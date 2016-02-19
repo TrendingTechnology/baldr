@@ -1,0 +1,33 @@
+<html>
+<head>
+<title>HTML5 presentation</title>
+<meta charset="utf-8" />
+<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+
+<h2>Search for songs</h2>
+
+
+<script src="http://code.jquery.com/jquery-2.2.0.min.js"></script>
+<script type="text/javascript">
+$( document ).ready(function() {
+  $.getJSON( "songs.json", function( data ) {
+  var items = [];
+  $.each( data, function( song ) {
+	  $.each( song, function( key, val ) {
+	    items.push( "<li id='" + key + "'>" + val + "</li>" );
+	  });
+  });
+
+
+  $( "<ul/>", {
+    "class": "my-new-list",
+    html: items.join( "" )
+  }).appendTo( "body" );
+});
+});
+</script>
+
+</body>
+</html>
