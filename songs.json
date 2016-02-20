@@ -1,8 +1,10 @@
 [
-	{
-		"title": "Lemon Tree"
-	},
-	{
-		"title": "Mad world"
-	}
+  {
+    "title": "Lemon Tree",
+    "artist": "Fools Garden"
+  },
+  {
+    "title": "Mad world",
+    "artist": "unknown"
+  }
 ]

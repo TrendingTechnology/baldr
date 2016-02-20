@@ -8,24 +8,15 @@
 
 <h2>Search for songs</h2>
 
-
 <script src="http://code.jquery.com/jquery-2.2.0.min.js"></script>
 <script type="text/javascript">
-$( document ).ready(function() {
-  $.getJSON( "songs.json", function( data ) {
-  var items = [];
-  $.each( data, function( song ) {
-	  $.each( song, function( key, val ) {
-	    items.push( "<li id='" + key + "'>" + val + "</li>" );
-	  });
+$(document).ready(function() {
+  $.getJSON( "songs.json", function( songs ) {
+    for (index = 0; index < songs.length; index++) {
+      var song = songs[index];
+      console.log('Title: ' + song.title + ' Artist: ' + song.artist);
+    }
   });
-
-
-  $( "<ul/>", {
-    "class": "my-new-list",
-    html: items.join( "" )
-  }).appendTo( "body" );
-});
 });
 </script>
 
