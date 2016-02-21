@@ -1,10 +1,20 @@
 [
   {
     "title": "Lemon Tree",
-    "artist": "Fools Garden"
+    "artist": "Fools Garden",
+    "files":
+      [
+        "image1.png",
+        "image2.png"
+      ]
   },
   {
     "title": "Mad world",
-    "artist": "unknown"
+    "artist": "unknown",
+    "files":
+      [
+        "picture1.png",
+        "picture2.png"
+      ]
   }
 ]
