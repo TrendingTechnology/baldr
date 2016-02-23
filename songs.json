@@ -16,5 +16,14 @@
         "picture1.png",
         "picture2.png"
       ]
+  },
+  {
+    "title": "Country Roads",
+    "artist": "John Denver",
+    "files":
+      [
+        "picture1.png",
+        "picture2.png"
+      ]
   }
 ]

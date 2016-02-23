@@ -11,6 +11,7 @@
 <input type="text" id="ajax" list="songs" placeholder="e. g.: Freude schöner Götterfunken">
 <datalist id="songs"></datalist>
 
+<script src="http://code.jquery.com/jquery-2.2.0.min.js"></script>
 <script type="text/javascript">
 
 // http://codepen.io/matt-west/pen/jKnzG
@@ -54,6 +55,19 @@ input.placeholder = "Loading options...";
 // Set up and make the request.
 request.open('GET', 'songs.json', true);
 request.send();
+
+
+$(document).ready(function() {
+  $('#ajax').on('input', function() {
+    var song = $(this).val();
+
+    $("#songs").find("option").each(function() {
+      if ($(this).val() == song) {
+        alert("The select song is " + song);
+      }
+    })
+  })
+});
 
 </script>
 
