@@ -31,12 +31,15 @@ function get_selected_song() {
   });
 }
 
-function hide_search_section() {
-  $('#section-search').toggle();
+function hide_search_section(shortcut) {
+  // 83 = 's'
+  if (shortcut.which == 83 && shortcut.altKey) {
+      $('#section-search').toggle();
+   }
 }
 
 function hotkey_bindings() {
-  $(document).bind('keydown', 'ctrl+space', hide_search_section);
+  $(document).bind('keydown', 'shortcut', hide_search_section);
 }
 
 $(document).ready(function() {
@@ -44,3 +47,4 @@ $(document).ready(function() {
   get_selected_song();
   hotkey_bindings();
 });
+
