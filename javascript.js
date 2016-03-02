@@ -31,7 +31,16 @@ function get_selected_song() {
   });
 }
 
+function hide_search_section() {
+  $('#section-search').toggle();
+}
+
+function hotkey_bindings() {
+  $(document).bind('keydown', 'ctrl+space', hide_search_section);
+}
+
 $(document).ready(function() {
   generate_search_list();
   get_selected_song();
+  hotkey_bindings();
 });
