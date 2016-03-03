@@ -1,6 +1,6 @@
 #! /bin/sh
 
-if [ -z "$@" ]; then
+if [ -z "$" ]; then
 	COMMAND=$(basename $0)
 	echo "Usage: $COMMAND <command>
 
