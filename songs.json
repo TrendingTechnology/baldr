@@ -1,29 +1,26 @@
-[
-  {
-    "title": "Lemon Tree",
-    "artist": "Fools Garden",
-    "files":
-      [
-        "image1.png",
-        "image2.png"
-      ]
-  },
-  {
-    "title": "Mad world",
-    "artist": "unknown",
-    "files":
-      [
-        "picture1.png",
-        "picture2.png"
-      ]
-  },
-  {
-    "title": "Country Roads",
-    "artist": "John Denver",
-    "files":
-      [
-        "picture1.png",
-        "picture2.png"
-      ]
-  }
-]
+{
+    "Lemon-tree": {
+        "title": "Lemon tree",
+        "artist": "Fools Garden",
+        "files": [
+            "info.json",
+            "lemon1.svg",
+            "lemon2.svg",
+            "lemon3.svg",
+            "lemon4.svg",
+            "lemon5.svg",
+            "lemon6.svg",
+            "lemon7.svg"
+        ],
+        "folder": "Lemon-tree"
+    },
+    "Un-poquito-cantas": {
+        "title": "Un poquito cantos",
+        "artist": "lateinamerikanisches Volkslied",
+        "files": [
+            "info.json",
+            "un-poquito-cantas.svg"
+        ],
+        "folder": "Un-poquito-cantas"
+    }
+}
