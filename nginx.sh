@@ -10,6 +10,11 @@ echo "Serving '$HTML_FOLDER' on port '$PORT'.
 Go to http://localhost:$PORT
 "
 
+{
+  sleep 3
+  xdg-open http://localhost:8080
+} &
+
 docker run \
 	--name $NAME \
 	-v "$HTML_FOLDER:/usr/share/nginx/html:ro" \

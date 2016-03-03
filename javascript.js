@@ -25,6 +25,7 @@ function get_selected_song() {
 
     $("#songs").find("option").each(function() {
       if ($(this).val() == song) {
+        $('#section-search').hide();
         alert("The selected song is '" + song + "'!");
       }
     })
@@ -32,10 +33,15 @@ function get_selected_song() {
 }
 
 function hide_search_section(shortcut) {
+  // 27 = 'ESC'
   // 83 = 's'
-  if (shortcut.which == 83 && shortcut.altKey) {
-      $('#section-search').toggle();
-   }
+  var displayState = document.getElementById("section-search").style.display;
+  if (shortcut.which == 83 && (displayState == 'none' || displayState == null)) {
+    $('#section-search').show();
+    document.getElementById("song-search").focus();
+  } else if (shortcut.which == 27) {
+    $('#section-search').hide();
+  }
 }
 
 function hotkey_bindings() {

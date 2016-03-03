@@ -3,6 +3,7 @@
 	z-index: 1;
 	background-color: white;
 	padding: 0.3em;
+	display: block;
 }
 
 #image-screen {
