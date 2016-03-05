@@ -1,15 +1,18 @@
 $(document).ready(function() {
   songs.setLibrary();
-  SearchBar.generateDatalist();
+  search.inputListener();
   $(document).bind('keydown', 'shortcut', bindShortcuts);
 });
 
+/**
+ * Map some keyboard shortcuts to the corresponding methods.
+ */
 function bindShortcuts(shortcut) {
 
     switch (shortcut.which) {
         // ESC
         case 27:
-            SearchBar.toggle();
+            search.toggle();
             break;
         // Cursor left
         case 37:
@@ -23,37 +26,21 @@ function bindShortcuts(shortcut) {
     }
 }
 
-
 /***********************************************************************
  * Object 'songs': All songs in the songs library.
  **********************************************************************/
 
-/**
- *
- */
 var songs = {}
 
 /**
  *
  */
 songs.setLibrary = function() {
-  var json = (function () {
-    var json = null;
-    $.ajax({
-        'async': false,
-        'global': false,
-        'url': 'songs.json',
-        'dataType': "json",
-        'success': function (data) {
-            json = data;
-        }
-    });
-    return json;
-})();
-  songs.library = json;
+  $.getJSON('songs.json', function(data) {
+    songs.library = data;
+    search.generateDatalist();
+  });
 }
-
-
 
 /***********************************************************************
  * Object 'song': The current song
@@ -72,49 +59,66 @@ song.slideNumber = 0;
 song.slideNumberMax;
 
 /**
- *
+ * Array of all images files of a song.
  */
-song.setSlide = function(slideNumber) {
-  if (! slideNumber) {
-    slideNumber = 0
-  }
+song.slides;
 
-  if (typeof song.meta.folder != 'undefined') {
-    var path = '/songs/' + song.meta.folder + '/' + song.meta.files[slideNumber];
+/**
+ * The folder containing the images files.
+ */
+song.folder;
+
+/**
+ * Set all properties for the current song.
+ */
+song.setCurrent = function(songID) {
+  var tmp = songs.library[songID];
+  song.slideNumber = 0;
+  song.slides = tmp.files;
+  song.slideNumberMax = song.slides.length - 1;
+  song.folder = tmp.folder;
+}
+
+/**
+ * Load the current image to the slide section.
+ */
+song.setSlide = function() {
+    var path = '/songs/' + song.folder + '/' + song.slides[song.slideNumber];
     $('#slide img').attr('src', path);
-  }
 }
 
 /**
- *
+ * Show the next slide.
  */
-song.slideNext = function() {
+song.nextSlide = function() {
   song.slideNumber += 1;
-  if (song.slideNumber > max_slide_number) {
-    song.slideNumber = 0
+  if (song.slideNumber > song.slideNumberMax) {
+    song.slideNumber = 0;
   }
+  song.setSlide();
 }
 
 /**
- *
+ * Show the previous slide.
  */
-song.slidePrevious = function() {
+song.previousSlide = function() {
   song.slideNumber -= 1;
   if (song.slideNumber < 0) {
-    song.slideNumber = max_slide_number
+    song.slideNumber = song.slideNumberMax;
   }
+  song.setSlide();
 }
 
 /***********************************************************************
  * Object 'search': Search bar
  **********************************************************************/
 
-var SearchBar = {};
+var search = {};
 
 /**
  * Generate a data list for an text input field containing all songs.
  */
-SearchBar.generateDatalist = function() {
+search.generateDatalist = function() {
     // Get the <datalist> and <input> elements.
     var dataList = document.getElementById('songs');
     var input = document.getElementById('song-search');
@@ -131,36 +135,36 @@ SearchBar.generateDatalist = function() {
     }
 
     // Update the placeholder text.
-    input.placeholder = 'e. g.: Freude schöner Götterfunken';
+    input.placeholder = 'Search for a song';
 }
 
 /**
  * Hide or show search bar.
  */
-SearchBar.toggle = function() {
+search.toggle = function() {
   var displayState = document.getElementById('search').style.display;
-  console.log(displayState);
   if (displayState == 'none') {
-    $('#search').show();
+    document.getElementById('search').style.display = 'block';
     document.getElementById('song-search').focus();
   } else {
-    $('#search').hide();
+    document.getElementById('search').style.display = 'none';
   }
 }
 
 /**
- *
+ * Listen on the input text field.
  */
-function get_selected_song() {
+search.inputListener = function() {
   $('#song-search').on('input', function() {
-    var song_title = $(this).val();
+    var songTitle = $(this).val();
 
     $('#songs').find('option').each(function() {
-      if ($(this).val() == song_title) {
-        var song_id = $(this).attr('id')
+      if ($(this).val() == songTitle) {
+        var songID = $(this).attr('id');
+        song.setCurrent(songID);
+        song.setSlide();
         $('#search').hide();
-        song.meta = songs[song_id];
-        setSlide();
+        $('#song-search').val('');
         $('#slide').show();
       }
     })
