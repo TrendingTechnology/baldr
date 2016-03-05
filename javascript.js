@@ -1,4 +1,3 @@
-
 /**
  * Contains the songs.json file.
  */
@@ -52,9 +51,10 @@ function get_selected_song() {
     $("#songs").find("option").each(function() {
       if ($(this).val() == song_title) {
         var song_id = $(this).attr("id")
-        $('#section-search').hide();
+        $('#search').hide();
         song.meta = songs[song_id];
         setSlide();
+        $('#slide').show();
       }
     })
   });
@@ -63,12 +63,12 @@ function get_selected_song() {
 function hide_search_section(shortcut) {
   // 27 = 'ESC'
   // 83 = 's'
-  var displayState = document.getElementById("section-search").style.display;
+  var displayState = document.getElementById("search").style.display;
   if (shortcut.which == 83 && (displayState == 'none' || displayState == null)) {
-    $('#section-search').show();
+    $('#search').show();
     document.getElementById("song-search").focus();
   } else if (shortcut.which == 27) {
-    $('#section-search').hide();
+    $('#search').hide();
   }
 }
 
@@ -102,6 +102,6 @@ function setSlide(slideNumber) {
     slideNumber = 0
   }
   var path = "/songs/" + song.meta.folder + "/" + song.meta.files[slideNumber];
-  $("#image-screen img").attr('src', path);
+  $("#slide img").attr('src', path);
 }
 
