@@ -62,9 +62,8 @@ function get_selected_song() {
 
 function hide_search_section(shortcut) {
   // 27 = 'ESC'
-  // 83 = 's'
   var displayState = document.getElementById("search").style.display;
-  if (shortcut.which == 83 && (displayState == 'none' || displayState == null)) {
+  if (shortcut.which == 27 && (displayState == 'none')) {
     $('#search').show();
     document.getElementById("song-search").focus();
   } else if (shortcut.which == 27) {
