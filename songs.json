@@ -2,6 +2,7 @@
     "Lemon-tree": {
         "title": "Lemon tree",
         "artist": "Fools Garden",
+        "folder": "Lemon-tree",
         "files": [
             "lemon1.svg",
             "lemon2.svg",
@@ -15,6 +16,7 @@
     "Un-poquito-cantas": {
         "title": "Un poquito cantos",
         "artist": "lateinamerikanisches Volkslied",
+        "folder": "Un-poquito-cantas",
         "files": [
             "un-poquito-cantas.svg"
         ]

@@ -20,10 +20,11 @@ function filterSlides(file) {
 folders = fs.readdirSync('./songs');
 
 folders.forEach(function (folder) {
-  var path = './songs/' + folder + '/'
-  var json = fs.readFileSync(path + 'info.json', 'utf8');
+  var songFolder = './songs/' + folder + '/'
+  var json = fs.readFileSync(songFolder + 'info.json', 'utf8');
   var info = JSON.parse(json);
-  info.files = fs.readdirSync(path).filter(filterSlides);
+  info.folder = folder;
+  info.files = fs.readdirSync(songFolder).filter(filterSlides);
   songs[folder] = info;
 });
 
