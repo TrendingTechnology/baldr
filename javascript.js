@@ -97,7 +97,10 @@ function slide_songs(shortcut) {
   setSlide(song.slideNumber);
 }
 
-function setSlide(slideNumber = 0) {
+function setSlide(slideNumber) {
+  if (! slideNumber) {
+    slideNumber = 0
+  }
   var path = "/songs/" + song.meta.folder + "/" + song.meta.files[slideNumber];
   $("#image-screen img").attr('src', path);
 }
