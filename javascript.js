@@ -1,18 +1,44 @@
+
+/**
+ * Contains the songs.json file.
+ */
+var songs = {}
+
+/**
+ * The current song to view.
+ */
+var song = {}
+song.slideNumber = 0;
+
+$(document).ready(function() {
+  get_songs();
+  generate_search_list();
+  get_selected_song();
+  hotkey_bindings();
+});
+
+function get_songs() {
+  $.getJSON("songs.json", function(songs) {
+    window.songs = songs;
+  });
+}
+
 function generate_search_list() {
   $.getJSON("songs.json", function(songs) {
     // Get the <datalist> and <input> elements.
     var dataList = document.getElementById('songs');
     var input = document.getElementById('song-search');
 
-    // Loop over the JSON array.
-    songs.forEach(function(item) {
+    for(key in songs){
       // Create a new <option> element.
       var option = document.createElement('option');
+
       // Set the value using the item in the JSON array.
-      option.value = item.title;
+      option.value = songs[key].title;
+      option.id = key;
       // Add the <option> element to the <datalist>.
       dataList.appendChild(option);
-    });
+    }
 
     // Update the placeholder text.
     input.placeholder = "e. g.: Freude schöner Götterfunken";
@@ -21,12 +47,15 @@ function generate_search_list() {
 
 function get_selected_song() {
   $('#song-search').on('input', function() {
-    var song = $(this).val();
+    var song_title = $(this).val();
 
     $("#songs").find("option").each(function() {
-      if ($(this).val() == song) {
+      if ($(this).val() == song_title) {
+        var song_id = $(this).attr("id")
         $('#section-search').hide();
-        alert("The selected song is '" + song + "'!");
+        song.meta = songs[song_id];
+        setSlide();
+        alert("The selected song is '" + song_title + "'!" + "(" + song_id + ")");
       }
     })
   });
@@ -49,40 +78,28 @@ function hotkey_bindings() {
   $(document).bind('keydown', 'shortcut', slide_songs);
 }
 
-slideNumber = 0
-
 function slide_songs(shortcut) {
-  var songs = [
-    "songs/lemon1.svg",
-    "songs/lemon2.svg",
-    "songs/lemon3.svg",
-    "songs/lemon4.svg",
-    "songs/lemon5.svg",
-    "songs/lemon6.svg",
-    "songs/lemon7.svg"
-  ]
-
   // 39 -> right
   // 37 -> left
 
+  var max_slide_number = song.meta.files.length - 1
+
   if (shortcut.which == 37) {
-    slideNumber -= 1;
-    if (slideNumber < 0) {
-      slideNumber = songs.length - 1
+    song.slideNumber -= 1;
+    if (song.slideNumber < 0) {
+      song.slideNumber = max_slide_number
     }
   } else if (shortcut.which == 39) {
-    slideNumber += 1;
-    if (slideNumber > songs.length - 1) {
-      slideNumber = 0
+    song.slideNumber += 1;
+    if (song.slideNumber > max_slide_number) {
+      song.slideNumber = 0
     }
   }
-
-  $("#image-screen img").attr('src', songs[slideNumber]);
+  setSlide(song.slideNumber);
 }
 
-$(document).ready(function() {
-  generate_search_list();
-  get_selected_song();
-  hotkey_bindings();
-});
+function setSlide(slideNumber = 0) {
+  var path = "/songs/" + song.meta.folder + "/" + song.meta.files[slideNumber];
+  $("#image-screen img").attr('src', path);
+}
 
