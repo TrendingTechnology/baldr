@@ -55,7 +55,6 @@ function get_selected_song() {
         $('#section-search').hide();
         song.meta = songs[song_id];
         setSlide();
-        alert("The selected song is '" + song_title + "'!" + "(" + song_id + ")");
       }
     })
   });
