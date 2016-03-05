@@ -39,6 +39,7 @@ songs.setLibrary = function() {
   $.getJSON('songs.json', function(data) {
     songs.library = data;
     search.generateDatalist();
+    song.loadByHash();
   });
 }
 
@@ -73,10 +74,12 @@ song.folder;
  */
 song.setCurrent = function(songID) {
   var tmp = songs.library[songID];
-  song.slideNumber = 0;
-  song.slides = tmp.files;
-  song.slideNumberMax = song.slides.length - 1;
-  song.folder = tmp.folder;
+  if (typeof tmp != 'undefined') {
+      song.slideNumber = 0;
+      song.slides = tmp.files;
+      song.slideNumberMax = song.slides.length - 1;
+      song.folder = tmp.folder;
+    }
 }
 
 /**
@@ -107,6 +110,17 @@ song.previousSlide = function() {
     song.slideNumber = song.slideNumberMax;
   }
   song.setSlide();
+}
+
+/**
+ *
+ */
+song.loadByHash = function() {
+  if (location.hash != '') {
+    song.setCurrent(location.hash.substring(1));
+    song.setSlide();
+    $('#slide').show();
+  }
 }
 
 /***********************************************************************
@@ -170,4 +184,3 @@ search.inputListener = function() {
     })
   });
 }
-
