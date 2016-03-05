@@ -17,13 +17,13 @@ $(document).ready(function() {
 });
 
 function get_songs() {
-  $.getJSON("songs.json", function(songs) {
+  $.getJSON('songs.json', function(songs) {
     window.songs = songs;
   });
 }
 
 function generate_search_list() {
-  $.getJSON("songs.json", function(songs) {
+  $.getJSON('songs.json', function(songs) {
     // Get the <datalist> and <input> elements.
     var dataList = document.getElementById('songs');
     var input = document.getElementById('song-search');
@@ -40,7 +40,7 @@ function generate_search_list() {
     }
 
     // Update the placeholder text.
-    input.placeholder = "e. g.: Freude schöner Götterfunken";
+    input.placeholder = 'e. g.: Freude schöner Götterfunken';
   });
 }
 
@@ -48,9 +48,9 @@ function get_selected_song() {
   $('#song-search').on('input', function() {
     var song_title = $(this).val();
 
-    $("#songs").find("option").each(function() {
+    $('#songs').find('option').each(function() {
       if ($(this).val() == song_title) {
-        var song_id = $(this).attr("id")
+        var song_id = $(this).attr('id')
         $('#search').hide();
         song.meta = songs[song_id];
         setSlide();
@@ -62,10 +62,10 @@ function get_selected_song() {
 
 function hide_search_section(shortcut) {
   // 27 = 'ESC'
-  var displayState = document.getElementById("search").style.display;
+  var displayState = document.getElementById('search').style.display;
   if (shortcut.which == 27 && (displayState == 'none')) {
     $('#search').show();
-    document.getElementById("song-search").focus();
+    document.getElementById('song-search').focus();
   } else if (shortcut.which == 27) {
     $('#search').hide();
   }
@@ -100,7 +100,7 @@ function setSlide(slideNumber) {
   if (! slideNumber) {
     slideNumber = 0
   }
-  var path = "/songs/" + song.meta.folder + "/" + song.meta.files[slideNumber];
-  $("#slide img").attr('src', path);
+  var path = '/songs/' + song.meta.folder + '/' + song.meta.files[slideNumber];
+  $('#slide img').attr('src', path);
 }
 
