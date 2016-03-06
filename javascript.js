@@ -41,6 +41,7 @@ songs.setLibrary = function() {
     songs.library = data;
     search.generateDatalist();
     song.loadByHash();
+    toc.build();
   });
 }
 
@@ -138,7 +139,7 @@ search.generateDatalist = function() {
   var dataList = document.getElementById('songs');
   var input = document.getElementById('song-search');
 
-  for(key in songs.library){
+  for (key in songs.library) {
     // Create a new <option> element.
     var option = document.createElement('option');
 
@@ -185,3 +186,29 @@ search.inputListener = function() {
     })
   });
 }
+
+/***********************************************************************
+ * Object 'toc': table of contents
+ **********************************************************************/
+
+var toc = {};
+
+toc.build = function() {
+  document.getElementById('table-of-contents').appendChild(toc.makeList(songs.library));
+}
+
+toc.makeList = function(library) {
+  var list = document.createElement('ul');
+  for (songID in library) {
+
+    var anchor = document.createElement('a');
+    anchor.setAttribute('href', '#' + songID);
+    anchor.innerHTML = library[songID].title;
+
+    var item = document.createElement('li');
+    item.appendChild(anchor);
+    list.appendChild(item);
+  }
+  return list;
+}
+
