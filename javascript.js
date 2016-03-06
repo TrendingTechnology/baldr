@@ -8,22 +8,23 @@ $(document).ready(function() {
  * Map some keyboard shortcuts to the corresponding methods.
  */
 function bindShortcuts(shortcut) {
+  switch (shortcut.which) {
 
-    switch (shortcut.which) {
-        // ESC
-        case 27:
-            search.toggle();
-            break;
-        // Cursor left
-        case 37:
-            song.previousSlide();
-            break;
+    // ESC
+    case 27:
+      search.toggle();
+      break;
 
-        // Cursor right
-        case 39:
-            song.nextSlide();
-            break;
-    }
+    // Cursor left
+    case 37:
+      song.previousSlide();
+      break;
+
+    // Cursor right
+    case 39:
+      song.nextSlide();
+      break;
+  }
 }
 
 /***********************************************************************
@@ -75,19 +76,19 @@ song.folder;
 song.setCurrent = function(songID) {
   var tmp = songs.library[songID];
   if (typeof tmp != 'undefined') {
-      song.slideNumber = 0;
-      song.slides = tmp.files;
-      song.slideNumberMax = song.slides.length - 1;
-      song.folder = tmp.folder;
-    }
+    song.slideNumber = 0;
+    song.slides = tmp.files;
+    song.slideNumberMax = song.slides.length - 1;
+    song.folder = tmp.folder;
+  }
 }
 
 /**
  * Load the current image to the slide section.
  */
 song.setSlide = function() {
-    var path = '/songs/' + song.folder + '/' + song.slides[song.slideNumber];
-    $('#slide img').attr('src', path);
+  var path = '/songs/' + song.folder + '/' + song.slides[song.slideNumber];
+  $('#slide img').attr('src', path);
 }
 
 /**
@@ -133,23 +134,23 @@ var search = {};
  * Generate a data list for an text input field containing all songs.
  */
 search.generateDatalist = function() {
-    // Get the <datalist> and <input> elements.
-    var dataList = document.getElementById('songs');
-    var input = document.getElementById('song-search');
+  // Get the <datalist> and <input> elements.
+  var dataList = document.getElementById('songs');
+  var input = document.getElementById('song-search');
 
-    for(key in songs.library){
-      // Create a new <option> element.
-      var option = document.createElement('option');
+  for(key in songs.library){
+    // Create a new <option> element.
+    var option = document.createElement('option');
 
-      // Set the value using the item in the JSON array.
-      option.value = songs.library[key].title;
-      option.id = key;
-      // Add the <option> element to the <datalist>.
-      dataList.appendChild(option);
-    }
+    // Set the value using the item in the JSON array.
+    option.value = songs.library[key].title;
+    option.id = key;
+    // Add the <option> element to the <datalist>.
+    dataList.appendChild(option);
+  }
 
-    // Update the placeholder text.
-    input.placeholder = 'Search for a song';
+  // Update the placeholder text.
+  input.placeholder = 'Search for a song';
 }
 
 /**
