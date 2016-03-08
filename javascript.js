@@ -37,7 +37,7 @@ var songs = {}
  *
  */
 songs.setLibrary = function() {
-  $.getJSON('songs.json', function(data) {
+  $.getJSON('/songs.json', function(data) {
     songs.library = data;
     search.generateDatalist();
     song.loadByHash();
