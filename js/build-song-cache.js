@@ -30,6 +30,6 @@ folders.forEach(function (folder) {
 
 var json = JSON.stringify(songs, null, 4)
 
-fs.writeFileSync('songs.json', json);
+fs.writeFileSync('./songs.json', json);
 
 console.log(json);
