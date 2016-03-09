@@ -37,7 +37,7 @@ var songs = {}
  *
  */
 songs.setLibrary = function() {
-  $.getJSON('songs.json', function(data) {
+  $.getJSON('/songs.json', function(data) {
     songs.library = data;
     search.generateDatalist();
     song.loadByHash();
@@ -88,7 +88,7 @@ song.setCurrent = function(songID) {
  * Load the current image to the slide section.
  */
 song.setSlide = function() {
-  var path = '/songs/' + song.folder + '/' + song.slides[song.slideNumber];
+  var path = '/songbook/songs/' + song.folder + '/' + song.slides[song.slideNumber];
   $('#slide img').attr('src', path);
 }
 

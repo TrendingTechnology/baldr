@@ -17,6 +17,7 @@ docker run \
 	--rm \
 	--name $NAME \
 	-v "$HTML_FOLDER:/usr/share/nginx/html:ro" \
+	-v "$HOME/git-repositories/schule/songbook:/usr/share/nginx/html/songbook/songs:ro" \
 	--publish "$PORT:80" \
 	nginx
 

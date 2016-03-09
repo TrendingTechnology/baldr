@@ -9,6 +9,8 @@
 var fs = require('fs');
 var path = require('path');
 
+var songsRootFolder = './songbook/songs/'
+
 var songs = {};
 
 function filterSlides(file) {
@@ -17,10 +19,10 @@ function filterSlides(file) {
   }
 }
 
-folders = fs.readdirSync('./songs');
+folders = fs.readdirSync(songsRootFolder);
 
 folders.forEach(function (folder) {
-  var songFolder = './songs/' + folder + '/'
+  var songFolder = songsRootFolder + folder + '/'
   var json = fs.readFileSync(songFolder + 'info.json', 'utf8');
   var info = JSON.parse(json);
   info.folder = folder;
@@ -30,6 +32,6 @@ folders.forEach(function (folder) {
 
 var json = JSON.stringify(songs, null, 4)
 
-fs.writeFileSync('songs.json', json);
+fs.writeFileSync('./songs.json', json);
 
 console.log(json);
