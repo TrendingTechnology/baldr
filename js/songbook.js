@@ -24,6 +24,10 @@ function bindShortcuts(shortcut) {
     case 39:
       song.nextSlide();
       break;
+
+    // #
+    case 163:
+      toc.toggle();
   }
 }
 
@@ -214,3 +218,15 @@ toc.makeList = function(library) {
   return list;
 }
 
+/**
+ * Hide or show table of contents.
+ */
+toc.toggle = function() {
+  var element = document.getElementById('table-of-contents');
+  var displayState = element.style.display;
+  if (displayState == 'none') {
+    element.style.display = 'block';
+  } else {
+    element.style.display = 'none';
+  }
+}
