@@ -29,6 +29,7 @@ songs.setLibrary = function() {
     search.generateDatalist();
     song.loadByHash();
     toc.build();
+    $('#table-of-contents a').click(toc.toggle);
   });
 }
 
