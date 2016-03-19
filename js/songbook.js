@@ -1,34 +1,17 @@
 $(document).ready(function() {
   songs.setLibrary();
   search.inputListener();
-  $(document).bind('keydown', 'shortcut', bindShortcuts);
+  bindShortcuts();
 });
 
 /**
  * Map some keyboard shortcuts to the corresponding methods.
  */
-function bindShortcuts(shortcut) {
-  switch (shortcut.which) {
-
-    // ESC
-    case 27:
-      search.toggle();
-      break;
-
-    // Cursor left
-    case 37:
-      song.previousSlide();
-      break;
-
-    // Cursor right
-    case 39:
-      song.nextSlide();
-      break;
-
-    // #
-    case 163:
-      toc.toggle();
-  }
+function bindShortcuts() {
+  Mousetrap.bind('esc', search.toggle);
+  Mousetrap.bind('left', song.previousSlide);
+  Mousetrap.bind('right', song.nextSlide);
+  Mousetrap.bind('#', toc.toggle);
 }
 
 /***********************************************************************
