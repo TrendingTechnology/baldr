@@ -30,6 +30,8 @@ songs.setLibrary = function() {
     song.loadByHash();
     toc.build();
     $('#table-of-contents a').click(toc.toggle);
+    $('#menu #menu-search').click(search.toggle);
+    $('#menu #menu-toc').click(toc.toggle);
   });
 }
 
@@ -148,12 +150,13 @@ search.generateDatalist = function() {
  * Hide or show search bar.
  */
 search.toggle = function() {
-  var displayState = document.getElementById('search').style.display;
+  var element = document.getElementById('search');
+  var displayState = element.style.display;
   if (displayState == 'none') {
-    document.getElementById('search').style.display = 'block';
+    element.style.display = 'block';
     document.getElementById('song-search').focus();
   } else {
-    document.getElementById('search').style.display = 'none';
+    element.style.display = 'none';
   }
 }
 

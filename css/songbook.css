@@ -47,12 +47,26 @@ body {
 }
 
 #menu ul {
-	/*display: none;*/
+	display: none;
 	font-size: 3em;
 	color: rgba(0, 0, 0, 0.5);
 	margin: 0;
 	text-align: right;
 	padding-right: 0.3em;
+}
+
+#menu li {
+	/*background-color: blue;*/
+	padding: 0.2em;
+	border-radius: 0.2em;
+}
+
+#menu li:hover {
+	color: rgba(0, 0, 0, 0.2);
+}
+
+#menu li:active {
+	background-color: rgba(255, 0, 0, 0.4);
 }
 
 #menu:hover ul {
