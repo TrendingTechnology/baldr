@@ -7,6 +7,8 @@
   </head>
   <body>
 
+    <!-- menu -->
+
     <section id="menu">
       <ul>
         <li id="menu-search" class="fa fa-search"></li>
@@ -14,18 +16,22 @@
       </ul>
     </section>
 
-    <section id="search" style="display: none">
-      <label for="song-search">Search for a song</label>
-      <input type="text" id="song-search" list="songs" placeholder="loading" class="mousetrap">
-      <datalist id="songs"></datalist>
-    </section>
-
+    <!-- slide -->
 
     <section id="slide">
       <img>
     </section>
 
-    <section id="table-of-contents">
+    <!-- search -->
+
+    <section id="search" style="display: none" class="modal">
+      <input type="text" id="search-input" list="songs" placeholder="loading" class="mousetrap">
+      <datalist id="songs"></datalist>
+    </section>
+
+    <!-- toc -->
+
+    <section id="toc" style="display: none" class="modal">
     </section>
 
     <script src="/lib/jquery/dist/jquery.min.js"></script>

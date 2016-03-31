@@ -29,7 +29,7 @@ songs.setLibrary = function() {
     search.generateDatalist();
     song.loadByHash();
     toc.build();
-    $('#table-of-contents a').click(toc.toggle);
+    $('#toc a').click(toc.toggle);
     $('#menu #menu-search').click(search.toggle);
     $('#menu #menu-toc').click(toc.toggle);
   });
@@ -129,7 +129,7 @@ var search = {};
 search.generateDatalist = function() {
   // Get the <datalist> and <input> elements.
   var dataList = document.getElementById('songs');
-  var input = document.getElementById('song-search');
+  var input = document.getElementById('search-input');
 
   for (key in songs.library) {
     // Create a new <option> element.
@@ -143,7 +143,7 @@ search.generateDatalist = function() {
   }
 
   // Update the placeholder text.
-  input.placeholder = 'Search for a song';
+  input.placeholder = 'Nach einem Lied suchen';
 }
 
 /**
@@ -153,8 +153,9 @@ search.toggle = function() {
   var element = document.getElementById('search');
   var displayState = element.style.display;
   if (displayState == 'none') {
+    document.getElementById('toc').style.display = 'none';
     element.style.display = 'block';
-    document.getElementById('song-search').focus();
+    document.getElementById('search-input').focus();
   } else {
     element.style.display = 'none';
   }
@@ -164,7 +165,7 @@ search.toggle = function() {
  * Listen on the input text field.
  */
 search.inputListener = function() {
-  $('#song-search').on('input', function() {
+  $('#search-input').on('input', function() {
     var songTitle = $(this).val();
 
     $('#songs').find('option').each(function() {
@@ -173,7 +174,7 @@ search.inputListener = function() {
         song.setCurrent(songID);
         song.setSlide();
         $('#search').hide();
-        $('#song-search').val('');
+        $('#search-input').val('');
         $('#slide').show();
       }
     })
@@ -187,7 +188,7 @@ search.inputListener = function() {
 var toc = {};
 
 toc.build = function() {
-  document.getElementById('table-of-contents').appendChild(toc.makeList(songs.library));
+  document.getElementById('toc').appendChild(toc.makeList(songs.library));
 }
 
 toc.makeList = function(library) {
@@ -209,9 +210,10 @@ toc.makeList = function(library) {
  * Hide or show table of contents.
  */
 toc.toggle = function() {
-  var element = document.getElementById('table-of-contents');
+  var element = document.getElementById('toc');
   var displayState = element.style.display;
   if (displayState == 'none') {
+    document.getElementById('search').style.display = 'none';
     element.style.display = 'block';
   } else {
     element.style.display = 'none';
