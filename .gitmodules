@@ -4,3 +4,6 @@
 [submodule "lib/mousetrap"]
 	path = lib/mousetrap
 	url = https://github.com/ccampbell/mousetrap.git
+[submodule "lib/jquery"]
+	path = lib/jquery
+	url = https://github.com/jquery/jquery-dist.git
