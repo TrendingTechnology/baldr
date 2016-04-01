@@ -23,17 +23,10 @@ Go to $URL:$PORT
   fi
 } &
 
-if [ -d $HOME/Desktop/school/songbook ]; then
-	SONGBOOK=$HOME/Desktop/school/songbook
-else
-	SONGBOOK=$HOME/git-repositories/content/schule/songbook
-fi
-
 docker run \
 	--rm \
 	--name $NAME \
 	-v "$HTML_FOLDER:/usr/share/nginx/html:ro" \
-	-v "$SONGBOOK:/usr/share/nginx/html/songbook/songs:ro" \
 	--publish "$PORT:80" \
 	nginx
 

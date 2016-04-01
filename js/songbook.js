@@ -64,7 +64,7 @@ var songs = {}
  *
  */
 songs.setLibrary = function() {
-  $.getJSON('/songs.json', function(data) {
+  $.getJSON('/songbook/songs/songs.json', function(data) {
     songs.library = data;
     search.generateDatalist();
     song.loadByHash();
@@ -106,7 +106,7 @@ song.setCurrent = function(songID) {
   var tmp = songs.library[songID];
   if (typeof tmp != 'undefined') {
     song.slideNumber = 0;
-    song.slides = tmp.files;
+    song.slides = tmp.slides;
     song.slideNumberMax = song.slides.length - 1;
     song.folder = tmp.folder;
   }
@@ -116,7 +116,7 @@ song.setCurrent = function(songID) {
  * Load the current image to the slide section.
  */
 song.setSlide = function() {
-  var path = '/songbook/songs/' + song.folder + '/' + song.slides[song.slideNumber];
+  var path = '/songbook/songs/songs/' + song.folder + '/slides/' + song.slides[song.slideNumber];
   $('#slide img').attr('src', path);
 }
 
