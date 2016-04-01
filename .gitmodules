@@ -7,3 +7,6 @@
 [submodule "lib/jquery"]
 	path = lib/jquery
 	url = https://github.com/jquery/jquery-dist.git
+[submodule "songbook/songs"]
+	path = songbook/songs
+	url = ssh://git@git.friedrich.rocks:60022/content/lieder.git
