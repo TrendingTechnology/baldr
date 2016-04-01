@@ -8,7 +8,7 @@ $(document).ready(function() {
  * Map some keyboard shortcuts to the corresponding methods.
  */
 function bindShortcuts() {
-  Mousetrap.bind('esc', search.toggle);
+  Mousetrap.bind('esc', search.toggle, 'keyup');
   Mousetrap.bind('#', toc.toggle);
   Mousetrap.bind('left', song.previousSlide);
   Mousetrap.bind('right', song.nextSlide);
