@@ -14,6 +14,19 @@ function bindShortcuts() {
   Mousetrap.bind('right', song.nextSlide);
 }
 
+/**
+ * Map some buttons to the corresponding methods.
+ */
+function bindButtons() {
+  $('#menu #menu-search').click(search.toggle);
+  $('#menu #menu-toc').click(toc.toggle);
+  $('#toc a').click(toc.toggle);
+  $('#toc .close').click(toc.toggle);
+  $('#slide #previous').click(song.previousSlide);
+  $('#slide #next').click(song.nextSlide);
+  $('#search .close').click(search.toggle);
+}
+
 /***********************************************************************
  * Object 'songs': All songs in the songs library.
  **********************************************************************/
@@ -29,11 +42,7 @@ songs.setLibrary = function() {
     search.generateDatalist();
     song.loadByHash();
     toc.build();
-    $('#toc a').click(toc.toggle);
-    $('#menu #menu-search').click(search.toggle);
-    $('#menu #menu-toc').click(toc.toggle);
-    $('#toc .close').click(toc.toggle);
-    $('#search .close').click(search.toggle);
+    bindButtons();
   });
 }
 
