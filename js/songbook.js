@@ -32,6 +32,8 @@ songs.setLibrary = function() {
     $('#toc a').click(toc.toggle);
     $('#menu #menu-search').click(search.toggle);
     $('#menu #menu-toc').click(toc.toggle);
+    $('#toc .close').click(toc.toggle);
+    $('#search .close').click(search.toggle);
   });
 }
 

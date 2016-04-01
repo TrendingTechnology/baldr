@@ -11,8 +11,8 @@
 
     <section id="menu">
       <ul>
-        <li id="menu-search" class="fa fa-search" title="Nach einem Lied suchen (Tastenkürzel: ESC)"></li>
-        <li id="menu-toc" class="fa fa-list-ul" title="Inhaltsverzeichnis (Tastenkürzel: #)"></li>
+        <li id="menu-search" class="button fa fa-search" title="Nach einem Lied suchen (Tastenkürzel: ESC)"></li>
+        <li id="menu-toc" class="button fa fa-list-ul" title="Inhaltsverzeichnis (Tastenkürzel: #)"></li>
       </ul>
     </section>
 
@@ -25,6 +25,8 @@
     <!-- search -->
 
     <section id="search" style="display: none" class="modal">
+      <div class="close button fa fa-times">
+      </div>
       <input type="text" id="search-input" list="songs" placeholder="loading">
       <datalist id="songs"></datalist>
     </section>
@@ -32,6 +34,8 @@
     <!-- toc -->
 
     <section id="toc" style="display: none" class="modal">
+      <div class="close button fa fa-times">
+      </div>
     </section>
 
     <script src="/lib/jquery/dist/jquery.min.js"></script>

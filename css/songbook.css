@@ -3,6 +3,10 @@ body {
 	background-color: black;
 }
 
+/**
+ * modal
+ */
+
 .modal {
 	position: fixed;
 	top: 10%;
@@ -14,6 +18,30 @@ body {
 	background-color: white;
 	box-sizing: border-box;
 	padding: 3em;
+}
+
+.modal .close {
+	font-size: 18pt;
+	padding: 10pt;
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+
+/**
+ * button
+ */
+
+.button {
+	cursor: pointer;
+}
+
+.button:hover {
+	color: rgba(0, 0, 0, 0.2);
+}
+
+.button:active {
+	color: rgba(255, 0, 0, 0.4);
 }
 
 /**
@@ -42,15 +70,6 @@ body {
 	/*background-color: blue;*/
 	padding: 0.2em;
 	border-radius: 0.2em;
-	cursor: pointer;
-}
-
-#menu li:hover {
-	color: rgba(0, 0, 0, 0.2);
-}
-
-#menu li:active {
-	background-color: rgba(255, 0, 0, 0.4);
 }
 
 #menu:hover ul {
