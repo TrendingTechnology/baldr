@@ -9,9 +9,9 @@ $(document).ready(function() {
  */
 function bindShortcuts() {
   Mousetrap.bind('esc', search.toggle);
+  Mousetrap.bind('#', toc.toggle);
   Mousetrap.bind('left', song.previousSlide);
   Mousetrap.bind('right', song.nextSlide);
-  Mousetrap.bind('#', toc.toggle);
 }
 
 /***********************************************************************

@@ -1,6 +1,21 @@
 @import '../lib/fontawesome/css/font-awesome.min.css';
 
-body, input, option {
+body, input {
 	font-family: Alegreya !important;
 }
 
+a {
+	text-decoration: none;
+}
+
+a:link, a:visited {
+	color: black;
+}
+
+a:hover {
+	color: rgba(0, 0, 0, 0.2);
+}
+
+a:active {
+	color: rgba(255, 0, 0, 0.4);
+}

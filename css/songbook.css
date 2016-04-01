@@ -1,5 +1,3 @@
-
-
 body {
 	margin: 0;
 	background-color: black;
@@ -31,7 +29,6 @@ body {
 	/*background-color: green;*/
 }
 
-
 #menu ul {
 	display: none;
 	font-size: 3em;
@@ -45,6 +42,7 @@ body {
 	/*background-color: blue;*/
 	padding: 0.2em;
 	border-radius: 0.2em;
+	cursor: pointer;
 }
 
 #menu li:hover {
@@ -86,3 +84,11 @@ body {
 	font-size: 2em;
 	width: 100%;
 }
+
+/**
+ * search
+ */
+
+ #toc {
+ 	font-size: 2em;
+ }

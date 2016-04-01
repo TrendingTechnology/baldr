@@ -1,4 +1,19 @@
 {
+    "Die-Affen-rasen-durch-den-Wald": {
+        "title": "Die Affen rasen durch den Wald",
+        "artist": "unbekannt",
+        "folder": "Die-Affen-rasen-durch-den-Wald",
+        "files": [
+            "output01.svg",
+            "output02.svg",
+            "output03.svg",
+            "output04.svg",
+            "output05.svg",
+            "output06.svg",
+            "output07.svg",
+            "output08.svg"
+        ]
+    },
     "Lemon-tree": {
         "title": "Lemon tree",
         "artist": "Fools Garden",
