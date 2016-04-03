@@ -28,7 +28,11 @@ function bindButtons() {
   $('#menu #menu-fullscreen').click(toggleFullScreen);
 }
 
-
+/**
+ * Toggle fullscreen in a browser compatible manner.
+ *
+ * Code from Mozilla net.
+ */
 function toggleFullScreen() {
   if (!document.fullscreenElement &&    // alternative standard method
       !document.mozFullScreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement ) {  // current working methods
@@ -150,6 +154,9 @@ song.loadByHash = function() {
     song.setCurrent(location.hash.substring(1));
     song.setSlide();
     $('#slide').show();
+  }
+  else {
+    toc.toggle();
   }
 }
 
