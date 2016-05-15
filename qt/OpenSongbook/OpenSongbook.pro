@@ -1,5 +1,5 @@
 TEMPLATE = app
-TARGET = fullscreen
+TARGET = open_songbook
 QT = core gui widgets
 SOURCES += \
   main.cpp
