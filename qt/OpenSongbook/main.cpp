@@ -10,7 +10,12 @@ int main(int argc, char **argv)
 
 	QApplication app (argc, argv);
 
-	QUrl url = QUrl("https://cheat.friedrich.rocks");
+	#ifdef Q_OS_MAC
+        QUrl url = QUrl("http://localhost/songbook/");
+	#else
+        QUrl url = QUrl("http://localhost:8080/songbook/");
+	#endif
+
 	QWebEngineView view;
 	view.load(url);
 	view.setWindowState(view.windowState() ^ Qt::WindowFullScreen);
