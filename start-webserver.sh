@@ -24,9 +24,9 @@ Go to $URL:$PORT
 } &
 
 docker run \
+	--rm \
 	--name $NAME \
 	-v "$HTML_FOLDER:/usr/share/nginx/html:ro" \
 	--publish "$PORT:80" \
-	-d \
 	nginx
 

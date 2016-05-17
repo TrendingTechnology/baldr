@@ -7,7 +7,7 @@ $(document).ready(function() {
  * Map some keyboard shortcuts to the corresponding methods.
  */
 function bindShortcuts() {
-  Mousetrap.bind('#', toc.toggle);
+  Mousetrap.bind('esc', toc.toggle);
   Mousetrap.bind('left', song.previousSlide);
   Mousetrap.bind('right', song.nextSlide);
 }
@@ -196,6 +196,7 @@ toc.toggle = function() {
   var displayState = element.style.display;
   if (displayState == 'none') {
     element.style.display = 'block';
+    document.getElementById('search').focus();
   } else {
     element.style.display = 'none';
   }
