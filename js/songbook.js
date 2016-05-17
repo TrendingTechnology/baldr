@@ -1,6 +1,5 @@
 $(document).ready(function() {
   songs.setLibrary();
-  search.inputListener();
   bindShortcuts();
 });
 
@@ -8,7 +7,6 @@ $(document).ready(function() {
  * Map some keyboard shortcuts to the corresponding methods.
  */
 function bindShortcuts() {
-  Mousetrap.bind('+', search.toggle);
   Mousetrap.bind('#', toc.toggle);
   Mousetrap.bind('left', song.previousSlide);
   Mousetrap.bind('right', song.nextSlide);
@@ -18,13 +16,11 @@ function bindShortcuts() {
  * Map some buttons to the corresponding methods.
  */
 function bindButtons() {
-  $('#menu #menu-search').click(search.toggle);
   $('#menu #menu-toc').click(toc.toggle);
   $('#toc a').click(toc.toggle);
   $('#toc .close').click(toc.toggle);
   $('#slide #previous').click(song.previousSlide);
   $('#slide #next').click(song.nextSlide);
-  $('#search .close').click(search.toggle);
   $('#menu #menu-fullscreen').click(toggleFullScreen);
 }
 
@@ -70,7 +66,6 @@ var songs = {}
 songs.setLibrary = function() {
   $.getJSON('/songbook/songs/songs.json', function(data) {
     songs.library = data;
-    search.generateDatalist();
     song.loadByHash();
     toc.build();
     bindButtons();
@@ -167,70 +162,6 @@ song.loadByHash = function() {
 window.onhashchange = song.loadByHash;
 
 /***********************************************************************
- * Object 'search': Search bar
- **********************************************************************/
-
-var search = {};
-
-/**
- * Generate a data list for an text input field containing all songs.
- */
-search.generateDatalist = function() {
-  // Get the <datalist> and <input> elements.
-  var dataList = document.getElementById('songs');
-  var input = document.getElementById('search-input');
-
-  for (key in songs.library) {
-    // Create a new <option> element.
-    var option = document.createElement('option');
-
-    // Set the value using the item in the JSON array.
-    option.value = songs.library[key].title;
-    option.id = key;
-    // Add the <option> element to the <datalist>.
-    dataList.appendChild(option);
-  }
-
-  // Update the placeholder text.
-  input.placeholder = 'Nach einem Lied suchen';
-}
-
-/**
- * Hide or show search bar.
- */
-search.toggle = function() {
-  var element = document.getElementById('search');
-  var displayState = element.style.display;
-  if (displayState == 'none') {
-    document.getElementById('toc').style.display = 'none';
-    element.style.display = 'block';
-    document.getElementById('search-input').focus();
-  } else {
-    element.style.display = 'none';
-  }
-}
-
-/**
- * Listen on the input text field.
- */
-search.inputListener = function() {
-  $('#search-input').on('input', function() {
-    var songTitle = $(this).val();
-
-    $('#songs').find('option').each(function() {
-      if ($(this).val() == songTitle) {
-        var songID = $(this).attr('id');
-        song.setCurrent(songID);
-        song.setSlide();
-        $('#search').hide();
-        $('#search-input').val('');
-        $('#slide').show();
-      }
-    })
-  });
-}
-
-/***********************************************************************
  * Object 'toc': table of contents
  **********************************************************************/
 
@@ -264,7 +195,6 @@ toc.toggle = function() {
   var element = document.getElementById('toc');
   var displayState = element.style.display;
   if (displayState == 'none') {
-    document.getElementById('search').style.display = 'none';
     element.style.display = 'block';
   } else {
     element.style.display = 'none';
