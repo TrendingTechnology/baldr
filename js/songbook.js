@@ -168,7 +168,7 @@ window.onhashchange = song.loadByHash;
 var toc = {};
 
 toc.build = function() {
-  document.getElementById('toc').appendChild(toc.makeList(songs.library));
+  document.getElementById('scroll').appendChild(toc.makeList(songs.library));
 }
 
 toc.makeList = function(library) {

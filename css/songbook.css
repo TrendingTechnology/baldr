@@ -116,7 +116,16 @@ body {
  * search
  */
 
- #toc {
- 	font-size: 1.5em;
- 	overflow: scroll;
- }
+#toc {
+	font-size: 1.5em;
+}
+
+#toc #scroll {
+	overflow-y: scroll;
+	height: 95%;
+}
+
+#toc .search {
+	width: 100%;
+	font-size: 1.5em;
+}
