@@ -74,6 +74,10 @@ songs.setLibrary = function() {
     song.loadByHash();
     toc.build();
     bindButtons();
+    var options = {
+      valueNames: [ 'title' ]
+    };
+    var tocList = new List('toc', options);
   });
 }
 
@@ -238,10 +242,12 @@ toc.build = function() {
 
 toc.makeList = function(library) {
   var list = document.createElement('ul');
+  list.setAttribute('class', 'list');
   for (songID in library) {
 
     var anchor = document.createElement('a');
     anchor.setAttribute('href', '#' + songID);
+    anchor.setAttribute('class', 'title');
     anchor.innerHTML = library[songID].title;
 
     var item = document.createElement('li');
