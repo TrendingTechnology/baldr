@@ -116,15 +116,6 @@ body {
  * search
  */
 
-#search input {
-	font-size: 2em;
-	width: 100%;
-}
-
-/**
- * search
- */
-
  #toc {
  	font-size: 1.5em;
  	overflow: scroll;
