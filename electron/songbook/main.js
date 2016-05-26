@@ -8,12 +8,28 @@ const {BrowserWindow} = electron;
 // be closed automatically when the JavaScript object is garbage collected.
 let win;
 
+function mirrorMonitors(state) {
+  var exec = require('child_process').exec;
+  var child;
+
+  child = exec('/usr/local/bin/mirror -' + state, function (error, stdout, stderr) {
+    if (error !== null) {
+      console.log('exec error: ' + error);
+    }
+  });
+}
+
 function createWindow() {
   // Create the browser window.
-  win = new BrowserWindow({width: 1800, height: 600});
+  win = new BrowserWindow({fullscreen: true});
 
-  // and load the index.html of the app.
-  win.loadURL('http://localhost:8080/songbook/#Aint-she-sweet');
+  if (process.platform == 'darwin') {
+    var url = 'http://localhost/songbook/';
+  } else {
+    var url = 'http://localhost:8080/songbook/';
+  }
+
+  win.loadURL(url);
 
   // Emitted when the window is closed.
   win.on('closed', () => {
@@ -23,6 +39,8 @@ function createWindow() {
     win = null;
   });
 }
+
+mirrorMonitors('on');
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
@@ -38,6 +56,10 @@ app.on('window-all-closed', () => {
   }
 });
 
+app.on('will-quit', () => {
+  mirrorMonitors('off');
+});
+
 app.on('activate', () => {
   // On OS X it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
@@ -45,6 +67,3 @@ app.on('activate', () => {
     createWindow();
   }
 });
-
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.
