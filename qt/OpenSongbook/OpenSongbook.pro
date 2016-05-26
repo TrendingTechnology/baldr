@@ -1,5 +1,6 @@
 TEMPLATE = app
-TARGET = open_songbook
+TARGET = Songbook
 QT += webenginewidgets
+ICON = songbook.icns
 SOURCES += \
   main.cpp
