@@ -27,11 +27,13 @@ function bindButtons() {
 
 var songs = {}
 
+songs.path = '/var/songs';
+
 /**
  *
  */
 songs.setLibrary = function() {
-  songs.library = JSON.parse(fs.readFileSync(path.join(__dirname, 'songs', 'songs.json'), 'utf8'));
+  songs.library = JSON.parse(fs.readFileSync(path.join(songs.path, 'songs.json'), 'utf8'));
   song.loadByHash();
   toc.build();
   bindButtons();
@@ -84,8 +86,8 @@ song.setCurrent = function(songID) {
  * Load the current image to the slide section.
  */
 song.setSlide = function() {
-  var path = 'songs/' + song.folder + '/slides/' + song.slides[song.slideNumber];
-  $('#slide img').attr('src', path);
+  var image_path = path.join(songs.path, song.folder, 'slides', song.slides[song.slideNumber])
+  $('#slide img').attr('src', image_path);
 }
 
 /**
