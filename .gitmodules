@@ -10,3 +10,6 @@
 [submodule "lib/listjs"]
 	path = songbook/app/lib/listjs
 	url = https://github.com/javve/list.js.git
+[submodule "songbook/app/lib/selectize"]
+	path = songbook/app/lib/selectize
+	url = https://github.com/selectize/selectize.js.git
