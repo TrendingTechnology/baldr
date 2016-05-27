@@ -139,20 +139,17 @@ toc.build = function() {
 }
 
 toc.makeList = function(library) {
-  var list = document.createElement('ul');
-  list.setAttribute('class', 'list');
+  var select = document.createElement('select');
+  select.setAttribute('class', 'list');
   for (songID in library) {
 
-    var anchor = document.createElement('a');
-    anchor.setAttribute('href', '#' + songID);
-    anchor.setAttribute('class', 'title');
-    anchor.innerHTML = library[songID].title;
+    var option = document.createElement('option');
+    option.setAttribute('value', songID);
+    option.innerHTML = library[songID].title;
 
-    var item = document.createElement('li');
-    item.appendChild(anchor);
-    list.appendChild(item);
+    select.appendChild(option);
   }
-  return list;
+  return select;
 }
 
 /**
