@@ -1,15 +1,15 @@
 [submodule "lib/fontawesome"]
-	path = lib/fontawesome
+	path = songbook/app/lib/fontawesome
 	url = https://github.com/FortAwesome/Font-Awesome.git
 [submodule "lib/mousetrap"]
-	path = lib/mousetrap
+	path = songbook/app/lib/mousetrap
 	url = https://github.com/ccampbell/mousetrap.git
 [submodule "lib/jquery"]
-	path = lib/jquery
+	path = songbook/app/lib/jquery
 	url = https://github.com/jquery/jquery-dist.git
 [submodule "songbook/songs"]
-	path = songbook/songs
+	path = songbook/app/songs
 	url = ssh://git@git.friedrich.rocks:60022/content/lieder.git
 [submodule "lib/listjs"]
-	path = lib/listjs
+	path = songbook/app/lib/listjs
 	url = https://github.com/javve/list.js.git

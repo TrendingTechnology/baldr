@@ -1,9 +1,0 @@
-wordpress:
-        image: nginx
-        container_name: html5-presentation
-        volumes: 
-                - ./:/usr/share/nginx/html:ro
-        restart: always
-        ports: 
-                - "8080:80"
-
