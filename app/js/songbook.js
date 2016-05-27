@@ -119,7 +119,7 @@ song.setCurrent = function(songID) {
  * Load the current image to the slide section.
  */
 song.setSlide = function() {
-  var path = 'songs/songs/' + song.folder + '/slides/' + song.slides[song.slideNumber];
+  var path = 'songs/' + song.folder + '/slides/' + song.slides[song.slideNumber];
   $('#slide img').attr('src', path);
 }
 
