@@ -9,21 +9,23 @@ const {BrowserWindow} = electron;
 let win;
 
 function mirrorMonitors(state) {
-  var exec = require('child_process').exec;
-  var child;
+  if (process.platform == 'darwin') {
+    var exec = require('child_process').exec;
+    var child;
 
-  child = exec('/usr/local/bin/mirror -' + state, function (error, stdout, stderr) {
-    if (error !== null) {
-      console.log('exec error: ' + error);
-    }
-  });
+    child = exec('/usr/local/bin/mirror -' + state, function (error, stdout, stderr) {
+      if (error !== null) {
+        console.log('exec error: ' + error);
+      }
+    });
+  }
 }
 
 function createWindow() {
   // Create the browser window.
   win = new BrowserWindow({fullscreen: true});
 
-  win.loadURL(`file://${__dirname}/app/index.html`));
+  win.loadURL(`file://${__dirname}/app/index.html`);
 
   // Emitted when the window is closed.
   win.on('closed', () => {
