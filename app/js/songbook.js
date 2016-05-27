@@ -1,9 +1,8 @@
 var fs = require('fs');
 
-$(document).ready(function() {
-  songs.setLibrary();
-  bindShortcuts();
-});
+console.log('lil');
+
+
 
 /**
  * Map some keyboard shortcuts to the corresponding methods.
@@ -66,8 +65,8 @@ var songs = {}
  *
  */
 songs.setLibrary = function() {
-  songs.library = JSON.parse(fs.readFileSync('songs/songs.json', 'utf8'));
-  console.log(songs.library);
+  songs.library = JSON.parse(fs.readFileSync('app/songs/songs.json', 'utf8'));
+  console.log('lol');
   song.loadByHash();
   toc.build();
   bindButtons();
@@ -120,7 +119,7 @@ song.setCurrent = function(songID) {
  * Load the current image to the slide section.
  */
 song.setSlide = function() {
-  var path = '/songbook/songs/songs/' + song.folder + '/slides/' + song.slides[song.slideNumber];
+  var path = 'songs/songs/' + song.folder + '/slides/' + song.slides[song.slideNumber];
   $('#slide img').attr('src', path);
 }
 
@@ -202,3 +201,6 @@ toc.toggle = function() {
     element.style.display = 'none';
   }
 }
+
+songs.setLibrary();
+bindShortcuts();
