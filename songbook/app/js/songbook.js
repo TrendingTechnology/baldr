@@ -1,3 +1,5 @@
+var fs = require('fs');
+
 $(document).ready(function() {
   songs.setLibrary();
   bindShortcuts();
@@ -64,16 +66,14 @@ var songs = {}
  *
  */
 songs.setLibrary = function() {
-  $.getJSON('/songbook/songs/songs.json', function(data) {
-    songs.library = data;
-    song.loadByHash();
-    toc.build();
-    bindButtons();
-    var options = {
-      valueNames: [ 'title' ]
-    };
-    var tocList = new List('toc', options);
-  });
+  songs.library = JSON.parse(fs.readFileSync('./songs/songs.json', 'utf8'));
+  song.loadByHash();
+  toc.build();
+  bindButtons();
+  var options = {
+    valueNames: [ 'title' ]
+  };
+  var tocList = new List('toc', options);
 }
 
 /***********************************************************************
