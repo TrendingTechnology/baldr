@@ -1,8 +1,5 @@
 var fs = require('fs');
-
-console.log('lil');
-
-
+var path = require('path');
 
 /**
  * Map some keyboard shortcuts to the corresponding methods.
@@ -22,37 +19,6 @@ function bindButtons() {
   $('#toc .close').click(toc.toggle);
   $('#slide #previous').click(song.previousSlide);
   $('#slide #next').click(song.nextSlide);
-  $('#menu #menu-fullscreen').click(toggleFullScreen);
-}
-
-/**
- * Toggle fullscreen in a browser compatible manner.
- *
- * Code from Mozilla net.
- */
-function toggleFullScreen() {
-  if (!document.fullscreenElement &&    // alternative standard method
-      !document.mozFullScreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement ) {  // current working methods
-    if (document.documentElement.requestFullscreen) {
-      document.documentElement.requestFullscreen();
-    } else if (document.documentElement.msRequestFullscreen) {
-      document.documentElement.msRequestFullscreen();
-    } else if (document.documentElement.mozRequestFullScreen) {
-      document.documentElement.mozRequestFullScreen();
-    } else if (document.documentElement.webkitRequestFullscreen) {
-      document.documentElement.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
-    }
-  } else {
-    if (document.exitFullscreen) {
-      document.exitFullscreen();
-    } else if (document.msExitFullscreen) {
-      document.msExitFullscreen();
-    } else if (document.mozCancelFullScreen) {
-      document.mozCancelFullScreen();
-    } else if (document.webkitExitFullscreen) {
-      document.webkitExitFullscreen();
-    }
-  }
 }
 
 /***********************************************************************
@@ -65,8 +31,7 @@ var songs = {}
  *
  */
 songs.setLibrary = function() {
-  songs.library = JSON.parse(fs.readFileSync('app/songs/songs.json', 'utf8'));
-  console.log('lol');
+  songs.library = JSON.parse(fs.readFileSync(path.join(__dirname, 'songs', 'songs.json'), 'utf8'));
   song.loadByHash();
   toc.build();
   bindButtons();
