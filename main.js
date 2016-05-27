@@ -23,13 +23,7 @@ function createWindow() {
   // Create the browser window.
   win = new BrowserWindow({fullscreen: true});
 
-  if (process.platform == 'darwin') {
-    var url = 'http://localhost/songbook/';
-  } else {
-    var url = 'http://localhost:8080/songbook/';
-  }
-
-  win.loadURL(url);
+  win.loadURL(`file://${__dirname}/app/index.html`));
 
   // Emitted when the window is closed.
   win.on('closed', () => {
