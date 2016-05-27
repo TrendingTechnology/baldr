@@ -37,10 +37,6 @@ songs.setLibrary = function() {
   song.loadByHash();
   toc.build();
   bindButtons();
-  var options = {
-    valueNames: [ 'title' ]
-  };
-  var tocList = new List('toc', options);
 }
 
 /***********************************************************************
@@ -135,18 +131,21 @@ window.onhashchange = song.loadByHash;
 var toc = {};
 
 toc.build = function() {
-  document.getElementById('scroll').appendChild(toc.makeList(songs.library));
+  document.getElementById('search').appendChild(toc.makeList(songs.library));
 }
 
 toc.makeList = function(library) {
   var select = document.createElement('select');
-  select.setAttribute('class', 'list');
-  for (songID in library) {
+  select.setAttribute('placeholder', 'Suche nach einem Lied');
 
+  var option = document.createElement('option');
+  option.setAttribute('value', '');
+  select.appendChild(option);
+
+  for (songID in library) {
     var option = document.createElement('option');
     option.setAttribute('value', songID);
     option.innerHTML = library[songID].title;
-
     select.appendChild(option);
   }
   return select;
@@ -160,7 +159,6 @@ toc.toggle = function() {
   var displayState = element.style.display;
   if (displayState == 'none') {
     element.style.display = 'block';
-    document.getElementById('search').focus();
   } else {
     element.style.display = 'none';
   }
@@ -168,3 +166,15 @@ toc.toggle = function() {
 
 songs.setLibrary();
 bindShortcuts();
+
+
+$(function() {
+    var selectized = $('select').selectize({
+      onItemAdd: function(value, data) {
+        console.log(value);
+        song.setCurrent(value);
+        song.setSlide();
+      }
+    });
+    selectized[0].selectize.focus();
+});
