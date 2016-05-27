@@ -66,7 +66,8 @@ var songs = {}
  *
  */
 songs.setLibrary = function() {
-  songs.library = JSON.parse(fs.readFileSync('./songs/songs.json', 'utf8'));
+  songs.library = JSON.parse(fs.readFileSync('songs/songs.json', 'utf8'));
+  console.log(songs.library);
   song.loadByHash();
   toc.build();
   bindButtons();
