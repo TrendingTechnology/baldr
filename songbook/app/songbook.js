@@ -6,6 +6,7 @@ var path = require('path');
  */
 function bindShortcuts() {
   Mousetrap.bind('esc', toc.toggle);
+  Mousetrap.bind('alt', toc.toggle);
   Mousetrap.bind('left', song.previousSlide);
   Mousetrap.bind('right', song.nextSlide);
 }
@@ -136,6 +137,7 @@ toc.build = function() {
 
 toc.makeList = function(library) {
   var select = document.createElement('select');
+  select.setAttribute('id', 'select');
   select.setAttribute('placeholder', 'Suche nach einem Lied');
 
   var option = document.createElement('option');
@@ -159,22 +161,34 @@ toc.toggle = function() {
   var displayState = element.style.display;
   if (displayState == 'none') {
     element.style.display = 'block';
+    if (typeof toc.selectize != 'undefined') {
+      toc.selectize.focus();
+      toc.selectize.clear();
+    }
   } else {
     element.style.display = 'none';
   }
 }
 
+toc.resetSelect = function() {
+  // fetch our section element
+  var select = document.getElementById('select');
+  var option = document.createElement('option');
+  option.setAttribute('value', '');
+  select.insertBefore(option, select.firstChild);
+}
+
 songs.setLibrary();
 bindShortcuts();
-
 
 $(function() {
     var selectized = $('select').selectize({
       onItemAdd: function(value, data) {
-        console.log(value);
         song.setCurrent(value);
         song.setSlide();
+        toc.toggle();
       }
     });
-    selectized[0].selectize.focus();
+    toc.selectize = selectized[0].selectize;
+    toc.selectize.focus();
 });
