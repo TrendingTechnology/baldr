@@ -18,7 +18,7 @@ function mirrorMonitors(state) {
 }
 
 function createWindow() {
-  win = new BrowserWindow();
+  win = new BrowserWindow({fullscreen: true});
 
   win.loadURL(`file://${__dirname}/app/index.html`);
   win.webContents.openDevTools();
