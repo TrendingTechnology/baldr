@@ -192,3 +192,18 @@ $(function() {
     toc.selectize = selectized[0].selectize;
     toc.selectize.focus();
 });
+
+const {remote} = require('electron');
+const {Menu, MenuItem} = remote;
+
+function updateSongLibrary() {
+  console.log('Update song library');
+}
+
+const contextMenu = new Menu();
+contextMenu.append(new MenuItem({label: 'Akualisieren der Liedersammlung', click: updateSongLibrary}));
+
+window.addEventListener('contextmenu', (e) => {
+  e.preventDefault();
+  contextMenu.popup(remote.getCurrentWindow());
+}, false);
