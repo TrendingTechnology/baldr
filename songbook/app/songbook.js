@@ -1,5 +1,6 @@
 var fs = require('fs');
 var path = require('path');
+const spawn = require('child_process').spawnSync;
 //var util = require('util');
 
 /***********************************************************************
@@ -73,21 +74,40 @@ library.getModifiedFiles = function() {
       }
     }
   });
-  console.log(modified);
   return modified;
 }
 
-library.generateSVGs = function() {
-  var modified = library.getModifiedFiles();
-  modified.forEach(function(folder) {
-    library.updateMTime(folder);
-    console.log(folder)
-  });
+library.generatePDF = function(folder) {
+  const mscore = spawn('mscore', [
+    '--export-to',
+    path.join(folder, 'score.pdf'),
+    path.join(folder, 'score.mscx')
+  ]);
+}
+
+library.generateSVGs = function(folder) {
+  console.log(folder);
+  var slides = path.join(folder, 'slides');
+  fs.access(slides, function(err) {
+    if (err) {
+      fs.mkdir(slides);
+    }
+  })
+  const pdf2svg = spawn('pdf2svg', [
+    path.join(folder, 'score.pdf'),
+    path.join(slides, '%02d.svg'),
+     'all'
+  ]);
 }
 
 library.update = function() {
-  library.generateSVGs();
-  //library.generateJSON();
+  var modified = library.getModifiedFiles();
+  modified.forEach(function(folder) {
+    library.generatePDF(folder);
+    library.generateSVGs(folder);
+    library.updateMTime(folder);
+  });
+  library.generateJSON();
 }
 
 /**
