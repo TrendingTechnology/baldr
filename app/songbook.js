@@ -14,16 +14,6 @@ library.json = library.path + '/songs.json';
 
 library.songs = {};
 
-library.writeMTime = function(file) {
-  stat = fs.statSync(file);
-  fileMTime = file.replace('info.json', '.mtime');
-  fs.writeFile(fileMTime, stat.mtime, function(err) {
-    if(err) {
-        return console.log(err);
-    }
-  });
-}
-
 library.generateJSON = function() {
   folders = fs.readdirSync(library.path);
 
@@ -45,22 +35,59 @@ library.generateJSON = function() {
   console.log(json);
 }
 
-library.getModifiedFiles = function () {
-  folders = fs.readdirSync(library.path);
-  folders.forEach(function (folder) {
-    var score = folder + '/score.mscx';
-    if (fs.existsSync(score)) {
-      var stat = fs.statSync(folder + '/score.mscx');
-      var mtime = fs.readFileSync(folder + '/.mtime', 'utf8');
-      if (stat.mtime != mtime) {
-        console.log('Change: ' + score);
-      }
+library.updateMTime = function(folder) {
+  var score = path.join(folder, 'score.mscx')
+  stat = fs.statSync(score);
+  fs.writeFile(path.join(folder, '.mtime'), stat.mtime, function(err) {
+    if(err) {
+        return console.log(err);
     }
   });
 }
 
+library.getMTime = function(folder) {
+  var stat = fs.statSync(folder + '/score.mscx');
+  return stat.mtime
+}
+
+library.getCachedMTime = function(folder) {
+  if (fs.existsSync(folder + '/.mtime')) {
+    return fs.readFileSync(folder + '/.mtime', 'utf8');
+  }
+  else {
+    return '';
+  }
+}
+
+library.getModifiedFiles = function() {
+  var modified = [];
+  folders = fs.readdirSync(library.path);
+  folders.forEach(function (folder) {
+    var folder = path.join(library.path, folder);
+    var score = path.join(folder, 'score.mscx');
+    if (fs.existsSync(score)) {
+      var MTime = library.getMTime(folder);
+      var cachedMTime = library.getCachedMTime(folder);
+      if (cachedMTime != MTime) {
+        modified[modified.length] = folder;
+      }
+    }
+  });
+  console.log(modified);
+  return modified;
+}
+
+library.generateSVGs = function() {
+  var modified = library.getModifiedFiles();
+  modified.forEach(function(folder) {
+    library.updateMTime(folder);
+    console.log(folder)
+  });
+}
+
 library.update = function() {
-  library.generateJSON();
+  library.generateSVGs();
+  //library.generateJSON();
 }
 
 /**
@@ -260,7 +287,13 @@ const {remote} = require('electron');
 const {Menu, MenuItem} = remote;
 
 const contextMenu = new Menu();
-contextMenu.append(new MenuItem({label: 'Akualisieren der Liedersammlung', click: library.update}));
+contextMenu.append(new MenuItem(
+  {
+    label: 'Akualisieren der Liedersammlung',
+    accelerator: 'CmdOrCtrl+u',
+    click: library.update
+  }
+));
 
 window.addEventListener('contextmenu', (e) => {
   e.preventDefault();
