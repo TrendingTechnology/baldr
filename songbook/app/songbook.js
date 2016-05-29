@@ -24,7 +24,7 @@ library.writeMTime = function(file) {
   });
 }
 
-library.generateJSON = function () {
+library.generateJSON = function() {
   folders = fs.readdirSync(library.path);
 
   folders.forEach(function (folder) {
@@ -39,7 +39,7 @@ library.generateJSON = function () {
     }
   });
 
-  var json = JSON.stringify(library.songs, null, 4)
+  var json = JSON.stringify(library.songs, null, 4);
 
   fs.writeFileSync(library.json, json);
   console.log(json);
@@ -57,6 +57,10 @@ library.getModifiedFiles = function () {
       }
     }
   });
+}
+
+library.update = function() {
+  library.generateJSON();
 }
 
 /**
@@ -256,7 +260,7 @@ const {remote} = require('electron');
 const {Menu, MenuItem} = remote;
 
 const contextMenu = new Menu();
-contextMenu.append(new MenuItem({label: 'Akualisieren der Liedersammlung', click: library.generateJSON}));
+contextMenu.append(new MenuItem({label: 'Akualisieren der Liedersammlung', click: library.update}));
 
 window.addEventListener('contextmenu', (e) => {
   e.preventDefault();
