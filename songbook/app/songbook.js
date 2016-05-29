@@ -2,6 +2,63 @@ var fs = require('fs');
 var path = require('path');
 //var util = require('util');
 
+/***********************************************************************
+ * Object 'library'
+ **********************************************************************/
+
+var library = {};
+
+library.path = '/var/songs';
+
+library.json = library.path + '/songs.json';
+
+library.songs = {};
+
+library.writeMTime = function(file) {
+  stat = fs.statSync(file);
+  fileMTime = file.replace('info.json', '.mtime');
+  fs.writeFile(fileMTime, stat.mtime, function(err) {
+    if(err) {
+        return console.log(err);
+    }
+  });
+}
+
+library.generateJSON = function () {
+  folders = fs.readdirSync(library.path);
+
+  folders.forEach(function (folder) {
+    var songFolder = library.path + '/' + folder + '/';
+    var jsonFile = songFolder + 'info.json';
+    if (fs.existsSync(jsonFile)) {
+      var json = fs.readFileSync(jsonFile, 'utf8');
+      var info = JSON.parse(json);
+      info.folder = folder;
+      info.slides = fs.readdirSync(songFolder + 'slides/');
+      library.songs[folder] = info;
+    }
+  });
+
+  var json = JSON.stringify(library.songs, null, 4)
+
+  fs.writeFileSync(library.json, json);
+  console.log(json);
+}
+
+library.getModifiedFiles = function () {
+  folders = fs.readdirSync(library.path);
+  folders.forEach(function (folder) {
+    var score = folder + '/score.mscx';
+    if (fs.existsSync(score)) {
+      var stat = fs.statSync(folder + '/score.mscx');
+      var mtime = fs.readFileSync(folder + '/.mtime', 'utf8');
+      if (stat.mtime != mtime) {
+        console.log('Change: ' + score);
+      }
+    }
+  });
+}
+
 /**
  * Map some keyboard shortcuts to the corresponding methods.
  */
@@ -29,13 +86,14 @@ function bindButtons() {
 
 var songs = {}
 
-songs.path = '/var/songs';
-
 /**
  *
  */
 songs.setLibrary = function() {
-  songs.library = JSON.parse(fs.readFileSync(path.join(songs.path, 'songs.json'), 'utf8'));
+  if (!fs.existsSync(library.json)) {
+    library.generateJSON();
+  }
+  songs.library = JSON.parse(fs.readFileSync(library.json, 'utf8'));
   song.loadByHash();
   toc.build();
   bindButtons();
@@ -84,7 +142,7 @@ song.setCurrent = function(songID) {
  * Load the current image to the slide section.
  */
 song.setSlide = function() {
-  var image_path = path.join(songs.path, song.folder, 'slides', song.slides[song.slideNumber])
+  var image_path = path.join(library.path, song.folder, 'slides', song.slides[song.slideNumber])
   $('#slide img').attr('src', image_path);
 }
 
@@ -197,68 +255,10 @@ $(function() {
 const {remote} = require('electron');
 const {Menu, MenuItem} = remote;
 
-function updateSongLibrary() {
-  console.log('Update song library');
-}
-
 const contextMenu = new Menu();
-contextMenu.append(new MenuItem({label: 'Akualisieren der Liedersammlung', click: updateSongLibrary}));
+contextMenu.append(new MenuItem({label: 'Akualisieren der Liedersammlung', click: library.generateJSON}));
 
 window.addEventListener('contextmenu', (e) => {
   e.preventDefault();
   contextMenu.popup(remote.getCurrentWindow());
 }, false);
-
-/***********************************************************************
- * Object 'library'
- **********************************************************************/
-
-var library = {};
-
-library.songs = {};
-
-library.writeMTime = function(file) {
-  stat = fs.statSync(file);
-  fileMTime = file.replace('info.json', '.mtime');
-  fs.writeFile(fileMTime, stat.mtime, function(err) {
-    if(err) {
-        return console.log(err);
-    }
-  });
-}
-
-library.generateSongsJson = function () {
-  folders = fs.readdirSync(songs.path);
-
-  folders.forEach(function (folder) {
-    var songFolder = songsRootFolder + folder + '/';
-    var jsonFile = songFolder + 'info.json';
-    if (fs.existsSync(jsonFile)) {
-      writeMTime(jsonFile);
-      var json = fs.readFileSync(jsonFile, 'utf8');
-      var info = JSON.parse(json);
-      info.folder = folder;
-      info.slides = fs.readdirSync(songFolder + 'slides/');
-      library.songs[folder] = info;
-    }
-  });
-
-  var json = JSON.stringify(library.songs, null, 4)
-
-  fs.writeFileSync(songs.path + '/songs.json', json);
-  console.log(json);
-}
-
-library.getModifiedFiles = function () {
-  folders = fs.readdirSync(songs.path);
-  folders.forEach(function (folder) {
-    var score = folder + '/score.mscx';
-    if (fs.existsSync(score)) {
-      var stat = fs.statSync(folder + '/score.mscx');
-      var mtime = fs.readFileSync(folder + '/.mtime', 'utf8');
-      if (stat.mtime != mtime) {
-        console.log('Change: ' + score);
-      }
-    }
-  });
-}
