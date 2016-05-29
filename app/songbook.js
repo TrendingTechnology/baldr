@@ -1,5 +1,6 @@
 var fs = require('fs');
 var path = require('path');
+//var util = require('util');
 
 /**
  * Map some keyboard shortcuts to the corresponding methods.
@@ -207,3 +208,57 @@ window.addEventListener('contextmenu', (e) => {
   e.preventDefault();
   contextMenu.popup(remote.getCurrentWindow());
 }, false);
+
+/***********************************************************************
+ * Object 'library'
+ **********************************************************************/
+
+var library = {};
+
+library.songs = {};
+
+library.writeMTime = function(file) {
+  stat = fs.statSync(file);
+  fileMTime = file.replace('info.json', '.mtime');
+  fs.writeFile(fileMTime, stat.mtime, function(err) {
+    if(err) {
+        return console.log(err);
+    }
+  });
+}
+
+library.generateSongsJson = function () {
+  folders = fs.readdirSync(songs.path);
+
+  folders.forEach(function (folder) {
+    var songFolder = songsRootFolder + folder + '/';
+    var jsonFile = songFolder + 'info.json';
+    if (fs.existsSync(jsonFile)) {
+      writeMTime(jsonFile);
+      var json = fs.readFileSync(jsonFile, 'utf8');
+      var info = JSON.parse(json);
+      info.folder = folder;
+      info.slides = fs.readdirSync(songFolder + 'slides/');
+      library.songs[folder] = info;
+    }
+  });
+
+  var json = JSON.stringify(library.songs, null, 4)
+
+  fs.writeFileSync(songs.path + '/songs.json', json);
+  console.log(json);
+}
+
+library.getModifiedFiles = function () {
+  folders = fs.readdirSync(songs.path);
+  folders.forEach(function (folder) {
+    var score = folder + '/score.mscx';
+    if (fs.existsSync(score)) {
+      var stat = fs.statSync(folder + '/score.mscx');
+      var mtime = fs.readFileSync(folder + '/.mtime', 'utf8');
+      if (stat.mtime != mtime) {
+        console.log('Change: ' + score);
+      }
+    }
+  });
+}
