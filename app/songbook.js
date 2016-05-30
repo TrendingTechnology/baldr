@@ -3,6 +3,35 @@ var path = require('path');
 const spawn = require('child_process').spawnSync;
 //var util = require('util');
 
+modal = {};
+
+modal.IDs = ['toc', 'update'];
+
+modal.setDisplay = function(modalID, state) {
+  var element = document.getElementById(modalID);
+  element.style.display = state;
+}
+
+modal.hide = function() {
+  modal.setDisplay
+  modal.IDs.forEach(function(modalID) {
+    modal.setDisplay(modalID, 'none');
+  });
+}
+
+modal.show = function(modalID) {
+  modal.hide();
+  modal.setDisplay(modalID, 'block');
+
+  if (modalID == 'toc') {
+    if (typeof toc.selectize != 'undefined') {
+      toc.selectize.focus();
+      toc.selectize.clear();
+    }
+  }
+}
+
+
 /***********************************************************************
  * Object 'library'
  **********************************************************************/
@@ -33,7 +62,7 @@ library.generateJSON = function() {
   var json = JSON.stringify(library.songs, null, 4);
 
   fs.writeFileSync(library.json, json);
-  console.log(json);
+  library.message('Datenbank-Datei erzeugen');
 }
 
 library.updateMTime = function(folder) {
@@ -83,6 +112,7 @@ library.getFolders = function(mode) {
 
 library.pull = function() {
   var gitpull = spawn('git', ['pull'], {cwd: library.path});
+  library.message('Nach Aktualsierungen suchen');
   console.log(gitpull.stdout.toString('utf8'));
 }
 
@@ -104,6 +134,7 @@ library.deletePDF = function(folder) {
 }
 
 library.generateSVGs = function(folder) {
+  library.message(folder + ': Bilder erzeugen');
   var slides = path.join(folder, 'slides');
   //var rm = spawn('rm', ['-rf', slides]);
   //if (rm.error) console.log(rm.error);
@@ -119,7 +150,25 @@ library.generateSVGs = function(folder) {
   ]);
 }
 
+library.toggle = function() {
+  var element = document.getElementById('update');
+  var displayState = element.style.display;
+  if (displayState == 'none') {
+    element.style.display = 'block';
+  } else {
+    element.style.display = 'none';
+  }
+}
+
+library.message =  function(text) {
+  var element = document.getElementById('progress');
+  var p = document.createElement('p');
+  p.innerHTML = text;
+  element.appendChild(p);
+}
+
 library.update = function(mode) {
+  modal.show('update');
   library.pull();
   var folders = library.getFolders(mode);
   folders.forEach(function(folder) {
@@ -149,9 +198,10 @@ function bindShortcuts() {
  * Map some buttons to the corresponding methods.
  */
 function bindButtons() {
-  $('#menu #menu-toc').click(toc.toggle);
-  $('#toc a').click(toc.toggle);
-  $('#toc .close').click(toc.toggle);
+  $('#menu #menu-toc').click(modal.show('menu'));
+  $('#toc a').click(modal.hide());
+  $('#toc .close').click(modal.hide());
+  $('#update .close').click(modal.hide());
   $('#slide #previous').click(song.previousSlide);
   $('#slide #next').click(song.nextSlide);
 }
@@ -254,7 +304,7 @@ song.loadByHash = function() {
     $('#slide').show();
   }
   else {
-    toc.toggle();
+    modal.show('toc');
   }
 }
 
@@ -321,7 +371,7 @@ $(function() {
       onItemAdd: function(value, data) {
         song.setCurrent(value);
         song.setSlide();
-        toc.toggle();
+        modal.hide();
       }
     });
     toc.selectize = selectized[0].selectize;
