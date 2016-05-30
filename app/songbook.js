@@ -60,21 +60,30 @@ library.getCachedMTime = function(folder) {
   }
 }
 
-library.getModifiedFiles = function() {
-  var modified = [];
+library.getFolders = function(mode) {
+  var output = [];
   folders = fs.readdirSync(library.path);
   folders.forEach(function (folder) {
     var folder = path.join(library.path, folder);
     var score = path.join(folder, 'score.mscx');
     if (fs.existsSync(score)) {
-      var MTime = library.getMTime(folder);
-      var cachedMTime = library.getCachedMTime(folder);
-      if (cachedMTime != MTime) {
-        modified[modified.length] = folder;
+      if (mode != 'force') {
+        var MTime = library.getMTime(folder);
+        var cachedMTime = library.getCachedMTime(folder);
+        if (cachedMTime != MTime) {
+          output[output.length] = folder;
+        }
+      } else {
+        output[output.length] = folder;
       }
     }
   });
-  return modified;
+  return output;
+}
+
+library.pull = function() {
+  var gitpull = spawn('git', ['pull'], {cwd: library.path});
+  console.log(gitpull.stdout.toString('utf8'));
 }
 
 library.generatePDF = function(folder) {
@@ -85,9 +94,19 @@ library.generatePDF = function(folder) {
   ]);
 }
 
+library.deletePDF = function(folder) {
+  fs.stat(path.join(folder, 'score.pdf'), function (err, stats) {
+    if (err) return console.error(err);
+      fs.unlink(path.join(folder, 'score.pdf'), function(err) {
+         if(err) return console.error(err);
+    });
+  });
+}
+
 library.generateSVGs = function(folder) {
-  console.log(folder);
   var slides = path.join(folder, 'slides');
+  //var rm = spawn('rm', ['-rf', slides]);
+  //if (rm.error) console.log(rm.error);
   fs.access(slides, function(err) {
     if (err) {
       fs.mkdir(slides);
@@ -100,14 +119,20 @@ library.generateSVGs = function(folder) {
   ]);
 }
 
-library.update = function() {
-  var modified = library.getModifiedFiles();
-  modified.forEach(function(folder) {
+library.update = function(mode) {
+  library.pull();
+  var folders = library.getFolders(mode);
+  folders.forEach(function(folder) {
     library.generatePDF(folder);
     library.generateSVGs(folder);
+    library.deletePDF(folder);
     library.updateMTime(folder);
   });
   library.generateJSON();
+}
+
+library.updateForce = function() {
+  library.update('force');
 }
 
 /**
@@ -312,6 +337,13 @@ contextMenu.append(new MenuItem(
     label: 'Akualisieren der Liedersammlung',
     accelerator: 'CmdOrCtrl+u',
     click: library.update
+  }
+));
+
+contextMenu.append(new MenuItem(
+  {
+    label: 'Akualisieren der Liedersammlung (komplett)',
+    click: library.updateForce
   }
 ));
 
