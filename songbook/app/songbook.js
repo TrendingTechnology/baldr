@@ -7,19 +7,19 @@ var modal = require('./modal.js');
  * Map some keyboard shortcuts to the corresponding methods.
  */
 function bindShortcuts() {
-  Mousetrap.bind('esc', modal.toggleToc);
-  Mousetrap.bind('alt', modal.toggleToc);
+  Mousetrap.bind('esc', modal.togglesearch);
+  Mousetrap.bind('alt', modal.togglesearch);
   Mousetrap.bind('left', song.previousSlide);
   Mousetrap.bind('right', song.nextSlide);
 }
-
+search
 /**
  * Map some buttons to the corresponding methods.
  */
 function bindButtons() {
-  $('#menu #menu-toc').click(modal.toggleToc);
-  $('#toc a').click(modal.hide);
-  $('#toc .close').click(modal.hide);
+  $('#menu #menu-search').click(modal.togglesearch);
+  $('#search a').click(modal.hide);
+  $('#search .close').click(modal.hide);
   $('#update .close').click(modal.hide);
   $('#slide #previous').click(song.previousSlide);
   $('#slide #next').click(song.nextSlide);
@@ -40,7 +40,7 @@ songs.setLibrary = function() {
   }
   songs.library = JSON.parse(fs.readFileSync(library.json, 'utf8'));
   song.loadByHash();
-  toc.build();
+  search.build();
   bindButtons();
 }
 
@@ -123,23 +123,23 @@ song.loadByHash = function() {
     $('#slide').show();
   }
   else {
-    modal.show('toc');
+    modal.show('search');
   }
 }
 
 window.onhashchange = song.loadByHash;
 
 /***********************************************************************
- * Object 'toc': table of contents
+ * Object 'search': table of contents
  **********************************************************************/
 
-var toc = {};
+var search = {};
 
-toc.build = function() {
-  document.getElementById('search').appendChild(toc.makeList(songs.library));
+search.build = function() {
+  document.getElementById('search').appendChild(search.makeList(songs.library));
 }
 
-toc.makeList = function(library) {
+search.makeList = function(library) {
   var select = document.createElement('select');
   select.setAttribute('id', 'select');
   select.setAttribute('placeholder', 'Suche nach einem Lied');
@@ -160,21 +160,21 @@ toc.makeList = function(library) {
 /**
  * Hide or show table of contents.
  */
-toc.toggle = function() {
-  var element = document.getElementById('toc');
+search.toggle = function() {
+  var element = document.getElementById('search');
   var displayState = element.style.display;
   if (displayState == 'none') {
     element.style.display = 'block';
-    if (typeof toc.selectize != 'undefined') {
-      toc.selectize.focus();
-      toc.selectize.clear();
+    if (typeof search.selectize != 'undefined') {
+      search.selectize.focus();
+      search.selectize.clear();
     }
   } else {
     element.style.display = 'none';
   }
 }
 
-toc.resetSelect = function() {
+search.resetSelect = function() {
   // fetch our section element
   var select = document.getElementById('select');
   var option = document.createElement('option');
@@ -193,8 +193,8 @@ $(function() {
         modal.hide();
       }
     });
-    toc.selectize = selectized[0].selectize;
-    toc.selectize.focus();
+    search.selectize = selectized[0].selectize;
+    search.selectize.focus();
 });
 
 const {remote} = require('electron');
