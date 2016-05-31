@@ -2,13 +2,10 @@ var fs = require('fs');
 var path = require('path');
 const spawn = require('child_process').spawnSync;
 
-path = '/var/songs';
+exports.path = path = '/var/songs';
+exports.json = path + '/songs.json';
 
-json = path + '/songs.json';
-
-songs = {};
-
-generateJSON = function() {
+exports.generateJSON = function() {
   folders = fs.readdirSync(path);
 
   folders.forEach(function (folder) {
