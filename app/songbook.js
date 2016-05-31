@@ -1,5 +1,188 @@
 var fs = require('fs');
 var path = require('path');
+const spawn = require('child_process').spawnSync;
+//var util = require('util');
+
+modal = {};
+
+modal.IDs = ['toc', 'update'];
+
+modal.setDisplay = function(modalID, state) {
+  var element = document.getElementById(modalID);
+  element.style.display = state;
+}
+
+modal.hide = function() {
+  modal.setDisplay
+  modal.IDs.forEach(function(modalID) {
+    modal.setDisplay(modalID, 'none');
+  });
+}
+
+modal.show = function(modalID) {
+  modal.hide();
+  modal.setDisplay(modalID, 'block');
+
+  if (modalID == 'toc') {
+    if (typeof toc.selectize != 'undefined') {
+      toc.selectize.focus();
+      toc.selectize.clear();
+    }
+  }
+}
+
+
+/***********************************************************************
+ * Object 'library'
+ **********************************************************************/
+
+var library = {};
+
+library.path = '/var/songs';
+
+library.json = library.path + '/songs.json';
+
+library.songs = {};
+
+library.generateJSON = function() {
+  folders = fs.readdirSync(library.path);
+
+  folders.forEach(function (folder) {
+    var songFolder = library.path + '/' + folder + '/';
+    var jsonFile = songFolder + 'info.json';
+    if (fs.existsSync(jsonFile)) {
+      var json = fs.readFileSync(jsonFile, 'utf8');
+      var info = JSON.parse(json);
+      info.folder = folder;
+      info.slides = fs.readdirSync(songFolder + 'slides/');
+      library.songs[folder] = info;
+    }
+  });
+
+  var json = JSON.stringify(library.songs, null, 4);
+
+  fs.writeFileSync(library.json, json);
+  library.message('Datenbank-Datei erzeugen');
+}
+
+library.updateMTime = function(folder) {
+  var score = path.join(folder, 'score.mscx')
+  stat = fs.statSync(score);
+  fs.writeFile(path.join(folder, '.mtime'), stat.mtime, function(err) {
+    if(err) {
+        return console.log(err);
+    }
+  });
+}
+
+library.getMTime = function(folder) {
+  var stat = fs.statSync(folder + '/score.mscx');
+  return stat.mtime
+}
+
+library.getCachedMTime = function(folder) {
+  if (fs.existsSync(folder + '/.mtime')) {
+    return fs.readFileSync(folder + '/.mtime', 'utf8');
+  }
+  else {
+    return '';
+  }
+}
+
+library.getFolders = function(mode) {
+  var output = [];
+  folders = fs.readdirSync(library.path);
+  folders.forEach(function (folder) {
+    var folder = path.join(library.path, folder);
+    var score = path.join(folder, 'score.mscx');
+    if (fs.existsSync(score)) {
+      if (mode != 'force') {
+        var MTime = library.getMTime(folder);
+        var cachedMTime = library.getCachedMTime(folder);
+        if (cachedMTime != MTime) {
+          output[output.length] = folder;
+        }
+      } else {
+        output[output.length] = folder;
+      }
+    }
+  });
+  return output;
+}
+
+library.pull = function() {
+  var gitpull = spawn('git', ['pull'], {cwd: library.path});
+  library.message('Nach Aktualsierungen suchen');
+  console.log(gitpull.stdout.toString('utf8'));
+}
+
+library.generatePDF = function(folder) {
+  const mscore = spawn('mscore', [
+    '--export-to',
+    path.join(folder, 'score.pdf'),
+    path.join(folder, 'score.mscx')
+  ]);
+}
+
+library.deletePDF = function(folder) {
+  fs.stat(path.join(folder, 'score.pdf'), function (err, stats) {
+    if (err) return console.error(err);
+      fs.unlink(path.join(folder, 'score.pdf'), function(err) {
+         if(err) return console.error(err);
+    });
+  });
+}
+
+library.generateSVGs = function(folder) {
+  library.message(folder + ': Bilder erzeugen');
+  var slides = path.join(folder, 'slides');
+  //var rm = spawn('rm', ['-rf', slides]);
+  //if (rm.error) console.log(rm.error);
+  fs.access(slides, function(err) {
+    if (err) {
+      fs.mkdir(slides);
+    }
+  })
+  const pdf2svg = spawn('pdf2svg', [
+    path.join(folder, 'score.pdf'),
+    path.join(slides, '%02d.svg'),
+     'all'
+  ]);
+}
+
+library.toggle = function() {
+  var element = document.getElementById('update');
+  var displayState = element.style.display;
+  if (displayState == 'none') {
+    element.style.display = 'block';
+  } else {
+    element.style.display = 'none';
+  }
+}
+
+library.message =  function(text) {
+  var element = document.getElementById('progress');
+  var p = document.createElement('p');
+  p.innerHTML = text;
+  element.appendChild(p);
+}
+
+library.update = function(mode) {
+  modal.show('update');
+  library.pull();
+  var folders = library.getFolders(mode);
+  folders.forEach(function(folder) {
+    library.generatePDF(folder);
+    library.generateSVGs(folder);
+    library.deletePDF(folder);
+    library.updateMTime(folder);
+  });
+  library.generateJSON();
+}
+
+library.updateForce = function() {
+  library.update('force');
+}
 
 /**
  * Map some keyboard shortcuts to the corresponding methods.
@@ -15,9 +198,10 @@ function bindShortcuts() {
  * Map some buttons to the corresponding methods.
  */
 function bindButtons() {
-  $('#menu #menu-toc').click(toc.toggle);
-  $('#toc a').click(toc.toggle);
-  $('#toc .close').click(toc.toggle);
+  $('#menu #menu-toc').click(modal.show('menu'));
+  $('#toc a').click(modal.hide());
+  $('#toc .close').click(modal.hide());
+  $('#update .close').click(modal.hide());
   $('#slide #previous').click(song.previousSlide);
   $('#slide #next').click(song.nextSlide);
 }
@@ -28,13 +212,14 @@ function bindButtons() {
 
 var songs = {}
 
-songs.path = '/var/songs';
-
 /**
  *
  */
 songs.setLibrary = function() {
-  songs.library = JSON.parse(fs.readFileSync(path.join(songs.path, 'songs.json'), 'utf8'));
+  if (!fs.existsSync(library.json)) {
+    library.generateJSON();
+  }
+  songs.library = JSON.parse(fs.readFileSync(library.json, 'utf8'));
   song.loadByHash();
   toc.build();
   bindButtons();
@@ -83,7 +268,7 @@ song.setCurrent = function(songID) {
  * Load the current image to the slide section.
  */
 song.setSlide = function() {
-  var image_path = path.join(songs.path, song.folder, 'slides', song.slides[song.slideNumber])
+  var image_path = path.join(library.path, song.folder, 'slides', song.slides[song.slideNumber])
   $('#slide img').attr('src', image_path);
 }
 
@@ -119,7 +304,7 @@ song.loadByHash = function() {
     $('#slide').show();
   }
   else {
-    toc.toggle();
+    modal.show('toc');
   }
 }
 
@@ -186,9 +371,33 @@ $(function() {
       onItemAdd: function(value, data) {
         song.setCurrent(value);
         song.setSlide();
-        toc.toggle();
+        modal.hide();
       }
     });
     toc.selectize = selectized[0].selectize;
     toc.selectize.focus();
 });
+
+const {remote} = require('electron');
+const {Menu, MenuItem} = remote;
+
+const contextMenu = new Menu();
+contextMenu.append(new MenuItem(
+  {
+    label: 'Akualisieren der Liedersammlung',
+    accelerator: 'CmdOrCtrl+u',
+    click: library.update
+  }
+));
+
+contextMenu.append(new MenuItem(
+  {
+    label: 'Akualisieren der Liedersammlung (komplett)',
+    click: library.updateForce
+  }
+));
+
+window.addEventListener('contextmenu', (e) => {
+  e.preventDefault();
+  contextMenu.popup(remote.getCurrentWindow());
+}, false);
