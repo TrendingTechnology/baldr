@@ -1,11 +1,11 @@
-IDs = ['search', 'update'];
+IDs = ['search', 'tableofcontents', 'settings'];
 
 setDisplay = function(modalID, state) {
   var element = document.getElementById(modalID);
   element.style.display = state;
 }
 
-toggle = function(modalID) {
+exports.toggle = toggle = function(modalID) {
   var element = document.getElementById(modalID);
   var displayState = element.style.display;
   if (displayState == 'none') {
