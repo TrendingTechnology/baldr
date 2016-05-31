@@ -1,4 +1,4 @@
-IDs = ['toc', 'update'];
+IDs = ['search', 'update'];
 
 setDisplay = function(modalID, state) {
   var element = document.getElementById(modalID);
@@ -15,8 +15,8 @@ toggle = function(modalID) {
   }
 }
 
-exports.toggleToc = function() {
-  toggle('toc');
+exports.togglesearch = function() {
+  toggle('search');
 }
 
 exports.hide = hide = function() {
@@ -29,10 +29,10 @@ exports.show = function(modalID) {
   hide();
   setDisplay(modalID, 'block');
 
-  if (modalID == 'toc') {
-    if (typeof toc.selectize != 'undefined') {
-      toc.selectize.focus();
-      toc.selectize.clear();
+  if (modalID == 'search') {
+    if (typeof search.selectize != 'undefined') {
+      search.selectize.focus();
+      search.selectize.clear();
     }
   }
 }
