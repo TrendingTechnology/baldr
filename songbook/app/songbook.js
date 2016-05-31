@@ -1,6 +1,6 @@
 var fs = require('fs');
 var path = require('path');
-var library = require('./library.js')
+var library = require('./library.js');
 
 modal = {};
 
