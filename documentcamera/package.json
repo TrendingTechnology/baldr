@@ -1,0 +1,29 @@
+{
+  "name": "documentcamera",
+  "productName": "Document camera",
+  "version": "0.0.1",
+  "description": "Document camera",
+  "main": "main.js",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@git.friedrich.rocks:60022/jf/html5-school-presentation.git"
+  },
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-packager . --out=dist --app-version=$npm_package_version --prune --asar --overwrite --platform=darwin --arch=x64"
+  },
+  "author": {
+    "name": "Josef Friedrich",
+    "email": "josef@friedrich.rocks",
+    "url": "https://josef.friedrich.rocks"
+  },
+  "license": "MIT",
+  "homepage": "https://git.friedrich.rocks/jf/html5-school-presentation",
+  "dependencies": {
+    "webrtc-adapter": "^1.3.0"
+  },
+  "devDependencies": {
+    "electron-prebuilt": "^1.2.0",
+    "electron-packager": "^7.0.2"
+  }
+}
