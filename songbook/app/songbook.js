@@ -1,41 +1,14 @@
 var fs = require('fs');
 var path = require('path');
 var library = require('./library.js');
-
-modal = {};
-
-modal.IDs = ['toc', 'update'];
-
-modal.setDisplay = function(modalID, state) {
-  var element = document.getElementById(modalID);
-  element.style.display = state;
-}
-
-modal.hide = function() {
-  modal.setDisplay
-  modal.IDs.forEach(function(modalID) {
-    modal.setDisplay(modalID, 'none');
-  });
-}
-
-modal.show = function(modalID) {
-  modal.hide();
-  modal.setDisplay(modalID, 'block');
-
-  if (modalID == 'toc') {
-    if (typeof toc.selectize != 'undefined') {
-      toc.selectize.focus();
-      toc.selectize.clear();
-    }
-  }
-}
+var modal = require('./modal.js');
 
 /**
  * Map some keyboard shortcuts to the corresponding methods.
  */
 function bindShortcuts() {
-  Mousetrap.bind('esc', toc.toggle);
-  Mousetrap.bind('alt', toc.toggle);
+  Mousetrap.bind('esc', modal.toggleToc);
+  Mousetrap.bind('alt', modal.toggleToc);
   Mousetrap.bind('left', song.previousSlide);
   Mousetrap.bind('right', song.nextSlide);
 }
@@ -44,10 +17,10 @@ function bindShortcuts() {
  * Map some buttons to the corresponding methods.
  */
 function bindButtons() {
-  $('#menu #menu-toc').click(modal.show('menu'));
-  $('#toc a').click(modal.hide());
-  $('#toc .close').click(modal.hide());
-  $('#update .close').click(modal.hide());
+  $('#menu #menu-toc').click(modal.toggleToc);
+  $('#toc a').click(modal.hide);
+  $('#toc .close').click(modal.hide);
+  $('#update .close').click(modal.hide);
   $('#slide #previous').click(song.previousSlide);
   $('#slide #next').click(song.nextSlide);
 }
