@@ -7,8 +7,8 @@ var modal = require('./modal.js');
  * Map some keyboard shortcuts to the corresponding methods.
  */
 function bindShortcuts() {
-  Mousetrap.bind('esc', modal.togglesearch);
-  Mousetrap.bind('alt', modal.togglesearch);
+  Mousetrap.bind('esc', function() {modal.toggle('search')});
+  Mousetrap.bind('alt', function() {modal.toggle('search')});
   Mousetrap.bind('left', song.previousSlide);
   Mousetrap.bind('right', song.nextSlide);
 }
@@ -17,10 +17,11 @@ search
  * Map some buttons to the corresponding methods.
  */
 function bindButtons() {
-  $('#menu #menu-search').click(modal.togglesearch);
+  $('#menu #menu-search').click(function() {modal.show('search')});
+  $('#menu #menu-tableofcontents').click(function() {modal.show('tableofcontents')});
+  $('#menu #menu-settings').click(function() {modal.show('settings')});
   $('#search a').click(modal.hide);
-  $('#search .close').click(modal.hide);
-  $('#update .close').click(modal.hide);
+  $('.modal .close').click(modal.hide);
   $('#slide #previous').click(song.previousSlide);
   $('#slide #next').click(song.nextSlide);
 }
@@ -136,7 +137,7 @@ window.onhashchange = song.loadByHash;
 var search = {};
 
 search.build = function() {
-  document.getElementById('search').appendChild(search.makeList(songs.library));
+  document.getElementById('field').appendChild(search.makeList(songs.library));
 }
 
 search.makeList = function(library) {
