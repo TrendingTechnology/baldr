@@ -10,20 +10,18 @@ exports.generateJSON = generateJSON = function() {
   folders = fs.readdirSync(path);
 
   folders.forEach(function (folder) {
+    console.log(folder);
     var songFolder = path + '/' + folder + '/';
     var jsonFile = songFolder + 'info.json';
     if (fs.existsSync(jsonFile)) {
-      var json = fs.readFileSync(jsonFile, 'utf8');
-      var info = JSON.parse(json);
+      var info = JSON.parse(fs.readFileSync(jsonFile, 'utf8'));
       info.folder = folder;
       info.slides = fs.readdirSync(songFolder + 'slides/');
       songs[folder] = info;
     }
   });
 
-  var json = JSON.stringify(songs, null, 4);
-
-  fs.writeFileSync(exports.json, json);
+  fs.writeFileSync(exports.json, JSON.stringify(songs, null, 4));
   message('Datenbank-Datei erzeugen');
 }
 
@@ -107,16 +105,6 @@ generateSVGs = function(folder) {
     pth.join(slides, '%02d.svg'),
      'all'
   ]);
-}
-
-toggle = function() {
-  var element = document.getElementById('update');
-  var displayState = element.style.display;
-  if (displayState == 'none') {
-    element.style.display = 'block';
-  } else {
-    element.style.display = 'none';
-  }
 }
 
 message =  function(text) {

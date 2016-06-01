@@ -10,13 +10,15 @@ exports.toggle = toggle = function(modalID) {
   var displayState = element.style.display;
   if (displayState == 'none') {
     element.style.display = 'block';
+    if (modalID == 'search') {
+      if (typeof search.selectize != 'undefined') {
+        search.selectize.focus();
+        search.selectize.clear();
+      }
+    }
   } else {
     element.style.display = 'none';
   }
-}
-
-exports.togglesearch = function() {
-  toggle('search');
 }
 
 exports.hide = hide = function() {
@@ -28,7 +30,6 @@ exports.hide = hide = function() {
 exports.show = function(modalID) {
   hide();
   setDisplay(modalID, 'block');
-
   if (modalID == 'search') {
     if (typeof search.selectize != 'undefined') {
       search.selectize.focus();
