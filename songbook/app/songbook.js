@@ -12,7 +12,7 @@ function bindShortcuts() {
   Mousetrap.bind('left', song.previousSlide);
   Mousetrap.bind('right', song.nextSlide);
 }
-search
+
 /**
  * Map some buttons to the corresponding methods.
  */
@@ -158,23 +158,6 @@ search.makeList = function(library) {
     select.appendChild(option);
   }
   return select;
-}
-
-/**
- * Hide or show table of contents.
- */
-search.toggle = function() {
-  var element = document.getElementById('search');
-  var displayState = element.style.display;
-  if (displayState == 'none') {
-    element.style.display = 'block';
-    if (typeof search.selectize != 'undefined') {
-      search.selectize.focus();
-      search.selectize.clear();
-    }
-  } else {
-    element.style.display = 'none';
-  }
 }
 
 search.resetSelect = function() {
