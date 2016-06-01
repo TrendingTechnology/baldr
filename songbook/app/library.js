@@ -7,21 +7,20 @@ exports.path = path = '/var/songs';
 exports.json = path + '/songs.json';
 
 exports.generateJSON = generateJSON = function() {
+  var tmp = {};
   folders = fs.readdirSync(path);
-
   folders.forEach(function (folder) {
-    console.log(folder);
     var songFolder = path + '/' + folder + '/';
     var jsonFile = songFolder + 'info.json';
     if (fs.existsSync(jsonFile)) {
       var info = JSON.parse(fs.readFileSync(jsonFile, 'utf8'));
       info.folder = folder;
       info.slides = fs.readdirSync(songFolder + 'slides/');
-      songs[folder] = info;
+      tmp[folder] = info;
     }
   });
 
-  fs.writeFileSync(exports.json, JSON.stringify(songs, null, 4));
+  fs.writeFileSync(exports.json, JSON.stringify(tmp, null, 4));
   message('Datenbank-Datei erzeugen');
 }
 
