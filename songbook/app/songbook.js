@@ -1,5 +1,5 @@
 var fs = require('fs');
-var path = require('path');
+var pth = require('path');
 var library = require('./library.js');
 var modal = require('./modal.js');
 
@@ -20,6 +20,8 @@ function bindButtons() {
   $('#menu #menu-search').click(function() {modal.show('search')});
   $('#menu #menu-tableofcontents').click(function() {modal.show('tableofcontents')});
   $('#menu #menu-settings').click(function() {modal.show('settings')});
+  $('#settings #update-library').click(library.update);
+  $('#settings #update-library-force').click(function() {library.update('force')});
   $('#search a').click(modal.hide);
   $('.modal .close').click(modal.hide);
   $('#slide #previous').click(song.previousSlide);
@@ -88,7 +90,7 @@ song.setCurrent = function(songID) {
  * Load the current image to the slide section.
  */
 song.setSlide = function() {
-  var image_path = path.join(library.path, song.folder, 'slides', song.slides[song.slideNumber])
+  var image_path = pth.join(library.path, song.folder, 'slides', song.slides[song.slideNumber])
   $('#slide img').attr('src', image_path);
 }
 
