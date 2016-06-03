@@ -10,6 +10,9 @@
   "author": "Josef Friedrich",
   "license": "ISC",
   "preferGlobal": true,
+  "dependencies": {
+    "commander": "*"
+  },
   "bin": {
     "songbook-library-update": "command.js"
   }
