@@ -2,7 +2,8 @@ var fs = require('fs');
 var pth = require('path');
 var library = require('../modules/library-update/index.js');
 var modal = require('./modal.js');
-var search = require('./search.js')
+var search = require('./search.js');
+var song = require('./song.js');
 
 /**
  * Map some keyboard shortcuts to the corresponding methods.
@@ -43,6 +44,11 @@ songs.setLibrary = function() {
     library.generateJSON();
   }
   songs.library = JSON.parse(fs.readFileSync(library.json, 'utf8'));
+  song.set({
+    "library": songs.library,
+    "selector": '#slide img',
+    "songsPath": library.path
+  })
   song.loadByHash();
   search.set({
     "library": songs.library,
@@ -52,98 +58,15 @@ songs.setLibrary = function() {
   bindButtons();
 }
 
-/***********************************************************************
- * Object 'song': The current song
- **********************************************************************/
-
-var song = {}
-
-/**
- * The current slide number.
- */
-song.slideNumber = 0;
-
-/**
- * The biggest slide number.
- */
-song.slideNumberMax;
-
-/**
- * Array of all images files of a song.
- */
-song.slides;
-
-/**
- * The folder containing the images files.
- */
-song.folder;
-
-/**
- * Set all properties for the current song.
- */
-song.setCurrent = function(songID) {
-  var tmp = songs.library[songID];
-  if (typeof tmp != 'undefined') {
-    song.slideNumber = 0;
-    song.slides = tmp.slides;
-    song.slideNumberMax = song.slides.length - 1;
-    song.folder = tmp.folder;
-  }
-}
-
-/**
- * Load the current image to the slide section.
- */
-song.setSlide = function() {
-  var image_path = pth.join(library.path, song.folder, 'slides', song.slides[song.slideNumber])
-  $('#slide img').attr('src', image_path);
-}
-
-/**
- * Show the next slide.
- */
-song.nextSlide = function() {
-  song.slideNumber += 1;
-  if (song.slideNumber > song.slideNumberMax) {
-    song.slideNumber = 0;
-  }
-  song.setSlide();
-}
-
-/**
- * Show the previous slide.
- */
-song.previousSlide = function() {
-  song.slideNumber -= 1;
-  if (song.slideNumber < 0) {
-    song.slideNumber = song.slideNumberMax;
-  }
-  song.setSlide();
-}
-
-/**
- *
- */
-song.loadByHash = function() {
-  if (location.hash != '') {
-    song.setCurrent(location.hash.substring(1));
-    song.setSlide();
-    $('#slide').show();
-  }
-  else {
-    modal.show('search');
-  }
-}
+songs.setLibrary();
 
 window.onhashchange = song.loadByHash;
 
-songs.setLibrary();
 bindShortcuts();
 
 var selectized = $('select').selectize({
   onItemAdd: function(value, data) {
     song.setCurrent(value);
-    song.setSlide();
     modal.hide();
   }
 });
