@@ -30,35 +30,22 @@ function bindButtons() {
   $('#slide #next').click(song.nextSlide);
 }
 
-/***********************************************************************
- * Object 'songs': All songs in the songs library.
- **********************************************************************/
-
-var songs = {}
-
-/**
- *
- */
-songs.setLibrary = function() {
-  if (!fs.existsSync(library.json)) {
-    library.generateJSON();
-  }
-  songs.library = JSON.parse(fs.readFileSync(library.json, 'utf8'));
-  song.set({
-    "library": songs.library,
-    "selector": '#slide img',
-    "songsPath": library.path
-  })
-  song.loadByHash();
-  search.set({
-    "library": songs.library,
-    "selector": "#field",
-  });
-  search.build();
-  bindButtons();
+if (!fs.existsSync(library.json)) {
+  library.generateJSON();
 }
-
-songs.setLibrary();
+var json = JSON.parse(fs.readFileSync(library.json, 'utf8'));
+song.set({
+  "library": json,
+  "selector": '#slide img',
+  "songsPath": library.path
+})
+song.loadByHash();
+search.set({
+  "library": json,
+  "selector": "#field",
+});
+search.build();
+bindButtons();
 
 window.onhashchange = song.loadByHash;
 
