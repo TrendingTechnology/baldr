@@ -9,6 +9,8 @@ var modal = require('./modal.js');
 var search = require('./search.js');
 var song = require('./song.js');
 
+require('./menu.js');
+
 /**
  * Map some keyboard shortcuts to the corresponding methods.
  */
@@ -62,29 +64,5 @@ var selectized = jquery('select').selectize({
 });
 search.selectize = selectized[0].selectize;
 search.selectize.focus();
-
-const {remote} = require('electron');
-const {Menu, MenuItem} = remote;
-
-const contextMenu = new Menu();
-contextMenu.append(new MenuItem(
-  {
-    label: 'Akualisieren der Liedersammlung',
-    accelerator: 'CmdOrCtrl+u',
-    click: library.update
-  }
-));
-
-contextMenu.append(new MenuItem(
-  {
-    label: 'Akualisieren der Liedersammlung (komplett)',
-    click: library.updateForce
-  }
-));
-
-window.addEventListener('contextmenu', (e) => {
-  e.preventDefault();
-  contextMenu.popup(remote.getCurrentWindow());
-}, false);
 
 modal.show('search');
