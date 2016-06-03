@@ -1,21 +1,22 @@
 var fs = require('fs');
 var pth = require('path');
+var jquery = require("jquery");
+var mousetrap = require('mousetrap');
+var selectize = require("selectize");
+
 var library = require('../modules/library-update/index.js');
 var modal = require('./modal.js');
 var search = require('./search.js');
 var song = require('./song.js');
-var jquery = require("jquery");
-var Mousetrap = require('mousetrap');
-require("selectize");
 
 /**
  * Map some keyboard shortcuts to the corresponding methods.
  */
 function bindShortcuts() {
-  Mousetrap.bind('esc', function() {modal.toggle('search')});
-  Mousetrap.bind('alt', function() {modal.toggle('search')});
-  Mousetrap.bind('left', song.previousSlide);
-  Mousetrap.bind('right', song.nextSlide);
+  mousetrap.bind('esc', function() {modal.toggle('search')});
+  mousetrap.bind('alt', function() {modal.toggle('search')});
+  mousetrap.bind('left', song.previousSlide);
+  mousetrap.bind('right', song.nextSlide);
 }
 
 /**
@@ -84,3 +85,5 @@ window.addEventListener('contextmenu', (e) => {
   e.preventDefault();
   contextMenu.popup(remote.getCurrentWindow());
 }, false);
+
+modal.show('search');
