@@ -2,14 +2,15 @@ var fs = require('fs');
 var pth = require('path');
 const spawn = require('child_process').spawnSync;
 
-exports.path = path = '/var/songs';
-exports.json = path + '/songs.json';
+exports.songsPath = songsPath = '/var/songs';
+
+var jsonPath = songsPath + '/songs.json';
 
 exports.generateJSON = generateJSON = function() {
   var tmp = {};
-  folders = fs.readdirSync(path);
+  folders = fs.readdirSync(songsPath);
   folders.forEach(function (folder) {
-    var songFolder = path + '/' + folder + '/';
+    var songFolder = songsPath + '/' + folder + '/';
     var jsonFile = songFolder + 'info.json';
     if (fs.existsSync(jsonFile)) {
       var info = JSON.parse(fs.readFileSync(jsonFile, 'utf8'));
@@ -19,7 +20,7 @@ exports.generateJSON = generateJSON = function() {
     }
   });
 
-  fs.writeFileSync(exports.json, JSON.stringify(tmp, null, 4));
+  fs.writeFileSync(jsonPath, JSON.stringify(tmp, null, 4));
   message('Datenbank-Datei erzeugen');
 }
 
@@ -49,9 +50,9 @@ getCachedMTime = function(folder) {
 
 getFolders = function(mode) {
   var output = [];
-  folders = fs.readdirSync(path);
+  folders = fs.readdirSync(songsPath);
   folders.forEach(function (folder) {
-    var folder = pth.join(path, folder);
+    var folder = pth.join(songsPath, folder);
     var score = pth.join(folder, 'score.mscx');
     if (fs.existsSync(score)) {
       if (mode != 'force') {
@@ -69,7 +70,7 @@ getFolders = function(mode) {
 }
 
 pull = function() {
-  var gitpull = spawn('git', ['pull'], {cwd: path});
+  var gitpull = spawn('git', ['pull'], {cwd: songsPath});
   message('Nach Aktualsierungen suchen: ' + gitpull.stdout.toString('utf8'));
 }
 
@@ -128,4 +129,11 @@ exports.update = update = function(mode) {
 
 exports.updateForce = function() {
   update('force');
+}
+
+exports.readJSON = function () {
+  if (!fs.existsSync(jsonPath)) {
+    generateJSON();
+  }
+  return JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
 }

@@ -55,7 +55,7 @@ exports.setCurrent = function(songID) {
  */
 setSlide = function() {
   var imagePath = pth.join(songsPath, folder, 'slides', slides[slideNumber])
-  $(selector).attr('src', imagePath);
+  jquery(selector).attr('src', imagePath);
 }
 
 /**
