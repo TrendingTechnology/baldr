@@ -4,6 +4,8 @@ var library = require('../modules/library-update/index.js');
 var modal = require('./modal.js');
 var search = require('./search.js');
 var song = require('./song.js');
+var $ = require("jquery");
+var Mousetrap = require('mousetrap');
 
 /**
  * Map some keyboard shortcuts to the corresponding methods.
