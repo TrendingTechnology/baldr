@@ -74,7 +74,12 @@ pull = function() {
 }
 
 generatePDF = function(folder) {
-  const mscore = spawn('mscore', [
+  if (process.platform == 'darwin') {
+    var command = '/Applications/MuseScore.app/Contents/MacOS/mscore';
+  } else {
+    command = 'mscore'
+  }
+  const mscore = spawn(command, [
     '--export-to',
     pth.join(folder, 'score.pdf'),
     pth.join(folder, 'score.mscx')
@@ -109,7 +114,7 @@ message =  function(text) {
   console.log(text);
 }
 
-exports.update = function(mode) {
+exports.update = update = function(mode) {
   pull();
   var folders = getFolders(mode);
   folders.forEach(function(folder) {
