@@ -34,7 +34,7 @@ function bindButtons() {
   jquery('#slide #next').click(song.nextSlide);
 }
 
-var json =library.readJSON();
+var json = library.readJSON();
 
 song.set({
   "library": json,
@@ -42,6 +42,7 @@ song.set({
   "songsPath": library.songsPath
 })
 song.loadByHash();
+
 search.set({
   "library": json,
   "selector": "#field",
