@@ -1,8 +1,8 @@
 {
   "name": "songbook-library-update",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "A script to update the songbook library",
-  "repository": "git+ssh://git@git.friedrich.rocks:60022/jf/songbook-library-update.git",
+  "repository": "git+ssh://git@git.friedrich.rocks:60022/jf/html5-school-presentation.git",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
