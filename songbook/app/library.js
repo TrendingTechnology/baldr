@@ -1,38 +1,33 @@
 var fs = require('fs');
-var path = require('path');
+var pth = require('path');
+var modal = require('./modal.js')
 const spawn = require('child_process').spawnSync;
 
-path = '/var/songs';
+exports.path = path = '/var/songs';
+exports.json = path + '/songs.json';
 
-json = path + '/songs.json';
-
-songs = {};
-
-generateJSON = function() {
+exports.generateJSON = generateJSON = function() {
+  var tmp = {};
   folders = fs.readdirSync(path);
-
   folders.forEach(function (folder) {
     var songFolder = path + '/' + folder + '/';
     var jsonFile = songFolder + 'info.json';
     if (fs.existsSync(jsonFile)) {
-      var json = fs.readFileSync(jsonFile, 'utf8');
-      var info = JSON.parse(json);
+      var info = JSON.parse(fs.readFileSync(jsonFile, 'utf8'));
       info.folder = folder;
       info.slides = fs.readdirSync(songFolder + 'slides/');
-      songs[folder] = info;
+      tmp[folder] = info;
     }
   });
 
-  var json = JSON.stringify(songs, null, 4);
-
-  fs.writeFileSync(json, json);
+  fs.writeFileSync(exports.json, JSON.stringify(tmp, null, 4));
   message('Datenbank-Datei erzeugen');
 }
 
 updateMTime = function(folder) {
-  var score = path.join(folder, 'score.mscx')
+  var score = pth.join(folder, 'score.mscx')
   stat = fs.statSync(score);
-  fs.writeFile(path.join(folder, '.mtime'), stat.mtime, function(err) {
+  fs.writeFile(pth.join(folder, '.mtime'), stat.mtime, function(err) {
     if(err) {
         return console.log(err);
     }
@@ -57,8 +52,8 @@ getFolders = function(mode) {
   var output = [];
   folders = fs.readdirSync(path);
   folders.forEach(function (folder) {
-    var folder = path.join(path, folder);
-    var score = path.join(folder, 'score.mscx');
+    var folder = pth.join(path, folder);
+    var score = pth.join(folder, 'score.mscx');
     if (fs.existsSync(score)) {
       if (mode != 'force') {
         var MTime = getMTime(folder);
@@ -76,53 +71,43 @@ getFolders = function(mode) {
 
 pull = function() {
   var gitpull = spawn('git', ['pull'], {cwd: path});
-  //message('Nach Aktualsierungen suchen');
-  console.log(gitpull.stdout.toString('utf8'));
+  message('Nach Aktualsierungen suchen: ' + gitpull.stdout.toString('utf8'));
 }
 
 generatePDF = function(folder) {
   const mscore = spawn('mscore', [
     '--export-to',
-    path.join(folder, 'score.pdf'),
-    path.join(folder, 'score.mscx')
+    pth.join(folder, 'score.pdf'),
+    pth.join(folder, 'score.mscx')
   ]);
 }
 
 deletePDF = function(folder) {
-  fs.stat(path.join(folder, 'score.pdf'), function (err, stats) {
+  fs.stat(pth.join(folder, 'score.pdf'), function (err, stats) {
     if (err) return console.error(err);
-      fs.unlink(path.join(folder, 'score.pdf'), function(err) {
+      fs.unlink(pth.join(folder, 'score.pdf'), function(err) {
          if(err) return console.error(err);
     });
   });
 }
 
 generateSVGs = function(folder) {
-  //message(folder + ': Bilder erzeugen');
-  var slides = path.join(folder, 'slides');
+  message(folder + ': Bilder erzeugen');
+  var slides = pth.join(folder, 'slides');
   fs.access(slides, function(err) {
     if (err) {
       fs.mkdir(slides);
     }
   })
   const pdf2svg = spawn('pdf2svg', [
-    path.join(folder, 'score.pdf'),
-    path.join(slides, '%02d.svg'),
+    pth.join(folder, 'score.pdf'),
+    pth.join(slides, '%02d.svg'),
      'all'
   ]);
 }
 
-toggle = function() {
-  var element = document.getElementById('update');
-  var displayState = element.style.display;
-  if (displayState == 'none') {
-    element.style.display = 'block';
-  } else {
-    element.style.display = 'none';
-  }
-}
-
 message =  function(text) {
+  console.log(text);
   var element = document.getElementById('progress');
   var p = document.createElement('p');
   p.innerHTML = text;
@@ -130,7 +115,7 @@ message =  function(text) {
 }
 
 exports.update = function(mode) {
-  //modal.show('update');
+  modal.show('settings');
   pull();
   var folders = getFolders(mode);
   folders.forEach(function(folder) {
