@@ -1,41 +1,14 @@
 var fs = require('fs');
-var path = require('path');
-var library = require('./library.js')
-
-modal = {};
-
-modal.IDs = ['toc', 'update'];
-
-modal.setDisplay = function(modalID, state) {
-  var element = document.getElementById(modalID);
-  element.style.display = state;
-}
-
-modal.hide = function() {
-  modal.setDisplay
-  modal.IDs.forEach(function(modalID) {
-    modal.setDisplay(modalID, 'none');
-  });
-}
-
-modal.show = function(modalID) {
-  modal.hide();
-  modal.setDisplay(modalID, 'block');
-
-  if (modalID == 'toc') {
-    if (typeof toc.selectize != 'undefined') {
-      toc.selectize.focus();
-      toc.selectize.clear();
-    }
-  }
-}
+var pth = require('path');
+var library = require('./library.js');
+var modal = require('./modal.js');
 
 /**
  * Map some keyboard shortcuts to the corresponding methods.
  */
 function bindShortcuts() {
-  Mousetrap.bind('esc', toc.toggle);
-  Mousetrap.bind('alt', toc.toggle);
+  Mousetrap.bind('esc', function() {modal.toggle('search')});
+  Mousetrap.bind('alt', function() {modal.toggle('search')});
   Mousetrap.bind('left', song.previousSlide);
   Mousetrap.bind('right', song.nextSlide);
 }
@@ -44,10 +17,13 @@ function bindShortcuts() {
  * Map some buttons to the corresponding methods.
  */
 function bindButtons() {
-  $('#menu #menu-toc').click(modal.show('menu'));
-  $('#toc a').click(modal.hide());
-  $('#toc .close').click(modal.hide());
-  $('#update .close').click(modal.hide());
+  $('#menu #menu-search').click(function() {modal.show('search')});
+  $('#menu #menu-tableofcontents').click(function() {modal.show('tableofcontents')});
+  $('#menu #menu-settings').click(function() {modal.show('settings')});
+  $('#settings #update-library').click(library.update);
+  $('#settings #update-library-force').click(function() {library.update('force')});
+  $('#search a').click(modal.hide);
+  $('.modal .close').click(modal.hide);
   $('#slide #previous').click(song.previousSlide);
   $('#slide #next').click(song.nextSlide);
 }
@@ -67,7 +43,7 @@ songs.setLibrary = function() {
   }
   songs.library = JSON.parse(fs.readFileSync(library.json, 'utf8'));
   song.loadByHash();
-  toc.build();
+  search.build();
   bindButtons();
 }
 
@@ -114,7 +90,7 @@ song.setCurrent = function(songID) {
  * Load the current image to the slide section.
  */
 song.setSlide = function() {
-  var image_path = path.join(library.path, song.folder, 'slides', song.slides[song.slideNumber])
+  var image_path = pth.join(library.path, song.folder, 'slides', song.slides[song.slideNumber])
   $('#slide img').attr('src', image_path);
 }
 
@@ -150,23 +126,23 @@ song.loadByHash = function() {
     $('#slide').show();
   }
   else {
-    modal.show('toc');
+    modal.show('search');
   }
 }
 
 window.onhashchange = song.loadByHash;
 
 /***********************************************************************
- * Object 'toc': table of contents
+ * Object 'search': table of contents
  **********************************************************************/
 
-var toc = {};
+var search = {};
 
-toc.build = function() {
-  document.getElementById('search').appendChild(toc.makeList(songs.library));
+search.build = function() {
+  document.getElementById('field').appendChild(search.makeList(songs.library));
 }
 
-toc.makeList = function(library) {
+search.makeList = function(library) {
   var select = document.createElement('select');
   select.setAttribute('id', 'select');
   select.setAttribute('placeholder', 'Suche nach einem Lied');
@@ -184,24 +160,7 @@ toc.makeList = function(library) {
   return select;
 }
 
-/**
- * Hide or show table of contents.
- */
-toc.toggle = function() {
-  var element = document.getElementById('toc');
-  var displayState = element.style.display;
-  if (displayState == 'none') {
-    element.style.display = 'block';
-    if (typeof toc.selectize != 'undefined') {
-      toc.selectize.focus();
-      toc.selectize.clear();
-    }
-  } else {
-    element.style.display = 'none';
-  }
-}
-
-toc.resetSelect = function() {
+search.resetSelect = function() {
   // fetch our section element
   var select = document.getElementById('select');
   var option = document.createElement('option');
@@ -220,8 +179,8 @@ $(function() {
         modal.hide();
       }
     });
-    toc.selectize = selectized[0].selectize;
-    toc.selectize.focus();
+    search.selectize = selectized[0].selectize;
+    search.selectize.focus();
 });
 
 const {remote} = require('electron');
