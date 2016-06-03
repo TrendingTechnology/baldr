@@ -1,11 +1,18 @@
 var fs = require('fs');
 var pth = require('path');
 
+var library = {};
+
+exports.set = function(values) {
+  library = values.library;
+
+}
+
 build = function() {
   document.getElementById('field').appendChild(makeList(songs.library));
 }
 
-makeList = function(library) {
+makeList = function() {
   var select = document.createElement('select');
   select.setAttribute('id', 'select');
   select.setAttribute('placeholder', 'Suche nach einem Lied');
