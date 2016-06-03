@@ -2,17 +2,14 @@ var fs = require('fs');
 var pth = require('path');
 
 var library = {};
+var selector = {};
 
 exports.set = function(values) {
   library = values.library;
-
+  selector = values.selector;
 }
 
-build = function() {
-  document.getElementById('field').appendChild(makeList(songs.library));
-}
-
-makeList = function() {
+exports.build = function() {
   var select = document.createElement('select');
   select.setAttribute('id', 'select');
   select.setAttribute('placeholder', 'Suche nach einem Lied');
@@ -27,27 +24,13 @@ makeList = function() {
     option.innerHTML = library[songID].title;
     select.appendChild(option);
   }
-  return select;
+
+  document.getElementById(selector).appendChild(select);
 }
 
-resetSelect = function() {
+exports.resetSelect = function() {
   var select = document.getElementById('select');
   var option = document.createElement('option');
   option.setAttribute('value', '');
   select.insertBefore(option, select.firstChild);
 }
-
-songs.setLibrary();
-bindShortcuts();
-
-$(function() {
-    var selectized = $('select').selectize({
-      onItemAdd: function(value, data) {
-        song.setCurrent(value);
-        song.setSlide();
-        modal.hide();
-      }
-    });
-    search.selectize = selectized[0].selectize;
-    search.selectize.focus();
-});

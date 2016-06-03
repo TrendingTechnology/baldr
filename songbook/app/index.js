@@ -2,6 +2,7 @@ var fs = require('fs');
 var pth = require('path');
 var library = require('../modules/library-update/index.js');
 var modal = require('./modal.js');
+var search = require('./search.js')
 
 /**
  * Map some keyboard shortcuts to the corresponding methods.
@@ -43,6 +44,10 @@ songs.setLibrary = function() {
   }
   songs.library = JSON.parse(fs.readFileSync(library.json, 'utf8'));
   song.loadByHash();
+  search.set({
+    "library": songs.library,
+    "selector": "field",
+  });
   search.build();
   bindButtons();
 }
@@ -131,42 +136,6 @@ song.loadByHash = function() {
 }
 
 window.onhashchange = song.loadByHash;
-
-/***********************************************************************
- * Object 'search': table of contents
- **********************************************************************/
-
-var search = {};
-
-search.build = function() {
-  document.getElementById('field').appendChild(search.makeList(songs.library));
-}
-
-search.makeList = function(library) {
-  var select = document.createElement('select');
-  select.setAttribute('id', 'select');
-  select.setAttribute('placeholder', 'Suche nach einem Lied');
-
-  var option = document.createElement('option');
-  option.setAttribute('value', '');
-  select.appendChild(option);
-
-  for (songID in library) {
-    var option = document.createElement('option');
-    option.setAttribute('value', songID);
-    option.innerHTML = library[songID].title;
-    select.appendChild(option);
-  }
-  return select;
-}
-
-search.resetSelect = function() {
-  // fetch our section element
-  var select = document.getElementById('select');
-  var option = document.createElement('option');
-  option.setAttribute('value', '');
-  select.insertBefore(option, select.firstChild);
-}
 
 songs.setLibrary();
 bindShortcuts();
