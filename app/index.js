@@ -30,14 +30,12 @@ function bindButtons() {
   $('#slide #next').click(song.nextSlide);
 }
 
-if (!fs.existsSync(library.json)) {
-  library.generateJSON();
-}
-var json = JSON.parse(fs.readFileSync(library.json, 'utf8'));
+var json =library.readJSON();
+
 song.set({
   "library": json,
   "selector": '#slide img',
-  "songsPath": library.path
+  "songsPath": library.songsPath
 })
 song.loadByHash();
 search.set({
