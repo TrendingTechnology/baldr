@@ -46,7 +46,7 @@ songs.setLibrary = function() {
   song.loadByHash();
   search.set({
     "library": songs.library,
-    "selector": "field",
+    "selector": "#field",
   });
   search.build();
   bindButtons();

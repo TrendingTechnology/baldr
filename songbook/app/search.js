@@ -25,12 +25,5 @@ exports.build = function() {
     select.appendChild(option);
   }
 
-  document.getElementById(selector).appendChild(select);
-}
-
-exports.resetSelect = function() {
-  var select = document.getElementById('select');
-  var option = document.createElement('option');
-  option.setAttribute('value', '');
-  select.insertBefore(option, select.firstChild);
+  document.querySelector(selector).appendChild(select);
 }
