@@ -34,12 +34,14 @@ if (!fs.existsSync(library.json)) {
   library.generateJSON();
 }
 var json = JSON.parse(fs.readFileSync(library.json, 'utf8'));
+
 song.set({
   "library": json,
   "selector": '#slide img',
   "songsPath": library.path
 })
 song.loadByHash();
+
 search.set({
   "library": json,
   "selector": "#field",
