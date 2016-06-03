@@ -4,8 +4,9 @@ var library = require('../modules/library-update/index.js');
 var modal = require('./modal.js');
 var search = require('./search.js');
 var song = require('./song.js');
-var $ = require("jquery");
+var jquery = require("jquery");
 var Mousetrap = require('mousetrap');
+require("selectize");
 
 /**
  * Map some keyboard shortcuts to the corresponding methods.
@@ -21,15 +22,15 @@ function bindShortcuts() {
  * Map some buttons to the corresponding methods.
  */
 function bindButtons() {
-  $('#menu #menu-search').click(function() {modal.show('search')});
-  $('#menu #menu-tableofcontents').click(function() {modal.show('tableofcontents')});
-  $('#menu #menu-settings').click(function() {modal.show('settings')});
-  $('#settings #update-library').click(library.update);
-  $('#settings #update-library-force').click(function() {library.update('force')});
-  $('#search a').click(modal.hide);
-  $('.modal .close').click(modal.hide);
-  $('#slide #previous').click(song.previousSlide);
-  $('#slide #next').click(song.nextSlide);
+  jquery('#menu #menu-search').click(function() {modal.show('search')});
+  jquery('#menu #menu-tableofcontents').click(function() {modal.show('tableofcontents')});
+  jquery('#menu #menu-settings').click(function() {modal.show('settings')});
+  jquery('#settings #update-library').click(library.update);
+  jquery('#settings #update-library-force').click(function() {library.update('force')});
+  jquery('#search a').click(modal.hide);
+  jquery('.modal .close').click(modal.hide);
+  jquery('#slide #previous').click(song.previousSlide);
+  jquery('#slide #next').click(song.nextSlide);
 }
 
 var json =library.readJSON();
@@ -51,7 +52,7 @@ window.onhashchange = song.loadByHash;
 
 bindShortcuts();
 
-var selectized = $('select').selectize({
+var selectized = jquery('select').selectize({
   onItemAdd: function(value, data) {
     song.setCurrent(value);
     modal.hide();
