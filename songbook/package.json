@@ -20,8 +20,9 @@
   "license": "MIT",
   "homepage": "https://git.friedrich.rocks/jf/html5-school-presentation",
   "dependencies": {
-    "mousetrap": "^1.6.0",
-    "jquery": "^2.2.4"
+    "mousetrap": "*",
+    "jquery": "*",
+    "selectize": "*"
   },
   "devDependencies": {
     "electron-prebuilt": "^1.2.0",
