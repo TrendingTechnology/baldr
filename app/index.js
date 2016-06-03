@@ -140,17 +140,15 @@ window.onhashchange = song.loadByHash;
 songs.setLibrary();
 bindShortcuts();
 
-$(function() {
-    var selectized = $('select').selectize({
-      onItemAdd: function(value, data) {
-        song.setCurrent(value);
-        song.setSlide();
-        modal.hide();
-      }
-    });
-    search.selectize = selectized[0].selectize;
-    search.selectize.focus();
+var selectized = $('select').selectize({
+  onItemAdd: function(value, data) {
+    song.setCurrent(value);
+    song.setSlide();
+    modal.hide();
+  }
 });
+search.selectize = selectized[0].selectize;
+search.selectize.focus();
 
 const {remote} = require('electron');
 const {Menu, MenuItem} = remote;
