@@ -110,11 +110,3 @@ body {
 #slide ul:hover li {
 	 display: inline-block;
 }
-
-/**
- * search
- */
-
-#toc {
-	font-size: 1.5em;
-}
