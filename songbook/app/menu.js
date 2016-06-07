@@ -3,7 +3,7 @@ const {Menu, MenuItem} = remote;
 const child_process = require('child_process');
 
 function update() {
-  var worker_process = child_process.spawn("node modules/library-update/command.js");
+  var worker_process = child_process.fork("modules/library-update/command.js");
 }
 
 const contextMenu = new Menu();
