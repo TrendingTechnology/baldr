@@ -23,7 +23,7 @@
     "mousetrap": "*",
     "jquery": "*",
     "selectize": "*",
-    "songbook-library-update": "file:modules/library-songbook"
+    "songbook-library-update": "file:modules/library-update"
   },
   "devDependencies": {
     "electron-prebuilt": "^1.2.0",
