@@ -22,7 +22,8 @@
   "dependencies": {
     "mousetrap": "*",
     "jquery": "*",
-    "selectize": "*"
+    "selectize": "*",
+    "songbook-library-update": "file:modules/library-songbook"
   },
   "devDependencies": {
     "electron-prebuilt": "^1.2.0",
