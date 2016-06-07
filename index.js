@@ -113,6 +113,11 @@ generateSVGs = function(folder) {
 
 message =  function(text) {
   console.log(text);
+  fs.appendFile(pth.join(songsPath, 'update.log'), text, function (err) {
+    if (err) {
+      throw err;
+    }
+  });
 }
 
 exports.update = update = function(mode) {
