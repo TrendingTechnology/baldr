@@ -4,7 +4,8 @@ var jquery = require("jquery");
 var mousetrap = require('mousetrap');
 var selectize = require("selectize");
 
-var library = require('../modules/library-update/index.js');
+//var library = require('../modules/library-update/index.js');
+library = require('songbook-library-update');
 var modal = require('./modal.js');
 var search = require('./search.js');
 var song = require('./song.js');
