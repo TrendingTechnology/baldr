@@ -6,13 +6,22 @@ exports.songsPath = songsPath = '/var/songs';
 
 var jsonPath = songsPath + '/songs.json';
 
+function fileExists(filePath) {
+  try {
+    return fs.statSync(filePath).isFile();
+  }
+  catch (err) {
+    return false;
+  }
+}
+
 exports.generateJSON = generateJSON = function() {
   var tmp = {};
   folders = fs.readdirSync(songsPath);
   folders.forEach(function (folder) {
     var songFolder = songsPath + '/' + folder + '/';
     var jsonFile = songFolder + 'info.json';
-    if (fs.existsSync(jsonFile)) {
+    if (fileExists(jsonFile)) {
       var info = JSON.parse(fs.readFileSync(jsonFile, 'utf8'));
       info.folder = folder;
       info.slides = fs.readdirSync(songFolder + 'slides/');
@@ -40,7 +49,7 @@ getMTime = function(folder) {
 }
 
 getCachedMTime = function(folder) {
-  if (fs.existsSync(folder + '/.mtime')) {
+  if (fileExists(folder + '/.mtime')) {
     return fs.readFileSync(folder + '/.mtime', 'utf8');
   }
   else {
@@ -54,7 +63,7 @@ getFolders = function(mode) {
   folders.forEach(function (folder) {
     var folder = pth.join(songsPath, folder);
     var score = pth.join(folder, 'score.mscx');
-    if (fs.existsSync(score)) {
+    if (fileExists(score)) {
       if (mode != 'force') {
         var MTime = getMTime(folder);
         var cachedMTime = getCachedMTime(folder);
@@ -146,7 +155,7 @@ exports.updateForce = function() {
 }
 
 exports.readJSON = function () {
-  if (!fs.existsSync(jsonPath)) {
+  if (!fileExists(jsonPath)) {
     generateJSON();
   }
   return JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
