@@ -104,6 +104,15 @@ generateSVGs = function(folder) {
       fs.mkdir(slides);
     }
   })
+  files = fs.readdirSync(slides);
+  files.map(function (file) {
+    return pth.join(slides, file);
+  }).filter(function (file) {
+    return fs.statSync(file).isFile();
+  }).forEach(function (file) {
+    fs.unlinkSync(file);
+  });
+
   const pdf2svg = spawn('pdf2svg', [
     pth.join(folder, 'score.pdf'),
     pth.join(slides, '%02d.svg'),
