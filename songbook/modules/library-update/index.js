@@ -131,7 +131,10 @@ generateSVGs = function(folder) {
 
 message =  function(text) {
   console.log(text);
-  fs.appendFile(pth.join(songsPath, 'update.log'), text, function (err) {
+
+  var date = new Date();
+  var isoDate = date.toISOString();
+  fs.appendFile(pth.join(songsPath, 'update.log'), isoDate + ': ' + text + '\n', function (err) {
     if (err) {
       throw err;
     }
