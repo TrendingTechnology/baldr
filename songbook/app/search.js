@@ -1,5 +1,5 @@
 var fs = require('fs');
-var pth = require('path');
+var path = require('path');
 
 var library = {};
 var selector = {};

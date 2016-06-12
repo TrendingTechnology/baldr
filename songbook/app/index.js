@@ -1,6 +1,6 @@
 const os = require('os');
-const pth = require('path');
-const config = require(pth.join(os.homedir(), '.html5-school-presentation.json'));
+const path = require('path');
+const config = require(path.join(os.homedir(), '.html5-school-presentation.json'));
 
 const fs = require('fs');
 
