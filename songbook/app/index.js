@@ -46,7 +46,7 @@ var json = library.readJSON();
 song.set({
   "library": json,
   "selector": '#slide img',
-  "songsPath": library.songsPath
+  "songsPath": config.songsPath
 })
 song.loadByHash();
 

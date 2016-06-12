@@ -1,10 +1,13 @@
-const fs = require('fs');
+const os = require('os');
 const path = require('path');
+const config = require(path.join(os.homedir(), '.html5-school-presentation.json'));
+
+const fs = require('fs');
 const spawn = require('child_process').spawnSync;
 
-exports.songsPath = songsPath = '/var/songs';
+exports.songsPath = config.songsPath = '/var/songs';
 
-var jsonPath = songsPath + '/songs.json';
+var jsonPath = config.songsPath + '/songs.json';
 
 function fileExists(filePath) {
   try {
@@ -17,9 +20,9 @@ function fileExists(filePath) {
 
 exports.generateJSON = generateJSON = function() {
   var tmp = {};
-  folders = fs.readdirSync(songsPath);
+  folders = fs.readdirSync(config.songsPath);
   folders.forEach(function (folder) {
-    var songFolder = songsPath + '/' + folder + '/';
+    var songFolder = config.songsPath + '/' + folder + '/';
     var jsonFile = songFolder + 'info.json';
     if (fileExists(jsonFile)) {
       var info = JSON.parse(fs.readFileSync(jsonFile, 'utf8'));
@@ -38,7 +41,7 @@ updateMTime = function(folder) {
   stat = fs.statSync(score);
   fs.writeFile(path.join(folder, '.mtime'), stat.mtime, function(err) {
     if (err) {
-      eturn console.log(err);
+      return console.log(err);
     }
   });
 }
@@ -59,9 +62,9 @@ getCachedMTime = function(folder) {
 
 getFolders = function(mode) {
   var output = [];
-  folders = fs.readdirSync(songsPath);
+  folders = fs.readdirSync(config.songsPath);
   folders.forEach(function (folder) {
-    var folder = path.join(songsPath, folder);
+    var folder = path.join(config.songsPath, folder);
     var score = path.join(folder, 'score.mscx');
     if (fileExists(score)) {
       if (mode != 'force') {
@@ -79,7 +82,7 @@ getFolders = function(mode) {
 }
 
 pull = function() {
-  var gitpull = spawn('git', ['pull'], {cwd: songsPath});
+  var gitpull = spawn('git', ['pull'], {cwd: config.songsPath});
   message('Nach Aktualsierungen suchen: ' + gitpull.stdout.toString('utf8'));
 }
 
@@ -134,7 +137,7 @@ message =  function(text) {
 
   var date = new Date();
   var isoDate = date.toISOString();
-  fs.appendFile(path.join(songsPath, 'update.log'), isoDate + ': ' + text + '\n', function (err) {
+  fs.appendFile(path.join(config.songsPath, 'update.log'), isoDate + ': ' + text + '\n', function (err) {
     if (err) {
       throw err;
     }
