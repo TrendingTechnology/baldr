@@ -3,11 +3,10 @@ const path = require('path');
 const config = require(path.join(os.homedir(), '.html5-school-presentation.json')).songbook;
 const fs = require('fs');
 
-const jquery = require("jquery");
+const jquery = require('jquery');
 const mousetrap = require('mousetrap');
-const selectize = require("selectize");
+const selectize = require('selectize');
 
-//var library = require('../modules/library-update/index.js');
 const library = require('songbook-library-update');
 const modal = require('./modal.js');
 const search = require('./search.js');
