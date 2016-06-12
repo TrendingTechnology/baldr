@@ -2,7 +2,7 @@
  * 'song': The current song
  **********************************************************************/
 
-var pth = require('path');
+var path = require('path');
 
 /**
  * The current slide number.
@@ -54,7 +54,7 @@ exports.setCurrent = function(songID) {
  * Load the current image to the slide section.
  */
 setSlide = function() {
-  var imagePath = pth.join(songsPath, folder, 'slides', slides[slideNumber])
+  var imagePath = path.join(songsPath, folder, 'slides', slides[slideNumber])
   jquery(selector).attr('src', imagePath);
 }
 
