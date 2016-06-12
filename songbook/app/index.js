@@ -1,7 +1,6 @@
 const os = require('os');
 const path = require('path');
-const config = require(path.join(os.homedir(), '.html5-school-presentation.json'));
-
+const config = require(path.join(os.homedir(), '.html5-school-presentation.json')).songbook;
 const fs = require('fs');
 
 const jquery = require("jquery");
@@ -46,7 +45,7 @@ var json = library.readJSON();
 song.set({
   "library": json,
   "selector": '#slide img',
-  "songsPath": config.songsPath
+  "songsPath": config.path
 })
 song.loadByHash();
 

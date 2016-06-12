@@ -1,8 +1,11 @@
 {
-	"songsPath": "/Users/jf/Desktop/school/Lieder",
-	"songsJSON": "songs.json",
-	"songsSlidesFolder": "slides",
-	"songsScore": "score.mscx",
-	"songsSlidesExt": ["svg", "png"],
-	"songsAudioExt": ["mp3", "m4a"]
+	"songbook": {
+		"path": "/Users/jf/Desktop/school/Lieder",
+		"json": "songs.json",
+		"info": "info.json",
+		"slidesFolder": "slides",
+		"score": "score.mscx",
+		"slidesExt": ["svg", "png"],
+		"audioExt": ["mp3", "m4a"]
+	}
 }
