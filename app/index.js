@@ -1,5 +1,9 @@
-var fs = require('fs');
+var os = require('os');
 var pth = require('path');
+var config = require(pth.join(os.homedir(), '.html5-school-presentation.json'));
+
+var fs = require('fs');
+
 var jquery = require("jquery");
 var mousetrap = require('mousetrap');
 var selectize = require("selectize");
