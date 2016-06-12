@@ -1,13 +1,14 @@
 const os = require('os');
 const path = require('path');
-const config = require(path.join(os.homedir(), '.html5-school-presentation.json'));
+const config = require(path.join(os.homedir(), '.html5-school-presentation.json')).songbook;
+
 
 const fs = require('fs');
 const spawn = require('child_process').spawnSync;
 
-exports.songsPath = config.songsPath;
+exports.songsPath = config.path;
 
-var jsonPath = config.songsPath + '/songs.json';
+var jsonPath = path.join(config.path, config.json);
 
 function fileExists(filePath) {
   try {
@@ -20,14 +21,14 @@ function fileExists(filePath) {
 
 exports.generateJSON = generateJSON = function() {
   var tmp = {};
-  folders = fs.readdirSync(config.songsPath);
+  folders = fs.readdirSync(config.path);
   folders.forEach(function (folder) {
-    var songFolder = config.songsPath + '/' + folder + '/';
-    var jsonFile = songFolder + 'info.json';
+    var songFolder = path.join(config.path, folder);
+    var jsonFile = path.join(songFolder, config.info);
     if (fileExists(jsonFile)) {
       var info = JSON.parse(fs.readFileSync(jsonFile, 'utf8'));
       info.folder = folder;
-      info.slides = fs.readdirSync(songFolder + 'slides/');
+      info.slides = fs.readdirSync(path.join(songFolder, config.slidesFolder));
       tmp[folder] = info;
     }
   });
@@ -37,7 +38,7 @@ exports.generateJSON = generateJSON = function() {
 }
 
 updateMTime = function(folder) {
-  var score = path.join(folder, 'score.mscx')
+  var score = path.join(folder, config.score)
   stat = fs.statSync(score);
   fs.writeFile(path.join(folder, '.mtime'), stat.mtime, function(err) {
     if (err) {
@@ -47,7 +48,7 @@ updateMTime = function(folder) {
 }
 
 getMTime = function(folder) {
-  var stat = fs.statSync(folder + '/score.mscx');
+  var stat = fs.statSync(path.join(folder, config.score));
   return stat.mtime
 }
 
@@ -62,9 +63,9 @@ getCachedMTime = function(folder) {
 
 getFolders = function(mode) {
   var output = [];
-  folders = fs.readdirSync(config.songsPath);
+  folders = fs.readdirSync(config.path);
   folders.forEach(function (folder) {
-    var folder = path.join(config.songsPath, folder);
+    var folder = path.join(config.path, folder);
     var score = path.join(folder, 'score.mscx');
     if (fileExists(score)) {
       if (mode != 'force') {
@@ -82,7 +83,7 @@ getFolders = function(mode) {
 }
 
 pull = function() {
-  var gitpull = spawn('git', ['pull'], {cwd: config.songsPath});
+  var gitpull = spawn('git', ['pull'], {cwd: config.path});
   message('Nach Aktualsierungen suchen: ' + gitpull.stdout.toString('utf8'));
 }
 
@@ -95,7 +96,7 @@ generatePDF = function(folder) {
   const mscore = spawn(command, [
     '--export-to',
     path.join(folder, 'score.pdf'),
-    path.join(folder, 'score.mscx')
+    path.join(folder, config.score)
   ]);
 }
 
@@ -110,7 +111,7 @@ deletePDF = function(folder) {
 
 generateSVGs = function(folder) {
   message(folder + ': Bilder erzeugen');
-  var slides = path.join(folder, 'slides');
+  var slides = path.join(folder, config.slidesFolder);
 
   if (!fileExists(slides)) {
     fs.mkdir(slides);
@@ -137,7 +138,7 @@ message =  function(text) {
 
   var date = new Date();
   var isoDate = date.toISOString();
-  fs.appendFile(path.join(config.songsPath, 'update.log'), isoDate + ': ' + text + '\n', function (err) {
+  fs.appendFile(path.join(config.path, 'update.log'), isoDate + ': ' + text + '\n', function (err) {
     if (err) {
       throw err;
     }
