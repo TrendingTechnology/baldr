@@ -2,7 +2,6 @@ const os = require('os');
 const path = require('path');
 const config = require(path.join(os.homedir(), '.html5-school-presentation.json')).songbook;
 
-
 const fs = require('fs');
 const spawn = require('child_process').spawnSync;
 
