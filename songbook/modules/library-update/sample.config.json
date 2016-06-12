@@ -1,0 +1,8 @@
+{
+	"songsPath": "/Users/jf/Desktop/school/Lieder",
+	"songsJSON": "songs.json",
+	"songsSlidesFolder": "slides",
+	"songsScore": "score.mscx",
+	"songsSlidesExt": ["svg", "png"],
+	"songsAudioExt": ["mp3", "m4a"]
+}
