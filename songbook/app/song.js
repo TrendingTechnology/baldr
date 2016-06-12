@@ -2,7 +2,7 @@
  * 'song': The current song
  **********************************************************************/
 
-var path = require('path');
+const path = require('path');
 
 /**
  * The current slide number.
