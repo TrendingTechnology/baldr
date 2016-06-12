@@ -1,18 +1,18 @@
-var os = require('os');
-var pth = require('path');
-var config = require(pth.join(os.homedir(), '.html5-school-presentation.json'));
+const os = require('os');
+const pth = require('path');
+const config = require(pth.join(os.homedir(), '.html5-school-presentation.json'));
 
-var fs = require('fs');
+const fs = require('fs');
 
-var jquery = require("jquery");
-var mousetrap = require('mousetrap');
-var selectize = require("selectize");
+const jquery = require("jquery");
+const mousetrap = require('mousetrap');
+const selectize = require("selectize");
 
 //var library = require('../modules/library-update/index.js');
-library = require('songbook-library-update');
-var modal = require('./modal.js');
-var search = require('./search.js');
-var song = require('./song.js');
+const library = require('songbook-library-update');
+const modal = require('./modal.js');
+const search = require('./search.js');
+const song = require('./song.js');
 
 require('./menu.js');
 
