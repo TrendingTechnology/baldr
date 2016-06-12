@@ -1,5 +1,5 @@
-var fs = require('fs');
-var pth = require('path');
+const fs = require('fs');
+const path = require('path');
 const spawn = require('child_process').spawnSync;
 
 exports.songsPath = songsPath = '/var/songs';
@@ -34,11 +34,11 @@ exports.generateJSON = generateJSON = function() {
 }
 
 updateMTime = function(folder) {
-  var score = pth.join(folder, 'score.mscx')
+  var score = path.join(folder, 'score.mscx')
   stat = fs.statSync(score);
-  fs.writeFile(pth.join(folder, '.mtime'), stat.mtime, function(err) {
-    if(err) {
-        return console.log(err);
+  fs.writeFile(path.join(folder, '.mtime'), stat.mtime, function(err) {
+    if (err) {
+      eturn console.log(err);
     }
   });
 }
@@ -61,8 +61,8 @@ getFolders = function(mode) {
   var output = [];
   folders = fs.readdirSync(songsPath);
   folders.forEach(function (folder) {
-    var folder = pth.join(songsPath, folder);
-    var score = pth.join(folder, 'score.mscx');
+    var folder = path.join(songsPath, folder);
+    var score = path.join(folder, 'score.mscx');
     if (fileExists(score)) {
       if (mode != 'force') {
         var MTime = getMTime(folder);
@@ -91,15 +91,15 @@ generatePDF = function(folder) {
   }
   const mscore = spawn(command, [
     '--export-to',
-    pth.join(folder, 'score.pdf'),
-    pth.join(folder, 'score.mscx')
+    path.join(folder, 'score.pdf'),
+    path.join(folder, 'score.mscx')
   ]);
 }
 
 deletePDF = function(folder) {
-  fs.stat(pth.join(folder, 'score.pdf'), function (err, stats) {
+  fs.stat(path.join(folder, 'score.pdf'), function (err, stats) {
     if (err) return console.error(err);
-      fs.unlink(pth.join(folder, 'score.pdf'), function(err) {
+      fs.unlink(path.join(folder, 'score.pdf'), function(err) {
          if(err) return console.error(err);
     });
   });
@@ -107,24 +107,24 @@ deletePDF = function(folder) {
 
 generateSVGs = function(folder) {
   message(folder + ': Bilder erzeugen');
-  var slides = pth.join(folder, 'slides');
-  fs.access(slides, function(err) {
-    if (err) {
-      fs.mkdir(slides);
-    }
-  })
-  files = fs.readdirSync(slides);
-  files.map(function (file) {
-    return pth.join(slides, file);
-  }).filter(function (file) {
-    return fs.statSync(file).isFile();
-  }).forEach(function (file) {
-    fs.unlinkSync(file);
-  });
+  var slides = path.join(folder, 'slides');
+
+  if (!fileExists(slides)) {
+    fs.mkdir(slides);
+  } else {
+    files = fs.readdirSync(slides);
+    files.map(function (file) {
+      return path.join(slides, file);
+    }).filter(function (file) {
+      return fs.statSync(file).isFile();
+    }).forEach(function (file) {
+      fs.unlinkSync(file);
+    });
+  }
 
   const pdf2svg = spawn('pdf2svg', [
-    pth.join(folder, 'score.pdf'),
-    pth.join(slides, '%02d.svg'),
+    path.join(folder, 'score.pdf'),
+    path.join(slides, '%02d.svg'),
      'all'
   ]);
 }
@@ -134,7 +134,7 @@ message =  function(text) {
 
   var date = new Date();
   var isoDate = date.toISOString();
-  fs.appendFile(pth.join(songsPath, 'update.log'), isoDate + ': ' + text + '\n', function (err) {
+  fs.appendFile(path.join(songsPath, 'update.log'), isoDate + ': ' + text + '\n', function (err) {
     if (err) {
       throw err;
     }
