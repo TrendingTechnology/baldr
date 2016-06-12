@@ -5,7 +5,7 @@ const config = require(path.join(os.homedir(), '.html5-school-presentation.json'
 const fs = require('fs');
 const spawn = require('child_process').spawnSync;
 
-exports.songsPath = config.songsPath = '/var/songs';
+exports.songsPath = config.songsPath;
 
 var jsonPath = config.songsPath + '/songs.json';
 
@@ -103,7 +103,7 @@ deletePDF = function(folder) {
   fs.stat(path.join(folder, 'score.pdf'), function (err, stats) {
     if (err) return console.error(err);
       fs.unlink(path.join(folder, 'score.pdf'), function(err) {
-         if(err) return console.error(err);
+      if(err) return console.error(err);
     });
   });
 }
