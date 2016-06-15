@@ -6,6 +6,8 @@
 		"slidesFolder": "slides",
 		"score": "score.mscx",
 		"slidesExt": ["svg", "png"],
-		"audioExt": ["mp3", "m4a"]
+		"audioExt": ["mp3", "m4a"],
+		"mtime": ".mtime",
+		"pdf": "score.pdf"
 	}
 }

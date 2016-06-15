@@ -39,7 +39,7 @@ exports.generateJSON = generateJSON = function() {
 updateMTime = function(folder) {
   var score = path.join(folder, config.score)
   stat = fs.statSync(score);
-  fs.writeFile(path.join(folder, '.mtime'), stat.mtime, function(err) {
+  fs.writeFile(path.join(folder, config.mtime), stat.mtime, function(err) {
     if (err) {
       return console.log(err);
     }
@@ -52,8 +52,9 @@ getMTime = function(folder) {
 }
 
 getCachedMTime = function(folder) {
-  if (fileExists(folder + '/.mtime')) {
-    return fs.readFileSync(folder + '/.mtime', 'utf8');
+  var mtime = path.join(folder, config.mtime);
+  if (fileExists(mtime)) {
+    return fs.readFileSync(mtime, 'utf8');
   }
   else {
     return '';
@@ -65,7 +66,7 @@ getFolders = function(mode) {
   folders = fs.readdirSync(config.path);
   folders.forEach(function (folder) {
     var folder = path.join(config.path, folder);
-    var score = path.join(folder, 'score.mscx');
+    var score = path.join(folder, config.score);
     if (fileExists(score)) {
       if (mode != 'force') {
         var MTime = getMTime(folder);
@@ -94,15 +95,15 @@ generatePDF = function(folder) {
   }
   const mscore = spawn(command, [
     '--export-to',
-    path.join(folder, 'score.pdf'),
+    path.join(folder, config.pdf),
     path.join(folder, config.score)
   ]);
 }
 
 deletePDF = function(folder) {
-  fs.stat(path.join(folder, 'score.pdf'), function (err, stats) {
+  fs.stat(path.join(folder, config.pdf), function (err, stats) {
     if (err) return console.error(err);
-      fs.unlink(path.join(folder, 'score.pdf'), function(err) {
+      fs.unlink(path.join(folder, config.pdf), function(err) {
       if(err) return console.error(err);
     });
   });
@@ -126,7 +127,7 @@ generateSVGs = function(folder) {
   }
 
   const pdf2svg = spawn('pdf2svg', [
-    path.join(folder, 'score.pdf'),
+    path.join(folder, config.pdf),
     path.join(slides, '%02d.svg'),
      'all'
   ]);
