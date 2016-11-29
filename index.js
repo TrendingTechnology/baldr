@@ -1,13 +1,7 @@
 const os = require('os');
 const path = require('path');
-const config = require(path.join(os.homedir(), '.html5-school-presentation.json')).songbook;
 
-const fs = require('fs');
-const spawn = require('child_process').spawnSync;
-
-exports.songsPath = config.path;
-
-var jsonPath = path.join(config.path, config.json);
+const configFileName = '.html5-school-presentation.json'
 
 function fileExists(filePath) {
   try {
@@ -17,6 +11,26 @@ function fileExists(filePath) {
     return false;
   }
 }
+
+bootstrap = function() {
+  var configFile = path.join(os.homedir(), configFileName);
+  if (fileExists(configFile)) {
+    return require(configFile).songbook;
+  }
+  else {
+    console.log('No config file \'~/' + configFileName + '\' found!')
+    process.exit(1)
+  }
+}
+
+const config = bootstrap();
+
+const fs = require('fs');
+const spawn = require('child_process').spawnSync;
+
+exports.songsPath = config.path;
+
+var jsonPath = path.join(config.path, config.json);
 
 exports.generateJSON = generateJSON = function() {
   var tmp = {};
