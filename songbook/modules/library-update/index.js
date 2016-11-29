@@ -1,3 +1,5 @@
+console.log('lol')
+
 const os = require('os');
 const path = require('path');
 const config = require(path.join(os.homedir(), '.html5-school-presentation.json')).songbook;
