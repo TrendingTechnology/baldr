@@ -89,7 +89,7 @@ pull = function() {
 
 generatePDF = function(folder) {
   if (process.platform == 'darwin') {
-    var command = '/Applications/MuseScore.app/Contents/MacOS/mscore';
+    var command = '/Applications/MuseScore 2.app/Contents/MacOS/mscore';
   } else {
     command = 'mscore'
   }
@@ -114,6 +114,7 @@ generateSVGs = function(folder) {
   var slides = path.join(folder, config.slidesFolder);
 
   if (!fileExists(slides)) {
+
     fs.mkdir(slides);
   } else {
     files = fs.readdirSync(slides);
