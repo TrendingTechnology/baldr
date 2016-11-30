@@ -1,5 +1,7 @@
 #! /usr/bin/env node
 
+console.log('lol')
+
 var slu = require('songbook-library-update');
 var commander = require('commander');
 
