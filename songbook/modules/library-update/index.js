@@ -1,7 +1,9 @@
+/* jshint esversion: 6 */
+
 const os = require('os');
 const path = require('path');
 
-const configFileName = '.html5-school-presentation.json'
+const configFileName = '.html5-school-presentation.json';
 
 function fileExists(filePath) {
   try {
@@ -18,10 +20,10 @@ bootstrap = function() {
     return require(configFile).songbook;
   }
   else {
-    console.log('No config file \'~/' + configFileName + '\' found!')
-    process.exit(1)
+    console.log('No config file \'~/' + configFileName + '\' found!');
+    process.exit(1);
   }
-}
+};
 
 const config = bootstrap();
 
@@ -48,22 +50,22 @@ exports.generateJSON = generateJSON = function() {
 
   fs.writeFileSync(jsonPath, JSON.stringify(tmp, null, 4));
   message('Datenbank-Datei erzeugen');
-}
+};
 
 updateMTime = function(folder) {
-  var score = path.join(folder, config.score)
+  var score = path.join(folder, config.score);
   stat = fs.statSync(score);
   fs.writeFile(path.join(folder, config.mtime), stat.mtime, function(err) {
     if (err) {
       return console.log(err);
     }
   });
-}
+};
 
 getMTime = function(folder) {
   var stat = fs.statSync(path.join(folder, config.score));
-  return stat.mtime
-}
+  return stat.mtime;
+};
 
 getCachedMTime = function(folder) {
   var mtime = path.join(folder, config.mtime);
@@ -73,46 +75,46 @@ getCachedMTime = function(folder) {
   else {
     return '';
   }
-}
+};
 
 getFolders = function(mode) {
   var output = [];
   folders = fs.readdirSync(config.path);
   folders.forEach(function (folder) {
-    var folder = path.join(config.path, folder);
-    var score = path.join(folder, config.score);
+    var absFolder = path.join(config.path, folder);
+    var score = path.join(absFolder, config.score);
     if (fileExists(score)) {
       if (mode != 'force') {
-        var MTime = getMTime(folder);
-        var cachedMTime = getCachedMTime(folder);
+        var MTime = getMTime(absFolder);
+        var cachedMTime = getCachedMTime(absFolder);
         if (cachedMTime != MTime) {
-          output[output.length] = folder;
+          output[output.length] = absFolder;
         }
       } else {
-        output[output.length] = folder;
+        output[output.length] = absFolder;
       }
     }
   });
   return output;
-}
+};
 
 pull = function() {
   var gitpull = spawn('git', ['pull'], {cwd: config.path});
   message('Nach Aktualsierungen suchen: ' + gitpull.stdout.toString('utf8'));
-}
+};
 
 generatePDF = function(folder) {
   if (process.platform == 'darwin') {
     var command = '/Applications/MuseScore 2.app/Contents/MacOS/mscore';
   } else {
-    command = 'mscore'
+    var command = 'mscore';
   }
   const mscore = spawn(command, [
     '--export-to',
     path.join(folder, config.pdf),
     path.join(folder, config.score)
   ]);
-}
+};
 
 deletePDF = function(folder) {
   fs.stat(path.join(folder, config.pdf), function (err, stats) {
@@ -121,7 +123,7 @@ deletePDF = function(folder) {
       if(err) return console.error(err);
     });
   });
-}
+};
 
 generateSVGs = function(folder) {
   message(folder + ': Bilder erzeugen');
@@ -146,7 +148,7 @@ generateSVGs = function(folder) {
     path.join(slides, '%02d.svg'),
      'all'
   ]);
-}
+};
 
 message =  function(text) {
   console.log(text);
@@ -158,7 +160,7 @@ message =  function(text) {
       throw err;
     }
   });
-}
+};
 
 exports.update = update = function(mode) {
   pull();
@@ -170,15 +172,15 @@ exports.update = update = function(mode) {
     updateMTime(folder);
   });
   generateJSON();
-}
+};
 
 exports.updateForce = function() {
   update('force');
-}
+};
 
 exports.readJSON = function () {
   if (!fileExists(jsonPath)) {
     generateJSON();
   }
   return JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
-}
+};
