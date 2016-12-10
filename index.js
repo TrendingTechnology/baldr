@@ -15,7 +15,7 @@ bootstrap = function() {
     return require(configFile).songbook;
   }
   else {
-    console.log('No config file \'~/' + configFileName + '\' found!');
+    console.log(error + 'No config file \'~/' + configFileName + '\' found!');
     process.exit(1);
   }
 };
