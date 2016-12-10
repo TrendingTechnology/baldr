@@ -6,18 +6,9 @@ const fs = require('fs');
 
 const configFileName = '.html5-school-presentation.json';
 
-function fileExists(filePath) {
-  try {
-    return fs.statSync(filePath).isFile();
-  }
-  catch (err) {
-    return false;
-  }
-}
-
 bootstrap = function() {
   var configFile = path.join(os.homedir(), configFileName);
-  if (fileExists(configFile)) {
+  if (fs.existsSync(configFile)) {
     return require(configFile).songbook;
   }
   else {
@@ -39,7 +30,7 @@ exports.generateJSON = generateJSON = function() {
   folders.forEach(function (folder) {
     var songFolder = path.join(config.path, folder);
     var jsonFile = path.join(songFolder, config.info);
-    if (fileExists(jsonFile)) {
+    if (fs.existsSync(jsonFile)) {
       var info = JSON.parse(fs.readFileSync(jsonFile, 'utf8'));
       info.folder = folder;
       info.slides = fs.readdirSync(path.join(songFolder, config.slidesFolder));
@@ -64,7 +55,7 @@ getMTime = function(folder) {
 
 getCachedMTime = function(folder) {
   var mtime = path.join(folder, config.mtime);
-  if (fileExists(mtime)) {
+  if (fs.existsSync(mtime)) {
     return fs.readFileSync(mtime, 'utf8');
   }
   else {
@@ -78,7 +69,7 @@ getFolders = function(mode) {
   folders.forEach(function (folder) {
     var absFolder = path.join(config.path, folder);
     var score = path.join(absFolder, config.score);
-    if (fileExists(score)) {
+    if (fs.existsSync(score)) {
       if (mode != 'force') {
         var MTime = getMTime(absFolder);
         var cachedMTime = getCachedMTime(absFolder);
@@ -124,7 +115,7 @@ generateSVGs = function(folder) {
   message(folder + ': Bilder erzeugen');
   var slides = path.join(folder, config.slidesFolder);
 
-  if (!fileExists(slides)) {
+  if (!fs.existsSync(slides)) {
     fs.mkdirSync(slides);
   } else {
     files = fs.readdirSync(slides);
@@ -173,7 +164,7 @@ exports.updateForce = function() {
 };
 
 exports.readJSON = function () {
-  if (!fileExists(jsonPath)) {
+  if (!fs.existsSync(jsonPath)) {
     generateJSON();
   }
   return JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
