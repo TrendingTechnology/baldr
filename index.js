@@ -6,18 +6,24 @@ const colors = require('colors');
 const fs = require('fs');
 
 const configFileName = '.html5-school-presentation.json';
-const warning = 'Warning! '.yellow
-const error = 'Error! '.red
+const warning = 'Warning! '.yellow;
+const error = 'Error! '.red;
 
 bootstrap = function() {
   var configFile = path.join(os.homedir(), configFileName);
+  var configValues;
   if (fs.existsSync(configFile)) {
-    return require(configFile).songbook;
+    configValues = require(configFile).songbook;
   }
   else {
     console.log(error + 'No config file \'~/' + configFileName + '\' found!');
+    const sampleConfigFile = path.join(__dirname, 'sample.config.json');
+    const sampleConfig = fs.readFileSync(sampleConfigFile, 'utf8');
+    console.log('\nCreate a config file with this keys:\n' + sampleConfig);
     process.exit(1);
   }
+
+  return configValues;
 };
 
 const config = bootstrap();
@@ -108,13 +114,16 @@ pull = function() {
   message('Nach Aktualsierungen suchen: ' + gitpull.stdout.toString('utf8'));
 };
 
-generatePDF = function(folder) {
+getMscoreCommand = function() {
   if (process.platform == 'darwin') {
-    var command = '/Applications/MuseScore 2.app/Contents/MacOS/mscore';
+    return '/Applications/MuseScore 2.app/Contents/MacOS/mscore';
   } else {
-    var command = 'mscore';
+    return 'mscore';
   }
-  const mscore = spawn(command, [
+};
+
+generatePDF = function(folder) {
+  const mscore = spawn(getMscoreCommand(), [
     '--export-to',
     path.join(folder, config.pdf),
     path.join(folder, config.score)
