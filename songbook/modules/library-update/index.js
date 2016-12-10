@@ -2,6 +2,7 @@
 
 const os = require('os');
 const path = require('path');
+const fs = require('fs');
 
 const configFileName = '.html5-school-presentation.json';
 
@@ -26,8 +27,6 @@ bootstrap = function() {
 };
 
 const config = bootstrap();
-
-const fs = require('fs');
 const spawn = require('child_process').spawnSync;
 
 exports.songsPath = config.path;
@@ -55,11 +54,7 @@ exports.generateJSON = generateJSON = function() {
 updateMTime = function(folder) {
   var score = path.join(folder, config.score);
   stat = fs.statSync(score);
-  fs.writeFile(path.join(folder, config.mtime), stat.mtime, function(err) {
-    if (err) {
-      return console.log(err);
-    }
-  });
+  fs.writeFileSync(path.join(folder, config.mtime), stat.mtime);
 };
 
 getMTime = function(folder) {
@@ -130,7 +125,6 @@ generateSVGs = function(folder) {
   var slides = path.join(folder, config.slidesFolder);
 
   if (!fileExists(slides)) {
-
     fs.mkdir(slides);
   } else {
     files = fs.readdirSync(slides);
