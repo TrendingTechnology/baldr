@@ -11,9 +11,9 @@ const error = 'Error! '.red;
 
 bootstrap = function() {
   var configFile = path.join(os.homedir(), configFileName);
-  var configValues;
+  var conf;
   if (fs.existsSync(configFile)) {
-    configValues = require(configFile).songbook;
+    conf = require(configFile).songbook;
   }
   else {
     console.log(error + 'No config file \'~/' + configFileName + '\' found!');
@@ -23,7 +23,38 @@ bootstrap = function() {
     process.exit(1);
   }
 
-  return configValues;
+  if (!conf.json) {
+    conf.json = "songs.json";
+  }
+
+  if (!conf.info) {
+    conf.info = "info.json";
+  }
+
+  if (!conf.slidesFolder) {
+    conf.slidesFolder = "slides";
+  }
+
+  if (!conf.score) {
+    conf.score = "score.mscx";
+  }
+
+  if (!conf.slidesExt) {
+    conf.slidesExt = ["svg", "png"];
+  }
+
+  if (!conf.audioExt) {
+    conf.audioExt = ["mp3", "m4a"];
+  }
+
+  if (!conf.mtime) {
+    conf.mtime = ".mtime";
+  }
+
+  if (!conf.pdf) {
+    conf.pdf = "score.pdf";
+  }
+  return conf;
 };
 
 const config = bootstrap();
