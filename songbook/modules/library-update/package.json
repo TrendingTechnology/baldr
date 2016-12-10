@@ -11,7 +11,8 @@
   "license": "ISC",
   "preferGlobal": true,
   "dependencies": {
-    "commander": "*"
+    "commander": "*",
+    "colors": "*"
   },
   "bin": {
     "songbook-library-update": "command.js"

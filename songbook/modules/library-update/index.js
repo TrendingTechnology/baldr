@@ -2,9 +2,12 @@
 
 const os = require('os');
 const path = require('path');
+const colors = require('colors');
 const fs = require('fs');
 
 const configFileName = '.html5-school-presentation.json';
+const warning = 'Warning! '.yellow
+const error = 'Error! '.red
 
 bootstrap = function() {
   var configFile = path.join(os.homedir(), configFileName);
@@ -34,12 +37,28 @@ exports.generateJSON = generateJSON = function() {
       var info = JSON.parse(fs.readFileSync(jsonFile, 'utf8'));
       info.folder = folder;
       info.slides = fs.readdirSync(path.join(songFolder, config.slidesFolder));
-      tmp[folder] = info;
+      if (Boolean(info.title)) {
+        tmp[folder] = info;
+      } else {
+        console.log(
+          warning +
+          folder.underline.yellow + '/' +
+          config.info.underline.red +
+          ' has no value for title!'
+        );
+      }
+    }
+    else if (fs.lstatSync(songFolder).isDirectory()) {
+      console.log(
+        warning +
+        folder.underline.red + ' has no ' +
+        config.info.underline.red + ' file!'
+      );
     }
   });
 
   fs.writeFileSync(jsonPath, JSON.stringify(tmp, null, 4));
-  message('Datenbank-Datei erzeugen');
+  message('Datenbank-Datei erzeugen'.green);
 };
 
 updateMTime = function(folder) {
