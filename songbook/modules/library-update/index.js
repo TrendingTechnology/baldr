@@ -125,7 +125,7 @@ generateSVGs = function(folder) {
   var slides = path.join(folder, config.slidesFolder);
 
   if (!fileExists(slides)) {
-    fs.mkdir(slides);
+    fs.mkdirSync(slides);
   } else {
     files = fs.readdirSync(slides);
     files.map(function (file) {
