@@ -178,13 +178,10 @@ generateSVGs = function(folder) {
     fs.mkdirSync(slides);
   } else {
     files = fs.readdirSync(slides);
-    files.map(function (file) {
-      return path.join(slides, file);
-    }).filter(function (file) {
-      return fs.statSync(file).isFile();
-    }).forEach(function (file) {
-      fs.unlinkSync(file);
-    });
+    files
+      .map(file => path.join(slides, file))
+      .filter(file => fs.statSync(file).isFile())
+      .forEach(file => fs.unlinkSync(file));
   }
 
   const pdf2svg = spawn('pdf2svg', [
@@ -209,12 +206,13 @@ message =  function(text) {
 exports.update = update = function(mode) {
   pull();
   var folders = getFolders(mode);
-  folders.forEach(function(folder) {
-    generatePDF(folder);
-    generateSVGs(folder);
-    deletePDF(folder);
-    updateMTime(folder);
-  });
+  folders.forEach(folder => {
+      generatePDF(folder);
+      generateSVGs(folder);
+      deletePDF(folder);
+      updateMTime(folder);
+    }
+  );
   generateJSON();
 };
 
