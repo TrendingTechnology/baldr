@@ -162,12 +162,10 @@ generatePDF = function(folder) {
 };
 
 deletePDF = function(folder) {
-  fs.stat(path.join(folder, config.pdf), function (err, stats) {
-    if (err) return console.error(err);
-      fs.unlink(path.join(folder, config.pdf), function(err) {
-      if(err) return console.error(err);
-    });
-  });
+  const pdf = path.join(folder, config.pdf);
+  if (fs.existsSync(pdf)) {
+    fs.unlinkSync(pdf);
+  }
 };
 
 generateSVGs = function(folder) {
