@@ -16,5 +16,8 @@
   },
   "bin": {
     "songbook-library-update": "command.js"
+  },
+  "engines" : {
+    "node" : ">=7.0.0"
   }
 }
