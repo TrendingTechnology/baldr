@@ -13,12 +13,12 @@ else
 fi
 
 _generate() {
-	SCORE="$1"
-	DIR=$(dirname $SCORE)
-	PDF=$DIR/score.pdf
+	PROJECTOR="$1"
+	DIR=$(dirname $PROJECTOR)
+	PDF=$DIR/projector.pdf
 	if [ "$FORCE" ] || [ ! -f "${DIR}/slides/01.svg" ]; then
 		echo "Generate ${PDF}"
-		"$MSCORE" --export-to "${PDF}" "${SCORE}" > /dev/null 2>&1
+		"$MSCORE" --export-to "${PDF}" "${PROJECTOR}" > /dev/null 2>&1
 		mkdir "${DIR}/slides" > /dev/null 2>&1
 		pdf2svg "${PDF}" "${DIR}/slides/%02d.svg" all
 		echo "Generate image files: $(ls "${DIR}/slides")"
@@ -29,6 +29,6 @@ _generate() {
 export -f _generate
 
 find "." \
-	-iname "score.mscx" \
+	-iname "projector.mscx" \
 	-exec bash -c '_generate "$0"' {} \;
 exit
