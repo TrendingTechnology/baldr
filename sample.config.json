@@ -4,10 +4,10 @@
 		"json": "songs.json",
 		"info": "info.json",
 		"slidesFolder": "slides",
-		"score": "score.mscx",
+		"projector": "projector.mscx",
 		"slidesExt": ["svg", "png"],
 		"audioExt": ["mp3", "m4a"],
 		"mtime": ".mtime",
-		"pdf": "score.pdf"
+		"pdf": "projector.pdf"
 	}
 }

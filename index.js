@@ -35,8 +35,8 @@ bootstrap = function() {
     conf.slidesFolder = "slides";
   }
 
-  if (!conf.score) {
-    conf.score = "score.mscx";
+  if (!conf.projector) {
+    conf.projector = "projector.mscx";
   }
 
   if (!conf.slidesExt) {
@@ -52,7 +52,7 @@ bootstrap = function() {
   }
 
   if (!conf.pdf) {
-    conf.pdf = "score.pdf";
+    conf.pdf = "projector.pdf";
   }
   return conf;
 };
@@ -99,13 +99,13 @@ exports.generateJSON = generateJSON = function() {
 };
 
 updateMTime = function(folder) {
-  var score = path.join(folder, config.score);
-  stat = fs.statSync(score);
+  var projector = path.join(folder, config.projector);
+  stat = fs.statSync(projector);
   fs.writeFileSync(path.join(folder, config.mtime), stat.mtime);
 };
 
 getMTime = function(folder) {
-  var stat = fs.statSync(path.join(folder, config.score));
+  var stat = fs.statSync(path.join(folder, config.projector));
   return stat.mtime;
 };
 
@@ -124,8 +124,8 @@ getFolders = function(mode) {
   folders = fs.readdirSync(config.path);
   folders.forEach(function (folder) {
     var absFolder = path.join(config.path, folder);
-    var score = path.join(absFolder, config.score);
-    if (fs.existsSync(score)) {
+    var projector = path.join(absFolder, config.projector);
+    if (fs.existsSync(projector)) {
       if (mode != 'force') {
         var MTime = getMTime(absFolder);
         var cachedMTime = getCachedMTime(absFolder);
@@ -157,7 +157,7 @@ generatePDF = function(folder) {
   const mscore = spawn(getMscoreCommand(), [
     '--export-to',
     path.join(folder, config.pdf),
-    path.join(folder, config.score)
+    path.join(folder, config.projector)
   ]);
 };
 
