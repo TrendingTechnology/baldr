@@ -2,32 +2,62 @@
 
 const os = require('os');
 const path = require('path');
+const colors = require('colors');
+const fs = require('fs');
 
 const configFileName = '.html5-school-presentation.json';
-
-function fileExists(filePath) {
-  try {
-    return fs.statSync(filePath).isFile();
-  }
-  catch (err) {
-    return false;
-  }
-}
+const warning = 'Warning! '.yellow;
+const error = 'Error! '.red;
 
 bootstrap = function() {
   var configFile = path.join(os.homedir(), configFileName);
-  if (fileExists(configFile)) {
-    return require(configFile).songbook;
+  var conf;
+  if (fs.existsSync(configFile)) {
+    conf = require(configFile).songbook;
   }
   else {
-    console.log('No config file \'~/' + configFileName + '\' found!');
+    console.log(error + 'No config file \'~/' + configFileName + '\' found!');
+    const sampleConfigFile = path.join(__dirname, 'sample.config.json');
+    const sampleConfig = fs.readFileSync(sampleConfigFile, 'utf8');
+    console.log('\nCreate a config file with this keys:\n' + sampleConfig);
     process.exit(1);
   }
+
+  if (!conf.json) {
+    conf.json = "songs.json";
+  }
+
+  if (!conf.info) {
+    conf.info = "info.json";
+  }
+
+  if (!conf.slidesFolder) {
+    conf.slidesFolder = "slides";
+  }
+
+  if (!conf.score) {
+    conf.score = "score.mscx";
+  }
+
+  if (!conf.slidesExt) {
+    conf.slidesExt = ["svg", "png"];
+  }
+
+  if (!conf.audioExt) {
+    conf.audioExt = ["mp3", "m4a"];
+  }
+
+  if (!conf.mtime) {
+    conf.mtime = ".mtime";
+  }
+
+  if (!conf.pdf) {
+    conf.pdf = "score.pdf";
+  }
+  return conf;
 };
 
 const config = bootstrap();
-
-const fs = require('fs');
 const spawn = require('child_process').spawnSync;
 
 exports.songsPath = config.path;
@@ -40,26 +70,38 @@ exports.generateJSON = generateJSON = function() {
   folders.forEach(function (folder) {
     var songFolder = path.join(config.path, folder);
     var jsonFile = path.join(songFolder, config.info);
-    if (fileExists(jsonFile)) {
+    if (fs.existsSync(jsonFile)) {
       var info = JSON.parse(fs.readFileSync(jsonFile, 'utf8'));
       info.folder = folder;
       info.slides = fs.readdirSync(path.join(songFolder, config.slidesFolder));
-      tmp[folder] = info;
+      if (Boolean(info.title)) {
+        tmp[folder] = info;
+      } else {
+        console.log(
+          warning +
+          folder.underline.yellow + '/' +
+          config.info.underline.red +
+          ' has no value for title!'
+        );
+      }
+    }
+    else if (fs.lstatSync(songFolder).isDirectory()) {
+      console.log(
+        warning +
+        folder.underline.red + ' has no ' +
+        config.info.underline.red + ' file!'
+      );
     }
   });
 
   fs.writeFileSync(jsonPath, JSON.stringify(tmp, null, 4));
-  message('Datenbank-Datei erzeugen');
+  message('Datenbank-Datei erzeugen'.green);
 };
 
 updateMTime = function(folder) {
   var score = path.join(folder, config.score);
   stat = fs.statSync(score);
-  fs.writeFile(path.join(folder, config.mtime), stat.mtime, function(err) {
-    if (err) {
-      return console.log(err);
-    }
-  });
+  fs.writeFileSync(path.join(folder, config.mtime), stat.mtime);
 };
 
 getMTime = function(folder) {
@@ -69,7 +111,7 @@ getMTime = function(folder) {
 
 getCachedMTime = function(folder) {
   var mtime = path.join(folder, config.mtime);
-  if (fileExists(mtime)) {
+  if (fs.existsSync(mtime)) {
     return fs.readFileSync(mtime, 'utf8');
   }
   else {
@@ -83,7 +125,7 @@ getFolders = function(mode) {
   folders.forEach(function (folder) {
     var absFolder = path.join(config.path, folder);
     var score = path.join(absFolder, config.score);
-    if (fileExists(score)) {
+    if (fs.existsSync(score)) {
       if (mode != 'force') {
         var MTime = getMTime(absFolder);
         var cachedMTime = getCachedMTime(absFolder);
@@ -103,13 +145,16 @@ pull = function() {
   message('Nach Aktualsierungen suchen: ' + gitpull.stdout.toString('utf8'));
 };
 
-generatePDF = function(folder) {
+getMscoreCommand = function() {
   if (process.platform == 'darwin') {
-    var command = '/Applications/MuseScore 2.app/Contents/MacOS/mscore';
+    return '/Applications/MuseScore 2.app/Contents/MacOS/mscore';
   } else {
-    var command = 'mscore';
+    return 'mscore';
   }
-  const mscore = spawn(command, [
+};
+
+generatePDF = function(folder) {
+  const mscore = spawn(getMscoreCommand(), [
     '--export-to',
     path.join(folder, config.pdf),
     path.join(folder, config.score)
@@ -117,30 +162,24 @@ generatePDF = function(folder) {
 };
 
 deletePDF = function(folder) {
-  fs.stat(path.join(folder, config.pdf), function (err, stats) {
-    if (err) return console.error(err);
-      fs.unlink(path.join(folder, config.pdf), function(err) {
-      if(err) return console.error(err);
-    });
-  });
+  const pdf = path.join(folder, config.pdf);
+  if (fs.existsSync(pdf)) {
+    fs.unlinkSync(pdf);
+  }
 };
 
 generateSVGs = function(folder) {
   message(folder + ': Bilder erzeugen');
   var slides = path.join(folder, config.slidesFolder);
 
-  if (!fileExists(slides)) {
-
-    fs.mkdir(slides);
+  if (!fs.existsSync(slides)) {
+    fs.mkdirSync(slides);
   } else {
     files = fs.readdirSync(slides);
-    files.map(function (file) {
-      return path.join(slides, file);
-    }).filter(function (file) {
-      return fs.statSync(file).isFile();
-    }).forEach(function (file) {
-      fs.unlinkSync(file);
-    });
+    files
+      .map(file => path.join(slides, file))
+      .filter(file => fs.statSync(file).isFile())
+      .forEach(file => fs.unlinkSync(file));
   }
 
   const pdf2svg = spawn('pdf2svg', [
@@ -165,12 +204,13 @@ message =  function(text) {
 exports.update = update = function(mode) {
   pull();
   var folders = getFolders(mode);
-  folders.forEach(function(folder) {
-    generatePDF(folder);
-    generateSVGs(folder);
-    deletePDF(folder);
-    updateMTime(folder);
-  });
+  folders.forEach(folder => {
+      generatePDF(folder);
+      generateSVGs(folder);
+      deletePDF(folder);
+      updateMTime(folder);
+    }
+  );
   generateJSON();
 };
 
@@ -179,7 +219,7 @@ exports.updateForce = function() {
 };
 
 exports.readJSON = function () {
-  if (!fileExists(jsonPath)) {
+  if (!fs.existsSync(jsonPath)) {
     generateJSON();
   }
   return JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
