@@ -9,11 +9,20 @@ const configFileName = '.html5-school-presentation.json';
 const warning = 'Warning! '.yellow;
 const error = 'Error! '.red;
 
+const configDefault = {
+  json: "songs.json",
+  info: "info.json",
+  slidesFolder: "slides",
+  projector: "projector",
+  mtime: ".mtime",
+  pdf: "projector.pdf"
+};
+
 bootstrap = function() {
   var configFile = path.join(os.homedir(), configFileName);
   var conf;
   if (fs.existsSync(configFile)) {
-    conf = require(configFile).songbook;
+    conf = Object.assign(configDefault, require(configFile).songbook);
   }
   else {
     console.log(error + 'No config file \'~/' + configFileName + '\' found!');
@@ -21,38 +30,6 @@ bootstrap = function() {
     const sampleConfig = fs.readFileSync(sampleConfigFile, 'utf8');
     console.log('\nCreate a config file with this keys:\n' + sampleConfig);
     process.exit(1);
-  }
-
-  if (!conf.json) {
-    conf.json = "songs.json";
-  }
-
-  if (!conf.info) {
-    conf.info = "info.json";
-  }
-
-  if (!conf.slidesFolder) {
-    conf.slidesFolder = "slides";
-  }
-
-  if (!conf.projector) {
-    conf.projector = "projector.mscx";
-  }
-
-  if (!conf.slidesExt) {
-    conf.slidesExt = ["svg", "png"];
-  }
-
-  if (!conf.audioExt) {
-    conf.audioExt = ["mp3", "m4a"];
-  }
-
-  if (!conf.mtime) {
-    conf.mtime = ".mtime";
-  }
-
-  if (!conf.pdf) {
-    conf.pdf = "projector.pdf";
   }
   return conf;
 };
@@ -68,10 +45,12 @@ exports.generateJSON = generateJSON = function() {
   var tmp = {};
   folders = fs.readdirSync(config.path);
   folders.forEach(function (folder) {
+    console.log(folder);
     var songFolder = path.join(config.path, folder);
     var jsonFile = path.join(songFolder, config.info);
     if (fs.existsSync(jsonFile)) {
-      var info = JSON.parse(fs.readFileSync(jsonFile, 'utf8'));
+      var jsonFileContents = fs.readFileSync(jsonFile, 'utf8');
+      var info = JSON.parse(jsonFileContents);
       info.folder = folder;
       info.slides = fs.readdirSync(path.join(songFolder, config.slidesFolder));
       if (Boolean(info.title)) {
@@ -98,15 +77,13 @@ exports.generateJSON = generateJSON = function() {
   message('Datenbank-Datei erzeugen'.green);
 };
 
-updateMTime = function(folder) {
-  var projector = path.join(folder, config.projector);
-  stat = fs.statSync(projector);
-  fs.writeFileSync(path.join(folder, config.mtime), stat.mtime);
+getMTime = function(folder) {
+  var stat = fs.statSync(path.join(folder, config.projector + '.mscx'));
+  return stat.mtime;
 };
 
-getMTime = function(folder) {
-  var stat = fs.statSync(path.join(folder, config.projector));
-  return stat.mtime;
+updateMTime = function(folder) {
+  fs.writeFileSync(path.join(folder, config.mtime), getMTime(folder));
 };
 
 getCachedMTime = function(folder) {
@@ -124,7 +101,7 @@ getFolders = function(mode) {
   folders = fs.readdirSync(config.path);
   folders.forEach(function (folder) {
     var absFolder = path.join(config.path, folder);
-    var projector = path.join(absFolder, config.projector);
+    var projector = path.join(absFolder, config.projector + '.mscx');
     if (fs.existsSync(projector)) {
       if (mode != 'force') {
         var MTime = getMTime(absFolder);
@@ -157,7 +134,7 @@ generatePDF = function(folder) {
   const mscore = spawn(getMscoreCommand(), [
     '--export-to',
     path.join(folder, config.pdf),
-    path.join(folder, config.projector)
+    path.join(folder, config.projector + '.mscx')
   ]);
 };
 
@@ -189,7 +166,7 @@ generateSVGs = function(folder) {
   ]);
 };
 
-message =  function(text) {
+message = function(text) {
   console.log(text);
 
   var date = new Date();
