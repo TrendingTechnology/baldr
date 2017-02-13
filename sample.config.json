@@ -5,8 +5,6 @@
 		"info": "info.json",
 		"slidesFolder": "slides",
 		"projector": "projector.mscx",
-		"slidesExt": ["svg", "png"],
-		"audioExt": ["mp3", "m4a"],
 		"mtime": ".mtime",
 		"pdf": "projector.pdf"
 	}
