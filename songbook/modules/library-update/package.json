@@ -5,7 +5,7 @@
   "repository": "git+ssh://git@git.friedrich.rocks:60022/jf/html5-school-presentation.git",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "author": "Josef Friedrich",
   "license": "ISC",
@@ -13,6 +13,10 @@
   "dependencies": {
     "commander": "*",
     "colors": "*"
+  },
+  "devDependencies": {
+    "mocha": "*",
+    "rewire": "*"
   },
   "bin": {
     "songbook-library-update": "command.js"
