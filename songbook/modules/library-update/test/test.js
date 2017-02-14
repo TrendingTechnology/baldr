@@ -1,7 +1,5 @@
 const assert = require('assert');
 
-//var slu = require('songbook-library-update');
-
 var rewire = require("rewire");
 var slu = rewire("../index.js");
 
