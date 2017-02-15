@@ -15,7 +15,7 @@ const configDefault = {
   slidesFolder: "slides",
   projector: "projector",
   mtime: ".mtime",
-  pdf: "projector.pdf"
+  pdf: "projector"
 };
 
 bootstrap = function() {
@@ -130,11 +130,11 @@ getMscoreCommand = function() {
   }
 };
 
-generatePDF = function(folder) {
+generatePDF = function(folder, source, destination) {
   const mscore = spawn(getMscoreCommand(), [
     '--export-to',
-    path.join(folder, config.pdf),
-    path.join(folder, config.projector + '.mscx')
+    path.join(folder, destination + '.pdf'),
+    path.join(folder, source + '.mscx')
   ]);
 };
 
@@ -182,7 +182,7 @@ exports.update = update = function(mode) {
   pull();
   var folders = getFolders(mode);
   folders.forEach(folder => {
-      generatePDF(folder);
+      generatePDF(folder, config.projector, config.pdf);
       generateSVGs(folder);
       deletePDF(folder);
       updateMTime(folder);
