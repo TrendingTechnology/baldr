@@ -148,11 +148,15 @@ generatePDF = function(folder, source, destination) {
   ]);
 };
 
-
-deletePDF = function(folder) {
-  const pdf = path.join(folder, config.pdf);
-  if (fs.existsSync(pdf)) {
-    fs.unlinkSync(pdf);
+/**
+ * Delete a file in a folder.
+ * @param {string} folder - Folder containing the file to delete.
+ * @param {string} file - Name of the file to delete.
+ */
+deleteFile = function(folder, file) {
+  const del = path.join(folder, file);
+  if (fs.existsSync(del)) {
+    fs.unlinkSync(del);
   }
 };
 
