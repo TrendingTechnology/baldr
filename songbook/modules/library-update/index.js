@@ -117,9 +117,14 @@ getFolders = function(mode) {
   return output;
 };
 
+/**
+ * Execute git pull if repository exists.
+ */
 pull = function() {
-  var gitpull = spawn('git', ['pull'], {cwd: config.path});
-  message('Nach Aktualsierungen suchen: ' + gitpull.stdout.toString('utf8'));
+  if (fs.existsSync(path.join(config.path, '.git'))) {
+    var gitpull = spawn('git', ['pull'], {cwd: config.path});
+    message('Nach Aktualsierungen suchen: ' + gitpull.stdout.toString('utf8'));
+  }
 };
 
 /**

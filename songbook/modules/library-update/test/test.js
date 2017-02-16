@@ -44,4 +44,11 @@ describe('Functions', function() {
     deleteFile(folder, fileName);
     assert.ok(!fs.existsSync(file));
   });
+
+  it.skip('"pull()"', function(done) {
+    const pull = slu.__get__("pull");
+    this.slow(10000000);
+    pull();
+    assert.ok(1);
+  });
 });
