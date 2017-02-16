@@ -2,11 +2,11 @@ const assert = require('assert');
 const path = require('path')
 const fs = require('fs');
 
-var rewire = require("rewire");
-var slu = rewire("../index.js");
+const rewire = require("rewire");
+const slu = rewire("../index.js");
 
 describe('Configuration', function() {
-  var config = slu.__get__("configDefault");
+  const config = slu.__get__("configDefault");
 
   describe('default configuration', function() {
     it('"config.json" should return "songs.json"', function() {
