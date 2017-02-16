@@ -26,10 +26,22 @@ describe('Functions', function() {
     const getMscoreCommand = slu.__get__("getMscoreCommand");
     assert.equal(getMscoreCommand(), "mscore");
   });
+
   it('"generatePDF()"', function() {
     const generatePDF = slu.__get__("generatePDF");
     const folder = path.join('songs', 'Swing-low');
     generatePDF(folder, 'projector', 'projector');
     assert.ok(fs.existsSync(path.join(folder, 'projector.pdf')));
+  });
+
+  it('"deleteFile()"', function() {
+    const deleteFile = slu.__get__("deleteFile");
+    const folder = path.join('songs', 'Swing-low');
+    const fileName = 'test.txt';
+    const file = path.join(folder, fileName);
+    fs.appendFileSync(file, 'test')
+    assert.ok(fs.existsSync(file));
+    deleteFile(folder, fileName);
+    assert.ok(!fs.existsSync(file));
   });
 });
