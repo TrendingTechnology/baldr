@@ -1,4 +1,6 @@
 const assert = require('assert');
+const path = require('path')
+const fs = require('fs');
 
 var rewire = require("rewire");
 var slu = rewire("../index.js");
@@ -20,8 +22,14 @@ describe('Configuration', function() {
 });
 
 describe('Functions', function() {
-  var getMscoreCommand = slu.__get__("getMscoreCommand");
   it('"getMscoreCommand()" should return "mscore"', function() {
+    const getMscoreCommand = slu.__get__("getMscoreCommand");
     assert.equal(getMscoreCommand(), "mscore");
+  });
+  it('"generatePDF()"', function() {
+    const generatePDF = slu.__get__("generatePDF");
+    const folder = path.join('songs', 'Swing-low');
+    generatePDF(folder, 'projector', 'projector');
+    assert.ok(fs.existsSync(path.join(folder, 'projector.pdf')));
   });
 });
