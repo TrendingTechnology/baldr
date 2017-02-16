@@ -122,6 +122,10 @@ pull = function() {
   message('Nach Aktualsierungen suchen: ' + gitpull.stdout.toString('utf8'));
 };
 
+/**
+ * Get the MuseScore command.
+ * @returns {string} The name of the MuseScore command.
+ */
 getMscoreCommand = function() {
   if (process.platform == 'darwin') {
     return '/Applications/MuseScore 2.app/Contents/MacOS/mscore';
@@ -130,6 +134,12 @@ getMscoreCommand = function() {
   }
 };
 
+/**
+ * Generate form a given *.mscx file a PDF file.
+ * @param {string} folder - Folder containing the *.mscx file.
+ * @param {string} source - Name of the *.mscx file without the extension.
+ * @param {string} destination - Name of the PDF without the extension.
+ */
 generatePDF = function(folder, source, destination) {
   const mscore = spawn(getMscoreCommand(), [
     '--export-to',
@@ -137,6 +147,7 @@ generatePDF = function(folder, source, destination) {
     path.join(folder, source + '.mscx')
   ]);
 };
+
 
 deletePDF = function(folder) {
   const pdf = path.join(folder, config.pdf);
