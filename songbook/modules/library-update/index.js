@@ -125,6 +125,9 @@ pull = function() {
     var gitpull = spawn('git', ['pull'], {cwd: config.path});
     message('Nach Aktualsierungen suchen: ' + gitpull.stdout.toString('utf8'));
   }
+  else {
+    return false;
+  }
 };
 
 /**

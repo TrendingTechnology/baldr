@@ -54,6 +54,6 @@ describe('Functions', function() {
   it('"pull()"', function() {
     slu.overrideConfig({path: path.resolve('songs')})
     var pull = slu.__get__("pull");
-    //pull();
+    assert.ok(!pull());
   });
 });
