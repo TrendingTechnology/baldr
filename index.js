@@ -209,7 +209,7 @@ message = function(text) {
  */
 exports.overrideConfig = function(newConfig) {
   config = Object.assign(config, newConfig);
-}
+};
 
 exports.update = update = function(mode) {
   pull();
