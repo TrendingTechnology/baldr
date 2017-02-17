@@ -3,7 +3,7 @@ const path = require('path')
 const fs = require('fs');
 
 const rewire = require("rewire");
-const slu = rewire("../index.js");
+var slu = rewire("../index.js");
 
 describe('Configuration', function() {
   const config = slu.__get__("configDefault");
@@ -17,6 +17,12 @@ describe('Configuration', function() {
     });
     it('"config.mtime" should return ".mtime"', function() {
       assert.equal(config.mtime, ".mtime");
+    });
+
+    it('"overrideConfig()', function() {
+      slu.overrideConfig({path: 'test'})
+      assert.equal(config.path, 'test');
+      assert.equal(config.json, "songs.json");
     });
   });
 });
@@ -45,10 +51,9 @@ describe('Functions', function() {
     assert.ok(!fs.existsSync(file));
   });
 
-  it.skip('"pull()"', function(done) {
-    const pull = slu.__get__("pull");
-    this.slow(10000000);
-    pull();
-    assert.ok(1);
+  it('"pull()"', function() {
+    slu.overrideConfig({path: path.resolve('songs')})
+    var pull = slu.__get__("pull");
+    assert.ok(!pull());
   });
 });

@@ -34,7 +34,7 @@ bootstrap = function() {
   return conf;
 };
 
-const config = bootstrap();
+var config = bootstrap();
 const spawn = require('child_process').spawnSync;
 
 exports.songsPath = config.path;
@@ -197,6 +197,16 @@ message = function(text) {
     }
   });
 };
+
+/**
+ * By default this module reads the config file ~/.html5-school-presentation to
+ * generate its config object.
+ * @param {object} newConfig - An object containing the same properties as the
+ * config object.
+ */
+exports.overrideConfig = function(newConfig) {
+  config = Object.assign(config, newConfig);
+}
 
 exports.update = update = function(mode) {
   pull();
