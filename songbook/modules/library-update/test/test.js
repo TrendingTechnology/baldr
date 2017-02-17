@@ -1,5 +1,7 @@
+/* jshint esversion: 6 */
+
 const assert = require('assert');
-const path = require('path')
+const path = require('path');
 const fs = require('fs');
 
 const rewire = require("rewire");
@@ -21,7 +23,7 @@ describe('Configuration', function() {
   });
 
   it('"overrideConfig()', function() {
-    slu.overrideConfig({path: 'test'})
+    slu.overrideConfig({path: 'test'});
     assert.equal(config.path, 'test');
     assert.equal(config.json, "songs.json");
   });
@@ -45,14 +47,14 @@ describe('Functions', function() {
     const folder = path.join('songs', 'Swing-low');
     const fileName = 'test.txt';
     const file = path.join(folder, fileName);
-    fs.appendFileSync(file, 'test')
+    fs.appendFileSync(file, 'test');
     assert.ok(fs.existsSync(file));
     deleteFile(folder, fileName);
     assert.ok(!fs.existsSync(file));
   });
 
   it('"pull()"', function() {
-    slu.overrideConfig({path: path.resolve('songs')})
+    slu.overrideConfig({path: path.resolve('songs')});
     var pull = slu.__get__("pull");
     assert.ok(!pull());
   });
