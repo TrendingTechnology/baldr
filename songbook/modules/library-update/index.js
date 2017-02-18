@@ -85,14 +85,8 @@ exports.generateJSON = generateJSON = function() {
  * @returns {boolean}
  */
 fileChanged = function(file) {
-  l = function (value) {
-    console.log(value)
-  };
-  l('--------');
   var fileMtime = fs.statSync(file).mtime.getTime();
-  l(fileMtime);
   var storedMtime = storage.getItemSync(file);
-  l(storedMtime);
   if (typeof storedMtime == 'undefined') {
     storedMtime = 0;
   }

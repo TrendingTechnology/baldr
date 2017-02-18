@@ -69,7 +69,7 @@ describe('Functions', function() {
 
   it('"fileChanged()" run twice', function() {
     var fileChanged = slu.__get__("fileChanged");
-    sleep.msleep(1);
+    sleep.msleep(10);
     fs.appendFileSync('tmp.txt', 'test');
     assert.ok(fileChanged('tmp.txt'));
     assert.ok(!fileChanged('tmp.txt'));
