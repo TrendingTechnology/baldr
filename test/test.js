@@ -59,10 +59,14 @@ describe('Functions', function() {
     assert.ok(!pull());
   });
 
-  it('"fileChanged()"', function() {
+  it('"fileChanged()" run once', function() {
+    var fileChanged = slu.__get__("fileChanged");
+    fs.appendFileSync('tmp.txt', 'test');
+    assert.ok(fileChanged('tmp.txt'));
+    fs.unlinkSync('tmp.txt');
+  });
 
-
-
+  it('"fileChanged()" run twice', function() {
     var fileChanged = slu.__get__("fileChanged");
     fs.appendFileSync('tmp.txt', 'test');
     assert.ok(fileChanged('tmp.txt'));
