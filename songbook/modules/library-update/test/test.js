@@ -76,7 +76,8 @@ describe('Functions', function() {
     fs.unlinkSync('tmp.txt');
   });
 
-  it.skip('"generateJSON()"', function() {
+  it('"generateJSON()"', function() {
+    slu.overrideConfig({path: path.resolve('songs')});
     slu.generateJSON();
   });
 
