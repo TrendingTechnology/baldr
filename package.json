@@ -17,7 +17,8 @@
   },
   "devDependencies": {
     "mocha": "*",
-    "rewire": "*"
+    "rewire": "*",
+    "sleep": "*"
   },
   "bin": {
     "songbook-library-update": "command.js"

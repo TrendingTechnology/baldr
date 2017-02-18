@@ -3,6 +3,7 @@
 const assert = require('assert');
 const path = require('path');
 const fs = require('fs');
+const sleep = require('sleep');
 
 const rewire = require("rewire");
 var slu = rewire("../index.js");
@@ -68,9 +69,15 @@ describe('Functions', function() {
 
   it('"fileChanged()" run twice', function() {
     var fileChanged = slu.__get__("fileChanged");
+    sleep.msleep(1);
     fs.appendFileSync('tmp.txt', 'test');
     assert.ok(fileChanged('tmp.txt'));
     assert.ok(!fileChanged('tmp.txt'));
     fs.unlinkSync('tmp.txt');
   });
+
+  it.skip('"generateJSON()"', function() {
+    slu.generateJSON();
+  });
+
 });
