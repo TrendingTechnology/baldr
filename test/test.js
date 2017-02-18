@@ -25,9 +25,11 @@ describe('Configuration', function() {
   });
 
   it('"bootstrapConfig()', function() {
-    slu.bootstrapConfig({path: 'test'});
-    assert.equal(config.path, 'test');
-    assert.equal(config.json, "songs.json");
+    var s = rewire("../index.js");
+    s.bootstrapConfig({path: 'lol'});
+    const c = s.__get__("config");
+    assert.equal(c.path, 'lol');
+    assert.equal(c.json, "songs.json");
   });
 });
 
