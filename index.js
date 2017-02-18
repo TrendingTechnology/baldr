@@ -20,6 +20,9 @@ const configDefault = {
   pdf: "projector"
 };
 
+/**
+ * TODO: refactor bootstrap and config function -> merge both functions
+ */
 bootstrap = function() {
   var configFile = path.join(os.homedir(), configFileName);
   var conf;
@@ -54,7 +57,10 @@ exports.generateJSON = generateJSON = function() {
       var jsonFileContents = fs.readFileSync(jsonFile, 'utf8');
       var info = JSON.parse(jsonFileContents);
       info.folder = folder;
-      info.slides = fs.readdirSync(path.join(songFolder, config.slidesFolder));
+      var slidesFolder = path.join(songFolder, config.slidesFolder);
+      if (fs.existsSync(slidesFolder)) {
+        info.slides = fs.readdirSync();
+      }
       if (Boolean(info.title)) {
         tmp[folder] = info;
       } else {
