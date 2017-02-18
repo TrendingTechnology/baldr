@@ -21,7 +21,6 @@ const configDefault = {
   configFileName: '.html5-school-presentation.json'
 };
 
-
 var config = {};
 
 /**
@@ -115,23 +114,16 @@ fileChanged = function(file) {
   }
 };
 
+/**
+ * Return the folder that might contain MuseScore files.
+ * @return {array} Array of absolute folder paths.
+ */
 getFolders = function(mode) {
   var output = [];
   folders = fs.readdirSync(config.path);
   folders.forEach(function (folder) {
     var absFolder = path.join(config.path, folder);
-    var projector = path.join(absFolder, config.projector + '.mscx');
-    if (fs.existsSync(projector)) {
-      if (mode != 'force') {
-        var MTime = getMTime(absFolder);
-        var cachedMTime = getCachedMTime(absFolder);
-        if (cachedMTime != MTime) {
-          output[output.length] = absFolder;
-        }
-      } else {
-        output[output.length] = absFolder;
-      }
-    }
+    output[output.length] = absFolder;
   });
   return output;
 };
