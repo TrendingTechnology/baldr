@@ -4,6 +4,7 @@ const os = require('os');
 const path = require('path');
 const colors = require('colors');
 const fs = require('fs');
+const spawn = require('child_process').spawnSync;
 const storage = require('node-persist');
 storage.initSync();
 
@@ -53,8 +54,6 @@ messageConfigFile = function() {
   console.log('\nCreate a config file with this keys:\n' + sampleConfig);
   process.exit(1);
 }
-
-const spawn = require('child_process').spawnSync;
 
 exports.generateJSON = generateJSON = function() {
   var tmp = {};
