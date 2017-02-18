@@ -106,6 +106,9 @@ getCachedMTime = function(folder) {
 fileChanged = function(file) {
   var fileMtime = fs.statSync(file).mtime.getTime();
   var storedMtime = storage.getItemSync(file);
+  if (typeof storedMtime == 'undefined') {
+    storedMtime = 0;
+  }
   if (fileMtime > storedMtime) {
     storage.setItemSync(file, fileMtime);
     return true;
