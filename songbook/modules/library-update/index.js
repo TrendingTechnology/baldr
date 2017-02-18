@@ -4,6 +4,8 @@ const os = require('os');
 const path = require('path');
 const colors = require('colors');
 const fs = require('fs');
+const storage = require('node-persist');
+storage.initSync();
 
 const configFileName = '.html5-school-presentation.json';
 const warning = 'Warning! '.yellow;
@@ -93,6 +95,23 @@ getCachedMTime = function(folder) {
   }
   else {
     return '';
+  }
+};
+
+/**
+ * Check for file modifications
+ * @param {string} file - Path to the file.
+ * @returns {boolean}
+ */
+fileChanged = function(file) {
+  var fileMtime = fs.statSync(file).mtime.getTime();
+  var storedMtime = storage.getItemSync(file);
+  if (fileMtime > storedMtime) {
+    storage.setItemSync(file, fileMtime);
+    return true;
+  }
+  else {
+    return false;
   }
 };
 

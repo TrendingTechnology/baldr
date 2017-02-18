@@ -12,7 +12,8 @@
   "preferGlobal": true,
   "dependencies": {
     "commander": "*",
-    "colors": "*"
+    "colors": "*",
+    "node-persist": "*"
   },
   "devDependencies": {
     "mocha": "*",

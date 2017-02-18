@@ -58,4 +58,15 @@ describe('Functions', function() {
     var pull = slu.__get__("pull");
     assert.ok(!pull());
   });
+
+  it('"fileChanged()"', function() {
+
+
+
+    var fileChanged = slu.__get__("fileChanged");
+    fs.appendFileSync('tmp.txt', 'test');
+    assert.ok(fileChanged('tmp.txt'));
+    assert.ok(!fileChanged('tmp.txt'));
+    fs.unlinkSync('tmp.txt');
+  });
 });
