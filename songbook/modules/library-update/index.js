@@ -7,7 +7,6 @@ const fs = require('fs');
 const storage = require('node-persist');
 storage.initSync();
 
-const configFileName = '.html5-school-presentation.json';
 const warning = 'Warning! '.yellow;
 const error = 'Error! '.red;
 
@@ -17,37 +16,49 @@ const configDefault = {
   slidesFolder: "slides",
   projector: "projector",
   mtime: ".mtime",
-  pdf: "projector"
+  pdf: "projector",
+  configFileName: '.html5-school-presentation.json'
 };
+
+
+var config = {};
 
 /**
- * TODO: refactor bootstrap and config function -> merge both functions
+ * By default this module reads the config file ~/.html5-school-presentation to
+ * generate its config object.
+ * @param {object} newConfig - An object containing the same properties as the
+ * config object.
  */
-bootstrap = function() {
-  var configFile = path.join(os.homedir(), configFileName);
-  var conf;
+exports.bootstrapConfig = function(newConfig=false) {
+
+  // default object
+  config = configDefault;
+
+  // config file
+  var configFile = path.join(os.homedir(), config.configFileName);
   if (fs.existsSync(configFile)) {
-    conf = Object.assign(configDefault, require(configFile).songbook);
+    config = Object.assign(config, require(configFile).songbook);
   }
-  else {
-    console.log(error + 'No config file \'~/' + configFileName + '\' found!');
-    const sampleConfigFile = path.join(__dirname, 'sample.config.json');
-    const sampleConfig = fs.readFileSync(sampleConfigFile, 'utf8');
-    console.log('\nCreate a config file with this keys:\n' + sampleConfig);
-    process.exit(1);
+
+  // function parameter
+  if (newConfig) {
+    config = Object.assign(config, newConfig)
   }
-  return conf;
 };
 
-var config = bootstrap();
+messageConfigFile = function() {
+  console.log(error + 'No config file \'~/' + configFileName + '\' found!');
+  const sampleConfigFile = path.join(__dirname, 'sample.config.json');
+  const sampleConfig = fs.readFileSync(sampleConfigFile, 'utf8');
+  console.log('\nCreate a config file with this keys:\n' + sampleConfig);
+  process.exit(1);
+}
+
 const spawn = require('child_process').spawnSync;
-
-exports.songsPath = config.path;
-
-var jsonPath = path.join(config.path, config.json);
 
 exports.generateJSON = generateJSON = function() {
   var tmp = {};
+  var jsonPath = path.join(config.path, config.json);
   folders = fs.readdirSync(config.path);
   folders.forEach(function (folder) {
     console.log(folder);
@@ -208,16 +219,6 @@ message = function(text) {
       throw err;
     }
   });
-};
-
-/**
- * By default this module reads the config file ~/.html5-school-presentation to
- * generate its config object.
- * @param {object} newConfig - An object containing the same properties as the
- * config object.
- */
-exports.overrideConfig = function(newConfig) {
-  config = Object.assign(config, newConfig);
 };
 
 exports.update = update = function(mode) {
