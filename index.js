@@ -79,25 +79,6 @@ exports.generateJSON = generateJSON = function() {
   message('Datenbank-Datei erzeugen'.green);
 };
 
-getMTime = function(folder) {
-  var stat = fs.statSync(path.join(folder, config.projector + '.mscx'));
-  return stat.mtime;
-};
-
-updateMTime = function(folder) {
-  fs.writeFileSync(path.join(folder, config.mtime), getMTime(folder));
-};
-
-getCachedMTime = function(folder) {
-  var mtime = path.join(folder, config.mtime);
-  if (fs.existsSync(mtime)) {
-    return fs.readFileSync(mtime, 'utf8');
-  }
-  else {
-    return '';
-  }
-};
-
 /**
  * Check for file modifications
  * @param {string} file - Path to the file.
