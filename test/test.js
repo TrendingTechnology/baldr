@@ -7,9 +7,10 @@ const sleep = require('sleep');
 
 const rewire = require("rewire");
 var slu = rewire("../index.js");
+slu.bootstrapConfig({path: path.resolve('songs')});
 
 describe('Configuration', function() {
-  const config = slu.__get__("configDefault");
+  const config = slu.__get__("config");
 
   describe('default configuration', function() {
     it('"config.json" should return "songs.json"', function() {
@@ -23,8 +24,8 @@ describe('Configuration', function() {
     });
   });
 
-  it('"overrideConfig()', function() {
-    slu.overrideConfig({path: 'test'});
+  it('"bootstrapConfig()', function() {
+    slu.bootstrapConfig({path: 'test'});
     assert.equal(config.path, 'test');
     assert.equal(config.json, "songs.json");
   });
@@ -55,7 +56,6 @@ describe('Functions', function() {
   });
 
   it('"pull()"', function() {
-    slu.overrideConfig({path: path.resolve('songs')});
     var pull = slu.__get__("pull");
     assert.ok(!pull());
   });
@@ -77,7 +77,6 @@ describe('Functions', function() {
   });
 
   it('"generateJSON()"', function() {
-    slu.overrideConfig({path: path.resolve('songs')});
     slu.generateJSON();
   });
 
