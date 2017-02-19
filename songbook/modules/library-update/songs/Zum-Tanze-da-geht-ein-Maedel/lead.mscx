@@ -480,8 +480,12 @@ Zum Tanze, da geht ein Mädel</metaTag>
           </System>
         <System>
           </System>
+        </Page>
+      <Page>
         <System>
           </System>
+        </Page>
+      <Page>
         <System>
           </System>
         </Page>
@@ -1118,6 +1122,9 @@ Zum Tanze, da geht ein Mädel</metaTag>
           </Chord>
         </Measure>
       <Measure number="9">
+        <LayoutBreak>
+          <subtype>page</subtype>
+          </LayoutBreak>
         <Harmony>
           <root>13</root>
           <rootCase>1</rootCase>
@@ -1396,6 +1403,9 @@ Zum Tanze, da geht ein Mädel</metaTag>
           </Chord>
         </Measure>
       <Measure number="13">
+        <LayoutBreak>
+          <subtype>page</subtype>
+          </LayoutBreak>
         <Harmony>
           <root>13</root>
           <rootCase>1</rootCase>
