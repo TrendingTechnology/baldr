@@ -13,7 +13,8 @@
   "dependencies": {
     "commander": "*",
     "colors": "*",
-    "node-persist": "*"
+    "node-persist": "*",
+    "fs-extra": "*"
   },
   "devDependencies": {
     "mocha": "*",

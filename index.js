@@ -2,9 +2,11 @@
 
 const os = require('os');
 const path = require('path');
+const p = path.join;
 const colors = require('colors');
 const fs = require('fs');
 const spawn = require('child_process').spawnSync;
+const fse = require('fs-extra');
 const storage = require('node-persist');
 storage.initSync();
 
@@ -225,8 +227,22 @@ generateSlides = function(folder) {
   ]);
 };
 
+/**
+ * Generate a PDF named piano.pdf a) from piano.mscx or b) from lead.mscx
+ * @param {string} folder - A song folder.
+ */
 generatePianoEPS = function(folder) {
-  spawn('mscore-to-eps.sh', [path.join(folder, 'lead.mscx')]);
+  var piano = p(folder, 'piano')
+  if (!fs.existsSync(piano)) {
+    fs.mkdirSync(piano);
+  }
+  if (fs.existsSync(p(folder, 'piano.mscx'))) {
+    fse.copySync(p(folder, 'piano.mscx'), p(piano, 'piano.mscx'))
+  }
+  else if (fs.existsSync(p(folder, 'lead.mscx'))) {
+    fse.copySync(p(folder, 'lead.mscx'), p(piano, 'piano.mscx'))
+  }
+  spawn('mscore-to-eps.sh', [p(piano, 'piano.mscx')]);
 }
 
 message = function(text) {
@@ -240,19 +256,6 @@ message = function(text) {
     }
   });
 };
-
-/**
- * Generate a PDF named piano.pdf a) from piano.mscx or b) from lead.mscx
- * @param {string} folder - A song folder.
- */
-generatePDFPiano = function(folder) {
-  if (fs.existsSync(path.join(folder, 'piano.mscx'))) {
-    generatePDF(folder, 'piano');
-  }
-  else if (fs.existsSync(path.join(folder, 'lead.mscx'))) {
-    generatePDF(folder, 'lead', 'piano');
-  }
-}
 
 /**
  * Wrapper function for all process functions for one folder.

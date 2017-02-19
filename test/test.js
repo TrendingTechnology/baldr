@@ -108,27 +108,22 @@ describe('Functions', function() {
     assert.ok(fs.existsSync(p('songs', 'Swing-low', 'slides', '01.svg')));
   });
 
-  it('"generatePDFPiano(): lead.mscx"', function() {
-    var generatePDFPiano = slu.__get__("generatePDFPiano");
-    const swing = p('songs', 'Swing-low')
-    generatePDFPiano(swing);
-    assert.ok(fs.existsSync(p(swing, 'piano.pdf')));
-    fs.unlinkSync(p(swing, 'piano.pdf'));
-  });
-
-  it('"generatePDFPiano(): piano.mscx"', function() {
-    var generatePDFPiano = slu.__get__("generatePDFPiano");
-    const auf = p('songs', 'Auf-der-Mauer_auf-der-Lauer');
-    generatePDFPiano(auf);
-    assert.ok(fs.existsSync(p(auf, 'piano.pdf')));
-    fs.unlinkSync(p(auf, 'piano.pdf'));
-  });
-
-  it('"generatePianoEPS()"', function() {
-    var generatePDFPiano = slu.__get__("generatePDFPiano");
+  it('"generatePianoEPS(): lead"', function() {
+    var generatePianoEPS = slu.__get__("generatePianoEPS");
     const swing = p('songs', 'Swing-low');
     generatePianoEPS(swing);
-    assert.ok(fs.existsSync(p(swing, 'lead.eps')));
+    assert.ok(fs.existsSync(p(swing, 'piano')));
+    assert.ok(fs.existsSync(p(swing, 'piano', 'piano.mscx')));
+    assert.ok(fs.existsSync(p(swing, 'piano', 'piano.eps')));
+  });
+
+  it('"generatePianoEPS(): piano"', function() {
+    var generatePianoEPS = slu.__get__("generatePianoEPS");
+    const auf = p('songs', 'Auf-der-Mauer_auf-der-Lauer');
+    generatePianoEPS(auf);
+    assert.ok(fs.existsSync(p(auf, 'piano')));
+    assert.ok(fs.existsSync(p(auf, 'piano', 'piano.mscx')));
+    assert.ok(fs.existsSync(p(auf, 'piano', 'piano.eps')));
   });
 
 });
