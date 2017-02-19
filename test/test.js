@@ -3,7 +3,7 @@
 const assert = require('assert');
 const path = require('path');
 const p = path.join
-const fs = require('fs');
+const fs = require('fs-extra');
 const sleep = require('sleep');
 
 const rewire = require("rewire");
@@ -35,6 +35,8 @@ describe('Configuration', function() {
 });
 
 describe('Functions', function() {
+  this.timeout(0);
+  this.slow(10000);
   it('"getMscoreCommand()" should return "mscore"', function() {
     const getMscoreCommand = slu.__get__("getMscoreCommand");
     assert.equal(getMscoreCommand(), "mscore");
@@ -115,6 +117,7 @@ describe('Functions', function() {
     assert.ok(fs.existsSync(p(swing, 'piano')));
     assert.ok(fs.existsSync(p(swing, 'piano', 'piano.mscx')));
     assert.ok(fs.existsSync(p(swing, 'piano', 'piano.eps')));
+    fs.removeSync(p(swing, 'piano'));
   });
 
   it('"generatePianoEPS(): piano"', function() {
@@ -124,6 +127,18 @@ describe('Functions', function() {
     assert.ok(fs.existsSync(p(auf, 'piano')));
     assert.ok(fs.existsSync(p(auf, 'piano', 'piano.mscx')));
     assert.ok(fs.existsSync(p(auf, 'piano', 'piano.eps')));
+    fs.removeSync(p(auf, 'piano'));
+
+  });
+
+  it('"generatePianoEPS(): multipage"', function() {
+    var generatePianoEPS = slu.__get__("generatePianoEPS");
+    const zum = p('songs', 'Zum-Tanze-da-geht-ein-Maedel');
+    generatePianoEPS(zum);
+    assert.ok(fs.existsSync(p(zum, 'piano')));
+    assert.ok(fs.existsSync(p(zum, 'piano', 'piano.mscx')));
+    assert.ok(fs.existsSync(p(zum, 'piano', 'piano_1.eps')));
+    fs.removeSync(p(zum, 'piano'));
   });
 
 });
