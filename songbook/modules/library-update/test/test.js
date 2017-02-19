@@ -52,17 +52,6 @@ describe('Functions', function() {
     assert.ok(fs.existsSync(p(folder, 'projector.pdf')));
   });
 
-  it('"deleteFile()"', function() {
-    const deleteFile = slu.__get__("deleteFile");
-    const folder = p('songs', 'Swing-low');
-    const fileName = 'test.txt';
-    const file = p(folder, fileName);
-    fs.appendFileSync(file, 'test');
-    assert.ok(fs.existsSync(file));
-    deleteFile(folder, fileName);
-    assert.ok(!fs.existsSync(file));
-  });
-
   it('"pull()"', function() {
     var pull = slu.__get__("pull");
     assert.ok(!pull());
@@ -92,17 +81,6 @@ describe('Functions', function() {
 
   it('"generateJSON()"', function() {
     slu.generateJSON();
-  });
-
-  it('"deleteFilesInFolder()"', function() {
-    var deleteFilesInFolder = slu.__get__("deleteFilesInFolder");
-    fs.mkdirSync('tmp');
-    fs.appendFileSync(p('tmp', 't.txt'), 'test');
-    fs.appendFileSync(p('tmp', 't2.txt'), 'test');
-    deleteFilesInFolder('tmp');
-    assert.ok(!fs.existsSync(p('tmp', 't.txt')))
-    assert.ok(!fs.existsSync(p('tmp', 't2.txt')))
-    fs.rmdirSync('tmp');
   });
 
   it('"generateSlides()"', function() {

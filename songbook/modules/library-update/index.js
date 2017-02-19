@@ -4,9 +4,8 @@ const os = require('os');
 const path = require('path');
 const p = path.join;
 const colors = require('colors');
-const fs = require('fs');
+const fs = require('fs-extra');
 const spawn = require('child_process').spawnSync;
-const fse = require('fs-extra');
 const storage = require('node-persist');
 storage.initSync();
 
@@ -187,40 +186,13 @@ generatePDF = function(folder, source, destination = '') {
 };
 
 /**
- * Delete a file in a folder.
- * @param {string} folder - Folder containing the file to delete.
- * @param {string} file - Name of the file to delete.
- */
-deleteFile = function(folder, file) {
-  const del = p(folder, file);
-  if (fs.existsSync(del)) {
-    fs.unlinkSync(del);
-  }
-};
-
-/**
- * @param {string} folder - Folder containing the files to delete.
- */
-deleteFilesInFolder = function (folder) {
-  if (fs.existsSync(folder)) {
-    fs.readdirSync(folder)
-      .map(file => p(folder, file))
-      .filter(file => fs.statSync(file).isFile())
-      .forEach(file => fs.unlinkSync(file));
-  }
-}
-
-/**
  * Generate svg files in a "slides" subfolder.
  * @param {string} folder - A song folder.
  */
 generateSlides = function(folder) {
   var slides = p(folder, config.slidesFolder);
-
-  if (!fs.existsSync(slides)) {
-    fs.mkdirSync(slides);
-  }
-  deleteFilesInFolder(slides);
+  fs.removeSync(slides);
+  fs.mkdirSync(slides);
 
   spawn('pdf2svg', [
     p(folder, 'projector.pdf'),
@@ -240,10 +212,10 @@ generatePianoEPS = function(folder) {
     fs.mkdirSync(piano);
   }
   if (fs.existsSync(p(folder, 'piano.mscx'))) {
-    fse.copySync(p(folder, 'piano.mscx'), p(piano, 'piano.mscx'))
+    fs.copySync(p(folder, 'piano.mscx'), p(piano, 'piano.mscx'))
   }
   else if (fs.existsSync(p(folder, 'lead.mscx'))) {
-    fse.copySync(p(folder, 'lead.mscx'), p(piano, 'piano.mscx'))
+    fs.copySync(p(folder, 'lead.mscx'), p(piano, 'piano.mscx'))
   }
   spawn('mscore-to-eps.sh', [p(piano, 'piano.mscx')]);
 }
