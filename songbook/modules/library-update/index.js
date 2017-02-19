@@ -210,6 +210,10 @@ deleteFilesInFolder = function (folder) {
   }
 }
 
+/**
+ * Generate svg files in a "slides" subfolder.
+ * @param {string} folder - A song folder.
+ */
 generateSlides = function(folder) {
   var slides = path.join(folder, config.slidesFolder);
 
