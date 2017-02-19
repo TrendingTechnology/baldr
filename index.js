@@ -38,7 +38,7 @@ exports.bootstrapConfig = function(newConfig=false) {
   config = configDefault;
 
   // config file
-  var configFile = path.join(os.homedir(), config.configFileName);
+  var configFile = p(os.homedir(), config.configFileName);
   if (fs.existsSync(configFile)) {
     config = Object.assign(config, require(configFile).songbook);
   }
@@ -51,7 +51,7 @@ exports.bootstrapConfig = function(newConfig=false) {
 
 messageConfigFile = function() {
   console.log(error + 'No config file \'~/' + configFileName + '\' found!');
-  const sampleConfigFile = path.join(__dirname, 'sample.config.json');
+  const sampleConfigFile = p(__dirname, 'sample.config.json');
   const sampleConfig = fs.readFileSync(sampleConfigFile, 'utf8');
   console.log('\nCreate a config file with this keys:\n' + sampleConfig);
   process.exit(1);
@@ -59,17 +59,17 @@ messageConfigFile = function() {
 
 exports.generateJSON = generateJSON = function() {
   var tmp = {};
-  var jsonPath = path.join(config.path, config.json);
+  var jsonPath = p(config.path, config.json);
   var output = '';
   getFolders().forEach(function (folder) {
     output += folder;
     var songFolder = folder;
-    var jsonFile = path.join(songFolder, config.info);
+    var jsonFile = p(songFolder, config.info);
     if (fs.existsSync(jsonFile)) {
       var jsonFileContents = fs.readFileSync(jsonFile, 'utf8');
       var info = JSON.parse(jsonFileContents);
       info.folder = folder;
-      var slidesFolder = path.join(songFolder, config.slidesFolder);
+      var slidesFolder = p(songFolder, config.slidesFolder);
       if (fs.existsSync(slidesFolder)) {
         info.slides = fs.readdirSync(slidesFolder);
       }
@@ -130,7 +130,7 @@ getFolders = function(mode) {
     }
   }
   function makeAbs(folder) {
-    return path.join(config.path, folder);
+    return p(config.path, folder);
   }
   function isDir(file) {
     var stats = fs.statSync(file);
@@ -148,7 +148,7 @@ getFolders = function(mode) {
  * Execute git pull if repository exists.
  */
 pull = function() {
-  if (fs.existsSync(path.join(config.path, '.git'))) {
+  if (fs.existsSync(p(config.path, '.git'))) {
     var gitpull = spawn('git', ['pull'], {cwd: config.path});
     message('Nach Aktualsierungen suchen: ' + gitpull.stdout.toString('utf8'));
   }
@@ -181,8 +181,8 @@ generatePDF = function(folder, source, destination = '') {
   }
   spawn(getMscoreCommand(), [
     '--export-to',
-    path.join(folder, destination + '.pdf'),
-    path.join(folder, source + '.mscx')
+    p(folder, destination + '.pdf'),
+    p(folder, source + '.mscx')
   ]);
 };
 
@@ -192,7 +192,7 @@ generatePDF = function(folder, source, destination = '') {
  * @param {string} file - Name of the file to delete.
  */
 deleteFile = function(folder, file) {
-  const del = path.join(folder, file);
+  const del = p(folder, file);
   if (fs.existsSync(del)) {
     fs.unlinkSync(del);
   }
@@ -204,7 +204,7 @@ deleteFile = function(folder, file) {
 deleteFilesInFolder = function (folder) {
   if (fs.existsSync(folder)) {
     fs.readdirSync(folder)
-      .map(file => path.join(folder, file))
+      .map(file => p(folder, file))
       .filter(file => fs.statSync(file).isFile())
       .forEach(file => fs.unlinkSync(file));
   }
@@ -215,7 +215,7 @@ deleteFilesInFolder = function (folder) {
  * @param {string} folder - A song folder.
  */
 generateSlides = function(folder) {
-  var slides = path.join(folder, config.slidesFolder);
+  var slides = p(folder, config.slidesFolder);
 
   if (!fs.existsSync(slides)) {
     fs.mkdirSync(slides);
@@ -223,8 +223,8 @@ generateSlides = function(folder) {
   deleteFilesInFolder(slides);
 
   spawn('pdf2svg', [
-    path.join(folder, 'projector.pdf'),
-    path.join(slides, '%02d.svg'),
+    p(folder, 'projector.pdf'),
+    p(slides, '%02d.svg'),
      'all'
   ]);
   return message(folder + ': Bilder erzeugen');
