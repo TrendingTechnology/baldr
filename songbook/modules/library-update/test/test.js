@@ -110,10 +110,18 @@ describe('Functions', function() {
 
   it('"generatePDFPiano(): lead.mscx"', function() {
     var generatePDFPiano = slu.__get__("generatePDFPiano");
-    generatePDFPiano(p('songs', 'Swing-low'));
-    assert.ok(fs.existsSync(p('songs', 'Swing-low', 'piano.pdf')));
-    fs.unlinkSync(p('songs', 'Swing-low', 'piano.pdf'));
+    const swing = p('songs', 'Swing-low')
+    generatePDFPiano(swing);
+    assert.ok(fs.existsSync(p(swing, 'piano.pdf')));
+    fs.unlinkSync(p(swing, 'piano.pdf'));
   });
 
+  it('"generatePDFPiano(): piano.mscx"', function() {
+    var generatePDFPiano = slu.__get__("generatePDFPiano");
+    const auf = p('songs', 'Auf-der-Mauer_auf-der-Lauer');
+    generatePDFPiano(auf);
+    assert.ok(fs.existsSync(p(auf, 'piano.pdf')));
+    fs.unlinkSync(p(auf, 'piano.pdf'));
+  });
 
 });
