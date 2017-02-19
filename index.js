@@ -121,6 +121,17 @@ fileChanged = function(file) {
 getFolders = function(mode) {
   var output = [];
   folders = fs.readdirSync(config.path);
+  function noSpecial(file) {
+    if (file.substr(0, 1) == '_' || file.substr(0, 1) == '.') {
+      return false;
+    }
+    else {
+      return true;
+    }
+  }
+  function makeAbs(folder) {
+    return path.join(config.path, folder);
+  }
   function isDir(file) {
     var stats = fs.statSync(file);
     if (stats.isDirectory()) {
@@ -130,10 +141,7 @@ getFolders = function(mode) {
       return false;
     }
   }
-  function makeAbs(folder) {
-    return path.join(config.path, folder);
-  }
-  return folders.map(makeAbs).filter(isDir);
+  return folders.filter(noSpecial).map(makeAbs).filter(isDir);
 };
 
 /**
