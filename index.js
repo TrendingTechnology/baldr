@@ -121,11 +121,19 @@ fileChanged = function(file) {
 getFolders = function(mode) {
   var output = [];
   folders = fs.readdirSync(config.path);
-  folders.forEach(function (folder) {
-    var absFolder = path.join(config.path, folder);
-    output[output.length] = absFolder;
-  });
-  return output;
+  function isDir(file) {
+    var stats = fs.statSync(file);
+    if (stats.isDirectory()) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+  function makeAbs(folder) {
+    return path.join(config.path, folder);
+  }
+  return folders.map(makeAbs).filter(isDir);
 };
 
 /**

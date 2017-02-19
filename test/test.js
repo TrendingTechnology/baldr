@@ -78,6 +78,12 @@ describe('Functions', function() {
     fs.unlinkSync('tmp.txt');
   });
 
+  it('"getFolders()"', function() {
+    var getFolders = slu.__get__("getFolders");
+    var folders = getFolders();
+    assert.equal(folders.length, 3);
+  });
+
   it('"generateJSON()"', function() {
     slu.generateJSON();
   });
