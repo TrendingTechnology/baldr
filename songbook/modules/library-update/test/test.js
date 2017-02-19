@@ -2,6 +2,7 @@
 
 const assert = require('assert');
 const path = require('path');
+const p = path.join
 const fs = require('fs');
 const sleep = require('sleep');
 
@@ -41,16 +42,16 @@ describe('Functions', function() {
 
   it('"generatePDF()"', function() {
     const generatePDF = slu.__get__("generatePDF");
-    const folder = path.join('songs', 'Swing-low');
+    const folder = p('songs', 'Swing-low');
     generatePDF(folder, 'projector', 'projector');
-    assert.ok(fs.existsSync(path.join(folder, 'projector.pdf')));
+    assert.ok(fs.existsSync(p(folder, 'projector.pdf')));
   });
 
   it('"deleteFile()"', function() {
     const deleteFile = slu.__get__("deleteFile");
-    const folder = path.join('songs', 'Swing-low');
+    const folder = p('songs', 'Swing-low');
     const fileName = 'test.txt';
-    const file = path.join(folder, fileName);
+    const file = p(folder, fileName);
     fs.appendFileSync(file, 'test');
     assert.ok(fs.existsSync(file));
     deleteFile(folder, fileName);
@@ -91,19 +92,28 @@ describe('Functions', function() {
   it('"deleteFilesInFolder()"', function() {
     var deleteFilesInFolder = slu.__get__("deleteFilesInFolder");
     fs.mkdirSync('tmp');
-    fs.appendFileSync(path.join('tmp', 't.txt'), 'test');
-    fs.appendFileSync(path.join('tmp', 't2.txt'), 'test');
+    fs.appendFileSync(p('tmp', 't.txt'), 'test');
+    fs.appendFileSync(p('tmp', 't2.txt'), 'test');
     deleteFilesInFolder('tmp');
-    assert.ok(!fs.existsSync(path.join('tmp', 't.txt')))
-    assert.ok(!fs.existsSync(path.join('tmp', 't2.txt')))
+    assert.ok(!fs.existsSync(p('tmp', 't.txt')))
+    assert.ok(!fs.existsSync(p('tmp', 't2.txt')))
     fs.rmdirSync('tmp');
   });
 
-  it('"generatePDF()"', function() {
+  it('"generateSlides()"', function() {
     var generatePDF = slu.__get__("generatePDF");
     var generateSlides = slu.__get__("generateSlides");
     generatePDF('Swing-low', 'projector');
-    generateSlides(path.join('songs', 'Swing-low'));
+    generateSlides(p('songs', 'Swing-low'));
+    assert.ok(fs.existsSync(p('songs', 'Swing-low', 'slides', '01.svg')));
   });
+
+  it('"generatePDFPiano(): lead.mscx"', function() {
+    var generatePDFPiano = slu.__get__("generatePDFPiano");
+    generatePDFPiano(p('songs', 'Swing-low'));
+    assert.ok(fs.existsSync(p('songs', 'Swing-low', 'piano.pdf')));
+    fs.unlinkSync(p('songs', 'Swing-low', 'piano.pdf'));
+  });
+
 
 });
