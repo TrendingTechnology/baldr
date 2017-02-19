@@ -212,9 +212,9 @@ generateSlides = function(folder) {
  */
 generatePianoEPS = function(folder) {
   var piano = p(folder, 'piano')
-  if (!fs.existsSync(piano)) {
-    fs.mkdirSync(piano);
-  }
+  fs.removeSync(piano);
+  fs.mkdirSync(piano);
+
   if (fs.existsSync(p(folder, 'piano.mscx'))) {
     fs.copySync(p(folder, 'piano.mscx'), p(piano, 'piano.mscx'))
   }
