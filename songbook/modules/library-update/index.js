@@ -20,7 +20,8 @@ const configDefault = {
   mtime: ".mtime",
   pdf: "projector",
   configFileName: '.html5-school-presentation.json',
-  test: false
+  test: false,
+  force: false
 };
 
 var config = {};
@@ -99,6 +100,9 @@ exports.generateJSON = generateJSON = function() {
  * @returns {boolean}
  */
 fileChanged = function(file) {
+  if (!fs.existsSync(file)) {
+    return false;
+  }
   var fileMtime = fs.statSync(file).mtime.getTime();
   var storedMtime = storage.getItemSync(file);
   if (typeof storedMtime == 'undefined') {
@@ -239,26 +243,23 @@ message = function(text) {
  */
 processFolder = function(folder) {
   // projector
-  generatePDF(folder, 'projector');
-  generateSVGs(folder);
+  if (config.force || fileChanged(p(folder, 'projector.mscx'))) {
+    generatePDF(folder, 'projector');
+    generateSlides(folder);
+  }
 
   // piano
-  generatePDFPiano(folder);
+  if (config.force ||
+    fileChanged(p(folder, 'piano.mscx')) ||
+    fileChanged(p(folder, 'lead.mscx'))
+  ) {
+    generatePianoEPS(folder);
+  }
+
 }
 
-exports.update = update = function(mode) {
+exports.update = function(mode) {
   pull();
   getFolders().forEach(processFolder);
   generateJSON();
-};
-
-exports.updateForce = function() {
-  update('force');
-};
-
-exports.readJSON = function () {
-  if (!fs.existsSync(jsonPath)) {
-    generateJSON();
-  }
-  return JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
 };
