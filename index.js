@@ -20,7 +20,8 @@ const configDefault = {
   projector: "projector",
   mtime: ".mtime",
   pdf: "projector",
-  configFileName: '.html5-school-presentation.json'
+  configFileName: '.html5-school-presentation.json',
+  test: false
 };
 
 var config = {};
@@ -59,8 +60,9 @@ messageConfigFile = function() {
 exports.generateJSON = generateJSON = function() {
   var tmp = {};
   var jsonPath = path.join(config.path, config.json);
+  var output = '';
   getFolders().forEach(function (folder) {
-    console.log(folder);
+    output += folder;
     var songFolder = folder;
     var jsonFile = path.join(songFolder, config.info);
     if (fs.existsSync(jsonFile)) {
@@ -74,25 +76,22 @@ exports.generateJSON = generateJSON = function() {
       if (Boolean(info.title)) {
         tmp[folder] = info;
       } else {
-        console.log(
-          warning +
+        output += warning +
           folder.underline.yellow + '/' +
           config.info.underline.red +
-          ' has no value for title!'
-        );
+          ' has no value for title!';
       }
     }
     else if (fs.lstatSync(songFolder).isDirectory()) {
-      console.log(
-        warning +
+      output += warning +
         folder.underline.red + ' has no ' +
-        config.info.underline.red + ' file!'
-      );
+        config.info.underline.red + ' file!';
     }
   });
 
   fs.writeFileSync(jsonPath, JSON.stringify(tmp, null, 4));
-  message('Datenbank-Datei erzeugen'.green);
+  output += 'Datenbank-Datei erzeugen'.green;
+  return message(output);
 };
 
 /**
@@ -212,7 +211,6 @@ deleteFilesInFolder = function (folder) {
 }
 
 generateSlides = function(folder) {
-  message(folder + ': Bilder erzeugen');
   var slides = path.join(folder, config.slidesFolder);
 
   if (!fs.existsSync(slides)) {
@@ -225,6 +223,7 @@ generateSlides = function(folder) {
     path.join(slides, '%02d.svg'),
      'all'
   ]);
+  return message(folder + ': Bilder erzeugen');
 };
 
 /**
@@ -245,16 +244,17 @@ generatePianoEPS = function(folder) {
   spawn('mscore-to-eps.sh', [p(piano, 'piano.mscx')]);
 }
 
+/**
+ * Print out or return text.
+ * @param {string} text - Text to display.
+ */
 message = function(text) {
-  console.log(text);
-
-  var date = new Date();
-  var isoDate = date.toISOString();
-  fs.appendFile(path.join(config.path, 'update.log'), isoDate + ': ' + text + '\n', function (err) {
-    if (err) {
-      throw err;
-    }
-  });
+  if (!config.test) {
+    console.log(text);
+  }
+  else {
+    return text;
+  }
 };
 
 /**

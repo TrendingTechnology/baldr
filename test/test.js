@@ -8,7 +8,10 @@ const sleep = require('sleep');
 
 const rewire = require("rewire");
 var slu = rewire("../index.js");
-slu.bootstrapConfig({path: path.resolve('songs')});
+slu.bootstrapConfig({
+  test: true,
+  path: path.resolve('songs')
+});
 
 describe('Configuration', function() {
   const config = slu.__get__("config");
@@ -139,6 +142,11 @@ describe('Functions', function() {
     assert.ok(fs.existsSync(p(zum, 'piano', 'piano.mscx')));
     assert.ok(fs.existsSync(p(zum, 'piano', 'piano_1.eps')));
     fs.removeSync(p(zum, 'piano'));
+  });
+
+  it('"message()"', function() {
+    var message = slu.__get__("message");
+    assert.equal(message('test'), 'test');
   });
 
 });
