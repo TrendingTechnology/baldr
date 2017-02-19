@@ -195,21 +195,25 @@ deleteFile = function(folder, file) {
   }
 };
 
-generateSVGs = function(folder) {
+/**
+ *
+ */
+deleteFilesInFolder = function (folder) {
+  fs.readdirSync(folder)
+    .map(file => path.join(folder, file))
+    .filter(file => fs.statSync(file).isFile())
+    .forEach(file => fs.unlinkSync(file));
+}
+
+generateSlides = function(folder) {
   message(folder + ': Bilder erzeugen');
   var slides = path.join(folder, config.slidesFolder);
 
   if (!fs.existsSync(slides)) {
     fs.mkdirSync(slides);
-  } else {
-    files = fs.readdirSync(slides);
-    files
-      .map(file => path.join(slides, file))
-      .filter(file => fs.statSync(file).isFile())
-      .forEach(file => fs.unlinkSync(file));
   }
 
-  const pdf2svg = spawn('pdf2svg', [
+  spawn('pdf2svg', [
     path.join(folder, config.pdf),
     path.join(slides, '%02d.svg'),
      'all'
@@ -228,16 +232,15 @@ message = function(text) {
   });
 };
 
+processFolder = function(folder) {
+  generatePDF(folder, config.projector, config.pdf);
+  generateSVGs(folder);
+  deletePDF(folder);
+}
+
 exports.update = update = function(mode) {
   pull();
-  var folders = getFolders(mode);
-  folders.forEach(folder => {
-      generatePDF(folder, config.projector, config.pdf);
-      generateSVGs(folder);
-      deletePDF(folder);
-      updateMTime(folder);
-    }
-  );
+  getFolders().forEach(processFolder);
   generateJSON();
 };
 

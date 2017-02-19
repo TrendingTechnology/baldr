@@ -88,4 +88,15 @@ describe('Functions', function() {
     slu.generateJSON();
   });
 
+  it('"deleteFilesInFolder()"', function() {
+    var deleteFilesInFolder = slu.__get__("deleteFilesInFolder");
+    fs.mkdirSync('tmp');
+    fs.appendFileSync(path.join('tmp', 't.txt'), 'test');
+    fs.appendFileSync(path.join('tmp', 't2.txt'), 'test');
+    deleteFilesInFolder('tmp');
+    assert.ok(!fs.existsSync(path.join('tmp', 't.txt')))
+    assert.ok(!fs.existsSync(path.join('tmp', 't2.txt')))
+    fs.rmdirSync('tmp');
+  });
+
 });
