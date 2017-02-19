@@ -237,13 +237,26 @@ message = function(text) {
   });
 };
 
+generatePDFPiano = function(folder) {
+  if (fs.existsSync(path.join(folder, 'piano.mscx'))) {
+    generatePDF(folder, 'piano');
+  }
+  else if (fs.existsSync(path.join(folder, 'lead.mscx'))) {
+    generatePDF(folder, 'lead', 'piano');
+  }
+}
+
+/**
+ * Wrapper function for all process functions for one folder.
+ * @param {string} folder - A song folder.
+ */
 processFolder = function(folder) {
   // projector
   generatePDF(folder, 'projector');
   generateSVGs(folder);
 
   // piano
-  deletePDF(folder);
+  generatePDFPiano(folder);
 }
 
 exports.update = update = function(mode) {
