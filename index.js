@@ -237,6 +237,10 @@ message = function(text) {
   });
 };
 
+/**
+ * Generate a PDF named piano.pdf a) from piano.mscx or b) from lead.mscx
+ * @param {string} folder - A song folder.
+ */
 generatePDFPiano = function(folder) {
   if (fs.existsSync(path.join(folder, 'piano.mscx'))) {
     generatePDF(folder, 'piano');
