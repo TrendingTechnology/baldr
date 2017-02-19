@@ -57,10 +57,9 @@ messageConfigFile = function() {
 exports.generateJSON = generateJSON = function() {
   var tmp = {};
   var jsonPath = path.join(config.path, config.json);
-  folders = fs.readdirSync(config.path);
-  folders.forEach(function (folder) {
+  getFolders().forEach(function (folder) {
     console.log(folder);
-    var songFolder = path.join(config.path, folder);
+    var songFolder = folder;
     var jsonFile = path.join(songFolder, config.info);
     if (fs.existsSync(jsonFile)) {
       var jsonFileContents = fs.readFileSync(jsonFile, 'utf8');
@@ -68,7 +67,7 @@ exports.generateJSON = generateJSON = function() {
       info.folder = folder;
       var slidesFolder = path.join(songFolder, config.slidesFolder);
       if (fs.existsSync(slidesFolder)) {
-        info.slides = fs.readdirSync();
+        info.slides = fs.readdirSync(slidesFolder);
       }
       if (Boolean(info.title)) {
         tmp[folder] = info;
@@ -175,8 +174,11 @@ getMscoreCommand = function() {
  * @param {string} source - Name of the *.mscx file without the extension.
  * @param {string} destination - Name of the PDF without the extension.
  */
-generatePDF = function(folder, source, destination) {
-  const mscore = spawn(getMscoreCommand(), [
+generatePDF = function(folder, source, destination = '') {
+  if (destination == '') {
+    destination = source;
+  }
+  spawn(getMscoreCommand(), [
     '--export-to',
     path.join(folder, destination + '.pdf'),
     path.join(folder, source + '.mscx')
@@ -196,13 +198,15 @@ deleteFile = function(folder, file) {
 };
 
 /**
- *
+ * @param {string} folder - Folder containing the files to delete.
  */
 deleteFilesInFolder = function (folder) {
-  fs.readdirSync(folder)
-    .map(file => path.join(folder, file))
-    .filter(file => fs.statSync(file).isFile())
-    .forEach(file => fs.unlinkSync(file));
+  if (fs.existsSync(folder)) {
+    fs.readdirSync(folder)
+      .map(file => path.join(folder, file))
+      .filter(file => fs.statSync(file).isFile())
+      .forEach(file => fs.unlinkSync(file));
+  }
 }
 
 generateSlides = function(folder) {
@@ -212,9 +216,10 @@ generateSlides = function(folder) {
   if (!fs.existsSync(slides)) {
     fs.mkdirSync(slides);
   }
+  deleteFilesInFolder(slides);
 
   spawn('pdf2svg', [
-    path.join(folder, config.pdf),
+    path.join(folder, 'projector.pdf'),
     path.join(slides, '%02d.svg'),
      'all'
   ]);
@@ -233,8 +238,11 @@ message = function(text) {
 };
 
 processFolder = function(folder) {
-  generatePDF(folder, config.projector, config.pdf);
+  // projector
+  generatePDF(folder, 'projector');
   generateSVGs(folder);
+
+  // piano
   deletePDF(folder);
 }
 

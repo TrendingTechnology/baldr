@@ -99,4 +99,11 @@ describe('Functions', function() {
     fs.rmdirSync('tmp');
   });
 
+  it('"generatePDF()"', function() {
+    var generatePDF = slu.__get__("generatePDF");
+    var generateSlides = slu.__get__("generateSlides");
+    generatePDF('Swing-low', 'projector');
+    generateSlides(path.join('songs', 'Swing-low'));
+  });
+
 });
