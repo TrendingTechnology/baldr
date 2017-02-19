@@ -4,16 +4,20 @@ var slu = require('songbook-library-update');
 var commander = require('commander');
 
 commander
-  .version('0.0.4')
+  .version('0.0.5')
   .option('-f, --force', 'rebuild all images')
   .option('-j, --json', 'generate JSON file')
   .parse(process.argv);
 
+if (commander.force) {
+  slu.bootstrapConfig({force: true});
+}
+else {
+  slu.bootstrapConfig();
+}
+
 if (commander.json) {
   slu.generateJSON();
-}
-else if (commander.force) {
-  slu.updateForce();
 }
 else {
   slu.update();
