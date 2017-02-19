@@ -124,4 +124,11 @@ describe('Functions', function() {
     fs.unlinkSync(p(auf, 'piano.pdf'));
   });
 
+  it('"generatePianoEPS()"', function() {
+    var generatePDFPiano = slu.__get__("generatePDFPiano");
+    const swing = p('songs', 'Swing-low');
+    generatePianoEPS(swing);
+    assert.ok(fs.existsSync(p(swing, 'lead.eps')));
+  });
+
 });
