@@ -225,6 +225,10 @@ generateSlides = function(folder) {
   ]);
 };
 
+generatePianoEPS = function(folder) {
+  spawn('mscore-to-eps.sh', [path.join(folder, 'lead.mscx')]);
+}
+
 message = function(text) {
   console.log(text);
 
