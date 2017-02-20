@@ -16,8 +16,6 @@ const configDefault = {
   json: "songs.json",
   info: "info.json",
   slidesFolder: "slides",
-  projector: "projector",
-  pdf: "projector",
   configFileName: '.html5-school-presentation.json',
   test: false,
   force: false
