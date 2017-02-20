@@ -13,6 +13,10 @@ slu.bootstrapConfig({
   path: path.resolve('songs')
 });
 
+exists = function() {
+  assert.ok(fs.existsSync(path.join.apply(null, arguments)));
+}
+
 describe('Configuration', function() {
   const config = slu.__get__("config");
 
@@ -49,7 +53,7 @@ describe('Functions', function() {
     const generatePDF = slu.__get__("generatePDF");
     const folder = p('songs', 'Swing-low');
     generatePDF(folder, 'projector', 'projector');
-    assert.ok(fs.existsSync(p(folder, 'projector.pdf')));
+    exists(folder, 'projector.pdf');
   });
 
   it('"pull()"', function() {
@@ -88,16 +92,16 @@ describe('Functions', function() {
     var generateSlides = slu.__get__("generateSlides");
     generatePDF('Swing-low', 'projector');
     generateSlides(p('songs', 'Swing-low'));
-    assert.ok(fs.existsSync(p('songs', 'Swing-low', 'slides', '01.svg')));
+    exists('songs', 'Swing-low', 'slides', '01.svg');
   });
 
   it('"generatePianoEPS(): lead"', function() {
     var generatePianoEPS = slu.__get__("generatePianoEPS");
     const swing = p('songs', 'Swing-low');
     generatePianoEPS(swing);
-    assert.ok(fs.existsSync(p(swing, 'piano')));
-    assert.ok(fs.existsSync(p(swing, 'piano', 'piano.mscx')));
-    assert.ok(fs.existsSync(p(swing, 'piano', 'piano.eps')));
+    exists(swing, 'piano');
+    exists(swing, 'piano', 'piano.mscx');
+    exists(swing, 'piano', 'piano.eps');
     fs.removeSync(p(swing, 'piano'));
   });
 
@@ -105,9 +109,9 @@ describe('Functions', function() {
     var generatePianoEPS = slu.__get__("generatePianoEPS");
     const auf = p('songs', 'Auf-der-Mauer_auf-der-Lauer');
     generatePianoEPS(auf);
-    assert.ok(fs.existsSync(p(auf, 'piano')));
-    assert.ok(fs.existsSync(p(auf, 'piano', 'piano.mscx')));
-    assert.ok(fs.existsSync(p(auf, 'piano', 'piano.eps')));
+    exists(auf, 'piano');
+    exists(auf, 'piano', 'piano.mscx');
+    exists(auf, 'piano', 'piano.eps');
     fs.removeSync(p(auf, 'piano'));
 
   });
@@ -116,9 +120,9 @@ describe('Functions', function() {
     var generatePianoEPS = slu.__get__("generatePianoEPS");
     const zum = p('songs', 'Zum-Tanze-da-geht-ein-Maedel');
     generatePianoEPS(zum);
-    assert.ok(fs.existsSync(p(zum, 'piano')));
-    assert.ok(fs.existsSync(p(zum, 'piano', 'piano.mscx')));
-    assert.ok(fs.existsSync(p(zum, 'piano', 'piano_1.eps')));
+    exists(zum, 'piano');
+    exists(zum, 'piano', 'piano.mscx');
+    exists(zum, 'piano', 'piano_1.eps');
     fs.removeSync(p(zum, 'piano'));
   });
 
