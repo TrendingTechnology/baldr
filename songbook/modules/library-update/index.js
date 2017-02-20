@@ -255,8 +255,29 @@ processFolder = function(folder) {
 
 }
 
-exports.update = function(mode) {
+/**
+ * Update and generate when required media files for the songs.
+ */
+exports.update = function() {
   pull();
   getFolders().forEach(processFolder);
   generateJSON();
+};
+
+/**
+ * Clean all temporary files in a song folder.
+ * @param {string} folder - A song folder.
+ */
+cleanFolder = function(folder) {
+  fs.removeSync(p(folder, 'piano'));
+  fs.removeSync(p(folder, 'slides'));
+  fs.removeSync(p(folder, 'projector.pdf'));
+}
+
+/**
+ * Clean all temporary media files.
+ */
+exports.clean = function() {
+  getFolders().forEach(cleanFolder);
+  fs.removeSync(p(config.path, 'songs.json'));
 };
