@@ -85,14 +85,23 @@ describe('Functions', function() {
 
   it('"generateJSON()"', function() {
     slu.generateJSON();
+    var json = p('songs', 'songs.json');
+    exists(json);
+    fs.removeSync(json);
   });
 
   it('"generateSlides()"', function() {
     var generatePDF = slu.__get__("generatePDF");
     var generateSlides = slu.__get__("generateSlides");
     generatePDF('Swing-low', 'projector');
-    generateSlides(p('songs', 'Swing-low'));
-    exists('songs', 'Swing-low', 'slides', '01.svg');
+    var folder = p('songs', 'Swing-low');
+    var slides = p (folder, 'slides');
+    generateSlides(folder);
+    exists(slides, '01.svg');
+    exists(slides, '02.svg');
+    exists(slides, '03.svg');
+    exists(slides, '04.svg');
+    fs.removeSync(slides)
   });
 
   it('"generatePianoEPS(): lead"', function() {
