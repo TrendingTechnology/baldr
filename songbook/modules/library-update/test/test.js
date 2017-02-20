@@ -27,9 +27,6 @@ describe('Configuration', function() {
     it('"config.info" should return "info.json"', function() {
       assert.equal(config.info, "info.json");
     });
-    it('"config.mtime" should return ".mtime"', function() {
-      assert.equal(config.mtime, ".mtime");
-    });
   });
 
   it('"bootstrapConfig()', function() {
