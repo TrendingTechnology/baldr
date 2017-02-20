@@ -10,7 +10,8 @@ const rewire = require("rewire");
 var slu = rewire("../index.js");
 slu.bootstrapConfig({
   test: true,
-  path: path.resolve('songs')
+  path: path.resolve('songs'),
+  force: true,
 });
 
 exists = function() {
@@ -139,7 +140,18 @@ describe('Functions', function() {
 
   it('"update()"', function() {
     slu.update();
-    slu.clean();
+    const auf = p('songs', 'Auf-der-Mauer_auf-der-Lauer');
+    const swing = p('songs', 'Swing-low');
+    const zum = p('songs', 'Zum-Tanze-da-geht-ein-Maedel');
+    const folders = [auf, swing, zum];
+
+    for (i = 0; i < folders.length; ++i) {
+      exists(folders[i], 'slides');
+      exists(folders[i], 'slides', '01.svg');
+      exists(folders[i], 'piano');
+      //exists(folders[i], 'piano', 'piano_1.eps');
+    }
+    //slu.clean();
   });
 
 });

@@ -246,12 +246,16 @@ processFolder = function(folder) {
   }
 
   // piano
+  generatePianoEPS(folder);
+
+  /*
   if (config.force ||
     fileChanged(p(folder, 'piano.mscx')) ||
     fileChanged(p(folder, 'lead.mscx'))
   ) {
     generatePianoEPS(folder);
   }
+  */
 
 }
 
