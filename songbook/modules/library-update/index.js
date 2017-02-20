@@ -17,7 +17,6 @@ const configDefault = {
   info: "info.json",
   slidesFolder: "slides",
   projector: "projector",
-  mtime: ".mtime",
   pdf: "projector",
   configFileName: '.html5-school-presentation.json',
   test: false,

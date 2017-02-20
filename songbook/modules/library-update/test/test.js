@@ -94,8 +94,8 @@ describe('Functions', function() {
     var generatePDF = slu.__get__("generatePDF");
     var generateSlides = slu.__get__("generateSlides");
     generatePDF('Swing-low', 'projector');
-    var folder = p('songs', 'Swing-low');
-    var slides = p (folder, 'slides');
+    const folder = p('songs', 'Swing-low');
+    const slides = p (folder, 'slides');
     generateSlides(folder);
     exists(slides, '01.svg');
     exists(slides, '02.svg');
@@ -106,33 +106,33 @@ describe('Functions', function() {
 
   it('"generatePianoEPS(): lead"', function() {
     var generatePianoEPS = slu.__get__("generatePianoEPS");
-    const swing = p('songs', 'Swing-low');
-    generatePianoEPS(swing);
-    exists(swing, 'piano');
-    exists(swing, 'piano', 'piano.mscx');
-    exists(swing, 'piano', 'piano.eps');
-    fs.removeSync(p(swing, 'piano'));
+    const folder = p('songs', 'Swing-low');
+    generatePianoEPS(folder);
+    exists(folder, 'piano');
+    exists(folder, 'piano', 'piano.mscx');
+    exists(folder, 'piano', 'piano.eps');
+    fs.removeSync(p(folder, 'piano'));
   });
 
   it('"generatePianoEPS(): piano"', function() {
     var generatePianoEPS = slu.__get__("generatePianoEPS");
-    const auf = p('songs', 'Auf-der-Mauer_auf-der-Lauer');
-    generatePianoEPS(auf);
-    exists(auf, 'piano');
-    exists(auf, 'piano', 'piano.mscx');
-    exists(auf, 'piano', 'piano.eps');
-    fs.removeSync(p(auf, 'piano'));
+    const folder = p('songs', 'Auf-der-Mauer_auf-der-Lauer');
+    generatePianoEPS(folder);
+    exists(folder, 'piano');
+    exists(folder, 'piano', 'piano.mscx');
+    exists(folder, 'piano', 'piano.eps');
+    fs.removeSync(p(folder, 'piano'));
 
   });
 
   it('"generatePianoEPS(): multipage"', function() {
     var generatePianoEPS = slu.__get__("generatePianoEPS");
-    const zum = p('songs', 'Zum-Tanze-da-geht-ein-Maedel');
-    generatePianoEPS(zum);
-    exists(zum, 'piano');
-    exists(zum, 'piano', 'piano.mscx');
-    exists(zum, 'piano', 'piano_1.eps');
-    fs.removeSync(p(zum, 'piano'));
+    const folder = p('songs', 'Zum-Tanze-da-geht-ein-Maedel');
+    generatePianoEPS(folder);
+    exists(folder, 'piano');
+    exists(folder, 'piano', 'piano.mscx');
+    exists(folder, 'piano', 'piano_1.eps');
+    fs.removeSync(p(folder, 'piano'));
   });
 
   it('"message()"', function() {
