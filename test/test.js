@@ -137,4 +137,9 @@ describe('Functions', function() {
     assert.equal(message('test'), 'test');
   });
 
+  it('"update()"', function() {
+    slu.update();
+    slu.clean();
+  });
+
 });
