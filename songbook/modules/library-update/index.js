@@ -24,12 +24,26 @@ const configDefault = {
 var config = {};
 
 /**
+ * Check if executable is installed.
+ * @param {string} executable - Name of the executable.
+ */
+checkExecutable = function(executable) {
+  var exec = spawn(executable, ['--help']);
+  if (exec.status == null) {
+    return message('Install executable: ' + executable);
+  }
+}
+
+/**
  * By default this module reads the config file ~/.html5-school-presentation to
  * generate its config object.
  * @param {object} newConfig - An object containing the same properties as the
  * config object.
  */
 exports.bootstrapConfig = function(newConfig=false) {
+  checkExecutable(getMscoreCommand());
+  checkExecutable('mscore-to-eps.sh');
+  checkExecutable('pdf2svg');
 
   // default object
   config = configDefault;
