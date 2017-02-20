@@ -161,4 +161,16 @@ describe('Functions', function() {
     slu.clean();
   });
 
+  it('"checkExecutable()": existing executable', function() {
+    var checkExecutable = slu.__get__("checkExecutable");
+    var check = checkExecutable('echo');
+    assert.equal(check, undefined);
+  });
+
+  it('"checkExecutable()": nonexisting executable', function() {
+    var checkExecutable = slu.__get__("checkExecutable");
+    var check = checkExecutable('loooooool');
+    assert.equal(typeof(check), 'string');
+  });
+
 });
