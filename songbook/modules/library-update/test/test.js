@@ -149,9 +149,16 @@ describe('Functions', function() {
       exists(folders[i], 'slides');
       exists(folders[i], 'slides', '01.svg');
       exists(folders[i], 'piano');
-      //exists(folders[i], 'piano', 'piano_1.eps');
+      exists(folders[i], 'piano', 'piano.mscx');
     }
-    //slu.clean();
+
+    exists(auf, 'piano', 'piano.eps');
+    exists(swing, 'piano', 'piano.eps');
+    exists(zum, 'piano', 'piano_1.eps');
+    exists(zum, 'piano', 'piano_2.eps');
+    exists(zum, 'piano', 'piano_3.eps');
+
+    slu.clean();
   });
 
 });
