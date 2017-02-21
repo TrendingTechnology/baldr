@@ -2,7 +2,7 @@
 
 const assert = require('assert');
 const path = require('path');
-const p = path.join
+const p = path.join;
 const fs = require('fs-extra');
 const sleep = require('sleep');
 
@@ -16,7 +16,7 @@ slu.bootstrapConfig({
 
 exists = function() {
   assert.ok(fs.existsSync(path.join.apply(null, arguments)));
-}
+};
 
 describe('Configuration', function() {
   const config = slu.__get__("config");
@@ -99,7 +99,7 @@ describe('Functions', function() {
     exists(slides, '02.svg');
     exists(slides, '03.svg');
     exists(slides, '04.svg');
-    fs.removeSync(slides)
+    fs.removeSync(slides);
   });
 
   it('"generatePianoEPS(): lead"', function() {
