@@ -29,10 +29,10 @@ var config = {};
  */
 checkExecutable = function(executable) {
   var exec = spawn(executable, ['--help']);
-  if (exec.status == null) {
+  if (exec.status === null) {
     return message('Install executable: ' + executable);
   }
-}
+};
 
 /**
  * By default this module reads the config file ~/.html5-school-presentation to
@@ -56,7 +56,7 @@ exports.bootstrapConfig = function(newConfig=false) {
 
   // function parameter
   if (newConfig) {
-    config = Object.assign(config, newConfig)
+    config = Object.assign(config, newConfig);
   }
 
   if (!config.test) {
@@ -79,7 +79,7 @@ messageConfigFile = function() {
   else {
     return message(output);
   }
-}
+};
 
 exports.generateJSON = generateJSON = function() {
   var tmp = {};
@@ -203,7 +203,7 @@ getMscoreCommand = function() {
  * @param {string} destination - Name of the PDF without the extension.
  */
 generatePDF = function(folder, source, destination = '') {
-  if (destination == '') {
+  if (destination === '') {
     destination = source;
   }
   spawn(getMscoreCommand(), [
@@ -235,18 +235,18 @@ generateSlides = function(folder) {
  * @param {string} folder - A song folder.
  */
 generatePianoEPS = function(folder) {
-  var piano = p(folder, 'piano')
+  var piano = p(folder, 'piano');
   fs.removeSync(piano);
   fs.mkdirSync(piano);
 
   if (fs.existsSync(p(folder, 'piano.mscx'))) {
-    fs.copySync(p(folder, 'piano.mscx'), p(piano, 'piano.mscx'))
+    fs.copySync(p(folder, 'piano.mscx'), p(piano, 'piano.mscx'));
   }
   else if (fs.existsSync(p(folder, 'lead.mscx'))) {
-    fs.copySync(p(folder, 'lead.mscx'), p(piano, 'piano.mscx'))
+    fs.copySync(p(folder, 'lead.mscx'), p(piano, 'piano.mscx'));
   }
   spawn('mscore-to-eps.sh', [p(piano, 'piano.mscx')]);
-}
+};
 
 /**
  * Print out or return text.
@@ -279,8 +279,7 @@ processFolder = function(folder) {
   ) {
     generatePianoEPS(folder);
   }
-
-}
+};
 
 /**
  * Update and generate when required media files for the songs.
@@ -299,7 +298,7 @@ cleanFolder = function(folder) {
   fs.removeSync(p(folder, 'piano'));
   fs.removeSync(p(folder, 'slides'));
   fs.removeSync(p(folder, 'projector.pdf'));
-}
+};
 
 /**
  * Clean all temporary media files.
