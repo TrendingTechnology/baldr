@@ -81,6 +81,16 @@ messageConfigFile = function() {
   }
 };
 
+/**
+ * Assemble warning message when info.json doesn’t exists.
+ * @param {string} folder - A song folder.
+ */
+warningInfoJson = function(folder) {
+  return warning +
+    folder.underline.yellow + '/' +
+    config.info.underline.red;
+};
+
 exports.generateJSON = generateJSON = function() {
   var tmp = {};
   var jsonPath = p(config.path, config.json);
@@ -90,8 +100,7 @@ exports.generateJSON = generateJSON = function() {
     var songFolder = folder;
     var jsonFile = p(songFolder, config.info);
     if (fs.existsSync(jsonFile)) {
-      var jsonFileContents = fs.readFileSync(jsonFile, 'utf8');
-      var info = JSON.parse(jsonFileContents);
+      var info = JSON.parse(fs.readFileSync(jsonFile, 'utf8'));
       info.folder = folder;
       var slidesFolder = p(songFolder, config.slidesFolder);
       if (fs.existsSync(slidesFolder)) {
@@ -100,16 +109,11 @@ exports.generateJSON = generateJSON = function() {
       if (Boolean(info.title)) {
         tmp[folder] = info;
       } else {
-        output += warning +
-          folder.underline.yellow + '/' +
-          config.info.underline.red +
-          ' has no value for title!';
+        output += warningInfoJson();
       }
     }
     else if (fs.lstatSync(songFolder).isDirectory()) {
-      output += warning +
-        folder.underline.red + ' has no ' +
-        config.info.underline.red + ' file!';
+      output += warningInfoJson();
     }
   });
 

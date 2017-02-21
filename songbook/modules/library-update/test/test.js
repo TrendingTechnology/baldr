@@ -140,6 +140,7 @@ describe('Functions', function() {
 
   it('"update()"', function() {
     slu.update();
+    var config = slu.__get__('config');
     const auf = p('songs', 'Auf-der-Mauer_auf-der-Lauer');
     const swing = p('songs', 'Swing-low');
     const zum = p('songs', 'Zum-Tanze-da-geht-ein-Maedel');
@@ -157,6 +158,9 @@ describe('Functions', function() {
     exists(zum, 'piano', 'piano_1.eps');
     exists(zum, 'piano', 'piano_2.eps');
     exists(zum, 'piano', 'piano_3.eps');
+
+    var info = JSON.parse(fs.readFileSync(p(config.path, 'songs.json'), 'utf8'));
+    assert.equal(info[Object.keys(info)[0]].title, 'Auf der Mauer, auf der Lauer');
 
     slu.clean();
   });
