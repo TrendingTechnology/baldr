@@ -32,7 +32,7 @@ describe('Configuration', function() {
 
   it('"bootstrapConfig()', function() {
     var s = rewire("../index.js");
-    s.bootstrapConfig({path: 'lol'});
+    s.bootstrapConfig({path: 'lol', test: true});
     const c = s.__get__("config");
     assert.equal(c.path, 'lol');
     assert.equal(c.json, "songs.json");
@@ -171,6 +171,12 @@ describe('Functions', function() {
     var checkExecutable = slu.__get__("checkExecutable");
     var check = checkExecutable('loooooool');
     assert.equal(typeof(check), 'string');
+  });
+
+  it('"messageConfigFile()"', function() {
+    var messageConfigFile = slu.__get__("messageConfigFile");
+    var output = messageConfigFile();
+    assert.ok(output.length > 100);
   });
 
 });
