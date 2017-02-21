@@ -58,14 +58,27 @@ exports.bootstrapConfig = function(newConfig=false) {
   if (newConfig) {
     config = Object.assign(config, newConfig)
   }
+
+  if (!config.test) {
+    messageConfigFile();
+  }
 };
 
+/**
+ * Display a message about the config file.
+ */
 messageConfigFile = function() {
-  console.log(error + 'No config file \'~/' + configFileName + '\' found!');
+  var output = error + 'No config file \'~/' + config.configFileName + '\' found!';
   const sampleConfigFile = p(__dirname, 'sample.config.json');
   const sampleConfig = fs.readFileSync(sampleConfigFile, 'utf8');
-  console.log('\nCreate a config file with this keys:\n' + sampleConfig);
-  process.exit(1);
+  output += '\nCreate a config file with this keys:\n' + sampleConfig;
+  if (!config.test) {
+    message(output);
+    process.exit(1);
+  }
+  else {
+    return message(output);
+  }
 }
 
 exports.generateJSON = generateJSON = function() {
