@@ -18,7 +18,8 @@ const configDefault = {
   slidesFolder: "slides",
   configFileName: '.html5-school-presentation.json',
   test: false,
-  force: false
+  force: false,
+  tex: 'songs.tex'
 };
 
 var config = {};
@@ -120,6 +121,33 @@ exports.generateJSON = generateJSON = function() {
   fs.writeFileSync(jsonPath, JSON.stringify(tmp, null, 4));
   output += 'Datenbank-Datei erzeugen'.green;
   return message(output);
+};
+
+/**
+ * @param {string} folder - Absolute path to a song folder.
+ */
+getSongInfo = function(folder) {
+  var jsonFile = p(folder, config.info);
+  if (fs.existsSync(jsonFile)) {
+    return JSON.parse(fs.readFileSync(jsonFile, 'utf8'));
+  }
+  else {
+    return false;
+  }
+};
+
+/**
+ *
+ */
+exports.generateTeX = generateTeX = function() {
+  var TeXFile = p(config.path, config.tex);
+  fs.removeSync(TeXFile);
+  getFolders().forEach(function (folder) {
+    if (info = getSongInfo(folder)) {
+      console.log(info.title);
+      fs.appendFileSync(TeXFile, '\\section{' + info.title + '}\n');
+    }
+  });
 };
 
 /**
