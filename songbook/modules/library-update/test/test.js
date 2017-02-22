@@ -190,7 +190,7 @@ describe('Functions', function() {
     assert.equal(info.title, 'Swing low');
   });
 
-  it.only('"generateTeX()"', function() {
+  it('"generateTeX()"', function() {
     slu.generateTeX();
     const config = slu.__get__("config");
     exists(config.path, config.tex);
