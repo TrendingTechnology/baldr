@@ -194,24 +194,13 @@ getFolders = function(mode) {
   var output = [];
   folders = fs.readdirSync(config.path);
   function noSpecial(file) {
-    if (file.substr(0, 1) == '_' || file.substr(0, 1) == '.') {
-      return false;
-    }
-    else {
-      return true;
-    }
+    return file.substr(0, 1) == '_' || file.substr(0, 1) == '.' ? false : true;
   }
   function makeAbs(folder) {
     return p(config.path, folder);
   }
   function isDir(file) {
-    var stats = fs.statSync(file);
-    if (stats.isDirectory()) {
-      return true;
-    }
-    else {
-      return false;
-    }
+    return fs.statSync(file).isDirectory() ? true : false;
   }
   return folders.filter(noSpecial).map(makeAbs).filter(isDir);
 };
