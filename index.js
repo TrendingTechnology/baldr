@@ -94,28 +94,26 @@ warningInfoJson = function(folder) {
 
 exports.generateJSON = generateJSON = function() {
   var tmp = {};
-  var jsonPath = p(config.path, config.json);
   var output = '';
   getFolders().forEach(function (folder) {
     output += folder;
-    var songFolder = folder;
-    var jsonFile = p(songFolder, config.info);
+    var jsonFile = p(folder, config.info);
     if (fs.existsSync(jsonFile)) {
       var info = JSON.parse(fs.readFileSync(jsonFile, 'utf8'));
       info.folder = folder;
-      info.slides = getFolderFiles(p(songFolder, config.slidesFolder), '.svg');
+      info.slides = getFolderFiles(p(folder, config.slidesFolder), '.svg');
       if (Boolean(info.title)) {
         tmp[folder] = info;
       } else {
         output += warningInfoJson();
       }
     }
-    else if (fs.lstatSync(songFolder).isDirectory()) {
+    else if (fs.lstatSync(folder).isDirectory()) {
       output += warningInfoJson();
     }
   });
 
-  fs.writeFileSync(jsonPath, JSON.stringify(tmp, null, 4));
+  fs.writeFileSync(p(config.path, config.json), JSON.stringify(tmp, null, 4));
   output += 'Datenbank-Datei erzeugen'.green;
   return message(output);
 };
