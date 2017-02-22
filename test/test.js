@@ -183,4 +183,17 @@ describe('Functions', function() {
     assert.ok(output.length > 100);
   });
 
+  it('"getSongInfo()"', function() {
+    var getSongInfo = slu.__get__("getSongInfo");
+    const config = slu.__get__("config");
+    var info = getSongInfo(p(config.path, 'Swing-low'));
+    assert.equal(info.title, 'Swing low');
+  });
+
+  it.only('"generateTeX()"', function() {
+    slu.generateTeX();
+    const config = slu.__get__("config");
+    exists(config.path, config.tex);
+  });
+
 });
