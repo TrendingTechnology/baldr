@@ -91,9 +91,10 @@ describe('Functions', function() {
   it('"generateSlides()"', function() {
     var generatePDF = slu.__get__("generatePDF");
     var generateSlides = slu.__get__("generateSlides");
+    var config = slu.__get__('config');
     generatePDF('Swing-low', 'projector');
     const folder = p('songs', 'Swing-low');
-    const slides = p (folder, 'slides');
+    const slides = p (folder, config.slidesFolder);
     generateSlides(folder);
     exists(slides, '01.svg');
     exists(slides, '02.svg');
@@ -104,33 +105,36 @@ describe('Functions', function() {
 
   it('"generatePianoEPS(): lead"', function() {
     var generatePianoEPS = slu.__get__("generatePianoEPS");
+    var config = slu.__get__('config');
     const folder = p('songs', 'Swing-low');
     generatePianoEPS(folder);
-    exists(folder, 'piano');
-    exists(folder, 'piano', 'piano.mscx');
-    exists(folder, 'piano', 'piano.eps');
-    fs.removeSync(p(folder, 'piano'));
+    exists(folder, config.pianoFolder);
+    exists(folder, config.pianoFolder, 'piano.mscx');
+    exists(folder, config.pianoFolder, 'piano.eps');
+    fs.removeSync(p(folder, config.pianoFolder));
   });
 
   it('"generatePianoEPS(): piano"', function() {
     var generatePianoEPS = slu.__get__("generatePianoEPS");
+    var config = slu.__get__('config');
     const folder = p('songs', 'Auf-der-Mauer_auf-der-Lauer');
     generatePianoEPS(folder);
-    exists(folder, 'piano');
-    exists(folder, 'piano', 'piano.mscx');
-    exists(folder, 'piano', 'piano.eps');
-    fs.removeSync(p(folder, 'piano'));
+    exists(folder, config.pianoFolder);
+    exists(folder, config.pianoFolder, 'piano.mscx');
+    exists(folder, config.pianoFolder, 'piano.eps');
+    fs.removeSync(p(folder, config.pianoFolder));
 
   });
 
   it('"generatePianoEPS(): multipage"', function() {
     var generatePianoEPS = slu.__get__("generatePianoEPS");
+    var config = slu.__get__('config');
     const folder = p('songs', 'Zum-Tanze-da-geht-ein-Maedel');
     generatePianoEPS(folder);
-    exists(folder, 'piano');
-    exists(folder, 'piano', 'piano.mscx');
-    exists(folder, 'piano', 'piano_1.eps');
-    fs.removeSync(p(folder, 'piano'));
+    exists(folder, config.pianoFolder);
+    exists(folder, config.pianoFolder, 'piano.mscx');
+    exists(folder, config.pianoFolder, 'piano_1.eps');
+    fs.removeSync(p(folder, config.pianoFolder));
   });
 
   it('"message()"', function() {
@@ -147,17 +151,17 @@ describe('Functions', function() {
     const folders = [auf, swing, zum];
 
     for (i = 0; i < folders.length; ++i) {
-      exists(folders[i], 'slides');
-      exists(folders[i], 'slides', '01.svg');
-      exists(folders[i], 'piano');
-      exists(folders[i], 'piano', 'piano.mscx');
+      exists(folders[i], config.slidesFolder);
+      exists(folders[i], config.slidesFolder, '01.svg');
+      exists(folders[i], config.pianoFolder);
+      exists(folders[i], config.pianoFolder, 'piano.mscx');
     }
 
-    exists(auf, 'piano', 'piano.eps');
-    exists(swing, 'piano', 'piano.eps');
-    exists(zum, 'piano', 'piano_1.eps');
-    exists(zum, 'piano', 'piano_2.eps');
-    exists(zum, 'piano', 'piano_3.eps');
+    exists(auf, config.pianoFolder, 'piano.eps');
+    exists(swing, config.pianoFolder, 'piano.eps');
+    exists(zum, config.pianoFolder, 'piano_1.eps');
+    exists(zum, config.pianoFolder, 'piano_2.eps');
+    exists(zum, config.pianoFolder, 'piano_3.eps');
 
     var info = JSON.parse(fs.readFileSync(p(config.path, 'songs.json'), 'utf8'));
     assert.equal(info[Object.keys(info)[0]].title, 'Auf der Mauer, auf der Lauer');

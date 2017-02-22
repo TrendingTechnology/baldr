@@ -19,7 +19,10 @@ const configDefault = {
   configFileName: '.html5-school-presentation.json',
   test: false,
   force: false,
-  tex: 'songs.tex'
+  tex: 'songs.tex',
+  pianoFolder: 'piano',
+  pianoMScore: 'piano.mscx',
+  leadMScore: 'lead.mscx'
 };
 
 var config = {};
@@ -277,17 +280,17 @@ generateSlides = function(folder) {
  * @param {string} folder - A song folder.
  */
 generatePianoEPS = function(folder) {
-  var piano = p(folder, 'piano');
+  var piano = p(folder, config.pianoFolder);
   fs.removeSync(piano);
   fs.mkdirSync(piano);
 
-  if (fs.existsSync(p(folder, 'piano.mscx'))) {
-    fs.copySync(p(folder, 'piano.mscx'), p(piano, 'piano.mscx'));
+  if (fs.existsSync(p(folder, config.pianoMScore))) {
+    fs.copySync(p(folder, config.pianoMScore), p(piano, config.pianoMScore));
   }
-  else if (fs.existsSync(p(folder, 'lead.mscx'))) {
-    fs.copySync(p(folder, 'lead.mscx'), p(piano, 'piano.mscx'));
+  else if (fs.existsSync(p(folder, config.leadMScore))) {
+    fs.copySync(p(folder, config.leadMScore), p(piano, config.pianoMScore));
   }
-  spawn('mscore-to-eps.sh', [p(piano, 'piano.mscx')]);
+  spawn('mscore-to-eps.sh', [p(piano, config.pianoMScore)]);
 };
 
 /**
@@ -316,8 +319,8 @@ processFolder = function(folder) {
 
   // piano
   if (config.force ||
-    fileChanged(p(folder, 'piano.mscx')) ||
-    fileChanged(p(folder, 'lead.mscx'))
+    fileChanged(p(folder, config.pianoMScore)) ||
+    fileChanged(p(folder, config.leadMScore))
   ) {
     generatePianoEPS(folder);
   }
@@ -337,8 +340,8 @@ exports.update = function() {
  * @param {string} folder - A song folder.
  */
 cleanFolder = function(folder) {
-  fs.removeSync(p(folder, 'piano'));
-  fs.removeSync(p(folder, 'slides'));
+  fs.removeSync(p(folder, config.pianoFolder));
+  fs.removeSync(p(folder, config.slidesFolder));
   fs.removeSync(p(folder, 'projector.pdf'));
 };
 
@@ -347,5 +350,5 @@ cleanFolder = function(folder) {
  */
 exports.clean = function() {
   getFolders().forEach(cleanFolder);
-  fs.removeSync(p(config.path, 'songs.json'));
+  fs.removeSync(p(config.path, config.json));
 };
