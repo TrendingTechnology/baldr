@@ -196,4 +196,30 @@ describe('Functions', function() {
     exists(config.path, config.tex);
   });
 
+  it('"getFolderFiles(): eps"', function() {
+    const getFolderFiles = slu.__get__("getFolderFiles");
+    const files = getFolderFiles(p('test', 'piano-files'), '.eps');
+    assert.deepEqual(files, ['01.eps', '02.eps', '03.eps']);
+  });
+
+  it('"getFolderFiles(): svg"', function() {
+    const getFolderFiles = slu.__get__("getFolderFiles");
+    const files = getFolderFiles(p('test', 'slides-files'), '.svg');
+    assert.deepEqual(files, ['01.svg', '02.svg', '03.svg']);
+  });
+
+  it('"getFolderFiles(): non existent folder"', function() {
+    const getFolderFiles = slu.__get__("getFolderFiles");
+    const files = getFolderFiles(p('test', 'lol'), '.svg');
+    assert.deepEqual(files, []);
+  });
+
+  it('"getFolderFiles(): empty folder"', function() {
+    const getFolderFiles = slu.__get__("getFolderFiles");
+    fs.mkdirSync(p('test', 'empty'));
+    const files = getFolderFiles(p('test', 'empty'), '.svg');
+    assert.deepEqual(files, []);
+    fs.rmdirSync(p('test', 'empty'));
+  });
+
 });
