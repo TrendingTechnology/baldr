@@ -103,10 +103,7 @@ exports.generateJSON = generateJSON = function() {
     if (fs.existsSync(jsonFile)) {
       var info = JSON.parse(fs.readFileSync(jsonFile, 'utf8'));
       info.folder = folder;
-      var slidesFolder = p(songFolder, config.slidesFolder);
-      if (fs.existsSync(slidesFolder)) {
-        info.slides = fs.readdirSync(slidesFolder);
-      }
+      info.slides = getFolderFiles(p(songFolder, config.slidesFolder), '.svg');
       if (Boolean(info.title)) {
         tmp[folder] = info;
       } else {
@@ -137,12 +134,27 @@ getSongInfo = function(folder) {
 };
 
 /**
+ * @param {string} folder - Absolute path.
+ * @param {string} filter - Absolute path.
+ */
+getFolderFiles = function(folder, filter) {
+  if (fs.existsSync(folder)) {
+    return fs.readdirSync(folder).filter((file) => {
+      return file.indexOf(filter) > -1 ? true : false;
+    });
+  }
+  else {
+    return [];
+  }
+};
+
+/**
  *
  */
 exports.generateTeX = generateTeX = function() {
   var TeXFile = p(config.path, config.tex);
   fs.removeSync(TeXFile);
-  getFolders().forEach(function (folder) {
+  getFolders().forEach((folder) => {
     if (info = getSongInfo(folder)) {
       console.log(info.title);
       fs.appendFileSync(TeXFile, '\\section{' + info.title + '}\n');
