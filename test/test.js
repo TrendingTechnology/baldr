@@ -226,4 +226,9 @@ describe('Functions', function() {
     fs.rmdirSync(p('test', 'empty'));
   });
 
+  it.only('"clean()', function() {
+    slu.clean();
+    assert.ok(!fs.existsSync(p('songs', 'songs.tex')));
+  });
+
 });

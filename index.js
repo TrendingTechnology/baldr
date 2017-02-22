@@ -351,4 +351,5 @@ cleanFolder = function(folder) {
 exports.clean = function() {
   getFolders().forEach(cleanFolder);
   fs.removeSync(p(config.path, config.json));
+  fs.removeSync(p(config.path, config.tex));
 };
