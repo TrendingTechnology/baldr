@@ -42,9 +42,15 @@ describe('Configuration', function() {
 describe('Functions', function() {
   this.timeout(0);
   this.slow(10000);
-  it('"getMscoreCommand()" should return "mscore"', function() {
+  it('"getMscoreCommand()"', function() {
     const getMscoreCommand = slu.__get__("getMscoreCommand");
-    assert.equal(getMscoreCommand(), "mscore");
+    if (process.platform == 'darwin') {
+      assert.equal(getMscoreCommand(), '/Applications/MuseScore 2.app/Contents/MacOS/mscore');
+    }
+    else {
+      assert.equal(getMscoreCommand(), "mscore");
+    }
+
   });
 
   it('"generatePDF()"', function() {
@@ -68,7 +74,7 @@ describe('Functions', function() {
 
   it('"fileChanged()" run twice', function() {
     var fileChanged = slu.__get__("fileChanged");
-    sleep.msleep(10);
+    sleep.msleep(1000);
     fs.appendFileSync('tmp.txt', 'test');
     assert.ok(fileChanged('tmp.txt'));
     assert.ok(!fileChanged('tmp.txt'));

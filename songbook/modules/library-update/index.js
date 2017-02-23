@@ -54,7 +54,8 @@ exports.bootstrapConfig = function(newConfig=false) {
 
   // config file
   var configFile = p(os.homedir(), config.configFileName);
-  if (fs.existsSync(configFile)) {
+  var configFileExits = fs.existsSync(configFile);
+  if (configFileExits) {
     config = Object.assign(config, require(configFile).songbook);
   }
 
@@ -63,7 +64,7 @@ exports.bootstrapConfig = function(newConfig=false) {
     config = Object.assign(config, newConfig);
   }
 
-  if (!config.test) {
+  if (!config.test && !configFileExits) {
     messageConfigFile();
   }
 };
