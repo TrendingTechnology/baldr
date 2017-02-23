@@ -195,9 +195,18 @@ describe('Functions', function() {
   });
 
   it('"generateTeX()"', function() {
+    const getFolders = slu.__get__("getFolders");
+    const generatePianoEPS = slu.__get__("generatePianoEPS");
+    getFolders().forEach((folder) => {generatePianoEPS(folder);});
+
     slu.generateTeX();
     const config = slu.__get__("config");
-    exists(config.path, config.tex);
+    const tex = p(config.path, config.tex);
+    exists(tex);
+    var texContents = fs.readFileSync(tex, 'utf8');
+    assert.ok(texContents.indexOf('\\grafik') > -1);
+    assert.ok(texContents.indexOf('\\section') > -1);
+    slu.clean();
   });
 
   it('"getFolderFiles(): eps"', function() {
