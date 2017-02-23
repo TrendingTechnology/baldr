@@ -136,7 +136,7 @@ getSongInfo = function(folder) {
 
 /**
  * @param {string} folder - Absolute path.
- * @param {string} filter - Absolute path.
+ * @param {string} filter - String to filter.
  */
 getFolderFiles = function(folder, filter) {
   if (fs.existsSync(folder)) {
@@ -150,15 +150,19 @@ getFolderFiles = function(folder, filter) {
 };
 
 /**
- *
+ * Generate TeX file for the piano version of the songbook
  */
 exports.generateTeX = generateTeX = function() {
   var TeXFile = p(config.path, config.tex);
   fs.removeSync(TeXFile);
   getFolders().forEach((folder) => {
     if (info = getSongInfo(folder)) {
-      console.log(info.title);
       fs.appendFileSync(TeXFile, '\\section{' + info.title + '}\n');
+      getFolderFiles(p(folder, config.pianoFolder), '.eps').forEach(
+        (file) => {
+          fs.appendFileSync(TeXFile, '\\grafik{' + p(folder, config.pianoFolder, file) + '}\n');
+        }
+      );
     }
   });
 };
