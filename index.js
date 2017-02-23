@@ -156,7 +156,8 @@ exports.generateTeX = generateTeX = function() {
   var TeXFile = p(config.path, config.tex);
   fs.removeSync(TeXFile);
   getFolders().forEach((folder) => {
-    if (info = getSongInfo(folder)) {
+    info = getSongInfo(folder);
+    if (info) {
       fs.appendFileSync(TeXFile, '\\section{' + info.title + '}\n');
       getFolderFiles(p(folder, config.pianoFolder), '.eps').forEach(
         (file) => {
