@@ -157,10 +157,11 @@ exports.generateTeX = generateTeX = function() {
   var TeXFile = p(config.path, config.tex);
   fs.removeSync(TeXFile);
   getFolders().forEach((folder) => {
-    info = getSongInfo(folder);
-    if (info) {
+    var info = getSongInfo(folder);
+    var eps = getFolderFiles(p(folder, config.pianoFolder), '.eps');
+    if (info.hasOwnProperty('title') && eps.length > 0) {
       fs.appendFileSync(TeXFile, '\n\n\\tmpheading{' + info.title + '}\n');
-      getFolderFiles(p(folder, config.pianoFolder), '.eps').forEach(
+      eps.forEach(
         (file) => {
           fs.appendFileSync(TeXFile, '\\tmpimage{' + p(folder, config.pianoFolder, file) + '}\n');
         }
