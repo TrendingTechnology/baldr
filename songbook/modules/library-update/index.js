@@ -159,10 +159,10 @@ exports.generateTeX = generateTeX = function() {
   getFolders().forEach((folder) => {
     info = getSongInfo(folder);
     if (info) {
-      fs.appendFileSync(TeXFile, '\\section{' + info.title + '}\n');
+      fs.appendFileSync(TeXFile, '\n\n\\tmpheading{' + info.title + '}\n');
       getFolderFiles(p(folder, config.pianoFolder), '.eps').forEach(
         (file) => {
-          fs.appendFileSync(TeXFile, '\\grafik{' + p(folder, config.pianoFolder, file) + '}\n');
+          fs.appendFileSync(TeXFile, '\\tmpimage{' + p(folder, config.pianoFolder, file) + '}\n');
         }
       );
     }
