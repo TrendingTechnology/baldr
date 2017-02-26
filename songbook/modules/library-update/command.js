@@ -7,6 +7,7 @@ commander
   .version('0.0.5')
   .option('-f, --force', 'rebuild all images')
   .option('-j, --json', 'generate JSON file')
+  .option('-t, --tex', 'generate TeX file')
   .parse(process.argv);
 
 if (commander.force) {
@@ -18,7 +19,8 @@ else {
 
 if (commander.json) {
   slu.generateJSON();
-}
-else {
+} else if (commander.tex) {
+  slu.generateTeX();
+} else {
   slu.update();
 }
