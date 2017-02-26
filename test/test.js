@@ -210,8 +210,8 @@ describe('Functions', function() {
     const tex = p(config.path, config.tex);
     exists(tex);
     var texContents = fs.readFileSync(tex, 'utf8');
-    assert.ok(texContents.indexOf('\\grafik') > -1);
-    assert.ok(texContents.indexOf('\\section') > -1);
+    assert.ok(texContents.indexOf('\\tmpimage') > -1);
+    assert.ok(texContents.indexOf('\\tmpheading') > -1);
     slu.clean();
   });
 
