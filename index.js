@@ -163,7 +163,7 @@ exports.generateTeX = generateTeX = function() {
       fs.appendFileSync(TeXFile, '\n\n\\tmpheading{' + info.title + '}\n');
       eps.forEach(
         (file) => {
-          fs.appendFileSync(TeXFile, '\\tmpimage{' + p(folder, config.pianoFolder, file) + '}\n');
+          fs.appendFileSync(TeXFile, '\\tmpimage{' + p(folder.split(path.sep).pop(), config.pianoFolder, file) + '}\n');
         }
       );
     }
