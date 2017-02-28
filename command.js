@@ -1,5 +1,7 @@
 #! /usr/bin/env node
 
+'use strict';
+
 try {
   var slu = require('songbook-library-update');
 }
