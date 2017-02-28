@@ -34,8 +34,6 @@ commander
   .option('-T, --test', 'switch to test mode')
   .parse(process.argv);
 
-
-
 if (commander.force) {
   slu.bootstrapConfig({force: true});
 }
