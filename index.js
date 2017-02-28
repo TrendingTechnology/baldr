@@ -46,7 +46,7 @@ var checkExecutable = function(executable) {
  * @param {object} newConfig - An object containing the same properties as the
  * config object.
  */
-exports.bootstrapConfig = function(newConfig=false) {
+var bootstrapConfig = function(newConfig=false) {
   checkExecutable(getMscoreCommand());
   checkExecutable('mscore-to-eps.sh');
   checkExecutable('pdf2svg');
@@ -70,6 +70,16 @@ exports.bootstrapConfig = function(newConfig=false) {
     messageConfigFile();
   }
 };
+exports.bootstrapConfig = bootstrapConfig;
+
+/**
+ * External function for command line usage.
+ */
+var setTestMode = function() {
+  config.test = true;
+  config.path = path.resolve('songs');
+}
+exports.setTestMode = setTestMode;
 
 /**
  * Display a message about the config file.
