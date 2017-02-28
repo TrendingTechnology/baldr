@@ -6,6 +6,7 @@ const path = require('path');
 const fs = require('fs');
 var commander = require('commander');
 
+// TODO: Clean up
 /*
 if (fs.existsSync('./index.js')) {
   var slu = require('./index.js');
@@ -13,6 +14,7 @@ if (fs.existsSync('./index.js')) {
   var slu = require('songbook-library-update');
 }*/
 
+// TODO: Clean up
 try {
   var slu = require('songbook-library-update');
 } catch (e) {
@@ -22,7 +24,6 @@ try {
 
 try {
   var slu = require('./index.js');
-  console.log('Using ./index.js')
 } catch (e) {}
 
 commander

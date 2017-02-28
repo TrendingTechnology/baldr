@@ -298,24 +298,18 @@ describe('Command line', function() {
     this.timeout(0);
     this.slow(50000);
     const cli = spawn('./command.js', ['--test']);
-    console.log(cli.stdout.toString());
-    console.log(cli.stderr.toString());
   });
 
   it('no arguments (second run): only json and TeX generation', function() {
     this.timeout(0);
     this.slow(1000);
     const cli = spawn('./command.js', ['--test']);
-    console.log(cli.stdout.toString());
-    console.log(cli.stderr.toString());
-
   });
 
   it('--force', function() {
     this.timeout(0);
     this.slow(50000);
     const cli = spawn('./command.js', ['--test', '--force']);
-    console.log(cli.stdout.toString());
   });
 
   it('--help', function() {
