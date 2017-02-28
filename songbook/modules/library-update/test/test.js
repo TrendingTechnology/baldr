@@ -247,3 +247,23 @@ describe('Functions', function() {
   });
 
 });
+
+
+describe('Command line', function() {
+  const spawn = require('child_process').spawnSync;
+
+  it('--help', function() {
+    const cli = spawn('./command.js', ['--help']);
+    var out = cli.stdout.toString();
+    assert.ok(out.indexOf('Usage') > -1)
+    assert.ok(out.indexOf('--help') > -1)
+    assert.ok(out.indexOf('--version') > -1)
+    assert.equal(cli.status, 0);
+  });
+
+  it('--version', function() {
+    const cli = spawn('./command.js', ['--version']);
+    assert.equal(cli.stdout.toString(), '0.0.5\n');
+    assert.equal(cli.status, 0);
+  });
+});
