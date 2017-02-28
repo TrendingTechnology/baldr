@@ -18,6 +18,15 @@ exists = function() {
   assert.ok(fs.existsSync(path.join.apply(null, arguments)));
 };
 
+var assertGenerateTeX = function() {
+  const config = slu.__get__('config');
+  const tex = p(config.path, config.tex);
+  exists(tex);
+  var texContents = fs.readFileSync(tex, 'utf8');
+  assert.ok(texContents.indexOf('\\tmpimage') > -1);
+  assert.ok(texContents.indexOf('\\tmpheading') > -1);
+};
+
 /**
  *
  */
@@ -268,12 +277,7 @@ describe('Exported functions', function() {
     getFolders().forEach((folder) => {generatePianoEPS(folder);});
 
     slu.generateTeX();
-    const config = slu.__get__('config');
-    const tex = p(config.path, config.tex);
-    exists(tex);
-    var texContents = fs.readFileSync(tex, 'utf8');
-    assert.ok(texContents.indexOf('\\tmpimage') > -1);
-    assert.ok(texContents.indexOf('\\tmpheading') > -1);
+    assertGenerateTeX();
     slu.clean();
   });
 
@@ -312,6 +316,21 @@ describe('Command line', function() {
     const cli = spawn('./command.js', ['--test', '--force']);
   });
 
+  // After --force
+  it('--json', function() {
+    this.timeout(0);
+    this.slow(50000);
+    const cli = spawn('./command.js', ['--test', '--json']);
+  });
+
+  // After --force
+  it.skip('--tex', function() {
+    this.timeout(0);
+    this.slow(50000);
+    const cli = spawn('./command.js', ['--test', '--tex']);
+    assertGenerateTeX();
+  });
+
   it('--help', function() {
     this.slow(1000);
     const cli = spawn('./command.js', ['--test', '--help']);
@@ -327,5 +346,11 @@ describe('Command line', function() {
     const cli = spawn('./command.js', ['--test', '--version']);
     assert.equal(cli.stdout.toString(), '0.0.5\n');
     assert.equal(cli.status, 0);
+  });
+
+  // Test should be executed at the very last position.
+  it('--clean', function() {
+    this.slow(50000);
+    const cli = spawn('./command.js', ['--test', '--clean']);
   });
 });

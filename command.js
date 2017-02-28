@@ -28,6 +28,7 @@ try {
 
 commander
   .version('0.0.5')
+  .option('-c, --clean', 'clean up (delete all generated files)')
   .option('-f, --force', 'rebuild all images')
   .option('-j, --json', 'generate JSON file')
   .option('-t, --tex', 'generate TeX file')
@@ -45,7 +46,9 @@ if (commander.test) {
   slu.setTestMode();
 }
 
-if (commander.json) {
+if (commander.clean) {
+  slu.clean();
+} else if (commander.json) {
   slu.generateJSON();
 } else if (commander.tex) {
   slu.generateTeX();
