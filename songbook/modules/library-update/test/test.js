@@ -18,6 +18,9 @@ exists = function() {
   assert.ok(fs.existsSync(path.join.apply(null, arguments)));
 };
 
+/**
+ *
+ */
 describe('Configuration', function() {
   const config = slu.__get__("config");
 
@@ -30,7 +33,8 @@ describe('Configuration', function() {
     });
   });
 
-  it('"bootstrapConfig()', function() {
+  it('"bootstrapConfig()"', function() {
+    this.slow(1000);
     var s = rewire("../index.js");
     s.bootstrapConfig({path: 'lol', test: true});
     const c = s.__get__("config");
@@ -39,9 +43,11 @@ describe('Configuration', function() {
   });
 });
 
-describe('Functions', function() {
-  this.timeout(0);
-  this.slow(10000);
+/**
+ *
+ */
+describe('Private functions', function() {
+
   it('"getMscoreCommand()"', function() {
     const getMscoreCommand = slu.__get__("getMscoreCommand");
     if (process.platform == 'darwin') {
@@ -50,10 +56,11 @@ describe('Functions', function() {
     else {
       assert.equal(getMscoreCommand(), "mscore");
     }
-
   });
 
   it('"generatePDF()"', function() {
+    this.timeout(0);
+    this.slow(10000);
     const generatePDF = slu.__get__("generatePDF");
     const folder = p('songs', 'Swing-low');
     generatePDF(folder, 'projector', 'projector');
@@ -65,20 +72,23 @@ describe('Functions', function() {
     assert.ok(!pull());
   });
 
-  it('"fileChanged()" run once', function() {
-    var fileChanged = slu.__get__("fileChanged");
-    fs.appendFileSync('tmp.txt', 'test');
-    assert.ok(fileChanged('tmp.txt'));
-    fs.unlinkSync('tmp.txt');
-  });
+  describe('"fileChanged()"', function() {
+    it('"fileChanged()": run once', function() {
+      var fileChanged = slu.__get__("fileChanged");
+      fs.appendFileSync('tmp.txt', 'test');
+      assert.ok(fileChanged('tmp.txt'));
+      fs.unlinkSync('tmp.txt');
+    });
 
-  it('"fileChanged()" run twice', function() {
-    var fileChanged = slu.__get__("fileChanged");
-    sleep.msleep(1000);
-    fs.appendFileSync('tmp.txt', 'test');
-    assert.ok(fileChanged('tmp.txt'));
-    assert.ok(!fileChanged('tmp.txt'));
-    fs.unlinkSync('tmp.txt');
+    it('"fileChanged()": run twice', function() {
+      this.slow(4000);
+      var fileChanged = slu.__get__("fileChanged");
+      sleep.msleep(1000);
+      fs.appendFileSync('tmp.txt', 'test');
+      assert.ok(fileChanged('tmp.txt'));
+      assert.ok(!fileChanged('tmp.txt'));
+      fs.unlinkSync('tmp.txt');
+    });
   });
 
   it('"getFolders()"', function() {
@@ -87,14 +97,9 @@ describe('Functions', function() {
     assert.equal(folders.length, 3);
   });
 
-  it('"generateJSON()"', function() {
-    slu.generateJSON();
-    var json = p('songs', 'songs.json');
-    exists(json);
-    fs.removeSync(json);
-  });
-
   it('"generateSlides()"', function() {
+    this.timeout(0);
+    this.slow(10000);
     var generatePDF = slu.__get__("generatePDF");
     var generateSlides = slu.__get__("generateSlides");
     var config = slu.__get__('config');
@@ -109,38 +114,46 @@ describe('Functions', function() {
     fs.removeSync(slides);
   });
 
-  it('"generatePianoEPS(): lead"', function() {
-    var generatePianoEPS = slu.__get__("generatePianoEPS");
-    var config = slu.__get__('config');
-    const folder = p('songs', 'Swing-low');
-    generatePianoEPS(folder);
-    exists(folder, config.pianoFolder);
-    exists(folder, config.pianoFolder, 'piano.mscx');
-    exists(folder, config.pianoFolder, 'piano.eps');
-    fs.removeSync(p(folder, config.pianoFolder));
-  });
+  describe('"generatePianoEPS()"', function() {
+    it('"generatePianoEPS()": lead', function() {
+      this.timeout(0);
+      this.slow(10000);
+      var generatePianoEPS = slu.__get__("generatePianoEPS");
+      var config = slu.__get__('config');
+      const folder = p('songs', 'Swing-low');
+      generatePianoEPS(folder);
+      exists(folder, config.pianoFolder);
+      exists(folder, config.pianoFolder, 'piano.mscx');
+      exists(folder, config.pianoFolder, 'piano.eps');
+      fs.removeSync(p(folder, config.pianoFolder));
+    });
 
-  it('"generatePianoEPS(): piano"', function() {
-    var generatePianoEPS = slu.__get__("generatePianoEPS");
-    var config = slu.__get__('config');
-    const folder = p('songs', 'Auf-der-Mauer_auf-der-Lauer');
-    generatePianoEPS(folder);
-    exists(folder, config.pianoFolder);
-    exists(folder, config.pianoFolder, 'piano.mscx');
-    exists(folder, config.pianoFolder, 'piano.eps');
-    fs.removeSync(p(folder, config.pianoFolder));
+    it('"generatePianoEPS()": piano', function() {
+      this.timeout(0);
+      this.slow(10000);
+      var generatePianoEPS = slu.__get__("generatePianoEPS");
+      var config = slu.__get__('config');
+      const folder = p('songs', 'Auf-der-Mauer_auf-der-Lauer');
+      generatePianoEPS(folder);
+      exists(folder, config.pianoFolder);
+      exists(folder, config.pianoFolder, 'piano.mscx');
+      exists(folder, config.pianoFolder, 'piano.eps');
+      fs.removeSync(p(folder, config.pianoFolder));
 
-  });
+    });
 
-  it('"generatePianoEPS(): multipage"', function() {
-    var generatePianoEPS = slu.__get__("generatePianoEPS");
-    var config = slu.__get__('config');
-    const folder = p('songs', 'Zum-Tanze-da-geht-ein-Maedel');
-    generatePianoEPS(folder);
-    exists(folder, config.pianoFolder);
-    exists(folder, config.pianoFolder, 'piano.mscx');
-    exists(folder, config.pianoFolder, 'piano_1.eps');
-    fs.removeSync(p(folder, config.pianoFolder));
+    it('"generatePianoEPS()": multipage', function() {
+      this.timeout(0);
+      this.slow(16000);
+      var generatePianoEPS = slu.__get__("generatePianoEPS");
+      var config = slu.__get__('config');
+      const folder = p('songs', 'Zum-Tanze-da-geht-ein-Maedel');
+      generatePianoEPS(folder);
+      exists(folder, config.pianoFolder);
+      exists(folder, config.pianoFolder, 'piano.mscx');
+      exists(folder, config.pianoFolder, 'piano_1.eps');
+      fs.removeSync(p(folder, config.pianoFolder));
+    });
   });
 
   it('"message()"', function() {
@@ -148,7 +161,79 @@ describe('Functions', function() {
     assert.equal(message('test'), 'test');
   });
 
+  describe('"checkExecutable()"', function() {
+    it('"checkExecutable()": existing executable', function() {
+      var checkExecutable = slu.__get__("checkExecutable");
+      var check = checkExecutable('echo');
+      assert.equal(check, undefined);
+    });
+
+    it('"checkExecutable()": nonexisting executable', function() {
+      var checkExecutable = slu.__get__("checkExecutable");
+      var check = checkExecutable('loooooool');
+      assert.equal(typeof(check), 'string');
+    });
+  });
+
+  it('"messageConfigFile()"', function() {
+    var messageConfigFile = slu.__get__("messageConfigFile");
+    var output = messageConfigFile();
+    assert.ok(output.length > 100);
+  });
+
+  it('"getSongInfo()"', function() {
+    var getSongInfo = slu.__get__("getSongInfo");
+    const config = slu.__get__("config");
+    var info = getSongInfo(p(config.path, 'Swing-low'));
+    assert.equal(info.title, 'Swing low');
+  });
+
+  describe('"getFolderFiles()"', function() {
+
+    it('"getFolderFiles()": eps', function() {
+      const getFolderFiles = slu.__get__("getFolderFiles");
+      const files = getFolderFiles(p('test', 'piano-files'), '.eps');
+      assert.deepEqual(files, ['01.eps', '02.eps', '03.eps']);
+    });
+
+    it('"getFolderFiles()": svg', function() {
+      const getFolderFiles = slu.__get__("getFolderFiles");
+      const files = getFolderFiles(p('test', 'slides-files'), '.svg');
+      assert.deepEqual(files, ['01.svg', '02.svg', '03.svg']);
+    });
+
+    it('"getFolderFiles()": non existent folder', function() {
+      const getFolderFiles = slu.__get__("getFolderFiles");
+      const files = getFolderFiles(p('test', 'lol'), '.svg');
+      assert.deepEqual(files, []);
+    });
+
+    it('"getFolderFiles()": empty folder', function() {
+      const getFolderFiles = slu.__get__("getFolderFiles");
+      fs.mkdirSync(p('test', 'empty'));
+      const files = getFolderFiles(p('test', 'empty'), '.svg');
+      assert.deepEqual(files, []);
+      fs.rmdirSync(p('test', 'empty'));
+    });
+  });
+
+});
+
+/**
+ *
+ */
+describe('Exported functions', function() {
+
+  it('"generateJSON()"', function() {
+    slu.generateJSON();
+    var json = p('songs', 'songs.json');
+    exists(json);
+    fs.removeSync(json);
+  });
+
   it('"update()"', function() {
+    this.timeout(0);
+    this.slow(50000);
     slu.update();
     var config = slu.__get__('config');
     const auf = p('songs', 'Auf-der-Mauer_auf-der-Lauer');
@@ -175,32 +260,9 @@ describe('Functions', function() {
     slu.clean();
   });
 
-  it('"checkExecutable()": existing executable', function() {
-    var checkExecutable = slu.__get__("checkExecutable");
-    var check = checkExecutable('echo');
-    assert.equal(check, undefined);
-  });
-
-  it('"checkExecutable()": nonexisting executable', function() {
-    var checkExecutable = slu.__get__("checkExecutable");
-    var check = checkExecutable('loooooool');
-    assert.equal(typeof(check), 'string');
-  });
-
-  it('"messageConfigFile()"', function() {
-    var messageConfigFile = slu.__get__("messageConfigFile");
-    var output = messageConfigFile();
-    assert.ok(output.length > 100);
-  });
-
-  it('"getSongInfo()"', function() {
-    var getSongInfo = slu.__get__("getSongInfo");
-    const config = slu.__get__("config");
-    var info = getSongInfo(p(config.path, 'Swing-low'));
-    assert.equal(info.title, 'Swing low');
-  });
-
   it('"generateTeX()"', function() {
+    this.timeout(0);
+    this.slow(40000);
     const getFolders = slu.__get__("getFolders");
     const generatePianoEPS = slu.__get__("generatePianoEPS");
     getFolders().forEach((folder) => {generatePianoEPS(folder);});
@@ -215,44 +277,18 @@ describe('Functions', function() {
     slu.clean();
   });
 
-  it('"getFolderFiles(): eps"', function() {
-    const getFolderFiles = slu.__get__("getFolderFiles");
-    const files = getFolderFiles(p('test', 'piano-files'), '.eps');
-    assert.deepEqual(files, ['01.eps', '02.eps', '03.eps']);
-  });
-
-  it('"getFolderFiles(): svg"', function() {
-    const getFolderFiles = slu.__get__("getFolderFiles");
-    const files = getFolderFiles(p('test', 'slides-files'), '.svg');
-    assert.deepEqual(files, ['01.svg', '02.svg', '03.svg']);
-  });
-
-  it('"getFolderFiles(): non existent folder"', function() {
-    const getFolderFiles = slu.__get__("getFolderFiles");
-    const files = getFolderFiles(p('test', 'lol'), '.svg');
-    assert.deepEqual(files, []);
-  });
-
-  it('"getFolderFiles(): empty folder"', function() {
-    const getFolderFiles = slu.__get__("getFolderFiles");
-    fs.mkdirSync(p('test', 'empty'));
-    const files = getFolderFiles(p('test', 'empty'), '.svg');
-    assert.deepEqual(files, []);
-    fs.rmdirSync(p('test', 'empty'));
-  });
-
-  it('"clean()', function() {
+  it('"clean()"', function() {
     slu.clean();
     assert.ok(!fs.existsSync(p('songs', 'songs.tex')));
   });
 
 });
 
-
 describe('Command line', function() {
   const spawn = require('child_process').spawnSync;
 
   it('--help', function() {
+    this.slow(1000);
     const cli = spawn('./command.js', ['--help']);
     var out = cli.stdout.toString();
     assert.ok(out.indexOf('Usage') > -1)
@@ -262,6 +298,7 @@ describe('Command line', function() {
   });
 
   it('--version', function() {
+    this.slow(1000);
     const cli = spawn('./command.js', ['--version']);
     assert.equal(cli.stdout.toString(), '0.0.5\n');
     assert.equal(cli.status, 0);
