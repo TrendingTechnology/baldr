@@ -291,9 +291,9 @@ describe('Command line', function() {
     this.slow(1000);
     const cli = spawn('./command.js', ['--help']);
     var out = cli.stdout.toString();
-    assert.ok(out.indexOf('Usage') > -1)
-    assert.ok(out.indexOf('--help') > -1)
-    assert.ok(out.indexOf('--version') > -1)
+    assert.ok(out.indexOf('Usage') > -1);
+    assert.ok(out.indexOf('--help') > -1);
+    assert.ok(out.indexOf('--version') > -1);
     assert.equal(cli.status, 0);
   });
 

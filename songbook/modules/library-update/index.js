@@ -1,5 +1,7 @@
 /* jshint esversion: 6 */
 
+'use strict';
+
 const os = require('os');
 const path = require('path');
 const p = path.join;
@@ -31,7 +33,7 @@ var config = {};
  * Check if executable is installed.
  * @param {string} executable - Name of the executable.
  */
-checkExecutable = function(executable) {
+var checkExecutable = function(executable) {
   var exec = spawn(executable, ['--help']);
   if (exec.status === null) {
     return message('Install executable: ' + executable);
@@ -72,7 +74,7 @@ exports.bootstrapConfig = function(newConfig=false) {
 /**
  * Display a message about the config file.
  */
-messageConfigFile = function() {
+var messageConfigFile = function() {
   var output = error + 'No config file \'~/' + config.configFileName + '\' found!';
   const sampleConfigFile = p(__dirname, 'sample.config.json');
   const sampleConfig = fs.readFileSync(sampleConfigFile, 'utf8');
@@ -90,13 +92,13 @@ messageConfigFile = function() {
  * Assemble warning message when info.json doesn’t exists.
  * @param {string} folder - A song folder.
  */
-warningInfoJson = function(folder) {
+var warningInfoJson = function(folder) {
   return warning +
     folder.underline.yellow + '/' +
     config.info.underline.red;
 };
 
-exports.generateJSON = generateJSON = function() {
+var generateJSON = function() {
   var tmp = {};
   var output = '';
   getFolders().forEach(function (folder) {
@@ -121,11 +123,12 @@ exports.generateJSON = generateJSON = function() {
   output += 'Datenbank-Datei erzeugen'.green;
   return message(output);
 };
+exports.generateJSON = generateJSON;
 
 /**
  * @param {string} folder - Absolute path to a song folder.
  */
-getSongInfo = function(folder) {
+var getSongInfo = function(folder) {
   var jsonFile = p(folder, config.info);
   if (fs.existsSync(jsonFile)) {
     return JSON.parse(fs.readFileSync(jsonFile, 'utf8'));
@@ -139,7 +142,7 @@ getSongInfo = function(folder) {
  * @param {string} folder - Absolute path.
  * @param {string} filter - String to filter.
  */
-getFolderFiles = function(folder, filter) {
+var getFolderFiles = function(folder, filter) {
   if (fs.existsSync(folder)) {
     return fs.readdirSync(folder).filter((file) => {
       return file.indexOf(filter) > -1 ? true : false;
@@ -153,7 +156,7 @@ getFolderFiles = function(folder, filter) {
 /**
  * Generate TeX file for the piano version of the songbook
  */
-exports.generateTeX = generateTeX = function() {
+var generateTeX = function() {
   var TeXFile = p(config.path, config.tex);
   fs.removeSync(TeXFile);
   getFolders().forEach((folder) => {
@@ -169,13 +172,14 @@ exports.generateTeX = generateTeX = function() {
     }
   });
 };
+exports.generateTeX = generateTeX;
 
 /**
  * Check for file modifications
  * @param {string} file - Path to the file.
  * @returns {boolean}
  */
-fileChanged = function(file) {
+var fileChanged = function(file) {
   if (!fs.existsSync(file)) {
     return false;
   }
@@ -197,9 +201,9 @@ fileChanged = function(file) {
  * Return the folder that might contain MuseScore files.
  * @return {array} Array of absolute folder paths.
  */
-getFolders = function(mode) {
+var getFolders = function(mode) {
   var output = [];
-  folders = fs.readdirSync(config.path);
+  var folders = fs.readdirSync(config.path);
   function noSpecial(file) {
     return file.substr(0, 1) == '_' || file.substr(0, 1) == '.' ? false : true;
   }
@@ -215,7 +219,7 @@ getFolders = function(mode) {
 /**
  * Execute git pull if repository exists.
  */
-pull = function() {
+var pull = function() {
   if (fs.existsSync(p(config.path, '.git'))) {
     var gitpull = spawn('git', ['pull'], {cwd: config.path});
     message('Nach Aktualsierungen suchen: ' + gitpull.stdout.toString('utf8'));
@@ -229,7 +233,7 @@ pull = function() {
  * Get the MuseScore command.
  * @returns {string} The name of the MuseScore command.
  */
-getMscoreCommand = function() {
+var getMscoreCommand = function() {
   if (process.platform == 'darwin') {
     return '/Applications/MuseScore 2.app/Contents/MacOS/mscore';
   } else {
@@ -243,7 +247,7 @@ getMscoreCommand = function() {
  * @param {string} source - Name of the *.mscx file without the extension.
  * @param {string} destination - Name of the PDF without the extension.
  */
-generatePDF = function(folder, source, destination = '') {
+var generatePDF = function(folder, source, destination = '') {
   if (destination === '') {
     destination = source;
   }
@@ -258,7 +262,7 @@ generatePDF = function(folder, source, destination = '') {
  * Generate svg files in a "slides" subfolder.
  * @param {string} folder - A song folder.
  */
-generateSlides = function(folder) {
+var generateSlides = function(folder) {
   var slides = p(folder, config.slidesFolder);
   fs.removeSync(slides);
   fs.mkdirSync(slides);
@@ -275,7 +279,7 @@ generateSlides = function(folder) {
  * Generate a PDF named piano.pdf a) from piano.mscx or b) from lead.mscx
  * @param {string} folder - A song folder.
  */
-generatePianoEPS = function(folder) {
+var generatePianoEPS = function(folder) {
   var piano = p(folder, config.pianoFolder);
   fs.removeSync(piano);
   fs.mkdirSync(piano);
@@ -293,7 +297,7 @@ generatePianoEPS = function(folder) {
  * Print out or return text.
  * @param {string} text - Text to display.
  */
-message = function(text) {
+var message = function(text) {
   if (!config.test) {
     console.log(text);
   }
@@ -306,7 +310,7 @@ message = function(text) {
  * Wrapper function for all process functions for one folder.
  * @param {string} folder - A song folder.
  */
-processFolder = function(folder) {
+var processFolder = function(folder) {
   // projector
   if (config.force || fileChanged(p(folder, 'projector.mscx'))) {
     generatePDF(folder, 'projector');
@@ -335,7 +339,7 @@ exports.update = function() {
  * Clean all temporary files in a song folder.
  * @param {string} folder - A song folder.
  */
-cleanFolder = function(folder) {
+var cleanFolder = function(folder) {
   fs.removeSync(p(folder, config.pianoFolder));
   fs.removeSync(p(folder, config.slidesFolder));
   fs.removeSync(p(folder, 'projector.pdf'));
