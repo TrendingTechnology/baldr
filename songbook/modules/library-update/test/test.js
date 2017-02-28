@@ -277,6 +277,13 @@ describe('Exported functions', function() {
     slu.clean();
   });
 
+  it('"setTestMode()"', function() {
+    slu.setTestMode();
+    const config = slu.__get__('config');
+    assert.equal(config.test, true);
+    assert.equal(config.path, path.resolve('./songs'));
+  });
+
   it('"clean()"', function() {
     slu.clean();
     assert.ok(!fs.existsSync(p('songs', 'songs.tex')));
@@ -287,9 +294,33 @@ describe('Exported functions', function() {
 describe('Command line', function() {
   const spawn = require('child_process').spawnSync;
 
+  it('no arguments: normal update', function() {
+    this.timeout(0);
+    this.slow(50000);
+    const cli = spawn('./command.js', ['--test']);
+    console.log(cli.stdout.toString());
+    console.log(cli.stderr.toString());
+  });
+
+  it('no arguments (second run): only json and TeX generation', function() {
+    this.timeout(0);
+    this.slow(1000);
+    const cli = spawn('./command.js', ['--test']);
+    console.log(cli.stdout.toString());
+    console.log(cli.stderr.toString());
+
+  });
+
+  it('--force', function() {
+    this.timeout(0);
+    this.slow(50000);
+    const cli = spawn('./command.js', ['--test', '--force']);
+    console.log(cli.stdout.toString());
+  });
+
   it('--help', function() {
     this.slow(1000);
-    const cli = spawn('./command.js', ['--help']);
+    const cli = spawn('./command.js', ['--test', '--help']);
     var out = cli.stdout.toString();
     assert.ok(out.indexOf('Usage') > -1);
     assert.ok(out.indexOf('--help') > -1);
@@ -299,7 +330,7 @@ describe('Command line', function() {
 
   it('--version', function() {
     this.slow(1000);
-    const cli = spawn('./command.js', ['--version']);
+    const cli = spawn('./command.js', ['--test', '--version']);
     assert.equal(cli.stdout.toString(), '0.0.5\n');
     assert.equal(cli.status, 0);
   });
