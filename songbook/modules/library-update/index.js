@@ -15,9 +15,9 @@ const warning = 'Warning! '.yellow;
 const error = 'Error! '.red;
 
 const configDefault = {
-  json: "songs.json",
-  info: "info.json",
-  slidesFolder: "slides",
+  json: 'songs.json',
+  info: 'info.json',
+  slidesFolder: 'slides',
   configFileName: '.html5-school-presentation.json',
   test: false,
   force: false,
@@ -259,7 +259,7 @@ var generatePDF = function(folder, source, destination = '') {
 };
 
 /**
- * Generate svg files in a "slides" subfolder.
+ * Generate svg files in a 'slides' subfolder.
  * @param {string} folder - A song folder.
  */
 var generateSlides = function(folder) {
