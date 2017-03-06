@@ -19,11 +19,8 @@
   },
   "license": "MIT",
   "homepage": "https://git.friedrich.rocks/jf/html5-school-presentation",
-  "dependencies": {
-    "webrtc-adapter": "^1.3.0"
-  },
   "devDependencies": {
-    "electron-prebuilt": "^1.2.0",
-    "electron-packager": "^7.0.2"
+    "electron": "*",
+    "electron-packager": "*"
   }
 }
