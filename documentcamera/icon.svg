@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="200mm"
+   height="200mm"
+   viewBox="0 0 708.66142 708.66141"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="icon.svg">
+  <defs
+     id="defs4" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.9899495"
+     inkscape:cx="186.50122"
+     inkscape:cy="282.6054"
+     inkscape:document-units="px"
+     inkscape:current-layer="text4136"
+     showgrid="false"
+     inkscape:window-width="1920"
+     inkscape:window-height="1016"
+     inkscape:window-x="0"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Ebene 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-343.70079)">
+    <circle
+       style="fill:#ff5555;fill-opacity:1;stroke-width:3;stroke-miterlimit:4;stroke-dasharray:none"
+       id="path4146"
+       cx="350.52292"
+       cy="704.36469"
+       r="306.0762" />
+    <g
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:368.53268433px;line-height:125%;font-family:Alegreya;-inkscape-font-specification:'Alegreya, Normal';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       id="text4136">
+      <path
+         d="m 349.96126,660.29128 c -32.69905,0 -59.22847,26.52942 -59.22847,59.22847 0,32.69905 26.52942,59.22847 59.22847,59.22847 32.69905,0 59.22847,-26.52942 59.22847,-59.22847 0,-32.69905 -26.52942,-59.22847 -59.22847,-59.22847 z m 144.7807,-85.55223 -46.06659,0 -10.48837,-27.969 c -5.14136,-13.57319 -21.18241,-24.67852 -35.57821,-24.67852 l -105.29506,0 c -14.39581,0 -30.43685,11.10533 -35.57821,24.67852 l -10.48837,27.969 -46.06659,0 c -28.99727,0 -52.64752,23.65026 -52.64752,52.64753 l 0,184.26634 c 0,28.99727 23.65025,52.64753 52.64752,52.64753 l 289.5614,0 c 28.99727,0 52.64752,-23.65026 52.64752,-52.64753 l 0,-184.26634 c 0,-28.99727 -23.65025,-52.64753 -52.64752,-52.64753 z m -144.7807,236.91387 c -50.79664,0 -92.13317,-41.33653 -92.13317,-92.13317 0,-50.79664 41.33653,-92.13317 92.13317,-92.13317 50.79664,0 92.13317,41.33653 92.13317,92.13317 0,50.79664 -41.33653,92.13317 -92.13317,92.13317 z"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:FontAwesome;-inkscape-font-specification:FontAwesome;fill:#ffffff"
+         id="path4141" />
+    </g>
+  </g>
+</svg>
