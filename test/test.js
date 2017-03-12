@@ -118,8 +118,6 @@ describe('Private functions', function() {
     generateSlides(folder);
     exists(slides, '01.svg');
     exists(slides, '02.svg');
-    exists(slides, '03.svg');
-    exists(slides, '04.svg');
     fs.removeSync(slides);
   });
 
@@ -261,7 +259,6 @@ describe('Exported functions', function() {
     exists(swing, config.pianoFolder, 'piano.eps');
     exists(zum, config.pianoFolder, 'piano_1.eps');
     exists(zum, config.pianoFolder, 'piano_2.eps');
-    exists(zum, config.pianoFolder, 'piano_3.eps');
 
     var info = JSON.parse(fs.readFileSync(p(config.path, 'songs.json'), 'utf8'));
     assert.equal(info[Object.keys(info)[0]].title, 'Auf der Mauer, auf der Lauer');

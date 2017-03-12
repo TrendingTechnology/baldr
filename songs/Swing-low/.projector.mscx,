@@ -9,8 +9,10 @@
       </Synthesizer>
     <Division>480</Division>
     <Style>
+      <evenFooterL></evenFooterL>
       <evenFooterC></evenFooterC>
       <oddFooterC></oddFooterC>
+      <oddFooterR></oddFooterR>
       <TextStyle>
         <halign>left</halign>
         <valign>baseline</valign>
@@ -63,7 +65,7 @@
         <halign>center</halign>
         <valign>baseline</valign>
         <xoffset>0</xoffset>
-        <yoffset>6</yoffset>
+        <yoffset>7</yoffset>
         <offsetType>spatium</offsetType>
         <name>Lyrics Odd Lines</name>
         <family>Alegreya</family>
@@ -436,22 +438,16 @@
         <frameColor r="0" g="0" b="0" a="255"/>
         </TextStyle>
       <page-layout>
-        <page-height>1683.36</page-height>
-        <page-width>1190.88</page-width>
-        <page-margins type="even">
+        <page-height>850.394</page-height>
+        <page-width>1133.86</page-width>
+        <page-margins type="both">
           <left-margin>56.6929</left-margin>
           <right-margin>56.6929</right-margin>
           <top-margin>56.6929</top-margin>
-          <bottom-margin>113.386</bottom-margin>
-          </page-margins>
-        <page-margins type="odd">
-          <left-margin>56.6929</left-margin>
-          <right-margin>56.6929</right-margin>
-          <top-margin>56.6929</top-margin>
-          <bottom-margin>113.386</bottom-margin>
+          <bottom-margin>56.6929</bottom-margin>
           </page-margins>
         </page-layout>
-      <Spatium>1.76389</Spatium>
+      <Spatium>2</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -475,6 +471,10 @@
       <Page>
         <System>
           </System>
+        <System>
+          </System>
+        </Page>
+      <Page>
         <System>
           </System>
         </Page>
@@ -505,6 +505,9 @@
           </Text>
         </VBox>
       <Measure number="1">
+        <LayoutBreak>
+          <subtype>page</subtype>
+          </LayoutBreak>
         <TimeSig>
           <subtype>2</subtype>
           <sigN>2</sigN>
@@ -517,6 +520,7 @@
           <Lyrics>
             <text>Swing</text>
             </Lyrics>
+          <StemDirection>up</StemDirection>
           <Note>
             <pitch>69</pitch>
             <tpc>17</tpc>
@@ -526,11 +530,49 @@
           <BeamMode>no</BeamMode>
           <durationType>half</durationType>
           <Lyrics>
+            <ticks>960</ticks>
             <text>low</text>
             </Lyrics>
+          <StemDirection>up</StemDirection>
           <Note>
+            <Tie id="2">
+              </Tie>
             <pitch>65</pitch>
             <tpc>13</tpc>
+            </Note>
+          </Chord>
+        </Measure>
+      <Measure number="2">
+        <LayoutBreak>
+          <subtype>page</subtype>
+          </LayoutBreak>
+        <Harmony>
+          <root>13</root>
+          <rootCase>1</rootCase>
+          <name>7</name>
+          <base>17</base>
+          <baseCase>1</baseCase>
+          </Harmony>
+        <Chord>
+          <BeamMode>no</BeamMode>
+          <durationType>half</durationType>
+          <StemDirection>up</StemDirection>
+          <Note>
+            <endSpanner id="2"/>
+            <pitch>65</pitch>
+            <tpc>13</tpc>
+            </Note>
+          </Chord>
+        <Chord>
+          <BeamMode>no</BeamMode>
+          <durationType>half</durationType>
+          <Lyrics>
+            <text>sweet</text>
+            </Lyrics>
+          <StemDirection>up</StemDirection>
+          <Note>
+            <pitch>69</pitch>
+            <tpc>17</tpc>
             </Note>
           </Chord>
         <BarLine>

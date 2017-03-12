@@ -503,6 +503,10 @@
           <style>Title</style>
           <text>Swing low</text>
           </Text>
+        <Text>
+          <style>Composer</style>
+          <text>Spiritual</text>
+          </Text>
         </VBox>
       <Measure number="1">
         <TimeSig>
@@ -511,6 +515,10 @@
           <sigD>2</sigD>
           <showCourtesySig>1</showCourtesySig>
           </TimeSig>
+        <Harmony>
+          <root>13</root>
+          <rootCase>1</rootCase>
+          </Harmony>
         <Chord>
           <BeamMode>no</BeamMode>
           <durationType>half</durationType>
