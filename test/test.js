@@ -23,6 +23,7 @@ var assertGenerateTeX = function() {
   const tex = p(config.path, config.tex);
   exists(tex);
   var texContents = fs.readFileSync(tex, 'utf8');
+
   assert.ok(texContents.indexOf('\\tmpimage') > -1);
   assert.ok(texContents.indexOf('\\tmpheading') > -1);
 };
@@ -271,8 +272,9 @@ describe('Exported functions', function() {
     this.slow(40000);
     const getFolders = slu.__get__('getFolders');
     const generatePianoEPS = slu.__get__('generatePianoEPS');
-    getFolders().forEach((folder) => {generatePianoEPS(folder);});
-
+    getFolders().forEach((folder) => {
+      generatePianoEPS(folder);
+    });
     slu.generateTeX();
     assertGenerateTeX();
     slu.clean();
@@ -321,7 +323,7 @@ describe('Command line', function() {
   });
 
   // After --force
-  it.skip('--tex', function() {
+  it('--tex', function() {
     this.timeout(0);
     this.slow(50000);
     const cli = spawn('./command.js', ['--test', '--tex']);
