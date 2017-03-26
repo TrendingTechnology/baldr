@@ -36,6 +36,10 @@ commander
   .option('-T, --test', 'switch to test mode')
   .parse(process.argv);
 
+if (commander.folder) {
+  commander.force = true;
+}
+
 var config = {
   folder: commander.folder,
   force: commander.force
