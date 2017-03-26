@@ -212,7 +212,9 @@ var fileChanged = function(file) {
  * @return {array} Array of absolute folder paths.
  */
 var getFolders = function(mode) {
-  var output = [];
+  if (config.folder) {
+    return [config.folder];
+  }
   var folders = fs.readdirSync(config.path);
   function noSpecial(file) {
     return file.substr(0, 1) == '_' || file.substr(0, 1) == '.' ? false : true;
