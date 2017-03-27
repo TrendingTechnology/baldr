@@ -330,13 +330,10 @@ describe('Command line', function() {
     assertGenerateTeX();
   });
 
-  it.only('--folder', function() {
+  it.skip('--folder', function() {
     const config = slu.__get__('config');
     const cli = spawn('./command.js', ['--test', '--folder', 'Swing-low']);
-    var out = cli.stdout.toString();
-    console.log(out);
     exists('Swing-low', config.pianoFolder, 'piano.eps');
-    //assert.equal(cli.status, 0);
   });
 
   it('--help', function() {
