@@ -7,14 +7,6 @@ const fs = require('fs');
 var commander = require('commander');
 
 // TODO: Clean up
-/*
-if (fs.existsSync('./index.js')) {
-  var slu = require('./index.js');
-} else {
-  var slu = require('songbook-library-update');
-}*/
-
-// TODO: Clean up
 try {
   var slu = require('songbook-library-update');
 } catch (e) {
