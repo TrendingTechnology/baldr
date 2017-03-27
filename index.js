@@ -167,12 +167,19 @@ var getFolderFiles = function(folder, filter) {
  * Generate TeX file for the piano version of the songbook
  */
 var generateTeX = function() {
+  var previousInitial;
+  var initial;
   var TeXFile = p(config.path, config.tex);
   fs.removeSync(TeXFile);
   getFolders().forEach((folder) => {
     var info = getSongInfo(folder);
     var eps = getFolderFiles(p(folder, config.pianoFolder), '.eps');
     if (info.hasOwnProperty('title') && eps.length > 0) {
+      previousInitial = initial;
+      initial = info.title.substr(0, 1).toUpperCase();
+      if (previousInitial != initial) {
+        fs.appendFileSync(TeXFile, '\n\n\\chapter{' + initial + '}\n');
+      }
       fs.appendFileSync(TeXFile, '\n\n\\tmpheading{' + info.title + '}\n');
       eps.forEach(
         (file) => {
