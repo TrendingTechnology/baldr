@@ -216,16 +216,19 @@ var getFolders = function(mode) {
     return [config.folder];
   }
   var folders = fs.readdirSync(config.path);
-  function noSpecial(file) {
-    return file.substr(0, 1) == '_' || file.substr(0, 1) == '.' ? false : true;
-  }
-  function makeAbs(folder) {
-    return p(config.path, folder);
-  }
-  function isDir(file) {
-    return fs.statSync(file).isDirectory() ? true : false;
-  }
-  return folders.filter(noSpecial).map(makeAbs).filter(isDir);
+  return folders.filter(
+      (file) => {
+        return file.substr(0, 1) == '_' || file.substr(0, 1) == '.' ? false : true;
+      }
+    ).map(
+      (folder) => {
+        return p(config.path, folder);
+      }
+    ).filter(
+      (file) => {
+        return fs.statSync(file).isDirectory() ? true : false;
+      }
+    );
 };
 
 /**
