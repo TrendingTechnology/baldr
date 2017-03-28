@@ -178,7 +178,7 @@ var generateTeX = function() {
       previousInitial = initial;
       initial = info.title.substr(0, 1).toUpperCase();
       if (previousInitial != initial) {
-        fs.appendFileSync(TeXFile, '\n\n\\chapter{' + initial + '}\n');
+        fs.appendFileSync(TeXFile, '\n\n\\tmpchapter{' + initial + '}\n');
       }
       fs.appendFileSync(TeXFile, '\n\n\\tmpheading{' + info.title + '}\n');
       eps.forEach(
