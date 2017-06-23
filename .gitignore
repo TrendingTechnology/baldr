@@ -117,3 +117,5 @@ typings/
 .env
 
 *.DS_Store
+
+*.node-persist/
