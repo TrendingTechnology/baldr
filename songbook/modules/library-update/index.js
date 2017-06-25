@@ -121,11 +121,11 @@ var generateJSON = function() {
       if (Boolean(info.title)) {
         tmp[folder] = info;
       } else {
-        output += warningInfoJson();
+        output += warningInfoJson(folder);
       }
     }
     else if (fs.lstatSync(folder).isDirectory()) {
-      output += warningInfoJson();
+      output += warningInfoJson(folder);
     }
   });
 
