@@ -50,6 +50,10 @@ var bootstrapConfig = function(newConfig=false) {
   checkExecutable(getMscoreCommand());
   checkExecutable('mscore-to-eps.sh');
   checkExecutable('pdf2svg');
+  checkExecutable('pdfcrop');
+  checkExecutable('pdfinfo');
+  checkExecutable('pdftops');
+
 
   // default object
   config = configDefault;
