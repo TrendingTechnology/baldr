@@ -139,6 +139,14 @@ var generateJSON = function() {
 };
 exports.generateJSON = generateJSON;
 
+var readJSON = function () {
+  // if (!fs.existsSync(p(config.path, config.json))) {
+  //   generateJSON();
+  // }
+  return JSON.parse(fs.readFileSync(p(config.path, config.json), 'utf8'));
+};
+exports.readJSON = readJSON;
+
 /**
  * @param {string} folder - Absolute path to a song folder.
  */

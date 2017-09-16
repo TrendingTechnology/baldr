@@ -8,6 +8,7 @@ const mousetrap = require('mousetrap');
 const selectize = require('selectize');
 
 const library = require('songbook-library-update');
+library.bootstrapConfig();
 const modal = require('./modal.js');
 const search = require('./search.js');
 const song = require('./song.js');
