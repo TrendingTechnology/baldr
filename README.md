@@ -12,5 +12,10 @@ Guide](https://google.github.io/styleguide/javascriptguide.xml).
 
 ```
 npm install
-npm run-scripts build
+npm run-script build
+```
+
+
+```
+npm run-script start
 ```
