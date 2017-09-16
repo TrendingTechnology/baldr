@@ -26,7 +26,7 @@
     "songbook-library-update": "file:modules/library-update"
   },
   "devDependencies": {
-    "electron-prebuilt": "^1.2.0",
-    "electron-packager": "^7.0.2"
+    "electron": "^1.7.6",
+    "electron-packager": "^9.1.0"
   }
 }
