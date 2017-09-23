@@ -1,8 +1,6 @@
 /* jshint esversion: 6 */
 
 const assert = require('assert');
-const process = require('process');
-const cwd = process.cwd();
 const path = require('path');
 const p = path.join;
 const fs = require('fs-extra');
@@ -12,7 +10,7 @@ const rewire = require('rewire');
 var slu = rewire('../index.js');
 slu.bootstrapConfig({
   test: true,
-  path: p(cwd, 'songs'),
+  path: path.resolve('songs'),
   force: true,
 });
 
@@ -74,7 +72,7 @@ describe('Private functions', function() {
     this.timeout(0);
     this.slow(10000);
     const generatePDF = slu.__get__('generatePDF');
-    const folder = p(cwd, 'songs', 'Swing-low');
+    const folder = p('songs', 'Swing-low');
     generatePDF(folder, 'projector', 'projector');
     exists(folder, 'projector.pdf');
   });
@@ -116,7 +114,7 @@ describe('Private functions', function() {
     var generateSlides = slu.__get__('generateSlides');
     var config = slu.__get__('config');
     generatePDF('Swing-low', 'projector');
-    const folder = p(cwd, 'songs', 'Swing-low');
+    const folder = p('songs', 'Swing-low');
     const slides = p (folder, config.slidesFolder);
     generateSlides(folder);
     exists(slides, '01.svg');
@@ -130,7 +128,7 @@ describe('Private functions', function() {
       this.slow(10000);
       var generatePianoEPS = slu.__get__('generatePianoEPS');
       var config = slu.__get__('config');
-      const folder = p(cwd, 'songs', 'Swing-low');
+      const folder = p('songs', 'Swing-low');
       generatePianoEPS(folder);
       exists(folder, config.pianoFolder);
       exists(folder, config.pianoFolder, 'piano.mscx');
@@ -143,12 +141,12 @@ describe('Private functions', function() {
       this.slow(10000);
       var generatePianoEPS = slu.__get__('generatePianoEPS');
       var config = slu.__get__('config');
-      const folder = p(cwd, 'songs', 'Auf-der-Mauer_auf-der-Lauer');
+      const folder = p('songs', 'Auf-der-Mauer_auf-der-Lauer');
       generatePianoEPS(folder);
       exists(folder, config.pianoFolder);
       exists(folder, config.pianoFolder, 'piano.mscx');
       exists(folder, config.pianoFolder, 'piano.eps');
-      fs.removeSync(p(cwd, folder, config.pianoFolder));
+      fs.removeSync(p(folder, config.pianoFolder));
 
     });
 
@@ -157,7 +155,7 @@ describe('Private functions', function() {
       this.slow(16000);
       var generatePianoEPS = slu.__get__('generatePianoEPS');
       var config = slu.__get__('config');
-      const folder = p(cwd, 'songs', 'Zum-Tanze-da-geht-ein-Maedel');
+      const folder = p('songs', 'Zum-Tanze-da-geht-ein-Maedel');
       generatePianoEPS(folder);
       exists(folder, config.pianoFolder);
       exists(folder, config.pianoFolder, 'piano.mscx');
@@ -202,28 +200,28 @@ describe('Private functions', function() {
 
     it('"getFolderFiles()": eps', function() {
       const getFolderFiles = slu.__get__('getFolderFiles');
-      const files = getFolderFiles(p(cwd, 'test', 'piano-files'), '.eps');
+      const files = getFolderFiles(p('test', 'piano-files'), '.eps');
       assert.deepEqual(files, ['01.eps', '02.eps', '03.eps']);
     });
 
     it('"getFolderFiles()": svg', function() {
       const getFolderFiles = slu.__get__('getFolderFiles');
-      const files = getFolderFiles(p(cwd, 'test', 'slides-files'), '.svg');
+      const files = getFolderFiles(p('test', 'slides-files'), '.svg');
       assert.deepEqual(files, ['01.svg', '02.svg', '03.svg']);
     });
 
     it('"getFolderFiles()": non existent folder', function() {
       const getFolderFiles = slu.__get__('getFolderFiles');
-      const files = getFolderFiles(p(cwd, 'test', 'lol'), '.svg');
+      const files = getFolderFiles(p('test', 'lol'), '.svg');
       assert.deepEqual(files, []);
     });
 
     it('"getFolderFiles()": empty folder', function() {
       const getFolderFiles = slu.__get__('getFolderFiles');
-      fs.mkdirSync(p(cwd, 'test', 'empty'));
-      const files = getFolderFiles(p(cwd, 'test', 'empty'), '.svg');
+      fs.mkdirSync(p('test', 'empty'));
+      const files = getFolderFiles(p('test', 'empty'), '.svg');
       assert.deepEqual(files, []);
-      fs.rmdirSync(p(cwd, 'test', 'empty'));
+      fs.rmdirSync(p('test', 'empty'));
     });
   });
 
@@ -236,7 +234,7 @@ describe('Exported functions', function() {
 
   it('"generateJSON()"', function() {
     slu.generateJSON();
-    var json = p(cwd, 'songs', 'songs.json');
+    var json = p('songs', 'songs.json');
     exists(json);
     fs.removeSync(json);
   });
@@ -246,9 +244,9 @@ describe('Exported functions', function() {
     this.slow(50000);
     slu.update();
     var config = slu.__get__('config');
-    const auf = p(cwd, 'songs', 'Auf-der-Mauer_auf-der-Lauer');
-    const swing = p(cwd, 'songs', 'Swing-low');
-    const zum = p(cwd, 'songs', 'Zum-Tanze-da-geht-ein-Maedel');
+    const auf = p('songs', 'Auf-der-Mauer_auf-der-Lauer');
+    const swing = p('songs', 'Swing-low');
+    const zum = p('songs', 'Zum-Tanze-da-geht-ein-Maedel');
     const folders = [auf, swing, zum];
 
     for (i = 0; i < folders.length; ++i) {
@@ -291,7 +289,7 @@ describe('Exported functions', function() {
 
   it('"clean()"', function() {
     slu.clean();
-    assert.ok(!fs.existsSync(p(cwd, 'songs', 'songs.tex')));
+    assert.ok(!fs.existsSync(p('songs', 'songs.tex')));
   });
 
 });
@@ -302,45 +300,45 @@ describe('Command line', function() {
   it('no arguments: normal update', function() {
     this.timeout(0);
     this.slow(50000);
-    const cli = spawn(p(cwd, 'command.js'), ['--test']);
+    const cli = spawn('./command.js', ['--test']);
   });
 
   it('no arguments (second run): only json and TeX generation', function() {
     this.timeout(0);
     this.slow(1000);
-    const cli = spawn(p(cwd, 'command.js'), ['--test']);
+    const cli = spawn('./command.js', ['--test']);
   });
 
   it('--force', function() {
     this.timeout(0);
     this.slow(50000);
-    const cli = spawn(p(cwd, 'command.js'), ['--test', '--force']);
+    const cli = spawn('./command.js', ['--test', '--force']);
   });
 
   // After --force
   it('--json', function() {
     this.timeout(0);
     this.slow(50000);
-    const cli = spawn(p(cwd, 'command.js'), ['--test', '--json']);
+    const cli = spawn('./command.js', ['--test', '--json']);
   });
 
   // After --force
   it('--tex', function() {
     this.timeout(0);
     this.slow(50000);
-    const cli = spawn(p(cwd, 'command.js'), ['--test', '--tex']);
+    const cli = spawn('./command.js', ['--test', '--tex']);
     assertGenerateTeX();
   });
 
-  it('--folder', function() {
+  it.skip('--folder', function() {
     const config = slu.__get__('config');
-    const cli = spawn(p(cwd, 'command.js'), ['--test', '--folder', 'Swing-low']);
-    exists(cwd, 'songs', 'Swing-low', config.pianoFolder, 'piano.eps');
+    const cli = spawn('./command.js', ['--test', '--folder', 'Swing-low']);
+    exists('Swing-low', config.pianoFolder, 'piano.eps');
   });
 
   it('--help', function() {
     this.slow(1000);
-    const cli = spawn(p(cwd, 'command.js'), ['--test', '--help']);
+    const cli = spawn('./command.js', ['--test', '--help']);
     var out = cli.stdout.toString();
     assert.ok(out.indexOf('Usage') > -1);
     assert.ok(out.indexOf('--help') > -1);
@@ -350,7 +348,7 @@ describe('Command line', function() {
 
   it('--version', function() {
     this.slow(1000);
-    const cli = spawn(p(cwd, 'command.js'), ['--test', '--version']);
+    const cli = spawn('./command.js', ['--test', '--version']);
     assert.equal(cli.stdout.toString(), '0.0.5\n');
     assert.equal(cli.status, 0);
   });
@@ -358,6 +356,6 @@ describe('Command line', function() {
   // Test should be executed at the very last position.
   it('--clean', function() {
     this.slow(50000);
-    const cli = spawn(p(cwd, 'command.js'), ['--test', '--clean']);
+    const cli = spawn('./command.js', ['--test', '--clean']);
   });
 });
