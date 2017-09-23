@@ -3,6 +3,7 @@
 'use strict';
 
 const os = require('os');
+const process = require('process');
 const path = require('path');
 const p = path.join;
 const colors = require('colors');
@@ -25,6 +26,14 @@ const configDefault = {
   pianoFolder: 'piano',
   pianoMScore: 'piano.mscx',
   leadMScore: 'lead.mscx'
+};
+
+var chDir = function(dir) {
+  try {
+    process.chdir(dir);
+  } catch (err) {
+    console.error(`chdir: ${err}`);
+  }
 };
 
 var config = {};
@@ -54,7 +63,6 @@ var bootstrapConfig = function(newConfig=false) {
   checkExecutable('pdfinfo');
   checkExecutable('pdftops');
 
-
   // default object
   config = configDefault;
 
@@ -73,6 +81,7 @@ var bootstrapConfig = function(newConfig=false) {
   if (!config.test && !configFileExits) {
     messageConfigFile();
   }
+  chDir(config.path);
 };
 exports.bootstrapConfig = bootstrapConfig;
 
@@ -225,7 +234,7 @@ var fileChanged = function(file) {
     return false;
   }
 };
-
+config.path
 /**
  * Return the folder that might contain MuseScore files.
  * @return {array} Array of absolute folder paths.
