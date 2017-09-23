@@ -11,10 +11,11 @@
   "license": "ISC",
   "preferGlobal": true,
   "dependencies": {
-    "commander": "*",
     "colors": "*",
+    "commander": "*",
+    "fs-extra": "*",
     "node-persist": "*",
-    "fs-extra": "*"
+    "sqlite3": "^3.1.12"
   },
   "devDependencies": {
     "mocha": "*",
