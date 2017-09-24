@@ -92,13 +92,53 @@ describe('Private functions', function() {
     });
 
     it('"fileChanged()": run twice', function() {
-      this.slow(4000);
       var fileChanged = slu.__get__('fileChanged');
-      sleep.msleep(1000);
       fs.appendFileSync('tmp.txt', 'test');
       assert.ok(fileChanged('tmp.txt'));
       assert.ok(!fileChanged('tmp.txt'));
       fs.unlinkSync('tmp.txt');
+    });
+
+    it('"fileChanged()": run three times', function() {
+      var fileChanged = slu.__get__('fileChanged');
+      fs.appendFileSync('tmp.txt', 'test');
+      assert.ok(fileChanged('tmp.txt'));
+      assert.ok(!fileChanged('tmp.txt'));
+      assert.ok(!fileChanged('tmp.txt'));
+      fs.unlinkSync('tmp.txt');
+    });
+
+    it('"fileChanged()": change file', function() {
+      var fileChanged = slu.__get__('fileChanged');
+      fs.appendFileSync('tmp.txt', 'test');
+      assert.ok(fileChanged('tmp.txt'));
+      assert.ok(!fileChanged('tmp.txt'));
+      fs.appendFileSync('tmp.txt', 'test');
+      assert.ok(fileChanged('tmp.txt'));
+      fs.unlinkSync('tmp.txt');
+    });
+
+    it('"fileChanged()": nonexisting file', function() {
+      var fileChanged = slu.__get__('fileChanged');
+      assert.ok(!fileChanged('tmxxxxxxxxxxxxxxxxxxxxxxp.txt'));
+    });
+
+    it('"fileChanged()": in folder', function() {
+      var fileChanged = slu.__get__('fileChanged');
+      var tmp = p('songs', 'tmp.txt')
+      fs.appendFileSync(tmp, 'test');
+      assert.ok(fileChanged(tmp));
+      assert.ok(!fileChanged(tmp));
+      fs.unlinkSync(tmp);
+    });
+
+    it('"fileChanged()": absolute path', function() {
+      var fileChanged = slu.__get__('fileChanged');
+      var tmp = path.resolve('tmp.txt')
+      fs.appendFileSync(tmp, 'test');
+      assert.ok(fileChanged(tmp));
+      assert.ok(!fileChanged(tmp));
+      fs.unlinkSync(tmp);
     });
   });
 
