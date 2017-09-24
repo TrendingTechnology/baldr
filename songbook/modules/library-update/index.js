@@ -231,21 +231,6 @@ var fileChanged = function(file) {
   }
 };
 
-var dbGetMtime = function(filename) {
-config.db.serialize(function() {
-  config.db.get('SELECT * FROM stats WHERE filename = $filename', {$filename: filename}, (err, row) => {
-    if (err) {
-      throw err;
-    }
-    if (row) {
-      db.run("UPDATE stats SET timestamp = $timestamp WHERE filename = $filename", {$filename: filename, $timestamp: timestamp});
-    }
-    else {
-      return false
-    }
-  });
-}
-
 /**
  * Check for file modifications
  * @param {string} filename - Path to the file.
@@ -257,28 +242,16 @@ var fileChangedSQlite = function(filename) {
   }
   var fileMtime = fs.statSync(filename).mtime.getTime();
 
+  var row = config.db.prepare('SELECT * FROM stats WHERE filename = $filename').run({filename: filename});
 
-
-
-  db.get('SELECT * FROM stats WHERE filename = $filename', {$filename: filename}, (err, row) => {
-    if (err) {
-      throw err;
-    }
-    if (row) {
-      console.log(row.filename + ': ' + row.timestamp);
-    }
-  });
-});
-
-
-
-
-  var storedMtime = storage.getItemSync(file);
-  if (typeof storedMtime == 'undefined') {
-    storedMtime = 0;
+  if (row) {
+    var storedMtime = row.timestamp;
+  } else  {
+      config.db.prepare('INSERT INTO stats values ($filename, $timestamp)').run({filename: filename, timestamp: fileMtime});
+    var storedMtime = 0;
   }
   if (fileMtime > storedMtime) {
-    storage.setItemSync(file, fileMtime);
+    config.db.prepare("UPDATE stats SET timestamp = $timestamp WHERE filename = $filename").run({filename: filename, timestamp: fileMtime});
     return true;
   }
   else {
@@ -406,15 +379,15 @@ var message = function(text) {
  */
 var processFolder = function(folder) {
   // projector
-  if (config.force || fileChanged(p(folder, 'projector.mscx'))) {
+  if (config.force || fileChangedSQlite(p(folder, 'projector.mscx'))) {
     generatePDF(folder, 'projector');
     generateSlides(folder);
   }
 
   // piano
   if (config.force ||
-    fileChanged(p(folder, config.pianoMScore)) ||
-    fileChanged(p(folder, config.leadMScore))
+    fileChangedSQlite(p(folder, config.pianoMScore)) ||
+    fileChangedSQlite(p(folder, config.leadMScore))
   ) {
     generatePianoEPS(folder);
   }
