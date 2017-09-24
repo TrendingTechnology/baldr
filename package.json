@@ -14,9 +14,7 @@
     "better-sqlite3": "*",
     "colors": "*",
     "commander": "*",
-    "fs-extra": "*",
-    "node-persist": "*",
-    "sqlite3": "*"
+    "fs-extra": "*"
   },
   "devDependencies": {
     "mocha": "*",

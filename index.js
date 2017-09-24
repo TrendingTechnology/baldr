@@ -8,9 +8,7 @@ const p = path.join;
 const colors = require('colors');
 const fs = require('fs-extra');
 const spawn = require('child_process').spawnSync;
-const storage = require('node-persist');
 const sqlite3 = require('better-sqlite3');
-storage.initSync();
 
 const warning = 'Warning! '.yellow;
 const error = 'Error! '.red;
@@ -210,39 +208,16 @@ exports.generateTeX = generateTeX;
 
 /**
  * Check for file modifications
- * @param {string} file - Path to the file.
- * @returns {boolean}
- */
-var fileChanged = function(file) {
-  if (!fs.existsSync(file)) {
-    return false;
-  }
-  var fileMtime = fs.statSync(file).mtime.getTime();
-  var storedMtime = storage.getItemSync(file);
-  if (typeof storedMtime == 'undefined') {
-    storedMtime = 0;
-  }
-  if (fileMtime > storedMtime) {
-    storage.setItemSync(file, fileMtime);
-    return true;
-  }
-  else {
-    return false;
-  }
-};
-
-/**
- * Check for file modifications
  * @param {string} filename - Path to the file.
  * @returns {boolean}
  */
-var fileChangedSQlite = function(filename) {
+var fileChanged = function(filename) {
   if (!fs.existsSync(filename)) {
     return false;
   }
   var fileMtime = fs.statSync(filename).mtime.getTime();
 
-  var row = config.db.prepare('SELECT * FROM stats WHERE filename = $filename').run({filename: filename});
+  var row = config.db.prepare('SELECT * FROM stats WHERE filename = $filename').get({filename: filename});
 
   if (row) {
     var storedMtime = row.timestamp;
@@ -379,15 +354,15 @@ var message = function(text) {
  */
 var processFolder = function(folder) {
   // projector
-  if (config.force || fileChangedSQlite(p(folder, 'projector.mscx'))) {
+  if (config.force || fileChanged(p(folder, 'projector.mscx'))) {
     generatePDF(folder, 'projector');
     generateSlides(folder);
   }
 
   // piano
   if (config.force ||
-    fileChangedSQlite(p(folder, config.pianoMScore)) ||
-    fileChangedSQlite(p(folder, config.leadMScore))
+    fileChanged(p(folder, config.pianoMScore)) ||
+    fileChanged(p(folder, config.leadMScore))
   ) {
     generatePianoEPS(folder);
   }
