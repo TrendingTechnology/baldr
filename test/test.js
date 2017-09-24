@@ -46,10 +46,11 @@ describe('Configuration', function() {
   it('"bootstrapConfig()"', function() {
     this.slow(1000);
     var s = rewire('../index.js');
-    s.bootstrapConfig({path: 'lol', test: true});
+    s.bootstrapConfig({path: path.resolve('songs'), test: true});
     const c = s.__get__('config');
-    assert.equal(c.path, 'lol');
+    assert.equal(c.path, path.resolve('songs'));
     assert.equal(c.json, 'songs.json');
+    exists(path.resolve('songs', 'filestats.db'))
   });
 });
 
