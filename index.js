@@ -54,7 +54,6 @@ var bootstrapConfig = function(newConfig=false) {
   checkExecutable('pdfinfo');
   checkExecutable('pdftops');
 
-
   // default object
   config = configDefault;
 
