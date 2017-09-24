@@ -2,6 +2,7 @@
 
 'use strict';
 
+const crypto = require('crypto');
 const os = require('os');
 const path = require('path');
 const p = path.join;
@@ -73,8 +74,8 @@ var bootstrapConfig = function(newConfig=false) {
     messageConfigFile();
   }
 
-  config.db = new sqlite3(p(config.path, 'filestats.db'));
-  config.db.prepare("CREATE TABLE IF NOT EXISTS stats (filename TEXT, timestamp INTEGER)").run();
+  config.db = new sqlite3(p(config.path, 'filehashes.db'));
+  config.db.prepare("CREATE TABLE IF NOT EXISTS hashes (filename TEXT, hash TEXT)").run();
 
 };
 exports.bootstrapConfig = bootstrapConfig;
@@ -212,21 +213,28 @@ exports.generateTeX = generateTeX;
  * @returns {boolean}
  */
 var fileChanged = function(filename) {
+  filename = path.resolve(filename);
   if (!fs.existsSync(filename)) {
     return false;
   }
-  var fileMtime = fs.statSync(filename).mtime.getTime();
 
-  var row = config.db.prepare('SELECT * FROM stats WHERE filename = $filename').get({filename: filename});
+  var hash = crypto
+    .createHash('sha1')
+    .update(
+      fs.readFileSync(filename)
+    )
+    .digest('hex');
+
+  var row = config.db.prepare('SELECT * FROM hashes WHERE filename = $filename').get({filename: filename});
 
   if (row) {
-    var storedMtime = row.timestamp;
+    var hashStored = row.hash;
   } else  {
-      config.db.prepare('INSERT INTO stats values ($filename, $timestamp)').run({filename: filename, timestamp: fileMtime});
-    var storedMtime = 0;
+    config.db.prepare('INSERT INTO hashes values ($filename, $hash)').run({filename: filename, hash: hash});
+    var hashStored = '';
   }
-  if (fileMtime > storedMtime) {
-    config.db.prepare("UPDATE stats SET timestamp = $timestamp WHERE filename = $filename").run({filename: filename, timestamp: fileMtime});
+  if (hash != hashStored) {
+    config.db.prepare("UPDATE hashes SET hash = $hash WHERE filename = $filename").run({filename: filename, hash: hash});
     return true;
   }
   else {
@@ -394,4 +402,5 @@ exports.clean = function() {
   getFolders().forEach(cleanFolder);
   fs.removeSync(p(config.path, config.json));
   fs.removeSync(p(config.path, config.tex));
+  fs.removeSync(p(config.path, 'filehashes.db'))
 };
