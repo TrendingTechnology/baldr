@@ -9,7 +9,7 @@ const colors = require('colors');
 const fs = require('fs-extra');
 const spawn = require('child_process').spawnSync;
 const storage = require('node-persist');
-const sqlite3 = require('sqlite3');
+const sqlite3 = require('better-sqlite3');
 storage.initSync();
 
 const warning = 'Warning! '.yellow;
@@ -75,11 +75,9 @@ var bootstrapConfig = function(newConfig=false) {
     messageConfigFile();
   }
 
-  config.db = new sqlite3.Database(p(config.path, 'filestats.db'));
+  config.db = new sqlite3(p(config.path, 'filestats.db'));
+  config.db.prepare("CREATE TABLE IF NOT EXISTS stats (filename TEXT, timestamp INTEGER)").run();
 
-  config.db.serialize(function() {
-    config.db.run("CREATE TABLE IF NOT EXISTS stats (filename TEXT, timestamp INTEGER)");
-  });
 };
 exports.bootstrapConfig = bootstrapConfig;
 
