@@ -233,6 +233,61 @@ var fileChanged = function(file) {
   }
 };
 
+var dbGetMtime = function(filename) {
+config.db.serialize(function() {
+  config.db.get('SELECT * FROM stats WHERE filename = $filename', {$filename: filename}, (err, row) => {
+    if (err) {
+      throw err;
+    }
+    if (row) {
+      db.run("UPDATE stats SET timestamp = $timestamp WHERE filename = $filename", {$filename: filename, $timestamp: timestamp});
+    }
+    else {
+      return false
+    }
+  });
+}
+
+/**
+ * Check for file modifications
+ * @param {string} filename - Path to the file.
+ * @returns {boolean}
+ */
+var fileChangedSQlite = function(filename) {
+  if (!fs.existsSync(filename)) {
+    return false;
+  }
+  var fileMtime = fs.statSync(filename).mtime.getTime();
+
+
+
+
+  db.get('SELECT * FROM stats WHERE filename = $filename', {$filename: filename}, (err, row) => {
+    if (err) {
+      throw err;
+    }
+    if (row) {
+      console.log(row.filename + ': ' + row.timestamp);
+    }
+  });
+});
+
+
+
+
+  var storedMtime = storage.getItemSync(file);
+  if (typeof storedMtime == 'undefined') {
+    storedMtime = 0;
+  }
+  if (fileMtime > storedMtime) {
+    storage.setItemSync(file, fileMtime);
+    return true;
+  }
+  else {
+    return false;
+  }
+};
+
 /**
  * Return the folder that might contain MuseScore files.
  * @return {array} Array of absolute folder paths.
