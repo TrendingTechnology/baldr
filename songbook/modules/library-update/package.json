@@ -5,7 +5,9 @@
   "repository": "git+ssh://git@git.friedrich.rocks:60022/jf/html5-school-presentation.git",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "postinstall": "electron-rebuild",
+    "electron-rebuild": "electron-rebuild"
   },
   "author": "Josef Friedrich",
   "license": "ISC",
@@ -19,7 +21,8 @@
   "devDependencies": {
     "mocha": "*",
     "rewire": "*",
-    "sleep": "*"
+    "sleep": "*",
+    "electron-rebuild": "*"
   },
   "bin": {
     "songbook-library-update": "command.js"

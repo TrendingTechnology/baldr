@@ -28,6 +28,8 @@ var assertGenerateTeX = function() {
   assert.ok(texContents.indexOf('\\tmpheading') > -1);
 };
 
+before(console.log('befoooooooore!'));
+
 /**
  *
  */
