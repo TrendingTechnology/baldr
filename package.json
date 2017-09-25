@@ -10,6 +10,8 @@
   },
   "scripts": {
     "start": "electron .",
+    "postinstall": "electron-rebuild",
+    "electron-rebuild": "electron-rebuild",
     "build": "electron-packager . --out=dist --app-version=$npm_package_version --prune --asar --overwrite --platform=darwin --arch=x64 --icon=./icon.icns"
   },
   "author": {
@@ -23,10 +25,12 @@
     "mousetrap": "*",
     "jquery": "*",
     "selectize": "*",
+    "better-sqlite3": "*",
     "songbook-library-update": "file:modules/library-update"
   },
   "devDependencies": {
-    "electron": "^1.7.6",
-    "electron-packager": "^9.1.0"
+    "electron": "*",
+    "electron-packager": "*",
+    "electron-rebuild": "*"
   }
 }
