@@ -40,3 +40,4 @@ jspm_packages
 *songs.json
 
 package-lock.json
+*.mscx,
