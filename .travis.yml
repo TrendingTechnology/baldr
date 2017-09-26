@@ -5,8 +5,7 @@ node_js:
   - "8"
 
 install:
-
-    - cd songbook/modules/library-update ; npm install
+  - cd songbook/modules/library-update ; npm install
 
 script:
-    - cd songbook/modules/library-update ; npm test
+  - cd songbook/modules/library-update ; npm test
