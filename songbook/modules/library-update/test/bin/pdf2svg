@@ -1,0 +1,15 @@
+#! /bin/sh
+
+# echo "1: $1 2: $2 3: $3" >> $HOME/debug_pdf2svg.sh
+
+# 1: /home/jf/git-repositories/jf/html5-school-presentation/songbook/modules/library-update/songs/Swing-low/projector.pdf
+# 2: /home/jf/git-repositories/jf/html5-school-presentation/songbook/modules/library-update/songs/Swing-low/slides/%02d.svg
+# 3: all
+
+
+if [ "$3" = all ]; then
+  echo "Test file" > "$2"
+  exit 0
+else
+  exit 1
+fi
