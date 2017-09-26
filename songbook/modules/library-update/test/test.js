@@ -74,7 +74,7 @@ describe('Private functions', function() {
     }
   });
 
-  it.only('"generatePDF()"', function() {
+  it('"generatePDF()"', function() {
     this.timeout(0);
     this.slow(10000);
     const generatePDF = slu.__get__('generatePDF');
