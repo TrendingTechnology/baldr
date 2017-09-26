@@ -19,8 +19,8 @@ _svg() {
 }
 
 if [ "$3" = all ]; then
-  _svg "$1" 1
-  _svg "$1" 2
+  _svg "$2" 1
+  _svg "$2" 2
   exit 0
 else
   exit 1

@@ -119,7 +119,7 @@ describe('Private functions', function() {
       generatePianoEPS(folder);
       exists(folder, config.pianoFolder);
       exists(folder, config.pianoFolder, 'piano.mscx');
-      exists(folder, config.pianoFolder, 'piano.eps');
+      exists(folder, config.pianoFolder, 'piano_1.eps');
       fs.removeSync(p(folder, config.pianoFolder));
     });
 
@@ -132,23 +132,12 @@ describe('Private functions', function() {
       generatePianoEPS(folder);
       exists(folder, config.pianoFolder);
       exists(folder, config.pianoFolder, 'piano.mscx');
-      exists(folder, config.pianoFolder, 'piano.eps');
-      fs.removeSync(p(folder, config.pianoFolder));
-
-    });
-
-    it('"generatePianoEPS()": multipage', function() {
-      this.timeout(0);
-      this.slow(16000);
-      var generatePianoEPS = slu.__get__('generatePianoEPS');
-      var config = slu.__get__('config');
-      const folder = p('songs', 'Zum-Tanze-da-geht-ein-Maedel');
-      generatePianoEPS(folder);
-      exists(folder, config.pianoFolder);
-      exists(folder, config.pianoFolder, 'piano.mscx');
       exists(folder, config.pianoFolder, 'piano_1.eps');
       fs.removeSync(p(folder, config.pianoFolder));
+
     });
+
+
   });
 
   it('"message()"', function() {
@@ -243,8 +232,8 @@ describe('Exported functions', function() {
       exists(folders[i], config.pianoFolder, 'piano.mscx');
     }
 
-    exists(auf, config.pianoFolder, 'piano.eps');
-    exists(swing, config.pianoFolder, 'piano.eps');
+    exists(auf, config.pianoFolder, 'piano_1.eps');
+    exists(swing, config.pianoFolder, 'piano_1.eps');
     exists(zum, config.pianoFolder, 'piano_1.eps');
     exists(zum, config.pianoFolder, 'piano_2.eps');
 
