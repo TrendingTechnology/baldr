@@ -18,17 +18,14 @@
 # Zum-Tanze-da-geht-ein-Maedel: 2 pages
 
 _eps() {
-	if [ -n "$2" ]; then
-		local EPS=$(echo "$1" | sed "s#.mscx#_$2.eps#")
-	else
-		local EPS=$(echo "$1" | sed "s#.mscx#.eps#")
-	fi
+	local EPS=$(echo "$1" | sed "s#.mscx#_$2.eps#")
 	echo "Test file" > "$EPS"
 }
 
-if [ "$3" = all ]; then
-  echo "Test file" > "$2"
-  exit 0
+if [ -n "$1" ] && [ "$1" != '--help' ]; then
+	_eps "$1" 1
+	_eps "$1" 2
+	exit 0
 else
-  exit 1
+	exit 1
 fi
