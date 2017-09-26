@@ -5,8 +5,9 @@ const path = require('path');
 const p = path.join;
 const fs = require('fs-extra');
 const sleep = require('sleep');
-
+const process = require('process');
 const rewire = require('rewire');
+
 var slu = rewire('../index.js');
 slu.bootstrapConfig({
   test: true,
@@ -28,7 +29,9 @@ var assertGenerateTeX = function() {
   assert.ok(texContents.indexOf('\\tmpheading') > -1);
 };
 
-before(console.log('befoooooooore!'));
+before(function() {
+  process.env.PATH = __dirname + '/bin:' + process.env.PATH;
+});
 
 /**
  *
@@ -71,7 +74,7 @@ describe('Private functions', function() {
     }
   });
 
-  it('"generatePDF()"', function() {
+  it.only('"generatePDF()"', function() {
     this.timeout(0);
     this.slow(10000);
     const generatePDF = slu.__get__('generatePDF');
