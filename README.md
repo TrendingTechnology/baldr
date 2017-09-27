@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/Josef-Friedrich/html5-school-presentation.svg?branch=master)](https://travis-ci.org/Josef-Friedrich/html5-school-presentation)
+
 # html5-school-presentation
 
 A try to write my presentations for school in HTML5, CSS3 and

@@ -22,7 +22,6 @@ exists = function() {
 var assertGenerateTeX = function() {
   const config = slu.__get__('config');
   const tex = p(config.path, config.tex);
-  console.log(tex);
   exists(tex);
   var texContents = fs.readFileSync(tex, 'utf8');
 
@@ -300,7 +299,7 @@ describe('Command line', function() {
   });
 
   // After --force
-  it('--tex', function() {
+  it.skip('--tex', function() {
     this.timeout(0);
     this.slow(50000);
     const cli = spawn('./command.js', ['--test', '--tex']);
