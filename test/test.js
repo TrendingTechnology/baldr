@@ -22,6 +22,7 @@ exists = function() {
 var assertGenerateTeX = function() {
   const config = slu.__get__('config');
   const tex = p(config.path, config.tex);
+  console.log(tex);
   exists(tex);
   var texContents = fs.readFileSync(tex, 'utf8');
 
