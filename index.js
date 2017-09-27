@@ -243,6 +243,19 @@ var fileChanged = function(filename) {
   }
 };
 
+var getAlphabeticalFolders = function() {
+  var folders = alphabet;
+  return folders.filter((file) => {
+    var folder = p(config.path, file)
+    if (fs.existsSync(folder) && fs.statSync(folder).isDirectory()) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  });
+}
+
 /**
  * Return the folder that might contain MuseScore files.
  * @return {array} Array of absolute folder paths.

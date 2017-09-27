@@ -94,6 +94,15 @@ describe('Private functions', function() {
     assert.ok(!pull());
   });
 
+  it.only('"getAlphabeticalFolders()"', function() {
+    var getAlphabeticalFolders = slu.__get__('getAlphabeticalFolders');
+    var folders = getAlphabeticalFolders();
+    assert.equal(folders.length, 3);
+    assert.equal(folders[0], 'a');
+    assert.equal(folders[1], 's');
+    assert.equal(folders[2], 'z');
+  });
+
   it('"getFolders()"', function() {
     var getFolders = slu.__get__('getFolders');
     var folders = getFolders();
