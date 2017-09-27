@@ -256,26 +256,31 @@ var getAlphabeticalFolders = function() {
   });
 }
 
+var getFolderStructure = function() {
+  var structure = {};
+  getAlphabeticalFolders.forEach(function(item) {
+    console.log(item, index);
+  });
+}
+
 /**
  * Return the folder that might contain MuseScore files.
- * @return {array} Array of absolute folder paths.
+ * @return {array} Array of folder paths.
  */
-var getFolders = function() {
+var getFolders = function(folder) {
   if (config.folder) {
     return [config.folder];
   }
-  var folders = fs.readdirSync(config.path);
+  var absPath = p(config.path, folder);
+  var folders = fs.readdirSync(absPath);
   return folders.filter(
       (file) => {
-        return file.substr(0, 1) == '_' || file.substr(0, 1) == '.' ? false : true;
-      }
-    ).map(
-      (folder) => {
-        return p(config.path, folder);
-      }
-    ).filter(
-      (file) => {
-        return fs.statSync(file).isDirectory() ? true : false;
+        if (fs.statSync(p(absPath, file)).isDirectory() && file.substr(0, 1) != '_' && file.substr(0, 1) != '.') {
+          return true;
+        }
+        else {
+          return false;
+        }
       }
     );
 };
