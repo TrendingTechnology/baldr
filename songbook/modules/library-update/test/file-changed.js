@@ -22,6 +22,10 @@ exists = function() {
   assert.ok(fs.existsSync(path.join.apply(null, arguments)));
 };
 
+before(function() {
+  process.env.PATH = __dirname + '/bin:' + process.env.PATH;
+});
+
 describe('"fileChanged()"', function() {
   it('"fileChanged()": run once', function() {
     var slu = rewireScript();
