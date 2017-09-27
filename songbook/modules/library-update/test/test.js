@@ -57,6 +57,12 @@ describe('Configuration', function() {
     assert.equal(c.json, 'songs.json');
     exists(path.resolve('songs', 'filehashes.db'))
   });
+
+  it('const alphabet', function() {
+      const alphabet = slu.__get__('alphabet');
+      assert.equal(alphabet[0], 0);
+      assert.equal(alphabet[26], 'z');
+  });
 });
 
 /**
