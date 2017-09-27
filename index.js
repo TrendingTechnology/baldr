@@ -260,7 +260,7 @@ var getAlphabeticalFolders = function() {
  * Return the folder that might contain MuseScore files.
  * @return {array} Array of absolute folder paths.
  */
-var getFolders = function(mode) {
+var getFolders = function() {
   if (config.folder) {
     return [config.folder];
   }
