@@ -29,6 +29,8 @@ const configDefault = {
 
 var config = {};
 
+const alphabet = '0abcdefghijklmnopqrstuvwxyz'.split('');
+
 /**
  * Check if executable is installed.
  * @param {string} executable - Name of the executable.
