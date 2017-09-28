@@ -103,13 +103,37 @@ describe('Private functions', function() {
     assert.equal(folders[2], 'z');
   });
 
-  it.only('"getFolderStructure()"', function() {
+  it('"getFolderStructure()"', function() {
     var getFolderStructure = slu.__get__('getFolderStructure');
     var structure = getFolderStructure();
-    //console.log(JSON.stringify(structure, null, '  '));
+    console.log(JSON.stringify(structure, null, '  '));
 
     assert.deepEqual(structure.a, { 'Auf-der-Mauer_auf-der-Lauer': {} });
     assert.deepEqual(structure.s, { 'Stille-Nacht': {}, 'Swing-low': {} });
+
+  });
+
+  it.only('"flattenFolderStructure()"', function() {
+    var flattenFolderStructure = slu.__get__('flattenFolderStructure');
+
+    var structure = {
+      "a": {
+        "Auf-der-Mauer_auf-der-Lauer": {}
+      },
+      "s": {
+        "Stille-Nacht": {},
+        "Swing-low": {}
+      },
+      "z": {
+        "Zum-Tanze-da-geht-ein-Maedel": {}
+      }
+    };
+
+    var folders = flattenFolderStructure(structure, '/tmp');
+    assert.equal(folders[0], '/tmp/a/Auf-der-Mauer_auf-der-Lauer');
+    assert.equal(folders[1], '/tmp/s/Stille-Nacht');
+    assert.equal(folders[2], '/tmp/s/Swing-low');
+    assert.equal(folders[3], '/tmp/z/Zum-Tanze-da-geht-ein-Maedel');
 
   });
 
