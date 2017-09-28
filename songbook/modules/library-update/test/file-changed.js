@@ -18,10 +18,6 @@ var rewireScript = function() {
   return script;
 }
 
-exists = function() {
-  assert.ok(fs.existsSync(path.join.apply(null, arguments)));
-};
-
 before(function() {
   process.env.PATH = __dirname + '/bin:' + process.env.PATH;
 });
