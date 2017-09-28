@@ -41,3 +41,4 @@ jspm_packages
 
 package-lock.json
 *.mscx,
+out/*
