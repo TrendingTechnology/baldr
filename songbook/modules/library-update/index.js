@@ -307,6 +307,19 @@ var getFolderStructure = function() {
 }
 
 /**
+ * @return {array} Array of absolute folder paths to search for song files.
+ */
+var flattenFolderStructure = function(structure, basePath) {
+  var flattFolders = [];
+  Object.keys(structure).forEach((alpha, index) => {
+    Object.keys(structure[alpha]).forEach((folder, index) => {
+      flattFolders.push(path.join(basePath, alpha, folder));
+    });
+  });
+  return flattFolders;
+};
+
+/**
  * Execute git pull if repository exists.
  */
 var pull = function() {
