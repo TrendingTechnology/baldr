@@ -34,21 +34,23 @@
 
 'use strict';
 
-const alphabet = '0abcdefghijklmnopqrstuvwxyz'.split('');
+const fs = require('fs');
+const path = require('path');
 
 /**
  * Return the folder that might contain MuseScore files.
  * @return {array} Array of folder paths.
  */
-var getSongFolders = function(folder) {
-  if (config.folder) {
-    return [config.folder];
-  }
-  var absPath = path.join(config.path, folder);
+var getSongFolders = function(basePath, folder) {
+  var absPath = path.join(basePath, folder);
   var folders = fs.readdirSync(absPath);
   return folders.filter(
     (file) => {
-      if (fs.statSync(path.join(absPath, file)).isDirectory() && file.substr(0, 1) != '_' && file.substr(0, 1) != '.') {
+      if (
+           fs.statSync(path.join(absPath, file)).isDirectory() &&
+           file.substr(0, 1) != '_' &&
+           file.substr(0, 1) != '.'
+         ) {
         return true;
       }
       else {
@@ -58,10 +60,10 @@ var getSongFolders = function(folder) {
   );
 };
 
-var getAlphabeticalFolders = function() {
-  var folders = alphabet;
-  return folders.filter((file) => {
-    var folder = path.join(config.path, file)
+var getABCFolders = function(basePath) {
+  var abc = '0abcdefghijklmnopqrstuvwxyz'.split('');
+  return abc.filter((file) => {
+    var folder = path.join(basePath, file)
     if (fs.existsSync(folder) && fs.statSync(folder).isDirectory()) {
       return true;
     }
@@ -87,27 +89,29 @@ var getAlphabeticalFolders = function() {
  * }
  * </code></pre>
  */
-var getFolderStructure = function() {
-  var structure = {};
-  getAlphabeticalFolders().forEach(function(item) {
+var getTree = function(basePath) {
+  var tree = {};
+  getABCFolders(basePath).forEach((abc) => {
     var folders = {};
-    getSongFolders(item).forEach((song) => {
+    getSongFolders(basePath, abc).forEach((song) => {
       folders[song] = {};
     });
-    structure[item] = folders;
+    tree[abc] = folders;
   });
-  return structure;
+  return tree;
 }
+exports.getTree = getTree;
 
 /**
  * @return {array} Array of absolute folder paths to search for song files.
  */
-var flattenFolderStructure = function(structure, basePath) {
+var flattenTree = function(tree) {
   var flattFolders = [];
-  Object.keys(structure).forEach((alpha, index) => {
-    Object.keys(structure[alpha]).forEach((folder, index) => {
-      flattFolders.push(path.join(basePath, alpha, folder));
+  Object.keys(tree).forEach((abc, index) => {
+    Object.keys(tree[abc]).forEach((folder, index) => {
+      flattFolders.push(path.join(abc, folder));
     });
   });
   return flattFolders;
 };
+exports.flattenTree = flattenTree;
