@@ -1,6 +1,6 @@
 /* jshint esversion: 6 */
 
-var assert = require('assert');
+const {assert} = require('./lib/helper.js');
 const path = require('path');
 const p = path.join;
 const fs = require('fs-extra');
@@ -14,14 +14,6 @@ slu.bootstrapConfig({
   path: path.resolve('songs'),
   force: true,
 });
-
-assert.exists = function() {
-  assert.ok(
-    fs.existsSync(
-      path.join.apply(null, arguments)
-    )
-  );
-};
 
 var assertGenerateTeX = function() {
   const config = slu.__get__('config');
