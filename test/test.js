@@ -258,7 +258,7 @@ describe('Private functions', function() {
  */
 describe('Exported functions', function() {
 
-  it.only('"generateJSON()"', function() {
+  it('"generateJSON()"', function() {
     slu.generateJSON();
     var json = path.join('songs', 'songs.json');
     assert.exists(json);

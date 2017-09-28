@@ -441,22 +441,38 @@ exports.update = function() {
   generateJSON();
 };
 
+var cleanFiles = function(folder, files) {
+  files.forEach(
+    (file) => {
+      fs.removeSync(path.join(folder, file));
+    }
+  );
+}
+
 /**
  * Clean all temporary files in a song folder.
  * @param {string} folder - A song folder.
  */
 var cleanFolder = function(folder) {
-  fs.removeSync(p(folder, config.pianoFolder));
-  fs.removeSync(p(folder, config.slidesFolder));
-  fs.removeSync(p(folder, 'projector.pdf'));
+  cleanFiles(folder, [
+    config.pianoFolder,
+    config.slidesFolder,
+    'projector.pdf'
+  ]);
 };
 
 /**
  * Clean all temporary media files.
  */
 exports.clean = function() {
-  getSongFolders().forEach(cleanFolder);
-  fs.removeSync(p(config.path, config.json));
-  fs.removeSync(p(config.path, config.tex));
-  fs.removeSync(p(config.path, 'filehashes.db'))
+  flattenFolderStructure(
+    getFolderStructure(),
+    config.path
+  ).forEach(cleanFolder);
+
+  cleanFiles(config.path, [
+    config.json,
+    config.tex,
+    'filehashes.db'
+  ]);
 };
