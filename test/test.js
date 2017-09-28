@@ -88,7 +88,7 @@ describe('Private functions', function() {
     this.timeout(0);
     this.slow(10000);
     const generatePDF = slu.__get__('generatePDF');
-    const folder = p('songs', 'Swing-low');
+    const folder = p('songs', 's', 'Swing-low');
     generatePDF(folder, 'projector', 'projector');
     assert.exists(folder, 'projector.pdf');
   });
@@ -140,20 +140,14 @@ describe('Private functions', function() {
 
   });
 
-  it('"getSongFolders()"', function() {
-    var getFolders = slu.__get__('getFolders');
-    var folders = getSongFolders();
-    assert.equal(folders.length, 3);
-  });
-
   it('"generateSlides()"', function() {
     this.timeout(0);
     this.slow(10000);
     var generatePDF = slu.__get__('generatePDF');
     var generateSlides = slu.__get__('generateSlides');
     var config = slu.__get__('config');
-    generatePDF('Swing-low', 'projector');
-    const folder = p('songs', 'Swing-low');
+    generatePDF('s', 'Swing-low', 'projector');
+    const folder = p('songs', 's', 'Swing-low');
     const slides = p (folder, config.slidesFolder);
     generateSlides(folder);
     assert.exists(slides, '01.svg');
@@ -167,7 +161,7 @@ describe('Private functions', function() {
       this.slow(10000);
       var generatePianoEPS = slu.__get__('generatePianoEPS');
       var config = slu.__get__('config');
-      const folder = p('songs', 'Swing-low');
+      const folder = p('songs', 's', 'Swing-low');
       generatePianoEPS(folder);
       assert.exists(folder, config.pianoFolder);
       assert.exists(folder, config.pianoFolder, 'piano.mscx');
@@ -180,7 +174,7 @@ describe('Private functions', function() {
       this.slow(10000);
       var generatePianoEPS = slu.__get__('generatePianoEPS');
       var config = slu.__get__('config');
-      const folder = p('songs', 'Auf-der-Mauer_auf-der-Lauer');
+      const folder = p('songs', 'a', 'Auf-der-Mauer_auf-der-Lauer');
       generatePianoEPS(folder);
       assert.exists(folder, config.pianoFolder);
       assert.exists(folder, config.pianoFolder, 'piano.mscx');
@@ -218,7 +212,7 @@ describe('Private functions', function() {
   it('"getSongInfo()"', function() {
     var getSongInfo = slu.__get__('getSongInfo');
     const config = slu.__get__('config');
-    var info = getSongInfo(p(config.path, 'Swing-low'));
+    var info = getSongInfo(path.join(config.path, 's', 'Swing-low'));
     assert.equal(info.title, 'Swing low');
   });
 
@@ -275,9 +269,9 @@ describe('Exported functions', function() {
     this.slow(50000);
     slu.update();
     var config = slu.__get__('config');
-    const auf = p('songs', 'Auf-der-Mauer_auf-der-Lauer');
-    const swing = p('songs', 'Swing-low');
-    const zum = p('songs', 'Zum-Tanze-da-geht-ein-Maedel');
+    const auf = p('songs', 'a', 'Auf-der-Mauer_auf-der-Lauer');
+    const swing = p('songs', 's', 'Swing-low');
+    const zum = p('songs', 'z', 'Zum-Tanze-da-geht-ein-Maedel');
     const folders = [auf, swing, zum];
 
     for (i = 0; i < folders.length; ++i) {
@@ -293,12 +287,15 @@ describe('Exported functions', function() {
     assert.exists(zum, config.pianoFolder, 'piano_2.eps');
 
     var info = JSON.parse(fs.readFileSync(p(config.path, 'songs.json'), 'utf8'));
-    assert.equal(info[Object.keys(info)[0]].title, 'Auf der Mauer, auf der Lauer');
+    assert.equal(
+      info.a['Auf-der-Mauer_auf-der-Lauer'].title,
+      'Auf der Mauer, auf der Lauer'
+    );
 
     slu.clean();
   });
 
-  it('"generateTeX()"', function() {
+  it.skip('"generateTeX()"', function() {
     this.timeout(0);
     this.slow(40000);
     const getFolders = slu.__get__('getFolders');
