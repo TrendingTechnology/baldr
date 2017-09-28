@@ -243,6 +243,28 @@ var fileChanged = function(filename) {
   }
 };
 
+/**
+ * Return the folder that might contain MuseScore files.
+ * @return {array} Array of folder paths.
+ */
+var getFolders = function(folder) {
+  if (config.folder) {
+    return [config.folder];
+  }
+  var absPath = p(config.path, folder);
+  var folders = fs.readdirSync(absPath);
+  return folders.filter(
+    (file) => {
+      if (fs.statSync(p(absPath, file)).isDirectory() && file.substr(0, 1) != '_' && file.substr(0, 1) != '.') {
+        return true;
+      }
+      else {
+        return false;
+      }
+    }
+  );
+};
+
 var getAlphabeticalFolders = function() {
   var folders = alphabet;
   return folders.filter((file) => {
@@ -256,34 +278,33 @@ var getAlphabeticalFolders = function() {
   });
 }
 
+/**
+ * <pre><code>
+ * {
+ *   "a": {
+ *     "Auf-der-Mauer_auf-der-Lauer": {}
+ *   },
+ *   "s": {
+ *     "Stille-Nacht": {},
+ *     "Swing-low": {}
+ *   },
+ *   "z": {
+ *     "Zum-Tanze-da-geht-ein-Maedel": {}
+ *   }
+ * }
+ * </code></pre>
+ */
 var getFolderStructure = function() {
   var structure = {};
-  getAlphabeticalFolders.forEach(function(item) {
-    console.log(item, index);
+  getAlphabeticalFolders().forEach(function(item) {
+    var folders = {};
+    getFolders(item).forEach((song) => {
+      folders[song] = {};
+    });
+    structure[item] = folders;
   });
+  return structure;
 }
-
-/**
- * Return the folder that might contain MuseScore files.
- * @return {array} Array of folder paths.
- */
-var getFolders = function(folder) {
-  if (config.folder) {
-    return [config.folder];
-  }
-  var absPath = p(config.path, folder);
-  var folders = fs.readdirSync(absPath);
-  return folders.filter(
-      (file) => {
-        if (fs.statSync(p(absPath, file)).isDirectory() && file.substr(0, 1) != '_' && file.substr(0, 1) != '.') {
-          return true;
-        }
-        else {
-          return false;
-        }
-      }
-    );
-};
 
 /**
  * Execute git pull if repository exists.

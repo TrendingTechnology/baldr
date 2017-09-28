@@ -94,7 +94,7 @@ describe('Private functions', function() {
     assert.ok(!pull());
   });
 
-  it.only('"getAlphabeticalFolders()"', function() {
+  it('"getAlphabeticalFolders()"', function() {
     var getAlphabeticalFolders = slu.__get__('getAlphabeticalFolders');
     var folders = getAlphabeticalFolders();
     assert.equal(folders.length, 3);
@@ -102,6 +102,17 @@ describe('Private functions', function() {
     assert.equal(folders[1], 's');
     assert.equal(folders[2], 'z');
   });
+
+  it.only('"getFolderStructure()"', function() {
+    var getFolderStructure = slu.__get__('getFolderStructure');
+    var structure = getFolderStructure();
+    //console.log(JSON.stringify(structure, null, '  '));
+
+    assert.deepEqual(structure.a, { 'Auf-der-Mauer_auf-der-Lauer': {} });
+    assert.deepEqual(structure.s, { 'Stille-Nacht': {}, 'Swing-low': {} });
+
+  });
+
 
   it('"getFolders()"', function() {
     var getFolders = slu.__get__('getFolders');
@@ -151,7 +162,6 @@ describe('Private functions', function() {
       fs.removeSync(p(folder, config.pianoFolder));
 
     });
-
 
   });
 
