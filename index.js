@@ -112,35 +112,38 @@ var messageConfigFile = function() {
  * @param {string} folder - A song folder.
  */
 var warningInfoJson = function(folder) {
-  return warning +
+  console.log(warning +
     folder.underline.yellow + '/' +
-    config.info.underline.red;
+    config.info.underline.red);
 };
 
+var generateSongJSON = function(folder) {
+  var jsonFile = p(folder, config.info);
+  if (fs.existsSync(jsonFile)) {
+    var info = JSON.parse(fs.readFileSync(jsonFile, 'utf8'));
+    info.folder = folder;
+    info.slides = getFolderFiles(p(folder, config.slidesFolder), '.svg');
+    if (Boolean(info.title)) {
+      return info;
+    } else {
+      warningInfoJson(folder);
+    }
+  }
+  else if (fs.lstatSync(folder).isDirectory()) {
+    warningInfoJson(folder);
+  }
+}
+
 var generateJSON = function() {
-  var tmp = {};
-  var output = '';
-  getFolders().forEach(function (folder) {
-    output += folder;
-    var jsonFile = p(folder, config.info);
-    if (fs.existsSync(jsonFile)) {
-      var info = JSON.parse(fs.readFileSync(jsonFile, 'utf8'));
-      info.folder = folder;
-      info.slides = getFolderFiles(p(folder, config.slidesFolder), '.svg');
-      if (Boolean(info.title)) {
-        tmp[folder] = info;
-      } else {
-        output += warningInfoJson(folder);
-      }
-    }
-    else if (fs.lstatSync(folder).isDirectory()) {
-      output += warningInfoJson(folder);
-    }
+  var structure = getFolderStructure();
+
+  Object.keys(structure).forEach((alpha, index) => {
+    Object.keys(structure[alpha]).forEach((folder, index) => {
+      structure[alpha][folder] = generateSongJSON(path.join(config.path, alpha, folder));
+    });
   });
 
-  fs.writeFileSync(p(config.path, config.json), JSON.stringify(tmp, null, 4));
-  output += 'Datenbank-Datei erzeugen'.green;
-  return message(output);
+  fs.writeFileSync(path.join(config.path, config.json), JSON.stringify(structure, null, 4));
 };
 exports.generateJSON = generateJSON;
 
@@ -188,7 +191,7 @@ var generateTeX = function() {
   var initial;
   var TeXFile = p(config.path, config.tex);
   fs.removeSync(TeXFile);
-  getFolders().forEach((folder) => {
+  getSongFolders().forEach((folder) => {
     var info = getSongInfo(folder);
     var eps = getFolderFiles(p(folder, config.pianoFolder), '.eps');
     if (info.hasOwnProperty('title') && eps.length > 0) {
@@ -247,15 +250,15 @@ var fileChanged = function(filename) {
  * Return the folder that might contain MuseScore files.
  * @return {array} Array of folder paths.
  */
-var getFolders = function(folder) {
+var getSongFolders = function(folder) {
   if (config.folder) {
     return [config.folder];
   }
-  var absPath = p(config.path, folder);
+  var absPath = path.join(config.path, folder);
   var folders = fs.readdirSync(absPath);
   return folders.filter(
     (file) => {
-      if (fs.statSync(p(absPath, file)).isDirectory() && file.substr(0, 1) != '_' && file.substr(0, 1) != '.') {
+      if (fs.statSync(path.join(absPath, file)).isDirectory() && file.substr(0, 1) != '_' && file.substr(0, 1) != '.') {
         return true;
       }
       else {
@@ -268,7 +271,7 @@ var getFolders = function(folder) {
 var getAlphabeticalFolders = function() {
   var folders = alphabet;
   return folders.filter((file) => {
-    var folder = p(config.path, file)
+    var folder = path.join(config.path, file)
     if (fs.existsSync(folder) && fs.statSync(folder).isDirectory()) {
       return true;
     }
@@ -298,7 +301,7 @@ var getFolderStructure = function() {
   var structure = {};
   getAlphabeticalFolders().forEach(function(item) {
     var folders = {};
-    getFolders(item).forEach((song) => {
+    getSongFolders(item).forEach((song) => {
       folders[song] = {};
     });
     structure[item] = folders;
@@ -434,7 +437,7 @@ var processFolder = function(folder) {
  */
 exports.update = function() {
   pull();
-  getFolders().forEach(processFolder);
+  flattenFolderStructure(getFolderStructure(), config.path).forEach(processFolder);
   generateJSON();
 };
 
@@ -452,7 +455,7 @@ var cleanFolder = function(folder) {
  * Clean all temporary media files.
  */
 exports.clean = function() {
-  getFolders().forEach(cleanFolder);
+  getSongFolders().forEach(cleanFolder);
   fs.removeSync(p(config.path, config.json));
   fs.removeSync(p(config.path, config.tex));
   fs.removeSync(p(config.path, 'filehashes.db'))

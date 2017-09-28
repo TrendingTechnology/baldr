@@ -1,6 +1,6 @@
 /* jshint esversion: 6 */
 
-const assert = require('assert');
+var assert = require('assert');
 const path = require('path');
 const p = path.join;
 const fs = require('fs-extra');
@@ -15,14 +15,18 @@ slu.bootstrapConfig({
   force: true,
 });
 
-exists = function() {
-  assert.ok(fs.existsSync(path.join.apply(null, arguments)));
+assert.exists = function() {
+  assert.ok(
+    fs.existsSync(
+      path.join.apply(null, arguments)
+    )
+  );
 };
 
 var assertGenerateTeX = function() {
   const config = slu.__get__('config');
   const tex = p(config.path, config.tex);
-  exists(tex);
+  assert.exists(tex);
   var texContents = fs.readFileSync(tex, 'utf8');
 
   assert.ok(texContents.indexOf('\\tmpimage') > -1);
@@ -55,7 +59,7 @@ describe('Configuration', function() {
     const c = s.__get__('config');
     assert.equal(c.path, path.resolve('songs'));
     assert.equal(c.json, 'songs.json');
-    exists(path.resolve('songs', 'filehashes.db'))
+    assert.exists(path.resolve('songs', 'filehashes.db'))
   });
 
   it('const alphabet', function() {
@@ -86,7 +90,7 @@ describe('Private functions', function() {
     const generatePDF = slu.__get__('generatePDF');
     const folder = p('songs', 'Swing-low');
     generatePDF(folder, 'projector', 'projector');
-    exists(folder, 'projector.pdf');
+    assert.exists(folder, 'projector.pdf');
   });
 
   it('"pull()"', function() {
@@ -106,14 +110,13 @@ describe('Private functions', function() {
   it('"getFolderStructure()"', function() {
     var getFolderStructure = slu.__get__('getFolderStructure');
     var structure = getFolderStructure();
-    console.log(JSON.stringify(structure, null, '  '));
 
     assert.deepEqual(structure.a, { 'Auf-der-Mauer_auf-der-Lauer': {} });
     assert.deepEqual(structure.s, { 'Stille-Nacht': {}, 'Swing-low': {} });
 
   });
 
-  it.only('"flattenFolderStructure()"', function() {
+  it('"flattenFolderStructure()"', function() {
     var flattenFolderStructure = slu.__get__('flattenFolderStructure');
 
     var structure = {
@@ -137,10 +140,9 @@ describe('Private functions', function() {
 
   });
 
-
-  it('"getFolders()"', function() {
+  it('"getSongFolders()"', function() {
     var getFolders = slu.__get__('getFolders');
-    var folders = getFolders();
+    var folders = getSongFolders();
     assert.equal(folders.length, 3);
   });
 
@@ -154,8 +156,8 @@ describe('Private functions', function() {
     const folder = p('songs', 'Swing-low');
     const slides = p (folder, config.slidesFolder);
     generateSlides(folder);
-    exists(slides, '01.svg');
-    exists(slides, '02.svg');
+    assert.exists(slides, '01.svg');
+    assert.exists(slides, '02.svg');
     fs.removeSync(slides);
   });
 
@@ -167,9 +169,9 @@ describe('Private functions', function() {
       var config = slu.__get__('config');
       const folder = p('songs', 'Swing-low');
       generatePianoEPS(folder);
-      exists(folder, config.pianoFolder);
-      exists(folder, config.pianoFolder, 'piano.mscx');
-      exists(folder, config.pianoFolder, 'piano_1.eps');
+      assert.exists(folder, config.pianoFolder);
+      assert.exists(folder, config.pianoFolder, 'piano.mscx');
+      assert.exists(folder, config.pianoFolder, 'piano_1.eps');
       fs.removeSync(p(folder, config.pianoFolder));
     });
 
@@ -180,11 +182,10 @@ describe('Private functions', function() {
       var config = slu.__get__('config');
       const folder = p('songs', 'Auf-der-Mauer_auf-der-Lauer');
       generatePianoEPS(folder);
-      exists(folder, config.pianoFolder);
-      exists(folder, config.pianoFolder, 'piano.mscx');
-      exists(folder, config.pianoFolder, 'piano_1.eps');
+      assert.exists(folder, config.pianoFolder);
+      assert.exists(folder, config.pianoFolder, 'piano.mscx');
+      assert.exists(folder, config.pianoFolder, 'piano_1.eps');
       fs.removeSync(p(folder, config.pianoFolder));
-
     });
 
   });
@@ -257,10 +258,15 @@ describe('Private functions', function() {
  */
 describe('Exported functions', function() {
 
-  it('"generateJSON()"', function() {
+  it.only('"generateJSON()"', function() {
     slu.generateJSON();
-    var json = p('songs', 'songs.json');
-    exists(json);
+    var json = path.join('songs', 'songs.json');
+    assert.exists(json);
+    var structure = JSON.parse(fs.readFileSync(json, 'utf8'));
+    assert.equal(
+      structure.a['Auf-der-Mauer_auf-der-Lauer'].title,
+      'Auf der Mauer, auf der Lauer'
+    );
     fs.removeSync(json);
   });
 
@@ -275,16 +281,16 @@ describe('Exported functions', function() {
     const folders = [auf, swing, zum];
 
     for (i = 0; i < folders.length; ++i) {
-      exists(folders[i], config.slidesFolder);
-      exists(folders[i], config.slidesFolder, '01.svg');
-      exists(folders[i], config.pianoFolder);
-      exists(folders[i], config.pianoFolder, 'piano.mscx');
+      assert.exists(folders[i], config.slidesFolder);
+      assert.exists(folders[i], config.slidesFolder, '01.svg');
+      assert.exists(folders[i], config.pianoFolder);
+      assert.exists(folders[i], config.pianoFolder, 'piano.mscx');
     }
 
-    exists(auf, config.pianoFolder, 'piano_1.eps');
-    exists(swing, config.pianoFolder, 'piano_1.eps');
-    exists(zum, config.pianoFolder, 'piano_1.eps');
-    exists(zum, config.pianoFolder, 'piano_2.eps');
+    assert.exists(auf, config.pianoFolder, 'piano_1.eps');
+    assert.exists(swing, config.pianoFolder, 'piano_1.eps');
+    assert.exists(zum, config.pianoFolder, 'piano_1.eps');
+    assert.exists(zum, config.pianoFolder, 'piano_2.eps');
 
     var info = JSON.parse(fs.readFileSync(p(config.path, 'songs.json'), 'utf8'));
     assert.equal(info[Object.keys(info)[0]].title, 'Auf der Mauer, auf der Lauer');
@@ -297,7 +303,7 @@ describe('Exported functions', function() {
     this.slow(40000);
     const getFolders = slu.__get__('getFolders');
     const generatePianoEPS = slu.__get__('generatePianoEPS');
-    getFolders().forEach((folder) => {
+    getSongFolders().forEach((folder) => {
       generatePianoEPS(folder);
     });
     slu.generateTeX();
@@ -358,7 +364,7 @@ describe('Command line', function() {
   it.skip('--folder', function() {
     const config = slu.__get__('config');
     const cli = spawn('./command.js', ['--test', '--folder', 'Swing-low']);
-    exists('Swing-low', config.pianoFolder, 'piano.eps');
+    assert.exists('Swing-low', config.pianoFolder, 'piano.eps');
   });
 
   it('--help', function() {
