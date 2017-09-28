@@ -183,6 +183,31 @@ var getFolderFiles = function(folder, filter) {
   }
 };
 
+var texCmd = function(command, value) {
+  return '\\tmp' + command + '{' + value  + '}\n';
+}
+
+var texSong = function(folder) {
+  var info = getSongInfo(folder);
+  var eps = getFolderFiles(p(folder, config.pianoFolder), '.eps');
+  var output = '';
+
+  if (info.hasOwnProperty('title') && eps.length > 0) {
+    output += texCmd('heading', info.title);
+    var basename = path.basename(folder);
+    eps.forEach(
+      (file) => {
+        output += texCmd('image', path.join(basename, config.pianoFolder, file));
+      }
+    );
+  }
+  return output;
+};
+
+var texAlpha = function(alpha) {
+  return '\n\n' + texCmd('chapter', alpha.toUpperCase());
+}
+
 /**
  * Generate TeX file for the piano version of the songbook
  */
@@ -192,21 +217,8 @@ var generateTeX = function() {
   var TeXFile = p(config.path, config.tex);
   fs.removeSync(TeXFile);
   getSongFolders().forEach((folder) => {
-    var info = getSongInfo(folder);
-    var eps = getFolderFiles(p(folder, config.pianoFolder), '.eps');
-    if (info.hasOwnProperty('title') && eps.length > 0) {
-      previousInitial = initial;
-      initial = info.title.substr(0, 1).toUpperCase();
-      if (previousInitial != initial) {
-        fs.appendFileSync(TeXFile, '\n\n\\tmpchapter{' + initial + '}\n');
-      }
-      fs.appendFileSync(TeXFile, '\n\n\\tmpheading{' + info.title + '}\n');
-      eps.forEach(
-        (file) => {
-          fs.appendFileSync(TeXFile, '\\tmpimage{' + p(folder.split(path.sep).pop(), config.pianoFolder, file) + '}\n');
-        }
-      );
-    }
+
+
   });
 };
 exports.generateTeX = generateTeX;
