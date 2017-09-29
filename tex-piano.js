@@ -6,6 +6,9 @@
 
 'use strict';
 
+const path = require('path');
+const folderTree = require('./folder-tree.js');
+
 /**
  *
  */
@@ -17,8 +20,8 @@ var texCmd = function(command, value) {
  *
  */
 var texSong = function(folder) {
-  var info = getSongInfo(folder);
-  var eps = getFolderFiles(p(folder, config.pianoFolder), '.eps');
+  const info = folderTree.getSongInfo(folder);
+  const eps = folderTree.getFolderFiles(path.join(folder, 'piano'), '.eps');
   var output = '';
 
   if (info.hasOwnProperty('title') && eps.length > 0) {
@@ -26,7 +29,7 @@ var texSong = function(folder) {
     var basename = path.basename(folder);
     eps.forEach(
       (file) => {
-        output += texCmd('image', path.join(basename, config.pianoFolder, file));
+        output += texCmd('image', path.join(basename, 'piano', file));
       }
     );
   }
