@@ -28,4 +28,10 @@ describe('TeX', function() {
       '\\tmpimage{Swing-low/piano/piano_3.eps}\n'
     );
   });
+
+  it('"generateTeX()"', function() {
+    texPiano.generateTeX(path.resolve('songs_processed'));
+    assert.exists('songs_processed', 'songs.tex');
+  });
+
 });
