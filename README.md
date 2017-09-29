@@ -13,8 +13,44 @@ npm run-script build
 npm run-script start
 ```
 
+# Song tree
+
 ## Songs tree from git
 
+Song folders have to lie in this parent folders:
+
+```
+0abcdefghijklmnopqrstuvwxyz
+```
+
+Folders names begining with “.” or “_” are ignored. 
+
+```
+.
+├── a
+│   └── Auf-der-Mauer_auf-der-Lauer
+│       ├── info.json
+│       ├── piano.mscx
+│       └── projector.mscx
+├── s
+│   ├── .hidden
+│   │   └── README.md
+│   ├── _scripts
+│   │   └── README.md
+│   ├── Stille-Nacht
+│   │   ├── info.json
+│   │   ├── lead.mscx
+│   │   └── projector.mscx
+│   └── Swing-low
+│       ├── info.json
+│       ├── lead.mscx
+│       └── projector.mscx
+└── z
+    └── Zum-Tanze-da-geht-ein-Maedel
+        ├── info.json
+        ├── lead.mscx
+        └── projector.mscx
+```
 
 ## Songs tree processed
 
