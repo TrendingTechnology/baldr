@@ -2,8 +2,8 @@
 
 const {assert} = require('./lib/helper.js');
 const path = require('path');
-var folderTree = require('../tex-piano.js');
-var rewire = require('rewire')('../tex-piano.js');
+const texPiano = require('../tex-piano.js');
+const rewire = require('rewire')('../tex-piano.js');
 
 describe('TeX', function() {
 
