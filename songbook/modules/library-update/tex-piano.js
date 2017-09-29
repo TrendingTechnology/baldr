@@ -7,6 +7,7 @@
 'use strict';
 
 const path = require('path');
+const fs = require('fs-extra');
 const folderTree = require('./folder-tree.js');
 
 /**
@@ -39,21 +40,24 @@ var texSong = function(folder) {
 /**
  *
  */
-var texABC = function(alpha) {
-  return '\n\n' + texCmd('chapter', alpha.toUpperCase());
+var texABC = function(abc) {
+  return '\n\n' + texCmd('chapter', abc.toUpperCase());
 }
 
 /**
  * Generate TeX file for the piano version of the songbook
  */
-var generateTeX = function() {
-  var previousInitial;
-  var initial;
-  var TeXFile = p(config.path, config.tex);
-  fs.removeSync(TeXFile);
-  getSongFolders().forEach((folder) => {
+var generateTeX = function(basePath) {
+  var tex = path.join(basePath, 'songs.tex');
+  const tree = folderTree.getTree(basePath);
+  fs.removeSync(tex);
 
+  Object.keys(tree).forEach((abc, index) => {
+    fs.appendFileSync(tex, texABC(abc));
 
+    Object.keys(tree[abc]).forEach((folder, index) => {
+      fs.appendFileSync(tex, texSong(path.join(basePath, abc, folder)));
+    });
   });
 };
 exports.generateTeX = generateTeX;

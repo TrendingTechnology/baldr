@@ -67,6 +67,7 @@ var getFolderFiles = function(folder, filter) {
 
 /**
  * Return the folder that might contain MuseScore files.
+ * @param {string} basePath - Basepath to the songbook tree.
  * @return {array} Array of folder paths.
  */
 var getSongFolders = function(basePath, folder) {
@@ -89,7 +90,7 @@ var getSongFolders = function(basePath, folder) {
 };
 
 /**
- *
+ * @param {string} basePath - Basepath to the songbook tree.
  */
 var getABCFolders = function(basePath) {
   var abc = '0abcdefghijklmnopqrstuvwxyz'.split('');
@@ -105,6 +106,7 @@ var getABCFolders = function(basePath) {
 }
 
 /**
+ * @param {string} basePath - Basepath to the songbook tree.
  * <pre><code>
  * {
  *   "a": {
