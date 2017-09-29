@@ -38,6 +38,34 @@ const fs = require('fs');
 const path = require('path');
 
 /**
+ * @param {string} folder - Absolute path to a song folder.
+ */
+var getSongInfo = function(folder) {
+  var jsonFile = path.join(folder, 'info.json');
+  if (fs.existsSync(jsonFile)) {
+    return JSON.parse(fs.readFileSync(jsonFile, 'utf8'));
+  }
+  else {
+    return false;
+  }
+};
+
+/**
+ * @param {string} folder - Absolute path.
+ * @param {string} filter - String to filter.
+ */
+var getFolderFiles = function(folder, filter) {
+  if (fs.existsSync(folder)) {
+    return fs.readdirSync(folder).filter((file) => {
+      return file.indexOf(filter) > -1 ? true : false;
+    });
+  }
+  else {
+    return [];
+  }
+};
+
+/**
  * Return the folder that might contain MuseScore files.
  * @return {array} Array of folder paths.
  */
@@ -60,6 +88,9 @@ var getSongFolders = function(basePath, folder) {
   );
 };
 
+/**
+ *
+ */
 var getABCFolders = function(basePath) {
   var abc = '0abcdefghijklmnopqrstuvwxyz'.split('');
   return abc.filter((file) => {
@@ -100,7 +131,6 @@ var getTree = function(basePath) {
   });
   return tree;
 }
-exports.getTree = getTree;
 
 /**
  * @return {array} Array of absolute folder paths to search for song files.
@@ -114,4 +144,8 @@ var flattenTree = function(tree) {
   });
   return flattFolders;
 };
+
+exports.getSongInfo = getSongInfo;
+exports.getFolderFiles = getFolderFiles;
+exports.getTree = getTree;
 exports.flattenTree = flattenTree;

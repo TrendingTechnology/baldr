@@ -1,12 +1,21 @@
 /* jshint esversion: 6 */
 
+/**
+ * @file Build a TeX file of all piano scores.
+ */
+
 'use strict';
 
-
+/**
+ *
+ */
 var texCmd = function(command, value) {
   return '\\tmp' + command + '{' + value  + '}\n';
 }
 
+/**
+ *
+ */
 var texSong = function(folder) {
   var info = getSongInfo(folder);
   var eps = getFolderFiles(p(folder, config.pianoFolder), '.eps');
@@ -24,7 +33,10 @@ var texSong = function(folder) {
   return output;
 };
 
-var texAlpha = function(alpha) {
+/**
+ *
+ */
+var texABC = function(alpha) {
   return '\n\n' + texCmd('chapter', alpha.toUpperCase());
 }
 
