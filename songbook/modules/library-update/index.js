@@ -11,6 +11,8 @@ const fs = require('fs-extra');
 const spawn = require('child_process').spawnSync;
 const sqlite3 = require('better-sqlite3');
 
+const tree = require('./folder-tree.js');
+
 const warning = 'Warning! '.yellow;
 const error = 'Error! '.red;
 
@@ -28,8 +30,6 @@ const configDefault = {
 };
 
 var config = {};
-
-const alphabet = '0abcdefghijklmnopqrstuvwxyz'.split('');
 
 /**
  * Check if executable is installed.
@@ -122,7 +122,7 @@ var generateSongJSON = function(folder) {
   if (fs.existsSync(jsonFile)) {
     var info = JSON.parse(fs.readFileSync(jsonFile, 'utf8'));
     info.folder = folder;
-    info.slides = getFolderFiles(p(folder, config.slidesFolder), '.svg');
+    info.slides = tree.getFolderFiles(p(folder, config.slidesFolder), '.svg');
     if (Boolean(info.title)) {
       return info;
     } else {
@@ -135,7 +135,7 @@ var generateSongJSON = function(folder) {
 }
 
 var generateJSON = function() {
-  var structure = getFolderStructure();
+  var structure = tree.getTree(config.path);
 
   Object.keys(structure).forEach((alpha, index) => {
     Object.keys(structure[alpha]).forEach((folder, index) => {
@@ -154,74 +154,6 @@ var readJSON = function () {
   return JSON.parse(fs.readFileSync(p(config.path, config.json), 'utf8'));
 };
 exports.readJSON = readJSON;
-
-/**
- * @param {string} folder - Absolute path to a song folder.
- */
-var getSongInfo = function(folder) {
-  var jsonFile = p(folder, config.info);
-  if (fs.existsSync(jsonFile)) {
-    return JSON.parse(fs.readFileSync(jsonFile, 'utf8'));
-  }
-  else {
-    return false;
-  }
-};
-
-/**
- * @param {string} folder - Absolute path.
- * @param {string} filter - String to filter.
- */
-var getFolderFiles = function(folder, filter) {
-  if (fs.existsSync(folder)) {
-    return fs.readdirSync(folder).filter((file) => {
-      return file.indexOf(filter) > -1 ? true : false;
-    });
-  }
-  else {
-    return [];
-  }
-};
-
-var texCmd = function(command, value) {
-  return '\\tmp' + command + '{' + value  + '}\n';
-}
-
-var texSong = function(folder) {
-  var info = getSongInfo(folder);
-  var eps = getFolderFiles(p(folder, config.pianoFolder), '.eps');
-  var output = '';
-
-  if (info.hasOwnProperty('title') && eps.length > 0) {
-    output += texCmd('heading', info.title);
-    var basename = path.basename(folder);
-    eps.forEach(
-      (file) => {
-        output += texCmd('image', path.join(basename, config.pianoFolder, file));
-      }
-    );
-  }
-  return output;
-};
-
-var texAlpha = function(alpha) {
-  return '\n\n' + texCmd('chapter', alpha.toUpperCase());
-}
-
-/**
- * Generate TeX file for the piano version of the songbook
- */
-var generateTeX = function() {
-  var previousInitial;
-  var initial;
-  var TeXFile = p(config.path, config.tex);
-  fs.removeSync(TeXFile);
-  getSongFolders().forEach((folder) => {
-
-
-  });
-};
-exports.generateTeX = generateTeX;
 
 /**
  * Check for file modifications
@@ -256,82 +188,6 @@ var fileChanged = function(filename) {
   else {
     return false;
   }
-};
-
-/**
- * Return the folder that might contain MuseScore files.
- * @return {array} Array of folder paths.
- */
-var getSongFolders = function(folder) {
-  if (config.folder) {
-    return [config.folder];
-  }
-  var absPath = path.join(config.path, folder);
-  var folders = fs.readdirSync(absPath);
-  return folders.filter(
-    (file) => {
-      if (fs.statSync(path.join(absPath, file)).isDirectory() && file.substr(0, 1) != '_' && file.substr(0, 1) != '.') {
-        return true;
-      }
-      else {
-        return false;
-      }
-    }
-  );
-};
-
-var getAlphabeticalFolders = function() {
-  var folders = alphabet;
-  return folders.filter((file) => {
-    var folder = path.join(config.path, file)
-    if (fs.existsSync(folder) && fs.statSync(folder).isDirectory()) {
-      return true;
-    }
-    else {
-      return false;
-    }
-  });
-}
-
-/**
- * <pre><code>
- * {
- *   "a": {
- *     "Auf-der-Mauer_auf-der-Lauer": {}
- *   },
- *   "s": {
- *     "Stille-Nacht": {},
- *     "Swing-low": {}
- *   },
- *   "z": {
- *     "Zum-Tanze-da-geht-ein-Maedel": {}
- *   }
- * }
- * </code></pre>
- */
-var getFolderStructure = function() {
-  var structure = {};
-  getAlphabeticalFolders().forEach(function(item) {
-    var folders = {};
-    getSongFolders(item).forEach((song) => {
-      folders[song] = {};
-    });
-    structure[item] = folders;
-  });
-  return structure;
-}
-
-/**
- * @return {array} Array of absolute folder paths to search for song files.
- */
-var flattenFolderStructure = function(structure, basePath) {
-  var flattFolders = [];
-  Object.keys(structure).forEach((alpha, index) => {
-    Object.keys(structure[alpha]).forEach((folder, index) => {
-      flattFolders.push(path.join(basePath, alpha, folder));
-    });
-  });
-  return flattFolders;
 };
 
 /**
@@ -449,10 +305,13 @@ var processFolder = function(folder) {
  */
 exports.update = function() {
   pull();
-  flattenFolderStructure(getFolderStructure(), config.path).forEach(processFolder);
+  tree.flat(config.path).forEach(processFolder);
   generateJSON();
 };
 
+/**
+ *
+ */
 var cleanFiles = function(folder, files) {
   files.forEach(
     (file) => {
@@ -477,10 +336,8 @@ var cleanFolder = function(folder) {
  * Clean all temporary media files.
  */
 exports.clean = function() {
-  flattenFolderStructure(
-    getFolderStructure(),
-    config.path
-  ).forEach(cleanFolder);
+
+  tree.flat(config.path).forEach(cleanFolder);
 
   cleanFiles(config.path, [
     config.json,

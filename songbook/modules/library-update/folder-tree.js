@@ -135,7 +135,7 @@ var getTree = function(basePath) {
 }
 
 /**
- * @return {array} Array of absolute folder paths to search for song files.
+ * @return {array} Array of folder paths.
  */
 var flattenTree = function(tree) {
   var flattFolders = [];
@@ -147,7 +147,18 @@ var flattenTree = function(tree) {
   return flattFolders;
 };
 
+/**
+ * @param {string} basePath - Basepath to the songbook tree.
+ * @return {array} Array of folder paths.
+ */
+var flat = function(basePath) {
+  return flattenTree(
+    getTree(basePath)
+  ).map(folder => path.join(basePath, folder));
+};
+
 exports.getSongInfo = getSongInfo;
 exports.getFolderFiles = getFolderFiles;
 exports.getTree = getTree;
 exports.flattenTree = flattenTree;
+exports.flat = flat;

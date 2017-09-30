@@ -44,11 +44,6 @@ describe('Configuration', () => {
     assert.exists(path.resolve('songs', 'filehashes.db'))
   });
 
-  it('const alphabet', () => {
-      const alphabet = slu.__get__('alphabet');
-      assert.equal(alphabet[0], 0);
-      assert.equal(alphabet[26], 'z');
-  });
 });
 
 /**
