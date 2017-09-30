@@ -62,8 +62,6 @@ describe('Private functions', () => {
   });
 
   it('"generatePDF()"', function() {
-    this.timeout(0);
-    this.slow(10000);
     const generatePDF = slu.__get__('generatePDF');
     const folder = p('songs', 's', 'Swing-low');
     generatePDF(folder, 'projector', 'projector');
@@ -76,8 +74,6 @@ describe('Private functions', () => {
   });
 
   it('"generateSlides()"', function() {
-    this.timeout(0);
-    this.slow(10000);
     var generatePDF = slu.__get__('generatePDF');
     var generateSlides = slu.__get__('generateSlides');
     var config = slu.__get__('config');
@@ -92,8 +88,6 @@ describe('Private functions', () => {
 
   describe('"generatePianoEPS()"', () => {
     it('"generatePianoEPS()": lead', function() {
-      this.timeout(0);
-      this.slow(10000);
       var generatePianoEPS = slu.__get__('generatePianoEPS');
       var config = slu.__get__('config');
       const folder = p('songs', 's', 'Swing-low');
@@ -105,8 +99,6 @@ describe('Private functions', () => {
     });
 
     it('"generatePianoEPS()": piano', function() {
-      this.timeout(0);
-      this.slow(10000);
       var generatePianoEPS = slu.__get__('generatePianoEPS');
       var config = slu.__get__('config');
       const folder = p('songs', 'a', 'Auf-der-Mauer_auf-der-Lauer');
@@ -152,8 +144,6 @@ describe('Private functions', () => {
 describe('Exported functions', () => {
 
   it('"update()"', function() {
-    this.timeout(0);
-    this.slow(50000);
     slu.update();
     var config = slu.__get__('config');
     const auf = p('songs', 'a', 'Auf-der-Mauer_auf-der-Lauer');
