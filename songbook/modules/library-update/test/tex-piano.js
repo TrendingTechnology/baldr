@@ -6,19 +6,19 @@ const fs = require('fs');
 const texPiano = require('../tex-piano.js');
 const rewire = require('rewire')('../tex-piano.js');
 
-describe('TeX', function() {
+describe('TeX', () => {
 
-  it('"texCmd()"', function() {
+  it('"texCmd()"', () => {
     var texCmd = rewire.__get__('texCmd');
     assert.equal(texCmd('lorem', 'ipsum'), '\\tmplorem{ipsum}\n')
   });
 
-  it('"texABC()"', function() {
+  it('"texABC()"', () => {
     var texAlpha = rewire.__get__('texABC');
     assert.equal(texAlpha('a'), '\n\n\\tmpchapter{A}\n')
   });
 
-  it('"texSong()"', function() {
+  it('"texSong()"', () => {
     var texSong = rewire.__get__('texSong');
     var folder = path.join(path.resolve('songs_processed'), 's', 'Swing-low');
     assert.equal(
@@ -31,7 +31,7 @@ describe('TeX', function() {
     );
   });
 
-  it('"generateTeX()"', function() {
+  it('"generateTeX()"', () => {
     texFile = path.join('songs_processed', 'songs.tex');
     texPiano.generateTeX(path.resolve('songs_processed'));
     assert.exists(texFile);

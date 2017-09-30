@@ -15,21 +15,21 @@ slu.bootstrapConfig({
   force: true,
 });
 
-before(function() {
+before(() => {
   process.env.PATH = __dirname + '/bin:' + process.env.PATH;
 });
 
 /**
  *
  */
-describe('Configuration', function() {
+describe('Configuration', () => {
   const config = slu.__get__('config');
 
-  describe('default configuration', function() {
-    it('"config.json" should return "songs.json"', function() {
+  describe('default configuration', () => {
+    it('"config.json" should return "songs.json"', () => {
       assert.equal(config.json, 'songs.json');
     });
-    it('"config.info" should return "info.json"', function() {
+    it('"config.info" should return "info.json"', () => {
       assert.equal(config.info, 'info.json');
     });
   });
@@ -44,7 +44,7 @@ describe('Configuration', function() {
     assert.exists(path.resolve('songs', 'filehashes.db'))
   });
 
-  it('const alphabet', function() {
+  it('const alphabet', () => {
       const alphabet = slu.__get__('alphabet');
       assert.equal(alphabet[0], 0);
       assert.equal(alphabet[26], 'z');
@@ -54,9 +54,9 @@ describe('Configuration', function() {
 /**
  *
  */
-describe('Private functions', function() {
+describe('Private functions', () => {
 
-  it('"getMscoreCommand()"', function() {
+  it('"getMscoreCommand()"', () => {
     const getMscoreCommand = slu.__get__('getMscoreCommand');
     if (process.platform == 'darwin') {
       assert.equal(getMscoreCommand(), '/Applications/MuseScore 2.app/Contents/MacOS/mscore');
@@ -75,7 +75,7 @@ describe('Private functions', function() {
     assert.exists(folder, 'projector.pdf');
   });
 
-  it('"pull()"', function() {
+  it('"pull()"', () => {
     var pull = slu.__get__('pull');
     assert.ok(!pull());
   });
@@ -95,7 +95,7 @@ describe('Private functions', function() {
     fs.removeSync(slides);
   });
 
-  describe('"generatePianoEPS()"', function() {
+  describe('"generatePianoEPS()"', () => {
     it('"generatePianoEPS()": lead', function() {
       this.timeout(0);
       this.slow(10000);
@@ -124,26 +124,26 @@ describe('Private functions', function() {
 
   });
 
-  it('"message()"', function() {
+  it('"message()"', () => {
     var message = slu.__get__('message');
     assert.equal(message('test'), 'test');
   });
 
-  describe('"checkExecutable()"', function() {
-    it('"checkExecutable()": existing executable', function() {
+  describe('"checkExecutable()"', () => {
+    it('"checkExecutable()": existing executable', () => {
       var checkExecutable = slu.__get__('checkExecutable');
       var check = checkExecutable('echo');
       assert.equal(check, undefined);
     });
 
-    it('"checkExecutable()": nonexisting executable', function() {
+    it('"checkExecutable()": nonexisting executable', () => {
       var checkExecutable = slu.__get__('checkExecutable');
       var check = checkExecutable('loooooool');
       assert.equal(typeof(check), 'string');
     });
   });
 
-  it('"messageConfigFile()"', function() {
+  it('"messageConfigFile()"', () => {
     var messageConfigFile = slu.__get__('messageConfigFile');
     var output = messageConfigFile();
     assert.ok(output.length > 100);
@@ -154,9 +154,9 @@ describe('Private functions', function() {
 /**
  *
  */
-describe('Exported functions', function() {
+describe('Exported functions', () => {
 
-  it('"generateJSON()"', function() {
+  it('"generateJSON()"', () => {
     slu.generateJSON();
     var json = path.join('songs', 'songs.json');
     assert.exists(json);
@@ -199,21 +199,21 @@ describe('Exported functions', function() {
     slu.clean();
   });
 
-  it('"setTestMode()"', function() {
+  it('"setTestMode()"', () => {
     slu.setTestMode();
     const config = slu.__get__('config');
     assert.equal(config.test, true);
     assert.equal(config.path, path.resolve('./songs'));
   });
 
-  it('"clean()"', function() {
+  it('"clean()"', () => {
     slu.clean();
     assert.ok(!fs.existsSync(p('songs', 'songs.tex')));
   });
 
 });
 
-describe('Command line', function() {
+describe('Command line', () => {
   const spawn = require('child_process').spawnSync;
 
   it('no arguments: normal update', function() {
