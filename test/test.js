@@ -151,18 +151,6 @@ describe('Private functions', () => {
  */
 describe('Exported functions', () => {
 
-  it('"generateJSON()"', () => {
-    slu.generateJSON();
-    var json = path.join('songs', 'songs.json');
-    assert.exists(json);
-    var structure = JSON.parse(fs.readFileSync(json, 'utf8'));
-    assert.equal(
-      structure.a['Auf-der-Mauer_auf-der-Lauer'].title,
-      'Auf der Mauer, auf der Lauer'
-    );
-    fs.removeSync(json);
-  });
-
   it('"update()"', function() {
     this.timeout(0);
     this.slow(50000);

@@ -46,6 +46,7 @@ var texABC = function(abc) {
 
 /**
  * Generate TeX file for the piano version of the songbook
+ * @param {string} basePath - Basepath to the songbook tree.
  */
 var generateTeX = function(basePath) {
   var tex = path.join(basePath, 'songs.tex');
