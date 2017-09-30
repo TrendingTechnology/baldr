@@ -26,7 +26,7 @@ var texSong = function(folder) {
   var output = '';
 
   if (info.hasOwnProperty('title') && eps.length > 0) {
-    output += texCmd('heading', info.title);
+    output += '\n' + texCmd('heading', info.title);
     var basename = path.basename(folder);
     eps.forEach(
       (file) => {
