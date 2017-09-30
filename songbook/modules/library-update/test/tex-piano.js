@@ -23,6 +23,7 @@ describe('TeX', function() {
     var folder = path.join(path.resolve('songs_processed'), 's', 'Swing-low');
     assert.equal(
       texSong(folder),
+      '\n' +
       '\\tmpheading{Swing low}\n' +
       '\\tmpimage{Swing-low/piano/piano_1.eps}\n' +
       '\\tmpimage{Swing-low/piano/piano_2.eps}\n' +
@@ -36,6 +37,9 @@ describe('TeX', function() {
     assert.exists(texFile);
 
     var tex = fs.readFileSync(texFile, 'utf8');
+    var compare = fs.readFileSync(path.join('test', 'songs.tex'), 'utf8');
+
+    assert.equal(tex, compare);
 
     assert.ok(tex.indexOf('\\tmpimage') > -1);
     assert.ok(tex.indexOf('\\tmpheading') > -1);
