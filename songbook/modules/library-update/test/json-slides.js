@@ -9,8 +9,7 @@ const rewire = require('rewire')('../json-slides.js');
 describe('json-slides', () => {
 
   it('"generateSongJSON()"', () => {
-    var generateSongJSON = rewire.__get__('generateSongJSON');
-    var info = generateSongJSON(path.join(
+    var info = rewire.__get__('generateSongJSON')(path.join(
       path.resolve('songs_processed'),
       'a',
       'Auf-der-Mauer_auf-der-Lauer'
@@ -31,6 +30,15 @@ describe('json-slides', () => {
       'Auf der Mauer, auf der Lauer'
     );
     fs.removeSync(json);
+  });
+
+  it('"readJSON()"', () => {
+    jsonSlides.generateJSON('songs_processed');
+    var json = jsonSlides.readJSON('songs_processed');
+    assert.equal(
+      json.a['Auf-der-Mauer_auf-der-Lauer'].title,
+      'Auf der Mauer, auf der Lauer'
+    );
   });
 
 });
