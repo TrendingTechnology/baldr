@@ -19,10 +19,10 @@ var checkExecutable = function(executable) {
   var exec = spawn(executable, ['--help']);
   if (exec.status === null) {
     console.log('Install executable: ' + executable);
-    return true;
+    return false;
   }
   else {
-    return false;
+    return true;
   }
 };
 
@@ -31,9 +31,14 @@ var checkExecutable = function(executable) {
  * @param {array} executables - Name of the executables.
  */
 var checkExecutables = function(executables) {
+  var allExecExists = true;
   executables.forEach((exec) => {
-    checkExecutable(exec);
+    var check = checkExecutable(exec);
+    if (!check) {
+      allExecExists = false;
+    }
   });
+  return allExecExists;
 };
 
 /**
@@ -82,7 +87,6 @@ var generateSlides = function(folder) {
   ]);
 };
 
-
 /**
  * Generate a PDF named piano.pdf a) from piano.mscx or b) from lead.mscx
  * @param {string} folder - A song folder.
@@ -107,6 +111,8 @@ var generatePianoEPS = function(folder) {
   spawn('mscore-to-eps.sh', [path.join(piano, 'piano.mscx')]);
 };
 
-exports.generatePDF = generatePDF;
 exports.checkExecutables = checkExecutables;
+exports.generatePDF = generatePDF;
+exports.generatePianoEPS = generatePianoEPS;
+exports.generateSlides = generateSlides;
 exports.getMscoreCommand = getMscoreCommand;
