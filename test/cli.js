@@ -9,34 +9,34 @@ before(() => {
 
 describe('Command line', () => {
 
-  it('no arguments: normal update', function() {
+  it('no arguments: normal update', () => {
     const cli = spawn('./command.js', ['--test']);
   });
 
-  it('no arguments (second run): only json and TeX generation', function() {
+  it('no arguments (second run): only json and TeX generation', () => {
     const cli = spawn('./command.js', ['--test']);
   });
 
-  it('--force', function() {
+  it('--force', () => {
     const cli = spawn('./command.js', ['--test', '--force']);
   });
 
   // After --force
-  it('--json', function() {
+  it('--json', () => {
     const cli = spawn('./command.js', ['--test', '--json']);
   });
 
   // After --force
-  it.skip('--tex', function() {
+  it.skip('--tex', () => {
     const cli = spawn('./command.js', ['--test', '--tex']);
   });
 
-  it.skip('--folder', function() {
+  it.skip('--folder', () => {
     const cli = spawn('./command.js', ['--test', '--folder', 'Swing-low']);
     assert.exists('Swing-low', 'piano', 'piano.eps');
   });
 
-  it('--help', function() {
+  it('--help', () => {
     const cli = spawn('./command.js', ['--test', '--help']);
     var out = cli.stdout.toString();
     assert.ok(out.indexOf('Usage') > -1);
@@ -45,14 +45,14 @@ describe('Command line', () => {
     assert.equal(cli.status, 0);
   });
 
-  it('--version', function() {
+  it('--version', () => {
     const cli = spawn('./command.js', ['--test', '--version']);
     assert.equal(cli.stdout.toString(), '0.0.5\n');
     assert.equal(cli.status, 0);
   });
 
   // Test should be executed at the very last position.
-  it('--clean', function() {
+  it('--clean', () => {
     const cli = spawn('./command.js', ['--test', '--clean']);
   });
 });
