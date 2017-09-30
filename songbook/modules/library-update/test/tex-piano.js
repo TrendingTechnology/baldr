@@ -2,6 +2,7 @@
 
 const {assert} = require('./lib/helper.js');
 const path = require('path');
+const fs = require('fs');
 const texPiano = require('../tex-piano.js');
 const rewire = require('rewire')('../tex-piano.js');
 
@@ -30,8 +31,14 @@ describe('TeX', function() {
   });
 
   it('"generateTeX()"', function() {
+    texFile = path.join('songs_processed', 'songs.tex');
     texPiano.generateTeX(path.resolve('songs_processed'));
-    assert.exists('songs_processed', 'songs.tex');
+    assert.exists(texFile);
+
+    var tex = fs.readFileSync(texFile, 'utf8');
+
+    assert.ok(tex.indexOf('\\tmpimage') > -1);
+    assert.ok(tex.indexOf('\\tmpheading') > -1);
   });
 
 });
