@@ -12,6 +12,7 @@ const spawn = require('child_process').spawnSync;
 const sqlite3 = require('better-sqlite3');
 
 const tree = require('./folder-tree.js');
+const jsonSlides = require('./json-slides.js');
 
 const warning = 'Warning! '.yellow;
 const error = 'Error! '.red;
@@ -116,44 +117,6 @@ var warningInfoJson = function(folder) {
     folder.underline.yellow + '/' +
     config.info.underline.red);
 };
-
-var generateSongJSON = function(folder) {
-  var jsonFile = p(folder, config.info);
-  if (fs.existsSync(jsonFile)) {
-    var info = JSON.parse(fs.readFileSync(jsonFile, 'utf8'));
-    info.folder = folder;
-    info.slides = tree.getFolderFiles(p(folder, config.slidesFolder), '.svg');
-    if (Boolean(info.title)) {
-      return info;
-    } else {
-      warningInfoJson(folder);
-    }
-  }
-  else if (fs.lstatSync(folder).isDirectory()) {
-    warningInfoJson(folder);
-  }
-}
-
-var generateJSON = function() {
-  var structure = tree.getTree(config.path);
-
-  Object.keys(structure).forEach((alpha, index) => {
-    Object.keys(structure[alpha]).forEach((folder, index) => {
-      structure[alpha][folder] = generateSongJSON(path.join(config.path, alpha, folder));
-    });
-  });
-
-  fs.writeFileSync(path.join(config.path, config.json), JSON.stringify(structure, null, 4));
-};
-exports.generateJSON = generateJSON;
-
-var readJSON = function () {
-  // if (!fs.existsSync(p(config.path, config.json))) {
-  //   generateJSON();
-  // }
-  return JSON.parse(fs.readFileSync(p(config.path, config.json), 'utf8'));
-};
-exports.readJSON = readJSON;
 
 /**
  * Check for file modifications
@@ -306,7 +269,7 @@ var processFolder = function(folder) {
 exports.update = function() {
   pull();
   tree.flat(config.path).forEach(processFolder);
-  generateJSON();
+  jsonSlides.generateJSON(config.path);
 };
 
 /**
