@@ -8,6 +8,7 @@
 'use strict';
 
 const path = require('path');
+const fs = require('fs-extra');
 const spawn = require('child_process').spawnSync;
 
 /**
@@ -17,10 +18,23 @@ const spawn = require('child_process').spawnSync;
 var checkExecutable = function(executable) {
   var exec = spawn(executable, ['--help']);
   if (exec.status === null) {
-    return message('Install executable: ' + executable);
+    console.log('Install executable: ' + executable);
+    return true;
+  }
+  else {
+    return false;
   }
 };
 
+/**
+ * Check if executables are installed.
+ * @param {array} executables - Name of the executables.
+ */
+var checkExecutables = function(executables) {
+  executables.forEach((exec) => {
+    checkExecutable(exec);
+  });
+};
 
 /**
  * Get the MuseScore command.
@@ -47,8 +61,8 @@ var generatePDF = function(folder, source, destination = '') {
   }
   spawn(getMscoreCommand(), [
     '--export-to',
-    p(folder, destination + '.pdf'),
-    p(folder, source + '.mscx')
+    path.join(folder, destination + '.pdf'),
+    path.join(folder, source + '.mscx')
   ]);
 };
 
@@ -57,16 +71,15 @@ var generatePDF = function(folder, source, destination = '') {
  * @param {string} folder - A song folder.
  */
 var generateSlides = function(folder) {
-  var slides = p(folder, config.slidesFolder);
+  var slides = path.join(folder, 'slides');
   fs.removeSync(slides);
   fs.mkdirSync(slides);
 
   spawn('pdf2svg', [
-    p(folder, 'projector.pdf'),
-    p(slides, '%02d.svg'),
+    path.join(folder, 'projector.pdf'),
+    path.join(slides, '%02d.svg'),
      'all'
   ]);
-  return message(folder + ': Bilder erzeugen');
 };
 
 
@@ -75,15 +88,25 @@ var generateSlides = function(folder) {
  * @param {string} folder - A song folder.
  */
 var generatePianoEPS = function(folder) {
-  var piano = p(folder, 'piano');
+  var piano = path.join(folder, 'piano');
   fs.removeSync(piano);
   fs.mkdirSync(piano);
 
-  if (fs.existsSync(p(folder, 'piano.mscx'))) {
-    fs.copySync(p(folder, 'piano.mscx'), p(piano, 'piano.mscx'));
+  if (fs.existsSync(path.join(folder, 'piano.mscx'))) {
+    fs.copySync(
+      path.join(folder, 'piano.mscx'),
+      path.join(piano, 'piano.mscx')
+    );
   }
-  else if (fs.existsSync(p(folder, 'lead.mscx'))) {
-    fs.copySync(p(folder, 'lead.mscx'), p(piano, 'piano.mscx'));
+  else if (fs.existsSync(path.join(folder, 'lead.mscx'))) {
+    fs.copySync(
+      path.join(folder, 'lead.mscx'),
+      path.join(piano, 'piano.mscx')
+    );
   }
-  spawn('mscore-to-eps.sh', [p(piano, 'piano.mscx')]);
+  spawn('mscore-to-eps.sh', [path.join(piano, 'piano.mscx')]);
 };
+
+exports.generatePDF = generatePDF;
+exports.checkExecutables = checkExecutables;
+exports.getMscoreCommand = getMscoreCommand;
