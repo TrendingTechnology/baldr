@@ -8,7 +8,6 @@ const path = require('path');
 const p = path.join;
 const colors = require('colors');
 const fs = require('fs-extra');
-const spawn = require('child_process').spawnSync;
 const sqlite3 = require('better-sqlite3');
 
 const tree = require('./folder-tree.js');
@@ -31,17 +30,6 @@ const configDefault = {
 };
 
 var config = {};
-
-/**
- * Check if executable is installed.
- * @param {string} executable - Name of the executable.
- */
-var checkExecutable = function(executable) {
-  var exec = spawn(executable, ['--help']);
-  if (exec.status === null) {
-    return message('Install executable: ' + executable);
-  }
-};
 
 /**
  * By default this module reads the config file ~/.html5-school-presentation to
@@ -167,70 +155,6 @@ var pull = function() {
 };
 
 /**
- * Get the MuseScore command.
- * @returns {string} The name of the MuseScore command.
- */
-var getMscoreCommand = function() {
-  if (process.platform == 'darwin') {
-    return '/Applications/MuseScore 2.app/Contents/MacOS/mscore';
-  } else {
-    return 'mscore';
-  }
-};
-
-/**
- * Generate form a given *.mscx file a PDF file.
- * @param {string} folder - Folder containing the *.mscx file.
- * @param {string} source - Name of the *.mscx file without the extension.
- * @param {string} destination - Name of the PDF without the extension.
- */
-var generatePDF = function(folder, source, destination = '') {
-  if (destination === '') {
-    destination = source;
-  }
-  spawn(getMscoreCommand(), [
-    '--export-to',
-    p(folder, destination + '.pdf'),
-    p(folder, source + '.mscx')
-  ]);
-};
-
-/**
- * Generate svg files in a 'slides' subfolder.
- * @param {string} folder - A song folder.
- */
-var generateSlides = function(folder) {
-  var slides = p(folder, config.slidesFolder);
-  fs.removeSync(slides);
-  fs.mkdirSync(slides);
-
-  spawn('pdf2svg', [
-    p(folder, 'projector.pdf'),
-    p(slides, '%02d.svg'),
-     'all'
-  ]);
-  return message(folder + ': Bilder erzeugen');
-};
-
-/**
- * Generate a PDF named piano.pdf a) from piano.mscx or b) from lead.mscx
- * @param {string} folder - A song folder.
- */
-var generatePianoEPS = function(folder) {
-  var piano = p(folder, config.pianoFolder);
-  fs.removeSync(piano);
-  fs.mkdirSync(piano);
-
-  if (fs.existsSync(p(folder, config.pianoMScore))) {
-    fs.copySync(p(folder, config.pianoMScore), p(piano, config.pianoMScore));
-  }
-  else if (fs.existsSync(p(folder, config.leadMScore))) {
-    fs.copySync(p(folder, config.leadMScore), p(piano, config.pianoMScore));
-  }
-  spawn('mscore-to-eps.sh', [p(piano, config.pianoMScore)]);
-};
-
-/**
  * Print out or return text.
  * @param {string} text - Text to display.
  */
@@ -256,7 +180,7 @@ var processFolder = function(folder) {
 
   // piano
   if (config.force ||
-    fileChanged(p(folder, config.pianoMScore)) ||
+    fileChanged(p(folder, 'piano.mscx')) ||
     fileChanged(p(folder, config.leadMScore))
   ) {
     generatePianoEPS(folder);
@@ -289,7 +213,7 @@ var cleanFiles = function(folder, files) {
  */
 var cleanFolder = function(folder) {
   cleanFiles(folder, [
-    config.pianoFolder,
+    'piano',
     config.slidesFolder,
     'projector.pdf'
   ]);
