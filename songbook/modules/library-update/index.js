@@ -12,6 +12,7 @@ const sqlite3 = require('better-sqlite3');
 
 const tree = require('./folder-tree.js');
 const jsonSlides = require('./json-slides.js');
+const mscxProcess = require('./mscx-process.js');
 
 const warning = 'Warning! '.yellow;
 const error = 'Error! '.red;
@@ -38,12 +39,15 @@ var config = {};
  * config object.
  */
 var bootstrapConfig = function(newConfig=false) {
-  checkExecutable(getMscoreCommand());
-  checkExecutable('mscore-to-eps.sh');
-  checkExecutable('pdf2svg');
-  checkExecutable('pdfcrop');
-  checkExecutable('pdfinfo');
-  checkExecutable('pdftops');
+
+  mscxProcess.checkExecutables([
+    'mscore-to-eps.sh',
+    'pdf2svg',
+    'pdfcrop',
+    'pdfinfo',
+    'pdftops',
+    mscxProcess.getMscoreCommand()
+  ]);
 
   // default object
   config = configDefault;
@@ -174,8 +178,8 @@ var message = function(text) {
 var processFolder = function(folder) {
   // projector
   if (config.force || fileChanged(p(folder, 'projector.mscx'))) {
-    generatePDF(folder, 'projector');
-    generateSlides(folder);
+    mscxProcess.generatePDF(folder, 'projector');
+    mscxProcess.generateSlides(folder);
   }
 
   // piano
@@ -183,7 +187,7 @@ var processFolder = function(folder) {
     fileChanged(p(folder, 'piano.mscx')) ||
     fileChanged(p(folder, config.leadMScore))
   ) {
-    generatePianoEPS(folder);
+    mscxProcess.generatePianoEPS(folder);
   }
 };
 
