@@ -15,16 +15,6 @@ slu.bootstrapConfig({
   force: true,
 });
 
-var assertGenerateTeX = function() {
-  const config = slu.__get__('config');
-  const tex = p(config.path, config.tex);
-  assert.exists(tex);
-  var texContents = fs.readFileSync(tex, 'utf8');
-
-  assert.ok(texContents.indexOf('\\tmpimage') > -1);
-  assert.ok(texContents.indexOf('\\tmpheading') > -1);
-};
-
 before(function() {
   process.env.PATH = __dirname + '/bin:' + process.env.PATH;
 });
@@ -88,48 +78,6 @@ describe('Private functions', function() {
   it('"pull()"', function() {
     var pull = slu.__get__('pull');
     assert.ok(!pull());
-  });
-
-  it('"getAlphabeticalFolders()"', function() {
-    var getAlphabeticalFolders = slu.__get__('getAlphabeticalFolders');
-    var folders = getAlphabeticalFolders();
-    assert.equal(folders.length, 3);
-    assert.equal(folders[0], 'a');
-    assert.equal(folders[1], 's');
-    assert.equal(folders[2], 'z');
-  });
-
-  it('"getFolderStructure()"', function() {
-    var getFolderStructure = slu.__get__('getFolderStructure');
-    var structure = getFolderStructure();
-
-    assert.deepEqual(structure.a, { 'Auf-der-Mauer_auf-der-Lauer': {} });
-    assert.deepEqual(structure.s, { 'Stille-Nacht': {}, 'Swing-low': {} });
-
-  });
-
-  it('"flattenFolderStructure()"', function() {
-    var flattenFolderStructure = slu.__get__('flattenFolderStructure');
-
-    var structure = {
-      "a": {
-        "Auf-der-Mauer_auf-der-Lauer": {}
-      },
-      "s": {
-        "Stille-Nacht": {},
-        "Swing-low": {}
-      },
-      "z": {
-        "Zum-Tanze-da-geht-ein-Maedel": {}
-      }
-    };
-
-    var folders = flattenFolderStructure(structure, '/tmp');
-    assert.equal(folders[0], '/tmp/a/Auf-der-Mauer_auf-der-Lauer');
-    assert.equal(folders[1], '/tmp/s/Stille-Nacht');
-    assert.equal(folders[2], '/tmp/s/Swing-low');
-    assert.equal(folders[3], '/tmp/z/Zum-Tanze-da-geht-ein-Maedel');
-
   });
 
   it('"generateSlides()"', function() {
@@ -201,42 +149,6 @@ describe('Private functions', function() {
     assert.ok(output.length > 100);
   });
 
-  it('"getSongInfo()"', function() {
-    var getSongInfo = slu.__get__('getSongInfo');
-    const config = slu.__get__('config');
-    var info = getSongInfo(path.join(config.path, 's', 'Swing-low'));
-    assert.equal(info.title, 'Swing low');
-  });
-
-  describe('"getFolderFiles()"', function() {
-
-    it('"getFolderFiles()": eps', function() {
-      const getFolderFiles = slu.__get__('getFolderFiles');
-      const files = getFolderFiles(p('test', 'piano-files'), '.eps');
-      assert.deepEqual(files, ['01.eps', '02.eps', '03.eps']);
-    });
-
-    it('"getFolderFiles()": svg', function() {
-      const getFolderFiles = slu.__get__('getFolderFiles');
-      const files = getFolderFiles(p('test', 'slides-files'), '.svg');
-      assert.deepEqual(files, ['01.svg', '02.svg', '03.svg']);
-    });
-
-    it('"getFolderFiles()": non existent folder', function() {
-      const getFolderFiles = slu.__get__('getFolderFiles');
-      const files = getFolderFiles(p('test', 'lol'), '.svg');
-      assert.deepEqual(files, []);
-    });
-
-    it('"getFolderFiles()": empty folder', function() {
-      const getFolderFiles = slu.__get__('getFolderFiles');
-      fs.mkdirSync(p('test', 'empty'));
-      const files = getFolderFiles(p('test', 'empty'), '.svg');
-      assert.deepEqual(files, []);
-      fs.rmdirSync(p('test', 'empty'));
-    });
-  });
-
 });
 
 /**
@@ -284,19 +196,6 @@ describe('Exported functions', function() {
       'Auf der Mauer, auf der Lauer'
     );
 
-    slu.clean();
-  });
-
-  it.skip('"generateTeX()"', function() {
-    this.timeout(0);
-    this.slow(40000);
-    const getFolders = slu.__get__('getFolders');
-    const generatePianoEPS = slu.__get__('generatePianoEPS');
-    getSongFolders().forEach((folder) => {
-      generatePianoEPS(folder);
-    });
-    slu.generateTeX();
-    assertGenerateTeX();
     slu.clean();
   });
 
