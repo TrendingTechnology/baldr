@@ -11,20 +11,18 @@ describe('mscx-process', () => {
   describe('"check executables"', () => {
     it('"checkExecutable()": existing executable', () => {
       var checkExecutable = rewire.__get__('checkExecutable');
-      var check = checkExecutable('echo');
-      assert.equal(check, true);
+      assert.equal(checkExecutable('echo'), true);
     });
 
     it('"checkExecutable()": nonexisting executable', () => {
       var checkExecutable = rewire.__get__('checkExecutable');
-      var check = checkExecutable('loooooool');
-      assert.equal(typeof(check), 'string');
+      assert.equal(checkExecutable('loooooool'), false);
     });
 
-    it('"checkExecutable()": nonexisting executable', () => {
-      var checkExecutable = rewire.__get__('checkExecutable');
-      var check = checkExecutable('loooooool');
-      assert.equal(typeof(check), 'string');
+    it('"checkExecutables()"', () => {
+      assert.equal(
+        mscxProcess.checkExecutables(['echo', 'ls']), true
+      );
     });
   });
 
@@ -39,19 +37,16 @@ describe('mscx-process', () => {
   });
 
   it('"generatePDF()"', () => {
-    const generatePDF = rewire.__get__('generatePDF');
     const folder = path.join('songs', 's', 'Swing-low');
-    generatePDF(folder, 'projector', 'projector');
+    mscxProcess.generatePDF(folder, 'projector', 'projector');
     assert.exists(folder, 'projector.pdf');
   });
 
   it('"generateSlides()"', () => {
-    var generatePDF = rewire.__get__('generatePDF');
-    var generateSlides = rewire.__get__('generateSlides');
-    generatePDF('s', 'Swing-low', 'projector');
+    mscxProcess.generatePDF('s', 'Swing-low', 'projector');
     const folder = path.join('songs', 's', 'Swing-low');
     const slides = path.join(folder, 'slides');
-    generateSlides(folder);
+    mscxProcess.generateSlides(folder);
     assert.exists(slides, '01.svg');
     assert.exists(slides, '02.svg');
     fs.removeSync(slides);
@@ -59,9 +54,8 @@ describe('mscx-process', () => {
 
   describe('"generatePianoEPS()"', () => {
     it('"generatePianoEPS()": lead', () => {
-      var generatePianoEPS = rewire.__get__('generatePianoEPS');
       const folder = path.join('songs', 's', 'Swing-low');
-      generatePianoEPS(folder);
+      mscxProcess.generatePianoEPS(folder);
       assert.exists(folder, 'piano');
       assert.exists(folder, 'piano', 'piano.mscx');
       assert.exists(folder, 'piano', 'piano_1.eps');
@@ -69,9 +63,8 @@ describe('mscx-process', () => {
     });
 
     it('"generatePianoEPS()": piano', () => {
-      var generatePianoEPS = rewire.__get__('generatePianoEPS');
       const folder = path.join('songs', 'a', 'Auf-der-Mauer_auf-der-Lauer');
-      generatePianoEPS(folder);
+      mscxProcess.generatePianoEPS(folder);
       assert.exists(folder, 'piano');
       assert.exists(folder, 'piano', 'piano.mscx');
       assert.exists(folder, 'piano', 'piano_1.eps');
