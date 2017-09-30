@@ -1,7 +1,7 @@
 /* jshint esversion: 6 */
 
 /**
- * @file Build a TeX file of all piano scores.
+ * @file Build a TeX file (songs.tex) of all piano scores.
  */
 
 'use strict';
