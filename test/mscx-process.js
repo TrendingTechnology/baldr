@@ -6,7 +6,7 @@ const fs = require('fs-extra');
 const mscxProcess = require('../mscx-process.js');
 const rewire = require('rewire')('../mscx-process.js');
 
-describe('mscx-process', () => {
+describe('mscx-process.js', () => {
 
   describe('"check executables"', () => {
     it('"checkExecutable()": existing executable', () => {
