@@ -6,7 +6,7 @@ const fs = require('fs');
 const texPiano = require('../tex-piano.js');
 const rewire = require('rewire')('../tex-piano.js');
 
-describe('TeX', () => {
+describe('tex-piano.js', () => {
 
   it('"texCmd()"', () => {
     var texCmd = rewire.__get__('texCmd');
