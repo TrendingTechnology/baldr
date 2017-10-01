@@ -18,7 +18,6 @@ const spawn = require('child_process').spawnSync;
 var checkExecutable = function(executable) {
   var exec = spawn(executable, ['--help']);
   if (exec.status === null) {
-    console.log('Install executable: ' + executable);
     return false;
   }
   else {
