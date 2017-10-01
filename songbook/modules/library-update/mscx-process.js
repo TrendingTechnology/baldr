@@ -29,15 +29,17 @@ var checkExecutable = function(executable) {
  * Check if executables are installed.
  * @param {array} executables - Name of the executables.
  */
-var checkExecutables = function(executables) {
-  var allExecExists = true;
+var checkExecutables = function(executables = []) {
+  var status = true;
+  var unavailable = [];
   executables.forEach((exec) => {
     var check = checkExecutable(exec);
     if (!check) {
-      allExecExists = false;
+      status = false;
+      unavailable.push(exec);
     }
   });
-  return allExecExists;
+  return {"status": status, "unavailable": unavailable};
 };
 
 /**

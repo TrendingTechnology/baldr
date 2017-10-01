@@ -19,22 +19,34 @@ describe('mscx-process', () => {
       assert.equal(checkExecutable('loooooool'), false);
     });
 
-    it('"checkExecutables()"', () => {
-      assert.equal(
-        mscxProcess.checkExecutables(['echo', 'ls']), true
-      );
+    it('"checkExecutables()": all are existing', () => {
+      let {status, unavailable} = mscxProcess.checkExecutables(['echo', 'ls'])
+      assert.equal(status, true);
+      assert.deepEqual(unavailable, []);
     });
 
-    it('"checkExecutables(): one nonexisting executable"', () => {
-      assert.equal(
-        mscxProcess.checkExecutables(['echo', 'loooooool']), false
-      );
+    it('"checkExecutables()": one executable', () => {
+      let {status, unavailable} = mscxProcess.checkExecutables(['echo'])
+      assert.equal(status, true);
+      assert.deepEqual(unavailable, []);
     });
 
-    it('"checkExecutables(): two nonexisting executable"', () => {
-      assert.equal(
-        mscxProcess.checkExecutables(['troooooool', 'loooooool']), false
-      );
+    it('"checkExecutables()": one nonexisting executable', () => {
+      let {status, unavailable} = mscxProcess.checkExecutables(['echo', 'loooooool'])
+      assert.equal(status, false);
+      assert.deepEqual(unavailable, ['loooooool']);
+    });
+
+    it('"checkExecutables()": two nonexisting executable', () => {
+      let {status, unavailable} = mscxProcess.checkExecutables(['troooooool', 'loooooool'])
+      assert.equal(status, false);
+      assert.deepEqual(unavailable, ['troooooool', 'loooooool']);
+    });
+
+    it('"checkExecutables()": without arguments', () => {
+      let {status, unavailable} = mscxProcess.checkExecutables();
+      assert.equal(status, true);
+      assert.deepEqual(unavailable, []);
     });
   });
 
