@@ -24,6 +24,18 @@ describe('mscx-process', () => {
         mscxProcess.checkExecutables(['echo', 'ls']), true
       );
     });
+
+    it('"checkExecutables(): one nonexisting executable"', () => {
+      assert.equal(
+        mscxProcess.checkExecutables(['echo', 'loooooool']), false
+      );
+    });
+
+    it('"checkExecutables(): two nonexisting executable"', () => {
+      assert.equal(
+        mscxProcess.checkExecutables(['troooooool', 'loooooool']), false
+      );
+    });
   });
 
   it('"getMscoreCommand()"', () => {
