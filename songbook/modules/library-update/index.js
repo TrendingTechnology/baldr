@@ -69,7 +69,6 @@ var bootstrapConfig = function(newConfig=false) {
   var CheckChange = new Check();
   CheckChange.init(path.join(config.path, 'filehashes.db'));
 };
-exports.bootstrapConfig = bootstrapConfig;
 
 /**
  * External function for command line usage.
@@ -78,7 +77,6 @@ var setTestMode = function() {
   config.test = true;
   config.path = path.resolve('songs');
 }
-exports.setTestMode = setTestMode;
 
 /**
  * Display a message about the config file.
@@ -188,8 +186,7 @@ var cleanFolder = function(folder) {
 /**
  * Clean all temporary media files.
  */
-exports.clean = function() {
-
+var clean = function() {
   tree.flat(config.path).forEach(cleanFolder);
 
   cleanFiles(config.path, [
@@ -198,3 +195,7 @@ exports.clean = function() {
     'filehashes.db'
   ]);
 };
+
+exports.bootstrapConfig = bootstrapConfig;
+exports.clean = clean;
+exports.setTestMode = setTestMode;
