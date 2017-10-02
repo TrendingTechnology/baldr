@@ -13,14 +13,25 @@ var Sqlite = function(dbFile) {
 Sqlite.prototype.initialize = function() {
   this.db = new sqlite3(this.dbFile);
   this.db
-    .prepare("CREATE TABLE IF NOT EXISTS hashes (filename TEXT, hash TEXT)")
+    .prepare(
+      "CREATE TABLE IF NOT EXISTS hashes (filename TEXT UNIQUE, hash TEXT)"
+    )
+    .run();
+
+  this.db
+    .prepare("CREATE INDEX filename ON hashes(filename)")
     .run();
 }
 
 Sqlite.prototype.insert = function(filename, hash) {
-  this.db
-    .prepare('INSERT INTO hashes values ($filename, $hash)')
-    .run({"filename": filename, "hash": hash});
+  try {
+    this.db
+      .prepare('INSERT INTO hashes values ($filename, $hash)')
+      .run({"filename": filename, "hash": hash});
+  }
+  catch (e) {
+    return e;
+  }
 }
 
 Sqlite.prototype.select = function(filename) {
