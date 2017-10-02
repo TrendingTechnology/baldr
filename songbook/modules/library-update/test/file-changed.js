@@ -48,10 +48,10 @@ describe('file-changed.js', () => {
     fs.unlinkSync('test.db');
   });
 
-  it('"hash()"', () => {
-    let hash = rw.__get__('hash');
+  it('"hashSHA1()"', () => {
+    let hashSHA1 = rw.__get__('hashSHA1');
     assert.equal(
-      hash(path.join('test', 'files', 'hash.txt')),
+      hashSHA1(path.join('test', 'files', 'hash.txt')),
       '7516f3c75e85c64b98241a12230d62a64e59bce3'
     );
   });

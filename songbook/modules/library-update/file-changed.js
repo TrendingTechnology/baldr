@@ -51,7 +51,7 @@ Sqlite.prototype.update = function(filename, hash) {
 /**
  *
  */
-var hash = function(filename) {
+var hashSHA1 = function(filename) {
   return crypto
     .createHash('sha1')
     .update(
@@ -71,12 +71,7 @@ var fileChanged = function(filename) {
     return false;
   }
 
-  var hash = crypto
-    .createHash('sha1')
-    .update(
-      fs.readFileSync(filename)
-    )
-    .digest('hex');
+  var hash = hashSHA1(filename);
 
   var row = config.db.prepare('SELECT * FROM hashes WHERE filename = $filename').get({filename: filename});
 
