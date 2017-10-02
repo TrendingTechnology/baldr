@@ -56,6 +56,12 @@ describe('file-changed.js', () => {
     );
   });
 
+  it('"dbInit()"', () => {
+    let db = fileChanged.dbInit('test.db');
+    assert.equal(db.dbFile, 'test.db');
+    fs.unlinkSync('test.db');
+  });
+
   describe('"fileChanged()"', function() {
     it('"fileChanged()": run once', function() {
       var slu = rewireScript();
