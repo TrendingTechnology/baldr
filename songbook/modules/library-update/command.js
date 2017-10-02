@@ -2,9 +2,9 @@
 
 'use strict';
 
-const path = require('path');
+const commander = require('commander');
 const fs = require('fs');
-var commander = require('commander');
+const path = require('path');
 
 // TODO: Clean up
 try {

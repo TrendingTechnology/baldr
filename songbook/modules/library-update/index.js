@@ -2,15 +2,15 @@
 
 'use strict';
 
-const os = require('os');
-const path = require('path');
 const colors = require('colors');
 const fs = require('fs-extra');
+const os = require('os');
+const path = require('path');
 
 const Check = require('./file-changed.js');
-const tree = require('./folder-tree.js');
 const jsonSlides = require('./json-slides.js');
 const mscxProcess = require('./mscx-process.js');
+const tree = require('./folder-tree.js');
 
 const warning = 'Warning! '.yellow;
 const error = 'Error! '.red;

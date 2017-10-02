@@ -2,10 +2,10 @@
 
 'use strict';
 
-const path = require('path');
-const sqlite3 = require('better-sqlite3');
 const crypto = require('crypto');
 const fs = require('fs');
+const path = require('path');
+const sqlite3 = require('better-sqlite3');
 
 var Sqlite = function(dbFile) {
   this.dbFile = dbFile;
