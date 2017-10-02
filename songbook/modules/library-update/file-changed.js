@@ -1,6 +1,6 @@
 /* jshint esversion: 6 */
 
-//'use strict';
+'use strict';
 
 const path = require('path');
 const sqlite3 = require('better-sqlite3');
