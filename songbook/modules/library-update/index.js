@@ -76,7 +76,7 @@ var bootstrapConfig = function(newConfig=false) {
 var setTestMode = function() {
   config.test = true;
   config.path = path.resolve('songs');
-}
+};
 
 /**
  * Display a message about the config file.
@@ -169,7 +169,7 @@ var cleanFiles = function(folder, files) {
       fs.removeSync(path.join(folder, file));
     }
   );
-}
+};
 
 /**
  * Clean all temporary files in a song folder.

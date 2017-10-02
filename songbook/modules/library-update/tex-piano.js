@@ -15,7 +15,7 @@ const path = require('path');
  */
 var texCmd = function(command, value) {
   return '\\tmp' + command + '{' + value  + '}\n';
-}
+};
 
 /**
  *
@@ -42,7 +42,7 @@ var texSong = function(folder) {
  */
 var texABC = function(abc) {
   return '\n\n' + texCmd('chapter', abc.toUpperCase());
-}
+};
 
 /**
  * Generate TeX file for the piano version of the songbook
