@@ -29,7 +29,9 @@ before(function() {
 describe('file-changed.js', () => {
 
   it('"Object Sqlite()"', () => {
-    let db = new fileChanged.Sqlite('test.db');
+    let Sqlite = rw.__get__('Sqlite');
+    let db = new Sqlite('test.db');
+
     db.initialize();
     assert.exists('test.db');
 
