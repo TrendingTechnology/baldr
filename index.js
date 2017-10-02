@@ -6,7 +6,8 @@ const os = require('os');
 const path = require('path');
 const colors = require('colors');
 const fs = require('fs-extra');
-const CheckChange = require('./file-changed.js');
+
+const Check = require('./file-changed.js');
 const tree = require('./folder-tree.js');
 const jsonSlides = require('./json-slides.js');
 const mscxProcess = require('./mscx-process.js');
@@ -65,8 +66,8 @@ var bootstrapConfig = function(newConfig=false) {
     messageConfigFile();
   }
 
-  var Check = new CheckChange();
-  Check.init(path.join(config.path, 'filehashes.db'));
+  var CheckChange = new Check();
+  CheckChange.init(path.join(config.path, 'filehashes.db'));
 };
 exports.bootstrapConfig = bootstrapConfig;
 
@@ -138,15 +139,15 @@ var message = function(text) {
  */
 var processFolder = function(folder) {
   // projector
-  if (config.force || Check.do(path.join(folder, 'projector.mscx'))) {
+  if (config.force || CheckChange.do(path.join(folder, 'projector.mscx'))) {
     mscxProcess.generatePDF(folder, 'projector');
     mscxProcess.generateSlides(folder);
   }
 
   // piano
   if (config.force ||
-    Check.do(path.join(folder, 'piano.mscx')) ||
-    Check.do(path.join(folder, 'lead.mscx'))
+    CheckChange.do(path.join(folder, 'piano.mscx')) ||
+    CheckChange.do(path.join(folder, 'lead.mscx'))
   ) {
     mscxProcess.generatePianoEPS(folder);
   }
