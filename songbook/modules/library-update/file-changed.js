@@ -94,5 +94,3 @@ var fileChanged = function(filename) {
     return false;
   }
 };
-
-exports.Sqlite = Sqlite;
