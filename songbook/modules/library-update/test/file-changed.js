@@ -25,38 +25,26 @@ before(function() {
 });
 
 describe('file-changed.js', () => {
-  describe('Object', () => {
 
-    it('"db.initialize()"', () => {
-      let db = new fileChanged.Sqlite('test.db');
-      db.initialize();
-      assert.exists('test.db');
-      fs.unlinkSync('test.db');
-    });
+  it('"Object Sqlite()"', () => {
+    let db = new fileChanged.Sqlite('test.db');
+    db.initialize();
+    assert.exists('test.db');
 
-    it('"db.insert()"', () => {
-      let db = new fileChanged.Sqlite('test.db');
-      db.initialize();
-      db.insert('lol', 'toll');
-      var row = db.select('lol');
-      assert.equal(row.hash, 'toll');
-      fs.unlinkSync('test.db');
-    });
+    db.insert('lol', 'toll');
+    var row = db.select('lol');
+    assert.equal(row.hash, 'toll');
 
-    it('"db.update()"', () => {
-      let db = new fileChanged.Sqlite('test.db');
-      db.initialize();
+    let error = db.insert('lol', 'toll');
+    assert.equal(error.name, 'SqliteError');
 
-      db.insert('lol', 'toll');
-      assert.equal(db.select('lol').hash, 'toll');
+    db.update('lol', 'troll');
+    assert.equal(db.select('lol').hash, 'troll');
 
-      db.update('lol', 'troll');
-      assert.equal(db.select('lol').hash, 'troll');
-
-      fs.unlinkSync('test.db');
-    });
-
+    fs.unlinkSync('test.db');
   });
+
+
 
   describe('"fileChanged()"', function() {
     it('"fileChanged()": run once', function() {
