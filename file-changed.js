@@ -5,6 +5,7 @@
 const path = require('path');
 const sqlite3 = require('better-sqlite3');
 const crypto = require('crypto');
+const fs = require('fs');
 
 var Sqlite = function(dbFile) {
   this.dbFile = dbFile;
@@ -51,7 +52,7 @@ Sqlite.prototype.update = function(filename, hash) {
  *
  */
 var hash = function(filename) {
-  var hash = crypto
+  return crypto
     .createHash('sha1')
     .update(
       fs.readFileSync(filename)
