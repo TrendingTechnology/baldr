@@ -6,9 +6,9 @@
 
 'use strict';
 
-const path = require('path');
-const fs = require('fs-extra');
 const folderTree = require('./folder-tree.js');
+const fs = require('fs-extra');
+const path = require('path');
 
 /**
  *

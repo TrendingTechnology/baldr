@@ -7,8 +7,8 @@
 
 'use strict';
 
-const path = require('path');
 const fs = require('fs-extra');
+const path = require('path');
 const spawn = require('child_process').spawnSync;
 
 /**
