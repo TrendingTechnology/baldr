@@ -9,6 +9,8 @@ const sleep = require('sleep');
 const fileChanged = require('../file-changed.js');
 
 const rewire = require('rewire');
+const rw = require('rewire')('../file-changed.js');
+
 
 var rewireScript = function() {
   script = rewire('../index.js');
@@ -44,7 +46,13 @@ describe('file-changed.js', () => {
     fs.unlinkSync('test.db');
   });
 
-
+  it('"hash()"', () => {
+    let hash = rw.__get__('hash');
+    assert.equal(
+      hash(path.join('test', 'files', 'hash.txt')),
+      '7516f3c75e85c64b98241a12230d62a64e59bce3'
+    );
+  });
 
   describe('"fileChanged()"', function() {
     it('"fileChanged()": run once', function() {
