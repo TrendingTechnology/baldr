@@ -2,13 +2,10 @@
 
 'use strict';
 
-const crypto = require('crypto');
 const os = require('os');
 const path = require('path');
-const p = path.join;
 const colors = require('colors');
 const fs = require('fs-extra');
-const sqlite3 = require('better-sqlite3');
 const CheckChange = require('./file-changed.js');
 const tree = require('./folder-tree.js');
 const jsonSlides = require('./json-slides.js');
@@ -53,7 +50,7 @@ var bootstrapConfig = function(newConfig=false) {
   config = configDefault;
 
   // config file
-  var configFile = p(os.homedir(), config.configFileName);
+  var configFile = path.join(os.homedir(), '.html5-school-presentation.json');
   var configFileExits = fs.existsSync(configFile);
   if (configFileExits) {
     config = Object.assign(config, require(configFile).songbook);
@@ -86,8 +83,8 @@ exports.setTestMode = setTestMode;
  * Display a message about the config file.
  */
 var messageConfigFile = function() {
-  var output = error + 'No config file \'~/' + config.configFileName + '\' found!';
-  const sampleConfigFile = p(__dirname, 'sample.config.json');
+  var output = error + 'No config file \'~/html5-school-presentation.json\' found!';
+  const sampleConfigFile = path.join(__dirname, 'sample.config.json');
   const sampleConfig = fs.readFileSync(sampleConfigFile, 'utf8');
   output += '\nCreate a config file with this keys:\n' + sampleConfig;
   if (!config.test) {
@@ -113,7 +110,7 @@ var warningInfoJson = function(folder) {
  * Execute git pull if repository exists.
  */
 var pull = function() {
-  if (fs.existsSync(p(config.path, '.git'))) {
+  if (fs.existsSync(path.join(config.path, '.git'))) {
     var gitpull = spawn('git', ['pull'], {cwd: config.path});
     message('Nach Aktualsierungen suchen: ' + gitpull.stdout.toString('utf8'));
   }
@@ -141,15 +138,15 @@ var message = function(text) {
  */
 var processFolder = function(folder) {
   // projector
-  if (config.force || Check.do(p(folder, 'projector.mscx'))) {
+  if (config.force || Check.do(path.join(folder, 'projector.mscx'))) {
     mscxProcess.generatePDF(folder, 'projector');
     mscxProcess.generateSlides(folder);
   }
 
   // piano
   if (config.force ||
-    Check.do(p(folder, 'piano.mscx')) ||
-    Check.do(p(folder, config.leadMScore))
+    Check.do(path.join(folder, 'piano.mscx')) ||
+    Check.do(path.join(folder, 'lead.mscx'))
   ) {
     mscxProcess.generatePianoEPS(folder);
   }
@@ -182,7 +179,7 @@ var cleanFiles = function(folder, files) {
 var cleanFolder = function(folder) {
   cleanFiles(folder, [
     'piano',
-    config.slidesFolder,
+    'slides',
     'projector.pdf'
   ]);
 };
@@ -195,8 +192,8 @@ exports.clean = function() {
   tree.flat(config.path).forEach(cleanFolder);
 
   cleanFiles(config.path, [
-    config.json,
-    config.tex,
+    'songs.json',
+    'songs.tex',
     'filehashes.db'
   ]);
 };
