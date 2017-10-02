@@ -48,12 +48,6 @@ Sqlite.prototype.update = function(filename, hash) {
 
 }
 
-var dbInit = function(dbFile) {
-  let dbConnection = new Sqlite(dbFile);
-  dbConnection.initialize();
-  return dbConnection;
-}
-
 /**
  *
  */
@@ -66,29 +60,38 @@ var hashSHA1 = function(filename) {
     .digest('hex');
 }
 
+var CheckChange = function() {
+  this.db = {};
+}
+
+CheckChange.prototype.init = function(dbFile) {
+  this.db = new Sqlite(dbFile);
+  this.db.initialize();
+  return this.db;
+}
+
 /**
  * Check for file modifications
  * @param {string} filename - Path to the file.
  * @returns {boolean}
  */
-var fileChanged = function(filename) {
+CheckChange.prototype.do = function(filename) {
   filename = path.resolve(filename);
   if (!fs.existsSync(filename)) {
     return false;
   }
 
   var hash = hashSHA1(filename);
-
-  var row = config.db.prepare('SELECT * FROM hashes WHERE filename = $filename').get({filename: filename});
+  var row = this.db.select(filename);
 
   if (row) {
     var hashStored = row.hash;
   } else  {
-    config.db.prepare('INSERT INTO hashes values ($filename, $hash)').run({filename: filename, hash: hash});
+    this.db.insert(filename, hash);
     var hashStored = '';
   }
   if (hash != hashStored) {
-    config.db.prepare("UPDATE hashes SET hash = $hash WHERE filename = $filename").run({filename: filename, hash: hash});
+    this.db.update(filename, hash);
     return true;
   }
   else {
@@ -96,4 +99,4 @@ var fileChanged = function(filename) {
   }
 };
 
-exports.dbInit = dbInit;
+module.exports = CheckChange;

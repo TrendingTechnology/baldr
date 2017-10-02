@@ -2,25 +2,11 @@
 
 const assert = require('assert');
 const path = require('path');
-const p = path.join;
 const fs = require('fs-extra');
-const sleep = require('sleep');
 
-const fileChanged = require('../file-changed.js');
+const CheckChange = require('../file-changed.js');
 
-const rewire = require('rewire');
-const rw = require('rewire')('../file-changed.js');
-
-
-var rewireScript = function() {
-  script = rewire('../index.js');
-  script.bootstrapConfig({
-    test: true,
-    path: path.resolve('songs'),
-    force: true,
-  });
-  return script;
-}
+const rewire = require('rewire')('../file-changed.js');
 
 before(function() {
   process.env.PATH = __dirname + '/bin:' + process.env.PATH;
@@ -29,7 +15,7 @@ before(function() {
 describe('file-changed.js', () => {
 
   it('"Object Sqlite()"', () => {
-    let Sqlite = rw.__get__('Sqlite');
+    let Sqlite = rewire.__get__('Sqlite');
     let db = new Sqlite('test.db');
 
     db.initialize();
@@ -49,89 +35,29 @@ describe('file-changed.js', () => {
   });
 
   it('"hashSHA1()"', () => {
-    let hashSHA1 = rw.__get__('hashSHA1');
+    let hashSHA1 = rewire.__get__('hashSHA1');
     assert.equal(
       hashSHA1(path.join('test', 'files', 'hash.txt')),
       '7516f3c75e85c64b98241a12230d62a64e59bce3'
     );
   });
 
-  it('"dbInit()"', () => {
-    let db = fileChanged.dbInit('test.db');
+  it('"Object CheckChange()"', () => {
+    var check = new CheckChange();
+    let db = check.init('test.db');
     assert.equal(db.dbFile, 'test.db');
+
+    fs.appendFileSync('tmp.txt', 'test');
+    assert.ok(check.do('tmp.txt'));
+
+    assert.ok(!check.do('tmp.txt'));
+    assert.ok(!check.do('tmp.txt'));
+
+    fs.appendFileSync('tmp.txt', 'test');
+    assert.ok(check.do('tmp.txt'));
+
+    fs.unlinkSync('tmp.txt');
     fs.unlinkSync('test.db');
   });
 
-  describe('"fileChanged()"', function() {
-    it('"fileChanged()": run once', function() {
-      var slu = rewireScript();
-      var fileChanged = slu.__get__('fileChanged');
-      fs.appendFileSync('tmp.txt', 'test');
-      assert.ok(fileChanged('tmp.txt'));
-      fs.unlinkSync('tmp.txt');
-      slu.clean();
-    });
-
-    it('"fileChanged()": run twice', function() {
-      var slu = rewireScript();
-      var fileChanged = slu.__get__('fileChanged');
-      fs.appendFileSync('tmp.txt', 'test');
-      assert.ok(fileChanged('tmp.txt'));
-      assert.ok(!fileChanged('tmp.txt'));
-      fs.unlinkSync('tmp.txt');
-      slu.clean();
-    });
-
-    it('"fileChanged()": run three times', function() {
-      var slu = rewireScript();
-      var fileChanged = slu.__get__('fileChanged');
-      fs.appendFileSync('tmp.txt', 'test');
-      assert.ok(fileChanged('tmp.txt'));
-      assert.ok(!fileChanged('tmp.txt'));
-      assert.ok(!fileChanged('tmp.txt'));
-      fs.unlinkSync('tmp.txt');
-      slu.clean();
-    });
-
-    it('"fileChanged()": change file', function() {
-      var slu = rewireScript();
-      var fileChanged = slu.__get__('fileChanged');
-      fs.appendFileSync('tmp.txt', 'test');
-      assert.ok(fileChanged('tmp.txt'));
-      assert.ok(!fileChanged('tmp.txt'));
-      fs.appendFileSync('tmp.txt', 'test');
-      assert.ok(fileChanged('tmp.txt'));
-      fs.unlinkSync('tmp.txt');
-      slu.clean();
-    });
-
-    it('"fileChanged()": nonexisting file', function() {
-      var slu = rewireScript();
-      var fileChanged = slu.__get__('fileChanged');
-      assert.ok(!fileChanged('tmxxxxxxxxxxxxxxxxxxxxxxp.txt'));
-      slu.clean();
-    });
-
-    it('"fileChanged()": in folder', function() {
-      var slu = rewireScript();
-      var fileChanged = slu.__get__('fileChanged');
-      var tmp = p('songs', 'tmp.txt')
-      fs.appendFileSync(tmp, 'test');
-      assert.ok(fileChanged(tmp));
-      assert.ok(!fileChanged(tmp));
-      fs.unlinkSync(tmp);
-      slu.clean();
-    });
-
-    it('"fileChanged()": absolute path', function() {
-      var slu = rewireScript();
-      var fileChanged = slu.__get__('fileChanged');
-      var tmp = path.resolve('tmp.txt')
-      fs.appendFileSync(tmp, 'test');
-      assert.ok(fileChanged(tmp));
-      assert.ok(!fileChanged(tmp));
-      fs.unlinkSync(tmp);
-      slu.clean();
-    });
-  });
 });
