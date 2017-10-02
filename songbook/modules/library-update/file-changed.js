@@ -25,14 +25,9 @@ Sqlite.prototype.initialize = function() {
 }
 
 Sqlite.prototype.insert = function(filename, hash) {
-  try {
-    this.db
-      .prepare('INSERT INTO hashes values ($filename, $hash)')
-      .run({"filename": filename, "hash": hash});
-  }
-  catch (e) {
-    return e;
-  }
+  this.db
+    .prepare('INSERT INTO hashes values ($filename, $hash)')
+    .run({"filename": filename, "hash": hash});
 }
 
 Sqlite.prototype.select = function(filename) {

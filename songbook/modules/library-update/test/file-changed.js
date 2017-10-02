@@ -25,8 +25,12 @@ describe('file-changed.js', () => {
     var row = db.select('lol');
     assert.equal(row.hash, 'toll');
 
-    let error = db.insert('lol', 'toll');
-    assert.equal(error.name, 'SqliteError');
+    try {
+      db.insert('lol', 'toll');
+    }
+    catch (e) {
+      assert.equal(e.name, 'SqliteError');
+    }
 
     db.update('lol', 'troll');
     assert.equal(db.select('lol').hash, 'troll');
