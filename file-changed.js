@@ -1,6 +1,6 @@
 /* jshint esversion: 6 */
 
-'use strict';
+//'use strict';
 
 const path = require('path');
 const sqlite3 = require('better-sqlite3');
@@ -48,6 +48,12 @@ Sqlite.prototype.update = function(filename, hash) {
 
 }
 
+var dbInit = function(dbFile) {
+  let dbConnection = new Sqlite(dbFile);
+  dbConnection.initialize();
+  return dbConnection;
+}
+
 /**
  *
  */
@@ -89,3 +95,5 @@ var fileChanged = function(filename) {
     return false;
   }
 };
+
+exports.dbInit = dbInit;
