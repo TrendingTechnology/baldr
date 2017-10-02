@@ -20,7 +20,7 @@ Sqlite.prototype.initialize = function() {
     .run();
 
   this.db
-    .prepare("CREATE INDEX filename ON hashes(filename)")
+    .prepare("CREATE INDEX IF NOT EXISTS filename ON hashes(filename)")
     .run();
 }
 
