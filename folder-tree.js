@@ -95,7 +95,7 @@ var getSongFolders = function(basePath, folder) {
 var getABCFolders = function(basePath) {
   var abc = '0abcdefghijklmnopqrstuvwxyz'.split('');
   return abc.filter((file) => {
-    var folder = path.join(basePath, file)
+    var folder = path.join(basePath, file);
     if (fs.existsSync(folder) && fs.statSync(folder).isDirectory()) {
       return true;
     }
@@ -103,7 +103,7 @@ var getABCFolders = function(basePath) {
       return false;
     }
   });
-}
+};
 
 /**
  * @param {string} basePath - Basepath to the songbook tree.
@@ -132,7 +132,7 @@ var getTree = function(basePath) {
     tree[abc] = folders;
   });
   return tree;
-}
+};
 
 /**
  * @return {array} Array of folder paths.
