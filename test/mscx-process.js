@@ -54,6 +54,10 @@ describe('mscx-process.js', () => {
     });
   });
 
+  it('"gitPull()"', () => {
+    assert.ok(!mscxProcess.gitPull('songs'));
+  });
+
   it('"getMscoreCommand()"', () => {
     const getMscoreCommand = rewire.__get__('getMscoreCommand');
     if (process.platform == 'darwin') {

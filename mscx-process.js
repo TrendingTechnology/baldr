@@ -41,6 +41,18 @@ var checkExecutables = function(executables = []) {
 };
 
 /**
+ * Execute git pull if repository exists.
+ */
+var gitPull = function(basePath) {
+  if (fs.existsSync(path.join(basePath, '.git'))) {
+    return spawn('git', ['pull'], {cwd: basePath});
+  }
+  else {
+    return false;
+  }
+};
+
+/**
  * Get the MuseScore command.
  * @returns {string} The name of the MuseScore command.
  */
@@ -115,3 +127,4 @@ exports.generatePDF = generatePDF;
 exports.generatePianoEPS = generatePianoEPS;
 exports.generateSlides = generateSlides;
 exports.getMscoreCommand = getMscoreCommand;
+exports.gitPull = gitPull;
