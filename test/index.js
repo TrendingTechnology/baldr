@@ -43,6 +43,24 @@ describe('Configuration', () => {
     assert.exists(path.resolve('songs', 'filehashes.db'))
   });
 
+  it('"bootstrapConfig()": exit', () => {
+    var s = rewire('../index.js');
+    let savePATH = process.env.PATH;
+    process.env.PATH = '';
+    try {
+      s.bootstrapConfig({path: path.resolve('songs'), test: true});
+    }
+    catch(e) {
+      assert.equal(
+        e.message,
+        'Some dependencies are not installed: “mscore-to-eps.sh”, ' +
+        '“pdf2svg”, “pdfcrop”, “pdfinfo”, “pdftops”, “mscore”'
+      )
+      assert.equal(e.name, 'UnavailableCommandsError');
+    }
+    process.env.PATH = savePATH;
+  });
+
 });
 
 /**
