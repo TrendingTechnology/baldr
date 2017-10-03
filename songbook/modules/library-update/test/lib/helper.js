@@ -11,4 +11,4 @@ assert.exists = function() {
   );
 };
 
-exports.assert = assert
+exports.assert = assert;
