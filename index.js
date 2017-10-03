@@ -38,7 +38,7 @@ var config = {};
  */
 var bootstrapConfig = function(newConfig=false) {
 
-  mscxProcess.checkExecutables([
+  let {status, unavailable} = mscxProcess.checkExecutables([
     'mscore-to-eps.sh',
     'pdf2svg',
     'pdfcrop',
@@ -46,6 +46,14 @@ var bootstrapConfig = function(newConfig=false) {
     'pdftops',
     mscxProcess.getMscoreCommand()
   ]);
+
+  if (!status) {
+    throw new Error(
+      'Some dependencies are not installed: “' +
+      unavailable.join('”, “') +
+      '”'
+    );
+  }
 
   // default object
   config = configDefault;
