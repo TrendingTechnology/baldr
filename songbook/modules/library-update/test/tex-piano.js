@@ -10,12 +10,12 @@ describe('tex-piano.js', () => {
 
   it('"texCmd()"', () => {
     var texCmd = rewire.__get__('texCmd');
-    assert.equal(texCmd('lorem', 'ipsum'), '\\tmplorem{ipsum}\n')
+    assert.equal(texCmd('lorem', 'ipsum'), '\\tmplorem{ipsum}\n');
   });
 
   it('"texABC()"', () => {
     var texAlpha = rewire.__get__('texABC');
-    assert.equal(texAlpha('a'), '\n\n\\tmpchapter{A}\n')
+    assert.equal(texAlpha('a'), '\n\n\\tmpchapter{A}\n');
   });
 
   it('"texSong()"', () => {

@@ -75,12 +75,12 @@ CheckChange.prototype.do = function(filename) {
 
   var hash = hashSHA1(filename);
   var row = this.db.select(filename);
+  var hashStored = '';
 
   if (row) {
-    var hashStored = row.hash;
+    hashStored = row.hash;
   } else  {
     this.db.insert(filename, hash);
-    var hashStored = '';
   }
   if (hash != hashStored) {
     this.db.update(filename, hash);

@@ -6,6 +6,7 @@ const os = require('os');
 const path = require('path');
 
 const Check = require('./file-changed.js');
+var CheckChange = new Check();
 const jsonSlides = require('./json-slides.js');
 const mscxProcess = require('./mscx-process.js');
 const tree = require('./folder-tree.js');
@@ -74,7 +75,6 @@ var bootstrapConfig = function(newConfig=false) {
     messageConfigFile();
   }
 
-  var CheckChange = new Check();
   CheckChange.init(path.join(config.path, 'filehashes.db'));
 };
 

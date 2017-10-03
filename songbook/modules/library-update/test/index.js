@@ -40,7 +40,7 @@ describe('Configuration', () => {
     const c = s.__get__('config');
     assert.equal(c.path, path.resolve('songs'));
     assert.equal(c.json, 'songs.json');
-    assert.exists(path.resolve('songs', 'filehashes.db'))
+    assert.exists(path.resolve('songs', 'filehashes.db'));
   });
 
   it('"bootstrapConfig()": exit', () => {
@@ -55,7 +55,7 @@ describe('Configuration', () => {
         e.message,
         'Some dependencies are not installed: “mscore-to-eps.sh”, ' +
         '“pdf2svg”, “pdfcrop”, “pdfinfo”, “pdftops”, “mscore”'
-      )
+      );
       assert.equal(e.name, 'UnavailableCommandsError');
     }
     process.env.PATH = savePATH;
