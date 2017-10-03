@@ -1,5 +1,3 @@
-/* jshint esversion: 6 */
-
 /**
  * @file Build a json file (songs.json) containing all slide files.
  */
@@ -35,7 +33,7 @@ var generateSongJSON = function(songPath) {
   else if (fs.lstatSync(songPath).isDirectory()) {
     return false;
   }
-}
+};
 
 /**
  *

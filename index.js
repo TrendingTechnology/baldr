@@ -1,5 +1,3 @@
-/* jshint esversion: 6 */
-
 'use strict';
 
 const colors = require('colors');

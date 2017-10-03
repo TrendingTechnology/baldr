@@ -1,5 +1,3 @@
-/* jshint esversion: 6 */
-
 /**
  * @file Retrieve a object representation of a song folder tree.
  * <pre><code>

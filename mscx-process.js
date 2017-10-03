@@ -1,5 +1,3 @@
-/* jshint esversion: 6 */
-
 /**
  * @file Process the various *.mscx files to various other file formats
  * (*.pdf, *.eps, *.svg)

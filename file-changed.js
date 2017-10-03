@@ -1,5 +1,3 @@
-/* jshint esversion: 6 */
-
 'use strict';
 
 const crypto = require('crypto');
@@ -9,7 +7,7 @@ const sqlite3 = require('better-sqlite3');
 
 var Sqlite = function(dbFile) {
   this.dbFile = dbFile;
-}
+};
 
 Sqlite.prototype.initialize = function() {
   this.db = new sqlite3(this.dbFile);
@@ -22,26 +20,25 @@ Sqlite.prototype.initialize = function() {
   this.db
     .prepare("CREATE INDEX IF NOT EXISTS filename ON hashes(filename)")
     .run();
-}
+};
 
 Sqlite.prototype.insert = function(filename, hash) {
   this.db
     .prepare('INSERT INTO hashes values ($filename, $hash)')
     .run({"filename": filename, "hash": hash});
-}
+};
 
 Sqlite.prototype.select = function(filename) {
   return this.db
     .prepare('SELECT * FROM hashes WHERE filename = $filename')
     .get({"filename": filename});
-}
+};
 
 Sqlite.prototype.update = function(filename, hash) {
   this.db
     .prepare("UPDATE hashes SET hash = $hash WHERE filename = $filename")
     .run({"filename": filename, "hash": hash});
-
-}
+};
 
 /**
  *
@@ -53,17 +50,17 @@ var hashSHA1 = function(filename) {
       fs.readFileSync(filename)
     )
     .digest('hex');
-}
+};
 
 var CheckChange = function() {
   this.db = {};
-}
+};
 
 CheckChange.prototype.init = function(dbFile) {
   this.db = new Sqlite(dbFile);
   this.db.initialize();
   return this.db;
-}
+};
 
 /**
  * Check for file modifications
