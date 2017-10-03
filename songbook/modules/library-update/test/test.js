@@ -50,12 +50,6 @@ describe('Configuration', () => {
  */
 describe('Private functions', () => {
 
-  it('"pull()"', () => {
-    var pull = slu.__get__('pull');
-    assert.ok(!pull());
-  });
-
-
   it('"message()"', () => {
     var message = slu.__get__('message');
     assert.equal(message('test'), 'test');

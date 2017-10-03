@@ -106,19 +106,6 @@ var warningInfoJson = function(folder) {
 };
 
 /**
- * Execute git pull if repository exists.
- */
-var pull = function() {
-  if (fs.existsSync(path.join(config.path, '.git'))) {
-    var gitpull = spawn('git', ['pull'], {cwd: config.path});
-    message('Nach Aktualsierungen suchen: ' + gitpull.stdout.toString('utf8'));
-  }
-  else {
-    return false;
-  }
-};
-
-/**
  * Print out or return text.
  * @param {string} text - Text to display.
  */
@@ -155,7 +142,7 @@ var processFolder = function(folder) {
  * Update and generate when required media files for the songs.
  */
 exports.update = function() {
-  pull();
+  mscxProcess.gitPull(config.path);
   tree.flat(config.path).forEach(processFolder);
   jsonSlides.generateJSON(config.path);
 };
