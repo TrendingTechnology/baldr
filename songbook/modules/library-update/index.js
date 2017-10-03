@@ -48,11 +48,13 @@ var bootstrapConfig = function(newConfig=false) {
   ]);
 
   if (!status) {
-    throw new Error(
+    let e = new Error(
       'Some dependencies are not installed: “' +
       unavailable.join('”, “') +
       '”'
     );
+    e.name = 'UnavailableCommandsError';
+    throw e;
   }
 
   // default object
