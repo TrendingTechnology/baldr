@@ -101,5 +101,4 @@ describe('mscx-process.js', () => {
 
   });
 
-
 });
