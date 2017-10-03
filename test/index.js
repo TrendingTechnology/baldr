@@ -1,5 +1,3 @@
-/* jshint esversion: 6 */
-
 const {assert} = require('./lib/helper.js');
 const path = require('path');
 const p = path.join;
@@ -7,6 +5,8 @@ const fs = require('fs-extra');
 const sleep = require('sleep');
 const process = require('process');
 const rewire = require('rewire');
+
+process.env.PATH = __dirname + '/bin:' + process.env.PATH;
 
 var slu = rewire('../index.js');
 slu.bootstrapConfig({

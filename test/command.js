@@ -1,5 +1,3 @@
-/* jshint esversion: 6 */
-
 const {assert} = require('./lib/helper.js');
 const spawn = require('child_process').spawnSync;
 

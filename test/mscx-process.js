@@ -1,5 +1,3 @@
-/* jshint esversion: 6 */
-
 const {assert} = require('./lib/helper.js');
 const path = require('path');
 const fs = require('fs-extra');
