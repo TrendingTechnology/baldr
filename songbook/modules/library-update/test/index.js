@@ -62,45 +62,6 @@ describe('Configuration', () => {
 /**
  *
  */
-describe('Private functions', () => {
-
-  it('"message()"', () => {
-    stub = sinon.stub();
-    message = rewire.__get__('message');
-    message = stub;
-    message('lol');
-    assert.equal(stub.called, true);
-  });
-
-  it('"messageNoPath()"', () => {
-    stub = sinon.stub();
-
-    let revert = rewire.__set__('message', stub);
-    messageNoPath = rewire.__get__('messageNoPath');
-
-    try {
-      messageNoPath();
-    }
-    catch (e) {
-      assert.equal(e.message, 'No configuration file found.');
-    }
-    assert.equal(stub.called, true);
-    assert.deepEqual(stub.args, [
-      [ '\u001b[31mError! \u001b[39mNo config file ' +
-        '\'~/html5-school-presentation.json\' found!\nCreate a ' +
-        'config file with this keys:\n{\n\t"songbook": ' +
-        '{\n\t\t"path": "/Users/jf/Desktop/school/Lieder",' +
-        '\n\t\t"json": "songs.json",\n\t\t"info": "info.json",' +
-        '\n\t\t"slidesFolder": "slides",\n\t}\n}\n'
-      ]
-    ]);
-  });
-
-});
-
-/**
- *
- */
 describe('Exported functions', () => {
 
   it('"update()"', () => {

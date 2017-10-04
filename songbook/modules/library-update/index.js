@@ -1,6 +1,5 @@
 'use strict';
 
-const colors = require('colors');
 const fs = require('fs-extra');
 const os = require('os');
 const path = require('path');
@@ -11,9 +10,7 @@ const jsonSlides = require('./json-slides.js');
 const mscxProcess = require('./mscx-process.js');
 const texPiano = require('./tex-piano.js');
 const tree = require('./folder-tree.js');
-
-const warning = 'Warning! '.yellow;
-const error = 'Error! '.red;
+const message = require('./message.js');
 
 const configDefault = {
   json: 'songs.json',
@@ -73,7 +70,7 @@ var bootstrapConfig = function(newConfig=false) {
   }
 
   if (!config.path || config.path.length === 0) {
-    messageNoPath();
+    message.noConfigPath();
   }
 
   CheckChange.init(path.join(config.path, 'filehashes.db'));
@@ -85,38 +82,6 @@ var bootstrapConfig = function(newConfig=false) {
 var setTestMode = function() {
   config.test = true;
   config.path = path.resolve('songs');
-};
-
-/**
- * Display a message about the config file.
- */
-var messageNoPath = function() {
-  var output = error +
-    'No config file \'~/html5-school-presentation.json\' found!';
-  const sampleConfig = fs.readFileSync(
-    path.join(__dirname, 'sample.config.json'), 'utf8'
-  );
-  output += '\nCreate a config file with this keys:\n' + sampleConfig;
-  message(output);
-  throw new Error('No configuration file found.');
-};
-
-/**
- * Assemble warning message when info.json doesn’t exists.
- * @param {string} folder - A song folder.
- */
-var warningInfoJson = function(folder) {
-  console.log(warning +
-    folder.underline.yellow + '/' +
-    config.info.underline.red);
-};
-
-/**
- * Print out or return text.
- * @param {string} text - Text to display.
- */
-var message = function(text) {
-  console.log(text);
 };
 
 /**
