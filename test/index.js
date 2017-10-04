@@ -2,20 +2,21 @@ const {assert} = require('./lib/helper.js');
 const path = require('path');
 const fs = require('fs-extra');
 const process = require('process');
-const rewire = require('rewire');
 const sinon = require('sinon');
 
 const index = require('../index.js');
-const rw = require('rewire')('../index.js');
 
-process.env.PATH = __dirname + '/bin:' + process.env.PATH;
-
-var slu = rewire('../index.js');
-slu.bootstrapConfig({
+var rewireBootstrapped = require('rewire')('../index.js');
+rewireBootstrapped.bootstrapConfig({
   test: true,
   path: path.resolve('songs'),
   force: true,
 });
+
+const rewire = require('rewire')('../index.js');
+
+process.env.PATH = __dirname + '/bin:' + process.env.PATH;
+
 
 before(() => {
   process.env.PATH = __dirname + '/bin:' + process.env.PATH;
@@ -25,7 +26,7 @@ before(() => {
  *
  */
 describe('Configuration', () => {
-  const config = slu.__get__('config');
+  const config = rewireBootstrapped.__get__('config');
 
   describe('default configuration', () => {
     it('"config.json" should return "songs.json"', () => {
@@ -37,20 +38,18 @@ describe('Configuration', () => {
   });
 
   it('"bootstrapConfig()"', () => {
-    var s = rewire('../index.js');
-    s.bootstrapConfig({path: path.resolve('songs'), test: true});
-    const c = s.__get__('config');
+    rewire.bootstrapConfig({path: path.resolve('songs'), test: true});
+    const c = rewire.__get__('config');
     assert.equal(c.path, path.resolve('songs'));
     assert.equal(c.json, 'songs.json');
     assert.exists(path.resolve('songs', 'filehashes.db'));
   });
 
   it('"bootstrapConfig()": exit', () => {
-    var s = rewire('../index.js');
     let savePATH = process.env.PATH;
     process.env.PATH = '';
     try {
-      s.bootstrapConfig({path: path.resolve('songs'), test: true});
+      rewire.bootstrapConfig({path: path.resolve('songs'), test: true});
     }
     catch(e) {
       assert.equal(
@@ -72,7 +71,7 @@ describe('Private functions', () => {
 
   it('"message()"', () => {
     stub = sinon.stub();
-    message = rw.__get__('message');
+    message = rewire.__get__('message');
     message = stub;
     message('lol');
     assert.equal(stub.called, true);
@@ -81,8 +80,8 @@ describe('Private functions', () => {
   it('"messageConfigFile()"', () => {
     stub = sinon.stub();
 
-    let revert = rw.__set__('message', stub);
-    messageConfigFile = rw.__get__('messageConfigFile');
+    let revert = rewire.__set__('message', stub);
+    messageConfigFile = rewire.__get__('messageConfigFile');
 
     try {
       messageConfigFile();
@@ -110,8 +109,8 @@ describe('Private functions', () => {
 describe('Exported functions', () => {
 
   it('"update()"', () => {
-    slu.update();
-    var config = slu.__get__('config');
+    rewireBootstrapped.update();
+    var config = rewireBootstrapped.__get__('config');
     const auf = path.join('songs', 'a', 'Auf-der-Mauer_auf-der-Lauer');
     const swing = path.join('songs', 's', 'Swing-low');
     const zum = path.join('songs', 'z', 'Zum-Tanze-da-geht-ein-Maedel');
@@ -135,18 +134,18 @@ describe('Exported functions', () => {
       'Auf der Mauer, auf der Lauer'
     );
 
-    slu.clean();
+    rewireBootstrapped.clean();
   });
 
   it('"setTestMode()"', () => {
-    slu.setTestMode();
-    const config = slu.__get__('config');
+    rewireBootstrapped.setTestMode();
+    const config = rewireBootstrapped.__get__('config');
     assert.equal(config.test, true);
     assert.equal(config.path, path.resolve('./songs'));
   });
 
   it('"clean()"', () => {
-    slu.clean();
+    rewireBootstrapped.clean();
     assert.ok(!fs.existsSync(path.join('songs', 'songs.tex')));
   });
 
