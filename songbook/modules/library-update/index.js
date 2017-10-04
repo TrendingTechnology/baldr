@@ -141,7 +141,7 @@ var processFolder = function(folder) {
 /**
  * Update and generate when required media files for the songs.
  */
-exports.update = function() {
+var update = function() {
   mscxProcess.gitPull(config.path);
   tree.flat(config.path).forEach(processFolder);
   jsonSlides.generateJSON(config.path);
@@ -186,3 +186,4 @@ var clean = function() {
 exports.bootstrapConfig = bootstrapConfig;
 exports.clean = clean;
 exports.setTestMode = setTestMode;
+exports.update = update;
