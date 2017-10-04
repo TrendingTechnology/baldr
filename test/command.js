@@ -1,7 +1,19 @@
 const {assert} = require('./lib/helper.js');
 const spawn = require('child_process').spawnSync;
-
+const command = require('rewire')('../command.js');
 process.env.PATH = __dirname + '/bin:' + process.env.PATH;
+
+describe('require as module', () => {
+  it.skip('path', () => {
+    main = command.__get__('main');
+    command.__set__('process.argv', [
+      '/usr/bin/node',
+      '/home/jf/git-repositories/jf/html5-school-presentation/songbook/modules/library-update/command.js',
+      '-t'
+    ]);
+    main();
+  });
+});
 
 describe('Command line', () => {
 
