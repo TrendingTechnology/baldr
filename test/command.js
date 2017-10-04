@@ -23,7 +23,7 @@ describe('Command line', () => {
   });
 
   // After --force
-  it.skip('--tex', () => {
+  it('--tex', () => {
     const cli = spawn('./command.js', ['--test', '--tex']);
   });
 

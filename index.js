@@ -9,6 +9,7 @@ const Check = require('./file-changed.js');
 var CheckChange = new Check();
 const jsonSlides = require('./json-slides.js');
 const mscxProcess = require('./mscx-process.js');
+const texPiano = require('./tex-piano.js');
 const tree = require('./folder-tree.js');
 
 const warning = 'Warning! '.yellow;
@@ -145,6 +146,7 @@ var update = function() {
   mscxProcess.gitPull(config.path);
   tree.flat(config.path).forEach(processFolder);
   jsonSlides.generateJSON(config.path);
+  texPiano.generateTeX(config.path);
 };
 
 /**
