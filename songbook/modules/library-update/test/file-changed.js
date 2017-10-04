@@ -6,9 +6,7 @@ const CheckChange = require('../file-changed.js');
 
 const rewire = require('rewire')('../file-changed.js');
 
-before(function() {
-  process.env.PATH = __dirname + '/bin:' + process.env.PATH;
-});
+process.env.PATH = __dirname + '/bin:' + process.env.PATH;
 
 describe('file-changed.js', () => {
 
