@@ -20,6 +20,7 @@
     "mocha": "*",
     "mocha-jshint": "*",
     "rewire": "*",
+    "sinon": "^4.0.0",
     "sleep": "*"
   },
   "bin": {

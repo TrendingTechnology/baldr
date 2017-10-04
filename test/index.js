@@ -5,6 +5,10 @@ const fs = require('fs-extra');
 const sleep = require('sleep');
 const process = require('process');
 const rewire = require('rewire');
+const sinon = require('sinon');
+
+const index = require('../index.js');
+const rw = require('rewire')('../index.js');
 
 process.env.PATH = __dirname + '/bin:' + process.env.PATH;
 
@@ -69,14 +73,26 @@ describe('Configuration', () => {
 describe('Private functions', () => {
 
   it('"message()"', () => {
-    var message = slu.__get__('message');
-    assert.equal(message('test'), 'test');
+    message = sinon.stub(index, "message");
+    index.message('lol');
+    assert.equal(message.called, true);
+    message.restore();
   });
 
   it('"messageConfigFile()"', () => {
-    var messageConfigFile = slu.__get__('messageConfigFile');
-    var output = messageConfigFile();
-    assert.ok(output.length > 100);
+    stub = sinon.stub();
+
+    let revert = rw.__set__('message', stub);
+    messageConfigFile = rw.__get__('messageConfigFile');
+
+    try {
+      messageConfigFile();
+    }
+    catch (e) {
+      assert.equal(e.message, 'No configuration file found.');
+    }
+    assert.equal(stub.called, true);
+    assert.deepEqual(stub.args, [ [ '\u001b[31mError! \u001b[39mNo config file \'~/html5-school-presentation.json\' found!\nCreate a config file with this keys:\n{\n\t"songbook": {\n\t\t"path": "/Users/jf/Desktop/school/Lieder",\n\t\t"json": "songs.json",\n\t\t"info": "info.json",\n\t\t"slidesFolder": "slides",\n\t}\n}\n' ] ]);
   });
 
 });

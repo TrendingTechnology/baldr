@@ -90,17 +90,14 @@ var setTestMode = function() {
  * Display a message about the config file.
  */
 var messageConfigFile = function() {
-  var output = error + 'No config file \'~/html5-school-presentation.json\' found!';
-  const sampleConfigFile = path.join(__dirname, 'sample.config.json');
-  const sampleConfig = fs.readFileSync(sampleConfigFile, 'utf8');
+  var output = error +
+    'No config file \'~/html5-school-presentation.json\' found!';
+  const sampleConfig = fs.readFileSync(
+    path.join(__dirname, 'sample.config.json'), 'utf8'
+  );
   output += '\nCreate a config file with this keys:\n' + sampleConfig;
-  if (!config.test) {
-    message(output);
-    process.exit(1);
-  }
-  else {
-    return message(output);
-  }
+  message(output);
+  throw new Error('No configuration file found.');
 };
 
 /**
@@ -118,12 +115,7 @@ var warningInfoJson = function(folder) {
  * @param {string} text - Text to display.
  */
 var message = function(text) {
-  if (!config.test) {
-    console.log(text);
-  }
-  else {
-    return text;
-  }
+  console.log(text);
 };
 
 /**
@@ -191,6 +183,8 @@ var clean = function() {
   ]);
 };
 
+exports.messageConfigFile = messageConfigFile;
 exports.bootstrapConfig = bootstrapConfig;
 exports.clean = clean;
+exports.message = message;
 exports.setTestMode = setTestMode;
