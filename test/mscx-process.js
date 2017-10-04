@@ -77,8 +77,12 @@ describe('mscx-process.js', () => {
     const folder = path.join('songs', 's', 'Swing-low');
     const slides = path.join(folder, 'slides');
     mscxProcess.generateSlides(folder);
-    assert.exists(slides, '01.svg');
-    assert.exists(slides, '02.svg');
+
+    [
+      [slides, '01.svg'],
+      [slides, '02.svg']
+    ].forEach(args => {assert.exists(...args);});
+
     fs.removeSync(slides);
   });
 
@@ -86,18 +90,26 @@ describe('mscx-process.js', () => {
     it('"generatePianoEPS()": lead', () => {
       const folder = path.join('songs', 's', 'Swing-low');
       mscxProcess.generatePianoEPS(folder);
-      assert.exists(folder, 'piano');
-      assert.exists(folder, 'piano', 'piano.mscx');
-      assert.exists(folder, 'piano', 'piano_1.eps');
+
+      [
+        [folder, 'piano'],
+        [folder, 'piano', 'piano.mscx'],
+        [folder, 'piano', 'piano_1.eps']
+      ].forEach(args => {assert.exists(...args);});
+
       fs.removeSync(path.join(folder, 'piano'));
     });
 
     it('"generatePianoEPS()": piano', () => {
       const folder = path.join('songs', 'a', 'Auf-der-Mauer_auf-der-Lauer');
       mscxProcess.generatePianoEPS(folder);
-      assert.exists(folder, 'piano');
-      assert.exists(folder, 'piano', 'piano.mscx');
-      assert.exists(folder, 'piano', 'piano_1.eps');
+
+      [
+        [folder, 'piano'],
+        [folder, 'piano', 'piano.mscx'],
+        [folder, 'piano', 'piano_1.eps']
+      ].forEach(args => {assert.exists(...args);});
+
       fs.removeSync(path.join(folder, 'piano'));
     });
 
