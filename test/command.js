@@ -1,7 +1,13 @@
 const {assert} = require('./lib/helper.js');
 const spawn = require('child_process').spawnSync;
 const command = require('rewire')('../command.js');
+const path = require('path');
 process.env.PATH = __dirname + '/bin:' + process.env.PATH;
+
+const baseArgv = [
+  '/usr/bin/node',
+  path.join(path.resolve('.'), 'command.js')
+];
 
 describe('require as module', () => {
   it.skip('path', () => {
