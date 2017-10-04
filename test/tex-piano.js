@@ -35,7 +35,9 @@ describe('tex-piano.js', () => {
     assert.exists(texFile);
 
     var tex = fs.readFileSync(texFile, 'utf8');
-    var compare = fs.readFileSync(path.join('test', 'songs.tex'), 'utf8');
+    var compare = fs.readFileSync(
+      path.join('test', 'files', 'songs_processed.tex'), 'utf8'
+    );
 
     assert.equal(tex, compare);
 
