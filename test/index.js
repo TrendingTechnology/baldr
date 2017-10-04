@@ -1,7 +1,6 @@
 const {assert} = require('./lib/helper.js');
 const path = require('path');
 const fs = require('fs-extra');
-const sleep = require('sleep');
 const process = require('process');
 const rewire = require('rewire');
 const sinon = require('sinon');
