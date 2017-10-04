@@ -72,14 +72,14 @@ describe('Private functions', () => {
     assert.equal(stub.called, true);
   });
 
-  it('"messageConfigFile()"', () => {
+  it('"messageNoPath()"', () => {
     stub = sinon.stub();
 
     let revert = rewire.__set__('message', stub);
-    messageConfigFile = rewire.__get__('messageConfigFile');
+    messageNoPath = rewire.__get__('messageNoPath');
 
     try {
-      messageConfigFile();
+      messageNoPath();
     }
     catch (e) {
       assert.equal(e.message, 'No configuration file found.');
