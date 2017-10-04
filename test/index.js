@@ -1,6 +1,5 @@
 const {assert} = require('./lib/helper.js');
 const path = require('path');
-const p = path.join;
 const fs = require('fs-extra');
 const sleep = require('sleep');
 const process = require('process');
@@ -114,9 +113,9 @@ describe('Exported functions', () => {
   it('"update()"', () => {
     slu.update();
     var config = slu.__get__('config');
-    const auf = p('songs', 'a', 'Auf-der-Mauer_auf-der-Lauer');
-    const swing = p('songs', 's', 'Swing-low');
-    const zum = p('songs', 'z', 'Zum-Tanze-da-geht-ein-Maedel');
+    const auf = path.join('songs', 'a', 'Auf-der-Mauer_auf-der-Lauer');
+    const swing = path.join('songs', 's', 'Swing-low');
+    const zum = path.join('songs', 'z', 'Zum-Tanze-da-geht-ein-Maedel');
     const folders = [auf, swing, zum];
 
     for (i = 0; i < folders.length; ++i) {
@@ -131,7 +130,7 @@ describe('Exported functions', () => {
     assert.exists(zum, config.pianoFolder, 'piano_1.eps');
     assert.exists(zum, config.pianoFolder, 'piano_2.eps');
 
-    var info = JSON.parse(fs.readFileSync(p(config.path, 'songs.json'), 'utf8'));
+    var info = JSON.parse(fs.readFileSync(path.join(config.path, 'songs.json'), 'utf8'));
     assert.equal(
       info.a['Auf-der-Mauer_auf-der-Lauer'].title,
       'Auf der Mauer, auf der Lauer'
@@ -149,7 +148,7 @@ describe('Exported functions', () => {
 
   it('"clean()"', () => {
     slu.clean();
-    assert.ok(!fs.existsSync(p('songs', 'songs.tex')));
+    assert.ok(!fs.existsSync(path.join('songs', 'songs.tex')));
   });
 
 });
