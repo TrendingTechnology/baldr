@@ -2,6 +2,7 @@ const {assert} = require('./lib/helper.js');
 const spawn = require('child_process').spawnSync;
 const command = require('rewire')('../command.js');
 const path = require('path');
+const fs = require('fs');
 process.env.PATH = __dirname + '/bin:' + process.env.PATH;
 
 const baseArgv = [
@@ -16,11 +17,40 @@ var invokeCommand = function(argv) {
   return command;
 };
 
+var read = function(file) {
+  return fs.readFileSync(file, 'utf-8');
+};
+
 describe('require as module', () => {
   it('--path', () => {
     let rewire = invokeCommand(['--path', 'songs']);
     let commander = rewire.__get__('commander');
     assert.equal(commander.path, 'songs');
+  });
+
+  it('--tex', () => {
+    let rewire = invokeCommand(['--path', 'songs_min_processed', '--tex']);
+    let commander = rewire.__get__('commander');
+    let tex = path.join('songs_min_processed', 'songs.tex');
+
+    assert.exists(tex);
+    assert.equal(
+      read(tex),
+      read(path.join('test', 'files', 'songs_min_processed.tex'))
+    );
+    fs.unlinkSync(tex);
+  });
+
+  it('--json', () => {
+    let rewire = invokeCommand(['--path', 'songs_min_processed', '--json']);
+    let commander = rewire.__get__('commander');
+    let json = path.join('songs_min_processed', 'songs.json');
+    assert.exists(json);
+    assert.equal(
+      read(json),
+      read(path.join('test', 'files', 'songs_min_processed.json'))
+    );
+    fs.unlinkSync(json);
   });
 });
 

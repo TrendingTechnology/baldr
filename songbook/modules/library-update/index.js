@@ -72,7 +72,7 @@ var bootstrapConfig = function(newConfig=false) {
     config = Object.assign(config, newConfig);
   }
 
-  if (!config.test && !configFileExits) {
+  if (!config.path || config.path.length === 0) {
     messageConfigFile();
   }
 
@@ -187,5 +187,7 @@ var clean = function() {
 
 exports.bootstrapConfig = bootstrapConfig;
 exports.clean = clean;
+exports.generateJSON = function() {jsonSlides.generateJSON(config.path);};
+exports.generateTeX = function() {texPiano.generateTeX(config.path);};
 exports.setTestMode = setTestMode;
 exports.update = update;
