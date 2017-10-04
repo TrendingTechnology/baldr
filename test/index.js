@@ -73,10 +73,11 @@ describe('Configuration', () => {
 describe('Private functions', () => {
 
   it('"message()"', () => {
-    message = sinon.stub(index, "message");
-    index.message('lol');
-    assert.equal(message.called, true);
-    message.restore();
+    stub = sinon.stub();
+    message = rw.__get__('message');
+    message = stub;
+    message('lol');
+    assert.equal(stub.called, true);
   });
 
   it('"messageConfigFile()"', () => {

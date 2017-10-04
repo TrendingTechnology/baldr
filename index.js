@@ -183,8 +183,6 @@ var clean = function() {
   ]);
 };
 
-exports.messageConfigFile = messageConfigFile;
 exports.bootstrapConfig = bootstrapConfig;
 exports.clean = clean;
-exports.message = message;
 exports.setTestMode = setTestMode;
