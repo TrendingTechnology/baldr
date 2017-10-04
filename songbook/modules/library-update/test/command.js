@@ -9,15 +9,18 @@ const baseArgv = [
   path.join(path.resolve('.'), 'command.js')
 ];
 
+var invokeCommand = function(argv) {
+  let main = command.__get__('main');
+  command.__set__('process.argv',  baseArgv.concat(argv));
+  main();
+  return command;
+};
+
 describe('require as module', () => {
-  it.skip('path', () => {
-    main = command.__get__('main');
-    command.__set__('process.argv', [
-      '/usr/bin/node',
-      '/home/jf/git-repositories/jf/html5-school-presentation/songbook/modules/library-update/command.js',
-      '-t'
-    ]);
-    main();
+  it('--path', () => {
+    let rewire = invokeCommand(['--path', 'songs']);
+    let commander = rewire.__get__('commander');
+    assert.equal(commander.path, 'songs');
   });
 });
 
