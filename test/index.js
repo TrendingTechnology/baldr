@@ -17,11 +17,6 @@ const rewire = require('rewire')('../index.js');
 
 process.env.PATH = __dirname + '/bin:' + process.env.PATH;
 
-
-before(() => {
-  process.env.PATH = __dirname + '/bin:' + process.env.PATH;
-});
-
 /**
  *
  */
