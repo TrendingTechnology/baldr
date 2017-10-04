@@ -73,7 +73,7 @@ var bootstrapConfig = function(newConfig=false) {
   }
 
   if (!config.path || config.path.length === 0) {
-    messageConfigFile();
+    messageNoPath();
   }
 
   CheckChange.init(path.join(config.path, 'filehashes.db'));
@@ -90,7 +90,7 @@ var setTestMode = function() {
 /**
  * Display a message about the config file.
  */
-var messageConfigFile = function() {
+var messageNoPath = function() {
   var output = error +
     'No config file \'~/html5-school-presentation.json\' found!';
   const sampleConfig = fs.readFileSync(
