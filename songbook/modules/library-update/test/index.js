@@ -93,7 +93,15 @@ describe('Private functions', () => {
       assert.equal(e.message, 'No configuration file found.');
     }
     assert.equal(stub.called, true);
-    assert.deepEqual(stub.args, [ [ '\u001b[31mError! \u001b[39mNo config file \'~/html5-school-presentation.json\' found!\nCreate a config file with this keys:\n{\n\t"songbook": {\n\t\t"path": "/Users/jf/Desktop/school/Lieder",\n\t\t"json": "songs.json",\n\t\t"info": "info.json",\n\t\t"slidesFolder": "slides",\n\t}\n}\n' ] ]);
+    assert.deepEqual(stub.args, [
+      [ '\u001b[31mError! \u001b[39mNo config file ' +
+        '\'~/html5-school-presentation.json\' found!\nCreate a ' +
+        'config file with this keys:\n{\n\t"songbook": ' +
+        '{\n\t\t"path": "/Users/jf/Desktop/school/Lieder",' +
+        '\n\t\t"json": "songs.json",\n\t\t"info": "info.json",' +
+        '\n\t\t"slidesFolder": "slides",\n\t}\n}\n'
+      ]
+    ]);
   });
 
 });
