@@ -1,10 +1,10 @@
 const {assert} = require('./lib/helper.js');
 const path = require('path');
 const fs = require('fs-extra');
-const mscxProcess = require('../mscx-process.js');
-const rewire = require('rewire')('../mscx-process.js');
+const mscxProcess = require('../mscx.js');
+const rewire = require('rewire')('../mscx.js');
 
-describe('file “mscx-process.js”', () => {
+describe('file “mscx.js”', () => {
 
   describe('function “checkExecutable()”', () => {
     it('function “checkExecutable()”: existing executable', () => {
