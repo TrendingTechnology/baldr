@@ -127,7 +127,7 @@ var updateSongFolder = function(folder) {
  */
 var update = function() {
   mscx.gitPull(config.path);
-  tree.flat(config.path).forEach(processSongFolder);
+  tree.flat(config.path).forEach(updateSongFolder);
   json.generateJSON(config.path);
   tex.generateTeX(config.path);
 };
