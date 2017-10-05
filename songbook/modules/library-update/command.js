@@ -50,6 +50,8 @@ var main = function() {
 
   if (commander.clean) {
     slu.clean();
+  } else if (commander.folder) {
+    slu.updateSongFolder(commander.folder);
   } else if (commander.json) {
     slu.generateJSON();
   } else if (commander.tex) {

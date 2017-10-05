@@ -54,6 +54,15 @@ describe('file “command.js”', () => {
       );
       fs.unlinkSync(json);
     });
+
+
+    it('--folder', () => {
+      let rewire = invokeCommand([
+        '--test',
+        '--folder',
+        'songs/a/Auf-der-Mauer_auf-der-Lauer'
+      ]);
+    });
   });
 
   describe('Command line', () => {
@@ -68,11 +77,6 @@ describe('file “command.js”', () => {
 
     it('--force', () => {
       const cli = spawn('./command.js', ['--test', '--force']);
-    });
-
-    it.skip('--folder', () => {
-      const cli = spawn('./command.js', ['--test', '--folder', 'Swing-low']);
-      assert.exists('Swing-low', 'piano', 'piano.eps');
     });
 
     it('--help', () => {
