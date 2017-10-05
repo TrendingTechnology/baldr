@@ -89,19 +89,29 @@ var setTestMode = function() {
  * @param {string} folder - A song folder.
  */
 var processFolder = function(folder) {
+  let status = {};
+
+  status.force = config.force;
+  status.changed = {};
+  status.changed.projector = CheckChange.do(path.join(folder, 'projector.mscx'));
+  status.generated = {};
   // projector
-  if (config.force || CheckChange.do(path.join(folder, 'projector.mscx'))) {
-    mscxProcess.generatePDF(folder, 'projector');
-    mscxProcess.generateSlides(folder);
+  if (config.force || status.changed.projector) {
+    status.generated.projector = mscxProcess.generatePDF(folder, 'projector');
+    status.generated.slides = mscxProcess.generateSlides(folder);
   }
+
+  status.changed.piano = CheckChange.do(path.join(folder, 'piano.mscx'));
+  status.changed.lead = CheckChange.do(path.join(folder, 'lead.mscx'));
 
   // piano
   if (config.force ||
-    CheckChange.do(path.join(folder, 'piano.mscx')) ||
-    CheckChange.do(path.join(folder, 'lead.mscx'))
+    status.changed.piano ||
+    status.changed.lead
   ) {
-    mscxProcess.generatePianoEPS(folder);
+    status.generated.piano = mscxProcess.generatePianoEPS(folder);
   }
+  return status;
 };
 
 /**
