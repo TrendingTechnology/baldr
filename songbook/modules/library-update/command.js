@@ -7,11 +7,11 @@ const fs = require('fs');
 const path = require('path');
 
 try {
-  var slu = require('songbook-library-update');
+  var index = require('songbook-library-update');
 } catch (e) {}
 
 try {
-  var slu = require('./index.js');
+  var index = require('./index.js');
 } catch (e) {}
 
 var main = function() {
@@ -36,22 +36,22 @@ var main = function() {
     path: commander.path
   };
 
-  slu.bootstrapConfig(config);
+  index.bootstrapConfig(config);
 
   if (commander.test) {
-    slu.setTestMode();
+    index.setTestMode();
   }
 
   if (commander.clean) {
-    slu.clean();
+    index.clean();
   } else if (commander.folder) {
-    slu.updateSongFolder(commander.folder);
+    index.updateSongFolder(commander.folder);
   } else if (commander.json) {
-    slu.generateJSON();
+    index.generateJSON();
   } else if (commander.tex) {
-    slu.generateTeX();
+    index.generateTeX();
   } else {
-    slu.update();
+    index.update();
   }
 };
 
