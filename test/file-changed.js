@@ -10,7 +10,7 @@ process.env.PATH = __dirname + '/bin:' + process.env.PATH;
 
 describe('file-changed.js', () => {
 
-  it('"Object Sqlite()"', () => {
+  it('object “Sqlite()”', () => {
     let Sqlite = rewire.__get__('Sqlite');
     let db = new Sqlite('test.db');
 
@@ -34,7 +34,7 @@ describe('file-changed.js', () => {
     fs.unlinkSync('test.db');
   });
 
-  it('"hashSHA1()"', () => {
+  it('function “hashSHA1()”', () => {
     let hashSHA1 = rewire.__get__('hashSHA1');
     assert.equal(
       hashSHA1(path.join('test', 'files', 'hash.txt')),
@@ -42,7 +42,7 @@ describe('file-changed.js', () => {
     );
   });
 
-  it('"Object CheckChange()"', () => {
+  it('object “CheckChange()”', () => {
     var check = new CheckChange();
     let db = check.init('test.db');
     assert.equal(db.dbFile, 'test.db');

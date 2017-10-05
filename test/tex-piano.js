@@ -6,17 +6,17 @@ const rewire = require('rewire')('../tex-piano.js');
 
 describe('tex-piano.js', () => {
 
-  it('"texCmd()"', () => {
+  it('function “texCmd()”', () => {
     var texCmd = rewire.__get__('texCmd');
     assert.equal(texCmd('lorem', 'ipsum'), '\\tmplorem{ipsum}\n');
   });
 
-  it('"texABC()"', () => {
+  it('function “texABC()”', () => {
     var texAlpha = rewire.__get__('texABC');
     assert.equal(texAlpha('a'), '\n\n\\tmpchapter{A}\n');
   });
 
-  it('"texSong()"', () => {
+  it('function “texSong()”', () => {
     var texSong = rewire.__get__('texSong');
     var folder = path.join(path.resolve('songs_processed'), 's', 'Swing-low');
     assert.equal(
@@ -29,7 +29,7 @@ describe('tex-piano.js', () => {
     );
   });
 
-  it('"generateTeX()"', () => {
+  it('function “generateTeX()”', () => {
     texFile = path.join('songs_processed', 'songs.tex');
     texPiano.generateTeX(path.resolve('songs_processed'));
     assert.exists(texFile);
