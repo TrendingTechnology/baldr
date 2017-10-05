@@ -4,7 +4,7 @@ const fs = require('fs-extra');
 const os = require('os');
 const path = require('path');
 
-const Check = require('./file-changed.js');
+const Check = require('./check.js');
 var CheckChange = new Check();
 const json = require('./json.js');
 const mscx = require('./mscx.js');
