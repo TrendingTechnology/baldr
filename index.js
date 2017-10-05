@@ -6,7 +6,7 @@ const path = require('path');
 
 const Check = require('./file-changed.js');
 var CheckChange = new Check();
-const jsonSlides = require('./json-slides.js');
+const json = require('./json.js');
 const mscxProcess = require('./mscx.js');
 const tex = require('./tex.js');
 const tree = require('./folder-tree.js');
@@ -128,7 +128,7 @@ var updateSongFolder = function(folder) {
 var update = function() {
   mscxProcess.gitPull(config.path);
   tree.flat(config.path).forEach(processSongFolder);
-  jsonSlides.generateJSON(config.path);
+  json.generateJSON(config.path);
   tex.generateTeX(config.path);
 };
 
@@ -170,7 +170,7 @@ var clean = function() {
 
 exports.bootstrapConfig = bootstrapConfig;
 exports.clean = clean;
-exports.generateJSON = function() {jsonSlides.generateJSON(config.path);};
+exports.generateJSON = function() {json.generateJSON(config.path);};
 exports.generateTeX = function() {tex.generateTeX(config.path);};
 exports.setTestMode = setTestMode;
 exports.update = update;
