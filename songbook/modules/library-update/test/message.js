@@ -13,19 +13,19 @@ describe('file “message.js”', () => {
     assert.equal(info.called, true);
   });
 
-  it('const “arrow”', () => {
-    let arrow = rewire.__get__('arrow');
-    assert.equal(arrow, '\u001b[32m✓\u001b[39m');
-  });
-
-  it('const “warning”', () => {
-    let warning = rewire.__get__('warning');
-    assert.equal(warning, '\u001b[33mWarning! \u001b[39m');
-  });
-
   it('const “error”', () => {
     let error = rewire.__get__('error');
-    assert.equal(error, '\u001b[31mError! \u001b[39m');
+    assert.equal(error, '\u001b[31m☒\u001b[39m');
+  });
+
+  it('const “finished”', () => {
+    let arrow = rewire.__get__('finished');
+    assert.equal(arrow, '\u001b[32m☑\u001b[39m');
+  });
+
+  it('const “progress”', () => {
+    let arrow = rewire.__get__('progress');
+    assert.equal(arrow, '\u001b[33m☐\u001b[39m');
   });
 
   it('function “noConfigPath()”', () => {
@@ -42,7 +42,7 @@ describe('file “message.js”', () => {
     }
     assert.equal(stub.called, true);
     assert.deepEqual(stub.args, [
-      [ '\u001b[31mError! \u001b[39mNo config file ' +
+      [ '\u001b[31m☒\u001b[39mNo config file ' +
         '\'~/html5-school-presentation.json\' found!\nCreate a ' +
         'config file with this keys:\n{\n\t"songbook": ' +
         '{\n\t\t"path": "/Users/jf/Desktop/school/Lieder",' +
@@ -50,6 +50,44 @@ describe('file “message.js”', () => {
         '\n\t\t"slidesFolder": "slides",\n\t}\n}\n'
       ]
     ]);
+  });
+
+  it('function “songFolder()”', () => {
+    let status = {
+      "changed": {
+        "lead": false,
+        "piano": false,
+        "projector": false
+      },
+      "folder": "songs/a/Auf-der-Mauer_auf-der-Lauer",
+      "folderName": "Auf-der-Mauer_auf-der-Lauer",
+      "force": true,
+      "generated": {
+        "piano": [
+          "piano_1.eps",
+          "piano_2.eps"
+        ],
+        "projector": "projector.pdf",
+        "slides": [
+          "01.svg",
+          "02.svg"
+        ],
+      },
+      "info": {
+        "title": "Auf der Mauer, auf der Lauer"
+      }
+    };
+
+    let finished = status;
+    message.songFolder(finished);
+
+    let progress = status;
+    progress.changed.projector = true;
+    message.songFolder(progress);
+
+    let noTitle = status;
+    noTitle.info.title = undefined;
+    message.songFolder(noTitle);
   });
 
 });

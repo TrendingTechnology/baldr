@@ -4,10 +4,9 @@ const colors = require('colors');
 const fs = require('fs');
 const path = require('path');
 
-const warning = 'Warning! '.yellow;
-const error = 'Error! '.red;
-
-const arrow = '✓'.green;
+const error = '☒'.red;
+const finished = '☑'.green;
+const progress = '☐'.yellow;
 
 /**
  * Print out or return text.
@@ -60,8 +59,25 @@ var noConfigPath = function() {
  * </code></pre>
  */
 var songFolder = function(s) {
-  let output = s.folderName + ': ' + s.info.title;
-  info(output);
+  let title;
+  if (!s.info.title) {
+    title = s.folderName.red;
+  }
+  else {
+    title = s.folderName + ': ' + s.info.title;
+  }
+
+  let symbol;
+  if (!s.info.title) {
+    symbol = error;
+  }
+  else if (!s.changed.projector && !s.changed.piano && !s.changed.lead) {
+    symbol = finished;
+  }
+  else {
+    symbol = progress;
+  }
+  info(symbol + '  ' + title);
 };
 
 exports.info = info;
