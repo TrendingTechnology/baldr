@@ -70,16 +70,6 @@ describe('file “command.js”', () => {
       const cli = spawn('./command.js', ['--test', '--force']);
     });
 
-    // After --force
-    it('--json', () => {
-      const cli = spawn('./command.js', ['--test', '--json']);
-    });
-
-    // After --force
-    it('--tex', () => {
-      const cli = spawn('./command.js', ['--test', '--tex']);
-    });
-
     it.skip('--folder', () => {
       const cli = spawn('./command.js', ['--test', '--folder', 'Swing-low']);
       assert.exists('Swing-low', 'piano', 'piano.eps');
