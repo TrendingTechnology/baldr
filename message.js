@@ -31,8 +31,37 @@ var noConfigPath = function() {
   throw new Error('No configuration file found.');
 };
 
-var songFolder = function(stat) {
-  info(stat);
+/**
+ * <pre><code>
+ * {
+ *   "changed": {
+ *     "lead": false,
+ *     "piano": false,
+ *     "projector": false
+ *   },
+ *   "folder": "songs/a/Auf-der-Mauer_auf-der-Lauer",
+ *   "folderName": "Auf-der-Mauer_auf-der-Lauer",
+ *   "force": true,
+ *   "generated": {
+ *     "piano": [
+ *       "piano_1.eps",
+ *       "piano_2.eps"
+ *     ],
+ *     "projector": "projector.pdf",
+ *     "slides": [
+ *       "01.svg",
+ *       "02.svg"
+ *     ],
+ *   },
+ *   "info": {
+ *     "title": "Auf der Mauer, auf der Lauer"
+ *   }
+ * }
+ * </code></pre>
+ */
+var songFolder = function(s) {
+  let output = s.folderName + ': ' + s.info.title;
+  info(output);
 };
 
 exports.info = info;
