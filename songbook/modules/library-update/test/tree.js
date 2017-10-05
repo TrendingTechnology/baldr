@@ -1,10 +1,10 @@
 const {assert} = require('./lib/helper.js');
 const path = require('path');
 const fs = require('fs');
-var tree = require('../folder-tree.js');
-var rewire = require('rewire')('../folder-tree.js');
+var tree = require('../tree.js');
+var rewire = require('rewire')('../tree.js');
 
-describe('file “folder-tree.js”', () => {
+describe('file “tree.js”', () => {
 
   it('function “getSongInfo()”', () => {
     var info = tree.getSongInfo(
