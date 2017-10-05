@@ -6,37 +6,37 @@ var rewire = require('rewire')('../folder-tree.js');
 
 describe('folder-tree.js', () => {
 
-  it('"getSongInfo()"', () => {
+  it('function “getSongInfo()”', () => {
     var info = tree.getSongInfo(
       path.join('songs', 's', 'Swing-low')
     );
     assert.equal(info.title, 'Swing low');
   });
 
-  describe('"getFolderFiles()"', () => {
+  describe('function “getFolderFiles()”', () => {
 
-    it('"getFolderFiles()": eps', () => {
+    it('function “getFolderFiles()”: eps', () => {
       const files = tree.getFolderFiles(
         path.join('test', 'files', 'piano'), '.eps'
       );
       assert.deepEqual(files, ['01.eps', '02.eps', '03.eps']);
     });
 
-    it('"getFolderFiles()": svg', () => {
+    it('function “getFolderFiles()”: svg', () => {
       const files = tree.getFolderFiles(
         path.join('test', 'files', 'slides'), '.svg'
       );
       assert.deepEqual(files, ['01.svg', '02.svg', '03.svg']);
     });
 
-    it('"getFolderFiles()": non existent folder', () => {
+    it('function “getFolderFiles()”: non existent folder', () => {
       const files = tree.getFolderFiles(
         path.join('test', 'files', 'lol'), '.svg'
       );
       assert.deepEqual(files, []);
     });
 
-    it('"getFolderFiles()": empty folder', () => {
+    it('function “getFolderFiles()”: empty folder', () => {
       const empty = path.join('test', 'files', 'empty');
       fs.mkdirSync(empty);
       const files = tree.getFolderFiles(
@@ -47,27 +47,27 @@ describe('folder-tree.js', () => {
     });
   });
 
-  it('"getSongFolders()"', () => {
+  it('function “getSongFolders()”', () => {
     var getSongFolders = rewire.__get__('getSongFolders');
     var folders = getSongFolders(path.resolve('songs'), 's');
     assert.equal(folders.length, 2);
     assert.deepEqual(folders, ['Stille-Nacht', 'Swing-low']);
   });
 
-  it('"getABCFolders()"', () => {
+  it('function “getABCFolders()”', () => {
     var getABCFolders = rewire.__get__('getABCFolders');
     var folders = getABCFolders(path.resolve('songs'));
     assert.equal(folders.length, 3);
     assert.deepEqual(folders, ['a', 's', 'z']);
   });
 
-  it('"getTree()"', () => {
+  it('function “getTree()”', () => {
     var folderTree = tree.getTree(path.resolve('songs'));
     assert.deepEqual(folderTree.a, { 'Auf-der-Mauer_auf-der-Lauer': {} });
     assert.deepEqual(folderTree.s, { 'Stille-Nacht': {}, 'Swing-low': {} });
   });
 
-  it('"flattenTree()"', () => {
+  it('function “flattenTree()”', () => {
     var folderTree = {
       "a": {
         "Auf-der-Mauer_auf-der-Lauer": {}
@@ -89,7 +89,7 @@ describe('folder-tree.js', () => {
     ]);
   });
 
-  it('"flat()"', () => {
+  it('function “flat()”', () => {
     var flat = tree.flat(path.resolve('songs'));
     assert.equal(flat.length, 4);
   });

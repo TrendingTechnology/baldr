@@ -36,7 +36,7 @@ describe('index.js', () => {
       });
     });
 
-    it('"bootstrapConfig()"', () => {
+    it('function “bootstrapConfig()”', () => {
       rewire.bootstrapConfig({path: path.resolve('songs'), test: true});
       const c = rewire.__get__('config');
       assert.equal(c.path, path.resolve('songs'));
@@ -44,7 +44,7 @@ describe('index.js', () => {
       assert.exists(path.resolve('songs', 'filehashes.db'));
     });
 
-    it('"bootstrapConfig()": exit', () => {
+    it('function “bootstrapConfig()”: exit', () => {
       let savePATH = process.env.PATH;
       process.env.PATH = '';
       try {
@@ -100,7 +100,7 @@ describe('index.js', () => {
    */
   describe('Exported functions', () => {
 
-    it('"update()"', () => {
+    it('function “update()”', () => {
       rewireBootstrapped.update();
       var config = rewireBootstrapped.__get__('config');
       const auf = path.join('songs', 'a', 'Auf-der-Mauer_auf-der-Lauer');
@@ -129,14 +129,14 @@ describe('index.js', () => {
       rewireBootstrapped.clean();
     });
 
-    it('"setTestMode()"', () => {
+    it('function “setTestMode()”', () => {
       rewireBootstrapped.setTestMode();
       const config = rewireBootstrapped.__get__('config');
       assert.equal(config.test, true);
       assert.equal(config.path, path.resolve('./songs'));
     });
 
-    it('"clean()"', () => {
+    it('function “clean()”', () => {
       rewireBootstrapped.clean();
       assert.ok(!fs.existsSync(path.join('songs', 'songs.tex')));
     });

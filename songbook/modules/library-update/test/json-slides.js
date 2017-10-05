@@ -6,7 +6,7 @@ const rewire = require('rewire')('../json-slides.js');
 
 describe('json-slides.js', () => {
 
-  it('"generateSongJSON()"', () => {
+  it('function “generateSongJSON()”', () => {
     var info = rewire.__get__('generateSongJSON')(path.join(
       path.resolve('songs_processed'),
       'a',
@@ -18,7 +18,7 @@ describe('json-slides.js', () => {
     );
   });
 
-  it('"generateJSON()"', () => {
+  it('function “generateJSON()”', () => {
     var json = path.join('songs_processed', 'songs.json');
     jsonSlides.generateJSON('songs_processed');
     assert.exists(json);
@@ -30,7 +30,7 @@ describe('json-slides.js', () => {
     fs.removeSync(json);
   });
 
-  it('"readJSON()"', () => {
+  it('function “readJSON()”', () => {
     jsonSlides.generateJSON('songs_processed');
     var json = jsonSlides.readJSON('songs_processed');
     assert.equal(

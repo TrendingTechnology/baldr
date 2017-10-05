@@ -5,7 +5,7 @@ const rewire = require('rewire')('../message.js');
 
 describe('message.js', () => {
 
-  it('"info()"', () => {
+  it('function “info()”', () => {
     stub = sinon.stub();
     rewire.__set__('info', stub);
     let info = rewire.__get__('info');
@@ -28,7 +28,7 @@ describe('message.js', () => {
     assert.equal(error, '\u001b[31mError! \u001b[39m');
   });
 
-  it('"noConfigPath()"', () => {
+  it('function “noConfigPath()”', () => {
     stub = sinon.stub();
 
     let revert = rewire.__set__('info', stub);
