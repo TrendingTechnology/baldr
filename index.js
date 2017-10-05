@@ -88,7 +88,7 @@ var setTestMode = function() {
  * Wrapper function for all process functions for one folder.
  * @param {string} folder - A song folder.
  */
-var processFolder = function(folder) {
+var processSongFolder = function(folder) {
   let status = {};
 
   status.force = config.force;
@@ -119,7 +119,7 @@ var processFolder = function(folder) {
  */
 var update = function() {
   mscxProcess.gitPull(config.path);
-  tree.flat(config.path).forEach(processFolder);
+  tree.flat(config.path).forEach(processSongFolder);
   jsonSlides.generateJSON(config.path);
   texPiano.generateTeX(config.path);
 };
