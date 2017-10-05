@@ -7,7 +7,7 @@ const path = require('path');
 const Check = require('./file-changed.js');
 var CheckChange = new Check();
 const json = require('./json.js');
-const mscxProcess = require('./mscx.js');
+const mscx = require('./mscx.js');
 const tex = require('./tex.js');
 const tree = require('./folder-tree.js');
 const message = require('./message.js');
@@ -35,13 +35,13 @@ var config = {};
  */
 var bootstrapConfig = function(newConfig=false) {
 
-  let {status, unavailable} = mscxProcess.checkExecutables([
+  let {status, unavailable} = mscx.checkExecutables([
     'mscore-to-eps.sh',
     'pdf2svg',
     'pdfcrop',
     'pdfinfo',
     'pdftops',
-    mscxProcess.getMscoreCommand()
+    mscx.getMscoreCommand()
   ]);
 
   if (!status) {
@@ -99,8 +99,8 @@ var processSongFolder = function(folder) {
   status.changed.projector = CheckChange.do(path.join(folder, 'projector.mscx'));
   // projector
   if (config.force || status.changed.projector) {
-    status.generated.projector = mscxProcess.generatePDF(folder, 'projector');
-    status.generated.slides = mscxProcess.generateSlides(folder);
+    status.generated.projector = mscx.generatePDF(folder, 'projector');
+    status.generated.slides = mscx.generateSlides(folder);
   }
 
   status.changed.piano = CheckChange.do(path.join(folder, 'piano.mscx'));
@@ -111,7 +111,7 @@ var processSongFolder = function(folder) {
     status.changed.piano ||
     status.changed.lead
   ) {
-    status.generated.piano = mscxProcess.generatePianoEPS(folder);
+    status.generated.piano = mscx.generatePianoEPS(folder);
   }
   return status;
 };
@@ -126,7 +126,7 @@ var updateSongFolder = function(folder) {
  * Update and generate when required media files for the songs.
  */
 var update = function() {
-  mscxProcess.gitPull(config.path);
+  mscx.gitPull(config.path);
   tree.flat(config.path).forEach(processSongFolder);
   json.generateJSON(config.path);
   tex.generateTeX(config.path);

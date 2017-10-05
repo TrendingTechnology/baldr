@@ -1,7 +1,7 @@
 const {assert} = require('./lib/helper.js');
 const path = require('path');
 const fs = require('fs-extra');
-const mscxProcess = require('../mscx.js');
+const mscx = require('../mscx.js');
 const rewire = require('rewire')('../mscx.js');
 
 describe('file “mscx.js”', () => {
@@ -18,7 +18,7 @@ describe('file “mscx.js”', () => {
     });
 
     it('function “checkExecutables()”: all are existing', () => {
-      let {status, unavailable} = mscxProcess
+      let {status, unavailable} = mscx
         .checkExecutables(['echo', 'ls']);
       assert.equal(status, true);
       assert.deepEqual(unavailable, []);
@@ -26,34 +26,34 @@ describe('file “mscx.js”', () => {
 
     it('function “checkExecutables()”: one executable', () => {
       let {status, unavailable} =
-        mscxProcess.checkExecutables(['echo']);
+        mscx.checkExecutables(['echo']);
       assert.equal(status, true);
       assert.deepEqual(unavailable, []);
     });
 
     it('function “checkExecutables()”: one nonexisting executable', () => {
       let {status, unavailable} =
-        mscxProcess.checkExecutables(['echo', 'loooooool']);
+        mscx.checkExecutables(['echo', 'loooooool']);
       assert.equal(status, false);
       assert.deepEqual(unavailable, ['loooooool']);
     });
 
     it('function “checkExecutables()”: two nonexisting executable', () => {
       let {status, unavailable} =
-        mscxProcess.checkExecutables(['troooooool', 'loooooool']);
+        mscx.checkExecutables(['troooooool', 'loooooool']);
       assert.equal(status, false);
       assert.deepEqual(unavailable, ['troooooool', 'loooooool']);
     });
 
     it('function “checkExecutables()”: without arguments', () => {
-      let {status, unavailable} = mscxProcess.checkExecutables();
+      let {status, unavailable} = mscx.checkExecutables();
       assert.equal(status, true);
       assert.deepEqual(unavailable, []);
     });
   });
 
   it('function “gitPull()”', () => {
-    assert.ok(!mscxProcess.gitPull('songs'));
+    assert.ok(!mscx.gitPull('songs'));
   });
 
   it('function “getMscoreCommand()”', () => {
@@ -68,16 +68,16 @@ describe('file “mscx.js”', () => {
 
   it('function “generatePDF()”', () => {
     const folder = path.join('songs', 's', 'Swing-low');
-    let file = mscxProcess.generatePDF(folder, 'projector', 'projector');
+    let file = mscx.generatePDF(folder, 'projector', 'projector');
     assert.equal(file, 'projector.pdf');
     assert.exists(folder, 'projector.pdf');
   });
 
   it('function “generateSlides()”', () => {
-    mscxProcess.generatePDF('s', 'Swing-low', 'projector');
+    mscx.generatePDF('s', 'Swing-low', 'projector');
     const folder = path.join('songs', 's', 'Swing-low');
     const slides = path.join(folder, 'slides');
-    let files = mscxProcess.generateSlides(folder);
+    let files = mscx.generateSlides(folder);
 
     assert.deepEqual(
       files,
@@ -96,7 +96,7 @@ describe('file “mscx.js”', () => {
 
     it('function “generatePianoEPS()”: lead', () => {
       const folder = path.join('songs', 's', 'Swing-low');
-      let files = mscxProcess.generatePianoEPS(folder);
+      let files = mscx.generatePianoEPS(folder);
 
       assert.deepEqual(
         files,
@@ -114,7 +114,7 @@ describe('file “mscx.js”', () => {
 
     it('function “generatePianoEPS()”: piano', () => {
       const folder = path.join('songs', 'a', 'Auf-der-Mauer_auf-der-Lauer');
-      mscxProcess.generatePianoEPS(folder);
+      mscx.generatePianoEPS(folder);
 
       [
         [folder, 'piano'],
