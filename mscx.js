@@ -8,7 +8,7 @@
 const fs = require('fs-extra');
 const path = require('path');
 const spawn = require('child_process').spawnSync;
-const folderTree = require('./folder-tree.js');
+const folderTree = require('./tree.js');
 
 /**
  * Check if executable is installed.

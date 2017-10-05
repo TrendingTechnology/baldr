@@ -9,7 +9,7 @@ var CheckChange = new Check();
 const json = require('./json.js');
 const mscx = require('./mscx.js');
 const tex = require('./tex.js');
-const tree = require('./folder-tree.js');
+const tree = require('./tree.js');
 const message = require('./message.js');
 
 const configDefault = {
