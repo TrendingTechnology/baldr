@@ -1,10 +1,10 @@
 const {assert} = require('./lib/helper.js');
 const path = require('path');
 const fs = require('fs');
-const texPiano = require('../tex-piano.js');
-const rewire = require('rewire')('../tex-piano.js');
+const tex = require('../tex.js');
+const rewire = require('rewire')('../tex.js');
 
-describe('file “tex-piano.js”', () => {
+describe('file “tex.js”', () => {
 
   it('function “texCmd()”', () => {
     var texCmd = rewire.__get__('texCmd');
@@ -31,18 +31,18 @@ describe('file “tex-piano.js”', () => {
 
   it('function “generateTeX()”', () => {
     texFile = path.join('songs_processed', 'songs.tex');
-    texPiano.generateTeX(path.resolve('songs_processed'));
+    tex.generateTeX(path.resolve('songs_processed'));
     assert.exists(texFile);
 
-    var tex = fs.readFileSync(texFile, 'utf8');
+    var texContent = fs.readFileSync(texFile, 'utf8');
     var compare = fs.readFileSync(
       path.join('test', 'files', 'songs_processed.tex'), 'utf8'
     );
 
-    assert.equal(tex, compare);
+    assert.equal(texContent, compare);
 
-    assert.ok(tex.indexOf('\\tmpimage') > -1);
-    assert.ok(tex.indexOf('\\tmpheading') > -1);
+    assert.ok(texContent.indexOf('\\tmpimage') > -1);
+    assert.ok(texContent.indexOf('\\tmpheading') > -1);
   });
 
 });
