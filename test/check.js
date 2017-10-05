@@ -2,13 +2,13 @@ const assert = require('assert');
 const path = require('path');
 const fs = require('fs-extra');
 
-const CheckChange = require('../file-changed.js');
+const CheckChange = require('../check.js');
 
-const rewire = require('rewire')('../file-changed.js');
+const rewire = require('rewire')('../check.js');
 
 process.env.PATH = __dirname + '/bin:' + process.env.PATH;
 
-describe('file “file-changed.js”', () => {
+describe('file “check.js”', () => {
 
   it('object “Sqlite()”', () => {
     let Sqlite = rewire.__get__('Sqlite');
