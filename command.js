@@ -34,9 +34,12 @@ var processOptions =  function(options) {
 
   let config = {
     folder: options.folder,
-    force: options.force,
-    path: options.path
+    force: options.force
   };
+
+  if (options.path && options.path.length > 0) {
+    config.path = options.path;
+  }
 
   index.bootstrapConfig(config);
 
