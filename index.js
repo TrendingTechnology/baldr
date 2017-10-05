@@ -117,6 +117,12 @@ var processSongFolder = function(folder) {
   return stat;
 };
 
+var updateSongFolder = function(folder) {
+  message.songFolder(
+    processSongFolder(folder)
+  );
+};
+
 /**
  * Update and generate when required media files for the songs.
  */
@@ -169,3 +175,4 @@ exports.generateJSON = function() {jsonSlides.generateJSON(config.path);};
 exports.generateTeX = function() {texPiano.generateTeX(config.path);};
 exports.setTestMode = setTestMode;
 exports.update = update;
+exports.updateSongFolder = updateSongFolder;

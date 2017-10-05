@@ -4,8 +4,6 @@ const colors = require('colors');
 const fs = require('fs');
 const path = require('path');
 
-
-
 const warning = 'Warning! '.yellow;
 const error = 'Error! '.red;
 
@@ -18,7 +16,6 @@ const arrow = '✓'.green;
 var info = function(text) {
   console.log(text);
 };
-
 
 /**
  *
@@ -34,5 +31,10 @@ var noConfigPath = function() {
   throw new Error('No configuration file found.');
 };
 
+var songFolder = function(stat) {
+  info(stat);
+};
+
 exports.info = info;
 exports.noConfigPath = noConfigPath;
+exports.songFolder = songFolder;
