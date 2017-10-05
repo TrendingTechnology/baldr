@@ -89,29 +89,32 @@ var setTestMode = function() {
  * @param {string} folder - A song folder.
  */
 var processSongFolder = function(folder) {
-  let status = {};
+  // stat = status
+  let stat = {};
 
-  status.force = config.force;
-  status.changed = {};
-  status.changed.projector = CheckChange.do(path.join(folder, 'projector.mscx'));
-  status.generated = {};
+  stat.force = config.force;
+  // chg = changed
+  stat.chg = {};
+  stat.chg.projector = CheckChange.do(path.join(folder, 'projector.mscx'));
+  // gen = generated
+  stat.gen = {};
   // projector
-  if (config.force || status.changed.projector) {
-    status.generated.projector = mscxProcess.generatePDF(folder, 'projector');
-    status.generated.slides = mscxProcess.generateSlides(folder);
+  if (config.force || stat.chg.projector) {
+    stat.gen.projector = mscxProcess.generatePDF(folder, 'projector');
+    stat.gen.slides = mscxProcess.generateSlides(folder);
   }
 
-  status.changed.piano = CheckChange.do(path.join(folder, 'piano.mscx'));
-  status.changed.lead = CheckChange.do(path.join(folder, 'lead.mscx'));
+  stat.chg.piano = CheckChange.do(path.join(folder, 'piano.mscx'));
+  stat.chg.lead = CheckChange.do(path.join(folder, 'lead.mscx'));
 
   // piano
   if (config.force ||
-    status.changed.piano ||
-    status.changed.lead
+    stat.chg.piano ||
+    stat.chg.lead
   ) {
-    status.generated.piano = mscxProcess.generatePianoEPS(folder);
+    stat.gen.piano = mscxProcess.generatePianoEPS(folder);
   }
-  return status;
+  return stat;
 };
 
 /**
