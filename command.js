@@ -14,8 +14,8 @@ try {
   var index = require('./index.js');
 } catch (e) {}
 
-var main = function() {
-  commander
+var setOptions = function() {
+  return commander
     .version('0.0.5')
     .option('-c, --clean', 'clean up (delete all generated files)')
     .option('-F, --folder <folder>', 'process only the given song folder')
@@ -25,34 +25,40 @@ var main = function() {
     .option('-T, --test', 'switch to test mode')
     .option('-t, --tex', 'generate TeX file')
     .parse(process.argv);
+};
 
-  if (commander.folder) {
-    commander.force = true;
+var processOptions =  function(options) {
+  if (options.folder) {
+    options.force = true;
   }
 
-  var config = {
-    folder: commander.folder,
-    force: commander.force,
-    path: commander.path
+  let config = {
+    folder: options.folder,
+    force: options.force,
+    path: options.path
   };
 
   index.bootstrapConfig(config);
 
-  if (commander.test) {
+  if (options.test) {
     index.setTestMode();
   }
 
-  if (commander.clean) {
+  if (options.clean) {
     index.clean();
-  } else if (commander.folder) {
-    index.updateSongFolder(commander.folder);
-  } else if (commander.json) {
+  } else if (options.folder) {
+    index.updateSongFolder(options.folder);
+  } else if (options.json) {
     index.generateJSON();
-  } else if (commander.tex) {
+  } else if (options.tex) {
     index.generateTeX();
   } else {
     index.update();
   }
+};
+
+var main = function() {
+  processOptions(setOptions());
 };
 
 if (require.main === module) {
