@@ -26,7 +26,7 @@ describe('index.js', () => {
     const config = rewireBootstrapped.__get__('config');
 
     describe('default configuration', () => {
-      
+
       it('"config.json" should return "songs.json"', () => {
         assert.equal(config.json, 'songs.json');
       });
@@ -64,12 +64,34 @@ describe('index.js', () => {
   });
 
   describe('Private functions', () => {
-    if('“processSongFolder()”', () => {
+    it('function “processSongFolder()”', () => {
       processSongFolder = rewireBootstrapped.__get__("processSongFolder");
       let stat = processSongFolder(
         path.join('songs', 'a', 'Auf-der-Mauer_auf-der-Lauer')
       );
-      assert.deepEqual(stat, {});
+
+      assert.deepEqual(
+        stat,
+        {
+          "chg": {
+            "lead": false,
+            "piano": false,
+            "projector": false
+          },
+          "force": true,
+          "gen": {
+            "piano": [
+              "piano_1.eps",
+              "piano_2.eps"
+            ],
+            "projector": "projector.pdf",
+            "slides": [
+              "01.svg",
+              "02.svg"
+            ]
+          }
+        }
+      );
     });
   });
 
