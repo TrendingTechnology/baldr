@@ -4,7 +4,7 @@ const fs = require('fs-extra');
 const jsonSlides = require('../json-slides.js');
 const rewire = require('rewire')('../json-slides.js');
 
-describe('json-slides.js', () => {
+describe('file “json-slides.js”', () => {
 
   it('function “generateSongJSON()”', () => {
     var info = rewire.__get__('generateSongJSON')(path.join(

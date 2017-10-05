@@ -4,7 +4,7 @@ const fs = require('fs');
 const texPiano = require('../tex-piano.js');
 const rewire = require('rewire')('../tex-piano.js');
 
-describe('tex-piano.js', () => {
+describe('file “tex-piano.js”', () => {
 
   it('function “texCmd()”', () => {
     var texCmd = rewire.__get__('texCmd');

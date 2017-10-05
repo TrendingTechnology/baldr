@@ -4,7 +4,7 @@ const fs = require('fs');
 var tree = require('../folder-tree.js');
 var rewire = require('rewire')('../folder-tree.js');
 
-describe('folder-tree.js', () => {
+describe('file “folder-tree.js”', () => {
 
   it('function “getSongInfo()”', () => {
     var info = tree.getSongInfo(

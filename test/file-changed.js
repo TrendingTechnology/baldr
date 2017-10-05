@@ -8,7 +8,7 @@ const rewire = require('rewire')('../file-changed.js');
 
 process.env.PATH = __dirname + '/bin:' + process.env.PATH;
 
-describe('file-changed.js', () => {
+describe('file “file-changed.js”', () => {
 
   it('object “Sqlite()”', () => {
     let Sqlite = rewire.__get__('Sqlite');

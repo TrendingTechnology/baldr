@@ -3,7 +3,7 @@ const sinon = require('sinon');
 const message = require('../message.js');
 const rewire = require('rewire')('../message.js');
 
-describe('message.js', () => {
+describe('file “message.js”', () => {
 
   it('function “info()”', () => {
     stub = sinon.stub();

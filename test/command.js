@@ -20,7 +20,7 @@ var invokeCommand = function(argv) {
 var read = function(file) {
   return fs.readFileSync(file, 'utf-8');
 };
-describe('command.js', () => {
+describe('file “command.js”', () => {
 
   describe('require as module', () => {
 
