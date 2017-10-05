@@ -1,8 +1,5 @@
 {
 	"songbook": {
-		"path": "/Users/jf/Desktop/school/Lieder",
-		"json": "songs.json",
-		"info": "info.json",
-		"slidesFolder": "slides",
+		"path": "/home/jf/songs"
 	}
 }

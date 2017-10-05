@@ -20,8 +20,7 @@
     "mocha": "*",
     "mocha-jshint": "*",
     "rewire": "*",
-    "sinon": "^4.0.0",
-    "sleep": "*"
+    "sinon": "^4.0.0"
   },
   "bin": {
     "songbook-library-update": "command.js"

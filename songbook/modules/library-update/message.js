@@ -20,12 +20,15 @@ var info = function(text) {
  *
  */
 var noConfigPath = function() {
-  var output = error +
-    'No config file \'~/html5-school-presentation.json\' found!';
+  var output = error + '  Configuration file ' +
+    '“~/.html5-school-presentation.json” not found!\n' +
+    'Create such a config file or use the “--path” option!';
+
   const sampleConfig = fs.readFileSync(
     path.join(__dirname, 'sample.config.json'), 'utf8'
   );
-  output += '\nCreate a config file with this keys:\n' + sampleConfig;
+  output += '\n\nExample configuration file:\n' + sampleConfig;
+
   info(output);
   throw new Error('No configuration file found.');
 };
