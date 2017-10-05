@@ -66,20 +66,22 @@ describe('file “index.js”', () => {
   describe('Private functions', () => {
     it('function “processSongFolder()”', () => {
       processSongFolder = rewireBootstrapped.__get__("processSongFolder");
-      let stat = processSongFolder(
+      let status = processSongFolder(
         path.join('songs', 'a', 'Auf-der-Mauer_auf-der-Lauer')
       );
 
       assert.deepEqual(
-        stat,
+        status,
         {
-          "chg": {
+          "changed": {
             "lead": false,
             "piano": false,
             "projector": false
           },
+          "folder": "songs/a/Auf-der-Mauer_auf-der-Lauer",
+          "folderName": "Auf-der-Mauer_auf-der-Lauer",
           "force": true,
-          "gen": {
+          "generated": {
             "piano": [
               "piano_1.eps",
               "piano_2.eps"
@@ -88,7 +90,10 @@ describe('file “index.js”', () => {
             "slides": [
               "01.svg",
               "02.svg"
-            ]
+            ],
+          },
+          "info": {
+            "title": "Auf der Mauer, auf der Lauer"
           }
         }
       );
