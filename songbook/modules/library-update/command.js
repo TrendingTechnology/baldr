@@ -6,15 +6,9 @@ const commander = require('commander');
 const fs = require('fs');
 const path = require('path');
 
-
-
-// TODO: Clean up
 try {
   var slu = require('songbook-library-update');
-} catch (e) {
-  if (e instanceof Error && e.code === 'MODULE_NOT_FOUND') {
-  }
-}
+} catch (e) {}
 
 try {
   var slu = require('./index.js');
