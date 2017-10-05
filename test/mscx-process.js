@@ -76,7 +76,12 @@ describe('mscx-process.js', () => {
     mscxProcess.generatePDF('s', 'Swing-low', 'projector');
     const folder = path.join('songs', 's', 'Swing-low');
     const slides = path.join(folder, 'slides');
-    mscxProcess.generateSlides(folder);
+    let files = mscxProcess.generateSlides(folder);
+
+    assert.deepEqual(
+      files,
+      ['01.svg', '02.svg']
+    );
 
     [
       [slides, '01.svg'],

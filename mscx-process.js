@@ -8,6 +8,7 @@
 const fs = require('fs-extra');
 const path = require('path');
 const spawn = require('child_process').spawnSync;
+const folderTree = require('./folder-tree.js');
 
 /**
  * Check if executable is installed.
@@ -91,11 +92,20 @@ var generateSlides = function(folder) {
   fs.removeSync(slides);
   fs.mkdirSync(slides);
 
-  spawn('pdf2svg', [
+  let pdf2svg = spawn('pdf2svg', [
     path.join(folder, 'projector.pdf'),
     path.join(slides, '%02d.svg'),
-     'all'
+    'all'
   ]);
+
+  let files = folderTree.getFolderFiles(slides, '.svg');
+
+  if (files.length === 0) {
+    return false;
+  }
+  else {
+    return files;
+  }
 };
 
 /**
