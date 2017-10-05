@@ -76,11 +76,18 @@ var generatePDF = function(folder, source, destination = '') {
   if (destination === '') {
     destination = source;
   }
+  let pdf = path.join(folder, destination + '.pdf');
   spawn(getMscoreCommand(), [
     '--export-to',
-    path.join(folder, destination + '.pdf'),
+    path.join(pdf),
     path.join(folder, source + '.mscx')
   ]);
+  if(fs.existsSync(pdf)) {
+    return destination + '.pdf';
+  }
+  else {
+    return false;
+  }
 };
 
 /**
@@ -98,14 +105,7 @@ var generateSlides = function(folder) {
     'all'
   ]);
 
-  let files = folderTree.getFolderFiles(slides, '.svg');
-
-  if (files.length === 0) {
-    return false;
-  }
-  else {
-    return files;
-  }
+  return folderTree.getFolderFiles(slides, '.svg');
 };
 
 /**
@@ -130,6 +130,8 @@ var generatePianoEPS = function(folder) {
     );
   }
   spawn('mscore-to-eps.sh', [path.join(piano, 'piano.mscx')]);
+
+  return folderTree.getFolderFiles(piano, '.eps');
 };
 
 exports.checkExecutables = checkExecutables;

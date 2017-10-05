@@ -68,7 +68,8 @@ describe('mscx-process.js', () => {
 
   it('"generatePDF()"', () => {
     const folder = path.join('songs', 's', 'Swing-low');
-    mscxProcess.generatePDF(folder, 'projector', 'projector');
+    let file = mscxProcess.generatePDF(folder, 'projector', 'projector');
+    assert.equal(file, 'projector.pdf');
     assert.exists(folder, 'projector.pdf');
   });
 
@@ -94,7 +95,12 @@ describe('mscx-process.js', () => {
   describe('"generatePianoEPS()"', () => {
     it('"generatePianoEPS()": lead', () => {
       const folder = path.join('songs', 's', 'Swing-low');
-      mscxProcess.generatePianoEPS(folder);
+      let files = mscxProcess.generatePianoEPS(folder);
+
+      assert.deepEqual(
+        files,
+        ['piano_1.eps', 'piano_2.eps']
+      );
 
       [
         [folder, 'piano'],
