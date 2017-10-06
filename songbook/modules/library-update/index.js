@@ -96,21 +96,27 @@ var processSongFolder = function(folder) {
   status.info = tree.getSongInfo(folder);
 
   status.force = config.force;
-  status.changed.projector = CheckChange.do(path.join(folder, 'projector.mscx'));
+  status.changed.slides = CheckChange.do(
+    path.join(folder, 'projector.mscx')
+  );
   // projector
-  if (config.force || status.changed.projector) {
+  if (config.force || status.changed.slides) {
     status.generated.projector = mscx.generatePDF(folder, 'projector');
     status.generated.slides = mscx.generateSlides(folder);
   }
 
-  status.changed.piano = CheckChange.do(path.join(folder, 'piano.mscx'));
-  status.changed.lead = CheckChange.do(path.join(folder, 'lead.mscx'));
+  if (
+      CheckChange.do(path.join(folder, 'lead.mscx')) ||
+      CheckChange.do(path.join(folder, 'piano.mscx'))
+    ) {
+      status.changed.piano = true;
+    }
+    else {
+      status.changed.piano = false;
+    }
 
   // piano
-  if (config.force ||
-    status.changed.piano ||
-    status.changed.lead
-  ) {
+  if (config.force || status.changed.piano) {
     status.generated.piano = mscx.generatePianoEPS(folder);
   }
   return status;

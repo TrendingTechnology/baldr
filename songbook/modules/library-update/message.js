@@ -37,9 +37,8 @@ var noConfigPath = function() {
  * <pre><code>
  * {
  *   "changed": {
- *     "lead": false,
  *     "piano": false,
- *     "projector": false
+ *     "slides": false
  *   },
  *   "folder": "songs/a/Auf-der-Mauer_auf-der-Lauer",
  *   "folderName": "Auf-der-Mauer_auf-der-Lauer",
@@ -74,7 +73,7 @@ var songFolder = function(s) {
   if (!s.info.title) {
     symbol = error;
   }
-  else if (!s.changed.projector && !s.changed.piano && !s.changed.lead) {
+  else if (!s.changed.slides && !s.changed.piano) {
     symbol = finished;
   }
   else {
