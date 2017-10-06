@@ -50,7 +50,6 @@ describe('file “command.js”', () => {
 
     it('--tex', () => {
       let rewire = invokeCommand(['--path', 'songs_min_processed', '--tex']);
-      let commander = rewire.__get__('commander');
       let tex = path.join('songs_min_processed', 'songs.tex');
 
       assert.exists(tex);
@@ -63,7 +62,6 @@ describe('file “command.js”', () => {
 
     it('--json', () => {
       let rewire = invokeCommand(['--path', 'songs_min_processed', '--json']);
-      let commander = rewire.__get__('commander');
       let json = path.join('songs_min_processed', 'songs.json');
       assert.exists(json);
       assert.equal(
