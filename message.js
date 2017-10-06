@@ -79,7 +79,24 @@ var songFolder = function(s) {
   else {
     symbol = progress;
   }
-  info(symbol + '  ' + title);
+
+  let output = symbol + '  ' + title;
+  if (s.generated.slides) {
+    output +=
+      '\n\t' +
+      'slides'.yellow +
+      ': ' +
+      s.generated.slides.join(', ');
+  }
+
+  if (s.generated.piano) {
+    output +=
+      '\n\t' +
+      'piano'.yellow +
+      ': ' +
+      s.generated.piano.join(', ');
+  }
+  info(output);
 };
 
 exports.info = info;

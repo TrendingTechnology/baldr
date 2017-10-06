@@ -3,6 +3,10 @@ const sinon = require('sinon');
 const message = require('../message.js');
 const rewire = require('rewire')('../message.js');
 
+var clone = function(object) {
+  return JSON.parse(JSON.stringify(object));
+};
+
 describe('file “message.js”', () => {
 
   it('function “info()”', () => {
@@ -54,8 +58,27 @@ describe('file “message.js”', () => {
       },
       "folder": "songs/a/Auf-der-Mauer_auf-der-Lauer",
       "folderName": "Auf-der-Mauer_auf-der-Lauer",
-      "force": true,
-      "generated": {
+      "force": false,
+      "generated": {},
+      "info": {
+        "title": "Auf der Mauer, auf der Lauer"
+      }
+    };
+
+    let finished = clone(status);
+    message.songFolder(finished);
+
+    let progress = clone(status);
+    progress.changed.slides = true;
+    message.songFolder(progress);
+
+    let noTitle = clone(status);
+    noTitle.info.title = undefined;
+    message.songFolder(noTitle);
+
+    let forced = clone(status);
+    forced.generated =
+      {
         "piano": [
           "piano_1.eps",
           "piano_2.eps"
@@ -65,22 +88,10 @@ describe('file “message.js”', () => {
           "01.svg",
           "02.svg"
         ],
-      },
-      "info": {
-        "title": "Auf der Mauer, auf der Lauer"
-      }
-    };
+      };
+    forced.force = true;
+    message.songFolder(forced);
 
-    let finished = status;
-    message.songFolder(finished);
-
-    let progress = status;
-    progress.changed.slides = true;
-    message.songFolder(progress);
-
-    let noTitle = status;
-    noTitle.info.title = undefined;
-    message.songFolder(noTitle);
   });
 
 });
