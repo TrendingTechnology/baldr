@@ -17,19 +17,28 @@ var invokeCommand = function(argv) {
   return command;
 };
 
+var args = function(arg) {
+  if (typeof arg == 'string') {
+    return ['-', '-', arg];
+  }
+  else {
+    return ['-', '-'].concat(arg);
+  }
+};
+
 var read = function(file) {
   return fs.readFileSync(file, 'utf-8');
 };
 describe('file “command.js”', () => {
 
-  // describe('setOptions', () => {
-  //   it('--clean', () => {
-  //     let setOptions = command.__get__('setOptions');
-  //     let out = setOptions(baseArgv.push('--clean'));
-  //     console.log(out);
-  //     assert.equal(out.clean, true);
-  //   });
-  // });
+  describe('setOptions', () => {
+    it.skip('--clean', () => {
+      let setOpt = command.__get__('setOpt');
+      let out = setOpt(args(['--clean']));
+      console.log(out);
+      assert.equal(out.clean, true);
+    });
+  });
 
   describe('require as module', () => {
 
