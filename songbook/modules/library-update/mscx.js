@@ -41,8 +41,18 @@ var checkExecutables = function(executables = []) {
   return {"status": status, "unavailable": unavailable};
 };
 
+
+
+
+
+
+
 /**
  * Execute git pull if repository exists.
+ * To get changed files:
+ * git diff-tree --no-commit-id --name-only -r <commit-ish>
+ * git diff-tree --no-commit-id --name-only -r babeae91638b55978b99ee5eb49ac2bf361df51e c11e2736edf1c6f6be47eeaa58fa172beedd6e0c
+ * git diff-tree --no-commit-id --name-only -r ba03fc103f962f8274b50aade61c99214d26e918 c11e2736edf1c6f6be47eeaa58fa172beedd6e0c
  */
 var gitPull = function(basePath) {
   if (fs.existsSync(path.join(basePath, '.git'))) {
