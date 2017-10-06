@@ -61,12 +61,12 @@ var noConfigPath = function() {
  * </code></pre>
  */
 var songFolder = function(s) {
-  let title;
-  if (!s.info.title) {
-    title = s.folderName.red;
+  let forced;
+  if (s.force) {
+    forced = ' ' + '(forced)'.red;
   }
   else {
-    title = s.folderName + ': ' + s.info.title;
+    forced = '';
   }
 
   let symbol;
@@ -80,7 +80,18 @@ var songFolder = function(s) {
     symbol = progress;
   }
 
-  let output = symbol + '  ' + title;
+  let title;
+  if (!s.info.title) {
+    title = s.folderName.red;
+  }
+  else if (!s.changed.slides && !s.changed.piano) {
+    title = s.folderName.green + ': ' + s.info.title;
+  }
+  else {
+    title = s.folderName.yellow + ': ' + s.info.title;
+  }
+
+  let output = symbol + '  ' + title + forced;
   if (s.generated.slides) {
     output +=
       '\n\t' +
