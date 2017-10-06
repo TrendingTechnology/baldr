@@ -92,6 +92,29 @@ describe('file “message.js”', () => {
     forced.force = true;
     message.songFolder(forced);
 
+    let generatedPiano = clone(status);
+    generatedPiano.changed.piano = true;
+    generatedPiano.generated =
+      {
+        "piano": [
+          "piano_1.eps",
+          "piano_2.eps"
+        ]
+      };
+    message.songFolder(generatedPiano);
+
+    let generatedSlides = clone(status);
+    generatedSlides.changed.slides = true;
+    generatedSlides.generated =
+      {
+        "projector": "projector.pdf",
+        "slides": [
+          "01.svg",
+          "02.svg"
+        ]
+      };
+    message.songFolder(generatedSlides);
+
   });
 
 });
