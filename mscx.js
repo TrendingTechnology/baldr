@@ -41,12 +41,6 @@ var checkExecutables = function(executables = []) {
   return {"status": status, "unavailable": unavailable};
 };
 
-
-
-
-
-
-
 /**
  * Execute git pull if repository exists.
  *
