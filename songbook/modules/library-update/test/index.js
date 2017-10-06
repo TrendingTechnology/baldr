@@ -105,26 +105,31 @@ describe('file “index.js”', () => {
   describe('Exported functions', () => {
 
     it('function “update()”', () => {
+      let stub = sinon.stub();
+      rewireBootstrapped.__set__('message.songFolder', stub);
       rewireBootstrapped.update();
-      var config = rewireBootstrapped.__get__('config');
       const auf = path.join('songs', 'a', 'Auf-der-Mauer_auf-der-Lauer');
       const swing = path.join('songs', 's', 'Swing-low');
       const zum = path.join('songs', 'z', 'Zum-Tanze-da-geht-ein-Maedel');
       const folders = [auf, swing, zum];
 
       for (i = 0; i < folders.length; ++i) {
-        assert.exists(folders[i], config.slidesFolder);
-        assert.exists(folders[i], config.slidesFolder, '01.svg');
-        assert.exists(folders[i], config.pianoFolder);
-        assert.exists(folders[i], config.pianoFolder, 'piano.mscx');
+        assert.exists(folders[i], 'slides');
+        assert.exists(folders[i], 'slides', '01.svg');
+        assert.exists(folders[i], 'piano');
+        assert.exists(folders[i], 'piano', 'piano.mscx');
       }
 
-      assert.exists(auf, config.pianoFolder, 'piano_1.eps');
-      assert.exists(swing, config.pianoFolder, 'piano_1.eps');
-      assert.exists(zum, config.pianoFolder, 'piano_1.eps');
-      assert.exists(zum, config.pianoFolder, 'piano_2.eps');
+      assert.exists(auf, 'piano', 'piano_1.eps');
+      assert.exists(swing, 'piano', 'piano_1.eps');
+      assert.exists(zum, 'piano', 'piano_1.eps');
+      assert.exists(zum, 'piano', 'piano_2.eps');
 
-      var info = JSON.parse(fs.readFileSync(path.join(config.path, 'songs.json'), 'utf8'));
+      var info = JSON.parse(
+        fs.readFileSync(
+          path.join('songs', 'songs.json'), 'utf8'
+        )
+      );
       assert.equal(
         info.a['Auf-der-Mauer_auf-der-Lauer'].title,
         'Auf der Mauer, auf der Lauer'
