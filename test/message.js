@@ -3,8 +3,34 @@ const sinon = require('sinon');
 const message = require('../message.js');
 const rewire = require('rewire')('../message.js');
 
+const status = {
+  "changed": {
+    "piano": false,
+    "slides": false
+  },
+  "folder": "songs/a/Auf-der-Mauer_auf-der-Lauer",
+  "folderName": "Auf-der-Mauer_auf-der-Lauer",
+  "force": false,
+  "generated": {},
+  "info": {
+    "title": "Auf der Mauer, auf der Lauer"
+  }
+};
+
 var clone = function(object) {
   return JSON.parse(JSON.stringify(object));
+};
+
+assert.songFolder = function(status, output) {
+  let stub = sinon.stub();
+
+  let revert = rewire.__set__('info', stub);
+  let songFolder = rewire.__get__('songFolder');
+
+  songFolder(status);
+  //console.log(stub.args[0]);
+  assert.equal(stub.args[0], output);
+  revert();
 };
 
 describe('file “message.js”', () => {
@@ -33,7 +59,7 @@ describe('file “message.js”', () => {
   });
 
   it('function “noConfigPath()”', () => {
-    stub = sinon.stub();
+    let stub = sinon.stub();
 
     let revert = rewire.__set__('info', stub);
     noConfigPath = rewire.__get__('noConfigPath');
@@ -48,72 +74,90 @@ describe('file “message.js”', () => {
     assert.deepEqual(stub.args, [
       [ '\u001b[31m☒\u001b[39m  Configuration file “~/.html5-school-presentation.json” not found!\nCreate such a config file or use the “--path” option!\n\nExample configuration file:\n{\n\t\"songbook\": {\n\t\t\"path\": \"/home/jf/songs\"\n\t}\n}\n' ]
     ]);
+    revert();
   });
 
-  it('function “songFolder()”', () => {
-    let status = {
-      "changed": {
-        "piano": false,
-        "slides": false
-      },
-      "folder": "songs/a/Auf-der-Mauer_auf-der-Lauer",
-      "folderName": "Auf-der-Mauer_auf-der-Lauer",
-      "force": false,
-      "generated": {},
-      "info": {
-        "title": "Auf der Mauer, auf der Lauer"
-      }
-    };
+  describe('function “songFolder()”', () => {
 
-    let finished = clone(status);
-    message.songFolder(finished);
+    it('finished', () => {
+      let finished = clone(status);
+      assert.songFolder(
+        finished,
+        '\u001b[32m☑\u001b[39m  \u001b[32mAuf-der-Mauer_auf-der-Lauer\u001b[39m: Auf der Mauer, auf der Lauer'
+      );
+    });
 
-    let progress = clone(status);
-    progress.changed.slides = true;
-    message.songFolder(progress);
+    it('progress', () => {
+      let progress = clone(status);
+      progress.changed.slides = true;
+      assert.songFolder(
+        progress,
+        '\u001b[33m☐\u001b[39m  \u001b[33mAuf-der-Mauer_auf-der-Lauer\u001b[39m: Auf der Mauer, auf der Lauer'
+      );
+    });
 
-    let noTitle = clone(status);
-    noTitle.info.title = undefined;
-    message.songFolder(noTitle);
+    it('noTitle', () => {
+      let noTitle = clone(status);
+      noTitle.info.title = undefined;
+      assert.songFolder(
+        noTitle,
+        '\u001b[31m☒\u001b[39m  \u001b[31mAuf-der-Mauer_auf-der-Lauer\u001b[39m'
+      );
+    });
 
-    let forced = clone(status);
-    forced.generated =
-      {
-        "piano": [
-          "piano_1.eps",
-          "piano_2.eps"
-        ],
-        "projector": "projector.pdf",
-        "slides": [
-          "01.svg",
-          "02.svg"
-        ],
-      };
-    forced.force = true;
-    message.songFolder(forced);
+    it('forced', () => {
+      let forced = clone(status);
+      forced.generated =
+        {
+          "piano": [
+            "piano_1.eps",
+            "piano_2.eps"
+          ],
+          "projector": "projector.pdf",
+          "slides": [
+            "01.svg",
+            "02.svg"
+          ],
+        };
+      forced.force = true;
+      assert.songFolder(
+        forced,
+        '\u001b[32m☑\u001b[39m  \u001b[32mAuf-der-Mauer_auf-der-Lauer\u001b[39m: Auf der Mauer, auf der Lauer \u001b[31m(forced)\u001b[39m\n\t\u001b[33mslides\u001b[39m: 01.svg, 02.svg\n\t\u001b[33mpiano\u001b[39m: piano_1.eps, piano_2.eps'
+      );
+    });
 
-    let generatedPiano = clone(status);
-    generatedPiano.changed.piano = true;
-    generatedPiano.generated =
-      {
-        "piano": [
-          "piano_1.eps",
-          "piano_2.eps"
-        ]
-      };
-    message.songFolder(generatedPiano);
+    it('generatedPiano', () => {
+      let generatedPiano = clone(status);
+      generatedPiano.changed.piano = true;
+      generatedPiano.generated =
+        {
+          "piano": [
+            "piano_1.eps",
+            "piano_2.eps"
+          ]
+        };
+      assert.songFolder(
+        generatedPiano,
+        '\u001b[33m☐\u001b[39m  \u001b[33mAuf-der-Mauer_auf-der-Lauer\u001b[39m: Auf der Mauer, auf der Lauer\n\t\u001b[33mpiano\u001b[39m: piano_1.eps, piano_2.eps'
+      );
+    });
 
-    let generatedSlides = clone(status);
-    generatedSlides.changed.slides = true;
-    generatedSlides.generated =
-      {
-        "projector": "projector.pdf",
-        "slides": [
-          "01.svg",
-          "02.svg"
-        ]
-      };
-    message.songFolder(generatedSlides);
+    it('generatedSlides', () => {
+      let generatedSlides = clone(status);
+      generatedSlides.changed.slides = true;
+      generatedSlides.generated =
+        {
+          "projector": "projector.pdf",
+          "slides": [
+            "01.svg",
+            "02.svg"
+          ]
+        };
+      assert.songFolder(
+        generatedSlides,
+        '\u001b[33m☐\u001b[39m  \u001b[33mAuf-der-Mauer_auf-der-Lauer\u001b[39m: Auf der Mauer, auf der Lauer\n\t\u001b[33mslides\u001b[39m: 01.svg, 02.svg'
+      );
+    });
 
   });
 
