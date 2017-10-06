@@ -49,9 +49,8 @@ describe('file “message.js”', () => {
   it('function “songFolder()”', () => {
     let status = {
       "changed": {
-        "lead": false,
         "piano": false,
-        "projector": false
+        "slides": false
       },
       "folder": "songs/a/Auf-der-Mauer_auf-der-Lauer",
       "folderName": "Auf-der-Mauer_auf-der-Lauer",
@@ -76,7 +75,7 @@ describe('file “message.js”', () => {
     message.songFolder(finished);
 
     let progress = status;
-    progress.changed.projector = true;
+    progress.changed.slides = true;
     message.songFolder(progress);
 
     let noTitle = status;

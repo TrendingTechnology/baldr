@@ -74,9 +74,8 @@ describe('file “index.js”', () => {
         status,
         {
           "changed": {
-            "lead": false,
             "piano": false,
-            "projector": false
+            "slides": false
           },
           "folder": "songs/a/Auf-der-Mauer_auf-der-Lauer",
           "folderName": "Auf-der-Mauer_auf-der-Lauer",
