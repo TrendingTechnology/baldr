@@ -33,8 +33,8 @@ describe('file “command.js”', () => {
 
   describe('setOptions', () => {
     it.skip('--clean', () => {
-      let setOpt = command.__get__('setOpt');
-      let out = setOpt(args(['--clean']));
+      let setOptions = command.__get__('setOptions');
+      let out = setOptions(args(['--clean']));
       console.log(out);
       assert.equal(out.clean, true);
     });
