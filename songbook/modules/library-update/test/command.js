@@ -22,6 +22,15 @@ var read = function(file) {
 };
 describe('file “command.js”', () => {
 
+  // describe('setOptions', () => {
+  //   it('--clean', () => {
+  //     let setOptions = command.__get__('setOptions');
+  //     let out = setOptions(baseArgv.push('--clean'));
+  //     console.log(out);
+  //     assert.equal(out.clean, true);
+  //   });
+  // });
+
   describe('require as module', () => {
 
     it('--path', () => {
