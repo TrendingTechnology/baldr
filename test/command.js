@@ -1,8 +1,10 @@
 const {assert} = require('./lib/helper.js');
 const spawn = require('child_process').spawnSync;
+const rewire = require('rewire');
 const command = require('rewire')('../command.js');
 const path = require('path');
 const fs = require('fs');
+const sinon = require('sinon');
 process.env.PATH = __dirname + '/bin:' + process.env.PATH;
 
 const baseArgv = [
@@ -73,11 +75,23 @@ describe('file “command.js”', () => {
 
 
     it('--folder', () => {
-      let rewire = invokeCommand([
+      let stub = sinon.stub();
+      let message = rewire('../message.js');
+      let index = rewire('../index.js');
+      let command = rewire('../command.js');
+      message.__set__('info', stub);
+      index.__set__('message', message);
+      command.__set__('index', index);
+
+      let main = command.__get__('main');
+      command.__set__('process.argv',  [
+        '', '',
         '--test',
         '--folder',
         'songs/a/Auf-der-Mauer_auf-der-Lauer'
       ]);
+      main();
+      assert.equal(stub.args, '\u001b[32m☑\u001b[39m  \u001b[32mAuf-der-Mauer_auf-der-Lauer\u001b[39m: Auf der Mauer, auf der Lauer \u001b[31m(forced)\u001b[39m\n\t\u001b[33mslides\u001b[39m: 01.svg, 02.svg\n\t\u001b[33mpiano\u001b[39m: piano_1.eps, piano_2.eps');
     });
   });
 

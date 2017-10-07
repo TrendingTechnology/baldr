@@ -10,7 +10,8 @@ const json = require('./json.js');
 const mscx = require('./mscx.js');
 const tex = require('./tex.js');
 const tree = require('./tree.js');
-const message = require('./message.js');
+// For test purposes, to be able to overwrite “message” with rewire.
+var message = require('./message.js');
 
 const configDefault = {
   json: 'songs.json',
