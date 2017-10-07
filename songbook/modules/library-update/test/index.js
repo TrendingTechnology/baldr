@@ -19,9 +19,6 @@ process.env.PATH = __dirname + '/bin:' + process.env.PATH;
 
 describe('file “index.js”', () => {
 
-  /**
-   *
-   */
   describe('Configuration', () => {
 
     it('function “bootstrapConfig()”', () => {
@@ -86,9 +83,6 @@ describe('file “index.js”', () => {
     });
   });
 
-  /**
-   *
-   */
   describe('Exported functions', () => {
 
     it('function “update()”', () => {
