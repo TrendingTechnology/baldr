@@ -23,24 +23,11 @@ describe('file “index.js”', () => {
    *
    */
   describe('Configuration', () => {
-    const config = rewireBootstrapped.__get__('config');
-
-    describe('default configuration', () => {
-
-      it('"config.json" should return "songs.json"', () => {
-        assert.equal(config.json, 'songs.json');
-      });
-
-      it('"config.info" should return "info.json"', () => {
-        assert.equal(config.info, 'info.json');
-      });
-    });
 
     it('function “bootstrapConfig()”', () => {
       rewire.bootstrapConfig({path: path.resolve('songs'), test: true});
       const c = rewire.__get__('config');
       assert.equal(c.path, path.resolve('songs'));
-      assert.equal(c.json, 'songs.json');
       assert.exists(path.resolve('songs', 'filehashes.db'));
     });
 

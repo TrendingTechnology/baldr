@@ -14,16 +14,8 @@ const tree = require('./tree.js');
 var message = require('./message.js');
 
 const configDefault = {
-  json: 'songs.json',
-  info: 'info.json',
-  slidesFolder: 'slides',
-  configFileName: '.html5-school-presentation.json',
   test: false,
-  force: false,
-  tex: 'songs.tex',
-  pianoFolder: 'piano',
-  pianoMScore: 'piano.mscx',
-  leadMScore: 'lead.mscx'
+  force: false
 };
 
 var config = {};
