@@ -45,9 +45,31 @@ describe('file “command.js”', () => {
   describe('require as module', () => {
 
     it('--path', () => {
-      let rewire = invokeCommand(['--path', 'songs']);
-      let commander = rewire.__get__('commander');
+      let stub = sinon.stub();
+      let message = rewire('../message.js');
+      let index = rewire('../index.js');
+      let command = rewire('../command.js');
+      message.__set__('info', stub);
+      index.__set__('message', message);
+      command.__set__('index', index);
+
+      let main = command.__get__('main');
+      command.__set__('process.argv',  [
+        '', '', '--path', 'songs'
+      ]);
+      main();
+
+      let commander = command.__get__('commander');
       assert.equal(commander.path, 'songs');
+      assert.deepEqual(
+        stub.args,
+        [
+          [ '\u001b[33m☐\u001b[39m  \u001b[33mAuf-der-Mauer_auf-der-Lauer\u001b[39m: Auf der Mauer, auf der Lauer\n\t\u001b[33mslides\u001b[39m: 01.svg, 02.svg\n\t\u001b[33mpiano\u001b[39m: piano_1.eps, piano_2.eps' ],
+          [ '\u001b[33m☐\u001b[39m  \u001b[33mStille-Nacht\u001b[39m: Stille Nacht\n\t\u001b[33mslides\u001b[39m: 01.svg, 02.svg\n\t\u001b[33mpiano\u001b[39m: piano_1.eps, piano_2.eps' ],
+          [ '\u001b[33m☐\u001b[39m  \u001b[33mSwing-low\u001b[39m: Swing low\n\t\u001b[33mslides\u001b[39m: 01.svg, 02.svg\n\t\u001b[33mpiano\u001b[39m: piano_1.eps, piano_2.eps' ],
+          [ '\u001b[33m☐\u001b[39m  \u001b[33mZum-Tanze-da-geht-ein-Maedel\u001b[39m: Zum Tanze, da geht ein Mädel\n\t\u001b[33mslides\u001b[39m: 01.svg, 02.svg\n\t\u001b[33mpiano\u001b[39m: piano_1.eps, piano_2.eps' ]
+        ]
+      );
     });
 
     it('--tex', () => {
