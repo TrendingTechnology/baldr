@@ -21,7 +21,7 @@ function createWindow() {
   win = new BrowserWindow({fullscreen: true});
 
   win.loadURL(`file://${__dirname}/app/index.html`);
-  //win.webContents.openDevTools();
+  win.webContents.openDevTools();
 
   win.on('closed', () => {
     win = null;
