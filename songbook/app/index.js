@@ -7,13 +7,9 @@ const jquery = require('jquery');
 const mousetrap = require('mousetrap');
 const selectize = require('selectize');
 
-const library = require('songbook-library-update');
-library.bootstrapConfig();
 const modal = require('./modal.js');
 const search = require('./search.js');
 const song = require('./song.js');
-
-require('./menu.js');
 
 /**
  * Map some keyboard shortcuts to the corresponding methods.
@@ -32,15 +28,17 @@ function bindButtons() {
   jquery('#menu #menu-search').click(function() {modal.show('search')});
   jquery('#menu #menu-tableofcontents').click(function() {modal.show('tableofcontents')});
   jquery('#menu #menu-settings').click(function() {modal.show('settings')});
-  jquery('#settings #update-library').click(library.update);
-  jquery('#settings #update-library-force').click(function() {library.update('force')});
   jquery('#search a').click(modal.hide);
   jquery('.modal .close').click(modal.hide);
   jquery('#slide #previous').click(song.previousSlide);
   jquery('#slide #next').click(song.nextSlide);
 }
 
-var json = library.readJSON();
+var json = JSON.parse(
+  fs.readFileSync(
+    path.join(config.path, 'songs.json'), 'utf8'
+  )
+);
 
 song.set({
   "library": json,

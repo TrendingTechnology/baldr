@@ -12,7 +12,7 @@
     "start": "electron .",
     "postinstall": "electron-rebuild",
     "electron-rebuild": "electron-rebuild",
-    "build": "electron-packager . --out=dist --app-version=$npm_package_version --prune --asar --overwrite --platform=darwin --arch=x64 --icon=./icon.icns"
+    "build": "electron-packager . --out=dist --app-version=$npm_package_version --prune --asar --overwrite --arch=x64 --icon=./icon.icns"
   },
   "author": {
     "name": "Josef Friedrich",
@@ -24,9 +24,7 @@
   "dependencies": {
     "mousetrap": "*",
     "jquery": "*",
-    "selectize": "*",
-    "better-sqlite3": "*",
-    "songbook-library-update": "file:modules/library-update"
+    "selectize": "*"
   },
   "devDependencies": {
     "electron": "*",
