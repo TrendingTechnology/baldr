@@ -11,6 +11,20 @@ const modal = require('./modal.js');
 const search = require('./search.js');
 const song = require('./song.js');
 
+
+/**
+ * @return {array} Array of folder paths.
+ */
+var flattenTree = function(tree) {
+  var newTree = {};
+  Object.keys(tree).forEach((abc, index) => {
+    Object.keys(tree[abc]).forEach((folder, index) => {
+      newTree[folder] = tree[abc][folder]
+    });
+  });
+  return newTree;
+};
+
 /**
  * Map some keyboard shortcuts to the corresponding methods.
  */
@@ -34,11 +48,13 @@ function bindButtons() {
   jquery('#slide #next').click(song.nextSlide);
 }
 
-var json = JSON.parse(
+var tree = JSON.parse(
   fs.readFileSync(
     path.join(config.path, 'songs.json'), 'utf8'
   )
 );
+
+json = flattenTree(tree);
 
 song.set({
   "library": json,
