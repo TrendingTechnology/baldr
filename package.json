@@ -1,12 +1,11 @@
 {
-  "name": "songbook",
-  "productName": "Songbook",
+  "name": "baldr-sbook",
+  "productName": "BALDUR Songbook",
   "version": "0.0.1",
-  "description": "My songbook",
   "main": "main.js",
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@git.friedrich.rocks:60022/jf/html5-school-presentation.git"
+    "url": "git@github.com:JosefFriedrich-nodejs/baldr-sbook.git"
   },
   "scripts": {
     "start": "electron .",
@@ -20,7 +19,7 @@
     "url": "https://josef.friedrich.rocks"
   },
   "license": "MIT",
-  "homepage": "https://git.friedrich.rocks/jf/html5-school-presentation",
+  "homepage": "https://github.com/JosefFriedrich-nodejs/baldr-sbook",
   "dependencies": {
     "mousetrap": "*",
     "jquery": "*",
