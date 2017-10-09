@@ -3,6 +3,8 @@
 A try to write my presentations for school in HTML5, CSS3 and
 Javascript using [Electron](https://electron.atom.io/).
 
+This repository contains some evaluation and development code.
+
 ## About the name `baldr`
 
 (Baldr)[https://en.wikipedia.org/wiki/Baldr] is the name of a nordic
