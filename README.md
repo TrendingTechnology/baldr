@@ -7,7 +7,7 @@ This repository contains some evaluation and development code.
 
 ## About the name `baldr`
 
-(Baldr)[https://en.wikipedia.org/wiki/Baldr] is the name of a nordic
+[Baldr](https://en.wikipedia.org/wiki/Baldr) is the name of a nordic
 god. He is the of god of light.
 
 ## Subpackages
