@@ -1,5 +1,0 @@
-#! /bin/sh
-
-echo "Bereits aktuell."
-
-exit 0
