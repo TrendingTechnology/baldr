@@ -1,12 +1,11 @@
 {
-  "name": "documentcamera",
-  "productName": "Document camera",
+  "name": "baldr-dcamr",
+  "productName": "BALDUR Document camera",
   "version": "0.0.1",
-  "description": "Document camera",
   "main": "main.js",
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@git.friedrich.rocks:60022/jf/html5-school-presentation.git"
+    "url": "git@github.com:JosefFriedrich-nodejs/baldr-dcamr.git"
   },
   "scripts": {
     "start": "electron .",
@@ -18,7 +17,7 @@
     "url": "https://josef.friedrich.rocks"
   },
   "license": "MIT",
-  "homepage": "https://git.friedrich.rocks/jf/html5-school-presentation",
+  "homepage": "https://github.com/JosefFriedrich-nodejs/baldr-dcamr",
   "devDependencies": {
     "electron": "*",
     "electron-packager": "*"
