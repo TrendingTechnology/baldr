@@ -8,12 +8,12 @@ const path = require('path');
 const pckg = require('./package.json');
 
 try {
-  var index = require('songbook-library-update');
-} catch (e) {}
-
-try {
   var index = require('./index.js');
 } catch (e) {}
+
+if (index && typeof index.bootstrapConfig !== "function") {
+  const index = require('baldr-sbook-updtr');
+}
 
 var setOptions = function(argv) {
   return commander
