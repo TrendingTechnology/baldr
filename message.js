@@ -21,7 +21,7 @@ var info = function(text) {
  */
 var noConfigPath = function() {
   var output = error + '  Configuration file ' +
-    '“~/.html5-school-presentation.json” not found!\n' +
+    '“~/.baldr.json” not found!\n' +
     'Create such a config file or use the “--path” option!';
 
   const sampleConfig = fs.readFileSync(

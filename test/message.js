@@ -72,7 +72,7 @@ describe('file “message.js”', () => {
     }
     assert.equal(stub.called, true);
     assert.deepEqual(stub.args, [
-      [ '\u001b[31m☒\u001b[39m  Configuration file “~/.html5-school-presentation.json” not found!\nCreate such a config file or use the “--path” option!\n\nExample configuration file:\n{\n\t\"songbook\": {\n\t\t\"path\": \"/home/jf/songs\"\n\t}\n}\n' ]
+      [ '\u001b[31m☒\u001b[39m  Configuration file “~/.baldr.json” not found!\nCreate such a config file or use the “--path” option!\n\nExample configuration file:\n{\n\t\"songbook\": {\n\t\t\"path\": \"/home/jf/songs\"\n\t}\n}\n' ]
     ]);
     revert();
   });

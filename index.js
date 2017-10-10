@@ -21,7 +21,7 @@ const configDefault = {
 var config = {};
 
 /**
- * By default this module reads the config file ~/.html5-school-presentation to
+ * By default this module reads the config file ~/.baldr to
  * generate its config object.
  * @param {object} newConfig - An object containing the same properties as the
  * config object.
@@ -51,7 +51,7 @@ var bootstrapConfig = function(newConfig=false) {
   config = configDefault;
 
   // config file
-  var configFile = path.join(os.homedir(), '.html5-school-presentation.json');
+  var configFile = path.join(os.homedir(), '.baldr.json');
   var configFileExits = fs.existsSync(configFile);
   if (configFileExits) {
     config = Object.assign(config, require(configFile).songbook);
