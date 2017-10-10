@@ -7,8 +7,7 @@ A command line utilty to generate from MuseScore files image files for
 the BALDUR Songbook.
 
 ```
-cd module-path
-npm install -g
+sudo npm install --global --unsafe-perm baldr-songbook-updater
 ```
 
 # Dependencies
@@ -20,6 +19,6 @@ npm install -g
 # Testing
 
 ```
-npm install --only=dev
+npm install
 npm test
 ```
