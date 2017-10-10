@@ -3,7 +3,8 @@
 
 # baldr-sbook-updtr - BALDUR Songbook Updater
 
-A nodejs to update the songbook library.
+A command line utilty to generate from MuseScore files image files for
+the BALDUR Songbook.
 
 ```
 cd module-path
