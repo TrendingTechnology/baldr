@@ -27,7 +27,7 @@
     "sinon": "^4.0.0"
   },
   "bin": {
-    "songbook-library-update": "command.js"
+    "baldr-sbook-updtr": "command.js"
   },
   "homepage": "https://github.com/JosefFriedrich-nodejs/baldr-sbook-updtr"
 }

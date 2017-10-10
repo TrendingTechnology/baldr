@@ -1,6 +1,6 @@
-# songbook-library-update
+# baldr-sbook-updtr - BALDUR Songbook Updater
 
-Node module to update the songbook library.
+A nodejs to update the songbook library.
 
 ```
 cd module-path
