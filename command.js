@@ -5,6 +5,7 @@
 const commander = require('commander');
 const fs = require('fs');
 const path = require('path');
+const pckg = require('./package.json');
 
 try {
   var index = require('songbook-library-update');
@@ -16,7 +17,7 @@ try {
 
 var setOptions = function(argv) {
   return commander
-    .version('0.0.5')
+    .version(pckg.version)
     .option('-c, --clean', 'clean up (delete all generated files)')
     .option('-F, --folder <folder>', 'process only the given song folder')
     .option('-f, --force', 'rebuild all images')

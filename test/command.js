@@ -145,7 +145,8 @@ describe('file “command.js”', () => {
 
     it('--version', () => {
       const cli = spawn('./command.js', ['--test', '--version']);
-      assert.equal(cli.stdout.toString(), '0.0.5\n');
+      let pckg = require('../package.json');
+      assert.equal(cli.stdout.toString(), pckg.version + '\n');
       assert.equal(cli.status, 0);
     });
 

@@ -1,8 +1,6 @@
 [![npm](https://img.shields.io/npm/v/baldr-sbook-updtr.svg)](https://www.npmjs.com/package/baldr-sbook-updtr)
 [![Build Status](https://travis-ci.org/JosefFriedrich-nodejs/baldr-sbook-updtr.svg?branch=master)](https://travis-ci.org/JosefFriedrich-nodejs/baldr-sbook-updtr)
 
-
-
 # baldr-sbook-updtr - BALDUR Songbook Updater
 
 A nodejs to update the songbook library.
