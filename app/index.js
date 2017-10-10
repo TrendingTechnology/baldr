@@ -1,6 +1,6 @@
 const os = require('os');
 const path = require('path');
-const config = require(path.join(os.homedir(), '.html5-school-presentation.json')).songbook;
+const config = require(path.join(os.homedir(), '.baldr.json')).songbook;
 const fs = require('fs');
 
 const jquery = require('jquery');
