@@ -3,7 +3,7 @@
 A try to write my presentations for school in HTML5, CSS3 and
 Javascript using [Electron](https://electron.atom.io/).
 
-This repository contains some evaluation and development code.
+This repository contains some evaluation and research code.
 
 ## About the name `baldr`
 
@@ -12,25 +12,17 @@ god. He is the of god of light.
 
 ## Subpackages
 
-`baldr` consists of some subpackages.
+`baldr` consists of this subpackages.
 
 * [baldr-dcamr](https://github.com/JosefFriedrich-nodejs/baldr-dcamr):
-  A fullscreen view for document cameras
+  A fullscreen electron app to display the video output from document
+  cameras.
 * [baldr-sbook](https://github.com/JosefFriedrich-nodejs/baldr-sbook):
-* Interactive song book - a small electron app for
-  displaying songs in the browser.
+  A fullscreen electron app to display songs in a class room using a
+  projector.
 * [baldr-sbook-updtr](https://github.com/JosefFriedrich-nodejs/baldr-sbook-updtr):
-  A command line utility to process the image files
-  for `baldr-sbook` from the source material, which are MuseScore files.
+  A command line utilty to generate from MuseScore files image files
+  for the BALDUR Songbook.
 
 Coding standards following the [Google Javascript Style
 Guide](https://google.github.io/styleguide/javascriptguide.xml).
-
-```
-npm install
-npm run-script build
-```
-
-```
-npm run-script start
-```
