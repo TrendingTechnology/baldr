@@ -1,4 +1,6 @@
-.jshintrc
 .jshintignore
+.jshintrc
+.npmignore
 .travis.yml
+test/
 TODO.md
