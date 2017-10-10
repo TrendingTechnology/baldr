@@ -1,29 +1,28 @@
-# songbook
+# baldr-sbook - BALDUR Songbook
 
-A tool to mirror displays on Mac OS is
-[mirror-display](https://github.com/fcanas/mirror-displays).
-The binary `mirror` is included in this repository.
+A fullscreen electron app to display songs in a class room using a
+projector.
+
+## Installation
 
 ```
 npm install
 npm run-script build
-```
-
-```
 npm run-script start
 ```
 
-# Song tree
+## Songs tree
 
-## Songs tree from git
+### clean
 
-Song folders have to lie in this parent folders:
+Each song has to be in his own folder. This individual song folders must
+be in this parent folders:
 
 ```
 0abcdefghijklmnopqrstuvwxyz
 ```
 
-Folders names begining with “.” or “_” are ignored. 
+Folders names begining with “.” or “_” are ignored.
 
 ```
 .
@@ -52,7 +51,11 @@ Folders names begining with “.” or “_” are ignored.
         └── projector.mscx
 ```
 
-## Songs tree processed
+### processed
+
+To process the MuseScore to the necessary image formats use the command
+line utility
+[baldr-sbook-updtr](https://github.com/JosefFriedrich-nodejs/baldr-sbook-updtr).
 
 ```
 .
@@ -112,3 +115,7 @@ Folders names begining with “.” or “_” are ignored.
             └── 02.svg
 
 ```
+
+A tool to mirror displays on Mac OS is
+[mirror-display](https://github.com/fcanas/mirror-displays).
+The binary `mirror` is included in this repository.
