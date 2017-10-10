@@ -74,7 +74,7 @@ var bootstrapConfig = function(newConfig=false) {
  */
 var setTestMode = function() {
   config.test = true;
-  config.path = path.resolve('songs');
+  config.path = path.resolve('test', 'songs', 'clean', 'some');
 };
 
 /**

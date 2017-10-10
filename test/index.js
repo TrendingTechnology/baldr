@@ -9,7 +9,7 @@ const index = require('../index.js');
 var rewireBootstrapped = require('rewire')('../index.js');
 rewireBootstrapped.bootstrapConfig({
   test: true,
-  path: path.resolve('songs'),
+  path: path.resolve('test', 'songs', 'clean', 'some'),
   force: true,
 });
 
@@ -22,17 +22,17 @@ describe('file “index.js”', () => {
   describe('Configuration', () => {
 
     it('function “bootstrapConfig()”', () => {
-      rewire.bootstrapConfig({path: path.resolve('songs'), test: true});
+      rewire.bootstrapConfig({path: path.resolve('test', 'songs', 'clean', 'some'), test: true});
       const c = rewire.__get__('config');
-      assert.equal(c.path, path.resolve('songs'));
-      assert.exists(path.resolve('songs', 'filehashes.db'));
+      assert.equal(c.path, path.resolve('test', 'songs', 'clean', 'some'));
+      assert.exists(path.resolve('test', 'songs', 'clean', 'some', 'filehashes.db'));
     });
 
     it('function “bootstrapConfig()”: exit', () => {
       let savePATH = process.env.PATH;
       process.env.PATH = '';
       try {
-        rewire.bootstrapConfig({path: path.resolve('songs'), test: true});
+        rewire.bootstrapConfig({path: path.resolve('test', 'songs', 'clean', 'some'), test: true});
       }
       catch(e) {
         assert.equal(
@@ -51,7 +51,7 @@ describe('file “index.js”', () => {
     it('function “processSongFolder()”', () => {
       processSongFolder = rewireBootstrapped.__get__("processSongFolder");
       let status = processSongFolder(
-        path.join('songs', 'a', 'Auf-der-Mauer_auf-der-Lauer')
+        path.join('test', 'songs', 'clean', 'some', 'a', 'Auf-der-Mauer_auf-der-Lauer')
       );
 
       assert.deepEqual(
@@ -61,7 +61,7 @@ describe('file “index.js”', () => {
             "piano": false,
             "slides": false
           },
-          "folder": "songs/a/Auf-der-Mauer_auf-der-Lauer",
+          "folder": "test/songs/clean/some/a/Auf-der-Mauer_auf-der-Lauer",
           "folderName": "Auf-der-Mauer_auf-der-Lauer",
           "force": true,
           "generated": {
@@ -89,9 +89,10 @@ describe('file “index.js”', () => {
       let stub = sinon.stub();
       rewireBootstrapped.__set__('message.songFolder', stub);
       rewireBootstrapped.update();
-      const auf = path.join('songs', 'a', 'Auf-der-Mauer_auf-der-Lauer');
-      const swing = path.join('songs', 's', 'Swing-low');
-      const zum = path.join('songs', 'z', 'Zum-Tanze-da-geht-ein-Maedel');
+      let songs = path.join('test', 'songs', 'clean', 'some');
+      const auf = path.join(songs, 'a', 'Auf-der-Mauer_auf-der-Lauer');
+      const swing = path.join(songs, 's', 'Swing-low');
+      const zum = path.join(songs, 'z', 'Zum-Tanze-da-geht-ein-Maedel');
       const folders = [auf, swing, zum];
 
       for (i = 0; i < folders.length; ++i) {
@@ -108,7 +109,7 @@ describe('file “index.js”', () => {
 
       var info = JSON.parse(
         fs.readFileSync(
-          path.join('songs', 'songs.json'), 'utf8'
+          path.join(songs, 'songs.json'), 'utf8'
         )
       );
       assert.equal(
@@ -123,7 +124,7 @@ describe('file “index.js”', () => {
       rewireBootstrapped.setTestMode();
       const config = rewireBootstrapped.__get__('config');
       assert.equal(config.test, true);
-      assert.equal(config.path, path.resolve('./songs'));
+      assert.equal(config.path, path.resolve('test', 'songs', 'clean', 'some'));
     });
 
     it('function “clean()”', () => {

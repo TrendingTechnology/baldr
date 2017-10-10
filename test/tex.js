@@ -18,7 +18,7 @@ describe('file “tex.js”', () => {
 
   it('function “texSong()”', () => {
     var texSong = rewire.__get__('texSong');
-    var folder = path.join(path.resolve('songs_processed'), 's', 'Swing-low');
+    var folder = path.resolve('test', 'songs', 'processed', 'some', 's', 'Swing-low');
     assert.equal(
       texSong(folder),
       '\n' +
@@ -30,8 +30,8 @@ describe('file “tex.js”', () => {
   });
 
   it('function “generateTeX()”', () => {
-    texFile = path.join('songs_processed', 'songs.tex');
-    tex.generateTeX(path.resolve('songs_processed'));
+    texFile = path.join('test', 'songs', 'processed', 'some', 'songs.tex');
+    tex.generateTeX(path.resolve('test', 'songs', 'processed', 'some'));
     assert.exists(texFile);
 
     var texContent = fs.readFileSync(texFile, 'utf8');

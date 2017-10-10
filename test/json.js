@@ -8,7 +8,7 @@ describe('file “json.js”', () => {
 
   it('function “generateSongJSON()”', () => {
     var info = rewire.__get__('generateSongJSON')(path.join(
-      path.resolve('songs_processed'),
+      path.resolve('test', 'songs', 'processed', 'some'),
       'a',
       'Auf-der-Mauer_auf-der-Lauer'
     ));
@@ -19,8 +19,8 @@ describe('file “json.js”', () => {
   });
 
   it('function “generateJSON()”', () => {
-    var jsonFile = path.join('songs_processed', 'songs.json');
-    json.generateJSON('songs_processed');
+    var jsonFile = path.join('test', 'songs', 'processed', 'some', 'songs.json');
+    json.generateJSON(path.join('test', 'songs', 'processed', 'some'));
     assert.exists(jsonFile);
     var tree = JSON.parse(fs.readFileSync(jsonFile, 'utf8'));
     assert.equal(
@@ -31,8 +31,8 @@ describe('file “json.js”', () => {
   });
 
   it('function “readJSON()”', () => {
-    json.generateJSON('songs_processed');
-    var jsonContent = json.readJSON('songs_processed');
+    json.generateJSON(path.resolve('test', 'songs', 'processed', 'some'));
+    var jsonContent = json.readJSON(path.resolve('test', 'songs', 'processed', 'some'));
     assert.equal(
       jsonContent.a['Auf-der-Mauer_auf-der-Lauer'].title,
       'Auf der Mauer, auf der Lauer'

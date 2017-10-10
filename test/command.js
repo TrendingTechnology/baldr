@@ -55,12 +55,12 @@ describe('file “command.js”', () => {
 
       let main = command.__get__('main');
       command.__set__('process.argv',  [
-        '', '', '--path', 'songs'
+        '', '', '--path', path.join('test', 'songs', 'clean', 'some')
       ]);
       main();
 
       let commander = command.__get__('commander');
-      assert.equal(commander.path, 'songs');
+      assert.equal(commander.path, path.join('test', 'songs', 'clean', 'some'));
       assert.deepEqual(
         stub.args,
         [
@@ -73,8 +73,8 @@ describe('file “command.js”', () => {
     });
 
     it('--tex', () => {
-      let rewire = invokeCommand(['--path', 'songs_min_processed', '--tex']);
-      let tex = path.join('songs_min_processed', 'songs.tex');
+      let rewire = invokeCommand(['--path', path.join('test', 'songs', 'processed', 'one'), '--tex']);
+      let tex = path.join('test', 'songs', 'processed', 'one', 'songs.tex');
 
       assert.exists(tex);
       assert.equal(
@@ -85,8 +85,8 @@ describe('file “command.js”', () => {
     });
 
     it('--json', () => {
-      let rewire = invokeCommand(['--path', 'songs_min_processed', '--json']);
-      let json = path.join('songs_min_processed', 'songs.json');
+      let rewire = invokeCommand(['--path', path.join('test', 'songs', 'processed', 'one'), '--json']);
+      let json = path.join('test', 'songs', 'processed', 'one', 'songs.json');
       assert.exists(json);
       assert.equal(
         read(json),
@@ -110,7 +110,7 @@ describe('file “command.js”', () => {
         '', '',
         '--test',
         '--folder',
-        'songs/a/Auf-der-Mauer_auf-der-Lauer'
+        'test/songs/clean/some/a/Auf-der-Mauer_auf-der-Lauer'
       ]);
       main();
       let output = stub.args[0][0];

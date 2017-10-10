@@ -2,7 +2,7 @@
     "a": {
         "Auf-der-Mauer_auf-der-Lauer": {
             "title": "Auf der Mauer, auf der Lauer",
-            "folder": "songs_min_processed/a/Auf-der-Mauer_auf-der-Lauer",
+            "folder": "test/songs/processed/one/a/Auf-der-Mauer_auf-der-Lauer",
             "slides": [
                 "01.svg"
             ]

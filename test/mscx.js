@@ -67,7 +67,7 @@ describe('file “mscx.js”', () => {
   });
 
   it('function “generatePDF()”', () => {
-    const folder = path.join('songs', 's', 'Swing-low');
+    const folder = path.join('test', 'songs', 'clean', 'some', 's', 'Swing-low');
     let file = mscx.generatePDF(folder, 'projector', 'projector');
     assert.equal(file, 'projector.pdf');
     assert.exists(folder, 'projector.pdf');
@@ -75,7 +75,7 @@ describe('file “mscx.js”', () => {
 
   it('function “generateSlides()”', () => {
     mscx.generatePDF('s', 'Swing-low', 'projector');
-    const folder = path.join('songs', 's', 'Swing-low');
+    const folder = path.join('test', 'songs', 'clean', 'some', 's', 'Swing-low');
     const slides = path.join(folder, 'slides');
     let files = mscx.generateSlides(folder);
 
@@ -95,7 +95,7 @@ describe('file “mscx.js”', () => {
   describe('function “generatePianoEPS()”', () => {
 
     it('function “generatePianoEPS()”: lead', () => {
-      const folder = path.join('songs', 's', 'Swing-low');
+      const folder = path.join('test', 'songs', 'clean', 'some', 's', 'Swing-low');
       let files = mscx.generatePianoEPS(folder);
 
       assert.deepEqual(
@@ -113,7 +113,7 @@ describe('file “mscx.js”', () => {
     });
 
     it('function “generatePianoEPS()”: piano', () => {
-      const folder = path.join('songs', 'a', 'Auf-der-Mauer_auf-der-Lauer');
+      const folder = path.join('test', 'songs', 'clean', 'some', 'a', 'Auf-der-Mauer_auf-der-Lauer');
       mscx.generatePianoEPS(folder);
 
       [
