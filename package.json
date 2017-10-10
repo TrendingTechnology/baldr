@@ -1,6 +1,7 @@
 {
   "name": "baldr-dcamr",
-  "productName": "BALDUR Document camera",
+  "productName": "BALDUR Document Camera Viewer",
+  "description": "A fullscreen electron app to display the video output from document cameras.",
   "version": "0.0.2",
   "main": "main.js",
   "repository": {

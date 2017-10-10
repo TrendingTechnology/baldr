@@ -1,4 +1,6 @@
+# baldr-dcamr - BALDUR Document Camera Viewer
 
+A fullscreen electron app to display the video output from document cameras.
 
 ```
 audioinput: Default id = default
