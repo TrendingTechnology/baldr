@@ -1,7 +1,7 @@
 {
   "name": "baldr-sbook-updtr",
   "productName": "BALDUR Songbook Updater",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "A packagegit  to update the songbook library",
   "repository": {
     "type": "git",
