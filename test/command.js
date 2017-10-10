@@ -113,7 +113,10 @@ describe('file “command.js”', () => {
         'songs/a/Auf-der-Mauer_auf-der-Lauer'
       ]);
       main();
-      assert.equal(stub.args, '\u001b[32m☑\u001b[39m  \u001b[32mAuf-der-Mauer_auf-der-Lauer\u001b[39m: Auf der Mauer, auf der Lauer \u001b[31m(forced)\u001b[39m\n\t\u001b[33mslides\u001b[39m: 01.svg, 02.svg\n\t\u001b[33mpiano\u001b[39m: piano_1.eps, piano_2.eps');
+      let output = stub.args[0][0];
+      assert.ok(output.includes('Auf-der-Mauer_auf-der-Lauer'));
+      assert.ok(output.includes('01.svg, 02.svg'));
+      assert.ok(output.includes('piano_1.eps, piano_2.eps'));
     });
   });
 
