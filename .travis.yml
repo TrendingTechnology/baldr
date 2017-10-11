@@ -1,0 +1,11 @@
+dist: trusty
+
+language: node_js
+node_js:
+  - "8"
+
+install:
+  - npm run build
+
+script:
+  - npm test
