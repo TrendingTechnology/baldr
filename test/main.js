@@ -31,4 +31,32 @@ describe('application launch', function () {
       assert.equal(count, 1)
     })
   })
+
+  it('Source code', function () {
+    return this.app.client.getSource().then(function (text) {
+      assert.ok(text.includes('<li id="menu-search" class="button fa fa-search" title="Suche (Tastenkürzel: Esc)"></li>'));
+    });
+  });
+
+  it.skip('get text', function () {
+    return this.app.client.getText('#update-library').then(function (text) {
+      assert.equal('lol', text);
+    });
+  });
+
+  it('get html', function () {
+    return this.app.client.getHTML('#update-library').then(function (text) {
+      assert.equal(text, '<a id="update-library" class="button">Die Liedersammlung aktualisieren</a>');
+    });
+  });
+
+  it('getTitle', function () {
+    return this.app.client.getTitle().then(function (text) {
+      assert.equal(text, 'Liederbuch „Die besten Lieder“');
+    });
+  });
+
+
+
+
 })
