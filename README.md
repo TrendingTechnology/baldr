@@ -1,3 +1,5 @@
+[![npm](https://img.shields.io/npm/v/baldr-sbook.svg)](https://www.npmjs.com/package/baldr-sbook)
+
 # baldr-sbook - BALDUR Songbook
 
 A fullscreen electron app to display songs in a class room using a
