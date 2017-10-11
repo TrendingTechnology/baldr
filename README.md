@@ -1,5 +1,5 @@
 [![npm](https://img.shields.io/npm/v/baldr-dcamr.svg)](https://www.npmjs.com/package/baldr-dcamr)
-
+[![Build Status](https://travis-ci.org/JosefFriedrich-nodejs/baldr-dcamr.svg?branch=master)](https://travis-ci.org/JosefFriedrich-nodejs/baldr-dcamr)
 
 # baldr-dcamr - BALDUR Document Camera Viewer
 
