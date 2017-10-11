@@ -1,3 +1,6 @@
+[![npm](https://img.shields.io/npm/v/baldr-dcamr.svg)](https://www.npmjs.com/package/baldr-dcamr)
+
+
 # baldr-dcamr - BALDUR Document Camera Viewer
 
 A fullscreen electron app to display the video output from document cameras.
