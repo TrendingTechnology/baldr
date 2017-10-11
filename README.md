@@ -1,4 +1,5 @@
 [![npm](https://img.shields.io/npm/v/baldr-sbook.svg)](https://www.npmjs.com/package/baldr-sbook)
+[![Build Status](https://travis-ci.org/JosefFriedrich-nodejs/baldr-sbook.svg?branch=master)](https://travis-ci.org/JosefFriedrich-nodejs/baldr-sbook)
 
 # baldr-sbook - BALDUR Songbook
 
