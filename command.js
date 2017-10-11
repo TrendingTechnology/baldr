@@ -6,14 +6,8 @@ const commander = require('commander');
 const fs = require('fs');
 const path = require('path');
 const pckg = require('./package.json');
+var index = require('./index.js');
 
-try {
-  var index = require('./index.js');
-} catch (e) {}
-
-if (index && typeof index.bootstrapConfig !== "function") {
-  const index = require('baldr-sbook-updtr');
-}
 
 var setOptions = function(argv) {
   return commander
