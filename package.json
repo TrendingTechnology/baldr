@@ -9,7 +9,7 @@
     "url": "git@github.com:JosefFriedrich-nodejs/baldr-sbook.git"
   },
   "scripts": {
-    "build": "electron-packager . --out=dist --app-version=$npm_package_version --prune --asar --overwrite --arch=x64 --icon=./icon.icns",
+    "build": "electron-packager . --out=dist --app-version=$npm_package_version --asar --overwrite --arch=x64 --icon=./icon.icns",
     "electron-rebuild": "electron-rebuild",
     "postinstall": "electron-rebuild",
     "start": "electron .",
