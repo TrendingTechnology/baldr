@@ -27,6 +27,7 @@
     "electron-packager": "^9.1.0",
     "electron-rebuild": "^1.6.0",
     "mocha": "^4.0.1",
+    "mocha-jshint": "^2.3.1",
     "spectron": "^3.7.2"
   }
 }
