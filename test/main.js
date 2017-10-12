@@ -63,9 +63,15 @@ describe('application launch', function () {
     });
   });
 
-  it.skip('elements', function () {
-    return this.app.client.$$('li').then(function (options) {
-      console.log(options.map(function(el) { return el.getAttribute('title'); }));
+  it('elements', function () {
+    return this.app.client.elements('li').then(function (options) {
+      console.log(options);
+    });
+  });
+
+  it('div .option', function () {
+    return this.app.client.$$('div .option').then(function (options) {
+      console.log(options);
     });
   });
 
