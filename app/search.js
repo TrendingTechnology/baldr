@@ -7,7 +7,7 @@ var selector = {};
 exports.set = function(values) {
   library = values.library;
   selector = values.selector;
-}
+};
 
 exports.build = function() {
   var select = document.createElement('select');
@@ -18,12 +18,12 @@ exports.build = function() {
   option.setAttribute('value', '');
   select.appendChild(option);
 
-  for (songID in library) {
-    var option = document.createElement('option');
+  for (var songID in library) {
+    option = document.createElement('option');
     option.setAttribute('value', songID);
     option.innerHTML = library[songID].title;
     select.appendChild(option);
   }
 
   document.querySelector(selector).appendChild(select);
-}
+};

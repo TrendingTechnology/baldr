@@ -5,7 +5,7 @@ const {BrowserWindow} = electron;
 let win;
 
 function mirrorMonitors(state) {
-  if (process.platform == 'darwin') {
+  if (process.platform === 'darwin') {
     var exec = require('child_process').exec;
     var child;
 

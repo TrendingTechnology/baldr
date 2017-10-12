@@ -1,7 +1,7 @@
 var assert = require('assert');
 const fs = require('fs');
 const path = require('path');
-var Application = require('spectron').Application
+var Application = require('spectron').Application;
 
 process.env.BALDR_SBOOK_PATH = path.resolve('test', 'songs');
 
@@ -14,26 +14,26 @@ describe('build', () => {
 });
 
 describe('application launch', function () {
-  this.timeout(10000)
+  this.timeout(10000);
 
   before(function () {
     this.app = new Application({
       path: 'dist/baldr-sbook-linux-x64/baldr-sbook'
-    })
-    return this.app.start()
-  })
+    });
+    return this.app.start();
+  });
 
   after(function () {
     if (this.app && this.app.isRunning()) {
-      return this.app.stop()
+      return this.app.stop();
     }
-  })
+  });
 
   it('shows an initial window', function () {
     return this.app.client.getWindowCount().then(function (count) {
-      assert.equal(count, 1)
-    })
-  })
+      assert.equal(count, 1);
+    });
+  });
 
   it('Source code', function () {
     return this.app.client.getSource().then(function (text) {
@@ -63,4 +63,4 @@ describe('application launch', function () {
     });
   });
 
-})
+});

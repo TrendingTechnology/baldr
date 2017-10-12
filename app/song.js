@@ -34,29 +34,29 @@ exports.set = function(values) {
   songsPath = values.songsPath;
   library = values.library;
   selector = values.selector;
-}
+};
 
 /**
  * Set all properties for the current song.
  */
 exports.setCurrent = function(songID) {
   var tmp = library[songID];
-  if (typeof tmp != 'undefined') {
+  if (typeof tmp !== 'undefined') {
     slideNumber = 0;
     slides = tmp.slides;
     slideNumberMax = slides.length - 1;
     folder = tmp.folder;
   }
   setSlide();
-}
+};
 
 /**
  * Load the current image to the slide section.
  */
 setSlide = function() {
-  var imagePath = path.join(folder, 'slides', slides[slideNumber])
+  var imagePath = path.join(folder, 'slides', slides[slideNumber]);
   jquery(selector).attr('src', imagePath);
-}
+};
 
 /**
  * Show the next slide.
@@ -67,7 +67,7 @@ exports.nextSlide = function() {
     slideNumber = 0;
   }
   setSlide();
-}
+};
 
 /**
  * Show the previous slide.
@@ -78,14 +78,14 @@ exports.previousSlide = function() {
     slideNumber = slideNumberMax;
   }
   setSlide();
-}
+};
 
 /**
  *
  */
 exports.loadByHash = function() {
-  if (location.hash != '') {
+  if (location.hash !== '') {
     setCurrent(location.hash.substring(1));
     setSlide();
   }
-}
+};
