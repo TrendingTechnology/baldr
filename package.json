@@ -28,9 +28,9 @@
     "selectize": "*"
   },
   "devDependencies": {
-    "electron": "*",
-    "electron-packager": "*",
-    "electron-rebuild": "*",
+    "electron": "^1.7.9",
+    "electron-packager": "^9.1.0",
+    "electron-rebuild": "^1.6.0",
     "mocha": "^4.0.1",
     "spectron": "^3.7.2"
   }
