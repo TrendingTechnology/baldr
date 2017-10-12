@@ -1,6 +1,5 @@
 const os = require('os');
 const path = require('path');
-const config = require(path.join(os.homedir(), '.baldr.json')).songbook;
 const fs = require('fs');
 
 const jquery = require('jquery');
@@ -11,8 +10,26 @@ const modal = require('./modal.js');
 const search = require('./search.js');
 const song = require('./song.js');
 
+var bootstrapConfig = function() {
+  let configFile = path.join(os.homedir(), '.baldr.json');
+  let config;
 
-/**
+  if (fs.existsSync(configFile)) {
+    config = require(configFile).songbook;
+  }
+  else {
+    config = {};
+  }
+
+  if (process.env.BALDR_SBOOK_PATH) {
+    config.path = process.env.BALDR_SBOOK_PATH;
+  }
+  return config;
+}
+
+var config = bootstrapConfig();
+
+/**configFile
  * @return {array} Array of folder paths.
  */
 var flattenTree = function(tree) {

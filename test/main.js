@@ -1,6 +1,9 @@
 var assert = require('assert');
 const fs = require('fs');
+const path = require('path');
 var Application = require('spectron').Application
+
+process.env.BALDR_SBOOK_PATH = path.resolve('test', 'songs');
 
 describe('build', () => {
 
@@ -24,6 +27,12 @@ describe('application launch', function () {
     if (this.app && this.app.isRunning()) {
       return this.app.stop()
     }
+  })
+
+  it.skip('pause', function () {
+    return this.app.client.pause(5000).then(function (count) {
+      console.log('lol');
+    })
   })
 
   it('shows an initial window', function () {
@@ -55,8 +64,5 @@ describe('application launch', function () {
       assert.equal(text, 'Liederbuch „Die besten Lieder“');
     });
   });
-
-
-
 
 })
