@@ -20,7 +20,7 @@ var invokeCommand = function(argv) {
 };
 
 var args = function(arg) {
-  if (typeof arg == 'string') {
+  if (typeof arg === 'string') {
     return ['-', '-', arg];
   }
   else {

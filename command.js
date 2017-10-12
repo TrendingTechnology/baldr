@@ -22,7 +22,7 @@ var setOptions = function(argv) {
     .parse(argv);
 };
 
-var processOptions =  function(options) {
+var processOptions = function(options) {
   if (options.folder) {
     options.force = true;
   }

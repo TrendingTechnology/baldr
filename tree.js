@@ -75,8 +75,8 @@ var getSongFolders = function(basePath, folder) {
     (file) => {
       if (
            fs.statSync(path.join(absPath, file)).isDirectory() &&
-           file.substr(0, 1) != '_' &&
-           file.substr(0, 1) != '.'
+           file.substr(0, 1) !== '_' &&
+           file.substr(0, 1) !== '.'
          ) {
         return true;
       }

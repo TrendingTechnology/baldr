@@ -82,7 +82,7 @@ CheckChange.prototype.do = function(filename) {
   } else  {
     this.db.insert(filename, hash);
   }
-  if (hash != hashStored) {
+  if (hash !== hashStored) {
     this.db.update(filename, hash);
     return true;
   }

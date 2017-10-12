@@ -66,7 +66,7 @@ var gitPull = function(basePath) {
  * @returns {string} The name of the MuseScore command.
  */
 var getMscoreCommand = function() {
-  if (process.platform == 'darwin') {
+  if (process.platform === 'darwin') {
     return '/Applications/MuseScore 2.app/Contents/MacOS/mscore';
   } else {
     return 'mscore';

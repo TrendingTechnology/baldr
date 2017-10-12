@@ -58,7 +58,7 @@ describe('file “mscx.js”', () => {
 
   it('function “getMscoreCommand()”', () => {
     const getMscoreCommand = rewire.__get__('getMscoreCommand');
-    if (process.platform == 'darwin') {
+    if (process.platform === 'darwin') {
       assert.equal(getMscoreCommand(), '/Applications/MuseScore 2.app/Contents/MacOS/mscore');
     }
     else {
