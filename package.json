@@ -1,6 +1,6 @@
 {
   "name": "baldr-dcamr",
-  "productName": "BALDUR Document Camera Viewer",
+  "productName": "baldr-dcamr",
   "description": "A fullscreen electron app to display the video output from document cameras.",
   "version": "0.0.3",
   "main": "main.js",
@@ -9,8 +9,11 @@
     "url": "git@github.com:JosefFriedrich-nodejs/baldr-dcamr.git"
   },
   "scripts": {
+    "build": "electron-packager ./ --out=dist --app-version=$npm_package_version --prune --asar --overwrite --arch=x64 --icon=./icon.icns",
+    "electron-rebuild": "electron-rebuild",
+    "postinstall": "electron-rebuild",
     "start": "electron .",
-    "build": "electron-packager ./ --out=dist --app-version=$npm_package_version --prune --asar --overwrite --platform=darwin --arch=x64 --icon=./icon.icns"
+    "test": "mocha"
   },
   "author": {
     "name": "Josef Friedrich",
@@ -20,7 +23,10 @@
   "license": "MIT",
   "homepage": "https://github.com/JosefFriedrich-nodejs/baldr-dcamr",
   "devDependencies": {
-    "electron": "*",
-    "electron-packager": "*"
+    "electron": "^1.7.9",
+    "electron-packager": "^9.1.0",
+    "electron-rebuild": "^1.6.0",
+    "mocha": "^4.0.1",
+    "spectron": "^3.7.2"
   }
 }
