@@ -16,23 +16,17 @@ describe('build', () => {
 describe('application launch', function () {
   this.timeout(10000)
 
-  beforeEach(function () {
+  before(function () {
     this.app = new Application({
       path: 'dist/baldr-sbook-linux-x64/baldr-sbook'
     })
     return this.app.start()
   })
 
-  afterEach(function () {
+  after(function () {
     if (this.app && this.app.isRunning()) {
       return this.app.stop()
     }
-  })
-
-  it.skip('pause', function () {
-    return this.app.client.pause(5000).then(function (count) {
-      console.log('lol');
-    })
   })
 
   it('shows an initial window', function () {
@@ -48,8 +42,12 @@ describe('application launch', function () {
   });
 
   it.skip('get text', function () {
-    return this.app.client.getText('#update-library').then(function (text) {
-      assert.equal('lol', text);
+    return this.app.client.moveTo('#slide').then((text) => {
+      return this.app.client.click('#menu-tableofcontents').then((test) => {
+        return this.app.client.getText('#tableofcontents h2').then(function (text) {
+          assert.equal(text, 'Inhaltsverzeichnis');
+        });
+      });
     });
   });
 
