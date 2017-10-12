@@ -63,4 +63,10 @@ describe('application launch', function () {
     });
   });
 
+  it.skip('elements', function () {
+    return this.app.client.$$('li').then(function (options) {
+      console.log(options.map(function(el) { return el.getAttribute('title'); }));
+    });
+  });
+
 });
