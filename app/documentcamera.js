@@ -12,7 +12,7 @@ var promisifiedOldGUM = function(constraints) {
     getUserMedia.call(navigator, constraints, resolve, reject);
   });
 
-}
+};
 
 if(navigator.mediaDevices === undefined) {
   navigator.mediaDevices = {};
