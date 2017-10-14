@@ -69,6 +69,28 @@ function bindButtons() {
   jquery('#slide #next').click(song.nextSlide);
 }
 
+/**
+ * Generate tree view for the table of contents page
+ */
+var tableOfContents = function(tree, element) {
+  var topUl = document.createElement('ul');
+
+  Object.keys(tree).forEach((abc, index) => {
+    var abcLi = document.createElement('li');
+    abcLi.innerHTML = abc;
+
+    var abcUl = document.createElement('ul');
+
+    Object.keys(tree[abc]).forEach((folder, index) => {
+      var li = document.createElement('li');
+      li.innerHTML = tree[abc][folder].title;
+      abcUl.appendChild(li);
+    });
+    topUl.appendChild(abcLi);
+    abcLi.appendChild(abcUl);
+  });
+  element.appendChild(topUl);
+};
 
 var main = function() {
   var tree = JSON.parse(
@@ -92,6 +114,9 @@ var main = function() {
   });
   search.build();
   bindButtons();
+
+
+  tableOfContents(tree, document.getElementById('toc-field'));
 
   window.onhashchange = song.loadByHash;
 
