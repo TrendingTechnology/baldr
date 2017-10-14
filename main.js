@@ -1,5 +1,5 @@
 /**
- * @file Main electron file
+ * @file Main process
  */
 
 const electron = require('electron');
