@@ -102,7 +102,7 @@ var main = function() {
   search.selectize.focus();
 
   modal.show('search');
-}
+};
 
 var config = bootstrapConfig();
 
