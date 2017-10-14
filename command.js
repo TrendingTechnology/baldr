@@ -1,5 +1,9 @@
 #! /usr/bin/env node
 
+/**
+ * @file Command line interface
+ */
+
 'use strict';
 
 const commander = require('commander');

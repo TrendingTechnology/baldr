@@ -1,3 +1,7 @@
+/**
+ * @file Implement message and loging functionality
+ */
+
 'use strict';
 
 const colors = require('colors');

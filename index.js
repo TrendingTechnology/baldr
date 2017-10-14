@@ -1,3 +1,7 @@
+/**
+ * @file Assemble all submodules and export to command.js
+ */
+
 'use strict';
 
 const fs = require('fs-extra');

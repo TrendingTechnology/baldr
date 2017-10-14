@@ -2,5 +2,6 @@
 .jshintrc
 .npmignore
 .travis.yml
+docs/
 test/
 TODO.md

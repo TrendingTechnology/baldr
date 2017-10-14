@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: json.js</title>
+    <title>JSDoc: Source: command.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: json.js</h1>
+    <h1 class="page-title">Source: command.js</h1>
 
     
 
@@ -26,80 +26,74 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>/**
- * @file Build a json file (songs.json) containing all slide files.
+            <pre class="prettyprint source linenums"><code>#! /usr/bin/env node
+
+/**
+ * @file Command line interface
  */
 
 'use strict';
 
+const commander = require('commander');
 const fs = require('fs');
 const path = require('path');
-const tree = require('./tree.js');
+const pckg = require('./package.json');
+var index = require('./index.js');
 
-/**
- *
- * @param {string} songPath - Path of the song folder.
- */
-var generateSongJSON = function(songPath) {
-  var jsonFile = path.join(songPath, 'info.json');
-  if (fs.existsSync(jsonFile)) {
-    var info = JSON.parse(
-      fs.readFileSync(jsonFile, 'utf8')
-    );
-    info.folder = songPath;
-    info.slides = tree.getFolderFiles(
-      path.join(songPath, 'slides'),
-      '.svg'
-    );
 
-    if (Boolean(info.title)) {
-      return info;
-    } else {
-      return false;
-    }
+var setOptions = function(argv) {
+  return commander
+    .version(pckg.version)
+    .option('-c, --clean', 'clean up (delete all generated files)')
+    .option('-F, --folder &lt;folder>', 'process only the given song folder')
+    .option('-f, --force', 'rebuild all images')
+    .option('-j, --json', 'generate JSON file')
+    .option('-p --path &lt;path>', 'Base path to a song collection.')
+    .option('-T, --test', 'switch to test mode')
+    .option('-t, --tex', 'generate TeX file')
+    .parse(argv);
+};
+
+var processOptions = function(options) {
+  if (options.folder) {
+    options.force = true;
   }
-  else if (fs.lstatSync(songPath).isDirectory()) {
-    return false;
+
+  let config = {
+    folder: options.folder,
+    force: options.force
+  };
+
+  if (options.path &amp;&amp; options.path.length > 0) {
+    config.path = options.path;
+  }
+
+  index.bootstrapConfig(config);
+
+  if (options.test) {
+    index.setTestMode();
+  }
+
+  if (options.clean) {
+    index.clean();
+  } else if (options.folder) {
+    index.updateSongFolder(options.folder);
+  } else if (options.json) {
+    index.generateJSON();
+  } else if (options.tex) {
+    index.generateTeX();
+  } else {
+    index.update();
   }
 };
 
-/**
- *
- * @param {string} basePath - Basepath to the songbook tree.
- */
-var generateJSON = function(basePath) {
-  var folderTree = tree.getTree(basePath);
-
-  Object.keys(folderTree).forEach((alpha, index) => {
-    Object.keys(folderTree[alpha]).forEach((folder, index) => {
-      folderTree[alpha][folder] = generateSongJSON(
-        path.join(basePath, alpha, folder)
-      );
-    });
-  });
-
-  fs.writeFileSync(
-    path.join(basePath, 'songs.json'),
-    JSON.stringify(folderTree, null, 4)
-  );
-  return folderTree;
+var main = function() {
+  processOptions(setOptions(process.argv));
 };
 
-/**
- *
- * @param {string} basePath - Basepath to the songbook tree.
- * @returns {object}
- */
-var readJSON = function (basePath) {
-  return JSON.parse(
-    fs.readFileSync(
-      path.join(basePath, 'songs.json'), 'utf8'
-    )
-  );
-};
-
-exports.generateJSON = generateJSON;
-exports.readJSON = readJSON;
+if (require.main === module) {
+  main();
+}
 </code></pre>
         </article>
     </section>

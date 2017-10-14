@@ -1,3 +1,7 @@
+/**
+ * @file Export CheckChange() object
+ */
+
 'use strict';
 
 const crypto = require('crypto');
