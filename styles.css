@@ -48,6 +48,17 @@ body {
 }
 
 /**
+ * search selectize overrides
+ */
+.selectize-dropdown {
+  font-size: 2em;
+	line-height: 1em;
+}
+.selectize-input input {
+  font-size: 3em;
+}
+
+/**
  * menu
  */
 
@@ -115,5 +126,25 @@ body {
 }
 
 /**
- * Typographie
+ * Typography
  */
+
+body, input {
+	font-family: Alegreya !important;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:link, a:visited {
+	color: black;
+}
+
+a:hover {
+	color: rgba(0, 0, 0, 0.2);
+}
+
+a:active {
+	color: rgba(255, 0, 0, 0.4);
+}
