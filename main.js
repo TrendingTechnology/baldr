@@ -1,3 +1,7 @@
+/**
+ * @file Main process
+ */
+
 const electron = require('electron');
 const {app} = electron;
 const {BrowserWindow} = electron;
@@ -20,7 +24,7 @@ function mirrorMonitors(state) {
 function createWindow() {
   win = new BrowserWindow({fullscreen: true});
 
-  win.loadURL(`file://${__dirname}/app/index.html`);
+  win.loadURL(`file://${__dirname}/index.html`);
   //win.webContents.openDevTools();
   win.on('closed', () => {
     win = null;

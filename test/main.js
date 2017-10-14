@@ -32,4 +32,10 @@ describe('application launch', function () {
     });
   });
 
+  it('CSS property: background-color', function () {
+    return this.app.client.$('body').getCssProperty('background-color').then(function (color) {
+      assert.equal(color.value, 'rgba(0,0,0,1)');
+    });
+  });
+
 });
