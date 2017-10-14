@@ -23,8 +23,9 @@
   "license": "MIT",
   "homepage": "https://github.com/JosefFriedrich-nodejs/baldr-sbook",
   "dependencies": {
-    "mousetrap": "*",
+    "font-awesome": "^4.7.0",
     "jquery": "*",
+    "mousetrap": "*",
     "selectize": "*"
   },
   "devDependencies": {

@@ -1,3 +1,6 @@
+@import 'node_modules/font-awesome/css/font-awesome.min.css';
+@import 'node_modules/selectize/dist/css/selectize.default.css';
+
 body {
 	margin: 0;
 }
@@ -74,8 +77,8 @@ body {
 }
 
 /**
-* slide
-*/
+ * slide
+ */
 
 #slide {
 	 max-width: 100%;
@@ -110,3 +113,7 @@ body {
 #slide ul:hover li {
 	 display: inline-block;
 }
+
+/**
+ * Typographie
+ */
