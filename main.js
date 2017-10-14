@@ -1,8 +1,5 @@
 const electron = require('electron');
-const {app} = electron;
-const {BrowserWindow} = electron;
-
-const {Menu} = require('electron')
+const {app, BrowserWindow, Menu} = electron;
 
 let win;
 
@@ -52,22 +49,6 @@ app.on('activate', () => {
 
 const template = [
   {
-    label: 'Edit',
-    submenu: [
-      {label: 'troll', click() {require('electron').shell.openExternal('https://www.tagesschau.de') }},
-      {label: 'devtools', click() {win.webContents.openDevTools(); }},
-      {role: 'undo'},
-      {role: 'redo'},
-      {type: 'separator'},
-      {role: 'cut'},
-      {role: 'copy'},
-      {role: 'paste'},
-      {role: 'pasteandmatchstyle'},
-      {role: 'delete'},
-      {role: 'selectall'}
-    ]
-  },
-  {
     label: 'View',
     submenu: [
       {role: 'reload'},
@@ -93,11 +74,11 @@ const template = [
     submenu: [
       {
         label: 'Learn More',
-        click () { require('electron').shell.openExternal('https://electron.atom.io') }
+        click () { require('electron').shell.openExternal('https://electron.atom.io'); }
       }
     ]
   }
-]
+];
 
 if (process.platform === 'darwin') {
   template.unshift({
@@ -113,29 +94,17 @@ if (process.platform === 'darwin') {
       {type: 'separator'},
       {role: 'quit'}
     ]
-  })
-
-  // Edit menu
-  template[1].submenu.push(
-    {type: 'separator'},
-    {
-      label: 'Speech',
-      submenu: [
-        {role: 'startspeaking'},
-        {role: 'stopspeaking'}
-      ]
-    }
-  )
+  });
 
   // Window menu
-  template[3].submenu = [
+  template[2].submenu = [
     {role: 'close'},
     {role: 'minimize'},
     {role: 'zoom'},
     {type: 'separator'},
     {role: 'front'}
-  ]
+  ];
 }
 
-const menu = Menu.buildFromTemplate(template)
-Menu.setApplicationMenu(menu)
+const menu = Menu.buildFromTemplate(template);
+Menu.setApplicationMenu(menu);
