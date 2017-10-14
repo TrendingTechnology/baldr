@@ -1,3 +1,8 @@
+/**
+ * @file Render process, assemble all submodules, bootstrap
+ * configuration and run render process
+ */
+
 const os = require('os');
 const path = require('path');
 const fs = require('fs');

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: song.js</title>
+    <title>JSDoc: Source: modal.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: song.js</h1>
+    <h1 class="page-title">Source: modal.js</h1>
 
     
 
@@ -27,94 +27,46 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
- * @file The current song
+ * @file Toggle the modal window
  */
 
-const path = require('path');
+IDs = ['search', 'tableofcontents', 'settings'];
 
-/**
- * The current slide number.
- */
-var slideNumber = 0;
-
-/**
- * The biggest slide number.
- */
-var slideNumberMax;
-
-/**
- * Array of all images files of a song.
- */
-var slides;
-
-/**
- * The folder containing the images files.
- */
-var folder;
-
-var songsPath;
-
-var library;
-
-var selector;
-
-exports.set = function(values) {
-  songsPath = values.songsPath;
-  library = values.library;
-  selector = values.selector;
+setDisplay = function(modalID, state) {
+  var element = document.getElementById(modalID);
+  element.style.display = state;
 };
 
-/**
- * Set all properties for the current song.
- */
-exports.setCurrent = function(songID) {
-  var tmp = library[songID];
-  if (typeof tmp !== 'undefined') {
-    slideNumber = 0;
-    slides = tmp.slides;
-    slideNumberMax = slides.length - 1;
-    folder = tmp.folder;
+exports.toggle = toggle = function(modalID) {
+  var element = document.getElementById(modalID);
+  var displayState = element.style.display;
+  if (displayState === 'none') {
+    element.style.display = 'block';
+    if (modalID === 'search') {
+      if (typeof search.selectize !== 'undefined') {
+        search.selectize.focus();
+        search.selectize.clear();
+      }
+    }
+  } else {
+    element.style.display = 'none';
   }
-  setSlide();
 };
 
-/**
- * Load the current image to the slide section.
- */
-setSlide = function() {
-  var imagePath = path.join(folder, 'slides', slides[slideNumber]);
-  jquery(selector).attr('src', imagePath);
+exports.hide = hide = function() {
+  IDs.forEach(function(modalID) {
+    setDisplay(modalID, 'none');
+  });
 };
 
-/**
- * Show the next slide.
- */
-exports.nextSlide = function() {
-  slideNumber += 1;
-  if (slideNumber > slideNumberMax) {
-    slideNumber = 0;
-  }
-  setSlide();
-};
-
-/**
- * Show the previous slide.
- */
-exports.previousSlide = function() {
-  slideNumber -= 1;
-  if (slideNumber &lt; 0) {
-    slideNumber = slideNumberMax;
-  }
-  setSlide();
-};
-
-/**
- *
- */
-exports.loadByHash = function() {
-  if (location.hash !== '') {
-    setCurrent(location.hash.substring(1));
-    setSlide();
+exports.show = function(modalID) {
+  hide();
+  setDisplay(modalID, 'block');
+  if (modalID === 'search') {
+    if (typeof search.selectize !== 'undefined') {
+      search.selectize.focus();
+      search.selectize.clear();
+    }
   }
 };
 </code></pre>

@@ -1,3 +1,7 @@
+/**
+ * @file Toggle the modal window
+ */
+
 IDs = ['search', 'tableofcontents', 'settings'];
 
 setDisplay = function(modalID, state) {

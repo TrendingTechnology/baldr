@@ -1,3 +1,7 @@
+/**
+ * @file Build the drop down menu for selectize 
+ */
+
 const fs = require('fs');
 const path = require('path');
 
