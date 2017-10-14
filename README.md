@@ -6,6 +6,10 @@
 A fullscreen electron app to display songs in a class room using a
 projector.
 
+Further informations can be found on the
+[API documentation site](https://joseffriedrich-nodejs.github.io/baldr-sbook/)
+of the project.
+
 ## Installation
 
 ```
