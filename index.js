@@ -27,8 +27,6 @@ var bootstrapConfig = function() {
   return config;
 };
 
-var config = bootstrapConfig();
-
 /**configFile
  * @return {array} Array of folder paths.
  */
@@ -41,6 +39,7 @@ var flattenTree = function(tree) {
   });
   return newTree;
 };
+
 
 /**
  * Map some keyboard shortcuts to the corresponding methods.
@@ -65,39 +64,48 @@ function bindButtons() {
   jquery('#slide #next').click(song.nextSlide);
 }
 
-var tree = JSON.parse(
-  fs.readFileSync(
-    path.join(config.path, 'songs.json'), 'utf8'
-  )
-);
 
-json = flattenTree(tree);
+var main = function() {
+  var tree = JSON.parse(
+    fs.readFileSync(
+      path.join(config.path, 'songs.json'), 'utf8'
+    )
+  );
 
-song.set({
-  "library": json,
-  "selector": '#slide img',
-  "songsPath": config.path
-});
-song.loadByHash();
+  json = flattenTree(tree);
 
-search.set({
-  "library": json,
-  "selector": "#field",
-});
-search.build();
-bindButtons();
+  song.set({
+    "library": json,
+    "selector": '#slide img',
+    "songsPath": config.path
+  });
+  song.loadByHash();
 
-window.onhashchange = song.loadByHash;
+  search.set({
+    "library": json,
+    "selector": "#field",
+  });
+  search.build();
+  bindButtons();
 
-bindShortcuts();
+  window.onhashchange = song.loadByHash;
 
-var selectized = jquery('select').selectize({
-  onItemAdd: function(value, data) {
-    song.setCurrent(value);
-    modal.hide();
-  }
-});
-search.selectize = selectized[0].selectize;
-search.selectize.focus();
+  bindShortcuts();
 
-modal.show('search');
+  var selectized = jquery('select').selectize({
+    onItemAdd: function(value, data) {
+      song.setCurrent(value);
+      modal.hide();
+    }
+  });
+  search.selectize = selectized[0].selectize;
+  search.selectize.focus();
+
+  modal.show('search');
+}
+
+var config = bootstrapConfig();
+
+if (config.path) {
+  main();
+}
