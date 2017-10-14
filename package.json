@@ -25,9 +25,9 @@
   "homepage": "https://github.com/JosefFriedrich-nodejs/baldr-sbook",
   "dependencies": {
     "font-awesome": "^4.7.0",
-    "jquery": "*",
-    "mousetrap": "*",
-    "selectize": "*"
+    "jquery": "^3.2.1",
+    "mousetrap": "^1.6.1",
+    "selectize": "^0.12.4"
   },
   "devDependencies": {
     "electron-packager": "^9.1.0",
