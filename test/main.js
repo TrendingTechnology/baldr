@@ -51,27 +51,27 @@ describe('application launch', function () {
     });
   });
 
-  it('get html', function () {
+  it.skip('get html', function () {
     return this.app.client.getHTML('#update-library').then(function (text) {
       assert.equal(text, '<a id="update-library" class="button">Die Liedersammlung aktualisieren</a>');
     });
   });
 
-  it('getTitle', function () {
+  it('HTML title', function () {
     return this.app.client.getTitle().then(function (text) {
       assert.equal(text, 'Liederbuch „Die besten Lieder“');
     });
   });
 
-  it('elements', function () {
-    return this.app.client.elements('li').then(function (options) {
-      console.log(options);
+  it('selectize control field', function () {
+    return this.app.client.element('.selectize-control').then(function (field) {
+      assert.ok(field.value.ELEMENT);
     });
   });
 
-  it('div .option', function () {
-    return this.app.client.$$('div .option').then(function (options) {
-      console.log(options);
+  it('selectize dropdown content', function () {
+    return this.app.client.$$('.selectize-dropdown-content .option').then(function (options) {
+      assert.equal(options.length, 4);
     });
   });
 
