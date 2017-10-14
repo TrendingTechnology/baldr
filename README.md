@@ -6,17 +6,28 @@
 A command line utilty to generate from MuseScore files image files for
 the BALDUR Songbook.
 
+Further informations can be found on the
+[API documentation site](https://joseffriedrich-nodejs.github.io/baldr-sbook-updtr/)
+of the project.
+
+## Installation
+
 ```
 sudo npm install --global --unsafe-perm baldr-songbook-updater
 ```
 
-# Dependencies
+## Dependencies
 
+Please install this dependenies:
+
+* [mscore-to-eps.sh](https://github.com/JosefFriedrich-shell/mscore-to-eps.sh)
 * [MuseScore](https://musescore.org/)
 * [pdf2svg](https://github.com/dawbarton/pdf2svg)
-* [mscore-to-eps.sh](https://github.com/Josef-Friedrich/shell-scripts/blob/master/mscore-to-eps.sh)
+* [pdfcrop](https://ctan.org/tex-archive/support/pdfcrop)
+* [pdfinfo](https://poppler.freedesktop.org/)
+* [pdftops](https://poppler.freedesktop.org/)
 
-# Testing
+## Testing
 
 ```
 npm install
