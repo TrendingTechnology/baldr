@@ -2,7 +2,7 @@
  * @file Toggle the modal window
  */
 
-IDs = ['search', 'tableofcontents', 'settings'];
+IDs = ['search', 'tableofcontents'];
 
 setDisplay = function(modalID, state) {
   var element = document.getElementById(modalID);
