@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: tree.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: tree.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @file Retrieve a object representation of a song folder tree.
+ * &lt;pre>&lt;code>
+ * .
+ * ├── a
+ * │   ├── Aint-she-sweet
+ * │   │   ├── info.json
+ * │   │   ├── piano
+ * │   │   │   └── piano.mscx
+ * │   │   ├── piano.mscx
+ * │   │   ├── projector.mscx
+ * │   │   ├── projector.pdf
+ * │   │   └── slides
+ * │   │       ├── 01.svg
+ * │   │       └── 02.svg
+ * │   ├── Altes-Fieber
+ * │   │   ├── info.json
+ * │   │   ├── lead.mscx
+ * │   │   ├── piano
+ * │   │   │   └── piano.mscx
+ * │   │   ├── projector.mscx
+ * │   │   ├── projector.pdf
+ * │   │   └── slides
+ * │   │       ├── 01.svg
+ * │   │       ├── 02.svg
+ * │   │       ├── 03.svg
+ * │   │       ├── 04.svg
+ * │   │       ├── 05.svg
+ * │   │       └── 06.svg
+ * &lt;/code>&lt;/pre>
+ */
+
+'use strict';
+
+const fs = require('fs');
+const path = require('path');
+
+/**
+ * @param {string} folder - Absolute path to a song folder.
+ */
+var getSongInfo = function(folder) {
+  var jsonFile = path.join(folder, 'info.json');
+  if (fs.existsSync(jsonFile)) {
+    return JSON.parse(fs.readFileSync(jsonFile, 'utf8'));
+  }
+  else {
+    return false;
+  }
+};
+
+/**
+ * @param {string} folder - Absolute path.
+ * @param {string} filter - String to filter.
+ */
+var getFolderFiles = function(folder, filter) {
+  if (fs.existsSync(folder)) {
+    return fs.readdirSync(folder).filter((file) => {
+      return file.indexOf(filter) > -1 ? true : false;
+    });
+  }
+  else {
+    return [];
+  }
+};
+
+/**
+ * Return the folder that might contain MuseScore files.
+ * @param {string} basePath - Basepath to the songbook tree.
+ * @return {array} Array of folder paths.
+ */
+var getSongFolders = function(basePath, folder) {
+  var absPath = path.join(basePath, folder);
+  var folders = fs.readdirSync(absPath);
+  return folders.filter(
+    (file) => {
+      if (
+           fs.statSync(path.join(absPath, file)).isDirectory() &amp;&amp;
+           file.substr(0, 1) !== '_' &amp;&amp;
+           file.substr(0, 1) !== '.'
+         ) {
+        return true;
+      }
+      else {
+        return false;
+      }
+    }
+  );
+};
+
+/**
+ * @param {string} basePath - Basepath to the songbook tree.
+ */
+var getABCFolders = function(basePath) {
+  var abc = '0abcdefghijklmnopqrstuvwxyz'.split('');
+  return abc.filter((file) => {
+    var folder = path.join(basePath, file);
+    if (fs.existsSync(folder) &amp;&amp; fs.statSync(folder).isDirectory()) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  });
+};
+
+/**
+ * @param {string} basePath - Basepath to the songbook tree.
+ * &lt;pre>&lt;code>
+ * {
+ *   "a": {
+ *     "Auf-der-Mauer_auf-der-Lauer": {}
+ *   },
+ *   "s": {
+ *     "Stille-Nacht": {},
+ *     "Swing-low": {}
+ *   },
+ *   "z": {
+ *     "Zum-Tanze-da-geht-ein-Maedel": {}
+ *   }
+ * }
+ * &lt;/code>&lt;/pre>
+ */
+var getTree = function(basePath) {
+  var tree = {};
+  getABCFolders(basePath).forEach((abc) => {
+    var folders = {};
+    getSongFolders(basePath, abc).forEach((song) => {
+      folders[song] = {};
+    });
+    tree[abc] = folders;
+  });
+  return tree;
+};
+
+/**
+ * @return {array} Array of folder paths.
+ */
+var flattenTree = function(tree) {
+  var flattFolders = [];
+  Object.keys(tree).forEach((abc, index) => {
+    Object.keys(tree[abc]).forEach((folder, index) => {
+      flattFolders.push(path.join(abc, folder));
+    });
+  });
+  return flattFolders;
+};
+
+/**
+ * @param {string} basePath - Basepath to the songbook tree.
+ * @return {array} Array of folder paths.
+ */
+var flat = function(basePath) {
+  return flattenTree(
+    getTree(basePath)
+  ).map(folder => path.join(basePath, folder));
+};
+
+exports.getSongInfo = getSongInfo;
+exports.getFolderFiles = getFolderFiles;
+exports.getTree = getTree;
+exports.flattenTree = flattenTree;
+exports.flat = flat;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#bootstrapConfig">bootstrapConfig</a></li><li><a href="global.html#checkExecutable">checkExecutable</a></li><li><a href="global.html#checkExecutables">checkExecutables</a></li><li><a href="global.html#clean">clean</a></li><li><a href="global.html#cleanFiles">cleanFiles</a></li><li><a href="global.html#cleanFolder">cleanFolder</a></li><li><a href="global.html#flat">flat</a></li><li><a href="global.html#flattenTree">flattenTree</a></li><li><a href="global.html#generateJSON">generateJSON</a></li><li><a href="global.html#generatePDF">generatePDF</a></li><li><a href="global.html#generatePianoEPS">generatePianoEPS</a></li><li><a href="global.html#generateSlides">generateSlides</a></li><li><a href="global.html#generateSongJSON">generateSongJSON</a></li><li><a href="global.html#generateTeX">generateTeX</a></li><li><a href="global.html#getABCFolders">getABCFolders</a></li><li><a href="global.html#getFolderFiles">getFolderFiles</a></li><li><a href="global.html#getMscoreCommand">getMscoreCommand</a></li><li><a href="global.html#getSongFolders">getSongFolders</a></li><li><a href="global.html#getSongInfo">getSongInfo</a></li><li><a href="global.html#getTree">getTree</a></li><li><a href="global.html#gitPull">gitPull</a></li><li><a href="global.html#hashSHA1">hashSHA1</a></li><li><a href="global.html#info">info</a></li><li><a href="global.html#noConfigPath">noConfigPath</a></li><li><a href="global.html#processSongFolder">processSongFolder</a></li><li><a href="global.html#readJSON">readJSON</a></li><li><a href="global.html#setTestMode">setTestMode</a></li><li><a href="global.html#songFolder">songFolder</a></li><li><a href="global.html#texABC">texABC</a></li><li><a href="global.html#texCmd">texCmd</a></li><li><a href="global.html#texSong">texSong</a></li><li><a href="global.html#update">update</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Sat Oct 14 2017 20:28:02 GMT+0200 (CEST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
