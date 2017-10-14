@@ -3,7 +3,12 @@
 
 # baldr-dcamr - BALDUR Document Camera Viewer
 
-A fullscreen electron app to display the video output from document cameras.
+A fullscreen electron app to display the video output from document
+cameras.
+
+Further informations can be found on the
+[API documentation site](https://joseffriedrich-nodejs.github.io/baldr-dcamr/)
+of the project.
 
 ```
 audioinput: Default id = default

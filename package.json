@@ -10,6 +10,7 @@
   },
   "scripts": {
     "build": "electron-packager ./ --out=dist --app-version=$npm_package_version --prune --asar --overwrite --arch=x64 --icon=./icon.icns",
+    "doc": "jsdoc --destination ./docs/ .",
     "electron-rebuild": "electron-rebuild",
     "postinstall": "electron-rebuild",
     "start": "electron .",
@@ -23,11 +24,12 @@
   "license": "MIT",
   "homepage": "https://github.com/JosefFriedrich-nodejs/baldr-dcamr",
   "devDependencies": {
-    "electron": "^1.7.9",
     "electron-packager": "^9.1.0",
     "electron-rebuild": "^1.6.0",
-    "mocha": "^4.0.1",
+    "electron": "^1.7.9",
+    "jsdoc": "^3.5.5",
     "mocha-jshint": "^2.3.1",
+    "mocha": "^4.0.1",
     "spectron": "^3.7.2"
   }
 }
