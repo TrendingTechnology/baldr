@@ -76,6 +76,7 @@ var tableOfContents = function(tree, element) {
 
   Object.keys(tree).forEach((abc, index) => {
     var abcLi = document.createElement('li');
+    abcLi.setAttribute('class', 'abc');
     abcLi.innerHTML = abc;
 
     var abcUl = document.createElement('ul');
@@ -84,6 +85,7 @@ var tableOfContents = function(tree, element) {
       var li = document.createElement('li');
       var a = document.createElement('a');
       a.setAttribute('href', '#' + folder);
+      a.setAttribute('id', 'song_' + folder);
       a.innerHTML = tree[abc][folder].title;
       li.appendChild(a);
       abcUl.appendChild(li);

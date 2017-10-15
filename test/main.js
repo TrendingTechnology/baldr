@@ -16,14 +16,14 @@ describe('build', () => {
 describe('application launch', function () {
   this.timeout(10000);
 
-  before(function () {
+  beforeEach(function () {
     this.app = new Application({
       path: 'dist/baldr-sbook-linux-x64/baldr-sbook'
     });
     return this.app.start();
   });
 
-  after(function () {
+  afterEach(function () {
     if (this.app && this.app.isRunning()) {
       return this.app.stop();
     }
@@ -41,14 +41,35 @@ describe('application launch', function () {
     });
   });
 
-  it.skip('get text', function () {
-    return this.app.client.moveTo('#slide').then((text) => {
-      return this.app.client.click('#menu-tableofcontents').then((test) => {
-        return this.app.client.getText('#tableofcontents h2').then(function (text) {
+  it.skip('tableofcontent', function () {
+    return this.app.client.moveTo('#slide')
+      .click('#menu-tableofcontents')
+      .getText('#tableofcontents h2').then(function (text) {
           assert.equal(text, 'Inhaltsverzeichnis');
-        });
       });
-    });
+  });
+
+  it('tableofcontent', function () {
+    return this.app.client
+      .click('#search .close')
+      .keys('Alt')
+      .getText('#tableofcontents h2').then(function (text) {
+        assert.equal(text, 'Inhaltsverzeichnis');
+      })
+      .getText('#song_Swing-low').then(function (text) {
+        assert.equal(text, 'Swing low');
+      })
+      .getText('#toc-field ul li ul li').then(function (text) {
+        assert.deepEqual(
+          text,
+          [
+            'Auf der Mauer, auf der Lauer',
+            'Stille Nacht',
+            'Swing low',
+            'Zum Tanze, da geht ein Mädel'
+          ]
+        );
+      });
   });
 
   it.skip('get html', function () {
