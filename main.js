@@ -54,7 +54,7 @@ if (process.platform === 'darwin') {
       {type: 'separator'},
       {role: 'quit'}
     ]
-  })
+  });
 
   // Edit menu
   template[1].submenu.push(
@@ -66,7 +66,7 @@ if (process.platform === 'darwin') {
         {role: 'stopspeaking'}
       ]
     }
-  )
+  );
 
   // Window menu
   template[3].submenu = [
@@ -75,7 +75,7 @@ if (process.platform === 'darwin') {
     {role: 'zoom'},
     {type: 'separator'},
     {role: 'front'}
-  ]
+  ];
 }
 
 const menu = Menu.buildFromTemplate(template);
