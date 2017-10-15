@@ -7,50 +7,6 @@ const {app, BrowserWindow, Menu} = electron;
 
 let win;
 
-function mirrorMonitors(state) {
-  if (process.platform === 'darwin') {
-    var exec = require('child_process').exec;
-    var child;
-
-    child = exec('/usr/local/bin/mirror -' + state, function (error, stdout, stderr) {
-      if (error !== null) {
-        console.log('exec error: ' + error);
-      }
-    });
-  }
-}
-
-function createWindow() {
-  win = new BrowserWindow({fullscreen: true});
-
-  win.loadURL(`file://${__dirname}/index.html`);
-  //win.webContents.openDevTools();
-
-  win.on('closed', () => {
-    win = null;
-  });
-}
-
-mirrorMonitors('on');
-
-app.on('ready', createWindow);
-
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    app.quit();
-  }
-});
-
-app.on('will-quit', () => {
-  mirrorMonitors('off');
-});
-
-app.on('activate', () => {
-  if (win === null) {
-    createWindow();
-  }
-});
-
 const template = [
   {
     label: 'View',
@@ -98,17 +54,72 @@ if (process.platform === 'darwin') {
       {type: 'separator'},
       {role: 'quit'}
     ]
-  });
+  })
+
+  // Edit menu
+  template[1].submenu.push(
+    {type: 'separator'},
+    {
+      label: 'Speech',
+      submenu: [
+        {role: 'startspeaking'},
+        {role: 'stopspeaking'}
+      ]
+    }
+  )
 
   // Window menu
-  template[2].submenu = [
+  template[3].submenu = [
     {role: 'close'},
     {role: 'minimize'},
     {role: 'zoom'},
     {type: 'separator'},
     {role: 'front'}
-  ];
+  ]
 }
 
 const menu = Menu.buildFromTemplate(template);
-Menu.setApplicationMenu(menu);
+
+function mirrorMonitors(state) {
+  if (process.platform === 'darwin') {
+    var exec = require('child_process').exec;
+    var child;
+
+    child = exec('/usr/local/bin/mirror -' + state, function (error, stdout, stderr) {
+      if (error !== null) {
+        console.log('exec error: ' + error);
+      }
+    });
+  }
+}
+
+function createWindow() {
+  win = new BrowserWindow({fullscreen: true});
+
+  win.loadURL(`file://${__dirname}/index.html`);
+
+  Menu.setApplicationMenu(menu);
+  win.on('closed', () => {
+    win = null;
+  });
+}
+
+mirrorMonitors('on');
+
+app.on('ready', createWindow);
+
+app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin') {
+    app.quit();
+  }
+});
+
+app.on('will-quit', () => {
+  mirrorMonitors('off');
+});
+
+app.on('activate', () => {
+  if (win === null) {
+    createWindow();
+  }
+});
