@@ -61,6 +61,10 @@ describe('application launch', function () {
             'Zum Tanze, da geht ein Mädel'
           ]
         );
+      })
+      .click('#song_Swing-low')
+      .getHTML('img').then(html => {
+        assert.equal(html, '<img>');
       });
   });
 
@@ -72,6 +76,23 @@ describe('application launch', function () {
     .$$('.selectize-dropdown-content .option')
     .then(options => {
       assert.equal(options.length, 4);
+    });
+  });
+
+  it('is Fullscreen', function () {
+    return this.app.browserWindow
+    .isFullScreen()
+    .then(full => {
+      assert.equal(full, true);
+    });
+  });
+
+  it('set Fullscreen', function () {
+    this.app.browserWindow.setFullScreen(false);
+    return this.app.browserWindow
+    .isFullScreen()
+    .then(full => {
+      assert.equal(full, false);
     });
   });
 
