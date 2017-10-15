@@ -68,6 +68,19 @@ function bindButtons() {
   jquery('#slide #next').click(song.nextSlide);
 }
 
+var showByHash = function() {
+  if (location.hash === "#search") {
+    modal.show('search');
+  }
+  else if (location.hash === "#tableofcontents") {
+    modal.show('tableofcontents');
+  } else if (location.hash) {
+    song.loadByHash();
+  } else {
+    modal.show('search');
+  }
+};
+
 /**
  * Generate a tree view for the table of contents page.
  */
@@ -110,7 +123,6 @@ var main = function() {
     "selector": '#slide img',
     "songsPath": config.path
   });
-  song.loadByHash();
 
   search.set({
     "library": json,
@@ -119,10 +131,9 @@ var main = function() {
   search.build();
   bindButtons();
 
-
   tableOfContents(tree, document.getElementById('toc-field'));
 
-  window.onhashchange = song.loadByHash;
+  window.onhashchange = showByHash;
 
   bindShortcuts();
 
@@ -135,7 +146,7 @@ var main = function() {
   search.selectize = selectized[0].selectize;
   search.selectize.focus();
 
-  modal.show('search');
+  showByHash();
 };
 
 var config = bootstrapConfig();

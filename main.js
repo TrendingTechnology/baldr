@@ -7,18 +7,45 @@ const {app, BrowserWindow, Menu} = electron;
 
 let win;
 
+var setUrl = function(htmlFile, hash=false) {
+  var url = {
+    protocol: 'file',
+    slashes: true,
+    pathname: require('path').join(__dirname, htmlFile)
+  };
+  if (hash) {
+    url.hash = hash;
+  }
+  return require('url').format(url);
+};
+
 const template = [
   {
     label: 'View',
     submenu: [
+      {
+        label: 'Search',
+        click() {win.loadURL(setUrl('index.html', '#search'));}
+      },
+      {
+        label: 'Table of contents',
+        click() {win.loadURL(setUrl('index.html', '#tableofcontents'));}
+      },
+
+      {type: 'separator'},
+
       {role: 'reload'},
       {role: 'forcereload'},
       {role: 'toggledevtools'},
+
       {type: 'separator'},
+
       {role: 'resetzoom'},
       {role: 'zoomin'},
       {role: 'zoomout'},
+
       {type: 'separator'},
+
       {role: 'togglefullscreen'}
     ]
   },
@@ -45,13 +72,18 @@ if (process.platform === 'darwin') {
     label: app.getName(),
     submenu: [
       {role: 'about'},
+
       {type: 'separator'},
+
       {role: 'services', submenu: []},
+
       {type: 'separator'},
       {role: 'hide'},
       {role: 'hideothers'},
       {role: 'unhide'},
+
       {type: 'separator'},
+
       {role: 'quit'}
     ]
   });
@@ -96,7 +128,7 @@ function mirrorMonitors(state) {
 function createWindow() {
   win = new BrowserWindow({fullscreen: true});
 
-  win.loadURL(`file://${__dirname}/index.html`);
+  win.loadURL(setUrl('index.html'));
 
   Menu.setApplicationMenu(menu);
   win.on('closed', () => {
