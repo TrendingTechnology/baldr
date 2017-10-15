@@ -3,12 +3,27 @@ const fs = require('fs');
 const path = require('path');
 var Application = require('spectron').Application;
 
+var pkg = require('../package.json');
+
 process.env.BALDR_SBOOK_PATH = path.resolve('test', 'songs');
+
+var darwinPath = [];
+
+if (process.platform === 'darwin') {
+  darwinPath = ['baldr-sbook.app', 'Contents', 'MacOS'];
+}
+
+var appPath = path.join(
+  'dist',
+  `${pkg.name}-${process.platform}-${process.arch}`,
+  ...darwinPath,
+  pkg.name
+);
 
 describe('build', () => {
 
-  it('exists “dist/baldr-sbook-linux-x64/baldr-sbook”', () => {
-    assert.ok(fs.existsSync('dist/baldr-sbook-linux-x64/baldr-sbook'));
+  it(`exists “${appPath}”`, () => {
+    assert.ok(fs.existsSync(appPath));
   });
 
 });
@@ -18,7 +33,7 @@ describe('application launch', function () {
 
   beforeEach(function () {
     this.app = new Application({
-      path: 'dist/baldr-sbook-linux-x64/baldr-sbook'
+      path: appPath
     });
     return this.app.start();
   });
