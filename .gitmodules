@@ -1,3 +1,0 @@
-[submodule "lib/fontawesome"]
-	path = songbook/app/lib/fontawesome
-	url = https://github.com/FortAwesome/Font-Awesome.git
