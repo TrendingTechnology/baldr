@@ -1,0 +1,28 @@
+{
+  "name": "baldr",
+  "version": "0.0.1",
+  "description": "Presentation software for music lessons",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JosefFriedrich-nodejs/baldr.git"
+  },
+  "author": "Josef Friedrich",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/JosefFriedrich-nodejs/baldr/issues"
+  },
+  "homepage": "https://github.com/JosefFriedrich-nodejs/baldr#readme",
+  "devDependencies": {
+    "electron": "^1.7.9",
+    "electron-packager": "^9.1.0",
+    "mocha": "^4.0.1",
+    "spectron": "^3.7.2"
+  },
+  "dependencies": {
+    "js-yaml": "^3.10.0"
+  }
+}
