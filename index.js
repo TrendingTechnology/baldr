@@ -70,7 +70,7 @@ function bindButtons() {
 }
 
 /**
- * Generate tree view for the table of contents page
+ * Generate a tree view for the table of contents page.
  */
 var tableOfContents = function(tree, element) {
   var topUl = document.createElement('ul');
