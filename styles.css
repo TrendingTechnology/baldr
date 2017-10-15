@@ -48,6 +48,15 @@ body {
 }
 
 /**
+ * Table of contents
+ */
+
+#tableofcontents #toc-field {
+	overflow-y: scroll;
+	height: 90%;
+}
+
+/**
  * search selectize overrides
  */
 .selectize-dropdown {
