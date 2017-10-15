@@ -60,7 +60,7 @@ body {
  * search selectize overrides
  */
 .selectize-dropdown {
-	font-size: 2em;
+	font-size: 1.3em;
 	line-height: 1em;
 }
 .selectize-input input {
