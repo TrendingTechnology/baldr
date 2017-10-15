@@ -83,7 +83,10 @@ var tableOfContents = function(tree, element) {
 
     Object.keys(tree[abc]).forEach((folder, index) => {
       var li = document.createElement('li');
-      li.innerHTML = tree[abc][folder].title;
+      var a = document.createElement('a');
+      a.setAttribute('href', '#' + folder);
+      a.innerHTML = tree[abc][folder].title;
+      li.appendChild(a);
       abcUl.appendChild(li);
     });
     topUl.appendChild(abcLi);

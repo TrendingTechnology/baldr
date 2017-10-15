@@ -3,6 +3,7 @@
  */
 
 const path = require('path');
+const modal = require('./modal.js');
 
 /**
  * The current slide number.
@@ -30,7 +31,7 @@ var library;
 
 var selector;
 
-exports.set = function(values) {
+var set = function(values) {
   songsPath = values.songsPath;
   library = values.library;
   selector = values.selector;
@@ -39,7 +40,7 @@ exports.set = function(values) {
 /**
  * Set all properties for the current song.
  */
-exports.setCurrent = function(songID) {
+var setCurrent = function(songID) {
   var tmp = library[songID];
   if (typeof tmp !== 'undefined') {
     slideNumber = 0;
@@ -53,7 +54,7 @@ exports.setCurrent = function(songID) {
 /**
  * Load the current image to the slide section.
  */
-setSlide = function() {
+var setSlide = function() {
   var imagePath = path.join(folder, 'slides', slides[slideNumber]);
   jquery(selector).attr('src', imagePath);
 };
@@ -61,7 +62,7 @@ setSlide = function() {
 /**
  * Show the next slide.
  */
-exports.nextSlide = function() {
+var nextSlide = function() {
   slideNumber += 1;
   if (slideNumber > slideNumberMax) {
     slideNumber = 0;
@@ -72,7 +73,7 @@ exports.nextSlide = function() {
 /**
  * Show the previous slide.
  */
-exports.previousSlide = function() {
+var previousSlide = function() {
   slideNumber -= 1;
   if (slideNumber < 0) {
     slideNumber = slideNumberMax;
@@ -83,9 +84,16 @@ exports.previousSlide = function() {
 /**
  *
  */
-exports.loadByHash = function() {
+var loadByHash = function() {
   if (location.hash !== '') {
     setCurrent(location.hash.substring(1));
     setSlide();
+    modal.hide();
   }
 };
+
+exports.loadByHash = loadByHash;
+exports.nextSlide = nextSlide;
+exports.previousSlide = previousSlide;
+exports.set = set;
+exports.setCurrent = setCurrent;
