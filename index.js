@@ -51,7 +51,7 @@ var flattenTree = function(tree) {
  */
 function bindShortcuts() {
   mousetrap.bind('esc', function() {modal.toggle('search');});
-  mousetrap.bind('alt', function() {modal.toggle('search');});
+  mousetrap.bind('alt', function() {modal.toggle('tableofcontents');});
   mousetrap.bind('left', song.previousSlide);
   mousetrap.bind('right', song.nextSlide);
 }
@@ -62,7 +62,6 @@ function bindShortcuts() {
 function bindButtons() {
   jquery('#menu #menu-search').click(function() {modal.show('search');});
   jquery('#menu #menu-tableofcontents').click(function() {modal.show('tableofcontents');});
-  jquery('#menu #menu-settings').click(function() {modal.show('settings');});
   jquery('#search a').click(modal.hide);
   jquery('.modal .close').click(modal.hide);
   jquery('#slide #previous').click(song.previousSlide);
