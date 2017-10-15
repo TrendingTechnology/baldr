@@ -1,9 +1,12 @@
 const yaml = require('js-yaml');
 const fs = require('fs');
 
-try {
-  var doc = yaml.safeLoad(fs.readFileSync('lesson.yml', 'utf8'));
-  console.log(doc);
-} catch (e) {
-  console.log(e);
+var loadYaml = function(yamlFile) {
+  try {
+    return yaml.safeLoad(fs.readFileSync(yamlFile, 'utf8'));
+  } catch (e) {
+    throw e;
+  }
 }
+
+exports.loadYaml = loadYaml;
