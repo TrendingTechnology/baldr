@@ -7,8 +7,8 @@ process.env.BALDR_SBOOK_PATH = path.resolve('test', 'songs');
 
 describe('build', () => {
 
-  it('exists “dist/baldr-sbook-linux-x64/resources/app.asar”', () => {
-    assert.ok(fs.existsSync('dist/baldr-sbook-linux-x64/resources/app.asar'));
+  it('exists “dist/baldr-sbook-linux-x64/baldr-sbook”', () => {
+    assert.ok(fs.existsSync('dist/baldr-sbook-linux-x64/baldr-sbook'));
   });
 
 });
@@ -29,23 +29,15 @@ describe('application launch', function () {
     }
   });
 
-  it('shows an initial window', function () {
-    return this.app.client.getWindowCount().then(function (count) {
-      assert.equal(count, 1);
-    });
-  });
-
-  it('Source code', function () {
-    return this.app.client.getSource().then(function (text) {
-      assert.ok(text.includes('<li id="menu-search" class="button fa fa-search" title="Suche (Tastenkürzel: Esc)"></li>'));
-    });
-  });
-
-  it.skip('tableofcontent', function () {
-    return this.app.client.moveTo('#slide')
-      .click('#menu-tableofcontents')
-      .getText('#tableofcontents h2').then(function (text) {
-          assert.equal(text, 'Inhaltsverzeichnis');
+  it('Initial window', function () {
+    return this.app.client
+      .getWindowCount()
+      .then(count => {
+        assert.equal(count, 1);
+      })
+      .getTitle()
+      .then(text => {
+        assert.equal(text, 'Liederbuch „Die besten Lieder“');
       });
   });
 
@@ -72,26 +64,13 @@ describe('application launch', function () {
       });
   });
 
-  it.skip('get html', function () {
-    return this.app.client.getHTML('#update-library').then(function (text) {
-      assert.equal(text, '<a id="update-library" class="button">Die Liedersammlung aktualisieren</a>');
-    });
-  });
-
-  it('HTML title', function () {
-    return this.app.client.getTitle().then(function (text) {
-      assert.equal(text, 'Liederbuch „Die besten Lieder“');
-    });
-  });
-
-  it('selectize control field', function () {
-    return this.app.client.element('.selectize-control').then(function (field) {
+  it('selectize', function () {
+    return this.app.client.element('.selectize-control')
+    .then(field => {
       assert.ok(field.value.ELEMENT);
-    });
-  });
-
-  it('selectize dropdown content', function () {
-    return this.app.client.$$('.selectize-dropdown-content .option').then(function (options) {
+    })
+    .$$('.selectize-dropdown-content .option')
+    .then(options => {
       assert.equal(options.length, 4);
     });
   });
