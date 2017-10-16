@@ -4,6 +4,7 @@
   "description": "Presentation software for music lessons",
   "main": "index.js",
   "scripts": {
+    "doc": "jsdoc --destination ./docs/ .",
     "test": "mocha"
   },
   "repository": {
@@ -19,6 +20,7 @@
   "devDependencies": {
     "electron": "^1.7.9",
     "electron-packager": "^9.1.0",
+    "jsdoc": "^3.5.5",
     "mocha": "^4.0.1",
     "spectron": "^3.7.2"
   },
