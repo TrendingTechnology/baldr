@@ -1,9 +1,9 @@
 var assert = require('assert');
-var index = require('../index.js');
+var index = require('../render.js');
 
 describe('function “loadYaml()”', () => {
   it('presentation.yml', () => {
-    var yml = index.loadYaml('test/presentation.yml');
+    var yml = index.loadYaml('presentation.yml');
     assert.equal(yml[0].quote.author, 'Johann Wolfgang von Goethe');
     assert.equal(yml[1].questions[0].answer, 1827);
   });
@@ -11,7 +11,7 @@ describe('function “loadYaml()”', () => {
 
 describe('Class “Presentation()”', () => {
   beforeEach(function() {
-    this.p = new index.Presentation('test/presentation.yml');
+    this.p = new index.Presentation('presentation.yml');
   });
 
   it('Properties', function() {

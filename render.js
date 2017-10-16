@@ -2,8 +2,9 @@
  * @file Index file of the render process.
  */
 
-const yaml = require('js-yaml');
 const fs = require('fs');
+const mousetrap = require('mousetrap');
+const yaml = require('js-yaml');
 
 /**
  * Load the content of a yaml file and convert its content into a
@@ -28,7 +29,12 @@ Presentation = function(yamlFile) {
   this.slides = loadYaml(yamlFile);
   this.slidesCount = this.slides.length;
   this.currentSlideNumber = 1;
-  this.currentSlideObject = this.slides[0];
+
+  this.setSlide = function() {
+    this.currentSlideObject = this.slides[this.currentSlideNumber - 1];
+  };
+
+  this.setSlide();
 };
 
 /**
@@ -41,7 +47,7 @@ Presentation.prototype.previousSlide = function() {
   else {
     this.currentSlideNumber = this.currentSlideNumber - 1;
   }
-  this.currentSlideObject = this.slides[this.currentSlideNumber - 1];
+  this.setSlide();
 };
 
 /**
@@ -55,8 +61,25 @@ Presentation.prototype.nextSlide = function() {
   else {
     this.currentSlideNumber = this.currentSlideNumber + 1;
   }
-  this.currentSlideObject = this.slides[this.currentSlideNumber - 1];
+  this.setSlide();
 };
 
-exports.Presentation = Presentation;
-exports.loadYaml = loadYaml;
+
+var main = function() {
+  prst = new Presentation('presentation.yml');
+
+  mousetrap.bind('left', function() {
+    prst.previousSlide();
+  });
+  mousetrap.bind('right', function() {
+    prst.nextSlide();
+  });
+};
+
+if (require.main === module) {
+  main();
+}
+else {
+  exports.Presentation = Presentation;
+  exports.loadYaml = loadYaml;
+}
