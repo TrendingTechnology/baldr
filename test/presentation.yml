@@ -6,6 +6,10 @@
     author: Johann Wolfgang von Goethe
     date: 1801
 
-- quote:
-    text: Das Bewusstsein eines erfüllten Lebens und die Erinnerung an viele gute Stunden sind das größte Glück auf Erden.
-    author: Marcus Tullius Cicero
+- questions:
+    - question: Wann starb Ludwig van Beethoven?
+      answer: 1827
+
+- person:
+    name: Ludwig van Beethoven
+    image: beethoven.jpg
