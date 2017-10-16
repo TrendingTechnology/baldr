@@ -35,62 +35,51 @@ const {app, BrowserWindow, Menu} = electron;
 
 let win;
 
-function mirrorMonitors(state) {
-  if (process.platform === 'darwin') {
-    var exec = require('child_process').exec;
-    var child;
-
-    child = exec('/usr/local/bin/mirror -' + state, function (error, stdout, stderr) {
-      if (error !== null) {
-        console.log('exec error: ' + error);
-      }
-    });
+/**
+ * @function
+ * @param {string} htmlFile The path of the HTML file.
+ * @param {string} hash The URL hash starting with “#”
+ * @return {string} The formated URL string
+ */
+var setUrl = function(htmlFile, hash=false) {
+  var url = {
+    protocol: 'file',
+    slashes: true,
+    pathname: require('path').join(__dirname, htmlFile)
+  };
+  if (hash) {
+    url.hash = hash;
   }
-}
-
-function createWindow() {
-  win = new BrowserWindow({fullscreen: true});
-
-  win.loadURL(`file://${__dirname}/index.html`);
-  //win.webContents.openDevTools();
-
-  win.on('closed', () => {
-    win = null;
-  });
-}
-
-mirrorMonitors('on');
-
-app.on('ready', createWindow);
-
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    app.quit();
-  }
-});
-
-app.on('will-quit', () => {
-  mirrorMonitors('off');
-});
-
-app.on('activate', () => {
-  if (win === null) {
-    createWindow();
-  }
-});
+  return require('url').format(url);
+};
 
 const template = [
   {
     label: 'View',
     submenu: [
+      {
+        label: 'Search',
+        click() {win.loadURL(setUrl('index.html', '#search'));}
+      },
+      {
+        label: 'Table of contents',
+        click() {win.loadURL(setUrl('index.html', '#tableofcontents'));}
+      },
+
+      {type: 'separator'},
+
       {role: 'reload'},
       {role: 'forcereload'},
       {role: 'toggledevtools'},
+
       {type: 'separator'},
+
       {role: 'resetzoom'},
       {role: 'zoomin'},
       {role: 'zoomout'},
+
       {type: 'separator'},
+
       {role: 'togglefullscreen'}
     ]
   },
@@ -117,19 +106,36 @@ if (process.platform === 'darwin') {
     label: app.getName(),
     submenu: [
       {role: 'about'},
+
       {type: 'separator'},
+
       {role: 'services', submenu: []},
+
       {type: 'separator'},
       {role: 'hide'},
       {role: 'hideothers'},
       {role: 'unhide'},
+
       {type: 'separator'},
+
       {role: 'quit'}
     ]
   });
 
+  // Edit menu
+  template[1].submenu.push(
+    {type: 'separator'},
+    {
+      label: 'Speech',
+      submenu: [
+        {role: 'startspeaking'},
+        {role: 'stopspeaking'}
+      ]
+    }
+  );
+
   // Window menu
-  template[2].submenu = [
+  template[3].submenu = [
     {role: 'close'},
     {role: 'minimize'},
     {role: 'zoom'},
@@ -139,7 +145,50 @@ if (process.platform === 'darwin') {
 }
 
 const menu = Menu.buildFromTemplate(template);
-Menu.setApplicationMenu(menu);
+
+function mirrorMonitors(state) {
+  if (process.platform === 'darwin') {
+    var exec = require('child_process').exec;
+    var child;
+
+    child = exec('/usr/local/bin/mirror -' + state, function (error, stdout, stderr) {
+      if (error !== null) {
+        console.log('exec error: ' + error);
+      }
+    });
+  }
+}
+
+function createWindow() {
+  win = new BrowserWindow({fullscreen: true});
+
+  win.loadURL(setUrl('index.html'));
+
+  Menu.setApplicationMenu(menu);
+  win.on('closed', () => {
+    win = null;
+  });
+}
+
+mirrorMonitors('on');
+
+app.on('ready', createWindow);
+
+app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin') {
+    app.quit();
+  }
+});
+
+app.on('will-quit', () => {
+  mirrorMonitors('off');
+});
+
+app.on('activate', () => {
+  if (win === null) {
+    createWindow();
+  }
+});
 </code></pre>
         </article>
     </section>
@@ -150,13 +199,13 @@ Menu.setApplicationMenu(menu);
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#bindButtons">bindButtons</a></li><li><a href="global.html#bindShortcuts">bindShortcuts</a></li><li><a href="global.html#flattenTree">flattenTree</a></li><li><a href="global.html#folder">folder</a></li><li><a href="global.html#loadByHash">loadByHash</a></li><li><a href="global.html#nextSlide">nextSlide</a></li><li><a href="global.html#previousSlide">previousSlide</a></li><li><a href="global.html#setCurrent">setCurrent</a></li><li><a href="global.html#setSlide">setSlide</a></li><li><a href="global.html#slideNumber">slideNumber</a></li><li><a href="global.html#slideNumberMax">slideNumberMax</a></li><li><a href="global.html#slides">slides</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#bindButtons">bindButtons</a></li><li><a href="global.html#bindShortcuts">bindShortcuts</a></li><li><a href="global.html#flattenTree">flattenTree</a></li><li><a href="global.html#folder">folder</a></li><li><a href="global.html#loadByHash">loadByHash</a></li><li><a href="global.html#nextSlide">nextSlide</a></li><li><a href="global.html#previousSlide">previousSlide</a></li><li><a href="global.html#setCurrent">setCurrent</a></li><li><a href="global.html#setSlide">setSlide</a></li><li><a href="global.html#setUrl">setUrl</a></li><li><a href="global.html#slideNumber">slideNumber</a></li><li><a href="global.html#slideNumberMax">slideNumberMax</a></li><li><a href="global.html#slides">slides</a></li><li><a href="global.html#tableOfContents">tableOfContents</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Sat Oct 14 2017 22:30:50 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Oct 16 2017 19:46:11 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>
