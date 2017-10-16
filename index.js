@@ -19,4 +19,30 @@ var loadYaml = function(yamlFile) {
   }
 }
 
+/**
+ * presentation - description
+ *
+ * @param {string} yamlFile Path of the yaml file.
+ */
+presentation = function(yamlFile) {
+  this.currentSlideNumber;
+  this.currentSlideObject;
+  this.slideNumber;
+  this.slides;
+};
+
+/**
+ * presentation.prototype.previousSlide - Display the previous slide.
+ */
+presentation.prototype.previousSlide = function() {
+
+}
+
+/**
+ * presentation.prototype.nextSlide - Display the next slide.
+ */
+presentation.prototype.nextSlide = function() {
+
+}
+
 exports.loadYaml = loadYaml;
