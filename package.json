@@ -2,9 +2,14 @@
   "name": "baldr",
   "version": "0.0.1",
   "description": "Presentation software for music lessons",
-  "main": "index.js",
+  "main": "main.js",
   "scripts": {
+    "build": "electron-packager . --out=dist --app-version=$npm_package_version --asar --prune --overwrite --arch=x64 --icon=./icon.icns",
+    "doc-show": "xdg-open ./docs/index.html",
     "doc": "jsdoc --destination ./docs/ .",
+    "electron-rebuild": "electron-rebuild",
+    "postinstall": "electron-rebuild",
+    "start": "electron .",
     "test": "mocha"
   },
   "repository": {
@@ -20,8 +25,11 @@
   "devDependencies": {
     "electron": "^1.7.9",
     "electron-packager": "^9.1.0",
+    "electron-rebuild": "^1.6.0",
     "jsdoc": "^3.5.5",
+    "jshint": "^2.9.5",
     "mocha": "^4.0.1",
+    "mocha-jshint": "^2.3.1",
     "spectron": "^3.7.2"
   },
   "dependencies": {

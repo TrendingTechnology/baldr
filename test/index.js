@@ -5,7 +5,7 @@ describe('function “loadYaml()”', () => {
   it('presentation.yml', () => {
     var yml = index.loadYaml('test/presentation.yml');
     assert.equal(yml[0].quote.author, 'Johann Wolfgang von Goethe');
-    assert.equal(yml[1].questions[0].answer, 1827)
+    assert.equal(yml[1].questions[0].answer, 1827);
   });
 });
 

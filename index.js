@@ -17,7 +17,7 @@ var loadYaml = function(yamlFile) {
   } catch (e) {
     throw e;
   }
-}
+};
 
 /**
  * Presentation - description
@@ -42,7 +42,7 @@ Presentation.prototype.previousSlide = function() {
     this.currentSlideNumber = this.currentSlideNumber - 1;
   }
   this.currentSlideObject = this.slides[this.currentSlideNumber - 1];
-}
+};
 
 /**
  * Presentation.prototype.nextSlide - Display the next slide.
@@ -56,7 +56,7 @@ Presentation.prototype.nextSlide = function() {
     this.currentSlideNumber = this.currentSlideNumber + 1;
   }
   this.currentSlideObject = this.slides[this.currentSlideNumber - 1];
-}
+};
 
 exports.Presentation = Presentation;
 exports.loadYaml = loadYaml;
