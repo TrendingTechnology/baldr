@@ -13,7 +13,7 @@ of the project.
 ## Installation
 
 ```
-sudo npm install --global --unsafe-perm baldr-songbook-updater
+sudo npm install --global --unsafe-perm baldr-sbook-updtr
 ```
 
 ## Dependencies
