@@ -39,7 +39,7 @@ jspm_packages
 .node-persist/*
 *songs.json
 
-package-lock.json
+#package-lock.json
 *.mscx,
 out/*
 piano/*
