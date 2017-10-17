@@ -7,6 +7,11 @@ const {app, BrowserWindow, Menu} = electron;
 
 let win;
 
+/**
+ * @param {string} htmlFile The path of the HTML file.
+ * @param {string} hash The URL hash starting with “#”
+ * @return {string} The formated URL string
+ */
 var setUrl = function(htmlFile, hash=false) {
   var url = {
     protocol: 'file',
