@@ -16,19 +16,33 @@ var texCmd = function(command, value) {
 };
 
 /**
+ * Generate TeX markup for one song.
  *
+ * @param {string} basePath Base path of the song collection.
+ * @param {string} songFolder Path of a single song.
+ * @return {string} TeX markup for a single song.
+ * <code><pre>
+ * \tmpheading{Swing low}
+ * \tmpimage{s/Swing-low/piano/piano_1.eps}
+ * \tmpimage{s/Swing-low/piano/piano_2.eps}
+ * \tmpimage{s/Swing-low/piano/piano_3.eps}
+ * </pre><code>
  */
-var texSong = function(folder) {
-  const info = folderTree.getSongInfo(folder);
-  const eps = folderTree.getFolderFiles(path.join(folder, 'piano'), '.eps');
+var texSong = function(basePath, songPath) {
+  basePath = path.resolve(basePath);
+  songPath = path.resolve(songPath);
+  let relativeSongPath = songPath
+    .replace(basePath, '')
+    .replace(/^\//, '');
+  const info = folderTree.getSongInfo(songPath);
+  const eps = folderTree.getFolderFiles(path.join(songPath, 'piano'), '.eps');
   var output = '';
 
   if (info.hasOwnProperty('title') && eps.length > 0) {
     output += '\n' + texCmd('heading', info.title);
-    var basename = path.basename(folder);
     eps.forEach(
       (file) => {
-        output += texCmd('image', path.join(basename, 'piano', file));
+        output += texCmd('image', path.join(relativeSongPath, 'piano', file));
       }
     );
   }
@@ -55,7 +69,7 @@ var generateTeX = function(basePath) {
     fs.appendFileSync(tex, texABC(abc));
 
     Object.keys(tree[abc]).forEach((folder, index) => {
-      fs.appendFileSync(tex, texSong(path.join(basePath, abc, folder)));
+      fs.appendFileSync(tex, texSong(basePath, path.join(basePath, abc, folder)));
     });
   });
 };

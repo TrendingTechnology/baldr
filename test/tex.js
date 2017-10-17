@@ -17,15 +17,16 @@ describe('file “tex.js”', () => {
   });
 
   it('function “texSong()”', () => {
-    var texSong = rewire.__get__('texSong');
-    var folder = path.resolve('test', 'songs', 'processed', 'some', 's', 'Swing-low');
+    let texSong = rewire.__get__('texSong');
+    let basePath = path.resolve('test', 'songs', 'processed', 'some');
+    let songPath = path.join(basePath, 's', 'Swing-low');
     assert.equal(
-      texSong(folder),
+      texSong(basePath, songPath),
       '\n' +
       '\\tmpheading{Swing low}\n' +
-      '\\tmpimage{Swing-low/piano/piano_1.eps}\n' +
-      '\\tmpimage{Swing-low/piano/piano_2.eps}\n' +
-      '\\tmpimage{Swing-low/piano/piano_3.eps}\n'
+      '\\tmpimage{s/Swing-low/piano/piano_1.eps}\n' +
+      '\\tmpimage{s/Swing-low/piano/piano_2.eps}\n' +
+      '\\tmpimage{s/Swing-low/piano/piano_3.eps}\n'
     );
   });
 
