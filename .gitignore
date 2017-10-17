@@ -40,3 +40,4 @@ dist/*
 
 package-lock.json
 out/
+.DS_Store
