@@ -5,7 +5,7 @@ describe('function “loadYaml()”', () => {
   it('presentation.yml', () => {
     var yml = index.loadYaml('presentation.yml');
     assert.equal(yml[0].quote.author, 'Johann Wolfgang von Goethe');
-    assert.equal(yml[1].questions[0].answer, 1827);
+    assert.equal(yml[1].question[0].answer, 1827);
   });
 });
 
@@ -19,7 +19,7 @@ describe('Class “Presentation()”', () => {
     assert.equal(this.p.currentSlideObject.quote.author, 'Johann Wolfgang von Goethe');
     assert.equal(this.p.currentSlideNumber, 1);
     assert.equal(this.p.slides[0].quote.author, 'Johann Wolfgang von Goethe');
-    assert.equal(this.p.slides[1].questions[0].answer, 1827);
+    assert.equal(this.p.slides[1].question[0].answer, 1827);
   });
 
 
@@ -30,7 +30,7 @@ describe('Class “Presentation()”', () => {
 
     this.p.previousSlide();
     assert.equal(this.p.currentSlideNumber, 2);
-    assert.equal(this.p.currentSlideObject.questions[0].answer, 1827);
+    assert.equal(this.p.currentSlideObject.question[0].answer, 1827);
 
     this.p.previousSlide();
     assert.equal(this.p.currentSlideNumber, 1);
@@ -44,7 +44,7 @@ describe('Class “Presentation()”', () => {
   it('Methode “nextSlide()”', function() {
     this.p.nextSlide();
     assert.equal(this.p.currentSlideNumber, 2);
-    assert.equal(this.p.currentSlideObject.questions[0].answer, 1827);
+    assert.equal(this.p.currentSlideObject.question[0].answer, 1827);
 
     this.p.nextSlide();
     assert.equal(this.p.currentSlideNumber, 3);
