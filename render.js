@@ -27,11 +27,15 @@ var loadYaml = function(yamlFile) {
  */
 Presentation = function(yamlFile) {
   this.slides = loadYaml(yamlFile);
-  this.slidesCount = this.slides.length;
-  this.currentSlideNumber = 1;
+  this.count = this.slides.length;
+  this.current = {};
+  this.current.no = 1;
 
   this.setSlide = function() {
-    this.currentSlideObject = this.slides[this.currentSlideNumber - 1];
+    let index = this.current.no - 1;
+    let currentObject = this.slides[index];
+    this.current.master = Object.keys(currentObject)[0];
+    this.current.data = currentObject[this.current.master];
   };
 
   this.setSlide();
@@ -41,11 +45,11 @@ Presentation = function(yamlFile) {
  * Presentation.prototype.previousSlide - Display the previous slide.
  */
 Presentation.prototype.previousSlide = function() {
-  if (this.currentSlideNumber === 1) {
-    this.currentSlideNumber = this.slidesCount;
+  if (this.current.no === 1) {
+    this.current.no = this.count;
   }
   else {
-    this.currentSlideNumber = this.currentSlideNumber - 1;
+    this.current.no = this.current.no - 1;
   }
   this.setSlide();
 };
@@ -55,11 +59,11 @@ Presentation.prototype.previousSlide = function() {
  */
 Presentation.prototype.nextSlide = function() {
 
-  if (this.currentSlideNumber === this.slidesCount) {
-    this.currentSlideNumber = 1;
+  if (this.current.no === this.count) {
+    this.current.no = 1;
   }
   else {
-    this.currentSlideNumber = this.currentSlideNumber + 1;
+    this.current.no = this.current.no + 1;
   }
   this.setSlide();
 };
