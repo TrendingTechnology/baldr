@@ -5,6 +5,7 @@
 const fs = require('fs');
 const mousetrap = require('mousetrap');
 const yaml = require('js-yaml');
+const path = require('path');
 
 /**
  * Load the content of a yaml file and convert its content into a
@@ -36,6 +37,12 @@ Presentation = function(yamlFile) {
     let currentObject = this.slides[index];
     this.current.master = Object.keys(currentObject)[0];
     this.current.data = currentObject[this.current.master];
+
+    let master = require(path.resolve('masters', this.current.master, 'index.js'));
+    this.innerHTML = master.render(this.current.data);
+    //let slides = document.querySelector('#slide');
+    //slides.innerHTML = this.innerHTML;
+
   };
 
   this.setSlide();
