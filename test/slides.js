@@ -1,7 +1,7 @@
 const assert = require('assert');
-const rewire = require('rewire')('../yml.js');
+const rewire = require('rewire')('../slides.js');
 
-describe('module “yml.js”', () => {
+describe('module “slides.js”', () => {
 
   it('function “loadYaml()”', () => {
     let loadYaml = rewire.__get__('loadYaml');
@@ -71,7 +71,7 @@ describe('module “yml.js”', () => {
   });
 
   it('function exported by module.exports', () => {
-    let slides = require('../yml.js')('presentation.yml');
+    let slides = require('../slides.js')('presentation.yml');
     assert.equal(slides[1].master, 'quote');
     assert.equal(slides[2].master, 'question');
     assert.equal(slides[3].master, 'person');

@@ -6,7 +6,7 @@ const fs = require('fs');
 const mousetrap = require('mousetrap');
 const path = require('path');
 
-const slides = require('./yml.js')('presentation.yml');
+const slides = require('./slides.js')('presentation.yml');
 
 /**
  * Presentation - description

@@ -1,5 +1,5 @@
 /**
- * @file Load the yaml file and process it.
+ * @file Load the slides object form the YAML file format and process it.
  */
 
 const fs = require('fs');
