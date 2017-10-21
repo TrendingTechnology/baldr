@@ -120,4 +120,4 @@ typings/
 
 *.node-persist/
 
-package-lock.json
+#package-lock.json
