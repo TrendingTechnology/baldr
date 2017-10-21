@@ -1,5 +1,6 @@
 const assert = require('assert');
-const rewire = require('rewire')('../slides.js');
+const rewire = require('rewire')('../presentation.js');
+const {Presentation} = require('../presentation.js');
 
 describe('module “slides.js”', () => {
 
@@ -70,11 +71,54 @@ describe('module “slides.js”', () => {
     assert.deepEqual(out, result);
   });
 
-  it('function exported by module.exports', () => {
-    let slides = require('../slides.js')('presentation.yml');
-    assert.equal(slides[1].master, 'quote');
-    assert.equal(slides[2].master, 'question');
-    assert.equal(slides[3].master, 'person');
+});
+
+describe('Class “Presentation()”', () => {
+  beforeEach(function() {
+    this.prs = new Presentation('presentation.yml');
   });
 
+  it('Properties', function() {
+    assert.equal(this.prs.count, 3);
+    assert.equal(this.prs.no, 1);
+    assert.equal(this.prs.slides[1].master, 'quote');
+  });
+
+  it('Methode “prev()”', function() {
+    this.prs.prev();
+    assert.equal(this.prs.no, 3);
+    this.prs.prev();
+    assert.equal(this.prs.no, 2);
+    this.prs.prev();
+    assert.equal(this.prs.no, 1);
+    this.prs.prev();
+    assert.equal(this.prs.no, 3);
+  });
+
+  it('Methode “next()”', function() {
+    this.prs.next();
+    assert.equal(this.prs.no, 2);
+    this.prs.next();
+    assert.equal(this.prs.no, 3);
+    this.prs.next();
+    assert.equal(this.prs.no, 1);
+    this.prs.next();
+    assert.equal(this.prs.no, 2);
+  });
+
+  it('Methode “render()”', function() {
+    this.prs.render();
+    let html = this.prs.HTML;
+    assert.ok(html.includes('Johann Wolfgang von Goethe'));
+  });
+
+  it('Methode “output()”', function() {
+    let html = this.prs.render().output();
+    assert.ok(html.includes('Johann Wolfgang von Goethe'));
+  });
+
+  it('Methode chaining', function() {
+    let html = this.prs.next().render().output();
+    assert.ok(html.includes('Ludwig van Beethoven'));
+  });
 });

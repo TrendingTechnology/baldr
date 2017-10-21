@@ -1,5 +1,5 @@
 const assert = require('assert');
-const rewire = require('rewire')('../render.js');
+const rewire = require('rewire')('../presentation.js');
 const jsdom = require('jsdom');
 const {JSDOM} = jsdom;
 
