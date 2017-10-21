@@ -21,7 +21,7 @@ var loadYaml = function(yamlFile) {
 
 /**
  * @param {array} yamlRaw The yaml file converted in an array of objects.
- * @return {object} Processed object
+ * @return {object} Processed object of slides
  */
 var processYaml = function(yamlRaw) {
   let out = {};
@@ -39,6 +39,10 @@ var processYaml = function(yamlRaw) {
   return out;
 };
 
+/**
+ * @param {string} yamlFile Path of the yaml file.
+ * @return {object} Processed object of slides
+ */
 module.exports = function (yamlFile) {
   return processYaml(loadYaml(yamlFile));
 };
