@@ -40,9 +40,8 @@ Presentation = function(yamlFile) {
 
     let master = require(path.resolve('masters', this.current.master, 'index.js'));
     this.innerHTML = master.render(this.current.data);
-    //let slides = document.querySelector('#slide');
-    //slides.innerHTML = this.innerHTML;
-
+    let slides = document.querySelector('#slide');
+    slides.innerHTML = this.innerHTML;
   };
 
   this.setSlide();
