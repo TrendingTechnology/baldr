@@ -72,7 +72,8 @@ var Presentation = function(yamlFile) {
    *       "text": "Der Tag der Gunst ist wie der Tag der Ernte,\nman muss geschäftig sein sobald sie reift.\n",
    *       "author": "Johann Wolfgang von Goethe",
    *       "date": 1801
-   *     }
+   *     },
+   *     "css": true
    *   },
    *   "2": {
    *     "no": 2,
@@ -82,7 +83,8 @@ var Presentation = function(yamlFile) {
    *         "question": "Wann starb Ludwig van Beethoven?",
    *         "answer": 1827
    *       }
-   *     ]
+   *     ],
+   *     "css": false
    *   },
    *   "3": {
    *     "no": 3,
@@ -90,7 +92,8 @@ var Presentation = function(yamlFile) {
    *     "data": {
    *       "name": "Ludwig van Beethoven",
    *       "image": "beethoven.jpg"
-   *     }
+   *     },
+   *     "css": false
    *   }
    * }
    * </code><pre>
