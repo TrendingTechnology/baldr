@@ -1,26 +1,24 @@
-/**
+  /**
  * @file Index file of the render process.
  */
 
-const fs = require('fs');
 const mousetrap = require('mousetrap');
-const path = require('path');
-
-//const slides = require('./slides.js')('presentation.yml');
-
-
-//let slides = document.querySelector('#slide');
-//slides.innerHTML = this.innerHTML;
+const {Presentation} = require('./presentation.js');
 
 var main = function() {
-  prst = new Presentation('presentation.yml');
+  var prs = new Presentation('presentation.yml');
+  var slideSel = document.querySelector('#slide');
 
-  mousetrap.bind('left', function() {
-    prst.previousSlide();
-  });
-  mousetrap.bind('right', function() {
-    prst.nextSlide();
-  });
+  var previousSlide = function() {
+    slideSel.innerHTML = prs.prev().render().output();
+  };
+
+  var nextSlide = function() {
+    slideSel.innerHTML = prs.next().render().output();
+  };
+  slideSel.innerHTML = prs.render().output();
+  mousetrap.bind('left', previousSlide);
+  mousetrap.bind('right', nextSlide);
 };
 
 if (require.main === module) {
