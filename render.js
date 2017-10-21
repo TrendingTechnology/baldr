@@ -4,22 +4,9 @@
 
 const fs = require('fs');
 const mousetrap = require('mousetrap');
-const yaml = require('js-yaml');
 const path = require('path');
 
-/**
- * Load the content of a yaml file and convert its content into a
- * object.
- * @param {string} yamlFile Path of the yaml file.
- * @return {object} Object representation of the yaml file.
- */
-var loadYaml = function(yamlFile) {
-  try {
-    return yaml.safeLoad(fs.readFileSync(yamlFile, 'utf8'));
-  } catch (e) {
-    throw e;
-  }
-};
+const slides = require('./yml.js')('presentation.yml');
 
 /**
  * Presentation - description
@@ -30,7 +17,7 @@ Presentation = function(yamlFile) {
   this.slides = loadYaml(yamlFile);
   this.count = this.slides.length;
   this.current = {};
-  this.current.no = 1;
+  this.current.no = 1;const yaml = require('js-yaml');
 
   this.setSlide = function() {
     let index = this.current.no - 1;
@@ -88,8 +75,4 @@ var main = function() {
 
 if (require.main === module) {
   main();
-}
-else {
-  exports.Presentation = Presentation;
-  exports.loadYaml = loadYaml;
 }

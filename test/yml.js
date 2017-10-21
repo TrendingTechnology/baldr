@@ -70,4 +70,11 @@ describe('module “yml.js”', () => {
     assert.deepEqual(out, result);
   });
 
+  it('function exported by module.exports', () => {
+    let slides = require('../yml.js')('presentation.yml');
+    assert.equal(slides[1].master, 'quote');
+    assert.equal(slides[2].master, 'question');
+    assert.equal(slides[3].master, 'person');
+  });
+
 });

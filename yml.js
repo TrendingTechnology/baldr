@@ -38,3 +38,7 @@ var processYaml = function(yamlRaw) {
 
   return out;
 };
+
+module.exports = function (yamlFile) {
+  return processYaml(loadYaml(yamlFile));
+};
