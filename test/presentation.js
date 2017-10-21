@@ -2,16 +2,17 @@ const assert = require('assert');
 const rewire = require('rewire')('../presentation.js');
 const {Presentation} = require('../presentation.js');
 
-describe('module “slides.js”', () => {
+describe('Class “Slides()”', () => {
 
-  it('function “loadYaml()”', () => {
-    let loadYaml = rewire.__get__('loadYaml');
+
+  it.skip('Method “readYamlFile()”', () => {
+    let readYamlFile = rewire.__get__('readYamlFile');
     let yml = loadYaml('presentation.yml');
     assert.equal(yml[0].quote.author, 'Johann Wolfgang von Goethe');
     assert.equal(yml[1].question[0].answer, 1827);
   });
 
-  it('function “processYaml()”', () => {
+  it.skip('Method “parse()”', () => {
     let rawYaml = [
       {
         "quote": {
@@ -70,9 +71,76 @@ describe('module “slides.js”', () => {
       }
     };
 
-    let processYaml = rewire.__get__('processYaml');
-    let out = processYaml(rawYaml);
-    assert.deepEqual(out, result);
+    var parse = rewire.__get__('Slides.parse');
+    assert.deepEqual(parse(rawYaml), result);
+  });
+
+
+  it.skip('new Slides()', () => {
+    // let rawYaml = [
+    //   {
+    //     "quote": {
+    //       "text": "text",
+    //       "author": "author",
+    //       "date": "date"
+    //     }
+    //   },
+    //   {
+    //     "question": [
+    //       {
+    //         "question": "question",
+    //         "answer": "answer"
+    //       }
+    //     ]
+    //   },
+    //   {
+    //     "person": {
+    //       "name": "name",
+    //       "image": "image"
+    //     }
+    //   }
+    // ];
+
+    let result = {
+      "1": {
+        "no": 1,
+        "master": "quote",
+        "data": {
+          "text": "text",
+          "author": "author",
+          "date": "date"
+        },
+        "css": true
+      },
+      "2": {
+        "no": 2,
+        "master": "question",
+        "data": [
+          {
+            "question": "question",
+            "answer": "answer"
+          },
+
+        ],
+        "css": false
+      },
+      "3": {
+        "no": 3,
+        "master": "person",
+        "data": {
+          "name": "name",
+          "image": "image"
+        },
+        "css": false
+      }
+    };
+
+    //let processYaml = rewire.__get__('processYaml');
+    //let out = processYaml(rawYaml);
+    var Slides = rewire.__get__('Slides');
+
+    let slides = new Slides('presentation.yml');
+    assert.deepEqual(slides, result);
   });
 
 });

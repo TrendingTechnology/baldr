@@ -17,124 +17,137 @@ var requireMaster = function(masterName) {
 };
 
 /**
- * Load the content of a yaml file and convert its content into a
- * object.
- * @param {string} yamlFile Path of the yaml file.
- * @return {object} Object representation of the yaml file.
- * <pre><code>
- * [
- *   {
- *     "quote": {
- *       "text": "text",
- *       "author": "author",
- *       "date": "date"
- *     }
- *   },
- *   {
- *     "question": [
- *       {
- *         "question": "question",
- *         "answer": "answer"
- *       }
- *     ]
- *   },
- *   {
- *     "person": {
- *       "name": "name",
- *       "image": "image"
- *     }
- *   }
- * ]
- * </code><pre>
- */
-var loadYaml = function(yamlFile) {
-  try {
-    return yaml.safeLoad(fs.readFileSync(yamlFile, 'utf8'));
-  } catch (e) {
-    throw e;
-  }
-};
-
-/**
- * Process meta data for one slide.
+ * Parse the object representation of all slides.
  *
- * @param {type} slide A raw slide object.
- * @param {type} index The array index (0 - ...)
- * @return {object}
- * <pre><code>
- * {
- *   "no": 1,
- *   "master": "quote",
- *   "data": {
- *     "text": "Der Tag der Gunst ist wie der Tag der Ernte,\nman muss geschäftig sein sobald sie reift.\n",
- *     "author": "Johann Wolfgang von Goethe",
- *     "date": 1801
- *   },
- *   "css": true
- * }
- * </code><pre>
+ * @param {string} yamlFile Path of the yaml file.
+ * @constructor
  */
-var processSlide = function(slide, index) {
-  let no = index + 1;
-  let master = Object.keys(slide)[0];
-  let css = false;
-  if (fs.existsSync(path.join('masters', master, 'styles.css'))) {
-    css = true;
-  }
-  return {
-    "no": no,
-    "master": master,
-    "data": slide[master],
-    "css": css
+var Slides = function(yamlFile) {
+
+  /**
+   * Load the content of a yaml file and convert its content into a
+   * object.
+   * @param {string} yamlFile Path of the yaml file.
+   * @return {object} Object representation of the yaml file.
+   * <pre><code>
+   * [
+   *   {
+   *     "quote": {
+   *       "text": "text",
+   *       "author": "author",
+   *       "date": "date"
+   *     }
+   *   },
+   *   {
+   *     "question": [
+   *       {
+   *         "question": "question",
+   *         "answer": "answer"
+   *       }
+   *     ]
+   *   },
+   *   {
+   *     "person": {
+   *       "name": "name",
+   *       "image": "image"
+   *     }
+   *   }
+   * ]
+   * </code><pre>
+   */
+  this.readYamlFile = function(yamlFile) {
+    try {
+      return yaml.safeLoad(fs.readFileSync(yamlFile, 'utf8'));
+    } catch (e) {
+      throw e;
+    }
   };
-};
 
-/**
- * @param {array} yamlRaw The yaml file converted in an array of objects.
- * @return {object} Processed object of slides
- * <pre><code>
- * {
- *   "1": {
- *     "no": 1,
- *     "master": "quote",
- *     "data": {
- *       "text": "Der Tag der Gunst ist wie der Tag der Ernte,\nman muss geschäftig sein sobald sie reift.\n",
- *       "author": "Johann Wolfgang von Goethe",
- *       "date": 1801
- *     },
- *     "css": true
- *   },
- *   "2": {
- *     "no": 2,
- *     "master": "question",
- *     "data": [
- *       {
- *         "question": "Wann starb Ludwig van Beethoven?",
- *         "answer": 1827
- *       }
- *     ],
- *     "css": false
- *   },
- *   "3": {
- *     "no": 3,
- *     "master": "person",
- *     "data": {
- *       "name": "Ludwig van Beethoven",
- *       "image": "beethoven.jpg"
- *     },
- *     "css": false
- *   }
- * }
- * </code><pre>
- */
-var processYaml = function(yamlRaw) {
-  let out = {};
+  /**
+   * Process meta data for one slide.
+   *
+   * @param {type} slide A raw slide object.
+   * @param {type} index The array index (0 - ...)
+   * @return {object}
+   * <pre><code>
+   * {
+   *   "no": 1,
+   *   "master": "quote",
+   *   "data": {
+   *     "text": "Der Tag der Gunst ist wie der Tag der Ernte,\nman muss geschäftig sein sobald sie reift.\n",
+   *     "author": "Johann Wolfgang von Goethe",
+   *     "date": 1801
+   *   },
+   *   "css": true
+   * }
+   * </code><pre>
+   */
+  this.parseSlide = function(slide, index) {
+    let no = index + 1;
+    let master = Object.keys(slide)[0];
+    let css = false;
+    if (fs.existsSync(path.join('masters', master, 'styles.css'))) {
+      css = true;
+    }
+    return {
+      "no": no,
+      "master": master,
+      "data": slide[master],
+      "css": css
+    };
+  };
 
-  yamlRaw.forEach((slide, index) => {
-    out[index + 1] = processSlide(slide, index);
-  });
+  /**
+   * @param {array} yamlRaw The yaml file converted in an array of objects.
+   * @return {object} Processed object of slides
+   * <pre><code>
+   * {
+   *   "1": {
+   *     "no": 1,
+   *     "master": "quote",
+   *     "data": {
+   *       "text": "Der Tag der Gunst ist wie der Tag der Ernte,\nman muss geschäftig sein sobald sie reift.\n",
+   *       "author": "Johann Wolfgang von Goethe",
+   *       "date": 1801
+   *     },
+   *     "css": true
+   *   },
+   *   "2": {
+   *     "no": 2,
+   *     "master": "question",
+   *     "data": [
+   *       {
+   *         "question": "Wann starb Ludwig van Beethoven?",
+   *         "answer": 1827
+   *       }
+   *     ],
+   *     "css": false
+   *   },
+   *   "3": {
+   *     "no": 3,
+   *     "master": "person",
+   *     "data": {
+   *       "name": "Ludwig van Beethoven",
+   *       "image": "beethoven.jpg"
+   *     },
+   *     "css": false
+   *   }
+   * }
+   * </code><pre>
+   */
+  this.parse = function(yamlRaw) {
+    let out = {};
 
-  return out;
+    yamlRaw.forEach((slide, index) => {
+      out[index + 1] = this.parseSlide(slide, index);
+    });
+
+    return out;
+  };
+
+  return this.parse(
+    this.readYamlFile(yamlFile)
+  );
 };
 
 /**
@@ -181,7 +194,7 @@ var Presentation = function(yamlFile) {
    * </code><pre>
    * @type {object}
    */
-  this.slides = processYaml(loadYaml(yamlFile));
+  this.slides = new Slides(yamlFile);
 
   /**
    * The count of all slides.
