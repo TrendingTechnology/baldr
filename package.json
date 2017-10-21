@@ -27,6 +27,7 @@
     "electron-packager": "^9.1.0",
     "electron-rebuild": "^1.6.0",
     "jsdoc": "^3.5.5",
+    "jsdom": "^11.3.0",
     "jshint": "^2.9.5",
     "mocha": "^4.0.1",
     "mocha-jshint": "^2.3.1",

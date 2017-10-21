@@ -9,6 +9,18 @@ const path = require('path');
 const slides = require('./slides.js')('presentation.yml');
 
 /**
+ * var requireMaster - description
+ *
+ * @param {string} masterName The name of the master slide
+ * @return {object} The module object of master slide
+ */
+var requireMaster = function(masterName) {
+  return require(
+    path.resolve('masters', masterName, 'index.js')
+  );
+};
+
+/**
  * Presentation - description
  *
  * @param {string} yamlFile Path of the yaml file.
