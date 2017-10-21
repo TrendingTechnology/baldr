@@ -84,7 +84,7 @@ describe('Class “Presentation()”', () => {
     assert.equal(this.prs.slides[1].master, 'quote');
   });
 
-  it('Methode “prev()”', function() {
+  it('Method “prev()”', function() {
     this.prs.prev();
     assert.equal(this.prs.no, 3);
     this.prs.prev();
@@ -95,7 +95,7 @@ describe('Class “Presentation()”', () => {
     assert.equal(this.prs.no, 3);
   });
 
-  it('Methode “next()”', function() {
+  it('Method “next()”', function() {
     this.prs.next();
     assert.equal(this.prs.no, 2);
     this.prs.next();
@@ -106,18 +106,18 @@ describe('Class “Presentation()”', () => {
     assert.equal(this.prs.no, 2);
   });
 
-  it('Methode “render()”', function() {
+  it('Method “render()”', function() {
     this.prs.render();
     let html = this.prs.HTML;
     assert.ok(html.includes('Johann Wolfgang von Goethe'));
   });
 
-  it('Methode “output()”', function() {
+  it('Method “output()”', function() {
     let html = this.prs.render().output();
     assert.ok(html.includes('Johann Wolfgang von Goethe'));
   });
 
-  it('Methode chaining', function() {
+  it('Method chaining', function() {
     let html = this.prs.next().render().output();
     assert.ok(html.includes('Ludwig van Beethoven'));
   });
