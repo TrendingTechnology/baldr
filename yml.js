@@ -24,15 +24,17 @@ var loadYaml = function(yamlFile) {
  * @return {object} Processed object
  */
 var processYaml = function(yamlRaw) {
+  let out = {};
 
-  // this.slides = loadYaml(yamlFile);
-  // this.count = this.slides.length;
-  // this.current = {};
-  // this.current.no = 1;
-  //
-  // let index = this.current.no - 1;
-  // let currentObject = this.slides[index];
-  // this.current.master = Object.keys(currentObject)[0];
-  // this.current.data = currentObject[this.current.master];
+  yamlRaw.forEach((slide, index) => {
+    let no = index + 1;
+    let master = Object.keys(slide)[0];
+    out[index + 1] = {
+      "no": no,
+      "master": master,
+      "data": slide[master]
+    };
+  });
 
+  return out;
 };
