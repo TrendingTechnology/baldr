@@ -44,7 +44,8 @@ describe('module “slides.js”', () => {
           "text": "text",
           "author": "author",
           "date": "date"
-        }
+        },
+        "css": true
       },
       "2": {
         "no": 2,
@@ -53,8 +54,10 @@ describe('module “slides.js”', () => {
           {
             "question": "question",
             "answer": "answer"
-          }
-        ]
+          },
+
+        ],
+        "css": false
       },
       "3": {
         "no": 3,
@@ -62,7 +65,8 @@ describe('module “slides.js”', () => {
         "data": {
           "name": "name",
           "image": "image"
-        }
+        },
+        "css": false
       }
     };
 

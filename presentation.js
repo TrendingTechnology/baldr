@@ -40,10 +40,15 @@ var processYaml = function(yamlRaw) {
   yamlRaw.forEach((slide, index) => {
     let no = index + 1;
     let master = Object.keys(slide)[0];
+    let css = false;
+    if (fs.existsSync(path.join('masters', master, 'styles.css'))) {
+      css = true;
+    }
     out[index + 1] = {
       "no": no,
       "master": master,
-      "data": slide[master]
+      "data": slide[master],
+      "css": css
     };
   });
 
