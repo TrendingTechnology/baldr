@@ -5,7 +5,6 @@
 const mousetrap = require('mousetrap');
 const {Presentation} = require('./presentation.js');
 
-
 /**
  * @function main
  * @namespace main
