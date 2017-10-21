@@ -1,4 +1,4 @@
-  /**
+/**
  * @file Index file of the render process.
  */
 
