@@ -151,9 +151,11 @@ describe('Class “Presentation()”', () => {
   });
 
   it('Properties', function() {
+    assert.equal(this.prs.slides[1].master, 'quote');
     assert.equal(this.prs.count, 3);
     assert.equal(this.prs.no, 1);
-    assert.equal(this.prs.slides[1].master, 'quote');
+    assert.equal(this.prs.currentSlide.master, 'quote');
+    assert.equal(this.prs.HTML, '');
   });
 
   it('Method “prev()”', function() {

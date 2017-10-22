@@ -250,6 +250,12 @@ var Presentation = function(yamlFile) {
   this.no = 1;
 
   /**
+   * The current slide object.
+   * @type {object}
+   */
+  this.currentSlide = this.slides[this.no];
+
+  /**
    * The HTML code of the current slide.
    * @type {string}
    */
@@ -266,6 +272,7 @@ Presentation.prototype.prev = function() {
   else {
     this.no = this.no - 1;
   }
+  this.currentSlide = this.slides[this.no];
   return this;
 };
 
@@ -279,6 +286,7 @@ Presentation.prototype.next = function() {
   else {
     this.no = this.no + 1;
   }
+  this.currentSlide = this.slides[this.no];
   return this;
 };
 
