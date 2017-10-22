@@ -4,13 +4,20 @@
   "description": "Presentation software for music lessons",
   "main": "main.js",
   "scripts": {
-    "build": "electron-packager . --out=dist --app-version=$npm_package_version --asar --prune --overwrite --arch=x64 --icon=./icon.icns",
+    "dist": "electron-builder",
     "doc-show": "xdg-open ./docs/index.html",
     "doc": "jsdoc --destination ./docs/ .",
     "electron-rebuild": "electron-rebuild",
+    "pack": "electron-builder --dir",
     "postinstall": "electron-rebuild",
     "start": "electron .",
     "test": "mocha"
+  },
+  "build": {
+    "appId": "rocks.friedrich.baldur",
+    "mac": {
+      "category": "public.app-category.education"
+    }
   },
   "repository": {
     "type": "git",
@@ -24,7 +31,7 @@
   "homepage": "https://github.com/JosefFriedrich-nodejs/baldr#readme",
   "devDependencies": {
     "electron": "^1.7.9",
-    "electron-packager": "^9.1.0",
+    "electron-builder": "^19.37.2",
     "electron-rebuild": "^1.6.0",
     "jsdoc": "^3.5.5",
     "jsdom": "^11.3.0",
