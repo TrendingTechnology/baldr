@@ -4,6 +4,7 @@
 
 const mousetrap = require('mousetrap');
 const {Presentation} = require('./presentation.js');
+const path = require('path');
 
 /**
  * @namespace main
@@ -24,29 +25,73 @@ var main = function() {
   };
 
   /**
-   * Fill the #slide tag with the HTML code of the previous slide.
+   * Add and remove master slide specific CSS styles
+   * @function setSlideCSS
+   * @memberof main
+   * @inner
+   * @param {object} slide The object of the current slide
+   */
+  var setSlideCSS = function(slide) {
+    if (slide.css) {
+      let head = document.getElementsByTagName('head')[0];
+      let link = document.createElement('link');
+      link.id = 'current-master';
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = path.join('masters', slide.master, 'styles.css');
+      head.appendChild(link);
+    }
+    else {
+      let link = document.querySelector('#current-master');
+      if (link) {
+        link.remove();
+      }
+    }
+  };
+
+  /**
+   * Update HTML for the current slide
+   * @function setSlide
+   * @memberof main
+   * @inner
+   * @param {object} pres The object presentation object
+   */
+  var setSlide = function(pres) {
+    setSlideHTML(pres.HTML);
+    setSlideCSS(pres.currentSlide);
+  };
+
+  /**
+   * Update the HTML structure with the code of the previous slide.
    * @function previousSlide
    * @memberof main
    * @inner
    */
   var previousSlide = function() {
-    let prev = prs.prev().render();
-    setSlideHTML(prev.HTML);
+    setSlide(prs.prev().render());
   };
 
   /**
-   * Fill the #slide tag with the HTML code of the previous slide.
+   * Update the HTML structure with the code of the next slide.
    * @function nextSlide
    * @memberof main
    * @inner
    */
   var nextSlide = function() {
-    let next = prs.next().render();
-    setSlideHTML(next.HTML);
+    setSlide(prs.next().render());
   };
 
-  let cur = prs.render();
-  setSlideHTML(cur.HTML);
+  /**
+   * Set the first slide when loading the presentation.
+   * @function firstSlide
+   * @memberof main
+   * @inner
+   */
+  var firstSlide = function() {
+    setSlide(prs.render());
+  };
+
+  firstSlide();
   mousetrap.bind('left', previousSlide);
   mousetrap.bind('right', nextSlide);
 };
