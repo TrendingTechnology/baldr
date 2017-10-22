@@ -18,7 +18,10 @@
       "target": "dmg"
     },
     "linux": {
-      "target": "deb"
+      "target": [
+        "deb",
+        "pacman"
+      ]
     },
     "fileAssociations": [
       {
