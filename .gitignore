@@ -121,3 +121,4 @@ typings/
 *.node-persist/
 
 #package-lock.json
+dist/
