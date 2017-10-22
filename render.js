@@ -57,8 +57,8 @@ var main = function() {
    * @param {object} pres The object presentation object
    */
   var setSlide = function(pres) {
-    setSlideHTML(pres.HTML);
     setSlideCSS(pres.currentSlide);
+    setSlideHTML(pres.HTML);
   };
 
   /**
