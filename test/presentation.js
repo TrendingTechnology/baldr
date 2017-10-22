@@ -4,15 +4,43 @@ const {Presentation} = require('../presentation.js');
 
 describe('Class “Slides()”', () => {
 
-
-  it.skip('Method “readYamlFile()”', () => {
-    let readYamlFile = rewire.__get__('readYamlFile');
-    let yml = loadYaml('presentation.yml');
+  it('Method “readYamlFile()”', () => {
+    let Slides = rewire.__get__('Slides');
+    let slides = new Slides('presentation.yml');
+    let yml = slides.readYamlFile('presentation.yml');
     assert.equal(yml[0].quote.author, 'Johann Wolfgang von Goethe');
     assert.equal(yml[1].question[0].answer, 1827);
   });
 
-  it.skip('Method “parse()”', () => {
+  it('Method “parseSlide()”', () => {
+    let Slides = rewire.__get__('Slides');
+    let slides = new Slides('presentation.yml');
+
+    assert.deepEqual(
+      slides.parseSlide(
+        {
+          "quote": {
+            "text": "text",
+            "author": "author",
+            "date": "date"
+          }
+        },
+        0
+      ),
+      {
+        "no": 1,
+        "master": "quote",
+        "data": {
+          "text": "text",
+          "author": "author",
+          "date": "date"
+        },
+        "css": true
+      }
+    );
+  });
+
+  it('Method “parseSlides()”', () => {
     let rawYaml = [
       {
         "quote": {
@@ -71,44 +99,20 @@ describe('Class “Slides()”', () => {
       }
     };
 
-    var parse = rewire.__get__('Slides.parse');
-    assert.deepEqual(parse(rawYaml), result);
+    let Slides = rewire.__get__('Slides');
+    let slides = new Slides('presentation.yml');
+    assert.deepEqual(slides.parseSlides(rawYaml), result);
   });
 
-
-  it.skip('new Slides()', () => {
-    // let rawYaml = [
-    //   {
-    //     "quote": {
-    //       "text": "text",
-    //       "author": "author",
-    //       "date": "date"
-    //     }
-    //   },
-    //   {
-    //     "question": [
-    //       {
-    //         "question": "question",
-    //         "answer": "answer"
-    //       }
-    //     ]
-    //   },
-    //   {
-    //     "person": {
-    //       "name": "name",
-    //       "image": "image"
-    //     }
-    //   }
-    // ];
-
+  it('Methode “parse()”', () => {
     let result = {
       "1": {
         "no": 1,
         "master": "quote",
         "data": {
-          "text": "text",
-          "author": "author",
-          "date": "date"
+          "text": "Der Tag der Gunst ist wie der Tag der Ernte,\nman muss geschäftig sein sobald sie reift.\n",
+          "author": "Johann Wolfgang von Goethe",
+          "date": 1801
         },
         "css": true
       },
@@ -117,10 +121,9 @@ describe('Class “Slides()”', () => {
         "master": "question",
         "data": [
           {
-            "question": "question",
-            "answer": "answer"
-          },
-
+            "question": "Wann starb Ludwig van Beethoven?",
+            "answer": 1827
+          }
         ],
         "css": false
       },
@@ -128,19 +131,16 @@ describe('Class “Slides()”', () => {
         "no": 3,
         "master": "person",
         "data": {
-          "name": "name",
-          "image": "image"
+          "name": "Ludwig van Beethoven",
+          "image": "beethoven.jpg"
         },
         "css": false
       }
     };
 
-    //let processYaml = rewire.__get__('processYaml');
-    //let out = processYaml(rawYaml);
-    var Slides = rewire.__get__('Slides');
-
+    let Slides = rewire.__get__('Slides');
     let slides = new Slides('presentation.yml');
-    assert.deepEqual(slides, result);
+    assert.deepEqual(slides.parse(), result);
   });
 
 });

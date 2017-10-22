@@ -13,7 +13,6 @@ var main = function() {
   var prs = new Presentation('presentation.yml');
   var slideSel = document.querySelector('#slide');
 
-
   /**
    * Fill the #slide tag with the HTML code of the previous slide.
    * @function previousSlide
