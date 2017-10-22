@@ -6,12 +6,22 @@ const mousetrap = require('mousetrap');
 const {Presentation} = require('./presentation.js');
 
 /**
- * @function main
  * @namespace main
+ * @function main
  */
 var main = function() {
   var prs = new Presentation('presentation.yml');
-  var slideSel = document.querySelector('#slide');
+
+  /**
+   * Fill the #slide tag with HTML form the slides.
+   * @function setSlideHTML
+   * @memberof main
+   * @inner
+   * @param {string} HTML HTML code
+   */
+  var setSlideHTML = function(HTML) {
+    document.querySelector('#slide').innerHTML = HTML;
+  };
 
   /**
    * Fill the #slide tag with the HTML code of the previous slide.
@@ -20,7 +30,8 @@ var main = function() {
    * @inner
    */
   var previousSlide = function() {
-    slideSel.innerHTML = prs.prev().render().output();
+    let prev = prs.prev().render();
+    setSlideHTML(prev.HTML);
   };
 
   /**
@@ -30,10 +41,12 @@ var main = function() {
    * @inner
    */
   var nextSlide = function() {
-    slideSel.innerHTML = prs.next().render().output();
+    let next = prs.next().render();
+    setSlideHTML(next.HTML);
   };
 
-  slideSel.innerHTML = prs.render().output();
+  let cur = prs.render();
+  setSlideHTML(cur.HTML);
   mousetrap.bind('left', previousSlide);
   mousetrap.bind('right', nextSlide);
 };
