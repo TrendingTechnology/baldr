@@ -1,8 +1,6 @@
 #slide {
-  font-size: 32pt;
+  font-size: 4vw;
   display: table;
-  height: 80%;
-  width: 100%;
 }
 
 .text-block {
@@ -22,7 +20,7 @@
 }
 
 .attribution {
-  font-size: 26pt;
+  font-size: 3vw;
   text-align: right;
 }
 
