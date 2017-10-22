@@ -17,6 +17,9 @@
     "appId": "rocks.friedrich.baldur",
     "mac": {
       "category": "public.app-category.education"
+    },
+    "linux": {
+      "target": "deb"
     }
   },
   "repository": {
