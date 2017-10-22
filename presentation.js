@@ -12,7 +12,7 @@ const path = require('path');
  */
 var requireMaster = function(masterName) {
   return require(
-    path.resolve('masters', masterName, 'index.js')
+    path.join(__dirname, 'masters', masterName, 'index.js')
   );
 };
 
@@ -88,7 +88,7 @@ Slides.prototype.parseSlide = function(slide, index) {
   let no = index + 1;
   let master = Object.keys(slide)[0];
   let css = false;
-  if (fs.existsSync(path.join('masters', master, 'styles.css'))) {
+  if (fs.existsSync(path.join(__dirname, 'masters', master, 'styles.css'))) {
     css = true;
   }
   return {

@@ -1,6 +1,7 @@
 const pug = require('pug');
+const path = require('path');
 
-const compiledFunction = pug.compileFile('masters/question/template.pug');
+const compiledFunction = pug.compileFile(path.join(__dirname, 'template.pug'));
 
 var render = function(data) {
   let questions = {

@@ -5,13 +5,14 @@
 const mousetrap = require('mousetrap');
 const {Presentation} = require('./presentation.js');
 const path = require('path');
+const {remote} = require('electron');
 
 /**
  * @namespace main
  * @function main
  */
 var main = function() {
-  var prs = new Presentation('presentation.yml');
+  var prs = new Presentation(remote.process.argv[1]);
 
   /**
    * Fill the #slide tag with HTML form the slides.

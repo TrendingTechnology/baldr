@@ -19,7 +19,6 @@
     },
     "linux": {
       "target": [
-        "deb",
         "pacman"
       ]
     },
