@@ -1,3 +1,31 @@
-body {
-  background-color: green;
+#slide {
+  font-size: 32pt;
+  display: table;
+  height: 80%;
+  width: 100%;
+}
+
+.text-block {
+  padding-left: 20%;
+  padding-right: 20%;
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.quote {
+  font-style: italic;
+}
+
+.quotation-mark {
+  font-family: 'Alegreya Sans';
+  font-weight: 900;
+}
+
+.attribution {
+  font-size: 26pt;
+  text-align: right;
+}
+
+.person {
+  font-family: 'Alegreya SC'
 }

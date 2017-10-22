@@ -22,12 +22,8 @@ describe('masters', () => {
 
     let document = getDOM(html);
     assert.equal(
-      document.querySelector('h1').textContent,
-      'author, date'
-    );
-    assert.equal(
-      document.querySelector('p').textContent,
-      'text'
+      document.querySelector('.person').textContent,
+      'author'
     );
 
   });
