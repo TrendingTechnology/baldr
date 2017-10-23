@@ -10,7 +10,7 @@
   vertical-align: middle;
 }
 
-.quote {
+.text {
   font-style: italic;
 }
 
@@ -24,6 +24,6 @@
   text-align: right;
 }
 
-.person {
+.author {
   font-family: 'Alegreya SC'
 }
