@@ -17,6 +17,25 @@ var requireMaster = function(masterName) {
 };
 
 /**
+ * Search for a *.baldr file in the argv array. Return the last
+ * matched element.
+ *
+ * @param {array} argv Arguments in process.argv
+ * @return {string} The path of a BALDUR file.
+ */
+var searchForBaldrFile = function(argv) {
+  let clone = argv.slice(0);
+  clone.reverse();
+
+  for (let arg of clone) {
+    if (arg.search(/\.baldr$/ig) > -1) {
+      return arg;
+    }
+  }
+  return false;
+};
+
+/**
  * Parse the object representation of all slides.
  *
  * @param {string} yamlFile Path of the yaml file.
@@ -308,3 +327,4 @@ Presentation.prototype.output = function() {
 };
 
 exports.Presentation = Presentation;
+exports.searchForBaldrFile = searchForBaldrFile;

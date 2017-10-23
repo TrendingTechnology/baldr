@@ -12,7 +12,11 @@ const url = require('url');
 
 let mainWindow;
 
-function buildMenu() {
+/**
+ * Build menu for the main process.
+ * @function buildMenu
+ */
+var buildMenu = function() {
   const template = [
     {
       label: 'View',
@@ -97,10 +101,13 @@ function buildMenu() {
   Menu.setApplicationMenu(
     Menu.buildFromTemplate(template)
   );
-}
+};
 
-function createWindow() {
-
+/**
+ * Create render window.
+ * @function createWindow
+ */
+var createWindow = function() {
   mainWindow = new BrowserWindow({width: 800, height: 600});
 
   mainWindow.loadURL(url.format({
@@ -113,28 +120,12 @@ function createWindow() {
   mainWindow.on('closed', function () {
     mainWindow = null;
   });
-}
+};
 
-// https://blog.dcpos.ch/how-to-make-your-electron-app-sexy
-// In the main process, check whether the app is starting
-// because the user dragged files onto the app icon
-//process.argv.forEach(onOpen)
-
-// Open handlers should be added on the first tick.
-// These fire if the app is already running and the user
-// drags files or URLs onto the dock icon, or if they set
-// the app as a handler for a file type and then open a file
 app.on('open-file', function(event, path) {
   process.argv.push(path);
   createWindow();
 });
-
-
-//app.on('open-url', onOpen);
-
-// Separately, in the renderer process, you can use the HTML5
-// drag-drop API to create a drop target and handle files
-// dropped directly onto the window.
 
 app.on('ready', createWindow);
 

@@ -4,6 +4,7 @@
 
 const mousetrap = require('mousetrap');
 const {Presentation} = require('./presentation.js');
+const presentation = require('./presentation.js');
 const path = require('path');
 const {remote} = require('electron');
 
@@ -12,8 +13,10 @@ const {remote} = require('electron');
  * @function main
  */
 var main = function() {
-  console.log(remote.process.argv);
-  var prs = new Presentation(remote.process.argv[1]);
+  let baldrFile = presentation.searchForBaldrFile(
+    remote.process.argv
+  );
+  var prs = new Presentation(baldrFile);
 
   /**
    * Fill the #slide tag with HTML form the slides.
