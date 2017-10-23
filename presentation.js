@@ -7,6 +7,7 @@ const yaml = require('js-yaml');
 const path = require('path');
 
 /**
+ * TODO: Move to another file
  * @param {string} masterName The name of the master slide
  * @return {object} The module object of master slide
  */
@@ -17,6 +18,7 @@ var requireMaster = function(masterName) {
 };
 
 /**
+ * TODO: Move to another file
  * Search for a *.baldr file in the argv array. Return the last
  * matched element.
  *

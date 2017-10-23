@@ -122,9 +122,17 @@ var createWindow = function() {
   });
 };
 
+/**
+ * Open a new window on Mac OS, if a *.baldr file is dragged to the
+ * app icon. The path of the *.baldr file is added to the process.argv
+ * array.
+ */
 app.on('open-file', function(event, path) {
+  // TODO: Overwrite args which are already *.baldr file paths.
   process.argv.push(path);
-  createWindow();
+  if (app.isReady()) {
+    createWindow();
+  }
 });
 
 app.on('ready', createWindow);

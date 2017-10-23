@@ -37,15 +37,15 @@ describe('Class “Slides()”', () => {
 
   it('Method “readYamlFile()”', () => {
     let Slides = rewire.__get__('Slides');
-    let slides = new Slides('presentation.yml');
-    let yml = slides.readYamlFile('presentation.yml');
+    let slides = new Slides('example.baldr');
+    let yml = slides.readYamlFile('example.baldr');
     assert.equal(yml[0].quote.author, 'Johann Wolfgang von Goethe');
     assert.equal(yml[1].question[0].answer, 1827);
   });
 
   it('Method “parseSlide()”', () => {
     let Slides = rewire.__get__('Slides');
-    let slides = new Slides('presentation.yml');
+    let slides = new Slides('example.baldr');
 
     assert.deepEqual(
       slides.parseSlide(
@@ -131,7 +131,7 @@ describe('Class “Slides()”', () => {
     };
 
     let Slides = rewire.__get__('Slides');
-    let slides = new Slides('presentation.yml');
+    let slides = new Slides('example.baldr');
     assert.deepEqual(slides.parseSlides(rawYaml), result);
   });
 
@@ -170,7 +170,7 @@ describe('Class “Slides()”', () => {
     };
 
     let Slides = rewire.__get__('Slides');
-    let slides = new Slides('presentation.yml');
+    let slides = new Slides('example.baldr');
     assert.deepEqual(slides.parse(), result);
   });
 
@@ -178,7 +178,7 @@ describe('Class “Slides()”', () => {
 
 describe('Class “Presentation()”', () => {
   beforeEach(function() {
-    this.prs = new Presentation('presentation.yml');
+    this.prs = new Presentation('example.baldr');
   });
 
   it('Properties', function() {
