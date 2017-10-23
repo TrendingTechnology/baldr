@@ -10,6 +10,8 @@ This repository contains some evaluation and research code.
 
 ## About the name `baldr`
 
+![](build/icons/256x256.png)
+
 [Baldr](https://en.wikipedia.org/wiki/Baldr) is the name of a nordic
 god. He is the of god of light.
 
@@ -29,3 +31,13 @@ god. He is the of god of light.
 
 Coding standards following the [Google Javascript Style
 Guide](https://google.github.io/styleguide/javascriptguide.xml).
+
+# Installation / Building
+
+```
+npm install
+npm test
+npm run dist
+pacman -U dist/baldur-0.0.1.pacman
+dpkg -i dist/baldur-0.0.1.deb
+```
