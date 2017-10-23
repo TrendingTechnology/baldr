@@ -1,7 +1,7 @@
 {
   "name": "baldr",
   "version": "0.0.1",
-  "description": "Presentation software for music lessons",
+  "description": "Presentation software",
   "main": "main.js",
   "scripts": {
     "dist": "electron-builder",
@@ -12,20 +12,24 @@
     "test": "mocha"
   },
   "build": {
-    "appId": "rocks.friedrich.baldur",
+    "appId": "rocks.friedrich.baldr",
     "mac": {
       "category": "public.app-category.education",
       "target": "dmg"
     },
     "linux": {
       "target": [
+        "deb",
         "pacman"
       ]
     },
     "fileAssociations": [
       {
         "ext": "baldr",
-        "name": "BALDUR"
+        "name": "BALDR Presentation Software",
+        "description": "File format of the BALDR Presentation Software",
+        "icon": "icon.icns",
+        "role": "Viewer"
       }
     ]
   },
@@ -54,12 +58,18 @@
     "spectron": "^3.7.2"
   },
   "dependencies": {
+    "7zip-bin-linux": "^1.1.0",
+    "baldr-audio": "file:./masters/audio",
+    "baldr-person": "file:./masters/person",
+    "baldr-question": "file:./masters/question",
+    "baldr-quote": "file:./masters/quote",
+    "baldr-svg": "file:./masters/svg",
     "js-yaml": "^3.10.0",
     "mousetrap": "^1.6.1",
     "pug": "^2.0.0-rc.4",
-    "typeface-alegreya": "0.0.40",
-    "typeface-alegreya-sans": "0.0.40",
-    "typeface-alegreya-sans-sc": "0.0.40",
-    "typeface-alegreya-sc": "0.0.40"
+    "typeface-alegreya-sans-sc": "^0.0.40",
+    "typeface-alegreya-sans": "^0.0.40",
+    "typeface-alegreya-sc": "^0.0.40",
+    "typeface-alegreya": "^0.0.40"
   }
 }
