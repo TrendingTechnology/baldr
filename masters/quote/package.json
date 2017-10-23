@@ -19,9 +19,6 @@
     "url": "https://github.com/JosefFriedrich-nodejs/baldr/issues"
   },
   "homepage": "https://github.com/JosefFriedrich-nodejs/baldr#readme",
-  "dependencies": {
-    "pug": "^2.0.0-rc.4"
-  },
   "devDependencies": {
     "jsdom": "^11.3.0",
     "mocha": "^4.0.1"

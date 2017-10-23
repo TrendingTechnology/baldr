@@ -1,10 +1,12 @@
-const pug = require('pug');
-const path = require('path');
+exports.render = function(data) {
+  return `
+<section id="baldr-master-quote">
 
-const compiledFunction = pug.compileFile(path.join(__dirname, 'template.pug'));
+  <p>${data.name}</p>
 
-var render = function(data) {
-  return compiledFunction(data);
+  <img src="${data.image}">
+
+</section>
+`;
+
 };
-
-exports.render = render;
