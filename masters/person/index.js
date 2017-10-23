@@ -1,10 +1,8 @@
 exports.render = function(data, presentation) {
   return `
-<section id="baldr-master-quote">
+<section id="baldr-master-person">
 
   <p>${data.name}</p>
-
-   ${presentation.pwd}
 
   <img src="${presentation.pwd}/${data.image}">
 
