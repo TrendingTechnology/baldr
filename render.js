@@ -12,10 +12,7 @@ const {remote} = require('electron');
  * @function main
  */
 var main = function() {
-  console.log(remote.process);
   console.log(remote.process.argv);
-  console.log(remote.process.execArgv);
-
   var prs = new Presentation(remote.process.argv[1]);
 
   /**

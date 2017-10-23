@@ -124,7 +124,12 @@ function createWindow() {
 // These fire if the app is already running and the user
 // drags files or URLs onto the dock icon, or if they set
 // the app as a handler for a file type and then open a file
-//app.on('open-file', onOpen);
+app.on('open-file', function(event, path) {
+  process.argv.push(path);
+  createWindow();
+});
+
+
 //app.on('open-url', onOpen);
 
 // Separately, in the renderer process, you can use the HTML5
