@@ -1,5 +1,6 @@
 const assert = require('assert');
 const rewire = require('rewire')('../presentation.js');
+const path = require('path');
 const {Presentation} = require('../presentation.js');
 
 describe('Other functions', () => {
@@ -185,6 +186,7 @@ describe('Class “Presentation()”', () => {
     assert.equal(this.prs.slides[1].master, 'quote');
     assert.equal(this.prs.count, 3);
     assert.equal(this.prs.no, 1);
+    assert.equal(this.prs.pwd, path.resolve(path.dirname('example.baldr')));
     assert.equal(this.prs.currentSlide.master, 'quote');
     assert.equal(this.prs.HTML, '');
   });

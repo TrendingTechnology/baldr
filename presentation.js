@@ -219,6 +219,14 @@ Slides.prototype.parse = function() {
 var Presentation = function(yamlFile) {
 
   /**
+   * The presentation files’ parent working directory. Assuming you are
+   * loading a file with the path “/home/jf/example.baldr”, your parent
+   * working directory (pwd) is than “/home/jf”
+   * @type {string}
+   */
+  this.pwd = path.resolve(path.dirname(yamlFile));
+
+  /**
    * All slides index by the slide number.
    * <pre><code>
    * {
@@ -317,7 +325,7 @@ Presentation.prototype.next = function() {
 Presentation.prototype.render = function() {
   let curSlide = this.slides[this.no];
   let master = requireMaster(curSlide.master);
-  this.HTML = master.render(curSlide.data);
+  this.HTML = master.render(curSlide.data, this);
   return this;
 };
 
