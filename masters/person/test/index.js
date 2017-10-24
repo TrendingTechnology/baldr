@@ -10,18 +10,16 @@ function getDOM(html) {
 
 describe('Master slide “person”', () => {
 
-  it('function “render(): all values”', () => {
+  it.skip('function “render()”', () => {
     let html = quote.render({
-      text: 'text',
-      author: 'author',
-      date: 'date'
+      name: 'Ludwig van Beethoven',
+      image: 'beethoven.jpg'
     });
 
     let doc = getDOM(html);
-    assert.ok(html.includes('text'));
     assert.equal(
-      doc.querySelector('.text').textContent,
-      '» text «'
+      doc.querySelector('#info-box p').textContent,
+      'Ludwig van Beethoven'
     );
 
   });
