@@ -9,7 +9,7 @@
     "doc": "jsdoc --destination ./docs/ .",
     "pack": "electron-builder --dir",
     "start": "electron .",
-    "test": "mocha"
+    "test": "mocha 'test/*.js' 'masters/quote/test/*.js'"
   },
   "build": {
     "appId": "rocks.friedrich.baldr",
@@ -61,15 +61,15 @@
     "7zip-bin-linux": "^1.1.0",
     "baldr-audio": "file:./masters/audio",
     "baldr-person": "file:./masters/person",
-    "baldr-question": "file:./masters/question",
+    "baldr-question": "file:masters/question",
     "baldr-quote": "file:./masters/quote",
     "baldr-svg": "file:./masters/svg",
     "js-yaml": "^3.10.0",
     "mousetrap": "^1.6.1",
     "pug": "^2.0.0-rc.4",
-    "typeface-alegreya-sans-sc": "^0.0.40",
+    "typeface-alegreya": "^0.0.40",
     "typeface-alegreya-sans": "^0.0.40",
-    "typeface-alegreya-sc": "^0.0.40",
-    "typeface-alegreya": "^0.0.40"
+    "typeface-alegreya-sans-sc": "^0.0.40",
+    "typeface-alegreya-sc": "^0.0.40"
   }
 }
