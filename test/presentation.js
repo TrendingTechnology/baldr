@@ -127,7 +127,7 @@ describe('Class “Slides()”', () => {
           "name": "name",
           "image": "image"
         },
-        "css": false
+        "css": true
       }
     };
 
@@ -166,7 +166,7 @@ describe('Class “Slides()”', () => {
           "name": "Ludwig van Beethoven",
           "image": "beethoven.jpg"
         },
-        "css": false
+        "css": true
       }
     };
 
