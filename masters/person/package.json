@@ -11,6 +11,9 @@
     "name": "Josef Friedrich",
     "email": "josef@friedrich.rocks"
   },
+  "scripts": {
+    "test": "mocha"
+  },
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/JosefFriedrich-nodejs/baldr/issues"

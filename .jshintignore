@@ -1,4 +1,4 @@
-docs
-dist
-node_modules
-out
+**/docs
+**/dist
+**/node_modules
+**/out

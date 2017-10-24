@@ -1,5 +1,6 @@
 const assert = require('assert');
-const quote = require('../index.js');
+const person = require('../index.js');
+
 const jsdom = require('jsdom');
 const {JSDOM} = jsdom;
 
@@ -10,16 +11,23 @@ function getDOM(html) {
 
 describe('Master slide “person”', () => {
 
-  it.skip('function “render()”', () => {
-    let html = quote.render({
+  it('function “render()”', () => {
+    let presentation = {pwd: '/home/bladr'};
+
+    let html = person.render({
       name: 'Ludwig van Beethoven',
       image: 'beethoven.jpg'
-    });
+    }, presentation);
 
     let doc = getDOM(html);
     assert.equal(
       doc.querySelector('#info-box p').textContent,
       'Ludwig van Beethoven'
+    );
+
+    assert.equal(
+      doc.querySelector('img').getAttribute('src'),
+      '/home/bladr/beethoven.jpg'
     );
 
   });
