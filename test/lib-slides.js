@@ -36,8 +36,7 @@ describe('Class “Slides()”', () => {
           "text": "text",
           "author": "author",
           "date": "date"
-        },
-        "css": true
+        }
       }
     );
   });
@@ -75,8 +74,7 @@ describe('Class “Slides()”', () => {
           "text": "text",
           "author": "author",
           "date": "date"
-        },
-        "css": true
+        }
       },
       "2": {
         "no": 2,
@@ -87,8 +85,7 @@ describe('Class “Slides()”', () => {
             "answer": "answer"
           },
 
-        ],
-        "css": false
+        ]
       },
       "3": {
         "no": 3,
@@ -96,8 +93,7 @@ describe('Class “Slides()”', () => {
         "data": {
           "name": "name",
           "image": "image"
-        },
-        "css": true
+        }
       }
     };
 
@@ -114,8 +110,7 @@ describe('Class “Slides()”', () => {
           "text": "Der Tag der Gunst ist wie der Tag der Ernte,\nman muss geschäftig sein sobald sie reift.\n",
           "author": "Johann Wolfgang von Goethe",
           "date": 1801
-        },
-        "css": true
+        }
       },
       "2": {
         "no": 2,
@@ -125,8 +120,7 @@ describe('Class “Slides()”', () => {
             "question": "Wann starb Ludwig van Beethoven?",
             "answer": 1827
           }
-        ],
-        "css": false
+        ]
       },
       "3": {
         "no": 3,
@@ -134,8 +128,7 @@ describe('Class “Slides()”', () => {
         "data": {
           "name": "Ludwig van Beethoven",
           "image": "beethoven.jpg"
-        },
-        "css": true
+        }
       }
     };
 
