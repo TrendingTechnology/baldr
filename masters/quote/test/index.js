@@ -10,7 +10,7 @@ function getDOM(html) {
 
 describe('Master slide “quote”', () => {
 
-  it('function “render(): all values”', () => {
+  it('function “render()”: all values', () => {
     let html = quote.render({
       text: 'text',
       author: 'author',
@@ -45,7 +45,7 @@ describe('Master slide “quote”', () => {
     );
   });
 
-  it('function “render(): no author”', () => {
+  it('function “render()”: no author', () => {
     let html = quote.render({
       text: 'text',
       date: 'date'
@@ -61,7 +61,7 @@ describe('Master slide “quote”', () => {
     );
   });
 
-  it('function “render(): no date”', () => {
+  it('function “render()”: no date', () => {
     let html = quote.render({
       text: 'text',
       author: 'author'
@@ -77,7 +77,7 @@ describe('Master slide “quote”', () => {
     );
   });
 
-  it('function “render(): only text”', () => {
+  it('function “render()”: only text', () => {
     let html = quote.render({
       text: 'text'
     });
