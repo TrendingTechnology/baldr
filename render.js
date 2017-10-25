@@ -7,6 +7,8 @@ const {Presentation} = require('./lib/presentation.js');
 const misc = require('./lib/misc.js');
 const path = require('path');
 const {remote} = require('electron');
+const Masters = require('./lib/masters.js').Masters;
+const masters = new Masters();
 
 /**
  * @namespace main
@@ -37,13 +39,14 @@ var main = function() {
    * @param {object} slide The object of the current slide
    */
   var setSlideCSS = function(slide) {
-    if (slide.css) {
+    let master = masters[slide.master];
+    if (master.css) {
       let head = document.getElementsByTagName('head')[0];
       let link = document.createElement('link');
       link.id = 'current-master';
       link.rel = 'stylesheet';
       link.type = 'text/css';
-      link.href = path.join('masters', slide.master, 'styles.css');
+      link.href = path.join(master.path, master.css);
       head.appendChild(link);
     }
     else {
