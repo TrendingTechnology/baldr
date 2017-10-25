@@ -19,8 +19,7 @@
     },
     "linux": {
       "target": [
-        "deb",
-        "pacman"
+        "deb"
       ]
     },
     "fileAssociations": [

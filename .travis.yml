@@ -8,7 +8,7 @@ node_js:
 install:
   - npm install --global npm
   - npm install
-  #- npm run build
+  - npm run dist
 
 before_script:
   - "export DISPLAY=:99.0"
