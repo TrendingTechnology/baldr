@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/JosefFriedrich-nodejs/baldr.svg?branch=master)](https://travis-ci.org/JosefFriedrich-nodejs/baldr)
+
 # baldr - BALDUR
 
 A try to write my presentations for school in HTML5, CSS3 and
