@@ -3,10 +3,12 @@ const path = require('path');
 const rewire = require('rewire')('../lib/presentation.js');
 const {Presentation} = require('../lib/presentation.js');
 
+const minimal = path.join('test', 'files', 'minimal.baldr');
+
 describe('Class “Presentation()”', () => {
 
   beforeEach(function() {
-    this.prs = new Presentation('example.baldr');
+    this.prs = new Presentation(minimal);
   });
 
   describe('Properties', function() {
@@ -26,7 +28,7 @@ describe('Class “Presentation()”', () => {
     it('this.pwd', function() {
       assert.equal(
         this.prs.pwd,
-        path.resolve(path.dirname('example.baldr'))
+        path.resolve(path.dirname(minimal))
       );
     });
 
