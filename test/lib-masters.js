@@ -5,6 +5,7 @@ const masters = require('../lib/masters.js');
 let m = new masters.Masters();
 let all = [
   'audio',
+  'camera',
   'person',
   'question',
   'quote',

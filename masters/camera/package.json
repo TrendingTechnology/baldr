@@ -1,0 +1,26 @@
+{
+  "name": "baldr-camera",
+  "version": "0.0.1",
+  "description": "Document camera master slide for the BALDR presentation software",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JosefFriedrich-nodejs/baldr.git"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "author": {
+    "name": "Josef Friedrich",
+    "email": "josef@friedrich.rocks"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/JosefFriedrich-nodejs/baldr/issues"
+  },
+  "homepage": "https://github.com/JosefFriedrich-nodejs/baldr#readme",
+  "devDependencies": {
+    "jsdom": "^11.3.0",
+    "mocha": "^4.0.1"
+  }
+}

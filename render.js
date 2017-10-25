@@ -64,6 +64,7 @@ var main = function() {
   var setSlide = function(pres) {
     setSlideCSS(pres.currentSlide);
     setSlideHTML(pres.HTML);
+    pres.postRender(document);
   };
 
   /**
