@@ -30,9 +30,16 @@ describe('Class “Master()”', () => {
       );
     });
 
-    it('this.app', () => {
+    it('this.render()', () => {
       assert.equal(
-        typeof master.app.render,
+        typeof master.render,
+        'function'
+      );
+    });
+
+    it('this.postRender()', () => {
+      assert.equal(
+        typeof master.postRender,
         'function'
       );
     });
@@ -60,9 +67,15 @@ describe('Class “Masters()”', () => {
       assert.deepEqual(masters.all, all);
     });
 
-    it('[master].app.render()', () => {
+    it('[master].render()', () => {
       for (let master of all) {
-        assert.equal(typeof masters[master].app.render, 'function');
+        assert.equal(typeof masters[master].render, 'function');
+      }
+    });
+
+    it('[master].postRender()', () => {
+      for (let master of all) {
+        assert.equal(typeof masters[master].postRender, 'function');
       }
     });
 
