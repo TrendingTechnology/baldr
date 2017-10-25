@@ -1,8 +1,9 @@
 var assert = require('assert');
 const fs = require('fs');
 const path = require('path');
-var Application = require('spectron').Application;
+const rewire = require('rewire');
 
+var Application = require('spectron').Application;
 var pkg = require('../package.json');
 
 let appPath;
@@ -22,7 +23,7 @@ describe('build', () => {
 
 });
 
-describe('application launch', function () {
+describe('Lauch without baldr file', function () {
   this.timeout(10000);
 
   beforeEach(function () {
@@ -50,6 +51,34 @@ describe('application launch', function () {
       })
       .getText('#slide').then(function (text) {
         assert.equal(text, 'Currently no slide is loaded!');
+      });
+
+  });
+
+});
+
+
+describe('Launch minimal.baldr', function () {
+  this.timeout(10000);
+
+  beforeEach(function () {
+    this.app = new Application({
+      path: appPath,
+      args: [path.join('test', 'files', 'minimal.baldr')]
+    });
+    return this.app.start();
+  });
+
+  afterEach(function () {
+    if (this.app && this.app.isRunning()) {
+      return this.app.stop();
+    }
+  });
+
+  it('Initial window', function () {
+    return this.app.client
+      .getText('.author').then(function (text) {
+        assert.equal(text, 'Johann Wolfgang von Goethe');
       });
   });
 
