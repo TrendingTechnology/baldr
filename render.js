@@ -10,10 +10,7 @@ const {remote} = require('electron');
 const Masters = require('./lib/masters.js').Masters;
 const masters = new Masters();
 
-let baldrFile = misc.searchForBaldrFile(
-  remote.process.argv
-);
-var presentation = new Presentation(baldrFile);
+let presentation;
 
 /**
  * Fill the #slide tag with HTML form the slides.
@@ -87,6 +84,11 @@ var firstSlide = function() {
  * @function main
  */
 var main = function() {
+  presentation = new Presentation(
+    misc.searchForBaldrFile(
+      remote.process.argv
+    )
+  );
   firstSlide();
   mousetrap.bind('left', previousSlide);
   mousetrap.bind('right', nextSlide);

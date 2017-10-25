@@ -1,5 +1,5 @@
-const assert = require('assert');
-
+// const assert = require('assert');
+//
 // const jsdom = require('jsdom');
 // const {JSDOM} = jsdom;
 // let DOM = new JSDOM(`<html>
@@ -12,5 +12,21 @@ const assert = require('assert');
 //   </body>
 // </html>`);
 // var document = DOM.window.document;
+//
+// var remote = {
+//   process: {
+//     argv: ['lol']
+//   }
+// };
+//
+// const rewire = require('rewire')('../render.js');
+//
+// let main = rewire.__get__('main');
+//
+// rewire.__set__('document', document);
+// rewire.__set__('remote.process.argv', ['lol']);
+//
+// main();
 
-const render = require('../render.js');
+
+//const render = require('../render.js');
