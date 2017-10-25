@@ -47,6 +47,9 @@ describe('application launch', function () {
       .getTitle()
       .then(text => {
         assert.equal(text, 'baldr');
+      })
+      .getText('#slide').then(function (text) {
+        assert.equal(text, 'Currently no slide is loaded!');
       });
   });
 
