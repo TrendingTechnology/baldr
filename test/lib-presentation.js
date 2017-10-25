@@ -1,7 +1,7 @@
 const assert = require('assert');
-const rewire = require('rewire')('../presentation.js');
 const path = require('path');
-const {Presentation} = require('../presentation.js');
+const rewire = require('rewire')('../lib/presentation.js');
+const {Presentation} = require('../lib/presentation.js');
 
 describe('Class “Presentation()”', () => {
 

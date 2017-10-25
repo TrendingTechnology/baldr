@@ -1,12 +1,11 @@
 const assert = require('assert');
-const rewire = require('rewire')('../presentation.js');
 const path = require('path');
-const {Presentation} = require('../presentation.js');
+const misc = require('../lib/misc.js');
 
 describe('Other functions', () => {
 
   it('Function “searchForBaldrFile()”', () => {
-    let search = rewire.__get__('searchForBaldrFile');
+    let search = misc.searchForBaldrFile;
     assert.equal(
       search(['lol.baldr']),
       'lol.baldr'

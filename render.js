@@ -3,8 +3,8 @@
  */
 
 const mousetrap = require('mousetrap');
-const {Presentation} = require('./presentation.js');
-const presentation = require('./presentation.js');
+const {Presentation} = require('./lib/presentation.js');
+const misc = require('./lib/misc.js');
 const path = require('path');
 const {remote} = require('electron');
 
@@ -13,7 +13,7 @@ const {remote} = require('electron');
  * @function main
  */
 var main = function() {
-  let baldrFile = presentation.searchForBaldrFile(
+  let baldrFile = misc.searchForBaldrFile(
     remote.process.argv
   );
   var prs = new Presentation(baldrFile);

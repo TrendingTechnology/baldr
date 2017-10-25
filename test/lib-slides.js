@@ -1,12 +1,12 @@
 const assert = require('assert');
-const rewire = require('rewire')('../presentation.js');
 const path = require('path');
-const {Presentation} = require('../presentation.js');
+
+const rewire = require('rewire')('../lib/slides.js');
+const {Slides} = require('../lib/slides.js');
 
 describe('Class “Slides()”', () => {
 
   it('Method “readYamlFile()”', () => {
-    let Slides = rewire.__get__('Slides');
     let slides = new Slides('example.baldr');
     let yml = slides.readYamlFile('example.baldr');
     assert.equal(yml[0].quote.author, 'Johann Wolfgang von Goethe');
@@ -14,7 +14,6 @@ describe('Class “Slides()”', () => {
   });
 
   it('Method “parseSlide()”', () => {
-    let Slides = rewire.__get__('Slides');
     let slides = new Slides('example.baldr');
 
     assert.deepEqual(
@@ -100,7 +99,6 @@ describe('Class “Slides()”', () => {
       }
     };
 
-    let Slides = rewire.__get__('Slides');
     let slides = new Slides('example.baldr');
     assert.deepEqual(slides.parseSlides(rawYaml), result);
   });
@@ -139,7 +137,6 @@ describe('Class “Slides()”', () => {
       }
     };
 
-    let Slides = rewire.__get__('Slides');
     let slides = new Slides('example.baldr');
     assert.deepEqual(slides.parse(), result);
   });
