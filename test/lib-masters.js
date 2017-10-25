@@ -1,5 +1,5 @@
 const assert = require('assert');
-
+const path = require('path');
 const masters = require('../lib/masters.js');
 
 let m = new masters.Masters();
@@ -7,16 +7,27 @@ let m = new masters.Masters();
 
 describe('Class “Masters()”', () => {
 
-  it('Properties', () => {
-    assert.deepEqual(
-      m.all,
-      [
-        'audio',
-        'person',
-        'question',
-        'quote',
-        'svg'
-    ]);
+  describe('Properties', () => {
+
+    it('this.path', () => {
+      assert.equal(
+        m.path,
+        path.resolve(__dirname, '..', 'masters')
+      );
+    });
+
+    it('this.all', () => {
+      assert.deepEqual(
+        m.all,
+        [
+          'audio',
+          'person',
+          'question',
+          'quote',
+          'svg'
+      ]);
+    });
+
   });
 
   it('Method “getModules()”', () => {

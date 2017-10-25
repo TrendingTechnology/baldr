@@ -178,17 +178,42 @@ describe('Class “Slides()”', () => {
 });
 
 describe('Class “Presentation()”', () => {
+  
   beforeEach(function() {
     this.prs = new Presentation('example.baldr');
   });
 
-  it('Properties', function() {
-    assert.equal(this.prs.slides[1].master, 'quote');
-    assert.equal(this.prs.count, 3);
-    assert.equal(this.prs.no, 1);
-    assert.equal(this.prs.pwd, path.resolve(path.dirname('example.baldr')));
-    assert.equal(this.prs.currentSlide.master, 'quote');
-    assert.equal(this.prs.HTML, '');
+  describe('Properties', function() {
+
+    it('this.slides', function() {
+      assert.equal(this.prs.slides[1].master, 'quote');
+    });
+
+    it('this.count', function() {
+      assert.equal(this.prs.count, 3);
+    });
+
+    it('this.no', function() {
+      assert.equal(this.prs.no, 1);
+    });
+
+    it('this.pwd', function() {
+      assert.equal(
+        this.prs.pwd,
+        path.resolve(path.dirname('example.baldr'))
+      );
+    });
+
+    it('this.currentSlide', function() {
+      assert.equal(
+        this.prs.currentSlide.master, 'quote'
+      );
+    });
+
+    it('this.HTML', function() {
+      assert.equal(this.prs.HTML, '');
+    });
+
   });
 
   it('Method “prev()”', function() {
