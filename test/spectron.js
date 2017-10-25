@@ -79,6 +79,9 @@ describe('Launch minimal.baldr', function () {
     return this.app.client
       .getText('.author').then(function (text) {
         assert.equal(text, 'Johann Wolfgang von Goethe');
+      })
+      .getCssProperty('.author', 'font-family').then(function (style) {
+        assert.equal(style.value, 'alegreya sc');
       });
   });
 
