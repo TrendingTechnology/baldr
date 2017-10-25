@@ -4,7 +4,6 @@ const masters = require('../lib/masters.js');
 
 let m = new masters.Masters();
 
-
 describe('Class “Masters()”', () => {
 
   describe('Properties', () => {

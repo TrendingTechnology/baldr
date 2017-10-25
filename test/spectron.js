@@ -5,11 +5,14 @@ var Application = require('spectron').Application;
 
 var pkg = require('../package.json');
 
-var appPath = path.join(
-  'dist',
-  `${process.platform}-unpacked`,
-  pkg.name
-);
+let appPath;
+
+if (process.platform === 'linux') {
+ appPath = 'dist/linux-unpacked/baldr';
+}
+else if (process.platform === 'darwin') {
+  appPath = 'dist/mac/baldr.app/Contents/MacOS/baldr';
+}
 
 describe('build', () => {
 
