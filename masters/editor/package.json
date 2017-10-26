@@ -1,0 +1,22 @@
+{
+  "name": "baldr-editor",
+  "version": "0.0.1",
+  "description": "Editor master slide for the BALDR presentation software",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JosefFriedrich-nodejs/baldr.git"
+  },
+  "author": {
+    "name": "Josef Friedrich",
+    "email": "josef@friedrich.rocks"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/JosefFriedrich-nodejs/baldr/issues"
+  },
+  "homepage": "https://github.com/JosefFriedrich-nodejs/baldr#readme"
+}

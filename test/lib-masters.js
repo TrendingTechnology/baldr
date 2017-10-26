@@ -9,6 +9,7 @@ const master = new Master('quote');
 let all = [
   'audio',
   'camera',
+  'editor',
   'person',
   'question',
   'quote',
