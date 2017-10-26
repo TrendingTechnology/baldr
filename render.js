@@ -92,6 +92,9 @@ var main = function() {
   firstSlide();
   mousetrap.bind('left', previousSlide);
   mousetrap.bind('right', nextSlide);
+  document.getElementById('button-left').addEventListener('click', previousSlide); 
+  document.getElementById('button-right').addEventListener('click', nextSlide);   
+  
 };
 
 if (require.main === module) {

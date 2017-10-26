@@ -43,6 +43,8 @@ h1, h2, h3, h4 {
   opacity: 0.1;
 }
 
-#navigation button:hover {
-  opacity: 1;
+#navigation button {
+  color: white;
+  background-color: inherit;
+  border: 0;
 }
