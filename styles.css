@@ -14,6 +14,7 @@ body {
   background-color: black;
   color: white;
   font-family: 'Alegreya';
+  margin: 0;
 }
 
 h1, h2, h3, h4 {
@@ -22,6 +23,6 @@ h1, h2, h3, h4 {
 }
 
 #slide {
-  height: 80%;
+  height: 100%;
   width: 100%;
 }
