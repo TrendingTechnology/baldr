@@ -63,6 +63,7 @@
     "baldr-question": "file:masters/question",
     "baldr-quote": "file:./masters/quote",
     "baldr-svg": "file:./masters/svg",
+    "font-awesome": "^4.7.0",
     "js-yaml": "^3.10.0",
     "mousetrap": "^1.6.1",
     "pug": "^2.0.0-rc.4",

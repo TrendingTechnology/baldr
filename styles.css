@@ -10,6 +10,9 @@
 /* Alegreya Sans SC: 100 300 400 500 700 800 900 */
 @import url("node_modules/typeface-alegreya-sans-sc/index.css");
 
+/* Font Awesome */
+@import 'node_modules/font-awesome/css/font-awesome.min.css';
+
 body {
   background-color: black;
   color: white;
@@ -25,4 +28,21 @@ h1, h2, h3, h4 {
 #slide {
   height: 100%;
   width: 100%;
+}
+
+/**
+ * Navigation buttons
+ */
+
+#navigation {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  z-index: 1;
+  font-size: 5vw;
+  opacity: 0.1;
+}
+
+#navigation button:hover {
+  opacity: 1;
 }
