@@ -49,7 +49,7 @@ describe('Lauch without baldr file', function () {
       .then(text => {
         assert.equal(text, 'baldr');
       })
-      .getText('#slide').then(function (text) {
+      .getText('#slide').then(text => {
         assert.equal(text, 'Currently no slide is loaded!');
       });
 
@@ -77,10 +77,10 @@ describe('Launch minimal.baldr', function () {
 
   it('Initial window', function () {
     return this.app.client
-      .getText('.author').then(function (text) {
+      .getText('.author').then(text => {
         assert.equal(text, 'Johann Wolfgang von Goethe');
       })
-      .getCssProperty('.author', 'font-family').then(function (style) {
+      .getCssProperty('.author', 'font-family').then(style => {
         assert.equal(style.value, 'alegreya sc');
       })
       .click('#button-right')
