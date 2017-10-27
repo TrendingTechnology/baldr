@@ -21,6 +21,19 @@ var buildMenu = function() {
     {
       label: 'View',
       submenu: [
+        {
+          label: 'Camera',
+          click (menuItem, browserWindow, event) { 
+            console.log(browserWindow);
+          }
+        },
+        {
+          label: 'Editor',
+          click (menuItem, browserWindow, event) { 
+            console.log(browserWindow);
+          }        
+        },
+        {type: 'separator'},
 
         {role: 'reload'},
         {role: 'forcereload'},
