@@ -50,10 +50,10 @@ var setSlideCSS = function(slide) {
  * @function setSlide
  * @param {object} pres The object presentation object
  */
-var setSlide = function(pres) {
-  setSlideCSS(pres.currentSlide);
-  setSlideHTML(pres.HTML);
-  pres.postRender(document);
+var setSlide = function() {
+  setSlideCSS(presentation.currentSlide);
+  setSlideHTML(presentation.HTML);
+  presentation.postRender(document);
 };
 
 /**
@@ -94,7 +94,6 @@ var main = function() {
   mousetrap.bind('right', nextSlide);
   document.getElementById('button-left').addEventListener('click', previousSlide); 
   document.getElementById('button-right').addEventListener('click', nextSlide);   
-  
 };
 
 if (require.main === module) {
