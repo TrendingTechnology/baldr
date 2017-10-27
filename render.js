@@ -7,6 +7,7 @@ const {Presentation} = require('./lib/presentation.js');
 const misc = require('./lib/misc.js');
 const path = require('path');
 const {remote} = require('electron');
+const {ipcRenderer} = require('electron');
 const Masters = require('./lib/masters.js').Masters;
 const masters = new Masters();
 
@@ -79,6 +80,26 @@ var nextSlide = function() {
 var firstSlide = function() {
   setSlide(presentation.render());
 };
+
+/**
+ * Show a master slide without custom data.
+ * 
+ * The displayed master slide is not part of the acutal presentation.
+ * Not every master slide can be shown with this function. It muss be
+ * possible to render the master slide without custom data.
+ * No number is assigned to the master slide.
+ * @param {string} name Name of the master slide
+ */
+var setMaster = function(name) {
+  let master = masters[name];
+  setSlideCSS({master: name});
+  setSlideHTML(master.render());
+  master.postRender(document);
+};
+
+ipcRenderer.on('set-master', function(event, masterName) {
+  setMaster(masterName);
+});
 
 /**
  * @function main

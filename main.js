@@ -24,13 +24,13 @@ var buildMenu = function() {
         {
           label: 'Camera',
           click (menuItem, browserWindow, event) { 
-            console.log(browserWindow);
+            browserWindow.webContents.send('set-master', 'camera');
           }
         },
         {
           label: 'Editor',
           click (menuItem, browserWindow, event) { 
-            console.log(browserWindow);
+            browserWindow.webContents.send('set-master', 'editor');
           }        
         },
         {type: 'separator'},
