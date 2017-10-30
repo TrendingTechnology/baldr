@@ -7,12 +7,23 @@
 
 const {MasterOfMasters} = require('../../lib/masters');
 
+/**
+ * Master class for the master slide “quote”
+ * @class
+ * @alias MasterQuote
+ */
 class Master extends MasterOfMasters {
   constructor(document, data) {
     super(document, data);
+    /**
+     * @type {string}
+     */
     this.masterPath = __dirname;
   }
 
+  /**
+   *
+   */
   renderAttribution(author='', date='') {
     let comma = '';
 
@@ -37,6 +48,9 @@ class Master extends MasterOfMasters {
     }
   }
 
+  /**
+   *
+   */
   renderQuotationMark(begin=true) {
     let mark = '»';
     let id = 'begin';
@@ -47,6 +61,9 @@ class Master extends MasterOfMasters {
     return `<span id="quotation-${id}" class="quotation-mark">${mark}</span>`;
   }
 
+  /**
+   *
+   */
   render(data) {
     let attribution = renderAttribution(data.author, data.date);
     let begin = renderQuotationMark();

@@ -7,6 +7,11 @@
 
 const {MasterOfMasters} = require('../../lib/masters');
 
+/**
+ * Master class for the master slide “question”
+ * @class
+ * @alias MasterQuestion
+ */
 class Master extends MasterOfMasters {
   constructor(document, data) {
     super(document, data);

@@ -8,8 +8,9 @@
 const {MasterOfMasters} = require('../../lib/masters');
 
 /**
- * Master class
- * @alias module:masters/audio.Master
+ * Master class for the master slide “audio”
+ * @class
+ * @alias MasterAudio
  */
 class Master extends MasterOfMasters {
   constructor(document, data) {
