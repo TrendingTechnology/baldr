@@ -1,5 +1,5 @@
 /**
- * @file Audio master slide
+ * @file Master slide “audio”
  * @module masters/audio
  */
 

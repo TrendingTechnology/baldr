@@ -1,3 +1,8 @@
+/**
+ * @file Master slide “editor”
+ * @module masters/editor
+ */
+
 'use strict';
 
 const {MasterOfMasters} = require('../../lib/masters');

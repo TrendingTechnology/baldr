@@ -1,3 +1,8 @@
+/**
+ * @file Master slide “svg”
+ * @module masters/svg
+ */
+
 'use strict';
 
 const {MasterOfMasters} = require('../../lib/masters');

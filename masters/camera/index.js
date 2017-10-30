@@ -1,3 +1,8 @@
+/**
+ * @file Master slide “camera”
+ * @module masters/camera
+ */
+
 'use strict';
 
 const {MasterOfMasters} = require('../../lib/masters');
