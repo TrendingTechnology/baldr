@@ -1,3 +1,14 @@
+'use strict';
+
+const {MasterOfMasters} = require('../../lib/masters');
+
+class Master extends MasterOfMasters {
+  constructor(document, data) {
+    super(document, data);
+  }
+
+}
+
 //
 // function SVGToggle() {
 //   var svg = document.querySelector('#zeichnung');
@@ -44,3 +55,5 @@
 exports.render = function(data, presentation) {
 
 };
+
+exports.Master = Master;

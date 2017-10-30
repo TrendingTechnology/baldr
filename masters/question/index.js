@@ -1,3 +1,15 @@
+'use strict';
+
+const {MasterOfMasters} = require('../../lib/masters');
+
+class Master extends MasterOfMasters {
+  constructor(document, data) {
+    super(document, data);
+  }
+
+}
+
+
 const pug = require('pug');
 const path = require('path');
 
@@ -11,3 +23,4 @@ var render = function(data) {
 };
 
 exports.render = render;
+exports.Master = Master;

@@ -1,7 +1,6 @@
 'use strict';
 
-const path = require('path');
-const {MasterOfMasters} = require(path.join(__dirname, '..', '..', 'lib', 'masters'));
+const {MasterOfMasters} = require('../../lib/masters');
 
 class Master extends MasterOfMasters {
   constructor(document, data) {

@@ -1,11 +1,20 @@
 'use strict';
 
+const {MasterOfMasters} = require('../../lib/masters');
+
+class Master extends MasterOfMasters {
+  constructor(document, data) {
+    super(document, data);
+  }
+
+}
+
 exports.render = function(data, presentation) {
   return `
   <div class="select">
   <label for="videoSource">Video source: </label><select id="videoSource"></select>
 </div>
-  
+
   <video autoplay="true" id="video"></video>`;
 
 };
@@ -13,7 +22,7 @@ exports.render = function(data, presentation) {
 /**
  * https://webrtc.github.io/samples/
  * mediaStream.getVideoTracks()[0].getConstraints()
- * 
+ *
 
 <code><pre>
 navigator.mediaDevices.getSupportedConstraints();
@@ -81,11 +90,11 @@ exports.postRender = function(document) {
   // .catch(function(err) {
   //   console.log(err.name + ": " + err.message);
   // });
-  
+
   var videoElement = document.querySelector('video');
   var videoSelect = document.querySelector('select#videoSource');
   var selectors = [videoSelect];
-  
+
   function gotDevices(deviceInfos) {
     // Handles being called several times to update labels. Preserve values.
     var values = selectors.map(function(select) {
@@ -115,9 +124,9 @@ exports.postRender = function(document) {
       }
     });
   }
-  
+
   navigator.mediaDevices.enumerateDevices().then(gotDevices).catch(handleError);
-  
+
   // Attach audio output device to video element using device/sink ID.
   function attachSinkId(element, sinkId) {
     if (typeof element.sinkId !== 'undefined') {
@@ -137,14 +146,14 @@ exports.postRender = function(document) {
       console.warn('Browser does not support output device selection.');
     }
   }
-  
+
   function gotStream(stream) {
     window.stream = stream; // make stream available to console
     videoElement.srcObject = stream;
     // Refresh button list in case labels have become available
     return navigator.mediaDevices.enumerateDevices();
   }
-  
+
   function start() {
     if (window.stream) {
       window.stream.getTracks().forEach(function(track) {
@@ -159,14 +168,16 @@ exports.postRender = function(document) {
     navigator.mediaDevices.getUserMedia(constraints).
         then(gotStream).then(gotDevices).catch(handleError);
   }
-  
+
   videoSelect.onchange = start;
-  
+
   start();
-  
+
   function handleError(error) {
     console.log('navigator.getUserMedia error: ', error);
   }
 
 };
 /* jshint ignore:end */
+
+exports.Master = Master;
