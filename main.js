@@ -1,7 +1,6 @@
 /**
  * @file Main process.
  * @module baldr
- * @see module:masters/audio
  */
 
 const electron = require('electron');

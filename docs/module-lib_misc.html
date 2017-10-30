@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: masters/audio/index.js</title>
+    <title>JSDoc: Module: lib/misc</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,60 +17,293 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: masters/audio/index.js</h1>
+    <h1 class="page-title">Module: lib/misc</h1>
 
     
 
 
 
+
+<section>
+
+<header>
     
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>/**
- * @file Master slide “audio”
- * @module masters/audio
- */
+        
+            
+        
+    
+</header>
 
-'use strict';
+<article>
+    <div class="container-overview">
+    
+        
+            <div class="description">Load the slides object form the YAML file format and process it.</div>
+        
 
-const {MasterOfMasters} = require('../../lib/masters');
+        
+            
 
-/**
- * Master class for the master slide “audio”
- * @class
- * @alias MasterAudio
- */
-class Master extends MasterOfMasters {
-  constructor(document, data) {
-    super(document, data);
-  }
 
-}
 
-// var sound = new Howl({
-//   src: ['sample.mp3'],
-// 	html5: true,
-// 	sprite: {
-// 		blast: [0, 3000],
-// 		laser: [4000, 500],
-// 		winner: [6000, 5000]
-// 	}
-// });
-//
-// Mousetrap.bind('p', function() {sound.play();});
-// Mousetrap.bind('l', function() {sound.play('laser');});
-// Mousetrap.bind('b', function() {sound.play('blast');});
-// Mousetrap.bind('w', function() {sound.play('winner');});
-// Mousetrap.bind('f', function() {sound.fade(1, 0, 5000);});
 
-exports.render = function(data, presentation) {
 
-};
 
-exports.Master = Master;
-</code></pre>
-        </article>
-    </section>
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="lib_misc.js.html">lib/misc.js</a>, <a href="lib_misc.js.html#line1">line 1</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id=".searchForBaldrFile"><span class="type-signature">(static) </span>searchForBaldrFile<span class="signature">(argv)</span><span class="type-signature"> &rarr; {string}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    TODO: Move to another file
+Search for a *.baldr file in the argv array. Return the last
+matched element.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>argv</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">array</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Arguments in process.argv</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="lib_misc.js.html">lib/misc.js</a>, <a href="lib_misc.js.html#line17">line 17</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The path of a BALDUR file.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">string</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
 
 
 
