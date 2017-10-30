@@ -34,7 +34,12 @@ let document = getDOM(
 
 describe('Class “MasterOfMasters”', function() {
   beforeEach(function() {
-    this.mom = new MasterOfMasters(document);
+    this.mom = new MasterOfMasters({
+      document: document,
+      data: this.data,
+      masterPath: path.resolve(__dirname, '..', 'masters', 'quote'),
+      nameName: 'quote'
+    });
   });
 
   it('Instantiation', function() {
@@ -57,14 +62,14 @@ describe('Class “MasterOfMasters”', function() {
   describe('Methods', function() {
     it('Method “hasCSS()”', function() {
       assert.equal(typeof this.mom.hasCSS, 'function');
-      assert.equal(this.mom.hasCSS(), false);
+      assert.equal(this.mom.hasCSS(), true);
     });
 
     it('Method “setCSS()”', function() {
       this.mom.setCSS();
       assert.equal(
-        this.mom.document.querySelector('link#current-master'),
-        null
+        typeof this.mom.document.querySelector('link#current-master'),
+        'object'
       );
     });
 
@@ -84,7 +89,12 @@ describe('Class “MasterOfMasters” extended on a example master class (quote)
   beforeEach(function() {
     let Master = require('../masters/quote').Master;
     this.data = {text: 'text', author: 'author'};
-    this.master = new Master(document, this.data);
+    this.master = new Master({
+      document: document,
+      data: this.data,
+      masterPath: path.resolve(__dirname, '..', 'masters', 'quote'),
+      masterName: 'quote'
+    });
   });
 
   describe('Properties', function() {
@@ -97,8 +107,8 @@ describe('Class “MasterOfMasters” extended on a example master class (quote)
 
     it('this.masterName', function() {
       assert.equal(
-        this.master.masterPath,
-        path.resolve(__dirname, '..', 'masters', 'quote')
+        this.master.masterName,
+        'quote'
       );
     });
   });

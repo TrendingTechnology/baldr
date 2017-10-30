@@ -13,8 +13,8 @@ const {MasterOfMasters} = require('../../lib/masters');
  * @alias MasterQuestion
  */
 class Master extends MasterOfMasters {
-  constructor(document, data) {
-    super(document, data);
+  constructor(propertyObj) {
+    super(propertyObj);
   }
 
 }

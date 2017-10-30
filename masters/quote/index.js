@@ -13,12 +13,9 @@ const {MasterOfMasters} = require('../../lib/masters');
  * @alias MasterQuote
  */
 class Master extends MasterOfMasters {
-  constructor(document, data) {
-    super(document, data);
-    /**
-     * @type {string}
-     */
-    this.masterPath = __dirname;
+
+  constructor(propObj) {
+    super(propObj);
   }
 
   /**

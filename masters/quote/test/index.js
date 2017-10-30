@@ -91,31 +91,3 @@ describe('Master slide “quote”', () => {
   });
 
 });
-
-describe('Class “Master”', function() {
-  beforeEach(function() {
-    this.document = getDOM(
-      fs.readFileSync(
-        path.join(__dirname, '..', '..', '..', 'render.html'),
-        'utf8'
-      )
-    );
-    this.data = {text: 'text', author: 'author'};
-    this.quote = new Master(this.document, this.data);
-  });
-
-  it('Class', function() {
-    assert.equal(typeof Master, 'function');
-  });
-
-  it('Property “innerHTML”', function() {
-    let render = this.quote.render({text: 'text', author: 'author'});
-    this.quote.set();
-    assert.equal(this.quote.elemSlide.innerHTML, render);
-  });
-
-  it('Method “hasCSS”', function() {
-    assert.equal(this.quote.hasCSS(), true);
-  });
-
-});
