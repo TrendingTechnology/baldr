@@ -25,10 +25,8 @@ let all = [
   'svg'
 ];
 
-
 describe('Class “MasterOfMasters”', function() {
   beforeEach(function() {
-
     this.mom = new MasterOfMasters(
       getDOM(
         fs.readFileSync(
@@ -44,20 +42,36 @@ describe('Class “MasterOfMasters”', function() {
     assert.equal(typeof this.mom, 'object');
   });
 
-  it('Property “document”', function() {
-    assert.equal(typeof this.mom.document, 'object');
+  describe('Properties', function() {
+    it('Property “document”', function() {
+      assert.equal(typeof this.mom.document, 'object');
+    });
+
+    it('Property “elemSlide”', function() {
+      assert.equal(this.mom.elemSlide.id, 'slide');
+      assert.equal(this.mom.elemSlide.nodeName, 'DIV');
+      assert.equal(this.mom.elemSlide.nodeType, 1);
+    });
   });
 
-  it('Property “elemSlide”', function() {
-    assert.equal(this.mom.elemSlide.id, 'slide');
-    assert.equal(this.mom.elemSlide.nodeName, 'DIV');
-    assert.equal(this.mom.elemSlide.nodeType, 1);
+  describe('Methods', function() {
+    it('Method “hasCSS()”', function() {
+      assert.equal(typeof this.mom.hasCSS, 'function');
+      assert.equal(this.mom.hasCSS(), false);
+    });
+
+    it('Method “setCSS()”', function() {
+    });
+
+    it('Method “set()”', function() {
+      this.mom.set();
+      assert.equal(
+        this.mom.elemSlide.innerHTML,
+        'No slide loaded.'
+      );
+    });
   });
 
-  it('Method hasCSS()', function() {
-    assert.equal(typeof this.mom.hasCSS, 'function');
-    assert.equal(this.mom.hasCSS(), false);
-  });
 });
 
 
