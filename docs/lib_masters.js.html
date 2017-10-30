@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: lib/masters.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: lib/masters.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @file Gather informations about all available master slides
+ */
+
+const fs = require('fs');
+const path = require('path');
+
+/**
+ * Each master slide class extends this class. It provides basic
+ * functionality for the master slide classes. This class is a
+ * interface for all child classes
+ */
+var MasterOfMasters = class {
+
+  constructor(document, data) {
+    this.masterPath = __dirname;
+    this.document = document;
+    this.elemSlide = document.getElementById('slide');
+    this.data = data;
+  }
+
+  hasCSS() {
+    if (fs.existsSync(path.join(this.masterPath, 'styles.css'))) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+
+  /**
+   * Add and remove master slide specific CSS styles
+   */
+  setCSS() {
+    if (this.hasCSS()) {
+      let head = this.document.getElementsByTagName('head')[0];
+      let link = this.document.createElement('link');
+      link.id = 'current-master';
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = path.join(this.masterPath, 'styles.css');
+      head.appendChild(link);
+    }
+    else {
+      let link = this.document.querySelector('#current-master');
+      if (link) {
+        link.remove();
+      }
+    }
+  }
+
+  render() {
+    return 'No slide loaded.';
+  }
+
+  set() {
+    this.setCSS();
+    this.elemSlide.innerHTML = this.render(this.data);
+  }
+};
+
+/**
+ * An unifed interface for a master slide.
+ *
+ * This class builds an unifed interface to access the properties and
+ * methods of a master slide.
+ *
+ * @constructor
+ */
+var Master = function(name) {
+
+  /**
+   * The name of the master slide.
+   * @type {string}
+   */
+  this.name = name;
+
+  /**
+   * The path of the master slide folder.
+   * @type {string}
+   */
+  this.path = path.join(__dirname, '..', 'masters', name);
+
+
+  let masterObj = this.require('index.js');
+
+  /**
+   * The render() method returns HTML output.
+   * @type {function}
+   */
+  this.render = this.checkMethods(masterObj, 'render');
+
+
+  /**
+   * The document object is exposed after the render() method.
+   * @type {function}
+   */
+  this.postRender = this.checkMethods(masterObj, 'postRender');
+  let pkg = this.require('package.json');
+
+  /**
+   * The name of the css file in the master slide folder.
+   * @type {string}
+   */
+  this.css = false;
+  if (pkg.css) {
+    this.css = pkg.css;
+  }
+
+};
+
+/**
+ * Require a file in a master slide folder. The file must be located in
+ * the root directory of the master slide.
+ *
+ * @param {string} file The file name
+ */
+Master.prototype.require = function(file) {
+  return require(path.join(this.path, file));
+};
+
+/**
+ * @param {object} masterObj The object of the required master slide.
+ * @param {object} methodName The name of the method to check.
+ */
+Master.prototype.checkMethods = function(masterObj, methodName) {
+  if (typeof masterObj[methodName] === 'function') {
+    return masterObj[methodName];
+  }
+  else {
+    return function(){};
+  }
+};
+
+/**
+ * Gather informations about all available master slides.
+ *
+ * @constructor
+ */
+var Masters = function() {
+
+  /**
+   * Parent path of all master slide modules.
+   * @type {string}
+   */
+   this.path = path.join(__dirname, '..', 'masters');
+
+  /**
+   * Folder name of master slides
+   * @type {array}
+   */
+  this.all = this.getModules();
+
+  for (let name of this.all) {
+    this[name] = new Master(name);
+  }
+};
+
+/**
+ * Get the folder off all master slide modules.
+ * @return {array} Folder name of master slides
+ */
+Masters.prototype.getModules = function() {
+  return fs.readdirSync(this.path, 'utf8')
+    .filter(
+      dir => fs.statSync(
+        path.join(this.path, dir)
+      ).isDirectory()
+    );
+};
+
+exports.Masters = Masters;
+exports.MasterOfMasters = MasterOfMasters;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-baldr.html">baldr</a></li><li><a href="module-masters_audio.html">masters/audio</a></li></ul><h3>Classes</h3><ul><li><a href="Master.html">Master</a></li><li><a href="MasterOfMasters.html">MasterOfMasters</a></li><li><a href="Masters.html">Masters</a></li><li><a href="module-masters_audio.Master.html">Master</a></li><li><a href="Presentation.html">Presentation</a></li><li><a href="Slides.html">Slides</a></li></ul><h3>Global</h3><ul><li><a href="global.html#firstSlide">firstSlide</a></li><li><a href="global.html#main">main</a></li><li><a href="global.html#nextSlide">nextSlide</a></li><li><a href="global.html#previousSlide">previousSlide</a></li><li><a href="global.html#searchForBaldrFile">searchForBaldrFile</a></li><li><a href="global.html#setMaster">setMaster</a></li><li><a href="global.html#setSlide">setSlide</a></li><li><a href="global.html#setSlideCSS">setSlideCSS</a></li><li><a href="global.html#setSlideHTML">setSlideHTML</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Oct 30 2017 17:39:51 GMT+0100 (CET)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

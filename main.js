@@ -1,5 +1,7 @@
 /**
  * @file Main process.
+ * @module baldr
+ * @see module:masters/audio
  */
 
 const electron = require('electron');
@@ -23,15 +25,15 @@ var buildMenu = function() {
       submenu: [
         {
           label: 'Camera',
-          click (menuItem, browserWindow, event) { 
+          click (menuItem, browserWindow, event) {
             browserWindow.webContents.send('set-master', 'camera');
           }
         },
         {
           label: 'Editor',
-          click (menuItem, browserWindow, event) { 
+          click (menuItem, browserWindow, event) {
             browserWindow.webContents.send('set-master', 'editor');
-          }        
+          }
         },
         {type: 'separator'},
 

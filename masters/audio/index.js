@@ -1,7 +1,16 @@
+/**
+ * @file Audio master slide
+ * @module masters/audio
+ */
+
 'use strict';
 
 const {MasterOfMasters} = require('../../lib/masters');
 
+/**
+ * Master class
+ * @alias module:masters/audio.Master
+ */
 class Master extends MasterOfMasters {
   constructor(document, data) {
     super(document, data);

@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: lib/slides.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: lib/slides.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @file Load the slides object form the YAML file format and process it.
+ */
+
+const fs = require('fs');
+const yaml = require('js-yaml');
+const path = require('path');
+
+/**
+ * Parse the object representation of all slides.
+ *
+ * @param {string} yamlFile Path of the yaml file.
+ * @constructor
+ */
+var Slides = function(yamlFile) {
+  this.yamlFile = yamlFile;
+};
+
+/**
+ * Load the content of a yaml file and convert its content into a
+ * object.
+ * @param {string} yamlFile Path of the yaml file.
+ * @return {object} Object representation of the yaml file.
+ * &lt;pre>&lt;code>
+ * [
+ *   {
+ *     "quote": {
+ *       "text": "text",
+ *       "author": "author",
+ *       "date": "date"
+ *     }
+ *   },
+ *   {
+ *     "question": [
+ *       {
+ *         "question": "question",
+ *         "answer": "answer"
+ *       }
+ *     ]
+ *   },
+ *   {
+ *     "person": {
+ *       "name": "name",
+ *       "image": "image"
+ *     }
+ *   }
+ * ]
+ * &lt;/code>&lt;pre>
+ */
+Slides.prototype.readYamlFile = function(yamlFile) {
+  try {
+    return yaml.safeLoad(fs.readFileSync(yamlFile, 'utf8'));
+  } catch (e) {
+    throw e;
+  }
+};
+
+/**
+ * Process meta data for one slide.
+ *
+ * @param {type} slide A raw slide object.
+ * @param {type} index The array index (0 - ...)
+ * @return {object}
+ * &lt;pre>&lt;code>
+ * {
+ *   "no": 1,
+ *   "master": "quote",
+ *   "data": {
+ *     "text": "Der Tag der Gunst ist wie der Tag der Ernte,\nman muss geschäftig sein sobald sie reift.\n",
+ *     "author": "Johann Wolfgang von Goethe",
+ *     "date": 1801
+ *   }
+ * }
+ * &lt;/code>&lt;pre>
+ */
+Slides.prototype.parseSlide = function(slide, index) {
+  let no = index + 1;
+  let master = Object.keys(slide)[0];
+  return {
+    "no": no,
+    "master": master,
+    "data": slide[master]
+  };
+};
+
+/**
+ * @param {array} yamlRaw The yaml file converted in an array of objects.
+ * @return {object} Processed object of slides
+ * &lt;pre>&lt;code>
+ * {
+ *   "1": {
+ *     "no": 1,
+ *     "master": "quote",
+ *     "data": {
+ *       "text": "Der Tag der Gunst ist wie der Tag der Ernte,\nman muss geschäftig sein sobald sie reift.\n",
+ *       "author": "Johann Wolfgang von Goethe",
+ *       "date": 1801
+ *     }
+ *   },
+ *   "2": {
+ *     "no": 2,
+ *     "master": "question",
+ *     "data": [
+ *       {
+ *         "question": "Wann starb Ludwig van Beethoven?",
+ *         "answer": 1827
+ *       }
+ *     ]
+ *   },
+ *   "3": {
+ *     "no": 3,
+ *     "master": "person",
+ *     "data": {
+ *       "name": "Ludwig van Beethoven",
+ *       "image": "beethoven.jpg"
+ *     }
+ *   }
+ * }
+ * &lt;/code>&lt;pre>
+ */
+Slides.prototype.parseSlides = function(yamlRaw) {
+  let out = {};
+
+  yamlRaw.forEach((slide, index) => {
+    out[index + 1] = this.parseSlide(slide, index);
+  });
+
+  return out;
+};
+
+/**
+ * Parse the yaml file.
+ * @return {object} Processed object of slides
+ * &lt;pre>&lt;code>
+ * {
+ *   "1": {
+ *     "no": 1,
+ *     "master": "quote",
+ *     "data": {
+ *       "text": "Der Tag der Gunst ist wie der Tag der Ernte,\nman muss geschäftig sein sobald sie reift.\n",
+ *       "author": "Johann Wolfgang von Goethe",
+ *       "date": 1801
+ *     }
+ *   },
+ *   "2": {
+ *     "no": 2,
+ *     "master": "question",
+ *     "data": [
+ *       {
+ *         "question": "Wann starb Ludwig van Beethoven?",
+ *         "answer": 1827
+ *       }
+ *     ]
+ *   },
+ *   "3": {
+ *     "no": 3,
+ *     "master": "person",
+ *     "data": {
+ *       "name": "Ludwig van Beethoven",
+ *       "image": "beethoven.jpg"
+ *     }
+ *   }
+ * }
+ * &lt;/code>&lt;pre>
+ */
+Slides.prototype.parse = function() {
+  return this.parseSlides(
+    this.readYamlFile(this.yamlFile)
+  );
+};
+
+exports.Slides = Slides;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-baldr.html">baldr</a></li><li><a href="module-masters_audio.html">masters/audio</a></li></ul><h3>Classes</h3><ul><li><a href="Master.html">Master</a></li><li><a href="MasterOfMasters.html">MasterOfMasters</a></li><li><a href="Masters.html">Masters</a></li><li><a href="module-masters_audio.Master.html">Master</a></li><li><a href="Presentation.html">Presentation</a></li><li><a href="Slides.html">Slides</a></li></ul><h3>Global</h3><ul><li><a href="global.html#firstSlide">firstSlide</a></li><li><a href="global.html#main">main</a></li><li><a href="global.html#nextSlide">nextSlide</a></li><li><a href="global.html#previousSlide">previousSlide</a></li><li><a href="global.html#searchForBaldrFile">searchForBaldrFile</a></li><li><a href="global.html#setMaster">setMaster</a></li><li><a href="global.html#setSlide">setSlide</a></li><li><a href="global.html#setSlideCSS">setSlideCSS</a></li><li><a href="global.html#setSlideHTML">setSlideHTML</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Oct 30 2017 17:39:51 GMT+0100 (CET)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
