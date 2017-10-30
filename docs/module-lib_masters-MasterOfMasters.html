@@ -29,7 +29,7 @@
 <header>
     
         <h2><span class="attribs"><span class="type-signature"></span></span>
-            <span class="ancestors"><a href="module-lib_masters.html">lib/masters</a>~</span>MasterOfMasters<span class="signature">()</span><span class="type-signature"></span></h2>
+            <span class="ancestors"><a href="module-lib_masters.html">lib/masters</a>~</span>MasterOfMasters<span class="signature">(propObj)</span><span class="type-signature"></span></h2>
         
             <div class="class-description">Each master slide class extends this class. It provides basic
 functionality for the master slide classes. This class is a
@@ -48,7 +48,7 @@ interface for all child classes</div>
     
 
     
-    <h4 class="name" id="MasterOfMasters"><span class="type-signature"></span>new MasterOfMasters<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="MasterOfMasters"><span class="type-signature"></span>new MasterOfMasters<span class="signature">(propObj)</span><span class="type-signature"></span></h4>
     
 
     
@@ -61,6 +61,173 @@ interface for all child classes</div>
 
 
 
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>propObj</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>masterName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Name of the master slide.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>masterPath</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Path of the master slide folder.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>document</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Javascript document object (DOM) of the render.html</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>data</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The slide data</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
 
 
 
@@ -144,147 +311,15 @@ interface for all child classes</div>
 
         
             
-<h4 class="name" id="data"><span class="type-signature"></span>data<span class="type-signature"> :object</span></h4>
-
-
-
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">object</span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_masters.js.html">lib/masters.js</a>, <a href="lib_masters.js.html#line36">line 36</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id="document"><span class="type-signature"></span>document<span class="type-signature"> :object</span></h4>
-
-
-
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">object</span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_masters.js.html">lib/masters.js</a>, <a href="lib_masters.js.html#line26">line 26</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-            
 <h4 class="name" id="elemSlide"><span class="type-signature"></span>elemSlide<span class="type-signature"> :object</span></h4>
 
 
 
 
+<div class="description">
+    The HTML-Element for the slide content.
+</div>
+
 
 
     <h5>Type:</h5>
@@ -330,75 +365,7 @@ interface for all child classes</div>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_masters.js.html">lib/masters.js</a>, <a href="lib_masters.js.html#line31">line 31</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id="masterPath"><span class="type-signature"></span>masterPath<span class="type-signature"> :string</span></h4>
-
-
-
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">string</span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_masters.js.html">lib/masters.js</a>, <a href="lib_masters.js.html#line21">line 21</a>
+        <a href="lib_masters.js.html">lib/masters.js</a>, <a href="lib_masters.js.html#line34">line 34</a>
     </li></ul></dd>
     
 
@@ -479,7 +446,7 @@ folder exists.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_masters.js.html">lib/masters.js</a>, <a href="lib_masters.js.html#line43">line 43</a>
+        <a href="lib_masters.js.html">lib/masters.js</a>, <a href="lib_masters.js.html#line42">line 42</a>
     </li></ul></dd>
     
 
@@ -561,7 +528,7 @@ folder exists.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_masters.js.html">lib/masters.js</a>, <a href="lib_masters.js.html#line76">line 76</a>
+        <a href="lib_masters.js.html">lib/masters.js</a>, <a href="lib_masters.js.html#line75">line 75</a>
     </li></ul></dd>
     
 
@@ -643,7 +610,7 @@ folder exists.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_masters.js.html">lib/masters.js</a>, <a href="lib_masters.js.html#line83">line 83</a>
+        <a href="lib_masters.js.html">lib/masters.js</a>, <a href="lib_masters.js.html#line82">line 82</a>
     </li></ul></dd>
     
 
@@ -729,7 +696,7 @@ folder exists.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_masters.js.html">lib/masters.js</a>, <a href="lib_masters.js.html#line55">line 55</a>
+        <a href="lib_masters.js.html">lib/masters.js</a>, <a href="lib_masters.js.html#line54">line 54</a>
     </li></ul></dd>
     
 
@@ -779,7 +746,7 @@ folder exists.
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Oct 30 2017 19:52:04 GMT+0100 (CET)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Oct 30 2017 21:04:29 GMT+0100 (CET)
 </footer>
 
 <script> prettyPrint(); </script>
