@@ -5,6 +5,7 @@ const {MasterOfMasters} = require('../../lib/masters');
 class Master extends MasterOfMasters {
   constructor(document, data) {
     super(document, data);
+    this.pathMaster = __dirname;
   }
 
   renderAttribution(author='', date='') {

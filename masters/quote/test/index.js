@@ -100,17 +100,22 @@ describe('Class “Master”', function() {
         'utf8'
       )
     );
+    this.data = {text: 'text', author: 'author'};
+    this.quote = new Master(this.document, this.data);
   });
 
   it('Class', function() {
     assert.equal(typeof Master, 'function');
   });
 
-  it('Instantiation', function() {
-    let quote = new Master(this.document, {text: 'text', author: 'author'});
-    console.log(quote.render({text: 'text', author: 'author'}));
-    quote.set();
-    console.log(quote.elemSlide.innerHTML);
+  it('Property “innerHTML”', function() {
+    let render = this.quote.render({text: 'text', author: 'author'});
+    this.quote.set();
+    assert.equal(this.quote.elemSlide.innerHTML, render);
+  });
+
+  it('Method “hasCSS”', function() {
+    assert.equal(this.quote.hasCSS(), true);
   });
 
 });

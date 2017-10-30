@@ -25,6 +25,42 @@ let all = [
   'svg'
 ];
 
+
+describe('Class “MasterOfMasters”', function() {
+  beforeEach(function() {
+
+    this.mom = new MasterOfMasters(
+      getDOM(
+        fs.readFileSync(
+          path.join(__dirname, '..', 'render.html'),
+          'utf8'
+        )
+      )
+    );
+  });
+
+  it('Instantiation', function() {
+    assert.equal(typeof MasterOfMasters, 'function');
+    assert.equal(typeof this.mom, 'object');
+  });
+
+  it('Property “document”', function() {
+    assert.equal(typeof this.mom.document, 'object');
+  });
+
+  it('Property “elemSlide”', function() {
+    assert.equal(this.mom.elemSlide.id, 'slide');
+    assert.equal(this.mom.elemSlide.nodeName, 'DIV');
+    assert.equal(this.mom.elemSlide.nodeType, 1);
+  });
+
+  it('Method hasCSS()', function() {
+    assert.equal(typeof this.mom.hasCSS, 'function');
+    assert.equal(this.mom.hasCSS(), false);
+  });
+});
+
+
 describe('Class “Master()”', () => {
 
   describe('Properties', () => {
@@ -95,37 +131,4 @@ describe('Class “Masters()”', () => {
     assert.deepEqual(masters.getModules(), all);
   });
 
-});
-
-describe('Class “MasterOfMasters”', function() {
-  beforeEach(function() {
-
-    this.mom = new MasterOfMasters(
-      getDOM(
-        fs.readFileSync(
-          path.join(__dirname, '..', 'render.html'),
-          'utf8'
-        )
-      )
-    );
-  });
-
-  it('Instantiation', function() {
-    assert.equal(typeof MasterOfMasters, 'function');
-    assert.equal(typeof this.mom, 'object');
-  });
-
-  it('Property “document”', function() {
-    assert.equal(typeof this.mom.document, 'object');
-  });
-
-  it('Property “elemSlide”', function() {
-    assert.equal(this.mom.elemSlide.id, 'slide');
-    assert.equal(this.mom.elemSlide.nodeName, 'DIV');
-    assert.equal(this.mom.elemSlide.nodeType, 1);
-  });
-
-  it('Method hasCSS()', function() {
-    assert.equal(typeof this.mom.hasCSS, 'function');
-  });
 });
