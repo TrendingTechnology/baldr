@@ -61,6 +61,11 @@ describe('Class “MasterOfMasters”', function() {
     });
 
     it('Method “setCSS()”', function() {
+      this.mom.setCSS();
+      assert.equal(
+        this.mom.document.querySelector('link#current-master'),
+        null
+      );
     });
 
     it('Method “set()”', function() {
