@@ -25,16 +25,16 @@ let all = [
   'svg'
 ];
 
+let document = getDOM(
+  fs.readFileSync(
+    path.join(__dirname, '..', 'render.html'),
+    'utf8'
+  )
+);
+
 describe('Class “MasterOfMasters”', function() {
   beforeEach(function() {
-    this.mom = new MasterOfMasters(
-      getDOM(
-        fs.readFileSync(
-          path.join(__dirname, '..', 'render.html'),
-          'utf8'
-        )
-      )
-    );
+    this.mom = new MasterOfMasters(document);
   });
 
   it('Instantiation', function() {
@@ -79,6 +79,30 @@ describe('Class “MasterOfMasters”', function() {
 
 });
 
+describe('Class “MasterOfMasters” extended on a example master class (quote)', function() {
+
+  beforeEach(function() {
+    let Master = require('../masters/quote').Master;
+    this.data = {text: 'text', author: 'author'};
+    this.master = new Master(document, this.data);
+  });
+
+  describe('Properties', function() {
+    it('Property “this.masterPath”', function() {
+      assert.equal(
+        this.master.masterPath,
+        path.resolve(__dirname, '..', 'masters', 'quote')
+      );
+    });
+
+    it('this.masterName', function() {
+      assert.equal(
+        this.master.masterPath,
+        path.resolve(__dirname, '..', 'masters', 'quote')
+      );
+    });
+  });
+});
 
 describe('Class “Master()”', () => {
 
