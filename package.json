@@ -6,7 +6,7 @@
   "scripts": {
     "dist": "electron-builder",
     "doc-show": "xdg-open ./docs/index.html",
-    "doc": "jsdoc --destination ./docs/ .",
+    "doc": "jsdoc --configure jsdoc-config.json .",
     "pack": "electron-builder --dir",
     "start": "electron .",
     "test": "mocha 'test/*.js' 'masters/quote/test/*.js' 'masters/person/test/*.js'"

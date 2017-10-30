@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: masters/audio/index.js</title>
+    <title>JSDoc: Source: masters/quote/index.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: masters/audio/index.js</h1>
+    <h1 class="page-title">Source: masters/quote/index.js</h1>
 
     
 
@@ -27,42 +27,119 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
- * @file Master slide “audio”
- * @module masters/audio
+ * @file Master slide “quote”
+ * @module masters/quote
  */
 
 'use strict';
 
 const {MasterOfMasters} = require('../../lib/masters');
 
-/**
- * Master class
- * @alias module:masters/audio.Master
- */
 class Master extends MasterOfMasters {
   constructor(document, data) {
     super(document, data);
+    this.masterPath = __dirname;
+  }
+
+  renderAttribution(author='', date='') {
+    let comma = '';
+
+    if (author) {
+      author = `&lt;span class="author">${author}&lt;/span>`;
+    }
+
+    if (date) {
+      date = `&lt;span class="date">${date}&lt;/span>`;
+    }
+
+    if (author &amp;&amp; date) {
+      comma = ', ';
+    }
+    let attribution = author + comma + date;
+
+    if (attribution) {
+      return `&lt;p class="attribution">${attribution}&lt;/p>`;
+    }
+    else {
+      return '';
+    }
+  }
+
+  renderQuotationMark(begin=true) {
+    let mark = '»';
+    let id = 'begin';
+    if (!begin) {
+      mark = '«';
+      id = 'end';
+    }
+    return `&lt;span id="quotation-${id}" class="quotation-mark">${mark}&lt;/span>`;
+  }
+
+  render(data) {
+    let attribution = renderAttribution(data.author, data.date);
+    let begin = renderQuotationMark();
+    let end = renderQuotationMark(false);
+    return `
+  &lt;section id="baldr-master-quote">
+
+    &lt;p class="text">${begin} ${data.text} ${end}&lt;/p>
+
+    ${attribution}
+
+  &lt;/section>
+  `;
+
   }
 
 }
 
-// var sound = new Howl({
-//   src: ['sample.mp3'],
-// 	html5: true,
-// 	sprite: {
-// 		blast: [0, 3000],
-// 		laser: [4000, 500],
-// 		winner: [6000, 5000]
-// 	}
-// });
-//
-// Mousetrap.bind('p', function() {sound.play();});
-// Mousetrap.bind('l', function() {sound.play('laser');});
-// Mousetrap.bind('b', function() {sound.play('blast');});
-// Mousetrap.bind('w', function() {sound.play('winner');});
-// Mousetrap.bind('f', function() {sound.fade(1, 0, 5000);});
+var renderAttribution = function(author='', date='') {
+  let comma = '';
 
-exports.render = function(data, presentation) {
+  if (author) {
+    author = `&lt;span class="author">${author}&lt;/span>`;
+  }
+
+  if (date) {
+    date = `&lt;span class="date">${date}&lt;/span>`;
+  }
+
+  if (author &amp;&amp; date) {
+    comma = ', ';
+  }
+  let attribution = author + comma + date;
+
+  if (attribution) {
+    return `&lt;p class="attribution">${attribution}&lt;/p>`;
+  }
+  else {
+    return '';
+  }
+};
+
+var renderQuotationMark = function(begin=true) {
+  let mark = '»';
+  let id = 'begin';
+  if (!begin) {
+    mark = '«';
+    id = 'end';
+  }
+  return `&lt;span id="quotation-${id}" class="quotation-mark">${mark}&lt;/span>`;
+};
+
+exports.render = function(data) {
+  let attribution = renderAttribution(data.author, data.date);
+  let begin = renderQuotationMark();
+  let end = renderQuotationMark(false);
+  return `
+&lt;section id="baldr-master-quote">
+
+  &lt;p class="text">${begin} ${data.text} ${end}&lt;/p>
+
+  ${attribution}
+
+&lt;/section>
+`;
 
 };
 

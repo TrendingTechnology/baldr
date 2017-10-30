@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: Master</title>
+    <title>JSDoc: Source: masters/question/index.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,136 +17,49 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: Master</h1>
+    <h1 class="page-title">Source: masters/question/index.js</h1>
 
     
 
 
 
-
-<section>
-
-<header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>
-            <span class="ancestors"><a href="module-masters_audio.html">masters/audio</a>.</span>Master<span class="signature">()</span><span class="type-signature"></span></h2>
-        
-            <div class="class-description">Master class</div>
-        
-    
-</header>
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @file Master slide “question”
+ * @module masters/question
+ */
 
-<article>
-    <div class="container-overview">
-    
-        
+'use strict';
 
-    
-    <h2>Constructor</h2>
-    
+const {MasterOfMasters} = require('../../lib/masters');
 
-    
-    <h4 class="name" id="Master"><span class="type-signature"></span>new Master<span class="signature">()</span><span class="type-signature"></span></h4>
-    
+class Master extends MasterOfMasters {
+  constructor(document, data) {
+    super(document, data);
+  }
 
-    
+}
 
 
+const pug = require('pug');
+const path = require('path');
 
+const compiledFunction = pug.compileFile(path.join(__dirname, 'template.pug'));
 
+var render = function(data) {
+  let questions = {
+    "questions": data
+  };
+  return compiledFunction(questions);
+};
 
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="masters_audio_index.js.html">masters/audio/index.js</a>, <a href="masters_audio_index.js.html#line14">line 14</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-    </div>
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
+exports.render = render;
+exports.Master = Master;
+</code></pre>
+        </article>
+    </section>
 
 
 
