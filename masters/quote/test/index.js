@@ -1,7 +1,9 @@
 const assert = require('assert');
+const fs = require('fs');
+const path = require('path');
 const quote = require('../index.js');
-const jsdom = require('jsdom');
-const {JSDOM} = jsdom;
+const Master = quote.Master;
+const {JSDOM} = require('jsdom');
 
 function getDOM(html) {
   let d = new JSDOM(html);
@@ -86,6 +88,29 @@ describe('Master slide “quote”', () => {
       doc.querySelector('.attribution'),
       null
     );
+  });
+
+});
+
+describe('Class “Master”', function() {
+  beforeEach(function() {
+    this.document = getDOM(
+      fs.readFileSync(
+        path.join(__dirname, '..', '..', '..', 'render.html'),
+        'utf8'
+      )
+    );
+  });
+
+  it('Class', function() {
+    assert.equal(typeof Master, 'function');
+  });
+
+  it('Instantiation', function() {
+    let quote = new Master(this.document, {text: 'text', author: 'author'});
+    console.log(quote.render({text: 'text', author: 'author'}));
+    quote.set();
+    console.log(quote.elemSlide.innerHTML);
   });
 
 });
