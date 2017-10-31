@@ -17,11 +17,11 @@ class Master extends MasterOfMasters {
     super(propObj);
   }
 
-  render(data, presentation) {
+  render() {
     return `
   <section id="master-person">
 
-    <img src="${presentation.pwd}/${this.data.image}">
+    <img src="${this.presentation.pwd}/${this.data.image}">
 
     <div id="info-box">
       <p>${this.data.name}</p>

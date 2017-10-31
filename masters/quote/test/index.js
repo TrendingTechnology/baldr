@@ -13,7 +13,7 @@ let propObj = {
 
 let render = function(data) {
   propObj.data = data;
-  quote = new Master(propObj);
+  let quote = new Master(propObj);
   return quote.render();
 };
 

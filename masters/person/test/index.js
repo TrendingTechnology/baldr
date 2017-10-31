@@ -1,23 +1,31 @@
 const assert = require('assert');
-const person = require('../index.js');
+const path = require('path');
+const {Master} = require('../index.js');
+const {document, presentation, getDOM} = require('../../../test/lib/helper.js');
 
-const jsdom = require('jsdom');
-const {JSDOM} = jsdom;
+presentation.pwd = '/home/bladr';
 
-function getDOM(html) {
-  let d = new JSDOM(html);
-  return d.window.document;
-}
+let propObj = {
+  masterName: 'person',
+  masterPath: path.resolve(__dirname, '..'),
+  document: document,
+  presentation: presentation
+};
+
+let render = function(data) {
+  propObj.data = data;
+  let person = new Master(propObj);
+  return person.render();
+};
 
 describe('Master slide “person”', () => {
 
   it('function “render()”', () => {
-    let presentation = {pwd: '/home/bladr'};
 
-    let html = person.render({
+    let html = render({
       name: 'Ludwig van Beethoven',
       image: 'beethoven.jpg'
-    }, presentation);
+    });
 
     let doc = getDOM(html);
     assert.equal(
