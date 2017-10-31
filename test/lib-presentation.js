@@ -1,5 +1,11 @@
-const assert = require('assert');
-const path = require('path');
+const {
+  assert,
+  document,
+  getDOM,
+  path,
+  presentation
+} = require('./lib/helper.js');
+
 const rewire = require('rewire')('../lib/presentation.js');
 const {Presentation} = require('../lib/presentation.js');
 
@@ -8,13 +14,13 @@ const minimal = path.join('test', 'files', 'minimal.baldr');
 describe('Class “Presentation()”', () => {
 
   beforeEach(function() {
-    this.prs = new Presentation(minimal);
+    this.prs = new Presentation(minimal, document);
   });
 
   describe('Properties', function() {
 
     it('this.slides', function() {
-      assert.equal(this.prs.slides[1].master, 'quote');
+      assert.equal(this.prs.slides[1].masterName, 'quote');
     });
 
     it('this.count', function() {
@@ -34,7 +40,7 @@ describe('Class “Presentation()”', () => {
 
     it('this.currentSlide', function() {
       assert.equal(
-        this.prs.currentSlide.master, 'quote'
+        this.prs.currentSlide.masterName, 'quote'
       );
     });
 
@@ -67,15 +73,12 @@ describe('Class “Presentation()”', () => {
   });
 
   it('Method “set()”', function() {
-    this.prs.render();
-    let html = this.prs.HTML;
-    assert.ok(html.includes('Johann Wolfgang von Goethe'));
+    this.prs.set();
+    assert.ok(this.prs.currentSlide.elemSlide.textContent.includes('Johann Wolfgang von Goethe'));
   });
 
   it('Method chaining', function() {
     this.prs.next().set();
-    let html = this.prs.HTML;
-
-    assert.ok(html.includes('Ludwig van Beethoven'));
+    assert.ok(this.prs.currentSlide.elemSlide.textContent.includes('Ludwig van Beethoven'));
   });
 });

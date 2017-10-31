@@ -48,9 +48,9 @@ describe('Class “Slides()”', () => {
 
     let slides = new Slides(minimal, document);
     let result = slides.parseSlides(rawYaml);
-    assert.equal(result[1].masterName, 'quote')
-    assert.equal(result[2].masterName, 'question')
-    assert.equal(result[3].masterName, 'person')
+    assert.equal(result[1].masterName, 'quote');
+    assert.equal(result[2].masterName, 'question');
+    assert.equal(result[3].masterName, 'person');
   });
 
   it('Method “instantiateSlides()”', () => {
@@ -72,9 +72,9 @@ describe('Class “Slides()”', () => {
   it('Method “parse()”', () => {
     let slides = new Slides(minimal, document);
     let result = slides.parse();
-    assert.equal(result[1].masterName, 'quote')
-    assert.equal(result[2].masterName, 'question')
-    assert.equal(result[3].masterName, 'person')
+    assert.equal(result[1].masterName, 'quote');
+    assert.equal(result[2].masterName, 'question');
+    assert.equal(result[3].masterName, 'person');
   });
 
 });
