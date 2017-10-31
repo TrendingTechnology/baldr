@@ -44,10 +44,6 @@ describe('Class “Presentation()”', () => {
       );
     });
 
-    it('this.HTML', function() {
-      assert.equal(this.prs.HTML, '');
-    });
-
   });
 
   it('Method “prev()”', function() {
