@@ -13,25 +13,24 @@ const {MasterOfMasters} = require('../../lib/masters');
  * @alias MasterPerson
  */
 class Master extends MasterOfMasters {
-  constructor(document, data) {
-    super(document, data);
+  constructor(propObj) {
+    super(propObj);
+  }
+
+  render(data, presentation) {
+    return `
+  <section id="master-person">
+
+    <img src="${presentation.pwd}/${this.data.image}">
+
+    <div id="info-box">
+      <p>${this.data.name}</p>
+    </div>
+
+  </section>
+  `;
   }
 
 }
-
-exports.render = function(data, presentation) {
-  return `
-<section id="master-person">
-
-  <img src="${presentation.pwd}/${data.image}">
-
-  <div id="info-box">
-    <p>${data.name}</p>
-  </div>
-
-</section>
-`;
-
-};
 
 exports.Master = Master;

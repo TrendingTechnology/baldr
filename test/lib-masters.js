@@ -3,17 +3,8 @@ const path = require('path');
 const fs = require('fs');
 const Masters = require('../lib/masters.js').Masters;
 const MasterOfMasters = require('../lib/masters.js').MasterOfMasters;
-const masters = new Masters();
-const rewire = require('rewire')('../lib/masters.js');
-Master = rewire.__get__('Master');
-const master = new Master('quote');
 
-const {JSDOM} = require('jsdom');
-
-function getDOM(html) {
-  let d = new JSDOM(html);
-  return d.window.document;
-}
+const {getDOM, document, presentation} = require('./lib/helper.js');
 
 let all = [
   'audio',
@@ -25,12 +16,7 @@ let all = [
   'svg'
 ];
 
-let document = getDOM(
-  fs.readFileSync(
-    path.join(__dirname, '..', 'render.html'),
-    'utf8'
-  )
-);
+const masters = new Masters(document, presentation);
 
 describe('Class “MasterOfMasters”', function() {
   beforeEach(function() {
@@ -112,43 +98,6 @@ describe('Class “MasterOfMasters” extended on a example master class (quote)
       );
     });
   });
-});
-
-describe('Class “Master()”', () => {
-
-  describe('Properties', () => {
-
-    it('this.name', () => {
-      assert.equal(master.name, 'quote');
-    });
-
-    it('this.path', () => {
-      assert.equal(
-        master.path,
-        path.resolve(__dirname, '..', 'masters', 'quote')
-      );
-    });
-
-    it('this.render()', () => {
-      assert.equal(
-        typeof master.render,
-        'function'
-      );
-    });
-
-    it('this.postRender()', () => {
-      assert.equal(
-        typeof master.postRender,
-        'function'
-      );
-    });
-
-    it('this.css', () => {
-      assert.equal(master.css, 'styles.css');
-    });
-
-  });
-
 });
 
 describe('Class “Masters()”', () => {

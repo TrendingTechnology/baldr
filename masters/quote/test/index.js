@@ -1,19 +1,26 @@
 const assert = require('assert');
 const fs = require('fs');
 const path = require('path');
-const quote = require('../index.js');
-const Master = quote.Master;
-const {JSDOM} = require('jsdom');
+const {Master} = require('../index.js');
+const {document, presentation, getDOM} = require('../../../test/lib/helper.js');
 
-function getDOM(html) {
-  let d = new JSDOM(html);
-  return d.window.document;
-}
+let propObj = {
+  masterName: 'quote',
+  masterPath: path.resolve(__dirname, '..'),
+  document: document,
+  presentation: presentation
+};
+
+let render = function(data) {
+  propObj.data = data;
+  quote = new Master(propObj);
+  return quote.render();
+};
 
 describe('Master slide “quote”', () => {
 
   it('function “render()”: all values', () => {
-    let html = quote.render({
+    let html = render({
       text: 'text',
       author: 'author',
       date: 'date'
@@ -48,7 +55,7 @@ describe('Master slide “quote”', () => {
   });
 
   it('function “render()”: no author', () => {
-    let html = quote.render({
+    let html = render({
       text: 'text',
       date: 'date'
     });
@@ -64,7 +71,7 @@ describe('Master slide “quote”', () => {
   });
 
   it('function “render()”: no date', () => {
-    let html = quote.render({
+    let html = render({
       text: 'text',
       author: 'author'
     });
@@ -80,7 +87,7 @@ describe('Master slide “quote”', () => {
   });
 
   it('function “render()”: only text', () => {
-    let html = quote.render({
+    let html = render({
       text: 'text'
     });
     let doc = getDOM(html);

@@ -62,13 +62,13 @@ class Master extends MasterOfMasters {
    *
    */
   render(data) {
-    let attribution = renderAttribution(data.author, data.date);
-    let begin = renderQuotationMark();
-    let end = renderQuotationMark(false);
+    let attribution = this.renderAttribution(this.data.author, this.data.date);
+    let begin = this.renderQuotationMark();
+    let end = this.renderQuotationMark(false);
     return `
   <section id="baldr-master-quote">
 
-    <p class="text">${begin} ${data.text} ${end}</p>
+    <p class="text">${begin} ${this.data.text} ${end}</p>
 
     ${attribution}
 
@@ -78,55 +78,5 @@ class Master extends MasterOfMasters {
   }
 
 }
-
-var renderAttribution = function(author='', date='') {
-  let comma = '';
-
-  if (author) {
-    author = `<span class="author">${author}</span>`;
-  }
-
-  if (date) {
-    date = `<span class="date">${date}</span>`;
-  }
-
-  if (author && date) {
-    comma = ', ';
-  }
-  let attribution = author + comma + date;
-
-  if (attribution) {
-    return `<p class="attribution">${attribution}</p>`;
-  }
-  else {
-    return '';
-  }
-};
-
-var renderQuotationMark = function(begin=true) {
-  let mark = '»';
-  let id = 'begin';
-  if (!begin) {
-    mark = '«';
-    id = 'end';
-  }
-  return `<span id="quotation-${id}" class="quotation-mark">${mark}</span>`;
-};
-
-exports.render = function(data) {
-  let attribution = renderAttribution(data.author, data.date);
-  let begin = renderQuotationMark();
-  let end = renderQuotationMark(false);
-  return `
-<section id="baldr-master-quote">
-
-  <p class="text">${begin} ${data.text} ${end}</p>
-
-  ${attribution}
-
-</section>
-`;
-
-};
 
 exports.Master = Master;

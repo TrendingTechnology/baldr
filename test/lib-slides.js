@@ -40,32 +40,6 @@ describe('Class “Slides()”', () => {
     assert.equal(yml[1].question[0].answer, 1827);
   });
 
-  it('Method “parseSlide()”', () => {
-    let slides = new Slides(minimal);
-
-    assert.deepEqual(
-      slides.parseSlide(
-        {
-          "quote": {
-            "text": "text",
-            "author": "author",
-            "date": "date"
-          }
-        },
-        0
-      ),
-      {
-        "no": 1,
-        "master": "quote",
-        "data": {
-          "text": "text",
-          "author": "author",
-          "date": "date"
-        }
-      }
-    );
-  });
-
   it('Method “parseSlides()”', () => {
     let rawYaml = [
       {
