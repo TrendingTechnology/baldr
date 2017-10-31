@@ -9,60 +9,16 @@ const path = require('path');
 const {remote} = require('electron');
 const {ipcRenderer} = require('electron');
 const Masters = require('./lib/masters.js').Masters;
-const masters = new Masters();
 
+let masters;
 let presentation;
-
-/**
- * Fill the #slide tag with HTML form the slides.
- * @function setSlideHTML
- * @param {string} HTML HTML code
- */
-var setSlideHTML = function(HTML) {
-  document.querySelector('#slide').innerHTML = HTML;
-};
-
-/**
- * Add and remove master slide specific CSS styles
- * @function setSlideCSS
- * @param {object} slide The object of the current slide
- */
-var setSlideCSS = function(slide) {
-  let master = masters[slide.master];
-  if (master.css) {
-    let head = document.getElementsByTagName('head')[0];
-    let link = document.createElement('link');
-    link.id = 'current-master';
-    link.rel = 'stylesheet';
-    link.type = 'text/css';
-    link.href = path.join(master.path, master.css);
-    head.appendChild(link);
-  }
-  else {
-    let link = document.querySelector('#current-master');
-    if (link) {
-      link.remove();
-    }
-  }
-};
-
-/**
- * Update HTML for the current slide
- * @function setSlide
- * @param {object} pres The object presentation object
- */
-var setSlide = function() {
-  setSlideCSS(presentation.currentSlide);
-  setSlideHTML(presentation.HTML);
-  presentation.postRender(document);
-};
 
 /**
  * Update the HTML structure with the code of the previous slide.
  * @function previousSlide
  */
 var previousSlide = function() {
-  setSlide(presentation.prev().render());
+  presentation.prev().set();
 };
 
 /**
@@ -70,7 +26,7 @@ var previousSlide = function() {
  * @function nextSlide
  */
 var nextSlide = function() {
-  setSlide(presentation.next().render());
+  presentation.next().set();
 };
 
 /**
@@ -78,12 +34,12 @@ var nextSlide = function() {
  * @function firstSlide
  */
 var firstSlide = function() {
-  setSlide(presentation.render());
+  presentation.set();
 };
 
 /**
  * Show a master slide without custom data.
- * 
+ *
  * The displayed master slide is not part of the acutal presentation.
  * Not every master slide can be shown with this function. It muss be
  * possible to render the master slide without custom data.
@@ -92,9 +48,7 @@ var firstSlide = function() {
  */
 var setMaster = function(name) {
   let master = masters[name];
-  setSlideCSS({master: name});
-  setSlideHTML(master.render());
-  master.postRender(document);
+  master.set();
 };
 
 ipcRenderer.on('set-master', function(event, masterName) {
@@ -106,15 +60,15 @@ ipcRenderer.on('set-master', function(event, masterName) {
  */
 var main = function() {
   presentation = new Presentation(
-    misc.searchForBaldrFile(
-      remote.process.argv
-    )
+    misc.searchForBaldrFile(remote.process.argv),
+    document
   );
+  masters = new Masters(document, presentation);
   firstSlide();
   mousetrap.bind('left', previousSlide);
   mousetrap.bind('right', nextSlide);
-  document.getElementById('button-left').addEventListener('click', previousSlide); 
-  document.getElementById('button-right').addEventListener('click', nextSlide);   
+  document.getElementById('button-left').addEventListener('click', previousSlide);
+  document.getElementById('button-right').addEventListener('click', nextSlide);
 };
 
 if (require.main === module) {

@@ -66,19 +66,16 @@ describe('Class “Presentation()”', () => {
     assert.equal(this.prs.no, 2);
   });
 
-  it('Method “render()”', function() {
+  it('Method “set()”', function() {
     this.prs.render();
     let html = this.prs.HTML;
     assert.ok(html.includes('Johann Wolfgang von Goethe'));
   });
 
-  it('Method “output()”', function() {
-    let html = this.prs.render().output();
-    assert.ok(html.includes('Johann Wolfgang von Goethe'));
-  });
-
   it('Method chaining', function() {
-    let html = this.prs.next().render().output();
+    this.prs.next().set();
+    let html = this.prs.HTML;
+
     assert.ok(html.includes('Ludwig van Beethoven'));
   });
 });
