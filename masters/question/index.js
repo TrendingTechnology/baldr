@@ -9,17 +9,22 @@ const {MasterOfMasters} = require('../../lib/masters');
 
 /**
  * Master class for the master slide “question”
- * @class
  */
 class MasterQuestion extends MasterOfMasters {
   constructor(propObj) {
     super(propObj);
   }
 
+  /**
+   *
+   */
   renderQuestion(question, answer) {
     return `<li>${question}: ${answer}</li>`;
   }
 
+  /**
+   *
+   */
   render() {
     let out = '';
     for (let question of this.data) {

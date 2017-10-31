@@ -37,60 +37,16 @@ const path = require('path');
 const {remote} = require('electron');
 const {ipcRenderer} = require('electron');
 const Masters = require('./lib/masters.js').Masters;
-const masters = new Masters();
 
+let masters;
 let presentation;
-
-/**
- * Fill the #slide tag with HTML form the slides.
- * @function setSlideHTML
- * @param {string} HTML HTML code
- */
-var setSlideHTML = function(HTML) {
-  document.querySelector('#slide').innerHTML = HTML;
-};
-
-/**
- * Add and remove master slide specific CSS styles
- * @function setSlideCSS
- * @param {object} slide The object of the current slide
- */
-var setSlideCSS = function(slide) {
-  let master = masters[slide.master];
-  if (master.css) {
-    let head = document.getElementsByTagName('head')[0];
-    let link = document.createElement('link');
-    link.id = 'current-master';
-    link.rel = 'stylesheet';
-    link.type = 'text/css';
-    link.href = path.join(master.path, master.css);
-    head.appendChild(link);
-  }
-  else {
-    let link = document.querySelector('#current-master');
-    if (link) {
-      link.remove();
-    }
-  }
-};
-
-/**
- * Update HTML for the current slide
- * @function setSlide
- * @param {object} pres The object presentation object
- */
-var setSlide = function() {
-  setSlideCSS(presentation.currentSlide);
-  setSlideHTML(presentation.HTML);
-  presentation.postRender(document);
-};
 
 /**
  * Update the HTML structure with the code of the previous slide.
  * @function previousSlide
  */
 var previousSlide = function() {
-  setSlide(presentation.prev().render());
+  presentation.prev().set();
 };
 
 /**
@@ -98,7 +54,7 @@ var previousSlide = function() {
  * @function nextSlide
  */
 var nextSlide = function() {
-  setSlide(presentation.next().render());
+  presentation.next().set();
 };
 
 /**
@@ -106,12 +62,12 @@ var nextSlide = function() {
  * @function firstSlide
  */
 var firstSlide = function() {
-  setSlide(presentation.render());
+  presentation.set();
 };
 
 /**
  * Show a master slide without custom data.
- * 
+ *
  * The displayed master slide is not part of the acutal presentation.
  * Not every master slide can be shown with this function. It muss be
  * possible to render the master slide without custom data.
@@ -120,9 +76,7 @@ var firstSlide = function() {
  */
 var setMaster = function(name) {
   let master = masters[name];
-  setSlideCSS({master: name});
-  setSlideHTML(master.render());
-  master.postRender(document);
+  master.set();
 };
 
 ipcRenderer.on('set-master', function(event, masterName) {
@@ -134,15 +88,15 @@ ipcRenderer.on('set-master', function(event, masterName) {
  */
 var main = function() {
   presentation = new Presentation(
-    misc.searchForBaldrFile(
-      remote.process.argv
-    )
+    misc.searchForBaldrFile(remote.process.argv),
+    document
   );
+  masters = new Masters(document, presentation);
   firstSlide();
   mousetrap.bind('left', previousSlide);
   mousetrap.bind('right', nextSlide);
-  document.getElementById('button-left').addEventListener('click', previousSlide); 
-  document.getElementById('button-right').addEventListener('click', nextSlide);   
+  document.getElementById('button-left').addEventListener('click', previousSlide);
+  document.getElementById('button-right').addEventListener('click', nextSlide);
 };
 
 if (require.main === module) {
@@ -158,13 +112,13 @@ if (require.main === module) {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-baldr.html">baldr</a></li><li><a href="module-lib_masters.html">lib/masters</a></li><li><a href="module-lib_misc.html">lib/misc</a></li><li><a href="module-lib_presentation.html">lib/presentation</a></li><li><a href="module-lib_slides.html">lib/slides</a></li><li><a href="module-masters_audio.html">masters/audio</a></li><li><a href="module-masters_camera.html">masters/camera</a></li><li><a href="module-masters_editor.html">masters/editor</a></li><li><a href="module-masters_person.html">masters/person</a></li><li><a href="module-masters_question.html">masters/question</a></li><li><a href="module-masters_quote.html">masters/quote</a></li><li><a href="module-masters_svg.html">masters/svg</a></li></ul><h3>Classes</h3><ul><li><a href="MasterAudio.html">MasterAudio</a></li><li><a href="MasterCamera.html">MasterCamera</a></li><li><a href="MasterEditor.html">MasterEditor</a></li><li><a href="MasterPerson.html">MasterPerson</a></li><li><a href="MasterQuestion.html">MasterQuestion</a></li><li><a href="MasterQuote.html">MasterQuote</a></li><li><a href="MasterSVG.html">MasterSVG</a></li><li><a href="module-lib_masters-Master.html">Master</a></li><li><a href="module-lib_masters-MasterOfMasters.html">MasterOfMasters</a></li><li><a href="module-lib_masters-Masters.html">Masters</a></li><li><a href="module-lib_presentation-Presentation.html">Presentation</a></li><li><a href="module-lib_slides-Slides.html">Slides</a></li></ul><h3>Global</h3><ul><li><a href="global.html#firstSlide">firstSlide</a></li><li><a href="global.html#main">main</a></li><li><a href="global.html#nextSlide">nextSlide</a></li><li><a href="global.html#previousSlide">previousSlide</a></li><li><a href="global.html#setMaster">setMaster</a></li><li><a href="global.html#setSlide">setSlide</a></li><li><a href="global.html#setSlideCSS">setSlideCSS</a></li><li><a href="global.html#setSlideHTML">setSlideHTML</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-baldr.html">baldr</a></li><li><a href="module-lib_masters.html">lib/masters</a></li><li><a href="module-lib_misc.html">lib/misc</a></li><li><a href="module-lib_presentation.html">lib/presentation</a></li><li><a href="module-lib_slides.html">lib/slides</a></li><li><a href="module-masters_audio.html">masters/audio</a></li><li><a href="module-masters_camera.html">masters/camera</a></li><li><a href="module-masters_editor.html">masters/editor</a></li><li><a href="module-masters_person.html">masters/person</a></li><li><a href="module-masters_question.html">masters/question</a></li><li><a href="module-masters_quote.html">masters/quote</a></li><li><a href="module-masters_svg.html">masters/svg</a></li></ul><h3>Classes</h3><ul><li><a href="module-lib_masters-MasterOfMasters.html">MasterOfMasters</a></li><li><a href="module-lib_masters-Masters.html">Masters</a></li><li><a href="module-lib_presentation-Presentation.html">Presentation</a></li><li><a href="module-lib_slides-Slides.html">Slides</a></li><li><a href="module-masters_audio-MasterAudio.html">MasterAudio</a></li><li><a href="module-masters_camera-MasterCamera.html">MasterCamera</a></li><li><a href="module-masters_editor-MasterEditor.html">MasterEditor</a></li><li><a href="module-masters_person-MasterPerson.html">MasterPerson</a></li><li><a href="module-masters_question-MasterQuestion.html">MasterQuestion</a></li><li><a href="module-masters_quote-MasterQuote.html">MasterQuote</a></li><li><a href="module-masters_svg-MasterSvg.html">MasterSvg</a></li></ul><h3>Global</h3><ul><li><a href="global.html#firstSlide">firstSlide</a></li><li><a href="global.html#main">main</a></li><li><a href="global.html#nextSlide">nextSlide</a></li><li><a href="global.html#previousSlide">previousSlide</a></li><li><a href="global.html#setMaster">setMaster</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Oct 30 2017 21:04:29 GMT+0100 (CET)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue Oct 31 2017 16:16:12 GMT+0100 (CET)
 </footer>
 
 <script> prettyPrint(); </script>

@@ -9,13 +9,18 @@ const {MasterOfMasters} = require('../../lib/masters');
 
 /**
  * Master class for the master slide “svg”
- * @class
  */
 class MasterSvg extends MasterOfMasters {
   constructor(document, data) {
     super(document, data);
   }
 
+  /**
+   *
+   */
+  render() {
+    return 'svg';
+  }
 }
 
 //

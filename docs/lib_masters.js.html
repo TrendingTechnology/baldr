@@ -35,6 +35,32 @@ const fs = require('fs');
 const path = require('path');
 
 /**
+ * Load the master slide class
+ *
+ * @param {string} masterName The name of the master slide
+ * @param {object} document The HTML DOM Document Object.
+ * @param {object} presentation The presentation object.
+ * @param {object} propObj Additonal properties for the slides and master objects
+ */
+var instantiateMaster = function(masterName, document, presentation, propObj) {
+  let masterPath = path.join(__dirname, '..', 'masters', masterName);
+
+  let className = 'Master' +
+    masterName.charAt(0).toUpperCase() +
+    masterName.slice(1);
+
+  let properties = {
+    "masterPath": masterPath,
+    "masterName": masterName,
+    "document": document,
+    "presentation": presentation
+  };
+
+  let Master = require(masterPath)[className];
+  return new Master(Object.assign({}, properties, propObj));
+};
+
+/**
  * Each master slide class extends this class. It provides basic
  * functionality for the master slide classes. This class is a
  * interface for all child classes
@@ -47,7 +73,6 @@ var MasterOfMasters = class {
    * @param {string} propObj.masterPath Path of the master slide folder.
    * @param {object} propObj.document Javascript document object (DOM) of the render.html
    * @param {object} propObj.data The slide data
-
    */
   constructor(propObj) {
 
@@ -114,84 +139,12 @@ var MasterOfMasters = class {
 };
 
 /**
- * An unifed interface for a master slide.
- *
- * This class builds an unifed interface to access the properties and
- * methods of a master slide.
- *
- * @constructor
- */
-var Master = function(name) {
-
-  /**
-   * The name of the master slide.
-   * @type {string}
-   */
-  this.name = name;
-
-  /**
-   * The path of the master slide folder.
-   * @type {string}
-   */
-  this.path = path.join(__dirname, '..', 'masters', name);
-
-
-  let masterObj = this.require('index.js');
-
-  /**
-   * The render() method returns HTML output.
-   * @type {function}
-   */
-  this.render = this.checkMethods(masterObj, 'render');
-
-
-  /**
-   * The document object is exposed after the render() method.
-   * @type {function}
-   */
-  this.postRender = this.checkMethods(masterObj, 'postRender');
-  let pkg = this.require('package.json');
-
-  /**
-   * The name of the css file in the master slide folder.
-   * @type {string}
-   */
-  this.css = false;
-  if (pkg.css) {
-    this.css = pkg.css;
-  }
-
-};
-
-/**
- * Require a file in a master slide folder. The file must be located in
- * the root directory of the master slide.
- *
- * @param {string} file The file name
- */
-Master.prototype.require = function(file) {
-  return require(path.join(this.path, file));
-};
-
-/**
- * @param {object} masterObj The object of the required master slide.
- * @param {object} methodName The name of the method to check.
- */
-Master.prototype.checkMethods = function(masterObj, methodName) {
-  if (typeof masterObj[methodName] === 'function') {
-    return masterObj[methodName];
-  }
-  else {
-    return function(){};
-  }
-};
-
-/**
  * Gather informations about all available master slides.
- *
+ * @param {object} document The HTML DOM Document Object.
+ * @param {object} presentation The presentation object.
  * @constructor
  */
-var Masters = function() {
+var Masters = function(document, presentation) {
 
   /**
    * Parent path of all master slide modules.
@@ -206,7 +159,7 @@ var Masters = function() {
   this.all = this.getModules();
 
   for (let name of this.all) {
-    this[name] = new Master(name);
+    this[name] = instantiateMaster(name, document, presentation);
   }
 };
 
@@ -225,6 +178,7 @@ Masters.prototype.getModules = function() {
 
 exports.Masters = Masters;
 exports.MasterOfMasters = MasterOfMasters;
+exports.instantiateMaster = instantiateMaster;
 </code></pre>
         </article>
     </section>
@@ -235,13 +189,13 @@ exports.MasterOfMasters = MasterOfMasters;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-baldr.html">baldr</a></li><li><a href="module-lib_masters.html">lib/masters</a></li><li><a href="module-lib_misc.html">lib/misc</a></li><li><a href="module-lib_presentation.html">lib/presentation</a></li><li><a href="module-lib_slides.html">lib/slides</a></li><li><a href="module-masters_audio.html">masters/audio</a></li><li><a href="module-masters_camera.html">masters/camera</a></li><li><a href="module-masters_editor.html">masters/editor</a></li><li><a href="module-masters_person.html">masters/person</a></li><li><a href="module-masters_question.html">masters/question</a></li><li><a href="module-masters_quote.html">masters/quote</a></li><li><a href="module-masters_svg.html">masters/svg</a></li></ul><h3>Classes</h3><ul><li><a href="MasterAudio.html">MasterAudio</a></li><li><a href="MasterCamera.html">MasterCamera</a></li><li><a href="MasterEditor.html">MasterEditor</a></li><li><a href="MasterPerson.html">MasterPerson</a></li><li><a href="MasterQuestion.html">MasterQuestion</a></li><li><a href="MasterQuote.html">MasterQuote</a></li><li><a href="MasterSVG.html">MasterSVG</a></li><li><a href="module-lib_masters-Master.html">Master</a></li><li><a href="module-lib_masters-MasterOfMasters.html">MasterOfMasters</a></li><li><a href="module-lib_masters-Masters.html">Masters</a></li><li><a href="module-lib_presentation-Presentation.html">Presentation</a></li><li><a href="module-lib_slides-Slides.html">Slides</a></li></ul><h3>Global</h3><ul><li><a href="global.html#firstSlide">firstSlide</a></li><li><a href="global.html#main">main</a></li><li><a href="global.html#nextSlide">nextSlide</a></li><li><a href="global.html#previousSlide">previousSlide</a></li><li><a href="global.html#setMaster">setMaster</a></li><li><a href="global.html#setSlide">setSlide</a></li><li><a href="global.html#setSlideCSS">setSlideCSS</a></li><li><a href="global.html#setSlideHTML">setSlideHTML</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-baldr.html">baldr</a></li><li><a href="module-lib_masters.html">lib/masters</a></li><li><a href="module-lib_misc.html">lib/misc</a></li><li><a href="module-lib_presentation.html">lib/presentation</a></li><li><a href="module-lib_slides.html">lib/slides</a></li><li><a href="module-masters_audio.html">masters/audio</a></li><li><a href="module-masters_camera.html">masters/camera</a></li><li><a href="module-masters_editor.html">masters/editor</a></li><li><a href="module-masters_person.html">masters/person</a></li><li><a href="module-masters_question.html">masters/question</a></li><li><a href="module-masters_quote.html">masters/quote</a></li><li><a href="module-masters_svg.html">masters/svg</a></li></ul><h3>Classes</h3><ul><li><a href="module-lib_masters-MasterOfMasters.html">MasterOfMasters</a></li><li><a href="module-lib_masters-Masters.html">Masters</a></li><li><a href="module-lib_presentation-Presentation.html">Presentation</a></li><li><a href="module-lib_slides-Slides.html">Slides</a></li><li><a href="module-masters_audio-MasterAudio.html">MasterAudio</a></li><li><a href="module-masters_camera-MasterCamera.html">MasterCamera</a></li><li><a href="module-masters_editor-MasterEditor.html">MasterEditor</a></li><li><a href="module-masters_person-MasterPerson.html">MasterPerson</a></li><li><a href="module-masters_question-MasterQuestion.html">MasterQuestion</a></li><li><a href="module-masters_quote-MasterQuote.html">MasterQuote</a></li><li><a href="module-masters_svg-MasterSvg.html">MasterSvg</a></li></ul><h3>Global</h3><ul><li><a href="global.html#firstSlide">firstSlide</a></li><li><a href="global.html#main">main</a></li><li><a href="global.html#nextSlide">nextSlide</a></li><li><a href="global.html#previousSlide">previousSlide</a></li><li><a href="global.html#setMaster">setMaster</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Oct 30 2017 21:04:29 GMT+0100 (CET)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue Oct 31 2017 16:16:12 GMT+0100 (CET)
 </footer>
 
 <script> prettyPrint(); </script>

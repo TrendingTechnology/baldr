@@ -9,11 +9,17 @@ const {MasterOfMasters} = require('../../lib/masters');
 
 /**
  * Master class for the master slide “audio”
- * @class
  */
 class MasterAudio extends MasterOfMasters {
   constructor(document, data) {
     super(document, data);
+  }
+
+  /**
+   *
+   */
+  render() {
+    return 'audio';
   }
 
 }

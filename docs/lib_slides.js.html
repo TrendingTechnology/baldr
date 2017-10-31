@@ -34,15 +34,19 @@
 const fs = require('fs');
 const yaml = require('js-yaml');
 const path = require('path');
+const {instantiateMaster} = require('./masters.js');
 
 /**
  * Parse the object representation of all slides.
  *
  * @param {string} yamlFile Path of the yaml file.
+ * @param {object} document The HTML DOM Document Object.
  * @constructor
  */
-var Slides = function(yamlFile) {
+var Slides = function(yamlFile, document, presentation) {
   this.yamlFile = yamlFile;
+  this.document = document;
+  this.presentation = presentation;
 };
 
 /**
@@ -85,31 +89,21 @@ Slides.prototype.readYamlFile = function(yamlFile) {
 };
 
 /**
- * Process meta data for one slide.
- *
- * @param {type} slide A raw slide object.
- * @param {type} index The array index (0 - ...)
- * @return {object}
- * &lt;pre>&lt;code>
- * {
- *   "no": 1,
- *   "master": "quote",
- *   "data": {
- *     "text": "Der Tag der Gunst ist wie der Tag der Ernte,\nman muss geschäftig sein sobald sie reift.\n",
- *     "author": "Johann Wolfgang von Goethe",
- *     "date": 1801
- *   }
- * }
- * &lt;/code>&lt;pre>
+ * Instantiate slide: Load master slide class
  */
-Slides.prototype.parseSlide = function(slide, index) {
+Slides.prototype.instantiateSlide = function(slide, index) {
   let no = index + 1;
   let master = Object.keys(slide)[0];
-  return {
-    "no": no,
-    "master": master,
-    "data": slide[master]
-  };
+
+  return instantiateMaster(
+    master,
+    this.document,
+    this.presentation,
+    {
+      data: slide[master],
+      slideNo: no
+    }
+  );
 };
 
 /**
@@ -151,7 +145,7 @@ Slides.prototype.parseSlides = function(yamlRaw) {
   let out = {};
 
   yamlRaw.forEach((slide, index) => {
-    out[index + 1] = this.parseSlide(slide, index);
+    out[index + 1] = this.instantiateSlide(slide, index);
   });
 
   return out;
@@ -209,13 +203,13 @@ exports.Slides = Slides;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-baldr.html">baldr</a></li><li><a href="module-lib_masters.html">lib/masters</a></li><li><a href="module-lib_misc.html">lib/misc</a></li><li><a href="module-lib_presentation.html">lib/presentation</a></li><li><a href="module-lib_slides.html">lib/slides</a></li><li><a href="module-masters_audio.html">masters/audio</a></li><li><a href="module-masters_camera.html">masters/camera</a></li><li><a href="module-masters_editor.html">masters/editor</a></li><li><a href="module-masters_person.html">masters/person</a></li><li><a href="module-masters_question.html">masters/question</a></li><li><a href="module-masters_quote.html">masters/quote</a></li><li><a href="module-masters_svg.html">masters/svg</a></li></ul><h3>Classes</h3><ul><li><a href="MasterAudio.html">MasterAudio</a></li><li><a href="MasterCamera.html">MasterCamera</a></li><li><a href="MasterEditor.html">MasterEditor</a></li><li><a href="MasterPerson.html">MasterPerson</a></li><li><a href="MasterQuestion.html">MasterQuestion</a></li><li><a href="MasterQuote.html">MasterQuote</a></li><li><a href="MasterSVG.html">MasterSVG</a></li><li><a href="module-lib_masters-Master.html">Master</a></li><li><a href="module-lib_masters-MasterOfMasters.html">MasterOfMasters</a></li><li><a href="module-lib_masters-Masters.html">Masters</a></li><li><a href="module-lib_presentation-Presentation.html">Presentation</a></li><li><a href="module-lib_slides-Slides.html">Slides</a></li></ul><h3>Global</h3><ul><li><a href="global.html#firstSlide">firstSlide</a></li><li><a href="global.html#main">main</a></li><li><a href="global.html#nextSlide">nextSlide</a></li><li><a href="global.html#previousSlide">previousSlide</a></li><li><a href="global.html#setMaster">setMaster</a></li><li><a href="global.html#setSlide">setSlide</a></li><li><a href="global.html#setSlideCSS">setSlideCSS</a></li><li><a href="global.html#setSlideHTML">setSlideHTML</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-baldr.html">baldr</a></li><li><a href="module-lib_masters.html">lib/masters</a></li><li><a href="module-lib_misc.html">lib/misc</a></li><li><a href="module-lib_presentation.html">lib/presentation</a></li><li><a href="module-lib_slides.html">lib/slides</a></li><li><a href="module-masters_audio.html">masters/audio</a></li><li><a href="module-masters_camera.html">masters/camera</a></li><li><a href="module-masters_editor.html">masters/editor</a></li><li><a href="module-masters_person.html">masters/person</a></li><li><a href="module-masters_question.html">masters/question</a></li><li><a href="module-masters_quote.html">masters/quote</a></li><li><a href="module-masters_svg.html">masters/svg</a></li></ul><h3>Classes</h3><ul><li><a href="module-lib_masters-MasterOfMasters.html">MasterOfMasters</a></li><li><a href="module-lib_masters-Masters.html">Masters</a></li><li><a href="module-lib_presentation-Presentation.html">Presentation</a></li><li><a href="module-lib_slides-Slides.html">Slides</a></li><li><a href="module-masters_audio-MasterAudio.html">MasterAudio</a></li><li><a href="module-masters_camera-MasterCamera.html">MasterCamera</a></li><li><a href="module-masters_editor-MasterEditor.html">MasterEditor</a></li><li><a href="module-masters_person-MasterPerson.html">MasterPerson</a></li><li><a href="module-masters_question-MasterQuestion.html">MasterQuestion</a></li><li><a href="module-masters_quote-MasterQuote.html">MasterQuote</a></li><li><a href="module-masters_svg-MasterSvg.html">MasterSvg</a></li></ul><h3>Global</h3><ul><li><a href="global.html#firstSlide">firstSlide</a></li><li><a href="global.html#main">main</a></li><li><a href="global.html#nextSlide">nextSlide</a></li><li><a href="global.html#previousSlide">previousSlide</a></li><li><a href="global.html#setMaster">setMaster</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Oct 30 2017 21:04:29 GMT+0100 (CET)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue Oct 31 2017 16:16:12 GMT+0100 (CET)
 </footer>
 
 <script> prettyPrint(); </script>

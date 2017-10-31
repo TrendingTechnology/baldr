@@ -9,24 +9,31 @@ const {MasterOfMasters} = require('../../lib/masters');
 
 /**
  * Master class for the master slide “camera”
- * @class
  */
 class MasterCamera extends MasterOfMasters {
   constructor(document, data) {
     super(document, data);
   }
 
+  /**
+   *
+   */
+  renderModal() {
+    return `
+    <div class="select">
+      <label for="videoSource">Video source: </label><select id="videoSource"></select>
+    </div>`;
+
+  }
+
+  /**
+   *
+   */
+  render() {
+    return '<video autoplay="true" id="video"></video>';
+  }
+
 }
-
-exports.render = function(data, presentation) {
-  return `
-  <div class="select">
-  <label for="videoSource">Video source: </label><select id="videoSource"></select>
-</div>
-
-  <video autoplay="true" id="video"></video>`;
-
-};
 
 /**
  * https://webrtc.github.io/samples/

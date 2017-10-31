@@ -16,6 +16,9 @@ class MasterPerson extends MasterOfMasters {
     super(propObj);
   }
 
+  /**
+   *
+   */
   render() {
     return `
   <section id="master-person">
