@@ -17,20 +17,18 @@ class Master extends MasterOfMasters {
     super(propObj);
   }
 
+  renderQuestion(question, answer) {
+    return `<li>${question}: ${answer}</li>`;
+  }
+
+  render() {
+    let out = '';
+    for (let question of this.data) {
+      out = out + this.renderQuestion(question.question, question.answer);
+    }
+    return `<ul>${out}</ul>`;
+  }
+
 }
 
-
-const pug = require('pug');
-const path = require('path');
-
-const compiledFunction = pug.compileFile(path.join(__dirname, 'template.pug'));
-
-var render = function(data) {
-  let questions = {
-    "questions": data
-  };
-  return compiledFunction(questions);
-};
-
-exports.render = render;
 exports.Master = Master;
