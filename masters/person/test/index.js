@@ -1,6 +1,6 @@
 const assert = require('assert');
 const path = require('path');
-const {Master} = require('../index.js');
+const {MasterPerson} = require('../index.js');
 const {document, presentation, getDOM} = require('../../../test/lib/helper.js');
 
 presentation.pwd = '/home/bladr';
@@ -14,7 +14,7 @@ let propObj = {
 
 let render = function(data) {
   propObj.data = data;
-  let person = new Master(propObj);
+  let person = new MasterPerson(propObj);
   return person.render();
 };
 

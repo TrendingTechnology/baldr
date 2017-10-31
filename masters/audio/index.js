@@ -10,9 +10,8 @@ const {MasterOfMasters} = require('../../lib/masters');
 /**
  * Master class for the master slide “audio”
  * @class
- * @alias MasterAudio
  */
-class Master extends MasterOfMasters {
+class MasterAudio extends MasterOfMasters {
   constructor(document, data) {
     super(document, data);
   }
@@ -35,8 +34,4 @@ class Master extends MasterOfMasters {
 // Mousetrap.bind('w', function() {sound.play('winner');});
 // Mousetrap.bind('f', function() {sound.fade(1, 0, 5000);});
 
-exports.render = function(data, presentation) {
-
-};
-
-exports.Master = Master;
+exports.MasterAudio = MasterAudio;

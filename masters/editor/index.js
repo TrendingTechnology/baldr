@@ -10,17 +10,16 @@ const {MasterOfMasters} = require('../../lib/masters');
 /**
  * Master class for the master slide “editor”
  * @class
- * @alias MasterEditor
  */
-class Master extends MasterOfMasters {
+class MasterEditor extends MasterOfMasters {
   constructor(document, data) {
     super(document, data);
   }
 
+  render() {
+    return `editor`;
+  }
+
 }
 
-exports.render = function() {
-  return `editor`;
-};
-
-exports.Master = Master;
+exports.MasterEditor = MasterEditor;

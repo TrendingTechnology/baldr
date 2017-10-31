@@ -10,9 +10,8 @@ const {MasterOfMasters} = require('../../lib/masters');
 /**
  * Master class for the master slide “quote”
  * @class
- * @alias MasterQuote
  */
-class Master extends MasterOfMasters {
+class MasterQuote extends MasterOfMasters {
 
   constructor(propObj) {
     super(propObj);
@@ -79,4 +78,4 @@ class Master extends MasterOfMasters {
 
 }
 
-exports.Master = Master;
+exports.MasterQuote = MasterQuote;

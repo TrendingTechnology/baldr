@@ -1,7 +1,7 @@
 const assert = require('assert');
 const fs = require('fs');
 const path = require('path');
-const {Master} = require('../index.js');
+const {MasterQuote} = require('../index.js');
 const {document, presentation, getDOM} = require('../../../test/lib/helper.js');
 
 let propObj = {
@@ -13,7 +13,7 @@ let propObj = {
 
 let render = function(data) {
   propObj.data = data;
-  let quote = new Master(propObj);
+  let quote = new MasterQuote(propObj);
   return quote.render();
 };
 

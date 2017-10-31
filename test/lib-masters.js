@@ -8,9 +8,26 @@ const {
   presentation
 } = require('./lib/helper.js');
 
-const Masters = require('../lib/masters.js').Masters;
-const MasterOfMasters = require('../lib/masters.js').MasterOfMasters;
+const {instantiateMaster, Masters, MasterOfMasters} = require('../lib/masters.js');
 const masters = new Masters(document, presentation);
+
+
+describe('Function “instantiateMaster()”', function() {
+  it('simple', function() {
+    let master = instantiateMaster('quote', document, presentation);
+    assert.equal(master.masterName, 'quote');
+  });
+
+  it('propObj', function() {
+    let master = instantiateMaster('quote', document, presentation, {lol: 'troll'});
+    assert.equal(master.lol, 'troll');
+  });
+
+  it('propObj multiple', function() {
+    let master = instantiateMaster('quote', document, presentation, {lol: 'troll', abc: 'xyz'});
+    assert.equal(master.abc, 'xyz');
+  });
+});
 
 describe('Class “MasterOfMasters”', function() {
   beforeEach(function() {
@@ -67,7 +84,7 @@ describe('Class “MasterOfMasters”', function() {
 describe('Class “MasterOfMasters” extended on a example master class (quote)', function() {
 
   beforeEach(function() {
-    let Master = require('../masters/quote').Master;
+    let Master = require('../masters/quote').MasterQuote;
     this.data = {text: 'text', author: 'author'};
     this.master = new Master({
       document: document,

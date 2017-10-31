@@ -10,9 +10,8 @@ const {MasterOfMasters} = require('../../lib/masters');
 /**
  * Master class for the master slide “camera”
  * @class
- * @alias MasterCamera
  */
-class Master extends MasterOfMasters {
+class MasterCamera extends MasterOfMasters {
   constructor(document, data) {
     super(document, data);
   }
@@ -190,4 +189,4 @@ exports.postRender = function(document) {
 };
 /* jshint ignore:end */
 
-exports.Master = Master;
+exports.MasterCamera = MasterCamera;

@@ -10,9 +10,8 @@ const {MasterOfMasters} = require('../../lib/masters');
 /**
  * Master class for the master slide “svg”
  * @class
- * @alias MasterSVG
  */
-class Master extends MasterOfMasters {
+class MasterSvg extends MasterOfMasters {
   constructor(document, data) {
     super(document, data);
   }
@@ -62,8 +61,4 @@ class Master extends MasterOfMasters {
 //
 // window.onload = onLoad;
 
-exports.render = function(data, presentation) {
-
-};
-
-exports.Master = Master;
+exports.MasterSvg = MasterSvg;
