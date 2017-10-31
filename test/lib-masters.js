@@ -1,21 +1,15 @@
-const assert = require('assert');
-const path = require('path');
-const fs = require('fs');
+const {
+  allMasters,
+  assert,
+  document,
+  fs,
+  getDOM,
+  path,
+  presentation
+} = require('./lib/helper.js');
+
 const Masters = require('../lib/masters.js').Masters;
 const MasterOfMasters = require('../lib/masters.js').MasterOfMasters;
-
-const {getDOM, document, presentation} = require('./lib/helper.js');
-
-let all = [
-  'audio',
-  'camera',
-  'editor',
-  'person',
-  'question',
-  'quote',
-  'svg'
-];
-
 const masters = new Masters(document, presentation);
 
 describe('Class “MasterOfMasters”', function() {
@@ -112,25 +106,25 @@ describe('Class “Masters()”', () => {
     });
 
     it('this.all', () => {
-      assert.deepEqual(masters.all, all);
+      assert.deepEqual(masters.all, allMasters);
     });
 
     it('[master].render()', () => {
-      for (let master of all) {
+      for (let master of allMasters) {
         assert.equal(typeof masters[master].render, 'function');
       }
     });
 
-    it('[master].postRender()', () => {
-      for (let master of all) {
-        assert.equal(typeof masters[master].postRender, 'function');
+    it('[master].masterName', () => {
+      for (let master of allMasters) {
+        assert.equal(masters[master].masterName, master);
       }
     });
 
   });
 
   it('Method “getModules()”', () => {
-    assert.deepEqual(masters.getModules(), all);
+    assert.deepEqual(masters.getModules(), allMasters);
   });
 
 });

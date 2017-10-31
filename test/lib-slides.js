@@ -46,39 +46,11 @@ describe('Class “Slides()”', () => {
       }
     ];
 
-    let result = {
-      "1": {
-        "no": 1,
-        "master": "quote",
-        "data": {
-          "text": "text",
-          "author": "author",
-          "date": "date"
-        }
-      },
-      "2": {
-        "no": 2,
-        "master": "question",
-        "data": [
-          {
-            "question": "question",
-            "answer": "answer"
-          },
-
-        ]
-      },
-      "3": {
-        "no": 3,
-        "master": "person",
-        "data": {
-          "name": "name",
-          "image": "image"
-        }
-      }
-    };
-
     let slides = new Slides(minimal, document);
-    //assert.deepEqual(slides.parseSlides(rawYaml), result);
+    let result = slides.parseSlides(rawYaml);
+    assert.equal(result[1].masterName, 'quote')
+    assert.equal(result[2].masterName, 'question')
+    assert.equal(result[3].masterName, 'person')
   });
 
   it('Method “instantiateSlides()”', () => {
