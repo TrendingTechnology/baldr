@@ -89,6 +89,8 @@ var main = function() {
   document.getElementById('button-left').addEventListener('click', previousSlide);
   document.getElementById('button-right').addEventListener('click', nextSlide);
   document.getElementById('modal-open').addEventListener('click', toggleModal);
+  document.getElementById('modal-close').addEventListener('click', toggleModal);
+  mousetrap.bind('esc', toggleModal);
 };
 
 if (require.main === module) {

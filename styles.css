@@ -86,9 +86,7 @@ button:hover {
 	padding: 3em;
 }
 
-#modal .close {
-	font-size: 18pt;
-	padding: 10pt;
+#modal button {
 	position: absolute;
 	top: 0;
 	right: 0;

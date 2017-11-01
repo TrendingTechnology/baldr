@@ -116,4 +116,40 @@ describe('Launch minimal.baldr', function () {
       });
   });
 
+  it('Modal window', function () {
+    return this.app.client
+
+      .click('#modal-open button')
+      .getCssProperty('#modal', 'display').then(style => {
+        assert.equal(style.value, 'block');
+      })
+
+      .click('#modal-open button')
+      .getCssProperty('#modal', 'display').then(style => {
+        assert.equal(style.value, 'none');
+      })
+
+      .click('#modal-open button')
+      .getCssProperty('#modal', 'display').then(style => {
+        assert.equal(style.value, 'block');
+      })
+
+      .click('#modal-close')
+      .getCssProperty('#modal', 'display').then(style => {
+        assert.equal(style.value, 'none');
+      })
+
+      .keys('Escape')
+      .getCssProperty('#modal', 'display').then(style => {
+        assert.equal(style.value, 'block');
+      })
+
+      .keys('Escape')
+      .getCssProperty('#modal', 'display').then(style => {
+        assert.equal(style.value, 'none');
+      })
+
+      ;
+  });
+
 });
