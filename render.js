@@ -71,6 +71,34 @@ var setMaster = function(name) {
 };
 
 /**
+ *
+ */
+var bindFunction = function(binding) {
+  if (binding.keys) {
+    for (let key of binding.keys) {
+      mousetrap.bind(key, binding.function);
+    }
+  }
+
+  if (binding.IDs) {
+    for (let ID of binding.IDs) {
+      document
+        .getElementById(ID)
+        .addEventListener('click', binding.function);
+    }
+  }
+};
+
+/**
+ *
+ */
+var bindFunctions = function(bindings) {
+  for (let binding of bindings) {
+    bindFunction(binding);
+  }
+};
+
+/**
  * @function main
  */
 var main = function() {
@@ -84,13 +112,25 @@ var main = function() {
   );
   masters = new Masters(document, presentation);
   firstSlide();
-  mousetrap.bind('left', previousSlide);
-  mousetrap.bind('right', nextSlide);
-  document.getElementById('button-left').addEventListener('click', previousSlide);
-  document.getElementById('button-right').addEventListener('click', nextSlide);
-  document.getElementById('modal-open').addEventListener('click', toggleModal);
-  document.getElementById('modal-close').addEventListener('click', toggleModal);
-  mousetrap.bind('esc', toggleModal);
+  bindFunctions(
+    [
+      {
+        function: previousSlide,
+        keys: ['left'],
+        IDs: ['button-left']
+      },
+      {
+        function: nextSlide,
+        keys: ['right'],
+        IDs: ['button-right']
+      },
+      {
+        function: toggleModal,
+        keys: ['esc'],
+        IDs: ['modal-open', 'modal-close']
+      }
+    ]
+  );
 };
 
 if (require.main === module) {

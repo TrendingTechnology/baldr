@@ -3,12 +3,11 @@ const {
   document
 } = require('./lib/helper.js');
 
-const rewire = require('rewire')('../render.js');
-rewire.__set__('document', document);
-let toggleModal = rewire.__get__('toggleModal');
-
 describe('“render.js”', function() {
   it('“toggleModal()”', function() {
+    const rewire = require('rewire')('../render.js');
+    rewire.__set__('document', document);
+    let toggleModal = rewire.__get__('toggleModal');
     let modal = document.getElementById('modal');
 
     assert.equal(toggleModal(), 'block');
@@ -19,6 +18,5 @@ describe('“render.js”', function() {
 
     assert.equal(toggleModal(), 'block');
     assert.equal(modal.style.display, 'block');
-
   });
 });
