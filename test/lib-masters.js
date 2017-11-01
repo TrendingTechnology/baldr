@@ -54,6 +54,12 @@ describe('Class “MasterOfMasters”', function() {
       assert.equal(this.mom.elemSlide.nodeName, 'MAIN');
       assert.equal(this.mom.elemSlide.nodeType, 1);
     });
+
+    it('Property “elemModal”', function() {
+      assert.equal(this.mom.elemModal.id, 'modal-content');
+      assert.equal(this.mom.elemModal.nodeName, 'DIV');
+      assert.equal(this.mom.elemModal.nodeType, 1);
+    });
   });
 
   describe('Methods', function() {
