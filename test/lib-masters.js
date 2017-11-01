@@ -51,7 +51,7 @@ describe('Class “MasterOfMasters”', function() {
 
     it('Property “elemSlide”', function() {
       assert.equal(this.mom.elemSlide.id, 'slide');
-      assert.equal(this.mom.elemSlide.nodeName, 'DIV');
+      assert.equal(this.mom.elemSlide.nodeName, 'MAIN');
       assert.equal(this.mom.elemSlide.nodeType, 1);
     });
   });

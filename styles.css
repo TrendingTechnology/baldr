@@ -48,3 +48,28 @@ h1, h2, h3, h4 {
   background-color: inherit;
   border: 0;
 }
+
+/**
+ * modal
+ */
+
+#modal {
+	position: fixed;
+	top: 10%;
+	left: 10%;
+	width: 80%;
+	height: 80%;
+	z-index: 10;
+	outline: 9999px solid rgba(0,0,0,0.5);
+	background-color: white;
+	box-sizing: border-box;
+	padding: 3em;
+}
+
+#modal .close {
+	font-size: 18pt;
+	padding: 10pt;
+	position: absolute;
+	top: 0;
+	right: 0;
+}

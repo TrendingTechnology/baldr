@@ -5,14 +5,24 @@
     <link rel="stylesheet" type="text/css" href="styles.css">
   </head>
   <body>
-    <div id="slide">Currently no slide is loaded!</div>
+    <main id="slide">Currently no slide is loaded!</main>
 
-    <aside id="navigation">
+    <section id="modal" style="display: none">
+      <div class="close button fa fa-times">
+      </div>
+      <div id="field"></div>
+    </section>
+
+    <nav id="modal-open">
+      <button class="fa fa-window-restore"></button>
+    </nav>
+
+    <nav id="navigation">
       <button id="button-up" class="fa fa-angle-up"></button><!--
    --><button id="button-down" class="fa fa-angle-down"></button>
       <button id="button-left" class="fa fa-angle-left"></button>
       <button id="button-right" class="fa fa-angle-right"></button>
-    </aside>
+    </nav>
     <script src="render.js"></script>
   </body>
 </html>
