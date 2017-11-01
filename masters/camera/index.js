@@ -9,14 +9,37 @@ const {MasterOfMasters} = require('../../lib/masters');
 
 /**
  * Master class for the master slide “camera”
+ *
+ * https://webrtc.github.io/samples/
+ * mediaStream.getVideoTracks()[0].getConstraints()
+ *
+ * <code><pre>
+ * navigator.mediaDevices.getSupportedConstraints();
+ * {
+ *   "aspectRatio": true,
+ *   "channelCount": true,
+ *   "depthFar": true,
+ *   "depthNear": true,
+ *   "deviceId": true,
+ *   "echoCancellation": true,
+ *   "facingMode": true,
+ *   "focalLengthX": true,
+ *   "focalLengthY": true,
+ *   "frameRate": true,
+ *   "groupId": true,
+ *   "height": true,
+ *   "latency": true,
+ *   "sampleRate": true,
+ *   "sampleSize": true,
+ *   "videoKind": true,
+ *   "volume": true,
+ *   "width": true
+ * }
+ * </pre></code>
  */
 class MasterCamera extends MasterOfMasters {
   constructor(propObj) {
     super(propObj);
-
-    // var videoElement = document.querySelector('video');
-    // var videoSelect = document.querySelector('select#videoSource');
-    // var selectors = [videoSelect];
   }
 
   /**
@@ -36,28 +59,32 @@ class MasterCamera extends MasterOfMasters {
     return '<video autoplay="true" id="video"></video>';
   }
 
+  /**
+   * Handles being called several times to update labels. Preserve values.
+   */
   gotDevices(deviceInfos) {
-    // Handles being called several times to update labels. Preserve values.
-    var values = selectors.map(function(select) {
+    var values = this.selectors.map(function(select) {
       return select.value;
     });
-    selectors.forEach(function(select) {
+
+    this.selectors.forEach(function(select) {
       while (select.firstChild) {
         select.removeChild(select.firstChild);
       }
     });
     for (var i = 0; i !== deviceInfos.length; ++i) {
       var deviceInfo = deviceInfos[i];
-      var option = document.createElement('option');
+      var option = this.document.createElement('option');
       option.value = deviceInfo.deviceId;
       if (deviceInfo.kind === 'videoinput') {
-        option.text = deviceInfo.label || 'camera ' + (videoSelect.length + 1);
-        videoSelect.appendChild(option);
+        option.text = deviceInfo.label || 'camera ' + (this.elemSelect.length + 1);
+        this.elemSelect.appendChild(option);
       } else {
         console.log('Some other kind of source/device: ', deviceInfo);
       }
     }
-    selectors.forEach(function(select, selectorIndex) {
+
+    this.selectors.forEach(function(select, selectorIndex) {
       if (Array.prototype.slice.call(select.childNodes).some(function(n) {
         return n.value === values[selectorIndex];
       })) {
@@ -92,28 +119,30 @@ class MasterCamera extends MasterOfMasters {
    *
    */
   gotStream(stream) {
-    window.stream = stream; // make stream available to console
-    videoElement.srcObject = stream;
+    this.window.stream = stream; // make stream available to console
+    this.elemVideo.srcObject = stream;
     // Refresh button list in case labels have become available
-    return navigator.mediaDevices.enumerateDevices();
+    return this.navigator.mediaDevices.enumerateDevices();
   }
 
   /**
    *
    */
   start() {
-    if (window.stream) {
-      window.stream.getTracks().forEach(function(track) {
+    if (this.window.stream) {
+      this.window.stream.getTracks().forEach(function(track) {
         track.stop();
       });
     }
-    var videoSource = videoSelect.value;
+    var videoSource = this.elemSelect.value;
     var constraints = {
       audio: false,
       video: {deviceId: videoSource ? {exact: videoSource} : undefined}
     };
-    navigator.mediaDevices.getUserMedia(constraints).
-        then(gotStream).then(gotDevices).catch(handleError);
+    this.navigator.mediaDevices.getUserMedia(constraints)
+      .then(this.gotStream)
+      .then(this.gotDevices)
+      .catch(this.handleError);
   }
 
   /**
@@ -122,62 +151,6 @@ class MasterCamera extends MasterOfMasters {
   handleError(error) {
     console.log('navigator.getUserMedia error: ', error);
   }
-
-  hookPreSet() {
-    navigator.mediaDevices.enumerateDevices().then(gotDevices).catch(handleError);
-    videoSelect.onchange = start;
-    start();
-  }
-
-}
-
-/**
- * https://webrtc.github.io/samples/
- * mediaStream.getVideoTracks()[0].getConstraints()
- *
- * <code><pre>
- * navigator.mediaDevices.getSupportedConstraints();
- * {
- *   "aspectRatio": true,
- *   "channelCount": true,
- *   "depthFar": true,
- *   "depthNear": true,
- *   "deviceId": true,
- *   "echoCancellation": true,
- *   "facingMode": true,
- *   "focalLengthX": true,
- *   "focalLengthY": true,
- *   "frameRate": true,
- *   "groupId": true,
- *   "height": true,
- *   "latency": true,
- *   "sampleRate": true,
- *   "sampleSize": true,
- *   "videoKind": true,
- *   "volume": true,
- *   "width": true
- * }
- * </pre></code>
- */
-
-/* jshint ignore:start */
-
-exports.postRender = function(document) {
-//   navigator.mediaDevices.getUserMedia(
-//     {
-//       audio: false,
-//       video: true,
-//     }
-//   ).then(function(mediaStream) {
-//     var video = document.querySelector('video');
-//     video.src = window.URL.createObjectURL(mediaStream);
-//     video.onloadedmetadata = function(e) {
-//       // Do something with the video here.
-//     };
-//   }).catch(function(err) {
-//     console.log(err.name);
-//   });
-
   /**
    * videoinput: Integrated Camera: Integrated C (04f2:b221) id = 1981dfec8d8861d2407ba74d86a2d777ec4b9d51d11644bad7f20645fd775eb2
    * supportedConstraints
@@ -191,21 +164,19 @@ exports.postRender = function(document) {
    * }
    * </pre></code>
    */
-  // navigator.mediaDevices.enumerateDevices()
-  // .then(function(devices) {
-  //   devices.forEach(function(device) {
-  //     //console.log(device.kind + ": " + device.label +  " id = " + device.deviceId);
-  //   });
-  // })
-  // .catch(function(err) {
-  //   console.log(err.name + ": " + err.message);
-  // });
+  hookPostSet() {
+    this.elemVideo = this.document.querySelector('video');
+    this.elemSelect = this.document.querySelector('select#videoSource');
+    this.selectors = [this.elemSelect];
 
+    this.navigator.mediaDevices
+      .enumerateDevices()
+      .then(this.gotDevices)
+      .catch(this.handleError);
+    this.elemSelect.onchange = this.start;
+    this.start();
+  }
 
-
-
-
-};
-/* jshint ignore:end */
+}
 
 exports.MasterCamera = MasterCamera;
