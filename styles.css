@@ -30,23 +30,43 @@ h1, h2, h3, h4 {
   width: 100%;
 }
 
+/***********************************************************************
+ * nav
+ **********************************************************************/
+
+nav {
+  position: absolute;
+  z-index: 1;
+}
+
+button {
+  color: blue;
+  background-color: inherit;
+  border: 0;
+  font-size: 4vw !important;
+  opacity: 0.2;
+}
+
+button:hover {
+  opacity: 1;
+}
+
 /**
- * Navigation buttons
+ * #navigation
  */
 
 #navigation {
-  position: absolute;
   bottom: 0;
   right: 0;
-  z-index: 1;
-  font-size: 5vw;
-  opacity: 0.1;
 }
 
-#navigation button {
-  color: white;
-  background-color: inherit;
-  border: 0;
+/**
+ * #modal-open
+ */
+
+#modal-open {
+  top: 0;
+  right: 0;
 }
 
 /**

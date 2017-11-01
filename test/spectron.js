@@ -83,6 +83,9 @@ describe('Launch minimal.baldr', function () {
       .getCssProperty('.author', 'font-family').then(style => {
         assert.equal(style.value, 'alegreya sc');
       })
+      .getCssProperty('button', 'color').then(style => {
+        assert.equal(style[0].parsed.hex, '#0000ff');
+      })
 
       .click('#button-right')
       .getText('li')
