@@ -11,8 +11,8 @@ const {MasterOfMasters} = require('../../lib/masters');
  * Master class for the master slide “editor”
  */
 class MasterEditor extends MasterOfMasters {
-  constructor(document, data) {
-    super(document, data);
+  constructor(propObj) {
+    super(propObj);
   }
 
   /**
