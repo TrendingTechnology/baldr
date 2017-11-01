@@ -73,6 +73,20 @@ var setMaster = function(name) {
 /**
  *
  */
+var setMasterCamera = function() {
+  setMaster('camera');
+};
+
+/**
+ *
+ */
+var setMasterEditor = function() {
+  setMaster('editor');
+};
+
+/**
+ *
+ */
 var bindFunction = function(binding) {
   if (binding.keys) {
     for (let key of binding.keys) {
@@ -128,6 +142,14 @@ var main = function() {
         function: toggleModal,
         keys: ['esc'],
         IDs: ['modal-open', 'modal-close']
+      },
+      {
+        function: setMasterCamera,
+        keys: ['c']
+      },
+      {
+        function: setMasterEditor,
+        keys: ['e']
       }
     ]
   );
