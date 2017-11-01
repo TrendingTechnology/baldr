@@ -15,12 +15,12 @@ let propObj = {
 let render = function(data) {
   propObj.data = data;
   let person = new MasterPerson(propObj);
-  return person.render();
+  return person.setHTMLSlide();
 };
 
 describe('Master slide “person”', () => {
 
-  it('function “render()”', () => {
+  it('function “setHTMLSlide()”', () => {
 
     let html = render({
       name: 'Ludwig van Beethoven',

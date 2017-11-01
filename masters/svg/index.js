@@ -18,7 +18,7 @@ class MasterSvg extends MasterOfMasters {
   /**
    *
    */
-  render() {
+  setHTMLSlide() {
     return 'svg';
   }
 }

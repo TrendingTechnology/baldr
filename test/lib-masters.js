@@ -132,9 +132,33 @@ describe('Class “Masters()”', () => {
       assert.deepEqual(masters.all, allMasters);
     });
 
-    it('[master].render()', () => {
+    it('[master].hasCSS()', () => {
       for (let master of allMasters) {
-        assert.equal(typeof masters[master].render, 'function');
+        assert.equal(typeof masters[master].hasCSS, 'function');
+      }
+    });
+
+    it('[master].setCSS()', () => {
+      for (let master of allMasters) {
+        assert.equal(typeof masters[master].setCSS, 'function');
+      }
+    });
+
+    it('[master].setHTMLSlide()', () => {
+      for (let master of allMasters) {
+        assert.equal(typeof masters[master].setHTMLSlide, 'function');
+      }
+    });
+
+    it('[master].setHTMLModal()', () => {
+      for (let master of allMasters) {
+        assert.equal(typeof masters[master].setHTMLModal, 'function');
+      }
+    });
+
+    it('[master].set()', () => {
+      for (let master of allMasters) {
+        assert.equal(typeof masters[master].set, 'function');
       }
     });
 

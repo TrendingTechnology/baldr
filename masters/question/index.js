@@ -25,7 +25,7 @@ class MasterQuestion extends MasterOfMasters {
   /**
    *
    */
-  render() {
+  setHTMLSlide() {
     let out = '';
     for (let question of this.data) {
       out = out + this.renderQuestion(question.question, question.answer);

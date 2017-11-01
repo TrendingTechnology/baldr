@@ -66,7 +66,9 @@ describe('Class “Slides()”', () => {
     let slide = slides.instantiateSlide(rawSlideObj, 0);
     assert.equal(slide.slideNo, 1);
     assert.equal(slide.masterName, 'quote');
-    assert.equal(typeof slide.render, 'function');
+    assert.equal(typeof slide.setHTMLSlide, 'function');
+    assert.equal(typeof slide.setHTMLModal, 'function');
+
   });
 
   it('Method “parse()”', () => {

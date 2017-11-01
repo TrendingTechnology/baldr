@@ -18,7 +18,7 @@ class MasterCamera extends MasterOfMasters {
   /**
    *
    */
-  renderModal() {
+  setHTMLModal() {
     return `
     <div class="select">
       <label for="videoSource">Video source: </label><select id="videoSource"></select>
@@ -29,7 +29,7 @@ class MasterCamera extends MasterOfMasters {
   /**
    *
    */
-  render() {
+  setHTMLSlide() {
     return '<video autoplay="true" id="video"></video>';
   }
 
