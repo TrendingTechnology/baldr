@@ -14,6 +14,25 @@ let masters;
 let presentation;
 
 /**
+ * Toogle the modal window
+ */
+var toggleModal = function() {
+  let modal = document.getElementById('modal');
+  let state = modal.style.display;
+  if (state === 'none') {
+    modal.style.display = 'block';
+    return 'block';
+  }
+  else if (state === 'block') {
+    modal.style.display = 'none';
+    return 'none';
+  }
+  else {
+    return false;
+  }
+};
+
+/**
  * Update the HTML structure with the code of the previous slide.
  * @function previousSlide
  */
@@ -51,14 +70,14 @@ var setMaster = function(name) {
   master.set();
 };
 
-ipcRenderer.on('set-master', function(event, masterName) {
-  setMaster(masterName);
-});
-
 /**
  * @function main
  */
 var main = function() {
+  ipcRenderer.on('set-master', function(event, masterName) {
+    setMaster(masterName);
+  });
+
   presentation = new Presentation(
     misc.searchForBaldrFile(remote.process.argv),
     document
@@ -69,6 +88,7 @@ var main = function() {
   mousetrap.bind('right', nextSlide);
   document.getElementById('button-left').addEventListener('click', previousSlide);
   document.getElementById('button-right').addEventListener('click', nextSlide);
+  document.getElementById('modal-open').addEventListener('click', toggleModal);
 };
 
 if (require.main === module) {
