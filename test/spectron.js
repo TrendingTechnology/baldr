@@ -83,12 +83,30 @@ describe('Launch minimal.baldr', function () {
       .getCssProperty('.author', 'font-family').then(style => {
         assert.equal(style.value, 'alegreya sc');
       })
+
       .click('#button-right')
       .getText('li')
       .then(text => {
         assert.equal(text, 'Wann starb Ludwig van Beethoven?: 1827');
       })
+
       .click('#button-right')
+      .getText('p')
+      .then(text => {
+        assert.equal(text, 'Ludwig van Beethoven');
+      });
+  });
+
+  it('Shortcuts', function () {
+    return this.app.client
+
+      .keys('ArrowRight')
+      .getText('li')
+      .then(text => {
+        assert.equal(text, 'Wann starb Ludwig van Beethoven?: 1827');
+      })
+
+      .keys('ArrowRight')
       .getText('p')
       .then(text => {
         assert.equal(text, 'Ludwig van Beethoven');
