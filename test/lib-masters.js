@@ -31,7 +31,7 @@ describe('Function “instantiateMaster()”', function() {
 
 describe('Class “MasterOfMasters”', function() {
   beforeEach(function() {
-    this.mom = new MasterOfMasters({
+    this.MoM = new MasterOfMasters({
       document: document,
       data: this.data,
       masterPath: path.resolve(__dirname, '..', 'masters', 'quote'),
@@ -41,45 +41,45 @@ describe('Class “MasterOfMasters”', function() {
 
   it('Instantiation', function() {
     assert.equal(typeof MasterOfMasters, 'function');
-    assert.equal(typeof this.mom, 'object');
+    assert.equal(typeof this.MoM, 'object');
   });
 
   describe('Properties', function() {
     it('Property “document”', function() {
-      assert.equal(typeof this.mom.document, 'object');
+      assert.equal(typeof this.MoM.document, 'object');
     });
 
     it('Property “elemSlide”', function() {
-      assert.equal(this.mom.elemSlide.id, 'slide');
-      assert.equal(this.mom.elemSlide.nodeName, 'MAIN');
-      assert.equal(this.mom.elemSlide.nodeType, 1);
+      assert.equal(this.MoM.elemSlide.id, 'slide');
+      assert.equal(this.MoM.elemSlide.nodeName, 'MAIN');
+      assert.equal(this.MoM.elemSlide.nodeType, 1);
     });
 
     it('Property “elemModal”', function() {
-      assert.equal(this.mom.elemModal.id, 'modal-content');
-      assert.equal(this.mom.elemModal.nodeName, 'DIV');
-      assert.equal(this.mom.elemModal.nodeType, 1);
+      assert.equal(this.MoM.elemModal.id, 'modal-content');
+      assert.equal(this.MoM.elemModal.nodeName, 'DIV');
+      assert.equal(this.MoM.elemModal.nodeType, 1);
     });
   });
 
   describe('Methods', function() {
     it('Method “hasCSS()”', function() {
-      assert.equal(typeof this.mom.hasCSS, 'function');
-      assert.equal(this.mom.hasCSS(), true);
+      assert.equal(typeof this.MoM.hasCSS, 'function');
+      assert.equal(this.MoM.hasCSS(), true);
     });
 
     it('Method “setCSS()”', function() {
-      this.mom.setCSS();
+      this.MoM.setCSS();
       assert.equal(
-        typeof this.mom.document.querySelector('link#current-master'),
+        typeof this.MoM.document.querySelector('link#current-master'),
         'object'
       );
     });
 
     it('Method “set()”', function() {
-      this.mom.set();
+      this.MoM.set();
       assert.equal(
-        this.mom.elemSlide.innerHTML,
+        this.MoM.elemSlide.innerHTML,
         'No slide loaded.'
       );
     });
