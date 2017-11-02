@@ -27,11 +27,19 @@ class MasterQuestion extends MasterOfMasters {
   /**
    *
    */
-  selectElemHide() {
-    let elem = this.document.querySelectorAll('p');
+  initSteps() {
+    let elements = this.document.querySelectorAll('p');
+    this.stepCount = elements.length;
+    elements.forEach((element, index) => {
+      this.stepData[index + 1] = element;
+    });
     elem.forEach(elem => {elem.style.visibility = 'hidden';});
     elem[0].style.visibility = 'visible';
     return elem;
+  }
+
+  setStep() {
+    this.stepData[this.stepNo].style.visibility = 'visible';
   }
 
   /**

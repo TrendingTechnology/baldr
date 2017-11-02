@@ -9,6 +9,8 @@ const {MasterOfMasters} = require('../../lib/masters');
 
 /**
  * Master class for the master slide “quote”
+ *
+ * @implements {MasterOfMasters}
  */
 class MasterQuote extends MasterOfMasters {
 
