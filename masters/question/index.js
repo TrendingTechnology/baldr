@@ -9,10 +9,21 @@ const {MasterOfMasters} = require('../../lib/masters');
 
 /**
  * Master class for the master slide “question”
+ *
+ * Types:
+ *  - single
+ *    - without answer
+ *    - with answer
+ *  - multiple
+ *    - without answer
+ *    - with answer
  */
 class MasterQuestion extends MasterOfMasters {
+
   constructor(propObj) {
     super(propObj);
+
+
   }
 
   /**
