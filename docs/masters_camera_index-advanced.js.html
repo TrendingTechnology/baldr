@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: masters/camera/index-advanced.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: masters/camera/index-advanced.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @file Master slide “camera”
+ * @module masters/camera
+ */
+
+'use strict';
+
+const {MasterOfMasters} = require('../../lib/masters');
+
+/**
+ * Master class for the master slide “camera”
+ *
+ * https://webrtc.github.io/samples/
+ * mediaStream.getVideoTracks()[0].getConstraints()
+ *
+ * &lt;code>&lt;pre>
+ * navigator.mediaDevices.getSupportedConstraints();
+ * {
+ *   "aspectRatio": true,
+ *   "channelCount": true,
+ *   "depthFar": true,
+ *   "depthNear": true,
+ *   "deviceId": true,
+ *   "echoCancellation": true,
+ *   "facingMode": true,
+ *   "focalLengthX": true,
+ *   "focalLengthY": true,
+ *   "frameRate": true,
+ *   "groupId": true,
+ *   "height": true,
+ *   "latency": true,
+ *   "sampleRate": true,
+ *   "sampleSize": true,
+ *   "videoKind": true,
+ *   "volume": true,
+ *   "width": true
+ * }
+ * &lt;/pre>&lt;/code>
+ */
+class MasterCamera extends MasterOfMasters {
+  constructor(propObj) {
+    super(propObj);
+  }
+
+  /**
+   *
+   */
+  setHTMLModal() {
+    return `
+    &lt;div class="select">
+      &lt;label for="videoSource">Video source: &lt;/label>&lt;select id="videoSource">&lt;/select>
+    &lt;/div>`;
+  }
+
+  /**
+   *
+   */
+  setHTMLSlide() {
+    return '&lt;video autoplay="true" id="video">&lt;/video>';
+  }
+
+  /**
+   * Handles being called several times to update labels. Preserve values.
+   */
+  gotDevices(deviceInfos) {
+    var values = this.selectors.map(function(select) {
+      return select.value;
+    });
+
+    this.selectors.forEach(function(select) {
+      while (select.firstChild) {
+        select.removeChild(select.firstChild);
+      }
+    });
+    for (var i = 0; i !== deviceInfos.length; ++i) {
+      var deviceInfo = deviceInfos[i];
+      var option = this.document.createElement('option');
+      option.value = deviceInfo.deviceId;
+      if (deviceInfo.kind === 'videoinput') {
+        option.text = deviceInfo.label || 'camera ' + (this.elemSelect.length + 1);
+        this.elemSelect.appendChild(option);
+      } else {
+        console.log('Some other kind of source/device: ', deviceInfo);
+      }
+    }
+
+    this.selectors.forEach(function(select, selectorIndex) {
+      if (Array.prototype.slice.call(select.childNodes).some(function(n) {
+        return n.value === values[selectorIndex];
+      })) {
+        select.value = values[selectorIndex];
+      }
+    });
+  }
+
+  /**
+   * Attach audio output device to video element using device/sink ID.
+   */
+  attachSinkId(element, sinkId) {
+    if (typeof element.sinkId !== 'undefined') {
+      element.setSinkId(sinkId)
+      .then(function() {
+        console.log('Success, audio output device attached: ' + sinkId);
+      })
+      .catch(function(error) {
+        var errorMessage = error;
+        if (error.name === 'SecurityError') {
+          errorMessage = 'You need to use HTTPS for selecting audio output ' +
+              'device: ' + error;
+        }
+        console.error(errorMessage);
+      });
+    } else {
+      console.warn('Browser does not support output device selection.');
+    }
+  }
+
+  /**
+   *
+   */
+  gotStream(stream) {
+    this.window.stream = stream; // make stream available to console
+    this.elemVideo.srcObject = stream;
+    // Refresh button list in case labels have become available
+    return this.navigator.mediaDevices.enumerateDevices();
+  }
+
+  /**
+   *
+   */
+  start() {
+    if (this.window.stream) {
+      this.window.stream.getTracks().forEach(function(track) {
+        track.stop();
+      });
+    }
+    var videoSource = this.elemSelect.value;
+    var constraints = {
+      audio: false,
+      video: {deviceId: videoSource ? {exact: videoSource} : undefined}
+    };
+    this.navigator.mediaDevices.getUserMedia(constraints)
+      .then(this.gotStream)
+      .then(this.gotDevices)
+      .catch(this.handleError);
+  }
+
+  /**
+   *
+   */
+  handleError(error) {
+    console.log('navigator.getUserMedia error: ', error);
+  }
+  /**
+   * videoinput: Integrated Camera: Integrated C (04f2:b221) id = 1981dfec8d8861d2407ba74d86a2d777ec4b9d51d11644bad7f20645fd775eb2
+   * supportedConstraints
+   *
+   * &lt;code>&lt;pre>
+   * {
+   *   "deviceId": "21c19a409344f4bee3a71d7b1b14d1bb452dcd86cba8c9c5136a992c33241c08",
+   *   "kind": "videoinput",
+   *   "label": "USB Webcam (0bda:5727)",
+   *   "groupId": ""
+   * }
+   * &lt;/pre>&lt;/code>
+   */
+  hookPostSet() {
+    this.elemVideo = this.document.querySelector('video');
+    this.elemSelect = this.document.querySelector('select#videoSource');
+    this.selectors = [this.elemSelect];
+
+    this.navigator.mediaDevices
+      .enumerateDevices()
+      .then(this.gotDevices)
+      .catch(this.handleError);
+    this.elemSelect.onchange = this.start;
+    this.start();
+  }
+
+}
+
+exports.MasterCamera = MasterCamera;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-baldr.html">baldr</a></li><li><a href="module-lib_masters.html">lib/masters</a></li><li><a href="module-lib_misc.html">lib/misc</a></li><li><a href="module-lib_presentation.html">lib/presentation</a></li><li><a href="module-lib_slides.html">lib/slides</a></li><li><a href="module-masters_audio.html">masters/audio</a></li><li><a href="module-masters_camera.html">masters/camera</a></li><li><a href="module-masters_editor.html">masters/editor</a></li><li><a href="module-masters_person.html">masters/person</a></li><li><a href="module-masters_question.html">masters/question</a></li><li><a href="module-masters_quote.html">masters/quote</a></li><li><a href="module-masters_svg.html">masters/svg</a></li></ul><h3>Classes</h3><ul><li><a href="module-lib_masters-MasterOfMasters.html">MasterOfMasters</a></li><li><a href="module-lib_masters-Masters.html">Masters</a></li><li><a href="module-lib_presentation-Presentation.html">Presentation</a></li><li><a href="module-lib_slides-Slides.html">Slides</a></li><li><a href="module-masters_audio-MasterAudio.html">MasterAudio</a></li><li><a href="module-masters_camera-MasterCamera.html">MasterCamera</a></li><li><a href="module-masters_editor-MasterEditor.html">MasterEditor</a></li><li><a href="module-masters_person-MasterPerson.html">MasterPerson</a></li><li><a href="module-masters_question-MasterQuestion.html">MasterQuestion</a></li><li><a href="module-masters_quote-MasterQuote.html">MasterQuote</a></li><li><a href="module-masters_svg-MasterSvg.html">MasterSvg</a></li></ul><h3>Global</h3><ul><li><a href="global.html#bindFunction">bindFunction</a></li><li><a href="global.html#bindFunctions">bindFunctions</a></li><li><a href="global.html#firstSlide">firstSlide</a></li><li><a href="global.html#main">main</a></li><li><a href="global.html#nextSlide">nextSlide</a></li><li><a href="global.html#previousSlide">previousSlide</a></li><li><a href="global.html#setMaster">setMaster</a></li><li><a href="global.html#setMasterCamera">setMasterCamera</a></li><li><a href="global.html#setMasterEditor">setMasterEditor</a></li><li><a href="global.html#toggleModal">toggleModal</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu Nov 02 2017 09:26:10 GMT+0100 (CET)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

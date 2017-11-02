@@ -29,7 +29,14 @@ class MasterQuestion extends MasterOfMasters {
   /**
    *
    */
-  renderQuestion(question, answer) {
+  normalizeData(data) {
+    return `<li>${question}: ${answer}</li>`;
+  }
+
+  /**
+   *
+   */
+  renderQuestionAnswerPair(question, answer) {
     return `<li>${question}: ${answer}</li>`;
   }
 
