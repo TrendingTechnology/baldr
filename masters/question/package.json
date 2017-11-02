@@ -15,5 +15,12 @@
   "bugs": {
     "url": "https://github.com/JosefFriedrich-nodejs/baldr/issues"
   },
-  "homepage": "https://github.com/JosefFriedrich-nodejs/baldr#readme"
+  "homepage": "https://github.com/JosefFriedrich-nodejs/baldr#readme",
+  "devDependencies": {
+    "jsdom": "^11.3.0",
+    "mocha": "^4.0.1"
+  },
+  "scripts": {
+    "test": "mocha"
+  }
 }
