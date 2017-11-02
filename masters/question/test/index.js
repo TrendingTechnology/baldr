@@ -164,4 +164,13 @@ describe('Master slide “question”', () => {
     );
   });
 
+  it('method “selectElemHide()”', () => {
+    let question = getQuestion('A question');
+    question.set();
+    assert.equal(
+      question.selectElemHide()[0].textContent,
+      'A question'
+    );
+  });
+
 });

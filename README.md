@@ -43,3 +43,8 @@ npm run dist
 pacman -U dist/baldur-0.0.1.pacman
 dpkg -i dist/baldur-0.0.1.deb
 ```
+
+# Navigation
+
+* Cursor/Arrow symbol left / right: slides
+* Cursor/Arrow symbol up / down: steps

@@ -27,6 +27,16 @@ class MasterQuestion extends MasterOfMasters {
   /**
    *
    */
+  selectElemHide() {
+    let elem = this.document.querySelectorAll('p');
+    elem.forEach(elem => {elem.style.visibility = 'hidden';});
+    elem[0].style.visibility = 'visible';
+    return elem;
+  }
+
+  /**
+   *
+   */
   normalizeDataQAPair(pair) {
     if (typeof pair === 'string') {
       return {question: pair, answer: false};
@@ -105,6 +115,12 @@ class MasterQuestion extends MasterOfMasters {
       '</div>';
   }
 
+  /**
+   *
+   */
+  hookPostSet() {
+    this.selectElemHide();
+  }
 }
 
 exports.MasterQuestion = MasterQuestion;
