@@ -68,10 +68,10 @@ class MasterQuestion extends MasterOfMasters {
   templatQAPair(question, answer) {
     let out = '';
     if (question) {
-      out += `<p class="question">${question}</p>`
+      out += `<p class="question">${question}</p>`;
     }
     if (answer) {
-      out += `<p class="answer">${answer}</p>`
+      out += `<p class="answer">${answer}</p>`;
     }
     return out;
   }
@@ -88,10 +88,10 @@ class MasterQuestion extends MasterOfMasters {
           this.templatQAPair(pair.question, pair.answer) +
           '</li>';
       }
-      return `<ol>${li}</ol>`
+      return `<ol>${li}</ol>`;
     }
     else {
-      return this.templatQAPair(data[0].question, data[0].answer)
+      return this.templatQAPair(data[0].question, data[0].answer);
     }
   }
 
@@ -100,7 +100,9 @@ class MasterQuestion extends MasterOfMasters {
    */
   setHTMLSlide() {
     let data = this.normalizeData(this.data);
-    return this.template(data);
+    return '<div id="question-content">' +
+      this.template(data) +
+      '</div>';
   }
 
 }

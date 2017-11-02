@@ -1,0 +1,24 @@
+#slide {
+  font-size: 4vw;
+  display: table;
+}
+
+#question-content {
+  padding-left: 20%;
+  padding-right: 20%;
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.answer {
+  font-style: italic;
+}
+
+p {
+  margin: 0;
+}
+
+li {
+  margin-top: 2vw;
+  margin-bottom: 2vw;
+}

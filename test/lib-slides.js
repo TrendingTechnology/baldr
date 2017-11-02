@@ -18,7 +18,7 @@ describe('Class “Slides()”', () => {
     let slides = new Slides(minimal, document);
     let yml = slides.readYamlFile(minimal);
     assert.equal(yml[0].quote.author, 'Johann Wolfgang von Goethe');
-    assert.equal(yml[1].question[0].answer, 1827);
+    assert.equal(yml[1].question, 'When did Ludwig van Beethoven die?');
   });
 
   it('Method “parseSlides()”', () => {

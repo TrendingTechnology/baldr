@@ -88,9 +88,9 @@ describe('Launch minimal.baldr', function () {
       })
 
       .click('#button-right')
-      .getText('li')
+      .getText('.question')
       .then(text => {
-        assert.equal(text, 'Wann starb Ludwig van Beethoven?: 1827');
+        assert.equal(text, 'When did Ludwig van Beethoven die?');
       })
 
       .click('#button-right')
@@ -104,9 +104,9 @@ describe('Launch minimal.baldr', function () {
     return this.app.client
 
       .keys('ArrowRight')
-      .getText('li')
+      .getText('.question')
       .then(text => {
-        assert.equal(text, 'Wann starb Ludwig van Beethoven?: 1827');
+        assert.equal(text, 'When did Ludwig van Beethoven die?');
       })
 
       .keys('ArrowRight')
