@@ -66,32 +66,41 @@ class MasterQuestion extends MasterOfMasters {
    *
    */
   templatQAPair(question, answer) {
-    return '';
+    let out = '';
+    if (question) {
+      out += `<p class="question">${question}</p>`
+    }
+    if (answer) {
+      out += `<p class="answer">${answer}</p>`
+    }
+    return out;
   }
 
   /**
    *
    */
-  template(normalizedData) {
-    return '`<li>${question}: ${answer}</li>`';
-  }
-
-  /**
-   *
-   */
-  renderQuestion(question, answer) {
-    return `<li>${question}: ${answer}</li>`;
+  template(data) {
+    if (data.length > 1) {
+      let li = '';
+      for (let pair of data) {
+        li +=
+          '<li>' +
+          this.templatQAPair(pair.question, pair.answer) +
+          '</li>';
+      }
+      return `<ol>${li}</ol>`
+    }
+    else {
+      return this.templatQAPair(data[0].question, data[0].answer)
+    }
   }
 
   /**
    *
    */
   setHTMLSlide() {
-    let out = '';
-    for (let question of this.data) {
-      out = out + this.renderQuestion(question.question, question.answer);
-    }
-    return `<ul>${out}</ul>`;
+    let data = this.normalizeData(this.data);
+    return this.template(data);
   }
 
 }

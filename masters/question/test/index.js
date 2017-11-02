@@ -38,7 +38,7 @@ let dataMultipleWithAnswer = [
 
 describe('Master slide “question”', () => {
 
-  it('function “normalizeData()”', () => {
+  it('method “normalizeData()”', () => {
     let question = getQuestion('');
 
     assert.deepEqual(
@@ -67,6 +67,7 @@ describe('Master slide “question”', () => {
       ]
     );
 
+    // TODO: Test error handling
     // let invalidData = function(data) {
     //   try {
     //     question.normalizeData(data);
@@ -80,6 +81,87 @@ describe('Master slide “question”', () => {
     // invalidData(false);
     // invalidData(true);
     // invalidData({lol: 'lol', troll: 'troll'});
+  });
+
+
+  it('method “templatQAPair()”', () => {
+    let question = getQuestion('');
+    let html = question.templatQAPair('question', 'answer');
+    let dom = getDOM(html);
+    assert.equal(
+      dom.querySelector('.question').textContent,
+      'question'
+    );
+    assert.equal(
+      dom.querySelector('.answer').textContent,
+      'answer'
+    );
+  });
+
+  it('method “templatQAPair()”: answer empty string', () => {
+    let question = getQuestion('');
+    let html = question.templatQAPair('question', '');
+    let dom = getDOM(html);
+    assert.equal(
+      dom.querySelector('.answer'),
+      null
+    );
+  });
+
+  it('method “setHTMLSlide()”: dataSingleWithout', () => {
+    let question = getQuestion(dataSingleWithout);
+    let html = question.setHTMLSlide();
+    let dom = getDOM(html);
+    assert.equal(
+      dom.querySelector('.question').textContent,
+      'One?'
+    );
+    assert.equal(
+      dom.querySelector('.answer'),
+      null
+    );
+  });
+
+  it('method “setHTMLSlide()”: dataSingleWithAnswer', () => {
+    let question = getQuestion(dataSingleWithAnswer);
+    let html = question.setHTMLSlide();
+    let dom = getDOM(html);
+    assert.equal(
+      dom.querySelector('.question').textContent,
+      'One?'
+    );
+    assert.equal(
+      dom.querySelector('.answer').textContent,
+      'One'
+    );
+  });
+
+  it('method “setHTMLSlide()”: dataMultipleWithout', () => {
+    let question = getQuestion(dataMultipleWithout);
+    let html = question.setHTMLSlide();
+    let dom = getDOM(html);
+    assert.equal(
+      dom.querySelector('ol li:nth-child(1) p.question').textContent,
+      'One?'
+    );
+    assert.equal(
+      dom.querySelector('ol li:nth-child(2) p.answer'),
+      null
+    );
+  });
+
+  it('method “setHTMLSlide()”: dataMultipleWithAnswer', () => {
+    let question = getQuestion(dataMultipleWithAnswer);
+    let html = question.setHTMLSlide();
+    let dom = getDOM(html);
+    assert.equal(
+      dom.querySelector('ol li:nth-child(1) p.question').textContent,
+      'One?'
+    );
+    assert.equal(
+      dom.querySelector('ol li:nth-child(2) p.answer').textContent,
+      'Two'
+    );
   });
 
 });
