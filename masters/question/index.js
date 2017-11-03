@@ -81,12 +81,16 @@ class MasterQuestion extends MasterOfMasters {
    */
   setByStepNo(no) {
     for (let i = 1; i <= this.stepCount; i++) {
-      let visibility = this.stepData[i].style.visibility;
-      if ((visibility === 'visible' || !visibility) && no >= i) {
+      if (!this.stepData[i].style.visibility) {
         this.stepData[i].style.visibility = 'visible';
       }
-      else if (no < i) {
+
+      let visibility = this.stepData[i].style.visibility;
+      if (visibility === 'visible' && no < i) {
         this.stepData[i].style.visibility = 'hidden';
+      }
+      else if (visibility === 'hidden' && no >= i) {
+        this.stepData[i].style.visibility = 'visible';
       }
     }
   }
@@ -143,14 +147,14 @@ class MasterQuestion extends MasterOfMasters {
    *
    */
   hookPrevStep() {
-    this.stepData[this.stepNo].style.visibility = 'hidden';
+    this.setByStepNo(this.stepNo);
   }
 
   /**
    *
    */
   hookNextStep() {
-    this.stepData[this.stepNo].style.visibility = 'visible';
+    this.setByStepNo(this.stepNo);
   }
 
 }
