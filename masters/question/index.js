@@ -80,6 +80,7 @@ class MasterQuestion extends MasterOfMasters {
    *
    */
   setByStepNo(no) {
+    console.log(no);
     for (let i = 1; i <= this.stepCount; i++) {
       if (!this.stepData[i].style.visibility) {
         this.stepData[i].style.visibility = 'visible';
@@ -87,9 +88,11 @@ class MasterQuestion extends MasterOfMasters {
 
       let visibility = this.stepData[i].style.visibility;
       if (visibility === 'visible' && no < i) {
+        console.log('hide no:' + no)
         this.stepData[i].style.visibility = 'hidden';
       }
       else if (visibility === 'hidden' && no >= i) {
+        console.log('hide show:' + no)
         this.stepData[i].style.visibility = 'visible';
       }
     }
@@ -127,19 +130,21 @@ class MasterQuestion extends MasterOfMasters {
   /**
    *
    */
-  hookInitSteps() {
+  hookPostFirstSet() {
+    this.stepNo = 1;
+  }
+
+  /**
+   * The stepData object has to be filled very time a slide is set.
+   * Every time a slide is set, new HTML elements are generated.
+   */
+  hookPostSet() {
     let elements = this.document.querySelectorAll('p');
     this.stepCount = elements.length;
     elements.forEach((element, index) => {
       this.stepData[index + 1] = element;
     });
-    this.stepNo = 1;
-  }
 
-  /**
-   *
-   */
-  hookPostSet() {
     this.setByStepNo(this.stepNo);
   }
 
