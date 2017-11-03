@@ -19,7 +19,7 @@ class MasterPerson extends MasterOfMasters {
   /**
    *
    */
-  setHTMLSlide() {
+  hookSetHTMLSlide() {
     return `
   <section id="master-person">
 

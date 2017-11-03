@@ -18,7 +18,7 @@ class MasterAudio extends MasterOfMasters {
   /**
    *
    */
-  setHTMLSlide() {
+  hookSetHTMLSlide() {
     return 'audio';
   }
 

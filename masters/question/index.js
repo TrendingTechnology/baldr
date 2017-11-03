@@ -27,16 +27,6 @@ class MasterQuestion extends MasterOfMasters {
   /**
    *
    */
-  selectElemHide() {
-    let elem = this.document.querySelectorAll('p');
-    elem.forEach(elem => {elem.style.visibility = 'hidden';});
-    elem[0].style.visibility = 'visible';
-    return elem;
-  }
-
-  /**
-   *
-   */
   normalizeDataQAPair(pair) {
     if (typeof pair === 'string') {
       return {question: pair, answer: false};
@@ -89,6 +79,25 @@ class MasterQuestion extends MasterOfMasters {
   /**
    *
    */
+  setByStepNo(no) {
+    for (let i = 1; i <= this.stepCount; i++) {
+      if (!this.stepData[i].style.visibility) {
+        this.stepData[i].style.visibility = 'visible';
+      }
+
+      let visibility = this.stepData[i].style.visibility;
+      if (visibility === 'visible' && no < i) {
+        this.stepData[i].style.visibility = 'hidden';
+      }
+      else if (visibility === 'hidden' && no >= i) {
+        this.stepData[i].style.visibility = 'visible';
+      }
+    }
+  }
+
+  /**
+   *
+   */
   template(data) {
     if (data.length > 1) {
       let li = '';
@@ -108,7 +117,7 @@ class MasterQuestion extends MasterOfMasters {
   /**
    *
    */
-  setHTMLSlide() {
+  hookSetHTMLSlide() {
     let data = this.normalizeData(this.data);
     return '<div id="question-content">' +
       this.template(data) +
@@ -118,9 +127,36 @@ class MasterQuestion extends MasterOfMasters {
   /**
    *
    */
-  hookPostSet() {
-    this.selectElemHide();
+  hookInitSteps() {
+    let elements = this.document.querySelectorAll('p');
+    this.stepCount = elements.length;
+    elements.forEach((element, index) => {
+      this.stepData[index + 1] = element;
+    });
+    this.stepNo = 1;
   }
+
+  /**
+   *
+   */
+  hookPostSet() {
+    this.setByStepNo(this.stepNo);
+  }
+
+  /**
+   *
+   */
+  hookPrevStep() {
+    this.setByStepNo(this.stepNo);
+  }
+
+  /**
+   *
+   */
+  hookNextStep() {
+    this.setByStepNo(this.stepNo);
+  }
+
 }
 
 exports.MasterQuestion = MasterQuestion;

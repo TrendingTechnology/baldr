@@ -21,10 +21,10 @@ let getQuestion = function(data) {
   return new MasterQuestion(propObj);
 };
 
-let setHTMLSlide = function(data) {
+let hookSetHTMLSlide = function(data) {
   propObj.data = data;
   let question = new MasterQuestion(propObj);
-  return quote.setHTMLSlide();
+  return quote.hookSetHTMLSlide();
 };
 
 let dataSingleWithout = 'One?';
@@ -108,9 +108,9 @@ describe('Master slide “question”', () => {
     );
   });
 
-  it('method “setHTMLSlide()”: dataSingleWithout', () => {
+  it('method “hookSetHTMLSlide()”: dataSingleWithout', () => {
     let question = getQuestion(dataSingleWithout);
-    let html = question.setHTMLSlide();
+    let html = question.hookSetHTMLSlide();
     let dom = getDOM(html);
     assert.equal(
       dom.querySelector('.question').textContent,
@@ -122,9 +122,9 @@ describe('Master slide “question”', () => {
     );
   });
 
-  it('method “setHTMLSlide()”: dataSingleWithAnswer', () => {
+  it('method “hookSetHTMLSlide()”: dataSingleWithAnswer', () => {
     let question = getQuestion(dataSingleWithAnswer);
-    let html = question.setHTMLSlide();
+    let html = question.hookSetHTMLSlide();
     let dom = getDOM(html);
     assert.equal(
       dom.querySelector('.question').textContent,
@@ -136,9 +136,9 @@ describe('Master slide “question”', () => {
     );
   });
 
-  it('method “setHTMLSlide()”: dataMultipleWithout', () => {
+  it('method “hookSetHTMLSlide()”: dataMultipleWithout', () => {
     let question = getQuestion(dataMultipleWithout);
-    let html = question.setHTMLSlide();
+    let html = question.hookSetHTMLSlide();
     let dom = getDOM(html);
     assert.equal(
       dom.querySelector('ol li:nth-child(1) p.question').textContent,
@@ -150,9 +150,9 @@ describe('Master slide “question”', () => {
     );
   });
 
-  it('method “setHTMLSlide()”: dataMultipleWithAnswer', () => {
+  it('method “hookSetHTMLSlide()”: dataMultipleWithAnswer', () => {
     let question = getQuestion(dataMultipleWithAnswer);
-    let html = question.setHTMLSlide();
+    let html = question.hookSetHTMLSlide();
     let dom = getDOM(html);
     assert.equal(
       dom.querySelector('ol li:nth-child(1) p.question').textContent,
@@ -164,13 +164,61 @@ describe('Master slide “question”', () => {
     );
   });
 
-  it('method “selectElemHide()”', () => {
-    let question = getQuestion('A question');
-    question.set();
-    assert.equal(
-      question.selectElemHide()[0].textContent,
-      'A question'
-    );
+  describe('Step support', function(){
+
+    it('property “this.alreadySet”', () => {
+      let question = getQuestion(['1', '2', '3']);
+      assert.equal(question.alreadySet, false);
+      question.set();
+      assert.equal(question.alreadySet, true);
+    });
+
+    it('property “this.stepCount”', () => {
+      let question = getQuestion(['1', '2', '3']);
+      question.set();
+      assert.equal(question.stepCount, 3);
+    });
+
+    it('property “this.stepData”', () => {
+      let question = getQuestion(['1', '2', '3']);
+      question.set();
+      assert.equal(question.stepData[1].tagName, 'P');
+      assert.equal(question.stepData[2].tagName, 'P');
+      assert.equal(question.stepData[3].tagName, 'P');
+    });
+
+    it('method “nextStep()”', () => {
+      let question = getQuestion(['1', '2', '3']);
+      question.set();
+
+      assert.equal(question.stepNo, 1);
+
+      question.nextStep();
+      assert.equal(question.stepNo, 2);
+
+      question.nextStep();
+      assert.equal(question.stepNo, 3);
+
+      question.nextStep();
+      assert.equal(question.stepNo, 1);
+    });
+
+    it('method “prevStep()”', () => {
+      let question = getQuestion(['1', '2', '3']);
+      question.set();
+
+      assert.equal(question.stepNo, 1);
+
+      question.prevStep();
+      assert.equal(question.stepNo, 3);
+
+      question.prevStep();
+      assert.equal(question.stepNo, 2);
+
+      question.prevStep();
+      assert.equal(question.stepNo, 1);
+    });
+
   });
 
 });

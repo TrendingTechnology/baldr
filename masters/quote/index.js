@@ -9,6 +9,8 @@ const {MasterOfMasters} = require('../../lib/masters');
 
 /**
  * Master class for the master slide “quote”
+ *
+ * @implements {MasterOfMasters}
  */
 class MasterQuote extends MasterOfMasters {
 
@@ -59,7 +61,7 @@ class MasterQuote extends MasterOfMasters {
   /**
    *
    */
-  setHTMLSlide() {
+  hookSetHTMLSlide() {
     let attribution = this.renderAttribution(this.data.author, this.data.date);
     let begin = this.renderQuotationMark();
     let end = this.renderQuotationMark(false);

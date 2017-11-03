@@ -57,6 +57,20 @@ var firstSlide = function() {
 };
 
 /**
+ * @function prevStep
+ */
+var prevStep = function() {
+  presentation.prevStep();
+};
+
+/**
+ * @function nextStep
+ */
+var nextStep = function() {
+  presentation.nextStep();
+};
+
+/**
  * Show a master slide without custom data.
  *
  * The displayed master slide is not part of the acutal presentation.
@@ -128,6 +142,16 @@ var main = function() {
   firstSlide();
   bindFunctions(
     [
+      {
+        function: prevStep,
+        keys: ['up'],
+        IDs: ['button-up']
+      },
+      {
+        function: nextStep,
+        keys: ['down'],
+        IDs: ['button-down']
+      },
       {
         function: previousSlide,
         keys: ['left'],

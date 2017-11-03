@@ -144,15 +144,15 @@ describe('Class “Masters()”', () => {
       }
     });
 
-    it('[master].setHTMLSlide()', () => {
+    it('[master].hookSetHTMLSlide()', () => {
       for (let master of allMasters) {
-        assert.equal(typeof masters[master].setHTMLSlide, 'function');
+        assert.equal(typeof masters[master].hookSetHTMLSlide, 'function');
       }
     });
 
-    it('[master].setHTMLModal()', () => {
+    it('[master].hookSetHTMLModal()', () => {
       for (let master of allMasters) {
-        assert.equal(typeof masters[master].setHTMLModal, 'function');
+        assert.equal(typeof masters[master].hookSetHTMLModal, 'function');
       }
     });
 

@@ -21,7 +21,7 @@ class MasterCamera extends MasterOfMasters {
   /**
    *
    */
-  setHTMLSlide() {
+  hookSetHTMLSlide() {
     return '<video autoplay="true" id="video">camera</video>';
   }
 
