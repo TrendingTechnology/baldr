@@ -167,3 +167,97 @@ describe('Launch minimal.baldr', function () {
   });
 
 });
+
+describe('Launch steps.baldr', function () {
+  this.timeout(10000);
+
+  beforeEach(function () {
+    this.app = new Application({
+      path: appPath,
+      args: [path.join('test', 'files', 'steps.baldr')]
+    });
+    return this.app.start();
+  });
+
+  afterEach(function () {
+    if (this.app && this.app.isRunning()) {
+      return this.app.stop();
+    }
+  });
+
+  it('General step functionality, nextStep', function () {
+    return this.app.client
+      .getText('li:nth-child(1) .question').then(text => {
+        assert.equal(text, 'one');
+      })
+      .getText('li:nth-child(2) .question').then(text => {
+        assert.equal(text, '');
+      })
+      .getText('li:nth-child(3) .question').then(text => {
+        assert.equal(text, '');
+      })
+
+      .click('#button-down')
+      .getText('li:nth-child(2) .question').then(text => {
+        assert.equal(text, 'two');
+      })
+
+      .click('#button-down')
+      .getText('li:nth-child(3) .question').then(text => {
+        assert.equal(text, 'three');
+      })
+
+      .keys('ArrowDown')
+      .getText('li:nth-child(1) .question').then(text => {
+        assert.equal(text, 'one');
+      })
+      .getText('li:nth-child(2) .question').then(text => {
+        assert.equal(text, '');
+      })
+      .getText('li:nth-child(3) .question').then(text => {
+        assert.equal(text, '');
+      })
+
+      ;
+  });
+
+  it('prevStep', function () {
+    return this.app.client
+      .click('#button-up')
+      .getText('li:nth-child(1) .question').then(text => {
+        assert.equal(text, 'one');
+      })
+      .getText('li:nth-child(2) .question').then(text => {
+        assert.equal(text, 'two');
+      })
+      .getText('li:nth-child(3) .question').then(text => {
+        assert.equal(text, 'three');
+      })
+
+      .click('#button-up')
+      .getText('li:nth-child(3) .question').then(text => {
+        assert.equal(text, '');
+      })
+
+      .click('#button-up')
+      .getText('li:nth-child(2) .question').then(text => {
+        assert.equal(text, '');
+      })
+
+      .keys('ArrowUp')
+      .getText('li:nth-child(1) .question').then(text => {
+        assert.equal(text, 'one');
+      })
+      .getText('li:nth-child(2) .question').then(text => {
+        assert.equal(text, 'two');
+      })
+      .getText('li:nth-child(3) .question').then(text => {
+        assert.equal(text, 'three');
+      })
+
+      ;
+  });
+
+
+
+});
