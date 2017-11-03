@@ -80,7 +80,6 @@ class MasterQuestion extends MasterOfMasters {
    *
    */
   setByStepNo(no) {
-    console.log(no);
     for (let i = 1; i <= this.stepCount; i++) {
       if (!this.stepData[i].style.visibility) {
         this.stepData[i].style.visibility = 'visible';
@@ -88,11 +87,9 @@ class MasterQuestion extends MasterOfMasters {
 
       let visibility = this.stepData[i].style.visibility;
       if (visibility === 'visible' && no < i) {
-        console.log('hide no:' + no)
         this.stepData[i].style.visibility = 'hidden';
       }
       else if (visibility === 'hidden' && no >= i) {
-        console.log('hide show:' + no)
         this.stepData[i].style.visibility = 'visible';
       }
     }
