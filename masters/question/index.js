@@ -24,20 +24,6 @@ class MasterQuestion extends MasterOfMasters {
     super(propObj);
   }
 
-  /**
-   *
-   */
-  hookInitSteps() {
-    let elements = this.document.querySelectorAll('p');
-    this.stepCount = elements.length;
-    elements.forEach((element, index) => {
-      this.stepData[index + 1] = element;
-    });
-  }
-
-  hookSetStep() {
-    this.stepData[this.stepNo].style.visibility = 'visible';
-  }
 
   /**
    *
@@ -123,9 +109,29 @@ class MasterQuestion extends MasterOfMasters {
   /**
    *
    */
-  hookPostSet() {
-    this.selectElemHide();
+  hookInitSteps() {
+    let elements = this.document.querySelectorAll('p');
+    this.stepCount = elements.length;
+    elements.forEach((element, index) => {
+      this.stepData[index + 1] = element;
+    });
   }
+
+  /**
+   *
+   */
+  hookPostInitStepsFirstTime() {
+    for (let i = 1; i <= this.stepCount; i++) {
+      this.stepData[i].style.visibility = 'hidden';
+    }
+    this.stepData[1].style.visibility = 'visible';
+    this.stepNo = 1;
+  }
+
+  hookSetStep() {
+    this.stepData[this.stepNo].style.visibility = 'visible';
+  }
+
 }
 
 exports.MasterQuestion = MasterQuestion;
