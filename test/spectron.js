@@ -298,6 +298,12 @@ describe('Launch steps.baldr', function () {
       .getCssProperty('#button-up', 'visibility').then(style => {
         assert.equal(style.value, 'visible');
       })
+      .getCssProperty('#button-left', 'visibility').then(style => {
+        assert.equal(style.value, 'visible');
+      })
+      .getCssProperty('#button-right', 'visibility').then(style => {
+        assert.equal(style.value, 'visible');
+      })
 
       .click('#button-right')
       .getCssProperty('#button-down', 'visibility').then(style => {
@@ -313,6 +319,37 @@ describe('Launch steps.baldr', function () {
       })
       .getCssProperty('#button-up', 'visibility').then(style => {
         assert.equal(style.value, 'visible');
+      })
+
+      ;
+  });
+
+});
+
+describe('Launch single-slide.baldr', function () {
+  this.timeout(10000);
+
+  beforeEach(function () {
+    this.app = new Application({
+      path: appPath,
+      args: [path.join('test', 'files', 'single-slide.baldr')]
+    });
+    return this.app.start();
+  });
+
+  afterEach(function () {
+    if (this.app && this.app.isRunning()) {
+      return this.app.stop();
+    }
+  });
+
+  it('Navigation buttons are hidden', function () {
+    return this.app.client
+      .getCssProperty('#button-left', 'visibility').then(style => {
+        assert.equal(style.value, 'hidden');
+      })
+      .getCssProperty('#button-right', 'visibility').then(style => {
+        assert.equal(style.value, 'hidden');
       })
 
       ;
