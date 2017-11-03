@@ -290,7 +290,33 @@ describe('Launch steps.baldr', function () {
       ;
   });
 
+  it('Visibility of the step buttons', function () {
+    return this.app.client
+      .getCssProperty('#button-down', 'visibility').then(style => {
+        assert.equal(style.value, 'visible');
+      })
+      .getCssProperty('#button-up', 'visibility').then(style => {
+        assert.equal(style.value, 'visible');
+      })
 
+      .click('#button-right')
+      .getCssProperty('#button-down', 'visibility').then(style => {
+        assert.equal(style.value, 'hidden');
+      })
+      .getCssProperty('#button-up', 'visibility').then(style => {
+        assert.equal(style.value, 'hidden');
+      })
+
+      .click('#button-left')
+      .getCssProperty('#button-down', 'visibility').then(style => {
+        assert.equal(style.value, 'visible');
+      })
+      .getCssProperty('#button-up', 'visibility').then(style => {
+        assert.equal(style.value, 'visible');
+      })
+
+      ;
+  });
 
 
 });
