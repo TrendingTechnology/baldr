@@ -142,14 +142,14 @@ var MasterOfMasters = class {
   /**
    * @return {string} HTML markup which is shown inside the slide element
    */
-  setHTMLSlide() {
+  hookSetHTMLSlide() {
     return 'No slide loaded.';
   }
 
   /**
    *
    */
-  setHTMLModal() {
+  hookSetHTMLModal() {
     return '';
   }
 
@@ -174,8 +174,8 @@ var MasterOfMasters = class {
   set() {
     this.hookPreSet();
     this.setCSS();
-    this.elemSlide.innerHTML = this.setHTMLSlide();
-    this.elemModal.innerHTML = this.setHTMLModal();
+    this.elemSlide.innerHTML = this.hookSetHTMLSlide();
+    this.elemModal.innerHTML = this.hookSetHTMLModal();
     this.hookPostSet();
     this.initSteps();
     this.beforeFirstStep();

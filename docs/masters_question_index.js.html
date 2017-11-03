@@ -144,7 +144,7 @@ class MasterQuestion extends MasterOfMasters {
   /**
    *
    */
-  setHTMLSlide() {
+  hookSetHTMLSlide() {
     let data = this.normalizeData(this.data);
     return '&lt;div id="question-content">' +
       this.template(data) +

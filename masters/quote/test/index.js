@@ -14,12 +14,12 @@ let propObj = {
 let render = function(data) {
   propObj.data = data;
   let quote = new MasterQuote(propObj);
-  return quote.setHTMLSlide();
+  return quote.hookSetHTMLSlide();
 };
 
 describe('Master slide “quote”', () => {
 
-  it('function “setHTMLSlide()”: all values', () => {
+  it('function “hookSetHTMLSlide()”: all values', () => {
     let html = render({
       text: 'text',
       author: 'author',
@@ -54,7 +54,7 @@ describe('Master slide “quote”', () => {
     );
   });
 
-  it('function “setHTMLSlide()”: no author', () => {
+  it('function “hookSetHTMLSlide()”: no author', () => {
     let html = render({
       text: 'text',
       date: 'date'
@@ -70,7 +70,7 @@ describe('Master slide “quote”', () => {
     );
   });
 
-  it('function “setHTMLSlide()”: no date', () => {
+  it('function “hookSetHTMLSlide()”: no date', () => {
     let html = render({
       text: 'text',
       author: 'author'
@@ -86,7 +86,7 @@ describe('Master slide “quote”', () => {
     );
   });
 
-  it('function “setHTMLSlide()”: only text', () => {
+  it('function “hookSetHTMLSlide()”: only text', () => {
     let html = render({
       text: 'text'
     });

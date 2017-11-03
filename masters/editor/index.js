@@ -18,7 +18,7 @@ class MasterEditor extends MasterOfMasters {
   /**
    *
    */
-  setHTMLSlide() {
+  hookSetHTMLSlide() {
     return `editor`;
   }
 

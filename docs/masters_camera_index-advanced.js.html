@@ -73,7 +73,7 @@ class MasterCamera extends MasterOfMasters {
   /**
    *
    */
-  setHTMLModal() {
+  hookSetHTMLModal() {
     return `
     &lt;div class="select">
       &lt;label for="videoSource">Video source: &lt;/label>&lt;select id="videoSource">&lt;/select>
@@ -83,7 +83,7 @@ class MasterCamera extends MasterOfMasters {
   /**
    *
    */
-  setHTMLSlide() {
+  hookSetHTMLSlide() {
     return '&lt;video autoplay="true" id="video">&lt;/video>';
   }
 

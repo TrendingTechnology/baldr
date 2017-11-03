@@ -27,18 +27,15 @@ class MasterQuestion extends MasterOfMasters {
   /**
    *
    */
-  initSteps() {
+  hookInitSteps() {
     let elements = this.document.querySelectorAll('p');
     this.stepCount = elements.length;
     elements.forEach((element, index) => {
       this.stepData[index + 1] = element;
     });
-    elem.forEach(elem => {elem.style.visibility = 'hidden';});
-    elem[0].style.visibility = 'visible';
-    return elem;
   }
 
-  setStep() {
+  hookSetStep() {
     this.stepData[this.stepNo].style.visibility = 'visible';
   }
 
@@ -116,7 +113,7 @@ class MasterQuestion extends MasterOfMasters {
   /**
    *
    */
-  setHTMLSlide() {
+  hookSetHTMLSlide() {
     let data = this.normalizeData(this.data);
     return '<div id="question-content">' +
       this.template(data) +

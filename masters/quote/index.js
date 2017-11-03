@@ -61,7 +61,7 @@ class MasterQuote extends MasterOfMasters {
   /**
    *
    */
-  setHTMLSlide() {
+  hookSetHTMLSlide() {
     let attribution = this.renderAttribution(this.data.author, this.data.date);
     let begin = this.renderQuotationMark();
     let end = this.renderQuotationMark(false);
