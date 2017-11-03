@@ -258,6 +258,39 @@ describe('Launch steps.baldr', function () {
       ;
   });
 
+  it('Step number is perserved on slide change', function () {
+    return this.app.client
+      .click('#button-down')
+      .getText('li:nth-child(1) .question').then(text => {
+        assert.equal(text, 'one');
+      })
+      .getText('li:nth-child(2) .question').then(text => {
+        assert.equal(text, 'two');
+      })
+      .getText('li:nth-child(3) .question').then(text => {
+        assert.equal(text, '');
+      })
+
+      .click('#button-right')
+      .getText('.question').then(text => {
+        assert.equal(text, 'Without steps');
+      })
+
+      .click('#button-left')
+      .getText('li:nth-child(1) .question').then(text => {
+        assert.equal(text, 'one');
+      })
+      .getText('li:nth-child(2) .question').then(text => {
+        assert.equal(text, 'two');
+      })
+      .getText('li:nth-child(3) .question').then(text => {
+        assert.equal(text, '');
+      })
+
+      ;
+  });
+
+
 
 
 });
