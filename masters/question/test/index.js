@@ -164,7 +164,7 @@ describe('Master slide “question”', () => {
     );
   });
 
-  it('method “selectElemHide()”', () => {
+  it.skip('method “selectElemHide()”', () => {
     let question = getQuestion('A question');
     question.set();
     assert.equal(

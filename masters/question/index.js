@@ -128,7 +128,11 @@ class MasterQuestion extends MasterOfMasters {
     this.stepNo = 1;
   }
 
-  hookSetStep() {
+  hookPrevStep() {
+    this.stepData[this.stepNo].style.visibility = 'hidden';
+  }
+
+  hookNextStep() {
     this.stepData[this.stepNo].style.visibility = 'visible';
   }
 
