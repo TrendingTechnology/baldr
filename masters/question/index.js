@@ -79,7 +79,7 @@ class MasterQuestion extends MasterOfMasters {
   /**
    *
    */
-  setByStepNo(no) {
+  setStepByNo(no) {
     for (let i = 1; i <= this.stepCount; i++) {
       if (!this.stepData[i].style.visibility) {
         this.stepData[i].style.visibility = 'visible';
@@ -142,21 +142,14 @@ class MasterQuestion extends MasterOfMasters {
       this.stepData[index + 1] = element;
     });
 
-    this.setByStepNo(this.stepNo);
+    this.setStepByNo(this.stepNo);
   }
 
   /**
    *
    */
-  hookPrevStep() {
-    this.setByStepNo(this.stepNo);
-  }
-
-  /**
-   *
-   */
-  hookNextStep() {
-    this.setByStepNo(this.stepNo);
+  hookSetStep() {
+    this.setStepByNo(this.stepNo);
   }
 
 }
