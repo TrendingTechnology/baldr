@@ -24,7 +24,6 @@ class MasterQuestion extends MasterOfMasters {
     super(propObj);
   }
 
-
   /**
    *
    */
@@ -80,6 +79,21 @@ class MasterQuestion extends MasterOfMasters {
   /**
    *
    */
+  setByStepNo(no) {
+    for (let i = 1; i <= this.stepCount; i++) {
+      let visibility = this.stepData[i].style.visibility;
+      if ((visibility === 'visible' || !visibility) && no >= i) {
+        this.stepData[i].style.visibility = 'visible';
+      }
+      else if (no < i) {
+        this.stepData[i].style.visibility = 'hidden';
+      }
+    }
+  }
+
+  /**
+   *
+   */
   template(data) {
     if (data.length > 1) {
       let li = '';
@@ -115,23 +129,26 @@ class MasterQuestion extends MasterOfMasters {
     elements.forEach((element, index) => {
       this.stepData[index + 1] = element;
     });
+    this.stepNo = 1;
   }
 
   /**
    *
    */
-  hookPostInitStepsFirstTime() {
-    for (let i = 1; i <= this.stepCount; i++) {
-      this.stepData[i].style.visibility = 'hidden';
-    }
-    this.stepData[1].style.visibility = 'visible';
-    this.stepNo = 1;
+  hookPostSet() {
+    this.setByStepNo(this.stepNo);
   }
 
+  /**
+   *
+   */
   hookPrevStep() {
     this.stepData[this.stepNo].style.visibility = 'hidden';
   }
 
+  /**
+   *
+   */
   hookNextStep() {
     this.stepData[this.stepNo].style.visibility = 'visible';
   }

@@ -164,13 +164,61 @@ describe('Master slide “question”', () => {
     );
   });
 
-  it.skip('method “selectElemHide()”', () => {
-    let question = getQuestion('A question');
-    question.set();
-    assert.equal(
-      question.selectElemHide()[0].textContent,
-      'A question'
-    );
+  describe('Step support', function(){
+
+    it('property “this.alreadySet”', () => {
+      let question = getQuestion(['1', '2', '3']);
+      assert.equal(question.alreadySet, false);
+      question.set();
+      assert.equal(question.alreadySet, true);
+    });
+
+    it('property “this.stepCount”', () => {
+      let question = getQuestion(['1', '2', '3']);
+      question.set();
+      assert.equal(question.stepCount, 3);
+    });
+
+    it('property “this.stepData”', () => {
+      let question = getQuestion(['1', '2', '3']);
+      question.set();
+      assert.equal(question.stepData[1].tagName, 'P');
+      assert.equal(question.stepData[2].tagName, 'P');
+      assert.equal(question.stepData[3].tagName, 'P');
+    });
+
+    it('method “nextStep()”', () => {
+      let question = getQuestion(['1', '2', '3']);
+      question.set();
+
+      assert.equal(question.stepNo, 1);
+
+      question.nextStep();
+      assert.equal(question.stepNo, 2);
+
+      question.nextStep();
+      assert.equal(question.stepNo, 3);
+
+      question.nextStep();
+      assert.equal(question.stepNo, 1);
+    });
+
+    it('method “prevStep()”', () => {
+      let question = getQuestion(['1', '2', '3']);
+      question.set();
+
+      assert.equal(question.stepNo, 1);
+
+      question.prevStep();
+      assert.equal(question.stepNo, 3);
+
+      question.prevStep();
+      assert.equal(question.stepNo, 2);
+
+      question.prevStep();
+      assert.equal(question.stepNo, 1);
+    });
+
   });
 
 });
