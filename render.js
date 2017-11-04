@@ -130,6 +130,16 @@ var bindFunctions = function(bindings) {
  * @function main
  */
 var main = function() {
+  window.onerror = function(message, source, lineNo, colNo, error) {
+    document.getElementById('slide').innerHTML = `
+    <p>${message}</p>
+    <p>Source: ${source}</p>
+    <p>Line number: ${lineNo}</p>
+    <p>Column number: ${colNo}</p>
+    <pre>${error.stack}</pre>
+    `;
+  };
+
   ipcRenderer.on('set-master', function(event, masterName) {
     setMaster(masterName);
   });
