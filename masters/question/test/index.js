@@ -190,27 +190,46 @@ describe('Master slide “question”', () => {
     it('method “nextStep()”', () => {
       let question = getQuestion(['1', '2', '3']);
       question.set();
+      let q1 = question.document.querySelector('li:nth-child(1) .question');
+      let q2 = question.document.querySelector('li:nth-child(2) .question');
+      let q3 = question.document.querySelector('li:nth-child(3) .question');
 
       assert.equal(question.stepNo, 1);
+      assert.equal(q1.style.visibility, 'visible');
+      assert.equal(q2.style.visibility, 'hidden');
+      assert.equal(q3.style.visibility, 'hidden');
 
       question.nextStep();
       assert.equal(question.stepNo, 2);
+      assert.equal(q2.style.visibility, 'visible');
 
       question.nextStep();
       assert.equal(question.stepNo, 3);
+      assert.equal(q3.style.visibility, 'visible');
 
       question.nextStep();
       assert.equal(question.stepNo, 1);
+      assert.equal(q1.style.visibility, 'visible');
     });
 
     it('method “prevStep()”', () => {
       let question = getQuestion(['1', '2', '3']);
       question.set();
 
+      let q1 = question.document.querySelector('li:nth-child(1) .question');
+      let q2 = question.document.querySelector('li:nth-child(2) .question');
+      let q3 = question.document.querySelector('li:nth-child(3) .question');
+
       assert.equal(question.stepNo, 1);
+      assert.equal(q1.style.visibility, 'visible');
+      assert.equal(q2.style.visibility, 'hidden');
+      assert.equal(q3.style.visibility, 'hidden');
 
       question.prevStep();
       assert.equal(question.stepNo, 3);
+      assert.equal(q1.style.visibility, 'visible');
+      assert.equal(q2.style.visibility, 'visible');
+      assert.equal(q3.style.visibility, 'visible');
 
       question.prevStep();
       assert.equal(question.stepNo, 2);
