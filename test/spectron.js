@@ -1,7 +1,8 @@
 const {
   assert,
   fs,
-  path
+  path,
+  Spectron
 } = require('./lib/helper.js');
 
 const rewire = require('rewire');
