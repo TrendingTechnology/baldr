@@ -67,20 +67,9 @@ describe('Master slide “question”', () => {
       ]
     );
 
-    // TODO: Test error handling
-    // let invalidData = function(data) {
-    //   try {
-    //     question.normalizeData(data);
-    //   }
-    //   catch(error) {
-    //     assert.equal(error.message, 'Master slide “question”: Invalid data input');
-    //     throw error;
-    //   }
-    // }
-    //
-    // invalidData(false);
-    // invalidData(true);
-    // invalidData({lol: 'lol', troll: 'troll'});
+    assert.throws(function() {question.normalizeData(false);});
+    assert.throws(function() {question.normalizeData(true);});
+    assert.throws(function() {question.normalizeData({lol: 'lol', troll: 'troll'});});
   });
 
 
