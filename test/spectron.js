@@ -375,7 +375,7 @@ describe('Launch error.baldr', function () {
     }
   });
 
-  it.only('Error text', function () {
+  it('Error text', function () {
     return this.app.client
       .click('#button-right')
       .getText('#slide').then(text => {
