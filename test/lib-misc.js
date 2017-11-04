@@ -21,10 +21,7 @@ describe('Other functions', () => {
       'lol.BALDR'
     );
 
-    assert.equal(
-      search(['lil', 'troll']),
-      false
-    );
+    assert.throws(function() {search(['lil', 'troll']);});
 
     assert.equal(
       search(['first.baldr', 'last.baldr']),

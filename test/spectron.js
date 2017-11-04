@@ -50,7 +50,7 @@ describe('Lauch without baldr file', function () {
         assert.equal(text, 'baldr');
       })
       .getText('#slide').then(text => {
-        assert.equal(text, 'Currently no slide is loaded!');
+        assert.ok(text.includes('Uncaught Error: No presentation file with the extension *.baldr found!'));
       });
 
   });
