@@ -355,5 +355,34 @@ describe('Launch single-slide.baldr', function () {
       ;
   });
 
+});
+
+
+describe('Launch error.baldr', function () {
+  this.timeout(10000);
+
+  beforeEach(function () {
+    this.app = new Application({
+      path: appPath,
+      args: [path.join('test', 'files', 'error.baldr')]
+    });
+    return this.app.start();
+  });
+
+  afterEach(function () {
+    if (this.app && this.app.isRunning()) {
+      return this.app.stop();
+    }
+  });
+
+  it.only('Error text', function () {
+    return this.app.client
+      .click('#button-right')
+      .getText('#slide').then(text => {
+        assert.ok(text.includes('Uncaught Error: Master slide “question”: Invalid data input'));
+      })
+
+      ;
+  });
 
 });
