@@ -16,6 +16,7 @@ exports.allMasters = [
   'audio',
   'camera',
   'editor',
+  'markdown',
   'person',
   'question',
   'quote',
