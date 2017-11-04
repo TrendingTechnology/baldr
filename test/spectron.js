@@ -1,6 +1,9 @@
-var assert = require('assert');
-const fs = require('fs');
-const path = require('path');
+const {
+  assert,
+  fs,
+  path
+} = require('./lib/helper.js');
+
 const rewire = require('rewire');
 
 var Application = require('spectron').Application;
