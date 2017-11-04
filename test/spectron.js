@@ -167,3 +167,193 @@ describe('Launch minimal.baldr', function () {
   });
 
 });
+
+describe('Launch steps.baldr', function () {
+  this.timeout(10000);
+
+  beforeEach(function () {
+    this.app = new Application({
+      path: appPath,
+      args: [path.join('test', 'files', 'steps.baldr')]
+    });
+    return this.app.start();
+  });
+
+  afterEach(function () {
+    if (this.app && this.app.isRunning()) {
+      return this.app.stop();
+    }
+  });
+
+  it('General step functionality, nextStep', function () {
+    return this.app.client
+      .getText('li:nth-child(1) .question').then(text => {
+        assert.equal(text, 'one');
+      })
+      .getText('li:nth-child(2) .question').then(text => {
+        assert.equal(text, '');
+      })
+      .getText('li:nth-child(3) .question').then(text => {
+        assert.equal(text, '');
+      })
+
+      .click('#button-down')
+      .getText('li:nth-child(2) .question').then(text => {
+        assert.equal(text, 'two');
+      })
+
+      .click('#button-down')
+      .getText('li:nth-child(3) .question').then(text => {
+        assert.equal(text, 'three');
+      })
+
+      .keys('ArrowDown')
+      .getText('li:nth-child(1) .question').then(text => {
+        assert.equal(text, 'one');
+      })
+      .getText('li:nth-child(2) .question').then(text => {
+        assert.equal(text, '');
+      })
+      .getText('li:nth-child(3) .question').then(text => {
+        assert.equal(text, '');
+      })
+
+      ;
+  });
+
+  it('prevStep', function () {
+    return this.app.client
+      .click('#button-up')
+      .getText('li:nth-child(1) .question').then(text => {
+        assert.equal(text, 'one');
+      })
+      .getText('li:nth-child(2) .question').then(text => {
+        assert.equal(text, 'two');
+      })
+      .getText('li:nth-child(3) .question').then(text => {
+        assert.equal(text, 'three');
+      })
+
+      .click('#button-up')
+      .getText('li:nth-child(3) .question').then(text => {
+        assert.equal(text, '');
+      })
+
+      .click('#button-up')
+      .getText('li:nth-child(2) .question').then(text => {
+        assert.equal(text, '');
+      })
+
+      .keys('ArrowUp')
+      .getText('li:nth-child(1) .question').then(text => {
+        assert.equal(text, 'one');
+      })
+      .getText('li:nth-child(2) .question').then(text => {
+        assert.equal(text, 'two');
+      })
+      .getText('li:nth-child(3) .question').then(text => {
+        assert.equal(text, 'three');
+      })
+
+      ;
+  });
+
+  it('Step number is perserved on slide change', function () {
+    return this.app.client
+      .click('#button-down')
+      .getText('li:nth-child(1) .question').then(text => {
+        assert.equal(text, 'one');
+      })
+      .getText('li:nth-child(2) .question').then(text => {
+        assert.equal(text, 'two');
+      })
+      .getText('li:nth-child(3) .question').then(text => {
+        assert.equal(text, '');
+      })
+
+      .click('#button-right')
+      .getText('.question').then(text => {
+        assert.equal(text, 'Without steps');
+      })
+
+      .click('#button-left')
+      .getText('li:nth-child(1) .question').then(text => {
+        assert.equal(text, 'one');
+      })
+      .getText('li:nth-child(2) .question').then(text => {
+        assert.equal(text, 'two');
+      })
+      .getText('li:nth-child(3) .question').then(text => {
+        assert.equal(text, '');
+      })
+
+      ;
+  });
+
+  it('Visibility of the step buttons', function () {
+    return this.app.client
+      .getCssProperty('#button-down', 'visibility').then(style => {
+        assert.equal(style.value, 'visible');
+      })
+      .getCssProperty('#button-up', 'visibility').then(style => {
+        assert.equal(style.value, 'visible');
+      })
+      .getCssProperty('#button-left', 'visibility').then(style => {
+        assert.equal(style.value, 'visible');
+      })
+      .getCssProperty('#button-right', 'visibility').then(style => {
+        assert.equal(style.value, 'visible');
+      })
+
+      .click('#button-right')
+      .getCssProperty('#button-down', 'visibility').then(style => {
+        assert.equal(style.value, 'hidden');
+      })
+      .getCssProperty('#button-up', 'visibility').then(style => {
+        assert.equal(style.value, 'hidden');
+      })
+
+      .click('#button-left')
+      .getCssProperty('#button-down', 'visibility').then(style => {
+        assert.equal(style.value, 'visible');
+      })
+      .getCssProperty('#button-up', 'visibility').then(style => {
+        assert.equal(style.value, 'visible');
+      })
+
+      ;
+  });
+
+});
+
+describe('Launch single-slide.baldr', function () {
+  this.timeout(10000);
+
+  beforeEach(function () {
+    this.app = new Application({
+      path: appPath,
+      args: [path.join('test', 'files', 'single-slide.baldr')]
+    });
+    return this.app.start();
+  });
+
+  afterEach(function () {
+    if (this.app && this.app.isRunning()) {
+      return this.app.stop();
+    }
+  });
+
+  it('Navigation buttons are hidden', function () {
+    return this.app.client
+      .getCssProperty('#button-left', 'visibility').then(style => {
+        assert.equal(style.value, 'hidden');
+      })
+      .getCssProperty('#button-right', 'visibility').then(style => {
+        assert.equal(style.value, 'hidden');
+      })
+
+      ;
+  });
+
+
+});
