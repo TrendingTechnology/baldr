@@ -72,13 +72,13 @@ describe('Launch minimal.baldr', function () {
         assert.equal(style[0].parsed.hex, '#0000ff');
       })
 
-      .click('#button-right')
+      .click('#nav-slide-next')
       .getText('.question')
       .then(text => {
         assert.equal(text, 'When did Ludwig van Beethoven die?');
       })
 
-      .click('#button-right')
+      .click('#nav-slide-next')
       .getText('p')
       .then(text => {
         assert.equal(text, 'Ludwig van Beethoven');
@@ -178,12 +178,12 @@ describe('Launch steps.baldr', function () {
         assert.equal(text, '');
       })
 
-      .click('#button-down')
+      .click('#nav-step-next')
       .getText('li:nth-child(2) .question').then(text => {
         assert.equal(text, 'two');
       })
 
-      .click('#button-down')
+      .click('#nav-step-next')
       .getText('li:nth-child(3) .question').then(text => {
         assert.equal(text, 'three');
       })
@@ -204,7 +204,7 @@ describe('Launch steps.baldr', function () {
 
   it('prevStep', function () {
     return this.app.client
-      .click('#button-up')
+      .click('#nav-step-prev')
       .getText('li:nth-child(1) .question').then(text => {
         assert.equal(text, 'one');
       })
@@ -215,12 +215,12 @@ describe('Launch steps.baldr', function () {
         assert.equal(text, 'three');
       })
 
-      .click('#button-up')
+      .click('#nav-step-prev')
       .getText('li:nth-child(3) .question').then(text => {
         assert.equal(text, '');
       })
 
-      .click('#button-up')
+      .click('#nav-step-prev')
       .getText('li:nth-child(2) .question').then(text => {
         assert.equal(text, '');
       })
@@ -241,7 +241,7 @@ describe('Launch steps.baldr', function () {
 
   it('Step number is perserved on slide change', function () {
     return this.app.client
-      .click('#button-down')
+      .click('#nav-step-next')
       .getText('li:nth-child(1) .question').then(text => {
         assert.equal(text, 'one');
       })
@@ -252,12 +252,12 @@ describe('Launch steps.baldr', function () {
         assert.equal(text, '');
       })
 
-      .click('#button-right')
+      .click('#nav-slide-next')
       .getText('.question').then(text => {
         assert.equal(text, 'Without steps');
       })
 
-      .click('#button-left')
+      .click('#nav-slide-prev')
       .getText('li:nth-child(1) .question').then(text => {
         assert.equal(text, 'one');
       })
@@ -273,32 +273,32 @@ describe('Launch steps.baldr', function () {
 
   it('Visibility of the step buttons', function () {
     return this.app.client
-      .getCssProperty('#button-down', 'visibility').then(style => {
+      .getCssProperty('#nav-step-next', 'visibility').then(style => {
         assert.equal(style.value, 'visible');
       })
-      .getCssProperty('#button-up', 'visibility').then(style => {
+      .getCssProperty('#nav-step-prev', 'visibility').then(style => {
         assert.equal(style.value, 'visible');
       })
-      .getCssProperty('#button-left', 'visibility').then(style => {
+      .getCssProperty('#nav-slide-prev', 'visibility').then(style => {
         assert.equal(style.value, 'visible');
       })
-      .getCssProperty('#button-right', 'visibility').then(style => {
+      .getCssProperty('#nav-slide-next', 'visibility').then(style => {
         assert.equal(style.value, 'visible');
       })
 
-      .click('#button-right')
-      .getCssProperty('#button-down', 'visibility').then(style => {
+      .click('#nav-slide-next')
+      .getCssProperty('#nav-step-next', 'visibility').then(style => {
         assert.equal(style.value, 'hidden');
       })
-      .getCssProperty('#button-up', 'visibility').then(style => {
+      .getCssProperty('#nav-step-prev', 'visibility').then(style => {
         assert.equal(style.value, 'hidden');
       })
 
-      .click('#button-left')
-      .getCssProperty('#button-down', 'visibility').then(style => {
+      .click('#nav-slide-prev')
+      .getCssProperty('#nav-step-next', 'visibility').then(style => {
         assert.equal(style.value, 'visible');
       })
-      .getCssProperty('#button-up', 'visibility').then(style => {
+      .getCssProperty('#nav-step-prev', 'visibility').then(style => {
         assert.equal(style.value, 'visible');
       })
 
@@ -322,10 +322,10 @@ describe('Launch single-slide.baldr', function () {
 
   it('Navigation buttons are hidden', function () {
     return this.app.client
-      .getCssProperty('#button-left', 'visibility').then(style => {
+      .getCssProperty('#nav-slide-prev', 'visibility').then(style => {
         assert.equal(style.value, 'hidden');
       })
-      .getCssProperty('#button-right', 'visibility').then(style => {
+      .getCssProperty('#nav-slide-next', 'visibility').then(style => {
         assert.equal(style.value, 'hidden');
       })
 
@@ -349,7 +349,7 @@ describe('Launch error.baldr', function () {
 
   it('Error text', function () {
     return this.app.client
-      .click('#button-right')
+      .click('#nav-slide-next')
       .getText('#slide').then(text => {
         assert.ok(text.includes('Uncaught Error: Master slide “question”: Invalid data input'));
       })

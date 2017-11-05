@@ -155,22 +155,22 @@ var main = function() {
       {
         function: prevStep,
         keys: ['up'],
-        IDs: ['button-up']
+        IDs: ['nav-step-prev']
       },
       {
         function: nextStep,
         keys: ['down'],
-        IDs: ['button-down']
+        IDs: ['nav-step-next']
       },
       {
         function: previousSlide,
         keys: ['left'],
-        IDs: ['button-left']
+        IDs: ['nav-slide-prev']
       },
       {
         function: nextSlide,
         keys: ['right'],
-        IDs: ['button-right']
+        IDs: ['nav-slide-next']
       },
       {
         function: toggleModal,
