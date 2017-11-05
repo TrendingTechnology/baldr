@@ -35,7 +35,7 @@ exports.presentation = {
 };
 
 class Spectron {
-  constructor(args) {
+  constructor(baldrFile) {
     if (process.platform === 'linux') {
       this.appPath = 'dist/linux-unpacked/baldr';
     }
@@ -46,8 +46,12 @@ class Spectron {
     let config = {
       path: this.appPath
     };
-    if (args) config.args = args;
+    if (baldrFile) config.args = [baldrFile];
     this.app = new Application(config);
+  }
+
+  get() {
+    return this.app;
   }
 
   start() {
