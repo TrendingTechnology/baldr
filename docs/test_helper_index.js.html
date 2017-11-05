@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: render.js</title>
+    <title>JSDoc: Source: test/helper/index.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: render.js</h1>
+    <h1 class="page-title">Source: test/helper/index.js</h1>
 
     
 
@@ -27,199 +27,117 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
- * @file Entry file of the render process.
+ * @file Helper module for unit testing baldr.
+ * @module baldr-test
  */
 
-const mousetrap = require('mousetrap');
-const {Presentation} = require('./lib/presentation.js');
-const misc = require('./lib/misc.js');
+const assert = require('assert');
+const fs = require('fs');
 const path = require('path');
-const {remote} = require('electron');
-const {ipcRenderer} = require('electron');
-const Masters = require('baldr-masters').Masters;
-
-let masters;
-let presentation;
+const {JSDOM} = require('jsdom');
 
 /**
- * Toogle the modal window
+ *
  */
-var toggleModal = function() {
-  let modal = document.getElementById('modal');
-  let state = modal.style.display;
-  if (state === 'none') {
-    modal.style.display = 'block';
-    return 'block';
+exports.assert = assert;
+
+/**
+ *
+ */
+exports.fs = fs;
+
+/**
+ *
+ */
+exports.path = path;
+
+/**
+ *
+ */
+exports.getDOM = getDOM = function(html) {
+  let d = new JSDOM(html);
+  return d.window.document;
+};
+
+/**
+ *
+ */
+exports.allMasters = [
+  'audio',
+  'camera',
+  'editor',
+  'markdown',
+  'person',
+  'question',
+  'quote',
+  'svg'
+];
+
+/**
+ *
+ */
+exports.document = getDOM(
+  fs.readFileSync(
+    path.join(__dirname, '..', '..', 'render.html'),
+    'utf8'
+  )
+);
+
+/**
+ *
+ */
+exports.presentation = {
+  pwd: '/home/jf/lol'
+};
+
+/**
+ *
+ */
+class Spectron {
+
+  /**
+   *
+   */
+  constructor(baldrFile) {
+    if (process.platform === 'linux') {
+      this.appPath = 'dist/linux-unpacked/baldr';
+    }
+    else if (process.platform === 'darwin') {
+      this.appPath = 'dist/mac/baldr.app/Contents/MacOS/baldr';
+    }
+    let {Application} = require('spectron');
+    let config = {
+      path: this.appPath
+    };
+    if (baldrFile) config.args = [baldrFile];
+    this.app = new Application(config);
   }
-  else if (state === 'block') {
-    modal.style.display = 'none';
-    return 'none';
+
+  /**
+   *
+   */
+  get() {
+    return this.app;
   }
-  else {
-    return false;
+
+  /**
+   *
+   */
+  start() {
+    return this.app.start();
   }
-};
 
-/**
- * Update the HTML structure with the code of the previous slide.
- * @function previousSlide
- */
-var previousSlide = function() {
-  presentation.prev().set();
-};
-
-/**
- * Update the HTML structure with the code of the next slide.
- * @function nextSlide
- */
-var nextSlide = function() {
-  presentation.next().set();
-};
-
-/**
- * Set the first slide when loading the presentation.
- * @function firstSlide
- */
-var firstSlide = function() {
-  presentation.set();
-};
-
-/**
- * @function prevStep
- */
-var prevStep = function() {
-  presentation.prevStep();
-};
-
-/**
- * @function nextStep
- */
-var nextStep = function() {
-  presentation.nextStep();
-};
-
-/**
- * Show a master slide without custom data.
- *
- * The displayed master slide is not part of the acutal presentation.
- * Not every master slide can be shown with this function. It muss be
- * possible to render the master slide without custom data.
- * No number is assigned to the master slide.
- * @param {string} name Name of the master slide
- */
-var setMaster = function(name) {
-  let master = masters[name];
-  master.set();
-};
-
-/**
- *
- */
-var setMasterCamera = function() {
-  setMaster('camera');
-};
-
-/**
- *
- */
-var setMasterEditor = function() {
-  setMaster('editor');
-};
-
-/**
- *
- */
-var bindFunction = function(binding) {
-  if (binding.keys) {
-    for (let key of binding.keys) {
-      mousetrap.bind(key, binding.function);
+  /**
+   *
+   */
+  stop() {
+    if (this.app &amp;&amp; this.app.isRunning()) {
+      return this.app.stop();
     }
   }
-
-  if (binding.IDs) {
-    for (let ID of binding.IDs) {
-      document
-        .getElementById(ID)
-        .addEventListener('click', binding.function);
-    }
-  }
-};
-
-/**
- *
- */
-var bindFunctions = function(bindings) {
-  for (let binding of bindings) {
-    bindFunction(binding);
-  }
-};
-
-/**
- * @function main
- */
-var main = function() {
-  window.onerror = function(message, source, lineNo, colNo, error) {
-    document.getElementById('slide').innerHTML = `
-    &lt;p>${message}&lt;/p>
-    &lt;p>Source: ${source}&lt;/p>
-    &lt;p>Line number: ${lineNo}&lt;/p>
-    &lt;p>Column number: ${colNo}&lt;/p>
-    &lt;pre>${error.stack}&lt;/pre>
-    `;
-  };
-
-  ipcRenderer.on('set-master', function(event, masterName) {
-    setMaster(masterName);
-  });
-
-  presentation = new Presentation(
-    misc.searchForBaldrFile(remote.process.argv),
-    document
-  );
-  masters = new Masters(document, presentation);
-  firstSlide();
-  bindFunctions(
-    [
-      {
-        function: prevStep,
-        keys: ['up'],
-        IDs: ['button-up']
-      },
-      {
-        function: nextStep,
-        keys: ['down'],
-        IDs: ['button-down']
-      },
-      {
-        function: previousSlide,
-        keys: ['left'],
-        IDs: ['button-left']
-      },
-      {
-        function: nextSlide,
-        keys: ['right'],
-        IDs: ['button-right']
-      },
-      {
-        function: toggleModal,
-        keys: ['esc'],
-        IDs: ['modal-open', 'modal-close']
-      },
-      {
-        function: setMasterCamera,
-        keys: ['c']
-      },
-      {
-        function: setMasterEditor,
-        keys: ['e']
-      }
-    ]
-  );
-};
-
-if (require.main === module) {
-  main();
 }
+
+exports.Spectron = Spectron;
 </code></pre>
         </article>
     </section>

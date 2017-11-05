@@ -1,17 +1,39 @@
+/**
+ * @file Helper module for unit testing baldr.
+ * @module baldr-test
+ */
+
 const assert = require('assert');
 const fs = require('fs');
 const path = require('path');
 const {JSDOM} = require('jsdom');
 
+/**
+ *
+ */
 exports.assert = assert;
+
+/**
+ *
+ */
 exports.fs = fs;
+
+/**
+ *
+ */
 exports.path = path;
 
+/**
+ *
+ */
 exports.getDOM = getDOM = function(html) {
   let d = new JSDOM(html);
   return d.window.document;
 };
 
+/**
+ *
+ */
 exports.allMasters = [
   'audio',
   'camera',
@@ -23,6 +45,9 @@ exports.allMasters = [
   'svg'
 ];
 
+/**
+ *
+ */
 exports.document = getDOM(
   fs.readFileSync(
     path.join(__dirname, '..', '..', 'render.html'),
@@ -30,11 +55,21 @@ exports.document = getDOM(
   )
 );
 
+/**
+ *
+ */
 exports.presentation = {
   pwd: '/home/jf/lol'
 };
 
+/**
+ *
+ */
 class Spectron {
+
+  /**
+   *
+   */
   constructor(baldrFile) {
     if (process.platform === 'linux') {
       this.appPath = 'dist/linux-unpacked/baldr';
@@ -50,14 +85,23 @@ class Spectron {
     this.app = new Application(config);
   }
 
+  /**
+   *
+   */
   get() {
     return this.app;
   }
 
+  /**
+   *
+   */
   start() {
     return this.app.start();
   }
 
+  /**
+   *
+   */
   stop() {
     if (this.app && this.app.isRunning()) {
       return this.app.stop();

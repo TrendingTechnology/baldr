@@ -1,6 +1,6 @@
 /**
  * @file Master slide “svg”
- * @module masters/svg
+ * @module baldr-master-svg
  */
 
 'use strict';

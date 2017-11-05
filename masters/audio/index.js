@@ -1,6 +1,6 @@
 /**
  * @file Master slide “audio”
- * @module masters/audio
+ * @module baldr-master-audio
  */
 
 'use strict';

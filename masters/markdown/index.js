@@ -1,6 +1,6 @@
 /**
  * @file Master slide “markdown”
- * @module masters/markdown
+ * @module baldr-master-markdown
  */
 
 'use strict';

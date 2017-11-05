@@ -28,12 +28,12 @@
         <article>
             <pre class="prettyprint source linenums"><code>/**
  * @file Master slide “question”
- * @module masters/question
+ * @module baldr-master-question
  */
 
 'use strict';
 
-const {MasterOfMasters} = require('../../lib/masters');
+const {MasterOfMasters} = require('baldr-masters');
 
 /**
  * Master class for the master slide “question”
@@ -50,24 +50,6 @@ class MasterQuestion extends MasterOfMasters {
 
   constructor(propObj) {
     super(propObj);
-  }
-
-  /**
-   *
-   */
-  initSteps() {
-    let elements = this.document.querySelectorAll('p');
-    this.stepCount = elements.length;
-    elements.forEach((element, index) => {
-      this.stepData[index + 1] = element;
-    });
-    elem.forEach(elem => {elem.style.visibility = 'hidden';});
-    elem[0].style.visibility = 'visible';
-    return elem;
-  }
-
-  setStep() {
-    this.stepData[this.stepNo].style.visibility = 'visible';
   }
 
   /**
@@ -125,6 +107,25 @@ class MasterQuestion extends MasterOfMasters {
   /**
    *
    */
+  setStepByNo(no) {
+    for (let i = 1; i &lt;= this.stepCount; i++) {
+      if (!this.stepData[i].style.visibility) {
+        this.stepData[i].style.visibility = 'visible';
+      }
+
+      let visibility = this.stepData[i].style.visibility;
+      if (visibility === 'visible' &amp;&amp; no &lt; i) {
+        this.stepData[i].style.visibility = 'hidden';
+      }
+      else if (visibility === 'hidden' &amp;&amp; no >= i) {
+        this.stepData[i].style.visibility = 'visible';
+      }
+    }
+  }
+
+  /**
+   *
+   */
   template(data) {
     if (data.length > 1) {
       let li = '';
@@ -154,9 +155,31 @@ class MasterQuestion extends MasterOfMasters {
   /**
    *
    */
-  hookPostSet() {
-    this.selectElemHide();
+  hookPostFirstSet() {
+    this.stepNo = 1;
   }
+
+  /**
+   * The stepData object has to be filled very time a slide is set.
+   * Every time a slide is set, new HTML elements are generated.
+   */
+  hookPostSet() {
+    let elements = this.document.querySelectorAll('p');
+    this.stepCount = elements.length;
+    elements.forEach((element, index) => {
+      this.stepData[index + 1] = element;
+    });
+
+    this.setStepByNo(this.stepNo);
+  }
+
+  /**
+   *
+   */
+  hookSetStep() {
+    this.setStepByNo(this.stepNo);
+  }
+
 }
 
 exports.MasterQuestion = MasterQuestion;
@@ -170,13 +193,13 @@ exports.MasterQuestion = MasterQuestion;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-baldr.html">baldr</a></li><li><a href="module-lib_masters.html">lib/masters</a></li><li><a href="module-lib_misc.html">lib/misc</a></li><li><a href="module-lib_presentation.html">lib/presentation</a></li><li><a href="module-lib_slides.html">lib/slides</a></li><li><a href="module-masters_audio.html">masters/audio</a></li><li><a href="module-masters_camera.html">masters/camera</a></li><li><a href="module-masters_editor.html">masters/editor</a></li><li><a href="module-masters_person.html">masters/person</a></li><li><a href="module-masters_question.html">masters/question</a></li><li><a href="module-masters_quote.html">masters/quote</a></li><li><a href="module-masters_svg.html">masters/svg</a></li></ul><h3>Classes</h3><ul><li><a href="module-lib_masters-Masters.html">Masters</a></li><li><a href="module-lib_presentation-Presentation.html">Presentation</a></li><li><a href="module-lib_slides-Slides.html">Slides</a></li><li><a href="module-masters_audio-MasterAudio.html">MasterAudio</a></li><li><a href="module-masters_camera-MasterCamera.html">MasterCamera</a></li><li><a href="module-masters_editor-MasterEditor.html">MasterEditor</a></li><li><a href="module-masters_person-MasterPerson.html">MasterPerson</a></li><li><a href="module-masters_question-MasterQuestion.html">MasterQuestion</a></li><li><a href="module-masters_quote-MasterQuote.html">MasterQuote</a></li><li><a href="module-masters_svg-MasterSvg.html">MasterSvg</a></li></ul><h3>Interfaces</h3><ul><li><a href="module-lib_masters-MasterOfMasters.html">MasterOfMasters</a></li></ul><h3>Global</h3><ul><li><a href="global.html#bindFunction">bindFunction</a></li><li><a href="global.html#bindFunctions">bindFunctions</a></li><li><a href="global.html#firstSlide">firstSlide</a></li><li><a href="global.html#main">main</a></li><li><a href="global.html#nextSlide">nextSlide</a></li><li><a href="global.html#previousSlide">previousSlide</a></li><li><a href="global.html#setMaster">setMaster</a></li><li><a href="global.html#setMasterCamera">setMasterCamera</a></li><li><a href="global.html#setMasterEditor">setMasterEditor</a></li><li><a href="global.html#toggleModal">toggleModal</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-baldr.html">baldr</a></li><li><a href="module-baldr-master-audio.html">baldr-master-audio</a></li><li><a href="module-baldr-master-camera.html">baldr-master-camera</a></li><li><a href="module-baldr-master-editor.html">baldr-master-editor</a></li><li><a href="module-baldr-master-markdown.html">baldr-master-markdown</a></li><li><a href="module-baldr-master-person.html">baldr-master-person</a></li><li><a href="module-baldr-master-question.html">baldr-master-question</a></li><li><a href="module-baldr-master-quote.html">baldr-master-quote</a></li><li><a href="module-baldr-master-svg.html">baldr-master-svg</a></li><li><a href="module-baldr-masters.html">baldr-masters</a></li><li><a href="module-baldr-test.html">baldr-test</a></li><li><a href="module-lib_misc.html">lib/misc</a></li><li><a href="module-lib_presentation.html">lib/presentation</a></li><li><a href="module-lib_slides.html">lib/slides</a></li><li><a href="module-masters_camera.html">masters/camera</a></li></ul><h3>Classes</h3><ul><li><a href="module-baldr-master-audio-MasterAudio.html">MasterAudio</a></li><li><a href="module-baldr-master-camera-MasterCamera.html">MasterCamera</a></li><li><a href="module-baldr-master-editor-MasterEditor.html">MasterEditor</a></li><li><a href="module-baldr-master-markdown-MasterMarkdown.html">MasterMarkdown</a></li><li><a href="module-baldr-master-person-MasterPerson.html">MasterPerson</a></li><li><a href="module-baldr-master-question-MasterQuestion.html">MasterQuestion</a></li><li><a href="module-baldr-master-quote-MasterQuote.html">MasterQuote</a></li><li><a href="module-baldr-master-svg-MasterSvg.html">MasterSvg</a></li><li><a href="module-baldr-masters-Masters.html">Masters</a></li><li><a href="module-baldr-test-Spectron.html">Spectron</a></li><li><a href="module-lib_presentation-Presentation.html">Presentation</a></li><li><a href="module-lib_slides-Slides.html">Slides</a></li><li><a href="module-masters_camera-MasterCamera.html">MasterCamera</a></li></ul><h3>Interfaces</h3><ul><li><a href="module-baldr-masters-MasterOfMasters.html">MasterOfMasters</a></li></ul><h3>Global</h3><ul><li><a href="global.html#bindFunction">bindFunction</a></li><li><a href="global.html#bindFunctions">bindFunctions</a></li><li><a href="global.html#firstSlide">firstSlide</a></li><li><a href="global.html#main">main</a></li><li><a href="global.html#nextSlide">nextSlide</a></li><li><a href="global.html#nextStep">nextStep</a></li><li><a href="global.html#previousSlide">previousSlide</a></li><li><a href="global.html#prevStep">prevStep</a></li><li><a href="global.html#setMaster">setMaster</a></li><li><a href="global.html#setMasterCamera">setMasterCamera</a></li><li><a href="global.html#setMasterEditor">setMasterEditor</a></li><li><a href="global.html#toggleModal">toggleModal</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu Nov 02 2017 23:38:05 GMT+0100 (CET)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Sun Nov 05 2017 16:07:02 GMT+0100 (CET)
 </footer>
 
 <script> prettyPrint(); </script>

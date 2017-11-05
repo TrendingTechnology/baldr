@@ -1,6 +1,6 @@
 /**
  * @file Master slide “quote”
- * @module masters/quote
+ * @module baldr-master-quote
  */
 
 'use strict';

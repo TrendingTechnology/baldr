@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Module: lib/misc</title>
+    <title>JSDoc: Module: baldr-masters</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Module: lib/misc</h1>
+    <h1 class="page-title">Module: baldr-masters</h1>
 
     
 
@@ -38,7 +38,7 @@
     <div class="container-overview">
     
         
-            <div class="description"><p>Load the slides object form the YAML file format and process it.</p></div>
+            <div class="description"><p>Gather informations about all available master slides</p></div>
         
 
         
@@ -87,7 +87,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_misc.js.html">lib/misc.js</a>, <a href="lib_misc.js.html#line1">line 1</a>
+        <a href="lib_masters_index.js.html">lib/masters/index.js</a>, <a href="lib_masters_index.js.html#line1">line 1</a>
     </li></ul></dd>
     
 
@@ -124,6 +124,58 @@
     
 
     
+        <h3 class="subsection-title">Classes</h3>
+
+        <dl>
+            <dt><a href="module-baldr-masters-Masters.html">Masters</a></dt>
+            <dd></dd>
+        </dl>
+    
+
+    
+        <h3 class="subsection-title">Interfaces</h3>
+
+        <dl>
+            <dt><a href="module-baldr-masters-MasterOfMasters.html">MasterOfMasters</a></dt>
+            <dd></dd>
+        </dl>
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Members</h3>
+
+        
+            
+<h4 class="name" id=".elemModal"><span class="type-signature">(static) </span>elemModal<span class="type-signature"> :object</span></h4>
+
+
+
+
+<div class="description">
+    <p>The HTML-Element for the modal content.</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">object</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
 
     
 
@@ -131,6 +183,116 @@
 
     
 
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="lib_masters_index.js.html">lib/masters/index.js</a>, <a href="lib_masters_index.js.html#line68">line 68</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id=".elemSlide"><span class="type-signature">(static) </span>elemSlide<span class="type-signature"> :object</span></h4>
+
+
+
+
+<div class="description">
+    <p>The HTML-Element for the slide content.</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">object</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="lib_masters_index.js.html">lib/masters/index.js</a>, <a href="lib_masters_index.js.html#line62">line 62</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
     
 
     
@@ -142,7 +304,7 @@
     
 
     
-    <h4 class="name" id=".searchForBaldrFile"><span class="type-signature">(static) </span>searchForBaldrFile<span class="signature">(argv)</span><span class="type-signature"> &rarr; {string}</span></h4>
+    <h4 class="name" id="~instantiateMaster"><span class="type-signature">(inner) </span>instantiateMaster<span class="signature">(masterName, document, presentation, propObj)</span><span class="type-signature"></span></h4>
     
 
     
@@ -150,9 +312,7 @@
 
 
 <div class="description">
-    <p>TODO: Move to another file
-Search for a *.baldr file in the argv array. Return the last
-matched element.</p>
+    <p>Load the master slide class</p>
 </div>
 
 
@@ -188,13 +348,13 @@ matched element.</p>
 
         <tr>
             
-                <td class="name"><code>argv</code></td>
+                <td class="name"><code>masterName</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">array</span>
+<span class="param-type">string</span>
 
 
             
@@ -204,7 +364,76 @@ matched element.</p>
 
             
 
-            <td class="description last"><p>Arguments in process.argv</p></td>
+            <td class="description last"><p>The name of the master slide</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>document</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The HTML DOM Document Object.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>presentation</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The presentation object.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>propObj</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Additonal properties for the slides and master objects</p></td>
         </tr>
 
     
@@ -245,7 +474,7 @@ matched element.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_misc.js.html">lib/misc.js</a>, <a href="lib_misc.js.html#line17">line 17</a>
+        <a href="lib_masters_index.js.html">lib/masters/index.js</a>, <a href="lib_masters_index.js.html#line17">line 17</a>
     </li></ul></dd>
     
 
@@ -268,28 +497,6 @@ matched element.</p>
 
 
 
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    <p>The path of a BALDUR file.</p>
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">string</span>
-
-
-    </dd>
-</dl>
-
-    
 
 
 

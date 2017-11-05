@@ -1,6 +1,6 @@
 /**
  * @file Master slide “person”
- * @module masters/person
+ * @module baldr-master-person
  */
 
 'use strict';

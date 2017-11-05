@@ -1,6 +1,6 @@
 /**
  * @file Master slide “question”
- * @module masters/question
+ * @module baldr-master-question
  */
 
 'use strict';

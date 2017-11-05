@@ -1,6 +1,6 @@
 /**
  * @file Master slide “camera”
- * @module masters/camera
+ * @module baldr-master-camera
  */
 
  /* jshint -W117 */

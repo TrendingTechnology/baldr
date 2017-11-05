@@ -1,6 +1,6 @@
 /**
  * @file Master slide “editor”
- * @module masters/editor
+ * @module baldr-master-editor
  */
 
 'use strict';
