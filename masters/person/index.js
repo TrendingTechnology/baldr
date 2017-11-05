@@ -5,7 +5,7 @@
 
 'use strict';
 
-const {MasterOfMasters} = require('../../lib/masters');
+const {MasterOfMasters} = require('baldr-masters');
 
 /**
  * Master class for the master slide “person”

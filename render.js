@@ -8,7 +8,7 @@ const misc = require('./lib/misc.js');
 const path = require('path');
 const {remote} = require('electron');
 const {ipcRenderer} = require('electron');
-const Masters = require('./lib/masters.js').Masters;
+const Masters = require('baldr-masters').Masters;
 
 let masters;
 let presentation;

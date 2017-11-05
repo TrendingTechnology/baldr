@@ -8,7 +8,7 @@ const {
   presentation
 } = require('baldr-test');
 
-const {instantiateMaster, Masters, MasterOfMasters} = require('../lib/masters.js');
+const {instantiateMaster, Masters, MasterOfMasters} = require('baldr-masters');
 const masters = new Masters(document, presentation);
 
 

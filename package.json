@@ -66,6 +66,7 @@
     "baldr-master-question": "file:./masters/question",
     "baldr-master-quote": "file:./masters/quote",
     "baldr-master-svg": "file:./masters/svg",
+    "baldr-masters": "file:./lib/masters",
     "baldr-test": "file:./test/helper",
     "font-awesome": "^4.7.0",
     "js-yaml": "^3.10.0",
