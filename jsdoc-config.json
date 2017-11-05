@@ -14,5 +14,11 @@
             "node_modules"
         ]
     },
-    "plugins": ["plugins/markdown"]
+    "plugins": ["plugins/markdown"],
+    "templates": {
+        "default": {
+          "layoutFile": "./jsdoc-layout.tmpl",
+          "includeDate": false
+        }
+    }
 }
