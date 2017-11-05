@@ -3,7 +3,7 @@ const {
   fs,
   path,
   Spectron
-} = require('../../../test/lib/helper.js');
+} = require('baldr-test');
 
 describe('question example.baldr', function () {
   this.timeout(10000);

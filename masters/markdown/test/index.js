@@ -4,7 +4,7 @@ const {
   path,
   presentation,
   getDOM
-} = require('../../../test/lib/helper.js');
+} = require('baldr-test');
 
 const {MasterMarkdown} = require('../index.js');
 

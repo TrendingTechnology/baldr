@@ -2,7 +2,7 @@ const assert = require('assert');
 const fs = require('fs');
 const path = require('path');
 const {MasterQuote} = require('../index.js');
-const {document, presentation, getDOM} = require('../../../test/lib/helper.js');
+const {document, presentation, getDOM} = require('baldr-test');
 
 let propObj = {
   masterName: 'quote',

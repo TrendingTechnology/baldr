@@ -6,7 +6,7 @@ const {
   getDOM,
   path,
   presentation
-} = require('./lib/helper.js');
+} = require('baldr-test');
 
 const {instantiateMaster, Masters, MasterOfMasters} = require('../lib/masters.js');
 const masters = new Masters(document, presentation);

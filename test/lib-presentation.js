@@ -4,7 +4,7 @@ const {
   getDOM,
   path,
   presentation
-} = require('./lib/helper.js');
+} = require('baldr-test');
 
 const rewire = require('rewire')('../lib/presentation.js');
 const {Presentation} = require('../lib/presentation.js');

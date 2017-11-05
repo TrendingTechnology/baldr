@@ -3,7 +3,7 @@ const {
   fs,
   path,
   Spectron
-} = require('./lib/helper.js');
+} = require('baldr-test');
 
 const rewire = require('rewire');
 

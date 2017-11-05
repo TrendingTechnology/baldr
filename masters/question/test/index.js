@@ -5,7 +5,7 @@ const {
   document,
   presentation,
   getDOM
-} = require('../../../test/lib/helper.js');
+} = require('baldr-test');
 
 const {MasterQuestion} = require('../index.js');
 

@@ -5,7 +5,7 @@ const {
   getDOM,
   path,
   presentation
-} = require('./lib/helper.js');
+} = require('baldr-test');
 
 const rewire = require('rewire')('../lib/slides.js');
 const {Slides} = require('../lib/slides.js');

@@ -1,7 +1,7 @@
 const {
   assert,
   document
-} = require('./lib/helper.js');
+} = require('baldr-test');
 
 describe('“render.js”', function() {
   it('“toggleModal()”', function() {
