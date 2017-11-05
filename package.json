@@ -59,6 +59,9 @@
   "dependencies": {
     "7zip-bin-linux": "^1.1.0",
     "baldr-audio": "file:./masters/audio",
+    "baldr-camera": "file:./masters/camera",
+    "baldr-editor": "file:./masters/editor",
+    "baldr-markdown": "file:./masters/markdown",
     "baldr-person": "file:./masters/person",
     "baldr-question": "file:masters/question",
     "baldr-quote": "file:./masters/quote",
