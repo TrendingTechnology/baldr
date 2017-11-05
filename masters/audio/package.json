@@ -1,21 +1,5 @@
 {
-  "name": "baldr-audio",
-  "version": "0.0.1",
-  "description": "Audio master slide for the BALDR presentation software",
-  "main": "index.js",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/JosefFriedrich-nodejs/baldr.git"
-  },
-  "author": {
-    "name": "Josef Friedrich",
-    "email": "josef@friedrich.rocks"
-  },
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/JosefFriedrich-nodejs/baldr/issues"
-  },
-  "homepage": "https://github.com/JosefFriedrich-nodejs/baldr#readme",
+  "name": "baldr-master-audio",
   "dependencies": {
     "howl": "*"
   }
