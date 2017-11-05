@@ -5,8 +5,6 @@ const {
   Spectron
 } = require('baldr-test');
 
-const rewire = require('rewire');
-
 describe('build', () => {
 
   it(`exists “Spectron.appPath”`, () => {
@@ -336,7 +334,6 @@ describe('Launch single-slide.baldr', function () {
 
 });
 
-
 describe('Launch error.baldr', function () {
   this.timeout(10000);
 
@@ -349,7 +346,6 @@ describe('Launch error.baldr', function () {
   afterEach(function () {
     return this.spectron.stop();
   });
-
 
   it('Error text', function () {
     return this.app.client

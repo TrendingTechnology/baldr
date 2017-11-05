@@ -7,6 +7,7 @@ const assert = require('assert');
 const fs = require('fs');
 const path = require('path');
 const {JSDOM} = require('jsdom');
+const rewire = require('rewire');
 
 /**
  *
@@ -22,6 +23,11 @@ exports.fs = fs;
  *
  */
 exports.path = path;
+
+/**
+ *
+ */
+exports.rewire = rewire;
 
 /**
  *

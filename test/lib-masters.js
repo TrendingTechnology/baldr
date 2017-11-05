@@ -11,7 +11,6 @@ const {
 const {instantiateMaster, Masters, MasterOfMasters} = require('baldr-masters');
 const masters = new Masters(document, presentation);
 
-
 describe('Function “instantiateMaster()”', function() {
   it('simple', function() {
     let master = instantiateMaster('quote', document, presentation);
