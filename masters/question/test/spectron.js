@@ -9,12 +9,13 @@ describe('question example.baldr', function () {
   this.timeout(10000);
 
   beforeEach(function () {
-    this.app = new Spectron('masters/question/example.baldr').get();
-    return this.app.start();
+    this.spectron = new Spectron('masters/question/example.baldr');
+    this.app = this.spectron.getApp();
+    return this.spectron.start();
   });
 
   afterEach(function () {
-    return this.app.stop();
+    return this.spectron.stop();
   });
 
   it('Initial window', function () {

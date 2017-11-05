@@ -88,7 +88,7 @@ class Spectron {
   /**
    *
    */
-  get() {
+  getApp() {
     return this.app;
   }
 

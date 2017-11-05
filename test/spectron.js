@@ -7,22 +7,11 @@ const {
 
 const rewire = require('rewire');
 
-var Application = require('spectron').Application;
-var pkg = require('../package.json');
-
-let appPath;
-
-if (process.platform === 'linux') {
- appPath = 'dist/linux-unpacked/baldr';
-}
-else if (process.platform === 'darwin') {
-  appPath = 'dist/mac/baldr.app/Contents/MacOS/baldr';
-}
-
 describe('build', () => {
 
-  it(`exists “${appPath}”`, () => {
-    assert.ok(fs.existsSync(appPath));
+  it(`exists “Spectron.appPath”`, () => {
+    let spectron = new Spectron();
+    assert.ok(fs.existsSync(spectron.appPath));
   });
 
 });
@@ -31,17 +20,15 @@ describe('Lauch without baldr file', function () {
   this.timeout(10000);
 
   beforeEach(function () {
-    this.app = new Application({
-      path: appPath
-    });
-    return this.app.start();
+    this.spectron = new Spectron();
+    this.app = this.spectron.getApp();
+    return this.spectron.start();
   });
 
   afterEach(function () {
-    if (this.app && this.app.isRunning()) {
-      return this.app.stop();
-    }
+    return this.spectron.stop();
   });
+
 
   it('Initial window', function () {
     return this.app.client
@@ -66,17 +53,13 @@ describe('Launch minimal.baldr', function () {
   this.timeout(10000);
 
   beforeEach(function () {
-    this.app = new Application({
-      path: appPath,
-      args: [path.join('test', 'files', 'minimal.baldr')]
-    });
-    return this.app.start();
+    this.spectron = new Spectron('test/files/minimal.baldr');
+    this.app = this.spectron.getApp();
+    return this.spectron.start();
   });
 
   afterEach(function () {
-    if (this.app && this.app.isRunning()) {
-      return this.app.stop();
-    }
+    return this.spectron.stop();
   });
 
   it('Initial window', function () {
@@ -176,17 +159,13 @@ describe('Launch steps.baldr', function () {
   this.timeout(10000);
 
   beforeEach(function () {
-    this.app = new Application({
-      path: appPath,
-      args: [path.join('test', 'files', 'steps.baldr')]
-    });
-    return this.app.start();
+    this.spectron = new Spectron('test/files/steps.baldr');
+    this.app = this.spectron.getApp();
+    return this.spectron.start();
   });
 
   afterEach(function () {
-    if (this.app && this.app.isRunning()) {
-      return this.app.stop();
-    }
+    return this.spectron.stop();
   });
 
   it('General step functionality, nextStep', function () {
@@ -334,17 +313,13 @@ describe('Launch single-slide.baldr', function () {
   this.timeout(10000);
 
   beforeEach(function () {
-    this.app = new Application({
-      path: appPath,
-      args: [path.join('test', 'files', 'single-slide.baldr')]
-    });
-    return this.app.start();
+    this.spectron = new Spectron('test/files/single-slide.baldr');
+    this.app = this.spectron.getApp();
+    return this.spectron.start();
   });
 
   afterEach(function () {
-    if (this.app && this.app.isRunning()) {
-      return this.app.stop();
-    }
+    return this.spectron.stop();
   });
 
   it('Navigation buttons are hidden', function () {
@@ -366,18 +341,15 @@ describe('Launch error.baldr', function () {
   this.timeout(10000);
 
   beforeEach(function () {
-    this.app = new Application({
-      path: appPath,
-      args: [path.join('test', 'files', 'error.baldr')]
-    });
-    return this.app.start();
+    this.spectron = new Spectron('test/files/error.baldr');
+    this.app = this.spectron.getApp();
+    return this.spectron.start();
   });
 
   afterEach(function () {
-    if (this.app && this.app.isRunning()) {
-      return this.app.stop();
-    }
+    return this.spectron.stop();
   });
+
 
   it('Error text', function () {
     return this.app.client
