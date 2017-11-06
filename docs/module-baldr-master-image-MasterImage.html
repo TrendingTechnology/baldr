@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: masters/question/index.js</title>
+    <title>JSDoc: Class: MasterImage</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,175 +17,222 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: masters/question/index.js</h1>
+    <h1 class="page-title">Class: MasterImage</h1>
 
     
 
 
 
+
+<section>
+
+<header>
     
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>/**
- * @file Master slide “question”
- * @module baldr-master-question
- */
+        <h2><span class="attribs"><span class="type-signature"></span></span>
+            <span class="ancestors"><a href="module-baldr-master-image.html">baldr-master-image</a>~</span>MasterImage<span class="signature">()</span><span class="type-signature"></span></h2>
+        
+            <div class="class-description"><p>Master class for the master slide “image”</p></div>
+        
+    
+</header>
 
-'use strict';
+<article>
+    <div class="container-overview">
+    
+        
 
-const {MasterOfMasters} = require('baldr-masters');
+    
+    <h2>Constructor</h2>
+    
 
-/**
- * Master class for the master slide “question”
- *
- * Types:
- *  - single
- *    - without answer
- *    - with answer
- *  - multiple
- *    - without answer
- *    - with answer
- */
-class MasterQuestion extends MasterOfMasters {
+    
+    <h4 class="name" id="MasterImage"><span class="type-signature"></span>new MasterImage<span class="signature">()</span><span class="type-signature"></span></h4>
+    
 
-  constructor(propObj) {
-    super(propObj);
-  }
+    
 
-  /**
-   *
-   */
-  normalizeDataQAPair(pair) {
-    if (typeof pair === 'string') {
-      return {question: pair, answer: false};
-    }
-    else if (typeof pair === 'object') {
-      if (typeof pair.question === 'string' &amp;&amp; !pair.answer) {
-        return {question: pair.question, answer: false};
-      }
-      else if (typeof pair.question === 'string' &amp;&amp; typeof pair.answer === 'string') {
-        return {question: pair.question, answer: pair.answer};
-      }
-      else {
-        throw new Error('Master slide “question”: Invalid data input');
-      }
-    }
-    else {
-      throw new Error('Master slide “question”: Invalid data input');
-    }
-  }
 
-  /**
-   *
-   */
-  normalizeData(data) {
-     if (typeof data === 'object' &amp;&amp; Array.isArray(data)) {
-      let out = [];
-      for (let pair of data) {
-        out.push(this.normalizeDataQAPair(pair));
-      }
-      return out;
-    } else {
-      return [this.normalizeDataQAPair(data)];
-    }
-  }
 
-  /**
-   *
-   */
-  templatQAPair(question, answer) {
-    let out = '';
-    if (question) {
-      out += `&lt;p class="question">${question}&lt;/p>`;
-    }
-    if (answer) {
-      out += `&lt;p class="answer">${answer}&lt;/p>`;
-    }
-    return out;
-  }
 
-  /**
-   *
-   */
-  setStepByNo(no) {
-    for (let i = 1; i &lt;= this.stepCount; i++) {
-      if (!this.stepData[i].style.visibility) {
-        this.stepData[i].style.visibility = 'visible';
-      }
 
-      let visibility = this.stepData[i].style.visibility;
-      if (visibility === 'visible' &amp;&amp; no &lt; i) {
-        this.stepData[i].style.visibility = 'hidden';
-      }
-      else if (visibility === 'hidden' &amp;&amp; no >= i) {
-        this.stepData[i].style.visibility = 'visible';
-      }
-    }
-  }
 
-  /**
-   *
-   */
-  template(data) {
-    if (data.length > 1) {
-      let li = '';
-      for (let pair of data) {
-        li +=
-          '&lt;li>' +
-          this.templatQAPair(pair.question, pair.answer) +
-          '&lt;/li>';
-      }
-      return `&lt;ol>${li}&lt;/ol>`;
-    }
-    else {
-      return this.templatQAPair(data[0].question, data[0].answer);
-    }
-  }
 
-  /**
-   *
-   */
-  hookSetHTMLSlide() {
-    let data = this.normalizeData(this.data);
-    return '&lt;div id="question-content">' +
-      this.template(data) +
-      '&lt;/div>';
-  }
 
-  /**
-   *
-   */
-  hookPostFirstSet() {
-    this.stepNo = 1;
-  }
 
-  /**
-   * The stepData object has to be filled very time a slide is set.
-   * Every time a slide is set, new HTML elements are generated.
-   */
-  hookPostSet() {
-    let elements = this.document.querySelectorAll('p');
-    this.stepCount = elements.length;
-    elements.forEach((element, index) => {
-      this.stepData[index + 1] = element;
-    });
 
-    this.setStepByNo(this.stepNo);
-  }
 
-  /**
-   *
-   */
-  hookSetStep() {
-    this.setStepByNo(this.stepNo);
-  }
 
-}
 
-exports.MasterQuestion = MasterQuestion;
-</code></pre>
-        </article>
-    </section>
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="masters_image_index.js.html">masters/image/index.js</a>, <a href="masters_image_index.js.html#line13">line 13</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="hookSetHTMLSlide"><span class="type-signature"></span>hookSetHTMLSlide<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="masters_image_index.js.html">masters/image/index.js</a>, <a href="masters_image_index.js.html#line22">line 22</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
 
 
 
