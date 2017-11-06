@@ -1,13 +1,6 @@
-#slide {
-  font-size: 4vw;
-  display: table;
-}
-
-#baldr-master-quote {
+#slide-content {
   padding-left: 20%;
   padding-right: 20%;
-  display: table-cell;
-  vertical-align: middle;
 }
 
 .text {

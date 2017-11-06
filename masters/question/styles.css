@@ -1,13 +1,6 @@
-#slide {
-  font-size: 4vw;
-  display: table;
-}
-
-#question-content {
+#slide-content {
   padding-left: 20%;
   padding-right: 20%;
-  display: table-cell;
-  vertical-align: middle;
 }
 
 .answer {
