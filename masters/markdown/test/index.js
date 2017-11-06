@@ -20,12 +20,6 @@ let getMarkdown = function(data) {
   return new MasterMarkdown(propObj);
 };
 
-let hookSetHTMLSlide = function(data) {
-  propObj.data = data;
-  let markdown = new MasterMarkdown(propObj);
-  return quote.hookSetHTMLSlide();
-};
-
 describe('Master slide “markdown”', () => {
 
   it('heading', () => {
