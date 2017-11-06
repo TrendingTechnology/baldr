@@ -22,7 +22,7 @@ let render = function(data) {
   return quote.hookSetHTMLSlide();
 };
 
-describe('Master slide “quote”', () => {
+describe('Master slide “quote”: unit tests', () => {
 
   it('function “hookSetHTMLSlide()”: all values', () => {
     let html = render({

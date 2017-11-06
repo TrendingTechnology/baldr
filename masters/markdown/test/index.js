@@ -20,7 +20,7 @@ let getMarkdown = function(data) {
   return new MasterMarkdown(propObj);
 };
 
-describe('Master slide “markdown”', () => {
+describe('Master slide “markdown”: unit tests', () => {
 
   it('heading', () => {
     let markdown = getMarkdown(`

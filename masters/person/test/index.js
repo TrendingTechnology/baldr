@@ -23,7 +23,7 @@ let render = function(data) {
   return person.hookSetHTMLSlide();
 };
 
-describe('Master slide “person”', () => {
+describe('Master slide “person”: unit tests', () => {
 
   it('function “hookSetHTMLSlide()”', () => {
 

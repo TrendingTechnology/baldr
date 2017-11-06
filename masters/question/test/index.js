@@ -36,7 +36,7 @@ let dataMultipleWithAnswer = [
   {question: 'Two?', answer: 'Two'}
 ];
 
-describe('Master slide “question”', () => {
+describe('Master slide “question”: unit tests', () => {
 
   it('method “normalizeData()”', () => {
     let question = getQuestion('');

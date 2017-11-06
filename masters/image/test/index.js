@@ -20,7 +20,7 @@ let getImage = function(data) {
   return new MasterImage(propObj);
 };
 
-describe('Master slide “image”', () => {
+describe('Master slide “image”: unit tests', () => {
 
   it.skip('', () => {
 
