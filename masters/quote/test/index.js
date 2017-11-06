@@ -1,8 +1,13 @@
-const assert = require('assert');
-const fs = require('fs');
-const path = require('path');
+const {
+  assert,
+  document,
+  fs,
+  getDOM,
+  path,
+  presentation
+} = require('baldr-test');
+
 const {MasterQuote} = require('../index.js');
-const {document, presentation, getDOM} = require('baldr-test');
 
 let propObj = {
   masterName: 'quote',

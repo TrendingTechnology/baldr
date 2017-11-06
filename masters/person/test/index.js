@@ -1,7 +1,12 @@
-const assert = require('assert');
-const path = require('path');
+const {
+  assert,
+  path,
+  document,
+  presentation,
+  getDOM
+} = require('baldr-test');
+
 const {MasterPerson} = require('../index.js');
-const {document, presentation, getDOM} = require('baldr-test');
 
 presentation.pwd = '/home/bladr';
 

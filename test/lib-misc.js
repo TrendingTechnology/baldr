@@ -1,5 +1,8 @@
-const assert = require('assert');
-const path = require('path');
+const {
+  assert,
+  path
+} = require('baldr-test');
+
 const misc = require('../lib/misc.js');
 
 describe('Other functions', () => {
