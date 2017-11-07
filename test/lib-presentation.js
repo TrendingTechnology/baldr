@@ -122,6 +122,9 @@ describe('Class “Presentation()”', () => {
     assert.ok(this.prs.filterFileByExtension('lol.txt', ['TXT']));
     assert.ok(this.prs.filterFileByExtension('lol.TXT', ['txt']));
     assert.ok(this.prs.filterFileByExtension('lol.txt', ['lol', 'txt']));
+    assert.ok(this.prs.filterFileByExtension('lol.txt'));
+    assert.ok(this.prs.filterFileByExtension('lol.txt', 'txt'));
+    assert.ok(!this.prs.filterFileByExtension('lol.txt', 'txxxt'));
     assert.ok(!this.prs.filterFileByExtension('lol.txt', ['lol', 'troll']));
     assert.ok(!this.prs.filterFileByExtension('lol.txt', ['txxxt']));
   });
