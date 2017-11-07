@@ -84,6 +84,32 @@ describe('Class “Presentation()”', () => {
     );
   });
 
+  describe('Method “normalizeInputPath()”', function() {
+    it('Nonexistent file: throws error', function() {
+      assert.throws(
+        () => {this.prs.normalizeInputPath('loool.txt');},
+        /The specified path “.*” does not exist!/
+      );
+    });
+
+    it('A path of a file (relative path)', function() {
+      // relative to test/files/minimal.baldr
+      assert.equal(
+        this.prs.normalizeInputPath('beethoven.jpg'),
+        path.resolve('test/files/beethoven.jpg')
+      );
+    });
+
+    it('A path of a file (absolute path)', function() {
+      assert.equal(
+        this.prs.normalizeInputPath(path.resolve('test/files/beethoven.jpg')),
+        path.resolve('test/files/beethoven.jpg')
+      );
+    });
+  });
+
+
+
   it('Method chaining', function() {
     this.prs.next().set();
     assert.ok(this.prs.currentSlide.elemSlide.textContent.includes('Ludwig van Beethoven'));
