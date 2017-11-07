@@ -73,6 +73,17 @@ describe('Class “Presentation()”', () => {
     assert.ok(this.prs.currentSlide.elemSlide.textContent.includes('Johann Wolfgang von Goethe'));
   });
 
+  it('Method “absolutePath()”', function() {
+    assert.equal(
+      this.prs.absolutePath('test.txt'),
+      path.join(this.prs.pwd, 'test.txt')
+    );
+    assert.equal(
+      this.prs.absolutePath('/tmp/test.txt'),
+      '/tmp/test.txt'
+    );
+  });
+
   it('Method chaining', function() {
     this.prs.next().set();
     assert.ok(this.prs.currentSlide.elemSlide.textContent.includes('Ludwig van Beethoven'));

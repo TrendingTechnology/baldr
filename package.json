@@ -46,6 +46,7 @@
   },
   "homepage": "https://github.com/JosefFriedrich-nodejs/baldr#readme",
   "devDependencies": {
+    "7zip-bin-linux": "^1.1.0",
     "electron": "^1.7.9",
     "electron-builder": "^19.37.2",
     "jsdoc": "^3.5.5",
