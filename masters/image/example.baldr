@@ -1,2 +1,15 @@
 ---
-- image: beethoven.jpg
+- image: images/beethoven.jpg
+
+- image:
+    - images/beethoven.jpg
+
+- image:
+    - images/beethoven.jpg
+    - images/haydn.jpg
+    - images/mozart.jpg
+
+- image: images
+
+- image:
+  - images

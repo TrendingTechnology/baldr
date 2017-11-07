@@ -22,7 +22,13 @@ let getImage = function(data) {
 
 describe('Master slide “image”: unit tests', () => {
 
-  it.skip('', () => {
+  it.skip('method normalizeData()', () => {
+    let image = getImage('beethoven.jpg');
+
+    assert.deepEqual(
+      image.normalizeData('beethoven.jpg')
+      [path.resolve('test/files/beethoven.jpg')]
+    );
 
   });
 

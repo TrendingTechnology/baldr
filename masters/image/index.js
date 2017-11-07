@@ -19,6 +19,31 @@ class MasterImage extends MasterOfMasters {
   /**
    *
    */
+  normalizeSinglePath(filePath) {
+    return this.presentation.filterFiles(
+      filePath,
+      ['jpg', 'jpeg', 'png']
+    );
+  }
+
+  /**
+   *
+   */
+  normalizeData(data) {
+     if (typeof data === 'object' && Array.isArray(data)) {
+      let out = [];
+      for (let filePath of data) {
+        out.push(this.normalizeSinglePath(filePath));
+      }
+      return out;
+    } else if (typeof data === 'string') {
+      return [this.normalizeSinglePath(data)];
+    }
+  }
+
+  /**
+   *
+   */
   hookSetHTMLSlide() {
     return `<img src="${this.data[0].path}">`;
   }
