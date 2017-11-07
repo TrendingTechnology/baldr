@@ -108,11 +108,24 @@ describe('Class “Presentation()”', () => {
     });
 
     it('A folder', function() {
+      let testFiles = path.resolve('masters/image/images');
+      assert.deepEqual(
+        this.prs.filterFiles(testFiles),
+        [
+          path.join(testFiles, 'beethoven.jpg'),
+          path.join(testFiles, 'haydn.jpg'),
+          path.join(testFiles, 'mozart.jpg')
+        ]
+      );
+    });
+
+    it('A folder without a match', function() {
       assert.deepEqual(
         this.prs.filterFiles(
-          path.resolve('masters/image/images')
+          path.resolve('masters/image/images'),
+          ['lol']
         ),
-        [ 'beethoven.jpg', 'haydn.jpg', 'mozart.jpg' ]
+        []
       );
     });
   });
