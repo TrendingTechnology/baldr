@@ -106,9 +106,25 @@ describe('Class “Presentation()”', () => {
         path.resolve('test/files/beethoven.jpg')
       );
     });
+
+    it('A folder', function() {
+      assert.deepEqual(
+        this.prs.normalizeInputPath(
+          path.resolve('masters/image/images')
+        ),
+        [ 'beethoven.jpg', 'haydn.jpg', 'mozart.jpg' ]
+      );
+    });
   });
 
-
+  it('Method “filterFileByExtension()”', function() {
+    assert.ok(this.prs.filterFileByExtension('lol.txt', ['txt']));
+    assert.ok(this.prs.filterFileByExtension('lol.txt', ['TXT']));
+    assert.ok(this.prs.filterFileByExtension('lol.TXT', ['txt']));
+    assert.ok(this.prs.filterFileByExtension('lol.txt', ['lol', 'txt']));
+    assert.ok(!this.prs.filterFileByExtension('lol.txt', ['lol', 'troll']));
+    assert.ok(!this.prs.filterFileByExtension('lol.txt', ['txxxt']));
+  });
 
   it('Method chaining', function() {
     this.prs.next().set();
