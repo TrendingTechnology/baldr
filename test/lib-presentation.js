@@ -85,18 +85,26 @@ describe('Class “Presentation()”', () => {
   });
 
   describe('Method “filterFiles()”', function() {
-    it('Nonexistent file: throws error', function() {
-      assert.throws(
-        () => {this.prs.filterFiles('loool.txt');},
-        /The specified path “.*” does not exist!/
+    it('Nonexistent file', function() {
+      assert.deepEqual(
+        this.prs.filterFiles('loool.txt'),
+        []
       );
     });
 
-    it('A path of a file (relative path)', function() {
+    it('A file (relative path)', function() {
       // relative to test/files/minimal.baldr
       assert.equal(
         this.prs.filterFiles('beethoven.jpg'),
         path.resolve('test/files/beethoven.jpg')
+      );
+    });
+
+    it('A file (relative path), not matching', function() {
+      // relative to test/files/minimal.baldr
+      assert.deepEqual(
+        this.prs.filterFiles('beethoven.jpg', ['lol']),
+        []
       );
     });
 
@@ -110,7 +118,7 @@ describe('Class “Presentation()”', () => {
     it('A folder', function() {
       let testFiles = path.resolve('masters/image/images');
       assert.deepEqual(
-        this.prs.filterFiles(testFiles),
+        this.prs.filterFiles(testFiles, 'jpg'),
         [
           path.join(testFiles, 'beethoven.jpg'),
           path.join(testFiles, 'haydn.jpg'),
