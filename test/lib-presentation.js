@@ -84,10 +84,10 @@ describe('Class “Presentation()”', () => {
     );
   });
 
-  describe('Method “normalizeInputPath()”', function() {
+  describe('Method “filterFiles()”', function() {
     it('Nonexistent file: throws error', function() {
       assert.throws(
-        () => {this.prs.normalizeInputPath('loool.txt');},
+        () => {this.prs.filterFiles('loool.txt');},
         /The specified path “.*” does not exist!/
       );
     });
@@ -95,21 +95,21 @@ describe('Class “Presentation()”', () => {
     it('A path of a file (relative path)', function() {
       // relative to test/files/minimal.baldr
       assert.equal(
-        this.prs.normalizeInputPath('beethoven.jpg'),
+        this.prs.filterFiles('beethoven.jpg'),
         path.resolve('test/files/beethoven.jpg')
       );
     });
 
     it('A path of a file (absolute path)', function() {
       assert.equal(
-        this.prs.normalizeInputPath(path.resolve('test/files/beethoven.jpg')),
+        this.prs.filterFiles(path.resolve('test/files/beethoven.jpg')),
         path.resolve('test/files/beethoven.jpg')
       );
     });
 
     it('A folder', function() {
       assert.deepEqual(
-        this.prs.normalizeInputPath(
+        this.prs.filterFiles(
           path.resolve('masters/image/images')
         ),
         [ 'beethoven.jpg', 'haydn.jpg', 'mozart.jpg' ]
