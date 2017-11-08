@@ -44,6 +44,11 @@ describe('Class “Presentation()”', () => {
       );
     });
 
+    it('this.cover', function() {
+      assert.equal(this.prs.cover.id, 'cover');
+      assert.equal(this.prs.cover.nodeName, 'DIV');
+    });
+
   });
 
   it('Method “prev()”', function() {
@@ -68,8 +73,15 @@ describe('Class “Presentation()”', () => {
     assert.equal(this.prs.no, 2);
   });
 
+  it('Method “setCoverBackground()”', function() {
+    this.prs.setCoverBackground('red');
+    let cover = this.prs.document.getElementById('cover');
+    assert.equal(cover.style.backgroundColor, 'red');
+  });
+
   it('Method “set()”', function() {
     this.prs.set();
+    assert.equal(this.prs.cover.style.backgroundColor, 'black');
     assert.ok(this.prs.currentSlide.elemSlide.textContent.includes('Johann Wolfgang von Goethe'));
   });
 
