@@ -1,5 +1,6 @@
 const {
   assert,
+  path,
   Spectron
 } = require('baldr-test');
 
@@ -16,16 +17,14 @@ describe('Master slide “image”: Spectron tests on “example.baldr”', func
     return this.spectron.stop();
   });
 
-  it.skip('', function () {
+  it('', function () {
     return this.app.client
-      .getText('h1')
-      .then(text => {assert.equal(text, 'heading 1');})
-      .getText('h2')
-      .then(text => {assert.equal(text, 'heading 2');})
-
-      .click('#nav-slide-next')
-      .getText('p')
-      .then(text => {assert.equal(text[0], 'Lorem ipsum dolor sit amet ...');})
+      .getAttribute('img', 'src')
+      .then(src => {
+        assert.equal(
+          src,
+          'file://' + path.resolve('masters/image/images/beethoven.jpg'));
+      })
 
       ;
   });

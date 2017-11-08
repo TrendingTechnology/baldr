@@ -2,12 +2,12 @@
 - image: images/beethoven.jpg
 
 - image:
-    - images/beethoven.jpg
+    - images/haydn.jpg
 
 - image:
+    - images/mozart.jpg
     - images/beethoven.jpg
     - images/haydn.jpg
-    - images/mozart.jpg
 
 - image: images
 

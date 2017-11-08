@@ -14,6 +14,8 @@ class MasterImage extends MasterOfMasters {
 
   constructor(propObj) {
     super(propObj);
+
+    this.dataNormalized = this.normalizeData(this.data);
   }
 
   /**
@@ -33,11 +35,14 @@ class MasterImage extends MasterOfMasters {
      if (typeof data === 'object' && Array.isArray(data)) {
       let out = [];
       for (let filePath of data) {
-        out.push(this.normalizeSinglePath(filePath));
+        var images = this.normalizeSinglePath(filePath);
+        for (let image of images) {
+          out.push(image);
+        }
       }
       return out;
     } else if (typeof data === 'string') {
-      return [this.normalizeSinglePath(data)];
+      return this.normalizeSinglePath(data);
     }
   }
 
@@ -45,7 +50,7 @@ class MasterImage extends MasterOfMasters {
    *
    */
   hookSetHTMLSlide() {
-    return `<img src="${this.data[0].path}">`;
+    return `<img src="${this.dataNormalized[0]}">`;
   }
 
 }
