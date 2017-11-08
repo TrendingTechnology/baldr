@@ -26,13 +26,15 @@ var buildMenu = function() {
           label: 'Camera',
           click (menuItem, browserWindow, event) {
             browserWindow.webContents.send('set-master', 'camera');
-          }
+          },
+          accelerator: 'Control+Alt+C'
         },
         {
           label: 'Editor',
           click (menuItem, browserWindow, event) {
             browserWindow.webContents.send('set-master', 'editor');
-          }
+          },
+          accelerator: 'Control+Alt+E'
         },
         {type: 'separator'},
 

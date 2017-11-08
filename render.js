@@ -179,11 +179,11 @@ var main = function() {
       },
       {
         function: setMasterCamera,
-        keys: ['c']
+        keys: ['ctrl+alt+c']
       },
       {
         function: setMasterEditor,
-        keys: ['e']
+        keys: ['ctrl+alt+e']
       }
     ]
   );

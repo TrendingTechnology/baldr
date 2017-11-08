@@ -22,6 +22,15 @@ describe('Master slide “camera”: Spectron tests on “example.baldr”', fun
       .click('#modal-open')
       .getText('#modal-content label')
       .then(text => {assert.equal(text, 'Video source:');})
+
+      .click('#modal-open')
+      .click('#nav-slide-next')
+
+      .keys(['Control', 'Alt', 'c'])
+      .click('#modal-open')
+      .getText('#modal-content label')
+      .then(text => {assert.equal(text, 'Video source:');})
+
       ;
   });
 
