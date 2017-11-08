@@ -18,6 +18,8 @@ body {
   color: white;
   font-family: 'Alegreya';
   margin: 0;
+  height: 100%;
+  width: 100%;
 }
 
 h1, h2, h3, h4 {
@@ -30,14 +32,12 @@ h1, h2, h3, h4 {
  **********************************************************************/
 
 #slide {
+  font-size: 4vw;
   height: 100%;
   width: 100%;
-  display: table;
-  font-size: 4vw;
 }
 
 #slide-content {
-  display: table-cell;
   vertical-align: middle;
 }
 
