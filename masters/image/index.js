@@ -6,6 +6,8 @@
 'use strict';
 
 const {MasterOfMasters} = require('baldr-masters');
+const {InputFiles} = require('baldr-input-files');
+
 
 /**
  * Master class for the master slide “image”
@@ -14,15 +16,17 @@ class MasterImage extends MasterOfMasters {
 
   constructor(propObj) {
     super(propObj);
-
-    this.dataNormalized = this.normalizeData(this.data);
+    if (this.presentation) {
+      this.inputFiles = new InputFiles(this.presentation.pwd);
+      this.dataNormalized = this.normalizeData(this.data);
+    }
   }
 
   /**
    *
    */
   normalizeSinglePath(filePath) {
-    return this.presentation.filterFiles(
+    return this.inputFiles.filter(
       filePath,
       ['jpg', 'jpeg', 'png']
     );
