@@ -50,7 +50,38 @@ class MasterImage extends MasterOfMasters {
    *
    */
   hookSetHTMLSlide() {
-    return `<img src="${this.dataNormalized[0]}">`;
+    return `<img id="baldr-master-image">`;
+  }
+
+  /**
+   *
+   */
+  hookPostFirstSet() {
+    this.stepNo = 1;
+    this.stepCount = this.dataNormalized.length;
+  }
+
+  /**
+   */
+  hookPostSet() {
+    this.elemImage = this.document
+      .getElementById('baldr-master-image');
+    this.setImage();
+  }
+
+  /**
+   *
+   */
+  setImage() {
+    this.elemImage
+      .setAttribute('src', this.dataNormalized[this.stepNo - 1]);
+  }
+
+  /**
+   *
+   */
+  hookSetStep() {
+    this.setImage();
   }
 
 }
