@@ -9,7 +9,7 @@
     "doc": "jsdoc --configure jsdoc-config.json .",
     "pack": "electron-builder --dir",
     "start": "electron .",
-    "test": "mocha 'test/*.js' 'masters/image/test/*.js' 'masters/markdown/test/*.js' 'masters/person/test/*.js' 'masters/question/test/*.js' 'masters/quote/test/*.js'"
+    "test": "mocha 'test/*.js' 'masters/image/camera/*.js' 'masters/image/test/*.js' 'masters/markdown/test/*.js' 'masters/person/test/*.js' 'masters/question/test/*.js' 'masters/quote/test/*.js'"
   },
   "build": {
     "appId": "rocks.friedrich.baldr",
