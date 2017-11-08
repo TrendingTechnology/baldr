@@ -50,7 +50,8 @@ class MasterCamera extends MasterOfMasters {
   hookSetHTMLModal() {
     return `
     <div class="select">
-      <label for="videoSource">Video source: </label><select id="videoSource"></select>
+      <label for="videoSource">Video source:</label>
+      <select id="videoSource"></select>
     </div>`;
   }
 
@@ -81,15 +82,10 @@ class MasterCamera extends MasterOfMasters {
      * values.
      */
     function gotDevices(deviceInfos) {
-      var values = selectors.map(function(select) {
-        return select.value;
-      });
+      while (elemSelect.firstChild) {
+        elemSelect.removeChild(elemSelect.firstChild);
+      }
 
-      selectors.forEach(function(select) {
-        while (select.firstChild) {
-          select.removeChild(select.firstChild);
-        }
-      });
       for (var i = 0; i !== deviceInfos.length; ++i) {
         var deviceInfo = deviceInfos[i];
         var option = document.createElement('option');
@@ -99,14 +95,6 @@ class MasterCamera extends MasterOfMasters {
           elemSelect.appendChild(option);
         }
       }
-
-      selectors.forEach(function(select, selectorIndex) {
-        if (Array.prototype.slice.call(select.childNodes).some(function(n) {
-          return n.value === values[selectorIndex];
-        })) {
-          select.value = values[selectorIndex];
-        }
-      });
     }
 
     /**
@@ -117,13 +105,6 @@ class MasterCamera extends MasterOfMasters {
       window.stream = stream;
       elemVideo.srcObject = stream;
       return navigator.mediaDevices.enumerateDevices();
-    }
-
-    /**
-     *
-     */
-    function handleError(error) {
-      console.log('navigator.getUserMedia error: ', error);
     }
 
     /**
@@ -142,18 +123,15 @@ class MasterCamera extends MasterOfMasters {
       };
       navigator.mediaDevices.getUserMedia(constraints)
         .then(gotStream)
-        .then(gotDevices)
-        .catch(handleError);
+        .then(gotDevices);
     }
 
     var elemVideo = document.querySelector('video');
     var elemSelect = document.querySelector('select#videoSource');
-    var selectors = [elemSelect];
 
     navigator.mediaDevices
       .enumerateDevices()
-      .then(gotDevices)
-      .catch(handleError);
+      .then(gotDevices);
     elemSelect.onchange = start;
     start();
   }
