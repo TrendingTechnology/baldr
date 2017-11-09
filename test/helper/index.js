@@ -50,7 +50,8 @@ exports.allMasters = [
   'person',
   'question',
   'quote',
-  'svg'
+  'svg',
+  'website'
 ];
 
 /**
