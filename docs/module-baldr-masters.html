@@ -150,6 +150,222 @@
 
         
             
+<h4 class="name" id=".alreadySet"><span class="type-signature">(static) </span>alreadySet<span class="type-signature"> :boolean</span></h4>
+
+
+
+
+<div class="description">
+    <p>Indicates whether the master slide is already set.</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">boolean</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="lib_masters_index.js.html">lib/masters/index.js</a>, <a href="lib_masters_index.js.html#line106">line 106</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id=".elemButtonDown"><span class="type-signature">(static) </span>elemButtonDown<span class="type-signature"> :object</span></h4>
+
+
+
+
+<div class="description">
+    <p>The HTML-Button-Element that triggers the next step.</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">object</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="lib_masters_index.js.html">lib/masters/index.js</a>, <a href="lib_masters_index.js.html#line81">line 81</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id=".elemButtonUp"><span class="type-signature">(static) </span>elemButtonUp<span class="type-signature"> :object</span></h4>
+
+
+
+
+<div class="description">
+    <p>The HTML-Button-Element that triggers the previous step.</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">object</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="lib_masters_index.js.html">lib/masters/index.js</a>, <a href="lib_masters_index.js.html#line75">line 75</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
 <h4 class="name" id=".elemModal"><span class="type-signature">(static) </span>elemModal<span class="type-signature"> :object</span></h4>
 
 
@@ -204,7 +420,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_masters_index.js.html">lib/masters/index.js</a>, <a href="lib_masters_index.js.html#line68">line 68</a>
+        <a href="lib_masters_index.js.html">lib/masters/index.js</a>, <a href="lib_masters_index.js.html#line69">line 69</a>
     </li></ul></dd>
     
 
@@ -222,13 +438,86 @@
 
         
             
-<h4 class="name" id=".elemSlide"><span class="type-signature">(static) </span>elemSlide<span class="type-signature"> :object</span></h4>
+<h4 class="name" id=".stepCount"><span class="type-signature">(static) </span>stepCount<span class="type-signature"> :integer</span></h4>
 
 
 
 
 <div class="description">
-    <p>The HTML-Element for the slide content.</p>
+    <p>The count of steps. (Default: 0)</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">integer</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="lib_masters_index.js.html">lib/masters/index.js</a>, <a href="lib_masters_index.js.html#line87">line 87</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id=".stepData"><span class="type-signature">(static) </span>stepData<span class="type-signature"> :object</span></h4>
+
+
+
+
+<div class="description">
+    <p>Object to store data for the individual steps. The step data
+should be indexed by the step number.</p>
 </div>
 
 
@@ -276,7 +565,79 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_masters_index.js.html">lib/masters/index.js</a>, <a href="lib_masters_index.js.html#line62">line 62</a>
+        <a href="lib_masters_index.js.html">lib/masters/index.js</a>, <a href="lib_masters_index.js.html#line100">line 100</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id=".stepNo"><span class="type-signature">(static) </span>stepNo<span class="type-signature"> :integer</span></h4>
+
+
+
+
+<div class="description">
+    <p>The current step number. (Default: 0)</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">integer</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="lib_masters_index.js.html">lib/masters/index.js</a>, <a href="lib_masters_index.js.html#line93">line 93</a>
     </li></ul></dd>
     
 
@@ -433,7 +794,8 @@
 
             
 
-            <td class="description last"><p>Additonal properties for the slides and master objects</p></td>
+            <td class="description last"><p>Additonal properties for the slides and
+  master objects that gets merged in the instatiated object.</p></td>
         </tr>
 
     
@@ -474,7 +836,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_masters_index.js.html">lib/masters/index.js</a>, <a href="lib_masters_index.js.html#line17">line 17</a>
+        <a href="lib_masters_index.js.html">lib/masters/index.js</a>, <a href="lib_masters_index.js.html#line18">line 18</a>
     </li></ul></dd>
     
 
@@ -518,7 +880,7 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-baldr.html">baldr</a></li><li><a href="module-baldr-master-audio.html">baldr-master-audio</a></li><li><a href="module-baldr-master-camera.html">baldr-master-camera</a></li><li><a href="module-baldr-master-editor.html">baldr-master-editor</a></li><li><a href="module-baldr-master-image.html">baldr-master-image</a></li><li><a href="module-baldr-master-markdown.html">baldr-master-markdown</a></li><li><a href="module-baldr-master-person.html">baldr-master-person</a></li><li><a href="module-baldr-master-question.html">baldr-master-question</a></li><li><a href="module-baldr-master-quote.html">baldr-master-quote</a></li><li><a href="module-baldr-master-svg.html">baldr-master-svg</a></li><li><a href="module-baldr-masters.html">baldr-masters</a></li><li><a href="module-baldr-test.html">baldr-test</a></li><li><a href="module-lib_misc.html">lib/misc</a></li><li><a href="module-lib_presentation.html">lib/presentation</a></li><li><a href="module-lib_slides.html">lib/slides</a></li><li><a href="module-masters_camera.html">masters/camera</a></li></ul><h3>Classes</h3><ul><li><a href="module-baldr-master-audio-MasterAudio.html">MasterAudio</a></li><li><a href="module-baldr-master-camera-MasterCamera.html">MasterCamera</a></li><li><a href="module-baldr-master-editor-MasterEditor.html">MasterEditor</a></li><li><a href="module-baldr-master-image-MasterImage.html">MasterImage</a></li><li><a href="module-baldr-master-markdown-MasterMarkdown.html">MasterMarkdown</a></li><li><a href="module-baldr-master-person-MasterPerson.html">MasterPerson</a></li><li><a href="module-baldr-master-question-MasterQuestion.html">MasterQuestion</a></li><li><a href="module-baldr-master-quote-MasterQuote.html">MasterQuote</a></li><li><a href="module-baldr-master-svg-MasterSvg.html">MasterSvg</a></li><li><a href="module-baldr-masters-Masters.html">Masters</a></li><li><a href="module-baldr-test-Spectron.html">Spectron</a></li><li><a href="module-lib_presentation-Presentation.html">Presentation</a></li><li><a href="module-lib_slides-Slides.html">Slides</a></li><li><a href="module-masters_camera-MasterCamera.html">MasterCamera</a></li></ul><h3>Interfaces</h3><ul><li><a href="module-baldr-masters-MasterOfMasters.html">MasterOfMasters</a></li></ul><h3>Global</h3><ul><li><a href="global.html#bindFunction">bindFunction</a></li><li><a href="global.html#bindFunctions">bindFunctions</a></li><li><a href="global.html#firstSlide">firstSlide</a></li><li><a href="global.html#main">main</a></li><li><a href="global.html#nextSlide">nextSlide</a></li><li><a href="global.html#nextStep">nextStep</a></li><li><a href="global.html#previousSlide">previousSlide</a></li><li><a href="global.html#prevStep">prevStep</a></li><li><a href="global.html#setMaster">setMaster</a></li><li><a href="global.html#setMasterCamera">setMasterCamera</a></li><li><a href="global.html#setMasterEditor">setMasterEditor</a></li><li><a href="global.html#toggleModal">toggleModal</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-baldr.html">baldr</a></li><li><a href="module-baldr-input-files.html">baldr-input-files</a></li><li><a href="module-baldr-master-audio.html">baldr-master-audio</a></li><li><a href="module-baldr-master-camera.html">baldr-master-camera</a></li><li><a href="module-baldr-master-editor.html">baldr-master-editor</a></li><li><a href="module-baldr-master-image.html">baldr-master-image</a></li><li><a href="module-baldr-master-markdown.html">baldr-master-markdown</a></li><li><a href="module-baldr-master-person.html">baldr-master-person</a></li><li><a href="module-baldr-master-question.html">baldr-master-question</a></li><li><a href="module-baldr-master-quote.html">baldr-master-quote</a></li><li><a href="module-baldr-master-svg.html">baldr-master-svg</a></li><li><a href="module-baldr-master-website.html">baldr-master-website</a></li><li><a href="module-baldr-masters.html">baldr-masters</a></li><li><a href="module-baldr-test.html">baldr-test</a></li><li><a href="module-lib_misc.html">lib/misc</a></li><li><a href="module-lib_presentation.html">lib/presentation</a></li><li><a href="module-lib_slides.html">lib/slides</a></li></ul><h3>Classes</h3><ul><li><a href="module-baldr-input-files-InputFiles.html">InputFiles</a></li><li><a href="module-baldr-master-audio-MasterAudio.html">MasterAudio</a></li><li><a href="module-baldr-master-camera-MasterCamera.html">MasterCamera</a></li><li><a href="module-baldr-master-editor-MasterEditor.html">MasterEditor</a></li><li><a href="module-baldr-master-image-MasterImage.html">MasterImage</a></li><li><a href="module-baldr-master-markdown-MasterMarkdown.html">MasterMarkdown</a></li><li><a href="module-baldr-master-person-MasterPerson.html">MasterPerson</a></li><li><a href="module-baldr-master-question-MasterQuestion.html">MasterQuestion</a></li><li><a href="module-baldr-master-quote-MasterQuote.html">MasterQuote</a></li><li><a href="module-baldr-master-svg-MasterSvg.html">MasterSvg</a></li><li><a href="module-baldr-master-website-MasterWebsite.html">MasterWebsite</a></li><li><a href="module-baldr-masters-Masters.html">Masters</a></li><li><a href="module-baldr-test-Spectron.html">Spectron</a></li><li><a href="module-lib_presentation-Presentation.html">Presentation</a></li><li><a href="module-lib_slides-Slides.html">Slides</a></li></ul><h3>Interfaces</h3><ul><li><a href="module-baldr-masters-MasterOfMasters.html">MasterOfMasters</a></li></ul><h3>Global</h3><ul><li><a href="global.html#bindFunction">bindFunction</a></li><li><a href="global.html#bindFunctions">bindFunctions</a></li><li><a href="global.html#firstSlide">firstSlide</a></li><li><a href="global.html#main">main</a></li><li><a href="global.html#nextSlide">nextSlide</a></li><li><a href="global.html#nextStep">nextStep</a></li><li><a href="global.html#previousSlide">previousSlide</a></li><li><a href="global.html#prevStep">prevStep</a></li><li><a href="global.html#setMaster">setMaster</a></li><li><a href="global.html#setMasterCamera">setMasterCamera</a></li><li><a href="global.html#setMasterEditor">setMasterEditor</a></li><li><a href="global.html#toggleModal">toggleModal</a></li></ul>
 </nav>
 
 <br class="clear">

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: lib/presentation.js</title>
+    <title>JSDoc: Source: lib/input-files/index.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: lib/presentation.js</h1>
+    <h1 class="page-title">Source: lib/input-files/index.js</h1>
 
     
 
@@ -27,129 +27,54 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
- * @file Load the slides object form the YAML file format and process it.
- * @module lib/presentation
+ * @file Filter and resolve the input files used in the presentation.
+ * @module baldr-input-files
  */
 
-const fs = require('fs');
 const path = require('path');
-const misc = require('../lib/misc.js');
-const {Slides} = require('../lib/slides.js');
+const fs = require('fs');
 
-/**
- *
- */
-class Presentation {
+class InputFiles {
 
   /**
-   * @param {string} yamlFile Path of the yaml file.
-   * @param {object} document The HTML DOM Document Object.
+   * @param {string} presentationPath The path which contains the
+   * presentation file (*.baldr).
    */
-  constructor(yamlFile, document) {
+  constructor(presentationPath) {
+    this.presentationPath = presentationPath;
 
-    /**
-     * The presentation files’ parent working directory. Assuming you are
-     * loading a file with the path “/home/jf/example.baldr”, your parent
-     * working directory (pwd) is than “/home/jf”
-     * @type {string}
-     */
-    this.pwd = path.resolve(path.dirname(yamlFile));
-
-    /**
-     * All slides index by the slide number.
-     * &lt;pre>&lt;code>
-     * {
-     *   "1": {
-     *     "no": 1,
-     *     "master": "quote",
-     *     "data": {
-     *       "text": "Der Tag der Gunst ist wie der Tag der Ernte,\nman muss geschäftig sein sobald sie reift.\n",
-     *       "author": "Johann Wolfgang von Goethe",
-     *       "date": 1801
-     *     }
-     *   },
-     *   "2": {
-     *     "no": 2,
-     *     "master": "question",
-     *     "data": [
-     *       {
-     *         "question": "Wann starb Ludwig van Beethoven?",
-     *         "answer": 1827
-     *       }
-     *     ]
-     *   },
-     *   "3": {
-     *     "no": 3,
-     *     "master": "person",
-     *     "data": {
-     *       "name": "Ludwig van Beethoven",
-     *       "image": "beethoven.jpg"
-     *     }
-     *   }
-     * }
-     * &lt;/code>&lt;pre>
-     * @type {object}
-     */
-    this.slides = new Slides(yamlFile, document, this).parse();
-
-    /**
-     * The count of all slides.
-     * @type {int}
-     */
-    this.count = Object.keys(this.slides).length;
-
-    /**
-     * The current slide number.
-     * @type {int}
-     */
-    this.no = 1;
-
-    /**
-     * The current slide object.
-     * @type {object}
-     */
-    this.currentSlide = this.slides[this.no];
-
-    /**
-     * @type {object}
-     */
-    this.document = document;
-
-    /**
-     * @type {object}
-     */
-    this.elemNavigationButtons = {
-      prev: this.document.getElementById('nav-slide-prev'),
-      next: this.document.getElementById('nav-slide-next')
+    this.extensionDefaults = {
+      audio: ['mp3'],
+      image: ['jpg', 'jpeg', 'png'],
+      video: ['mp4']
     };
-
-    /**
-     * A HTML div element, which covers the complete slide area to
-     * a void flickering, when new CSS styles are loaded.
-     *
-     * @type {object}
-     */
-    this.cover = this.document.getElementById('cover');
   }
 
   /**
-   * @private
+   * Get extensions to filter the input files.
+   *
+   * @param {array|string} extensions A array of extensions or
+   * a single extension specifed as a string or a property of
+   * the object “this.extensionDefaults”. An extension should be
+   * noted without a leading dot (e. g.: “jpg”, “mp4”)
+   *
+   * @return {array} A array of extensions
    */
-  setNavigationButtonsVisibility_(state) {
-    for (let prop in this.elemNavigationButtons) {
-      this.elemNavigationButtons[prop].style.visibility = state;
+  getExtensions(extensions) {
+    if (typeof extensions === 'object' &amp;&amp; Array.isArray(extensions)) {
+      return extensions;
     }
-  }
-
-  /**
-   * @private
-   */
-  displayNavigationButtons_() {
-    if (this.count > 1) {
-      this.setNavigationButtonsVisibility_('visible');
+    else if (
+      typeof extensions === 'string' &amp;&amp;
+      this.extensionDefaults[extensions]
+    ) {
+      return this.extensionDefaults[extensions];
+    }
+    else if (typeof extensions === 'string') {
+      return [extensions];
     }
     else {
-      this.setNavigationButtonsVisibility_('hidden');
+      return [];
     }
   }
 
@@ -158,31 +83,36 @@ class Presentation {
    *
    * @return {string} Absolute path
    */
-  absolutePath(filePath) {
+  resolvePath(filePath) {
     if (path.isAbsolute(filePath)) {
       return filePath;
     }
     else {
-      return path.resolve(this.pwd, filePath);
+      return path.resolve(this.presentationPath, filePath);
     }
   }
 
   /**
    * @param {string} inputPath The path of a file
-   * @param {misc} extensions An array of extensions without “.”
-   *   (e. g.: ['jpg', 'gif']), a single extension as string or empty
-   *   to bypass the filter mechanism and return always true.
+   * @param {array|string} extensions A array of extensions or
+   * a single extension specifed as a string or a property of
+   * the object “this.extensionDefaults”. An extension should be
+   * noted without a leading dot (e. g.: “jpg”, “mp4”). Leave the
+   * parameter empty to bypass the filter mechanism.
    * @return {boolean} True if the input file has the given extension
    */
-  filterFileByExtension(inputPath, extensions) {
+  filterFile(inputPath, extensions) {
     if (!extensions) {
       return true;
     }
-    if (typeof extensions === 'string') extensions = [extensions];
-    let filterExtensions = extensions.map((value) => {
-      return '.' + value.toLowerCase();
-    });
+
+    let filterExtensions = this.getExtensions(extensions)
+      .map((value) => {
+        return '.' + value.toLowerCase();
+      });
+
     let inputExtension = path.extname(inputPath).toLowerCase();
+
     for (let filterExtension of filterExtensions) {
       if (inputExtension === filterExtension) return true;
     }
@@ -190,26 +120,29 @@ class Presentation {
   }
 
   /**
-   * @param {string} inputPath Relative or absolute path of a folder or a file.
-   * @param {misc} extensions An array of extensions without “.”
-   *   (e. g.: ['jpg', 'gif']), a single extension as string or empty
-   *   to bypass the filter mechanism and return always true.
+   * @param {string} inputPath Relative or absolute path of a folder or
+   * a file.
+   * @param {array|string} extensions A array of extensions or
+   * a single extension specifed as a string or a property of
+   * the object “this.extensionDefaults”. An extension should be
+   * noted without a leading dot (e. g.: “jpg”, “mp4”). Leave the
+   * parameter empty to bypass the filter mechanism.
    * @return {array} A array of absolute file paths or an empty array.
    */
-  filterFiles(inputPath, extensions) {
-    let absPath = this.absolutePath(inputPath);
+  list(inputPath, extensions) {
+    let absPath = this.resolvePath(inputPath);
 
     if (!fs.existsSync(absPath)) {
       return [];
     }
     let stat = fs.statSync(absPath);
-    if (!stat.isDirectory() &amp;&amp; this.filterFileByExtension(absPath, extensions)) {
+    if (!stat.isDirectory() &amp;&amp; this.filterFile(absPath, extensions)) {
       return [absPath];
     }
     else if (stat.isDirectory()) {
       return fs.readdirSync(absPath)
         .filter((filename) => {
-          return this.filterFileByExtension(filename, extensions);
+          return this.filterFile(filename, extensions);
         })
         .map((filename) => {
           return path.join(absPath, filename);
@@ -222,75 +155,35 @@ class Presentation {
   }
 
   /**
-   * Set the current slide to the previous slide.
+   * @param {array|string} inputPaths Both folder or file paths can
+   * be specified.
+   * @param {array|string} extensions A array of extensions or
+   * a single extension specifed as a string or a property of
+   * the object “this.extensionDefaults”. An extension should be
+   * noted without a leading dot (e. g.: “jpg”, “mp4”). Leave the
+   * parameter empty to bypass the filter mechanism.
    */
-  prev() {
-    if (this.no === 1) {
-      this.no = this.count;
+  orderedList(inputPaths, extensions) {
+    let normalizedPaths;
+    if (typeof inputPaths === 'string') {
+      normalizedPaths = [inputPaths];
     }
     else {
-      this.no = this.no - 1;
+      normalizedPaths = inputPaths;
     }
-    this.currentSlide = this.slides[this.no];
-    return this;
-  }
-
-  /**
-   * Set the current slide to the next slide.
-   */
-  next() {
-    if (this.no === this.count) {
-      this.no = 1;
+    let list = [];
+    for (let filePath of normalizedPaths) {
+      var sortedList = this.list(filePath, extensions);
+      for (let file of sortedList) {
+        list.push(file);
+      }
     }
-    else {
-      this.no = this.no + 1;
-    }
-    this.currentSlide = this.slides[this.no];
-    return this;
-  }
-
-  /**
-   *
-   */
-  prevStep() {
-    this.currentSlide.prevStep();
-    return this;
-  }
-
-  /**
-   *
-   */
-  nextStep() {
-    this.currentSlide.nextStep();
-    return this;
-  }
-
-  /**
-   * Set the background color of the “cover” DIV element.
-   *
-   * @param {string} color A CSS color information.
-   */
-  setCoverBackground(color) {
-    this.cover.style.backgroundColor = color;
-  }
-
-  /**
-   * Set the current slide
-   */
-  set() {
-    this.setCoverBackground('black');
-    setTimeout(() => {
-      this.setCoverBackground('transparent');
-    }, 50);
-
-    this.currentSlide.set();
-    this.displayNavigationButtons_();
-    return this;
+    return list;
   }
 
 }
 
-exports.Presentation = Presentation;
+exports.InputFiles = InputFiles;
 </code></pre>
         </article>
     </section>

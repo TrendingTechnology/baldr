@@ -1,13 +1,13 @@
 /**
  * @file Master slide “camera”
- * @module masters/camera
+ * @module baldr-master-camera
  */
 
 /* jshint -W117 */
 
 'use strict';
 
-const {MasterOfMasters} = require('../../lib/masters');
+const {MasterOfMasters} = require('baldr-masters');
 
 /**
  * Master class for the master slide “camera”

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: Slides</title>
+    <title>JSDoc: Class: InputFiles</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: Slides</h1>
+    <h1 class="page-title">Class: InputFiles</h1>
 
     
 
@@ -29,9 +29,7 @@
 <header>
     
         <h2><span class="attribs"><span class="type-signature"></span></span>
-            <span class="ancestors"><a href="module-lib_slides.html">lib/slides</a>~</span>Slides<span class="signature">(yamlFile, document, presentation)</span><span class="type-signature"></span></h2>
-        
-            <div class="class-description"><p>Parse the object representation of all slides.</p></div>
+            <span class="ancestors"><a href="module-baldr-input-files.html">baldr-input-files</a>~</span>InputFiles<span class="signature">(presentationPath)</span><span class="type-signature"></span></h2>
         
     
 </header>
@@ -42,11 +40,9 @@
         
 
     
-    <h2>Constructor</h2>
-    
 
     
-    <h4 class="name" id="Slides"><span class="type-signature"></span>new Slides<span class="signature">(yamlFile, document, presentation)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="InputFiles"><span class="type-signature"></span>new InputFiles<span class="signature">(presentationPath)</span><span class="type-signature"></span></h4>
     
 
     
@@ -86,7 +82,7 @@
 
         <tr>
             
-                <td class="name"><code>yamlFile</code></td>
+                <td class="name"><code>presentationPath</code></td>
             
 
             <td class="type">
@@ -102,53 +98,8 @@
 
             
 
-            <td class="description last"><p>Path of the yaml file.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>document</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>The HTML DOM Document Object.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>presentation</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>The object representation of the presentation.</p></td>
+            <td class="description last"><p>The path which contains the
+presentation file (*.baldr).</p></td>
         </tr>
 
     
@@ -189,7 +140,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_slides.js.html">lib/slides.js</a>, <a href="lib_slides.js.html#line14">line 14</a>
+        <a href="lib_input-files_index.js.html">lib/input-files/index.js</a>, <a href="lib_input-files_index.js.html#line15">line 15</a>
     </li></ul></dd>
     
 
@@ -243,232 +194,7 @@
     
 
     
-    <h4 class="name" id="instantiateSlide"><span class="type-signature"></span>instantiateSlide<span class="signature">()</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    <p>Instantiate slide: Load master slide class</p>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_slides.js.html">lib/slides.js</a>, <a href="lib_slides.js.html#line70">line 70</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="parse"><span class="type-signature"></span>parse<span class="signature">()</span><span class="type-signature"> &rarr; {object}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    <p>Parse the yaml file.</p>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_slides.js.html">lib/slides.js</a>, <a href="lib_slides.js.html#line165">line 165</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    <p>Processed object of slides</p>
-<p><pre><code>
-{
-  &quot;1&quot;: {
-    &quot;no&quot;: 1,
-    &quot;master&quot;: &quot;quote&quot;,
-    &quot;data&quot;: {
-      &quot;text&quot;: &quot;Der Tag der Gunst ist wie der Tag der Ernte,\nman muss geschäftig sein sobald sie reift.\n&quot;,
-      &quot;author&quot;: &quot;Johann Wolfgang von Goethe&quot;,
-      &quot;date&quot;: 1801
-    }
-  },
-  &quot;2&quot;: {
-    &quot;no&quot;: 2,
-    &quot;master&quot;: &quot;question&quot;,
-    &quot;data&quot;: [
-      {
-        &quot;question&quot;: &quot;Wann starb Ludwig van Beethoven?&quot;,
-        &quot;answer&quot;: 1827
-      }
-    ]
-  },
-  &quot;3&quot;: {
-    &quot;no&quot;: 3,
-    &quot;master&quot;: &quot;person&quot;,
-    &quot;data&quot;: {
-      &quot;name&quot;: &quot;Ludwig van Beethoven&quot;,
-      &quot;image&quot;: &quot;beethoven.jpg&quot;
-    }
-  }
-}
-</code><pre></p>
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">object</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="parseSlides"><span class="type-signature"></span>parseSlides<span class="signature">(yamlRaw)</span><span class="type-signature"> &rarr; {object}</span></h4>
+    <h4 class="name" id="filterFile"><span class="type-signature"></span>filterFile<span class="signature">(inputPath, extensions)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
     
 
     
@@ -508,196 +234,7 @@
 
         <tr>
             
-                <td class="name"><code>yamlRaw</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">array</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>The yaml file converted in an array of objects.</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_slides.js.html">lib/slides.js</a>, <a href="lib_slides.js.html#line120">line 120</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    <p>Processed object of slides</p>
-<p><pre><code>
-{
-  &quot;1&quot;: {
-    &quot;no&quot;: 1,
-    &quot;master&quot;: &quot;quote&quot;,
-    &quot;data&quot;: {
-      &quot;text&quot;: &quot;Der Tag der Gunst ist wie der Tag der Ernte,\nman muss geschäftig sein sobald sie reift.\n&quot;,
-      &quot;author&quot;: &quot;Johann Wolfgang von Goethe&quot;,
-      &quot;date&quot;: 1801
-    }
-  },
-  &quot;2&quot;: {
-    &quot;no&quot;: 2,
-    &quot;master&quot;: &quot;question&quot;,
-    &quot;data&quot;: [
-      {
-        &quot;question&quot;: &quot;Wann starb Ludwig van Beethoven?&quot;,
-        &quot;answer&quot;: 1827
-      }
-    ]
-  },
-  &quot;3&quot;: {
-    &quot;no&quot;: 3,
-    &quot;master&quot;: &quot;person&quot;,
-    &quot;data&quot;: {
-      &quot;name&quot;: &quot;Ludwig van Beethoven&quot;,
-      &quot;image&quot;: &quot;beethoven.jpg&quot;
-    }
-  }
-}
-</code><pre></p>
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">object</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="readYamlFile"><span class="type-signature"></span>readYamlFile<span class="signature">(yamlFile)</span><span class="type-signature"> &rarr; {object}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    <p>Load the content of a yaml file and convert its content into a
-object.</p>
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>yamlFile</code></td>
+                <td class="name"><code>inputPath</code></td>
             
 
             <td class="type">
@@ -713,7 +250,37 @@ object.</p>
 
             
 
-            <td class="description last"><p>Path of the yaml file.</p></td>
+            <td class="description last"><p>The path of a file</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>extensions</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">array</span>
+|
+
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>A array of extensions or
+a single extension specifed as a string or a property of
+the object “this.extensionDefaults”. An extension should be
+noted without a leading dot (e. g.: “jpg”, “mp4”). Leave the
+parameter empty to bypass the filter mechanism.</p></td>
         </tr>
 
     
@@ -754,7 +321,7 @@ object.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_slides.js.html">lib/slides.js</a>, <a href="lib_slides.js.html#line59">line 59</a>
+        <a href="lib_input-files_index.js.html">lib/input-files/index.js</a>, <a href="lib_input-files_index.js.html#line76">line 76</a>
     </li></ul></dd>
     
 
@@ -781,32 +348,7 @@ object.</p>
 
         
 <div class="param-desc">
-    <p>Object representation of the yaml file.</p>
-<p><pre><code>
-[
-  {
-    &quot;quote&quot;: {
-      &quot;text&quot;: &quot;text&quot;,
-      &quot;author&quot;: &quot;author&quot;,
-      &quot;date&quot;: &quot;date&quot;
-    }
-  },
-  {
-    &quot;question&quot;: [
-      {
-        &quot;question&quot;: &quot;question&quot;,
-        &quot;answer&quot;: &quot;answer&quot;
-      }
-    ]
-  },
-  {
-    &quot;person&quot;: {
-      &quot;name&quot;: &quot;name&quot;,
-      &quot;image&quot;: &quot;image&quot;
-    }
-  }
-]
-</code><pre></p>
+    <p>True if the input file has the given extension</p>
 </div>
 
 
@@ -817,7 +359,627 @@ object.</p>
     </dt>
     <dd>
         
-<span class="param-type">object</span>
+<span class="param-type">boolean</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="getExtensions"><span class="type-signature"></span>getExtensions<span class="signature">(extensions)</span><span class="type-signature"> &rarr; {array}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Get extensions to filter the input files.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>extensions</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">array</span>
+|
+
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>A array of extensions or
+a single extension specifed as a string or a property of
+the object “this.extensionDefaults”. An extension should be
+noted without a leading dot (e. g.: “jpg”, “mp4”)</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="lib_input-files_index.js.html">lib/input-files/index.js</a>, <a href="lib_input-files_index.js.html#line35">line 35</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>A array of extensions</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">array</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="list"><span class="type-signature"></span>list<span class="signature">(inputPath, extensions)</span><span class="type-signature"> &rarr; {array}</span></h4>
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>inputPath</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Relative or absolute path of a folder or
+a file.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>extensions</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">array</span>
+|
+
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>A array of extensions or
+a single extension specifed as a string or a property of
+the object “this.extensionDefaults”. An extension should be
+noted without a leading dot (e. g.: “jpg”, “mp4”). Leave the
+parameter empty to bypass the filter mechanism.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="lib_input-files_index.js.html">lib/input-files/index.js</a>, <a href="lib_input-files_index.js.html#line104">line 104</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>A array of absolute file paths or an empty array.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">array</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="orderedList"><span class="type-signature"></span>orderedList<span class="signature">(inputPaths, extensions)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>inputPaths</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">array</span>
+|
+
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Both folder or file paths can
+be specified.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>extensions</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">array</span>
+|
+
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>A array of extensions or
+a single extension specifed as a string or a property of
+the object “this.extensionDefaults”. An extension should be
+noted without a leading dot (e. g.: “jpg”, “mp4”). Leave the
+parameter empty to bypass the filter mechanism.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="lib_input-files_index.js.html">lib/input-files/index.js</a>, <a href="lib_input-files_index.js.html#line138">line 138</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="resolvePath"><span class="type-signature"></span>resolvePath<span class="signature">()</span><span class="type-signature"> &rarr; {string}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Get the absolute path of a file used in the presentation.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="lib_input-files_index.js.html">lib/input-files/index.js</a>, <a href="lib_input-files_index.js.html#line58">line 58</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Absolute path</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">string</span>
 
 
     </dd>

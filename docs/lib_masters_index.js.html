@@ -40,23 +40,24 @@ const path = require('path');
  * @param {string} masterName The name of the master slide
  * @param {object} document The HTML DOM Document Object.
  * @param {object} presentation The presentation object.
- * @param {object} propObj Additonal properties for the slides and master objects
+ * @param {object} propObj Additonal properties for the slides and
+ *   master objects that gets merged in the instatiated object.
  */
 var loadMaster = function(masterName, document, presentation, propObj) {
-  let masterPath = path.join(__dirname, '..', '..', 'masters', masterName);
+  let moduleName = 'baldr-master-' + masterName;
 
   let className = 'Master' +
     masterName.charAt(0).toUpperCase() +
     masterName.slice(1);
 
   let properties = {
-    "masterPath": masterPath,
+    "masterPath": path.dirname(require.resolve(moduleName)),
     "masterName": masterName,
     "document": document,
     "presentation": presentation
   };
 
-  let Master = require('baldr-master-' + masterName)[className];
+  let Master = require(moduleName)[className];
   return new Master(Object.assign({}, properties, propObj));
 };
 
@@ -84,7 +85,7 @@ var MasterOfMasters = class {
     }
 
     /**
-     * The HTML-Element for the slide content.
+     * @memberof MasterOfMasters HTML-Element for the slide content.
      * @type {object}
      */
     this.elemSlide = this.document.getElementById('slide-content');
@@ -95,12 +96,41 @@ var MasterOfMasters = class {
      */
     this.elemModal = this.document.getElementById('modal-content');
 
+    /**
+     * The HTML-Button-Element that triggers the previous step.
+     * @type {object}
+     */
     this.elemButtonUp = this.document.getElementById('nav-step-prev');
+
+    /**
+     * The HTML-Button-Element that triggers the next step.
+     * @type {object}
+     */
     this.elemButtonDown = this.document.getElementById('nav-step-next');
 
+    /**
+     * The count of steps. (Default: 0)
+     * @type {integer}
+     */
     this.stepCount = 0;
+
+    /**
+     * The current step number. (Default: 0)
+     * @type {integer}
+     */
     this.stepNo = 0;
+
+    /**
+     * Object to store data for the individual steps. The step data
+     * should be indexed by the step number.
+     * @type {object}
+     */
     this.stepData = {};
+
+    /**
+     * Indicates whether the master slide is already set.
+     * @type {boolean}
+     */
     this.alreadySet = false;
   }
 
@@ -164,6 +194,7 @@ var MasterOfMasters = class {
     this.setCSS();
     this.elemSlide.innerHTML = this.hookSetHTMLSlide();
     this.elemModal.innerHTML = this.hookSetHTMLModal();
+    this.document.body.dataset.master = this.masterName;
     if (!this.alreadySet) {
       this.hookPostFirstSet();
     }
@@ -295,9 +326,6 @@ class Masters {
      */
     this.all = this.getModules();
 
-    for (let name of this.all) {
-      this[name] = loadMaster(name, document, presentation);
-    }
   }
 
   /**
@@ -328,7 +356,7 @@ exports.loadMaster = loadMaster;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-baldr.html">baldr</a></li><li><a href="module-baldr-master-audio.html">baldr-master-audio</a></li><li><a href="module-baldr-master-camera.html">baldr-master-camera</a></li><li><a href="module-baldr-master-editor.html">baldr-master-editor</a></li><li><a href="module-baldr-master-image.html">baldr-master-image</a></li><li><a href="module-baldr-master-markdown.html">baldr-master-markdown</a></li><li><a href="module-baldr-master-person.html">baldr-master-person</a></li><li><a href="module-baldr-master-question.html">baldr-master-question</a></li><li><a href="module-baldr-master-quote.html">baldr-master-quote</a></li><li><a href="module-baldr-master-svg.html">baldr-master-svg</a></li><li><a href="module-baldr-masters.html">baldr-masters</a></li><li><a href="module-baldr-test.html">baldr-test</a></li><li><a href="module-lib_misc.html">lib/misc</a></li><li><a href="module-lib_presentation.html">lib/presentation</a></li><li><a href="module-lib_slides.html">lib/slides</a></li><li><a href="module-masters_camera.html">masters/camera</a></li></ul><h3>Classes</h3><ul><li><a href="module-baldr-master-audio-MasterAudio.html">MasterAudio</a></li><li><a href="module-baldr-master-camera-MasterCamera.html">MasterCamera</a></li><li><a href="module-baldr-master-editor-MasterEditor.html">MasterEditor</a></li><li><a href="module-baldr-master-image-MasterImage.html">MasterImage</a></li><li><a href="module-baldr-master-markdown-MasterMarkdown.html">MasterMarkdown</a></li><li><a href="module-baldr-master-person-MasterPerson.html">MasterPerson</a></li><li><a href="module-baldr-master-question-MasterQuestion.html">MasterQuestion</a></li><li><a href="module-baldr-master-quote-MasterQuote.html">MasterQuote</a></li><li><a href="module-baldr-master-svg-MasterSvg.html">MasterSvg</a></li><li><a href="module-baldr-masters-Masters.html">Masters</a></li><li><a href="module-baldr-test-Spectron.html">Spectron</a></li><li><a href="module-lib_presentation-Presentation.html">Presentation</a></li><li><a href="module-lib_slides-Slides.html">Slides</a></li><li><a href="module-masters_camera-MasterCamera.html">MasterCamera</a></li></ul><h3>Interfaces</h3><ul><li><a href="module-baldr-masters-MasterOfMasters.html">MasterOfMasters</a></li></ul><h3>Global</h3><ul><li><a href="global.html#bindFunction">bindFunction</a></li><li><a href="global.html#bindFunctions">bindFunctions</a></li><li><a href="global.html#firstSlide">firstSlide</a></li><li><a href="global.html#main">main</a></li><li><a href="global.html#nextSlide">nextSlide</a></li><li><a href="global.html#nextStep">nextStep</a></li><li><a href="global.html#previousSlide">previousSlide</a></li><li><a href="global.html#prevStep">prevStep</a></li><li><a href="global.html#setMaster">setMaster</a></li><li><a href="global.html#setMasterCamera">setMasterCamera</a></li><li><a href="global.html#setMasterEditor">setMasterEditor</a></li><li><a href="global.html#toggleModal">toggleModal</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-baldr.html">baldr</a></li><li><a href="module-baldr-input-files.html">baldr-input-files</a></li><li><a href="module-baldr-master-audio.html">baldr-master-audio</a></li><li><a href="module-baldr-master-camera.html">baldr-master-camera</a></li><li><a href="module-baldr-master-editor.html">baldr-master-editor</a></li><li><a href="module-baldr-master-image.html">baldr-master-image</a></li><li><a href="module-baldr-master-markdown.html">baldr-master-markdown</a></li><li><a href="module-baldr-master-person.html">baldr-master-person</a></li><li><a href="module-baldr-master-question.html">baldr-master-question</a></li><li><a href="module-baldr-master-quote.html">baldr-master-quote</a></li><li><a href="module-baldr-master-svg.html">baldr-master-svg</a></li><li><a href="module-baldr-master-website.html">baldr-master-website</a></li><li><a href="module-baldr-masters.html">baldr-masters</a></li><li><a href="module-baldr-test.html">baldr-test</a></li><li><a href="module-lib_misc.html">lib/misc</a></li><li><a href="module-lib_presentation.html">lib/presentation</a></li><li><a href="module-lib_slides.html">lib/slides</a></li></ul><h3>Classes</h3><ul><li><a href="module-baldr-input-files-InputFiles.html">InputFiles</a></li><li><a href="module-baldr-master-audio-MasterAudio.html">MasterAudio</a></li><li><a href="module-baldr-master-camera-MasterCamera.html">MasterCamera</a></li><li><a href="module-baldr-master-editor-MasterEditor.html">MasterEditor</a></li><li><a href="module-baldr-master-image-MasterImage.html">MasterImage</a></li><li><a href="module-baldr-master-markdown-MasterMarkdown.html">MasterMarkdown</a></li><li><a href="module-baldr-master-person-MasterPerson.html">MasterPerson</a></li><li><a href="module-baldr-master-question-MasterQuestion.html">MasterQuestion</a></li><li><a href="module-baldr-master-quote-MasterQuote.html">MasterQuote</a></li><li><a href="module-baldr-master-svg-MasterSvg.html">MasterSvg</a></li><li><a href="module-baldr-master-website-MasterWebsite.html">MasterWebsite</a></li><li><a href="module-baldr-masters-Masters.html">Masters</a></li><li><a href="module-baldr-test-Spectron.html">Spectron</a></li><li><a href="module-lib_presentation-Presentation.html">Presentation</a></li><li><a href="module-lib_slides-Slides.html">Slides</a></li></ul><h3>Interfaces</h3><ul><li><a href="module-baldr-masters-MasterOfMasters.html">MasterOfMasters</a></li></ul><h3>Global</h3><ul><li><a href="global.html#bindFunction">bindFunction</a></li><li><a href="global.html#bindFunctions">bindFunctions</a></li><li><a href="global.html#firstSlide">firstSlide</a></li><li><a href="global.html#main">main</a></li><li><a href="global.html#nextSlide">nextSlide</a></li><li><a href="global.html#nextStep">nextStep</a></li><li><a href="global.html#previousSlide">previousSlide</a></li><li><a href="global.html#prevStep">prevStep</a></li><li><a href="global.html#setMaster">setMaster</a></li><li><a href="global.html#setMasterCamera">setMasterCamera</a></li><li><a href="global.html#setMasterEditor">setMasterEditor</a></li><li><a href="global.html#toggleModal">toggleModal</a></li></ul>
 </nav>
 
 <br class="clear">
