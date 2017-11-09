@@ -100,13 +100,13 @@ var MasterOfMasters = class {
      * The HTML-Button-Element that triggers the previous step.
      * @type {object}
      */
-    this.elemButtonUp = this.document.getElementById('nav-step-prev');
+    this.elemStepPrev = this.document.getElementById('nav-step-prev');
 
     /**
      * The HTML-Button-Element that triggers the next step.
      * @type {object}
      */
-    this.elemButtonDown = this.document.getElementById('nav-step-next');
+    this.elemStepNext = this.document.getElementById('nav-step-next');
 
     /**
      * The count of steps. (Default: 0)
@@ -170,8 +170,8 @@ var MasterOfMasters = class {
    * @private
    */
   setStepButtonsVisibility_(state) {
-    this.elemButtonDown.style.visibility = state;
-    this.elemButtonUp.style.visibility = state;
+    this.elemStepNext.style.visibility = state;
+    this.elemStepPrev.style.visibility = state;
   }
 
   /**
