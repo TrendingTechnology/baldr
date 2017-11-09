@@ -42,7 +42,7 @@ const path = require('path');
  * @param {object} presentation The presentation object.
  * @param {object} propObj Additonal properties for the slides and master objects
  */
-var instantiateMaster = function(masterName, document, presentation, propObj) {
+var loadMaster = function(masterName, document, presentation, propObj) {
   let masterPath = path.join(__dirname, '..', '..', 'masters', masterName);
 
   let className = 'Master' +
@@ -296,7 +296,7 @@ class Masters {
     this.all = this.getModules();
 
     for (let name of this.all) {
-      this[name] = instantiateMaster(name, document, presentation);
+      this[name] = loadMaster(name, document, presentation);
     }
   }
 
@@ -317,7 +317,7 @@ class Masters {
 
 exports.Masters = Masters;
 exports.MasterOfMasters = MasterOfMasters;
-exports.instantiateMaster = instantiateMaster;
+exports.loadMaster = loadMaster;
 </code></pre>
         </article>
     </section>

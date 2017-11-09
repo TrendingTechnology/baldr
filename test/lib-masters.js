@@ -8,22 +8,22 @@ const {
   presentation
 } = require('baldr-test');
 
-const {instantiateMaster, Masters, MasterOfMasters} = require('baldr-masters');
+const {loadMaster, Masters, MasterOfMasters} = require('baldr-masters');
 const masters = new Masters(document, presentation);
 
-describe('Function “instantiateMaster()”', function() {
+describe('Function “loadMaster()”', function() {
   it('simple', function() {
-    let master = instantiateMaster('quote', document, presentation);
+    let master = loadMaster('quote', document, presentation);
     assert.equal(master.masterName, 'quote');
   });
 
   it('propObj', function() {
-    let master = instantiateMaster('quote', document, presentation, {lol: 'troll'});
+    let master = loadMaster('quote', document, presentation, {lol: 'troll'});
     assert.equal(master.lol, 'troll');
   });
 
   it('propObj multiple', function() {
-    let master = instantiateMaster('quote', document, presentation, {lol: 'troll', abc: 'xyz'});
+    let master = loadMaster('quote', document, presentation, {lol: 'troll', abc: 'xyz'});
     assert.equal(master.abc, 'xyz');
   });
 });
