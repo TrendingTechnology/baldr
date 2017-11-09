@@ -1,4 +1,4 @@
-iframe {
+[data-master="website"] iframe {
   width: 100%;
   height: 100%;
 }

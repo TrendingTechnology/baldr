@@ -1,22 +1,22 @@
-#slide-content {
+[data-master="quote"] #slide-content {
   padding-left: 20%;
   padding-right: 20%;
 }
 
-.text {
+[data-master="quote"] .text {
   font-style: italic;
 }
 
-.quotation-mark {
+[data-master="quote"] .quotation-mark {
   font-family: 'Alegreya Sans';
   font-weight: 900;
 }
 
-.attribution {
+[data-master="quote"] .attribution {
   font-size: 3vw;
   text-align: right;
 }
 
-.author {
+[data-master="quote"] .author {
   font-family: 'Alegreya SC'
 }

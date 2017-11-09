@@ -1,9 +1,9 @@
-#slide-content {
+[data-master="image"] #slide-content {
   text-align: center;
   width: 100%;
   height: 100%;
 }
-#slide-content img {
+[data-master="image"] #slide-content img {
   max-height: 100%;
   max-width: 100%;
 }

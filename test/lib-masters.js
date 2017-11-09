@@ -107,11 +107,16 @@ describe('Class “MasterOfMasters” extended on a example master class (quote)
       );
     });
 
-    it('this.masterName', function() {
+    it('Property “this.masterName”', function() {
       assert.equal(
         this.master.masterName,
         'quote'
       );
+    });
+
+    it('Property “this.alreadySet”', function() {
+      this.master.set();
+      assert.equal(this.master.alreadySet, true);
     });
   });
 
@@ -133,6 +138,8 @@ describe('Class “MasterOfMasters” extended on a example master class (quote)
 
   it('[master].set()', function() {
     assert.equal(typeof this.master.set, 'function');
+    this.master.set();
+    assert.equal(this.master.document.body.dataset.master, 'quote');
   });
 
   it('[master].masterName', function() {

@@ -1,17 +1,17 @@
-#slide-content {
+[data-master="question"] #slide-content {
   padding-left: 20%;
   padding-right: 20%;
 }
 
-.answer {
+[data-master="question"] .answer {
   font-style: italic;
 }
 
-p {
+[data-master="question"] p {
   margin: 0;
 }
 
-li {
+[data-master="question"] li {
   margin-top: 2vw;
   margin-bottom: 2vw;
 }
