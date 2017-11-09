@@ -8,9 +8,8 @@ const misc = require('./lib/misc.js');
 const path = require('path');
 const {remote} = require('electron');
 const {ipcRenderer} = require('electron');
-const Masters = require('baldr-masters').Masters;
+const {loadMaster} = require('baldr-masters');
 
-let masters;
 let presentation;
 
 /**
@@ -80,7 +79,7 @@ var nextStep = function() {
  * @param {string} name Name of the master slide
  */
 var setMaster = function(name) {
-  let master = masters[name];
+  let master = loadMaster(name, document, presentation);
   master.set();
 };
 
@@ -148,7 +147,6 @@ var main = function() {
     misc.searchForBaldrFile(remote.process.argv),
     document
   );
-  masters = new Masters(document, presentation);
   firstSlide();
   bindFunctions(
     [
