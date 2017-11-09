@@ -38,7 +38,12 @@ h1, h2, h3, h4 {
   overflow: hidden;
 }
 
-#slide-content {
+[data-center-vertically="true"] #slide {
+  display: table;
+}
+
+[data-center-vertically="true"] #slide-content {
+  display: table-cell;
   vertical-align: middle;
 }
 

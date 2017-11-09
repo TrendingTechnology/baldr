@@ -16,6 +16,7 @@ class MasterQuote extends MasterOfMasters {
 
   constructor(propObj) {
     super(propObj);
+    this.centerVertically = true;
   }
 
   /**

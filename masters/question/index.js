@@ -22,6 +22,7 @@ class MasterQuestion extends MasterOfMasters {
 
   constructor(propObj) {
     super(propObj);
+    this.centerVertically = true;
   }
 
   /**
