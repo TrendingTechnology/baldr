@@ -16,38 +16,15 @@ class MasterImage extends MasterOfMasters {
 
   constructor(propObj) {
     super(propObj);
-    if (this.presentation) {
-      this.inputFiles = new InputFiles(this.presentation.pwd);
-      this.dataNormalized = this.normalizeData(this.data);
-    }
-  }
-
-  /**
-   *
-   */
-  normalizeSinglePath(filePath) {
-    return this.inputFiles.filter(
-      filePath,
-      ['jpg', 'jpeg', 'png']
-    );
+    this.inputFiles = new InputFiles(this.presentation.pwd);
+    this.dataNormalized = this.normalizeData(this.data);
   }
 
   /**
    *
    */
   normalizeData(data) {
-     if (typeof data === 'object' && Array.isArray(data)) {
-      let out = [];
-      for (let filePath of data) {
-        var images = this.normalizeSinglePath(filePath);
-        for (let image of images) {
-          out.push(image);
-        }
-      }
-      return out;
-    } else if (typeof data === 'string') {
-      return this.normalizeSinglePath(data);
-    }
+    return this.inputFiles.orderedList(data, 'image');
   }
 
   /**

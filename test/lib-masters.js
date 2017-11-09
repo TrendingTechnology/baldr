@@ -114,6 +114,31 @@ describe('Class “MasterOfMasters” extended on a example master class (quote)
       );
     });
   });
+
+  it('[master].hasCSS()', function() {
+    assert.equal(typeof this.master.hasCSS, 'function');
+  });
+
+  it('[master].setCSS()', function() {
+    assert.equal(typeof this.master.setCSS, 'function');
+  });
+
+  it('[master].hookSetHTMLSlide()', function() {
+    assert.equal(typeof this.master.hookSetHTMLSlide, 'function');
+  });
+
+  it('[master].hookSetHTMLModal()', function() {
+    assert.equal(typeof this.master.hookSetHTMLModal, 'function');
+  });
+
+  it('[master].set()', function() {
+    assert.equal(typeof this.master.set, 'function');
+  });
+
+  it('[master].masterName', function() {
+    assert.equal(this.master.masterName, 'quote');
+  });
+
 });
 
 describe('Class “Masters()”', () => {
@@ -129,42 +154,6 @@ describe('Class “Masters()”', () => {
 
     it('this.all', () => {
       assert.deepEqual(masters.all, allMasters);
-    });
-
-    it('[master].hasCSS()', () => {
-      for (let master of allMasters) {
-        assert.equal(typeof masters[master].hasCSS, 'function');
-      }
-    });
-
-    it('[master].setCSS()', () => {
-      for (let master of allMasters) {
-        assert.equal(typeof masters[master].setCSS, 'function');
-      }
-    });
-
-    it('[master].hookSetHTMLSlide()', () => {
-      for (let master of allMasters) {
-        assert.equal(typeof masters[master].hookSetHTMLSlide, 'function');
-      }
-    });
-
-    it('[master].hookSetHTMLModal()', () => {
-      for (let master of allMasters) {
-        assert.equal(typeof masters[master].hookSetHTMLModal, 'function');
-      }
-    });
-
-    it('[master].set()', () => {
-      for (let master of allMasters) {
-        assert.equal(typeof masters[master].set, 'function');
-      }
-    });
-
-    it('[master].masterName', () => {
-      for (let master of allMasters) {
-        assert.equal(masters[master].masterName, master);
-      }
     });
 
   });
