@@ -72,6 +72,7 @@
     "baldr-masters": "file:./lib/masters",
     "baldr-test": "file:./test/helper",
     "font-awesome": "^4.7.0",
+    "howler": "^2.0.5",
     "js-yaml": "^3.10.0",
     "marked": "^0.3.6",
     "mousetrap": "^1.6.1",

@@ -6,20 +6,58 @@
 'use strict';
 
 const {MasterOfMasters} = require('baldr-masters');
+const {InputFiles} = require('baldr-input-files');
+const path = require('path');
+const {Howl} = require('howler');
+const mousetrap = require('mousetrap');
+
+
+let howls = {};
 
 /**
  * Master class for the master slide “audio”
  */
 class MasterAudio extends MasterOfMasters {
-  constructor(document, data) {
-    super(document, data);
+  constructor(propObj) {
+    super(propObj);
+    this.inputFiles = new InputFiles(this.presentation.pwd);
+    this.dataNormalized = this.normalizeData(this.data);
+    let audioFiles = this.dataNormalized;
+
+    var mousetrapbind = function(key, combo) {
+      howls[key.key].play();
+    };
+
+    for (var i = 1; i <= audioFiles.length; i++) {
+      howls[i] = new Howl({src: [audioFiles[i - 1]]});
+      mousetrap.bind('ctrl+' + i, mousetrapbind);
+    }
+
+  }
+
+
+
+
+
+  /**
+   *this.dataNormalized
+   */
+  normalizeData(data) {
+    return this.inputFiles.orderedList(data, 'audio');
   }
 
   /**
    *
    */
   hookSetHTMLSlide() {
-    return 'audio';
+    let out = '';
+    let fileName;
+    for (let audioFile of this.dataNormalized) {
+      fileName = path.basename(audioFile);
+      out += `<li>${fileName}</li>`;
+    }
+
+    return `<ol>${out}</ol>`;
   }
 
 }

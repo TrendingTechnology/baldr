@@ -1,0 +1,5 @@
+---
+- audio:
+    - files/haydn.mp3
+    - files/beethoven.mp3
+    - files/mozart.mp3
