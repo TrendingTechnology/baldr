@@ -71,6 +71,8 @@
     "baldr-master-website": "file:./masters/website",
     "baldr-masters": "file:./lib/masters",
     "baldr-test": "file:./test/helper",
+    "baldr-theme-default": "file:./themes/default",
+    "baldr-theme-handwriting": "file:./themes/handwriting",
     "font-awesome": "^4.7.0",
     "howler": "^2.0.5",
     "js-yaml": "^3.10.0",
@@ -79,6 +81,7 @@
     "typeface-alegreya": "^0.0.40",
     "typeface-alegreya-sans": "^0.0.40",
     "typeface-alegreya-sans-sc": "^0.0.40",
-    "typeface-alegreya-sc": "^0.0.40"
+    "typeface-alegreya-sc": "^0.0.40",
+    "typeface-kalam": "^0.0.43"
   }
 }

@@ -1,0 +1,6 @@
+{
+  "name": "baldr-theme-handwriting",
+  "dependencies": {
+    "typeface-kalam": "^0.0.43"
+  }
+}
