@@ -57,6 +57,14 @@ exports.allMasters = [
 /**
  *
  */
+exports.allThemes = [
+  'default',
+  'handwriting'
+];
+
+/**
+ *
+ */
 exports.document = getDOM(
   fs.readFileSync(
     path.join(__dirname, '..', '..', 'render.html'),
