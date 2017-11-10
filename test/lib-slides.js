@@ -79,4 +79,29 @@ describe('Class “Slides()”', () => {
     assert.equal(result[3].masterName, 'person');
   });
 
+  it('Method “intersectMastersSlideKeys()”', () => {
+    let slides = new Slides(minimal, document);
+    let array1 = ['one', 'two', 'three'];
+    let array2 = ['two'];
+    let result = slides.intersectMastersSlideKeys(['one', 'two', 'three'], ['two']);
+    assert.deepEqual(result, ['two']);
+    assert.deepEqual(array1, ['one', 'two', 'three']);
+    assert.deepEqual(array2, ['two']);
+
+    assert.deepEqual(
+      slides.intersectMastersSlideKeys(['one', 'two', 'three'], ['four']),
+      []
+    );
+
+    assert.deepEqual(
+      slides.intersectMastersSlideKeys(['one', 'two', 'three'], ['one', 'two', 'three']),
+      ['one', 'two', 'three']
+    );
+
+    assert.deepEqual(
+      slides.intersectMastersSlideKeys(['one', 'two', 'three'], ['three', 'two', 'one']),
+      ['one', 'two', 'three']
+    );
+  });
+
 });
