@@ -1,1 +1,5 @@
-/* */
+body[data-theme="handwriting"] {
+  background-color: white;
+  color: blue;
+  font-family: 'Kalam';
+}

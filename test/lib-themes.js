@@ -76,4 +76,9 @@ describe('Class “Themes()”', () => {
     );
   });
 
+  it('Method “setTheme()”', () => {
+    themes.setTheme('handwriting');
+    assert.equal(themes.document.body.dataset.theme, 'handwriting');
+  });
+
 });

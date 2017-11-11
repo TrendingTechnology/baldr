@@ -122,6 +122,10 @@ describe('Class “MasterOfMasters” extended on a example master class (quote)
       this.master.set();
       assert.equal(this.master.alreadySet, true);
     });
+
+    it('Property “this.theme”', function() {
+      assert.equal(this.master.theme, 'default');
+    });
   });
 
   it('[master].hasCSS()', function() {
@@ -154,6 +158,11 @@ describe('Class “MasterOfMasters” extended on a example master class (quote)
   it('[master].set() <body data-center-vertically="true">', function() {
     this.master.set();
     assert.equal(this.master.document.body.dataset.centerVertically, 'true');
+  });
+
+  it('[master].set() <body data-theme="default">', function() {
+    this.master.set();
+    assert.equal(this.master.document.body.dataset.theme, 'default');
   });
 
 });

@@ -1,25 +1,10 @@
-/* Alegreya: 400 700 900 */
-@import url("node_modules/typeface-alegreya/index.css");
-
-/* Alegreya SC: 400 700 900 */
-@import url("node_modules/typeface-alegreya-sc/index.css");
-
-/* Alegreya Sans: 100 300 400 500 700 800 900 */
-@import url("node_modules/typeface-alegreya-sans/index.css");
-
-/* Alegreya Sans SC: 100 300 400 500 700 800 900 */
-@import url("node_modules/typeface-alegreya-sans-sc/index.css");
-
-body {
+body[data-theme="default"] {
   background-color: black;
   color: white;
   font-family: 'Alegreya';
-  margin: 0;
-  height: 100%;
-  width: 100%;
 }
 
-h1, h2, h3, h4 {
+[data-theme="default"] h1, h2, h3, h4 {
   font-family: 'Alegreya Sans SC';
   font-weight:700;
 }

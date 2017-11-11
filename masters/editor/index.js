@@ -13,6 +13,7 @@ const {MasterOfMasters} = require('baldr-masters');
 class MasterEditor extends MasterOfMasters {
   constructor(propObj) {
     super(propObj);
+    this.theme = 'handwriting';
   }
 
   /**

@@ -5,6 +5,7 @@
 const mousetrap = require('mousetrap');
 const {Presentation} = require('./lib/presentation.js');
 const misc = require('./lib/misc.js');
+const {Themes} = require('./lib/themes.js');
 const path = require('path');
 const {remote} = require('electron');
 const {ipcRenderer} = require('electron');
@@ -142,6 +143,9 @@ var main = function() {
   ipcRenderer.on('set-master', function(event, masterName) {
     setMaster(masterName);
   });
+
+  let themes = new Themes(document);
+  themes.loadThemes();
 
   presentation = new Presentation(
     misc.searchForBaldrFile(remote.process.argv),
