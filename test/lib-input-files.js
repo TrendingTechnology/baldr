@@ -5,10 +5,10 @@ const {
 
 const {InputFiles} = require('baldr-input-files');
 
-let input = new InputFiles(path.resolve('test', 'files', 'media'));
+let input = new InputFiles(path.resolve('test', 'files', 'mixed-extensions'));
 
 let resolve = function(folder, file) {
-  return path.resolve('test', 'files', 'media', folder, file);
+  return path.resolve('test', 'files', 'mixed-extensions', folder, file);
 };
 
 
@@ -42,7 +42,7 @@ describe('Class “InputFiles()”', () => {
     it('this.presentationPath', function() {
       assert.equal(
         input.presentationPath,
-        path.resolve('test', 'files', 'media')
+        path.resolve('test', 'files', 'mixed-extensions')
       );
     });
 
@@ -117,7 +117,7 @@ describe('Class “InputFiles()”', () => {
 
     it('A folder', function() {
       assert.deepEqual(
-        input.list(path.resolve('test/files/media/image'), 'image'),
+        input.list(path.resolve('test/files/mixed-extensions/image'), 'image'),
         expectedImage
       );
     });
