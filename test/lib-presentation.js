@@ -3,7 +3,8 @@ const {
   document,
   getDOM,
   path,
-  presentation
+  presentation,
+  state
 } = require('baldr-test');
 
 const rewire = require('rewire')('../lib/presentation.js');

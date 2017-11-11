@@ -10,6 +10,7 @@ const path = require('path');
 const {remote} = require('electron');
 const {ipcRenderer} = require('electron');
 const {loadMaster} = require('baldr-masters');
+const state = require('./lib/state.js');
 
 let presentation;
 
@@ -130,6 +131,7 @@ var bindFunctions = function(bindings) {
  * @function main
  */
 var main = function() {
+  state.document = document;
   window.onerror = function(message, source, lineNo, colNo, error) {
     document.getElementById('slide').innerHTML = `
     <p>${message}</p>
@@ -151,6 +153,7 @@ var main = function() {
     misc.searchForBaldrFile(remote.process.argv),
     document
   );
+  state.presentation = presentation;
   firstSlide();
   bindFunctions(
     [
