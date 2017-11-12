@@ -7,7 +7,6 @@ const {
   presentation
 } = require('baldr-test');
 
-const rewire = require('rewire')('../lib/slides.js');
 const {Slides} = require('../lib/slides.js');
 
 let rawYaml = [
@@ -34,65 +33,98 @@ let rawYaml = [
   }
 ];
 
+let instantiateSlides = function() {
+  return new Slides(rawYaml, document, presentation);
+}
+
+let slides;
+
 describe('Class “Slides()”', () => {
 
-  it('Method “parseSlides()”', () => {
-
-    let slides = new Slides(rawYaml, document);
-    let result = slides.parseSlides(rawYaml);
-    assert.equal(result[1].masterName, 'quote');
-    assert.equal(result[2].masterName, 'question');
-    assert.equal(result[3].masterName, 'person');
+  beforeEach(() => {
+    slides = instantiateSlides();
   });
 
-  it('Method “instantiateSlides()”', () => {
-    let rawSlideObj = {
-        "quote": {
-          "text": "text",
-          "author": "author",
-          "date": "date"
-        }
-      };
+  describe('Properties', () => {
+    it('Property “this.raw”', () => {
+      assert.equal(typeof slides.raw, 'object');
+      assert.equal(slides.raw[0].quote.text, 'text');
 
-    let slides = new Slides(rawYaml, document);
-    let slide = slides.instantiateSlide(rawSlideObj, 0);
-    assert.equal(slide.slideNo, 1);
-    assert.equal(slide.masterName, 'quote');
-    assert.equal(typeof slide.hookSetHTMLSlide, 'function');
-    assert.equal(typeof slide.hookSetHTMLModal, 'function');
+    });
+
+    it('Property “this.document”', () => {
+      assert.equal(typeof slides.document, 'object');
+      assert.equal(slides.document.body.nodeName, 'BODY');
+    });
+
+    it('Property “this.presentation”', () => {
+      assert.equal(typeof slides.presentation, 'object');
+      assert.equal(
+        slides.presentation.pwd,
+        path.resolve(__dirname, 'files')
+      );
+    });
+
   });
 
-  it('Method “parse()”', () => {
-    let slides = new Slides(rawYaml, document);
-    let result = slides.parse();
-    assert.equal(result[1].masterName, 'quote');
-    assert.equal(result[2].masterName, 'question');
-    assert.equal(result[3].masterName, 'person');
-  });
+  describe('Methods', () => {
+    it('Method “parseSlides()”', () => {
+      let slides = new Slides(rawYaml, document);
+      let result = slides.parseSlides(rawYaml);
+      assert.equal(result[1].masterName, 'quote');
+      assert.equal(result[2].masterName, 'question');
+      assert.equal(result[3].masterName, 'person');
+    });
 
-  it('Method “intersectMastersSlideKeys()”', () => {
-    let slides = new Slides(rawYaml, document);
-    let array1 = ['one', 'two', 'three'];
-    let array2 = ['two'];
-    let result = slides.intersectMastersSlideKeys(['one', 'two', 'three'], ['two']);
-    assert.deepEqual(result, ['two']);
-    assert.deepEqual(array1, ['one', 'two', 'three']);
-    assert.deepEqual(array2, ['two']);
+    it('Method “instantiateSlides()”', () => {
+      let rawSlideObj = {
+          "quote": {
+            "text": "text",
+            "author": "author",
+            "date": "date"
+          }
+        };
 
-    assert.deepEqual(
-      slides.intersectMastersSlideKeys(['one', 'two', 'three'], ['four']),
-      []
-    );
+      let slides = new Slides(rawYaml, document);
+      let slide = slides.instantiateSlide(rawSlideObj, 0);
+      assert.equal(slide.slideNo, 1);
+      assert.equal(slide.masterName, 'quote');
+      assert.equal(typeof slide.hookSetHTMLSlide, 'function');
+      assert.equal(typeof slide.hookSetHTMLModal, 'function');
+    });
 
-    assert.deepEqual(
-      slides.intersectMastersSlideKeys(['one', 'two', 'three'], ['one', 'two', 'three']),
-      ['one', 'two', 'three']
-    );
+    it('Method “parse()”', () => {
+      let slides = new Slides(rawYaml, document);
+      let result = slides.parse();
+      assert.equal(result[1].masterName, 'quote');
+      assert.equal(result[2].masterName, 'question');
+      assert.equal(result[3].masterName, 'person');
+    });
 
-    assert.deepEqual(
-      slides.intersectMastersSlideKeys(['one', 'two', 'three'], ['three', 'two', 'one']),
-      ['one', 'two', 'three']
-    );
+    it('Method “intersectMastersSlideKeys()”', () => {
+      let slides = new Slides(rawYaml, document);
+      let array1 = ['one', 'two', 'three'];
+      let array2 = ['two'];
+      let result = slides.intersectMastersSlideKeys(['one', 'two', 'three'], ['two']);
+      assert.deepEqual(result, ['two']);
+      assert.deepEqual(array1, ['one', 'two', 'three']);
+      assert.deepEqual(array2, ['two']);
+
+      assert.deepEqual(
+        slides.intersectMastersSlideKeys(['one', 'two', 'three'], ['four']),
+        []
+      );
+
+      assert.deepEqual(
+        slides.intersectMastersSlideKeys(['one', 'two', 'three'], ['one', 'two', 'three']),
+        ['one', 'two', 'three']
+      );
+
+      assert.deepEqual(
+        slides.intersectMastersSlideKeys(['one', 'two', 'three'], ['three', 'two', 'one']),
+        ['one', 'two', 'three']
+      );
+    });
   });
 
 });
