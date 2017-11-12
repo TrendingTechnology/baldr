@@ -35,7 +35,7 @@ let rawYaml = [
 
 let instantiateSlides = function() {
   return new Slides(rawYaml, document, presentation);
-}
+};
 
 let slides;
 

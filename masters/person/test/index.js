@@ -8,8 +8,6 @@ const {
 
 const {MasterPerson} = require('../index.js');
 
-presentation.pwd = '/home/bladr';
-
 let propObj = {
   masterName: 'person',
   masterPath: path.resolve(__dirname, '..'),
@@ -40,7 +38,7 @@ describe('Master slide “person”: unit tests', () => {
 
     assert.equal(
       doc.querySelector('img').getAttribute('src'),
-      '/home/bladr/beethoven.jpg'
+      path.resolve(__dirname, '..', '..', '..', 'test', 'files', 'beethoven.jpg')
     );
 
   });
