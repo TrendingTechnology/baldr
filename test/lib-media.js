@@ -1,9 +1,10 @@
 const {
   assert,
   path,
+  testFileMinimal
 } = require('baldr-test');
 
-const {Media} = require('baldr-media');
+const {Media, FileInfo} = require('baldr-media');
 
 let input = new Media(path.resolve('test', 'files', 'mixed-extensions'));
 
@@ -44,20 +45,20 @@ describe('Class “Media()”', () => {
       );
     });
 
-    it('this.extensionDefaults', function() {
-      assert.ok(input.extensionDefaults);
+    it('this.types', function() {
+      assert.ok(input.types);
     });
 
-    it('this.extensionDefaults.audio', function() {
-      assert.deepEqual(input.extensionDefaults.audio, ['mp3']);
+    it('this.types.audio', function() {
+      assert.deepEqual(input.types.audio, ['mp3']);
     });
 
-    it('this.extensionDefaults.image', function() {
-      assert.deepEqual(input.extensionDefaults.image, ['jpg', 'jpeg', 'png']);
+    it('this.types.image', function() {
+      assert.deepEqual(input.types.image, ['jpg', 'jpeg', 'png']);
     });
 
-    it('this.extensionDefaults.video', function() {
-      assert.deepEqual(input.extensionDefaults.video, ['mp4']);
+    it('this.types.video', function() {
+      assert.deepEqual(input.types.video, ['mp4']);
     });
 
   });
@@ -214,5 +215,47 @@ describe('Class “Media()”', () => {
       assert.ok(list.pop().includes('video/mozart.mp4'));
     });
 
+    it('Method “groupByTypes()”', () => {
+      let list = input.listRecursively(
+        path.resolve('test', 'files', 'mixed-extensions')
+      );
+      let group = input.groupByTypes(list);
+
+      assert.equal(group.audio.length, 3);
+      assert.equal(group.image.length, 4);
+      assert.equal(group.video.length, 4);
+    });
+
   });
+
+});
+
+describe('Class “FileInfo()”', () => {
+
+    it('Instantiation', () => {
+      let list = new FileInfo(testFileMinimal);
+      assert.equal(typeof list, 'object');
+      assert.equal(list.path, testFileMinimal);
+      assert.equal(list.basename, 'minimal.baldr');
+      assert.equal(list.extension, 'baldr');
+    });
+
+    describe('Properties', () => {
+      it('Property “this.path”', () => {
+        let list = new FileInfo(testFileMinimal);
+        assert.equal(list.path, testFileMinimal);
+      });
+
+      it('Property “this.basename”', () => {
+        let list = new FileInfo(testFileMinimal);
+        assert.equal(list.basename, 'minimal.baldr');
+      });
+
+      it('Property “this.extension”', () => {
+        let list = new FileInfo(testFileMinimal);
+        assert.equal(list.extension, 'baldr');
+      });
+
+    });
+
 });

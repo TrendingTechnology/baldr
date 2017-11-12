@@ -37,12 +37,21 @@ const fs = require('fs');
 class Media {
 
   /**
-   * @param {string} presentationPath The path which contains the
+   * @name Media#extensionDefaults
+   * @type Object
+   */
+
+  /**
+   * @param {string} parentPath The path which contains the
    * presentation file (*.baldr).
    */
-  constructor(presentationPath) {
-    this.presentationPath = presentationPath;
+  constructor(parentPath) {
+    this.parentPath = parentPath;
 
+    /**
+     * @name Media#extensionDefaults
+     * @type Object
+     */
     this.extensionDefaults = {
       audio: ['mp3'],
       image: ['jpg', 'jpeg', 'png'],
@@ -88,7 +97,7 @@ class Media {
       return filePath;
     }
     else {
-      return path.resolve(this.presentationPath, filePath);
+      return path.resolve(this.parentPath, filePath);
     }
   }
 
@@ -117,6 +126,31 @@ class Media {
       if (inputExtension === filterExtension) return true;
     }
     return false;
+  }
+
+  /**
+   * List all files in a directory in Node.js recursively in a
+   * synchronous fashion.
+   *
+   * @param {string} folder Relative or absolute path of a folder.
+   * @param {array} fileList An array of file paths
+   * @return {array} An array of file paths
+   *
+   * @see https://gist.github.com/kethinov/6658166
+   */
+  listRecursively(folder, filelist) {
+    let files = fs.readdirSync(folder).sort();
+    filelist = filelist || [];
+    files.forEach((file) => {
+      let filePath = path.resolve(folder, file);
+      if (fs.statSync(filePath).isDirectory()) {
+        filelist = this.listRecursively(filePath, filelist);
+      }
+      else {
+        filelist.push(filePath);
+      }
+    });
+    return filelist;
   }
 
   /**

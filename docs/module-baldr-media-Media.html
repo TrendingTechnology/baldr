@@ -29,7 +29,7 @@
 <header>
     
         <h2><span class="attribs"><span class="type-signature"></span></span>
-            <span class="ancestors"><a href="module-baldr-media.html">baldr-media</a>~</span>Media<span class="signature">(presentationPath)</span><span class="type-signature"></span></h2>
+            <span class="ancestors"><a href="module-baldr-media.html">baldr-media</a>~</span>Media<span class="signature">(parentPath)</span><span class="type-signature"></span></h2>
         
     
 </header>
@@ -42,7 +42,7 @@
     
 
     
-    <h4 class="name" id="Media"><span class="type-signature"></span>new Media<span class="signature">(presentationPath)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="Media"><span class="type-signature"></span>new Media<span class="signature">(parentPath)</span><span class="type-signature"></span></h4>
     
 
     
@@ -82,7 +82,7 @@
 
         <tr>
             
-                <td class="name"><code>presentationPath</code></td>
+                <td class="name"><code>parentPath</code></td>
             
 
             <td class="type">
@@ -140,7 +140,7 @@ presentation file (*.baldr).</p></td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_media_index.js.html">lib/media/index.js</a>, <a href="lib_media_index.js.html#line15">line 15</a>
+        <a href="lib_media_index.js.html">lib/media/index.js</a>, <a href="lib_media_index.js.html#line20">line 20</a>
     </li></ul></dd>
     
 
@@ -321,7 +321,7 @@ parameter empty to bypass the filter mechanism.</p></td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_media_index.js.html">lib/media/index.js</a>, <a href="lib_media_index.js.html#line76">line 76</a>
+        <a href="lib_media_index.js.html">lib/media/index.js</a>, <a href="lib_media_index.js.html#line85">line 85</a>
     </li></ul></dd>
     
 
@@ -484,7 +484,7 @@ noted without a leading dot (e. g.: “jpg”, “mp4”)</p></td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_media_index.js.html">lib/media/index.js</a>, <a href="lib_media_index.js.html#line35">line 35</a>
+        <a href="lib_media_index.js.html">lib/media/index.js</a>, <a href="lib_media_index.js.html#line44">line 44</a>
     </li></ul></dd>
     
 
@@ -668,7 +668,7 @@ parameter empty to bypass the filter mechanism.</p></td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_media_index.js.html">lib/media/index.js</a>, <a href="lib_media_index.js.html#line104">line 104</a>
+        <a href="lib_media_index.js.html">lib/media/index.js</a>, <a href="lib_media_index.js.html#line138">line 138</a>
     </li></ul></dd>
     
 
@@ -696,6 +696,194 @@ parameter empty to bypass the filter mechanism.</p></td>
         
 <div class="param-desc">
     <p>A array of absolute file paths or an empty array.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">array</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="listRecursively"><span class="type-signature"></span>listRecursively<span class="signature">(folder, fileList)</span><span class="type-signature"> &rarr; {array}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>List all files in a directory in Node.js recursively in a
+synchronous fashion.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>folder</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Relative or absolute path of a folder.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>fileList</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">array</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>An array of file paths</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="lib_media_index.js.html">lib/media/index.js</a>, <a href="lib_media_index.js.html#line113">line 113</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="https://gist.github.com/kethinov/6658166">https://gist.github.com/kethinov/6658166</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>An array of file paths</p>
 </div>
 
 
@@ -855,7 +1043,7 @@ parameter empty to bypass the filter mechanism.</p></td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_media_index.js.html">lib/media/index.js</a>, <a href="lib_media_index.js.html#line138">line 138</a>
+        <a href="lib_media_index.js.html">lib/media/index.js</a>, <a href="lib_media_index.js.html#line172">line 172</a>
     </li></ul></dd>
     
 
@@ -941,7 +1129,7 @@ parameter empty to bypass the filter mechanism.</p></td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_media_index.js.html">lib/media/index.js</a>, <a href="lib_media_index.js.html#line58">line 58</a>
+        <a href="lib_media_index.js.html">lib/media/index.js</a>, <a href="lib_media_index.js.html#line67">line 67</a>
     </li></ul></dd>
     
 
