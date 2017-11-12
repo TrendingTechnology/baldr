@@ -58,7 +58,7 @@
     "spectron": "^3.7.2"
   },
   "dependencies": {
-    "baldr-input-files": "file:./lib/input-files",
+    "baldr-media": "file:./lib/media",
     "baldr-master-audio": "file:./masters/audio",
     "baldr-master-camera": "file:./masters/camera",
     "baldr-master-editor": "file:./masters/editor",

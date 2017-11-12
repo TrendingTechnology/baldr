@@ -6,7 +6,7 @@
 'use strict';
 
 const {MasterOfMasters} = require('baldr-masters');
-const {InputFiles} = require('baldr-input-files');
+const {Media} = require('baldr-media');
 const path = require('path');
 const {Howl} = require('howler');
 const mousetrap = require('mousetrap');
@@ -20,7 +20,7 @@ let howls = {};
 class MasterAudio extends MasterOfMasters {
   constructor(propObj) {
     super(propObj);
-    this.inputFiles = new InputFiles(this.presentation.pwd);
+    this.inputFiles = new Media(this.presentation.pwd);
     this.dataNormalized = this.normalizeData(this.data);
     let audioFiles = this.dataNormalized;
 

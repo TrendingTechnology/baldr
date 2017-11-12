@@ -3,9 +3,9 @@ const {
   path,
 } = require('baldr-test');
 
-const {InputFiles} = require('baldr-input-files');
+const {Media} = require('baldr-media');
 
-let input = new InputFiles(path.resolve('test', 'files', 'mixed-extensions'));
+let input = new Media(path.resolve('test', 'files', 'mixed-extensions'));
 
 let resolve = function(folder, file) {
   return path.resolve('test', 'files', 'mixed-extensions', folder, file);
@@ -33,7 +33,7 @@ let orderedList = function() {
   input.orderedList(['images']);
 };
 
-describe('Class “InputFiles()”', () => {
+describe('Class “Media()”', () => {
 
   describe('Properties', function() {
 
