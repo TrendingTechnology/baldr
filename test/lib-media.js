@@ -205,5 +205,14 @@ describe('Class “Media()”', () => {
         );
       });
     });
+
+    it('Method “listRecursively()”', () => {
+      let list = input.listRecursively(
+        path.resolve('test', 'files', 'mixed-extensions')
+      );
+      assert.ok(list[0].includes('audio/beethoven.m4a'));
+      assert.ok(list.pop().includes('video/mozart.mp4'));
+    });
+
   });
 });
