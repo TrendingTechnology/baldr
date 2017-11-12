@@ -54,7 +54,7 @@ dpkg -i dist/baldur-0.0.1.deb
   * `views`: are not arranged in the list of slides. They can be
      displayed during the presentation by keyboard shortcuts or menu
      entries.
-  * `master`:
+  * `master`: Each `slide` and `view` is derived from a `master`
   * `media`: All kind of media files (audio, video, image) that are
      located in the same folder as the *.baldr presentation file.
 
