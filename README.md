@@ -44,7 +44,19 @@ pacman -U dist/baldur-0.0.1.pacman
 dpkg -i dist/baldur-0.0.1.deb
 ```
 
-# Navigation
+# Terminology
+
+* `presentation`:
+  * `slides`: A ordered list of single slides.
+    * `slide`: One fullscreen view displayed for an audience.
+      * `steps`: A ordered list of display states
+        * `step`: A display state of a slide
+  * `views`: are not arranged in the list of slides. They can be
+     displayed during the presentation by keyboard shortcuts or menu
+     entries.
+  * `master`:
+  * `media`: All kind of media files (audio, video, image) that are
+     located in the same folder as the *.baldr presentation file.
 
 * Cursor/Arrow symbol left / right: slides
 * Cursor/Arrow symbol up / down: steps
