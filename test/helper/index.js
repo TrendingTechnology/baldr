@@ -9,12 +9,6 @@ const path = require('path');
 const {JSDOM} = require('jsdom');
 const rewire = require('rewire');
 const {Presentation} = require('../../lib/presentation.js');
-const state = require('../../lib/state.js');
-
-/**
- *
- */
-exports.state = state;
 
 /**
  *
