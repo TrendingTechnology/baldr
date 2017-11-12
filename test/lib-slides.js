@@ -10,43 +10,35 @@ const {
 const rewire = require('rewire')('../lib/slides.js');
 const {Slides} = require('../lib/slides.js');
 
-const minimal = path.join('test', 'files', 'minimal.baldr');
+let rawYaml = [
+  {
+    "quote": {
+      "text": "text",
+      "author": "author",
+      "date": "date"
+    }
+  },
+  {
+    "question": [
+      {
+        "question": "question",
+        "answer": "answer"
+      }
+    ]
+  },
+  {
+    "person": {
+      "name": "name",
+      "image": "image"
+    }
+  }
+];
 
 describe('Class “Slides()”', () => {
 
-  it('Method “readYamlFile()”', () => {
-    let slides = new Slides(minimal, document);
-    let yml = slides.readYamlFile(minimal);
-    assert.equal(yml[0].quote.author, 'Johann Wolfgang von Goethe');
-    assert.equal(yml[1].question, 'When did Ludwig van Beethoven die?');
-  });
-
   it('Method “parseSlides()”', () => {
-    let rawYaml = [
-      {
-        "quote": {
-          "text": "text",
-          "author": "author",
-          "date": "date"
-        }
-      },
-      {
-        "question": [
-          {
-            "question": "question",
-            "answer": "answer"
-          }
-        ]
-      },
-      {
-        "person": {
-          "name": "name",
-          "image": "image"
-        }
-      }
-    ];
 
-    let slides = new Slides(minimal, document);
+    let slides = new Slides(rawYaml, document);
     let result = slides.parseSlides(rawYaml);
     assert.equal(result[1].masterName, 'quote');
     assert.equal(result[2].masterName, 'question');
@@ -62,17 +54,16 @@ describe('Class “Slides()”', () => {
         }
       };
 
-    let slides = new Slides(minimal, document);
+    let slides = new Slides(rawYaml, document);
     let slide = slides.instantiateSlide(rawSlideObj, 0);
     assert.equal(slide.slideNo, 1);
     assert.equal(slide.masterName, 'quote');
     assert.equal(typeof slide.hookSetHTMLSlide, 'function');
     assert.equal(typeof slide.hookSetHTMLModal, 'function');
-
   });
 
   it('Method “parse()”', () => {
-    let slides = new Slides(minimal, document);
+    let slides = new Slides(rawYaml, document);
     let result = slides.parse();
     assert.equal(result[1].masterName, 'quote');
     assert.equal(result[2].masterName, 'question');
@@ -80,7 +71,7 @@ describe('Class “Slides()”', () => {
   });
 
   it('Method “intersectMastersSlideKeys()”', () => {
-    let slides = new Slides(minimal, document);
+    let slides = new Slides(rawYaml, document);
     let array1 = ['one', 'two', 'three'];
     let array2 = ['two'];
     let result = slides.intersectMastersSlideKeys(['one', 'two', 'three'], ['two']);

@@ -1,5 +1,6 @@
 ---
-- question: No error on this slide
+slides:
+  - question: No error on this slide
 
-- question:
-    - lol: troll
+  - question:
+      - lol: troll

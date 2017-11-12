@@ -1,15 +1,16 @@
 ---
-- image: images/beethoven.jpg
+slides:
+  - image: images/beethoven.jpg
 
-- image:
-    - images/haydn.jpg
+  - image:
+      - images/haydn.jpg
 
-- image:
-    - images/mozart.jpg
-    - images/beethoven.jpg
-    - images/haydn.jpg
+  - image:
+      - images/mozart.jpg
+      - images/beethoven.jpg
+      - images/haydn.jpg
 
-- image: images
+  - image: images
 
-- image:
-  - images
+  - image:
+    - images

@@ -2,6 +2,7 @@ const {
   assert,
   document,
   getDOM,
+  fs,
   path,
   presentation
 } = require('baldr-test');
@@ -18,6 +19,14 @@ describe('Class “Presentation()”', () => {
   });
 
   describe('Properties', function() {
+
+    it('this.baldrFile', function() {
+      assert.ok(fs.existsSync(this.prs.baldrFile));
+    });
+
+    it('this.raw', function() {
+      assert.equal(typeof this.prs.raw, 'object');
+    });
 
     it('this.slides', function() {
       assert.equal(this.prs.slides[1].masterName, 'quote');
@@ -49,6 +58,13 @@ describe('Class “Presentation()”', () => {
       assert.equal(this.prs.cover.nodeName, 'DIV');
     });
 
+  });
+
+  it('Method “parseYamlFile()”', () => {
+    let presentation = new Presentation(minimal, document);
+    let yml = presentation.parseYamlFile(minimal);
+    assert.equal(yml.slides[0].quote.author, 'Johann Wolfgang von Goethe');
+    assert.equal(yml.slides[1].question, 'When did Ludwig van Beethoven die?');
   });
 
   it('Method “prev()”', function() {

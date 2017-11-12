@@ -1,7 +1,8 @@
 ---
-- question:
-    - one
-    - two
-    - three
+slides:
+  - question:
+      - one
+      - two
+      - three
 
-- question: Without steps
+  - question: Without steps

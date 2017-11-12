@@ -1,13 +1,14 @@
 ---
-- quote:
-    text: |
-      Der Tag der Gunst ist wie der Tag der Ernte,
-      man muss geschäftig sein sobald sie reift.
-    author: Johann Wolfgang von Goethe
-    date: 1801
+slides:
+  - quote:
+      text: |
+        Der Tag der Gunst ist wie der Tag der Ernte,
+        man muss geschäftig sein sobald sie reift.
+      author: Johann Wolfgang von Goethe
+      date: 1801
 
-- question: When did Ludwig van Beethoven die?
+  - question: When did Ludwig van Beethoven die?
 
-- person:
-    name: Ludwig van Beethoven
-    image: beethoven.jpg
+  - person:
+      name: Ludwig van Beethoven
+      image: beethoven.jpg

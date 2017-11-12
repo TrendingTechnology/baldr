@@ -1,23 +1,24 @@
 ---
-- quote:
-    text: No date
-    author: Author
+slides:
+  - quote:
+      text: No date
+      author: Author
 
-- quote:
-    text: No author
-    date: Date
+  - quote:
+      text: No author
+      date: Date
 
-- quote:
-    text: All values
-    author: Author
-    date: Date
+  - quote:
+      text: All values
+      author: Author
+      date: Date
 
-- quote:
-    text: only text
+  - quote:
+      text: only text
 
-- quote:
-    text: |
-      Der Tag der Gunst ist wie der Tag der Ernte,
-      man muss geschäftig sein sobald sie reift.
-    author: Johann Wolfgang von Goethe
-    date: 1801
+  - quote:
+      text: |
+        Der Tag der Gunst ist wie der Tag der Ernte,
+        man muss geschäftig sein sobald sie reift.
+      author: Johann Wolfgang von Goethe
+      date: 1801

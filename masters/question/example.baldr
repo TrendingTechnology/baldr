@@ -1,19 +1,20 @@
 ---
-- question:
-    - question: Question one?
-      answer: Answer one
-    - question: Question two?
-      answer: Answer two
-    - question: Question three?
-      answer: Answer three
+slides:
+  - question:
+      - question: Question one?
+        answer: Answer one
+      - question: Question two?
+        answer: Answer two
+      - question: Question three?
+        answer: Answer three
 
-- question:
-    - question: This is a question?
-      answer: This is the answer
+  - question:
+      - question: This is a question?
+        answer: This is the answer
 
-- question:
-    - Question one?
-    - Question two?
-    - Question three?
+  - question:
+      - Question one?
+      - Question two?
+      - Question three?
 
-- question: One big question?
+  - question: One big question?

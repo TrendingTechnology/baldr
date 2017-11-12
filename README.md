@@ -58,5 +58,28 @@ dpkg -i dist/baldur-0.0.1.deb
   * `media`: All kind of media files (audio, video, image) that are
      located in the same folder as the *.baldr presentation file.
 
+# Shortcuts
+
 * Cursor/Arrow symbol left / right: slides
 * Cursor/Arrow symbol up / down: steps
+
+# Structure of the `*.baldr` YAML file format
+
+
+```yml
+
+---
+slides:
+  - quote:
+      text: |
+        Der Tag der Gunst ist wie der Tag der Ernte,
+        man muss geschäftig sein sobald sie reift.
+      author: Johann Wolfgang von Goethe
+      date: 1801
+
+  - question: When did Ludwig van Beethoven die?
+
+  - person:
+      name: Ludwig van Beethoven
+      image: beethoven.jpg
+```

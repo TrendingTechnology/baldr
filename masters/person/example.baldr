@@ -1,4 +1,5 @@
 ---
-- person:
-    name: Ludwig van Beethoven
-    image: beethoven.jpg
+slides:
+  - person:
+      name: Ludwig van Beethoven
+      image: beethoven.jpg
