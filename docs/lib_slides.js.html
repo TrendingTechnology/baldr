@@ -32,9 +32,10 @@
  */
 
 const fs = require('fs');
-const yaml = require('js-yaml');
 const path = require('path');
-const {loadMaster} = require('baldr-masters');
+const {loadMaster, Masters} = require('baldr-masters');
+
+const masters = new Masters();
 
 /**
  * Parse the object representation of all slides.
@@ -42,62 +43,51 @@ const {loadMaster} = require('baldr-masters');
 class Slides {
 
   /**
-   * @param {string} yamlFile Path of the yaml file.
+   * @param {array} rawSlides A raw array of all slide objects.
    * @param {object} document The HTML DOM Document Object.
-   * @param {object} presentation The object representation of the presentation.
-   * @constructor
+   * @param {object} presentation The object representation of the p
+   * resentation.
    */
-  constructor(yamlFile, document, presentation) {
-    this.yamlFile = yamlFile;
+  constructor(rawSlides, document, presentation) {
+    this.raw = rawSlides;
     this.document = document;
     this.presentation = presentation;
   }
 
   /**
-   * Load the content of a yaml file and convert its content into a
-   * object.
-   * @param {string} yamlFile Path of the yaml file.
-   * @return {object} Object representation of the yaml file.
-   * &lt;pre>&lt;code>
-   * [
-   *   {
-   *     "quote": {
-   *       "text": "text",
-   *       "author": "author",
-   *       "date": "date"
-   *     }
-   *   },
-   *   {
-   *     "question": [
-   *       {
-   *         "question": "question",
-   *         "answer": "answer"
-   *       }
-   *     ]
-   *   },
-   *   {
-   *     "person": {
-   *       "name": "name",
-   *       "image": "image"
-   *     }
-   *   }
-   * ]
-   * &lt;/code>&lt;pre>
+   * Get the intersection between all master names and the slide keys.
+   *
+   * This method can be used to check that a slide object uses only
+   * one master slide.
+   *
+   * @param {array} masterNames
+   * @param {array} slideKeys
+   * @return {array} The intersection as an array
    */
-  readYamlFile(yamlFile) {
-    try {
-      return yaml.safeLoad(fs.readFileSync(yamlFile, 'utf8'));
-    } catch (e) {
-      throw e;
-    }
+  intersectMastersSlideKeys(masterNames, slideKeys) {
+    return masterNames.filter((n) => slideKeys.includes(n));
   }
 
   /**
    * Instantiate slide: Load master slide class
+   *
+   * @param {object} slide
+   * @param {integer} index The index of the slide array
+   * @return {object} A master slide object
    */
   instantiateSlide(slide, index) {
     let no = index + 1;
-    let master = Object.keys(slide)[0];
+
+    let intersection = this.intersectMastersSlideKeys(
+      masters.all,
+      Object.keys(slide)
+    );
+
+    if (intersection.length > 1) {
+      throw Error('Each slide must have only one master slide.');
+    }
+
+    let master = intersection[0];
 
     return loadMaster(
       master,
@@ -191,9 +181,7 @@ class Slides {
    * &lt;/code>&lt;pre>
    */
   parse() {
-    return this.parseSlides(
-      this.readYamlFile(this.yamlFile)
-    );
+    return this.parseSlides(this.raw);
   }
 
 }
@@ -209,7 +197,7 @@ exports.Slides = Slides;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-baldr.html">baldr</a></li><li><a href="module-baldr-media.html">baldr-media</a></li><li><a href="module-baldr-master-audio.html">baldr-master-audio</a></li><li><a href="module-baldr-master-camera.html">baldr-master-camera</a></li><li><a href="module-baldr-master-editor.html">baldr-master-editor</a></li><li><a href="module-baldr-master-image.html">baldr-master-image</a></li><li><a href="module-baldr-master-markdown.html">baldr-master-markdown</a></li><li><a href="module-baldr-master-person.html">baldr-master-person</a></li><li><a href="module-baldr-master-question.html">baldr-master-question</a></li><li><a href="module-baldr-master-quote.html">baldr-master-quote</a></li><li><a href="module-baldr-master-svg.html">baldr-master-svg</a></li><li><a href="module-baldr-master-website.html">baldr-master-website</a></li><li><a href="module-baldr-masters.html">baldr-masters</a></li><li><a href="module-baldr-test.html">baldr-test</a></li><li><a href="module-lib_misc.html">lib/misc</a></li><li><a href="module-lib_presentation.html">lib/presentation</a></li><li><a href="module-lib_slides.html">lib/slides</a></li></ul><h3>Classes</h3><ul><li><a href="module-baldr-media-Media.html">Media</a></li><li><a href="module-baldr-master-audio-MasterAudio.html">MasterAudio</a></li><li><a href="module-baldr-master-camera-MasterCamera.html">MasterCamera</a></li><li><a href="module-baldr-master-editor-MasterEditor.html">MasterEditor</a></li><li><a href="module-baldr-master-image-MasterImage.html">MasterImage</a></li><li><a href="module-baldr-master-markdown-MasterMarkdown.html">MasterMarkdown</a></li><li><a href="module-baldr-master-person-MasterPerson.html">MasterPerson</a></li><li><a href="module-baldr-master-question-MasterQuestion.html">MasterQuestion</a></li><li><a href="module-baldr-master-quote-MasterQuote.html">MasterQuote</a></li><li><a href="module-baldr-master-svg-MasterSvg.html">MasterSvg</a></li><li><a href="module-baldr-master-website-MasterWebsite.html">MasterWebsite</a></li><li><a href="module-baldr-masters-Masters.html">Masters</a></li><li><a href="module-baldr-test-Spectron.html">Spectron</a></li><li><a href="module-lib_presentation-Presentation.html">Presentation</a></li><li><a href="module-lib_slides-Slides.html">Slides</a></li></ul><h3>Interfaces</h3><ul><li><a href="module-baldr-masters-MasterOfMasters.html">MasterOfMasters</a></li></ul><h3>Global</h3><ul><li><a href="global.html#bindFunction">bindFunction</a></li><li><a href="global.html#bindFunctions">bindFunctions</a></li><li><a href="global.html#firstSlide">firstSlide</a></li><li><a href="global.html#main">main</a></li><li><a href="global.html#nextSlide">nextSlide</a></li><li><a href="global.html#nextStep">nextStep</a></li><li><a href="global.html#previousSlide">previousSlide</a></li><li><a href="global.html#prevStep">prevStep</a></li><li><a href="global.html#setMaster">setMaster</a></li><li><a href="global.html#setMasterCamera">setMasterCamera</a></li><li><a href="global.html#setMasterEditor">setMasterEditor</a></li><li><a href="global.html#toggleModal">toggleModal</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-baldr.html">baldr</a></li><li><a href="module-baldr-master-audio.html">baldr-master-audio</a></li><li><a href="module-baldr-master-camera.html">baldr-master-camera</a></li><li><a href="module-baldr-master-editor.html">baldr-master-editor</a></li><li><a href="module-baldr-master-image.html">baldr-master-image</a></li><li><a href="module-baldr-master-markdown.html">baldr-master-markdown</a></li><li><a href="module-baldr-master-person.html">baldr-master-person</a></li><li><a href="module-baldr-master-question.html">baldr-master-question</a></li><li><a href="module-baldr-master-quote.html">baldr-master-quote</a></li><li><a href="module-baldr-master-svg.html">baldr-master-svg</a></li><li><a href="module-baldr-master-website.html">baldr-master-website</a></li><li><a href="module-baldr-masters.html">baldr-masters</a></li><li><a href="module-baldr-media.html">baldr-media</a></li><li><a href="module-baldr-test.html">baldr-test</a></li><li><a href="module-lib_misc.html">lib/misc</a></li><li><a href="module-lib_presentation.html">lib/presentation</a></li><li><a href="module-lib_slides.html">lib/slides</a></li><li><a href="module-lib_themes.html">lib/themes</a></li></ul><h3>Classes</h3><ul><li><a href="module-baldr-master-audio-MasterAudio.html">MasterAudio</a></li><li><a href="module-baldr-master-camera-MasterCamera.html">MasterCamera</a></li><li><a href="module-baldr-master-editor-MasterEditor.html">MasterEditor</a></li><li><a href="module-baldr-master-image-MasterImage.html">MasterImage</a></li><li><a href="module-baldr-master-markdown-MasterMarkdown.html">MasterMarkdown</a></li><li><a href="module-baldr-master-person-MasterPerson.html">MasterPerson</a></li><li><a href="module-baldr-master-question-MasterQuestion.html">MasterQuestion</a></li><li><a href="module-baldr-master-quote-MasterQuote.html">MasterQuote</a></li><li><a href="module-baldr-master-svg-MasterSvg.html">MasterSvg</a></li><li><a href="module-baldr-master-website-MasterWebsite.html">MasterWebsite</a></li><li><a href="module-baldr-masters-Masters.html">Masters</a></li><li><a href="module-baldr-media-Media.html">Media</a></li><li><a href="module-baldr-test-Spectron.html">Spectron</a></li><li><a href="module-lib_presentation-Presentation.html">Presentation</a></li><li><a href="module-lib_slides-Slides.html">Slides</a></li><li><a href="module-lib_themes-Themes.html">Themes</a></li></ul><h3>Interfaces</h3><ul><li><a href="module-baldr-masters-MasterOfMasters.html">MasterOfMasters</a></li></ul><h3>Global</h3><ul><li><a href="global.html#bindFunction">bindFunction</a></li><li><a href="global.html#bindFunctions">bindFunctions</a></li><li><a href="global.html#firstSlide">firstSlide</a></li><li><a href="global.html#main">main</a></li><li><a href="global.html#nextSlide">nextSlide</a></li><li><a href="global.html#nextStep">nextStep</a></li><li><a href="global.html#previousSlide">previousSlide</a></li><li><a href="global.html#prevStep">prevStep</a></li><li><a href="global.html#setMaster">setMaster</a></li><li><a href="global.html#setMasterCamera">setMasterCamera</a></li><li><a href="global.html#setMasterEditor">setMasterEditor</a></li><li><a href="global.html#toggleModal">toggleModal</a></li></ul>
 </nav>
 
 <br class="clear">

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: masters/question/index.js</title>
+    <title>JSDoc: Source: lib/media/index.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: masters/question/index.js</h1>
+    <h1 class="page-title">Source: lib/media/index.js</h1>
 
     
 
@@ -27,163 +27,163 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
- * @file Master slide “question”
- * @module baldr-master-question
+ * @file Filter and resolve the input files used in the presentation.
+ * @module baldr-media
  */
 
-'use strict';
+const path = require('path');
+const fs = require('fs');
 
-const {MasterOfMasters} = require('baldr-masters');
+class Media {
 
-/**
- * Master class for the master slide “question”
- *
- * Types:
- *  - single
- *    - without answer
- *    - with answer
- *  - multiple
- *    - without answer
- *    - with answer
- */
-class MasterQuestion extends MasterOfMasters {
+  /**
+   * @param {string} presentationPath The path which contains the
+   * presentation file (*.baldr).
+   */
+  constructor(presentationPath) {
+    this.presentationPath = presentationPath;
 
-  constructor(propObj) {
-    super(propObj);
-    this.centerVertically = true;
+    this.extensionDefaults = {
+      audio: ['mp3'],
+      image: ['jpg', 'jpeg', 'png'],
+      video: ['mp4']
+    };
   }
 
   /**
+   * Get extensions to filter the input files.
    *
+   * @param {array|string} extensions A array of extensions or
+   * a single extension specifed as a string or a property of
+   * the object “this.extensionDefaults”. An extension should be
+   * noted without a leading dot (e. g.: “jpg”, “mp4”)
+   *
+   * @return {array} A array of extensions
    */
-  normalizeDataQAPair(pair) {
-    if (typeof pair === 'string') {
-      return {question: pair, answer: false};
+  getExtensions(extensions) {
+    if (typeof extensions === 'object' &amp;&amp; Array.isArray(extensions)) {
+      return extensions;
     }
-    else if (typeof pair === 'object') {
-      if (typeof pair.question === 'string' &amp;&amp; !pair.answer) {
-        return {question: pair.question, answer: false};
-      }
-      else if (typeof pair.question === 'string' &amp;&amp; typeof pair.answer === 'string') {
-        return {question: pair.question, answer: pair.answer};
-      }
-      else {
-        throw new Error('Master slide “question”: Invalid data input');
-      }
+    else if (
+      typeof extensions === 'string' &amp;&amp;
+      this.extensionDefaults[extensions]
+    ) {
+      return this.extensionDefaults[extensions];
+    }
+    else if (typeof extensions === 'string') {
+      return [extensions];
     }
     else {
-      throw new Error('Master slide “question”: Invalid data input');
+      return [];
     }
   }
 
   /**
+   * Get the absolute path of a file used in the presentation.
    *
+   * @return {string} Absolute path
    */
-  normalizeData(data) {
-     if (typeof data === 'object' &amp;&amp; Array.isArray(data)) {
-      let out = [];
-      for (let pair of data) {
-        out.push(this.normalizeDataQAPair(pair));
-      }
-      return out;
-    } else {
-      return [this.normalizeDataQAPair(data)];
-    }
-  }
-
-  /**
-   *
-   */
-  templatQAPair(question, answer) {
-    let out = '';
-    if (question) {
-      out += `&lt;p class="question">${question}&lt;/p>`;
-    }
-    if (answer) {
-      out += `&lt;p class="answer">${answer}&lt;/p>`;
-    }
-    return out;
-  }
-
-  /**
-   *
-   */
-  setStepByNo(no) {
-    for (let i = 1; i &lt;= this.stepCount; i++) {
-      if (!this.stepData[i].style.visibility) {
-        this.stepData[i].style.visibility = 'visible';
-      }
-
-      let visibility = this.stepData[i].style.visibility;
-      if (visibility === 'visible' &amp;&amp; no &lt; i) {
-        this.stepData[i].style.visibility = 'hidden';
-      }
-      else if (visibility === 'hidden' &amp;&amp; no >= i) {
-        this.stepData[i].style.visibility = 'visible';
-      }
-    }
-  }
-
-  /**
-   *
-   */
-  template(data) {
-    if (data.length > 1) {
-      let li = '';
-      for (let pair of data) {
-        li +=
-          '&lt;li>' +
-          this.templatQAPair(pair.question, pair.answer) +
-          '&lt;/li>';
-      }
-      return `&lt;ol>${li}&lt;/ol>`;
+  resolvePath(filePath) {
+    if (path.isAbsolute(filePath)) {
+      return filePath;
     }
     else {
-      return this.templatQAPair(data[0].question, data[0].answer);
+      return path.resolve(this.presentationPath, filePath);
     }
   }
 
   /**
-   *
+   * @param {string} inputPath The path of a file
+   * @param {array|string} extensions A array of extensions or
+   * a single extension specifed as a string or a property of
+   * the object “this.extensionDefaults”. An extension should be
+   * noted without a leading dot (e. g.: “jpg”, “mp4”). Leave the
+   * parameter empty to bypass the filter mechanism.
+   * @return {boolean} True if the input file has the given extension
    */
-  hookSetHTMLSlide() {
-    let data = this.normalizeData(this.data);
-    return '&lt;div id="question-content">' +
-      this.template(data) +
-      '&lt;/div>';
+  filterFile(inputPath, extensions) {
+    if (!extensions) {
+      return true;
+    }
+
+    let filterExtensions = this.getExtensions(extensions)
+      .map((value) => {
+        return '.' + value.toLowerCase();
+      });
+
+    let inputExtension = path.extname(inputPath).toLowerCase();
+
+    for (let filterExtension of filterExtensions) {
+      if (inputExtension === filterExtension) return true;
+    }
+    return false;
   }
 
   /**
-   *
+   * @param {string} inputPath Relative or absolute path of a folder or
+   * a file.
+   * @param {array|string} extensions A array of extensions or
+   * a single extension specifed as a string or a property of
+   * the object “this.extensionDefaults”. An extension should be
+   * noted without a leading dot (e. g.: “jpg”, “mp4”). Leave the
+   * parameter empty to bypass the filter mechanism.
+   * @return {array} A array of absolute file paths or an empty array.
    */
-  hookPostFirstSet() {
-    this.stepNo = 1;
+  list(inputPath, extensions) {
+    let absPath = this.resolvePath(inputPath);
+
+    if (!fs.existsSync(absPath)) {
+      return [];
+    }
+    let stat = fs.statSync(absPath);
+    if (!stat.isDirectory() &amp;&amp; this.filterFile(absPath, extensions)) {
+      return [absPath];
+    }
+    else if (stat.isDirectory()) {
+      return fs.readdirSync(absPath)
+        .filter((filename) => {
+          return this.filterFile(filename, extensions);
+        })
+        .map((filename) => {
+          return path.join(absPath, filename);
+        })
+        .sort();
+    }
+    else {
+      return [];
+    }
   }
 
   /**
-   * The stepData object has to be filled very time a slide is set.
-   * Every time a slide is set, new HTML elements are generated.
+   * @param {array|string} inputPaths Both folder or file paths can
+   * be specified.
+   * @param {array|string} extensions A array of extensions or
+   * a single extension specifed as a string or a property of
+   * the object “this.extensionDefaults”. An extension should be
+   * noted without a leading dot (e. g.: “jpg”, “mp4”). Leave the
+   * parameter empty to bypass the filter mechanism.
    */
-  hookPostSet() {
-    let elements = this.document.querySelectorAll('p');
-    this.stepCount = elements.length;
-    elements.forEach((element, index) => {
-      this.stepData[index + 1] = element;
-    });
-
-    this.setStepByNo(this.stepNo);
-  }
-
-  /**
-   *
-   */
-  hookSetStep() {
-    this.setStepByNo(this.stepNo);
+  orderedList(inputPaths, extensions) {
+    let normalizedPaths;
+    if (typeof inputPaths === 'string') {
+      normalizedPaths = [inputPaths];
+    }
+    else {
+      normalizedPaths = inputPaths;
+    }
+    let list = [];
+    for (let filePath of normalizedPaths) {
+      var sortedList = this.list(filePath, extensions);
+      for (let file of sortedList) {
+        list.push(file);
+      }
+    }
+    return list;
   }
 
 }
 
-exports.MasterQuestion = MasterQuestion;
+exports.Media = Media;
 </code></pre>
         </article>
     </section>

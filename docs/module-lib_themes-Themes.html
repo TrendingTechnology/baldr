@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: Slides</title>
+    <title>JSDoc: Class: Themes</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: Slides</h1>
+    <h1 class="page-title">Class: Themes</h1>
 
     
 
@@ -29,9 +29,9 @@
 <header>
     
         <h2><span class="attribs"><span class="type-signature"></span></span>
-            <span class="ancestors"><a href="module-lib_slides.html">lib/slides</a>~</span>Slides<span class="signature">(rawSlides, document, presentation)</span><span class="type-signature"></span></h2>
+            <span class="ancestors"><a href="module-lib_themes.html">lib/themes</a>~</span>Themes<span class="signature">()</span><span class="type-signature"></span></h2>
         
-            <div class="class-description"><p>Parse the object representation of all slides.</p></div>
+            <div class="class-description"><p>Gather informations about all themes.</p></div>
         
     
 </header>
@@ -46,7 +46,7 @@
     
 
     
-    <h4 class="name" id="Slides"><span class="type-signature"></span>new Slides<span class="signature">(rawSlides, document, presentation)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="Themes"><span class="type-signature"></span>new Themes<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
     
@@ -59,102 +59,6 @@
 
 
 
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>rawSlides</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">array</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>A raw array of all slide objects.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>document</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>The HTML DOM Document Object.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>presentation</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>The object representation of the p
-resentation.</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
 
 
 
@@ -190,7 +94,7 @@ resentation.</p></td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_slides.js.html">lib/slides.js</a>, <a href="lib_slides.js.html#line15">line 15</a>
+        <a href="lib_themes.js.html">lib/themes.js</a>, <a href="lib_themes.js.html#line14">line 14</a>
     </li></ul></dd>
     
 
@@ -234,6 +138,154 @@ resentation.</p></td>
     
 
     
+        <h3 class="subsection-title">Members</h3>
+
+        
+            
+<h4 class="name" id="all"><span class="type-signature"></span>all<span class="type-signature"> :array</span></h4>
+
+
+
+
+<div class="description">
+    <p>Folder names of all themes</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">array</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="lib_themes.js.html">lib/themes.js</a>, <a href="lib_themes.js.html#line33">line 33</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="path"><span class="type-signature"></span>path<span class="type-signature"> :string</span></h4>
+
+
+
+
+<div class="description">
+    <p>Parent path of all themes.</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">string</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="lib_themes.js.html">lib/themes.js</a>, <a href="lib_themes.js.html#line27">line 27</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+    
 
     
         <h3 class="subsection-title">Methods</h3>
@@ -244,7 +296,112 @@ resentation.</p></td>
     
 
     
-    <h4 class="name" id="instantiateSlide"><span class="type-signature"></span>instantiateSlide<span class="signature">(slide, index)</span><span class="type-signature"> &rarr; {object}</span></h4>
+    <h4 class="name" id="getAllCSSFiles"><span class="type-signature"></span>getAllCSSFiles<span class="signature">()</span><span class="type-signature"> &rarr; {array}</span></h4>
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="lib_themes.js.html">lib/themes.js</a>, <a href="lib_themes.js.html#line92">line 92</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>A array of CSS files in the order: first
+dependencies of the theme and then the real theme CSS file</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">array</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="getPackageJSON"><span class="type-signature"></span>getPackageJSON<span class="signature">(name)</span><span class="type-signature"></span></h4>
     
 
     
@@ -252,7 +409,7 @@ resentation.</p></td>
 
 
 <div class="description">
-    <p>Instantiate slide: Load master slide class</p>
+    <p>Get the content of the package.json file.</p>
 </div>
 
 
@@ -288,13 +445,13 @@ resentation.</p></td>
 
         <tr>
             
-                <td class="name"><code>slide</code></td>
+                <td class="name"><code>name</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">object</span>
+<span class="param-type">string</span>
 
 
             
@@ -304,30 +461,7 @@ resentation.</p></td>
 
             
 
-            <td class="description last"></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>index</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">integer</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>The index of the slide array</p></td>
+            <td class="description last"><p>The name of the theme</p></td>
         </tr>
 
     
@@ -368,7 +502,93 @@ resentation.</p></td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_slides.js.html">lib/slides.js</a>, <a href="lib_slides.js.html#line50">line 50</a>
+        <a href="lib_themes.js.html">lib/themes.js</a>, <a href="lib_themes.js.html#line82">line 82</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="getThemes"><span class="type-signature"></span>getThemes<span class="signature">()</span><span class="type-signature"> &rarr; {array}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Get the folders of all themes.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="lib_themes.js.html">lib/themes.js</a>, <a href="lib_themes.js.html#line41">line 41</a>
     </li></ul></dd>
     
 
@@ -395,7 +615,7 @@ resentation.</p></td>
 
         
 <div class="param-desc">
-    <p>A master slide object</p>
+    <p>Folder names of all themes</p>
 </div>
 
 
@@ -406,7 +626,7 @@ resentation.</p></td>
     </dt>
     <dd>
         
-<span class="param-type">object</span>
+<span class="param-type">array</span>
 
 
     </dd>
@@ -424,7 +644,7 @@ resentation.</p></td>
     
 
     
-    <h4 class="name" id="intersectMastersSlideKeys"><span class="type-signature"></span>intersectMastersSlideKeys<span class="signature">(masterNames, slideKeys)</span><span class="type-signature"> &rarr; {array}</span></h4>
+    <h4 class="name" id="loadThemes"><span class="type-signature"></span>loadThemes<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
     
@@ -432,9 +652,94 @@ resentation.</p></td>
 
 
 <div class="description">
-    <p>Get the intersection between all master names and the slide keys.</p>
-<p>This method can be used to check that a slide object uses only
-one master slide.</p>
+    <p>Load all CSS files of all themes and add link elements to the
+DOM.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="lib_themes.js.html">lib/themes.js</a>, <a href="lib_themes.js.html#line111">line 111</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="resolveDependencies"><span class="type-signature"></span>resolveDependencies<span class="signature">(dependencies)</span><span class="type-signature"> &rarr; {array}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Resolve all theme dependencies (e. g. typeface modules)</p>
 </div>
 
 
@@ -470,13 +775,13 @@ one master slide.</p>
 
         <tr>
             
-                <td class="name"><code>masterNames</code></td>
+                <td class="name"><code>dependencies</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">array</span>
+<span class="param-type">object</span>
 
 
             
@@ -486,30 +791,8 @@ one master slide.</p>
 
             
 
-            <td class="description last"></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>slideKeys</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">array</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
+            <td class="description last"><p>The dependencies object like in
+package.json</p></td>
         </tr>
 
     
@@ -550,7 +833,7 @@ one master slide.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_slides.js.html">lib/slides.js</a>, <a href="lib_slides.js.html#line39">line 39</a>
+        <a href="lib_themes.js.html">lib/themes.js</a>, <a href="lib_themes.js.html#line57">line 57</a>
     </li></ul></dd>
     
 
@@ -577,7 +860,7 @@ one master slide.</p>
 
         
 <div class="param-desc">
-    <p>The intersection as an array</p>
+    <p>A list of CSS paths as an array</p>
 </div>
 
 
@@ -606,7 +889,7 @@ one master slide.</p>
     
 
     
-    <h4 class="name" id="parse"><span class="type-signature"></span>parse<span class="signature">()</span><span class="type-signature"> &rarr; {object}</span></h4>
+    <h4 class="name" id="resolveTheme"><span class="type-signature"></span>resolveTheme<span class="signature">(name)</span><span class="type-signature"> &rarr; {string}</span></h4>
     
 
     
@@ -614,143 +897,8 @@ one master slide.</p>
 
 
 <div class="description">
-    <p>Parse the yaml file.</p>
+    <p>Resolve the folder path of the theme module</p>
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_slides.js.html">lib/slides.js</a>, <a href="lib_slides.js.html#line155">line 155</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    <p>Processed object of slides</p>
-<p><pre><code>
-{
-  &quot;1&quot;: {
-    &quot;no&quot;: 1,
-    &quot;master&quot;: &quot;quote&quot;,
-    &quot;data&quot;: {
-      &quot;text&quot;: &quot;Der Tag der Gunst ist wie der Tag der Ernte,\nman muss geschäftig sein sobald sie reift.\n&quot;,
-      &quot;author&quot;: &quot;Johann Wolfgang von Goethe&quot;,
-      &quot;date&quot;: 1801
-    }
-  },
-  &quot;2&quot;: {
-    &quot;no&quot;: 2,
-    &quot;master&quot;: &quot;question&quot;,
-    &quot;data&quot;: [
-      {
-        &quot;question&quot;: &quot;Wann starb Ludwig van Beethoven?&quot;,
-        &quot;answer&quot;: 1827
-      }
-    ]
-  },
-  &quot;3&quot;: {
-    &quot;no&quot;: 3,
-    &quot;master&quot;: &quot;person&quot;,
-    &quot;data&quot;: {
-      &quot;name&quot;: &quot;Ludwig van Beethoven&quot;,
-      &quot;image&quot;: &quot;beethoven.jpg&quot;
-    }
-  }
-}
-</code><pre></p>
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">object</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="parseSlides"><span class="type-signature"></span>parseSlides<span class="signature">(yamlRaw)</span><span class="type-signature"> &rarr; {object}</span></h4>
-    
-
-    
-
-
 
 
 
@@ -785,13 +933,13 @@ one master slide.</p>
 
         <tr>
             
-                <td class="name"><code>yamlRaw</code></td>
+                <td class="name"><code>name</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">array</span>
+<span class="param-type">string</span>
 
 
             
@@ -801,7 +949,7 @@ one master slide.</p>
 
             
 
-            <td class="description last"><p>The yaml file converted in an array of objects.</p></td>
+            <td class="description last"><p>The name of the theme</p></td>
         </tr>
 
     
@@ -842,7 +990,7 @@ one master slide.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_slides.js.html">lib/slides.js</a>, <a href="lib_slides.js.html#line110">line 110</a>
+        <a href="lib_themes.js.html">lib/themes.js</a>, <a href="lib_themes.js.html#line71">line 71</a>
     </li></ul></dd>
     
 
@@ -869,38 +1017,8 @@ one master slide.</p>
 
         
 <div class="param-desc">
-    <p>Processed object of slides</p>
-<p><pre><code>
-{
-  &quot;1&quot;: {
-    &quot;no&quot;: 1,
-    &quot;master&quot;: &quot;quote&quot;,
-    &quot;data&quot;: {
-      &quot;text&quot;: &quot;Der Tag der Gunst ist wie der Tag der Ernte,\nman muss geschäftig sein sobald sie reift.\n&quot;,
-      &quot;author&quot;: &quot;Johann Wolfgang von Goethe&quot;,
-      &quot;date&quot;: 1801
-    }
-  },
-  &quot;2&quot;: {
-    &quot;no&quot;: 2,
-    &quot;master&quot;: &quot;question&quot;,
-    &quot;data&quot;: [
-      {
-        &quot;question&quot;: &quot;Wann starb Ludwig van Beethoven?&quot;,
-        &quot;answer&quot;: 1827
-      }
-    ]
-  },
-  &quot;3&quot;: {
-    &quot;no&quot;: 3,
-    &quot;master&quot;: &quot;person&quot;,
-    &quot;data&quot;: {
-      &quot;name&quot;: &quot;Ludwig van Beethoven&quot;,
-      &quot;image&quot;: &quot;beethoven.jpg&quot;
-    }
-  }
-}
-</code><pre></p>
+    <p>Absolute path of the folder containing the theme
+module.s</p>
 </div>
 
 
@@ -911,13 +1029,148 @@ one master slide.</p>
     </dt>
     <dd>
         
-<span class="param-type">object</span>
+<span class="param-type">string</span>
 
 
     </dd>
 </dl>
 
     
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="setTheme"><span class="type-signature"></span>setTheme<span class="signature">(name)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Set a data-* attribute to the body element of the DOM.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The name of the theme</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="lib_themes.js.html">lib/themes.js</a>, <a href="lib_themes.js.html#line128">line 128</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
