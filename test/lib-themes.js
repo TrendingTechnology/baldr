@@ -5,7 +5,6 @@ const {
   path
 } = require('baldr-test');
 
-
 const {Themes} = require('../lib/themes.js');
 const themes = new Themes(document);
 
@@ -13,72 +12,76 @@ describe('Class “Themes()”', () => {
 
   describe('Properties', () => {
 
-    it('this.path', () => {
+    it('Property “this.path”', () => {
       assert.equal(
         themes.path,
         path.resolve(__dirname, '..', 'themes')
       );
     });
 
-    it('this.all', () => {
+    it('Property “this.all”', () => {
       assert.deepEqual(themes.all, allThemes);
     });
 
   });
 
-  it('Method “getThemes()”', () => {
-    assert.deepEqual(themes.getThemes(), allThemes);
-  });
+  describe('Methods', () => {
 
-  it('Method “getPackageJSON()”', () => {
-    assert.equal(
-      themes.getPackageJSON('default').name,
-      'baldr-theme-default'
-    );
-  });
+    it('Method “getThemes()”', () => {
+      assert.deepEqual(themes.getThemes(), allThemes);
+    });
 
-  it('Method “resolveDependencies()”', () => {
-    let cssFiles = themes.resolveDependencies(
-      themes.getPackageJSON('default').dependencies
-    );
-    assert.equal(
-      cssFiles[0],
-      require.resolve('typeface-alegreya')
-    );
-  });
+    it('Method “getPackageJSON()”', () => {
+      assert.equal(
+        themes.getPackageJSON('default').name,
+        'baldr-theme-default'
+      );
+    });
 
-  it('Method “resolveTheme()”', () => {
-    assert.equal(
-      themes.resolveTheme('default'),
-      path.dirname(
-        require.resolve('baldr-theme-default')
-      )
-    );
-  });
+    it('Method “resolveDependencies()”', () => {
+      let cssFiles = themes.resolveDependencies(
+        themes.getPackageJSON('default').dependencies
+      );
+      assert.equal(
+        cssFiles[0],
+        require.resolve('typeface-alegreya')
+      );
+    });
 
-  it('Method “getAllCSSFiles()”', () => {
-    let cssFiles = themes.getAllCSSFiles();
-    assert.equal(
-      cssFiles[0],
-      require.resolve('typeface-alegreya')
-    );
-    assert.equal(
-      cssFiles.pop(),
-      require.resolve('baldr-theme-handwriting')
-    );
-  });
+    it('Method “resolveTheme()”', () => {
+      assert.equal(
+        themes.resolveTheme('default'),
+        path.dirname(
+          require.resolve('baldr-theme-default')
+        )
+      );
+    });
 
-  it('Method “loadThemes()”', () => {
-    themes.loadThemes();
-    assert.equal(
-      themes.document.querySelectorAll('link.baldr-theme').length,
-      7
-    );
-  });
+    it('Method “getAllCSSFiles()”', () => {
+      let cssFiles = themes.getAllCSSFiles();
+      assert.equal(
+        cssFiles[0],
+        require.resolve('typeface-alegreya')
+      );
+      assert.equal(
+        cssFiles.pop(),
+        require.resolve('baldr-theme-handwriting')
+      );
+    });
 
-  it('Method “setTheme()”', () => {
-    themes.setTheme('handwriting');
-    assert.equal(themes.document.body.dataset.theme, 'handwriting');
+    it('Method “loadThemes()”', () => {
+      themes.loadThemes();
+      assert.equal(
+        themes.document.querySelectorAll('link.baldr-theme').length,
+        7
+      );
+    });
+
+    it('Method “setTheme()”', () => {
+      themes.setTheme('handwriting');
+      assert.equal(themes.document.body.dataset.theme, 'handwriting');
+    });
+
   });
 
 });
