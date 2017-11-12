@@ -37,9 +37,9 @@ describe('Class “Media()”', () => {
 
   describe('Properties', function() {
 
-    it('this.presentationPath', function() {
+    it('this.parentPath', function() {
       assert.equal(
-        input.presentationPath,
+        input.parentPath,
         path.resolve('test', 'files', 'mixed-extensions')
       );
     });
@@ -75,7 +75,7 @@ describe('Class “Media()”', () => {
     it('Method “resolvePath()”', function() {
       assert.equal(
         input.resolvePath('test.txt'),
-        path.join(input.presentationPath, 'test.txt')
+        path.join(input.parentPath, 'test.txt')
       );
       assert.equal(
         input.resolvePath('/tmp/test.txt'),
