@@ -4,6 +4,8 @@ const {
   testFileMinimal
 } = require('baldr-test');
 
+
+
 const {Media, FileInfo} = require('baldr-media');
 
 let input = new Media(path.resolve('test', 'files', 'mixed-extensions'));
@@ -33,6 +35,55 @@ let expectedImage = [
 let orderedList = function() {
   input.orderedList(['images']);
 };
+
+describe('Class “FileInfo()”', () => {
+
+  it('Instantiation', () => {
+    let list = new FileInfo(testFileMinimal);
+    assert.equal(typeof list, 'object');
+    assert.equal(list.path, testFileMinimal);
+    assert.equal(list.basename, 'minimal.baldr');
+    assert.equal(list.extension, 'baldr');
+  });
+
+  describe('Properties', () => {
+    it('Property “this.path”', () => {
+      let list = new FileInfo(testFileMinimal);
+      assert.equal(list.path, testFileMinimal);
+    });
+
+    it('Property “this.basename”', () => {
+      let list = new FileInfo(testFileMinimal);
+      assert.equal(list.basename, 'minimal.baldr');
+    });
+
+    it('Property “this.extension”', () => {
+      let list = new FileInfo(testFileMinimal);
+      assert.equal(list.extension, 'baldr');
+    });
+
+  });
+
+  describe('Methods', () => {
+    it('Method “readInfoYaml()”', () => {
+      let basePath = path.resolve('test', 'files', 'media', 'image');
+
+      let testInfo = function(fileName, result) {
+        let filePath = path.resolve(basePath, fileName);
+        let file = new FileInfo(filePath);
+        let info = file.readInfoYaml();
+        assert.equal(info.title, result);
+        assert.equal(file.title, result);
+      }
+
+      testInfo('beethoven.jpg', 'Ludwig van Beethoven');
+      testInfo('haydn.jpg', 'Joseph Haydn');
+      testInfo('mozart.jpg', 'Wolfgang Amadeus Mozart');
+    });
+
+  });
+
+});
 
 describe('Class “Media()”', () => {
 
@@ -227,35 +278,5 @@ describe('Class “Media()”', () => {
     });
 
   });
-
-});
-
-describe('Class “FileInfo()”', () => {
-
-    it('Instantiation', () => {
-      let list = new FileInfo(testFileMinimal);
-      assert.equal(typeof list, 'object');
-      assert.equal(list.path, testFileMinimal);
-      assert.equal(list.basename, 'minimal.baldr');
-      assert.equal(list.extension, 'baldr');
-    });
-
-    describe('Properties', () => {
-      it('Property “this.path”', () => {
-        let list = new FileInfo(testFileMinimal);
-        assert.equal(list.path, testFileMinimal);
-      });
-
-      it('Property “this.basename”', () => {
-        let list = new FileInfo(testFileMinimal);
-        assert.equal(list.basename, 'minimal.baldr');
-      });
-
-      it('Property “this.extension”', () => {
-        let list = new FileInfo(testFileMinimal);
-        assert.equal(list.extension, 'baldr');
-      });
-
-    });
 
 });
