@@ -65,7 +65,7 @@ describe('Class “Presentation()”', () => {
       assert.equal(typeof presentation.media.audio.length, 'number');
       assert.equal(typeof presentation.media.image.length, 'number');
       assert.equal(typeof presentation.media.video.length, 'number');
-      assert.equal(presentation.media.audio[0].title, 'beethoven.mp3');
+      assert.equal(presentation.media.audio[0].basename, 'beethoven.mp3');
     });
 
   });

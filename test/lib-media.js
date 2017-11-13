@@ -283,7 +283,7 @@ describe('Class “Media()”', () => {
       assert.equal(out.image.length, 3);
       assert.equal(out.video.length, 3);
 
-      assert.equal(out.audio[0].title, 'beethoven.mp3');
+      assert.equal(out.audio[0].basename, 'beethoven.mp3');
       assert.equal(out.image[0].profession, 'Composer');
       assert.equal(out.image[2].title, 'Wolfgang Amadeus Mozart');
     });
