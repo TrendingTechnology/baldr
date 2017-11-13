@@ -4,8 +4,6 @@ const {
   testFileMinimal
 } = require('baldr-test');
 
-
-
 const {Media, FileInfo} = require('baldr-media');
 
 let input = new Media(path.resolve('test', 'files', 'mixed-extensions'));
@@ -275,6 +273,19 @@ describe('Class “Media()”', () => {
       assert.equal(group.audio.length, 3);
       assert.equal(group.image.length, 4);
       assert.equal(group.video.length, 4);
+    });
+
+    it('Method “getMedia()”', () => {
+      let media = new Media(path.resolve('test', 'files', 'media'));
+      let out = media.getMedia();
+
+      assert.equal(out.audio.length, 3);
+      assert.equal(out.image.length, 3);
+      assert.equal(out.video.length, 3);
+
+      assert.equal(out.audio[0].title, 'beethoven.mp3');
+      assert.equal(out.image[0].profession, 'Composer');
+      assert.equal(out.image[2].title, 'Wolfgang Amadeus Mozart');
     });
 
   });
