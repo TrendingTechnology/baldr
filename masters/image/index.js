@@ -55,7 +55,7 @@ class MasterImage extends MasterOfMasters {
    */
   setImage() {
     this.elemImage
-      .setAttribute('src', this.dataNormalized[this.stepNo - 1]);
+      .setAttribute('src', this.dataNormalized[this.stepNo - 1].path);
   }
 
   /**

@@ -35,53 +35,37 @@ describe('Master slide “image”: unit tests', () => {
   describe('method normalizeData()', () => {
 
     it('Single file as string', () => {
-      assert.deepEqual(
-        image.normalizeData('images/beethoven.jpg'),
-        [resolveImage('images', 'beethoven.jpg')]
-      );
+      let out = image.normalizeData('images/beethoven.jpg');
+      assert.equal(out[0].basename, 'beethoven.jpg');
     });
 
     it('Single file as array', () => {
-      assert.deepEqual(
-        image.normalizeData(['images/beethoven.jpg']),
-        [resolveImage('images', 'beethoven.jpg')]
-      );
+      let out = image.normalizeData(['images/beethoven.jpg']);
+      assert.equal(out[0].basename, 'beethoven.jpg');
     });
 
     it('Single folder as string', () => {
-      assert.deepEqual(
-        image.normalizeData('images'),
-        [
-          resolveImage('images', 'beethoven.jpg'),
-          resolveImage('images', 'haydn.jpg'),
-          resolveImage('images', 'mozart.jpg')
-        ]
-      );
+      let out = image.normalizeData('images');
+      assert.equal(out[0].basename, 'beethoven.jpg');
+      assert.equal(out[1].basename, 'haydn.jpg');
+      assert.equal(out[2].basename, 'mozart.jpg');
     });
 
     it('Single folder as array', () => {
-      assert.deepEqual(
-        image.normalizeData(['images']),
-        [
-          resolveImage('images', 'beethoven.jpg'),
-          resolveImage('images', 'haydn.jpg'),
-          resolveImage('images', 'mozart.jpg')
-        ]
-      );
+      let out = image.normalizeData(['images']);
+      assert.equal(out[0].basename, 'beethoven.jpg');
+      assert.equal(out[1].basename, 'haydn.jpg');
+      assert.equal(out[2].basename, 'mozart.jpg');
     });
 
     it('Multiple folders as array', () => {
-      assert.deepEqual(
-        image.normalizeData(['images', 'images2']),
-        [
-          resolveImage('images', 'beethoven.jpg'),
-          resolveImage('images', 'haydn.jpg'),
-          resolveImage('images', 'mozart.jpg'),
-          resolveImage('images2', 'beethoven.jpg'),
-          resolveImage('images2', 'haydn.jpg'),
-          resolveImage('images2', 'mozart.jpg')
-        ]
-      );
+      let out = image.normalizeData(['images', 'images2']);
+      assert.equal(out[0].basename, 'beethoven.jpg');
+      assert.equal(out[1].basename, 'haydn.jpg');
+      assert.equal(out[2].basename, 'mozart.jpg');
+      assert.equal(out[3].basename, 'beethoven.jpg');
+      assert.equal(out[4].basename, 'haydn.jpg');
+      assert.equal(out[5].basename, 'mozart.jpg');
     });
 
   });

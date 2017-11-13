@@ -6,10 +6,11 @@ const {
 
 const {Media, FileInfo} = require('baldr-media');
 
-let input = new Media(path.resolve('test', 'files', 'mixed-extensions'));
+let testFiles = path.resolve('test', 'files', 'mixed-extensions');
+let media = new Media(testFiles);
 
 let resolve = function(folder, file) {
-  return path.resolve('test', 'files', 'mixed-extensions', folder, file);
+  return path.join(testFiles, folder, file);
 };
 
 let resolveAudio = function(file) {
@@ -31,7 +32,7 @@ let expectedImage = [
 ];
 
 let orderedList = function() {
-  input.orderedList(['images']);
+  media.orderedList(['images']);
 };
 
 describe('Class “FileInfo()”', () => {
@@ -89,46 +90,46 @@ describe('Class “Media()”', () => {
 
     it('this.parentPath', function() {
       assert.equal(
-        input.parentPath,
+        media.parentPath,
         path.resolve('test', 'files', 'mixed-extensions')
       );
     });
 
     it('this.types', function() {
-      assert.ok(input.types);
+      assert.ok(media.types);
     });
 
     it('this.types.audio', function() {
-      assert.deepEqual(input.types.audio, ['mp3']);
+      assert.deepEqual(media.types.audio, ['mp3']);
     });
 
     it('this.types.image', function() {
-      assert.deepEqual(input.types.image, ['jpg', 'jpeg', 'png']);
+      assert.deepEqual(media.types.image, ['jpg', 'jpeg', 'png']);
     });
 
     it('this.types.video', function() {
-      assert.deepEqual(input.types.video, ['mp4']);
+      assert.deepEqual(media.types.video, ['mp4']);
     });
 
   });
 
   describe('Methods', () => {
     it('Method “getExtensions()”', function() {
-      assert.deepEqual(input.getExtensions(['lol']), ['lol']);
-      assert.deepEqual(input.getExtensions(['lol', 'troll']), ['lol', 'troll']);
-      assert.deepEqual(input.getExtensions('lol'), ['lol']);
-      assert.deepEqual(input.getExtensions('audio'), ['mp3']);
-      assert.deepEqual(input.getExtensions('image'), ['jpg', 'jpeg', 'png']);
-      assert.deepEqual(input.getExtensions('video'), ['mp4']);
+      assert.deepEqual(media.getExtensions(['lol']), ['lol']);
+      assert.deepEqual(media.getExtensions(['lol', 'troll']), ['lol', 'troll']);
+      assert.deepEqual(media.getExtensions('lol'), ['lol']);
+      assert.deepEqual(media.getExtensions('audio'), ['mp3']);
+      assert.deepEqual(media.getExtensions('image'), ['jpg', 'jpeg', 'png']);
+      assert.deepEqual(media.getExtensions('video'), ['mp4']);
     });
 
     it('Method “resolvePath()”', function() {
       assert.equal(
-        input.resolvePath('test.txt'),
-        path.join(input.parentPath, 'test.txt')
+        media.resolvePath('test.txt'),
+        path.join(media.parentPath, 'test.txt')
       );
       assert.equal(
-        input.resolvePath('/tmp/test.txt'),
+        media.resolvePath('/tmp/test.txt'),
         '/tmp/test.txt'
       );
     });
@@ -136,45 +137,45 @@ describe('Class “Media()”', () => {
     describe('Method “list()”', function() {
       it('Nonexistent file', function() {
         assert.deepEqual(
-          input.list('loool.txt'),
+          media.list('loool.txt'),
           []
         );
       });
 
       it('A file (relative path)', function() {
         // relative to test/files
-        assert.deepEqual(
-          input.list('image/beethoven.jpg'),
-          [resolve('image', 'beethoven.jpg')]
+        assert.equal(
+          media.list('image/beethoven.jpg')[0].path,
+          resolve('image', 'beethoven.jpg')
         );
       });
 
       it('A file (relative path), not matching', function() {
         // relative to test/files
         assert.deepEqual(
-          input.list('image/beethoven.jpg', ['lol']),
+          media.list('image/beethoven.jpg', ['lol']),
           []
         );
       });
 
       it('Absolute path of a file', function() {
-        assert.deepEqual(
-          input.list(resolve('image', 'beethoven.jpg')),
-          [resolve('image', 'beethoven.jpg')]
+        assert.equal(
+          media.list(resolve('image', 'beethoven.jpg'))[0].path,
+          resolve('image', 'beethoven.jpg')
         );
       });
 
       it('A folder', function() {
-        assert.deepEqual(
-          input.list(path.resolve('test/files/mixed-extensions/image'), 'image'),
-          expectedImage
+        out = media.list(
+          path.resolve('test/files/mixed-extensions/image')
         );
+        assert.equal(out[2].basename, 'mozart.jpeg');
       });
 
       it('A folder without a match', function() {
         assert.deepEqual(
-          input.list(
-            path.resolve('masters/input/images'),
+          media.list(
+            path.resolve('masters/media/images'),
             ['lol']
           ),
           []
@@ -183,81 +184,68 @@ describe('Class “Media()”', () => {
     });
 
     it('Method “filterFile()”', function() {
-      assert.ok(input.filterFile('lol.txt', ['txt']));
-      assert.ok(input.filterFile('lol.txt', ['TXT']));
-      assert.ok(input.filterFile('lol.TXT', ['txt']));
-      assert.ok(input.filterFile('lol.txt', ['lol', 'txt']));
-      assert.ok(input.filterFile('lol.txt'));
-      assert.ok(input.filterFile('lol.txt', 'txt'));
-      assert.ok(!input.filterFile('lol.txt', 'txxxt'));
-      assert.ok(!input.filterFile('lol.txt', ['lol', 'troll']));
-      assert.ok(!input.filterFile('lol.txt', ['txxxt']));
+      assert.ok(media.filterFile('lol.txt', ['txt']));
+      assert.ok(media.filterFile('lol.txt', ['TXT']));
+      assert.ok(media.filterFile('lol.TXT', ['txt']));
+      assert.ok(media.filterFile('lol.txt', ['lol', 'txt']));
+      assert.ok(media.filterFile('lol.txt'));
+      assert.ok(media.filterFile('lol.txt', 'txt'));
+      assert.ok(!media.filterFile('lol.txt', 'txxxt'));
+      assert.ok(!media.filterFile('lol.txt', ['lol', 'troll']));
+      assert.ok(!media.filterFile('lol.txt', ['txxxt']));
     });
 
     describe('Method “orderedList()”', () => {
 
       it('Single file as string', () => {
-        assert.deepEqual(
-          input.orderedList('image/beethoven.jpg'),
-          [resolveImage('beethoven.jpg')]
-        );
+        let out = media.orderedList('image/beethoven.jpg');
+        assert.equal(out[0].basename, 'beethoven.jpg');
       });
 
       it('Single file as array', () => {
-        assert.deepEqual(
-          input.orderedList(['image/beethoven.jpg']),
-          [resolveImage('beethoven.jpg')]
-        );
+        let out = media.orderedList(['image/beethoven.jpg']);
+        assert.equal(out[0].basename, 'beethoven.jpg');
       });
 
       it('Single folder as string', () => {
-        assert.deepEqual(
-          input.orderedList('image'),
-          expectedImage
-        );
+        let out = media.orderedList('image');
+        assert.equal(out[2].basename, 'mozart.jpeg');
       });
 
       it('Single folder as array', () => {
-        assert.deepEqual(
-          input.orderedList(['image']),
-          expectedImage
-        );
+        let out = media.orderedList(['image']);
+        assert.equal(out[2].basename, 'mozart.jpeg');
       });
 
       it('Multiple folders as array', () => {
-        assert.deepEqual(
-          input.orderedList(['image', 'audio']),
-          [
-            resolveImage('beethoven.jpg'),
-            resolveImage('haydn.png'),
-            resolveImage('mozart.jpeg'),
-            resolveAudio('beethoven.m4a'),
-            resolveAudio('haydn.mp3'),
-            resolveAudio('mozart.mp3')
-          ]
-        );
+        let out = media.orderedList(['image', 'audio']);
+        assert.equal(out[0].basename, 'beethoven.jpg');
+        assert.equal(out[0].path, path.join(testFiles, 'image', 'beethoven.jpg'));
+        assert.equal(out[1].basename, 'haydn.png');
+        assert.equal(out[2].basename, 'mozart.jpeg');
+        assert.equal(out[3].basename, 'beethoven.m4a');
+        assert.equal(out[3].path, path.join(testFiles, 'audio', 'beethoven.m4a'));
+        assert.equal(out[4].basename, 'haydn.mp3');
+        assert.equal(out[5].basename, 'mozart.mp3');
       });
 
       it('Multiple files as array', () => {
-        assert.deepEqual(
-          input.orderedList(
-            [
-              'video/haydn.mp4',
-              'audio/beethoven.m4a',
-              'image/mozart.jpeg'
-            ]
-          ),
+        let out = media.orderedList(
           [
-            resolveVideo('haydn.mp4'),
-            resolveAudio('beethoven.m4a'),
-            resolveImage('mozart.jpeg')
+            'video/haydn.mp4',
+            'audio/beethoven.m4a',
+            'image/mozart.jpeg'
           ]
         );
+
+        assert.equal(out[0].basename, 'haydn.mp4');
+        assert.equal(out[1].basename, 'beethoven.m4a');
+        assert.equal(out[2].basename, 'mozart.jpeg');
       });
     });
 
     it('Method “listRecursively()”', () => {
-      let list = input.listRecursively(
+      let list = media.listRecursively(
         path.resolve('test', 'files', 'mixed-extensions')
       );
       assert.ok(list[0].includes('audio/beethoven.m4a'));
@@ -265,10 +253,10 @@ describe('Class “Media()”', () => {
     });
 
     it('Method “groupByTypes()”', () => {
-      let list = input.listRecursively(
+      let list = media.listRecursively(
         path.resolve('test', 'files', 'mixed-extensions')
       );
-      let group = input.groupByTypes(list);
+      let group = media.groupByTypes(list);
 
       assert.equal(group.audio.length, 3);
       assert.equal(group.image.length, 4);
