@@ -74,7 +74,7 @@ describe('Class “FileInfo()”', () => {
         let info = file.readInfoYaml();
         assert.equal(info.title, result);
         assert.equal(file.title, result);
-      }
+      };
 
       testInfo('beethoven.jpg', 'Ludwig van Beethoven');
       testInfo('haydn.jpg', 'Joseph Haydn');
