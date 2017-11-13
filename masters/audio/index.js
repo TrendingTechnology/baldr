@@ -29,15 +29,11 @@ class MasterAudio extends MasterOfMasters {
     };
 
     for (var i = 1; i <= audioFiles.length; i++) {
-      howls[i] = new Howl({src: [audioFiles[i - 1]]});
+      howls[i] = new Howl({src: [audioFiles[i - 1].path]});
       mousetrap.bind('ctrl+' + i, mousetrapbind);
     }
 
   }
-
-
-
-
 
   /**
    *this.dataNormalized
@@ -51,31 +47,17 @@ class MasterAudio extends MasterOfMasters {
    */
   hookSetHTMLSlide() {
     let out = '';
-    let fileName;
     for (let audioFile of this.dataNormalized) {
-      fileName = path.basename(audioFile);
-      out += `<li>${fileName}</li>`;
+      out += `
+  <li>
+    <span class="artist">${audioFile.artist}</span>:
+    <span class="title">${audioFile.title}</span>
+  </li>`;
     }
 
     return `<ol>${out}</ol>`;
   }
 
 }
-
-// var sound = new Howl({
-//   src: ['sample.mp3'],
-// 	html5: true,
-// 	sprite: {
-// 		blast: [0, 3000],
-// 		laser: [4000, 500],
-// 		winner: [6000, 5000]
-// 	}
-// });
-//
-// Mousetrap.bind('p', function() {sound.play();});
-// Mousetrap.bind('l', function() {sound.play('laser');});
-// Mousetrap.bind('b', function() {sound.play('blast');});
-// Mousetrap.bind('w', function() {sound.play('winner');});
-// Mousetrap.bind('f', function() {sound.fade(1, 0, 5000);});
 
 exports.MasterAudio = MasterAudio;
