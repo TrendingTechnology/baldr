@@ -5,6 +5,9 @@ language: node_js
 node_js:
   - "8"
 
+env:
+  - ELECTRON_BUILDER_ALLOW_UNRESOLVED_DEPENDENCIES=true
+
 install:
   - npm install --global npm
   - npm install
