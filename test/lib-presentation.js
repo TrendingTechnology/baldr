@@ -61,6 +61,13 @@ describe('Class “Presentation()”', () => {
       assert.equal(presentation.cover.nodeName, 'DIV');
     });
 
+    it('Property “this.media”', () => {
+      assert.equal(typeof presentation.media.audio.length, 'number');
+      assert.equal(typeof presentation.media.image.length, 'number');
+      assert.equal(typeof presentation.media.video.length, 'number');
+      assert.equal(presentation.media.audio[0].title, 'beethoven.mp3');
+    });
+
   });
 
   describe('Methods', () => {
