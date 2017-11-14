@@ -6,13 +6,11 @@
 'use strict';
 
 const {MasterOfMasters} = require('baldr-masters');
-const {Media} = require('baldr-media');
+const {Media, audio} = require('baldr-media');
 const path = require('path');
-const {Howl} = require('howler');
 const mousetrap = require('mousetrap');
 
-
-let howls = {};
+let audioFiles = [];
 
 /**
  * Master class for the master slide “audio”
@@ -22,14 +20,16 @@ class MasterAudio extends MasterOfMasters {
     super(propObj);
     this.inputFiles = new Media(this.presentation.pwd);
     this.dataNormalized = this.normalizeData(this.data);
-    let audioFiles = this.dataNormalized;
 
     var mousetrapbind = function(key, combo) {
-      howls[key.key].play();
+      console.log(audioFiles[key.key]);
+      audio.play(audioFiles[key.key]);
     };
 
-    for (var i = 1; i <= audioFiles.length; i++) {
-      howls[i] = new Howl({src: [audioFiles[i - 1].path]});
+    console.log(this.dataNormalized)
+    for (var i = 1; i <= this.dataNormalized.length; i++) {
+      console.log(this.dataNormalized)
+      audioFiles[i] = this.dataNormalized[i - 1].path;
       mousetrap.bind('ctrl+' + i, mousetrapbind);
     }
 
