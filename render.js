@@ -10,6 +10,8 @@ const path = require('path');
 const {remote} = require('electron');
 const {ipcRenderer} = require('electron');
 const {loadMaster} = require('baldr-masters');
+const {audio} = require('baldr-media');
+
 
 let presentation;
 
@@ -186,6 +188,18 @@ var main = function() {
       {
         function: setMasterEditor,
         keys: ['ctrl+alt+e']
+      },
+      {
+        function: () => {audio.stop();},
+        keys: ['ctrl+a']
+      },
+      {
+        function: () => {audio.fadeOut();},
+        keys: ['ctrl+f']
+      },
+      {
+        function: () => {audio.pausePlay();},
+        keys: ['space']
       }
     ]
   );
