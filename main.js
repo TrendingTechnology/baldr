@@ -3,10 +3,7 @@
  * @module baldr
  */
 
-const electron = require('electron');
-const app = electron.app;
-const BrowserWindow = electron.BrowserWindow;
-const Menu = electron.Menu;
+const {app, BrowserWindow, Menu, shell} = require('electron');
 
 const path = require('path');
 const url = require('url');
@@ -65,7 +62,7 @@ var buildMenu = function() {
       submenu: [
         {
           label: 'Learn More',
-          click () { require('electron').shell.openExternal('https://electron.atom.io'); }
+          click () { shell.openExternal('https://electron.atom.io'); }
         }
       ]
     }
