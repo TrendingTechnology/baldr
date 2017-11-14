@@ -35,44 +35,6 @@ var toggleModal = function() {
 };
 
 /**
- * Update the HTML structure with the code of the previous slide.
- * @function previousSlide
- */
-var previousSlide = function() {
-  presentation.prev().set();
-};
-
-/**
- * Update the HTML structure with the code of the next slide.
- * @function nextSlide
- */
-var nextSlide = function() {
-  presentation.next().set();
-};
-
-/**
- * Set the first slide when loading the presentation.
- * @function firstSlide
- */
-var firstSlide = function() {
-  presentation.set();
-};
-
-/**
- * @function prevStep
- */
-var prevStep = function() {
-  presentation.prevStep();
-};
-
-/**
- * @function nextStep
- */
-var nextStep = function() {
-  presentation.nextStep();
-};
-
-/**
  * Show a master slide without custom data.
  *
  * The displayed master slide is not part of the acutal presentation.
@@ -84,20 +46,6 @@ var nextStep = function() {
 var setMaster = function(name) {
   let master = loadMaster(name, document, presentation);
   master.set();
-};
-
-/**
- *
- */
-var setMasterCamera = function() {
-  setMaster('camera');
-};
-
-/**
- *
- */
-var setMasterEditor = function() {
-  setMaster('editor');
 };
 
 /**
@@ -153,26 +101,26 @@ var main = function() {
     misc.searchForBaldrFile(remote.process.argv),
     document
   );
-  firstSlide();
+  presentation.set();
   bindFunctions(
     [
       {
-        function: prevStep,
+        function: () => {presentation.prevStep();},
         keys: ['up'],
         IDs: ['nav-step-prev']
       },
       {
-        function: nextStep,
+        function: () => {presentation.nextStep();},
         keys: ['down'],
         IDs: ['nav-step-next']
       },
       {
-        function: previousSlide,
+        function: () => {presentation.prev().set();},
         keys: ['left'],
         IDs: ['nav-slide-prev']
       },
       {
-        function: nextSlide,
+        function: () => {presentation.next().set();},
         keys: ['right'],
         IDs: ['nav-slide-next']
       },
@@ -182,11 +130,11 @@ var main = function() {
         IDs: ['modal-open', 'modal-close']
       },
       {
-        function: setMasterCamera,
+        function: () => {setMaster('camera');},
         keys: ['ctrl+alt+c']
       },
       {
-        function: setMasterEditor,
+        function: () => {setMaster('editor');},
         keys: ['ctrl+alt+e']
       },
       {
