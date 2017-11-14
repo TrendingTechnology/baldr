@@ -22,13 +22,10 @@ class MasterAudio extends MasterOfMasters {
     this.dataNormalized = this.normalizeData(this.data);
 
     var mousetrapbind = function(key, combo) {
-      console.log(audioFiles[key.key]);
       audio.play(audioFiles[key.key]);
     };
 
-    console.log(this.dataNormalized)
     for (var i = 1; i <= this.dataNormalized.length; i++) {
-      console.log(this.dataNormalized)
       audioFiles[i] = this.dataNormalized[i - 1].path;
       mousetrap.bind('ctrl+' + i, mousetrapbind);
     }
