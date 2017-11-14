@@ -101,7 +101,7 @@ describe('Class “Presentation()”', () => {
       assert.equal(presentation.no, 2);
     });
 
-    it.only('Method “setCover()”', () => {
+    it('Method “setCover()”', () => {
       presentation.setCover('red', 99);
       let cover = presentation.document.getElementById('cover');
       assert.equal(cover.style.backgroundColor, 'red');

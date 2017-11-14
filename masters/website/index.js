@@ -22,7 +22,7 @@ class MasterWebsite extends MasterOfMasters {
    *
    */
   hookSetHTMLSlide() {
-    return `<iframe src="${this.data}"></iframe>`;
+    return `<webview src="${this.data}"></webview>`;
   }
 
 }
