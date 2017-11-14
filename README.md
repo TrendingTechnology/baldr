@@ -51,9 +51,9 @@ dpkg -i dist/baldur-0.0.1.deb
     * `slide`: One fullscreen view displayed for an audience.
       * `steps`: A ordered list of display states
         * `step`: A display state of a slide
-  * `views`: are not arranged in the list of slides. They can be
-     displayed during the presentation by keyboard shortcuts or menu
-     entries.
+  * `general`: Views in this section are not arranged in the order list
+     of slides. They can be displayed during the presentation by
+     keyboard shortcuts or menu entries.
   * `master`: Each `slide` and `view` is derived from a `master`
   * `media`: All kind of media files (audio, video, image) that are
      located in the same folder as the *.baldr presentation file.
@@ -69,6 +69,16 @@ dpkg -i dist/baldur-0.0.1.deb
 ```yml
 
 ---
+general:
+  camera: yes
+  editor: yes
+  audio:
+    - audios/beethoven.mp3
+    - audios/mozart.mp3
+  video:
+    - videos/haydn.mp4
+    - videos/mozart.mp4
+
 slides:
   - quote:
       text: |
