@@ -80,6 +80,29 @@ general:
     - videos/mozart.mp4
 
 slides:
+
+  - audio:
+      - media/audio/mozart.mp3
+      - media/audio/haydn.mp3
+      - media/audio/beethoven.mp3
+
+  - camera: yes
+
+  - editor: yes
+
+  - image: media/image
+
+  - markdown: |
+      # heading 1
+      ## heading 2
+      ### heading 3
+
+  - person:
+      name: Ludwig van Beethoven
+      image: beethoven.jpg
+
+  - question: When did Ludwig van Beethoven die?
+
   - quote:
       text: |
         Der Tag der Gunst ist wie der Tag der Ernte,
@@ -87,9 +110,5 @@ slides:
       author: Johann Wolfgang von Goethe
       date: 1801
 
-  - question: When did Ludwig van Beethoven die?
-
-  - person:
-      name: Ludwig van Beethoven
-      image: beethoven.jpg
+  - website: https://google.de
 ```
