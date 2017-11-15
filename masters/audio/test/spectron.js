@@ -30,6 +30,11 @@ describe('Master slide “audio”: Spectron tests on “example.baldr”', func
 
       .getText('li:nth-child(3)')
       .then(artist => {assert.equal(artist, 'Wolfgang Amadeus Mozart: Eine kleine Nachtmusik');})
+
+      .keys(['Control', '1'])
+      .getText('#media-info')
+      .then(text => {assert.equal(text, 'Joseph Haydn: The Suprise');})
+
       ;
   });
 

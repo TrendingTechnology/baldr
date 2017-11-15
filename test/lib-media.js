@@ -61,6 +61,29 @@ describe('Class “FileInfo()”', () => {
       assert.equal(list.extension, 'baldr');
     });
 
+    it('Property “this.titleSafe', () => {
+      let getFileInfo = function() {
+        return new FileInfo(
+          path.resolve('test', 'files', 'media', ...arguments)
+        );
+      };
+      assert.equal(
+        getFileInfo('audio', 'beethoven.mp3').titleSafe,
+        'beethoven.mp3'
+      );
+      assert.equal(
+        getFileInfo('image', 'beethoven.jpg').titleSafe,
+        'Ludwig van Beethoven'
+      );
+
+      assert.equal(
+        getFileInfo('audio', 'haydn.mp3').titleSafe,
+        'Joseph Haydn: The Surprise'
+      );
+
+    });
+
+
   });
 
   describe('Methods', () => {

@@ -26,7 +26,7 @@ class MasterAudio extends MasterOfMasters {
     };
 
     for (var i = 1; i <= this.dataNormalized.length; i++) {
-      audioFiles[i] = this.dataNormalized[i - 1].path;
+      audioFiles[i] = this.dataNormalized[i - 1];
       mousetrap.bind('ctrl+' + i, mousetrapbind);
     }
 
