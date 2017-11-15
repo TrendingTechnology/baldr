@@ -80,6 +80,13 @@ var bindFunctions = function(bindings) {
  * @function main
  */
 var main = function() {
+  //const {Menu, MenuItem} = remote;
+  //const menu = Menu.getApplicationMenu()
+
+  //console.log(menu.items[0].submenu.items[0].label);
+  //menu.append(new MenuItem({label: 'MenuItem1', click() { console.log('item 1 clicked') }}))
+  //menu.items[0].submenu.items[0].label = 'lol';
+  //Menu.setApplicationMenu(menu);
   window.onerror = function(message, source, lineNo, colNo, error) {
     document.getElementById('slide').innerHTML = `
     <p>${message}</p>
