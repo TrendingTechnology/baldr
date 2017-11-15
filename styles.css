@@ -102,3 +102,13 @@ button:hover {
 	top: 0;
 	right: 0;
 }
+
+#media-info {
+  z-index: -1;
+  opacity: 0.4;
+  background: white;
+  color: black;
+  position: absolute;
+  bottom: 10vw;
+  height: 10vw;
+}

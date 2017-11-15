@@ -80,6 +80,8 @@ var bindFunctions = function(bindings) {
  * @function main
  */
 var main = function() {
+  audio.elemMediaInfo = document.getElementById('media-info');
+
   //const {Menu, MenuItem} = remote;
   //const menu = Menu.getApplicationMenu()
 
