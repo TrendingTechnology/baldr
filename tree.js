@@ -4,7 +4,7 @@
  * .
  * ├── a
  * │   ├── Aint-she-sweet
- * │   │   ├── info.json
+ * │   │   ├── info.yml
  * │   │   ├── piano
  * │   │   │   └── piano.mscx
  * │   │   ├── piano.mscx
@@ -14,7 +14,7 @@
  * │   │       ├── 01.svg
  * │   │       └── 02.svg
  * │   ├── Altes-Fieber
- * │   │   ├── info.json
+ * │   │   ├── info.yml
  * │   │   ├── lead.mscx
  * │   │   ├── piano
  * │   │   │   └── piano.mscx
@@ -34,14 +34,15 @@
 
 const fs = require('fs');
 const path = require('path');
+const yaml = require('js-yaml');
 
 /**
  * @param {string} folder - Absolute path to a song folder.
  */
 var getSongInfo = function(folder) {
-  var jsonFile = path.join(folder, 'info.json');
-  if (fs.existsSync(jsonFile)) {
-    return JSON.parse(fs.readFileSync(jsonFile, 'utf8'));
+  var ymlFile = path.join(folder, 'info.yml');
+  if (fs.existsSync(ymlFile)) {
+    return yaml.safeLoad(fs.readFileSync(ymlFile, 'utf8'));
   }
   else {
     return false;

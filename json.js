@@ -7,16 +7,17 @@
 const fs = require('fs');
 const path = require('path');
 const tree = require('./tree.js');
+const yaml = require('js-yaml');
 
 /**
  *
  * @param {string} songPath - Path of the song folder.
  */
 var generateSongJSON = function(songPath) {
-  var jsonFile = path.join(songPath, 'info.json');
-  if (fs.existsSync(jsonFile)) {
-    var info = JSON.parse(
-      fs.readFileSync(jsonFile, 'utf8')
+  var ymlFile = path.join(songPath, 'info.yml');
+  if (fs.existsSync(ymlFile)) {
+    var info = yaml.safeLoad(
+      fs.readFileSync(ymlFile, 'utf8')
     );
     info.folder = songPath;
     info.slides = tree.getFolderFiles(

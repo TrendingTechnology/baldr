@@ -41,10 +41,10 @@ const tree = require('./tree.js');
  * @param {string} songPath - Path of the song folder.
  */
 var generateSongJSON = function(songPath) {
-  var jsonFile = path.join(songPath, 'info.json');
-  if (fs.existsSync(jsonFile)) {
+  var ymlFile = path.join(songPath, 'info.yml');
+  if (fs.existsSync(ymlFile)) {
     var info = JSON.parse(
-      fs.readFileSync(jsonFile, 'utf8')
+      fs.readFileSync(ymlFile, 'utf8')
     );
     info.folder = songPath;
     info.slides = tree.getFolderFiles(

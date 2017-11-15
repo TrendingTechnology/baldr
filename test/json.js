@@ -19,15 +19,15 @@ describe('file “json.js”', () => {
   });
 
   it('function “generateJSON()”', () => {
-    var jsonFile = path.join('test', 'songs', 'processed', 'some', 'songs.json');
+    var ymlFile = path.join('test', 'songs', 'processed', 'some', 'songs.json');
     json.generateJSON(path.join('test', 'songs', 'processed', 'some'));
-    assert.exists(jsonFile);
-    var tree = JSON.parse(fs.readFileSync(jsonFile, 'utf8'));
+    assert.exists(ymlFile);
+    var tree = JSON.parse(fs.readFileSync(ymlFile, 'utf8'));
     assert.equal(
       tree.a['Auf-der-Mauer_auf-der-Lauer'].title,
       'Auf der Mauer, auf der Lauer'
     );
-    fs.removeSync(jsonFile);
+    fs.removeSync(ymlFile);
   });
 
   it('function “readJSON()”', () => {
