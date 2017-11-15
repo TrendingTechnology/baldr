@@ -70,14 +70,29 @@ dpkg -i dist/baldur-0.0.1.deb
 
 ---
 general:
-  camera: yes
-  editor: yes
-  audio:
+
+  - title: Camera
+    camera: yes
+    shortcut: ctrl+c
+
+  - title: Editor
+    editor: yes
+
+  - title: Audio
+    audio:
     - audios/beethoven.mp3
     - audios/mozart.mp3
-  video:
+
+  - title: Video
+    video:
     - videos/haydn.mp4
     - videos/mozart.mp4
+
+  - title: Google
+    website: https://google.com
+
+  - title: wikipedia
+    website: https://en.wikipedia.org
 
 slides:
 
