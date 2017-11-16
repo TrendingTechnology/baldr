@@ -13,5 +13,6 @@ _install themes/default
 _install themes/handwriting
 _install masters/audio
 _install masters/markdown
+_install masters/editor
 
 cd "$PARENT"

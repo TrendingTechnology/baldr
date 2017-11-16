@@ -1,3 +1,6 @@
 {
-  "name": "baldr-master-editor"
+  "name": "baldr-master-editor",
+  "dependencies": {
+    "ContentTools": "^1.6.0"
+  }
 }
