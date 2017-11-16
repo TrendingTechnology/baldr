@@ -9,7 +9,7 @@
     "doc": "jsdoc --configure jsdoc-config.json .",
     "pack": "electron-builder --dir",
     "start": "electron .",
-    "test": "mocha 'test/*.js' 'masters/audio/test/*.js' 'masters/camera/test/*.js' 'masters/image/test/*.js' 'masters/markdown/test/*.js' 'masters/person/test/*.js' 'masters/question/test/*.js' 'masters/quote/test/*.js' 'masters/website/test/*.js'"
+    "test": "mocha 'test/*.js' 'masters/audio/test/*.js' 'masters/camera/test/*.js' 'masters/editor/test/*.js' 'masters/image/test/*.js' 'masters/markdown/test/*.js' 'masters/person/test/*.js' 'masters/question/test/*.js' 'masters/quote/test/*.js' 'masters/website/test/*.js'"
   },
   "build": {
     "appId": "rocks.friedrich.baldr",
@@ -47,7 +47,6 @@
   "homepage": "https://github.com/JosefFriedrich-nodejs/baldr#readme",
   "devDependencies": {
     "7zip-bin-linux": "^1.1.0",
-    "ContentTools": "^1.6.0",
     "electron": "^1.7.9",
     "electron-builder": "^19.37.2",
     "jsdoc": "^3.5.5",
@@ -74,15 +73,16 @@
     "baldr-test": "file:./test/helper",
     "baldr-theme-default": "file:./themes/default",
     "baldr-theme-handwriting": "file:./themes/handwriting",
+    "ContentTools": "^1.6.0",
     "font-awesome": "^4.7.0",
     "howler": "^2.0.5",
     "js-yaml": "^3.10.0",
     "marked": "^0.3.6",
     "mousetrap": "^1.6.1",
-    "typeface-alegreya": "^0.0.40",
-    "typeface-alegreya-sans": "^0.0.40",
     "typeface-alegreya-sans-sc": "^0.0.40",
+    "typeface-alegreya-sans": "^0.0.40",
     "typeface-alegreya-sc": "^0.0.40",
+    "typeface-alegreya": "^0.0.40",
     "typeface-kalam": "^0.0.43",
     "web-audio-engine": "^0.13.3",
     "webdriverio": "4.8.0"

@@ -19,9 +19,8 @@ describe('Master slide “editor”: Spectron tests on “example.baldr”', fun
 
   it('Basic navigation', function () {
     return this.app.client
-      .pause(5000)
       .getHTML('.ct-app')
-      .then(text => {assert.equal(text, 'Video source:');})
+      .then(text => {assert.ok(text.includes('ct-ignition__button--edit'));})
 
       ;
   });
