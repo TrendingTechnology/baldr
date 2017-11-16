@@ -11,7 +11,12 @@
         "includePattern": ".+\\.js(doc)?$",
         "excludePattern": "(^|\\/|\\\\)_",
         "exclude": [
-            "node_modules"
+            "masters/audio/node_modules",
+            "masters/editor/node_modules",
+            "masters/markdown/node_modules",
+            "node_modules",
+            "themes/default/node_modules",
+            "themes/handwriting/node_modules"
         ]
     },
     "plugins": ["plugins/markdown"],

@@ -38,6 +38,8 @@ const path = require('path');
 const {remote} = require('electron');
 const {ipcRenderer} = require('electron');
 const {loadMaster} = require('baldr-masters');
+const {audio} = require('baldr-media');
+
 
 let presentation;
 
@@ -61,44 +63,6 @@ var toggleModal = function() {
 };
 
 /**
- * Update the HTML structure with the code of the previous slide.
- * @function previousSlide
- */
-var previousSlide = function() {
-  presentation.prev().set();
-};
-
-/**
- * Update the HTML structure with the code of the next slide.
- * @function nextSlide
- */
-var nextSlide = function() {
-  presentation.next().set();
-};
-
-/**
- * Set the first slide when loading the presentation.
- * @function firstSlide
- */
-var firstSlide = function() {
-  presentation.set();
-};
-
-/**
- * @function prevStep
- */
-var prevStep = function() {
-  presentation.prevStep();
-};
-
-/**
- * @function nextStep
- */
-var nextStep = function() {
-  presentation.nextStep();
-};
-
-/**
  * Show a master slide without custom data.
  *
  * The displayed master slide is not part of the acutal presentation.
@@ -110,20 +74,6 @@ var nextStep = function() {
 var setMaster = function(name) {
   let master = loadMaster(name, document, presentation);
   master.set();
-};
-
-/**
- *
- */
-var setMasterCamera = function() {
-  setMaster('camera');
-};
-
-/**
- *
- */
-var setMasterEditor = function() {
-  setMaster('editor');
 };
 
 /**
@@ -158,6 +108,15 @@ var bindFunctions = function(bindings) {
  * @function main
  */
 var main = function() {
+  audio.elemMediaInfo = document.getElementById('media-info');
+
+  //const {Menu, MenuItem} = remote;
+  //const menu = Menu.getApplicationMenu()
+
+  //console.log(menu.items[0].submenu.items[0].label);
+  //menu.append(new MenuItem({label: 'MenuItem1', click() { console.log('item 1 clicked') }}))
+  //menu.items[0].submenu.items[0].label = 'lol';
+  //Menu.setApplicationMenu(menu);
   window.onerror = function(message, source, lineNo, colNo, error) {
     document.getElementById('slide').innerHTML = `
     &lt;p>${message}&lt;/p>
@@ -179,26 +138,26 @@ var main = function() {
     misc.searchForBaldrFile(remote.process.argv),
     document
   );
-  firstSlide();
+  presentation.set();
   bindFunctions(
     [
       {
-        function: prevStep,
+        function: () => {presentation.prevStep();},
         keys: ['up'],
         IDs: ['nav-step-prev']
       },
       {
-        function: nextStep,
+        function: () => {presentation.nextStep();},
         keys: ['down'],
         IDs: ['nav-step-next']
       },
       {
-        function: previousSlide,
+        function: () => {presentation.prev().set();},
         keys: ['left'],
         IDs: ['nav-slide-prev']
       },
       {
-        function: nextSlide,
+        function: () => {presentation.next().set();},
         keys: ['right'],
         IDs: ['nav-slide-next']
       },
@@ -208,12 +167,24 @@ var main = function() {
         IDs: ['modal-open', 'modal-close']
       },
       {
-        function: setMasterCamera,
+        function: () => {setMaster('camera');},
         keys: ['ctrl+alt+c']
       },
       {
-        function: setMasterEditor,
+        function: () => {setMaster('editor');},
         keys: ['ctrl+alt+e']
+      },
+      {
+        function: () => {audio.stop();},
+        keys: ['ctrl+a']
+      },
+      {
+        function: () => {audio.fadeOut();},
+        keys: ['ctrl+f']
+      },
+      {
+        function: () => {audio.pausePlay();},
+        keys: ['space']
       }
     ]
   );
@@ -232,7 +203,7 @@ if (require.main === module) {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-baldr.html">baldr</a></li><li><a href="module-baldr-master-audio.html">baldr-master-audio</a></li><li><a href="module-baldr-master-camera.html">baldr-master-camera</a></li><li><a href="module-baldr-master-editor.html">baldr-master-editor</a></li><li><a href="module-baldr-master-image.html">baldr-master-image</a></li><li><a href="module-baldr-master-markdown.html">baldr-master-markdown</a></li><li><a href="module-baldr-master-person.html">baldr-master-person</a></li><li><a href="module-baldr-master-question.html">baldr-master-question</a></li><li><a href="module-baldr-master-quote.html">baldr-master-quote</a></li><li><a href="module-baldr-master-svg.html">baldr-master-svg</a></li><li><a href="module-baldr-master-website.html">baldr-master-website</a></li><li><a href="module-baldr-masters.html">baldr-masters</a></li><li><a href="module-baldr-media.html">baldr-media</a></li><li><a href="module-baldr-test.html">baldr-test</a></li><li><a href="module-lib_misc.html">lib/misc</a></li><li><a href="module-lib_presentation.html">lib/presentation</a></li><li><a href="module-lib_slides.html">lib/slides</a></li><li><a href="module-lib_themes.html">lib/themes</a></li></ul><h3>Classes</h3><ul><li><a href="module-baldr-master-audio-MasterAudio.html">MasterAudio</a></li><li><a href="module-baldr-master-camera-MasterCamera.html">MasterCamera</a></li><li><a href="module-baldr-master-editor-MasterEditor.html">MasterEditor</a></li><li><a href="module-baldr-master-image-MasterImage.html">MasterImage</a></li><li><a href="module-baldr-master-markdown-MasterMarkdown.html">MasterMarkdown</a></li><li><a href="module-baldr-master-person-MasterPerson.html">MasterPerson</a></li><li><a href="module-baldr-master-question-MasterQuestion.html">MasterQuestion</a></li><li><a href="module-baldr-master-quote-MasterQuote.html">MasterQuote</a></li><li><a href="module-baldr-master-svg-MasterSvg.html">MasterSvg</a></li><li><a href="module-baldr-master-website-MasterWebsite.html">MasterWebsite</a></li><li><a href="module-baldr-masters-Masters.html">Masters</a></li><li><a href="module-baldr-media-Media.html">Media</a></li><li><a href="module-baldr-test-Spectron.html">Spectron</a></li><li><a href="module-lib_presentation-Presentation.html">Presentation</a></li><li><a href="module-lib_slides-Slides.html">Slides</a></li><li><a href="module-lib_themes-Themes.html">Themes</a></li></ul><h3>Interfaces</h3><ul><li><a href="module-baldr-masters-MasterOfMasters.html">MasterOfMasters</a></li></ul><h3>Global</h3><ul><li><a href="global.html#bindFunction">bindFunction</a></li><li><a href="global.html#bindFunctions">bindFunctions</a></li><li><a href="global.html#firstSlide">firstSlide</a></li><li><a href="global.html#main">main</a></li><li><a href="global.html#nextSlide">nextSlide</a></li><li><a href="global.html#nextStep">nextStep</a></li><li><a href="global.html#previousSlide">previousSlide</a></li><li><a href="global.html#prevStep">prevStep</a></li><li><a href="global.html#setMaster">setMaster</a></li><li><a href="global.html#setMasterCamera">setMasterCamera</a></li><li><a href="global.html#setMasterEditor">setMasterEditor</a></li><li><a href="global.html#toggleModal">toggleModal</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-baldr.html">baldr</a></li><li><a href="module-baldr-master-audio.html">baldr-master-audio</a></li><li><a href="module-baldr-master-camera.html">baldr-master-camera</a></li><li><a href="module-baldr-master-editor.html">baldr-master-editor</a></li><li><a href="module-baldr-master-image.html">baldr-master-image</a></li><li><a href="module-baldr-master-markdown.html">baldr-master-markdown</a></li><li><a href="module-baldr-master-person.html">baldr-master-person</a></li><li><a href="module-baldr-master-question.html">baldr-master-question</a></li><li><a href="module-baldr-master-quote.html">baldr-master-quote</a></li><li><a href="module-baldr-master-svg.html">baldr-master-svg</a></li><li><a href="module-baldr-master-website.html">baldr-master-website</a></li><li><a href="module-baldr-masters.html">baldr-masters</a></li><li><a href="module-baldr-media.html">baldr-media</a></li><li><a href="module-baldr-test.html">baldr-test</a></li><li><a href="module-lib_misc.html">lib/misc</a></li><li><a href="module-lib_presentation.html">lib/presentation</a></li><li><a href="module-lib_slides.html">lib/slides</a></li><li><a href="module-lib_themes.html">lib/themes</a></li></ul><h3>Classes</h3><ul><li><a href="module-baldr-master-audio-MasterAudio.html">MasterAudio</a></li><li><a href="module-baldr-master-camera-MasterCamera.html">MasterCamera</a></li><li><a href="module-baldr-master-editor-MasterEditor.html">MasterEditor</a></li><li><a href="module-baldr-master-image-MasterImage.html">MasterImage</a></li><li><a href="module-baldr-master-markdown-MasterMarkdown.html">MasterMarkdown</a></li><li><a href="module-baldr-master-person-MasterPerson.html">MasterPerson</a></li><li><a href="module-baldr-master-question-MasterQuestion.html">MasterQuestion</a></li><li><a href="module-baldr-master-quote-MasterQuote.html">MasterQuote</a></li><li><a href="module-baldr-master-svg-MasterSvg.html">MasterSvg</a></li><li><a href="module-baldr-master-website-MasterWebsite.html">MasterWebsite</a></li><li><a href="module-baldr-masters-Masters.html">Masters</a></li><li><a href="module-baldr-media-Audio.html">Audio</a></li><li><a href="module-baldr-media-FileInfo.html">FileInfo</a></li><li><a href="module-baldr-media-Media.html">Media</a></li><li><a href="module-baldr-test-Spectron.html">Spectron</a></li><li><a href="module-lib_presentation-Presentation.html">Presentation</a></li><li><a href="module-lib_slides-Slides.html">Slides</a></li><li><a href="module-lib_themes-Themes.html">Themes</a></li></ul><h3>Interfaces</h3><ul><li><a href="module-baldr-masters-MasterOfMasters.html">MasterOfMasters</a></li></ul><h3>Global</h3><ul><li><a href="global.html#bindFunction">bindFunction</a></li><li><a href="global.html#bindFunctions">bindFunctions</a></li><li><a href="global.html#main">main</a></li><li><a href="global.html#setMaster">setMaster</a></li><li><a href="global.html#toggleModal">toggleModal</a></li></ul>
 </nav>
 
 <br class="clear">

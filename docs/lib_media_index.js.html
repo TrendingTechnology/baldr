@@ -33,26 +33,86 @@
 
 const path = require('path');
 const fs = require('fs');
-
-class Media {
+const yaml = require('js-yaml');
+const {Howl} = require('howler');
+/**
+ *
+ */
+class FileInfo {
+  constructor(filePath) {
+    this.path = path.resolve(filePath);
+    this.basename = path.basename(filePath);
+    this.extension = path.extname(filePath).replace('.', '');
+    let info = this.readInfoYaml();
+    for (let property in info) {
+      this[property] = info[property];
+    }
+  }
 
   /**
-   * @name Media#extensionDefaults
-   * @type Object
+   * @type {string}
    */
+  get titleSafe() {
+    if (this.hasOwnProperty('artist') &amp;&amp; this.hasOwnProperty('title')) {
+      return this.artist + ': ' + this.title;
+    }
+    else if (this.hasOwnProperty('title')) {
+      return this.title;
+    }
+    else {
+      return this.basename;
+    }
+  }
+
+  /**
+   * Parse the info file of a media file.
+   *
+   * Each media file can have a info file that stores additional
+   * metadata informations.
+   *
+   * File path:
+   * `/home/baldr/beethoven.jpg`
+   *
+   * Info file in the YAML file format:
+   * `/home/baldr/beethoven.jpg.yml`
+   */
+  readInfoYaml() {
+    let infoFile = this.path + '.yml';
+    if (fs.existsSync(infoFile)) {
+      let info = yaml.safeLoad(fs.readFileSync(infoFile, 'utf8'));
+      if (typeof info === 'string') {
+        return {"title": info};
+      }
+      else {
+        return info;
+      }
+    }
+    else {
+      return false;
+    }
+  }
+}
+
+/**
+ *
+ */
+class Media {
 
   /**
    * @param {string} parentPath The path which contains the
    * presentation file (*.baldr).
    */
   constructor(parentPath) {
+
+    /**
+     * @type string
+     */
     this.parentPath = parentPath;
 
     /**
-     * @name Media#extensionDefaults
      * @type Object
      */
-    this.extensionDefaults = {
+    this.types = {
       audio: ['mp3'],
       image: ['jpg', 'jpeg', 'png'],
       video: ['mp4']
@@ -64,7 +124,7 @@ class Media {
    *
    * @param {array|string} extensions A array of extensions or
    * a single extension specifed as a string or a property of
-   * the object “this.extensionDefaults”. An extension should be
+   * the object “this.types”. An extension should be
    * noted without a leading dot (e. g.: “jpg”, “mp4”)
    *
    * @return {array} A array of extensions
@@ -75,9 +135,9 @@ class Media {
     }
     else if (
       typeof extensions === 'string' &amp;&amp;
-      this.extensionDefaults[extensions]
+      this.types[extensions]
     ) {
-      return this.extensionDefaults[extensions];
+      return this.types[extensions];
     }
     else if (typeof extensions === 'string') {
       return [extensions];
@@ -105,7 +165,7 @@ class Media {
    * @param {string} inputPath The path of a file
    * @param {array|string} extensions A array of extensions or
    * a single extension specifed as a string or a property of
-   * the object “this.extensionDefaults”. An extension should be
+   * the object “this.types”. An extension should be
    * noted without a leading dot (e. g.: “jpg”, “mp4”). Leave the
    * parameter empty to bypass the filter mechanism.
    * @return {boolean} True if the input file has the given extension
@@ -126,6 +186,59 @@ class Media {
       if (inputExtension === filterExtension) return true;
     }
     return false;
+  }
+
+  /**
+   * @param {array} fileList An array of file paths
+   * @return {object}
+   */
+  groupByTypes(fileList) {
+    let out = {};
+    for (let type of Object.keys(this.types)) {
+      out[type] = fileList.filter(
+        /* jshint -W083 */
+        file => this.filterFile(file, this.types[type])
+      )
+      .map(file => new FileInfo(file));
+    }
+    return out;
+  }
+
+  /**
+   * Scan the parent presentation folder recursively for media files.
+   * @return {object}
+   * &lt;code>&lt;pre>
+   * {
+   *   "audio": [
+   *     {
+   *       "path": "/home/baldr/test/files/media/audio/beethoven.mp3",
+   *       "basename": "beethoven.mp3",
+   *       "extension": "mp3",
+   *       "title": "beethoven.mp3"
+   *     }
+   *   ],
+   *   "image": [
+   *     {
+   *       "path": "/home/baldr/test/files/media/image/beethoven.jpg",
+   *       "basename": "beethoven.jpg",
+   *       "extension": "jpg",
+   *       "title": "Ludwig van Beethoven",
+   *       "profession": "Composer"
+   *     },
+   *     {
+   *       "path": "/home/baldr/test/files/media/image/haydn.jpg",
+   *       "basename": "haydn.jpg",
+   *       "extension": "jpg",
+   *       "title": "Joseph Haydn"
+   *     }
+   *   ]
+   * }
+   * &lt;/pre>&lt;/code>
+   */
+  getMedia() {
+    return this.groupByTypes(
+      this.listRecursively(this.parentPath)
+    );
   }
 
   /**
@@ -158,7 +271,7 @@ class Media {
    * a file.
    * @param {array|string} extensions A array of extensions or
    * a single extension specifed as a string or a property of
-   * the object “this.extensionDefaults”. An extension should be
+   * the object “this.types”. An extension should be
    * noted without a leading dot (e. g.: “jpg”, “mp4”). Leave the
    * parameter empty to bypass the filter mechanism.
    * @return {array} A array of absolute file paths or an empty array.
@@ -171,17 +284,16 @@ class Media {
     }
     let stat = fs.statSync(absPath);
     if (!stat.isDirectory() &amp;&amp; this.filterFile(absPath, extensions)) {
-      return [absPath];
+      return [new FileInfo(absPath)];
     }
     else if (stat.isDirectory()) {
-      return fs.readdirSync(absPath)
-        .filter((filename) => {
-          return this.filterFile(filename, extensions);
+      return this.listRecursively(absPath)
+        .filter((file) => {
+          return this.filterFile(file, extensions);
         })
-        .map((filename) => {
-          return path.join(absPath, filename);
-        })
-        .sort();
+        .map((file) => {
+          return new FileInfo(file);
+        });
     }
     else {
       return [];
@@ -193,7 +305,7 @@ class Media {
    * be specified.
    * @param {array|string} extensions A array of extensions or
    * a single extension specifed as a string or a property of
-   * the object “this.extensionDefaults”. An extension should be
+   * the object “this.types”. An extension should be
    * noted without a leading dot (e. g.: “jpg”, “mp4”). Leave the
    * parameter empty to bypass the filter mechanism.
    */
@@ -217,6 +329,55 @@ class Media {
 
 }
 
+/**
+ *
+ */
+class Audio {
+
+  play(fileInfo) {
+    this.stop();
+    this.current = new Howl({src: [fileInfo.path]});
+    this.id = this.current.play();
+
+    if (this.hasOwnProperty('elemMediaInfo')) {
+      this.elemMediaInfo.innerHTML = fileInfo.titleSafe;
+      this.elemMediaInfo.style.zIndex = 1;
+      this.elemMediaInfo.style.visibility = 'visible';
+      setTimeout(() => {
+        this.elemMediaInfo.style.zIndex = 1;
+        this.elemMediaInfo.style.visibility = 'hidden';
+      }, 2000);
+    }
+  }
+
+  stop() {
+    if (this.hasOwnProperty('current') &amp;&amp; this.current.playing()) {
+      this.current.stop();
+    }
+  }
+
+  pausePlay() {
+    if (this.hasOwnProperty('current')) {
+      if (this.current.playing()) {
+        this.current.pause();
+      }
+      else {
+        this.current.play();
+      }
+    }
+  }
+
+  fadeOut() {
+    if (this.hasOwnProperty('current') &amp;&amp; this.current.playing()) {
+      this.current.fade(1, 0, 5000);
+    }
+  }
+}
+
+exports.audio = new Audio();
+
+exports.Audio = Audio;
+exports.FileInfo = FileInfo;
 exports.Media = Media;
 </code></pre>
         </article>
@@ -228,7 +389,7 @@ exports.Media = Media;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-baldr.html">baldr</a></li><li><a href="module-baldr-master-audio.html">baldr-master-audio</a></li><li><a href="module-baldr-master-camera.html">baldr-master-camera</a></li><li><a href="module-baldr-master-editor.html">baldr-master-editor</a></li><li><a href="module-baldr-master-image.html">baldr-master-image</a></li><li><a href="module-baldr-master-markdown.html">baldr-master-markdown</a></li><li><a href="module-baldr-master-person.html">baldr-master-person</a></li><li><a href="module-baldr-master-question.html">baldr-master-question</a></li><li><a href="module-baldr-master-quote.html">baldr-master-quote</a></li><li><a href="module-baldr-master-svg.html">baldr-master-svg</a></li><li><a href="module-baldr-master-website.html">baldr-master-website</a></li><li><a href="module-baldr-masters.html">baldr-masters</a></li><li><a href="module-baldr-media.html">baldr-media</a></li><li><a href="module-baldr-test.html">baldr-test</a></li><li><a href="module-lib_misc.html">lib/misc</a></li><li><a href="module-lib_presentation.html">lib/presentation</a></li><li><a href="module-lib_slides.html">lib/slides</a></li><li><a href="module-lib_themes.html">lib/themes</a></li></ul><h3>Classes</h3><ul><li><a href="module-baldr-master-audio-MasterAudio.html">MasterAudio</a></li><li><a href="module-baldr-master-camera-MasterCamera.html">MasterCamera</a></li><li><a href="module-baldr-master-editor-MasterEditor.html">MasterEditor</a></li><li><a href="module-baldr-master-image-MasterImage.html">MasterImage</a></li><li><a href="module-baldr-master-markdown-MasterMarkdown.html">MasterMarkdown</a></li><li><a href="module-baldr-master-person-MasterPerson.html">MasterPerson</a></li><li><a href="module-baldr-master-question-MasterQuestion.html">MasterQuestion</a></li><li><a href="module-baldr-master-quote-MasterQuote.html">MasterQuote</a></li><li><a href="module-baldr-master-svg-MasterSvg.html">MasterSvg</a></li><li><a href="module-baldr-master-website-MasterWebsite.html">MasterWebsite</a></li><li><a href="module-baldr-masters-Masters.html">Masters</a></li><li><a href="module-baldr-media-Media.html">Media</a></li><li><a href="module-baldr-test-Spectron.html">Spectron</a></li><li><a href="module-lib_presentation-Presentation.html">Presentation</a></li><li><a href="module-lib_slides-Slides.html">Slides</a></li><li><a href="module-lib_themes-Themes.html">Themes</a></li></ul><h3>Interfaces</h3><ul><li><a href="module-baldr-masters-MasterOfMasters.html">MasterOfMasters</a></li></ul><h3>Global</h3><ul><li><a href="global.html#bindFunction">bindFunction</a></li><li><a href="global.html#bindFunctions">bindFunctions</a></li><li><a href="global.html#firstSlide">firstSlide</a></li><li><a href="global.html#main">main</a></li><li><a href="global.html#nextSlide">nextSlide</a></li><li><a href="global.html#nextStep">nextStep</a></li><li><a href="global.html#previousSlide">previousSlide</a></li><li><a href="global.html#prevStep">prevStep</a></li><li><a href="global.html#setMaster">setMaster</a></li><li><a href="global.html#setMasterCamera">setMasterCamera</a></li><li><a href="global.html#setMasterEditor">setMasterEditor</a></li><li><a href="global.html#toggleModal">toggleModal</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-baldr.html">baldr</a></li><li><a href="module-baldr-master-audio.html">baldr-master-audio</a></li><li><a href="module-baldr-master-camera.html">baldr-master-camera</a></li><li><a href="module-baldr-master-editor.html">baldr-master-editor</a></li><li><a href="module-baldr-master-image.html">baldr-master-image</a></li><li><a href="module-baldr-master-markdown.html">baldr-master-markdown</a></li><li><a href="module-baldr-master-person.html">baldr-master-person</a></li><li><a href="module-baldr-master-question.html">baldr-master-question</a></li><li><a href="module-baldr-master-quote.html">baldr-master-quote</a></li><li><a href="module-baldr-master-svg.html">baldr-master-svg</a></li><li><a href="module-baldr-master-website.html">baldr-master-website</a></li><li><a href="module-baldr-masters.html">baldr-masters</a></li><li><a href="module-baldr-media.html">baldr-media</a></li><li><a href="module-baldr-test.html">baldr-test</a></li><li><a href="module-lib_misc.html">lib/misc</a></li><li><a href="module-lib_presentation.html">lib/presentation</a></li><li><a href="module-lib_slides.html">lib/slides</a></li><li><a href="module-lib_themes.html">lib/themes</a></li></ul><h3>Classes</h3><ul><li><a href="module-baldr-master-audio-MasterAudio.html">MasterAudio</a></li><li><a href="module-baldr-master-camera-MasterCamera.html">MasterCamera</a></li><li><a href="module-baldr-master-editor-MasterEditor.html">MasterEditor</a></li><li><a href="module-baldr-master-image-MasterImage.html">MasterImage</a></li><li><a href="module-baldr-master-markdown-MasterMarkdown.html">MasterMarkdown</a></li><li><a href="module-baldr-master-person-MasterPerson.html">MasterPerson</a></li><li><a href="module-baldr-master-question-MasterQuestion.html">MasterQuestion</a></li><li><a href="module-baldr-master-quote-MasterQuote.html">MasterQuote</a></li><li><a href="module-baldr-master-svg-MasterSvg.html">MasterSvg</a></li><li><a href="module-baldr-master-website-MasterWebsite.html">MasterWebsite</a></li><li><a href="module-baldr-masters-Masters.html">Masters</a></li><li><a href="module-baldr-media-Audio.html">Audio</a></li><li><a href="module-baldr-media-FileInfo.html">FileInfo</a></li><li><a href="module-baldr-media-Media.html">Media</a></li><li><a href="module-baldr-test-Spectron.html">Spectron</a></li><li><a href="module-lib_presentation-Presentation.html">Presentation</a></li><li><a href="module-lib_slides-Slides.html">Slides</a></li><li><a href="module-lib_themes-Themes.html">Themes</a></li></ul><h3>Interfaces</h3><ul><li><a href="module-baldr-masters-MasterOfMasters.html">MasterOfMasters</a></li></ul><h3>Global</h3><ul><li><a href="global.html#bindFunction">bindFunction</a></li><li><a href="global.html#bindFunctions">bindFunctions</a></li><li><a href="global.html#main">main</a></li><li><a href="global.html#setMaster">setMaster</a></li><li><a href="global.html#toggleModal">toggleModal</a></li></ul>
 </nav>
 
 <br class="clear">
