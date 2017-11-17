@@ -68,6 +68,10 @@ describe('Class “Presentation()”', () => {
       assert.equal(presentation.media.audio[0].basename, 'beethoven.mp3');
     });
 
+    it('Property “this.quickies”', () => {
+      assert.equal(typeof presentation.quickies, 'object');
+    });
+
   });
 
   describe('Methods', () => {
