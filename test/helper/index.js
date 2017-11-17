@@ -75,6 +75,18 @@ exports.document = getDOM(
 /**
  *
  */
+exports.returnDOM = function() {
+  return getDOM(
+    fs.readFileSync(
+      path.join(__dirname, '..', '..', 'render.html'),
+      'utf8'
+    )
+  );
+};
+
+/**
+ *
+ */
 exports.testFileMinimal = path.resolve('test', 'files', 'minimal.baldr');
 
 /**
