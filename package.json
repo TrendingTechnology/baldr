@@ -49,6 +49,8 @@
     "7zip-bin-linux": "^1.1.0",
     "electron": "^1.7.9",
     "electron-builder": "^19.37.2",
+    "eslint": "^4.11.0",
+    "eslint-config-google": "^0.9.1",
     "jsdoc": "^3.5.5",
     "jsdom": "^11.3.0",
     "jshint": "^2.9.5",

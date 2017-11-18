@@ -6,12 +6,10 @@ const mousetrap = require('mousetrap');
 const {Presentation} = require('./lib/presentation.js');
 const misc = require('./lib/misc.js');
 const {Themes} = require('./lib/themes.js');
-const path = require('path');
 const {remote} = require('electron');
 const {ipcRenderer} = require('electron');
 const {loadMaster} = require('baldr-masters');
 const {audio} = require('baldr-media');
-
 
 let presentation;
 
