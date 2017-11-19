@@ -6,11 +6,12 @@ const {
   getDOM,
   path,
   presentation,
+  masters,
   returnDOM
 } = require('baldr-test');
 
-const {loadMaster, Masters, MasterOfMasters, LoadMasters} = require('baldr-masters');
-let masters = new Masters(document, presentation);
+const {loadMaster, MasterOfMasters, LoadMasters} = require('baldr-masters');
+let _masters = new LoadMasters(document, presentation);
 
 describe('Function “loadMaster()”', function() {
   it('simple', function() {
@@ -90,7 +91,8 @@ describe('Class “MasterOfMasters”', function() {
 describe('Class “MasterOfMasters” extended on a example master class (quote)', function() {
 
   beforeEach(function() {
-    let Master = require('../masters/quote').MasterQuote;
+    let {Master} = require('../masters/quote')(document, masters, presentation);
+
     this.data = {text: 'text', author: 'author'};
     this.master = new Master({
       document: document,
@@ -168,70 +170,25 @@ describe('Class “MasterOfMasters” extended on a example master class (quote)
 
 });
 
-describe('Class “Masters()”', () => {
+describe('Class “LoadMasters()”', () => {
 
   describe('Properties', () => {
 
     it('this.path', () => {
       assert.equal(
-        masters.path,
+        _masters.path,
         path.resolve(__dirname, '..', 'masters')
       );
     });
 
     it('this.all', () => {
-      assert.deepEqual(masters.all, allMasters);
+      assert.deepEqual(_masters.all, allMasters);
     });
 
   });
 
-  it('Method “getModules()”', () => {
-    assert.deepEqual(masters.getModules(), allMasters);
-  });
-
-});
-
-let initLoadMasters = function() {
-  return new LoadMasters(returnDOM(), presentation);
-};
-
-describe('Class “LoadMasters()”', () => {
-
-  beforeEach(() => {
-    masters = initLoadMasters();
-  });
-
-  describe('Properties', () => {
-
-    it('Property “this.all”', () => {
-      assert.deepEqual(masters.all, ['audio']);
-    });
-
-    it('Property “this.audio.state.media”', () => {
-      assert.equal(masters.audio.state.media.length, 3);
-    });
-
-  });
-
-  describe('Methods', () => {
-
-    it('Method “getHooks()”', () => {
-      assert.deepEqual(
-        masters.getHooks('mediaTypesExtensions', 'object'),
-        ['audio']
-      );
-
-      assert.deepEqual(
-        masters.getHooks('getDocument'),
-        ['audio']
-      );
-
-      assert.deepEqual(
-        masters.getHooks('XxX'),
-        []
-      );
-    });
-
+  it('Method “getAll()”', () => {
+    assert.deepEqual(_masters.getAll(), allMasters);
   });
 
 });

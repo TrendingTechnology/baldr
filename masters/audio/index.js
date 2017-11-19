@@ -57,8 +57,6 @@ class MasterAudio extends MasterOfMasters {
 
 }
 
-exports.MasterAudio = MasterAudio;
-
 /**
  * Export the implemented hooks of this master.
  *
@@ -72,7 +70,8 @@ exports.MasterAudio = MasterAudio;
  *
  * @return {object} A object, each property represents a hook.
  */
-// module.exports = function(document, masters, presentation) {
-//   let _export = {};
-//   return _export;
-// };
+module.exports = function(document, masters, presentation) {
+  let _export = {};
+  _export.Master = MasterAudio;
+  return _export;
+};

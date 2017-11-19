@@ -67,8 +67,6 @@ class MasterImage extends MasterOfMasters {
 
 }
 
-exports.MasterImage = MasterImage;
-
 /**
  * Export the implemented hooks of this master.
  *
@@ -82,7 +80,8 @@ exports.MasterImage = MasterImage;
  *
  * @return {object} A object, each property represents a hook.
  */
-// module.exports = function(document, masters, presentation) {
-//   let _export = {};
-//   return _export;
-// };
+module.exports = function(document, masters, presentation) {
+  let _export = {};
+  _export.Master = MasterImage;
+  return _export;
+};

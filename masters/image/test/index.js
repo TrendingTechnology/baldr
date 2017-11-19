@@ -4,10 +4,11 @@ const {
   path,
   presentation,
   Presentation,
+  masters,
   getDOM
 } = require('baldr-test');
 
-const {MasterImage} = require('../index.js');
+const {Master} = require('../index.js')(document, masters, presentation);
 
 let propObj = {
   masterName: 'image',
@@ -21,7 +22,7 @@ let propObj = {
 
 let getImage = function(data) {
   propObj.data = data;
-  return new MasterImage(propObj);
+  return new Master(propObj);
 };
 
 let resolveImage = function(imagePath, image) {

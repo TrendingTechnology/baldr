@@ -3,11 +3,12 @@ const {
   fs,
   path,
   document,
+  masters,
   presentation,
   getDOM
 } = require('baldr-test');
 
-const {MasterQuestion} = require('../index.js');
+const {Master} = require('../index.js')(document, masters, presentation);
 
 let propObj = {
   masterName: 'question',
@@ -18,13 +19,13 @@ let propObj = {
 
 let getQuestion = function(data) {
   propObj.data = data;
-  return new MasterQuestion(propObj);
+  return new Master(propObj);
 };
 
 let hookSetHTMLSlide = function(data) {
   propObj.data = data;
-  let question = new MasterQuestion(propObj);
-  return quote.hookSetHTMLSlide();
+  let question = new Master(propObj);
+  return question.hookSetHTMLSlide();
 };
 
 let dataSingleWithout = 'One?';

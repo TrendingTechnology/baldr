@@ -4,10 +4,11 @@ const {
   fs,
   getDOM,
   path,
-  presentation
+  presentation,
+  masters
 } = require('baldr-test');
 
-const {MasterQuote} = require('../index.js');
+const {Master} = require('../index.js')(document, masters, presentation);
 
 let propObj = {
   masterName: 'quote',
@@ -18,7 +19,7 @@ let propObj = {
 
 let render = function(data) {
   propObj.data = data;
-  let quote = new MasterQuote(propObj);
+  let quote = new Master(propObj);
   return quote.hookSetHTMLSlide();
 };
 

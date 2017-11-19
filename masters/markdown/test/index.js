@@ -3,10 +3,11 @@ const {
   document,
   path,
   presentation,
+  masters,
   getDOM
 } = require('baldr-test');
 
-const {MasterMarkdown} = require('../index.js');
+const {Master} = require('../index.js')(document, masters, presentation);
 
 let propObj = {
   masterName: 'markdown',
@@ -17,7 +18,7 @@ let propObj = {
 
 let getMarkdown = function(data) {
   propObj.data = data;
-  return new MasterMarkdown(propObj);
+  return new Master(propObj);
 };
 
 describe('Master slide “markdown”: unit tests', () => {

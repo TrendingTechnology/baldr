@@ -27,8 +27,6 @@ class MasterWebsite extends MasterOfMasters {
 
 }
 
-exports.MasterWebsite = MasterWebsite;
-
 /**
  * Export the implemented hooks of this master.
  *
@@ -42,7 +40,8 @@ exports.MasterWebsite = MasterWebsite;
  *
  * @return {object} A object, each property represents a hook.
  */
-// module.exports = function(document, masters, presentation) {
-//   let _export = {};
-//   return _export;
-// };
+module.exports = function(document, masters, presentation) {
+  let _export = {};
+  _export.Master = MasterWebsite;
+  return _export;
+};

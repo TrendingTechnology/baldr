@@ -155,8 +155,6 @@ class MasterQuestion extends MasterOfMasters {
 
 }
 
-exports.MasterQuestion = MasterQuestion;
-
 /**
  * Export the implemented hooks of this master.
  *
@@ -170,7 +168,8 @@ exports.MasterQuestion = MasterQuestion;
  *
  * @return {object} A object, each property represents a hook.
  */
-// module.exports = function(document, masters, presentation) {
-//   let _export = {};
-//   return _export;
-// };
+module.exports = function(document, masters, presentation) {
+  let _export = {};
+  _export.Master = MasterQuestion;
+  return _export;
+};

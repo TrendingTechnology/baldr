@@ -3,10 +3,11 @@ const {
   path,
   document,
   presentation,
+  masters,
   getDOM
 } = require('baldr-test');
 
-const {MasterPerson} = require('../index.js');
+const {Master} = require('../index.js')(document, masters, presentation);
 
 let propObj = {
   masterName: 'person',
@@ -17,7 +18,7 @@ let propObj = {
 
 let render = function(data) {
   propObj.data = data;
-  let person = new MasterPerson(propObj);
+  let person = new Master(propObj);
   return person.hookSetHTMLSlide();
 };
 
