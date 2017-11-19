@@ -10,6 +10,7 @@ const {remote} = require('electron');
 const {ipcRenderer} = require('electron');
 const {loadMaster} = require('baldr-masters');
 const {audio} = require('baldr-media');
+const {Plugins} = require('./lib/plugins.js');
 
 let presentation;
 
@@ -79,6 +80,12 @@ var bindFunctions = function(bindings) {
  */
 var main = function() {
   audio.elemMediaInfo = document.getElementById('media-info');
+
+  const plugins = new Plugins(document);
+  //console.log(plugins);
+
+  //console.log(plugins.audio.getDocument());
+  //console.log(plugins.audio.getPlugins());
 
   //const {Menu, MenuItem} = remote;
   //const menu = Menu.getApplicationMenu()
