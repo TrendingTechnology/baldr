@@ -5,11 +5,12 @@ const {
   fs,
   getDOM,
   path,
-  presentation
+  presentation,
+  returnDOM
 } = require('baldr-test');
 
-const {loadMaster, Masters, MasterOfMasters} = require('baldr-masters');
-const masters = new Masters(document, presentation);
+const {loadMaster, Masters, MasterOfMasters, LoadMasters} = require('baldr-masters');
+let masters = new Masters(document, presentation);
 
 describe('Function “loadMaster()”', function() {
   it('simple', function() {
@@ -186,6 +187,51 @@ describe('Class “Masters()”', () => {
 
   it('Method “getModules()”', () => {
     assert.deepEqual(masters.getModules(), allMasters);
+  });
+
+});
+
+let initLoadMasters = function() {
+  return new LoadMasters(returnDOM(), presentation);
+};
+
+describe('Class “LoadMasters()”', () => {
+
+  beforeEach(() => {
+    masters = initLoadMasters();
+  });
+
+  describe('Properties', () => {
+
+    it('Property “this.all”', () => {
+      assert.deepEqual(masters.all, ['audio']);
+    });
+
+    it('Property “this.audio.state.media”', () => {
+      assert.equal(masters.audio.state.media.length, 3);
+    });
+
+  });
+
+  describe('Methods', () => {
+
+    it('Method “getHooks()”', () => {
+      assert.deepEqual(
+        masters.getHooks('mediaTypesExtensions', 'object'),
+        ['audio']
+      );
+
+      assert.deepEqual(
+        masters.getHooks('getDocument'),
+        ['audio']
+      );
+
+      assert.deepEqual(
+        masters.getHooks('XxX'),
+        []
+      );
+    });
+
   });
 
 });

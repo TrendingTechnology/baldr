@@ -53,8 +53,7 @@ class Audio {
   }
 }
 
-module.exports = function(document, plugins, presentation) {
-
+module.exports = function(document, masters, presentation) {
   let media = new Media(presentation.pwd);
   let audioFiles = media.list('media/audio', mediaTypesExtensions);
 
@@ -72,24 +71,24 @@ module.exports = function(document, plugins, presentation) {
       }
     }
   }
+  let _export = {};
 
-  return {
-
-    state: {
+  _export.state = {
       audio: audio,
       media: audioFiles
-    },
+    };
 
-    Audio: Audio,
+  _export.Audio = Audio;
 
-    mediaTypesExtensions: ['mp3', 'aac'],
+  _export.mediaTypesExtensions = ['mp3', 'aac'];
 
-    getDocument: function() {
-      return document.body.nodeName;
-    },
-
-    getPlugins: function() {
-      return plugins;
-    }
+  _export.getDocument = function() {
+    return document.body.nodeName;
   };
+
+  _export.getPlugins = function() {
+    return masters;
+  };
+
+  return _export;
 };

@@ -8,9 +8,8 @@ const misc = require('./lib/misc.js');
 const {Themes} = require('./lib/themes.js');
 const {remote} = require('electron');
 const {ipcRenderer} = require('electron');
-const {loadMaster} = require('baldr-masters');
+const {loadMaster, LoadMasters} = require('baldr-masters');
 const {audio} = require('baldr-media');
-const {Plugins} = require('./lib/plugins.js');
 
 let presentation;
 
@@ -114,7 +113,7 @@ var main = function() {
     misc.searchForBaldrFile(remote.process.argv),
     document
   );
-  const plugins = new Plugins(document, presentation);
+  const masters = new LoadMasters(document, presentation);
 
   presentation.set();
 
