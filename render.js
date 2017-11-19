@@ -81,7 +81,6 @@ var bindFunctions = function(bindings) {
 var main = function() {
   audio.elemMediaInfo = document.getElementById('media-info');
 
-  const plugins = new Plugins(document);
   //console.log(plugins);
 
   //console.log(plugins.audio.getDocument());
@@ -115,7 +114,11 @@ var main = function() {
     misc.searchForBaldrFile(remote.process.argv),
     document
   );
+  const plugins = new Plugins(document, presentation);
+
   presentation.set();
+
+
   bindFunctions(
     [
       {

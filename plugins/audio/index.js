@@ -1,11 +1,16 @@
 const {Howl} = require('howler');
+const {Media} = require('baldr-media');
+const mousetrap = require('mousetrap');
+
+let mediaTypesExtensions = ['mp3', 'aac'];
 
 /**
  *
  */
 class Audio {
+
   constructor(document) {
-    this.element = 'lol';
+    this.element = document.getElementById('media-info');
   }
 
   play(fileInfo) {
@@ -13,13 +18,13 @@ class Audio {
     this.current = new Howl({src: [fileInfo.path]});
     this.id = this.current.play();
 
-    if (this.hasOwnProperty('elemMediaInfo')) {
-      this.elemMediaInfo.innerHTML = fileInfo.titleSafe;
-      this.elemMediaInfo.style.zIndex = 1;
-      this.elemMediaInfo.style.visibility = 'visible';
+    if (this.hasOwnProperty('element')) {
+      this.element.innerHTML = fileInfo.titleSafe;
+      this.element.style.zIndex = 1;
+      this.element.style.visibility = 'visible';
       setTimeout(() => {
-        this.elemMediaInfo.style.zIndex = 1;
-        this.elemMediaInfo.style.visibility = 'hidden';
+        this.element.style.zIndex = -1;
+        this.element.style.visibility = 'hidden';
       }, 2000);
     }
   }
@@ -48,17 +53,41 @@ class Audio {
   }
 }
 
-module.exports = function(document, plugins) {
+module.exports = function(document, plugins, presentation) {
+
+  let media = new Media(presentation.pwd);
+  let audioFiles = media.list('media/audio', mediaTypesExtensions);
+
+  let audio = new Audio(document);
+
+  let playByNo = function(key) {
+    audio.play(audioFiles[key.key - 1]);
+  };
+
+  if (audioFiles.length > 0) {
+    for (let index in audioFiles) {
+      let no = Number.parseInt(index) + 1;
+      if (typeof window === 'object') {
+        mousetrap.bind('alt+' + no, playByNo);
+      }
+    }
+  }
+
   return {
+
     state: {
-      audio: new Audio(document)
+      audio: audio,
+      media: audioFiles
     },
+
     Audio: Audio,
+
     mediaTypesExtensions: ['mp3', 'aac'],
 
     getDocument: function() {
       return document.body.nodeName;
     },
+
     getPlugins: function() {
       return plugins;
     }
