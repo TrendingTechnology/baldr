@@ -53,6 +53,9 @@ class Audio {
   }
 }
 
+/**
+ *
+ */
 module.exports = function(document, masters, presentation) {
   let media = new Media(presentation.pwd);
   let audioFiles = media.list('media/audio', mediaTypesExtensions);
