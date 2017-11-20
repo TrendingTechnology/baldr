@@ -3,7 +3,7 @@
   "productName": "baldr-sbook",
   "description": "A fullscreen electron app to display songs in a class room using a projector.",
   "version": "0.0.3",
-  "main": "main.js",
+  "main": "lib/main.js",
   "repository": {
     "type": "git",
     "url": "git@github.com:JosefFriedrich-nodejs/baldr-sbook.git"
