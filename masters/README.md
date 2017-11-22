@@ -10,6 +10,7 @@ This exported functions are hooks:
   * `centerVertically`: boolean
   * `stepSupport`: boolean
   * `theme`: themeName
+* `init(document, config)`
 * `normalizeData(data, document)`
 * `modalHTML()`
 * `mainHTML(data, config, document)`

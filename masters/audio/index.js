@@ -5,11 +5,63 @@
 
 'use strict';
 
-const {Media, audio} = require('baldr-media');
+const {Media} = require('baldr-media');
 const path = require('path');
 const mousetrap = require('mousetrap');
 
 let audioFiles = {};
+let audio;
+let mediaTypesExtensions = ['mp3', 'aac'];
+
+class Audio {
+
+  constructor(document) {
+    this.element = document.getElementById('media-info');
+  }
+
+  play(fileInfo) {
+    this.stop();
+    this.current = new Howl({src: [fileInfo.path]});
+    this.id = this.current.play();
+
+    if (this.hasOwnProperty('element')) {
+      this.element.innerHTML = fileInfo.titleSafe;
+      this.element.style.zIndex = 1;
+      this.element.style.visibility = 'visible';
+      setTimeout(() => {
+        this.element.style.zIndex = -1;
+        this.element.style.visibility = 'hidden';
+      }, 2000);
+    }
+  }
+
+  stop() {
+    if (this.hasOwnProperty('current') && this.current.playing()) {
+      this.current.stop();
+    }
+  }
+
+  pausePlay() {
+    if (this.hasOwnProperty('current')) {
+      if (this.current.playing()) {
+        this.current.pause();
+      }
+      else {
+        this.current.play();
+      }
+    }
+  }
+
+  fadeOut() {
+    if (this.hasOwnProperty('current') && this.current.playing()) {
+      this.current.fade(1, 0, 5000);
+    }
+  }
+}
+
+exports.init = function(document) {
+  audio = new Audio(document);
+}
 
 /**
  *this.dataNormalized

@@ -5,15 +5,13 @@
 const path = require('path');
 const mousetrap = require('mousetrap');
 const {remote, ipcRenderer} = require('electron');
-const {setMain, LoadMasters, addCSSFile} = require('baldr-masters');
+const {setMain, addCSSFile, masters} = require('baldr-masters');
 
 const {SlidesSwitcher} = require('./lib/slides-switcher.js');
 const {SlidesNormalize} = require('./lib/slides-normalize.js');
 const {Presentation} = require('./lib/presentation.js');
 const {Themes} = require('./lib/themes.js');
 const {Config} = require('./lib/config.js');
-
-const {audio} = require('baldr-media');
 
 let presentation;
 
@@ -115,7 +113,6 @@ let searchForBaldrFile = function(argv) {
  * Initialize the presentaton session.
  */
 let main = function() {
-  audio.elemMediaInfo = document.getElementById('media-info');
   window.onerror = errorPage;
   ipcRenderer.on('set-master', function(event, masterName) {
     setMaster(masterName);
@@ -123,13 +120,13 @@ let main = function() {
   let config = new Config(
     searchForBaldrFile(remote.process.argv)
   );
+
+  masters.execAll('init', document, config);
   let slidesData = new SlidesNormalize(config.slides);
   let slideSwitcher = new SlidesSwitcher(slidesData.normalized, document);
 
   let themes = new Themes(document);
   themes.loadThemes();
-
-  const masters = new LoadMasters();
 
   for (let master of masters.all) {
     if (masters[master].css) {
