@@ -11,7 +11,7 @@ const {
 } = require('baldr-test');
 
 const {loadMaster, MasterOfMasters, LoadMasters} = require('baldr-masters');
-let _masters = new LoadMasters(document, presentation);
+let _masters = new LoadMasters();
 
 describe('Function “loadMaster()”', function() {
   it('simple', function() {
@@ -181,7 +181,7 @@ describe('Class “LoadMasters()”', () => {
       );
     });
 
-    it('this.all', () => {
+    it.only('this.all', () => {
       assert.deepEqual(_masters.all, allMasters);
     });
 

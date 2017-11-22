@@ -120,8 +120,8 @@ let main = function() {
   let config = new Config(
     searchForBaldrFile(remote.process.argv)
   );
-  //let slides = new Slides(config.slides, document).parse()
-  //let slideSwitcher = new SlideSwitcher(slides);
+  let slides = new Slides(config.slides, document).parse()
+  let slideSwitcher = new SlideSwitcher(slides);
 
 
   let themes = new Themes(document);

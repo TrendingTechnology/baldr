@@ -5,83 +5,48 @@
 
 'use strict';
 
-const {MasterOfMasters} = require('baldr-masters');
 const {Media} = require('baldr-media');
 
+/**
+ *
+ */
+exports.normalizeData = function(data, document, config) {
+  let inputFiles = new Media(config.sessionDir);
+  return {
+    elemImage: document.getElementById('baldr-master-image'),
+    inputFiles: inputFiles.orderedList(data, 'image')
+  }
+};
 
 /**
- * Master class for the master slide “image”
+ *
  */
-class MasterImage extends MasterOfMasters {
-
-  constructor(propObj) {
-    super(propObj);
-    this.inputFiles = new Media(this.presentation.pwd);
-    this.dataNormalized = this.normalizeData(this.data);
+exports.initSteps = function(data, document) {
+  let inputFiles = new Media(config.sessionDir);
+  return {
+    elemImage: document.getElementById('baldr-master-image'),
+    inputFiles: inputFiles.orderedList(data, 'image')
   }
+};
 
-  /**
-   *
-   */
-  normalizeData(data) {
-    return this.inputFiles.orderedList(data, 'image');
-  }
-
-  /**
-   *
-   */
-  hookSetHTMLSlide() {
-    return `<img id="baldr-master-image">`;
-  }
-
-  /**
-   *
-   */
-  hookPostFirstSet() {
-    this.stepNo = 1;
-    this.stepCount = this.dataNormalized.length;
-  }
-
-  /**
-   */
-  hookPostSet() {
-    this.elemImage = this.document
-      .getElementById('baldr-master-image');
-    this.setImage();
-  }
-
-  /**
-   *
-   */
-  setImage() {
-    this.elemImage
-      .setAttribute('src', this.dataNormalized[this.stepNo - 1].path);
-  }
-
-  /**
-   *
-   */
-  hookSetStep() {
-    this.setImage();
-  }
-
+/**
+ *
+ */
+exports.setStepByNo = function(no, count, data) {
+  this.elemImage
+    .setAttribute('src', this.dataNormalized[this.stepNo - 1].path);
 }
 
 /**
- * Export the implemented hooks of this master.
  *
- * @param {object} document The HTML Document Object (DOM) of the
- *   current render process.
- * @param {object} masters All required and loaded masters. Using
- *   `masters.masterName` you have access to all exported methods of
- *   a specific master.
- * @param {object} presentation Object representing the current
- *   presentation session.
- *
- * @return {object} A object, each property represents a hook.
  */
-module.exports = function(document, masters, presentation) {
-  let _export = {};
-  _export.Master = MasterImage;
-  return _export;
+exports.config = {
+  stepSupport: true
+};
+
+/**
+ *
+ */
+exports.mainHTML = function() {
+  return `<img id="baldr-master-image">`;
 };

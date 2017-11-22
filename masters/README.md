@@ -4,6 +4,15 @@ slide.
 
 Each master slide must have a main entry file named `index.js`.
 The `ìndex.js` file has the structure of a node module.
-This functions are exported by `index.js`:
+This exported functions are hooks:
 
-* `render(data)`
+* `config`
+  * `centerVertically`: boolean
+  * `stepSupport`: boolean
+  * `theme`: themeName
+* `normalizeData(data, document)`
+* `modalHTML()`
+* `mainHTML(data, config, document)`
+* `postSet()`
+* `setStepByNo(no, count, data)`
+* `initSteps(document, data)`
