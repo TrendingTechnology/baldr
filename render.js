@@ -7,7 +7,6 @@ const {remote, ipcRenderer} = require('electron');
 const {loadMaster, LoadMasters} = require('baldr-masters');
 
 const {Presentation} = require('./lib/presentation.js');
-const misc = require('./lib/misc.js');
 const {Themes} = require('./lib/themes.js');
 const {audio} = require('baldr-media');
 
@@ -88,6 +87,26 @@ let errorPage = function(message, source, lineNo, colNo, error) {
 };
 
 /**
+ * Search for a *.baldr session file in the argv array. Return the last
+ * matched element.
+ *
+ * @param {array} argv Arguments in process.argv
+ *
+ * @return {string} The path of a BALDUR file.
+ */
+let searchForBaldrFile = function(argv) {
+  let clone = argv.slice(0);
+  clone.reverse();
+
+  for (let arg of clone) {
+    if (arg.search(/\.baldr$/ig) > -1) {
+      return arg;
+    }
+  }
+  throw new Error('No presentation file with the extension *.baldr found!');
+};
+
+/**
  * @function main
  */
 var main = function() {
@@ -103,7 +122,7 @@ var main = function() {
   themes.loadThemes();
 
   presentation = new Presentation(
-    misc.searchForBaldrFile(remote.process.argv),
+    searchForBaldrFile(remote.process.argv),
     document
   );
   const masters = new LoadMasters(document, presentation);
