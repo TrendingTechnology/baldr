@@ -114,12 +114,15 @@ let searchForBaldrFile = function(argv) {
 let main = function() {
   audio.elemMediaInfo = document.getElementById('media-info');
   window.onerror = errorPage;
-  let config = new Config(
-    searchForBaldrFile(remote.process.argv)
-  );
   ipcRenderer.on('set-master', function(event, masterName) {
     setMaster(masterName);
   });
+  let config = new Config(
+    searchForBaldrFile(remote.process.argv)
+  );
+  //let slides = new Slides(config.slides, document).parse()
+  //let slideSwitcher = new SlideSwitcher(slides);
+
 
   let themes = new Themes(document);
   themes.loadThemes();
