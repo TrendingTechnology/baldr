@@ -2,10 +2,13 @@
  * @file Entry file of the render process. Assemble all classes
  */
 
+const path = require('path');
 const mousetrap = require('mousetrap');
 const {remote, ipcRenderer} = require('electron');
-const {loadMaster, LoadMasters} = require('baldr-masters');
+const {loadMaster, LoadMasters, addCSSFile} = require('baldr-masters');
 
+const {SlidesSwitcher} = require('./lib/slides-switcher.js');
+const {SlidesNormalize} = require('./lib/slides-normalize.js');
 const {Presentation} = require('./lib/presentation.js');
 const {Themes} = require('./lib/themes.js');
 const {Config} = require('./lib/config.js');
@@ -120,41 +123,51 @@ let main = function() {
   let config = new Config(
     searchForBaldrFile(remote.process.argv)
   );
-  let slides = new Slides(config.slides, document).parse()
-  let slideSwitcher = new SlideSwitcher(slides);
-
+  let slidesData = new SlidesNormalize(config.slides);
+  let slideSwitcher = new SlidesSwitcher(slidesData.normalized, document);
 
   let themes = new Themes(document);
   themes.loadThemes();
 
-  presentation = new Presentation(
-    searchForBaldrFile(remote.process.argv),
-    document
-  );
+  const masters = new LoadMasters();
 
-  const masters = new LoadMasters(document, presentation);
+  for (let master of masters.all) {
+    if (masters[master].css) {
+      addCSSFile(
+        document,
+        path.join(masters[master].path, 'styles.css'),
+        'baldr-master'
+      );
+    }
+  }
 
-  presentation.set();
+  let slidePrev = function() {
+    slideSwitcher.prev();
+  }
+
+  let slideNext = function() {
+    slideSwitcher.prev();
+  }
 
   bindFunctions(
     [
       {
-        function: () => {presentation.prevStep();},
+        function: null,
         keys: ['up'],
         IDs: ['nav-step-prev']
       },
       {
-        function: () => {presentation.nextStep();},
+        function: null,
         keys: ['down'],
         IDs: ['nav-step-next']
       },
       {
-        function: () => {presentation.prev().set();},
+        function: slidePrev,
         keys: ['left'],
         IDs: ['nav-slide-prev']
       },
       {
-        function: () => {presentation.next().set();},
+        function: slideNext,
         keys: ['right'],
         IDs: ['nav-slide-next']
       },
