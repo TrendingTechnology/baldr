@@ -1,14 +1,14 @@
 /**
- * @file Entry file of the render process.
+ * @file Entry file of the render process. Assemble all classes
  */
 
 const mousetrap = require('mousetrap');
+const {remote, ipcRenderer} = require('electron');
+const {loadMaster, LoadMasters} = require('baldr-masters');
+
 const {Presentation} = require('./lib/presentation.js');
 const misc = require('./lib/misc.js');
 const {Themes} = require('./lib/themes.js');
-const {remote} = require('electron');
-const {ipcRenderer} = require('electron');
-const {loadMaster, LoadMasters} = require('baldr-masters');
 const {audio} = require('baldr-media');
 
 let presentation;
@@ -75,32 +75,25 @@ var bindFunctions = function(bindings) {
 };
 
 /**
+ *
+ */
+let errorPage = function(message, source, lineNo, colNo, error) {
+  document.getElementById('slide').innerHTML = `
+  <p>${message}</p>
+  <p>Source: ${source}</p>
+  <p>Line number: ${lineNo}</p>
+  <p>Column number: ${colNo}</p>
+  <pre>${error.stack}</pre>
+  `;
+};
+
+/**
  * @function main
  */
 var main = function() {
   audio.elemMediaInfo = document.getElementById('media-info');
 
-  //console.log(plugins);
-
-  //console.log(plugins.audio.getDocument());
-  //console.log(plugins.audio.getPlugins());
-
-  //const {Menu, MenuItem} = remote;
-  //const menu = Menu.getApplicationMenu()
-
-  //console.log(menu.items[0].submenu.items[0].label);
-  //menu.append(new MenuItem({label: 'MenuItem1', click() { console.log('item 1 clicked') }}))
-  //menu.items[0].submenu.items[0].label = 'lol';
-  //Menu.setApplicationMenu(menu);
-  window.onerror = function(message, source, lineNo, colNo, error) {
-    document.getElementById('slide').innerHTML = `
-    <p>${message}</p>
-    <p>Source: ${source}</p>
-    <p>Line number: ${lineNo}</p>
-    <p>Column number: ${colNo}</p>
-    <pre>${error.stack}</pre>
-    `;
-  };
+  window.onerror = errorPage;
 
   ipcRenderer.on('set-master', function(event, masterName) {
     setMaster(masterName);
@@ -116,7 +109,6 @@ var main = function() {
   const masters = new LoadMasters(document, presentation);
 
   presentation.set();
-
 
   bindFunctions(
     [
