@@ -9,22 +9,24 @@ const {Media, audio} = require('baldr-media');
 const path = require('path');
 const mousetrap = require('mousetrap');
 
+let audioFiles = {};
+
 /**
  *this.dataNormalized
  */
-exports.normalizeData = function(data) {
-  this.inputFiles = new Media(this.presentation.pwd);
-  this.dataNormalized = this.normalizeData(this.data);
+exports.normalizeData = function(data, config) {
+  let inputFiles = new Media(config.sessionDir);
+  let files = inputFiles.orderedList(data, 'audio');
 
   var mousetrapbind = function(key, combo) {
     audio.play(audioFiles[key.key]);
   };
 
-  for (var i = 1; i <= this.dataNormalized.length; i++) {
-    audioFiles[i] = this.dataNormalized[i - 1];
+  for (var i = 1; i <= files.length; i++) {
+    audioFiles[i] = files[i - 1];
     mousetrap.bind('ctrl+' + i, mousetrapbind);
   }
-  return this.inputFiles.orderedList(data, 'audio');
+  return files;
 }
 
 /**
