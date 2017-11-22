@@ -8,6 +8,8 @@ const {loadMaster, LoadMasters} = require('baldr-masters');
 
 const {Presentation} = require('./lib/presentation.js');
 const {Themes} = require('./lib/themes.js');
+const {Config} = require('./lib/config.js');
+
 const {audio} = require('baldr-media');
 
 let presentation;
@@ -107,13 +109,14 @@ let searchForBaldrFile = function(argv) {
 };
 
 /**
- * @function main
+ * Initialize the presentaton session.
  */
 let main = function() {
   audio.elemMediaInfo = document.getElementById('media-info');
-
   window.onerror = errorPage;
-
+  let config = new Config(
+    searchForBaldrFile(remote.process.argv)
+  );
   ipcRenderer.on('set-master', function(event, masterName) {
     setMaster(masterName);
   });
@@ -125,6 +128,7 @@ let main = function() {
     searchForBaldrFile(remote.process.argv),
     document
   );
+
   const masters = new LoadMasters(document, presentation);
 
   presentation.set();
