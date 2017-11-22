@@ -52,14 +52,14 @@ let renderQuotationMark = function(begin=true) {
 /**
  *
  */
-exports.mainHTML = function() {
-  let attribution = this.renderAttribution(this.data.author, this.data.date);
-  let begin = this.renderQuotationMark();
-  let end = this.renderQuotationMark(false);
+exports.mainHTML = function(data, config, document) {
+  let attribution = renderAttribution(data.author, data.date);
+  let begin = renderQuotationMark();
+  let end = renderQuotationMark(false);
   return `
 <section id="baldr-master-quote">
 
-  <p class="text">${begin} ${this.data.text} ${end}</p>
+  <p class="text">${begin} ${data.text} ${end}</p>
 
   ${attribution}
 

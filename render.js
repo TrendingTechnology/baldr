@@ -5,7 +5,7 @@
 const path = require('path');
 const mousetrap = require('mousetrap');
 const {remote, ipcRenderer} = require('electron');
-const {loadMaster, LoadMasters, addCSSFile} = require('baldr-masters');
+const {setMain, LoadMasters, addCSSFile} = require('baldr-masters');
 
 const {SlidesSwitcher} = require('./lib/slides-switcher.js');
 const {SlidesNormalize} = require('./lib/slides-normalize.js');
@@ -142,12 +142,18 @@ let main = function() {
   }
 
   let slidePrev = function() {
-    slideSwitcher.prev();
+    let slide = slideSwitcher.prev();
+    setMain(slide.master, slide.data, config, document);
   }
 
   let slideNext = function() {
-    slideSwitcher.prev();
+    let slide = slideSwitcher.prev();
+    setMain(slide.master, slide.data, config, document);
   }
+
+  let slide = slideSwitcher.getByNo(1);
+  console.log(slide);
+  setMain(slide.master, slide.data, config, document);
 
   bindFunctions(
     [
