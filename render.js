@@ -15,7 +15,7 @@ let presentation;
 /**
  * Toogle the modal window
  */
-var toggleModal = function() {
+let toggleModal = function() {
   let modal = document.getElementById('modal');
   let state = modal.style.display;
   if (state === 'none') {
@@ -40,7 +40,7 @@ var toggleModal = function() {
  * No number is assigned to the master slide.
  * @param {string} name Name of the master slide
  */
-var setMaster = function(name) {
+let setMaster = function(name) {
   let master = loadMaster(name, document, presentation);
   master.set();
 };
@@ -48,7 +48,7 @@ var setMaster = function(name) {
 /**
  *
  */
-var bindFunction = function(binding) {
+let bindFunction = function(binding) {
   if (binding.keys) {
     for (let key of binding.keys) {
       mousetrap.bind(key, binding.function);
@@ -67,7 +67,7 @@ var bindFunction = function(binding) {
 /**
  *
  */
-var bindFunctions = function(bindings) {
+let bindFunctions = function(bindings) {
   for (let binding of bindings) {
     bindFunction(binding);
   }
@@ -109,7 +109,7 @@ let searchForBaldrFile = function(argv) {
 /**
  * @function main
  */
-var main = function() {
+let main = function() {
   audio.elemMediaInfo = document.getElementById('media-info');
 
   window.onerror = errorPage;
