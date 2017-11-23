@@ -127,7 +127,7 @@ let main = function() {
 
   for (let slideNo in slidesData) {
     console.log(slideNo)
-    slidesData[slideNo].steps = new StepSwitcher(document, slidesData[slideNo]);
+    slidesData[slideNo].steps = new StepSwitcher(document, slidesData[slideNo], config);
   }
 
   let slidesSwitcher = new SlidesSwitcher(slidesData, document);

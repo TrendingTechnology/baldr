@@ -6,35 +6,25 @@
 'use strict';
 
 const {Media} = require('baldr-media');
+const {reIndex} = require('baldr-masters');
 
 /**
  *
  */
-exports.normalizeData = function(data, document, config) {
-  let inputFiles = new Media(config.sessionDir);
-  return {
-    elemImage: document.getElementById('baldr-master-image'),
-    inputFiles: inputFiles.orderedList(data, 'image')
-  }
+exports.initSteps = function(document, slide, config) {
+  return reIndex(
+    new Media(config.sessionDir)
+    .orderedList(slide.data, 'image')
+  );
 };
 
 /**
  *
  */
-exports.initSteps = function(data, document) {
-  let inputFiles = new Media(config.sessionDir);
-  return {
-    elemImage: document.getElementById('baldr-master-image'),
-    inputFiles: inputFiles.orderedList(data, 'image')
-  }
-};
-
-/**
- *
- */
-exports.setStepByNo = function(no, count, data) {
-  this.elemImage
-    .setAttribute('src', this.dataNormalized[this.stepNo - 1].path);
+exports.setStepByNo = function(no, count, stepData, document) {
+  document
+    .getElementById('baldr-master-image')
+    .setAttribute('src', stepData[no].path);
 }
 
 /**
