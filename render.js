@@ -122,8 +122,8 @@ let main = function() {
   );
 
   masters.execAll('init', document, config);
-  let slidesData = new SlidesNormalize(config.slides);
-  let slideSwitcher = new SlidesSwitcher(slidesData.normalized, document);
+  let slidesData = new SlidesNormalize(config.slides).normalized;
+  let slidesSwitcher = new SlidesSwitcher(slidesData, document);
 
   let themes = new Themes(document);
   themes.loadThemes();
@@ -139,17 +139,16 @@ let main = function() {
   }
 
   let slidePrev = function() {
-    let slide = slideSwitcher.prev();
+    let slide = slidesSwitcher.prev();
     setMain(slide.master, slide.data, config, document);
   }
 
   let slideNext = function() {
-    let slide = slideSwitcher.prev();
+    let slide = slidesSwitcher.prev();
     setMain(slide.master, slide.data, config, document);
   }
 
-  let slide = slideSwitcher.getByNo(1);
-  console.log(slide);
+  let slide = slidesSwitcher.getByNo(1);
   setMain(slide.master, slide.data, config, document);
 
   bindFunctions(
