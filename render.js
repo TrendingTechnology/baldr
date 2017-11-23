@@ -7,6 +7,7 @@ const mousetrap = require('mousetrap');
 const {remote, ipcRenderer} = require('electron');
 const {setMain, addCSSFile, masters} = require('baldr-masters');
 
+const {StepSwitcher} = require('./lib/step-switcher.js');
 const {SlidesSwitcher} = require('./lib/slides-switcher.js');
 const {SlidesNormalize} = require('./lib/slides-normalize.js');
 const {Presentation} = require('./lib/presentation.js');
@@ -123,6 +124,12 @@ let main = function() {
 
   masters.execAll('init', document, config);
   let slidesData = new SlidesNormalize(config.slides).normalized;
+
+  for (let slideNo in slidesData) {
+    console.log(slideNo)
+    slidesData[slideNo].steps = new StepSwitcher(document, slidesData[slideNo]);
+  }
+
   let slidesSwitcher = new SlidesSwitcher(slidesData, document);
 
   let themes = new Themes(document);
