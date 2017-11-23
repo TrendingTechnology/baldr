@@ -80,7 +80,7 @@ let bindFunctions = function(bindings) {
  *
  */
 let errorPage = function(message, source, lineNo, colNo, error) {
-  document.getElementById('slide').innerHTML = `
+  document.getElementById('slide-content').innerHTML = `
   <p>${message}</p>
   <p>Source: ${source}</p>
   <p>Line number: ${lineNo}</p>

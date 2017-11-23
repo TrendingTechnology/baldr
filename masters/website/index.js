@@ -8,6 +8,6 @@
 /**
  *
  */
-exports.mainHTML = function() {
-  return `<webview src="${this.data}"></webview>`;
+exports.mainHTML = function(data) {
+  return `<webview src="${data}"></webview>`;
 }
