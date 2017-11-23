@@ -148,7 +148,7 @@ let main = function() {
 
   let setSlide = function() {
     setMain(currentSlide.master, currentSlide.data, config, document);
-    currentSlide.steps.init();
+    currentSlide.steps.visit();
   }
 
   let stepPrev = function() {
@@ -165,7 +165,7 @@ let main = function() {
   }
 
   let slideNext = function() {
-    currentSlide = slidesSwitcher.prev();
+    currentSlide = slidesSwitcher.next();
     setSlide();
   }
 

@@ -15,5 +15,5 @@ This exported functions are hooks:
 * `modalHTML()`
 * `mainHTML(slideData, config, document)`
 * `postSet()`
-* `setStepByNo(no, count, stepsData)`
+* `setStepByNo(no, count, stepData)`
 * `initSteps(document, slide, config)`

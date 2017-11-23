@@ -122,7 +122,7 @@ exports.mainHTML = function(data) {
  * The stepData object has to be filled very time a slide is set.
  * Every time a slide is set, new HTML elements are generated.
  */
-exports.initSteps = function(document) {
+exports.initStepsEveryVisit = function(document) {
   let data = {};
   let elements = document.querySelectorAll('p');
   elements.forEach((element, index) => {
