@@ -17,3 +17,4 @@ This exported functions are hooks:
 * `postSet()`
 * `setStepByNo(no, count, stepData)`
 * `initSteps(document, slide, config)`
+* `initStepsEveryVisit(document, slide, config)`
