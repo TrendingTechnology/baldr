@@ -48,7 +48,7 @@ exports.normalizeData = function(rawSlideData) {
     }
     return out;
   } else {
-    return [normalizeDataQAPair(data)];
+    return [normalizeDataQAPair(rawSlideData)];
   }
 }
 

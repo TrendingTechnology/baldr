@@ -6,15 +6,17 @@ Each master slide must have a main entry file named `index.js`.
 The `ìndex.js` file has the structure of a node module.
 This exported functions are hooks:
 
+# All hooks (sorted alphabetically):
+
 * `config`
   * `centerVertically`: boolean
   * `stepSupport`: boolean
   * `theme`: themeName
 * `init(document, config)`
-* `normalizeData(rawSlideData, document)`
-* `modalHTML()`
-* `mainHTML(normalizedSlideData, config, document)`
-* `postSet()`
-* `setStepByNo(no, count, stepData)`
 * `initSteps(document, slide, config)`
 * `initStepsEveryVisit(document, slide, config)`
+* `mainHTML(normalizedSlideData, config, document)`
+* `modalHTML()`
+* `normalizeData(rawSlideData, config)`
+* `postSet()`
+* `setStepByNo(no, count, stepData)`

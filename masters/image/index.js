@@ -11,11 +11,16 @@ const {reIndex} = require('baldr-masters');
 /**
  *
  */
-exports.initSteps = function(document, slide, config) {
-  return reIndex(
-    new Media(config.sessionDir)
-    .orderedList(slide.data, 'image')
-  );
+exports.normalizeData = function(rawSlideData, config) {
+  return new Media(config.sessionDir)
+    .orderedList(rawSlideData, 'image');
+};
+
+/**
+ *
+ */
+exports.initSteps = function(document, slide, config, normalizedSlideData) {
+  return reIndex(normalizedSlideData);
 };
 
 /**
