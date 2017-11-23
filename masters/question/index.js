@@ -40,8 +40,8 @@ let normalizeDataQAPair = function(pair) {
 /**
  *
  */
-let normalizeData = function(data) {
-   if (typeof data === 'object' && Array.isArray(data)) {
+exports.normalizeData = function(data) {
+  if (typeof data === 'object' && Array.isArray(data)) {
     let out = [];
     for (let pair of data) {
       out.push(normalizeDataQAPair(pair));
@@ -113,7 +113,6 @@ exports.setStepByNo = function(no, count, data) {
  *
  */
 exports.mainHTML = function(data) {
-  data = normalizeData(data);
   return '<div id="question-content">' +
     template(data) +
     '</div>';
@@ -126,7 +125,6 @@ exports.mainHTML = function(data) {
 exports.initSteps = function(document) {
   let data = {};
   let elements = document.querySelectorAll('p');
-  stepCount = elements.length;
   elements.forEach((element, index) => {
     data[index + 1] = element;
   });

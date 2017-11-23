@@ -126,7 +126,6 @@ let main = function() {
   let slidesData = new SlidesNormalize(config.slides).normalized;
 
   for (let slideNo in slidesData) {
-    console.log(slideNo)
     slidesData[slideNo].steps = new StepSwitcher(document, slidesData[slideNo], config);
   }
 
@@ -145,28 +144,43 @@ let main = function() {
     }
   }
 
+  let currentSlide;
+
+  let setSlide = function() {
+    setMain(currentSlide.master, currentSlide.data, config, document);
+    currentSlide.steps.init();
+  }
+
+  let stepPrev = function() {
+    currentSlide.steps.prev();
+  }
+
+  let stepNext = function() {
+    currentSlide.steps.next();
+  }
+
   let slidePrev = function() {
-    let slide = slidesSwitcher.prev();
-    setMain(slide.master, slide.data, config, document);
+    currentSlide = slidesSwitcher.prev();
+    setSlide();
   }
 
   let slideNext = function() {
-    let slide = slidesSwitcher.prev();
-    setMain(slide.master, slide.data, config, document);
+    currentSlide = slidesSwitcher.prev();
+    setSlide();
   }
 
-  let slide = slidesSwitcher.getByNo(1);
-  setMain(slide.master, slide.data, config, document);
+  currentSlide = slidesSwitcher.getByNo(1);
+  setSlide();
 
   bindFunctions(
     [
       {
-        function: null,
+        function: stepPrev,
         keys: ['up'],
         IDs: ['nav-step-prev']
       },
       {
-        function: null,
+        function: stepNext,
         keys: ['down'],
         IDs: ['nav-step-next']
       },
