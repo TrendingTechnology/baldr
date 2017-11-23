@@ -119,11 +119,9 @@ Use HTML like notation `<object>` to reference objects.
 {
     no: 1,
     master: "audio",
-    data: [
-        "media/audio/mozart.mp3",
-        "media/audio/haydn.mp3",
-        "media/audio/beethoven.mp3"
-    ]
+    rawData: <misc>
+    normalizedData: <misc>
+    steps: 
 }
 ```
 

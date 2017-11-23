@@ -9,12 +9,9 @@ const {setMain, addCSSFile, masters} = require('baldr-masters');
 
 const {StepSwitcher} = require('./lib/step-switcher.js');
 const {SlidesSwitcher} = require('./lib/slides-switcher.js');
-const {SlidesNormalize} = require('./lib/slides-normalize.js');
-const {Presentation} = require('./lib/presentation.js');
+const {getSlides} = require('./lib/slides.js');
 const {Themes} = require('./lib/themes.js');
 const {Config} = require('./lib/config.js');
-
-let presentation;
 
 /**
  * Toogle the modal window
@@ -123,13 +120,9 @@ let main = function() {
   );
 
   masters.execAll('init', document, config);
-  let slidesData = new SlidesNormalize(config.slides).normalized;
+  let slides = getSlides(config.slides, config, document);
 
-  for (let slideNo in slidesData) {
-    slidesData[slideNo].steps = new StepSwitcher(document, slidesData[slideNo], config);
-  }
-
-  let slidesSwitcher = new SlidesSwitcher(slidesData, document);
+  let slidesSwitcher = new SlidesSwitcher(slides, document);
 
   let themes = new Themes(document);
   themes.loadThemes();
@@ -147,7 +140,7 @@ let main = function() {
   let currentSlide;
 
   let setSlide = function() {
-    setMain(currentSlide.master, currentSlide.data, config, document);
+    setMain(currentSlide, config, document);
     currentSlide.steps.visit();
   }
 
