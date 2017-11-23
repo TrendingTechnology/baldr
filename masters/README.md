@@ -11,9 +11,9 @@ This exported functions are hooks:
   * `stepSupport`: boolean
   * `theme`: themeName
 * `init(document, config)`
-* `normalizeData(slideData, document)`
+* `normalizeData(rawSlideData, document)`
 * `modalHTML()`
-* `mainHTML(slideData, config, document)`
+* `mainHTML(normalizedSlideData, config, document)`
 * `postSet()`
 * `setStepByNo(no, count, stepData)`
 * `initSteps(document, slide, config)`

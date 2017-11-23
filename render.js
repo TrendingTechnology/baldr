@@ -14,6 +14,12 @@ const {Presentation} = require('./lib/presentation.js');
 const {Themes} = require('./lib/themes.js');
 const {Config} = require('./lib/config.js');
 
+  // TODO: remove
+  let pretty = function(object) {
+    let pretty = require('js-object-pretty-print').pretty;
+    console.log(pretty(object));
+  }
+
 let presentation;
 
 /**
@@ -134,6 +140,8 @@ let main = function() {
   let themes = new Themes(document);
   themes.loadThemes();
 
+  pretty(document);
+
   for (let master of masters.all) {
     if (masters[master].css) {
       addCSSFile(
@@ -171,6 +179,8 @@ let main = function() {
 
   currentSlide = slidesSwitcher.getByNo(1);
   setSlide();
+
+
 
   bindFunctions(
     [

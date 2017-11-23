@@ -40,10 +40,10 @@ let normalizeDataQAPair = function(pair) {
 /**
  *
  */
-exports.normalizeData = function(data) {
-  if (typeof data === 'object' && Array.isArray(data)) {
+exports.normalizeData = function(rawSlideData) {
+  if (typeof rawSlideData === 'object' && Array.isArray(rawSlideData)) {
     let out = [];
-    for (let pair of data) {
+    for (let pair of rawSlideData) {
       out.push(normalizeDataQAPair(pair));
     }
     return out;
@@ -93,18 +93,18 @@ exports.config = {
 /**
  *
  */
-exports.setStepByNo = function(no, count, data) {
+exports.setStepByNo = function(no, count, stepData) {
   for (let i = 1; i <= count; i++) {
-    if (!data[i].style.visibility) {
-      data[i].style.visibility = 'visible';
+    if (!stepData[i].style.visibility) {
+      stepData[i].style.visibility = 'visible';
     }
 
-    let visibility = data[i].style.visibility;
+    let visibility = stepData[i].style.visibility;
     if (visibility === 'visible' && no < i) {
-      data[i].style.visibility = 'hidden';
+      stepData[i].style.visibility = 'hidden';
     }
     else if (visibility === 'hidden' && no >= i) {
-      data[i].style.visibility = 'visible';
+      stepData[i].style.visibility = 'visible';
     }
   }
 }
@@ -112,9 +112,9 @@ exports.setStepByNo = function(no, count, data) {
 /**
  *
  */
-exports.mainHTML = function(data) {
+exports.mainHTML = function(normalizedSlideData, config, document) {
   return '<div id="question-content">' +
-    template(data) +
+    template(normalizedSlideData) +
     '</div>';
 }
 
@@ -122,7 +122,7 @@ exports.mainHTML = function(data) {
  * The stepData object has to be filled very time a slide is set.
  * Every time a slide is set, new HTML elements are generated.
  */
-exports.initStepsEveryVisit = function(document) {
+exports.initStepsEveryVisit = function(document, slide, config) {
   let data = {};
   let elements = document.querySelectorAll('p');
   elements.forEach((element, index) => {

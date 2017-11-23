@@ -1,5 +1,17 @@
 # Objects
 
+Code to pretty print objects:
+
+```js
+// TODO: remove
+let pretty = function(object) {
+  let pretty = require('js-object-pretty-print').pretty;
+  console.log(pretty(object));
+}
+```
+
+Use HTML like notation `<object>` to reference objects.
+
 ------------------------------------------------------------------------
 
 ## ``
@@ -25,34 +37,51 @@
 
 ------------------------------------------------------------------------
 
+## `document`
+
+```
+{
+    location: {
+        replace: "function ()",
+        assign: "function ()",
+        href: "file:///home//baldr/render.html",
+        ancestorOrigins: {
+
+        },
+        origin: "file://",
+        protocol: "file:",
+        host: "",
+        hostname: "",
+        port: "",
+        pathname: "/home/jf/baldr/render.html",
+        search: "",
+        hash: "",
+        reload: "function reload()"
+    }
+}
+```
+
+------------------------------------------------------------------------
+
 ## `masters`
 
-```json
+```
 
 {
-  "path": "/home/baldr/masters",
-  "all": [
-    "audio",
-    "camera",
-    "editor",
-    "image",
-    "markdown",
-    "person",
-    "question",
-    "quote",
-    "svg",
-    "website"
-  ],
-  "audio": {
-    "config": {
-      "centerVertically": false,
-      "stepSupport": false,
-      "theme": "default"
-    },
-    "path": "/home/baldr/masters/audio",
-    "css": false
-  },
-  "..."
+    path: "/home/jf/git-repositories/github/JosefFriedrich-nodejs/baldr/masters",
+    all: [
+        "audio",
+        "camera",
+        "editor",
+        "image",
+        "markdown",
+        "person",
+        "question",
+        "quote",
+        "svg",
+        "website"
+    ],
+    masterName: <master>
 }
 
 ```
@@ -94,6 +123,33 @@
         "media/audio/mozart.mp3",
         "media/audio/haydn.mp3",
         "media/audio/beethoven.mp3"
+    ]
+}
+```
+
+------------------------------------------------------------------------
+
+## `stepData`
+
+```
+{
+    1: <misc>,
+    2: <misc>,
+    ...
+}
+```
+
+------------------------------------------------------------------------
+
+## `themes`
+
+```
+{
+    document: <document>
+    path: "/home//baldr/themes",
+    all: [
+        "default",
+        "handwriting"
     ]
 }
 ```
