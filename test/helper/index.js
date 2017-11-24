@@ -95,11 +95,24 @@ exports.testFileMinimal = path.resolve('test', 'files', 'minimal.baldr');
  */
 exports.config = getConfig([exports.testFileMinimal]);
 
-
 /**
  *
  */
 exports.masters = getMasters();
+
+/**
+ *
+ */
+exports.srcPath = function() {
+  return path.join(__dirname, '..', '..', 'src', ...arguments);
+};
+
+/**
+ *
+ */
+exports.requireFile = function() {
+  return require(exports.srcPath(...arguments));
+};
 
 /**
  *

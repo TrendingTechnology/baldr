@@ -1,10 +1,17 @@
 const {
   assert,
   path,
-  testFileMinimal
+  testFileMinimal,
+  rewire,
+  srcPath,
+  requireFile
 } = require('baldr-test');
 
-const {Media, FileInfo} = require('baldr-media');
+let mediaJsPath = srcPath('lib', 'media.js');
+
+const {Media} = require(mediaJsPath);
+let mediaRewired = rewire(mediaJsPath);
+let FileInfo = mediaRewired.__get__('FileInfo');
 
 let testFiles = path.resolve('test', 'files', 'mixed-extensions');
 let media = new Media(testFiles);
@@ -82,7 +89,6 @@ describe('Class “FileInfo()”', () => {
       );
 
     });
-
 
   });
 
