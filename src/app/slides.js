@@ -5,7 +5,6 @@
 
 const fs = require('fs');
 const path = require('path');
-const {masters} = require(path.join(__dirname, 'masters.js'));
 const {StepSwitcher} = require(path.join(__dirname, 'step-switcher.js'));
 
 /**
@@ -16,10 +15,11 @@ class Slides {
   /**
    * @param {array} raw A raw array of all slide objects.
    */
-  constructor(rawSlides, config, document) {
+  constructor(rawSlides, config, document, masters) {
     this.rawSlides = rawSlides;
     this.config = config;
     this.document = document;
+    this.masters = masters;
   }
 
   /**
@@ -48,7 +48,7 @@ class Slides {
     slide.no = index + 1;
 
     let intersection = this.intersectMastersSlideKeys(
-      masters.all,
+      this.masters.all,
       Object.keys(rawSlide)
     );
 
@@ -58,9 +58,9 @@ class Slides {
 
     slide.master = intersection[0];
     slide.rawData = rawSlide[slide.master];
-    slide.normalizedData = masters[slide.master]
+    slide.normalizedData = this.masters[slide.master]
       .normalizeData(slide.rawData, this.config);
-    slide.steps = new StepSwitcher(this.document, slide, this.config);
+    slide.steps = new StepSwitcher(this.document, slide, this.config, this.masters);
 
     return slide;
   }
@@ -77,8 +77,6 @@ class Slides {
 
 }
 
-let getSlides = function(rawSlides, config, document) {
-  return new Slides(rawSlides, config, document).get();
+exports.getSlides = function(rawSlides, config, document, masters) {
+  return new Slides(rawSlides, config, document, masters).get();
 }
-
-exports.getSlides = getSlides;

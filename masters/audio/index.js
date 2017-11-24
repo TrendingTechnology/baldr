@@ -9,7 +9,7 @@ const path = require('path');
 const mousetrap = require('mousetrap');
 const {Howl} = require('howler');
 
-const lol = require('baldr-library');
+const {Media} = require('baldr-library');
 
 let audioFiles = {};
 let audio;

@@ -7,7 +7,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const {addCSSFile} = require(path.join(__dirname, 'helper.js'));
+const {addCSSFile} = require('baldr-library');
 
 /**
  * Gather informations about all themes.
@@ -25,7 +25,7 @@ class Themes {
      * Parent path of all themes.
      * @type {string}
      */
-     this.path = path.join(__dirname, '..', 'themes');
+     this.path = path.join(__dirname, '..', '..', 'themes');
 
     /**
      * Folder names of all themes
@@ -111,7 +111,7 @@ class Themes {
    */
   loadThemes() {
     for (let cssFile of this.getAllCSSFiles()) {
-      masters.addCSSFile(this.document, cssFile, 'baldr-theme');
+      addCSSFile(this.document, cssFile, 'baldr-theme');
     }
   }
 
@@ -126,4 +126,8 @@ class Themes {
 
 }
 
-exports.Themes = Themes;
+exports.getThemes = function(document) {
+  let themes = new Themes(document);
+  themes.loadThemes();
+  return themes;
+};

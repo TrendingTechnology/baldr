@@ -4,12 +4,17 @@ let requireLib = function(fileName) {
   return require(path.join(__dirname, fileName + '.js'));
 };
 
-const {StepSwitcher} = requireLib('step-switcher');
-const {SlidesSwitcher} = requireLib('slides-switcher');
+const {
+  getMasters,
+  setMain
+} = requireLib('masters');
 const {getSlides} = requireLib('slides');
+const {SlidesSwitcher} = requireLib('slides-switcher');
+const {getThemes} = requireLib('themes');
 
 module.exports = {
+  getMasters: getMasters,
   getSlides: getSlides,
   SlidesSwitcher: SlidesSwitcher,
-  StepSwitcher: StepSwitcher
+  getThemes: getThemes
 };

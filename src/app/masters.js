@@ -110,30 +110,6 @@ class LoadMasters {
   }
 }
 
-let masters;
-exports.masters = masters = new LoadMasters();
-
-let setMain = function(slide, config, document) {
-  let master = masters[slide.master];
-  let elements = {
-    slide: document.getElementById('slide-content'),
-    modal: document.getElementById('modal-content')
-  };
-
-  let dataset = document.body.dataset;
-  dataset.master = slide.master;
-  dataset.centerVertically = master.config.centerVertically;
-  dataset.theme = master.config.theme;
-
-  elements.slide.innerHTML = master.mainHTML(
-    slide,
-    config,
-    document
-  );
-  elements.modal.innerHTML = master.modalHTML();
-
-  master.postSet(slide, config, document);
-};
-
-exports.setMain = setMain;
-exports.LoadMasters = LoadMasters;
+exports.getMasters = function() {
+  return new LoadMasters();
+}

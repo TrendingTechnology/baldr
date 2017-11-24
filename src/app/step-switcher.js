@@ -4,7 +4,6 @@
  */
 
 const path = require('path');
-const {masters} = require(path.join(__dirname, 'masters.js'));
 
 /**
  * Some masters support steps. Steps are switched by the up and down
@@ -13,7 +12,7 @@ const {masters} = require(path.join(__dirname, 'masters.js'));
  */
 class StepSwitcher {
 
-  constructor(document, slide, config) {
+  constructor(document, slide, config, masters) {
     this.config = config;
     this.document = document;
     this.slide = slide;

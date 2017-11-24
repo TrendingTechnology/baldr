@@ -8,25 +8,16 @@ const {remote, ipcRenderer} = require('electron');
 
 const {
   addCSSFile,
-  Config,
-  getSlides,
-  masters,
-  setMain,
-  SlidesSwitcher,
-  StepSwitcher,
-  Themes
+  Config
 } = require('baldr-library');
 
 const {
-  addCSSFile,
-  Config,
+  getMasters,
   getSlides,
-  masters,
-  setMain,
   SlidesSwitcher,
-  StepSwitcher,
-  Themes
-} = require('baldr-library');
+  getThemes
+} = require('baldr-application');
+
 
 /**
  * Toogle the modal window
@@ -122,6 +113,28 @@ let searchForBaldrFile = function(argv) {
   throw new Error('No presentation file with the extension *.baldr found!');
 };
 
+let setMain = function(slide, config, masters) {
+  let master = masters[slide.master];
+  let elements = {
+    slide: document.getElementById('slide-content'),
+    modal: document.getElementById('modal-content')
+  };
+
+  let dataset = document.body.dataset;
+  dataset.master = slide.master;
+  dataset.centerVertically = master.config.centerVertically;
+  dataset.theme = master.config.theme;
+
+  elements.slide.innerHTML = master.mainHTML(
+    slide,
+    config,
+    document
+  );
+  elements.modal.innerHTML = master.modalHTML();
+
+  master.postSet(slide, config, document);
+};
+
 /**
  * Initialize the presentaton session.
  */
@@ -134,13 +147,14 @@ let main = function() {
     searchForBaldrFile(remote.process.argv)
   );
 
+  let masters = getMasters();
+
   masters.execAll('init', document, config);
-  let slides = getSlides(config.slides, config, document);
+  let slides = getSlides(config.slides, config, document, masters);
 
-  let slidesSwitcher = new SlidesSwitcher(slides, document);
+  let slidesSwitcher = new SlidesSwitcher(slides, document, masters);
 
-  let themes = new Themes(document);
-  themes.loadThemes();
+  let themes = getThemes(document);
 
   for (let master of masters.all) {
     if (masters[master].css) {
@@ -155,7 +169,7 @@ let main = function() {
   let currentSlide;
 
   let setSlide = function() {
-    setMain(currentSlide, config, document);
+    setMain(currentSlide, config, masters);
     currentSlide.steps.visit();
   }
 
@@ -179,8 +193,6 @@ let main = function() {
 
   currentSlide = slidesSwitcher.getByNo(1);
   setSlide();
-
-
 
   bindFunctions(
     [
