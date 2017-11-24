@@ -1,4 +1,5 @@
 {
   "name": "baldr-application",
-  "main": "index.js"
+  "main": "index.js",
+  "description": "High level classes and functions used by render.js."
 }
