@@ -19,8 +19,8 @@ exports.normalizeData = function(rawSlideData, config) {
 /**
  *
  */
-exports.initSteps = function(document, slide, config, normalizedSlideData) {
-  return reIndex(normalizedSlideData);
+exports.initSteps = function(document, slide, config) {
+  return reIndex(slide.normalizedData);
 };
 
 /**
@@ -42,6 +42,7 @@ exports.config = {
 /**
  *
  */
-exports.mainHTML = function() {
-  return `<img id="baldr-master-image">`;
+exports.mainHTML = function(slide, config, document) {
+  let path = slide.normalizedData[0].path;
+  return `<img id="baldr-master-image" src="${path}">`;
 };

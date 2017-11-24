@@ -40,21 +40,6 @@ let normalizeDataQAPair = function(pair) {
 /**
  *
  */
-exports.normalizeData = function(rawSlideData) {
-  if (typeof rawSlideData === 'object' && Array.isArray(rawSlideData)) {
-    let out = [];
-    for (let pair of rawSlideData) {
-      out.push(normalizeDataQAPair(pair));
-    }
-    return out;
-  } else {
-    return [normalizeDataQAPair(rawSlideData)];
-  }
-}
-
-/**
- *
- */
 let templatQAPair = function(question, answer) {
   let out = '';
   if (question) {
@@ -85,6 +70,21 @@ let template = function(data) {
   }
 }
 
+/**
+ *
+ */
+exports.normalizeData = function(rawSlideData, config) {
+  if (typeof rawSlideData === 'object' && Array.isArray(rawSlideData)) {
+    let out = [];
+    for (let pair of rawSlideData) {
+      out.push(normalizeDataQAPair(pair));
+    }
+    return out;
+  } else {
+    return [normalizeDataQAPair(rawSlideData)];
+  }
+}
+
 exports.config = {
   centerVertically: true,
   stepSupport: true
@@ -93,7 +93,7 @@ exports.config = {
 /**
  *
  */
-exports.setStepByNo = function(no, count, stepData) {
+exports.setStepByNo = function(no, count, stepData, document) {
   for (let i = 1; i <= count; i++) {
     if (!stepData[i].style.visibility) {
       stepData[i].style.visibility = 'visible';
@@ -112,9 +112,9 @@ exports.setStepByNo = function(no, count, stepData) {
 /**
  *
  */
-exports.mainHTML = function(normalizedSlideData, config, document) {
+exports.mainHTML = function(slide, config, document) {
   return '<div id="question-content">' +
-    template(normalizedSlideData) +
+    template(slide.normalizedData) +
     '</div>';
 }
 

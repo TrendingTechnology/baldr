@@ -5,10 +5,6 @@
 
 'use strict';
 
-exports.config = {
-  centerVertically: true
-};
-
 /**
  *
  */
@@ -49,10 +45,15 @@ let renderQuotationMark = function(begin=true) {
   return `<span id="quotation-${id}" class="quotation-mark">${mark}</span>`;
 };
 
+exports.config = {
+  centerVertically: true
+};
+
 /**
  *
  */
-exports.mainHTML = function(data, config, document) {
+exports.mainHTML = function(slide, config, document) {
+  let data = slide.normalizedData;
   let attribution = renderAttribution(data.author, data.date);
   let begin = renderQuotationMark();
   let end = renderQuotationMark(false);

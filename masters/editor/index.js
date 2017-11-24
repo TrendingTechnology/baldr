@@ -5,7 +5,7 @@
 
 'use strict';
 
-const {MasterOfMasters, addCSSFile} = require('baldr-masters');
+const {addCSSFile} = require('baldr-masters');
 const ContentTools = require('ContentTools');
 const path = require('path');
 
@@ -13,7 +13,7 @@ exports.config = {
   theme: 'handwriting'
 };
 
-exports.mainHTML = function(data, config, document) {
+exports.mainHTML = function(slide, config, document) {
   addCSSFile(
     document,
     path.join(
@@ -24,7 +24,7 @@ exports.mainHTML = function(data, config, document) {
   return `<div data-editable data-name="main-content"></div>`;
 }
 
-exports.hookPostSet = function() {
+exports.postSet = function(slide, config, document) {
   ContentTools.StylePalette.add([
     new ContentTools.Style('Author', 'author', ['p'])
   ]);

@@ -59,16 +59,16 @@ class Audio {
   }
 }
 
-exports.init = function(document) {
+exports.init = function(document, config) {
   audio = new Audio(document);
 }
 
 /**
- *this.dataNormalized
+ *
  */
-exports.normalizeData = function(data, config) {
+exports.normalizeData = function(rawSlideData, config) {
   let inputFiles = new Media(config.sessionDir);
-  let files = inputFiles.orderedList(data, 'audio');
+  let files = inputFiles.orderedList(rawSlideData, 'audio');
 
   var mousetrapbind = function(key, combo) {
     audio.play(audioFiles[key.key]);
@@ -84,9 +84,9 @@ exports.normalizeData = function(data, config) {
 /**
  *
  */
-exports.mainHTML = function(data) {
+exports.mainHTML = function(slide, config, document) {
   let out = '';
-  for (let audioFile of data) {
+  for (let audioFile of slide.normalizedData) {
     out += `
 <li>
   <span class="artist">${audioFile.artist}</span>:

@@ -8,6 +8,6 @@
 /**
  *
  */
-exports.mainHTML = function() {
+exports.mainHTML = function(slide, config, document) {
   return 'svg';
 }

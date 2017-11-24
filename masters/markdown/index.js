@@ -10,6 +10,6 @@ const markdown = require('marked');
 /**
  *
  */
-exports.mainHTML = function(data) {
-  return markdown(data);
+exports.mainHTML = function(slide, config, document) {
+  return markdown(slide.normalizedData);
 };

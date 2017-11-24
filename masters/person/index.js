@@ -8,7 +8,8 @@
 /**
  *
  */
-exports.mainHTML = function(data, config) {
+exports.mainHTML = function(slide, config, document) {
+  let data = slide.normalizedData;
   return `
 <section id="master-person">
 

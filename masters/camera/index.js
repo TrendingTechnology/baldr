@@ -48,8 +48,6 @@
 
 'use strict';
 
-const {MasterOfMasters} = require('baldr-masters');
-
 /**
  *
  */
@@ -64,14 +62,14 @@ exports.modalHTML = function() {
 /**
  *
  */
-exports.mainHTML = function() {
+exports.mainHTML = function(slide, config, document) {
   return '<video autoplay="true" id="video"></video>';
 }
 
 /**
  *
  */
-exports.postSet = function() {
+exports.postSet = function(slide, config, document) {
 
   /**
    * Handles being called several times to update labels. Preserve
