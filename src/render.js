@@ -8,7 +8,7 @@ const {remote, ipcRenderer} = require('electron');
 
 const {
   addCSSFile,
-  Config
+  getConfig
 } = require('baldr-library');
 
 const {
@@ -17,7 +17,6 @@ const {
   SlidesSwitcher,
   getThemes
 } = require('baldr-application');
-
 
 /**
  * Toogle the modal window
@@ -36,20 +35,6 @@ let toggleModal = function() {
   else {
     return false;
   }
-};
-
-/**
- * Show a master slide without custom data.
- *
- * The displayed master slide is not part of the acutal presentation.
- * Not every master slide can be shown with this function. It muss be
- * possible to render the master slide without custom data.
- * No number is assigned to the master slide.
- * @param {string} name Name of the master slide
- */
-let setMaster = function(name) {
-  let master = loadMaster(name, document, presentation);
-  master.set();
 };
 
 /**
@@ -136,6 +121,20 @@ let setMain = function(slide, config, masters) {
 };
 
 /**
+ * Show a master slide without custom data.
+ *
+ * The displayed master slide is not part of the acutal presentation.
+ * Not every master slide can be shown with this function. It muss be
+ * possible to render the master slide without custom data.
+ * No number is assigned to the master slide.
+ * @param {string} name Name of the master slide
+ */
+let setMaster = function(masterName, config, masters) {
+  setMain({"master": masterName}, config, masters);
+};
+
+
+/**
  * Initialize the presentaton session.
  */
 let main = function() {
@@ -143,14 +142,14 @@ let main = function() {
   ipcRenderer.on('set-master', function(event, masterName) {
     setMaster(masterName);
   });
-  let config = new Config(
+  let config = getConfig(
     searchForBaldrFile(remote.process.argv)
   );
 
-  let masters = getMasters();
+  masters = getMasters();
 
   masters.execAll('init', document, config);
-  let slides = getSlides(config.slides, config, document, masters);
+  slides = getSlides(config.slides, config, document, masters);
 
   let slidesSwitcher = new SlidesSwitcher(slides, document, masters);
 
@@ -171,25 +170,33 @@ let main = function() {
   let setSlide = function() {
     setMain(currentSlide, config, masters);
     currentSlide.steps.visit();
-  }
+  };
 
   let stepPrev = function() {
     currentSlide.steps.prev();
-  }
+  };
 
   let stepNext = function() {
     currentSlide.steps.next();
-  }
+  };
 
   let slidePrev = function() {
     currentSlide = slidesSwitcher.prev();
     setSlide();
-  }
+  };
 
   let slideNext = function() {
     currentSlide = slidesSwitcher.next();
     setSlide();
-  }
+  };
+
+  let setMasterCamera = function() {
+    setMaster('camera', config, masters);
+  };
+
+  let setMasterEditor = function() {
+    setMaster('editor', config, masters);
+  };
 
   currentSlide = slidesSwitcher.getByNo(1);
   setSlide();
@@ -222,11 +229,11 @@ let main = function() {
         IDs: ['modal-open', 'modal-close']
       },
       {
-        function: () => {setMaster('camera');},
+        function: setMasterCamera,
         keys: ['ctrl+alt+c']
       },
       {
-        function: () => {setMaster('editor');},
+        function: setMasterEditor,
         keys: ['ctrl+alt+e']
       },
       {

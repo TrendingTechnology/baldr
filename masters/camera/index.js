@@ -57,14 +57,14 @@ exports.modalHTML = function() {
     <label for="videoSource">Video source:</label>
     <select id="videoSource"></select>
   </div>`;
-}
+};
 
 /**
  *
  */
 exports.mainHTML = function(slide, config, document) {
   return '<video autoplay="true" id="video"></video>';
-}
+};
 
 /**
  *
@@ -128,4 +128,4 @@ exports.postSet = function(slide, config, document) {
     .then(gotDevices);
   elemSelect.onchange = start;
   start();
-}
+};

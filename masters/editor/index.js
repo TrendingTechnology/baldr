@@ -23,7 +23,7 @@ exports.mainHTML = function(slide, config, document) {
     )
   );
   return `<div data-editable data-name="main-content"></div>`;
-}
+};
 
 exports.postSet = function(slide, config, document) {
   ContentTools.StylePalette.add([
@@ -32,4 +32,4 @@ exports.postSet = function(slide, config, document) {
 
   let editor = ContentTools.EditorApp.get();
   editor.init('*[data-editable]', 'data-name');
-}
+};

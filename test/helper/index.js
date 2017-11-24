@@ -8,9 +8,8 @@ const fs = require('fs');
 const path = require('path');
 const {JSDOM} = require('jsdom');
 const rewire = require('rewire');
-const {Presentation} = require('../../lib/presentation.js');
-const {LoadMasters} = require('baldr-masters');
-
+const {getMasters} = require('baldr-application');
+const {getConfig} = require('baldr-library');
 
 /**
  *
@@ -94,21 +93,13 @@ exports.testFileMinimal = path.resolve('test', 'files', 'minimal.baldr');
 /**
  *
  */
-exports.Presentation = Presentation;
-
-/**
- *
- */
-exports.presentation = new Presentation(
-  exports.testFileMinimal,
-  exports.document
-);
+exports.config = getConfig(exports.testFileMinimal);
 
 
 /**
  *
  */
-exports.masters = new LoadMasters(exports.document, exports.presentation);
+exports.masters = getMasters();
 
 /**
  *

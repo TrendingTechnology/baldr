@@ -79,4 +79,4 @@ class Slides {
 
 exports.getSlides = function(rawSlides, config, document, masters) {
   return new Slides(rawSlides, config, document, masters).get();
-}
+};

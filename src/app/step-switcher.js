@@ -26,7 +26,7 @@ class StepSwitcher {
     this.elements = {
       prev: document.getElementById('nav-step-prev'),
       next: document.getElementById('nav-step-next')
-    }
+    };
 
     /**
      * Object to store data for the individual steps. The step data

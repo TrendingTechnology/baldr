@@ -35,7 +35,7 @@ let normalizeDataQAPair = function(pair) {
   else {
     throw new Error('Master slide “question”: Invalid data input');
   }
-}
+};
 
 /**
  *
@@ -49,7 +49,7 @@ let templatQAPair = function(question, answer) {
     out += `<p class="answer">${answer}</p>`;
   }
   return out;
-}
+};
 
 /**
  *
@@ -68,7 +68,7 @@ let template = function(data) {
   else {
     return templatQAPair(data[0].question, data[0].answer);
   }
-}
+};
 
 /**
  *
@@ -83,7 +83,7 @@ exports.normalizeData = function(rawSlideData, config) {
   } else {
     return [normalizeDataQAPair(rawSlideData)];
   }
-}
+};
 
 exports.config = {
   centerVertically: true,
@@ -107,7 +107,7 @@ exports.setStepByNo = function(no, count, stepData, document) {
       stepData[i].style.visibility = 'visible';
     }
   }
-}
+};
 
 /**
  *
@@ -116,7 +116,7 @@ exports.mainHTML = function(slide, config, document) {
   return '<div id="question-content">' +
     template(slide.normalizedData) +
     '</div>';
-}
+};
 
 /**
  * The stepData object has to be filled very time a slide is set.
@@ -129,4 +129,4 @@ exports.initStepsEveryVisit = function(document, slide, config) {
     data[index + 1] = element;
   });
   return data;
-}
+};

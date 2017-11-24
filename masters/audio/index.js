@@ -63,7 +63,7 @@ class Audio {
 
 exports.init = function(document, config) {
   audio = new Audio(document);
-}
+};
 
 /**
  *
@@ -81,7 +81,7 @@ exports.normalizeData = function(rawSlideData, config) {
     mousetrap.bind('ctrl+' + i, mousetrapbind);
   }
   return files;
-}
+};
 
 /**
  *
@@ -97,4 +97,4 @@ exports.mainHTML = function(slide, config, document) {
   }
 
   return `<ol>${out}</ol>`;
-}
+};

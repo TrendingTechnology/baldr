@@ -32,7 +32,7 @@ exports.setStepByNo = function(no, count, stepData, document) {
   document
     .getElementById('baldr-master-image')
     .setAttribute('src', stepData[no].path);
-}
+};
 
 /**
  *

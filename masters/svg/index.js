@@ -10,4 +10,4 @@
  */
 exports.mainHTML = function(slide, config, document) {
   return 'svg';
-}
+};

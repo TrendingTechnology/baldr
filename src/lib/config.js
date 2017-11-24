@@ -60,4 +60,6 @@ class Config {
 
 }
 
-exports.Config = Config;
+exports.getConfig = function(sessionFile) {
+  return new Config(sessionFile);
+};
