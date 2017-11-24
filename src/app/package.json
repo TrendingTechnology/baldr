@@ -1,5 +1,9 @@
 {
   "name": "baldr-application",
   "main": "index.js",
-  "description": "High level classes and functions used by render.js."
+  "description": "High level classes and functions used by render.js.",
+  "dependencies": {
+    "js-yaml": "^3.10.0",
+    "baldr-library": "file:../lib"
+  }
 }

@@ -9,6 +9,8 @@ _install() {
 
 npm install
 
+_install src/app
+_install src/lib
 _install themes/default
 _install themes/handwriting
 _install masters/audio
