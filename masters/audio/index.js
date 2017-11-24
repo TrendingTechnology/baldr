@@ -5,9 +5,11 @@
 
 'use strict';
 
-const {Media} = require('baldr-media');
+
 const path = require('path');
 const mousetrap = require('mousetrap');
+
+const {Media} = require('baldr-library');
 
 let audioFiles = {};
 let audio;

@@ -5,9 +5,8 @@
 
 const fs = require('fs');
 const path = require('path');
-const {masters} = require('baldr-masters');
-const {StepSwitcher} = require('../lib/step-switcher.js');
-
+const {masters} = require(path.join(__dirname, 'masters.js'));
+const {StepSwitcher} = require(path.join(__dirname, 'step-switcher.js'));
 
 /**
  * Parse the object representation of all slides.

@@ -5,13 +5,19 @@
 const path = require('path');
 const mousetrap = require('mousetrap');
 const {remote, ipcRenderer} = require('electron');
-const {setMain, addCSSFile, masters} = require('baldr-masters');
 
-const {StepSwitcher} = require('./lib/step-switcher.js');
-const {SlidesSwitcher} = require('./lib/slides-switcher.js');
-const {getSlides} = require('./lib/slides.js');
-const {Themes} = require('./lib/themes.js');
-const {Config} = require('./lib/config.js');
+const {
+  addCSSFile,
+  Config,
+  getSlides,
+  masters,
+  setMain,
+  SlidesSwitcher,
+  StepSwitcher,
+  Themes
+} = require('baldr-library');
+
+console.log(Themes);
 
 /**
  * Toogle the modal window

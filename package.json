@@ -2,7 +2,7 @@
   "name": "baldr",
   "version": "0.0.1",
   "description": "Presentation software",
-  "main": "main.js",
+  "main": "src/main.js",
   "scripts": {
     "dist": "electron-builder",
     "doc-show": "xdg-open ./docs/index.html",
@@ -72,8 +72,7 @@
     "baldr-master-quote": "file:./masters/quote",
     "baldr-master-svg": "file:./masters/svg",
     "baldr-master-website": "file:./masters/website",
-    "baldr-masters": "file:./lib/masters",
-    "baldr-media": "file:./lib/media",
+    "baldr-library": "file:./src/lib",
     "baldr-test": "file:./test/helper",
     "baldr-theme-default": "file:./themes/default",
     "baldr-theme-handwriting": "file:./themes/handwriting",

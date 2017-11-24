@@ -5,9 +5,10 @@
 
 'use strict';
 
-const {addCSSFile} = require('baldr-masters');
 const ContentTools = require('ContentTools');
 const path = require('path');
+
+const {addCSSFile} = require('baldr-library');
 
 exports.config = {
   theme: 'handwriting'

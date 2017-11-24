@@ -3,7 +3,8 @@
  * @module lib/step-switcher
  */
 
-const {masters} = require('baldr-masters');
+const path = require('path');
+const {masters} = require(path.join(__dirname, 'masters.js'));
 
 /**
  * Some masters support steps. Steps are switched by the up and down

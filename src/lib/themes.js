@@ -7,7 +7,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const masters = require('baldr-masters');
+const {masters} = require(path.join(__dirname, 'masters.js'));
 
 
 /**

@@ -5,8 +5,10 @@
 
 'use strict';
 
-const {Media} = require('baldr-media');
-const {reIndex} = require('baldr-masters');
+const {
+  Media,
+  reIndex
+} = require('baldr-library');
 
 /**
  *

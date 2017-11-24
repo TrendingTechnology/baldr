@@ -3,10 +3,15 @@
  * @module baldr
  */
 
-const {app, BrowserWindow, Menu, shell} = require('electron');
-
 const path = require('path');
 const url = require('url');
+
+const {
+  app,
+  BrowserWindow,
+  Menu,
+  shell
+} = require('electron');
 
 let mainWindow;
 
@@ -124,7 +129,7 @@ var createWindow = function() {
   mainWindow = new BrowserWindow({width: 800, height: 600});
 
   mainWindow.loadURL(url.format({
-    pathname: path.join(__dirname, 'render.html'),
+    pathname: path.join(__dirname, '..', 'render.html'),
     protocol: 'file:',
     slashes: true
   }));
