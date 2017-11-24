@@ -4,17 +4,16 @@ let requireLib = function(fileName) {
   return require(path.join(__dirname, fileName + '.js'));
 };
 
+const {Config} = requireLib('config');
 const {
   addCSSFile,
+  reIndex
+} = requireLib('helper');
+const {
   masters,
-  reIndex,
   setMain
 } = requireLib('masters');
-const {StepSwitcher} = requireLib('step-switcher');
-const {SlidesSwitcher} = requireLib('slides-switcher');
-const {getSlides} = requireLib('slides');
 const {Themes} = requireLib('themes');
-const {Config} = requireLib('config');
 const {Media} = requireLib('media');
 
 module.exports = {
@@ -24,7 +23,6 @@ module.exports = {
   masters: masters,
   Media: Media,
   reIndex: reIndex,
-  setMain: setMain,
-  StepSwitcher: StepSwitcher,
+  setMain: setMain
   Themes: Themes
 };

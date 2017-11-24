@@ -7,8 +7,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const {masters} = require(path.join(__dirname, 'masters.js'));
-
+const {addCSSFile} = require(path.join(__dirname, 'helper.js'));
 
 /**
  * Gather informations about all themes.

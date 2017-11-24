@@ -62,6 +62,8 @@
   },
   "dependencies": {
     "ContentTools": "^1.6.0",
+    "baldr-application": "file:./src/app",
+    "baldr-library": "file:./src/lib",
     "baldr-master-audio": "file:./masters/audio",
     "baldr-master-camera": "file:./masters/camera",
     "baldr-master-editor": "file:./masters/editor",
@@ -72,7 +74,6 @@
     "baldr-master-quote": "file:./masters/quote",
     "baldr-master-svg": "file:./masters/svg",
     "baldr-master-website": "file:./masters/website",
-    "baldr-library": "file:./src/lib",
     "baldr-test": "file:./test/helper",
     "baldr-theme-default": "file:./themes/default",
     "baldr-theme-handwriting": "file:./themes/handwriting",

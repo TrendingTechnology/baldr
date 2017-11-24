@@ -17,6 +17,17 @@ const {
   Themes
 } = require('baldr-library');
 
+const {
+  addCSSFile,
+  Config,
+  getSlides,
+  masters,
+  setMain,
+  SlidesSwitcher,
+  StepSwitcher,
+  Themes
+} = require('baldr-library');
+
 /**
  * Toogle the modal window
  */
