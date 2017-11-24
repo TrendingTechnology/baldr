@@ -8,6 +8,7 @@
 
 const path = require('path');
 const mousetrap = require('mousetrap');
+const {Howl} = require('howler');
 
 const {Media} = require('baldr-library');
 

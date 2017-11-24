@@ -17,8 +17,6 @@ const {
   Themes
 } = require('baldr-library');
 
-console.log(Themes);
-
 /**
  * Toogle the modal window
  */
