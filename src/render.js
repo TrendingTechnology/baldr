@@ -144,8 +144,12 @@ let main = function() {
   }
 
   let currentSlide;
+  let oldSlide;
 
   let setSlide = function() {
+    if (typeof oldSlide === 'object' && oldSlide.hasOwnProperty('master')) {
+      masters[oldSlide.master].cleanUp(document, oldSlide, currentSlide);
+    }
     setMain(currentSlide, config, masters);
     currentSlide.steps.visit();
   };
@@ -159,11 +163,13 @@ let main = function() {
   };
 
   let slidePrev = function() {
+    oldSlide = currentSlide;
     currentSlide = slidesSwitcher.prev();
     setSlide();
   };
 
   let slideNext = function() {
+    oldSlide = currentSlide;
     currentSlide = slidesSwitcher.next();
     setSlide();
   };

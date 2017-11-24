@@ -61,7 +61,8 @@ class LoadMasters {
       postSet: emptyFunc,
       setStepByNo: emptyFunc,
       initSteps: funcFalse,
-      initStepsEveryVisit: funcFalse
+      initStepsEveryVisit: funcFalse,
+      cleanUp: emptyFunc
     };
 
     return Object.assign({}, defaultObject, requireObject);

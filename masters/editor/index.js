@@ -33,3 +33,7 @@ exports.postSet = function(slide, config, document) {
   let editor = ContentTools.EditorApp.get();
   editor.init('*[data-editable]', 'data-name');
 };
+
+exports.cleanUp = function(document, oldSlide, newSlide) {
+  document.querySelector('.ct-app').remove();
+};

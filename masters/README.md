@@ -20,3 +20,4 @@ This exported functions are hooks:
 * `normalizeData(rawSlideData, config)`
 * `postSet(slide, config, document)`
 * `setStepByNo(no, count, stepData, document)`
+* `cleanUp(document, oldSlide, newSlide)`
