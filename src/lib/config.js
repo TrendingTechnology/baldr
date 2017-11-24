@@ -13,17 +13,16 @@ const fs = require('fs');
 class Config {
 
   /**
-   * @param {string} sessionFile The path of the *.baldr presentation file
-   * structured in the YAML format.
+   * @param {array} argv Arguments in process.argv
    */
-  constructor(sessionFile) {
+  constructor(argv) {
 
     /**
      * The path of the *.baldr presentation file
      * structured in the YAML format.
      * @type {string}
      */
-    this.sessionFile = sessionFile;
+    this.sessionFile = this.pickSessionFile(argv);
 
     /**
      * The session files’ parent working directory. Assuming you are
@@ -46,11 +45,31 @@ class Config {
   }
 
   /**
+   * Search for a *.baldr session file in the argv array. Return the last
+   * matched element.
+   *
+   * @param {array} argv Arguments in process.argv
+   *
+   * @return {string} The path of a BALDUR file.
+   */
+  pickSessionFile(argv) {
+    let clone = argv.slice(0);
+    clone.reverse();
+
+    for (let arg of clone) {
+      if (arg.search(/\.baldr$/ig) > -1) {
+        return arg;
+      }
+    }
+    throw new Error('No presentation file with the extension *.baldr found!');
+  }
+
+  /**
    * Load the contents of a *.baldr YAML file and convert its content
    * into a object.
    *
-   * @param {string} sessionFile The path of the *.baldr presentation file
-   * structured in the YAML format.
+   * @param {string} sessionFile The path of the *.baldr presentation
+   * file structured in the YAML format.
    * @return {object} Raw object representation of the presentation
    * session.
    */
@@ -60,6 +79,6 @@ class Config {
 
 }
 
-exports.getConfig = function(sessionFile) {
-  return new Config(sessionFile);
+exports.getConfig = function(argv) {
+  return new Config(argv);
 };

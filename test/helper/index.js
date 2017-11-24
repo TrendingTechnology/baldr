@@ -93,7 +93,7 @@ exports.testFileMinimal = path.resolve('test', 'files', 'minimal.baldr');
 /**
  *
  */
-exports.config = getConfig(exports.testFileMinimal);
+exports.config = getConfig([exports.testFileMinimal]);
 
 
 /**

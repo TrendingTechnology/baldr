@@ -44,29 +44,4 @@ describe('“render.js”', function() {
     assert.equal(getText('#slide pre'), 'stack');
   });
 
-  it('Function “searchForBaldrFile()”', () => {
-    let search = rewire.__get__('searchForBaldrFile');
-
-    assert.equal(
-      search(['lol.baldr']),
-      'lol.baldr'
-    );
-
-    assert.equal(
-      search(['lol.BALDR']),
-      'lol.BALDR'
-    );
-
-    assert.equal(
-      search(['lil', 'lol.BALDR', 'troll']),
-      'lol.BALDR'
-    );
-
-    assert.throws(function() {search(['lil', 'troll']);});
-
-    assert.equal(
-      search(['first.baldr', 'last.baldr']),
-      'last.baldr'
-    );
-  });
 });

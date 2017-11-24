@@ -78,26 +78,6 @@ let errorPage = function(message, source, lineNo, colNo, error) {
   `;
 };
 
-/**
- * Search for a *.baldr session file in the argv array. Return the last
- * matched element.
- *
- * @param {array} argv Arguments in process.argv
- *
- * @return {string} The path of a BALDUR file.
- */
-let searchForBaldrFile = function(argv) {
-  let clone = argv.slice(0);
-  clone.reverse();
-
-  for (let arg of clone) {
-    if (arg.search(/\.baldr$/ig) > -1) {
-      return arg;
-    }
-  }
-  throw new Error('No presentation file with the extension *.baldr found!');
-};
-
 let setMain = function(slide, config, masters) {
   let master = masters[slide.master];
   let elements = {
@@ -142,9 +122,7 @@ let main = function() {
   ipcRenderer.on('set-master', function(event, masterName) {
     setMaster(masterName);
   });
-  let config = getConfig(
-    searchForBaldrFile(remote.process.argv)
-  );
+  let config = getConfig(remote.process.argv);
 
   masters = getMasters();
 

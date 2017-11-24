@@ -5,18 +5,15 @@ const {
   testFileMinimal
 } = require('baldr-test');
 
-const {Config} = require('../lib/config.js');
-
-let initConfig = function() {
-  return new Config(testFileMinimal);
-};
-
-let presentation;
+const {getConfig} = require(
+  path.join(__dirname, '..', 'src', 'lib', 'config.js')
+);
+let config;
 
 describe('Class “Config()”', () => {
 
   beforeEach(() => {
-    config = initConfig();
+    config = getConfig([testFileMinimal]);
   });
 
   describe('Properties', () => {
@@ -42,6 +39,33 @@ describe('Class “Config()”', () => {
       let yml = config.parseYamlFile(testFileMinimal);
       assert.equal(yml.slides[0].quote.author, 'Johann Wolfgang von Goethe');
       assert.equal(yml.slides[1].question, 'When did Ludwig van Beethoven die?');
+    });
+
+    it('Method “pickSessionFile()”', () => {
+
+      assert.equal(
+        config.pickSessionFile(['lol.baldr']),
+        'lol.baldr'
+      );
+
+      assert.equal(
+        config.pickSessionFile(['lol.BALDR']),
+        'lol.BALDR'
+      );
+
+      assert.equal(
+        config.pickSessionFile(['lil', 'lol.BALDR', 'troll']),
+        'lol.BALDR'
+      );
+
+      assert.throws(function() {
+        config.pickSessionFile(['lil', 'troll']);
+      });
+
+      assert.equal(
+        config.pickSessionFile(['first.baldr', 'last.baldr']),
+        'last.baldr'
+      );
     });
 
   });
