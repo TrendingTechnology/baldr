@@ -34,14 +34,6 @@ exports.rewire = rewire;
 /**
  *
  */
-exports.getDOM = getDOM = function(html) {
-  let d = new JSDOM(html);
-  return d.window.document;
-};
-
-/**
- *
- */
 exports.allMasters = [
   'audio',
   'camera',
@@ -66,7 +58,14 @@ exports.allThemes = [
 /**
  *
  */
-exports.document = getDOM(
+let makeDOM = function(html) {
+  return new JSDOM(html).window.document;
+};
+
+/**
+ *
+ */
+exports.document = makeDOM(
   fs.readFileSync(
     path.join(__dirname, '..', '..', 'render.html'),
     'utf8'
@@ -76,8 +75,8 @@ exports.document = getDOM(
 /**
  *
  */
-exports.returnDOM = function() {
-  return getDOM(
+exports.getDOM = function() {
+  return makeDOM(
     fs.readFileSync(
       path.join(__dirname, '..', '..', 'render.html'),
       'utf8'

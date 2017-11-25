@@ -1,12 +1,13 @@
 const {
-  document,
+  getDOM,
   allThemes,
   assert,
-  path
+  path,
+  requireFile
 } = require('baldr-test');
 
-const {Themes} = require('../lib/themes.js');
-const themes = new Themes(document);
+const {getThemes} = requireFile('app', 'themes.js');
+const themes = getThemes(getDOM());
 
 describe('Class “Themes()”', () => {
 
@@ -70,7 +71,6 @@ describe('Class “Themes()”', () => {
     });
 
     it('Method “loadThemes()”', () => {
-      themes.loadThemes();
       assert.equal(
         themes.document.querySelectorAll('link.baldr-theme').length,
         7
