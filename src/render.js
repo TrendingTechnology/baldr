@@ -5,18 +5,7 @@
 const path = require('path');
 const mousetrap = require('mousetrap');
 const {remote, ipcRenderer} = require('electron');
-
-const {
-  addCSSFile,
-  getConfig
-} = require('baldr-library');
-
-const {
-  getMasters,
-  getSlides,
-  SlidesSwitcher,
-  getThemes
-} = require('baldr-application');
+const {ShowRunner} = require('baldr-application');
 
 /**
  * Toogle the modal window
@@ -78,132 +67,35 @@ let errorPage = function(message, source, lineNo, colNo, error) {
   `;
 };
 
-let setMain = function(slide, config, masters) {
-  let master = masters[slide.master];
-  let elements = {
-    slide: document.getElementById('slide-content'),
-    modal: document.getElementById('modal-content')
-  };
-
-  let dataset = document.body.dataset;
-  dataset.master = slide.master;
-  dataset.centerVertically = master.config.centerVertically;
-  dataset.theme = master.config.theme;
-
-  elements.slide.innerHTML = master.mainHTML(
-    slide,
-    config,
-    document
-  );
-  elements.modal.innerHTML = master.modalHTML();
-
-  master.postSet(slide, config, document);
-};
-
-/**
- * Show a master slide without custom data.
- *
- * The displayed master slide is not part of the acutal presentation.
- * Not every master slide can be shown with this function. It muss be
- * possible to render the master slide without custom data.
- * No number is assigned to the master slide.
- * @param {string} name Name of the master slide
- */
-let setMaster = function(masterName, config, masters) {
-  setMain({"master": masterName}, config, masters);
-};
-
-
 /**
  * Initialize the presentaton session.
  */
 let main = function() {
   window.onerror = errorPage;
+  let show = new ShowRunner(remote.process.argv, document);
   ipcRenderer.on('set-master', function(event, masterName) {
-    setMaster(masterName);
+    show.setInstantSlide(masterName);
   });
-  let config = getConfig(remote.process.argv);
-
-  masters = getMasters();
-
-  masters.execAll('init', document, config);
-  slides = getSlides(config.slides, config, document, masters);
-
-  let slidesSwitcher = new SlidesSwitcher(slides, document, masters);
-
-  let themes = getThemes(document);
-
-  for (let master of masters.all) {
-    if (masters[master].css) {
-      addCSSFile(
-        document,
-        path.join(masters[master].path, 'styles.css'),
-        'baldr-master'
-      );
-    }
-  }
-
-  let currentSlide;
-  let oldSlide;
-
-  let setSlide = function() {
-    if (typeof oldSlide === 'object' && oldSlide.hasOwnProperty('master')) {
-      masters[oldSlide.master].cleanUp(document, oldSlide, currentSlide);
-    }
-    setMain(currentSlide, config, masters);
-    currentSlide.steps.visit();
-  };
-
-  let stepPrev = function() {
-    currentSlide.steps.prev();
-  };
-
-  let stepNext = function() {
-    currentSlide.steps.next();
-  };
-
-  let slidePrev = function() {
-    oldSlide = currentSlide;
-    currentSlide = slidesSwitcher.prev();
-    setSlide();
-  };
-
-  let slideNext = function() {
-    oldSlide = currentSlide;
-    currentSlide = slidesSwitcher.next();
-    setSlide();
-  };
-
-  let setMasterCamera = function() {
-    setMaster('camera', config, masters);
-  };
-
-  let setMasterEditor = function() {
-    setMaster('editor', config, masters);
-  };
-
-  currentSlide = slidesSwitcher.getByNo(1);
-  setSlide();
 
   bindFunctions(
     [
       {
-        function: stepPrev,
+        function: () => {show.stepPrev();},
         keys: ['up'],
         IDs: ['nav-step-prev']
       },
       {
-        function: stepNext,
+        function: () => {show.stepNext();},
         keys: ['down'],
         IDs: ['nav-step-next']
       },
       {
-        function: slidePrev,
+        function: () => {show.slidePrev();},
         keys: ['left'],
         IDs: ['nav-slide-prev']
       },
       {
-        function: slideNext,
+        function: () => {show.slideNext();},
         keys: ['right'],
         IDs: ['nav-slide-next']
       },
@@ -213,11 +105,11 @@ let main = function() {
         IDs: ['modal-open', 'modal-close']
       },
       {
-        function: setMasterCamera,
+        function: () => {show.setInstantSlide('camera');},
         keys: ['ctrl+alt+c']
       },
       {
-        function: setMasterEditor,
+        function: () => {show.setInstantSlide('editor');},
         keys: ['ctrl+alt+e']
       },
       {

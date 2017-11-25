@@ -120,6 +120,41 @@ class StepSwitcher {
   }
 }
 
+class Slide {
+
+  constructor(rawSlide, document, config, masters) {
+    let intersection = this.intersectMastersSlideKeys(
+      masters.all,
+      Object.keys(rawSlide)
+    );
+
+    if (intersection.length > 1) {
+      throw Error('Each slide must have only one master slide.');
+    }
+
+    this.master = intersection[0];
+    this.rawData = rawSlide[this.master];
+    this.normalizedData = masters[this.master]
+      .normalizeData(this.rawData, config);
+    this.steps = new StepSwitcher(document, this, config, masters);
+  }
+
+  /**
+   * Get the intersection between all master names and the slide keys.
+   *
+   * This method can be used to check that a slide object uses only
+   * one master slide.
+   *
+   * @param {array} masterNames
+   * @param {array} slideKeys
+   * @return {array} The intersection as an array
+   */
+  intersectMastersSlideKeys(masterNames, slideKeys) {
+    return masterNames.filter((n) => slideKeys.includes(n));
+  }
+
+}
+
 /**
  * Parse the object representation of all slides.
  */
@@ -182,7 +217,9 @@ class Slides {
     let out = {};
 
     this.rawSlides.forEach((rawSlide, index) => {
-      out[index + 1] = this.assembleSlide(rawSlide, index);
+      let slide = new Slide(rawSlide, this.document, this.config, this.masters);
+      slide.no = index + 1;
+      out[index + 1] = slide;
     });
 
     return out;
@@ -193,3 +230,5 @@ class Slides {
 exports.getSlides = function(rawSlides, config, document, masters) {
   return new Slides(rawSlides, config, document, masters).get();
 };
+
+exports.Slide = Slide;

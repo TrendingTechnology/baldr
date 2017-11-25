@@ -87,7 +87,7 @@ describe('General Spectron tests', () => {
         });
     });
 
-    it.skip('Shortcuts', function () {
+    it('Shortcuts', function () {
       return this.app.client
 
         .keys('ArrowRight')
