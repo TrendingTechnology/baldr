@@ -293,7 +293,7 @@ class Media {
     }
     let list = [];
     for (let filePath of normalizedPaths) {
-      var sortedList = this.list(filePath, extensions);
+      let sortedList = this.list(filePath, extensions);
       for (let file of sortedList) {
         list.push(file);
       }
