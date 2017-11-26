@@ -1,9 +1,9 @@
 /**
  * @file
- * @module lib/quickies
+ * @module app/general
  */
 
-class Quickies {
+class General {
 
   constructor(document) {
 
@@ -15,12 +15,12 @@ class Quickies {
     /**
      *
      */
-    this.elemNavigationMenu = this.document.getElementById('nav-quickies');
+    this.elemNavigationMenu = this.document.getElementById('nav-general');
 
     /**
      *
      */
-    this.defaultQuickies = [
+    this.defaultGeneral = [
       {
         title: 'Camera',
         master: 'camera',
@@ -84,7 +84,7 @@ class Quickies {
    *
    */
   renderNavigationMenu() {
-    for (let entry of this.defaultQuickies) {
+    for (let entry of this.defaultGeneral) {
       let button = this.renderButton(entry.title, entry.fontawesome);
       this.elemNavigationMenu.appendChild(button);
     }
@@ -95,4 +95,8 @@ class Quickies {
   }
 }
 
-exports.Quickies = Quickies;
+exports.General = General;
+
+exports.getGeneral = function(document) {
+  return new General(document);
+};

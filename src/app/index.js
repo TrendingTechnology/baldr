@@ -9,6 +9,7 @@ let requireLib = function(fileName) {
   return require(path.join(__dirname, fileName + '.js'));
 };
 
+const {getGeneral} = requireLib('general');
 const {getMasters} = requireLib('masters');
 const {getSlides, Slide} = requireLib('slides');
 const {SlidesSwitcher} = requireLib('slides-switcher');
@@ -19,7 +20,7 @@ class ShowRunner {
     this.document = document;
     this.config = getConfig(argv);
     this.masters = getMasters();
-    this.masters.execAll('init', this.document, this.config);
+    this.masters.execAll('init', document, this.config);
     this.slides = getSlides(
       this.config.slides,
       this.config,
@@ -35,6 +36,8 @@ class ShowRunner {
 
     this.oldSlide = {};
     this.addMastersCSS();
+    this.general = getGeneral(document);
+    this.general.set();
     this.setFirstSlide();
   }
 
@@ -125,6 +128,7 @@ class ShowRunner {
 
 }
 
+// TODO: Remove
 exports.getMasters = getMasters;
 exports.getSlides = getSlides;
 exports.SlidesSwitcher = SlidesSwitcher;
