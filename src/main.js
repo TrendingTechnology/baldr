@@ -137,7 +137,7 @@ let loadURL =  function() {
     protocol: 'file:',
     slashes: true
   }));
-}
+};
 
 /**
  * Create render window.
