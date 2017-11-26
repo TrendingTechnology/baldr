@@ -1,3 +1,6 @@
+/**
+ * @module baldr-library
+ */
 
 'use strict';
 

@@ -1,6 +1,5 @@
 /**
  * @file Manage the configuration for a presentation session.
- * @module lib/config
  */
 
 'use strict';

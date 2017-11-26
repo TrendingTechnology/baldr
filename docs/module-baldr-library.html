@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: masters/image/index.js</title>
+    <title>JSDoc: Module: baldr-library</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,68 +17,52 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: masters/image/index.js</h1>
+    <h1 class="page-title">Module: baldr-library</h1>
 
     
 
 
 
+
+<section>
+
+<header>
     
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>/**
- * @file Master slide “image”
- * @module baldr-master-image
- */
+        
+    
+</header>
 
-'use strict';
+<article>
+    <div class="container-overview">
+    
+        
 
-const {
-  Media,
-  reIndex
-} = require('baldr-library');
+        
+    
+    </div>
 
-/**
- *
- */
-exports.normalizeData = function(rawSlideData, config) {
-  return new Media(config.sessionDir)
-    .orderedList(rawSlideData, 'image');
-};
+    
 
-/**
- *
- */
-exports.initSteps = function(document, slide, config) {
-  return reIndex(slide.normalizedData);
-};
+    
 
-/**
- *
- */
-exports.setStepByNo = function(no, count, stepData, document) {
-  document
-    .getElementById('baldr-master-image')
-    .setAttribute('src', stepData[no].path);
-};
+    
 
-/**
- *
- */
-exports.config = {
-  stepSupport: true
-};
+    
 
-/**
- *
- */
-exports.mainHTML = function(slide, config, document) {
-  let path = slide.normalizedData[0].path;
-  return `&lt;img id="baldr-master-image" src="${path}">`;
-};
-</code></pre>
-        </article>
-    </section>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</article>
+
+</section>
 
 
 

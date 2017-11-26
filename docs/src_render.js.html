@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: masters/image/index.js</title>
+    <title>JSDoc: Source: src/render.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: masters/image/index.js</h1>
+    <h1 class="page-title">Source: src/render.js</h1>
 
     
 
@@ -27,55 +27,130 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
- * @file Master slide “image”
- * @module baldr-master-image
+ * @file Entry file of the render process. Assemble all classes
  */
 
 'use strict';
 
-const {
-  Media,
-  reIndex
-} = require('baldr-library');
+const path = require('path');
+const mousetrap = require('mousetrap');
+const {remote, ipcRenderer} = require('electron');
+const {ShowRunner} = require('baldr-application');
+
+/* jshint -W117 */
 
 /**
- *
+ * Toogle the modal window
  */
-exports.normalizeData = function(rawSlideData, config) {
-  return new Media(config.sessionDir)
-    .orderedList(rawSlideData, 'image');
+let toggleModal = function() {
+  let modal = document.getElementById('modal');
+  let state = modal.style.display;
+  if (state === 'none') {
+    modal.style.display = 'block';
+    return 'block';
+  }
+  else if (state === 'block') {
+    modal.style.display = 'none';
+    return 'none';
+  }
+  else {
+    return false;
+  }
 };
 
 /**
  *
  */
-exports.initSteps = function(document, slide, config) {
-  return reIndex(slide.normalizedData);
+let bindFunction = function(binding) {
+  if (binding.keys) {
+    for (let key of binding.keys) {
+      mousetrap.bind(key, binding.function);
+    }
+  }
+
+  if (binding.IDs) {
+    for (let ID of binding.IDs) {
+      document
+        .getElementById(ID)
+        .addEventListener('click', binding.function);
+    }
+  }
 };
 
 /**
  *
  */
-exports.setStepByNo = function(no, count, stepData, document) {
-  document
-    .getElementById('baldr-master-image')
-    .setAttribute('src', stepData[no].path);
+let bindFunctions = function(bindings) {
+  for (let binding of bindings) {
+    bindFunction(binding);
+  }
 };
 
 /**
  *
  */
-exports.config = {
-  stepSupport: true
+let errorPage = function(message, source, lineNo, colNo, error) {
+  document.getElementById('slide-content').innerHTML = `
+  &lt;p>${message}&lt;/p>
+  &lt;p>Source: ${source}&lt;/p>
+  &lt;p>Line number: ${lineNo}&lt;/p>
+  &lt;p>Column number: ${colNo}&lt;/p>
+  &lt;pre>${error.stack}&lt;/pre>
+  `;
 };
 
 /**
- *
+ * Initialize the presentaton session.
  */
-exports.mainHTML = function(slide, config, document) {
-  let path = slide.normalizedData[0].path;
-  return `&lt;img id="baldr-master-image" src="${path}">`;
+let main = function() {
+  window.onerror = errorPage;
+  let show = new ShowRunner(remote.process.argv, document);
+  ipcRenderer.on('set-master', function(event, masterName) {
+    show.setInstantSlide(masterName);
+  });
+
+  bindFunctions(
+    [
+      {
+        function: () => {show.stepPrev();},
+        keys: ['up'],
+        IDs: ['nav-step-prev']
+      },
+      {
+        function: () => {show.stepNext();},
+        keys: ['down'],
+        IDs: ['nav-step-next']
+      },
+      {
+        function: () => {show.slidePrev();},
+        keys: ['left'],
+        IDs: ['nav-slide-prev']
+      },
+      {
+        function: () => {show.slideNext();},
+        keys: ['right'],
+        IDs: ['nav-slide-next']
+      },
+      {
+        function: toggleModal,
+        keys: ['esc'],
+        IDs: ['modal-open', 'modal-close']
+      },
+      {
+        function: () => {show.setInstantSlide('camera');},
+        keys: ['ctrl+alt+c']
+      },
+      {
+        function: () => {show.setInstantSlide('editor');},
+        keys: ['ctrl+alt+e']
+      }
+    ]
+  );
 };
+
+if (require.main === module) {
+  main();
+}
 </code></pre>
         </article>
     </section>

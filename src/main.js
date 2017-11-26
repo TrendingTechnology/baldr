@@ -68,8 +68,16 @@ let buildMenu = function() {
       role: 'help',
       submenu: [
         {
-          label: 'Learn More',
-          click () { shell.openExternal('https://electron.atom.io'); }
+          label: 'Baldr documentation',
+          click () { loadURL('docs', 'index.html'); }
+        },
+        {
+          label: 'Electron documentation',
+          click () { shell.openExternal('https://electron.atom.io/docs'); }
+        },
+        {
+          label: 'Node documentation',
+          click () { shell.openExternal('https://nodejs.org/api'); }
         }
       ]
     }
@@ -123,18 +131,21 @@ let buildMenu = function() {
   );
 };
 
+let loadURL =  function() {
+  mainWindow.loadURL(url.format({
+    pathname: path.join(__dirname, '..', ...arguments),
+    protocol: 'file:',
+    slashes: true
+  }));
+}
+
 /**
  * Create render window.
  * @function createWindow
  */
 let createWindow = function() {
   mainWindow = new BrowserWindow({width: 800, height: 600});
-
-  mainWindow.loadURL(url.format({
-    pathname: path.join(__dirname, '..', 'render.html'),
-    protocol: 'file:',
-    slashes: true
-  }));
+  loadURL('render.html');
   buildMenu();
 
   mainWindow.on('closed', function () {

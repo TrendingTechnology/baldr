@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: masters/image/index.js</title>
+    <title>JSDoc: Source: src/app/general.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: masters/image/index.js</h1>
+    <h1 class="page-title">Source: src/app/general.js</h1>
 
     
 
@@ -27,54 +27,108 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
- * @file Master slide “image”
- * @module baldr-master-image
+ * @file
+ * @module baldr-application
  */
 
 'use strict';
 
-const {
-  Media,
-  reIndex
-} = require('baldr-library');
+class General {
 
-/**
- *
- */
-exports.normalizeData = function(rawSlideData, config) {
-  return new Media(config.sessionDir)
-    .orderedList(rawSlideData, 'image');
-};
+  constructor(document) {
 
-/**
- *
- */
-exports.initSteps = function(document, slide, config) {
-  return reIndex(slide.normalizedData);
-};
+    /**
+     *
+     */
+    this.document = document;
 
-/**
- *
- */
-exports.setStepByNo = function(no, count, stepData, document) {
-  document
-    .getElementById('baldr-master-image')
-    .setAttribute('src', stepData[no].path);
-};
+    /**
+     *
+     */
+    this.elemNavigationMenu = this.document.getElementById('nav-general');
 
-/**
- *
- */
-exports.config = {
-  stepSupport: true
-};
+    /**
+     *
+     */
+    this.defaultGeneral = [
+      {
+        title: 'Camera',
+        master: 'camera',
+        shortcut: 'ctrl+c',
+        fontawesome: 'camera'
+      },
+      {
+        title: 'Editor',
+        master: 'editor',
+        shortcut: '',
+        fontawesome: 'file-text'
+      },
+      {
+        title: 'Audio',
+        master: 'audio',
+        shortcut: '',
+        fontawesome: 'volume-up'
+      },
+      {
+        title: 'Video',
+        master: 'video',
+        shortcut: '',
+        fontawesome: 'video-camera'
+      },
+      {
+        title: 'Image',
+        master: 'image',
+        shortcut: '',
+        fontawesome: 'file-image-o'
+      },
+      {
+        title: 'Google',
+        master: 'website',
+        data: 'https://google.com',
+        shortcut: '',
+        fontawesome: 'google'
+      },
+      {
+        title: 'Wikipedia',
+        master: 'website',
+        data: 'https://en.wikipedia.org',
+        shortcut: '',
+        fontawesome: 'wikipedia-w'
+      }
+    ];
 
-/**
- *
- */
-exports.mainHTML = function(slide, config, document) {
-  let path = slide.normalizedData[0].path;
-  return `&lt;img id="baldr-master-image" src="${path}">`;
+  }
+
+  /**
+   *
+   */
+  renderButton(title, fontawesome) {
+    let button = this.document.createElement('button');
+    button.title = title;
+    button.classList.add('fa');
+    button.classList.add('fa-' + fontawesome);
+    return button;
+  }
+
+  /**
+   *
+   */
+  renderNavigationMenu() {
+    for (let entry of this.defaultGeneral) {
+      let button = this.renderButton(entry.title, entry.fontawesome);
+      this.elemNavigationMenu.appendChild(button);
+    }
+  }
+
+  set() {
+    this.renderNavigationMenu();
+  }
+}
+
+exports.General = General;
+
+exports.getGeneral = function(document) {
+  return new General(document);
 };
 </code></pre>
         </article>

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: masters/image/index.js</title>
+    <title>JSDoc: Source: src/lib/helper.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: masters/image/index.js</h1>
+    <h1 class="page-title">Source: src/lib/helper.js</h1>
 
     
 
@@ -26,55 +26,65 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>/**
- * @file Master slide “image”
- * @module baldr-master-image
- */
-
+            <pre class="prettyprint source linenums"><code>
 'use strict';
 
-const {
-  Media,
-  reIndex
-} = require('baldr-library');
+const fs = require('fs');
+const path = require('path');
 
-/**
- *
- */
-exports.normalizeData = function(rawSlideData, config) {
-  return new Media(config.sessionDir)
-    .orderedList(rawSlideData, 'image');
+exports.reIndex = function(array) {
+  let out = {};
+  for (let index in array) {
+    out[Number.parseInt(index) + 1] = array[index];
+  }
+  return out;
 };
 
 /**
+ * Generate a link element and append this element to the head section
+ * of the document object
  *
+ * @param {object} document The HTML DOM Document Object.
+ * @param {string} cssFile Path of the CSS file to include
+ * @param {string} className A CSS class name to add to the link element.
  */
-exports.initSteps = function(document, slide, config) {
-  return reIndex(slide.normalizedData);
+exports.addCSSFile = function(document, cssFile, className=false) {
+  let link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.type = 'text/css';
+  if (className) {
+    link.classList.add(className);
+  }
+  link.href = cssFile;
+  document.head.appendChild(link);
 };
 
-/**
- *
- */
-exports.setStepByNo = function(no, count, stepData, document) {
-  document
-    .getElementById('baldr-master-image')
-    .setAttribute('src', stepData[no].path);
-};
+exports.checkProperty = {
+  isString: function(object, property) {
+    if (
+      typeof object === 'object' &amp;&amp;
+      object.hasOwnProperty(property) &amp;&amp;
+      typeof object[property] === 'string'
+    ) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  },
 
-/**
- *
- */
-exports.config = {
-  stepSupport: true
-};
-
-/**
- *
- */
-exports.mainHTML = function(slide, config, document) {
-  let path = slide.normalizedData[0].path;
-  return `&lt;img id="baldr-master-image" src="${path}">`;
+  empty: function(object, property) {
+    if (
+      typeof object === 'object' &amp;&amp;
+      object.hasOwnProperty(property) &amp;&amp;
+      object[property]
+    ) {
+      return false;
+    }
+    else {
+      return true;
+    }
+  }
 };
 </code></pre>
         </article>

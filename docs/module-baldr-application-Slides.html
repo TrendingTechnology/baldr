@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: masters/image/index.js</title>
+    <title>JSDoc: Class: Slides</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,68 +17,185 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: masters/image/index.js</h1>
+    <h1 class="page-title">Class: Slides</h1>
 
     
 
 
 
+
+<section>
+
+<header>
     
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>/**
- * @file Master slide “image”
- * @module baldr-master-image
- */
+        <h2><span class="attribs"><span class="type-signature"></span></span>
+            <span class="ancestors"><a href="module-baldr-application.html">baldr-application</a>~</span>Slides<span class="signature">(raw)</span><span class="type-signature"></span></h2>
+        
+            <div class="class-description"><p>Parse the object representation of all slides.</p></div>
+        
+    
+</header>
 
-'use strict';
+<article>
+    <div class="container-overview">
+    
+        
 
-const {
-  Media,
-  reIndex
-} = require('baldr-library');
+    
+    <h2>Constructor</h2>
+    
 
-/**
- *
- */
-exports.normalizeData = function(rawSlideData, config) {
-  return new Media(config.sessionDir)
-    .orderedList(rawSlideData, 'image');
-};
+    
+    <h4 class="name" id="Slides"><span class="type-signature"></span>new Slides<span class="signature">(raw)</span><span class="type-signature"></span></h4>
+    
 
-/**
- *
- */
-exports.initSteps = function(document, slide, config) {
-  return reIndex(slide.normalizedData);
-};
+    
 
-/**
- *
- */
-exports.setStepByNo = function(no, count, stepData, document) {
-  document
-    .getElementById('baldr-master-image')
-    .setAttribute('src', stepData[no].path);
-};
 
-/**
- *
- */
-exports.config = {
-  stepSupport: true
-};
 
-/**
- *
- */
-exports.mainHTML = function(slide, config, document) {
-  let path = slide.normalizedData[0].path;
-  return `&lt;img id="baldr-master-image" src="${path}">`;
-};
-</code></pre>
-        </article>
-    </section>
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>raw</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">array</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>A raw array of all slide objects.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line163">line 163</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</article>
+
+</section>
 
 
 

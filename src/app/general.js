@@ -1,6 +1,6 @@
 /**
  * @file
- * @module app/general
+ * @module baldr-application
  */
 
 'use strict';

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: masters/image/index.js</title>
+    <title>JSDoc: Source: src/lib/config.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: masters/image/index.js</h1>
+    <h1 class="page-title">Source: src/lib/config.js</h1>
 
     
 
@@ -27,54 +27,89 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
- * @file Master slide “image”
- * @module baldr-master-image
+ * @file Manage the configuration for a presentation session.
  */
 
 'use strict';
 
-const {
-  Media,
-  reIndex
-} = require('baldr-library');
+const yaml = require('js-yaml');
+const path = require('path');
+const fs = require('fs');
 
 /**
- *
+ * Manage the configuration for a presentation session.
  */
-exports.normalizeData = function(rawSlideData, config) {
-  return new Media(config.sessionDir)
-    .orderedList(rawSlideData, 'image');
-};
+class Config {
 
-/**
- *
- */
-exports.initSteps = function(document, slide, config) {
-  return reIndex(slide.normalizedData);
-};
+  /**
+   * @param {array} argv Arguments in process.argv
+   */
+  constructor(argv) {
 
-/**
- *
- */
-exports.setStepByNo = function(no, count, stepData, document) {
-  document
-    .getElementById('baldr-master-image')
-    .setAttribute('src', stepData[no].path);
-};
+    /**
+     * The path of the *.baldr presentation file
+     * structured in the YAML format.
+     * @type {string}
+     */
+    this.sessionFile = this.pickSessionFile(argv);
 
-/**
- *
- */
-exports.config = {
-  stepSupport: true
-};
+    /**
+     * The session files’ parent working directory. Assuming you are
+     * loading a file with the path “/home/jf/example.baldr”, your
+     * session directory is than “/home/jf”.
+     * @type {string}
+     */
+    this.sessionDir = path.resolve(path.dirname(this.sessionFile));
 
-/**
- *
- */
-exports.mainHTML = function(slide, config, document) {
-  let path = slide.normalizedData[0].path;
-  return `&lt;img id="baldr-master-image" src="${path}">`;
+    /**
+     * Raw object representation of the main *.baldr session file
+     * structured in YAML
+     * @type {object}
+     */
+    this.raw = this.parseYamlFile(this.sessionFile);
+
+    for (let config in this.raw) {
+      this[config] = this.raw[config];
+    }
+  }
+
+  /**
+   * Search for a *.baldr session file in the argv array. Return the last
+   * matched element.
+   *
+   * @param {array} argv Arguments in process.argv
+   *
+   * @return {string} The path of a BALDUR file.
+   */
+  pickSessionFile(argv) {
+    let clone = argv.slice(0);
+    clone.reverse();
+
+    for (let arg of clone) {
+      if (arg.search(/\.baldr$/ig) > -1) {
+        return arg;
+      }
+    }
+    throw new Error('No presentation file with the extension *.baldr found!');
+  }
+
+  /**
+   * Load the contents of a *.baldr YAML file and convert its content
+   * into a object.
+   *
+   * @param {string} sessionFile The path of the *.baldr presentation
+   * file structured in the YAML format.
+   * @return {object} Raw object representation of the presentation
+   * session.
+   */
+  parseYamlFile(sessionFile) {
+    return yaml.safeLoad(fs.readFileSync(sessionFile, 'utf8'));
+  }
+
+}
+
+exports.getConfig = function(argv) {
+  return new Config(argv);
 };
 </code></pre>
         </article>
