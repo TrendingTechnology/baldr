@@ -3,6 +3,8 @@
  * @module baldr
  */
 
+'use strict';
+
 const path = require('path');
 const url = require('url');
 

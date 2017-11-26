@@ -3,6 +3,8 @@
  * @module lib/config
  */
 
+'use strict';
+
 const yaml = require('js-yaml');
 const path = require('path');
 const fs = require('fs');

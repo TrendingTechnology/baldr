@@ -63,6 +63,20 @@ class Audio {
 
 exports.init = function(document, config) {
   audio = new Audio(document);
+
+// ,
+// {
+//   function: () => {audio.stop();},
+//   keys: ['ctrl+a']
+// },
+// {
+//   function: () => {audio.fadeOut();},
+//   keys: ['ctrl+f']
+// },
+// {
+//   function: () => {audio.pausePlay();},
+//   keys: ['space']
+// }
 };
 
 /**

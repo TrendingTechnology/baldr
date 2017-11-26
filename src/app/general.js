@@ -3,6 +3,8 @@
  * @module app/general
  */
 
+'use strict';
+
 class General {
 
   constructor(document) {

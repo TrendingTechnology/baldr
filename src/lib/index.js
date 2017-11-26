@@ -1,3 +1,6 @@
+
+'use strict';
+
 const path = require('path');
 
 let requireLib = function(fileName) {

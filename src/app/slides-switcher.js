@@ -3,6 +3,8 @@
  * @module lib/slide-switcher
  */
 
+'use strict';
+
 /**
  *
  */

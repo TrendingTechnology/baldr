@@ -2,10 +2,14 @@
  * @file Entry file of the render process. Assemble all classes
  */
 
+'use strict';
+
 const path = require('path');
 const mousetrap = require('mousetrap');
 const {remote, ipcRenderer} = require('electron');
 const {ShowRunner} = require('baldr-application');
+
+/* jshint -W117 */
 
 /**
  * Toogle the modal window
@@ -111,18 +115,6 @@ let main = function() {
       {
         function: () => {show.setInstantSlide('editor');},
         keys: ['ctrl+alt+e']
-      },
-      {
-        function: () => {audio.stop();},
-        keys: ['ctrl+a']
-      },
-      {
-        function: () => {audio.fadeOut();},
-        keys: ['ctrl+f']
-      },
-      {
-        function: () => {audio.pausePlay();},
-        keys: ['space']
       }
     ]
   );

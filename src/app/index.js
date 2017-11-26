@@ -1,3 +1,6 @@
+
+'use strict';
+
 const path = require('path');
 
 const {
@@ -45,7 +48,7 @@ class ShowRunner {
     for (let master of this.masters.all) {
       if (this.masters[master].css) {
         addCSSFile(
-          document,
+          this.document,
           path.join(this.masters[master].path, 'styles.css'),
           'baldr-master'
         );
