@@ -71,7 +71,7 @@ describe('General Spectron tests', () => {
           assert.equal(style.value, 'alegreya sc');
         })
         .getCssProperty('button', 'color').then(style => {
-          assert.equal(style[0].parsed.hex, '#0000ff');
+          assert.equal(style[0].parsed.hex, '#808080');
         })
 
         .click('#nav-slide-next')

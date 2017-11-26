@@ -50,8 +50,16 @@ nav {
   z-index: 2;
 }
 
+nav#nav-general button {
+  visibility: hidden;
+}
+
+nav#nav-general:hover button {
+  visibility: visible;
+}
+
 button {
-  color: blue;
+  color: #808080;
   background-color: inherit;
   border: 0;
   font-size: 4vw !important;
