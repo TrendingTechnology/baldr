@@ -58,14 +58,14 @@ exports.allThemes = [
 /**
  *
  */
-let makeDOM = function(html) {
+exports.makeDOM = function(html) {
   return new JSDOM(html).window.document;
 };
 
 /**
  *
  */
-exports.document = makeDOM(
+exports.document = exports.makeDOM(
   fs.readFileSync(
     path.join(__dirname, '..', '..', 'render.html'),
     'utf8'
@@ -76,7 +76,7 @@ exports.document = makeDOM(
  *
  */
 exports.getDOM = function() {
-  return makeDOM(
+  return exports.makeDOM(
     fs.readFileSync(
       path.join(__dirname, '..', '..', 'render.html'),
       'utf8'
@@ -93,6 +93,9 @@ exports.testFileMinimal = path.resolve('test', 'files', 'minimal.baldr');
  *
  */
 exports.config = getConfig([exports.testFileMinimal]);
+exports.cloneConfig = function () {
+  return Object.assign({}, exports.config);
+};
 
 /**
  *
