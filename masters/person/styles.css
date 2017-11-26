@@ -1,23 +1,30 @@
 [data-master="person"] img {
   position: absolute;
   max-width: 100%;
-  max-height: 100%;
+  min-height: 100%;
   top: 0;
   left: 0;
 }
 
 [data-master="person"] .info-box {
   position: absolute;
-  bottom: 2vw;
-  right: 3vw;
+  width: 100%;
+  bottom: 4vw;
+  right: 0;
+}
+
+
+[data-master="person"] .info-box .birth-and-death {
+  font-size: 3vw;
+  padding-right: 6vw;
+  text-align: right;
+  margin: 0;
 }
 
 [data-master="person"] .info-box .person {
   font-size: 6vw;
   margin: 0;
-}
-
-[data-master="person"] .info-box .birth-and-death {
-  font-size: 3vw;
   text-align: right;
+  padding-right: 4vw;
+  background: rgba(170, 170, 170, 0.3);
 }

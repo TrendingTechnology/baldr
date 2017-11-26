@@ -80,7 +80,7 @@ exports.mainHTML = function(slide, config, document) {
 <img src="${data.imagePath}">
 
 <div class="info-box">
-  <p class="person important">${data.name}</p>
   ${birthAndDeath}
+  <p class="person important">${data.name}</p>
 </div>`;
 };
