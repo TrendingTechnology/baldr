@@ -22,7 +22,7 @@ let mainHTML = function(data) {
 describe('Master slide “person”: unit tests', () => {
 
 
-  it('function “normalizeData()”', () => {
+  it('function “normalizeData()”: all Values', () => {
     const data = normalizeData({
       name: 'Ludwig van Beethoven',
       image: 'beethoven.jpg',
@@ -38,6 +38,17 @@ describe('Master slide “person”: unit tests', () => {
     assert.equal(data.birthAndDeath, true);
   });
 
+  it('function “normalizeData(): minimal values”', () => {
+    const data = normalizeData({
+      name: 'Ludwig van Beethoven',
+      image: 'beethoven.jpg'
+    });
+
+    assert.equal(data.name, 'Ludwig van Beethoven');
+    assert.equal(data.birth, '');
+    assert.equal(data.death, '');
+    assert.equal(data.birthAndDeath, false);
+  });
 
   it('function “mainHTML()”', () => {
 

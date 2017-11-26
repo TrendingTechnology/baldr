@@ -30,3 +30,31 @@ exports.addCSSFile = function(document, cssFile, className=false) {
   link.href = cssFile;
   document.head.appendChild(link);
 };
+
+exports.checkProperty = {
+  isString: function(object, property) {
+    if (
+      typeof object === 'object' &&
+      object.hasOwnProperty(property) &&
+      typeof object[property] === 'string'
+    ) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  },
+
+  empty: function(object, property) {
+    if (
+      typeof object === 'object' &&
+      object.hasOwnProperty(property) &&
+      object[property]
+    ) {
+      return false;
+    }
+    else {
+      return true;
+    }
+  }
+};

@@ -10,7 +10,8 @@ let requireLib = function(fileName) {
 const {getConfig} = requireLib('config');
 const {
   addCSSFile,
-  reIndex
+  reIndex,
+  checkProperty
 } = requireLib('helper');
 const {Media} = requireLib('media');
 
@@ -18,5 +19,6 @@ module.exports = {
   addCSSFile: addCSSFile,
   getConfig: getConfig,
   Media: Media,
-  reIndex: reIndex
+  reIndex: reIndex,
+  checkProperty: checkProperty
 };

@@ -5,7 +5,7 @@
 
 'use strict';
 
-const {Media} = require('baldr-library');
+const {Media, checkProperty} = require('baldr-library');
 
 exports.documentation = {
   examples: [
@@ -19,39 +19,13 @@ exports.documentation = {
   ]
 };
 
-function objPropertyIsString(object, property) {
-  if (
-    typeof object === 'object' &&
-    object.hasOwnProperty(property) &&
-    typeof object[property] === 'string'
-  ) {
-    return true;
-  }
-  else {
-    return false;
-  }
-}
-
-function objPropertyNotEmty(object, property) {
-  if (
-    typeof object === 'object' &&
-    object.hasOwnProperty(property) &&
-    object[property]
-  ) {
-    return true;
-  }
-  else {
-    return false;
-  }
-}
-
 /**
  *
  */
 exports.normalizeData = function(rawSlideData, config) {
   let data = {};
 
-  if (objPropertyIsString(rawSlideData, 'name')) {
+  if (checkProperty.isString(rawSlideData, 'name')) {
     data.name = rawSlideData.name;
   }
 
@@ -61,22 +35,28 @@ exports.normalizeData = function(rawSlideData, config) {
     data.imagePath = image[0].path;
   }
 
-  if (objPropertyNotEmty(rawSlideData, 'birth')) {
+  if (!checkProperty.empty(rawSlideData, 'birth')) {
     data.birth = '* ' + rawSlideData.birth;
   }
   else {
     data.birth = '';
   }
 
-  if (objPropertyNotEmty(rawSlideData, 'death')) {
+  if (!checkProperty.empty(rawSlideData, 'death')) {
     data.death = '† ' + rawSlideData.death;
   }
   else {
     data.death = '';
   }
 
-  if (data.hasOwnProperty('birth') || data.hasOwnProperty('death')) {
+  if (
+    !checkProperty.empty(rawSlideData, 'birth') ||
+    !checkProperty.empty(rawSlideData, 'death')
+  ) {
     data.birthAndDeath = true;
+  }
+  else {
+    data.birthAndDeath = false;
   }
 
   return data;
