@@ -3,3 +3,12 @@ slides:
   - person:
       name: Ludwig van Beethoven
       image: beethoven.jpg
+      birth: 1770
+      death: 1827
+  - person:
+      name: Joseph Haydn
+      death: 1809
+      image: haydn.jpg
+  - person:
+      name: Wolfgang Amadeus Mozart
+      image: mozart.jpg

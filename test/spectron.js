@@ -81,7 +81,7 @@ describe('General Spectron tests', () => {
         })
 
         .click('#nav-slide-next')
-        .getText('p')
+        .getText('.person')
         .then(text => {
           assert.equal(text, 'Ludwig van Beethoven');
         });
@@ -97,7 +97,7 @@ describe('General Spectron tests', () => {
         })
 
         .keys('ArrowRight')
-        .getText('p')
+        .getText('.person')
         .then(text => {
           assert.equal(text, 'Ludwig van Beethoven');
         })

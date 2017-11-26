@@ -12,8 +12,8 @@ config.sessionDir = path.resolve(__dirname, '..');
 
 let render = function(data) {
   let slide = {};
-  slide.normalizedData = data;
-  return person.mainHTML(slide, config);
+  normalizedData = person.normalizeData(data, config);
+  return person.mainHTML({normalizedData: normalizedData}, config);
 };
 
 describe('Master slide “person”: unit tests', () => {
@@ -27,7 +27,7 @@ describe('Master slide “person”: unit tests', () => {
 
     let doc = makeDOM(html);
     assert.equal(
-      doc.querySelector('#info-box p').textContent,
+      doc.querySelector('.info-box .person').textContent,
       'Ludwig van Beethoven'
     );
 

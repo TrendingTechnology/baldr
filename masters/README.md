@@ -21,3 +21,5 @@ This exported functions are hooks:
 * `postSet(slide, config, document)`
 * `setStepByNo(no, count, stepData, document)`
 * `cleanUp(document, oldSlide, newSlide)`
+* `documentation`: object
+  * `examples`: array

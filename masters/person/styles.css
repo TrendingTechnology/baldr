@@ -6,8 +6,18 @@
   left: 0;
 }
 
-[data-master="person"] #info-box {
+[data-master="person"] .info-box {
   position: absolute;
-  top: 0;
-  right: 0;
+  bottom: 2vw;
+  right: 3vw;
+}
+
+[data-master="person"] .info-box .person {
+  font-size: 6vw;
+  margin: 0;
+}
+
+[data-master="person"] .info-box .birth-and-death {
+  font-size: 3vw;
+  text-align: right;
 }
