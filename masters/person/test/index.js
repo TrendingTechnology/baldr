@@ -11,7 +11,6 @@ let config = cloneConfig();
 config.sessionDir = path.resolve(__dirname, '..');
 
 let render = function(data) {
-  let slide = {};
   normalizedData = person.normalizeData(data, config);
   return person.mainHTML({normalizedData: normalizedData}, config);
 };
