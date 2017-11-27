@@ -45,6 +45,7 @@ class ShowRunner {
     this.quickStart = getQuickStart(document, this.masters);
     this.quickStart.set();
     this.setFirstSlide();
+    this.quickStart.bind(this);
   }
 
   addMastersCSS() {
@@ -100,9 +101,9 @@ class ShowRunner {
    * No number is assigned to the master slide.
    * @param {string} name Name of the master slide
    */
-  setInstantSlide(masterName) {
+  setInstantSlide(masterName, rawData=true) {
     let rawSlide = {};
-    rawSlide[masterName] = true;
+    rawSlide[masterName] = rawData;
     let slide = new Slide(rawSlide, this.document, this.config, this.masters);
     this.setSlide(slide);
   }

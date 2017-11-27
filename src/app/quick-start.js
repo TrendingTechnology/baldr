@@ -3,6 +3,8 @@
  * @module baldr-application
  */
 
+/* jshint -W083 */
+
 'use strict';
 
 class QuickStart {
@@ -30,21 +32,34 @@ class QuickStart {
   collectEntries() {
     let entries = [];
     for (let master of this.masters.all) {
-      entries = entries.concat(
-        this.masters[master].quickStartEntries()
-      );
+      let rawEntries = this.masters[master].quickStartEntries();
+      for (let index in rawEntries) {
+        rawEntries[index].master = master;
+        if (!rawEntries[index].hasOwnProperty('data')) {
+          rawEntries[index].data = true;
+        }
+      }
+      entries = entries.concat(rawEntries);
     }
+
+    for (let index in entries) {
+      let no = Number.parseInt(index) + 1;
+      entries[index].cssID =
+        'quick-start-entry_' + entries[index].master +  '_' + no;
+    }
+
     return entries;
   }
 
   /**
    *
    */
-  renderButton(title, fontawesome) {
+  renderButton(entry) {
     let button = this.document.createElement('button');
-    button.title = title;
+    button.title = entry.title;
+    button.id = entry.cssID;
     button.classList.add('fa');
-    button.classList.add('fa-' + fontawesome);
+    button.classList.add('fa-' + entry.fontawesome);
     return button;
   }
 
@@ -53,13 +68,24 @@ class QuickStart {
    */
   renderNavigationMenu() {
     for (let entry of this.entries) {
-      let button = this.renderButton(entry.title, entry.fontawesome);
+      let button = this.renderButton(entry);
       this.elemNavigationMenu.appendChild(button);
     }
   }
 
   set() {
     this.renderNavigationMenu();
+  }
+
+  bind(showRunner) {
+    for (let entry of this.entries) {
+      this.document
+      .getElementById(entry.cssID)
+      .addEventListener(
+        'click',
+        function() {showRunner.setInstantSlide(entry.master, entry.data);}
+      );
+    }
   }
 }
 

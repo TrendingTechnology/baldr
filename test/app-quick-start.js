@@ -37,11 +37,22 @@ describe('Class “QuickStart()”', () => {
     it('Method “collectEntries()”', () => {
       let entries = quickStart.collectEntries();
       assert.equal(entries[0].title, 'Audio');
+      assert.equal(entries[0].master, 'audio');
+      assert.equal(entries[0].cssID, 'quick-start-entry_audio_1');
+      assert.equal(entries[0].data, true);
+
       assert.equal(entries[1].title, 'Camera');
+      assert.equal(entries[1].master, 'camera');
+      assert.equal(entries[1].cssID, 'quick-start-entry_camera_2');
+      assert.equal(entries[1].data, true);
     });
 
     it('Method “renderButton()”', () => {
-      let button = quickStart.renderButton('lol', 'lol');
+      let entry = {
+        title: 'lol',
+        fontawesome: 'lol'
+      };
+      let button = quickStart.renderButton(entry);
       assert.equal(button.nodeName, 'BUTTON');
       assert.equal(button.title, 'lol');
       assert.equal(button.classList.item(0), 'fa');
