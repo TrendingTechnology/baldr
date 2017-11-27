@@ -64,7 +64,8 @@ class LoadMasters {
       setStepByNo: emptyFunc,
       initSteps: funcFalse,
       initStepsEveryVisit: funcFalse,
-      cleanUp: emptyFunc
+      cleanUp: emptyFunc,
+      quickStartEntries: function() {return [];}
     };
 
     return Object.assign({}, defaultObject, requireObject);

@@ -14,6 +14,20 @@ exports.config = {
   theme: 'handwriting'
 };
 
+
+/**
+ *
+ */
+exports.quickStartEntries = function() {
+  return [
+    {
+      title: 'Editor',
+      shortcut: '',
+      fontawesome: ''
+    }
+  ];
+};
+
 exports.mainHTML = function(slide, config, document) {
   addCSSFile(
     document,

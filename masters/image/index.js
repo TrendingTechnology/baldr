@@ -10,6 +10,21 @@ const {
   reIndex
 } = require('baldr-library');
 
+
+/**
+ *
+ */
+exports.quickStartEntries = function() {
+  return [
+    {
+      title: 'Image',
+      master: 'image',
+      shortcut: '',
+      fontawesome: 'file-image-o'
+    }
+  ];
+};
+
 /**
  *
  */

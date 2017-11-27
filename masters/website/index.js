@@ -5,6 +5,27 @@
 
 'use strict';
 
+
+/**
+ *
+ */
+exports.quickStartEntries = function() {
+  return [
+    {
+      title: 'Google',
+      data: 'https://google.com',
+      shortcut: '',
+      fontawesome: 'google'
+    },
+    {
+      title: 'Wikipedia',
+      data: 'https://de.wikipedia.org',
+      shortcut: '',
+      fontawesome: 'wikipedia-w'
+    }
+  ];
+};
+
 /**
  *
  */

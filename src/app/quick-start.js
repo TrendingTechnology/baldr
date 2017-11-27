@@ -7,7 +7,9 @@
 
 class QuickStart {
 
-  constructor(document) {
+  constructor(document, masters) {
+
+    this.masters = masters;
 
     /**
      *
@@ -19,56 +21,20 @@ class QuickStart {
      */
     this.elemNavigationMenu = this.document.getElementById('nav-quick-start');
 
-    /**
-     *
-     */
-    this.defaultQuickStart = [
-      {
-        title: 'Camera',
-        master: 'camera',
-        shortcut: 'ctrl+c',
-        fontawesome: 'camera'
-      },
-      {
-        title: 'Editor',
-        master: 'editor',
-        shortcut: '',
-        fontawesome: 'file-text'
-      },
-      {
-        title: 'Audio',
-        master: 'audio',
-        shortcut: '',
-        fontawesome: 'volume-up'
-      },
-      {
-        title: 'Video',
-        master: 'video',
-        shortcut: '',
-        fontawesome: 'video-camera'
-      },
-      {
-        title: 'Image',
-        master: 'image',
-        shortcut: '',
-        fontawesome: 'file-image-o'
-      },
-      {
-        title: 'Google',
-        master: 'website',
-        data: 'https://google.com',
-        shortcut: '',
-        fontawesome: 'google'
-      },
-      {
-        title: 'Wikipedia',
-        master: 'website',
-        data: 'https://en.wikipedia.org',
-        shortcut: '',
-        fontawesome: 'wikipedia-w'
-      }
-    ];
+    this.entries = this.collectEntries();
+  }
 
+  /**
+   *
+   */
+  collectEntries() {
+    let entries = [];
+    for (let master of this.masters.all) {
+      entries = entries.concat(
+        this.masters[master].quickStartEntries()
+      );
+    }
+    return entries;
   }
 
   /**
@@ -86,7 +52,7 @@ class QuickStart {
    *
    */
   renderNavigationMenu() {
-    for (let entry of this.defaultQuickStart) {
+    for (let entry of this.entries) {
       let button = this.renderButton(entry.title, entry.fontawesome);
       this.elemNavigationMenu.appendChild(button);
     }
@@ -99,6 +65,6 @@ class QuickStart {
 
 exports.QuickStart = QuickStart;
 
-exports.getQuickStart = function(document) {
-  return new QuickStart(document);
+exports.getQuickStart = function(document, masters) {
+  return new QuickStart(document, masters);
 };

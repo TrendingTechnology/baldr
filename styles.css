@@ -50,12 +50,19 @@ nav {
   z-index: 2;
 }
 
-nav#nav-general button {
+nav#nav-quick-start button {
   visibility: hidden;
 }
 
-nav#nav-general:hover button {
+nav#nav-quick-start:hover button {
   visibility: visible;
+}
+
+#nav-quick-start {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: 2;
 }
 
 button {
@@ -109,13 +116,6 @@ button:hover {
 	position: absolute;
 	top: 0;
 	right: 0;
-}
-
-#nav-general {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  z-index: 2;
 }
 
 #media-info {

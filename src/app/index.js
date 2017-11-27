@@ -42,7 +42,7 @@ class ShowRunner {
 
     this.oldSlide = {};
     this.addMastersCSS();
-    this.quickStart = getQuickStart(document);
+    this.quickStart = getQuickStart(document, this.masters);
     this.quickStart.set();
     this.setFirstSlide();
   }

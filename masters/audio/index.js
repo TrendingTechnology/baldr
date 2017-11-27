@@ -82,6 +82,20 @@ exports.init = function(document, config) {
 /**
  *
  */
+exports.quickStartEntries = function() {
+  return [
+    {
+      title: 'Audio',
+      master: 'audio',
+      shortcut: '',
+      fontawesome: 'volume-up'
+    }
+  ];
+};
+
+/**
+ *
+ */
 exports.normalizeData = function(rawSlideData, config) {
   let inputFiles = new Media(config.sessionDir);
   let files = inputFiles.orderedList(rawSlideData, 'audio');

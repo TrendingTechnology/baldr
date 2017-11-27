@@ -51,6 +51,20 @@
 /**
  *
  */
+exports.quickStartEntries = function() {
+  return [
+    {
+      title: 'Camera',
+      master: 'camera',
+      shortcut: 'ctrl+c',
+      fontawesome: 'camera'
+    }
+  ];
+};
+
+/**
+ *
+ */
 exports.modalHTML = function() {
   return `
   <div class="select">
