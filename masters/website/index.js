@@ -14,13 +14,13 @@ exports.quickStartEntries = function() {
     {
       title: 'Google',
       data: 'https://google.com',
-      shortcut: '',
+      shortcut: 'ctrl+alt+g',
       fontawesome: 'google'
     },
     {
       title: 'Wikipedia',
       data: 'https://de.wikipedia.org',
-      shortcut: '',
+      shortcut: 'ctrl+alt+w',
       fontawesome: 'wikipedia-w'
     }
   ];

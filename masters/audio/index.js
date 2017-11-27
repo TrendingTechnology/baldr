@@ -87,7 +87,7 @@ exports.quickStartEntries = function() {
     {
       title: 'Audio',
       master: 'audio',
-      shortcut: '',
+      shortcut: 'ctrl+alt+a',
       fontawesome: 'volume-up'
     }
   ];

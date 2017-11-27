@@ -22,8 +22,8 @@ exports.quickStartEntries = function() {
   return [
     {
       title: 'Editor',
-      shortcut: '',
-      fontawesome: ''
+      shortcut: 'ctrl+alt+e',
+      fontawesome: 'list'
     }
   ];
 };

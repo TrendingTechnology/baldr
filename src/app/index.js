@@ -22,8 +22,9 @@ const {SlidesSwitcher} = requireLib('slides-switcher');
 const {getThemes} = requireLib('themes');
 
 class ShowRunner {
-  constructor(argv, document) {
+  constructor(argv, document, mousetrap) {
     this.document = document;
+    this.mousetrap = mousetrap;
     this.config = getConfig(argv);
     this.masters = getMasters();
     this.masters.execAll('init', document, this.config);
@@ -45,7 +46,7 @@ class ShowRunner {
     this.quickStart = getQuickStart(document, this.masters);
     this.quickStart.set();
     this.setFirstSlide();
-    this.quickStart.bind(this);
+    this.quickStart.bind(this, this.mousetrap);
   }
 
   addMastersCSS() {

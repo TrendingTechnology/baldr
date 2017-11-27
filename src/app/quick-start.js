@@ -10,7 +10,6 @@
 class QuickStart {
 
   constructor(document, masters) {
-
     this.masters = masters;
 
     /**
@@ -77,14 +76,15 @@ class QuickStart {
     this.renderNavigationMenu();
   }
 
-  bind(showRunner) {
+  bind(showRunner, mousetrap) {
     for (let entry of this.entries) {
+      let func = function() {
+        showRunner.setInstantSlide(entry.master, entry.data);
+      };
+      mousetrap.bind(entry.shortcut, func);
       this.document
       .getElementById(entry.cssID)
-      .addEventListener(
-        'click',
-        function() {showRunner.setInstantSlide(entry.master, entry.data);}
-      );
+      .addEventListener('click', func);
     }
   }
 }

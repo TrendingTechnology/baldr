@@ -19,7 +19,7 @@ exports.quickStartEntries = function() {
     {
       title: 'Image',
       master: 'image',
-      shortcut: '',
+      shortcut: 'ctrl-alt-i',
       fontawesome: 'file-image-o'
     }
   ];

@@ -56,7 +56,7 @@ exports.quickStartEntries = function() {
     {
       title: 'Camera',
       master: 'camera',
-      shortcut: 'ctrl+c',
+      shortcut: 'ctrl+alt+c',
       fontawesome: 'camera'
     }
   ];

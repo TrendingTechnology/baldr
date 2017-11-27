@@ -76,7 +76,7 @@ let errorPage = function(message, source, lineNo, colNo, error) {
  */
 let main = function() {
   window.onerror = errorPage;
-  let show = new ShowRunner(remote.process.argv, document);
+  let show = new ShowRunner(remote.process.argv, document, mousetrap);
   ipcRenderer.on('set-master', function(event, masterName) {
     show.setInstantSlide(masterName);
   });
