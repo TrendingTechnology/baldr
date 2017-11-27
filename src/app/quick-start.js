@@ -5,7 +5,7 @@
 
 'use strict';
 
-class General {
+class QuickStart {
 
   constructor(document) {
 
@@ -17,12 +17,12 @@ class General {
     /**
      *
      */
-    this.elemNavigationMenu = this.document.getElementById('nav-general');
+    this.elemNavigationMenu = this.document.getElementById('nav-quick-start');
 
     /**
      *
      */
-    this.defaultGeneral = [
+    this.defaultQuickStart = [
       {
         title: 'Camera',
         master: 'camera',
@@ -86,7 +86,7 @@ class General {
    *
    */
   renderNavigationMenu() {
-    for (let entry of this.defaultGeneral) {
+    for (let entry of this.defaultQuickStart) {
       let button = this.renderButton(entry.title, entry.fontawesome);
       this.elemNavigationMenu.appendChild(button);
     }
@@ -97,8 +97,8 @@ class General {
   }
 }
 
-exports.General = General;
+exports.QuickStart = QuickStart;
 
-exports.getGeneral = function(document) {
-  return new General(document);
+exports.getQuickStart = function(document) {
+  return new QuickStart(document);
 };

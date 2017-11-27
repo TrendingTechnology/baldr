@@ -5,32 +5,32 @@ const {
   requireFile
 } = require('baldr-test');
 
-const {General} = requireFile('app', 'general.js');
+const {QuickStart} = requireFile('app', 'quick-start.js');
 
-let initiateGeneral = function() {
-  return new General(getDOM());
+let initiateQuickStart = function() {
+  return new QuickStart(getDOM());
 };
 
-let general;
+let quickStart;
 
-describe('Class “General()”', () => {
+describe('Class “QuickStart()”', () => {
 
   beforeEach(() => {
-    general = initiateGeneral();
+    quickStart = initiateQuickStart();
   });
 
   describe('Properties', () => {
 
     it('Property “this.document”', () => {
-      assert.equal(general.document.nodeName, '#document');
+      assert.equal(quickStart.document.nodeName, '#document');
     });
 
-    it('Property “this.defaultGeneral”', () => {
-      assert.equal(general.defaultGeneral[0].title, 'Camera');
+    it('Property “this.defaultQuickStart”', () => {
+      assert.equal(quickStart.defaultQuickStart[0].title, 'Camera');
     });
 
     it('Property “this.elemNavigationMenu”', () => {
-      assert.equal(general.elemNavigationMenu.nodeName, 'NAV');
+      assert.equal(quickStart.elemNavigationMenu.nodeName, 'NAV');
     });
 
   });
@@ -38,7 +38,7 @@ describe('Class “General()”', () => {
   describe('Methods', () => {
 
     it('Method “renderButton()”', () => {
-      let button = general.renderButton('lol', 'lol');
+      let button = quickStart.renderButton('lol', 'lol');
       assert.equal(button.nodeName, 'BUTTON');
       assert.equal(button.title, 'lol');
       assert.equal(button.classList.item(0), 'fa');
@@ -46,14 +46,14 @@ describe('Class “General()”', () => {
     });
 
     it('Method “renderNavigationMenu()”', () => {
-      general.renderNavigationMenu();
-      let buttons = general.document.querySelectorAll('#nav-general button');
+      quickStart.renderNavigationMenu();
+      let buttons = quickStart.document.querySelectorAll('#nav-quick-start button');
       assert.equal(buttons[0].title, 'Camera');
     });
 
     it('Method “set()”', () => {
-      general.set();
-      let buttons = general.document.querySelectorAll('#nav-general button');
+      quickStart.set();
+      let buttons = quickStart.document.querySelectorAll('#nav-quick-start button');
       assert.equal(buttons[0].title, 'Camera');
     });
 

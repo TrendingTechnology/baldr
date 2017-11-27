@@ -15,7 +15,7 @@ let requireLib = function(fileName) {
   return require(path.join(__dirname, fileName + '.js'));
 };
 
-const {getGeneral} = requireLib('general');
+const {getQuickStart} = requireLib('quick-start');
 const {getMasters} = requireLib('masters');
 const {getSlides, Slide} = requireLib('slides');
 const {SlidesSwitcher} = requireLib('slides-switcher');
@@ -42,8 +42,8 @@ class ShowRunner {
 
     this.oldSlide = {};
     this.addMastersCSS();
-    this.general = getGeneral(document);
-    this.general.set();
+    this.quickStart = getQuickStart(document);
+    this.quickStart.set();
     this.setFirstSlide();
   }
 
