@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: masters/person/index.js</title>
+    <title>JSDoc: Source: src/app/quick-start.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: masters/person/index.js</h1>
+    <h1 class="page-title">Source: src/app/quick-start.js</h1>
 
     
 
@@ -27,90 +27,100 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
- * @file Master slide “person”
- * @module baldr-master-person
+ * @file
+ * @module baldr-application
  */
+
+/* jshint -W083 */
 
 'use strict';
 
-const {Media, checkProperty} = require('baldr-library');
+class QuickStart {
 
-exports.documentation = {
-  examples: [
-`
-- person:
-     name: Ludwig van Beethoven
-     image: images/beethoven.jpg
-     birth: 1770
-     death: 1827
-`
-  ]
-};
+  constructor(document, masters) {
+    this.masters = masters;
 
-/**
- *
- */
-exports.normalizeData = function(rawSlideData, config) {
-  let data = {};
+    /**
+     *
+     */
+    this.document = document;
 
-  if (checkProperty.isString(rawSlideData, 'name')) {
-    data.name = rawSlideData.name;
+    /**
+     *
+     */
+    this.elemNavigationMenu = this.document.getElementById('nav-quick-start');
+
+    this.entries = this.collectEntries();
   }
 
-  let images = new Media(config.sessionDir);
-  let image = images.list(rawSlideData.image, 'image');
-  if (image &amp;&amp; image !== [] &amp;&amp; image[0] &amp;&amp; image[0].hasOwnProperty('path')) {
-    data.imagePath = image[0].path;
+  /**
+   *
+   */
+  collectEntries() {
+    let entries = [];
+    for (let master of this.masters.all) {
+      let rawEntries = this.masters[master].quickStartEntries();
+      for (let index in rawEntries) {
+        rawEntries[index].master = master;
+        if (!rawEntries[index].hasOwnProperty('data')) {
+          rawEntries[index].data = true;
+        }
+      }
+      entries = entries.concat(rawEntries);
+    }
+
+    for (let index in entries) {
+      let no = Number.parseInt(index) + 1;
+      entries[index].cssID =
+        'quick-start-entry_' + entries[index].master +  '_' + no;
+    }
+
+    return entries;
   }
 
-  if (!checkProperty.empty(rawSlideData, 'birth')) {
-    data.birth = '* ' + rawSlideData.birth;
-  }
-  else {
-    data.birth = '';
-  }
-
-  if (!checkProperty.empty(rawSlideData, 'death')) {
-    data.death = '† ' + rawSlideData.death;
-  }
-  else {
-    data.death = '';
+  /**
+   *
+   */
+  renderButton(entry) {
+    let button = this.document.createElement('button');
+    button.title = entry.title;
+    button.id = entry.cssID;
+    button.classList.add('fa');
+    button.classList.add('fa-' + entry.fontawesome);
+    return button;
   }
 
-  if (
-    !checkProperty.empty(rawSlideData, 'birth') ||
-    !checkProperty.empty(rawSlideData, 'death')
-  ) {
-    data.birthAndDeath = true;
-  }
-  else {
-    data.birthAndDeath = false;
-  }
-
-  return data;
-};
-
-/**
- *
- */
-exports.mainHTML = function(slide, config, document) {
-  let data = slide.normalizedData;
-
-  let birthAndDeath;
-  if (data.birthAndDeath) {
-    birthAndDeath = `&lt;p class="birth-and-death">${data.birth} ${data.death}&lt;/p>`;
-  }
-  else {
-    birthAndDeath = '';
+  /**
+   *
+   */
+  renderNavigationMenu() {
+    for (let entry of this.entries) {
+      let button = this.renderButton(entry);
+      this.elemNavigationMenu.appendChild(button);
+    }
   }
 
-  return `
-&lt;img src="${data.imagePath}">
+  set() {
+    this.renderNavigationMenu();
+  }
 
-&lt;div class="info-box">
-  ${birthAndDeath}
-  &lt;p class="person important">${data.name}&lt;/p>
-&lt;/div>`;
+  bind(showRunner, mousetrap) {
+    for (let entry of this.entries) {
+      let func = function() {
+        showRunner.setInstantSlide(entry.master, entry.data);
+      };
+      mousetrap.bind(entry.shortcut, func);
+      this.document
+      .getElementById(entry.cssID)
+      .addEventListener('click', func);
+    }
+  }
+}
+
+exports.QuickStart = QuickStart;
+
+exports.getQuickStart = function(document, masters) {
+  return new QuickStart(document, masters);
 };
 </code></pre>
         </article>

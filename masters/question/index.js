@@ -85,6 +85,9 @@ exports.normalizeData = function(rawSlideData, config) {
   }
 };
 
+/**
+ *
+ */
 exports.config = {
   centerVertically: true,
   stepSupport: true

@@ -21,7 +21,14 @@ const {getSlides, Slide} = requireLib('slides');
 const {SlidesSwitcher} = requireLib('slides-switcher');
 const {getThemes} = requireLib('themes');
 
+/**
+ *
+ */
 class ShowRunner {
+
+  /**
+   *
+   */
   constructor(argv, document, mousetrap) {
     this.document = document;
     this.mousetrap = mousetrap;
@@ -49,6 +56,9 @@ class ShowRunner {
     this.quickStart.bind(this, this.mousetrap);
   }
 
+  /**
+   *
+   */
   addMastersCSS() {
     for (let master of this.masters.all) {
       if (this.masters[master].css) {
@@ -61,6 +71,9 @@ class ShowRunner {
     }
   }
 
+  /**
+   *
+   */
   setMain(slide) {
     let master = this.masters[this.newSlide.master];
     let elements = {
@@ -83,6 +96,9 @@ class ShowRunner {
     master.postSet(slide, this.config, this.document);
   }
 
+  /**
+   *
+   */
   setSlide(slide) {
     if (this.oldSlide.hasOwnProperty('master')) {
       this.masters[this.oldSlide.master]
@@ -109,25 +125,40 @@ class ShowRunner {
     this.setSlide(slide);
   }
 
+  /**
+   *
+   */
   setFirstSlide() {
     this.newSlide = this.slidesSwitcher.getByNo(1);
     this.setSlide(this.newSlide);
   }
 
+  /**
+   *
+   */
   stepPrev() {
     this.newSlide.steps.prev();
   }
 
+  /**
+   *
+   */
   stepNext() {
     this.newSlide.steps.next();
   }
 
+  /**
+   *
+   */
   slidePrev() {
     this.oldSlide = this.newSlide;
     this.newSlide = this.slidesSwitcher.prev();
     this.setSlide(this.newSlide);
   }
 
+  /**
+   *
+   */
   slideNext() {
     this.oldSlide = this.newSlide;
     this.newSlide = this.slidesSwitcher.next();

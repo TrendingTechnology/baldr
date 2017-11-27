@@ -15,12 +15,21 @@ let audioFiles = {};
 let audio;
 let mediaTypesExtensions = ['mp3', 'aac'];
 
+/**
+ *
+ */
 class Audio {
 
+  /**
+   *
+   */
   constructor(document) {
     this.element = document.getElementById('media-info');
   }
 
+  /**
+   *
+   */
   play(fileInfo) {
     this.stop();
     this.current = new Howl({src: [fileInfo.path]});
@@ -37,12 +46,18 @@ class Audio {
     }
   }
 
+  /**
+   *
+   */
   stop() {
     if (this.hasOwnProperty('current') && this.current.playing()) {
       this.current.stop();
     }
   }
 
+  /**
+   *
+   */
   pausePlay() {
     if (this.hasOwnProperty('current')) {
       if (this.current.playing()) {
@@ -54,6 +69,9 @@ class Audio {
     }
   }
 
+  /**
+   *
+   */
   fadeOut() {
     if (this.hasOwnProperty('current') && this.current.playing()) {
       this.current.fade(1, 0, 5000);
@@ -61,6 +79,9 @@ class Audio {
   }
 }
 
+/**
+ *
+ */
 exports.init = function(document, config) {
   audio = new Audio(document);
 

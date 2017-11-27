@@ -43,15 +43,23 @@ let requireLib = function(fileName) {
   return require(path.join(__dirname, fileName + '.js'));
 };
 
-const {getGeneral} = requireLib('general');
+const {getQuickStart} = requireLib('quick-start');
 const {getMasters} = requireLib('masters');
 const {getSlides, Slide} = requireLib('slides');
 const {SlidesSwitcher} = requireLib('slides-switcher');
 const {getThemes} = requireLib('themes');
 
+/**
+ *
+ */
 class ShowRunner {
-  constructor(argv, document) {
+
+  /**
+   *
+   */
+  constructor(argv, document, mousetrap) {
     this.document = document;
+    this.mousetrap = mousetrap;
     this.config = getConfig(argv);
     this.masters = getMasters();
     this.masters.execAll('init', document, this.config);
@@ -70,11 +78,15 @@ class ShowRunner {
 
     this.oldSlide = {};
     this.addMastersCSS();
-    this.general = getGeneral(document);
-    this.general.set();
+    this.quickStart = getQuickStart(document, this.masters);
+    this.quickStart.set();
     this.setFirstSlide();
+    this.quickStart.bind(this, this.mousetrap);
   }
 
+  /**
+   *
+   */
   addMastersCSS() {
     for (let master of this.masters.all) {
       if (this.masters[master].css) {
@@ -87,6 +99,9 @@ class ShowRunner {
     }
   }
 
+  /**
+   *
+   */
   setMain(slide) {
     let master = this.masters[this.newSlide.master];
     let elements = {
@@ -109,6 +124,9 @@ class ShowRunner {
     master.postSet(slide, this.config, this.document);
   }
 
+  /**
+   *
+   */
   setSlide(slide) {
     if (this.oldSlide.hasOwnProperty('master')) {
       this.masters[this.oldSlide.master]
@@ -128,32 +146,47 @@ class ShowRunner {
    * No number is assigned to the master slide.
    * @param {string} name Name of the master slide
    */
-  setInstantSlide(masterName) {
+  setInstantSlide(masterName, rawData=true) {
     let rawSlide = {};
-    rawSlide[masterName] = true;
+    rawSlide[masterName] = rawData;
     let slide = new Slide(rawSlide, this.document, this.config, this.masters);
     this.setSlide(slide);
   }
 
+  /**
+   *
+   */
   setFirstSlide() {
     this.newSlide = this.slidesSwitcher.getByNo(1);
     this.setSlide(this.newSlide);
   }
 
+  /**
+   *
+   */
   stepPrev() {
     this.newSlide.steps.prev();
   }
 
+  /**
+   *
+   */
   stepNext() {
     this.newSlide.steps.next();
   }
 
+  /**
+   *
+   */
   slidePrev() {
     this.oldSlide = this.newSlide;
     this.newSlide = this.slidesSwitcher.prev();
     this.setSlide(this.newSlide);
   }
 
+  /**
+   *
+   */
   slideNext() {
     this.oldSlide = this.newSlide;
     this.newSlide = this.slidesSwitcher.next();
@@ -179,7 +212,7 @@ exports.ShowRunner = ShowRunner;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-baldr.html">baldr</a></li><li><a href="module-baldr-application.html">baldr-application</a></li><li><a href="module-baldr-library.html">baldr-library</a></li><li><a href="module-baldr-master-audio.html">baldr-master-audio</a></li><li><a href="module-baldr-master-camera.html">baldr-master-camera</a></li><li><a href="module-baldr-master-editor.html">baldr-master-editor</a></li><li><a href="module-baldr-master-image.html">baldr-master-image</a></li><li><a href="module-baldr-master-markdown.html">baldr-master-markdown</a></li><li><a href="module-baldr-master-person.html">baldr-master-person</a></li><li><a href="module-baldr-master-question.html">baldr-master-question</a></li><li><a href="module-baldr-master-quote.html">baldr-master-quote</a></li><li><a href="module-baldr-master-svg.html">baldr-master-svg</a></li><li><a href="module-baldr-master-website.html">baldr-master-website</a></li><li><a href="module-baldr-test.html">baldr-test</a></li></ul><h3>Classes</h3><ul><li><a href="Config.html">Config</a></li><li><a href="FileInfo.html">FileInfo</a></li><li><a href="Media.html">Media</a></li><li><a href="module-baldr-application-LoadMasters.html">LoadMasters</a></li><li><a href="module-baldr-application-Slides.html">Slides</a></li><li><a href="module-baldr-application-SlidesSwitcher.html">SlidesSwitcher</a></li><li><a href="module-baldr-application-StepSwitcher.html">StepSwitcher</a></li><li><a href="module-baldr-application-Themes.html">Themes</a></li><li><a href="module-baldr-test-Spectron.html">Spectron</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addCSSFile">addCSSFile</a></li><li><a href="global.html#bindFunction">bindFunction</a></li><li><a href="global.html#bindFunctions">bindFunctions</a></li><li><a href="global.html#errorPage">errorPage</a></li><li><a href="global.html#main">main</a></li><li><a href="global.html#toggleModal">toggleModal</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-baldr.html">baldr</a></li><li><a href="module-baldr-application.html">baldr-application</a></li><li><a href="module-baldr-library.html">baldr-library</a></li><li><a href="module-baldr-master-audio.html">baldr-master-audio</a></li><li><a href="module-baldr-master-camera.html">baldr-master-camera</a></li><li><a href="module-baldr-master-editor.html">baldr-master-editor</a></li><li><a href="module-baldr-master-image.html">baldr-master-image</a></li><li><a href="module-baldr-master-markdown.html">baldr-master-markdown</a></li><li><a href="module-baldr-master-person.html">baldr-master-person</a></li><li><a href="module-baldr-master-question.html">baldr-master-question</a></li><li><a href="module-baldr-master-quote.html">baldr-master-quote</a></li><li><a href="module-baldr-master-svg.html">baldr-master-svg</a></li><li><a href="module-baldr-master-website.html">baldr-master-website</a></li><li><a href="module-baldr-test.html">baldr-test</a></li></ul><h3>Classes</h3><ul><li><a href="Config.html">Config</a></li><li><a href="FileInfo.html">FileInfo</a></li><li><a href="Media.html">Media</a></li><li><a href="module-baldr-application-LoadMasters.html">LoadMasters</a></li><li><a href="module-baldr-application-ShowRunner.html">ShowRunner</a></li><li><a href="module-baldr-application-Slides.html">Slides</a></li><li><a href="module-baldr-application-SlidesSwitcher.html">SlidesSwitcher</a></li><li><a href="module-baldr-application-StepSwitcher.html">StepSwitcher</a></li><li><a href="module-baldr-application-Themes.html">Themes</a></li><li><a href="module-baldr-master-audio-Audio.html">Audio</a></li><li><a href="module-baldr-test-Spectron.html">Spectron</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addCSSFile">addCSSFile</a></li><li><a href="global.html#bindFunction">bindFunction</a></li><li><a href="global.html#bindFunctions">bindFunctions</a></li><li><a href="global.html#errorPage">errorPage</a></li><li><a href="global.html#main">main</a></li><li><a href="global.html#toggleModal">toggleModal</a></li></ul>
 </nav>
 
 <br class="clear">

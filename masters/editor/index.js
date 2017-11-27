@@ -28,6 +28,9 @@ exports.quickStartEntries = function() {
   ];
 };
 
+/**
+ *
+ */
 exports.mainHTML = function(slide, config, document) {
   addCSSFile(
     document,
@@ -39,6 +42,9 @@ exports.mainHTML = function(slide, config, document) {
   return `<div data-editable data-name="main-content"></div>`;
 };
 
+/**
+ *
+ */
 exports.postSet = function(slide, config, document) {
   ContentTools.StylePalette.add([
     new ContentTools.Style('Author', 'author', ['p'])
@@ -48,6 +54,9 @@ exports.postSet = function(slide, config, document) {
   editor.init('*[data-editable]', 'data-name');
 };
 
+/**
+ *
+ */
 exports.cleanUp = function(document, oldSlide, newSlide) {
   document.querySelector('.ct-app').remove();
 };
