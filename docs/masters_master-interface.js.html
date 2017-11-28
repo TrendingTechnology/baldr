@@ -26,9 +26,124 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>
-/**
+            <pre class="prettyprint source linenums"><code>/**
  * @module baldr-master_INTERFACE
+ */
+
+/***********************************************************************
+ * Members
+ **********************************************************************/
+
+/**
+ * @property {object} config
+ * @property {boolean} config.centerVertically
+ * @property {boolean} config.stepSupport
+ * @property {string} config.theme
+ */
+exports.config = {
+
+};
+
+/**
+ * @property {object} documentation
+ * @property {array} documentation.examples
+ */
+exports.documentation = {
+  examples: [
+`
+- mastername:
+     property: value
+`,
+`
+- mastername:
+     property: value
+`
+  ]
+};
+
+/***********************************************************************
+ * Methods
+ **********************************************************************/
+
+/**
+ * @param {object} document
+ * @param {slide} oldSlide
+ * @param {slide} newSlide
+ */
+exports.cleanUp = function(document, oldSlide, newSlide) {};
+
+/**
+ * @param {object} document
+ * @param {object} config
+ */
+exports.init = function(document, config) {};
+
+/**
+ * @param {object} document
+ * @param {object} slide
+ * @param {object} config
+ */
+exports.initSteps = function(document, slide, config) {};
+
+/**
+ * @param {object} document
+ * @param {object} slide
+ * @param {object} config
+ */
+exports.initStepsEveryVisit = function(document, slide, config) {};
+
+
+/**
+ * @param {module:baldr-master_INTERFACE~slide} slide
+ * @param {object} config
+ * @param {object} document
+ */
+exports.mainHTML = function(slide, config, document) {};
+
+/**
+ *
+ */
+exports.modalHTML = function() {};
+
+/**
+ * @param {object} rawSlideData
+ * @param {object} config
+ */
+exports.normalizeData = function(rawSlideData, config) {};
+
+/**
+ * @param {object} document
+ * @param {module:baldr-library/config~Config} config
+ * @param {object} slide
+ */
+exports.postSet = function(slide, config, document) {};
+
+/**
+ * @return {module:baldr-master_INTERFACE~rawQuickStartEntries}
+ */
+exports.quickStartEntries = function() {};
+
+/**
+ * @param {integer} no
+ * @param {integer} count
+ * @param {object} stepData
+ * @param {object} document
+ */
+exports.setStepByNo = function(no, count, stepData, document) {};
+
+/***********************************************************************
+ * typedef
+ **********************************************************************/
+
+
+/**
+ * @typedef config
+ * @type {object}
+ * @property {string} sessionFile
+ * @property {string} sessionDir
+ * @property {object} raw Raw object representation of the main *.baldr
+ * session file structured in YAML
+ * @property {string|array|object} slides
  */
 
 
@@ -42,49 +157,19 @@
  * @property {object} steps
  */
 
-// * `initSteps(document, slide, config)`
-// * `initStepsEveryVisit(document, slide, config)`
-// * `modalHTML()`
-// * `normalizeData(rawSlideData, config)`
-// * `postSet(slide, config, document)`
-// * `setStepByNo(no, count, stepData, document)`
-
-// * `documentation`: object
-//   * `examples`: array
-
-
+/**
+ * @typedef rawQuickStartEntries
+ * @type {array}
+ */
 
 /**
- * @param {object} document
- * @param {slide} oldSlide
- * @param {slide} newSlide
+ * @typedef rawQuickStartEntry
+ * @type {object}
+ * @property {title} title
+ * @property {string|array|object} data
+ * @property {string} shortcut
+ * @property {string} fontawesome
  */
-exports.cleanUp = function(document, oldSlide, newSlide) {};
-
-
-/**
- * @property {object} config
- * @property {boolean} config.centerVertically
- * @property {boolean} config.stepSupport
- * @property {string} config.theme
- */
-exports.config = {
-
-}
-
-/**
- * @param {object} document
- * @param {object} config
- */
-exports.init = function(document, config) {};
-
-
-/**
- * @param {slide} slide
- * @param {object} config
- * @param {object} document
- */
-exports.mainHTML = function(slide, config, document) {};
 </code></pre>
         </article>
     </section>

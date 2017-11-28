@@ -115,20 +115,6 @@ Use HTML like notation `<object>` to reference objects.
 
 ------------------------------------------------------------------------
 
-## `slide`
-
-```
-{
-    no: 1,
-    master: "audio",
-    rawData: <misc>
-    normalizedData: <misc>
-    steps:
-}
-```
-
-------------------------------------------------------------------------
-
 ## `stepData`
 
 ```
