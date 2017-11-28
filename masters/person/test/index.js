@@ -19,7 +19,7 @@ let mainHTML = function(data) {
   return person.mainHTML({normalizedData: normalizedData}, config);
 };
 
-describe('Master slide “person”: unit tests', () => {
+describe('Master slide “person” #unittest', () => {
 
 
   it('function “normalizeData()”: all Values', () => {

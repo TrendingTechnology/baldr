@@ -9,7 +9,7 @@ let render = function(data) {
   return quote.mainHTML({normalizedData: data});
 };
 
-describe('Master slide “quote”: unit tests', () => {
+describe('Master slide “quote”: unit tests #unittest', () => {
 
   it('function “hookSetHTMLSlide()”: all values', () => {
     let html = render({

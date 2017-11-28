@@ -5,7 +5,7 @@ const {
   Spectron
 } = require('baldr-test');
 
-describe('General Spectron tests', () => {
+describe('General Spectron tests #spectron', () => {
 
   describe('build', () => {
 

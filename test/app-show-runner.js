@@ -7,15 +7,7 @@ const {
   testFileMinimal
 } = require('baldr-test');
 
-const {Presentation} = require('../lib/presentation.js');
-
-let initiatePresentation = function() {
-  return new Presentation(testFileMinimal, document);
-};
-
-let presentation;
-
-describe('Class “Presentation()”', () => {
+describe.skip('Class “ShowRunner()” #unittest', () => {
 
   beforeEach(() => {
     presentation = initiatePresentation();

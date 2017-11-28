@@ -6,7 +6,7 @@ const {
 let rewire;
 let document;
 
-describe('“render.js”', function() {
+describe.skip('“render.js” #unittest', function() {
 
   beforeEach(() => {
     rewire = require('rewire')('../render.js');

@@ -26,7 +26,7 @@ let dataMultipleWithAnswer = [
   {question: 'Two?', answer: 'Two'}
 ];
 
-describe('Master slide “question”: unit tests', () => {
+describe('Master slide “question” #unittest', () => {
 
   it('method “normalizeData()”', () => {
     assert.deepEqual(

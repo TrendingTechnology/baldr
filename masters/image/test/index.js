@@ -10,8 +10,7 @@ const image = require('../index.js');
 let config = cloneConfig();
 config.sessionDir = path.resolve(__dirname, '..');
 
-
-describe('Master slide “image”: unit tests', () => {
+describe('Master slide “image” #unittest', () => {
 
   describe('method normalizeData()', () => {
 
