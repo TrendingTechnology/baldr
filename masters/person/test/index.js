@@ -1,45 +1,71 @@
 const {
   assert,
   path,
-  document,
-  presentation,
-  masters,
-  getDOM
+  cloneConfig,
+  makeDOM
 } = require('baldr-test');
 
-const {Master} = require('../index.js')(document, masters, presentation);
+const person = require('../index.js');
 
-let propObj = {
-  masterName: 'person',
-  masterPath: path.resolve(__dirname, '..'),
-  document: document,
-  presentation: presentation
+let config = cloneConfig();
+config.sessionDir = path.resolve(__dirname, '..');
+
+let normalizeData = function(data) {
+  return person.normalizeData(data, config);
 };
 
-let render = function(data) {
-  propObj.data = data;
-  let person = new Master(propObj);
-  return person.hookSetHTMLSlide();
+let mainHTML = function(data) {
+  normalizedData = person.normalizeData(data, config);
+  return person.mainHTML({normalizedData: normalizedData}, config);
 };
 
 describe('Master slide “person”: unit tests', () => {
 
-  it('function “hookSetHTMLSlide()”', () => {
 
-    let html = render({
+  it('function “normalizeData()”: all Values', () => {
+    const data = normalizeData({
+      name: 'Ludwig van Beethoven',
+      image: 'beethoven.jpg',
+      birth: 1770,
+      death: 1827
+    });
+
+    assert.equal(data.name, 'Ludwig van Beethoven');
+    assert.ok(data.imagePath.includes('beethoven.jpg'));
+    assert.ok(data.imagePath.includes(path.sep));
+    assert.equal(data.birth, '* 1770');
+    assert.equal(data.death, '† 1827');
+    assert.equal(data.birthAndDeath, true);
+  });
+
+  it('function “normalizeData(): minimal values”', () => {
+    const data = normalizeData({
       name: 'Ludwig van Beethoven',
       image: 'beethoven.jpg'
     });
 
-    let doc = getDOM(html);
+    assert.equal(data.name, 'Ludwig van Beethoven');
+    assert.equal(data.birth, '');
+    assert.equal(data.death, '');
+    assert.equal(data.birthAndDeath, false);
+  });
+
+  it('function “mainHTML()”', () => {
+
+    let html = mainHTML({
+      name: 'Ludwig van Beethoven',
+      image: 'beethoven.jpg'
+    });
+
+    let doc = makeDOM(html);
     assert.equal(
-      doc.querySelector('#info-box p').textContent,
+      doc.querySelector('.info-box .person').textContent,
       'Ludwig van Beethoven'
     );
 
     assert.equal(
       doc.querySelector('img').getAttribute('src'),
-      path.resolve(__dirname, '..', '..', '..', 'test', 'files', 'beethoven.jpg')
+      path.resolve(__dirname, '..', 'beethoven.jpg')
     );
 
   });

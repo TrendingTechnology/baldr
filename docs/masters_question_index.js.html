@@ -28,15 +28,6 @@
         <article>
             <pre class="prettyprint source linenums"><code>/**
  * @file Master slide “question”
- * @module baldr-master-question
- */
-
-'use strict';
-
-const {MasterOfMasters} = require('baldr-masters');
-
-/**
- * Master class for the master slide “question”
  *
  * Types:
  *  - single
@@ -45,145 +36,131 @@ const {MasterOfMasters} = require('baldr-masters');
  *  - multiple
  *    - without answer
  *    - with answer
+ *
+ * @module baldr-master-question
  */
-class MasterQuestion extends MasterOfMasters {
 
-  constructor(propObj) {
-    super(propObj);
-    this.centerVertically = true;
+'use strict';
+
+/**
+ *
+ */
+let normalizeDataQAPair = function(pair) {
+  if (typeof pair === 'string') {
+    return {question: pair, answer: false};
   }
-
-  /**
-   *
-   */
-  normalizeDataQAPair(pair) {
-    if (typeof pair === 'string') {
-      return {question: pair, answer: false};
+  else if (typeof pair === 'object') {
+    if (typeof pair.question === 'string' &amp;&amp; !pair.answer) {
+      return {question: pair.question, answer: false};
     }
-    else if (typeof pair === 'object') {
-      if (typeof pair.question === 'string' &amp;&amp; !pair.answer) {
-        return {question: pair.question, answer: false};
-      }
-      else if (typeof pair.question === 'string' &amp;&amp; typeof pair.answer === 'string') {
-        return {question: pair.question, answer: pair.answer};
-      }
-      else {
-        throw new Error('Master slide “question”: Invalid data input');
-      }
+    else if (typeof pair.question === 'string' &amp;&amp; typeof pair.answer === 'string') {
+      return {question: pair.question, answer: pair.answer};
     }
     else {
       throw new Error('Master slide “question”: Invalid data input');
     }
   }
-
-  /**
-   *
-   */
-  normalizeData(data) {
-     if (typeof data === 'object' &amp;&amp; Array.isArray(data)) {
-      let out = [];
-      for (let pair of data) {
-        out.push(this.normalizeDataQAPair(pair));
-      }
-      return out;
-    } else {
-      return [this.normalizeDataQAPair(data)];
-    }
+  else {
+    throw new Error('Master slide “question”: Invalid data input');
   }
+};
 
-  /**
-   *
-   */
-  templatQAPair(question, answer) {
-    let out = '';
-    if (question) {
-      out += `&lt;p class="question">${question}&lt;/p>`;
+/**
+ *
+ */
+let templatQAPair = function(question, answer) {
+  let out = '';
+  if (question) {
+    out += `&lt;p class="question">${question}&lt;/p>`;
+  }
+  if (answer) {
+    out += `&lt;p class="answer">${answer}&lt;/p>`;
+  }
+  return out;
+};
+
+/**
+ *
+ */
+let template = function(data) {
+  if (data.length > 1) {
+    let li = '';
+    for (let pair of data) {
+      li +=
+        '&lt;li>' +
+        templatQAPair(pair.question, pair.answer) +
+        '&lt;/li>';
     }
-    if (answer) {
-      out += `&lt;p class="answer">${answer}&lt;/p>`;
+    return `&lt;ol>${li}&lt;/ol>`;
+  }
+  else {
+    return templatQAPair(data[0].question, data[0].answer);
+  }
+};
+
+/**
+ *
+ */
+exports.normalizeData = function(rawSlideData, config) {
+  if (typeof rawSlideData === 'object' &amp;&amp; Array.isArray(rawSlideData)) {
+    let out = [];
+    for (let pair of rawSlideData) {
+      out.push(normalizeDataQAPair(pair));
     }
     return out;
+  } else {
+    return [normalizeDataQAPair(rawSlideData)];
   }
+};
 
-  /**
-   *
-   */
-  setStepByNo(no) {
-    for (let i = 1; i &lt;= this.stepCount; i++) {
-      if (!this.stepData[i].style.visibility) {
-        this.stepData[i].style.visibility = 'visible';
-      }
+/**
+ *
+ */
+exports.config = {
+  centerVertically: true,
+  stepSupport: true
+};
 
-      let visibility = this.stepData[i].style.visibility;
-      if (visibility === 'visible' &amp;&amp; no &lt; i) {
-        this.stepData[i].style.visibility = 'hidden';
-      }
-      else if (visibility === 'hidden' &amp;&amp; no >= i) {
-        this.stepData[i].style.visibility = 'visible';
-      }
+/**
+ *
+ */
+exports.setStepByNo = function(no, count, stepData, document) {
+  for (let i = 1; i &lt;= count; i++) {
+    if (!stepData[i].style.visibility) {
+      stepData[i].style.visibility = 'visible';
+    }
+
+    let visibility = stepData[i].style.visibility;
+    if (visibility === 'visible' &amp;&amp; no &lt; i) {
+      stepData[i].style.visibility = 'hidden';
+    }
+    else if (visibility === 'hidden' &amp;&amp; no >= i) {
+      stepData[i].style.visibility = 'visible';
     }
   }
+};
 
-  /**
-   *
-   */
-  template(data) {
-    if (data.length > 1) {
-      let li = '';
-      for (let pair of data) {
-        li +=
-          '&lt;li>' +
-          this.templatQAPair(pair.question, pair.answer) +
-          '&lt;/li>';
-      }
-      return `&lt;ol>${li}&lt;/ol>`;
-    }
-    else {
-      return this.templatQAPair(data[0].question, data[0].answer);
-    }
-  }
+/**
+ *
+ */
+exports.mainHTML = function(slide, config, document) {
+  return '&lt;div id="question-content">' +
+    template(slide.normalizedData) +
+    '&lt;/div>';
+};
 
-  /**
-   *
-   */
-  hookSetHTMLSlide() {
-    let data = this.normalizeData(this.data);
-    return '&lt;div id="question-content">' +
-      this.template(data) +
-      '&lt;/div>';
-  }
-
-  /**
-   *
-   */
-  hookPostFirstSet() {
-    this.stepNo = 1;
-  }
-
-  /**
-   * The stepData object has to be filled very time a slide is set.
-   * Every time a slide is set, new HTML elements are generated.
-   */
-  hookPostSet() {
-    let elements = this.document.querySelectorAll('p');
-    this.stepCount = elements.length;
-    elements.forEach((element, index) => {
-      this.stepData[index + 1] = element;
-    });
-
-    this.setStepByNo(this.stepNo);
-  }
-
-  /**
-   *
-   */
-  hookSetStep() {
-    this.setStepByNo(this.stepNo);
-  }
-
-}
-
-exports.MasterQuestion = MasterQuestion;
+/**
+ * The stepData object has to be filled very time a slide is set.
+ * Every time a slide is set, new HTML elements are generated.
+ */
+exports.initStepsEveryVisit = function(document, slide, config) {
+  let data = {};
+  let elements = document.querySelectorAll('p');
+  elements.forEach((element, index) => {
+    data[index + 1] = element;
+  });
+  return data;
+};
 </code></pre>
         </article>
     </section>
@@ -194,7 +171,7 @@ exports.MasterQuestion = MasterQuestion;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-baldr.html">baldr</a></li><li><a href="module-baldr-master-audio.html">baldr-master-audio</a></li><li><a href="module-baldr-master-camera.html">baldr-master-camera</a></li><li><a href="module-baldr-master-editor.html">baldr-master-editor</a></li><li><a href="module-baldr-master-image.html">baldr-master-image</a></li><li><a href="module-baldr-master-markdown.html">baldr-master-markdown</a></li><li><a href="module-baldr-master-person.html">baldr-master-person</a></li><li><a href="module-baldr-master-question.html">baldr-master-question</a></li><li><a href="module-baldr-master-quote.html">baldr-master-quote</a></li><li><a href="module-baldr-master-svg.html">baldr-master-svg</a></li><li><a href="module-baldr-master-website.html">baldr-master-website</a></li><li><a href="module-baldr-masters.html">baldr-masters</a></li><li><a href="module-baldr-media.html">baldr-media</a></li><li><a href="module-baldr-test.html">baldr-test</a></li><li><a href="module-lib_misc.html">lib/misc</a></li><li><a href="module-lib_presentation.html">lib/presentation</a></li><li><a href="module-lib_slides.html">lib/slides</a></li><li><a href="module-lib_themes.html">lib/themes</a></li></ul><h3>Classes</h3><ul><li><a href="module-baldr-master-audio-MasterAudio.html">MasterAudio</a></li><li><a href="module-baldr-master-camera-MasterCamera.html">MasterCamera</a></li><li><a href="module-baldr-master-editor-MasterEditor.html">MasterEditor</a></li><li><a href="module-baldr-master-image-MasterImage.html">MasterImage</a></li><li><a href="module-baldr-master-markdown-MasterMarkdown.html">MasterMarkdown</a></li><li><a href="module-baldr-master-person-MasterPerson.html">MasterPerson</a></li><li><a href="module-baldr-master-question-MasterQuestion.html">MasterQuestion</a></li><li><a href="module-baldr-master-quote-MasterQuote.html">MasterQuote</a></li><li><a href="module-baldr-master-svg-MasterSvg.html">MasterSvg</a></li><li><a href="module-baldr-master-website-MasterWebsite.html">MasterWebsite</a></li><li><a href="module-baldr-masters-Masters.html">Masters</a></li><li><a href="module-baldr-media-Audio.html">Audio</a></li><li><a href="module-baldr-media-FileInfo.html">FileInfo</a></li><li><a href="module-baldr-media-Media.html">Media</a></li><li><a href="module-baldr-test-Spectron.html">Spectron</a></li><li><a href="module-lib_presentation-Presentation.html">Presentation</a></li><li><a href="module-lib_slides-Slides.html">Slides</a></li><li><a href="module-lib_themes-Themes.html">Themes</a></li></ul><h3>Interfaces</h3><ul><li><a href="module-baldr-masters-MasterOfMasters.html">MasterOfMasters</a></li></ul><h3>Global</h3><ul><li><a href="global.html#bindFunction">bindFunction</a></li><li><a href="global.html#bindFunctions">bindFunctions</a></li><li><a href="global.html#main">main</a></li><li><a href="global.html#setMaster">setMaster</a></li><li><a href="global.html#toggleModal">toggleModal</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-baldr.html">baldr</a></li><li><a href="module-baldr-application.html">baldr-application</a></li><li><a href="module-baldr-library.html">baldr-library</a></li><li><a href="module-baldr-master-audio.html">baldr-master-audio</a></li><li><a href="module-baldr-master-camera.html">baldr-master-camera</a></li><li><a href="module-baldr-master-editor.html">baldr-master-editor</a></li><li><a href="module-baldr-master-image.html">baldr-master-image</a></li><li><a href="module-baldr-master-markdown.html">baldr-master-markdown</a></li><li><a href="module-baldr-master-person.html">baldr-master-person</a></li><li><a href="module-baldr-master-question.html">baldr-master-question</a></li><li><a href="module-baldr-master-quote.html">baldr-master-quote</a></li><li><a href="module-baldr-master-svg.html">baldr-master-svg</a></li><li><a href="module-baldr-master-website.html">baldr-master-website</a></li><li><a href="module-baldr-test.html">baldr-test</a></li></ul><h3>Classes</h3><ul><li><a href="Config.html">Config</a></li><li><a href="FileInfo.html">FileInfo</a></li><li><a href="Media.html">Media</a></li><li><a href="module-baldr-application-LoadMasters.html">LoadMasters</a></li><li><a href="module-baldr-application-ShowRunner.html">ShowRunner</a></li><li><a href="module-baldr-application-Slides.html">Slides</a></li><li><a href="module-baldr-application-SlidesSwitcher.html">SlidesSwitcher</a></li><li><a href="module-baldr-application-StepSwitcher.html">StepSwitcher</a></li><li><a href="module-baldr-application-Themes.html">Themes</a></li><li><a href="module-baldr-master-audio-Audio.html">Audio</a></li><li><a href="module-baldr-test-Spectron.html">Spectron</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addCSSFile">addCSSFile</a></li><li><a href="global.html#bindFunction">bindFunction</a></li><li><a href="global.html#bindFunctions">bindFunctions</a></li><li><a href="global.html#errorPage">errorPage</a></li><li><a href="global.html#main">main</a></li><li><a href="global.html#toggleModal">toggleModal</a></li></ul>
 </nav>
 
 <br class="clear">

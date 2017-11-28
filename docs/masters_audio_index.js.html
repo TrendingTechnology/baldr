@@ -33,59 +33,148 @@
 
 'use strict';
 
-const {MasterOfMasters} = require('baldr-masters');
-const {Media, audio} = require('baldr-media');
 const path = require('path');
 const mousetrap = require('mousetrap');
+const {Howl} = require('howler');
 
-let audioFiles = [];
+const {Media} = require('baldr-library');
+
+let audioFiles = {};
+let audio;
+let mediaTypesExtensions = ['mp3', 'aac'];
 
 /**
- * Master class for the master slide “audio”
+ *
  */
-class MasterAudio extends MasterOfMasters {
-  constructor(propObj) {
-    super(propObj);
-    this.inputFiles = new Media(this.presentation.pwd);
-    this.dataNormalized = this.normalizeData(this.data);
-
-    var mousetrapbind = function(key, combo) {
-      audio.play(audioFiles[key.key]);
-    };
-
-    for (var i = 1; i &lt;= this.dataNormalized.length; i++) {
-      audioFiles[i] = this.dataNormalized[i - 1];
-      mousetrap.bind('ctrl+' + i, mousetrapbind);
-    }
-
-  }
+class Audio {
 
   /**
-   *this.dataNormalized
+   *
    */
-  normalizeData(data) {
-    return this.inputFiles.orderedList(data, 'audio');
+  constructor(document) {
+    this.element = document.getElementById('media-info');
   }
 
   /**
    *
    */
-  hookSetHTMLSlide() {
-    let out = '';
-    for (let audioFile of this.dataNormalized) {
-      out += `
-  &lt;li>
-    &lt;span class="artist">${audioFile.artist}&lt;/span>:
-    &lt;span class="title">${audioFile.title}&lt;/span>
-  &lt;/li>`;
-    }
+  play(fileInfo) {
+    this.stop();
+    this.current = new Howl({src: [fileInfo.path]});
+    this.id = this.current.play();
 
-    return `&lt;ol>${out}&lt;/ol>`;
+    if (this.hasOwnProperty('element')) {
+      this.element.innerHTML = fileInfo.titleSafe;
+      this.element.style.zIndex = 1;
+      this.element.style.visibility = 'visible';
+      setTimeout(() => {
+        this.element.style.zIndex = -1;
+        this.element.style.visibility = 'hidden';
+      }, 2000);
+    }
   }
 
+  /**
+   *
+   */
+  stop() {
+    if (this.hasOwnProperty('current') &amp;&amp; this.current.playing()) {
+      this.current.stop();
+    }
+  }
+
+  /**
+   *
+   */
+  pausePlay() {
+    if (this.hasOwnProperty('current')) {
+      if (this.current.playing()) {
+        this.current.pause();
+      }
+      else {
+        this.current.play();
+      }
+    }
+  }
+
+  /**
+   *
+   */
+  fadeOut() {
+    if (this.hasOwnProperty('current') &amp;&amp; this.current.playing()) {
+      this.current.fade(1, 0, 5000);
+    }
+  }
 }
 
-exports.MasterAudio = MasterAudio;
+/**
+ *
+ */
+exports.init = function(document, config) {
+  audio = new Audio(document);
+
+// ,
+// {
+//   function: () => {audio.stop();},
+//   keys: ['ctrl+a']
+// },
+// {
+//   function: () => {audio.fadeOut();},
+//   keys: ['ctrl+f']
+// },
+// {
+//   function: () => {audio.pausePlay();},
+//   keys: ['space']
+// }
+};
+
+/**
+ *
+ */
+exports.quickStartEntries = function() {
+  return [
+    {
+      title: 'Audio',
+      master: 'audio',
+      shortcut: 'ctrl+alt+a',
+      fontawesome: 'volume-up'
+    }
+  ];
+};
+
+/**
+ *
+ */
+exports.normalizeData = function(rawSlideData, config) {
+  let inputFiles = new Media(config.sessionDir);
+  let files = inputFiles.orderedList(rawSlideData, 'audio');
+
+  var mousetrapbind = function(key, combo) {
+    audio.play(audioFiles[key.key]);
+  };
+
+  for (var i = 1; i &lt;= files.length; i++) {
+    audioFiles[i] = files[i - 1];
+    mousetrap.bind('ctrl+' + i, mousetrapbind);
+  }
+  return files;
+};
+
+/**
+ *
+ */
+exports.mainHTML = function(slide, config, document) {
+  let out = '';
+  for (let audioFile of slide.normalizedData) {
+    out += `
+&lt;li>
+  &lt;span class="artist">${audioFile.artist}&lt;/span>:
+  &lt;span class="title">${audioFile.title}&lt;/span>
+&lt;/li>`;
+  }
+
+  return `&lt;ol>${out}&lt;/ol>`;
+};
 </code></pre>
         </article>
     </section>
@@ -96,7 +185,7 @@ exports.MasterAudio = MasterAudio;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-baldr.html">baldr</a></li><li><a href="module-baldr-master-audio.html">baldr-master-audio</a></li><li><a href="module-baldr-master-camera.html">baldr-master-camera</a></li><li><a href="module-baldr-master-editor.html">baldr-master-editor</a></li><li><a href="module-baldr-master-image.html">baldr-master-image</a></li><li><a href="module-baldr-master-markdown.html">baldr-master-markdown</a></li><li><a href="module-baldr-master-person.html">baldr-master-person</a></li><li><a href="module-baldr-master-question.html">baldr-master-question</a></li><li><a href="module-baldr-master-quote.html">baldr-master-quote</a></li><li><a href="module-baldr-master-svg.html">baldr-master-svg</a></li><li><a href="module-baldr-master-website.html">baldr-master-website</a></li><li><a href="module-baldr-masters.html">baldr-masters</a></li><li><a href="module-baldr-media.html">baldr-media</a></li><li><a href="module-baldr-test.html">baldr-test</a></li><li><a href="module-lib_misc.html">lib/misc</a></li><li><a href="module-lib_presentation.html">lib/presentation</a></li><li><a href="module-lib_slides.html">lib/slides</a></li><li><a href="module-lib_themes.html">lib/themes</a></li></ul><h3>Classes</h3><ul><li><a href="module-baldr-master-audio-MasterAudio.html">MasterAudio</a></li><li><a href="module-baldr-master-camera-MasterCamera.html">MasterCamera</a></li><li><a href="module-baldr-master-editor-MasterEditor.html">MasterEditor</a></li><li><a href="module-baldr-master-image-MasterImage.html">MasterImage</a></li><li><a href="module-baldr-master-markdown-MasterMarkdown.html">MasterMarkdown</a></li><li><a href="module-baldr-master-person-MasterPerson.html">MasterPerson</a></li><li><a href="module-baldr-master-question-MasterQuestion.html">MasterQuestion</a></li><li><a href="module-baldr-master-quote-MasterQuote.html">MasterQuote</a></li><li><a href="module-baldr-master-svg-MasterSvg.html">MasterSvg</a></li><li><a href="module-baldr-master-website-MasterWebsite.html">MasterWebsite</a></li><li><a href="module-baldr-masters-Masters.html">Masters</a></li><li><a href="module-baldr-media-Audio.html">Audio</a></li><li><a href="module-baldr-media-FileInfo.html">FileInfo</a></li><li><a href="module-baldr-media-Media.html">Media</a></li><li><a href="module-baldr-test-Spectron.html">Spectron</a></li><li><a href="module-lib_presentation-Presentation.html">Presentation</a></li><li><a href="module-lib_slides-Slides.html">Slides</a></li><li><a href="module-lib_themes-Themes.html">Themes</a></li></ul><h3>Interfaces</h3><ul><li><a href="module-baldr-masters-MasterOfMasters.html">MasterOfMasters</a></li></ul><h3>Global</h3><ul><li><a href="global.html#bindFunction">bindFunction</a></li><li><a href="global.html#bindFunctions">bindFunctions</a></li><li><a href="global.html#main">main</a></li><li><a href="global.html#setMaster">setMaster</a></li><li><a href="global.html#toggleModal">toggleModal</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-baldr.html">baldr</a></li><li><a href="module-baldr-application.html">baldr-application</a></li><li><a href="module-baldr-library.html">baldr-library</a></li><li><a href="module-baldr-master-audio.html">baldr-master-audio</a></li><li><a href="module-baldr-master-camera.html">baldr-master-camera</a></li><li><a href="module-baldr-master-editor.html">baldr-master-editor</a></li><li><a href="module-baldr-master-image.html">baldr-master-image</a></li><li><a href="module-baldr-master-markdown.html">baldr-master-markdown</a></li><li><a href="module-baldr-master-person.html">baldr-master-person</a></li><li><a href="module-baldr-master-question.html">baldr-master-question</a></li><li><a href="module-baldr-master-quote.html">baldr-master-quote</a></li><li><a href="module-baldr-master-svg.html">baldr-master-svg</a></li><li><a href="module-baldr-master-website.html">baldr-master-website</a></li><li><a href="module-baldr-test.html">baldr-test</a></li></ul><h3>Classes</h3><ul><li><a href="Config.html">Config</a></li><li><a href="FileInfo.html">FileInfo</a></li><li><a href="Media.html">Media</a></li><li><a href="module-baldr-application-LoadMasters.html">LoadMasters</a></li><li><a href="module-baldr-application-ShowRunner.html">ShowRunner</a></li><li><a href="module-baldr-application-Slides.html">Slides</a></li><li><a href="module-baldr-application-SlidesSwitcher.html">SlidesSwitcher</a></li><li><a href="module-baldr-application-StepSwitcher.html">StepSwitcher</a></li><li><a href="module-baldr-application-Themes.html">Themes</a></li><li><a href="module-baldr-master-audio-Audio.html">Audio</a></li><li><a href="module-baldr-test-Spectron.html">Spectron</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addCSSFile">addCSSFile</a></li><li><a href="global.html#bindFunction">bindFunction</a></li><li><a href="global.html#bindFunctions">bindFunctions</a></li><li><a href="global.html#errorPage">errorPage</a></li><li><a href="global.html#main">main</a></li><li><a href="global.html#toggleModal">toggleModal</a></li></ul>
 </nav>
 
 <br class="clear">

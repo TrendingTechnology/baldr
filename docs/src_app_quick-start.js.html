@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: src/app/quick-start.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: src/app/quick-start.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @file
+ * @module baldr-application
+ */
+
+/* jshint -W083 */
+
+'use strict';
+
+class QuickStart {
+
+  constructor(document, masters) {
+    this.masters = masters;
+
+    /**
+     *
+     */
+    this.document = document;
+
+    /**
+     *
+     */
+    this.elemNavigationMenu = this.document.getElementById('nav-quick-start');
+
+    this.entries = this.collectEntries();
+  }
+
+  /**
+   *
+   */
+  collectEntries() {
+    let entries = [];
+    for (let master of this.masters.all) {
+      let rawEntries = this.masters[master].quickStartEntries();
+      for (let index in rawEntries) {
+        rawEntries[index].master = master;
+        if (!rawEntries[index].hasOwnProperty('data')) {
+          rawEntries[index].data = true;
+        }
+      }
+      entries = entries.concat(rawEntries);
+    }
+
+    for (let index in entries) {
+      let no = Number.parseInt(index) + 1;
+      entries[index].cssID =
+        'quick-start-entry_' + entries[index].master +  '_' + no;
+    }
+
+    return entries;
+  }
+
+  /**
+   *
+   */
+  renderButton(entry) {
+    let button = this.document.createElement('button');
+    button.title = entry.title;
+    button.id = entry.cssID;
+    button.classList.add('fa');
+    button.classList.add('fa-' + entry.fontawesome);
+    return button;
+  }
+
+  /**
+   *
+   */
+  renderNavigationMenu() {
+    for (let entry of this.entries) {
+      let button = this.renderButton(entry);
+      this.elemNavigationMenu.appendChild(button);
+    }
+  }
+
+  set() {
+    this.renderNavigationMenu();
+  }
+
+  bind(showRunner, mousetrap) {
+    for (let entry of this.entries) {
+      let func = function() {
+        showRunner.setInstantSlide(entry.master, entry.data);
+      };
+      mousetrap.bind(entry.shortcut, func);
+      this.document
+      .getElementById(entry.cssID)
+      .addEventListener('click', func);
+    }
+  }
+}
+
+exports.QuickStart = QuickStart;
+
+exports.getQuickStart = function(document, masters) {
+  return new QuickStart(document, masters);
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-baldr.html">baldr</a></li><li><a href="module-baldr-application.html">baldr-application</a></li><li><a href="module-baldr-library.html">baldr-library</a></li><li><a href="module-baldr-master-audio.html">baldr-master-audio</a></li><li><a href="module-baldr-master-camera.html">baldr-master-camera</a></li><li><a href="module-baldr-master-editor.html">baldr-master-editor</a></li><li><a href="module-baldr-master-image.html">baldr-master-image</a></li><li><a href="module-baldr-master-markdown.html">baldr-master-markdown</a></li><li><a href="module-baldr-master-person.html">baldr-master-person</a></li><li><a href="module-baldr-master-question.html">baldr-master-question</a></li><li><a href="module-baldr-master-quote.html">baldr-master-quote</a></li><li><a href="module-baldr-master-svg.html">baldr-master-svg</a></li><li><a href="module-baldr-master-website.html">baldr-master-website</a></li><li><a href="module-baldr-test.html">baldr-test</a></li></ul><h3>Classes</h3><ul><li><a href="Config.html">Config</a></li><li><a href="FileInfo.html">FileInfo</a></li><li><a href="Media.html">Media</a></li><li><a href="module-baldr-application-LoadMasters.html">LoadMasters</a></li><li><a href="module-baldr-application-ShowRunner.html">ShowRunner</a></li><li><a href="module-baldr-application-Slides.html">Slides</a></li><li><a href="module-baldr-application-SlidesSwitcher.html">SlidesSwitcher</a></li><li><a href="module-baldr-application-StepSwitcher.html">StepSwitcher</a></li><li><a href="module-baldr-application-Themes.html">Themes</a></li><li><a href="module-baldr-master-audio-Audio.html">Audio</a></li><li><a href="module-baldr-test-Spectron.html">Spectron</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addCSSFile">addCSSFile</a></li><li><a href="global.html#bindFunction">bindFunction</a></li><li><a href="global.html#bindFunctions">bindFunctions</a></li><li><a href="global.html#errorPage">errorPage</a></li><li><a href="global.html#main">main</a></li><li><a href="global.html#toggleModal">toggleModal</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a>.
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

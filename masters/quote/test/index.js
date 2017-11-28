@@ -1,26 +1,12 @@
 const {
   assert,
-  document,
-  fs,
-  getDOM,
-  path,
-  presentation,
-  masters
+  makeDOM
 } = require('baldr-test');
 
-const {Master} = require('../index.js')(document, masters, presentation);
-
-let propObj = {
-  masterName: 'quote',
-  masterPath: path.resolve(__dirname, '..'),
-  document: document,
-  presentation: presentation
-};
+const quote = require('../index.js');
 
 let render = function(data) {
-  propObj.data = data;
-  let quote = new Master(propObj);
-  return quote.hookSetHTMLSlide();
+  return quote.mainHTML({normalizedData: data});
 };
 
 describe('Master slide “quote”: unit tests', () => {
@@ -32,7 +18,7 @@ describe('Master slide “quote”: unit tests', () => {
       date: 'date'
     });
 
-    let doc = getDOM(html);
+    let doc = makeDOM(html);
     assert.ok(html.includes('text'));
     assert.equal(
       doc.querySelector('.text').textContent,
@@ -65,7 +51,7 @@ describe('Master slide “quote”: unit tests', () => {
       text: 'text',
       date: 'date'
     });
-    let doc = getDOM(html);
+    let doc = makeDOM(html);
     assert.equal(
       doc.querySelector('.date').textContent,
       'date'
@@ -81,7 +67,7 @@ describe('Master slide “quote”: unit tests', () => {
       text: 'text',
       author: 'author'
     });
-    let doc = getDOM(html);
+    let doc = makeDOM(html);
     assert.equal(
       doc.querySelector('.author').textContent,
       'author'
@@ -96,7 +82,7 @@ describe('Master slide “quote”: unit tests', () => {
     let html = render({
       text: 'text'
     });
-    let doc = getDOM(html);
+    let doc = makeDOM(html);
     assert.equal(
       doc.querySelector('.attribution'),
       null

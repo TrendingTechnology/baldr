@@ -5,73 +5,145 @@
 
 'use strict';
 
-const {MasterOfMasters} = require('baldr-masters');
-const {Media, audio} = require('baldr-media');
 const path = require('path');
 const mousetrap = require('mousetrap');
+const {Howl} = require('howler');
 
-let audioFiles = [];
+const {Media} = require('baldr-library');
+
+let audioFiles = {};
+let audio;
+let mediaTypesExtensions = ['mp3', 'aac'];
 
 /**
- * Master class for the master slide “audio”
+ *
  */
-class MasterAudio extends MasterOfMasters {
-  constructor(propObj) {
-    super(propObj);
-    this.inputFiles = new Media(this.presentation.pwd);
-    this.dataNormalized = this.normalizeData(this.data);
-
-    var mousetrapbind = function(key, combo) {
-      audio.play(audioFiles[key.key]);
-    };
-
-    for (var i = 1; i <= this.dataNormalized.length; i++) {
-      audioFiles[i] = this.dataNormalized[i - 1];
-      mousetrap.bind('ctrl+' + i, mousetrapbind);
-    }
-
-  }
+class Audio {
 
   /**
-   *this.dataNormalized
+   *
    */
-  normalizeData(data) {
-    return this.inputFiles.orderedList(data, 'audio');
+  constructor(document) {
+    this.element = document.getElementById('media-info');
   }
 
   /**
    *
    */
-  hookSetHTMLSlide() {
-    let out = '';
-    for (let audioFile of this.dataNormalized) {
-      out += `
-  <li>
-    <span class="artist">${audioFile.artist}</span>:
-    <span class="title">${audioFile.title}</span>
-  </li>`;
-    }
+  play(fileInfo) {
+    this.stop();
+    this.current = new Howl({src: [fileInfo.path]});
+    this.id = this.current.play();
 
-    return `<ol>${out}</ol>`;
+    if (this.hasOwnProperty('element')) {
+      this.element.innerHTML = fileInfo.titleSafe;
+      this.element.style.zIndex = 1;
+      this.element.style.visibility = 'visible';
+      setTimeout(() => {
+        this.element.style.zIndex = -1;
+        this.element.style.visibility = 'hidden';
+      }, 2000);
+    }
   }
 
+  /**
+   *
+   */
+  stop() {
+    if (this.hasOwnProperty('current') && this.current.playing()) {
+      this.current.stop();
+    }
+  }
+
+  /**
+   *
+   */
+  pausePlay() {
+    if (this.hasOwnProperty('current')) {
+      if (this.current.playing()) {
+        this.current.pause();
+      }
+      else {
+        this.current.play();
+      }
+    }
+  }
+
+  /**
+   *
+   */
+  fadeOut() {
+    if (this.hasOwnProperty('current') && this.current.playing()) {
+      this.current.fade(1, 0, 5000);
+    }
+  }
 }
 
 /**
- * Export the implemented hooks of this master.
  *
- * @param {object} document The HTML Document Object (DOM) of the
- *   current render process.
- * @param {object} masters All required and loaded masters. Using
- *   `masters.masterName` you have access to all exported methods of
- *   a specific master.
- * @param {object} presentation Object representing the current
- *   presentation session.
- *
- * @return {object} A object, each property represents a hook.
  */
-module.exports = function(document, masters, presentation) {
-  let _export = {};
-  _export.Master = MasterAudio;
-  return _export;
+exports.init = function(document, config) {
+  audio = new Audio(document);
+
+// ,
+// {
+//   function: () => {audio.stop();},
+//   keys: ['ctrl+a']
+// },
+// {
+//   function: () => {audio.fadeOut();},
+//   keys: ['ctrl+f']
+// },
+// {
+//   function: () => {audio.pausePlay();},
+//   keys: ['space']
+// }
+};
+
+/**
+ *
+ */
+exports.quickStartEntries = function() {
+  return [
+    {
+      title: 'Audio',
+      master: 'audio',
+      shortcut: 'ctrl+alt+a',
+      fontawesome: 'volume-up'
+    }
+  ];
+};
+
+/**
+ *
+ */
+exports.normalizeData = function(rawSlideData, config) {
+  let inputFiles = new Media(config.sessionDir);
+  let files = inputFiles.orderedList(rawSlideData, 'audio');
+
+  var mousetrapbind = function(key, combo) {
+    audio.play(audioFiles[key.key]);
+  };
+
+  for (var i = 1; i <= files.length; i++) {
+    audioFiles[i] = files[i - 1];
+    mousetrap.bind('ctrl+' + i, mousetrapbind);
+  }
+  return files;
+};
+
+/**
+ *
+ */
+exports.mainHTML = function(slide, config, document) {
+  let out = '';
+  for (let audioFile of slide.normalizedData) {
+    out += `
+<li>
+  <span class="artist">${audioFile.artist}</span>:
+  <span class="title">${audioFile.title}</span>
+</li>`;
+  }
+
+  return `<ol>${out}</ol>`;
 };

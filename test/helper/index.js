@@ -8,9 +8,8 @@ const fs = require('fs');
 const path = require('path');
 const {JSDOM} = require('jsdom');
 const rewire = require('rewire');
-const {Presentation} = require('../../lib/presentation.js');
-const {LoadMasters} = require('baldr-masters');
-
+const {getMasters} = require('baldr-application');
+const {getConfig} = require('baldr-library');
 
 /**
  *
@@ -31,14 +30,6 @@ exports.path = path;
  *
  */
 exports.rewire = rewire;
-
-/**
- *
- */
-exports.getDOM = getDOM = function(html) {
-  let d = new JSDOM(html);
-  return d.window.document;
-};
 
 /**
  *
@@ -67,7 +58,14 @@ exports.allThemes = [
 /**
  *
  */
-exports.document = getDOM(
+exports.makeDOM = function(html) {
+  return new JSDOM(html).window.document;
+};
+
+/**
+ *
+ */
+exports.document = exports.makeDOM(
   fs.readFileSync(
     path.join(__dirname, '..', '..', 'render.html'),
     'utf8'
@@ -77,8 +75,8 @@ exports.document = getDOM(
 /**
  *
  */
-exports.returnDOM = function() {
-  return getDOM(
+exports.getDOM = function() {
+  return exports.makeDOM(
     fs.readFileSync(
       path.join(__dirname, '..', '..', 'render.html'),
       'utf8'
@@ -94,21 +92,29 @@ exports.testFileMinimal = path.resolve('test', 'files', 'minimal.baldr');
 /**
  *
  */
-exports.Presentation = Presentation;
+exports.config = getConfig([exports.testFileMinimal]);
+exports.cloneConfig = function () {
+  return Object.assign({}, exports.config);
+};
 
 /**
  *
  */
-exports.presentation = new Presentation(
-  exports.testFileMinimal,
-  exports.document
-);
-
+exports.masters = getMasters();
 
 /**
  *
  */
-exports.masters = new LoadMasters(exports.document, exports.presentation);
+exports.srcPath = function() {
+  return path.join(__dirname, '..', '..', 'src', ...arguments);
+};
+
+/**
+ *
+ */
+exports.requireFile = function() {
+  return require(exports.srcPath(...arguments));
+};
 
 /**
  *

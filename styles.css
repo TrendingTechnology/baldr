@@ -50,8 +50,23 @@ nav {
   z-index: 2;
 }
 
+nav#nav-quick-start button {
+  visibility: hidden;
+}
+
+nav#nav-quick-start:hover button {
+  visibility: visible;
+}
+
+#nav-quick-start {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: 2;
+}
+
 button {
-  color: blue;
+  color: #808080;
   background-color: inherit;
   border: 0;
   font-size: 4vw !important;
@@ -101,13 +116,6 @@ button:hover {
 	position: absolute;
 	top: 0;
 	right: 0;
-}
-
-#nav-quickies {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  z-index: 2;
 }
 
 #media-info {

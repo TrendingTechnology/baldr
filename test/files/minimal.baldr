@@ -1,4 +1,8 @@
 ---
+masters:
+  audio:
+    - media/audio/beethoven.mp3
+
 slides:
   - quote:
       text: |

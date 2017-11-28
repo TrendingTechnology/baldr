@@ -2,65 +2,45 @@ const {
   assert,
   document,
   path,
-  presentation,
-  Presentation,
-  masters,
-  getDOM
+  cloneConfig
 } = require('baldr-test');
 
-const {Master} = require('../index.js')(document, masters, presentation);
+const image = require('../index.js');
 
-let propObj = {
-  masterName: 'image',
-  masterPath: path.resolve(__dirname, '..'),
-  document: document,
-  presentation: new Presentation(
-    path.resolve(__dirname, '..', 'example.baldr'),
-    document
-  )
-};
+let config = cloneConfig();
+config.sessionDir = path.resolve(__dirname, '..');
 
-let getImage = function(data) {
-  propObj.data = data;
-  return new Master(propObj);
-};
-
-let resolveImage = function(imagePath, image) {
-  return path.resolve('masters', 'image', imagePath, image);
-};
-
-let image = getImage('images/beethoven.jpg');
 
 describe('Master slide “image”: unit tests', () => {
 
   describe('method normalizeData()', () => {
 
     it('Single file as string', () => {
-      let out = image.normalizeData('images/beethoven.jpg');
+      let out = image.normalizeData('images/beethoven.jpg', config);
       assert.equal(out[0].basename, 'beethoven.jpg');
     });
 
     it('Single file as array', () => {
-      let out = image.normalizeData(['images/beethoven.jpg']);
+      let out = image.normalizeData(['images/beethoven.jpg'], config);
       assert.equal(out[0].basename, 'beethoven.jpg');
     });
 
     it('Single folder as string', () => {
-      let out = image.normalizeData('images');
+      let out = image.normalizeData('images', config);
       assert.equal(out[0].basename, 'beethoven.jpg');
       assert.equal(out[1].basename, 'haydn.jpg');
       assert.equal(out[2].basename, 'mozart.jpg');
     });
 
     it('Single folder as array', () => {
-      let out = image.normalizeData(['images']);
+      let out = image.normalizeData(['images'], config);
       assert.equal(out[0].basename, 'beethoven.jpg');
       assert.equal(out[1].basename, 'haydn.jpg');
       assert.equal(out[2].basename, 'mozart.jpg');
     });
 
     it('Multiple folders as array', () => {
-      let out = image.normalizeData(['images', 'images2']);
+      let out = image.normalizeData(['images', 'images2'], config);
       assert.equal(out[0].basename, 'beethoven.jpg');
       assert.equal(out[1].basename, 'haydn.jpg');
       assert.equal(out[2].basename, 'mozart.jpg');

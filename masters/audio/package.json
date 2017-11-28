@@ -1,7 +1,6 @@
 {
   "name": "baldr-master-audio",
   "dependencies": {
-    "howl": "*",
     "howler": "^2.0.5"
   }
 }

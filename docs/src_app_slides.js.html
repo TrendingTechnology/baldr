@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: src/app/slides.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: src/app/slides.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @file Load the slides object form the YAML file format and process it.
+ * @module baldr-application
+ */
+
+'use strict';
+
+const fs = require('fs');
+const path = require('path');
+
+/**
+ * Some masters support steps. Steps are switched by the up and down
+ * arrow keys. Steps are the second level in the hierachy of state
+ * changes. On the first level are slides.
+ */
+
+class StepSwitcher {
+
+  constructor(document, slide, config, masters) {
+    this.config = config;
+    this.document = document;
+    this.slide = slide;
+
+    this.master = masters[slide.master];
+
+    /**
+     * The HTML-Button-Element that triggers the previous step.
+     * @type {object}
+     */
+    this.elements = {
+      prev: document.getElementById('nav-step-prev'),
+      next: document.getElementById('nav-step-next')
+    };
+
+    /**
+     * Object to store data for the individual steps. The step data
+     * should be indexed by the step number.
+     * @type {object}
+     */
+    this.stepData = false;
+
+    this.stepSupport = false;
+
+    /**
+     * The current step number. (Default: 0)
+     * @type {integer}
+     */
+    this.no = 0;
+
+    this.visited = false;
+  }
+
+  /**
+   * @private
+   */
+  setButtonsVisibility_(state) {
+    this.elements.prev.style.visibility = state;
+    this.elements.next.style.visibility = state;
+  }
+
+  setup_(stepData) {
+    if (stepData) {
+      this.stepData = stepData;
+      this.count = Object.keys(stepData).length;
+      this.stepSupport = this.count > 1;
+    }
+  }
+
+  visit() {
+    this.setup_(
+      this.master.initStepsEveryVisit(this.document, this.slide, this.config)
+    );
+    if (!this.visited) {
+      this.setup_(
+        this.master.initSteps(this.document, this.slide, this.config)
+      );
+      this.visited = true;
+      this.no = 1;
+    }
+
+    if (this.stepSupport) {
+      this.setByNo(this.no);
+      this.setButtonsVisibility_('visible');
+    }
+    else {
+      this.setButtonsVisibility_('hidden');
+    }
+  }
+
+  setByNo(no) {
+    this.master.setStepByNo(no, this.count, this.stepData, this.document);
+  }
+
+  /**
+   *
+   */
+  prev() {
+    if (this.stepSupport) {
+      if (this.no === 1) {
+        this.no = this.count;
+      }
+      else {
+        this.no--;
+      }
+      this.setByNo(this.no);
+    }
+  }
+
+  /**
+   *
+   */
+  next() {
+    if (this.stepSupport) {
+      if (this.no === this.count) {
+        this.no = 1;
+      }
+      else {
+        this.no++;
+      }
+      this.setByNo(this.no);
+    }
+  }
+}
+
+class Slide {
+
+  constructor(rawSlide, document, config, masters) {
+    let intersection = this.intersectMastersSlideKeys(
+      masters.all,
+      Object.keys(rawSlide)
+    );
+
+    if (intersection.length > 1) {
+      throw Error('Each slide must have only one master slide.');
+    }
+
+    this.master = intersection[0];
+    this.rawData = rawSlide[this.master];
+    this.normalizedData = masters[this.master]
+      .normalizeData(this.rawData, config);
+    this.steps = new StepSwitcher(document, this, config, masters);
+  }
+
+  /**
+   * Get the intersection between all master names and the slide keys.
+   *
+   * This method can be used to check that a slide object uses only
+   * one master slide.
+   *
+   * @param {array} masterNames
+   * @param {array} slideKeys
+   * @return {array} The intersection as an array
+   */
+  intersectMastersSlideKeys(masterNames, slideKeys) {
+    return masterNames.filter((n) => slideKeys.includes(n));
+  }
+
+}
+
+/**
+ * Parse the object representation of all slides.
+ */
+class Slides {
+
+  /**
+   * @param {array} raw A raw array of all slide objects.
+   */
+  constructor(rawSlides, config, document, masters) {
+    this.rawSlides = rawSlides;
+    this.config = config;
+    this.document = document;
+    this.masters = masters;
+  }
+
+  get() {
+    let out = {};
+
+    this.rawSlides.forEach((rawSlide, index) => {
+      let slide = new Slide(rawSlide, this.document, this.config, this.masters);
+      slide.no = index + 1;
+      out[index + 1] = slide;
+    });
+
+    return out;
+  }
+
+}
+
+exports.getSlides = function(rawSlides, config, document, masters) {
+  return new Slides(rawSlides, config, document, masters).get();
+};
+
+exports.Slide = Slide;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-baldr.html">baldr</a></li><li><a href="module-baldr-application.html">baldr-application</a></li><li><a href="module-baldr-library.html">baldr-library</a></li><li><a href="module-baldr-master-audio.html">baldr-master-audio</a></li><li><a href="module-baldr-master-camera.html">baldr-master-camera</a></li><li><a href="module-baldr-master-editor.html">baldr-master-editor</a></li><li><a href="module-baldr-master-image.html">baldr-master-image</a></li><li><a href="module-baldr-master-markdown.html">baldr-master-markdown</a></li><li><a href="module-baldr-master-person.html">baldr-master-person</a></li><li><a href="module-baldr-master-question.html">baldr-master-question</a></li><li><a href="module-baldr-master-quote.html">baldr-master-quote</a></li><li><a href="module-baldr-master-svg.html">baldr-master-svg</a></li><li><a href="module-baldr-master-website.html">baldr-master-website</a></li><li><a href="module-baldr-test.html">baldr-test</a></li></ul><h3>Classes</h3><ul><li><a href="Config.html">Config</a></li><li><a href="FileInfo.html">FileInfo</a></li><li><a href="Media.html">Media</a></li><li><a href="module-baldr-application-LoadMasters.html">LoadMasters</a></li><li><a href="module-baldr-application-ShowRunner.html">ShowRunner</a></li><li><a href="module-baldr-application-Slides.html">Slides</a></li><li><a href="module-baldr-application-SlidesSwitcher.html">SlidesSwitcher</a></li><li><a href="module-baldr-application-StepSwitcher.html">StepSwitcher</a></li><li><a href="module-baldr-application-Themes.html">Themes</a></li><li><a href="module-baldr-master-audio-Audio.html">Audio</a></li><li><a href="module-baldr-test-Spectron.html">Spectron</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addCSSFile">addCSSFile</a></li><li><a href="global.html#bindFunction">bindFunction</a></li><li><a href="global.html#bindFunctions">bindFunctions</a></li><li><a href="global.html#errorPage">errorPage</a></li><li><a href="global.html#main">main</a></li><li><a href="global.html#toggleModal">toggleModal</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a>.
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

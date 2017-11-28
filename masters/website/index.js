@@ -5,43 +5,31 @@
 
 'use strict';
 
-const {MasterOfMasters} = require('baldr-masters');
 
 /**
- * Master class for the master slide “website”
  *
- * @implements {MasterOfMasters}
  */
-class MasterWebsite extends MasterOfMasters {
-
-  constructor(propObj) {
-    super(propObj);
-  }
-
-  /**
-   *
-   */
-  hookSetHTMLSlide() {
-    return `<webview src="${this.data}"></webview>`;
-  }
-
-}
+exports.quickStartEntries = function() {
+  return [
+    {
+      title: 'Google',
+      data: 'https://google.com',
+      shortcut: 'ctrl+alt+g',
+      fontawesome: 'google'
+    },
+    {
+      title: 'Wikipedia',
+      data: 'https://de.wikipedia.org',
+      shortcut: 'ctrl+alt+w',
+      fontawesome: 'wikipedia-w'
+    }
+  ];
+};
 
 /**
- * Export the implemented hooks of this master.
  *
- * @param {object} document The HTML Document Object (DOM) of the
- *   current render process.
- * @param {object} masters All required and loaded masters. Using
- *   `masters.masterName` you have access to all exported methods of
- *   a specific master.
- * @param {object} presentation Object representing the current
- *   presentation session.
- *
- * @return {object} A object, each property represents a hook.
  */
-module.exports = function(document, masters, presentation) {
-  let _export = {};
-  _export.Master = MasterWebsite;
-  return _export;
+exports.mainHTML = function(slide, config, document) {
+  let data = slide.normalizedData;
+  return `<webview src="${data}"></webview>`;
 };

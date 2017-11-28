@@ -1,0 +1,8 @@
+{
+  "name": "baldr-library",
+  "main": "index.js",
+  "description": "Some low level library functions and classes used by the master modules.",
+  "dependencies": {
+    "js-yaml": "^3.10.0"
+  }
+}

@@ -71,7 +71,7 @@ describe('General Spectron tests', () => {
           assert.equal(style.value, 'alegreya sc');
         })
         .getCssProperty('button', 'color').then(style => {
-          assert.equal(style[0].parsed.hex, '#0000ff');
+          assert.equal(style[0].parsed.hex, '#808080');
         })
 
         .click('#nav-slide-next')
@@ -81,7 +81,7 @@ describe('General Spectron tests', () => {
         })
 
         .click('#nav-slide-next')
-        .getText('p')
+        .getText('.person')
         .then(text => {
           assert.equal(text, 'Ludwig van Beethoven');
         });
@@ -97,7 +97,7 @@ describe('General Spectron tests', () => {
         })
 
         .keys('ArrowRight')
-        .getText('p')
+        .getText('.person')
         .then(text => {
           assert.equal(text, 'Ludwig van Beethoven');
         })

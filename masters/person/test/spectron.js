@@ -18,7 +18,7 @@ describe('Master slide “person”: Spectron tests on “example.baldr”', fun
 
   it('Text on the example slides', function () {
     return this.app.client
-      .getText('#info-box p')
+      .getText('.info-box .person')
       .then(text => {assert.equal(text, 'Ludwig van Beethoven');})
 
       ;

@@ -5,51 +5,82 @@
 
 'use strict';
 
-const {MasterOfMasters} = require('baldr-masters');
+const {Media, checkProperty} = require('baldr-library');
+
+exports.documentation = {
+  examples: [
+`
+- person:
+     name: Ludwig van Beethoven
+     image: images/beethoven.jpg
+     birth: 1770
+     death: 1827
+`
+  ]
+};
 
 /**
- * Master class for the master slide “person”
- * @class
+ *
  */
-class MasterPerson extends MasterOfMasters {
-  constructor(propObj) {
-    super(propObj);
+exports.normalizeData = function(rawSlideData, config) {
+  let data = {};
+
+  if (checkProperty.isString(rawSlideData, 'name')) {
+    data.name = rawSlideData.name;
   }
 
-  /**
-   *
-   */
-  hookSetHTMLSlide() {
-    return `
-  <section id="master-person">
-
-    <img src="${this.presentation.pwd}/${this.data.image}">
-
-    <div id="info-box">
-      <p>${this.data.name}</p>
-    </div>
-
-  </section>
-  `;
+  let images = new Media(config.sessionDir);
+  let image = images.list(rawSlideData.image, 'image');
+  if (image && image !== [] && image[0] && image[0].hasOwnProperty('path')) {
+    data.imagePath = image[0].path;
   }
 
-}
+  if (!checkProperty.empty(rawSlideData, 'birth')) {
+    data.birth = '* ' + rawSlideData.birth;
+  }
+  else {
+    data.birth = '';
+  }
+
+  if (!checkProperty.empty(rawSlideData, 'death')) {
+    data.death = '† ' + rawSlideData.death;
+  }
+  else {
+    data.death = '';
+  }
+
+  if (
+    !checkProperty.empty(rawSlideData, 'birth') ||
+    !checkProperty.empty(rawSlideData, 'death')
+  ) {
+    data.birthAndDeath = true;
+  }
+  else {
+    data.birthAndDeath = false;
+  }
+
+  return data;
+};
 
 /**
- * Export the implemented hooks of this master.
  *
- * @param {object} document The HTML Document Object (DOM) of the
- *   current render process.
- * @param {object} masters All required and loaded masters. Using
- *   `masters.masterName` you have access to all exported methods of
- *   a specific master.
- * @param {object} presentation Object representing the current
- *   presentation session.
- *
- * @return {object} A object, each property represents a hook.
  */
-module.exports = function(document, masters, presentation) {
-  let _export = {};
-  _export.Master = MasterPerson;
-  return _export;
+exports.mainHTML = function(slide, config, document) {
+  let data = slide.normalizedData;
+
+  let birthAndDeath;
+  if (data.birthAndDeath) {
+    birthAndDeath = `<p class="birth-and-death">${data.birth} ${data.death}</p>`;
+  }
+  else {
+    birthAndDeath = '';
+  }
+
+  return `
+<img src="${data.imagePath}">
+
+<div class="info-box">
+  ${birthAndDeath}
+  <p class="person important">${data.name}</p>
+</div>`;
 };

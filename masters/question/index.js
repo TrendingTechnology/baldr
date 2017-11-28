@@ -1,14 +1,5 @@
 /**
  * @file Master slide “question”
- * @module baldr-master-question
- */
-
-'use strict';
-
-const {MasterOfMasters} = require('baldr-masters');
-
-/**
- * Master class for the master slide “question”
  *
  * Types:
  *  - single
@@ -17,159 +8,128 @@ const {MasterOfMasters} = require('baldr-masters');
  *  - multiple
  *    - without answer
  *    - with answer
+ *
+ * @module baldr-master-question
  */
-class MasterQuestion extends MasterOfMasters {
 
-  constructor(propObj) {
-    super(propObj);
-    this.centerVertically = true;
+'use strict';
+
+/**
+ *
+ */
+let normalizeDataQAPair = function(pair) {
+  if (typeof pair === 'string') {
+    return {question: pair, answer: false};
   }
-
-  /**
-   *
-   */
-  normalizeDataQAPair(pair) {
-    if (typeof pair === 'string') {
-      return {question: pair, answer: false};
+  else if (typeof pair === 'object') {
+    if (typeof pair.question === 'string' && !pair.answer) {
+      return {question: pair.question, answer: false};
     }
-    else if (typeof pair === 'object') {
-      if (typeof pair.question === 'string' && !pair.answer) {
-        return {question: pair.question, answer: false};
-      }
-      else if (typeof pair.question === 'string' && typeof pair.answer === 'string') {
-        return {question: pair.question, answer: pair.answer};
-      }
-      else {
-        throw new Error('Master slide “question”: Invalid data input');
-      }
+    else if (typeof pair.question === 'string' && typeof pair.answer === 'string') {
+      return {question: pair.question, answer: pair.answer};
     }
     else {
       throw new Error('Master slide “question”: Invalid data input');
     }
   }
-
-  /**
-   *
-   */
-  normalizeData(data) {
-     if (typeof data === 'object' && Array.isArray(data)) {
-      let out = [];
-      for (let pair of data) {
-        out.push(this.normalizeDataQAPair(pair));
-      }
-      return out;
-    } else {
-      return [this.normalizeDataQAPair(data)];
-    }
+  else {
+    throw new Error('Master slide “question”: Invalid data input');
   }
-
-  /**
-   *
-   */
-  templatQAPair(question, answer) {
-    let out = '';
-    if (question) {
-      out += `<p class="question">${question}</p>`;
-    }
-    if (answer) {
-      out += `<p class="answer">${answer}</p>`;
-    }
-    return out;
-  }
-
-  /**
-   *
-   */
-  setStepByNo(no) {
-    for (let i = 1; i <= this.stepCount; i++) {
-      if (!this.stepData[i].style.visibility) {
-        this.stepData[i].style.visibility = 'visible';
-      }
-
-      let visibility = this.stepData[i].style.visibility;
-      if (visibility === 'visible' && no < i) {
-        this.stepData[i].style.visibility = 'hidden';
-      }
-      else if (visibility === 'hidden' && no >= i) {
-        this.stepData[i].style.visibility = 'visible';
-      }
-    }
-  }
-
-  /**
-   *
-   */
-  template(data) {
-    if (data.length > 1) {
-      let li = '';
-      for (let pair of data) {
-        li +=
-          '<li>' +
-          this.templatQAPair(pair.question, pair.answer) +
-          '</li>';
-      }
-      return `<ol>${li}</ol>`;
-    }
-    else {
-      return this.templatQAPair(data[0].question, data[0].answer);
-    }
-  }
-
-  /**
-   *
-   */
-  hookSetHTMLSlide() {
-    let data = this.normalizeData(this.data);
-    return '<div id="question-content">' +
-      this.template(data) +
-      '</div>';
-  }
-
-  /**
-   *
-   */
-  hookPostFirstSet() {
-    this.stepNo = 1;
-  }
-
-  /**
-   * The stepData object has to be filled very time a slide is set.
-   * Every time a slide is set, new HTML elements are generated.
-   */
-  hookPostSet() {
-    let elements = this.document.querySelectorAll('p');
-    this.stepCount = elements.length;
-    elements.forEach((element, index) => {
-      this.stepData[index + 1] = element;
-    });
-
-    this.setStepByNo(this.stepNo);
-  }
-
-  /**
-   *
-   */
-  hookSetStep() {
-    this.setStepByNo(this.stepNo);
-  }
-
-}
+};
 
 /**
- * Export the implemented hooks of this master.
  *
- * @param {object} document The HTML Document Object (DOM) of the
- *   current render process.
- * @param {object} masters All required and loaded masters. Using
- *   `masters.masterName` you have access to all exported methods of
- *   a specific master.
- * @param {object} presentation Object representing the current
- *   presentation session.
- *
- * @return {object} A object, each property represents a hook.
  */
-module.exports = function(document, masters, presentation) {
-  let _export = {};
-  _export.Master = MasterQuestion;
-  return _export;
+let templatQAPair = function(question, answer) {
+  let out = '';
+  if (question) {
+    out += `<p class="question">${question}</p>`;
+  }
+  if (answer) {
+    out += `<p class="answer">${answer}</p>`;
+  }
+  return out;
+};
+
+/**
+ *
+ */
+let template = function(data) {
+  if (data.length > 1) {
+    let li = '';
+    for (let pair of data) {
+      li +=
+        '<li>' +
+        templatQAPair(pair.question, pair.answer) +
+        '</li>';
+    }
+    return `<ol>${li}</ol>`;
+  }
+  else {
+    return templatQAPair(data[0].question, data[0].answer);
+  }
+};
+
+/**
+ *
+ */
+exports.normalizeData = function(rawSlideData, config) {
+  if (typeof rawSlideData === 'object' && Array.isArray(rawSlideData)) {
+    let out = [];
+    for (let pair of rawSlideData) {
+      out.push(normalizeDataQAPair(pair));
+    }
+    return out;
+  } else {
+    return [normalizeDataQAPair(rawSlideData)];
+  }
+};
+
+/**
+ *
+ */
+exports.config = {
+  centerVertically: true,
+  stepSupport: true
+};
+
+/**
+ *
+ */
+exports.setStepByNo = function(no, count, stepData, document) {
+  for (let i = 1; i <= count; i++) {
+    if (!stepData[i].style.visibility) {
+      stepData[i].style.visibility = 'visible';
+    }
+
+    let visibility = stepData[i].style.visibility;
+    if (visibility === 'visible' && no < i) {
+      stepData[i].style.visibility = 'hidden';
+    }
+    else if (visibility === 'hidden' && no >= i) {
+      stepData[i].style.visibility = 'visible';
+    }
+  }
+};
+
+/**
+ *
+ */
+exports.mainHTML = function(slide, config, document) {
+  return '<div id="question-content">' +
+    template(slide.normalizedData) +
+    '</div>';
+};
+
+/**
+ * The stepData object has to be filled very time a slide is set.
+ * Every time a slide is set, new HTML elements are generated.
+ */
+exports.initStepsEveryVisit = function(document, slide, config) {
+  let data = {};
+  let elements = document.querySelectorAll('p');
+  elements.forEach((element, index) => {
+    data[index + 1] = element;
+  });
+  return data;
 };
