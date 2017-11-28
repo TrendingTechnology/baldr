@@ -42,7 +42,7 @@ exports.cleanUp = function(document, oldSlide, newSlide) {};
  */
 exports.config = {
 
-}
+};
 
 /**
  * @param {object} document
