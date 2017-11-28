@@ -1,6 +1,6 @@
 /**
  * @file Load the slides object form the YAML file format and process it.
- * @module baldr-application
+ * @module baldr-application/slides
  */
 
 'use strict';

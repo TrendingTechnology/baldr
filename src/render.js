@@ -1,5 +1,6 @@
 /**
  * @file Entry file of the render process. Assemble all classes
+ * @module baldr/render
  */
 
 'use strict';

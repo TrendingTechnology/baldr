@@ -1,5 +1,6 @@
 /**
  * @file Manage the configuration for a presentation session.
+ * @module baldr-library/config
  */
 
 'use strict';

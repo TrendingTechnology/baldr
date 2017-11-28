@@ -1,4 +1,6 @@
-
+/**
+ * @module baldr-library/helper
+ */
 'use strict';
 
 const fs = require('fs');

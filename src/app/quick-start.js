@@ -1,12 +1,15 @@
 /**
  * @file
- * @module baldr-application
+ * @module baldr-application/quick-start
  */
 
 /* jshint -W083 */
 
 'use strict';
 
+/**
+ *
+ */
 class QuickStart {
 
   constructor(document, masters) {
@@ -72,10 +75,16 @@ class QuickStart {
     }
   }
 
+  /**
+   *
+   */
   set() {
     this.renderNavigationMenu();
   }
 
+  /**
+   *
+   */
   bind(showRunner, mousetrap) {
     for (let entry of this.entries) {
       let func = function() {
@@ -91,6 +100,9 @@ class QuickStart {
 
 exports.QuickStart = QuickStart;
 
+/**
+ *
+ */
 exports.getQuickStart = function(document, masters) {
   return new QuickStart(document, masters);
 };

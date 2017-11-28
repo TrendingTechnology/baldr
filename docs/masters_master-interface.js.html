@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: masters/svg/index.js</title>
+    <title>JSDoc: Source: masters/master-interface.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: masters/svg/index.js</h1>
+    <h1 class="page-title">Source: masters/master-interface.js</h1>
 
     
 
@@ -26,19 +26,65 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>/**
- * @file Master slide “svg”
- * @module baldr-master-svg
+            <pre class="prettyprint source linenums"><code>
+/**
+ * @module baldr-master_INTERFACE
  */
 
-'use strict';
 
 /**
- *
+ * @typedef slide
+ * @type {object}
+ * @property {integer} no
+ * @property {string} master
+ * @property {string|array|object} rawData
+ * @property {string|array|object} normalizedData
+ * @property {object} steps
  */
-exports.mainHTML = function(slide, config, document) {
-  return 'svg';
-};
+
+// * `initSteps(document, slide, config)`
+// * `initStepsEveryVisit(document, slide, config)`
+// * `modalHTML()`
+// * `normalizeData(rawSlideData, config)`
+// * `postSet(slide, config, document)`
+// * `setStepByNo(no, count, stepData, document)`
+
+// * `documentation`: object
+//   * `examples`: array
+
+
+
+/**
+ * @param {object} document
+ * @param {slide} oldSlide
+ * @param {slide} newSlide
+ */
+exports.cleanUp = function(document, oldSlide, newSlide) {};
+
+
+/**
+ * @property {object} config
+ * @property {boolean} config.centerVertically
+ * @property {boolean} config.stepSupport
+ * @property {string} config.theme
+ */
+exports.config = {
+
+}
+
+/**
+ * @param {object} document
+ * @param {object} config
+ */
+exports.init = function(document, config) {};
+
+
+/**
+ * @param {slide} slide
+ * @param {object} config
+ * @param {object} document
+ */
+exports.mainHTML = function(slide, config, document) {};
 </code></pre>
         </article>
     </section>

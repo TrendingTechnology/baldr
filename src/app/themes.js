@@ -1,6 +1,6 @@
 /**
  * @file Gather informations about all themes.
- * @module baldr-application
+ * @module baldr-application/themes
  */
 
 'use strict';

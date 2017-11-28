@@ -1,6 +1,6 @@
 /**
  * @file Gather informations about all available master slides
- * @module baldr-application
+ * @module baldr-application/masters
  */
 
 'use strict';
