@@ -45,12 +45,19 @@ let renderQuotationMark = function(begin=true) {
   return `<span id="quotation-${id}" class="quotation-mark">${mark}</span>`;
 };
 
+/***********************************************************************
+ * Hooks
+ **********************************************************************/
+
+/**
+ * @see {@link module:baldr-master_INTERFACE.config}
+ */
 exports.config = {
   centerVertically: true
 };
 
 /**
- *
+ * @see {@link module:baldr-master_INTERFACE.mainHTML}
  */
 exports.mainHTML = function(slide, config, document) {
   let data = slide.normalizedData;

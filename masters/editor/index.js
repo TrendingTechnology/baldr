@@ -10,13 +10,19 @@ const path = require('path');
 
 const {addCSSFile} = require('baldr-library');
 
+/***********************************************************************
+ * Hooks
+ **********************************************************************/
+
+/**
+ * @see {@link module:baldr-master_INTERFACE.config}
+ */
 exports.config = {
   theme: 'handwriting'
 };
 
-
 /**
- *
+ * @see {@link module:baldr-master_INTERFACE.quickStartEntries}
  */
 exports.quickStartEntries = function() {
   return [
@@ -29,7 +35,7 @@ exports.quickStartEntries = function() {
 };
 
 /**
- *
+ * @see {@link module:baldr-master_INTERFACE.mainHTML}
  */
 exports.mainHTML = function(slide, config, document) {
   addCSSFile(
@@ -43,7 +49,7 @@ exports.mainHTML = function(slide, config, document) {
 };
 
 /**
- *
+ * @see {@link module:baldr-master_INTERFACE.postSet}
  */
 exports.postSet = function(slide, config, document) {
   ContentTools.StylePalette.add([
@@ -55,7 +61,7 @@ exports.postSet = function(slide, config, document) {
 };
 
 /**
- *
+ * @see {@link module:baldr-master_INTERFACE.cleanUp}
  */
 exports.cleanUp = function(document, oldSlide, newSlide) {
   document.querySelector('.ct-app').remove();

@@ -10,9 +10,12 @@ const {
   reIndex
 } = require('baldr-library');
 
+/***********************************************************************
+ * Hooks
+ **********************************************************************/
 
 /**
- *
+ * @see {@link module:baldr-master_INTERFACE.quickStartEntries}
  */
 exports.quickStartEntries = function() {
   return [
@@ -26,7 +29,7 @@ exports.quickStartEntries = function() {
 };
 
 /**
- *
+ * @see {@link module:baldr-master_INTERFACE.normalizeData}
  */
 exports.normalizeData = function(rawSlideData, config) {
   return new Media(config.sessionDir)
@@ -34,14 +37,14 @@ exports.normalizeData = function(rawSlideData, config) {
 };
 
 /**
- *
+ * @see {@link module:baldr-master_INTERFACE.initSteps}
  */
 exports.initSteps = function(document, slide, config) {
   return reIndex(slide.normalizedData);
 };
 
 /**
- *
+ * @see {@link module:baldr-master_INTERFACE.setStepByNo}
  */
 exports.setStepByNo = function(no, count, stepData, document) {
   document
@@ -50,14 +53,14 @@ exports.setStepByNo = function(no, count, stepData, document) {
 };
 
 /**
- *
+ * @see {@link module:baldr-master_INTERFACE.config}
  */
 exports.config = {
   stepSupport: true
 };
 
 /**
- *
+ * @see {@link module:baldr-master_INTERFACE.mainHTML}
  */
 exports.mainHTML = function(slide, config, document) {
   let path = slide.normalizedData[0].path;

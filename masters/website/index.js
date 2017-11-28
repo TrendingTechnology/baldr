@@ -5,9 +5,12 @@
 
 'use strict';
 
+/***********************************************************************
+ * Hooks
+ **********************************************************************/
 
 /**
- *
+ * @see {@link module:baldr-master_INTERFACE.quickStartEntries}
  */
 exports.quickStartEntries = function() {
   return [

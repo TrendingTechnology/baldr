@@ -48,8 +48,12 @@
 
 'use strict';
 
+/***********************************************************************
+ * Hooks
+ **********************************************************************/
+
 /**
- *
+ * @see {@link module:baldr-master_INTERFACE.quickStartEntries}
  */
 exports.quickStartEntries = function() {
   return [
@@ -63,7 +67,7 @@ exports.quickStartEntries = function() {
 };
 
 /**
- *
+ * @see {@link module:baldr-master_INTERFACE.modalHTML}
  */
 exports.modalHTML = function() {
   return `
@@ -74,14 +78,14 @@ exports.modalHTML = function() {
 };
 
 /**
- *
+ * @see {@link module:baldr-master_INTERFACE.mainHTML}
  */
 exports.mainHTML = function(slide, config, document) {
   return '<video autoplay="true" id="video"></video>';
 };
 
 /**
- *
+ * @see {@link module:baldr-master_INTERFACE.postSet}
  */
 exports.postSet = function(slide, config, document) {
 

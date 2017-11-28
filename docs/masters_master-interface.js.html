@@ -74,14 +74,14 @@ exports.cleanUp = function(document, oldSlide, newSlide) {};
 
 /**
  * @param {object} document
- * @param {object} config
+ * @param {module:baldr-library/config~Config} config
  */
 exports.init = function(document, config) {};
 
 /**
  * @param {object} document
  * @param {object} slide
- * @param {object} config
+ * @param {module:baldr-library/config~Config} config
  */
 exports.initSteps = function(document, slide, config) {};
 
@@ -95,19 +95,20 @@ exports.initStepsEveryVisit = function(document, slide, config) {};
 
 /**
  * @param {module:baldr-master_INTERFACE~slide} slide
- * @param {object} config
+ * @param {module:baldr-library/config~Config} config
  * @param {object} document
+ * @return {string}
  */
 exports.mainHTML = function(slide, config, document) {};
 
 /**
- *
+ * @return {string}
  */
 exports.modalHTML = function() {};
 
 /**
  * @param {object} rawSlideData
- * @param {object} config
+ * @param {module:baldr-library/config~Config} config
  */
 exports.normalizeData = function(rawSlideData, config) {};
 
@@ -128,24 +129,13 @@ exports.quickStartEntries = function() {};
  * @param {integer} count
  * @param {object} stepData
  * @param {object} document
+ * @return {undefined}
  */
 exports.setStepByNo = function(no, count, stepData, document) {};
 
 /***********************************************************************
  * typedef
  **********************************************************************/
-
-
-/**
- * @typedef config
- * @type {object}
- * @property {string} sessionFile
- * @property {string} sessionDir
- * @property {object} raw Raw object representation of the main *.baldr
- * session file structured in YAML
- * @property {string|array|object} slides
- */
-
 
 /**
  * @typedef slide

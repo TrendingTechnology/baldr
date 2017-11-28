@@ -67,13 +67,14 @@ exports.initStepsEveryVisit = function(document, slide, config) {};
 
 /**
  * @param {module:baldr-master_INTERFACE~slide} slide
- * @param {object} config
+ * @param {module:baldr-library/config~Config} config
  * @param {object} document
+ * @return {string}
  */
 exports.mainHTML = function(slide, config, document) {};
 
 /**
- *
+ * @return {string}
  */
 exports.modalHTML = function() {};
 
@@ -100,6 +101,7 @@ exports.quickStartEntries = function() {};
  * @param {integer} count
  * @param {object} stepData
  * @param {object} document
+ * @return {undefined}
  */
 exports.setStepByNo = function(no, count, stepData, document) {};
 

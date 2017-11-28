@@ -70,8 +70,12 @@ let template = function(data) {
   }
 };
 
+/***********************************************************************
+ * Hooks
+ **********************************************************************/
+
 /**
- *
+ * @see {@link module:baldr-master_INTERFACE.normalizeData}
  */
 exports.normalizeData = function(rawSlideData, config) {
   if (typeof rawSlideData === 'object' && Array.isArray(rawSlideData)) {
@@ -86,7 +90,7 @@ exports.normalizeData = function(rawSlideData, config) {
 };
 
 /**
- *
+ * @see {@link module:baldr-master_INTERFACE.config}
  */
 exports.config = {
   centerVertically: true,
@@ -94,7 +98,7 @@ exports.config = {
 };
 
 /**
- *
+ * @see {@link module:baldr-master_INTERFACE.setStepByNo}
  */
 exports.setStepByNo = function(no, count, stepData, document) {
   for (let i = 1; i <= count; i++) {
@@ -113,7 +117,7 @@ exports.setStepByNo = function(no, count, stepData, document) {
 };
 
 /**
- *
+ * @see {@link module:baldr-master_INTERFACE.mainHTML}
  */
 exports.mainHTML = function(slide, config, document) {
   return '<div id="question-content">' +
@@ -124,6 +128,8 @@ exports.mainHTML = function(slide, config, document) {
 /**
  * The stepData object has to be filled very time a slide is set.
  * Every time a slide is set, new HTML elements are generated.
+ *
+ * @see {@link module:baldr-master_INTERFACE.initStepsEveryVisit}
  */
 exports.initStepsEveryVisit = function(document, slide, config) {
   let data = {};
