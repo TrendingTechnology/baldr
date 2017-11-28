@@ -36,6 +36,44 @@
 'use strict';
 
 /**
+ * @typedef rawQuickStartEntries
+ * @type {array}
+ */
+
+/**
+ * @typedef rawQuickStartEntry
+ * @type {object}
+ * @property {title} title String to show in the “title” attribute of
+ *   the HTML link tag.
+ * @property {string|array|object} data Slide data
+ * @property {string} shortcut Mousetrap shortcut string
+ * @property {string} fontawesome Name of a fontawesome icon
+ *   (without “fa-”).
+ */
+
+/**
+ * An array of processed [quick start entries]{@link module:baldr-application/quick-start~quickStartEntry}
+ *
+ * @typedef quickStartEntries
+ * @type {array}
+ */
+
+/**
+ * The processed quick start entry object.
+ *
+ * @typedef quickStartEntry
+ * @type {object}
+ * @property {string} cssID CSS id name like “quick-start-entry_master_1”
+ * @property {string|array|object} data Slide data
+ * @property {string} fontawesome Name of a fontawesome icon
+ *   (without “fa-”).
+ * @property {string} master Name of the master
+ * @property {string} shortcut Mousetrap shortcut string
+ * @property {title} title String to show in the “title” attribute of
+ *   the HTML link tag.
+ */
+
+/**
  *
  */
 class QuickStart {
@@ -44,7 +82,9 @@ class QuickStart {
     this.masters = masters;
 
     /**
+     * {@link https://developer.mozilla.org/en-US/docs/Web/API/Document}
      *
+     * @type {object}
      */
     this.document = document;
 
@@ -53,11 +93,14 @@ class QuickStart {
      */
     this.elemNavigationMenu = this.document.getElementById('nav-quick-start');
 
+    /**
+     * @type {module:baldr-application/quick-start~quickStartEntries}
+     */
     this.entries = this.collectEntries();
   }
 
   /**
-   *
+   * @return {array} Array of [quick start entries]{@link module:baldr-application/quick-start~quickStartEntry}.
    */
   collectEntries() {
     let entries = [];
