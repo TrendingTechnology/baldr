@@ -33,7 +33,19 @@ exports.addCSSFile = function(document, cssFile, className=false) {
   document.head.appendChild(link);
 };
 
+/**
+ * @property {object} checkProperty
+ * @property {function} checkProperty.isString
+ * @property {function} checkProperty.empty
+ */
 exports.checkProperty = {
+
+  /**
+   * @name isString
+   * @function
+   * @property {object} object
+   * @property {string} property
+   */
   isString: function(object, property) {
     if (
       typeof object === 'object' &&
@@ -47,6 +59,12 @@ exports.checkProperty = {
     }
   },
 
+  /**
+   * @name empty
+   * @function
+   * @property {object} object
+   * @property {string} property
+   */
   empty: function(object, property) {
     if (
       typeof object === 'object' &&

@@ -7,6 +7,8 @@
 
 'use strict';
 
+const {checkProperty} = require('baldr-library');
+
 /**
  * @typedef rawQuickStartEntries
  * @type {array}
@@ -54,7 +56,7 @@ class QuickStart {
     this.masters = masters;
 
     /**
-     * {@link https://developer.mozilla.org/en-US/docs/Web/API/Document}
+     * {@link https://developer.mozilla.org/en-US/docs/Web/API/Document Document}
      *
      * @type {object}
      */
@@ -97,11 +99,17 @@ class QuickStart {
   }
 
   /**
+   * @param {module:baldr-application/quick-start~quickStartEntry} entry
    *
+   * @return {object} {@link https://developer.mozilla.org/en-US/docs/Web/API/HTMLButtonElement HTMLButtonElement}
    */
   renderButton(entry) {
     let button = this.document.createElement('button');
-    button.title = entry.title;
+    let shortcut = '';
+    if (checkProperty.isString(entry, 'shortcut')) {
+      shortcut = ` (${entry.shortcut})`;
+    }
+    button.title = `${entry.title}${shortcut}`;
     button.id = entry.cssID;
     button.classList.add('fa');
     button.classList.add('fa-' + entry.fontawesome);

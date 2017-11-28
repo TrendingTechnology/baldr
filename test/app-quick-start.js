@@ -62,13 +62,13 @@ describe('Class “QuickStart()” #unittest', () => {
     it('Method “renderNavigationMenu()”', () => {
       quickStart.renderNavigationMenu();
       let buttons = quickStart.document.querySelectorAll('#nav-quick-start button');
-      assert.equal(buttons[0].title, 'Audio');
+      assert.equal(buttons[0].title, 'Audio (ctrl+alt+a)');
     });
 
     it('Method “set()”', () => {
       quickStart.set();
       let buttons = quickStart.document.querySelectorAll('#nav-quick-start button');
-      assert.equal(buttons[0].title, 'Audio');
+      assert.equal(buttons[0].title, 'Audio (ctrl+alt+a)');
     });
 
   });
