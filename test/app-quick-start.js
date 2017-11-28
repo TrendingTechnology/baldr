@@ -14,7 +14,7 @@ let initiateQuickStart = function() {
 
 let quickStart;
 
-describe('Class “QuickStart()”', () => {
+describe('Class “QuickStart()” #unittest', () => {
 
   beforeEach(() => {
     quickStart = initiateQuickStart();

@@ -17,7 +17,7 @@ const Slides = rewire(slidesJsPath).__get__('Slides');
 
 let slide;
 
-describe('Class “Slide()”', () => {
+describe('Class “Slide()” #unittest', () => {
 
   beforeEach(() => {
     slide = new Slide({

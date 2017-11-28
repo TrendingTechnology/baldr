@@ -9,6 +9,7 @@
     "doc": "jsdoc --configure jsdoc-config.json .",
     "pack": "electron-builder --dir",
     "start": "electron .",
+    "unittest": "mocha --fgrep '#unittest' 'test/*.js' 'masters/audio/test/*.js' 'masters/camera/test/*.js' 'masters/editor/test/*.js' 'masters/image/test/*.js' 'masters/markdown/test/*.js' 'masters/person/test/*.js' 'masters/question/test/*.js' 'masters/quote/test/*.js' 'masters/website/test/*.js'",
     "jshint": "mocha --fgrep jshint 'test/*.js' 'masters/audio/test/*.js' 'masters/camera/test/*.js' 'masters/editor/test/*.js' 'masters/image/test/*.js' 'masters/markdown/test/*.js' 'masters/person/test/*.js' 'masters/question/test/*.js' 'masters/quote/test/*.js' 'masters/website/test/*.js'",
     "test": "mocha 'test/*.js' 'masters/audio/test/*.js' 'masters/camera/test/*.js' 'masters/editor/test/*.js' 'masters/image/test/*.js' 'masters/markdown/test/*.js' 'masters/person/test/*.js' 'masters/question/test/*.js' 'masters/quote/test/*.js' 'masters/website/test/*.js'"
   },

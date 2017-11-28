@@ -42,7 +42,7 @@ let orderedList = function() {
   media.orderedList(['images']);
 };
 
-describe('Class “FileInfo()”', () => {
+describe('Class “FileInfo()” #unittest', () => {
 
   it('Instantiation', () => {
     let list = new FileInfo(testFileMinimal);
@@ -113,7 +113,7 @@ describe('Class “FileInfo()”', () => {
 
 });
 
-describe('Class “Media()”', () => {
+describe('Class “Media()” #unittest', () => {
 
   describe('Properties', function() {
 

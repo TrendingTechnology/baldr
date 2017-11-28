@@ -10,7 +10,7 @@ const {getConfig} = require(
 );
 let config;
 
-describe('Class “Config()”', () => {
+describe('Class “Config()” #unittest', () => {
 
   beforeEach(() => {
     config = getConfig([testFileMinimal]);

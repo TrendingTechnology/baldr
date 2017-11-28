@@ -7,7 +7,7 @@ const {
 const {getMasters} = require('baldr-application');
 let masters = new getMasters();
 
-describe.skip('Function “loadMaster()”', function() {
+describe.skip('Function “loadMaster()” #unittest', function() {
   it('simple', function() {
     let master = loadMaster('quote', document, presentation);
     assert.equal(master.masterName, 'quote');
@@ -24,7 +24,7 @@ describe.skip('Function “loadMaster()”', function() {
   });
 });
 
-describe.skip('Class “MasterOfMasters”', function() {
+describe.skip('Class “MasterOfMasters” #unittest', function() {
   beforeEach(function() {
     this.MoM = new MasterOfMasters({
       document: document,
@@ -82,7 +82,7 @@ describe.skip('Class “MasterOfMasters”', function() {
 
 });
 
-describe.skip('Class “MasterOfMasters” extended on a example master class (quote)', function() {
+describe.skip('Class “MasterOfMasters” extended on a example master class (quote) #unittest', function() {
 
   beforeEach(function() {
     let {Master} = require('../masters/quote')(document, masters, presentation);
@@ -164,7 +164,7 @@ describe.skip('Class “MasterOfMasters” extended on a example master class (q
 
 });
 
-describe('Class “LoadMasters()”', () => {
+describe('Class “LoadMasters()” #unittest', () => {
 
   describe('Properties', () => {
 
