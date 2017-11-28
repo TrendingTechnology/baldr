@@ -1,3 +1,5 @@
+How to write a bladr master slide: [Interface](module-baldr-master_INTERFACE.html)
+
 # Objects
 
 Code to pretty print objects:
@@ -121,7 +123,7 @@ Use HTML like notation `<object>` to reference objects.
     master: "audio",
     rawData: <misc>
     normalizedData: <misc>
-    steps: 
+    steps:
 }
 ```
 
