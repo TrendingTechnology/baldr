@@ -6,7 +6,7 @@ const {
 } = require('baldr-test');
 
 const {getConfig} = require(
-  path.join(__dirname, '..', 'src', 'lib', 'config.js')
+  path.join(__dirname, '..', 'config.js')
 );
 let config;
 

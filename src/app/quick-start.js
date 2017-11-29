@@ -55,7 +55,7 @@ class QuickStartEntry {
      * Slide data
      * @type {string|array|object}
      */
-    this.data = rawQuickStartEntry.data
+    this.data = rawQuickStartEntry.data;
 
     /**
      * Name of a fontawesome icon
@@ -128,7 +128,7 @@ class QuickStart {
     let out = [];
     for (let index in entries) {
       let no = Number.parseInt(index) + 1;
-      out.push(new QuickStartEntry(entries[index], entries[index].master, no))
+      out.push(new QuickStartEntry(entries[index], entries[index].master, no));
     }
 
     return out;

@@ -171,7 +171,7 @@ describe('Class “LoadMasters()” #unittest', () => {
     it('this.path', () => {
       assert.equal(
         masters.path,
-        path.resolve(__dirname, '..', 'masters')
+        path.resolve(__dirname, '..', '..', '..', 'masters')
       );
     });
 

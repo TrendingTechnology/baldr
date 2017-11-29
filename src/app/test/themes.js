@@ -16,7 +16,7 @@ describe('Class “Themes()” #unittest', () => {
     it('Property “this.path”', () => {
       assert.equal(
         themes.path,
-        path.resolve(__dirname, '..', 'themes')
+        path.resolve(__dirname, '..', '..', '..', 'themes')
       );
     });
 
