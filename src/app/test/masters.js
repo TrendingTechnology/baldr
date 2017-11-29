@@ -1,7 +1,8 @@
 const {
   allMasters,
   assert,
-  path
+  path,
+  rewire
 } = require('baldr-test');
 
 const {getMasters} = require('baldr-application');
@@ -160,6 +161,80 @@ describe.skip('Class “MasterOfMasters” extended on a example master class (q
   it('[master].set() <body data-theme="default">', function() {
     this.master.set();
     assert.equal(this.master.document.body.dataset.theme, 'default');
+  });
+
+});
+
+describe('Class “Master()” #unittest', () => {
+  let person;
+
+    beforeEach(() => {
+      let mastersJs = rewire(path.join(__dirname, '..', 'masters.js'));
+      let Master = mastersJs.__get__('Master');
+      person = new Master(
+        path.resolve(__dirname, '..', '..', '..', 'masters', 'person', 'index.js'),
+        'person'
+      );
+    });
+
+  describe('Properties', () => {
+
+    it('this.css', () => {
+      assert.equal(person.css, true);
+    });
+
+    it('this.name', () => {
+      assert.equal(person.name, 'person');
+    });
+
+    it('this.path', () => {
+      assert.ok(person.path.includes('/person'));
+    });
+
+  });
+
+  describe('Methods', () => {
+
+    it('Method “cleanUp()”', () => {
+      assert.equal(typeof person.cleanUp, 'function');
+    });
+
+    it('Method “init()”', () => {
+      assert.equal(typeof person.init, 'function');
+    });
+
+    it('Method “initSteps()”', () => {
+      assert.equal(typeof person.initSteps, 'function');
+    });
+
+    it('Method “initStepsEveryVisit()”', () => {
+      assert.equal(typeof person.initStepsEveryVisit, 'function');
+    });
+
+    it('Method “mainHTML()”', () => {
+      assert.equal(typeof person.mainHTML, 'function');
+    });
+
+    it('Method “modalHTML()”', () => {
+      assert.equal(typeof person.modalHTML, 'function');
+    });
+
+    it('Method “normalizeData()”', () => {
+      assert.equal(typeof person.normalizeData, 'function');
+    });
+
+    it('Method “postSet()”', () => {
+      assert.equal(typeof person.postSet, 'function');
+    });
+
+    it('Method “quickStartEntries()”', () => {
+      assert.equal(typeof person.quickStartEntries, 'function');
+    });
+
+    it('Method “setStepByNo()”', () => {
+      assert.equal(typeof person.setStepByNo, 'function');
+    });
+
   });
 
 });

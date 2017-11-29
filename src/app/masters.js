@@ -13,32 +13,78 @@ const path = require('path');
  */
 class Master {
 
+  /**
+   * @param {string} modulePath
+   * @param {string} name
+   */
   constructor(modulePath, name) {
 
-    this.path = modulePath;
+    /**
+     *
+     */
+    this.path = path.dirname(modulePath);
 
+    /**
+     *
+     */
     this.name = name;
 
-    this.css = this.hasCSS_(modulePath);
+    /**
+     *
+     */
+    this.css = this.hasCSS_(this.path);
 
     let defaults = this.setDefaults_(modulePath);
 
     /**
-     * function
+     * @function
      */
-    this.lol = function() {
+    this.cleanUp = defaults.cleanUp;
 
-    }
-    this.init: emptyFunc,
-    this.normalizeData: function(data) {return data;},
-    this.modalHTML: returnEmpty,
-    this.mainHTML: returnEmpty,
-    this.postSet: emptyFunc,
-    this.setStepByNo: emptyFunc,
-    this.initSteps: funcFalse,
-    this.initStepsEveryVisit: funcFalse,
-    this.cleanUp: emptyFunc,
-    this.quickStartEntries: function() {return [];}
+    /**
+     * @function
+     */
+    this.init = defaults.init;
+
+    /**
+     * @function
+     */
+    this.initSteps = defaults.initSteps;
+
+    /**
+     * @function
+     */
+    this.initStepsEveryVisit = defaults.initStepsEveryVisit;
+
+    /**
+     * @function
+     */
+    this.mainHTML = defaults.mainHTML;
+
+    /**
+     * @function
+     */
+    this.modalHTML = defaults.modalHTML;
+
+    /**
+     * @function
+     */
+    this.normalizeData = defaults.normalizeData;
+
+    /**
+     * @function
+     */
+    this.postSet = defaults.postSet;
+
+    /**
+     * @function
+     */
+    this.quickStartEntries = defaults.quickStartEntries;
+
+    /**
+     * @function
+     */
+    this.setStepByNo = defaults.setStepByNo;
   }
 
   /**
