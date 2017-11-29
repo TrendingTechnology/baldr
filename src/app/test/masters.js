@@ -8,22 +8,6 @@ const {
 const {getMasters} = require('baldr-application');
 let masters = new getMasters();
 
-describe.skip('Function “loadMaster()” #unittest', function() {
-  it('simple', function() {
-    let master = loadMaster('quote', document, presentation);
-    assert.equal(master.masterName, 'quote');
-  });
-
-  it('propObj', function() {
-    let master = loadMaster('quote', document, presentation, {lol: 'troll'});
-    assert.equal(master.lol, 'troll');
-  });
-
-  it('propObj multiple', function() {
-    let master = loadMaster('quote', document, presentation, {lol: 'troll', abc: 'xyz'});
-    assert.equal(master.abc, 'xyz');
-  });
-});
 
 describe.skip('Class “MasterOfMasters” #unittest', function() {
   beforeEach(function() {
@@ -112,18 +96,11 @@ describe.skip('Class “MasterOfMasters” extended on a example master class (q
       );
     });
 
-    it('Property “this.centerVertically”', function() {
-      assert.equal(this.master.centerVertically, true);
-    });
-
     it('Property “this.alreadySet”', function() {
       this.master.set();
       assert.equal(this.master.alreadySet, true);
     });
 
-    it('Property “this.theme”', function() {
-      assert.equal(this.master.theme, 'default');
-    });
   });
 
   it('[master].hasCSS()', function() {
@@ -132,14 +109,6 @@ describe.skip('Class “MasterOfMasters” extended on a example master class (q
 
   it('[master].setCSS()', function() {
     assert.equal(typeof this.master.setCSS, 'function');
-  });
-
-  it('[master].hookSetHTMLSlide()', function() {
-    assert.equal(typeof this.master.hookSetHTMLSlide, 'function');
-  });
-
-  it('[master].hookSetHTMLModal()', function() {
-    assert.equal(typeof this.master.hookSetHTMLModal, 'function');
   });
 
   it('[master].set()', function() {
@@ -181,6 +150,8 @@ describe('Class “Master()” #unittest', () => {
 
     it('this.config', () => {
       assert.equal(person.config.theme, 'default');
+      assert.equal(person.config.centerVertically, false);
+      assert.equal(person.config.stepSupport, false);
     });
 
     it('this.css', () => {
@@ -266,6 +237,16 @@ describe('Class “Masters()” #unittest', () => {
 
   it('Method “getAll()”', () => {
     assert.deepEqual(masters.getAll(), allMasters);
+  });
+
+});
+
+describe('Function getMasters()” #unittest', function() {
+
+  it('simple', function() {
+    let {getMasters} = require('baldr-application');
+    let masters = getMasters();
+    assert.equal(typeof masters.all, 'object');
   });
 
 });
