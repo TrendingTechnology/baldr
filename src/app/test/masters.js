@@ -164,7 +164,7 @@ describe.skip('Class “MasterOfMasters” extended on a example master class (q
 
 });
 
-describe('Class “LoadMasters()” #unittest', () => {
+describe('Class “Masters()” #unittest', () => {
 
   describe('Properties', () => {
 

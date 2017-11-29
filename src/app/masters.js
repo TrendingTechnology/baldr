@@ -9,43 +9,59 @@ const fs = require('fs');
 const path = require('path');
 
 /**
- * Gather informations about all available master slides.
+ *
  */
-class LoadMasters {
+class Master {
+
+  constructor(modulePath, name) {
+
+    this.path = modulePath;
+
+    this.name = name;
+
+    this.css = this.hasCSS_(modulePath);
+
+    let defaults = this.setDefaults_(modulePath);
+
+    /**
+     * function
+     */
+    this.lol = function() {
+
+    }
+    this.init: emptyFunc,
+    this.normalizeData: function(data) {return data;},
+    this.modalHTML: returnEmpty,
+    this.mainHTML: returnEmpty,
+    this.postSet: emptyFunc,
+    this.setStepByNo: emptyFunc,
+    this.initSteps: funcFalse,
+    this.initStepsEveryVisit: funcFalse,
+    this.cleanUp: emptyFunc,
+    this.quickStartEntries: function() {return [];}
+  }
 
   /**
+   * Check if the CSS style file “styles.css” in the master slide
+   * folder exists.
    *
+   * @private
    */
-  constructor() {
-
-    /**
-     * Parent path of all master slide modules.
-     * @type {string}
-     */
-    this.path = path.join(__dirname, '..', '..', 'masters');
-
-    /**
-     * Folder name of master slides
-     * @type {array}
-     */
-    this.all = this.getAll();
-    for (let master of this.all) {
-      let masterPath = path.join(this.path, master);
-      this[master] = this.setDefaults_(
-        require(
-          path.join(masterPath, 'index.js')
-        )
-      );
-      this[master].name = master;
-      this[master].path = masterPath;
-      this[master].css = this.hasCSS_(masterPath);
+  hasCSS_(masterPath) {
+    if (fs.existsSync(path.join(masterPath, 'styles.css'))) {
+      return true;
+    }
+    else {
+      return false;
     }
   }
+
 
   /**
    * @private
    */
-  setDefaults_(requireObject) {
+  setDefaults_(modulePath) {
+    let requireObject = require(modulePath);
     let emptyFunc = function() {};
     let returnEmpty = function() {return '';};
     let funcFalse = function() {return false;};
@@ -74,18 +90,32 @@ class LoadMasters {
     return Object.assign({}, defaultObject, requireObject);
   }
 
+}
+
+/**
+ * Gather informations about all available master slides.
+ */
+class Masters {
+
   /**
-   * Check if the CSS style file “styles.css” in the master slide
-   * folder exists.
    *
-   * @private
    */
-  hasCSS_(masterPath) {
-    if (fs.existsSync(path.join(masterPath, 'styles.css'))) {
-      return true;
-    }
-    else {
-      return false;
+  constructor() {
+
+    /**
+     * Parent path of all master slide modules.
+     * @type {string}
+     */
+    this.path = path.join(__dirname, '..', '..', 'masters');
+
+    /**
+     * Folder name of master slides
+     * @type {array}
+     */
+    this.all = this.getAll();
+    for (let master of this.all) {
+      let masterPath = path.join(this.path, master);
+      this[master] = new Master(path.join(masterPath, 'index.js'));
     }
   }
 
@@ -127,5 +157,5 @@ class LoadMasters {
  *
  */
 exports.getMasters = function() {
-  return new LoadMasters();
+  return new Masters();
 };
