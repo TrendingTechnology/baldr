@@ -9,7 +9,7 @@ let resolve = function(image) {
   return 'file://' + path.resolve('masters/image/images', image);
 };
 
-describe('Master slide “image”: Spectron tests on “example.baldr” #spectron', function () {
+describe('Master slide “image”: “example.baldr” #spectron', function () {
   this.timeout(10000);
 
   beforeEach(function () {

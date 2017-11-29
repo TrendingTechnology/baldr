@@ -3,7 +3,7 @@ const {
   Spectron
 } = require('baldr-test');
 
-describe('Master slide “quote”: Spectron tests on “example.baldr” #spectron', function () {
+describe('Master slide “quote”: “example.baldr” #spectron', function () {
   this.timeout(10000);
 
   beforeEach(function () {
