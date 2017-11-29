@@ -10,6 +10,7 @@
 const {checkProperty} = require('baldr-library');
 
 /**
+ * A array of [raw quick start entries]{@link module:baldr-application/quick-start~rawQuickStartEntry}
  * @typedef rawQuickStartEntries
  * @type {array}
  */
@@ -34,18 +35,53 @@ const {checkProperty} = require('baldr-library');
 
 /**
  * The processed quick start entry object.
- *
- * @typedef quickStartEntry
- * @type {object}
- * @property {string} cssID CSS id name like “quick-start-entry_master_1”
- * @property {string|array|object} data Slide data
- * @property {string} fontawesome Name of a fontawesome icon
- *   (without “fa-”).
- * @property {string} master Name of the master
- * @property {string} shortcut Mousetrap shortcut string
- * @property {title} title String to show in the “title” attribute of
- *   the HTML link tag.
  */
+class QuickStartEntry {
+
+  constructor(rawQuickStartEntry, master, no) {
+
+    /**
+     * @type {integer}
+     */
+    this.no = no;
+
+    /**
+     * CSS id name like “quick-start-entry_master_1”
+     * @type {string}
+     */
+    this.cssID = 'quick-start-entry_' + master +  '_' + no;
+
+    /**
+     * Slide data
+     * @type {string|array|object}
+     */
+    this.data = rawQuickStartEntry.data
+
+    /**
+     * Name of a fontawesome icon
+     * @type {string}
+     */
+    this.fontawesome = rawQuickStartEntry.fontawesome;
+
+    /**
+     * Name of the master
+     * @type {master}
+     */
+    this.master = master;
+
+    /**
+     * Mousetrap shortcut string
+     * @type {string}
+     */
+    this.shortcut = rawQuickStartEntry.shortcut;
+
+    /**
+     * String to show in the “title” attribute of the HTML link tag.
+     * @type {string}
+     */
+    this.title = rawQuickStartEntry.title;
+  }
+}
 
 /**
  *
@@ -74,7 +110,7 @@ class QuickStart {
   }
 
   /**
-   * @return {array} Array of [quick start entries]{@link module:baldr-application/quick-start~quickStartEntry}.
+   * @return {array} Array of [quick start entries]{@link module:baldr-application/quick-start~QuickStartEntry}.
    */
   collectEntries() {
     let entries = [];
@@ -89,13 +125,13 @@ class QuickStart {
       entries = entries.concat(rawEntries);
     }
 
+    let out = [];
     for (let index in entries) {
       let no = Number.parseInt(index) + 1;
-      entries[index].cssID =
-        'quick-start-entry_' + entries[index].master +  '_' + no;
+      out.push(new QuickStartEntry(entries[index], entries[index].master, no))
     }
 
-    return entries;
+    return out;
   }
 
   /**
