@@ -18,23 +18,41 @@ class Master {
    * @param {string} name
    */
   constructor(modulePath, name) {
+    let defaults = this.setDefaults_(modulePath);
+    let dirname = path.dirname(modulePath);
+
+    /*******************************************************************
+     * Members
+     ******************************************************************/
 
     /**
-     *
+     * @type {object}
      */
-    this.path = path.dirname(modulePath);
+    this.config = defaults.config;
 
     /**
-     *
+     * @type {boolean}
+     */
+    this.css = this.hasCSS_(dirname);
+
+    /**
+     * @type {object}
+     */
+    this.documentation = defaults.documentation;
+
+    /**
+     * @type {string}
+     */
+    this.path = dirname;
+
+    /**
+     * @type {string}
      */
     this.name = name;
 
-    /**
-     *
-     */
-    this.css = this.hasCSS_(this.path);
-
-    let defaults = this.setDefaults_(modulePath);
+    /*******************************************************************
+     * Methods
+     ******************************************************************/
 
     /**
      * @function
@@ -102,7 +120,6 @@ class Master {
     }
   }
 
-
   /**
    * @private
    */
@@ -118,19 +135,24 @@ class Master {
       theme: 'default'
     };
 
+    let documentation = {
+      examples: []
+    };
+
     requireObject.config = Object.assign({}, config, requireObject.config);
+    requireObject.documentation = Object.assign({}, documentation, requireObject.documentation);
 
     let defaultObject = {
+      cleanUp: emptyFunc,
       init: emptyFunc,
-      normalizeData: function(data) {return data;},
-      modalHTML: returnEmpty,
-      mainHTML: returnEmpty,
-      postSet: emptyFunc,
-      setStepByNo: emptyFunc,
       initSteps: funcFalse,
       initStepsEveryVisit: funcFalse,
-      cleanUp: emptyFunc,
-      quickStartEntries: function() {return [];}
+      mainHTML: returnEmpty,
+      modalHTML: returnEmpty,
+      normalizeData: function(data) {return data;},
+      postSet: emptyFunc,
+      quickStartEntries: function() {return [];},
+      setStepByNo: emptyFunc
     };
 
     return Object.assign({}, defaultObject, requireObject);

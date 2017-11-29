@@ -46,28 +46,47 @@ class Master {
    * @param {string} name
    */
   constructor(modulePath, name) {
+    let defaults = this.setDefaults_(modulePath);
+
+    /*******************************************************************
+     * Members
+     ******************************************************************/
 
     /**
-     *
+     * @type {boolean}
+     */
+    this.css = this.hasCSS_(this.path);
+
+    /**
+     * @type {string}
      */
     this.path = path.dirname(modulePath);
 
     /**
-     *
+     * @type {string}
      */
     this.name = name;
 
     /**
-     *
+     * @type {object}
      */
-    this.css = this.hasCSS_(this.path);
+    this.config = defaults.config;
 
-    let defaults = this.setDefaults_(modulePath);
+    /**
+     * @type {object}
+     */
+    this.documentation = defaults.documentation;
+
+    /*******************************************************************
+     * Methods
+     ******************************************************************/
 
     /**
      * @function
      */
     this.cleanUp = defaults.cleanUp;
+
+
 
     /**
      * @function
@@ -98,6 +117,8 @@ class Master {
      * @function
      */
     this.normalizeData = defaults.normalizeData;
+
+
 
     /**
      * @function
@@ -130,7 +151,6 @@ class Master {
     }
   }
 
-
   /**
    * @private
    */
@@ -146,19 +166,24 @@ class Master {
       theme: 'default'
     };
 
+    let documentation = {
+      examples: []
+    };
+
     requireObject.config = Object.assign({}, config, requireObject.config);
+    requireObject.documentation = Object.assign({}, documentation, requireObject.documentation);
 
     let defaultObject = {
+      cleanUp: emptyFunc,
       init: emptyFunc,
-      normalizeData: function(data) {return data;},
-      modalHTML: returnEmpty,
-      mainHTML: returnEmpty,
-      postSet: emptyFunc,
-      setStepByNo: emptyFunc,
       initSteps: funcFalse,
       initStepsEveryVisit: funcFalse,
-      cleanUp: emptyFunc,
-      quickStartEntries: function() {return [];}
+      mainHTML: returnEmpty,
+      modalHTML: returnEmpty,
+      normalizeData: function(data) {return data;},
+      postSet: emptyFunc,
+      quickStartEntries: function() {return [];},
+      setStepByNo: emptyFunc
     };
 
     return Object.assign({}, defaultObject, requireObject);

@@ -179,8 +179,16 @@ describe('Class “Master()” #unittest', () => {
 
   describe('Properties', () => {
 
+    it('this.config', () => {
+      assert.equal(person.config.theme, 'default');
+    });
+
     it('this.css', () => {
       assert.equal(person.css, true);
+    });
+
+    it('this.documentation', () => {
+      assert.equal(typeof person.documentation.examples, 'object');
     });
 
     it('this.name', () => {
