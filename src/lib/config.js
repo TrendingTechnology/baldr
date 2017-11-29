@@ -41,9 +41,11 @@ class Config {
      */
     this.raw = this.parseYamlFile(this.sessionFile);
 
-    for (let config in this.raw) {
-      this[config] = this.raw[config];
-    }
+    /**
+     * Array of raw slide objects.
+     * @type {module:baldr-application/slides~rawSlideObject[]}
+     */
+    this.slides = this.raw.slides;
   }
 
   /**
@@ -81,6 +83,9 @@ class Config {
 
 }
 
+/**
+ *
+ */
 exports.getConfig = function(argv) {
   return new Config(argv);
 };

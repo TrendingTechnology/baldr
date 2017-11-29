@@ -6,6 +6,9 @@
 const fs = require('fs');
 const path = require('path');
 
+/**
+ *
+ */
 exports.reIndex = function(array) {
   let out = {};
   for (let index in array) {

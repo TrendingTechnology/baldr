@@ -9,6 +9,18 @@ const fs = require('fs');
 const path = require('path');
 
 /**
+ * A raw slide object with one property: the name of the master slide.
+ * @typedef rawSlideObject
+ * @type {object}
+ * @property {rawSlideData} masterName
+ */
+
+/**
+ * @typedef rawSlideData
+ * @type {(boolean|number|string|array|object)}
+ */
+
+/**
  * Some masters support steps. Steps are switched by the up and down
  * arrow keys. Steps are the second level in the hierachy of state
  * changes. On the first level are slides.
@@ -16,6 +28,10 @@ const path = require('path');
 
 class StepSwitcher {
 
+  /**
+   * @param {object} document The document object of the browser (DOM), see on MDN:
+   * {@link https://developer.mozilla.org/en-US/docs/Web/API/Document Document}
+   */
   constructor(document, slide, config, masters) {
     this.config = config;
     this.document = document;
@@ -39,6 +55,9 @@ class StepSwitcher {
      */
     this.stepData = false;
 
+    /**
+     *
+     */
     this.stepSupport = false;
 
     /**
@@ -47,6 +66,9 @@ class StepSwitcher {
      */
     this.no = 0;
 
+    /**
+     *
+     */
     this.visited = false;
   }
 
@@ -58,6 +80,9 @@ class StepSwitcher {
     this.elements.next.style.visibility = state;
   }
 
+  /**
+   *
+   */
   setup_(stepData) {
     if (stepData) {
       this.stepData = stepData;
@@ -66,6 +91,9 @@ class StepSwitcher {
     }
   }
 
+  /**
+   *
+   */
   visit() {
     this.setup_(
       this.master.initStepsEveryVisit(this.document, this.slide, this.config)
@@ -87,6 +115,9 @@ class StepSwitcher {
     }
   }
 
+  /**
+   *
+   */
   setByNo(no) {
     this.master.setStepByNo(no, this.count, this.stepData, this.document);
   }
@@ -122,8 +153,15 @@ class StepSwitcher {
   }
 }
 
+/**
+ *
+ */
 class Slide {
 
+  /**
+   * @param {object} document The document object of the browser (DOM), see on MDN:
+   * {@link https://developer.mozilla.org/en-US/docs/Web/API/Document Document}
+   */
   constructor(rawSlide, document, config, masters) {
     let intersection = this.intersectMastersSlideKeys(
       masters.all,
@@ -134,10 +172,28 @@ class Slide {
       throw Error('Each slide must have only one master slide.');
     }
 
+    /**
+     * Name of the master slide.
+     * @type {string}
+     */
     this.master = intersection[0];
+
+    /**
+     * The raw slide data
+     * @type {(boolean|number|string|array|object)}
+     */
     this.rawData = rawSlide[this.master];
+
+    /**
+     * The normalized slide data
+     * @type {(boolean|number|string|array|object)}
+     */
     this.normalizedData = masters[this.master]
       .normalizeData(this.rawData, config);
+
+    /**
+     * @type {module:baldr-application/slides~StepSwitcher}
+     */
     this.steps = new StepSwitcher(document, this, config, masters);
   }
 
@@ -163,7 +219,10 @@ class Slide {
 class Slides {
 
   /**
-   * @param {array} raw A raw array of all slide objects.
+   * @param {array} rawSlides A raw array of raw slide objects.
+   * @param {module:baldr-library/config~Config} config
+   * @param {object} document The document object of the browser (DOM), see on MDN:
+   * {@link https://developer.mozilla.org/en-US/docs/Web/API/Document Document}
    */
   constructor(rawSlides, config, document, masters) {
     this.rawSlides = rawSlides;
@@ -172,6 +231,9 @@ class Slides {
     this.masters = masters;
   }
 
+  /**
+   *
+   */
   get() {
     let out = {};
 
@@ -186,6 +248,10 @@ class Slides {
 
 }
 
+/**
+ * @param {object} document The document object of the browser (DOM), see on MDN:
+ * {@link https://developer.mozilla.org/en-US/docs/Web/API/Document Document}
+ */
 exports.getSlides = function(rawSlides, config, document, masters) {
   return new Slides(rawSlides, config, document, masters).get();
 };

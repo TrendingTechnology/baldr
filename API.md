@@ -12,57 +12,6 @@ let pretty = function(object) {
 }
 ```
 
-Use HTML like notation `<object>` to reference objects.
-
-------------------------------------------------------------------------
-
-## ``
-
-```
-
-```
-
-------------------------------------------------------------------------
-
-## `config`
-
-```
-{
-    sessionFile: "test/files/all.baldr",
-    sessionDir: "/home/baldr/test/files",
-    raw: {
-        slides: []
-    },
-    slides: circular reference
-}
-```
-
-------------------------------------------------------------------------
-
-## `document`
-
-```
-{
-    location: {
-        replace: "function ()",
-        assign: "function ()",
-        href: "file:///home//baldr/render.html",
-        ancestorOrigins: {
-
-        },
-        origin: "file://",
-        protocol: "file:",
-        host: "",
-        hostname: "",
-        port: "",
-        pathname: "/home/jf/baldr/render.html",
-        search: "",
-        hash: "",
-        reload: "function reload()"
-    }
-}
-```
-
 ------------------------------------------------------------------------
 
 ## `masters`
@@ -122,20 +71,5 @@ Use HTML like notation `<object>` to reference objects.
     1: <misc>,
     2: <misc>,
     ...
-}
-```
-
-------------------------------------------------------------------------
-
-## `themes`
-
-```
-{
-    document: <document>
-    path: "/home//baldr/themes",
-    all: [
-        "default",
-        "handwriting"
-    ]
 }
 ```

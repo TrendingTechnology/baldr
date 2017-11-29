@@ -38,6 +38,9 @@ const {checkProperty} = require('baldr-library');
  */
 class QuickStartEntry {
 
+  /**
+   *
+   */
   constructor(rawQuickStartEntry, master, no) {
 
     /**
@@ -88,6 +91,9 @@ class QuickStartEntry {
  */
 class QuickStart {
 
+  /**
+   *
+   */
   constructor(document, masters) {
     this.masters = masters;
 
@@ -185,11 +191,11 @@ class QuickStart {
   }
 }
 
-exports.QuickStart = QuickStart;
-
 /**
  *
  */
 exports.getQuickStart = function(document, masters) {
   return new QuickStart(document, masters);
 };
+
+exports.QuickStart = QuickStart;

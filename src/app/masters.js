@@ -13,6 +13,9 @@ const path = require('path');
  */
 class LoadMasters {
 
+  /**
+   *
+   */
   constructor() {
 
     /**
@@ -86,6 +89,9 @@ class LoadMasters {
     }
   }
 
+  /**
+   *
+   */
   execAll(hookName) {
     let args = Array.from(arguments);
     args.shift();
@@ -94,6 +100,9 @@ class LoadMasters {
     }
   }
 
+  /**
+   *
+   */
   getHooks(hookName, type='function') {
     return this.all.filter(
       master => typeof this[master][hookName] === type
@@ -114,6 +123,9 @@ class LoadMasters {
   }
 }
 
+/**
+ *
+ */
 exports.getMasters = function() {
   return new LoadMasters();
 };

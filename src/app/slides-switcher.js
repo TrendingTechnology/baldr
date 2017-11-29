@@ -1,6 +1,6 @@
 /**
  * @file Load the slides object form the YAML file format and process it.
- * @module baldr-application/slide-switcher
+ * @module baldr-application/slides-switcher
  */
 
 'use strict';
@@ -8,13 +8,12 @@
 /**
  *
  */
-
 class SlidesSwitcher {
 
   /**
-   * @param {string} baldrFile The path of the *.baldr presentation file
-   * structured in the YAML format.
-   * @param {object} document The HTML DOM Document Object.
+   * @param {object} slides
+   * @param {object} document The document object of the browser (DOM), see on MDN:
+   * {@link https://developer.mozilla.org/en-US/docs/Web/API/Document Document}
    */
   constructor(slides, document) {
 

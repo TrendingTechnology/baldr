@@ -28,7 +28,6 @@ describe('Class “Config()” #unittest', () => {
 
     it('of the YAML file are properties of the class Config()', () => {
       assert.equal(typeof config.slides, 'object');
-      assert.equal(config.masters.audio[0], 'media/audio/beethoven.mp3');
     });
 
   });

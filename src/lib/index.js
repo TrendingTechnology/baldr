@@ -6,6 +6,9 @@
 
 const path = require('path');
 
+/**
+ *
+ */
 let requireLib = function(fileName) {
   return require(path.join(__dirname, fileName + '.js'));
 };

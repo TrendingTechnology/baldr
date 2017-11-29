@@ -11,6 +11,9 @@ const {
   getConfig
 } = require('baldr-library');
 
+/**
+ *
+ */
 let requireLib = function(fileName) {
   return require(path.join(__dirname, fileName + '.js'));
 };
@@ -27,21 +30,38 @@ const {getThemes} = requireLib('themes');
 class ShowRunner {
 
   /**
-   *
+   * @param {object} document The document object of the browser (DOM), see on MDN:
+   * {@link https://developer.mozilla.org/en-US/docs/Web/API/Document Document}
    */
   constructor(argv, document, mousetrap) {
     this.document = document;
     this.mousetrap = mousetrap;
+
+    /**
+     * @type {module:baldr-library/config~Config}
+     */
     this.config = getConfig(argv);
     this.masters = getMasters();
     this.masters.execAll('init', document, this.config);
+
+    /**
+     * @type {module:baldr-application/slides~Slides}
+     */
     this.slides = getSlides(
       this.config.slides,
       this.config,
       document,
       this.masters
     );
+
+    /**
+     * @type {module:baldr-application/themes~Themes}
+     */
     this.themes = getThemes(document);
+
+    /**
+     * @type {module:baldr-application/slides-switcher~SlidesSwitcher}
+     */
     this.slidesSwitcher = new SlidesSwitcher(
       this.slides,
       this.document,
