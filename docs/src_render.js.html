@@ -100,15 +100,16 @@ let errorPage = function(message, source, lineNo, colNo, error) {
   `;
 };
 
+/***********************************************************************
+ *
+ **********************************************************************/
+
 /**
  * Initialize the presentaton session.
  */
 let main = function() {
   window.onerror = errorPage;
   let show = new ShowRunner(remote.process.argv, document, mousetrap);
-  ipcRenderer.on('set-master', function(event, masterName) {
-    show.setInstantSlide(masterName);
-  });
 
   bindFunctions(
     [
@@ -140,6 +141,10 @@ let main = function() {
     ]
   );
 };
+
+/***********************************************************************
+ *
+ **********************************************************************/
 
 if (require.main === module) {
   main();

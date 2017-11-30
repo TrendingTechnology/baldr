@@ -84,7 +84,7 @@ class Audio {
  **********************************************************************/
 
 /**
- * @see {@link module:baldr-master_INTERFACE.init}
+ * @see {@link module:baldr-application/masters~Master#init}
  */
 exports.init = function(document, config) {
   audio = new Audio(document);
@@ -105,7 +105,7 @@ exports.init = function(document, config) {
 };
 
 /**
- * @see {@link module:baldr-master_INTERFACE.quickStartEntries}
+ * @see {@link module:baldr-application/masters~Master#quickStartEntries}
  */
 exports.quickStartEntries = function() {
   return [
@@ -119,7 +119,7 @@ exports.quickStartEntries = function() {
 };
 
 /**
- * @see {@link module:baldr-master_INTERFACE.normalizeData}
+ * @see {@link module:baldr-application/masters~Master#normalizeData}
  */
 exports.normalizeData = function(rawSlideData, config) {
   let inputFiles = new Media(config.sessionDir);
@@ -137,7 +137,7 @@ exports.normalizeData = function(rawSlideData, config) {
 };
 
 /**
- * @see {@link module:baldr-master_INTERFACE.mainHTML}
+ * @see {@link module:baldr-application/masters~Master#mainHTML}
  */
 exports.mainHTML = function(slide, config, document) {
   let out = '';

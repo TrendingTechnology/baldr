@@ -50,14 +50,14 @@ let renderQuotationMark = function(begin=true) {
  **********************************************************************/
 
 /**
- * @see {@link module:baldr-master_INTERFACE.config}
+ * @see {@link module:baldr-application/masters~Master#config}
  */
 exports.config = {
   centerVertically: true
 };
 
 /**
- * @see {@link module:baldr-master_INTERFACE.mainHTML}
+ * @see {@link module:baldr-application/masters~Master#mainHTML}
  */
 exports.mainHTML = function(slide, config, document) {
   let data = slide.normalizedData;

@@ -53,7 +53,7 @@
  **********************************************************************/
 
 /**
- * @see {@link module:baldr-master_INTERFACE.quickStartEntries}
+ * @see {@link module:baldr-application/masters~Master#quickStartEntries}
  */
 exports.quickStartEntries = function() {
   return [
@@ -67,7 +67,7 @@ exports.quickStartEntries = function() {
 };
 
 /**
- * @see {@link module:baldr-master_INTERFACE.modalHTML}
+ * @see {@link module:baldr-application/masters~Master#modalHTML}
  */
 exports.modalHTML = function() {
   return `
@@ -78,14 +78,14 @@ exports.modalHTML = function() {
 };
 
 /**
- * @see {@link module:baldr-master_INTERFACE.mainHTML}
+ * @see {@link module:baldr-application/masters~Master#mainHTML}
  */
 exports.mainHTML = function(slide, config, document) {
   return '<video autoplay="true" id="video"></video>';
 };
 
 /**
- * @see {@link module:baldr-master_INTERFACE.postSet}
+ * @see {@link module:baldr-application/masters~Master#postSet}
  */
 exports.postSet = function(slide, config, document) {
 

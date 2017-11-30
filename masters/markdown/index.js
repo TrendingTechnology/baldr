@@ -12,7 +12,7 @@ const markdown = require('marked');
  **********************************************************************/
 
 /**
- * @see {@link module:baldr-master_INTERFACE.mainHTML}
+ * @see {@link module:baldr-application/masters~Master#mainHTML}
  */
 exports.mainHTML = function(slide, config, document) {
   return markdown(slide.normalizedData);

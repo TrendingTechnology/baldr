@@ -15,7 +15,7 @@ const {
  **********************************************************************/
 
 /**
- * @see {@link module:baldr-master_INTERFACE.quickStartEntries}
+ * @see {@link module:baldr-application/masters~Master#quickStartEntries}
  */
 exports.quickStartEntries = function() {
   return [
@@ -29,7 +29,7 @@ exports.quickStartEntries = function() {
 };
 
 /**
- * @see {@link module:baldr-master_INTERFACE.normalizeData}
+ * @see {@link module:baldr-application/masters~Master#normalizeData}
  */
 exports.normalizeData = function(rawSlideData, config) {
   return new Media(config.sessionDir)
@@ -37,14 +37,14 @@ exports.normalizeData = function(rawSlideData, config) {
 };
 
 /**
- * @see {@link module:baldr-master_INTERFACE.initSteps}
+ * @see {@link module:baldr-application/masters~Master#initSteps}
  */
 exports.initSteps = function(document, slide, config) {
   return reIndex(slide.normalizedData);
 };
 
 /**
- * @see {@link module:baldr-master_INTERFACE.setStepByNo}
+ * @see {@link module:baldr-application/masters~Master#setStepByNo}
  */
 exports.setStepByNo = function(no, count, stepData, document) {
   document
@@ -53,14 +53,14 @@ exports.setStepByNo = function(no, count, stepData, document) {
 };
 
 /**
- * @see {@link module:baldr-master_INTERFACE.config}
+ * @see {@link module:baldr-application/masters~Master#config}
  */
 exports.config = {
   stepSupport: true
 };
 
 /**
- * @see {@link module:baldr-master_INTERFACE.mainHTML}
+ * @see {@link module:baldr-application/masters~Master#mainHTML}
  */
 exports.mainHTML = function(slide, config, document) {
   let path = slide.normalizedData[0].path;

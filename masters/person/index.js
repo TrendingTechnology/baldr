@@ -12,7 +12,7 @@ const {Media, checkProperty} = require('baldr-library');
  **********************************************************************/
 
 /**
- * @see {@link module:baldr-master_INTERFACE.documentation}
+ * @see {@link module:baldr-application/masters~Master#documentation}
  */
 exports.documentation = {
   examples: [
@@ -27,7 +27,7 @@ exports.documentation = {
 };
 
 /**
- * @see {@link module:baldr-master_INTERFACE.normalizeData}
+ * @see {@link module:baldr-application/masters~Master#normalizeData}
  */
 exports.normalizeData = function(rawSlideData, config) {
   let data = {};
@@ -70,7 +70,7 @@ exports.normalizeData = function(rawSlideData, config) {
 };
 
 /**
- * @see {@link module:baldr-master_INTERFACE.mainHTML}
+ * @see {@link module:baldr-application/masters~Master#mainHTML}
  */
 exports.mainHTML = function(slide, config, document) {
   let data = slide.normalizedData;

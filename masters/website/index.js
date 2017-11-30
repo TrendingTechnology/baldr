@@ -10,7 +10,7 @@
  **********************************************************************/
 
 /**
- * @see {@link module:baldr-master_INTERFACE.quickStartEntries}
+ * @see {@link module:baldr-application/masters~Master#quickStartEntries}
  */
 exports.quickStartEntries = function() {
   return [
@@ -30,7 +30,7 @@ exports.quickStartEntries = function() {
 };
 
 /**
- * @see {@link module:baldr-master_INTERFACE.mainHTML}
+ * @see {@link module:baldr-application/masters~Master#mainHTML}
  */
 exports.mainHTML = function(slide, config, document) {
   let data = slide.normalizedData;
