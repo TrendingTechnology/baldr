@@ -170,6 +170,10 @@ class StepSwitcher {
   }
 }
 
+/***********************************************************************
+ *
+ **********************************************************************/
+
 /**
  *
  */
@@ -298,6 +302,10 @@ class Slide {
 
 }
 
+/***********************************************************************
+ *
+ **********************************************************************/
+
 /**
  * Show a master slide without custom data.
  *
@@ -325,6 +333,10 @@ exports.getInstantSlide = function(masterName, rawSlideData, document, config, m
   rawSlide[masterName] = rawSlideData;
   return new Slide(rawSlide, document, config, masters);
 };
+
+/***********************************************************************
+ *
+ **********************************************************************/
 
 /**
  * Parse the object representation of all slides.

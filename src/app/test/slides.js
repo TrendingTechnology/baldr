@@ -17,6 +17,10 @@ const Slides = rewire(slidesJsPath).__get__('Slides');
 
 let slide;
 
+/***********************************************************************
+ *
+ **********************************************************************/
+
 describe('Class “Slide()” #unittest', () => {
 
   beforeEach(() => {
@@ -79,6 +83,37 @@ describe('Class “Slide()” #unittest', () => {
     });
   });
 
+  describe('Method “setDataset_()”', () => {
+    let dom = getDOM();
+
+    let slide = new Slide({
+      "question": [
+        {
+          "question": "question",
+          "answer": "answer"
+        }
+      ]},
+      dom,
+      config,
+      masters
+    );
+
+    slide.setDataset_();
+
+    it('master: <body data-master="masterName">', function() {
+      assert.equal(dom.body.dataset.master, 'question');
+    });
+
+    it('centerVertically: <body data-center-vertically="true">', function() {
+      assert.equal(dom.body.dataset.centerVertically, 'true');
+    });
+
+    it('theme: <body data-theme="default">', function() {
+      assert.equal(dom.body.dataset.theme, 'default');
+    });
+
+  });
+
 });
 
 let rawYaml = [
@@ -106,6 +141,10 @@ let rawYaml = [
 ];
 
 let slidesClass;
+
+/***********************************************************************
+ *
+ **********************************************************************/
 
 describe('Class “Slides()”', () => {
 

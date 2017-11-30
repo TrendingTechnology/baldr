@@ -117,21 +117,6 @@ describe.skip('Class “MasterOfMasters” extended on a example master class (q
     assert.equal(this.master.document.body.dataset.master, 'quote');
   });
 
-  it('[master].set() <body data-master="masterName">', function() {
-    this.master.set();
-    assert.equal(this.master.document.body.dataset.master, 'quote');
-  });
-
-  it('[master].set() <body data-center-vertically="true">', function() {
-    this.master.set();
-    assert.equal(this.master.document.body.dataset.centerVertically, 'true');
-  });
-
-  it('[master].set() <body data-theme="default">', function() {
-    this.master.set();
-    assert.equal(this.master.document.body.dataset.theme, 'default');
-  });
-
 });
 
 describe('Class “Master()” #unittest', () => {
