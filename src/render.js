@@ -108,14 +108,6 @@ let main = function() {
         function: toggleModal,
         keys: ['esc'],
         IDs: ['modal-open', 'modal-close']
-      },
-      {
-        function: () => {show.setInstantSlide('camera');},
-        keys: ['ctrl+alt+c']
-      },
-      {
-        function: () => {show.setInstantSlide('editor');},
-        keys: ['ctrl+alt+e']
       }
     ]
   );

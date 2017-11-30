@@ -94,7 +94,10 @@ class QuickStart {
   /**
    *
    */
-  constructor(document, masters) {
+  constructor(document, masters, config) {
+
+    this.config = config;
+
     this.masters = masters;
 
     /**
@@ -112,13 +115,13 @@ class QuickStart {
     /**
      * @type {module:baldr-application/quick-start~quickStartEntries}
      */
-    this.entries = this.collectEntries();
+    this.entries = this.collectEntries_();
   }
 
   /**
    * @return {array} Array of [quick start entries]{@link module:baldr-application/quick-start~QuickStartEntry}.
    */
-  collectEntries() {
+  collectEntries_() {
     let entries = [];
     for (let master of this.masters.all) {
       let rawEntries = this.masters[master].quickStartEntries();
@@ -145,7 +148,7 @@ class QuickStart {
    *
    * @return {object} {@link https://developer.mozilla.org/en-US/docs/Web/API/HTMLButtonElement HTMLButtonElement}
    */
-  renderButton(entry) {
+  renderButton_(entry) {
     let button = this.document.createElement('button');
     let shortcut = '';
     if (checkProperty.isString(entry, 'shortcut')) {
@@ -161,9 +164,9 @@ class QuickStart {
   /**
    *
    */
-  renderNavigationMenu() {
+  renderNavigationMenu_() {
     for (let entry of this.entries) {
-      let button = this.renderButton(entry);
+      let button = this.renderButton_(entry);
       this.elemNavigationMenu.appendChild(button);
     }
   }
@@ -172,7 +175,7 @@ class QuickStart {
    *
    */
   set() {
-    this.renderNavigationMenu();
+    this.renderNavigationMenu_();
   }
 
   /**
@@ -181,7 +184,7 @@ class QuickStart {
   bind(showRunner, mousetrap) {
     for (let entry of this.entries) {
       let func = function() {
-        showRunner.setInstantSlide(entry.master, entry.data);
+        showRunner.setInstantSlide(entry.master, entry.data, this.document, this.config, this.masters);
       };
       mousetrap.bind(entry.shortcut, func);
       this.document

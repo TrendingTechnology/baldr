@@ -9,13 +9,15 @@ const fs = require('fs');
 const path = require('path');
 
 /**
- * A raw slide object with one property: the name of the master slide.
+ * A raw slide object containing only one property: The name of the
+ * master slide.
  * @typedef rawSlideObject
  * @type {object}
  * @property {rawSlideData} masterName
  */
 
 /**
+ * Various types of data to render a slide.
  * @typedef rawSlideData
  * @type {(boolean|number|string|array|object)}
  */
@@ -48,12 +50,12 @@ class StepSwitcher {
    * @param {object} document The document object of the browser (DOM), see on MDN:
    * {@link https://developer.mozilla.org/en-US/docs/Web/API/Document Document}
    */
-  constructor(document, slide, config, masters) {
+  constructor(document, slide, config) {
     this.config = config;
     this.document = document;
     this.slide = slide;
 
-    this.master = masters[slide.master];
+    this.master = slide.master;
 
     /**
      * The HTML-Button-Element that triggers the previous step.
@@ -179,7 +181,7 @@ class Slide {
    * {@link https://developer.mozilla.org/en-US/docs/Web/API/Document Document}
    */
   constructor(rawSlide, document, config, masters) {
-    let intersection = this.intersectMastersSlideKeys(
+    let intersection = this.intersectMastersSlideKeys_(
       masters.all,
       Object.keys(rawSlide)
     );
@@ -189,28 +191,51 @@ class Slide {
     }
 
     /**
-     * Name of the master slide.
-     * @type {string}
+     * @type {module:baldr-library/config~Config}
      */
-    this.master = intersection[0];
+    this.config = config;
+
+    /**
+     * @type {module:baldr-application~Document}
+     */
+    this.document = document;
+
+    /**
+     * @type {object}
+     */
+    this.elements = {
+      slide: document.getElementById('slide-content'),
+      modal: document.getElementById('modal-content')
+    };
+
+    /**
+     * The master of the slide.
+     * @type {module:baldr-application/masters~Master}
+     */
+    this.master = masters[intersection[0]];
+
+    /**
+     * @type {module:baldr-library/config~Config}
+     */
+    this.masters = masters;
 
     /**
      * The raw slide data
      * @type {(boolean|number|string|array|object)}
      */
-    this.rawData = rawSlide[this.master];
+    this.rawData = rawSlide[this.master.name];
 
     /**
      * The normalized slide data
      * @type {(boolean|number|string|array|object)}
      */
-    this.normalizedData = masters[this.master]
+    this.normalizedData = this.master
       .normalizeData(this.rawData, config);
 
     /**
      * @type {module:baldr-application/slides~StepSwitcher}
      */
-    this.steps = new StepSwitcher(document, this, config, masters);
+    this.steps = new StepSwitcher(document, this, config);
   }
 
   /**
@@ -223,11 +248,84 @@ class Slide {
    * @param {array} slideKeys
    * @return {array} The intersection as an array
    */
-  intersectMastersSlideKeys(masterNames, slideKeys) {
+  intersectMastersSlideKeys_(masterNames, slideKeys) {
     return masterNames.filter((n) => slideKeys.includes(n));
   }
 
+  /**
+   *
+   */
+  setDataset_() {
+    let dataset = this.document.body.dataset;
+    dataset.master = this.master.name;
+    dataset.centerVertically = this.master.config.centerVertically;
+    dataset.theme = this.master.config.theme;
+  }
+
+  /**
+   *
+   */
+  setModal_() {
+    this.elements.modal.innerHTML = this.master.modalHTML();
+  }
+
+  /**
+   *
+   */
+  setMain_() {
+    this.elements.slide.innerHTML = this.master.mainHTML(
+      this,
+      this.config,
+      this.document
+    );
+
+  }
+
+  /**
+   *
+   */
+  set(oldSlide) {
+    if (oldSlide && oldSlide.hasOwnProperty('master')) {
+      this.masters[oldSlide.master.name]
+      .cleanUp(this.document, oldSlide, this);
+    }
+    this.setDataset_();
+    this.setMain_();
+    this.setModal_();
+    this.master.postSet(this, this.config, this.document);
+
+    this.steps.visit();
+  }
+
 }
+
+/**
+ * Show a master slide without custom data.
+ *
+ * The displayed master slide is not part of the acutal presentation.
+ * Not every master slide can be shown with this function. It muss be
+ * possible to render the master slide without custom data.
+ * No number is assigned to the master slide.
+ * @param {string} masterName Name of the master slide.
+ * @param {module:baldr-application/slides~rawSlideData} rawSlideData
+ *   Various types of data to render a slide.
+ * @param {module:baldr-application~Document} document The document
+ *   object (DOM) of the render process.
+ * @param {module:baldr-library/config~Config} config All
+ *   configurations of the current presentation session.
+ * @param {module:baldr-application/masters~Masters} masters All
+ *   available master slides.
+ *
+ * @return {module:baldr-application/slides~Slide}
+ */
+exports.getInstantSlide = function(masterName, rawSlideData, document, config, masters) {
+  let rawSlide = {};
+  if (!rawSlideData) {
+    rawSlideData = true;
+  }
+  rawSlide[masterName] = rawSlideData;
+  return new Slide(rawSlide, document, config, masters);
+};
 
 /**
  * Parse the object representation of all slides.
@@ -241,9 +339,25 @@ class Slides {
    * {@link https://developer.mozilla.org/en-US/docs/Web/API/Document Document}
    */
   constructor(rawSlides, config, document, masters) {
+
+    /**
+     *
+     */
     this.rawSlides = rawSlides;
+
+    /**
+     *
+     */
     this.config = config;
+
+    /**
+     *
+     */
     this.document = document;
+
+    /**
+     *
+     */
     this.masters = masters;
   }
 

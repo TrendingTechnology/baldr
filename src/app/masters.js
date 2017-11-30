@@ -236,7 +236,7 @@ class Masters {
     this.all = this.getAll();
     for (let master of this.all) {
       let masterPath = path.join(this.path, master);
-      this[master] = new Master(path.join(masterPath, 'index.js'));
+      this[master] = new Master(path.join(masterPath, 'index.js'), master);
     }
 
   }

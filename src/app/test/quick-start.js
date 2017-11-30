@@ -35,7 +35,7 @@ describe('Class “QuickStart()” #unittest', () => {
   describe('Methods', () => {
 
     it('Method “collectEntries()”', () => {
-      let entries = quickStart.collectEntries();
+      let entries = quickStart.collectEntries_();
       assert.equal(entries[0].title, 'Audio');
       assert.equal(entries[0].master, 'audio');
       assert.equal(entries[0].cssID, 'quick-start-entry_audio_1');
@@ -52,7 +52,7 @@ describe('Class “QuickStart()” #unittest', () => {
         title: 'lol',
         fontawesome: 'lol'
       };
-      let button = quickStart.renderButton(entry);
+      let button = quickStart.renderButton_(entry);
       assert.equal(button.nodeName, 'BUTTON');
       assert.equal(button.title, 'lol');
       assert.equal(button.classList.item(0), 'fa');
@@ -60,7 +60,7 @@ describe('Class “QuickStart()” #unittest', () => {
     });
 
     it('Method “renderNavigationMenu()”', () => {
-      quickStart.renderNavigationMenu();
+      quickStart.renderNavigationMenu_();
       let buttons = quickStart.document.querySelectorAll('#nav-quick-start button');
       assert.equal(buttons[0].title, 'Audio (ctrl+alt+a)');
     });

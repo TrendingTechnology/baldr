@@ -48,9 +48,27 @@ let requireLib = function(fileName) {
 
 const {getQuickStart} = requireLib('quick-start');
 const {getMasters} = requireLib('masters');
-const {getSlides, Slide} = requireLib('slides');
+const {
+  getInstantSlide,
+  getSlides,
+  Slide
+} = requireLib('slides');
 const {SlidesSwitcher} = requireLib('slides-switcher');
 const {getThemes} = requireLib('themes');
+
+/**
+ * The document object of the browser (DOM), see on MDN:
+ * {@link https://developer.mozilla.org/en-US/docs/Web/API/Document Document}
+ * @typedef Document
+ * @type {object}
+ */
+
+/**
+ * The mousetrap object
+ * {@link https://www.npmjs.com/package/mousetrap}
+ * @typedef mousetrap
+ * @type {object}
+ */
 
 /**
  *
@@ -58,17 +76,28 @@ const {getThemes} = requireLib('themes');
 class ShowRunner {
 
   /**
-   * @param {object} document The document object of the browser (DOM), see on MDN:
-   * {@link https://developer.mozilla.org/en-US/docs/Web/API/Document Document}
+   * @param {module:baldr-application~Document} document
    */
   constructor(argv, document, mousetrap) {
+
+    /**
+     * @type {module:baldr-application~Document}
+     */
     this.document = document;
+
+    /**
+     * @type {module:baldr-application~mousetrap}
+     */
     this.mousetrap = mousetrap;
 
     /**
      * @type {module:baldr-library/config~Config}
      */
     this.config = getConfig(argv);
+
+    /**
+     * @type {module:baldr-application/masters~Masters}
+     */
     this.masters = getMasters();
     this.masters.execAll('init', document, this.config);
 
@@ -96,18 +125,32 @@ class ShowRunner {
       this.masters
     );
 
+    /**
+     * @type {module:baldr-application/slides~Slide}
+     */
     this.oldSlide = {};
-    this.addMastersCSS();
-    this.quickStart = getQuickStart(document, this.masters);
+
+    /**
+     * @type {module:baldr-application/slides~Slide}
+     */
+    this.newSlide = {};
+
+    /**
+     * @type {module:baldr-application/quick-start~QuickStart}
+     */
+    this.quickStart = getQuickStart(document, this.masters, this.config);
     this.quickStart.set();
-    this.setFirstSlide();
     this.quickStart.bind(this, this.mousetrap);
+
+    this.setFirstSlide();
+
+    this.addMastersCSS_();
   }
 
   /**
    *
    */
-  addMastersCSS() {
+  addMastersCSS_() {
     for (let master of this.masters.all) {
       if (this.masters[master].css) {
         addCSSFile(
@@ -122,63 +165,23 @@ class ShowRunner {
   /**
    *
    */
-  setMain(slide) {
-    let master = this.masters[this.newSlide.master];
-    let elements = {
-      slide: this.document.getElementById('slide-content'),
-      modal: this.document.getElementById('modal-content')
-    };
-
-    let dataset = this.document.body.dataset;
-    dataset.master = slide.master;
-    dataset.centerVertically = master.config.centerVertically;
-    dataset.theme = master.config.theme;
-
-    elements.slide.innerHTML = master.mainHTML(
-      slide,
-      this.config,
-      this.document
-    );
-    elements.modal.innerHTML = master.modalHTML();
-
-    master.postSet(slide, this.config, this.document);
-  }
-
-  /**
-   *
-   */
-  setSlide(slide) {
-    if (this.oldSlide.hasOwnProperty('master')) {
-      this.masters[this.oldSlide.master]
-      .cleanUp(this.document, this.oldSlide, slide);
-    }
-    this.newSlide = slide;
-    this.setMain(slide);
-    this.newSlide.steps.visit();
-  }
-
-  /**
-   * Show a master slide without custom data.
-   *
-   * The displayed master slide is not part of the acutal presentation.
-   * Not every master slide can be shown with this function. It muss be
-   * possible to render the master slide without custom data.
-   * No number is assigned to the master slide.
-   * @param {string} name Name of the master slide
-   */
-  setInstantSlide(masterName, rawData=true) {
-    let rawSlide = {};
-    rawSlide[masterName] = rawData;
-    let slide = new Slide(rawSlide, this.document, this.config, this.masters);
-    this.setSlide(slide);
-  }
-
-  /**
-   *
-   */
   setFirstSlide() {
     this.newSlide = this.slidesSwitcher.getByNo(1);
-    this.setSlide(this.newSlide);
+    this.newSlide.set();
+  }
+
+  /**
+   *
+   */
+  setInstantSlide(masterName, rawData) {
+    this.newSlide = getInstantSlide(
+      masterName,
+      rawData,
+      this.document,
+      this.config,
+      this.masters
+    );
+    this.newSlide.set();
   }
 
   /**
@@ -201,7 +204,7 @@ class ShowRunner {
   slidePrev() {
     this.oldSlide = this.newSlide;
     this.newSlide = this.slidesSwitcher.prev();
-    this.setSlide(this.newSlide);
+    this.newSlide.set(this.oldSlide);
   }
 
   /**
@@ -210,7 +213,7 @@ class ShowRunner {
   slideNext() {
     this.oldSlide = this.newSlide;
     this.newSlide = this.slidesSwitcher.next();
-    this.setSlide(this.newSlide);
+    this.newSlide.set(this.oldSlide);
   }
 
 }

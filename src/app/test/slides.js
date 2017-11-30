@@ -35,7 +35,7 @@ describe('Class “Slide()” #unittest', () => {
 
   describe('Properties', () => {
     it('Property “this.master”', () => {
-      assert.equal(slide.master, 'question');
+      assert.equal(slide.master.name, 'question');
     });
 
     it('Property “this.rawData”', () => {
@@ -54,26 +54,26 @@ describe('Class “Slide()” #unittest', () => {
 
   describe('Methods', () => {
 
-    it('Method “intersectMastersSlideKeys()”', () => {
+    it('Method “intersectMastersSlideKeys_()”', () => {
       let array1 = ['one', 'two', 'three'];
       let array2 = ['two'];
-      let result = slide.intersectMastersSlideKeys(['one', 'two', 'three'], ['two']);
+      let result = slide.intersectMastersSlideKeys_(['one', 'two', 'three'], ['two']);
       assert.deepEqual(result, ['two']);
       assert.deepEqual(array1, ['one', 'two', 'three']);
       assert.deepEqual(array2, ['two']);
 
       assert.deepEqual(
-        slide.intersectMastersSlideKeys(['one', 'two', 'three'], ['four']),
+        slide.intersectMastersSlideKeys_(['one', 'two', 'three'], ['four']),
         []
       );
 
       assert.deepEqual(
-        slide.intersectMastersSlideKeys(['one', 'two', 'three'], ['one', 'two', 'three']),
+        slide.intersectMastersSlideKeys_(['one', 'two', 'three'], ['one', 'two', 'three']),
         ['one', 'two', 'three']
       );
 
       assert.deepEqual(
-        slide.intersectMastersSlideKeys(['one', 'two', 'three'], ['three', 'two', 'one']),
+        slide.intersectMastersSlideKeys_(['one', 'two', 'three'], ['three', 'two', 'one']),
         ['one', 'two', 'three']
       );
     });

@@ -15,15 +15,14 @@ const {addCSSFile} = require('baldr-library');
 class Themes {
 
   /**
-   * @param {object} document The document object of the browser (DOM), see on MDN:
-   * {@link https://developer.mozilla.org/en-US/docs/Web/API/Document Document}
+   * @param {module:baldr-application~Document} document The document
+   *   object of the browser (DOM).
    */
   constructor(document) {
 
     /**
-     * The document object of the browser (DOM), see on MDN:
-     * {@link https://developer.mozilla.org/en-US/docs/Web/API/Document Document}
-     * @type {object}
+     * The document object of the browser (DOM).
+     * @type {module:baldr-application~Document}
      */
     this.document = document;
 
@@ -133,8 +132,8 @@ class Themes {
 }
 
 /**
- * @param {object} document The document object of the browser (DOM), see on MDN:
- * {@link https://developer.mozilla.org/en-US/docs/Web/API/Document Document}
+ * @param {module:baldr-application~Document} document The document
+ *   object of the browser (DOM).
  */
 exports.getThemes = function(document) {
   let themes = new Themes(document);
