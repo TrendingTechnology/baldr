@@ -69,9 +69,9 @@ describe('Class “ShowRunner()” #unittest', () => {
 
   describe('Methods', () => {
 
-    it.skip('Method “parseYamlFile()”', () => {
+    it.skip('Method “parseYamlFile_()”', () => {
       let presentation = initiatePresentation();
-      let yml = presentation.parseYamlFile(testFileMinimal);
+      let yml = presentation.parseYamlFile_(testFileMinimal);
       assert.equal(yml.slides[0].quote.author, 'Johann Wolfgang von Goethe');
       assert.equal(yml.slides[1].question, 'When did Ludwig van Beethoven die?');
     });

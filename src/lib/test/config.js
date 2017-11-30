@@ -34,35 +34,35 @@ describe('Class “Config()” #unittest', () => {
 
   describe('Methods', () => {
 
-    it('Method “parseYamlFile()”', () => {
-      let yml = config.parseYamlFile(testFileMinimal);
+    it('Method “parseYamlFile_()”', () => {
+      let yml = config.parseYamlFile_(testFileMinimal);
       assert.equal(yml.slides[0].quote.author, 'Johann Wolfgang von Goethe');
       assert.equal(yml.slides[1].question, 'When did Ludwig van Beethoven die?');
     });
 
-    it('Method “pickSessionFile()”', () => {
+    it('Method “pickSessionFile_()”', () => {
 
       assert.equal(
-        config.pickSessionFile(['lol.baldr']),
+        config.pickSessionFile_(['lol.baldr']),
         'lol.baldr'
       );
 
       assert.equal(
-        config.pickSessionFile(['lol.BALDR']),
+        config.pickSessionFile_(['lol.BALDR']),
         'lol.BALDR'
       );
 
       assert.equal(
-        config.pickSessionFile(['lil', 'lol.BALDR', 'troll']),
+        config.pickSessionFile_(['lil', 'lol.BALDR', 'troll']),
         'lol.BALDR'
       );
 
       assert.throws(function() {
-        config.pickSessionFile(['lil', 'troll']);
+        config.pickSessionFile_(['lil', 'troll']);
       });
 
       assert.equal(
-        config.pickSessionFile(['first.baldr', 'last.baldr']),
+        config.pickSessionFile_(['first.baldr', 'last.baldr']),
         'last.baldr'
       );
     });

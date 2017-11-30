@@ -93,13 +93,13 @@ describe('Class “FileInfo()” #unittest', () => {
   });
 
   describe('Methods', () => {
-    it('Method “readInfoYaml()”', () => {
+    it('Method “readInfoYaml_()”', () => {
       let basePath = path.resolve('test', 'files', 'media', 'image');
 
       let testInfo = function(fileName, result) {
         let filePath = path.resolve(basePath, fileName);
         let file = new FileInfo(filePath);
-        let info = file.readInfoYaml();
+        let info = file.readInfoYaml_();
         assert.equal(info.title, result);
         assert.equal(file.title, result);
       };
@@ -143,22 +143,22 @@ describe('Class “Media()” #unittest', () => {
   });
 
   describe('Methods', () => {
-    it('Method “getExtensions()”', function() {
-      assert.deepEqual(media.getExtensions(['lol']), ['lol']);
-      assert.deepEqual(media.getExtensions(['lol', 'troll']), ['lol', 'troll']);
-      assert.deepEqual(media.getExtensions('lol'), ['lol']);
-      assert.deepEqual(media.getExtensions('audio'), ['mp3']);
-      assert.deepEqual(media.getExtensions('image'), ['jpg', 'jpeg', 'png']);
-      assert.deepEqual(media.getExtensions('video'), ['mp4']);
+    it('Method “getExtensions_()”', function() {
+      assert.deepEqual(media.getExtensions_(['lol']), ['lol']);
+      assert.deepEqual(media.getExtensions_(['lol', 'troll']), ['lol', 'troll']);
+      assert.deepEqual(media.getExtensions_('lol'), ['lol']);
+      assert.deepEqual(media.getExtensions_('audio'), ['mp3']);
+      assert.deepEqual(media.getExtensions_('image'), ['jpg', 'jpeg', 'png']);
+      assert.deepEqual(media.getExtensions_('video'), ['mp4']);
     });
 
-    it('Method “resolvePath()”', function() {
+    it('Method “resolvePath_()”', function() {
       assert.equal(
-        media.resolvePath('test.txt'),
+        media.resolvePath_('test.txt'),
         path.join(media.parentPath, 'test.txt')
       );
       assert.equal(
-        media.resolvePath('/tmp/test.txt'),
+        media.resolvePath_('/tmp/test.txt'),
         '/tmp/test.txt'
       );
     });
@@ -273,19 +273,19 @@ describe('Class “Media()” #unittest', () => {
       });
     });
 
-    it('Method “listRecursively()”', () => {
-      let list = media.listRecursively(
+    it('Method “listRecursively_()”', () => {
+      let list = media.listRecursively_(
         path.resolve('test', 'files', 'mixed-extensions')
       );
       assert.ok(list[0].includes('audio/beethoven.m4a'));
       assert.ok(list.pop().includes('video/mozart.mp4'));
     });
 
-    it('Method “groupByTypes()”', () => {
-      let list = media.listRecursively(
+    it('Method “groupByTypes_()”', () => {
+      let list = media.listRecursively_(
         path.resolve('test', 'files', 'mixed-extensions')
       );
-      let group = media.groupByTypes(list);
+      let group = media.groupByTypes_(list);
 
       assert.equal(group.audio.length, 3);
       assert.equal(group.image.length, 4);

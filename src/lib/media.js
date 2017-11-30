@@ -21,7 +21,7 @@ class FileInfo {
     this.path = path.resolve(filePath);
     this.basename = path.basename(filePath);
     this.extension = path.extname(filePath).replace('.', '');
-    let info = this.readInfoYaml();
+    let info = this.readInfoYaml_();
     for (let property in info) {
       this[property] = info[property];
     }
@@ -54,7 +54,7 @@ class FileInfo {
    * Info file in the YAML file format:
    * `/home/baldr/beethoven.jpg.yml`
    */
-  readInfoYaml() {
+  readInfoYaml_() {
     let infoFile = this.path + '.yml';
     if (fs.existsSync(infoFile)) {
       let info = yaml.safeLoad(fs.readFileSync(infoFile, 'utf8'));
@@ -111,7 +111,7 @@ class Media {
    *
    * @return {array} A array of extensions
    */
-  getExtensions(extensions) {
+  getExtensions_(extensions) {
     if (typeof extensions === 'object' && Array.isArray(extensions)) {
       return extensions;
     }
@@ -134,7 +134,7 @@ class Media {
    *
    * @return {string} Absolute path
    */
-  resolvePath(filePath) {
+  resolvePath_(filePath) {
     if (path.isAbsolute(filePath)) {
       return filePath;
     }
@@ -157,7 +157,7 @@ class Media {
       return true;
     }
 
-    let filterExtensions = this.getExtensions(extensions)
+    let filterExtensions = this.getExtensions_(extensions)
       .map((value) => {
         return '.' + value.toLowerCase();
       });
@@ -174,7 +174,7 @@ class Media {
    * @param {array} fileList An array of file paths
    * @return {object}
    */
-  groupByTypes(fileList) {
+  groupByTypes_(fileList) {
     let out = {};
     for (let type of Object.keys(this.types)) {
       out[type] = fileList.filter(
@@ -218,8 +218,8 @@ class Media {
    * </pre></code>
    */
   getMedia() {
-    return this.groupByTypes(
-      this.listRecursively(this.parentPath)
+    return this.groupByTypes_(
+      this.listRecursively_(this.parentPath)
     );
   }
 
@@ -233,13 +233,13 @@ class Media {
    *
    * @see https://gist.github.com/kethinov/6658166
    */
-  listRecursively(folder, filelist) {
+  listRecursively_(folder, filelist) {
     let files = fs.readdirSync(folder).sort();
     filelist = filelist || [];
     files.forEach((file) => {
       let filePath = path.resolve(folder, file);
       if (fs.statSync(filePath).isDirectory()) {
-        filelist = this.listRecursively(filePath, filelist);
+        filelist = this.listRecursively_(filePath, filelist);
       }
       else {
         filelist.push(filePath);
@@ -259,7 +259,7 @@ class Media {
    * @return {array} A array of absolute file paths or an empty array.
    */
   list(inputPath, extensions) {
-    let absPath = this.resolvePath(inputPath);
+    let absPath = this.resolvePath_(inputPath);
 
     if (!fs.existsSync(absPath)) {
       return [];
@@ -269,7 +269,7 @@ class Media {
       return [new FileInfo(absPath)];
     }
     else if (stat.isDirectory()) {
-      return this.listRecursively(absPath)
+      return this.listRecursively_(absPath)
         .filter((file) => {
           return this.filterFile(file, extensions);
         })
