@@ -93,7 +93,7 @@ class SlidesSwitcher {
   }
 
   /**
-   * @private
+   *
    */
   setVisibility_(state) {
     for (let prop in this.elemNavigationButtons) {
@@ -102,7 +102,7 @@ class SlidesSwitcher {
   }
 
   /**
-   * @private
+   *
    */
   setButtons_() {
     if (this.count > 1) {
@@ -118,7 +118,6 @@ class SlidesSwitcher {
    *
    * @param {string} color A CSS color information.
    * @param {number} zIndex A CSS color information.
-   * @private
    */
   setCover_(color, zIndex) {
     this.cover.style.backgroundColor = color;

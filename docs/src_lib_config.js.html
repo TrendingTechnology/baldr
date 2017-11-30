@@ -56,7 +56,7 @@ class Config {
      * structured in the YAML format.
      * @type {string}
      */
-    this.sessionFile = this.pickSessionFile(argv);
+    this.sessionFile = this.pickSessionFile_(argv);
 
     /**
      * The session files’ parent working directory. Assuming you are
@@ -71,7 +71,7 @@ class Config {
      * structured in YAML
      * @type {object}
      */
-    this.raw = this.parseYamlFile(this.sessionFile);
+    this.raw = this.parseYamlFile_(this.sessionFile);
 
     /**
      * Array of raw slide objects.
@@ -88,7 +88,7 @@ class Config {
    *
    * @return {string} The path of a BALDUR file.
    */
-  pickSessionFile(argv) {
+  pickSessionFile_(argv) {
     let clone = argv.slice(0);
     clone.reverse();
 
@@ -109,7 +109,7 @@ class Config {
    * @return {object} Raw object representation of the presentation
    * session.
    */
-  parseYamlFile(sessionFile) {
+  parseYamlFile_(sessionFile) {
     return yaml.safeLoad(fs.readFileSync(sessionFile, 'utf8'));
   }
 
