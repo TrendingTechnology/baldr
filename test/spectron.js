@@ -87,7 +87,7 @@ describe('General Spectron tests #spectron', () => {
         });
     });
 
-    it('Shortcuts', function () {
+    it('Quick start shortcuts', function () {
       return this.app.client
 
         .keys('ArrowRight')
@@ -107,13 +107,6 @@ describe('General Spectron tests #spectron', () => {
         .then(text => {
           assert.ok(text.includes('<video'));
         })
-
-        // .keys(['Control', 'Alt', 'e'])
-        // .pause(100)
-        // .getText('#slide-content')
-        // .then(text => {
-        //   assert.equal(text, 'editor');
-        // })
 
         ;
     });
