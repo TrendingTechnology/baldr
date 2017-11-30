@@ -64,5 +64,8 @@ exports.postSet = function(slide, config, document) {
  * @see {@link module:baldr-master_INTERFACE.cleanUp}
  */
 exports.cleanUp = function(document, oldSlide, newSlide) {
-  document.querySelector('.ct-app').remove();
+  let elements = document.querySelectorAll('.ct-app');
+  for (let element of elements) {
+    element.remove();
+  }
 };

@@ -22,6 +22,18 @@ describe('Master slide “editor”: “example.baldr” #spectron', function ()
       .getHTML('.ct-app')
       .then(text => {assert.ok(text.includes('ct-ignition__button--edit'));})
 
+      .click('#nav-slide-next')
+      .getText('#slide-content')
+      .then(text => {assert.equal(text, 'test');})
+
+      .keys(['Control', 'Alt', 'e'])
+      .getHTML('.ct-app')
+      .then(text => {assert.ok(text.includes('ct-ignition__button--edit'));})
+
+      .click('#nav-slide-prev')
+      .getHTML('.ct-app')
+      .then(text => {assert.ok(text.includes('ct-ignition__button--edit'));})
+
       ;
   });
 

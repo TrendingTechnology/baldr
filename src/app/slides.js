@@ -43,7 +43,6 @@ const path = require('path');
  * arrow keys. Steps are the second level in the hierachy of state
  * changes. On the first level are slides.
  */
-
 class StepSwitcher {
 
   /**
