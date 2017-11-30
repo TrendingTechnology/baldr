@@ -14,6 +14,10 @@ let initiateQuickStart = function() {
 
 let quickStart;
 
+/***********************************************************************
+ *
+ **********************************************************************/
+
 describe('Class “QuickStart()” #unittest', () => {
 
   beforeEach(() => {

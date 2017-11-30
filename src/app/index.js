@@ -28,6 +28,10 @@ const {
 const {SlidesSwitcher} = requireLib('slides-switcher');
 const {getThemes} = requireLib('themes');
 
+/***********************************************************************
+ *
+ **********************************************************************/
+
 /**
  * The document object of the browser (DOM), see on MDN:
  * {@link https://developer.mozilla.org/en-US/docs/Web/API/Document Document}
@@ -41,6 +45,10 @@ const {getThemes} = requireLib('themes');
  * @typedef mousetrap
  * @type {object}
  */
+
+/***********************************************************************
+ *
+ **********************************************************************/
 
 /**
  *

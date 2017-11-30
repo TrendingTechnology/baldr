@@ -8,6 +8,10 @@
 const fs = require('fs');
 const path = require('path');
 
+/***********************************************************************
+ *
+ **********************************************************************/
+
 /**
  * A raw slide object containing only one property: The name of the
  * master slide.
@@ -37,6 +41,10 @@ const path = require('path');
  * @property {stepData.2} stepDataEntry Misc step data
  * @property {stepData.3} stepDataEntry Misc step data
  */
+
+/***********************************************************************
+ *
+ **********************************************************************/
 
 /**
  * Some masters support steps. Steps are switched by the up and down

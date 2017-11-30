@@ -9,6 +9,10 @@ const {
 const {getThemes} = requireFile('app', 'themes.js');
 const themes = getThemes(getDOM());
 
+/***********************************************************************
+ *
+ **********************************************************************/
+
 describe('Class “Themes()” #unittest', () => {
 
   describe('Properties', () => {

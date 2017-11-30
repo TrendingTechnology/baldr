@@ -9,6 +9,10 @@ const fs = require('fs');
 const path = require('path');
 const {addCSSFile} = require('baldr-library');
 
+/***********************************************************************
+ *
+ **********************************************************************/
+
 /**
  * Gather informations about all themes.
  */
@@ -130,6 +134,10 @@ class Themes {
   }
 
 }
+
+/***********************************************************************
+ *
+ **********************************************************************/
 
 /**
  * @param {module:baldr-application~Document} document The document

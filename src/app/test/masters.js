@@ -8,6 +8,9 @@ const {
 const {getMasters} = require('baldr-application');
 let masters = new getMasters();
 
+/***********************************************************************
+ *
+ **********************************************************************/
 
 describe.skip('Class “MasterOfMasters” #unittest', function() {
   beforeEach(function() {
@@ -67,6 +70,10 @@ describe.skip('Class “MasterOfMasters” #unittest', function() {
 
 });
 
+/***********************************************************************
+ *
+ **********************************************************************/
+
 describe.skip('Class “MasterOfMasters” extended on a example master class (quote) #unittest', function() {
 
   beforeEach(function() {
@@ -118,6 +125,10 @@ describe.skip('Class “MasterOfMasters” extended on a example master class (q
   });
 
 });
+
+/***********************************************************************
+ *
+ **********************************************************************/
 
 describe('Class “Master()” #unittest', () => {
   let person;
@@ -203,6 +214,10 @@ describe('Class “Master()” #unittest', () => {
 
 });
 
+/***********************************************************************
+ *
+ **********************************************************************/
+
 describe('Class “Masters()” #unittest', () => {
 
   describe('Properties', () => {
@@ -225,6 +240,10 @@ describe('Class “Masters()” #unittest', () => {
   });
 
 });
+
+/***********************************************************************
+ *
+ **********************************************************************/
 
 describe('Function getMasters()” #unittest', function() {
 
