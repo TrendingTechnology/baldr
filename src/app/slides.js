@@ -21,6 +21,22 @@ const path = require('path');
  */
 
 /**
+ * Step data indexed by the step number begining with 1.
+ *
+ *     {
+ *       1: {misc},
+ *       2: {misc},
+ *       3: {misc}
+ *     }
+ *
+ * @typedef stepData
+ * @type {object}
+ * @property {stepData.1} stepDataEntry Misc step data
+ * @property {stepData.2} stepDataEntry Misc step data
+ * @property {stepData.3} stepDataEntry Misc step data
+ */
+
+/**
  * Some masters support steps. Steps are switched by the up and down
  * arrow keys. Steps are the second level in the hierachy of state
  * changes. On the first level are slides.
@@ -51,7 +67,7 @@ class StepSwitcher {
     /**
      * Object to store data for the individual steps. The step data
      * should be indexed by the step number.
-     * @type {object}
+     * @type {module:baldr-application/slides~stepData}
      */
     this.stepData = false;
 

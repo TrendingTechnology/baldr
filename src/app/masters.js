@@ -27,6 +27,10 @@ class Master {
 
     /**
      * @type {object}
+     * @property {object} config
+     * @property {boolean} config.centerVertically
+     * @property {boolean} config.stepSupport
+     * @property {string} config.theme
      */
     this.config = defaults.config;
 
@@ -36,7 +40,25 @@ class Master {
     this.css = this.hasCSS_(dirname);
 
     /**
+     * Some documentation informations about the master slide.
+     *
+     * <code><pre>
+     * exports.documentation = {
+     *   examples: [
+     * `
+     * - mastername:
+     *      property: value
+     * `,
+     * `
+     * - mastername:
+     *      property: value
+     * `
+     *   ]
+     * };
+     * </pre></pre>
      * @type {object}
+     * @property {object} documentation
+     * @property {array} documentation.examples
      */
     this.documentation = defaults.documentation;
 
@@ -56,51 +78,82 @@ class Master {
 
     /**
      * @function
+     * @param {object} document
+     * @param {module:baldr-application/slides~Slide} oldSlide
+     * @param {module:baldr-application/slides~Slide} newSlide
      */
     this.cleanUp = defaults.cleanUp;
 
     /**
      * @function
+     * @param {object} document
+     * @param {module:baldr-library/config~Config} config
      */
     this.init = defaults.init;
 
     /**
      * @function
+     * @param {object} document
+     * @param {module:baldr-application/slides~Slide} slide
+     * @param {module:baldr-library/config~Config} config
      */
     this.initSteps = defaults.initSteps;
 
     /**
      * @function
+     * @param {object} document
+     * @param {module:baldr-application/slides~Slide} slide
+     * @param {module:baldr-library/config~Config} config
      */
     this.initStepsEveryVisit = defaults.initStepsEveryVisit;
 
     /**
      * @function
+     * @param {module:baldr-application/slides~Slide} slide
+     * @param {module:baldr-library/config~Config} config
+     * @param {object} document
+     * @return {string}
      */
     this.mainHTML = defaults.mainHTML;
 
     /**
      * @function
+     * @return {string}
      */
     this.modalHTML = defaults.modalHTML;
 
     /**
      * @function
+     * @param {object} rawSlideData
+     * @param {module:baldr-library/config~Config} config
      */
     this.normalizeData = defaults.normalizeData;
 
     /**
      * @function
+     * @param {object} document
+     * @param {module:baldr-library/config~Config} config
+     * @param {module:baldr-application/slides~Slide} slide
+     * @return {undefined}
+     * @see {@link module:baldr-application~ShowRunner#setMain}
      */
     this.postSet = defaults.postSet;
 
     /**
      * @function
+     * @return {module:baldr-application/quick-start~rawQuickStartEntries}
+     * @see {@link module:baldr-application/quick-start~QuickStart#collectEntries}
      */
     this.quickStartEntries = defaults.quickStartEntries;
 
     /**
      * @function
+     * @param {integer} no
+     * @param {integer} count
+     * @param {object} stepData
+     * @param {object} document
+     * @return {undefined}
+     * @see {@link module:baldr-application/slides~StepSwitcher#setByNo}
      */
     this.setStepByNo = defaults.setStepByNo;
   }
@@ -185,6 +238,7 @@ class Masters {
       let masterPath = path.join(this.path, master);
       this[master] = new Master(path.join(masterPath, 'index.js'));
     }
+
   }
 
   /**
