@@ -168,6 +168,7 @@ class ShowRunner {
    *
    */
   setInstantSlide(masterName, rawData) {
+    this.oldSlide = this.newSlide;
     this.newSlide = getInstantSlide(
       masterName,
       rawData,
