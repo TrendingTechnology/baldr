@@ -40,7 +40,7 @@ class Themes {
      * Folder names of all themes
      * @type {array}
      */
-    this.all = this.getThemes();
+    this.all = this.getThemes_();
 
   }
 
@@ -48,7 +48,7 @@ class Themes {
    * Get the folders of all themes.
    * @return {array} Folder names of all themes
    */
-  getThemes() {
+  getThemes_() {
     return fs.readdirSync(this.path, 'utf8')
       .filter(
         dir => fs.statSync(
@@ -64,7 +64,7 @@ class Themes {
    * package.json
    * @return {array} A list of CSS paths as an array
    */
-  resolveDependencies(dependencies) {
+  resolveDependencies_(dependencies) {
     return Object.keys(dependencies)
       .map(
         dependency => require.resolve(dependency)
@@ -78,7 +78,7 @@ class Themes {
    * @return {string} Absolute path of the folder containing the theme
    * module.s
    */
-  resolveTheme(name) {
+  resolveTheme_(name) {
     return path.dirname(
       require.resolve('baldr-theme-' + name)
     );
@@ -89,9 +89,9 @@ class Themes {
    *
    * @param {string} name The name of the theme
    */
-  getPackageJSON(name) {
+  getPackageJSON_(name) {
     return require(
-      path.join(this.resolveTheme(name), 'package.json')
+      path.join(this.resolveTheme_(name), 'package.json')
     );
   }
 
@@ -99,13 +99,13 @@ class Themes {
    * @return {array} A array of CSS files in the order: first
    * dependencies of the theme and then the real theme CSS file
    */
-  getAllCSSFiles() {
+  getAllCSSFiles_() {
     let pkg;
     let dependencies;
     let cssFiles = [];
     for (let name of this.all) {
-      pkg = this.getPackageJSON(name);
-      dependencies = this.resolveDependencies(pkg.dependencies);
+      pkg = this.getPackageJSON_(name);
+      dependencies = this.resolveDependencies_(pkg.dependencies);
       for (let dependencyCSS of dependencies) {
         cssFiles.push(dependencyCSS);
       }
@@ -119,18 +119,9 @@ class Themes {
    * DOM.
    */
   loadThemes() {
-    for (let cssFile of this.getAllCSSFiles()) {
+    for (let cssFile of this.getAllCSSFiles_()) {
       addCSSFile(this.document, cssFile, 'baldr-theme');
     }
-  }
-
-  /**
-   * Set a data-* attribute to the body element of the DOM.
-   *
-   * @param {string} name The name of the theme
-   */
-  setTheme(name) {
-    this.document.body.dataset.theme = name;
   }
 
 }

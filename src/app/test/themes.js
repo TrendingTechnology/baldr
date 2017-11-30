@@ -32,20 +32,20 @@ describe('Class “Themes()” #unittest', () => {
 
   describe('Methods', () => {
 
-    it('Method “getThemes()”', () => {
-      assert.deepEqual(themes.getThemes(), allThemes);
+    it('Method “getThemes_()”', () => {
+      assert.deepEqual(themes.getThemes_(), allThemes);
     });
 
-    it('Method “getPackageJSON()”', () => {
+    it('Method “getPackageJSON_()”', () => {
       assert.equal(
-        themes.getPackageJSON('default').name,
+        themes.getPackageJSON_('default').name,
         'baldr-theme-default'
       );
     });
 
-    it('Method “resolveDependencies()”', () => {
-      let cssFiles = themes.resolveDependencies(
-        themes.getPackageJSON('default').dependencies
+    it('Method “resolveDependencies_()”', () => {
+      let cssFiles = themes.resolveDependencies_(
+        themes.getPackageJSON_('default').dependencies
       );
       assert.equal(
         cssFiles[0],
@@ -53,17 +53,17 @@ describe('Class “Themes()” #unittest', () => {
       );
     });
 
-    it('Method “resolveTheme()”', () => {
+    it('Method “resolveTheme_()”', () => {
       assert.equal(
-        themes.resolveTheme('default'),
+        themes.resolveTheme_('default'),
         path.dirname(
           require.resolve('baldr-theme-default')
         )
       );
     });
 
-    it('Method “getAllCSSFiles()”', () => {
-      let cssFiles = themes.getAllCSSFiles();
+    it('Method “getAllCSSFiles_()”', () => {
+      let cssFiles = themes.getAllCSSFiles_();
       assert.equal(
         cssFiles[0],
         require.resolve('typeface-alegreya')
@@ -79,11 +79,6 @@ describe('Class “Themes()” #unittest', () => {
         themes.document.querySelectorAll('link.baldr-theme').length,
         7
       );
-    });
-
-    it('Method “setTheme()”', () => {
-      themes.setTheme('handwriting');
-      assert.equal(themes.document.body.dataset.theme, 'handwriting');
     });
 
   });

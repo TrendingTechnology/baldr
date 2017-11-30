@@ -136,7 +136,7 @@ class ShowRunner {
     this.quickStart.set();
     this.quickStart.bind(this, this.mousetrap);
 
-    this.setFirstSlide();
+    this.setFirstSlide_();
 
     this.addMastersCSS_();
   }
@@ -159,7 +159,7 @@ class ShowRunner {
   /**
    *
    */
-  setFirstSlide() {
+  setFirstSlide_() {
     this.newSlide = this.slidesSwitcher.getByNo(1);
     this.newSlide.set();
   }

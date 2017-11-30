@@ -241,7 +241,7 @@ class Masters {
      * Folder name of master slides
      * @type {array}
      */
-    this.all = this.getAll();
+    this.all = this.getAll_();
     for (let master of this.all) {
       let masterPath = path.join(this.path, master);
       this[master] = new Master(path.join(masterPath, 'index.js'), master);
@@ -261,19 +261,10 @@ class Masters {
   }
 
   /**
-   *
-   */
-  getHooks(hookName, type='function') {
-    return this.all.filter(
-      master => typeof this[master][hookName] === type
-    );
-  }
-
-  /**
    * Get the folder off all master slide modules.
    * @return {array} Folder name of master slides
    */
-  getAll() {
+  getAll_() {
     return fs.readdirSync(this.path, 'utf8')
     .filter(
       dir => fs.statSync(

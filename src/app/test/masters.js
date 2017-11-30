@@ -235,8 +235,8 @@ describe('Class “Masters()” #unittest', () => {
 
   });
 
-  it('Method “getAll()”', () => {
-    assert.deepEqual(masters.getAll(), allMasters);
+  it('Method “getAll_()”', () => {
+    assert.deepEqual(masters.getAll_(), allMasters);
   });
 
 });
