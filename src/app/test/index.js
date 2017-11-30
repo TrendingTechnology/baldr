@@ -7,70 +7,74 @@ const {
   testFileMinimal
 } = require('baldr-test');
 
+const {ShowRunner} = require('baldr-application');
+const mousetrap = require('mousetrap');
+
 /***********************************************************************
  *
  **********************************************************************/
 
-describe.skip('Class “ShowRunner()” #unittest', () => {
+describe('Class “ShowRunner()” #unittest', () => {
+  let show;
 
   beforeEach(() => {
-    presentation = initiatePresentation();
+    show = new ShowRunner([testFileMinimal], getDOM(), mousetrap);
   });
 
   describe('Properties', () => {
 
-    it('Property “this.baldrFile”', () => {
-      assert.ok(fs.existsSync(presentation.baldrFile));
+    it('Property “this.config.sessionFile', () => {
+      assert.ok(fs.existsSync(show.config.sessionFile));
     });
 
-    it('Property “this.raw”', () => {
-      assert.equal(typeof presentation.raw, 'object');
+    it('Property “this.config.raw', () => {
+      assert.equal(typeof show.config.raw, 'object');
     });
 
-    it('Property “this.slides”', () => {
-      assert.equal(presentation.slides[1].masterName, 'quote');
+    it('Property “this.slides[1].master.name', () => {
+      assert.equal(show.slides[1].master.name, 'quote');
     });
 
-    it('Property “this.count”', () => {
-      assert.equal(presentation.count, 3);
+    it('Property “this.slidesSwitcher.count', () => {
+      assert.equal(show.slidesSwitcher.count, 3);
     });
 
-    it('Property “this.no”', () => {
-      assert.equal(presentation.no, 1);
+    it('Property “this.slidesSwitcher.no', () => {
+      assert.equal(show.slidesSwitcher.no, 1);
     });
 
-    it('Property “this.pwd”', () => {
+    it('Property “this.config.sessionDir', () => {
       assert.equal(
-        presentation.pwd,
+        show.config.sessionDir,
         path.resolve(path.dirname(testFileMinimal))
       );
     });
 
-    it('Property “this.currentSlide”', () => {
+    it('Property “this.newSlide.master.name”', () => {
       assert.equal(
-        presentation.currentSlide.masterName, 'quote'
+        show.newSlide.master.name, 'quote'
       );
     });
 
-    it('Property “this.cover”', () => {
+    it.skip('Property “this.cover”', () => {
       assert.equal(presentation.cover.id, 'cover');
       assert.equal(presentation.cover.nodeName, 'DIV');
     });
 
-    it('Property “this.media”', () => {
+    it.skip('Property “this.media”', () => {
       assert.equal(typeof presentation.media.audio.length, 'number');
       assert.equal(typeof presentation.media.image.length, 'number');
       assert.equal(typeof presentation.media.video.length, 'number');
       assert.equal(presentation.media.audio[0].basename, 'beethoven.mp3');
     });
 
-    it('Property “this.quickies”', () => {
+    it.skip('Property “this.quickies”', () => {
       assert.equal(typeof presentation.quickies, 'object');
     });
 
   });
 
-  describe('Methods', () => {
+  describe.skip('Methods', () => {
 
     it('Method “parseYamlFile()”', () => {
       let presentation = initiatePresentation();

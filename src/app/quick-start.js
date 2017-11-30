@@ -200,7 +200,11 @@ class QuickStart {
           this.masters
         );
       };
-      mousetrap.bind(entry.shortcut, func);
+      // To allow unit tests without window object.
+      // mousetrap returns in this situation an empty object.
+      if (mousetrap && mousetrap.hasOwnProperty('bind')) {
+        mousetrap.bind(entry.shortcut, func);
+      }
       this.document
       .getElementById(entry.cssID)
       .addEventListener('click', func);
