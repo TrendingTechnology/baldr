@@ -12,7 +12,7 @@ const {
 } = require('baldr-library');
 
 /**
- *
+ * @param {string} fileName
  */
 let requireLib = function(fileName) {
   return require(path.join(__dirname, fileName + '.js'));
@@ -40,7 +40,7 @@ const {getThemes} = requireLib('themes');
  */
 
 /**
- * The mousetrap object
+ * The object of shortcut library “mousetrap”.
  * {@link https://www.npmjs.com/package/mousetrap}
  * @typedef mousetrap
  * @type {object}
@@ -56,32 +56,41 @@ const {getThemes} = requireLib('themes');
 class ShowRunner {
 
   /**
-   * @param {module:baldr-application~Document} document
+   * @param {array} argv An array containing the command line arguments.
+   * @param {module:baldr-application~Document} document The document
+   *   object (DOM) of the render process.
+   * @param {module:baldr-application~mousetrap} mousetrap The object
+   *   of shortcut library “mousetrap”.
    */
   constructor(argv, document, mousetrap) {
 
     /**
+     * The document object (DOM) of the render process.
      * @type {module:baldr-application~Document}
      */
     this.document = document;
 
     /**
+     * The object of shortcut library “mousetrap”.
      * @type {module:baldr-application~mousetrap}
      */
     this.mousetrap = mousetrap;
 
     /**
+     * All configurations of the current presentation session.
      * @type {module:baldr-library/config~Config}
      */
     this.config = getConfig(argv);
 
     /**
+     * All available master slides.
      * @type {module:baldr-application/masters~Masters}
      */
     this.masters = getMasters();
     this.masters.execAll('init', document, this.config);
 
     /**
+     * All slide objects of the current presentation session.
      * @type {module:baldr-application/slides~Slides}
      */
     this.slides = getSlides(
@@ -92,11 +101,13 @@ class ShowRunner {
     );
 
     /**
+     * All available themes.
      * @type {module:baldr-application/themes~Themes}
      */
     this.themes = getThemes(document);
 
     /**
+     * Object to switch between the slides.
      * @type {module:baldr-application/slides-switcher~SlidesSwitcher}
      */
     this.slidesSwitcher = new SlidesSwitcher(
@@ -106,16 +117,19 @@ class ShowRunner {
     );
 
     /**
+     * The object representation of the old slide.
      * @type {module:baldr-application/slides~Slide}
      */
     this.oldSlide = {};
 
     /**
+     * The object representation of the new slide.
      * @type {module:baldr-application/slides~Slide}
      */
     this.newSlide = {};
 
     /**
+     * Object to manage the quick start entries.
      * @type {module:baldr-application/quick-start~QuickStart}
      */
     this.quickStart = getQuickStart(document, this.masters, this.config);
