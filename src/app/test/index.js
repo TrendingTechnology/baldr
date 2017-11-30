@@ -61,66 +61,54 @@ describe('Class “ShowRunner()” #unittest', () => {
       assert.equal(presentation.cover.nodeName, 'DIV');
     });
 
-    it.skip('Property “this.media”', () => {
-      assert.equal(typeof presentation.media.audio.length, 'number');
-      assert.equal(typeof presentation.media.image.length, 'number');
-      assert.equal(typeof presentation.media.video.length, 'number');
-      assert.equal(presentation.media.audio[0].basename, 'beethoven.mp3');
-    });
-
-    it.skip('Property “this.quickies”', () => {
-      assert.equal(typeof presentation.quickies, 'object');
+    it('Property “this.quickStart', () => {
+      assert.equal(typeof show.quickStart, 'object');
     });
 
   });
 
-  describe.skip('Methods', () => {
+  describe('Methods', () => {
 
-    it('Method “parseYamlFile()”', () => {
+    it.skip('Method “parseYamlFile()”', () => {
       let presentation = initiatePresentation();
       let yml = presentation.parseYamlFile(testFileMinimal);
       assert.equal(yml.slides[0].quote.author, 'Johann Wolfgang von Goethe');
       assert.equal(yml.slides[1].question, 'When did Ludwig van Beethoven die?');
     });
 
-    it('Method “prev()”',() => {
-      presentation.prev();
-      assert.equal(presentation.no, 3);
-      presentation.prev();
-      assert.equal(presentation.no, 2);
-      presentation.prev();
-      assert.equal(presentation.no, 1);
-      presentation.prev();
-      assert.equal(presentation.no, 3);
+    it('Method “slidePrev()”',() => {
+      show.slidePrev();
+      assert.equal(show.slidesSwitcher.no, 3);
+      show.slidePrev();
+      assert.equal(show.slidesSwitcher.no, 2);
+      show.slidePrev();
+      assert.equal(show.slidesSwitcher.no, 1);
+      show.slidePrev();
+      assert.equal(show.slidesSwitcher.no, 3);
     });
 
-    it('Method “next()”', () => {
-      presentation.next();
-      assert.equal(presentation.no, 2);
-      presentation.next();
-      assert.equal(presentation.no, 3);
-      presentation.next();
-      assert.equal(presentation.no, 1);
-      presentation.next();
-      assert.equal(presentation.no, 2);
+    it('Method “slideNext()”', () => {
+      show.slideNext();
+      assert.equal(show.slidesSwitcher.no, 2);
+      show.slideNext();
+      assert.equal(show.slidesSwitcher.no, 3);
+      show.slideNext();
+      assert.equal(show.slidesSwitcher.no, 1);
+      show.slideNext();
+      assert.equal(show.slidesSwitcher.no, 2);
     });
 
-    it('Method “setCover()”', () => {
+    it.skip('Method “setCover()”', () => {
       presentation.setCover('red', 99);
       let cover = presentation.document.getElementById('cover');
       assert.equal(cover.style.backgroundColor, 'red');
       assert.equal(cover.style.zIndex, 99);
     });
 
-    it('Method “set()”', () => {
+    it.skip('Method “set()”', () => {
       presentation.set();
       assert.equal(presentation.cover.style.backgroundColor, 'black');
       assert.ok(presentation.currentSlide.elemSlide.textContent.includes('Johann Wolfgang von Goethe'));
-    });
-
-    it('Method chaining', () => {
-      presentation.next().set();
-      assert.ok(presentation.currentSlide.elemSlide.textContent.includes('Ludwig van Beethoven'));
     });
 
   });
