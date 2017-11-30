@@ -130,9 +130,9 @@ describe('Class “Slides()”', () => {
 
     it('Method “get()”', () => {
       let result = slidesClass.get();
-      assert.equal(result[1].master, 'quote');
-      assert.equal(result[2].master, 'question');
-      assert.equal(result[3].master, 'person');
+      assert.equal(result[1].master.name, 'quote');
+      assert.equal(result[2].master.name, 'question');
+      assert.equal(result[3].master.name, 'person');
     });
 
   });

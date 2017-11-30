@@ -183,8 +183,14 @@ class QuickStart {
    */
   bind(showRunner, mousetrap) {
     for (let entry of this.entries) {
-      let func = function() {
-        showRunner.setInstantSlide(entry.master, entry.data, this.document, this.config, this.masters);
+      let func = () => {
+        showRunner.setInstantSlide(
+          entry.master,
+          entry.data,
+          this.document,
+          this.config,
+          this.masters
+        );
       };
       mousetrap.bind(entry.shortcut, func);
       this.document

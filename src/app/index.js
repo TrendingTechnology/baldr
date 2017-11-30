@@ -153,7 +153,7 @@ class ShowRunner {
       this.config,
       this.masters
     );
-    this.newSlide.set();
+    this.newSlide.set(this.oldSlide);
   }
 
   /**
