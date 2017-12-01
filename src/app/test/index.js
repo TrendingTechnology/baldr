@@ -86,12 +86,6 @@ describe('Class “ShowRunner()” #unittest', () => {
       assert.equal(show.slidesSwitcher.no, 2);
     });
 
-    it.skip('Method “set()”', () => {
-      presentation.set();
-      assert.equal(presentation.cover.style.backgroundColor, 'black');
-      assert.ok(presentation.currentSlide.elemSlide.textContent.includes('Johann Wolfgang von Goethe'));
-    });
-
   });
 
 });

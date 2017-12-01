@@ -7,6 +7,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const {addCSSFile} = require('baldr-library');
 
 /***********************************************************************
  *
@@ -227,9 +228,16 @@ class Master {
 class Masters {
 
   /**
-   *
+   * @param {module:baldr-application~Document} document The document
+   *   object (DOM) of the render process.
    */
-  constructor() {
+  constructor(document) {
+
+    /**
+     * The document object (DOM) of the render process.
+     * @type {module:baldr-application~Document}
+     */
+    this.document = document;
 
     /**
      * Parent path of all master slide modules.
@@ -242,21 +250,32 @@ class Masters {
      * @type {array}
      */
     this.all = this.getAll_();
-    for (let master of this.all) {
-      let masterPath = path.join(this.path, master);
-      this[master] = new Master(path.join(masterPath, 'index.js'), master);
+    for (let masterName of this.all) {
+      this[masterName] = this.initMaster_(masterName);
     }
 
+    this.addCSS_();
+  }
+
+  /**
+   * @param {string} masterName The name of the master slide.
+   */
+  initMaster_(masterName) {
+    return new Master(path.join(this.path, masterName, 'index.js'), masterName);
   }
 
   /**
    *
    */
-  execAll(hookName) {
-    let args = Array.from(arguments);
-    args.shift();
-    for (let master of this.all) {
-      this[master][hookName](...args);
+  addCSS_() {
+    for (let masterName of this.all) {
+      if (this[masterName].css) {
+        addCSSFile(
+          this.document,
+          path.join(this[masterName].path, 'styles.css'),
+          'baldr-master'
+        );
+      }
     }
   }
 
@@ -272,11 +291,23 @@ class Masters {
       ).isDirectory()
     );
   }
+
+  /**
+   *
+   */
+  execAll(hookName) {
+    let args = Array.from(arguments);
+    args.shift();
+    for (let master of this.all) {
+      this[master][hookName](...args);
+    }
+  }
 }
 
 /**
- *
+ * @param {module:baldr-application~Document} document The document
+ *   object (DOM) of the render process.
  */
-exports.getMasters = function() {
-  return new Masters();
+exports.getMasters = function(document) {
+  return new Masters(document);
 };

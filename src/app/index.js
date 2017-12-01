@@ -6,10 +6,7 @@
 
 const path = require('path');
 
-const {
-  addCSSFile,
-  getConfig
-} = require('baldr-library');
+const {getConfig} = require('baldr-library');
 
 /**
  * @param {string} fileName
@@ -86,7 +83,7 @@ class ShowRunner {
      * All available master slides.
      * @type {module:baldr-application/masters~Masters}
      */
-    this.masters = getMasters();
+    this.masters = getMasters(document);
     this.masters.execAll('init', document, this.config);
 
     /**
@@ -137,23 +134,6 @@ class ShowRunner {
     this.quickStart.bind(this, this.mousetrap);
 
     this.setFirstSlide_();
-
-    this.addMastersCSS_();
-  }
-
-  /**
-   *
-   */
-  addMastersCSS_() {
-    for (let master of this.masters.all) {
-      if (this.masters[master].css) {
-        addCSSFile(
-          this.document,
-          path.join(this.masters[master].path, 'styles.css'),
-          'baldr-master'
-        );
-      }
-    }
   }
 
   /**

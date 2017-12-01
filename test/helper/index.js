@@ -115,7 +115,7 @@ exports.cloneConfig = function () {
 /**
  *
  */
-exports.masters = getMasters();
+exports.masters = getMasters(exports.document);
 
 /**
  *

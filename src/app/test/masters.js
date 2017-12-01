@@ -3,78 +3,12 @@ const {
   assert,
   path,
   rewire,
-  requireFile
+  requireFile,
+  getDOM
 } = require('baldr-test');
 
 const {getMasters} = requireFile('app', 'masters.js');
-let masters = new getMasters();
-
-/***********************************************************************
- *
- **********************************************************************/
-
-describe.skip('Class “MasterOfMasters” #unittest', function() {
-
-  it('Instantiation', function() {
-    assert.equal(typeof MasterOfMasters, 'function');
-    assert.equal(typeof this.MoM, 'object');
-  });
-
-  describe('Methods', function() {
-    it('Method “hasCSS()”', function() {
-      assert.equal(typeof this.MoM.hasCSS, 'function');
-      assert.equal(this.MoM.hasCSS(), true);
-    });
-
-    it('Method “setCSS()”', function() {
-      this.MoM.setCSS();
-      assert.equal(
-        typeof this.MoM.document.querySelector('link#current-master'),
-        'object'
-      );
-    });
-
-  });
-
-});
-
-/***********************************************************************
- *
- **********************************************************************/
-
-describe.skip('Class “MasterOfMasters” extended on a example master class (quote) #unittest', function() {
-
-  describe('Properties', function() {
-    it('Property “this.masterPath”', function() {
-      assert.equal(
-        this.master.masterPath,
-        path.resolve(__dirname, '..', 'masters', 'quote')
-      );
-    });
-
-    it('Property “this.masterName”', function() {
-      assert.equal(
-        this.master.masterName,
-        'quote'
-      );
-    });
-
-    it('Property “this.alreadySet”', function() {
-      this.master.set();
-      assert.equal(this.master.alreadySet, true);
-    });
-
-  });
-
-  it('[master].hasCSS()', function() {
-    assert.equal(typeof this.master.hasCSS, 'function');
-  });
-
-  it('[master].setCSS()', function() {
-    assert.equal(typeof this.master.setCSS, 'function');
-  });
-
-});
+let masters = new getMasters(getDOM());
 
 /***********************************************************************
  *
@@ -185,8 +119,24 @@ describe('Class “Masters()” #unittest', () => {
 
   });
 
-  it('Method “getAll_()”', () => {
-    assert.deepEqual(masters.getAll_(), allMasters);
+  describe('Methods', () => {
+    it('Method “addCSS_()”', function() {
+      const masters = getMasters(getDOM());
+      const firstRunCount = masters
+        .document
+        .querySelectorAll('link.baldr-master').length;
+
+      masters.addCSS_();
+      const SecondRunCount = masters
+        .document
+        .querySelectorAll('link.baldr-master').length;
+
+      assert.equal(SecondRunCount, firstRunCount * 2);
+    });
+
+    it('Method “getAll_()”', () => {
+      assert.deepEqual(masters.getAll_(), allMasters);
+    });
   });
 
 });
@@ -199,7 +149,7 @@ describe('Function getMasters()” #unittest', function() {
 
   it('simple', function() {
     const {getMasters} = requireFile('app', 'masters.js');
-    let masters = getMasters();
+    let masters = getMasters(getDOM());
     assert.equal(typeof masters.all, 'object');
   });
 

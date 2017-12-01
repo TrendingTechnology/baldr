@@ -54,6 +54,12 @@ describe('Class “Slide()” #unittest', () => {
       assert.equal(slide.steps.constructor.name, 'StepSwitcher');
     });
 
+    it('Property “this.steps”', () => {
+      assert.equal(slide.steps.visited, false);
+      slide.set();
+      assert.equal(slide.steps.visited, true);
+    });
+
     it('Property “this.document”', function() {
       assert.equal(typeof slide.document, 'object');
     });
@@ -116,6 +122,9 @@ describe('Class “Slide()” #unittest', () => {
         slide.document.querySelector('p:nth-child(1)').textContent,
         'question'
       );
+
+      assert.equal(slide.cover.style.backgroundColor, 'black');
+      assert.ok(slide.elements.slide.textContent.includes('question'));
     });
 
   });
