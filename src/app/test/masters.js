@@ -2,10 +2,11 @@ const {
   allMasters,
   assert,
   path,
-  rewire
+  rewire,
+  requireFile
 } = require('baldr-test');
 
-const {getMasters} = require('baldr-application');
+const {getMasters} = requireFile('app', 'masters.js');
 let masters = new getMasters();
 
 /***********************************************************************
@@ -197,7 +198,7 @@ describe('Class “Masters()” #unittest', () => {
 describe('Function getMasters()” #unittest', function() {
 
   it('simple', function() {
-    let {getMasters} = require('baldr-application');
+    const {getMasters} = requireFile('app', 'masters.js');
     let masters = getMasters();
     assert.equal(typeof masters.all, 'object');
   });

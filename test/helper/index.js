@@ -8,8 +8,23 @@ const fs = require('fs');
 const path = require('path');
 const {JSDOM} = require('jsdom');
 const rewire = require('rewire');
-const {getMasters} = require('baldr-application');
 const {getConfig} = require('baldr-library');
+
+/**
+ *
+ */
+exports.srcPath = function() {
+  return path.join(__dirname, '..', '..', 'src', ...arguments);
+};
+
+/**
+ *
+ */
+exports.requireFile = function() {
+  return require(exports.srcPath(...arguments));
+};
+
+const {getMasters} = exports.requireFile('app', 'masters.js');
 
 /**
  *
@@ -101,20 +116,6 @@ exports.cloneConfig = function () {
  *
  */
 exports.masters = getMasters();
-
-/**
- *
- */
-exports.srcPath = function() {
-  return path.join(__dirname, '..', '..', 'src', ...arguments);
-};
-
-/**
- *
- */
-exports.requireFile = function() {
-  return require(exports.srcPath(...arguments));
-};
 
 /**
  *

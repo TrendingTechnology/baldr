@@ -5,10 +5,13 @@ const {
   getDOM,
   fs,
   path,
-  testFileMinimal
+  testFileMinimal,
+  requireFile
 } = require('baldr-test');
 
-const {SlidesSwitcher, getSlides} = require('baldr-application');
+const {getSlides} = requireFile('app', 'slides.js');
+const {SlidesSwitcher} = requireFile('app', 'slides-switcher.js');
+
 let document = getDOM();
 let slides = getSlides(config.slides, config, document, masters);
 let slidesSwitcher = new SlidesSwitcher(slides, document, masters);

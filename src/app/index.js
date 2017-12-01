@@ -213,10 +213,4 @@ class ShowRunner {
 
 }
 
-// TODO: Remove
-exports.getMasters = getMasters;
-exports.getSlides = getSlides;
-exports.SlidesSwitcher = SlidesSwitcher;
-exports.getThemes = getThemes;
-
 exports.ShowRunner = ShowRunner;
