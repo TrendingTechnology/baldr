@@ -6,9 +6,9 @@ slides:
       - media/audio/haydn.mp3
       - media/audio/beethoven.mp3
 
-  - camera: yes
+  - camera
 
-  - editor: yes
+  - editor
 
   - image: media/image
 

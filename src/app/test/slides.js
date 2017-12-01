@@ -116,6 +116,55 @@ describe('Class “Slide()” #unittest', () => {
       );
     });
 
+    describe('Method “findMaster_()”', () => {
+
+      it('Valid string', () => {
+        let {masterName, rawSlideData} = slide.findMaster_('camera', masters);
+        assert.equal(masterName, 'camera');
+        assert.equal(rawSlideData, true);
+      });
+
+      it('Invalid string', () => {
+        assert.throws(
+          () => {slide.findMaster_('lol', masters);},
+          /Error: Unknown master “lol” specified as string/
+        );
+      });
+
+      it('Unsupported type', () => {
+        assert.throws(
+          () => {slide.findMaster_(['lol'], masters);},
+          /Error: Unsupported input type “array” on input data: lol/
+        );
+        assert.throws(
+          () => {slide.findMaster_(42, masters);},
+          /Error: Unsupported input type “number” on input data: 42/
+        );
+      });
+
+      it('undefined', () => {
+        assert.throws(
+          () => {slide.findMaster_(undefined, masters);},
+          /Error: Unsupported input type “undefined” on input data: undefined/
+        );
+      });
+
+      it('Two master slide properties', () => {
+        assert.throws(
+          () => {slide.findMaster_({audio: true, camera: true}, masters);},
+          /Error: Each slide must have only one master slide: {"audio":true,"camera":true}/
+        );
+      });
+
+      it('No master slide properties', () => {
+        assert.throws(
+          () => {slide.findMaster_({lol: true, troll: true}, masters);},
+          /Error: No master slide found: {"lol":true,"troll":true}/
+        );
+      });
+
+    });
+
     it('Method “set()”', function() {
       slide.set();
       assert.equal(

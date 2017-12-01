@@ -355,7 +355,7 @@ No number is assigned to the master slide.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line395">line 395</a>
+        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line469">line 469</a>
     </li></ul></dd>
     
 
@@ -576,7 +576,7 @@ No number is assigned to the master slide.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line506">line 506</a>
+        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line580">line 580</a>
     </li></ul></dd>
     
 
@@ -678,7 +678,7 @@ No number is assigned to the master slide.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line23">line 23</a>
+        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line41">line 41</a>
     </li></ul></dd>
     
 
@@ -702,8 +702,14 @@ No number is assigned to the master slide.</p>
 
 
 <div class="description">
-    <p>A raw slide object containing only one property: The name of the
-master slide.</p>
+    <p>A raw slide object or a raw slide string.</p>
+<p>If a string is obtained, it should be the name of a master slide.
+This type is the direct input of the markdown configuration file
+converted to a Javascript types.</p>
+<h1>Object with one property:</h1><pre class="prettyprint source"><code>- markdown: Some text</code></pre><h1>Object with multiple properties:</h1><pre class="prettyprint source"><code>- title: A quote
+  quote:
+    author: Goehte
+    text: lol</code></pre><h1>String:</h1><pre class="prettyprint source"><code>- camera</code></pre>
 </div>
 
 
@@ -713,63 +719,14 @@ master slide.</p>
         <li>
             
 <span class="param-type">object</span>
+|
+
+<span class="param-type">string</span>
 
 
         </li>
     </ul>
 
-
-
-
-
-    <h5 class="subsection-title">Properties:</h5>
-
-    
-
-<table class="props">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>masterName</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">rawSlideData</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-    </tbody>
-</table>
 
 
 
@@ -978,7 +935,7 @@ master slide.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line29">line 29</a>
+        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line47">line 47</a>
     </li></ul></dd>
     
 

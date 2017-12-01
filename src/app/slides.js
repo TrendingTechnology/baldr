@@ -13,11 +13,29 @@ const path = require('path');
  **********************************************************************/
 
 /**
- * A raw slide object containing only one property: The name of the
- * master slide.
+ * A raw slide object or a raw slide string.
+ *
+ * If a string is obtained, it should be the name of a master slide.
+ * This type is the direct input of the markdown configuration file
+ * converted to a Javascript types.
+ *
+ * # Object with one property:
+ *
+ *     - markdown: Some text
+ *
+ * # Object with multiple properties:
+ *
+ *     - title: A quote
+ *       quote:
+ *         author: Goehte
+ *         text: lol
+ *
+ * # String:
+ *
+ *     - camera
+ *
  * @typedef rawSlideObject
- * @type {object}
- * @property {rawSlideData} masterName
+ * @type {(object|string)}
  */
 
 /**
@@ -223,14 +241,9 @@ class Slide {
    *   available master slides.
    */
   constructor(rawSlideObject, document, config, masters) {
-    let intersection = this.intersectMastersSlideKeys_(
-      masters.all,
-      Object.keys(rawSlideObject)
+    const {masterName, rawSlideData} = this.findMaster_(
+      rawSlideObject, masters
     );
-
-    if (intersection.length > 1) {
-      throw Error('Each slide must have only one master slide.');
-    }
 
     /**
      * All configurations of the current presentation session.
@@ -256,7 +269,7 @@ class Slide {
      * The normalized master object derived from the master slide.
      * @type {module:baldr-application/masters~Master}
      */
-    this.master = masters[intersection[0]];
+    this.master = masters[masterName];
 
     /**
      * All configurations of the current presentation session.
@@ -268,7 +281,7 @@ class Slide {
      * Various types of data to render a slide.
      * @type {module:baldr-application/slides~rawSlideData}
      */
-    this.rawData = rawSlideObject[this.master.name];
+    this.rawData = rawSlideData;
 
     /**
      * The normalized slide data
@@ -304,6 +317,67 @@ class Slide {
    */
   intersectMastersSlideKeys_(masterNames, slideKeys) {
     return masterNames.filter((n) => slideKeys.includes(n));
+  }
+
+  /**
+   * @param {module:baldr-application/slides~rawSlideObject} rawSlideObject
+   *   A raw slide object containing only one property: The name of the
+   *   master slide or a string.
+   * @param {module:baldr-application/masters~Masters} masters All
+   *   available master slides.
+   */
+  findMaster_(rawSlideObject, masters) {
+    // string
+    if (typeof rawSlideObject === 'string') {
+      if (
+        masters.hasOwnProperty(rawSlideObject) &&
+        masters[rawSlideObject].name === rawSlideObject
+      ) {
+        return {
+          masterName: rawSlideObject,
+          rawSlideData: true
+        };
+      }
+      else {
+        throw Error(`Unknown master “${rawSlideObject}” specified as string`);
+      }
+    }
+    // object
+    else if (typeof rawSlideObject === 'object' && !Array.isArray(rawSlideObject)) {
+      let intersection = this.intersectMastersSlideKeys_(
+        masters.all,
+        Object.keys(rawSlideObject)
+      );
+
+      if (intersection.length === 0) {
+        throw Error(`No master slide found: ${JSON.stringify(rawSlideObject)}`);
+      }
+
+      if (intersection.length > 1) {
+        throw Error(`Each slide must have only one master slide: ${JSON.stringify(rawSlideObject)}`);
+      }
+      return {
+        masterName: intersection[0],
+        rawSlideData: rawSlideObject[intersection[0]]
+      };
+    // something else
+    } else {
+      let type;
+      if (Array.isArray(rawSlideObject)) {
+        type = 'array';
+      }
+      else {
+        type = typeof rawSlideObject;
+      }
+      let data;
+      if (rawSlideObject) {
+        data = rawSlideObject.toString();
+      }
+      else {
+        data = typeof rawSlideObject;
+      }
+      throw Error(`Unsupported input type “${type}” on input data: ${data}`);
+    }
   }
 
   /**
