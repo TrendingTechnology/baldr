@@ -54,6 +54,22 @@ describe('Class “Slide()” #unittest', () => {
       assert.equal(slide.steps.constructor.name, 'StepSwitcher');
     });
 
+    it('Property “this.document”', function() {
+      assert.equal(typeof slide.document, 'object');
+    });
+
+    it('Property “this.elements.slide”', function() {
+      assert.equal(slide.elements.slide.id, 'slide-content');
+      assert.equal(slide.elements.slide.nodeName, 'DIV');
+      assert.equal(slide.elements.slide.nodeType, 1);
+    });
+
+    it('Property “this.elements.modal”', function() {
+      assert.equal(slide.elements.modal.id, 'modal-content');
+      assert.equal(slide.elements.modal.nodeName, 'DIV');
+      assert.equal(slide.elements.modal.nodeType, 1);
+    });
+
   });
 
   describe('Methods', () => {
@@ -81,6 +97,15 @@ describe('Class “Slide()” #unittest', () => {
         ['one', 'two', 'three']
       );
     });
+
+    it('Method “set()”', function() {
+      slide.set();
+      assert.equal(
+        slide.document.querySelector('p:nth-child(1)').textContent,
+        'question'
+      );
+    });
+
   });
 
   describe('Method “setDataset_()”', () => {

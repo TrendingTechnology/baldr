@@ -13,36 +13,10 @@ let masters = new getMasters();
  **********************************************************************/
 
 describe.skip('Class “MasterOfMasters” #unittest', function() {
-  beforeEach(function() {
-    this.MoM = new MasterOfMasters({
-      document: document,
-      data: this.data,
-      masterPath: path.resolve(__dirname, '..', 'masters', 'quote'),
-      nameName: 'quote'
-    });
-  });
 
   it('Instantiation', function() {
     assert.equal(typeof MasterOfMasters, 'function');
     assert.equal(typeof this.MoM, 'object');
-  });
-
-  describe('Properties', function() {
-    it('Property “document”', function() {
-      assert.equal(typeof this.MoM.document, 'object');
-    });
-
-    it('Property “elemSlide”', function() {
-      assert.equal(this.MoM.elemSlide.id, 'slide-content');
-      assert.equal(this.MoM.elemSlide.nodeName, 'DIV');
-      assert.equal(this.MoM.elemSlide.nodeType, 1);
-    });
-
-    it('Property “elemModal”', function() {
-      assert.equal(this.MoM.elemModal.id, 'modal-content');
-      assert.equal(this.MoM.elemModal.nodeName, 'DIV');
-      assert.equal(this.MoM.elemModal.nodeType, 1);
-    });
   });
 
   describe('Methods', function() {
@@ -59,13 +33,6 @@ describe.skip('Class “MasterOfMasters” #unittest', function() {
       );
     });
 
-    it('Method “set()”', function() {
-      this.MoM.set();
-      assert.equal(
-        this.MoM.elemSlide.innerHTML,
-        'No slide loaded.'
-      );
-    });
   });
 
 });
@@ -75,18 +42,6 @@ describe.skip('Class “MasterOfMasters” #unittest', function() {
  **********************************************************************/
 
 describe.skip('Class “MasterOfMasters” extended on a example master class (quote) #unittest', function() {
-
-  beforeEach(function() {
-    let {Master} = require('../masters/quote')(document, masters, presentation);
-
-    this.data = {text: 'text', author: 'author'};
-    this.master = new Master({
-      document: document,
-      data: this.data,
-      masterPath: path.resolve(__dirname, '..', 'masters', 'quote'),
-      masterName: 'quote'
-    });
-  });
 
   describe('Properties', function() {
     it('Property “this.masterPath”', function() {
@@ -116,12 +71,6 @@ describe.skip('Class “MasterOfMasters” extended on a example master class (q
 
   it('[master].setCSS()', function() {
     assert.equal(typeof this.master.setCSS, 'function');
-  });
-
-  it('[master].set()', function() {
-    assert.equal(typeof this.master.set, 'function');
-    this.master.set();
-    assert.equal(this.master.document.body.dataset.master, 'quote');
   });
 
 });

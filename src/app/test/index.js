@@ -56,11 +56,6 @@ describe('Class “ShowRunner()” #unittest', () => {
       );
     });
 
-    it.skip('Property “this.cover”', () => {
-      assert.equal(presentation.cover.id, 'cover');
-      assert.equal(presentation.cover.nodeName, 'DIV');
-    });
-
     it('Property “this.quickStart', () => {
       assert.equal(typeof show.quickStart, 'object');
     });
@@ -68,13 +63,6 @@ describe('Class “ShowRunner()” #unittest', () => {
   });
 
   describe('Methods', () => {
-
-    it.skip('Method “parseYamlFile_()”', () => {
-      let presentation = initiatePresentation();
-      let yml = presentation.parseYamlFile_(testFileMinimal);
-      assert.equal(yml.slides[0].quote.author, 'Johann Wolfgang von Goethe');
-      assert.equal(yml.slides[1].question, 'When did Ludwig van Beethoven die?');
-    });
 
     it('Method “slidePrev()”',() => {
       show.slidePrev();
@@ -96,13 +84,6 @@ describe('Class “ShowRunner()” #unittest', () => {
       assert.equal(show.slidesSwitcher.no, 1);
       show.slideNext();
       assert.equal(show.slidesSwitcher.no, 2);
-    });
-
-    it.skip('Method “setCover()”', () => {
-      presentation.setCover('red', 99);
-      let cover = presentation.document.getElementById('cover');
-      assert.equal(cover.style.backgroundColor, 'red');
-      assert.equal(cover.style.zIndex, 99);
     });
 
     it.skip('Method “set()”', () => {
