@@ -282,6 +282,14 @@ class Slide {
      * @type {module:baldr-application/slides~StepSwitcher}
      */
     this.steps = new StepSwitcher(document, this, config);
+
+    /**
+     * A HTML div element, which covers the complete slide area to
+     * a void flickering, when new CSS styles are loaded.
+     *
+     * @type {object}
+     */
+    this.cover = this.document.getElementById('cover');
   }
 
   /**
@@ -296,6 +304,17 @@ class Slide {
    */
   intersectMastersSlideKeys_(masterNames, slideKeys) {
     return masterNames.filter((n) => slideKeys.includes(n));
+  }
+
+  /**
+   * Set the background color of the “cover” DIV element.
+   *
+   * @param {string} color A CSS color information.
+   * @param {number} zIndex A CSS color information.
+   */
+  setCover_(color, zIndex) {
+    this.cover.style.backgroundColor = color;
+    this.cover.style.zIndex = zIndex;
   }
 
   /**
@@ -335,6 +354,10 @@ class Slide {
       this.masters[oldSlide.master.name]
       .cleanUp(this.document, oldSlide, this);
     }
+    this.setCover_('black', 1);
+    setTimeout(() => {
+      this.setCover_('transparent', -1);
+    }, 50);
     this.setDataset_();
     this.setMain_();
     this.setModal_();

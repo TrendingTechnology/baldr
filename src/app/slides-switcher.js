@@ -54,13 +54,6 @@ class SlidesSwitcher {
       next: this.document.getElementById('nav-slide-next')
     };
 
-    /**
-     * A HTML div element, which covers the complete slide area to
-     * a void flickering, when new CSS styles are loaded.
-     *
-     * @type {object}
-     */
-    this.cover = this.document.getElementById('cover');
   }
 
   /**
@@ -85,25 +78,9 @@ class SlidesSwitcher {
   }
 
   /**
-   * Set the background color of the “cover” DIV element.
-   *
-   * @param {string} color A CSS color information.
-   * @param {number} zIndex A CSS color information.
-   */
-  setCover_(color, zIndex) {
-    this.cover.style.backgroundColor = color;
-    this.cover.style.zIndex = zIndex;
-  }
-
-  /**
    * Set the current slide
    */
   getByNo(no) {
-    this.setCover_('black', 1);
-    setTimeout(() => {
-      this.setCover_('transparent', -1);
-    }, 50);
-
     this.setButtons_();
     return this.slides[no];
   }

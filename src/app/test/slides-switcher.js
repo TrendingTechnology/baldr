@@ -25,11 +25,6 @@ describe('Class “SlidesSwitcher()” #unittest', () => {
       assert.equal(slidesSwitcher.slides[1].no, 1);
     });
 
-    it('Property “this.cover”', () => {
-      assert.equal(slidesSwitcher.cover.id, 'cover');
-      assert.equal(slidesSwitcher.cover.nodeName, 'DIV');
-    });
-
     it('Property “this.count”', () => {
       assert.equal(slidesSwitcher.count, 3);
     });
@@ -59,13 +54,6 @@ describe('Class “SlidesSwitcher()” #unittest', () => {
   });
 
   describe('Methods', () => {
-
-    it('Method “setCover_()”', () => {
-      slidesSwitcher.setCover_('red', 99);
-      let cover = slidesSwitcher.document.getElementById('cover');
-      assert.equal(cover.style.backgroundColor, 'red');
-      assert.equal(cover.style.zIndex, 99);
-    });
 
     it('Method “getByNo()”', () => {
       let slide = slidesSwitcher.getByNo(2);

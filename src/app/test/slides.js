@@ -70,9 +70,21 @@ describe('Class “Slide()” #unittest', () => {
       assert.equal(slide.elements.modal.nodeType, 1);
     });
 
+    it('Property “this.cover”', () => {
+      assert.equal(slide.cover.id, 'cover');
+      assert.equal(slide.cover.nodeName, 'DIV');
+    });
+
   });
 
   describe('Methods', () => {
+
+    it('Method “setCover_()”', () => {
+      slide.setCover_('red', 99);
+      let cover = slide.document.getElementById('cover');
+      assert.equal(cover.style.backgroundColor, 'red');
+      assert.equal(cover.style.zIndex, 99);
+    });
 
     it('Method “intersectMastersSlideKeys_()”', () => {
       let array1 = ['one', 'two', 'three'];
