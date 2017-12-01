@@ -35,6 +35,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const {addCSSFile} = require('baldr-library');
 
 /***********************************************************************
  *
@@ -110,40 +111,54 @@ class Master {
 
     /**
      * @function
-     * @param {object} document
-     * @param {module:baldr-application/slides~Slide} oldSlide
-     * @param {module:baldr-application/slides~Slide} newSlide
+     * @param {module:baldr-application~Document} document The document
+     *   object (DOM) of the render process.
+     * @param {module:baldr-application/slides~Slide} oldSlide The
+     *   object representation of the old slide.
+     * @param {module:baldr-application/slides~Slide} newSlide The
+     *   object representation of the new slide.
      */
     this.cleanUp = defaults.cleanUp;
 
     /**
      * @function
-     * @param {object} document
-     * @param {module:baldr-library/config~Config} config
+     * @param {module:baldr-application~Document} document The document
+     *   object (DOM) of the render process.
+     * @param {module:baldr-library/config~Config} config All
+     *   configurations of the current presentation session.
      */
     this.init = defaults.init;
 
     /**
      * @function
-     * @param {object} document
-     * @param {module:baldr-application/slides~Slide} slide
-     * @param {module:baldr-library/config~Config} config
+     * @param {module:baldr-application~Document} document The document
+     *   object (DOM) of the render process.
+     * @param {module:baldr-application/slides~Slide} slide The object
+     *   representation of one slide.
+     * @param {module:baldr-library/config~Config} config All
+     *   configurations of the current presentation session.
      */
     this.initSteps = defaults.initSteps;
 
     /**
      * @function
-     * @param {object} document
-     * @param {module:baldr-application/slides~Slide} slide
-     * @param {module:baldr-library/config~Config} config
+     * @param {module:baldr-application~Document} document The document
+     *   object (DOM) of the render process.
+     * @param {module:baldr-application/slides~Slide} slide The object
+     *   representation of one slide.
+     * @param {module:baldr-library/config~Config} config All
+     *   configurations of the current presentation session.
      */
     this.initStepsEveryVisit = defaults.initStepsEveryVisit;
 
     /**
      * @function
-     * @param {module:baldr-application/slides~Slide} slide
-     * @param {module:baldr-library/config~Config} config
-     * @param {object} document
+     * @param {module:baldr-application/slides~Slide} slide The object
+     *   representation of one slide.
+     * @param {module:baldr-library/config~Config} config All
+     *   configurations of the current presentation session.
+     * @param {module:baldr-application~Document} document The document
+     *   object (DOM) of the render process.
      * @return {string}
      */
     this.mainHTML = defaults.mainHTML;
@@ -163,9 +178,12 @@ class Master {
 
     /**
      * @function
-     * @param {object} document
-     * @param {module:baldr-library/config~Config} config
-     * @param {module:baldr-application/slides~Slide} slide
+     * @param {module:baldr-application~Document} document The document
+     * object (DOM) of the render process.
+     * @param {module:baldr-library/config~Config} config All
+     *   configurations of the current presentation session.
+     * @param {module:baldr-application/slides~Slide} slide The object
+     *   representation of one slide.
      * @return {undefined}
      * @see {@link module:baldr-application~ShowRunner#setMain}
      */
@@ -183,7 +201,8 @@ class Master {
      * @param {integer} no
      * @param {integer} count
      * @param {object} stepData
-     * @param {object} document
+     * @param {module:baldr-application~Document} document The document
+     *   object (DOM) of the render process.
      * @return {undefined}
      * @see {@link module:baldr-application/slides~StepSwitcher#setByNo}
      */
@@ -193,8 +212,6 @@ class Master {
   /**
    * Check if the CSS style file “styles.css” in the master slide
    * folder exists.
-   *
-   * @private
    */
   hasCSS_(masterPath) {
     if (fs.existsSync(path.join(masterPath, 'styles.css'))) {
@@ -206,7 +223,7 @@ class Master {
   }
 
   /**
-   * @private
+   *
    */
   setDefaults_(modulePath) {
     let requireObject = require(modulePath);
@@ -255,9 +272,16 @@ class Master {
 class Masters {
 
   /**
-   *
+   * @param {module:baldr-application~Document} document The document
+   *   object (DOM) of the render process.
    */
-  constructor() {
+  constructor(document) {
+
+    /**
+     * The document object (DOM) of the render process.
+     * @type {module:baldr-application~Document}
+     */
+    this.document = document;
 
     /**
      * Parent path of all master slide modules.
@@ -270,21 +294,32 @@ class Masters {
      * @type {array}
      */
     this.all = this.getAll_();
-    for (let master of this.all) {
-      let masterPath = path.join(this.path, master);
-      this[master] = new Master(path.join(masterPath, 'index.js'), master);
+    for (let masterName of this.all) {
+      this[masterName] = this.initMaster_(masterName);
     }
 
+    this.addCSS_();
+  }
+
+  /**
+   * @param {string} masterName The name of the master slide.
+   */
+  initMaster_(masterName) {
+    return new Master(path.join(this.path, masterName, 'index.js'), masterName);
   }
 
   /**
    *
    */
-  execAll(hookName) {
-    let args = Array.from(arguments);
-    args.shift();
-    for (let master of this.all) {
-      this[master][hookName](...args);
+  addCSS_() {
+    for (let masterName of this.all) {
+      if (this[masterName].css) {
+        addCSSFile(
+          this.document,
+          path.join(this[masterName].path, 'styles.css'),
+          'baldr-master'
+        );
+      }
     }
   }
 
@@ -300,13 +335,25 @@ class Masters {
       ).isDirectory()
     );
   }
+
+  /**
+   *
+   */
+  execAll(hookName) {
+    let args = Array.from(arguments);
+    args.shift();
+    for (let master of this.all) {
+      this[master][hookName](...args);
+    }
+  }
 }
 
 /**
- *
+ * @param {module:baldr-application~Document} document The document
+ *   object (DOM) of the render process.
  */
-exports.getMasters = function() {
-  return new Masters();
+exports.getMasters = function(document) {
+  return new Masters(document);
 };
 </code></pre>
         </article>

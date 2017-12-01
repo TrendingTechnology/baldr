@@ -83,40 +83,54 @@ class Master {
 
     /**
      * @function
-     * @param {object} document
-     * @param {module:baldr-application/slides~Slide} oldSlide
-     * @param {module:baldr-application/slides~Slide} newSlide
+     * @param {module:baldr-application~Document} document The document
+     *   object (DOM) of the render process.
+     * @param {module:baldr-application/slides~Slide} oldSlide The
+     *   object representation of the old slide.
+     * @param {module:baldr-application/slides~Slide} newSlide The
+     *   object representation of the new slide.
      */
     this.cleanUp = defaults.cleanUp;
 
     /**
      * @function
-     * @param {object} document
-     * @param {module:baldr-library/config~Config} config
+     * @param {module:baldr-application~Document} document The document
+     *   object (DOM) of the render process.
+     * @param {module:baldr-library/config~Config} config All
+     *   configurations of the current presentation session.
      */
     this.init = defaults.init;
 
     /**
      * @function
-     * @param {object} document
-     * @param {module:baldr-application/slides~Slide} slide
-     * @param {module:baldr-library/config~Config} config
+     * @param {module:baldr-application~Document} document The document
+     *   object (DOM) of the render process.
+     * @param {module:baldr-application/slides~Slide} slide The object
+     *   representation of one slide.
+     * @param {module:baldr-library/config~Config} config All
+     *   configurations of the current presentation session.
      */
     this.initSteps = defaults.initSteps;
 
     /**
      * @function
-     * @param {object} document
-     * @param {module:baldr-application/slides~Slide} slide
-     * @param {module:baldr-library/config~Config} config
+     * @param {module:baldr-application~Document} document The document
+     *   object (DOM) of the render process.
+     * @param {module:baldr-application/slides~Slide} slide The object
+     *   representation of one slide.
+     * @param {module:baldr-library/config~Config} config All
+     *   configurations of the current presentation session.
      */
     this.initStepsEveryVisit = defaults.initStepsEveryVisit;
 
     /**
      * @function
-     * @param {module:baldr-application/slides~Slide} slide
-     * @param {module:baldr-library/config~Config} config
-     * @param {object} document
+     * @param {module:baldr-application/slides~Slide} slide The object
+     *   representation of one slide.
+     * @param {module:baldr-library/config~Config} config All
+     *   configurations of the current presentation session.
+     * @param {module:baldr-application~Document} document The document
+     *   object (DOM) of the render process.
      * @return {string}
      */
     this.mainHTML = defaults.mainHTML;
@@ -136,9 +150,12 @@ class Master {
 
     /**
      * @function
-     * @param {object} document
-     * @param {module:baldr-library/config~Config} config
-     * @param {module:baldr-application/slides~Slide} slide
+     * @param {module:baldr-application~Document} document The document
+     * object (DOM) of the render process.
+     * @param {module:baldr-library/config~Config} config All
+     *   configurations of the current presentation session.
+     * @param {module:baldr-application/slides~Slide} slide The object
+     *   representation of one slide.
      * @return {undefined}
      * @see {@link module:baldr-application~ShowRunner#setMain}
      */
@@ -156,7 +173,8 @@ class Master {
      * @param {integer} no
      * @param {integer} count
      * @param {object} stepData
-     * @param {object} document
+     * @param {module:baldr-application~Document} document The document
+     *   object (DOM) of the render process.
      * @return {undefined}
      * @see {@link module:baldr-application/slides~StepSwitcher#setByNo}
      */
@@ -166,8 +184,6 @@ class Master {
   /**
    * Check if the CSS style file “styles.css” in the master slide
    * folder exists.
-   *
-   * @private
    */
   hasCSS_(masterPath) {
     if (fs.existsSync(path.join(masterPath, 'styles.css'))) {
@@ -179,7 +195,7 @@ class Master {
   }
 
   /**
-   * @private
+   *
    */
   setDefaults_(modulePath) {
     let requireObject = require(modulePath);
