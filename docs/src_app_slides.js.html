@@ -82,14 +82,37 @@ const path = require('path');
 class StepSwitcher {
 
   /**
-   * @param {object} document The document object of the browser (DOM), see on MDN:
-   * {@link https://developer.mozilla.org/en-US/docs/Web/API/Document Document}
+   * @param {module:baldr-application~Document} document The document
+   *   object (DOM) of the render process.
+   * @param {module:baldr-application/slides~Slide} slide The object
+   *   representation of one slide.
+   * @param {module:baldr-library/config~Config} config All
+   *   configurations of the current presentation session.
    */
   constructor(document, slide, config) {
+
+    /**
+     * All configurations of the current presentation session.
+     * @type {module:baldr-library/config~Config}
+     */
     this.config = config;
+
+    /**
+     * The document object (DOM) of the render process.
+     * @type {module:baldr-application~Document}
+     */
     this.document = document;
+
+    /**
+     * The object representation of one slide.
+     * @type {module:baldr-application/slides~Slide}
+     */
     this.slide = slide;
 
+    /**
+     * The normalized master object derived from the master slide.
+     * @type {module:baldr-application/masters~Master}
+     */
     this.master = slide.master;
 
     /**
@@ -109,7 +132,7 @@ class StepSwitcher {
     this.stepData = false;
 
     /**
-     *
+     * @type {boolean}
      */
     this.stepSupport = false;
 
@@ -126,7 +149,7 @@ class StepSwitcher {
   }
 
   /**
-   * @private
+   *
    */
   setButtonsVisibility_(state) {
     this.elements.prev.style.visibility = state;
@@ -216,13 +239,20 @@ class StepSwitcher {
 class Slide {
 
   /**
-   * @param {object} document The document object of the browser (DOM), see on MDN:
-   * {@link https://developer.mozilla.org/en-US/docs/Web/API/Document Document}
+   * @param {module:baldr-application/slides~rawSlideObject} rawSlideObject
+   *   A raw slide object containing only one property: The name of the
+   *   master slide.
+   * @param {module:baldr-application~Document} document The document
+   *   object (DOM) of the render process.
+   * @param {module:baldr-library/config~Config} config All
+   *   configurations of the current presentation session.
+   * @param {module:baldr-application/masters~Masters} masters All
+   *   available master slides.
    */
-  constructor(rawSlide, document, config, masters) {
+  constructor(rawSlideObject, document, config, masters) {
     let intersection = this.intersectMastersSlideKeys_(
       masters.all,
-      Object.keys(rawSlide)
+      Object.keys(rawSlideObject)
     );
 
     if (intersection.length > 1) {
@@ -230,11 +260,13 @@ class Slide {
     }
 
     /**
+     * All configurations of the current presentation session.
      * @type {module:baldr-library/config~Config}
      */
     this.config = config;
 
     /**
+     * The document object (DOM) of the render process.
      * @type {module:baldr-application~Document}
      */
     this.document = document;
@@ -248,21 +280,22 @@ class Slide {
     };
 
     /**
-     * The master of the slide.
+     * The normalized master object derived from the master slide.
      * @type {module:baldr-application/masters~Master}
      */
     this.master = masters[intersection[0]];
 
     /**
+     * All configurations of the current presentation session.
      * @type {module:baldr-library/config~Config}
      */
     this.masters = masters;
 
     /**
-     * The raw slide data
-     * @type {(boolean|number|string|array|object)}
+     * Various types of data to render a slide.
+     * @type {module:baldr-application/slides~rawSlideData}
      */
-    this.rawData = rawSlide[this.master.name];
+    this.rawData = rawSlideObject[this.master.name];
 
     /**
      * The normalized slide data
@@ -272,6 +305,7 @@ class Slide {
       .normalizeData(this.rawData, config);
 
     /**
+     * The instantiated object derived from the class “StepSwitcher()”
      * @type {module:baldr-application/slides~StepSwitcher}
      */
     this.steps = new StepSwitcher(document, this, config);
@@ -349,6 +383,7 @@ class Slide {
  * Not every master slide can be shown with this function. It muss be
  * possible to render the master slide without custom data.
  * No number is assigned to the master slide.
+ *
  * @param {string} masterName Name of the master slide.
  * @param {module:baldr-application/slides~rawSlideData} rawSlideData
  *   Various types of data to render a slide.
@@ -380,36 +415,74 @@ exports.getInstantSlide = function(masterName, rawSlideData, document, config, m
 class Slides {
 
   /**
-   * @param {array} rawSlides A raw array of raw slide objects.
-   * @param {module:baldr-library/config~Config} config
-   * @param {object} document The document object of the browser (DOM), see on MDN:
-   * {@link https://developer.mozilla.org/en-US/docs/Web/API/Document Document}
+   * @param {array} rawSlides An array of raw slide objects.
+   * @param {module:baldr-library/config~Config} config All
+   *   configurations of the current presentation session.
+   * @param {module:baldr-application~Document} document The document
+   *   object (DOM) of the render process.
+   * @param {module:baldr-application/masters~Masters} masters All
+   *   available master slides.
    */
   constructor(rawSlides, config, document, masters) {
 
     /**
-     *
+     * An array of raw slide objects.
+     * @type {array}
      */
     this.rawSlides = rawSlides;
 
     /**
-     *
+     * All configurations of the current presentation session.`
+     * @type {module:baldr-library/config~Config}
      */
     this.config = config;
 
     /**
-     *
+     * The document object (DOM) of the render process.
+     * @type {module:baldr-application~Document}
      */
     this.document = document;
 
     /**
-     *
+     * All available master slides.
+     * @type {module:baldr-application/masters~Masters}
      */
     this.masters = masters;
   }
 
   /**
-   *
+   * &lt;pre>&lt;code>
+   * {
+   *   "1": {
+   *     "no": 1,
+   *     "master": "quote",
+   *     "data": {
+   *       "text": "Der Tag der Gunst ist wie der Tag der Ernte,\nman muss geschäftig sein sobald sie reift.\n",
+   *       "author": "Johann Wolfgang von Goethe",
+   *       "date": 1801
+   *     }
+   *   },
+   *   "2": {
+   *     "no": 2,
+   *     "master": "question",
+   *     "data": [
+   *       {
+   *         "question": "Wann starb Ludwig van Beethoven?",
+   *         "answer": 1827
+   *       }
+   *     ]
+   *   },
+   *   "3": {
+   *     "no": 3,
+   *     "master": "person",
+   *     "data": {
+   *       "name": "Ludwig van Beethoven",
+   *       "image": "beethoven.jpg"
+   *     }
+   *   }
+   * }
+   * &lt;/code>&lt;pre>
+   * @return {object}
    */
   get() {
     let out = {};
@@ -426,8 +499,13 @@ class Slides {
 }
 
 /**
- * @param {object} document The document object of the browser (DOM), see on MDN:
- * {@link https://developer.mozilla.org/en-US/docs/Web/API/Document Document}
+ * @param {array} rawSlides An array of raw slide objects.
+ * @param {module:baldr-library/config~Config} config All
+ *   configurations of the current presentation session.
+ * @param {module:baldr-application~Document} document The document
+ *   object (DOM) of the render process.
+ * @param {module:baldr-application/masters~Masters} masters All
+ *   available master slides.
  */
 exports.getSlides = function(rawSlides, config, document, masters) {
   return new Slides(rawSlides, config, document, masters).get();

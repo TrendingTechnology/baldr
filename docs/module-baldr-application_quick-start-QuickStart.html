@@ -29,7 +29,7 @@
 <header>
     
         <h2><span class="attribs"><span class="type-signature"></span></span>
-            <span class="ancestors"><a href="module-baldr-application_quick-start.html">baldr-application/quick-start</a>~</span>QuickStart<span class="signature">()</span><span class="type-signature"></span></h2>
+            <span class="ancestors"><a href="module-baldr-application_quick-start.html">baldr-application/quick-start</a>~</span>QuickStart<span class="signature">(document, masters, config)</span><span class="type-signature"></span></h2>
         
     
 </header>
@@ -42,7 +42,7 @@
     
 
     
-    <h4 class="name" id="QuickStart"><span class="type-signature"></span>new QuickStart<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="QuickStart"><span class="type-signature"></span>new QuickStart<span class="signature">(document, masters, config)</span><span class="type-signature"></span></h4>
     
 
     
@@ -55,6 +55,104 @@
 
 
 
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>document</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="module-baldr-application.html#~Document">module:baldr-application~Document</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The document
+  object (DOM) of the render process.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>masters</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="module-baldr-application_masters-Masters.html">module:baldr-application/masters~Masters</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>All
+  available master slides.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>config</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="module-baldr-library_config-Config.html">module:baldr-library/config~Config</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>All
+  configurations of the current presentation session.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
 
 
 
@@ -90,7 +188,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_app_quick-start.js.html">src/app/quick-start.js</a>, <a href="src_app_quick-start.js.html#line100">line 100</a>
+        <a href="src_app_quick-start.js.html">src/app/quick-start.js</a>, <a href="src_app_quick-start.js.html#line105">line 105</a>
     </li></ul></dd>
     
 
@@ -138,13 +236,13 @@
 
         
             
-<h4 class="name" id="document"><span class="type-signature"></span>document<span class="type-signature"> :object</span></h4>
+<h4 class="name" id="config"><span class="type-signature"></span>config<span class="type-signature"> :<a href="module-baldr-library_config-Config.html">module:baldr-library/config~Config</a></span></h4>
 
 
 
 
 <div class="description">
-    <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/Document">Document</a></p>
+    <p>All configurations of the current presentation session.</p>
 </div>
 
 
@@ -153,7 +251,7 @@
     <ul>
         <li>
             
-<span class="param-type">object</span>
+<span class="param-type"><a href="module-baldr-library_config-Config.html">module:baldr-library/config~Config</a></span>
 
 
         </li>
@@ -192,7 +290,79 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_app_quick-start.js.html">src/app/quick-start.js</a>, <a href="src_app_quick-start.js.html#line116">line 116</a>
+        <a href="src_app_quick-start.js.html">src/app/quick-start.js</a>, <a href="src_app_quick-start.js.html#line121">line 121</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="document"><span class="type-signature"></span>document<span class="type-signature"> :<a href="module-baldr-application.html#~Document">module:baldr-application~Document</a></span></h4>
+
+
+
+
+<div class="description">
+    <p>The document object (DOM) of the render process.</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type"><a href="module-baldr-application.html#~Document">module:baldr-application~Document</a></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="src_app_quick-start.js.html">src/app/quick-start.js</a>, <a href="src_app_quick-start.js.html#line133">line 133</a>
     </li></ul></dd>
     
 
@@ -250,7 +420,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_app_quick-start.js.html">src/app/quick-start.js</a>, <a href="src_app_quick-start.js.html#line121">line 121</a>
+        <a href="src_app_quick-start.js.html">src/app/quick-start.js</a>, <a href="src_app_quick-start.js.html#line138">line 138</a>
     </li></ul></dd>
     
 
@@ -318,7 +488,79 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_app_quick-start.js.html">src/app/quick-start.js</a>, <a href="src_app_quick-start.js.html#line126">line 126</a>
+        <a href="src_app_quick-start.js.html">src/app/quick-start.js</a>, <a href="src_app_quick-start.js.html#line143">line 143</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="masters"><span class="type-signature"></span>masters<span class="type-signature"> :<a href="module-baldr-application_masters-Masters.html">module:baldr-application/masters~Masters</a></span></h4>
+
+
+
+
+<div class="description">
+    <p>All available master slides.</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type"><a href="module-baldr-application_masters-Masters.html">module:baldr-application/masters~Masters</a></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="src_app_quick-start.js.html">src/app/quick-start.js</a>, <a href="src_app_quick-start.js.html#line127">line 127</a>
     </li></ul></dd>
     
 
@@ -394,7 +636,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_app_quick-start.js.html">src/app/quick-start.js</a>, <a href="src_app_quick-start.js.html#line192">line 192</a>
+        <a href="src_app_quick-start.js.html">src/app/quick-start.js</a>, <a href="src_app_quick-start.js.html#line209">line 209</a>
     </li></ul></dd>
     
 
@@ -476,7 +718,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_app_quick-start.js.html">src/app/quick-start.js</a>, <a href="src_app_quick-start.js.html#line132">line 132</a>
+        <a href="src_app_quick-start.js.html">src/app/quick-start.js</a>, <a href="src_app_quick-start.js.html#line149">line 149</a>
     </li></ul></dd>
     
 
@@ -629,7 +871,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_app_quick-start.js.html">src/app/quick-start.js</a>, <a href="src_app_quick-start.js.html#line159">line 159</a>
+        <a href="src_app_quick-start.js.html">src/app/quick-start.js</a>, <a href="src_app_quick-start.js.html#line176">line 176</a>
     </li></ul></dd>
     
 
@@ -733,7 +975,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_app_quick-start.js.html">src/app/quick-start.js</a>, <a href="src_app_quick-start.js.html#line175">line 175</a>
+        <a href="src_app_quick-start.js.html">src/app/quick-start.js</a>, <a href="src_app_quick-start.js.html#line192">line 192</a>
     </li></ul></dd>
     
 
@@ -815,7 +1057,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_app_quick-start.js.html">src/app/quick-start.js</a>, <a href="src_app_quick-start.js.html#line185">line 185</a>
+        <a href="src_app_quick-start.js.html">src/app/quick-start.js</a>, <a href="src_app_quick-start.js.html#line202">line 202</a>
     </li></ul></dd>
     
 

@@ -38,20 +38,20 @@ describe('Class “QuickStart()” #unittest', () => {
 
   describe('Methods', () => {
 
-    it('Method “collectEntries()”', () => {
+    it('Method “collectEntries_()”', () => {
       let entries = quickStart.collectEntries_();
       assert.equal(entries[0].title, 'Audio');
-      assert.equal(entries[0].master, 'audio');
+      assert.equal(entries[0].masterName, 'audio');
       assert.equal(entries[0].cssID, 'quick-start-entry_audio_1');
       assert.equal(entries[0].data, true);
 
       assert.equal(entries[1].title, 'Camera');
-      assert.equal(entries[1].master, 'camera');
+      assert.equal(entries[1].masterName, 'camera');
       assert.equal(entries[1].cssID, 'quick-start-entry_camera_2');
       assert.equal(entries[1].data, true);
     });
 
-    it('Method “renderButton()”', () => {
+    it('Method “renderButton_()”', () => {
       let entry = {
         title: 'lol',
         fontawesome: 'lol'
@@ -63,7 +63,7 @@ describe('Class “QuickStart()” #unittest', () => {
       assert.equal(button.classList.item(1), 'fa-lol');
     });
 
-    it('Method “renderNavigationMenu()”', () => {
+    it('Method “renderNavigationMenu_()”', () => {
       quickStart.renderNavigationMenu_();
       let buttons = quickStart.document.querySelectorAll('#nav-quick-start button');
       assert.equal(buttons[0].title, 'Audio (ctrl+alt+a)');

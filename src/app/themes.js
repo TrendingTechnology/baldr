@@ -61,7 +61,7 @@ class Themes {
    * Resolve all theme dependencies (e. g. typeface modules)
    *
    * @param {object} dependencies The dependencies object like in
-   * package.json
+   *   package.json
    * @return {array} A list of CSS paths as an array
    */
   resolveDependencies_(dependencies) {

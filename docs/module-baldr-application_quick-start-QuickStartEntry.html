@@ -29,7 +29,7 @@
 <header>
     
         <h2><span class="attribs"><span class="type-signature"></span></span>
-            <span class="ancestors"><a href="module-baldr-application_quick-start.html">baldr-application/quick-start</a>~</span>QuickStartEntry<span class="signature">()</span><span class="type-signature"></span></h2>
+            <span class="ancestors"><a href="module-baldr-application_quick-start.html">baldr-application/quick-start</a>~</span>QuickStartEntry<span class="signature">(rawQuickStartEntry, masterName, no)</span><span class="type-signature"></span></h2>
         
             <div class="class-description"><p>The processed quick start entry object.</p></div>
         
@@ -46,7 +46,7 @@
     
 
     
-    <h4 class="name" id="QuickStartEntry"><span class="type-signature"></span>new QuickStartEntry<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="QuickStartEntry"><span class="type-signature"></span>new QuickStartEntry<span class="signature">(rawQuickStartEntry, masterName, no)</span><span class="type-signature"></span></h4>
     
 
     
@@ -59,6 +59,101 @@
 
 
 
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>rawQuickStartEntry</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="module-baldr-application_quick-start.html#~rawQuickStartEntry">module:baldr-application/quick-start~rawQuickStartEntry</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>A raw quick start entry specified in the master slide hooks.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>masterName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Name of the master slide.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>no</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">integer</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>A integer starting from 1</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
 
 
 
@@ -94,7 +189,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_app_quick-start.js.html">src/app/quick-start.js</a>, <a href="src_app_quick-start.js.html#line43">line 43</a>
+        <a href="src_app_quick-start.js.html">src/app/quick-start.js</a>, <a href="src_app_quick-start.js.html#line44">line 44</a>
     </li></ul></dd>
     
 
@@ -196,7 +291,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_app_quick-start.js.html">src/app/quick-start.js</a>, <a href="src_app_quick-start.js.html#line59">line 59</a>
+        <a href="src_app_quick-start.js.html">src/app/quick-start.js</a>, <a href="src_app_quick-start.js.html#line64">line 64</a>
     </li></ul></dd>
     
 
@@ -274,7 +369,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_app_quick-start.js.html">src/app/quick-start.js</a>, <a href="src_app_quick-start.js.html#line65">line 65</a>
+        <a href="src_app_quick-start.js.html">src/app/quick-start.js</a>, <a href="src_app_quick-start.js.html#line70">line 70</a>
     </li></ul></dd>
     
 
@@ -346,7 +441,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_app_quick-start.js.html">src/app/quick-start.js</a>, <a href="src_app_quick-start.js.html#line71">line 71</a>
+        <a href="src_app_quick-start.js.html">src/app/quick-start.js</a>, <a href="src_app_quick-start.js.html#line76">line 76</a>
     </li></ul></dd>
     
 
@@ -364,13 +459,13 @@
 
         
             
-<h4 class="name" id="master"><span class="type-signature"></span>master<span class="type-signature"> :master</span></h4>
+<h4 class="name" id="masterName"><span class="type-signature"></span>masterName<span class="type-signature"> :master</span></h4>
 
 
 
 
 <div class="description">
-    <p>Name of the master</p>
+    <p>The name of the master</p>
 </div>
 
 
@@ -418,7 +513,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_app_quick-start.js.html">src/app/quick-start.js</a>, <a href="src_app_quick-start.js.html#line77">line 77</a>
+        <a href="src_app_quick-start.js.html">src/app/quick-start.js</a>, <a href="src_app_quick-start.js.html#line82">line 82</a>
     </li></ul></dd>
     
 
@@ -440,6 +535,10 @@
 
 
 
+
+<div class="description">
+    <p>A integer starting from 1</p>
+</div>
 
 
 
@@ -486,7 +585,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_app_quick-start.js.html">src/app/quick-start.js</a>, <a href="src_app_quick-start.js.html#line53">line 53</a>
+        <a href="src_app_quick-start.js.html">src/app/quick-start.js</a>, <a href="src_app_quick-start.js.html#line58">line 58</a>
     </li></ul></dd>
     
 
@@ -558,7 +657,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_app_quick-start.js.html">src/app/quick-start.js</a>, <a href="src_app_quick-start.js.html#line83">line 83</a>
+        <a href="src_app_quick-start.js.html">src/app/quick-start.js</a>, <a href="src_app_quick-start.js.html#line88">line 88</a>
     </li></ul></dd>
     
 
@@ -630,7 +729,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_app_quick-start.js.html">src/app/quick-start.js</a>, <a href="src_app_quick-start.js.html#line89">line 89</a>
+        <a href="src_app_quick-start.js.html">src/app/quick-start.js</a>, <a href="src_app_quick-start.js.html#line94">line 94</a>
     </li></ul></dd>
     
 

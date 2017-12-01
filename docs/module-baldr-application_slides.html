@@ -355,7 +355,7 @@ No number is assigned to the master slide.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line336">line 336</a>
+        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line371">line 371</a>
     </li></ul></dd>
     
 
@@ -407,7 +407,7 @@ No number is assigned to the master slide.</p>
     
 
     
-    <h4 class="name" id=".getSlides"><span class="type-signature">(static) </span>getSlides<span class="signature">(document)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id=".getSlides"><span class="type-signature">(static) </span>getSlides<span class="signature">(rawSlides, config, document, masters)</span><span class="type-signature"></span></h4>
     
 
     
@@ -447,13 +447,13 @@ No number is assigned to the master slide.</p>
 
         <tr>
             
-                <td class="name"><code>document</code></td>
+                <td class="name"><code>rawSlides</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">object</span>
+<span class="param-type">array</span>
 
 
             
@@ -463,8 +463,79 @@ No number is assigned to the master slide.</p>
 
             
 
-            <td class="description last"><p>The document object of the browser (DOM), see on MDN:
-<a href="https://developer.mozilla.org/en-US/docs/Web/API/Document">Document</a></p></td>
+            <td class="description last"><p>An array of raw slide objects.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>config</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="module-baldr-library_config-Config.html">module:baldr-library/config~Config</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>All
+  configurations of the current presentation session.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>document</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="module-baldr-application.html#~Document">module:baldr-application~Document</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The document
+  object (DOM) of the render process.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>masters</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="module-baldr-application_masters-Masters.html">module:baldr-application/masters~Masters</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>All
+  available master slides.</p></td>
         </tr>
 
     
@@ -505,7 +576,7 @@ No number is assigned to the master slide.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line404">line 404</a>
+        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line482">line 482</a>
     </li></ul></dd>
     
 

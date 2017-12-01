@@ -43,46 +43,16 @@
 class SlidesSwitcher {
 
   /**
-   * @param {object} slides
-   * @param {object} document The document object of the browser (DOM), see on MDN:
-   * {@link https://developer.mozilla.org/en-US/docs/Web/API/Document Document}
+   * @param {module:baldr-application/slides~Slides} slides All slide
+   *   objects of the current presentation session.
+   * @param {module:baldr-application~Document} document The document
+   *   object (DOM) of the render process.
    */
   constructor(slides, document) {
 
     /**
      * All slides index by the slide number.
-     * &lt;pre>&lt;code>
-     * {
-     *   "1": {
-     *     "no": 1,
-     *     "master": "quote",
-     *     "data": {
-     *       "text": "Der Tag der Gunst ist wie der Tag der Ernte,\nman muss geschäftig sein sobald sie reift.\n",
-     *       "author": "Johann Wolfgang von Goethe",
-     *       "date": 1801
-     *     }
-     *   },
-     *   "2": {
-     *     "no": 2,
-     *     "master": "question",
-     *     "data": [
-     *       {
-     *         "question": "Wann starb Ludwig van Beethoven?",
-     *         "answer": 1827
-     *       }
-     *     ]
-     *   },
-     *   "3": {
-     *     "no": 3,
-     *     "master": "person",
-     *     "data": {
-     *       "name": "Ludwig van Beethoven",
-     *       "image": "beethoven.jpg"
-     *     }
-     *   }
-     * }
-     * &lt;/code>&lt;pre>
-     * @type {object}
+     * @type {module:baldr-application/slides~Slides}
      */
     this.slides = slides;
 
@@ -99,7 +69,8 @@ class SlidesSwitcher {
     this.no = 1;
 
     /**
-     * @type {object}
+     * The document object (DOM) of the render process.
+     * @type {module:baldr-application~Document} 
      */
     this.document = document;
 

@@ -29,7 +29,7 @@
 <header>
     
         <h2><span class="attribs"><span class="type-signature"></span></span>
-            <span class="ancestors"><a href="module-baldr-application_slides.html">baldr-application/slides</a>~</span>Slides<span class="signature">(rawSlides, config, document)</span><span class="type-signature"></span></h2>
+            <span class="ancestors"><a href="module-baldr-application_slides.html">baldr-application/slides</a>~</span>Slides<span class="signature">(rawSlides, config, document, masters)</span><span class="type-signature"></span></h2>
         
             <div class="class-description"><p>Parse the object representation of all slides.</p></div>
         
@@ -46,7 +46,7 @@
     
 
     
-    <h4 class="name" id="Slides"><span class="type-signature"></span>new Slides<span class="signature">(rawSlides, config, document)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="Slides"><span class="type-signature"></span>new Slides<span class="signature">(rawSlides, config, document, masters)</span><span class="type-signature"></span></h4>
     
 
     
@@ -102,7 +102,7 @@
 
             
 
-            <td class="description last"><p>A raw array of raw slide objects.</p></td>
+            <td class="description last"><p>An array of raw slide objects.</p></td>
         </tr>
 
     
@@ -125,7 +125,8 @@
 
             
 
-            <td class="description last"></td>
+            <td class="description last"><p>All
+  configurations of the current presentation session.</p></td>
         </tr>
 
     
@@ -138,7 +139,7 @@
             <td class="type">
             
                 
-<span class="param-type">object</span>
+<span class="param-type"><a href="module-baldr-application.html#~Document">module:baldr-application~Document</a></span>
 
 
             
@@ -148,8 +149,32 @@
 
             
 
-            <td class="description last"><p>The document object of the browser (DOM), see on MDN:
-<a href="https://developer.mozilla.org/en-US/docs/Web/API/Document">Document</a></p></td>
+            <td class="description last"><p>The document
+  object (DOM) of the render process.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>masters</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="module-baldr-application_masters-Masters.html">module:baldr-application/masters~Masters</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>All
+  available master slides.</p></td>
         </tr>
 
     
@@ -190,7 +215,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line352">line 352</a>
+        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line387">line 387</a>
     </li></ul></dd>
     
 
@@ -238,12 +263,26 @@
 
         
             
-<h4 class="name" id="config"><span class="type-signature"></span>config<span class="type-signature"></span></h4>
+<h4 class="name" id="config"><span class="type-signature"></span>config<span class="type-signature"> :<a href="module-baldr-library_config-Config.html">module:baldr-library/config~Config</a></span></h4>
 
 
 
 
+<div class="description">
+    <p>All configurations of the current presentation session.`</p>
+</div>
 
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type"><a href="module-baldr-library_config-Config.html">module:baldr-library/config~Config</a></span>
+
+
+        </li>
+    </ul>
 
 
 
@@ -278,7 +317,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line370">line 370</a>
+        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line410">line 410</a>
     </li></ul></dd>
     
 
@@ -296,12 +335,26 @@
 
         
             
-<h4 class="name" id="document"><span class="type-signature"></span>document<span class="type-signature"></span></h4>
+<h4 class="name" id="document"><span class="type-signature"></span>document<span class="type-signature"> :<a href="module-baldr-application.html#~Document">module:baldr-application~Document</a></span></h4>
 
 
 
 
+<div class="description">
+    <p>The document object (DOM) of the render process.</p>
+</div>
 
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type"><a href="module-baldr-application.html#~Document">module:baldr-application~Document</a></span>
+
+
+        </li>
+    </ul>
 
 
 
@@ -336,7 +389,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line375">line 375</a>
+        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line416">line 416</a>
     </li></ul></dd>
     
 
@@ -354,12 +407,26 @@
 
         
             
-<h4 class="name" id="masters"><span class="type-signature"></span>masters<span class="type-signature"></span></h4>
+<h4 class="name" id="masters"><span class="type-signature"></span>masters<span class="type-signature"> :<a href="module-baldr-application_masters-Masters.html">module:baldr-application/masters~Masters</a></span></h4>
 
 
 
 
+<div class="description">
+    <p>All available master slides.</p>
+</div>
 
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type"><a href="module-baldr-application_masters-Masters.html">module:baldr-application/masters~Masters</a></span>
+
+
+        </li>
+    </ul>
 
 
 
@@ -394,7 +461,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line380">line 380</a>
+        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line422">line 422</a>
     </li></ul></dd>
     
 
@@ -412,12 +479,26 @@
 
         
             
-<h4 class="name" id="rawSlides"><span class="type-signature"></span>rawSlides<span class="type-signature"></span></h4>
+<h4 class="name" id="rawSlides"><span class="type-signature"></span>rawSlides<span class="type-signature"> :array</span></h4>
 
 
 
 
+<div class="description">
+    <p>An array of raw slide objects.</p>
+</div>
 
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">array</span>
+
+
+        </li>
+    </ul>
 
 
 
@@ -452,7 +533,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line365">line 365</a>
+        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line404">line 404</a>
     </li></ul></dd>
     
 
@@ -480,12 +561,46 @@
     
 
     
-    <h4 class="name" id="get"><span class="type-signature"></span>get<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="get"><span class="type-signature"></span>get<span class="signature">()</span><span class="type-signature"> &rarr; {object}</span></h4>
     
 
     
 
 
+
+<div class="description">
+    <p><pre><code>
+{
+  &quot;1&quot;: {
+    &quot;no&quot;: 1,
+    &quot;master&quot;: &quot;quote&quot;,
+    &quot;data&quot;: {
+      &quot;text&quot;: &quot;Der Tag der Gunst ist wie der Tag der Ernte,\nman muss geschäftig sein sobald sie reift.\n&quot;,
+      &quot;author&quot;: &quot;Johann Wolfgang von Goethe&quot;,
+      &quot;date&quot;: 1801
+    }
+  },
+  &quot;2&quot;: {
+    &quot;no&quot;: 2,
+    &quot;master&quot;: &quot;question&quot;,
+    &quot;data&quot;: [
+      {
+        &quot;question&quot;: &quot;Wann starb Ludwig van Beethoven?&quot;,
+        &quot;answer&quot;: 1827
+      }
+    ]
+  },
+  &quot;3&quot;: {
+    &quot;no&quot;: 3,
+    &quot;master&quot;: &quot;person&quot;,
+    &quot;data&quot;: {
+      &quot;name&quot;: &quot;Ludwig van Beethoven&quot;,
+      &quot;image&quot;: &quot;beethoven.jpg&quot;
+    }
+  }
+}
+</code><pre></p>
+</div>
 
 
 
@@ -528,7 +643,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line386">line 386</a>
+        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line459">line 459</a>
     </li></ul></dd>
     
 
@@ -551,6 +666,24 @@
 
 
 
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">object</span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 

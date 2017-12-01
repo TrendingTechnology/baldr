@@ -29,7 +29,7 @@
 <header>
     
         <h2><span class="attribs"><span class="type-signature"></span></span>
-            <span class="ancestors"><a href="module-baldr-application_slides.html">baldr-application/slides</a>~</span>Slide<span class="signature">(document)</span><span class="type-signature"></span></h2>
+            <span class="ancestors"><a href="module-baldr-application_slides.html">baldr-application/slides</a>~</span>Slide<span class="signature">(rawSlideObject, document, config, masters)</span><span class="type-signature"></span></h2>
         
     
 </header>
@@ -42,7 +42,7 @@
     
 
     
-    <h4 class="name" id="Slide"><span class="type-signature"></span>new Slide<span class="signature">(document)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="Slide"><span class="type-signature"></span>new Slide<span class="signature">(rawSlideObject, document, config, masters)</span><span class="type-signature"></span></h4>
     
 
     
@@ -82,13 +82,13 @@
 
         <tr>
             
-                <td class="name"><code>document</code></td>
+                <td class="name"><code>rawSlideObject</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">object</span>
+<span class="param-type"><a href="module-baldr-application_slides.html#~rawSlideObject">module:baldr-application/slides~rawSlideObject</a></span>
 
 
             
@@ -98,8 +98,80 @@
 
             
 
-            <td class="description last"><p>The document object of the browser (DOM), see on MDN:
-<a href="https://developer.mozilla.org/en-US/docs/Web/API/Document">Document</a></p></td>
+            <td class="description last"><p>A raw slide object containing only one property: The name of the
+  master slide.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>document</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="module-baldr-application.html#~Document">module:baldr-application~Document</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The document
+  object (DOM) of the render process.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>config</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="module-baldr-library_config-Config.html">module:baldr-library/config~Config</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>All
+  configurations of the current presentation session.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>masters</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="module-baldr-application_masters-Masters.html">module:baldr-application/masters~Masters</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>All
+  available master slides.</p></td>
         </tr>
 
     
@@ -140,7 +212,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line188">line 188</a>
+        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line211">line 211</a>
     </li></ul></dd>
     
 
@@ -193,6 +265,10 @@
 
 
 
+<div class="description">
+    <p>All configurations of the current presentation session.</p>
+</div>
+
 
 
     <h5>Type:</h5>
@@ -238,7 +314,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line207">line 207</a>
+        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line238">line 238</a>
     </li></ul></dd>
     
 
@@ -260,6 +336,10 @@
 
 
 
+
+<div class="description">
+    <p>The document object (DOM) of the render process.</p>
+</div>
 
 
 
@@ -306,7 +386,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line212">line 212</a>
+        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line244">line 244</a>
     </li></ul></dd>
     
 
@@ -374,7 +454,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line217">line 217</a>
+        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line249">line 249</a>
     </li></ul></dd>
     
 
@@ -398,7 +478,7 @@
 
 
 <div class="description">
-    <p>The master of the slide.</p>
+    <p>The normalized master object derived from the master slide.</p>
 </div>
 
 
@@ -446,7 +526,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line226">line 226</a>
+        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line258">line 258</a>
     </li></ul></dd>
     
 
@@ -468,6 +548,10 @@
 
 
 
+
+<div class="description">
+    <p>All configurations of the current presentation session.</p>
+</div>
 
 
 
@@ -514,7 +598,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line231">line 231</a>
+        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line264">line 264</a>
     </li></ul></dd>
     
 
@@ -598,7 +682,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line243">line 243</a>
+        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line276">line 276</a>
     </li></ul></dd>
     
 
@@ -616,13 +700,13 @@
 
         
             
-<h4 class="name" id="rawData"><span class="type-signature"></span>rawData<span class="type-signature"> :boolean|number|string|array|object</span></h4>
+<h4 class="name" id="rawData"><span class="type-signature"></span>rawData<span class="type-signature"> :<a href="module-baldr-application_slides.html#~rawSlideData">module:baldr-application/slides~rawSlideData</a></span></h4>
 
 
 
 
 <div class="description">
-    <p>The raw slide data</p>
+    <p>Various types of data to render a slide.</p>
 </div>
 
 
@@ -631,19 +715,7 @@
     <ul>
         <li>
             
-<span class="param-type">boolean</span>
-|
-
-<span class="param-type">number</span>
-|
-
-<span class="param-type">string</span>
-|
-
-<span class="param-type">array</span>
-|
-
-<span class="param-type">object</span>
+<span class="param-type"><a href="module-baldr-application_slides.html#~rawSlideData">module:baldr-application/slides~rawSlideData</a></span>
 
 
         </li>
@@ -682,7 +754,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line237">line 237</a>
+        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line270">line 270</a>
     </li></ul></dd>
     
 
@@ -704,6 +776,10 @@
 
 
 
+
+<div class="description">
+    <p>The instantiated object derived from the class “StepSwitcher()”</p>
+</div>
 
 
 
@@ -750,7 +826,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line249">line 249</a>
+        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line283">line 283</a>
     </li></ul></dd>
     
 
@@ -904,7 +980,7 @@ one master slide.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line262">line 262</a>
+        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line296">line 296</a>
     </li></ul></dd>
     
 
@@ -1008,7 +1084,7 @@ one master slide.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line298">line 298</a>
+        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line332">line 332</a>
     </li></ul></dd>
     
 
@@ -1090,7 +1166,7 @@ one master slide.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line269">line 269</a>
+        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line303">line 303</a>
     </li></ul></dd>
     
 
@@ -1172,7 +1248,7 @@ one master slide.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line286">line 286</a>
+        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line320">line 320</a>
     </li></ul></dd>
     
 
@@ -1254,7 +1330,7 @@ one master slide.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line279">line 279</a>
+        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line313">line 313</a>
     </li></ul></dd>
     
 

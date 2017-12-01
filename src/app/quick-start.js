@@ -16,6 +16,7 @@ const {checkProperty} = require('baldr-library');
  */
 
 /**
+ * A raw quick start entry specified in the master slide hooks.
  * @typedef rawQuickStartEntry
  * @type {object}
  * @property {title} title String to show in the “title” attribute of
@@ -43,11 +44,15 @@ const {checkProperty} = require('baldr-library');
 class QuickStartEntry {
 
   /**
-   *
+   * @param {module:baldr-application/quick-start~rawQuickStartEntry} rawQuickStartEntry
+   *   A raw quick start entry specified in the master slide hooks.
+   * @param {string} masterName Name of the master slide.
+   * @param {integer} no A integer starting from 1
    */
-  constructor(rawQuickStartEntry, master, no) {
+  constructor(rawQuickStartEntry, masterName, no) {
 
     /**
+     *  A integer starting from 1
      * @type {integer}
      */
     this.no = no;
@@ -56,7 +61,7 @@ class QuickStartEntry {
      * CSS id name like “quick-start-entry_master_1”
      * @type {string}
      */
-    this.cssID = 'quick-start-entry_' + master +  '_' + no;
+    this.cssID = 'quick-start-entry_' + masterName +  '_' + no;
 
     /**
      * Slide data
@@ -71,10 +76,10 @@ class QuickStartEntry {
     this.fontawesome = rawQuickStartEntry.fontawesome;
 
     /**
-     * Name of the master
+     * The name of the master
      * @type {master}
      */
-    this.master = master;
+    this.masterName = masterName;
 
     /**
      * Mousetrap shortcut string
@@ -100,18 +105,30 @@ class QuickStartEntry {
 class QuickStart {
 
   /**
-   *
+   * @param {module:baldr-application~Document} document The document
+   *   object (DOM) of the render process.
+   * @param {module:baldr-application/masters~Masters} masters All
+   *   available master slides.
+   * @param {module:baldr-library/config~Config} config All
+   *   configurations of the current presentation session.
    */
   constructor(document, masters, config) {
 
+    /**
+     * All configurations of the current presentation session.
+     * @type {module:baldr-library/config~Config}
+     */
     this.config = config;
 
+    /**
+     * All available master slides.
+     * @type {module:baldr-application/masters~Masters}
+     */
     this.masters = masters;
 
     /**
-     * {@link https://developer.mozilla.org/en-US/docs/Web/API/Document Document}
-     *
-     * @type {object}
+     * The document object (DOM) of the render process.
+     * @type {module:baldr-application~Document}
      */
     this.document = document;
 
@@ -131,10 +148,10 @@ class QuickStart {
    */
   collectEntries_() {
     let entries = [];
-    for (let master of this.masters.all) {
-      let rawEntries = this.masters[master].quickStartEntries();
+    for (let masterName of this.masters.all) {
+      let rawEntries = this.masters[masterName].quickStartEntries();
       for (let index in rawEntries) {
-        rawEntries[index].master = master;
+        rawEntries[index].masterName = masterName;
         if (!rawEntries[index].hasOwnProperty('data')) {
           rawEntries[index].data = true;
         }
@@ -145,7 +162,7 @@ class QuickStart {
     let out = [];
     for (let index in entries) {
       let no = Number.parseInt(index) + 1;
-      out.push(new QuickStartEntry(entries[index], entries[index].master, no));
+      out.push(new QuickStartEntry(entries[index], entries[index].masterName, no));
     }
 
     return out;
@@ -193,7 +210,7 @@ class QuickStart {
     for (let entry of this.entries) {
       let func = () => {
         showRunner.setInstantSlide(
-          entry.master,
+          entry.masterName,
           entry.data,
           this.document,
           this.config,

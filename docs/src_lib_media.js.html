@@ -45,9 +45,25 @@ const yaml = require('js-yaml');
  *
  */
 class FileInfo {
+
   constructor(filePath) {
+
+    /**
+     * Absolute path ot the file.
+     * @type {string}
+     */
     this.path = path.resolve(filePath);
+
+    /**
+     * The basename (filename) of the file.
+     * @type {string}
+     */
     this.basename = path.basename(filePath);
+
+    /**
+     * The extension of the file.
+     * @type {string}
+     */
     this.extension = path.extname(filePath).replace('.', '');
     let info = this.readInfoYaml_();
     for (let property in info) {
