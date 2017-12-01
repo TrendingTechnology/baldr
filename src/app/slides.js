@@ -115,7 +115,8 @@ class StepSwitcher {
     this.no = 0;
 
     /**
-     *
+     * Indicates if a slide was already visited.
+     * @type {boolean}
      */
     this.visited = false;
   }

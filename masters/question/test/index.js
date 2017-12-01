@@ -1,7 +1,11 @@
 const {
   assert,
   makeDOM,
+  config,
+  masters,
   rewire,
+  srcPath,
+  getDOM,
   path
 } = require('baldr-test');
 
@@ -137,55 +141,68 @@ describe('Master slide “question” #unittest', () => {
     );
   });
 
-  describe.skip('Step support', function(){
+  describe('Step support', () => {
 
-    it('Property “this.alreadySet”', () => {
+    let slidesJsPath = srcPath('app', 'slides.js');
+    const {Slide} = require(slidesJsPath);
+
+    let getQuestion = function() {
+      let dom = getDOM();
+      return new Slide(
+        {"question": ['1', '2', '3']},
+        dom,
+        config,
+        masters
+      );
+    }
+
+    it('Property “this.visited', () => {
       let question = getQuestion(['1', '2', '3']);
-      assert.equal(question.alreadySet, false);
+      assert.equal(question.steps.visited, false);
       question.set();
-      assert.equal(question.alreadySet, true);
+      assert.equal(question.steps.visited, true);
     });
 
-    it('Property “this.stepCount”', () => {
+    it('Property “this.steps.count', () => {
       let question = getQuestion(['1', '2', '3']);
       question.set();
-      assert.equal(question.stepCount, 3);
+      assert.equal(question.steps.count, 3);
     });
 
-    it('Property “this.stepData”', () => {
+    it('Property “this.steps.stepData', () => {
       let question = getQuestion(['1', '2', '3']);
       question.set();
-      assert.equal(question.stepData[1].tagName, 'P');
-      assert.equal(question.stepData[2].tagName, 'P');
-      assert.equal(question.stepData[3].tagName, 'P');
+      assert.equal(question.steps.stepData[1].tagName, 'P');
+      assert.equal(question.steps.stepData[2].tagName, 'P');
+      assert.equal(question.steps.stepData[3].tagName, 'P');
     });
 
-    it('Method “nextStep()”', () => {
+    it('Method “steps.next()”', () => {
       let question = getQuestion(['1', '2', '3']);
       question.set();
       let q1 = question.document.querySelector('li:nth-child(1) .question');
       let q2 = question.document.querySelector('li:nth-child(2) .question');
       let q3 = question.document.querySelector('li:nth-child(3) .question');
 
-      assert.equal(question.stepNo, 1);
+      assert.equal(question.steps.no, 1);
       assert.equal(q1.style.visibility, 'visible');
       assert.equal(q2.style.visibility, 'hidden');
       assert.equal(q3.style.visibility, 'hidden');
 
-      question.nextStep();
-      assert.equal(question.stepNo, 2);
+      question.steps.next();
+      assert.equal(question.steps.no, 2);
       assert.equal(q2.style.visibility, 'visible');
 
-      question.nextStep();
-      assert.equal(question.stepNo, 3);
+      question.steps.next();
+      assert.equal(question.steps.no, 3);
       assert.equal(q3.style.visibility, 'visible');
 
-      question.nextStep();
-      assert.equal(question.stepNo, 1);
+      question.steps.next();
+      assert.equal(question.steps.no, 1);
       assert.equal(q1.style.visibility, 'visible');
     });
 
-    it('Method “prevStep()”', () => {
+    it('Method “steps.prev()”', () => {
       let question = getQuestion(['1', '2', '3']);
       question.set();
 
@@ -193,22 +210,22 @@ describe('Master slide “question” #unittest', () => {
       let q2 = question.document.querySelector('li:nth-child(2) .question');
       let q3 = question.document.querySelector('li:nth-child(3) .question');
 
-      assert.equal(question.stepNo, 1);
+      assert.equal(question.steps.no, 1);
       assert.equal(q1.style.visibility, 'visible');
       assert.equal(q2.style.visibility, 'hidden');
       assert.equal(q3.style.visibility, 'hidden');
 
-      question.prevStep();
-      assert.equal(question.stepNo, 3);
+      question.steps.prev();
+      assert.equal(question.steps.no, 3);
       assert.equal(q1.style.visibility, 'visible');
       assert.equal(q2.style.visibility, 'visible');
       assert.equal(q3.style.visibility, 'visible');
 
-      question.prevStep();
-      assert.equal(question.stepNo, 2);
+      question.steps.prev();
+      assert.equal(question.steps.no, 2);
 
-      question.prevStep();
-      assert.equal(question.stepNo, 1);
+      question.steps.prev();
+      assert.equal(question.steps.no, 1);
     });
 
   });
