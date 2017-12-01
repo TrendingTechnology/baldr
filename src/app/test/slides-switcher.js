@@ -21,9 +21,39 @@ describe('Class “SlidesSwitcher()” #unittest', () => {
 
   describe('Properties', () => {
 
+    it('Property “this.slides”', () => {
+      assert.equal(slidesSwitcher.slides[1].no, 1);
+    });
+
     it('Property “this.cover”', () => {
       assert.equal(slidesSwitcher.cover.id, 'cover');
       assert.equal(slidesSwitcher.cover.nodeName, 'DIV');
+    });
+
+    it('Property “this.count”', () => {
+      assert.equal(slidesSwitcher.count, 3);
+    });
+
+    it('Property “this.no”', () => {
+      assert.equal(slidesSwitcher.no, 1);
+    });
+
+    it('Property “this.document”', () => {
+      assert.equal(typeof slidesSwitcher.document, 'object');
+    });
+
+    it('Property “this.elemNavigationButtons.prev”', () => {
+      assert.equal(
+        slidesSwitcher.elemNavigationButtons.prev.id,
+        'nav-slide-prev'
+      );
+    });
+
+    it('Property “this.elemNavigationButtons.next”', () => {
+      assert.equal(
+        slidesSwitcher.elemNavigationButtons.next.id,
+        'nav-slide-next'
+      );
     });
 
   });
@@ -35,6 +65,21 @@ describe('Class “SlidesSwitcher()” #unittest', () => {
       let cover = slidesSwitcher.document.getElementById('cover');
       assert.equal(cover.style.backgroundColor, 'red');
       assert.equal(cover.style.zIndex, 99);
+    });
+
+    it('Method “getByNo()”', () => {
+      let slide = slidesSwitcher.getByNo(2);
+      assert.equal(slide.no, 2);
+    });
+
+    it('Method “prev()”', () => {
+      let slide = slidesSwitcher.prev();
+      assert.equal(slide.no, 3);
+    });
+
+    it('Method “next()”', () => {
+      let slide = slidesSwitcher.next();
+      assert.equal(slide.no, 1);
     });
 
   });

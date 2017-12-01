@@ -42,7 +42,7 @@ class SlidesSwitcher {
 
     /**
      * The document object (DOM) of the render process.
-     * @type {module:baldr-application~Document} 
+     * @type {module:baldr-application~Document}
      */
     this.document = document;
 
@@ -105,7 +105,7 @@ class SlidesSwitcher {
     }, 50);
 
     this.setButtons_();
-    return this.slides[this.no];
+    return this.slides[no];
   }
 
   /**
