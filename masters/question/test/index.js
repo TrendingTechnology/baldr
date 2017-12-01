@@ -154,7 +154,7 @@ describe('Master slide “question” #unittest', () => {
         config,
         masters
       );
-    }
+    };
 
     it('Property “this.visited', () => {
       let question = getQuestion(['1', '2', '3']);
