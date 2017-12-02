@@ -15,7 +15,7 @@ const {
 let slidesJsPath = srcPath('app', 'slides.js');
 const {Slide, getSlides} = require(slidesJsPath);
 const Slides = rewire(slidesJsPath).__get__('Slides');
-const SlideInput = rewire(slidesJsPath).__get__('SlideInput');
+const SlideData = rewire(slidesJsPath).__get__('SlideData');
 
 let slide;
 
@@ -23,12 +23,12 @@ let slide;
  *
  **********************************************************************/
 
-describe('Class “SlideInput()” #unittest', () => {
+describe('Class “SlideData()” #unittest', () => {
   const masterNames = ['markdown', 'camera', 'audio'];
   const themeNames = ['default', 'handwriting'];
 
   let getInput = function(rawSlideData) {
-    return new SlideInput(rawSlideData, masterNames, themeNames);
+    return new SlideData(rawSlideData, freshEnv());
   };
   let input = getInput({markdown: 'text'});
 
@@ -39,21 +39,21 @@ describe('Class “SlideInput()” #unittest', () => {
         let input = getInput('camera');
         assert.equal(input.masterName, 'camera');
         assert.equal(input.rawMasterData, true);
-        assert.equal(input.theme, false);
+        assert.equal(input.themeName, false);
       });
 
       it('Object: only master property', () => {
         let input = getInput({'camera': true});
         assert.equal(input.masterName, 'camera');
         assert.equal(input.rawMasterData, true);
-        assert.equal(input.theme, false);
+        assert.equal(input.themeName, false);
       });
 
       it('Object: only master property', () => {
         let input = getInput({camera: true, theme: 'default'});
         assert.equal(input.masterName, 'camera');
         assert.equal(input.rawMasterData, true);
-        assert.equal(input.theme, 'default');
+        assert.equal(input.themeName, 'default');
       });
 
     });
@@ -275,79 +275,6 @@ describe('Class “Slide()” #unittest', () => {
       let cover = slide.env.document.getElementById('cover');
       assert.equal(cover.style.backgroundColor, 'red');
       assert.equal(cover.style.zIndex, 99);
-    });
-
-    it('Method “intersectMastersSlideKeys_()”', () => {
-      let array1 = ['one', 'two', 'three'];
-      let array2 = ['two'];
-      let result = slide.intersectMastersSlideKeys_(['one', 'two', 'three'], ['two']);
-      assert.deepEqual(result, ['two']);
-      assert.deepEqual(array1, ['one', 'two', 'three']);
-      assert.deepEqual(array2, ['two']);
-
-      assert.deepEqual(
-        slide.intersectMastersSlideKeys_(['one', 'two', 'three'], ['four']),
-        []
-      );
-
-      assert.deepEqual(
-        slide.intersectMastersSlideKeys_(['one', 'two', 'three'], ['one', 'two', 'three']),
-        ['one', 'two', 'three']
-      );
-
-      assert.deepEqual(
-        slide.intersectMastersSlideKeys_(['one', 'two', 'three'], ['three', 'two', 'one']),
-        ['one', 'two', 'three']
-      );
-    });
-
-    describe('Method “findMaster_()”', () => {
-
-      it('Valid string', () => {
-        let {masterName, rawSlideData} = slide.findMaster_('camera', masters);
-        assert.equal(masterName, 'camera');
-        assert.equal(rawSlideData, true);
-      });
-
-      it('Invalid string', () => {
-        assert.throws(
-          () => {slide.findMaster_('lol', masters);},
-          /Error: Unknown master “lol” specified as string/
-        );
-      });
-
-      it('Unsupported type', () => {
-        assert.throws(
-          () => {slide.findMaster_(['lol'], masters);},
-          /Error: Unsupported input type “array” on input data: lol/
-        );
-        assert.throws(
-          () => {slide.findMaster_(42, masters);},
-          /Error: Unsupported input type “number” on input data: 42/
-        );
-      });
-
-      it('undefined', () => {
-        assert.throws(
-          () => {slide.findMaster_(undefined, masters);},
-          /Error: Unsupported input type “undefined” on input data: undefined/
-        );
-      });
-
-      it('Two master slide properties', () => {
-        assert.throws(
-          () => {slide.findMaster_({audio: true, camera: true}, masters);},
-          /Error: Each slide must have only one master slide: {"audio":true,"camera":true}/
-        );
-      });
-
-      it('No master slide properties', () => {
-        assert.throws(
-          () => {slide.findMaster_({lol: true, troll: true}, masters);},
-          /Error: No master slide found: {"lol":true,"troll":true}/
-        );
-      });
-
     });
 
     it('Method “set()”', function() {

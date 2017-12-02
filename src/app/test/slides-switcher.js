@@ -14,8 +14,6 @@ const {getSlides} = requireFile('app', 'slides.js');
 const {SlidesSwitcher} = requireFile('app', 'slides-switcher.js');
 
 let env = freshEnv();
-
-let document = getDOM();
 let slides = getSlides(env);
 let slidesSwitcher = new SlidesSwitcher(slides, env);
 

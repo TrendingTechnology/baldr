@@ -16,7 +16,7 @@ How to write a bladr master slide: [Interface](module-baldr-application_masters-
 
 ## e
 
-* `env`: `@param {module:baldr-application~Environment} env Low level environment data.` 
+* `env`: `@param {module:baldr-application~Environment} env Low level environment data.`
 
 ## m
 
@@ -37,7 +37,6 @@ How to write a bladr master slide: [Interface](module-baldr-application_masters-
 
 * `rawQuickStartEntry`: `@param {module:baldr-application/quick-start~rawQuickStartEntry} rawQuickStartEntry A raw quick start entry specified in the master slide hooks.`
 * `rawSlideData`: `@param {module:baldr-application/slides~rawSlideData} rawSlideData Various types of data to render a slide.`
-* `rawSlideObject`: `@param {module:baldr-application/slides~rawSlideObject} rawSlideObject A raw slide object containing only one property: The name of the  master slide.`
 * `rawSlides`: `@param {array} rawSlides An array of raw slide objects.`
 
 ## s
@@ -50,3 +49,4 @@ How to write a bladr master slide: [Interface](module-baldr-application_masters-
 ## t
 
 * `themes`: `@param {module:baldr-application/themes~Themes} themes All available themes.`
+* `themeName`: `@param {string} themeName The name of a theme.`

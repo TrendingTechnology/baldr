@@ -34,7 +34,7 @@ const path = require('path');
  *
  *     - camera
  *
- * @typedef rawSlideObject
+ * @typedef rawSlideData
  * @type {(object|string)}
  */
 
@@ -216,29 +216,58 @@ class StepSwitcher {
  *
  **********************************************************************/
 
-class SlideInput {
+class SlideData {
 
-  constructor(rawSlideData, masterNames, themeNames) {
+  /**
+   * @param {module:baldr-application/slides~rawSlideData} rawSlideData
+   *   Various types of data to render a slide.
+   * @param {module:baldr-application~Environment} env Low level
+   *   environment data.
+   */
+  constructor(rawSlideData, env) {
 
+    /**
+     * Various types of data to render a slide.
+     * @type {module:baldr-application/slides~rawSlideData}
+     */
     this.rawSlideData = Object.assign({}, rawSlideData);
 
-    this.theme = false;
+    /**
+     * The name of a theme.
+     * @type {string}
+     */
+    this.themeName = false;
+
+    /**
+     * The name of the master slide.
+     * @type {string}
+     */
     this.masterName = false;
+
+    /**
+     *
+     */
     this.rawMasterData = false;
 
     // string
     if (typeof rawSlideData === 'string') {
-      let {masterName, rawMasterData} = this.pullMasterfromString_(rawSlideData, masterNames);
+      let {masterName, rawMasterData} = this.pullMasterfromString_(
+        rawSlideData, env.masters.all
+      );
       rawSlideData = {};
       this.masterName = masterName;
       this.rawMasterData = rawMasterData;
     }
     // object
     else if (typeof rawSlideData === 'object' && !Array.isArray(rawSlideData)) {
-      let {masterName, rawMasterData} = this.pullMasterfromObject_(rawSlideData, masterNames);
+      let {masterName, rawMasterData} = this.pullMasterfromObject_(
+        rawSlideData, env.masters.all
+      );
       this.masterName = masterName;
       this.rawMasterData = rawMasterData;
-      this.theme = this.pullTheme_(rawSlideData, themeNames);
+      this.themeName = this.pullTheme_(
+        rawSlideData, env.themes.all
+      );
     // something else
     } else {
       throw Error(`Unsupported input type “${this.getType_(rawSlideData)}” on input data: ${this.toString_(rawSlideData)}`);
@@ -261,6 +290,16 @@ class SlideInput {
     }
   }
 
+  /**
+   * Get the intersection between all master names and the slide keys.
+   *
+   * This method can be used to check that a slide object uses only
+   * one master slide.
+   *
+   * @param {array} array1
+   * @param {array} array2
+   * @return {array} The intersection as an array
+   */
   intersect_(array1, array2) {
     return array1.filter((n) => array2.includes(n));
   }
@@ -359,7 +398,7 @@ class Slide {
    * @param {module:baldr-application~Environment} env Low level
    *   environment data.
    */
-  constructor(rawSlideObject, env) {
+  constructor(rawSlideData, env) {
 
     /**
      * Low level environment data.
@@ -367,9 +406,10 @@ class Slide {
      */
     this.env = env;
 
-    const {masterName, rawSlideData} = this.findMaster_(
-      rawSlideObject, this.env.masters
-    );
+    /**
+     *
+     */
+    this.slideData = new SlideData(rawSlideData, this.env);
 
     /**
      * @type {object}
@@ -383,13 +423,13 @@ class Slide {
      * The normalized master object derived from the master slide.
      * @type {module:baldr-application/masters~Master}
      */
-    this.master = this.env.masters[masterName];
+    this.master = this.env.masters[this.slideData.masterName];
 
     /**
      * Various types of data to render a slide.
      * @type {module:baldr-application/slides~rawSlideData}
      */
-    this.rawData = rawSlideData;
+    this.rawData = this.slideData.rawMasterData;
 
     /**
      * The normalized slide data
@@ -411,81 +451,6 @@ class Slide {
      * @type {object}
      */
     this.cover = this.env.document.getElementById('cover');
-  }
-
-  /**
-   * Get the intersection between all master names and the slide keys.
-   *
-   * This method can be used to check that a slide object uses only
-   * one master slide.
-   *
-   * @param {array} masterNames
-   * @param {array} slideKeys
-   * @return {array} The intersection as an array
-   */
-  intersectMastersSlideKeys_(masterNames, slideKeys) {
-    return masterNames.filter((n) => slideKeys.includes(n));
-  }
-
-  /**
-   * @param {module:baldr-application/slides~rawSlideObject} rawSlideObject
-   *   A raw slide object containing only one property: The name of the
-   *   master slide or a string.
-   * @param {module:baldr-application/masters~Masters} masters All
-   *   available master slides.
-   */
-  findMaster_(rawSlideObject, masters) {
-    // string
-    if (typeof rawSlideObject === 'string') {
-      if (
-        masters.hasOwnProperty(rawSlideObject) &&
-        masters[rawSlideObject].name === rawSlideObject
-      ) {
-        return {
-          masterName: rawSlideObject,
-          rawSlideData: true
-        };
-      }
-      else {
-        throw Error(`Unknown master “${rawSlideObject}” specified as string`);
-      }
-    }
-    // object
-    else if (typeof rawSlideObject === 'object' && !Array.isArray(rawSlideObject)) {
-      let intersection = this.intersectMastersSlideKeys_(
-        masters.all,
-        Object.keys(rawSlideObject)
-      );
-
-      if (intersection.length === 0) {
-        throw Error(`No master slide found: ${JSON.stringify(rawSlideObject)}`);
-      }
-
-      if (intersection.length > 1) {
-        throw Error(`Each slide must have only one master slide: ${JSON.stringify(rawSlideObject)}`);
-      }
-      return {
-        masterName: intersection[0],
-        rawSlideData: rawSlideObject[intersection[0]]
-      };
-    // something else
-    } else {
-      let type;
-      if (Array.isArray(rawSlideObject)) {
-        type = 'array';
-      }
-      else {
-        type = typeof rawSlideObject;
-      }
-      let data;
-      if (rawSlideObject) {
-        data = rawSlideObject.toString();
-      }
-      else {
-        data = typeof rawSlideObject;
-      }
-      throw Error(`Unsupported input type “${type}” on input data: ${data}`);
-    }
   }
 
   /**
