@@ -6,7 +6,8 @@ const {
   rewire,
   srcPath,
   getDOM,
-  path
+  path,
+  freshEnv
 } = require('baldr-test');
 
 const question = require('../index.js');
@@ -148,12 +149,7 @@ describe('Master slide “question” #unittest', () => {
 
     let getQuestion = function() {
       let dom = getDOM();
-      return new Slide(
-        {"question": ['1', '2', '3']},
-        dom,
-        config,
-        masters
-      );
+      return new Slide({"question": ['1', '2', '3']}, freshEnv());
     };
 
     it('Property “this.visited', () => {
@@ -180,9 +176,9 @@ describe('Master slide “question” #unittest', () => {
     it('Method “steps.next()”', () => {
       let question = getQuestion(['1', '2', '3']);
       question.set();
-      let q1 = question.document.querySelector('li:nth-child(1) .question');
-      let q2 = question.document.querySelector('li:nth-child(2) .question');
-      let q3 = question.document.querySelector('li:nth-child(3) .question');
+      let q1 = question.env.document.querySelector('li:nth-child(1) .question');
+      let q2 = question.env.document.querySelector('li:nth-child(2) .question');
+      let q3 = question.env.document.querySelector('li:nth-child(3) .question');
 
       assert.equal(question.steps.no, 1);
       assert.equal(q1.style.visibility, 'visible');
@@ -206,9 +202,9 @@ describe('Master slide “question” #unittest', () => {
       let question = getQuestion(['1', '2', '3']);
       question.set();
 
-      let q1 = question.document.querySelector('li:nth-child(1) .question');
-      let q2 = question.document.querySelector('li:nth-child(2) .question');
-      let q3 = question.document.querySelector('li:nth-child(3) .question');
+      let q1 = question.env.document.querySelector('li:nth-child(1) .question');
+      let q2 = question.env.document.querySelector('li:nth-child(2) .question');
+      let q3 = question.env.document.querySelector('li:nth-child(3) .question');
 
       assert.equal(question.steps.no, 1);
       assert.equal(q1.style.visibility, 'visible');

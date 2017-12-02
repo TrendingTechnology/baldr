@@ -8,7 +8,8 @@ const {
   path,
   requireFile,
   rewire,
-  srcPath
+  srcPath,
+  freshEnv
 } = require('baldr-test');
 
 let slidesJsPath = srcPath('app', 'slides.js');
@@ -217,9 +218,7 @@ describe('Class “Slide()” #unittest', () => {
           "answer": "answer"
         }
       ]},
-      getDOM(),
-      config,
-      masters
+      freshEnv()
     );
   });
 
@@ -247,7 +246,7 @@ describe('Class “Slide()” #unittest', () => {
     });
 
     it('Property “this.document”', function() {
-      assert.equal(typeof slide.document, 'object');
+      assert.equal(typeof slide.env.document, 'object');
     });
 
     it('Property “this.elements.slide”', function() {
@@ -273,7 +272,7 @@ describe('Class “Slide()” #unittest', () => {
 
     it('Method “setCover_()”', () => {
       slide.setCover_('red', 99);
-      let cover = slide.document.getElementById('cover');
+      let cover = slide.env.document.getElementById('cover');
       assert.equal(cover.style.backgroundColor, 'red');
       assert.equal(cover.style.zIndex, 99);
     });
@@ -354,7 +353,7 @@ describe('Class “Slide()” #unittest', () => {
     it('Method “set()”', function() {
       slide.set();
       assert.equal(
-        slide.document.querySelector('p:nth-child(1)').textContent,
+        slide.env.document.querySelector('p:nth-child(1)').textContent,
         'question'
       );
 
@@ -365,7 +364,7 @@ describe('Class “Slide()” #unittest', () => {
   });
 
   describe('Method “setDataset_()”', () => {
-    let dom = getDOM();
+    let env = freshEnv();
 
     let slide = new Slide({
       "question": [
@@ -374,23 +373,21 @@ describe('Class “Slide()” #unittest', () => {
           "answer": "answer"
         }
       ]},
-      dom,
-      config,
-      masters
+      env
     );
 
     slide.setDataset_();
 
     it('master: <body data-master="masterName">', function() {
-      assert.equal(dom.body.dataset.master, 'question');
+      assert.equal(env.document.body.dataset.master, 'question');
     });
 
     it('centerVertically: <body data-center-vertically="true">', function() {
-      assert.equal(dom.body.dataset.centerVertically, 'true');
+      assert.equal(env.document.body.dataset.centerVertically, 'true');
     });
 
     it('theme: <body data-theme="default">', function() {
-      assert.equal(dom.body.dataset.theme, 'default');
+      assert.equal(env.document.body.dataset.theme, 'default');
     });
 
   });
@@ -430,18 +427,18 @@ let slidesClass;
 describe('Class “Slides()”', () => {
 
   beforeEach(() => {
-    slidesClass = new Slides(rawYaml, config, getDOM(), masters);
+    slidesClass = new Slides(freshEnv());
   });
 
   describe('Properties', () => {
     it('Property “this.rawSlides”', () => {
       assert.equal(typeof slidesClass.rawSlides, 'object');
-      assert.equal(slidesClass.rawSlides[0].quote.text, 'text');
+      assert.equal(slidesClass.rawSlides[0].quote.author, 'Johann Wolfgang von Goethe');
     });
 
     it('Property “this.document”', () => {
-      assert.equal(typeof slidesClass.document, 'object');
-      assert.equal(slidesClass.document.body.nodeName, 'BODY');
+      assert.equal(typeof slidesClass.env.document, 'object');
+      assert.equal(slidesClass.env.document.body.nodeName, 'BODY');
     });
 
   });

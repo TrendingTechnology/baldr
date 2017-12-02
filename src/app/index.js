@@ -110,11 +110,6 @@ class ShowRunner {
      */
     this.env = new Environment(argv, document);
 
-    /**
-     * The document object (DOM) of the render process.
-     * @type {module:baldr-application~Document}
-     */
-    this.document = document;
 
     /**
      * The object of shortcut library “mousetrap”.
@@ -122,35 +117,13 @@ class ShowRunner {
      */
     this.mousetrap = mousetrap;
 
-    /**
-     * All configurations of the current presentation session.
-     * @type {module:baldr-library/config~Config}
-     */
-    this.config = getConfig(argv);
-
-    /**
-     * All available master slides.
-     * @type {module:baldr-application/masters~Masters}
-     */
-    this.masters = getMasters(document);
-    this.masters.execAll('init', document, this.config);
+    this.env.masters.execAll('init', this.env.document, this.env.config);
 
     /**
      * All slide objects of the current presentation session.
      * @type {module:baldr-application/slides~Slides}
      */
-    this.slides = getSlides(
-      this.config.slides,
-      this.config,
-      document,
-      this.masters
-    );
-
-    /**
-     * All available themes.
-     * @type {module:baldr-application/themes~Themes}
-     */
-    this.themes = getThemes(document);
+    this.slides = getSlides(this.env);
 
     /**
      * Object to switch between the slides.
@@ -158,8 +131,7 @@ class ShowRunner {
      */
     this.slidesSwitcher = new SlidesSwitcher(
       this.slides,
-      this.document,
-      this.masters
+      this.env
     );
 
     /**
@@ -178,7 +150,7 @@ class ShowRunner {
      * Object to manage the quick start entries.
      * @type {module:baldr-application/quick-start~QuickStart}
      */
-    this.quickStart = getQuickStart(document, this.masters, this.config);
+    this.quickStart = getQuickStart(this.env);
     this.quickStart.set();
     this.quickStart.bind(this, this.mousetrap);
 
@@ -201,9 +173,7 @@ class ShowRunner {
     this.newSlide = getInstantSlide(
       masterName,
       rawData,
-      this.document,
-      this.config,
-      this.masters
+      this.env
     );
     this.newSlide.set(this.oldSlide);
   }
@@ -242,4 +212,5 @@ class ShowRunner {
 
 }
 
+exports.Environment = Environment;
 exports.ShowRunner = ShowRunner;

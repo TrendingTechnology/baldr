@@ -6,15 +6,18 @@ const {
   fs,
   path,
   testFileMinimal,
-  requireFile
+  requireFile,
+  freshEnv
 } = require('baldr-test');
 
 const {getSlides} = requireFile('app', 'slides.js');
 const {SlidesSwitcher} = requireFile('app', 'slides-switcher.js');
 
+let env = freshEnv();
+
 let document = getDOM();
-let slides = getSlides(config.slides, config, document, masters);
-let slidesSwitcher = new SlidesSwitcher(slides, document, masters);
+let slides = getSlides(env);
+let slidesSwitcher = new SlidesSwitcher(slides, env);
 
 /***********************************************************************
  *
@@ -37,7 +40,7 @@ describe('Class “SlidesSwitcher()” #unittest', () => {
     });
 
     it('Property “this.document”', () => {
-      assert.equal(typeof slidesSwitcher.document, 'object');
+      assert.equal(typeof slidesSwitcher.env.document, 'object');
     });
 
     it('Property “this.elemNavigationButtons.prev”', () => {

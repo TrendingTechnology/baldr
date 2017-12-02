@@ -72,32 +72,24 @@ const path = require('path');
 class StepSwitcher {
 
   /**
-   * @param {module:baldr-application~Document} document The document
-   *   object (DOM) of the render process.
    * @param {module:baldr-application/slides~Slide} slide The object
    *   representation of one slide.
-   * @param {module:baldr-library/config~Config} config All
-   *   configurations of the current presentation session.
+   * @param {module:baldr-application~Environment} env Low level
+   *   environment data.
    */
-  constructor(document, slide, config) {
-
-    /**
-     * All configurations of the current presentation session.
-     * @type {module:baldr-library/config~Config}
-     */
-    this.config = config;
-
-    /**
-     * The document object (DOM) of the render process.
-     * @type {module:baldr-application~Document}
-     */
-    this.document = document;
+  constructor(slide, env) {
 
     /**
      * The object representation of one slide.
      * @type {module:baldr-application/slides~Slide}
      */
     this.slide = slide;
+
+    /**
+     * Low level environment data.
+     * @type {module:baldr-application~Environment}
+     */
+    this.env = env;
 
     /**
      * The normalized master object derived from the master slide.
@@ -110,8 +102,8 @@ class StepSwitcher {
      * @type {object}
      */
     this.elements = {
-      prev: document.getElementById('nav-step-prev'),
-      next: document.getElementById('nav-step-next')
+      prev: this.env.document.getElementById('nav-step-prev'),
+      next: this.env.document.getElementById('nav-step-next')
     };
 
     /**
@@ -163,11 +155,11 @@ class StepSwitcher {
    */
   visit() {
     this.setup_(
-      this.master.initStepsEveryVisit(this.document, this.slide, this.config)
+      this.master.initStepsEveryVisit(this.env.document, this.slide, this.env.config)
     );
     if (!this.visited) {
       this.setup_(
-        this.master.initSteps(this.document, this.slide, this.config)
+        this.master.initSteps(this.env.document, this.slide, this.env.config)
       );
       this.visited = true;
       this.no = 1;
@@ -186,7 +178,7 @@ class StepSwitcher {
    *
    */
   setByNo(no) {
-    this.master.setStepByNo(no, this.count, this.stepData, this.document);
+    this.master.setStepByNo(no, this.count, this.stepData, this.env.document);
   }
 
   /**
@@ -364,52 +356,34 @@ class SlideInput {
 class Slide {
 
   /**
-   * @param {module:baldr-application/slides~rawSlideObject} rawSlideObject
-   *   A raw slide object containing only one property: The name of the
-   *   master slide.
-   * @param {module:baldr-application~Document} document The document
-   *   object (DOM) of the render process.
-   * @param {module:baldr-library/config~Config} config All
-   *   configurations of the current presentation session.
-   * @param {module:baldr-application/masters~Masters} masters All
-   *   available master slides.
+   * @param {module:baldr-application~Environment} env Low level
+   *   environment data.
    */
-  constructor(rawSlideObject, document, config, masters) {
+  constructor(rawSlideObject, env) {
+
+    /**
+     * Low level environment data.
+     * @type {module:baldr-application~Environment}
+     */
+    this.env = env;
+
     const {masterName, rawSlideData} = this.findMaster_(
-      rawSlideObject, masters
+      rawSlideObject, this.env.masters
     );
-
-    /**
-     * All configurations of the current presentation session.
-     * @type {module:baldr-library/config~Config}
-     */
-    this.config = config;
-
-    /**
-     * The document object (DOM) of the render process.
-     * @type {module:baldr-application~Document}
-     */
-    this.document = document;
 
     /**
      * @type {object}
      */
     this.elements = {
-      slide: document.getElementById('slide-content'),
-      modal: document.getElementById('modal-content')
+      slide: this.env.document.getElementById('slide-content'),
+      modal: this.env.document.getElementById('modal-content')
     };
 
     /**
      * The normalized master object derived from the master slide.
      * @type {module:baldr-application/masters~Master}
      */
-    this.master = masters[masterName];
-
-    /**
-     * All configurations of the current presentation session.
-     * @type {module:baldr-library/config~Config}
-     */
-    this.masters = masters;
+    this.master = this.env.masters[masterName];
 
     /**
      * Various types of data to render a slide.
@@ -422,13 +396,13 @@ class Slide {
      * @type {(boolean|number|string|array|object)}
      */
     this.normalizedData = this.master
-      .normalizeData(this.rawData, config);
+      .normalizeData(this.rawData, this.env.config);
 
     /**
      * The instantiated object derived from the class “StepSwitcher()”
      * @type {module:baldr-application/slides~StepSwitcher}
      */
-    this.steps = new StepSwitcher(document, this, config);
+    this.steps = new StepSwitcher(this, this.env);
 
     /**
      * A HTML div element, which covers the complete slide area to
@@ -436,7 +410,7 @@ class Slide {
      *
      * @type {object}
      */
-    this.cover = this.document.getElementById('cover');
+    this.cover = this.env.document.getElementById('cover');
   }
 
   /**
@@ -529,7 +503,7 @@ class Slide {
    *
    */
   setDataset_() {
-    let dataset = this.document.body.dataset;
+    let dataset = this.env.document.body.dataset;
     dataset.master = this.master.name;
     dataset.centerVertically = this.master.config.centerVertically;
     dataset.theme = this.master.config.theme;
@@ -548,8 +522,8 @@ class Slide {
   setMain_() {
     this.elements.slide.innerHTML = this.master.mainHTML(
       this,
-      this.config,
-      this.document
+      this.env.config,
+      this.env.document
     );
 
   }
@@ -559,8 +533,8 @@ class Slide {
    */
   set(oldSlide) {
     if (oldSlide && oldSlide.hasOwnProperty('master')) {
-      this.masters[oldSlide.master.name]
-      .cleanUp(this.document, oldSlide, this);
+      this.env.masters[oldSlide.master.name]
+      .cleanUp(this.env.document, oldSlide, this);
     }
     this.setCover_('black', 1);
     setTimeout(() => {
@@ -569,7 +543,7 @@ class Slide {
     this.setDataset_();
     this.setMain_();
     this.setModal_();
-    this.master.postSet(this, this.config, this.document);
+    this.master.postSet(this, this.env.config, this.env.document);
 
     this.steps.visit();
   }
@@ -591,22 +565,18 @@ class Slide {
  * @param {string} masterName Name of the master slide.
  * @param {module:baldr-application/slides~rawSlideData} rawSlideData
  *   Various types of data to render a slide.
- * @param {module:baldr-application~Document} document The document
- *   object (DOM) of the render process.
- * @param {module:baldr-library/config~Config} config All
- *   configurations of the current presentation session.
- * @param {module:baldr-application/masters~Masters} masters All
- *   available master slides.
+ * @param {module:baldr-application~Environment} env Low level
+ *   environment data.
  *
  * @return {module:baldr-application/slides~Slide}
  */
-exports.getInstantSlide = function(masterName, rawSlideData, document, config, masters) {
+exports.getInstantSlide = function(masterName, rawSlideData, env) {
   let rawSlide = {};
   if (!rawSlideData) {
     rawSlideData = true;
   }
   rawSlide[masterName] = rawSlideData;
-  return new Slide(rawSlide, document, config, masters);
+  return new Slide(rawSlide, env);
 };
 
 /***********************************************************************
@@ -619,39 +589,22 @@ exports.getInstantSlide = function(masterName, rawSlideData, document, config, m
 class Slides {
 
   /**
-   * @param {array} rawSlides An array of raw slide objects.
-   * @param {module:baldr-library/config~Config} config All
-   *   configurations of the current presentation session.
-   * @param {module:baldr-application~Document} document The document
-   *   object (DOM) of the render process.
-   * @param {module:baldr-application/masters~Masters} masters All
-   *   available master slides.
+   * @param {module:baldr-application~Environment} env Low level
+   *   environment data.
    */
-  constructor(rawSlides, config, document, masters) {
+  constructor(env) {
+
+    /**
+     * Low level environment data.
+     * @type {module:baldr-application~Environment}
+     */
+    this.env = env;
 
     /**
      * An array of raw slide objects.
      * @type {array}
      */
-    this.rawSlides = rawSlides;
-
-    /**
-     * All configurations of the current presentation session.`
-     * @type {module:baldr-library/config~Config}
-     */
-    this.config = config;
-
-    /**
-     * The document object (DOM) of the render process.
-     * @type {module:baldr-application~Document}
-     */
-    this.document = document;
-
-    /**
-     * All available master slides.
-     * @type {module:baldr-application/masters~Masters}
-     */
-    this.masters = masters;
+    this.rawSlides = this.env.config.slides;
   }
 
   /**
@@ -692,7 +645,7 @@ class Slides {
     let out = {};
 
     this.rawSlides.forEach((rawSlide, index) => {
-      let slide = new Slide(rawSlide, this.document, this.config, this.masters);
+      let slide = new Slide(rawSlide, this.env);
       slide.no = index + 1;
       out[index + 1] = slide;
     });
@@ -703,16 +656,11 @@ class Slides {
 }
 
 /**
- * @param {array} rawSlides An array of raw slide objects.
- * @param {module:baldr-library/config~Config} config All
- *   configurations of the current presentation session.
- * @param {module:baldr-application~Document} document The document
- *   object (DOM) of the render process.
- * @param {module:baldr-application/masters~Masters} masters All
- *   available master slides.
+ * @param {module:baldr-application~Environment} env Low level
+ *   environment data.
  */
-exports.getSlides = function(rawSlides, config, document, masters) {
-  return new Slides(rawSlides, config, document, masters).get();
+exports.getSlides = function(env) {
+  return new Slides(env).get();
 };
 
 exports.Slide = Slide;

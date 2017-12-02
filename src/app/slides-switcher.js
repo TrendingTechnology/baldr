@@ -17,10 +17,16 @@ class SlidesSwitcher {
   /**
    * @param {module:baldr-application/slides~Slides} slides All slide
    *   objects of the current presentation session.
-   * @param {module:baldr-application~Document} document The document
-   *   object (DOM) of the render process.
+   * @param {module:baldr-application~Environment} env Low level
+   *   environment data.
    */
-  constructor(slides, document) {
+  constructor(slides, env) {
+
+    /**
+     * Low level environment data.
+     * @type {module:baldr-application~Environment}
+     */
+    this.env = env;
 
     /**
      * All slides index by the slide number.
@@ -41,17 +47,11 @@ class SlidesSwitcher {
     this.no = 1;
 
     /**
-     * The document object (DOM) of the render process.
-     * @type {module:baldr-application~Document}
-     */
-    this.document = document;
-
-    /**
      * @type {object}
      */
     this.elemNavigationButtons = {
-      prev: this.document.getElementById('nav-slide-prev'),
-      next: this.document.getElementById('nav-slide-next')
+      prev: this.env.document.getElementById('nav-slide-prev'),
+      next: this.env.document.getElementById('nav-slide-next')
     };
 
   }

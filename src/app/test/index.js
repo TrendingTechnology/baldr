@@ -61,7 +61,7 @@ describe('Class “ShowRunner()” #unittest', () => {
   describe('Properties', () => {
 
     it('Property “this.config.sessionFile', () => {
-      assert.ok(fs.existsSync(show.config.sessionFile));
+      assert.ok(fs.existsSync(show.env.config.sessionFile));
     });
 
     it('Property “this.env', () => {
@@ -70,7 +70,7 @@ describe('Class “ShowRunner()” #unittest', () => {
     });
 
     it('Property “this.config.raw', () => {
-      assert.equal(typeof show.config.raw, 'object');
+      assert.equal(typeof show.env.config.raw, 'object');
     });
 
     it('Property “this.slides[1].master.name', () => {
@@ -87,7 +87,7 @@ describe('Class “ShowRunner()” #unittest', () => {
 
     it('Property “this.config.sessionDir', () => {
       assert.equal(
-        show.config.sessionDir,
+        show.env.config.sessionDir,
         path.resolve(path.dirname(testFileMinimal))
       );
     });

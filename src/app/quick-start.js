@@ -105,37 +105,21 @@ class QuickStartEntry {
 class QuickStart {
 
   /**
-   * @param {module:baldr-application~Document} document The document
-   *   object (DOM) of the render process.
-   * @param {module:baldr-application/masters~Masters} masters All
-   *   available master slides.
-   * @param {module:baldr-library/config~Config} config All
-   *   configurations of the current presentation session.
+   * @param {module:baldr-application~Environment} env Low level
+   *   environment data.
    */
-  constructor(document, masters, config) {
+  constructor(env) {
 
     /**
-     * All configurations of the current presentation session.
-     * @type {module:baldr-library/config~Config}
+     * Low level environment data.
+     * @type {module:baldr-application~Environment}
      */
-    this.config = config;
-
-    /**
-     * All available master slides.
-     * @type {module:baldr-application/masters~Masters}
-     */
-    this.masters = masters;
-
-    /**
-     * The document object (DOM) of the render process.
-     * @type {module:baldr-application~Document}
-     */
-    this.document = document;
+    this.env = env;
 
     /**
      *
      */
-    this.elemNavigationMenu = this.document.getElementById('nav-quick-start');
+    this.elemNavigationMenu = this.env.document.getElementById('nav-quick-start');
 
     /**
      * @type {module:baldr-application/quick-start~quickStartEntries}
@@ -148,8 +132,8 @@ class QuickStart {
    */
   collectEntries_() {
     let entries = [];
-    for (let masterName of this.masters.all) {
-      let rawEntries = this.masters[masterName].quickStartEntries();
+    for (let masterName of this.env.masters.all) {
+      let rawEntries = this.env.masters[masterName].quickStartEntries();
       for (let index in rawEntries) {
         rawEntries[index].masterName = masterName;
         if (!rawEntries[index].hasOwnProperty('data')) {
@@ -174,7 +158,7 @@ class QuickStart {
    * @return {object} {@link https://developer.mozilla.org/en-US/docs/Web/API/HTMLButtonElement HTMLButtonElement}
    */
   renderButton_(entry) {
-    let button = this.document.createElement('button');
+    let button = this.env.document.createElement('button');
     let shortcut = '';
     if (checkProperty.isString(entry, 'shortcut')) {
       shortcut = ` (${entry.shortcut})`;
@@ -212,9 +196,7 @@ class QuickStart {
         showRunner.setInstantSlide(
           entry.masterName,
           entry.data,
-          this.document,
-          this.config,
-          this.masters
+          this.env
         );
       };
       // To allow unit tests without window object.
@@ -222,7 +204,7 @@ class QuickStart {
       if (mousetrap && mousetrap.hasOwnProperty('bind')) {
         mousetrap.bind(entry.shortcut, func);
       }
-      this.document
+      this.env.document
       .getElementById(entry.cssID)
       .addEventListener('click', func);
     }
@@ -232,8 +214,8 @@ class QuickStart {
 /**
  *
  */
-exports.getQuickStart = function(document, masters) {
-  return new QuickStart(document, masters);
+exports.getQuickStart = function(env) {
+  return new QuickStart(env);
 };
 
 exports.QuickStart = QuickStart;

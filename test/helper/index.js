@@ -9,6 +9,7 @@ const path = require('path');
 const {JSDOM} = require('jsdom');
 const rewire = require('rewire');
 const {getConfig} = require('baldr-library');
+const {Environment} = require('baldr-application');
 
 /**
  *
@@ -103,6 +104,18 @@ exports.getDOM = function() {
  *
  */
 exports.testFileMinimal = path.resolve('test', 'files', 'minimal.baldr');
+
+/**
+ *
+ */
+exports.freshEnv = function() {
+  return new Environment([exports.testFileMinimal], exports.getDOM());
+};
+
+/**
+ *
+ */
+exports.env = exports.freshEnv();
 
 /**
  *

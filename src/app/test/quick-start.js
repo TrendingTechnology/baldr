@@ -3,13 +3,14 @@ const {
   document,
   getDOM,
   requireFile,
-  masters
+  masters,
+  freshEnv
 } = require('baldr-test');
 
 const {QuickStart} = requireFile('app', 'quick-start.js');
 
 let initiateQuickStart = function() {
-  return new QuickStart(getDOM(), masters);
+  return new QuickStart(freshEnv());
 };
 
 let quickStart;
@@ -26,8 +27,8 @@ describe('Class “QuickStart()” #unittest', () => {
 
   describe('Properties', () => {
 
-    it('Property “this.document”', () => {
-      assert.equal(quickStart.document.nodeName, '#document');
+    it('Property “this.env.document”', () => {
+      assert.equal(quickStart.env.document.nodeName, '#document');
     });
 
     it('Property “this.elemNavigationMenu”', () => {
@@ -65,13 +66,13 @@ describe('Class “QuickStart()” #unittest', () => {
 
     it('Method “renderNavigationMenu_()”', () => {
       quickStart.renderNavigationMenu_();
-      let buttons = quickStart.document.querySelectorAll('#nav-quick-start button');
+      let buttons = quickStart.env.document.querySelectorAll('#nav-quick-start button');
       assert.equal(buttons[0].title, 'Audio (ctrl+alt+a)');
     });
 
     it('Method “set()”', () => {
       quickStart.set();
-      let buttons = quickStart.document.querySelectorAll('#nav-quick-start button');
+      let buttons = quickStart.env.document.querySelectorAll('#nav-quick-start button');
       assert.equal(buttons[0].title, 'Audio (ctrl+alt+a)');
     });
 
