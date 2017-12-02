@@ -224,6 +224,119 @@ class StepSwitcher {
  *
  **********************************************************************/
 
+class SlideInput {
+
+  constructor(rawSlideInput, masters, themes) {
+
+    this.theme = false;
+    this.masterName = false;
+    this.rawSlideData = false;
+
+    // string
+    if (typeof rawSlideInput === 'string') {
+      let {masterName, rawSlideData} = this.pullMasterfromString_(rawSlideInput, masters);
+      rawSlideInput = {};
+      this.masterName = masterName;
+      this.rawSlideData = rawSlideData;
+    }
+    // object
+    else if (typeof rawSlideInput === 'object' && !Array.isArray(rawSlideInput)) {
+      let {masterName, rawSlideData} = this.pullMasterfromObject_(rawSlideInput, masters);
+      this.masterName = masterName;
+      this.rawSlideData = rawSlideData;
+      this.theme = this.findTheme_(rawSlideInput, themes);
+    // something else
+    } else {
+      throw Error(`Unsupported input type “${this.getType_(rawSlideInput)}” on input data: ${this.toString_(rawSlideInput)}`);
+    }
+
+  }
+
+  pullProperty_(rawSlideInput, property) {
+    if (rawSlideInput.hasOwnProperty(property)) {
+      const out = rawSlideInput[property];
+      delete rawSlideInput[property];
+      return out;
+    }
+    else {
+      return false;
+    }
+  }
+
+  intersect_(array1, array2) {
+    return array1.filter((n) => array2.includes(n));
+  }
+
+  pullMasterfromString_(rawSlideInput, masters) {
+    if (
+      masters.hasOwnProperty(rawSlideInput) &&
+      masters[rawSlideInput].name === rawSlideInput
+    ) {
+      return {
+        masterName: rawSlideInput,
+        rawSlideData: true
+      };
+    }
+    else {
+      throw Error(`Unknown master “${rawSlideInput}” specified as string`);
+    }
+  }
+
+  pullMasterfromObject_(rawSlideInput, masters) {
+    let intersection = this.intersect_(
+      masters.all,
+      Object.keys(rawSlideInput)
+    );
+
+    if (intersection.length === 0) {
+      throw Error(`No master slide found: ${this.toString_(rawSlideInput)}`);
+    }
+
+    if (intersection.length > 1) {
+      throw Error(`Each slide must have only one master slide: ${this.toString_(rawSlideInput)}`);
+    }
+    let masterName = intersection[0];
+    let rawSlideData = rawSlideInput[masterName];
+    this.pullProperty_(rawSlideInput, masterName);
+
+    return {
+      masterName: masterName,
+      rawSlideData: rawSlideData
+    };
+  }
+
+  findTheme_(rawSlideInput, themes) {
+    if (rawSlideInput.hasOwnProperty('theme') && themes.hasOwnProperty(rawSlideInput.theme)) {
+      let theme = rawSlideInput.theme;
+      this.pullProperty_(rawSlideInput, 'theme');
+      return rawSlideInput.theme;
+    }
+  }
+
+  toString_(rawSlideInput) {
+    if (rawSlideInput) {
+      return rawSlideInput.toString();
+    }
+    else {
+      return typeof rawSlideInput;
+    }
+  }
+
+  getType_(rawSlideInput) {
+    if (Array.isArray(rawSlideInput)) {
+      return 'array';
+    }
+    else {
+      return typeof rawSlideInput;
+    }
+  }
+
+}
+
+/***********************************************************************
+ *
+ **********************************************************************/
+
 /**
  *
  */
