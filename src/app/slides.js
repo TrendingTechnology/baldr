@@ -226,7 +226,7 @@ class StepSwitcher {
 
 class SlideInput {
 
-  constructor(rawSlideInput, masters, themes) {
+  constructor(rawSlideInput, masterNames, themeNames) {
 
     this.theme = false;
     this.masterName = false;
@@ -234,17 +234,17 @@ class SlideInput {
 
     // string
     if (typeof rawSlideInput === 'string') {
-      let {masterName, rawSlideData} = this.pullMasterfromString_(rawSlideInput, masters);
+      let {masterName, rawSlideData} = this.pullMasterfromString_(rawSlideInput, masterNames);
       rawSlideInput = {};
       this.masterName = masterName;
       this.rawSlideData = rawSlideData;
     }
     // object
     else if (typeof rawSlideInput === 'object' && !Array.isArray(rawSlideInput)) {
-      let {masterName, rawSlideData} = this.pullMasterfromObject_(rawSlideInput, masters);
+      let {masterName, rawSlideData} = this.pullMasterfromObject_(rawSlideInput, masterNames);
       this.masterName = masterName;
       this.rawSlideData = rawSlideData;
-      this.theme = this.findTheme_(rawSlideInput, themes);
+      this.theme = this.pullTheme_(rawSlideInput, themeNames);
     // something else
     } else {
       throw Error(`Unsupported input type “${this.getType_(rawSlideInput)}” on input data: ${this.toString_(rawSlideInput)}`);
@@ -268,10 +268,7 @@ class SlideInput {
   }
 
   pullMasterfromString_(rawSlideInput, masters) {
-    if (
-      masters.hasOwnProperty(rawSlideInput) &&
-      masters[rawSlideInput].name === rawSlideInput
-    ) {
+    if (masters.includes(rawSlideInput)) {
       return {
         masterName: rawSlideInput,
         rawSlideData: true
@@ -282,9 +279,9 @@ class SlideInput {
     }
   }
 
-  pullMasterfromObject_(rawSlideInput, masters) {
+  pullMasterfromObject_(rawSlideInput, masterNames) {
     let intersection = this.intersect_(
-      masters.all,
+      masterNames,
       Object.keys(rawSlideInput)
     );
 
@@ -305,26 +302,44 @@ class SlideInput {
     };
   }
 
-  findTheme_(rawSlideInput, themes) {
-    if (rawSlideInput.hasOwnProperty('theme') && themes.hasOwnProperty(rawSlideInput.theme)) {
+  pullTheme_(rawSlideInput, themeNames) {
+    if (
+      rawSlideInput.hasOwnProperty('theme') &&
+      themeNames.includes(rawSlideInput.theme)
+    ) {
       let theme = rawSlideInput.theme;
       this.pullProperty_(rawSlideInput, 'theme');
-      return rawSlideInput.theme;
+      return theme;
+    }
+    else {
+      return false;
     }
   }
 
   toString_(rawSlideInput) {
-    if (rawSlideInput) {
+    if (rawSlideInput === null) {
+      return 'null';
+    }
+    else if (!rawSlideInput) {
+      return typeof rawSlideInput;
+    }
+    else if (typeof rawSlideInput === 'string') {
+      return rawSlideInput;
+    }
+    else if (Array.isArray(rawSlideInput)) {
       return rawSlideInput.toString();
     }
     else {
-      return typeof rawSlideInput;
+      return JSON.stringify(rawSlideInput);
     }
   }
 
   getType_(rawSlideInput) {
     if (Array.isArray(rawSlideInput)) {
       return 'array';
+    }
+    else if (rawSlideInput === null) {
+      return 'null';
     }
     else {
       return typeof rawSlideInput;
