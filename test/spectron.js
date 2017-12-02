@@ -355,4 +355,41 @@ describe('General Spectron tests #spectron', () => {
 
   });
 
+  describe('Launch themes.baldr', function () {
+    this.timeout(10000);
+
+    beforeEach(function () {
+      this.spectron = new Spectron('test/files/themes.baldr');
+      this.app = this.spectron.getApp();
+      return this.spectron.start();
+    });
+
+    afterEach(function () {
+      return this.spectron.stop();
+    });
+
+    it('Theme switching', function () {
+      return this.app.client
+        .getCssProperty('#slide-content p', 'color')
+        .then(style => {assert.equal(style.parsed.hex, '#0000ff');})
+        .getCssProperty('#slide-content p', 'font-family')
+        .then(style => {assert.equal(style.value, 'kalam');})
+
+        .click('#nav-slide-next')
+        .getCssProperty('#slide-content p', 'color')
+        .then(style => {assert.equal(style.parsed.hex, '#ffffff');})
+        .getCssProperty('#slide-content p', 'font-family')
+        .then(style => {assert.equal(style.value, 'alegreya');})
+
+        .click('#nav-slide-next')
+        .getCssProperty('#slide-content p', 'color')
+        .then(style => {assert.equal(style.parsed.hex, '#ffffff');})
+        .getCssProperty('#slide-content p', 'font-family')
+        .then(style => {assert.equal(style.value, 'alegreya');})
+
+        ;
+    });
+
+  });
+
 });

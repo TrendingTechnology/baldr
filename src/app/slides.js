@@ -471,7 +471,12 @@ class Slide {
     let dataset = this.env.document.body.dataset;
     dataset.master = this.master.name;
     dataset.centerVertically = this.master.config.centerVertically;
-    dataset.theme = this.master.config.theme;
+    if (this.slideData.themeName) {
+      dataset.theme = this.slideData.themeName;
+    }
+    else {
+      dataset.theme = this.master.config.theme;
+    }
   }
 
   /**
