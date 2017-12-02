@@ -25,18 +25,24 @@ describe('Class “Environment()” #unittest', () => {
 
   it('config', () => {
     assert.equal(typeof env.config, 'object');
+    assert.equal(env.config.constructor.name, 'Config');
+
   });
 
   it('document', () => {
     assert.equal(typeof env.document, 'object');
+    assert.equal(env.document.constructor.name, 'Document');
   });
 
   it('masters', () => {
     assert.equal(typeof env.masters, 'object');
+    assert.equal(env.masters.constructor.name, 'Masters');
+
   });
 
   it('themes', () => {
     assert.equal(typeof env.themes, 'object');
+    assert.equal(env.themes.constructor.name, 'Themes');
   });
 
 });
@@ -56,6 +62,11 @@ describe('Class “ShowRunner()” #unittest', () => {
 
     it('Property “this.config.sessionFile', () => {
       assert.ok(fs.existsSync(show.config.sessionFile));
+    });
+
+    it('Property “this.env', () => {
+      assert.equal(typeof show.env, 'object');
+      assert.equal(show.env.constructor.name, 'Environment');
     });
 
     it('Property “this.config.raw', () => {
