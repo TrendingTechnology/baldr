@@ -228,6 +228,8 @@ class SlideInput {
 
   constructor(rawSlideData, masterNames, themeNames) {
 
+    this.rawSlideData = Object.assign({}, rawSlideData);
+
     this.theme = false;
     this.masterName = false;
     this.rawMasterData = false;
