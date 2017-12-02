@@ -37,21 +37,21 @@ describe('Class “SlideInput()” #unittest', () => {
       it('String', () => {
         let input = getInput('camera');
         assert.equal(input.masterName, 'camera');
-        assert.equal(input.rawSlideData, true);
+        assert.equal(input.rawMasterData, true);
         assert.equal(input.theme, false);
       });
 
       it('Object: only master property', () => {
         let input = getInput({'camera': true});
         assert.equal(input.masterName, 'camera');
-        assert.equal(input.rawSlideData, true);
+        assert.equal(input.rawMasterData, true);
         assert.equal(input.theme, false);
       });
 
       it('Object: only master property', () => {
         let input = getInput({camera: true, theme: 'default'});
         assert.equal(input.masterName, 'camera');
-        assert.equal(input.rawSlideData, true);
+        assert.equal(input.rawMasterData, true);
         assert.equal(input.theme, 'default');
       });
 
@@ -97,6 +97,21 @@ describe('Class “SlideInput()” #unittest', () => {
           /Error: No master slide found: {"lol":true,"troll":true}/
         );
       });
+
+      it('Wrong theme', () => {
+        assert.throws(
+          () => {getInput({camera: true, theme: 'lol'});},
+          /Error: Unkown theme: “lol”/
+        );
+      });
+
+      it('Unkown slide properties', () => {
+        assert.throws(
+          () => {getInput({camera: true, lol: 'lol'});},
+          /Error: Unknown slide properties: {"lol":"lol"}/
+        );
+      });
+
     });
 
   });

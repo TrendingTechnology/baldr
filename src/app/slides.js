@@ -230,24 +230,28 @@ class SlideInput {
 
     this.theme = false;
     this.masterName = false;
-    this.rawSlideData = false;
+    this.rawMasterData = false;
 
     // string
     if (typeof rawSlideInput === 'string') {
-      let {masterName, rawSlideData} = this.pullMasterfromString_(rawSlideInput, masterNames);
+      let {masterName, rawMasterData} = this.pullMasterfromString_(rawSlideInput, masterNames);
       rawSlideInput = {};
       this.masterName = masterName;
-      this.rawSlideData = rawSlideData;
+      this.rawMasterData = rawMasterData;
     }
     // object
     else if (typeof rawSlideInput === 'object' && !Array.isArray(rawSlideInput)) {
-      let {masterName, rawSlideData} = this.pullMasterfromObject_(rawSlideInput, masterNames);
+      let {masterName, rawMasterData} = this.pullMasterfromObject_(rawSlideInput, masterNames);
       this.masterName = masterName;
-      this.rawSlideData = rawSlideData;
+      this.rawMasterData = rawMasterData;
       this.theme = this.pullTheme_(rawSlideInput, themeNames);
     // something else
     } else {
       throw Error(`Unsupported input type “${this.getType_(rawSlideInput)}” on input data: ${this.toString_(rawSlideInput)}`);
+    }
+
+    if (Object.keys(rawSlideInput).length > 0) {
+      throw Error(`Unknown slide properties: ${this.toString_(rawSlideInput)}`);
     }
 
   }
@@ -271,7 +275,7 @@ class SlideInput {
     if (masters.includes(rawSlideInput)) {
       return {
         masterName: rawSlideInput,
-        rawSlideData: true
+        rawMasterData: true
       };
     }
     else {
@@ -293,26 +297,26 @@ class SlideInput {
       throw Error(`Each slide must have only one master slide: ${this.toString_(rawSlideInput)}`);
     }
     let masterName = intersection[0];
-    let rawSlideData = rawSlideInput[masterName];
+    let rawMasterData = rawSlideInput[masterName];
     this.pullProperty_(rawSlideInput, masterName);
 
     return {
       masterName: masterName,
-      rawSlideData: rawSlideData
+      rawMasterData: rawMasterData
     };
   }
 
   pullTheme_(rawSlideInput, themeNames) {
-    if (
-      rawSlideInput.hasOwnProperty('theme') &&
-      themeNames.includes(rawSlideInput.theme)
-    ) {
+    if (!rawSlideInput.hasOwnProperty('theme')) {
+      return false;
+    }
+    else if (themeNames.includes(rawSlideInput.theme)) {
       let theme = rawSlideInput.theme;
       this.pullProperty_(rawSlideInput, 'theme');
       return theme;
     }
     else {
-      return false;
+      throw Error(`Unkown theme: “${this.toString_(rawSlideInput.theme)}”`);
     }
   }
 
