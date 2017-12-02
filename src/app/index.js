@@ -48,7 +48,7 @@ const {getThemes} = requireLib('themes');
  **********************************************************************/
 
 /**
- * This class bundles important low level data in a object. The bundled
+ * This class bundles important low level data in an object. The bundled
  * object can easily passed around through different classes and
  * avoids therefore many arguments in the constructor functions.
  *
@@ -106,7 +106,7 @@ class ShowRunner {
 
     /**
      * Low level environment data.
-     * @type {module:baldr-application~Env}
+     * @type {module:baldr-application~Environment}
      */
     this.env = new Environment(argv, document);
 

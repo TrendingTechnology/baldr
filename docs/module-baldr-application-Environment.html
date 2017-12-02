@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: Spectron</title>
+    <title>JSDoc: Class: Environment</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: Spectron</h1>
+    <h1 class="page-title">Class: Environment</h1>
 
     
 
@@ -29,7 +29,11 @@
 <header>
     
         <h2><span class="attribs"><span class="type-signature"></span></span>
-            <span class="ancestors"><a href="module-baldr-test.html">baldr-test</a>~</span>Spectron<span class="signature">()</span><span class="type-signature"></span></h2>
+            <span class="ancestors"><a href="module-baldr-application.html">baldr-application</a>~</span>Environment<span class="signature">(argv, document)</span><span class="type-signature"></span></h2>
+        
+            <div class="class-description"><p>This class bundles important low level data in an object. The bundled
+object can easily passed around through different classes and
+avoids therefore many arguments in the constructor functions.</p></div>
         
     
 </header>
@@ -40,12 +44,14 @@
         
 
     
-
-    
-    <h4 class="name" id="Spectron"><span class="type-signature"></span>new Spectron<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h2>Constructor</h2>
     
 
     
+    <h4 class="name" id="Environment"><span class="type-signature"></span>new Environment<span class="signature">(argv, document)</span><span class="type-signature"></span></h4>
+    
+
+    
 
 
 
@@ -55,6 +61,79 @@
 
 
 
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>argv</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">array</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>An array containing the command line arguments.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>document</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="module-baldr-application.html#~Document">module:baldr-application~Document</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The document
+  object (DOM) of the render process.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
 
 
 
@@ -90,7 +169,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="test_helper_index.js.html">test/helper/index.js</a>, <a href="test_helper_index.js.html#line123">line 123</a>
+        <a href="src_app_index.js.html">src/app/index.js</a>, <a href="src_app_index.js.html#line59">line 59</a>
     </li></ul></dd>
     
 
@@ -134,30 +213,30 @@
     
 
     
-
-    
-        <h3 class="subsection-title">Methods</h3>
+        <h3 class="subsection-title">Members</h3>
 
         
             
-
-    
-
-    
-    <h4 class="name" id="getApp"><span class="type-signature"></span>getApp<span class="signature">()</span><span class="type-signature"></span></h4>
-    
-
-    
+<h4 class="name" id="config"><span class="type-signature"></span>config<span class="type-signature"> :<a href="module-baldr-library_config-Config.html">module:baldr-library/config~Config</a></span></h4>
 
 
 
 
+<div class="description">
+    <p>All configurations of the current presentation session.</p>
+</div>
 
 
 
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type"><a href="module-baldr-library_config-Config.html">module:baldr-library/config~Config</a></span>
 
 
-
+        </li>
+    </ul>
 
 
 
@@ -192,7 +271,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="test_helper_index.js.html">test/helper/index.js</a>, <a href="test_helper_index.js.html#line146">line 146</a>
+        <a href="src_app_index.js.html">src/app/index.js</a>, <a href="src_app_index.js.html#line79">line 79</a>
     </li></ul></dd>
     
 
@@ -208,38 +287,28 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
         
             
-
-    
-
-    
-    <h4 class="name" id="start"><span class="type-signature"></span>start<span class="signature">()</span><span class="type-signature"></span></h4>
-    
-
-    
+<h4 class="name" id="document"><span class="type-signature"></span>document<span class="type-signature"> :<a href="module-baldr-application.html#~Document">module:baldr-application~Document</a></span></h4>
 
 
 
 
+<div class="description">
+    <p>The document object (DOM) of the render process.</p>
+</div>
 
 
 
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type"><a href="module-baldr-application.html#~Document">module:baldr-application~Document</a></span>
 
 
-
+        </li>
+    </ul>
 
 
 
@@ -274,7 +343,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="test_helper_index.js.html">test/helper/index.js</a>, <a href="test_helper_index.js.html#line153">line 153</a>
+        <a href="src_app_index.js.html">src/app/index.js</a>, <a href="src_app_index.js.html#line67">line 67</a>
     </li></ul></dd>
     
 
@@ -290,38 +359,28 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
         
             
-
-    
-
-    
-    <h4 class="name" id="stop"><span class="type-signature"></span>stop<span class="signature">()</span><span class="type-signature"></span></h4>
-    
-
-    
+<h4 class="name" id="masters"><span class="type-signature"></span>masters<span class="type-signature"> :<a href="module-baldr-application_masters-Masters.html">module:baldr-application/masters~Masters</a></span></h4>
 
 
 
 
+<div class="description">
+    <p>All available master slides.</p>
+</div>
 
 
 
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type"><a href="module-baldr-application_masters-Masters.html">module:baldr-application/masters~Masters</a></span>
 
 
-
+        </li>
+    </ul>
 
 
 
@@ -356,7 +415,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="test_helper_index.js.html">test/helper/index.js</a>, <a href="test_helper_index.js.html#line160">line 160</a>
+        <a href="src_app_index.js.html">src/app/index.js</a>, <a href="src_app_index.js.html#line73">line 73</a>
     </li></ul></dd>
     
 
@@ -372,12 +431,72 @@
 
 
 
+        
+            
+<h4 class="name" id="themes"><span class="type-signature"></span>themes<span class="type-signature"> :<a href="module-baldr-application_themes-Themes.html">module:baldr-application/themes~Themes</a></span></h4>
+
+
+
+
+<div class="description">
+    <p>All available themes.</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type"><a href="module-baldr-application_themes-Themes.html">module:baldr-application/themes~Themes</a></span>
+
+
+        </li>
+    </ul>
 
 
 
 
 
+<dl class="details">
 
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="src_app_index.js.html">src/app/index.js</a>, <a href="src_app_index.js.html#line85">line 85</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
 
 
 
@@ -385,6 +504,8 @@
 
 
         
+    
+
     
 
     

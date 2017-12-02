@@ -252,6 +252,140 @@ class StepSwitcher {
  *
  **********************************************************************/
 
+class SlideInput {
+
+  constructor(rawSlideData, masterNames, themeNames) {
+
+    this.rawSlideData = Object.assign({}, rawSlideData);
+
+    this.theme = false;
+    this.masterName = false;
+    this.rawMasterData = false;
+
+    // string
+    if (typeof rawSlideData === 'string') {
+      let {masterName, rawMasterData} = this.pullMasterfromString_(rawSlideData, masterNames);
+      rawSlideData = {};
+      this.masterName = masterName;
+      this.rawMasterData = rawMasterData;
+    }
+    // object
+    else if (typeof rawSlideData === 'object' &amp;&amp; !Array.isArray(rawSlideData)) {
+      let {masterName, rawMasterData} = this.pullMasterfromObject_(rawSlideData, masterNames);
+      this.masterName = masterName;
+      this.rawMasterData = rawMasterData;
+      this.theme = this.pullTheme_(rawSlideData, themeNames);
+    // something else
+    } else {
+      throw Error(`Unsupported input type “${this.getType_(rawSlideData)}” on input data: ${this.toString_(rawSlideData)}`);
+    }
+
+    if (Object.keys(rawSlideData).length > 0) {
+      throw Error(`Unknown slide properties: ${this.toString_(rawSlideData)}`);
+    }
+
+  }
+
+  pullProperty_(rawSlideData, property) {
+    if (rawSlideData.hasOwnProperty(property)) {
+      const out = rawSlideData[property];
+      delete rawSlideData[property];
+      return out;
+    }
+    else {
+      return false;
+    }
+  }
+
+  intersect_(array1, array2) {
+    return array1.filter((n) => array2.includes(n));
+  }
+
+  pullMasterfromString_(rawSlideData, masters) {
+    if (masters.includes(rawSlideData)) {
+      return {
+        masterName: rawSlideData,
+        rawMasterData: true
+      };
+    }
+    else {
+      throw Error(`Unknown master “${rawSlideData}” specified as string`);
+    }
+  }
+
+  pullMasterfromObject_(rawSlideData, masterNames) {
+    let intersection = this.intersect_(
+      masterNames,
+      Object.keys(rawSlideData)
+    );
+
+    if (intersection.length === 0) {
+      throw Error(`No master slide found: ${this.toString_(rawSlideData)}`);
+    }
+
+    if (intersection.length > 1) {
+      throw Error(`Each slide must have only one master slide: ${this.toString_(rawSlideData)}`);
+    }
+    let masterName = intersection[0];
+    let rawMasterData = rawSlideData[masterName];
+    this.pullProperty_(rawSlideData, masterName);
+
+    return {
+      masterName: masterName,
+      rawMasterData: rawMasterData
+    };
+  }
+
+  pullTheme_(rawSlideData, themeNames) {
+    if (!rawSlideData.hasOwnProperty('theme')) {
+      return false;
+    }
+    else if (themeNames.includes(rawSlideData.theme)) {
+      let theme = rawSlideData.theme;
+      this.pullProperty_(rawSlideData, 'theme');
+      return theme;
+    }
+    else {
+      throw Error(`Unkown theme: “${this.toString_(rawSlideData.theme)}”`);
+    }
+  }
+
+  toString_(rawSlideData) {
+    if (rawSlideData === null) {
+      return 'null';
+    }
+    else if (!rawSlideData) {
+      return typeof rawSlideData;
+    }
+    else if (typeof rawSlideData === 'string') {
+      return rawSlideData;
+    }
+    else if (Array.isArray(rawSlideData)) {
+      return rawSlideData.toString();
+    }
+    else {
+      return JSON.stringify(rawSlideData);
+    }
+  }
+
+  getType_(rawSlideData) {
+    if (Array.isArray(rawSlideData)) {
+      return 'array';
+    }
+    else if (rawSlideData === null) {
+      return 'null';
+    }
+    else {
+      return typeof rawSlideData;
+    }
+  }
+
+}
+
+/***********************************************************************
+ *
+ **********************************************************************/
+
 /**
  *
  */
@@ -620,7 +754,7 @@ exports.Slide = Slide;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-baldr.html">baldr</a></li><li><a href="module-baldr-application.html">baldr-application</a></li><li><a href="module-baldr-application_masters.html">baldr-application/masters</a></li><li><a href="module-baldr-application_quick-start.html">baldr-application/quick-start</a></li><li><a href="module-baldr-application_slides.html">baldr-application/slides</a></li><li><a href="module-baldr-application_slides-switcher.html">baldr-application/slides-switcher</a></li><li><a href="module-baldr-application_themes.html">baldr-application/themes</a></li><li><a href="module-baldr-library.html">baldr-library</a></li><li><a href="module-baldr-library_config.html">baldr-library/config</a></li><li><a href="module-baldr-library_helper.html">baldr-library/helper</a></li><li><a href="module-baldr-library_media.html">baldr-library/media</a></li><li><a href="module-baldr-master-audio.html">baldr-master-audio</a></li><li><a href="module-baldr-master-camera.html">baldr-master-camera</a></li><li><a href="module-baldr-master-editor.html">baldr-master-editor</a></li><li><a href="module-baldr-master-image.html">baldr-master-image</a></li><li><a href="module-baldr-master-markdown.html">baldr-master-markdown</a></li><li><a href="module-baldr-master-person.html">baldr-master-person</a></li><li><a href="module-baldr-master-question.html">baldr-master-question</a></li><li><a href="module-baldr-master-quote.html">baldr-master-quote</a></li><li><a href="module-baldr-master-svg.html">baldr-master-svg</a></li><li><a href="module-baldr-master-website.html">baldr-master-website</a></li><li><a href="module-baldr-test.html">baldr-test</a></li><li><a href="module-baldr_render.html">baldr/render</a></li></ul><h3>Classes</h3><ul><li><a href="module-baldr-application_masters-Master.html">Master</a></li><li><a href="module-baldr-application_masters-Masters.html">Masters</a></li><li><a href="module-baldr-application_quick-start-QuickStart.html">QuickStart</a></li><li><a href="module-baldr-application_quick-start-QuickStartEntry.html">QuickStartEntry</a></li><li><a href="module-baldr-application_slides-switcher-SlidesSwitcher.html">SlidesSwitcher</a></li><li><a href="module-baldr-application_slides-Slide.html">Slide</a></li><li><a href="module-baldr-application_slides-Slides.html">Slides</a></li><li><a href="module-baldr-application_slides-StepSwitcher.html">StepSwitcher</a></li><li><a href="module-baldr-application_themes-Themes.html">Themes</a></li><li><a href="module-baldr-application-ShowRunner.html">ShowRunner</a></li><li><a href="module-baldr-library_config-Config.html">Config</a></li><li><a href="module-baldr-library_media-FileInfo.html">FileInfo</a></li><li><a href="module-baldr-library_media-Media.html">Media</a></li><li><a href="module-baldr-master-audio-Audio.html">Audio</a></li><li><a href="module-baldr-test-Spectron.html">Spectron</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-baldr.html">baldr</a></li><li><a href="module-baldr-application.html">baldr-application</a></li><li><a href="module-baldr-application_masters.html">baldr-application/masters</a></li><li><a href="module-baldr-application_quick-start.html">baldr-application/quick-start</a></li><li><a href="module-baldr-application_slides.html">baldr-application/slides</a></li><li><a href="module-baldr-application_slides-switcher.html">baldr-application/slides-switcher</a></li><li><a href="module-baldr-application_themes.html">baldr-application/themes</a></li><li><a href="module-baldr-library.html">baldr-library</a></li><li><a href="module-baldr-library_config.html">baldr-library/config</a></li><li><a href="module-baldr-library_helper.html">baldr-library/helper</a></li><li><a href="module-baldr-library_media.html">baldr-library/media</a></li><li><a href="module-baldr-master-audio.html">baldr-master-audio</a></li><li><a href="module-baldr-master-camera.html">baldr-master-camera</a></li><li><a href="module-baldr-master-editor.html">baldr-master-editor</a></li><li><a href="module-baldr-master-image.html">baldr-master-image</a></li><li><a href="module-baldr-master-markdown.html">baldr-master-markdown</a></li><li><a href="module-baldr-master-person.html">baldr-master-person</a></li><li><a href="module-baldr-master-question.html">baldr-master-question</a></li><li><a href="module-baldr-master-quote.html">baldr-master-quote</a></li><li><a href="module-baldr-master-svg.html">baldr-master-svg</a></li><li><a href="module-baldr-master-website.html">baldr-master-website</a></li><li><a href="module-baldr-test.html">baldr-test</a></li><li><a href="module-baldr_render.html">baldr/render</a></li></ul><h3>Classes</h3><ul><li><a href="module-baldr-application_masters-Master.html">Master</a></li><li><a href="module-baldr-application_masters-Masters.html">Masters</a></li><li><a href="module-baldr-application_quick-start-QuickStart.html">QuickStart</a></li><li><a href="module-baldr-application_quick-start-QuickStartEntry.html">QuickStartEntry</a></li><li><a href="module-baldr-application_slides-switcher-SlidesSwitcher.html">SlidesSwitcher</a></li><li><a href="module-baldr-application_slides-Slide.html">Slide</a></li><li><a href="module-baldr-application_slides-Slides.html">Slides</a></li><li><a href="module-baldr-application_slides-StepSwitcher.html">StepSwitcher</a></li><li><a href="module-baldr-application_themes-Themes.html">Themes</a></li><li><a href="module-baldr-application-Environment.html">Environment</a></li><li><a href="module-baldr-application-ShowRunner.html">ShowRunner</a></li><li><a href="module-baldr-library_config-Config.html">Config</a></li><li><a href="module-baldr-library_media-FileInfo.html">FileInfo</a></li><li><a href="module-baldr-library_media-Media.html">Media</a></li><li><a href="module-baldr-master-audio-Audio.html">Audio</a></li><li><a href="module-baldr-test-Spectron.html">Spectron</a></li></ul>
 </nav>
 
 <br class="clear">
