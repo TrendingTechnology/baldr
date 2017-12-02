@@ -4,11 +4,42 @@ const {
   getDOM,
   fs,
   path,
-  testFileMinimal
+  testFileMinimal,
+  rewire,
+  srcPath
 } = require('baldr-test');
 
 const {ShowRunner} = require('baldr-application');
 const mousetrap = require('mousetrap');
+
+
+/***********************************************************************
+ *
+ **********************************************************************/
+
+describe('Class “Environment()” #unittest', () => {
+
+  let indexJsPath = srcPath('app', 'index.js');
+  const Environment = rewire(indexJsPath).__get__('Environment');
+  let env = new Environment([testFileMinimal], getDOM());
+
+  it('config', () => {
+    assert.equal(typeof env.config, 'object');
+  });
+
+  it('document', () => {
+    assert.equal(typeof env.document, 'object');
+  });
+
+  it('masters', () => {
+    assert.equal(typeof env.masters, 'object');
+  });
+
+  it('themes', () => {
+    assert.equal(typeof env.themes, 'object');
+  });
+
+});
 
 /***********************************************************************
  *

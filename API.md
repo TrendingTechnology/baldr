@@ -14,6 +14,10 @@ How to write a bladr master slide: [Interface](module-baldr-application_masters-
 
 * `document`: `@param {module:baldr-application~Document} document The document object (DOM) of the render process.`
 
+## e
+
+* `env`: `@param {module:baldr-application~Environment} env Low level environment data.` 
+
 ## m
 
 * `master`: `@param {module:baldr-application/masters~Master} master The normalized master object derived from the master slide.`

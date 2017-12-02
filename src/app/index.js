@@ -48,6 +48,49 @@ const {getThemes} = requireLib('themes');
  **********************************************************************/
 
 /**
+ * This class bundles important low level data in a object. The bundled
+ * object can easily passed around through different classes and
+ * avoids therefore many arguments in the constructor functions.
+ *
+ * @param {array} argv An array containing the command line arguments.
+ * @param {module:baldr-application~Document} document The document
+ *   object (DOM) of the render process.
+ */
+class Environment {
+
+  constructor(argv, document) {
+
+    /**
+     * The document object (DOM) of the render process.
+     * @type {module:baldr-application~Document}
+     */
+    this.document = document;
+
+    /**
+     * All available master slides.
+     * @type {module:baldr-application/masters~Masters}
+     */
+    this.masters = getMasters(document);
+
+    /**
+     * All configurations of the current presentation session.
+     * @type {module:baldr-library/config~Config}
+     */
+    this.config = getConfig(argv);
+
+    /**
+     * All available themes.
+     * @type {module:baldr-application/themes~Themes}
+     */
+    this.themes = getThemes(document);
+  }
+}
+
+/***********************************************************************
+ *
+ **********************************************************************/
+
+/**
  *
  */
 class ShowRunner {
@@ -60,6 +103,12 @@ class ShowRunner {
    *   of shortcut library “mousetrap”.
    */
   constructor(argv, document, mousetrap) {
+
+    /**
+     * Low level environment data.
+     * @type {module:baldr-application~Env}
+     */
+    this.env = new Environment(argv, document);
 
     /**
      * The document object (DOM) of the render process.
