@@ -29,7 +29,7 @@
 <header>
     
         <h2><span class="attribs"><span class="type-signature"></span></span>
-            <span class="ancestors"><a href="module-baldr-application_slides.html">baldr-application/slides</a>~</span>Slides<span class="signature">(rawSlides, config, document, masters)</span><span class="type-signature"></span></h2>
+            <span class="ancestors"><a href="module-baldr-application_slides.html">baldr-application/slides</a>~</span>Slides<span class="signature">(env)</span><span class="type-signature"></span></h2>
         
             <div class="class-description"><p>Parse the object representation of all slides.</p></div>
         
@@ -46,7 +46,7 @@
     
 
     
-    <h4 class="name" id="Slides"><span class="type-signature"></span>new Slides<span class="signature">(rawSlides, config, document, masters)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="Slides"><span class="type-signature"></span>new Slides<span class="signature">(env)</span><span class="type-signature"></span></h4>
     
 
     
@@ -86,13 +86,13 @@
 
         <tr>
             
-                <td class="name"><code>rawSlides</code></td>
+                <td class="name"><code>env</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">array</span>
+<span class="param-type"><a href="module-baldr-application-Environment.html">module:baldr-application~Environment</a></span>
 
 
             
@@ -102,79 +102,8 @@
 
             
 
-            <td class="description last"><p>An array of raw slide objects.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>config</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="module-baldr-library_config-Config.html">module:baldr-library/config~Config</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>All
-  configurations of the current presentation session.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>document</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="module-baldr-application.html#~Document">module:baldr-application~Document</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>The document
-  object (DOM) of the render process.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>masters</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="module-baldr-application_masters-Masters.html">module:baldr-application/masters~Masters</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>All
-  available master slides.</p></td>
+            <td class="description last"><p>Low level
+  environment data.</p></td>
         </tr>
 
     
@@ -215,7 +144,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line619">line 619</a>
+        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line589">line 589</a>
     </li></ul></dd>
     
 
@@ -263,13 +192,13 @@
 
         
             
-<h4 class="name" id="config"><span class="type-signature"></span>config<span class="type-signature"> :<a href="module-baldr-library_config-Config.html">module:baldr-library/config~Config</a></span></h4>
+<h4 class="name" id="env"><span class="type-signature"></span>env<span class="type-signature"> :<a href="module-baldr-application-Environment.html">module:baldr-application~Environment</a></span></h4>
 
 
 
 
 <div class="description">
-    <p>All configurations of the current presentation session.`</p>
+    <p>Low level environment data.</p>
 </div>
 
 
@@ -278,7 +207,7 @@
     <ul>
         <li>
             
-<span class="param-type"><a href="module-baldr-library_config-Config.html">module:baldr-library/config~Config</a></span>
+<span class="param-type"><a href="module-baldr-application-Environment.html">module:baldr-application~Environment</a></span>
 
 
         </li>
@@ -317,151 +246,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line642">line 642</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id="document"><span class="type-signature"></span>document<span class="type-signature"> :<a href="module-baldr-application.html#~Document">module:baldr-application~Document</a></span></h4>
-
-
-
-
-<div class="description">
-    <p>The document object (DOM) of the render process.</p>
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type"><a href="module-baldr-application.html#~Document">module:baldr-application~Document</a></span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line648">line 648</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id="masters"><span class="type-signature"></span>masters<span class="type-signature"> :<a href="module-baldr-application_masters-Masters.html">module:baldr-application/masters~Masters</a></span></h4>
-
-
-
-
-<div class="description">
-    <p>All available master slides.</p>
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type"><a href="module-baldr-application_masters-Masters.html">module:baldr-application/masters~Masters</a></span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line654">line 654</a>
+        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line601">line 601</a>
     </li></ul></dd>
     
 
@@ -533,7 +318,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line636">line 636</a>
+        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line607">line 607</a>
     </li></ul></dd>
     
 
@@ -643,7 +428,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line691">line 691</a>
+        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line644">line 644</a>
     </li></ul></dd>
     
 

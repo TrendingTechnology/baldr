@@ -29,7 +29,7 @@
 <header>
     
         <h2><span class="attribs"><span class="type-signature"></span></span>
-            <span class="ancestors"><a href="module-baldr-application_slides.html">baldr-application/slides</a>~</span>Slide<span class="signature">(rawSlideObject, document, config, masters)</span><span class="type-signature"></span></h2>
+            <span class="ancestors"><a href="module-baldr-application_slides.html">baldr-application/slides</a>~</span>Slide<span class="signature">(env)</span><span class="type-signature"></span></h2>
         
     
 </header>
@@ -42,7 +42,7 @@
     
 
     
-    <h4 class="name" id="Slide"><span class="type-signature"></span>new Slide<span class="signature">(rawSlideObject, document, config, masters)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="Slide"><span class="type-signature"></span>new Slide<span class="signature">(env)</span><span class="type-signature"></span></h4>
     
 
     
@@ -82,13 +82,13 @@
 
         <tr>
             
-                <td class="name"><code>rawSlideObject</code></td>
+                <td class="name"><code>env</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="module-baldr-application_slides.html#~rawSlideObject">module:baldr-application/slides~rawSlideObject</a></span>
+<span class="param-type"><a href="module-baldr-application-Environment.html">module:baldr-application~Environment</a></span>
 
 
             
@@ -98,80 +98,8 @@
 
             
 
-            <td class="description last"><p>A raw slide object containing only one property: The name of the
-  master slide.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>document</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="module-baldr-application.html#~Document">module:baldr-application~Document</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>The document
-  object (DOM) of the render process.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>config</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="module-baldr-library_config-Config.html">module:baldr-library/config~Config</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>All
-  configurations of the current presentation session.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>masters</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="module-baldr-application_masters-Masters.html">module:baldr-application/masters~Masters</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>All
-  available master slides.</p></td>
+            <td class="description last"><p>Low level
+  environment data.</p></td>
         </tr>
 
     
@@ -212,7 +140,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line364">line 364</a>
+        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line356">line 356</a>
     </li></ul></dd>
     
 
@@ -257,78 +185,6 @@
 
     
         <h3 class="subsection-title">Members</h3>
-
-        
-            
-<h4 class="name" id="config"><span class="type-signature"></span>config<span class="type-signature"> :<a href="module-baldr-library_config-Config.html">module:baldr-library/config~Config</a></span></h4>
-
-
-
-
-<div class="description">
-    <p>All configurations of the current presentation session.</p>
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type"><a href="module-baldr-library_config-Config.html">module:baldr-library/config~Config</a></span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line386">line 386</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
 
         
             
@@ -387,79 +243,7 @@ a void flickering, when new CSS styles are loaded.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line439">line 439</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id="document"><span class="type-signature"></span>document<span class="type-signature"> :<a href="module-baldr-application.html#~Document">module:baldr-application~Document</a></span></h4>
-
-
-
-
-<div class="description">
-    <p>The document object (DOM) of the render process.</p>
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type"><a href="module-baldr-application.html#~Document">module:baldr-application~Document</a></span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line392">line 392</a>
+        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line413">line 413</a>
     </li></ul></dd>
     
 
@@ -527,7 +311,79 @@ a void flickering, when new CSS styles are loaded.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line397">line 397</a>
+        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line377">line 377</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="env"><span class="type-signature"></span>env<span class="type-signature"> :<a href="module-baldr-application-Environment.html">module:baldr-application~Environment</a></span></h4>
+
+
+
+
+<div class="description">
+    <p>Low level environment data.</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type"><a href="module-baldr-application-Environment.html">module:baldr-application~Environment</a></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line368">line 368</a>
     </li></ul></dd>
     
 
@@ -599,79 +455,7 @@ a void flickering, when new CSS styles are loaded.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line406">line 406</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id="masters"><span class="type-signature"></span>masters<span class="type-signature"> :<a href="module-baldr-library_config-Config.html">module:baldr-library/config~Config</a></span></h4>
-
-
-
-
-<div class="description">
-    <p>All configurations of the current presentation session.</p>
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type"><a href="module-baldr-library_config-Config.html">module:baldr-library/config~Config</a></span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line412">line 412</a>
+        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line386">line 386</a>
     </li></ul></dd>
     
 
@@ -755,7 +539,7 @@ a void flickering, when new CSS styles are loaded.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line424">line 424</a>
+        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line398">line 398</a>
     </li></ul></dd>
     
 
@@ -827,7 +611,7 @@ a void flickering, when new CSS styles are loaded.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line418">line 418</a>
+        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line392">line 392</a>
     </li></ul></dd>
     
 
@@ -899,7 +683,7 @@ a void flickering, when new CSS styles are loaded.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line431">line 431</a>
+        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line405">line 405</a>
     </li></ul></dd>
     
 
@@ -1049,7 +833,7 @@ a void flickering, when new CSS styles are loaded.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line463">line 463</a>
+        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line437">line 437</a>
     </li></ul></dd>
     
 
@@ -1209,7 +993,7 @@ one master slide.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line452">line 452</a>
+        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line426">line 426</a>
     </li></ul></dd>
     
 
@@ -1313,7 +1097,7 @@ one master slide.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line560">line 560</a>
+        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line534">line 534</a>
     </li></ul></dd>
     
 
@@ -1471,7 +1255,7 @@ one master slide.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line523">line 523</a>
+        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line497">line 497</a>
     </li></ul></dd>
     
 
@@ -1553,7 +1337,7 @@ one master slide.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line531">line 531</a>
+        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line505">line 505</a>
     </li></ul></dd>
     
 
@@ -1635,7 +1419,7 @@ one master slide.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line548">line 548</a>
+        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line522">line 522</a>
     </li></ul></dd>
     
 
@@ -1717,7 +1501,7 @@ one master slide.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line541">line 541</a>
+        <a href="src_app_slides.js.html">src/app/slides.js</a>, <a href="src_app_slides.js.html#line515">line 515</a>
     </li></ul></dd>
     
 
