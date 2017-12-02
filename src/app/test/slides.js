@@ -26,14 +26,14 @@ describe('Class “SlideInput()” #unittest', () => {
   const masterNames = ['markdown', 'camera', 'audio'];
   const themeNames = ['default', 'handwriting'];
 
-  let getInput = function(rawSlideInput) {
-    return new SlideInput(rawSlideInput, masterNames, themeNames);
+  let getInput = function(rawSlideData) {
+    return new SlideInput(rawSlideData, masterNames, themeNames);
   };
   let input = getInput({markdown: 'text'});
 
   describe('Instantiation', () => {
 
-    describe('Valid input on “rawSlideInput”', () => {
+    describe('Valid input on “rawSlideData”', () => {
       it('String', () => {
         let input = getInput('camera');
         assert.equal(input.masterName, 'camera');
@@ -57,7 +57,7 @@ describe('Class “SlideInput()” #unittest', () => {
 
     });
 
-    describe('Invalid input on “rawSlideInput”', () => {
+    describe('Invalid input on “rawSlideData”', () => {
 
       it('Invalid string', () => {
         assert.throws(
