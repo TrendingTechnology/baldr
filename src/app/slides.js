@@ -465,8 +465,9 @@ class Slide {
    */
   setDataset_() {
     let dataset = this.env.document.body.dataset;
-    dataset.master = this.master.name;
     dataset.centerVertically = this.master.config.centerVertically;
+    dataset.margin = this.master.config.margin;
+    dataset.master = this.master.name;
     if (this.slideData.themeName) {
       dataset.theme = this.slideData.themeName;
     }

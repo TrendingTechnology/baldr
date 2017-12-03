@@ -12,6 +12,13 @@ const {Media, checkProperty} = require('baldr-library');
  **********************************************************************/
 
 /**
+ * @see {@link module:baldr-application/masters~Master#config}
+ */
+exports.config = {
+  margin: false
+};
+
+/**
  * @see {@link module:baldr-application/masters~Master#documentation}
  */
 exports.documentation = {

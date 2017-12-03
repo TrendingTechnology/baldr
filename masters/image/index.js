@@ -56,7 +56,8 @@ exports.setStepByNo = function(no, count, stepData, document) {
  * @see {@link module:baldr-application/masters~Master#config}
  */
 exports.config = {
-  stepSupport: true
+  stepSupport: true,
+  margin: false
 };
 
 /**

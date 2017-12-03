@@ -305,12 +305,16 @@ describe('Class “Slide()” #unittest', () => {
 
     slide.setDataset_();
 
-    it('master: <body data-master="masterName">', function() {
-      assert.equal(env.document.body.dataset.master, 'question');
-    });
-
     it('centerVertically: <body data-center-vertically="true">', function() {
       assert.equal(env.document.body.dataset.centerVertically, 'true');
+    });
+
+    it('margin: <body data-margin="true">', function() {
+      assert.equal(env.document.body.dataset.margin, 'true');
+    });
+
+    it('master: <body data-master="masterName">', function() {
+      assert.equal(env.document.body.dataset.master, 'question');
     });
 
     it('theme: <body data-theme="default">', function() {

@@ -17,21 +17,35 @@ let masters = new getMasters(getDOM());
 describe('Class “Master()” #unittest', () => {
   let person;
 
-    beforeEach(() => {
-      let mastersJs = rewire(path.join(__dirname, '..', 'masters.js'));
-      let Master = mastersJs.__get__('Master');
-      person = new Master(
-        path.resolve(__dirname, '..', '..', '..', 'masters', 'person', 'index.js'),
-        'person'
-      );
-    });
+  beforeEach(() => {
+    let mastersJs = rewire(path.join(__dirname, '..', 'masters.js'));
+    let Master = mastersJs.__get__('Master');
+    person = new Master(
+      path.resolve(__dirname, '..', '..', '..', 'masters', 'person', 'index.js'),
+      'person'
+    );
+  });
 
   describe('Properties', () => {
 
-    it('this.config', () => {
-      assert.equal(person.config.theme, 'default');
-      assert.equal(person.config.centerVertically, false);
-      assert.equal(person.config.stepSupport, false);
+    describe('this.config', () => {
+
+      it('this.config.centerVertically', () => {
+        assert.equal(person.config.centerVertically, false);
+      });
+
+      it('this.config.margin', () => {
+        assert.equal(person.config.margin, false);
+      });
+
+      it('this.config.stepSupport', () => {
+        assert.equal(person.config.stepSupport, false);
+      });
+
+      it('this.config.theme', () => {
+        assert.equal(person.config.theme, 'default');
+      });
+
     });
 
     it('this.css', () => {

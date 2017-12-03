@@ -53,6 +53,13 @@
  **********************************************************************/
 
 /**
+ * @see {@link module:baldr-application/masters~Master#config}
+ */
+exports.config = {
+  margin: false
+};
+
+/**
  * @see {@link module:baldr-application/masters~Master#quickStartEntries}
  */
 exports.quickStartEntries = function() {
