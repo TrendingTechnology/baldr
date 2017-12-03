@@ -168,6 +168,8 @@ class Master {
      *
      * @return {module:baldr-application/masters~masterData} The
      * normalized master data.
+     *
+     * @see {@link module:baldr-application/slides~Slide}
      */
     this.normalizeData = defaults.normalizeData;
 
