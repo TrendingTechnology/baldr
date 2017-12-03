@@ -64,20 +64,20 @@ class Master {
     /**
      * Some documentation informations about the master slide.
      *
-     * <code><pre>
-     * exports.documentation = {
-     *   examples: [
-     * `
-     * - mastername:
-     *      property: value
-     * `,
-     * `
-     * - mastername:
-     *      property: value
-     * `
-     *   ]
-     * };
-     * </pre></pre>
+     *
+     *     exports.documentation = {
+     *       examples: [
+     *     `
+     *     - mastername:
+     *          property: value
+     *     `,
+     *     `
+     *     - mastername:
+     *          property: value
+     *     `
+     *       ]
+     *     };
+     *
      * @type {object}
      * @property {object} documentation
      * @property {array} documentation.examples
@@ -126,6 +126,8 @@ class Master {
      *   representation of one slide.
      * @param {module:baldr-library/config~Config} config All
      *   configurations of the current presentation session.
+     *
+     * @return {module:baldr-application/slides~stepData}
      */
     this.initSteps = defaults.initSteps;
 
@@ -137,6 +139,8 @@ class Master {
      *   representation of one slide.
      * @param {module:baldr-library/config~Config} config All
      *   configurations of the current presentation session.
+     *
+     * @return {module:baldr-application/slides~stepData}
      */
     this.initStepsEveryVisit = defaults.initStepsEveryVisit;
 
@@ -148,6 +152,7 @@ class Master {
      *   configurations of the current presentation session.
      * @param {module:baldr-application~Document} document The document
      *   object (DOM) of the render process.
+     *
      * @return {string}
      */
     this.mainHTML = defaults.mainHTML;
@@ -182,6 +187,7 @@ class Master {
      *   configurations of the current presentation session.
      * @param {module:baldr-application/slides~Slide} slide The object
      *   representation of one slide.
+     *
      * @return {undefined}
      * @see {@link module:baldr-application~ShowRunner#setMain}
      */
@@ -201,6 +207,7 @@ class Master {
      * @param {object} stepData
      * @param {module:baldr-application~Document} document The document
      *   object (DOM) of the render process.
+     *
      * @return {undefined}
      * @see {@link module:baldr-application/slides~StepSwitcher#setByNo}
      */
