@@ -88,7 +88,7 @@ exports.config = {
  * @see {@link module:baldr-application/masters~Master#mainHTML}
  */
 exports.mainHTML = function(slide, config, document) {
-  let data = slide.normalizedData;
+  let data = slide.masterData;
   let attribution = renderAttribution(data.author, data.date);
   let begin = renderQuotationMark();
   let end = renderQuotationMark(false);

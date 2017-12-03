@@ -24,7 +24,7 @@ How to write a bladr master slide: [Interface](module-baldr-application_masters-
 * `masterName`: `@param {string} masterName The name of the master slide.`
 * `masters`: `@param {module:baldr-application/masters~Masters} masters All available master slides.`
 * `mousetrap`: `@param {module:baldr-application~mousetrap} mousetrap The object of shortcut library “mousetrap”.`
-* `masterData`: `@param {module:baldr-application/masters~masterData} Normalized master data.`
+* `masterData`: `@param {module:baldr-application/masters~masterData} The normalized master data.`
 
 ## n
 
@@ -39,6 +39,7 @@ How to write a bladr master slide: [Interface](module-baldr-application_masters-
 * `rawQuickStartEntry`: `@param {module:baldr-application/quick-start~rawQuickStartEntry} rawQuickStartEntry A raw quick start entry specified in the master slide hooks.`
 * `rawSlideData`: `@param {module:baldr-application/slides~rawSlideData} rawSlideData Various types of data to render a slide.`
 * `rawSlides`: `@param {array} rawSlides An array of raw slide objects.`
+* `rawMasterData`: `@param {module:baldr-application/masters~rawMasterData} rawMasterData Data in various types to pass to a master slide.`
 
 ## s
 

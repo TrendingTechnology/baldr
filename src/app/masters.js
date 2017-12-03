@@ -14,6 +14,12 @@ const {addCSSFile} = require('baldr-library');
  **********************************************************************/
 
 /**
+ * Data in various types to pass to a master slide.
+ * @typedef rawMasterData
+ * @type {(boolean|number|string|array|object)}
+ */
+
+/**
  * Normalized master data in various types.
  * @typedef masterData
  * @type {(boolean|number|string|array|object)}
@@ -152,9 +158,16 @@ class Master {
     this.modalHTML = defaults.modalHTML;
 
     /**
+     * Normalize the data input of the master slide.
+     *
      * @function
-     * @param {object} rawSlideData
-     * @param {module:baldr-library/config~Config} config
+     * @param {module:baldr-application/masters~rawMasterData} rawMasterData
+     *   Data in various types to pass to a master slide.
+     * @param {module:baldr-library/config~Config} config All
+     *   configurations of the current presentation session.
+     *
+     * @return {module:baldr-application/masters~masterData} The
+     * normalized master data.
      */
     this.normalizeData = defaults.normalizeData;
 

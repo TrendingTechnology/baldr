@@ -245,7 +245,8 @@ class SlideData {
     this.masterName = false;
 
     /**
-     *
+     * Data in various types to pass to a master slide.
+     * @type {module:baldr-application/masters~rawMasterData}
      */
     this.rawMasterData = false;
 

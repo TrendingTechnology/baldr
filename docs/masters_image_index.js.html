@@ -68,7 +68,7 @@ exports.normalizeData = function(rawSlideData, config) {
  * @see {@link module:baldr-application/masters~Master#initSteps}
  */
 exports.initSteps = function(document, slide, config) {
-  return reIndex(slide.normalizedData);
+  return reIndex(slide.masterData);
 };
 
 /**
@@ -91,7 +91,7 @@ exports.config = {
  * @see {@link module:baldr-application/masters~Master#mainHTML}
  */
 exports.mainHTML = function(slide, config, document) {
-  let path = slide.normalizedData[0].path;
+  let path = slide.masterData[0].path;
   return `&lt;img id="baldr-master-image" src="${path}">`;
 };
 </code></pre>
