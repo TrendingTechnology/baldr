@@ -154,3 +154,14 @@ exports.postSet = function(slide, config, document) {
   elemSelect.onchange = start;
   start();
 };
+
+/**
+ * @see {@link module:baldr-application/masters~Master#cleanUp}
+ */
+exports.cleanUp = function(document, oldSlide, newSlide) {
+  if (window.stream) {
+    window.stream.getTracks().forEach(function(track) {
+      track.stop();
+    });
+  }
+};
