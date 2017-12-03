@@ -14,6 +14,16 @@ const {addCSSFile} = require('baldr-library');
  **********************************************************************/
 
 /**
+ * Normalized master data in various types.
+ * @typedef masterData
+ * @type {(boolean|number|string|array|object)}
+ */
+
+/***********************************************************************
+ *
+ **********************************************************************/
+
+/**
  *
  */
 class Master {

@@ -141,7 +141,7 @@ exports.normalizeData = function(rawSlideData, config) {
  */
 exports.mainHTML = function(slide, config, document) {
   let out = '';
-  for (let audioFile of slide.normalizedData) {
+  for (let audioFile of slide.masterData) {
     out += `
 <li>
   <span class="artist">${audioFile.artist}</span>:

@@ -33,6 +33,6 @@ exports.quickStartEntries = function() {
  * @see {@link module:baldr-application/masters~Master#mainHTML}
  */
 exports.mainHTML = function(slide, config, document) {
-  let data = slide.normalizedData;
+  let data = slide.masterData;
   return `<webview src="${data}"></webview>`;
 };

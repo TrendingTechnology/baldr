@@ -18,8 +18,8 @@ let normalizeData = function(data) {
 };
 
 let mainHTML = function(data) {
-  normalizedData = question.normalizeData(data);
-  return question.mainHTML({normalizedData: normalizedData});
+  masterData = question.normalizeData(data);
+  return question.mainHTML({masterData: masterData});
 };
 
 let dataSingleWithout = 'One?';

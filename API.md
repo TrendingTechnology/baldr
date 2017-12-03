@@ -24,6 +24,7 @@ How to write a bladr master slide: [Interface](module-baldr-application_masters-
 * `masterName`: `@param {string} masterName The name of the master slide.`
 * `masters`: `@param {module:baldr-application/masters~Masters} masters All available master slides.`
 * `mousetrap`: `@param {module:baldr-application~mousetrap} mousetrap The object of shortcut library “mousetrap”.`
+* `masterData`: `@param {module:baldr-application/masters~masterData} Normalized master data.`
 
 ## n
 
@@ -42,6 +43,7 @@ How to write a bladr master slide: [Interface](module-baldr-application_masters-
 ## s
 
 * `slide`: `@param {module:baldr-application/slides~Slide} slide The object representation of one slide.`
+* `slideData`: `@param {module:baldr-application/slides~SlideData} slideData Normalized slide data.`
 * `slides`: `@param {module:baldr-application/slides~Slides} slides All slide objects of the current presentation session.`
 * `slidesSwitcher`: `@param {module:baldr-application/slides-switcher~SlidesSwitcher} slidesSwitcher Object to switch between the slides.`
 * `steps`: `@param {module:baldr-application/slides~StepSwitcher} The instantiated object derived from the class “StepSwitcher()”.`

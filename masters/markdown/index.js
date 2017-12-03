@@ -15,5 +15,5 @@ const markdown = require('marked');
  * @see {@link module:baldr-application/masters~Master#mainHTML}
  */
 exports.mainHTML = function(slide, config, document) {
-  return markdown(slide.normalizedData);
+  return markdown(slide.masterData);
 };

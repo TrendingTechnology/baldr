@@ -227,12 +227,12 @@ describe('Class “Slide()” #unittest', () => {
       assert.equal(slide.master.name, 'question');
     });
 
-    it('Property “this.rawData”', () => {
-      assert.equal(slide.rawData[0].question, 'question');
+    it('Property “this.slideData.rawMasterData', () => {
+      assert.equal(slide.slideData.rawMasterData[0].question, 'question');
     });
 
-    it('Property “this.normalizedData”', () => {
-      assert.equal(slide.normalizedData[0].question, 'question');
+    it('Property “this.masterData”', () => {
+      assert.equal(slide.masterData[0].question, 'question');
     });
 
     it('Property “this.steps”', () => {

@@ -10,7 +10,7 @@ const {
 const markdown = require('../index.js');
 
 let mainHTML = function(data) {
-  return markdown.mainHTML({normalizedData: data});
+  return markdown.mainHTML({masterData: data});
 };
 
 describe('Master slide “markdown” #unittest', () => {

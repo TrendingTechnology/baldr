@@ -121,7 +121,7 @@ exports.setStepByNo = function(no, count, stepData, document) {
  */
 exports.mainHTML = function(slide, config, document) {
   return '<div id="question-content">' +
-    template(slide.normalizedData) +
+    template(slide.masterData) +
     '</div>';
 };
 

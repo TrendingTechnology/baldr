@@ -407,7 +407,8 @@ class Slide {
     this.env = env;
 
     /**
-     *
+     * Normalized slide data.
+     * @type {module:baldr-application/slides~SlideData}
      */
     this.slideData = new SlideData(rawSlideData, this.env);
 
@@ -426,17 +427,11 @@ class Slide {
     this.master = this.env.masters[this.slideData.masterName];
 
     /**
-     * Various types of data to render a slide.
-     * @type {module:baldr-application/slides~rawSlideData}
+     * Normalized master data.
+     * @type {module:baldr-application/masters~masterData}
      */
-    this.rawData = this.slideData.rawMasterData;
-
-    /**
-     * The normalized slide data
-     * @type {(boolean|number|string|array|object)}
-     */
-    this.normalizedData = this.master
-      .normalizeData(this.rawData, this.env.config);
+    this.masterData = this.master
+      .normalizeData(this.slideData.rawMasterData, this.env.config);
 
     /**
      * The instantiated object derived from the class “StepSwitcher()”

@@ -15,8 +15,8 @@ let normalizeData = function(data) {
 };
 
 let mainHTML = function(data) {
-  normalizedData = person.normalizeData(data, config);
-  return person.mainHTML({normalizedData: normalizedData}, config);
+  masterData = person.normalizeData(data, config);
+  return person.mainHTML({masterData: masterData}, config);
 };
 
 describe('Master slide “person” #unittest', () => {

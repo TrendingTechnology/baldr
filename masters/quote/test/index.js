@@ -6,7 +6,7 @@ const {
 const quote = require('../index.js');
 
 let render = function(data) {
-  return quote.mainHTML({normalizedData: data});
+  return quote.mainHTML({masterData: data});
 };
 
 describe('Master slide “quote”: unit tests #unittest', () => {
