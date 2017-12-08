@@ -60,6 +60,7 @@ exports.allMasters = [
   'question',
   'quote',
   'svg',
+  'video',
   'website'
 ];
 
