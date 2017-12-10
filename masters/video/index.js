@@ -1,7 +1,15 @@
-/*
- https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Client-side_web_APIs/Video_and_audio_APIs
-*/
+/**
+ * @file Master slide “video”
+ * @module baldr-master-video
+ */
 
+'use strict';
+
+const {Media} = require('baldr-library');
+
+/**
+ * {@see https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Client-side_web_APIs/Video_and_audio_APIs}
+ */
 class VideoPlayer {
   constructor(document) {
     this.media = document.querySelector('video');
@@ -29,19 +37,23 @@ class VideoPlayer {
     this.intervalFwd = 0;
     this.intervalRwd = 0;
 
-    this.media.addEventListener('timeupdate', setTime);
+    this.media.addEventListener('timeupdate', this.setTime);
   }
 
+  /**
+   *
+   */
   playPauseMedia() {
     if(this.media.paused) {
-      this.play.setAttribute('data-icon','u');
-      this.media.this.play();
+      this.media.play();
     } else {
-      this.play.setAttribute('data-icon','P');
       this.media.pause();
     }
   }
 
+  /**
+   *
+   */
   stopMedia() {
     this.media.pause();
     this.media.currentTime = 0;
@@ -52,6 +64,9 @@ class VideoPlayer {
     clearInterval(this.intervalFwd);
   }
 
+  /**
+   *
+   */
   mediaBackward() {
     clearInterval(this.intervalFwd);
     this.fwd.classList.remove('active');
@@ -63,10 +78,13 @@ class VideoPlayer {
     } else {
       this.rwd.classList.add('active');
       this.media.pause();
-      this.intervalRwd = setInterval(windBackward, 200);
+      this.intervalRwd = setInterval(this.windBackward, 200);
     }
   }
 
+  /**
+   *
+   */
   mediaForward() {
     clearInterval(this.intervalRwd);
     this.rwd.classList.remove('active');
@@ -78,10 +96,13 @@ class VideoPlayer {
     } else {
       this.fwd.classList.add('active');
       this.media.pause();
-      this.intervalFwd = setInterval(windForward, 200);
+      this.intervalFwd = setInterval(this.windForward, 200);
     }
   }
 
+  /**
+   *
+   */
   windBackward() {
     if(this.media.currentTime <= 3) {
       this.rwd.classList.remove('active');
@@ -92,6 +113,9 @@ class VideoPlayer {
     }
   }
 
+  /**
+   *
+   */
   windForward() {
     if(this.media.currentTime >= this.media.duration - 3) {
       this.fwd.classList.remove('active');
@@ -102,7 +126,9 @@ class VideoPlayer {
     }
   }
 
-
+  /**
+   *
+   */
   setTime() {
     let minutes = Math.floor(this.media.currentTime / 60);
     let seconds = Math.floor(this.media.currentTime - minutes * 60);
@@ -129,23 +155,41 @@ class VideoPlayer {
   }
 }
 
+/**
+ * @see {@link module:baldr-application/masters~Master#normalizeData}
+ */
+exports.normalizeData = function(rawSlideData, config) {
+  return new Media(config.sessionDir)
+    .orderedList(rawSlideData, 'video');
+};
 
+/**
+ * @see {@link module:baldr-application/masters~Master#mainHTML}
+ */
 exports.mainHTML = function(slide, config, document) {
-  return `<div class="this.player">
-    <video this.controls>
-      <source src="video/sintel-short.mp4" type="video/mp4">
-      <source src="video/sintel-short.mp4" type="video/webm">
+  let video = slide.masterData[0].path;
+  return `<div class="player">
+    <video>
+      <source src="${video}" type="video/mp4">
       <!-- fallback content here -->
     </video>
-    <div class="this.controls">
-      <button class="this.play" data-icon="P" aria-label="this.play pause toggle"></button>
-      <button class="this.stop" data-icon="S" aria-label="this.stop"></button>
-      <div class="this.timer">
+    <div class="controls">
+      <button class="play fa fa-play" aria-label="play pause toggle"></button>
+      <button class="stop fa fa-stop" aria-label="stop"></button>
+      <div class="timer">
         <div></div>
-        <span aria-label="this.timer">00:00</span>
+        <span aria-label="timer">00:00</span>
       </div>
-      <button class="this.rwd" data-icon="B" aria-label="rewind"></button>
-      <button class="this.fwd" data-icon="F" aria-label="fast forward"></button>
+      <button class="rwd fa fa-backward" aria-label="rewind"></button>
+      <button class="fwd fa fa-forward" aria-label="fast forward"></button>
     </div>
   </div>`;
+};
+
+/**
+ * @see {@link module:baldr-application/masters~Master#postSet}
+ */
+exports.postSet = function(slide, config, document) {
+  let videoPlayer = new VideoPlayer(document);
+  videoPlayer.play.addEventListener('click', videoPlayer.playPauseMedia);
 };

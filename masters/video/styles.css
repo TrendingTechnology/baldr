@@ -1,9 +1,8 @@
-/*
- https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Client-side_web_APIs/Video_and_audio_APIs
-*/
+/**
+ * https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Client-side_web_APIs/Video_and_audio_APIs
+ */
 
-.controls {
-  visibility: hidden;
+[data-master="video"] .controls {
   opacity: 0.5;
   width: 400px;
   border-radius: 10px;
@@ -17,25 +16,7 @@
   display: flex;
 }
 
-.player:hover .controls, player:focus .controls {
+[data-master="video"] .player:hover .controls,
+[data-master="video"] .player:focus .controls {
   opacity: 1;
-}
-
-@font-face {
-   font-family: 'HeydingsControlsRegular';
-   src: url('fonts/heydings_controls-webfont.eot');
-   src: url('fonts/heydings_controls-webfont.eot?#iefix') format('embedded-opentype'),
-        url('fonts/heydings_controls-webfont.woff') format('woff'),
-        url('fonts/heydings_controls-webfont.ttf') format('truetype');
-   font-weight: normal;
-   font-style: normal;
-}
-
-button:before {
-  font-family: HeydingsControlsRegular;
-  font-size: 20px;
-  position: relative;
-  content: attr(data-icon);
-  color: #aaa;
-  text-shadow: 1px 1px 0px black;
 }

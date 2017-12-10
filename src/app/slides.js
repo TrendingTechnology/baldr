@@ -280,6 +280,9 @@ class SlideData {
 
   }
 
+  /**
+   *
+   */
   pullProperty_(rawSlideData, property) {
     if (rawSlideData.hasOwnProperty(property)) {
       const out = rawSlideData[property];
@@ -305,6 +308,9 @@ class SlideData {
     return array1.filter((n) => array2.includes(n));
   }
 
+  /**
+   *
+   */
   pullMasterfromString_(rawSlideData, masters) {
     if (masters.includes(rawSlideData)) {
       return {
@@ -317,6 +323,9 @@ class SlideData {
     }
   }
 
+  /**
+   *
+   */
   pullMasterfromObject_(rawSlideData, masterNames) {
     let intersection = this.intersect_(
       masterNames,
@@ -340,6 +349,9 @@ class SlideData {
     };
   }
 
+  /**
+   *
+   */
   pullTheme_(rawSlideData, themeNames) {
     if (!rawSlideData.hasOwnProperty('theme')) {
       return false;
@@ -354,6 +366,9 @@ class SlideData {
     }
   }
 
+  /**
+   *
+   */
   toString_(rawSlideData) {
     if (rawSlideData === null) {
       return 'null';
@@ -372,6 +387,9 @@ class SlideData {
     }
   }
 
+  /**
+   *
+   */
   getType_(rawSlideData) {
     if (Array.isArray(rawSlideData)) {
       return 'array';
