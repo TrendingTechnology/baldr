@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: masters/video/index.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: masters/video/index.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @file Master slide “video”
+ * @module baldr-master-video
+ */
+
+'use strict';
+
+const {Media} = require('baldr-library');
+
+/**
+ * {@see https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Client-side_web_APIs/Video_and_audio_APIs}
+ */
+class VideoPlayer {
+  constructor(document) {
+    this.media = document.querySelector('video');
+    this.controls = document.querySelector('.controls');
+
+    this.play = document.querySelector('.play');
+    this.stop = document.querySelector('.stop');
+    this.rwd = document.querySelector('.rwd');
+    this.fwd = document.querySelector('.fwd');
+
+    this.timerWrapper = document.querySelector('.timer');
+    this.timer = document.querySelector('.timer span');
+    this.timerBar = document.querySelector('.timer div');
+
+    this.play.addEventListener('click', this.playPauseMedia.bind(this));
+
+    this.stop.addEventListener('click', this.stopMedia.bind(this));
+    this.media.addEventListener('ended', this.stopMedia.bind(this));
+
+    this.rwd.addEventListener('click', this.mediaBackward.bind(this));
+    this.fwd.addEventListener('click', this.mediaForward.bind(this));
+
+    this.intervalFwd = 0;
+    this.intervalRwd = 0;
+
+    this.media.addEventListener('timeupdate', this.setTime.bind(this));
+  }
+
+  /**
+   *
+   */
+  playPauseMedia() {
+    if(this.media.paused) {
+      this.media.play();
+      this.play.classList.remove('fa-play');
+      this.play.classList.add('fa-pause');
+    }
+    else {
+      this.media.pause();
+      this.play.classList.remove('fa-pause');
+      this.play.classList.add('fa-play');
+    }
+  }
+
+  /**
+   *
+   */
+  stopMedia() {
+    this.media.pause();
+    this.media.currentTime = 0;
+    this.play.setAttribute('data-icon','P');
+    this.rwd.classList.remove('active');
+    this.fwd.classList.remove('active');
+    clearInterval(this.intervalRwd);
+    clearInterval(this.intervalFwd);
+  }
+
+  /**
+   *
+   */
+  mediaBackward() {
+    clearInterval(this.intervalFwd);
+    this.fwd.classList.remove('active');
+
+    if(this.rwd.classList.contains('active')) {
+      this.rwd.classList.remove('active');
+      clearInterval(this.intervalRwd);
+      this.media.this.play();
+    } else {
+      this.rwd.classList.add('active');
+      this.media.pause();
+      this.intervalRwd = setInterval(this.windBackward_.bind(this), 200);
+    }
+  }
+
+  /**
+   *
+   */
+  mediaForward() {
+    clearInterval(this.intervalRwd);
+    this.rwd.classList.remove('active');
+
+    if(this.fwd.classList.contains('active')) {
+      this.fwd.classList.remove('active');
+      clearInterval(this.intervalFwd);
+      this.media.this.play();
+    } else {
+      this.fwd.classList.add('active');
+      this.media.pause();
+      this.intervalFwd = setInterval(this.windForward_.bind(this), 200);
+    }
+  }
+
+  /**
+   *
+   */
+  windBackward_() {
+    if(this.media.currentTime &lt;= 3) {
+      this.rwd.classList.remove('active');
+      clearInterval(this.intervalRwd);
+      this.stopMedia();
+    } else {
+      this.media.currentTime -= 3;
+    }
+  }
+
+  /**
+   *
+   */
+  windForward_() {
+    if(this.media.currentTime >= this.media.duration - 3) {
+      this.fwd.classList.remove('active');
+      clearInterval(this.intervalFwd);
+      this.stopMedia();
+    } else {
+      this.media.currentTime += 3;
+    }
+  }
+
+  /**
+   *
+   */
+  setTime() {
+    let minutes = Math.floor(this.media.currentTime / 60);
+    let seconds = Math.floor(this.media.currentTime - minutes * 60);
+    let minuteValue;
+    let secondValue;
+
+    if (minutes &lt; 10) {
+      minuteValue = '0' + minutes;
+    } else {
+      minuteValue = minutes;
+    }
+
+    if (seconds &lt; 10) {
+      secondValue = '0' + seconds;
+    } else {
+      secondValue = seconds;
+    }
+
+    this.mediaTime = minuteValue + ':' + secondValue;
+    this.timer.textContent = this.mediaTime;
+
+    let barLength = this.timerWrapper.clientWidth * (this.media.currentTime/this.media.duration);
+    this.timerBar.style.width = barLength + 'px';
+  }
+}
+
+/**
+ * @see {@link module:baldr-application/masters~Master#normalizeData}
+ */
+exports.normalizeData = function(rawSlideData, config) {
+  return new Media(config.sessionDir)
+    .orderedList(rawSlideData, 'video');
+};
+
+/**
+ * @see {@link module:baldr-application/masters~Master#mainHTML}
+ */
+exports.mainHTML = function(slide, config, document) {
+  let video = slide.masterData[0].path;
+  return `&lt;div class="player">
+    &lt;video>
+      &lt;source src="${video}" type="video/mp4">
+      &lt;!-- fallback content here -->
+    &lt;/video>
+    &lt;div class="controls">
+      &lt;button class="play fa fa-play" aria-label="play pause toggle">&lt;/button>
+      &lt;button class="stop fa fa-stop" aria-label="stop">&lt;/button>
+      &lt;div class="timer">
+        &lt;div>&lt;/div>
+        &lt;span aria-label="timer">00:00&lt;/span>
+      &lt;/div>
+      &lt;button class="rwd fa fa-backward" aria-label="rewind">&lt;/button>
+      &lt;button class="fwd fa fa-forward" aria-label="fast forward">&lt;/button>
+    &lt;/div>
+  &lt;/div>`;
+};
+
+/**
+ * @see {@link module:baldr-application/masters~Master#postSet}
+ */
+exports.postSet = function(slide, config, document) {
+  let vid = new VideoPlayer(document);
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-baldr.html">baldr</a></li><li><a href="module-baldr-application.html">baldr-application</a></li><li><a href="module-baldr-application_masters.html">baldr-application/masters</a></li><li><a href="module-baldr-application_quick-start.html">baldr-application/quick-start</a></li><li><a href="module-baldr-application_slides.html">baldr-application/slides</a></li><li><a href="module-baldr-application_slides-switcher.html">baldr-application/slides-switcher</a></li><li><a href="module-baldr-application_themes.html">baldr-application/themes</a></li><li><a href="module-baldr-library.html">baldr-library</a></li><li><a href="module-baldr-library_config.html">baldr-library/config</a></li><li><a href="module-baldr-library_helper.html">baldr-library/helper</a></li><li><a href="module-baldr-library_media.html">baldr-library/media</a></li><li><a href="module-baldr-library_player.html">baldr-library/player</a></li><li><a href="module-baldr-master-audio.html">baldr-master-audio</a></li><li><a href="module-baldr-master-camera.html">baldr-master-camera</a></li><li><a href="module-baldr-master-editor.html">baldr-master-editor</a></li><li><a href="module-baldr-master-image.html">baldr-master-image</a></li><li><a href="module-baldr-master-markdown.html">baldr-master-markdown</a></li><li><a href="module-baldr-master-person.html">baldr-master-person</a></li><li><a href="module-baldr-master-question.html">baldr-master-question</a></li><li><a href="module-baldr-master-quote.html">baldr-master-quote</a></li><li><a href="module-baldr-master-svg.html">baldr-master-svg</a></li><li><a href="module-baldr-master-video.html">baldr-master-video</a></li><li><a href="module-baldr-master-website.html">baldr-master-website</a></li><li><a href="module-baldr-test.html">baldr-test</a></li><li><a href="module-baldr_render.html">baldr/render</a></li></ul><h3>Classes</h3><ul><li><a href="module-baldr-application_masters-Master.html">Master</a></li><li><a href="module-baldr-application_masters-Masters.html">Masters</a></li><li><a href="module-baldr-application_quick-start-QuickStart.html">QuickStart</a></li><li><a href="module-baldr-application_quick-start-QuickStartEntry.html">QuickStartEntry</a></li><li><a href="module-baldr-application_slides-switcher-SlidesSwitcher.html">SlidesSwitcher</a></li><li><a href="module-baldr-application_slides-Slide.html">Slide</a></li><li><a href="module-baldr-application_slides-SlideData.html">SlideData</a></li><li><a href="module-baldr-application_slides-Slides.html">Slides</a></li><li><a href="module-baldr-application_slides-StepSwitcher.html">StepSwitcher</a></li><li><a href="module-baldr-application_themes-Themes.html">Themes</a></li><li><a href="module-baldr-application-Environment.html">Environment</a></li><li><a href="module-baldr-application-ShowRunner.html">ShowRunner</a></li><li><a href="module-baldr-library_config-Config.html">Config</a></li><li><a href="module-baldr-library_media-FileInfo.html">FileInfo</a></li><li><a href="module-baldr-library_media-Media.html">Media</a></li><li><a href="module-baldr-library_player-Player.html">Player</a></li><li><a href="module-baldr-master-audio-Audio.html">Audio</a></li><li><a href="module-baldr-master-video-VideoPlayer.html">VideoPlayer</a></li><li><a href="module-baldr-test-Spectron.html">Spectron</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a>.
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
