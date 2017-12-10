@@ -7,160 +7,156 @@
 
 const {Media} = require('baldr-library');
 
-let media, controls, play, stop, rwd, fwd, timerWrapper, timer, timerBar, intervalFwd, intervalRwd;
-
 /**
  * {@see https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Client-side_web_APIs/Video_and_audio_APIs}
  */
+class VideoPlayer {
+  constructor(document) {
+    this.media = document.querySelector('video');
+    this.controls = document.querySelector('.controls');
 
-function playerSetup(document) {
-  media = document.querySelector('video');
-  controls = document.querySelector('.controls');
+    this.play = document.querySelector('.play');
+    this.stop = document.querySelector('.stop');
+    this.rwd = document.querySelector('.rwd');
+    this.fwd = document.querySelector('.fwd');
 
-  play = document.querySelector('.play');
-  stop = document.querySelector('.stop');
-  rwd = document.querySelector('.rwd');
-  fwd = document.querySelector('.fwd');
+    this.timerWrapper = document.querySelector('.timer');
+    this.timer = document.querySelector('.timer span');
+    this.timerBar = document.querySelector('.timer div');
 
-  timerWrapper = document.querySelector('.timer');
-  timer = document.querySelector('.timer span');
-  timerBar = document.querySelector('.timer div');
+    this.play.addEventListener('click', this.playPauseMedia.bind(this));
 
-  intervalFwd = 0;
-  intervalRwd = 0;
-}
+    this.stop.addEventListener('click', this.stopMedia.bind(this));
+    this.media.addEventListener('ended', this.stopMedia.bind(this));
 
-/**
- *
- */
-function addEventListener() {
-  play.addEventListener('click', playPauseMedia);
-  stop.addEventListener('click', stopMedia);
-  media.addEventListener('ended', stopMedia);
-  rwd.addEventListener('click', mediaBackward);
-  fwd.addEventListener('click', mediaForward);
-  media.addEventListener('timeupdate', setTime);
-}
+    this.rwd.addEventListener('click', this.mediaBackward.bind(this));
+    this.fwd.addEventListener('click', this.mediaForward.bind(this));
 
-/**
- *
- */
-function playPauseMedia() {
-  if(media.paused) {
-    media.play();
-    play.classList.remove('fa-play');
-    play.classList.add('fa-pause');
-  } else {
-    media.pause();
-    play.classList.remove('fa-pause');
-    play.classList.add('fa-play');
-  }
-}
+    this.intervalFwd = 0;
+    this.intervalRwd = 0;
 
-/**
- *
- */
-function stopMedia() {
-  media.pause();
-  media.currentTime = 0;
-  play.setAttribute('data-icon','P');
-  rwd.classList.remove('active');
-  fwd.classList.remove('active');
-  clearInterval(intervalRwd);
-  clearInterval(intervalFwd);
-}
-
-/**
- *
- */
-function mediaBackward() {
-  clearInterval(intervalFwd);
-  fwd.classList.remove('active');
-
-  if(rwd.classList.contains('active')) {
-    rwd.classList.remove('active');
-    clearInterval(intervalRwd);
-    media.play();
-  } else {
-    rwd.classList.add('active');
-    media.pause();
-    intervalRwd = setInterval(windBackward, 200);
-  }
-}
-
-/**
- *
- */
-function mediaForward() {
-  clearInterval(intervalRwd);
-  rwd.classList.remove('active');
-
-  if(fwd.classList.contains('active')) {
-    fwd.classList.remove('active');
-    clearInterval(intervalFwd);
-    media.play();
-  } else {
-    fwd.classList.add('active');
-    media.pause();
-    intervalFwd = setInterval(windForward, 200);
-  }
-}
-
-/**
- *
- */
-function windBackward() {
-  if(media.currentTime <= 3) {
-    rwd.classList.remove('active');
-    clearInterval(intervalRwd);
-    stopMedia();
-  } else {
-    media.currentTime -= 3;
-  }
-}
-
-/**
- *
- */
-function windForward() {
-
-  if(media.currentTime >= media.duration - 3) {
-    fwd.classList.remove('active');
-    clearInterval(intervalFwd);
-    stopMedia();
-  } else {
-    media.currentTime += 3;
-  }
-}
-
-/**
- *
- */
-function setTime() {
-  let minutes = Math.floor(media.currentTime / 60);
-  let seconds = Math.floor(media.currentTime - minutes * 60);
-  let minuteValue;
-  let secondValue;
-
-  if (minutes < 10) {
-    minuteValue = '0' + minutes;
-  } else {
-    minuteValue = minutes;
+    this.media.addEventListener('timeupdate', this.setTime.bind(this));
   }
 
-  if (seconds < 10) {
-    secondValue = '0' + seconds;
-  } else {
-    secondValue = seconds;
+  /**
+   *
+   */
+  playPauseMedia() {
+    if(this.media.paused) {
+      this.media.play();
+      this.play.classList.remove('fa-play');
+      this.play.classList.add('fa-pause');
+    }
+    else {
+      this.media.pause();
+      this.play.classList.remove('fa-pause');
+      this.play.classList.add('fa-play');
+    }
   }
 
-  let mediaTime = minuteValue + ':' + secondValue;
-  timer.textContent = mediaTime;
+  /**
+   *
+   */
+  stopMedia() {
+    this.media.pause();
+    this.media.currentTime = 0;
+    this.play.setAttribute('data-icon','P');
+    this.rwd.classList.remove('active');
+    this.fwd.classList.remove('active');
+    clearInterval(this.intervalRwd);
+    clearInterval(this.intervalFwd);
+  }
 
-  let barLength = timerWrapper.clientWidth * (media.currentTime/media.duration);
-  timerBar.style.width = barLength + 'px';
+  /**
+   *
+   */
+  mediaBackward() {
+    clearInterval(this.intervalFwd);
+    this.fwd.classList.remove('active');
+
+    if(this.rwd.classList.contains('active')) {
+      this.rwd.classList.remove('active');
+      clearInterval(this.intervalRwd);
+      this.media.this.play();
+    } else {
+      this.rwd.classList.add('active');
+      this.media.pause();
+      this.intervalRwd = setInterval(this.windBackward_.bind(this), 200);
+    }
+  }
+
+  /**
+   *
+   */
+  mediaForward() {
+    clearInterval(this.intervalRwd);
+    this.rwd.classList.remove('active');
+
+    if(this.fwd.classList.contains('active')) {
+      this.fwd.classList.remove('active');
+      clearInterval(this.intervalFwd);
+      this.media.this.play();
+    } else {
+      this.fwd.classList.add('active');
+      this.media.pause();
+      this.intervalFwd = setInterval(this.windForward_.bind(this), 200);
+    }
+  }
+
+  /**
+   *
+   */
+  windBackward_() {
+    if(this.media.currentTime <= 3) {
+      this.rwd.classList.remove('active');
+      clearInterval(this.intervalRwd);
+      this.stopMedia();
+    } else {
+      this.media.currentTime -= 3;
+    }
+  }
+
+  /**
+   *
+   */
+  windForward_() {
+    if(this.media.currentTime >= this.media.duration - 3) {
+      this.fwd.classList.remove('active');
+      clearInterval(this.intervalFwd);
+      this.stopMedia();
+    } else {
+      this.media.currentTime += 3;
+    }
+  }
+
+  /**
+   *
+   */
+  setTime() {
+    let minutes = Math.floor(this.media.currentTime / 60);
+    let seconds = Math.floor(this.media.currentTime - minutes * 60);
+    let minuteValue;
+    let secondValue;
+
+    if (minutes < 10) {
+      minuteValue = '0' + minutes;
+    } else {
+      minuteValue = minutes;
+    }
+
+    if (seconds < 10) {
+      secondValue = '0' + seconds;
+    } else {
+      secondValue = seconds;
+    }
+
+    this.mediaTime = minuteValue + ':' + secondValue;
+    this.timer.textContent = this.mediaTime;
+
+    let barLength = this.timerWrapper.clientWidth * (this.media.currentTime/this.media.duration);
+    this.timerBar.style.width = barLength + 'px';
+  }
 }
-
 
 /**
  * @see {@link module:baldr-application/masters~Master#normalizeData}
@@ -197,6 +193,5 @@ exports.mainHTML = function(slide, config, document) {
  * @see {@link module:baldr-application/masters~Master#postSet}
  */
 exports.postSet = function(slide, config, document) {
-  playerSetup(document);
-  addEventListener();
+  let vid = new VideoPlayer(document);
 };
