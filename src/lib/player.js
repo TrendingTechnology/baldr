@@ -155,3 +155,34 @@ class Player {
     this.timerBar.style.width = barLength + 'px';
   }
 }
+
+exports.Player = Player;
+
+/**
+ *
+ */
+exports.renderPlayer = function(id, mediaFile, isVideo=false) {
+  let tag;
+  if (isVideo) {
+    tag = 'video';
+  }
+  else {
+    tag = 'audio';
+  }
+  return `
+<div id="${id}" class="player">
+  <${tag}>
+    <source src="${mediaFile}">
+  </${tag}>
+  <div class="controls">
+    <button class="play fa fa-play" aria-label="play pause toggle"></button>
+    <button class="stop fa fa-stop" aria-label="stop"></button>
+    <div class="timer">
+      <div></div>
+      <span aria-label="timer">00:00</span>
+    </div>
+    <button class="rwd fa fa-backward" aria-label="rewind"></button>
+    <button class="fwd fa fa-forward" aria-label="fast forward"></button>
+  </div>
+</div>`;
+};

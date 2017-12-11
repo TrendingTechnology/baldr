@@ -183,6 +183,30 @@ class Player {
     this.timerBar.style.width = barLength + 'px';
   }
 }
+
+exports.Player = Player;
+
+/**
+ *
+ */
+exports.renderPlayer = function(id, mediaFile, isVideo=false) {
+  return `
+&lt;div id="${id}" class="player">
+  &lt;video>
+    &lt;source src="${mediaFile}">
+  &lt;/video>
+  &lt;div class="controls">
+    &lt;button class="play fa fa-play" aria-label="play pause toggle">&lt;/button>
+    &lt;button class="stop fa fa-stop" aria-label="stop">&lt;/button>
+    &lt;div class="timer">
+      &lt;div>&lt;/div>
+      &lt;span aria-label="timer">00:00&lt;/span>
+    &lt;/div>
+    &lt;button class="rwd fa fa-backward" aria-label="rewind">&lt;/button>
+    &lt;button class="fwd fa fa-forward" aria-label="fast forward">&lt;/button>
+  &lt;/div>
+&lt;/div>`;
+};
 </code></pre>
         </article>
     </section>
