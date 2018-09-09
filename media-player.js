@@ -14,7 +14,7 @@ class BaldrAudio {
     this.audio.play()
   }
 
-  fadeOut(duration=1){
+  fadeOut(duration=3.1){
     var actualVolume = this.audio.volume;
     var steps = actualVolume / 100
     // in milliseconds: duration * 1000 / 100
@@ -26,7 +26,6 @@ class BaldrAudio {
       }
       else {
         this.stop();
-        var d = new Date();
         clearInterval(fadeOutInterval);
       }
     }, parseInt(delay));
