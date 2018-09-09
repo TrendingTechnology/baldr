@@ -13,17 +13,17 @@ var start = function(audio) {
 
 function fadeOut(audio){
     var actualVolume = audio.volume;
-    console.log(actualVolume)
     var fadeOutInterval = setInterval(function(){
-        actualVolume = actualVolume - 0.02;
+        actualVolume -= 0.01;
         if(actualVolume >= 0){
-            console.log(actualVolume)
-            audio.volume = actualVolume;
+            audio.volume = actualVolume.toFixed(2);
+            console.log(audio.volume)
         } else {
             audio.pause();
+            console.log('pause')
             clearInterval(fadeOutInterval);
         }
-    }, 200);
+    }, 30);
 }
 
 // define a handler
