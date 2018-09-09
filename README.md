@@ -1,19 +1,19 @@
-[![npm](https://img.shields.io/npm/v/baldr-sbook-updtr.svg)](https://www.npmjs.com/package/baldr-sbook-updtr)
-[![Build Status](https://travis-ci.org/JosefFriedrich-nodejs/baldr-sbook-updtr.svg?branch=master)](https://travis-ci.org/JosefFriedrich-nodejs/baldr-sbook-updtr)
+[![npm](https://img.shields.io/npm/v/baldr-songbook-updater.svg)](https://www.npmjs.com/package/baldr-songbook-updater)
+[![Build Status](https://travis-ci.org/JosefFriedrich-nodejs/baldr-songbook-updater.svg?branch=master)](https://travis-ci.org/JosefFriedrich-nodejs/baldr-songbook-updater)
 
-# baldr-sbook-updtr - BALDUR Songbook Updater
+# baldr-songbook-updater - BALDUR Songbook Updater
 
 A command line utilty to generate from MuseScore files image files for
 the BALDUR Songbook.
 
 Further informations can be found on the
-[API documentation site](https://joseffriedrich-nodejs.github.io/baldr-sbook-updtr/)
+[API documentation site](https://joseffriedrich-nodejs.github.io/baldr-songbook-updater/)
 of the project.
 
 ## Installation
 
 ```
-sudo npm install --global --unsafe-perm baldr-sbook-updtr
+sudo npm install --global --unsafe-perm baldr-songbook-updater
 ```
 
 ## Dependencies
