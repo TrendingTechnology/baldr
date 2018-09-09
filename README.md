@@ -1,13 +1,13 @@
-[![npm](https://img.shields.io/npm/v/baldr-dcamr.svg)](https://www.npmjs.com/package/baldr-dcamr)
-[![Build Status](https://travis-ci.org/JosefFriedrich-nodejs/baldr-dcamr.svg?branch=master)](https://travis-ci.org/JosefFriedrich-nodejs/baldr-dcamr)
+[![npm](https://img.shields.io/npm/v/baldr-document-camera.svg)](https://www.npmjs.com/package/baldr-document-camera)
+[![Build Status](https://travis-ci.org/JosefFriedrich-nodejs/baldr-document-camera.svg?branch=master)](https://travis-ci.org/JosefFriedrich-nodejs/baldr-document-camera)
 
-# baldr-dcamr - BALDUR Document Camera Viewer
+# baldr-document-camera - BALDUR Document Camera Viewer
 
 A fullscreen electron app to display the video output from document
 cameras.
 
 Further informations can be found on the
-[API documentation site](https://joseffriedrich-nodejs.github.io/baldr-dcamr/)
+[API documentation site](https://joseffriedrich-nodejs.github.io/baldr-document-camera/)
 of the project.
 
 ```

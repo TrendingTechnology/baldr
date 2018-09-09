@@ -4,8 +4,8 @@ var Application = require('spectron').Application;
 
 describe('build', () => {
 
-  it('exists “dist/baldr-dcamr-linux-x64/resources/app.asar”', () => {
-    assert.ok(fs.existsSync('dist/baldr-dcamr-linux-x64/resources/app.asar'));
+  it('exists “dist/baldr-document-camera-linux-x64/resources/app.asar”', () => {
+    assert.ok(fs.existsSync('dist/baldr-document-camera-linux-x64/resources/app.asar'));
   });
 
 });
@@ -15,7 +15,7 @@ describe('application launch', function () {
 
   before(function () {
     this.app = new Application({
-      path: 'dist/baldr-dcamr-linux-x64/baldr-dcamr'
+      path: 'dist/baldr-document-camera-linux-x64/baldr-document-camera'
     });
     return this.app.start();
   });

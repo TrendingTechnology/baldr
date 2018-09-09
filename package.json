@@ -1,12 +1,12 @@
 {
-  "name": "baldr-dcamr",
-  "productName": "baldr-dcamr",
+  "name": "baldr-document-camera",
+  "productName": "baldr-document-camera",
   "description": "A fullscreen electron app to display the video output from document cameras.",
   "version": "0.0.3",
   "main": "main.js",
   "repository": {
     "type": "git",
-    "url": "git@github.com:JosefFriedrich-nodejs/baldr-dcamr.git"
+    "url": "git@github.com:JosefFriedrich-nodejs/baldr-document-camera.git"
   },
   "scripts": {
     "build": "electron-packager ./ --out=dist --app-version=$npm_package_version --prune --asar --overwrite --arch=x64 --icon=./icon.icns",
@@ -22,7 +22,7 @@
     "url": "https://josef.friedrich.rocks"
   },
   "license": "MIT",
-  "homepage": "https://github.com/JosefFriedrich-nodejs/baldr-dcamr",
+  "homepage": "https://github.com/JosefFriedrich-nodejs/baldr-document-camera",
   "devDependencies": {
     "electron-packager": "^9.1.0",
     "electron-rebuild": "^1.6.0",
