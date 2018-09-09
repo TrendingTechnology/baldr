@@ -1,44 +1,54 @@
-var audio = new Audio('files/mozart.mp3');
+class BaldrAudio {
+  constructor(audioFile) {
+    this.audio = new Audio(audioFile);
+  }
 
-var stop = function(audio) {
-  audio.pause();
-  audio.currentTime = 0;
+  stop() {
+    this.audio.pause();
+    this.audio.currentTime = 0;
+  }
+
+  start() {
+    this.audio.volume = 1
+    this.audio.currentTime = 0;
+    this.audio.play()
+  }
+
+  fadeOut(duration=1){
+    var actualVolume = this.audio.volume;
+    var steps = actualVolume / 100
+    // in milliseconds: duration * 1000 / 100
+    var delay = duration * 10
+    var fadeOutInterval = setInterval(() => {
+      actualVolume -= steps;
+      if (actualVolume >= 0) {
+        this.audio.volume = actualVolume.toFixed(2);
+      }
+      else {
+        this.stop();
+        var d = new Date();
+        clearInterval(fadeOutInterval);
+      }
+    }, parseInt(delay));
+  }
+
 }
 
-var start = function(audio) {
-  audio.volume = 1
-  audio.play()
-  audio.currentTime = 0;
-}
-
-function fadeOut(audio){
-    var actualVolume = audio.volume;
-    var fadeOutInterval = setInterval(function(){
-        actualVolume -= 0.01;
-        if(actualVolume >= 0){
-            audio.volume = actualVolume.toFixed(2);
-            console.log(audio.volume)
-        } else {
-            audio.pause();
-            console.log('pause')
-            clearInterval(fadeOutInterval);
-        }
-    }, 30);
-}
+var audio = new BaldrAudio('files/mozart.mp3');
 
 // define a handler
 function shortCuts(e) {
 
   if (e.key == 'p') {
-    start(audio);
+    audio.start();
   }
 
   if (e.key == 's') {
-    stop(audio);
+    audio.stop();
   }
 
   if (e.key == 'f') {
-    fadeOut(audio);
+    audio.fadeOut();
   }
 
 }
