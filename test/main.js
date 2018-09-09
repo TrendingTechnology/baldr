@@ -10,7 +10,7 @@ process.env.BALDR_SBOOK_PATH = path.resolve('test', 'songs');
 var darwinPath = [];
 
 if (process.platform === 'darwin') {
-  darwinPath = ['baldr-sbook.app', 'Contents', 'MacOS'];
+  darwinPath = ['baldr-songbook.app', 'Contents', 'MacOS'];
 }
 
 var appPath = path.join(

@@ -1,13 +1,13 @@
-[![npm](https://img.shields.io/npm/v/baldr-sbook.svg)](https://www.npmjs.com/package/baldr-sbook)
-[![Build Status](https://travis-ci.org/JosefFriedrich-nodejs/baldr-sbook.svg?branch=master)](https://travis-ci.org/JosefFriedrich-nodejs/baldr-sbook)
+[![npm](https://img.shields.io/npm/v/baldr-songbook.svg)](https://www.npmjs.com/package/baldr-songbook)
+[![Build Status](https://travis-ci.org/JosefFriedrich-nodejs/baldr-songbook.svg?branch=master)](https://travis-ci.org/JosefFriedrich-nodejs/baldr-songbook)
 
-# baldr-sbook - BALDUR Songbook
+# baldr-songbook - BALDUR Songbook
 
 A fullscreen electron app to display songs in a class room using a
 projector.
 
 Further informations can be found on the
-[API documentation site](https://joseffriedrich-nodejs.github.io/baldr-sbook/)
+[API documentation site](https://joseffriedrich-nodejs.github.io/baldr-songbook/)
 of the project.
 
 ## Installation
@@ -62,7 +62,7 @@ Folders names begining with “.” or “_” are ignored.
 
 To process the MuseScore to the necessary image formats use the command
 line utility
-[baldr-sbook-updtr](https://github.com/JosefFriedrich-nodejs/baldr-sbook-updtr).
+[baldr-songbook-updtr](https://github.com/JosefFriedrich-nodejs/baldr-songbook-updtr).
 
 ```
 .
