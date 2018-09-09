@@ -1,0 +1,13 @@
+.baldr-media-player {
+  background-size: contain;
+  width: 100px;
+  height: 100px;
+}
+
+.baldr-media-player.play {
+  background-image: url('assets/play.svg');
+}
+
+.baldr-media-player.stop {
+  background-image: url('assets/stop.svg');
+}
