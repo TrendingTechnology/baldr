@@ -1,22 +1,59 @@
-class BaldrAudio {
 
-  constructor(audioFile) {
-    this.audio = new Audio(audioFile);
-    this.playButton = this.createButton()
+class AudioButton {
+
+  constructor(baldrAudio) {
+    this.baldrAudio = baldrAudio;
+    this.button = this.create()
   }
 
-  createButton() {
+  create() {
     var button = document.createElement('div');
     button.classList.add('baldr-media-player');
     button.classList.add('play');
     button.id = 'baldr-media-1';
-    button.addEventListener("click", function() {this.start()}.bind(this), false);
+    button.addEventListener(
+      'click',
+      function() {this.baldrAudio.start()}.bind(this),
+      false
+    );
     return button
   }
 
-  insertButton(selector) {
+  insert(selector) {
     var el = document.querySelector(selector);
-    el.parentNode.replaceChild(this.playButton, el);
+    el.parentNode.replaceChild(this.button, el);
+  }
+
+  onstart() {
+    this.button.classList.replace('play', 'stop')
+  }
+
+  onstop() {
+    this.button.classList.replace('stop', 'play')
+  }
+}
+
+class BaldrAudio {
+
+  constructor(audioFile) {
+    this.audio = new Audio(audioFile);
+    this.button = new AudioButton(this)
+
+    this.audio.addEventListener(
+      'ended',
+      function() {
+        this.button.onstop();
+      }.bind(this),
+      false
+    );
+
+    this.audio.addEventListener(
+      'play',
+      function() {
+        this.button.onstart();
+      }.bind(this),
+      false
+    );
   }
 
   stop() {
@@ -71,4 +108,4 @@ function shortCuts(e) {
 // register the handler
 document.addEventListener('keyup', shortCuts, false);
 
-audio.insertButton('baldr-audio')
+audio.button.insert('baldr-audio')
