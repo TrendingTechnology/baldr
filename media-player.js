@@ -2,7 +2,21 @@ class BaldrAudio {
 
   constructor(audioFile) {
     this.audio = new Audio(audioFile);
-    console.log(this.audio)
+    this.playButton = this.createButton()
+  }
+
+  createButton() {
+    var button = document.createElement('div');
+    button.classList.add('baldr-media-player');
+    button.classList.add('play');
+    button.id = 'baldr-media-1';
+    button.addEventListener("click", function() {this.start()}.bind(this), false);
+    return button
+  }
+
+  insertButton(selector) {
+    var el = document.querySelector(selector);
+    el.parentNode.replaceChild(this.playButton, el);
   }
 
   stop() {
@@ -35,11 +49,6 @@ class BaldrAudio {
 
 }
 
-
-function render(id) {
-  return `<div class="baldr-media-player play" id="baldr-media-${id}"></div>`
-}
-
 var audio = new BaldrAudio('files/mozart.mp3');
 
 // define a handler
@@ -58,15 +67,8 @@ function shortCuts(e) {
   }
 
 }
+
 // register the handler
 document.addEventListener('keyup', shortCuts, false);
 
-el = document.querySelector("baldr-audio");
-el.outerHTML = render('1')
-
-
-el = document.querySelector(".baldr-media-player")
-
-el.addEventListener("click", function(){
-  audio.start();
-});
+audio.insertButton('baldr-audio')
