@@ -1,4 +1,6 @@
 
+audioWatcher = {'current': null}
+
 class AudioButton {
 
   constructor(baldrAudio) {
