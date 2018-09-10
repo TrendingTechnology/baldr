@@ -1,5 +1,8 @@
 
-audioWatcher = {'current': null}
+currentAudio = {
+  'start': function() {},
+  'stop': function() {}
+}
 
 class AudioButton {
 
@@ -39,10 +42,19 @@ class BaldrAudio {
 
   constructor(audioFile) {
     this.audio = new Audio(audioFile);
+    console.log(this.audio)
     this.button = new AudioButton(this)
 
     this.audio.addEventListener(
       'ended',
+      function() {
+        this.button.onstop();
+      }.bind(this),
+      false
+    );
+
+    this.audio.addEventListener(
+      'pause',
       function() {
         this.button.onstop();
       }.bind(this),
@@ -64,9 +76,11 @@ class BaldrAudio {
   }
 
   start() {
+    currentAudio.stop()
     this.audio.volume = 1
     this.audio.currentTime = 0;
     this.audio.play()
+    currentAudio = this
   }
 
   fadeOut(duration=3.1){
@@ -88,7 +102,11 @@ class BaldrAudio {
 
 }
 
-var audio = new BaldrAudio('files/mozart.mp3');
+var mozart = new BaldrAudio('files/mozart.mp3');
+mozart.button.insert('baldr-audio#mozart')
+
+var beethoven = new BaldrAudio('files/beethoven.mp3');
+beethoven.button.insert('baldr-audio#beethoven')
 
 // define a handler
 function shortCuts(e) {
@@ -109,5 +127,3 @@ function shortCuts(e) {
 
 // register the handler
 document.addEventListener('keyup', shortCuts, false);
-
-audio.button.insert('baldr-audio')
