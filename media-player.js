@@ -1,4 +1,3 @@
-
 currentAudio = {
   'start': function() {},
   'stop': function() {}
@@ -6,8 +5,8 @@ currentAudio = {
 
 class AudioButton {
 
-  constructor(baldrAudio) {
-    this.baldrAudio = baldrAudio;
+  constructor(audioFile) {
+    this.audioFile = audioFile;
     this.button = this.create()
   }
 
@@ -15,18 +14,17 @@ class AudioButton {
     var button = document.createElement('div');
     button.classList.add('baldr-media-player');
     button.classList.add('play');
-    button.id = 'baldr-media-1';
     button.addEventListener(
       'click',
-      function() {this.baldrAudio.start()}.bind(this),
+      function() {this.audioFile.start()}.bind(this),
       false
     );
     return button
   }
 
   insert(selector) {
-    var el = document.querySelector(selector);
-    el.parentNode.replaceChild(this.button, el);
+    var element = document.querySelector(selector);
+    element.parentNode.replaceChild(this.button, element);
   }
 
   onstart() {
@@ -38,36 +36,14 @@ class AudioButton {
   }
 }
 
-class BaldrAudio {
+class AudioFile {
 
   constructor(audioFile) {
     this.audio = new Audio(audioFile);
-    console.log(this.audio)
     this.button = new AudioButton(this)
-
-    this.audio.addEventListener(
-      'ended',
-      function() {
-        this.button.onstop();
-      }.bind(this),
-      false
-    );
-
-    this.audio.addEventListener(
-      'pause',
-      function() {
-        this.button.onstop();
-      }.bind(this),
-      false
-    );
-
-    this.audio.addEventListener(
-      'play',
-      function() {
-        this.button.onstart();
-      }.bind(this),
-      false
-    );
+    this.audio.addEventListener('ended', () => {this.button.onstop();});
+    this.audio.addEventListener('pause', () => {this.button.onstop();});
+    this.audio.addEventListener('play', () => {this.button.onstart();});
   }
 
   stop() {
@@ -102,10 +78,10 @@ class BaldrAudio {
 
 }
 
-var mozart = new BaldrAudio('files/mozart.mp3');
+var mozart = new AudioFile('files/mozart.mp3');
 mozart.button.insert('baldr-audio#mozart')
 
-var beethoven = new BaldrAudio('files/beethoven.mp3');
+var beethoven = new AudioFile('files/beethoven.mp3');
 beethoven.button.insert('baldr-audio#beethoven')
 
 // define a handler
