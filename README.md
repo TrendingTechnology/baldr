@@ -62,7 +62,7 @@ Folders names begining with “.” or “_” are ignored.
 
 To process the MuseScore to the necessary image formats use the command
 line utility
-[baldr-songbook-updtr](https://github.com/JosefFriedrich-nodejs/baldr-songbook-updtr).
+[baldr-songbook-updater](https://github.com/JosefFriedrich-nodejs/baldr-songbook-updater).
 
 ```
 .
