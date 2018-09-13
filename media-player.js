@@ -88,18 +88,44 @@ beethoven.button.insert('baldr-audio#beethoven')
 function shortCuts(e) {
 
   if (e.key == 'p') {
-    audio.start();
+    currentAudio.start();
   }
 
   if (e.key == 's') {
-    audio.stop();
+    currentAudio.stop();
   }
 
   if (e.key == 'f') {
-    audio.fadeOut();
+    currentAudio.fadeOut();
   }
 
 }
 
-// register the handler
 document.addEventListener('keyup', shortCuts, false);
+
+class AudioPlayer extends HTMLElement {
+  constructor() {
+    super();
+
+    const shadow = this.attachShadow({mode: 'open'});
+    const info = document.createElement('span');
+    const text = this.getAttribute('data-text');
+
+    const src = this.getAttribute('src');
+    info.textContent = src;
+
+    const style = document.createElement('style');
+
+    style.textContent = `
+      span {
+        color: red;
+      }
+    `;
+
+    shadow.appendChild(style);
+
+    shadow.appendChild(info);
+  }
+}
+
+customElements.define('audio-button', AudioPlayer);
