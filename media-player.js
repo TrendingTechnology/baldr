@@ -3,47 +3,10 @@ currentAudio = {
   'stop': function() {}
 }
 
-class AudioButton {
-
-  constructor(audioFile) {
-    this.audioFile = audioFile;
-    this.button = this.create()
-  }
-
-  create() {
-    var button = document.createElement('div');
-    button.classList.add('baldr-media-player');
-    button.classList.add('play');
-    button.addEventListener(
-      'click',
-      function() {this.audioFile.start()}.bind(this),
-      false
-    );
-    return button
-  }
-
-  insert(selector) {
-    var element = document.querySelector(selector);
-    element.parentNode.replaceChild(this.button, element);
-  }
-
-  onstart() {
-    this.button.classList.replace('play', 'stop')
-  }
-
-  onstop() {
-    this.button.classList.replace('stop', 'play')
-  }
-}
-
 class AudioFile {
 
   constructor(audioFile) {
     this.audio = new Audio(audioFile);
-    this.button = new AudioButton(this)
-    this.audio.addEventListener('ended', () => {this.button.onstop();});
-    this.audio.addEventListener('pause', () => {this.button.onstop();});
-    this.audio.addEventListener('play', () => {this.button.onstart();});
   }
 
   stop() {
@@ -78,11 +41,11 @@ class AudioFile {
 
 }
 
-var mozart = new AudioFile('files/mozart.mp3');
-mozart.button.insert('baldr-audio#mozart')
-
-var beethoven = new AudioFile('files/beethoven.mp3');
-beethoven.button.insert('baldr-audio#beethoven')
+// var mozart = new AudioFile('files/mozart.mp3');
+// mozart.button.insert('baldr-audio#mozart')
+//
+// var beethoven = new AudioFile('files/beethoven.mp3');
+// beethoven.button.insert('baldr-audio#beethoven')
 
 // define a handler
 function shortCuts(e) {
@@ -103,29 +66,62 @@ function shortCuts(e) {
 
 document.addEventListener('keyup', shortCuts, false);
 
-class AudioPlayer extends HTMLElement {
+class AudioButton extends HTMLElement {
   constructor() {
     super();
 
     const shadow = this.attachShadow({mode: 'open'});
-    const info = document.createElement('span');
-    const text = this.getAttribute('data-text');
+    this.button = document.createElement('div');
+    this.button.classList.add('button');
+    this.button.classList.add('play');
+
+    const info = document.createElement('div');
 
     const src = this.getAttribute('src');
-    info.textContent = src;
+    this.audioFile = new AudioFile(src);
+    console.log(this.audioFile)
+    this.audioFile.audio.addEventListener('ended', () => {this.onstop_();});
+    this.audioFile.audio.addEventListener('pause', () => {this.onstop_();});
+    this.audioFile.audio.addEventListener('play', () => {this.onplay_();});
+    this.addEventListener('click', () => {this.audioFile.start();});
 
     const style = document.createElement('style');
 
     style.textContent = `
-      span {
-        color: red;
+      .button {
+        background-size: contain;
+        width: 100px;
+        height: 100px;
+      }
+
+      .play {
+        background-image: url('assets/play.svg');
+      }
+
+      .stop {
+        background-image: url('assets/stop.svg');
       }
     `;
 
     shadow.appendChild(style);
+    shadow.appendChild(this.button);
 
     shadow.appendChild(info);
   }
+
+  insert(selector) {
+    var element = document.querySelector(selector);
+    element.parentNode.replaceChild(this.button, element);
+  }
+
+  onplay_() {
+    this.button.classList.replace('play', 'stop')
+  }
+
+  onstop_() {
+    this.button.classList.replace('stop', 'play')
+  }
+
 }
 
-customElements.define('audio-button', AudioPlayer);
+customElements.define('audio-button', AudioButton);
