@@ -2,7 +2,7 @@
   "name": "baldr-songbook",
   "productName": "baldr-songbook",
   "description": "A fullscreen electron app to display songs in a class room using a projector.",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "main": "lib/main.js",
   "repository": {
     "type": "git",
