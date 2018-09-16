@@ -49,13 +49,79 @@ var slideNumberMax;
 var slides;
 
 /**
- * The folder containing the images files.
+ * The absolute path of the song folder containing the images files.
  */
 var folder;
 
+/**
+ * Parent folder containing all songs
+ */
 var songsPath;
 
+/**
+ * &lt;code>&lt;pre>
+ * {
+ *   "Aint-she-sweet": {
+ *     "title": "Ain’t she sweet",
+ *     "artist": "Milton Ager (1893 - 1979)",
+ *     "lyricist": "Jack Yellen",
+ *     "folder": "/home/jf/git-repositories/content/lieder/a/Aint-she-sweet",
+ *     "slides": [
+ *       "01.svg",
+ *       "02.svg"
+ *     ]
+ *   },
+ *   "Altes-Fieber": {
+ *     "title": "Altes Fieber",
+ *     "artist": "Die Toten Hosen",
+ *     "musescore": "https://musescore.com/user/12559861/scores/4801717",
+ *     "folder": "/home/jf/git-repositories/content/lieder/a/Altes-Fieber",
+ *     "slides": [
+ *       "01.svg",
+ *       "02.svg",
+ *       "03.svg",
+ *       "04.svg",
+ *       "05.svg",
+ *       "06.svg"
+ *     ]
+ *   },
+ *   "Always-look-on-the-bright-side": {
+ *     "title": "Always look on the bright side of life",
+ *     "source": "http://musescore.com/score/158089",
+ *     "folder": "/home/jf/git-repositories/content/lieder/a/Always-look-on-the-bright-side",
+ *     "slides": [
+ *       "01.svg",
+ *       "02.svg",
+ *       "03.svg",
+ *       "04.svg",
+ *       "05.svg",
+ *       "06.svg"
+ *     ]
+ *   },
+ * &lt;/pre>&lt;/code>
+ */
 var library;
+
+/**
+ * The current song
+ * &lt;code>&lt;pre>
+ * {
+ *   "title": "Altes Fieber",
+ *   "artist": "Die Toten Hosen",
+ *   "musescore": "https://musescore.com/user/12559861/scores/4801717",
+ *   "folder": "/home/jf/git-repositories/content/lieder/a/Altes-Fieber",
+ *   "slides": [
+ *     "01.svg",
+ *     "02.svg",
+ *     "03.svg",
+ *     "04.svg",
+ *     "05.svg",
+ *     "06.svg"
+ *   ]
+ * }
+ * &lt;/pre>&lt;/code>
+ */
+var song;
 
 var selector;
 
@@ -67,16 +133,35 @@ var set = function(values) {
 
 /**
  * Set all properties for the current song.
+ *
+ * @param {string} songID The ID of the song: The song title, escaped
+ *   without special characters and whitespaces
+ *   (e. g.: Another-brick-in-the-wall)
  */
 var setCurrent = function(songID) {
-  var tmp = library[songID];
-  if (typeof tmp !== 'undefined') {
+  song = library[songID];
+  if (typeof song !== 'undefined') {
     slideNumber = 0;
-    slides = tmp.slides;
+    slides = song.slides;
     slideNumberMax = slides.length - 1;
-    folder = tmp.folder;
+    folder = song.folder;
   }
   setSlide();
+};
+
+/**
+ *
+ */
+var setSongTitle = function() {
+  if (slideNumber === 0 &amp;&amp; song.hasOwnProperty('title')) {
+    document.getElementById('song-title').style.display = 'block';
+    document.getElementById('song-title_title').textContent = song.title;
+    document.getElementById('song-title_subtitle').textContent = song.subtitle;
+
+  }
+  else {
+    document.getElementById('song-title').style.display = 'none';
+  }
 };
 
 /**
@@ -84,7 +169,8 @@ var setCurrent = function(songID) {
  */
 var setSlide = function() {
   var imagePath = path.join(folder, 'slides', slides[slideNumber]);
-  jquery(selector).attr('src', imagePath);
+  document.querySelector(selector).setAttribute('src', imagePath);
+  setSongTitle();
 };
 
 /**
@@ -135,13 +221,13 @@ exports.setCurrent = setCurrent;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#bindButtons">bindButtons</a></li><li><a href="global.html#bindShortcuts">bindShortcuts</a></li><li><a href="global.html#flattenTree">flattenTree</a></li><li><a href="global.html#folder">folder</a></li><li><a href="global.html#loadByHash">loadByHash</a></li><li><a href="global.html#nextSlide">nextSlide</a></li><li><a href="global.html#previousSlide">previousSlide</a></li><li><a href="global.html#setCurrent">setCurrent</a></li><li><a href="global.html#setSlide">setSlide</a></li><li><a href="global.html#setUrl">setUrl</a></li><li><a href="global.html#slideNumber">slideNumber</a></li><li><a href="global.html#slideNumberMax">slideNumberMax</a></li><li><a href="global.html#slides">slides</a></li><li><a href="global.html#tableOfContents">tableOfContents</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#bindButtons">bindButtons</a></li><li><a href="global.html#bindShortcuts">bindShortcuts</a></li><li><a href="global.html#flattenTree">flattenTree</a></li><li><a href="global.html#folder">folder</a></li><li><a href="global.html#library">library</a></li><li><a href="global.html#loadByHash">loadByHash</a></li><li><a href="global.html#MetaDataInterface">MetaDataInterface</a></li><li><a href="global.html#nextSlide">nextSlide</a></li><li><a href="global.html#previousSlide">previousSlide</a></li><li><a href="global.html#setCurrent">setCurrent</a></li><li><a href="global.html#setSlide">setSlide</a></li><li><a href="global.html#setSongTitle">setSongTitle</a></li><li><a href="global.html#setUrl">setUrl</a></li><li><a href="global.html#slideNumber">slideNumber</a></li><li><a href="global.html#slideNumberMax">slideNumberMax</a></li><li><a href="global.html#slides">slides</a></li><li><a href="global.html#song">song</a></li><li><a href="global.html#songsPath">songsPath</a></li><li><a href="global.html#tableOfContents">tableOfContents</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Mon Oct 16 2017 19:46:11 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Sun Sep 16 2018 14:20:56 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>
