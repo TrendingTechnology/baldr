@@ -1,6 +1,6 @@
 {
   "name": "baldr",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Presentation software",
   "main": "src/main.js",
   "scripts": {
