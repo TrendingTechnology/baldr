@@ -5,7 +5,7 @@
 A try to write my presentations for school in HTML5, CSS3 and
 Javascript using [Electron](https://electron.atom.io/).
 Further informations can be found on the
-[API documentation site](https://joseffriedrich-nodejs.github.io/baldr/)
+[API documentation site](https://josef-friedrich.github.io/baldr)
 of the project.
 
 This repository contains some evaluation and research code.
