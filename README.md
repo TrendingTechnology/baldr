@@ -1,5 +1,5 @@
 [![npm](https://img.shields.io/npm/v/baldr-songbook-updater.svg)](https://www.npmjs.com/package/baldr-songbook-updater)
-[![Build Status](https://travis-ci.org/JosefFriedrich-nodejs/baldr-songbook-updater.svg?branch=master)](https://travis-ci.org/JosefFriedrich-nodejs/baldr-songbook-updater)
+[![Build Status](https://travis-ci.org/Josef-Friedrich/baldr-songbook-updater.svg?branch=master)](https://travis-ci.org/Josef-Friedrich/baldr-songbook-updater)
 
 # baldr-songbook-updater - BALDUR Songbook Updater
 
