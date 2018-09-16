@@ -190,11 +190,18 @@ exports.Player = Player;
  *
  */
 exports.renderPlayer = function(id, mediaFile, isVideo=false) {
+  let tag;
+  if (isVideo) {
+    tag = 'video';
+  }
+  else {
+    tag = 'audio';
+  }
   return `
 &lt;div id="${id}" class="player">
-  &lt;video>
+  &lt;${tag}>
     &lt;source src="${mediaFile}">
-  &lt;/video>
+  &lt;/${tag}>
   &lt;div class="controls">
     &lt;button class="play fa fa-play" aria-label="play pause toggle">&lt;/button>
     &lt;button class="stop fa fa-stop" aria-label="stop">&lt;/button>

@@ -24,7 +24,7 @@
     "plugins": ["plugins/markdown"],
     "templates": {
         "default": {
-          "layoutFile": "./jsdoc-layout.tmpl",
+          "layoutFile": "./docs/jsdoc-layout.tmpl",
           "includeDate": false
         }
     }
