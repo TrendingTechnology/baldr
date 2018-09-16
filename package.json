@@ -1,11 +1,11 @@
 {
   "name": "baldr-songbook-updater",
   "productName": "BALDUR Songbook Updater",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A command line utilty to generate from MuseScore files image files for the BALDUR Songbook.",
   "repository": {
     "type": "git",
-    "url": "git@github.com:JosefFriedrich-nodejs/baldr-songbook-updater.git"
+    "url": "git@github.com:Josef-Friedrich/baldr-songbook-updater.git"
   },
   "main": "index.js",
   "scripts": {
