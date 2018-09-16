@@ -1,5 +1,5 @@
 [![npm](https://img.shields.io/npm/v/baldr-songbook.svg)](https://www.npmjs.com/package/baldr-songbook)
-[![Build Status](https://travis-ci.org/JosefFriedrich-nodejs/baldr-songbook.svg?branch=master)](https://travis-ci.org/JosefFriedrich-nodejs/baldr-songbook)
+[![Build Status](https://travis-ci.org/Josef-Friedrich/baldr-songbook.svg?branch=master)](https://travis-ci.org/Josef-Friedrich/baldr-songbook)
 
 # baldr-songbook - BALDUR Songbook
 
@@ -62,7 +62,7 @@ Folders names begining with “.” or “_” are ignored.
 
 To process the MuseScore to the necessary image formats use the command
 line utility
-[baldr-songbook-updater](https://github.com/JosefFriedrich-nodejs/baldr-songbook-updater).
+[baldr-songbook-updater](https://github.com/Josef-Friedrich/baldr-songbook-updater).
 
 ```
 .
