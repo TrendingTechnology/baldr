@@ -21,13 +21,13 @@ god. He is the of god of light.
 
 `baldr` consists of this subpackages.
 
-* [baldr-dcamr](https://github.com/JosefFriedrich-nodejs/baldr-dcamr):
+* [baldr-document-camera](https://github.com/Josef-Friedrich/baldr-document-camera):
   A fullscreen electron app to display the video output from document
   cameras.
-* [baldr-sbook](https://github.com/JosefFriedrich-nodejs/baldr-sbook):
+* [baldr-songbook](https://github.com/Josef-Friedrich/baldr-songbook):
   A fullscreen electron app to display songs in a class room using a
   projector.
-* [baldr-sbook-updtr](https://github.com/JosefFriedrich-nodejs/baldr-sbook-updtr):
+* [baldr-songbook-updater](https://github.com/Josef-Friedrich/baldr-songbook-updater):
   A command line utilty to generate from MuseScore files image files
   for the BALDUR Songbook.
 
