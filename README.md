@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/JosefFriedrich-nodejs/baldr.svg?branch=master)](https://travis-ci.org/JosefFriedrich-nodejs/baldr)
+[![Build Status](https://travis-ci.org/Josef-Friedrich/baldr.svg?branch=master)](https://travis-ci.org/Josef-Friedrich/baldr)
 
 # baldr - BALDUR
 

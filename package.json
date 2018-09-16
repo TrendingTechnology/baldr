@@ -1,6 +1,6 @@
 {
   "name": "baldr",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Presentation software",
   "main": "src/main.js",
   "scripts": {
@@ -37,7 +37,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/JosefFriedrich-nodejs/baldr.git"
+    "url": "git+https://github.com/Josef-Friedrich/baldr.git"
   },
   "author": {
     "name": "Josef Friedrich",
@@ -45,9 +45,9 @@
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/JosefFriedrich-nodejs/baldr/issues"
+    "url": "https://github.com/Josef-Friedrich/baldr/issues"
   },
-  "homepage": "https://github.com/JosefFriedrich-nodejs/baldr#readme",
+  "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
   "devDependencies": {
     "7zip-bin-linux": "^1.1.0",
     "electron": "^1.7.9",
