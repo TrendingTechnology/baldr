@@ -6,7 +6,7 @@
   "main": "main.js",
   "repository": {
     "type": "git",
-    "url": "git@github.com:JosefFriedrich-nodejs/baldr-document-camera.git"
+    "url": "git@github.com:Josef-Friedrich/baldr-document-camera.git"
   },
   "scripts": {
     "build": "electron-packager ./ --out=dist --app-version=$npm_package_version --prune --asar --overwrite --arch=x64 --icon=./icon.icns",
@@ -22,7 +22,7 @@
     "url": "https://josef.friedrich.rocks"
   },
   "license": "MIT",
-  "homepage": "https://github.com/JosefFriedrich-nodejs/baldr-document-camera",
+  "homepage": "https://github.com/Josef-Friedrich/baldr-document-camera",
   "devDependencies": {
     "electron-packager": "^9.1.0",
     "electron-rebuild": "^1.6.0",
