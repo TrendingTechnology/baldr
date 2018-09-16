@@ -7,7 +7,7 @@ A command line utilty to generate from MuseScore files image files for
 the BALDUR Songbook.
 
 Further informations can be found on the
-[API documentation site](https://joseffriedrich-nodejs.github.io/baldr-songbook-updater/)
+[API documentation site](https://josef-friedrich.github.io/baldr-songbook-updater)
 of the project.
 
 ## Installation
