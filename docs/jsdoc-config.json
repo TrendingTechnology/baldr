@@ -1,0 +1,31 @@
+{
+    "opts": {
+        "encoding": "utf8",
+        "destination": "./docs/",
+        "recurse": true
+    },
+    "tags": {
+        "allowUnknownTags": true
+    },
+    "source": {
+        "includePattern": ".+\\.js(doc)?$",
+        "excludePattern": "(^|\\/|\\\\)_",
+        "exclude": [
+            "masters/audio/node_modules",
+            "masters/editor/node_modules",
+            "masters/markdown/node_modules",
+            "node_modules",
+            "src/app/node_modules",
+            "src/lib/node_modules",
+            "themes/default/node_modules",
+            "themes/handwriting/node_modules"
+        ]
+    },
+    "plugins": ["plugins/markdown"],
+    "templates": {
+        "default": {
+          "layoutFile": "./docs/jsdoc-layout.tmpl",
+          "includeDate": false
+        }
+    }
+}

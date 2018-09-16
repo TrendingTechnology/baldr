@@ -9,7 +9,7 @@
   },
   "main": "index.js",
   "scripts": {
-    "doc": "jsdoc --destination ./docs/ .",
+    "doc": "jsdoc --configure ./docs/jsdoc-config.json --destination ./docs/ .",
     "test": "mocha"
   },
   "author": "Josef Friedrich",
