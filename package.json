@@ -91,6 +91,6 @@
     "typeface-alegreya-sc": "^0.0.40",
     "typeface-kalam": "^0.0.43",
     "web-audio-engine": "^0.13.3",
-    "webdriverio": "4.8.0"
+    "webdriverio": "^4.13.2"
   }
 }
