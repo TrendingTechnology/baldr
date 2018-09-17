@@ -1,5 +1,5 @@
 var rewire = require('rewire');
-var index = rewire("../lib/song-ng.js");
+var index = rewire("../lib/song-meta-data.js");
 let SongMetaData = index.__get__('SongMetaData');
 
 const assert = require("assert");
