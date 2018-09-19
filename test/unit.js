@@ -1,8 +1,37 @@
-var rewire = require('rewire');
-var index = rewire("../lib/song-meta-data.js");
-let SongMetaData = index.__get__('SongMetaData');
+const {Library, SongMetaData} = require('../lib/without-dom.js');
+const assert = require('assert');
+const path = require('path');
 
-const assert = require("assert");
+describe('Class “Library”', () => {
+
+  before(() => {
+    this.library = new Library(path.join(__dirname, 'songs', 'songs.json'));
+  });
+
+  describe('properties', () => {
+    it('tree', () => {
+      assert.ok(this.library.tree);
+      assert.equal(
+        this.library.tree.a['Auf-der-Mauer_auf-der-Lauer'].title,
+        'Auf der Mauer, auf der Lauer'
+      );
+    });
+    it('list', () => {
+      assert.ok(this.library.list);
+      assert.equal(
+        this.library.list['Auf-der-Mauer_auf-der-Lauer'].title,
+        'Auf der Mauer, auf der Lauer'
+      );
+    });
+  });
+
+  describe('methods', () => {
+    it('flattenTree_', () => {
+      let list = Library.flattenTree_(this.library.tree);
+    });
+  });
+
+});
 
 describe('Class “SongMetaData”', () => {
 
