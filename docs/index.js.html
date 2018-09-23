@@ -87,30 +87,33 @@ var showByHash = function() {
 /**
  * Generate a tree view for the table of contents page.
  */
-var tableOfContents = function(tree, element) {
-  var topUl = document.createElement('ul');
+class BaldrSongbookToc extends HTMLElement {
+  constructor() {
+    super();
+    let topUl = document.createElement('ul');
 
-  Object.keys(tree).forEach((abc, index) => {
-    var abcLi = document.createElement('li');
-    abcLi.setAttribute('class', 'abc');
-    abcLi.innerHTML = abc;
+    Object.keys(library.tree).forEach((abc, index) => {
+      let abcLi = document.createElement('li');
+      abcLi.setAttribute('class', 'abc');
+      abcLi.innerHTML = abc;
 
-    var abcUl = document.createElement('ul');
+      let abcUl = document.createElement('ul');
 
-    Object.keys(tree[abc]).forEach((folder, index) => {
-      var li = document.createElement('li');
-      var a = document.createElement('a');
-      a.setAttribute('href', '#' + folder);
-      a.setAttribute('id', 'song_' + folder);
-      a.innerHTML = tree[abc][folder].title;
-      li.appendChild(a);
-      abcUl.appendChild(li);
+      Object.keys(library.tree[abc]).forEach((folder, index) => {
+        let li = document.createElement('li');
+        let a = document.createElement('a');
+        a.setAttribute('href', '#' + folder);
+        a.setAttribute('id', 'song_' + folder);
+        a.innerHTML = library.tree[abc][folder].title;
+        li.appendChild(a);
+        abcUl.appendChild(li);
+      });
+      topUl.appendChild(abcLi);
+      abcLi.appendChild(abcUl);
     });
-    topUl.appendChild(abcLi);
-    abcLi.appendChild(abcUl);
-  });
-  element.appendChild(topUl);
-};
+    this.appendChild(topUl);
+  }
+}
 
 /**
  * Build the drop down menu for selectize
@@ -145,6 +148,7 @@ const library = new Library(path.join(config.path, 'songs.json'));
 var main = function() {
 
   customElements.define('baldr-songbook-search', BaldrSongbookSearch);
+  customElements.define('baldr-songbook-toc', BaldrSongbookToc);
 
   song.set({
     "library": library.list,
@@ -153,8 +157,6 @@ var main = function() {
   });
 
   bindButtons();
-
-  tableOfContents(library.tree, document.getElementById('toc-field'));
 
   window.onhashchange = showByHash;
 
@@ -186,7 +188,7 @@ if (config.path) {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="BaldrSongbookSearch.html">BaldrSongbookSearch</a></li><li><a href="Library.html">Library</a></li><li><a href="Modal.html">Modal</a></li><li><a href="Song.html">Song</a></li><li><a href="SongMetaData.html">SongMetaData</a></li></ul><h3>Global</h3><ul><li><a href="global.html#bindButtons">bindButtons</a></li><li><a href="global.html#bindShortcuts">bindShortcuts</a></li><li><a href="global.html#bootstrapConfig">bootstrapConfig</a></li><li><a href="global.html#folder">folder</a></li><li><a href="global.html#library">library</a></li><li><a href="global.html#loadByHash">loadByHash</a></li><li><a href="global.html#nextSlide">nextSlide</a></li><li><a href="global.html#previousSlide">previousSlide</a></li><li><a href="global.html#setCurrent">setCurrent</a></li><li><a href="global.html#setSlide">setSlide</a></li><li><a href="global.html#setSongTitle">setSongTitle</a></li><li><a href="global.html#setUrl">setUrl</a></li><li><a href="global.html#slideNumber">slideNumber</a></li><li><a href="global.html#slideNumberMax">slideNumberMax</a></li><li><a href="global.html#slides">slides</a></li><li><a href="global.html#song">song</a></li><li><a href="global.html#songsPath">songsPath</a></li><li><a href="global.html#tableOfContents">tableOfContents</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="BaldrSongbookSearch.html">BaldrSongbookSearch</a></li><li><a href="BaldrSongbookToc.html">BaldrSongbookToc</a></li><li><a href="Library.html">Library</a></li><li><a href="Modal.html">Modal</a></li><li><a href="Song.html">Song</a></li><li><a href="SongMetaData.html">SongMetaData</a></li></ul><h3>Global</h3><ul><li><a href="global.html#bindButtons">bindButtons</a></li><li><a href="global.html#bindShortcuts">bindShortcuts</a></li><li><a href="global.html#bootstrapConfig">bootstrapConfig</a></li><li><a href="global.html#folder">folder</a></li><li><a href="global.html#library">library</a></li><li><a href="global.html#loadByHash">loadByHash</a></li><li><a href="global.html#nextSlide">nextSlide</a></li><li><a href="global.html#previousSlide">previousSlide</a></li><li><a href="global.html#setCurrent">setCurrent</a></li><li><a href="global.html#setSlide">setSlide</a></li><li><a href="global.html#setSongTitle">setSongTitle</a></li><li><a href="global.html#setUrl">setUrl</a></li><li><a href="global.html#slideNumber">slideNumber</a></li><li><a href="global.html#slideNumberMax">slideNumberMax</a></li><li><a href="global.html#slides">slides</a></li><li><a href="global.html#song">song</a></li><li><a href="global.html#songsPath">songsPath</a></li></ul>
 </nav>
 
 <br class="clear">
