@@ -51,7 +51,8 @@ body {
  * Table of contents
  */
 
-#tableofcontents #toc-field {
+#tableofcontents baldr-songbook-toc {
+	display: block;
 	overflow-y: scroll;
 	height: 90%;
 }
