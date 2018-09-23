@@ -28,6 +28,27 @@
         <article>
             <pre class="prettyprint source linenums"><code>const fs = require('fs');
 const path = require('path');
+const os = require('os');
+
+/**
+ *
+ */
+var bootstrapConfig = function() {
+  let configFile = path.join(os.homedir(), '.baldr.json');
+  let config;
+
+  if (fs.existsSync(configFile)) {
+    config = require(configFile).songbook;
+  }
+  else {
+    config = {};
+  }
+
+  if (process.env.BALDR_SONGBOOK_PATH) {
+    config.path = process.env.BALDR_SONGBOOK_PATH;
+  }
+  return config;
+};
 
 /**
  *
@@ -237,7 +258,7 @@ class SongMetaData {
     }
   }
 }
-
+exports.bootstrapConfig = bootstrapConfig;
 exports.Library = Library;
 exports.SongMetaData = SongMetaData;
 </code></pre>
@@ -250,7 +271,7 @@ exports.SongMetaData = SongMetaData;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="BaldrSongbookSearch.html">BaldrSongbookSearch</a></li><li><a href="Library.html">Library</a></li><li><a href="Modal.html">Modal</a></li><li><a href="Song.html">Song</a></li><li><a href="SongMetaData.html">SongMetaData</a></li></ul><h3>Global</h3><ul><li><a href="global.html#bindButtons">bindButtons</a></li><li><a href="global.html#bindShortcuts">bindShortcuts</a></li><li><a href="global.html#folder">folder</a></li><li><a href="global.html#library">library</a></li><li><a href="global.html#loadByHash">loadByHash</a></li><li><a href="global.html#nextSlide">nextSlide</a></li><li><a href="global.html#previousSlide">previousSlide</a></li><li><a href="global.html#setCurrent">setCurrent</a></li><li><a href="global.html#setSlide">setSlide</a></li><li><a href="global.html#setSongTitle">setSongTitle</a></li><li><a href="global.html#setUrl">setUrl</a></li><li><a href="global.html#slideNumber">slideNumber</a></li><li><a href="global.html#slideNumberMax">slideNumberMax</a></li><li><a href="global.html#slides">slides</a></li><li><a href="global.html#song">song</a></li><li><a href="global.html#songsPath">songsPath</a></li><li><a href="global.html#tableOfContents">tableOfContents</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="BaldrSongbookSearch.html">BaldrSongbookSearch</a></li><li><a href="Library.html">Library</a></li><li><a href="Modal.html">Modal</a></li><li><a href="Song.html">Song</a></li><li><a href="SongMetaData.html">SongMetaData</a></li></ul><h3>Global</h3><ul><li><a href="global.html#bindButtons">bindButtons</a></li><li><a href="global.html#bindShortcuts">bindShortcuts</a></li><li><a href="global.html#bootstrapConfig">bootstrapConfig</a></li><li><a href="global.html#folder">folder</a></li><li><a href="global.html#library">library</a></li><li><a href="global.html#loadByHash">loadByHash</a></li><li><a href="global.html#nextSlide">nextSlide</a></li><li><a href="global.html#previousSlide">previousSlide</a></li><li><a href="global.html#setCurrent">setCurrent</a></li><li><a href="global.html#setSlide">setSlide</a></li><li><a href="global.html#setSongTitle">setSongTitle</a></li><li><a href="global.html#setUrl">setUrl</a></li><li><a href="global.html#slideNumber">slideNumber</a></li><li><a href="global.html#slideNumberMax">slideNumberMax</a></li><li><a href="global.html#slides">slides</a></li><li><a href="global.html#song">song</a></li><li><a href="global.html#songsPath">songsPath</a></li><li><a href="global.html#tableOfContents">tableOfContents</a></li></ul>
 </nav>
 
 <br class="clear">
