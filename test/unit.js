@@ -1,6 +1,17 @@
-const {Library, SongMetaData} = require('../lib/without-dom.js');
+const {bootstrapConfig, Library, SongMetaData} = require('../lib/without-dom.js');
 const assert = require('assert');
 const path = require('path');
+
+describe('Function “bootstrapConfig”', () => {
+  before(() => {
+    process.env.BALDR_SONGBOOK_PATH = '/lol';
+  });
+
+  it('BALDR_SONGBOOK_PATH', () => {
+    config = bootstrapConfig();
+    assert.equal(config.path, '/lol');
+  });
+});
 
 describe('Class “Library”', () => {
 

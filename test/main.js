@@ -5,7 +5,7 @@ var Application = require('spectron').Application;
 
 var pkg = require('../package.json');
 
-process.env.BALDR_SBOOK_PATH = path.resolve('test', 'songs');
+process.env.BALDR_SONGBOOK_PATH = path.resolve('test', 'songs');
 
 var darwinPath = [];
 
