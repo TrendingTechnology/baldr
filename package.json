@@ -10,7 +10,7 @@
   "main": "index.js",
   "scripts": {
     "doc": "jsdoc --configure ./docs/jsdoc-config.json --destination ./docs/ .",
-    "test": "mocha"
+    "test": "mocha --reporter spec"
   },
   "author": "Josef Friedrich",
   "license": "MIT",
