@@ -3,8 +3,23 @@ const path = require('path');
 const fs = require('fs');
 const tex = require('../tex.js');
 const rewire = require('rewire')('../tex.js');
+const json = require('../json.js');
+
+const basePath = path.resolve('test', 'songs', 'processed', 'some');
 
 describe('file “tex.js”', () => {
+
+  it('function “buildPianoFilesCountTree()”', () => {
+    let buildPianoFilesCountTree = rewire.__get__('buildPianoFilesCountTree');
+    let folderTree = json.readJSON(basePath);
+    let count = buildPianoFilesCountTree(folderTree, basePath);
+    assert.equal(count.a[3]['Auf-der-Mauer_auf-der-Lauer'].title, 'Auf der Mauer, auf der Lauer');
+    assert.equal(count.s[1]['Stille-Nacht'].title, 'Stille Nacht');
+    assert.equal(count.s[3]['Swing-low'].title, 'Swing low');
+    assert.equal(count.z[2]['Zum-Tanze-da-geht-ein-Maedel'].title, 'Zum Tanze, da geht ein Mädel');
+
+    assert.deepEqual(count.s[3]['Swing-low'].pianoFiles, [ 'piano_1.eps', 'piano_2.eps', 'piano_3.eps' ]);
+  });
 
   it('function “texCmd()”', () => {
     var texCmd = rewire.__get__('texCmd');

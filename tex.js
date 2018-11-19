@@ -9,6 +9,47 @@ const fs = require('fs-extra');
 const path = require('path');
 
 /**
+ * Build a tree object which contains the number of piano files of
+ * each song. This tree is necessary to avoid page breaks on multipage
+ * piano scores.
+ *
+ * @param {object} tree The object of songs.json
+ * @param {string} basePath Base path of the song collection.
+ * @return {object}
+ * <code><pre>
+ * { a: { '3': { 'Auf-der-Mauer_auf-der-Lauer': [Object] } },
+ *   s:
+ *    { '1': { 'Stille-Nacht': [Object] },
+ *      '3': { 'Swing-low': [Object] } },
+ *   z: { '2': { 'Zum-Tanze-da-geht-ein-Maedel': [Object] } } }
+ * </pre><code>
+ *
+ * One song entry has following properties:
+ *
+ * <code><pre>
+ * { title: 'Swing low',
+ *   folder: '/test/songs/processed/some/s/Swing-low',
+ *   slides: [ '01.svg', '02.svg', '03.svg' ],
+ *   pianoFiles: [ 'piano_1.eps', 'piano_2.eps', 'piano_3.eps' ] }
+ * </pre><code>
+ */
+var buildPianoFilesCountTree = function(tree, basePath) {
+  let output = {};
+  Object.keys(tree).forEach((abc, index) => {
+    Object.keys(tree[abc]).forEach((songFolder, index) => {
+      let absSongFolder = path.join(basePath, abc, songFolder, 'piano');
+      let pianoFiles = folderTree.getFolderFiles(absSongFolder, '.eps');
+      let count = pianoFiles.length;
+      if (!(abc in output)) output[abc] = {};
+      if (!(count in output[abc])) output[abc][count] = {};
+      output[abc][count][songFolder] = tree[abc][songFolder];
+      output[abc][count][songFolder].pianoFiles = pianoFiles;
+    });
+  });
+  return output;
+};
+
+/**
  *
  */
 var texCmd = function(command, value) {
