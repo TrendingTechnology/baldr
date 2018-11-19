@@ -89,15 +89,15 @@ var texABC = function(abc) {
  * @param {string} basePath - Basepath to the songbook tree.
  */
 var generateTeX = function(basePath) {
-  var tex = path.join(basePath, 'songs.tex');
+  var texFile = path.join(basePath, 'songs.tex');
   const tree = folderTree.getTree(basePath);
-  fs.removeSync(tex);
+  fs.removeSync(texFile);
 
   Object.keys(tree).forEach((abc, index) => {
-    fs.appendFileSync(tex, texABC(abc));
+    fs.appendFileSync(texFile, texABC(abc));
 
     Object.keys(tree[abc]).forEach((folder, index) => {
-      fs.appendFileSync(tex, texSong(basePath, path.join(basePath, abc, folder)));
+      fs.appendFileSync(texFile, texSong(basePath, path.join(basePath, abc, folder)));
     });
   });
 };
