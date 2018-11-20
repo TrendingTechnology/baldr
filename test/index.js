@@ -14,18 +14,18 @@ rewireBootstrapped.bootstrapConfig({
   force: true,
 });
 
-const rewire = require('rewire')('../index.js');
-
-const basePath = path.resolve('test', 'songs', 'processed', 'some');
+const rewire = require('rewire')('../index.js'); 
 
 process.env.PATH = __dirname + '/bin:' + process.env.PATH;
 
 describe('file “tex.js”', () => {
+    let TeX = rewire.__get__('TeX');
+    let basePath = path.resolve('test', 'songs', 'processed', 'some');
+    let tex = new TeX(basePath);
 
   it('function “buildPianoFilesCountTree()”', () => {
-    let buildPianoFilesCountTree = rewire.__get__('buildPianoFilesCountTree');
     let folderTree = json.readJSON(basePath);
-    let count = buildPianoFilesCountTree(folderTree, basePath);
+    let count = tex.buildPianoFilesCountTree(folderTree);
     assert.equal(count.a[3]['Auf-der-Mauer_auf-der-Lauer'].title, 'Auf der Mauer, auf der Lauer');
     assert.equal(count.s[1]['Stille-Nacht'].title, 'Stille Nacht');
     assert.equal(count.s[3]['Swing-low'].title, 'Swing low');
@@ -35,21 +35,17 @@ describe('file “tex.js”', () => {
   });
 
   it('function “texCmd()”', () => {
-    var texCmd = rewire.__get__('texCmd');
-    assert.equal(texCmd('lorem', 'ipsum'), '\\tmplorem{ipsum}\n');
+    assert.equal(tex.texCmd('lorem', 'ipsum'), '\\tmplorem{ipsum}\n');
   });
 
   it('function “texABC()”', () => {
-    var texAlpha = rewire.__get__('texABC');
-    assert.equal(texAlpha('a'), '\n\n\\tmpchapter{A}\n');
+    assert.equal(tex.texABC('a'), '\n\n\\tmpchapter{A}\n');
   });
 
   it('function “texSong()”', () => {
-    let texSong = rewire.__get__('texSong');
-    let basePath = path.resolve('test', 'songs', 'processed', 'some');
     let songPath = path.join(basePath, 's', 'Swing-low');
     assert.equal(
-      texSong(basePath, songPath),
+      tex.texSong(songPath),
       '\n' +
       '\\tmpheading{Swing low}\n' +
       '\\tmpimage{s/Swing-low/piano/piano_1.eps}\n' +
@@ -59,9 +55,8 @@ describe('file “tex.js”', () => {
   });
 
   it('function “generateTeX()”', () => {
-    let generateTeX = rewire.__get__('generateTeX');
     texFile = path.join('test', 'songs', 'processed', 'some', 'songs.tex');
-    generateTeX(path.resolve('test', 'songs', 'processed', 'some'));
+    tex.generateTeX(path.resolve('test', 'songs', 'processed', 'some'));
     assert.exists(texFile);
 
     var texContent = fs.readFileSync(texFile, 'utf8');
