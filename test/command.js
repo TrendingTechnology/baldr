@@ -1,7 +1,7 @@
 const {assert} = require('./lib/helper.js');
 const spawn = require('child_process').spawnSync;
 const rewire = require('rewire');
-const command = require('rewire')('../command.js');
+const index = require('rewire')('../index.js');
 const path = require('path');
 const fs = require('fs');
 const sinon = require('sinon');
@@ -9,14 +9,14 @@ process.env.PATH = __dirname + '/bin:' + process.env.PATH;
 
 const baseArgv = [
   '/usr/bin/node',
-  path.join(path.resolve('.'), 'command.js')
+  path.join(path.resolve('.'), 'index.js')
 ];
 
 var invokeCommand = function(argv) {
-  let main = command.__get__('main');
-  command.__set__('process.argv',  baseArgv.concat(argv));
+  let main = index.__get__('main');
+  index.__set__('process.argv',  baseArgv.concat(argv));
   main();
-  return command;
+  return index;
 };
 
 var args = function(arg) {
@@ -31,11 +31,11 @@ var args = function(arg) {
 var read = function(file) {
   return fs.readFileSync(file, 'utf-8');
 };
-describe('file “command.js”', () => {
+describe('file “index.js”', () => {
 
   describe('setOptions', () => {
     it.skip('--clean', () => {
-      let setOptions = command.__get__('setOptions');
+      let setOptions = index.__get__('setOptions');
       let out = setOptions(args(['--clean']));
       console.log(out);
       assert.equal(out.clean, true);
@@ -47,19 +47,16 @@ describe('file “command.js”', () => {
     it('--path', () => {
       let stub = sinon.stub();
       let message = rewire('../message.js');
-      let index = rewire('../index.js');
-      let command = rewire('../command.js');
       message.__set__('info', stub);
       index.__set__('message', message);
-      command.__set__('index', index);
 
-      let main = command.__get__('main');
-      command.__set__('process.argv',  [
+      let main = index.__get__('main');
+      index.__set__('process.argv',  [
         '', '', '--path', path.join('test', 'songs', 'clean', 'some')
       ]);
       main();
 
-      let commander = command.__get__('commander');
+      let commander = index.__get__('commander');
       assert.equal(commander.path, path.join('test', 'songs', 'clean', 'some'));
       assert.deepEqual(
         stub.args,
@@ -99,14 +96,11 @@ describe('file “command.js”', () => {
     it('--folder', () => {
       let stub = sinon.stub();
       let message = rewire('../message.js');
-      let index = rewire('../index.js');
-      let command = rewire('../command.js');
       message.__set__('info', stub);
       index.__set__('message', message);
-      command.__set__('index', index);
 
-      let main = command.__get__('main');
-      command.__set__('process.argv',  [
+      let main = index.__get__('main');
+      index.__set__('process.argv',  [
         '', '',
         '--test',
         '--folder',
@@ -123,19 +117,19 @@ describe('file “command.js”', () => {
   describe('Command line', () => {
 
     it('no arguments: normal update', () => {
-      const cli = spawn('./command.js', ['--test']);
+      const cli = spawn('./index.js', ['--test']);
     });
 
     it('no arguments (second run): only json and TeX generation', () => {
-      const cli = spawn('./command.js', ['--test']);
+      const cli = spawn('./index.js', ['--test']);
     });
 
     it('--force', () => {
-      const cli = spawn('./command.js', ['--test', '--force']);
+      const cli = spawn('./index.js', ['--test', '--force']);
     });
 
     it('--help', () => {
-      const cli = spawn('./command.js', ['--test', '--help']);
+      const cli = spawn('./index.js', ['--test', '--help']);
       var out = cli.stdout.toString();
       assert.ok(out.indexOf('Usage') > -1);
       assert.ok(out.indexOf('--help') > -1);
@@ -144,7 +138,7 @@ describe('file “command.js”', () => {
     });
 
     it('--version', () => {
-      const cli = spawn('./command.js', ['--test', '--version']);
+      const cli = spawn('./index.js', ['--test', '--version']);
       let pckg = require('../package.json');
       assert.equal(cli.stdout.toString(), pckg.version + '\n');
       assert.equal(cli.status, 0);
@@ -152,7 +146,7 @@ describe('file “command.js”', () => {
 
     // Test should be executed at the very last position.
     it('--clean', () => {
-      const cli = spawn('./command.js', ['--test', '--clean']);
+      const cli = spawn('./index.js', ['--test', '--clean']);
     });
 
   });

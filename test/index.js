@@ -6,15 +6,14 @@ const sinon = require('sinon');
 
 const index = require('../index.js');
 const json = require('../json.js');
+const rewire = require('rewire')('../index.js');
 
-var rewireBootstrapped = require('rewire')('../index.js');
-rewireBootstrapped.bootstrapConfig({
+let bootstrapConfig = rewire.__get__('bootstrapConfig');
+bootstrapConfig({
   test: true,
   path: path.resolve('test', 'songs', 'clean', 'some'),
   force: true,
 });
-
-const rewire = require('rewire')('../index.js'); 
 
 process.env.PATH = __dirname + '/bin:' + process.env.PATH;
 
@@ -77,7 +76,8 @@ describe('file “index.js”', () => {
   describe('Configuration', () => {
 
     it('function “bootstrapConfig()”', () => {
-      rewire.bootstrapConfig({path: path.resolve('test', 'songs', 'clean', 'some'), test: true});
+      let bootstrapConfig = rewire.__get__('bootstrapConfig');
+      bootstrapConfig({path: path.resolve('test', 'songs', 'clean', 'some'), test: true});
       const c = rewire.__get__('config');
       assert.equal(c.path, path.resolve('test', 'songs', 'clean', 'some'));
       assert.exists(path.resolve('test', 'songs', 'clean', 'some', 'filehashes.db'));
@@ -87,7 +87,8 @@ describe('file “index.js”', () => {
       let savePATH = process.env.PATH;
       process.env.PATH = '';
       try {
-        rewire.bootstrapConfig({path: path.resolve('test', 'songs', 'clean', 'some'), test: true});
+        let bootstrapConfig = rewire.__get__('bootstrapConfig');
+        bootstrapConfig({path: path.resolve('test', 'songs', 'clean', 'some'), test: true});
       }
       catch(e) {
         assert.equal(
@@ -104,7 +105,7 @@ describe('file “index.js”', () => {
 
   describe('Private functions', () => {
     it('function “processSongFolder()”', () => {
-      processSongFolder = rewireBootstrapped.__get__("processSongFolder");
+      processSongFolder = rewire.__get__("processSongFolder");
       let status = processSongFolder(
         path.join('test', 'songs', 'clean', 'some', 'a', 'Auf-der-Mauer_auf-der-Lauer')
       );
@@ -113,8 +114,8 @@ describe('file “index.js”', () => {
         status,
         {
           "changed": {
-            "piano": false,
-            "slides": false
+            "piano": true,
+            "slides": true
           },
           "folder": "test/songs/clean/some/a/Auf-der-Mauer_auf-der-Lauer",
           "folderName": "Auf-der-Mauer_auf-der-Lauer",
@@ -142,8 +143,9 @@ describe('file “index.js”', () => {
 
     it('function “update()”', () => {
       let stub = sinon.stub();
-      rewireBootstrapped.__set__('message.songFolder', stub);
-      rewireBootstrapped.update();
+      rewire.__set__('message.songFolder', stub);
+      update = rewire.__get__('update');
+      update();
       let songs = path.join('test', 'songs', 'clean', 'some');
       const auf = path.join(songs, 'a', 'Auf-der-Mauer_auf-der-Lauer');
       const swing = path.join(songs, 's', 'Swing-low');
@@ -172,18 +174,21 @@ describe('file “index.js”', () => {
         'Auf der Mauer, auf der Lauer'
       );
 
-      rewireBootstrapped.clean();
+      let clean = rewire.__get__('clean');
+      clean();
     });
 
     it('function “setTestMode()”', () => {
-      rewireBootstrapped.setTestMode();
-      const config = rewireBootstrapped.__get__('config');
+      let setTestMode = rewire.__get__('setTestMode');
+      setTestMode();
+      const config = rewire.__get__('config');
       assert.equal(config.test, true);
       assert.equal(config.path, path.resolve('test', 'songs', 'clean', 'some'));
     });
 
     it('function “clean()”', () => {
-      rewireBootstrapped.clean();
+      let clean = rewire.__get__('clean');
+      clean();
       assert.ok(!fs.existsSync(path.join('songs', 'songs.tex')));
     });
 

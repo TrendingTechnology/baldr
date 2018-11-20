@@ -1,3 +1,5 @@
+#! /usr/bin/env node
+
 /**
  * @file Assemble all submodules and export to command.js
  */
@@ -7,6 +9,8 @@
 const fs = require('fs-extra');
 const os = require('os');
 const path = require('path');
+const commander = require('commander');
+const pckg = require('./package.json');
 
 const Check = require('./check.js');
 var CheckChange = new Check();
@@ -295,13 +299,64 @@ var clean = function() {
   ]);
 };
 
-exports.bootstrapConfig = bootstrapConfig;
-exports.clean = clean;
-exports.generateJSON = function() {json.generateJSON(config.path);};
-exports.generateTeX = function() {
+let generateJSON = function() {
+  json.generateJSON(config.path);
+};
+
+let generateTeX = function() {
   let tex = new TeX(config.path);
   tex.generateTeX();
 };
-exports.setTestMode = setTestMode;
-exports.update = update;
-exports.updateSongFolder = updateSongFolder;
+
+var setOptions = function(argv) {
+  return commander
+    .version(pckg.version)
+    .option('-c, --clean', 'clean up (delete all generated files)')
+    .option('-F, --folder <folder>', 'process only the given song folder')
+    .option('-f, --force', 'rebuild all images')
+    .option('-j, --json', 'generate JSON file')
+    .option('-p --path <path>', 'Base path to a song collection.')
+    .option('-T, --test', 'switch to test mode')
+    .option('-t, --tex', 'generate TeX file')
+    .parse(argv);
+};
+
+var main = function() {
+  let options = setOptions(process.argv);
+
+  if (options.folder) {
+    options.force = true;
+  }
+
+  let config = {
+    folder: options.folder,
+    force: options.force
+  };
+
+  if (options.path && options.path.length > 0) {
+    config.path = options.path;
+  }
+
+  bootstrapConfig(config);
+
+  if (options.test) {
+    setTestMode();
+  }
+
+  if (options.clean) {
+    clean();
+  } else if (options.folder) {
+    updateSongFolder(options.folder);
+  } else if (options.json) {
+    generateJSON();
+  } else if (options.tex) {
+    generateTeX();
+  } else {
+    update();
+  }
+
+};
+
+if (require.main === module) {
+  main();
+}
