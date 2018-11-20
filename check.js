@@ -9,40 +9,43 @@ const fs = require('fs');
 const path = require('path');
 const sqlite3 = require('better-sqlite3');
 
-var Sqlite = function(dbFile) {
-  this.dbFile = dbFile;
-};
 
-Sqlite.prototype.initialize = function() {
-  this.db = new sqlite3(this.dbFile);
-  this.db
-    .prepare(
-      "CREATE TABLE IF NOT EXISTS hashes (filename TEXT UNIQUE, hash TEXT)"
-    )
-    .run();
+class Sqlite{
+  constructor(dbFile) {
+    this.dbFile = dbFile;
+  }
 
-  this.db
-    .prepare("CREATE INDEX IF NOT EXISTS filename ON hashes(filename)")
-    .run();
-};
+  initialize() {
+    this.db = new sqlite3(this.dbFile);
+    this.db
+      .prepare(
+        "CREATE TABLE IF NOT EXISTS hashes (filename TEXT UNIQUE, hash TEXT)"
+      )
+      .run();
 
-Sqlite.prototype.insert = function(filename, hash) {
-  this.db
-    .prepare('INSERT INTO hashes values ($filename, $hash)')
-    .run({"filename": filename, "hash": hash});
-};
+    this.db
+      .prepare("CREATE INDEX IF NOT EXISTS filename ON hashes(filename)")
+      .run();
+  }
 
-Sqlite.prototype.select = function(filename) {
-  return this.db
-    .prepare('SELECT * FROM hashes WHERE filename = $filename')
-    .get({"filename": filename});
-};
+  insert(filename, hash) {
+    this.db
+      .prepare('INSERT INTO hashes values ($filename, $hash)')
+      .run({"filename": filename, "hash": hash});
+  }
 
-Sqlite.prototype.update = function(filename, hash) {
-  this.db
-    .prepare("UPDATE hashes SET hash = $hash WHERE filename = $filename")
-    .run({"filename": filename, "hash": hash});
-};
+  select(filename) {
+    return this.db
+      .prepare('SELECT * FROM hashes WHERE filename = $filename')
+      .get({"filename": filename});
+  }
+
+  update(filename, hash) {
+    this.db
+      .prepare("UPDATE hashes SET hash = $hash WHERE filename = $filename")
+      .run({"filename": filename, "hash": hash});
+  }
+}
 
 /**
  *
@@ -55,6 +58,44 @@ var hashSHA1 = function(filename) {
     )
     .digest('hex');
 };
+
+// class CheckChange {
+//
+//   constructor(dbFile) {
+//     this.db = new Sqlite(dbFile);
+//     this.db.initialize();
+//   }
+//
+//   /**
+//    * Check for file modifications
+//    * @param {string} filename - Path to the file.
+//    * @returns {boolean}
+//    */
+//   do(filename) {
+//     filename = path.resolve(filename);
+//     if (!fs.existsSync(filename)) {
+//       return false;
+//     }
+//
+//     var hash = hashSHA1(filename);
+//     var row = this.db.select(filename);
+//     var hashStored = '';
+//
+//     if (row) {
+//       hashStored = row.hash;
+//     } else  {
+//       this.db.insert(filename, hash);
+//     }
+//     if (hash !== hashStored) {
+//       this.db.update(filename, hash);
+//       return true;
+//     }
+//     else {
+//       return false;
+//     }
+//   }
+// }
+//
 
 var CheckChange = function() {
   this.db = {};
