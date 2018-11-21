@@ -2,7 +2,7 @@
     "a": {
         "Auf-der-Mauer_auf-der-Lauer": {
             "title": "Auf der Mauer, auf der Lauer",
-            "folder": "/home/jf/git-repositories/github/Josef-Friedrich/baldr-songbook-updater/test/songs/processed/some/a/Auf-der-Mauer_auf-der-Lauer",
+            "folder": "/Users/jf/git-repositories/github/Josef-Friedrich/baldr-songbook-updater/test/songs/processed/some/a/Auf-der-Mauer_auf-der-Lauer",
             "slides": [
                 "01.svg",
                 "02.svg",
@@ -14,14 +14,14 @@
     "s": {
         "Stille-Nacht": {
             "title": "Stille Nacht",
-            "folder": "/home/jf/git-repositories/github/Josef-Friedrich/baldr-songbook-updater/test/songs/processed/some/s/Stille-Nacht",
+            "folder": "/Users/jf/git-repositories/github/Josef-Friedrich/baldr-songbook-updater/test/songs/processed/some/s/Stille-Nacht",
             "slides": [
                 "01.svg"
             ]
         },
         "Swing-low": {
             "title": "Swing low",
-            "folder": "/home/jf/git-repositories/github/Josef-Friedrich/baldr-songbook-updater/test/songs/processed/some/s/Swing-low",
+            "folder": "/Users/jf/git-repositories/github/Josef-Friedrich/baldr-songbook-updater/test/songs/processed/some/s/Swing-low",
             "slides": [
                 "01.svg",
                 "02.svg",
@@ -32,7 +32,7 @@
     "z": {
         "Zum-Tanze-da-geht-ein-Maedel": {
             "title": "Zum Tanze, da geht ein Mädel",
-            "folder": "/home/jf/git-repositories/github/Josef-Friedrich/baldr-songbook-updater/test/songs/processed/some/z/Zum-Tanze-da-geht-ein-Maedel",
+            "folder": "/Users/jf/git-repositories/github/Josef-Friedrich/baldr-songbook-updater/test/songs/processed/some/z/Zum-Tanze-da-geht-ein-Maedel",
             "slides": [
                 "01.svg",
                 "02.svg"

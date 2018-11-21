@@ -62,19 +62,6 @@ var gitPull = function(basePath) {
 };
 
 /**
- * Get the MuseScore command.
- * @returns {string} The name of the MuseScore command.
- */
-var getMscoreCommand = function() {
-  if (process.platform === 'darwin') {
-    return '/Applications/MuseScore 2.app/Contents/MacOS/mscore';
-  } else {
-    return 'mscore';
-  }
-};
-
-
-/**
  * Generate form a given *.mscx file a PDF file.
  * @param {string} folder - Folder containing the *.mscx file.
  * @param {string} source - Name of the *.mscx file without the extension.
@@ -85,7 +72,7 @@ var generatePDF = function(folder, source, destination = '') {
     destination = source;
   }
   let pdf = path.join(folder, destination + '.pdf');
-  spawn(getMscoreCommand(), [
+  spawn('mscore', [
     '--export-to',
     path.join(pdf),
     path.join(folder, source + '.mscx')
@@ -146,5 +133,4 @@ exports.checkExecutables = checkExecutables;
 exports.generatePDF = generatePDF;
 exports.generatePianoEPS = generatePianoEPS;
 exports.generateSlides = generateSlides;
-exports.getMscoreCommand = getMscoreCommand;
 exports.gitPull = gitPull;

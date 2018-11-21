@@ -165,7 +165,7 @@ var bootstrapConfig = function(newConfig=false) {
     'pdfcrop',
     'pdfinfo',
     'pdftops',
-    mscx.getMscoreCommand()
+    'mscore',
   ]);
 
   if (!status) {

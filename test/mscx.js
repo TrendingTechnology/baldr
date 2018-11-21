@@ -56,16 +56,6 @@ describe('file “mscx.js”', () => {
     assert.ok(!mscx.gitPull('songs'));
   });
 
-  it('function “getMscoreCommand()”', () => {
-    const getMscoreCommand = rewire.__get__('getMscoreCommand');
-    if (process.platform === 'darwin') {
-      assert.equal(getMscoreCommand(), '/Applications/MuseScore 2.app/Contents/MacOS/mscore');
-    }
-    else {
-      assert.equal(getMscoreCommand(), 'mscore');
-    }
-  });
-
   it('function “generatePDF()”', () => {
     const folder = path.join('test', 'songs', 'clean', 'some', 's', 'Swing-low');
     let file = mscx.generatePDF(folder, 'projector', 'projector');
