@@ -17,12 +17,12 @@ bootstrapConfig({
 
 process.env.PATH = __dirname + '/bin:' + process.env.PATH;
 
-describe('file “tex.js”', () => {
+describe('Class “TeX”', () => {
     let TeX = rewire.__get__('TeX');
     let basePath = path.resolve('test', 'songs', 'processed', 'some');
     let tex = new TeX(basePath);
 
-  it('function “buildPianoFilesCountTree()”', () => {
+  it('method “buildPianoFilesCountTree()”', () => {
     let folderTree = json.readJSON(basePath);
     let count = tex.buildPianoFilesCountTree(folderTree);
     assert.equal(count.a[3]['Auf-der-Mauer_auf-der-Lauer'].title, 'Auf der Mauer, auf der Lauer');
@@ -33,15 +33,15 @@ describe('file “tex.js”', () => {
     assert.deepEqual(count.s[3]['Swing-low'].pianoFiles, [ 'piano_1.eps', 'piano_2.eps', 'piano_3.eps' ]);
   });
 
-  it('function “texCmd()”', () => {
+  it('method “texCmd()”', () => {
     assert.equal(tex.texCmd('lorem', 'ipsum'), '\\tmplorem{ipsum}\n');
   });
 
-  it('function “texABC()”', () => {
+  it('method “texABC()”', () => {
     assert.equal(tex.texABC('a'), '\n\n\\tmpchapter{A}\n');
   });
 
-  it('function “texSong()”', () => {
+  it('method “texSong()”', () => {
     let songPath = path.join(basePath, 's', 'Swing-low');
     assert.equal(
       tex.texSong(songPath),
@@ -53,7 +53,7 @@ describe('file “tex.js”', () => {
     );
   });
 
-  it('function “generateTeX()”', () => {
+  it('method “generateTeX()”', () => {
     texFile = path.join('test', 'songs', 'processed', 'some', 'songs.tex');
     tex.generateTeX(path.resolve('test', 'songs', 'processed', 'some'));
     assert.exists(texFile);
