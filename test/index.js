@@ -11,14 +11,14 @@ const sinon = require('sinon')
 const spawn = require('child_process').spawnSync
 const standard = require('mocha-standard')
 
+process.env.PATH = path.join(__dirname, 'bin:', process.env.PATH)
+
 let bootstrapConfig = indexRewired.__get__('bootstrapConfig')
 bootstrapConfig({
   test: true,
   path: path.resolve('test', 'songs', 'clean', 'some'),
   force: true
 })
-
-process.env.PATH = path.join(__dirname, 'bin:', process.env.PATH)
 
 describe('file “check.js”', () => {
   it('object “Sqlite()”', () => {
