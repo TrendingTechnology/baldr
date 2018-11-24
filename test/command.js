@@ -1,39 +1,40 @@
 const { assert } = require('./lib/helper.js')
 const spawn = require('child_process').spawnSync
 const rewire = require('rewire')
-const index = require('rewire')('../index.js')
+const indexRewired = require('rewire')('../index.js')
 const path = require('path')
 const fs = require('fs')
 const sinon = require('sinon')
 process.env.PATH = path.join(__dirname, '/bin:', process.env.PATH)
 
-const baseArgv = [
-  '/usr/bin/node',
-  path.join(path.resolve('.'), 'index.js')
-]
+describe('Command line interface', () => {
+  const baseArgv = [
+    '/usr/bin/node',
+    path.join(path.resolve('.'), 'index.js')
+  ]
 
-var invokeCommand = function (argv) {
-  let main = index.__get__('main')
-  index.__set__('process.argv', baseArgv.concat(argv))
-  main()
-  return index
-}
-
-var args = function (arg) {
-  if (typeof arg === 'string') {
-    return ['-', '-', arg]
-  } else {
-    return ['-', '-'].concat(arg)
+  const invokeCommand = function (argv) {
+    let main = indexRewired.__get__('main')
+    indexRewired.__set__('process.argv', baseArgv.concat(argv))
+    main()
+    return indexRewired
   }
-}
 
-var read = function (file) {
-  return fs.readFileSync(file, 'utf-8')
-}
-describe('file “index.js”', () => {
+  const args = function (arg) {
+    if (typeof arg === 'string') {
+      return ['-', '-', arg]
+    } else {
+      return ['-', '-'].concat(arg)
+    }
+  }
+
+  const read = function (file) {
+    return fs.readFileSync(file, 'utf-8')
+  }
+
   describe('setOptions', () => {
     it.skip('--clean', () => {
-      let setOptions = index.__get__('setOptions')
+      let setOptions = indexRewired.__get__('setOptions')
       let out = setOptions(args(['--clean']))
       console.log(out)
       assert.equal(out.clean, true)
@@ -45,15 +46,15 @@ describe('file “index.js”', () => {
       let stub = sinon.stub()
       let message = rewire('../message.js')
       message.__set__('info', stub)
-      index.__set__('message', message)
+      indexRewired.__set__('message', message)
 
-      let main = index.__get__('main')
-      index.__set__('process.argv', [
+      let main = indexRewired.__get__('main')
+      indexRewired.__set__('process.argv', [
         '', '', '--path', path.join('test', 'songs', 'clean', 'some')
       ])
       main()
 
-      let commander = index.__get__('commander')
+      let commander = indexRewired.__get__('commander')
       assert.equal(commander.path, path.join('test', 'songs', 'clean', 'some'))
       assert.deepEqual(
         stub.args,
@@ -93,10 +94,10 @@ describe('file “index.js”', () => {
       let stub = sinon.stub()
       let message = rewire('../message.js')
       message.__set__('info', stub)
-      index.__set__('message', message)
+      indexRewired.__set__('message', message)
 
-      let main = index.__get__('main')
-      index.__set__('process.argv', [
+      let main = indexRewired.__get__('main')
+      indexRewired.__set__('process.argv', [
         '', '',
         '--test',
         '--folder',

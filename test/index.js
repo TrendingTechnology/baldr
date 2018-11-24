@@ -6,9 +6,9 @@ const sinon = require('sinon')
 
 const standard = require('mocha-standard')
 const json = require('../json.js')
-const rewire = require('rewire')('../index.js')
+const indexRewired = require('rewire')('../index.js')
 
-let bootstrapConfig = rewire.__get__('bootstrapConfig')
+let bootstrapConfig = indexRewired.__get__('bootstrapConfig')
 bootstrapConfig({
   test: true,
   path: path.resolve('test', 'songs', 'clean', 'some'),
@@ -18,7 +18,7 @@ bootstrapConfig({
 process.env.PATH = path.join(__dirname, '/bin:', process.env.PATH)
 
 describe('Class “TeX”', () => {
-  let TeX = rewire.__get__('TeX')
+  let TeX = indexRewired.__get__('TeX')
   let basePath = path.resolve('test', 'songs', 'processed', 'some')
   let tex = new TeX(basePath)
 
@@ -73,9 +73,9 @@ describe('Class “TeX”', () => {
 describe('file “index.js”', () => {
   describe('Configuration', () => {
     it('function “bootstrapConfig()”', () => {
-      let bootstrapConfig = rewire.__get__('bootstrapConfig')
+      let bootstrapConfig = indexRewired.__get__('bootstrapConfig')
       bootstrapConfig({ path: path.resolve('test', 'songs', 'clean', 'some'), test: true })
-      const c = rewire.__get__('config')
+      const c = indexRewired.__get__('config')
       assert.equal(c.path, path.resolve('test', 'songs', 'clean', 'some'))
       assert.exists(path.resolve('test', 'songs', 'clean', 'some', 'filehashes.db'))
     })
@@ -84,7 +84,7 @@ describe('file “index.js”', () => {
       let savePATH = process.env.PATH
       process.env.PATH = ''
       try {
-        let bootstrapConfig = rewire.__get__('bootstrapConfig')
+        let bootstrapConfig = indexRewired.__get__('bootstrapConfig')
         bootstrapConfig({ path: path.resolve('test', 'songs', 'clean', 'some'), test: true })
       } catch (e) {
         assert.equal(
@@ -100,7 +100,7 @@ describe('file “index.js”', () => {
 
   describe('Private functions', () => {
     it('function “processSongFolder()”', () => {
-      let processSongFolder = rewire.__get__('processSongFolder')
+      let processSongFolder = indexRewired.__get__('processSongFolder')
       let status = processSongFolder(
         path.join('test', 'songs', 'clean', 'some', 'a', 'Auf-der-Mauer_auf-der-Lauer')
       )
@@ -137,8 +137,8 @@ describe('file “index.js”', () => {
   describe('Exported functions', () => {
     it('function “update()”', () => {
       let stub = sinon.stub()
-      rewire.__set__('message.songFolder', stub)
-      let update = rewire.__get__('update')
+      indexRewired.__set__('message.songFolder', stub)
+      let update = indexRewired.__get__('update')
       update()
       let songs = path.join('test', 'songs', 'clean', 'some')
       const auf = path.join(songs, 'a', 'Auf-der-Mauer_auf-der-Lauer')
@@ -168,20 +168,20 @@ describe('file “index.js”', () => {
         'Auf der Mauer, auf der Lauer'
       )
 
-      let clean = rewire.__get__('clean')
+      let clean = indexRewired.__get__('clean')
       clean()
     })
 
     it('function “setTestMode()”', () => {
-      let setTestMode = rewire.__get__('setTestMode')
+      let setTestMode = indexRewired.__get__('setTestMode')
       setTestMode()
-      const config = rewire.__get__('config')
+      const config = indexRewired.__get__('config')
       assert.equal(config.test, true)
       assert.equal(config.path, path.resolve('test', 'songs', 'clean', 'some'))
     })
 
     it('function “clean()”', () => {
-      let clean = rewire.__get__('clean')
+      let clean = indexRewired.__get__('clean')
       clean()
       assert.ok(!fs.existsSync(path.join('songs', 'songs.tex')))
     })
