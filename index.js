@@ -11,12 +11,14 @@ const os = require('os')
 const path = require('path')
 const commander = require('commander')
 const pckg = require('./package.json')
+const yaml = require('js-yaml')
 
 const Check = require('./check.js')
 var CheckChange = new Check()
 const json = require('./json.js')
 const mscx = require('./mscx.js')
 const folderTree = require('./tree.js')
+
 // For test purposes, to be able to overwrite “message” with rewire.
 var message = require('./message.js')
 
@@ -317,6 +319,25 @@ var setOptions = function (argv) {
     .parse(argv)
 }
 
+class Song {
+  constructor (folder) {
+    this.folder = folder
+  }
+
+  /**
+   * @param {string} folder - Absolute path to a song folder.
+   */
+  // var getSongInfo = function (folder) {
+  //   var ymlFile = path.join(folder, 'info.yml')
+  //   if (fs.existsSync(ymlFile)) {
+  //     return yaml.safeLoad(fs.readFileSync(ymlFile, 'utf8'))
+  //   } else {
+  //     return false
+  //   }
+  // }
+
+}
+
 var main = function () {
   let options = setOptions(process.argv)
 
@@ -355,3 +376,5 @@ var main = function () {
 if (require.main === module) {
   main()
 }
+
+exports.Song = Song

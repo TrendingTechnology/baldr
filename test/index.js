@@ -385,3 +385,12 @@ describe('Command line interface', () => {
     })
   })
 })
+
+describe('Class Song()', function () {
+  let Song = indexRewired.__get__('Song')
+
+  it('Initialisation', function () {
+    let song = new Song('lol')
+    assert.ok(song)
+  })
+})
