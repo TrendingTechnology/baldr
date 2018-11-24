@@ -110,8 +110,8 @@ describe('file “index.js”', () => {
         status,
         {
           'changed': {
-            'piano': false,
-            'slides': false
+            'piano': true,
+            'slides': true
           },
           'folder': 'test/songs/clean/some/a/Auf-der-Mauer_auf-der-Lauer',
           'folderName': 'Auf-der-Mauer_auf-der-Lauer',
