@@ -42,8 +42,8 @@ describe('file “check.js”', () => {
 
   it('object “CheckChange()”', () => {
     var check = new CheckChange()
-    let db = check.init('test.db')
-    assert.strictEqual(db.dbFile, 'test.db')
+    check.init('test.db')
+    assert.strictEqual(check.db.dbFile, 'test.db')
 
     fs.appendFileSync('tmp.txt', 'test')
     assert.ok(check.do('tmp.txt'))

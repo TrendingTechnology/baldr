@@ -190,7 +190,7 @@ describe('file “index.js”', () => {
 })
 
 it('conforms to standard', standard.files([
-  'index.js', 'test/*.js'
+  '*.js', 'test/*.js'
 ]))
 
 describe('Command line interface', () => {
