@@ -15,7 +15,9 @@
     "electron-rebuild": "electron-rebuild",
     "postinstall": "electron-rebuild",
     "start": "electron .",
-    "test": "mocha"
+    "test": "mocha",
+    "standard": "standard *.js lib/*.js"
+
   },
   "author": {
     "name": "Josef Friedrich",
@@ -31,13 +33,26 @@
     "selectize": "^0.12.4"
   },
   "devDependencies": {
+    "electron": "^1.7.9",
     "electron-packager": "^9.1.0",
     "electron-rebuild": "^1.6.0",
-    "electron": "^1.7.9",
     "jsdoc": "^3.5.5",
-    "mocha-jshint": "^2.3.1",
     "mocha": "^4.0.1",
+    "mocha-standard": "^1.0.0",
+    "rewire": "^4.0.1",
     "spectron": "^3.7.2",
-    "rewire": "^4.0.1"
+    "standard": "^12.0.1"
+  },
+  "standard": {
+    "globals": [
+      "describe",
+      "context",
+      "before",
+      "beforeEach",
+      "after",
+      "afterEach",
+      "it",
+      "expect"
+    ]
   }
 }
