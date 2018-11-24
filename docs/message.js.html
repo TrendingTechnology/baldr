@@ -30,40 +30,40 @@
  * @file Implement message and loging functionality
  */
 
-'use strict';
+'use strict'
 
-const colors = require('colors');
-const fs = require('fs');
-const path = require('path');
+require('colors')
+const fs = require('fs')
+const path = require('path')
 
-const error = '☒'.red;
-const finished = '☑'.green;
-const progress = '☐'.yellow;
+const error = '☒'.red
+const finished = '☑'.green
+const progress = '☐'.yellow
 
 /**
  * Print out or return text.
  * @param {string} text - Text to display.
  */
-var info = function(text) {
-  console.log(text);
-};
+var info = function (text) {
+  console.log(text)
+}
 
 /**
  *
  */
-var noConfigPath = function() {
+var noConfigPath = function () {
   var output = error + '  Configuration file ' +
     '“~/.baldr.json” not found!\n' +
-    'Create such a config file or use the “--path” option!';
+    'Create such a config file or use the “--path” option!'
 
   const sampleConfig = fs.readFileSync(
     path.join(__dirname, 'sample.config.json'), 'utf8'
-  );
-  output += '\n\nExample configuration file:\n' + sampleConfig;
+  )
+  output += '\n\nExample configuration file:\n' + sampleConfig
 
-  info(output);
-  throw new Error('No configuration file found.');
-};
+  info(output)
+  throw new Error('No configuration file found.')
+}
 
 /**
  * &lt;pre>&lt;code>
@@ -92,44 +92,39 @@ var noConfigPath = function() {
  * }
  * &lt;/code>&lt;/pre>
  */
-var songFolder = function(s) {
-  let forced;
+var songFolder = function (s) {
+  let forced
   if (s.force) {
-    forced = ' ' + '(forced)'.red;
-  }
-  else {
-    forced = '';
+    forced = ' ' + '(forced)'.red
+  } else {
+    forced = ''
   }
 
-  let symbol;
+  let symbol
   if (!s.info.title) {
-    symbol = error;
-  }
-  else if (!s.changed.slides &amp;&amp; !s.changed.piano) {
-    symbol = finished;
-  }
-  else {
-    symbol = progress;
+    symbol = error
+  } else if (!s.changed.slides &amp;&amp; !s.changed.piano) {
+    symbol = finished
+  } else {
+    symbol = progress
   }
 
-  let title;
+  let title
   if (!s.info.title) {
-    title = s.folderName.red;
-  }
-  else if (!s.changed.slides &amp;&amp; !s.changed.piano) {
-    title = s.folderName.green + ': ' + s.info.title;
-  }
-  else {
-    title = s.folderName.yellow + ': ' + s.info.title;
+    title = s.folderName.red
+  } else if (!s.changed.slides &amp;&amp; !s.changed.piano) {
+    title = s.folderName.green + ': ' + s.info.title
+  } else {
+    title = s.folderName.yellow + ': ' + s.info.title
   }
 
-  let output = symbol + '  ' + title + forced;
+  let output = symbol + '  ' + title + forced
   if (s.generated.slides) {
     output +=
       '\n\t' +
       'slides'.yellow +
       ': ' +
-      s.generated.slides.join(', ');
+      s.generated.slides.join(', ')
   }
 
   if (s.generated.piano) {
@@ -137,14 +132,14 @@ var songFolder = function(s) {
       '\n\t' +
       'piano'.yellow +
       ': ' +
-      s.generated.piano.join(', ');
+      s.generated.piano.join(', ')
   }
-  info(output);
-};
+  info(output)
+}
 
-exports.info = info;
-exports.noConfigPath = noConfigPath;
-exports.songFolder = songFolder;
+exports.info = info
+exports.noConfigPath = noConfigPath
+exports.songFolder = songFolder
 </code></pre>
         </article>
     </section>
@@ -155,7 +150,7 @@ exports.songFolder = songFolder;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="TeX.html">TeX</a></li></ul><h3>Global</h3><ul><li><a href="global.html#bootstrapConfig">bootstrapConfig</a></li><li><a href="global.html#checkExecutable">checkExecutable</a></li><li><a href="global.html#checkExecutables">checkExecutables</a></li><li><a href="global.html#clean">clean</a></li><li><a href="global.html#cleanFiles">cleanFiles</a></li><li><a href="global.html#cleanFolder">cleanFolder</a></li><li><a href="global.html#flat">flat</a></li><li><a href="global.html#flattenTree">flattenTree</a></li><li><a href="global.html#generateJSON">generateJSON</a></li><li><a href="global.html#generatePDF">generatePDF</a></li><li><a href="global.html#generatePianoEPS">generatePianoEPS</a></li><li><a href="global.html#generateSlides">generateSlides</a></li><li><a href="global.html#generateSongJSON">generateSongJSON</a></li><li><a href="global.html#getABCFolders">getABCFolders</a></li><li><a href="global.html#getFolderFiles">getFolderFiles</a></li><li><a href="global.html#getMscoreCommand">getMscoreCommand</a></li><li><a href="global.html#getSongFolders">getSongFolders</a></li><li><a href="global.html#getSongInfo">getSongInfo</a></li><li><a href="global.html#getTree">getTree</a></li><li><a href="global.html#gitPull">gitPull</a></li><li><a href="global.html#hashSHA1">hashSHA1</a></li><li><a href="global.html#info">info</a></li><li><a href="global.html#noConfigPath">noConfigPath</a></li><li><a href="global.html#processSongFolder">processSongFolder</a></li><li><a href="global.html#readJSON">readJSON</a></li><li><a href="global.html#setTestMode">setTestMode</a></li><li><a href="global.html#songFolder">songFolder</a></li><li><a href="global.html#update">update</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="TeX.html">TeX</a></li></ul><h3>Global</h3><ul><li><a href="global.html#bootstrapConfig">bootstrapConfig</a></li><li><a href="global.html#checkExecutable">checkExecutable</a></li><li><a href="global.html#checkExecutables">checkExecutables</a></li><li><a href="global.html#clean">clean</a></li><li><a href="global.html#cleanFiles">cleanFiles</a></li><li><a href="global.html#cleanFolder">cleanFolder</a></li><li><a href="global.html#flat">flat</a></li><li><a href="global.html#flattenTree">flattenTree</a></li><li><a href="global.html#generateJSON">generateJSON</a></li><li><a href="global.html#generatePDF">generatePDF</a></li><li><a href="global.html#generatePianoEPS">generatePianoEPS</a></li><li><a href="global.html#generateSlides">generateSlides</a></li><li><a href="global.html#generateSongJSON">generateSongJSON</a></li><li><a href="global.html#getABCFolders">getABCFolders</a></li><li><a href="global.html#getFolderFiles">getFolderFiles</a></li><li><a href="global.html#getSongFolders">getSongFolders</a></li><li><a href="global.html#getSongInfo">getSongInfo</a></li><li><a href="global.html#getTree">getTree</a></li><li><a href="global.html#gitPull">gitPull</a></li><li><a href="global.html#hashSHA1">hashSHA1</a></li><li><a href="global.html#info">info</a></li><li><a href="global.html#noConfigPath">noConfigPath</a></li><li><a href="global.html#processSongFolder">processSongFolder</a></li><li><a href="global.html#readJSON">readJSON</a></li><li><a href="global.html#setTestMode">setTestMode</a></li><li><a href="global.html#songFolder">songFolder</a></li><li><a href="global.html#update">update</a></li></ul>
 </nav>
 
 <br class="clear">

@@ -30,61 +30,60 @@
  * @file Build a json file (songs.json) containing all slide files.
  */
 
-'use strict';
+'use strict'
 
-const fs = require('fs');
-const path = require('path');
-const tree = require('./tree.js');
-const yaml = require('js-yaml');
+const fs = require('fs')
+const path = require('path')
+const tree = require('./tree.js')
+const yaml = require('js-yaml')
 
 /**
  *
  * @param {string} songPath - Path of the song folder.
  */
-var generateSongJSON = function(songPath) {
-  var ymlFile = path.join(songPath, 'info.yml');
+var generateSongJSON = function (songPath) {
+  var ymlFile = path.join(songPath, 'info.yml')
   if (fs.existsSync(ymlFile)) {
     var info = yaml.safeLoad(
       fs.readFileSync(ymlFile, 'utf8')
-    );
-    info.folder = songPath;
+    )
+    info.folder = songPath
     info.slides = tree.getFolderFiles(
       path.join(songPath, 'slides'),
       '.svg'
-    );
+    )
 
-    if (Boolean(info.title)) {
-      return info;
+    if (info.title) {
+      return info
     } else {
-      return false;
+      return false
     }
+  } else if (fs.lstatSync(songPath).isDirectory()) {
+    return false
   }
-  else if (fs.lstatSync(songPath).isDirectory()) {
-    return false;
-  }
-};
+}
 
 /**
  *
  * @param {string} basePath - Basepath to the songbook tree.
  */
-var generateJSON = function(basePath) {
-  var folderTree = tree.getTree(basePath);
+var generateJSON = function (basePath) {
+  var folderTree = tree.getTree(basePath)
 
   Object.keys(folderTree).forEach((alpha, index) => {
     Object.keys(folderTree[alpha]).forEach((folder, index) => {
       folderTree[alpha][folder] = generateSongJSON(
         path.join(basePath, alpha, folder)
-      );
-    });
-  });
+      )
+    })
+  })
 
   fs.writeFileSync(
     path.join(basePath, 'songs.json'),
     JSON.stringify(folderTree, null, 4)
-  );
-  return folderTree;
-};
+  )
+  return folderTree
+}
 
 /**
  *
@@ -96,11 +95,11 @@ var readJSON = function (basePath) {
     fs.readFileSync(
       path.join(basePath, 'songs.json'), 'utf8'
     )
-  );
-};
+  )
+}
 
-exports.generateJSON = generateJSON;
-exports.readJSON = readJSON;
+exports.generateJSON = generateJSON
+exports.readJSON = readJSON
 </code></pre>
         </article>
     </section>
@@ -111,7 +110,7 @@ exports.readJSON = readJSON;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="TeX.html">TeX</a></li></ul><h3>Global</h3><ul><li><a href="global.html#bootstrapConfig">bootstrapConfig</a></li><li><a href="global.html#checkExecutable">checkExecutable</a></li><li><a href="global.html#checkExecutables">checkExecutables</a></li><li><a href="global.html#clean">clean</a></li><li><a href="global.html#cleanFiles">cleanFiles</a></li><li><a href="global.html#cleanFolder">cleanFolder</a></li><li><a href="global.html#flat">flat</a></li><li><a href="global.html#flattenTree">flattenTree</a></li><li><a href="global.html#generateJSON">generateJSON</a></li><li><a href="global.html#generatePDF">generatePDF</a></li><li><a href="global.html#generatePianoEPS">generatePianoEPS</a></li><li><a href="global.html#generateSlides">generateSlides</a></li><li><a href="global.html#generateSongJSON">generateSongJSON</a></li><li><a href="global.html#getABCFolders">getABCFolders</a></li><li><a href="global.html#getFolderFiles">getFolderFiles</a></li><li><a href="global.html#getMscoreCommand">getMscoreCommand</a></li><li><a href="global.html#getSongFolders">getSongFolders</a></li><li><a href="global.html#getSongInfo">getSongInfo</a></li><li><a href="global.html#getTree">getTree</a></li><li><a href="global.html#gitPull">gitPull</a></li><li><a href="global.html#hashSHA1">hashSHA1</a></li><li><a href="global.html#info">info</a></li><li><a href="global.html#noConfigPath">noConfigPath</a></li><li><a href="global.html#processSongFolder">processSongFolder</a></li><li><a href="global.html#readJSON">readJSON</a></li><li><a href="global.html#setTestMode">setTestMode</a></li><li><a href="global.html#songFolder">songFolder</a></li><li><a href="global.html#update">update</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="TeX.html">TeX</a></li></ul><h3>Global</h3><ul><li><a href="global.html#bootstrapConfig">bootstrapConfig</a></li><li><a href="global.html#checkExecutable">checkExecutable</a></li><li><a href="global.html#checkExecutables">checkExecutables</a></li><li><a href="global.html#clean">clean</a></li><li><a href="global.html#cleanFiles">cleanFiles</a></li><li><a href="global.html#cleanFolder">cleanFolder</a></li><li><a href="global.html#flat">flat</a></li><li><a href="global.html#flattenTree">flattenTree</a></li><li><a href="global.html#generateJSON">generateJSON</a></li><li><a href="global.html#generatePDF">generatePDF</a></li><li><a href="global.html#generatePianoEPS">generatePianoEPS</a></li><li><a href="global.html#generateSlides">generateSlides</a></li><li><a href="global.html#generateSongJSON">generateSongJSON</a></li><li><a href="global.html#getABCFolders">getABCFolders</a></li><li><a href="global.html#getFolderFiles">getFolderFiles</a></li><li><a href="global.html#getSongFolders">getSongFolders</a></li><li><a href="global.html#getSongInfo">getSongInfo</a></li><li><a href="global.html#getTree">getTree</a></li><li><a href="global.html#gitPull">gitPull</a></li><li><a href="global.html#hashSHA1">hashSHA1</a></li><li><a href="global.html#info">info</a></li><li><a href="global.html#noConfigPath">noConfigPath</a></li><li><a href="global.html#processSongFolder">processSongFolder</a></li><li><a href="global.html#readJSON">readJSON</a></li><li><a href="global.html#setTestMode">setTestMode</a></li><li><a href="global.html#songFolder">songFolder</a></li><li><a href="global.html#update">update</a></li></ul>
 </nav>
 
 <br class="clear">
