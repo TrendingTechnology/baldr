@@ -9,7 +9,7 @@ describe('file “tree.js”', () => {
     var info = tree.getSongInfo(
       path.join('test', 'songs', 'clean', 'some', 's', 'Swing-low')
     )
-    assert.equal(info.title, 'Swing low')
+    assert.strictEqual(info.title, 'Swing low')
   })
 
   describe('function “getFolderFiles()”', () => {
@@ -48,14 +48,14 @@ describe('file “tree.js”', () => {
   it('function “getSongFolders()”', () => {
     var getSongFolders = rewire.__get__('getSongFolders')
     var folders = getSongFolders(path.resolve('test', 'songs', 'clean', 'some'), 's')
-    assert.equal(folders.length, 2)
+    assert.strictEqual(folders.length, 2)
     assert.deepEqual(folders, ['Stille-Nacht', 'Swing-low'])
   })
 
   it('function “getABCFolders()”', () => {
     var getABCFolders = rewire.__get__('getABCFolders')
     var folders = getABCFolders(path.resolve('test', 'songs', 'clean', 'some'))
-    assert.equal(folders.length, 3)
+    assert.strictEqual(folders.length, 3)
     assert.deepEqual(folders, ['a', 's', 'z'])
   })
 
@@ -89,6 +89,6 @@ describe('file “tree.js”', () => {
 
   it('function “flat()”', () => {
     var flat = tree.flat(path.resolve('test', 'songs', 'clean', 'some'))
-    assert.equal(flat.length, 4)
+    assert.strictEqual(flat.length, 4)
   })
 })

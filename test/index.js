@@ -26,25 +26,25 @@ describe('Class “TeX”', () => {
   it('method “buildPianoFilesCountTree()”', () => {
     let folderTree = json.readJSON(basePath)
     let count = tex.buildPianoFilesCountTree(folderTree)
-    assert.equal(count.a[3]['Auf-der-Mauer_auf-der-Lauer'].title, 'Auf der Mauer, auf der Lauer')
-    assert.equal(count.s[1]['Stille-Nacht'].title, 'Stille Nacht')
-    assert.equal(count.s[3]['Swing-low'].title, 'Swing low')
-    assert.equal(count.z[2]['Zum-Tanze-da-geht-ein-Maedel'].title, 'Zum Tanze, da geht ein Mädel')
+    assert.strictEqual(count.a[3]['Auf-der-Mauer_auf-der-Lauer'].title, 'Auf der Mauer, auf der Lauer')
+    assert.strictEqual(count.s[1]['Stille-Nacht'].title, 'Stille Nacht')
+    assert.strictEqual(count.s[3]['Swing-low'].title, 'Swing low')
+    assert.strictEqual(count.z[2]['Zum-Tanze-da-geht-ein-Maedel'].title, 'Zum Tanze, da geht ein Mädel')
 
     assert.deepEqual(count.s[3]['Swing-low'].pianoFiles, [ 'piano_1.eps', 'piano_2.eps', 'piano_3.eps' ])
   })
 
   it('method “texCmd()”', () => {
-    assert.equal(tex.texCmd('lorem', 'ipsum'), '\\tmplorem{ipsum}\n')
+    assert.strictEqual(tex.texCmd('lorem', 'ipsum'), '\\tmplorem{ipsum}\n')
   })
 
   it('method “texABC()”', () => {
-    assert.equal(tex.texABC('a'), '\n\n\\tmpchapter{A}\n')
+    assert.strictEqual(tex.texABC('a'), '\n\n\\tmpchapter{A}\n')
   })
 
   it('method “texSong()”', () => {
     let songPath = path.join(basePath, 's', 'Swing-low')
-    assert.equal(
+    assert.strictEqual(
       tex.texSong(songPath),
       '\n' +
       '\\tmpheading{Swing low}\n' +
@@ -64,7 +64,7 @@ describe('Class “TeX”', () => {
       path.join('test', 'files', 'songs_processed.tex'), 'utf8'
     )
 
-    assert.equal(texContent, compare)
+    assert.strictEqual(texContent, compare)
 
     assert.ok(texContent.indexOf('\\tmpimage') > -1)
     assert.ok(texContent.indexOf('\\tmpheading') > -1)
@@ -77,7 +77,7 @@ describe('file “index.js”', () => {
       let bootstrapConfig = indexRewired.__get__('bootstrapConfig')
       bootstrapConfig({ path: path.resolve('test', 'songs', 'clean', 'some'), test: true })
       const c = indexRewired.__get__('config')
-      assert.equal(c.path, path.resolve('test', 'songs', 'clean', 'some'))
+      assert.strictEqual(c.path, path.resolve('test', 'songs', 'clean', 'some'))
       assert.exists(path.resolve('test', 'songs', 'clean', 'some', 'filehashes.db'))
     })
 
@@ -88,12 +88,12 @@ describe('file “index.js”', () => {
         let bootstrapConfig = indexRewired.__get__('bootstrapConfig')
         bootstrapConfig({ path: path.resolve('test', 'songs', 'clean', 'some'), test: true })
       } catch (e) {
-        assert.equal(
+        assert.strictEqual(
           e.message,
           'Some dependencies are not installed: “mscore-to-eps.sh”, ' +
           '“pdf2svg”, “pdfcrop”, “pdfinfo”, “pdftops”, “mscore”'
         )
-        assert.equal(e.name, 'UnavailableCommandsError')
+        assert.strictEqual(e.name, 'UnavailableCommandsError')
       }
       process.env.PATH = savePATH
     })
@@ -164,7 +164,7 @@ describe('file “index.js”', () => {
           path.join(songs, 'songs.json'), 'utf8'
         )
       )
-      assert.equal(
+      assert.strictEqual(
         info.a['Auf-der-Mauer_auf-der-Lauer'].title,
         'Auf der Mauer, auf der Lauer'
       )
@@ -177,8 +177,8 @@ describe('file “index.js”', () => {
       let setTestMode = indexRewired.__get__('setTestMode')
       setTestMode()
       const config = indexRewired.__get__('config')
-      assert.equal(config.test, true)
-      assert.equal(config.path, path.resolve('test', 'songs', 'clean', 'some'))
+      assert.strictEqual(config.test, true)
+      assert.strictEqual(config.path, path.resolve('test', 'songs', 'clean', 'some'))
     })
 
     it('function “clean()”', () => {
@@ -223,7 +223,7 @@ describe('Command line interface', () => {
       let setOptions = indexRewired.__get__('setOptions')
       let out = setOptions(args(['--clean']))
       console.log(out)
-      assert.equal(out.clean, true)
+      assert.strictEqual(out.clean, true)
     })
   })
 
@@ -241,7 +241,7 @@ describe('Command line interface', () => {
       main()
 
       let commander = indexRewired.__get__('commander')
-      assert.equal(commander.path, path.join('test', 'songs', 'clean', 'some'))
+      assert.strictEqual(commander.path, path.join('test', 'songs', 'clean', 'some'))
       assert.deepEqual(
         stub.args,
         [
@@ -258,7 +258,7 @@ describe('Command line interface', () => {
       let tex = path.join('test', 'songs', 'processed', 'one', 'songs.tex')
 
       assert.exists(tex)
-      assert.equal(
+      assert.strictEqual(
         read(tex),
         read(path.join('test', 'files', 'songs_min_processed.tex'))
       )
@@ -269,7 +269,7 @@ describe('Command line interface', () => {
       invokeCommand(['--path', path.join('test', 'songs', 'processed', 'one'), '--json'])
       let json = path.join('test', 'songs', 'processed', 'one', 'songs.json')
       assert.exists(json)
-      assert.equal(
+      assert.strictEqual(
         read(json),
         read(path.join('test', 'files', 'songs_min_processed.json'))
       )
@@ -316,14 +316,14 @@ describe('Command line interface', () => {
       assert.ok(out.indexOf('Usage') > -1)
       assert.ok(out.indexOf('--help') > -1)
       assert.ok(out.indexOf('--version') > -1)
-      assert.equal(cli.status, 0)
+      assert.strictEqual(cli.status, 0)
     })
 
     it('--version', () => {
       const cli = spawn('./index.js', ['--test', '--version'])
       let pckg = require('../package.json')
-      assert.equal(cli.stdout.toString(), pckg.version + '\n')
-      assert.equal(cli.status, 0)
+      assert.strictEqual(cli.stdout.toString(), pckg.version + '\n')
+      assert.strictEqual(cli.status, 0)
     })
 
     // Test should be executed at the very last position.

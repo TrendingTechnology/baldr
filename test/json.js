@@ -11,7 +11,7 @@ describe('file “json.js”', () => {
       'a',
       'Auf-der-Mauer_auf-der-Lauer'
     ))
-    assert.equal(
+    assert.strictEqual(
       info.title,
       'Auf der Mauer, auf der Lauer'
     )
@@ -22,7 +22,7 @@ describe('file “json.js”', () => {
     json.generateJSON(path.join('test', 'songs', 'processed', 'some'))
     assert.exists(ymlFile)
     var tree = JSON.parse(fs.readFileSync(ymlFile, 'utf8'))
-    assert.equal(
+    assert.strictEqual(
       tree.a['Auf-der-Mauer_auf-der-Lauer'].title,
       'Auf der Mauer, auf der Lauer'
     )
@@ -32,7 +32,7 @@ describe('file “json.js”', () => {
   it('function “readJSON()”', () => {
     json.generateJSON(path.resolve('test', 'songs', 'processed', 'some'))
     var jsonContent = json.readJSON(path.resolve('test', 'songs', 'processed', 'some'))
-    assert.equal(
+    assert.strictEqual(
       jsonContent.a['Auf-der-Mauer_auf-der-Lauer'].title,
       'Auf der Mauer, auf der Lauer'
     )

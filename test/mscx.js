@@ -8,45 +8,45 @@ describe('file “mscx.js”', () => {
   describe('function “checkExecutable()”', () => {
     it('function “checkExecutable()”: existing executable', () => {
       var checkExecutable = rewire.__get__('checkExecutable')
-      assert.equal(checkExecutable('echo'), true)
+      assert.strictEqual(checkExecutable('echo'), true)
     })
 
     it('function “checkExecutable()”: nonexisting executable', () => {
       var checkExecutable = rewire.__get__('checkExecutable')
-      assert.equal(checkExecutable('loooooool'), false)
+      assert.strictEqual(checkExecutable('loooooool'), false)
     })
 
     it('function “checkExecutables()”: all are existing', () => {
       let { status, unavailable } = mscx
         .checkExecutables(['echo', 'ls'])
-      assert.equal(status, true)
+      assert.strictEqual(status, true)
       assert.deepEqual(unavailable, [])
     })
 
     it('function “checkExecutables()”: one executable', () => {
       let { status, unavailable } =
         mscx.checkExecutables(['echo'])
-      assert.equal(status, true)
+      assert.strictEqual(status, true)
       assert.deepEqual(unavailable, [])
     })
 
     it('function “checkExecutables()”: one nonexisting executable', () => {
       let { status, unavailable } =
         mscx.checkExecutables(['echo', 'loooooool'])
-      assert.equal(status, false)
+      assert.strictEqual(status, false)
       assert.deepEqual(unavailable, ['loooooool'])
     })
 
     it('function “checkExecutables()”: two nonexisting executable', () => {
       let { status, unavailable } =
         mscx.checkExecutables(['troooooool', 'loooooool'])
-      assert.equal(status, false)
+      assert.strictEqual(status, false)
       assert.deepEqual(unavailable, ['troooooool', 'loooooool'])
     })
 
     it('function “checkExecutables()”: without arguments', () => {
       let { status, unavailable } = mscx.checkExecutables()
-      assert.equal(status, true)
+      assert.strictEqual(status, true)
       assert.deepEqual(unavailable, [])
     })
   })
@@ -58,7 +58,7 @@ describe('file “mscx.js”', () => {
   it('function “generatePDF()”', () => {
     const folder = path.join('test', 'songs', 'clean', 'some', 's', 'Swing-low')
     let file = mscx.generatePDF(folder, 'projector', 'projector')
-    assert.equal(file, 'projector.pdf')
+    assert.strictEqual(file, 'projector.pdf')
     assert.exists(folder, 'projector.pdf')
   })
 
