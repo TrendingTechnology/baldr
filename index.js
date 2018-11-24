@@ -4,34 +4,33 @@
  * @file Assemble all submodules and export to command.js
  */
 
-'use strict';
+'use strict'
 
-const fs = require('fs-extra');
-const os = require('os');
-const path = require('path');
-const commander = require('commander');
-const pckg = require('./package.json');
+const fs = require('fs-extra')
+const os = require('os')
+const path = require('path')
+const commander = require('commander')
+const pckg = require('./package.json')
 
-const Check = require('./check.js');
-var CheckChange = new Check();
-const json = require('./json.js');
-const mscx = require('./mscx.js');
-const folderTree = require('./tree.js');
+const Check = require('./check.js')
+var CheckChange = new Check()
+const json = require('./json.js')
+const mscx = require('./mscx.js')
+const folderTree = require('./tree.js')
 // For test purposes, to be able to overwrite “message” with rewire.
-var message = require('./message.js');
+var message = require('./message.js')
 
 /***********************************************************************
  * Build a TeX file (songs.tex) of all piano scores.
  **********************************************************************/
 
 class TeX {
-
   /**
    * @param {string} basePath The base path of the song collection.
    */
-  constructor(basePath) {
-    this.basePath = basePath;
-    this.outputFile = path.join(basePath, 'songs.tex');
+  constructor (basePath) {
+    this.basePath = basePath
+    this.outputFile = path.join(basePath, 'songs.tex')
   }
 
   /**
@@ -58,27 +57,27 @@ class TeX {
    *   pianoFiles: [ 'piano_1.eps', 'piano_2.eps', 'piano_3.eps' ] }
    * </pre><code>
    */
-  buildPianoFilesCountTree(tree) {
-    let output = {};
+  buildPianoFilesCountTree (tree) {
+    let output = {}
     Object.keys(tree).forEach((abc, index) => {
       Object.keys(tree[abc]).forEach((songFolder, index) => {
-        let absSongFolder = path.join(this.basePath, abc, songFolder, 'piano');
-        let pianoFiles = folderTree.getFolderFiles(absSongFolder, '.eps');
-        let count = pianoFiles.length;
-        if (!(abc in output)) output[abc] = {};
-        if (!(count in output[abc])) output[abc][count] = {};
-        output[abc][count][songFolder] = tree[abc][songFolder];
-        output[abc][count][songFolder].pianoFiles = pianoFiles;
-      });
-    });
-    return output;
+        let absSongFolder = path.join(this.basePath, abc, songFolder, 'piano')
+        let pianoFiles = folderTree.getFolderFiles(absSongFolder, '.eps')
+        let count = pianoFiles.length
+        if (!(abc in output)) output[abc] = {}
+        if (!(count in output[abc])) output[abc][count] = {}
+        output[abc][count][songFolder] = tree[abc][songFolder]
+        output[abc][count][songFolder].pianoFiles = pianoFiles
+      })
+    })
+    return output
   }
 
   /**
    *
    */
-  texCmd(command, value) {
-    return '\\tmp' + command + '{' + value  + '}\n';
+  texCmd (command, value) {
+    return '\\tmp' + command + '{' + value + '}\n'
   }
 
   /**
@@ -94,50 +93,49 @@ class TeX {
    * \tmpimage{s/Swing-low/piano/piano_3.eps}
    * </pre><code>
    */
-  texSong(songPath) {
-    let basePath = path.resolve(this.basePath);
-    let resolvedSongPath = path.resolve(songPath);
+  texSong (songPath) {
+    let basePath = path.resolve(this.basePath)
+    let resolvedSongPath = path.resolve(songPath)
     let relativeSongPath = resolvedSongPath
       .replace(basePath, '')
-      .replace(/^\//, '');
-    const info = folderTree.getSongInfo(resolvedSongPath);
-    const eps = folderTree.getFolderFiles(path.join(resolvedSongPath, 'piano'), '.eps');
-    var output = '';
+      .replace(/^\//, '')
+    const info = folderTree.getSongInfo(resolvedSongPath)
+    const eps = folderTree.getFolderFiles(path.join(resolvedSongPath, 'piano'), '.eps')
+    var output = ''
 
     if (info.hasOwnProperty('title') && eps.length > 0) {
-      output += '\n' + this.texCmd('heading', info.title);
+      output += '\n' + this.texCmd('heading', info.title)
       eps.forEach(
         (file) => {
-          output += this.texCmd('image', path.join(relativeSongPath, 'piano', file));
+          output += this.texCmd('image', path.join(relativeSongPath, 'piano', file))
         }
-      );
+      )
     }
-    return output;
+    return output
   }
 
   /**
    *
    */
-  texABC(abc) {
-    return '\n\n' + this.texCmd('chapter', abc.toUpperCase());
+  texABC (abc) {
+    return '\n\n' + this.texCmd('chapter', abc.toUpperCase())
   }
 
   /**
    * Generate TeX file for the piano version of the songbook.
    */
-  generateTeX() {
-    const tree = folderTree.getTree(this.basePath);
-    fs.removeSync(this.outputFile);
+  generateTeX () {
+    const tree = folderTree.getTree(this.basePath)
+    fs.removeSync(this.outputFile)
 
     Object.keys(tree).forEach((abc, index) => {
-      fs.appendFileSync(this.outputFile, this.texABC(abc));
+      fs.appendFileSync(this.outputFile, this.texABC(abc))
 
       Object.keys(tree[abc]).forEach((folder, index) => {
-        fs.appendFileSync(this.outputFile, this.texSong(path.join(this.basePath, abc, folder)));
-      });
-    });
+        fs.appendFileSync(this.outputFile, this.texSong(path.join(this.basePath, abc, folder)))
+      })
+    })
   }
-
 }
 
 /***********************************************************************
@@ -147,9 +145,9 @@ class TeX {
 const configDefault = {
   test: false,
   force: false
-};
+}
 
-var config = {};
+var config = {}
 
 /**
  * By default this module reads the config file ~/.baldr to
@@ -157,158 +155,156 @@ var config = {};
  * @param {object} newConfig - An object containing the same properties as the
  * config object.
  */
-var bootstrapConfig = function(newConfig=false) {
-
-  let {status, unavailable} = mscx.checkExecutables([
+var bootstrapConfig = function (newConfig = false) {
+  let { status, unavailable } = mscx.checkExecutables([
     'mscore-to-eps.sh',
     'pdf2svg',
     'pdfcrop',
     'pdfinfo',
     'pdftops',
-    'mscore',
-  ]);
+    'mscore'
+  ])
 
   if (!status) {
     let e = new Error(
       'Some dependencies are not installed: “' +
       unavailable.join('”, “') +
       '”'
-    );
-    e.name = 'UnavailableCommandsError';
-    throw e;
+    )
+    e.name = 'UnavailableCommandsError'
+    throw e
   }
 
   // default object
-  config = configDefault;
+  config = configDefault
 
   // config file
-  var configFile = path.join(os.homedir(), '.baldr.json');
-  var configFileExits = fs.existsSync(configFile);
+  var configFile = path.join(os.homedir(), '.baldr.json')
+  var configFileExits = fs.existsSync(configFile)
   if (configFileExits) {
-    config = Object.assign(config, require(configFile).songbook);
+    config = Object.assign(config, require(configFile).songbook)
   }
 
   // function parameter
   if (newConfig) {
-    config = Object.assign(config, newConfig);
+    config = Object.assign(config, newConfig)
   }
 
   if (!config.path || config.path.length === 0) {
-    message.noConfigPath();
+    message.noConfigPath()
   }
 
-  CheckChange.init(path.join(config.path, 'filehashes.db'));
-};
+  CheckChange.init(path.join(config.path, 'filehashes.db'))
+}
 
 /**
  * External function for command line usage.
  */
-var setTestMode = function() {
-  config.test = true;
-  config.path = path.resolve('test', 'songs', 'clean', 'some');
-};
+var setTestMode = function () {
+  config.test = true
+  config.path = path.resolve('test', 'songs', 'clean', 'some')
+}
 
 /**
  * Wrapper function for all process functions for one folder.
  * @param {string} folder - A song folder.
  */
-var processSongFolder = function(folder) {
-  let status = {changed: {}, generated: {}};
+var processSongFolder = function (folder) {
+  let status = { changed: {}, generated: {} }
 
-  status.folder = folder;
-  status.folderName = path.basename(folder);
-  status.info = folderTree.getSongInfo(folder);
+  status.folder = folder
+  status.folderName = path.basename(folder)
+  status.info = folderTree.getSongInfo(folder)
 
-  status.force = config.force;
+  status.force = config.force
   status.changed.slides = CheckChange.do(
     path.join(folder, 'projector.mscx')
-  );
+  )
   // projector
   if (config.force || status.changed.slides) {
-    status.generated.projector = mscx.generatePDF(folder, 'projector');
-    status.generated.slides = mscx.generateSlides(folder);
+    status.generated.projector = mscx.generatePDF(folder, 'projector')
+    status.generated.slides = mscx.generateSlides(folder)
   }
 
   if (
-      CheckChange.do(path.join(folder, 'lead.mscx')) ||
+    CheckChange.do(path.join(folder, 'lead.mscx')) ||
       CheckChange.do(path.join(folder, 'piano.mscx'))
-    ) {
-      status.changed.piano = true;
-    }
-    else {
-      status.changed.piano = false;
-    }
+  ) {
+    status.changed.piano = true
+  } else {
+    status.changed.piano = false
+  }
 
   // piano
   if (config.force || status.changed.piano) {
-    status.generated.piano = mscx.generatePianoEPS(folder);
+    status.generated.piano = mscx.generatePianoEPS(folder)
   }
-  return status;
-};
+  return status
+}
 
-var updateSongFolder = function(folder) {
+var updateSongFolder = function (folder) {
   message.songFolder(
     processSongFolder(folder)
-  );
-};
+  )
+}
 
 /**
  * Update and generate when required media files for the songs.
  */
-var update = function() {
-  mscx.gitPull(config.path);
-  folderTree.flat(config.path).forEach(updateSongFolder);
-  json.generateJSON(config.path);
-  let tex = new TeX(config.path);
-  tex.generateTeX();
-};
+var update = function () {
+  mscx.gitPull(config.path)
+  folderTree.flat(config.path).forEach(updateSongFolder)
+  json.generateJSON(config.path)
+  let tex = new TeX(config.path)
+  tex.generateTeX()
+}
 
 /**
  *
  */
-var cleanFiles = function(folder, files) {
+var cleanFiles = function (folder, files) {
   files.forEach(
     (file) => {
-      fs.removeSync(path.join(folder, file));
+      fs.removeSync(path.join(folder, file))
     }
-  );
-};
+  )
+}
 
 /**
  * Clean all temporary files in a song folder.
  * @param {string} folder - A song folder.
  */
-var cleanFolder = function(folder) {
+var cleanFolder = function (folder) {
   cleanFiles(folder, [
     'piano',
     'slides',
     'projector.pdf'
-  ]);
-};
+  ])
+}
 
 /**
  * Clean all temporary media files.
  */
-var clean = function() {
-  folderTree.flat(config.path).forEach(cleanFolder);
+var clean = function () {
+  folderTree.flat(config.path).forEach(cleanFolder)
 
   cleanFiles(config.path, [
     'songs.json',
     'songs.tex',
     'filehashes.db'
-  ]);
-};
+  ])
+}
 
-let generateJSON = function() {
-  json.generateJSON(config.path);
-};
+let generateJSON = function () {
+  json.generateJSON(config.path)
+}
 
-let generateTeX = function() {
-  let tex = new TeX(config.path);
-  tex.generateTeX();
-};
+let generateTeX = function () {
+  let tex = new TeX(config.path)
+  tex.generateTeX()
+}
 
-var setOptions = function(argv) {
+var setOptions = function (argv) {
   return commander
     .version(pckg.version)
     .option('-c, --clean', 'clean up (delete all generated files)')
@@ -318,45 +314,44 @@ var setOptions = function(argv) {
     .option('-p --path <path>', 'Base path to a song collection.')
     .option('-T, --test', 'switch to test mode')
     .option('-t, --tex', 'generate TeX file')
-    .parse(argv);
-};
+    .parse(argv)
+}
 
-var main = function() {
-  let options = setOptions(process.argv);
+var main = function () {
+  let options = setOptions(process.argv)
 
   if (options.folder) {
-    options.force = true;
+    options.force = true
   }
 
   let config = {
     folder: options.folder,
     force: options.force
-  };
-
-  if (options.path && options.path.length > 0) {
-    config.path = options.path;
   }
 
-  bootstrapConfig(config);
+  if (options.path && options.path.length > 0) {
+    config.path = options.path
+  }
+
+  bootstrapConfig(config)
 
   if (options.test) {
-    setTestMode();
+    setTestMode()
   }
 
   if (options.clean) {
-    clean();
+    clean()
   } else if (options.folder) {
-    updateSongFolder(options.folder);
+    updateSongFolder(options.folder)
   } else if (options.json) {
-    generateJSON();
+    generateJSON()
   } else if (options.tex) {
-    generateTeX();
+    generateTeX()
   } else {
-    update();
+    update()
   }
-
-};
+}
 
 if (require.main === module) {
-  main();
+  main()
 }

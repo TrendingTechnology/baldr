@@ -3,43 +3,42 @@
  * (*.pdf, *.eps, *.svg)
  */
 
-'use strict';
+'use strict'
 
-const fs = require('fs-extra');
-const path = require('path');
-const spawn = require('child_process').spawnSync;
-const folderTree = require('./tree.js');
+const fs = require('fs-extra')
+const path = require('path')
+const spawn = require('child_process').spawnSync
+const folderTree = require('./tree.js')
 
 /**
  * Check if executable is installed.
  * @param {string} executable - Name of the executable.
  */
-var checkExecutable = function(executable) {
-  var exec = spawn(executable, ['--help']);
+var checkExecutable = function (executable) {
+  var exec = spawn(executable, ['--help'])
   if (exec.status === null) {
-    return false;
+    return false
+  } else {
+    return true
   }
-  else {
-    return true;
-  }
-};
+}
 
 /**
  * Check if executables are installed.
  * @param {array} executables - Name of the executables.
  */
-var checkExecutables = function(executables = []) {
-  var status = true;
-  var unavailable = [];
+var checkExecutables = function (executables = []) {
+  var status = true
+  var unavailable = []
   executables.forEach((exec) => {
-    var check = checkExecutable(exec);
+    var check = checkExecutable(exec)
     if (!check) {
-      status = false;
-      unavailable.push(exec);
+      status = false
+      unavailable.push(exec)
     }
-  });
-  return {"status": status, "unavailable": unavailable};
-};
+  })
+  return { 'status': status, 'unavailable': unavailable }
+}
 
 /**
  * Execute git pull if repository exists.
@@ -52,14 +51,13 @@ var checkExecutables = function(executables = []) {
  * Get current commit id:
  * git rev-parse HEAD
  */
-var gitPull = function(basePath) {
+var gitPull = function (basePath) {
   if (fs.existsSync(path.join(basePath, '.git'))) {
-    return spawn('git', ['pull'], {cwd: basePath});
+    return spawn('git', ['pull'], { cwd: basePath })
+  } else {
+    return false
   }
-  else {
-    return false;
-  }
-};
+}
 
 /**
  * Generate form a given *.mscx file a PDF file.
@@ -67,70 +65,68 @@ var gitPull = function(basePath) {
  * @param {string} source - Name of the *.mscx file without the extension.
  * @param {string} destination - Name of the PDF without the extension.
  */
-var generatePDF = function(folder, source, destination = '') {
+var generatePDF = function (folder, source, destination = '') {
   if (destination === '') {
-    destination = source;
+    destination = source
   }
-  let pdf = path.join(folder, destination + '.pdf');
+  let pdf = path.join(folder, destination + '.pdf')
   spawn('mscore', [
     '--export-to',
     path.join(pdf),
     path.join(folder, source + '.mscx')
-  ]);
-  if(fs.existsSync(pdf)) {
-    return destination + '.pdf';
+  ])
+  if (fs.existsSync(pdf)) {
+    return destination + '.pdf'
+  } else {
+    return false
   }
-  else {
-    return false;
-  }
-};
+}
 
 /**
  * Generate svg files in a 'slides' subfolder.
  * @param {string} folder - A song folder.
  */
-var generateSlides = function(folder) {
-  var slides = path.join(folder, 'slides');
-  fs.removeSync(slides);
-  fs.mkdirSync(slides);
+var generateSlides = function (folder) {
+  var slides = path.join(folder, 'slides')
+  fs.removeSync(slides)
+  fs.mkdirSync(slides)
 
-  let pdf2svg = spawn('pdf2svg', [
+  spawn('pdf2svg', [
     path.join(folder, 'projector.pdf'),
     path.join(slides, '%02d.svg'),
     'all'
-  ]);
+  ])
 
-  return folderTree.getFolderFiles(slides, '.svg');
-};
+  return folderTree.getFolderFiles(slides, '.svg')
+}
 
 /**
  * Generate a PDF named piano.pdf a) from piano.mscx or b) from lead.mscx
  * @param {string} folder - A song folder.
  */
-var generatePianoEPS = function(folder) {
-  var piano = path.join(folder, 'piano');
-  fs.removeSync(piano);
-  fs.mkdirSync(piano);
+var generatePianoEPS = function (folder) {
+  var piano = path.join(folder, 'piano')
+  fs.removeSync(piano)
+  fs.mkdirSync(piano)
 
   if (fs.existsSync(path.join(folder, 'piano.mscx'))) {
     fs.copySync(
       path.join(folder, 'piano.mscx'),
       path.join(piano, 'piano.mscx')
-    );
-  }
-  else if (fs.existsSync(path.join(folder, 'lead.mscx'))) {
+    )
+  } else if (fs.existsSync(path.join(folder, 'lead.mscx'))) {
     fs.copySync(
       path.join(folder, 'lead.mscx'),
       path.join(piano, 'piano.mscx')
-    );
+    )
   }
-  spawn('mscore-to-eps.sh', [path.join(piano, 'piano.mscx')]);
+  spawn('mscore-to-eps.sh', [path.join(piano, 'piano.mscx')])
 
-  return folderTree.getFolderFiles(piano, '.eps');
-};
+  return folderTree.getFolderFiles(piano, '.eps')
+}
 
-exports.checkExecutables = checkExecutables;
-exports.generatePDF = generatePDF;
-exports.generatePianoEPS = generatePianoEPS;
-exports.generateSlides = generateSlides;
-exports.gitPull = gitPull;
+exports.checkExecutables = checkExecutables
+exports.generatePDF = generatePDF
+exports.generatePianoEPS = generatePianoEPS
+exports.generateSlides = generateSlides
+exports.gitPull = gitPull

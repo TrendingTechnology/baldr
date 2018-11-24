@@ -2,62 +2,61 @@
  * @file Export CheckChange() object
  */
 
-'use strict';
+'use strict'
 
-const crypto = require('crypto');
-const fs = require('fs');
-const path = require('path');
-const sqlite3 = require('better-sqlite3');
+const crypto = require('crypto')
+const fs = require('fs')
+const path = require('path')
+const Sqlite3 = require('better-sqlite3')
 
-
-class Sqlite{
-  constructor(dbFile) {
-    this.dbFile = dbFile;
+class Sqlite {
+  constructor (dbFile) {
+    this.dbFile = dbFile
   }
 
-  initialize() {
-    this.db = new sqlite3(this.dbFile);
+  initialize () {
+    this.db = new Sqlite3(this.dbFile)
     this.db
       .prepare(
-        "CREATE TABLE IF NOT EXISTS hashes (filename TEXT UNIQUE, hash TEXT)"
+        'CREATE TABLE IF NOT EXISTS hashes (filename TEXT UNIQUE, hash TEXT)'
       )
-      .run();
+      .run()
 
     this.db
-      .prepare("CREATE INDEX IF NOT EXISTS filename ON hashes(filename)")
-      .run();
+      .prepare('CREATE INDEX IF NOT EXISTS filename ON hashes(filename)')
+      .run()
   }
 
-  insert(filename, hash) {
+  insert (filename, hash) {
     this.db
       .prepare('INSERT INTO hashes values ($filename, $hash)')
-      .run({"filename": filename, "hash": hash});
+      .run({ 'filename': filename, 'hash': hash })
   }
 
-  select(filename) {
+  select (filename) {
     return this.db
       .prepare('SELECT * FROM hashes WHERE filename = $filename')
-      .get({"filename": filename});
+      .get({ 'filename': filename })
   }
 
-  update(filename, hash) {
+  update (filename, hash) {
     this.db
-      .prepare("UPDATE hashes SET hash = $hash WHERE filename = $filename")
-      .run({"filename": filename, "hash": hash});
+      .prepare('UPDATE hashes SET hash = $hash WHERE filename = $filename')
+      .run({ 'filename': filename, 'hash': hash })
   }
 }
 
 /**
  *
  */
-var hashSHA1 = function(filename) {
+var hashSHA1 = function (filename) {
   return crypto
     .createHash('sha1')
     .update(
       fs.readFileSync(filename)
     )
-    .digest('hex');
-};
+    .digest('hex')
+}
 
 // class CheckChange {
 //
@@ -97,43 +96,42 @@ var hashSHA1 = function(filename) {
 // }
 //
 
-var CheckChange = function() {
-  this.db = {};
-};
+var CheckChange = function () {
+  this.db = {}
+}
 
-CheckChange.prototype.init = function(dbFile) {
-  this.db = new Sqlite(dbFile);
-  this.db.initialize();
-  return this.db;
-};
+CheckChange.prototype.init = function (dbFile) {
+  this.db = new Sqlite(dbFile)
+  this.db.initialize()
+  return this.db
+}
 
 /**
  * Check for file modifications
  * @param {string} filename - Path to the file.
  * @returns {boolean}
  */
-CheckChange.prototype.do = function(filename) {
-  filename = path.resolve(filename);
+CheckChange.prototype.do = function (filename) {
+  filename = path.resolve(filename)
   if (!fs.existsSync(filename)) {
-    return false;
+    return false
   }
 
-  var hash = hashSHA1(filename);
-  var row = this.db.select(filename);
-  var hashStored = '';
+  var hash = hashSHA1(filename)
+  var row = this.db.select(filename)
+  var hashStored = ''
 
   if (row) {
-    hashStored = row.hash;
-  } else  {
-    this.db.insert(filename, hash);
+    hashStored = row.hash
+  } else {
+    this.db.insert(filename, hash)
   }
   if (hash !== hashStored) {
-    this.db.update(filename, hash);
-    return true;
+    this.db.update(filename, hash)
+    return true
+  } else {
+    return false
   }
-  else {
-    return false;
-  }
-};
+}
 
-module.exports = CheckChange;
+module.exports = CheckChange

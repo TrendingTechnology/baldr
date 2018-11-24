@@ -2,40 +2,40 @@
  * @file Implement message and loging functionality
  */
 
-'use strict';
+'use strict'
 
-const colors = require('colors');
-const fs = require('fs');
-const path = require('path');
+require('colors')
+const fs = require('fs')
+const path = require('path')
 
-const error = '☒'.red;
-const finished = '☑'.green;
-const progress = '☐'.yellow;
+const error = '☒'.red
+const finished = '☑'.green
+const progress = '☐'.yellow
 
 /**
  * Print out or return text.
  * @param {string} text - Text to display.
  */
-var info = function(text) {
-  console.log(text);
-};
+var info = function (text) {
+  console.log(text)
+}
 
 /**
  *
  */
-var noConfigPath = function() {
+var noConfigPath = function () {
   var output = error + '  Configuration file ' +
     '“~/.baldr.json” not found!\n' +
-    'Create such a config file or use the “--path” option!';
+    'Create such a config file or use the “--path” option!'
 
   const sampleConfig = fs.readFileSync(
     path.join(__dirname, 'sample.config.json'), 'utf8'
-  );
-  output += '\n\nExample configuration file:\n' + sampleConfig;
+  )
+  output += '\n\nExample configuration file:\n' + sampleConfig
 
-  info(output);
-  throw new Error('No configuration file found.');
-};
+  info(output)
+  throw new Error('No configuration file found.')
+}
 
 /**
  * <pre><code>
@@ -64,44 +64,39 @@ var noConfigPath = function() {
  * }
  * </code></pre>
  */
-var songFolder = function(s) {
-  let forced;
+var songFolder = function (s) {
+  let forced
   if (s.force) {
-    forced = ' ' + '(forced)'.red;
-  }
-  else {
-    forced = '';
+    forced = ' ' + '(forced)'.red
+  } else {
+    forced = ''
   }
 
-  let symbol;
+  let symbol
   if (!s.info.title) {
-    symbol = error;
-  }
-  else if (!s.changed.slides && !s.changed.piano) {
-    symbol = finished;
-  }
-  else {
-    symbol = progress;
+    symbol = error
+  } else if (!s.changed.slides && !s.changed.piano) {
+    symbol = finished
+  } else {
+    symbol = progress
   }
 
-  let title;
+  let title
   if (!s.info.title) {
-    title = s.folderName.red;
-  }
-  else if (!s.changed.slides && !s.changed.piano) {
-    title = s.folderName.green + ': ' + s.info.title;
-  }
-  else {
-    title = s.folderName.yellow + ': ' + s.info.title;
+    title = s.folderName.red
+  } else if (!s.changed.slides && !s.changed.piano) {
+    title = s.folderName.green + ': ' + s.info.title
+  } else {
+    title = s.folderName.yellow + ': ' + s.info.title
   }
 
-  let output = symbol + '  ' + title + forced;
+  let output = symbol + '  ' + title + forced
   if (s.generated.slides) {
     output +=
       '\n\t' +
       'slides'.yellow +
       ': ' +
-      s.generated.slides.join(', ');
+      s.generated.slides.join(', ')
   }
 
   if (s.generated.piano) {
@@ -109,11 +104,11 @@ var songFolder = function(s) {
       '\n\t' +
       'piano'.yellow +
       ': ' +
-      s.generated.piano.join(', ');
+      s.generated.piano.join(', ')
   }
-  info(output);
-};
+  info(output)
+}
 
-exports.info = info;
-exports.noConfigPath = noConfigPath;
-exports.songFolder = songFolder;
+exports.info = info
+exports.noConfigPath = noConfigPath
+exports.songFolder = songFolder
