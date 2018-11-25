@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: json.js</title>
+    <title>JSDoc: Class: SongMetaData</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,92 +17,201 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: json.js</h1>
+    <h1 class="page-title">Class: SongMetaData</h1>
 
     
 
 
 
+
+<section>
+
+<header>
     
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>/**
- * @file Build a json file (songs.json) containing all slide files.
- */
+        <h2><span class="attribs"><span class="type-signature"></span></span>SongMetaData<span class="signature">(folder)</span><span class="type-signature"></span></h2>
+        
+            <div class="class-description"><p>info.yml</p>
+<pre class="prettyprint source"><code>---
+title: Lemon tree
+subtitle:
+alias: I’m sitting here
+artist: Fools Garden
+lyricist:
+composer: Heinz Müller / Manfred Meier
+country: Deutschland
+musescore: https://musescore.com/user/12559861/scores/4801717
+source: http://wikifonia.org/node/9928/revisions/13488/view
+year: 1965
+genre: Spiritual</code></pre><h1>Mapping</h1><ul>
+<li>title: title (year)</li>
+<li>subtitle: subtitle - alias - country</li>
+<li>composer: composer, artist, genre</li>
+<li>lyricist: lyricist</li>
+</ul></div>
+        
+    
+</header>
 
-'use strict'
+<article>
+    <div class="container-overview">
+    
+        
 
-const fs = require('fs')
-const path = require('path')
-const tree = require('./tree.js')
-const yaml = require('js-yaml')
+    
+    <h2>Constructor</h2>
+    
 
-/**
- *
- * @param {string} songPath - Path of the song folder.
- */
-var generateSongJSON = function (songPath) {
-  var ymlFile = path.join(songPath, 'info.yml')
-  if (fs.existsSync(ymlFile)) {
-    var info = yaml.safeLoad(
-      fs.readFileSync(ymlFile, 'utf8')
-    )
-    info.folder = songPath
-    info.slides = tree.getFolderFiles(
-      path.join(songPath, 'slides'),
-      '.svg'
-    )
+    
+    <h4 class="name" id="SongMetaData"><span class="type-signature"></span>new SongMetaData<span class="signature">(folder)</span><span class="type-signature"></span></h4>
+    
 
-    if (info.title) {
-      return info
-    } else {
-      return false
-    }
-  } else if (fs.lstatSync(songPath).isDirectory()) {
-    return false
-  }
-}
+    
 
-/**
- *
- * @param {string} basePath - Basepath to the songbook tree.
- */
-var generateJSON = function (basePath) {
-  var folderTree = tree.getTree(basePath)
 
-  Object.keys(folderTree).forEach((alpha, index) => {
-    Object.keys(folderTree[alpha]).forEach((folder, index) => {
-      folderTree[alpha][folder] = generateSongJSON(
-        path.join(basePath, alpha, folder)
-      )
-    })
-  })
 
-  fs.writeFileSync(
-    path.join(basePath, 'songs.json'),
-    JSON.stringify(folderTree, null, 4)
-  )
-  return folderTree
-}
 
-/**
- *
- * @param {string} basePath - Basepath to the songbook tree.
- * @returns {object}
- */
-var readJSON = function (basePath) {
-  return JSON.parse(
-    fs.readFileSync(
-      path.join(basePath, 'songs.json'), 'utf8'
-    )
-  )
-}
 
-exports.generateJSON = generateJSON
-exports.readJSON = readJSON
-</code></pre>
-        </article>
-    </section>
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>folder</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Absolute path to a song folder.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line352">line 352</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</article>
+
+</section>
 
 
 

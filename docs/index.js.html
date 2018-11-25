@@ -40,6 +40,7 @@ const path = require('path')
 const commander = require('commander')
 const pckg = require('./package.json')
 const yaml = require('js-yaml')
+const util = require('util')
 
 const Check = require('./check.js')
 var CheckChange = new Check()
@@ -351,19 +352,62 @@ class Song {
   constructor (folder) {
     this.folder = folder
   }
+}
 
+/**
+ * info.yml
+ *
+ *     ---
+ *     title: Lemon tree
+ *     subtitle:
+ *     alias: I’m sitting here
+ *     artist: Fools Garden
+ *     lyricist:
+ *     composer: Heinz Müller / Manfred Meier
+ *     country: Deutschland
+ *     musescore: https://musescore.com/user/12559861/scores/4801717
+ *     source: http://wikifonia.org/node/9928/revisions/13488/view
+ *     year: 1965
+ *     genre: Spiritual
+ *
+ * # Mapping
+ *
+ * * title: title (year)
+ * * subtitle: subtitle - alias - country
+ * * composer: composer, artist, genre
+ * * lyricist: lyricist
+ */
+class SongMetaData {
   /**
    * @param {string} folder - Absolute path to a song folder.
    */
-  // var getSongInfo = function (folder) {
-  //   var ymlFile = path.join(folder, 'info.yml')
-  //   if (fs.existsSync(ymlFile)) {
-  //     return yaml.safeLoad(fs.readFileSync(ymlFile, 'utf8'))
-  //   } else {
-  //     return false
-  //   }
-  // }
+  constructor (folder) {
+    this.yamlFile = 'info.yml'
 
+    this.allowedProperties = [
+      'alias',
+      'arranger',
+      'artist',
+      'composer',
+      'country',
+      'genre',
+      'lyricist',
+      'musescore',
+      'source',
+      'subtitle',
+      'title',
+      'year'
+    ]
+    if (!fs.existsSync(folder)) {
+      throw new Error(util.format('Song folder doesn’t exist: %s', folder))
+    }
+    this.folder = folder
+    let ymlFile = path.join(folder, this.yamlFile)
+    if (!fs.existsSync(ymlFile)) {
+      throw new Error(util.format('YAML file could not be found: %s', ymlFile))
+    }
+    this.raw = yaml.safeLoad(fs.readFileSync(ymlFile, 'utf8'))
+  }
 }
 
 var main = function () {
@@ -406,6 +450,7 @@ if (require.main === module) {
 }
 
 exports.Song = Song
+exports.SongMetaData = SongMetaData
 </code></pre>
         </article>
     </section>
@@ -416,7 +461,7 @@ exports.Song = Song
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="TeX.html">TeX</a></li></ul><h3>Global</h3><ul><li><a href="global.html#bootstrapConfig">bootstrapConfig</a></li><li><a href="global.html#checkExecutable">checkExecutable</a></li><li><a href="global.html#checkExecutables">checkExecutables</a></li><li><a href="global.html#clean">clean</a></li><li><a href="global.html#cleanFiles">cleanFiles</a></li><li><a href="global.html#cleanFolder">cleanFolder</a></li><li><a href="global.html#flat">flat</a></li><li><a href="global.html#flattenTree">flattenTree</a></li><li><a href="global.html#generateJSON">generateJSON</a></li><li><a href="global.html#generatePDF">generatePDF</a></li><li><a href="global.html#generatePianoEPS">generatePianoEPS</a></li><li><a href="global.html#generateSlides">generateSlides</a></li><li><a href="global.html#generateSongJSON">generateSongJSON</a></li><li><a href="global.html#getABCFolders">getABCFolders</a></li><li><a href="global.html#getFolderFiles">getFolderFiles</a></li><li><a href="global.html#getSongFolders">getSongFolders</a></li><li><a href="global.html#getSongInfo">getSongInfo</a></li><li><a href="global.html#getTree">getTree</a></li><li><a href="global.html#gitPull">gitPull</a></li><li><a href="global.html#hashSHA1">hashSHA1</a></li><li><a href="global.html#info">info</a></li><li><a href="global.html#noConfigPath">noConfigPath</a></li><li><a href="global.html#processSongFolder">processSongFolder</a></li><li><a href="global.html#readJSON">readJSON</a></li><li><a href="global.html#setTestMode">setTestMode</a></li><li><a href="global.html#songFolder">songFolder</a></li><li><a href="global.html#update">update</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="SongMetaData.html">SongMetaData</a></li><li><a href="TeX.html">TeX</a></li></ul><h3>Global</h3><ul><li><a href="global.html#bootstrapConfig">bootstrapConfig</a></li><li><a href="global.html#checkExecutable">checkExecutable</a></li><li><a href="global.html#checkExecutables">checkExecutables</a></li><li><a href="global.html#clean">clean</a></li><li><a href="global.html#cleanFiles">cleanFiles</a></li><li><a href="global.html#cleanFolder">cleanFolder</a></li><li><a href="global.html#flat">flat</a></li><li><a href="global.html#flattenTree">flattenTree</a></li><li><a href="global.html#generateJSON">generateJSON</a></li><li><a href="global.html#generatePDF">generatePDF</a></li><li><a href="global.html#generatePianoEPS">generatePianoEPS</a></li><li><a href="global.html#generateSlides">generateSlides</a></li><li><a href="global.html#generateSongJSON">generateSongJSON</a></li><li><a href="global.html#getABCFolders">getABCFolders</a></li><li><a href="global.html#getFolderFiles">getFolderFiles</a></li><li><a href="global.html#getSongFolders">getSongFolders</a></li><li><a href="global.html#getSongInfo">getSongInfo</a></li><li><a href="global.html#getTree">getTree</a></li><li><a href="global.html#gitPull">gitPull</a></li><li><a href="global.html#hashSHA1">hashSHA1</a></li><li><a href="global.html#info">info</a></li><li><a href="global.html#noConfigPath">noConfigPath</a></li><li><a href="global.html#processSongFolder">processSongFolder</a></li><li><a href="global.html#readJSON">readJSON</a></li><li><a href="global.html#setTestMode">setTestMode</a></li><li><a href="global.html#songFolder">songFolder</a></li><li><a href="global.html#update">update</a></li></ul>
 </nav>
 
 <br class="clear">
