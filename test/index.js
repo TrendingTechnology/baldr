@@ -29,7 +29,7 @@ describe('file “check.js”', () => {
     assert.exists('test.db')
 
     db.insert('lol', 'toll')
-    var row = db.select('lol')
+    let row = db.select('lol')
     assert.strictEqual(row.hash, 'toll')
 
     try {
@@ -53,7 +53,7 @@ describe('file “check.js”', () => {
   })
 
   it('object “CheckChange()”', () => {
-    var check = new CheckChange()
+    let check = new CheckChange()
     check.init('test.db')
     assert.strictEqual(check.db.dbFile, 'test.db')
 
@@ -112,8 +112,8 @@ describe('Class “TeX”', () => {
     tex.generateTeX(path.resolve('test', 'songs', 'processed', 'some'))
     assert.exists(texFile)
 
-    var texContent = fs.readFileSync(texFile, 'utf8')
-    var compare = fs.readFileSync(
+    let texContent = fs.readFileSync(texFile, 'utf8')
+    let compare = fs.readFileSync(
       path.join('test', 'files', 'songs_processed.tex'), 'utf8'
     )
 
@@ -212,7 +212,7 @@ describe('file “index.js”', () => {
       assert.exists(zum, 'piano', 'piano_1.eps')
       assert.exists(zum, 'piano', 'piano_2.eps')
 
-      var info = JSON.parse(
+      let info = JSON.parse(
         fs.readFileSync(
           path.join(songs, 'songs.json'), 'utf8'
         )
@@ -365,7 +365,7 @@ describe('Command line interface', () => {
 
     it('--help', () => {
       const cli = spawn('./index.js', ['--test', '--help'])
-      var out = cli.stdout.toString()
+      let out = cli.stdout.toString()
       assert.ok(out.indexOf('Usage') > -1)
       assert.ok(out.indexOf('--help') > -1)
       assert.ok(out.indexOf('--version') > -1)

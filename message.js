@@ -16,15 +16,15 @@ const progress = '☐'.yellow
  * Print out or return text.
  * @param {string} text - Text to display.
  */
-var info = function (text) {
+let info = function (text) {
   console.log(text)
 }
 
 /**
  *
  */
-var noConfigPath = function () {
-  var output = error + '  Configuration file ' +
+let noConfigPath = function () {
+  let output = error + '  Configuration file ' +
     '“~/.baldr.json” not found!\n' +
     'Create such a config file or use the “--path” option!'
 
@@ -64,7 +64,7 @@ var noConfigPath = function () {
  * }
  * </code></pre>
  */
-var songFolder = function (s) {
+let songFolder = function (s) {
   let forced
   if (s.force) {
     forced = ' ' + '(forced)'.red

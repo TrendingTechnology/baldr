@@ -7,12 +7,12 @@ const rewire = require('rewire')('../mscx.js')
 describe('file “mscx.js”', () => {
   describe('function “checkExecutable()”', () => {
     it('function “checkExecutable()”: existing executable', () => {
-      var checkExecutable = rewire.__get__('checkExecutable')
+      let checkExecutable = rewire.__get__('checkExecutable')
       assert.strictEqual(checkExecutable('echo'), true)
     })
 
     it('function “checkExecutable()”: nonexisting executable', () => {
-      var checkExecutable = rewire.__get__('checkExecutable')
+      let checkExecutable = rewire.__get__('checkExecutable')
       assert.strictEqual(checkExecutable('loooooool'), false)
     })
 

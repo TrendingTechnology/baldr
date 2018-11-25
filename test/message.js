@@ -16,7 +16,7 @@ const status = {
   }
 }
 
-var clone = function (object) {
+let clone = function (object) {
   return JSON.parse(JSON.stringify(object))
 }
 

@@ -49,7 +49,7 @@ class Sqlite {
 /**
  *
  */
-var hashSHA1 = function (filename) {
+let hashSHA1 = function (filename) {
   return crypto
     .createHash('sha1')
     .update(
@@ -75,9 +75,9 @@ class CheckChange {
       return false
     }
 
-    var hash = hashSHA1(filename)
-    var row = this.db.select(filename)
-    var hashStored = ''
+    let hash = hashSHA1(filename)
+    let row = this.db.select(filename)
+    let hashStored = ''
 
     if (row) {
       hashStored = row.hash

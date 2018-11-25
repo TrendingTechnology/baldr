@@ -11,8 +11,8 @@ const yaml = require('js-yaml')
 /**
  * @param {string} folder - Absolute path to a song folder.
  */
-var getSongInfo = function (folder) {
-  var ymlFile = path.join(folder, 'info.yml')
+let getSongInfo = function (folder) {
+  let ymlFile = path.join(folder, 'info.yml')
   if (fs.existsSync(ymlFile)) {
     return yaml.safeLoad(fs.readFileSync(ymlFile, 'utf8'))
   } else {
@@ -24,7 +24,7 @@ var getSongInfo = function (folder) {
  * @param {string} folder - Absolute path.
  * @param {string} filter - String to filter.
  */
-var getFolderFiles = function (folder, filter) {
+let getFolderFiles = function (folder, filter) {
   if (fs.existsSync(folder)) {
     return fs.readdirSync(folder).filter((file) => {
       return file.indexOf(filter) > -1
@@ -39,9 +39,9 @@ var getFolderFiles = function (folder, filter) {
  * @param {string} basePath - Basepath to the songbook tree.
  * @return {array} Array of folder paths.
  */
-var getSongFolders = function (basePath, folder) {
-  var absPath = path.join(basePath, folder)
-  var folders = fs.readdirSync(absPath)
+let getSongFolders = function (basePath, folder) {
+  let absPath = path.join(basePath, folder)
+  let folders = fs.readdirSync(absPath)
   return folders.filter(
     (file) => {
       if (
@@ -60,10 +60,10 @@ var getSongFolders = function (basePath, folder) {
 /**
  * @param {string} basePath - Basepath to the songbook tree.
  */
-var getABCFolders = function (basePath) {
-  var abc = '0abcdefghijklmnopqrstuvwxyz'.split('')
+let getABCFolders = function (basePath) {
+  let abc = '0abcdefghijklmnopqrstuvwxyz'.split('')
   return abc.filter((file) => {
-    var folder = path.join(basePath, file)
+    let folder = path.join(basePath, file)
     if (fs.existsSync(folder) && fs.statSync(folder).isDirectory()) {
       return true
     } else {
@@ -89,10 +89,10 @@ var getABCFolders = function (basePath) {
  * }
  * </code></pre>
  */
-var getTree = function (basePath) {
-  var tree = {}
+let getTree = function (basePath) {
+  let tree = {}
   getABCFolders(basePath).forEach((abc) => {
-    var folders = {}
+    let folders = {}
     getSongFolders(basePath, abc).forEach((song) => {
       folders[song] = {}
     })
@@ -104,8 +104,8 @@ var getTree = function (basePath) {
 /**
  * @return {array} Array of folder paths.
  */
-var flattenTree = function (tree) {
-  var flattFolders = []
+let flattenTree = function (tree) {
+  let flattFolders = []
   Object.keys(tree).forEach((abc, index) => {
     Object.keys(tree[abc]).forEach((folder, index) => {
       flattFolders.push(path.join(abc, folder))
@@ -118,7 +118,7 @@ var flattenTree = function (tree) {
  * @param {string} basePath - Basepath to the songbook tree.
  * @return {array} Array of folder paths.
  */
-var flat = function (basePath) {
+let flat = function (basePath) {
   return flattenTree(
     getTree(basePath)
   ).map(folder => path.join(basePath, folder))

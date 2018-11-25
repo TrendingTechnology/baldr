@@ -14,8 +14,8 @@ const folderTree = require('./tree.js')
  * Check if executable is installed.
  * @param {string} executable - Name of the executable.
  */
-var checkExecutable = function (executable) {
-  var exec = spawn(executable, ['--help'])
+let checkExecutable = function (executable) {
+  let exec = spawn(executable, ['--help'])
   if (exec.status === null) {
     return false
   } else {
@@ -27,11 +27,11 @@ var checkExecutable = function (executable) {
  * Check if executables are installed.
  * @param {array} executables - Name of the executables.
  */
-var checkExecutables = function (executables = []) {
-  var status = true
-  var unavailable = []
+let checkExecutables = function (executables = []) {
+  let status = true
+  let unavailable = []
   executables.forEach((exec) => {
-    var check = checkExecutable(exec)
+    let check = checkExecutable(exec)
     if (!check) {
       status = false
       unavailable.push(exec)
@@ -51,7 +51,7 @@ var checkExecutables = function (executables = []) {
  * Get current commit id:
  * git rev-parse HEAD
  */
-var gitPull = function (basePath) {
+let gitPull = function (basePath) {
   if (fs.existsSync(path.join(basePath, '.git'))) {
     return spawn('git', ['pull'], { cwd: basePath })
   } else {
@@ -65,7 +65,7 @@ var gitPull = function (basePath) {
  * @param {string} source - Name of the *.mscx file without the extension.
  * @param {string} destination - Name of the PDF without the extension.
  */
-var generatePDF = function (folder, source, destination = '') {
+let generatePDF = function (folder, source, destination = '') {
   if (destination === '') {
     destination = source
   }
@@ -86,8 +86,8 @@ var generatePDF = function (folder, source, destination = '') {
  * Generate svg files in a 'slides' subfolder.
  * @param {string} folder - A song folder.
  */
-var generateSlides = function (folder) {
-  var slides = path.join(folder, 'slides')
+let generateSlides = function (folder) {
+  let slides = path.join(folder, 'slides')
   fs.removeSync(slides)
   fs.mkdirSync(slides)
 
@@ -104,8 +104,8 @@ var generateSlides = function (folder) {
  * Generate a PDF named piano.pdf a) from piano.mscx or b) from lead.mscx
  * @param {string} folder - A song folder.
  */
-var generatePianoEPS = function (folder) {
-  var piano = path.join(folder, 'piano')
+let generatePianoEPS = function (folder) {
+  let piano = path.join(folder, 'piano')
   fs.removeSync(piano)
   fs.mkdirSync(piano)
 

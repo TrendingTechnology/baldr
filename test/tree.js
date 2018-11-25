@@ -1,12 +1,12 @@
 const { assert } = require('./lib/helper.js')
 const path = require('path')
 const fs = require('fs')
-var tree = require('../tree.js')
-var rewire = require('rewire')('../tree.js')
+let tree = require('../tree.js')
+let rewire = require('rewire')('../tree.js')
 
 describe('file “tree.js”', () => {
   it('function “getSongInfo()”', () => {
-    var info = tree.getSongInfo(
+    let info = tree.getSongInfo(
       path.join('test', 'songs', 'clean', 'some', 's', 'Swing-low')
     )
     assert.strictEqual(info.title, 'Swing low')
@@ -46,27 +46,27 @@ describe('file “tree.js”', () => {
   })
 
   it('function “getSongFolders()”', () => {
-    var getSongFolders = rewire.__get__('getSongFolders')
-    var folders = getSongFolders(path.resolve('test', 'songs', 'clean', 'some'), 's')
+    let getSongFolders = rewire.__get__('getSongFolders')
+    let folders = getSongFolders(path.resolve('test', 'songs', 'clean', 'some'), 's')
     assert.strictEqual(folders.length, 2)
     assert.deepEqual(folders, ['Stille-Nacht', 'Swing-low'])
   })
 
   it('function “getABCFolders()”', () => {
-    var getABCFolders = rewire.__get__('getABCFolders')
-    var folders = getABCFolders(path.resolve('test', 'songs', 'clean', 'some'))
+    let getABCFolders = rewire.__get__('getABCFolders')
+    let folders = getABCFolders(path.resolve('test', 'songs', 'clean', 'some'))
     assert.strictEqual(folders.length, 3)
     assert.deepEqual(folders, ['a', 's', 'z'])
   })
 
   it('function “getTree()”', () => {
-    var folderTree = tree.getTree(path.resolve('test', 'songs', 'clean', 'some'))
+    let folderTree = tree.getTree(path.resolve('test', 'songs', 'clean', 'some'))
     assert.deepEqual(folderTree.a, { 'Auf-der-Mauer_auf-der-Lauer': {} })
     assert.deepEqual(folderTree.s, { 'Stille-Nacht': {}, 'Swing-low': {} })
   })
 
   it('function “flattenTree()”', () => {
-    var folderTree = {
+    let folderTree = {
       'a': {
         'Auf-der-Mauer_auf-der-Lauer': {}
       },
@@ -88,7 +88,7 @@ describe('file “tree.js”', () => {
   })
 
   it('function “flat()”', () => {
-    var flat = tree.flat(path.resolve('test', 'songs', 'clean', 'some'))
+    let flat = tree.flat(path.resolve('test', 'songs', 'clean', 'some'))
     assert.strictEqual(flat.length, 4)
   })
 })
