@@ -13,6 +13,7 @@ const commander = require('commander')
 const pckg = require('./package.json')
 const yaml = require('js-yaml')
 const util = require('util')
+const spawn = require('child_process').spawnSync
 
 const Check = require('./check.js')
 var CheckChange = new Check()
@@ -327,6 +328,120 @@ class Song {
 }
 
 /**
+ * Generate all temporary files of a single song.
+ */
+class SongFiles {
+  /**
+   * @param {string} folder - The directory containing to song files.
+   */
+  constructor (folder) {
+    this.folder = folder
+  }
+
+  /**
+   * Generate form a given *.mscx file a PDF file.
+   * @param {string} source - Name of the *.mscx file without the extension.
+   * @param {string} destination - Name of the PDF without the extension.
+   */
+  generatePDF (source, destination = '') {
+    if (destination === '') {
+      destination = source
+    }
+    let pdf = path.join(this.folder, destination + '.pdf')
+    spawn('mscore', [
+      '--export-to',
+      path.join(pdf),
+      path.join(this.folder, source + '.mscx')
+    ])
+    if (fs.existsSync(pdf)) {
+      return destination + '.pdf'
+    } else {
+      return false
+    }
+  }
+
+  /**
+   * Generate svg files in a 'slides' subfolder.
+   * @param {string} folder - A song folder.
+   */
+  generateSlides () {
+    var slides = path.join(this.folder, 'slides')
+    fs.removeSync(slides)
+    fs.mkdirSync(slides)
+
+    spawn('pdf2svg', [
+      path.join(this.folder, 'projector.pdf'),
+      path.join(slides, '%02d.svg'),
+      'all'
+    ])
+
+    return folderTree.getFolderFiles(slides, '.svg')
+  }
+
+  /**
+   * Generate a PDF named piano.pdf a) from piano.mscx or b) from lead.mscx
+   * @param {string} folder - A song folder.
+   */
+  generatePiano () {
+    var piano = path.join(this.folder, 'piano')
+    fs.removeSync(piano)
+    fs.mkdirSync(piano)
+
+    if (fs.existsSync(path.join(this.folder, 'piano.mscx'))) {
+      fs.copySync(
+        path.join(this.folder, 'piano.mscx'),
+        path.join(piano, 'piano.mscx')
+      )
+    } else if (fs.existsSync(path.join(this.folder, 'lead.mscx'))) {
+      fs.copySync(
+        path.join(this.folder, 'lead.mscx'),
+        path.join(piano, 'piano.mscx')
+      )
+    }
+    spawn('mscore-to-eps.sh', [path.join(piano, 'piano.mscx')])
+
+    return folderTree.getFolderFiles(piano, '.eps')
+  }
+
+  /**
+   * Wrapper function for all process functions for one folder.
+   * @param {string} folder - A song folder.
+   */
+  processSongFolder () {
+    let status = { changed: {}, generated: {} }
+
+    status.folder = this.folder
+    status.folderName = path.basename(this.folder)
+    status.info = folderTree.getSongInfo(this.folder)
+
+    status.force = config.force
+    status.changed.slides = CheckChange.do(
+      path.join(this.folder, 'projector.mscx')
+    )
+    // projector
+    if (config.force || status.changed.slides) {
+      status.generated.projector = this.generatePDF('projector')
+      status.generated.slides = this.generateSlides()
+    }
+
+    if (
+      CheckChange.do(path.join(this.folder, 'lead.mscx')) ||
+        CheckChange.do(path.join(this.folder, 'piano.mscx'))
+    ) {
+      status.changed.piano = true
+    } else {
+      status.changed.piano = false
+    }
+
+    // piano
+    if (config.force || status.changed.piano) {
+      status.generated.piano = this.generatePiano()
+    }
+    return status
+  }
+}
+
+/**
  * info.yml
  *
  *     ---
@@ -423,3 +538,4 @@ if (require.main === module) {
 
 exports.Song = Song
 exports.SongMetaData = SongMetaData
+exports.SongFiles = SongFiles
