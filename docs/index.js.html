@@ -41,6 +41,7 @@ const commander = require('commander')
 const pckg = require('./package.json')
 const yaml = require('js-yaml')
 const util = require('util')
+const spawn = require('child_process').spawnSync
 
 const Check = require('./check.js')
 var CheckChange = new Check()
@@ -355,6 +356,120 @@ class Song {
 }
 
 /**
+ * Generate all temporary files of a single song.
+ */
+class SongFiles {
+  /**
+   * @param {string} folder - The directory containing to song files.
+   */
+  constructor (folder) {
+    this.folder = folder
+  }
+
+  /**
+   * Generate form a given *.mscx file a PDF file.
+   * @param {string} source - Name of the *.mscx file without the extension.
+   * @param {string} destination - Name of the PDF without the extension.
+   */
+  generatePDF (source, destination = '') {
+    if (destination === '') {
+      destination = source
+    }
+    let pdf = path.join(this.folder, destination + '.pdf')
+    spawn('mscore', [
+      '--export-to',
+      path.join(pdf),
+      path.join(this.folder, source + '.mscx')
+    ])
+    if (fs.existsSync(pdf)) {
+      return destination + '.pdf'
+    } else {
+      return false
+    }
+  }
+
+  /**
+   * Generate svg files in a 'slides' subfolder.
+   * @param {string} folder - A song folder.
+   */
+  generateSlides () {
+    var slides = path.join(this.folder, 'slides')
+    fs.removeSync(slides)
+    fs.mkdirSync(slides)
+
+    spawn('pdf2svg', [
+      path.join(this.folder, 'projector.pdf'),
+      path.join(slides, '%02d.svg'),
+      'all'
+    ])
+
+    return folderTree.getFolderFiles(slides, '.svg')
+  }
+
+  /**
+   * Generate a PDF named piano.pdf a) from piano.mscx or b) from lead.mscx
+   * @param {string} folder - A song folder.
+   */
+  generatePiano () {
+    var piano = path.join(this.folder, 'piano')
+    fs.removeSync(piano)
+    fs.mkdirSync(piano)
+
+    if (fs.existsSync(path.join(this.folder, 'piano.mscx'))) {
+      fs.copySync(
+        path.join(this.folder, 'piano.mscx'),
+        path.join(piano, 'piano.mscx')
+      )
+    } else if (fs.existsSync(path.join(this.folder, 'lead.mscx'))) {
+      fs.copySync(
+        path.join(this.folder, 'lead.mscx'),
+        path.join(piano, 'piano.mscx')
+      )
+    }
+    spawn('mscore-to-eps.sh', [path.join(piano, 'piano.mscx')])
+
+    return folderTree.getFolderFiles(piano, '.eps')
+  }
+
+  /**
+   * Wrapper function for all process functions for one folder.
+   * @param {string} folder - A song folder.
+   */
+  processSongFolder () {
+    let status = { changed: {}, generated: {} }
+
+    status.folder = this.folder
+    status.folderName = path.basename(this.folder)
+    status.info = folderTree.getSongInfo(this.folder)
+
+    status.force = config.force
+    status.changed.slides = CheckChange.do(
+      path.join(this.folder, 'projector.mscx')
+    )
+    // projector
+    if (config.force || status.changed.slides) {
+      status.generated.projector = this.generatePDF('projector')
+      status.generated.slides = this.generateSlides()
+    }
+
+    if (
+      CheckChange.do(path.join(this.folder, 'lead.mscx')) ||
+        CheckChange.do(path.join(this.folder, 'piano.mscx'))
+    ) {
+      status.changed.piano = true
+    } else {
+      status.changed.piano = false
+    }
+
+    // piano
+    if (config.force || status.changed.piano) {
+      status.generated.piano = this.generatePiano()
+    }
+    return status
+  }
+}
+
+/**
  * info.yml
  *
  *     ---
@@ -451,6 +566,7 @@ if (require.main === module) {
 
 exports.Song = Song
 exports.SongMetaData = SongMetaData
+exports.SongFiles = SongFiles
 </code></pre>
         </article>
     </section>
@@ -461,7 +577,7 @@ exports.SongMetaData = SongMetaData
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="SongMetaData.html">SongMetaData</a></li><li><a href="TeX.html">TeX</a></li></ul><h3>Global</h3><ul><li><a href="global.html#bootstrapConfig">bootstrapConfig</a></li><li><a href="global.html#checkExecutable">checkExecutable</a></li><li><a href="global.html#checkExecutables">checkExecutables</a></li><li><a href="global.html#clean">clean</a></li><li><a href="global.html#cleanFiles">cleanFiles</a></li><li><a href="global.html#cleanFolder">cleanFolder</a></li><li><a href="global.html#flat">flat</a></li><li><a href="global.html#flattenTree">flattenTree</a></li><li><a href="global.html#generateJSON">generateJSON</a></li><li><a href="global.html#generatePDF">generatePDF</a></li><li><a href="global.html#generatePianoEPS">generatePianoEPS</a></li><li><a href="global.html#generateSlides">generateSlides</a></li><li><a href="global.html#generateSongJSON">generateSongJSON</a></li><li><a href="global.html#getABCFolders">getABCFolders</a></li><li><a href="global.html#getFolderFiles">getFolderFiles</a></li><li><a href="global.html#getSongFolders">getSongFolders</a></li><li><a href="global.html#getSongInfo">getSongInfo</a></li><li><a href="global.html#getTree">getTree</a></li><li><a href="global.html#gitPull">gitPull</a></li><li><a href="global.html#hashSHA1">hashSHA1</a></li><li><a href="global.html#info">info</a></li><li><a href="global.html#noConfigPath">noConfigPath</a></li><li><a href="global.html#processSongFolder">processSongFolder</a></li><li><a href="global.html#readJSON">readJSON</a></li><li><a href="global.html#setTestMode">setTestMode</a></li><li><a href="global.html#songFolder">songFolder</a></li><li><a href="global.html#update">update</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="SongFiles.html">SongFiles</a></li><li><a href="SongMetaData.html">SongMetaData</a></li><li><a href="TeX.html">TeX</a></li></ul><h3>Global</h3><ul><li><a href="global.html#bootstrapConfig">bootstrapConfig</a></li><li><a href="global.html#checkExecutable">checkExecutable</a></li><li><a href="global.html#checkExecutables">checkExecutables</a></li><li><a href="global.html#clean">clean</a></li><li><a href="global.html#cleanFiles">cleanFiles</a></li><li><a href="global.html#cleanFolder">cleanFolder</a></li><li><a href="global.html#flat">flat</a></li><li><a href="global.html#flattenTree">flattenTree</a></li><li><a href="global.html#generateJSON">generateJSON</a></li><li><a href="global.html#generatePDF">generatePDF</a></li><li><a href="global.html#generatePianoEPS">generatePianoEPS</a></li><li><a href="global.html#generateSlides">generateSlides</a></li><li><a href="global.html#generateSongJSON">generateSongJSON</a></li><li><a href="global.html#getABCFolders">getABCFolders</a></li><li><a href="global.html#getFolderFiles">getFolderFiles</a></li><li><a href="global.html#getSongFolders">getSongFolders</a></li><li><a href="global.html#getSongInfo">getSongInfo</a></li><li><a href="global.html#getTree">getTree</a></li><li><a href="global.html#gitPull">gitPull</a></li><li><a href="global.html#hashSHA1">hashSHA1</a></li><li><a href="global.html#info">info</a></li><li><a href="global.html#noConfigPath">noConfigPath</a></li><li><a href="global.html#processSongFolder">processSongFolder</a></li><li><a href="global.html#readJSON">readJSON</a></li><li><a href="global.html#setTestMode">setTestMode</a></li><li><a href="global.html#songFolder">songFolder</a></li><li><a href="global.html#update">update</a></li></ul>
 </nav>
 
 <br class="clear">
