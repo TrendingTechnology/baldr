@@ -396,14 +396,39 @@ describe('Class Song()', function () {
 })
 
 describe('Class SongMetaData()', function () {
+  let songPath = path.resolve('test', 'songs', 'clean', 'some', 'a', 'Auf-der-Mauer_auf-der-Lauer')
   let SongMetaData = indexRewired.__get__('SongMetaData')
 
-  it('Exception', function () {
+  it('Exception: No song folder', function () {
     assert.throws(
       () => {
         return new SongMetaData('lol')
       },
       /^.*Song folder doesn’t exist: lol.*$/
+    )
+  })
+
+  it('Exception: No yaml file', function () {
+    let tmpDir = fs.mkdtempSync('song')
+    assert.throws(
+      () => {
+        return new SongMetaData(tmpDir)
+      },
+      /^.*YAML file could not be found: .*$/
+    )
+  })
+
+  it('on regular song folder', function () {
+    let song = new SongMetaData(songPath)
+    assert.strictEqual(song.title, 'Auf der Mauer, auf der Lauer')
+  })
+
+  it('Exception: Unsupported key', function () {
+    assert.throws(
+      () => {
+        return new SongMetaData(path.join('test', 'files', 'wrong-song-yaml'))
+      },
+      /^.*Unsupported key: lol.*$/
     )
   })
 })
