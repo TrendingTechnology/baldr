@@ -46,13 +46,13 @@ const util = require('util')
 const yaml = require('js-yaml')
 
 const Check = require('./check.js')
-var CheckChange = new Check()
+let CheckChange = new Check()
 const json = require('./json.js')
 const mscx = require('./mscx.js')
 const folderTree = require('./tree.js')
 
 // For test purposes, to be able to overwrite “message” with rewire.
-var message = require('./message.js')
+let message = require('./message.js')
 
 /***********************************************************************
  * Build a TeX file (songs.tex) of all piano scores.
@@ -135,7 +135,7 @@ class TeX {
       .replace(/^\//, '')
     const info = folderTree.getSongInfo(resolvedSongPath)
     const eps = folderTree.getFolderFiles(path.join(resolvedSongPath, 'piano'), '.eps')
-    var output = ''
+    let output = ''
 
     if (info.hasOwnProperty('title') &amp;&amp; eps.length > 0) {
       output += '\n' + this.texCmd('heading', info.title)
@@ -181,7 +181,7 @@ const configDefault = {
   force: false
 }
 
-var config = {}
+let config = {}
 
 /**
  * By default this module reads the config file ~/.baldr to
@@ -189,7 +189,7 @@ var config = {}
  * @param {object} newConfig - An object containing the same properties as the
  * config object.
  */
-var bootstrapConfig = function (newConfig = false) {
+let bootstrapConfig = function (newConfig = false) {
   let { status, unavailable } = mscx.checkExecutables([
     'mscore-to-eps.sh',
     'pdf2svg',
@@ -213,8 +213,8 @@ var bootstrapConfig = function (newConfig = false) {
   config = configDefault
 
   // config file
-  var configFile = path.join(os.homedir(), '.baldr.json')
-  var configFileExits = fs.existsSync(configFile)
+  let configFile = path.join(os.homedir(), '.baldr.json')
+  let configFileExits = fs.existsSync(configFile)
   if (configFileExits) {
     config = Object.assign(config, require(configFile).songbook)
   }
@@ -234,7 +234,7 @@ var bootstrapConfig = function (newConfig = false) {
 /**
  * External function for command line usage.
  */
-var setTestMode = function () {
+let setTestMode = function () {
   config.test = true
   config.path = path.resolve('test', 'songs', 'clean', 'some')
 }
@@ -243,7 +243,7 @@ var setTestMode = function () {
  * Wrapper function for all process functions for one folder.
  * @param {string} folder - A song folder.
  */
-var processSongFolder = function (folder) {
+let processSongFolder = function (folder) {
   let status = { changed: {}, generated: {} }
 
   status.folder = folder
@@ -276,7 +276,7 @@ var processSongFolder = function (folder) {
   return status
 }
 
-var updateSongFolder = function (folder) {
+let updateSongFolder = function (folder) {
   message.songFolder(
     processSongFolder(folder)
   )
@@ -285,7 +285,7 @@ var updateSongFolder = function (folder) {
 /**
  * Update and generate when required media files for the songs.
  */
-var update = function () {
+let update = function () {
   mscx.gitPull(config.path)
   folderTree.flat(config.path).forEach(updateSongFolder)
   json.generateJSON(config.path)
@@ -296,7 +296,7 @@ var update = function () {
 /**
  *
  */
-var cleanFiles = function (folder, files) {
+let cleanFiles = function (folder, files) {
   files.forEach(
     (file) => {
       fs.removeSync(path.join(folder, file))
@@ -308,7 +308,7 @@ var cleanFiles = function (folder, files) {
  * Clean all temporary files in a song folder.
  * @param {string} folder - A song folder.
  */
-var cleanFolder = function (folder) {
+let cleanFolder = function (folder) {
   cleanFiles(folder, [
     'piano',
     'slides',
@@ -319,7 +319,7 @@ var cleanFolder = function (folder) {
 /**
  * Clean all temporary media files.
  */
-var clean = function () {
+let clean = function () {
   folderTree.flat(config.path).forEach(cleanFolder)
 
   cleanFiles(config.path, [
@@ -338,7 +338,7 @@ let generateTeX = function () {
   tex.generateTeX()
 }
 
-var setOptions = function (argv) {
+let setOptions = function (argv) {
   return commander
     .version(pckg.version)
     .option('-c, --clean', 'clean up (delete all generated files)')
@@ -395,7 +395,7 @@ class SongFiles {
    * @param {string} folder - A song folder.
    */
   generateSlides () {
-    var slides = path.join(this.folder, 'slides')
+    let slides = path.join(this.folder, 'slides')
     fs.removeSync(slides)
     fs.mkdirSync(slides)
 
@@ -413,7 +413,7 @@ class SongFiles {
    * @param {string} folder - A song folder.
    */
   generatePiano () {
-    var piano = path.join(this.folder, 'piano')
+    let piano = path.join(this.folder, 'piano')
     fs.removeSync(piano)
     fs.mkdirSync(piano)
 
@@ -591,9 +591,9 @@ class FileMonitor {
       return false
     }
 
-    var hash = this.hashSHA1(filename)
-    var row = this.db.select(filename)
-    var hashStored = ''
+    let hash = this.hashSHA1(filename)
+    let row = this.db.select(filename)
+    let hashStored = ''
 
     if (row) {
       hashStored = row.hash
@@ -616,7 +616,7 @@ class FileMonitor {
   }
 }
 
-var main = function () {
+let main = function () {
   let options = setOptions(process.argv)
 
   if (options.folder) {
