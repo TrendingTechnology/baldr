@@ -536,7 +536,6 @@ class Sqlite {
 class FileMonitor {
   constructor (dbFile) {
     this.db = new Sqlite(dbFile)
-    this.db.initialize()
   }
 
   /**
@@ -544,7 +543,7 @@ class FileMonitor {
    *
    * @param {string} filename - The path of the file.
    */
-  static hashSHA1 (filename) {
+  hashSHA1 (filename) {
     return crypto
       .createHash('sha1')
       .update(
@@ -579,6 +578,13 @@ class FileMonitor {
     } else {
       return false
     }
+  }
+
+  /**
+   * Flush the file monitor database by deleting it.
+   */
+  flush () {
+    if (fs.existsSync(this.db.dbFile)) fs.unlinkSync(this.db.dbFile)
   }
 }
 

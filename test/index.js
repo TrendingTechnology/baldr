@@ -432,3 +432,106 @@ describe('Class SongMetaData()', function () {
     )
   })
 })
+
+describe('class “Sqlite”', () => {
+  let Sqlite = indexRewired.__get__('Sqlite')
+  let tmpDir = fs.mkdtempSync('file-monitor')
+  let testDb = path.join(tmpDir, 'test.db')
+  let db
+
+  beforeEach(function () {
+    db = new Sqlite(testDb)
+  })
+
+  afterEach(function () {
+    fs.unlinkSync(testDb)
+  })
+
+  it('object “Sqlite()”', () => {
+    assert.ok(db)
+  })
+
+  it('test.db exists', () => {
+    assert.exists(testDb)
+  })
+
+  it('method “insert()”', () => {
+    db.insert('lol', 'toll')
+    let row = db.select('lol')
+    assert.strictEqual(row.hash, 'toll')
+  })
+
+  it('Error', () => {
+    try {
+      db.insert('lol', 'toll')
+      db.insert('lol', 'toll')
+    } catch (e) {
+      assert.strictEqual(e.name, 'SqliteError')
+    }
+  })
+
+  it('method “update()”', () => {
+    db.insert('lol', 'toll')
+    db.update('lol', 'troll')
+    assert.strictEqual(db.select('lol').hash, 'troll')
+  })
+})
+
+describe('class “FileMonitor()”', () => {
+  let FileMonitor = indexRewired.__get__('FileMonitor')
+  let tmpDir = fs.mkdtempSync('file-monitor')
+  let testDb = path.join(tmpDir, 'file-monitor.db')
+  let testFile = path.join(tmpDir, 'file-monitor.txt')
+  let monitor
+
+  beforeEach(function () {
+    monitor = new FileMonitor(testDb)
+  })
+
+  afterEach(function () {
+    if (fs.existsSync(testFile)) fs.unlinkSync(testFile)
+    monitor.flush()
+  })
+
+  it('method “hashSHA1()”', () => {
+    assert.strictEqual(
+      monitor.hashSHA1(path.join('test', 'files', 'hash.txt')),
+      '7516f3c75e85c64b98241a12230d62a64e59bce3'
+    )
+  })
+
+  it('dbFile exists', () => {
+    assert.strictEqual(monitor.db.dbFile, testDb)
+  })
+
+  it('file modified', () => {
+    fs.appendFileSync(testFile, 'test')
+    assert.ok(monitor.isModified(testFile))
+  })
+
+  it('file not modified', () => {
+    fs.appendFileSync(testFile, 'test')
+    assert.ok(monitor.isModified(testFile))
+    assert.ok(!monitor.isModified(testFile))
+    assert.ok(!monitor.isModified(testFile))
+  })
+
+  it('file twice modified', () => {
+    fs.appendFileSync(testFile, 'test')
+    assert.ok(monitor.isModified(testFile))
+    fs.appendFileSync(testFile, 'test')
+    assert.ok(monitor.isModified(testFile))
+  })
+
+  it('method “flush()”', () => {
+    monitor.flush()
+    assert.ok(!fs.existsSync(testDb))
+  })
+
+  it('method “flush()”: call multiple times', () => {
+    monitor.flush()
+    assert.ok(!fs.existsSync(testDb))
+    monitor.flush()
+    assert.ok(!fs.existsSync(testDb))
+  })
+})
