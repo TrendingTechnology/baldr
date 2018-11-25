@@ -4,6 +4,7 @@ const checkRewired = require('rewire')('../check.js')
 const fs = require('fs-extra')
 const indexRewired = require('rewire')('../index.js')
 const json = require('../json.js')
+const os = require('os')
 const path = require('path')
 const process = require('process')
 const rewire = require('rewire')
@@ -409,7 +410,7 @@ describe('Class SongMetaData()', function () {
   })
 
   it('Exception: No yaml file', function () {
-    let tmpDir = fs.mkdtempSync('song')
+    let tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'song'))
     assert.throws(
       () => {
         return new SongMetaData(tmpDir)
@@ -435,7 +436,7 @@ describe('Class SongMetaData()', function () {
 
 describe('class “Sqlite”', () => {
   let Sqlite = indexRewired.__get__('Sqlite')
-  let tmpDir = fs.mkdtempSync('file-monitor')
+  let tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'sqlite-'))
   let testDb = path.join(tmpDir, 'test.db')
   let db
 
@@ -479,7 +480,7 @@ describe('class “Sqlite”', () => {
 
 describe('class “FileMonitor()”', () => {
   let FileMonitor = indexRewired.__get__('FileMonitor')
-  let tmpDir = fs.mkdtempSync('file-monitor')
+  let tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'file-monitor-'))
   let testDb = path.join(tmpDir, 'file-monitor.db')
   let testFile = path.join(tmpDir, 'file-monitor.txt')
   let monitor
