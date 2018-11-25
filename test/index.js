@@ -11,6 +11,7 @@ const rewire = require('rewire')
 const sinon = require('sinon')
 const spawn = require('child_process').spawnSync
 const standard = require('mocha-standard')
+const tmp = require('tmp')
 
 process.env.PATH = path.join(__dirname, 'bin:', process.env.PATH)
 
@@ -539,6 +540,59 @@ describe('class “FileMonitor()”', () => {
 
 describe('Class SongFiles', function () {
   let SongFiles = indexRewired.__get__('SongFiles')
+  let FileMonitor = indexRewired.__get__('FileMonitor')
+
+  let folder = path.join('test', 'songs', 'clean', 'some', 'a', 'Auf-der-Mauer_auf-der-Lauer')
+  describe('method “process()”', () => {
+    let dbFile = tmp.fileSync()
+    let fileMonitor = new FileMonitor(dbFile.name)
+    let songFiles = new SongFiles(folder, fileMonitor)
+
+    after(function () {
+      fileMonitor.flush()
+    })
+
+    it('First run', function () {
+      let status = songFiles.process()
+      assert.deepEqual(
+        status,
+        {
+          'changed': {
+            'piano': true,
+            'slides': true
+          },
+          'folder': 'test/songs/clean/some/a/Auf-der-Mauer_auf-der-Lauer',
+          'folderName': 'Auf-der-Mauer_auf-der-Lauer',
+          'force': false,
+          'generated': {
+            'piano': [
+              'piano_1.eps',
+              'piano_2.eps'
+            ],
+            'projector': 'projector.pdf',
+            'slides': [
+              '01.svg',
+              '02.svg'
+            ]
+          },
+          'info': {
+            'title': 'Auf der Mauer, auf der Lauer'
+          }
+        }
+      )
+    })
+
+    it('Second run', function () {
+      let status = songFiles.process()
+      assert.strictEqual(status.changed.piano, false)
+      assert.strictEqual(status.changed.slides, false)
+    })
+
+    it('force', function () {
+      let status = songFiles.process(true)
+      assert.strictEqual(status.force, true)
+    })
+  })
 
   describe('method “getFolderFiles()”', () => {
     let songFiles = new SongFiles(path.join('test', 'files'))
