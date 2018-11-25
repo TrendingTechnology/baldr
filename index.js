@@ -12,6 +12,7 @@ const path = require('path')
 const commander = require('commander')
 const pckg = require('./package.json')
 const yaml = require('js-yaml')
+const util = require('util')
 
 const Check = require('./check.js')
 var CheckChange = new Check()
@@ -323,19 +324,62 @@ class Song {
   constructor (folder) {
     this.folder = folder
   }
+}
 
+/**
+ * info.yml
+ *
+ *     ---
+ *     title: Lemon tree
+ *     subtitle:
+ *     alias: I’m sitting here
+ *     artist: Fools Garden
+ *     lyricist:
+ *     composer: Heinz Müller / Manfred Meier
+ *     country: Deutschland
+ *     musescore: https://musescore.com/user/12559861/scores/4801717
+ *     source: http://wikifonia.org/node/9928/revisions/13488/view
+ *     year: 1965
+ *     genre: Spiritual
+ *
+ * # Mapping
+ *
+ * * title: title (year)
+ * * subtitle: subtitle - alias - country
+ * * composer: composer, artist, genre
+ * * lyricist: lyricist
+ */
+class SongMetaData {
   /**
    * @param {string} folder - Absolute path to a song folder.
    */
-  // var getSongInfo = function (folder) {
-  //   var ymlFile = path.join(folder, 'info.yml')
-  //   if (fs.existsSync(ymlFile)) {
-  //     return yaml.safeLoad(fs.readFileSync(ymlFile, 'utf8'))
-  //   } else {
-  //     return false
-  //   }
-  // }
+  constructor (folder) {
+    this.yamlFile = 'info.yml'
 
+    this.allowedProperties = [
+      'alias',
+      'arranger',
+      'artist',
+      'composer',
+      'country',
+      'genre',
+      'lyricist',
+      'musescore',
+      'source',
+      'subtitle',
+      'title',
+      'year'
+    ]
+    if (!fs.existsSync(folder)) {
+      throw new Error(util.format('Song folder doesn’t exist: %s', folder))
+    }
+    this.folder = folder
+    let ymlFile = path.join(folder, this.yamlFile)
+    if (!fs.existsSync(ymlFile)) {
+      throw new Error(util.format('YAML file could not be found: %s', ymlFile))
+    }
+    this.raw = yaml.safeLoad(fs.readFileSync(ymlFile, 'utf8'))
+  }
 }
 
 var main = function () {
@@ -378,3 +422,4 @@ if (require.main === module) {
 }
 
 exports.Song = Song
+exports.SongMetaData = SongMetaData

@@ -394,3 +394,16 @@ describe('Class Song()', function () {
     assert.ok(song)
   })
 })
+
+describe('Class SongMetaData()', function () {
+  let SongMetaData = indexRewired.__get__('SongMetaData')
+
+  it('Exception', function () {
+    assert.throws(
+      () => {
+        return new SongMetaData('lol')
+      },
+      /^.*Song folder doesn’t exist: lol.*$/
+    )
+  })
+})
