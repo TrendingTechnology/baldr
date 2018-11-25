@@ -369,13 +369,6 @@ class Song {
  *     source: http://wikifonia.org/node/9928/revisions/13488/view
  *     year: 1965
  *     genre: Spiritual
- *
- * # Mapping
- *
- * * title: title (year)
- * * subtitle: subtitle - alias - country
- * * composer: composer, artist, genre
- * * lyricist: lyricist
  */
 class SongMetaData {
   /**
@@ -406,7 +399,14 @@ class SongMetaData {
     if (!fs.existsSync(ymlFile)) {
       throw new Error(util.format('YAML file could not be found: %s', ymlFile))
     }
-    this.raw = yaml.safeLoad(fs.readFileSync(ymlFile, 'utf8'))
+    let raw = yaml.safeLoad(fs.readFileSync(ymlFile, 'utf8'))
+
+    for (let key in raw) {
+      if (!this.allowedProperties.includes(key)) {
+        throw new Error(util.format('Unsupported key: %s', key))
+      }
+      this[key] = raw[key]
+    }
   }
 }
 
