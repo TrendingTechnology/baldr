@@ -535,3 +535,34 @@ describe('class “FileMonitor()”', () => {
     assert.ok(!fs.existsSync(testDb))
   })
 })
+
+describe('Class SongFiles', function () {
+  let SongFiles = indexRewired.__get__('SongFiles')
+
+  describe('method “getFolderFiles()”', () => {
+    let songFiles = new SongFiles(path.join('test', 'files'))
+
+    it('method “getFolderFiles()”: eps', () => {
+      const files = songFiles.getFolderFiles('piano', '.eps')
+      assert.deepEqual(files, ['01.eps', '02.eps', '03.eps'])
+    })
+
+    it('method “getFolderFiles()”: svg', () => {
+      const files = songFiles.getFolderFiles('slides', '.svg')
+      assert.deepEqual(files, ['01.svg', '02.svg', '03.svg'])
+    })
+
+    it('method “getFolderFiles()”: non existent folder', () => {
+      const files = songFiles.getFolderFiles('lol', '.svg')
+      assert.deepEqual(files, [])
+    })
+
+    it('method “getFolderFiles()”: empty folder', () => {
+      const empty = path.join('test', 'files', 'empty')
+      fs.mkdirSync(empty)
+      const files = songFiles.getFolderFiles('empty', '.svg')
+      assert.deepEqual(files, [])
+      fs.rmdirSync(empty)
+    })
+  })
+})

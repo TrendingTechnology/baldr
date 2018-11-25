@@ -335,9 +335,26 @@ class Song {
 class SongFiles {
   /**
    * @param {string} folder - The directory containing to song files.
+   * @param {string} fileMonitor - A instance of the FileMonitor() class.
    */
-  constructor (folder) {
+  constructor (folder, fileMonitor) {
+    this.fileMonitor = fileMonitor
     this.folder = folder
+  }
+
+  /**
+   * @param {string} subFolder - A subfolder relative to this.folder
+   * @param {string} filter - String to filter.
+   */
+  getFolderFiles (subFolder, filter) {
+    let folder = path.join(this.folder, subFolder)
+    if (fs.existsSync(folder)) {
+      return fs.readdirSync(folder).filter((file) => {
+        return file.indexOf(filter) > -1
+      })
+    } else {
+      return []
+    }
   }
 
   /**
@@ -377,7 +394,7 @@ class SongFiles {
       'all'
     ])
 
-    return folderTree.getFolderFiles(slides, '.svg')
+    return this.getFolderFiles('slides', '.svg')
   }
 
   /**
@@ -402,22 +419,22 @@ class SongFiles {
     }
     spawn('mscore-to-eps.sh', [path.join(piano, 'piano.mscx')])
 
-    return folderTree.getFolderFiles(piano, '.eps')
+    return this.getFolderFiles('piano', '.eps')
   }
 
   /**
    * Wrapper function for all process functions for one folder.
    * @param {string} folder - A song folder.
    */
-  processSongFolder () {
+  process (force = false) {
     let status = { changed: {}, generated: {} }
 
     status.folder = this.folder
     status.folderName = path.basename(this.folder)
     status.info = folderTree.getSongInfo(this.folder)
 
-    status.force = config.force
-    status.changed.slides = CheckChange.do(
+    status.force = force
+    status.changed.slides = this.fileMonitor.isModified(
       path.join(this.folder, 'projector.mscx')
     )
     // projector
@@ -427,8 +444,8 @@ class SongFiles {
     }
 
     if (
-      CheckChange.do(path.join(this.folder, 'lead.mscx')) ||
-        CheckChange.do(path.join(this.folder, 'piano.mscx'))
+      this.fileMonitor.isModified(path.join(this.folder, 'lead.mscx')) ||
+        this.fileMonitor.isModified(path.join(this.folder, 'piano.mscx'))
     ) {
       status.changed.piano = true
     } else {
