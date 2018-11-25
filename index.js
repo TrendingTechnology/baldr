@@ -6,14 +6,16 @@
 
 'use strict'
 
+const commander = require('commander')
+const crypto = require('crypto')
 const fs = require('fs-extra')
 const os = require('os')
 const path = require('path')
-const commander = require('commander')
 const pckg = require('./package.json')
-const yaml = require('js-yaml')
-const util = require('util')
 const spawn = require('child_process').spawnSync
+const Sqlite3 = require('better-sqlite3')
+const util = require('util')
+const yaml = require('js-yaml')
 
 const Check = require('./check.js')
 var CheckChange = new Check()
@@ -497,6 +499,89 @@ class SongMetaData {
   }
 }
 
+class Sqlite {
+  constructor (dbFile) {
+    this.dbFile = dbFile
+    this.db = new Sqlite3(this.dbFile)
+    this.db
+      .prepare(
+        'CREATE TABLE IF NOT EXISTS hashes (filename TEXT UNIQUE, hash TEXT)'
+      )
+      .run()
+
+    this.db
+      .prepare('CREATE INDEX IF NOT EXISTS filename ON hashes(filename)')
+      .run()
+  }
+
+  insert (filename, hash) {
+    this.db
+      .prepare('INSERT INTO hashes values ($filename, $hash)')
+      .run({ 'filename': filename, 'hash': hash })
+  }
+
+  select (filename) {
+    return this.db
+      .prepare('SELECT * FROM hashes WHERE filename = $filename')
+      .get({ 'filename': filename })
+  }
+
+  update (filename, hash) {
+    this.db
+      .prepare('UPDATE hashes SET hash = $hash WHERE filename = $filename')
+      .run({ 'filename': filename, 'hash': hash })
+  }
+}
+
+class FileMonitor {
+  constructor (dbFile) {
+    this.db = new Sqlite(dbFile)
+    this.db.initialize()
+  }
+
+  /**
+   * Build the sha1 hash of a file.
+   *
+   * @param {string} filename - The path of the file.
+   */
+  static hashSHA1 (filename) {
+    return crypto
+      .createHash('sha1')
+      .update(
+        fs.readFileSync(filename)
+      )
+      .digest('hex')
+  }
+
+  /**
+   * Check for file modifications
+   * @param {string} filename - Path to the file.
+   * @returns {boolean}
+   */
+  isModified (filename) {
+    filename = path.resolve(filename)
+    if (!fs.existsSync(filename)) {
+      return false
+    }
+
+    var hash = this.hashSHA1(filename)
+    var row = this.db.select(filename)
+    var hashStored = ''
+
+    if (row) {
+      hashStored = row.hash
+    } else {
+      this.db.insert(filename, hash)
+    }
+    if (hash !== hashStored) {
+      this.db.update(filename, hash)
+      return true
+    } else {
+      return false
+    }
+  }
+}
+
 var main = function () {
   let options = setOptions(process.argv)
 
@@ -539,3 +624,4 @@ if (require.main === module) {
 exports.Song = Song
 exports.SongMetaData = SongMetaData
 exports.SongFiles = SongFiles
+exports.FileMonitor = FileMonitor
