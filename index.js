@@ -336,7 +336,7 @@ class Song {
  */
 class SongFiles {
   /**
-   * @param {string} folder - The directory containing to song files.
+   * @param {string} folder - The directory containing the song files.
    * @param {string} fileMonitor - A instance of the FileMonitor() class.
    */
   constructor (folder, fileMonitor) {
@@ -460,6 +460,22 @@ class SongFiles {
     }
     return status
   }
+
+  /**
+   * Delete all generated files of a song folder.
+   */
+  clean () {
+    let files = [
+      'piano',
+      'slides',
+      'projector.pdf'
+    ]
+    files.forEach(
+      (file) => {
+        fs.removeSync(path.join(this.folder, file))
+      }
+    )
+  }
 }
 
 /**
@@ -550,6 +566,10 @@ class Sqlite {
       .prepare('UPDATE hashes SET hash = $hash WHERE filename = $filename')
       .run({ 'filename': filename, 'hash': hash })
   }
+
+  flush () {
+    this.db.prepare('DELETE FROM hashes').run()
+  }
 }
 
 class FileMonitor {
@@ -600,9 +620,16 @@ class FileMonitor {
   }
 
   /**
-   * Flush the file monitor database by deleting it.
+   * Flush the file monitor database.
    */
   flush () {
+    this.db.flush()
+  }
+
+  /**
+   * Purge the file monitor database by deleting it.
+   */
+  purge () {
     if (fs.existsSync(this.db.dbFile)) fs.unlinkSync(this.db.dbFile)
   }
 }

@@ -412,7 +412,7 @@ describe('class “FileMonitor()”', () => {
 
   afterEach(function () {
     if (fs.existsSync(testFile)) fs.unlinkSync(testFile)
-    monitor.flush()
+    monitor.purge()
   })
 
   it('method “hashSHA1()”', () => {
@@ -445,15 +445,15 @@ describe('class “FileMonitor()”', () => {
     assert.ok(monitor.isModified(testFile))
   })
 
-  it('method “flush()”', () => {
-    monitor.flush()
+  it('method “purge()”', () => {
+    monitor.purge()
     assert.ok(!fs.existsSync(testDb))
   })
 
   it('method “flush()”: call multiple times', () => {
-    monitor.flush()
+    monitor.purge()
     assert.ok(!fs.existsSync(testDb))
-    monitor.flush()
+    monitor.purge()
     assert.ok(!fs.existsSync(testDb))
   })
 })
@@ -465,7 +465,7 @@ describe('Class SongFiles', function () {
   let fileMonitor = new FileMonitor(mkTmpFile())
   let songFiles = new SongFiles(folder, fileMonitor)
 
-  after(function () {
+  afterEach(function () {
     fileMonitor.flush()
   })
 
@@ -501,6 +501,7 @@ describe('Class SongFiles', function () {
     })
 
     it('Second run', function () {
+      songFiles.process()
       let status = songFiles.process()
       assert.strictEqual(status.changed.piano, false)
       assert.strictEqual(status.changed.slides, false)
@@ -598,6 +599,13 @@ describe('Class SongFiles', function () {
 
       fs.removeSync(path.join(folder, 'piano'))
     })
+  })
+
+  it('method “clean()”', () => {
+    songFiles.process()
+    assert.ok(fs.existsSync(path.join(songFiles.folder, 'projector.pdf')))
+    songFiles.clean()
+    assert.ok(!fs.existsSync(path.join(songFiles.folder, 'projector.pdf')))
   })
 })
 
