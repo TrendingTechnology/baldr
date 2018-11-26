@@ -469,6 +469,22 @@ describe('Class “SongFiles()”', function () {
     fileMonitor.flush()
   })
 
+  describe('Private function “detectFile_()”', () => {
+    it('Exception', function () {
+      assert.throws(
+        () => {
+          songFiles.detectFile_('xxx')
+        },
+        /^.*File doesn’t exist: .*$/
+      )
+    })
+
+    it('Return value', function () {
+      let result = songFiles.detectFile_('projector.mscx')
+      assert.ok(result.includes('projector.mscx'))
+    })
+  })
+
   describe('Method “process()”', () => {
     it('First run', function () {
       let status = songFiles.process()
