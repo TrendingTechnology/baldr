@@ -96,7 +96,6 @@ describe('file “index.js”', () => {
       bootstrapConfig({ path: path.resolve('test', 'songs', 'clean', 'some'), test: true })
       const c = indexRewired.__get__('config')
       assert.strictEqual(c.path, path.resolve('test', 'songs', 'clean', 'some'))
-      assertExists(path.resolve('test', 'songs', 'clean', 'some', 'filehashes.db'))
     })
 
     it('function “bootstrapConfig()”: exit', () => {
