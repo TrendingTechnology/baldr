@@ -11,6 +11,7 @@ const standard = require('mocha-standard')
 const tmp = require('tmp')
 
 process.env.PATH = path.join(__dirname, 'bin:', process.env.PATH)
+process.env.BALDR_SONGBOOK_PATH = path.resolve('test', 'songs', 'clean', 'some')
 
 let assertExists = function () {
   assert.ok(
@@ -157,14 +158,6 @@ describe('file “index.js”', () => {
       clean()
     })
 
-    it('function “setTestMode()”', () => {
-      let setTestMode = indexRewired.__get__('setTestMode')
-      setTestMode()
-      const config = indexRewired.__get__('config')
-      assert.strictEqual(config.test, true)
-      assert.strictEqual(config.path, path.resolve('test', 'songs', 'clean', 'some'))
-    })
-
     it('function “clean()”', () => {
       let clean = indexRewired.__get__('clean')
       clean()
@@ -269,7 +262,6 @@ describe('Command line interface', () => {
       let main = indexRewired.__get__('main')
       indexRewired.__set__('process.argv', [
         '', '',
-        '--test',
         '--folder',
         'test/songs/clean/some/a/Auf-der-Mauer_auf-der-Lauer'
       ])
@@ -283,19 +275,19 @@ describe('Command line interface', () => {
 
   describe('Command line', () => {
     it('no arguments: normal update', () => {
-      spawn('./index.js', ['--test'])
+      spawn('./index.js')
     })
 
     it('no arguments (second run): only json and TeX generation', () => {
-      spawn('./index.js', ['--test'])
+      spawn('./index.js')
     })
 
     it('--force', () => {
-      spawn('./index.js', ['--test', '--force'])
+      spawn('./index.js', ['--force'])
     })
 
     it('--help', () => {
-      const cli = spawn('./index.js', ['--test', '--help'])
+      const cli = spawn('./index.js', ['--help'])
       let out = cli.stdout.toString()
       assert.ok(out.indexOf('Usage') > -1)
       assert.ok(out.indexOf('--help') > -1)
@@ -304,7 +296,7 @@ describe('Command line interface', () => {
     })
 
     it('--version', () => {
-      const cli = spawn('./index.js', ['--test', '--version'])
+      const cli = spawn('./index.js', ['--version'])
       let pckg = require('../package.json')
       assert.strictEqual(cli.stdout.toString(), pckg.version + '\n')
       assert.strictEqual(cli.status, 0)
@@ -312,7 +304,7 @@ describe('Command line interface', () => {
 
     // Test should be executed at the very last position.
     it('--clean', () => {
-      spawn('./index.js', ['--test', '--clean'])
+      spawn('./index.js', ['--clean'])
     })
   })
 })

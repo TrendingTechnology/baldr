@@ -147,7 +147,6 @@ class TeX {
  **********************************************************************/
 
 const configDefault = {
-  test: false,
   force: false
 }
 
@@ -194,17 +193,13 @@ let bootstrapConfig = function (newConfig = false) {
     config = Object.assign(config, newConfig)
   }
 
+  if (process.env.BALDR_SONGBOOK_PATH) {
+    config.path = process.env.BALDR_SONGBOOK_PATH
+  }
+
   if (!config.path || config.path.length === 0) {
     message.noConfigPath()
   }
-}
-
-/**
- * External function for command line usage.
- */
-let setTestMode = function () {
-  config.test = true
-  config.path = path.resolve('test', 'songs', 'clean', 'some')
 }
 
 let updateSongFolder = function (folder, fileMonitor) {
@@ -261,12 +256,12 @@ let clean = function () {
   ])
 }
 
-let generateJSON = function () {
-  json.generateJSON(config.path)
+let generateJSON = function (basePath) {
+  json.generateJSON(basePath)
 }
 
-let generateTeX = function () {
-  let tex = new TeX(config.path)
+let generateTeX = function (basePath) {
+  let tex = new TeX(basePath)
   tex.generateTeX()
 }
 
@@ -278,7 +273,6 @@ let setOptions = function (argv) {
     .option('-f, --force', 'rebuild all images')
     .option('-j, --json', 'generate JSON file')
     .option('-p --path <path>', 'Base path to a song collection.')
-    .option('-T, --test', 'switch to test mode')
     .option('-t, --tex', 'generate TeX file')
     .parse(argv)
 }
@@ -577,14 +571,10 @@ let main = function () {
     force: options.force
   }
 
-  if (options.path && options.path.length > 0) {
-    config.path = options.path
-  }
-
   bootstrapConfig(config)
 
-  if (options.test) {
-    setTestMode()
+  if (options.path && options.path.length > 0) {
+    config.path = options.path
   }
 
   let fileMonitor = new FileMonitor(path.join(config.path, 'filehashes.db'))
@@ -594,9 +584,9 @@ let main = function () {
   } else if (options.folder) {
     updateSongFolder(options.folder, fileMonitor)
   } else if (options.json) {
-    generateJSON()
+    generateJSON(config.path)
   } else if (options.tex) {
-    generateTeX()
+    generateTeX(config.path)
   } else {
     update(config.path, fileMonitor)
   }
