@@ -36,12 +36,12 @@ bootstrapConfig({
   force: true
 })
 
-describe('Class “TeX”', () => {
+describe('Class “TeX()”', () => {
   let TeX = indexRewired.__get__('TeX')
   let basePath = path.resolve('test', 'songs', 'processed', 'some')
   let tex = new TeX(basePath)
 
-  it('method “buildPianoFilesCountTree()”', () => {
+  it('Method “buildPianoFilesCountTree()”', () => {
     let folderTree = json.readJSON(basePath)
     let count = tex.buildPianoFilesCountTree(folderTree)
     assert.strictEqual(count.a[3]['Auf-der-Mauer_auf-der-Lauer'].title, 'Auf der Mauer, auf der Lauer')
@@ -52,15 +52,15 @@ describe('Class “TeX”', () => {
     assert.deepStrictEqual(count.s[3]['Swing-low'].pianoFiles, [ 'piano_1.eps', 'piano_2.eps', 'piano_3.eps' ])
   })
 
-  it('method “texCmd()”', () => {
+  it('Method “texCmd()”', () => {
     assert.strictEqual(tex.texCmd('lorem', 'ipsum'), '\\tmplorem{ipsum}\n')
   })
 
-  it('method “texABC()”', () => {
+  it('Method “texABC()”', () => {
     assert.strictEqual(tex.texABC('a'), '\n\n\\tmpchapter{A}\n')
   })
 
-  it('method “texSong()”', () => {
+  it('Method “texSong()”', () => {
     let songPath = path.join(basePath, 's', 'Swing-low')
     assert.strictEqual(
       tex.texSong(songPath),
@@ -72,7 +72,7 @@ describe('Class “TeX”', () => {
     )
   })
 
-  it('method “generateTeX()”', () => {
+  it('Method “generateTeX()”', () => {
     let texFile = path.join('test', 'songs', 'processed', 'some', 'songs.tex')
     tex.generateTeX(path.resolve('test', 'songs', 'processed', 'some'))
     assertExists(texFile)
@@ -89,16 +89,16 @@ describe('Class “TeX”', () => {
   })
 })
 
-describe('file “index.js”', () => {
+describe('File “index.js”', () => {
   describe('Configuration', () => {
-    it('function “bootstrapConfig()”', () => {
+    it('Function “bootstrapConfig()”', () => {
       let bootstrapConfig = indexRewired.__get__('bootstrapConfig')
       bootstrapConfig({ path: path.resolve('test', 'songs', 'clean', 'some'), test: true })
       const c = indexRewired.__get__('config')
       assert.strictEqual(c.path, path.resolve('test', 'songs', 'clean', 'some'))
     })
 
-    it('function “bootstrapConfig()”: exit', () => {
+    it('Function “bootstrapConfig()”: exit', () => {
       let savePATH = process.env.PATH
       process.env.PATH = ''
       try {
@@ -117,7 +117,7 @@ describe('file “index.js”', () => {
   })
 
   describe('Exported functions', () => {
-    it('function “update()”', () => {
+    it('Function “update()”', () => {
       let stub = sinon.stub()
       indexRewired.__set__('message.songFolder', stub)
 
@@ -157,7 +157,7 @@ describe('file “index.js”', () => {
       clean()
     })
 
-    it('function “clean()”', () => {
+    it('Function “clean()”', () => {
       let clean = indexRewired.__get__('clean')
       clean()
       assert.ok(!fs.existsSync(path.join('songs', 'songs.tex')))
@@ -165,7 +165,7 @@ describe('file “index.js”', () => {
   })
 })
 
-it('conforms to standard', standard.files([
+it('Conforms to standard', standard.files([
   '*.js', 'test/*.js'
 ]))
 
@@ -203,7 +203,7 @@ describe('Command line interface', () => {
     })
   })
 
-  describe('require as module', () => {
+  describe('Require as module', () => {
     it('--path', () => {
       let stub = sinon.stub()
       let message = rewire('../message.js')
@@ -308,7 +308,7 @@ describe('Command line interface', () => {
   })
 })
 
-describe('Class Song()', function () {
+describe('Class “Song()”', function () {
   let Song = indexRewired.__get__('Song')
 
   it('Initialisation', function () {
@@ -317,7 +317,7 @@ describe('Class Song()', function () {
   })
 })
 
-describe('Class SongMetaData()', function () {
+describe('Class “SongMetaData()”', function () {
   let songPath = path.resolve('test', 'songs', 'clean', 'some', 'a', 'Auf-der-Mauer_auf-der-Lauer')
   let SongMetaData = indexRewired.__get__('SongMetaData')
 
@@ -355,7 +355,7 @@ describe('Class SongMetaData()', function () {
   })
 })
 
-describe('class “Sqlite”', () => {
+describe('Class “Sqlite()”', () => {
   let Sqlite = indexRewired.__get__('Sqlite')
   let tmpDir = mkTmpDir()
   let testDb = path.join(tmpDir, 'test.db')
@@ -369,7 +369,7 @@ describe('class “Sqlite”', () => {
     fs.unlinkSync(testDb)
   })
 
-  it('object “Sqlite()”', () => {
+  it('Object “Sqlite()”', () => {
     assert.ok(db)
   })
 
@@ -377,7 +377,7 @@ describe('class “Sqlite”', () => {
     assertExists(testDb)
   })
 
-  it('method “insert()”', () => {
+  it('Method “insert()”', () => {
     db.insert('lol', 'toll')
     let row = db.select('lol')
     assert.strictEqual(row.hash, 'toll')
@@ -392,14 +392,14 @@ describe('class “Sqlite”', () => {
     }
   })
 
-  it('method “update()”', () => {
+  it('Method “update()”', () => {
     db.insert('lol', 'toll')
     db.update('lol', 'troll')
     assert.strictEqual(db.select('lol').hash, 'troll')
   })
 })
 
-describe('class “FileMonitor()”', () => {
+describe('Class “FileMonitor()”', () => {
   let FileMonitor = indexRewired.__get__('FileMonitor')
   let tmpDir = mkTmpDir()
   let testDb = path.join(tmpDir, 'file-monitor.db')
@@ -415,7 +415,7 @@ describe('class “FileMonitor()”', () => {
     monitor.purge()
   })
 
-  it('method “hashSHA1()”', () => {
+  it('Method “hashSHA1()”', () => {
     assert.strictEqual(
       monitor.hashSHA1(path.join('test', 'files', 'hash.txt')),
       '7516f3c75e85c64b98241a12230d62a64e59bce3'
@@ -426,31 +426,31 @@ describe('class “FileMonitor()”', () => {
     assert.strictEqual(monitor.db.dbFile, testDb)
   })
 
-  it('file modified', () => {
+  it('File modified', () => {
     fs.appendFileSync(testFile, 'test')
     assert.ok(monitor.isModified(testFile))
   })
 
-  it('file not modified', () => {
+  it('File not modified', () => {
     fs.appendFileSync(testFile, 'test')
     assert.ok(monitor.isModified(testFile))
     assert.ok(!monitor.isModified(testFile))
     assert.ok(!monitor.isModified(testFile))
   })
 
-  it('file twice modified', () => {
+  it('File twice modified', () => {
     fs.appendFileSync(testFile, 'test')
     assert.ok(monitor.isModified(testFile))
     fs.appendFileSync(testFile, 'test')
     assert.ok(monitor.isModified(testFile))
   })
 
-  it('method “purge()”', () => {
+  it('Method “purge()”', () => {
     monitor.purge()
     assert.ok(!fs.existsSync(testDb))
   })
 
-  it('method “purge()”: call multiple times', () => {
+  it('Method “purge()”: call multiple times', () => {
     monitor.purge()
     assert.ok(!fs.existsSync(testDb))
     monitor.purge()
@@ -458,7 +458,7 @@ describe('class “FileMonitor()”', () => {
   })
 })
 
-describe('Class SongFiles', function () {
+describe('Class “SongFiles()”', function () {
   let SongFiles = indexRewired.__get__('SongFiles')
   let FileMonitor = indexRewired.__get__('FileMonitor')
   let folder = path.join('test', 'songs', 'clean', 'some', 'a', 'Auf-der-Mauer_auf-der-Lauer')
@@ -469,7 +469,7 @@ describe('Class SongFiles', function () {
     fileMonitor.flush()
   })
 
-  describe('method “process()”', () => {
+  describe('Method “process()”', () => {
     it('First run', function () {
       let status = songFiles.process()
       assert.deepStrictEqual(
@@ -513,25 +513,25 @@ describe('Class SongFiles', function () {
     })
   })
 
-  describe('method “getFolderFiles()”', () => {
+  describe('Method “getFolderFiles()”', () => {
     let songFiles = new SongFiles(path.join('test', 'files'))
 
-    it('method “getFolderFiles()”: eps', () => {
+    it('Method “getFolderFiles()”: eps', () => {
       const files = songFiles.getFolderFiles('piano', '.eps')
       assert.deepStrictEqual(files, ['01.eps', '02.eps', '03.eps'])
     })
 
-    it('method “getFolderFiles()”: svg', () => {
+    it('Method “getFolderFiles()”: svg', () => {
       const files = songFiles.getFolderFiles('slides', '.svg')
       assert.deepStrictEqual(files, ['01.svg', '02.svg', '03.svg'])
     })
 
-    it('method “getFolderFiles()”: non existent folder', () => {
+    it('Method “getFolderFiles()”: non existent folder', () => {
       const files = songFiles.getFolderFiles('lol', '.svg')
       assert.deepStrictEqual(files, [])
     })
 
-    it('method “getFolderFiles()”: empty folder', () => {
+    it('Method “getFolderFiles()”: empty folder', () => {
       const empty = path.join('test', 'files', 'empty')
       fs.mkdirSync(empty)
       const files = songFiles.getFolderFiles('empty', '.svg')
@@ -540,13 +540,13 @@ describe('Class SongFiles', function () {
     })
   })
 
-  it('method “generatePDF()”', () => {
+  it('Method “generatePDF()”', () => {
     let file = songFiles.generatePDF('projector', 'projector')
     assert.strictEqual(file, 'projector.pdf')
     assert.exists(folder, 'projector.pdf')
   })
 
-  it('method “generateSlides()”', () => {
+  it('Method “generateSlides()”', () => {
     songFiles.generatePDF('projector')
     const slides = path.join(folder, 'slides')
     let files = songFiles.generateSlides(folder)
@@ -564,7 +564,7 @@ describe('Class SongFiles', function () {
     fs.removeSync(slides)
   })
 
-  describe('method “generatePiano()”', () => {
+  describe('Method “generatePiano()”', () => {
     it('lead', () => {
       let folderSwing = path.join('test', 'songs', 'clean', 'some', 's', 'Swing-low')
       let songFilesSwing = new SongFiles(folderSwing, fileMonitor)
@@ -601,7 +601,7 @@ describe('Class SongFiles', function () {
     })
   })
 
-  it('method “clean()”', () => {
+  it('Method “clean()”', () => {
     songFiles.process()
     assert.ok(fs.existsSync(path.join(songFiles.folder, 'projector.pdf')))
     songFiles.clean()
@@ -609,19 +609,19 @@ describe('Class SongFiles', function () {
   })
 })
 
-describe('function “checkExecutable()”', () => {
+describe('Function “checkExecutable()”', () => {
   let checkExecutable = indexRewired.__get__('checkExecutable')
 
-  it('function “checkExecutable()”: existing executable', () => {
+  it('Function “checkExecutable()”: existing executable', () => {
     assert.strictEqual(checkExecutable('echo'), true)
   })
 
-  it('function “checkExecutable()”: nonexisting executable', () => {
+  it('Function “checkExecutable()”: nonexisting executable', () => {
     assert.strictEqual(checkExecutable('loooooool'), false)
   })
 })
 
-describe('function “checkExecutables()”', () => {
+describe('Function “checkExecutables()”', () => {
   let checkExecutables = indexRewired.__get__('checkExecutables')
 
   it('all are existing', () => {
@@ -655,10 +655,10 @@ describe('function “checkExecutables()”', () => {
   })
 })
 
-describe('file “mscx.js”', () => {
+describe('File “mscx.js”', () => {
   let gitPull = indexRewired.__get__('gitPull')
 
-  it('function “gitPull()”', () => {
+  it('Function “gitPull()”', () => {
     assert.ok(!gitPull('songs'))
   })
 })
