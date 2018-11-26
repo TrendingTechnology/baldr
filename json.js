@@ -20,7 +20,7 @@ var generateSongJSON = function (songPath) {
       fs.readFileSync(ymlFile, 'utf8')
     )
     info.folder = songPath
-    info.slides = tree.getFolderFiles(
+    info.slides = tree.getFolderFiles_(
       path.join(songPath, 'slides'),
       '.svg'
     )

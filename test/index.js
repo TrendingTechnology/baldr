@@ -548,44 +548,44 @@ describe('Class “SongFiles()”', function () {
     })
   })
 
-  describe('Method “getFolderFiles()”', () => {
+  describe('Method “getFolderFiles_()”', () => {
     let folder = path.join('test', 'songs', 'processed', 'one', 'a', 'Auf-der-Mauer_auf-der-Lauer')
     let songFiles = new SongFiles(folder)
 
-    it('Method “getFolderFiles()”: eps', () => {
-      const files = songFiles.getFolderFiles('piano', '.eps')
+    it('Method “getFolderFiles_()”: eps', () => {
+      const files = songFiles.getFolderFiles_('piano', '.eps')
       assert.deepStrictEqual(files, ['piano.eps'])
     })
 
-    it('Method “getFolderFiles()”: svg', () => {
-      const files = songFiles.getFolderFiles('slides', '.svg')
+    it('Method “getFolderFiles_()”: svg', () => {
+      const files = songFiles.getFolderFiles_('slides', '.svg')
       assert.deepStrictEqual(files, ['01.svg'])
     })
 
-    it('Method “getFolderFiles()”: non existent folder', () => {
-      const files = songFiles.getFolderFiles('lol', '.svg')
+    it('Method “getFolderFiles_()”: non existent folder', () => {
+      const files = songFiles.getFolderFiles_('lol', '.svg')
       assert.deepStrictEqual(files, [])
     })
 
-    it('Method “getFolderFiles()”: empty folder', () => {
+    it('Method “getFolderFiles_()”: empty folder', () => {
       const empty = path.join('test', 'files', 'empty')
       fs.mkdirSync(empty)
-      const files = songFiles.getFolderFiles('empty', '.svg')
+      const files = songFiles.getFolderFiles_('empty', '.svg')
       assert.deepStrictEqual(files, [])
       fs.rmdirSync(empty)
     })
   })
 
-  it('Method “generatePDF()”', () => {
-    let file = songFiles.generatePDF('projector', 'projector')
+  it('Method “generatePDF_()”', () => {
+    let file = songFiles.generatePDF_('projector', 'projector')
     assert.strictEqual(file, 'projector.pdf')
     assertExists(folder, 'projector.pdf')
   })
 
-  it('Method “generateSlides()”', () => {
-    songFiles.generatePDF('projector')
+  it('Method “generateSlides_()”', () => {
+    songFiles.generatePDF_('projector')
     const slides = path.join(folder, 'slides')
-    let files = songFiles.generateSlides(folder)
+    let files = songFiles.generateSlides_(folder)
 
     assert.deepStrictEqual(
       files,
@@ -600,11 +600,11 @@ describe('Class “SongFiles()”', function () {
     fs.removeSync(slides)
   })
 
-  describe('Method “generatePiano()”', () => {
+  describe('Method “generatePiano_()”', () => {
     it('lead', () => {
       let folderSwing = path.join('test', 'songs', 'clean', 'some', 's', 'Swing-low')
       let songFilesSwing = new SongFiles(folderSwing, fileMonitor)
-      let files = songFilesSwing.generatePiano()
+      let files = songFilesSwing.generatePiano_()
 
       assert.deepStrictEqual(files, [ 'piano_1.eps', 'piano_2.eps' ])
 
@@ -619,7 +619,7 @@ describe('Class “SongFiles()”', function () {
     })
 
     it('piano', () => {
-      let files = songFiles.generatePiano()
+      let files = songFiles.generatePiano_()
 
       assert.deepStrictEqual(
         files,

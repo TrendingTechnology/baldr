@@ -142,7 +142,7 @@ class TeX {
     Object.keys(tree).forEach((abc, index) => {
       Object.keys(tree[abc]).forEach((songFolder, index) => {
         let absSongFolder = path.join(this.basePath, abc, songFolder, 'piano')
-        let pianoFiles = folderTree.getFolderFiles(absSongFolder, '.eps')
+        let pianoFiles = folderTree.getFolderFiles_(absSongFolder, '.eps')
         let count = pianoFiles.length
         if (!(abc in output)) output[abc] = {}
         if (!(count in output[abc])) output[abc][count] = {}
@@ -180,7 +180,7 @@ class TeX {
       .replace(basePath, '')
       .replace(/^\//, '')
     const info = folderTree.getSongInfo(resolvedSongPath)
-    const eps = folderTree.getFolderFiles(path.join(resolvedSongPath, 'piano'), '.eps')
+    const eps = folderTree.getFolderFiles_(path.join(resolvedSongPath, 'piano'), '.eps')
     let output = ''
 
     if (info.hasOwnProperty('title') &amp;&amp; eps.length > 0) {
@@ -398,7 +398,7 @@ class SongFiles {
    * @param {string} subFolder - A subfolder relative to this.folder
    * @param {string} filter - String to filter.
    */
-  getFolderFiles (subFolder, filter) {
+  getFolderFiles_ (subFolder, filter) {
     let folder = path.join(this.folder, subFolder)
     if (fs.existsSync(folder)) {
       return fs.readdirSync(folder).filter((file) => {
@@ -414,7 +414,7 @@ class SongFiles {
    * @param {string} source - Name of the *.mscx file without the extension.
    * @param {string} destination - Name of the PDF without the extension.
    */
-  generatePDF (source, destination = '') {
+  generatePDF_ (source, destination = '') {
     if (destination === '') {
       destination = source
     }
@@ -435,7 +435,7 @@ class SongFiles {
    * Generate svg files in a 'slides' subfolder.
    * @param {string} folder - A song folder.
    */
-  generateSlides () {
+  generateSlides_ () {
     let slides = path.join(this.folder, 'slides')
     fs.removeSync(slides)
     fs.mkdirSync(slides)
@@ -446,14 +446,14 @@ class SongFiles {
       'all'
     ])
 
-    return this.getFolderFiles('slides', '.svg')
+    return this.getFolderFiles_('slides', '.svg')
   }
 
   /**
    * Generate a PDF named piano.pdf a) from piano.mscx or b) from lead.mscx
    * @param {string} folder - A song folder.
    */
-  generatePiano () {
+  generatePiano_ () {
     let piano = path.join(this.folder, 'piano')
     fs.removeSync(piano)
     fs.mkdirSync(piano)
@@ -471,7 +471,7 @@ class SongFiles {
     }
     spawn('mscore-to-eps.sh', [path.join(piano, 'piano.mscx')])
 
-    return this.getFolderFiles('piano', '.eps')
+    return this.getFolderFiles_('piano', '.eps')
   }
 
   /**
@@ -491,8 +491,8 @@ class SongFiles {
     )
     // projector
     if (config.force || status.changed.slides) {
-      status.generated.projector = this.generatePDF('projector')
-      status.generated.slides = this.generateSlides()
+      status.generated.projector = this.generatePDF_('projector')
+      status.generated.slides = this.generateSlides_()
     }
 
     if (
@@ -506,7 +506,7 @@ class SongFiles {
 
     // piano
     if (config.force || status.changed.piano) {
-      status.generated.piano = this.generatePiano()
+      status.generated.piano = this.generatePiano_()
     }
     return status
   }
@@ -733,7 +733,7 @@ exports.SongMetaData = SongMetaData
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="SongFiles.html">SongFiles</a></li><li><a href="SongMetaData.html">SongMetaData</a></li><li><a href="TeX.html">TeX</a></li></ul><h3>Global</h3><ul><li><a href="global.html#bootstrapConfig">bootstrapConfig</a></li><li><a href="global.html#checkExecutable">checkExecutable</a></li><li><a href="global.html#checkExecutables">checkExecutables</a></li><li><a href="global.html#clean">clean</a></li><li><a href="global.html#cleanFiles">cleanFiles</a></li><li><a href="global.html#cleanFolder">cleanFolder</a></li><li><a href="global.html#flat">flat</a></li><li><a href="global.html#flattenTree">flattenTree</a></li><li><a href="global.html#generateJSON">generateJSON</a></li><li><a href="global.html#generateSongJSON">generateSongJSON</a></li><li><a href="global.html#getABCFolders">getABCFolders</a></li><li><a href="global.html#getFolderFiles">getFolderFiles</a></li><li><a href="global.html#getSongFolders">getSongFolders</a></li><li><a href="global.html#getSongInfo">getSongInfo</a></li><li><a href="global.html#getTree">getTree</a></li><li><a href="global.html#gitPull">gitPull</a></li><li><a href="global.html#info">info</a></li><li><a href="global.html#noConfigPath">noConfigPath</a></li><li><a href="global.html#readJSON">readJSON</a></li><li><a href="global.html#songFolder">songFolder</a></li><li><a href="global.html#update">update</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="SongFiles.html">SongFiles</a></li><li><a href="SongMetaData.html">SongMetaData</a></li><li><a href="TeX.html">TeX</a></li></ul><h3>Global</h3><ul><li><a href="global.html#bootstrapConfig">bootstrapConfig</a></li><li><a href="global.html#checkExecutable">checkExecutable</a></li><li><a href="global.html#checkExecutables">checkExecutables</a></li><li><a href="global.html#clean">clean</a></li><li><a href="global.html#cleanFiles">cleanFiles</a></li><li><a href="global.html#cleanFolder">cleanFolder</a></li><li><a href="global.html#flat">flat</a></li><li><a href="global.html#flattenTree">flattenTree</a></li><li><a href="global.html#generateJSON">generateJSON</a></li><li><a href="global.html#generateSongJSON">generateSongJSON</a></li><li><a href="global.html#getABCFolders">getABCFolders</a></li><li><a href="global.html#getFolderFiles_">getFolderFiles_</a></li><li><a href="global.html#getSongFolders">getSongFolders</a></li><li><a href="global.html#getSongInfo">getSongInfo</a></li><li><a href="global.html#getTree">getTree</a></li><li><a href="global.html#gitPull">gitPull</a></li><li><a href="global.html#info">info</a></li><li><a href="global.html#noConfigPath">noConfigPath</a></li><li><a href="global.html#readJSON">readJSON</a></li><li><a href="global.html#songFolder">songFolder</a></li><li><a href="global.html#update">update</a></li></ul>
 </nav>
 
 <br class="clear">

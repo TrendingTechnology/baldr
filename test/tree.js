@@ -12,32 +12,32 @@ describe('file “tree.js”', () => {
     assert.strictEqual(info.title, 'Swing low')
   })
 
-  describe('function “getFolderFiles()”', () => {
-    it('function “getFolderFiles()”: eps', () => {
-      const files = tree.getFolderFiles(
+  describe('function “getFolderFiles_()”', () => {
+    it('function “getFolderFiles_()”: eps', () => {
+      const files = tree.getFolderFiles_(
         path.join('test', 'files', 'piano'), '.eps'
       )
       assert.deepStrictEqual(files, ['01.eps', '02.eps', '03.eps'])
     })
 
-    it('function “getFolderFiles()”: svg', () => {
-      const files = tree.getFolderFiles(
+    it('function “getFolderFiles_()”: svg', () => {
+      const files = tree.getFolderFiles_(
         path.join('test', 'files', 'slides'), '.svg'
       )
       assert.deepStrictEqual(files, ['01.svg', '02.svg', '03.svg'])
     })
 
-    it('function “getFolderFiles()”: non existent folder', () => {
-      const files = tree.getFolderFiles(
+    it('function “getFolderFiles_()”: non existent folder', () => {
+      const files = tree.getFolderFiles_(
         path.join('test', 'files', 'lol'), '.svg'
       )
       assert.deepStrictEqual(files, [])
     })
 
-    it('function “getFolderFiles()”: empty folder', () => {
+    it('function “getFolderFiles_()”: empty folder', () => {
       const empty = path.join('test', 'files', 'empty')
       fs.mkdirSync(empty)
-      const files = tree.getFolderFiles(
+      const files = tree.getFolderFiles_(
         empty, '.svg'
       )
       assert.deepStrictEqual(files, [])

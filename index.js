@@ -114,7 +114,7 @@ class TeX {
     Object.keys(tree).forEach((abc, index) => {
       Object.keys(tree[abc]).forEach((songFolder, index) => {
         let absSongFolder = path.join(this.basePath, abc, songFolder, 'piano')
-        let pianoFiles = folderTree.getFolderFiles(absSongFolder, '.eps')
+        let pianoFiles = folderTree.getFolderFiles_(absSongFolder, '.eps')
         let count = pianoFiles.length
         if (!(abc in output)) output[abc] = {}
         if (!(count in output[abc])) output[abc][count] = {}
@@ -152,7 +152,7 @@ class TeX {
       .replace(basePath, '')
       .replace(/^\//, '')
     const info = folderTree.getSongInfo(resolvedSongPath)
-    const eps = folderTree.getFolderFiles(path.join(resolvedSongPath, 'piano'), '.eps')
+    const eps = folderTree.getFolderFiles_(path.join(resolvedSongPath, 'piano'), '.eps')
     let output = ''
 
     if (info.hasOwnProperty('title') && eps.length > 0) {
@@ -370,7 +370,7 @@ class SongFiles {
    * @param {string} subFolder - A subfolder relative to this.folder
    * @param {string} filter - String to filter.
    */
-  getFolderFiles (subFolder, filter) {
+  getFolderFiles_ (subFolder, filter) {
     let folder = path.join(this.folder, subFolder)
     if (fs.existsSync(folder)) {
       return fs.readdirSync(folder).filter((file) => {
@@ -386,7 +386,7 @@ class SongFiles {
    * @param {string} source - Name of the *.mscx file without the extension.
    * @param {string} destination - Name of the PDF without the extension.
    */
-  generatePDF (source, destination = '') {
+  generatePDF_ (source, destination = '') {
     if (destination === '') {
       destination = source
     }
@@ -407,7 +407,7 @@ class SongFiles {
    * Generate svg files in a 'slides' subfolder.
    * @param {string} folder - A song folder.
    */
-  generateSlides () {
+  generateSlides_ () {
     let slides = path.join(this.folder, 'slides')
     fs.removeSync(slides)
     fs.mkdirSync(slides)
@@ -418,14 +418,14 @@ class SongFiles {
       'all'
     ])
 
-    return this.getFolderFiles('slides', '.svg')
+    return this.getFolderFiles_('slides', '.svg')
   }
 
   /**
    * Generate a PDF named piano.pdf a) from piano.mscx or b) from lead.mscx
    * @param {string} folder - A song folder.
    */
-  generatePiano () {
+  generatePiano_ () {
     let piano = path.join(this.folder, 'piano')
     fs.removeSync(piano)
     fs.mkdirSync(piano)
@@ -443,12 +443,12 @@ class SongFiles {
     }
     spawn('mscore-to-eps.sh', [path.join(piano, 'piano.mscx')])
 
-    return this.getFolderFiles('piano', '.eps')
+    return this.getFolderFiles_('piano', '.eps')
   }
 
   /**
-   * Wrapper function for all process functions for one folder.
-   * @param {string} folder - A song folder.
+   * Wrapper method for all process methods of one song folder.
+   * @param {boolean} force - Force the generation of media files.
    */
   process (force = false) {
     let status = { changed: {}, generated: {} }
@@ -463,8 +463,8 @@ class SongFiles {
     )
     // projector
     if (config.force || status.changed.slides) {
-      status.generated.projector = this.generatePDF('projector')
-      status.generated.slides = this.generateSlides()
+      status.generated.projector = this.generatePDF_('projector')
+      status.generated.slides = this.generateSlides_()
     }
 
     if (
@@ -478,7 +478,7 @@ class SongFiles {
 
     // piano
     if (config.force || status.changed.piano) {
-      status.generated.piano = this.generatePiano()
+      status.generated.piano = this.generatePiano_()
     }
     return status
   }

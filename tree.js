@@ -24,7 +24,7 @@ let getSongInfo = function (folder) {
  * @param {string} folder - Absolute path.
  * @param {string} filter - String to filter.
  */
-let getFolderFiles = function (folder, filter) {
+let getFolderFiles_ = function (folder, filter) {
   if (fs.existsSync(folder)) {
     return fs.readdirSync(folder).filter((file) => {
       return file.indexOf(filter) > -1
@@ -125,7 +125,7 @@ let flat = function (basePath) {
 }
 
 exports.getSongInfo = getSongInfo
-exports.getFolderFiles = getFolderFiles
+exports.getFolderFiles_ = getFolderFiles_
 exports.getTree = getTree
 exports.flattenTree = flattenTree
 exports.flat = flat
