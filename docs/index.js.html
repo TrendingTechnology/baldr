@@ -46,11 +46,59 @@ const util = require('util')
 const yaml = require('js-yaml')
 
 const json = require('./json.js')
-const mscx = require('./mscx.js')
 const folderTree = require('./tree.js')
 
 // For test purposes, to be able to overwrite “message” with rewire.
 let message = require('./message.js')
+
+/**
+ * Check if executable is installed.
+ * @param {string} executable - Name of the executable.
+ */
+let checkExecutable = function (executable) {
+  let exec = spawn(executable, ['--help'])
+  if (exec.status === null) {
+    return false
+  } else {
+    return true
+  }
+}
+
+/**
+ * Check if executables are installed.
+ * @param {array} executables - Name of the executables.
+ */
+let checkExecutables = function (executables = []) {
+  let status = true
+  let unavailable = []
+  executables.forEach((exec) => {
+    let check = checkExecutable(exec)
+    if (!check) {
+      status = false
+      unavailable.push(exec)
+    }
+  })
+  return { 'status': status, 'unavailable': unavailable }
+}
+
+/**
+ * Execute git pull if repository exists.
+ *
+ * To get changed files:
+ * git diff-tree --no-commit-id --name-only -r &lt;commit-ish>
+ * git diff-tree --no-commit-id --name-only -r babeae91638b55978b99ee5eb49ac2bf361df51e c11e2736edf1c6f6be47eeaa58fa172beedd6e0c
+ * git diff-tree --no-commit-id --name-only -r ba03fc103f962f8274b50aade61c99214d26e918 c11e2736edf1c6f6be47eeaa58fa172beedd6e0c
+ *
+ * Get current commit id:
+ * git rev-parse HEAD
+ */
+let gitPull = function (basePath) {
+  if (fs.existsSync(path.join(basePath, '.git'))) {
+    return spawn('git', ['pull'], { cwd: basePath })
+  } else {
+    return false
+  }
+}
 
 /***********************************************************************
  * Build a TeX file (songs.tex) of all piano scores.
@@ -187,7 +235,7 @@ let config = {}
  * config object.
  */
 let bootstrapConfig = function (newConfig = false) {
-  let { status, unavailable } = mscx.checkExecutables([
+  let { status, unavailable } = checkExecutables([
     'mscore-to-eps.sh',
     'pdf2svg',
     'pdfcrop',
@@ -239,7 +287,7 @@ let updateSongFolder = function (folder, fileMonitor) {
  * Update and generate when required media files for the songs.
  */
 let update = function (basePath, fileMonitor) {
-  mscx.gitPull(basePath)
+  gitPull(basePath)
   folderTree.flat(basePath).forEach((songFolder) => {
     updateSongFolder(songFolder, fileMonitor)
   })
