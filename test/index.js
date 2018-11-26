@@ -543,7 +543,7 @@ describe('Class “SongFiles()”', function () {
   it('Method “generatePDF()”', () => {
     let file = songFiles.generatePDF('projector', 'projector')
     assert.strictEqual(file, 'projector.pdf')
-    assert.exists(folder, 'projector.pdf')
+    assertExists(folder, 'projector.pdf')
   })
 
   it('Method “generateSlides()”', () => {
@@ -559,7 +559,7 @@ describe('Class “SongFiles()”', function () {
     [
       [slides, '01.svg'],
       [slides, '02.svg']
-    ].forEach(args => { assert.exists(...args) })
+    ].forEach(args => { assertExists(...args) })
 
     fs.removeSync(slides)
   })
@@ -577,7 +577,7 @@ describe('Class “SongFiles()”', function () {
         [folderSwing, 'piano', 'piano.mscx'],
         [folderSwing, 'piano', 'piano_1.eps']
       ]
-      result.forEach(args => { assert.exists(...args) })
+      result.forEach(args => { assertExists(...args) })
 
       fs.removeSync(path.join(folder, 'piano'))
     })
@@ -595,7 +595,7 @@ describe('Class “SongFiles()”', function () {
         [folder, 'piano', 'piano.mscx'],
         [folder, 'piano', 'piano_1.eps']
       ]
-      result.forEach(args => { assert.exists(...args) })
+      result.forEach(args => { assertExists(...args) })
 
       fs.removeSync(path.join(folder, 'piano'))
     })

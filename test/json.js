@@ -1,8 +1,16 @@
-const { assert } = require('./lib/helper.js')
+const assert = require('assert')
 const path = require('path')
 const fs = require('fs-extra')
 const json = require('../json.js')
 const rewire = require('rewire')('../json.js')
+
+let assertExists = function () {
+  assert.ok(
+    fs.existsSync(
+      path.join.apply(null, arguments)
+    )
+  )
+}
 
 describe('file “json.js”', () => {
   it('function “generateSongJSON()”', () => {
@@ -20,7 +28,7 @@ describe('file “json.js”', () => {
   it('function “generateJSON()”', () => {
     let ymlFile = path.join('test', 'songs', 'processed', 'some', 'songs.json')
     json.generateJSON(path.join('test', 'songs', 'processed', 'some'))
-    assert.exists(ymlFile)
+    assertExists(ymlFile)
     let tree = JSON.parse(fs.readFileSync(ymlFile, 'utf8'))
     assert.strictEqual(
       tree.a['Auf-der-Mauer_auf-der-Lauer'].title,

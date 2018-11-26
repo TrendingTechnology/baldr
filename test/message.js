@@ -1,4 +1,4 @@
-const { assert } = require('./lib/helper.js')
+const assert = require('assert')
 const sinon = require('sinon')
 const rewire = require('rewire')('../message.js')
 
@@ -28,7 +28,7 @@ assert.songFolder = function (status, output) {
 
   songFolder(status)
   // console.log(stub.args[0]);
-  assert.equal(stub.args[0], output)
+  assert.strictEqual(String(stub.args[0]), String(output))
   revert()
 }
 
@@ -38,22 +38,22 @@ describe('file “message.js”', () => {
     rewire.__set__('info', stub)
     let info = rewire.__get__('info')
     info('lol')
-    assert.equal(info.called, true)
+    assert.strictEqual(info.called, true)
   })
 
   it('const “error”', () => {
     let error = rewire.__get__('error')
-    assert.equal(error, '\u001b[31m☒\u001b[39m')
+    assert.strictEqual(error, '\u001b[31m☒\u001b[39m')
   })
 
   it('const “finished”', () => {
     let arrow = rewire.__get__('finished')
-    assert.equal(arrow, '\u001b[32m☑\u001b[39m')
+    assert.strictEqual(arrow, '\u001b[32m☑\u001b[39m')
   })
 
   it('const “progress”', () => {
     let arrow = rewire.__get__('progress')
-    assert.equal(arrow, '\u001b[33m☐\u001b[39m')
+    assert.strictEqual(arrow, '\u001b[33m☐\u001b[39m')
   })
 
   it('function “noConfigPath()”', () => {
@@ -65,9 +65,9 @@ describe('file “message.js”', () => {
     try {
       noConfigPath()
     } catch (e) {
-      assert.equal(e.message, 'No configuration file found.')
+      assert.strictEqual(e.message, 'No configuration file found.')
     }
-    assert.equal(stub.called, true)
+    assert.strictEqual(stub.called, true)
     assert.deepStrictEqual(stub.args, [
       [ '\u001b[31m☒\u001b[39m  Configuration file “~/.baldr.json” not found!\nCreate such a config file or use the “--path” option!\n\nExample configuration file:\n{\n\t"songbook": {\n\t\t"path": "/home/jf/songs"\n\t}\n}\n' ]
     ])

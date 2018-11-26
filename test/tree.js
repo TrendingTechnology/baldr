@@ -1,4 +1,4 @@
-const { assert } = require('./lib/helper.js')
+const assert = require('assert')
 const path = require('path')
 const fs = require('fs')
 let tree = require('../tree.js')
