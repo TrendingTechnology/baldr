@@ -450,23 +450,12 @@ class SongFiles {
    * @param {string} folder - A song folder.
    */
   generatePiano_ () {
-    let piano = path.join(this.folder, 'piano')
-    fs.removeSync(piano)
-    fs.mkdirSync(piano)
-
-    if (fs.existsSync(path.join(this.folder, 'piano.mscx'))) {
-      fs.copySync(
-        path.join(this.folder, 'piano.mscx'),
-        path.join(piano, 'piano.mscx')
-      )
-    } else if (fs.existsSync(path.join(this.folder, 'lead.mscx'))) {
-      fs.copySync(
-        path.join(this.folder, 'lead.mscx'),
-        path.join(piano, 'piano.mscx')
-      )
-    }
-    spawn('mscore-to-eps.sh', [path.join(piano, 'piano.mscx')])
-
+    let pianoFolder = path.join(this.folder, 'piano')
+    fs.removeSync(pianoFolder)
+    fs.mkdirSync(pianoFolder)
+    let pianoFile = path.join(pianoFolder, 'piano.mscx')
+    fs.copySync(this.mscxPiano, pianoFile)
+    spawn('mscore-to-eps.sh', [pianoFile])
     return this.getFolderFiles_('piano', '.eps')
   }
 
