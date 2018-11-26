@@ -17,8 +17,6 @@ const Sqlite3 = require('better-sqlite3')
 const util = require('util')
 const yaml = require('js-yaml')
 
-const Check = require('./check.js')
-let CheckChange = new Check()
 const json = require('./json.js')
 const mscx = require('./mscx.js')
 const folderTree = require('./tree.js')
@@ -199,8 +197,6 @@ let bootstrapConfig = function (newConfig = false) {
   if (!config.path || config.path.length === 0) {
     message.noConfigPath()
   }
-
-  CheckChange.init(path.join(config.path, 'filehashes.db'))
 }
 
 /**
@@ -211,57 +207,21 @@ let setTestMode = function () {
   config.path = path.resolve('test', 'songs', 'clean', 'some')
 }
 
-/**
- * Wrapper function for all process functions for one folder.
- * @param {string} folder - A song folder.
- */
-let processSongFolder = function (folder) {
-  let status = { changed: {}, generated: {} }
-
-  status.folder = folder
-  status.folderName = path.basename(folder)
-  status.info = folderTree.getSongInfo(folder)
-
-  status.force = config.force
-  status.changed.slides = CheckChange.do(
-    path.join(folder, 'projector.mscx')
-  )
-  // projector
-  if (config.force || status.changed.slides) {
-    status.generated.projector = mscx.generatePDF(folder, 'projector')
-    status.generated.slides = mscx.generateSlides(folder)
-  }
-
-  if (
-    CheckChange.do(path.join(folder, 'lead.mscx')) ||
-      CheckChange.do(path.join(folder, 'piano.mscx'))
-  ) {
-    status.changed.piano = true
-  } else {
-    status.changed.piano = false
-  }
-
-  // piano
-  if (config.force || status.changed.piano) {
-    status.generated.piano = mscx.generatePianoEPS(folder)
-  }
-  return status
-}
-
-let updateSongFolder = function (folder) {
-  message.songFolder(
-    processSongFolder(folder)
-  )
+let updateSongFolder = function (folder, fileMonitor) {
+  let status = new SongFiles(folder, fileMonitor).process()
+  message.songFolder(status)
 }
 
 /**
  * Update and generate when required media files for the songs.
  */
-let update = function () {
-  mscx.gitPull(config.path)
-  folderTree.flat(config.path).forEach(updateSongFolder)
-  json.generateJSON(config.path)
-  let tex = new TeX(config.path)
+let update = function (basePath, fileMonitor) {
+  mscx.gitPull(basePath)
+  folderTree.flat(basePath).forEach((songFolder) => {
+    updateSongFolder(songFolder, fileMonitor)
+  })
+  json.generateJSON(basePath)
+  let tex = new TeX(basePath)
   tex.generateTeX()
 }
 
@@ -627,16 +587,18 @@ let main = function () {
     setTestMode()
   }
 
+  let fileMonitor = new FileMonitor(path.join(config.path, 'filehashes.db'))
+
   if (options.clean) {
     clean()
   } else if (options.folder) {
-    updateSongFolder(options.folder)
+    updateSongFolder(options.folder, fileMonitor)
   } else if (options.json) {
     generateJSON()
   } else if (options.tex) {
     generateTeX()
   } else {
-    update()
+    update(config.path, fileMonitor)
   }
 }
 

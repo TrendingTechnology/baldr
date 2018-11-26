@@ -116,53 +116,20 @@ describe('file “index.js”', () => {
     })
   })
 
-  describe('Private functions', () => {
-    it('function “processSongFolder()”', () => {
-      let processSongFolder = indexRewired.__get__('processSongFolder')
-      let status = processSongFolder(
-        path.join('test', 'songs', 'clean', 'some', 'a', 'Auf-der-Mauer_auf-der-Lauer')
-      )
-
-      assert.deepStrictEqual(
-        status,
-        {
-          'changed': {
-            'piano': true,
-            'slides': true
-          },
-          'folder': 'test/songs/clean/some/a/Auf-der-Mauer_auf-der-Lauer',
-          'folderName': 'Auf-der-Mauer_auf-der-Lauer',
-          'force': true,
-          'generated': {
-            'piano': [
-              'piano_1.eps',
-              'piano_2.eps'
-            ],
-            'projector': 'projector.pdf',
-            'slides': [
-              '01.svg',
-              '02.svg'
-            ]
-          },
-          'info': {
-            'title': 'Auf der Mauer, auf der Lauer'
-          }
-        }
-      )
-    })
-  })
-
   describe('Exported functions', () => {
     it('function “update()”', () => {
       let stub = sinon.stub()
       indexRewired.__set__('message.songFolder', stub)
-      let update = indexRewired.__get__('update')
-      update()
+
       let songs = path.join('test', 'songs', 'clean', 'some')
       const auf = path.join(songs, 'a', 'Auf-der-Mauer_auf-der-Lauer')
       const swing = path.join(songs, 's', 'Swing-low')
       const zum = path.join(songs, 'z', 'Zum-Tanze-da-geht-ein-Maedel')
       const folders = [auf, swing, zum]
+
+      let update = indexRewired.__get__('update')
+      let FileMonitor = indexRewired.__get__('FileMonitor')
+      update(songs, new FileMonitor(mkTmpFile()))
 
       for (let i = 0; i < folders.length; ++i) {
         assertExists(folders[i], 'slides')
