@@ -1,7 +1,9 @@
 #! /usr/bin/env node
 
 /**
- * @file Assemble all submodules and export to command.js
+ * @file Command line interface to generate the intermediate media files
+ * for the BALDR songbook.
+ * @module baldr-songbook-updater
  */
 
 'use strict'
@@ -337,12 +339,34 @@ class Song {
 class SongFiles {
   /**
    * @param {string} folder - The directory containing the song files.
-   * @param {string} fileMonitor - A instance of the FileMonitor() class.
+   * @param {module:baldr-songbook-updater~FileMonitor} fileMonitor - A instance of the FileMonitor() class.
    */
   constructor (folder, fileMonitor) {
+    /**
+     * A instance of the FileMonitor class.
+     * @type {module:baldr-songbook-updater~FileMonitor}
+     */
     this.fileMonitor = fileMonitor
+
+    /**
+     * The directory containing the song files.
+     * @type string
+     */
     this.folder = folder
+
+    /**
+     * Path of the MuseScore file 'projector.mscx', relative to the base folder
+     * of the song collection.
+     * @type string
+     */
     this.mscxProjector = this.detectFile_('projector.mscx')
+
+    /**
+     * Path of the MuseScore file for the piano parts, can be 'piano.mscx'
+     * or 'lead.mscx', relative to the base folder
+     * of the song collection.
+     * @type string
+     */
     this.mscxPiano = this.detectFile_('piano.mscx', 'lead.mscx')
   }
 
@@ -594,6 +618,9 @@ class Sqlite {
   }
 }
 
+/**
+ * Monitor files changes
+ */
 class FileMonitor {
   constructor (dbFile) {
     this.db = new Sqlite(dbFile)
