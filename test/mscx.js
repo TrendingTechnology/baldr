@@ -20,34 +20,34 @@ describe('file “mscx.js”', () => {
       let { status, unavailable } = mscx
         .checkExecutables(['echo', 'ls'])
       assert.strictEqual(status, true)
-      assert.deepEqual(unavailable, [])
+      assert.deepStrictEqual(unavailable, [])
     })
 
     it('function “checkExecutables()”: one executable', () => {
       let { status, unavailable } =
         mscx.checkExecutables(['echo'])
       assert.strictEqual(status, true)
-      assert.deepEqual(unavailable, [])
+      assert.deepStrictEqual(unavailable, [])
     })
 
     it('function “checkExecutables()”: one nonexisting executable', () => {
       let { status, unavailable } =
         mscx.checkExecutables(['echo', 'loooooool'])
       assert.strictEqual(status, false)
-      assert.deepEqual(unavailable, ['loooooool'])
+      assert.deepStrictEqual(unavailable, ['loooooool'])
     })
 
     it('function “checkExecutables()”: two nonexisting executable', () => {
       let { status, unavailable } =
         mscx.checkExecutables(['troooooool', 'loooooool'])
       assert.strictEqual(status, false)
-      assert.deepEqual(unavailable, ['troooooool', 'loooooool'])
+      assert.deepStrictEqual(unavailable, ['troooooool', 'loooooool'])
     })
 
     it('function “checkExecutables()”: without arguments', () => {
       let { status, unavailable } = mscx.checkExecutables()
       assert.strictEqual(status, true)
-      assert.deepEqual(unavailable, [])
+      assert.deepStrictEqual(unavailable, [])
     })
   })
 
@@ -68,7 +68,7 @@ describe('file “mscx.js”', () => {
     const slides = path.join(folder, 'slides')
     let files = mscx.generateSlides(folder)
 
-    assert.deepEqual(
+    assert.deepStrictEqual(
       files,
       ['01.svg', '02.svg']
     );
@@ -86,7 +86,7 @@ describe('file “mscx.js”', () => {
       const folder = path.join('test', 'songs', 'clean', 'some', 's', 'Swing-low')
       let files = mscx.generatePianoEPS(folder)
 
-      assert.deepEqual(
+      assert.deepStrictEqual(
         files,
         ['piano_1.eps', 'piano_2.eps']
       );

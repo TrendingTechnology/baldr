@@ -1,4 +1,4 @@
-const { assert } = require('./lib/helper.js')
+const assert = require('assert')
 const CheckChange = require('../check.js')
 const checkRewired = require('rewire')('../check.js')
 const fs = require('fs-extra')
@@ -14,6 +14,14 @@ const tmp = require('tmp')
 
 process.env.PATH = path.join(__dirname, 'bin:', process.env.PATH)
 
+let assertExists = function () {
+  assert.ok(
+    fs.existsSync(
+      path.join.apply(null, arguments)
+    )
+  )
+}
+
 let bootstrapConfig = indexRewired.__get__('bootstrapConfig')
 bootstrapConfig({
   test: true,
@@ -27,7 +35,7 @@ describe('file “check.js”', () => {
     let db = new Sqlite('test.db')
 
     db.initialize()
-    assert.exists('test.db')
+    assertExists('test.db')
 
     db.insert('lol', 'toll')
     let row = db.select('lol')
@@ -85,7 +93,7 @@ describe('Class “TeX”', () => {
     assert.strictEqual(count.s[3]['Swing-low'].title, 'Swing low')
     assert.strictEqual(count.z[2]['Zum-Tanze-da-geht-ein-Maedel'].title, 'Zum Tanze, da geht ein Mädel')
 
-    assert.deepEqual(count.s[3]['Swing-low'].pianoFiles, [ 'piano_1.eps', 'piano_2.eps', 'piano_3.eps' ])
+    assert.deepStrictEqual(count.s[3]['Swing-low'].pianoFiles, [ 'piano_1.eps', 'piano_2.eps', 'piano_3.eps' ])
   })
 
   it('method “texCmd()”', () => {
@@ -111,7 +119,7 @@ describe('Class “TeX”', () => {
   it('method “generateTeX()”', () => {
     let texFile = path.join('test', 'songs', 'processed', 'some', 'songs.tex')
     tex.generateTeX(path.resolve('test', 'songs', 'processed', 'some'))
-    assert.exists(texFile)
+    assertExists(texFile)
 
     let texContent = fs.readFileSync(texFile, 'utf8')
     let compare = fs.readFileSync(
@@ -132,7 +140,7 @@ describe('file “index.js”', () => {
       bootstrapConfig({ path: path.resolve('test', 'songs', 'clean', 'some'), test: true })
       const c = indexRewired.__get__('config')
       assert.strictEqual(c.path, path.resolve('test', 'songs', 'clean', 'some'))
-      assert.exists(path.resolve('test', 'songs', 'clean', 'some', 'filehashes.db'))
+      assertExists(path.resolve('test', 'songs', 'clean', 'some', 'filehashes.db'))
     })
 
     it('function “bootstrapConfig()”: exit', () => {
@@ -160,7 +168,7 @@ describe('file “index.js”', () => {
         path.join('test', 'songs', 'clean', 'some', 'a', 'Auf-der-Mauer_auf-der-Lauer')
       )
 
-      assert.deepEqual(
+      assert.deepStrictEqual(
         status,
         {
           'changed': {
@@ -202,16 +210,16 @@ describe('file “index.js”', () => {
       const folders = [auf, swing, zum]
 
       for (let i = 0; i < folders.length; ++i) {
-        assert.exists(folders[i], 'slides')
-        assert.exists(folders[i], 'slides', '01.svg')
-        assert.exists(folders[i], 'piano')
-        assert.exists(folders[i], 'piano', 'piano.mscx')
+        assertExists(folders[i], 'slides')
+        assertExists(folders[i], 'slides', '01.svg')
+        assertExists(folders[i], 'piano')
+        assertExists(folders[i], 'piano', 'piano.mscx')
       }
 
-      assert.exists(auf, 'piano', 'piano_1.eps')
-      assert.exists(swing, 'piano', 'piano_1.eps')
-      assert.exists(zum, 'piano', 'piano_1.eps')
-      assert.exists(zum, 'piano', 'piano_2.eps')
+      assertExists(auf, 'piano', 'piano_1.eps')
+      assertExists(swing, 'piano', 'piano_1.eps')
+      assertExists(zum, 'piano', 'piano_1.eps')
+      assertExists(zum, 'piano', 'piano_2.eps')
 
       let info = JSON.parse(
         fs.readFileSync(
@@ -296,7 +304,7 @@ describe('Command line interface', () => {
 
       let commander = indexRewired.__get__('commander')
       assert.strictEqual(commander.path, path.join('test', 'songs', 'clean', 'some'))
-      assert.deepEqual(
+      assert.deepStrictEqual(
         stub.args,
         [
           [ '\u001b[33m☐\u001b[39m  \u001b[33mAuf-der-Mauer_auf-der-Lauer\u001b[39m: Auf der Mauer, auf der Lauer\n\t\u001b[33mslides\u001b[39m: 01.svg, 02.svg\n\t\u001b[33mpiano\u001b[39m: piano_1.eps, piano_2.eps' ],
@@ -311,7 +319,7 @@ describe('Command line interface', () => {
       invokeCommand(['--path', path.join('test', 'songs', 'processed', 'one'), '--tex'])
       let tex = path.join('test', 'songs', 'processed', 'one', 'songs.tex')
 
-      assert.exists(tex)
+      assertExists(tex)
       assert.strictEqual(
         read(tex),
         read(path.join('test', 'files', 'songs_min_processed.tex'))
@@ -322,7 +330,7 @@ describe('Command line interface', () => {
     it('--json', () => {
       invokeCommand(['--path', path.join('test', 'songs', 'processed', 'one'), '--json'])
       let json = path.join('test', 'songs', 'processed', 'one', 'songs.json')
-      assert.exists(json)
+      assertExists(json)
       assert.strictEqual(
         read(json),
         read(path.join('test', 'files', 'songs_min_processed.json'))
@@ -453,7 +461,7 @@ describe('class “Sqlite”', () => {
   })
 
   it('test.db exists', () => {
-    assert.exists(testDb)
+    assertExists(testDb)
   })
 
   it('method “insert()”', () => {
@@ -553,7 +561,7 @@ describe('Class SongFiles', function () {
 
     it('First run', function () {
       let status = songFiles.process()
-      assert.deepEqual(
+      assert.deepStrictEqual(
         status,
         {
           'changed': {
@@ -598,24 +606,24 @@ describe('Class SongFiles', function () {
 
     it('method “getFolderFiles()”: eps', () => {
       const files = songFiles.getFolderFiles('piano', '.eps')
-      assert.deepEqual(files, ['01.eps', '02.eps', '03.eps'])
+      assert.deepStrictEqual(files, ['01.eps', '02.eps', '03.eps'])
     })
 
     it('method “getFolderFiles()”: svg', () => {
       const files = songFiles.getFolderFiles('slides', '.svg')
-      assert.deepEqual(files, ['01.svg', '02.svg', '03.svg'])
+      assert.deepStrictEqual(files, ['01.svg', '02.svg', '03.svg'])
     })
 
     it('method “getFolderFiles()”: non existent folder', () => {
       const files = songFiles.getFolderFiles('lol', '.svg')
-      assert.deepEqual(files, [])
+      assert.deepStrictEqual(files, [])
     })
 
     it('method “getFolderFiles()”: empty folder', () => {
       const empty = path.join('test', 'files', 'empty')
       fs.mkdirSync(empty)
       const files = songFiles.getFolderFiles('empty', '.svg')
-      assert.deepEqual(files, [])
+      assert.deepStrictEqual(files, [])
       fs.rmdirSync(empty)
     })
   })

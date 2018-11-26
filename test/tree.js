@@ -17,21 +17,21 @@ describe('file “tree.js”', () => {
       const files = tree.getFolderFiles(
         path.join('test', 'files', 'piano'), '.eps'
       )
-      assert.deepEqual(files, ['01.eps', '02.eps', '03.eps'])
+      assert.deepStrictEqual(files, ['01.eps', '02.eps', '03.eps'])
     })
 
     it('function “getFolderFiles()”: svg', () => {
       const files = tree.getFolderFiles(
         path.join('test', 'files', 'slides'), '.svg'
       )
-      assert.deepEqual(files, ['01.svg', '02.svg', '03.svg'])
+      assert.deepStrictEqual(files, ['01.svg', '02.svg', '03.svg'])
     })
 
     it('function “getFolderFiles()”: non existent folder', () => {
       const files = tree.getFolderFiles(
         path.join('test', 'files', 'lol'), '.svg'
       )
-      assert.deepEqual(files, [])
+      assert.deepStrictEqual(files, [])
     })
 
     it('function “getFolderFiles()”: empty folder', () => {
@@ -40,7 +40,7 @@ describe('file “tree.js”', () => {
       const files = tree.getFolderFiles(
         empty, '.svg'
       )
-      assert.deepEqual(files, [])
+      assert.deepStrictEqual(files, [])
       fs.rmdirSync(empty)
     })
   })
@@ -49,20 +49,20 @@ describe('file “tree.js”', () => {
     let getSongFolders = rewire.__get__('getSongFolders')
     let folders = getSongFolders(path.resolve('test', 'songs', 'clean', 'some'), 's')
     assert.strictEqual(folders.length, 2)
-    assert.deepEqual(folders, ['Stille-Nacht', 'Swing-low'])
+    assert.deepStrictEqual(folders, ['Stille-Nacht', 'Swing-low'])
   })
 
   it('function “getABCFolders()”', () => {
     let getABCFolders = rewire.__get__('getABCFolders')
     let folders = getABCFolders(path.resolve('test', 'songs', 'clean', 'some'))
     assert.strictEqual(folders.length, 3)
-    assert.deepEqual(folders, ['a', 's', 'z'])
+    assert.deepStrictEqual(folders, ['a', 's', 'z'])
   })
 
   it('function “getTree()”', () => {
     let folderTree = tree.getTree(path.resolve('test', 'songs', 'clean', 'some'))
-    assert.deepEqual(folderTree.a, { 'Auf-der-Mauer_auf-der-Lauer': {} })
-    assert.deepEqual(folderTree.s, { 'Stille-Nacht': {}, 'Swing-low': {} })
+    assert.deepStrictEqual(folderTree.a, { 'Auf-der-Mauer_auf-der-Lauer': {} })
+    assert.deepStrictEqual(folderTree.s, { 'Stille-Nacht': {}, 'Swing-low': {} })
   })
 
   it('function “flattenTree()”', () => {
@@ -79,7 +79,7 @@ describe('file “tree.js”', () => {
       }
     }
 
-    assert.deepEqual(tree.flattenTree(folderTree), [
+    assert.deepStrictEqual(tree.flattenTree(folderTree), [
       'a/Auf-der-Mauer_auf-der-Lauer',
       's/Stille-Nacht',
       's/Swing-low',
