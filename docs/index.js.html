@@ -566,14 +566,8 @@ class SongMetaData {
    * @param {string} folder - Absolute path to a song folder.
    */
   constructor (folder) {
-
     /**
      * Alias for a song title, e. g. “Sehnsucht nach dem Frühlinge” “Komm, lieber Mai, und mache”
-     * @type {string}
-     */
-
-    /**
-     * .
      * @type {string}
      */
     this.alias = null
@@ -629,7 +623,13 @@ class SongMetaData {
     /**
      * .
      * @type {string}
-     */    this.subtitle = null
+     */
+    this.subtitle = null
+
+    /**
+     * .
+     * @type {string}
+     */
     this.title = null
 
     /**
@@ -637,7 +637,6 @@ class SongMetaData {
      * @type {string}
      */
     this.year = null
-
 
     /**
      * The file name of the YAML file.
