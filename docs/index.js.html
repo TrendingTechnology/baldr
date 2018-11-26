@@ -475,8 +475,8 @@ class SongFiles {
   }
 
   /**
-   * Wrapper function for all process functions for one folder.
-   * @param {string} folder - A song folder.
+   * Wrapper method for all process methods of one song folder.
+   * @param {boolean} force - Force the generation of media files.
    */
   process (force = false) {
     let status = { changed: {}, generated: {} }

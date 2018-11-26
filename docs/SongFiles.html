@@ -1034,7 +1034,7 @@ file doesn’t exist.</p>
     
 
     
-    <h4 class="name" id="process"><span class="type-signature"></span>process<span class="signature">(folder)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="process"><span class="type-signature"></span>process<span class="signature">(force)</span><span class="type-signature"></span></h4>
     
 
     
@@ -1042,7 +1042,7 @@ file doesn’t exist.</p>
 
 
 <div class="description">
-    <p>Wrapper function for all process functions for one folder.</p>
+    <p>Wrapper method for all process methods of one song folder.</p>
 </div>
 
 
@@ -1068,6 +1068,8 @@ file doesn’t exist.</p>
         
 
         
+        <th>Default</th>
+        
 
         <th class="last">Description</th>
     </tr>
@@ -1078,13 +1080,13 @@ file doesn’t exist.</p>
 
         <tr>
             
-                <td class="name"><code>folder</code></td>
+                <td class="name"><code>force</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">boolean</span>
 
 
             
@@ -1093,8 +1095,14 @@ file doesn’t exist.</p>
             
 
             
+                <td class="default">
+                
+                    false
+                
+                </td>
+            
 
-            <td class="description last"><p>A song folder.</p></td>
+            <td class="description last"><p>Force the generation of media files.</p></td>
         </tr>
 
     
