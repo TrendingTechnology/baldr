@@ -479,8 +479,27 @@ describe('Class “SongFiles()”', function () {
       )
     })
 
+    it('Exception by two files', function () {
+      assert.throws(
+        () => {
+          songFiles.detectFile_('xxx', 'yyy')
+        },
+        /^.*File doesn’t exist: .*$/
+      )
+    })
+
     it('Return value', function () {
       let result = songFiles.detectFile_('projector.mscx')
+      assert.ok(result.includes('projector.mscx'))
+    })
+
+    it('Return value by two files', function () {
+      let result = songFiles.detectFile_('xxx.mscx', 'projector.mscx')
+      assert.ok(result.includes('projector.mscx'))
+    })
+
+    it('Return value by two files, get first', function () {
+      let result = songFiles.detectFile_('projector.mscx', 'xxx.mscx')
       assert.ok(result.includes('projector.mscx'))
     })
   })
@@ -530,16 +549,17 @@ describe('Class “SongFiles()”', function () {
   })
 
   describe('Method “getFolderFiles()”', () => {
-    let songFiles = new SongFiles(path.join('test', 'files'))
+    let folder = path.join('test', 'songs', 'processed', 'one', 'a', 'Auf-der-Mauer_auf-der-Lauer')
+    let songFiles = new SongFiles(folder)
 
     it('Method “getFolderFiles()”: eps', () => {
       const files = songFiles.getFolderFiles('piano', '.eps')
-      assert.deepStrictEqual(files, ['01.eps', '02.eps', '03.eps'])
+      assert.deepStrictEqual(files, ['piano.eps'])
     })
 
     it('Method “getFolderFiles()”: svg', () => {
       const files = songFiles.getFolderFiles('slides', '.svg')
-      assert.deepStrictEqual(files, ['01.svg', '02.svg', '03.svg'])
+      assert.deepStrictEqual(files, ['01.svg'])
     })
 
     it('Method “getFolderFiles()”: non existent folder', () => {
