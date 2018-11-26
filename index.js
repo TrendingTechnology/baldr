@@ -598,5 +598,3 @@ if (require.main === module) {
 
 exports.Song = Song
 exports.SongMetaData = SongMetaData
-exports.SongFiles = SongFiles
-exports.FileMonitor = FileMonitor
