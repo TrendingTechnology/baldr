@@ -22,6 +22,14 @@ let assertExists = function () {
   )
 }
 
+let mkTmpDir = function () {
+  return tmp.dirSync().name
+}
+
+let mkTmpFile = function () {
+  return tmp.fileSync().name
+}
+
 let bootstrapConfig = indexRewired.__get__('bootstrapConfig')
 bootstrapConfig({
   test: true,
@@ -418,10 +426,10 @@ describe('Class SongMetaData()', function () {
   })
 
   it('Exception: No yaml file', function () {
-    let tmpDir = tmp.dirSync()
+    let tmpDir = mkTmpDir()
     assert.throws(
       () => {
-        return new SongMetaData(tmpDir.name)
+        return new SongMetaData(tmpDir)
       },
       /^.*YAML file could not be found: .*$/
     )
@@ -444,7 +452,7 @@ describe('Class SongMetaData()', function () {
 
 describe('class “Sqlite”', () => {
   let Sqlite = indexRewired.__get__('Sqlite')
-  let tmpDir = tmp.dirSync().name
+  let tmpDir = mkTmpDir()
   let testDb = path.join(tmpDir, 'test.db')
   let db
 
@@ -488,7 +496,7 @@ describe('class “Sqlite”', () => {
 
 describe('class “FileMonitor()”', () => {
   let FileMonitor = indexRewired.__get__('FileMonitor')
-  let tmpDir = tmp.dirSync().name
+  let tmpDir = mkTmpDir()
   let testDb = path.join(tmpDir, 'file-monitor.db')
   let testFile = path.join(tmpDir, 'file-monitor.txt')
   let monitor
@@ -548,17 +556,15 @@ describe('class “FileMonitor()”', () => {
 describe('Class SongFiles', function () {
   let SongFiles = indexRewired.__get__('SongFiles')
   let FileMonitor = indexRewired.__get__('FileMonitor')
-
   let folder = path.join('test', 'songs', 'clean', 'some', 'a', 'Auf-der-Mauer_auf-der-Lauer')
+  let fileMonitor = new FileMonitor(mkTmpFile())
+  let songFiles = new SongFiles(folder, fileMonitor)
+
+  after(function () {
+    fileMonitor.flush()
+  })
+
   describe('method “process()”', () => {
-    let dbFile = tmp.fileSync()
-    let fileMonitor = new FileMonitor(dbFile.name)
-    let songFiles = new SongFiles(folder, fileMonitor)
-
-    after(function () {
-      fileMonitor.flush()
-    })
-
     it('First run', function () {
       let status = songFiles.process()
       assert.deepStrictEqual(
@@ -625,6 +631,67 @@ describe('Class SongFiles', function () {
       const files = songFiles.getFolderFiles('empty', '.svg')
       assert.deepStrictEqual(files, [])
       fs.rmdirSync(empty)
+    })
+  })
+
+  it('method “generatePDF()”', () => {
+    let file = songFiles.generatePDF('projector', 'projector')
+    assert.strictEqual(file, 'projector.pdf')
+    assert.exists(folder, 'projector.pdf')
+  })
+
+  it('method “generateSlides()”', () => {
+    songFiles.generatePDF('projector')
+    const slides = path.join(folder, 'slides')
+    let files = songFiles.generateSlides(folder)
+
+    assert.deepStrictEqual(
+      files,
+      ['01.svg', '02.svg']
+    );
+
+    [
+      [slides, '01.svg'],
+      [slides, '02.svg']
+    ].forEach(args => { assert.exists(...args) })
+
+    fs.removeSync(slides)
+  })
+
+  describe('method “generatePiano()”', () => {
+    it('lead', () => {
+      let folderSwing = path.join('test', 'songs', 'clean', 'some', 's', 'Swing-low')
+      let songFilesSwing = new SongFiles(folderSwing, fileMonitor)
+      let files = songFilesSwing.generatePiano()
+
+      assert.deepStrictEqual(files, [ 'piano_1.eps', 'piano_2.eps' ])
+
+      let result = [
+        [folderSwing, 'piano'],
+        [folderSwing, 'piano', 'piano.mscx'],
+        [folderSwing, 'piano', 'piano_1.eps']
+      ]
+      result.forEach(args => { assert.exists(...args) })
+
+      fs.removeSync(path.join(folder, 'piano'))
+    })
+
+    it('piano', () => {
+      let files = songFiles.generatePiano()
+
+      assert.deepStrictEqual(
+        files,
+        ['piano_1.eps', 'piano_2.eps']
+      )
+
+      let result = [
+        [folder, 'piano'],
+        [folder, 'piano', 'piano.mscx'],
+        [folder, 'piano', 'piano_1.eps']
+      ]
+      result.forEach(args => { assert.exists(...args) })
+
+      fs.removeSync(path.join(folder, 'piano'))
     })
   })
 })
