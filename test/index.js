@@ -637,7 +637,7 @@ describe('Class “SongFiles()”', function () {
     })
   })
 
-  it('Method “clean()”', () => {
+  it('Method “cleanIntermediateFiles()”', () => {
     songFiles.generateIntermediateFiles()
     assert.ok(fs.existsSync(path.join(songFiles.folder, 'projector.pdf')))
     songFiles.cleanIntermediateFiles()
