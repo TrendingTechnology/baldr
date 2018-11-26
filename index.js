@@ -251,7 +251,7 @@ let bootstrapConfig = function (newConfig = false) {
 }
 
 let updateSongFolder = function (folder, fileMonitor) {
-  let status = new SongFiles(folder, fileMonitor).process()
+  let status = new SongFiles(folder, fileMonitor).generateIntermediateFiles()
   message.songFolder(status)
 }
 
@@ -450,7 +450,7 @@ class SongFiles {
    * Wrapper method for all process methods of one song folder.
    * @param {boolean} force - Force the generation of media files.
    */
-  process (force = false) {
+  generateIntermediateFiles (force = false) {
     let status = { changed: {}, generated: {} }
 
     status.folder = this.folder
@@ -486,7 +486,7 @@ class SongFiles {
   /**
    * Delete all generated files of a song folder.
    */
-  clean () {
+  cleanIntermediateFiles () {
     let files = [
       'piano',
       'slides',

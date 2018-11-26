@@ -504,9 +504,9 @@ describe('Class “SongFiles()”', function () {
     })
   })
 
-  describe('Method “process()”', () => {
+  describe('Method “generateIntermediateFiles()”', () => {
     it('First run', function () {
-      let status = songFiles.process()
+      let status = songFiles.generateIntermediateFiles()
       assert.deepStrictEqual(
         status,
         {
@@ -536,14 +536,14 @@ describe('Class “SongFiles()”', function () {
     })
 
     it('Second run', function () {
-      songFiles.process()
-      let status = songFiles.process()
+      songFiles.generateIntermediateFiles()
+      let status = songFiles.generateIntermediateFiles()
       assert.strictEqual(status.changed.piano, false)
       assert.strictEqual(status.changed.slides, false)
     })
 
     it('force', function () {
-      let status = songFiles.process(true)
+      let status = songFiles.generateIntermediateFiles(true)
       assert.strictEqual(status.force, true)
     })
   })
@@ -638,9 +638,9 @@ describe('Class “SongFiles()”', function () {
   })
 
   it('Method “clean()”', () => {
-    songFiles.process()
+    songFiles.generateIntermediateFiles()
     assert.ok(fs.existsSync(path.join(songFiles.folder, 'projector.pdf')))
-    songFiles.clean()
+    songFiles.cleanIntermediateFiles()
     assert.ok(!fs.existsSync(path.join(songFiles.folder, 'projector.pdf')))
   })
 })
