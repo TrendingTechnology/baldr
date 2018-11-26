@@ -1,6 +1,6 @@
 *.pdf
 *.svg
 *.eps
-*/piano/*
+piano/
 songs.tex
 *.db

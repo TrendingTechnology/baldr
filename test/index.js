@@ -1,6 +1,4 @@
 const assert = require('assert')
-const CheckChange = require('../check.js')
-const checkRewired = require('rewire')('../check.js')
 const fs = require('fs-extra')
 const indexRewired = require('rewire')('../index.js')
 const json = require('../json.js')
@@ -35,57 +33,6 @@ bootstrapConfig({
   test: true,
   path: path.resolve('test', 'songs', 'clean', 'some'),
   force: true
-})
-
-describe('file “check.js”', () => {
-  it('object “Sqlite()”', () => {
-    let Sqlite = checkRewired.__get__('Sqlite')
-    let db = new Sqlite('test.db')
-
-    db.initialize()
-    assertExists('test.db')
-
-    db.insert('lol', 'toll')
-    let row = db.select('lol')
-    assert.strictEqual(row.hash, 'toll')
-
-    try {
-      db.insert('lol', 'toll')
-    } catch (e) {
-      assert.strictEqual(e.name, 'SqliteError')
-    }
-
-    db.update('lol', 'troll')
-    assert.strictEqual(db.select('lol').hash, 'troll')
-
-    fs.unlinkSync('test.db')
-  })
-
-  it('function “hashSHA1()”', () => {
-    let hashSHA1 = checkRewired.__get__('hashSHA1')
-    assert.strictEqual(
-      hashSHA1(path.join('test', 'files', 'hash.txt')),
-      '7516f3c75e85c64b98241a12230d62a64e59bce3'
-    )
-  })
-
-  it('object “CheckChange()”', () => {
-    let check = new CheckChange()
-    check.init('test.db')
-    assert.strictEqual(check.db.dbFile, 'test.db')
-
-    fs.appendFileSync('tmp.txt', 'test')
-    assert.ok(check.do('tmp.txt'))
-
-    assert.ok(!check.do('tmp.txt'))
-    assert.ok(!check.do('tmp.txt'))
-
-    fs.appendFileSync('tmp.txt', 'test')
-    assert.ok(check.do('tmp.txt'))
-
-    fs.unlinkSync('tmp.txt')
-    fs.unlinkSync('test.db')
-  })
 })
 
 describe('Class “TeX”', () => {

@@ -1,6 +1,4 @@
 const { assert } = require('./lib/helper.js')
-const path = require('path')
-const fs = require('fs-extra')
 const mscx = require('../mscx.js')
 const rewire = require('rewire')('../mscx.js')
 
@@ -53,64 +51,5 @@ describe('file “mscx.js”', () => {
 
   it('function “gitPull()”', () => {
     assert.ok(!mscx.gitPull('songs'))
-  })
-
-  it('function “generatePDF()”', () => {
-    const folder = path.join('test', 'songs', 'clean', 'some', 's', 'Swing-low')
-    let file = mscx.generatePDF(folder, 'projector', 'projector')
-    assert.strictEqual(file, 'projector.pdf')
-    assert.exists(folder, 'projector.pdf')
-  })
-
-  it('function “generateSlides()”', () => {
-    mscx.generatePDF('s', 'Swing-low', 'projector')
-    const folder = path.join('test', 'songs', 'clean', 'some', 's', 'Swing-low')
-    const slides = path.join(folder, 'slides')
-    let files = mscx.generateSlides(folder)
-
-    assert.deepStrictEqual(
-      files,
-      ['01.svg', '02.svg']
-    );
-
-    [
-      [slides, '01.svg'],
-      [slides, '02.svg']
-    ].forEach(args => { assert.exists(...args) })
-
-    fs.removeSync(slides)
-  })
-
-  describe('function “generatePianoEPS()”', () => {
-    it('function “generatePianoEPS()”: lead', () => {
-      const folder = path.join('test', 'songs', 'clean', 'some', 's', 'Swing-low')
-      let files = mscx.generatePianoEPS(folder)
-
-      assert.deepStrictEqual(
-        files,
-        ['piano_1.eps', 'piano_2.eps']
-      );
-
-      [
-        [folder, 'piano'],
-        [folder, 'piano', 'piano.mscx'],
-        [folder, 'piano', 'piano_1.eps']
-      ].forEach(args => { assert.exists(...args) })
-
-      fs.removeSync(path.join(folder, 'piano'))
-    })
-
-    it('function “generatePianoEPS()”: piano', () => {
-      const folder = path.join('test', 'songs', 'clean', 'some', 'a', 'Auf-der-Mauer_auf-der-Lauer')
-      mscx.generatePianoEPS(folder);
-
-      [
-        [folder, 'piano'],
-        [folder, 'piano', 'piano.mscx'],
-        [folder, 'piano', 'piano_1.eps']
-      ].forEach(args => { assert.exists(...args) })
-
-      fs.removeSync(path.join(folder, 'piano'))
-    })
   })
 })
