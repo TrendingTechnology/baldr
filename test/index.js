@@ -601,3 +601,57 @@ describe('Class SongFiles', function () {
     })
   })
 })
+
+describe('function “checkExecutable()”', () => {
+  let checkExecutable = indexRewired.__get__('checkExecutable')
+
+  it('function “checkExecutable()”: existing executable', () => {
+    assert.strictEqual(checkExecutable('echo'), true)
+  })
+
+  it('function “checkExecutable()”: nonexisting executable', () => {
+    assert.strictEqual(checkExecutable('loooooool'), false)
+  })
+})
+
+describe('function “checkExecutables()”', () => {
+  let checkExecutables = indexRewired.__get__('checkExecutables')
+
+  it('all are existing', () => {
+    let { status, unavailable } = checkExecutables(['echo', 'ls'])
+    assert.strictEqual(status, true)
+    assert.deepStrictEqual(unavailable, [])
+  })
+
+  it('one executable', () => {
+    let { status, unavailable } = checkExecutables(['echo'])
+    assert.strictEqual(status, true)
+    assert.deepStrictEqual(unavailable, [])
+  })
+
+  it('one nonexisting executable', () => {
+    let { status, unavailable } = checkExecutables(['echo', 'loooooool'])
+    assert.strictEqual(status, false)
+    assert.deepStrictEqual(unavailable, ['loooooool'])
+  })
+
+  it('two nonexisting executable', () => {
+    let { status, unavailable } = checkExecutables(['troooooool', 'loooooool'])
+    assert.strictEqual(status, false)
+    assert.deepStrictEqual(unavailable, ['troooooool', 'loooooool'])
+  })
+
+  it('without arguments', () => {
+    let { status, unavailable } = checkExecutables()
+    assert.strictEqual(status, true)
+    assert.deepStrictEqual(unavailable, [])
+  })
+})
+
+describe('file “mscx.js”', () => {
+  let gitPull = indexRewired.__get__('gitPull')
+
+  it('function “gitPull()”', () => {
+    assert.ok(!gitPull('songs'))
+  })
+})
