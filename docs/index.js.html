@@ -45,8 +45,6 @@ const Sqlite3 = require('better-sqlite3')
 const util = require('util')
 const yaml = require('js-yaml')
 
-const Check = require('./check.js')
-let CheckChange = new Check()
 const json = require('./json.js')
 const mscx = require('./mscx.js')
 const folderTree = require('./tree.js')
@@ -227,8 +225,6 @@ let bootstrapConfig = function (newConfig = false) {
   if (!config.path || config.path.length === 0) {
     message.noConfigPath()
   }
-
-  CheckChange.init(path.join(config.path, 'filehashes.db'))
 }
 
 /**
@@ -239,57 +235,21 @@ let setTestMode = function () {
   config.path = path.resolve('test', 'songs', 'clean', 'some')
 }
 
-/**
- * Wrapper function for all process functions for one folder.
- * @param {string} folder - A song folder.
- */
-let processSongFolder = function (folder) {
-  let status = { changed: {}, generated: {} }
-
-  status.folder = folder
-  status.folderName = path.basename(folder)
-  status.info = folderTree.getSongInfo(folder)
-
-  status.force = config.force
-  status.changed.slides = CheckChange.do(
-    path.join(folder, 'projector.mscx')
-  )
-  // projector
-  if (config.force || status.changed.slides) {
-    status.generated.projector = mscx.generatePDF(folder, 'projector')
-    status.generated.slides = mscx.generateSlides(folder)
-  }
-
-  if (
-    CheckChange.do(path.join(folder, 'lead.mscx')) ||
-      CheckChange.do(path.join(folder, 'piano.mscx'))
-  ) {
-    status.changed.piano = true
-  } else {
-    status.changed.piano = false
-  }
-
-  // piano
-  if (config.force || status.changed.piano) {
-    status.generated.piano = mscx.generatePianoEPS(folder)
-  }
-  return status
-}
-
-let updateSongFolder = function (folder) {
-  message.songFolder(
-    processSongFolder(folder)
-  )
+let updateSongFolder = function (folder, fileMonitor) {
+  let status = new SongFiles(folder, fileMonitor).process()
+  message.songFolder(status)
 }
 
 /**
  * Update and generate when required media files for the songs.
  */
-let update = function () {
-  mscx.gitPull(config.path)
-  folderTree.flat(config.path).forEach(updateSongFolder)
-  json.generateJSON(config.path)
-  let tex = new TeX(config.path)
+let update = function (basePath, fileMonitor) {
+  mscx.gitPull(basePath)
+  folderTree.flat(basePath).forEach((songFolder) => {
+    updateSongFolder(songFolder, fileMonitor)
+  })
+  json.generateJSON(basePath)
+  let tex = new TeX(basePath)
   tex.generateTeX()
 }
 
@@ -655,16 +615,18 @@ let main = function () {
     setTestMode()
   }
 
+  let fileMonitor = new FileMonitor(path.join(config.path, 'filehashes.db'))
+
   if (options.clean) {
     clean()
   } else if (options.folder) {
-    updateSongFolder(options.folder)
+    updateSongFolder(options.folder, fileMonitor)
   } else if (options.json) {
     generateJSON()
   } else if (options.tex) {
     generateTeX()
   } else {
-    update()
+    update(config.path, fileMonitor)
   }
 }
 
@@ -686,7 +648,7 @@ exports.FileMonitor = FileMonitor
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="SongFiles.html">SongFiles</a></li><li><a href="SongMetaData.html">SongMetaData</a></li><li><a href="TeX.html">TeX</a></li></ul><h3>Global</h3><ul><li><a href="global.html#bootstrapConfig">bootstrapConfig</a></li><li><a href="global.html#checkExecutable">checkExecutable</a></li><li><a href="global.html#checkExecutables">checkExecutables</a></li><li><a href="global.html#clean">clean</a></li><li><a href="global.html#cleanFiles">cleanFiles</a></li><li><a href="global.html#cleanFolder">cleanFolder</a></li><li><a href="global.html#flat">flat</a></li><li><a href="global.html#flattenTree">flattenTree</a></li><li><a href="global.html#generateJSON">generateJSON</a></li><li><a href="global.html#generatePDF">generatePDF</a></li><li><a href="global.html#generatePianoEPS">generatePianoEPS</a></li><li><a href="global.html#generateSlides">generateSlides</a></li><li><a href="global.html#generateSongJSON">generateSongJSON</a></li><li><a href="global.html#getABCFolders">getABCFolders</a></li><li><a href="global.html#getFolderFiles">getFolderFiles</a></li><li><a href="global.html#getSongFolders">getSongFolders</a></li><li><a href="global.html#getSongInfo">getSongInfo</a></li><li><a href="global.html#getTree">getTree</a></li><li><a href="global.html#gitPull">gitPull</a></li><li><a href="global.html#hashSHA1">hashSHA1</a></li><li><a href="global.html#info">info</a></li><li><a href="global.html#noConfigPath">noConfigPath</a></li><li><a href="global.html#processSongFolder">processSongFolder</a></li><li><a href="global.html#readJSON">readJSON</a></li><li><a href="global.html#setTestMode">setTestMode</a></li><li><a href="global.html#songFolder">songFolder</a></li><li><a href="global.html#update">update</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="SongFiles.html">SongFiles</a></li><li><a href="SongMetaData.html">SongMetaData</a></li><li><a href="TeX.html">TeX</a></li></ul><h3>Global</h3><ul><li><a href="global.html#bootstrapConfig">bootstrapConfig</a></li><li><a href="global.html#checkExecutable">checkExecutable</a></li><li><a href="global.html#checkExecutables">checkExecutables</a></li><li><a href="global.html#clean">clean</a></li><li><a href="global.html#cleanFiles">cleanFiles</a></li><li><a href="global.html#cleanFolder">cleanFolder</a></li><li><a href="global.html#flat">flat</a></li><li><a href="global.html#flattenTree">flattenTree</a></li><li><a href="global.html#generateJSON">generateJSON</a></li><li><a href="global.html#generatePDF">generatePDF</a></li><li><a href="global.html#generatePianoEPS">generatePianoEPS</a></li><li><a href="global.html#generateSlides">generateSlides</a></li><li><a href="global.html#generateSongJSON">generateSongJSON</a></li><li><a href="global.html#getABCFolders">getABCFolders</a></li><li><a href="global.html#getFolderFiles">getFolderFiles</a></li><li><a href="global.html#getSongFolders">getSongFolders</a></li><li><a href="global.html#getSongInfo">getSongInfo</a></li><li><a href="global.html#getTree">getTree</a></li><li><a href="global.html#gitPull">gitPull</a></li><li><a href="global.html#info">info</a></li><li><a href="global.html#noConfigPath">noConfigPath</a></li><li><a href="global.html#readJSON">readJSON</a></li><li><a href="global.html#setTestMode">setTestMode</a></li><li><a href="global.html#songFolder">songFolder</a></li><li><a href="global.html#update">update</a></li></ul>
 </nav>
 
 <br class="clear">
