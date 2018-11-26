@@ -31,41 +31,40 @@
  * configuration and run render process
  */
 
-const fs = require('fs');
-const path = require('path');
+/* global search location */
+
+const path = require('path')
 
 /**
  * The current song
  */
 
 class Song {
-
-  constructur() {
-
+  constructur () {
     /**
      * The current slide number.
      */
-    this.slideNumber = 0;
+    this.slideNumber = 0
 
     /**
      * The biggest slide number.
      */
-    this.slideNumberMax = 0;
+    this.slideNumberMax = 0
 
     /**
      * Array of all images files of a song.
      */
-    this.slides = [];
+    this.slides = []
 
     /**
      * The absolute path of the song folder containing the images files.
      */
-    this.folder = '';
+    this.folder = ''
 
     /**
      * Parent folder containing all songs
      */
-    this.songsPath = '';
+    this.songsPath = ''
 
     /**
      * &lt;code>&lt;pre>
@@ -109,7 +108,7 @@ class Song {
      *   },
      * &lt;/pre>&lt;/code>
      */
-    this.library = {};
+    this.library = {}
 
     /**
      * The current song
@@ -130,15 +129,15 @@ class Song {
      * }
      * &lt;/pre>&lt;/code>
      */
-    this.song = {};
+    this.song = {}
 
-    this.selector = '';
+    this.selector = ''
   }
 
-  set(values) {
-    this.songsPath = values.songsPath;
-    this.library = values.library;
-    this.selector = values.selector;
+  set (values) {
+    this.songsPath = values.songsPath
+    this.library = values.library
+    this.selector = values.selector
   }
 
   /**
@@ -148,107 +147,102 @@ class Song {
    *   without special characters and whitespaces
    *   (e. g.: Another-brick-in-the-wall)
    */
-  setCurrent(songID) {
-    this.song = this.library[songID];
+  setCurrent (songID) {
+    this.song = this.library[songID]
     if (typeof this.song !== 'undefined') {
-      this.slideNumber = 0;
-      this.slides = song.slides;
-      this.slideNumberMax = slides.length - 1;
-      this.folder = song.folder;
+      this.slideNumber = 0
+      this.slides = this.song.slides
+      this.slideNumberMax = this.slides.length - 1
+      this.folder = this.song.folder
     }
-    setSlide();
+    this.setSlide()
   }
 
   /**
    *
    */
-  setSongTitle() {
-    if (slideNumber === 0 &amp;&amp; song.hasOwnProperty('title')) {
-      document.getElementById('song-title').style.display = 'block';
-      document.getElementById('song-title_title').textContent = song.title;
-      document.getElementById('song-title_subtitle').textContent = song.subtitle;
-
-    }
-    else {
-      document.getElementById('song-title').style.display = 'none';
+  setSongTitle () {
+    if (this.slideNumber === 0 &amp;&amp; this.song.hasOwnProperty('title')) {
+      document.getElementById('song-title').style.display = 'block'
+      document.getElementById('song-title_title').textContent = this.song.title
+      document.getElementById('song-title_subtitle').textContent = this.song.subtitle
+    } else {
+      document.getElementById('song-title').style.display = 'none'
     }
   }
 
   /**
    * Load the current image to the slide section.
    */
-  setSlide() {
-    var imagePath = path.join(this.folder, 'slides', this.slides[this.slideNumber]);
-    document.querySelector(this.selector).setAttribute('src', imagePath);
-    this.setSongTitle();
+  setSlide () {
+    var imagePath = path.join(this.folder, 'slides', this.slides[this.slideNumber])
+    document.querySelector(this.selector).setAttribute('src', imagePath)
+    this.setSongTitle()
   }
 
   /**
    * Show the next slide.
    */
-  nextSlide() {
-    this.slideNumber += 1;
+  nextSlide () {
+    this.slideNumber += 1
     if (this.slideNumber > this.slideNumberMax) {
-      this.slideNumber = 0;
+      this.slideNumber = 0
     }
-    this.setSlide();
+    this.setSlide()
   }
 
   /**
    * Show the previous slide.
    */
-  previousSlide() {
-    this.slideNumber -= 1;
+  previousSlide () {
+    this.slideNumber -= 1
     if (this.slideNumber &lt; 0) {
-      this.slideNumber = this.slideNumberMax;
+      this.slideNumber = this.slideNumberMax
     }
-    this.setSlide();
+    this.setSlide()
   }
 
   /**
    *
    */
-  loadByHash() {
+  loadByHash () {
     if (location.hash !== '') {
-      this.setCurrent(location.hash.substring(1));
-      this.setSlide();
-      modal.hide();
+      this.setCurrent(location.hash.substring(1))
+      this.setSlide()
+      this.modal.hide()
     }
   }
-
 }
 
 class Search {
-
-  constructor() {
-    this.library = {};
-    this.selector = {};
+  constructor () {
+    this.library = {}
+    this.selector = {}
   }
 
-  set(values) {
-    library = values.library;
-    selector = values.selector;
+  set (values) {
+    this.library = values.library
+    this.selector = values.selector
   }
 
-  build() {
-    var select = document.createElement('select');
-    select.setAttribute('id', 'select');
-    select.setAttribute('placeholder', 'Suche nach einem Lied');
+  build () {
+    var select = document.createElement('select')
+    select.setAttribute('id', 'select')
+    select.setAttribute('placeholder', 'Suche nach einem Lied')
 
-    var option = document.createElement('option');
-    option.setAttribute('value', '');
-    select.appendChild(option);
+    var option = document.createElement('option')
+    option.setAttribute('value', '')
+    select.appendChild(option)
 
-    for (var songID in library) {
-      option = document.createElement('option');
-      option.setAttribute('value', songID);
-      option.innerHTML = library[songID].title;
-      select.appendChild(option);
+    for (var songID in this.library) {
+      option = document.createElement('option')
+      option.setAttribute('value', songID)
+      option.innerHTML = this.library[songID].title
+      select.appendChild(option)
     }
 
-    document.querySelector(selector).appendChild(select);
+    document.querySelector(this.selector).appendChild(select)
   }
-
 }
 
 /**
@@ -256,50 +250,52 @@ class Search {
  */
 
 class Modal {
-
-  constructor() {
-    this.IDs  = ['search', 'tableofcontents'];
+  constructor () {
+    this.IDs = ['search', 'tableofcontents']
   }
 
-  setDisplay(modalID, state) {
-    var element = document.getElementById(modalID);
-    element.style.display = state;
+  setDisplay (modalID, state) {
+    var element = document.getElementById(modalID)
+    element.style.display = state
   }
 
-  toggle(modalID) {
-    var element = document.getElementById(modalID);
-    var displayState = element.style.display;
+  toggle (modalID) {
+    var element = document.getElementById(modalID)
+    var displayState = element.style.display
     if (displayState === 'none') {
-      element.style.display = 'block';
+      element.style.display = 'block'
       if (modalID === 'search') {
         if (typeof search.selectize !== 'undefined') {
-          search.selectize.focus();
-          search.selectize.clear();
+          search.selectize.focus()
+          search.selectize.clear()
         }
       }
     } else {
-      element.style.display = 'none';
+      element.style.display = 'none'
     }
   }
 
-  hide() {
-    IDs.forEach(function(modalID) {
-      setDisplay(modalID, 'none');
-    });
+  hide () {
+    this.IDs.forEach(function (modalID) {
+      this.setDisplay(modalID, 'none')
+    })
   }
 
-  show(modalID) {
-    hide();
-    setDisplay(modalID, 'block');
+  show (modalID) {
+    this.hide()
+    this.setDisplay(modalID, 'block')
     if (modalID === 'search') {
       if (typeof search.selectize !== 'undefined') {
-        search.selectize.focus();
-        search.selectize.clear();
+        search.selectize.focus()
+        search.selectize.clear()
       }
     }
   }
-
 }
+
+exports.Modal = Modal
+exports.Search = Search
+exports.Song = Song
 </code></pre>
         </article>
     </section>
@@ -310,7 +306,7 @@ class Modal {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="BaldrSongbookSearch.html">BaldrSongbookSearch</a></li><li><a href="BaldrSongbookToc.html">BaldrSongbookToc</a></li><li><a href="Library.html">Library</a></li><li><a href="Modal.html">Modal</a></li><li><a href="Song.html">Song</a></li><li><a href="SongMetaData.html">SongMetaData</a></li></ul><h3>Global</h3><ul><li><a href="global.html#bindButtons">bindButtons</a></li><li><a href="global.html#bindShortcuts">bindShortcuts</a></li><li><a href="global.html#bootstrapConfig">bootstrapConfig</a></li><li><a href="global.html#folder">folder</a></li><li><a href="global.html#library">library</a></li><li><a href="global.html#loadByHash">loadByHash</a></li><li><a href="global.html#nextSlide">nextSlide</a></li><li><a href="global.html#previousSlide">previousSlide</a></li><li><a href="global.html#setCurrent">setCurrent</a></li><li><a href="global.html#setSlide">setSlide</a></li><li><a href="global.html#setSongTitle">setSongTitle</a></li><li><a href="global.html#setUrl">setUrl</a></li><li><a href="global.html#slideNumber">slideNumber</a></li><li><a href="global.html#slideNumberMax">slideNumberMax</a></li><li><a href="global.html#slides">slides</a></li><li><a href="global.html#song">song</a></li><li><a href="global.html#songsPath">songsPath</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="BaldrSongbookModal.html">BaldrSongbookModal</a></li><li><a href="BaldrSongbookSearch.html">BaldrSongbookSearch</a></li><li><a href="BaldrSongbookToc.html">BaldrSongbookToc</a></li><li><a href="Library.html">Library</a></li><li><a href="Modal.html">Modal</a></li><li><a href="Song.html">Song</a></li><li><a href="SongMetaData.html">SongMetaData</a></li></ul><h3>Global</h3><ul><li><a href="global.html#bindButtons">bindButtons</a></li><li><a href="global.html#bindShortcuts">bindShortcuts</a></li><li><a href="global.html#bootstrapConfig">bootstrapConfig</a></li><li><a href="global.html#folder">folder</a></li><li><a href="global.html#library">library</a></li><li><a href="global.html#loadByHash">loadByHash</a></li><li><a href="global.html#nextSlide">nextSlide</a></li><li><a href="global.html#previousSlide">previousSlide</a></li><li><a href="global.html#setCurrent">setCurrent</a></li><li><a href="global.html#setSlide">setSlide</a></li><li><a href="global.html#setSongTitle">setSongTitle</a></li><li><a href="global.html#setUrl">setUrl</a></li><li><a href="global.html#slideNumber">slideNumber</a></li><li><a href="global.html#slideNumberMax">slideNumberMax</a></li><li><a href="global.html#slides">slides</a></li><li><a href="global.html#song">song</a></li><li><a href="global.html#songsPath">songsPath</a></li></ul>
 </nav>
 
 <br class="clear">

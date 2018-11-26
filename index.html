@@ -31,20 +31,15 @@
 
     <!-- search -->
 
-    <section id="search" style="display: none" class="modal">
-      <div class="close button fa fa-times">
-      </div>
+    <baldr-songbook-modal id="search">
       <baldr-songbook-search></baldr-songbook-search>
-    </section>
+    </baldr-songbook-modal>
 
     <!-- tableofcontents -->
 
-    <section id="tableofcontents" style="display: none" class="modal">
-      <div class="close button fa fa-times">
-      </div>
-      <h2>Inhaltsverzeichnis</h2>
+    <baldr-songbook-modal id="tableofcontents" title="Inhaltsverzeichnis">
       <baldr-songbook-toc></baldr-songbook-toc>
-    </section>
+    </baldr-songbook-modal>
 
     <script src="lib/index.js"></script>
 

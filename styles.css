@@ -9,7 +9,7 @@ body {
  * modal
  */
 
-.modal {
+baldr-songbook-modal {
 	position: fixed;
 	top: 10%;
 	left: 10%;
@@ -22,7 +22,7 @@ body {
 	padding: 3em;
 }
 
-.modal .close {
+baldr-songbook-modal .close {
 	font-size: 18pt;
 	padding: 10pt;
 	position: absolute;

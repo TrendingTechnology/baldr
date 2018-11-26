@@ -30,33 +30,35 @@
  * @file The current song
  */
 
-const path = require('path');
-const modal = require('./modal.js');
+/* global location */
+
+const path = require('path')
+const modal = require('./modal.js')
 
 /**
  * The current slide number.
  */
-var slideNumber = 0;
+var slideNumber = 0
 
 /**
  * The biggest slide number.
  */
-var slideNumberMax;
+var slideNumberMax
 
 /**
  * Array of all images files of a song.
  */
-var slides;
+var slides
 
 /**
  * The absolute path of the song folder containing the images files.
  */
-var folder;
+var folder
 
 /**
  * Parent folder containing all songs
  */
-var songsPath;
+var songsPath
 
 /**
  * &lt;code>&lt;pre>
@@ -100,7 +102,7 @@ var songsPath;
  *   },
  * &lt;/pre>&lt;/code>
  */
-var library;
+var library
 
 /**
  * The current song
@@ -121,15 +123,15 @@ var library;
  * }
  * &lt;/pre>&lt;/code>
  */
-var song;
+var song
 
-var selector;
+var selector
 
-var set = function(values) {
-  songsPath = values.songsPath;
-  library = values.library;
-  selector = values.selector;
-};
+var set = function (values) {
+  songsPath = values.songsPath
+  library = values.library
+  selector = values.selector
+}
 
 /**
  * Set all properties for the current song.
@@ -138,79 +140,78 @@ var set = function(values) {
  *   without special characters and whitespaces
  *   (e. g.: Another-brick-in-the-wall)
  */
-var setCurrent = function(songID) {
-  song = library[songID];
+var setCurrent = function (songID) {
+  song = library[songID]
   if (typeof song !== 'undefined') {
-    slideNumber = 0;
-    slides = song.slides;
-    slideNumberMax = slides.length - 1;
-    folder = song.folder;
+    slideNumber = 0
+    slides = song.slides
+    slideNumberMax = slides.length - 1
+    folder = song.folder
   }
-  setSlide();
-};
+  setSlide()
+}
 
 /**
  *
  */
-var setSongTitle = function() {
+var setSongTitle = function () {
   if (slideNumber === 0 &amp;&amp; song.hasOwnProperty('title')) {
-    document.getElementById('song-title').style.display = 'block';
-    document.getElementById('song-title_title').textContent = song.title;
-    document.getElementById('song-title_subtitle').textContent = song.subtitle;
-
+    document.getElementById('song-title').style.display = 'block'
+    document.getElementById('song-title_title').textContent = song.title
+    document.getElementById('song-title_subtitle').textContent = song.subtitle
+  } else {
+    document.getElementById('song-title').style.display = 'none'
   }
-  else {
-    document.getElementById('song-title').style.display = 'none';
-  }
-};
+}
 
 /**
  * Load the current image to the slide section.
  */
-var setSlide = function() {
-  var imagePath = path.join(folder, 'slides', slides[slideNumber]);
-  document.querySelector(selector).setAttribute('src', imagePath);
-  setSongTitle();
-};
+var setSlide = function () {
+  var imagePath = path.join(folder, 'slides', slides[slideNumber])
+  document.querySelector(selector).setAttribute('src', imagePath)
+  setSongTitle()
+}
 
 /**
  * Show the next slide.
  */
-var nextSlide = function() {
-  slideNumber += 1;
+var nextSlide = function () {
+  slideNumber += 1
   if (slideNumber > slideNumberMax) {
-    slideNumber = 0;
+    slideNumber = 0
   }
-  setSlide();
-};
+  setSlide()
+}
 
 /**
  * Show the previous slide.
  */
-var previousSlide = function() {
-  slideNumber -= 1;
+var previousSlide = function () {
+  slideNumber -= 1
   if (slideNumber &lt; 0) {
-    slideNumber = slideNumberMax;
+    slideNumber = slideNumberMax
   }
-  setSlide();
-};
+  setSlide()
+}
 
 /**
  *
  */
-var loadByHash = function() {
+var loadByHash = function () {
   if (location.hash !== '') {
-    setCurrent(location.hash.substring(1));
-    setSlide();
-    modal.hide();
+    setCurrent(location.hash.substring(1))
+    setSlide()
+    modal.hide()
   }
-};
+}
 
-exports.loadByHash = loadByHash;
-exports.nextSlide = nextSlide;
-exports.previousSlide = previousSlide;
-exports.set = set;
-exports.setCurrent = setCurrent;
+exports.loadByHash = loadByHash
+exports.nextSlide = nextSlide
+exports.previousSlide = previousSlide
+exports.set = set
+exports.setCurrent = setCurrent
+exports.songsPath = songsPath
 </code></pre>
         </article>
     </section>
@@ -221,7 +222,7 @@ exports.setCurrent = setCurrent;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="BaldrSongbookSearch.html">BaldrSongbookSearch</a></li><li><a href="BaldrSongbookToc.html">BaldrSongbookToc</a></li><li><a href="Library.html">Library</a></li><li><a href="Modal.html">Modal</a></li><li><a href="Song.html">Song</a></li><li><a href="SongMetaData.html">SongMetaData</a></li></ul><h3>Global</h3><ul><li><a href="global.html#bindButtons">bindButtons</a></li><li><a href="global.html#bindShortcuts">bindShortcuts</a></li><li><a href="global.html#bootstrapConfig">bootstrapConfig</a></li><li><a href="global.html#folder">folder</a></li><li><a href="global.html#library">library</a></li><li><a href="global.html#loadByHash">loadByHash</a></li><li><a href="global.html#nextSlide">nextSlide</a></li><li><a href="global.html#previousSlide">previousSlide</a></li><li><a href="global.html#setCurrent">setCurrent</a></li><li><a href="global.html#setSlide">setSlide</a></li><li><a href="global.html#setSongTitle">setSongTitle</a></li><li><a href="global.html#setUrl">setUrl</a></li><li><a href="global.html#slideNumber">slideNumber</a></li><li><a href="global.html#slideNumberMax">slideNumberMax</a></li><li><a href="global.html#slides">slides</a></li><li><a href="global.html#song">song</a></li><li><a href="global.html#songsPath">songsPath</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="BaldrSongbookModal.html">BaldrSongbookModal</a></li><li><a href="BaldrSongbookSearch.html">BaldrSongbookSearch</a></li><li><a href="BaldrSongbookToc.html">BaldrSongbookToc</a></li><li><a href="Library.html">Library</a></li><li><a href="Modal.html">Modal</a></li><li><a href="Song.html">Song</a></li><li><a href="SongMetaData.html">SongMetaData</a></li></ul><h3>Global</h3><ul><li><a href="global.html#bindButtons">bindButtons</a></li><li><a href="global.html#bindShortcuts">bindShortcuts</a></li><li><a href="global.html#bootstrapConfig">bootstrapConfig</a></li><li><a href="global.html#folder">folder</a></li><li><a href="global.html#library">library</a></li><li><a href="global.html#loadByHash">loadByHash</a></li><li><a href="global.html#nextSlide">nextSlide</a></li><li><a href="global.html#previousSlide">previousSlide</a></li><li><a href="global.html#setCurrent">setCurrent</a></li><li><a href="global.html#setSlide">setSlide</a></li><li><a href="global.html#setSongTitle">setSongTitle</a></li><li><a href="global.html#setUrl">setUrl</a></li><li><a href="global.html#slideNumber">slideNumber</a></li><li><a href="global.html#slideNumberMax">slideNumberMax</a></li><li><a href="global.html#slides">slides</a></li><li><a href="global.html#song">song</a></li><li><a href="global.html#songsPath">songsPath</a></li></ul>
 </nav>
 
 <br class="clear">
