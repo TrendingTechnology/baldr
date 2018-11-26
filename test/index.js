@@ -450,7 +450,7 @@ describe('class “FileMonitor()”', () => {
     assert.ok(!fs.existsSync(testDb))
   })
 
-  it('method “flush()”: call multiple times', () => {
+  it('method “purge()”: call multiple times', () => {
     monitor.purge()
     assert.ok(!fs.existsSync(testDb))
     monitor.purge()
