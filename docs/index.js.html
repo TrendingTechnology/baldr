@@ -370,15 +370,28 @@ class SongFiles {
   constructor (folder, fileMonitor) {
     this.fileMonitor = fileMonitor
     this.folder = folder
+    this.mscxProjector = this.detectFile_('projector.mscx')
+    this.mscxPiano = this.detectFile_('piano.mscx', 'lead.mscx')
   }
 
+  /**
+   * Detect a file inside the song folder. Throw an exception if the
+   * file doesn’t exist.
+   *
+   *  @param {string} file - A filename of a file inside the song folder.
+   *
+   * @return A joined path of the file relative to the song collection
+   *   base dir.
+   */
   detectFile_ (file) {
-    let absPath = path.join(this.folder, file)
-    if (fs.existsSync(absPath)) {
-      return absPath
-    } else {
-      throw new Error(util.format('File doesn’t exist: %s', absPath))
+    let absPath
+    for (let argument of arguments) {
+      absPath = path.join(this.folder, argument)
+      if (fs.existsSync(absPath)) {
+        return absPath
+      }
     }
+    throw new Error(util.format('File doesn’t exist: %s', absPath))
   }
 
   /**
