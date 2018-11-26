@@ -372,6 +372,15 @@ class SongFiles {
     this.folder = folder
   }
 
+  detectFile_ (file) {
+    let absPath = path.join(this.folder, file)
+    if (fs.existsSync(absPath)) {
+      return absPath
+    } else {
+      throw new Error(util.format('File doesn’t exist: %s', absPath))
+    }
+  }
+
   /**
    * @param {string} subFolder - A subfolder relative to this.folder
    * @param {string} filter - String to filter.
