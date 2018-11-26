@@ -17,7 +17,6 @@
     "start": "electron .",
     "test": "mocha",
     "standard": "standard *.js lib/*.js"
-
   },
   "author": {
     "name": "Josef Friedrich",
