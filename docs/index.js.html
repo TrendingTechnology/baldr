@@ -102,10 +102,9 @@ let gitPull = function (basePath) {
   }
 }
 
-/***********************************************************************
+/**
  * Build a TeX file (songs.tex) of all piano scores.
- **********************************************************************/
-
+ */
 class TeX {
   /**
    * @param {string} basePath The base path of the song collection.
@@ -355,6 +354,9 @@ let setOptions = function (argv) {
     .parse(argv)
 }
 
+/**
+ * One song
+ */
 class Song {
   constructor (folder) {
     this.folder = folder
@@ -542,6 +544,8 @@ class SongFiles {
 }
 
 /**
+ * Metadata of a song catched from the info.yml file:
+ *
  * info.yml
  *
  *     ---
@@ -562,6 +566,83 @@ class SongMetaData {
    * @param {string} folder - Absolute path to a song folder.
    */
   constructor (folder) {
+
+    /**
+     * Alias for a song title, e. g. “Sehnsucht nach dem Frühlinge” “Komm, lieber Mai, und mache”
+     * @type {string}
+     */
+
+    /**
+     * .
+     * @type {string}
+     */
+    this.alias = null
+
+    /**
+     * .
+     * @type {string}
+     */
+    this.arranger = null
+
+    /**
+     * .
+     * @type {string}
+     */
+    this.artist = null
+
+    /**
+     * .
+     * @type {string}
+     */
+    this.composer = null
+
+    /**
+     * .
+     * @type {string}
+     */
+    this.country = null
+
+    /**
+     * .
+     * @type {string}
+     */
+    this.genre = null
+
+    /**
+     * .
+     * @type {string}
+     */
+    this.lyricist = null
+
+    /**
+     * .
+     * @type {string}
+     */
+    this.musescore = null
+
+    /**
+     * .
+     * @type {string}
+     */
+    this.source = null
+
+    /**
+     * .
+     * @type {string}
+     */    this.subtitle = null
+    this.title = null
+
+    /**
+     * .
+     * @type {string}
+     */
+    this.year = null
+
+
+    /**
+     * The file name of the YAML file.
+     * @type {string}
+     */
     this.yamlFile = 'info.yml'
 
     this.allowedProperties = [
@@ -597,6 +678,10 @@ class SongMetaData {
   }
 }
 
+/**
+ * Sqlite database wrapper to store file contents hashes to detect
+ * file modifications.
+ */
 class Sqlite {
   constructor (dbFile) {
     this.dbFile = dbFile
@@ -749,7 +834,7 @@ exports.SongMetaData = SongMetaData
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-baldr-songbook-updater.html">baldr-songbook-updater</a></li></ul><h3>Classes</h3><ul><li><a href="module-baldr-songbook-updater-FileMonitor.html">FileMonitor</a></li><li><a href="module-baldr-songbook-updater-SongFiles.html">SongFiles</a></li><li><a href="module-baldr-songbook-updater-SongMetaData.html">SongMetaData</a></li><li><a href="module-baldr-songbook-updater-TeX.html">TeX</a></li></ul><h3>Global</h3><ul><li><a href="global.html#flat">flat</a></li><li><a href="global.html#flattenTree">flattenTree</a></li><li><a href="global.html#generateJSON">generateJSON</a></li><li><a href="global.html#generateSongJSON">generateSongJSON</a></li><li><a href="global.html#getABCFolders">getABCFolders</a></li><li><a href="global.html#getFolderFiles_">getFolderFiles_</a></li><li><a href="global.html#getSongFolders">getSongFolders</a></li><li><a href="global.html#getSongInfo">getSongInfo</a></li><li><a href="global.html#getTree">getTree</a></li><li><a href="global.html#info">info</a></li><li><a href="global.html#noConfigPath">noConfigPath</a></li><li><a href="global.html#readJSON">readJSON</a></li><li><a href="global.html#songFolder">songFolder</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-baldr-songbook-updater.html">baldr-songbook-updater</a></li></ul><h3>Classes</h3><ul><li><a href="module-baldr-songbook-updater-FileMonitor.html">FileMonitor</a></li><li><a href="module-baldr-songbook-updater-Song.html">Song</a></li><li><a href="module-baldr-songbook-updater-SongFiles.html">SongFiles</a></li><li><a href="module-baldr-songbook-updater-SongMetaData.html">SongMetaData</a></li><li><a href="module-baldr-songbook-updater-Sqlite.html">Sqlite</a></li><li><a href="module-baldr-songbook-updater-TeX.html">TeX</a></li></ul><h3>Global</h3><ul><li><a href="global.html#flat">flat</a></li><li><a href="global.html#flattenTree">flattenTree</a></li><li><a href="global.html#generateJSON">generateJSON</a></li><li><a href="global.html#generateSongJSON">generateSongJSON</a></li><li><a href="global.html#getABCFolders">getABCFolders</a></li><li><a href="global.html#getFolderFiles_">getFolderFiles_</a></li><li><a href="global.html#getSongFolders">getSongFolders</a></li><li><a href="global.html#getSongInfo">getSongInfo</a></li><li><a href="global.html#getTree">getTree</a></li><li><a href="global.html#info">info</a></li><li><a href="global.html#noConfigPath">noConfigPath</a></li><li><a href="global.html#readJSON">readJSON</a></li><li><a href="global.html#songFolder">songFolder</a></li></ul>
 </nav>
 
 <br class="clear">

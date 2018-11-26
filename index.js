@@ -74,10 +74,9 @@ let gitPull = function (basePath) {
   }
 }
 
-/***********************************************************************
+/**
  * Build a TeX file (songs.tex) of all piano scores.
- **********************************************************************/
-
+ */
 class TeX {
   /**
    * @param {string} basePath The base path of the song collection.
@@ -327,6 +326,9 @@ let setOptions = function (argv) {
     .parse(argv)
 }
 
+/**
+ * One song
+ */
 class Song {
   constructor (folder) {
     this.folder = folder
@@ -514,6 +516,8 @@ class SongFiles {
 }
 
 /**
+ * Metadata of a song catched from the info.yml file:
+ *
  * info.yml
  *
  *     ---
@@ -534,6 +538,82 @@ class SongMetaData {
    * @param {string} folder - Absolute path to a song folder.
    */
   constructor (folder) {
+    /**
+     * Alias for a song title, e. g. “Sehnsucht nach dem Frühlinge” “Komm, lieber Mai, und mache”
+     * @type {string}
+     */
+    this.alias = null
+
+    /**
+     * .
+     * @type {string}
+     */
+    this.arranger = null
+
+    /**
+     * .
+     * @type {string}
+     */
+    this.artist = null
+
+    /**
+     * .
+     * @type {string}
+     */
+    this.composer = null
+
+    /**
+     * .
+     * @type {string}
+     */
+    this.country = null
+
+    /**
+     * .
+     * @type {string}
+     */
+    this.genre = null
+
+    /**
+     * .
+     * @type {string}
+     */
+    this.lyricist = null
+
+    /**
+     * .
+     * @type {string}
+     */
+    this.musescore = null
+
+    /**
+     * .
+     * @type {string}
+     */
+    this.source = null
+
+    /**
+     * .
+     * @type {string}
+     */
+    this.subtitle = null
+
+    /**
+     * .
+     * @type {string}
+     */
+    this.title = null
+
+    /**
+     * .
+     * @type {string}
+     */
+    this.year = null
+
+    /**
+     * The file name of the YAML file.
+     * @type {string}
+     */
     this.yamlFile = 'info.yml'
 
     this.allowedProperties = [
@@ -569,6 +649,10 @@ class SongMetaData {
   }
 }
 
+/**
+ * Sqlite database wrapper to store file contents hashes to detect
+ * file modifications.
+ */
 class Sqlite {
   constructor (dbFile) {
     this.dbFile = dbFile

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: json.js</title>
+    <title>JSDoc: Class: Song</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,92 +17,136 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: json.js</h1>
+    <h1 class="page-title">Class: Song</h1>
 
     
 
 
 
+
+<section>
+
+<header>
     
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>/**
- * @file Build a json file (songs.json) containing all slide files.
- */
+        <h2><span class="attribs"><span class="type-signature"></span></span>
+            <span class="ancestors"><a href="module-baldr-songbook-updater.html">baldr-songbook-updater</a>~</span>Song<span class="signature">()</span><span class="type-signature"></span></h2>
+        
+            <div class="class-description"><p>One song</p></div>
+        
+    
+</header>
 
-'use strict'
+<article>
+    <div class="container-overview">
+    
+        
 
-const fs = require('fs')
-const path = require('path')
-const tree = require('./tree.js')
-const yaml = require('js-yaml')
+    
+    <h2>Constructor</h2>
+    
 
-/**
- *
- * @param {string} songPath - Path of the song folder.
- */
-var generateSongJSON = function (songPath) {
-  var ymlFile = path.join(songPath, 'info.yml')
-  if (fs.existsSync(ymlFile)) {
-    var info = yaml.safeLoad(
-      fs.readFileSync(ymlFile, 'utf8')
-    )
-    info.folder = songPath
-    info.slides = tree.getFolderFiles_(
-      path.join(songPath, 'slides'),
-      '.svg'
-    )
+    
+    <h4 class="name" id="Song"><span class="type-signature"></span>new Song<span class="signature">()</span><span class="type-signature"></span></h4>
+    
 
-    if (info.title) {
-      return info
-    } else {
-      return false
-    }
-  } else if (fs.lstatSync(songPath).isDirectory()) {
-    return false
-  }
-}
+    
 
-/**
- *
- * @param {string} basePath - Basepath to the songbook tree.
- */
-var generateJSON = function (basePath) {
-  var folderTree = tree.getTree(basePath)
 
-  Object.keys(folderTree).forEach((alpha, index) => {
-    Object.keys(folderTree[alpha]).forEach((folder, index) => {
-      folderTree[alpha][folder] = generateSongJSON(
-        path.join(basePath, alpha, folder)
-      )
-    })
-  })
 
-  fs.writeFileSync(
-    path.join(basePath, 'songs.json'),
-    JSON.stringify(folderTree, null, 4)
-  )
-  return folderTree
-}
 
-/**
- *
- * @param {string} basePath - Basepath to the songbook tree.
- * @returns {object}
- */
-var readJSON = function (basePath) {
-  return JSON.parse(
-    fs.readFileSync(
-      path.join(basePath, 'songs.json'), 'utf8'
-    )
-  )
-}
 
-exports.generateJSON = generateJSON
-exports.readJSON = readJSON
-</code></pre>
-        </article>
-    </section>
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line332">line 332</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</article>
+
+</section>
 
 
 
