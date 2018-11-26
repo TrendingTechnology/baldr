@@ -175,7 +175,6 @@ class TeX {
  **********************************************************************/
 
 const configDefault = {
-  test: false,
   force: false
 }
 
@@ -222,17 +221,13 @@ let bootstrapConfig = function (newConfig = false) {
     config = Object.assign(config, newConfig)
   }
 
+  if (process.env.BALDR_SONGBOOK_PATH) {
+    config.path = process.env.BALDR_SONGBOOK_PATH
+  }
+
   if (!config.path || config.path.length === 0) {
     message.noConfigPath()
   }
-}
-
-/**
- * External function for command line usage.
- */
-let setTestMode = function () {
-  config.test = true
-  config.path = path.resolve('test', 'songs', 'clean', 'some')
 }
 
 let updateSongFolder = function (folder, fileMonitor) {
@@ -289,12 +284,12 @@ let clean = function () {
   ])
 }
 
-let generateJSON = function () {
-  json.generateJSON(config.path)
+let generateJSON = function (basePath) {
+  json.generateJSON(basePath)
 }
 
-let generateTeX = function () {
-  let tex = new TeX(config.path)
+let generateTeX = function (basePath) {
+  let tex = new TeX(basePath)
   tex.generateTeX()
 }
 
@@ -306,7 +301,6 @@ let setOptions = function (argv) {
     .option('-f, --force', 'rebuild all images')
     .option('-j, --json', 'generate JSON file')
     .option('-p --path &lt;path>', 'Base path to a song collection.')
-    .option('-T, --test', 'switch to test mode')
     .option('-t, --tex', 'generate TeX file')
     .parse(argv)
 }
@@ -605,14 +599,10 @@ let main = function () {
     force: options.force
   }
 
-  if (options.path &amp;&amp; options.path.length > 0) {
-    config.path = options.path
-  }
-
   bootstrapConfig(config)
 
-  if (options.test) {
-    setTestMode()
+  if (options.path &amp;&amp; options.path.length > 0) {
+    config.path = options.path
   }
 
   let fileMonitor = new FileMonitor(path.join(config.path, 'filehashes.db'))
@@ -622,9 +612,9 @@ let main = function () {
   } else if (options.folder) {
     updateSongFolder(options.folder, fileMonitor)
   } else if (options.json) {
-    generateJSON()
+    generateJSON(config.path)
   } else if (options.tex) {
-    generateTeX()
+    generateTeX(config.path)
   } else {
     update(config.path, fileMonitor)
   }
@@ -648,7 +638,7 @@ exports.FileMonitor = FileMonitor
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="SongFiles.html">SongFiles</a></li><li><a href="SongMetaData.html">SongMetaData</a></li><li><a href="TeX.html">TeX</a></li></ul><h3>Global</h3><ul><li><a href="global.html#bootstrapConfig">bootstrapConfig</a></li><li><a href="global.html#checkExecutable">checkExecutable</a></li><li><a href="global.html#checkExecutables">checkExecutables</a></li><li><a href="global.html#clean">clean</a></li><li><a href="global.html#cleanFiles">cleanFiles</a></li><li><a href="global.html#cleanFolder">cleanFolder</a></li><li><a href="global.html#flat">flat</a></li><li><a href="global.html#flattenTree">flattenTree</a></li><li><a href="global.html#generateJSON">generateJSON</a></li><li><a href="global.html#generateSongJSON">generateSongJSON</a></li><li><a href="global.html#getABCFolders">getABCFolders</a></li><li><a href="global.html#getFolderFiles">getFolderFiles</a></li><li><a href="global.html#getSongFolders">getSongFolders</a></li><li><a href="global.html#getSongInfo">getSongInfo</a></li><li><a href="global.html#getTree">getTree</a></li><li><a href="global.html#gitPull">gitPull</a></li><li><a href="global.html#info">info</a></li><li><a href="global.html#noConfigPath">noConfigPath</a></li><li><a href="global.html#readJSON">readJSON</a></li><li><a href="global.html#setTestMode">setTestMode</a></li><li><a href="global.html#songFolder">songFolder</a></li><li><a href="global.html#update">update</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="SongFiles.html">SongFiles</a></li><li><a href="SongMetaData.html">SongMetaData</a></li><li><a href="TeX.html">TeX</a></li></ul><h3>Global</h3><ul><li><a href="global.html#bootstrapConfig">bootstrapConfig</a></li><li><a href="global.html#checkExecutable">checkExecutable</a></li><li><a href="global.html#checkExecutables">checkExecutables</a></li><li><a href="global.html#clean">clean</a></li><li><a href="global.html#cleanFiles">cleanFiles</a></li><li><a href="global.html#cleanFolder">cleanFolder</a></li><li><a href="global.html#flat">flat</a></li><li><a href="global.html#flattenTree">flattenTree</a></li><li><a href="global.html#generateJSON">generateJSON</a></li><li><a href="global.html#generateSongJSON">generateSongJSON</a></li><li><a href="global.html#getABCFolders">getABCFolders</a></li><li><a href="global.html#getFolderFiles">getFolderFiles</a></li><li><a href="global.html#getSongFolders">getSongFolders</a></li><li><a href="global.html#getSongInfo">getSongInfo</a></li><li><a href="global.html#getTree">getTree</a></li><li><a href="global.html#gitPull">gitPull</a></li><li><a href="global.html#info">info</a></li><li><a href="global.html#noConfigPath">noConfigPath</a></li><li><a href="global.html#readJSON">readJSON</a></li><li><a href="global.html#songFolder">songFolder</a></li><li><a href="global.html#update">update</a></li></ul>
 </nav>
 
 <br class="clear">
