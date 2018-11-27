@@ -39,6 +39,7 @@
 const commander = require('commander')
 const crypto = require('crypto')
 const fs = require('fs-extra')
+const glob = require('glob')
 const os = require('os')
 const path = require('path')
 const pckg = require('./package.json')
@@ -753,8 +754,26 @@ class SongMetaDataCombined {
  * One song
  */
 class Song {
-  constructor (folder) {
-    this.folder = folder
+  /**
+   * @param {string} songPath - The path of the directory containing the song files
+   * or a path of a file inside the song folder (not nested in subfolders )
+   */
+  constructor (songPath) {
+    /**
+     * The directory containing the song files.
+     * @type {string}
+     */
+    this.folder = null
+    if (fs.lstatSync(songPath).isDirectory()) {
+      this.folder = songPath
+    } else {
+      this.folder = path.dirname(songPath)
+    }
+    /**
+     * An instance of SongMetaData.
+     * @type {module:baldr-songbook-updater~SongMetaData}
+     */
+    this.metaData = new SongMetaData(this.folder)
   }
 }
 
@@ -763,56 +782,21 @@ class Song {
  **********************************************************************/
 
 /**
- *
+ * The song library - a collection of songs
  */
 class Library {
-  constructor (filePath) {
-    this.tree = JSON.parse(fs.readFileSync(filePath))
+  /**
+   * @param {string} - The base path of the song library
+   */
+  constructor (basePath) {
+    this.basePath = basePath
+  }
 
-    /**
-     * @return {array} Array of folder paths.
-     * &lt;code>&lt;pre>
-     * {
-     *   "Aint-she-sweet": {
-     *     "title": "Ain’t she sweet",
-     *     "artist": "Milton Ager (1893 - 1979)",
-     *     "lyricist": "Jack Yellen",
-     *     "folder": "/home/jf/git-repositories/content/lieder/a/Aint-she-sweet",
-     *     "slides": [
-     *       "01.svg",
-     *       "02.svg"
-     *     ]
-     *   },
-     *   "Altes-Fieber": {
-     *     "title": "Altes Fieber",
-     *     "artist": "Die Toten Hosen",
-     *     "musescore": "https://musescore.com/user/12559861/scores/4801717",
-     *     "folder": "/home/jf/git-repositories/content/lieder/a/Altes-Fieber",
-     *     "slides": [
-     *       "01.svg",
-     *       "02.svg",
-     *       "03.svg",
-     *       "04.svg",
-     *       "05.svg",
-     *       "06.svg"
-     *     ]
-     *   },
-     *   "Always-look-on-the-bright-side": {
-     *     "title": "Always look on the bright side of life",
-     *     "source": "http://musescore.com/score/158089",
-     *     "folder": "/home/jf/git-repositories/content/lieder/a/Always-look-on-the-bright-side",
-     *     "slides": [
-     *       "01.svg",
-     *       "02.svg",
-     *       "03.svg",
-     *       "04.svg",
-     *       "05.svg",
-     *       "06.svg"
-     *     ]
-     *   },
-     * &lt;/pre>&lt;/code>
-     */
-    this.list = Library.flattenTree_(this.tree)
+  /**
+   * Identify a song folder by searching for a file named “info.yml.”
+   */
+  detectSongs_ () {
+    return glob.sync('info.yml', { cwd: this.basePath, matchBase: true })
   }
 
   /**

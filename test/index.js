@@ -308,15 +308,6 @@ describe('Command line interface', () => {
   })
 })
 
-describe('Class “Song()”', function () {
-  let Song = indexRewired.__get__('Song')
-
-  it('Initialisation', function () {
-    let song = new Song('lol')
-    assert.ok(song)
-  })
-})
-
 describe('Class “SongMetaData()”', function () {
   let songPath = path.resolve('test', 'songs', 'clean', 'some', 'a', 'Auf-der-Mauer_auf-der-Lauer')
   let SongMetaData = indexRewired.__get__('SongMetaData')
@@ -691,10 +682,48 @@ describe('Function “checkExecutables()”', () => {
   })
 })
 
-describe('File “mscx.js”', () => {
+describe('Function “gitPull()”', () => {
   let gitPull = indexRewired.__get__('gitPull')
+  assert.ok(!gitPull('songs'))
+})
 
-  it('Function “gitPull()”', () => {
-    assert.ok(!gitPull('songs'))
+describe('Class “Song()”', function () {
+  let Song = indexRewired.__get__('Song')
+  let folder = path.join('test', 'songs', 'clean', 'some', 'a', 'Auf-der-Mauer_auf-der-Lauer')
+  let song = new Song(folder)
+
+  it('Initialisation with a directory', function () {
+    let song = new Song(folder)
+    assert.strictEqual(song.folder, folder)
+  })
+
+  it('Initialisation with info.yml', function () {
+    let song = new Song(path.join(folder, 'info.yml'))
+    assert.strictEqual(song.folder, folder)
+  })
+
+  it('Initialisation with projector.mscx', function () {
+    let song = new Song(path.join(folder, 'projector.mscx'))
+    assert.strictEqual(song.folder, folder)
+  })
+
+  it('Property “metaData”', function () {
+    let SongMetaData = indexRewired.__get__('SongMetaData')
+    assert.ok(song.metaData instanceof SongMetaData)
+  })
+
+  it('Property “files”', function () {
+    let SongFiles = indexRewired.__get__('SongFiles')
+    assert.ok(song.files instanceof SongFiles)
+  })
+})
+
+describe('Class “Library()”', () => {
+  let Library = indexRewired.__get__('Library')
+  let folder = path.join('test', 'songs', 'processed', 'some')
+  let library = new Library(folder)
+
+  it('Method “detectSongs_()”', () => {
+    assert.strictEqual(library.detectSongs_().length, 4)
   })
 })
