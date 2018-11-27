@@ -769,11 +769,18 @@ class Song {
     } else {
       this.folder = path.dirname(songPath)
     }
+
     /**
      * An instance of SongMetaData.
      * @type {module:baldr-songbook-updater~SongMetaData}
      */
     this.metaData = new SongMetaData(this.folder)
+
+    /**
+     * An instance of SongFiles.
+     * @type {module:baldr-songbook-updater~SongFiles}
+     */
+    this.files = new SongFiles(this.folder)
   }
 }
 
