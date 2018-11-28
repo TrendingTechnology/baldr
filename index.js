@@ -646,7 +646,9 @@ class SongMetaData {
 }
 
 /**
- * # Mapping
+ * Combine some song metadata properties 
+ *
+ * Mapping
  *
  * * title: title (year)
  * * subtitle: subtitle - alias - country
@@ -654,8 +656,12 @@ class SongMetaData {
  * * lyricist: lyricist
  */
 class SongMetaDataCombined {
-  constructor (info) {
-    this.rawInfo = info
+  /**
+   * @param {module:baldr-songbook-updater~SongMetaData} songMetaData - A song
+   * metadata object.
+   */
+  constructor (songMetaData) {
+    this.metaData = songMetaData
   }
 
   /**
@@ -665,7 +671,7 @@ class SongMetaDataCombined {
   static collectProperties_ (properties, object) {
     let parts = []
     for (let property of properties) {
-      if (property in object) {
+      if (property in object && object[property]) {
         parts.push(object[property])
       }
     }
@@ -677,14 +683,14 @@ class SongMetaDataCombined {
    */
   get title () {
     let out
-    if ('title' in this.rawInfo) {
-      out = this.rawInfo.title
+    if ('title' in this.metaData) {
+      out = this.metaData.title
     } else {
       out = ''
     }
 
-    if ('year' in this.rawInfo) {
-      return `${out} (${this.rawInfo.year})`
+    if ('year' in this.metaData && this.metaData.year) {
+      return `${out} (${this.metaData.year})`
     } else {
       return out
     }
@@ -694,9 +700,9 @@ class SongMetaDataCombined {
    * subtitle - alias - country
    */
   get subtitle () {
-    return SongMetaData.collectProperties_(
+    return SongMetaDataCombined.collectProperties_(
       ['subtitle', 'alias', 'country'],
-      this.rawInfo
+      this.metaData
     ).join(' - ')
   }
 
@@ -704,9 +710,9 @@ class SongMetaDataCombined {
    * composer, artist, genre
    */
   get composer () {
-    return SongMetaData.collectProperties_(
+    return SongMetaDataCombined.collectProperties_(
       ['composer', 'artist', 'genre'],
-      this.rawInfo
+      this.metaData
     ).join(', ')
   }
 
@@ -714,8 +720,8 @@ class SongMetaDataCombined {
    * lyricist
    */
   get lyricist () {
-    if ('lyricist' in this.rawInfo) {
-      return this.rawInfo.lyricist
+    if ('lyricist' in this.metaData && this.metaData.lyricist) {
+      return this.metaData.lyricist
     } else {
       return ''
     }

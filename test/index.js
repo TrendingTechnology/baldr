@@ -520,7 +520,8 @@ describe('Class “SongFiles()”', function () {
             ]
           },
           'info': {
-            'title': 'Auf der Mauer, auf der Lauer'
+            'title': 'Auf der Mauer, auf der Lauer',
+            'country': 'Deutschland'
           }
         }
       )
@@ -685,6 +686,62 @@ describe('Function “checkExecutables()”', () => {
 describe('Function “gitPull()”', () => {
   let gitPull = indexRewired.__get__('gitPull')
   assert.ok(!gitPull('songs'))
+})
+
+describe('Class “SongMetaData”', () => {
+  let SongMetaDataCombined = indexRewired.__get__('SongMetaDataCombined')
+
+  describe('get title', () => {
+    it('title only', () => {
+      let song = new SongMetaDataCombined({ 'title': 'lol' })
+      assert.strictEqual(song.title, 'lol')
+    })
+    it('title and year', () => {
+      let song = new SongMetaDataCombined({ 'title': 'lol', 'year': 1984 })
+      assert.strictEqual(song.title, 'lol (1984)')
+    })
+  })
+
+  describe('get subtitle', () => {
+    it('all properties', () => {
+      let song = new SongMetaDataCombined({ 'subtitle': 's', 'alias': 'a', 'country': 'c' })
+      assert.strictEqual(song.subtitle, 's - a - c')
+    })
+    it('no properties', () => {
+      let song = new SongMetaDataCombined({})
+      assert.strictEqual(song.subtitle, '')
+    })
+  })
+
+  describe('get composer', () => {
+    it('all properties', () => {
+      let song = new SongMetaDataCombined({ 'composer': 'c', 'artist': 'a', 'genre': 'g' })
+      assert.strictEqual(song.composer, 'c, a, g')
+    })
+    it('no properties', () => {
+      let song = new SongMetaDataCombined({})
+      assert.strictEqual(song.composer, '')
+    })
+  })
+
+  describe('Real world example', () => {
+    let SongMetaData = indexRewired.__get__('SongMetaData')
+    let folder = path.join('test', 'songs', 'clean', 'some', 'a', 'Auf-der-Mauer_auf-der-Lauer')
+    let metaData = new SongMetaData(folder)
+    let combined = new SongMetaDataCombined(metaData)
+    it('title', () => {
+      assert.strictEqual(combined.title, 'Auf der Mauer, auf der Lauer')
+    })
+    it('subtitle', () => {
+      assert.strictEqual(combined.subtitle, 'Deutschland')
+    })
+    it('composer', () => {
+      assert.strictEqual(combined.composer, '')
+    })
+    it('lyricist', () => {
+      assert.strictEqual(combined.lyricist, '')
+    })
+  })
 })
 
 describe('Class “Song()”', function () {
