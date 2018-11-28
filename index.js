@@ -749,6 +749,12 @@ class Song {
     }
 
     /**
+     * The songID is the name of the directory which contains all song files
+     * @type {string}
+     */
+    this.songID = path.basename(this.folder)
+
+    /**
      * An instance of the class SongMetaData().
      * @type {module:baldr-songbook-updater~SongMetaData}
      */
@@ -758,7 +764,7 @@ class Song {
      * An instance of the class SongMetaDataCombined().
      * @type {module:baldr-songbook-updater~SongMetaDataCombined}
      */
-    this.SongMetaDataCombined = new SongMetaDataCombined(this.metaData)
+    this.metaDataCombined = new SongMetaDataCombined(this.metaData)
 
     /**
      * An instance of SongFiles.
@@ -780,7 +786,23 @@ class Library {
    * @param {string} - The base path of the song library
    */
   constructor (basePath) {
+    /**
+     * The base path of the song library
+     * @type {string}
+     */
     this.basePath = basePath
+
+    /**
+     * @type {object}
+     */
+    this.songs = {}
+    for (let songPath of this.detectSongs_()) {
+      let song = new Song(path.join(this.basePath, songPath))
+      if (song.songID in this.songs) {
+        throw new Error(util.format('A song with the same songID already exists: %s', song.songID))
+      }
+      this.songs[song.songID] = song
+    }
   }
 
   /**

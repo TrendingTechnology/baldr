@@ -764,9 +764,18 @@ describe('Class “Song()”', function () {
     assert.strictEqual(song.folder, folder)
   })
 
+  it('Property “songID”', function () {
+    assert.strictEqual(song.songID, 'Auf-der-Mauer_auf-der-Lauer')
+  })
+
   it('Property “metaData”', function () {
     let SongMetaData = indexRewired.__get__('SongMetaData')
     assert.ok(song.metaData instanceof SongMetaData)
+  })
+
+  it('Property “metaDataCombined”', function () {
+    let SongMetaDataCombined = indexRewired.__get__('SongMetaDataCombined')
+    assert.ok(song.metaDataCombined instanceof SongMetaDataCombined)
   })
 
   it('Property “files”', function () {
@@ -782,5 +791,19 @@ describe('Class “Library()”', () => {
 
   it('Method “detectSongs_()”', () => {
     assert.strictEqual(library.detectSongs_().length, 4)
+  })
+
+  it('Property “songs”', () => {
+    assert.strictEqual(library.songs['Auf-der-Mauer_auf-der-Lauer'].songID, 'Auf-der-Mauer_auf-der-Lauer')
+  })
+
+  it('Exceptions', () => {
+    let folder = path.join('test', 'songs', 'processed')
+    assert.throws(
+      () => {
+        return new Library(folder)
+      },
+      /^.*A song with the same songID already exists: Auf-der-Mauer_auf-der-Lauer$/
+    )
   })
 })
