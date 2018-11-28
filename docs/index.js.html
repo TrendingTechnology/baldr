@@ -674,7 +674,7 @@ class SongMetaData {
 }
 
 /**
- * Combine some song metadata properties 
+ * Combine some song metadata properties
  *
  * Mapping
  *
@@ -777,10 +777,16 @@ class Song {
     }
 
     /**
-     * An instance of SongMetaData.
+     * An instance of the class SongMetaData().
      * @type {module:baldr-songbook-updater~SongMetaData}
      */
     this.metaData = new SongMetaData(this.folder)
+
+    /**
+     * An instance of the class SongMetaDataCombined().
+     * @type {module:baldr-songbook-updater~SongMetaDataCombined}
+     */
+    this.SongMetaDataCombined = new SongMetaDataCombined(this.metaData)
 
     /**
      * An instance of SongFiles.
