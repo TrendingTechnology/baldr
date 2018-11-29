@@ -4,7 +4,6 @@ const indexRewired = require('rewire')('../index.js')
 const json = require('../json.js')
 const path = require('path')
 const process = require('process')
-const rewire = require('rewire')
 const sinon = require('sinon')
 const spawn = require('child_process').spawnSync
 const standard = require('mocha-standard')
@@ -34,6 +33,155 @@ bootstrapConfig({
   test: true,
   path: path.resolve('test', 'songs', 'clean', 'some'),
   force: true
+})
+
+describe('Class “Message()”', () => {
+  let Message = indexRewired.__get__('Message')
+  let message = indexRewired.__get__('message')
+
+  const status = {
+    'changed': {
+      'piano': false,
+      'slides': false
+    },
+    'folder': 'songs/a/Auf-der-Mauer_auf-der-Lauer',
+    'folderName': 'Auf-der-Mauer_auf-der-Lauer',
+    'force': false,
+    'generated': {},
+    'info': {
+      'title': 'Auf der Mauer, auf der Lauer'
+    }
+  }
+
+  let clone = function (object) {
+    return JSON.parse(JSON.stringify(object))
+  }
+
+  let assertSongFolder = function (status, output) {
+    let stub = sinon.stub()
+    let message = new Message()
+    message.print = stub
+    message.songFolder(status)
+    assert.strictEqual(String(stub.args[0]), String(output))
+  }
+
+  it('Method “print()”', () => {
+    let stub = sinon.stub()
+    let message = new Message()
+    message.print = stub
+    message.print('lol')
+    assert.strictEqual(stub.called, true)
+  })
+
+  it('const “error”', () => {
+    assert.strictEqual(message.error, '\u001b[31m☒\u001b[39m')
+  })
+
+  it('const “finished”', () => {
+    assert.strictEqual(message.finished, '\u001b[32m☑\u001b[39m')
+  })
+
+  it('const “progress”', () => {
+    assert.strictEqual(message.progress, '\u001b[33m☐\u001b[39m')
+  })
+
+  it('function “noConfigPath()”', () => {
+    let stub = sinon.stub()
+    let message = new Message()
+    message.print = stub
+
+    try {
+      message.noConfigPath()
+    } catch (e) {
+      assert.strictEqual(e.message, 'No configuration file found.')
+    }
+    assert.strictEqual(stub.called, true)
+    assert.deepStrictEqual(stub.args, [
+      [ '\u001b[31m☒\u001b[39m  Configuration file “~/.baldr.json” not found!\nCreate such a config file or use the “--path” option!\n\nExample configuration file:\n{\n\t"songbook": {\n\t\t"path": "/home/jf/songs"\n\t}\n}\n' ]
+    ])
+  })
+
+  describe('function “songFolder()”', () => {
+    it('finished', () => {
+      let finished = clone(status)
+      assertSongFolder(
+        finished,
+        '\u001b[32m☑\u001b[39m  \u001b[32mAuf-der-Mauer_auf-der-Lauer\u001b[39m: Auf der Mauer, auf der Lauer'
+      )
+    })
+
+    it('progress', () => {
+      let progress = clone(status)
+      progress.changed.slides = true
+      assertSongFolder(
+        progress,
+        '\u001b[33m☐\u001b[39m  \u001b[33mAuf-der-Mauer_auf-der-Lauer\u001b[39m: Auf der Mauer, auf der Lauer'
+      )
+    })
+
+    it('noTitle', () => {
+      let noTitle = clone(status)
+      noTitle.info.title = undefined
+      assertSongFolder(
+        noTitle,
+        '\u001b[31m☒\u001b[39m  \u001b[31mAuf-der-Mauer_auf-der-Lauer\u001b[39m'
+      )
+    })
+
+    it('forced', () => {
+      let forced = clone(status)
+      forced.generated =
+        {
+          'piano': [
+            'piano_1.eps',
+            'piano_2.eps'
+          ],
+          'projector': 'projector.pdf',
+          'slides': [
+            '01.svg',
+            '02.svg'
+          ]
+        }
+      forced.force = true
+      assertSongFolder(
+        forced,
+        '\u001b[32m☑\u001b[39m  \u001b[32mAuf-der-Mauer_auf-der-Lauer\u001b[39m: Auf der Mauer, auf der Lauer \u001b[31m(forced)\u001b[39m\n\t\u001b[33mslides\u001b[39m: 01.svg, 02.svg\n\t\u001b[33mpiano\u001b[39m: piano_1.eps, piano_2.eps'
+      )
+    })
+
+    it('generatedPiano', () => {
+      let generatedPiano = clone(status)
+      generatedPiano.changed.piano = true
+      generatedPiano.generated =
+        {
+          'piano': [
+            'piano_1.eps',
+            'piano_2.eps'
+          ]
+        }
+      assertSongFolder(
+        generatedPiano,
+        '\u001b[33m☐\u001b[39m  \u001b[33mAuf-der-Mauer_auf-der-Lauer\u001b[39m: Auf der Mauer, auf der Lauer\n\t\u001b[33mpiano\u001b[39m: piano_1.eps, piano_2.eps'
+      )
+    })
+
+    it('generatedSlides', () => {
+      let generatedSlides = clone(status)
+      generatedSlides.changed.slides = true
+      generatedSlides.generated =
+        {
+          'projector': 'projector.pdf',
+          'slides': [
+            '01.svg',
+            '02.svg'
+          ]
+        }
+      assertSongFolder(
+        generatedSlides,
+        '\u001b[33m☐\u001b[39m  \u001b[33mAuf-der-Mauer_auf-der-Lauer\u001b[39m: Auf der Mauer, auf der Lauer\n\t\u001b[33mslides\u001b[39m: 01.svg, 02.svg'
+      )
+    })
+  })
 })
 
 describe('Class “TeX()”', () => {
@@ -205,9 +353,11 @@ describe('Command line interface', () => {
 
   describe('Require as module', () => {
     it('--path', () => {
+      const indexRewired = require('rewire')('../index.js')
+      let Message = indexRewired.__get__('Message')
+      let message = new Message()
       let stub = sinon.stub()
-      let message = rewire('../message.js')
-      message.__set__('info', stub)
+      message.print = stub
       indexRewired.__set__('message', message)
 
       let main = indexRewired.__get__('main')
@@ -253,9 +403,11 @@ describe('Command line interface', () => {
     })
 
     it('--folder', () => {
+      const indexRewired = require('rewire')('../index.js')
+      let Message = indexRewired.__get__('Message')
+      let message = new Message()
       let stub = sinon.stub()
-      let message = rewire('../message.js')
-      message.__set__('info', stub)
+      message.print = stub
       indexRewired.__set__('message', message)
 
       let main = indexRewired.__get__('main')

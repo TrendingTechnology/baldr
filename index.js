@@ -19,12 +19,120 @@ const spawn = require('child_process').spawnSync
 const Sqlite3 = require('better-sqlite3')
 const util = require('util')
 const yaml = require('js-yaml')
+require('colors')
 
 const json = require('./json.js')
 const folderTree = require('./tree.js')
 
-// For test purposes, to be able to overwrite “message” with rewire.
-let message = require('./message.js')
+class Message {
+  constructor () {
+    this.error = '☒'.red
+    this.finished = '☑'.green
+    this.progress = '☐'.yellow
+  }
+
+  /**
+   * Print out and return text.
+   * @param {string} text - Text to display.
+   */
+  print (text) {
+    console.log(text)
+    return text
+  }
+
+  /**
+   *
+   */
+  noConfigPath () {
+    let output = this.error + '  Configuration file ' +
+      '“~/.baldr.json” not found!\n' +
+      'Create such a config file or use the “--path” option!'
+
+    const sampleConfig = fs.readFileSync(
+      path.join(__dirname, 'sample.config.json'), 'utf8'
+    )
+    output += '\n\nExample configuration file:\n' + sampleConfig
+
+    this.print(output)
+    throw new Error('No configuration file found.')
+  }
+
+  /**
+   *
+   * @param {object} status
+   * <pre><code>
+   * {
+   *   "changed": {
+   *     "piano": false,
+   *     "slides": false
+   *   },
+   *   "folder": "songs/a/Auf-der-Mauer_auf-der-Lauer",
+   *   "folderName": "Auf-der-Mauer_auf-der-Lauer",
+   *   "force": true,
+   *   "generated": {
+   *     "piano": [
+   *       "piano_1.eps",
+   *       "piano_2.eps"
+   *     ],
+   *     "projector": "projector.pdf",
+   *     "slides": [
+   *       "01.svg",
+   *       "02.svg"
+   *     ],
+   *   },
+   *   "info": {
+   *     "title": "Auf der Mauer, auf der Lauer"
+   *   }
+   * }
+   * </code></pre>
+   */
+  songFolder (status) {
+    let forced
+    if (status.force) {
+      forced = ' ' + '(forced)'.red
+    } else {
+      forced = ''
+    }
+
+    let symbol
+    if (!status.info.title) {
+      symbol = this.error
+    } else if (!status.changed.slides && !status.changed.piano) {
+      symbol = this.finished
+    } else {
+      symbol = this.progress
+    }
+
+    let title
+    if (!status.info.title) {
+      title = status.folderName.red
+    } else if (!status.changed.slides && !status.changed.piano) {
+      title = status.folderName.green + ': ' + status.info.title
+    } else {
+      title = status.folderName.yellow + ': ' + status.info.title
+    }
+
+    let output = symbol + '  ' + title + forced
+    if (status.generated.slides) {
+      output +=
+        '\n\t' +
+        'slides'.yellow +
+        ': ' +
+        status.generated.slides.join(', ')
+    }
+
+    if (status.generated.piano) {
+      output +=
+        '\n\t' +
+        'piano'.yellow +
+        ': ' +
+        status.generated.piano.join(', ')
+    }
+    this.print(output)
+  }
+}
+
+let message = new Message()
 
 /**
  * Check if executable is installed.
