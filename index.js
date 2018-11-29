@@ -323,6 +323,40 @@ let setOptions = function (argv) {
  **********************************************************************/
 
 /**
+ *
+ */
+class Folder {
+  /**
+   * @param {...string} folderPath - The path segments of the folder
+   */
+  constructor (folderPath) {
+    this.folderPath = path.join(...arguments)
+    if (!fs.existsSync(this.folderPath)) {
+      fs.mkdirSync(this.folderPath)
+    }
+  }
+
+  /**
+   * Remove the folder
+   */
+  remove () {
+    fs.removeSync(this.folderPath)
+  }
+
+  /**
+   * Empty the folder (Delete all it’s files)
+   */
+  empty () {
+    fs.removeSync(this.folderPath)
+    fs.mkdirSync(this.folderPath)
+  }
+
+  get () {
+    return this.folderPath
+  }
+}
+
+/**
  * Sqlite database wrapper to store file contents hashes to detect
  * file modifications.
  */
@@ -600,6 +634,18 @@ class SongFiles {
     this.folder = folder
 
     /**
+     * The slides folder
+     * @type {module:baldr-songbook-updater~Folder}
+     */
+    this.folderSlides = new Folder(this.folder, 'slides')
+
+    /**
+     * The piano folder
+     * @type {module:baldr-songbook-updater~Folder}
+     */
+    this.folderPiano = new Folder(this.folder, 'piano')
+
+    /**
      * Path of the MuseScore file 'projector.mscx', relative to the base folder
      * of the song collection.
      * @type string
@@ -677,16 +723,12 @@ class SongFiles {
    * @param {string} folder - A song folder.
    */
   generateSlides_ () {
-    let slides = path.join(this.folder, 'slides')
-    fs.removeSync(slides)
-    fs.mkdirSync(slides)
-
+    this.folderSlides.empty()
     spawn('pdf2svg', [
       path.join(this.folder, 'projector.pdf'),
-      path.join(slides, '%02d.svg'),
+      path.join(this.folderSlides.get(), '%02d.svg'),
       'all'
     ])
-
     return this.getFolderFiles_('slides', '.svg')
   }
 
@@ -695,10 +737,8 @@ class SongFiles {
    * @param {string} folder - A song folder.
    */
   generatePiano_ () {
-    let pianoFolder = path.join(this.folder, 'piano')
-    fs.removeSync(pianoFolder)
-    fs.mkdirSync(pianoFolder)
-    let pianoFile = path.join(pianoFolder, 'piano.mscx')
+    this.folderPiano.empty()
+    let pianoFile = path.join(this.folderPiano.get(), 'piano.mscx')
     fs.copySync(this.mscxPiano, pianoFile)
     spawn('mscore-to-eps.sh', [pianoFile])
     return this.getFolderFiles_('piano', '.eps')
@@ -1264,3 +1304,4 @@ exports.Song = Song
 exports.SongMetaData = SongMetaData
 exports.SongMetaDataCombined = SongMetaDataCombined
 exports.Library = Library
+exports.Folder = Folder

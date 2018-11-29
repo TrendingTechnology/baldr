@@ -1021,3 +1021,33 @@ describe('Class “Library()”', () => {
     assert.ok(spy.calledWith(true))
   })
 })
+
+describe('Class “Folder()”', function () {
+  let Folder = indexRewired.__get__('Folder')
+
+  it('Initialisation', function () {
+    let tmpDir = mkTmpDir()
+    let folder = new Folder(tmpDir)
+    assert.strictEqual(folder.folderPath, tmpDir)
+  })
+
+  it('Initialisation with two arguments', function () {
+    let tmpDir = mkTmpDir()
+    let folder = new Folder(tmpDir, 'test')
+    assert.strictEqual(folder.folderPath, path.join(tmpDir, 'test'))
+  })
+
+  it('Method “remove()”', function () {
+    let tmpDir = mkTmpDir()
+    let folder = new Folder(tmpDir)
+    folder.remove()
+    assert.ok(!fs.existsSync(folder.folderPath))
+  })
+
+  it('Method “empty()”', function () {
+    let tmpDir = mkTmpDir()
+    let folder = new Folder(tmpDir)
+    folder.empty()
+    assert.ok(fs.existsSync(folder.folderPath))
+  })
+})
