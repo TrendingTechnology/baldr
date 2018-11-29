@@ -806,4 +806,17 @@ describe('Class “Library()”', () => {
       /^.*A song with the same songID already exists: Auf-der-Mauer_auf-der-Lauer$/
     )
   })
+
+  it('Method “getSongById()”', () => {
+    assert.strictEqual(library.getSongById('Auf-der-Mauer_auf-der-Lauer').metaData.title, 'Auf der Mauer, auf der Lauer')
+  })
+
+  it('Method “getSongById()”: Exception', () => {
+    assert.throws(
+      () => {
+        return library.getSongById('test')
+      },
+      /^.*There is no song with the songID: test$/
+    )
+  })
 })

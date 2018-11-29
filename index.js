@@ -793,6 +793,7 @@ class Library {
     this.basePath = basePath
 
     /**
+     * The collection of songs
      * @type {object}
      */
     this.songs = {}
@@ -865,8 +866,15 @@ class Library {
     return newTree
   }
 
+  /**
+   *
+   */
   getSongById (songID) {
-    return this.list[songID]
+    if (songID in this.songs && this.songs[songID]) {
+      return this.songs[songID]
+    } else {
+      throw new Error(util.format('There is no song with the songID: %s', songID))
+    }
   }
 }
 
