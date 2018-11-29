@@ -819,4 +819,10 @@ describe('Class “Library()”', () => {
       /^.*There is no song with the songID: test$/
     )
   })
+
+  it('Method “getABCFolders_()”', () => {
+    let folders = library.getABCFolders_()
+    assert.strictEqual(folders.length, 3)
+    assert.deepStrictEqual(folders, ['a', 's', 'z'])
+  })
 })
