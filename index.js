@@ -964,6 +964,11 @@ class Library {
     }
   }
 
+  /**
+   * Calls the method generateIntermediateFiles on each song
+   *
+   * @param {boolean} force - Force the regeneration of intermediate files.
+   */
   generateIntermediateFiles (force = false) {
     for (let songID in this.songs) {
       this.songs[songID].files.generateIntermediateFiles(force)
@@ -976,6 +981,9 @@ class Library {
  * file modifications.
  */
 class Sqlite {
+  /**
+   * @param {string} dbFile - The path where to store the Sqlite database.
+   */
   constructor (dbFile) {
     this.dbFile = dbFile
     this.db = new Sqlite3(this.dbFile)
@@ -990,24 +998,44 @@ class Sqlite {
       .run()
   }
 
+  /**
+   * Insert a hash value of a file.
+   *
+   * @param {string} filename - Name or path of a file.
+   * @param {string} hash - The sha1 hash of the content of the file.
+   */
   insert (filename, hash) {
     this.db
       .prepare('INSERT INTO hashes values ($filename, $hash)')
       .run({ 'filename': filename, 'hash': hash })
   }
 
+  /**
+   * Get the hast value of a file.
+   *
+   * @param {string} filename - Name or path of a file.
+   */
   select (filename) {
     return this.db
       .prepare('SELECT * FROM hashes WHERE filename = $filename')
       .get({ 'filename': filename })
   }
 
+  /**
+   * Update the hash value of a file.
+   *
+   * @param {string} filename - Name or path of a file.
+   * @param {string} hash - The sha1 hash of the content of the file.
+   */
   update (filename, hash) {
     this.db
       .prepare('UPDATE hashes SET hash = $hash WHERE filename = $filename')
       .run({ 'filename': filename, 'hash': hash })
   }
 
+  /**
+   * Delete all rows from the table “hashes”.
+   */
   flush () {
     this.db.prepare('DELETE FROM hashes').run()
   }
@@ -1017,6 +1045,9 @@ class Sqlite {
  * Monitor files changes
  */
 class FileMonitor {
+  /**
+   * @param {string} dbFile - The path where to store the Sqlite database.
+   */
   constructor (dbFile) {
     this.db = new Sqlite(dbFile)
   }
@@ -1037,7 +1068,9 @@ class FileMonitor {
 
   /**
    * Check for file modifications
+   *
    * @param {string} filename - Path to the file.
+   *
    * @returns {boolean}
    */
   isModified (filename) {
