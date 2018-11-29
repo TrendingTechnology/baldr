@@ -790,6 +790,10 @@ describe('Class “Song()”', function () {
   it('Method “normalizeSongFolder_(): file', function () {
     assert.strictEqual(song.normalizeSongFolder_(path.join(folder, 'info.yml')), folder)
   })
+
+  it('Method “recognizeABCFolder_(): file', function () {
+    assert.strictEqual(song.recognizeABCFolder_(folder), 'a')
+  })
 })
 
 describe('Class “Library()”', () => {

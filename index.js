@@ -744,6 +744,13 @@ class Song {
     this.folder = this.normalizeSongFolder_(songPath)
 
     /**
+     * The character of the alphabetical folder. The song folders must
+     * be placed in alphabetical folders.
+     * @type {string}
+     */
+    this.abc = this.recognizeABCFolder_ (this.folder)
+
+    /**
      * The songID is the name of the directory which contains all song files
      * @type {string}
      */
@@ -780,6 +787,17 @@ class Song {
     } else {
       return path.dirname(songPath)
     }
+  }
+
+  /**
+   * @param {string} folder - The directory containing the song files.
+   *
+   * @return {string} A single character
+   */
+  recognizeABCFolder_ (folder) {
+    let pathSegments = folder.split(path.sep)
+    let abc = pathSegments[pathSegments.length - 2]
+    return abc
   }
 }
 
