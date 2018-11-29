@@ -911,12 +911,12 @@ class Library {
   }
 
   /**
-   * Function to sort alphabetically an array of objects by some specific key.
+   * Sort alphabetically an array of objects by some specific property.
    *
    * @param {String} property Key of the object to sort.
-   * @see {@link Tutorial https://ourcodeworld.com/articles/read/764/how-to-sort-alphabetically-an-array-of-objects-by-key-in-javascript}
+   * @see {@link https://ourcodeworld.com/articles/read/764/how-to-sort-alphabetically-an-array-of-objects-by-key-in-javascript Tutorial}
    */
-  static dynamicSort (property) {
+  sortByProperty_ (property) {
     return function (a, b) {
       return a[property].localeCompare(b[property])
     }
@@ -944,7 +944,7 @@ class Library {
       tree[song.abc].push(song)
     }
     for (let abc in tree) {
-      tree[abc].sort(Library.dynamicSort('songID'))
+      tree[abc].sort(this.sortByProperty_('songID'))
     }
     return tree
   }
