@@ -963,6 +963,12 @@ class Library {
       throw new Error(util.format('There is no song with the songID: %s', songID))
     }
   }
+
+  generateIntermediateFiles (force = false) {
+    for (let songID in this.songs) {
+      this.songs[songID].files.generateIntermediateFiles(force)
+    }
+  }
 }
 
 /**

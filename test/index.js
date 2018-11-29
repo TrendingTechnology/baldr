@@ -838,7 +838,7 @@ describe('Class “Library()”', () => {
     assert.deepStrictEqual(folders, ['a', 's', 'z'])
   })
 
-  it('function “getTree()”', () => {
+  it('Method “buildAlphabeticalSongTree()”', () => {
     let folderTree = library.buildAlphabeticalSongTree()
     assert.deepStrictEqual(
       folderTree.a[0].songID,
@@ -846,5 +846,26 @@ describe('Class “Library()”', () => {
     assert.deepStrictEqual(
       folderTree.s[0].songID,
       'Stille-Nacht')
+  })
+
+  it('Method “generateIntermediateFiles(force = false)”', () => {
+    let spy = sinon.spy()
+    let library = new Library(folder)
+    for (let songID in library.songs) {
+      library.songs[songID].files.generateIntermediateFiles = spy
+    }
+    library.generateIntermediateFiles(false)
+    assert.strictEqual(spy.callCount, 4)
+    assert.ok(spy.calledWith(false))
+  })
+
+  it('Method “generateIntermediateFiles(force = true)”', () => {
+    let spy = sinon.spy()
+    let library = new Library(folder)
+    for (let songID in library.songs) {
+      library.songs[songID].files.generateIntermediateFiles = spy
+    }
+    library.generateIntermediateFiles(true)
+    assert.ok(spy.calledWith(true))
   })
 })
