@@ -748,7 +748,7 @@ class Song {
      * be placed in alphabetical folders.
      * @type {string}
      */
-    this.abc = this.recognizeABCFolder_ (this.folder)
+    this.abc = this.recognizeABCFolder_(this.folder)
 
     /**
      * The songID is the name of the directory which contains all song files
@@ -908,6 +908,45 @@ class Library {
         return false
       }
     })
+  }
+
+  /**
+   * Function to sort alphabetically an array of objects by some specific key.
+   *
+   * @param {String} property Key of the object to sort.
+   * @see {@link Tutorial https://ourcodeworld.com/articles/read/764/how-to-sort-alphabetically-an-array-of-objects-by-key-in-javascript}
+   */
+  static dynamicSort (property) {
+    return function (a, b) {
+      return a[property].localeCompare(b[property])
+    }
+  }
+
+  /**
+   * Build a song tree where the songs are placed in alphabetical
+   * folders.
+   *
+   * @return {object} - A tree object like this:
+   *
+   * <pre><code>
+   * {
+   *   "a": [ song, song ],
+   *   "s": [ song, song ],
+   *   "z": [ song, song ]
+   * }
+   * </code></pre>
+   */
+  buildAlphabeticalSongTree () {
+    let tree = {}
+    for (let songID in this.songs) {
+      let song = this.songs[songID]
+      if (!tree.hasOwnProperty(song.abc)) tree[song.abc] = []
+      tree[song.abc].push(song)
+    }
+    for (let abc in tree) {
+      tree[abc].sort(Library.dynamicSort('songID'))
+    }
+    return tree
   }
 
   /**

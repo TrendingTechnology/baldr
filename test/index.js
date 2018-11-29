@@ -837,4 +837,14 @@ describe('Class “Library()”', () => {
     assert.strictEqual(folders.length, 3)
     assert.deepStrictEqual(folders, ['a', 's', 'z'])
   })
+
+  it('function “getTree()”', () => {
+    let folderTree = library.buildAlphabeticalSongTree()
+    assert.deepStrictEqual(
+      folderTree.a[0].songID,
+      'Auf-der-Mauer_auf-der-Lauer')
+    assert.deepStrictEqual(
+      folderTree.s[0].songID,
+      'Stille-Nacht')
+  })
 })
