@@ -211,123 +211,6 @@ let gitPull = function (basePath) {
   }
 }
 
-/**
- * Build a TeX file (songs.tex) of all piano scores.
- */
-class TeX {
-  /**
-   * @param {string} basePath The base path of the song collection.
-   */
-  constructor (basePath) {
-    this.basePath = basePath
-    this.outputFile = path.join(basePath, 'songs.tex')
-  }
-
-  /**
-   * Build a tree object which contains the number of piano files of
-   * each song. This tree is necessary to avoid page breaks on multipage
-   * piano scores.
-   *
-   * @param {object} tree The object of songs.json
-   * @return {object}
-   * &lt;code>&lt;pre>
-   * { a: { '3': { 'Auf-der-Mauer_auf-der-Lauer': [Object] } },
-   *   s:
-   *    { '1': { 'Stille-Nacht': [Object] },
-   *      '3': { 'Swing-low': [Object] } },
-   *   z: { '2': { 'Zum-Tanze-da-geht-ein-Maedel': [Object] } } }
-   * &lt;/pre>&lt;code>
-   *
-   * One song entry has following properties:
-   *
-   * &lt;code>&lt;pre>
-   * { title: 'Swing low',
-   *   folder: '/test/songs/processed/some/s/Swing-low',
-   *   slides: [ '01.svg', '02.svg', '03.svg' ],
-   *   pianoFiles: [ 'piano_1.eps', 'piano_2.eps', 'piano_3.eps' ] }
-   * &lt;/pre>&lt;code>
-   */
-  buildPianoFilesCountTree (tree) {
-    let output = {}
-    Object.keys(tree).forEach((abc, index) => {
-      Object.keys(tree[abc]).forEach((songFolder, index) => {
-        let absSongFolder = path.join(this.basePath, abc, songFolder, 'piano')
-        let pianoFiles = folderTree.getFolderFiles_(absSongFolder, '.eps')
-        let count = pianoFiles.length
-        if (!(abc in output)) output[abc] = {}
-        if (!(count in output[abc])) output[abc][count] = {}
-        output[abc][count][songFolder] = tree[abc][songFolder]
-        output[abc][count][songFolder].pianoFiles = pianoFiles
-      })
-    })
-    return output
-  }
-
-  /**
-   *
-   */
-  texCmd (command, value) {
-    return '\\tmp' + command + '{' + value + '}\n'
-  }
-
-  /**
-   * Generate TeX markup for one song.
-   *
-   * @param {string} basePath Base path of the song collection.
-   * @param {string} songFolder Path of a single song.
-   * @return {string} TeX markup for a single song.
-   * &lt;code>&lt;pre>
-   * \tmpheading{Swing low}
-   * \tmpimage{s/Swing-low/piano/piano_1.eps}
-   * \tmpimage{s/Swing-low/piano/piano_2.eps}
-   * \tmpimage{s/Swing-low/piano/piano_3.eps}
-   * &lt;/pre>&lt;code>
-   */
-  texSong (songPath) {
-    let basePath = path.resolve(this.basePath)
-    let resolvedSongPath = path.resolve(songPath)
-    let relativeSongPath = resolvedSongPath
-      .replace(basePath, '')
-      .replace(/^\//, '')
-    const info = folderTree.getSongInfo(resolvedSongPath)
-    const eps = folderTree.getFolderFiles_(path.join(resolvedSongPath, 'piano'), '.eps')
-    let output = ''
-
-    if (info.hasOwnProperty('title') &amp;&amp; eps.length > 0) {
-      output += '\n' + this.texCmd('heading', info.title)
-      eps.forEach(
-        (file) => {
-          output += this.texCmd('image', path.join(relativeSongPath, 'piano', file))
-        }
-      )
-    }
-    return output
-  }
-
-  /**
-   *
-   */
-  texABC (abc) {
-    return '\n\n' + this.texCmd('chapter', abc.toUpperCase())
-  }
-
-  /**
-   * Generate TeX file for the piano version of the songbook.
-   */
-  generateTeX () {
-    const tree = folderTree.getTree(this.basePath)
-    fs.removeSync(this.outputFile)
-
-    Object.keys(tree).forEach((abc, index) => {
-      fs.appendFileSync(this.outputFile, this.texABC(abc))
-
-      Object.keys(tree[abc]).forEach((folder, index) => {
-        fs.appendFileSync(this.outputFile, this.texSong(path.join(this.basePath, abc, folder)))
-      })
-    })
-  }
-}
-
 /***********************************************************************
  * index
  **********************************************************************/
@@ -464,7 +347,263 @@ let setOptions = function (argv) {
 }
 
 /***********************************************************************
- * One Song
+ * Utility classes
+ **********************************************************************/
+
+/**
+ * Sqlite database wrapper to store file contents hashes to detect
+ * file modifications.
+ */
+class Sqlite {
+  /**
+   * @param {string} dbFile - The path where to store the Sqlite database.
+   */
+  constructor (dbFile) {
+    this.dbFile = dbFile
+    this.db = new Sqlite3(this.dbFile)
+    this.db
+      .prepare(
+        'CREATE TABLE IF NOT EXISTS hashes (filename TEXT UNIQUE, hash TEXT)'
+      )
+      .run()
+
+    this.db
+      .prepare('CREATE INDEX IF NOT EXISTS filename ON hashes(filename)')
+      .run()
+  }
+
+  /**
+   * Insert a hash value of a file.
+   *
+   * @param {string} filename - Name or path of a file.
+   * @param {string} hash - The sha1 hash of the content of the file.
+   */
+  insert (filename, hash) {
+    this.db
+      .prepare('INSERT INTO hashes values ($filename, $hash)')
+      .run({ 'filename': filename, 'hash': hash })
+  }
+
+  /**
+   * Get the hast value of a file.
+   *
+   * @param {string} filename - Name or path of a file.
+   */
+  select (filename) {
+    return this.db
+      .prepare('SELECT * FROM hashes WHERE filename = $filename')
+      .get({ 'filename': filename })
+  }
+
+  /**
+   * Update the hash value of a file.
+   *
+   * @param {string} filename - Name or path of a file.
+   * @param {string} hash - The sha1 hash of the content of the file.
+   */
+  update (filename, hash) {
+    this.db
+      .prepare('UPDATE hashes SET hash = $hash WHERE filename = $filename')
+      .run({ 'filename': filename, 'hash': hash })
+  }
+
+  /**
+   * Delete all rows from the table “hashes”.
+   */
+  flush () {
+    this.db.prepare('DELETE FROM hashes').run()
+  }
+}
+
+/**
+ * Monitor files changes
+ */
+class FileMonitor {
+  /**
+   * @param {string} dbFile - The path where to store the Sqlite database.
+   */
+  constructor (dbFile) {
+    this.db = new Sqlite(dbFile)
+  }
+
+  /**
+   * Build the sha1 hash of a file.
+   *
+   * @param {string} filename - The path of the file.
+   */
+  hashSHA1 (filename) {
+    return crypto
+      .createHash('sha1')
+      .update(
+        fs.readFileSync(filename)
+      )
+      .digest('hex')
+  }
+
+  /**
+   * Check for file modifications
+   *
+   * @param {string} filename - Path to the file.
+   *
+   * @returns {boolean}
+   */
+  isModified (filename) {
+    filename = path.resolve(filename)
+    if (!fs.existsSync(filename)) {
+      return false
+    }
+
+    let hash = this.hashSHA1(filename)
+    let row = this.db.select(filename)
+    let hashStored = ''
+
+    if (row) {
+      hashStored = row.hash
+    } else {
+      this.db.insert(filename, hash)
+    }
+    if (hash !== hashStored) {
+      this.db.update(filename, hash)
+      return true
+    } else {
+      return false
+    }
+  }
+
+  /**
+   * Flush the file monitor database.
+   */
+  flush () {
+    this.db.flush()
+  }
+
+  /**
+   * Purge the file monitor database by deleting it.
+   */
+  purge () {
+    if (fs.existsSync(this.db.dbFile)) fs.unlinkSync(this.db.dbFile)
+  }
+}
+
+/**
+ * Build a TeX file (songs.tex) of all piano scores.
+ */
+class TeX {
+  /**
+   * @param {string} basePath The base path of the song collection.
+   */
+  constructor (basePath) {
+    this.basePath = basePath
+    this.outputFile = path.join(basePath, 'songs.tex')
+  }
+
+  /**
+   * Build a tree object which contains the number of piano files of
+   * each song. This tree is necessary to avoid page breaks on multipage
+   * piano scores.
+   *
+   * @param {object} tree The object of songs.json
+   * @return {object}
+   * &lt;code>&lt;pre>
+   * { a: { '3': { 'Auf-der-Mauer_auf-der-Lauer': [Object] } },
+   *   s:
+   *    { '1': { 'Stille-Nacht': [Object] },
+   *      '3': { 'Swing-low': [Object] } },
+   *   z: { '2': { 'Zum-Tanze-da-geht-ein-Maedel': [Object] } } }
+   * &lt;/pre>&lt;code>
+   *
+   * One song entry has following properties:
+   *
+   * &lt;code>&lt;pre>
+   * { title: 'Swing low',
+   *   folder: '/test/songs/processed/some/s/Swing-low',
+   *   slides: [ '01.svg', '02.svg', '03.svg' ],
+   *   pianoFiles: [ 'piano_1.eps', 'piano_2.eps', 'piano_3.eps' ] }
+   * &lt;/pre>&lt;code>
+   */
+  buildPianoFilesCountTree (tree) {
+    let output = {}
+    Object.keys(tree).forEach((abc, index) => {
+      Object.keys(tree[abc]).forEach((songFolder, index) => {
+        let absSongFolder = path.join(this.basePath, abc, songFolder, 'piano')
+        let pianoFiles = folderTree.getFolderFiles_(absSongFolder, '.eps')
+        let count = pianoFiles.length
+        if (!(abc in output)) output[abc] = {}
+        if (!(count in output[abc])) output[abc][count] = {}
+        output[abc][count][songFolder] = tree[abc][songFolder]
+        output[abc][count][songFolder].pianoFiles = pianoFiles
+      })
+    })
+    return output
+  }
+
+  /**
+   *
+   */
+  texCmd (command, value) {
+    return '\\tmp' + command + '{' + value + '}\n'
+  }
+
+  /**
+   * Generate TeX markup for one song.
+   *
+   * @param {string} basePath Base path of the song collection.
+   * @param {string} songFolder Path of a single song.
+   * @return {string} TeX markup for a single song.
+   * &lt;code>&lt;pre>
+   * \tmpheading{Swing low}
+   * \tmpimage{s/Swing-low/piano/piano_1.eps}
+   * \tmpimage{s/Swing-low/piano/piano_2.eps}
+   * \tmpimage{s/Swing-low/piano/piano_3.eps}
+   * &lt;/pre>&lt;code>
+   */
+  texSong (songPath) {
+    let basePath = path.resolve(this.basePath)
+    let resolvedSongPath = path.resolve(songPath)
+    let relativeSongPath = resolvedSongPath
+      .replace(basePath, '')
+      .replace(/^\//, '')
+    const info = folderTree.getSongInfo(resolvedSongPath)
+    const eps = folderTree.getFolderFiles_(path.join(resolvedSongPath, 'piano'), '.eps')
+    let output = ''
+
+    if (info.hasOwnProperty('title') &amp;&amp; eps.length > 0) {
+      output += '\n' + this.texCmd('heading', info.title)
+      eps.forEach(
+        (file) => {
+          output += this.texCmd('image', path.join(relativeSongPath, 'piano', file))
+        }
+      )
+    }
+    return output
+  }
+
+  /**
+   *
+   */
+  texABC (abc) {
+    return '\n\n' + this.texCmd('chapter', abc.toUpperCase())
+  }
+
+  /**
+   * Generate TeX file for the piano version of the songbook.
+   */
+  generateTeX () {
+    const tree = folderTree.getTree(this.basePath)
+    fs.removeSync(this.outputFile)
+
+    Object.keys(tree).forEach((abc, index) => {
+      fs.appendFileSync(this.outputFile, this.texABC(abc))
+
+      Object.keys(tree[abc]).forEach((folder, index) => {
+        fs.appendFileSync(this.outputFile, this.texSong(path.join(this.basePath, abc, folder)))
+      })
+    })
+  }
+}
+
+/***********************************************************************
+ * Song classes
  **********************************************************************/
 
 /**
@@ -1109,141 +1248,6 @@ class Library {
     for (let songID in this.songs) {
       this.songs[songID].files.generateIntermediateFiles(force)
     }
-  }
-}
-
-/**
- * Sqlite database wrapper to store file contents hashes to detect
- * file modifications.
- */
-class Sqlite {
-  /**
-   * @param {string} dbFile - The path where to store the Sqlite database.
-   */
-  constructor (dbFile) {
-    this.dbFile = dbFile
-    this.db = new Sqlite3(this.dbFile)
-    this.db
-      .prepare(
-        'CREATE TABLE IF NOT EXISTS hashes (filename TEXT UNIQUE, hash TEXT)'
-      )
-      .run()
-
-    this.db
-      .prepare('CREATE INDEX IF NOT EXISTS filename ON hashes(filename)')
-      .run()
-  }
-
-  /**
-   * Insert a hash value of a file.
-   *
-   * @param {string} filename - Name or path of a file.
-   * @param {string} hash - The sha1 hash of the content of the file.
-   */
-  insert (filename, hash) {
-    this.db
-      .prepare('INSERT INTO hashes values ($filename, $hash)')
-      .run({ 'filename': filename, 'hash': hash })
-  }
-
-  /**
-   * Get the hast value of a file.
-   *
-   * @param {string} filename - Name or path of a file.
-   */
-  select (filename) {
-    return this.db
-      .prepare('SELECT * FROM hashes WHERE filename = $filename')
-      .get({ 'filename': filename })
-  }
-
-  /**
-   * Update the hash value of a file.
-   *
-   * @param {string} filename - Name or path of a file.
-   * @param {string} hash - The sha1 hash of the content of the file.
-   */
-  update (filename, hash) {
-    this.db
-      .prepare('UPDATE hashes SET hash = $hash WHERE filename = $filename')
-      .run({ 'filename': filename, 'hash': hash })
-  }
-
-  /**
-   * Delete all rows from the table “hashes”.
-   */
-  flush () {
-    this.db.prepare('DELETE FROM hashes').run()
-  }
-}
-
-/**
- * Monitor files changes
- */
-class FileMonitor {
-  /**
-   * @param {string} dbFile - The path where to store the Sqlite database.
-   */
-  constructor (dbFile) {
-    this.db = new Sqlite(dbFile)
-  }
-
-  /**
-   * Build the sha1 hash of a file.
-   *
-   * @param {string} filename - The path of the file.
-   */
-  hashSHA1 (filename) {
-    return crypto
-      .createHash('sha1')
-      .update(
-        fs.readFileSync(filename)
-      )
-      .digest('hex')
-  }
-
-  /**
-   * Check for file modifications
-   *
-   * @param {string} filename - Path to the file.
-   *
-   * @returns {boolean}
-   */
-  isModified (filename) {
-    filename = path.resolve(filename)
-    if (!fs.existsSync(filename)) {
-      return false
-    }
-
-    let hash = this.hashSHA1(filename)
-    let row = this.db.select(filename)
-    let hashStored = ''
-
-    if (row) {
-      hashStored = row.hash
-    } else {
-      this.db.insert(filename, hash)
-    }
-    if (hash !== hashStored) {
-      this.db.update(filename, hash)
-      return true
-    } else {
-      return false
-    }
-  }
-
-  /**
-   * Flush the file monitor database.
-   */
-  flush () {
-    this.db.flush()
-  }
-
-  /**
-   * Purge the file monitor database by deleting it.
-   */
-  purge () {
-    if (fs.existsSync(this.db.dbFile)) fs.unlinkSync(this.db.dbFile)
   }
 }
 
