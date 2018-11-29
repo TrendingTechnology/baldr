@@ -895,7 +895,26 @@ class Library {
   }
 
   /**
+   * @return {Array}
+   */
+  getABCFolders_ () {
+    let abc = '0abcdefghijklmnopqrstuvwxyz'.split('')
+    return abc.filter((file) => {
+      let folder = path.join(this.basePath, file)
+      if (fs.existsSync(folder) &amp;&amp; fs.statSync(folder).isDirectory()) {
+        return true
+      } else {
+        return false
+      }
+    })
+  }
+
+  /**
+   * Get the song object from the song ID.
    *
+   * @param {string} songID - The ID of the song. (The parent song folder)
+   *
+   * @return {module:baldr-songbook-updater~Song}
    */
   getSongById (songID) {
     if (songID in this.songs &amp;&amp; this.songs[songID]) {
