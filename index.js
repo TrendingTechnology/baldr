@@ -741,12 +741,7 @@ class Song {
      * The directory containing the song files.
      * @type {string}
      */
-    this.folder = null
-    if (fs.lstatSync(songPath).isDirectory()) {
-      this.folder = songPath
-    } else {
-      this.folder = path.dirname(songPath)
-    }
+    this.folder = this.normalizeSongFolder_(songPath)
 
     /**
      * The songID is the name of the directory which contains all song files
@@ -771,6 +766,20 @@ class Song {
      * @type {module:baldr-songbook-updater~SongFiles}
      */
     this.files = new SongFiles(this.folder)
+  }
+
+  /**
+   * @param {string} songPath - The path of the directory containing the song files
+   * or a path of a file inside the song folder (not nested in subfolders)
+   *
+   * @return {string} The path of the parent directory of the song.
+   */
+  normalizeSongFolder_ (songPath) {
+    if (fs.lstatSync(songPath).isDirectory()) {
+      return songPath
+    } else {
+      return path.dirname(songPath)
+    }
   }
 }
 
@@ -867,6 +876,8 @@ class Library {
   }
 
   /**
+   * Return only the existing ABC folders.
+   *
    * @return {Array}
    */
   getABCFolders_ () {

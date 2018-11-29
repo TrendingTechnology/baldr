@@ -782,6 +782,14 @@ describe('Class “Song()”', function () {
     let SongFiles = indexRewired.__get__('SongFiles')
     assert.ok(song.files instanceof SongFiles)
   })
+
+  it('Method “normalizeSongFolder_(): folder”', function () {
+    assert.strictEqual(song.normalizeSongFolder_(folder), folder)
+  })
+
+  it('Method “normalizeSongFolder_(): file', function () {
+    assert.strictEqual(song.normalizeSongFolder_(path.join(folder, 'info.yml')), folder)
+  })
 })
 
 describe('Class “Library()”', () => {
