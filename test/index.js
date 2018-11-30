@@ -263,50 +263,6 @@ describe('File “index.js”', () => {
       process.env.PATH = savePATH
     })
   })
-
-  describe('Exported functions', () => {
-    it('Function “update()”', () => {
-      let stub = sinon.stub()
-      indexRewired.__set__('message.songFolder', stub)
-
-      let songs = path.join('test', 'songs', 'clean', 'some')
-      const auf = path.join(songs, 'a', 'Auf-der-Mauer_auf-der-Lauer')
-      const swing = path.join(songs, 's', 'Swing-low')
-      const zum = path.join(songs, 'z', 'Zum-Tanze-da-geht-ein-Maedel')
-      const folders = [auf, swing, zum]
-
-      let update = indexRewired.__get__('update')
-      let Library = indexRewired.__get__('Library')
-      let library = new Library(songs)
-
-      let FileMonitor = indexRewired.__get__('FileMonitor')
-      update(songs, new FileMonitor(mkTmpFile()))
-
-      for (let i = 0; i < folders.length; ++i) {
-        assertExists(folders[i], 'slides')
-        assertExists(folders[i], 'slides', '01.svg')
-        assertExists(folders[i], 'piano')
-        assertExists(folders[i], 'piano', 'piano.mscx')
-      }
-
-      assertExists(auf, 'piano', 'piano_1.eps')
-      assertExists(swing, 'piano', 'piano_1.eps')
-      assertExists(zum, 'piano', 'piano_1.eps')
-      assertExists(zum, 'piano', 'piano_2.eps')
-
-      let info = JSON.parse(
-        fs.readFileSync(
-          path.join(songs, 'songs.json'), 'utf8'
-        )
-      )
-      assert.strictEqual(
-        info.a['Auf-der-Mauer_auf-der-Lauer'].title,
-        'Auf der Mauer, auf der Lauer'
-      )
-
-      library.cleanIntermediateFiles()
-    })
-  })
 })
 
 it('Conforms to standard', standard.files([
@@ -831,11 +787,6 @@ describe('Function “checkExecutables()”', () => {
   })
 })
 
-describe('Function “gitPull()”', () => {
-  let gitPull = indexRewired.__get__('gitPull')
-  assert.ok(!gitPull('songs'))
-})
-
 describe('Class “SongMetaData”', () => {
   let SongMetaDataCombined = indexRewired.__get__('SongMetaDataCombined')
 
@@ -953,6 +904,10 @@ describe('Class “Library()”', () => {
     assert.strictEqual(library.detectSongs_().length, 4)
   })
 
+  it('Method “gitPull()”', () => {
+    assert.ok(!library.gitPull())
+  })
+
   it('Property “songs”', () => {
     assert.strictEqual(library.songs['Auf-der-Mauer_auf-der-Lauer'].songID, 'Auf-der-Mauer_auf-der-Lauer')
   })
@@ -1006,6 +961,8 @@ describe('Class “Library()”', () => {
 
   it('Method “generateIntermediateFiles(force = false)”', () => {
     let spy = sinon.spy()
+    let stub = sinon.stub()
+    indexRewired.__set__('message.songFolder', stub)
     let library = new Library(folder)
     for (let songID in library.songs) {
       library.songs[songID].files.generateIntermediateFiles = spy
@@ -1013,16 +970,59 @@ describe('Class “Library()”', () => {
     library.generateIntermediateFiles(false)
     assert.strictEqual(spy.callCount, 4)
     assert.ok(spy.calledWith(false))
+    stub()
   })
 
   it('Method “generateIntermediateFiles(force = true)”', () => {
     let spy = sinon.spy()
+    let stub = sinon.stub()
+    indexRewired.__set__('message.songFolder', stub)
     let library = new Library(folder)
     for (let songID in library.songs) {
       library.songs[songID].files.generateIntermediateFiles = spy
     }
     library.generateIntermediateFiles(true)
     assert.ok(spy.calledWith(true))
+    stub()
+  })
+
+  it('Method “update()”', () => {
+    let stub = sinon.stub()
+    indexRewired.__set__('message.songFolder', stub)
+
+    let songs = path.join('test', 'songs', 'clean', 'some')
+    const auf = path.join(songs, 'a', 'Auf-der-Mauer_auf-der-Lauer')
+    const swing = path.join(songs, 's', 'Swing-low')
+    const zum = path.join(songs, 'z', 'Zum-Tanze-da-geht-ein-Maedel')
+    const folders = [auf, swing, zum]
+
+    let library = new Library(songs)
+    library.fileMonitor.flush()
+    library.update()
+
+    for (let i = 0; i < folders.length; ++i) {
+      assertExists(folders[i], 'slides')
+      assertExists(folders[i], 'slides', '01.svg')
+      assertExists(folders[i], 'piano')
+      assertExists(folders[i], 'piano', 'piano.mscx')
+    }
+
+    assertExists(auf, 'piano', 'piano_1.eps')
+    assertExists(swing, 'piano', 'piano_1.eps')
+    assertExists(zum, 'piano', 'piano_1.eps')
+    assertExists(zum, 'piano', 'piano_2.eps')
+
+    let info = JSON.parse(
+      fs.readFileSync(
+        path.join(songs, 'songs.json'), 'utf8'
+      )
+    )
+    assert.strictEqual(
+      info.a['Auf-der-Mauer_auf-der-Lauer'].title,
+      'Auf der Mauer, auf der Lauer'
+    )
+
+    library.cleanIntermediateFiles()
   })
 })
 
