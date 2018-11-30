@@ -1217,8 +1217,8 @@ class Library {
 
   /**
    * Delete multiple files.
-   * 
-   * @param {array} files - An array of files to delete. 
+   *
+   * @param {array} files - An array of files to delete.
    */
   deleteFiles_ (files) {
     files.forEach(

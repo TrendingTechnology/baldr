@@ -276,6 +276,9 @@ describe('File “index.js”', () => {
       const folders = [auf, swing, zum]
 
       let update = indexRewired.__get__('update')
+      let Library = indexRewired.__get__('Library')
+      let library = new Library(songs)
+
       let FileMonitor = indexRewired.__get__('FileMonitor')
       update(songs, new FileMonitor(mkTmpFile()))
 
@@ -301,14 +304,7 @@ describe('File “index.js”', () => {
         'Auf der Mauer, auf der Lauer'
       )
 
-      let clean = indexRewired.__get__('clean')
-      clean()
-    })
-
-    it('Function “clean()”', () => {
-      let clean = indexRewired.__get__('clean')
-      clean()
-      assert.ok(!fs.existsSync(path.join('songs', 'songs.tex')))
+      library.cleanIntermediateFiles()
     })
   })
 })
@@ -998,6 +994,14 @@ describe('Class “Library()”', () => {
     assert.deepStrictEqual(
       folderTree.s[0].songID,
       'Stille-Nacht')
+  })
+
+  it('Method “cleanIntermediateFiles()”', () => {
+    let tmpDir = mkTmpDir()
+    fs.copySync(folder, tmpDir)
+    let library = new Library(tmpDir)
+    library.cleanIntermediateFiles()
+    assert.ok(!fs.existsSync(path.join(library.basePath, 'songs.tex')))
   })
 
   it('Method “generateIntermediateFiles(force = false)”', () => {
