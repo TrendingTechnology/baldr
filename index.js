@@ -261,42 +261,6 @@ let update = function (basePath, fileMonitor) {
   tex.generateTeX()
 }
 
-/**
- *
- */
-let cleanFiles = function (folder, files) {
-  files.forEach(
-    (file) => {
-      fs.removeSync(path.join(folder, file))
-    }
-  )
-}
-
-/**
- * Clean all temporary files in a song folder.
- * @param {string} folder - A song folder.
- */
-let cleanFolder = function (folder) {
-  cleanFiles(folder, [
-    'piano',
-    'slides',
-    'projector.pdf'
-  ])
-}
-
-/**
- * Clean all temporary media files.
- */
-let clean = function () {
-  folderTree.flat(config.path).forEach(cleanFolder)
-
-  cleanFiles(config.path, [
-    'songs.json',
-    'songs.tex',
-    'filehashes.db'
-  ])
-}
-
 let generateJSON = function (basePath) {
   json.generateJSON(basePath)
 }
@@ -1252,6 +1216,33 @@ class Library {
   }
 
   /**
+   * Delete multiple files.
+   * 
+   * @param {array} files - An array of files to delete. 
+   */
+  deleteFiles_ (files) {
+    files.forEach(
+      (file) => {
+        fs.removeSync(path.join(this.basePath, file))
+      }
+    )
+  }
+
+  /**
+   * Clean all intermediate media files.
+   */
+  cleanIntermediateFiles () {
+    for (let songID in this.songs) {
+      this.songs[songID].files.cleanIntermediateFiles()
+    }
+    this.deleteFiles_([
+      'songs.json',
+      'songs.tex',
+      'filehashes.db'
+    ])
+  }
+
+  /**
    * Calls the method generateIntermediateFiles on each song
    *
    * @param {boolean} force - Force the regeneration of intermediate files.
@@ -1282,9 +1273,10 @@ let main = function () {
   }
 
   let fileMonitor = new FileMonitor(path.join(config.path, 'filehashes.db'))
+  let library = new Library(config.path)
 
   if (options.clean) {
-    clean()
+    library.cleanIntermediateFiles()
   } else if (options.folder) {
     updateSongFolder(options.folder, fileMonitor)
   } else if (options.json) {
