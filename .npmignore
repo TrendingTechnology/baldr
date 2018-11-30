@@ -1,8 +1,6 @@
-.jshintignore
-.jshintrc
 .npmignore
 .travis.yml
+.vscode
 dist/
 docs/
 test/
-TODO.md
