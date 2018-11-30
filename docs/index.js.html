@@ -192,25 +192,6 @@ let checkExecutables = function (executables = []) {
   return { 'status': status, 'unavailable': unavailable }
 }
 
-/**
- * Execute git pull if repository exists.
- *
- * To get changed files:
- * git diff-tree --no-commit-id --name-only -r &lt;commit-ish>
- * git diff-tree --no-commit-id --name-only -r babeae91638b55978b99ee5eb49ac2bf361df51e c11e2736edf1c6f6be47eeaa58fa172beedd6e0c
- * git diff-tree --no-commit-id --name-only -r ba03fc103f962f8274b50aade61c99214d26e918 c11e2736edf1c6f6be47eeaa58fa172beedd6e0c
- *
- * Get current commit id:
- * git rev-parse HEAD
- */
-let gitPull = function (basePath) {
-  if (fs.existsSync(path.join(basePath, '.git'))) {
-    return spawn('git', ['pull'], { cwd: basePath })
-  } else {
-    return false
-  }
-}
-
 /***********************************************************************
  * index
  **********************************************************************/
@@ -269,33 +250,6 @@ let bootstrapConfig = function (newConfig = false) {
   if (!config.path || config.path.length === 0) {
     message.noConfigPath()
   }
-}
-
-let updateSongFolder = function (folder, fileMonitor) {
-  let status = new SongFiles(folder, fileMonitor).generateIntermediateFiles()
-  message.songFolder(status)
-}
-
-/**
- * Update and generate when required media files for the songs.
- */
-let update = function (basePath, fileMonitor) {
-  gitPull(basePath)
-  folderTree.flat(basePath).forEach((songFolder) => {
-    updateSongFolder(songFolder, fileMonitor)
-  })
-  json.generateJSON(basePath)
-  let tex = new TeX(basePath)
-  tex.generateTeX()
-}
-
-let generateJSON = function (basePath) {
-  json.generateJSON(basePath)
-}
-
-let generateTeX = function (basePath) {
-  let tex = new TeX(basePath)
-  tex.generateTeX()
 }
 
 let setOptions = function (argv) {
@@ -1014,13 +968,20 @@ class Song {
   /**
    * @param {string} songPath - The path of the directory containing the song files
    * or a path of a file inside the song folder (not nested in subfolders )
+   * @param {module:baldr-songbook-updater~FileMonitor} fileMonitor - A instance of the FileMonitor() class.
    */
-  constructor (songPath) {
+  constructor (songPath, fileMonitor) {
     /**
      * The directory containing the song files.
      * @type {string}
      */
     this.folder = this.normalizeSongFolder_(songPath)
+
+    /**
+     * A instance of the FileMonitor class.
+     * @type {module:baldr-songbook-updater~FileMonitor}
+     */
+    this.fileMonitor = fileMonitor
 
     /**
      * The character of the alphabetical folder. The song folders must
@@ -1051,7 +1012,7 @@ class Song {
      * An instance of SongFiles.
      * @type {module:baldr-songbook-updater~SongFiles}
      */
-    this.files = new SongFiles(this.folder)
+    this.files = new SongFiles(this.folder, this.fileMonitor)
   }
 
   /**
@@ -1099,12 +1060,18 @@ class Library {
     this.basePath = basePath
 
     /**
+     * A instance of the FileMonitor class.
+     * @type {module:baldr-songbook-updater~FileMonitor}
+     */
+    this.fileMonitor = new FileMonitor(path.join(this.basePath, 'filehashes.db'))
+
+    /**
      * The collection of songs
      * @type {object}
      */
     this.songs = {}
     for (let songPath of this.detectSongs_()) {
-      let song = new Song(path.join(this.basePath, songPath))
+      let song = new Song(path.join(this.basePath, songPath), this.fileMonitor)
       if (song.songID in this.songs) {
         throw new Error(util.format('A song with the same songID already exists: %s', song.songID))
       }
@@ -1117,6 +1084,25 @@ class Library {
    */
   detectSongs_ () {
     return glob.sync('info.yml', { cwd: this.basePath, matchBase: true })
+  }
+
+  /**
+   * Execute git pull if repository exists.
+   *
+   * To get changed files:
+   * git diff-tree --no-commit-id --name-only -r &lt;commit-ish>
+   * git diff-tree --no-commit-id --name-only -r babeae91638b55978b99ee5eb49ac2bf361df51e c11e2736edf1c6f6be47eeaa58fa172beedd6e0c
+   * git diff-tree --no-commit-id --name-only -r ba03fc103f962f8274b50aade61c99214d26e918 c11e2736edf1c6f6be47eeaa58fa172beedd6e0c
+   *
+   * Get current commit id:
+   * git rev-parse HEAD
+   */
+  gitPull () {
+    if (fs.existsSync(path.join(this.basePath, '.git'))) {
+      return spawn('git', ['pull'], { cwd: this.basePath })
+    } else {
+      return false
+    }
   }
 
   /**
@@ -1277,8 +1263,33 @@ class Library {
    */
   generateIntermediateFiles (force = false) {
     for (let songID in this.songs) {
-      this.songs[songID].files.generateIntermediateFiles(force)
+      let status = this.songs[songID].files.generateIntermediateFiles(force)
+      message.songFolder(status)
     }
+  }
+
+  updateSongFolder (folder) {
+    let status = new SongFiles(folder, this.fileMonitor).generateIntermediateFiles()
+    message.songFolder(status)
+  }
+
+  generateJSON () {
+    json.generateJSON(this.basePath)
+  }
+
+  generateTeX () {
+    let tex = new TeX(this.basePath)
+    tex.generateTeX()
+  }
+
+  /**
+   * Update the whole song library.
+   */
+  update () {
+    this.gitPull()
+    this.generateIntermediateFiles()
+    this.generateJSON()
+    this.generateTeX()
   }
 }
 
@@ -1300,19 +1311,18 @@ let main = function () {
     config.path = options.path
   }
 
-  let fileMonitor = new FileMonitor(path.join(config.path, 'filehashes.db'))
   let library = new Library(config.path)
 
   if (options.clean) {
     library.cleanIntermediateFiles()
   } else if (options.folder) {
-    updateSongFolder(options.folder, fileMonitor)
+    library.updateSongFolder(options.folder)
   } else if (options.json) {
-    generateJSON(config.path)
+    library.generateJSON()
   } else if (options.tex) {
-    generateTeX(config.path)
+    library.generateTeX()
   } else {
-    update(config.path, fileMonitor)
+    library.update()
   }
 }
 
