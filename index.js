@@ -1301,9 +1301,3 @@ let main = function () {
 if (require.main === module) {
   main()
 }
-
-exports.Song = Song
-exports.SongMetaData = SongMetaData
-exports.SongMetaDataCombined = SongMetaDataCombined
-exports.Library = Library
-exports.Folder = Folder
