@@ -21,118 +21,16 @@ const util = require('util')
 const yaml = require('js-yaml')
 require('colors')
 
-const json = require('./json.js')
-const folderTree = require('./tree.js')
+/***********************************************************************
+ * Functions
+ **********************************************************************/
 
-class Message {
-  constructor () {
-    this.error = '☒'.red
-    this.finished = '☑'.green
-    this.progress = '☐'.yellow
-  }
-
-  /**
-   * Print out and return text.
-   * @param {string} text - Text to display.
-   */
-  print (text) {
-    console.log(text)
-    return text
-  }
-
-  /**
-   *
-   */
-  noConfigPath () {
-    let output = this.error + '  Configuration file ' +
-      '“~/.baldr.json” not found!\n' +
-      'Create such a config file or use the “--path” option!'
-
-    const sampleConfig = fs.readFileSync(
-      path.join(__dirname, 'sample.config.json'), 'utf8'
-    )
-    output += '\n\nExample configuration file:\n' + sampleConfig
-
-    this.print(output)
-    throw new Error('No configuration file found.')
-  }
-
-  /**
-   *
-   * @param {object} status
-   * <pre><code>
-   * {
-   *   "changed": {
-   *     "piano": false,
-   *     "slides": false
-   *   },
-   *   "folder": "songs/a/Auf-der-Mauer_auf-der-Lauer",
-   *   "folderName": "Auf-der-Mauer_auf-der-Lauer",
-   *   "force": true,
-   *   "generated": {
-   *     "piano": [
-   *       "piano_1.eps",
-   *       "piano_2.eps"
-   *     ],
-   *     "projector": "projector.pdf",
-   *     "slides": [
-   *       "01.svg",
-   *       "02.svg"
-   *     ],
-   *   },
-   *   "info": {
-   *     "title": "Auf der Mauer, auf der Lauer"
-   *   }
-   * }
-   * </code></pre>
-   */
-  songFolder (status) {
-    let forced
-    if (status.force) {
-      forced = ' ' + '(forced)'.red
-    } else {
-      forced = ''
-    }
-
-    let symbol
-    if (!status.info.title) {
-      symbol = this.error
-    } else if (!status.changed.slides && !status.changed.piano) {
-      symbol = this.finished
-    } else {
-      symbol = this.progress
-    }
-
-    let title
-    if (!status.info.title) {
-      title = status.folderName.red
-    } else if (!status.changed.slides && !status.changed.piano) {
-      title = status.folderName.green + ': ' + status.info.title
-    } else {
-      title = status.folderName.yellow + ': ' + status.info.title
-    }
-
-    let output = symbol + '  ' + title + forced
-    if (status.generated.slides) {
-      output +=
-        '\n\t' +
-        'slides'.yellow +
-        ': ' +
-        status.generated.slides.join(', ')
-    }
-
-    if (status.generated.piano) {
-      output +=
-        '\n\t' +
-        'piano'.yellow +
-        ': ' +
-        status.generated.piano.join(', ')
-    }
-    this.print(output)
-  }
+/**
+ *
+ */
+function texCmd (command, value) {
+  return '\\tmp' + command + '{' + value + '}\n'
 }
-
-let message = new Message()
 
 /**
  * Check if executable is installed.
@@ -230,7 +128,6 @@ let setOptions = function (argv) {
     .option('-c, --clean', 'clean up (delete all generated files)')
     .option('-F, --folder <folder>', 'process only the given song folder')
     .option('-f, --force', 'rebuild all images')
-    .option('-j, --json', 'generate JSON file')
     .option('-p --path <path>', 'Base path to a song collection.')
     .option('-t, --tex', 'generate TeX file')
     .parse(argv)
@@ -239,6 +136,116 @@ let setOptions = function (argv) {
 /***********************************************************************
  * Utility classes
  **********************************************************************/
+
+class Message {
+  constructor () {
+    this.error = '☒'.red
+    this.finished = '☑'.green
+    this.progress = '☐'.yellow
+  }
+
+  /**
+   * Print out and return text.
+   * @param {string} text - Text to display.
+   */
+  print (text) {
+    console.log(text)
+    return text
+  }
+
+  /**
+   *
+   */
+  noConfigPath () {
+    let output = this.error + '  Configuration file ' +
+      '“~/.baldr.json” not found!\n' +
+      'Create such a config file or use the “--path” option!'
+
+    const sampleConfig = fs.readFileSync(
+      path.join(__dirname, 'sample.config.json'), 'utf8'
+    )
+    output += '\n\nExample configuration file:\n' + sampleConfig
+
+    this.print(output)
+    throw new Error('No configuration file found.')
+  }
+
+  /**
+   *
+   * @param {object} status
+   * <pre><code>
+   * {
+   *   "changed": {
+   *     "piano": false,
+   *     "slides": false
+   *   },
+   *   "folder": "songs/a/Auf-der-Mauer_auf-der-Lauer",
+   *   "folderName": "Auf-der-Mauer_auf-der-Lauer",
+   *   "force": true,
+   *   "generated": {
+   *     "piano": [
+   *       "piano_1.eps",
+   *       "piano_2.eps"
+   *     ],
+   *     "projector": "projector.pdf",
+   *     "slides": [
+   *       "01.svg",
+   *       "02.svg"
+   *     ],
+   *   },
+   *   "info": {
+   *     "title": "Auf der Mauer, auf der Lauer"
+   *   }
+   * }
+   * </code></pre>
+   */
+  songFolder (status, song) {
+    let forced
+    if (status.force) {
+      forced = ' ' + '(forced)'.red
+    } else {
+      forced = ''
+    }
+
+    let symbol
+    if (!song.metaData.title) {
+      symbol = this.error
+    } else if (!status.changed.slides && !status.changed.piano) {
+      symbol = this.finished
+    } else {
+      symbol = this.progress
+    }
+
+    let title
+    if (!song.metaData.title) {
+      title = status.folderName.red
+    } else if (!status.changed.slides && !status.changed.piano) {
+      title = status.folderName.green + ': ' + song.metaData.title
+    } else {
+      title = status.folderName.yellow + ': ' + song.metaData.title
+    }
+
+    let output = symbol + '  ' + title + forced
+    if (status.generated.slides) {
+      output +=
+        '\n\t' +
+        'slides'.yellow +
+        ': ' +
+        status.generated.slides.join(', ')
+    }
+
+    if (status.generated.piano) {
+      output +=
+        '\n\t' +
+        'piano'.yellow +
+        ': ' +
+        status.generated.piano.join(', ')
+    }
+    this.print(output)
+  }
+}
+
+let message = new Message()
 
 /**
  *
@@ -412,117 +419,29 @@ class FileMonitor {
 /**
  * Build a TeX file (songs.tex) of all piano scores.
  */
-class TeX {
+class TeXFile {
   /**
-   * @param {string} basePath The base path of the song collection.
+   * @param {string} path The path of the TeXFile.
    */
-  constructor (basePath) {
-    this.basePath = basePath
-    this.outputFile = path.join(basePath, 'songs.tex')
+  constructor (path) {
+    this.path = path
+    this.flush()
   }
 
-  /**
-   * Build a tree object which contains the number of piano files of
-   * each song. This tree is necessary to avoid page breaks on multipage
-   * piano scores.
-   *
-   * @param {object} tree The object of songs.json
-   * @return {object}
-   * <code><pre>
-   * { a: { '3': { 'Auf-der-Mauer_auf-der-Lauer': [Object] } },
-   *   s:
-   *    { '1': { 'Stille-Nacht': [Object] },
-   *      '3': { 'Swing-low': [Object] } },
-   *   z: { '2': { 'Zum-Tanze-da-geht-ein-Maedel': [Object] } } }
-   * </pre><code>
-   *
-   * One song entry has following properties:
-   *
-   * <code><pre>
-   * { title: 'Swing low',
-   *   folder: '/test/songs/processed/some/s/Swing-low',
-   *   slides: [ '01.svg', '02.svg', '03.svg' ],
-   *   pianoFiles: [ 'piano_1.eps', 'piano_2.eps', 'piano_3.eps' ] }
-   * </pre><code>
-   */
-  buildPianoFilesCountTree (tree) {
-    let output = {}
-    Object.keys(tree).forEach((abc, index) => {
-      Object.keys(tree[abc]).forEach((songFolder, index) => {
-        let absSongFolder = path.join(this.basePath, abc, songFolder, 'piano')
-        let pianoFiles = folderTree.getFolderFiles_(absSongFolder, '.eps')
-        let count = pianoFiles.length
-        if (!(abc in output)) output[abc] = {}
-        if (!(count in output[abc])) output[abc][count] = {}
-        output[abc][count][songFolder] = tree[abc][songFolder]
-        output[abc][count][songFolder].pianoFiles = pianoFiles
-      })
-    })
-    return output
+  append (content) {
+    fs.appendFileSync(this.path, content)
   }
 
-  /**
-   *
-   */
-  texCmd (command, value) {
-    return '\\tmp' + command + '{' + value + '}\n'
+  remove () {
+    fs.unlinkSync(this.path)
   }
 
-  /**
-   * Generate TeX markup for one song.
-   *
-   * @param {string} basePath Base path of the song collection.
-   * @param {string} songFolder Path of a single song.
-   * @return {string} TeX markup for a single song.
-   * <code><pre>
-   * \tmpheading{Swing low}
-   * \tmpimage{s/Swing-low/piano/piano_1.eps}
-   * \tmpimage{s/Swing-low/piano/piano_2.eps}
-   * \tmpimage{s/Swing-low/piano/piano_3.eps}
-   * </pre><code>
-   */
-  texSong (songPath) {
-    let basePath = path.resolve(this.basePath)
-    let resolvedSongPath = path.resolve(songPath)
-    let relativeSongPath = resolvedSongPath
-      .replace(basePath, '')
-      .replace(/^\//, '')
-    const info = folderTree.getSongInfo(resolvedSongPath)
-    const eps = folderTree.getFolderFiles_(path.join(resolvedSongPath, 'piano'), '.eps')
-    let output = ''
-
-    if (info.hasOwnProperty('title') && eps.length > 0) {
-      output += '\n' + this.texCmd('heading', info.title)
-      eps.forEach(
-        (file) => {
-          output += this.texCmd('image', path.join(relativeSongPath, 'piano', file))
-        }
-      )
-    }
-    return output
+  flush () {
+    fs.writeFileSync(this.path, '')
   }
 
-  /**
-   *
-   */
-  texABC (abc) {
-    return '\n\n' + this.texCmd('chapter', abc.toUpperCase())
-  }
-
-  /**
-   * Generate TeX file for the piano version of the songbook.
-   */
-  generateTeX () {
-    const tree = folderTree.getTree(this.basePath)
-    fs.removeSync(this.outputFile)
-
-    Object.keys(tree).forEach((abc, index) => {
-      fs.appendFileSync(this.outputFile, this.texABC(abc))
-
-      Object.keys(tree[abc]).forEach((folder, index) => {
-        fs.appendFileSync(this.outputFile, this.texSong(path.join(this.basePath, abc, folder)))
-      })
-    })
+  read () {
+    return fs.readFileSync(this.path, { encoding: 'utf8' })
   }
 }
 
@@ -671,7 +590,6 @@ class SongFiles {
 
     status.folder = this.folder
     status.folderName = path.basename(this.folder)
-    status.info = folderTree.getSongInfo(this.folder)
 
     status.force = force
     status.changed.slides = this.fileMonitor.isModified(
@@ -963,7 +881,9 @@ class Song {
     this.abc = this.recognizeABCFolder_(this.folder)
 
     /**
-     * The songID is the name of the directory which contains all song files
+     * The songID is the name of the directory which contains all song
+     * files. It is used to sort the songs. It must be unique along all
+     * songs.
      * @type {string}
      */
     this.songID = path.basename(this.folder)
@@ -1010,6 +930,31 @@ class Song {
     let pathSegments = folder.split(path.sep)
     let abc = pathSegments[pathSegments.length - 2]
     return abc
+  }
+
+  /**
+   * Generate TeX markup for one song.
+   *
+   * @return {string} TeX markup for a single song.
+   * <code><pre>
+   * \tmpheading{Swing low}
+   * \tmpimage{s/Swing-low/piano/piano_1.eps}
+   * \tmpimage{s/Swing-low/piano/piano_2.eps}
+   * \tmpimage{s/Swing-low/piano/piano_3.eps}
+   * </pre><code>
+   */
+  formatPianoTex () {
+    let relativeSongPath = path.join(this.abc, this.songID)
+    const eps = this.files.getFolderFiles_('piano', '.eps')
+    let output = ''
+
+    output += '\n' + texCmd('heading', this.metaDataCombined.title)
+    eps.forEach(
+      (file) => {
+        output += texCmd('image', path.join(relativeSongPath, 'piano', file))
+      }
+    )
+    return output
   }
 }
 
@@ -1169,7 +1114,6 @@ class Library {
       this.songs[songID].files.cleanIntermediateFiles()
     }
     this.deleteFiles_([
-      'songs.json',
       'songs.tex',
       'filehashes.db'
     ])
@@ -1182,23 +1126,71 @@ class Library {
    */
   generateIntermediateFiles (force = false) {
     for (let songID in this.songs) {
-      let status = this.songs[songID].files.generateIntermediateFiles(force)
-      message.songFolder(status)
+      let song = this.songs[songID]
+      let status = song.files.generateIntermediateFiles(force)
+      message.songFolder(status, song)
     }
   }
 
   updateSongFolder (folder) {
-    let status = new SongFiles(folder, this.fileMonitor).generateIntermediateFiles()
-    message.songFolder(status)
+    let song = new Song(folder, this.fileMonitor)
+    let status = song.files.generateIntermediateFiles()
+    message.songFolder(status, song)
   }
 
-  generateJSON () {
-    json.generateJSON(this.basePath)
+  /**
+   * Build a tree object which contains the number of piano files of
+   * each song. This tree is necessary to avoid page breaks on multipage
+   * piano scores.
+   *
+   * @return {object}
+   * <code><pre>
+   * { a: { '3': { 'Auf-der-Mauer_auf-der-Lauer': [Object] } },
+   *   s:
+   *    { '1': { 'Stille-Nacht': [Object] },
+   *      '3': { 'Swing-low': [Object] } },
+   *   z: { '2': { 'Zum-Tanze-da-geht-ein-Maedel': [Object] } } }
+   * </pre><code>
+   *
+   * One song entry has following properties:
+   *
+   * <code><pre>
+   * { title: 'Swing low',
+   *   folder: '/test/songs/processed/some/s/Swing-low',
+   *   slides: [ '01.svg', '02.svg', '03.svg' ],
+   *   pianoFiles: [ 'piano_1.eps', 'piano_2.eps', 'piano_3.eps' ] }
+   * </pre><code>
+   */
+  buildPianoFilesCountTree () {
+    let output = {}
+    let tree = this.buildAlphabeticalSongTree()
+    Object.keys(tree).forEach((abc, index) => {
+      for (let i = 0; i < tree[abc].length; i++) {
+        let song = tree[abc][i]
+        let pianoFiles = song.files.getFolderFiles_('piano', '.eps')
+        let count = pianoFiles.length
+        if (!(abc in output)) output[abc] = {}
+        if (!(count in output[abc])) output[abc][count] = []
+        output[abc][count].push(song)
+      }
+    })
+    return output
   }
 
+  /**
+   * Generate the TeX file for the piano version of the songbook.
+   */
   generateTeX () {
-    let tex = new TeX(this.basePath)
-    tex.generateTeX()
+    let tree = this.buildAlphabeticalSongTree()
+    let texFile = new TeXFile(path.join(this.basePath, 'songs.tex'))
+
+    Object.keys(tree).forEach((abc, index) => {
+      texFile.append('\n\n' + texCmd('chapter', abc.toUpperCase()))
+      for (let i = 0; i < tree[abc].length; i++) {
+        let song = tree[abc][i]
+        texFile.append(song.formatPianoTex())
+      }
+    })
   }
 
   /**
@@ -1207,7 +1199,6 @@ class Library {
   update () {
     this.gitPull()
     this.generateIntermediateFiles()
-    this.generateJSON()
     this.generateTeX()
   }
 }
@@ -1236,8 +1227,6 @@ let main = function () {
     library.cleanIntermediateFiles()
   } else if (options.folder) {
     library.updateSongFolder(options.folder)
-  } else if (options.json) {
-    library.generateJSON()
   } else if (options.tex) {
     library.generateTeX()
   } else {
