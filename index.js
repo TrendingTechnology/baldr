@@ -466,191 +466,6 @@ class TeXFile {
  **********************************************************************/
 
 /**
- * Generate all temporary files of a single song.
- */
-class SongFiles {
-  /**
-   * @param {string} folder - The directory containing the song files.
-   * @param {module:baldr-songbook-updater~FileMonitor} fileMonitor - A instance of the FileMonitor() class.
-   */
-  constructor (folder, fileMonitor) {
-    /**
-     * A instance of the FileMonitor class.
-     * @type {module:baldr-songbook-updater~FileMonitor}
-     */
-    this.fileMonitor = fileMonitor
-
-    /**
-     * The directory containing the song files.
-     * @type string
-     */
-    this.folder = folder
-
-    /**
-     * The slides folder
-     * @type {module:baldr-songbook-updater~Folder}
-     */
-    this.folderSlides = new Folder(this.folder, 'slides')
-
-    /**
-     * The piano folder
-     * @type {module:baldr-songbook-updater~Folder}
-     */
-    this.folderPiano = new Folder(this.folder, 'piano')
-
-    /**
-     * Path of the MuseScore file 'projector.mscx', relative to the base folder
-     * of the song collection.
-     * @type string
-     */
-    this.mscxProjector = this.detectFile_('projector.mscx')
-
-    /**
-     * Path of the MuseScore file for the piano parts, can be 'piano.mscx'
-     * or 'lead.mscx', relative to the base folder
-     * of the song collection.
-     * @type string
-     */
-    this.mscxPiano = this.detectFile_('piano.mscx', 'lead.mscx')
-  }
-
-  /**
-   * Detect a file inside the song folder. Throw an exception if the
-   * file doesn’t exist.
-   *
-   *  @param {string} file - A filename of a file inside the song folder.
-   *
-   * @return A joined path of the file relative to the song collection
-   *   base dir.
-   */
-  detectFile_ (file) {
-    let absPath
-    for (let argument of arguments) {
-      absPath = path.join(this.folder, argument)
-      if (fs.existsSync(absPath)) {
-        return absPath
-      }
-    }
-    throw new Error(util.format('File doesn’t exist: %s', absPath))
-  }
-
-  /**
-   * @param {string} subFolder - A subfolder relative to this.folder
-   * @param {string} filter - String to filter.
-   */
-  getFolderFiles_ (subFolder, filter) {
-    let folder = path.join(this.folder, subFolder)
-    if (fs.existsSync(folder)) {
-      return fs.readdirSync(folder).filter((file) => {
-        return file.indexOf(filter) > -1
-      })
-    } else {
-      return []
-    }
-  }
-
-  /**
-   * Generate form a given *.mscx file a PDF file.
-   * @param {string} source - Name of the *.mscx file without the extension.
-   * @param {string} destination - Name of the PDF without the extension.
-   */
-  generatePDF_ (source, destination = '') {
-    if (destination === '') {
-      destination = source
-    }
-    let pdf = path.join(this.folder, destination + '.pdf')
-    spawn('mscore', [
-      '--export-to',
-      path.join(pdf),
-      path.join(this.folder, source + '.mscx')
-    ])
-    if (fs.existsSync(pdf)) {
-      return destination + '.pdf'
-    } else {
-      return false
-    }
-  }
-
-  /**
-   * Generate svg files in a 'slides' subfolder.
-   * @param {string} folder - A song folder.
-   */
-  generateSlides_ () {
-    this.folderSlides.empty()
-    spawn('pdf2svg', [
-      path.join(this.folder, 'projector.pdf'),
-      path.join(this.folderSlides.get(), '%02d.svg'),
-      'all'
-    ])
-    return this.getFolderFiles_('slides', '.svg')
-  }
-
-  /**
-   * Generate a PDF named piano.pdf a) from piano.mscx or b) from lead.mscx
-   * @param {string} folder - A song folder.
-   */
-  generatePiano_ () {
-    this.folderPiano.empty()
-    let pianoFile = path.join(this.folderPiano.get(), 'piano.mscx')
-    fs.copySync(this.mscxPiano, pianoFile)
-    spawn('mscore-to-eps.sh', [pianoFile])
-    return this.getFolderFiles_('piano', '.eps')
-  }
-
-  /**
-   * Wrapper method for all process methods of one song folder.
-   * @param {boolean} force - Force the generation of media files.
-   */
-  generateIntermediateFiles (force = false) {
-    let status = { changed: {}, generated: {} }
-
-    status.folder = this.folder
-    status.folderName = path.basename(this.folder)
-
-    status.force = force
-    status.changed.slides = this.fileMonitor.isModified(
-      path.join(this.folder, 'projector.mscx')
-    )
-    // projector
-    if (force || status.changed.slides) {
-      status.generated.projector = this.generatePDF_('projector')
-      status.generated.slides = this.generateSlides_()
-    }
-
-    if (
-      this.fileMonitor.isModified(path.join(this.folder, 'lead.mscx')) ||
-        this.fileMonitor.isModified(path.join(this.folder, 'piano.mscx'))
-    ) {
-      status.changed.piano = true
-    } else {
-      status.changed.piano = false
-    }
-
-    // piano
-    if (force || status.changed.piano) {
-      status.generated.piano = this.generatePiano_()
-    }
-    return status
-  }
-
-  /**
-   * Delete all generated files of a song folder.
-   */
-  cleanIntermediateFiles () {
-    let files = [
-      'piano',
-      'slides',
-      'projector.pdf'
-    ]
-    files.forEach(
-      (file) => {
-        fs.removeSync(path.join(this.folder, file))
-      }
-    )
-  }
-}
-
-/**
  * Metadata of a song catched from the info.yml file:
  *
  * info.yml
@@ -917,10 +732,31 @@ class Song {
     this.metaDataCombined = new SongMetaDataCombined(this.metaData)
 
     /**
-     * An instance of SongFiles.
-     * @type {module:baldr-songbook-updater~SongFiles}
+     * The slides folder
+     * @type {module:baldr-songbook-updater~Folder}
      */
-    this.files = new SongFiles(this.folder, this.fileMonitor)
+    this.folderSlides = new Folder(this.folder, 'slides')
+
+    /**
+     * The piano folder
+     * @type {module:baldr-songbook-updater~Folder}
+     */
+    this.folderPiano = new Folder(this.folder, 'piano')
+
+    /**
+     * Path of the MuseScore file 'projector.mscx', relative to the base folder
+     * of the song collection.
+     * @type string
+     */
+    this.mscxProjector = this.detectFile_('projector.mscx')
+
+    /**
+     * Path of the MuseScore file for the piano parts, can be 'piano.mscx'
+     * or 'lead.mscx', relative to the base folder
+     * of the song collection.
+     * @type string
+     */
+    this.mscxPiano = this.detectFile_('piano.mscx', 'lead.mscx')
   }
 
   /**
@@ -961,7 +797,7 @@ class Song {
    */
   formatPianoTex () {
     let relativeSongPath = path.join(this.abc, this.songID)
-    const eps = this.files.getFolderFiles_('piano', '.eps')
+    const eps = this.getFolderFiles_('piano', '.eps')
     let output = ''
 
     output += '\n' + texCmd('heading', this.metaDataCombined.title)
@@ -971,6 +807,141 @@ class Song {
       }
     )
     return output
+  }
+
+  /**
+   * Detect a file inside the song folder. Throw an exception if the
+   * file doesn’t exist.
+   *
+   *  @param {string} file - A filename of a file inside the song folder.
+   *
+   * @return A joined path of the file relative to the song collection
+   *   base dir.
+   */
+  detectFile_ (file) {
+    let absPath
+    for (let argument of arguments) {
+      absPath = path.join(this.folder, argument)
+      if (fs.existsSync(absPath)) {
+        return absPath
+      }
+    }
+    throw new Error(util.format('File doesn’t exist: %s', absPath))
+  }
+
+  /**
+   * @param {string} subFolder - A subfolder relative to this.folder
+   * @param {string} filter - String to filter.
+   */
+  getFolderFiles_ (subFolder, filter) {
+    let folder = path.join(this.folder, subFolder)
+    if (fs.existsSync(folder)) {
+      return fs.readdirSync(folder).filter((file) => {
+        return file.indexOf(filter) > -1
+      })
+    } else {
+      return []
+    }
+  }
+
+  /**
+   * Generate form a given *.mscx file a PDF file.
+   * @param {string} source - Name of the *.mscx file without the extension.
+   * @param {string} destination - Name of the PDF without the extension.
+   */
+  generatePDF_ (source, destination = '') {
+    if (destination === '') {
+      destination = source
+    }
+    let pdf = path.join(this.folder, destination + '.pdf')
+    spawn('mscore', [
+      '--export-to',
+      path.join(pdf),
+      path.join(this.folder, source + '.mscx')
+    ])
+    if (fs.existsSync(pdf)) {
+      return destination + '.pdf'
+    } else {
+      return false
+    }
+  }
+
+  /**
+   * Generate svg files in a 'slides' subfolder.
+   * @param {string} folder - A song folder.
+   */
+  generateSlides_ () {
+    this.folderSlides.empty()
+    spawn('pdf2svg', [
+      path.join(this.folder, 'projector.pdf'),
+      path.join(this.folderSlides.get(), '%02d.svg'),
+      'all'
+    ])
+    return this.getFolderFiles_('slides', '.svg')
+  }
+
+  /**
+   * Generate a PDF named piano.pdf a) from piano.mscx or b) from lead.mscx
+   * @param {string} folder - A song folder.
+   */
+  generatePiano_ () {
+    this.folderPiano.empty()
+    let pianoFile = path.join(this.folderPiano.get(), 'piano.mscx')
+    fs.copySync(this.mscxPiano, pianoFile)
+    spawn('mscore-to-eps.sh', [pianoFile])
+    return this.getFolderFiles_('piano', '.eps')
+  }
+
+  /**
+   * Wrapper method for all process methods of one song folder.
+   * @param {boolean} force - Force the generation of media files.
+   */
+  generateIntermediateFiles (force = false) {
+    let status = { changed: {}, generated: {} }
+
+    status.folder = this.folder
+    status.folderName = path.basename(this.folder)
+
+    status.force = force
+    status.changed.slides = this.fileMonitor.isModified(
+      path.join(this.folder, 'projector.mscx')
+    )
+    // projector
+    if (force || status.changed.slides) {
+      status.generated.projector = this.generatePDF_('projector')
+      status.generated.slides = this.generateSlides_()
+    }
+
+    if (
+      this.fileMonitor.isModified(path.join(this.folder, 'lead.mscx')) ||
+        this.fileMonitor.isModified(path.join(this.folder, 'piano.mscx'))
+    ) {
+      status.changed.piano = true
+    } else {
+      status.changed.piano = false
+    }
+
+    // piano
+    if (force || status.changed.piano) {
+      status.generated.piano = this.generatePiano_()
+    }
+    return status
+  }
+
+  /**
+   * Delete all generated files of a song folder.
+   */
+  cleanIntermediateFiles () {
+    let files = [
+      'piano',
+      'slides',
+      'projector.pdf'
+    ]
+    files.forEach(
+      (file) => {
+        fs.removeSync(path.join(this.folder, file))
+      }
+    )
   }
 }
 
@@ -1118,7 +1089,7 @@ class Library {
    */
   cleanIntermediateFiles () {
     for (let songID in this.songs) {
-      this.songs[songID].files.cleanIntermediateFiles()
+      this.songs[songID].cleanIntermediateFiles()
     }
     this.deleteFiles_([
       'songs.tex',
@@ -1134,7 +1105,7 @@ class Library {
   generateIntermediateFiles (force = false) {
     for (let songID in this.songs) {
       let song = this.songs[songID]
-      let status = song.files.generateIntermediateFiles(force)
+      let status = song.generateIntermediateFiles(force)
       message.songFolder(status, song)
     }
   }
@@ -1146,7 +1117,7 @@ class Library {
    */
   updateSongFolder (folder) {
     let song = new Song(folder, this.fileMonitor)
-    let status = song.files.generateIntermediateFiles(true)
+    let status = song.generateIntermediateFiles(true)
     message.songFolder(status, song)
   }
 
@@ -1179,7 +1150,7 @@ class Library {
     Object.keys(tree).forEach((abc, index) => {
       for (let i = 0; i < tree[abc].length; i++) {
         let song = tree[abc][i]
-        let pianoFiles = song.files.getFolderFiles_('piano', '.eps')
+        let pianoFiles = song.getFolderFiles_('piano', '.eps')
         let count = pianoFiles.length
         if (!(abc in output)) output[abc] = {}
         if (!(count in output[abc])) output[abc][count] = []

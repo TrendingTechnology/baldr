@@ -497,190 +497,6 @@ describe('Class “FileMonitor()”', () => {
   })
 })
 
-describe('Class “SongFiles()”', function () {
-  let SongFiles = indexRewired.__get__('SongFiles')
-  let FileMonitor = indexRewired.__get__('FileMonitor')
-  let folder = path.join('test', 'songs', 'clean', 'some', 'a', 'Auf-der-Mauer_auf-der-Lauer')
-  let fileMonitor = new FileMonitor(mkTmpFile())
-  let songFiles = new SongFiles(folder, fileMonitor)
-
-  afterEach(function () {
-    fileMonitor.flush()
-  })
-
-  describe('Private function “detectFile_()”', () => {
-    it('Exception', function () {
-      assert.throws(
-        () => {
-          songFiles.detectFile_('xxx')
-        },
-        /^.*File doesn’t exist: .*$/
-      )
-    })
-
-    it('Exception by two files', function () {
-      assert.throws(
-        () => {
-          songFiles.detectFile_('xxx', 'yyy')
-        },
-        /^.*File doesn’t exist: .*$/
-      )
-    })
-
-    it('Return value', function () {
-      let result = songFiles.detectFile_('projector.mscx')
-      assert.ok(result.includes('projector.mscx'))
-    })
-
-    it('Return value by two files', function () {
-      let result = songFiles.detectFile_('xxx.mscx', 'projector.mscx')
-      assert.ok(result.includes('projector.mscx'))
-    })
-
-    it('Return value by two files, get first', function () {
-      let result = songFiles.detectFile_('projector.mscx', 'xxx.mscx')
-      assert.ok(result.includes('projector.mscx'))
-    })
-  })
-
-  describe('Method “generateIntermediateFiles()”', () => {
-    it('First run', function () {
-      let status = songFiles.generateIntermediateFiles()
-      assert.deepStrictEqual(
-        status,
-        {
-          'changed': {
-            'piano': true,
-            'slides': true
-          },
-          'folder': 'test/songs/clean/some/a/Auf-der-Mauer_auf-der-Lauer',
-          'folderName': 'Auf-der-Mauer_auf-der-Lauer',
-          'force': false,
-          'generated': {
-            'piano': [
-              'piano_1.eps',
-              'piano_2.eps'
-            ],
-            'projector': 'projector.pdf',
-            'slides': [
-              '01.svg',
-              '02.svg'
-            ]
-          }
-        }
-      )
-    })
-
-    it('Second run', function () {
-      songFiles.generateIntermediateFiles()
-      let status = songFiles.generateIntermediateFiles()
-      assert.strictEqual(status.changed.piano, false)
-      assert.strictEqual(status.changed.slides, false)
-    })
-
-    it('force', function () {
-      let status = songFiles.generateIntermediateFiles(true)
-      assert.strictEqual(status.force, true)
-    })
-  })
-
-  describe('Method “getFolderFiles_()”', () => {
-    let folder = path.join('test', 'songs', 'processed', 'one', 'a', 'Auf-der-Mauer_auf-der-Lauer')
-    let songFiles = new SongFiles(folder)
-
-    it('Method “getFolderFiles_()”: eps', () => {
-      const files = songFiles.getFolderFiles_('piano', '.eps')
-      assert.deepStrictEqual(files, ['piano.eps'])
-    })
-
-    it('Method “getFolderFiles_()”: svg', () => {
-      const files = songFiles.getFolderFiles_('slides', '.svg')
-      assert.deepStrictEqual(files, ['01.svg'])
-    })
-
-    it('Method “getFolderFiles_()”: non existent folder', () => {
-      const files = songFiles.getFolderFiles_('lol', '.svg')
-      assert.deepStrictEqual(files, [])
-    })
-
-    it('Method “getFolderFiles_()”: empty folder', () => {
-      const empty = path.join('test', 'files', 'empty')
-      fs.mkdirSync(empty)
-      const files = songFiles.getFolderFiles_('empty', '.svg')
-      assert.deepStrictEqual(files, [])
-      fs.rmdirSync(empty)
-    })
-  })
-
-  it('Method “generatePDF_()”', () => {
-    let file = songFiles.generatePDF_('projector', 'projector')
-    assert.strictEqual(file, 'projector.pdf')
-    assertExists(folder, 'projector.pdf')
-  })
-
-  it('Method “generateSlides_()”', () => {
-    songFiles.generatePDF_('projector')
-    const slides = path.join(folder, 'slides')
-    let files = songFiles.generateSlides_(folder)
-
-    assert.deepStrictEqual(
-      files,
-      ['01.svg', '02.svg']
-    );
-
-    [
-      [slides, '01.svg'],
-      [slides, '02.svg']
-    ].forEach(args => { assertExists(...args) })
-
-    fs.removeSync(slides)
-  })
-
-  describe('Method “generatePiano_()”', () => {
-    it('lead', () => {
-      let folderSwing = path.join('test', 'songs', 'clean', 'some', 's', 'Swing-low')
-      let songFilesSwing = new SongFiles(folderSwing, fileMonitor)
-      let files = songFilesSwing.generatePiano_()
-
-      assert.deepStrictEqual(files, [ 'piano_1.eps', 'piano_2.eps' ])
-
-      let result = [
-        [folderSwing, 'piano'],
-        [folderSwing, 'piano', 'piano.mscx'],
-        [folderSwing, 'piano', 'piano_1.eps']
-      ]
-      result.forEach(args => { assertExists(...args) })
-
-      fs.removeSync(path.join(folder, 'piano'))
-    })
-
-    it('piano', () => {
-      let files = songFiles.generatePiano_()
-
-      assert.deepStrictEqual(
-        files,
-        ['piano_1.eps', 'piano_2.eps']
-      )
-
-      let result = [
-        [folder, 'piano'],
-        [folder, 'piano', 'piano.mscx'],
-        [folder, 'piano', 'piano_1.eps']
-      ]
-      result.forEach(args => { assertExists(...args) })
-
-      fs.removeSync(path.join(folder, 'piano'))
-    })
-  })
-
-  it('Method “cleanIntermediateFiles()”', () => {
-    songFiles.generateIntermediateFiles()
-    assert.ok(fs.existsSync(path.join(songFiles.folder, 'projector.pdf')))
-    songFiles.cleanIntermediateFiles()
-    assert.ok(!fs.existsSync(path.join(songFiles.folder, 'projector.pdf')))
-  })
-})
-
 it('Function “texCmd()”', () => {
   let texCmd = indexRewired.__get__('texCmd')
   assert.strictEqual(texCmd('lorem', 'ipsum'), '\\tmplorem{ipsum}\n')
@@ -790,8 +606,14 @@ describe('Class “SongMetaData”', () => {
 
 describe('Class “Song()”', function () {
   let Song = indexRewired.__get__('Song')
+  let FileMonitor = indexRewired.__get__('FileMonitor')
+  let fileMonitor = new FileMonitor(mkTmpFile())
   let folder = path.join('test', 'songs', 'clean', 'some', 'a', 'Auf-der-Mauer_auf-der-Lauer')
-  let song = new Song(folder)
+  let song = new Song(folder, fileMonitor)
+
+  afterEach(function () {
+    fileMonitor.flush()
+  })
 
   it('Initialisation with a directory', function () {
     let song = new Song(folder)
@@ -822,11 +644,6 @@ describe('Class “Song()”', function () {
     assert.ok(song.metaDataCombined instanceof SongMetaDataCombined)
   })
 
-  it('Property “files”', function () {
-    let SongFiles = indexRewired.__get__('SongFiles')
-    assert.ok(song.files instanceof SongFiles)
-  })
-
   it('Method “normalizeSongFolder_(): folder”', function () {
     assert.strictEqual(song.normalizeSongFolder_(folder), folder)
   })
@@ -850,6 +667,178 @@ describe('Class “Song()”', function () {
       '\\tmpimage{s/Swing-low/piano/piano_2.eps}\n' +
       '\\tmpimage{s/Swing-low/piano/piano_3.eps}\n'
     )
+  })
+
+  describe('Private function “detectFile_()”', () => {
+    it('Exception', function () {
+      assert.throws(
+        () => {
+          song.detectFile_('xxx')
+        },
+        /^.*File doesn’t exist: .*$/
+      )
+    })
+
+    it('Exception by two files', function () {
+      assert.throws(
+        () => {
+          song.detectFile_('xxx', 'yyy')
+        },
+        /^.*File doesn’t exist: .*$/
+      )
+    })
+
+    it('Return value', function () {
+      let result = song.detectFile_('projector.mscx')
+      assert.ok(result.includes('projector.mscx'))
+    })
+
+    it('Return value by two files', function () {
+      let result = song.detectFile_('xxx.mscx', 'projector.mscx')
+      assert.ok(result.includes('projector.mscx'))
+    })
+
+    it('Return value by two files, get first', function () {
+      let result = song.detectFile_('projector.mscx', 'xxx.mscx')
+      assert.ok(result.includes('projector.mscx'))
+    })
+  })
+
+  describe('Method “generateIntermediateFiles()”', () => {
+    it('First run', function () {
+      let status = song.generateIntermediateFiles()
+      assert.deepStrictEqual(
+        status,
+        {
+          'changed': {
+            'piano': true,
+            'slides': true
+          },
+          'folder': 'test/songs/clean/some/a/Auf-der-Mauer_auf-der-Lauer',
+          'folderName': 'Auf-der-Mauer_auf-der-Lauer',
+          'force': false,
+          'generated': {
+            'piano': [
+              'piano_1.eps',
+              'piano_2.eps'
+            ],
+            'projector': 'projector.pdf',
+            'slides': [
+              '01.svg',
+              '02.svg'
+            ]
+          }
+        }
+      )
+    })
+
+    it('Second run', function () {
+      song.generateIntermediateFiles()
+      let status = song.generateIntermediateFiles()
+      assert.strictEqual(status.changed.piano, false)
+      assert.strictEqual(status.changed.slides, false)
+    })
+
+    it('force', function () {
+      let status = song.generateIntermediateFiles(true)
+      assert.strictEqual(status.force, true)
+    })
+  })
+
+  describe('Method “getFolderFiles_()”', () => {
+    let folder = path.join('test', 'songs', 'processed', 'one', 'a', 'Auf-der-Mauer_auf-der-Lauer')
+    let song = new Song(folder)
+
+    it('Method “getFolderFiles_()”: eps', () => {
+      const files = song.getFolderFiles_('piano', '.eps')
+      assert.deepStrictEqual(files, ['piano.eps'])
+    })
+
+    it('Method “getFolderFiles_()”: svg', () => {
+      const files = song.getFolderFiles_('slides', '.svg')
+      assert.deepStrictEqual(files, ['01.svg'])
+    })
+
+    it('Method “getFolderFiles_()”: non existent folder', () => {
+      const files = song.getFolderFiles_('lol', '.svg')
+      assert.deepStrictEqual(files, [])
+    })
+
+    it('Method “getFolderFiles_()”: empty folder', () => {
+      const empty = path.join('test', 'files', 'empty')
+      fs.mkdirSync(empty)
+      const files = song.getFolderFiles_('empty', '.svg')
+      assert.deepStrictEqual(files, [])
+      fs.rmdirSync(empty)
+    })
+  })
+
+  it('Method “generatePDF_()”', () => {
+    let file = song.generatePDF_('projector', 'projector')
+    assert.strictEqual(file, 'projector.pdf')
+    assertExists(folder, 'projector.pdf')
+  })
+
+  it('Method “generateSlides_()”', () => {
+    song.generatePDF_('projector')
+    const slides = path.join(folder, 'slides')
+    let files = song.generateSlides_(folder)
+
+    assert.deepStrictEqual(
+      files,
+      ['01.svg', '02.svg']
+    );
+
+    [
+      [slides, '01.svg'],
+      [slides, '02.svg']
+    ].forEach(args => { assertExists(...args) })
+
+    fs.removeSync(slides)
+  })
+
+  describe('Method “generatePiano_()”', () => {
+    it('lead', () => {
+      let folderSwing = path.join('test', 'songs', 'clean', 'some', 's', 'Swing-low')
+      let songSwing = new Song(folderSwing, fileMonitor)
+      let files = songSwing.generatePiano_()
+
+      assert.deepStrictEqual(files, [ 'piano_1.eps', 'piano_2.eps' ])
+
+      let result = [
+        [folderSwing, 'piano'],
+        [folderSwing, 'piano', 'piano.mscx'],
+        [folderSwing, 'piano', 'piano_1.eps']
+      ]
+      result.forEach(args => { assertExists(...args) })
+
+      fs.removeSync(path.join(folder, 'piano'))
+    })
+
+    it('piano', () => {
+      let files = song.generatePiano_()
+
+      assert.deepStrictEqual(
+        files,
+        ['piano_1.eps', 'piano_2.eps']
+      )
+
+      let result = [
+        [folder, 'piano'],
+        [folder, 'piano', 'piano.mscx'],
+        [folder, 'piano', 'piano_1.eps']
+      ]
+      result.forEach(args => { assertExists(...args) })
+
+      fs.removeSync(path.join(folder, 'piano'))
+    })
+  })
+
+  it('Method “cleanIntermediateFiles()”', () => {
+    song.generateIntermediateFiles()
+    assert.ok(fs.existsSync(path.join(song.folder, 'projector.pdf')))
+    song.cleanIntermediateFiles()
+    assert.ok(!fs.existsSync(path.join(song.folder, 'projector.pdf')))
   })
 })
 
@@ -923,7 +912,7 @@ describe('Class “Library()”', () => {
     indexRewired.__set__('message.songFolder', stub)
     let library = new Library(folder)
     for (let songID in library.songs) {
-      library.songs[songID].files.generateIntermediateFiles = spy
+      library.songs[songID].generateIntermediateFiles = spy
     }
     library.generateIntermediateFiles(false)
     assert.strictEqual(spy.callCount, 4)
@@ -937,7 +926,7 @@ describe('Class “Library()”', () => {
     indexRewired.__set__('message.songFolder', stub)
     let library = new Library(folder)
     for (let songID in library.songs) {
-      library.songs[songID].files.generateIntermediateFiles = spy
+      library.songs[songID].generateIntermediateFiles = spy
     }
     library.generateIntermediateFiles(true)
     assert.ok(spy.calledWith(true))
