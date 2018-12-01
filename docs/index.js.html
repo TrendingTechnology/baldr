@@ -271,6 +271,51 @@ class Message {
 let message = new Message()
 
 /**
+ * Build a TeX file (songs.tex) of all piano scores.
+ */
+class TeXFile {
+  /**
+   * @param {string} path The path of the TeXFile.
+   */
+  constructor (path) {
+    this.path = path
+    this.flush()
+  }
+
+  /**
+   * Append content to the TeX file.
+   *
+   * @param {string} content - Content to append to the Tex file.
+   */
+  append (content) {
+    fs.appendFileSync(this.path, content)
+  }
+
+  /**
+   * Remove the TeX file.
+   */
+  remove () {
+    fs.unlinkSync(this.path)
+  }
+
+  /**
+   * Delete the content of the TeX file, not the TeX file itself.
+   */
+  flush () {
+    fs.writeFileSync(this.path, '')
+  }
+
+  /**
+   * Read the complete TeX file
+   *
+   * @return {string}
+   */
+  read () {
+    return fs.readFileSync(this.path, { encoding: 'utf8' })
+  }
+}
+
+/**
  *
  */
 class Folder {
@@ -441,51 +486,6 @@ class FileMonitor {
    */
   purge () {
     if (fs.existsSync(this.db.dbFile)) fs.unlinkSync(this.db.dbFile)
-  }
-}
-
-/**
- * Build a TeX file (songs.tex) of all piano scores.
- */
-class TeXFile {
-  /**
-   * @param {string} path The path of the TeXFile.
-   */
-  constructor (path) {
-    this.path = path
-    this.flush()
-  }
-
-  /**
-   * Append content to the TeX file.
-   *
-   * @param {string} content - Content to append to the Tex file.
-   */
-  append (content) {
-    fs.appendFileSync(this.path, content)
-  }
-
-  /**
-   * Remove the TeX file.
-   */
-  remove () {
-    fs.unlinkSync(this.path)
-  }
-
-  /**
-   * Delete the content of the TeX file, not the TeX file itself.
-   */
-  flush () {
-    fs.writeFileSync(this.path, '')
-  }
-
-  /**
-   * Read the complete TeX file
-   *
-   * @return {string}
-   */
-  read () {
-    return fs.readFileSync(this.path, { encoding: 'utf8' })
   }
 }
 
