@@ -282,26 +282,9 @@ describe('Command line interface', () => {
     return indexRewired
   }
 
-  const args = function (arg) {
-    if (typeof arg === 'string') {
-      return ['-', '-', arg]
-    } else {
-      return ['-', '-'].concat(arg)
-    }
-  }
-
   const read = function (file) {
     return fs.readFileSync(file, 'utf-8')
   }
-
-  describe('setOptions', () => {
-    it.skip('--clean', () => {
-      let setOptions = indexRewired.__get__('setOptions')
-      let out = setOptions(args(['--clean']))
-      console.log(out)
-      assert.strictEqual(out.clean, true)
-    })
-  })
 
   describe('Require as module', () => {
     it('--path', () => {
