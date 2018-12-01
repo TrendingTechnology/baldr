@@ -214,9 +214,8 @@ describe('File “index.js”', () => {
   describe('Configuration', () => {
     it('Function “bootstrapConfig()”', () => {
       let bootstrapConfig = indexRewired.__get__('bootstrapConfig')
-      bootstrapConfig({ path: path.resolve('test', 'songs', 'clean', 'some'), test: true })
-      const c = indexRewired.__get__('config')
-      assert.strictEqual(c.path, path.resolve('test', 'songs', 'clean', 'some'))
+      let config = bootstrapConfig({ path: path.resolve('test', 'songs', 'clean', 'some'), test: true })
+      assert.strictEqual(config.path, path.resolve('test', 'songs', 'clean', 'some'))
     })
 
     it('Function “bootstrapConfig()”: exit', () => {
