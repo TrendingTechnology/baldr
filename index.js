@@ -36,7 +36,7 @@ function texCmd (command, value) {
  * Check if executable is installed.
  * @param {string} executable - Name of the executable.
  */
-let checkExecutable = function (executable) {
+function checkExecutable (executable) {
   let exec = spawn(executable, ['--help'])
   if (exec.status === null) {
     return false
@@ -49,7 +49,7 @@ let checkExecutable = function (executable) {
  * Check if executables are installed.
  * @param {array} executables - Name of the executables.
  */
-let checkExecutables = function (executables = []) {
+function checkExecutables (executables = []) {
   let status = true
   let unavailable = []
   executables.forEach((exec) => {
@@ -68,7 +68,7 @@ let checkExecutables = function (executables = []) {
  * @param {object} newConfig - An object containing the same properties as the
  * config object.
  */
-let bootstrapConfig = function (newConfig = false) {
+function bootstrapConfig (newConfig = false) {
   let { status, unavailable } = checkExecutables([
     'mscore-to-eps.sh',
     'pdf2svg',
@@ -117,7 +117,7 @@ let bootstrapConfig = function (newConfig = false) {
   return config
 }
 
-let setOptions = function (argv) {
+function setOptions (argv) {
   return commander
     .version(pckg.version)
     .option('-c, --clean', 'clean up (delete all generated files)')
