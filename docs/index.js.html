@@ -90,16 +90,6 @@ let checkExecutables = function (executables = []) {
   return { 'status': status, 'unavailable': unavailable }
 }
 
-/***********************************************************************
- * index
- **********************************************************************/
-
-const configDefault = {
-  force: false
-}
-
-let config = {}
-
 /**
  * By default this module reads the config file ~/.baldr to
  * generate its config object.
@@ -126,8 +116,12 @@ let bootstrapConfig = function (newConfig = false) {
     throw e
   }
 
+  const configDefault = {
+    force: false
+  }
+
   // default object
-  config = configDefault
+  let config = configDefault
 
   // config file
   let configFile = path.join(os.homedir(), '.baldr.json')
@@ -148,6 +142,7 @@ let bootstrapConfig = function (newConfig = false) {
   if (!config.path || config.path.length === 0) {
     message.noConfigPath()
   }
+  return config
 }
 
 let setOptions = function (argv) {
@@ -624,7 +619,7 @@ class SongFiles {
       path.join(this.folder, 'projector.mscx')
     )
     // projector
-    if (config.force || status.changed.slides) {
+    if (force || status.changed.slides) {
       status.generated.projector = this.generatePDF_('projector')
       status.generated.slides = this.generateSlides_()
     }
@@ -639,7 +634,7 @@ class SongFiles {
     }
 
     // piano
-    if (config.force || status.changed.piano) {
+    if (force || status.changed.piano) {
       status.generated.piano = this.generatePiano_()
     }
     return status
@@ -1162,7 +1157,7 @@ class Library {
 
   updateSongFolder (folder) {
     let song = new Song(folder, this.fileMonitor)
-    let status = song.files.generateIntermediateFiles()
+    let status = song.files.generateIntermediateFiles(true)
     message.songFolder(status, song)
   }
 
@@ -1243,7 +1238,7 @@ let main = function () {
     force: options.force
   }
 
-  bootstrapConfig(config)
+  config = bootstrapConfig(config)
 
   if (options.path &amp;&amp; options.path.length > 0) {
     config.path = options.path
