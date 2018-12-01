@@ -1,7 +1,6 @@
 const assert = require('assert')
 const fs = require('fs-extra')
 const indexRewired = require('rewire')('../index.js')
-const json = require('../json.js')
 const path = require('path')
 const process = require('process')
 const sinon = require('sinon')
@@ -15,6 +14,14 @@ process.env.BALDR_SONGBOOK_PATH = path.resolve('test', 'songs', 'clean', 'some')
 let assertExists = function () {
   assert.ok(
     fs.existsSync(
+      path.join.apply(null, arguments)
+    )
+  )
+}
+
+let assertNotExists = function () {
+  assert.ok(
+    !fs.existsSync(
       path.join.apply(null, arguments)
     )
   )
@@ -38,6 +45,8 @@ bootstrapConfig({
 describe('Class “Message()”', () => {
   let Message = indexRewired.__get__('Message')
   let message = indexRewired.__get__('message')
+  let Song = indexRewired.__get__('Song')
+  let song = new Song(path.resolve('test', 'songs', 'processed', 'some', 'a', 'Auf-der-Mauer_auf-der-Lauer'))
 
   const status = {
     'changed': {
@@ -47,10 +56,7 @@ describe('Class “Message()”', () => {
     'folder': 'songs/a/Auf-der-Mauer_auf-der-Lauer',
     'folderName': 'Auf-der-Mauer_auf-der-Lauer',
     'force': false,
-    'generated': {},
-    'info': {
-      'title': 'Auf der Mauer, auf der Lauer'
-    }
+    'generated': {}
   }
 
   let clone = function (object) {
@@ -61,7 +67,7 @@ describe('Class “Message()”', () => {
     let stub = sinon.stub()
     let message = new Message()
     message.print = stub
-    message.songFolder(status)
+    message.songFolder(status, song)
     assert.strictEqual(String(stub.args[0]), String(output))
   }
 
@@ -116,15 +122,6 @@ describe('Class “Message()”', () => {
       assertSongFolder(
         progress,
         '\u001b[33m☐\u001b[39m  \u001b[33mAuf-der-Mauer_auf-der-Lauer\u001b[39m: Auf der Mauer, auf der Lauer'
-      )
-    })
-
-    it('noTitle', () => {
-      let noTitle = clone(status)
-      noTitle.info.title = undefined
-      assertSongFolder(
-        noTitle,
-        '\u001b[31m☒\u001b[39m  \u001b[31mAuf-der-Mauer_auf-der-Lauer\u001b[39m'
       )
     })
 
@@ -184,56 +181,32 @@ describe('Class “Message()”', () => {
   })
 })
 
-describe('Class “TeX()”', () => {
-  let TeX = indexRewired.__get__('TeX')
-  let basePath = path.resolve('test', 'songs', 'processed', 'some')
-  let tex = new TeX(basePath)
+describe('Class “TeXFile()”', () => {
+  let TeXFile = indexRewired.__get__('TeXFile')
 
-  it('Method “buildPianoFilesCountTree()”', () => {
-    let folderTree = json.readJSON(basePath)
-    let count = tex.buildPianoFilesCountTree(folderTree)
-    assert.strictEqual(count.a[3]['Auf-der-Mauer_auf-der-Lauer'].title, 'Auf der Mauer, auf der Lauer')
-    assert.strictEqual(count.s[1]['Stille-Nacht'].title, 'Stille Nacht')
-    assert.strictEqual(count.s[3]['Swing-low'].title, 'Swing low')
-    assert.strictEqual(count.z[2]['Zum-Tanze-da-geht-ein-Maedel'].title, 'Zum Tanze, da geht ein Mädel')
-
-    assert.deepStrictEqual(count.s[3]['Swing-low'].pianoFiles, [ 'piano_1.eps', 'piano_2.eps', 'piano_3.eps' ])
+  it('Method “append()”', function () {
+    let texFile = new TeXFile(mkTmpFile())
+    texFile.append('test')
   })
 
-  it('Method “texCmd()”', () => {
-    assert.strictEqual(tex.texCmd('lorem', 'ipsum'), '\\tmplorem{ipsum}\n')
+  it('Method “remove()”', function () {
+    let texFile = new TeXFile(mkTmpFile())
+    assertExists(texFile.path)
+    texFile.remove()
+    assertNotExists(texFile.path)
   })
 
-  it('Method “texABC()”', () => {
-    assert.strictEqual(tex.texABC('a'), '\n\n\\tmpchapter{A}\n')
+  it('Method “flush()”', function () {
+    let texFile = new TeXFile(mkTmpFile())
+    texFile.append('test')
+    texFile.flush('test')
+    assert.strictEqual(texFile.read(), '')
   })
 
-  it('Method “texSong()”', () => {
-    let songPath = path.join(basePath, 's', 'Swing-low')
-    assert.strictEqual(
-      tex.texSong(songPath),
-      '\n' +
-      '\\tmpheading{Swing low}\n' +
-      '\\tmpimage{s/Swing-low/piano/piano_1.eps}\n' +
-      '\\tmpimage{s/Swing-low/piano/piano_2.eps}\n' +
-      '\\tmpimage{s/Swing-low/piano/piano_3.eps}\n'
-    )
-  })
-
-  it('Method “generateTeX()”', () => {
-    let texFile = path.join('test', 'songs', 'processed', 'some', 'songs.tex')
-    tex.generateTeX(path.resolve('test', 'songs', 'processed', 'some'))
-    assertExists(texFile)
-
-    let texContent = fs.readFileSync(texFile, 'utf8')
-    let compare = fs.readFileSync(
-      path.join('test', 'files', 'songs_processed.tex'), 'utf8'
-    )
-
-    assert.strictEqual(texContent, compare)
-
-    assert.ok(texContent.indexOf('\\tmpimage') > -1)
-    assert.ok(texContent.indexOf('\\tmpheading') > -1)
+  it('Method “read()”', function () {
+    let texFile = new TeXFile(mkTmpFile())
+    texFile.append('test')
+    assert.strictEqual(texFile.read(), 'test')
   })
 })
 
@@ -341,17 +314,6 @@ describe('Command line interface', () => {
         read(path.join('test', 'files', 'songs_min_processed.tex'))
       )
       fs.unlinkSync(tex)
-    })
-
-    it('--json', () => {
-      invokeCommand(['--path', path.join('test', 'songs', 'processed', 'one'), '--json'])
-      let json = path.join('test', 'songs', 'processed', 'one', 'songs.json')
-      assertExists(json)
-      assert.strictEqual(
-        read(json),
-        read(path.join('test', 'files', 'songs_min_processed.json'))
-      )
-      fs.unlinkSync(json)
     })
 
     it('--folder', () => {
@@ -622,10 +584,6 @@ describe('Class “SongFiles()”', function () {
               '01.svg',
               '02.svg'
             ]
-          },
-          'info': {
-            'title': 'Auf der Mauer, auf der Lauer',
-            'country': 'Deutschland'
           }
         }
       )
@@ -739,6 +697,11 @@ describe('Class “SongFiles()”', function () {
     songFiles.cleanIntermediateFiles()
     assert.ok(!fs.existsSync(path.join(songFiles.folder, 'projector.pdf')))
   })
+})
+
+it('Function “texCmd()”', () => {
+  let texCmd = indexRewired.__get__('texCmd')
+  assert.strictEqual(texCmd('lorem', 'ipsum'), '\\tmplorem{ipsum}\n')
 })
 
 describe('Function “checkExecutable()”', () => {
@@ -893,6 +856,19 @@ describe('Class “Song()”', function () {
   it('Method “recognizeABCFolder_(): file', function () {
     assert.strictEqual(song.recognizeABCFolder_(folder), 'a')
   })
+
+  it('Method “formatPianoTex()”', () => {
+    let folder = path.join('test', 'songs', 'processed', 'some', 's', 'Swing-low')
+    let song = new Song(folder)
+    assert.strictEqual(
+      song.formatPianoTex(),
+      '\n' +
+      '\\tmpheading{Swing low}\n' +
+      '\\tmpimage{s/Swing-low/piano/piano_1.eps}\n' +
+      '\\tmpimage{s/Swing-low/piano/piano_2.eps}\n' +
+      '\\tmpimage{s/Swing-low/piano/piano_3.eps}\n'
+    )
+  })
 })
 
 describe('Class “Library()”', () => {
@@ -1012,17 +988,32 @@ describe('Class “Library()”', () => {
     assertExists(zum, 'piano', 'piano_1.eps')
     assertExists(zum, 'piano', 'piano_2.eps')
 
-    let info = JSON.parse(
-      fs.readFileSync(
-        path.join(songs, 'songs.json'), 'utf8'
-      )
-    )
-    assert.strictEqual(
-      info.a['Auf-der-Mauer_auf-der-Lauer'].title,
-      'Auf der Mauer, auf der Lauer'
+    library.cleanIntermediateFiles()
+  })
+
+  it('Method “buildPianoFilesCountTree()”', () => {
+    let count = library.buildPianoFilesCountTree()
+    assert.strictEqual(count.a[3][0].metaData.title, 'Auf der Mauer, auf der Lauer')
+    assert.strictEqual(count.s[1][0].metaData.title, 'Stille Nacht')
+    assert.strictEqual(count.s[3][0].metaData.title, 'Swing low')
+    assert.strictEqual(count.z[2][0].metaData.title, 'Zum Tanze, da geht ein Mädel')
+  })
+
+  it('Method “generateTeX()”', () => {
+    library.generateTeX()
+    let texFile = path.join(library.basePath, 'songs.tex')
+
+    assertExists(texFile)
+
+    let texContent = fs.readFileSync(texFile, 'utf8')
+    let compare = fs.readFileSync(
+      path.join('test', 'files', 'songs_processed.tex'), 'utf8'
     )
 
-    library.cleanIntermediateFiles()
+    assert.strictEqual(texContent, compare)
+
+    assert.ok(texContent.indexOf('\\tmpimage') > -1)
+    assert.ok(texContent.indexOf('\\tmpheading') > -1)
   })
 })
 
