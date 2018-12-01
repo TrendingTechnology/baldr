@@ -42,6 +42,84 @@ bootstrapConfig({
   force: true
 })
 
+it('Conforms to standard', standard.files([
+  '*.js', 'test/*.js'
+]))
+
+it('Function “texCmd()”', () => {
+  let texCmd = indexRewired.__get__('texCmd')
+  assert.strictEqual(texCmd('lorem', 'ipsum'), '\\tmplorem{ipsum}\n')
+})
+
+describe('Function “checkExecutable()”', () => {
+  let checkExecutable = indexRewired.__get__('checkExecutable')
+
+  it('Function “checkExecutable()”: existing executable', () => {
+    assert.strictEqual(checkExecutable('echo'), true)
+  })
+
+  it('Function “checkExecutable()”: nonexisting executable', () => {
+    assert.strictEqual(checkExecutable('loooooool'), false)
+  })
+})
+
+describe('Function “checkExecutables()”', () => {
+  let checkExecutables = indexRewired.__get__('checkExecutables')
+
+  it('all are existing', () => {
+    let { status, unavailable } = checkExecutables(['echo', 'ls'])
+    assert.strictEqual(status, true)
+    assert.deepStrictEqual(unavailable, [])
+  })
+
+  it('one executable', () => {
+    let { status, unavailable } = checkExecutables(['echo'])
+    assert.strictEqual(status, true)
+    assert.deepStrictEqual(unavailable, [])
+  })
+
+  it('one nonexisting executable', () => {
+    let { status, unavailable } = checkExecutables(['echo', 'loooooool'])
+    assert.strictEqual(status, false)
+    assert.deepStrictEqual(unavailable, ['loooooool'])
+  })
+
+  it('two nonexisting executable', () => {
+    let { status, unavailable } = checkExecutables(['troooooool', 'loooooool'])
+    assert.strictEqual(status, false)
+    assert.deepStrictEqual(unavailable, ['troooooool', 'loooooool'])
+  })
+
+  it('without arguments', () => {
+    let { status, unavailable } = checkExecutables()
+    assert.strictEqual(status, true)
+    assert.deepStrictEqual(unavailable, [])
+  })
+})
+
+it('Function “bootstrapConfig()”', () => {
+  let bootstrapConfig = indexRewired.__get__('bootstrapConfig')
+  let config = bootstrapConfig({ path: path.resolve('test', 'songs', 'clean', 'some'), test: true })
+  assert.strictEqual(config.path, path.resolve('test', 'songs', 'clean', 'some'))
+})
+
+it('Function “bootstrapConfig()”: exit', () => {
+  let savePATH = process.env.PATH
+  process.env.PATH = ''
+  try {
+    let bootstrapConfig = indexRewired.__get__('bootstrapConfig')
+    bootstrapConfig({ path: path.resolve('test', 'songs', 'clean', 'some'), test: true })
+  } catch (e) {
+    assert.strictEqual(
+      e.message,
+      'Some dependencies are not installed: “mscore-to-eps.sh”, ' +
+      '“pdf2svg”, “pdfcrop”, “pdfinfo”, “pdftops”, “mscore”'
+    )
+    assert.strictEqual(e.name, 'UnavailableCommandsError')
+  }
+  process.env.PATH = savePATH
+})
+
 describe('Class “Message()”', () => {
   let Message = indexRewired.__get__('Message')
   let message = indexRewired.__get__('message')
@@ -71,14 +149,6 @@ describe('Class “Message()”', () => {
     assert.strictEqual(String(stub.args[0]), String(output))
   }
 
-  it('Method “print()”', () => {
-    let stub = sinon.stub()
-    let message = new Message()
-    message.print = stub
-    message.print('lol')
-    assert.strictEqual(stub.called, true)
-  })
-
   it('const “error”', () => {
     assert.strictEqual(message.error, '\u001b[31m☒\u001b[39m')
   })
@@ -91,7 +161,15 @@ describe('Class “Message()”', () => {
     assert.strictEqual(message.progress, '\u001b[33m☐\u001b[39m')
   })
 
-  it('function “noConfigPath()”', () => {
+  it('Method “print()”', () => {
+    let stub = sinon.stub()
+    let message = new Message()
+    message.print = stub
+    message.print('lol')
+    assert.strictEqual(stub.called, true)
+  })
+
+  it('Method “noConfigPath()”', () => {
     let stub = sinon.stub()
     let message = new Message()
     message.print = stub
@@ -107,7 +185,7 @@ describe('Class “Message()”', () => {
     ])
   })
 
-  describe('function “songFolder()”', () => {
+  describe('Method “songFolder()”', () => {
     it('finished', () => {
       let finished = clone(status)
       assertSongFolder(
@@ -239,37 +317,6 @@ describe('Class “TeXFile()”', () => {
   })
 })
 
-describe('File “index.js”', () => {
-  describe('Configuration', () => {
-    it('Function “bootstrapConfig()”', () => {
-      let bootstrapConfig = indexRewired.__get__('bootstrapConfig')
-      let config = bootstrapConfig({ path: path.resolve('test', 'songs', 'clean', 'some'), test: true })
-      assert.strictEqual(config.path, path.resolve('test', 'songs', 'clean', 'some'))
-    })
-
-    it('Function “bootstrapConfig()”: exit', () => {
-      let savePATH = process.env.PATH
-      process.env.PATH = ''
-      try {
-        let bootstrapConfig = indexRewired.__get__('bootstrapConfig')
-        bootstrapConfig({ path: path.resolve('test', 'songs', 'clean', 'some'), test: true })
-      } catch (e) {
-        assert.strictEqual(
-          e.message,
-          'Some dependencies are not installed: “mscore-to-eps.sh”, ' +
-          '“pdf2svg”, “pdfcrop”, “pdfinfo”, “pdftops”, “mscore”'
-        )
-        assert.strictEqual(e.name, 'UnavailableCommandsError')
-      }
-      process.env.PATH = savePATH
-    })
-  })
-})
-
-it('Conforms to standard', standard.files([
-  '*.js', 'test/*.js'
-]))
-
 describe('Class “Sqlite()”', () => {
   let Sqlite = indexRewired.__get__('Sqlite')
   let tmpDir = mkTmpDir()
@@ -370,57 +417,6 @@ describe('Class “FileMonitor()”', () => {
     assert.ok(!fs.existsSync(testDb))
     monitor.purge()
     assert.ok(!fs.existsSync(testDb))
-  })
-})
-
-it('Function “texCmd()”', () => {
-  let texCmd = indexRewired.__get__('texCmd')
-  assert.strictEqual(texCmd('lorem', 'ipsum'), '\\tmplorem{ipsum}\n')
-})
-
-describe('Function “checkExecutable()”', () => {
-  let checkExecutable = indexRewired.__get__('checkExecutable')
-
-  it('Function “checkExecutable()”: existing executable', () => {
-    assert.strictEqual(checkExecutable('echo'), true)
-  })
-
-  it('Function “checkExecutable()”: nonexisting executable', () => {
-    assert.strictEqual(checkExecutable('loooooool'), false)
-  })
-})
-
-describe('Function “checkExecutables()”', () => {
-  let checkExecutables = indexRewired.__get__('checkExecutables')
-
-  it('all are existing', () => {
-    let { status, unavailable } = checkExecutables(['echo', 'ls'])
-    assert.strictEqual(status, true)
-    assert.deepStrictEqual(unavailable, [])
-  })
-
-  it('one executable', () => {
-    let { status, unavailable } = checkExecutables(['echo'])
-    assert.strictEqual(status, true)
-    assert.deepStrictEqual(unavailable, [])
-  })
-
-  it('one nonexisting executable', () => {
-    let { status, unavailable } = checkExecutables(['echo', 'loooooool'])
-    assert.strictEqual(status, false)
-    assert.deepStrictEqual(unavailable, ['loooooool'])
-  })
-
-  it('two nonexisting executable', () => {
-    let { status, unavailable } = checkExecutables(['troooooool', 'loooooool'])
-    assert.strictEqual(status, false)
-    assert.deepStrictEqual(unavailable, ['troooooool', 'loooooool'])
-  })
-
-  it('without arguments', () => {
-    let { status, unavailable } = checkExecutables()
-    assert.strictEqual(status, true)
-    assert.deepStrictEqual(unavailable, [])
   })
 })
 
