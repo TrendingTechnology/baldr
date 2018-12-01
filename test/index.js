@@ -180,6 +180,35 @@ describe('Class “Message()”', () => {
     })
   })
 })
+describe('Class “Folder()”', function () {
+  let Folder = indexRewired.__get__('Folder')
+
+  it('Initialisation', function () {
+    let tmpDir = mkTmpDir()
+    let folder = new Folder(tmpDir)
+    assert.strictEqual(folder.folderPath, tmpDir)
+  })
+
+  it('Initialisation with two arguments', function () {
+    let tmpDir = mkTmpDir()
+    let folder = new Folder(tmpDir, 'test')
+    assert.strictEqual(folder.folderPath, path.join(tmpDir, 'test'))
+  })
+
+  it('Method “remove()”', function () {
+    let tmpDir = mkTmpDir()
+    let folder = new Folder(tmpDir)
+    folder.remove()
+    assert.ok(!fs.existsSync(folder.folderPath))
+  })
+
+  it('Method “empty()”', function () {
+    let tmpDir = mkTmpDir()
+    let folder = new Folder(tmpDir)
+    folder.empty()
+    assert.ok(fs.existsSync(folder.folderPath))
+  })
+})
 
 describe('Class “TeXFile()”', () => {
   let TeXFile = indexRewired.__get__('TeXFile')
@@ -240,159 +269,6 @@ describe('File “index.js”', () => {
 it('Conforms to standard', standard.files([
   '*.js', 'test/*.js'
 ]))
-
-describe('Command line interface', () => {
-  const baseArgv = [
-    '/usr/bin/node',
-    path.join(path.resolve('.'), 'index.js')
-  ]
-
-  const invokeCommand = function (argv) {
-    let main = indexRewired.__get__('main')
-    indexRewired.__set__('process.argv', baseArgv.concat(argv))
-    main()
-    return indexRewired
-  }
-
-  const read = function (file) {
-    return fs.readFileSync(file, 'utf-8')
-  }
-
-  describe('Require as module', () => {
-    it('--path', () => {
-      const indexRewired = require('rewire')('../index.js')
-      let Message = indexRewired.__get__('Message')
-      let message = new Message()
-      let stub = sinon.stub()
-      message.print = stub
-      indexRewired.__set__('message', message)
-
-      let main = indexRewired.__get__('main')
-      indexRewired.__set__('process.argv', [
-        '', '', '--path', path.join('test', 'songs', 'clean', 'some')
-      ])
-      main()
-
-      let commander = indexRewired.__get__('commander')
-      assert.strictEqual(commander.path, path.join('test', 'songs', 'clean', 'some'))
-      assert.deepStrictEqual(
-        stub.args,
-        [
-          [ '\u001b[33m☐\u001b[39m  \u001b[33mAuf-der-Mauer_auf-der-Lauer\u001b[39m: Auf der Mauer, auf der Lauer\n\t\u001b[33mslides\u001b[39m: 01.svg, 02.svg\n\t\u001b[33mpiano\u001b[39m: piano_1.eps, piano_2.eps' ],
-          [ '\u001b[33m☐\u001b[39m  \u001b[33mStille-Nacht\u001b[39m: Stille Nacht\n\t\u001b[33mslides\u001b[39m: 01.svg, 02.svg\n\t\u001b[33mpiano\u001b[39m: piano_1.eps, piano_2.eps' ],
-          [ '\u001b[33m☐\u001b[39m  \u001b[33mSwing-low\u001b[39m: Swing low\n\t\u001b[33mslides\u001b[39m: 01.svg, 02.svg\n\t\u001b[33mpiano\u001b[39m: piano_1.eps, piano_2.eps' ],
-          [ '\u001b[33m☐\u001b[39m  \u001b[33mZum-Tanze-da-geht-ein-Maedel\u001b[39m: Zum Tanze, da geht ein Mädel\n\t\u001b[33mslides\u001b[39m: 01.svg, 02.svg\n\t\u001b[33mpiano\u001b[39m: piano_1.eps, piano_2.eps' ]
-        ]
-      )
-    })
-
-    it('--tex', () => {
-      invokeCommand(['--path', path.join('test', 'songs', 'processed', 'one'), '--tex'])
-      let tex = path.join('test', 'songs', 'processed', 'one', 'songs.tex')
-
-      assertExists(tex)
-      assert.strictEqual(
-        read(tex),
-        read(path.join('test', 'files', 'songs_min_processed.tex'))
-      )
-      fs.unlinkSync(tex)
-    })
-
-    it('--folder', () => {
-      const indexRewired = require('rewire')('../index.js')
-      let Message = indexRewired.__get__('Message')
-      let message = new Message()
-      let stub = sinon.stub()
-      message.print = stub
-      indexRewired.__set__('message', message)
-
-      let main = indexRewired.__get__('main')
-      indexRewired.__set__('process.argv', [
-        '', '',
-        '--folder',
-        'test/songs/clean/some/a/Auf-der-Mauer_auf-der-Lauer'
-      ])
-      main()
-      let output = stub.args[0][0]
-      assert.ok(output.includes('Auf-der-Mauer_auf-der-Lauer'))
-      assert.ok(output.includes('01.svg, 02.svg'))
-      assert.ok(output.includes('piano_1.eps, piano_2.eps'))
-    })
-  })
-
-  describe('Command line', () => {
-    it('no arguments: normal update', () => {
-      spawn('./index.js')
-    })
-
-    it('no arguments (second run): only json and TeX generation', () => {
-      spawn('./index.js')
-    })
-
-    it('--force', () => {
-      spawn('./index.js', ['--force'])
-    })
-
-    it('--help', () => {
-      const cli = spawn('./index.js', ['--help'])
-      let out = cli.stdout.toString()
-      assert.ok(out.indexOf('Usage') > -1)
-      assert.ok(out.indexOf('--help') > -1)
-      assert.ok(out.indexOf('--version') > -1)
-      assert.strictEqual(cli.status, 0)
-    })
-
-    it('--version', () => {
-      const cli = spawn('./index.js', ['--version'])
-      let pckg = require('../package.json')
-      assert.strictEqual(cli.stdout.toString(), pckg.version + '\n')
-      assert.strictEqual(cli.status, 0)
-    })
-
-    // Test should be executed at the very last position.
-    it('--clean', () => {
-      spawn('./index.js', ['--clean'])
-    })
-  })
-})
-
-describe('Class “SongMetaData()”', function () {
-  let songPath = path.resolve('test', 'songs', 'clean', 'some', 'a', 'Auf-der-Mauer_auf-der-Lauer')
-  let SongMetaData = indexRewired.__get__('SongMetaData')
-
-  it('Exception: No song folder', function () {
-    assert.throws(
-      () => {
-        return new SongMetaData('lol')
-      },
-      /^.*Song folder doesn’t exist: lol.*$/
-    )
-  })
-
-  it('Exception: No yaml file', function () {
-    let tmpDir = mkTmpDir()
-    assert.throws(
-      () => {
-        return new SongMetaData(tmpDir)
-      },
-      /^.*YAML file could not be found: .*$/
-    )
-  })
-
-  it('on regular song folder', function () {
-    let song = new SongMetaData(songPath)
-    assert.strictEqual(song.title, 'Auf der Mauer, auf der Lauer')
-  })
-
-  it('Exception: Unsupported key', function () {
-    assert.throws(
-      () => {
-        return new SongMetaData(path.join('test', 'files', 'wrong-song-yaml'))
-      },
-      /^.*Unsupported key: lol.*$/
-    )
-  })
-})
 
 describe('Class “Sqlite()”', () => {
   let Sqlite = indexRewired.__get__('Sqlite')
@@ -548,7 +424,45 @@ describe('Function “checkExecutables()”', () => {
   })
 })
 
-describe('Class “SongMetaData”', () => {
+describe('Class “SongMetaData()”', function () {
+  let songPath = path.resolve('test', 'songs', 'clean', 'some', 'a', 'Auf-der-Mauer_auf-der-Lauer')
+  let SongMetaData = indexRewired.__get__('SongMetaData')
+
+  it('Exception: No song folder', function () {
+    assert.throws(
+      () => {
+        return new SongMetaData('lol')
+      },
+      /^.*Song folder doesn’t exist: lol.*$/
+    )
+  })
+
+  it('Exception: No yaml file', function () {
+    let tmpDir = mkTmpDir()
+    assert.throws(
+      () => {
+        return new SongMetaData(tmpDir)
+      },
+      /^.*YAML file could not be found: .*$/
+    )
+  })
+
+  it('on regular song folder', function () {
+    let song = new SongMetaData(songPath)
+    assert.strictEqual(song.title, 'Auf der Mauer, auf der Lauer')
+  })
+
+  it('Exception: Unsupported key', function () {
+    assert.throws(
+      () => {
+        return new SongMetaData(path.join('test', 'files', 'wrong-song-yaml'))
+      },
+      /^.*Unsupported key: lol.*$/
+    )
+  })
+})
+
+describe('Class “SongMetaDataCombined()”', () => {
   let SongMetaDataCombined = indexRewired.__get__('SongMetaDataCombined')
 
   describe('get title', () => {
@@ -988,32 +902,117 @@ describe('Class “Library()”', () => {
   })
 })
 
-describe('Class “Folder()”', function () {
-  let Folder = indexRewired.__get__('Folder')
+describe('Command line interface', () => {
+  const baseArgv = [
+    '/usr/bin/node',
+    path.join(path.resolve('.'), 'index.js')
+  ]
 
-  it('Initialisation', function () {
-    let tmpDir = mkTmpDir()
-    let folder = new Folder(tmpDir)
-    assert.strictEqual(folder.folderPath, tmpDir)
+  const invokeCommand = function (argv) {
+    let main = indexRewired.__get__('main')
+    indexRewired.__set__('process.argv', baseArgv.concat(argv))
+    main()
+    return indexRewired
+  }
+
+  const read = function (file) {
+    return fs.readFileSync(file, 'utf-8')
+  }
+
+  describe('Require as module', () => {
+    it('--path', () => {
+      const indexRewired = require('rewire')('../index.js')
+      let Message = indexRewired.__get__('Message')
+      let message = new Message()
+      let stub = sinon.stub()
+      message.print = stub
+      indexRewired.__set__('message', message)
+
+      let main = indexRewired.__get__('main')
+      indexRewired.__set__('process.argv', [
+        '', '', '--path', path.join('test', 'songs', 'clean', 'some')
+      ])
+      main()
+
+      let commander = indexRewired.__get__('commander')
+      assert.strictEqual(commander.path, path.join('test', 'songs', 'clean', 'some'))
+      assert.deepStrictEqual(
+        stub.args,
+        [
+          [ '\u001b[33m☐\u001b[39m  \u001b[33mAuf-der-Mauer_auf-der-Lauer\u001b[39m: Auf der Mauer, auf der Lauer\n\t\u001b[33mslides\u001b[39m: 01.svg, 02.svg\n\t\u001b[33mpiano\u001b[39m: piano_1.eps, piano_2.eps' ],
+          [ '\u001b[33m☐\u001b[39m  \u001b[33mStille-Nacht\u001b[39m: Stille Nacht\n\t\u001b[33mslides\u001b[39m: 01.svg, 02.svg\n\t\u001b[33mpiano\u001b[39m: piano_1.eps, piano_2.eps' ],
+          [ '\u001b[33m☐\u001b[39m  \u001b[33mSwing-low\u001b[39m: Swing low\n\t\u001b[33mslides\u001b[39m: 01.svg, 02.svg\n\t\u001b[33mpiano\u001b[39m: piano_1.eps, piano_2.eps' ],
+          [ '\u001b[33m☐\u001b[39m  \u001b[33mZum-Tanze-da-geht-ein-Maedel\u001b[39m: Zum Tanze, da geht ein Mädel\n\t\u001b[33mslides\u001b[39m: 01.svg, 02.svg\n\t\u001b[33mpiano\u001b[39m: piano_1.eps, piano_2.eps' ]
+        ]
+      )
+    })
+
+    it('--tex', () => {
+      invokeCommand(['--path', path.join('test', 'songs', 'processed', 'one'), '--tex'])
+      let tex = path.join('test', 'songs', 'processed', 'one', 'songs.tex')
+
+      assertExists(tex)
+      assert.strictEqual(
+        read(tex),
+        read(path.join('test', 'files', 'songs_min_processed.tex'))
+      )
+      fs.unlinkSync(tex)
+    })
+
+    it('--folder', () => {
+      const indexRewired = require('rewire')('../index.js')
+      let Message = indexRewired.__get__('Message')
+      let message = new Message()
+      let stub = sinon.stub()
+      message.print = stub
+      indexRewired.__set__('message', message)
+
+      let main = indexRewired.__get__('main')
+      indexRewired.__set__('process.argv', [
+        '', '',
+        '--folder',
+        'test/songs/clean/some/a/Auf-der-Mauer_auf-der-Lauer'
+      ])
+      main()
+      let output = stub.args[0][0]
+      assert.ok(output.includes('Auf-der-Mauer_auf-der-Lauer'))
+      assert.ok(output.includes('01.svg, 02.svg'))
+      assert.ok(output.includes('piano_1.eps, piano_2.eps'))
+    })
   })
 
-  it('Initialisation with two arguments', function () {
-    let tmpDir = mkTmpDir()
-    let folder = new Folder(tmpDir, 'test')
-    assert.strictEqual(folder.folderPath, path.join(tmpDir, 'test'))
-  })
+  describe('Command line', () => {
+    it('no arguments: normal update', () => {
+      spawn('./index.js')
+    })
 
-  it('Method “remove()”', function () {
-    let tmpDir = mkTmpDir()
-    let folder = new Folder(tmpDir)
-    folder.remove()
-    assert.ok(!fs.existsSync(folder.folderPath))
-  })
+    it('no arguments (second run): only json and TeX generation', () => {
+      spawn('./index.js')
+    })
 
-  it('Method “empty()”', function () {
-    let tmpDir = mkTmpDir()
-    let folder = new Folder(tmpDir)
-    folder.empty()
-    assert.ok(fs.existsSync(folder.folderPath))
+    it('--force', () => {
+      spawn('./index.js', ['--force'])
+    })
+
+    it('--help', () => {
+      const cli = spawn('./index.js', ['--help'])
+      let out = cli.stdout.toString()
+      assert.ok(out.indexOf('Usage') > -1)
+      assert.ok(out.indexOf('--help') > -1)
+      assert.ok(out.indexOf('--version') > -1)
+      assert.strictEqual(cli.status, 0)
+    })
+
+    it('--version', () => {
+      const cli = spawn('./index.js', ['--version'])
+      let pckg = require('../package.json')
+      assert.strictEqual(cli.stdout.toString(), pckg.version + '\n')
+      assert.strictEqual(cli.status, 0)
+    })
+
+    // Test should be executed at the very last position.
+    it('--clean', () => {
+      spawn('./index.js', ['--clean'])
+    })
   })
 })
