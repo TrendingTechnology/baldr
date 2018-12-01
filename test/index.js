@@ -181,7 +181,7 @@ describe('Class “Message()”', () => {
     }
     assert.strictEqual(stub.called, true)
     assert.deepStrictEqual(stub.args, [
-      [ '\u001b[31m☒\u001b[39m  Configuration file “~/.baldr.json” not found!\nCreate such a config file or use the “--path” option!\n\nExample configuration file:\n{\n\t"songbook": {\n\t\t"path": "/home/jf/songs"\n\t}\n}\n' ]
+      [ '\u001b[31m☒\u001b[39m  Configuration file “~/.baldr.json” not found!\nCreate such a config file or use the “--base-path” option!\n\nExample configuration file:\n{\n\t"songbook": {\n\t\t"path": "/home/jf/songs"\n\t}\n}\n' ]
     ])
   })
 
@@ -916,8 +916,7 @@ describe('Command line interface', () => {
   }
 
   describe('Require as module', () => {
-    it('--path', () => {
-      const indexRewired = require('rewire')('../index.js')
+    it('--base-path', () => {
       let Message = indexRewired.__get__('Message')
       let message = new Message()
       let stub = sinon.stub()
@@ -926,7 +925,7 @@ describe('Command line interface', () => {
 
       let main = indexRewired.__get__('main')
       indexRewired.__set__('process.argv', [
-        '', '', '--path', path.join('test', 'songs', 'clean', 'some')
+        '', '', '--base-path', path.join('test', 'songs', 'clean', 'some')
       ])
       main()
 
@@ -943,8 +942,8 @@ describe('Command line interface', () => {
       )
     })
 
-    it('--tex', () => {
-      invokeCommand(['--path', path.join('test', 'songs', 'processed', 'one'), '--tex'])
+    it('--piano', () => {
+      invokeCommand(['--base-path', path.join('test', 'songs', 'processed', 'one'), '--piano'])
       let tex = path.join('test', 'songs', 'processed', 'one', 'songs.tex')
 
       assertExists(tex)

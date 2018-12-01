@@ -116,8 +116,9 @@ function parseCliArguments (argv) {
     .option('-c, --clean', 'clean up (delete all generated files)')
     .option('-F, --folder <folder>', 'process only the given song folder')
     .option('-f, --force', 'rebuild all images')
-    .option('-p --path <path>', 'Base path to a song collection.')
-    .option('-t, --tex', 'generate TeX file')
+    .option('-b --base-path <base-path>', 'Base path of a song collection.')
+    .option('-p, --piano', 'Generate the piano files only.')
+    .option('-s, --slides', 'Generate the slides only.')
     .parse(argv)
 }
 
@@ -1190,15 +1191,10 @@ let main = function () {
     options.force = true
   }
 
-  let config = {
-    folder: options.folder,
-    force: options.force
-  }
+  let config = bootstrapConfig()
 
-  config = bootstrapConfig(config)
-
-  if (options.path && options.path.length > 0) {
-    config.path = options.path
+  if (options.path && options.basePath.length > 0) {
+    config.path = options.basePath
   }
 
   let library = new Library(config.path)
