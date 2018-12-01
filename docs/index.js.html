@@ -299,6 +299,11 @@ class Folder {
     fs.mkdirSync(this.folderPath)
   }
 
+  /**
+   * Return the path of the folder
+   *
+   * @returns {string}
+   */
   get () {
     return this.folderPath
   }
@@ -451,18 +456,34 @@ class TeXFile {
     this.flush()
   }
 
+  /**
+   * Append content to the TeX file.
+   *
+   * @param {string} content - Content to append to the Tex file.
+   */
   append (content) {
     fs.appendFileSync(this.path, content)
   }
 
+  /**
+   * Remove the TeX file.
+   */
   remove () {
     fs.unlinkSync(this.path)
   }
 
+  /**
+   * Delete the content of the TeX file, not the TeX file itself.
+   */
   flush () {
     fs.writeFileSync(this.path, '')
   }
 
+  /**
+   * Read the complete TeX file
+   *
+   * @return {string}
+   */
   read () {
     return fs.readFileSync(this.path, { encoding: 'utf8' })
   }
@@ -1028,14 +1049,6 @@ class Library {
 
   /**
    * Execute git pull if repository exists.
-   *
-   * To get changed files:
-   * git diff-tree --no-commit-id --name-only -r &lt;commit-ish>
-   * git diff-tree --no-commit-id --name-only -r babeae91638b55978b99ee5eb49ac2bf361df51e c11e2736edf1c6f6be47eeaa58fa172beedd6e0c
-   * git diff-tree --no-commit-id --name-only -r ba03fc103f962f8274b50aade61c99214d26e918 c11e2736edf1c6f6be47eeaa58fa172beedd6e0c
-   *
-   * Get current commit id:
-   * git rev-parse HEAD
    */
   gitPull () {
     if (fs.existsSync(path.join(this.basePath, '.git'))) {
@@ -1079,7 +1092,6 @@ class Library {
    * folders.
    *
    * @return {object} - A tree object like this:
-   *
    * &lt;pre>&lt;code>
    * {
    *   "a": [ song, song ],
@@ -1155,6 +1167,11 @@ class Library {
     }
   }
 
+  /**
+   * Generate all intermediate media files for one song.
+   *
+   * @param {string} folder - The path of the parent song folder.
+   */
   updateSongFolder (folder) {
     let song = new Song(folder, this.fileMonitor)
     let status = song.files.generateIntermediateFiles(true)
@@ -1226,6 +1243,10 @@ class Library {
   }
 }
 
+/**
+ * Main function: This function gets executed when the script is called
+ * on the command line.
+ */
 let main = function () {
   let options = parseCliArguments(process.argv)
 
