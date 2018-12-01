@@ -41,7 +41,7 @@ const pckg = require('./package.json');
 var index = require('./index.js');
 
 
-var setOptions = function(argv) {
+var parseCliArguments = function(argv) {
   return commander
     .version(pckg.version)
     .option('-c, --clean', 'clean up (delete all generated files)')
@@ -88,7 +88,7 @@ var processOptions = function(options) {
 };
 
 var main = function() {
-  processOptions(setOptions(process.argv));
+  processOptions(parseCliArguments(process.argv));
 };
 
 if (require.main === module) {

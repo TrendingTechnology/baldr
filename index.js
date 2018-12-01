@@ -117,7 +117,7 @@ function bootstrapConfig (newConfig = false) {
   return config
 }
 
-function setOptions (argv) {
+function parseCliArguments (argv) {
   return commander
     .version(pckg.version)
     .option('-c, --clean', 'clean up (delete all generated files)')
@@ -1199,7 +1199,7 @@ class Library {
 }
 
 let main = function () {
-  let options = setOptions(process.argv)
+  let options = parseCliArguments(process.argv)
 
   if (options.folder) {
     options.force = true
