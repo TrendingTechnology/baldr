@@ -99,7 +99,7 @@ describe('Function “checkExecutables()”', () => {
 
 it('Function “bootstrapConfig()”', () => {
   let bootstrapConfig = indexRewired.__get__('bootstrapConfig')
-  let config = bootstrapConfig({ path: path.resolve('test', 'songs', 'clean', 'some'), test: true })
+  let config = bootstrapConfig()
   assert.strictEqual(config.path, path.resolve('test', 'songs', 'clean', 'some'))
 })
 
@@ -108,7 +108,7 @@ it('Function “bootstrapConfig()”: exit', () => {
   process.env.PATH = ''
   try {
     let bootstrapConfig = indexRewired.__get__('bootstrapConfig')
-    bootstrapConfig({ path: path.resolve('test', 'songs', 'clean', 'some'), test: true })
+    bootstrapConfig()
   } catch (e) {
     assert.strictEqual(
       e.message,

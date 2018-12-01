@@ -65,10 +65,8 @@ function checkExecutables (executables = []) {
 /**
  * By default this module reads the config file ~/.baldr to
  * generate its config object.
- * @param {object} newConfig - An object containing the same properties as the
- * config object.
  */
-function bootstrapConfig (newConfig = false) {
+function bootstrapConfig () {
   let { status, unavailable } = checkExecutables([
     'mscore-to-eps.sh',
     'pdf2svg',
@@ -100,11 +98,6 @@ function bootstrapConfig (newConfig = false) {
   let configFileExits = fs.existsSync(configFile)
   if (configFileExits) {
     config = Object.assign(config, require(configFile).songbook)
-  }
-
-  // function parameter
-  if (newConfig) {
-    config = Object.assign(config, newConfig)
   }
 
   if (process.env.BALDR_SONGBOOK_PATH) {
