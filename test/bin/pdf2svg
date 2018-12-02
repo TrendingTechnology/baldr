@@ -9,7 +9,7 @@
 
 #SONG=$(echo "$1" | sed -e "s#$(pwd)/songs/##g" -e "s#/projector.pdf##")
 
-# Auf-der-Mauer_auf-der-Lauer:  2 pages
+# Auf-der-Mauer:  2 pages
 # Swing-low:                    2 pages
 # Zum-Tanze-da-geht-ein-Maedel: 2 pages
 

@@ -13,7 +13,7 @@
 # piano_1.eps
 # piano_2.eps
 
-# Auf-der-Mauer_auf-der-Lauer:  1 page
+# Auf-der-Mauer:  1 page
 # Swing-low:                    1 page
 # Zum-Tanze-da-geht-ein-Maedel: 2 pages
 

@@ -30,15 +30,9 @@ let mkTmpFile = function () {
   return tmp.fileSync().name
 }
 
-let tmpSongsClean = function () {
+let tmpCopy = function (folder1, folder2) {
   let tmpDir = mkTmpDir()
-  fs.copySync(path.resolve('test', 'songs', 'clean', 'some'), tmpDir)
-  return tmpDir
-}
-
-let tmpSongsProcessed = function () {
-  let tmpDir = mkTmpDir()
-  fs.copySync(path.resolve('test', 'songs', 'processed', 'some'), tmpDir)
+  fs.copySync(path.resolve('test', 'songs', folder1, folder2), tmpDir)
   return tmpDir
 }
 
@@ -170,15 +164,15 @@ describe('Classes', function () {
     let Message = indexRewired.__get__('Message')
     let message = indexRewired.__get__('message')
     let Song = indexRewired.__get__('Song')
-    let song = new Song(path.resolve('test', 'songs', 'processed', 'some', 'a', 'Auf-der-Mauer_auf-der-Lauer'))
+    let song = new Song(path.resolve('test', 'songs', 'processed', 'some', 'a', 'Auf-der-Mauer'))
 
     const status = {
       'changed': {
         'piano': false,
         'slides': false
       },
-      'folder': 'songs/a/Auf-der-Mauer_auf-der-Lauer',
-      'folderName': 'Auf-der-Mauer_auf-der-Lauer',
+      'folder': 'songs/a/Auf-der-Mauer',
+      'folderName': 'Auf-der-Mauer',
       'force': false,
       'generated': {}
     }
@@ -240,7 +234,7 @@ describe('Classes', function () {
         let finished = clone(status)
         assertSongFolder(
           finished,
-          '\u001b[32m☑\u001b[39m  \u001b[32mAuf-der-Mauer_auf-der-Lauer\u001b[39m: Auf der Mauer, auf der Lauer'
+          '\u001b[32m☑\u001b[39m  \u001b[32mAuf-der-Mauer\u001b[39m: Auf der Mauer, auf der Lauer'
         )
       })
 
@@ -249,7 +243,7 @@ describe('Classes', function () {
         progress.changed.slides = true
         assertSongFolder(
           progress,
-          '\u001b[33m☐\u001b[39m  \u001b[33mAuf-der-Mauer_auf-der-Lauer\u001b[39m: Auf der Mauer, auf der Lauer'
+          '\u001b[33m☐\u001b[39m  \u001b[33mAuf-der-Mauer\u001b[39m: Auf der Mauer, auf der Lauer'
         )
       })
 
@@ -270,7 +264,7 @@ describe('Classes', function () {
         forced.force = true
         assertSongFolder(
           forced,
-          '\u001b[32m☑\u001b[39m  \u001b[32mAuf-der-Mauer_auf-der-Lauer\u001b[39m: Auf der Mauer, auf der Lauer \u001b[31m(forced)\u001b[39m\n\t\u001b[33mslides\u001b[39m: 01.svg, 02.svg\n\t\u001b[33mpiano\u001b[39m: piano_1.eps, piano_2.eps'
+          '\u001b[32m☑\u001b[39m  \u001b[32mAuf-der-Mauer\u001b[39m: Auf der Mauer, auf der Lauer \u001b[31m(forced)\u001b[39m\n\t\u001b[33mslides\u001b[39m: 01.svg, 02.svg\n\t\u001b[33mpiano\u001b[39m: piano_1.eps, piano_2.eps'
         )
       })
 
@@ -286,7 +280,7 @@ describe('Classes', function () {
           }
         assertSongFolder(
           generatedPiano,
-          '\u001b[33m☐\u001b[39m  \u001b[33mAuf-der-Mauer_auf-der-Lauer\u001b[39m: Auf der Mauer, auf der Lauer\n\t\u001b[33mpiano\u001b[39m: piano_1.eps, piano_2.eps'
+          '\u001b[33m☐\u001b[39m  \u001b[33mAuf-der-Mauer\u001b[39m: Auf der Mauer, auf der Lauer\n\t\u001b[33mpiano\u001b[39m: piano_1.eps, piano_2.eps'
         )
       })
 
@@ -303,7 +297,7 @@ describe('Classes', function () {
           }
         assertSongFolder(
           generatedSlides,
-          '\u001b[33m☐\u001b[39m  \u001b[33mAuf-der-Mauer_auf-der-Lauer\u001b[39m: Auf der Mauer, auf der Lauer\n\t\u001b[33mslides\u001b[39m: 01.svg, 02.svg'
+          '\u001b[33m☐\u001b[39m  \u001b[33mAuf-der-Mauer\u001b[39m: Auf der Mauer, auf der Lauer\n\t\u001b[33mslides\u001b[39m: 01.svg, 02.svg'
         )
       })
     })
@@ -514,7 +508,7 @@ describe('Classes', function () {
   })
 
   describe('Class “SongMetaData()”', function () {
-    let songPath = path.resolve('test', 'songs', 'clean', 'some', 'a', 'Auf-der-Mauer_auf-der-Lauer')
+    let songPath = path.resolve('test', 'songs', 'clean', 'some', 'a', 'Auf-der-Mauer')
     let SongMetaData = indexRewired.__get__('SongMetaData')
     let song = new SongMetaData(songPath)
 
@@ -667,7 +661,7 @@ describe('Classes', function () {
 
     describe('Real world example', function () {
       let SongMetaData = indexRewired.__get__('SongMetaData')
-      let folder = path.join('test', 'songs', 'clean', 'some', 'a', 'Auf-der-Mauer_auf-der-Lauer')
+      let folder = path.join('test', 'songs', 'clean', 'some', 'a', 'Auf-der-Mauer')
       let metaData = new SongMetaData(folder)
       let combined = new SongMetaDataCombined(metaData)
       it('title', function () {
@@ -689,7 +683,7 @@ describe('Classes', function () {
     let Song = indexRewired.__get__('Song')
     let FileMonitor = indexRewired.__get__('FileMonitor')
     let fileMonitor = new FileMonitor(mkTmpFile())
-    let folder = path.join('test', 'songs', 'clean', 'some', 'a', 'Auf-der-Mauer_auf-der-Lauer')
+    let folder = path.join('test', 'songs', 'clean', 'some', 'a', 'Auf-der-Mauer')
     let song = new Song(folder, fileMonitor)
 
     afterEach(function () {
@@ -727,7 +721,7 @@ describe('Classes', function () {
       })
 
       it('Property “songID”', function () {
-        assert.strictEqual(song.songID, 'Auf-der-Mauer_auf-der-Lauer')
+        assert.strictEqual(song.songID, 'Auf-der-Mauer')
       })
 
       it('Property “metaData”', function () {
@@ -822,7 +816,7 @@ describe('Classes', function () {
 
       describe('Method “generateIntermediateFiles()”', function () {
         it('First run', function () {
-          let status = song.generateIntermediateFiles()
+          let status = song.generateIntermediateFiles('all', false)
           assert.deepStrictEqual(
             status,
             {
@@ -830,8 +824,8 @@ describe('Classes', function () {
                 'piano': true,
                 'slides': true
               },
-              'folder': 'test/songs/clean/some/a/Auf-der-Mauer_auf-der-Lauer',
-              'folderName': 'Auf-der-Mauer_auf-der-Lauer',
+              'folder': 'test/songs/clean/some/a/Auf-der-Mauer',
+              'folderName': 'Auf-der-Mauer',
               'force': false,
               'generated': {
                 'piano': [
@@ -849,20 +843,20 @@ describe('Classes', function () {
         })
 
         it('Second run', function () {
-          song.generateIntermediateFiles()
-          let status = song.generateIntermediateFiles()
+          song.generateIntermediateFiles('all', false)
+          let status = song.generateIntermediateFiles('all', false)
           assert.strictEqual(status.changed.piano, false)
           assert.strictEqual(status.changed.slides, false)
         })
 
         it('force', function () {
-          let status = song.generateIntermediateFiles(true)
+          let status = song.generateIntermediateFiles('all', true)
           assert.strictEqual(status.force, true)
         })
       })
 
       describe('Method “getFolderFiles_()”', function () {
-        let folder = path.join('test', 'songs', 'processed', 'one', 'a', 'Auf-der-Mauer_auf-der-Lauer')
+        let folder = path.join('test', 'songs', 'processed', 'one', 'a', 'Auf-der-Mauer')
         let song = new Song(folder)
 
         it('Method “getFolderFiles_()”: eps', function () {
@@ -951,7 +945,7 @@ describe('Classes', function () {
       })
 
       it('Method “cleanIntermediateFiles()”', function () {
-        song.generateIntermediateFiles()
+        song.generateIntermediateFiles('all', false)
         assert.ok(fs.existsSync(path.join(song.folder, 'projector.pdf')))
         song.cleanIntermediateFiles()
         assert.ok(!fs.existsSync(path.join(song.folder, 'projector.pdf')))
@@ -976,7 +970,7 @@ describe('Classes', function () {
         function () {
           return new Library(basePath)
         },
-        /^.*A song with the same songID already exists: Auf-der-Mauer_auf-der-Lauer$/
+        /^.*A song with the same songID already exists: Auf-der-Mauer$/
       )
     })
 
@@ -991,7 +985,7 @@ describe('Classes', function () {
       })
 
       it('Property “songs”', function () {
-        assert.strictEqual(library.songs['Auf-der-Mauer_auf-der-Lauer'].songID, 'Auf-der-Mauer_auf-der-Lauer')
+        assert.strictEqual(library.songs['Auf-der-Mauer'].songID, 'Auf-der-Mauer')
       })
     })
 
@@ -1005,7 +999,7 @@ describe('Classes', function () {
       })
 
       it('Method “getSongById()”', function () {
-        assert.strictEqual(library.getSongById('Auf-der-Mauer_auf-der-Lauer').metaData.title, 'Auf der Mauer, auf der Lauer')
+        assert.strictEqual(library.getSongById('Auf-der-Mauer').metaData.title, 'Auf der Mauer, auf der Lauer')
       })
 
       it('Method “getSongById()”: Exception', function () {
@@ -1027,7 +1021,7 @@ describe('Classes', function () {
         let folderTree = library.buildAlphabeticalSongTree()
         assert.deepStrictEqual(
           folderTree.a[0].songID,
-          'Auf-der-Mauer_auf-der-Lauer')
+          'Auf-der-Mauer')
         assert.deepStrictEqual(
           folderTree.s[0].songID,
           'Stille-Nacht')
@@ -1049,9 +1043,9 @@ describe('Classes', function () {
         for (let songID in library.songs) {
           library.songs[songID].generateIntermediateFiles = spy
         }
-        library.generateIntermediateFiles(false)
+        library.generateIntermediateFiles('all', false)
         assert.strictEqual(spy.callCount, 4)
-        assert.ok(spy.calledWith(false))
+        assert.ok(spy.calledWith('all', false))
         stub()
       })
 
@@ -1063,8 +1057,8 @@ describe('Classes', function () {
         for (let songID in library.songs) {
           library.songs[songID].generateIntermediateFiles = spy
         }
-        library.generateIntermediateFiles(true)
-        assert.ok(spy.calledWith(true))
+        library.generateIntermediateFiles('all', true)
+        assert.ok(spy.calledWith('all', true))
         stub()
       })
 
@@ -1101,7 +1095,7 @@ describe('Classes', function () {
 
         let buildFolderList = function (basePath) {
           return [
-            path.join(basePath, 'a', 'Auf-der-Mauer_auf-der-Lauer'),
+            path.join(basePath, 'a', 'Auf-der-Mauer'),
             path.join(basePath, 's', 'Swing-low'),
             path.join(basePath, 'z', 'Zum-Tanze-da-geht-ein-Maedel')
           ]
@@ -1132,7 +1126,7 @@ describe('Classes', function () {
             assertExists(folders[i], 'piano', 'piano.mscx')
           }
 
-          assertExists(tmpDir, 'a', 'Auf-der-Mauer_auf-der-Lauer', 'piano', 'piano_1.eps')
+          assertExists(tmpDir, 'a', 'Auf-der-Mauer', 'piano', 'piano_1.eps')
           assertExists(tmpDir, 's', 'Swing-low', 'piano', 'piano_1.eps')
           assertExists(tmpDir, 'z', 'Zum-Tanze-da-geht-ein-Maedel', 'piano', 'piano_1.eps')
           assertExists(tmpDir, 'z', 'Zum-Tanze-da-geht-ein-Maedel', 'piano', 'piano_2.eps')
@@ -1145,7 +1139,7 @@ describe('Classes', function () {
           indexRewired.__set__('message.songFolder', stub)
 
           let songs = path.join('test', 'songs', 'clean', 'some')
-          const auf = path.join(songs, 'a', 'Auf-der-Mauer_auf-der-Lauer')
+          const auf = path.join(songs, 'a', 'Auf-der-Mauer')
           const swing = path.join(songs, 's', 'Swing-low')
           const zum = path.join(songs, 'z', 'Zum-Tanze-da-geht-ein-Maedel')
           const folders = [auf, swing, zum]
@@ -1226,7 +1220,7 @@ describe('Command line interface', function () {
 
       let commander = indexRewired.__get__('commander')
       assert.strictEqual(commander.basePath, tmpDir)
-      assert.strictEqual(removeANSI(stub.args[0][0]), removeANSI('\u001b[33m☐\u001b[39m  \u001b[33mAuf-der-Mauer_auf-der-Lauer\u001b[39m: Auf der Mauer, auf der Lauer\n\t\u001b[33mslides\u001b[39m: 01.svg, 02.svg\n\t\u001b[33mpiano\u001b[39m: piano_1.eps, piano_2.eps'))
+      assert.strictEqual(removeANSI(stub.args[0][0]), removeANSI('\u001b[33m☐\u001b[39m  \u001b[33mAuf-der-Mauer\u001b[39m: Auf der Mauer, auf der Lauer\n\t\u001b[33mslides\u001b[39m: 01.svg, 02.svg\n\t\u001b[33mpiano\u001b[39m: piano_1.eps, piano_2.eps'))
     })
 
     it.skip('--piano', function () {
@@ -1253,11 +1247,11 @@ describe('Command line interface', function () {
       indexRewired.__set__('process.argv', [
         '', '',
         '--folder',
-        'test/songs/clean/some/a/Auf-der-Mauer_auf-der-Lauer'
+        'test/songs/clean/some/a/Auf-der-Mauer'
       ])
       main()
       let output = stub.args[0][0]
-      assert.ok(output.includes('Auf-der-Mauer_auf-der-Lauer'))
+      assert.ok(output.includes('Auf-der-Mauer'))
       assert.ok(output.includes('01.svg, 02.svg'))
       assert.ok(output.includes('piano_1.eps, piano_2.eps'))
     })
@@ -1294,7 +1288,11 @@ describe('Command line interface', function () {
     })
 
     it('--force', function () {
-      spawn('./index.js', ['--force'])
+      let tmpDir = tmpCopy('clean', 'one')
+      let notForced = spawn('./index.js', ['--base-path', tmpDir])
+      assert.ok(!notForced.stdout.toString().includes('(forced)'))
+      let forced = spawn('./index.js', ['--base-path', tmpDir, '--force'])
+      assert.ok(forced.stdout.toString().includes('(forced)'))
     })
 
     it('--help', function () {
@@ -1315,7 +1313,7 @@ describe('Command line interface', function () {
 
     // Test should be executed at the very last position.
     it('--clean', function () {
-      let tmpDir = tmpSongsProcessed()
+      let tmpDir = tmpCopy('processed', 'one')
       spawn('./index.js', ['--base-path', tmpDir, '--clean'])
       assertNotExists(tmpDir, 's', 'Swing-low', 'piano', 'piano.mscx')
     })

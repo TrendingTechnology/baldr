@@ -176,8 +176,8 @@ class Message {
    *     "piano": false,
    *     "slides": false
    *   },
-   *   "folder": "songs/a/Auf-der-Mauer_auf-der-Lauer",
-   *   "folderName": "Auf-der-Mauer_auf-der-Lauer",
+   *   "folder": "songs/a/Auf-der-Mauer",
+   *   "folderName": "Auf-der-Mauer",
    *   "force": true,
    *   "generated": {
    *     "piano": [
@@ -925,9 +925,12 @@ class Song {
 
   /**
    * Wrapper method for all process methods of one song folder.
-   * @param {boolean} force - Force the generation of media files.
+   *
+   * @param {string} mode - Generate all intermediate media files or only slide
+   *   and piano files. Possible values: “all”, “slides” or “piano”
+   * @param {boolean} force - Force the regeneration of intermediate files.
    */
-  generateIntermediateFiles (force = false) {
+  generateIntermediateFiles (mode = 'all', force = false) {
     let status = { changed: {}, generated: {} }
 
     status.folder = this.folder
@@ -1131,12 +1134,14 @@ class Library {
   /**
    * Calls the method generateIntermediateFiles on each song
    *
+   * @param {string} mode - Generate all intermediate media files or only slide
+   *   and piano files. Possible values: “all”, “slides” or “piano”
    * @param {boolean} force - Force the regeneration of intermediate files.
    */
-  generateIntermediateFiles (force = false) {
+  generateIntermediateFiles (mode = 'all', force = false) {
     for (let songID in this.songs) {
       let song = this.songs[songID]
-      let status = song.generateIntermediateFiles(force)
+      let status = song.generateIntermediateFiles(mode, force)
       message.songFolder(status, song)
     }
   }
@@ -1159,7 +1164,7 @@ class Library {
    *
    * @return {object}
    * <code><pre>
-   * { a: { '3': { 'Auf-der-Mauer_auf-der-Lauer': [Object] } },
+   * { a: { '3': { 'Auf-der-Mauer': [Object] } },
    *   s:
    *    { '1': { 'Stille-Nacht': [Object] },
    *      '3': { 'Swing-low': [Object] } },
@@ -1210,14 +1215,16 @@ class Library {
   /**
    * Update the whole song library.
    *
-   * @param {string} mode - “all”, “slides” or “piano”
+   * @param {string} mode - Generate all intermediate media files or only slide
+   *   and piano files. Possible values: “all”, “slides” or “piano”
+   * @param {boolean} force - Force the regeneration of intermediate files.
    */
-  update (mode = 'all') {
+  update (mode = 'all', force = false) {
     if (!['all', 'slides', 'piano'].includes(mode)) {
       throw new Error('The parameter “mode” must be one of this strings: “all”, “slides” or “piano”.')
     }
     this.gitPull()
-    this.generateIntermediateFiles(mode)
+    this.generateIntermediateFiles(mode, force)
     if (mode === 'piano' || mode === 'all') this.generateTeX()
   }
 }
@@ -1255,7 +1262,7 @@ let main = function () {
   } else if (options.folder) {
     library.updateSongFolder(options.folder)
   } else {
-    library.update(mode)
+    library.update(mode, options.force)
   }
 }
 
