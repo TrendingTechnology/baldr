@@ -7,24 +7,19 @@ const sinon = require('sinon')
 const spawn = require('child_process').spawnSync
 const standard = require('mocha-standard')
 const tmp = require('tmp')
+const util = require('util')
 
 process.env.PATH = path.join(__dirname, 'bin:', process.env.PATH)
 process.env.BALDR_SONGBOOK_PATH = path.resolve('test', 'songs', 'clean', 'some')
 
 let assertExists = function () {
-  assert.ok(
-    fs.existsSync(
-      path.join.apply(null, arguments)
-    )
-  )
+  let file = path.join.apply(null, arguments)
+  assert.ok(fs.existsSync(file), util.format('File exists not: %s', file))
 }
 
 let assertNotExists = function () {
-  assert.ok(
-    !fs.existsSync(
-      path.join.apply(null, arguments)
-    )
-  )
+  let file = path.join.apply(null, arguments)
+  assert.ok(!fs.existsSync(file), util.format('File exists: %s', file))
 }
 
 let mkTmpDir = function () {
@@ -33,6 +28,18 @@ let mkTmpDir = function () {
 
 let mkTmpFile = function () {
   return tmp.fileSync().name
+}
+
+let tmpSongsClean = function () {
+  let tmpDir = mkTmpDir()
+  fs.copySync(path.resolve('test', 'songs', 'clean', 'some'), tmpDir)
+  return tmpDir
+}
+
+let tmpSongsProcessed = function () {
+  let tmpDir = mkTmpDir()
+  fs.copySync(path.resolve('test', 'songs', 'processed', 'some'), tmpDir)
+  return tmpDir
 }
 
 /**
@@ -131,6 +138,29 @@ describe('Functions', function () {
         assert.strictEqual(e.name, 'UnavailableCommandsError')
       }
       process.env.PATH = savePATH
+    })
+  })
+
+  describe('Function “parseCliArguments()”', function () {
+    let parseCliArguments = indexRewired.__get__('parseCliArguments')
+    it('version', function () {
+      let args = parseCliArguments(['-', '-'], '1')
+      assert.strictEqual(args.version(), '1')
+    })
+
+    it('--base-path', function () {
+      let args = parseCliArguments(['-', '-', '--base-path', 'lol'], '1')
+      assert.strictEqual(args.basePath, 'lol')
+    })
+
+    it('--slides', function () {
+      let args = parseCliArguments(['-', '-', '--slides'], '1')
+      assert.strictEqual(args.slides, true)
+    })
+
+    it('no --slides', function () {
+      let args = parseCliArguments(['-', '-'], '1')
+      assert.strictEqual(args.slides, undefined)
     })
   })
 })
@@ -931,8 +961,14 @@ describe('Classes', function () {
 
   describe('Class “Library()”', function () {
     let Library = indexRewired.__get__('Library')
-    let basePath = path.join('test', 'songs', 'processed', 'some')
-    let library = new Library(basePath)
+    let library
+    let basePath
+
+    beforeEach(function () {
+      basePath = mkTmpDir()
+      fs.copySync(path.join('test', 'songs', 'processed', 'some'), basePath)
+      library = new Library(basePath)
+    })
 
     it('Exceptions', function () {
       let basePath = path.join('test', 'songs', 'processed')
@@ -1032,35 +1068,6 @@ describe('Classes', function () {
         stub()
       })
 
-      it('Method “update()”', function () {
-        let stub = sinon.stub()
-        indexRewired.__set__('message.songFolder', stub)
-
-        let songs = path.join('test', 'songs', 'clean', 'some')
-        const auf = path.join(songs, 'a', 'Auf-der-Mauer_auf-der-Lauer')
-        const swing = path.join(songs, 's', 'Swing-low')
-        const zum = path.join(songs, 'z', 'Zum-Tanze-da-geht-ein-Maedel')
-        const folders = [auf, swing, zum]
-
-        let library = new Library(songs)
-        library.fileMonitor.flush()
-        library.update()
-
-        for (let i = 0; i < folders.length; ++i) {
-          assertExists(folders[i], 'slides')
-          assertExists(folders[i], 'slides', '01.svg')
-          assertExists(folders[i], 'piano')
-          assertExists(folders[i], 'piano', 'piano.mscx')
-        }
-
-        assertExists(auf, 'piano', 'piano_1.eps')
-        assertExists(swing, 'piano', 'piano_1.eps')
-        assertExists(zum, 'piano', 'piano_1.eps')
-        assertExists(zum, 'piano', 'piano_2.eps')
-
-        library.cleanIntermediateFiles()
-      })
-
       it('Method “buildPianoFilesCountTree()”', function () {
         let count = library.buildPianoFilesCountTree()
         assert.strictEqual(count.a[3][0].metaData.title, 'Auf der Mauer, auf der Lauer')
@@ -1084,6 +1091,100 @@ describe('Classes', function () {
 
         assert.ok(texContent.indexOf('\\tmpimage') > -1)
         assert.ok(texContent.indexOf('\\tmpheading') > -1)
+      })
+
+      describe('Method “update()”', function () {
+        let stub = sinon.stub()
+        indexRewired.__set__('message.songFolder', stub)
+
+        let songs = path.join('test', 'songs', 'clean', 'some')
+
+        let buildFolderList = function (basePath) {
+          return [
+            path.join(basePath, 'a', 'Auf-der-Mauer_auf-der-Lauer'),
+            path.join(basePath, 's', 'Swing-low'),
+            path.join(basePath, 'z', 'Zum-Tanze-da-geht-ein-Maedel')
+          ]
+        }
+
+        it('Exception', function () {
+          assert.throws(
+            function () {
+              library.update('lol')
+            },
+            /^.*The parameter “mode” must be one of this strings: “all”, “slides” or “piano”.*$/
+          )
+          library.cleanIntermediateFiles()
+        })
+
+        it('mode = all', function () {
+          let tmpDir = mkTmpDir()
+          fs.copySync(songs, tmpDir)
+          let library = new Library(tmpDir)
+          library.update()
+
+          const folders = buildFolderList(tmpDir)
+
+          for (let i = 0; i < folders.length; ++i) {
+            assertExists(folders[i], 'slides')
+            assertExists(folders[i], 'slides', '01.svg')
+            assertExists(folders[i], 'piano')
+            assertExists(folders[i], 'piano', 'piano.mscx')
+          }
+
+          assertExists(tmpDir, 'a', 'Auf-der-Mauer_auf-der-Lauer', 'piano', 'piano_1.eps')
+          assertExists(tmpDir, 's', 'Swing-low', 'piano', 'piano_1.eps')
+          assertExists(tmpDir, 'z', 'Zum-Tanze-da-geht-ein-Maedel', 'piano', 'piano_1.eps')
+          assertExists(tmpDir, 'z', 'Zum-Tanze-da-geht-ein-Maedel', 'piano', 'piano_2.eps')
+
+          assertExists(tmpDir, 'songs.tex')
+        })
+
+        it('mode = piano', function () {
+          let stub = sinon.stub()
+          indexRewired.__set__('message.songFolder', stub)
+
+          let songs = path.join('test', 'songs', 'clean', 'some')
+          const auf = path.join(songs, 'a', 'Auf-der-Mauer_auf-der-Lauer')
+          const swing = path.join(songs, 's', 'Swing-low')
+          const zum = path.join(songs, 'z', 'Zum-Tanze-da-geht-ein-Maedel')
+          const folders = [auf, swing, zum]
+
+          let library = new Library(songs)
+          library.fileMonitor.flush()
+          library.update()
+
+          for (let i = 0; i < folders.length; ++i) {
+            assertExists(folders[i], 'slides')
+            assertExists(folders[i], 'slides', '01.svg')
+            assertExists(folders[i], 'piano')
+            assertExists(folders[i], 'piano', 'piano.mscx')
+          }
+
+          assertExists(auf, 'piano', 'piano_1.eps')
+          assertExists(swing, 'piano', 'piano_1.eps')
+          assertExists(zum, 'piano', 'piano_1.eps')
+          assertExists(zum, 'piano', 'piano_2.eps')
+
+          library.cleanIntermediateFiles()
+        })
+
+        it('mode = slides', function () {
+          let tmpDir = mkTmpDir()
+          fs.copySync(songs, tmpDir)
+          let library = new Library(tmpDir)
+          library.update('slides')
+
+          // const folders = buildFolderList(tmpDir)
+
+          // for (let i = 0; i < folders.length; ++i) {
+          //   assertExists(folders[i], 'slides')
+          //   assertExists(folders[i], 'slides', '01.svg')
+          //   assertNotExists(folders[i], 'piano')
+          //   assertNotExists(folders[i], 'piano', 'piano.mscx')
+          // }
+          assertNotExists(tmpDir, 'songs.tex')
+        })
       })
     })
   })
@@ -1113,15 +1214,18 @@ describe('Command line interface', function () {
       let stub = sinon.stub()
       message.print = stub
       indexRewired.__set__('message', message)
+      let tmpDir = mkTmpDir()
+
+      fs.copySync(path.join('test', 'songs', 'clean', 'some'), tmpDir)
 
       let main = indexRewired.__get__('main')
       indexRewired.__set__('process.argv', [
-        '', '', '--base-path', path.join('test', 'songs', 'clean', 'some')
+        '', '', '--base-path', tmpDir
       ])
       main()
 
       let commander = indexRewired.__get__('commander')
-      assert.strictEqual(commander.basePath, path.join('test', 'songs', 'clean', 'some'))
+      assert.strictEqual(commander.basePath, tmpDir)
       assert.strictEqual(removeANSI(stub.args[0][0]), removeANSI('\u001b[33m☐\u001b[39m  \u001b[33mAuf-der-Mauer_auf-der-Lauer\u001b[39m: Auf der Mauer, auf der Lauer\n\t\u001b[33mslides\u001b[39m: 01.svg, 02.svg\n\t\u001b[33mpiano\u001b[39m: piano_1.eps, piano_2.eps'))
     })
 
@@ -1168,6 +1272,27 @@ describe('Command line interface', function () {
       spawn('./index.js')
     })
 
+    it('--base-path', function () {
+      let tmpDir = mkTmpDir()
+      fs.copySync(path.join('test', 'songs', 'clean', 'some'), tmpDir)
+      spawn('./index.js', ['--base-path', tmpDir])
+      assertExists(tmpDir, 'songs.tex')
+    })
+
+    it('--piano', function () {
+      let tmpDir = mkTmpDir()
+      fs.copySync(path.join('test', 'songs', 'clean', 'some'), tmpDir)
+      spawn('./index.js', ['--base-path', tmpDir, '--piano'])
+      assertExists(tmpDir, 'songs.tex')
+    })
+
+    it('--slides', function () {
+      let tmpDir = mkTmpDir()
+      fs.copySync(path.join('test', 'songs', 'clean', 'some'), tmpDir)
+      spawn('./index.js', ['--base-path', tmpDir, '--slides'])
+      assertNotExists(tmpDir, 'songs.tex')
+    })
+
     it('--force', function () {
       spawn('./index.js', ['--force'])
     })
@@ -1190,7 +1315,9 @@ describe('Command line interface', function () {
 
     // Test should be executed at the very last position.
     it('--clean', function () {
-      spawn('./index.js', ['--clean'])
+      let tmpDir = tmpSongsProcessed()
+      spawn('./index.js', ['--base-path', tmpDir, '--clean'])
+      assertNotExists(tmpDir, 's', 'Swing-low', 'piano', 'piano.mscx')
     })
   })
 })

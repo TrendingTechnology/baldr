@@ -8,7 +8,7 @@
 
 'use strict'
 
-const commander = require('commander')
+const { Command } = require('commander')
 const crypto = require('crypto')
 const fs = require('fs-extra')
 const glob = require('glob')
@@ -110,9 +110,17 @@ function bootstrapConfig () {
   return config
 }
 
-function parseCliArguments (argv) {
+/**
+ * Wrapper around the node module “commander”.
+ * @param {*} argv - The same as process.argv
+ * @param {string} version - The version string
+ */
+function parseCliArguments (argv, version) {
+  // To get a clean commander. Otherwise we get options from mocha in the tests.
+  // https://github.com/tj/commander.js/issues/438#issuecomment-274285003
+  const commander = new Command()
   return commander
-    .version(pckg.version)
+    .version(version)
     .option('-c, --clean', 'clean up (delete all generated files)')
     .option('-F, --folder <folder>', 'process only the given song folder')
     .option('-f, --force', 'rebuild all images')
@@ -1201,11 +1209,16 @@ class Library {
 
   /**
    * Update the whole song library.
+   *
+   * @param {string} mode - “all”, “slides” or “piano”
    */
-  update () {
+  update (mode = 'all') {
+    if (!['all', 'slides', 'piano'].includes(mode)) {
+      throw new Error('The parameter “mode” must be one of this strings: “all”, “slides” or “piano”.')
+    }
     this.gitPull()
-    this.generateIntermediateFiles()
-    this.generateTeX()
+    this.generateIntermediateFiles(mode)
+    if (mode === 'piano' || mode === 'all') this.generateTeX()
   }
 }
 
@@ -1214,13 +1227,22 @@ class Library {
  * on the command line.
  */
 let main = function () {
-  let options = parseCliArguments(process.argv)
+  let options = parseCliArguments(process.argv, pckg.version)
 
   if (options.folder) {
     options.force = true
   }
 
   let config = bootstrapConfig()
+
+  let mode
+  if (options.slides) {
+    mode = 'slides'
+  } else if (options.piano) {
+    mode = 'piano'
+  } else {
+    mode = 'all'
+  }
 
   if (options.path && options.basePath.length > 0) {
     config.path = options.basePath
@@ -1232,10 +1254,8 @@ let main = function () {
     library.cleanIntermediateFiles()
   } else if (options.folder) {
     library.updateSongFolder(options.folder)
-  } else if (options.tex) {
-    library.generateTeX()
   } else {
-    library.update()
+    library.update(mode)
   }
 }
 
