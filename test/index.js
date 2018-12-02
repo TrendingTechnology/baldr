@@ -1190,7 +1190,7 @@ describe('Command line interface', function () {
     path.join(path.resolve('.'), 'index.js')
   ]
 
-  const invokeCommand = function (argv) {
+  const callMainWithArgv = function (argv) {
     let main = indexRewired.__get__('main')
     indexRewired.__set__('process.argv', baseArgv.concat(argv))
     main()
@@ -1217,7 +1217,7 @@ describe('Command line interface', function () {
     })
 
     it.skip('--piano', function () {
-      invokeCommand(['--base-path', path.join('test', 'songs', 'processed', 'one'), '--piano'])
+      callMainWithArgv(['--base-path', path.join('test', 'songs', 'processed', 'one'), '--piano'])
       let tex = path.join('test', 'songs', 'processed', 'one', 'songs.tex')
 
       assertExists(tex)
