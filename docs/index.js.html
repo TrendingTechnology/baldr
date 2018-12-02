@@ -362,10 +362,19 @@ class Folder {
  */
 class Sqlite {
   /**
-   * @param {string} dbFile - The path where to store the Sqlite database.
+   * @param {string} dbFile - The path of the Sqlite database.
    */
   constructor (dbFile) {
+    /**
+     * The path of the Sqlite database.
+     * @type {string}
+     */
     this.dbFile = dbFile
+
+    /**
+     * A instance of the class “Sqlite3”.
+     * @type {module:baldr-songbook-updater~Sqlite3}
+     */
     this.db = new Sqlite3(this.dbFile)
     this.db
       .prepare(

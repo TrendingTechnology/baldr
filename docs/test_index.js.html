@@ -403,33 +403,50 @@ describe('Classes', function () {
       fs.unlinkSync(testDb)
     })
 
-    it('Object “Sqlite()”', function () {
-      assert.ok(db)
+    describe('Initialisation', function () {
+      it('Object “Sqlite()”', function () {
+        assert.ok(db)
+      })
+
+      it('test.db exists', function () {
+        assertExists(testDb)
+      })
     })
 
-    it('test.db exists', function () {
-      assertExists(testDb)
+    describe('Properties', function () {
+      it('Property “dbFile”', function () {
+        assert.strictEqual(db.dbFile, testDb)
+      })
+
+      it('Property “db”', function () {
+        const Sqlite3 = require('better-sqlite3')
+        assert.ok(db.db instanceof Sqlite3)
+      })
     })
 
-    it('Method “insert()”', function () {
-      db.insert('lol', 'toll')
-      let row = db.select('lol')
-      assert.strictEqual(row.hash, 'toll')
-    })
+    describe('Methods', function () {
+      describe('Method “insert()”', function () {
+        it('Successful insert', function () {
+          db.insert('lol', 'toll')
+          let row = db.select('lol')
+          assert.strictEqual(row.hash, 'toll')
+        })
 
-    it('Error', function () {
-      try {
+        it('Exception', function () {
+          try {
+            db.insert('lol', 'toll')
+            db.insert('lol', 'toll')
+          } catch (e) {
+            assert.strictEqual(e.name, 'SqliteError')
+          }
+        })
+      })
+
+      it('Method “update()”', function () {
         db.insert('lol', 'toll')
-        db.insert('lol', 'toll')
-      } catch (e) {
-        assert.strictEqual(e.name, 'SqliteError')
-      }
-    })
-
-    it('Method “update()”', function () {
-      db.insert('lol', 'toll')
-      db.update('lol', 'troll')
-      assert.strictEqual(db.select('lol').hash, 'troll')
+        db.update('lol', 'troll')
+        assert.strictEqual(db.select('lol').hash, 'troll')
+      })
     })
   })
 
