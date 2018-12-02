@@ -937,15 +937,18 @@ class Song {
     status.folderName = path.basename(this.folder)
 
     status.force = force
+    // TODO use: this.mscxSlides
     status.changed.slides = this.fileMonitor.isModified(
       path.join(this.folder, 'projector.mscx')
     )
-    // projector
-    if (force || status.changed.slides) {
+
+    // slides
+    if ((mode === 'all' || mode === 'slides') && (force || status.changed.slides)) {
       status.generated.projector = this.generatePDF_('projector')
       status.generated.slides = this.generateSlides_()
     }
 
+    // TODO use: this.mscxPiano
     if (
       this.fileMonitor.isModified(path.join(this.folder, 'lead.mscx')) ||
         this.fileMonitor.isModified(path.join(this.folder, 'piano.mscx'))
@@ -956,7 +959,7 @@ class Song {
     }
 
     // piano
-    if (force || status.changed.piano) {
+    if ((mode === 'all' || mode === 'piano') && (force || status.changed.piano)) {
       status.generated.piano = this.generatePiano_()
     }
     return status
@@ -1150,10 +1153,12 @@ class Library {
    * Generate all intermediate media files for one song.
    *
    * @param {string} folder - The path of the parent song folder.
+   * @param {string} mode - Generate all intermediate media files or only slide
+   *   and piano files. Possible values: “all”, “slides” or “piano”
    */
-  updateSongFolder (folder) {
+  updateSongFolder (folder, mode = 'all') {
     let song = new Song(folder, this.fileMonitor)
-    let status = song.generateIntermediateFiles(true)
+    let status = song.generateIntermediateFiles(mode, true)
     message.songFolder(status, song)
   }
 
@@ -1251,7 +1256,7 @@ let main = function () {
     mode = 'all'
   }
 
-  if (options.path && options.basePath.length > 0) {
+  if (options.basePath && options.basePath.length > 0) {
     config.path = options.basePath
   }
 
@@ -1260,7 +1265,7 @@ let main = function () {
   if (options.clean) {
     library.cleanIntermediateFiles()
   } else if (options.folder) {
-    library.updateSongFolder(options.folder)
+    library.updateSongFolder(options.folder, mode)
   } else {
     library.update(mode, options.force)
   }
