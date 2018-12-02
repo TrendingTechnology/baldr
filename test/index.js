@@ -35,6 +35,17 @@ let mkTmpFile = function () {
   return tmp.fileSync().name
 }
 
+/**
+ * String containing ANSI escape sequences are not working with Visual Studio Code’s Test Explorer.
+ * 
+ * @param {string} string 
+ * 
+ * @returns {string} A cleaned string
+ */
+let removeANSI = function (string) {
+  return string.replace(/[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g, '')
+}
+
 let bootstrapConfig = indexRewired.__get__('bootstrapConfig')
 bootstrapConfig({
   test: true,
@@ -146,19 +157,19 @@ describe('Class “Message()”', () => {
     let message = new Message()
     message.print = stub
     message.songFolder(status, song)
-    assert.strictEqual(String(stub.args[0]), String(output))
+    assert.strictEqual(removeANSI(String(stub.args[0])), removeANSI(String(output)))
   }
 
   it('const “error”', () => {
-    assert.strictEqual(message.error, '\u001b[31m☒\u001b[39m')
+    assert.strictEqual(removeANSI(message.error), removeANSI('\u001b[31m☒\u001b[39m'))
   })
 
   it('const “finished”', () => {
-    assert.strictEqual(message.finished, '\u001b[32m☑\u001b[39m')
+    assert.strictEqual(removeANSI(message.finished), removeANSI('\u001b[32m☑\u001b[39m'))
   })
 
   it('const “progress”', () => {
-    assert.strictEqual(message.progress, '\u001b[33m☐\u001b[39m')
+    assert.strictEqual(removeANSI(message.progress), removeANSI('\u001b[33m☐\u001b[39m'))
   })
 
   it('Method “print()”', () => {
@@ -180,9 +191,9 @@ describe('Class “Message()”', () => {
       assert.strictEqual(e.message, 'No configuration file found.')
     }
     assert.strictEqual(stub.called, true)
-    assert.deepStrictEqual(stub.args, [
-      [ '\u001b[31m☒\u001b[39m  Configuration file “~/.baldr.json” not found!\nCreate such a config file or use the “--base-path” option!\n\nExample configuration file:\n{\n\t"songbook": {\n\t\t"path": "/home/jf/songs"\n\t}\n}\n' ]
-    ])
+    assert.strictEqual(removeANSI(stub.args[0][0]), 
+      removeANSI('\u001b[31m☒\u001b[39m  Configuration file “~/.baldr.json” not found!\nCreate such a config file or use the “--base-path” option!\n\nExample configuration file:\n{\n\t"songbook": {\n\t\t"path": "/home/jf/songs"\n\t}\n}\n')
+    )
   })
 
   describe('Method “songFolder()”', () => {
@@ -930,16 +941,13 @@ describe('Command line interface', () => {
       main()
 
       let commander = indexRewired.__get__('commander')
-      assert.strictEqual(commander.path, path.join('test', 'songs', 'clean', 'some'))
-      assert.deepStrictEqual(
-        stub.args,
-        [
-          [ '\u001b[33m☐\u001b[39m  \u001b[33mAuf-der-Mauer_auf-der-Lauer\u001b[39m: Auf der Mauer, auf der Lauer\n\t\u001b[33mslides\u001b[39m: 01.svg, 02.svg\n\t\u001b[33mpiano\u001b[39m: piano_1.eps, piano_2.eps' ],
-          [ '\u001b[33m☐\u001b[39m  \u001b[33mStille-Nacht\u001b[39m: Stille Nacht\n\t\u001b[33mslides\u001b[39m: 01.svg, 02.svg\n\t\u001b[33mpiano\u001b[39m: piano_1.eps, piano_2.eps' ],
-          [ '\u001b[33m☐\u001b[39m  \u001b[33mSwing-low\u001b[39m: Swing low\n\t\u001b[33mslides\u001b[39m: 01.svg, 02.svg\n\t\u001b[33mpiano\u001b[39m: piano_1.eps, piano_2.eps' ],
-          [ '\u001b[33m☐\u001b[39m  \u001b[33mZum-Tanze-da-geht-ein-Maedel\u001b[39m: Zum Tanze, da geht ein Mädel\n\t\u001b[33mslides\u001b[39m: 01.svg, 02.svg\n\t\u001b[33mpiano\u001b[39m: piano_1.eps, piano_2.eps' ]
-        ]
-      )
+      assert.strictEqual(commander.basePath, path.join('test', 'songs', 'clean', 'some'))
+
+      let args = stub.args
+      assert.strictEqual(removeANSI(args[0]), removeANSI('\u001b[33m☐\u001b[39m  \u001b[33mAuf-der-Mauer_auf-der-Lauer\u001b[39m: Auf der Mauer, auf der Lauer\n\t\u001b[33mslides\u001b[39m: 01.svg, 02.svg\n\t\u001b[33mpiano\u001b[39m: piano_1.eps, piano_2.eps'))
+      assert.strictEqual(removeANSI(args[1]), removeANSI('\u001b[33m☐\u001b[39m  \u001b[33mStille-Nacht\u001b[39m: Stille Nacht\n\t\u001b[33mslides\u001b[39m: 01.svg, 02.svg\n\t\u001b[33mpiano\u001b[39m: piano_1.eps, piano_2.eps'))
+      assert.strictEqual(removeANSI(args[2]), removeANSI('\u001b[33m☐\u001b[39m  \u001b[33mSwing-low\u001b[39m: Swing low\n\t\u001b[33mslides\u001b[39m: 01.svg, 02.svg\n\t\u001b[33mpiano\u001b[39m: piano_1.eps, piano_2.eps'))
+      assert.strictEqual(removeANSI(args[3]), removeANSI('\u001b[33m☐\u001b[39m  \u001b[33mZum-Tanze-da-geht-ein-Maedel\u001b[39m: Zum Tanze, da geht ein Mädel\n\t\u001b[33mslides\u001b[39m: 01.svg, 02.svg\n\t\u001b[33mpiano\u001b[39m: piano_1.eps, piano_2.eps'))
     })
 
     it('--piano', () => {

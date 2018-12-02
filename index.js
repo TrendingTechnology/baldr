@@ -148,7 +148,7 @@ class Message {
   noConfigPath () {
     let output = this.error + '  Configuration file ' +
       '“~/.baldr.json” not found!\n' +
-      'Create such a config file or use the “--path” option!'
+      'Create such a config file or use the “--base-path” option!'
 
     const sampleConfig = fs.readFileSync(
       path.join(__dirname, 'sample.config.json'), 'utf8'
