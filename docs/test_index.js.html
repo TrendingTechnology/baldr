@@ -19,11 +19,11 @@
 
     <h1 class="page-title">Source: test/index.js</h1>
 
+    
 
 
 
-
-
+    
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>const assert = require('assert')
@@ -58,15 +58,9 @@ let mkTmpFile = function () {
   return tmp.fileSync().name
 }
 
-let tmpSongsClean = function () {
+let tmpCopy = function (folder1, folder2) {
   let tmpDir = mkTmpDir()
-  fs.copySync(path.resolve('test', 'songs', 'clean', 'some'), tmpDir)
-  return tmpDir
-}
-
-let tmpSongsProcessed = function () {
-  let tmpDir = mkTmpDir()
-  fs.copySync(path.resolve('test', 'songs', 'processed', 'some'), tmpDir)
+  fs.copySync(path.resolve('test', 'songs', folder1, folder2), tmpDir)
   return tmpDir
 }
 
@@ -850,7 +844,7 @@ describe('Classes', function () {
 
       describe('Method “generateIntermediateFiles()”', function () {
         it('First run', function () {
-          let status = song.generateIntermediateFiles()
+          let status = song.generateIntermediateFiles('all', false)
           assert.deepStrictEqual(
             status,
             {
@@ -877,14 +871,14 @@ describe('Classes', function () {
         })
 
         it('Second run', function () {
-          song.generateIntermediateFiles()
-          let status = song.generateIntermediateFiles()
+          song.generateIntermediateFiles('all', false)
+          let status = song.generateIntermediateFiles('all', false)
           assert.strictEqual(status.changed.piano, false)
           assert.strictEqual(status.changed.slides, false)
         })
 
         it('force', function () {
-          let status = song.generateIntermediateFiles(true)
+          let status = song.generateIntermediateFiles('all', true)
           assert.strictEqual(status.force, true)
         })
       })
@@ -979,7 +973,7 @@ describe('Classes', function () {
       })
 
       it('Method “cleanIntermediateFiles()”', function () {
-        song.generateIntermediateFiles()
+        song.generateIntermediateFiles('all', false)
         assert.ok(fs.existsSync(path.join(song.folder, 'projector.pdf')))
         song.cleanIntermediateFiles()
         assert.ok(!fs.existsSync(path.join(song.folder, 'projector.pdf')))
@@ -1077,9 +1071,9 @@ describe('Classes', function () {
         for (let songID in library.songs) {
           library.songs[songID].generateIntermediateFiles = spy
         }
-        library.generateIntermediateFiles(false)
+        library.generateIntermediateFiles('all', false)
         assert.strictEqual(spy.callCount, 4)
-        assert.ok(spy.calledWith(false))
+        assert.ok(spy.calledWith('all', false))
         stub()
       })
 
@@ -1091,8 +1085,8 @@ describe('Classes', function () {
         for (let songID in library.songs) {
           library.songs[songID].generateIntermediateFiles = spy
         }
-        library.generateIntermediateFiles(true)
-        assert.ok(spy.calledWith(true))
+        library.generateIntermediateFiles('all', true)
+        assert.ok(spy.calledWith('all', true))
         stub()
       })
 
@@ -1322,7 +1316,11 @@ describe('Command line interface', function () {
     })
 
     it('--force', function () {
-      spawn('./index.js', ['--force'])
+      let tmpDir = tmpCopy('clean', 'one')
+      let notForced = spawn('./index.js', ['--base-path', tmpDir])
+      assert.ok(!notForced.stdout.toString().includes('(forced)'))
+      let forced = spawn('./index.js', ['--base-path', tmpDir, '--force'])
+      assert.ok(forced.stdout.toString().includes('(forced)'))
     })
 
     it('--help', function () {
@@ -1343,7 +1341,7 @@ describe('Command line interface', function () {
 
     // Test should be executed at the very last position.
     it('--clean', function () {
-      let tmpDir = tmpSongsProcessed()
+      let tmpDir = tmpCopy('processed', 'one')
       spawn('./index.js', ['--base-path', tmpDir, '--clean'])
       assertNotExists(tmpDir, 's', 'Swing-low', 'piano', 'piano.mscx')
     })
