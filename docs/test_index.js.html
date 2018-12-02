@@ -306,62 +306,86 @@ describe('Classes', function () {
       })
     })
   })
+
+  describe('Class “TeXFile()”', function () {
+    let TeXFile = indexRewired.__get__('TeXFile')
+
+    it('Property “path”', function () {
+      let tmpFile = mkTmpFile()
+      let texFile = new TeXFile(tmpFile)
+      assert.strictEqual(texFile.path, tmpFile)
+    })
+
+    describe('Methods', function () {
+      it('Method “append()”', function () {
+        let texFile = new TeXFile(mkTmpFile())
+        texFile.append('test')
+      })
+
+      it('Method “read()”', function () {
+        let texFile = new TeXFile(mkTmpFile())
+        texFile.append('test')
+        assert.strictEqual(texFile.read(), 'test')
+      })
+
+      it('Method “flush()”', function () {
+        let texFile = new TeXFile(mkTmpFile())
+        texFile.append('test')
+        texFile.flush('test')
+        assert.strictEqual(texFile.read(), '')
+      })
+      it('Method “remove()”', function () {
+        let texFile = new TeXFile(mkTmpFile())
+        assertExists(texFile.path)
+        texFile.remove()
+        assertNotExists(texFile.path)
+      })
+    })
+  })
+
   describe('Class “Folder()”', function () {
     let Folder = indexRewired.__get__('Folder')
 
-    it('Initialisation', function () {
+    describe('Initialisation', function () {
+      it('Using one path string.', function () {
+        let tmpDir = mkTmpDir()
+        let folder = new Folder(tmpDir)
+        assert.strictEqual(folder.folderPath, tmpDir)
+      })
+
+      it('Using two arguments', function () {
+        let tmpDir = mkTmpDir()
+        let folder = new Folder(tmpDir, 'test')
+        assert.strictEqual(folder.folderPath, path.join(tmpDir, 'test'))
+      })
+    })
+
+    it('Property “folderPath”', function () {
       let tmpDir = mkTmpDir()
       let folder = new Folder(tmpDir)
       assert.strictEqual(folder.folderPath, tmpDir)
     })
 
-    it('Initialisation with two arguments', function () {
-      let tmpDir = mkTmpDir()
-      let folder = new Folder(tmpDir, 'test')
-      assert.strictEqual(folder.folderPath, path.join(tmpDir, 'test'))
-    })
+    describe('Methods', function () {
+      it('Method “get()”', function () {
+        let tmpDir = mkTmpDir()
+        let folder = new Folder(tmpDir)
+        assert.strictEqual(folder.get(), tmpDir)
+      })
 
-    it('Method “remove()”', function () {
-      let tmpDir = mkTmpDir()
-      let folder = new Folder(tmpDir)
-      folder.remove()
-      assert.ok(!fs.existsSync(folder.folderPath))
-    })
+      it('Method “empty()”', function () {
+        let tmpDir = mkTmpDir()
+        let folder = new Folder(tmpDir)
+        folder.empty()
+        assert.ok(fs.existsSync(folder.folderPath))
+      })
 
-    it('Method “empty()”', function () {
-      let tmpDir = mkTmpDir()
-      let folder = new Folder(tmpDir)
-      folder.empty()
-      assert.ok(fs.existsSync(folder.folderPath))
-    })
-  })
-
-  describe('Class “TeXFile()”', function () {
-    let TeXFile = indexRewired.__get__('TeXFile')
-
-    it('Method “append()”', function () {
-      let texFile = new TeXFile(mkTmpFile())
-      texFile.append('test')
-    })
-
-    it('Method “remove()”', function () {
-      let texFile = new TeXFile(mkTmpFile())
-      assertExists(texFile.path)
-      texFile.remove()
-      assertNotExists(texFile.path)
-    })
-
-    it('Method “flush()”', function () {
-      let texFile = new TeXFile(mkTmpFile())
-      texFile.append('test')
-      texFile.flush('test')
-      assert.strictEqual(texFile.read(), '')
-    })
-
-    it('Method “read()”', function () {
-      let texFile = new TeXFile(mkTmpFile())
-      texFile.append('test')
-      assert.strictEqual(texFile.read(), 'test')
+      it('Method “remove()”', function () {
+        let tmpDir = mkTmpDir()
+        let folder = new Folder(tmpDir)
+        folder.remove()
+        assert.ok(!fs.existsSync(folder.folderPath))
+      })
     })
   })
 
