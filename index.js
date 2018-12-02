@@ -460,26 +460,27 @@ class FileMonitor {
  **********************************************************************/
 
 /**
- * Metadata of a song catched from the info.yml file:
+ * Metadata of a song catched from the info.yml file.
  *
  * info.yml
  *
  *     ---
- *     title: Lemon tree
- *     subtitle:
  *     alias: I’m sitting here
+ *     arranger: Josef Friedrich
  *     artist: Fools Garden
- *     lyricist:
  *     composer: Heinz Müller / Manfred Meier
  *     country: Deutschland
+ *     genre: Spiritual
+ *     lyricist: Goethe
  *     musescore: https://musescore.com/user/12559861/scores/4801717
  *     source: http://wikifonia.org/node/9928/revisions/13488/view
+ *     subtitle: A very good song
+ *     title: Lemon tree
  *     year: 1965
- *     genre: Spiritual
  */
 class SongMetaData {
   /**
-   * @param {string} folder - Absolute path to a song folder.
+   * @param {string} folder - Path of the song folder.
    */
   constructor (folder) {
     /**
@@ -560,6 +561,10 @@ class SongMetaData {
      */
     this.yamlFile = 'info.yml'
 
+    /**
+     * All in the YAML file “info.yml” allowed properties (keys).
+     * @type {arry}
+     */
     this.allowedProperties = [
       'alias',
       'arranger',
@@ -574,10 +579,17 @@ class SongMetaData {
       'title',
       'year'
     ]
+
     if (!fs.existsSync(folder)) {
       throw new Error(util.format('Song folder doesn’t exist: %s', folder))
     }
+
+    /**
+     * The path of then parent song folder.
+     * @type {string}
+     */
     this.folder = folder
+
     let ymlFile = path.join(folder, this.yamlFile)
     if (!fs.existsSync(ymlFile)) {
       throw new Error(util.format('YAML file could not be found: %s', ymlFile))

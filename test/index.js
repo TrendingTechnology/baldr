@@ -445,38 +445,116 @@ describe('Classes', function () {
   describe('Class “SongMetaData()”', function () {
     let songPath = path.resolve('test', 'songs', 'clean', 'some', 'a', 'Auf-der-Mauer_auf-der-Lauer')
     let SongMetaData = indexRewired.__get__('SongMetaData')
+    let song = new SongMetaData(songPath)
 
-    it('Exception: No song folder', function () {
-      assert.throws(
-        function () {
-          return new SongMetaData('lol')
-        },
-        /^.*Song folder doesn’t exist: lol.*$/
-      )
+    describe('Properties', function () {
+      it('Property “alias”', function () {
+        assert.strictEqual(song.alias, null)
+      })
+
+      it('Property “arranger”', function () {
+        assert.strictEqual(song.arranger, null)
+      })
+
+      it('Property “artist”', function () {
+        assert.strictEqual(song.artist, null)
+      })
+
+      it('Property “composer”', function () {
+        assert.strictEqual(song.composer, null)
+      })
+
+      it('Property “country”', function () {
+        assert.strictEqual(song.country, 'Deutschland')
+      })
+
+      it('Property “genre”', function () {
+        assert.strictEqual(song.genre, null)
+      })
+
+      it('Property “lyricist”', function () {
+        assert.strictEqual(song.lyricist, null)
+      })
+
+      it('Property “musescore”', function () {
+        assert.strictEqual(song.musescore, null)
+      })
+
+      it('Property “source”', function () {
+        assert.strictEqual(song.source, null)
+      })
+
+      it('Property “subtitle”', function () {
+        assert.strictEqual(song.subtitle, null)
+      })
+
+      it('Property “title”', function () {
+        assert.strictEqual(song.title, 'Auf der Mauer, auf der Lauer')
+      })
+
+      it('Property “year”', function () {
+        assert.strictEqual(song.year, null)
+      })
+
+      it('Property “yamlFile”', function () {
+        assert.strictEqual(song.yamlFile, 'info.yml')
+      })
+
+      it('Property “allowedProperties”', function () {
+        assert.deepStrictEqual(song.allowedProperties, [
+          'alias',
+          'arranger',
+          'artist',
+          'composer',
+          'country',
+          'genre',
+          'lyricist',
+          'musescore',
+          'source',
+          'subtitle',
+          'title',
+          'year'
+        ])
+      })
+
+      it('Property “folder”', function () {
+        assert.ok(song.folder.includes('Mauer'))
+      })
     })
 
-    it('Exception: No yaml file', function () {
-      let tmpDir = mkTmpDir()
-      assert.throws(
-        function () {
-          return new SongMetaData(tmpDir)
-        },
-        /^.*YAML file could not be found: .*$/
-      )
+    describe('Exceptions', function () {
+      it('Exception: No song folder', function () {
+        assert.throws(
+          function () {
+            return new SongMetaData('lol')
+          },
+          /^.*Song folder doesn’t exist: lol.*$/
+        )
+      })
+
+      it('Exception: No yaml file', function () {
+        let tmpDir = mkTmpDir()
+        assert.throws(
+          function () {
+            return new SongMetaData(tmpDir)
+          },
+          /^.*YAML file could not be found: .*$/
+        )
+      })
+
+      it('Exception: Unsupported key', function () {
+        assert.throws(
+          function () {
+            return new SongMetaData(path.join('test', 'files', 'wrong-song-yaml'))
+          },
+          /^.*Unsupported key: lol.*$/
+        )
+      })
     })
 
     it('on regular song folder', function () {
       let song = new SongMetaData(songPath)
       assert.strictEqual(song.title, 'Auf der Mauer, auf der Lauer')
-    })
-
-    it('Exception: Unsupported key', function () {
-      assert.throws(
-        function () {
-          return new SongMetaData(path.join('test', 'files', 'wrong-song-yaml'))
-        },
-        /^.*Unsupported key: lol.*$/
-      )
     })
   })
 
