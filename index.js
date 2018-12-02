@@ -844,7 +844,7 @@ class Song {
    * Detect a file inside the song folder. Throw an exception if the
    * file doesn’t exist.
    *
-   *  @param {string} file - A filename of a file inside the song folder.
+   * @param {string} file - A filename of a file inside the song folder.
    *
    * @return A joined path of the file relative to the song collection
    *   base dir.
