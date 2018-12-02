@@ -244,6 +244,10 @@ class TeXFile {
    * @param {string} path The path of the TeXFile.
    */
   constructor (path) {
+    /**
+     * The path of the TeX file.
+     * @type {string}
+     */
     this.path = path
     this.flush()
   }
@@ -258,10 +262,12 @@ class TeXFile {
   }
 
   /**
-   * Remove the TeX file.
+   * Read the complete TeX file
+   *
+   * @return {string}
    */
-  remove () {
-    fs.unlinkSync(this.path)
+  read () {
+    return fs.readFileSync(this.path, { encoding: 'utf8' })
   }
 
   /**
@@ -272,12 +278,10 @@ class TeXFile {
   }
 
   /**
-   * Read the complete TeX file
-   *
-   * @return {string}
+   * Remove the TeX file.
    */
-  read () {
-    return fs.readFileSync(this.path, { encoding: 'utf8' })
+  remove () {
+    fs.unlinkSync(this.path)
   }
 }
 
@@ -289,6 +293,10 @@ class Folder {
    * @param {...string} folderPath - The path segments of the folder
    */
   constructor (folderPath) {
+    /**
+     * The path of the folder.
+     * @type {string}
+     */
     this.folderPath = path.join(...arguments)
     if (!fs.existsSync(this.folderPath)) {
       fs.mkdirSync(this.folderPath)
@@ -296,14 +304,16 @@ class Folder {
   }
 
   /**
-   * Remove the folder
+   * Return the path of the folder.
+   *
+   * @returns {string}
    */
-  remove () {
-    fs.removeSync(this.folderPath)
+  get () {
+    return this.folderPath
   }
 
   /**
-   * Empty the folder (Delete all it’s files)
+   * Empty the folder (Delete all it’s files).
    */
   empty () {
     fs.removeSync(this.folderPath)
@@ -311,12 +321,10 @@ class Folder {
   }
 
   /**
-   * Return the path of the folder
-   *
-   * @returns {string}
+   * Remove the folder.
    */
-  get () {
-    return this.folderPath
+  remove () {
+    fs.removeSync(this.folderPath)
   }
 }
 
