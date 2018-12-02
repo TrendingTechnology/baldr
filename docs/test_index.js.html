@@ -1236,18 +1236,11 @@ describe('Command line interface', function () {
       let stub = sinon.stub()
       message.print = stub
       indexRewired.__set__('message', message)
-      let tmpDir = mkTmpDir()
-
-      fs.copySync(path.join('test', 'songs', 'clean', 'some'), tmpDir)
-
-      let main = indexRewired.__get__('main')
+      let tmpDir = tmpCopy('clean', 'one')
       indexRewired.__set__('process.argv', [
         '', '', '--base-path', tmpDir
       ])
-      main()
-
-      let commander = indexRewired.__get__('commander')
-      assert.strictEqual(commander.basePath, tmpDir)
+      indexRewired.__get__('main')()
       assert.strictEqual(removeANSI(stub.args[0][0]), removeANSI('\u001b[33m☐\u001b[39m  \u001b[33mAuf-der-Mauer\u001b[39m: Auf der Mauer, auf der Lauer\n\t\u001b[33mslides\u001b[39m: 01.svg, 02.svg\n\t\u001b[33mpiano\u001b[39m: piano_1.eps, piano_2.eps'))
     })
 
@@ -1270,12 +1263,13 @@ describe('Command line interface', function () {
       let stub = sinon.stub()
       message.print = stub
       indexRewired.__set__('message', message)
-
+      let tmpDir = tmpCopy('clean', 'one')
       let main = indexRewired.__get__('main')
       indexRewired.__set__('process.argv', [
         '', '',
+        '--base-path', tmpDir,
         '--folder',
-        'test/songs/clean/some/a/Auf-der-Mauer'
+        path.join(tmpDir, 'a', 'Auf-der-Mauer')
       ])
       main()
       let output = stub.args[0][0]
@@ -1286,32 +1280,30 @@ describe('Command line interface', function () {
   })
 
   describe('Command line', function () {
-    it('no arguments: normal update', function () {
-      spawn('./index.js')
-    })
-
-    it('no arguments (second run): only json and TeX generation', function () {
-      spawn('./index.js')
-    })
-
     it('--base-path', function () {
-      let tmpDir = mkTmpDir()
-      fs.copySync(path.join('test', 'songs', 'clean', 'some'), tmpDir)
+      let tmpDir = tmpCopy('clean', 'one')
       spawn('./index.js', ['--base-path', tmpDir])
+      assertExists(tmpDir, 'a', 'Auf-der-Mauer', 'piano', 'piano.mscx')
       assertExists(tmpDir, 'songs.tex')
+      assertExists(tmpDir, 'a', 'Auf-der-Mauer', 'slides', '01.svg')
+      assertExists(tmpDir, 'a', 'Auf-der-Mauer', 'projector.pdf')
     })
 
     it('--piano', function () {
-      let tmpDir = mkTmpDir()
-      fs.copySync(path.join('test', 'songs', 'clean', 'some'), tmpDir)
+      let tmpDir = tmpCopy('clean', 'one')
       spawn('./index.js', ['--base-path', tmpDir, '--piano'])
+      assertExists(tmpDir, 'a', 'Auf-der-Mauer', 'piano', 'piano.mscx')
       assertExists(tmpDir, 'songs.tex')
+      assertNotExists(tmpDir, 'a', 'Auf-der-Mauer', 'slides', '01.svg')
+      assertNotExists(tmpDir, 'a', 'Auf-der-Mauer', 'projector.pdf')
     })
 
     it('--slides', function () {
-      let tmpDir = mkTmpDir()
-      fs.copySync(path.join('test', 'songs', 'clean', 'some'), tmpDir)
+      let tmpDir = tmpCopy('clean', 'one')
       spawn('./index.js', ['--base-path', tmpDir, '--slides'])
+      assertExists(tmpDir, 'a', 'Auf-der-Mauer', 'slides', '01.svg')
+      assertExists(tmpDir, 'a', 'Auf-der-Mauer', 'projector.pdf')
+      assertNotExists(tmpDir, 'a', 'Auf-der-Mauer', 'piano', 'piano.mscx')
       assertNotExists(tmpDir, 'songs.tex')
     })
 
@@ -1339,7 +1331,6 @@ describe('Command line interface', function () {
       assert.strictEqual(cli.status, 0)
     })
 
-    // Test should be executed at the very last position.
     it('--clean', function () {
       let tmpDir = tmpCopy('processed', 'one')
       spawn('./index.js', ['--base-path', tmpDir, '--clean'])
