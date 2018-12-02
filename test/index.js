@@ -547,22 +547,36 @@ describe('Classes', function () {
       fileMonitor.flush()
     })
 
-    it('Initialisation with a directory', function () {
-      let song = new Song(folder)
-      assert.strictEqual(song.folder, folder)
-    })
+    describe('Initialisation', function () {
+      it('with a directory', function () {
+        let song = new Song(folder)
+        assert.strictEqual(song.folder, folder)
+      })
 
-    it('Initialisation with info.yml', function () {
-      let song = new Song(path.join(folder, 'info.yml'))
-      assert.strictEqual(song.folder, folder)
-    })
+      it('with info.yml', function () {
+        let song = new Song(path.join(folder, 'info.yml'))
+        assert.strictEqual(song.folder, folder)
+      })
 
-    it('Initialisation with projector.mscx', function () {
-      let song = new Song(path.join(folder, 'projector.mscx'))
-      assert.strictEqual(song.folder, folder)
+      it('with projector.mscx', function () {
+        let song = new Song(path.join(folder, 'projector.mscx'))
+        assert.strictEqual(song.folder, folder)
+      })
     })
 
     describe('Properties', function () {
+      it('Property “folder”', function () {
+        assert.strictEqual(song.folder, folder)
+      })
+
+      it('Property “fileMonitor”', function () {
+        assert.ok(song.fileMonitor instanceof FileMonitor)
+      })
+
+      it('Property “abc”', function () {
+        assert.strictEqual(song.abc, 'a')
+      })
+
       it('Property “songID”', function () {
         assert.strictEqual(song.songID, 'Auf-der-Mauer_auf-der-Lauer')
       })
@@ -575,6 +589,24 @@ describe('Classes', function () {
       it('Property “metaDataCombined”', function () {
         let SongMetaDataCombined = indexRewired.__get__('SongMetaDataCombined')
         assert.ok(song.metaDataCombined instanceof SongMetaDataCombined)
+      })
+
+      it('Property “folderSlides”', function () {
+        let Folder = indexRewired.__get__('Folder')
+        assert.ok(song.folderSlides instanceof Folder)
+      })
+
+      it('Property “folderPiano”', function () {
+        let Folder = indexRewired.__get__('Folder')
+        assert.ok(song.folderPiano instanceof Folder)
+      })
+
+      it('Property “mscxProjector”', function () {
+        assert.strictEqual(song.mscxProjector, path.join(song.folder, 'projector.mscx'))
+      })
+
+      it('Property “mscxPiano”', function () {
+        assert.strictEqual(song.mscxPiano, path.join(song.folder, 'piano.mscx'))
       })
     })
 
@@ -780,21 +812,32 @@ describe('Classes', function () {
 
   describe('Class “Library()”', function () {
     let Library = indexRewired.__get__('Library')
-    let folder = path.join('test', 'songs', 'processed', 'some')
-    let library = new Library(folder)
-
-    it('Property “songs”', function () {
-      assert.strictEqual(library.songs['Auf-der-Mauer_auf-der-Lauer'].songID, 'Auf-der-Mauer_auf-der-Lauer')
-    })
+    let basePath = path.join('test', 'songs', 'processed', 'some')
+    let library = new Library(basePath)
 
     it('Exceptions', function () {
-      let folder = path.join('test', 'songs', 'processed')
+      let basePath = path.join('test', 'songs', 'processed')
       assert.throws(
         function () {
-          return new Library(folder)
+          return new Library(basePath)
         },
         /^.*A song with the same songID already exists: Auf-der-Mauer_auf-der-Lauer$/
       )
+    })
+
+    describe('Properties', function () {
+      it('Property “basePath”', function () {
+        assert.strictEqual(library.basePath, basePath)
+      })
+
+      it('Property “fileMonitor”', function () {
+        let FileMonitor = indexRewired.__get__('FileMonitor')
+        assert.ok(library.fileMonitor instanceof FileMonitor)
+      })
+
+      it('Property “songs”', function () {
+        assert.strictEqual(library.songs['Auf-der-Mauer_auf-der-Lauer'].songID, 'Auf-der-Mauer_auf-der-Lauer')
+      })
     })
 
     describe('Methods', function () {
@@ -837,7 +880,7 @@ describe('Classes', function () {
 
       it('Method “cleanIntermediateFiles()”', function () {
         let tmpDir = mkTmpDir()
-        fs.copySync(folder, tmpDir)
+        fs.copySync(basePath, tmpDir)
         let library = new Library(tmpDir)
         library.cleanIntermediateFiles()
         assert.ok(!fs.existsSync(path.join(library.basePath, 'songs.tex')))
@@ -847,7 +890,7 @@ describe('Classes', function () {
         let spy = sinon.spy()
         let stub = sinon.stub()
         indexRewired.__set__('message.songFolder', stub)
-        let library = new Library(folder)
+        let library = new Library(basePath)
         for (let songID in library.songs) {
           library.songs[songID].generateIntermediateFiles = spy
         }
@@ -861,7 +904,7 @@ describe('Classes', function () {
         let spy = sinon.spy()
         let stub = sinon.stub()
         indexRewired.__set__('message.songFolder', stub)
-        let library = new Library(folder)
+        let library = new Library(basePath)
         for (let songID in library.songs) {
           library.songs[songID].generateIntermediateFiles = spy
         }
