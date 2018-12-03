@@ -967,10 +967,7 @@ class Song {
     status.folderName = path.basename(this.folder)
 
     status.force = force
-    // TODO use: this.mscxSlides
-    status.changed.slides = this.fileMonitor.isModified(
-      path.join(this.folder, 'projector.mscx')
-    )
+    status.changed.slides = this.fileMonitor.isModified(this.mscxProjector)
 
     // slides
     if ((mode === 'all' || mode === 'slides') && (force || status.changed.slides)) {
@@ -978,15 +975,7 @@ class Song {
       status.generated.slides = this.generateSlides_()
     }
 
-    // TODO use: this.mscxPiano
-    if (
-      this.fileMonitor.isModified(path.join(this.folder, 'lead.mscx')) ||
-        this.fileMonitor.isModified(path.join(this.folder, 'piano.mscx'))
-    ) {
-      status.changed.piano = true
-    } else {
-      status.changed.piano = false
-    }
+    status.changed.piano = this.fileMonitor.isModified(this.mscxPiano)
 
     // piano
     if ((mode === 'all' || mode === 'piano') && (force || status.changed.piano)) {

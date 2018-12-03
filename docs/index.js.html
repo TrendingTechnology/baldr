@@ -995,10 +995,7 @@ class Song {
     status.folderName = path.basename(this.folder)
 
     status.force = force
-    // TODO use: this.mscxSlides
-    status.changed.slides = this.fileMonitor.isModified(
-      path.join(this.folder, 'projector.mscx')
-    )
+    status.changed.slides = this.fileMonitor.isModified(this.mscxProjector)
 
     // slides
     if ((mode === 'all' || mode === 'slides') &amp;&amp; (force || status.changed.slides)) {
@@ -1006,15 +1003,7 @@ class Song {
       status.generated.slides = this.generateSlides_()
     }
 
-    // TODO use: this.mscxPiano
-    if (
-      this.fileMonitor.isModified(path.join(this.folder, 'lead.mscx')) ||
-        this.fileMonitor.isModified(path.join(this.folder, 'piano.mscx'))
-    ) {
-      status.changed.piano = true
-    } else {
-      status.changed.piano = false
-    }
+    status.changed.piano = this.fileMonitor.isModified(this.mscxPiano)
 
     // piano
     if ((mode === 'all' || mode === 'piano') &amp;&amp; (force || status.changed.piano)) {
@@ -1345,7 +1334,7 @@ if (require.main === module) {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-baldr-songbook-updater.html">baldr-songbook-updater</a></li></ul><h3>Classes</h3><ul><li><a href="module-baldr-songbook-updater-FileMonitor.html">FileMonitor</a></li><li><a href="module-baldr-songbook-updater-Folder.html">Folder</a></li><li><a href="module-baldr-songbook-updater-Library.html">Library</a></li><li><a href="module-baldr-songbook-updater-Song.html">Song</a></li><li><a href="module-baldr-songbook-updater-SongMetaData.html">SongMetaData</a></li><li><a href="module-baldr-songbook-updater-SongMetaDataCombined.html">SongMetaDataCombined</a></li><li><a href="module-baldr-songbook-updater-Sqlite.html">Sqlite</a></li><li><a href="module-baldr-songbook-updater-TeXFile.html">TeXFile</a></li></ul><h3>Global</h3><ul><li><a href="global.html#removeANSI">removeANSI</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-baldr-songbook-updater.html">baldr-songbook-updater</a></li></ul><h3>Classes</h3><ul><li><a href="module-baldr-songbook-updater-FileMonitor.html">FileMonitor</a></li><li><a href="module-baldr-songbook-updater-Folder.html">Folder</a></li><li><a href="module-baldr-songbook-updater-Library.html">Library</a></li><li><a href="module-baldr-songbook-updater-Song.html">Song</a></li><li><a href="module-baldr-songbook-updater-SongMetaData.html">SongMetaData</a></li><li><a href="module-baldr-songbook-updater-SongMetaDataCombined.html">SongMetaDataCombined</a></li><li><a href="module-baldr-songbook-updater-Sqlite.html">Sqlite</a></li><li><a href="module-baldr-songbook-updater-TeXFile.html">TeXFile</a></li></ul>
 </nav>
 
 <br class="clear">
