@@ -148,8 +148,13 @@ function assemblePianoDoublePage (pianoScores, songs, pageCount) {
     if (pianoScores.hasOwnProperty(i)) {
       let song = pianoScores[i].shift()
       if (song) {
+        let missingPages = pageCount - i
         songs.push(song)
-        assemblePianoDoublePage(pianoScores, songs, pageCount - i)
+        if (missingPages <= 0) {
+          return songs
+        } else {
+          assemblePianoDoublePage(pianoScores, songs, missingPages)
+        }
       }
     }
   }
