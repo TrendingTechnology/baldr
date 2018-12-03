@@ -1,8 +1,8 @@
 #! /usr/bin/env node
 
 /**
- * @file Command line interface to generate the intermediate media files
- * for the BALDR songbook.
+ * @file Command line interface to generate the intermediate media files for the
+ * BALDR songbook.
  *
  * @module baldr-songbook-updater
  */
@@ -22,9 +22,9 @@ const util = require('util')
 const yaml = require('js-yaml')
 require('colors')
 
-/***********************************************************************
+/*******************************************************************************
  * Functions
- **********************************************************************/
+ ******************************************************************************/
 
 /**
  *
@@ -66,8 +66,8 @@ function checkExecutables (executables = []) {
 }
 
 /**
- * By default this module reads the config file ~/.baldr to
- * generate its config object.
+ * By default this module reads the config file ~/.baldr to generate its config
+ * object.
  */
 function bootstrapConfig () {
   let { status, unavailable } = checkExecutables([
@@ -134,9 +134,9 @@ function parseCliArguments (argv, version) {
     .parse(argv)
 }
 
-/***********************************************************************
+/*******************************************************************************
  * Utility classes
- **********************************************************************/
+ ******************************************************************************/
 
 class Message {
   constructor () {
@@ -486,9 +486,9 @@ class FileMonitor {
   }
 }
 
-/***********************************************************************
+/*******************************************************************************
  * Song classes
- **********************************************************************/
+ ******************************************************************************/
 
 /**
  * Metadata of a song catched from the info.yml file.
@@ -737,9 +737,10 @@ class SongMetaDataCombined {
  */
 class Song {
   /**
-   * @param {string} songPath - The path of the directory containing the song files
-   * or a path of a file inside the song folder (not nested in subfolders )
-   * @param {module:baldr-songbook-updater~FileMonitor} fileMonitor - A instance of the FileMonitor() class.
+   * @param {string} songPath - The path of the directory containing the song
+   * files or a path of a file inside the song folder (not nested in subfolders)
+   * @param {module:baldr-songbook-updater~FileMonitor} fileMonitor - A instance
+   * of the FileMonitor() class.
    */
   constructor (songPath, fileMonitor) {
     /**
@@ -818,8 +819,8 @@ class Song {
   }
 
   /**
-   * @param {string} songPath - The path of the directory containing the song files
-   * or a path of a file inside the song folder (not nested in subfolders)
+   * @param {string} songPath - The path of the directory containing the song
+   * files or a path of a file inside the song folder (not nested in subfolders)
    *
    * @return {string} The path of the parent directory of the song.
    */
@@ -970,7 +971,8 @@ class Song {
     status.changed.slides = this.fileMonitor.isModified(this.mscxProjector)
 
     // slides
-    if ((mode === 'all' || mode === 'slides') && (force || status.changed.slides)) {
+    if ((mode === 'all' || mode === 'slides') &&
+        (force || status.changed.slides)) {
       status.generated.projector = this.generatePDF_('projector')
       status.generated.slides = this.generateSlides_()
     }
@@ -978,7 +980,8 @@ class Song {
     status.changed.piano = this.fileMonitor.isModified(this.mscxPiano)
 
     // piano
-    if ((mode === 'all' || mode === 'piano') && (force || status.changed.piano)) {
+    if ((mode === 'all' || mode === 'piano') &&
+        (force || status.changed.piano)) {
       status.generated.piano = this.generatePiano_()
     }
     return status
@@ -1001,9 +1004,9 @@ class Song {
   }
 }
 
-/***********************************************************************
+/*******************************************************************************
  * Song library - collection of songs
- **********************************************************************/
+ ******************************************************************************/
 
 /**
  * The song library - a collection of songs
@@ -1025,7 +1028,8 @@ class Library {
      *
      * @type {module:baldr-songbook-updater~FileMonitor}
      */
-    this.fileMonitor = new FileMonitor(path.join(this.basePath, 'filehashes.db'))
+    this.fileMonitor = new FileMonitor(path.join(this.basePath,
+      'filehashes.db'))
 
     /**
      * The collection of songs
@@ -1036,7 +1040,9 @@ class Library {
     for (let songPath of this.detectSongs_()) {
       let song = new Song(path.join(this.basePath, songPath), this.fileMonitor)
       if (song.songID in this.songs) {
-        throw new Error(util.format('A song with the same songID already exists: %s', song.songID))
+        throw new Error(
+          util.format('A song with the same songID already exists: %s',
+            song.songID))
       }
       this.songs[song.songID] = song
     }
@@ -1126,7 +1132,8 @@ class Library {
     if (songID in this.songs && this.songs[songID]) {
       return this.songs[songID]
     } else {
-      throw new Error(util.format('There is no song with the songID: %s', songID))
+      throw new Error(util.format('There is no song with the songID: %s',
+        songID))
     }
   }
 
@@ -1248,7 +1255,8 @@ class Library {
    */
   update (mode = 'all', force = false) {
     if (!['all', 'slides', 'piano'].includes(mode)) {
-      throw new Error('The parameter “mode” must be one of this strings: “all”, “slides” or “piano”.')
+      throw new Error('The parameter “mode” must be one of this strings: ' +
+        '“all”, “slides” or “piano”.')
     }
     this.gitPull()
     this.generateIntermediateFiles(mode, force)
