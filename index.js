@@ -3,6 +3,7 @@
 /**
  * @file Command line interface to generate the intermediate media files
  * for the BALDR songbook.
+ *
  * @module baldr-songbook-updater
  */
 
@@ -34,6 +35,7 @@ function texCmd (command, value) {
 
 /**
  * Check if executable is installed.
+ *
  * @param {string} executable - Name of the executable.
  */
 function checkExecutable (executable) {
@@ -47,6 +49,7 @@ function checkExecutable (executable) {
 
 /**
  * Check if executables are installed.
+ *
  * @param {array} executables - Name of the executables.
  */
 function checkExecutables (executables = []) {
@@ -112,6 +115,7 @@ function bootstrapConfig () {
 
 /**
  * Wrapper around the node module “commander”.
+ *
  * @param {*} argv - The same as process.argv
  * @param {string} version - The version string
  */
@@ -143,6 +147,7 @@ class Message {
 
   /**
    * Print out and return text.
+   *
    * @param {string} text - Text to display.
    */
   print (text) {
@@ -168,7 +173,6 @@ class Message {
   }
 
   /**
-   *
    * @param {object} status
    * <pre><code>
    * {
@@ -347,12 +351,14 @@ class Sqlite {
   constructor (dbFile) {
     /**
      * The path of the Sqlite database.
+     *
      * @type {string}
      */
     this.dbFile = dbFile
 
     /**
      * A instance of the class “Sqlite3”.
+     *
      * @type {module:baldr-songbook-updater~Sqlite3}
      */
     this.db = new Sqlite3(this.dbFile)
@@ -509,37 +515,44 @@ class SongMetaData {
    */
   constructor (folder) {
     /**
-     * Alias for a song title, e. g. “Sehnsucht nach dem Frühlinge” “Komm, lieber Mai, und mache”
+     * Alias for a song title, e. g. “Sehnsucht nach dem Frühlinge” “Komm,
+     * lieber Mai, und mache”
+     *
      * @type {string}
      */
     this.alias = null
 
     /**
      * .
+     *
      * @type {string}
      */
     this.arranger = null
 
     /**
      * .
+     *
      * @type {string}
      */
     this.artist = null
 
     /**
      * .
+     *
      * @type {string}
      */
     this.composer = null
 
     /**
      * .
+     *
      * @type {string}
      */
     this.country = null
 
     /**
      * .
+     *
      * @type {string}
      */
     this.genre = null
@@ -564,30 +577,35 @@ class SongMetaData {
 
     /**
      * .
+     *
      * @type {string}
      */
     this.subtitle = null
 
     /**
      * .
+     *
      * @type {string}
      */
     this.title = null
 
     /**
      * .
+     *
      * @type {string}
      */
     this.year = null
 
     /**
      * The file name of the YAML file.
+     *
      * @type {string}
      */
     this.yamlFile = 'info.yml'
 
     /**
      * All in the YAML file “info.yml” allowed properties (keys).
+     *
      * @type {arry}
      */
     this.allowedProperties = [
@@ -611,6 +629,7 @@ class SongMetaData {
 
     /**
      * The path of then parent song folder.
+     *
      * @type {string}
      */
     this.folder = folder
@@ -725,12 +744,14 @@ class Song {
   constructor (songPath, fileMonitor) {
     /**
      * The directory containing the song files.
+     *
      * @type {string}
      */
     this.folder = this.normalizeSongFolder_(songPath)
 
     /**
      * A instance of the FileMonitor class.
+     *
      * @type {module:baldr-songbook-updater~FileMonitor}
      */
     this.fileMonitor = fileMonitor
@@ -738,6 +759,7 @@ class Song {
     /**
      * The character of the alphabetical folder. The song folders must
      * be placed in alphabetical folders.
+     *
      * @type {string}
      */
     this.abc = this.recognizeABCFolder_(this.folder)
@@ -746,6 +768,7 @@ class Song {
      * The songID is the name of the directory which contains all song
      * files. It is used to sort the songs. It must be unique along all
      * songs.
+     *
      * @type {string}
      */
     this.songID = path.basename(this.folder)
@@ -764,12 +787,14 @@ class Song {
 
     /**
      * The slides folder
+     *
      * @type {module:baldr-songbook-updater~Folder}
      */
     this.folderSlides = new Folder(this.folder, 'slides')
 
     /**
      * The piano folder
+     *
      * @type {module:baldr-songbook-updater~Folder}
      */
     this.folderPiano = new Folder(this.folder, 'piano')
@@ -777,6 +802,7 @@ class Song {
     /**
      * Path of the MuseScore file 'projector.mscx', relative to the base folder
      * of the song collection.
+     *
      * @type string
      */
     this.mscxProjector = this.detectFile_('projector.mscx')
@@ -785,6 +811,7 @@ class Song {
      * Path of the MuseScore file for the piano parts, can be 'piano.mscx'
      * or 'lead.mscx', relative to the base folder
      * of the song collection.
+     *
      * @type string
      */
     this.mscxPiano = this.detectFile_('piano.mscx', 'lead.mscx')
@@ -844,7 +871,7 @@ class Song {
    * Detect a file inside the song folder. Throw an exception if the
    * file doesn’t exist.
    *
-   *  @param {string} file - A filename of a file inside the song folder.
+   * @param {string} file - A filename of a file inside the song folder.
    *
    * @return A joined path of the file relative to the song collection
    *   base dir.
@@ -877,6 +904,7 @@ class Song {
 
   /**
    * Generate form a given *.mscx file a PDF file.
+   *
    * @param {string} source - Name of the *.mscx file without the extension.
    * @param {string} destination - Name of the PDF without the extension.
    */
@@ -899,6 +927,7 @@ class Song {
 
   /**
    * Generate svg files in a 'slides' subfolder.
+   *
    * @param {string} folder - A song folder.
    */
   generateSlides_ () {
@@ -913,6 +942,7 @@ class Song {
 
   /**
    * Generate a PDF named piano.pdf a) from piano.mscx or b) from lead.mscx
+   *
    * @param {string} folder - A song folder.
    */
   generatePiano_ () {
@@ -996,18 +1026,21 @@ class Library {
   constructor (basePath) {
     /**
      * The base path of the song library
+     *
      * @type {string}
      */
     this.basePath = basePath
 
     /**
      * A instance of the FileMonitor class.
+     *
      * @type {module:baldr-songbook-updater~FileMonitor}
      */
     this.fileMonitor = new FileMonitor(path.join(this.basePath, 'filehashes.db'))
 
     /**
      * The collection of songs
+     *
      * @type {object}
      */
     this.songs = {}
