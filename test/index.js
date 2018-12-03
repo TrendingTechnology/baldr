@@ -150,6 +150,59 @@ describe('Functions', function () {
       assert.strictEqual(args.slides, undefined)
     })
   })
+
+  describe('Function “assemblePianoDoublePage()”', function () {
+    /**
+     * @param {object} config
+     * <code><pre>
+     * let config = {
+     *   1: [1, 2, 2, 4],
+     *   2: [1, 2, 2, 4],
+     *   3: [3],
+     *   4: [3, 2, 2, 4]
+     * }
+     * </pre><code>
+     *
+     */
+    let generatePianoScoreObject = function (config) {
+      let output = {}
+      // Level 1: pageCount
+      for (let pageCount in config) {
+        // Level 2: song
+        let song = {}
+        if (!output.hasOwnProperty(pageCount)) output[pageCount] = []
+        for (let songPages of config[pageCount]) {
+          // Level 3: pianoFile
+          let pianoFiles = []
+          for (let i = 1; i <= songPages; i++) {
+            pianoFiles.push(`piano_${i}.eps`)
+          }
+          song['pianoFiles'] = pianoFiles
+        }
+        output[pageCount].push(song)
+      }
+      return output
+    }
+
+    it('helper function', function () {
+      let pianoScores = generatePianoScoreObject({ 1: [1] })
+      assert.deepStrictEqual(pianoScores, {
+        '1': [
+          {
+            'pianoFiles': [
+              'piano_1.eps'
+            ]
+          }
+        ]
+      })
+    })
+
+    it('Single page', function () {
+      let assemblePianoDoublePage = indexRewired.__get__('assemblePianoDoublePage')
+      let pianoScores = generatePianoScoreObject({ 1: [1] })
+      assemblePianoDoublePage(pianoScores, 2)
+    })
+  })
 })
 
 describe('Classes', function () {
@@ -743,6 +796,28 @@ describe('Classes', function () {
 
       it('Property “mscxPiano”', function () {
         assert.strictEqual(song.mscxPiano, path.join(song.folder, 'piano.mscx'))
+      })
+
+      describe('Property “pianoFiles”', function () {
+        it('empty', function () {
+          assert.deepStrictEqual(song.pianoFiles, [])
+        })
+
+        it('not empty', function () {
+          let song = new Song(path.join('test', 'songs', 'processed', 'some', 's', 'Swing-low'))
+          assert.deepStrictEqual(song.pianoFiles, ['piano_1.eps', 'piano_2.eps', 'piano_3.eps'])
+        })
+      })
+
+      describe('Property “slidesFiles”', function () {
+        it('empty', function () {
+          assert.deepStrictEqual(song.slidesFiles, [])
+        })
+
+        it('not empty', function () {
+          let song = new Song(path.join('test', 'songs', 'processed', 'some', 's', 'Swing-low'))
+          assert.deepStrictEqual(song.slidesFiles, ['01.svg', '02.svg', '03.svg'])
+        })
       })
     })
 

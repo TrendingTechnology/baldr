@@ -134,6 +134,18 @@ function parseCliArguments (argv, version) {
     .parse(argv)
 }
 
+/**
+ * Assemble a double page of the piano score.
+ *
+ * @param {object} pianoScores - Piano scores grouped by page number.
+ * @param {number} pageCount - Number of pages to group together.
+ *
+ * @return {array} An array of song objects, which fit in the double page
+ */
+function assemblePianoDoublePage (pianoScores, pageCount) {
+
+}
+
 /*******************************************************************************
  * Utility classes
  ******************************************************************************/
@@ -816,6 +828,20 @@ class Song {
      * @type string
      */
     this.mscxPiano = this.detectFile_('piano.mscx', 'lead.mscx')
+
+    /**
+     * An array of piano score pages in the EPS format.
+     *
+     * @type {array}
+     */
+    this.pianoFiles = this.getFolderFiles_('piano', '.eps')
+
+    /**
+     * An array of slides file in the SVG format.
+     *
+     * @type {array}
+     */
+    this.slidesFiles = this.getFolderFiles_('slides', '.svg')
   }
 
   /**
@@ -889,8 +915,13 @@ class Song {
   }
 
   /**
+   * List files in a subfolder of the song folder. You have to use a filter to
+   * select the files.
+   *
    * @param {string} subFolder - A subfolder relative to this.folder
-   * @param {string} filter - String to filter.
+   * @param {string} filter - String to filter, e. g. “.eps”
+   *
+   * @return {array} An array of file names.
    */
   getFolderFiles_ (subFolder, filter) {
     let folder = path.join(this.folder, subFolder)
@@ -1304,3 +1335,5 @@ let main = function () {
 if (require.main === module) {
   main()
 }
+
+exports.assemblePianoDoublePage = assemblePianoDoublePage
