@@ -152,55 +152,79 @@ describe('Functions', function () {
   })
 
   describe('Function “assemblePianoDoublePage()”', function () {
+    let assemblePianoDoublePage = indexRewired.__get__('assemblePianoDoublePage')
+
     /**
      * @param {object} config
      * <code><pre>
      * let config = {
-     *   1: [1, 2, 2, 4],
-     *   2: [1, 2, 2, 4],
-     *   3: [3],
-     *   4: [3, 2, 2, 4]
+     *   1: 4,
+     *   2: 2,
+     *   3: 3,
+     *   4: 2
      * }
      * </pre><code>
      *
      */
     let generatePianoScoreObject = function (config) {
       let output = {}
-      // Level 1: pageCount
-      for (let pageCount in config) {
-        // Level 2: song
-        let song = {}
-        if (!output.hasOwnProperty(pageCount)) output[pageCount] = []
-        for (let songPages of config[pageCount]) {
-          // Level 3: pianoFile
-          let pianoFiles = []
-          for (let i = 1; i <= songPages; i++) {
-            pianoFiles.push(`piano_${i}.eps`)
-          }
-          song['pianoFiles'] = pianoFiles
+      // Level 1: countCategory
+      for (let countCategory in config) {
+        // Level 2: numberOfSongs
+        if (!output.hasOwnProperty(countCategory)) output[countCategory] = []
+        let numberOfSongs = config[countCategory]
+        let songs = []
+        for (let i = 1; i <= numberOfSongs; i++) {
+          let song = {}
+          song.title = `${countCategory}-${i}`
+          songs.push(song)
         }
-        output[pageCount].push(song)
+        output[countCategory] = songs
       }
       return output
     }
 
-    it('helper function', function () {
-      let pianoScores = generatePianoScoreObject({ 1: [1] })
-      assert.deepStrictEqual(pianoScores, {
-        '1': [
-          {
-            'pianoFiles': [
-              'piano_1.eps'
-            ]
-          }
-        ]
+    let getSongs = function (pageCount, config) {
+      return assemblePianoDoublePage(generatePianoScoreObject(config), [], pageCount)
+    }
+
+    describe('Helper function “generatePianoScoreObject()”', function () {
+      it('Single entry', function () {
+        let pianoScores = generatePianoScoreObject({ 1: 1 })
+        assert.deepStrictEqual(pianoScores, {
+          '1': [{ 'title': '1-1' }]
+        })
+      })
+
+      it('More entries', function () {
+        let pianoScores = generatePianoScoreObject({ 1: 1, 2: 2, 3: 3 })
+        assert.deepStrictEqual(pianoScores, {
+          '1': [{ 'title': '1-1' }],
+          '2': [{ 'title': '2-1' }, { 'title': '2-2' }],
+          '3': [{ 'title': '3-1' }, { 'title': '3-2' }, { 'title': '3-3' }]
+        })
       })
     })
 
-    it('Single page', function () {
-      let assemblePianoDoublePage = indexRewired.__get__('assemblePianoDoublePage')
-      let pianoScores = generatePianoScoreObject({ 1: [1] })
-      assemblePianoDoublePage(pianoScores, 2)
+    it('2 pages per unit <- 1-page-song * 1', function () {
+      assert.deepStrictEqual(
+        getSongs(2, { 1: 1 }),
+        [{ 'title': '1-1' }]
+      )
+    })
+
+    it('4 pages per unit <- 1-page-song * 4', function () {
+      assert.deepStrictEqual(
+        getSongs(4, { 1: 4 }),
+        [{ 'title': '1-1' }, { 'title': '1-2' }, { 'title': '1-3' }, { 'title': '1-4' }]
+      )
+    })
+
+    it('4 pages per unit <- 1-page-song * 4', function () {
+      assert.deepStrictEqual(
+        getSongs(4, { 4: 2 }),
+        [{ 'title': '4-1' }]
+      )
     })
   })
 })

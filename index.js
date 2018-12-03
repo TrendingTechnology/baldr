@@ -135,15 +135,25 @@ function parseCliArguments (argv, version) {
 }
 
 /**
- * Assemble a double page of the piano score.
+ * Assemble a double page with piano scores.
  *
  * @param {object} pianoScores - Piano scores grouped by page number.
+ * @param {array} songs - An array of song objects.
  * @param {number} pageCount - Number of pages to group together.
  *
  * @return {array} An array of song objects, which fit in the double page
  */
-function assemblePianoDoublePage (pianoScores, pageCount) {
-
+function assemblePianoDoublePage (pianoScores, songs, pageCount) {
+  for (let i = pageCount; i > 0; i--) {
+    if (pianoScores.hasOwnProperty(i)) {
+      let song = pianoScores[i].shift()
+      if (song) {
+        songs.push(song)
+        assemblePianoDoublePage(pianoScores, songs, pageCount - i)
+      }
+    }
+  }
+  return songs
 }
 
 /*******************************************************************************
