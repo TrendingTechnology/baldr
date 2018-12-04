@@ -1309,7 +1309,7 @@ class Library {
   /**
    * Generate the TeX file for the piano version of the songbook.
    */
-  generateTeX () {
+  buildPianoScoreAlpabetically () {
     let tree = this.buildAlphabeticalSongTree()
     let texFile = new TeXFile(path.join(this.basePath, 'songs.tex'))
 
@@ -1329,7 +1329,7 @@ class Library {
    * within a song, a piano accompaniment must not have more than four
    * EPS files.
    */
-  buildPianoScore () {
+  buildPianoScorePageTurnOptimized () {
     let tree = this.buildPianoFilesCountTree()
     let texFile = new TeXFile(path.join(this.basePath, 'songs.tex'))
     Object.keys(tree).forEach((abc, index) => {
@@ -1369,7 +1369,7 @@ class Library {
     }
     this.gitPull()
     this.generateIntermediateFiles(mode, force)
-    if (mode === 'piano' || mode === 'all') this.generateTeX()
+    if (mode === 'piano' || mode === 'all') this.buildPianoScoreAlpabetically()
   }
 }
 

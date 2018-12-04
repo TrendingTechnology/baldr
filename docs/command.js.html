@@ -19,11 +19,11 @@
 
     <h1 class="page-title">Source: command.js</h1>
 
-    
 
 
 
-    
+
+
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>#! /usr/bin/env node
@@ -81,7 +81,7 @@ var processOptions = function(options) {
   } else if (options.json) {
     index.generateJSON();
   } else if (options.tex) {
-    index.generateTeX();
+    index.buildPianoScoreAlpabetically();
   } else {
     index.update();
   }

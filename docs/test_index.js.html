@@ -19,11 +19,11 @@
 
     <h1 class="page-title">Source: test/index.js</h1>
 
-    
 
 
 
-    
+
+
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>const assert = require('assert')
@@ -1091,8 +1091,8 @@ describe('Classes', function () {
         assert.strictEqual(count.z[2][0].metaData.title, 'Zum Tanze, da geht ein Mädel')
       })
 
-      it('Method “generateTeX()”', function () {
-        library.generateTeX()
+      it('Method “buildPianoScoreAlpabetically()”', function () {
+        library.buildPianoScoreAlpabetically()
         let texFile = path.join(library.basePath, 'songs.tex')
 
         assertExists(texFile)
