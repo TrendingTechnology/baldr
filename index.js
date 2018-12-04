@@ -1277,6 +1277,29 @@ class Library {
   }
 
   /**
+   * Count the song objects in a tree object. The songs are placed in the object
+   * by the number of piano pages as property.
+   *
+   * @param {object} tree
+   *
+   * <code><pre>
+   * {
+   *   '1': { 'Stille-Nacht': [Object] },
+   *   '3': { 'Swing-low': [Object] }
+   * }
+   * </pre><code>
+   *
+   * @return {number} The count of the songs.
+   */
+  countPianoFilesCountTree (tree) {
+    let count = 0
+    for (let countCategory in tree) {
+      count = count + tree[countCategory].length
+    }
+    return count
+  }
+
+  /**
    * Generate the TeX file for the piano version of the songbook.
    */
   generateTeX () {
@@ -1288,6 +1311,31 @@ class Library {
       for (let i = 0; i < tree[abc].length; i++) {
         let song = tree[abc][i]
         texFile.append(song.formatPianoTex())
+      }
+    })
+  }
+
+  /**
+   * Generate the TeX file for the piano version of the songbook. The page
+   * orientation of the score is in the landscape format. Two
+   * EPS files exported from MuseScore fit on one page. To avoid page breaks
+   * within a song, a piano accompaniment must not have more than four
+   * EPS files.
+   */
+  buildPianoScore () {
+    let tree = this.buildPianoFilesCountTree()
+    let texFile = new TeXFile(path.join(this.basePath, 'songs.tex'))
+    Object.keys(tree).forEach((abc, index) => {
+      texFile.append('\n\n' + texCmd('chapter', abc.toUpperCase()))
+      let abcSongs = tree[abc]
+      let firstPage = true
+      while (this.buildPianoFilesCountTree(abcSongs) > 0) {
+        let pageCount = 4
+        if (firstPage) {
+          pageCount = 2
+          firstPage = false
+        }
+        assemblePianoDoublePage(abcSongs, [], pageCount)
       }
     })
   }

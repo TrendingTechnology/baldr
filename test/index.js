@@ -1169,11 +1169,17 @@ describe('Classes', function () {
       })
 
       it('Method “buildPianoFilesCountTree()”', function () {
-        let count = library.buildPianoFilesCountTree()
-        assert.strictEqual(count.a[3][0].metaData.title, 'Auf der Mauer, auf der Lauer')
-        assert.strictEqual(count.s[1][0].metaData.title, 'Stille Nacht')
-        assert.strictEqual(count.s[3][0].metaData.title, 'Swing low')
-        assert.strictEqual(count.z[2][0].metaData.title, 'Zum Tanze, da geht ein Mädel')
+        let tree = library.buildPianoFilesCountTree()
+        assert.strictEqual(tree.a[3][0].metaData.title, 'Auf der Mauer, auf der Lauer')
+        assert.strictEqual(tree.s[1][0].metaData.title, 'Stille Nacht')
+        assert.strictEqual(tree.s[3][0].metaData.title, 'Swing low')
+        assert.strictEqual(tree.z[2][0].metaData.title, 'Zum Tanze, da geht ein Mädel')
+      })
+
+      it('Method “countPianoFilesCountTree()”', function () {
+        let tree = library.buildPianoFilesCountTree()
+        assert.strictEqual(library.countPianoFilesCountTree(tree.a), 1)
+        assert.strictEqual(library.countPianoFilesCountTree(tree.s), 2)
       })
 
       it('Method “generateTeX()”', function () {
