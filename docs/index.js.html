@@ -1364,13 +1364,21 @@ class Library {
       texFile.append('\n\n' + texCmd('chapter', abc.toUpperCase()))
       let abcSongs = tree[abc]
       let firstPage = true
-      while (this.buildPianoFilesCountTree(abcSongs) > 0) {
-        let pageCount = 4
+      while (this.countPianoFilesCountTree(abcSongs) > 0) {
+        let maxPages = 4
+        let actualpages = 0
         if (firstPage) {
-          pageCount = 2
+          maxPages = 2
           firstPage = false
         }
-        assemblePianoDoublePage(abcSongs, [], pageCount)
+        let songs = assemblePianoDoublePage(abcSongs, [], maxPages)
+        for (let i = 0; i &lt; songs.length; i++) {
+          let song = songs[i]
+          actualpages = actualpages + song.pianoFiles.length
+          texFile.append(song.formatPianoTex())
+        }
+        // Blank pages
+        texFile.append('\\strut\\columnbreak'.repeat(maxPages - actualpages))
       }
     })
   }
