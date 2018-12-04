@@ -657,6 +657,96 @@ piano scores.</p>
     
 
     
+    <h4 class="name" id="buildPianoScore"><span class="type-signature"></span>buildPianoScore<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Generate the TeX file for the piano version of the songbook. The page
+orientation of the score is in the landscape format. Two
+EPS files exported from MuseScore fit on one page. To avoid page breaks
+within a song, a piano accompaniment must not have more than four
+EPS files.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1325">line 1325</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
     <h4 class="name" id="cleanIntermediateFiles"><span class="type-signature"></span>cleanIntermediateFiles<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
@@ -732,6 +822,169 @@ piano scores.</p>
 
 
 
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="countPianoFilesCountTree"><span class="type-signature"></span>countPianoFilesCountTree<span class="signature">(tree)</span><span class="type-signature"> &rarr; {number}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Count the song objects in a tree object. The songs are placed in the object
+by the number of piano pages as property.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>tree</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p><code><pre>
+{
+  '1': { 'Stille-Nacht': [Object] },
+  '3': { 'Swing-low': [Object] }
+}
+</pre><code></p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1294">line 1294</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>The count of the songs.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">number</span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
@@ -1189,7 +1442,7 @@ piano scores.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1282">line 1282</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1305">line 1305</a>
     </li></ul></dd>
     
 
@@ -1847,7 +2100,7 @@ piano scores.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1302">line 1302</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line1350">line 1350</a>
     </li></ul></dd>
     
 
