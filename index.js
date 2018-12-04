@@ -885,6 +885,18 @@ class Song {
   }
 
   /**
+   * Format one image file of a piano score in the TeX format.
+   *
+   * @param {number} index The index number of the array position
+   *
+   * @return {string} TeX markup for one EPS image file of a piano score.
+   */
+  formatPianoTeXEpsFile_ (index) {
+    return texCmd('image',
+      path.join(this.abc, this.songID, 'piano', this.pianoFiles[index]))
+  }
+
+  /**
    * Generate TeX markup for one song.
    *
    * @return {string} TeX markup for a single song.
@@ -896,16 +908,11 @@ class Song {
    * </pre><code>
    */
   formatPianoTex () {
-    let relativeSongPath = path.join(this.abc, this.songID)
-    const eps = this.getFolderFiles_('piano', '.eps')
     let output = ''
-
     output += '\n' + texCmd('heading', this.metaDataCombined.title)
-    eps.forEach(
-      (file) => {
-        output += texCmd('image', path.join(relativeSongPath, 'piano', file))
-      }
-    )
+    for (let i = 0; i < this.pianoFiles.length; i++) {
+      output += this.formatPianoTeXEpsFile_(i)
+    }
     return output
   }
 

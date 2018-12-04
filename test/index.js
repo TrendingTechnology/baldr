@@ -872,6 +872,25 @@ describe('Classes', function () {
         assert.strictEqual(song.recognizeABCFolder_(folder), 'a')
       })
 
+      it('Method “formatPianoTeXEpsFile_()”', function () {
+        let folder = path.join('test', 'songs', 'processed', 'some', 's', 'Swing-low')
+        let song = new Song(folder)
+        assert.strictEqual(
+          song.formatPianoTeXEpsFile_(0),
+          '\\tmpimage{s/Swing-low/piano/piano_1.eps}\n'
+        )
+
+        assert.strictEqual(
+          song.formatPianoTeXEpsFile_(1),
+          '\\tmpimage{s/Swing-low/piano/piano_2.eps}\n'
+        )
+
+        assert.strictEqual(
+          song.formatPianoTeXEpsFile_(2),
+          '\\tmpimage{s/Swing-low/piano/piano_3.eps}\n'
+        )
+      })
+
       it('Method “formatPianoTex()”', function () {
         let folder = path.join('test', 'songs', 'processed', 'some', 's', 'Swing-low')
         let song = new Song(folder)
