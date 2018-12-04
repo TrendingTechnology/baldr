@@ -1201,6 +1201,20 @@ describe('Classes', function () {
         assert.strictEqual(library.countPianoFilesCountTree(tree.s), 2)
       })
 
+      it.skip('Method “buildPianoScore()”', function () {
+        library.buildPianoScore()
+        let texFile = path.join(library.basePath, 'songs.tex')
+
+        assertExists(texFile)
+
+        let texContent = fs.readFileSync(texFile, 'utf8')
+        let compare = fs.readFileSync(
+          path.join('test', 'files', 'songs_processed.tex'), 'utf8'
+        )
+
+        assert.strictEqual(texContent, compare)
+      })
+
       it('Method “generateTeX()”', function () {
         library.generateTeX()
         let texFile = path.join(library.basePath, 'songs.tex')
