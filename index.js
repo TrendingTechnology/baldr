@@ -1338,7 +1338,7 @@ class Library {
       let firstPage = true
       while (this.countPianoFilesCountTree(abcSongs) > 0) {
         let maxPages = 4
-        let actualpages = 0
+        let actualPages = 0
         if (firstPage) {
           maxPages = 2
           firstPage = false
@@ -1346,11 +1346,11 @@ class Library {
         let songs = assemblePianoDoublePage(abcSongs, [], maxPages)
         for (let i = 0; i < songs.length; i++) {
           let song = songs[i]
-          actualpages = actualpages + song.pianoFiles.length
+          actualPages = actualPages + song.pianoFiles.length
           texFile.append(song.formatPianoTex())
         }
         // Blank pages
-        texFile.append('\\strut\\columnbreak'.repeat(maxPages - actualpages))
+        texFile.append('\\strut\\columnbreak'.repeat(maxPages - actualPages))
       }
     })
   }
