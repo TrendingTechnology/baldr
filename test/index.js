@@ -52,9 +52,16 @@ it('Conforms to standard', standard.files([
 ]))
 
 describe('Functions', function () {
-  it('Function “texCmd()”', function () {
-    let texCmd = indexRewired.__get__('texCmd')
-    assert.strictEqual(texCmd('lorem', 'ipsum'), '\\tmplorem{ipsum}\n')
+  describe('Function “texCmd()”', function () {
+    it('without a value', function () {
+      let texCmd = indexRewired.__get__('texCmd')
+      assert.strictEqual(texCmd('lorem', 'ipsum'), '\\tmplorem{ipsum}\n')
+    })
+
+    it('with a value', function () {
+      let texCmd = indexRewired.__get__('texCmd')
+      assert.strictEqual(texCmd('lorem'), '\\tmplorem\n')
+    })
   })
 
   describe('Function “checkExecutable()”', function () {
@@ -1232,7 +1239,7 @@ describe('Classes', function () {
         assert.strictEqual(library.countPianoFilesCountTree(tree.s), 2)
       })
 
-      it.skip('Method “buildPianoScorePageTurnOptimized()”', function () {
+      it('Method “buildPianoScorePageTurnOptimized()”', function () {
         library.buildPianoScorePageTurnOptimized()
         let texFile = path.join(library.basePath, 'songs.tex')
 
@@ -1240,7 +1247,7 @@ describe('Classes', function () {
 
         let texContent = fs.readFileSync(texFile, 'utf8')
         let compare = fs.readFileSync(
-          path.join('test', 'files', 'songs_processed.tex'), 'utf8'
+          path.join('test', 'files', 'songs_page_turn_optimized.tex'), 'utf8'
         )
 
         assert.strictEqual(texContent, compare)
