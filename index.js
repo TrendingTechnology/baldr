@@ -1045,7 +1045,7 @@ class Song {
 
     // slides
     if ((mode === 'all' || mode === 'slides') &&
-        (force || status.changed.slides)) {
+        (force || status.changed.slides || !this.slidesFiles.length)) {
       status.generated.projector = this.generatePDF_('projector')
       status.generated.slides = this.generateSlides_()
     }
@@ -1054,7 +1054,7 @@ class Song {
 
     // piano
     if ((mode === 'all' || mode === 'piano') &&
-        (force || status.changed.piano)) {
+        (force || status.changed.piano || !this.pianoFiles.length)) {
       status.generated.piano = this.generatePiano_()
     }
     return status
