@@ -908,6 +908,16 @@ class Song {
    * </pre><code>
    */
   formatPianoTex () {
+    if (this.pianoFiles.length === 0) {
+      throw new Error(util.format(
+        'The song “%s” has no EPS piano score files.',
+        this.metaData.title))
+    }
+    if (this.pianoFiles.length > 4) {
+      throw new Error(util.format(
+        'The song “%s” has more than 4 EPS piano score files.',
+        this.metaData.title))
+    }
     let output = ''
     output += '\n' + texCmd('heading', this.metaDataCombined.title)
     for (let i = 0; i < this.pianoFiles.length; i++) {
@@ -991,20 +1001,30 @@ class Song {
       path.join(this.folderSlides.get(), '%02d.svg'),
       'all'
     ])
-    return this.getFolderFiles_('slides', '.svg')
+    let result = this.getFolderFiles_('slides', '.svg')
+    if (!result) {
+      throw new Error('The SVG files for the slides couldn’t be generated.')
+    }
+    this.slidesFiles = result
+    return result
   }
 
   /**
-   * Generate a PDF named piano.pdf a) from piano.mscx or b) from lead.mscx
+   * Generate from the MuseScore file “piano/piano.mscx” EPS files.
    *
-   * @param {string} folder - A song folder.
+   * @return {array} An array of EPS piano score filenames.
    */
   generatePiano_ () {
     this.folderPiano.empty()
     let pianoFile = path.join(this.folderPiano.get(), 'piano.mscx')
     fs.copySync(this.mscxPiano, pianoFile)
     spawn('mscore-to-eps.sh', [pianoFile])
-    return this.getFolderFiles_('piano', '.eps')
+    let result = this.getFolderFiles_('piano', '.eps')
+    if (!result) {
+      throw new Error('The EPS files for the piano score couldn’t be generated.')
+    }
+    this.pianoFiles = result
+    return result
   }
 
   /**

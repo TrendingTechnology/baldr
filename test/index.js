@@ -891,17 +891,41 @@ describe('Classes', function () {
         )
       })
 
-      it('Method “formatPianoTex()”', function () {
-        let folder = path.join('test', 'songs', 'processed', 'some', 's', 'Swing-low')
-        let song = new Song(folder)
-        assert.strictEqual(
-          song.formatPianoTex(),
-          '\n' +
-          '\\tmpheading{Swing low}\n' +
-          '\\tmpimage{s/Swing-low/piano/piano_1.eps}\n' +
-          '\\tmpimage{s/Swing-low/piano/piano_2.eps}\n' +
-          '\\tmpimage{s/Swing-low/piano/piano_3.eps}\n'
-        )
+      describe('Method “formatPianoTex()”', function () {
+        it('Markup', function () {
+          let folder = path.join('test', 'songs', 'processed', 'some', 's', 'Swing-low')
+          let song = new Song(folder)
+          assert.strictEqual(
+            song.formatPianoTex(),
+            '\n' +
+            '\\tmpheading{Swing low}\n' +
+            '\\tmpimage{s/Swing-low/piano/piano_1.eps}\n' +
+            '\\tmpimage{s/Swing-low/piano/piano_2.eps}\n' +
+            '\\tmpimage{s/Swing-low/piano/piano_3.eps}\n'
+          )
+        })
+
+        it('Exception: no EPS files', function () {
+          let song = new Song(folder)
+          song.pianoFiles = []
+          assert.throws(
+            function () {
+              song.formatPianoTex()
+            },
+            /^.*The song “Auf der Mauer, auf der Lauer” has no EPS piano score files\..*$/
+          )
+        })
+
+        it('Exception: more than 4 EPS files', function () {
+          let song = new Song(folder)
+          song.pianoFiles = [1, 2, 3, 4, 5]
+          assert.throws(
+            function () {
+              song.formatPianoTex()
+            },
+            /^.*The song “Auf der Mauer, auf der Lauer” has more than 4 EPS piano score files\..*$/
+          )
+        })
       })
 
       describe('Method “detectFile_()”', function () {
