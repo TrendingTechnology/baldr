@@ -55,10 +55,21 @@ require('colors')
  ******************************************************************************/
 
 /**
+ * Generate TeX markup. Generate a TeX command prefixed with \tmp.
  *
+ * @param {string} command
+ * @param {string} value
+ *
+ * @return {string} A TeX markup, for example: \tmpcommand{value}\n
  */
 function texCmd (command, value) {
-  return '\\tmp' + command + '{' + value + '}\n'
+  let markupValue
+  if (value) {
+    markupValue = `{${value}}`
+  } else {
+    markupValue = ''
+  }
+  return `\\tmp${command}${markupValue}\n`
 }
 
 /**
@@ -1397,8 +1408,9 @@ class Library {
           actualPages = actualPages + song.pianoFiles.length
           texFile.append(song.formatPianoTex())
         }
-        // Blank pages
-        texFile.append('\\strut\\columnbreak'.repeat(maxPages - actualPages))
+        // Add placeholder for blank pages
+        let placeholder = texCmd('placeholder')
+        texFile.append(placeholder.repeat(maxPages - actualPages))
       }
     })
   }
@@ -1417,7 +1429,7 @@ class Library {
     }
     this.gitPull()
     this.generateIntermediateFiles(mode, force)
-    if (mode === 'piano' || mode === 'all') this.buildPianoScoreAlpabetically()
+    if (mode === 'piano' || mode === 'all') this.buildPianoScorePageTurnOptimized()
   }
 }
 
