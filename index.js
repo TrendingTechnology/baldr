@@ -1445,5 +1445,3 @@ let main = function () {
 if (require.main === module) {
   main()
 }
-
-exports.assemblePianoDoublePage = assemblePianoDoublePage
