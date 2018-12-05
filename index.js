@@ -153,7 +153,7 @@ function assemblePianoDoublePage (pianoScores, songs, pageCount) {
         if (missingPages <= 0) {
           return songs
         } else {
-          assemblePianoDoublePage(pianoScores, songs, missingPages)
+          return assemblePianoDoublePage(pianoScores, songs, missingPages)
         }
       }
     }

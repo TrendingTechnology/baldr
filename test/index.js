@@ -240,6 +240,13 @@ describe('Functions', function () {
         []
       )
     })
+
+    it('4 pages per unit <- 3-page-song', function () {
+      assert.deepStrictEqual(
+        getSongs(4, { 1: 3, 2: 3, 3: 3 }),
+        [{ 'title': '3-1' }, { 'title': '1-1' }]
+      )
+    })
   })
 })
 
