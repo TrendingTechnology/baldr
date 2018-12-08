@@ -136,6 +136,7 @@ function parseCliArguments (argv, version) {
   const commander = new Command()
   return commander
     .version(version)
+    .option('-a, --alphabetical-tree', 'List the songs in an alphabetical tree.')
     .option('-b --base-path <base-path>', 'Base path of a song collection.')
     .option('-c, --clean', 'Clean up (delete all generated files)')
     .option('-F, --folder <folder>', 'Process only the given song folder')
@@ -144,6 +145,7 @@ function parseCliArguments (argv, version) {
     .option('-l, --list <song-id-list>', 'Use a list of song IDs in a text file to specify which songs should be updated.')
     .option('-p, --piano', 'Generate the piano files only.')
     .option('-s, --slides', 'Generate the slides only.')
+    .option('-t, --page-turn-friendly', 'Generate a page turn friendly piano score version.')
     .parse(argv)
 }
 
