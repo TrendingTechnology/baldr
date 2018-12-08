@@ -255,6 +255,12 @@ describe('Functions', function () {
       )
     })
   })
+
+  it('Function “parseSongIDList()”', function () {
+    let parseSongIDList = indexRewired.__get__('parseSongIDList')
+    let result = parseSongIDList(path.join('test', 'files', 'song-id-list.txt'))
+    assert.deepStrictEqual(result, ['Auf-der-Mauer', 'Swing-low'])
+  })
 })
 
 describe('Classes', function () {

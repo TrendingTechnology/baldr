@@ -141,6 +141,7 @@ function parseCliArguments (argv, version) {
     .option('-F, --folder <folder>', 'Process only the given song folder')
     .option('-f, --force', 'Rebuild all images')
     .option('-i --song-id <song-id>', 'Process only the song with the given song ID (The parent song folder).')
+    .option('-l, --list', 'Use a list of song IDs in a text file to specify which songs should be updated.')
     .option('-p, --piano', 'Generate the piano files only.')
     .option('-s, --slides', 'Generate the slides only.')
     .parse(argv)
@@ -171,6 +172,11 @@ function assemblePianoDoublePage (pianoScores, songs, pageCount) {
     }
   }
   return songs
+}
+
+function parseSongIDList (listPath) {
+  let content = fs.readFileSync(listPath, { encoding: 'utf-8' })
+  return content.split(/\s+/).filter(songID => songID)
 }
 
 /*******************************************************************************
@@ -1466,3 +1472,5 @@ let main = function () {
 if (require.main === module) {
   main()
 }
+
+exports.parseSongIDList = parseSongIDList
