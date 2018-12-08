@@ -19,11 +19,11 @@
 
     <h1 class="page-title">Source: index.js</h1>
 
-    
 
 
 
-    
+
+
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>#! /usr/bin/env node
@@ -1297,7 +1297,7 @@ class Library {
    * @param {string} mode - Generate all intermediate media files or only slide
    *   and piano files. Possible values: “all”, “slides” or “piano”
    */
-  updateSongFolder (folder, mode = 'all') {
+  updateSongByPath (folder, mode = 'all') {
     let song = new Song(folder, this.fileMonitor)
     let status = song.generateIntermediateFiles(mode, true)
     message.songFolder(status, song)
@@ -1464,7 +1464,7 @@ let main = function () {
   if (options.clean) {
     library.cleanIntermediateFiles()
   } else if (options.folder) {
-    library.updateSongFolder(options.folder, mode)
+    library.updateSongByPath(options.folder, mode)
   } else {
     library.update(mode, options.force)
   }

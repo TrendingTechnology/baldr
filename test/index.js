@@ -863,6 +863,7 @@ describe('Classes', function () {
 
       describe('Property “slidesFiles”', function () {
         it('empty', function () {
+          let song = new Song(path.join('test', 'songs', 'clean', 'some', 's', 'Swing-low'))
           assert.deepStrictEqual(song.slidesFiles, [])
         })
 
@@ -1270,6 +1271,42 @@ describe('Classes', function () {
         assert.ok(texContent.indexOf('\\tmpheading') > -1)
       })
 
+      describe('Method “updateSongByPath()”', function () {
+        it('No exception', function () {
+          let clean = path.join('test', 'songs', 'clean', 'some')
+          library = new Library(clean)
+          library.updateSongByPath(path.join(clean, 'a', 'Auf-der-Mauer'))
+          assertExists(path.join(library.basePath, 'a', 'Auf-der-Mauer', 'slides', '01.svg'))
+        })
+
+        it('Exception', function () {
+          assert.throws(
+            function () {
+              library.updateSongByPath('xxx')
+            },
+            /^.*no such file or directory.*$/
+          )
+        })
+      })
+
+      describe('Method “updateSongBySongId()”', function () {
+        it('No exception', function () {
+          let clean = path.join('test', 'songs', 'clean', 'some')
+          library = new Library(clean)
+          library.updateSongBySongId('Auf-der-Mauer')
+          assertExists(path.join(library.basePath, 'a', 'Auf-der-Mauer', 'slides', '01.svg'))
+        })
+
+        it('Exception', function () {
+          assert.throws(
+            function () {
+              library.updateSongBySongId('lol')
+            },
+            /^.*The song with the song ID “lol” is unkown.*$/
+          )
+        })
+      })
+
       describe('Method “update()”', function () {
         let stub = sinon.stub()
         indexRewired.__set__('message.songFolder', stub)
@@ -1368,128 +1405,72 @@ describe('Classes', function () {
 })
 
 describe('Command line interface', function () {
-  const baseArgv = [
-    '/usr/bin/node',
-    path.join(path.resolve('.'), 'index.js')
-  ]
-
-  const callMainWithArgv = function (argv) {
-    let main = indexRewired.__get__('main')
-    indexRewired.__set__('process.argv', baseArgv.concat(argv))
-    main()
-    return indexRewired
-  }
-
-  const read = function (file) {
-    return fs.readFileSync(file, 'utf-8')
-  }
-
-  describe('Require as module', function () {
-    it('--base-path', function () {
-      let Message = indexRewired.__get__('Message')
-      let message = new Message()
-      let stub = sinon.stub()
-      message.print = stub
-      indexRewired.__set__('message', message)
-      let tmpDir = tmpCopy('clean', 'one')
-      indexRewired.__set__('process.argv', [
-        '', '', '--base-path', tmpDir
-      ])
-      indexRewired.__get__('main')()
-      assert.strictEqual(removeANSI(stub.args[0][0]), removeANSI('\u001b[33m☐\u001b[39m  \u001b[33mAuf-der-Mauer\u001b[39m: Auf der Mauer, auf der Lauer\n\t\u001b[33mslides\u001b[39m: 01.svg, 02.svg\n\t\u001b[33mpiano\u001b[39m: piano_1.eps, piano_2.eps'))
-    })
-
-    it.skip('--piano', function () {
-      callMainWithArgv(['--base-path', path.join('test', 'songs', 'processed', 'one'), '--piano'])
-      let tex = path.join('test', 'songs', 'processed', 'one', 'songs.tex')
-
-      assertExists(tex)
-      assert.strictEqual(
-        read(tex),
-        read(path.join('test', 'files', 'songs_min_processed.tex'))
-      )
-      fs.unlinkSync(tex)
-    })
-
-    it('--folder', function () {
-      const indexRewired = require('rewire')('../index.js')
-      let Message = indexRewired.__get__('Message')
-      let message = new Message()
-      let stub = sinon.stub()
-      message.print = stub
-      indexRewired.__set__('message', message)
-      let tmpDir = tmpCopy('clean', 'one')
-      let main = indexRewired.__get__('main')
-      indexRewired.__set__('process.argv', [
-        '', '',
-        '--base-path', tmpDir,
-        '--folder',
-        path.join(tmpDir, 'a', 'Auf-der-Mauer')
-      ])
-      main()
-      let output = stub.args[0][0]
-      assert.ok(output.includes('Auf-der-Mauer'))
-      assert.ok(output.includes('01.svg, 02.svg'))
-      assert.ok(output.includes('piano_1.eps, piano_2.eps'))
-    })
+  it('--base-path', function () {
+    let tmpDir = tmpCopy('clean', 'one')
+    spawn('./index.js', ['--base-path', tmpDir])
+    assertExists(tmpDir, 'a', 'Auf-der-Mauer', 'piano', 'piano.mscx')
+    assertExists(tmpDir, 'songs.tex')
+    assertExists(tmpDir, 'a', 'Auf-der-Mauer', 'slides', '01.svg')
+    assertExists(tmpDir, 'a', 'Auf-der-Mauer', 'projector.pdf')
   })
 
-  describe('Command line', function () {
-    it('--base-path', function () {
-      let tmpDir = tmpCopy('clean', 'one')
-      spawn('./index.js', ['--base-path', tmpDir])
-      assertExists(tmpDir, 'a', 'Auf-der-Mauer', 'piano', 'piano.mscx')
-      assertExists(tmpDir, 'songs.tex')
-      assertExists(tmpDir, 'a', 'Auf-der-Mauer', 'slides', '01.svg')
-      assertExists(tmpDir, 'a', 'Auf-der-Mauer', 'projector.pdf')
-    })
+  it('--folder', function () {
+    let tmpDir = tmpCopy('clean', 'some')
+    spawn('./index.js', ['--base-path', tmpDir, '--folder', path.join(tmpDir, 'a', 'Auf-der-Mauer')])
+    assertExists(tmpDir, 'a', 'Auf-der-Mauer', 'slides', '01.svg')
+  })
 
-    it('--piano', function () {
-      let tmpDir = tmpCopy('clean', 'one')
-      spawn('./index.js', ['--base-path', tmpDir, '--piano'])
-      assertExists(tmpDir, 'a', 'Auf-der-Mauer', 'piano', 'piano.mscx')
-      assertExists(tmpDir, 'songs.tex')
-      assertNotExists(tmpDir, 'a', 'Auf-der-Mauer', 'slides', '01.svg')
-      assertNotExists(tmpDir, 'a', 'Auf-der-Mauer', 'projector.pdf')
-    })
+  it('--song-id', function () {
+    let tmpDir = tmpCopy('clean', 'some')
+    spawn('./index.js', ['--base-path', tmpDir, '--song-id', 'Auf-der-Mauer'])
+    assertExists(tmpDir, 'a', 'Auf-der-Mauer', 'slides', '01.svg')
+  })
 
-    it('--slides', function () {
-      let tmpDir = tmpCopy('clean', 'one')
-      spawn('./index.js', ['--base-path', tmpDir, '--slides'])
-      assertExists(tmpDir, 'a', 'Auf-der-Mauer', 'slides', '01.svg')
-      assertExists(tmpDir, 'a', 'Auf-der-Mauer', 'projector.pdf')
-      assertNotExists(tmpDir, 'a', 'Auf-der-Mauer', 'piano', 'piano.mscx')
-      assertNotExists(tmpDir, 'songs.tex')
-    })
+  it('--piano', function () {
+    let tmpDir = tmpCopy('clean', 'one')
+    spawn('./index.js', ['--base-path', tmpDir, '--piano'])
+    assertExists(tmpDir, 'a', 'Auf-der-Mauer', 'piano', 'piano.mscx')
+    assertExists(tmpDir, 'songs.tex')
+    assertNotExists(tmpDir, 'a', 'Auf-der-Mauer', 'slides', '01.svg')
+    assertNotExists(tmpDir, 'a', 'Auf-der-Mauer', 'projector.pdf')
+  })
 
-    it('--force', function () {
-      let tmpDir = tmpCopy('clean', 'one')
-      let notForced = spawn('./index.js', ['--base-path', tmpDir])
-      assert.ok(!notForced.stdout.toString().includes('(forced)'))
-      let forced = spawn('./index.js', ['--base-path', tmpDir, '--force'])
-      assert.ok(forced.stdout.toString().includes('(forced)'))
-    })
+  it('--slides', function () {
+    let tmpDir = tmpCopy('clean', 'one')
+    spawn('./index.js', ['--base-path', tmpDir, '--slides'])
+    assertExists(tmpDir, 'a', 'Auf-der-Mauer', 'slides', '01.svg')
+    assertExists(tmpDir, 'a', 'Auf-der-Mauer', 'projector.pdf')
+    assertNotExists(tmpDir, 'a', 'Auf-der-Mauer', 'piano', 'piano.mscx')
+    assertNotExists(tmpDir, 'songs.tex')
+  })
 
-    it('--help', function () {
-      const cli = spawn('./index.js', ['--help'])
-      let out = cli.stdout.toString()
-      assert.ok(out.indexOf('Usage') > -1)
-      assert.ok(out.indexOf('--help') > -1)
-      assert.ok(out.indexOf('--version') > -1)
-      assert.strictEqual(cli.status, 0)
-    })
+  it('--force', function () {
+    let tmpDir = tmpCopy('clean', 'one')
+    let notForced = spawn('./index.js', ['--base-path', tmpDir])
+    assert.ok(!notForced.stdout.toString().includes('(forced)'))
+    let forced = spawn('./index.js', ['--base-path', tmpDir, '--force'])
+    assert.ok(forced.stdout.toString().includes('(forced)'))
+  })
 
-    it('--version', function () {
-      const cli = spawn('./index.js', ['--version'])
-      let pckg = require('../package.json')
-      assert.strictEqual(cli.stdout.toString(), pckg.version + '\n')
-      assert.strictEqual(cli.status, 0)
-    })
+  it('--help', function () {
+    const cli = spawn('./index.js', ['--help'])
+    let out = cli.stdout.toString()
+    assert.ok(out.indexOf('Usage') > -1)
+    assert.ok(out.indexOf('--help') > -1)
+    assert.ok(out.indexOf('--version') > -1)
+    assert.strictEqual(cli.status, 0)
+  })
 
-    it('--clean', function () {
-      let tmpDir = tmpCopy('processed', 'one')
-      spawn('./index.js', ['--base-path', tmpDir, '--clean'])
-      assertNotExists(tmpDir, 's', 'Swing-low', 'piano', 'piano.mscx')
-    })
+  it('--version', function () {
+    const cli = spawn('./index.js', ['--version'])
+    let pckg = require('../package.json')
+    assert.strictEqual(cli.stdout.toString(), pckg.version + '\n')
+    assert.strictEqual(cli.status, 0)
+  })
+
+  it('--clean', function () {
+    let tmpDir = tmpCopy('processed', 'one')
+    spawn('./index.js', ['--base-path', tmpDir, '--clean'])
+    assertNotExists(tmpDir, 's', 'Swing-low', 'piano', 'piano.mscx')
   })
 })

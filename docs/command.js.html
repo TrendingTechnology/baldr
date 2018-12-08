@@ -77,7 +77,7 @@ var processOptions = function(options) {
   if (options.clean) {
     index.clean();
   } else if (options.folder) {
-    index.updateSongFolder(options.folder);
+    index.updateSongByPath(options.folder);
   } else if (options.json) {
     index.generateJSON();
   } else if (options.tex) {
