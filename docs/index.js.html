@@ -19,11 +19,11 @@
 
     <h1 class="page-title">Source: index.js</h1>
 
+    
 
 
 
-
-
+    
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>#! /usr/bin/env node
@@ -164,10 +164,11 @@ function parseCliArguments (argv, version) {
   const commander = new Command()
   return commander
     .version(version)
-    .option('-c, --clean', 'clean up (delete all generated files)')
-    .option('-F, --folder &lt;folder>', 'process only the given song folder')
-    .option('-f, --force', 'rebuild all images')
     .option('-b --base-path &lt;base-path>', 'Base path of a song collection.')
+    .option('-c, --clean', 'Clean up (delete all generated files)')
+    .option('-F, --folder &lt;folder>', 'Process only the given song folder')
+    .option('-f, --force', 'Rebuild all images')
+    .option('-i --song-id &lt;song-id>', 'Process only the song with the given song ID (The parent song folder).')
     .option('-p, --piano', 'Generate the piano files only.')
     .option('-s, --slides', 'Generate the slides only.')
     .parse(argv)
@@ -1291,19 +1292,6 @@ class Library {
   }
 
   /**
-   * Generate all intermediate media files for one song.
-   *
-   * @param {string} folder - The path of the parent song folder.
-   * @param {string} mode - Generate all intermediate media files or only slide
-   *   and piano files. Possible values: “all”, “slides” or “piano”
-   */
-  updateSongByPath (folder, mode = 'all') {
-    let song = new Song(folder, this.fileMonitor)
-    let status = song.generateIntermediateFiles(mode, true)
-    message.songFolder(status, song)
-  }
-
-  /**
    * Build a tree object which contains the number of piano files of
    * each song. This tree is necessary to avoid page breaks on multipage
    * piano scores.
@@ -1416,6 +1404,37 @@ class Library {
   }
 
   /**
+   * Generate all intermediate media files for one song.
+   *
+   * @param {string} folder - The path of the parent song folder.
+   * @param {string} mode - Generate all intermediate media files or only slide
+   *   and piano files. Possible values: “all”, “slides” or “piano”
+   */
+  updateSongByPath (folder, mode = 'all') {
+    let song = new Song(folder, this.fileMonitor)
+    let status = song.generateIntermediateFiles(mode, true)
+    message.songFolder(status, song)
+  }
+
+  /**
+   * Generate all intermediate media files for one song.
+   *
+   * @param {string} songID - The ID of the song (the name of the parent song folder)
+   * @param {string} mode - Generate all intermediate media files or only slide
+   *   and piano files. Possible values: “all”, “slides” or “piano”
+   */
+  updateSongBySongId (songID, mode = 'all') {
+    let song
+    if (this.songs.hasOwnProperty(songID)) {
+      song = this.songs[songID]
+    } else {
+      throw new Error(util.format('The song with the song ID “%s” is unkown.', songID))
+    }
+    let status = song.generateIntermediateFiles(mode, true)
+    message.songFolder(status, song)
+  }
+
+  /**
    * Update the whole song library.
    *
    * @param {string} mode - Generate all intermediate media files or only slide
@@ -1465,6 +1484,8 @@ let main = function () {
     library.cleanIntermediateFiles()
   } else if (options.folder) {
     library.updateSongByPath(options.folder, mode)
+  } else if (options.songId) {
+    library.updateSongBySongId(options.songId, mode)
   } else {
     library.update(mode, options.force)
   }
