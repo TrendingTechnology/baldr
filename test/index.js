@@ -1170,6 +1170,12 @@ describe('Classes', function () {
         assert.strictEqual(songs['Auf-der-Mauer'].songID, 'Auf-der-Mauer')
       })
 
+      it('Method “loadSongList()”', function () {
+        let result = library.loadSongList(path.join('test', 'files', 'song-id-list.txt'))
+        assert.deepStrictEqual(result, library.songs)
+        assert.strictEqual(Object.keys(result).length, 2)
+      })
+
       it('Method “gitPull()”', function () {
         assert.ok(!library.gitPull())
       })
@@ -1424,6 +1430,15 @@ describe('Command line interface', function () {
     assertExists(tmpDir, 'songs.tex')
     assertExists(tmpDir, 'a', 'Auf-der-Mauer', 'slides', '01.svg')
     assertExists(tmpDir, 'a', 'Auf-der-Mauer', 'projector.pdf')
+  })
+
+  it('--list', function () {
+    let tmpDir = tmpCopy('clean', 'some')
+    let process = spawn('./index.js', ['--base-path', tmpDir, '--list', path.join('test', 'files', 'song-id-list.txt')])
+    let stdout = process.stdout.toString()
+    assert.ok(stdout.includes('Auf-der-Mauer'))
+    assert.ok(stdout.includes('Swing-low'))
+    assert.ok(!stdout.includes('Stille-Nacht'))
   })
 
   it('--folder', function () {

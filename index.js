@@ -141,7 +141,7 @@ function parseCliArguments (argv, version) {
     .option('-F, --folder <folder>', 'Process only the given song folder')
     .option('-f, --force', 'Rebuild all images')
     .option('-i --song-id <song-id>', 'Process only the song with the given song ID (The parent song folder).')
-    .option('-l, --list', 'Use a list of song IDs in a text file to specify which songs should be updated.')
+    .option('-l, --list <song-id-list>', 'Use a list of song IDs in a text file to specify which songs should be updated.')
     .option('-p, --piano', 'Generate the piano files only.')
     .option('-s, --slides', 'Generate the slides only.')
     .parse(argv)
@@ -1159,6 +1159,23 @@ class Library {
   }
 
   /**
+   * @param {string} listFile
+   */
+  loadSongList (listFile) {
+    let songIDs = parseSongIDList(listFile)
+    let songs = {}
+    for (let songID of songIDs) {
+      if (this.songs.hasOwnProperty(songID)) {
+        songs[songID] = this.songs[songID]
+      } else {
+        throw new Error(util.format('There is no song with song ID “%s”', songID))
+      }
+    }
+    this.songs = songs
+    return songs
+  }
+
+  /**
    * Execute git pull if repository exists.
    */
   gitPull () {
@@ -1469,6 +1486,7 @@ let main = function () {
   }
 
   let library = new Library(config.path)
+  if (options.list) library.loadSongList(options.list)
 
   if (options.clean) {
     library.cleanIntermediateFiles()
