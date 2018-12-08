@@ -1155,16 +1155,7 @@ class Library {
      *
      * @type {object}
      */
-    this.songs = {}
-    for (let songPath of this.detectSongs_()) {
-      let song = new Song(path.join(this.basePath, songPath), this.fileMonitor)
-      if (song.songID in this.songs) {
-        throw new Error(
-          util.format('A song with the same songID already exists: %s',
-            song.songID))
-      }
-      this.songs[song.songID] = song
-    }
+    this.songs = this.collectSongs_()
   }
 
   /**
@@ -1172,6 +1163,27 @@ class Library {
    */
   detectSongs_ () {
     return glob.sync('info.yml', { cwd: this.basePath, matchBase: true })
+  }
+
+  /**
+   * Collect all songs of a song tree by walking through the folder tree
+   * structur.
+   *
+   * @returns {object} An object indexed with the song ID containing the song
+   * objects.
+   */
+  collectSongs_ () {
+    let songs = {}
+    for (let songPath of this.detectSongs_()) {
+      let song = new Song(path.join(this.basePath, songPath), this.fileMonitor)
+      if (song.songID in songs) {
+        throw new Error(
+          util.format('A song with the same songID already exists: %s',
+            song.songID))
+      }
+      songs[song.songID] = song
+    }
+    return songs
   }
 
   /**
