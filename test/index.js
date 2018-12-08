@@ -227,7 +227,7 @@ describe('Functions', function () {
       )
     })
 
-    it('4 pages per unit <- 1-page-song * 4', function () {
+    it('4 pages per unit <- 1-page-song * 2', function () {
       assert.deepStrictEqual(
         getSongs(4, { 4: 2 }),
         [{ 'title': '4-1' }]
@@ -1162,6 +1162,12 @@ describe('Classes', function () {
     describe('Methods', function () {
       it('Method “detectSongs_()”', function () {
         assert.strictEqual(library.detectSongs_().length, 4)
+      })
+
+      it('Method “collectSongs_()”', function () {
+        assert.strictEqual(library.detectSongs_().length, 4)
+        let songs = library.collectSongs_()
+        assert.strictEqual(songs['Auf-der-Mauer'].songID, 'Auf-der-Mauer')
       })
 
       it('Method “gitPull()”', function () {
