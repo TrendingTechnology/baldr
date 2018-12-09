@@ -1114,7 +1114,7 @@ class PianoScore {
    *
    * @return {string} A TeX markup, for example: \tmpcommand{value}\n
    */
-  texCmd (command, value) {
+  static texCmd (command, value) {
     let markupValue
     if (value) {
       markupValue = `{${value}}`
@@ -1125,7 +1125,7 @@ class PianoScore {
   }
 
   /**
-   * Assemble a double page with piano scores.
+   * Assemble a certain number of pages with piano scores.
    *
    * @param {object} pianoScores - Piano scores grouped by page number.
    * @param {array} songs - An array of song objects.
@@ -1133,7 +1133,8 @@ class PianoScore {
    *
    * @return {array} An array of song objects, which fit in the double page
    */
-  assemblePianoDoublePage (pianoScores, songs, pageCount) {
+
+  static selectSongs (pianoScores, songs, pageCount) {
     for (let i = pageCount; i > 0; i--) {
       if (pianoScores.hasOwnProperty(i)) {
         let song = pianoScores[i].shift()
@@ -1143,7 +1144,7 @@ class PianoScore {
           if (missingPages <= 0) {
             return songs
           } else {
-            return assemblePianoDoublePage(pianoScores, songs, missingPages)
+            return PianoScore.selectSongs(pianoScores, songs, missingPages)
           }
         }
       }
