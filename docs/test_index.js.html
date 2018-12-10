@@ -324,35 +324,35 @@ describe('Classes', function () {
     })
   })
 
-  describe('Class “TeXFile()”', function () {
-    let TeXFile = indexRewired.__get__('TeXFile')
+  describe('Class “TextFile()”', function () {
+    let TextFile = indexRewired.__get__('TextFile')
 
     it('Property “path”', function () {
       let tmpFile = mkTmpFile()
-      let texFile = new TeXFile(tmpFile)
+      let texFile = new TextFile(tmpFile)
       assert.strictEqual(texFile.path, tmpFile)
     })
 
     describe('Methods', function () {
       it('Method “append()”', function () {
-        let texFile = new TeXFile(mkTmpFile())
+        let texFile = new TextFile(mkTmpFile())
         texFile.append('test')
       })
 
       it('Method “read()”', function () {
-        let texFile = new TeXFile(mkTmpFile())
+        let texFile = new TextFile(mkTmpFile())
         texFile.append('test')
         assert.strictEqual(texFile.read(), 'test')
       })
 
       it('Method “flush()”', function () {
-        let texFile = new TeXFile(mkTmpFile())
+        let texFile = new TextFile(mkTmpFile())
         texFile.append('test')
         texFile.flush('test')
         assert.strictEqual(texFile.read(), '')
       })
       it('Method “remove()”', function () {
-        let texFile = new TeXFile(mkTmpFile())
+        let texFile = new TextFile(mkTmpFile())
         assertExists(texFile.path)
         texFile.remove()
         assertNotExists(texFile.path)
@@ -1341,7 +1341,7 @@ describe('Command line interface', function () {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-baldr-songbook-updater.html">baldr-songbook-updater</a></li></ul><h3>Classes</h3><ul><li><a href="module-baldr-songbook-updater-FileMonitor.html">FileMonitor</a></li><li><a href="module-baldr-songbook-updater-Folder.html">Folder</a></li><li><a href="module-baldr-songbook-updater-Library.html">Library</a></li><li><a href="module-baldr-songbook-updater-Song.html">Song</a></li><li><a href="module-baldr-songbook-updater-SongMetaData.html">SongMetaData</a></li><li><a href="module-baldr-songbook-updater-SongMetaDataCombined.html">SongMetaDataCombined</a></li><li><a href="module-baldr-songbook-updater-Sqlite.html">Sqlite</a></li><li><a href="module-baldr-songbook-updater-TeXFile.html">TeXFile</a></li></ul><h3>Global</h3><ul><li><a href="global.html#removeANSI">removeANSI</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-baldr-songbook-updater.html">baldr-songbook-updater</a></li></ul><h3>Classes</h3><ul><li><a href="module-baldr-songbook-updater-FileMonitor.html">FileMonitor</a></li><li><a href="module-baldr-songbook-updater-Folder.html">Folder</a></li><li><a href="module-baldr-songbook-updater-Library.html">Library</a></li><li><a href="module-baldr-songbook-updater-Song.html">Song</a></li><li><a href="module-baldr-songbook-updater-SongMetaData.html">SongMetaData</a></li><li><a href="module-baldr-songbook-updater-SongMetaDataCombined.html">SongMetaDataCombined</a></li><li><a href="module-baldr-songbook-updater-Sqlite.html">Sqlite</a></li><li><a href="module-baldr-songbook-updater-TextFile.html">TextFile</a></li></ul><h3>Global</h3><ul><li><a href="global.html#removeANSI">removeANSI</a></li></ul>
 </nav>
 
 <br class="clear">

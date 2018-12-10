@@ -341,15 +341,15 @@ class Message {
 let message = new Message()
 
 /**
- * Build a TeX file (songs.tex) of all piano scores.
+ * A text file.
  */
-class TeXFile {
+class TextFile {
   /**
-   * @param {string} path The path of the TeXFile.
+   * @param {string} path The path of the text file.
    */
   constructor (path) {
     /**
-     * The path of the TeX file.
+     * The path of the text file.
      * @type {string}
      */
     this.path = path
@@ -357,16 +357,16 @@ class TeXFile {
   }
 
   /**
-   * Append content to the TeX file.
+   * Append content to the text file.
    *
-   * @param {string} content - Content to append to the Tex file.
+   * @param {string} content - Content to append to the text file.
    */
   append (content) {
     fs.appendFileSync(this.path, content)
   }
 
   /**
-   * Read the complete TeX file
+   * Read the whole text file.
    *
    * @return {string}
    */
@@ -375,14 +375,14 @@ class TeXFile {
   }
 
   /**
-   * Delete the content of the TeX file, not the TeX file itself.
+   * Delete the content of the text file, not the text file itself.
    */
   flush () {
     fs.writeFileSync(this.path, '')
   }
 
   /**
-   * Remove the TeX file.
+   * Remove the text file.
    */
   remove () {
     fs.unlinkSync(this.path)
@@ -1237,7 +1237,7 @@ class PianoFilesCountTree {
  */
 class PianoScore {
   constructor (texFile, songTree, alphabeticalTree = true, pageTurnOptimized = true) {
-    this.texFile = new TeXFile(texFile)
+    this.texFile = new TextFile(texFile)
   }
 
   /**
@@ -1305,7 +1305,7 @@ class PianoScore {
    */
   buildPianoScoreAlpabetically () {
     let tree = this.buildAlphabeticalSongTree()
-    let texFile = new TeXFile(path.join(this.basePath, 'songs.tex'))
+    let texFile = new TextFile(path.join(this.basePath, 'songs.tex'))
 
     Object.keys(tree).forEach((abc) => {
       texFile.append('\n\n' + texCmd('chapter', abc.toUpperCase()))
@@ -1325,7 +1325,7 @@ class PianoScore {
    */
   buildPianoScorePageTurnOptimized () {
     let tree = this.buildPianoFilesCountTree()
-    let texFile = new TeXFile(path.join(this.basePath, 'songs.tex'))
+    let texFile = new TextFile(path.join(this.basePath, 'songs.tex'))
     Object.keys(tree).forEach((abc, index) => {
       texFile.append('\n\n' + texCmd('chapter', abc.toUpperCase()))
       let abcSongs = tree[abc]
@@ -1617,7 +1617,7 @@ class Library {
    */
   buildPianoScoreAlpabetically () {
     let tree = this.buildAlphabeticalSongTree()
-    let texFile = new TeXFile(path.join(this.basePath, 'songs.tex'))
+    let texFile = new TextFile(path.join(this.basePath, 'songs.tex'))
 
     Object.keys(tree).forEach((abc, index) => {
       texFile.append('\n\n' + texCmd('chapter', abc.toUpperCase()))
@@ -1637,7 +1637,7 @@ class Library {
    */
   buildPianoScorePageTurnOptimized () {
     let tree = this.buildPianoFilesCountTree()
-    let texFile = new TeXFile(path.join(this.basePath, 'songs.tex'))
+    let texFile = new TextFile(path.join(this.basePath, 'songs.tex'))
     Object.keys(tree).forEach((abc, index) => {
       texFile.append('\n\n' + texCmd('chapter', abc.toUpperCase()))
       let abcSongs = tree[abc]
@@ -1769,7 +1769,7 @@ exports.AlphabeticalSongsTree = AlphabeticalSongsTree
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-baldr-songbook-updater.html">baldr-songbook-updater</a></li></ul><h3>Classes</h3><ul><li><a href="module-baldr-songbook-updater-AlphabeticalSongsTree.html">AlphabeticalSongsTree</a></li><li><a href="module-baldr-songbook-updater-FileMonitor.html">FileMonitor</a></li><li><a href="module-baldr-songbook-updater-Folder.html">Folder</a></li><li><a href="module-baldr-songbook-updater-Library.html">Library</a></li><li><a href="module-baldr-songbook-updater-PianoFilesCountTree.html">PianoFilesCountTree</a></li><li><a href="module-baldr-songbook-updater-PianoScore.html">PianoScore</a></li><li><a href="module-baldr-songbook-updater-Song.html">Song</a></li><li><a href="module-baldr-songbook-updater-SongMetaData.html">SongMetaData</a></li><li><a href="module-baldr-songbook-updater-SongMetaDataCombined.html">SongMetaDataCombined</a></li><li><a href="module-baldr-songbook-updater-Sqlite.html">Sqlite</a></li><li><a href="module-baldr-songbook-updater-TeXFile.html">TeXFile</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-baldr-songbook-updater.html">baldr-songbook-updater</a></li></ul><h3>Classes</h3><ul><li><a href="module-baldr-songbook-updater-AlphabeticalSongsTree.html">AlphabeticalSongsTree</a></li><li><a href="module-baldr-songbook-updater-FileMonitor.html">FileMonitor</a></li><li><a href="module-baldr-songbook-updater-Folder.html">Folder</a></li><li><a href="module-baldr-songbook-updater-Library.html">Library</a></li><li><a href="module-baldr-songbook-updater-PianoFilesCountTree.html">PianoFilesCountTree</a></li><li><a href="module-baldr-songbook-updater-PianoScore.html">PianoScore</a></li><li><a href="module-baldr-songbook-updater-Song.html">Song</a></li><li><a href="module-baldr-songbook-updater-SongMetaData.html">SongMetaData</a></li><li><a href="module-baldr-songbook-updater-SongMetaDataCombined.html">SongMetaDataCombined</a></li><li><a href="module-baldr-songbook-updater-Sqlite.html">Sqlite</a></li><li><a href="module-baldr-songbook-updater-TextFile.html">TextFile</a></li></ul>
 </nav>
 
 <br class="clear">
