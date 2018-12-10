@@ -1123,6 +1123,43 @@ describe('Classes', function () {
     })
   })
 
+  describe('Class “PianoFilesCountTree()”', function () {
+    let PianoFilesCountTree = indexRewired.__get__('PianoFilesCountTree')
+    let Library = indexRewired.__get__('Library')
+    let library = new Library(path.join('test', 'songs', 'processed', 'some'))
+    let songs = Object.values(library.songs)
+    let countTree = new PianoFilesCountTree(songs)
+
+    it('Initialisation', function () {
+      assert.ok(countTree)
+    })
+
+    it('Method “sum()”', function () {
+      assert.strictEqual(countTree.sum(), 4)
+    })
+
+    it('Method “isEmpty()”', function () {
+      assert.strictEqual(countTree.isEmpty(), false)
+    })
+
+    it('Method “shift()”', function () {
+      let countTree = new PianoFilesCountTree(songs)
+      let song1 = countTree.shift(1)
+      assert.strictEqual(song1.metaData.title, 'Stille Nacht')
+      let song2 = countTree.shift(1)
+      assert.strictEqual(song2, undefined)
+    })
+
+    it('Method “shift()”: exception', function () {
+      assert.throws(
+        function () {
+          countTree.shift(7)
+        },
+        /^.*Invalid piano file count: 7$/
+      )
+    })
+  })
+
   describe('Class “PianoScore()”', function () {
     let PianoScore = indexRewired.__get__('PianoScore')
     describe('Static method “texCmd()”', function () {

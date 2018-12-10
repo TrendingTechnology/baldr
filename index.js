@@ -1101,6 +1101,76 @@ class Song {
  * Song library - collection of songs
  ******************************************************************************/
 
+/**
+ * Build a tree object which contains the number of piano files of
+ * each song. This tree is necessary to avoid page breaks on multipage
+ * piano scores.
+ *
+ * @return {object}
+ * <code><pre>
+ * { a: { '3': { 'Auf-der-Mauer': [Object] } },
+ *   s:
+ *    { '1': { 'Stille-Nacht': [Object] },
+ *      '3': { 'Swing-low': [Object] } },
+ *   z: { '2': { 'Zum-Tanze-da-geht-ein-Maedel': [Object] } } }
+ * </pre><code>
+ *
+ * One song entry has following properties:
+ *
+ * <code><pre>
+ * { title: 'Swing low',
+ *   folder: '/test/songs/processed/some/s/Swing-low',
+ *   slides: [ '01.svg', '02.svg', '03.svg' ],
+ *   pianoFiles: [ 'piano_1.eps', 'piano_2.eps', 'piano_3.eps' ] }
+ * </pre><code>
+ */
+class PianoFilesCountTree {
+  constructor (songs) {
+    this.validCounts_ = [1, 2, 3, 4]
+    this.build_(songs)
+  }
+
+  checkCount_ (count) {
+    if (this.validCounts_.includes(count)) {
+      return true
+    } else {
+      throw new Error(util.format('Invalid piano file count: %s', count))
+    }
+  }
+
+  build_ (songs) {
+    for (let i = 0; i < songs.length; i++) {
+      let song = songs[i]
+      let count = song.pianoFiles.length
+      if (!(count in this)) this[count] = []
+      this[count].push(song)
+    }
+  }
+
+  sum () {
+    let count = 0
+    for (let validCount in this.validCounts_) {
+      if (this.hasOwnProperty(validCount)) {
+        count = count + this[validCount].length
+      }
+    }
+    return count
+  }
+
+  isEmpty () {
+    if (this.sum() === 0) {
+      return true
+    } else {
+      return false
+    }
+  }
+
+  shift (count) {
+    this.checkCount_(count)
+    return this[count].shift()
+  }
+}
+
 class PianoScore {
   constructor (texFile, songTree, alphabeticalTree = true, pageTurnOptimized = true) {
     this.texFile = new TeXFile(texFile)
@@ -1671,3 +1741,4 @@ if (require.main === module) {
 
 exports.parseSongIDList = parseSongIDList
 exports.PianoScore = PianoScore
+exports.PianoFilesCountTree = PianoFilesCountTree
