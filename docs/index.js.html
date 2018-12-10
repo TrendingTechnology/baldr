@@ -1213,13 +1213,17 @@ class PianoFilesCountTree {
 /**
  * The piano score.
  *
- * @param songTree
- * @param {boolean} alphabeticalTree
+ * @param {module:baldr-songbook-updater~Library} library - An instance of the class “Library()”
+ * @param {boolean} groupAlphabetically
  * @param {boolean} pageTurnOptimized
  */
 class PianoScore {
-  constructor (texFile, songTree, alphabeticalTree = true, pageTurnOptimized = true) {
+  constructor (texFile, library, groupAlphabetically = true, pageTurnOptimized = true) {
     this.texFile = new TextFile(texFile)
+    let songs = library.toArray()
+    if (groupAlphabetically) {
+      this.abcTree = new AlphabeticalSongsTree(songs)
+    }
   }
 
   /**
@@ -1362,6 +1366,13 @@ class Library {
      * @type {object}
      */
     this.songs = this.collectSongs_()
+  }
+
+  /**
+   * @returns {module:baldr-songbook-updater~songs}
+   */
+  toArray () {
+    return Object.values(this.songs)
   }
 
   /**
