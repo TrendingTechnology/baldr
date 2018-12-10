@@ -1795,8 +1795,6 @@ describe('Classes', function () {
           assertExists(tmpDir, 's', 'Swing-low', 'piano', 'piano_1.eps')
           assertExists(tmpDir, 'z', 'Zum-Tanze-da-geht-ein-Maedel', 'piano', 'piano_1.eps')
           assertExists(tmpDir, 'z', 'Zum-Tanze-da-geht-ein-Maedel', 'piano', 'piano_2.eps')
-
-          assertExists(tmpDir, 'songs.tex')
         })
 
         it('mode = piano', function () {
