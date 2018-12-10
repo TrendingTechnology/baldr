@@ -194,104 +194,6 @@ describe('Functions', function () {
     })
   })
 
-  describe('Function “assemblePianoDoublePage()”', function () {
-    let assemblePianoDoublePage = indexRewired.__get__('assemblePianoDoublePage')
-
-    /**
-     * @param {object} config
-     * <code><pre>
-     * let config = {
-     *   1: 4,
-     *   2: 2,
-     *   3: 3,
-     *   4: 2
-     * }
-     * </pre><code>
-     *
-     */
-    let generatePianoScoreObject = function (config) {
-      let output = {}
-      // Level 1: countCategory
-      for (let countCategory in config) {
-        // Level 2: numberOfSongs
-        if (!output.hasOwnProperty(countCategory)) output[countCategory] = []
-        let numberOfSongs = config[countCategory]
-        let songs = []
-        for (let i = 1; i <= numberOfSongs; i++) {
-          let song = {}
-          song.title = `${countCategory}-${i}`
-          songs.push(song)
-        }
-        output[countCategory] = songs
-      }
-      return output
-    }
-
-    let getSongs = function (pageCount, config) {
-      return assemblePianoDoublePage(generatePianoScoreObject(config), [], pageCount)
-    }
-
-    describe('Helper function “generatePianoScoreObject()”', function () {
-      it('Single entry', function () {
-        let pianoScores = generatePianoScoreObject({ 1: 1 })
-        assert.deepStrictEqual(pianoScores, {
-          '1': [{ 'title': '1-1' }]
-        })
-      })
-
-      it('More entries', function () {
-        let pianoScores = generatePianoScoreObject({ 1: 1, 2: 2, 3: 3 })
-        assert.deepStrictEqual(pianoScores, {
-          '1': [{ 'title': '1-1' }],
-          '2': [{ 'title': '2-1' }, { 'title': '2-2' }],
-          '3': [{ 'title': '3-1' }, { 'title': '3-2' }, { 'title': '3-3' }]
-        })
-      })
-    })
-
-    it('2 pages per unit <- 1-page-song * 1', function () {
-      assert.deepStrictEqual(
-        getSongs(2, { 1: 1 }),
-        [{ 'title': '1-1' }]
-      )
-    })
-
-    it('4 pages per unit <- 1-page-song * 4', function () {
-      assert.deepStrictEqual(
-        getSongs(4, { 1: 4 }),
-        [{ 'title': '1-1' }, { 'title': '1-2' }, { 'title': '1-3' }, { 'title': '1-4' }]
-      )
-    })
-
-    it('4 pages per unit <- 1-page-song * 2', function () {
-      assert.deepStrictEqual(
-        getSongs(4, { 4: 2 }),
-        [{ 'title': '4-1' }]
-      )
-    })
-
-    it('4 pages per unit <- 1-page-song, 2-page-song, 4-page-song * 2', function () {
-      assert.deepStrictEqual(
-        getSongs(4, { 1: 1, 2: 1, 4: 2 }),
-        [{ 'title': '4-1' }]
-      )
-    })
-
-    it('2 pages per unit <- 3-page-song', function () {
-      assert.deepStrictEqual(
-        getSongs(2, { 3: 1 }),
-        []
-      )
-    })
-
-    it('4 pages per unit <- 3-page-song', function () {
-      assert.deepStrictEqual(
-        getSongs(4, { 1: 3, 2: 3, 3: 3 }),
-        [{ 'title': '3-1' }, { 'title': '1-1' }]
-      )
-    })
-  })
-
   it('Function “parseSongIDList()”', function () {
     let parseSongIDList = indexRewired.__get__('parseSongIDList')
     let result = parseSongIDList(path.join('test', 'files', 'song-id-list.txt'))
@@ -1183,6 +1085,10 @@ describe('Classes', function () {
 
     it('Initialisation', function () {
       assert.ok(countTree)
+      assert.strictEqual(countTree[3][0].metaData.title, 'Auf der Mauer, auf der Lauer')
+      assert.strictEqual(countTree[1][0].metaData.title, 'Stille Nacht')
+      assert.strictEqual(countTree[3][1].metaData.title, 'Swing low')
+      assert.strictEqual(countTree[2][0].metaData.title, 'Zum Tanze, da geht ein Mädel')
     })
 
     describe('Method “sum()”', function () {
@@ -1501,11 +1407,38 @@ describe('Classes', function () {
         })
       })
 
-      it('Method “write()”', function () {
-        let pianoScore = new PianoScore(mkTmpFile(), library)
-        pianoScore.write()
-        let texMarkup = pianoScore.texFile.read()
-        assert.strictEqual(texMarkup, `
+      describe('Method “write()”', function () {
+        it('groupAlphabetically = true, pageTurnOptimized = true', function () {
+          let pianoScore = new PianoScore(mkTmpFile(), library, true, true)
+          pianoScore.write()
+          let texMarkup = pianoScore.texFile.read()
+          let compare = fs.readFileSync(
+            path.join('test', 'files', 'songs_page_turn_optimized.tex'), 'utf8'
+          )
+
+          assertExists(pianoScore.texFile.path)
+          assert.strictEqual(texMarkup, compare)
+        })
+
+        it('groupAlphabetically = true, pageTurnOptimized = false', function () {
+          let pianoScore = new PianoScore(mkTmpFile(), library, true, false)
+          pianoScore.write()
+          let texMarkup = pianoScore.texFile.read()
+          let compare = fs.readFileSync(
+            path.join('test', 'files', 'songs_processed.tex'), 'utf8'
+          )
+
+          assertExists(pianoScore.texFile.path)
+          assert.strictEqual(texMarkup, compare)
+          assert.ok(texMarkup.indexOf('\\tmpimage') > -1)
+          assert.ok(texMarkup.indexOf('\\tmpheading') > -1)
+        })
+
+        it('defaults', function () {
+          let pianoScore = new PianoScore(mkTmpFile(), library)
+          pianoScore.write()
+          let texMarkup = pianoScore.texFile.read()
+          assert.strictEqual(texMarkup, `
 
 \\tmpchapter{A}
 \\tmpplaceholder
@@ -1537,6 +1470,7 @@ describe('Classes', function () {
 \\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_1.eps}
 \\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_2.eps}
 `)
+        })
       })
     })
   })
@@ -1669,51 +1603,6 @@ describe('Classes', function () {
           assert.ok(spy.calledWith('all', true))
           stub()
         })
-      })
-
-      it('Method “buildPianoFilesCountTree()”', function () {
-        let tree = library.buildPianoFilesCountTree()
-        assert.strictEqual(tree.a[3][0].metaData.title, 'Auf der Mauer, auf der Lauer')
-        assert.strictEqual(tree.s[1][0].metaData.title, 'Stille Nacht')
-        assert.strictEqual(tree.s[3][0].metaData.title, 'Swing low')
-        assert.strictEqual(tree.z[2][0].metaData.title, 'Zum Tanze, da geht ein Mädel')
-      })
-
-      it('Method “countPianoFilesCountTree()”', function () {
-        let tree = library.buildPianoFilesCountTree()
-        assert.strictEqual(library.countPianoFilesCountTree(tree.a), 1)
-        assert.strictEqual(library.countPianoFilesCountTree(tree.s), 2)
-      })
-
-      it('Method “buildPianoScorePageTurnOptimized()”', function () {
-        library.buildPianoScorePageTurnOptimized()
-        let texFile = path.join(library.basePath, 'songs.tex')
-
-        assertExists(texFile)
-
-        let texContent = fs.readFileSync(texFile, 'utf8')
-        let compare = fs.readFileSync(
-          path.join('test', 'files', 'songs_page_turn_optimized.tex'), 'utf8'
-        )
-
-        assert.strictEqual(texContent, compare)
-      })
-
-      it('Method “buildPianoScoreAlpabetically()”', function () {
-        library.buildPianoScoreAlpabetically()
-        let texFile = path.join(library.basePath, 'songs.tex')
-
-        assertExists(texFile)
-
-        let texContent = fs.readFileSync(texFile, 'utf8')
-        let compare = fs.readFileSync(
-          path.join('test', 'files', 'songs_processed.tex'), 'utf8'
-        )
-
-        assert.strictEqual(texContent, compare)
-
-        assert.ok(texContent.indexOf('\\tmpimage') > -1)
-        assert.ok(texContent.indexOf('\\tmpheading') > -1)
       })
 
       describe('Method “updateSongByPath()”', function () {
