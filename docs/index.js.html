@@ -1257,10 +1257,9 @@ class PianoFilesCountTree {
 class PianoScore {
   constructor (texFile, library, groupAlphabetically = true, pageTurnOptimized = true) {
     this.texFile = new TextFile(texFile)
-    let songs = library.toArray()
-    if (groupAlphabetically) {
-      this.abcTree = new AlphabeticalSongsTree(songs)
-    }
+    this.library = library
+    this.groupAlphabetically = groupAlphabetically
+    this.pageTurnOptimized = pageTurnOptimized
   }
 
   /**
@@ -1345,53 +1344,24 @@ class PianoScore {
   }
 
   /**
-   * Generate the TeX file for the piano version of the songbook.
+   * @param {boolean} groupAlphabetically
+   * @param {boolean} pageTurnOptimized
+   *
+   * @returns {string}
    */
-  buildPianoScoreAlpabetically () {
-    let tree = this.buildAlphabeticalSongTree()
-    let texFile = new TextFile(path.join(this.basePath, 'songs.tex'))
-
-    Object.keys(tree).forEach((abc) => {
-      texFile.append('\n\n' + PianoScore.texCmd('chapter', abc.toUpperCase()))
-      for (let i = 0; i &lt; tree[abc].length; i++) {
-        let song = tree[abc][i]
-        texFile.append(song.formatPianoTex())
-      }
-    })
-  }
-
-  /**
-   * Generate the TeX file for the piano version of the songbook. The page
-   * orientation of the score is in the landscape format. Two
-   * EPS files exported from MuseScore fit on one page. To avoid page breaks
-   * within a song, a piano accompaniment must not have more than four
-   * EPS files.
-   */
-  buildPianoScorePageTurnOptimized () {
-    let tree = this.buildPianoFilesCountTree()
-    let texFile = new TextFile(path.join(this.basePath, 'songs.tex'))
-    Object.keys(tree).forEach((abc, index) => {
-      texFile.append('\n\n' + PianoScore.texCmd('chapter', abc.toUpperCase()))
-      let abcSongs = tree[abc]
-      let firstPage = true
-      while (this.countPianoFilesCountTree(abcSongs) > 0) {
-        let maxPages = 4
-        let actualPages = 0
-        if (firstPage) {
-          maxPages = 2
-          firstPage = false
-        }
-        let songs = assemblePianoDoublePage(abcSongs, [], maxPages)
-        for (let i = 0; i &lt; songs.length; i++) {
-          let song = songs[i]
-          actualPages = actualPages + song.pianoFiles.length
-          texFile.append(song.formatPianoTex())
-        }
-        // Add placeholder for blank pages
-        let placeholder = PianoScore.texCmd('placeholder')
-        texFile.append(placeholder.repeat(maxPages - actualPages))
-      }
-    })
+  build () {
+    let output = []
+    let songs = this.library.toArray()
+    if (this.groupAlphabetically) {
+      let abcTree = new AlphabeticalSongsTree(songs)
+      Object.keys(abcTree).forEach((abc) => {
+        output.push('\n\n' + PianoScore.texCmd('chapter', abc.toUpperCase()))
+        output.push(PianoScore.buildSongList(abcTree[abc], this.pageTurnOptimized))
+      })
+    } else {
+      output.push(PianoScore.buildSongList(songs, this.pageTurnOptimized))
+    }
+    return output.join('')
   }
 }
 
