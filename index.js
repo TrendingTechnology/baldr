@@ -1215,6 +1215,12 @@ class PianoFilesCountTree {
 /**
  * The piano score.
  *
+ * Generate the TeX file for the piano version of the songbook. The page
+ * orientation of the score is in the landscape format. Two
+ * EPS files exported from MuseScore fit on one page. To avoid page breaks
+ * within a song, a piano accompaniment must not have more than four
+ * EPS files.
+ *
  * @param {string} texFile - The path of the TeX file.
  * @param {module:baldr-songbook-updater~Library} library - An instance of the class “Library()”
  * @param {boolean} groupAlphabetically
@@ -1286,7 +1292,7 @@ class PianoScore {
     if (pageTurnOptimized) {
       let firstPage = true
       let countTree = new PianoFilesCountTree(songs)
-      while (countTree.isEmpty()) {
+      while (!countTree.isEmpty()) {
         let maxPages = 4
         let actualPages = 0
         if (firstPage) {
@@ -1294,8 +1300,7 @@ class PianoScore {
           firstPage = false
         }
         let songs = PianoScore.selectSongs(countTree, [], maxPages)
-        for (let i = 0; i < songs.length; i++) {
-          let song = songs[i]
+        for (let song of songs) {
           actualPages = actualPages + song.pianoFiles.length
           output.push(song.formatPianoTex())
         }
