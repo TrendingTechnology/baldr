@@ -22,6 +22,11 @@ const util = require('util')
 const yaml = require('js-yaml')
 require('colors')
 
+/**
+ * An array of song objects.
+ * @typedef {module:baldr-songbook-updater~Song[]} songs
+ */
+
 /*******************************************************************************
  * Functions
  ******************************************************************************/
@@ -1105,24 +1110,6 @@ class Song {
  * Build a tree object which contains the number of piano files of
  * each song. This tree is necessary to avoid page breaks on multipage
  * piano scores.
- *
- * @return {object}
- * <code><pre>
- * { a: { '3': { 'Auf-der-Mauer': [Object] } },
- *   s:
- *    { '1': { 'Stille-Nacht': [Object] },
- *      '3': { 'Swing-low': [Object] } },
- *   z: { '2': { 'Zum-Tanze-da-geht-ein-Maedel': [Object] } } }
- * </pre><code>
- *
- * One song entry has following properties:
- *
- * <code><pre>
- * { title: 'Swing low',
- *   folder: '/test/songs/processed/some/s/Swing-low',
- *   slides: [ '01.svg', '02.svg', '03.svg' ],
- *   pianoFiles: [ 'piano_1.eps', 'piano_2.eps', 'piano_3.eps' ] }
- * </pre><code>
  */
 class PianoFilesCountTree {
   constructor (songs) {
@@ -1171,6 +1158,13 @@ class PianoFilesCountTree {
   }
 }
 
+/**
+ * The piano score.
+ *
+ * @param songTree
+ * @param {boolean} alphabeticalTree
+ * @param {boolean} pageTurnOptimized
+ */
 class PianoScore {
   constructor (texFile, songTree, alphabeticalTree = true, pageTurnOptimized = true) {
     this.texFile = new TeXFile(texFile)
@@ -1195,10 +1189,10 @@ class PianoScore {
   }
 
   /**
-   * Assemble a certain number of pages with piano scores.
+   * Fill a certain number of pages with piano score files.
    *
-   * @param {object} pianoScores - Piano scores grouped by page number.
-   * @param {array} songs - An array of song objects.
+   * @param {module:baldr-songbook-updater~PianoFilesCounterTree} pianoFilesCounterTree - Piano scores grouped by page number.
+   * @param {module:baldr-songbook-updater~songs} songs - An array of song objects.
    * @param {number} pageCount - Number of pages to group together.
    *
    * @return {array} An array of song objects, which fit in the double page
@@ -1221,6 +1215,13 @@ class PianoScore {
     return songs
   }
 
+  /**
+   * Build the TeX markup of an array of song objects
+   *
+   * @param {module:baldr-songbook-updater~songs} songs - An array of song objects.
+   *
+   * @return {string}
+   */
   static buildSongList (songs) {
     let output = []
     for (let song of songs) {
