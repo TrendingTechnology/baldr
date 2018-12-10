@@ -30,5 +30,11 @@
 		"body": [
 			"assert.strictEqual($1, $2)"
 		]
+	},
+	"Type definition module:baldr-songbook-updater": {
+		"prefix": "mod",
+		"body": [
+			"{module:baldr-songbook-updater~$1}"
+		]
 	}
 }

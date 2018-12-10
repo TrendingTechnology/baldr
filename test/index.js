@@ -30,6 +30,13 @@ let mkTmpFile = function () {
   return tmp.fileSync().name
 }
 
+/**
+ *
+ * @param {string} folder1 - “processed” or “clean”
+ * @param {string} folder2 - “some” or “one”
+ *
+ * @return {string} Path of the temporary directory.
+ */
 let tmpCopy = function (folder1, folder2) {
   let tmpDir = mkTmpDir()
   fs.copySync(path.resolve('test', 'songs', folder1, folder2), tmpDir)
@@ -1163,117 +1170,127 @@ describe('Classes', function () {
 
   describe('Class “PianoScore()”', function () {
     let PianoScore = indexRewired.__get__('PianoScore')
-    describe('Static method “texCmd()”', function () {
-      it('without a value', function () {
-        assert.strictEqual(PianoScore.texCmd('lorem', 'ipsum'), '\\tmplorem{ipsum}\n')
-      })
+    let Library = indexRewired.__get__('Library')
+    let tmpDir = tmpCopy('processed', 'some')
+    let library = new Library(tmpDir)
 
-      it('with a value', function () {
-        assert.strictEqual(PianoScore.texCmd('lorem'), '\\tmplorem\n')
-      })
+    it('Initialisation', function () {
+      let pianoScore = new PianoScore(path.join(tmpDir, 'piano.tex'), library)
+      assert.ok(pianoScore)
     })
-    describe('Static method “selectSongs()”', function () {
-      /**
-       * @param {object} config
-       * <code><pre>
-       * let config = {
-       *   1: 4,
-       *   2: 2,
-       *   3: 3,
-       *   4: 2
-       * }
-       * </pre><code>
-       *
-       */
-      let generatePianoScoreObject = function (config) {
-        let output = {}
-        // Level 1: countCategory
-        for (let countCategory in config) {
-          // Level 2: numberOfSongs
-          if (!output.hasOwnProperty(countCategory)) output[countCategory] = []
-          let numberOfSongs = config[countCategory]
-          let songs = []
-          for (let i = 1; i <= numberOfSongs; i++) {
-            let song = {}
-            song.title = `${countCategory}-${i}`
-            songs.push(song)
+
+    describe('Methods', function () {
+      describe('Static method “texCmd()”', function () {
+        it('without a value', function () {
+          assert.strictEqual(PianoScore.texCmd('lorem', 'ipsum'), '\\tmplorem{ipsum}\n')
+        })
+
+        it('with a value', function () {
+          assert.strictEqual(PianoScore.texCmd('lorem'), '\\tmplorem\n')
+        })
+      })
+      describe('Static method “selectSongs()”', function () {
+        /**
+         * @param {object} config
+         * <code><pre>
+         * let config = {
+         *   1: 4,
+         *   2: 2,
+         *   3: 3,
+         *   4: 2
+         * }
+         * </pre><code>
+         *
+         */
+        let generatePianoScoreObject = function (config) {
+          let output = {}
+          // Level 1: countCategory
+          for (let countCategory in config) {
+            // Level 2: numberOfSongs
+            if (!output.hasOwnProperty(countCategory)) output[countCategory] = []
+            let numberOfSongs = config[countCategory]
+            let songs = []
+            for (let i = 1; i <= numberOfSongs; i++) {
+              let song = {}
+              song.title = `${countCategory}-${i}`
+              songs.push(song)
+            }
+            output[countCategory] = songs
           }
-          output[countCategory] = songs
+          return output
         }
-        return output
-      }
 
-      let getSongs = function (pageCount, config) {
-        return PianoScore.selectSongs(generatePianoScoreObject(config), [], pageCount)
-      }
+        let getSongs = function (pageCount, config) {
+          return PianoScore.selectSongs(generatePianoScoreObject(config), [], pageCount)
+        }
 
-      describe('Helper function “generatePianoScoreObject()”', function () {
-        it('Single entry', function () {
-          let pianoScores = generatePianoScoreObject({ 1: 1 })
-          assert.deepStrictEqual(pianoScores, {
-            '1': [{ 'title': '1-1' }]
+        describe('Helper function “generatePianoScoreObject()”', function () {
+          it('Single entry', function () {
+            let pianoScores = generatePianoScoreObject({ 1: 1 })
+            assert.deepStrictEqual(pianoScores, {
+              '1': [{ 'title': '1-1' }]
+            })
+          })
+
+          it('More entries', function () {
+            let pianoScores = generatePianoScoreObject({ 1: 1, 2: 2, 3: 3 })
+            assert.deepStrictEqual(pianoScores, {
+              '1': [{ 'title': '1-1' }],
+              '2': [{ 'title': '2-1' }, { 'title': '2-2' }],
+              '3': [{ 'title': '3-1' }, { 'title': '3-2' }, { 'title': '3-3' }]
+            })
           })
         })
 
-        it('More entries', function () {
-          let pianoScores = generatePianoScoreObject({ 1: 1, 2: 2, 3: 3 })
-          assert.deepStrictEqual(pianoScores, {
-            '1': [{ 'title': '1-1' }],
-            '2': [{ 'title': '2-1' }, { 'title': '2-2' }],
-            '3': [{ 'title': '3-1' }, { 'title': '3-2' }, { 'title': '3-3' }]
-          })
+        it('2 pages per unit <- 1-page-song * 1', function () {
+          assert.deepStrictEqual(
+            getSongs(2, { 1: 1 }),
+            [{ 'title': '1-1' }]
+          )
+        })
+
+        it('4 pages per unit <- 1-page-song * 4', function () {
+          assert.deepStrictEqual(
+            getSongs(4, { 1: 4 }),
+            [{ 'title': '1-1' }, { 'title': '1-2' }, { 'title': '1-3' }, { 'title': '1-4' }]
+          )
+        })
+
+        it('4 pages per unit <- 1-page-song * 2', function () {
+          assert.deepStrictEqual(
+            getSongs(4, { 4: 2 }),
+            [{ 'title': '4-1' }]
+          )
+        })
+
+        it('4 pages per unit <- 1-page-song, 2-page-song, 4-page-song * 2', function () {
+          assert.deepStrictEqual(
+            getSongs(4, { 1: 1, 2: 1, 4: 2 }),
+            [{ 'title': '4-1' }]
+          )
+        })
+
+        it('2 pages per unit <- 3-page-song', function () {
+          assert.deepStrictEqual(
+            getSongs(2, { 3: 1 }),
+            []
+          )
+        })
+
+        it('4 pages per unit <- 3-page-song', function () {
+          assert.deepStrictEqual(
+            getSongs(4, { 1: 3, 2: 3, 3: 3 }),
+            [{ 'title': '3-1' }, { 'title': '1-1' }]
+          )
         })
       })
 
-      it('2 pages per unit <- 1-page-song * 1', function () {
-        assert.deepStrictEqual(
-          getSongs(2, { 1: 1 }),
-          [{ 'title': '1-1' }]
-        )
-      })
-
-      it('4 pages per unit <- 1-page-song * 4', function () {
-        assert.deepStrictEqual(
-          getSongs(4, { 1: 4 }),
-          [{ 'title': '1-1' }, { 'title': '1-2' }, { 'title': '1-3' }, { 'title': '1-4' }]
-        )
-      })
-
-      it('4 pages per unit <- 1-page-song * 2', function () {
-        assert.deepStrictEqual(
-          getSongs(4, { 4: 2 }),
-          [{ 'title': '4-1' }]
-        )
-      })
-
-      it('4 pages per unit <- 1-page-song, 2-page-song, 4-page-song * 2', function () {
-        assert.deepStrictEqual(
-          getSongs(4, { 1: 1, 2: 1, 4: 2 }),
-          [{ 'title': '4-1' }]
-        )
-      })
-
-      it('2 pages per unit <- 3-page-song', function () {
-        assert.deepStrictEqual(
-          getSongs(2, { 3: 1 }),
-          []
-        )
-      })
-
-      it('4 pages per unit <- 3-page-song', function () {
-        assert.deepStrictEqual(
-          getSongs(4, { 1: 3, 2: 3, 3: 3 }),
-          [{ 'title': '3-1' }, { 'title': '1-1' }]
-        )
-      })
-    })
-
-    it('Static method “buildSongList()”', function () {
-      let Library = indexRewired.__get__('Library')
-      let library = new Library(path.join('test', 'songs', 'processed', 'some'))
-      let songs = Object.values(library.songs)
-      let texMarkup = PianoScore.buildSongList(songs)
-      assert.strictEqual(texMarkup, `
+      it('Static method “buildSongList()”', function () {
+        let Library = indexRewired.__get__('Library')
+        let library = new Library(path.join('test', 'songs', 'processed', 'some'))
+        let songs = Object.values(library.songs)
+        let texMarkup = PianoScore.buildSongList(songs)
+        assert.strictEqual(texMarkup, `
 \\tmpheading{Auf der Mauer, auf der Lauer}
 \\tmpimage{a/Auf-der-Mauer/piano/piano_1.eps}
 \\tmpimage{a/Auf-der-Mauer/piano/piano_2.eps}
@@ -1291,6 +1308,7 @@ describe('Classes', function () {
 \\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_1.eps}
 \\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_2.eps}
 `)
+      })
     })
   })
 
@@ -1331,6 +1349,11 @@ describe('Classes', function () {
     })
 
     describe('Methods', function () {
+      it('Method “toArray()”', function () {
+        let songs = library.toArray()
+        assert.strictEqual(songs.length, 4)
+      })
+
       it('Method “detectSongs_()”', function () {
         assert.strictEqual(library.detectSongs_().length, 4)
       })
