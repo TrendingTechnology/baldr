@@ -1123,6 +1123,19 @@ describe('Classes', function () {
     })
   })
 
+  describe('Class “AlphabeticalSongsTree()”', function () {
+    let AlphabeticalSongsTree = indexRewired.__get__('AlphabeticalSongsTree')
+    let Library = indexRewired.__get__('Library')
+    let library = new Library(path.join('test', 'songs', 'processed', 'some'))
+    let songs = Object.values(library.songs)
+
+    it('Initialisation', function () {
+      let abcTree = new AlphabeticalSongsTree(songs)
+      console.log(abcTree)
+      assert.strictEqual(abcTree.a[0].metaData.title, 'Auf der Mauer, auf der Lauer')
+    })
+  })
+
   describe('Class “PianoFilesCountTree()”', function () {
     let PianoFilesCountTree = indexRewired.__get__('PianoFilesCountTree')
     let Library = indexRewired.__get__('Library')

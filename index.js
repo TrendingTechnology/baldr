@@ -186,6 +186,18 @@ function parseSongIDList (listPath) {
   return content.split(/\s+/).filter(songID => songID)
 }
 
+/**
+ * Sort alphabetically an array of objects by some specific property.
+ *
+ * @param {String} property Key of the object to sort.
+ * @see {@link https://ourcodeworld.com/articles/read/764/how-to-sort-alphabetically-an-array-of-objects-by-key-in-javascript Tutorial}
+ */
+function sortObjectsByProperty (property) {
+  return function (a, b) {
+    return a[property].localeCompare(b[property])
+  }
+}
+
 /*******************************************************************************
  * Utility classes
  ******************************************************************************/
@@ -1103,8 +1115,35 @@ class Song {
 }
 
 /*******************************************************************************
- * Song library - collection of songs
+ * Classes for multiple songs
  ******************************************************************************/
+
+/**
+ * A tree of songs where the song arrays are placed in alphabetical properties.
+ * An instanace of this class would look like this example:
+ *
+ * <pre><code>
+ * {
+ *   "a": [ song, song ],
+ *   "s": [ song, song ],
+ *   "z": [ song, song ]
+ * }
+ * </code></pre>
+ */
+class AlphabeticalSongsTree {
+  /**
+   * @param {module:baldr-songbook-updater~songs} songs - An array of song objects.
+   */
+  constructor (songs) {
+    for (let song of songs) {
+      if (!this.hasOwnProperty(song.abc)) this[song.abc] = []
+      this[song.abc].push(song)
+    }
+    for (let abc in this) {
+      this[abc].sort(sortObjectsByProperty('songID'))
+    }
+  }
+}
 
 /**
  * Build a tree object which contains the number of piano files of
@@ -1112,6 +1151,9 @@ class Song {
  * piano scores.
  */
 class PianoFilesCountTree {
+  /**
+   * @param {module:baldr-songbook-updater~songs} songs - An array of song objects.
+   */
   constructor (songs) {
     this.validCounts_ = [1, 2, 3, 4]
     this.build_(songs)
@@ -1688,3 +1730,4 @@ if (require.main === module) {
 exports.parseSongIDList = parseSongIDList
 exports.PianoScore = PianoScore
 exports.PianoFilesCountTree = PianoFilesCountTree
+exports.AlphabeticalSongsTree = AlphabeticalSongsTree
