@@ -151,7 +151,7 @@ function parseCliArguments (argv, version) {
   const commander = new Command()
   return commander
     .version(version)
-    .option('-a, --alphabetical-tree', 'List the songs in an alphabetical tree.')
+    .option('-a, --group-alphabetically', 'List the songs in an alphabetical tree.')
     .option('-b --base-path &lt;base-path>', 'Base path of a song collection.')
     .option('-c, --clean', 'Clean up (delete all generated files)')
     .option('-F, --folder &lt;folder>', 'Process only the given song folder')
@@ -160,7 +160,7 @@ function parseCliArguments (argv, version) {
     .option('-l, --list &lt;song-id-list>', 'Use a list of song IDs in a text file to specify which songs should be updated.')
     .option('-p, --piano', 'Generate the piano files only.')
     .option('-s, --slides', 'Generate the slides only.')
-    .option('-t, --page-turn-friendly', 'Generate a page turn friendly piano score version.')
+    .option('-t, --page-turn-optimized', 'Generate a page turn friendly piano score version.')
     .parse(argv)
 }
 
@@ -1248,13 +1248,14 @@ class PianoFilesCountTree {
  * EPS files exported from MuseScore fit on one page. To avoid page breaks
  * within a song, a piano accompaniment must not have more than four
  * EPS files.
- *
- * @param {string} texFile - The path of the TeX file.
- * @param {module:baldr-songbook-updater~Library} library - An instance of the class “Library()”
- * @param {boolean} groupAlphabetically
- * @param {boolean} pageTurnOptimized
  */
 class PianoScore {
+  /**
+   * @param {string} texFile - The path of the TeX file.
+   * @param {module:baldr-songbook-updater~Library} library - An instance of the class “Library()”
+   * @param {boolean} groupAlphabetically
+   * @param {boolean} pageTurnOptimized
+   */
   constructor (texFile, library, groupAlphabetically = true, pageTurnOptimized = true) {
     this.texFile = new TextFile(texFile)
     this.library = library
@@ -1735,7 +1736,6 @@ class Library {
     }
     this.gitPull()
     this.generateIntermediateFiles(mode, force)
-    if (mode === 'piano' || mode === 'all') this.buildPianoScorePageTurnOptimized()
   }
 }
 
@@ -1776,6 +1776,10 @@ let main = function () {
     library.updateSongBySongId(options.songId, mode)
   } else {
     library.update(mode, options.force)
+    if (mode === 'piano' || mode === 'all') {
+      let pianoScore = new PianoScore(path.join(library.basePath, 'songs.tex'), library, options.groupAlphabetically, options.pageTurnOptimized)
+      pianoScore.write()
+    }
   }
 }
 
