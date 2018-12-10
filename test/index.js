@@ -1131,7 +1131,6 @@ describe('Classes', function () {
 
     it('Initialisation', function () {
       let abcTree = new AlphabeticalSongsTree(songs)
-      console.log(abcTree)
       assert.strictEqual(abcTree.a[0].metaData.title, 'Auf der Mauer, auf der Lauer')
     })
   })
