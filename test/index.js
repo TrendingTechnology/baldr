@@ -407,35 +407,35 @@ describe('Classes', function () {
     })
   })
 
-  describe('Class “TeXFile()”', function () {
-    let TeXFile = indexRewired.__get__('TeXFile')
+  describe('Class “TextFile()”', function () {
+    let TextFile = indexRewired.__get__('TextFile')
 
     it('Property “path”', function () {
       let tmpFile = mkTmpFile()
-      let texFile = new TeXFile(tmpFile)
+      let texFile = new TextFile(tmpFile)
       assert.strictEqual(texFile.path, tmpFile)
     })
 
     describe('Methods', function () {
       it('Method “append()”', function () {
-        let texFile = new TeXFile(mkTmpFile())
+        let texFile = new TextFile(mkTmpFile())
         texFile.append('test')
       })
 
       it('Method “read()”', function () {
-        let texFile = new TeXFile(mkTmpFile())
+        let texFile = new TextFile(mkTmpFile())
         texFile.append('test')
         assert.strictEqual(texFile.read(), 'test')
       })
 
       it('Method “flush()”', function () {
-        let texFile = new TeXFile(mkTmpFile())
+        let texFile = new TextFile(mkTmpFile())
         texFile.append('test')
         texFile.flush('test')
         assert.strictEqual(texFile.read(), '')
       })
       it('Method “remove()”', function () {
-        let texFile = new TeXFile(mkTmpFile())
+        let texFile = new TextFile(mkTmpFile())
         assertExists(texFile.path)
         texFile.remove()
         assertNotExists(texFile.path)

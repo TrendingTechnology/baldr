@@ -313,15 +313,15 @@ class Message {
 let message = new Message()
 
 /**
- * Build a TeX file (songs.tex) of all piano scores.
+ * A text file.
  */
-class TeXFile {
+class TextFile {
   /**
-   * @param {string} path The path of the TeXFile.
+   * @param {string} path The path of the text file.
    */
   constructor (path) {
     /**
-     * The path of the TeX file.
+     * The path of the text file.
      * @type {string}
      */
     this.path = path
@@ -329,16 +329,16 @@ class TeXFile {
   }
 
   /**
-   * Append content to the TeX file.
+   * Append content to the text file.
    *
-   * @param {string} content - Content to append to the Tex file.
+   * @param {string} content - Content to append to the text file.
    */
   append (content) {
     fs.appendFileSync(this.path, content)
   }
 
   /**
-   * Read the complete TeX file
+   * Read the whole text file.
    *
    * @return {string}
    */
@@ -347,14 +347,14 @@ class TeXFile {
   }
 
   /**
-   * Delete the content of the TeX file, not the TeX file itself.
+   * Delete the content of the text file, not the text file itself.
    */
   flush () {
     fs.writeFileSync(this.path, '')
   }
 
   /**
-   * Remove the TeX file.
+   * Remove the text file.
    */
   remove () {
     fs.unlinkSync(this.path)
@@ -1209,7 +1209,7 @@ class PianoFilesCountTree {
  */
 class PianoScore {
   constructor (texFile, songTree, alphabeticalTree = true, pageTurnOptimized = true) {
-    this.texFile = new TeXFile(texFile)
+    this.texFile = new TextFile(texFile)
   }
 
   /**
@@ -1277,7 +1277,7 @@ class PianoScore {
    */
   buildPianoScoreAlpabetically () {
     let tree = this.buildAlphabeticalSongTree()
-    let texFile = new TeXFile(path.join(this.basePath, 'songs.tex'))
+    let texFile = new TextFile(path.join(this.basePath, 'songs.tex'))
 
     Object.keys(tree).forEach((abc) => {
       texFile.append('\n\n' + texCmd('chapter', abc.toUpperCase()))
@@ -1297,7 +1297,7 @@ class PianoScore {
    */
   buildPianoScorePageTurnOptimized () {
     let tree = this.buildPianoFilesCountTree()
-    let texFile = new TeXFile(path.join(this.basePath, 'songs.tex'))
+    let texFile = new TextFile(path.join(this.basePath, 'songs.tex'))
     Object.keys(tree).forEach((abc, index) => {
       texFile.append('\n\n' + texCmd('chapter', abc.toUpperCase()))
       let abcSongs = tree[abc]
@@ -1589,7 +1589,7 @@ class Library {
    */
   buildPianoScoreAlpabetically () {
     let tree = this.buildAlphabeticalSongTree()
-    let texFile = new TeXFile(path.join(this.basePath, 'songs.tex'))
+    let texFile = new TextFile(path.join(this.basePath, 'songs.tex'))
 
     Object.keys(tree).forEach((abc, index) => {
       texFile.append('\n\n' + texCmd('chapter', abc.toUpperCase()))
@@ -1609,7 +1609,7 @@ class Library {
    */
   buildPianoScorePageTurnOptimized () {
     let tree = this.buildPianoFilesCountTree()
-    let texFile = new TeXFile(path.join(this.basePath, 'songs.tex'))
+    let texFile = new TextFile(path.join(this.basePath, 'songs.tex'))
     Object.keys(tree).forEach((abc, index) => {
       texFile.append('\n\n' + texCmd('chapter', abc.toUpperCase()))
       let abcSongs = tree[abc]
