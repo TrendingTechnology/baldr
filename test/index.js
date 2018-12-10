@@ -1253,6 +1253,7 @@ describe('Classes', function () {
     let Library = indexRewired.__get__('Library')
     let tmpDir = tmpCopy('processed', 'some')
     let library = new Library(tmpDir)
+    let songs = library.toArray()
 
     it('Initialisation', function () {
       let pianoScore = new PianoScore(path.join(tmpDir, 'piano.tex'), library)
@@ -1336,10 +1337,6 @@ describe('Classes', function () {
       })
 
       describe('Static method “buildSongList()”', function () {
-        let Library = indexRewired.__get__('Library')
-        let library = new Library(path.join('test', 'songs', 'processed', 'some'))
-        let songs = library.toArray()
-
         it('pageTurnOptimized = false', function () {
           let texMarkup = PianoScore.buildSongList(songs, false)
           assert.strictEqual(texMarkup, `
@@ -1382,6 +1379,124 @@ describe('Classes', function () {
 \\tmpimage{s/Swing-low/piano/piano_2.eps}
 \\tmpimage{s/Swing-low/piano/piano_3.eps}
 \\tmpplaceholder
+`)
+        })
+      })
+
+      describe('Method “build()”', function () {
+        it('groupAlphabetically = true, pageTurnOptimized = true', function () {
+          let pianoScore = new PianoScore(mkTmpFile(), library, true, true)
+          let texMarkup = pianoScore.build()
+          assert.strictEqual(texMarkup, `
+
+\\tmpchapter{A}
+\\tmpplaceholder
+\\tmpplaceholder
+
+\\tmpheading{Auf der Mauer, auf der Lauer}
+\\tmpimage{a/Auf-der-Mauer/piano/piano_1.eps}
+\\tmpimage{a/Auf-der-Mauer/piano/piano_2.eps}
+\\tmpimage{a/Auf-der-Mauer/piano/piano_3.eps}
+\\tmpplaceholder
+
+
+\\tmpchapter{S}
+
+\\tmpheading{Stille Nacht}
+\\tmpimage{s/Stille-Nacht/piano/piano.eps}
+\\tmpplaceholder
+
+\\tmpheading{Swing low}
+\\tmpimage{s/Swing-low/piano/piano_1.eps}
+\\tmpimage{s/Swing-low/piano/piano_2.eps}
+\\tmpimage{s/Swing-low/piano/piano_3.eps}
+\\tmpplaceholder
+
+
+\\tmpchapter{Z}
+
+\\tmpheading{Zum Tanze, da geht ein Mädel}
+\\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_1.eps}
+\\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_2.eps}
+`)
+        })
+
+        it('groupAlphabetically = true, pageTurnOptimized = false', function () {
+          let pianoScore = new PianoScore(mkTmpFile(), library, true, false)
+          let texMarkup = pianoScore.build()
+          assert.strictEqual(texMarkup, `
+
+\\tmpchapter{A}
+
+\\tmpheading{Auf der Mauer, auf der Lauer}
+\\tmpimage{a/Auf-der-Mauer/piano/piano_1.eps}
+\\tmpimage{a/Auf-der-Mauer/piano/piano_2.eps}
+\\tmpimage{a/Auf-der-Mauer/piano/piano_3.eps}
+
+
+\\tmpchapter{S}
+
+\\tmpheading{Stille Nacht}
+\\tmpimage{s/Stille-Nacht/piano/piano.eps}
+
+\\tmpheading{Swing low}
+\\tmpimage{s/Swing-low/piano/piano_1.eps}
+\\tmpimage{s/Swing-low/piano/piano_2.eps}
+\\tmpimage{s/Swing-low/piano/piano_3.eps}
+
+
+\\tmpchapter{Z}
+
+\\tmpheading{Zum Tanze, da geht ein Mädel}
+\\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_1.eps}
+\\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_2.eps}
+`)
+        })
+
+        it('groupAlphabetically = false, pageTurnOptimized = true', function () {
+          let pianoScore = new PianoScore(mkTmpFile(), library, false, true)
+          let texMarkup = pianoScore.build()
+          assert.strictEqual(texMarkup, `
+\\tmpheading{Zum Tanze, da geht ein Mädel}
+\\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_1.eps}
+\\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_2.eps}
+
+\\tmpheading{Auf der Mauer, auf der Lauer}
+\\tmpimage{a/Auf-der-Mauer/piano/piano_1.eps}
+\\tmpimage{a/Auf-der-Mauer/piano/piano_2.eps}
+\\tmpimage{a/Auf-der-Mauer/piano/piano_3.eps}
+
+\\tmpheading{Stille Nacht}
+\\tmpimage{s/Stille-Nacht/piano/piano.eps}
+
+\\tmpheading{Swing low}
+\\tmpimage{s/Swing-low/piano/piano_1.eps}
+\\tmpimage{s/Swing-low/piano/piano_2.eps}
+\\tmpimage{s/Swing-low/piano/piano_3.eps}
+\\tmpplaceholder
+`)
+        })
+
+        it('groupAlphabetically = false, pageTurnOptimized = false', function () {
+          let pianoScore = new PianoScore(mkTmpFile(), library, false, false)
+          let texMarkup = pianoScore.build()
+          assert.strictEqual(texMarkup, `
+\\tmpheading{Auf der Mauer, auf der Lauer}
+\\tmpimage{a/Auf-der-Mauer/piano/piano_1.eps}
+\\tmpimage{a/Auf-der-Mauer/piano/piano_2.eps}
+\\tmpimage{a/Auf-der-Mauer/piano/piano_3.eps}
+
+\\tmpheading{Stille Nacht}
+\\tmpimage{s/Stille-Nacht/piano/piano.eps}
+
+\\tmpheading{Swing low}
+\\tmpimage{s/Swing-low/piano/piano_1.eps}
+\\tmpimage{s/Swing-low/piano/piano_2.eps}
+\\tmpimage{s/Swing-low/piano/piano_3.eps}
+
+\\tmpheading{Zum Tanze, da geht ein Mädel}
+\\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_1.eps}
+\\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_2.eps}
 `)
         })
       })
