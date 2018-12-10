@@ -31,6 +31,47 @@ let mkTmpFile = function () {
 }
 
 /**
+ * @param {number} pianoFilesCount - Number of piano files
+ */
+let fakeSong = function (pianoFilesCount) {
+  return {
+    title: `${pianoFilesCount} piano file(s)`,
+    pianoFiles: {
+      length: pianoFilesCount
+    }
+  }
+}
+
+/**
+ * @param {object} config
+ * <code><pre>
+ * let config = {
+ *   number-of-piano-files: number-of-songs,
+ * }
+ * </pre><code>
+ * <code><pre>
+ * let config = {
+ *   1: 4,
+ *   2: 2,
+ *   3: 3,
+ *   4: 2
+ * }
+ * </pre><code>
+ */
+let fakeSongs = function (config) {
+  let songs = []
+  // Level 1: countCategory
+  for (let numberPianoFiles in config) {
+    // Level 2: numberOfSongs
+    let numberOfSongs = config[numberPianoFiles]
+    for (let i = 1; i <= numberOfSongs; i++) {
+      songs.push(fakeSong(numberPianoFiles))
+    }
+  }
+  return songs
+}
+
+/**
  *
  * @param {string} folder1 - “processed” or “clean”
  * @param {string} folder2 - “some” or “one”
@@ -1144,34 +1185,71 @@ describe('Classes', function () {
       assert.ok(countTree)
     })
 
-    it('Method “sum()”', function () {
-      assert.strictEqual(countTree.sum(), 4)
+    describe('Method “sum()”', function () {
+      it('Integration', function () {
+        assert.strictEqual(countTree.sum(), 4)
+      })
+
+      it('one', function () {
+        let countTree = new PianoFilesCountTree(fakeSongs({ 1: 1 }))
+        assert.strictEqual(countTree.sum(), 1)
+      })
+
+      it('many', function () {
+        let countTree = new PianoFilesCountTree(fakeSongs({ 1: 1, 2: 2, 3: 3, 4: 4 }))
+        assert.strictEqual(countTree.sum(), 10)
+      })
+
+      it('empty', function () {
+        let countTree = new PianoFilesCountTree([])
+        assert.strictEqual(countTree.sum(), 0)
+      })
     })
 
-    it('Method “isEmpty()”', function () {
-      assert.strictEqual(countTree.isEmpty(), false)
+    describe('Method “isEmpty()”', function () {
+      it('Integration', function () {
+        assert.strictEqual(countTree.isEmpty(), false)
+      })
+
+      it('true', function () {
+        let countTree = new PianoFilesCountTree([])
+        assert.strictEqual(countTree.isEmpty(), true)
+      })
+
+      it('false', function () {
+        let countTree = new PianoFilesCountTree(fakeSongs({ 1: 1 }))
+        assert.strictEqual(countTree.isEmpty(), false)
+      })
     })
 
-    it('Method “shift()”', function () {
-      let countTree = new PianoFilesCountTree(songs)
-      let song1 = countTree.shift(1)
-      assert.strictEqual(song1.metaData.title, 'Stille Nacht')
-      let song2 = countTree.shift(1)
-      assert.strictEqual(song2, undefined)
-    })
+    describe('Method “shift()”', function () {
+      it('No exception', function () {
+        let countTree = new PianoFilesCountTree(songs)
+        let song1 = countTree.shift(1)
+        assert.strictEqual(song1.metaData.title, 'Stille Nacht')
+        let song2 = countTree.shift(1)
+        assert.strictEqual(song2, undefined)
+      })
 
-    it('Method “shift()”: exception', function () {
-      assert.throws(
-        function () {
-          countTree.shift(7)
-        },
-        /^.*Invalid piano file count: 7$/
-      )
+      it('No songs anymore in count category', function () {
+        let countTree = new PianoFilesCountTree(songs)
+        assert.strictEqual(countTree.shift(4), undefined)
+      })
+
+      it('Exception', function () {
+        assert.throws(
+          function () {
+            countTree.shift(7)
+          },
+          /^.*Invalid piano file count: 7$/
+        )
+      })
     })
   })
 
   describe('Class “PianoScore()”', function () {
     let PianoScore = indexRewired.__get__('PianoScore')
+    let PianoFilesCountTree = indexRewired.__get__('PianoFilesCountTree')
     let Library = indexRewired.__get__('Library')
     let tmpDir = tmpCopy('processed', 'some')
     let library = new Library(tmpDir)
@@ -1192,98 +1270,68 @@ describe('Classes', function () {
         })
       })
       describe('Static method “selectSongs()”', function () {
-        /**
-         * @param {object} config
-         * <code><pre>
-         * let config = {
-         *   1: 4,
-         *   2: 2,
-         *   3: 3,
-         *   4: 2
-         * }
-         * </pre><code>
-         *
-         */
-        let generatePianoScoreObject = function (config) {
-          let output = {}
-          // Level 1: countCategory
-          for (let countCategory in config) {
-            // Level 2: numberOfSongs
-            if (!output.hasOwnProperty(countCategory)) output[countCategory] = []
-            let numberOfSongs = config[countCategory]
-            let songs = []
-            for (let i = 1; i <= numberOfSongs; i++) {
-              let song = {}
-              song.title = `${countCategory}-${i}`
-              songs.push(song)
-            }
-            output[countCategory] = songs
-          }
-          return output
+        let fakeSelectSongs = function (pageCount, config) {
+          let songs = fakeSongs(config)
+          let countTree = new PianoFilesCountTree(songs)
+          return PianoScore.selectSongs(countTree, [], pageCount)
         }
 
-        let getSongs = function (pageCount, config) {
-          return PianoScore.selectSongs(generatePianoScoreObject(config), [], pageCount)
-        }
-
-        describe('Helper function “generatePianoScoreObject()”', function () {
-          it('Single entry', function () {
-            let pianoScores = generatePianoScoreObject({ 1: 1 })
-            assert.deepStrictEqual(pianoScores, {
-              '1': [{ 'title': '1-1' }]
-            })
-          })
-
-          it('More entries', function () {
-            let pianoScores = generatePianoScoreObject({ 1: 1, 2: 2, 3: 3 })
-            assert.deepStrictEqual(pianoScores, {
-              '1': [{ 'title': '1-1' }],
-              '2': [{ 'title': '2-1' }, { 'title': '2-2' }],
-              '3': [{ 'title': '3-1' }, { 'title': '3-2' }, { 'title': '3-3' }]
-            })
-          })
+        it('4 pages per unit <- 1-page-song, 2-page-song x2, 3-page-song x3', function () {
+          let result = fakeSelectSongs(4, { 1: 1, 2: 2, 3: 3 })
+          assert.strictEqual(result.length, 2)
+          assert.strictEqual(result[0].pianoFiles.length, '3')
+          assert.strictEqual(result[1].pianoFiles.length, '1')
         })
 
-        it('2 pages per unit <- 1-page-song * 1', function () {
-          assert.deepStrictEqual(
-            getSongs(2, { 1: 1 }),
-            [{ 'title': '1-1' }]
-          )
+        it('2 pages per unit <- 1-page-song x1', function () {
+          let result = fakeSelectSongs(2, { 1: 1 })
+          assert.strictEqual(result.length, 1)
+          assert.strictEqual(result[0].pianoFiles.length, '1')
         })
 
-        it('4 pages per unit <- 1-page-song * 4', function () {
-          assert.deepStrictEqual(
-            getSongs(4, { 1: 4 }),
-            [{ 'title': '1-1' }, { 'title': '1-2' }, { 'title': '1-3' }, { 'title': '1-4' }]
-          )
+        it('4 pages per unit <- 1-page-song x4', function () {
+          let result = fakeSelectSongs(4, { 1: 4 })
+          assert.strictEqual(result.length, 4)
+          assert.strictEqual(result[0].pianoFiles.length, '1')
+          assert.strictEqual(result[1].pianoFiles.length, '1')
+          assert.strictEqual(result[2].pianoFiles.length, '1')
+          assert.strictEqual(result[3].pianoFiles.length, '1')
         })
 
-        it('4 pages per unit <- 1-page-song * 2', function () {
-          assert.deepStrictEqual(
-            getSongs(4, { 4: 2 }),
-            [{ 'title': '4-1' }]
-          )
+        it('4 pages per unit <- 4-page-song x2', function () {
+          let result = fakeSelectSongs(4, { 4: 2 })
+          assert.strictEqual(result.length, 1)
+          assert.strictEqual(result[0].pianoFiles.length, '4')
         })
 
-        it('4 pages per unit <- 1-page-song, 2-page-song, 4-page-song * 2', function () {
-          assert.deepStrictEqual(
-            getSongs(4, { 1: 1, 2: 1, 4: 2 }),
-            [{ 'title': '4-1' }]
-          )
+        it('2 pages per unit <- 2-page-song x2', function () {
+          let result = fakeSelectSongs(2, { 2: 2 })
+          assert.strictEqual(result.length, 1)
+          assert.strictEqual(result[0].pianoFiles.length, '2')
+        })
+
+        it('2 pages per unit <- 2-page-song', function () {
+          let result = fakeSelectSongs(2, { 2: 1 })
+          assert.strictEqual(result.length, 1)
+          assert.strictEqual(result[0].pianoFiles.length, '2')
+        })
+
+        it('4 pages per unit <- 1-page-song, 2-page-song, 4-page-song x2', function () {
+          let result = fakeSelectSongs(4, { 1: 1, 2: 1, 4: 2 })
+          assert.strictEqual(result.length, 1)
+          assert.strictEqual(result[0].pianoFiles.length, '4')
         })
 
         it('2 pages per unit <- 3-page-song', function () {
-          assert.deepStrictEqual(
-            getSongs(2, { 3: 1 }),
-            []
-          )
+          let result = fakeSelectSongs(2, { 3: 1 })
+          assert.strictEqual(result.length, 0)
         })
 
-        it('4 pages per unit <- 3-page-song', function () {
-          assert.deepStrictEqual(
-            getSongs(4, { 1: 3, 2: 3, 3: 3 }),
-            [{ 'title': '3-1' }, { 'title': '1-1' }]
-          )
+        it('4 pages per unit <- 1-page-song x3, 2-page-song x3, 3-page-song x3', function () {
+          let result = fakeSelectSongs(4, { 1: 3, 2: 3, 3: 3 })
+          assert.strictEqual(result.length, 2)
+          assert.strictEqual(result[0].pianoFiles.length, '3')
+          assert.strictEqual(result[1].pianoFiles.length, '1')
         })
       })
 
