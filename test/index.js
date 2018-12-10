@@ -52,18 +52,6 @@ it('Conforms to standard', standard.files([
 ]))
 
 describe('Functions', function () {
-  describe('Function “texCmd()”', function () {
-    it('without a value', function () {
-      let texCmd = indexRewired.__get__('texCmd')
-      assert.strictEqual(texCmd('lorem', 'ipsum'), '\\tmplorem{ipsum}\n')
-    })
-
-    it('with a value', function () {
-      let texCmd = indexRewired.__get__('texCmd')
-      assert.strictEqual(texCmd('lorem'), '\\tmplorem\n')
-    })
-  })
-
   describe('Function “checkExecutable()”', function () {
     let checkExecutable = indexRewired.__get__('checkExecutable')
 
@@ -858,6 +846,7 @@ describe('Classes', function () {
 
       describe('Property “pianoFiles”', function () {
         it('empty', function () {
+          let song = new Song(path.join('test', 'songs', 'clean', 'some', 's', 'Swing-low'))
           assert.deepStrictEqual(song.pianoFiles, [])
         })
 

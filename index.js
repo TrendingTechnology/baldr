@@ -32,24 +32,6 @@ require('colors')
  ******************************************************************************/
 
 /**
- * Generate TeX markup. Generate a TeX command prefixed with \tmp.
- *
- * @param {string} command
- * @param {string} value
- *
- * @return {string} A TeX markup, for example: \tmpcommand{value}\n
- */
-function texCmd (command, value) {
-  let markupValue
-  if (value) {
-    markupValue = `{${value}}`
-  } else {
-    markupValue = ''
-  }
-  return `\\tmp${command}${markupValue}\n`
-}
-
-/**
  * Check if executable is installed.
  *
  * @param {string} executable - Name of the executable.
@@ -929,7 +911,7 @@ class Song {
    * @return {string} TeX markup for one EPS image file of a piano score.
    */
   formatPianoTeXEpsFile_ (index) {
-    return texCmd('image',
+    return PianoScore.texCmd('image',
       path.join(this.abc, this.songID, 'piano', this.pianoFiles[index]))
   }
 
@@ -956,7 +938,7 @@ class Song {
         this.metaData.title))
     }
     let output = ''
-    output += '\n' + texCmd('heading', this.metaDataCombined.title)
+    output += '\n' + PianoScore.texCmd('heading', this.metaDataCombined.title)
     for (let i = 0; i < this.pianoFiles.length; i++) {
       output += this.formatPianoTeXEpsFile_(i)
     }
@@ -1280,7 +1262,7 @@ class PianoScore {
     let texFile = new TextFile(path.join(this.basePath, 'songs.tex'))
 
     Object.keys(tree).forEach((abc) => {
-      texFile.append('\n\n' + texCmd('chapter', abc.toUpperCase()))
+      texFile.append('\n\n' + PianoScore.texCmd('chapter', abc.toUpperCase()))
       for (let i = 0; i < tree[abc].length; i++) {
         let song = tree[abc][i]
         texFile.append(song.formatPianoTex())
@@ -1299,7 +1281,7 @@ class PianoScore {
     let tree = this.buildPianoFilesCountTree()
     let texFile = new TextFile(path.join(this.basePath, 'songs.tex'))
     Object.keys(tree).forEach((abc, index) => {
-      texFile.append('\n\n' + texCmd('chapter', abc.toUpperCase()))
+      texFile.append('\n\n' + PianoScore.texCmd('chapter', abc.toUpperCase()))
       let abcSongs = tree[abc]
       let firstPage = true
       while (this.countPianoFilesCountTree(abcSongs) > 0) {
@@ -1316,7 +1298,7 @@ class PianoScore {
           texFile.append(song.formatPianoTex())
         }
         // Add placeholder for blank pages
-        let placeholder = texCmd('placeholder')
+        let placeholder = PianoScore.texCmd('placeholder')
         texFile.append(placeholder.repeat(maxPages - actualPages))
       }
     })
@@ -1592,7 +1574,7 @@ class Library {
     let texFile = new TextFile(path.join(this.basePath, 'songs.tex'))
 
     Object.keys(tree).forEach((abc, index) => {
-      texFile.append('\n\n' + texCmd('chapter', abc.toUpperCase()))
+      texFile.append('\n\n' + PianoScore.texCmd('chapter', abc.toUpperCase()))
       for (let i = 0; i < tree[abc].length; i++) {
         let song = tree[abc][i]
         texFile.append(song.formatPianoTex())
@@ -1611,7 +1593,7 @@ class Library {
     let tree = this.buildPianoFilesCountTree()
     let texFile = new TextFile(path.join(this.basePath, 'songs.tex'))
     Object.keys(tree).forEach((abc, index) => {
-      texFile.append('\n\n' + texCmd('chapter', abc.toUpperCase()))
+      texFile.append('\n\n' + PianoScore.texCmd('chapter', abc.toUpperCase()))
       let abcSongs = tree[abc]
       let firstPage = true
       while (this.countPianoFilesCountTree(abcSongs) > 0) {
@@ -1628,7 +1610,7 @@ class Library {
           texFile.append(song.formatPianoTex())
         }
         // Add placeholder for blank pages
-        let placeholder = texCmd('placeholder')
+        let placeholder = PianoScore.texCmd('placeholder')
         texFile.append(placeholder.repeat(maxPages - actualPages))
       }
     })
