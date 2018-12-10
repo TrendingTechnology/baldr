@@ -1156,9 +1156,19 @@ class AlphabeticalSongsTree {
 }
 
 /**
- * Build a tree object which contains the number of piano files of
- * each song. This tree is necessary to avoid page breaks on multipage
- * piano scores.
+ * An object that groups songs that have the same number of piano files.
+ *
+ * This tree object is an helper object. It is necessary to avoid page breaks
+ * on multipage piano scores.
+ *
+ * &lt;pre>&lt;code>
+ * {
+ *   "1": [ 1-page-song, 1-page-song ... ],
+ *   "2": [ 2-page-song ... ],
+ *   "3": [ 3-page-song ... ]
+ *   "3": [ 3-page-song ... ]
+ * }
+ * &lt;/code>&lt;/pre>
  */
 class PianoFilesCountTree {
   /**
@@ -1169,6 +1179,9 @@ class PianoFilesCountTree {
     this.build_(songs)
   }
 
+  /**
+   * @param {number} count - 1, 2, 3, 4
+   */
   checkCount_ (count) {
     if (this.validCounts_.includes(count)) {
       return true
@@ -1177,18 +1190,23 @@ class PianoFilesCountTree {
     }
   }
 
+  /**
+   * @param {module:baldr-songbook-updater~songs} songs - An array of song objects.
+   */
   build_ (songs) {
-    for (let i = 0; i &lt; songs.length; i++) {
-      let song = songs[i]
+    for (let song of songs) {
       let count = song.pianoFiles.length
       if (!(count in this)) this[count] = []
       this[count].push(song)
     }
   }
 
+  /**
+   * Sum up the number of all songs in all count categories.
+   */
   sum () {
     let count = 0
-    for (let validCount in this.validCounts_) {
+    for (let validCount of this.validCounts_) {
       if (this.hasOwnProperty(validCount)) {
         count = count + this[validCount].length
       }
@@ -1196,6 +1214,11 @@ class PianoFilesCountTree {
     return count
   }
 
+  /**
+   * Return true if the count tree has no songs.
+   *
+   * @return {boolean}
+   */
   isEmpty () {
     if (this.sum() === 0) {
       return true
@@ -1204,9 +1227,16 @@ class PianoFilesCountTree {
     }
   }
 
+  /**
+   * Shift the array of songs that has ”count” number of piano files.
+   *
+   * @param {number} count - 1, 2, 3, 4
+   *
+   * @returns {module:baldr-songbook-updater~Song}
+   */
   shift (count) {
     this.checkCount_(count)
-    return this[count].shift()
+    if (this.hasOwnProperty(count)) return this[count].shift()
   }
 }
 
@@ -1248,23 +1278,23 @@ class PianoScore {
   /**
    * Fill a certain number of pages with piano score files.
    *
-   * @param {module:baldr-songbook-updater~PianoFilesCounterTree} pianoFilesCounterTree - Piano scores grouped by page number.
+   * @param {module:baldr-songbook-updater~PianoFilesCountTree} countTree - Piano scores grouped by page number.
    * @param {module:baldr-songbook-updater~songs} songs - An array of song objects.
    * @param {number} pageCount - Number of pages to group together.
    *
-   * @return {array} An array of song objects, which fit in the double page
+   * @returns {module:baldr-songbook-updater~songs} An array of song objects, which fit in a given page number
    */
-  static selectSongs (pianoScores, songs, pageCount) {
+  static selectSongs (countTree, songs, pageCount) {
     for (let i = pageCount; i > 0; i--) {
-      if (pianoScores.hasOwnProperty(i)) {
-        let song = pianoScores[i].shift()
+      if (!countTree.isEmpty()) {
+        let song = countTree.shift(i)
         if (song) {
           let missingPages = pageCount - i
           songs.push(song)
           if (missingPages &lt;= 0) {
             return songs
           } else {
-            return PianoScore.selectSongs(pianoScores, songs, missingPages)
+            return PianoScore.selectSongs(countTree, songs, missingPages)
           }
         }
       }
@@ -1279,10 +1309,32 @@ class PianoScore {
    *
    * @return {string}
    */
-  static buildSongList (songs) {
+  static buildSongList (songs, pageTurnOptimized = false) {
     let output = []
-    for (let song of songs) {
-      output.push(song.formatPianoTex())
+    if (pageTurnOptimized) {
+      let firstPage = true
+      let countTree = new PianoFilesCountTree(songs)
+      while (countTree.isEmpty()) {
+        let maxPages = 4
+        let actualPages = 0
+        if (firstPage) {
+          maxPages = 2
+          firstPage = false
+        }
+        let songs = PianoScore.selectSongs(countTree, [], maxPages)
+        for (let i = 0; i &lt; songs.length; i++) {
+          let song = songs[i]
+          actualPages = actualPages + song.pianoFiles.length
+          output.push(song.formatPianoTex())
+        }
+        // Add placeholder for blank pages
+        let placeholder = PianoScore.texCmd('placeholder')
+        output.push(placeholder.repeat(maxPages - actualPages))
+      }
+    } else {
+      for (let song of songs) {
+        output.push(song.formatPianoTex())
+      }
     }
     return output.join('')
   }
