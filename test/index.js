@@ -1500,6 +1500,44 @@ describe('Classes', function () {
 `)
         })
       })
+
+      it('Method “write()”', function () {
+        let pianoScore = new PianoScore(mkTmpFile(), library)
+        pianoScore.write()
+        let texMarkup = pianoScore.texFile.read()
+        assert.strictEqual(texMarkup, `
+
+\\tmpchapter{A}
+\\tmpplaceholder
+\\tmpplaceholder
+
+\\tmpheading{Auf der Mauer, auf der Lauer}
+\\tmpimage{a/Auf-der-Mauer/piano/piano_1.eps}
+\\tmpimage{a/Auf-der-Mauer/piano/piano_2.eps}
+\\tmpimage{a/Auf-der-Mauer/piano/piano_3.eps}
+\\tmpplaceholder
+
+
+\\tmpchapter{S}
+
+\\tmpheading{Stille Nacht}
+\\tmpimage{s/Stille-Nacht/piano/piano.eps}
+\\tmpplaceholder
+
+\\tmpheading{Swing low}
+\\tmpimage{s/Swing-low/piano/piano_1.eps}
+\\tmpimage{s/Swing-low/piano/piano_2.eps}
+\\tmpimage{s/Swing-low/piano/piano_3.eps}
+\\tmpplaceholder
+
+
+\\tmpchapter{Z}
+
+\\tmpheading{Zum Tanze, da geht ein Mädel}
+\\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_1.eps}
+\\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_2.eps}
+`)
+      })
     })
   })
 

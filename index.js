@@ -1335,6 +1335,13 @@ class PianoScore {
     }
     return output.join('')
   }
+
+  /**
+   * Build and write the TeX file.
+   */
+  write () {
+    this.texFile.append(this.build())
+  }
 }
 
 /**
