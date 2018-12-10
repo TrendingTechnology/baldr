@@ -1073,6 +1073,7 @@ describe('Classes', function () {
     it('Initialisation', function () {
       let abcTree = new AlphabeticalSongsTree(songs)
       assert.strictEqual(abcTree.a[0].metaData.title, 'Auf der Mauer, auf der Lauer')
+      assert.strictEqual(abcTree.s[0].metaData.title, 'Stille Nacht')
     })
   })
 
@@ -1556,16 +1557,6 @@ describe('Classes', function () {
         let folders = library.getABCFolders_()
         assert.strictEqual(folders.length, 3)
         assert.deepStrictEqual(folders, ['a', 's', 'z'])
-      })
-
-      it('Method “buildAlphabeticalSongTree()”', function () {
-        let folderTree = library.buildAlphabeticalSongTree()
-        assert.deepStrictEqual(
-          folderTree.a[0].songID,
-          'Auf-der-Mauer')
-        assert.deepStrictEqual(
-          folderTree.s[0].songID,
-          'Stille-Nacht')
       })
 
       it('Method “cleanIntermediateFiles()”', function () {

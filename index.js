@@ -1442,32 +1442,6 @@ class Library {
   }
 
   /**
-   * Build a song tree where the songs are placed in alphabetical
-   * folders.
-   *
-   * @return {object} - A tree object like this:
-   * <pre><code>
-   * {
-   *   "a": [ song, song ],
-   *   "s": [ song, song ],
-   *   "z": [ song, song ]
-   * }
-   * </code></pre>
-   */
-  buildAlphabeticalSongTree () {
-    let tree = {}
-    for (let songID in this.songs) {
-      let song = this.songs[songID]
-      if (!tree.hasOwnProperty(song.abc)) tree[song.abc] = []
-      tree[song.abc].push(song)
-    }
-    for (let abc in tree) {
-      tree[abc].sort(this.sortByProperty_('songID'))
-    }
-    return tree
-  }
-
-  /**
    * Get the song object from the song ID.
    *
    * @param {string} songID - The ID of the song. (The parent song folder)
