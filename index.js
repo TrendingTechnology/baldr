@@ -1185,6 +1185,7 @@ class PianoFilesCountTree {
 /**
  * The piano score.
  *
+ * @param {string} texFile - The path of the TeX file.
  * @param {module:baldr-songbook-updater~Library} library - An instance of the class “Library()”
  * @param {boolean} groupAlphabetically
  * @param {boolean} pageTurnOptimized

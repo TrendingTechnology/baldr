@@ -326,78 +326,78 @@ describe('Classes', function () {
           removeANSI('\u001b[31m☒\u001b[39m  Configuration file “~/.baldr.json” not found!\nCreate such a config file or use the “--base-path” option!\n\nExample configuration file:\n{\n\t"songbook": {\n\t\t"path": "/home/jf/songs"\n\t}\n}\n')
         )
       })
-    })
 
-    describe('Method “songFolder()”', function () {
-      it('finished', function () {
-        let finished = clone(status)
-        assertSongFolder(
-          finished,
-          '\u001b[32m☑\u001b[39m  \u001b[32mAuf-der-Mauer\u001b[39m: Auf der Mauer, auf der Lauer'
-        )
-      })
+      describe('Method “songFolder()”', function () {
+        it('finished', function () {
+          let finished = clone(status)
+          assertSongFolder(
+            finished,
+            '\u001b[32m☑\u001b[39m  \u001b[32mAuf-der-Mauer\u001b[39m: Auf der Mauer, auf der Lauer'
+          )
+        })
 
-      it('progress', function () {
-        let progress = clone(status)
-        progress.changed.slides = true
-        assertSongFolder(
-          progress,
-          '\u001b[33m☐\u001b[39m  \u001b[33mAuf-der-Mauer\u001b[39m: Auf der Mauer, auf der Lauer'
-        )
-      })
+        it('progress', function () {
+          let progress = clone(status)
+          progress.changed.slides = true
+          assertSongFolder(
+            progress,
+            '\u001b[33m☐\u001b[39m  \u001b[33mAuf-der-Mauer\u001b[39m: Auf der Mauer, auf der Lauer'
+          )
+        })
 
-      it('forced', function () {
-        let forced = clone(status)
-        forced.generated =
-          {
-            'piano': [
-              'piano_1.eps',
-              'piano_2.eps'
-            ],
-            'projector': 'projector.pdf',
-            'slides': [
-              '01.svg',
-              '02.svg'
-            ]
-          }
-        forced.force = true
-        assertSongFolder(
-          forced,
-          '\u001b[32m☑\u001b[39m  \u001b[32mAuf-der-Mauer\u001b[39m: Auf der Mauer, auf der Lauer \u001b[31m(forced)\u001b[39m\n\t\u001b[33mslides\u001b[39m: 01.svg, 02.svg\n\t\u001b[33mpiano\u001b[39m: piano_1.eps, piano_2.eps'
-        )
-      })
+        it('forced', function () {
+          let forced = clone(status)
+          forced.generated =
+            {
+              'piano': [
+                'piano_1.eps',
+                'piano_2.eps'
+              ],
+              'projector': 'projector.pdf',
+              'slides': [
+                '01.svg',
+                '02.svg'
+              ]
+            }
+          forced.force = true
+          assertSongFolder(
+            forced,
+            '\u001b[32m☑\u001b[39m  \u001b[32mAuf-der-Mauer\u001b[39m: Auf der Mauer, auf der Lauer \u001b[31m(forced)\u001b[39m\n\t\u001b[33mslides\u001b[39m: 01.svg, 02.svg\n\t\u001b[33mpiano\u001b[39m: piano_1.eps, piano_2.eps'
+          )
+        })
 
-      it('generatedPiano', function () {
-        let generatedPiano = clone(status)
-        generatedPiano.changed.piano = true
-        generatedPiano.generated =
-          {
-            'piano': [
-              'piano_1.eps',
-              'piano_2.eps'
-            ]
-          }
-        assertSongFolder(
-          generatedPiano,
-          '\u001b[33m☐\u001b[39m  \u001b[33mAuf-der-Mauer\u001b[39m: Auf der Mauer, auf der Lauer\n\t\u001b[33mpiano\u001b[39m: piano_1.eps, piano_2.eps'
-        )
-      })
+        it('generatedPiano', function () {
+          let generatedPiano = clone(status)
+          generatedPiano.changed.piano = true
+          generatedPiano.generated =
+            {
+              'piano': [
+                'piano_1.eps',
+                'piano_2.eps'
+              ]
+            }
+          assertSongFolder(
+            generatedPiano,
+            '\u001b[33m☐\u001b[39m  \u001b[33mAuf-der-Mauer\u001b[39m: Auf der Mauer, auf der Lauer\n\t\u001b[33mpiano\u001b[39m: piano_1.eps, piano_2.eps'
+          )
+        })
 
-      it('generatedSlides', function () {
-        let generatedSlides = clone(status)
-        generatedSlides.changed.slides = true
-        generatedSlides.generated =
-          {
-            'projector': 'projector.pdf',
-            'slides': [
-              '01.svg',
-              '02.svg'
-            ]
-          }
-        assertSongFolder(
-          generatedSlides,
-          '\u001b[33m☐\u001b[39m  \u001b[33mAuf-der-Mauer\u001b[39m: Auf der Mauer, auf der Lauer\n\t\u001b[33mslides\u001b[39m: 01.svg, 02.svg'
-        )
+        it('generatedSlides', function () {
+          let generatedSlides = clone(status)
+          generatedSlides.changed.slides = true
+          generatedSlides.generated =
+            {
+              'projector': 'projector.pdf',
+              'slides': [
+                '01.svg',
+                '02.svg'
+              ]
+            }
+          assertSongFolder(
+            generatedSlides,
+            '\u001b[33m☐\u001b[39m  \u001b[33mAuf-der-Mauer\u001b[39m: Auf der Mauer, auf der Lauer\n\t\u001b[33mslides\u001b[39m: 01.svg, 02.svg'
+          )
+        })
       })
     })
   })
@@ -877,12 +877,14 @@ describe('Classes', function () {
     })
 
     describe('Methods', function () {
-      it('Method “normalizeSongFolder_(): folder”', function () {
-        assert.strictEqual(song.normalizeSongFolder_(folder), folder)
-      })
+      describe('Method “normalizeSongFolder_()”', function () {
+        it('folder”', function () {
+          assert.strictEqual(song.normalizeSongFolder_(folder), folder)
+        })
 
-      it('Method “normalizeSongFolder_(): file', function () {
-        assert.strictEqual(song.normalizeSongFolder_(path.join(folder, 'info.yml')), folder)
+        it('file', function () {
+          assert.strictEqual(song.normalizeSongFolder_(path.join(folder, 'info.yml')), folder)
+        })
       })
 
       it('Method “recognizeABCFolder_(): file', function () {
@@ -1374,17 +1376,19 @@ describe('Classes', function () {
         assert.ok(!library.gitPull())
       })
 
-      it('Method “getSongById()”', function () {
-        assert.strictEqual(library.getSongById('Auf-der-Mauer').metaData.title, 'Auf der Mauer, auf der Lauer')
-      })
+      describe('Method “getSongById()”', function () {
+        it('No exception', function () {
+          assert.strictEqual(library.getSongById('Auf-der-Mauer').metaData.title, 'Auf der Mauer, auf der Lauer')
+        })
 
-      it('Method “getSongById()”: Exception', function () {
-        assert.throws(
-          function () {
-            return library.getSongById('test')
-          },
-          /^.*There is no song with the songID: test$/
-        )
+        it('Exception', function () {
+          assert.throws(
+            function () {
+              return library.getSongById('test')
+            },
+            /^.*There is no song with the songID: test$/
+          )
+        })
       })
 
       it('Method “getABCFolders_()”', function () {
@@ -1411,31 +1415,33 @@ describe('Classes', function () {
         assert.ok(!fs.existsSync(path.join(library.basePath, 'songs.tex')))
       })
 
-      it('Method “generateIntermediateFiles(force = false)”', function () {
-        let spy = sinon.spy()
-        let stub = sinon.stub()
-        indexRewired.__set__('message.songFolder', stub)
-        let library = new Library(basePath)
-        for (let songID in library.songs) {
-          library.songs[songID].generateIntermediateFiles = spy
-        }
-        library.generateIntermediateFiles('all', false)
-        assert.strictEqual(spy.callCount, 4)
-        assert.ok(spy.calledWith('all', false))
-        stub()
-      })
+      describe('Method “generateIntermediateFiles()”', function () {
+        it('force = false', function () {
+          let spy = sinon.spy()
+          let stub = sinon.stub()
+          indexRewired.__set__('message.songFolder', stub)
+          let library = new Library(basePath)
+          for (let songID in library.songs) {
+            library.songs[songID].generateIntermediateFiles = spy
+          }
+          library.generateIntermediateFiles('all', false)
+          assert.strictEqual(spy.callCount, 4)
+          assert.ok(spy.calledWith('all', false))
+          stub()
+        })
 
-      it('Method “generateIntermediateFiles(force = true)”', function () {
-        let spy = sinon.spy()
-        let stub = sinon.stub()
-        indexRewired.__set__('message.songFolder', stub)
-        let library = new Library(basePath)
-        for (let songID in library.songs) {
-          library.songs[songID].generateIntermediateFiles = spy
-        }
-        library.generateIntermediateFiles('all', true)
-        assert.ok(spy.calledWith('all', true))
-        stub()
+        it('force = true', function () {
+          let spy = sinon.spy()
+          let stub = sinon.stub()
+          indexRewired.__set__('message.songFolder', stub)
+          let library = new Library(basePath)
+          for (let songID in library.songs) {
+            library.songs[songID].generateIntermediateFiles = spy
+          }
+          library.generateIntermediateFiles('all', true)
+          assert.ok(spy.calledWith('all', true))
+          stub()
+        })
       })
 
       it('Method “buildPianoFilesCountTree()”', function () {
