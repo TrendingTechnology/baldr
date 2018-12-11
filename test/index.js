@@ -1738,14 +1738,21 @@ describe('Command line interface', function () {
     assertExists(tmpDir, 'a', 'Auf-der-Mauer', 'projector.pdf')
   })
 
-  it('--list', function () {
-    let tmpDir = tmpCopy('clean', 'some')
-    let process = spawn('./index.js', ['--base-path', tmpDir, '--list', path.join('test', 'files', 'song-id-list.txt')])
-    let stdout = process.stdout.toString()
-    assert.ok(stdout.includes('Auf-der-Mauer'))
-    assert.ok(stdout.includes('Swing-low'))
-    assert.ok(!stdout.includes('Stille-Nacht'))
+  it('--clean', function () {
+    let tmpDir = tmpCopy('processed', 'one')
+    spawn('./index.js', ['--base-path', tmpDir, '--clean'])
+    assertNotExists(tmpDir, 's', 'Swing-low', 'piano', 'piano.mscx')
   })
+
+  it('--help', function () {
+    const cli = spawn('./index.js', ['--help'])
+    let out = cli.stdout.toString()
+    assert.ok(out.indexOf('Usage') > -1)
+    assert.ok(out.indexOf('--help') > -1)
+    assert.ok(out.indexOf('--version') > -1)
+    assert.strictEqual(cli.status, 0)
+  })
+
 
   it('--folder', function () {
     let tmpDir = tmpCopy('clean', 'some')
@@ -1753,10 +1760,21 @@ describe('Command line interface', function () {
     assertExists(tmpDir, 'a', 'Auf-der-Mauer', 'slides', '01.svg')
   })
 
-  it('--song-id', function () {
+  it('--force', function () {
+    let tmpDir = tmpCopy('clean', 'one')
+    let notForced = spawn('./index.js', ['--base-path', tmpDir])
+    assert.ok(!notForced.stdout.toString().includes('(forced)'))
+    let forced = spawn('./index.js', ['--base-path', tmpDir, '--force'])
+    assert.ok(forced.stdout.toString().includes('(forced)'))
+  })
+
+  it('--list', function () {
     let tmpDir = tmpCopy('clean', 'some')
-    spawn('./index.js', ['--base-path', tmpDir, '--song-id', 'Auf-der-Mauer'])
-    assertExists(tmpDir, 'a', 'Auf-der-Mauer', 'slides', '01.svg')
+    let process = spawn('./index.js', ['--base-path', tmpDir, '--list', path.join('test', 'files', 'song-id-list.txt')])
+    let stdout = process.stdout.toString()
+    assert.ok(stdout.includes('Auf-der-Mauer'))
+    assert.ok(stdout.includes('Swing-low'))
+    assert.ok(!stdout.includes('Stille-Nacht'))
   })
 
   it('--piano', function () {
@@ -1777,21 +1795,10 @@ describe('Command line interface', function () {
     assertNotExists(tmpDir, 'songs.tex')
   })
 
-  it('--force', function () {
-    let tmpDir = tmpCopy('clean', 'one')
-    let notForced = spawn('./index.js', ['--base-path', tmpDir])
-    assert.ok(!notForced.stdout.toString().includes('(forced)'))
-    let forced = spawn('./index.js', ['--base-path', tmpDir, '--force'])
-    assert.ok(forced.stdout.toString().includes('(forced)'))
-  })
-
-  it('--help', function () {
-    const cli = spawn('./index.js', ['--help'])
-    let out = cli.stdout.toString()
-    assert.ok(out.indexOf('Usage') > -1)
-    assert.ok(out.indexOf('--help') > -1)
-    assert.ok(out.indexOf('--version') > -1)
-    assert.strictEqual(cli.status, 0)
+  it('--song-id', function () {
+    let tmpDir = tmpCopy('clean', 'some')
+    spawn('./index.js', ['--base-path', tmpDir, '--song-id', 'Auf-der-Mauer'])
+    assertExists(tmpDir, 'a', 'Auf-der-Mauer', 'slides', '01.svg')
   })
 
   it('--version', function () {
@@ -1799,11 +1806,5 @@ describe('Command line interface', function () {
     let pckg = require('../package.json')
     assert.strictEqual(cli.stdout.toString(), pckg.version + '\n')
     assert.strictEqual(cli.status, 0)
-  })
-
-  it('--clean', function () {
-    let tmpDir = tmpCopy('processed', 'one')
-    spawn('./index.js', ['--base-path', tmpDir, '--clean'])
-    assertNotExists(tmpDir, 's', 'Swing-low', 'piano', 'piano.mscx')
   })
 })
