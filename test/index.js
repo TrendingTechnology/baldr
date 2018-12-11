@@ -1820,6 +1820,61 @@ describe('Command line interface', function () {
     assert.ok(!stdout.includes('Stille-Nacht'))
   })
 
+  it('--page-turn-optimized --group-alphabetically', function () {
+    let tmpDir = tmpCopy('clean', 'some')
+    spawn('./index.js', ['--base-path', tmpDir, '--page-turn-optimized', '--group-alphabetically', '--piano'])
+    let texMarkup = read(path.join(tmpDir, 'songs.tex'))
+    assert.strictEqual(texMarkup, `
+
+\\tmpchapter{A}
+
+\\tmpheading{Auf der Mauer, auf der Lauer}
+\\tmpimage{a/Auf-der-Mauer/piano/piano_1.eps}
+\\tmpimage{a/Auf-der-Mauer/piano/piano_2.eps}
+
+
+\\tmpchapter{S}
+
+\\tmpheading{Stille Nacht}
+\\tmpimage{s/Stille-Nacht/piano/piano_1.eps}
+\\tmpimage{s/Stille-Nacht/piano/piano_2.eps}
+
+\\tmpheading{Swing low}
+\\tmpimage{s/Swing-low/piano/piano_1.eps}
+\\tmpimage{s/Swing-low/piano/piano_2.eps}
+\\tmpplaceholder
+\\tmpplaceholder
+
+
+\\tmpchapter{Z}
+
+\\tmpheading{Zum Tanze, da geht ein Mädel}
+\\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_1.eps}
+\\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_2.eps}
+`)
+  })
+
+  it('--page-turn-optimized --group-alphabetically --list', function () {
+    let tmpDir = tmpCopy('clean', 'some')
+    spawn('./index.js', ['--base-path', tmpDir, '--page-turn-optimized', '--group-alphabetically', '--list', path.join('test', 'files', 'song-id-list.txt'), '--piano'])
+    let texMarkup = read(path.join(tmpDir, 'songs.tex'))
+    assert.strictEqual(texMarkup, `
+
+\\tmpchapter{A}
+
+\\tmpheading{Auf der Mauer, auf der Lauer}
+\\tmpimage{a/Auf-der-Mauer/piano/piano_1.eps}
+\\tmpimage{a/Auf-der-Mauer/piano/piano_2.eps}
+
+
+\\tmpchapter{S}
+
+\\tmpheading{Swing low}
+\\tmpimage{s/Swing-low/piano/piano_1.eps}
+\\tmpimage{s/Swing-low/piano/piano_2.eps}
+`)
+  })
+
   it('--page-turn-optimized', function () {
     let tmpDir = tmpCopy('clean', 'some')
     spawn('./index.js', ['--base-path', tmpDir, '--page-turn-optimized', '--piano'])

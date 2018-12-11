@@ -1572,6 +1572,7 @@ let main = function () {
     config.path = options.basePath
   }
 
+  // To avoid strange behavior when creating the piano score
   if (!options.hasOwnProperty('groupAlphabetically')) options.groupAlphabetically = false
   if (!options.hasOwnProperty('pageTurnOptimized')) options.pageTurnOptimized = false
 
