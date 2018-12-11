@@ -95,9 +95,10 @@ let removeANSI = function (string) {
   return string.replace(/[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g, '') // eslint-disable-line
 }
 
-it('Conforms to standard', standard.files([
-  '*.js', 'test/*.js'
-]))
+it('Conforms to standard', function () {
+  this.timeout(4000);
+  standard.files(['*.js', 'test/*.js'])
+})
 
 describe('Functions', function () {
   describe('Function “checkExecutable()”', function () {
