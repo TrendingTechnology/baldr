@@ -95,6 +95,15 @@ let removeANSI = function (string) {
   return string.replace(/[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g, '') // eslint-disable-line
 }
 
+/**
+ * @param {...string} pathSegments - Path segments relative to the test folder.
+ *
+ * @return {string}
+ */
+let read = function (pathSegments) {
+  return fs.readFileSync(path.join('test', ...arguments), 'utf8')
+}
+
 it('Conforms to standard', function () {
   this.timeout(4000);
   standard.files(['*.js', 'test/*.js'])
@@ -1414,10 +1423,7 @@ describe('Classes', function () {
           let pianoScore = new PianoScore(mkTmpFile(), library, true, true)
           pianoScore.write()
           let texMarkup = pianoScore.texFile.read()
-          let compare = fs.readFileSync(
-            path.join('test', 'files', 'songs_page_turn_optimized.tex'), 'utf8'
-          )
-
+          let compare = read('files', 'songs_page_turn_optimized.tex')
           assertExists(pianoScore.texFile.path)
           assert.strictEqual(texMarkup, compare)
         })
@@ -1426,10 +1432,7 @@ describe('Classes', function () {
           let pianoScore = new PianoScore(mkTmpFile(), library, true, false)
           pianoScore.write()
           let texMarkup = pianoScore.texFile.read()
-          let compare = fs.readFileSync(
-            path.join('test', 'files', 'songs_processed.tex'), 'utf8'
-          )
-
+          let compare = read('files', 'songs_processed.tex')
           assertExists(pianoScore.texFile.path)
           assert.strictEqual(texMarkup, compare)
           assert.ok(texMarkup.indexOf('\\tmpimage') > -1)
