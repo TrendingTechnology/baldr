@@ -96,7 +96,7 @@ let removeANSI = function (string) {
 }
 
 it('Conforms to standard', function () {
-  this.timeout(4000);
+  this.timeout(4000)
   standard.files(['*.js', 'test/*.js'])
 })
 
@@ -1753,7 +1753,6 @@ describe('Command line interface', function () {
     assert.strictEqual(cli.status, 0)
   })
 
-
   it('--folder', function () {
     let tmpDir = tmpCopy('clean', 'some')
     spawn('./index.js', ['--base-path', tmpDir, '--folder', path.join(tmpDir, 'a', 'Auf-der-Mauer')])
@@ -1768,6 +1767,11 @@ describe('Command line interface', function () {
     assert.ok(forced.stdout.toString().includes('(forced)'))
   })
 
+  it('--group-alphabetically', function () {
+    let tmpDir = tmpCopy('clean', 'some')
+    spawn('./index.js', ['--base-path', tmpDir, '--group-alphabetically', '--piano'])
+  })
+
   it('--list', function () {
     let tmpDir = tmpCopy('clean', 'some')
     let process = spawn('./index.js', ['--base-path', tmpDir, '--list', path.join('test', 'files', 'song-id-list.txt')])
@@ -1775,6 +1779,11 @@ describe('Command line interface', function () {
     assert.ok(stdout.includes('Auf-der-Mauer'))
     assert.ok(stdout.includes('Swing-low'))
     assert.ok(!stdout.includes('Stille-Nacht'))
+  })
+
+  it('--page-turn-optimized', function () {
+    let tmpDir = tmpCopy('clean', 'some')
+    spawn('./index.js', ['--base-path', tmpDir, '--page-turn-optimized', '--piano'])
   })
 
   it('--piano', function () {
