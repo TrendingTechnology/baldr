@@ -113,10 +113,9 @@ let read = function (filePath) {
   return fs.readFileSync(filePath, 'utf8')
 }
 
-
-it('Conforms to standard', function () {
+describe('standardjs', function () {
   this.timeout(4000)
-  standard.files(['*.js', 'test/*.js'])
+  it('Conforms to standard', standard.files(['*.js', 'test/*.js']))
 })
 
 describe('Functions', function () {

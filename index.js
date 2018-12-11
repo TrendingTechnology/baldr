@@ -1587,7 +1587,6 @@ let main = function () {
   } else {
     library.update(mode, options.force)
     if (mode === 'piano' || mode === 'all') {
-
       let pianoScore = new PianoScore(path.join(library.basePath, 'songs.tex'), library, options.groupAlphabetically, options.pageTurnOptimized)
       pianoScore.write()
     }
