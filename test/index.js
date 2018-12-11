@@ -100,9 +100,19 @@ let removeANSI = function (string) {
  *
  * @return {string}
  */
-let read = function (pathSegments) {
+let readPathSegments = function (pathSegments) {
   return fs.readFileSync(path.join('test', ...arguments), 'utf8')
 }
+
+/**
+ * @param {...string} pathSegments - Path segments relative to the test folder.
+ *
+ * @return {string}
+ */
+let read = function (filePath) {
+  return fs.readFileSync(filePath, 'utf8')
+}
+
 
 it('Conforms to standard', function () {
   this.timeout(4000)
@@ -1423,7 +1433,7 @@ describe('Classes', function () {
           let pianoScore = new PianoScore(mkTmpFile(), library, true, true)
           pianoScore.write()
           let texMarkup = pianoScore.texFile.read()
-          let compare = read('files', 'songs_page_turn_optimized.tex')
+          let compare = readPathSegments('files', 'songs_page_turn_optimized.tex')
           assertExists(pianoScore.texFile.path)
           assert.strictEqual(texMarkup, compare)
         })
@@ -1432,7 +1442,7 @@ describe('Classes', function () {
           let pianoScore = new PianoScore(mkTmpFile(), library, true, false)
           pianoScore.write()
           let texMarkup = pianoScore.texFile.read()
-          let compare = read('files', 'songs_processed.tex')
+          let compare = readPathSegments('files', 'songs_processed.tex')
           assertExists(pianoScore.texFile.path)
           assert.strictEqual(texMarkup, compare)
           assert.ok(texMarkup.indexOf('\\tmpimage') > -1)
@@ -1773,6 +1783,33 @@ describe('Command line interface', function () {
   it('--group-alphabetically', function () {
     let tmpDir = tmpCopy('clean', 'some')
     spawn('./index.js', ['--base-path', tmpDir, '--group-alphabetically', '--piano'])
+    let texMarkup = read(path.join(tmpDir, 'songs.tex'))
+    assert.strictEqual(texMarkup, `
+
+\\tmpchapter{A}
+
+\\tmpheading{Auf der Mauer, auf der Lauer}
+\\tmpimage{a/Auf-der-Mauer/piano/piano_1.eps}
+\\tmpimage{a/Auf-der-Mauer/piano/piano_2.eps}
+
+
+\\tmpchapter{S}
+
+\\tmpheading{Stille Nacht}
+\\tmpimage{s/Stille-Nacht/piano/piano_1.eps}
+\\tmpimage{s/Stille-Nacht/piano/piano_2.eps}
+
+\\tmpheading{Swing low}
+\\tmpimage{s/Swing-low/piano/piano_1.eps}
+\\tmpimage{s/Swing-low/piano/piano_2.eps}
+
+
+\\tmpchapter{Z}
+
+\\tmpheading{Zum Tanze, da geht ein Mädel}
+\\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_1.eps}
+\\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_2.eps}
+`)
   })
 
   it('--list', function () {
@@ -1787,6 +1824,26 @@ describe('Command line interface', function () {
   it('--page-turn-optimized', function () {
     let tmpDir = tmpCopy('clean', 'some')
     spawn('./index.js', ['--base-path', tmpDir, '--page-turn-optimized', '--piano'])
+    let texMarkup = read(path.join(tmpDir, 'songs.tex'))
+    assert.strictEqual(texMarkup, `
+\\tmpheading{Auf der Mauer, auf der Lauer}
+\\tmpimage{a/Auf-der-Mauer/piano/piano_1.eps}
+\\tmpimage{a/Auf-der-Mauer/piano/piano_2.eps}
+
+\\tmpheading{Stille Nacht}
+\\tmpimage{s/Stille-Nacht/piano/piano_1.eps}
+\\tmpimage{s/Stille-Nacht/piano/piano_2.eps}
+
+\\tmpheading{Swing low}
+\\tmpimage{s/Swing-low/piano/piano_1.eps}
+\\tmpimage{s/Swing-low/piano/piano_2.eps}
+
+\\tmpheading{Zum Tanze, da geht ein Mädel}
+\\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_1.eps}
+\\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_2.eps}
+\\tmpplaceholder
+\\tmpplaceholder
+`)
   })
 
   it('--piano', function () {

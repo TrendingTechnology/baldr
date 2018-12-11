@@ -1572,6 +1572,9 @@ let main = function () {
     config.path = options.basePath
   }
 
+  if (!options.hasOwnProperty('groupAlphabetically')) options.groupAlphabetically = false
+  if (!options.hasOwnProperty('pageTurnOptimized')) options.pageTurnOptimized = false
+
   let library = new Library(config.path)
   if (options.list) library.loadSongList(options.list)
 
@@ -1584,6 +1587,7 @@ let main = function () {
   } else {
     library.update(mode, options.force)
     if (mode === 'piano' || mode === 'all') {
+
       let pianoScore = new PianoScore(path.join(library.basePath, 'songs.tex'), library, options.groupAlphabetically, options.pageTurnOptimized)
       pianoScore.write()
     }
