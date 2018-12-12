@@ -1531,6 +1531,10 @@ describe('Classes', function () {
         assert.strictEqual(songs.length, 4)
       })
 
+      it('Method “countSongs()”', function () {
+        assert.strictEqual(library.countSongs(), 4)
+      })
+
       it('Method “detectSongs_()”', function () {
         assert.strictEqual(library.detectSongs_().length, 4)
       })
@@ -1744,7 +1748,11 @@ describe('Command line interface', function () {
   it('--base-path', function () {
     let tmpDir = tmpCopy('clean', 'one')
     let process = spawn('./index.js', ['--base-path', tmpDir])
-    assert.ok(process.stdout.toString().includes(removeANSI(util.format('The base path of the song collection is located at:\n    %s\n', tmpDir))))
+
+    let stdout = process.stdout.toString()
+    assert.ok(stdout.includes(removeANSI(util.format('The base path of the song collection is located at:\n    %s\n', tmpDir))))
+    assert.ok(stdout.includes(removeANSI(util.format('Found %s songs.', 1))))
+
     assertExists(tmpDir, 'a', 'Auf-der-Mauer', 'piano', 'piano.mscx')
     assertExists(tmpDir, 'songs.tex')
     assertExists(tmpDir, 'a', 'Auf-der-Mauer', 'slides', '01.svg')
