@@ -1743,7 +1743,8 @@ describe('Classes', function () {
 describe('Command line interface', function () {
   it('--base-path', function () {
     let tmpDir = tmpCopy('clean', 'one')
-    spawn('./index.js', ['--base-path', tmpDir])
+    let process = spawn('./index.js', ['--base-path', tmpDir])
+    assert.ok(process.stdout.toString().includes(removeANSI(util.format('The base path of the song collection is located at:\n    %s\n', tmpDir))))
     assertExists(tmpDir, 'a', 'Auf-der-Mauer', 'piano', 'piano.mscx')
     assertExists(tmpDir, 'songs.tex')
     assertExists(tmpDir, 'a', 'Auf-der-Mauer', 'slides', '01.svg')
