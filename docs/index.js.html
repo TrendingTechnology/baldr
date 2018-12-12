@@ -1385,6 +1385,15 @@ class Library {
   }
 
   /**
+   * Count the number of songs in the song library
+   *
+   * @return {number}
+   */
+  countSongs () {
+    return Object.keys(this.songs).length
+  }
+
+  /**
    * Identify a song folder by searching for a file named “info.yml.”
    */
   detectSongs_ () {
@@ -1605,8 +1614,8 @@ let main = function () {
   if (!options.hasOwnProperty('pageTurnOptimized')) options.pageTurnOptimized = false
 
   console.log(util.format('The base path of the song collection is located at:\n    %s\n', config.path.cyan))
-
   let library = new Library(config.path)
+  console.log(util.format('Found %s songs.', library.countSongs()))
   if (options.list) library.loadSongList(options.list)
 
   if (options.clean) {
