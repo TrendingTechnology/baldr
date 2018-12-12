@@ -1604,6 +1604,8 @@ let main = function () {
   if (!options.hasOwnProperty('groupAlphabetically')) options.groupAlphabetically = false
   if (!options.hasOwnProperty('pageTurnOptimized')) options.pageTurnOptimized = false
 
+  console.log(util.format('The base path of the song collection is located at:\n    %s\n', config.path.cyan))
+
   let library = new Library(config.path)
   if (options.list) library.loadSongList(options.list)
 
