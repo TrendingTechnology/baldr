@@ -2,6 +2,7 @@
 .jshintrc
 .npmignore
 .travis.yml
+.vscode
 dist/
 docs/
 test/

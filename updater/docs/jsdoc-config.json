@@ -1,0 +1,25 @@
+{
+    "opts": {
+        "encoding": "utf8",
+        "destination": "./docs/",
+        "recurse": true
+    },
+    "tags": {
+        "allowUnknownTags": true
+    },
+    "source": {
+        "includePattern": ".+\\.js(doc)?$",
+        "excludePattern": "(^|\\/|\\\\)_",
+        "exclude": [
+            "node_modules",
+            "test"
+        ]
+    },
+    "plugins": ["plugins/markdown"],
+    "templates": {
+        "default": {
+          "layoutFile": "./docs/jsdoc-layout.tmpl",
+          "includeDate": false
+        }
+    }
+}

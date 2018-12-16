@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: tex.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: tex.js</h1>
+
+
+
+
+
+
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @file Build a TeX file (songs.tex) of all piano scores.
+ */
+
+'use strict';
+
+const folderTree = require('./tree.js');
+const fs = require('fs-extra');
+const path = require('path');
+
+/**
+ * Build a tree object which contains the number of piano files of
+ * each song. This tree is necessary to avoid page breaks on multipage
+ * piano scores.
+ *
+ * @param {object} tree The object of songs.json
+ * @param {string} basePath Base path of the song collection.
+ * @return {object}
+ * &lt;code>&lt;pre>
+ * { a: { '3': { 'Auf-der-Mauer': [Object] } },
+ *   s:
+ *    { '1': { 'Stille-Nacht': [Object] },
+ *      '3': { 'Swing-low': [Object] } },
+ *   z: { '2': { 'Zum-Tanze-da-geht-ein-Maedel': [Object] } } }
+ * &lt;/pre>&lt;code>
+ *
+ * One song entry has following properties:
+ *
+ * &lt;code>&lt;pre>
+ * { title: 'Swing low',
+ *   folder: '/test/songs/processed/some/s/Swing-low',
+ *   slides: [ '01.svg', '02.svg', '03.svg' ],
+ *   pianoFiles: [ 'piano_1.eps', 'piano_2.eps', 'piano_3.eps' ] }
+ * &lt;/pre>&lt;code>
+ */
+var buildPianoFilesCountTree = function(tree, basePath) {
+  let output = {};
+  Object.keys(tree).forEach((abc, index) => {
+    Object.keys(tree[abc]).forEach((songFolder, index) => {
+      let absSongFolder = path.join(basePath, abc, songFolder, 'piano');
+      let pianoFiles = folderTree.getFolderFiles_(absSongFolder, '.eps');
+      let count = pianoFiles.length;
+      if (!(abc in output)) output[abc] = {};
+      if (!(count in output[abc])) output[abc][count] = {};
+      output[abc][count][songFolder] = tree[abc][songFolder];
+      output[abc][count][songFolder].pianoFiles = pianoFiles;
+    });
+  });
+  return output;
+};
+
+/**
+ *
+ */
+var texCmd = function(command, value) {
+  return '\\tmp' + command + '{' + value  + '}\n';
+};
+
+/**
+ * Generate TeX markup for one song.
+ *
+ * @param {string} basePath Base path of the song collection.
+ * @param {string} songFolder Path of a single song.
+ * @return {string} TeX markup for a single song.
+ * &lt;code>&lt;pre>
+ * \tmpheading{Swing low}
+ * \tmpimage{s/Swing-low/piano/piano_1.eps}
+ * \tmpimage{s/Swing-low/piano/piano_2.eps}
+ * \tmpimage{s/Swing-low/piano/piano_3.eps}
+ * &lt;/pre>&lt;code>
+ */
+var texSong = function(basePath, songPath) {
+  basePath = path.resolve(basePath);
+  songPath = path.resolve(songPath);
+  let relativeSongPath = songPath
+    .replace(basePath, '')
+    .replace(/^\//, '');
+  const info = folderTree.getSongInfo(songPath);
+  const eps = folderTree.getFolderFiles_(path.join(songPath, 'piano'), '.eps');
+  var output = '';
+
+  if (info.hasOwnProperty('title') &amp;&amp; eps.length > 0) {
+    output += '\n' + texCmd('heading', info.title);
+    eps.forEach(
+      (file) => {
+        output += texCmd('image', path.join(relativeSongPath, 'piano', file));
+      }
+    );
+  }
+  return output;
+};
+
+/**
+ *
+ */
+var texABC = function(abc) {
+  return '\n\n' + texCmd('chapter', abc.toUpperCase());
+};
+
+/**
+ * Generate TeX file for the piano version of the songbook
+ * @param {string} basePath - Basepath to the songbook tree.
+ */
+var buildPianoScoreAlpabetically = function(basePath) {
+  var texFile = path.join(basePath, 'songs.tex');
+  const tree = folderTree.getTree(basePath);
+  fs.removeSync(texFile);
+
+  Object.keys(tree).forEach((abc, index) => {
+    fs.appendFileSync(texFile, texABC(abc));
+
+    Object.keys(tree[abc]).forEach((folder, index) => {
+      fs.appendFileSync(texFile, texSong(basePath, path.join(basePath, abc, folder)));
+    });
+  });
+};
+exports.buildPianoScoreAlpabetically = buildPianoScoreAlpabetically;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#bootstrapConfig">bootstrapConfig</a></li><li><a href="global.html#buildPianoFilesCountTree">buildPianoFilesCountTree</a></li><li><a href="global.html#checkExecutable">checkExecutable</a></li><li><a href="global.html#checkExecutables">checkExecutables</a></li><li><a href="global.html#clean">clean</a></li><li><a href="global.html#cleanFiles">cleanFiles</a></li><li><a href="global.html#cleanFolder">cleanFolder</a></li><li><a href="global.html#flat">flat</a></li><li><a href="global.html#flattenTree">flattenTree</a></li><li><a href="global.html#generateJSON">generateJSON</a></li><li><a href="global.html#generatePDF_">generatePDF_</a></li><li><a href="global.html#generatePiano_EPS">generatePiano_EPS</a></li><li><a href="global.html#generateSlides_">generateSlides_</a></li><li><a href="global.html#generateSongJSON">generateSongJSON</a></li><li><a href="global.html#buildPianoScoreAlpabetically">buildPianoScoreAlpabetically</a></li><li><a href="global.html#getABCFolders">getABCFolders</a></li><li><a href="global.html#getFolderFiles_">getFolderFiles_</a></li><li><a href="global.html#getMscoreCommand">getMscoreCommand</a></li><li><a href="global.html#getSongFolders">getSongFolders</a></li><li><a href="global.html#getSongInfo">getSongInfo</a></li><li><a href="global.html#getTree">getTree</a></li><li><a href="global.html#gitPull">gitPull</a></li><li><a href="global.html#hashSHA1">hashSHA1</a></li><li><a href="global.html#info">info</a></li><li><a href="global.html#noConfigPath">noConfigPath</a></li><li><a href="global.html#processSongFolder">processSongFolder</a></li><li><a href="global.html#readJSON">readJSON</a></li><li><a href="global.html#setTestMode">setTestMode</a></li><li><a href="global.html#songFolder">songFolder</a></li><li><a href="global.html#texABC">texABC</a></li><li><a href="global.html#texCmd">texCmd</a></li><li><a href="global.html#texSong">texSong</a></li><li><a href="global.html#update">update</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a>.
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

@@ -40,3 +40,9 @@ dist/*
 
 out/
 .DS_Store
+*songs.json
+
+#package-lock.json
+*.mscx,
+out/*
+piano/*
