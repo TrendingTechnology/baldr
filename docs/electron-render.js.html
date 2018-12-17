@@ -33,8 +33,6 @@
 
 /* global HTMLElement location customElements search */
 
-const path = require('path')
-
 const jquery = require('jquery')
 const mousetrap = require('mousetrap')
 require('selectize')
@@ -42,7 +40,7 @@ require('selectize')
 let modalManager
 
 const song = require('./src/song.js')
-const { bootstrapConfig, Library } = require('./src/without-dom.js')
+const { bootstrapConfig, Library, AlphabeticalSongsTree } = require('./src/lib.js')
 
 /**
  * Map some keyboard shortcuts to the corresponding methods.
@@ -60,9 +58,9 @@ function bindShortcuts () {
 function bindButtons () {
   let bindings = [
     { selector: '#menu #menu-search', function: () => { modalManager.openByID('search') } },
-    { selector: '#menu #menu-tableofcontents', function: () => { modalManager.openByID('tableofcontents') } },
-    { selector: '#slide #previous', function: song.previousSlide },
-    { selector: '#slide #next', function: song.nextSlide }
+    { selector: '#menu #menu-tableofcontents', function: () => { modalManager.openByID('tableofcontents') } }
+    // { selector: '#slide #previous', function: song.previousSlide },
+    // { selector: '#slide #next', function: song.nextSlide }
   ]
   for (let binding of bindings) {
     document
@@ -91,22 +89,25 @@ class BaldrSongbookToc extends HTMLElement {
     super()
     let topUl = document.createElement('ul')
 
-    Object.keys(library.tree).forEach((abc, index) => {
+    let tree = new AlphabeticalSongsTree(library.toArray())
+
+    Object.keys(tree).forEach((abc) => {
       let abcLi = document.createElement('li')
       abcLi.setAttribute('class', 'abc')
       abcLi.innerHTML = abc
 
       let abcUl = document.createElement('ul')
 
-      Object.keys(library.tree[abc]).forEach((folder, index) => {
+      for (let song of tree[abc]) {
         let li = document.createElement('li')
         let a = document.createElement('a')
-        a.setAttribute('href', '#' + folder)
-        a.setAttribute('id', 'song_' + folder)
-        a.innerHTML = library.tree[abc][folder].title
+        a.setAttribute('href', '#' + song.songID)
+        a.setAttribute('id', 'song_' + song.songID)
+        a.innerHTML = song.metaDataCombined.title
         li.appendChild(a)
         abcUl.appendChild(li)
-      })
+      }
+
       topUl.appendChild(abcLi)
       abcLi.appendChild(abcUl)
     })
@@ -129,10 +130,11 @@ class BaldrSongbookSearch extends HTMLElement {
     option.setAttribute('value', '')
     select.appendChild(option)
 
-    for (let songID in library.list) {
+    for (let songID in library.songs) {
+      let song = library.songs[songID]
       option = document.createElement('option')
       option.setAttribute('value', songID)
-      option.innerHTML = library.list[songID].title
+      option.innerHTML = song.metaDataCombined.title
       select.appendChild(option)
     }
     this.appendChild(select)
@@ -183,6 +185,49 @@ class BaldrSongbookModal extends HTMLElement {
 }
 
 /**
+ *
+ */
+class BaldrSongbookSongSlide extends HTMLElement {
+  static get observedAttributes() {
+    return ['songID', 'no']
+  }
+
+  constructor () {
+    super()
+    this.song
+
+        /**
+     * The current slide number.
+     */
+    this.slideNumber = 0
+
+    /**
+     * The biggest slide number.
+     */
+    this.slideNumberMax = 0
+  }
+
+  attributeChangedCallback (name, oldValue, newValue) {
+    console.log(name)
+    if (name === 'songID') {
+      this.setSongById_(newValue)
+    }
+
+  }
+
+  setSongById_ (songID) {
+    this.song = library.getSongById(songID)
+    console.log(this.song)
+  }
+
+  setSlide_ () {
+      let imagePath = path.join(folder, 'slides', slides[slideNumber])
+      document.querySelector(selector).setAttribute('src', imagePath)
+      setSongTitle()
+  }
+}
+
+/**
  * Manage all modal windows of a app.
  */
 class ModalManager {
@@ -218,12 +263,13 @@ class ModalManager {
 
 const config = bootstrapConfig()
 
-const library = new Library(path.join(config.path, 'songs.json'))
+const library = new Library(config.path)
 
 let main = function () {
   customElements.define('baldr-songbook-search', BaldrSongbookSearch)
   customElements.define('baldr-songbook-toc', BaldrSongbookToc)
   customElements.define('baldr-songbook-modal', BaldrSongbookModal)
+  customElements.define('baldr-songbook-song-slide', BaldrSongbookSongSlide)
 
   modalManager = new ModalManager()
 
@@ -264,7 +310,7 @@ if (config.path) {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-baldr-songbook.html">baldr-songbook</a></li></ul><h3>Classes</h3><ul><li><a href="AlphabeticalSongsTree.html">AlphabeticalSongsTree</a></li><li><a href="BaldrSongbookModal.html">BaldrSongbookModal</a></li><li><a href="BaldrSongbookSearch.html">BaldrSongbookSearch</a></li><li><a href="BaldrSongbookToc.html">BaldrSongbookToc</a></li><li><a href="FileMonitor.html">FileMonitor</a></li><li><a href="Folder.html">Folder</a></li><li><a href="Library.html">Library</a></li><li><a href="ModalManager.html">ModalManager</a></li><li><a href="PianoFilesCountTree.html">PianoFilesCountTree</a></li><li><a href="PianoScore.html">PianoScore</a></li><li><a href="Song.html">Song</a></li><li><a href="SongMetaData.html">SongMetaData</a></li><li><a href="SongMetaDataCombined.html">SongMetaDataCombined</a></li><li><a href="Sqlite.html">Sqlite</a></li><li><a href="TextFile.html">TextFile</a></li></ul><h3>Global</h3><ul><li><a href="global.html#bindButtons">bindButtons</a></li><li><a href="global.html#bindShortcuts">bindShortcuts</a></li><li><a href="global.html#bootstrapConfig">bootstrapConfig</a></li><li><a href="global.html#checkExecutable">checkExecutable</a></li><li><a href="global.html#checkExecutables">checkExecutables</a></li><li><a href="global.html#folder">folder</a></li><li><a href="global.html#library">library</a></li><li><a href="global.html#loadByHash">loadByHash</a></li><li><a href="global.html#main">main</a></li><li><a href="global.html#nextSlide">nextSlide</a></li><li><a href="global.html#parseCliArguments">parseCliArguments</a></li><li><a href="global.html#previousSlide">previousSlide</a></li><li><a href="global.html#setCurrent">setCurrent</a></li><li><a href="global.html#setSlide">setSlide</a></li><li><a href="global.html#setSongTitle">setSongTitle</a></li><li><a href="global.html#slideNumber">slideNumber</a></li><li><a href="global.html#slideNumberMax">slideNumberMax</a></li><li><a href="global.html#slides">slides</a></li><li><a href="global.html#song">song</a></li><li><a href="global.html#songsPath">songsPath</a></li><li><a href="global.html#sortObjectsByProperty">sortObjectsByProperty</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-baldr-songbook.html">baldr-songbook</a></li></ul><h3>Classes</h3><ul><li><a href="AlphabeticalSongsTree.html">AlphabeticalSongsTree</a></li><li><a href="BaldrSongbookModal.html">BaldrSongbookModal</a></li><li><a href="BaldrSongbookSearch.html">BaldrSongbookSearch</a></li><li><a href="BaldrSongbookSongSlide.html">BaldrSongbookSongSlide</a></li><li><a href="BaldrSongbookToc.html">BaldrSongbookToc</a></li><li><a href="FileMonitor.html">FileMonitor</a></li><li><a href="Folder.html">Folder</a></li><li><a href="Library.html">Library</a></li><li><a href="ModalManager.html">ModalManager</a></li><li><a href="PianoFilesCountTree.html">PianoFilesCountTree</a></li><li><a href="PianoScore.html">PianoScore</a></li><li><a href="Song.html">Song</a></li><li><a href="SongMetaData.html">SongMetaData</a></li><li><a href="SongMetaDataCombined.html">SongMetaDataCombined</a></li><li><a href="Sqlite.html">Sqlite</a></li><li><a href="TextFile.html">TextFile</a></li></ul><h3>Global</h3><ul><li><a href="global.html#bindButtons">bindButtons</a></li><li><a href="global.html#bindShortcuts">bindShortcuts</a></li><li><a href="global.html#bootstrapConfig">bootstrapConfig</a></li><li><a href="global.html#checkExecutable">checkExecutable</a></li><li><a href="global.html#checkExecutables">checkExecutables</a></li><li><a href="global.html#folder">folder</a></li><li><a href="global.html#library">library</a></li><li><a href="global.html#loadByHash">loadByHash</a></li><li><a href="global.html#main">main</a></li><li><a href="global.html#nextSlide">nextSlide</a></li><li><a href="global.html#parseCliArguments">parseCliArguments</a></li><li><a href="global.html#previousSlide">previousSlide</a></li><li><a href="global.html#setCurrent">setCurrent</a></li><li><a href="global.html#setSlide">setSlide</a></li><li><a href="global.html#setSongTitle">setSongTitle</a></li><li><a href="global.html#slideNumber">slideNumber</a></li><li><a href="global.html#slideNumberMax">slideNumberMax</a></li><li><a href="global.html#slides">slides</a></li><li><a href="global.html#song">song</a></li><li><a href="global.html#songsPath">songsPath</a></li><li><a href="global.html#sortObjectsByProperty">sortObjectsByProperty</a></li></ul>
 </nav>
 
 <br class="clear">
