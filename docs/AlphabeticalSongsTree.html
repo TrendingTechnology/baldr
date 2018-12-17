@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: BaldrSongbookToc</title>
+    <title>JSDoc: Class: AlphabeticalSongsTree</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: BaldrSongbookToc</h1>
+    <h1 class="page-title">Class: AlphabeticalSongsTree</h1>
 
     
 
@@ -28,9 +28,17 @@
 
 <header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>BaldrSongbookToc<span class="signature">()</span><span class="type-signature"></span></h2>
+        <h2><span class="attribs"><span class="type-signature"></span></span>AlphabeticalSongsTree<span class="signature">(songs)</span><span class="type-signature"></span></h2>
         
-            <div class="class-description"><p>Generate a tree view for the table of contents page.</p></div>
+            <div class="class-description"><p>A tree of songs where the song arrays are placed in alphabetical properties.
+An instanace of this class would look like this example:</p>
+<pre><code>
+{
+  "a": [ song, song ],
+  "s": [ song, song ],
+  "z": [ song, song ]
+}
+</code></pre></div>
         
     
 </header>
@@ -45,7 +53,7 @@
     
 
     
-    <h4 class="name" id="BaldrSongbookToc"><span class="type-signature"></span>new BaldrSongbookToc<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="AlphabeticalSongsTree"><span class="type-signature"></span>new AlphabeticalSongsTree<span class="signature">(songs)</span><span class="type-signature"></span></h4>
     
 
     
@@ -58,6 +66,55 @@
 
 
 
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>songs</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">module:baldr-songbook~songs</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>An array of song objects.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
 
 
 
@@ -93,7 +150,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="electron-render.js.html">electron-render.js</a>, <a href="electron-render.js.html#line61">line 61</a>
+        <a href="lib.js.html">lib.js</a>, <a href="lib.js.html#line1057">line 1057</a>
     </li></ul></dd>
     
 

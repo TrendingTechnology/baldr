@@ -851,6 +851,363 @@
     
 
     
+    <h4 class="name" id="bootstrapConfig"><span class="type-signature"></span>bootstrapConfig<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>By default this module reads the config file ~/.baldr to generate its config
+object.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="lib.js.html">lib.js</a>, <a href="lib.js.html#line64">line 64</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="checkExecutable"><span class="type-signature"></span>checkExecutable<span class="signature">(executable)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Check if executable is installed.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>executable</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Name of the executable.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="lib.js.html">lib.js</a>, <a href="lib.js.html#line33">line 33</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="checkExecutables"><span class="type-signature"></span>checkExecutables<span class="signature">(executables)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Check if executables are installed.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>executables</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">array</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Name of the executables.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="lib.js.html">lib.js</a>, <a href="lib.js.html#line47">line 47</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
     <h4 class="name" id="loadByHash"><span class="type-signature"></span>loadByHash<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
@@ -1655,12 +2012,16 @@ on the command line.</p>
     
 
     
-    <h4 class="name" id="setUrl"><span class="type-signature"></span>setUrl<span class="signature">(htmlFile, hash)</span><span class="type-signature"> &rarr; {string}</span></h4>
+    <h4 class="name" id="sortObjectsByProperty"><span class="type-signature"></span>sortObjectsByProperty<span class="signature">(property)</span><span class="type-signature"></span></h4>
     
 
     
 
 
+
+<div class="description">
+    <p>Sort alphabetically an array of objects by some specific property.</p>
+</div>
 
 
 
@@ -1685,8 +2046,6 @@ on the command line.</p>
         
 
         
-        <th>Default</th>
-        
 
         <th class="last">Description</th>
     </tr>
@@ -1697,13 +2056,13 @@ on the command line.</p>
 
         <tr>
             
-                <td class="name"><code>htmlFile</code></td>
+                <td class="name"><code>property</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">String</span>
 
 
             
@@ -1712,41 +2071,8 @@ on the command line.</p>
             
 
             
-                <td class="default">
-                
-                </td>
-            
 
-            <td class="description last"><p>The path of the HTML file.</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>hash</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-                <td class="default">
-                
-                    false
-                
-                </td>
-            
-
-            <td class="description last"><p>The URL hash starting with “#”</p></td>
+            <td class="description last"><p>Key of the object to sort.</p></td>
         </tr>
 
     
@@ -1787,7 +2113,104 @@ on the command line.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="electron-main.js.html">electron-main.js</a>, <a href="electron-main.js.html#line15">line 15</a>
+        <a href="lib.js.html">lib.js</a>, <a href="lib.js.html#line119">line 119</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="https://ourcodeworld.com/articles/read/764/how-to-sort-alphabetically-an-array-of-objects-by-key-in-javascript">Tutorial</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+    
+
+    
+        <h3 class="subsection-title">Type Definitions</h3>
+
+        
+                
+<h4 class="name" id="songs">songs</h4>
+
+
+
+
+<div class="description">
+    <p>An array of song objects.</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Array.&lt;module:baldr-songbook~Song></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="lib.js.html">lib.js</a>, <a href="lib.js.html#line19">line 19</a>
     </li></ul></dd>
     
 
@@ -1803,43 +2226,7 @@ on the command line.</p>
 
 
 
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    <p>The formated URL string</p>
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">string</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-    
-
+            
     
 
     
@@ -1853,7 +2240,7 @@ on the command line.</p>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-baldr-songbook-updater.html">baldr-songbook-updater</a></li></ul><h3>Classes</h3><ul><li><a href="BaldrSongbookModal.html">BaldrSongbookModal</a></li><li><a href="BaldrSongbookSearch.html">BaldrSongbookSearch</a></li><li><a href="BaldrSongbookToc.html">BaldrSongbookToc</a></li><li><a href="Library.html">Library</a></li><li><a href="ModalManager.html">ModalManager</a></li><li><a href="module-baldr-songbook-updater-AlphabeticalSongsTree.html">AlphabeticalSongsTree</a></li><li><a href="module-baldr-songbook-updater-FileMonitor.html">FileMonitor</a></li><li><a href="module-baldr-songbook-updater-Folder.html">Folder</a></li><li><a href="module-baldr-songbook-updater-Library.html">Library</a></li><li><a href="module-baldr-songbook-updater-PianoFilesCountTree.html">PianoFilesCountTree</a></li><li><a href="module-baldr-songbook-updater-PianoScore.html">PianoScore</a></li><li><a href="module-baldr-songbook-updater-Song.html">Song</a></li><li><a href="module-baldr-songbook-updater-SongMetaData.html">SongMetaData</a></li><li><a href="module-baldr-songbook-updater-SongMetaDataCombined.html">SongMetaDataCombined</a></li><li><a href="module-baldr-songbook-updater-Sqlite.html">Sqlite</a></li><li><a href="module-baldr-songbook-updater-TextFile.html">TextFile</a></li><li><a href="Song.html">Song</a></li><li><a href="SongMetaData.html">SongMetaData</a></li></ul><h3>Global</h3><ul><li><a href="global.html#bindButtons">bindButtons</a></li><li><a href="global.html#bindShortcuts">bindShortcuts</a></li><li><a href="global.html#bootstrapConfig">bootstrapConfig</a></li><li><a href="global.html#folder">folder</a></li><li><a href="global.html#library">library</a></li><li><a href="global.html#loadByHash">loadByHash</a></li><li><a href="global.html#main">main</a></li><li><a href="global.html#nextSlide">nextSlide</a></li><li><a href="global.html#parseCliArguments">parseCliArguments</a></li><li><a href="global.html#previousSlide">previousSlide</a></li><li><a href="global.html#setCurrent">setCurrent</a></li><li><a href="global.html#setSlide">setSlide</a></li><li><a href="global.html#setSongTitle">setSongTitle</a></li><li><a href="global.html#setUrl">setUrl</a></li><li><a href="global.html#slideNumber">slideNumber</a></li><li><a href="global.html#slideNumberMax">slideNumberMax</a></li><li><a href="global.html#slides">slides</a></li><li><a href="global.html#song">song</a></li><li><a href="global.html#songsPath">songsPath</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-baldr-songbook.html">baldr-songbook</a></li></ul><h3>Classes</h3><ul><li><a href="AlphabeticalSongsTree.html">AlphabeticalSongsTree</a></li><li><a href="BaldrSongbookModal.html">BaldrSongbookModal</a></li><li><a href="BaldrSongbookSearch.html">BaldrSongbookSearch</a></li><li><a href="BaldrSongbookToc.html">BaldrSongbookToc</a></li><li><a href="FileMonitor.html">FileMonitor</a></li><li><a href="Folder.html">Folder</a></li><li><a href="Library.html">Library</a></li><li><a href="ModalManager.html">ModalManager</a></li><li><a href="PianoFilesCountTree.html">PianoFilesCountTree</a></li><li><a href="PianoScore.html">PianoScore</a></li><li><a href="Song.html">Song</a></li><li><a href="SongMetaData.html">SongMetaData</a></li><li><a href="SongMetaDataCombined.html">SongMetaDataCombined</a></li><li><a href="Sqlite.html">Sqlite</a></li><li><a href="TextFile.html">TextFile</a></li></ul><h3>Global</h3><ul><li><a href="global.html#bindButtons">bindButtons</a></li><li><a href="global.html#bindShortcuts">bindShortcuts</a></li><li><a href="global.html#bootstrapConfig">bootstrapConfig</a></li><li><a href="global.html#checkExecutable">checkExecutable</a></li><li><a href="global.html#checkExecutables">checkExecutables</a></li><li><a href="global.html#folder">folder</a></li><li><a href="global.html#library">library</a></li><li><a href="global.html#loadByHash">loadByHash</a></li><li><a href="global.html#main">main</a></li><li><a href="global.html#nextSlide">nextSlide</a></li><li><a href="global.html#parseCliArguments">parseCliArguments</a></li><li><a href="global.html#previousSlide">previousSlide</a></li><li><a href="global.html#setCurrent">setCurrent</a></li><li><a href="global.html#setSlide">setSlide</a></li><li><a href="global.html#setSongTitle">setSongTitle</a></li><li><a href="global.html#slideNumber">slideNumber</a></li><li><a href="global.html#slideNumberMax">slideNumberMax</a></li><li><a href="global.html#slides">slides</a></li><li><a href="global.html#song">song</a></li><li><a href="global.html#songsPath">songsPath</a></li><li><a href="global.html#sortObjectsByProperty">sortObjectsByProperty</a></li></ul>
 </nav>
 
 <br class="clear">
