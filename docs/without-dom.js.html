@@ -33,7 +33,7 @@ const os = require('os')
 /**
  *
  */
-var bootstrapConfig = function () {
+let bootstrapConfig = function () {
   let configFile = path.join(os.homedir(), '.baldr.json')
   let config
 
@@ -146,7 +146,7 @@ class Library {
    * &lt;/pre>&lt;/code>
    */
   static flattenTree_ (tree) {
-    var newTree = {}
+    let newTree = {}
     Object.keys(tree).forEach((abc, index) => {
       Object.keys(tree[abc]).forEach((folder, index) => {
         newTree[folder] = tree[abc][folder]
