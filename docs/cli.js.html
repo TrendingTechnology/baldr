@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: electron-main.js</title>
+    <title>JSDoc: Source: cli.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: electron-main.js</h1>
+    <h1 class="page-title">Source: cli.js</h1>
 
     
 
@@ -26,166 +26,92 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>/**
- * @file Main process
- */
+            <pre class="prettyprint source linenums"><code>#! /usr/bin/env node
 
-const electron = require('electron')
-const { app, BrowserWindow, Menu } = electron
-
-let win
+const pckg = require('../package.json')
+const { bootstrapConfig, Library, PianoScore } = require('./lib.js')
+const { Command } = require('commander')
+const util = require('util')
+const path = require('path')
 
 /**
- * @param {string} htmlFile The path of the HTML file.
- * @param {string} hash The URL hash starting with “#”
- * @return {string} The formated URL string
+ * Wrapper around the node module “commander”.
+ *
+ * @param {*} argv - The same as process.argv
+ * @param {string} version - The version string
  */
-let setUrl = function (htmlFile, hash = false) {
-  let url = {
-    protocol: 'file',
-    slashes: true,
-    pathname: require('path').join(__dirname, '..', htmlFile)
-  }
-  if (hash) {
-    url.hash = hash
-  }
-  return require('url').format(url)
+function parseCliArguments (argv, version) {
+  // To get a clean commander. Otherwise we get options from mocha in the tests.
+  // https://github.com/tj/commander.js/issues/438#issuecomment-274285003
+  const commander = new Command()
+  return commander
+    .version(version)
+    .option('-a, --group-alphabetically', 'List the songs in an alphabetical tree.')
+    .option('-b --base-path &lt;base-path>', 'Base path of a song collection.')
+    .option('-c, --clean', 'Clean up (delete all generated files)')
+    .option('-F, --folder &lt;folder>', 'Process only the given song folder')
+    .option('-f, --force', 'Rebuild all images')
+    .option('-i --song-id &lt;song-id>', 'Process only the song with the given song ID (The parent song folder).')
+    .option('-l, --list &lt;song-id-list>', 'Use a list of song IDs in a text file to specify which songs should be updated.')
+    .option('-p, --piano', 'Generate the piano files only.')
+    .option('-s, --slides', 'Generate the slides only.')
+    .option('-t, --page-turn-optimized', 'Generate a page turn friendly piano score version.')
+    .parse(argv)
 }
 
-const template = [
-  {
-    label: 'View',
-    submenu: [
-      {
-        label: 'Search',
-        click () { win.loadURL(setUrl('index.html', '#search')) }
-      },
-      {
-        label: 'Table of contents',
-        click () { win.loadURL(setUrl('index.html', '#tableofcontents')) }
-      },
+/**
+ * Main function: This function gets executed when the script is called
+ * on the command line.
+ */
+let main = function () {
+  let options = parseCliArguments(process.argv, pckg.version)
 
-      { type: 'separator' },
-
-      { role: 'reload' },
-      { role: 'forcereload' },
-      { role: 'toggledevtools' },
-
-      { type: 'separator' },
-
-      { role: 'resetzoom' },
-      { role: 'zoomin' },
-      { role: 'zoomout' },
-
-      { type: 'separator' },
-
-      { role: 'togglefullscreen' }
-    ]
-  },
-  {
-    role: 'window',
-    submenu: [
-      { role: 'minimize' },
-      { role: 'close' }
-    ]
-  },
-  {
-    role: 'help',
-    submenu: [
-      {
-        label: 'Learn More',
-        click () { require('electron').shell.openExternal('https://electron.atom.io') }
-      }
-    ]
+  if (options.folder) {
+    options.force = true
   }
-]
 
-if (process.platform === 'darwin') {
-  template.unshift({
-    label: app.getName(),
-    submenu: [
-      { role: 'about' },
+  let config = bootstrapConfig()
 
-      { type: 'separator' },
+  let mode
+  if (options.slides) {
+    mode = 'slides'
+  } else if (options.piano) {
+    mode = 'piano'
+  } else {
+    mode = 'all'
+  }
 
-      { role: 'services', submenu: [] },
+  if (options.basePath &amp;&amp; options.basePath.length > 0) {
+    config.path = options.basePath
+  }
 
-      { type: 'separator' },
-      { role: 'hide' },
-      { role: 'hideothers' },
-      { role: 'unhide' },
+  // To avoid strange behavior when creating the piano score
+  if (!options.hasOwnProperty('groupAlphabetically')) options.groupAlphabetically = false
+  if (!options.hasOwnProperty('pageTurnOptimized')) options.pageTurnOptimized = false
 
-      { type: 'separator' },
+  console.log(util.format('The base path of the song collection is located at:\n    %s\n', config.path.cyan))
+  let library = new Library(config.path)
+  console.log(util.format('Found %s songs.', library.countSongs()))
+  if (options.list) library.loadSongList(options.list)
 
-      { role: 'quit' }
-    ]
-  })
-
-  // Edit menu
-  template[1].submenu.push(
-    { type: 'separator' },
-    {
-      label: 'Speech',
-      submenu: [
-        { role: 'startspeaking' },
-        { role: 'stopspeaking' }
-      ]
+  if (options.clean) {
+    library.cleanIntermediateFiles()
+  } else if (options.folder) {
+    library.updateSongByPath(options.folder, mode)
+  } else if (options.songId) {
+    library.updateSongBySongId(options.songId, mode)
+  } else {
+    library.update(mode, options.force)
+    if (mode === 'piano' || mode === 'all') {
+      let pianoScore = new PianoScore(path.join(library.basePath, 'songs.tex'), library, options.groupAlphabetically, options.pageTurnOptimized)
+      pianoScore.write()
     }
-  )
-
-  // Window menu
-  template[3].submenu = [
-    { role: 'close' },
-    { role: 'minimize' },
-    { role: 'zoom' },
-    { type: 'separator' },
-    { role: 'front' }
-  ]
-}
-
-const menu = Menu.buildFromTemplate(template)
-
-function mirrorMonitors (state) {
-  if (process.platform === 'darwin') {
-    let exec = require('child_process').exec
-    exec('/usr/local/bin/mirror -' + state, function (error, stdout, stderr) {
-      if (error !== null) {
-        console.log('exec error: ' + error)
-      }
-    })
   }
 }
 
-function createWindow () {
-  win = new BrowserWindow({ fullscreen: true })
-
-  win.loadURL(setUrl('index.html'))
-
-  Menu.setApplicationMenu(menu)
-  win.on('closed', () => {
-    win = null
-  })
+if (require.main === module) {
+  main()
 }
-
-mirrorMonitors('on')
-
-app.on('ready', createWindow)
-
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    app.quit()
-  }
-})
-
-app.on('will-quit', () => {
-  mirrorMonitors('off')
-})
-
-app.on('activate', () => {
-  if (win === null) {
-    createWindow()
-  }
-})
 </code></pre>
         </article>
     </section>
