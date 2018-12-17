@@ -161,6 +161,14 @@ class BaldrSongbookModal extends HTMLElement {
     this.style.display = 'none'
   }
 
+  get isOpen () {
+    if (this.style.display === 'none') {
+      return false
+    } else if (this.style.display === 'block') {
+      return true
+    }
+  }
+
   open () {
     this.style.display = 'block'
   }
@@ -197,7 +205,14 @@ class ModalManager {
   }
 
   openByID (modalID) {
-    this.modals[modalID].open()
+    for (let id in this.modals) {
+      let modal = this.modals[id]
+      if (modal.id === modalID) {
+        modal.open()
+      } else {
+        modal.close()
+      }
+    }
   }
 }
 
