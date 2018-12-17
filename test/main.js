@@ -1,20 +1,20 @@
-var assert = require('assert')
+let assert = require('assert')
 const fs = require('fs')
 const path = require('path')
-var Application = require('spectron').Application
+let Application = require('spectron').Application
 const standard = require('mocha-standard')
 
-var pkg = require('../package.json')
+let pkg = require('../package.json')
 
 process.env.BALDR_SONGBOOK_PATH = path.resolve('test', 'songs')
 
-var darwinPath = []
+let darwinPath = []
 
 if (process.platform === 'darwin') {
   darwinPath = ['baldr-songbook.app', 'Contents', 'MacOS']
 }
 
-var appPath = path.join(
+let appPath = path.join(
   'dist',
   `${pkg.name}-${process.platform}-${process.arch}`,
   ...darwinPath,

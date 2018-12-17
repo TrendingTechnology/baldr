@@ -43,7 +43,7 @@ function bindButtons () {
   }
 }
 
-var showByHash = function () {
+let showByHash = function () {
   if (location.hash === '#search') {
     modalManager.openByID('search')
   } else if (location.hash === '#tableofcontents') {
@@ -192,7 +192,7 @@ const config = bootstrapConfig()
 
 const library = new Library(path.join(config.path, 'songs.json'))
 
-var main = function () {
+let main = function () {
   customElements.define('baldr-songbook-search', BaldrSongbookSearch)
   customElements.define('baldr-songbook-toc', BaldrSongbookToc)
   customElements.define('baldr-songbook-modal', BaldrSongbookModal)
@@ -211,7 +211,7 @@ var main = function () {
 
   bindShortcuts()
 
-  var selectized = jquery('select').selectize({
+  let selectized = jquery('select').selectize({
     onItemAdd: function (value, data) {
       song.setCurrent(value)
       modalManager.closeAll()

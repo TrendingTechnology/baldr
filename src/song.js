@@ -9,27 +9,27 @@ const path = require('path')
 /**
  * The current slide number.
  */
-var slideNumber = 0
+let slideNumber = 0
 
 /**
  * The biggest slide number.
  */
-var slideNumberMax
+let slideNumberMax
 
 /**
  * Array of all images files of a song.
  */
-var slides
+let slides
 
 /**
  * The absolute path of the song folder containing the images files.
  */
-var folder
+let folder
 
 /**
  * Parent folder containing all songs
  */
-var songsPath
+let songsPath
 
 /**
  * <code><pre>
@@ -73,7 +73,7 @@ var songsPath
  *   },
  * </pre></code>
  */
-var library
+let library
 
 /**
  * The current song
@@ -94,11 +94,11 @@ var library
  * }
  * </pre></code>
  */
-var song
+let song
 
-var selector
+let selector
 
-var set = function (values) {
+let set = function (values) {
   songsPath = values.songsPath
   library = values.library
   selector = values.selector
@@ -111,7 +111,7 @@ var set = function (values) {
  *   without special characters and whitespaces
  *   (e. g.: Another-brick-in-the-wall)
  */
-var setCurrent = function (songID) {
+let setCurrent = function (songID) {
   song = library[songID]
   if (typeof song !== 'undefined') {
     slideNumber = 0
@@ -125,7 +125,7 @@ var setCurrent = function (songID) {
 /**
  *
  */
-var setSongTitle = function () {
+let setSongTitle = function () {
   if (slideNumber === 0 && song.hasOwnProperty('title')) {
     document.getElementById('song-title').style.display = 'block'
     document.getElementById('song-title_title').textContent = song.title
@@ -138,8 +138,8 @@ var setSongTitle = function () {
 /**
  * Load the current image to the slide section.
  */
-var setSlide = function () {
-  var imagePath = path.join(folder, 'slides', slides[slideNumber])
+let setSlide = function () {
+  let imagePath = path.join(folder, 'slides', slides[slideNumber])
   document.querySelector(selector).setAttribute('src', imagePath)
   setSongTitle()
 }
@@ -147,7 +147,7 @@ var setSlide = function () {
 /**
  * Show the next slide.
  */
-var nextSlide = function () {
+let nextSlide = function () {
   slideNumber += 1
   if (slideNumber > slideNumberMax) {
     slideNumber = 0
@@ -158,7 +158,7 @@ var nextSlide = function () {
 /**
  * Show the previous slide.
  */
-var previousSlide = function () {
+let previousSlide = function () {
   slideNumber -= 1
   if (slideNumber < 0) {
     slideNumber = slideNumberMax
@@ -169,7 +169,7 @@ var previousSlide = function () {
 /**
  *
  */
-var loadByHash = function () {
+let loadByHash = function () {
   if (location.hash !== '') {
     setCurrent(location.hash.substring(1))
     setSlide()

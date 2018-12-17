@@ -147,7 +147,7 @@ class Song {
    * Load the current image to the slide section.
    */
   setSlide () {
-    var imagePath = path.join(this.folder, 'slides', this.slides[this.slideNumber])
+    let imagePath = path.join(this.folder, 'slides', this.slides[this.slideNumber])
     document.querySelector(this.selector).setAttribute('src', imagePath)
     this.setSongTitle()
   }
@@ -198,15 +198,15 @@ class Search {
   }
 
   build () {
-    var select = document.createElement('select')
+    let select = document.createElement('select')
     select.setAttribute('id', 'select')
     select.setAttribute('placeholder', 'Suche nach einem Lied')
 
-    var option = document.createElement('option')
+    let option = document.createElement('option')
     option.setAttribute('value', '')
     select.appendChild(option)
 
-    for (var songID in this.library) {
+    for (let songID in this.library) {
       option = document.createElement('option')
       option.setAttribute('value', songID)
       option.innerHTML = this.library[songID].title
@@ -227,13 +227,13 @@ class Modal {
   }
 
   setDisplay (modalID, state) {
-    var element = document.getElementById(modalID)
+    let element = document.getElementById(modalID)
     element.style.display = state
   }
 
   toggle (modalID) {
-    var element = document.getElementById(modalID)
-    var displayState = element.style.display
+    let element = document.getElementById(modalID)
+    let displayState = element.style.display
     if (displayState === 'none') {
       element.style.display = 'block'
       if (modalID === 'search') {
