@@ -2,11 +2,8 @@ let assert = require('assert')
 const fs = require('fs')
 const path = require('path')
 let Application = require('spectron').Application
-const standard = require('mocha-standard')
 
 let pkg = require('../package.json')
-
-process.env.BALDR_SONGBOOK_PATH = path.resolve('test', 'songs', 'real')
 
 let darwinPath = []
 
@@ -31,6 +28,7 @@ describe('application launch', function () {
   this.timeout(10000)
 
   beforeEach(function () {
+    process.env.BALDR_SONGBOOK_PATH = path.resolve(__dirname, 'songs', 'real')
     this.app = new Application({
       path: appPath
     })
@@ -110,7 +108,3 @@ describe('application launch', function () {
       })
   })
 })
-
-it('conforms to standard', standard.files([
-  'src/*.js', 'test/*.js'
-]))

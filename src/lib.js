@@ -1528,4 +1528,5 @@ class Library {
 
 exports.parseSongIDList = parseSongIDList
 exports.Library = Library
+exports.PianoScore = PianoScore
 exports.bootstrapConfig = bootstrapConfig

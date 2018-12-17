@@ -15,7 +15,7 @@
     "electron-rebuild": "electron-rebuild",
     "postinstall": "electron-rebuild",
     "start": "electron .",
-    "test": "mocha",
+    "test": "mocha --reporter spec",
     "standard": "standard *.js src/*.js"
   },
   "author": {
@@ -63,6 +63,6 @@
     ]
   },
   "bin": {
-    "baldr-songbook-updater": "index.js"
+    "baldr-songbook-updater": "./src/cli.js"
   }
 }

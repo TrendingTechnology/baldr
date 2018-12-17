@@ -66,6 +66,10 @@ describe('Functions', function () {
   })
 
   describe('Function “bootstrapConfig()”', function () {
+    beforeEach(function () {
+      process.env.BALDR_SONGBOOK_PATH = path.resolve(__dirname, 'songs', 'clean', 'some')
+    })
+
     it('config.path', function () {
       let bootstrapConfig = libRewired.__get__('bootstrapConfig')
       let config = bootstrapConfig()
