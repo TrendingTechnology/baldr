@@ -112,5 +112,5 @@ describe('application launch', function () {
 })
 
 it('conforms to standard', standard.files([
-  'lib/*.js', 'test/*.js'
+  'src/*.js', 'test/*.js'
 ]))

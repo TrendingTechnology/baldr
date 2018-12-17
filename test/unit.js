@@ -1,4 +1,4 @@
-const { bootstrapConfig, Library, SongMetaData } = require('../lib/without-dom.js')
+const { bootstrapConfig, Library, SongMetaData } = require('../src/without-dom.js')
 const assert = require('assert')
 const path = require('path')
 

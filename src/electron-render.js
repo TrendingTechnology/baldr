@@ -13,8 +13,8 @@ require('selectize')
 
 let modalManager
 
-const song = require('./lib/song.js')
-const { bootstrapConfig, Library } = require('./lib/without-dom.js')
+const song = require('./src/song.js')
+const { bootstrapConfig, Library } = require('./src/without-dom.js')
 
 /**
  * Map some keyboard shortcuts to the corresponding methods.
