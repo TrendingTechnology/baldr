@@ -5,8 +5,6 @@
 
 /* global HTMLElement location customElements search */
 
-const path = require('path')
-
 const jquery = require('jquery')
 const mousetrap = require('mousetrap')
 require('selectize')
@@ -14,7 +12,7 @@ require('selectize')
 let modalManager
 
 const song = require('./src/song.js')
-const { bootstrapConfig, Library } = require('./src/without-dom.js')
+const { bootstrapConfig, Library, AlphabeticalSongsTree } = require('./src/lib.js')
 
 /**
  * Map some keyboard shortcuts to the corresponding methods.
@@ -63,22 +61,25 @@ class BaldrSongbookToc extends HTMLElement {
     super()
     let topUl = document.createElement('ul')
 
-    Object.keys(library.tree).forEach((abc, index) => {
+    let tree = new AlphabeticalSongsTree(library.toArray())
+
+    Object.keys(tree).forEach((abc) => {
       let abcLi = document.createElement('li')
       abcLi.setAttribute('class', 'abc')
       abcLi.innerHTML = abc
 
       let abcUl = document.createElement('ul')
 
-      Object.keys(library.tree[abc]).forEach((folder, index) => {
+      for (let song of tree[abc]) {
         let li = document.createElement('li')
         let a = document.createElement('a')
-        a.setAttribute('href', '#' + folder)
-        a.setAttribute('id', 'song_' + folder)
-        a.innerHTML = library.tree[abc][folder].title
+        a.setAttribute('href', '#' + song.songID)
+        a.setAttribute('id', 'song_' + song.songID)
+        a.innerHTML = song.metaDataCombined.title
         li.appendChild(a)
         abcUl.appendChild(li)
-      })
+      }
+
       topUl.appendChild(abcLi)
       abcLi.appendChild(abcUl)
     })
@@ -101,10 +102,11 @@ class BaldrSongbookSearch extends HTMLElement {
     option.setAttribute('value', '')
     select.appendChild(option)
 
-    for (let songID in library.list) {
+    for (let songID in library.songs) {
+      let song = library.songs[songID]
       option = document.createElement('option')
       option.setAttribute('value', songID)
-      option.innerHTML = library.list[songID].title
+      option.innerHTML = song.metaDataCombined.title
       select.appendChild(option)
     }
     this.appendChild(select)
@@ -190,7 +192,7 @@ class ModalManager {
 
 const config = bootstrapConfig()
 
-const library = new Library(path.join(config.path, 'songs.json'))
+const library = new Library(config.path)
 
 let main = function () {
   customElements.define('baldr-songbook-search', BaldrSongbookSearch)

@@ -1523,7 +1523,8 @@ class Library {
   }
 }
 
-exports.parseSongIDList = parseSongIDList
-exports.Library = Library
-exports.PianoScore = PianoScore
+exports.AlphabeticalSongsTree = AlphabeticalSongsTree
 exports.bootstrapConfig = bootstrapConfig
+exports.Library = Library
+exports.parseSongIDList = parseSongIDList
+exports.PianoScore = PianoScore
