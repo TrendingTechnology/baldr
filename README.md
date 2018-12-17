@@ -24,7 +24,6 @@ npm run-script start
 npm test
 ```
 
-
 ## Songs tree
 
 ### clean
@@ -68,8 +67,7 @@ Folders names begining with “.” or “_” are ignored.
 ### processed
 
 To process the MuseScore to the necessary image formats use the command
-line utility
-[baldr-songbook-updater](https://github.com/Josef-Friedrich/baldr-songbook-updater).
+line utility `baldr-songbook-updater`.
 
 ```
 .

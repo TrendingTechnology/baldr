@@ -1,5 +1,7 @@
 /**
  * @file Main process
+ *
+ * @module baldr-songbook
  */
 
 const electron = require('electron')

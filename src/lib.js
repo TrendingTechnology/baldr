@@ -1,8 +1,6 @@
 /**
  * @file Command line interface to generate the intermediate media files for the
  * BALDR songbook.
- *
- * @module baldr-songbook-updater
  */
 
 'use strict'
@@ -20,7 +18,7 @@ require('colors')
 
 /**
  * An array of song objects.
- * @typedef {module:baldr-songbook-updater~Song[]} songs
+ * @typedef {module:baldr-songbook~Song[]} songs
  */
 
 /*******************************************************************************
@@ -349,7 +347,7 @@ class Sqlite {
     /**
      * A instance of the class “Sqlite3”.
      *
-     * @type {module:baldr-songbook-updater~Sqlite3}
+     * @type {module:baldr-songbook~Sqlite3}
      */
     this.db = new Sqlite3(this.dbFile)
     this.db
@@ -651,7 +649,7 @@ class SongMetaData {
  */
 class SongMetaDataCombined {
   /**
-   * @param {module:baldr-songbook-updater~SongMetaData} songMetaData - A song
+   * @param {module:baldr-songbook~SongMetaData} songMetaData - A song
    * metadata object.
    */
   constructor (songMetaData) {
@@ -729,7 +727,7 @@ class Song {
   /**
    * @param {string} songPath - The path of the directory containing the song
    * files or a path of a file inside the song folder (not nested in subfolders)
-   * @param {module:baldr-songbook-updater~FileMonitor} fileMonitor - A instance
+   * @param {module:baldr-songbook~FileMonitor} fileMonitor - A instance
    * of the FileMonitor() class.
    */
   constructor (songPath, fileMonitor) {
@@ -743,7 +741,7 @@ class Song {
     /**
      * A instance of the FileMonitor class.
      *
-     * @type {module:baldr-songbook-updater~FileMonitor}
+     * @type {module:baldr-songbook~FileMonitor}
      */
     this.fileMonitor = fileMonitor
 
@@ -766,27 +764,27 @@ class Song {
 
     /**
      * An instance of the class SongMetaData().
-     * @type {module:baldr-songbook-updater~SongMetaData}
+     * @type {module:baldr-songbook~SongMetaData}
      */
     this.metaData = new SongMetaData(this.folder)
 
     /**
      * An instance of the class SongMetaDataCombined().
-     * @type {module:baldr-songbook-updater~SongMetaDataCombined}
+     * @type {module:baldr-songbook~SongMetaDataCombined}
      */
     this.metaDataCombined = new SongMetaDataCombined(this.metaData)
 
     /**
      * The slides folder
      *
-     * @type {module:baldr-songbook-updater~Folder}
+     * @type {module:baldr-songbook~Folder}
      */
     this.folderSlides = new Folder(this.folder, 'slides')
 
     /**
      * The piano folder
      *
-     * @type {module:baldr-songbook-updater~Folder}
+     * @type {module:baldr-songbook~Folder}
      */
     this.folderPiano = new Folder(this.folder, 'piano')
 
@@ -1058,7 +1056,7 @@ class Song {
  */
 class AlphabeticalSongsTree {
   /**
-   * @param {module:baldr-songbook-updater~songs} songs - An array of song objects.
+   * @param {module:baldr-songbook~songs} songs - An array of song objects.
    */
   constructor (songs) {
     for (let song of songs) {
@@ -1088,7 +1086,7 @@ class AlphabeticalSongsTree {
  */
 class PianoFilesCountTree {
   /**
-   * @param {module:baldr-songbook-updater~songs} songs - An array of song objects.
+   * @param {module:baldr-songbook~songs} songs - An array of song objects.
    */
   constructor (songs) {
     this.validCounts_ = [1, 2, 3, 4]
@@ -1107,7 +1105,7 @@ class PianoFilesCountTree {
   }
 
   /**
-   * @param {module:baldr-songbook-updater~songs} songs - An array of song objects.
+   * @param {module:baldr-songbook~songs} songs - An array of song objects.
    */
   build_ (songs) {
     for (let song of songs) {
@@ -1148,7 +1146,7 @@ class PianoFilesCountTree {
    *
    * @param {number} count - 1, 2, 3, 4
    *
-   * @returns {module:baldr-songbook-updater~Song}
+   * @returns {module:baldr-songbook~Song}
    */
   shift (count) {
     this.checkCount_(count)
@@ -1168,7 +1166,7 @@ class PianoFilesCountTree {
 class PianoScore {
   /**
    * @param {string} texFile - The path of the TeX file.
-   * @param {module:baldr-songbook-updater~Library} library - An instance of the class “Library()”
+   * @param {module:baldr-songbook~Library} library - An instance of the class “Library()”
    * @param {boolean} groupAlphabetically
    * @param {boolean} pageTurnOptimized
    */
@@ -1200,11 +1198,11 @@ class PianoScore {
   /**
    * Fill a certain number of pages with piano score files.
    *
-   * @param {module:baldr-songbook-updater~PianoFilesCountTree} countTree - Piano scores grouped by page number.
-   * @param {module:baldr-songbook-updater~songs} songs - An array of song objects.
+   * @param {module:baldr-songbook~PianoFilesCountTree} countTree - Piano scores grouped by page number.
+   * @param {module:baldr-songbook~songs} songs - An array of song objects.
    * @param {number} pageCount - Number of pages to group together.
    *
-   * @returns {module:baldr-songbook-updater~songs} An array of song objects, which fit in a given page number
+   * @returns {module:baldr-songbook~songs} An array of song objects, which fit in a given page number
    */
   static selectSongs (countTree, songs, pageCount) {
     for (let i = pageCount; i > 0; i--) {
@@ -1227,7 +1225,7 @@ class PianoScore {
   /**
    * Build the TeX markup of an array of song objects
    *
-   * @param {module:baldr-songbook-updater~songs} songs - An array of song objects.
+   * @param {module:baldr-songbook~songs} songs - An array of song objects.
    *
    * @return {string}
    */
@@ -1307,7 +1305,7 @@ class Library {
     /**
      * A instance of the FileMonitor class.
      *
-     * @type {module:baldr-songbook-updater~FileMonitor}
+     * @type {module:baldr-songbook~FileMonitor}
      */
     this.fileMonitor = new FileMonitor(path.join(this.basePath,
       'filehashes.db'))
@@ -1321,7 +1319,7 @@ class Library {
   }
 
   /**
-   * @returns {module:baldr-songbook-updater~songs}
+   * @returns {module:baldr-songbook~songs}
    */
   toArray () {
     return Object.values(this.songs)
@@ -1426,7 +1424,7 @@ class Library {
    *
    * @param {string} songID - The ID of the song. (The parent song folder)
    *
-   * @return {module:baldr-songbook-updater~Song}
+   * @return {module:baldr-songbook~Song}
    */
   getSongById (songID) {
     if (songID in this.songs && this.songs[songID]) {
