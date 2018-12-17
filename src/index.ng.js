@@ -3,7 +3,7 @@
  * configuration and run render process
  */
 
-/* global search location */
+/* global location */
 
 const path = require('path')
 
@@ -186,85 +186,4 @@ class Song {
   }
 }
 
-class Search {
-  constructor () {
-    this.library = {}
-    this.selector = {}
-  }
-
-  set (values) {
-    this.library = values.library
-    this.selector = values.selector
-  }
-
-  build () {
-    let select = document.createElement('select')
-    select.setAttribute('id', 'select')
-    select.setAttribute('placeholder', 'Suche nach einem Lied')
-
-    let option = document.createElement('option')
-    option.setAttribute('value', '')
-    select.appendChild(option)
-
-    for (let songID in this.library) {
-      option = document.createElement('option')
-      option.setAttribute('value', songID)
-      option.innerHTML = this.library[songID].title
-      select.appendChild(option)
-    }
-
-    document.querySelector(this.selector).appendChild(select)
-  }
-}
-
-/**
- * Toggle the modal window
- */
-
-class Modal {
-  constructor () {
-    this.IDs = ['search', 'tableofcontents']
-  }
-
-  setDisplay (modalID, state) {
-    let element = document.getElementById(modalID)
-    element.style.display = state
-  }
-
-  toggle (modalID) {
-    let element = document.getElementById(modalID)
-    let displayState = element.style.display
-    if (displayState === 'none') {
-      element.style.display = 'block'
-      if (modalID === 'search') {
-        if (typeof search.selectize !== 'undefined') {
-          search.selectize.focus()
-          search.selectize.clear()
-        }
-      }
-    } else {
-      element.style.display = 'none'
-    }
-  }
-
-  hide () {
-    this.IDs.forEach(function (modalID) {
-      this.setDisplay(modalID, 'none')
-    })
-  }
-
-  show (modalID) {
-    this.hide()
-    this.setDisplay(modalID, 'block')
-    if (modalID === 'search') {
-      if (typeof search.selectize !== 'undefined') {
-        search.selectize.focus()
-        search.selectize.clear()
-      }
-    }
-  }
-}
-
-exports.Modal = Modal
-exports.Search = Search
 exports.Song = Song
