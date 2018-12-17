@@ -1,0 +1,40 @@
+{
+    "a": {
+        "Auf-der-Mauer_auf-der-Lauer": {
+            "title": "Auf der Mauer, auf der Lauer",
+            "folder": "test/songs/real/a/Auf-der-Mauer_auf-der-Lauer",
+            "slides": [
+                "01.svg",
+                "02.svg"
+            ]
+        }
+    },
+    "s": {
+        "Stille-Nacht": {
+            "title": "Stille Nacht",
+            "folder": "test/songs/real/s/Stille-Nacht",
+            "slides": [
+                "01.svg",
+                "02.svg"
+            ]
+        },
+        "Swing-low": {
+            "title": "Swing low",
+            "folder": "test/songs/real/s/Swing-low",
+            "slides": [
+                "01.svg",
+                "02.svg"
+            ]
+        }
+    },
+    "z": {
+        "Zum-Tanze-da-geht-ein-Maedel": {
+            "title": "Zum Tanze, da geht ein Mädel",
+            "folder": "test/songs/real/z/Zum-Tanze-da-geht-ein-Maedel",
+            "slides": [
+                "01.svg",
+                "02.svg"
+            ]
+        }
+    }
+}
