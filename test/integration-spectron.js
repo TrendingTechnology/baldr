@@ -6,7 +6,7 @@ const standard = require('mocha-standard')
 
 let pkg = require('../package.json')
 
-process.env.BALDR_SONGBOOK_PATH = path.resolve('test', 'real', 'songs')
+process.env.BALDR_SONGBOOK_PATH = path.resolve('test', 'songs', 'real')
 
 let darwinPath = []
 

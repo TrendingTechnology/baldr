@@ -1,33 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <title>JSDoc: Source: index.js</title>
-
-    <script src="scripts/prettify/prettify.js"> </script>
-    <script src="scripts/prettify/lang-css.js"> </script>
-    <!--[if lt IE 9]>
-      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
-    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
-</head>
-
-<body>
-
-<div id="main">
-
-    <h1 class="page-title">Source: index.js</h1>
-
-    
-
-
-
-    
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>#! /usr/bin/env node
-
 /**
  * @file Command line interface to generate the intermediate media files for the
  * BALDR songbook.
@@ -37,13 +7,11 @@
 
 'use strict'
 
-const { Command } = require('commander')
 const crypto = require('crypto')
 const fs = require('fs-extra')
 const glob = require('glob')
 const os = require('os')
 const path = require('path')
-const pckg = require('./package.json')
 const spawn = require('child_process').spawnSync
 const Sqlite3 = require('better-sqlite3')
 const util = require('util')
@@ -139,31 +107,6 @@ function bootstrapConfig () {
   return config
 }
 
-/**
- * Wrapper around the node module “commander”.
- *
- * @param {*} argv - The same as process.argv
- * @param {string} version - The version string
- */
-function parseCliArguments (argv, version) {
-  // To get a clean commander. Otherwise we get options from mocha in the tests.
-  // https://github.com/tj/commander.js/issues/438#issuecomment-274285003
-  const commander = new Command()
-  return commander
-    .version(version)
-    .option('-a, --group-alphabetically', 'List the songs in an alphabetical tree.')
-    .option('-b --base-path &lt;base-path>', 'Base path of a song collection.')
-    .option('-c, --clean', 'Clean up (delete all generated files)')
-    .option('-F, --folder &lt;folder>', 'Process only the given song folder')
-    .option('-f, --force', 'Rebuild all images')
-    .option('-i --song-id &lt;song-id>', 'Process only the song with the given song ID (The parent song folder).')
-    .option('-l, --list &lt;song-id-list>', 'Use a list of song IDs in a text file to specify which songs should be updated.')
-    .option('-p, --piano', 'Generate the piano files only.')
-    .option('-s, --slides', 'Generate the slides only.')
-    .option('-t, --page-turn-optimized', 'Generate a page turn friendly piano score version.')
-    .parse(argv)
-}
-
 function parseSongIDList (listPath) {
   let content = fs.readFileSync(listPath, { encoding: 'utf-8' })
   return content.split(/\s+/).filter(songID => songID)
@@ -211,7 +154,7 @@ class Message {
       'Create such a config file or use the “--base-path” option!'
 
     const sampleConfig = fs.readFileSync(
-      path.join(__dirname, 'sample.config.json'), 'utf8'
+      path.resolve(__dirname, '..', 'sample.config.json'), 'utf8'
     )
     output += '\n\nExample configuration file:\n' + sampleConfig
 
@@ -221,7 +164,7 @@ class Message {
 
   /**
    * @param {object} status
-   * &lt;pre>&lt;code>
+   * <pre><code>
    * {
    *   "changed": {
    *     "piano": false,
@@ -245,7 +188,7 @@ class Message {
    *     "title": "Auf der Mauer, auf der Lauer"
    *   }
    * }
-   * &lt;/code>&lt;/pre>
+   * </code></pre>
    */
   songFolder (status, song) {
     let forced
@@ -258,7 +201,7 @@ class Message {
     let symbol
     if (!song.metaData.title) {
       symbol = this.error
-    } else if (!status.changed.slides &amp;&amp; !status.changed.piano) {
+    } else if (!status.changed.slides && !status.changed.piano) {
       symbol = this.finished
     } else {
       symbol = this.progress
@@ -267,7 +210,7 @@ class Message {
     let title
     if (!song.metaData.title) {
       title = status.folderName.red
-    } else if (!status.changed.slides &amp;&amp; !status.changed.piano) {
+    } else if (!status.changed.slides && !status.changed.piano) {
       title = status.folderName.green + ': ' + song.metaData.title
     } else {
       title = status.folderName.yellow + ': ' + song.metaData.title
@@ -722,7 +665,7 @@ class SongMetaDataCombined {
   static collectProperties_ (properties, object) {
     let parts = []
     for (let property of properties) {
-      if (property in object &amp;&amp; object[property]) {
+      if (property in object && object[property]) {
         parts.push(object[property])
       }
     }
@@ -740,7 +683,7 @@ class SongMetaDataCombined {
       out = ''
     }
 
-    if ('year' in this.metaData &amp;&amp; this.metaData.year) {
+    if ('year' in this.metaData && this.metaData.year) {
       return `${out} (${this.metaData.year})`
     } else {
       return out
@@ -771,7 +714,7 @@ class SongMetaDataCombined {
    * lyricist
    */
   get lyricist () {
-    if ('lyricist' in this.metaData &amp;&amp; this.metaData.lyricist) {
+    if ('lyricist' in this.metaData && this.metaData.lyricist) {
       return this.metaData.lyricist
     } else {
       return ''
@@ -920,12 +863,12 @@ class Song {
    * Generate TeX markup for one song.
    *
    * @return {string} TeX markup for a single song.
-   * &lt;code>&lt;pre>
+   * <code><pre>
    * \tmpheading{Swing low}
    * \tmpimage{s/Swing-low/piano/piano_1.eps}
    * \tmpimage{s/Swing-low/piano/piano_2.eps}
    * \tmpimage{s/Swing-low/piano/piano_3.eps}
-   * &lt;/pre>&lt;code>
+   * </pre><code>
    */
   formatPianoTex () {
     if (this.pianoFiles.length === 0) {
@@ -940,7 +883,7 @@ class Song {
     }
     let output = ''
     output += '\n' + PianoScore.texCmd('heading', this.metaDataCombined.title)
-    for (let i = 0; i &lt; this.pianoFiles.length; i++) {
+    for (let i = 0; i < this.pianoFiles.length; i++) {
       output += this.formatPianoTeXEpsFile_(i)
     }
     return output
@@ -1064,7 +1007,7 @@ class Song {
     status.changed.slides = this.fileMonitor.isModified(this.mscxProjector)
 
     // slides
-    if ((mode === 'all' || mode === 'slides') &amp;&amp;
+    if ((mode === 'all' || mode === 'slides') &&
         (force || status.changed.slides || !this.slidesFiles.length)) {
       status.generated.projector = this.generatePDF_('projector')
       status.generated.slides = this.generateSlides_()
@@ -1073,7 +1016,7 @@ class Song {
     status.changed.piano = this.fileMonitor.isModified(this.mscxPiano)
 
     // piano
-    if ((mode === 'all' || mode === 'piano') &amp;&amp;
+    if ((mode === 'all' || mode === 'piano') &&
         (force || status.changed.piano || !this.pianoFiles.length)) {
       status.generated.piano = this.generatePiano_()
     }
@@ -1105,13 +1048,13 @@ class Song {
  * A tree of songs where the song arrays are placed in alphabetical properties.
  * An instanace of this class would look like this example:
  *
- * &lt;pre>&lt;code>
+ * <pre><code>
  * {
  *   "a": [ song, song ],
  *   "s": [ song, song ],
  *   "z": [ song, song ]
  * }
- * &lt;/code>&lt;/pre>
+ * </code></pre>
  */
 class AlphabeticalSongsTree {
   /**
@@ -1134,14 +1077,14 @@ class AlphabeticalSongsTree {
  * This tree object is an helper object. It is necessary to avoid page breaks
  * on multipage piano scores.
  *
- * &lt;pre>&lt;code>
+ * <pre><code>
  * {
  *   "1": [ 1-page-song, 1-page-song ... ],
  *   "2": [ 2-page-song ... ],
  *   "3": [ 3-page-song ... ]
  *   "3": [ 3-page-song ... ]
  * }
- * &lt;/code>&lt;/pre>
+ * </code></pre>
  */
 class PianoFilesCountTree {
   /**
@@ -1270,7 +1213,7 @@ class PianoScore {
         if (song) {
           let missingPages = pageCount - i
           songs.push(song)
-          if (missingPages &lt;= 0) {
+          if (missingPages <= 0) {
             return songs
           } else {
             return PianoScore.selectSongs(countTree, songs, missingPages)
@@ -1458,7 +1401,7 @@ class Library {
     let abc = '0abcdefghijklmnopqrstuvwxyz'.split('')
     return abc.filter((file) => {
       let folder = path.join(this.basePath, file)
-      if (fs.existsSync(folder) &amp;&amp; fs.statSync(folder).isDirectory()) {
+      if (fs.existsSync(folder) && fs.statSync(folder).isDirectory()) {
         return true
       } else {
         return false
@@ -1486,7 +1429,7 @@ class Library {
    * @return {module:baldr-songbook-updater~Song}
    */
   getSongById (songID) {
-    if (songID in this.songs &amp;&amp; this.songs[songID]) {
+    if (songID in this.songs && this.songs[songID]) {
       return this.songs[songID]
     } else {
       throw new Error(util.format('There is no song with the songID: %s',
@@ -1583,81 +1526,6 @@ class Library {
   }
 }
 
-/**
- * Main function: This function gets executed when the script is called
- * on the command line.
- */
-let main = function () {
-  let options = parseCliArguments(process.argv, pckg.version)
-
-  if (options.folder) {
-    options.force = true
-  }
-
-  let config = bootstrapConfig()
-
-  let mode
-  if (options.slides) {
-    mode = 'slides'
-  } else if (options.piano) {
-    mode = 'piano'
-  } else {
-    mode = 'all'
-  }
-
-  if (options.basePath &amp;&amp; options.basePath.length > 0) {
-    config.path = options.basePath
-  }
-
-  // To avoid strange behavior when creating the piano score
-  if (!options.hasOwnProperty('groupAlphabetically')) options.groupAlphabetically = false
-  if (!options.hasOwnProperty('pageTurnOptimized')) options.pageTurnOptimized = false
-
-  console.log(util.format('The base path of the song collection is located at:\n    %s\n', config.path.cyan))
-  let library = new Library(config.path)
-  console.log(util.format('Found %s songs.', library.countSongs()))
-  if (options.list) library.loadSongList(options.list)
-
-  if (options.clean) {
-    library.cleanIntermediateFiles()
-  } else if (options.folder) {
-    library.updateSongByPath(options.folder, mode)
-  } else if (options.songId) {
-    library.updateSongBySongId(options.songId, mode)
-  } else {
-    library.update(mode, options.force)
-    if (mode === 'piano' || mode === 'all') {
-      let pianoScore = new PianoScore(path.join(library.basePath, 'songs.tex'), library, options.groupAlphabetically, options.pageTurnOptimized)
-      pianoScore.write()
-    }
-  }
-}
-
-if (require.main === module) {
-  main()
-}
-
 exports.parseSongIDList = parseSongIDList
-</code></pre>
-        </article>
-    </section>
-
-
-
-
-</div>
-
-<nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-baldr-songbook-updater.html">baldr-songbook-updater</a></li></ul><h3>Classes</h3><ul><li><a href="module-baldr-songbook-updater-AlphabeticalSongsTree.html">AlphabeticalSongsTree</a></li><li><a href="module-baldr-songbook-updater-FileMonitor.html">FileMonitor</a></li><li><a href="module-baldr-songbook-updater-Folder.html">Folder</a></li><li><a href="module-baldr-songbook-updater-Library.html">Library</a></li><li><a href="module-baldr-songbook-updater-PianoFilesCountTree.html">PianoFilesCountTree</a></li><li><a href="module-baldr-songbook-updater-PianoScore.html">PianoScore</a></li><li><a href="module-baldr-songbook-updater-Song.html">Song</a></li><li><a href="module-baldr-songbook-updater-SongMetaData.html">SongMetaData</a></li><li><a href="module-baldr-songbook-updater-SongMetaDataCombined.html">SongMetaDataCombined</a></li><li><a href="module-baldr-songbook-updater-Sqlite.html">Sqlite</a></li><li><a href="module-baldr-songbook-updater-TextFile.html">TextFile</a></li></ul>
-</nav>
-
-<br class="clear">
-
-<footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc</a>.
-</footer>
-
-<script> prettyPrint(); </script>
-<script src="scripts/linenumber.js"> </script>
-</body>
-</html>
+exports.Library = Library
+exports.bootstrapConfig = bootstrapConfig

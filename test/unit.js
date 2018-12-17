@@ -15,7 +15,7 @@ describe('Function “bootstrapConfig”', () => {
 
 describe('Class “Library”', () => {
   before(() => {
-    this.library = new Library(path.join(__dirname, 'real', 'songs', 'songs.json'))
+    this.library = new Library(path.join(__dirname, 'songs', 'real', 'songs.json'))
   })
 
   describe('properties', () => {
