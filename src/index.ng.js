@@ -1,6 +1,5 @@
 /**
- * @file Render process, assemble all submodules, bootstrap
- * configuration and run render process
+ * @file TODO: Should be removed. Unused code
  */
 
 /* global location */

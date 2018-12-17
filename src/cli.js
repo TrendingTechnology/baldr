@@ -1,5 +1,10 @@
 #! /usr/bin/env node
 
+/**
+ * @file Command line interface to generate the intermediate media files for the
+ * BALDR songbook.
+ */
+
 const pckg = require('../package.json')
 const { bootstrapConfig, Library, PianoScore } = require('./lib.js')
 const { Command } = require('commander')

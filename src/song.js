@@ -1,5 +1,5 @@
 /**
- * @file The current song
+ * @file TODO: should be replaced by a custom HTML element. The current song
  */
 
 /* global location */

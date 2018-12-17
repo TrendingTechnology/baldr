@@ -1,6 +1,5 @@
 /**
- * @file Command line interface to generate the intermediate media files for the
- * BALDR songbook.
+ * @file A collection of function and classes not using the DOM
  */
 
 'use strict'
