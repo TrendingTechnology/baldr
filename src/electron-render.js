@@ -30,9 +30,9 @@ function bindShortcuts () {
 function bindButtons () {
   let bindings = [
     { selector: '#menu #menu-search', function: () => { modalManager.openByID('search') } },
-    { selector: '#menu #menu-tableofcontents', function: () => { modalManager.openByID('tableofcontents') } },
-    { selector: '#slide #previous', function: song.previousSlide },
-    { selector: '#slide #next', function: song.nextSlide }
+    { selector: '#menu #menu-tableofcontents', function: () => { modalManager.openByID('tableofcontents') } }
+    // { selector: '#slide #previous', function: song.previousSlide },
+    // { selector: '#slide #next', function: song.nextSlide }
   ]
   for (let binding of bindings) {
     document
@@ -157,6 +157,49 @@ class BaldrSongbookModal extends HTMLElement {
 }
 
 /**
+ *
+ */
+class BaldrSongbookSongSlide extends HTMLElement {
+  static get observedAttributes() {
+    return ['songID', 'no']
+  }
+
+  constructor () {
+    super()
+    this.song
+
+        /**
+     * The current slide number.
+     */
+    this.slideNumber = 0
+
+    /**
+     * The biggest slide number.
+     */
+    this.slideNumberMax = 0
+  }
+
+  attributeChangedCallback (name, oldValue, newValue) {
+    console.log(name)
+    if (name === 'songID') {
+      this.setSongById_(newValue)
+    }
+
+  }
+
+  setSongById_ (songID) {
+    this.song = library.getSongById(songID)
+    console.log(this.song)
+  }
+
+  setSlide_ () {
+      let imagePath = path.join(folder, 'slides', slides[slideNumber])
+      document.querySelector(selector).setAttribute('src', imagePath)
+      setSongTitle()
+  }
+}
+
+/**
  * Manage all modal windows of a app.
  */
 class ModalManager {
@@ -198,6 +241,7 @@ let main = function () {
   customElements.define('baldr-songbook-search', BaldrSongbookSearch)
   customElements.define('baldr-songbook-toc', BaldrSongbookToc)
   customElements.define('baldr-songbook-modal', BaldrSongbookModal)
+  customElements.define('baldr-songbook-song-slide', BaldrSongbookSongSlide)
 
   modalManager = new ModalManager()
 
