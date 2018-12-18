@@ -35,6 +35,8 @@
 
 const jquery = require('jquery')
 const mousetrap = require('mousetrap')
+const path = require('path')
+
 require('selectize')
 
 let modalManager
@@ -189,41 +191,66 @@ class BaldrSongbookModal extends HTMLElement {
  */
 class BaldrSongbookSongSlide extends HTMLElement {
   static get observedAttributes() {
-    return ['songID', 'no']
+    return ['songid', 'no']
   }
 
   constructor () {
     super()
-    this.song
-
-        /**
-     * The current slide number.
-     */
-    this.slideNumber = 0
+    const shadowRoot = this.attachShadow({mode: 'open'})
 
     /**
-     * The biggest slide number.
+     *
      */
-    this.slideNumberMax = 0
+    this.imgElement = document.createElement('img')
+    shadowRoot.appendChild(this.imgElement)
+
+    /**
+     * The current slide number.
+     */
+    this.song
+
+    /**
+     * The current slide number.
+     */
+    this.no = 1
   }
 
   attributeChangedCallback (name, oldValue, newValue) {
-    console.log(name)
-    if (name === 'songID') {
+    if (name === 'songid') {
       this.setSongById_(newValue)
+    } else if (name === 'no') {
+      this.setSlideByNo_(newValue)
     }
-
   }
 
   setSongById_ (songID) {
     this.song = library.getSongById(songID)
-    console.log(this.song)
   }
 
-  setSlide_ () {
-      let imagePath = path.join(folder, 'slides', slides[slideNumber])
-      document.querySelector(selector).setAttribute('src', imagePath)
-      setSongTitle()
+  setSlideByNo_ (no) {
+    this.imgElement.setAttribute('src', path.join(this.song.folderSlides.get(), this.song.slidesFiles[no - 1]))
+  }
+
+  /**
+   * Show the next slide.
+   */
+  next () {
+    this.no += 1
+    if (this.no >= this.song.slidesFiles.length) {
+      this.no = 1
+    }
+    setSlideByNo_(this.no)
+  }
+
+  /**
+   * Show the previous slide.
+   */
+  previous () {
+    this.no -= 1
+    if (this.no &lt; 0) {
+      this.no = this.song.slidesFiles.length
+    }
+    setSlideByNo_(this.no)
   }
 }
 
