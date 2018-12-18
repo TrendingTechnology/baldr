@@ -36,22 +36,22 @@
 const jquery = require('jquery')
 const mousetrap = require('mousetrap')
 const path = require('path')
-
+const { bootstrapConfig, Library, AlphabeticalSongsTree } = require('./src/lib.js')
 require('selectize')
+const config = bootstrapConfig()
+const library = new Library(config.path)
 
 let modalManager
 
 const song = require('./src/song.js')
-const { bootstrapConfig, Library, AlphabeticalSongsTree } = require('./src/lib.js')
 
 /**
  * Map some keyboard shortcuts to the corresponding methods.
  */
-function bindShortcuts () {
-  mousetrap.bind('esc', function () { modalManager.toggleByID('search') })
-  mousetrap.bind('alt', function () { modalManager.toggleByID('tableofcontents') })
-  mousetrap.bind('left', song.previousSlide)
-  mousetrap.bind('right', song.nextSlide)
+function bindShortcuts (shortcuts) {
+  for (let shortcut in shortcuts) {
+    mousetrap.bind(shortcut, shortcuts[shortcut])
+  }
 }
 
 /**
@@ -205,12 +205,13 @@ class BaldrSongbookSongSlide extends HTMLElement {
     shadowRoot.appendChild(this.imgElement)
 
     /**
-     * The current slide number.
+     * The song object
+     * @type {module:baldr-songbook~lib.Song}
      */
     this.song
 
     /**
-     * The current slide number.
+     * The current slide number. The lowest slide number is 1 not 0.
      */
     this.no = 1
   }
@@ -231,26 +232,37 @@ class BaldrSongbookSongSlide extends HTMLElement {
     this.imgElement.setAttribute('src', path.join(this.song.folderSlides.get(), this.song.slidesFiles[no - 1]))
   }
 
+  get no () {
+    return this.no_
+  }
+
+  set no (value) {
+    this.no_ = value
+    this.setAttribute('no', value)
+  }
+
   /**
    * Show the next slide.
    */
   next () {
-    this.no += 1
-    if (this.no >= this.song.slidesFiles.length) {
+    if (this.no === this.song.slidesFiles.length) {
       this.no = 1
+    } else {
+      this.no += 1
     }
-    setSlideByNo_(this.no)
+    this.setSlideByNo_(this.no)
   }
 
   /**
    * Show the previous slide.
    */
   previous () {
-    this.no -= 1
-    if (this.no &lt; 0) {
+    if (this.no === 1) {
       this.no = this.song.slidesFiles.length
+    } else {
+      this.no -= 1
     }
-    setSlideByNo_(this.no)
+    this.setSlideByNo_(this.no)
   }
 }
 
@@ -288,16 +300,13 @@ class ModalManager {
   }
 }
 
-const config = bootstrapConfig()
-
-const library = new Library(config.path)
-
 let main = function () {
   customElements.define('baldr-songbook-search', BaldrSongbookSearch)
   customElements.define('baldr-songbook-toc', BaldrSongbookToc)
   customElements.define('baldr-songbook-modal', BaldrSongbookModal)
   customElements.define('baldr-songbook-song-slide', BaldrSongbookSongSlide)
 
+  let songSlide = document.querySelector('baldr-songbook-song-slide')
   modalManager = new ModalManager()
 
   song.set({
@@ -310,7 +319,12 @@ let main = function () {
 
   window.onhashchange = showByHash
 
-  bindShortcuts()
+  bindShortcuts({
+    'left': function () { songSlide.previous() },
+    'right': function () { songSlide.next() },
+    'esc': function () { modalManager.toggleByID('search') },
+    'alt': function () { modalManager.toggleByID('tableofcontents') }
+  })
 
   let selectized = jquery('select').selectize({
     onItemAdd: function (value, data) {
