@@ -170,11 +170,31 @@ class BaldrSongbookSongSlide extends HTMLElement {
     super()
     const shadowRoot = this.attachShadow({mode: 'open'})
 
+    let styleElement = document.createElement('style')
+    styleElement.innerHTML = `
+      div {
+        max-width: 100%;
+        max-height: 100%;
+        text-align: center;
+      }
+
+      img {
+        width: 100%;
+        height: 100%;
+        vertical-align: middle;
+        background-color: white;
+      }
+    `
+    shadowRoot.appendChild(styleElement)
+
+    let divElement = document.createElement('div')
+    shadowRoot.appendChild(divElement)
+
     /**
      *
      */
     this.imgElement = document.createElement('img')
-    shadowRoot.appendChild(this.imgElement)
+    divElement.appendChild(this.imgElement)
 
     /**
      * The song object
@@ -198,6 +218,12 @@ class BaldrSongbookSongSlide extends HTMLElement {
 
   setSongById_ (songID) {
     this.song = library.getSongById(songID)
+  }
+
+  setSongByHash (hash) {
+    if (hash !== '') {
+      this.setSongById_(hash.substring(1))
+    }
   }
 
   setSlideByNo_ (no) {
