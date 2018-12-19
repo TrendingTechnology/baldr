@@ -10,12 +10,11 @@ const mousetrap = require('mousetrap')
 const path = require('path')
 const { bootstrapConfig, Library, AlphabeticalSongsTree } = require('./src/lib.js')
 require('selectize')
+
 const config = bootstrapConfig()
 const library = new Library(config.path)
-
 let modalManager
-
-const song = require('./src/song.js')
+let songSlide
 
 /**
  * Map some keyboard shortcuts to the corresponding methods.
@@ -43,13 +42,13 @@ function bindButtons () {
   }
 }
 
-let showByHash = function () {
+function showByHash () {
   if (location.hash === '#search') {
     modalManager.openByID('search')
   } else if (location.hash === '#tableofcontents') {
     modalManager.openByID('tableofcontents')
   } else if (location.hash) {
-    song.loadByHash()
+    songSlide.setSongByHash(location.hash)
   } else {
     modalManager.openByID('search')
   }
@@ -162,13 +161,13 @@ class BaldrSongbookModal extends HTMLElement {
  *
  */
 class BaldrSongbookSongSlide extends HTMLElement {
-  static get observedAttributes() {
+  static get observedAttributes () {
     return ['songid', 'no']
   }
 
   constructor () {
     super()
-    const shadowRoot = this.attachShadow({mode: 'open'})
+    const shadowRoot = this.attachShadow({ mode: 'open' })
 
     let styleElement = document.createElement('style')
     styleElement.innerHTML = `
@@ -196,11 +195,36 @@ class BaldrSongbookSongSlide extends HTMLElement {
     this.imgElement = document.createElement('img')
     divElement.appendChild(this.imgElement)
 
+    // /**
+    //  *
+    //  */
+    // let setSongTitle = function () {
+    //   if (slideNumber === 0 && song.hasOwnProperty('title')) {
+    //     document.getElementById('song-title').style.display = 'block'
+    //     document.getElementById('song-title_title').textContent = song.title
+    //     document.getElementById('song-title_subtitle').textContent = song.subtitle
+    //   } else {
+    //     document.getElementById('song-title').style.display = 'none'
+    //   }
+    // }
+
+    // <section id="slide">
+    //   <div id="song-title">
+    //     <h1 id="song-title_title"></h1>
+    //     <h2 id="song-title_subtitle"></h2>
+    //   </div>
+    //   <img>
+    //   <ul>
+    //     <li id="previous" class="button fa fa-arrow-left" title="Vorhergehende Seite (Tastenkürzel: linke Pfeiltaste)"></li>
+    //     <li id="next" class="button fa fa-arrow-right" title="Nächste Seite (Tastenkürzel: rechte Pfeiltaste)"></li>
+    //   </ul>
+    // </section>
+
     /**
      * The song object
      * @type {module:baldr-songbook~lib.Song}
      */
-    this.song
+    this.song = {}
 
     /**
      * The current slide number. The lowest slide number is 1 not 0.
@@ -210,19 +234,21 @@ class BaldrSongbookSongSlide extends HTMLElement {
 
   attributeChangedCallback (name, oldValue, newValue) {
     if (name === 'songid') {
-      this.setSongById_(newValue)
+      this.setSongById(newValue)
     } else if (name === 'no') {
       this.setSlideByNo_(newValue)
     }
   }
 
-  setSongById_ (songID) {
+  setSongById (songID) {
     this.song = library.getSongById(songID)
+    this.songid_ = songID
+    this.setSlideByNo_(1)
   }
 
   setSongByHash (hash) {
     if (hash !== '') {
-      this.setSongById_(hash.substring(1))
+      this.setSongById(hash.substring(1))
     }
   }
 
@@ -237,6 +263,15 @@ class BaldrSongbookSongSlide extends HTMLElement {
   set no (value) {
     this.no_ = value
     this.setAttribute('no', value)
+  }
+
+  get songid () {
+    return this.songid_
+  }
+
+  set songid (value) {
+    this.songid_ = value
+    this.setAttribute('songid', value)
   }
 
   /**
@@ -304,14 +339,8 @@ let main = function () {
   customElements.define('baldr-songbook-modal', BaldrSongbookModal)
   customElements.define('baldr-songbook-song-slide', BaldrSongbookSongSlide)
 
-  let songSlide = document.querySelector('baldr-songbook-song-slide')
+  songSlide = document.querySelector('baldr-songbook-song-slide')
   modalManager = new ModalManager()
-
-  song.set({
-    'library': library.list,
-    'selector': '#slide img',
-    'songsPath': config.path
-  })
 
   bindButtons()
 
@@ -325,8 +354,8 @@ let main = function () {
   })
 
   let selectized = jquery('select').selectize({
-    onItemAdd: function (value, data) {
-      song.setCurrent(value)
+    onItemAdd: function (value) {
+      songSlide.setAttribute('songid', value)
       modalManager.closeAll()
     }
   })
