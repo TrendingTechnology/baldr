@@ -14,7 +14,7 @@
     "doc-show": "xdg-open ./docs/index.html",
     "electron-rebuild": "electron-rebuild",
     "postinstall": "electron-rebuild",
-    "start": "electron .",
+    "start": "./node_modules/.bin/electron .",
     "test": "mocha --reporter spec",
     "standard": "standard *.js src/*.js"
   },
