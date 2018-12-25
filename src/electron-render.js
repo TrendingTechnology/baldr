@@ -19,7 +19,7 @@ let songSlide
 /**
  * Map some keyboard shortcuts to the corresponding methods.
  */
-function bindShortcuts(shortcuts) {
+function bindShortcuts (shortcuts) {
   for (let shortcut in shortcuts) {
     mousetrap.bind(shortcut, shortcuts[shortcut])
   }
@@ -28,21 +28,15 @@ function bindShortcuts(shortcuts) {
 /**
  * Map some buttons to the corresponding methods.
  */
-function bindButtons() {
-  let bindings = [
-    { selector: '#menu #menu-search', function: () => { modalManager.openByID('search') } },
-    { selector: '#menu #menu-tableofcontents', function: () => { modalManager.openByID('tableofcontents') } }
-    // { selector: '#slide #previous', function: song.previousSlide },
-    // { selector: '#slide #next', function: song.nextSlide }
-  ]
-  for (let binding of bindings) {
+function bindButtons (bindings) {
+  for (let binding of arguments) {
     document
-      .querySelector(binding.selector)
-      .addEventListener('click', binding.function)
+      .querySelector(binding[0])
+      .addEventListener('click', binding[1])
   }
 }
 
-function showByHash() {
+function showByHash () {
   if (location.hash === '#search') {
     modalManager.openByID('search')
   } else if (location.hash === '#tableofcontents') {
@@ -58,7 +52,7 @@ function showByHash() {
  * Generate a tree view for the table of contents page.
  */
 class BaldrSongbookToc extends HTMLElement {
-  constructor() {
+  constructor () {
     super()
     let topUl = document.createElement('ul')
 
@@ -92,7 +86,7 @@ class BaldrSongbookToc extends HTMLElement {
  * Build the drop down menu for selectize
  */
 class BaldrSongbookSearch extends HTMLElement {
-  constructor() {
+  constructor () {
     super()
 
     let select = document.createElement('select')
@@ -118,7 +112,7 @@ class BaldrSongbookSearch extends HTMLElement {
  * Build the drop down menu for selectize
  */
 class BaldrSongbookModal extends HTMLElement {
-  constructor() {
+  constructor () {
     super()
     let elmementClose = document.createElement('div')
     elmementClose.addEventListener('click', () => { this.close() })
@@ -132,11 +126,11 @@ class BaldrSongbookModal extends HTMLElement {
     this.style.display = 'none'
   }
 
-  close() {
+  close () {
     this.style.display = 'none'
   }
 
-  get isOpen() {
+  get isOpen () {
     if (this.style.display === 'none') {
       return false
     } else if (this.style.display === 'block') {
@@ -144,11 +138,11 @@ class BaldrSongbookModal extends HTMLElement {
     }
   }
 
-  open() {
+  open () {
     this.style.display = 'block'
   }
 
-  toggle() {
+  toggle () {
     if (this.style.display === 'none') {
       this.style.display = 'block'
     } else {
@@ -161,11 +155,11 @@ class BaldrSongbookModal extends HTMLElement {
  *
  */
 class BaldrSongbookSongSlide extends HTMLElement {
-  static get observedAttributes() {
+  static get observedAttributes () {
     return ['songid', 'no']
   }
 
-  constructor() {
+  constructor () {
     super()
     const shadowRoot = this.attachShadow({ mode: 'open' })
 
@@ -232,7 +226,7 @@ class BaldrSongbookSongSlide extends HTMLElement {
     this.no = 1
   }
 
-  attributeChangedCallback(name, oldValue, newValue) {
+  attributeChangedCallback (name, oldValue, newValue) {
     if (name === 'songid') {
       this.setSongById(newValue)
     } else if (name === 'no') {
@@ -240,36 +234,36 @@ class BaldrSongbookSongSlide extends HTMLElement {
     }
   }
 
-  setSongById(songID) {
+  setSongById (songID) {
     this.song = library.getSongById(songID)
     this.songid_ = songID
     this.setSlideByNo_(1)
   }
 
-  setSongByHash(hash) {
+  setSongByHash (hash) {
     if (hash !== '') {
       this.setSongById(hash.substring(1))
     }
   }
 
-  setSlideByNo_(no) {
+  setSlideByNo_ (no) {
     this.imgElement.setAttribute('src', path.join(this.song.folderSlides.get(), this.song.slidesFiles[no - 1]))
   }
 
-  get no() {
+  get no () {
     return this.no_
   }
 
-  set no(value) {
+  set no (value) {
     this.no_ = value
     this.setAttribute('no', value)
   }
 
-  get songid() {
+  get songid () {
     return this.songid_
   }
 
-  set songid(value) {
+  set songid (value) {
     this.songid_ = value
     this.setAttribute('songid', value)
   }
@@ -277,7 +271,7 @@ class BaldrSongbookSongSlide extends HTMLElement {
   /**
    * Show the next slide.
    */
-  next() {
+  next () {
     if (this.no === this.song.slidesFiles.length) {
       this.no = 1
     } else {
@@ -289,7 +283,7 @@ class BaldrSongbookSongSlide extends HTMLElement {
   /**
    * Show the previous slide.
    */
-  previous() {
+  previous () {
     if (this.no === 1) {
       this.no = this.song.slidesFiles.length
     } else {
@@ -303,7 +297,7 @@ class BaldrSongbookSongSlide extends HTMLElement {
  * Manage all modal windows of a app.
  */
 class ModalManager {
-  constructor() {
+  constructor () {
     let modals = document.querySelectorAll('baldr-songbook-modal')
     this.modals = {}
     for (let modal of modals) {
@@ -311,17 +305,17 @@ class ModalManager {
     }
   }
 
-  toggleByID(modalID) {
+  toggleByID (modalID) {
     this.modals[modalID].open()
   }
 
-  closeAll() {
+  closeAll () {
     for (let modalID in this.modals) {
       this.modals[modalID].close()
     }
   }
 
-  openByID(modalID) {
+  openByID (modalID) {
     for (let id in this.modals) {
       let modal = this.modals[id]
       if (modal.id === modalID) {
@@ -337,7 +331,7 @@ class ModalManager {
  *
  * @param {*} mapping
  */
-function defineCustomElements(mapping) {
+function defineCustomElements (mapping) {
   for (let element of arguments) {
     customElements.define(element[0], element[1])
   }
@@ -354,7 +348,12 @@ let main = function () {
   songSlide = document.querySelector('baldr-songbook-song-slide')
   modalManager = new ModalManager()
 
-  bindButtons()
+  bindButtons(
+    [ '#menu #menu-search', () => { modalManager.openByID('search') } ],
+    [ '#menu #menu-tableofcontents', () => { modalManager.openByID('tableofcontents') } ]
+    // { selector: '#slide #previous', function: song.previousSlide },
+    // { selector: '#slide #next', function: song.nextSlide }
+  )
 
   window.onhashchange = showByHash
 

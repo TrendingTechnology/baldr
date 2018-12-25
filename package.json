@@ -9,14 +9,14 @@
     "url": "git@github.com:Josef-Friedrich/baldr-songbook.git"
   },
   "scripts": {
-    "build": "electron-packager . --out=dist --app-version=$npm_package_version --asar --prune --overwrite --arch=x64 --icon=./icon.icns",
+    "build": "./node_modules/.bin/electron-packager . --out=dist --app-version=$npm_package_version --asar --prune --overwrite --arch=x64 --icon=./icon.icns",
     "doc": "rm -f docs/*.html; jsdoc --configure ./docs/jsdoc-config.json --destination ./docs/ src/",
     "doc-show": "xdg-open ./docs/index.html",
-    "electron-rebuild": "electron-rebuild",
-    "postinstall": "electron-rebuild",
+    "electron-rebuild": "./node_modules/.bin/electron-rebuild",
+    "postinstall": "./node_modules/.bin/electron-rebuild",
     "start": "./node_modules/.bin/electron .",
-    "test": "mocha --reporter spec",
-    "standard": "standard *.js src/*.js"
+    "test": "./node_modules/.bin/mocha --reporter spec",
+    "standard": "./node_modules/.bin/standard *.js src/*.js"
   },
   "author": {
     "name": "Josef Friedrich",
@@ -35,8 +35,7 @@
     "jquery": "^3.2.1",
     "js-yaml": "^3.10.0",
     "mousetrap": "^1.6.1",
-    "selectize": "^0.12.4",
-    "node-abi": "^2.5.0"
+    "selectize": "^0.12.4"
   },
   "devDependencies": {
     "electron-packager": "^9.1.0",
