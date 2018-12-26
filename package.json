@@ -38,12 +38,12 @@
     "selectize": "^0.12.4"
   },
   "devDependencies": {
+    "electron": "^3.0.13",
     "electron-packager": "^9.1.0",
     "electron-rebuild": "^1.6.0",
-    "electron": "^3.0.13",
     "jsdoc": "^3.5.5",
-    "mocha-standard": "^1.0.0",
     "mocha": "^4.0.1",
+    "mocha-standard": "^1.0.0",
     "rewire": "^4.0.1",
     "sinon": "^4.0.0",
     "spectron": "^3.7.2",

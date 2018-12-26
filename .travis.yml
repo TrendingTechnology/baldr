@@ -1,15 +1,13 @@
-dist: trusty
 sudo: true
 
 language: node_js
 node_js:
-  - "8"
+  - "10"
 
 install:
   - npm install --global npm
   - npm install
   - npm run build
-  - npm rebuild
 
 before_script:
   - "export DISPLAY=:99.0"
