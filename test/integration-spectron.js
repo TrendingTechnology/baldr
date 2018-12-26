@@ -74,10 +74,10 @@ describe('application launch', function () {
           ]
         )
       })
-      .click('#song_Swing-low')
-      .getHTML('img').then(html => {
-        assert.strictEqual(html, '<img>')
-      })
+      // .click('#song_Swing-low')
+      // .getHTML('img').then(html => {
+      //   assert.strictEqual(html, '<img>')
+      // })
   })
 
   it('selectize', function () {
