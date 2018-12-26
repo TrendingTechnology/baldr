@@ -211,7 +211,7 @@ class BaldrSongbookSongSlide extends HTMLElement {
           &lt;h1>&lt;/h1>
           &lt;h2>&lt;/h2>
           &lt;p class="composer">&lt;/p>
-          &lt;p class="lyricst">&lt;/p>
+          &lt;p class="lyricist">&lt;/p>
         &lt;/div>
         &lt;img>
         &lt;ul>
@@ -255,7 +255,10 @@ class BaldrSongbookSongSlide extends HTMLElement {
   setMetaData () {
     for (let property in this.metaDataElements) {
       if (this.song.metaDataCombined[property]) {
+        this.metaDataElements[property].style.display = 'block'
         this.metaDataElements[property].innerHTML = this.song.metaDataCombined[property]
+      } else {
+        this.metaDataElements[property].style.display = 'none'
       }
     }
   }
