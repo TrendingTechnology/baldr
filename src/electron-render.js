@@ -163,56 +163,46 @@ class BaldrSongbookSongSlide extends HTMLElement {
     super()
     const shadowRoot = this.attachShadow({ mode: 'open' })
 
-    let styleElement = document.createElement('style')
-    styleElement.innerHTML = `
-      div {
-        max-width: 100%;
-        max-height: 100%;
-        text-align: center;
-      }
+    shadowRoot.innerHTML = `
+      <section>
+        <style>
+          div {
+            max-width: 100%;
+            max-height: 100%;
+            text-align: center;
+          }
 
-      img {
-        width: 100%;
-        height: 100%;
-        vertical-align: middle;
-        background-color: white;
-      }
-    `
-    shadowRoot.appendChild(styleElement)
-
-    let divElement = document.createElement('div')
-    shadowRoot.appendChild(divElement)
+          img {
+            width: 100%;
+            height: 100%;
+            vertical-align: middle;
+            background-color: white;
+          }
+        </style>
+        <div class="metadata">
+          <h1></h1>
+          <h2></h2>
+          <p class="composer"></p>
+          <p class="lyricst"></p>
+        </div>
+        <img>
+        <ul>
+          <li class="previous" title="Vorhergehende Seite (Tastenkürzel: linke Pfeiltaste)"></li>
+          <li class="next" title="Nächste Seite (Tastenkürzel: rechte Pfeiltaste)"></li>
+        </ul>
+      </section>`
 
     /**
      *
      */
-    this.imgElement = document.createElement('img')
-    divElement.appendChild(this.imgElement)
-
-    // /**
-    //  *
-    //  */
-    // let setSongTitle = function () {
-    //   if (slideNumber === 0 && song.hasOwnProperty('title')) {
-    //     document.getElementById('song-title').style.display = 'block'
-    //     document.getElementById('song-title_title').textContent = song.title
-    //     document.getElementById('song-title_subtitle').textContent = song.subtitle
-    //   } else {
-    //     document.getElementById('song-title').style.display = 'none'
-    //   }
-    // }
-
-    // <section id="slide">
-    //   <div id="song-title">
-    //     <h1 id="song-title_title"></h1>
-    //     <h2 id="song-title_subtitle"></h2>
-    //   </div>
-    //   <img>
-    //   <ul>
-    //     <li id="previous" class="button fa fa-arrow-left" title="Vorhergehende Seite (Tastenkürzel: linke Pfeiltaste)"></li>
-    //     <li id="next" class="button fa fa-arrow-right" title="Nächste Seite (Tastenkürzel: rechte Pfeiltaste)"></li>
-    //   </ul>
-    // </section>
+    this.imgElement = shadowRoot.querySelector('img')
+    this.metaDataBlockElement = shadowRoot.querySelector('.metadata')
+    this.metaDataElements = {
+      title: shadowRoot.querySelector('h1'),
+      subtitle: shadowRoot.querySelector('h2'),
+      composer: shadowRoot.querySelector('.composer'),
+      lyricist: shadowRoot.querySelector('.lyricist')
+    }
 
     /**
      * The song object
@@ -234,10 +224,19 @@ class BaldrSongbookSongSlide extends HTMLElement {
     }
   }
 
+  setMetaData () {
+    for (let property in this.metaDataElements) {
+      if (this.song.metaDataCombined[property]) {
+        this.metaDataElements[property].innerHTML = this.song.metaDataCombined[property]
+      }
+    }
+  }
+
   setSongById (songID) {
     this.song = library.getSongById(songID)
     this.songid_ = songID
     this.setSlideByNo_(1)
+    this.setMetaData()
   }
 
   setSongByHash (hash) {
@@ -247,6 +246,11 @@ class BaldrSongbookSongSlide extends HTMLElement {
   }
 
   setSlideByNo_ (no) {
+    if (no === 1) {
+      this.metaDataBlockElement.style.display = 'block'
+    } else {
+      this.metaDataBlockElement.style.display = 'none'
+    }
     this.imgElement.setAttribute('src', path.join(this.song.folderSlides.get(), this.song.slidesFiles[no - 1]))
   }
 
