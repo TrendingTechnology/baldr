@@ -38,7 +38,7 @@
     "selectize": "^0.12.4"
   },
   "devDependencies": {
-    "electron": "^3.0.13",
+    "electron": "^2.0.16",
     "electron-packager": "^9.1.0",
     "electron-rebuild": "^1.6.0",
     "jsdoc": "^3.5.5",
