@@ -51,7 +51,7 @@ function showByHash () {
 /**
  * Generate a tree view for the table of contents page.
  */
-class BaldrSongbookToc extends HTMLElement {
+class TableOfContentsElement extends HTMLElement {
   constructor () {
     super()
     let topUl = document.createElement('ul')
@@ -85,7 +85,7 @@ class BaldrSongbookToc extends HTMLElement {
 /**
  * Build the drop down menu for selectize
  */
-class BaldrSongbookSearch extends HTMLElement {
+class SongbookSearchElement extends HTMLElement {
   constructor () {
     super()
 
@@ -111,7 +111,7 @@ class BaldrSongbookSearch extends HTMLElement {
 /**
  * Build the drop down menu for selectize
  */
-class BaldrSongbookModal extends HTMLElement {
+class ModalWindowElement extends HTMLElement {
   constructor () {
     super()
     let elmementClose = document.createElement('div')
@@ -154,7 +154,7 @@ class BaldrSongbookModal extends HTMLElement {
 /**
  *
  */
-class BaldrSongbookSongSlide extends HTMLElement {
+class SongSlideElement extends HTMLElement {
   static get observedAttributes () {
     return ['songid', 'no']
   }
@@ -339,10 +339,10 @@ function defineCustomElements (mapping) {
 
 let main = function () {
   defineCustomElements(
-    ['songbook-search', BaldrSongbookSearch],
-    ['table-of-contents', BaldrSongbookToc],
-    ['modal-window', BaldrSongbookModal],
-    ['song-slide', BaldrSongbookSongSlide]
+    ['songbook-search', SongbookSearchElement],
+    ['table-of-contents', TableOfContentsElement],
+    ['modal-window', ModalWindowElement],
+    ['song-slide', SongSlideElement]
   )
 
   songSlide = document.querySelector('song-slide')
