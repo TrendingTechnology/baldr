@@ -298,7 +298,7 @@ class BaldrSongbookSongSlide extends HTMLElement {
  */
 class ModalManager {
   constructor () {
-    let modals = document.querySelectorAll('baldr-songbook-modal')
+    let modals = document.querySelectorAll('modal-window')
     this.modals = {}
     for (let modal of modals) {
       this.modals[modal.id] = modal
@@ -339,13 +339,13 @@ function defineCustomElements (mapping) {
 
 let main = function () {
   defineCustomElements(
-    ['baldr-songbook-search', BaldrSongbookSearch],
-    ['baldr-songbook-toc', BaldrSongbookToc],
-    ['baldr-songbook-modal', BaldrSongbookModal],
-    ['baldr-songbook-song-slide', BaldrSongbookSongSlide]
+    ['songbook-search', BaldrSongbookSearch],
+    ['table-of-contents', BaldrSongbookToc],
+    ['modal-window', BaldrSongbookModal],
+    ['song-slide', BaldrSongbookSongSlide]
   )
 
-  songSlide = document.querySelector('baldr-songbook-song-slide')
+  songSlide = document.querySelector('song-slide')
   modalManager = new ModalManager()
 
   bindButtons(

@@ -63,7 +63,7 @@ describe('application launch', function () {
       .getText('#song_Swing-low').then(function (text) {
         assert.strictEqual(text, 'Swing low')
       })
-      .getText('baldr-songbook-toc ul li ul li').then(function (text) {
+      .getText('table-of-contents ul li ul li').then(function (text) {
         assert.deepStrictEqual(
           text,
           [

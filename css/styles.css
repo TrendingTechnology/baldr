@@ -9,7 +9,7 @@ body {
  * modal
  */
 
-baldr-songbook-modal {
+modal-window {
 	position: fixed;
 	top: 10%;
 	left: 10%;
@@ -22,7 +22,7 @@ baldr-songbook-modal {
 	padding: 3em;
 }
 
-baldr-songbook-modal .close {
+modal-window .close {
 	font-size: 18pt;
 	padding: 10pt;
 	position: absolute;
@@ -51,7 +51,7 @@ baldr-songbook-modal .close {
  * Table of contents
  */
 
-#tableofcontents baldr-songbook-toc {
+#tableofcontents table-of-contents {
 	display: block;
 	overflow-y: scroll;
 	height: 90%;
