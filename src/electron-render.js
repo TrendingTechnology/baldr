@@ -165,74 +165,7 @@ class BaldrSongbookSongSlide extends HTMLElement {
 
     shadowRoot.innerHTML = `
       <section>
-        <style>
-          .metadata {
-            padding-top: 0.2vw;
-            position: absolute;
-            width: 100%
-          }
-
-          .people {
-            display: flex;
-            font-size: 1.5vw;
-          }
-
-          .people > div {
-            flex: 1;
-          }
-
-          .composer {
-            text-align: right;
-          }
-
-          .lyricist {
-            text-align: left;
-          }
-
-          h1, h2 {
-            font-family: 'Alegreya Sans' !important;
-          }
-
-          h1 {
-            font-size: 3vw;
-          }
-
-          h2 {
-            font-size: 2vw;
-          }
-
-          div {
-            max-width: 100%;
-            max-height: 100%;
-            text-align: center;
-          }
-
-          img {
-            width: 100%;
-            height: 100%;
-            vertical-align: middle;
-            background-color: white;
-          }
-
-          .slide-number {
-            padding: 1vw;
-            position: absolute;
-            left: 0;
-            bottom: 0;
-            z-index: 1;
-            font-size: 1vw;
-            opacity: 0;
-          }
-
-          .fade-out {
-            animation: fadeout 2s linear forwards;
-          }
-
-          @keyframes fadeout {
-            0% { opacity: 1; }
-            100% { opacity: 0; }
-          }
-        </style>
+        <link href="css/song-slide.css" rel="stylesheet" type="text/css">
         <div class="metadata">
           <h1></h1>
           <h2></h2>
