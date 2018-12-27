@@ -213,6 +213,25 @@ class BaldrSongbookSongSlide extends HTMLElement {
             vertical-align: middle;
             background-color: white;
           }
+
+          .slide-number {
+            padding: 1vw;
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            z-index: 1;
+            font-size: 1vw;
+            opacity: 0;
+          }
+
+          .fade-out {
+            animation: fadeout 2s linear forwards;
+          }
+
+          @keyframes fadeout {
+            0% { opacity: 1; }
+            100% { opacity: 0; }
+          }
         </style>
         <div class="metadata">
           <h1></h1>
@@ -227,10 +246,12 @@ class BaldrSongbookSongSlide extends HTMLElement {
           <li class="previous" title="Vorhergehende Seite (Tastenkürzel: linke Pfeiltaste)"></li>
           <li class="next" title="Nächste Seite (Tastenkürzel: rechte Pfeiltaste)"></li>
         </ul>
+        <div class="slide-number"></div>
       </section>`
 
     this.imgElement = shadowRoot.querySelector('img')
     this.metaDataBlockElement = shadowRoot.querySelector('.metadata')
+    this.slideNumberElement = shadowRoot.querySelector('.slide-number')
     this.metaDataElements = {
       title: shadowRoot.querySelector('h1'),
       subtitle: shadowRoot.querySelector('h2'),
@@ -289,6 +310,11 @@ class BaldrSongbookSongSlide extends HTMLElement {
       this.metaDataBlockElement.style.display = 'none'
     }
     this.imgElement.setAttribute('src', path.join(this.song.folderSlides.get(), this.song.slidesFiles[no - 1]))
+    this.slideNumberElement.innerHTML = no
+
+    this.slideNumberElement.classList.remove('fade-out')
+    // Simply add and remove the class without timeout doesn’t work
+    setTimeout(() => { this.slideNumberElement.classList.add('fade-out') }, 1)
   }
 
   get no () {
