@@ -157,12 +157,3 @@ a:hover {
 a:active {
 	color: rgba(255, 0, 0, 0.4);
 }
-
-#song-title {
-	padding-top: 0.5vw;
-}
-
-#song-title #song-title_title {
-	font-family: 'Alegreya Sans' !important;
-	font-size: 3vw;
-}

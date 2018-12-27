@@ -166,6 +166,41 @@ class BaldrSongbookSongSlide extends HTMLElement {
     shadowRoot.innerHTML = `
       <section>
         <style>
+          .metadata {
+            padding-top: 0.2vw;
+            position: absolute;
+            width: 100%
+          }
+
+          .people {
+            display: flex;
+            font-size: 1.5vw;
+          }
+
+          .people > div {
+            flex: 1;
+          }
+
+          .composer {
+            text-align: right;
+          }
+
+          .lyricist {
+            text-align: left;
+          }
+
+          h1, h2 {
+            font-family: 'Alegreya Sans' !important;
+          }
+
+          h1 {
+            font-size: 3vw;
+          }
+
+          h2 {
+            font-size: 2vw;
+          }
+
           div {
             max-width: 100%;
             max-height: 100%;
@@ -182,8 +217,10 @@ class BaldrSongbookSongSlide extends HTMLElement {
         <div class="metadata">
           <h1></h1>
           <h2></h2>
-          <p class="composer"></p>
-          <p class="lyricist"></p>
+          <div class="people">
+            <div class="lyricist"></div>
+            <div class="composer"></div>
+          </div>
         </div>
         <img>
         <ul>
@@ -192,9 +229,6 @@ class BaldrSongbookSongSlide extends HTMLElement {
         </ul>
       </section>`
 
-    /**
-     *
-     */
     this.imgElement = shadowRoot.querySelector('img')
     this.metaDataBlockElement = shadowRoot.querySelector('.metadata')
     this.metaDataElements = {
