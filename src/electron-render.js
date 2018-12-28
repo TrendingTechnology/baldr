@@ -351,9 +351,10 @@ let main = function () {
   bindButtons(
     [ '#menu #menu-search', () => { modalManager.openByID('search') } ],
     [ '#menu #menu-tableofcontents', () => { modalManager.openByID('tableofcontents') } ]
-    // { selector: '#slide #previous', function: song.previousSlide },
-    // { selector: '#slide #next', function: song.nextSlide }
   )
+
+  songSlide.shadowRoot.querySelector('.previous').addEventListener('click', () => { songSlide.previous() })
+  songSlide.shadowRoot.querySelector('.next').addEventListener('click', () => { songSlide.next() })
 
   window.onhashchange = showByHash
 

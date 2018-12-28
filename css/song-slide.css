@@ -6,7 +6,7 @@
 
   .people {
     display: flex;
-    font-size: 1.5vw;
+    font-size: 2vh;
     padding: 5vw;
   }
 
@@ -24,15 +24,16 @@
 
   h1, h2 {
     font-family: 'Alegreya Sans' !important;
-    margin: 1vw;
+    margin: 1vh;
   }
 
   h1 {
-    font-size: 3vw;
+    font-size: 5vh;
   }
 
   h2 {
-    font-size: 2vw;
+    font-size: 3vh;
+    font-style: italic;
   }
 
   section {
@@ -68,21 +69,37 @@
   }
 
 ul {
-  position: fixed;
   bottom: 0;
-  left: 0;
-  z-index: 2;
-  padding: 3em;
+  display: flex;
+  height: 4vw;
   margin: 0;
-  width: 15em;
-  height: 3em;
+  padding: 0;
+  position: fixed;
+  right: 0;
+  width: 10vw;
+  z-index: 2;
 }
 
 li {
-  font-size: 3em;
-  display: none;
+  width: 4vw;
+  height: 4vw;
+  background-size: 100%;
+  opacity: 0.1;
+  display: block;
+}
+
+li:hover {
+  opacity: 1 !important;
 }
 
 ul:hover li {
-  display: inline-block;
+  opacity: 0.3;
+}
+
+.previous {
+  background-image: url('../icons/chevron-left.svg');
+}
+
+.next {
+  background-image: url('../icons/chevron-right.svg');
 }
