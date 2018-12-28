@@ -361,7 +361,13 @@ let main = function () {
     'left': function () { songSlide.previous() },
     'right': function () { songSlide.next() },
     'esc': function () { modalManager.toggleByID('search') },
-    'alt': function () { modalManager.toggleByID('tableofcontents') }
+    'alt': function () { modalManager.toggleByID('tableofcontents') },
+    'ctrl+left': function () {
+      songSlide.setAttribute('songid', library.getPreviousSong().songID)
+    },
+    'ctrl+right': function () {
+      songSlide.setAttribute('songid', library.getNextSong().songID)
+    }
   })
 
   let selectized = jquery('select').selectize({
