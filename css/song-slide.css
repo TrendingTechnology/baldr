@@ -7,7 +7,7 @@
   .people {
     display: flex;
     font-size: 1.5vw;
-    width: 95%;
+    padding: 5vw;
   }
 
   .people > div {

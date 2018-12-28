@@ -78,6 +78,7 @@ modal-window .close {
 	right: 0;
 	width: 30em;
 	height: 5em;
+	z-index: 1;
 }
 
 #menu ul {
