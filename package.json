@@ -9,14 +9,14 @@
     "url": "git@github.com:Josef-Friedrich/baldr-songbook.git"
   },
   "scripts": {
-    "build": "./node_modules/.bin/electron-packager . --out=dist --app-version=$npm_package_version --asar --prune --overwrite --arch=x64 --icon=./icon.icns",
+    "build": "electron-packager . --out=dist --app-version=$npm_package_version --asar --prune --overwrite --arch=x64 --icon=./icon.icns",
     "doc": "rm -f docs/*.html; jsdoc --configure ./docs/jsdoc-config.json --destination ./docs/ src/",
     "doc-show": "xdg-open ./docs/index.html",
-    "electron-rebuild": "./node_modules/.bin/electron-rebuild",
-    "postinstall": "./node_modules/.bin/electron-rebuild",
-    "start": "./node_modules/.bin/electron .",
-    "test": "./node_modules/.bin/mocha --reporter spec",
-    "standard": "./node_modules/.bin/standard *.js src/*.js"
+    "electron-rebuild": "electron-rebuild",
+    "postinstall": "electron-rebuild",
+    "start": "electron .",
+    "test": "mocha --reporter spec",
+    "standard": "standard *.js src/*.js"
   },
   "author": {
     "name": "Josef Friedrich",
