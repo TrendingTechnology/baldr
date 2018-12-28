@@ -1431,6 +1431,18 @@ describe('Classes', function () {
       it('Property “songs”', function () {
         assert.strictEqual(library.songs['Auf-der-Mauer'].songID, 'Auf-der-Mauer')
       })
+
+      it('Property “songIDs”', function () {
+        assert.deepStrictEqual(library.songIDs, [
+          'Auf-der-Mauer',
+          'Stille-Nacht',
+          'Swing-low',
+          'Zum-Tanze-da-geht-ein-Maedel'
+        ])
+      })
+      it('Property “currentSongIndex”', function () {
+        assert.strictEqual(library.currentSongIndex, 0)
+      })
     })
 
     describe('Methods', function () {
@@ -1476,6 +1488,22 @@ describe('Classes', function () {
             /^.*There is no song with the songID: test$/
           )
         })
+      })
+
+      it('Method “getPreviousSong()”', function () {
+        assert.strictEqual(library.getPreviousSong().songID, 'Zum-Tanze-da-geht-ein-Maedel')
+        assert.strictEqual(library.getPreviousSong().songID, 'Swing-low')
+        assert.strictEqual(library.getPreviousSong().songID, 'Stille-Nacht')
+        assert.strictEqual(library.getPreviousSong().songID, 'Auf-der-Mauer')
+        assert.strictEqual(library.getPreviousSong().songID, 'Zum-Tanze-da-geht-ein-Maedel')
+      })
+
+      it('Method “getNextSong()”', function () {
+        assert.strictEqual(library.getNextSong().songID, 'Stille-Nacht')
+        assert.strictEqual(library.getNextSong().songID, 'Swing-low')
+        assert.strictEqual(library.getNextSong().songID, 'Zum-Tanze-da-geht-ein-Maedel')
+        assert.strictEqual(library.getNextSong().songID, 'Auf-der-Mauer')
+        assert.strictEqual(library.getNextSong().songID, 'Stille-Nacht')
       })
 
       it('Method “getABCFolders_()”', function () {

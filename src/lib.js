@@ -1329,6 +1329,21 @@ class Library {
      * @type {object}
      */
     this.songs = this.collectSongs_()
+
+    /**
+     * An array of song IDs.
+     *
+     * @type {array}
+     */
+    this.songIDs = Object.keys(this.songs)
+
+    /**
+     * The current index of the array this.songIDs. Used for the methods
+     * getNextSong and getPreviousSong
+     *
+     * @type {integer}
+     */
+    this.currentSongIndex = 0
   }
 
   /**
@@ -1344,7 +1359,7 @@ class Library {
    * @return {number}
    */
   countSongs () {
-    return Object.keys(this.songs).length
+    return this.songIDs.length
   }
 
   /**
@@ -1446,6 +1461,34 @@ class Library {
       throw new Error(util.format('There is no song with the songID: %s',
         songID))
     }
+  }
+
+  /**
+   * Get the previous song
+   *
+   * @return {module:baldr-songbook~Song}
+   */
+  getPreviousSong () {
+    if (this.currentSongIndex === 0) {
+      this.currentSongIndex = this.countSongs() - 1
+    } else {
+      this.currentSongIndex -= 1
+    }
+    return this.getSongById(this.songIDs[this.currentSongIndex])
+  }
+
+  /**
+   * Get the next song
+   *
+   * @return {module:baldr-songbook~Song}
+   */
+  getNextSong () {
+    if (this.currentSongIndex === this.countSongs() - 1) {
+      this.currentSongIndex = 0
+    } else {
+      this.currentSongIndex += 1
+    }
+    return this.getSongById(this.songIDs[this.currentSongIndex])
   }
 
   /**
