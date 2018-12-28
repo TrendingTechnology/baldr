@@ -658,6 +658,9 @@ class SongMetaDataCombined {
   /**
    * Extract values of given properties of an object and collect it in
    * an array.
+   *
+   * @params {array} properties - Some object properties to collect strings from.
+   * @params {object} object - An object.
    */
   static collectProperties_ (properties, object) {
     let parts = []
@@ -701,8 +704,14 @@ class SongMetaDataCombined {
    * composer, artist, genre
    */
   get composer () {
+    let properties
+    if (this.metaData.composer === this.metaData.artist) {
+      properties = ['composer', 'genre']
+    } else {
+      properties = ['composer', 'artist', 'genre']
+    }
     return SongMetaDataCombined.collectProperties_(
-      ['composer', 'artist', 'genre'],
+      properties,
       this.metaData
     ).join(', ')
   }
@@ -711,7 +720,12 @@ class SongMetaDataCombined {
    * lyricist
    */
   get lyricist () {
-    if ('lyricist' in this.metaData && this.metaData.lyricist) {
+    if (
+      'lyricist' in this.metaData &&
+      this.metaData.lyricist &&
+      this.metaData.lyricist !== this.metaData.artist &&
+      this.metaData.lyricist !== this.metaData.composer
+    ) {
       return this.metaData.lyricist
     } else {
       return ''

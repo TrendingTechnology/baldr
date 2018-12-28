@@ -595,12 +595,39 @@ describe('Classes', function () {
         let song = new SongMetaDataCombined({ 'composer': 'c', 'artist': 'a', 'genre': 'g' })
         assert.strictEqual(song.composer, 'c, a, g')
       })
+
+      it('artist and composer are identical', function () {
+        let song = new SongMetaDataCombined({ 'composer': 'i', 'artist': 'i', 'genre': 'g' })
+        assert.strictEqual(song.composer, 'i, g')
+      })
+
       it('no properties', function () {
         let song = new SongMetaDataCombined({})
         assert.strictEqual(song.composer, '')
       })
     })
 
+    describe('get lyricist', function () {
+      it('all properties', function () {
+        let song = new SongMetaDataCombined({ 'lyricist': 'l' })
+        assert.strictEqual(song.lyricist, 'l')
+      })
+
+      it('lyricist and composer are identical', function () {
+        let song = new SongMetaDataCombined({ 'lyricist': 'i', 'composer': 'i' })
+        assert.strictEqual(song.lyricist, '')
+      })
+
+      it('lyricist and artist are identical', function () {
+        let song = new SongMetaDataCombined({ 'lyricist': 'i', 'artist': 'i' })
+        assert.strictEqual(song.lyricist, '')
+      })
+
+      it('no properties', function () {
+        let song = new SongMetaDataCombined({})
+        assert.strictEqual(song.lyricist, '')
+      })
+    })
     describe('Real world example', function () {
       let SongMetaData = libRewired.__get__('SongMetaData')
       let folder = path.join('test', 'songs', 'clean', 'some', 'a', 'Auf-der-Mauer')
