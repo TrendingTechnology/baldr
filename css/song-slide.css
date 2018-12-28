@@ -1,12 +1,13 @@
 .metadata {
     padding-top: 0.2vw;
     position: absolute;
-    width: 100%
+    width: 100%;
   }
 
   .people {
     display: flex;
     font-size: 1.5vw;
+    width: 95%;
   }
 
   .people > div {
@@ -23,6 +24,7 @@
 
   h1, h2 {
     font-family: 'Alegreya Sans' !important;
+    margin: 1vw;
   }
 
   h1 {
@@ -33,7 +35,7 @@
     font-size: 2vw;
   }
 
-  div {
+  section {
     max-width: 100%;
     max-height: 100%;
     text-align: center;
@@ -64,3 +66,23 @@
     0% { opacity: 1; }
     100% { opacity: 0; }
   }
+
+ul {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: 2;
+  padding: 3em;
+  margin: 0;
+  width: 15em;
+  height: 3em;
+}
+
+li {
+  font-size: 3em;
+  display: none;
+}
+
+ul:hover li {
+  display: inline-block;
+}
