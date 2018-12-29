@@ -234,13 +234,13 @@ class SongSlideElement extends HTMLElement {
 
   attributeChangedCallback (name, oldValue, newValue) {
     if (name === 'songid') {
-      this.setSong_(newValue)
+      this.setSongByID_(newValue)
     } else if (name === 'no') {
       this.setSlideByNo_(newValue)
     }
   }
 
-  setMetaData () {
+  setMetaData_ () {
     for (let property in this.metaDataElements) {
       if (this.song.metaDataCombined[property]) {
         this.metaDataElements[property].style.display = 'block'
@@ -256,24 +256,23 @@ class SongSlideElement extends HTMLElement {
    *
    * @param {string} songID
    */
-  setSong_ (songID) {
+  setSongByID_ (songID) {
     this.song = library.getSongById(songID)
-    this.songid_ = songID
     this.setAttribute('no', 1)
-    this.no_ = 1
-    this.setMetaData()
+    this.setMetaData_()
   }
 
   /**
    * Set a song by using it’s song ID.
    *
-   * To avoid a endless recursive loop we don’t use the method `setSong_` directly.
+   * To avoid a endless recursive loop we don’t use the method `setSongByID_` directly.
    * Instead we change the HTML attribute to the right song ID.
    *
    * @param {string} songID
    */
-  setSongById (songID) {
+  setSongidViaAttr (songID) {
     this.setAttribute('songid', songID)
+    this.setNoViaAttr (1)
   }
 
   /**
@@ -283,13 +282,13 @@ class SongSlideElement extends HTMLElement {
    */
   setSongByHash (hash) {
     if (hash !== '') {
-      this.setSong_(hash.substring(1))
+      this.setSongByID_(hash.substring(1))
     }
   }
 
   setSlideByNo_ (no) {
-    console.log(no)
-    if (no === 1) {
+    // Maybe no is a string
+    if (parseInt(no) === 1) {
       this.metaDataBlockElement.style.display = 'block'
     } else {
       this.metaDataBlockElement.style.display = 'none'
@@ -302,6 +301,11 @@ class SongSlideElement extends HTMLElement {
     setTimeout(() => { this.slideNumberElement.classList.add('fade-out') }, 1)
   }
 
+  setNoViaAttr (no) {
+    this.setAttribute('no', no)
+    this.no = no
+  }
+
   /**
    * Show the next slide.
    */
@@ -311,7 +315,7 @@ class SongSlideElement extends HTMLElement {
     } else {
       this.no += 1
     }
-    this.setSlideByNo_(this.no)
+    this.setNoViaAttr(this.no)
   }
 
   /**
@@ -323,7 +327,7 @@ class SongSlideElement extends HTMLElement {
     } else {
       this.no -= 1
     }
-    this.setSlideByNo_(this.no)
+    this.setNoViaAttr(this.no)
   }
 }
 
@@ -375,21 +379,21 @@ function defineCustomElements (mapping) {
  * Set the previous song in the list of songs.
  */
 function setPreviousSong () {
-  songSlide.setSongById(library.getPreviousSong().songID)
+  songSlide.setSongidViaAttr(library.getPreviousSong().songID)
 }
 
 /**
  * Set the next song in the list of songs.
  */
 function setNextSong () {
-  songSlide.setSongById(library.getNextSong().songID)
+  songSlide.setSongidViaAttr(library.getNextSong().songID)
 }
 
 /**
  * Set a random song.
  */
 function setRandomSong () {
-  songSlide.setSongById(library.getRandomSong().songID)
+  songSlide.setSongidViaAttr(library.getRandomSong().songID)
 }
 
 /**
@@ -427,8 +431,8 @@ let main = function () {
   })
 
   let selectized = jquery('select').selectize({
-    onItemAdd: function (value) {
-      songSlide.setSongById(value)
+    onItemAdd: function (songID) {
+      songSlide.setSongidViaAttr(songID)
       modalManager.closeAll()
     }
   })
