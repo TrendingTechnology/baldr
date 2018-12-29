@@ -206,7 +206,7 @@ class SongSlideElement extends HTMLElement {
 
   attributeChangedCallback (name, oldValue, newValue) {
     if (name === 'songid') {
-      this.setSongById(newValue)
+      this.setSong_(newValue)
     } else if (name === 'no') {
       this.setSlideByNo_(newValue)
     }
@@ -223,16 +223,38 @@ class SongSlideElement extends HTMLElement {
     }
   }
 
-  setSongById (songID) {
+  /**
+   * Set a song
+   *
+   * @param {string} songID
+   */
+  setSong_ (songID) {
     this.song = library.getSongById(songID)
     this.songid_ = songID
     this.setSlideByNo_(1)
     this.setMetaData()
   }
 
+  /**
+   * Set a song by using it’s song ID.
+   *
+   * To avoid a endless recursive loop we don’t use the method `setSong_` directly.
+   * Instead we change the HTML attribute to the right song ID.
+   *
+   * @param {string} songID
+   */
+  setSongById (songID) {
+    this.setAttribute('songid', songID)
+  }
+
+  /**
+   * The a song by using a hast string.
+   *
+   * @param {string} hash - The song ID prefix with `#`.
+   */
   setSongByHash (hash) {
     if (hash !== '') {
-      this.setSongById(hash.substring(1))
+      this.setSong_(hash.substring(1))
     }
   }
 
@@ -364,10 +386,13 @@ let main = function () {
     'esc': function () { modalManager.toggleByID('search') },
     'alt': function () { modalManager.toggleByID('tableofcontents') },
     'ctrl+left': function () {
-      songSlide.setAttribute('songid', library.getPreviousSong().songID)
+      songSlide.setSongById(library.getPreviousSong().songID)
     },
     'ctrl+right': function () {
-      songSlide.setAttribute('songid', library.getNextSong().songID)
+      songSlide.setSongById(library.getNextSong().songID)
+    },
+    'r': function () {
+      songSlide.setSongById(library.getRandomSong().songID)
     }
   })
 

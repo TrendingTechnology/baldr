@@ -1506,6 +1506,10 @@ describe('Classes', function () {
         assert.strictEqual(library.getNextSong().songID, 'Stille-Nacht')
       })
 
+      it('Method “getRandomSong()”', function () {
+        assert.ok(library.getRandomSong().songID)
+      })
+
       it('Method “getABCFolders_()”', function () {
         let folders = library.getABCFolders_()
         assert.strictEqual(folders.length, 3)

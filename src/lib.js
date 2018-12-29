@@ -1492,6 +1492,15 @@ class Library {
   }
 
   /**
+   * Get a random song.
+   *
+   * @return {module:baldr-songbook~Song}
+   */
+  getRandomSong () {
+    return this.getSongById(this.songIDs[Math.floor(Math.random() * this.songIDs.length)])
+  }
+
+  /**
    * Delete multiple files.
    *
    * @param {array} files - An array of files to delete.
