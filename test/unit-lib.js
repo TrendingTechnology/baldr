@@ -1455,6 +1455,10 @@ describe('Classes', function () {
         assert.strictEqual(library.countSongs(), 4)
       })
 
+      it('Method “updateCurrentSongIndex()”', function () {
+        assert.strictEqual(library.updateCurrentSongIndex('Auf-der-Mauer'), 0)
+      })
+
       it('Method “detectSongs_()”', function () {
         assert.strictEqual(library.detectSongs_().length, 4)
       })

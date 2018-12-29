@@ -44,6 +44,8 @@ function showByHash () {
     modalManager.openByID('tableofcontents')
   } else if (location.hash) {
     songSlide.setSongByHash(location.hash)
+    library.updateCurrentSongIndex(location.hash.substring(1))
+    modalManager.closeAll()
   } else {
     modalManager.openByID('search')
   }
@@ -371,6 +373,7 @@ function setRandomSong () {
 
 function setSongAfterSearch (songID) {
   songSlide.setSongidViaAttr(songID)
+  library.updateCurrentSongIndex(songID)
   modalManager.closeAll()
 }
 
