@@ -29,10 +29,10 @@
             <pre class="prettyprint source linenums"><code>/**
  * @module baldr-library/helper
  */
-'use strict';
+'use strict'
 
-const fs = require('fs');
-const path = require('path');
+const fs = require('fs')
+const path = require('path')
 
 /***********************************************************************
  *
@@ -41,13 +41,13 @@ const path = require('path');
 /**
  *
  */
-exports.reIndex = function(array) {
-  let out = {};
+exports.reIndex = function (array) {
+  let out = {}
   for (let index in array) {
-    out[Number.parseInt(index) + 1] = array[index];
+    out[Number.parseInt(index) + 1] = array[index]
   }
-  return out;
-};
+  return out
+}
 
 /**
  * Generate a link element and append this element to the head section
@@ -57,16 +57,16 @@ exports.reIndex = function(array) {
  * @param {string} cssFile Path of the CSS file to include
  * @param {string} className A CSS class name to add to the link element.
  */
-exports.addCSSFile = function(document, cssFile, className=false) {
-  let link = document.createElement('link');
-  link.rel = 'stylesheet';
-  link.type = 'text/css';
+exports.addCSSFile = function (document, cssFile, className = false) {
+  let link = document.createElement('link')
+  link.rel = 'stylesheet'
+  link.type = 'text/css'
   if (className) {
-    link.classList.add(className);
+    link.classList.add(className)
   }
-  link.href = cssFile;
-  document.head.appendChild(link);
-};
+  link.href = cssFile
+  document.head.appendChild(link)
+}
 
 /**
  * @property {object} checkProperty
@@ -81,16 +81,15 @@ exports.checkProperty = {
    * @property {object} object
    * @property {string} property
    */
-  isString: function(object, property) {
+  isString: function (object, property) {
     if (
       typeof object === 'object' &amp;&amp;
       object.hasOwnProperty(property) &amp;&amp;
       typeof object[property] === 'string'
     ) {
-      return true;
-    }
-    else {
-      return false;
+      return true
+    } else {
+      return false
     }
   },
 
@@ -100,19 +99,18 @@ exports.checkProperty = {
    * @property {object} object
    * @property {string} property
    */
-  empty: function(object, property) {
+  empty: function (object, property) {
     if (
       typeof object === 'object' &amp;&amp;
       object.hasOwnProperty(property) &amp;&amp;
       object[property]
     ) {
-      return false;
-    }
-    else {
-      return true;
+      return false
+    } else {
+      return true
     }
   }
-};
+}
 </code></pre>
         </article>
     </section>
