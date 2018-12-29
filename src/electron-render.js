@@ -231,7 +231,8 @@ class SongSlideElement extends HTMLElement {
   setSong_ (songID) {
     this.song = library.getSongById(songID)
     this.songid_ = songID
-    this.setSlideByNo_(1)
+    this.setAttribute('no', 1)
+    this.no_ = 1
     this.setMetaData()
   }
 
@@ -259,6 +260,7 @@ class SongSlideElement extends HTMLElement {
   }
 
   setSlideByNo_ (no) {
+    console.log(no)
     if (no === 1) {
       this.metaDataBlockElement.style.display = 'block'
     } else {
@@ -270,24 +272,6 @@ class SongSlideElement extends HTMLElement {
     this.slideNumberElement.classList.remove('fade-out')
     // Simply add and remove the class without timeout doesn’t work
     setTimeout(() => { this.slideNumberElement.classList.add('fade-out') }, 1)
-  }
-
-  get no () {
-    return this.no_
-  }
-
-  set no (value) {
-    this.no_ = value
-    this.setAttribute('no', value)
-  }
-
-  get songid () {
-    return this.songid_
-  }
-
-  set songid (value) {
-    this.songid_ = value
-    this.setAttribute('songid', value)
   }
 
   /**
@@ -359,6 +343,30 @@ function defineCustomElements (mapping) {
   }
 }
 
+/**
+ * Set the previous song in the list of songs.
+ */
+function setPreviousSong () {
+  songSlide.setSongById(library.getPreviousSong().songID)
+}
+
+/**
+ * Set the next song in the list of songs.
+ */
+function setNextSong () {
+  songSlide.setSongById(library.getNextSong().songID)
+}
+
+/**
+ * Set a random song.
+ */
+function setRandomSong () {
+  songSlide.setSongById(library.getRandomSong().songID)
+}
+
+/**
+ * Main function to enter in the render process.
+ */
 let main = function () {
   defineCustomElements(
     ['songbook-search', SongbookSearchElement],
@@ -385,20 +393,14 @@ let main = function () {
     'right': function () { songSlide.next() },
     'esc': function () { modalManager.toggleByID('search') },
     'alt': function () { modalManager.toggleByID('tableofcontents') },
-    'ctrl+left': function () {
-      songSlide.setSongById(library.getPreviousSong().songID)
-    },
-    'ctrl+right': function () {
-      songSlide.setSongById(library.getNextSong().songID)
-    },
-    'r': function () {
-      songSlide.setSongById(library.getRandomSong().songID)
-    }
+    'ctrl+left': setPreviousSong,
+    'ctrl+right': setNextSong,
+    'r': setRandomSong
   })
 
   let selectized = jquery('select').selectize({
     onItemAdd: function (value) {
-      songSlide.setAttribute('songid', value)
+      songSlide.setSongById(value)
       modalManager.closeAll()
     }
   })
