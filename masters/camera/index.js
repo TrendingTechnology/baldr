@@ -46,7 +46,7 @@
 
 /* jshint -W117 */
 
-'use strict';
+'use strict'
 
 /***********************************************************************
  * Hooks
@@ -57,12 +57,12 @@
  */
 exports.config = {
   margin: false
-};
+}
 
 /**
  * @see {@link module:baldr-application/masters~Master#quickStartEntries}
  */
-exports.quickStartEntries = function() {
+exports.quickStartEntries = function () {
   return [
     {
       title: 'Camera',
@@ -70,48 +70,47 @@ exports.quickStartEntries = function() {
       shortcut: 'ctrl+alt+c',
       fontawesome: 'camera'
     }
-  ];
-};
+  ]
+}
 
 /**
  * @see {@link module:baldr-application/masters~Master#modalHTML}
  */
-exports.modalHTML = function() {
+exports.modalHTML = function () {
   return `
   <div class="select">
     <label for="videoSource">Video source:</label>
     <select id="videoSource"></select>
-  </div>`;
-};
+  </div>`
+}
 
 /**
  * @see {@link module:baldr-application/masters~Master#mainHTML}
  */
-exports.mainHTML = function(slide, config, document) {
-  return '<video autoplay="true" id="video"></video>';
-};
+exports.mainHTML = function (slide, config, document) {
+  return '<video autoplay="true" id="video"></video>'
+}
 
 /**
  * @see {@link module:baldr-application/masters~Master#postSet}
  */
-exports.postSet = function(slide, config, document) {
-
+exports.postSet = function (slide, config, document) {
   /**
    * Handles being called several times to update labels. Preserve
    * values.
    */
-  function gotDevices(deviceInfos) {
+  function gotDevices (deviceInfos) {
     while (elemSelect.firstChild) {
-      elemSelect.removeChild(elemSelect.firstChild);
+      elemSelect.removeChild(elemSelect.firstChild)
     }
 
     for (var i = 0; i !== deviceInfos.length; ++i) {
-      var deviceInfo = deviceInfos[i];
-      var option = document.createElement('option');
-      option.value = deviceInfo.deviceId;
+      var deviceInfo = deviceInfos[i]
+      var option = document.createElement('option')
+      option.value = deviceInfo.deviceId
       if (deviceInfo.kind === 'videoinput') {
-        option.text = deviceInfo.label || 'camera ' + (elemSelect.length + 1);
-        elemSelect.appendChild(option);
+        option.text = deviceInfo.label || 'camera ' + (elemSelect.length + 1)
+        elemSelect.appendChild(option)
       }
     }
   }
@@ -120,48 +119,48 @@ exports.postSet = function(slide, config, document) {
    * Make stream available to console. Refresh button list in case
    * labels have become available
    */
-  function gotStream(stream) {
-    window.stream = stream;
-    elemVideo.srcObject = stream;
-    return navigator.mediaDevices.enumerateDevices();
+  function gotStream (stream) {
+    window.stream = stream
+    elemVideo.srcObject = stream
+    return navigator.mediaDevices.enumerateDevices()
   }
 
   /**
    *
    */
-  function start() {
+  function start () {
     if (window.stream) {
-      window.stream.getTracks().forEach(function(track) {
-        track.stop();
-      });
+      window.stream.getTracks().forEach(function (track) {
+        track.stop()
+      })
     }
-    var videoSource = elemSelect.value;
+    var videoSource = elemSelect.value
     var constraints = {
       audio: false,
-      video: {deviceId: videoSource ? {exact: videoSource} : undefined}
-    };
+      video: { deviceId: videoSource ? { exact: videoSource } : undefined }
+    }
     navigator.mediaDevices.getUserMedia(constraints)
       .then(gotStream)
-      .then(gotDevices);
+      .then(gotDevices)
   }
 
-  var elemVideo = document.querySelector('video');
-  var elemSelect = document.querySelector('select#videoSource');
+  var elemVideo = document.querySelector('video')
+  var elemSelect = document.querySelector('select#videoSource')
 
   navigator.mediaDevices
     .enumerateDevices()
-    .then(gotDevices);
-  elemSelect.onchange = start;
-  start();
-};
+    .then(gotDevices)
+  elemSelect.onchange = start
+  start()
+}
 
 /**
  * @see {@link module:baldr-application/masters~Master#cleanUp}
  */
-exports.cleanUp = function(document, oldSlide, newSlide) {
+exports.cleanUp = function (document, oldSlide, newSlide) {
   if (window.stream) {
-    window.stream.getTracks().forEach(function(track) {
-      track.stop();
-    });
+    window.stream.getTracks().forEach(function (track) {
+      track.stop()
+    })
   }
-};
+}

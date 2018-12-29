@@ -3,11 +3,11 @@
  * @module baldr-application/masters
  */
 
-'use strict';
+'use strict'
 
-const fs = require('fs');
-const path = require('path');
-const {addCSSFile} = require('baldr-library');
+const fs = require('fs')
+const path = require('path')
+const { addCSSFile } = require('baldr-library')
 
 /***********************************************************************
  *
@@ -33,14 +33,13 @@ const {addCSSFile} = require('baldr-library');
  *
  */
 class Master {
-
   /**
    * @param {string} modulePath
    * @param {string} name
    */
-  constructor(modulePath, name) {
-    let defaults = this.setDefaults_(modulePath);
-    let dirname = path.dirname(modulePath);
+  constructor (modulePath, name) {
+    let defaults = this.setDefaults_(modulePath)
+    let dirname = path.dirname(modulePath)
 
     /*******************************************************************
      * Members
@@ -54,12 +53,12 @@ class Master {
      * @property {boolean} config.stepSupport
      * @property {string} config.theme
      */
-    this.config = defaults.config;
+    this.config = defaults.config
 
     /**
      * @type {boolean}
      */
-    this.css = this.hasCSS_(dirname);
+    this.css = this.hasCSS_(dirname)
 
     /**
      * Some documentation informations about the master slide.
@@ -82,17 +81,17 @@ class Master {
      * @property {object} documentation
      * @property {array} documentation.examples
      */
-    this.documentation = defaults.documentation;
+    this.documentation = defaults.documentation
 
     /**
      * @type {string}
      */
-    this.path = dirname;
+    this.path = dirname
 
     /**
      * @type {string}
      */
-    this.name = name;
+    this.name = name
 
     /*******************************************************************
      * Methods
@@ -107,7 +106,7 @@ class Master {
      * @param {module:baldr-application/slides~Slide} newSlide The
      *   object representation of the new slide.
      */
-    this.cleanUp = defaults.cleanUp;
+    this.cleanUp = defaults.cleanUp
 
     /**
      * @function
@@ -116,20 +115,7 @@ class Master {
      * @param {module:baldr-library/config~Config} config All
      *   configurations of the current presentation session.
      */
-    this.init = defaults.init;
-
-    /**
-     * @function
-     * @param {module:baldr-application~Document} document The document
-     *   object (DOM) of the render process.
-     * @param {module:baldr-application/slides~Slide} slide The object
-     *   representation of one slide.
-     * @param {module:baldr-library/config~Config} config All
-     *   configurations of the current presentation session.
-     *
-     * @return {module:baldr-application/slides~stepData}
-     */
-    this.initSteps = defaults.initSteps;
+    this.init = defaults.init
 
     /**
      * @function
@@ -142,7 +128,20 @@ class Master {
      *
      * @return {module:baldr-application/slides~stepData}
      */
-    this.initStepsEveryVisit = defaults.initStepsEveryVisit;
+    this.initSteps = defaults.initSteps
+
+    /**
+     * @function
+     * @param {module:baldr-application~Document} document The document
+     *   object (DOM) of the render process.
+     * @param {module:baldr-application/slides~Slide} slide The object
+     *   representation of one slide.
+     * @param {module:baldr-library/config~Config} config All
+     *   configurations of the current presentation session.
+     *
+     * @return {module:baldr-application/slides~stepData}
+     */
+    this.initStepsEveryVisit = defaults.initStepsEveryVisit
 
     /**
      * @function
@@ -155,13 +154,13 @@ class Master {
      *
      * @return {string}
      */
-    this.mainHTML = defaults.mainHTML;
+    this.mainHTML = defaults.mainHTML
 
     /**
      * @function
      * @return {string}
      */
-    this.modalHTML = defaults.modalHTML;
+    this.modalHTML = defaults.modalHTML
 
     /**
      * Normalize the data input of the master slide.
@@ -177,7 +176,7 @@ class Master {
      *
      * @see {@link module:baldr-application/slides~Slide}
      */
-    this.normalizeData = defaults.normalizeData;
+    this.normalizeData = defaults.normalizeData
 
     /**
      * @function
@@ -191,14 +190,14 @@ class Master {
      * @return {undefined}
      * @see {@link module:baldr-application~ShowRunner#setMain}
      */
-    this.postSet = defaults.postSet;
+    this.postSet = defaults.postSet
 
     /**
      * @function
      * @return {module:baldr-application/quick-start~rawQuickStartEntries}
      * @see {@link module:baldr-application/quick-start~QuickStart#collectEntries}
      */
-    this.quickStartEntries = defaults.quickStartEntries;
+    this.quickStartEntries = defaults.quickStartEntries
 
     /**
      * @function
@@ -211,44 +210,43 @@ class Master {
      * @return {undefined}
      * @see {@link module:baldr-application/slides~StepSwitcher#setByNo}
      */
-    this.setStepByNo = defaults.setStepByNo;
+    this.setStepByNo = defaults.setStepByNo
   }
 
   /**
    * Check if the CSS style file “styles.css” in the master slide
    * folder exists.
    */
-  hasCSS_(masterPath) {
+  hasCSS_ (masterPath) {
     if (fs.existsSync(path.join(masterPath, 'styles.css'))) {
-      return true;
-    }
-    else {
-      return false;
+      return true
+    } else {
+      return false
     }
   }
 
   /**
    *
    */
-  setDefaults_(modulePath) {
-    let requireObject = require(modulePath);
-    let emptyFunc = function() {};
-    let returnEmpty = function() {return '';};
-    let funcFalse = function() {return false;};
+  setDefaults_ (modulePath) {
+    let requireObject = require(modulePath)
+    let emptyFunc = function () {}
+    let returnEmpty = function () { return '' }
+    let funcFalse = function () { return false }
 
     let config = {
       centerVertically: false,
       margin: true,
       stepSupport: false,
       theme: 'default'
-    };
+    }
 
     let documentation = {
       examples: []
-    };
+    }
 
-    requireObject.config = Object.assign({}, config, requireObject.config);
-    requireObject.documentation = Object.assign({}, documentation, requireObject.documentation);
+    requireObject.config = Object.assign({}, config, requireObject.config)
+    requireObject.documentation = Object.assign({}, documentation, requireObject.documentation)
 
     let defaultObject = {
       cleanUp: emptyFunc,
@@ -257,15 +255,14 @@ class Master {
       initStepsEveryVisit: funcFalse,
       mainHTML: returnEmpty,
       modalHTML: returnEmpty,
-      normalizeData: function(data) {return data;},
+      normalizeData: function (data) { return data },
       postSet: emptyFunc,
-      quickStartEntries: function() {return [];},
+      quickStartEntries: function () { return [] },
       setStepByNo: emptyFunc
-    };
+    }
 
-    return Object.assign({}, defaultObject, requireObject);
+    return Object.assign({}, defaultObject, requireObject)
   }
-
 }
 
 /***********************************************************************
@@ -276,55 +273,53 @@ class Master {
  * Gather informations about all available master slides.
  */
 class Masters {
-
   /**
    * @param {module:baldr-application~Document} document The document
    *   object (DOM) of the render process.
    */
-  constructor(document) {
-
+  constructor (document) {
     /**
      * The document object (DOM) of the render process.
      * @type {module:baldr-application~Document}
      */
-    this.document = document;
+    this.document = document
 
     /**
      * Parent path of all master slide modules.
      * @type {string}
      */
-    this.path = path.join(__dirname, '..', '..', 'masters');
+    this.path = path.join(__dirname, '..', '..', 'masters')
 
     /**
      * Folder name of master slides
      * @type {array}
      */
-    this.all = this.getAll_();
+    this.all = this.getAll_()
     for (let masterName of this.all) {
-      this[masterName] = this.initMaster_(masterName);
+      this[masterName] = this.initMaster_(masterName)
     }
 
-    this.addCSS_();
+    this.addCSS_()
   }
 
   /**
    * @param {string} masterName The name of the master slide.
    */
-  initMaster_(masterName) {
-    return new Master(path.join(this.path, masterName, 'index.js'), masterName);
+  initMaster_ (masterName) {
+    return new Master(path.join(this.path, masterName, 'index.js'), masterName)
   }
 
   /**
    *
    */
-  addCSS_() {
+  addCSS_ () {
     for (let masterName of this.all) {
       if (this[masterName].css) {
         addCSSFile(
           this.document,
           path.join(this[masterName].path, 'styles.css'),
           'baldr-master'
-        );
+        )
       }
     }
   }
@@ -333,23 +328,23 @@ class Masters {
    * Get the folder off all master slide modules.
    * @return {array} Folder name of master slides
    */
-  getAll_() {
+  getAll_ () {
     return fs.readdirSync(this.path, 'utf8')
-    .filter(
-      dir => fs.statSync(
-        path.join(this.path, dir)
-      ).isDirectory()
-    );
+      .filter(
+        dir => fs.statSync(
+          path.join(this.path, dir)
+        ).isDirectory()
+      )
   }
 
   /**
    *
    */
-  execAll(hookName) {
-    let args = Array.from(arguments);
-    args.shift();
+  execAll (hookName) {
+    let args = Array.from(arguments)
+    args.shift()
     for (let master of this.all) {
-      this[master][hookName](...args);
+      this[master][hookName](...args)
     }
   }
 }
@@ -358,6 +353,6 @@ class Masters {
  * @param {module:baldr-application~Document} document The document
  *   object (DOM) of the render process.
  */
-exports.getMasters = function(document) {
-  return new Masters(document);
-};
+exports.getMasters = function (document) {
+  return new Masters(document)
+}

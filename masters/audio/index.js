@@ -3,68 +3,66 @@
  * @module baldr-master-audio
  */
 
-'use strict';
+'use strict'
 
-const path = require('path');
-const mousetrap = require('mousetrap');
-const {Howl} = require('howler');
+const path = require('path')
+const mousetrap = require('mousetrap')
+const { Howl } = require('howler')
 
-const {Media} = require('baldr-library');
+const { Media } = require('baldr-library')
 
-let audioFiles = {};
-let audio;
-let mediaTypesExtensions = ['mp3', 'aac'];
+let audioFiles = {}
+let audio
+let mediaTypesExtensions = ['mp3', 'aac']
 
 /**
  *
  */
 class Audio {
-
   /**
    *
    */
-  constructor(document) {
-    this.element = document.getElementById('media-info');
+  constructor (document) {
+    this.element = document.getElementById('media-info')
   }
 
   /**
    *
    */
-  play(fileInfo) {
-    this.stop();
-    this.current = new Howl({src: [fileInfo.path]});
-    this.id = this.current.play();
+  play (fileInfo) {
+    this.stop()
+    this.current = new Howl({ src: [fileInfo.path] })
+    this.id = this.current.play()
 
     if (this.hasOwnProperty('element')) {
-      this.element.innerHTML = fileInfo.titleSafe;
-      this.element.style.zIndex = 1;
-      this.element.style.visibility = 'visible';
+      this.element.innerHTML = fileInfo.titleSafe
+      this.element.style.zIndex = 1
+      this.element.style.visibility = 'visible'
       setTimeout(() => {
-        this.element.style.zIndex = -1;
-        this.element.style.visibility = 'hidden';
-      }, 2000);
+        this.element.style.zIndex = -1
+        this.element.style.visibility = 'hidden'
+      }, 2000)
     }
   }
 
   /**
    *
    */
-  stop() {
+  stop () {
     if (this.hasOwnProperty('current') && this.current.playing()) {
-      this.current.stop();
+      this.current.stop()
     }
   }
 
   /**
    *
    */
-  pausePlay() {
+  pausePlay () {
     if (this.hasOwnProperty('current')) {
       if (this.current.playing()) {
-        this.current.pause();
-      }
-      else {
-        this.current.play();
+        this.current.pause()
+      } else {
+        this.current.play()
       }
     }
   }
@@ -72,9 +70,9 @@ class Audio {
   /**
    *
    */
-  fadeOut() {
+  fadeOut () {
     if (this.hasOwnProperty('current') && this.current.playing()) {
-      this.current.fade(1, 0, 5000);
+      this.current.fade(1, 0, 5000)
     }
   }
 }
@@ -86,8 +84,8 @@ class Audio {
 /**
  * @see {@link module:baldr-application/masters~Master#init}
  */
-exports.init = function(document, config) {
-  audio = new Audio(document);
+exports.init = function (document, config) {
+  audio = new Audio(document)
 
 // ,
 // {
@@ -102,12 +100,12 @@ exports.init = function(document, config) {
 //   function: () => {audio.pausePlay();},
 //   keys: ['space']
 // }
-};
+}
 
 /**
  * @see {@link module:baldr-application/masters~Master#quickStartEntries}
  */
-exports.quickStartEntries = function() {
+exports.quickStartEntries = function () {
   return [
     {
       title: 'Audio',
@@ -115,39 +113,39 @@ exports.quickStartEntries = function() {
       shortcut: 'ctrl+alt+a',
       fontawesome: 'volume-up'
     }
-  ];
-};
+  ]
+}
 
 /**
  * @see {@link module:baldr-application/masters~Master#normalizeData}
  */
-exports.normalizeData = function(rawSlideData, config) {
-  let inputFiles = new Media(config.sessionDir);
-  let files = inputFiles.orderedList(rawSlideData, 'audio');
+exports.normalizeData = function (rawSlideData, config) {
+  let inputFiles = new Media(config.sessionDir)
+  let files = inputFiles.orderedList(rawSlideData, 'audio')
 
-  var mousetrapbind = function(key, combo) {
-    audio.play(audioFiles[key.key]);
-  };
+  var mousetrapbind = function (key, combo) {
+    audio.play(audioFiles[key.key])
+  }
 
   for (var i = 1; i <= files.length; i++) {
-    audioFiles[i] = files[i - 1];
-    mousetrap.bind('ctrl+' + i, mousetrapbind);
+    audioFiles[i] = files[i - 1]
+    mousetrap.bind('ctrl+' + i, mousetrapbind)
   }
-  return files;
-};
+  return files
+}
 
 /**
  * @see {@link module:baldr-application/masters~Master#mainHTML}
  */
-exports.mainHTML = function(slide, config, document) {
-  let out = '';
+exports.mainHTML = function (slide, config, document) {
+  let out = ''
   for (let audioFile of slide.masterData) {
     out += `
 <li>
   <span class="artist">${audioFile.artist}</span>:
   <span class="title">${audioFile.title}</span>
-</li>`;
+</li>`
   }
 
-  return `<ol>${out}</ol>`;
-};
+  return `<ol>${out}</ol>`
+}

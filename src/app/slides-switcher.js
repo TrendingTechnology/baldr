@@ -3,7 +3,7 @@
  * @module baldr-application/slides-switcher
  */
 
-'use strict';
+'use strict'
 
 /***********************************************************************
  *
@@ -13,38 +13,36 @@
  *
  */
 class SlidesSwitcher {
-
   /**
    * @param {module:baldr-application/slides~Slides} slides All slide
    *   objects of the current presentation session.
    * @param {module:baldr-application~Environment} env Low level
    *   environment data.
    */
-  constructor(slides, env) {
-
+  constructor (slides, env) {
     /**
      * Low level environment data.
      * @type {module:baldr-application~Environment}
      */
-    this.env = env;
+    this.env = env
 
     /**
      * All slides index by the slide number.
      * @type {module:baldr-application/slides~Slides}
      */
-    this.slides = slides;
+    this.slides = slides
 
     /**
      * The count of all slides.
      * @type {int}
      */
-    this.count = Object.keys(this.slides).length;
+    this.count = Object.keys(this.slides).length
 
     /**
      * The current slide number.
      * @type {int}
      */
-    this.no = 1;
+    this.no = 1
 
     /**
      * @type {object}
@@ -52,65 +50,60 @@ class SlidesSwitcher {
     this.elemNavigationButtons = {
       prev: this.env.document.getElementById('nav-slide-prev'),
       next: this.env.document.getElementById('nav-slide-next')
-    };
-
+    }
   }
 
   /**
    *
    */
-  setVisibility_(state) {
+  setVisibility_ (state) {
     for (let prop in this.elemNavigationButtons) {
-      this.elemNavigationButtons[prop].style.visibility = state;
+      this.elemNavigationButtons[prop].style.visibility = state
     }
   }
 
   /**
    *
    */
-  setButtons_() {
+  setButtons_ () {
     if (this.count > 1) {
-      this.setVisibility_('visible');
-    }
-    else {
-      this.setVisibility_('hidden');
+      this.setVisibility_('visible')
+    } else {
+      this.setVisibility_('hidden')
     }
   }
 
   /**
    * Set the current slide
    */
-  getByNo(no) {
-    this.setButtons_();
-    return this.slides[no];
+  getByNo (no) {
+    this.setButtons_()
+    return this.slides[no]
   }
 
   /**
    * Set the current slide to the previous slide.
    */
-  prev() {
+  prev () {
     if (this.no === 1) {
-      this.no = this.count;
+      this.no = this.count
+    } else {
+      this.no = this.no - 1
     }
-    else {
-      this.no = this.no - 1;
-    }
-    return this.getByNo(this.no);
+    return this.getByNo(this.no)
   }
 
   /**
    * Set the current slide to the next slide.
    */
-  next() {
+  next () {
     if (this.no === this.count) {
-      this.no = 1;
+      this.no = 1
+    } else {
+      this.no = this.no + 1
     }
-    else {
-      this.no = this.no + 1;
-    }
-    return this.getByNo(this.no);
+    return this.getByNo(this.no)
   }
-
 }
 
-exports.SlidesSwitcher = SlidesSwitcher;
+exports.SlidesSwitcher = SlidesSwitcher

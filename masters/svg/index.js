@@ -3,7 +3,7 @@
  * @module baldr-master-svg
  */
 
-'use strict';
+'use strict'
 
 /***********************************************************************
  * Hooks
@@ -11,6 +11,6 @@
 /**
  * @see {@link module:baldr-application/masters~Master#mainHTML}
  */
-exports.mainHTML = function(slide, config, document) {
-  return 'svg';
-};
+exports.mainHTML = function (slide, config, document) {
+  return 'svg'
+}
