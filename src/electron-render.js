@@ -3,7 +3,7 @@
  * configuration and run render process
  */
 
-/* global HTMLElement location customElements search */
+/* global HTMLElement location customElements */
 
 const jquery = require('jquery')
 const mousetrap = require('mousetrap')
@@ -15,6 +15,7 @@ const config = bootstrapConfig()
 const library = new Library(config.path)
 let modalManager
 let songSlide
+let selectized
 
 /**
  * Map some keyboard shortcuts to the corresponding methods.
@@ -244,7 +245,7 @@ class SongSlideElement extends HTMLElement {
    */
   setSongidViaAttr (songID) {
     this.setAttribute('songid', songID)
-    this.setNoViaAttr (1)
+    this.setNoViaAttr(1)
   }
 
   /**
@@ -368,6 +369,21 @@ function setRandomSong () {
   songSlide.setSongidViaAttr(library.getRandomSong().songID)
 }
 
+function setSongAfterSearch (songID) {
+  songSlide.setSongidViaAttr(songID)
+  modalManager.closeAll()
+}
+
+function searchFocus () {
+  selectized[0].selectize.focus()
+  selectized[0].selectize.clear()
+}
+
+function newSearch () {
+  modalManager.toggleByID('search')
+  searchFocus()
+}
+
 /**
  * Main function to enter in the render process.
  */
@@ -395,22 +411,16 @@ let main = function () {
   bindShortcuts({
     'left': function () { songSlide.previous() },
     'right': function () { songSlide.next() },
-    'esc': function () { modalManager.toggleByID('search') },
+    'esc': newSearch,
     'alt': function () { modalManager.toggleByID('tableofcontents') },
     'ctrl+left': setPreviousSong,
     'ctrl+right': setNextSong,
     'r': setRandomSong
   })
-
-  let selectized = jquery('select').selectize({
-    onItemAdd: function (songID) {
-      songSlide.setSongidViaAttr(songID)
-      modalManager.closeAll()
-    }
+  selectized = jquery('select').selectize({
+    onItemAdd: setSongAfterSearch
   })
-  search.selectize = selectized[0].selectize
-  search.selectize.focus()
-
+  searchFocus()
   showByHash()
 }
 
