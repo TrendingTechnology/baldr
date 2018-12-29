@@ -1391,6 +1391,19 @@ class Library {
   }
 
   /**
+   * Update the index of the song IDs array. If a song is opened via the search
+   * form, it is possible to go to the next or previous song of the opened song.
+   *
+   * @param {string} songID
+   *
+   * @returns {integer} The index in the songIDs array.
+   */
+  updateCurrentSongIndex (songID) {
+    this.currentSongIndex = this.songIDs.indexOf(songID)
+    return this.currentSongIndex
+  }
+
+  /**
    * Identify a song folder by searching for a file named “info.yml.”
    */
   detectSongs_ () {
