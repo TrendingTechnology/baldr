@@ -259,7 +259,8 @@ class SongSlideElement extends HTMLElement {
   setSong_ (songID) {
     this.song = library.getSongById(songID)
     this.songid_ = songID
-    this.setSlideByNo_(1)
+    this.setAttribute('no', 1)
+    this.no_ = 1
     this.setMetaData()
   }
 
@@ -287,6 +288,7 @@ class SongSlideElement extends HTMLElement {
   }
 
   setSlideByNo_ (no) {
+    console.log(no)
     if (no === 1) {
       this.metaDataBlockElement.style.display = 'block'
     } else {
@@ -298,24 +300,6 @@ class SongSlideElement extends HTMLElement {
     this.slideNumberElement.classList.remove('fade-out')
     // Simply add and remove the class without timeout doesn’t work
     setTimeout(() => { this.slideNumberElement.classList.add('fade-out') }, 1)
-  }
-
-  get no () {
-    return this.no_
-  }
-
-  set no (value) {
-    this.no_ = value
-    this.setAttribute('no', value)
-  }
-
-  get songid () {
-    return this.songid_
-  }
-
-  set songid (value) {
-    this.songid_ = value
-    this.setAttribute('songid', value)
   }
 
   /**
@@ -387,6 +371,30 @@ function defineCustomElements (mapping) {
   }
 }
 
+/**
+ * Set the previous song in the list of songs.
+ */
+function setPreviousSong () {
+  songSlide.setSongById(library.getPreviousSong().songID)
+}
+
+/**
+ * Set the next song in the list of songs.
+ */
+function setNextSong () {
+  songSlide.setSongById(library.getNextSong().songID)
+}
+
+/**
+ * Set a random song.
+ */
+function setRandomSong () {
+  songSlide.setSongById(library.getRandomSong().songID)
+}
+
+/**
+ * Main function to enter in the render process.
+ */
 let main = function () {
   defineCustomElements(
     ['songbook-search', SongbookSearchElement],
@@ -413,20 +421,14 @@ let main = function () {
     'right': function () { songSlide.next() },
     'esc': function () { modalManager.toggleByID('search') },
     'alt': function () { modalManager.toggleByID('tableofcontents') },
-    'ctrl+left': function () {
-      songSlide.setSongById(library.getPreviousSong().songID)
-    },
-    'ctrl+right': function () {
-      songSlide.setSongById(library.getNextSong().songID)
-    },
-    'r': function () {
-      songSlide.setSongById(library.getRandomSong().songID)
-    }
+    'ctrl+left': setPreviousSong,
+    'ctrl+right': setNextSong,
+    'r': setRandomSong
   })
 
   let selectized = jquery('select').selectize({
     onItemAdd: function (value) {
-      songSlide.setAttribute('songid', value)
+      songSlide.setSongById(value)
       modalManager.closeAll()
     }
   })
@@ -449,7 +451,7 @@ if (config.path) {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-baldr-songbook.html">baldr-songbook</a></li></ul><h3>Classes</h3><ul><li><a href="AlphabeticalSongsTree.html">AlphabeticalSongsTree</a></li><li><a href="FileMonitor.html">FileMonitor</a></li><li><a href="Folder.html">Folder</a></li><li><a href="Library.html">Library</a></li><li><a href="ModalManager.html">ModalManager</a></li><li><a href="ModalWindowElement.html">ModalWindowElement</a></li><li><a href="PianoFilesCountTree.html">PianoFilesCountTree</a></li><li><a href="PianoScore.html">PianoScore</a></li><li><a href="Song.html">Song</a></li><li><a href="SongbookSearchElement.html">SongbookSearchElement</a></li><li><a href="SongMetaData.html">SongMetaData</a></li><li><a href="SongMetaDataCombined.html">SongMetaDataCombined</a></li><li><a href="SongSlideElement.html">SongSlideElement</a></li><li><a href="Sqlite.html">Sqlite</a></li><li><a href="TableOfContentsElement.html">TableOfContentsElement</a></li><li><a href="TextFile.html">TextFile</a></li></ul><h3>Global</h3><ul><li><a href="global.html#bindButtons">bindButtons</a></li><li><a href="global.html#bindShortcuts">bindShortcuts</a></li><li><a href="global.html#bootstrapConfig">bootstrapConfig</a></li><li><a href="global.html#checkExecutable">checkExecutable</a></li><li><a href="global.html#checkExecutables">checkExecutables</a></li><li><a href="global.html#defineCustomElements">defineCustomElements</a></li><li><a href="global.html#main">main</a></li><li><a href="global.html#parseCliArguments">parseCliArguments</a></li><li><a href="global.html#sortObjectsByProperty">sortObjectsByProperty</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-baldr-songbook.html">baldr-songbook</a></li></ul><h3>Classes</h3><ul><li><a href="AlphabeticalSongsTree.html">AlphabeticalSongsTree</a></li><li><a href="FileMonitor.html">FileMonitor</a></li><li><a href="Folder.html">Folder</a></li><li><a href="Library.html">Library</a></li><li><a href="ModalManager.html">ModalManager</a></li><li><a href="ModalWindowElement.html">ModalWindowElement</a></li><li><a href="PianoFilesCountTree.html">PianoFilesCountTree</a></li><li><a href="PianoScore.html">PianoScore</a></li><li><a href="Song.html">Song</a></li><li><a href="SongbookSearchElement.html">SongbookSearchElement</a></li><li><a href="SongMetaData.html">SongMetaData</a></li><li><a href="SongMetaDataCombined.html">SongMetaDataCombined</a></li><li><a href="SongSlideElement.html">SongSlideElement</a></li><li><a href="Sqlite.html">Sqlite</a></li><li><a href="TableOfContentsElement.html">TableOfContentsElement</a></li><li><a href="TextFile.html">TextFile</a></li></ul><h3>Global</h3><ul><li><a href="global.html#bindButtons">bindButtons</a></li><li><a href="global.html#bindShortcuts">bindShortcuts</a></li><li><a href="global.html#bootstrapConfig">bootstrapConfig</a></li><li><a href="global.html#checkExecutable">checkExecutable</a></li><li><a href="global.html#checkExecutables">checkExecutables</a></li><li><a href="global.html#defineCustomElements">defineCustomElements</a></li><li><a href="global.html#main">main</a></li><li><a href="global.html#parseCliArguments">parseCliArguments</a></li><li><a href="global.html#setNextSong">setNextSong</a></li><li><a href="global.html#setPreviousSong">setPreviousSong</a></li><li><a href="global.html#setRandomSong">setRandomSong</a></li><li><a href="global.html#sortObjectsByProperty">sortObjectsByProperty</a></li></ul>
 </nav>
 
 <br class="clear">
