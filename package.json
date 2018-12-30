@@ -50,7 +50,7 @@
   "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
   "devDependencies": {
     "7zip-bin-linux": "^1.1.0",
-    "electron": "^1.7.9",
+    "electron": "^4.0.0",
     "electron-builder": "^19.37.2",
     "js-object-pretty-print": "^0.3.0",
     "jsdoc": "^3.5.5",
