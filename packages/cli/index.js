@@ -5,8 +5,9 @@
  * BALDR songbook.
  */
 
-const pckg = require('../package.json')
-const { bootstrapConfig, Library, PianoScore } = require('./lib.js')
+const pckg = require('./package.json')
+const { bootstrapConfig } = require('@bldr/songbook-base')
+const { IntermediateLibrary, PianoScore } = require('@bldr/songbook-intermediate-files')
 const { Command } = require('commander')
 const util = require('util')
 const path = require('path')
@@ -67,7 +68,7 @@ let main = function () {
   if (!options.hasOwnProperty('pageTurnOptimized')) options.pageTurnOptimized = false
 
   console.log(util.format('The base path of the song collection is located at:\n    %s\n', config.path.cyan))
-  let library = new Library(config.path)
+  let library = new IntermediateLibrary(config.path)
   console.log(util.format('Found %s songs.', library.countSongs()))
   if (options.list) library.loadSongList(options.list)
 

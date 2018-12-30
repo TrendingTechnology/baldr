@@ -24,6 +24,38 @@ require('colors')
  * Functions
  ******************************************************************************/
 
+ /**
+ * Check if executable is installed.
+ *
+ * @param {string} executable - Name of the executable.
+ */
+function checkExecutable (executable) {
+  let exec = spawn(executable, ['--help'])
+  if (exec.status === null) {
+    return false
+  } else {
+    return true
+  }
+}
+
+/**
+ * Check if executables are installed.
+ *
+ * @param {array} executables - Name of the executables.
+ */
+function checkExecutables (executables = []) {
+  let status = true
+  let unavailable = []
+  executables.forEach((exec) => {
+    let check = checkExecutable(exec)
+    if (!check) {
+      status = false
+      unavailable.push(exec)
+    }
+  })
+  return { 'status': status, 'unavailable': unavailable }
+}
+
 /**
  * By default this module reads the config file ~/.baldr to generate its config
  * object.
@@ -571,12 +603,6 @@ class Song {
      */
     this.folder = this.normalizeSongFolder_(songPath)
 
-    /**
-     * A instance of the FileMonitor class.
-     *
-     * @type {module:baldr-songbook~FileMonitor}
-     */
-    this.fileMonitor = fileMonitor
 
     /**
      * The character of the alphabetical folder. The song folders must
@@ -852,14 +878,6 @@ class Library {
     this.basePath = basePath
 
     /**
-     * A instance of the FileMonitor class.
-     *
-     * @type {module:baldr-songbook~FileMonitor}
-     */
-    this.fileMonitor = new FileMonitor(path.join(this.basePath,
-      'filehashes.db'))
-
-    /**
      * The collection of songs
      *
      * @type {object}
@@ -928,7 +946,7 @@ class Library {
   collectSongs_ () {
     let songs = {}
     for (let songPath of this.detectSongs_()) {
-      let song = new Song(path.join(this.basePath, songPath), this.fileMonitor)
+      let song = new Song(path.join(this.basePath, songPath))
       if (song.songID in songs) {
         throw new Error(
           util.format('A song with the same songID already exists: %s',
@@ -1055,5 +1073,4 @@ exports.AlphabeticalSongsTree = AlphabeticalSongsTree
 exports.bootstrapConfig = bootstrapConfig
 exports.Library = Library
 exports.parseSongIDList = parseSongIDList
-exports.PianoScore = PianoScore
 exports.Song = Song

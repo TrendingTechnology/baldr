@@ -16,5 +16,13 @@
   "gitHead": "303c4b20e1396cf570c1b3fe01b0749e9e4ba734",
   "publishConfig": {
     "access": "public"
+  },
+  "dependencies": {
+    "@bldr/songbook-intermediate-files": "*",
+    "@bldr/songbook-base": "*",
+    "commander": "^2.11.0"
+  },
+  "bin": {
+    "baldr-songbook-updater": "./index.js"
   }
 }

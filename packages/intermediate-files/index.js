@@ -1,54 +1,12 @@
 
 const crypto = require('crypto')
 const fs = require('fs-extra')
-const glob = require('glob')
-const os = require('os')
 const path = require('path')
 const spawn = require('child_process').spawnSync
 const Sqlite3 = require('better-sqlite3')
 const util = require('util')
-const yaml = require('js-yaml')
+const { Song, Library } = require('@bldr/songbook-base')
 require('colors')
-
-/*******************************************************************************
- * Functions
- ******************************************************************************/
-
-/**
- * Check if executable is installed.
- *
- * @param {string} executable - Name of the executable.
- */
-function checkExecutable (executable) {
-  let exec = spawn(executable, ['--help'])
-  if (exec.status === null) {
-    return false
-  } else {
-    return true
-  }
-}
-
-/**
- * Check if executables are installed.
- *
- * @param {array} executables - Name of the executables.
- */
-function checkExecutables (executables = []) {
-  let status = true
-  let unavailable = []
-  executables.forEach((exec) => {
-    let check = checkExecutable(exec)
-    if (!check) {
-      status = false
-      unavailable.push(exec)
-    }
-  })
-  return { 'status': status, 'unavailable': unavailable }
-}
-
-/*******************************************************************************
- * Classes
- ******************************************************************************/
 
 /**
  * Sqlite database wrapper to store file contents hashes to detect
@@ -331,10 +289,13 @@ class PianoScore {
 
 class IntermediateSong extends Song {
   /**
+   * @param {string} songPath - The path of the directory containing the song
+   * files or a path of a file inside the song folder (not nested in subfolders)
    * @param {module:baldr-songbook~FileMonitor} fileMonitor - A instance
    * of the FileMonitor() class.
    */
-  constructor (fileMonitor) {
+  constructor (songPath, fileMonitor) {
+    super(songPath)
 
     /**
      * A instance of the FileMonitor class.
@@ -498,6 +459,35 @@ class IntermediateSong extends Song {
 }
 
 class IntermediateLibrary extends Library {
+  /**
+   * @param {string} - The base path of the song library
+   */
+  constructor (basePath) {
+    super(basePath)
+    /**
+     * A instance of the FileMonitor class.
+     *
+     * @type {module:baldr-songbook~FileMonitor}
+     */
+    this.fileMonitor = new FileMonitor(path.join(this.basePath,
+      'filehashes.db'))
+
+    this.song = this.collectSongs_()
+  }
+
+  collectSongs_ () {
+    let songs = {}
+    for (let songPath of this.detectSongs_()) {
+      let song = new IntermediateSong(path.join(this.basePath, songPath), this.fileMonitor)
+      if (song.songID in songs) {
+        throw new Error(
+          util.format('A song with the same songID already exists: %s',
+            song.songID))
+      }
+      songs[song.songID] = song
+    }
+    return songs
+  }
 
   /**
    * Delete multiple files.
@@ -548,7 +538,7 @@ class IntermediateLibrary extends Library {
    *   and piano files. Possible values: “all”, “slides” or “piano”
    */
   updateSongByPath (folder, mode = 'all') {
-    let song = new Song(folder, this.fileMonitor)
+    let song = new IntermediateSong(folder, this.fileMonitor)
     let status = song.generateIntermediateFiles(mode, true)
     message.songFolder(status, song)
   }
@@ -587,3 +577,5 @@ class IntermediateLibrary extends Library {
     this.generateIntermediateFiles(mode, force)
   }
 }
+
+exports.IntermediateLibrary = IntermediateLibrary

@@ -16,5 +16,9 @@
   "gitHead": "303c4b20e1396cf570c1b3fe01b0749e9e4ba734",
   "publishConfig": {
     "access": "public"
+  },
+  "dependencies": {
+    "better-sqlite3": "^5.2.0",
+    "@bldr/songbook-base": "*"
   }
 }
