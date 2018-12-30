@@ -3,7 +3,6 @@ const {
   makeDOM,
   rewire,
   srcPath,
-  getDOM,
   path,
   freshEnv
 } = require('baldr-test')

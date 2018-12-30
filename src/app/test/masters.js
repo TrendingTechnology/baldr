@@ -8,7 +8,7 @@ const {
 } = require('baldr-test')
 
 const { getMasters } = requireFile('app', 'masters.js')
-let masters = new getMasters(getDOM())
+let masters = getMasters(getDOM())
 
 /***********************************************************************
  *

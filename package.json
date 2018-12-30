@@ -55,6 +55,7 @@
     "js-object-pretty-print": "^0.3.0",
     "jsdoc": "^3.5.5",
     "jsdom": "^11.3.0",
+    "lerna": "^3.8.0",
     "mocha": "^4.0.1",
     "mocha-standard": "^1.0.0",
     "rewire": "^2.5.2",

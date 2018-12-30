@@ -15,7 +15,7 @@ let normalizeData = function (data) {
 }
 
 let mainHTML = function (data) {
-  masterData = person.normalizeData(data, config)
+  let masterData = person.normalizeData(data, config)
   return person.mainHTML({ masterData: masterData }, config)
 }
 
