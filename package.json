@@ -9,7 +9,7 @@
     "doc": "jsdoc --configure ./docs/jsdoc-config.json --readme API.md .",
     "pack": "electron-builder --dir",
     "start": "electron .",
-    "standard": "standard *.js src/*.js masters/*.js test/*.js",
+    "standard": "standard",
     "spectron": "mocha --fgrep '#spectron' 'test/*.js' 'src/app/test/*.js' 'src/lib/test/*.js' 'masters/audio/test/*.js' 'masters/camera/test/*.js' 'masters/editor/test/*.js' 'masters/image/test/*.js' 'masters/markdown/test/*.js' 'masters/person/test/*.js' 'masters/question/test/*.js' 'masters/quote/test/*.js' 'masters/svg/test/*.js' 'masters/website/test/*.js'",
     "unittest": "mocha --fgrep '#unittest' 'test/*.js' 'src/app/test/*.js' 'src/lib/test/*.js' 'masters/audio/test/*.js' 'masters/camera/test/*.js' 'masters/editor/test/*.js' 'masters/image/test/*.js' 'masters/markdown/test/*.js' 'masters/person/test/*.js' 'masters/question/test/*.js' 'masters/quote/test/*.js' 'masters/svg/test/*.js' 'masters/website/test/*.js'",
     "test": "mocha 'test/*.js' 'test/*.js' 'src/app/test/*.js' 'src/lib/test/*.js' 'masters/audio/test/*.js' 'masters/camera/test/*.js' 'masters/editor/test/*.js' 'masters/image/test/*.js' 'masters/markdown/test/*.js' 'masters/person/test/*.js' 'masters/question/test/*.js' 'masters/quote/test/*.js' 'masters/svg/test/*.js' 'masters/website/test/*.js'"
@@ -101,6 +101,7 @@
       "afterEach",
       "it",
       "expect"
-    ]
+    ],
+    "ignore": ["docs"]
   }
 }

@@ -3,9 +3,9 @@
  * @module baldr-master-markdown
  */
 
-'use strict';
+'use strict'
 
-const markdown = require('marked');
+const markdown = require('marked')
 
 /***********************************************************************
  * Hooks
@@ -14,6 +14,6 @@ const markdown = require('marked');
 /**
  * @see {@link module:baldr-application/masters~Master#mainHTML}
  */
-exports.mainHTML = function(slide, config, document) {
-  return markdown(slide.masterData);
-};
+exports.mainHTML = function (slide, config, document) {
+  return markdown(slide.masterData)
+}

@@ -12,63 +12,58 @@
  * @module baldr-master-question
  */
 
-'use strict';
+'use strict'
 
 /**
  *
  */
-let normalizeDataQAPair = function(pair) {
+let normalizeDataQAPair = function (pair) {
   if (typeof pair === 'string') {
-    return {question: pair, answer: false};
-  }
-  else if (typeof pair === 'object') {
+    return { question: pair, answer: false }
+  } else if (typeof pair === 'object') {
     if (typeof pair.question === 'string' && !pair.answer) {
-      return {question: pair.question, answer: false};
+      return { question: pair.question, answer: false }
+    } else if (typeof pair.question === 'string' && typeof pair.answer === 'string') {
+      return { question: pair.question, answer: pair.answer }
+    } else {
+      throw new Error('Master slide “question”: Invalid data input')
     }
-    else if (typeof pair.question === 'string' && typeof pair.answer === 'string') {
-      return {question: pair.question, answer: pair.answer};
-    }
-    else {
-      throw new Error('Master slide “question”: Invalid data input');
-    }
+  } else {
+    throw new Error('Master slide “question”: Invalid data input')
   }
-  else {
-    throw new Error('Master slide “question”: Invalid data input');
-  }
-};
+}
 
 /**
  *
  */
-let templatQAPair = function(question, answer) {
-  let out = '';
+let templatQAPair = function (question, answer) {
+  let out = ''
   if (question) {
-    out += `<p class="question">${question}</p>`;
+    out += `<p class="question">${question}</p>`
   }
   if (answer) {
-    out += `<p class="answer">${answer}</p>`;
+    out += `<p class="answer">${answer}</p>`
   }
-  return out;
-};
+  return out
+}
 
 /**
  *
  */
-let template = function(data) {
+let template = function (data) {
   if (data.length > 1) {
-    let li = '';
+    let li = ''
     for (let pair of data) {
       li +=
         '<li>' +
         templatQAPair(pair.question, pair.answer) +
-        '</li>';
+        '</li>'
     }
-    return `<ol>${li}</ol>`;
+    return `<ol>${li}</ol>`
+  } else {
+    return templatQAPair(data[0].question, data[0].answer)
   }
-  else {
-    return templatQAPair(data[0].question, data[0].answer);
-  }
-};
+}
 
 /***********************************************************************
  * Hooks
@@ -77,17 +72,17 @@ let template = function(data) {
 /**
  * @see {@link module:baldr-application/masters~Master#normalizeData}
  */
-exports.normalizeData = function(rawSlideData, config) {
+exports.normalizeData = function (rawSlideData, config) {
   if (typeof rawSlideData === 'object' && Array.isArray(rawSlideData)) {
-    let out = [];
+    let out = []
     for (let pair of rawSlideData) {
-      out.push(normalizeDataQAPair(pair));
+      out.push(normalizeDataQAPair(pair))
     }
-    return out;
+    return out
   } else {
-    return [normalizeDataQAPair(rawSlideData)];
+    return [normalizeDataQAPair(rawSlideData)]
   }
-};
+}
 
 /**
  * @see {@link module:baldr-application/masters~Master#config}
@@ -95,35 +90,34 @@ exports.normalizeData = function(rawSlideData, config) {
 exports.config = {
   centerVertically: true,
   stepSupport: true
-};
+}
 
 /**
  * @see {@link module:baldr-application/masters~Master#setStepByNo}
  */
-exports.setStepByNo = function(no, count, stepData, document) {
+exports.setStepByNo = function (no, count, stepData, document) {
   for (let i = 1; i <= count; i++) {
     if (!stepData[i].style.visibility) {
-      stepData[i].style.visibility = 'visible';
+      stepData[i].style.visibility = 'visible'
     }
 
-    let visibility = stepData[i].style.visibility;
+    let visibility = stepData[i].style.visibility
     if (visibility === 'visible' && no < i) {
-      stepData[i].style.visibility = 'hidden';
-    }
-    else if (visibility === 'hidden' && no >= i) {
-      stepData[i].style.visibility = 'visible';
+      stepData[i].style.visibility = 'hidden'
+    } else if (visibility === 'hidden' && no >= i) {
+      stepData[i].style.visibility = 'visible'
     }
   }
-};
+}
 
 /**
  * @see {@link module:baldr-application/masters~Master#mainHTML}
  */
-exports.mainHTML = function(slide, config, document) {
+exports.mainHTML = function (slide, config, document) {
   return '<div id="question-content">' +
     template(slide.masterData) +
-    '</div>';
-};
+    '</div>'
+}
 
 /**
  * The stepData object has to be filled very time a slide is set.
@@ -131,11 +125,11 @@ exports.mainHTML = function(slide, config, document) {
  *
  * @see {@link module:baldr-application/masters~Master#initStepsEveryVisit}
  */
-exports.initStepsEveryVisit = function(document, slide, config) {
-  let data = {};
-  let elements = document.querySelectorAll('p');
+exports.initStepsEveryVisit = function (document, slide, config) {
+  let data = {}
+  let elements = document.querySelectorAll('p')
   elements.forEach((element, index) => {
-    data[index + 1] = element;
-  });
-  return data;
-};
+    data[index + 1] = element
+  })
+  return data
+}

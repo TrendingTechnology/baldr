@@ -2,24 +2,24 @@
  * @module baldr-library
  */
 
-'use strict';
+'use strict'
 
-const path = require('path');
+const path = require('path')
 
 /**
  *
  */
-let requireLib = function(fileName) {
-  return require(path.join(__dirname, fileName + '.js'));
-};
+let requireLib = function (fileName) {
+  return require(path.join(__dirname, fileName + '.js'))
+}
 
-const {getConfig} = requireLib('config');
+const { getConfig } = requireLib('config')
 const {
   addCSSFile,
   reIndex,
   checkProperty
-} = requireLib('helper');
-const {Media} = requireLib('media');
+} = requireLib('helper')
+const { Media } = requireLib('media')
 
 module.exports = {
   addCSSFile: addCSSFile,
@@ -27,4 +27,4 @@ module.exports = {
   Media: Media,
   reIndex: reIndex,
   checkProperty: checkProperty
-};
+}

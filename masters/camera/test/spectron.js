@@ -2,26 +2,26 @@ const {
   assert,
   path,
   Spectron
-} = require('baldr-test');
+} = require('baldr-test')
 
 describe('Master slide “camera”: “example.baldr” #spectron', function () {
-  this.timeout(10000);
+  this.timeout(10000)
 
   beforeEach(function () {
-    this.spectron = new Spectron('masters/camera/example.baldr');
-    this.app = this.spectron.getApp();
-    return this.spectron.start();
-  });
+    this.spectron = new Spectron('masters/camera/example.baldr')
+    this.app = this.spectron.getApp()
+    return this.spectron.start()
+  })
 
   afterEach(function () {
-    return this.spectron.stop();
-  });
+    return this.spectron.stop()
+  })
 
   it('Basic navigation', function () {
     return this.app.client
       .click('#modal-open')
       .getText('#modal-content label')
-      .then(text => {assert.equal(text, 'Video source:');})
+      .then(text => { assert.equal(text, 'Video source:') })
 
       .click('#modal-open')
       .click('#nav-slide-next')
@@ -29,9 +29,6 @@ describe('Master slide “camera”: “example.baldr” #spectron', function ()
       .keys(['Control', 'Alt', 'c'])
       .click('#modal-open')
       .getText('#modal-content label')
-      .then(text => {assert.equal(text, 'Video source:');})
-
-      ;
-  });
-
-});
+      .then(text => { assert.equal(text, 'Video source:') })
+  })
+})

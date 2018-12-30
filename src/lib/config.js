@@ -3,11 +3,11 @@
  * @module baldr-library/config
  */
 
-'use strict';
+'use strict'
 
-const yaml = require('js-yaml');
-const path = require('path');
-const fs = require('fs');
+const yaml = require('js-yaml')
+const path = require('path')
+const fs = require('fs')
 
 /***********************************************************************
  *
@@ -17,18 +17,16 @@ const fs = require('fs');
  * Manage the configuration for a presentation session.
  */
 class Config {
-
   /**
    * @param {array} argv Arguments in process.argv
    */
-  constructor(argv) {
-
+  constructor (argv) {
     /**
      * The path of the *.baldr presentation file
      * structured in the YAML format.
      * @type {string}
      */
-    this.sessionFile = this.pickSessionFile_(argv);
+    this.sessionFile = this.pickSessionFile_(argv)
 
     /**
      * The session files’ parent working directory. Assuming you are
@@ -36,20 +34,20 @@ class Config {
      * session directory is than “/home/jf”.
      * @type {string}
      */
-    this.sessionDir = path.resolve(path.dirname(this.sessionFile));
+    this.sessionDir = path.resolve(path.dirname(this.sessionFile))
 
     /**
      * Raw object representation of the main *.baldr session file
      * structured in YAML
      * @type {object}
      */
-    this.raw = this.parseYamlFile_(this.sessionFile);
+    this.raw = this.parseYamlFile_(this.sessionFile)
 
     /**
      * Array of raw slide objects.
      * @type {module:baldr-application/slides~rawSlideObject[]}
      */
-    this.slides = this.raw.slides;
+    this.slides = this.raw.slides
   }
 
   /**
@@ -60,16 +58,16 @@ class Config {
    *
    * @return {string} The path of a BALDUR file.
    */
-  pickSessionFile_(argv) {
-    let clone = argv.slice(0);
-    clone.reverse();
+  pickSessionFile_ (argv) {
+    let clone = argv.slice(0)
+    clone.reverse()
 
     for (let arg of clone) {
       if (arg.search(/\.baldr$/ig) > -1) {
-        return arg;
+        return arg
       }
     }
-    throw new Error('No presentation file with the extension *.baldr found!');
+    throw new Error('No presentation file with the extension *.baldr found!')
   }
 
   /**
@@ -81,10 +79,9 @@ class Config {
    * @return {object} Raw object representation of the presentation
    * session.
    */
-  parseYamlFile_(sessionFile) {
-    return yaml.safeLoad(fs.readFileSync(sessionFile, 'utf8'));
+  parseYamlFile_ (sessionFile) {
+    return yaml.safeLoad(fs.readFileSync(sessionFile, 'utf8'))
   }
-
 }
 
 /***********************************************************************
@@ -94,6 +91,6 @@ class Config {
 /**
  *
  */
-exports.getConfig = function(argv) {
-  return new Config(argv);
-};
+exports.getConfig = function (argv) {
+  return new Config(argv)
+}

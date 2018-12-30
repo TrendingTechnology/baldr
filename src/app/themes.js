@@ -3,11 +3,11 @@
  * @module baldr-application/themes
  */
 
-'use strict';
+'use strict'
 
-const fs = require('fs');
-const path = require('path');
-const {addCSSFile} = require('baldr-library');
+const fs = require('fs')
+const path = require('path')
+const { addCSSFile } = require('baldr-library')
 
 /***********************************************************************
  *
@@ -17,44 +17,41 @@ const {addCSSFile} = require('baldr-library');
  * Gather informations about all themes.
  */
 class Themes {
-
   /**
    * @param {module:baldr-application~Document} document The document
    *   object of the browser (DOM).
    */
-  constructor(document) {
-
+  constructor (document) {
     /**
      * The document object of the browser (DOM).
      * @type {module:baldr-application~Document}
      */
-    this.document = document;
+    this.document = document
 
     /**
      * Parent path of all themes.
      * @type {string}
      */
-     this.path = path.join(__dirname, '..', '..', 'themes');
+    this.path = path.join(__dirname, '..', '..', 'themes')
 
     /**
      * Folder names of all themes
      * @type {array}
      */
-    this.all = this.getThemes_();
-
+    this.all = this.getThemes_()
   }
 
   /**
    * Get the folders of all themes.
    * @return {array} Folder names of all themes
    */
-  getThemes_() {
+  getThemes_ () {
     return fs.readdirSync(this.path, 'utf8')
       .filter(
         dir => fs.statSync(
           path.join(this.path, dir)
         ).isDirectory()
-      );
+      )
   }
 
   /**
@@ -64,11 +61,11 @@ class Themes {
    *   package.json
    * @return {array} A list of CSS paths as an array
    */
-  resolveDependencies_(dependencies) {
+  resolveDependencies_ (dependencies) {
     return Object.keys(dependencies)
       .map(
         dependency => require.resolve(dependency)
-      );
+      )
   }
 
   /**
@@ -78,10 +75,10 @@ class Themes {
    * @return {string} Absolute path of the folder containing the theme
    * module.s
    */
-  resolveTheme_(name) {
+  resolveTheme_ (name) {
     return path.dirname(
       require.resolve('baldr-theme-' + name)
-    );
+    )
   }
 
   /**
@@ -89,41 +86,40 @@ class Themes {
    *
    * @param {string} name The name of the theme
    */
-  getPackageJSON_(name) {
+  getPackageJSON_ (name) {
     return require(
       path.join(this.resolveTheme_(name), 'package.json')
-    );
+    )
   }
 
   /**
    * @return {array} A array of CSS files in the order: first
    * dependencies of the theme and then the real theme CSS file
    */
-  getAllCSSFiles_() {
-    let pkg;
-    let dependencies;
-    let cssFiles = [];
+  getAllCSSFiles_ () {
+    let pkg
+    let dependencies
+    let cssFiles = []
     for (let name of this.all) {
-      pkg = this.getPackageJSON_(name);
-      dependencies = this.resolveDependencies_(pkg.dependencies);
+      pkg = this.getPackageJSON_(name)
+      dependencies = this.resolveDependencies_(pkg.dependencies)
       for (let dependencyCSS of dependencies) {
-        cssFiles.push(dependencyCSS);
+        cssFiles.push(dependencyCSS)
       }
-      cssFiles.push(require.resolve('baldr-theme-' + name));
+      cssFiles.push(require.resolve('baldr-theme-' + name))
     }
-    return cssFiles;
+    return cssFiles
   }
 
   /**
    * Load all CSS files of all themes and add link elements to the
    * DOM.
    */
-  loadThemes() {
+  loadThemes () {
     for (let cssFile of this.getAllCSSFiles_()) {
-      addCSSFile(this.document, cssFile, 'baldr-theme');
+      addCSSFile(this.document, cssFile, 'baldr-theme')
     }
   }
-
 }
 
 /***********************************************************************
@@ -134,8 +130,8 @@ class Themes {
  * @param {module:baldr-application~Document} document The document
  *   object of the browser (DOM).
  */
-exports.getThemes = function(document) {
-  let themes = new Themes(document);
-  themes.loadThemes();
-  return themes;
-};
+exports.getThemes = function (document) {
+  let themes = new Themes(document)
+  themes.loadThemes()
+  return themes
+}

@@ -3,13 +3,13 @@
  * @module baldr-test
  */
 
-const assert = require('assert');
-const fs = require('fs');
-const path = require('path');
-const {JSDOM} = require('jsdom');
-const rewire = require('rewire');
-const {getConfig} = require('baldr-library');
-const {Environment} = require('baldr-application');
+const assert = require('assert')
+const fs = require('fs')
+const path = require('path')
+const { JSDOM } = require('jsdom')
+const rewire = require('rewire')
+const { getConfig } = require('baldr-library')
+const { Environment } = require('baldr-application')
 
 /**
  * Resolves a sequence of paths or path segments into an absolute path
@@ -21,9 +21,9 @@ const {Environment} = require('baldr-application');
  *
  * @returns {string} Absolute path of a file in the “src” folder.
  */
-exports.srcPath = function() {
-  return path.join(__dirname, '..', '..', 'src', ...arguments);
-};
+exports.srcPath = function () {
+  return path.join(__dirname, '..', '..', 'src', ...arguments)
+}
 
 /**
  * Require a file as a module in the “src” folder.
@@ -34,31 +34,31 @@ exports.srcPath = function() {
  *
  * @returns {object} The required module.
  */
-exports.requireFile = function() {
-  return require(exports.srcPath(...arguments));
-};
+exports.requireFile = function () {
+  return require(exports.srcPath(...arguments))
+}
 
-const {getMasters} = exports.requireFile('app', 'masters.js');
-
-/**
- *
- */
-exports.assert = assert;
+const { getMasters } = exports.requireFile('app', 'masters.js')
 
 /**
  *
  */
-exports.fs = fs;
+exports.assert = assert
 
 /**
  *
  */
-exports.path = path;
+exports.fs = fs
 
 /**
  *
  */
-exports.rewire = rewire;
+exports.path = path
+
+/**
+ *
+ */
+exports.rewire = rewire
 
 /**
  *
@@ -75,7 +75,7 @@ exports.allMasters = [
   'svg',
   'video',
   'website'
-];
+]
 
 /**
  *
@@ -83,14 +83,14 @@ exports.allMasters = [
 exports.allThemes = [
   'default',
   'handwriting'
-];
+]
 
 /**
  *
  */
-exports.makeDOM = function(html) {
-  return new JSDOM(html).window.document;
-};
+exports.makeDOM = function (html) {
+  return new JSDOM(html).window.document
+}
 
 /**
  * The document object (DOM) of the file “render.html”.
@@ -101,38 +101,38 @@ exports.document = exports.makeDOM(
     path.join(__dirname, '..', '..', 'render.html'),
     'utf8'
   )
-);
+)
 
 /**
  *
  */
-exports.getDOM = function() {
+exports.getDOM = function () {
   return exports.makeDOM(
     fs.readFileSync(
       path.join(__dirname, '..', '..', 'render.html'),
       'utf8'
     )
-  );
-};
+  )
+}
 
 /**
  * Absolute path of the minimal baldr session file.
  * @type {string}
  */
-exports.testFileMinimal = path.resolve('test', 'files', 'minimal.baldr');
+exports.testFileMinimal = path.resolve('test', 'files', 'minimal.baldr')
 
 /**
  * @returns {module:baldr-application~Environment}
  */
-exports.freshEnv = function() {
-  return new Environment([exports.testFileMinimal], exports.getDOM());
-};
+exports.freshEnv = function () {
+  return new Environment([exports.testFileMinimal], exports.getDOM())
+}
 
 /**
  * Low level environment data.
  * @type {module:baldr-application~Environment}
  */
-exports.env = exports.freshEnv();
+exports.env = exports.freshEnv()
 
 /**
  * `config` object of the test file
@@ -142,7 +142,7 @@ exports.env = exports.freshEnv();
  *
  * @see module:baldr-test.testFileMinimal
  */
-exports.config = getConfig([exports.testFileMinimal]);
+exports.config = getConfig([exports.testFileMinimal])
 
 /**
  * Clone the `config` object {@link module:baldr-test.config}
@@ -150,60 +150,58 @@ exports.config = getConfig([exports.testFileMinimal]);
  * @return {module:baldr-library/config~Config}
  */
 exports.cloneConfig = function () {
-  return Object.assign({}, exports.config);
-};
+  return Object.assign({}, exports.config)
+}
 
 /**
  * All available master slides.
  * @type {module:baldr-application/masters~Masters}
  */
-exports.masters = getMasters(exports.document);
+exports.masters = getMasters(exports.document)
 
 /**
  *
  */
 class Spectron {
-
   /**
    *
    */
-  constructor(baldrFile) {
+  constructor (baldrFile) {
     if (process.platform === 'linux') {
-      this.appPath = 'dist/linux-unpacked/baldr';
+      this.appPath = 'dist/linux-unpacked/baldr'
+    } else if (process.platform === 'darwin') {
+      this.appPath = 'dist/mac/baldr.app/Contents/MacOS/baldr'
     }
-    else if (process.platform === 'darwin') {
-      this.appPath = 'dist/mac/baldr.app/Contents/MacOS/baldr';
-    }
-    let {Application} = require('spectron');
+    let { Application } = require('spectron')
     let config = {
       path: this.appPath
-    };
-    if (baldrFile) config.args = [baldrFile];
-    this.app = new Application(config);
+    }
+    if (baldrFile) config.args = [baldrFile]
+    this.app = new Application(config)
   }
 
   /**
    *
    */
-  getApp() {
-    return this.app;
+  getApp () {
+    return this.app
   }
 
   /**
    *
    */
-  start() {
-    return this.app.start();
+  start () {
+    return this.app.start()
   }
 
   /**
    *
    */
-  stop() {
+  stop () {
     if (this.app && this.app.isRunning()) {
-      return this.app.stop();
+      return this.app.stop()
     }
   }
 }
 
-exports.Spectron = Spectron;
+exports.Spectron = Spectron

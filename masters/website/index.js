@@ -3,7 +3,7 @@
  * @module baldr-master-website
  */
 
-'use strict';
+'use strict'
 
 /***********************************************************************
  * Hooks
@@ -14,12 +14,12 @@
  */
 exports.config = {
   margin: false
-};
+}
 
 /**
  * @see {@link module:baldr-application/masters~Master#quickStartEntries}
  */
-exports.quickStartEntries = function() {
+exports.quickStartEntries = function () {
   return [
     {
       title: 'Google',
@@ -33,13 +33,13 @@ exports.quickStartEntries = function() {
       shortcut: 'ctrl+alt+w',
       fontawesome: 'wikipedia-w'
     }
-  ];
-};
+  ]
+}
 
 /**
  * @see {@link module:baldr-application/masters~Master#mainHTML}
  */
-exports.mainHTML = function(slide, config, document) {
-  let data = slide.masterData;
-  return `<webview src="${data}"></webview>`;
-};
+exports.mainHTML = function (slide, config, document) {
+  let data = slide.masterData
+  return `<webview src="${data}"></webview>`
+}
