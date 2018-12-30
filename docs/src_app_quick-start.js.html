@@ -33,9 +33,9 @@
 
 /* jshint -W083 */
 
-'use strict';
+'use strict'
 
-const {checkProperty} = require('baldr-library');
+const { checkProperty } = require('baldr-library')
 
 /**
  * A array of [raw quick start entries]{@link module:baldr-application/quick-start~rawQuickStartEntry}
@@ -70,56 +70,54 @@ const {checkProperty} = require('baldr-library');
  * The processed quick start entry object.
  */
 class QuickStartEntry {
-
   /**
    * @param {module:baldr-application/quick-start~rawQuickStartEntry} rawQuickStartEntry
    *   A raw quick start entry specified in the master slide hooks.
    * @param {string} masterName Name of the master slide.
    * @param {integer} no A integer starting from 1
    */
-  constructor(rawQuickStartEntry, masterName, no) {
-
+  constructor (rawQuickStartEntry, masterName, no) {
     /**
      *  A integer starting from 1
      * @type {integer}
      */
-    this.no = no;
+    this.no = no
 
     /**
      * CSS id name like “quick-start-entry_master_1”
      * @type {string}
      */
-    this.cssID = 'quick-start-entry_' + masterName +  '_' + no;
+    this.cssID = 'quick-start-entry_' + masterName + '_' + no
 
     /**
      * Slide data
      * @type {string|array|object}
      */
-    this.data = rawQuickStartEntry.data;
+    this.data = rawQuickStartEntry.data
 
     /**
      * Name of a fontawesome icon
      * @type {string}
      */
-    this.fontawesome = rawQuickStartEntry.fontawesome;
+    this.fontawesome = rawQuickStartEntry.fontawesome
 
     /**
      * The name of the master
      * @type {master}
      */
-    this.masterName = masterName;
+    this.masterName = masterName
 
     /**
      * Mousetrap shortcut string
      * @type {string}
      */
-    this.shortcut = rawQuickStartEntry.shortcut;
+    this.shortcut = rawQuickStartEntry.shortcut
 
     /**
      * String to show in the “title” attribute of the HTML link tag.
      * @type {string}
      */
-    this.title = rawQuickStartEntry.title;
+    this.title = rawQuickStartEntry.title
   }
 }
 
@@ -131,53 +129,51 @@ class QuickStartEntry {
  *
  */
 class QuickStart {
-
   /**
    * @param {module:baldr-application~Environment} env Low level
    *   environment data.
    */
-  constructor(env) {
-
+  constructor (env) {
     /**
      * Low level environment data.
      * @type {module:baldr-application~Environment}
      */
-    this.env = env;
+    this.env = env
 
     /**
      *
      */
-    this.elemNavigationMenu = this.env.document.getElementById('nav-quick-start');
+    this.elemNavigationMenu = this.env.document.getElementById('nav-quick-start')
 
     /**
      * @type {module:baldr-application/quick-start~quickStartEntries}
      */
-    this.entries = this.collectEntries_();
+    this.entries = this.collectEntries_()
   }
 
   /**
    * @return {array} Array of [quick start entries]{@link module:baldr-application/quick-start~QuickStartEntry}.
    */
-  collectEntries_() {
-    let entries = [];
+  collectEntries_ () {
+    let entries = []
     for (let masterName of this.env.masters.all) {
-      let rawEntries = this.env.masters[masterName].quickStartEntries();
+      let rawEntries = this.env.masters[masterName].quickStartEntries()
       for (let index in rawEntries) {
-        rawEntries[index].masterName = masterName;
+        rawEntries[index].masterName = masterName
         if (!rawEntries[index].hasOwnProperty('data')) {
-          rawEntries[index].data = true;
+          rawEntries[index].data = true
         }
       }
-      entries = entries.concat(rawEntries);
+      entries = entries.concat(rawEntries)
     }
 
-    let out = [];
+    let out = []
     for (let index in entries) {
-      let no = Number.parseInt(index) + 1;
-      out.push(new QuickStartEntry(entries[index], entries[index].masterName, no));
+      let no = Number.parseInt(index) + 1
+      out.push(new QuickStartEntry(entries[index], entries[index].masterName, no))
     }
 
-    return out;
+    return out
   }
 
   /**
@@ -185,56 +181,56 @@ class QuickStart {
    *
    * @return {object} {@link https://developer.mozilla.org/en-US/docs/Web/API/HTMLButtonElement HTMLButtonElement}
    */
-  renderButton_(entry) {
-    let button = this.env.document.createElement('button');
-    let shortcut = '';
+  renderButton_ (entry) {
+    let button = this.env.document.createElement('button')
+    let shortcut = ''
     if (checkProperty.isString(entry, 'shortcut')) {
-      shortcut = ` (${entry.shortcut})`;
+      shortcut = ` (${entry.shortcut})`
     }
-    button.title = `${entry.title}${shortcut}`;
-    button.id = entry.cssID;
-    button.classList.add('fa');
-    button.classList.add('fa-' + entry.fontawesome);
-    return button;
+    button.title = `${entry.title}${shortcut}`
+    button.id = entry.cssID
+    button.classList.add('fa')
+    button.classList.add('fa-' + entry.fontawesome)
+    return button
   }
 
   /**
    *
    */
-  renderNavigationMenu_() {
+  renderNavigationMenu_ () {
     for (let entry of this.entries) {
-      let button = this.renderButton_(entry);
-      this.elemNavigationMenu.appendChild(button);
+      let button = this.renderButton_(entry)
+      this.elemNavigationMenu.appendChild(button)
     }
   }
 
   /**
    *
    */
-  set() {
-    this.renderNavigationMenu_();
+  set () {
+    this.renderNavigationMenu_()
   }
 
   /**
    *
    */
-  bind(showRunner, mousetrap) {
+  bind (showRunner, mousetrap) {
     for (let entry of this.entries) {
       let func = () => {
         showRunner.setInstantSlide(
           entry.masterName,
           entry.data,
           this.env
-        );
-      };
+        )
+      }
       // To allow unit tests without window object.
       // mousetrap returns in this situation an empty object.
       if (mousetrap &amp;&amp; mousetrap.hasOwnProperty('bind')) {
-        mousetrap.bind(entry.shortcut, func);
+        mousetrap.bind(entry.shortcut, func)
       }
       this.env.document
-      .getElementById(entry.cssID)
-      .addEventListener('click', func);
+        .getElementById(entry.cssID)
+        .addEventListener('click', func)
     }
   }
 }
@@ -242,11 +238,11 @@ class QuickStart {
 /**
  *
  */
-exports.getQuickStart = function(env) {
-  return new QuickStart(env);
-};
+exports.getQuickStart = function (env) {
+  return new QuickStart(env)
+}
 
-exports.QuickStart = QuickStart;
+exports.QuickStart = QuickStart
 </code></pre>
         </article>
     </section>

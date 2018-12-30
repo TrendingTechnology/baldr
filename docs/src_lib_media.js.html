@@ -31,11 +31,11 @@
  * @module baldr-library/media
  */
 
-'use strict';
+'use strict'
 
-const path = require('path');
-const fs = require('fs');
-const yaml = require('js-yaml');
+const path = require('path')
+const fs = require('fs')
+const yaml = require('js-yaml')
 
 /***********************************************************************
  *
@@ -45,44 +45,40 @@ const yaml = require('js-yaml');
  *
  */
 class FileInfo {
-
-  constructor(filePath) {
-
+  constructor (filePath) {
     /**
      * Absolute path ot the file.
      * @type {string}
      */
-    this.path = path.resolve(filePath);
+    this.path = path.resolve(filePath)
 
     /**
      * The basename (filename) of the file.
      * @type {string}
      */
-    this.basename = path.basename(filePath);
+    this.basename = path.basename(filePath)
 
     /**
      * The extension of the file.
      * @type {string}
      */
-    this.extension = path.extname(filePath).replace('.', '');
-    let info = this.readInfoYaml_();
+    this.extension = path.extname(filePath).replace('.', '')
+    let info = this.readInfoYaml_()
     for (let property in info) {
-      this[property] = info[property];
+      this[property] = info[property]
     }
   }
 
   /**
    * @type {string}
    */
-  get titleSafe() {
+  get titleSafe () {
     if (this.hasOwnProperty('artist') &amp;&amp; this.hasOwnProperty('title')) {
-      return this.artist + ': ' + this.title;
-    }
-    else if (this.hasOwnProperty('title')) {
-      return this.title;
-    }
-    else {
-      return this.basename;
+      return this.artist + ': ' + this.title
+    } else if (this.hasOwnProperty('title')) {
+      return this.title
+    } else {
+      return this.basename
     }
   }
 
@@ -98,19 +94,17 @@ class FileInfo {
    * Info file in the YAML file format:
    * `/home/baldr/beethoven.jpg.yml`
    */
-  readInfoYaml_() {
-    let infoFile = this.path + '.yml';
+  readInfoYaml_ () {
+    let infoFile = this.path + '.yml'
     if (fs.existsSync(infoFile)) {
-      let info = yaml.safeLoad(fs.readFileSync(infoFile, 'utf8'));
+      let info = yaml.safeLoad(fs.readFileSync(infoFile, 'utf8'))
       if (typeof info === 'string') {
-        return {"title": info};
+        return { 'title': info }
+      } else {
+        return info
       }
-      else {
-        return info;
-      }
-    }
-    else {
-      return false;
+    } else {
+      return false
     }
   }
 }
@@ -123,17 +117,15 @@ class FileInfo {
  *
  */
 class Media {
-
   /**
    * @param {string} parentPath The path which contains the
    * presentation file (*.baldr).
    */
-  constructor(parentPath) {
-
+  constructor (parentPath) {
     /**
      * @type string
      */
-    this.parentPath = parentPath;
+    this.parentPath = parentPath
 
     /**
      * @type Object
@@ -142,7 +134,7 @@ class Media {
       audio: ['mp3'],
       image: ['jpg', 'jpeg', 'png'],
       video: ['mp4']
-    };
+    }
   }
 
   /**
@@ -155,21 +147,18 @@ class Media {
    *
    * @return {array} A array of extensions
    */
-  getExtensions_(extensions) {
+  getExtensions_ (extensions) {
     if (typeof extensions === 'object' &amp;&amp; Array.isArray(extensions)) {
-      return extensions;
-    }
-    else if (
+      return extensions
+    } else if (
       typeof extensions === 'string' &amp;&amp;
       this.types[extensions]
     ) {
-      return this.types[extensions];
-    }
-    else if (typeof extensions === 'string') {
-      return [extensions];
-    }
-    else {
-      return [];
+      return this.types[extensions]
+    } else if (typeof extensions === 'string') {
+      return [extensions]
+    } else {
+      return []
     }
   }
 
@@ -178,12 +167,11 @@ class Media {
    *
    * @return {string} Absolute path
    */
-  resolvePath_(filePath) {
+  resolvePath_ (filePath) {
     if (path.isAbsolute(filePath)) {
-      return filePath;
-    }
-    else {
-      return path.resolve(this.parentPath, filePath);
+      return filePath
+    } else {
+      return path.resolve(this.parentPath, filePath)
     }
   }
 
@@ -196,38 +184,38 @@ class Media {
    * parameter empty to bypass the filter mechanism.
    * @return {boolean} True if the input file has the given extension
    */
-  filterFile(inputPath, extensions) {
+  filterFile (inputPath, extensions) {
     if (!extensions) {
-      return true;
+      return true
     }
 
     let filterExtensions = this.getExtensions_(extensions)
       .map((value) => {
-        return '.' + value.toLowerCase();
-      });
+        return '.' + value.toLowerCase()
+      })
 
-    let inputExtension = path.extname(inputPath).toLowerCase();
+    let inputExtension = path.extname(inputPath).toLowerCase()
 
     for (let filterExtension of filterExtensions) {
-      if (inputExtension === filterExtension) return true;
+      if (inputExtension === filterExtension) return true
     }
-    return false;
+    return false
   }
 
   /**
    * @param {array} fileList An array of file paths
    * @return {object}
    */
-  groupByTypes_(fileList) {
-    let out = {};
+  groupByTypes_ (fileList) {
+    let out = {}
     for (let type of Object.keys(this.types)) {
       out[type] = fileList.filter(
         /* jshint -W083 */
         file => this.filterFile(file, this.types[type])
       )
-      .map(file => new FileInfo(file));
+        .map(file => new FileInfo(file))
     }
-    return out;
+    return out
   }
 
   /**
@@ -261,10 +249,10 @@ class Media {
    * }
    * &lt;/pre>&lt;/code>
    */
-  getMedia() {
+  getMedia () {
     return this.groupByTypes_(
       this.listRecursively_(this.parentPath)
-    );
+    )
   }
 
   /**
@@ -277,19 +265,18 @@ class Media {
    *
    * @see https://gist.github.com/kethinov/6658166
    */
-  listRecursively_(folder, filelist) {
-    let files = fs.readdirSync(folder).sort();
-    filelist = filelist || [];
+  listRecursively_ (folder, filelist) {
+    let files = fs.readdirSync(folder).sort()
+    filelist = filelist || []
     files.forEach((file) => {
-      let filePath = path.resolve(folder, file);
+      let filePath = path.resolve(folder, file)
       if (fs.statSync(filePath).isDirectory()) {
-        filelist = this.listRecursively_(filePath, filelist);
+        filelist = this.listRecursively_(filePath, filelist)
+      } else {
+        filelist.push(filePath)
       }
-      else {
-        filelist.push(filePath);
-      }
-    });
-    return filelist;
+    })
+    return filelist
   }
 
   /**
@@ -302,27 +289,25 @@ class Media {
    * parameter empty to bypass the filter mechanism.
    * @return {array} A array of absolute file paths or an empty array.
    */
-  list(inputPath, extensions) {
-    let absPath = this.resolvePath_(inputPath);
+  list (inputPath, extensions) {
+    let absPath = this.resolvePath_(inputPath)
 
     if (!fs.existsSync(absPath)) {
-      return [];
+      return []
     }
-    let stat = fs.statSync(absPath);
+    let stat = fs.statSync(absPath)
     if (!stat.isDirectory() &amp;&amp; this.filterFile(absPath, extensions)) {
-      return [new FileInfo(absPath)];
-    }
-    else if (stat.isDirectory()) {
+      return [new FileInfo(absPath)]
+    } else if (stat.isDirectory()) {
       return this.listRecursively_(absPath)
         .filter((file) => {
-          return this.filterFile(file, extensions);
+          return this.filterFile(file, extensions)
         })
         .map((file) => {
-          return new FileInfo(file);
-        });
-    }
-    else {
-      return [];
+          return new FileInfo(file)
+        })
+    } else {
+      return []
     }
   }
 
@@ -335,27 +320,25 @@ class Media {
    * noted without a leading dot (e. g.: “jpg”, “mp4”). Leave the
    * parameter empty to bypass the filter mechanism.
    */
-  orderedList(inputPaths, extensions) {
-    let normalizedPaths;
+  orderedList (inputPaths, extensions) {
+    let normalizedPaths
     if (typeof inputPaths === 'string') {
-      normalizedPaths = [inputPaths];
+      normalizedPaths = [inputPaths]
+    } else {
+      normalizedPaths = inputPaths
     }
-    else {
-      normalizedPaths = inputPaths;
-    }
-    let list = [];
+    let list = []
     for (let filePath of normalizedPaths) {
-      let sortedList = this.list(filePath, extensions);
+      let sortedList = this.list(filePath, extensions)
       for (let file of sortedList) {
-        list.push(file);
+        list.push(file)
       }
     }
-    return list;
+    return list
   }
-
 }
 
-exports.Media = Media;
+exports.Media = Media
 </code></pre>
         </article>
     </section>
