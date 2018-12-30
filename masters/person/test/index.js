@@ -3,7 +3,7 @@ const {
   path,
   cloneConfig,
   makeDOM
-} = require('baldr-test')
+} = require('@bldr/test-helper')
 
 const person = require('../index.js')
 

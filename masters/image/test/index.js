@@ -2,7 +2,7 @@ const {
   assert,
   path,
   cloneConfig
-} = require('baldr-test')
+} = require('@bldr/test-helper')
 
 const image = require('../index.js')
 

@@ -1,6 +1,6 @@
 /**
  * @file Filter and resolve the input files used in the presentation.
- * @module baldr-library/media
+ * @module @bldr/library/media
  */
 
 'use strict'

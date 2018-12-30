@@ -27,14 +27,14 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
- * @module baldr-application
+ * @module @bldr/electron-app
  */
 
 'use strict'
 
 const path = require('path')
 
-const { getConfig } = require('baldr-library')
+const { getConfig } = require('@bldr/library')
 
 /**
  * @param {string} fileName
@@ -80,32 +80,32 @@ const { getThemes } = requireLib('themes')
  * avoids therefore many arguments in the constructor functions.
  *
  * @param {array} argv An array containing the command line arguments.
- * @param {module:baldr-application~Document} document The document
+ * @param {module:@bldr/electron-app~Document} document The document
  *   object (DOM) of the render process.
  */
 class Environment {
   constructor (argv, document) {
     /**
      * The document object (DOM) of the render process.
-     * @type {module:baldr-application~Document}
+     * @type {module:@bldr/electron-app~Document}
      */
     this.document = document
 
     /**
      * All available master slides.
-     * @type {module:baldr-application/masters~Masters}
+     * @type {module:@bldr/electron-app/masters~Masters}
      */
     this.masters = getMasters(document)
 
     /**
      * All configurations of the current presentation session.
-     * @type {module:baldr-library/config~Config}
+     * @type {module:@bldr/library/config~Config}
      */
     this.config = getConfig(argv)
 
     /**
      * All available themes.
-     * @type {module:baldr-application/themes~Themes}
+     * @type {module:@bldr/electron-app/themes~Themes}
      */
     this.themes = getThemes(document)
   }
@@ -121,21 +121,21 @@ class Environment {
 class ShowRunner {
   /**
    * @param {array} argv An array containing the command line arguments.
-   * @param {module:baldr-application~Document} document The document
+   * @param {module:@bldr/electron-app~Document} document The document
    *   object (DOM) of the render process.
-   * @param {module:baldr-application~mousetrap} mousetrap The object
+   * @param {module:@bldr/electron-app~mousetrap} mousetrap The object
    *   of shortcut library “mousetrap”.
    */
   constructor (argv, document, mousetrap) {
     /**
      * Low level environment data.
-     * @type {module:baldr-application~Environment}
+     * @type {module:@bldr/electron-app~Environment}
      */
     this.env = new Environment(argv, document)
 
     /**
      * The object of shortcut library “mousetrap”.
-     * @type {module:baldr-application~mousetrap}
+     * @type {module:@bldr/electron-app~mousetrap}
      */
     this.mousetrap = mousetrap
 
@@ -143,13 +143,13 @@ class ShowRunner {
 
     /**
      * All slide objects of the current presentation session.
-     * @type {module:baldr-application/slides~Slides}
+     * @type {module:@bldr/electron-app/slides~Slides}
      */
     this.slides = getSlides(this.env)
 
     /**
      * Object to switch between the slides.
-     * @type {module:baldr-application/slides-switcher~SlidesSwitcher}
+     * @type {module:@bldr/electron-app/slides-switcher~SlidesSwitcher}
      */
     this.slidesSwitcher = new SlidesSwitcher(
       this.slides,
@@ -158,19 +158,19 @@ class ShowRunner {
 
     /**
      * The object representation of the old slide.
-     * @type {module:baldr-application/slides~Slide}
+     * @type {module:@bldr/electron-app/slides~Slide}
      */
     this.oldSlide = {}
 
     /**
      * The object representation of the new slide.
-     * @type {module:baldr-application/slides~Slide}
+     * @type {module:@bldr/electron-app/slides~Slide}
      */
     this.newSlide = {}
 
     /**
      * Object to manage the quick start entries.
-     * @type {module:baldr-application/quick-start~QuickStart}
+     * @type {module:@bldr/electron-app/quick-start~QuickStart}
      */
     this.quickStart = getQuickStart(this.env)
     this.quickStart.set()
@@ -245,7 +245,7 @@ exports.ShowRunner = ShowRunner
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-baldr.html">baldr</a></li><li><a href="module-baldr-application.html">baldr-application</a></li><li><a href="module-baldr-application_masters.html">baldr-application/masters</a></li><li><a href="module-baldr-application_quick-start.html">baldr-application/quick-start</a></li><li><a href="module-baldr-application_slides.html">baldr-application/slides</a></li><li><a href="module-baldr-application_slides-switcher.html">baldr-application/slides-switcher</a></li><li><a href="module-baldr-application_themes.html">baldr-application/themes</a></li><li><a href="module-baldr-library.html">baldr-library</a></li><li><a href="module-baldr-library_config.html">baldr-library/config</a></li><li><a href="module-baldr-library_helper.html">baldr-library/helper</a></li><li><a href="module-baldr-library_media.html">baldr-library/media</a></li><li><a href="module-baldr-library_player.html">baldr-library/player</a></li><li><a href="module-baldr-master-audio.html">baldr-master-audio</a></li><li><a href="module-baldr-master-camera.html">baldr-master-camera</a></li><li><a href="module-baldr-master-editor.html">baldr-master-editor</a></li><li><a href="module-baldr-master-image.html">baldr-master-image</a></li><li><a href="module-baldr-master-markdown.html">baldr-master-markdown</a></li><li><a href="module-baldr-master-person.html">baldr-master-person</a></li><li><a href="module-baldr-master-question.html">baldr-master-question</a></li><li><a href="module-baldr-master-quote.html">baldr-master-quote</a></li><li><a href="module-baldr-master-svg.html">baldr-master-svg</a></li><li><a href="module-baldr-master-video.html">baldr-master-video</a></li><li><a href="module-baldr-master-website.html">baldr-master-website</a></li><li><a href="module-baldr-test.html">baldr-test</a></li><li><a href="module-baldr_render.html">baldr/render</a></li></ul><h3>Classes</h3><ul><li><a href="module-baldr-application_masters-Master.html">Master</a></li><li><a href="module-baldr-application_masters-Masters.html">Masters</a></li><li><a href="module-baldr-application_quick-start-QuickStart.html">QuickStart</a></li><li><a href="module-baldr-application_quick-start-QuickStartEntry.html">QuickStartEntry</a></li><li><a href="module-baldr-application_slides-switcher-SlidesSwitcher.html">SlidesSwitcher</a></li><li><a href="module-baldr-application_slides-Slide.html">Slide</a></li><li><a href="module-baldr-application_slides-SlideData.html">SlideData</a></li><li><a href="module-baldr-application_slides-Slides.html">Slides</a></li><li><a href="module-baldr-application_slides-StepSwitcher.html">StepSwitcher</a></li><li><a href="module-baldr-application_themes-Themes.html">Themes</a></li><li><a href="module-baldr-application-Environment.html">Environment</a></li><li><a href="module-baldr-application-ShowRunner.html">ShowRunner</a></li><li><a href="module-baldr-library_config-Config.html">Config</a></li><li><a href="module-baldr-library_media-FileInfo.html">FileInfo</a></li><li><a href="module-baldr-library_media-Media.html">Media</a></li><li><a href="module-baldr-library_player-Player.html">Player</a></li><li><a href="module-baldr-master-audio-Audio.html">Audio</a></li><li><a href="module-baldr-master-video-VideoPlayer.html">VideoPlayer</a></li><li><a href="module-baldr-test-Spectron.html">Spectron</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-@bldr_electron-app.html">@bldr/electron-app</a></li><li><a href="module-@bldr_electron-app_masters.html">@bldr/electron-app/masters</a></li><li><a href="module-@bldr_electron-app_quick-start.html">@bldr/electron-app/quick-start</a></li><li><a href="module-@bldr_electron-app_slides.html">@bldr/electron-app/slides</a></li><li><a href="module-@bldr_electron-app_slides-switcher.html">@bldr/electron-app/slides-switcher</a></li><li><a href="module-@bldr_electron-app_themes.html">@bldr/electron-app/themes</a></li><li><a href="module-@bldr_library.html">@bldr/library</a></li><li><a href="module-@bldr_library_config.html">@bldr/library/config</a></li><li><a href="module-@bldr_library_helper.html">@bldr/library/helper</a></li><li><a href="module-@bldr_library_media.html">@bldr/library/media</a></li><li><a href="module-@bldr_library_player.html">@bldr/library/player</a></li><li><a href="module-@bldr_master-audio.html">@bldr/master-audio</a></li><li><a href="module-@bldr_master-camera.html">@bldr/master-camera</a></li><li><a href="module-@bldr_master-editor.html">@bldr/master-editor</a></li><li><a href="module-@bldr_master-image.html">@bldr/master-image</a></li><li><a href="module-@bldr_master-markdown.html">@bldr/master-markdown</a></li><li><a href="module-@bldr_master-person.html">@bldr/master-person</a></li><li><a href="module-@bldr_master-question.html">@bldr/master-question</a></li><li><a href="module-@bldr_master-quote.html">@bldr/master-quote</a></li><li><a href="module-@bldr_master-svg.html">@bldr/master-svg</a></li><li><a href="module-@bldr_master-video.html">@bldr/master-video</a></li><li><a href="module-@bldr_master-website.html">@bldr/master-website</a></li><li><a href="module-@bldr_test-helper.html">@bldr/test-helper</a></li><li><a href="module-baldr.html">baldr</a></li><li><a href="module-baldr_render.html">baldr/render</a></li></ul><h3>Classes</h3><ul><li><a href="module-@bldr_electron-app_masters-Master.html">Master</a></li><li><a href="module-@bldr_electron-app_masters-Masters.html">Masters</a></li><li><a href="module-@bldr_electron-app_quick-start-QuickStart.html">QuickStart</a></li><li><a href="module-@bldr_electron-app_quick-start-QuickStartEntry.html">QuickStartEntry</a></li><li><a href="module-@bldr_electron-app_slides-switcher-SlidesSwitcher.html">SlidesSwitcher</a></li><li><a href="module-@bldr_electron-app_slides-Slide.html">Slide</a></li><li><a href="module-@bldr_electron-app_slides-SlideData.html">SlideData</a></li><li><a href="module-@bldr_electron-app_slides-Slides.html">Slides</a></li><li><a href="module-@bldr_electron-app_slides-StepSwitcher.html">StepSwitcher</a></li><li><a href="module-@bldr_electron-app_themes-Themes.html">Themes</a></li><li><a href="module-@bldr_electron-app-Environment.html">Environment</a></li><li><a href="module-@bldr_electron-app-ShowRunner.html">ShowRunner</a></li><li><a href="module-@bldr_library_config-Config.html">Config</a></li><li><a href="module-@bldr_library_media-FileInfo.html">FileInfo</a></li><li><a href="module-@bldr_library_media-Media.html">Media</a></li><li><a href="module-@bldr_library_player-Player.html">Player</a></li><li><a href="module-@bldr_master-audio-Audio.html">Audio</a></li><li><a href="module-@bldr_master-video-VideoPlayer.html">VideoPlayer</a></li><li><a href="module-@bldr_test-helper-Spectron.html">Spectron</a></li></ul>
 </nav>
 
 <br class="clear">

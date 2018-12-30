@@ -1,25 +1,25 @@
 /**
  * @file Master slide “person”
- * @module baldr-master-person
+ * @module @bldr/master-person
  */
 
 'use strict'
 
-const { Media, checkProperty } = require('baldr-library')
+const { Media, checkProperty } = require('@bldr/library')
 
 /***********************************************************************
  * Hooks
  **********************************************************************/
 
 /**
- * @see {@link module:baldr-application/masters~Master#config}
+ * @see {@link module:@bldr/electron-app/masters~Master#config}
  */
 exports.config = {
   margin: false
 }
 
 /**
- * @see {@link module:baldr-application/masters~Master#documentation}
+ * @see {@link module:@bldr/electron-app/masters~Master#documentation}
  */
 exports.documentation = {
   examples: [
@@ -34,7 +34,7 @@ exports.documentation = {
 }
 
 /**
- * @see {@link module:baldr-application/masters~Master#normalizeData}
+ * @see {@link module:@bldr/electron-app/masters~Master#normalizeData}
  */
 exports.normalizeData = function (rawSlideData, config) {
   let data = {}
@@ -74,7 +74,7 @@ exports.normalizeData = function (rawSlideData, config) {
 }
 
 /**
- * @see {@link module:baldr-application/masters~Master#mainHTML}
+ * @see {@link module:@bldr/electron-app/masters~Master#mainHTML}
  */
 exports.mainHTML = function (slide, config, document) {
   let data = slide.masterData

@@ -1,5 +1,5 @@
 /**
- * @module baldr-library/helper
+ * @module @bldr/library/helper
  */
 'use strict'
 

@@ -3,7 +3,7 @@ const {
   rewire,
   srcPath,
   freshEnv
-} = require('baldr-test')
+} = require('@bldr/test-helper')
 
 let slidesJsPath = srcPath('app', 'slides.js')
 const { Slide } = require(slidesJsPath)

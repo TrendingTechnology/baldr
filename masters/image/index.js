@@ -1,6 +1,6 @@
 /**
  * @file Master slide “image”
- * @module baldr-master-image
+ * @module @bldr/master-image
  */
 
 'use strict'
@@ -8,14 +8,14 @@
 const {
   Media,
   reIndex
-} = require('baldr-library')
+} = require('@bldr/library')
 
 /***********************************************************************
  * Hooks
  **********************************************************************/
 
 /**
- * @see {@link module:baldr-application/masters~Master#quickStartEntries}
+ * @see {@link module:@bldr/electron-app/masters~Master#quickStartEntries}
  */
 exports.quickStartEntries = function () {
   return [
@@ -29,7 +29,7 @@ exports.quickStartEntries = function () {
 }
 
 /**
- * @see {@link module:baldr-application/masters~Master#normalizeData}
+ * @see {@link module:@bldr/electron-app/masters~Master#normalizeData}
  */
 exports.normalizeData = function (rawSlideData, config) {
   return new Media(config.sessionDir)
@@ -37,23 +37,23 @@ exports.normalizeData = function (rawSlideData, config) {
 }
 
 /**
- * @see {@link module:baldr-application/masters~Master#initSteps}
+ * @see {@link module:@bldr/electron-app/masters~Master#initSteps}
  */
 exports.initSteps = function (document, slide, config) {
   return reIndex(slide.masterData)
 }
 
 /**
- * @see {@link module:baldr-application/masters~Master#setStepByNo}
+ * @see {@link module:@bldr/electron-app/masters~Master#setStepByNo}
  */
 exports.setStepByNo = function (no, count, stepData, document) {
   document
-    .getElementById('baldr-master-image')
+    .getElementById('@bldr/master-image')
     .setAttribute('src', stepData[no].path)
 }
 
 /**
- * @see {@link module:baldr-application/masters~Master#config}
+ * @see {@link module:@bldr/electron-app/masters~Master#config}
  */
 exports.config = {
   stepSupport: true,
@@ -61,9 +61,9 @@ exports.config = {
 }
 
 /**
- * @see {@link module:baldr-application/masters~Master#mainHTML}
+ * @see {@link module:@bldr/electron-app/masters~Master#mainHTML}
  */
 exports.mainHTML = function (slide, config, document) {
   let path = slide.masterData[0].path
-  return `<img id="baldr-master-image" src="${path}">`
+  return `<img id="@bldr/master-image" src="${path}">`
 }

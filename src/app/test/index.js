@@ -6,9 +6,9 @@ const {
   testFileMinimal,
   rewire,
   srcPath
-} = require('baldr-test')
+} = require('@bldr/test-helper')
 
-const { ShowRunner } = require('baldr-application')
+const { ShowRunner } = require('@bldr/electron-app')
 const mousetrap = require('mousetrap')
 
 /***********************************************************************

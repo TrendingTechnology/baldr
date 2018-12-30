@@ -2,7 +2,7 @@ const {
   assert,
   requireFile,
   freshEnv
-} = require('baldr-test')
+} = require('@bldr/test-helper')
 
 const { getSlides } = requireFile('app', 'slides.js')
 const { SlidesSwitcher } = requireFile('app', 'slides-switcher.js')

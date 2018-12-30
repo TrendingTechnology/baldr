@@ -1,6 +1,6 @@
 /**
  * @file Helper module for unit testing baldr.
- * @module baldr-test
+ * @module @bldr/test-helper
  */
 
 const assert = require('assert')
@@ -8,8 +8,8 @@ const fs = require('fs')
 const path = require('path')
 const { JSDOM } = require('jsdom')
 const rewire = require('rewire')
-const { getConfig } = require('baldr-library')
-const { Environment } = require('baldr-application')
+const { getConfig } = require('@bldr/library')
+const { Environment } = require('@bldr/electron-app')
 
 /**
  * Resolves a sequence of paths or path segments into an absolute path
@@ -94,7 +94,7 @@ exports.makeDOM = function (html) {
 
 /**
  * The document object (DOM) of the file “render.html”.
- * @type {module:baldr-application~Document}
+ * @type {module:@bldr/electron-app~Document}
  */
 exports.document = exports.makeDOM(
   fs.readFileSync(
@@ -122,7 +122,7 @@ exports.getDOM = function () {
 exports.testFileMinimal = path.resolve('test', 'files', 'minimal.baldr')
 
 /**
- * @returns {module:baldr-application~Environment}
+ * @returns {module:@bldr/electron-app~Environment}
  */
 exports.freshEnv = function () {
   return new Environment([exports.testFileMinimal], exports.getDOM())
@@ -130,24 +130,24 @@ exports.freshEnv = function () {
 
 /**
  * Low level environment data.
- * @type {module:baldr-application~Environment}
+ * @type {module:@bldr/electron-app~Environment}
  */
 exports.env = exports.freshEnv()
 
 /**
  * `config` object of the test file
- * {@link module:baldr-test.testFileMinimal testFileMinimal}.
+ * {@link module:@bldr/test-helper.testFileMinimal testFileMinimal}.
  *
- * @type {module:baldr-library/config~Config}
+ * @type {module:@bldr/library/config~Config}
  *
- * @see module:baldr-test.testFileMinimal
+ * @see module:@bldr/test-helper.testFileMinimal
  */
 exports.config = getConfig([exports.testFileMinimal])
 
 /**
- * Clone the `config` object {@link module:baldr-test.config}
+ * Clone the `config` object {@link module:@bldr/test-helper.config}
  *
- * @return {module:baldr-library/config~Config}
+ * @return {module:@bldr/library/config~Config}
  */
 exports.cloneConfig = function () {
   return Object.assign({}, exports.config)
@@ -155,7 +155,7 @@ exports.cloneConfig = function () {
 
 /**
  * All available master slides.
- * @type {module:baldr-application/masters~Masters}
+ * @type {module:@bldr/electron-app/masters~Masters}
  */
 exports.masters = getMasters(exports.document)
 

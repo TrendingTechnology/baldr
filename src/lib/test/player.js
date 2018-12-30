@@ -1,7 +1,7 @@
 const {
   assert,
   requireFile
-} = require('baldr-test')
+} = require('@bldr/test-helper')
 
 const { JSDOM } = require('jsdom')
 const player = requireFile('lib', 'player.js')

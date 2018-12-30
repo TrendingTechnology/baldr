@@ -3,7 +3,7 @@ const {
   fs,
   path,
   testFileMinimal
-} = require('baldr-test')
+} = require('@bldr/test-helper')
 
 const { getConfig } = require(
   path.join(__dirname, '..', 'config.js')

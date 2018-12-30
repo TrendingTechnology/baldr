@@ -1,5 +1,5 @@
 {
-  "name": "baldr-theme-default",
+  "name": "@bldr/theme-default",
   "main": "styles.css",
   "dependencies": {
     "typeface-alegreya": "^0.0.40",

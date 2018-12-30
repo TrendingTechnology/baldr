@@ -1,7 +1,7 @@
 const {
   assert,
   makeDOM
-} = require('baldr-test')
+} = require('@bldr/test-helper')
 
 const quote = require('../index.js')
 

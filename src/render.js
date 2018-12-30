@@ -7,7 +7,7 @@
 
 const mousetrap = require('mousetrap')
 const { remote } = require('electron')
-const { ShowRunner } = require('baldr-application')
+const { ShowRunner } = require('@bldr/electron-app')
 
 /* jshint -W117 */
 

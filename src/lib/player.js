@@ -1,6 +1,6 @@
 /**
  * @file A simple player for audio and video media
- * @module baldr-library/player
+ * @module @bldr/library/player
  */
 
 'use strict'

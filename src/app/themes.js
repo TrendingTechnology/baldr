@@ -1,13 +1,13 @@
 /**
  * @file Gather informations about all themes.
- * @module baldr-application/themes
+ * @module @bldr/electron-app/themes
  */
 
 'use strict'
 
 const fs = require('fs')
 const path = require('path')
-const { addCSSFile } = require('baldr-library')
+const { addCSSFile } = require('@bldr/library')
 
 /***********************************************************************
  *
@@ -18,13 +18,13 @@ const { addCSSFile } = require('baldr-library')
  */
 class Themes {
   /**
-   * @param {module:baldr-application~Document} document The document
+   * @param {module:@bldr/electron-app~Document} document The document
    *   object of the browser (DOM).
    */
   constructor (document) {
     /**
      * The document object of the browser (DOM).
-     * @type {module:baldr-application~Document}
+     * @type {module:@bldr/electron-app~Document}
      */
     this.document = document
 
@@ -77,7 +77,7 @@ class Themes {
    */
   resolveTheme_ (name) {
     return path.dirname(
-      require.resolve('baldr-theme-' + name)
+      require.resolve('@bldr/theme-' + name)
     )
   }
 
@@ -106,7 +106,7 @@ class Themes {
       for (let dependencyCSS of dependencies) {
         cssFiles.push(dependencyCSS)
       }
-      cssFiles.push(require.resolve('baldr-theme-' + name))
+      cssFiles.push(require.resolve('@bldr/theme-' + name))
     }
     return cssFiles
   }
@@ -127,7 +127,7 @@ class Themes {
  **********************************************************************/
 
 /**
- * @param {module:baldr-application~Document} document The document
+ * @param {module:@bldr/electron-app~Document} document The document
  *   object of the browser (DOM).
  */
 exports.getThemes = function (document) {

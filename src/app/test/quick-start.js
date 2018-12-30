@@ -2,7 +2,7 @@ const {
   assert,
   requireFile,
   freshEnv
-} = require('baldr-test')
+} = require('@bldr/test-helper')
 
 const { QuickStart } = requireFile('app', 'quick-start.js')
 

@@ -1,6 +1,6 @@
 /**
  * @file Manage the configuration for a presentation session.
- * @module baldr-library/config
+ * @module @bldr/library/config
  */
 
 'use strict'
@@ -45,7 +45,7 @@ class Config {
 
     /**
      * Array of raw slide objects.
-     * @type {module:baldr-application/slides~rawSlideObject[]}
+     * @type {module:@bldr/electron-app/slides~rawSlideObject[]}
      */
     this.slides = this.raw.slides
   }

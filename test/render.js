@@ -1,7 +1,7 @@
 const {
   assert,
   returnDOM
-} = require('baldr-test')
+} = require('@bldr/test-helper')
 
 let rewire
 let document

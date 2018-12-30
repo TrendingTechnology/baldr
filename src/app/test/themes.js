@@ -4,7 +4,7 @@ const {
   assert,
   path,
   requireFile
-} = require('baldr-test')
+} = require('@bldr/test-helper')
 
 const { getThemes } = requireFile('app', 'themes.js')
 const themes = getThemes(getDOM())
@@ -35,7 +35,7 @@ describe('Class “Themes()” #unittest', () => {
     it('Method “getPackageJSON_()”', () => {
       assert.equal(
         themes.getPackageJSON_('default').name,
-        'baldr-theme-default'
+        '@bldr/theme-default'
       )
     })
 
@@ -53,7 +53,7 @@ describe('Class “Themes()” #unittest', () => {
       assert.equal(
         themes.resolveTheme_('default'),
         path.dirname(
-          require.resolve('baldr-theme-default')
+          require.resolve('@bldr/theme-default')
         )
       )
     })
@@ -66,7 +66,7 @@ describe('Class “Themes()” #unittest', () => {
       )
       assert.equal(
         cssFiles.pop(),
-        require.resolve('baldr-theme-handwriting')
+        require.resolve('@bldr/theme-handwriting')
       )
     })
 

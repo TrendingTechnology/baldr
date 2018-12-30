@@ -5,7 +5,7 @@ const {
   rewire,
   requireFile,
   getDOM
-} = require('baldr-test')
+} = require('@bldr/test-helper')
 
 const { getMasters } = requireFile('app', 'masters.js')
 let masters = getMasters(getDOM())

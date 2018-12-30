@@ -4,7 +4,7 @@ const {
   testFileMinimal,
   rewire,
   srcPath
-} = require('baldr-test')
+} = require('@bldr/test-helper')
 
 let mediaJsPath = srcPath('lib', 'media.js')
 

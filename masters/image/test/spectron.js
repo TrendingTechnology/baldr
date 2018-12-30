@@ -2,7 +2,7 @@ const {
   assert,
   path,
   Spectron
-} = require('baldr-test')
+} = require('@bldr/test-helper')
 
 let resolve = function (image) {
   return 'file://' + path.resolve('masters/image/images', image)

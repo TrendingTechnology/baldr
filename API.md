@@ -1,4 +1,4 @@
-How to write a bladr master slide: [Interface](module-baldr-application_masters-Master.html)
+How to write a bladr master slide: [Interface](module-@bldr/electron-app_masters-Master.html)
 
 # JSDoc parameters
 
@@ -8,23 +8,23 @@ How to write a bladr master slide: [Interface](module-baldr-application_masters-
 
 ## c
 
-* `config`: `@param {module:baldr-library/config~Config} config All configurations of the current presentation session.`
+* `config`: `@param {module:@bldr/library/config~Config} config All configurations of the current presentation session.`
 
 ## d
 
-* `document`: `@param {module:baldr-application~Document} document The document object (DOM) of the render process.`
+* `document`: `@param {module:@bldr/electron-app~Document} document The document object (DOM) of the render process.`
 
 ## e
 
-* `env`: `@param {module:baldr-application~Environment} env Low level environment data.`
+* `env`: `@param {module:@bldr/electron-app~Environment} env Low level environment data.`
 
 ## m
 
-* `master`: `@param {module:baldr-application/masters~Master} master The normalized master object derived from the master slide.`
+* `master`: `@param {module:@bldr/electron-app/masters~Master} master The normalized master object derived from the master slide.`
 * `masterName`: `@param {string} masterName The name of the master slide.`
-* `masters`: `@param {module:baldr-application/masters~Masters} masters All available master slides.`
-* `mousetrap`: `@param {module:baldr-application~mousetrap} mousetrap The object of shortcut library “mousetrap”.`
-* `masterData`: `@param {module:baldr-application/masters~masterData} The normalized master data.`
+* `masters`: `@param {module:@bldr/electron-app/masters~Masters} masters All available master slides.`
+* `mousetrap`: `@param {module:@bldr/electron-app~mousetrap} mousetrap The object of shortcut library “mousetrap”.`
+* `masterData`: `@param {module:@bldr/electron-app/masters~masterData} The normalized master data.`
 
 ## n
 
@@ -32,24 +32,24 @@ How to write a bladr master slide: [Interface](module-baldr-application_masters-
 
 ## q
 
-* `quickStart`: `@param {module:baldr-application/quick-start~QuickStart} quickStart Object to manage the quick start entries.`
+* `quickStart`: `@param {module:@bldr/electron-app/quick-start~QuickStart} quickStart Object to manage the quick start entries.`
 
 ## r
 
-* `rawQuickStartEntry`: `@param {module:baldr-application/quick-start~rawQuickStartEntry} rawQuickStartEntry A raw quick start entry specified in the master slide hooks.`
-* `rawSlideData`: `@param {module:baldr-application/slides~rawSlideData} rawSlideData Various types of data to render a slide.`
+* `rawQuickStartEntry`: `@param {module:@bldr/electron-app/quick-start~rawQuickStartEntry} rawQuickStartEntry A raw quick start entry specified in the master slide hooks.`
+* `rawSlideData`: `@param {module:@bldr/electron-app/slides~rawSlideData} rawSlideData Various types of data to render a slide.`
 * `rawSlides`: `@param {array} rawSlides An array of raw slide objects.`
-* `rawMasterData`: `@param {module:baldr-application/masters~rawMasterData} rawMasterData Data in various types to pass to a master slide.`
+* `rawMasterData`: `@param {module:@bldr/electron-app/masters~rawMasterData} rawMasterData Data in various types to pass to a master slide.`
 
 ## s
 
-* `slide`: `@param {module:baldr-application/slides~Slide} slide The object representation of one slide.`
-* `slideData`: `@param {module:baldr-application/slides~SlideData} slideData Normalized slide data.`
-* `slides`: `@param {module:baldr-application/slides~Slides} slides All slide objects of the current presentation session.`
-* `slidesSwitcher`: `@param {module:baldr-application/slides-switcher~SlidesSwitcher} slidesSwitcher Object to switch between the slides.`
-* `steps`: `@param {module:baldr-application/slides~StepSwitcher} The instantiated object derived from the class “StepSwitcher()”.`
+* `slide`: `@param {module:@bldr/electron-app/slides~Slide} slide The object representation of one slide.`
+* `slideData`: `@param {module:@bldr/electron-app/slides~SlideData} slideData Normalized slide data.`
+* `slides`: `@param {module:@bldr/electron-app/slides~Slides} slides All slide objects of the current presentation session.`
+* `slidesSwitcher`: `@param {module:@bldr/electron-app/slides-switcher~SlidesSwitcher} slidesSwitcher Object to switch between the slides.`
+* `steps`: `@param {module:@bldr/electron-app/slides~StepSwitcher} The instantiated object derived from the class “StepSwitcher()”.`
 
 ## t
 
-* `themes`: `@param {module:baldr-application/themes~Themes} themes All available themes.`
+* `themes`: `@param {module:@bldr/electron-app/themes~Themes} themes All available themes.`
 * `themeName`: `@param {string} themeName The name of a theme.`

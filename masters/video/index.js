@@ -1,11 +1,11 @@
 /**
  * @file Master slide “video”
- * @module baldr-master-video
+ * @module @bldr/master-video
  */
 
 'use strict'
 
-const { Media } = require('baldr-library')
+const { Media } = require('@bldr/library')
 
 /**
  * {@see https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Client-side_web_APIs/Video_and_audio_APIs}
@@ -158,7 +158,7 @@ class VideoPlayer {
 }
 
 /**
- * @see {@link module:baldr-application/masters~Master#normalizeData}
+ * @see {@link module:@bldr/electron-app/masters~Master#normalizeData}
  */
 exports.normalizeData = function (rawSlideData, config) {
   return new Media(config.sessionDir)
@@ -166,7 +166,7 @@ exports.normalizeData = function (rawSlideData, config) {
 }
 
 /**
- * @see {@link module:baldr-application/masters~Master#mainHTML}
+ * @see {@link module:@bldr/electron-app/masters~Master#mainHTML}
  */
 exports.mainHTML = function (slide, config, document) {
   let video = slide.masterData[0].path
@@ -189,7 +189,7 @@ exports.mainHTML = function (slide, config, document) {
 }
 
 /**
- * @see {@link module:baldr-application/masters~Master#postSet}
+ * @see {@link module:@bldr/electron-app/masters~Master#postSet}
  */
 exports.postSet = function (slide, config, document) {
   let vid = new VideoPlayer(document)

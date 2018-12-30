@@ -1,6 +1,6 @@
 /**
  * @file Master slide “markdown”
- * @module baldr-master-markdown
+ * @module @bldr/master-markdown
  */
 
 'use strict'
@@ -12,7 +12,7 @@ const markdown = require('marked')
  **********************************************************************/
 
 /**
- * @see {@link module:baldr-application/masters~Master#mainHTML}
+ * @see {@link module:@bldr/electron-app/masters~Master#mainHTML}
  */
 exports.mainHTML = function (slide, config, document) {
   return markdown(slide.masterData)

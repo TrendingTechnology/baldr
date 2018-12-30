@@ -1,5 +1,5 @@
 {
-  "name": "baldr-library",
+  "name": "@bldr/library",
   "main": "index.js",
   "description": "Some low level library functions and classes used by the master modules.",
   "dependencies": {

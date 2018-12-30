@@ -1,6 +1,6 @@
 /**
  * @file Load the slides object form the YAML file format and process it.
- * @module baldr-application/slides-switcher
+ * @module @bldr/electron-app/slides-switcher
  */
 
 'use strict'
@@ -14,21 +14,21 @@
  */
 class SlidesSwitcher {
   /**
-   * @param {module:baldr-application/slides~Slides} slides All slide
+   * @param {module:@bldr/electron-app/slides~Slides} slides All slide
    *   objects of the current presentation session.
-   * @param {module:baldr-application~Environment} env Low level
+   * @param {module:@bldr/electron-app~Environment} env Low level
    *   environment data.
    */
   constructor (slides, env) {
     /**
      * Low level environment data.
-     * @type {module:baldr-application~Environment}
+     * @type {module:@bldr/electron-app~Environment}
      */
     this.env = env
 
     /**
      * All slides index by the slide number.
-     * @type {module:baldr-application/slides~Slides}
+     * @type {module:@bldr/electron-app/slides~Slides}
      */
     this.slides = slides
 

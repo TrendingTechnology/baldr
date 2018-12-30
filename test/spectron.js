@@ -2,7 +2,7 @@ const {
   assert,
   fs,
   Spectron
-} = require('baldr-test')
+} = require('@bldr/test-helper')
 
 describe('General Spectron tests #spectron', () => {
   describe('build', () => {

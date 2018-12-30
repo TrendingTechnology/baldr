@@ -5,7 +5,7 @@ const {
   srcPath,
   path,
   freshEnv
-} = require('baldr-test')
+} = require('@bldr/test-helper')
 
 const question = require('../index.js')
 const questionRewired = rewire(path.join(__dirname, '..', 'index.js'))

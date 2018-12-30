@@ -1,5 +1,5 @@
 {
-  "name": "baldr-master-editor",
+  "name": "@bldr/master-editor",
   "dependencies": {
     "ContentTools": "^1.6.0"
   }

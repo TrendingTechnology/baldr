@@ -1,6 +1,6 @@
 /**
  * @file Master slide “quote”
- * @module baldr-master-quote
+ * @module @bldr/master-quote
  */
 
 'use strict'
@@ -49,14 +49,14 @@ let renderQuotationMark = function (begin = true) {
  **********************************************************************/
 
 /**
- * @see {@link module:baldr-application/masters~Master#config}
+ * @see {@link module:@bldr/electron-app/masters~Master#config}
  */
 exports.config = {
   centerVertically: true
 }
 
 /**
- * @see {@link module:baldr-application/masters~Master#mainHTML}
+ * @see {@link module:@bldr/electron-app/masters~Master#mainHTML}
  */
 exports.mainHTML = function (slide, config, document) {
   let data = slide.masterData
@@ -64,7 +64,7 @@ exports.mainHTML = function (slide, config, document) {
   let begin = renderQuotationMark()
   let end = renderQuotationMark(false)
   return `
-<section id="baldr-master-quote">
+<section id="@bldr/master-quote">
 
   <p class="text">${begin} ${data.text} ${end}</p>
 

@@ -1,7 +1,7 @@
 const {
   assert,
   Spectron
-} = require('baldr-test')
+} = require('@bldr/test-helper')
 
 describe('Master slide “website”: “example.baldr” #website', function () {
   this.timeout(10000)
