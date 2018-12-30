@@ -17,7 +17,7 @@ describe('Master slide “editor”: “example.baldr” #spectron', function ()
     return this.spectron.stop();
   });
 
-  it('Basic navigation', function () {
+  it.skip('Basic navigation', function () {
     return this.app.client
       .getHTML('.ct-app')
       .then(text => {assert.ok(text.includes('ct-ignition__button--edit'));})
