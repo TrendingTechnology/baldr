@@ -3,8 +3,7 @@ const {
   path,
   testFileMinimal,
   rewire,
-  srcPath,
-  requireFile
+  srcPath
 } = require('baldr-test')
 
 let mediaJsPath = srcPath('lib', 'media.js')
@@ -18,28 +17,6 @@ let media = new Media(testFiles)
 
 let resolve = function (folder, file) {
   return path.join(testFiles, folder, file)
-}
-
-let resolveAudio = function (file) {
-  return resolve('audio', file)
-}
-
-let resolveImage = function (file) {
-  return resolve('image', file)
-}
-
-let resolveVideo = function (file) {
-  return resolve('video', file)
-}
-
-let expectedImage = [
-  resolveImage('beethoven.jpg'),
-  resolveImage('haydn.png'),
-  resolveImage('mozart.jpeg')
-]
-
-let orderedList = function () {
-  media.orderedList(['images'])
 }
 
 describe('Class “FileInfo()” #unittest', () => {
@@ -187,7 +164,7 @@ describe('Class “Media()” #unittest', () => {
       })
 
       it('A folder', function () {
-        out = media.list(
+        let out = media.list(
           path.resolve('test/files/mixed-extensions/image')
         )
         assert.equal(out[2].basename, 'mozart.jpeg')

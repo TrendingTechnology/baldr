@@ -5,9 +5,6 @@
 
 'use strict'
 
-const fs = require('fs')
-const path = require('path')
-
 /***********************************************************************
  *
  **********************************************************************/
@@ -251,9 +248,8 @@ class SlideData {
       rawSlideData = {}
       this.masterName = masterName
       this.rawMasterData = rawMasterData
-    }
     // object
-    else if (typeof rawSlideData === 'object' && !Array.isArray(rawSlideData)) {
+    } else if (typeof rawSlideData === 'object' && !Array.isArray(rawSlideData)) {
       let { masterName, rawMasterData } = this.pullMasterfromObject_(
         rawSlideData, env.masters.all
       )

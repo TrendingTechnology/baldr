@@ -1,9 +1,5 @@
 const {
   assert,
-  document,
-  path,
-  presentation,
-  masters,
   makeDOM
 } = require('baldr-test')
 

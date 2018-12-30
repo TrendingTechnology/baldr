@@ -19,8 +19,7 @@ const { getQuickStart } = requireLib('quick-start')
 const { getMasters } = requireLib('masters')
 const {
   getInstantSlide,
-  getSlides,
-  Slide
+  getSlides
 } = requireLib('slides')
 const { SlidesSwitcher } = requireLib('slides-switcher')
 const { getThemes } = requireLib('themes')

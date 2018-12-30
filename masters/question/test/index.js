@@ -1,8 +1,6 @@
 const {
   assert,
   makeDOM,
-  config,
-  masters,
   rewire,
   srcPath,
   getDOM,
@@ -18,7 +16,7 @@ let normalizeData = function (data) {
 }
 
 let mainHTML = function (data) {
-  masterData = question.normalizeData(data)
+  let masterData = question.normalizeData(data)
   return question.mainHTML({ masterData: masterData })
 }
 
@@ -145,7 +143,6 @@ describe('Master slide “question” #unittest', () => {
     const { Slide } = require(slidesJsPath)
 
     let getQuestion = function () {
-      let dom = getDOM()
       return new Slide({ 'question': ['1', '2', '3'] }, freshEnv())
     }
 

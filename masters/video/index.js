@@ -193,4 +193,5 @@ exports.mainHTML = function (slide, config, document) {
  */
 exports.postSet = function (slide, config, document) {
   let vid = new VideoPlayer(document)
+  return vid
 }

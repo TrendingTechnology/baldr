@@ -1,19 +1,12 @@
 const {
-  config,
-  masters,
-  allMasters,
   assert,
-  document,
-  getDOM,
-  path,
-  requireFile,
   rewire,
   srcPath,
   freshEnv
 } = require('baldr-test')
 
 let slidesJsPath = srcPath('app', 'slides.js')
-const { Slide, getSlides } = require(slidesJsPath)
+const { Slide } = require(slidesJsPath)
 const Slides = rewire(slidesJsPath).__get__('Slides')
 const SlideData = rewire(slidesJsPath).__get__('SlideData')
 
@@ -24,9 +17,6 @@ let slide
  **********************************************************************/
 
 describe('Class “SlideData()” #unittest', () => {
-  const masterNames = ['markdown', 'camera', 'audio']
-  const themeNames = ['default', 'handwriting']
-
   let getInput = function (rawSlideData) {
     return new SlideData(rawSlideData, freshEnv())
   }
@@ -308,30 +298,6 @@ describe('Class “Slide()” #unittest', () => {
     })
   })
 })
-
-let rawYaml = [
-  {
-    'quote': {
-      'text': 'text',
-      'author': 'author',
-      'date': 'date'
-    }
-  },
-  {
-    'question': [
-      {
-        'question': 'question',
-        'answer': 'answer'
-      }
-    ]
-  },
-  {
-    'person': {
-      'name': 'name',
-      'image': 'image'
-    }
-  }
-]
 
 let slidesClass
 

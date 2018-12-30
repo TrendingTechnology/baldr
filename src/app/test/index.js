@@ -1,6 +1,5 @@
 const {
   assert,
-  document,
   getDOM,
   fs,
   path,
