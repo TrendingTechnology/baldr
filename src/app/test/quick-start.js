@@ -1,9 +1,6 @@
 const {
   assert,
-  document,
-  getDOM,
   requireFile,
-  masters,
   freshEnv
 } = require('baldr-test')
 

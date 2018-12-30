@@ -1,8 +1,6 @@
 const {
   assert,
   makeDOM,
-  config,
-  masters,
   rewire,
   srcPath,
   getDOM,
@@ -18,7 +16,11 @@ let normalizeData = function (data) {
 }
 
 let mainHTML = function (data) {
+<<<<<<< HEAD
   masterData = question.normalizeData(data)
+=======
+  let masterData = question.normalizeData(data)
+>>>>>>> d94624cbc5c01caa65ca922c6b86bd4e94499744
   return question.mainHTML({ masterData: masterData })
 }
 
@@ -145,7 +147,10 @@ describe('Master slide “question” #unittest', () => {
     const { Slide } = require(slidesJsPath)
 
     let getQuestion = function () {
+<<<<<<< HEAD
       let dom = getDOM()
+=======
+>>>>>>> d94624cbc5c01caa65ca922c6b86bd4e94499744
       return new Slide({ 'question': ['1', '2', '3'] }, freshEnv())
     }
 

@@ -193,4 +193,8 @@ exports.mainHTML = function (slide, config, document) {
  */
 exports.postSet = function (slide, config, document) {
   let vid = new VideoPlayer(document)
+<<<<<<< HEAD
+=======
+  return vid
+>>>>>>> d94624cbc5c01caa65ca922c6b86bd4e94499744
 }

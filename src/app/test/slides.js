@@ -1,19 +1,16 @@
 const {
-  config,
-  masters,
-  allMasters,
   assert,
-  document,
-  getDOM,
-  path,
-  requireFile,
   rewire,
   srcPath,
   freshEnv
 } = require('baldr-test')
 
 let slidesJsPath = srcPath('app', 'slides.js')
+<<<<<<< HEAD
 const { Slide, getSlides } = require(slidesJsPath)
+=======
+const { Slide } = require(slidesJsPath)
+>>>>>>> d94624cbc5c01caa65ca922c6b86bd4e94499744
 const Slides = rewire(slidesJsPath).__get__('Slides')
 const SlideData = rewire(slidesJsPath).__get__('SlideData')
 
@@ -24,9 +21,12 @@ let slide
  **********************************************************************/
 
 describe('Class “SlideData()” #unittest', () => {
+<<<<<<< HEAD
   const masterNames = ['markdown', 'camera', 'audio']
   const themeNames = ['default', 'handwriting']
 
+=======
+>>>>>>> d94624cbc5c01caa65ca922c6b86bd4e94499744
   let getInput = function (rawSlideData) {
     return new SlideData(rawSlideData, freshEnv())
   }
@@ -302,6 +302,7 @@ describe('Class “Slide()” #unittest', () => {
     it('master: <body data-master="masterName">', function () {
       assert.equal(env.document.body.dataset.master, 'question')
     })
+<<<<<<< HEAD
 
     it('theme: <body data-theme="default">', function () {
       assert.equal(env.document.body.dataset.theme, 'default')
@@ -333,6 +334,15 @@ let rawYaml = [
   }
 ]
 
+=======
+
+    it('theme: <body data-theme="default">', function () {
+      assert.equal(env.document.body.dataset.theme, 'default')
+    })
+  })
+})
+
+>>>>>>> d94624cbc5c01caa65ca922c6b86bd4e94499744
 let slidesClass
 
 /***********************************************************************

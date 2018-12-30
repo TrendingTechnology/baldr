@@ -1,6 +1,5 @@
 const {
   assert,
-  path,
   Spectron
 } = require('baldr-test')
 

@@ -11,7 +11,7 @@ env:
 install:
   - npm install --global npm
   - npm install
-  - npm run dist
+  - npm run build
 
 before_script:
   - "export DISPLAY=:99.0"

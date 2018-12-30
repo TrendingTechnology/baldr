@@ -1,6 +1,5 @@
 const {
   assert,
-  document,
   path,
   cloneConfig
 } = require('baldr-test')

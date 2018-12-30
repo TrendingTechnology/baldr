@@ -1,11 +1,5 @@
 const {
   assert,
-  masters,
-  config,
-  getDOM,
-  fs,
-  path,
-  testFileMinimal,
   requireFile,
   freshEnv
 } = require('baldr-test')
