@@ -1,0 +1,15 @@
+{
+  "name": "@bldr/songbook-cli",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:Josef-Friedrich/baldr-songbook.git"
+  },
+  "author": {
+    "name": "Josef Friedrich",
+    "email": "josef@friedrich.rocks",
+    "url": "https://josef.friedrich.rocks"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/Josef-Friedrich/baldr-songbook"
+}
