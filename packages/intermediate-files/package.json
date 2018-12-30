@@ -1,6 +1,7 @@
 {
   "name": "@bldr/songbook-intermediate-files",
   "main": "index.js",
+  "version": "0.0.0",
   "repository": {
     "type": "git",
     "url": "git@github.com:Josef-Friedrich/baldr-songbook.git"
