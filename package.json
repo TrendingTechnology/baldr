@@ -102,6 +102,8 @@
       "it",
       "expect"
     ],
-    "ignore": ["docs"]
+    "ignore": [
+      "docs"
+    ]
   }
 }

@@ -5,10 +5,6 @@
 
 'use strict'
 
-<<<<<<< HEAD
-const path = require('path')
-=======
->>>>>>> d94624cbc5c01caa65ca922c6b86bd4e94499744
 const mousetrap = require('mousetrap')
 const { Howl } = require('howler')
 
@@ -16,10 +12,6 @@ const { Media } = require('baldr-library')
 
 let audioFiles = {}
 let audio
-<<<<<<< HEAD
-let mediaTypesExtensions = ['mp3', 'aac']
-=======
->>>>>>> d94624cbc5c01caa65ca922c6b86bd4e94499744
 
 /**
  *

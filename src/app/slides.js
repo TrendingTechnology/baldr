@@ -4,12 +4,6 @@
  */
 
 'use strict'
-<<<<<<< HEAD
-
-const fs = require('fs')
-const path = require('path')
-=======
->>>>>>> d94624cbc5c01caa65ca922c6b86bd4e94499744
 
 /***********************************************************************
  *
@@ -254,14 +248,8 @@ class SlideData {
       rawSlideData = {}
       this.masterName = masterName
       this.rawMasterData = rawMasterData
-<<<<<<< HEAD
-    }
-    // object
-    else if (typeof rawSlideData === 'object' && !Array.isArray(rawSlideData)) {
-=======
     // object
     } else if (typeof rawSlideData === 'object' && !Array.isArray(rawSlideData)) {
->>>>>>> d94624cbc5c01caa65ca922c6b86bd4e94499744
       let { masterName, rawMasterData } = this.pullMasterfromObject_(
         rawSlideData, env.masters.all
       )
