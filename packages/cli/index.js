@@ -3,6 +3,7 @@
 /**
  * @file Command line interface to generate the intermediate media files for the
  * BALDR songbook.
+ * @module @bldr/songbook-cli
  */
 
 const pckg = require('./package.json')

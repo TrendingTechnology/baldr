@@ -1,6 +1,7 @@
 {
   "name": "@bldr/songbook-intermediate-files",
   "main": "index.js",
+  "description": "A collection of classes and functions to generate the intermediate files for the BALDR songbook.",
   "version": "0.0.7",
   "repository": {
     "type": "git",

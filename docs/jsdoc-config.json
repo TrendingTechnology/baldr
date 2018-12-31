@@ -9,8 +9,8 @@
     },
     "source": {
         "includePattern": ".+\\.js(doc)?$",
-        "excludePattern": "(^|\\/|\\\\)_",
-        "exclude": ["node_modules"]
+        "excludePattern": "(node_modules)",
+        "include": ["packages"]
     },
     "plugins": ["plugins/markdown"],
     "templates": {

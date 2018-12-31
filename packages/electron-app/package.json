@@ -1,6 +1,7 @@
 {
   "name": "@bldr/songbook-electron-app",
   "main": "electron-main.js",
+  "description": "A fullscreen electron app to display songs in a class room using a projector.",
   "version": "0.0.7",
   "repository": {
     "type": "git",
