@@ -1,8 +1,7 @@
-.jshintignore
-.jshintrc
 .npmignore
 .travis.yml
 .vscode
 dist/
+packages/
 docs/
 test/
