@@ -2,7 +2,7 @@
   "name": "@bldr/songbook-base",
   "main": "index.js",
   "description": "Some base classes and functions for the BALDR songbook. This classes are used by the electron app as well by the command line utilty.",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "repository": {
     "type": "git",
     "url": "git@github.com:Josef-Friedrich/baldr-songbook.git"
