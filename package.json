@@ -45,5 +45,9 @@
       "it",
       "expect"
     ]
-  }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "gitHead": "d853bd132f4a61db5b3b796e7bd5dfa44aa8d106"
 }
