@@ -9,7 +9,7 @@ const {
   read,
   tmpCopy
 } = require('./_helper.js')
-const cliRewired = require('rewire')('../src/cli.js')
+const cliRewired = require('rewire')('@bldr/songbook-cli')
 
 describe('Function “parseCliArguments()”', function () {
   let parseCliArguments = cliRewired.__get__('parseCliArguments')
@@ -37,7 +37,7 @@ describe('Function “parseCliArguments()”', function () {
 describe('Command line interface', function () {
   it('--base-path', function () {
     let tmpDir = tmpCopy('clean', 'one')
-    let process = spawn('./src/cli.js', ['--base-path', tmpDir])
+    let process = spawn('./packages/cli/index.js', ['--base-path', tmpDir])
     assert.strictEqual(process.status, 0)
 
     let stdout = process.stdout.toString()
@@ -53,12 +53,12 @@ describe('Command line interface', function () {
 
   it('--clean', function () {
     let tmpDir = tmpCopy('processed', 'one')
-    spawn('./src/cli.js', ['--base-path', tmpDir, '--clean'])
+    spawn('./packages/cli/index.js', ['--base-path', tmpDir, '--clean'])
     assertNotExists(tmpDir, 's', 'Swing-low', 'piano', 'piano.mscx')
   })
 
   it('--help', function () {
-    const cli = spawn('./src/cli.js', ['--help'])
+    const cli = spawn('./packages/cli/index.js', ['--help'])
     let out = cli.stdout.toString()
     assert.ok(out.indexOf('Usage') > -1)
     assert.ok(out.indexOf('--help') > -1)
@@ -68,21 +68,21 @@ describe('Command line interface', function () {
 
   it('--folder', function () {
     let tmpDir = tmpCopy('clean', 'some')
-    spawn('./src/cli.js', ['--base-path', tmpDir, '--folder', path.join(tmpDir, 'a', 'Auf-der-Mauer')])
+    spawn('./packages/cli/index.js', ['--base-path', tmpDir, '--folder', path.join(tmpDir, 'a', 'Auf-der-Mauer')])
     assertExists(tmpDir, 'a', 'Auf-der-Mauer', 'slides', '01.svg')
   })
 
   it('--force', function () {
     let tmpDir = tmpCopy('clean', 'one')
-    let notForced = spawn('./src/cli.js', ['--base-path', tmpDir])
+    let notForced = spawn('./packages/cli/index.js', ['--base-path', tmpDir])
     assert.ok(!notForced.stdout.toString().includes('(forced)'))
-    let forced = spawn('./src/cli.js', ['--base-path', tmpDir, '--force'])
+    let forced = spawn('./packages/cli/index.js', ['--base-path', tmpDir, '--force'])
     assert.ok(forced.stdout.toString().includes('(forced)'))
   })
 
   it('--group-alphabetically', function () {
     let tmpDir = tmpCopy('clean', 'some')
-    spawn('./src/cli.js', ['--base-path', tmpDir, '--group-alphabetically', '--piano'])
+    spawn('./packages/cli/index.js', ['--base-path', tmpDir, '--group-alphabetically', '--piano'])
     let texMarkup = read(path.join(tmpDir, 'songs.tex'))
     assert.strictEqual(texMarkup, `
 
@@ -114,7 +114,7 @@ describe('Command line interface', function () {
 
   it('--list', function () {
     let tmpDir = tmpCopy('clean', 'some')
-    let process = spawn('./src/cli.js', ['--base-path', tmpDir, '--list', path.join('test', 'files', 'song-id-list.txt')])
+    let process = spawn('./packages/cli/index.js', ['--base-path', tmpDir, '--list', path.join('test', 'files', 'song-id-list.txt')])
     let stdout = process.stdout.toString()
     assert.ok(stdout.includes('Auf-der-Mauer'))
     assert.ok(stdout.includes('Swing-low'))
@@ -123,7 +123,7 @@ describe('Command line interface', function () {
 
   it('--page-turn-optimized --group-alphabetically', function () {
     let tmpDir = tmpCopy('clean', 'some')
-    spawn('./src/cli.js', ['--base-path', tmpDir, '--page-turn-optimized', '--group-alphabetically', '--piano'])
+    spawn('./packages/cli/index.js', ['--base-path', tmpDir, '--page-turn-optimized', '--group-alphabetically', '--piano'])
     let texMarkup = read(path.join(tmpDir, 'songs.tex'))
     assert.strictEqual(texMarkup, `
 
@@ -157,7 +157,7 @@ describe('Command line interface', function () {
 
   it('--page-turn-optimized --group-alphabetically --list', function () {
     let tmpDir = tmpCopy('clean', 'some')
-    spawn('./src/cli.js', ['--base-path', tmpDir, '--page-turn-optimized', '--group-alphabetically', '--list', path.join('test', 'files', 'song-id-list.txt'), '--piano'])
+    spawn('./packages/cli/index.js', ['--base-path', tmpDir, '--page-turn-optimized', '--group-alphabetically', '--list', path.join('test', 'files', 'song-id-list.txt'), '--piano'])
     let texMarkup = read(path.join(tmpDir, 'songs.tex'))
     assert.strictEqual(texMarkup, `
 
@@ -178,7 +178,7 @@ describe('Command line interface', function () {
 
   it('--page-turn-optimized', function () {
     let tmpDir = tmpCopy('clean', 'some')
-    spawn('./src/cli.js', ['--base-path', tmpDir, '--page-turn-optimized', '--piano'])
+    spawn('./packages/cli/index.js', ['--base-path', tmpDir, '--page-turn-optimized', '--piano'])
     let texMarkup = read(path.join(tmpDir, 'songs.tex'))
     assert.strictEqual(texMarkup, `
 \\tmpheading{Auf der Mauer, auf der Lauer}
@@ -203,7 +203,7 @@ describe('Command line interface', function () {
 
   it('--piano', function () {
     let tmpDir = tmpCopy('clean', 'one')
-    spawn('./src/cli.js', ['--base-path', tmpDir, '--piano'])
+    spawn('./packages/cli/index.js', ['--base-path', tmpDir, '--piano'])
     assertExists(tmpDir, 'a', 'Auf-der-Mauer', 'piano', 'piano.mscx')
     assertExists(tmpDir, 'songs.tex')
     assertNotExists(tmpDir, 'a', 'Auf-der-Mauer', 'slides', '01.svg')
@@ -212,7 +212,7 @@ describe('Command line interface', function () {
 
   it('--slides', function () {
     let tmpDir = tmpCopy('clean', 'one')
-    spawn('./src/cli.js', ['--base-path', tmpDir, '--slides'])
+    spawn('./packages/cli/index.js', ['--base-path', tmpDir, '--slides'])
     assertExists(tmpDir, 'a', 'Auf-der-Mauer', 'slides', '01.svg')
     assertExists(tmpDir, 'a', 'Auf-der-Mauer', 'projector.pdf')
     assertNotExists(tmpDir, 'a', 'Auf-der-Mauer', 'piano', 'piano.mscx')
@@ -221,12 +221,12 @@ describe('Command line interface', function () {
 
   it('--song-id', function () {
     let tmpDir = tmpCopy('clean', 'some')
-    spawn('./src/cli.js', ['--base-path', tmpDir, '--song-id', 'Auf-der-Mauer'])
+    spawn('./packages/cli/index.js', ['--base-path', tmpDir, '--song-id', 'Auf-der-Mauer'])
     assertExists(tmpDir, 'a', 'Auf-der-Mauer', 'slides', '01.svg')
   })
 
   it('--version', function () {
-    const cli = spawn('./src/cli.js', ['--version'])
+    const cli = spawn('./packages/cli/index.js', ['--version'])
     let pckg = require('../package.json')
     assert.strictEqual(cli.stdout.toString(), pckg.version + '\n')
     assert.strictEqual(cli.status, 0)

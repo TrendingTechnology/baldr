@@ -3,7 +3,7 @@ const fs = require('fs')
 const path = require('path')
 let Application = require('spectron').Application
 
-let pkg = require('../package.json')
+let pkg = require(path.join('packages', 'electron-app', 'package.json'))
 
 let darwinPath = []
 
@@ -12,7 +12,7 @@ if (process.platform === 'darwin') {
 }
 
 let appPath = path.join(
-  'dist',
+  'packages', 'electron-app', 'dist',
   `${pkg.name}-${process.platform}-${process.arch}`,
   ...darwinPath,
   pkg.name

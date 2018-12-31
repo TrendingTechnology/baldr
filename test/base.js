@@ -1,6 +1,6 @@
 const assert = require('assert')
 const fs = require('fs-extra')
-const libRewired = require('rewire')('../src/lib.js')
+const baseRewired = require('rewire')('@bldr/songbook-base')
 const path = require('path')
 const process = require('process')
 const sinon = require('sinon')
@@ -20,7 +20,7 @@ process.env.BALDR_SONGBOOK_PATH = path.resolve('test', 'songs', 'clean', 'some')
 
 describe('Functions', function () {
   describe('Function “checkExecutable()”', function () {
-    let checkExecutable = libRewired.__get__('checkExecutable')
+    let checkExecutable = baseRewired.__get__('checkExecutable')
 
     it('Function “checkExecutable()”: existing executable', function () {
       assert.strictEqual(checkExecutable('echo'), true)
@@ -32,7 +32,7 @@ describe('Functions', function () {
   })
 
   describe('Function “checkExecutables()”', function () {
-    let checkExecutables = libRewired.__get__('checkExecutables')
+    let checkExecutables = baseRewired.__get__('checkExecutables')
 
     it('all are existing', function () {
       let { status, unavailable } = checkExecutables(['echo', 'ls'])
@@ -71,7 +71,7 @@ describe('Functions', function () {
     })
 
     it('config.path', function () {
-      let bootstrapConfig = libRewired.__get__('bootstrapConfig')
+      let bootstrapConfig = baseRewired.__get__('bootstrapConfig')
       let config = bootstrapConfig()
       assert.strictEqual(config.path, path.resolve('test', 'songs', 'clean', 'some'))
     })
@@ -80,7 +80,7 @@ describe('Functions', function () {
       let savePATH = process.env.PATH
       process.env.PATH = ''
       try {
-        let bootstrapConfig = libRewired.__get__('bootstrapConfig')
+        let bootstrapConfig = baseRewired.__get__('bootstrapConfig')
         bootstrapConfig()
       } catch (e) {
         assert.strictEqual(
@@ -95,7 +95,7 @@ describe('Functions', function () {
   })
 
   it('Function “parseSongIDList()”', function () {
-    let parseSongIDList = libRewired.__get__('parseSongIDList')
+    let parseSongIDList = baseRewired.__get__('parseSongIDList')
     let result = parseSongIDList(path.join('test', 'files', 'song-id-list.txt'))
     assert.deepStrictEqual(result, ['Auf-der-Mauer', 'Swing-low'])
   })
@@ -103,9 +103,9 @@ describe('Functions', function () {
 
 describe('Classes', function () {
   describe('Class “Message()”', function () {
-    let Message = libRewired.__get__('Message')
-    let message = libRewired.__get__('message')
-    let Song = libRewired.__get__('Song')
+    let Message = baseRewired.__get__('Message')
+    let message = baseRewired.__get__('message')
+    let Song = baseRewired.__get__('Song')
     let song = new Song(path.resolve('test', 'songs', 'processed', 'some', 'a', 'Auf-der-Mauer'))
 
     const status = {
@@ -246,7 +246,7 @@ describe('Classes', function () {
   })
 
   describe('Class “TextFile()”', function () {
-    let TextFile = libRewired.__get__('TextFile')
+    let TextFile = baseRewired.__get__('TextFile')
 
     it('Property “path”', function () {
       let tmpFile = mkTmpFile()
@@ -282,7 +282,7 @@ describe('Classes', function () {
   })
 
   describe('Class “Folder()”', function () {
-    let Folder = libRewired.__get__('Folder')
+    let Folder = baseRewired.__get__('Folder')
 
     describe('Initialisation', function () {
       it('Using one path string.', function () {
@@ -328,7 +328,7 @@ describe('Classes', function () {
   })
 
   describe('Class “Sqlite()”', function () {
-    let Sqlite = libRewired.__get__('Sqlite')
+    let Sqlite = baseRewired.__get__('Sqlite')
     let tmpDir = mkTmpDir()
     let testDb = path.join(tmpDir, 'test.db')
     let db
@@ -389,7 +389,7 @@ describe('Classes', function () {
   })
 
   describe('Class “FileMonitor()”', function () {
-    let FileMonitor = libRewired.__get__('FileMonitor')
+    let FileMonitor = baseRewired.__get__('FileMonitor')
     let tmpDir = mkTmpDir()
     let testDb = path.join(tmpDir, 'file-monitor.db')
     let testFile = path.join(tmpDir, 'file-monitor.txt')
@@ -451,7 +451,7 @@ describe('Classes', function () {
 
   describe('Class “SongMetaData()”', function () {
     let songPath = path.resolve('test', 'songs', 'clean', 'some', 'a', 'Auf-der-Mauer')
-    let SongMetaData = libRewired.__get__('SongMetaData')
+    let SongMetaData = baseRewired.__get__('SongMetaData')
     let song = new SongMetaData(songPath)
 
     describe('Properties', function () {
@@ -566,7 +566,7 @@ describe('Classes', function () {
   })
 
   describe('Class “SongMetaDataCombined()”', function () {
-    let SongMetaDataCombined = libRewired.__get__('SongMetaDataCombined')
+    let SongMetaDataCombined = baseRewired.__get__('SongMetaDataCombined')
 
     describe('get title', function () {
       it('title only', function () {
@@ -629,7 +629,7 @@ describe('Classes', function () {
       })
     })
     describe('Real world example', function () {
-      let SongMetaData = libRewired.__get__('SongMetaData')
+      let SongMetaData = baseRewired.__get__('SongMetaData')
       let folder = path.join('test', 'songs', 'clean', 'some', 'a', 'Auf-der-Mauer')
       let metaData = new SongMetaData(folder)
       let combined = new SongMetaDataCombined(metaData)
@@ -649,8 +649,8 @@ describe('Classes', function () {
   })
 
   describe('Class “Song()”', function () {
-    let Song = libRewired.__get__('Song')
-    let FileMonitor = libRewired.__get__('FileMonitor')
+    let Song = baseRewired.__get__('Song')
+    let FileMonitor = baseRewired.__get__('FileMonitor')
     let fileMonitor = new FileMonitor(mkTmpFile())
     let folder = path.join('test', 'songs', 'clean', 'some', 'a', 'Auf-der-Mauer')
     let song = new Song(folder, fileMonitor)
@@ -694,22 +694,22 @@ describe('Classes', function () {
       })
 
       it('Property “metaData”', function () {
-        let SongMetaData = libRewired.__get__('SongMetaData')
+        let SongMetaData = baseRewired.__get__('SongMetaData')
         assert.ok(song.metaData instanceof SongMetaData)
       })
 
       it('Property “metaDataCombined”', function () {
-        let SongMetaDataCombined = libRewired.__get__('SongMetaDataCombined')
+        let SongMetaDataCombined = baseRewired.__get__('SongMetaDataCombined')
         assert.ok(song.metaDataCombined instanceof SongMetaDataCombined)
       })
 
       it('Property “folderSlides”', function () {
-        let Folder = libRewired.__get__('Folder')
+        let Folder = baseRewired.__get__('Folder')
         assert.ok(song.folderSlides instanceof Folder)
       })
 
       it('Property “folderPiano”', function () {
-        let Folder = libRewired.__get__('Folder')
+        let Folder = baseRewired.__get__('Folder')
         assert.ok(song.folderPiano instanceof Folder)
       })
 
@@ -992,8 +992,8 @@ describe('Classes', function () {
   })
 
   describe('Class “AlphabeticalSongsTree()”', function () {
-    let AlphabeticalSongsTree = libRewired.__get__('AlphabeticalSongsTree')
-    let Library = libRewired.__get__('Library')
+    let AlphabeticalSongsTree = baseRewired.__get__('AlphabeticalSongsTree')
+    let Library = baseRewired.__get__('Library')
     let library = new Library(path.join('test', 'songs', 'processed', 'some'))
     let songs = Object.values(library.songs)
 
@@ -1005,8 +1005,8 @@ describe('Classes', function () {
   })
 
   describe('Class “PianoFilesCountTree()”', function () {
-    let PianoFilesCountTree = libRewired.__get__('PianoFilesCountTree')
-    let Library = libRewired.__get__('Library')
+    let PianoFilesCountTree = baseRewired.__get__('PianoFilesCountTree')
+    let Library = baseRewired.__get__('Library')
     let library = new Library(path.join('test', 'songs', 'processed', 'some'))
     let songs = Object.values(library.songs)
     let countTree = new PianoFilesCountTree(songs)
@@ -1082,9 +1082,9 @@ describe('Classes', function () {
   })
 
   describe('Class “PianoScore()”', function () {
-    let PianoScore = libRewired.__get__('PianoScore')
-    let PianoFilesCountTree = libRewired.__get__('PianoFilesCountTree')
-    let Library = libRewired.__get__('Library')
+    let PianoScore = baseRewired.__get__('PianoScore')
+    let PianoFilesCountTree = baseRewired.__get__('PianoFilesCountTree')
+    let Library = baseRewired.__get__('Library')
     let tmpDir = tmpCopy('processed', 'some')
     let library = new Library(tmpDir)
     let songs = library.toArray()
@@ -1398,7 +1398,7 @@ describe('Classes', function () {
   })
 
   describe('Class “Library()”', function () {
-    let Library = libRewired.__get__('Library')
+    let Library = baseRewired.__get__('Library')
     let library
     let basePath
 
@@ -1424,7 +1424,7 @@ describe('Classes', function () {
       })
 
       it('Property “fileMonitor”', function () {
-        let FileMonitor = libRewired.__get__('FileMonitor')
+        let FileMonitor = baseRewired.__get__('FileMonitor')
         assert.ok(library.fileMonitor instanceof FileMonitor)
       })
 
@@ -1532,7 +1532,7 @@ describe('Classes', function () {
         it('force = false', function () {
           let spy = sinon.spy()
           let stub = sinon.stub()
-          libRewired.__set__('message.songFolder', stub)
+          baseRewired.__set__('message.songFolder', stub)
           let library = new Library(basePath)
           for (let songID in library.songs) {
             library.songs[songID].generateIntermediateFiles = spy
@@ -1546,7 +1546,7 @@ describe('Classes', function () {
         it('force = true', function () {
           let spy = sinon.spy()
           let stub = sinon.stub()
-          libRewired.__set__('message.songFolder', stub)
+          baseRewired.__set__('message.songFolder', stub)
           let library = new Library(basePath)
           for (let songID in library.songs) {
             library.songs[songID].generateIntermediateFiles = spy
@@ -1595,7 +1595,7 @@ describe('Classes', function () {
 
       describe('Method “update()”', function () {
         let stub = sinon.stub()
-        libRewired.__set__('message.songFolder', stub)
+        baseRewired.__set__('message.songFolder', stub)
 
         let songs = path.join('test', 'songs', 'clean', 'some')
 
@@ -1640,7 +1640,7 @@ describe('Classes', function () {
 
         it('mode = piano', function () {
           let stub = sinon.stub()
-          libRewired.__set__('message.songFolder', stub)
+          baseRewired.__set__('message.songFolder', stub)
 
           let songs = path.join('test', 'songs', 'clean', 'some')
           const auf = path.join(songs, 'a', 'Auf-der-Mauer')
