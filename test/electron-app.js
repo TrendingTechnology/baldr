@@ -3,7 +3,7 @@ const fs = require('fs')
 const path = require('path')
 let Application = require('spectron').Application
 
-let pkg = require(path.join('packages', 'electron-app', 'package.json'))
+let pkg = require(path.join(__dirname, '..', 'packages', 'electron-app', 'package.json'))
 
 let darwinPath = []
 
