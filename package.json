@@ -1,7 +1,7 @@
 {
   "name": "@bldr/songbook",
   "description": "Meta package used for testing and documentation purposes.",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "repository": {
     "type": "git",
     "url": "git@github.com:Josef-Friedrich/baldr-songbook.git"
@@ -22,7 +22,7 @@
   "devDependencies": {
     "@bldr/songbook-base": "^0.0.10",
     "@bldr/songbook-cli": "^0.0.10",
-    "@bldr/songbook-electron-app": "^0.0.10",
+    "@bldr/songbook-electron-app": "^0.0.11",
     "@bldr/songbook-intermediate-files": "^0.0.10",
     "jsdoc": "^3.5.5",
     "lerna": "^3.8.0",
