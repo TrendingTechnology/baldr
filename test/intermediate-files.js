@@ -83,11 +83,6 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
         it('Property “dbFile”', function () {
           assert.strictEqual(db.dbFile, testDb)
         })
-
-        it('Property “db”', function () {
-          const Sqlite3 = require('better-sqlite3')
-          assert.ok(db.db instanceof Sqlite3)
-        })
       })
 
       describe('Methods', function () {
@@ -180,9 +175,9 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
     describe('Class “PianoScore()”', function () {
       let PianoScore = intermediateRewired.__get__('PianoScore')
       let PianoFilesCountTree = intermediateRewired.__get__('PianoFilesCountTree')
-      let Library = intermediateRewired.__get__('Library')
+      let IntermediateLibrary = intermediateRewired.__get__('IntermediateLibrary')
       let tmpDir = tmpCopy('processed', 'some')
-      let library = new Library(tmpDir)
+      let library = new IntermediateLibrary(tmpDir)
       let songs = library.toArray()
 
       it('Initialisation', function () {
@@ -270,46 +265,46 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
           it('pageTurnOptimized = false', function () {
             let texMarkup = PianoScore.buildSongList(songs, false)
             assert.strictEqual(texMarkup, `
-  \\tmpheading{Auf der Mauer, auf der Lauer}
-  \\tmpimage{a/Auf-der-Mauer/piano/piano_1.eps}
-  \\tmpimage{a/Auf-der-Mauer/piano/piano_2.eps}
-  \\tmpimage{a/Auf-der-Mauer/piano/piano_3.eps}
+\\tmpheading{Auf der Mauer, auf der Lauer}
+\\tmpimage{a/Auf-der-Mauer/piano/piano_1.eps}
+\\tmpimage{a/Auf-der-Mauer/piano/piano_2.eps}
+\\tmpimage{a/Auf-der-Mauer/piano/piano_3.eps}
 
-  \\tmpheading{Stille Nacht}
-  \\tmpimage{s/Stille-Nacht/piano/piano.eps}
+\\tmpheading{Stille Nacht}
+\\tmpimage{s/Stille-Nacht/piano/piano.eps}
 
-  \\tmpheading{Swing low}
-  \\tmpimage{s/Swing-low/piano/piano_1.eps}
-  \\tmpimage{s/Swing-low/piano/piano_2.eps}
-  \\tmpimage{s/Swing-low/piano/piano_3.eps}
+\\tmpheading{Swing low}
+\\tmpimage{s/Swing-low/piano/piano_1.eps}
+\\tmpimage{s/Swing-low/piano/piano_2.eps}
+\\tmpimage{s/Swing-low/piano/piano_3.eps}
 
-  \\tmpheading{Zum Tanze, da geht ein Mädel}
-  \\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_1.eps}
-  \\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_2.eps}
-  `)
+\\tmpheading{Zum Tanze, da geht ein Mädel}
+\\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_1.eps}
+\\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_2.eps}
+`)
           })
 
           it('pageTurnOptimized = true', function () {
             let texMarkup = PianoScore.buildSongList(songs, true)
             assert.strictEqual(texMarkup, `
-  \\tmpheading{Zum Tanze, da geht ein Mädel}
-  \\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_1.eps}
-  \\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_2.eps}
+\\tmpheading{Zum Tanze, da geht ein Mädel}
+\\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_1.eps}
+\\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_2.eps}
 
-  \\tmpheading{Auf der Mauer, auf der Lauer}
-  \\tmpimage{a/Auf-der-Mauer/piano/piano_1.eps}
-  \\tmpimage{a/Auf-der-Mauer/piano/piano_2.eps}
-  \\tmpimage{a/Auf-der-Mauer/piano/piano_3.eps}
+\\tmpheading{Auf der Mauer, auf der Lauer}
+\\tmpimage{a/Auf-der-Mauer/piano/piano_1.eps}
+\\tmpimage{a/Auf-der-Mauer/piano/piano_2.eps}
+\\tmpimage{a/Auf-der-Mauer/piano/piano_3.eps}
 
-  \\tmpheading{Stille Nacht}
-  \\tmpimage{s/Stille-Nacht/piano/piano.eps}
+\\tmpheading{Stille Nacht}
+\\tmpimage{s/Stille-Nacht/piano/piano.eps}
 
-  \\tmpheading{Swing low}
-  \\tmpimage{s/Swing-low/piano/piano_1.eps}
-  \\tmpimage{s/Swing-low/piano/piano_2.eps}
-  \\tmpimage{s/Swing-low/piano/piano_3.eps}
-  \\tmpplaceholder
-  `)
+\\tmpheading{Swing low}
+\\tmpimage{s/Swing-low/piano/piano_1.eps}
+\\tmpimage{s/Swing-low/piano/piano_2.eps}
+\\tmpimage{s/Swing-low/piano/piano_3.eps}
+\\tmpplaceholder
+`)
           })
         })
 
@@ -319,36 +314,36 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
             let texMarkup = pianoScore.build()
             assert.strictEqual(texMarkup, `
 
-  \\tmpchapter{A}
-  \\tmpplaceholder
-  \\tmpplaceholder
+\\tmpchapter{A}
+\\tmpplaceholder
+\\tmpplaceholder
 
-  \\tmpheading{Auf der Mauer, auf der Lauer}
-  \\tmpimage{a/Auf-der-Mauer/piano/piano_1.eps}
-  \\tmpimage{a/Auf-der-Mauer/piano/piano_2.eps}
-  \\tmpimage{a/Auf-der-Mauer/piano/piano_3.eps}
-  \\tmpplaceholder
-
-
-  \\tmpchapter{S}
-
-  \\tmpheading{Stille Nacht}
-  \\tmpimage{s/Stille-Nacht/piano/piano.eps}
-  \\tmpplaceholder
-
-  \\tmpheading{Swing low}
-  \\tmpimage{s/Swing-low/piano/piano_1.eps}
-  \\tmpimage{s/Swing-low/piano/piano_2.eps}
-  \\tmpimage{s/Swing-low/piano/piano_3.eps}
-  \\tmpplaceholder
+\\tmpheading{Auf der Mauer, auf der Lauer}
+\\tmpimage{a/Auf-der-Mauer/piano/piano_1.eps}
+\\tmpimage{a/Auf-der-Mauer/piano/piano_2.eps}
+\\tmpimage{a/Auf-der-Mauer/piano/piano_3.eps}
+\\tmpplaceholder
 
 
-  \\tmpchapter{Z}
+\\tmpchapter{S}
 
-  \\tmpheading{Zum Tanze, da geht ein Mädel}
-  \\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_1.eps}
-  \\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_2.eps}
-  `)
+\\tmpheading{Stille Nacht}
+\\tmpimage{s/Stille-Nacht/piano/piano.eps}
+\\tmpplaceholder
+
+\\tmpheading{Swing low}
+\\tmpimage{s/Swing-low/piano/piano_1.eps}
+\\tmpimage{s/Swing-low/piano/piano_2.eps}
+\\tmpimage{s/Swing-low/piano/piano_3.eps}
+\\tmpplaceholder
+
+
+\\tmpchapter{Z}
+
+\\tmpheading{Zum Tanze, da geht ein Mädel}
+\\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_1.eps}
+\\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_2.eps}
+`)
           })
 
           it('groupAlphabetically = true, pageTurnOptimized = false', function () {
@@ -356,78 +351,78 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
             let texMarkup = pianoScore.build()
             assert.strictEqual(texMarkup, `
 
-  \\tmpchapter{A}
+\\tmpchapter{A}
 
-  \\tmpheading{Auf der Mauer, auf der Lauer}
-  \\tmpimage{a/Auf-der-Mauer/piano/piano_1.eps}
-  \\tmpimage{a/Auf-der-Mauer/piano/piano_2.eps}
-  \\tmpimage{a/Auf-der-Mauer/piano/piano_3.eps}
-
-
-  \\tmpchapter{S}
-
-  \\tmpheading{Stille Nacht}
-  \\tmpimage{s/Stille-Nacht/piano/piano.eps}
-
-  \\tmpheading{Swing low}
-  \\tmpimage{s/Swing-low/piano/piano_1.eps}
-  \\tmpimage{s/Swing-low/piano/piano_2.eps}
-  \\tmpimage{s/Swing-low/piano/piano_3.eps}
+\\tmpheading{Auf der Mauer, auf der Lauer}
+\\tmpimage{a/Auf-der-Mauer/piano/piano_1.eps}
+\\tmpimage{a/Auf-der-Mauer/piano/piano_2.eps}
+\\tmpimage{a/Auf-der-Mauer/piano/piano_3.eps}
 
 
-  \\tmpchapter{Z}
+\\tmpchapter{S}
 
-  \\tmpheading{Zum Tanze, da geht ein Mädel}
-  \\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_1.eps}
-  \\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_2.eps}
-  `)
+\\tmpheading{Stille Nacht}
+\\tmpimage{s/Stille-Nacht/piano/piano.eps}
+
+\\tmpheading{Swing low}
+\\tmpimage{s/Swing-low/piano/piano_1.eps}
+\\tmpimage{s/Swing-low/piano/piano_2.eps}
+\\tmpimage{s/Swing-low/piano/piano_3.eps}
+
+
+\\tmpchapter{Z}
+
+\\tmpheading{Zum Tanze, da geht ein Mädel}
+\\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_1.eps}
+\\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_2.eps}
+`)
           })
 
           it('groupAlphabetically = false, pageTurnOptimized = true', function () {
             let pianoScore = new PianoScore(mkTmpFile(), library, false, true)
             let texMarkup = pianoScore.build()
             assert.strictEqual(texMarkup, `
-  \\tmpheading{Zum Tanze, da geht ein Mädel}
-  \\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_1.eps}
-  \\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_2.eps}
+\\tmpheading{Zum Tanze, da geht ein Mädel}
+\\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_1.eps}
+\\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_2.eps}
 
-  \\tmpheading{Auf der Mauer, auf der Lauer}
-  \\tmpimage{a/Auf-der-Mauer/piano/piano_1.eps}
-  \\tmpimage{a/Auf-der-Mauer/piano/piano_2.eps}
-  \\tmpimage{a/Auf-der-Mauer/piano/piano_3.eps}
+\\tmpheading{Auf der Mauer, auf der Lauer}
+\\tmpimage{a/Auf-der-Mauer/piano/piano_1.eps}
+\\tmpimage{a/Auf-der-Mauer/piano/piano_2.eps}
+\\tmpimage{a/Auf-der-Mauer/piano/piano_3.eps}
 
-  \\tmpheading{Stille Nacht}
-  \\tmpimage{s/Stille-Nacht/piano/piano.eps}
+\\tmpheading{Stille Nacht}
+\\tmpimage{s/Stille-Nacht/piano/piano.eps}
 
-  \\tmpheading{Swing low}
-  \\tmpimage{s/Swing-low/piano/piano_1.eps}
-  \\tmpimage{s/Swing-low/piano/piano_2.eps}
-  \\tmpimage{s/Swing-low/piano/piano_3.eps}
-  \\tmpplaceholder
-  `)
+\\tmpheading{Swing low}
+\\tmpimage{s/Swing-low/piano/piano_1.eps}
+\\tmpimage{s/Swing-low/piano/piano_2.eps}
+\\tmpimage{s/Swing-low/piano/piano_3.eps}
+\\tmpplaceholder
+`)
           })
 
           it('groupAlphabetically = false, pageTurnOptimized = false', function () {
             let pianoScore = new PianoScore(mkTmpFile(), library, false, false)
             let texMarkup = pianoScore.build()
             assert.strictEqual(texMarkup, `
-  \\tmpheading{Auf der Mauer, auf der Lauer}
-  \\tmpimage{a/Auf-der-Mauer/piano/piano_1.eps}
-  \\tmpimage{a/Auf-der-Mauer/piano/piano_2.eps}
-  \\tmpimage{a/Auf-der-Mauer/piano/piano_3.eps}
+\\tmpheading{Auf der Mauer, auf der Lauer}
+\\tmpimage{a/Auf-der-Mauer/piano/piano_1.eps}
+\\tmpimage{a/Auf-der-Mauer/piano/piano_2.eps}
+\\tmpimage{a/Auf-der-Mauer/piano/piano_3.eps}
 
-  \\tmpheading{Stille Nacht}
-  \\tmpimage{s/Stille-Nacht/piano/piano.eps}
+\\tmpheading{Stille Nacht}
+\\tmpimage{s/Stille-Nacht/piano/piano.eps}
 
-  \\tmpheading{Swing low}
-  \\tmpimage{s/Swing-low/piano/piano_1.eps}
-  \\tmpimage{s/Swing-low/piano/piano_2.eps}
-  \\tmpimage{s/Swing-low/piano/piano_3.eps}
+\\tmpheading{Swing low}
+\\tmpimage{s/Swing-low/piano/piano_1.eps}
+\\tmpimage{s/Swing-low/piano/piano_2.eps}
+\\tmpimage{s/Swing-low/piano/piano_3.eps}
 
-  \\tmpheading{Zum Tanze, da geht ein Mädel}
-  \\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_1.eps}
-  \\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_2.eps}
-  `)
+\\tmpheading{Zum Tanze, da geht ein Mädel}
+\\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_1.eps}
+\\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_2.eps}
+`)
           })
         })
 
@@ -458,57 +453,56 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
             let texMarkup = pianoScore.texFile.read()
             assert.strictEqual(texMarkup, `
 
-  \\tmpchapter{A}
-  \\tmpplaceholder
-  \\tmpplaceholder
+\\tmpchapter{A}
+\\tmpplaceholder
+\\tmpplaceholder
 
-  \\tmpheading{Auf der Mauer, auf der Lauer}
-  \\tmpimage{a/Auf-der-Mauer/piano/piano_1.eps}
-  \\tmpimage{a/Auf-der-Mauer/piano/piano_2.eps}
-  \\tmpimage{a/Auf-der-Mauer/piano/piano_3.eps}
-  \\tmpplaceholder
-
-
-  \\tmpchapter{S}
-
-  \\tmpheading{Stille Nacht}
-  \\tmpimage{s/Stille-Nacht/piano/piano.eps}
-  \\tmpplaceholder
-
-  \\tmpheading{Swing low}
-  \\tmpimage{s/Swing-low/piano/piano_1.eps}
-  \\tmpimage{s/Swing-low/piano/piano_2.eps}
-  \\tmpimage{s/Swing-low/piano/piano_3.eps}
-  \\tmpplaceholder
+\\tmpheading{Auf der Mauer, auf der Lauer}
+\\tmpimage{a/Auf-der-Mauer/piano/piano_1.eps}
+\\tmpimage{a/Auf-der-Mauer/piano/piano_2.eps}
+\\tmpimage{a/Auf-der-Mauer/piano/piano_3.eps}
+\\tmpplaceholder
 
 
-  \\tmpchapter{Z}
+\\tmpchapter{S}
 
-  \\tmpheading{Zum Tanze, da geht ein Mädel}
-  \\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_1.eps}
-  \\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_2.eps}
-  `)
+\\tmpheading{Stille Nacht}
+\\tmpimage{s/Stille-Nacht/piano/piano.eps}
+\\tmpplaceholder
+
+\\tmpheading{Swing low}
+\\tmpimage{s/Swing-low/piano/piano_1.eps}
+\\tmpimage{s/Swing-low/piano/piano_2.eps}
+\\tmpimage{s/Swing-low/piano/piano_3.eps}
+\\tmpplaceholder
+
+
+\\tmpchapter{Z}
+
+\\tmpheading{Zum Tanze, da geht ein Mädel}
+\\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_1.eps}
+\\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_2.eps}
+`)
           })
         })
       })
     })
 
     describe('Class “IntermediateSong()”', function () {
-      let Song = intermediateRewired.__get__('Song')
+      let IntermediateSong = intermediateRewired.__get__('IntermediateSong')
       let FileMonitor = intermediateRewired.__get__('FileMonitor')
       let fileMonitor = new FileMonitor(mkTmpFile())
       let folder = path.join('test', 'songs', 'clean', 'some', 'a', 'Auf-der-Mauer')
-      let song = new Song(folder, fileMonitor)
+      let song = new IntermediateSong(folder, fileMonitor)
 
       afterEach(function () {
         fileMonitor.flush()
       })
 
       describe('Methods', function () {
-
         it('Method “formatPianoTeXEpsFile_()”', function () {
           let folder = path.join('test', 'songs', 'processed', 'some', 's', 'Swing-low')
-          let song = new Song(folder)
+          let song = new IntermediateSong(folder)
           assert.strictEqual(
             song.formatPianoTeXEpsFile_(0),
             '\\tmpimage{s/Swing-low/piano/piano_1.eps}\n'
@@ -528,7 +522,7 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
         describe('Method “formatPianoTex()”', function () {
           it('Markup', function () {
             let folder = path.join('test', 'songs', 'processed', 'some', 's', 'Swing-low')
-            let song = new Song(folder)
+            let song = new IntermediateSong(folder)
             assert.strictEqual(
               song.formatPianoTex(),
               '\n' +
@@ -540,7 +534,7 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
           })
 
           it('Exception: no EPS files', function () {
-            let song = new Song(folder)
+            let song = new IntermediateSong(folder)
             song.pianoFiles = []
             assert.throws(
               function () {
@@ -551,7 +545,7 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
           })
 
           it('Exception: more than 4 EPS files', function () {
-            let song = new Song(folder)
+            let song = new IntermediateSong(folder)
             song.pianoFiles = [1, 2, 3, 4, 5]
             assert.throws(
               function () {
@@ -589,7 +583,7 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
         describe('Method “generatePiano_()”', function () {
           it('lead', function () {
             let folderSwing = path.join('test', 'songs', 'clean', 'some', 's', 'Swing-low')
-            let songSwing = new Song(folderSwing, fileMonitor)
+            let songSwing = new IntermediateSong(folderSwing, fileMonitor)
             let files = songSwing.generatePiano_()
 
             assert.deepStrictEqual(files, [ 'piano_1.eps', 'piano_2.eps' ])
@@ -751,6 +745,16 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
     })
 
     describe('Class “IntermediateLibrary()”', function () {
+      let IntermediateLibrary = intermediateRewired.__get__('IntermediateLibrary')
+      let library
+      let basePath
+
+      beforeEach(function () {
+        basePath = mkTmpDir()
+        fs.copySync(path.join('test', 'songs', 'processed', 'some'), basePath)
+        library = new IntermediateLibrary(basePath)
+      })
+
       describe('Properties', function () {
         it('Property “fileMonitor”', function () {
           let FileMonitor = intermediateRewired.__get__('FileMonitor')
@@ -776,7 +780,7 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
         it('Method “cleanIntermediateFiles()”', function () {
           let tmpDir = mkTmpDir()
           fs.copySync(basePath, tmpDir)
-          let library = new Library(tmpDir)
+          let library = new IntermediateLibrary(tmpDir)
           library.cleanIntermediateFiles()
           assert.ok(!fs.existsSync(path.join(library.basePath, 'songs.tex')))
         })
@@ -786,7 +790,7 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
             let spy = sinon.spy()
             let stub = sinon.stub()
             intermediateRewired.__set__('message.songFolder', stub)
-            let library = new Library(basePath)
+            let library = new IntermediateLibrary(basePath)
             for (let songID in library.songs) {
               library.songs[songID].generateIntermediateFiles = spy
             }
@@ -800,7 +804,7 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
             let spy = sinon.spy()
             let stub = sinon.stub()
             intermediateRewired.__set__('message.songFolder', stub)
-            let library = new Library(basePath)
+            let library = new IntermediateLibrary(basePath)
             for (let songID in library.songs) {
               library.songs[songID].generateIntermediateFiles = spy
             }
@@ -813,7 +817,7 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
         describe('Method “updateSongByPath()”', function () {
           it('No exception', function () {
             let clean = path.join('test', 'songs', 'clean', 'some')
-            library = new Library(clean)
+            library = new IntermediateLibrary(clean)
             library.updateSongByPath(path.join(clean, 'a', 'Auf-der-Mauer'))
             assertExists(path.join(library.basePath, 'a', 'Auf-der-Mauer', 'slides', '01.svg'))
           })
@@ -831,7 +835,7 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
         describe('Method “updateSongBySongId()”', function () {
           it('No exception', function () {
             let clean = path.join('test', 'songs', 'clean', 'some')
-            library = new Library(clean)
+            library = new IntermediateLibrary(clean)
             library.updateSongBySongId('Auf-der-Mauer')
             assertExists(path.join(library.basePath, 'a', 'Auf-der-Mauer', 'slides', '01.svg'))
           })
@@ -873,7 +877,7 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
           it('mode = all', function () {
             let tmpDir = mkTmpDir()
             fs.copySync(songs, tmpDir)
-            let library = new Library(tmpDir)
+            let library = new IntermediateLibrary(tmpDir)
             library.update()
 
             const folders = buildFolderList(tmpDir)
@@ -901,7 +905,7 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
             const zum = path.join(songs, 'z', 'Zum-Tanze-da-geht-ein-Maedel')
             const folders = [auf, swing, zum]
 
-            let library = new Library(songs)
+            let library = new IntermediateLibrary(songs)
             library.fileMonitor.flush()
             library.update()
 
@@ -923,7 +927,7 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
           it('mode = slides', function () {
             let tmpDir = mkTmpDir()
             fs.copySync(songs, tmpDir)
-            let library = new Library(tmpDir)
+            let library = new IntermediateLibrary(tmpDir)
             library.update('slides')
 
             // const folders = buildFolderList(tmpDir)

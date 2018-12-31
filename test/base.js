@@ -6,7 +6,6 @@ const process = require('process')
 const sinon = require('sinon')
 const {
   mkTmpDir,
-  mkTmpFile,
   removeANSI
 } = require('./_helper.js')
 
@@ -491,10 +490,6 @@ describe('Package “@bldr/songbook-base”', function () {
       let folder = path.join('test', 'songs', 'clean', 'some', 'a', 'Auf-der-Mauer')
       let song = new Song(folder)
 
-      afterEach(function () {
-        fileMonitor.flush()
-      })
-
       describe('Initialisation', function () {
         it('with a directory', function () {
           let song = new Song(folder)
@@ -515,10 +510,6 @@ describe('Package “@bldr/songbook-base”', function () {
       describe('Properties', function () {
         it('Property “folder”', function () {
           assert.strictEqual(song.folder, folder)
-        })
-
-        it('Property “fileMonitor”', function () {
-          assert.ok(song.fileMonitor instanceof FileMonitor)
         })
 
         it('Property “abc”', function () {
