@@ -8,7 +8,7 @@ const path = require('path')
 const spawn = require('child_process').spawnSync
 const Sqlite3 = require('better-sqlite3')
 const util = require('util')
-const { Song, Library, message } = require('@bldr/songbook-base')
+const { Song, Library, message, AlphabeticalSongsTree } = require('@bldr/songbook-base')
 
 /**
  * A text file.
@@ -506,6 +506,91 @@ class IntermediateSong extends Song {
         fs.removeSync(path.join(this.folder, file))
       }
     )
+  }
+}
+
+/**
+ * An object that groups songs that have the same number of piano files.
+ *
+ * This tree object is an helper object. It is necessary to avoid page breaks
+ * on multipage piano scores.
+ *
+ * <pre><code>
+ * {
+ *   "1": [ 1-page-song, 1-page-song ... ],
+ *   "2": [ 2-page-song ... ],
+ *   "3": [ 3-page-song ... ]
+ *   "3": [ 3-page-song ... ]
+ * }
+ * </code></pre>
+ */
+class PianoFilesCountTree {
+  /**
+   * @param {module:baldr-songbook~songs} songs - An array of song objects.
+   */
+  constructor (songs) {
+    this.validCounts_ = [1, 2, 3, 4]
+    this.build_(songs)
+  }
+
+  /**
+   * @param {number} count - 1, 2, 3, 4
+   */
+  checkCount_ (count) {
+    if (this.validCounts_.includes(count)) {
+      return true
+    } else {
+      throw new Error(util.format('Invalid piano file count: %s', count))
+    }
+  }
+
+  /**
+   * @param {module:baldr-songbook~songs} songs - An array of song objects.
+   */
+  build_ (songs) {
+    for (let song of songs) {
+      let count = song.pianoFiles.length
+      if (!(count in this)) this[count] = []
+      this[count].push(song)
+    }
+  }
+
+  /**
+   * Sum up the number of all songs in all count categories.
+   */
+  sum () {
+    let count = 0
+    for (let validCount of this.validCounts_) {
+      if (this.hasOwnProperty(validCount)) {
+        count = count + this[validCount].length
+      }
+    }
+    return count
+  }
+
+  /**
+   * Return true if the count tree has no songs.
+   *
+   * @return {boolean}
+   */
+  isEmpty () {
+    if (this.sum() === 0) {
+      return true
+    } else {
+      return false
+    }
+  }
+
+  /**
+   * Shift the array of songs that has ”count” number of piano files.
+   *
+   * @param {number} count - 1, 2, 3, 4
+   *
+   * @returns {module:baldr-songbook~Song}
+   */
+  shift (count) {
+    this.checkCount_(count)
+    if (this.hasOwnProperty(count)) return this[count].shift()
   }
 }
 

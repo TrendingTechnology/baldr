@@ -23,7 +23,7 @@ require('colors')
  * Functions
  ******************************************************************************/
 
- /**
+/**
  * Check if executable is installed.
  *
  * @param {string} executable - Name of the executable.
@@ -553,7 +553,6 @@ class Song {
      */
     this.folder = this.normalizeSongFolder_(songPath)
 
-
     /**
      * The character of the alphabetical folder. The song folders must
      * be placed in alphabetical folders.
@@ -693,7 +692,6 @@ class Song {
       return []
     }
   }
-
 }
 
 /*******************************************************************************
@@ -724,91 +722,6 @@ class AlphabeticalSongsTree {
     for (let abc in this) {
       this[abc].sort(sortObjectsByProperty('songID'))
     }
-  }
-}
-
-/**
- * An object that groups songs that have the same number of piano files.
- *
- * This tree object is an helper object. It is necessary to avoid page breaks
- * on multipage piano scores.
- *
- * <pre><code>
- * {
- *   "1": [ 1-page-song, 1-page-song ... ],
- *   "2": [ 2-page-song ... ],
- *   "3": [ 3-page-song ... ]
- *   "3": [ 3-page-song ... ]
- * }
- * </code></pre>
- */
-class PianoFilesCountTree {
-  /**
-   * @param {module:baldr-songbook~songs} songs - An array of song objects.
-   */
-  constructor (songs) {
-    this.validCounts_ = [1, 2, 3, 4]
-    this.build_(songs)
-  }
-
-  /**
-   * @param {number} count - 1, 2, 3, 4
-   */
-  checkCount_ (count) {
-    if (this.validCounts_.includes(count)) {
-      return true
-    } else {
-      throw new Error(util.format('Invalid piano file count: %s', count))
-    }
-  }
-
-  /**
-   * @param {module:baldr-songbook~songs} songs - An array of song objects.
-   */
-  build_ (songs) {
-    for (let song of songs) {
-      let count = song.pianoFiles.length
-      if (!(count in this)) this[count] = []
-      this[count].push(song)
-    }
-  }
-
-  /**
-   * Sum up the number of all songs in all count categories.
-   */
-  sum () {
-    let count = 0
-    for (let validCount of this.validCounts_) {
-      if (this.hasOwnProperty(validCount)) {
-        count = count + this[validCount].length
-      }
-    }
-    return count
-  }
-
-  /**
-   * Return true if the count tree has no songs.
-   *
-   * @return {boolean}
-   */
-  isEmpty () {
-    if (this.sum() === 0) {
-      return true
-    } else {
-      return false
-    }
-  }
-
-  /**
-   * Shift the array of songs that has ”count” number of piano files.
-   *
-   * @param {number} count - 1, 2, 3, 4
-   *
-   * @returns {module:baldr-songbook~Song}
-   */
-  shift (count) {
-    this.checkCount_(count)
-    if (this.hasOwnProperty(count)) return this[count].shift()
   }
 }
 
@@ -1016,7 +929,6 @@ class Library {
   getRandomSong () {
     return this.getSongById(this.songIDs[Math.floor(Math.random() * this.songIDs.length)])
   }
-
 }
 
 exports.AlphabeticalSongsTree = AlphabeticalSongsTree
