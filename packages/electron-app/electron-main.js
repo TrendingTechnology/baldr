@@ -18,7 +18,7 @@ let setUrl = function (htmlFile, hash = false) {
   let url = {
     protocol: 'file',
     slashes: true,
-    pathname: require('path').join(__dirname, '..', htmlFile)
+    pathname: require('path').join(__dirname, htmlFile)
   }
   if (hash) {
     url.hash = hash

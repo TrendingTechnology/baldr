@@ -1,6 +1,6 @@
 {
   "name": "@bldr/songbook-electron-app",
-  "main": "index.js",
+  "main": "electron-main.js",
   "version": "0.0.7",
   "repository": {
     "type": "git",
@@ -37,5 +37,15 @@
     "spectron": "^3.7.2",
     "standard": "^12.0.1",
     "tmp": "0.0.33"
+  },
+  "scripts": {
+    "build": "electron-packager . --out=dist --app-version=$npm_package_version --asar --prune --overwrite --arch=x64 --icon=./icon.icns",
+    "doc": "rm -f docs/*.html; jsdoc --configure ./docs/jsdoc-config.json --destination ./docs/ src/",
+    "doc-show": "xdg-open ./docs/index.html",
+    "electron-rebuild": "electron-rebuild",
+    "postinstall": "electron-rebuild",
+    "start": "electron .",
+    "test": "mocha --reporter spec",
+    "standard": "standard *.js src/*.js"
   }
 }

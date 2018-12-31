@@ -8,7 +8,7 @@
 const jquery = require('jquery')
 const mousetrap = require('mousetrap')
 const path = require('path')
-const { bootstrapConfig, Library, AlphabeticalSongsTree } = require('./src/lib.js')
+const { bootstrapConfig, Library, AlphabeticalSongsTree } = require('@bldr/songbook-base')
 require('selectize')
 
 const config = bootstrapConfig()
