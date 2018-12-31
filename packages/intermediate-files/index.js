@@ -5,8 +5,56 @@ const path = require('path')
 const spawn = require('child_process').spawnSync
 const Sqlite3 = require('better-sqlite3')
 const util = require('util')
-const { Song, Library } = require('@bldr/songbook-base')
-require('colors')
+const { Song, Library, message } = require('@bldr/songbook-base')
+
+/**
+ * A text file.
+ */
+class TextFile {
+  /**
+   * @param {string} path The path of the text file.
+   */
+  constructor (path) {
+    /**
+     * The path of the text file.
+     * @type {string}
+     */
+    this.path = path
+    this.flush()
+  }
+
+  /**
+   * Append content to the text file.
+   *
+   * @param {string} content - Content to append to the text file.
+   */
+  append (content) {
+    fs.appendFileSync(this.path, content)
+  }
+
+  /**
+   * Read the whole text file.
+   *
+   * @return {string}
+   */
+  read () {
+    return fs.readFileSync(this.path, { encoding: 'utf8' })
+  }
+
+  /**
+   * Delete the content of the text file, not the text file itself.
+   */
+  flush () {
+    fs.writeFileSync(this.path, '')
+  }
+
+  /**
+   * Remove the text file.
+   */
+  remove () {
+    fs.unlinkSync(this.path)
+  }
+}
 
 /**
  * Sqlite database wrapper to store file contents hashes to detect
@@ -472,7 +520,7 @@ class IntermediateLibrary extends Library {
     this.fileMonitor = new FileMonitor(path.join(this.basePath,
       'filehashes.db'))
 
-    this.song = this.collectSongs_()
+    this.songs = this.collectSongs_()
   }
 
   collectSongs_ () {
@@ -579,3 +627,4 @@ class IntermediateLibrary extends Library {
 }
 
 exports.IntermediateLibrary = IntermediateLibrary
+exports.PianoScore = PianoScore

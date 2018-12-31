@@ -4,13 +4,11 @@
 
 'use strict'
 
-const crypto = require('crypto')
 const fs = require('fs-extra')
 const glob = require('glob')
 const os = require('os')
 const path = require('path')
 const spawn = require('child_process').spawnSync
-const Sqlite3 = require('better-sqlite3')
 const util = require('util')
 const yaml = require('js-yaml')
 require('colors')
@@ -234,55 +232,6 @@ class Message {
 }
 
 let message = new Message()
-
-/**
- * A text file.
- */
-class TextFile {
-  /**
-   * @param {string} path The path of the text file.
-   */
-  constructor (path) {
-    /**
-     * The path of the text file.
-     * @type {string}
-     */
-    this.path = path
-    this.flush()
-  }
-
-  /**
-   * Append content to the text file.
-   *
-   * @param {string} content - Content to append to the text file.
-   */
-  append (content) {
-    fs.appendFileSync(this.path, content)
-  }
-
-  /**
-   * Read the whole text file.
-   *
-   * @return {string}
-   */
-  read () {
-    return fs.readFileSync(this.path, { encoding: 'utf8' })
-  }
-
-  /**
-   * Delete the content of the text file, not the text file itself.
-   */
-  flush () {
-    fs.writeFileSync(this.path, '')
-  }
-
-  /**
-   * Remove the text file.
-   */
-  remove () {
-    fs.unlinkSync(this.path)
-  }
-}
 
 /**
  *
@@ -1072,5 +1021,6 @@ class Library {
 exports.AlphabeticalSongsTree = AlphabeticalSongsTree
 exports.bootstrapConfig = bootstrapConfig
 exports.Library = Library
+exports.message = message
 exports.parseSongIDList = parseSongIDList
 exports.Song = Song

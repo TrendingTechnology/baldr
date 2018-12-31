@@ -16,5 +16,26 @@
   "gitHead": "303c4b20e1396cf570c1b3fe01b0749e9e4ba734",
   "publishConfig": {
     "access": "public"
+  },
+  "dependencies": {
+    "@bldr/songbook-base": "*",
+    "font-awesome": "^4.7.0",
+    "jquery": "^3.2.1",
+    "mousetrap": "^1.6.1",
+    "selectize": "^0.12.4"
+  },
+  "devDependencies": {
+    "electron": "^2.0.16",
+    "electron-packager": "^9.1.0",
+    "electron-rebuild": "^1.6.0",
+    "jsdoc": "^3.5.5",
+    "lerna": "^3.8.0",
+    "mocha": "^4.0.1",
+    "mocha-standard": "^1.0.0",
+    "rewire": "^4.0.1",
+    "sinon": "^4.0.0",
+    "spectron": "^3.7.2",
+    "standard": "^12.0.1",
+    "tmp": "0.0.33"
   }
 }
