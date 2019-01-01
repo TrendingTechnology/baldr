@@ -1,13 +1,13 @@
 /**
  * @file Gather informations about all themes.
- * @module @bldr/electron-app/themes
+ * @module @bldr/core/themes
  */
 
 'use strict'
 
 const fs = require('fs')
 const path = require('path')
-const { addCSSFile } = require('@bldr/library')
+const { addCSSFile } = require('@bldr/foundation-master')
 
 /***********************************************************************
  *
@@ -18,13 +18,13 @@ const { addCSSFile } = require('@bldr/library')
  */
 class Themes {
   /**
-   * @param {module:@bldr/electron-app~Document} document The document
+   * @param {module:@bldr/core~Document} document The document
    *   object of the browser (DOM).
    */
   constructor (document) {
     /**
      * The document object of the browser (DOM).
-     * @type {module:@bldr/electron-app~Document}
+     * @type {module:@bldr/core~Document}
      */
     this.document = document
 
@@ -127,7 +127,7 @@ class Themes {
  **********************************************************************/
 
 /**
- * @param {module:@bldr/electron-app~Document} document The document
+ * @param {module:@bldr/core~Document} document The document
  *   object of the browser (DOM).
  */
 exports.getThemes = function (document) {

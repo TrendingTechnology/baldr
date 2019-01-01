@@ -10,14 +10,14 @@
  **********************************************************************/
 
 /**
- * @see {@link module:@bldr/electron-app/masters~Master#config}
+ * @see {@link module:@bldr/core/masters~Master#config}
  */
 exports.config = {
   margin: false
 }
 
 /**
- * @see {@link module:@bldr/electron-app/masters~Master#quickStartEntries}
+ * @see {@link module:@bldr/core/masters~Master#quickStartEntries}
  */
 exports.quickStartEntries = function () {
   return [
@@ -37,7 +37,7 @@ exports.quickStartEntries = function () {
 }
 
 /**
- * @see {@link module:@bldr/electron-app/masters~Master#mainHTML}
+ * @see {@link module:@bldr/core/masters~Master#mainHTML}
  */
 exports.mainHTML = function (slide, config, document) {
   let data = slide.masterData

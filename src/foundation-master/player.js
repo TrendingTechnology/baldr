@@ -1,6 +1,6 @@
 /**
  * @file A simple player for audio and video media
- * @module @bldr/library/player
+ * @module @bldr/foundation-master/player
  */
 
 'use strict'

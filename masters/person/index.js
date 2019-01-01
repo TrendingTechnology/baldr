@@ -5,21 +5,21 @@
 
 'use strict'
 
-const { Media, checkProperty } = require('@bldr/library')
+const { Media, checkProperty } = require('@bldr/foundation-master')
 
 /***********************************************************************
  * Hooks
  **********************************************************************/
 
 /**
- * @see {@link module:@bldr/electron-app/masters~Master#config}
+ * @see {@link module:@bldr/core/masters~Master#config}
  */
 exports.config = {
   margin: false
 }
 
 /**
- * @see {@link module:@bldr/electron-app/masters~Master#documentation}
+ * @see {@link module:@bldr/core/masters~Master#documentation}
  */
 exports.documentation = {
   examples: [
@@ -34,7 +34,7 @@ exports.documentation = {
 }
 
 /**
- * @see {@link module:@bldr/electron-app/masters~Master#normalizeData}
+ * @see {@link module:@bldr/core/masters~Master#normalizeData}
  */
 exports.normalizeData = function (rawSlideData, config) {
   let data = {}
@@ -74,7 +74,7 @@ exports.normalizeData = function (rawSlideData, config) {
 }
 
 /**
- * @see {@link module:@bldr/electron-app/masters~Master#mainHTML}
+ * @see {@link module:@bldr/core/masters~Master#mainHTML}
  */
 exports.mainHTML = function (slide, config, document) {
   let data = slide.masterData

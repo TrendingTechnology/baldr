@@ -117,7 +117,7 @@ let buildMenu = function () {
 
 let loadURL = function () {
   mainWindow.loadURL(url.format({
-    pathname: path.join(__dirname, '..', ...arguments),
+    pathname: path.join(__dirname, ...arguments),
     protocol: 'file:',
     slashes: true
   }))

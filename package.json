@@ -1,8 +1,7 @@
 {
   "name": "baldr",
   "version": "0.0.3",
-  "description": "Presentation software",
-  "main": "src/main.js",
+  "description": "Virtual package for tooling support.",
   "scripts": {
     "build": "electron-builder",
     "doc-show": "xdg-open ./docs/index.html",
@@ -60,12 +59,10 @@
     "mocha-standard": "^1.0.0",
     "rewire": "^2.5.2",
     "spectron": "^3.7.2",
-    "standard": "^12.0.1"
-  },
-  "dependencies": {
-    "ContentTools": "^1.6.0",
+    "standard": "^12.0.1",
     "@bldr/electron-app": "*",
-    "@bldr/library": "*",
+    "@bldr/core": "*",
+    "@bldr/foundation-master": "*",
     "@bldr/master-audio": "*",
     "@bldr/master-camera": "*",
     "@bldr/master-editor": "*",
@@ -78,19 +75,7 @@
     "@bldr/master-website": "*",
     "@bldr/test-helper": "*",
     "@bldr/theme-default": "*",
-    "@bldr/theme-handwriting": "*",
-    "font-awesome": "^4.7.0",
-    "howler": "^2.0.5",
-    "js-yaml": "^3.10.0",
-    "marked": "^0.3.6",
-    "mousetrap": "^1.6.1",
-    "typeface-alegreya": "^0.0.40",
-    "typeface-alegreya-sans": "^0.0.40",
-    "typeface-alegreya-sans-sc": "^0.0.40",
-    "typeface-alegreya-sc": "^0.0.40",
-    "typeface-kalam": "^0.0.43",
-    "web-audio-engine": "^0.13.3",
-    "webdriverio": "^4.13.2"
+    "@bldr/theme-handwriting": "*"
   },
   "standard": {
     "globals": [

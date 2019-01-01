@@ -49,14 +49,14 @@ let renderQuotationMark = function (begin = true) {
  **********************************************************************/
 
 /**
- * @see {@link module:@bldr/electron-app/masters~Master#config}
+ * @see {@link module:@bldr/core/masters~Master#config}
  */
 exports.config = {
   centerVertically: true
 }
 
 /**
- * @see {@link module:@bldr/electron-app/masters~Master#mainHTML}
+ * @see {@link module:@bldr/core/masters~Master#mainHTML}
  */
 exports.mainHTML = function (slide, config, document) {
   let data = slide.masterData

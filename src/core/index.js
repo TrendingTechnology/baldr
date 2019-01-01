@@ -1,12 +1,12 @@
 /**
- * @module @bldr/electron-app
+ * @module @bldr/core
  */
 
 'use strict'
 
 const path = require('path')
 
-const { getConfig } = require('@bldr/library')
+const { getConfig } = require('@bldr/foundation-master')
 
 /**
  * @param {string} fileName
@@ -52,32 +52,32 @@ const { getThemes } = requireLib('themes')
  * avoids therefore many arguments in the constructor functions.
  *
  * @param {array} argv An array containing the command line arguments.
- * @param {module:@bldr/electron-app~Document} document The document
+ * @param {module:@bldr/core~Document} document The document
  *   object (DOM) of the render process.
  */
 class Environment {
   constructor (argv, document) {
     /**
      * The document object (DOM) of the render process.
-     * @type {module:@bldr/electron-app~Document}
+     * @type {module:@bldr/core~Document}
      */
     this.document = document
 
     /**
      * All available master slides.
-     * @type {module:@bldr/electron-app/masters~Masters}
+     * @type {module:@bldr/core/masters~Masters}
      */
     this.masters = getMasters(document)
 
     /**
      * All configurations of the current presentation session.
-     * @type {module:@bldr/library/config~Config}
+     * @type {module:@bldr/foundation-master/config~Config}
      */
     this.config = getConfig(argv)
 
     /**
      * All available themes.
-     * @type {module:@bldr/electron-app/themes~Themes}
+     * @type {module:@bldr/core/themes~Themes}
      */
     this.themes = getThemes(document)
   }
@@ -93,21 +93,21 @@ class Environment {
 class ShowRunner {
   /**
    * @param {array} argv An array containing the command line arguments.
-   * @param {module:@bldr/electron-app~Document} document The document
+   * @param {module:@bldr/core~Document} document The document
    *   object (DOM) of the render process.
-   * @param {module:@bldr/electron-app~mousetrap} mousetrap The object
+   * @param {module:@bldr/core~mousetrap} mousetrap The object
    *   of shortcut library “mousetrap”.
    */
   constructor (argv, document, mousetrap) {
     /**
      * Low level environment data.
-     * @type {module:@bldr/electron-app~Environment}
+     * @type {module:@bldr/core~Environment}
      */
     this.env = new Environment(argv, document)
 
     /**
      * The object of shortcut library “mousetrap”.
-     * @type {module:@bldr/electron-app~mousetrap}
+     * @type {module:@bldr/core~mousetrap}
      */
     this.mousetrap = mousetrap
 
@@ -115,13 +115,13 @@ class ShowRunner {
 
     /**
      * All slide objects of the current presentation session.
-     * @type {module:@bldr/electron-app/slides~Slides}
+     * @type {module:@bldr/core/slides~Slides}
      */
     this.slides = getSlides(this.env)
 
     /**
      * Object to switch between the slides.
-     * @type {module:@bldr/electron-app/slides-switcher~SlidesSwitcher}
+     * @type {module:@bldr/core/slides-switcher~SlidesSwitcher}
      */
     this.slidesSwitcher = new SlidesSwitcher(
       this.slides,
@@ -130,19 +130,19 @@ class ShowRunner {
 
     /**
      * The object representation of the old slide.
-     * @type {module:@bldr/electron-app/slides~Slide}
+     * @type {module:@bldr/core/slides~Slide}
      */
     this.oldSlide = {}
 
     /**
      * The object representation of the new slide.
-     * @type {module:@bldr/electron-app/slides~Slide}
+     * @type {module:@bldr/core/slides~Slide}
      */
     this.newSlide = {}
 
     /**
      * Object to manage the quick start entries.
-     * @type {module:@bldr/electron-app/quick-start~QuickStart}
+     * @type {module:@bldr/core/quick-start~QuickStart}
      */
     this.quickStart = getQuickStart(this.env)
     this.quickStart.set()

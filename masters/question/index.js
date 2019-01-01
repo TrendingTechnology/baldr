@@ -70,7 +70,7 @@ let template = function (data) {
  **********************************************************************/
 
 /**
- * @see {@link module:@bldr/electron-app/masters~Master#normalizeData}
+ * @see {@link module:@bldr/core/masters~Master#normalizeData}
  */
 exports.normalizeData = function (rawSlideData, config) {
   if (typeof rawSlideData === 'object' && Array.isArray(rawSlideData)) {
@@ -85,7 +85,7 @@ exports.normalizeData = function (rawSlideData, config) {
 }
 
 /**
- * @see {@link module:@bldr/electron-app/masters~Master#config}
+ * @see {@link module:@bldr/core/masters~Master#config}
  */
 exports.config = {
   centerVertically: true,
@@ -93,7 +93,7 @@ exports.config = {
 }
 
 /**
- * @see {@link module:@bldr/electron-app/masters~Master#setStepByNo}
+ * @see {@link module:@bldr/core/masters~Master#setStepByNo}
  */
 exports.setStepByNo = function (no, count, stepData, document) {
   for (let i = 1; i <= count; i++) {
@@ -111,7 +111,7 @@ exports.setStepByNo = function (no, count, stepData, document) {
 }
 
 /**
- * @see {@link module:@bldr/electron-app/masters~Master#mainHTML}
+ * @see {@link module:@bldr/core/masters~Master#mainHTML}
  */
 exports.mainHTML = function (slide, config, document) {
   return '<div id="question-content">' +
@@ -123,7 +123,7 @@ exports.mainHTML = function (slide, config, document) {
  * The stepData object has to be filled very time a slide is set.
  * Every time a slide is set, new HTML elements are generated.
  *
- * @see {@link module:@bldr/electron-app/masters~Master#initStepsEveryVisit}
+ * @see {@link module:@bldr/core/masters~Master#initStepsEveryVisit}
  */
 exports.initStepsEveryVisit = function (document, slide, config) {
   let data = {}

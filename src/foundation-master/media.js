@@ -1,6 +1,6 @@
 /**
  * @file Filter and resolve the input files used in the presentation.
- * @module @bldr/library/media
+ * @module @bldr/foundation-master/media
  */
 
 'use strict'

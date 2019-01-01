@@ -1,5 +1,5 @@
 /**
- * @module @bldr/library/helper
+ * @module @bldr/foundation-master/helper
  */
 'use strict'
 

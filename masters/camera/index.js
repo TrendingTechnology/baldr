@@ -53,14 +53,14 @@
  **********************************************************************/
 
 /**
- * @see {@link module:@bldr/electron-app/masters~Master#config}
+ * @see {@link module:@bldr/core/masters~Master#config}
  */
 exports.config = {
   margin: false
 }
 
 /**
- * @see {@link module:@bldr/electron-app/masters~Master#quickStartEntries}
+ * @see {@link module:@bldr/core/masters~Master#quickStartEntries}
  */
 exports.quickStartEntries = function () {
   return [
@@ -74,7 +74,7 @@ exports.quickStartEntries = function () {
 }
 
 /**
- * @see {@link module:@bldr/electron-app/masters~Master#modalHTML}
+ * @see {@link module:@bldr/core/masters~Master#modalHTML}
  */
 exports.modalHTML = function () {
   return `
@@ -85,14 +85,14 @@ exports.modalHTML = function () {
 }
 
 /**
- * @see {@link module:@bldr/electron-app/masters~Master#mainHTML}
+ * @see {@link module:@bldr/core/masters~Master#mainHTML}
  */
 exports.mainHTML = function (slide, config, document) {
   return '<video autoplay="true" id="video"></video>'
 }
 
 /**
- * @see {@link module:@bldr/electron-app/masters~Master#postSet}
+ * @see {@link module:@bldr/core/masters~Master#postSet}
  */
 exports.postSet = function (slide, config, document) {
   /**
@@ -155,7 +155,7 @@ exports.postSet = function (slide, config, document) {
 }
 
 /**
- * @see {@link module:@bldr/electron-app/masters~Master#cleanUp}
+ * @see {@link module:@bldr/core/masters~Master#cleanUp}
  */
 exports.cleanUp = function (document, oldSlide, newSlide) {
   if (window.stream) {

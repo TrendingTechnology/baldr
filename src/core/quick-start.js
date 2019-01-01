@@ -1,16 +1,16 @@
 /**
  * @file
- * @module @bldr/electron-app/quick-start
+ * @module @bldr/core/quick-start
  */
 
 /* jshint -W083 */
 
 'use strict'
 
-const { checkProperty } = require('@bldr/library')
+const { checkProperty } = require('@bldr/foundation-master')
 
 /**
- * A array of [raw quick start entries]{@link module:@bldr/electron-app/quick-start~rawQuickStartEntry}
+ * A array of [raw quick start entries]{@link module:@bldr/core/quick-start~rawQuickStartEntry}
  * @typedef rawQuickStartEntries
  * @type {array}
  */
@@ -28,7 +28,7 @@ const { checkProperty } = require('@bldr/library')
  */
 
 /**
- * An array of processed [quick start entries]{@link module:@bldr/electron-app/quick-start~quickStartEntry}
+ * An array of processed [quick start entries]{@link module:@bldr/core/quick-start~quickStartEntry}
  *
  * @typedef quickStartEntries
  * @type {array}
@@ -43,7 +43,7 @@ const { checkProperty } = require('@bldr/library')
  */
 class QuickStartEntry {
   /**
-   * @param {module:@bldr/electron-app/quick-start~rawQuickStartEntry} rawQuickStartEntry
+   * @param {module:@bldr/core/quick-start~rawQuickStartEntry} rawQuickStartEntry
    *   A raw quick start entry specified in the master slide hooks.
    * @param {string} masterName Name of the master slide.
    * @param {integer} no A integer starting from 1
@@ -102,13 +102,13 @@ class QuickStartEntry {
  */
 class QuickStart {
   /**
-   * @param {module:@bldr/electron-app~Environment} env Low level
+   * @param {module:@bldr/core~Environment} env Low level
    *   environment data.
    */
   constructor (env) {
     /**
      * Low level environment data.
-     * @type {module:@bldr/electron-app~Environment}
+     * @type {module:@bldr/core~Environment}
      */
     this.env = env
 
@@ -118,13 +118,13 @@ class QuickStart {
     this.elemNavigationMenu = this.env.document.getElementById('nav-quick-start')
 
     /**
-     * @type {module:@bldr/electron-app/quick-start~quickStartEntries}
+     * @type {module:@bldr/core/quick-start~quickStartEntries}
      */
     this.entries = this.collectEntries_()
   }
 
   /**
-   * @return {array} Array of [quick start entries]{@link module:@bldr/electron-app/quick-start~QuickStartEntry}.
+   * @return {array} Array of [quick start entries]{@link module:@bldr/core/quick-start~QuickStartEntry}.
    */
   collectEntries_ () {
     let entries = []
@@ -149,7 +149,7 @@ class QuickStart {
   }
 
   /**
-   * @param {module:@bldr/electron-app/quick-start~quickStartEntry} entry
+   * @param {module:@bldr/core/quick-start~quickStartEntry} entry
    *
    * @return {object} {@link https://developer.mozilla.org/en-US/docs/Web/API/HTMLButtonElement HTMLButtonElement}
    */

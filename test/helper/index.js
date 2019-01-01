@@ -8,8 +8,10 @@ const fs = require('fs')
 const path = require('path')
 const { JSDOM } = require('jsdom')
 const rewire = require('rewire')
-const { getConfig } = require('@bldr/library')
-const { Environment } = require('@bldr/electron-app')
+const { getConfig } = require('@bldr/foundation-master')
+const { Environment } = require('@bldr/core')
+const process = require('process')
+const util = require('util')
 
 /**
  * Resolves a sequence of paths or path segments into an absolute path
@@ -94,7 +96,7 @@ exports.makeDOM = function (html) {
 
 /**
  * The document object (DOM) of the file “render.html”.
- * @type {module:@bldr/electron-app~Document}
+ * @type {module:@bldr/core~Document}
  */
 exports.document = exports.makeDOM(
   fs.readFileSync(
@@ -122,7 +124,7 @@ exports.getDOM = function () {
 exports.testFileMinimal = path.resolve('test', 'files', 'minimal.baldr')
 
 /**
- * @returns {module:@bldr/electron-app~Environment}
+ * @returns {module:@bldr/core~Environment}
  */
 exports.freshEnv = function () {
   return new Environment([exports.testFileMinimal], exports.getDOM())
@@ -130,7 +132,7 @@ exports.freshEnv = function () {
 
 /**
  * Low level environment data.
- * @type {module:@bldr/electron-app~Environment}
+ * @type {module:@bldr/core~Environment}
  */
 exports.env = exports.freshEnv()
 
@@ -138,7 +140,7 @@ exports.env = exports.freshEnv()
  * `config` object of the test file
  * {@link module:@bldr/test-helper.testFileMinimal testFileMinimal}.
  *
- * @type {module:@bldr/library/config~Config}
+ * @type {module:@bldr/foundation-master/config~Config}
  *
  * @see module:@bldr/test-helper.testFileMinimal
  */
@@ -147,7 +149,7 @@ exports.config = getConfig([exports.testFileMinimal])
 /**
  * Clone the `config` object {@link module:@bldr/test-helper.config}
  *
- * @return {module:@bldr/library/config~Config}
+ * @return {module:@bldr/foundation-master/config~Config}
  */
 exports.cloneConfig = function () {
   return Object.assign({}, exports.config)
@@ -155,7 +157,7 @@ exports.cloneConfig = function () {
 
 /**
  * All available master slides.
- * @type {module:@bldr/electron-app/masters~Masters}
+ * @type {module:@bldr/core/masters~Masters}
  */
 exports.masters = getMasters(exports.document)
 
@@ -204,4 +206,40 @@ class Spectron {
   }
 }
 
+/**
+ * Build the Electron app using the package “electron-packager”
+ *
+ * @param {string} packageFolder - Path of the package Folder
+ * @param {boolean} force - Force the building for the app
+ */
+function buildElectronApp (packageFolder, force = false) {
+  let darwinPath = []
+  if (process.platform === 'darwin') {
+    darwinPath = [packageName + '.app', 'Contents', 'MacOS']
+  }
+
+  let packageJson = require(path.join(packageFolder, 'package.json'))
+  let packageName = packageJson.name.replace('/', '-')
+  let appName = util.format('%s-%s-%s', packageName, process.platform, process.arch)
+  let distFolder = path.join(packageFolder, 'dist')
+  let appPath = path.join(distFolder, appName, ...darwinPath, packageName)
+
+  if (!fs.existsSync(appPath) || force) {
+    // derefSymlinks: lerna symlinks the some dependencies.
+    // This symlinks are broken without the option derefSymlinks in the folder
+    // packages/electron-app/dist/@bldr-songbook-electron-app-linux-x64/resources/app/node_modules/@bldr
+    return packager({
+      dir: packageFolder,
+      out: distFolder,
+      prune: false,
+      derefSymlinks: true,
+      overwrite: true,
+      arch: process.arch,
+      icon: path.join(packageFolder, 'icon.icns'),
+      appVersion: packageJson.version
+    }).then(appPath => { return appPath })
+  }
+}
+
+exports.buildElectronApp = buildElectronApp
 exports.Spectron = Spectron

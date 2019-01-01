@@ -8,14 +8,14 @@
 const {
   Media,
   reIndex
-} = require('@bldr/library')
+} = require('@bldr/foundation-master')
 
 /***********************************************************************
  * Hooks
  **********************************************************************/
 
 /**
- * @see {@link module:@bldr/electron-app/masters~Master#quickStartEntries}
+ * @see {@link module:@bldr/core/masters~Master#quickStartEntries}
  */
 exports.quickStartEntries = function () {
   return [
@@ -29,7 +29,7 @@ exports.quickStartEntries = function () {
 }
 
 /**
- * @see {@link module:@bldr/electron-app/masters~Master#normalizeData}
+ * @see {@link module:@bldr/core/masters~Master#normalizeData}
  */
 exports.normalizeData = function (rawSlideData, config) {
   return new Media(config.sessionDir)
@@ -37,14 +37,14 @@ exports.normalizeData = function (rawSlideData, config) {
 }
 
 /**
- * @see {@link module:@bldr/electron-app/masters~Master#initSteps}
+ * @see {@link module:@bldr/core/masters~Master#initSteps}
  */
 exports.initSteps = function (document, slide, config) {
   return reIndex(slide.masterData)
 }
 
 /**
- * @see {@link module:@bldr/electron-app/masters~Master#setStepByNo}
+ * @see {@link module:@bldr/core/masters~Master#setStepByNo}
  */
 exports.setStepByNo = function (no, count, stepData, document) {
   document
@@ -53,7 +53,7 @@ exports.setStepByNo = function (no, count, stepData, document) {
 }
 
 /**
- * @see {@link module:@bldr/electron-app/masters~Master#config}
+ * @see {@link module:@bldr/core/masters~Master#config}
  */
 exports.config = {
   stepSupport: true,
@@ -61,7 +61,7 @@ exports.config = {
 }
 
 /**
- * @see {@link module:@bldr/electron-app/masters~Master#mainHTML}
+ * @see {@link module:@bldr/core/masters~Master#mainHTML}
  */
 exports.mainHTML = function (slide, config, document) {
   let path = slide.masterData[0].path

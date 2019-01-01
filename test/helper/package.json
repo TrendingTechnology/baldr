@@ -1,4 +1,11 @@
 {
   "name": "@bldr/test-helper",
-  "version": "0.0.0"
+  "version": "0.0.0",
+  "dependencies": {
+    "@bldr/core": "*",
+    "@bldr/foundation-master": "*",
+    "electron-packager": "^13.0.1",
+    "jsdom": "^13.1.0",
+    "rewire": "^4.0.1"
+  }
 }

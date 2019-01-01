@@ -1,13 +1,13 @@
 /**
  * @file Gather informations about all available master slides
- * @module @bldr/electron-app/masters
+ * @module @bldr/core/masters
  */
 
 'use strict'
 
 const fs = require('fs')
 const path = require('path')
-const { addCSSFile } = require('@bldr/library')
+const { addCSSFile } = require('@bldr/foundation-master')
 
 /***********************************************************************
  *
@@ -99,57 +99,57 @@ class Master {
 
     /**
      * @function
-     * @param {module:@bldr/electron-app~Document} document The document
+     * @param {module:@bldr/core~Document} document The document
      *   object (DOM) of the render process.
-     * @param {module:@bldr/electron-app/slides~Slide} oldSlide The
+     * @param {module:@bldr/core/slides~Slide} oldSlide The
      *   object representation of the old slide.
-     * @param {module:@bldr/electron-app/slides~Slide} newSlide The
+     * @param {module:@bldr/core/slides~Slide} newSlide The
      *   object representation of the new slide.
      */
     this.cleanUp = defaults.cleanUp
 
     /**
      * @function
-     * @param {module:@bldr/electron-app~Document} document The document
+     * @param {module:@bldr/core~Document} document The document
      *   object (DOM) of the render process.
-     * @param {module:@bldr/library/config~Config} config All
+     * @param {module:@bldr/foundation-master/config~Config} config All
      *   configurations of the current presentation session.
      */
     this.init = defaults.init
 
     /**
      * @function
-     * @param {module:@bldr/electron-app~Document} document The document
+     * @param {module:@bldr/core~Document} document The document
      *   object (DOM) of the render process.
-     * @param {module:@bldr/electron-app/slides~Slide} slide The object
+     * @param {module:@bldr/core/slides~Slide} slide The object
      *   representation of one slide.
-     * @param {module:@bldr/library/config~Config} config All
+     * @param {module:@bldr/foundation-master/config~Config} config All
      *   configurations of the current presentation session.
      *
-     * @return {module:@bldr/electron-app/slides~stepData}
+     * @return {module:@bldr/core/slides~stepData}
      */
     this.initSteps = defaults.initSteps
 
     /**
      * @function
-     * @param {module:@bldr/electron-app~Document} document The document
+     * @param {module:@bldr/core~Document} document The document
      *   object (DOM) of the render process.
-     * @param {module:@bldr/electron-app/slides~Slide} slide The object
+     * @param {module:@bldr/core/slides~Slide} slide The object
      *   representation of one slide.
-     * @param {module:@bldr/library/config~Config} config All
+     * @param {module:@bldr/foundation-master/config~Config} config All
      *   configurations of the current presentation session.
      *
-     * @return {module:@bldr/electron-app/slides~stepData}
+     * @return {module:@bldr/core/slides~stepData}
      */
     this.initStepsEveryVisit = defaults.initStepsEveryVisit
 
     /**
      * @function
-     * @param {module:@bldr/electron-app/slides~Slide} slide The object
+     * @param {module:@bldr/core/slides~Slide} slide The object
      *   representation of one slide.
-     * @param {module:@bldr/library/config~Config} config All
+     * @param {module:@bldr/foundation-master/config~Config} config All
      *   configurations of the current presentation session.
-     * @param {module:@bldr/electron-app~Document} document The document
+     * @param {module:@bldr/core~Document} document The document
      *   object (DOM) of the render process.
      *
      * @return {string}
@@ -166,36 +166,36 @@ class Master {
      * Normalize the data input of the master slide.
      *
      * @function
-     * @param {module:@bldr/electron-app/masters~rawMasterData} rawMasterData
+     * @param {module:@bldr/core/masters~rawMasterData} rawMasterData
      *   Data in various types to pass to a master slide.
-     * @param {module:@bldr/library/config~Config} config All
+     * @param {module:@bldr/foundation-master/config~Config} config All
      *   configurations of the current presentation session.
      *
-     * @return {module:@bldr/electron-app/masters~masterData} The
+     * @return {module:@bldr/core/masters~masterData} The
      * normalized master data.
      *
-     * @see {@link module:@bldr/electron-app/slides~Slide}
+     * @see {@link module:@bldr/core/slides~Slide}
      */
     this.normalizeData = defaults.normalizeData
 
     /**
      * @function
-     * @param {module:@bldr/electron-app~Document} document The document
+     * @param {module:@bldr/core~Document} document The document
      * object (DOM) of the render process.
-     * @param {module:@bldr/library/config~Config} config All
+     * @param {module:@bldr/foundation-master/config~Config} config All
      *   configurations of the current presentation session.
-     * @param {module:@bldr/electron-app/slides~Slide} slide The object
+     * @param {module:@bldr/core/slides~Slide} slide The object
      *   representation of one slide.
      *
      * @return {undefined}
-     * @see {@link module:@bldr/electron-app~ShowRunner#setMain}
+     * @see {@link module:@bldr/core~ShowRunner#setMain}
      */
     this.postSet = defaults.postSet
 
     /**
      * @function
-     * @return {module:@bldr/electron-app/quick-start~rawQuickStartEntries}
-     * @see {@link module:@bldr/electron-app/quick-start~QuickStart#collectEntries}
+     * @return {module:@bldr/core/quick-start~rawQuickStartEntries}
+     * @see {@link module:@bldr/core/quick-start~QuickStart#collectEntries}
      */
     this.quickStartEntries = defaults.quickStartEntries
 
@@ -204,11 +204,11 @@ class Master {
      * @param {integer} no
      * @param {integer} count
      * @param {object} stepData
-     * @param {module:@bldr/electron-app~Document} document The document
+     * @param {module:@bldr/core~Document} document The document
      *   object (DOM) of the render process.
      *
      * @return {undefined}
-     * @see {@link module:@bldr/electron-app/slides~StepSwitcher#setByNo}
+     * @see {@link module:@bldr/core/slides~StepSwitcher#setByNo}
      */
     this.setStepByNo = defaults.setStepByNo
   }
@@ -274,13 +274,13 @@ class Master {
  */
 class Masters {
   /**
-   * @param {module:@bldr/electron-app~Document} document The document
+   * @param {module:@bldr/core~Document} document The document
    *   object (DOM) of the render process.
    */
   constructor (document) {
     /**
      * The document object (DOM) of the render process.
-     * @type {module:@bldr/electron-app~Document}
+     * @type {module:@bldr/core~Document}
      */
     this.document = document
 
@@ -350,7 +350,7 @@ class Masters {
 }
 
 /**
- * @param {module:@bldr/electron-app~Document} document The document
+ * @param {module:@bldr/core~Document} document The document
  *   object (DOM) of the render process.
  */
 exports.getMasters = function (document) {

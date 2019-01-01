@@ -8,7 +8,7 @@ const {
   srcPath
 } = require('@bldr/test-helper')
 
-const { ShowRunner } = require('@bldr/electron-app')
+const { ShowRunner } = require('@bldr/core')
 const mousetrap = require('mousetrap')
 
 /***********************************************************************

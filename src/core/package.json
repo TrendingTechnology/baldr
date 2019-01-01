@@ -1,0 +1,10 @@
+{
+  "name": "@bldr/core",
+  "main": "index.js",
+  "description": "High level classes and functions used by Electron app.",
+  "dependencies": {
+    "js-yaml": "^3.10.0",
+    "@bldr/foundation-master": "*"
+  },
+  "version": "0.0.0"
+}

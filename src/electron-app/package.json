@@ -1,0 +1,14 @@
+{
+  "name": "@bldr/electron-app",
+  "version": "0.0.0",
+  "main": "electron-main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "description": "The main electron app.",
+  "dependencies": {
+    "@bldr/core": "*",
+    "electron": "^4.0.0",
+    "mousetrap": "^1.6.2"
+  }
+}

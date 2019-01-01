@@ -1,5 +1,5 @@
 {
-  "name": "@bldr/library",
+  "name": "@bldr/foundation-master",
   "main": "index.js",
   "description": "Some low level library functions and classes used by the master modules.",
   "dependencies": {

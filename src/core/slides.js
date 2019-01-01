@@ -1,6 +1,6 @@
 /**
  * @file Load the slides object form the YAML file format and process it.
- * @module @bldr/electron-app/slides
+ * @module @bldr/core/slides
  */
 
 'use strict'
@@ -68,27 +68,27 @@
  */
 class StepSwitcher {
   /**
-   * @param {module:@bldr/electron-app/slides~Slide} slide The object
+   * @param {module:@bldr/core/slides~Slide} slide The object
    *   representation of one slide.
-   * @param {module:@bldr/electron-app~Environment} env Low level
+   * @param {module:@bldr/core~Environment} env Low level
    *   environment data.
    */
   constructor (slide, env) {
     /**
      * The object representation of one slide.
-     * @type {module:@bldr/electron-app/slides~Slide}
+     * @type {module:@bldr/core/slides~Slide}
      */
     this.slide = slide
 
     /**
      * Low level environment data.
-     * @type {module:@bldr/electron-app~Environment}
+     * @type {module:@bldr/core~Environment}
      */
     this.env = env
 
     /**
      * The normalized master object derived from the master slide.
-     * @type {module:@bldr/electron-app/masters~Master}
+     * @type {module:@bldr/core/masters~Master}
      */
     this.master = slide.master
 
@@ -104,7 +104,7 @@ class StepSwitcher {
     /**
      * Object to store data for the individual steps. The step data
      * should be indexed by the step number.
-     * @type {module:@bldr/electron-app/slides~stepData}
+     * @type {module:@bldr/core/slides~stepData}
      */
     this.stepData = false
 
@@ -210,15 +210,15 @@ class StepSwitcher {
 
 class SlideData {
   /**
-   * @param {module:@bldr/electron-app/slides~rawSlideData} rawSlideData
+   * @param {module:@bldr/core/slides~rawSlideData} rawSlideData
    *   Various types of data to render a slide.
-   * @param {module:@bldr/electron-app~Environment} env Low level
+   * @param {module:@bldr/core~Environment} env Low level
    *   environment data.
    */
   constructor (rawSlideData, env) {
     /**
      * Various types of data to render a slide.
-     * @type {module:@bldr/electron-app/slides~rawSlideData}
+     * @type {module:@bldr/core/slides~rawSlideData}
      */
     this.rawSlideData = Object.assign({}, rawSlideData)
 
@@ -236,7 +236,7 @@ class SlideData {
 
     /**
      * Data in various types to pass to a master slide.
-     * @type {module:@bldr/electron-app/masters~rawMasterData}
+     * @type {module:@bldr/core/masters~rawMasterData}
      */
     this.rawMasterData = false
 
@@ -390,19 +390,19 @@ class SlideData {
  */
 class Slide {
   /**
-   * @param {module:@bldr/electron-app~Environment} env Low level
+   * @param {module:@bldr/core~Environment} env Low level
    *   environment data.
    */
   constructor (rawSlideData, env) {
     /**
      * Low level environment data.
-     * @type {module:@bldr/electron-app~Environment}
+     * @type {module:@bldr/core~Environment}
      */
     this.env = env
 
     /**
      * Normalized slide data.
-     * @type {module:@bldr/electron-app/slides~SlideData}
+     * @type {module:@bldr/core/slides~SlideData}
      */
     this.slideData = new SlideData(rawSlideData, this.env)
 
@@ -416,20 +416,20 @@ class Slide {
 
     /**
      * The normalized master object derived from the master slide.
-     * @type {module:@bldr/electron-app/masters~Master}
+     * @type {module:@bldr/core/masters~Master}
      */
     this.master = this.env.masters[this.slideData.masterName]
 
     /**
      * Normalized master data.
-     * @type {module:@bldr/electron-app/masters~masterData}
+     * @type {module:@bldr/core/masters~masterData}
      */
     this.masterData = this.master
       .normalizeData(this.slideData.rawMasterData, this.env.config)
 
     /**
      * The instantiated object derived from the class “StepSwitcher()”
-     * @type {module:@bldr/electron-app/slides~StepSwitcher}
+     * @type {module:@bldr/core/slides~StepSwitcher}
      */
     this.steps = new StepSwitcher(this, this.env)
 
@@ -520,12 +520,12 @@ class Slide {
  * No number is assigned to the master slide.
  *
  * @param {string} masterName Name of the master slide.
- * @param {module:@bldr/electron-app/slides~rawSlideData} rawSlideData
+ * @param {module:@bldr/core/slides~rawSlideData} rawSlideData
  *   Various types of data to render a slide.
- * @param {module:@bldr/electron-app~Environment} env Low level
+ * @param {module:@bldr/core~Environment} env Low level
  *   environment data.
  *
- * @return {module:@bldr/electron-app/slides~Slide}
+ * @return {module:@bldr/core/slides~Slide}
  */
 exports.getInstantSlide = function (masterName, rawSlideData, env) {
   let rawSlide = {}
@@ -545,13 +545,13 @@ exports.getInstantSlide = function (masterName, rawSlideData, env) {
  */
 class Slides {
   /**
-   * @param {module:@bldr/electron-app~Environment} env Low level
+   * @param {module:@bldr/core~Environment} env Low level
    *   environment data.
    */
   constructor (env) {
     /**
      * Low level environment data.
-     * @type {module:@bldr/electron-app~Environment}
+     * @type {module:@bldr/core~Environment}
      */
     this.env = env
 
@@ -610,7 +610,7 @@ class Slides {
 }
 
 /**
- * @param {module:@bldr/electron-app~Environment} env Low level
+ * @param {module:@bldr/core~Environment} env Low level
  *   environment data.
  */
 exports.getSlides = function (env) {

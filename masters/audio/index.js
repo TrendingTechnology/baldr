@@ -8,7 +8,7 @@
 const mousetrap = require('mousetrap')
 const { Howl } = require('howler')
 
-const { Media } = require('@bldr/library')
+const { Media } = require('@bldr/foundation-master')
 
 let audioFiles = {}
 let audio
@@ -80,7 +80,7 @@ class Audio {
  **********************************************************************/
 
 /**
- * @see {@link module:@bldr/electron-app/masters~Master#init}
+ * @see {@link module:@bldr/core/masters~Master#init}
  */
 exports.init = function (document, config) {
   audio = new Audio(document)
@@ -101,7 +101,7 @@ exports.init = function (document, config) {
 }
 
 /**
- * @see {@link module:@bldr/electron-app/masters~Master#quickStartEntries}
+ * @see {@link module:@bldr/core/masters~Master#quickStartEntries}
  */
 exports.quickStartEntries = function () {
   return [
@@ -115,7 +115,7 @@ exports.quickStartEntries = function () {
 }
 
 /**
- * @see {@link module:@bldr/electron-app/masters~Master#normalizeData}
+ * @see {@link module:@bldr/core/masters~Master#normalizeData}
  */
 exports.normalizeData = function (rawSlideData, config) {
   let inputFiles = new Media(config.sessionDir)
@@ -133,7 +133,7 @@ exports.normalizeData = function (rawSlideData, config) {
 }
 
 /**
- * @see {@link module:@bldr/electron-app/masters~Master#mainHTML}
+ * @see {@link module:@bldr/core/masters~Master#mainHTML}
  */
 exports.mainHTML = function (slide, config, document) {
   let out = ''

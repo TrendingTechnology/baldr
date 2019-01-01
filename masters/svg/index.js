@@ -9,7 +9,7 @@
  * Hooks
  **********************************************************************/
 /**
- * @see {@link module:@bldr/electron-app/masters~Master#mainHTML}
+ * @see {@link module:@bldr/core/masters~Master#mainHTML}
  */
 exports.mainHTML = function (slide, config, document) {
   return 'svg'

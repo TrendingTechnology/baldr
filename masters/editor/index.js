@@ -8,21 +8,21 @@
 const ContentTools = require('ContentTools')
 const path = require('path')
 
-const { addCSSFile } = require('@bldr/library')
+const { addCSSFile } = require('@bldr/foundation-master')
 
 /***********************************************************************
  * Hooks
  **********************************************************************/
 
 /**
- * @see {@link module:@bldr/electron-app/masters~Master#config}
+ * @see {@link module:@bldr/core/masters~Master#config}
  */
 exports.config = {
   theme: 'handwriting'
 }
 
 /**
- * @see {@link module:@bldr/electron-app/masters~Master#quickStartEntries}
+ * @see {@link module:@bldr/core/masters~Master#quickStartEntries}
  */
 exports.quickStartEntries = function () {
   return [
@@ -35,7 +35,7 @@ exports.quickStartEntries = function () {
 }
 
 /**
- * @see {@link module:@bldr/electron-app/masters~Master#mainHTML}
+ * @see {@link module:@bldr/core/masters~Master#mainHTML}
  */
 exports.mainHTML = function (slide, config, document) {
   addCSSFile(
@@ -49,7 +49,7 @@ exports.mainHTML = function (slide, config, document) {
 }
 
 /**
- * @see {@link module:@bldr/electron-app/masters~Master#postSet}
+ * @see {@link module:@bldr/core/masters~Master#postSet}
  */
 exports.postSet = function (slide, config, document) {
   ContentTools.StylePalette.add([
@@ -61,7 +61,7 @@ exports.postSet = function (slide, config, document) {
 }
 
 /**
- * @see {@link module:@bldr/electron-app/masters~Master#cleanUp}
+ * @see {@link module:@bldr/core/masters~Master#cleanUp}
  */
 exports.cleanUp = function (document, oldSlide, newSlide) {
   let elements = document.querySelectorAll('.ct-app')
