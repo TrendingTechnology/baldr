@@ -3,11 +3,10 @@ const {
   path,
   testFileMinimal,
   rewire,
-  srcPath
+  packageFilePath
 } = require('@bldr/test-helper')
 
-let mediaJsPath = srcPath('foundation-master', 'media.js')
-
+let mediaJsPath = packageFilePath('@bldr/foundation-master', 'media.js')
 const { Media } = require(mediaJsPath)
 let mediaRewired = rewire(mediaJsPath)
 let FileInfo = mediaRewired.__get__('FileInfo')

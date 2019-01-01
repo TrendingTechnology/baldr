@@ -15,33 +15,33 @@ const util = require('util')
 const packager = require('electron-packager')
 
 /**
- * Resolves a sequence of paths or path segments into an absolute path
- * of a file in the “src” folder.
+ * Require a file as a module in the “src” folder.
  *
- *     let path = srcPath('lib', 'player.js');
+ * @param {string} packageName - The name of package.
+ * @param {...string} pathSegment - A sequence of path segments.
  *
- * @param {...string} paths A sequence of path segments
- *
- * @returns {string} Absolute path of a file in the “src” folder.
+ * @returns {string} The path of the required file inside the package.
  */
-exports.srcPath = function () {
-  return path.join(__dirname, '..', '..', 'src', ...arguments)
+exports.packageFilePath = function (packageName, pathSegment) {
+  let segments = Array.from(arguments).slice(1)
+  return path.join(path.dirname(require.resolve(packageName)), ...segments)
 }
 
 /**
- * Require a file as a module in the “src” folder.
+ * Require a file of a node package-
  *
- *     const player = requireFile('lib', 'player.js');
+ *     const player = requireFile('@bldr/core', 'player.js');
  *
- * @param {...string} paths A sequence of path segments
+ * @param {string} packageName - The name of package.
+ * @param {...string} pathSegment - A sequence of path segments.
  *
  * @returns {object} The required module.
  */
-exports.requireFile = function () {
-  return require(exports.srcPath(...arguments))
+exports.requireFile = function (packageName, fileName) {
+  return require(exports.packageFilePath(...arguments))
 }
 
-const { getMasters } = exports.requireFile('core', 'masters.js')
+const { getMasters } = exports.requireFile('@bldr/core', 'masters.js')
 
 /**
  *

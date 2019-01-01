@@ -5,7 +5,7 @@ const {
   path,
   testFileMinimal,
   rewire,
-  srcPath
+  packageFilePath
 } = require('@bldr/test-helper')
 
 const { ShowRunner } = require('@bldr/core')
@@ -16,7 +16,7 @@ const mousetrap = require('mousetrap')
  **********************************************************************/
 
 describe('Class “Environment()” #unittest', () => {
-  let indexJsPath = srcPath('core', 'index.js')
+  let indexJsPath = packageFilePath('@bldr/core', 'index.js')
   const Environment = rewire(indexJsPath).__get__('Environment')
   let env = new Environment([testFileMinimal], getDOM())
 

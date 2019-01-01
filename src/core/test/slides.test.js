@@ -1,11 +1,11 @@
 const {
   assert,
   rewire,
-  srcPath,
-  freshEnv
+  freshEnv,
+  packageFilePath
 } = require('@bldr/test-helper')
 
-let slidesJsPath = srcPath('core', 'slides.js')
+let slidesJsPath = packageFilePath('@bldr/core', 'slides.js')
 const { Slide } = require(slidesJsPath)
 const Slides = rewire(slidesJsPath).__get__('Slides')
 const SlideData = rewire(slidesJsPath).__get__('SlideData')

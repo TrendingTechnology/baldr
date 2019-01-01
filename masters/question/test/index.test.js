@@ -2,9 +2,9 @@ const {
   assert,
   makeDOM,
   rewire,
-  srcPath,
   path,
-  freshEnv
+  freshEnv,
+  requireFile
 } = require('@bldr/test-helper')
 
 const question = require('../index.js')
@@ -138,8 +138,7 @@ describe('Master slide “question” #unittest', () => {
   })
 
   describe('Step support', () => {
-    let slidesJsPath = srcPath('app', 'slides.js')
-    const { Slide } = require(slidesJsPath)
+    const { Slide } = requireFile('@bldr/core', 'slides.js')
 
     let getQuestion = function () {
       return new Slide({ 'question': ['1', '2', '3'] }, freshEnv())

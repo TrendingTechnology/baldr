@@ -6,7 +6,7 @@ const {
   requireFile
 } = require('@bldr/test-helper')
 
-const { getThemes } = requireFile('core', 'themes.js')
+const { getThemes } = requireFile('@bldr/core', 'themes.js')
 const themes = getThemes(getDOM())
 
 /***********************************************************************
