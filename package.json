@@ -24,6 +24,7 @@
     "@bldr/songbook-cli": "^0.0.10",
     "@bldr/songbook-electron-app": "^0.0.11",
     "@bldr/songbook-intermediate-files": "^0.0.10",
+    "electron-packager": "^13.0.1",
     "jsdoc": "^3.5.5",
     "lerna": "^3.8.0",
     "mocha": "^4.0.1",

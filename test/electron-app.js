@@ -1,24 +1,42 @@
 let assert = require('assert')
 const fs = require('fs')
 const path = require('path')
+const packager = require('electron-packager')
 let Application = require('spectron').Application
-
-let pkg = require(path.join(__dirname, '..', 'packages', 'electron-app', 'package.json'))
+const util = require('util')
 
 let darwinPath = []
-
 if (process.platform === 'darwin') {
   darwinPath = ['baldr-songbook.app', 'Contents', 'MacOS']
 }
 
-let appPath = path.join(
-  'packages', 'electron-app', 'dist',
-  `${pkg.name}-${process.platform}-${process.arch}`,
-  ...darwinPath,
-  pkg.name
-)
+let packageFolder = path.join(__dirname, '..', 'packages', 'electron-app')
+let packageJson = require(path.join(packageFolder, 'package.json'))
+let packageName = packageJson.name.replace('/', '-')
+let appName = util.format('%s-%s-%s', packageName, process.platform, process.arch)
+let distFolder = path.join(packageFolder, 'dist')
+let appPath = path.join(distFolder, appName, ...darwinPath, packageName)
 
 describe('Package “@bldr/songbook-electron-app”', function () {
+  before(function () {
+    this.timeout(100000)
+    if (!fs.existsSync(appPath)) {
+      // derefSymlinks: lerna symlinks the some dependencies.
+      // This symlinks are broken without the option derefSymlinks in the folder
+      // packages/electron-app/dist/@bldr-songbook-electron-app-linux-x64/resources/app/node_modules/@bldr
+      return packager({
+        dir: packageFolder,
+        out: distFolder,
+        prune: false,
+        derefSymlinks: true,
+        overwrite: true,
+        arch: process.arch,
+        icon: path.join(packageFolder, 'icon.icns'),
+        app_version: packageJson.version
+      }).then(appPath => { return appPath })
+    }
+  })
+
   describe('build', () => {
     it(`exists “${appPath}”`, () => {
       assert.ok(fs.existsSync(appPath))
