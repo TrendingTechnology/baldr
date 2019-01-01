@@ -1,17 +1,16 @@
-dist: trusty
 sudo: true
 
 language: node_js
 node_js:
-  - "8"
+  - "10"
 
 env:
   - ELECTRON_BUILDER_ALLOW_UNRESOLVED_DEPENDENCIES=true
 
 install:
   - npm install --global npm
-  - npm install
-  - npm run build
+  - npm install --global lerna
+  - lerna bootstrap
 
 before_script:
   - "export DISPLAY=:99.0"
@@ -20,7 +19,3 @@ before_script:
 
 script:
   - npm test
-
-branches:
-  only:
-  - master

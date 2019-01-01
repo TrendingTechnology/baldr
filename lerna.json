@@ -1,9 +1,10 @@
 {
   "packages": [
+    ".",
     "masters/**",
     "src/**",
-    "themes/**",
-    "test/helper"
+    "test/helper",
+    "themes/**"
   ],
   "version": "0.0.0"
 }

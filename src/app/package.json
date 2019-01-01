@@ -4,6 +4,7 @@
   "description": "High level classes and functions used by render.js.",
   "dependencies": {
     "js-yaml": "^3.10.0",
-    "@bldr/library": "file:../lib"
-  }
+    "@bldr/library": "*"
+  },
+  "version": "0.0.0"
 }
