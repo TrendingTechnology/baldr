@@ -122,7 +122,7 @@ exports.getDOM = function () {
  * Absolute path of the minimal baldr session file.
  * @type {string}
  */
-exports.testFileMinimal = path.resolve('test', 'files', 'minimal.baldr')
+exports.testFileMinimal = path.resolve(__dirname, '..', 'files', 'minimal.baldr')
 
 /**
  * @returns {module:@bldr/core~Environment}
@@ -162,14 +162,26 @@ exports.cloneConfig = function () {
  */
 exports.masters = getMasters(exports.document)
 
+
 /**
- *
+ * Launch an Electron app using the testing framework Spectron.
  */
 class Spectron {
   /**
    *
    */
-  constructor (baldrFile) {
+  constructor (packageName, baldrFile) {
+    this.packagePath = path.dirname(require.resolve(packageName))
+    let packageJson = require(path.join(this.packagePath, 'package.json'))
+    let electronName = packageJson.name.replace('/', '-')
+    this.appName = util.format('%s-%s-%s', electronName, process.platform, process.arch)
+    let distFolder = path.join(packagePath, 'dist')
+    let darwinPath = []
+    if (process.platform === 'darwin') {
+      darwinPath = [electronName + '.app', 'Contents', 'MacOS']
+    }
+    let appPath = path.join(distFolder, appName, ...darwinPath, packageName)
+
     if (process.platform === 'linux') {
       this.appPath = 'dist/linux-unpacked/baldr'
     } else if (process.platform === 'darwin') {
@@ -181,6 +193,31 @@ class Spectron {
     }
     if (baldrFile) config.args = [baldrFile]
     this.app = new Application(config)
+  }
+
+  /**
+   * Build the Electron app using the package “electron-packager”
+   *
+   * @param {string} packageName - Path of the package Folder
+   * @param {boolean} force - Force the building for the app
+   */
+  buildElectronApp (packageName, force = false) {
+
+    if (!fs.existsSync(appPath) || force) {
+      // derefSymlinks: lerna symlinks the some dependencies.
+      // This symlinks are broken without the option derefSymlinks in the folder
+      // packages/electron-app/dist/@bldr-songbook-electron-app-linux-x64/resources/app/node_modules/@bldr
+      packager({
+        dir: packagePath,
+        out: distFolder,
+        prune: false,
+        derefSymlinks: true,
+        overwrite: true,
+        arch: process.arch,
+        icon: path.join(packagePath, 'icon.icns'),
+        appVersion: packageJson.version
+      })
+    }
   }
 
   /**
@@ -204,40 +241,6 @@ class Spectron {
     if (this.app && this.app.isRunning()) {
       return this.app.stop()
     }
-  }
-}
-
-/**
- * Build the Electron app using the package “electron-packager”
- *
- * @param {string} packageFolder - Path of the package Folder
- * @param {boolean} force - Force the building for the app
- */
-function buildElectronApp (packageFolder, force = false) {
-  let packageJson = require(path.join(packageFolder, 'package.json'))
-  let packageName = packageJson.name.replace('/', '-')
-  let appName = util.format('%s-%s-%s', packageName, process.platform, process.arch)
-  let distFolder = path.join(packageFolder, 'dist')
-  let darwinPath = []
-  if (process.platform === 'darwin') {
-    darwinPath = [packageName + '.app', 'Contents', 'MacOS']
-  }
-  let appPath = path.join(distFolder, appName, ...darwinPath, packageName)
-
-  if (!fs.existsSync(appPath) || force) {
-    // derefSymlinks: lerna symlinks the some dependencies.
-    // This symlinks are broken without the option derefSymlinks in the folder
-    // packages/electron-app/dist/@bldr-songbook-electron-app-linux-x64/resources/app/node_modules/@bldr
-    return packager({
-      dir: packageFolder,
-      out: distFolder,
-      prune: false,
-      derefSymlinks: true,
-      overwrite: true,
-      arch: process.arch,
-      icon: path.join(packageFolder, 'icon.icns'),
-      appVersion: packageJson.version
-    }).then(appPath => { return appPath })
   }
 }
 
