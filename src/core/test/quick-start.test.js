@@ -4,7 +4,7 @@ const {
   freshEnv
 } = require('@bldr/test-helper')
 
-const { QuickStart } = requireFile('app', 'quick-start.js')
+const { QuickStart } = requireFile('core', 'quick-start.js')
 
 let initiateQuickStart = function () {
   return new QuickStart(freshEnv())

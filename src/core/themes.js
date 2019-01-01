@@ -55,6 +55,8 @@ class Themes {
   }
 
   /**
+   * TODO: fix
+   *
    * Resolve all theme dependencies (e. g. typeface modules)
    *
    * @param {object} dependencies The dependencies object like in
@@ -62,10 +64,11 @@ class Themes {
    * @return {array} A list of CSS paths as an array
    */
   resolveDependencies_ (dependencies) {
-    return Object.keys(dependencies)
-      .map(
-        dependency => require.resolve(dependency)
-      )
+    return ['quickfix']
+    // return Object.keys(dependencies)
+    //   .map(
+    //     dependency => require.resolve(dependency)
+    //   )
   }
 
   /**

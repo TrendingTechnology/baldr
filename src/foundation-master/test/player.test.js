@@ -4,7 +4,7 @@ const {
 } = require('@bldr/test-helper')
 
 const { JSDOM } = require('jsdom')
-const player = requireFile('lib', 'player.js')
+const player = requireFile('foundation-master', 'player.js')
 
 describe('lib/player.js #unittest', () => {
   it('Method “renderPlayer()”: audio', () => {

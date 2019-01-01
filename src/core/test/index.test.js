@@ -16,7 +16,7 @@ const mousetrap = require('mousetrap')
  **********************************************************************/
 
 describe('Class “Environment()” #unittest', () => {
-  let indexJsPath = srcPath('app', 'index.js')
+  let indexJsPath = srcPath('core', 'index.js')
   const Environment = rewire(indexJsPath).__get__('Environment')
   let env = new Environment([testFileMinimal], getDOM())
 

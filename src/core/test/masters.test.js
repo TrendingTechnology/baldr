@@ -7,7 +7,7 @@ const {
   getDOM
 } = require('@bldr/test-helper')
 
-const { getMasters } = requireFile('app', 'masters.js')
+const { getMasters } = requireFile('core', 'masters.js')
 let masters = getMasters(getDOM())
 
 /***********************************************************************
@@ -150,7 +150,7 @@ describe('Class “Masters()” #unittest', () => {
 
 describe('Function getMasters()” #unittest', function () {
   it('simple', function () {
-    const { getMasters } = requireFile('app', 'masters.js')
+    const { getMasters } = requireFile('core', 'masters.js')
     let masters = getMasters(getDOM())
     assert.equal(typeof masters.all, 'object')
   })

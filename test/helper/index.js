@@ -12,6 +12,7 @@ const { getConfig } = require('@bldr/foundation-master')
 const { Environment } = require('@bldr/core')
 const process = require('process')
 const util = require('util')
+const packager = require('electron-packager')
 
 /**
  * Resolves a sequence of paths or path segments into an absolute path
@@ -40,7 +41,7 @@ exports.requireFile = function () {
   return require(exports.srcPath(...arguments))
 }
 
-const { getMasters } = exports.requireFile('app', 'masters.js')
+const { getMasters } = exports.requireFile('core', 'masters.js')
 
 /**
  *
@@ -100,7 +101,7 @@ exports.makeDOM = function (html) {
  */
 exports.document = exports.makeDOM(
   fs.readFileSync(
-    path.join(__dirname, '..', '..', 'render.html'),
+    path.join(__dirname, '..', '..', 'src', 'electron-app', 'render.html'),
     'utf8'
   )
 )
@@ -111,7 +112,7 @@ exports.document = exports.makeDOM(
 exports.getDOM = function () {
   return exports.makeDOM(
     fs.readFileSync(
-      path.join(__dirname, '..', '..', 'render.html'),
+      path.join(__dirname, '..', '..', 'src', 'electron-app', 'render.html'),
       'utf8'
     )
   )
@@ -213,15 +214,14 @@ class Spectron {
  * @param {boolean} force - Force the building for the app
  */
 function buildElectronApp (packageFolder, force = false) {
-  let darwinPath = []
-  if (process.platform === 'darwin') {
-    darwinPath = [packageName + '.app', 'Contents', 'MacOS']
-  }
-
   let packageJson = require(path.join(packageFolder, 'package.json'))
   let packageName = packageJson.name.replace('/', '-')
   let appName = util.format('%s-%s-%s', packageName, process.platform, process.arch)
   let distFolder = path.join(packageFolder, 'dist')
+  let darwinPath = []
+  if (process.platform === 'darwin') {
+    darwinPath = [packageName + '.app', 'Contents', 'MacOS']
+  }
   let appPath = path.join(distFolder, appName, ...darwinPath, packageName)
 
   if (!fs.existsSync(appPath) || force) {

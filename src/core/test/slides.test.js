@@ -5,7 +5,7 @@ const {
   freshEnv
 } = require('@bldr/test-helper')
 
-let slidesJsPath = srcPath('app', 'slides.js')
+let slidesJsPath = srcPath('core', 'slides.js')
 const { Slide } = require(slidesJsPath)
 const Slides = rewire(slidesJsPath).__get__('Slides')
 const SlideData = rewire(slidesJsPath).__get__('SlideData')

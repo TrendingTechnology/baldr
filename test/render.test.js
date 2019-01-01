@@ -2,13 +2,13 @@ const {
   assert,
   returnDOM
 } = require('@bldr/test-helper')
-
+const path = require('path')
 let rewire
 let document
 
 describe.skip('“render.js” #unittest', function () {
   beforeEach(() => {
-    rewire = require('rewire')('../render.js')
+    rewire = require('rewire')(path.join(__dirname, '..', 'src', 'electron-app', 'electron-render.js'))
     document = returnDOM()
     rewire.__set__('document', document)
   })

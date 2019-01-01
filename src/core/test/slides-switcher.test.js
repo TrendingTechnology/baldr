@@ -4,8 +4,8 @@ const {
   freshEnv
 } = require('@bldr/test-helper')
 
-const { getSlides } = requireFile('app', 'slides.js')
-const { SlidesSwitcher } = requireFile('app', 'slides-switcher.js')
+const { getSlides } = requireFile('core', 'slides.js')
+const { SlidesSwitcher } = requireFile('core', 'slides-switcher.js')
 
 let env = freshEnv()
 let slides = getSlides(env)

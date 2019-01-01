@@ -6,7 +6,7 @@ const {
   srcPath
 } = require('@bldr/test-helper')
 
-let mediaJsPath = srcPath('lib', 'media.js')
+let mediaJsPath = srcPath('foundation-master', 'media.js')
 
 const { Media } = require(mediaJsPath)
 let mediaRewired = rewire(mediaJsPath)
