@@ -4,7 +4,7 @@ const {
   cloneConfig
 } = require('@bldr/test-helper')
 
-const image = require('../index.js')
+const image = require('@bldr/master-image')
 
 let config = cloneConfig()
 config.sessionDir = path.resolve(__dirname, '..')

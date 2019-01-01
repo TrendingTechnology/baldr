@@ -2,13 +2,13 @@ const {
   assert,
   makeDOM,
   rewire,
-  path,
   freshEnv,
-  requireFile
+  requireFile,
+  packageFilePath
 } = require('@bldr/test-helper')
 
-const question = require('../index.js')
-const questionRewired = rewire(path.join(__dirname, '..', 'index.js'))
+const question = require('@bldr/master-question')
+const questionRewired = rewire(packageFilePath('@bldr/master-question', 'index.js'))
 
 let normalizeData = function (data) {
   return question.normalizeData(data)

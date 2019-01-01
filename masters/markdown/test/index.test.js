@@ -3,7 +3,7 @@ const {
   makeDOM
 } = require('@bldr/test-helper')
 
-const markdown = require('../index.js')
+const markdown = require('@bldr/master-markdown')
 
 let mainHTML = function (data) {
   return markdown.mainHTML({ masterData: data })

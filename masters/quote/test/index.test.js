@@ -3,7 +3,7 @@ const {
   makeDOM
 } = require('@bldr/test-helper')
 
-const quote = require('../index.js')
+const quote = require('@bldr/master-quote')
 
 let render = function (data) {
   return quote.mainHTML({ masterData: data })

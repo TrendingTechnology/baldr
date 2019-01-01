@@ -5,7 +5,7 @@ const {
   makeDOM
 } = require('@bldr/test-helper')
 
-const person = require('../index.js')
+const person = require('@bldr/master-person')
 
 let config = cloneConfig()
 config.sessionDir = path.resolve(__dirname, '..')
