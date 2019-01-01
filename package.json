@@ -9,7 +9,7 @@
   "scripts": {
     "doc": "rm -f docs/*.html; jsdoc --configure ./docs/jsdoc-config.json --destination ./docs/",
     "doc-show": "xdg-open ./docs/index.html",
-    "test": "mocha --reporter spec",
+    "test": "mocha",
     "standard": "standard *.js packages/**/*.js test/*.js"
   },
   "author": {
