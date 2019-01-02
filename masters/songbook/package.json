@@ -1,0 +1,54 @@
+{
+  "name": "@bldr/songbook",
+  "description": "Meta package used for testing and documentation purposes.",
+  "version": "0.0.11",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:Josef-Friedrich/baldr-songbook.git"
+  },
+  "scripts": {
+    "doc": "rm -f docs/*.html; jsdoc --configure ./docs/jsdoc-config.json --destination ./docs/",
+    "doc-show": "xdg-open ./docs/index.html",
+    "test": "mocha",
+    "standard": "standard *.js packages/**/*.js test/*.js"
+  },
+  "author": {
+    "name": "Josef Friedrich",
+    "email": "josef@friedrich.rocks",
+    "url": "https://josef.friedrich.rocks"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/Josef-Friedrich/baldr-songbook",
+  "devDependencies": {
+    "@bldr/songbook-base": "^0.0.10",
+    "@bldr/songbook-cli": "^0.0.10",
+    "@bldr/songbook-electron-app": "^0.0.11",
+    "@bldr/songbook-intermediate-files": "^0.0.10",
+    "electron-packager": "^13.0.1",
+    "jsdoc": "^3.5.5",
+    "lerna": "^3.8.0",
+    "mocha": "^4.0.1",
+    "mocha-standard": "^1.0.0",
+    "rewire": "^4.0.1",
+    "sinon": "^4.0.0",
+    "spectron": "^3.7.2",
+    "standard": "^12.0.1",
+    "tmp": "0.0.33"
+  },
+  "standard": {
+    "globals": [
+      "describe",
+      "context",
+      "before",
+      "beforeEach",
+      "after",
+      "afterEach",
+      "it",
+      "expect"
+    ]
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "gitHead": "d853bd132f4a61db5b3b796e7bd5dfa44aa8d106"
+}

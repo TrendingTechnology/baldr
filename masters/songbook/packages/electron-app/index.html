@@ -1,0 +1,37 @@
+<html>
+  <head>
+    <title>Liederbuch „Die besten Lieder“</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" type="text/css" href="css/styles.css">
+  </head>
+  <body>
+
+    <!-- menu -->
+
+    <section id="menu">
+      <ul>
+        <li id="menu-search" class="button fa fa-search" title="Suche (Tastenkürzel: Esc)"></li>
+        <li id="menu-tableofcontents" class="button fa fa-list" title="Inhaltsverzeichnis (Tastenkürzel: Alt)"></li>
+      </ul>
+    </section>
+
+    <!-- slide -->
+
+    <song-slide></song-slide>
+
+    <!-- search -->
+
+    <modal-window id="search">
+      <songbook-search></songbook-search>
+    </modal-window>
+
+    <!-- tableofcontents -->
+
+    <modal-window id="tableofcontents" title="Inhaltsverzeichnis">
+      <table-of-contents></table-of-contents>
+    </modal-window>
+
+    <script src="electron-render.js"></script>
+
+  </body>
+</html>
