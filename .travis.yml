@@ -4,9 +4,6 @@ language: node_js
 node_js:
   - "10"
 
-env:
-  - ELECTRON_BUILDER_ALLOW_UNRESOLVED_DEPENDENCIES=true
-
 install:
   - npm install --global npm
   - npm install --global lerna
