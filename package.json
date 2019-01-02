@@ -5,7 +5,7 @@
   "scripts": {
     "build": "electron-builder",
     "doc-show": "xdg-open ./docs/index.html",
-    "doc": "jsdoc --configure ./docs/jsdoc-config.json --readme API.md .",
+    "doc": "rm -f docs/*.html; jsdoc --configure ./docs/jsdoc-config.json --readme API.md .",
     "pack": "electron-builder --dir",
     "start": "electron .",
     "standard": "standard",

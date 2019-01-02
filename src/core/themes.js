@@ -28,8 +28,9 @@ class Themes {
     this.document = document
 
     /**
-     * @type {array} - An array of node package names which contain theme
+     * An array of node package names which contain theme
      * informations.
+     * @type {array}
      */
     this.packageNames = [
       '@bldr/theme-default',
