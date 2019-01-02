@@ -69,6 +69,8 @@ let template = function (data) {
  * Hooks
  **********************************************************************/
 
+exports.name = 'question'
+
 /**
  * @see {@link module:@bldr/core/masters~Master#normalizeData}
  */

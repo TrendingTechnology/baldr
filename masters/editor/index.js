@@ -14,6 +14,8 @@ const { addCSSFile } = require('@bldr/foundation-master')
  * Hooks
  **********************************************************************/
 
+exports.name = 'editor'
+
 /**
  * @see {@link module:@bldr/core/masters~Master#config}
  */

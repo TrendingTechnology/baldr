@@ -11,6 +11,8 @@ const { Media, checkProperty } = require('@bldr/foundation-master')
  * Hooks
  **********************************************************************/
 
+exports.name = 'person'
+
 /**
  * @see {@link module:@bldr/core/masters~Master#config}
  */

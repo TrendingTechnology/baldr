@@ -20,10 +20,7 @@ describe('Class “Master()” #unittest', () => {
   beforeEach(() => {
     let mastersJs = rewire(path.join(__dirname, '..', 'masters.js'))
     let Master = mastersJs.__get__('Master')
-    person = new Master(
-      path.resolve(__dirname, '..', '..', '..', 'masters', 'person', 'index.js'),
-      'person'
-    )
+    person = new Master('@bldr/master-person')
   })
 
   describe('Properties', () => {
@@ -55,6 +52,10 @@ describe('Class “Master()” #unittest', () => {
 
     it('this.name', () => {
       assert.equal(person.name, 'person')
+    })
+
+    it('this.packageName', () => {
+      assert.equal(person.packageName, '@bldr/master-person')
     })
 
     it('this.path', () => {

@@ -34,12 +34,11 @@ const { addCSSFile } = require('@bldr/foundation-master')
  */
 class Master {
   /**
-   * @param {string} modulePath
-   * @param {string} name
+   * @param {string} packageName - The name of the node package which is a master.
    */
-  constructor (modulePath, name) {
-    let defaults = this.setDefaults_(modulePath)
-    let dirname = path.dirname(modulePath)
+  constructor (packageName) {
+    let defaults = this.setDefaults_(packageName)
+    let dirname = path.dirname(require.resolve(packageName))
 
     /*******************************************************************
      * Members
@@ -89,9 +88,16 @@ class Master {
     this.path = dirname
 
     /**
+     * The name of the master
      * @type {string}
      */
-    this.name = name
+    this.name = defaults.name
+
+    /**
+     * The name of the node package which contains the master.
+     * @type {string}
+     */
+    this.packageName = packageName
 
     /*******************************************************************
      * Methods
@@ -228,8 +234,8 @@ class Master {
   /**
    *
    */
-  setDefaults_ (modulePath) {
-    let requireObject = require(modulePath)
+  setDefaults_ (packageName) {
+    let requireObject = require(packageName)
     let emptyFunc = function () {}
     let returnEmpty = function () { return '' }
     let funcFalse = function () { return false }
@@ -291,22 +297,36 @@ class Masters {
     this.path = path.join(__dirname, '..', '..', 'masters')
 
     /**
-     * Folder name of master slides
+     * All node packages which contain masters.
      * @type {array}
      */
-    this.all = this.getAll_()
-    for (let masterName of this.all) {
-      this[masterName] = this.initMaster_(masterName)
+    this.all = [
+      '@bldr/master-audio',
+      '@bldr/master-camera',
+      '@bldr/master-editor',
+      '@bldr/master-image',
+      '@bldr/master-markdown',
+      '@bldr/master-person',
+      '@bldr/master-question',
+      '@bldr/master-quote',
+      '@bldr/master-svg',
+      '@bldr/master-website'
+    ]
+
+    for (let packageName of this.all) {
+      let master = this.initMaster_(packageName)
+      this[master.name] = master
     }
 
     this.addCSS_()
   }
 
   /**
-   * @param {string} masterName The name of the master slide.
+   * @param {string} packageName - The name of the node package which contains
+   *   the master slide.
    */
-  initMaster_ (masterName) {
-    return new Master(path.join(this.path, masterName, 'index.js'), masterName)
+  initMaster_ (packageName) {
+    return new Master(packageName)
   }
 
   /**
@@ -322,19 +342,6 @@ class Masters {
         )
       }
     }
-  }
-
-  /**
-   * Get the folder off all master slide modules.
-   * @return {array} Folder name of master slides
-   */
-  getAll_ () {
-    return fs.readdirSync(this.path, 'utf8')
-      .filter(
-        dir => fs.statSync(
-          path.join(this.path, dir)
-        ).isDirectory()
-      )
   }
 
   /**

@@ -79,6 +79,8 @@ class Audio {
  * Hooks
  **********************************************************************/
 
+exports.name = 'audio'
+
 /**
  * @see {@link module:@bldr/core/masters~Master#init}
  */

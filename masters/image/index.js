@@ -14,6 +14,8 @@ const {
  * Hooks
  **********************************************************************/
 
+exports.name = 'image'
+
 /**
  * @see {@link module:@bldr/core/masters~Master#quickStartEntries}
  */

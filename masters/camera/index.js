@@ -52,6 +52,8 @@
  * Hooks
  **********************************************************************/
 
+exports.name = 'camera'
+
 /**
  * @see {@link module:@bldr/core/masters~Master#config}
  */

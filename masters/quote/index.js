@@ -48,6 +48,8 @@ let renderQuotationMark = function (begin = true) {
  * Hooks
  **********************************************************************/
 
+exports.name = 'quote'
+
 /**
  * @see {@link module:@bldr/core/masters~Master#config}
  */

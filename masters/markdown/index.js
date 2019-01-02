@@ -11,6 +11,8 @@ const markdown = require('marked')
  * Hooks
  **********************************************************************/
 
+exports.name = 'markdown'
+
 /**
  * @see {@link module:@bldr/core/masters~Master#mainHTML}
  */
