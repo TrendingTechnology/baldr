@@ -11,7 +11,7 @@
     "standard": "standard",
     "spectron": "mocha --fgrep '#spectron' 'test/*.js' 'src/app/test/*.js' 'src/lib/test/*.js' 'masters/audio/test/*.js' 'masters/camera/test/*.js' 'masters/editor/test/*.js' 'masters/image/test/*.js' 'masters/markdown/test/*.js' 'masters/person/test/*.js' 'masters/question/test/*.js' 'masters/quote/test/*.js' 'masters/svg/test/*.js' 'masters/website/test/*.js'",
     "unittest": "mocha --fgrep '#unittest' 'test/*.js' 'src/app/test/*.js' 'src/lib/test/*.js' 'masters/audio/test/*.js' 'masters/camera/test/*.js' 'masters/editor/test/*.js' 'masters/image/test/*.js' 'masters/markdown/test/*.js' 'masters/person/test/*.js' 'masters/question/test/*.js' 'masters/quote/test/*.js' 'masters/svg/test/*.js' 'masters/website/test/*.js'",
-    "test": "mocha"
+    "test": "mocha --reporter spec --recursive './{,!(node_modules)/**}/*.test.js'"
   },
   "build": {
     "appId": "rocks.friedrich.baldr",
