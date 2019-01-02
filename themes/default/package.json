@@ -1,6 +1,6 @@
 {
   "name": "@bldr/theme-default",
-  "main": "styles.css",
+  "main": "index.js",
   "dependencies": {
     "typeface-alegreya": "^0.0.40",
     "typeface-alegreya-sans": "^0.0.40",

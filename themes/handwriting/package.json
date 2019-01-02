@@ -1,6 +1,6 @@
 {
   "name": "@bldr/theme-handwriting",
-  "main": "styles.css",
+  "main": "index.js",
   "dependencies": {
     "typeface-kalam": "^0.0.43"
   },

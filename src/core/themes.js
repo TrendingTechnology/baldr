@@ -5,7 +5,6 @@
 
 'use strict'
 
-const fs = require('fs')
 const path = require('path')
 const { addCSSFile } = require('@bldr/foundation-master')
 
@@ -29,70 +28,13 @@ class Themes {
     this.document = document
 
     /**
-     * Parent path of all themes.
-     * @type {string}
-     */
-    this.path = path.join(__dirname, '..', '..', 'themes')
-
-    /**
      * Folder names of all themes
      * @type {array}
      */
-    this.all = this.getThemes_()
-  }
-
-  /**
-   * Get the folders of all themes.
-   * @return {array} Folder names of all themes
-   */
-  getThemes_ () {
-    return fs.readdirSync(this.path, 'utf8')
-      .filter(
-        dir => fs.statSync(
-          path.join(this.path, dir)
-        ).isDirectory()
-      )
-  }
-
-  /**
-   * TODO: fix
-   *
-   * Resolve all theme dependencies (e. g. typeface modules)
-   *
-   * @param {object} dependencies The dependencies object like in
-   *   package.json
-   * @return {array} A list of CSS paths as an array
-   */
-  resolveDependencies_ (dependencies) {
-    return ['quickfix']
-    // return Object.keys(dependencies)
-    //   .map(
-    //     dependency => require.resolve(dependency)
-    //   )
-  }
-
-  /**
-   * Resolve the folder path of the theme module
-   *
-   * @param {string} name The name of the theme
-   * @return {string} Absolute path of the folder containing the theme
-   * module.s
-   */
-  resolveTheme_ (name) {
-    return path.dirname(
-      require.resolve('@bldr/theme-' + name)
-    )
-  }
-
-  /**
-   * Get the content of the package.json file.
-   *
-   * @param {string} name The name of the theme
-   */
-  getPackageJSON_ (name) {
-    return require(
-      path.join(this.resolveTheme_(name), 'package.json')
-    )
+    this.all = [
+      '@bldr/theme-default',
+      '@bldr/theme-handwriting'
+    ]
   }
 
   /**
@@ -100,16 +42,13 @@ class Themes {
    * dependencies of the theme and then the real theme CSS file
    */
   getAllCSSFiles_ () {
-    let pkg
-    let dependencies
     let cssFiles = []
-    for (let name of this.all) {
-      pkg = this.getPackageJSON_(name)
-      dependencies = this.resolveDependencies_(pkg.dependencies)
-      for (let dependencyCSS of dependencies) {
-        cssFiles.push(dependencyCSS)
+    for (let packageName of this.all) {
+      let theme = require(packageName)
+      for (let cssFile of theme.cssFiles) {
+        cssFiles.push(cssFile)
       }
-      cssFiles.push(require.resolve('@bldr/theme-' + name))
+      cssFiles.push(path.join(path.dirname(require.resolve(packageName)), 'styles.css'))
     }
     return cssFiles
   }

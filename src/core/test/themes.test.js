@@ -1,8 +1,6 @@
 const {
   getDOM,
-  allThemes,
   assert,
-  path,
   requireFile
 } = require('@bldr/test-helper')
 
@@ -15,59 +13,18 @@ const themes = getThemes(getDOM())
 
 describe('Class “Themes()” #unittest', () => {
   describe('Properties', () => {
-    it('Property “this.path”', () => {
-      assert.equal(
-        themes.path,
-        path.resolve(__dirname, '..', '..', '..', 'themes')
-      )
-    })
-
     it('Property “this.all”', () => {
-      assert.deepEqual(themes.all, allThemes)
+      assert.deepEqual(themes.all, [
+        '@bldr/theme-default',
+        '@bldr/theme-handwriting'
+      ])
     })
   })
 
   describe('Methods', () => {
-    it('Method “getThemes_()”', () => {
-      assert.deepEqual(themes.getThemes_(), allThemes)
-    })
-
-    it('Method “getPackageJSON_()”', () => {
-      assert.equal(
-        themes.getPackageJSON_('default').name,
-        '@bldr/theme-default'
-      )
-    })
-
-    it('Method “resolveDependencies_()”', () => {
-      let cssFiles = themes.resolveDependencies_(
-        themes.getPackageJSON_('default').dependencies
-      )
-      assert.equal(
-        cssFiles[0],
-        require.resolve('typeface-alegreya')
-      )
-    })
-
-    it('Method “resolveTheme_()”', () => {
-      assert.equal(
-        themes.resolveTheme_('default'),
-        path.dirname(
-          require.resolve('@bldr/theme-default')
-        )
-      )
-    })
-
     it('Method “getAllCSSFiles_()”', () => {
       let cssFiles = themes.getAllCSSFiles_()
-      assert.equal(
-        cssFiles[0],
-        require.resolve('typeface-alegreya')
-      )
-      assert.equal(
-        cssFiles.pop(),
-        require.resolve('@bldr/theme-handwriting')
-      )
+      assert.strictEqual(cssFiles.length, 7)
     })
 
     it('Method “loadThemes()”', () => {

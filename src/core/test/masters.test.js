@@ -112,13 +112,6 @@ describe('Class “Master()” #unittest', () => {
 
 describe('Class “Masters()” #unittest', () => {
   describe('Properties', () => {
-    it('this.path', () => {
-      assert.equal(
-        masters.path,
-        path.resolve(__dirname, '..', '..', '..', 'masters')
-      )
-    })
-
     it('this.all', () => {
       assert.deepEqual(masters.all, allMasters)
     })

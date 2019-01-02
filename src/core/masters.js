@@ -290,13 +290,6 @@ class Masters {
      */
     this.document = document
 
-    /**
-     * Parent path of all master slide modules.
-     * @type {string}
-     */
-    this.path = path.join(__dirname, '..', '..', 'masters')
-
-
     let all = [
       '@bldr/master-audio',
       '@bldr/master-camera',

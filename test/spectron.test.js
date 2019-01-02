@@ -7,7 +7,7 @@ const {
 describe('General Spectron tests #spectron', () => {
   describe('build', () => {
     it(`exists “Spectron.appPath”`, () => {
-      let spectron = new Spectron('@bldr/electron-app', )
+      let spectron = new Spectron('@bldr/electron-app')
       assert.ok(fs.existsSync(spectron.appPath))
     })
   })
@@ -16,7 +16,7 @@ describe('General Spectron tests #spectron', () => {
     this.timeout(10000)
 
     beforeEach(function () {
-      this.spectron = new Spectron('@bldr/electron-app', )
+      this.spectron = new Spectron('@bldr/electron-app')
       this.app = this.spectron.getApp()
       return this.spectron.start()
     })
