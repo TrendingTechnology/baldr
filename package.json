@@ -72,6 +72,7 @@
     "@bldr/master-question": "*",
     "@bldr/master-quote": "*",
     "@bldr/master-svg": "*",
+    "@bldr/master-video": "*",
     "@bldr/master-website": "*",
     "@bldr/test-helper": "*",
     "@bldr/theme-default": "*",

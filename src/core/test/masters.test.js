@@ -138,10 +138,6 @@ describe('Class “Masters()” #unittest', () => {
 
       assert.equal(SecondRunCount, firstRunCount * 2)
     })
-
-    it('Method “getAll_()”', () => {
-      assert.deepEqual(masters.getAll_(), allMasters)
-    })
   })
 })
 

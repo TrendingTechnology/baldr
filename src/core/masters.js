@@ -296,11 +296,8 @@ class Masters {
      */
     this.path = path.join(__dirname, '..', '..', 'masters')
 
-    /**
-     * All node packages which contain masters.
-     * @type {array}
-     */
-    this.all = [
+
+    let all = [
       '@bldr/master-audio',
       '@bldr/master-camera',
       '@bldr/master-editor',
@@ -310,11 +307,19 @@ class Masters {
       '@bldr/master-question',
       '@bldr/master-quote',
       '@bldr/master-svg',
+      '@bldr/master-video',
       '@bldr/master-website'
     ]
 
-    for (let packageName of this.all) {
+    /**
+     * All node packages which contain masters.
+     * @type {array}
+     */
+    this.all = []
+
+    for (let packageName of all) {
       let master = this.initMaster_(packageName)
+      this.all.push(master.name)
       this[master.name] = master
     }
 

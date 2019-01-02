@@ -157,6 +157,12 @@ class VideoPlayer {
   }
 }
 
+/***********************************************************************
+ * Hooks
+ **********************************************************************/
+
+exports.name = 'video'
+
 /**
  * @see {@link module:@bldr/core/masters~Master#normalizeData}
  */

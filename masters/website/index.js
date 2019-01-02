@@ -9,6 +9,8 @@
  * Hooks
  **********************************************************************/
 
+exports.name = 'website'
+
 /**
  * @see {@link module:@bldr/core/masters~Master#config}
  */
