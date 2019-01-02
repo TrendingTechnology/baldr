@@ -10,7 +10,7 @@ const {
 } = require('./_helper.js')
 
 process.env.PATH = path.join(__dirname, 'bin:', process.env.PATH)
-process.env.BALDR_SONGBOOK_PATH = path.resolve('test', 'songs', 'clean', 'some')
+process.env.BALDR_SONGBOOK_PATH = path.resolve(__dirname, 'songs', 'clean', 'some')
 
 describe('Package “@bldr/songbook-base”', function () {
   describe('Functions', function () {
@@ -68,7 +68,7 @@ describe('Package “@bldr/songbook-base”', function () {
       it('config.path', function () {
         let bootstrapConfig = baseRewired.__get__('bootstrapConfig')
         let config = bootstrapConfig()
-        assert.strictEqual(config.path, path.resolve('test', 'songs', 'clean', 'some'))
+        assert.strictEqual(config.path, path.resolve(__dirname, 'songs', 'clean', 'some'))
       })
 
       it('exit', function () {
@@ -91,7 +91,7 @@ describe('Package “@bldr/songbook-base”', function () {
 
     it('Function “parseSongIDList()”', function () {
       let parseSongIDList = baseRewired.__get__('parseSongIDList')
-      let result = parseSongIDList(path.join('test', 'files', 'song-id-list.txt'))
+      let result = parseSongIDList(path.join(__dirname, 'files', 'song-id-list.txt'))
       assert.deepStrictEqual(result, ['Auf-der-Mauer', 'Swing-low'])
     })
   })
@@ -101,7 +101,7 @@ describe('Package “@bldr/songbook-base”', function () {
       let Message = baseRewired.__get__('Message')
       let message = baseRewired.__get__('message')
       let Song = baseRewired.__get__('Song')
-      let song = new Song(path.resolve('test', 'songs', 'processed', 'some', 'a', 'Auf-der-Mauer'))
+      let song = new Song(path.resolve(__dirname, 'songs', 'processed', 'some', 'a', 'Auf-der-Mauer'))
 
       const status = {
         'changed': {
@@ -287,7 +287,7 @@ describe('Package “@bldr/songbook-base”', function () {
     })
 
     describe('Class “SongMetaData()”', function () {
-      let songPath = path.resolve('test', 'songs', 'clean', 'some', 'a', 'Auf-der-Mauer')
+      let songPath = path.resolve(__dirname, 'songs', 'clean', 'some', 'a', 'Auf-der-Mauer')
       let SongMetaData = baseRewired.__get__('SongMetaData')
       let song = new SongMetaData(songPath)
 
@@ -389,7 +389,7 @@ describe('Package “@bldr/songbook-base”', function () {
         it('Exception: Unsupported key', function () {
           assert.throws(
             function () {
-              return new SongMetaData(path.join('test', 'files', 'wrong-song-yaml'))
+              return new SongMetaData(path.join(__dirname, 'files', 'wrong-song-yaml'))
             },
             /^.*Unsupported key: lol.*$/
           )
@@ -467,7 +467,7 @@ describe('Package “@bldr/songbook-base”', function () {
       })
       describe('Real world example', function () {
         let SongMetaData = baseRewired.__get__('SongMetaData')
-        let folder = path.join('test', 'songs', 'clean', 'some', 'a', 'Auf-der-Mauer')
+        let folder = path.join(__dirname, 'songs', 'clean', 'some', 'a', 'Auf-der-Mauer')
         let metaData = new SongMetaData(folder)
         let combined = new SongMetaDataCombined(metaData)
         it('title', function () {
@@ -487,7 +487,7 @@ describe('Package “@bldr/songbook-base”', function () {
 
     describe('Class “Song()”', function () {
       let Song = baseRewired.__get__('Song')
-      let folder = path.join('test', 'songs', 'clean', 'some', 'a', 'Auf-der-Mauer')
+      let folder = path.join(__dirname, 'songs', 'clean', 'some', 'a', 'Auf-der-Mauer')
       let song = new Song(folder)
 
       describe('Initialisation', function () {
@@ -550,24 +550,24 @@ describe('Package “@bldr/songbook-base”', function () {
 
         describe('Property “pianoFiles”', function () {
           it('empty', function () {
-            let song = new Song(path.join('test', 'songs', 'clean', 'some', 's', 'Swing-low'))
+            let song = new Song(path.join(__dirname, 'songs', 'clean', 'some', 's', 'Swing-low'))
             assert.deepStrictEqual(song.pianoFiles, [])
           })
 
           it('not empty', function () {
-            let song = new Song(path.join('test', 'songs', 'processed', 'some', 's', 'Swing-low'))
+            let song = new Song(path.join(__dirname, 'songs', 'processed', 'some', 's', 'Swing-low'))
             assert.deepStrictEqual(song.pianoFiles, ['piano_1.eps', 'piano_2.eps', 'piano_3.eps'])
           })
         })
 
         describe('Property “slidesFiles”', function () {
           it('empty', function () {
-            let song = new Song(path.join('test', 'songs', 'clean', 'some', 's', 'Swing-low'))
+            let song = new Song(path.join(__dirname, 'songs', 'clean', 'some', 's', 'Swing-low'))
             assert.deepStrictEqual(song.slidesFiles, [])
           })
 
           it('not empty', function () {
-            let song = new Song(path.join('test', 'songs', 'processed', 'some', 's', 'Swing-low'))
+            let song = new Song(path.join(__dirname, 'songs', 'processed', 'some', 's', 'Swing-low'))
             assert.deepStrictEqual(song.slidesFiles, ['01.svg', '02.svg', '03.svg'])
           })
         })
@@ -624,7 +624,7 @@ describe('Package “@bldr/songbook-base”', function () {
         })
 
         describe('Method “getFolderFiles_()”', function () {
-          let folder = path.join('test', 'songs', 'processed', 'one', 'a', 'Auf-der-Mauer')
+          let folder = path.join(__dirname, 'songs', 'processed', 'one', 'a', 'Auf-der-Mauer')
           let song = new Song(folder)
 
           it('Method “getFolderFiles_()”: eps', function () {
@@ -656,7 +656,7 @@ describe('Package “@bldr/songbook-base”', function () {
     describe('Class “AlphabeticalSongsTree()”', function () {
       let AlphabeticalSongsTree = baseRewired.__get__('AlphabeticalSongsTree')
       let Library = baseRewired.__get__('Library')
-      let library = new Library(path.join('test', 'songs', 'processed', 'some'))
+      let library = new Library(path.join(__dirname, 'songs', 'processed', 'some'))
       let songs = Object.values(library.songs)
 
       it('Initialisation', function () {
@@ -673,12 +673,12 @@ describe('Package “@bldr/songbook-base”', function () {
 
       beforeEach(function () {
         basePath = mkTmpDir()
-        fs.copySync(path.join('test', 'songs', 'processed', 'some'), basePath)
+        fs.copySync(path.join(__dirname, 'songs', 'processed', 'some'), basePath)
         library = new Library(basePath)
       })
 
       it('Exceptions', function () {
-        let basePath = path.join('test', 'songs', 'processed')
+        let basePath = path.join(__dirname, 'songs', 'processed')
         assert.throws(
           function () {
             return new Library(basePath)

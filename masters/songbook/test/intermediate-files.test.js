@@ -15,7 +15,7 @@ const {
 } = require('./_helper.js')
 
 process.env.PATH = path.join(__dirname, 'bin:', process.env.PATH)
-process.env.BALDR_SONGBOOK_PATH = path.resolve('test', 'songs', 'clean', 'some')
+process.env.BALDR_SONGBOOK_PATH = path.resolve(__dirname, 'songs', 'clean', 'some')
 
 describe('Package “@bldr/songbook-intermediate-files”', function () {
   describe('Classes', function () {
@@ -153,7 +153,7 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
       describe('Methods', function () {
         it('Method “hashSHA1()”', function () {
           assert.strictEqual(
-            monitor.hashSHA1(path.join('test', 'files', 'hash.txt')),
+            monitor.hashSHA1(path.join(__dirname, 'files', 'hash.txt')),
             '7516f3c75e85c64b98241a12230d62a64e59bce3'
           )
         })
@@ -492,7 +492,7 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
       let IntermediateSong = intermediateRewired.__get__('IntermediateSong')
       let FileMonitor = intermediateRewired.__get__('FileMonitor')
       let fileMonitor = new FileMonitor(mkTmpFile())
-      let folder = path.join('test', 'songs', 'clean', 'some', 'a', 'Auf-der-Mauer')
+      let folder = path.join(__dirname, 'songs', 'clean', 'some', 'a', 'Auf-der-Mauer')
       let song = new IntermediateSong(folder, fileMonitor)
 
       afterEach(function () {
@@ -501,7 +501,7 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
 
       describe('Methods', function () {
         it('Method “formatPianoTeXEpsFile_()”', function () {
-          let folder = path.join('test', 'songs', 'processed', 'some', 's', 'Swing-low')
+          let folder = path.join(__dirname, 'songs', 'processed', 'some', 's', 'Swing-low')
           let song = new IntermediateSong(folder)
           assert.strictEqual(
             song.formatPianoTeXEpsFile_(0),
@@ -521,7 +521,7 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
 
         describe('Method “formatPianoTex()”', function () {
           it('Markup', function () {
-            let folder = path.join('test', 'songs', 'processed', 'some', 's', 'Swing-low')
+            let folder = path.join(__dirname, 'songs', 'processed', 'some', 's', 'Swing-low')
             let song = new IntermediateSong(folder)
             assert.strictEqual(
               song.formatPianoTex(),
@@ -582,7 +582,7 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
 
         describe('Method “generatePiano_()”', function () {
           it('lead', function () {
-            let folderSwing = path.join('test', 'songs', 'clean', 'some', 's', 'Swing-low')
+            let folderSwing = path.join(__dirname, 'songs', 'clean', 'some', 's', 'Swing-low')
             let songSwing = new IntermediateSong(folderSwing, fileMonitor)
             let files = songSwing.generatePiano_()
 
@@ -670,7 +670,7 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
     describe('Class “PianoFilesCountTree()”', function () {
       let PianoFilesCountTree = intermediateRewired.__get__('PianoFilesCountTree')
       let Library = intermediateRewired.__get__('Library')
-      let library = new Library(path.join('test', 'songs', 'processed', 'some'))
+      let library = new Library(path.join(__dirname, 'songs', 'processed', 'some'))
       let songs = Object.values(library.songs)
       let countTree = new PianoFilesCountTree(songs)
 
@@ -751,7 +751,7 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
 
       beforeEach(function () {
         basePath = mkTmpDir()
-        fs.copySync(path.join('test', 'songs', 'processed', 'some'), basePath)
+        fs.copySync(path.join(__dirname, 'songs', 'processed', 'some'), basePath)
         library = new IntermediateLibrary(basePath)
       })
 
@@ -816,7 +816,7 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
 
         describe('Method “updateSongByPath()”', function () {
           it('No exception', function () {
-            let clean = path.join('test', 'songs', 'clean', 'some')
+            let clean = path.join(__dirname, 'songs', 'clean', 'some')
             library = new IntermediateLibrary(clean)
             library.updateSongByPath(path.join(clean, 'a', 'Auf-der-Mauer'))
             assertExists(path.join(library.basePath, 'a', 'Auf-der-Mauer', 'slides', '01.svg'))
@@ -834,7 +834,7 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
 
         describe('Method “updateSongBySongId()”', function () {
           it('No exception', function () {
-            let clean = path.join('test', 'songs', 'clean', 'some')
+            let clean = path.join(__dirname, 'songs', 'clean', 'some')
             library = new IntermediateLibrary(clean)
             library.updateSongBySongId('Auf-der-Mauer')
             assertExists(path.join(library.basePath, 'a', 'Auf-der-Mauer', 'slides', '01.svg'))
@@ -854,7 +854,7 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
           let stub = sinon.stub()
           intermediateRewired.__set__('message.songFolder', stub)
 
-          let songs = path.join('test', 'songs', 'clean', 'some')
+          let songs = path.join(__dirname, 'songs', 'clean', 'some')
 
           let buildFolderList = function (basePath) {
             return [
@@ -899,7 +899,7 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
             let stub = sinon.stub()
             intermediateRewired.__set__('message.songFolder', stub)
 
-            let songs = path.join('test', 'songs', 'clean', 'some')
+            let songs = path.join(__dirname, 'songs', 'clean', 'some')
             const auf = path.join(songs, 'a', 'Auf-der-Mauer')
             const swing = path.join(songs, 's', 'Swing-low')
             const zum = path.join(songs, 'z', 'Zum-Tanze-da-geht-ein-Maedel')

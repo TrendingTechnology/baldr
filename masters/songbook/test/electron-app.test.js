@@ -1,65 +1,25 @@
-let assert = require('assert')
-const fs = require('fs')
 const path = require('path')
-const packager = require('electron-packager')
-let Application = require('spectron').Application
-const util = require('util')
-
-let darwinPath = []
-if (process.platform === 'darwin') {
-  darwinPath = ['baldr-songbook.app', 'Contents', 'MacOS']
-}
-
-let packageFolder = path.join(__dirname, '..', 'packages', 'electron-app')
-let packageJson = require(path.join(packageFolder, 'package.json'))
-let packageName = packageJson.name.replace('/', '-')
-let appName = util.format('%s-%s-%s', packageName, process.platform, process.arch)
-let distFolder = path.join(packageFolder, 'dist')
-let appPath = path.join(distFolder, appName, ...darwinPath, packageName)
+const {
+  assert,
+  fs,
+  Spectron
+} = require('@bldr/test-helper')
 
 describe('Package “@bldr/songbook-electron-app”', function () {
-  before(function () {
-    this.timeout(100000)
-    if (!fs.existsSync(appPath)) {
-      // derefSymlinks: lerna symlinks the some dependencies.
-      // This symlinks are broken without the option derefSymlinks in the folder
-      // packages/electron-app/dist/@bldr-songbook-electron-app-linux-x64/resources/app/node_modules/@bldr
-      return packager({
-        dir: packageFolder,
-        out: distFolder,
-        prune: false,
-        derefSymlinks: true,
-        overwrite: true,
-        arch: process.arch,
-        icon: path.join(packageFolder, 'icon.icns'),
-        app_version: packageJson.version
-      }).then(appPath => { return appPath })
-    }
+  this.timeout(10000)
+
+  beforeEach(function () {
+    process.env.BALDR_SONGBOOK_PATH = path.resolve(__dirname, 'songs', 'real')
+    this.spectron = new Spectron('@bldr/songbook-electron-app')
+    this.app = this.spectron.getApp()
+    return this.spectron.start()
   })
 
-  describe('build', () => {
-    it(`exists “${appPath}”`, () => {
-      assert.ok(fs.existsSync(appPath))
-    })
+  afterEach(function () {
+    return this.spectron.stop()
   })
 
   describe('application launch', function () {
-    this.timeout(10000)
-
-    beforeEach(function () {
-      process.env.BALDR_SONGBOOK_PATH = path.resolve(__dirname, 'songs', 'real')
-      this.app = new Application({
-        path: appPath
-      })
-      return this.app.start()
-    })
-
-    afterEach(function () {
-      if (this.app && this.app.isRunning()) {
-        return this.app.stop()
-      }
-    })
-
     it('Initial window', function () {
       return this.app.client
         .getWindowCount()
