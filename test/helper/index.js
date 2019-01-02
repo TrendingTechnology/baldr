@@ -162,15 +162,16 @@ exports.cloneConfig = function () {
  */
 exports.masters = getMasters(exports.document)
 
-
 /**
  * Launch an Electron app using the testing framework Spectron.
  */
 class Spectron {
   /**
-   *
+   * @param {string} packageName - The name of a node package which contains
+   *   code to build a electron app from.
+   * @param {string} baldrFile - The path of a BALDR file.
    */
-  constructor (packageName, baldrFile) {
+  constructor (packageName, baldrFile = false) {
     this.packagePath = path.dirname(require.resolve(packageName))
     this.packageJson = require(path.join(this.packagePath, 'package.json'))
     let electronName = this.packageJson.name.replace('/', '-')
@@ -183,13 +184,6 @@ class Spectron {
     }
     this.appPath = path.join(this.distFolder, this.appName, ...darwinPath, electronName)
 
-    (async () => {
-        try {
-          await this.buildElectronApp(false)
-        } catch (error) {
-          console.log(error)
-        }
-    })();
     let { Application } = require('spectron')
     let config = {
       path: this.appPath
@@ -201,11 +195,10 @@ class Spectron {
   /**
    * Build the Electron app using the package “electron-packager”
    *
-   * @param {string} packageName - Path of the package Folder
    * @param {boolean} force - Force the building for the app
    */
   buildElectronApp (force = false) {
-    //if (!fs.existsSync(this.appPath) || force) {
+    if (!fs.existsSync(this.appPath) || force) {
       // derefSymlinks: lerna symlinks the some dependencies.
       // This symlinks are broken without the option derefSymlinks in the folder
       // packages/electron-app/dist/@bldr-songbook-electron-app-linux-x64/resources/app/node_modules/@bldr
@@ -219,7 +212,11 @@ class Spectron {
         icon: path.join(this.packagePath, 'icon.icns'),
         appVersion: this.packageJson.version
       })
-    //}
+    } else {
+      return new Promise((resolve, reject) => {
+        resolve()
+      })
+    }
   }
 
   /**
@@ -233,7 +230,9 @@ class Spectron {
    *
    */
   start () {
-    return this.app.start()
+    return this.buildElectronApp().then(() => {
+      return this.app.start()
+    })
   }
 
   /**

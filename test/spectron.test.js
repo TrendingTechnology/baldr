@@ -7,7 +7,7 @@ const {
 describe('General Spectron tests #spectron', () => {
   describe('build', () => {
     it(`exists “Spectron.appPath”`, () => {
-      let spectron = new Spectron()
+      let spectron = new Spectron('@bldr/electron-app', )
       assert.ok(fs.existsSync(spectron.appPath))
     })
   })
@@ -16,7 +16,7 @@ describe('General Spectron tests #spectron', () => {
     this.timeout(10000)
 
     beforeEach(function () {
-      this.spectron = new Spectron()
+      this.spectron = new Spectron('@bldr/electron-app', )
       this.app = this.spectron.getApp()
       return this.spectron.start()
     })
@@ -45,7 +45,7 @@ describe('General Spectron tests #spectron', () => {
     this.timeout(10000)
 
     beforeEach(function () {
-      this.spectron = new Spectron('test/files/minimal.baldr')
+      this.spectron = new Spectron('@bldr/electron-app', 'test/files/minimal.baldr')
       this.app = this.spectron.getApp()
       return this.spectron.start()
     })
@@ -140,7 +140,7 @@ describe('General Spectron tests #spectron', () => {
     this.timeout(10000)
 
     beforeEach(function () {
-      this.spectron = new Spectron('test/files/steps.baldr')
+      this.spectron = new Spectron('@bldr/electron-app', 'test/files/steps.baldr')
       this.app = this.spectron.getApp()
       return this.spectron.start()
     })
@@ -285,7 +285,7 @@ describe('General Spectron tests #spectron', () => {
     this.timeout(10000)
 
     beforeEach(function () {
-      this.spectron = new Spectron('test/files/single-slide.baldr')
+      this.spectron = new Spectron('@bldr/electron-app', 'test/files/single-slide.baldr')
       this.app = this.spectron.getApp()
       return this.spectron.start()
     })
@@ -309,7 +309,7 @@ describe('General Spectron tests #spectron', () => {
     this.timeout(10000)
 
     beforeEach(function () {
-      this.spectron = new Spectron('test/files/error.baldr')
+      this.spectron = new Spectron('@bldr/electron-app', 'test/files/error.baldr')
       this.app = this.spectron.getApp()
       return this.spectron.start()
     })
@@ -331,7 +331,7 @@ describe('General Spectron tests #spectron', () => {
     this.timeout(10000)
 
     beforeEach(function () {
-      this.spectron = new Spectron('test/files/themes.baldr')
+      this.spectron = new Spectron('@bldr/electron-app', 'test/files/themes.baldr')
       this.app = this.spectron.getApp()
       return this.spectron.start()
     })

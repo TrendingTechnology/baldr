@@ -7,7 +7,7 @@ describe('Master slide “camera”: “example.baldr” #spectron', function ()
   this.timeout(10000)
 
   beforeEach(function () {
-    this.spectron = new Spectron('masters/camera/example.baldr')
+    this.spectron = new Spectron('@bldr/electron-app', 'masters/camera/example.baldr')
     this.app = this.spectron.getApp()
     return this.spectron.start()
   })

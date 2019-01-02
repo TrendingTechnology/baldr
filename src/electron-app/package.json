@@ -8,6 +8,20 @@
   "description": "The main electron app.",
   "dependencies": {
     "@bldr/core": "*",
+    "@bldr/foundation-master": "*",
+    "@bldr/master-audio": "*",
+    "@bldr/master-camera": "*",
+    "@bldr/master-editor": "*",
+    "@bldr/master-image": "*",
+    "@bldr/master-markdown": "*",
+    "@bldr/master-person": "*",
+    "@bldr/master-question": "*",
+    "@bldr/master-quote": "*",
+    "@bldr/master-svg": "*",
+    "@bldr/master-website": "*",
+    "@bldr/test-helper": "*",
+    "@bldr/theme-default": "*",
+    "@bldr/theme-handwriting": "*",
     "electron": "^4.0.0",
     "mousetrap": "^1.6.2"
   }

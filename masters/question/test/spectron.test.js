@@ -9,9 +9,7 @@ describe('Master slide “question”: “example.baldr” #spectron', function 
   beforeEach(function () {
     this.spectron = new Spectron('@bldr/electron-app', 'masters/question/example.baldr')
     this.app = this.spectron.getApp()
-    let result = this.spectron.start()
-    console.log(result)
-    return result
+    return this.spectron.start()
   })
 
   afterEach(function () {
