@@ -1,4 +1,4 @@
-exports.name = 'handwriting'
+exports.name = 'default'
 
 exports.cssFiles = [
   require.resolve('typeface-alegreya'),

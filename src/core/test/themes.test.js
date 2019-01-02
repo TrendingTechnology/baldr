@@ -13,10 +13,17 @@ const themes = getThemes(getDOM())
 
 describe('Class “Themes()” #unittest', () => {
   describe('Properties', () => {
-    it('Property “this.all”', () => {
-      assert.deepEqual(themes.all, [
+    it('Property “this.packageNames', () => {
+      assert.deepEqual(themes.packageNames, [
         '@bldr/theme-default',
         '@bldr/theme-handwriting'
+      ])
+    })
+
+    it('Property “this.all', () => {
+      assert.deepEqual(themes.all, [
+        'default',
+        'handwriting'
       ])
     })
   })

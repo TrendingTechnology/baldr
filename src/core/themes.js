@@ -28,13 +28,31 @@ class Themes {
     this.document = document
 
     /**
-     * Folder names of all themes
-     * @type {array}
+     * @type {array} - An array of node package names which contain theme
+     * informations.
      */
-    this.all = [
+    this.packageNames = [
       '@bldr/theme-default',
       '@bldr/theme-handwriting'
     ]
+
+    /**
+     * All theme objects a return by the require() function indexed with the
+     * theme name.
+     * @type {object}
+     */
+    this.themes = {}
+
+    /**
+     * Folder names of all themes
+     * @type {array}
+     */
+    this.all = []
+    for (let packageName of this.packageNames) {
+      let theme = require(packageName)
+      this.themes[theme.name] = theme
+      this.all.push(theme.name)
+    }
   }
 
   /**
@@ -43,7 +61,7 @@ class Themes {
    */
   getAllCSSFiles_ () {
     let cssFiles = []
-    for (let packageName of this.all) {
+    for (let packageName of this.packageNames) {
       let theme = require(packageName)
       for (let cssFile of theme.cssFiles) {
         cssFiles.push(cssFile)
