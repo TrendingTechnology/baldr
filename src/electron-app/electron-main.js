@@ -115,21 +115,17 @@ let buildMenu = function () {
   )
 }
 
-let loadURL = function () {
-  mainWindow.loadURL(url.format({
-    pathname: path.join(__dirname, ...arguments),
-    protocol: 'file:',
-    slashes: true
-  }))
-}
-
 /**
  * Create render window.
  * @function createWindow
  */
 let createWindow = function () {
   mainWindow = new BrowserWindow({ width: 800, height: 600 })
-  loadURL('render.html')
+  mainWindow.loadURL(url.format({
+    pathname: path.join(__dirname, 'render.html'),
+    protocol: 'file:',
+    slashes: true
+  }))
   buildMenu()
 
   mainWindow.on('closed', function () {

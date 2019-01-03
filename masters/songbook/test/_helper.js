@@ -95,7 +95,7 @@ exports.removeANSI = function (string) {
  * @return {string}
  */
 exports.readPathSegments = function (pathSegments) {
-  return fs.readFileSync(path.join('test', ...arguments), 'utf8')
+  return fs.readFileSync(path.join(__dirname, ...arguments), 'utf8')
 }
 
 /**
