@@ -5,6 +5,8 @@ const {
 } = require('@bldr/test-helper')
 
 describe('General Spectron tests #spectron', () => {
+  this.timeout(40000)
+
   describe('build', () => {
     it(`exists “Spectron.appPath”`, () => {
       let spectron = new Spectron('@bldr/electron-app')
@@ -13,8 +15,6 @@ describe('General Spectron tests #spectron', () => {
   })
 
   describe('Lauch without baldr file', function () {
-    this.timeout(10000)
-
     beforeEach(function () {
       this.spectron = new Spectron('@bldr/electron-app')
       this.app = this.spectron.getApp()

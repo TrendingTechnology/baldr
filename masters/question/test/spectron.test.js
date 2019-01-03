@@ -4,7 +4,7 @@ const {
 } = require('@bldr/test-helper')
 
 describe('Master slide “question”: “example.baldr” #spectron', function () {
-  this.timeout(10000)
+  this.timeout(40000)
 
   beforeEach(function () {
     this.spectron = new Spectron('@bldr/electron-app', 'masters/question/example.baldr')

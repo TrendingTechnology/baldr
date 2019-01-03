@@ -1,12 +1,11 @@
 const path = require('path')
 const {
   assert,
-  fs,
   Spectron
 } = require('@bldr/test-helper')
 
 describe('Package “@bldr/songbook-electron-app”', function () {
-  this.timeout(10000)
+  this.timeout(40000)
 
   beforeEach(function () {
     process.env.BALDR_SONGBOOK_PATH = path.resolve(__dirname, 'songs', 'real')
