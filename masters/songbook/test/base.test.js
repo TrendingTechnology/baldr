@@ -734,7 +734,7 @@ describe('Package “@bldr/songbook-base”', function () {
         })
 
         it('Method “loadSongList()”', function () {
-          let result = library.loadSongList(path.join('test', 'files', 'song-id-list.txt'))
+          let result = library.loadSongList(path.join(__dirname, 'files', 'song-id-list.txt'))
           assert.deepStrictEqual(result, library.songs)
           assert.strictEqual(Object.keys(result).length, 2)
         })

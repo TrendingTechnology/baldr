@@ -620,6 +620,7 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
         describe('Method “generateIntermediateFiles()”', function () {
           it('First run', function () {
             let status = song.generateIntermediateFiles('all', false)
+            status.folder = 'test'
             assert.deepStrictEqual(
               status,
               {
@@ -627,7 +628,7 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
                   'piano': true,
                   'slides': true
                 },
-                'folder': 'test/songs/clean/some/a/Auf-der-Mauer',
+                'folder': 'test',
                 'folderName': 'Auf-der-Mauer',
                 'force': false,
                 'generated': {
