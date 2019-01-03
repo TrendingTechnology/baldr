@@ -1,10 +1,16 @@
 {
   "packages": [
     ".",
-    "masters/**",
-    "src/**",
+    "masters/*",
+    "masters/songbook/packages/*",
+    "src/*",
     "test/helper",
-    "themes/**"
+    "themes/*"
   ],
-  "version": "0.0.0"
+  "version": "0.0.0",
+  "command": {
+    "publish": {
+      "ignoreChanges": ["*.md"]
+    }
+  }
 }
