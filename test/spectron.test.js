@@ -5,10 +5,9 @@ const {
 } = require('@bldr/test-helper')
 
 describe('General Spectron tests #spectron', () => {
-  this.timeout(40000)
-
   describe('build', () => {
     it(`exists “Spectron.appPath”`, () => {
+      this.timeout(40000)
       let spectron = new Spectron('@bldr/electron-app')
       assert.ok(fs.existsSync(spectron.appPath))
     })
