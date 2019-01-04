@@ -3,6 +3,7 @@
     ".",
     "masters/*",
     "masters/songbook/packages/*",
+    "masters/camera/electron-app",
     "src/*",
     "test/helper",
     "themes/*"

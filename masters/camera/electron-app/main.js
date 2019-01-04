@@ -2,51 +2,49 @@
  * @file Main process
  */
 
-const electron = require('electron');
-const {app} = electron;
-const {BrowserWindow} = electron;
+const electron = require('electron')
+const { app } = electron
+const { BrowserWindow } = electron
 
-let win;
+let win
 
-function mirrorMonitors(state) {
+function mirrorMonitors (state) {
   if (process.platform === 'darwin') {
-    var exec = require('child_process').exec;
-    var child;
-
-    child = exec('/usr/local/bin/mirror -' + state, function (error, stdout, stderr) {
+    var exec = require('child_process').exec
+    exec('/usr/local/bin/mirror -' + state, function (error, stdout, stderr) {
       if (error !== null) {
-        console.log('exec error: ' + error);
+        console.log('exec error: ' + error)
       }
-    });
+    })
   }
 }
 
-function createWindow() {
-  win = new BrowserWindow({fullscreen: true});
+function createWindow () {
+  win = new BrowserWindow({ fullscreen: true })
 
-  win.loadURL(`file://${__dirname}/index.html`);
-  //win.webContents.openDevTools();
+  win.loadURL(`file://${__dirname}/index.html`)
+  // win.webContents.openDevTools();
   win.on('closed', () => {
-    win = null;
-  });
+    win = null
+  })
 }
 
-mirrorMonitors('on');
+mirrorMonitors('on')
 
-app.on('ready', createWindow);
+app.on('ready', createWindow)
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
-    app.quit();
+    app.quit()
   }
-});
+})
 
 app.on('will-quit', () => {
-  mirrorMonitors('off');
-});
+  mirrorMonitors('off')
+})
 
 app.on('activate', () => {
   if (win === null) {
-    createWindow();
+    createWindow()
   }
-});
+})

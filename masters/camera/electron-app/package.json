@@ -1,6 +1,5 @@
 {
-  "name": "baldr-document-camera",
-  "productName": "baldr-document-camera",
+  "name": "@bldr/camera-electron-app",
   "description": "A fullscreen electron app to display the video output from document cameras.",
   "version": "0.0.4",
   "main": "main.js",
@@ -30,6 +29,22 @@
     "jsdoc": "^3.5.5",
     "mocha-jshint": "^2.3.1",
     "mocha": "^4.0.1",
-    "spectron": "^3.7.2"
+    "spectron": "^3.7.2",
+    "@bldr/test-helper": "*"
+  },
+  "standard": {
+    "globals": [
+      "describe",
+      "context",
+      "before",
+      "beforeEach",
+      "after",
+      "afterEach",
+      "it",
+      "expect"
+    ],
+    "ignore": [
+      "docs"
+    ]
   }
 }

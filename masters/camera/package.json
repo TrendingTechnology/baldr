@@ -1,4 +1,19 @@
 {
   "name": "@bldr/master-camera",
-  "version": "0.0.0"
+  "version": "0.0.0",
+  "standard": {
+    "globals": [
+      "describe",
+      "context",
+      "before",
+      "beforeEach",
+      "after",
+      "afterEach",
+      "it",
+      "expect"
+    ],
+    "ignore": [
+      "docs"
+    ]
+  }
 }
