@@ -1,0 +1,7 @@
+.jshintignore
+.jshintrc
+.npmignore
+.travis.yml
+dist/
+docs/
+test/
