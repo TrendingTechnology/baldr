@@ -11,7 +11,7 @@
     "standard": "standard",
     "spectron": "mocha --fgrep '#spectron' 'test/*.js' 'src/app/test/*.js' 'src/lib/test/*.js' 'masters/audio/test/*.js' 'masters/camera/test/*.js' 'masters/editor/test/*.js' 'masters/image/test/*.js' 'masters/markdown/test/*.js' 'masters/person/test/*.js' 'masters/question/test/*.js' 'masters/quote/test/*.js' 'masters/svg/test/*.js' 'masters/website/test/*.js'",
     "unittest": "mocha --fgrep '#unittest' 'test/*.js' 'src/app/test/*.js' 'src/lib/test/*.js' 'masters/audio/test/*.js' 'masters/camera/test/*.js' 'masters/editor/test/*.js' 'masters/image/test/*.js' 'masters/markdown/test/*.js' 'masters/person/test/*.js' 'masters/question/test/*.js' 'masters/quote/test/*.js' 'masters/svg/test/*.js' 'masters/website/test/*.js'",
-    "test": "mocha --reporter spec --recursive './{,!(node_modules)/**}/*.test.js'"
+    "test": "./run-mocha.js"
   },
   "build": {
     "appId": "rocks.friedrich.baldr",
@@ -48,6 +48,7 @@
   },
   "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
   "devDependencies": {
+    "7zip-bin-linux": "^1.1.0",
     "@bldr/core": "*",
     "@bldr/electron-app": "*",
     "@bldr/foundation-master": "*",
@@ -69,16 +70,17 @@
     "@bldr/test-helper": "*",
     "@bldr/theme-default": "*",
     "@bldr/theme-handwriting": "*",
-    "7zip-bin-linux": "^1.1.0",
+    "electron": "^4.0.0",
     "electron-builder": "^19.37.2",
     "electron-packager": "^13.0.1",
-    "electron": "^4.0.0",
+    "electron-rebuild": "^1.8.2",
+    "glob": "^7.1.3",
     "js-object-pretty-print": "^0.3.0",
     "jsdoc": "^3.5.5",
     "jsdom": "^11.3.0",
     "lerna": "^3.8.0",
-    "mocha-standard": "^1.0.0",
     "mocha": "^4.0.1",
+    "mocha-standard": "^1.0.0",
     "rewire": "^2.5.2",
     "sinon": "^4.0.0",
     "spectron": "^3.7.2",

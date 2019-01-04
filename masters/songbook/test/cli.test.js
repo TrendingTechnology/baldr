@@ -12,7 +12,6 @@ const {
 const cliRewired = require('rewire')('@bldr/songbook-cli')
 
 let script = require.resolve('@bldr/songbook-cli')
-console.log(script)
 process.env.PATH = path.join(__dirname, 'bin:', process.env.PATH)
 
 describe('Package “@bldr/songbook-cli”', function () {
