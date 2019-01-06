@@ -1,7 +1,7 @@
 {
   "name": "@bldr/master-person",
   "version": "0.0.4",
-  "gitHead": "fa7d757f6a3cc0a08b9e66bcfb9ee8fcc4ce514f",
+  "gitHead": "1071a4332e0793ccb92d323493a018af9105c758",
   "publishConfig": {
     "access": "public"
   }
