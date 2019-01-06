@@ -19,10 +19,10 @@ describe('Master slide “website”: “example.baldr” #website', function ()
   it('Text on the example slides', function () {
     return this.app.client
       .getAttribute('webview', 'src')
-      .then(src => { assert.equal(src, 'https://de.wikipedia.org/wiki/Wikipedia:Hauptseite') })
+      .then(src => { assert.equal(src, 'https://www.google.de/') })
 
       .click('#nav-slide-next')
       .getAttribute('webview', 'src')
-      .then(src => { assert.equal(src, 'https://google.de/') })
+      .then(src => { assert.equal(src, 'https://www.google.com/') })
   })
 })
