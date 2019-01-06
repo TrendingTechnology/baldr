@@ -7,5 +7,9 @@
     "electron-packager": "^13.0.1",
     "jsdom": "^13.1.0",
     "rewire": "^4.0.1"
+  },
+  "gitHead": "0144493bd1f3ec442a7badf1c6a1cf23097de0d7",
+  "publishConfig": {
+    "access": "public"
   }
 }

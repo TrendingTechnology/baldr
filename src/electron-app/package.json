@@ -25,5 +25,9 @@
     "@bldr/theme-handwriting": "^0.0.1",
     "electron": "^4.0.0",
     "mousetrap": "^1.6.2"
+  },
+  "gitHead": "0144493bd1f3ec442a7badf1c6a1cf23097de0d7",
+  "publishConfig": {
+    "access": "public"
   }
 }

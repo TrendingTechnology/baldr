@@ -7,5 +7,9 @@
     "typeface-alegreya-sans-sc": "^0.0.40",
     "typeface-alegreya-sc": "^0.0.40"
   },
-  "version": "0.0.1"
+  "version": "0.0.1",
+  "gitHead": "0144493bd1f3ec442a7badf1c6a1cf23097de0d7",
+  "publishConfig": {
+    "access": "public"
+  }
 }

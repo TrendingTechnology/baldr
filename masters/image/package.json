@@ -1,4 +1,8 @@
 {
   "name": "@bldr/master-image",
-  "version": "0.0.1"
+  "version": "0.0.1",
+  "gitHead": "0144493bd1f3ec442a7badf1c6a1cf23097de0d7",
+  "publishConfig": {
+    "access": "public"
+  }
 }
