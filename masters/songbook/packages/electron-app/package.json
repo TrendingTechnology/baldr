@@ -19,15 +19,15 @@
     "access": "public"
   },
   "dependencies": {
-    "@bldr/songbook-base": "^0.0.14",
+    "@bldr/songbook-base": "0.0.14",
     "font-awesome": "^4.7.0",
     "jquery": "^3.2.1",
     "mousetrap": "^1.6.1",
     "selectize": "^0.12.4"
   },
   "devDependencies": {
-    "electron": "^4.0.0",
-    "electron-packager": "^9.1.0",
+    "electron": "^4.0.1",
+    "electron-packager": "^13.0.1",
     "electron-rebuild": "^1.6.0"
   },
   "scripts": {
