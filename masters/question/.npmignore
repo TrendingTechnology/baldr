@@ -1,4 +1,2 @@
 .npmignore
-dist/
-docs/
 test/

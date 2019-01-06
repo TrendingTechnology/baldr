@@ -47,5 +47,8 @@
       "docs"
     ]
   },
-  "gitHead": "0144493bd1f3ec442a7badf1c6a1cf23097de0d7"
+  "gitHead": "82dab4d610f843d7426467a4d37eb54aa477025e",
+  "publishConfig": {
+    "access": "public"
+  }
 }

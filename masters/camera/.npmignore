@@ -1,0 +1,4 @@
+.npmignore
+electron-app/
+test/
+*.baldr

@@ -1,4 +1,3 @@
 .npmignore
-dist/
-docs/
 test/
+files/
