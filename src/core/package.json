@@ -3,9 +3,9 @@
   "main": "index.js",
   "description": "High level classes and functions used by Electron app.",
   "dependencies": {
-    "@bldr/foundation-master": "*",
+    "@bldr/foundation-master": "^0.0.1",
     "js-yaml": "^3.10.0",
     "mousetrap": "^1.6.2"
   },
-  "version": "0.0.0"
+  "version": "0.0.1"
 }
