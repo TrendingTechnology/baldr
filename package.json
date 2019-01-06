@@ -1,7 +1,7 @@
 {
   "name": "baldr",
   "version": "0.0.3",
-  "description": "Virtual package for tooling support.",
+  "description": "A try to write my presentations for school in HTML5, CSS3 and Javascript using Electron. Virtual top level package for tooling support.",
   "scripts": {
     "build": "electron-builder",
     "doc-show": "xdg-open ./docs/index.html",

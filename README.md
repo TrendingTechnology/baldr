@@ -13,34 +13,17 @@ This repository contains some evaluation and research code.
 
 ## About the name `baldr`
 
-![](build/icons/256x256.png)
+![](src/electron-app/icons/256x256.png)
 
 [Baldr](https://en.wikipedia.org/wiki/Baldr) is the name of a nordic
 god. He is the of god of light.
-
-## Subpackages
-
-`baldr` consists of this subpackages.
-
-* [baldr-document-camera](https://github.com/Josef-Friedrich/baldr-document-camera):
-  A fullscreen electron app to display the video output from document
-  cameras.
-* [baldr-songbook](https://github.com/Josef-Friedrich/baldr-songbook):
-  A fullscreen electron app to display songs in a class room using a
-  projector.
-* [baldr-songbook-updater](https://github.com/Josef-Friedrich/baldr-songbook-updater):
-  A command line utilty to generate from MuseScore files image files
-  for the BALDUR Songbook.
-
-Coding standards following the [Google Javascript Style
-Guide](https://google.github.io/styleguide/javascriptguide.xml).
 
 # Installation / Building
 
 ```
 npm install
 npm test
-npm run dist
+npm run build
 pacman -U dist/baldur-0.0.1.pacman
 dpkg -i dist/baldur-0.0.1.deb
 ```
@@ -52,26 +35,7 @@ This npm commands execute tests:
 * `npm test`: All tests
 * `npm run untitest`: All unit tests
 * `npm run spectron`: All spectron tests
-* `npm run jshint`: jshint linting
-
-Test are executed by the testing framework “mocha”. This patterns are
-used to pick all test files:
-
-```
-'test/*.js'
-'src/app/test/*.js'
-'src/lib/test/*.js'
-'masters/audio/test/*.js'
-'masters/camera/test/*.js'
-'masters/editor/test/*.js'
-'masters/image/test/*.js'
-'masters/markdown/test/*.js'
-'masters/person/test/*.js'
-'masters/question/test/*.js'
-'masters/quote/test/*.js'
-'masters/svg/test/*.js'
-'masters/website/test/*.js'
-```
+* `npm run standard`: standardjs linting
 
 # Terminology
 

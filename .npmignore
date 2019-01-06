@@ -1,7 +1,11 @@
-.jshintignore
-.jshintrc
 .npmignore
 .travis.yml
+.vscode
 dist/
 docs/
+lerna.json
+masters/
+run-mocha.js
+src/
 test/
+themes/
