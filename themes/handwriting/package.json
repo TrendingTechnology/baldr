@@ -4,7 +4,7 @@
   "dependencies": {
     "typeface-kalam": "^0.0.43"
   },
-  "version": "0.0.2",
+  "version": "0.0.3",
   "gitHead": "82dab4d610f843d7426467a4d37eb54aa477025e",
   "publishConfig": {
     "access": "public"
