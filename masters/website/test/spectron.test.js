@@ -16,7 +16,7 @@ describe('Master slide “website”: “example.baldr” #website', function ()
     return this.spectron.stop()
   })
 
-  it('Text on the example slides', function () {
+  it.skip('Text on the example slides', function () {
     return this.app.client
       .getAttribute('webview', 'src')
       .then(src => { assert.equal(src, 'https://www.google.de/') })
