@@ -3,11 +3,11 @@
   "main": "index.js",
   "description": "High level classes and functions used by Electron app.",
   "dependencies": {
-    "@bldr/foundation-master": "^0.0.1",
+    "@bldr/foundation-master": "^0.0.2",
     "js-yaml": "^3.10.0",
     "mousetrap": "^1.6.2"
   },
-  "version": "0.0.1",
+  "version": "0.0.2",
   "gitHead": "0144493bd1f3ec442a7badf1c6a1cf23097de0d7",
   "publishConfig": {
     "access": "public"

@@ -1,6 +1,6 @@
 {
   "name": "@bldr/master-camera",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "standard": {
     "globals": [
       "describe",
