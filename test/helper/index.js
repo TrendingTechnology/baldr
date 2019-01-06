@@ -95,15 +95,14 @@ exports.makeDOM = function (html) {
   return new JSDOM(html).window.document
 }
 
+let renderHTMLPath = path.join(path.dirname(require.resolve('@bldr/electron-app')), 'render.html')
+
 /**
  * The document object (DOM) of the file “render.html”.
  * @type {module:@bldr/core~Document}
  */
 exports.document = exports.makeDOM(
-  fs.readFileSync(
-    path.join(__dirname, '..', '..', 'src', 'electron-app', 'render.html'),
-    'utf8'
-  )
+  fs.readFileSync(renderHTMLPath, 'utf8')
 )
 
 /**
@@ -111,10 +110,7 @@ exports.document = exports.makeDOM(
  */
 exports.getDOM = function () {
   return exports.makeDOM(
-    fs.readFileSync(
-      path.join(__dirname, '..', '..', 'src', 'electron-app', 'render.html'),
-      'utf8'
-    )
+    fs.readFileSync(renderHTMLPath, 'utf8')
   )
 }
 
