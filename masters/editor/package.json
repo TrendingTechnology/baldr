@@ -3,7 +3,7 @@
   "dependencies": {
     "ContentTools": "^1.6.0"
   },
-  "version": "0.0.3",
+  "version": "0.0.4",
   "gitHead": "fa7d757f6a3cc0a08b9e66bcfb9ee8fcc4ce514f",
   "publishConfig": {
     "access": "public"

@@ -1,6 +1,6 @@
 {
   "name": "@bldr/master-audio",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "dependencies": {
     "howler": "^2.0.5",
     "mousetrap": "^1.6.2"
