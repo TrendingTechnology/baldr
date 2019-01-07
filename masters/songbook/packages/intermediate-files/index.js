@@ -7,13 +7,45 @@
  * @module @bldr/songbook-intermediate-files
  */
 
+const { Song, Library, message, AlphabeticalSongsTree } = require('@bldr/songbook-base')
 const crypto = require('crypto')
 const fs = require('fs-extra')
 const path = require('path')
 const spawn = require('child_process').spawnSync
 const Sqlite3 = require('better-sqlite3')
 const util = require('util')
-const { Song, Library, message, AlphabeticalSongsTree } = require('@bldr/songbook-base')
+
+/**
+ * Check if executable is installed.
+ *
+ * @param {string} executable - Name of the executable.
+ */
+function checkExecutable (executable) {
+  let exec = spawn(executable, ['--help'])
+  if (exec.status === null) {
+    return false
+  } else {
+    return true
+  }
+}
+
+/**
+ * Check if executables are installed.
+ *
+ * @param {array} executables - Name of the executables.
+ */
+function checkExecutables (executables = []) {
+  let status = true
+  let unavailable = []
+  executables.forEach((exec) => {
+    let check = checkExecutable(exec)
+    if (!check) {
+      status = false
+      unavailable.push(exec)
+    }
+  })
+  return { 'status': status, 'unavailable': unavailable }
+}
 
 /**
  * A text file.
@@ -719,5 +751,6 @@ class IntermediateLibrary extends Library {
   }
 }
 
+exports.checkExecutables = checkExecutables
 exports.IntermediateLibrary = IntermediateLibrary
 exports.PianoScore = PianoScore

@@ -39,6 +39,17 @@ describe('Package “@bldr/songbook-cli”', function () {
   })
 
   describe('Command line interface', function () {
+    it('exit: missing dependencies', function () {
+      let savePATH = process.env.PATH
+      process.env.PATH = '/usr/bin'
+      let tmpDir = tmpCopy('clean', 'one')
+      let result = spawn(script, ['--base-path', tmpDir])
+      assert.strictEqual(result.status, 1)
+      let stderr = result.stderr.toString()
+      assert.ok(stderr.includes('Some dependencies are not installed:'))
+      process.env.PATH = savePATH
+    })
+
     it('--base-path', function () {
       let tmpDir = tmpCopy('clean', 'one')
       let process = spawn(script, ['--base-path', tmpDir])

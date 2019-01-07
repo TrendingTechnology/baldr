@@ -14,52 +14,6 @@ process.env.BALDR_SONGBOOK_PATH = path.resolve(__dirname, 'songs', 'clean', 'som
 
 describe('Package “@bldr/songbook-base”', function () {
   describe('Functions', function () {
-    describe('Function “checkExecutable()”', function () {
-      let checkExecutable = baseRewired.__get__('checkExecutable')
-
-      it('Function “checkExecutable()”: existing executable', function () {
-        assert.strictEqual(checkExecutable('echo'), true)
-      })
-
-      it('Function “checkExecutable()”: nonexisting executable', function () {
-        assert.strictEqual(checkExecutable('loooooool'), false)
-      })
-    })
-
-    describe('Function “checkExecutables()”', function () {
-      let checkExecutables = baseRewired.__get__('checkExecutables')
-
-      it('all are existing', function () {
-        let { status, unavailable } = checkExecutables(['echo', 'ls'])
-        assert.strictEqual(status, true)
-        assert.deepStrictEqual(unavailable, [])
-      })
-
-      it('one executable', function () {
-        let { status, unavailable } = checkExecutables(['echo'])
-        assert.strictEqual(status, true)
-        assert.deepStrictEqual(unavailable, [])
-      })
-
-      it('one nonexisting executable', function () {
-        let { status, unavailable } = checkExecutables(['echo', 'loooooool'])
-        assert.strictEqual(status, false)
-        assert.deepStrictEqual(unavailable, ['loooooool'])
-      })
-
-      it('two nonexisting executable', function () {
-        let { status, unavailable } = checkExecutables(['troooooool', 'loooooool'])
-        assert.strictEqual(status, false)
-        assert.deepStrictEqual(unavailable, ['troooooool', 'loooooool'])
-      })
-
-      it('without arguments', function () {
-        let { status, unavailable } = checkExecutables()
-        assert.strictEqual(status, true)
-        assert.deepStrictEqual(unavailable, [])
-      })
-    })
-
     describe('Function “bootstrapConfig()”', function () {
       beforeEach(function () {
         process.env.BALDR_SONGBOOK_PATH = path.resolve(__dirname, 'songs', 'clean', 'some')
@@ -69,23 +23,6 @@ describe('Package “@bldr/songbook-base”', function () {
         let bootstrapConfig = baseRewired.__get__('bootstrapConfig')
         let config = bootstrapConfig()
         assert.strictEqual(config.path, path.resolve(__dirname, 'songs', 'clean', 'some'))
-      })
-
-      it('exit', function () {
-        let savePATH = process.env.PATH
-        process.env.PATH = ''
-        try {
-          let bootstrapConfig = baseRewired.__get__('bootstrapConfig')
-          bootstrapConfig()
-        } catch (e) {
-          assert.strictEqual(
-            e.message,
-            'Some dependencies are not installed: “mscore-to-eps.sh”, ' +
-            '“pdf2svg”, “pdfcrop”, “pdfinfo”, “pdftops”, “mscore”'
-          )
-          assert.strictEqual(e.name, 'UnavailableCommandsError')
-        }
-        process.env.PATH = savePATH
       })
     })
 

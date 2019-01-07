@@ -18,6 +18,53 @@ process.env.PATH = path.join(__dirname, 'bin:', process.env.PATH)
 process.env.BALDR_SONGBOOK_PATH = path.resolve(__dirname, 'songs', 'clean', 'some')
 
 describe('Package “@bldr/songbook-intermediate-files”', function () {
+  describe('Functions', function () {
+    describe('Function “checkExecutable()”', function () {
+      let checkExecutable = intermediateRewired.__get__('checkExecutable')
+
+      it('Function “checkExecutable()”: existing executable', function () {
+        assert.strictEqual(checkExecutable('echo'), true)
+      })
+
+      it('Function “checkExecutable()”: nonexisting executable', function () {
+        assert.strictEqual(checkExecutable('loooooool'), false)
+      })
+    })
+
+    describe('Function “checkExecutables()”', function () {
+      let checkExecutables = intermediateRewired.__get__('checkExecutables')
+
+      it('all are existing', function () {
+        let { status, unavailable } = checkExecutables(['echo', 'ls'])
+        assert.strictEqual(status, true)
+        assert.deepStrictEqual(unavailable, [])
+      })
+
+      it('one executable', function () {
+        let { status, unavailable } = checkExecutables(['echo'])
+        assert.strictEqual(status, true)
+        assert.deepStrictEqual(unavailable, [])
+      })
+
+      it('one nonexisting executable', function () {
+        let { status, unavailable } = checkExecutables(['echo', 'loooooool'])
+        assert.strictEqual(status, false)
+        assert.deepStrictEqual(unavailable, ['loooooool'])
+      })
+
+      it('two nonexisting executable', function () {
+        let { status, unavailable } = checkExecutables(['troooooool', 'loooooool'])
+        assert.strictEqual(status, false)
+        assert.deepStrictEqual(unavailable, ['troooooool', 'loooooool'])
+      })
+
+      it('without arguments', function () {
+        let { status, unavailable } = checkExecutables()
+        assert.strictEqual(status, true)
+        assert.deepStrictEqual(unavailable, [])
+      })
+    })
+  })
   describe('Classes', function () {
     describe('Class “TextFile()”', function () {
       let TextFile = intermediateRewired.__get__('TextFile')

@@ -8,7 +8,7 @@
 
 const pckg = require('./package.json')
 const { bootstrapConfig } = require('@bldr/songbook-base')
-const { IntermediateLibrary, PianoScore } = require('@bldr/songbook-intermediate-files')
+const { IntermediateLibrary, PianoScore, checkExecutables } = require('@bldr/songbook-intermediate-files')
 const { Command } = require('commander')
 const util = require('util')
 const path = require('path')
@@ -47,6 +47,25 @@ let main = function () {
 
   if (options.folder) {
     options.force = true
+  }
+
+  let { status, unavailable } = checkExecutables([
+    'mscore-to-eps.sh',
+    'pdf2svg',
+    'pdfcrop',
+    'pdfinfo',
+    'pdftops',
+    'mscore'
+  ])
+
+  if (!status) {
+    let e = new Error(
+      'Some dependencies are not installed: “' +
+      unavailable.join('”, “') +
+      '”'
+    )
+    e.name = 'UnavailableCommandsError'
+    throw e
   }
 
   let config = bootstrapConfig()
