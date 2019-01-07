@@ -52,61 +52,10 @@ require('colors')
  ******************************************************************************/
 
 /**
- * Check if executable is installed.
- *
- * @param {string} executable - Name of the executable.
- */
-function checkExecutable (executable) {
-  let exec = spawn(executable, ['--help'])
-  if (exec.status === null) {
-    return false
-  } else {
-    return true
-  }
-}
-
-/**
- * Check if executables are installed.
- *
- * @param {array} executables - Name of the executables.
- */
-function checkExecutables (executables = []) {
-  let status = true
-  let unavailable = []
-  executables.forEach((exec) => {
-    let check = checkExecutable(exec)
-    if (!check) {
-      status = false
-      unavailable.push(exec)
-    }
-  })
-  return { 'status': status, 'unavailable': unavailable }
-}
-
-/**
  * By default this module reads the config file ~/.baldr to generate its config
  * object.
  */
 function bootstrapConfig () {
-  let { status, unavailable } = checkExecutables([
-    'mscore-to-eps.sh',
-    'pdf2svg',
-    'pdfcrop',
-    'pdfinfo',
-    'pdftops',
-    'mscore'
-  ])
-
-  if (!status) {
-    let e = new Error(
-      'Some dependencies are not installed: “' +
-      unavailable.join('”, “') +
-      '”'
-    )
-    e.name = 'UnavailableCommandsError'
-    throw e
-  }
-
   const configDefault = {
     force: false
   }
