@@ -44,10 +44,10 @@ describe('Package “@bldr/songbook-cli”', function () {
       process.env.PATH = '/usr/bin'
       let tmpDir = tmpCopy('clean', 'one')
       let result = spawn(script, ['--base-path', tmpDir])
-      assert.strictEqual(result.status, 1)
+      process.env.PATH = savePATH
+      assert.ok(result.status !== 0)
       let stderr = result.stderr.toString()
       assert.ok(stderr.includes('Some dependencies are not installed:'))
-      process.env.PATH = savePATH
     })
 
     it('--base-path', function () {
