@@ -12,6 +12,7 @@ const {
 const cliRewired = require('rewire')('@bldr/songbook-cli')
 
 let script = require.resolve('@bldr/songbook-cli')
+let oldPath = process.env.PATH
 process.env.PATH = path.join(__dirname, 'bin:', process.env.PATH)
 
 describe('Package “@bldr/songbook-cli”', function () {
@@ -41,7 +42,7 @@ describe('Package “@bldr/songbook-cli”', function () {
   describe('Command line interface', function () {
     it('exit: missing dependencies', function () {
       let savePATH = process.env.PATH
-      process.env.PATH = '/usr/bin'
+      process.env.PATH = oldPath
       let tmpDir = tmpCopy('clean', 'one')
       let result = spawn(script, ['--base-path', tmpDir])
       process.env.PATH = savePATH
