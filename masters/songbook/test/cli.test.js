@@ -40,7 +40,7 @@ describe('Package “@bldr/songbook-cli”', function () {
   })
 
   describe('Command line interface', function () {
-    it('exit: missing dependencies', function () {
+    it.skip('exit: missing dependencies', function () {
       let savePATH = process.env.PATH
       process.env.PATH = oldPath
       let tmpDir = tmpCopy('clean', 'one')
