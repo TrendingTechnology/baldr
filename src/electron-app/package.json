@@ -24,6 +24,7 @@
     "@bldr/theme-default": "^0.0.4",
     "@bldr/theme-handwriting": "^0.0.4",
     "electron": "^4.0.0",
+    "font-awesome": "^4.7.0",
     "mousetrap": "^1.6.2"
   },
   "gitHead": "1071a4332e0793ccb92d323493a018af9105c758",
