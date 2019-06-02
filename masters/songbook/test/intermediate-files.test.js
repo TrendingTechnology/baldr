@@ -318,7 +318,9 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
 {} % composer
 {} % lyricist
 \\tmpimage{a/Auf-der-Mauer/piano/piano_1.eps}
+\\tmpcolumnbreak
 \\tmpimage{a/Auf-der-Mauer/piano/piano_2.eps}
+\\tmpcolumnbreak
 \\tmpimage{a/Auf-der-Mauer/piano/piano_3.eps}
 
 \\tmpmetadata
@@ -334,7 +336,9 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
 {} % composer
 {} % lyricist
 \\tmpimage{s/Swing-low/piano/piano_1.eps}
+\\tmpcolumnbreak
 \\tmpimage{s/Swing-low/piano/piano_2.eps}
+\\tmpcolumnbreak
 \\tmpimage{s/Swing-low/piano/piano_3.eps}
 
 \\tmpmetadata
@@ -343,6 +347,7 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
 {} % composer
 {} % lyricist
 \\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_1.eps}
+\\tmpcolumnbreak
 \\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_2.eps}
 `)
           })
@@ -356,6 +361,7 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
 {} % composer
 {} % lyricist
 \\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_1.eps}
+\\tmpcolumnbreak
 \\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_2.eps}
 
 \\tmpmetadata
@@ -364,7 +370,9 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
 {} % composer
 {} % lyricist
 \\tmpimage{a/Auf-der-Mauer/piano/piano_1.eps}
+\\tmpcolumnbreak
 \\tmpimage{a/Auf-der-Mauer/piano/piano_2.eps}
+\\tmpcolumnbreak
 \\tmpimage{a/Auf-der-Mauer/piano/piano_3.eps}
 
 \\tmpmetadata
@@ -380,7 +388,9 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
 {} % composer
 {} % lyricist
 \\tmpimage{s/Swing-low/piano/piano_1.eps}
+\\tmpcolumnbreak
 \\tmpimage{s/Swing-low/piano/piano_2.eps}
+\\tmpcolumnbreak
 \\tmpimage{s/Swing-low/piano/piano_3.eps}
 \\tmpplaceholder
 `)
@@ -403,7 +413,9 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
 {} % composer
 {} % lyricist
 \\tmpimage{a/Auf-der-Mauer/piano/piano_1.eps}
+\\tmpcolumnbreak
 \\tmpimage{a/Auf-der-Mauer/piano/piano_2.eps}
+\\tmpcolumnbreak
 \\tmpimage{a/Auf-der-Mauer/piano/piano_3.eps}
 \\tmpplaceholder
 
@@ -424,7 +436,9 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
 {} % composer
 {} % lyricist
 \\tmpimage{s/Swing-low/piano/piano_1.eps}
+\\tmpcolumnbreak
 \\tmpimage{s/Swing-low/piano/piano_2.eps}
+\\tmpcolumnbreak
 \\tmpimage{s/Swing-low/piano/piano_3.eps}
 \\tmpplaceholder
 
@@ -437,6 +451,7 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
 {} % composer
 {} % lyricist
 \\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_1.eps}
+\\tmpcolumnbreak
 \\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_2.eps}
 `)
           })
@@ -454,7 +469,9 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
 {} % composer
 {} % lyricist
 \\tmpimage{a/Auf-der-Mauer/piano/piano_1.eps}
+\\tmpcolumnbreak
 \\tmpimage{a/Auf-der-Mauer/piano/piano_2.eps}
+\\tmpcolumnbreak
 \\tmpimage{a/Auf-der-Mauer/piano/piano_3.eps}
 
 
@@ -473,7 +490,9 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
 {} % composer
 {} % lyricist
 \\tmpimage{s/Swing-low/piano/piano_1.eps}
+\\tmpcolumnbreak
 \\tmpimage{s/Swing-low/piano/piano_2.eps}
+\\tmpcolumnbreak
 \\tmpimage{s/Swing-low/piano/piano_3.eps}
 
 
@@ -485,6 +504,7 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
 {} % composer
 {} % lyricist
 \\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_1.eps}
+\\tmpcolumnbreak
 \\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_2.eps}
 `)
           })
@@ -499,6 +519,7 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
 {} % composer
 {} % lyricist
 \\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_1.eps}
+\\tmpcolumnbreak
 \\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_2.eps}
 
 \\tmpmetadata
@@ -507,7 +528,9 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
 {} % composer
 {} % lyricist
 \\tmpimage{a/Auf-der-Mauer/piano/piano_1.eps}
+\\tmpcolumnbreak
 \\tmpimage{a/Auf-der-Mauer/piano/piano_2.eps}
+\\tmpcolumnbreak
 \\tmpimage{a/Auf-der-Mauer/piano/piano_3.eps}
 
 \\tmpmetadata
@@ -523,7 +546,9 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
 {} % composer
 {} % lyricist
 \\tmpimage{s/Swing-low/piano/piano_1.eps}
+\\tmpcolumnbreak
 \\tmpimage{s/Swing-low/piano/piano_2.eps}
+\\tmpcolumnbreak
 \\tmpimage{s/Swing-low/piano/piano_3.eps}
 \\tmpplaceholder
 `)
@@ -539,7 +564,9 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
 {} % composer
 {} % lyricist
 \\tmpimage{a/Auf-der-Mauer/piano/piano_1.eps}
+\\tmpcolumnbreak
 \\tmpimage{a/Auf-der-Mauer/piano/piano_2.eps}
+\\tmpcolumnbreak
 \\tmpimage{a/Auf-der-Mauer/piano/piano_3.eps}
 
 \\tmpmetadata
@@ -555,7 +582,9 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
 {} % composer
 {} % lyricist
 \\tmpimage{s/Swing-low/piano/piano_1.eps}
+\\tmpcolumnbreak
 \\tmpimage{s/Swing-low/piano/piano_2.eps}
+\\tmpcolumnbreak
 \\tmpimage{s/Swing-low/piano/piano_3.eps}
 
 \\tmpmetadata
@@ -564,6 +593,7 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
 {} % composer
 {} % lyricist
 \\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_1.eps}
+\\tmpcolumnbreak
 \\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_2.eps}
 `)
           })
@@ -606,7 +636,9 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
 {} % composer
 {} % lyricist
 \\tmpimage{a/Auf-der-Mauer/piano/piano_1.eps}
+\\tmpcolumnbreak
 \\tmpimage{a/Auf-der-Mauer/piano/piano_2.eps}
+\\tmpcolumnbreak
 \\tmpimage{a/Auf-der-Mauer/piano/piano_3.eps}
 \\tmpplaceholder
 
@@ -627,7 +659,9 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
 {} % composer
 {} % lyricist
 \\tmpimage{s/Swing-low/piano/piano_1.eps}
+\\tmpcolumnbreak
 \\tmpimage{s/Swing-low/piano/piano_2.eps}
+\\tmpcolumnbreak
 \\tmpimage{s/Swing-low/piano/piano_3.eps}
 \\tmpplaceholder
 
@@ -640,6 +674,7 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
 {} % composer
 {} % lyricist
 \\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_1.eps}
+\\tmpcolumnbreak
 \\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_2.eps}
 `)
           })
@@ -687,7 +722,9 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
               '\n' +
               '\\tmpmetadata\n{Swing low} % title\n{} % subtitle\n{} % composer\n{} % lyricist\n' +
               '\\tmpimage{s/Swing-low/piano/piano_1.eps}\n' +
+              '\\tmpcolumnbreak\n' +
               '\\tmpimage{s/Swing-low/piano/piano_2.eps}\n' +
+              '\\tmpcolumnbreak\n' +
               '\\tmpimage{s/Swing-low/piano/piano_3.eps}\n'
             )
           })

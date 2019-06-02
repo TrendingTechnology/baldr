@@ -110,6 +110,7 @@ describe('Package “@bldr/songbook-cli”', function () {
 {Georg Lehmann} % composer
 {unbekannt} % lyricist
 \\tmpimage{a/Auf-der-Mauer/piano/piano_1.eps}
+\\tmpcolumnbreak
 \\tmpimage{a/Auf-der-Mauer/piano/piano_2.eps}
 
 
@@ -121,6 +122,7 @@ describe('Package “@bldr/songbook-cli”', function () {
 {} % composer
 {} % lyricist
 \\tmpimage{s/Stille-Nacht/piano/piano_1.eps}
+\\tmpcolumnbreak
 \\tmpimage{s/Stille-Nacht/piano/piano_2.eps}
 
 \\tmpmetadata
@@ -129,6 +131,7 @@ describe('Package “@bldr/songbook-cli”', function () {
 {} % composer
 {} % lyricist
 \\tmpimage{s/Swing-low/piano/piano_1.eps}
+\\tmpcolumnbreak
 \\tmpimage{s/Swing-low/piano/piano_2.eps}
 
 
@@ -140,6 +143,7 @@ describe('Package “@bldr/songbook-cli”', function () {
 {} % composer
 {} % lyricist
 \\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_1.eps}
+\\tmpcolumnbreak
 \\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_2.eps}
 `)
     })
@@ -167,6 +171,7 @@ describe('Package “@bldr/songbook-cli”', function () {
 {Georg Lehmann} % composer
 {unbekannt} % lyricist
 \\tmpimage{a/Auf-der-Mauer/piano/piano_1.eps}
+\\tmpcolumnbreak
 \\tmpimage{a/Auf-der-Mauer/piano/piano_2.eps}
 
 
@@ -178,6 +183,7 @@ describe('Package “@bldr/songbook-cli”', function () {
 {} % composer
 {} % lyricist
 \\tmpimage{s/Stille-Nacht/piano/piano_1.eps}
+\\tmpcolumnbreak
 \\tmpimage{s/Stille-Nacht/piano/piano_2.eps}
 
 \\tmpmetadata
@@ -186,6 +192,7 @@ describe('Package “@bldr/songbook-cli”', function () {
 {} % composer
 {} % lyricist
 \\tmpimage{s/Swing-low/piano/piano_1.eps}
+\\tmpcolumnbreak
 \\tmpimage{s/Swing-low/piano/piano_2.eps}
 \\tmpplaceholder
 \\tmpplaceholder
@@ -199,6 +206,7 @@ describe('Package “@bldr/songbook-cli”', function () {
 {} % composer
 {} % lyricist
 \\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_1.eps}
+\\tmpcolumnbreak
 \\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_2.eps}
 `)
     })
@@ -217,6 +225,7 @@ describe('Package “@bldr/songbook-cli”', function () {
 {Georg Lehmann} % composer
 {unbekannt} % lyricist
 \\tmpimage{a/Auf-der-Mauer/piano/piano_1.eps}
+\\tmpcolumnbreak
 \\tmpimage{a/Auf-der-Mauer/piano/piano_2.eps}
 
 
@@ -228,6 +237,7 @@ describe('Package “@bldr/songbook-cli”', function () {
 {} % composer
 {} % lyricist
 \\tmpimage{s/Swing-low/piano/piano_1.eps}
+\\tmpcolumnbreak
 \\tmpimage{s/Swing-low/piano/piano_2.eps}
 `)
     })
@@ -243,6 +253,7 @@ describe('Package “@bldr/songbook-cli”', function () {
 {Georg Lehmann} % composer
 {unbekannt} % lyricist
 \\tmpimage{a/Auf-der-Mauer/piano/piano_1.eps}
+\\tmpcolumnbreak
 \\tmpimage{a/Auf-der-Mauer/piano/piano_2.eps}
 
 \\tmpmetadata
@@ -251,6 +262,7 @@ describe('Package “@bldr/songbook-cli”', function () {
 {} % composer
 {} % lyricist
 \\tmpimage{s/Stille-Nacht/piano/piano_1.eps}
+\\tmpcolumnbreak
 \\tmpimage{s/Stille-Nacht/piano/piano_2.eps}
 
 \\tmpmetadata
@@ -259,6 +271,7 @@ describe('Package “@bldr/songbook-cli”', function () {
 {} % composer
 {} % lyricist
 \\tmpimage{s/Swing-low/piano/piano_1.eps}
+\\tmpcolumnbreak
 \\tmpimage{s/Swing-low/piano/piano_2.eps}
 
 \\tmpmetadata
@@ -267,6 +280,7 @@ describe('Package “@bldr/songbook-cli”', function () {
 {} % composer
 {} % lyricist
 \\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_1.eps}
+\\tmpcolumnbreak
 \\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_2.eps}
 \\tmpplaceholder
 \\tmpplaceholder

@@ -410,7 +410,11 @@ class IntermediateSong extends Song {
    *
    * @return {string} TeX markup for a single song.
    * <code><pre>
-   * \tmptitle{Swing low}
+   * \tmpmetadata
+   * {title} % title
+   * {subtitle} % subtitle
+   * {composer} % composer
+   * {lyricist} % lyricist
    * \tmpimage{s/Swing-low/piano/piano_1.eps}
    * \tmpimage{s/Swing-low/piano/piano_2.eps}
    * \tmpimage{s/Swing-low/piano/piano_3.eps}
@@ -427,25 +431,24 @@ class IntermediateSong extends Song {
         'The song “%s” has more than 4 EPS piano score files.',
         this.metaData.title))
     }
-    let output = ''
-
     let template = `\n\\tmpmetadata
 {%s} % title
 {%s} % subtitle
 {%s} % composer
 {%s} % lyricist
 `
-    output += util.format(
+    let output = util.format(
       template,
       this.metaDataCombined.title,
       this.metaDataCombined.subtitle,
       this.metaDataCombined.composer,
       this.metaDataCombined.lyricist
     )
+    let epsFiles = []
     for (let i = 0; i < this.pianoFiles.length; i++) {
-      output += this.formatPianoTeXEpsFile_(i)
+      epsFiles.push(this.formatPianoTeXEpsFile_(i))
     }
-    return output
+    return output + epsFiles.join('\\tmpcolumnbreak\n')
   }
 
   /**
