@@ -104,28 +104,41 @@ describe('Package “@bldr/songbook-cli”', function () {
 
 \\tmpchapter{A}
 
-\\tmptitle{Auf der Mauer, auf der Lauer (1890)}
-\\tmpsubtitle{Deutschland}
-\\tmpcomposer{Georg Lehmann}
-\\tmplyricist{unbekannt}
+\\tmpmetadata
+{Auf der Mauer, auf der Lauer (1890)} % title
+{Deutschland} % subtitle
+{Georg Lehmann} % composer
+{unbekannt} % lyricist
 \\tmpimage{a/Auf-der-Mauer/piano/piano_1.eps}
 \\tmpimage{a/Auf-der-Mauer/piano/piano_2.eps}
 
 
 \\tmpchapter{S}
 
-\\tmptitle{Stille Nacht}
+\\tmpmetadata
+{Stille Nacht} % title
+{} % subtitle
+{} % composer
+{} % lyricist
 \\tmpimage{s/Stille-Nacht/piano/piano_1.eps}
 \\tmpimage{s/Stille-Nacht/piano/piano_2.eps}
 
-\\tmptitle{Swing low}
+\\tmpmetadata
+{Swing low} % title
+{} % subtitle
+{} % composer
+{} % lyricist
 \\tmpimage{s/Swing-low/piano/piano_1.eps}
 \\tmpimage{s/Swing-low/piano/piano_2.eps}
 
 
 \\tmpchapter{Z}
 
-\\tmptitle{Zum Tanze, da geht ein Mädel}
+\\tmpmetadata
+{Zum Tanze, da geht ein Mädel} % title
+{} % subtitle
+{} % composer
+{} % lyricist
 \\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_1.eps}
 \\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_2.eps}
 `)
@@ -148,21 +161,30 @@ describe('Package “@bldr/songbook-cli”', function () {
 
 \\tmpchapter{A}
 
-\\tmptitle{Auf der Mauer, auf der Lauer (1890)}
-\\tmpsubtitle{Deutschland}
-\\tmpcomposer{Georg Lehmann}
-\\tmplyricist{unbekannt}
+\\tmpmetadata
+{Auf der Mauer, auf der Lauer (1890)} % title
+{Deutschland} % subtitle
+{Georg Lehmann} % composer
+{unbekannt} % lyricist
 \\tmpimage{a/Auf-der-Mauer/piano/piano_1.eps}
 \\tmpimage{a/Auf-der-Mauer/piano/piano_2.eps}
 
 
 \\tmpchapter{S}
 
-\\tmptitle{Stille Nacht}
+\\tmpmetadata
+{Stille Nacht} % title
+{} % subtitle
+{} % composer
+{} % lyricist
 \\tmpimage{s/Stille-Nacht/piano/piano_1.eps}
 \\tmpimage{s/Stille-Nacht/piano/piano_2.eps}
 
-\\tmptitle{Swing low}
+\\tmpmetadata
+{Swing low} % title
+{} % subtitle
+{} % composer
+{} % lyricist
 \\tmpimage{s/Swing-low/piano/piano_1.eps}
 \\tmpimage{s/Swing-low/piano/piano_2.eps}
 \\tmpplaceholder
@@ -171,7 +193,11 @@ describe('Package “@bldr/songbook-cli”', function () {
 
 \\tmpchapter{Z}
 
-\\tmptitle{Zum Tanze, da geht ein Mädel}
+\\tmpmetadata
+{Zum Tanze, da geht ein Mädel} % title
+{} % subtitle
+{} % composer
+{} % lyricist
 \\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_1.eps}
 \\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_2.eps}
 `)
@@ -185,17 +211,22 @@ describe('Package “@bldr/songbook-cli”', function () {
 
 \\tmpchapter{A}
 
-\\tmptitle{Auf der Mauer, auf der Lauer (1890)}
-\\tmpsubtitle{Deutschland}
-\\tmpcomposer{Georg Lehmann}
-\\tmplyricist{unbekannt}
+\\tmpmetadata
+{Auf der Mauer, auf der Lauer (1890)} % title
+{Deutschland} % subtitle
+{Georg Lehmann} % composer
+{unbekannt} % lyricist
 \\tmpimage{a/Auf-der-Mauer/piano/piano_1.eps}
 \\tmpimage{a/Auf-der-Mauer/piano/piano_2.eps}
 
 
 \\tmpchapter{S}
 
-\\tmptitle{Swing low}
+\\tmpmetadata
+{Swing low} % title
+{} % subtitle
+{} % composer
+{} % lyricist
 \\tmpimage{s/Swing-low/piano/piano_1.eps}
 \\tmpimage{s/Swing-low/piano/piano_2.eps}
 `)
@@ -206,22 +237,35 @@ describe('Package “@bldr/songbook-cli”', function () {
       spawn(script, ['--base-path', tmpDir, '--page-turn-optimized', '--piano'])
       let texMarkup = read(path.join(tmpDir, 'songs.tex'))
       assert.strictEqual(texMarkup, `
-\\tmptitle{Auf der Mauer, auf der Lauer (1890)}
-\\tmpsubtitle{Deutschland}
-\\tmpcomposer{Georg Lehmann}
-\\tmplyricist{unbekannt}
+\\tmpmetadata
+{Auf der Mauer, auf der Lauer (1890)} % title
+{Deutschland} % subtitle
+{Georg Lehmann} % composer
+{unbekannt} % lyricist
 \\tmpimage{a/Auf-der-Mauer/piano/piano_1.eps}
 \\tmpimage{a/Auf-der-Mauer/piano/piano_2.eps}
 
-\\tmptitle{Stille Nacht}
+\\tmpmetadata
+{Stille Nacht} % title
+{} % subtitle
+{} % composer
+{} % lyricist
 \\tmpimage{s/Stille-Nacht/piano/piano_1.eps}
 \\tmpimage{s/Stille-Nacht/piano/piano_2.eps}
 
-\\tmptitle{Swing low}
+\\tmpmetadata
+{Swing low} % title
+{} % subtitle
+{} % composer
+{} % lyricist
 \\tmpimage{s/Swing-low/piano/piano_1.eps}
 \\tmpimage{s/Swing-low/piano/piano_2.eps}
 
-\\tmptitle{Zum Tanze, da geht ein Mädel}
+\\tmpmetadata
+{Zum Tanze, da geht ein Mädel} % title
+{} % subtitle
+{} % composer
+{} % lyricist
 \\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_1.eps}
 \\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_2.eps}
 \\tmpplaceholder
