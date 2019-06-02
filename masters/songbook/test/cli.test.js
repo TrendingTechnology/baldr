@@ -124,6 +124,7 @@ describe('Package “@bldr/songbook-cli”', function () {
 \\tmpimage{s/Stille-Nacht/piano/piano_1.eps}
 \\tmpcolumnbreak
 \\tmpimage{s/Stille-Nacht/piano/piano_2.eps}
+\\tmpcolumnbreak
 
 \\tmpmetadata
 {Swing low} % title
@@ -185,6 +186,7 @@ describe('Package “@bldr/songbook-cli”', function () {
 \\tmpimage{s/Stille-Nacht/piano/piano_1.eps}
 \\tmpcolumnbreak
 \\tmpimage{s/Stille-Nacht/piano/piano_2.eps}
+\\tmpcolumnbreak
 
 \\tmpmetadata
 {Swing low} % title
@@ -253,6 +255,7 @@ describe('Package “@bldr/songbook-cli”', function () {
 \\tmpimage{a/Auf-der-Mauer/piano/piano_1.eps}
 \\tmpcolumnbreak
 \\tmpimage{a/Auf-der-Mauer/piano/piano_2.eps}
+\\tmpcolumnbreak
 
 \\tmpmetadata
 {Stille Nacht} % title
@@ -262,6 +265,7 @@ describe('Package “@bldr/songbook-cli”', function () {
 \\tmpimage{s/Stille-Nacht/piano/piano_1.eps}
 \\tmpcolumnbreak
 \\tmpimage{s/Stille-Nacht/piano/piano_2.eps}
+\\tmpcolumnbreak
 
 \\tmpmetadata
 {Swing low} % title
@@ -271,6 +275,7 @@ describe('Package “@bldr/songbook-cli”', function () {
 \\tmpimage{s/Swing-low/piano/piano_1.eps}
 \\tmpcolumnbreak
 \\tmpimage{s/Swing-low/piano/piano_2.eps}
+\\tmpcolumnbreak
 
 \\tmpmetadata
 {Zum Tanze, da geht ein Mädel} % title

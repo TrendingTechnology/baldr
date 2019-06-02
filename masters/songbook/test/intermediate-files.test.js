@@ -322,6 +322,7 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
 \\tmpimage{a/Auf-der-Mauer/piano/piano_2.eps}
 \\tmpcolumnbreak
 \\tmpimage{a/Auf-der-Mauer/piano/piano_3.eps}
+\\tmpcolumnbreak
 
 \\tmpmetadata
 {Stille Nacht} % title
@@ -329,6 +330,7 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
 {} % composer
 {} % lyricist
 \\tmpimage{s/Stille-Nacht/piano/piano.eps}
+\\tmpcolumnbreak
 
 \\tmpmetadata
 {Swing low} % title
@@ -340,6 +342,7 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
 \\tmpimage{s/Swing-low/piano/piano_2.eps}
 \\tmpcolumnbreak
 \\tmpimage{s/Swing-low/piano/piano_3.eps}
+\\tmpcolumnbreak
 
 \\tmpmetadata
 {Zum Tanze, da geht ein Mädel} % title
@@ -363,6 +366,7 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
 \\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_1.eps}
 \\tmpcolumnbreak
 \\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_2.eps}
+\\tmpcolumnbreak
 
 \\tmpmetadata
 {Auf der Mauer, auf der Lauer} % title
@@ -374,6 +378,7 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
 \\tmpimage{a/Auf-der-Mauer/piano/piano_2.eps}
 \\tmpcolumnbreak
 \\tmpimage{a/Auf-der-Mauer/piano/piano_3.eps}
+\\tmpcolumnbreak
 
 \\tmpmetadata
 {Stille Nacht} % title
@@ -381,6 +386,7 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
 {} % composer
 {} % lyricist
 \\tmpimage{s/Stille-Nacht/piano/piano.eps}
+\\tmpcolumnbreak
 
 \\tmpmetadata
 {Swing low} % title
@@ -404,7 +410,9 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
 
 \\tmpchapter{A}
 \\tmpplaceholder
+\\tmpcolumnbreak
 \\tmpplaceholder
+\\tmpcolumnbreak
 
 \\tmpmetadata
 {Auf der Mauer, auf der Lauer} % title
@@ -426,7 +434,9 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
 {} % composer
 {} % lyricist
 \\tmpimage{s/Stille-Nacht/piano/piano.eps}
+\\tmpcolumnbreak
 \\tmpplaceholder
+\\tmpcolumnbreak
 
 \\tmpmetadata
 {Swing low} % title
@@ -480,6 +490,7 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
 {} % composer
 {} % lyricist
 \\tmpimage{s/Stille-Nacht/piano/piano.eps}
+\\tmpcolumnbreak
 
 \\tmpmetadata
 {Swing low} % title
@@ -518,6 +529,7 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
 \\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_1.eps}
 \\tmpcolumnbreak
 \\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_2.eps}
+\\tmpcolumnbreak
 
 \\tmpmetadata
 {Auf der Mauer, auf der Lauer} % title
@@ -529,6 +541,7 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
 \\tmpimage{a/Auf-der-Mauer/piano/piano_2.eps}
 \\tmpcolumnbreak
 \\tmpimage{a/Auf-der-Mauer/piano/piano_3.eps}
+\\tmpcolumnbreak
 
 \\tmpmetadata
 {Stille Nacht} % title
@@ -536,6 +549,7 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
 {} % composer
 {} % lyricist
 \\tmpimage{s/Stille-Nacht/piano/piano.eps}
+\\tmpcolumnbreak
 
 \\tmpmetadata
 {Swing low} % title
@@ -564,6 +578,7 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
 \\tmpimage{a/Auf-der-Mauer/piano/piano_2.eps}
 \\tmpcolumnbreak
 \\tmpimage{a/Auf-der-Mauer/piano/piano_3.eps}
+\\tmpcolumnbreak
 
 \\tmpmetadata
 {Stille Nacht} % title
@@ -571,6 +586,7 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
 {} % composer
 {} % lyricist
 \\tmpimage{s/Stille-Nacht/piano/piano.eps}
+\\tmpcolumnbreak
 
 \\tmpmetadata
 {Swing low} % title
@@ -582,6 +598,7 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
 \\tmpimage{s/Swing-low/piano/piano_2.eps}
 \\tmpcolumnbreak
 \\tmpimage{s/Swing-low/piano/piano_3.eps}
+\\tmpcolumnbreak
 
 \\tmpmetadata
 {Zum Tanze, da geht ein Mädel} % title
@@ -624,7 +641,9 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
 
 \\tmpchapter{A}
 \\tmpplaceholder
+\\tmpcolumnbreak
 \\tmpplaceholder
+\\tmpcolumnbreak
 
 \\tmpmetadata
 {Auf der Mauer, auf der Lauer} % title
@@ -646,7 +665,9 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
 {} % composer
 {} % lyricist
 \\tmpimage{s/Stille-Nacht/piano/piano.eps}
+\\tmpcolumnbreak
 \\tmpplaceholder
+\\tmpcolumnbreak
 
 \\tmpmetadata
 {Swing low} % title
