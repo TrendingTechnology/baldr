@@ -104,7 +104,10 @@ describe('Package “@bldr/songbook-cli”', function () {
 
 \\tmpchapter{A}
 
-\\tmptitle{Auf der Mauer, auf der Lauer}
+\\tmptitle{Auf der Mauer, auf der Lauer (1890)}
+\\tmpsubtitle{Deutschland}
+\\tmpcomposer{Georg Lehmann}
+\\tmplyricist{unbekannt}
 \\tmpimage{a/Auf-der-Mauer/piano/piano_1.eps}
 \\tmpimage{a/Auf-der-Mauer/piano/piano_2.eps}
 
@@ -145,7 +148,10 @@ describe('Package “@bldr/songbook-cli”', function () {
 
 \\tmpchapter{A}
 
-\\tmptitle{Auf der Mauer, auf der Lauer}
+\\tmptitle{Auf der Mauer, auf der Lauer (1890)}
+\\tmpsubtitle{Deutschland}
+\\tmpcomposer{Georg Lehmann}
+\\tmplyricist{unbekannt}
 \\tmpimage{a/Auf-der-Mauer/piano/piano_1.eps}
 \\tmpimage{a/Auf-der-Mauer/piano/piano_2.eps}
 
@@ -179,7 +185,10 @@ describe('Package “@bldr/songbook-cli”', function () {
 
 \\tmpchapter{A}
 
-\\tmptitle{Auf der Mauer, auf der Lauer}
+\\tmptitle{Auf der Mauer, auf der Lauer (1890)}
+\\tmpsubtitle{Deutschland}
+\\tmpcomposer{Georg Lehmann}
+\\tmplyricist{unbekannt}
 \\tmpimage{a/Auf-der-Mauer/piano/piano_1.eps}
 \\tmpimage{a/Auf-der-Mauer/piano/piano_2.eps}
 
@@ -197,7 +206,10 @@ describe('Package “@bldr/songbook-cli”', function () {
       spawn(script, ['--base-path', tmpDir, '--page-turn-optimized', '--piano'])
       let texMarkup = read(path.join(tmpDir, 'songs.tex'))
       assert.strictEqual(texMarkup, `
-\\tmptitle{Auf der Mauer, auf der Lauer}
+\\tmptitle{Auf der Mauer, auf der Lauer (1890)}
+\\tmpsubtitle{Deutschland}
+\\tmpcomposer{Georg Lehmann}
+\\tmplyricist{unbekannt}
 \\tmpimage{a/Auf-der-Mauer/piano/piano_1.eps}
 \\tmpimage{a/Auf-der-Mauer/piano/piano_2.eps}
 

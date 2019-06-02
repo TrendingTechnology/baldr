@@ -242,7 +242,7 @@ describe('Package “@bldr/songbook-base”', function () {
         })
 
         it('Property “composer”', function () {
-          assert.strictEqual(song.composer, null)
+          assert.strictEqual(song.composer, 'Georg Lehmann')
         })
 
         it('Property “country”', function () {
@@ -254,7 +254,7 @@ describe('Package “@bldr/songbook-base”', function () {
         })
 
         it('Property “lyricist”', function () {
-          assert.strictEqual(song.lyricist, null)
+          assert.strictEqual(song.lyricist, 'unbekannt')
         })
 
         it('Property “musescore”', function () {
@@ -274,7 +274,7 @@ describe('Package “@bldr/songbook-base”', function () {
         })
 
         it('Property “year”', function () {
-          assert.strictEqual(song.year, null)
+          assert.strictEqual(song.year, 1890)
         })
 
         it('Property “yamlFile”', function () {
@@ -408,16 +408,16 @@ describe('Package “@bldr/songbook-base”', function () {
         let metaData = new SongMetaData(folder)
         let combined = new SongMetaDataCombined(metaData)
         it('title', function () {
-          assert.strictEqual(combined.title, 'Auf der Mauer, auf der Lauer')
+          assert.strictEqual(combined.title, 'Auf der Mauer, auf der Lauer (1890)')
         })
         it('subtitle', function () {
           assert.strictEqual(combined.subtitle, 'Deutschland')
         })
         it('composer', function () {
-          assert.strictEqual(combined.composer, '')
+          assert.strictEqual(combined.composer, 'Georg Lehmann')
         })
         it('lyricist', function () {
-          assert.strictEqual(combined.lyricist, '')
+          assert.strictEqual(combined.lyricist, 'unbekannt')
         })
       })
     })

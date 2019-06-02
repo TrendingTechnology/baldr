@@ -429,6 +429,15 @@ class IntermediateSong extends Song {
     }
     let output = ''
     output += '\n' + PianoScore.texCmd('title', this.metaDataCombined.title)
+    if (this.metaDataCombined.subtitle) {
+      output += PianoScore.texCmd('subtitle', this.metaDataCombined.subtitle)
+    }
+    if (this.metaDataCombined.composer) {
+      output += PianoScore.texCmd('composer', this.metaDataCombined.composer)
+    }
+    if (this.metaDataCombined.lyricist) {
+      output += PianoScore.texCmd('lyricist', this.metaDataCombined.lyricist)
+    }
     for (let i = 0; i < this.pianoFiles.length; i++) {
       output += this.formatPianoTeXEpsFile_(i)
     }
