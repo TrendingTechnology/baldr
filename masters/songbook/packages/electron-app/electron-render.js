@@ -9,6 +9,7 @@ const jquery = require('jquery')
 const mousetrap = require('mousetrap')
 const path = require('path')
 const { bootstrapConfig, Library, AlphabeticalSongsTree } = require('@bldr/songbook-base')
+const util = require('util')
 require('selectize')
 
 const config = bootstrapConfig()
@@ -75,6 +76,9 @@ class TableOfContentsElement extends HTMLElement {
         a.setAttribute('id', 'song_' + song.songID)
         a.innerHTML = song.metaDataCombined.title
         li.appendChild(a)
+        if (song.metaData.musescore) {
+          li.innerHTML += util.format(' <a class="icon icon-musescore" href="%s"></a>', song.metaData.musescore)
+        }
         abcUl.appendChild(li)
       }
 

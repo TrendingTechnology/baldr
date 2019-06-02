@@ -1,1 +1,4 @@
-Material icons
+Material Design Icons
+
+https://materialdesignicons.com/
+

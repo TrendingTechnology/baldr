@@ -121,3 +121,14 @@ a:hover {
 a:active {
 	color: rgba(255, 0, 0, 0.4);
 }
+
+.icon {
+	height: 1em;
+	width: 1em;
+	display: inline-block;
+}
+
+.icon-musescore {
+	background-size: 16px 16px;
+	background: url('../icons/musescore.svg') left center no-repeat;
+}
