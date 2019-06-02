@@ -456,16 +456,20 @@ class IntermediateSong extends Song {
         this.metaData.title))
     }
     let output = ''
-    output += '\n' + PianoScore.texCmd('title', this.metaDataCombined.title)
-    if (this.metaDataCombined.subtitle) {
-      output += PianoScore.texCmd('subtitle', this.metaDataCombined.subtitle)
-    }
-    if (this.metaDataCombined.composer) {
-      output += PianoScore.texCmd('composer', this.metaDataCombined.composer)
-    }
-    if (this.metaDataCombined.lyricist) {
-      output += PianoScore.texCmd('lyricist', this.metaDataCombined.lyricist)
-    }
+
+    let template = `\n\\tmpmetadata
+{%s} % title
+{%s} % subtitle
+{%s} % composer
+{%s} % lyricist
+`
+    output += util.format(
+      template,
+      this.metaDataCombined.title,
+      this.metaDataCombined.subtitle,
+      this.metaDataCombined.composer,
+      this.metaDataCombined.lyricist
+    )
     for (let i = 0; i &lt; this.pianoFiles.length; i++) {
       output += this.formatPianoTeXEpsFile_(i)
     }
