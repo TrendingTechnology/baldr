@@ -678,7 +678,6 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
           )
         })
 
-
         describe('Method “formatPianoTex()”', function () {
           it('Markup', function () {
             let folder = path.join(__dirname, 'songs', 'processed', 'some', 's', 'Swing-low')
