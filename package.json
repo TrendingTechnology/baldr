@@ -1,6 +1,6 @@
 {
   "name": "baldr",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "A try to write my presentations for school in HTML5, CSS3 and Javascript using Electron. Virtual top level package for tooling support.",
   "scripts": {
     "build": "electron-builder",
@@ -64,7 +64,7 @@
     "@bldr/master-website": "^0.0.5",
     "@bldr/songbook-base": "^0.0.15",
     "@bldr/songbook-cli": "^0.0.15",
-    "@bldr/songbook-electron-app": "^0.0.16",
+    "@bldr/songbook-electron-app": "^0.0.17",
     "@bldr/songbook-intermediate-files": "^0.0.15",
     "@bldr/test-helper": "^0.0.5",
     "@bldr/theme-default": "^0.0.5",
