@@ -346,11 +346,13 @@ class PianoScore {
    * @return {string}
    */
   static buildSongList (songs, pageTurnOptimized = false) {
-    let output = []
+    let doublePages = []
     if (pageTurnOptimized) {
       let firstPage = true
       let countTree = new PianoFilesCountTree(songs)
       while (!countTree.isEmpty()) {
+        // One page with two columns or two pages with 4 columns
+        let doublePage = []
         let maxPages = 4
         let actualPages = 0
         if (firstPage) {
@@ -360,21 +362,29 @@ class PianoScore {
         let songs = PianoScore.selectSongs(countTree, [], maxPages)
         for (let song of songs) {
           actualPages = actualPages + song.pianoFiles.length
-          output.push(song.formatPianoTex())
+          doublePage.push(song.formatPianoTex())
         }
         // Do not add placeholder on the end of list.
         if (countTree.sumFiles() > maxPages) {
           // Add placeholder for blank pages
           let placeholder = PianoScore.texCmd('placeholder')
-          output.push(placeholder.repeat(maxPages - actualPages))
+          let countPlaceholders = maxPages - actualPages
+          // To avoid empty entries in the list: We use join later on.
+          if (countPlaceholders) {
+            for (let index = 0; index &lt; countPlaceholders; index++) {
+              doublePage.push(placeholder)
+            }
+          }
         }
+        doublePages.push(doublePage.join('\\tmpcolumnbreak\n'))
       }
     } else {
       for (let song of songs) {
-        output.push(song.formatPianoTex())
+        doublePages.push(song.formatPianoTex())
       }
     }
-    return output.join('')
+
+    return doublePages.join('\\tmpcolumnbreak\n')
   }
 
   /**
