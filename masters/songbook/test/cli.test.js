@@ -104,25 +104,25 @@ describe('Package “@bldr/songbook-cli”', function () {
 
 \\tmpchapter{A}
 
-\\tmpheading{Auf der Mauer, auf der Lauer}
+\\tmptitle{Auf der Mauer, auf der Lauer}
 \\tmpimage{a/Auf-der-Mauer/piano/piano_1.eps}
 \\tmpimage{a/Auf-der-Mauer/piano/piano_2.eps}
 
 
 \\tmpchapter{S}
 
-\\tmpheading{Stille Nacht}
+\\tmptitle{Stille Nacht}
 \\tmpimage{s/Stille-Nacht/piano/piano_1.eps}
 \\tmpimage{s/Stille-Nacht/piano/piano_2.eps}
 
-\\tmpheading{Swing low}
+\\tmptitle{Swing low}
 \\tmpimage{s/Swing-low/piano/piano_1.eps}
 \\tmpimage{s/Swing-low/piano/piano_2.eps}
 
 
 \\tmpchapter{Z}
 
-\\tmpheading{Zum Tanze, da geht ein Mädel}
+\\tmptitle{Zum Tanze, da geht ein Mädel}
 \\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_1.eps}
 \\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_2.eps}
 `)
@@ -145,18 +145,18 @@ describe('Package “@bldr/songbook-cli”', function () {
 
 \\tmpchapter{A}
 
-\\tmpheading{Auf der Mauer, auf der Lauer}
+\\tmptitle{Auf der Mauer, auf der Lauer}
 \\tmpimage{a/Auf-der-Mauer/piano/piano_1.eps}
 \\tmpimage{a/Auf-der-Mauer/piano/piano_2.eps}
 
 
 \\tmpchapter{S}
 
-\\tmpheading{Stille Nacht}
+\\tmptitle{Stille Nacht}
 \\tmpimage{s/Stille-Nacht/piano/piano_1.eps}
 \\tmpimage{s/Stille-Nacht/piano/piano_2.eps}
 
-\\tmpheading{Swing low}
+\\tmptitle{Swing low}
 \\tmpimage{s/Swing-low/piano/piano_1.eps}
 \\tmpimage{s/Swing-low/piano/piano_2.eps}
 \\tmpplaceholder
@@ -165,7 +165,7 @@ describe('Package “@bldr/songbook-cli”', function () {
 
 \\tmpchapter{Z}
 
-\\tmpheading{Zum Tanze, da geht ein Mädel}
+\\tmptitle{Zum Tanze, da geht ein Mädel}
 \\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_1.eps}
 \\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_2.eps}
 `)
@@ -179,14 +179,14 @@ describe('Package “@bldr/songbook-cli”', function () {
 
 \\tmpchapter{A}
 
-\\tmpheading{Auf der Mauer, auf der Lauer}
+\\tmptitle{Auf der Mauer, auf der Lauer}
 \\tmpimage{a/Auf-der-Mauer/piano/piano_1.eps}
 \\tmpimage{a/Auf-der-Mauer/piano/piano_2.eps}
 
 
 \\tmpchapter{S}
 
-\\tmpheading{Swing low}
+\\tmptitle{Swing low}
 \\tmpimage{s/Swing-low/piano/piano_1.eps}
 \\tmpimage{s/Swing-low/piano/piano_2.eps}
 `)
@@ -197,19 +197,19 @@ describe('Package “@bldr/songbook-cli”', function () {
       spawn(script, ['--base-path', tmpDir, '--page-turn-optimized', '--piano'])
       let texMarkup = read(path.join(tmpDir, 'songs.tex'))
       assert.strictEqual(texMarkup, `
-\\tmpheading{Auf der Mauer, auf der Lauer}
+\\tmptitle{Auf der Mauer, auf der Lauer}
 \\tmpimage{a/Auf-der-Mauer/piano/piano_1.eps}
 \\tmpimage{a/Auf-der-Mauer/piano/piano_2.eps}
 
-\\tmpheading{Stille Nacht}
+\\tmptitle{Stille Nacht}
 \\tmpimage{s/Stille-Nacht/piano/piano_1.eps}
 \\tmpimage{s/Stille-Nacht/piano/piano_2.eps}
 
-\\tmpheading{Swing low}
+\\tmptitle{Swing low}
 \\tmpimage{s/Swing-low/piano/piano_1.eps}
 \\tmpimage{s/Swing-low/piano/piano_2.eps}
 
-\\tmpheading{Zum Tanze, da geht ein Mädel}
+\\tmptitle{Zum Tanze, da geht ein Mädel}
 \\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_1.eps}
 \\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_2.eps}
 \\tmpplaceholder

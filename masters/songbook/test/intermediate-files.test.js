@@ -312,20 +312,20 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
           it('pageTurnOptimized = false', function () {
             let texMarkup = PianoScore.buildSongList(songs, false)
             assert.strictEqual(texMarkup, `
-\\tmpheading{Auf der Mauer, auf der Lauer}
+\\tmptitle{Auf der Mauer, auf der Lauer}
 \\tmpimage{a/Auf-der-Mauer/piano/piano_1.eps}
 \\tmpimage{a/Auf-der-Mauer/piano/piano_2.eps}
 \\tmpimage{a/Auf-der-Mauer/piano/piano_3.eps}
 
-\\tmpheading{Stille Nacht}
+\\tmptitle{Stille Nacht}
 \\tmpimage{s/Stille-Nacht/piano/piano.eps}
 
-\\tmpheading{Swing low}
+\\tmptitle{Swing low}
 \\tmpimage{s/Swing-low/piano/piano_1.eps}
 \\tmpimage{s/Swing-low/piano/piano_2.eps}
 \\tmpimage{s/Swing-low/piano/piano_3.eps}
 
-\\tmpheading{Zum Tanze, da geht ein Mädel}
+\\tmptitle{Zum Tanze, da geht ein Mädel}
 \\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_1.eps}
 \\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_2.eps}
 `)
@@ -334,19 +334,19 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
           it('pageTurnOptimized = true', function () {
             let texMarkup = PianoScore.buildSongList(songs, true)
             assert.strictEqual(texMarkup, `
-\\tmpheading{Zum Tanze, da geht ein Mädel}
+\\tmptitle{Zum Tanze, da geht ein Mädel}
 \\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_1.eps}
 \\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_2.eps}
 
-\\tmpheading{Auf der Mauer, auf der Lauer}
+\\tmptitle{Auf der Mauer, auf der Lauer}
 \\tmpimage{a/Auf-der-Mauer/piano/piano_1.eps}
 \\tmpimage{a/Auf-der-Mauer/piano/piano_2.eps}
 \\tmpimage{a/Auf-der-Mauer/piano/piano_3.eps}
 
-\\tmpheading{Stille Nacht}
+\\tmptitle{Stille Nacht}
 \\tmpimage{s/Stille-Nacht/piano/piano.eps}
 
-\\tmpheading{Swing low}
+\\tmptitle{Swing low}
 \\tmpimage{s/Swing-low/piano/piano_1.eps}
 \\tmpimage{s/Swing-low/piano/piano_2.eps}
 \\tmpimage{s/Swing-low/piano/piano_3.eps}
@@ -365,7 +365,7 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
 \\tmpplaceholder
 \\tmpplaceholder
 
-\\tmpheading{Auf der Mauer, auf der Lauer}
+\\tmptitle{Auf der Mauer, auf der Lauer}
 \\tmpimage{a/Auf-der-Mauer/piano/piano_1.eps}
 \\tmpimage{a/Auf-der-Mauer/piano/piano_2.eps}
 \\tmpimage{a/Auf-der-Mauer/piano/piano_3.eps}
@@ -374,11 +374,11 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
 
 \\tmpchapter{S}
 
-\\tmpheading{Stille Nacht}
+\\tmptitle{Stille Nacht}
 \\tmpimage{s/Stille-Nacht/piano/piano.eps}
 \\tmpplaceholder
 
-\\tmpheading{Swing low}
+\\tmptitle{Swing low}
 \\tmpimage{s/Swing-low/piano/piano_1.eps}
 \\tmpimage{s/Swing-low/piano/piano_2.eps}
 \\tmpimage{s/Swing-low/piano/piano_3.eps}
@@ -387,7 +387,7 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
 
 \\tmpchapter{Z}
 
-\\tmpheading{Zum Tanze, da geht ein Mädel}
+\\tmptitle{Zum Tanze, da geht ein Mädel}
 \\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_1.eps}
 \\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_2.eps}
 `)
@@ -400,7 +400,7 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
 
 \\tmpchapter{A}
 
-\\tmpheading{Auf der Mauer, auf der Lauer}
+\\tmptitle{Auf der Mauer, auf der Lauer}
 \\tmpimage{a/Auf-der-Mauer/piano/piano_1.eps}
 \\tmpimage{a/Auf-der-Mauer/piano/piano_2.eps}
 \\tmpimage{a/Auf-der-Mauer/piano/piano_3.eps}
@@ -408,10 +408,10 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
 
 \\tmpchapter{S}
 
-\\tmpheading{Stille Nacht}
+\\tmptitle{Stille Nacht}
 \\tmpimage{s/Stille-Nacht/piano/piano.eps}
 
-\\tmpheading{Swing low}
+\\tmptitle{Swing low}
 \\tmpimage{s/Swing-low/piano/piano_1.eps}
 \\tmpimage{s/Swing-low/piano/piano_2.eps}
 \\tmpimage{s/Swing-low/piano/piano_3.eps}
@@ -419,7 +419,7 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
 
 \\tmpchapter{Z}
 
-\\tmpheading{Zum Tanze, da geht ein Mädel}
+\\tmptitle{Zum Tanze, da geht ein Mädel}
 \\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_1.eps}
 \\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_2.eps}
 `)
@@ -429,19 +429,19 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
             let pianoScore = new PianoScore(mkTmpFile(), library, false, true)
             let texMarkup = pianoScore.build()
             assert.strictEqual(texMarkup, `
-\\tmpheading{Zum Tanze, da geht ein Mädel}
+\\tmptitle{Zum Tanze, da geht ein Mädel}
 \\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_1.eps}
 \\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_2.eps}
 
-\\tmpheading{Auf der Mauer, auf der Lauer}
+\\tmptitle{Auf der Mauer, auf der Lauer}
 \\tmpimage{a/Auf-der-Mauer/piano/piano_1.eps}
 \\tmpimage{a/Auf-der-Mauer/piano/piano_2.eps}
 \\tmpimage{a/Auf-der-Mauer/piano/piano_3.eps}
 
-\\tmpheading{Stille Nacht}
+\\tmptitle{Stille Nacht}
 \\tmpimage{s/Stille-Nacht/piano/piano.eps}
 
-\\tmpheading{Swing low}
+\\tmptitle{Swing low}
 \\tmpimage{s/Swing-low/piano/piano_1.eps}
 \\tmpimage{s/Swing-low/piano/piano_2.eps}
 \\tmpimage{s/Swing-low/piano/piano_3.eps}
@@ -453,20 +453,20 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
             let pianoScore = new PianoScore(mkTmpFile(), library, false, false)
             let texMarkup = pianoScore.build()
             assert.strictEqual(texMarkup, `
-\\tmpheading{Auf der Mauer, auf der Lauer}
+\\tmptitle{Auf der Mauer, auf der Lauer}
 \\tmpimage{a/Auf-der-Mauer/piano/piano_1.eps}
 \\tmpimage{a/Auf-der-Mauer/piano/piano_2.eps}
 \\tmpimage{a/Auf-der-Mauer/piano/piano_3.eps}
 
-\\tmpheading{Stille Nacht}
+\\tmptitle{Stille Nacht}
 \\tmpimage{s/Stille-Nacht/piano/piano.eps}
 
-\\tmpheading{Swing low}
+\\tmptitle{Swing low}
 \\tmpimage{s/Swing-low/piano/piano_1.eps}
 \\tmpimage{s/Swing-low/piano/piano_2.eps}
 \\tmpimage{s/Swing-low/piano/piano_3.eps}
 
-\\tmpheading{Zum Tanze, da geht ein Mädel}
+\\tmptitle{Zum Tanze, da geht ein Mädel}
 \\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_1.eps}
 \\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_2.eps}
 `)
@@ -491,7 +491,7 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
             assertExists(pianoScore.texFile.path)
             assert.strictEqual(texMarkup, compare)
             assert.ok(texMarkup.indexOf('\\tmpimage') > -1)
-            assert.ok(texMarkup.indexOf('\\tmpheading') > -1)
+            assert.ok(texMarkup.indexOf('\\tmptitle') > -1)
           })
 
           it('defaults', function () {
@@ -504,7 +504,7 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
 \\tmpplaceholder
 \\tmpplaceholder
 
-\\tmpheading{Auf der Mauer, auf der Lauer}
+\\tmptitle{Auf der Mauer, auf der Lauer}
 \\tmpimage{a/Auf-der-Mauer/piano/piano_1.eps}
 \\tmpimage{a/Auf-der-Mauer/piano/piano_2.eps}
 \\tmpimage{a/Auf-der-Mauer/piano/piano_3.eps}
@@ -513,11 +513,11 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
 
 \\tmpchapter{S}
 
-\\tmpheading{Stille Nacht}
+\\tmptitle{Stille Nacht}
 \\tmpimage{s/Stille-Nacht/piano/piano.eps}
 \\tmpplaceholder
 
-\\tmpheading{Swing low}
+\\tmptitle{Swing low}
 \\tmpimage{s/Swing-low/piano/piano_1.eps}
 \\tmpimage{s/Swing-low/piano/piano_2.eps}
 \\tmpimage{s/Swing-low/piano/piano_3.eps}
@@ -526,7 +526,7 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
 
 \\tmpchapter{Z}
 
-\\tmpheading{Zum Tanze, da geht ein Mädel}
+\\tmptitle{Zum Tanze, da geht ein Mädel}
 \\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_1.eps}
 \\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_2.eps}
 `)
@@ -573,7 +573,7 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
             assert.strictEqual(
               song.formatPianoTex(),
               '\n' +
-              '\\tmpheading{Swing low}\n' +
+              '\\tmptitle{Swing low}\n' +
               '\\tmpimage{s/Swing-low/piano/piano_1.eps}\n' +
               '\\tmpimage{s/Swing-low/piano/piano_2.eps}\n' +
               '\\tmpimage{s/Swing-low/piano/piano_3.eps}\n'

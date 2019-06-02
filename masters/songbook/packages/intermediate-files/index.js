@@ -410,7 +410,7 @@ class IntermediateSong extends Song {
    *
    * @return {string} TeX markup for a single song.
    * <code><pre>
-   * \tmpheading{Swing low}
+   * \tmptitle{Swing low}
    * \tmpimage{s/Swing-low/piano/piano_1.eps}
    * \tmpimage{s/Swing-low/piano/piano_2.eps}
    * \tmpimage{s/Swing-low/piano/piano_3.eps}
@@ -428,7 +428,7 @@ class IntermediateSong extends Song {
         this.metaData.title))
     }
     let output = ''
-    output += '\n' + PianoScore.texCmd('heading', this.metaDataCombined.title)
+    output += '\n' + PianoScore.texCmd('title', this.metaDataCombined.title)
     for (let i = 0; i < this.pianoFiles.length; i++) {
       output += this.formatPianoTeXEpsFile_(i)
     }

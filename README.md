@@ -21,7 +21,8 @@ god. He is the of god of light.
 # Installation / Building
 
 ```
-npm install
+npm install -g lerna
+lerna bootstrap
 npm test
 npm run build
 pacman -U dist/baldur-0.0.1.pacman
