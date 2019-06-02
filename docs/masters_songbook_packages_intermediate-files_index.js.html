@@ -19,11 +19,11 @@
 
     <h1 class="page-title">Source: masters/songbook/packages/intermediate-files/index.js</h1>
 
+    
 
 
 
-
-
+    
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
@@ -456,7 +456,7 @@ class IntermediateSong extends Song {
         this.metaData.title))
     }
     let output = ''
-    output += '\n' + PianoScore.texCmd('heading', this.metaDataCombined.title)
+    output += '\n' + PianoScore.texCmd('title', this.metaDataCombined.title)
     for (let i = 0; i &lt; this.pianoFiles.length; i++) {
       output += this.formatPianoTeXEpsFile_(i)
     }
