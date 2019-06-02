@@ -334,9 +334,12 @@ class PianoScore {
           actualPages = actualPages + song.pianoFiles.length
           output.push(song.formatPianoTex())
         }
-        // Add placeholder for blank pages
-        let placeholder = PianoScore.texCmd('placeholder')
-        output.push(placeholder.repeat(maxPages - actualPages))
+        // Do not add placeholder on the end of list.
+        if (countTree.sumFiles() > maxPages) {
+          // Add placeholder for blank pages
+          let placeholder = PianoScore.texCmd('placeholder')
+          output.push(placeholder.repeat(maxPages - actualPages))
+        }
       }
     } else {
       for (let song of songs) {
@@ -616,6 +619,19 @@ class PianoFilesCountTree {
     for (let validCount of this.validCounts_) {
       if (this.hasOwnProperty(validCount)) {
         count = count + this[validCount].length
+      }
+    }
+    return count
+  }
+
+  /**
+   * Sum up the number of files of all songs in all count categories.
+   */
+  sumFiles () {
+    let count = 0
+    for (let validCount of this.validCounts_) {
+      if (this.hasOwnProperty(validCount)) {
+        count += validCount * this[validCount].length
       }
     }
     return count

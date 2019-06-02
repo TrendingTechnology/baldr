@@ -392,7 +392,6 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
 \\tmpimage{s/Swing-low/piano/piano_2.eps}
 \\tmpcolumnbreak
 \\tmpimage{s/Swing-low/piano/piano_3.eps}
-\\tmpplaceholder
 `)
           })
         })
@@ -417,7 +416,6 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
 \\tmpimage{a/Auf-der-Mauer/piano/piano_2.eps}
 \\tmpcolumnbreak
 \\tmpimage{a/Auf-der-Mauer/piano/piano_3.eps}
-\\tmpplaceholder
 
 
 \\tmpchapter{S}
@@ -440,7 +438,6 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
 \\tmpimage{s/Swing-low/piano/piano_2.eps}
 \\tmpcolumnbreak
 \\tmpimage{s/Swing-low/piano/piano_3.eps}
-\\tmpplaceholder
 
 
 \\tmpchapter{Z}
@@ -550,7 +547,6 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
 \\tmpimage{s/Swing-low/piano/piano_2.eps}
 \\tmpcolumnbreak
 \\tmpimage{s/Swing-low/piano/piano_3.eps}
-\\tmpplaceholder
 `)
           })
 
@@ -640,7 +636,6 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
 \\tmpimage{a/Auf-der-Mauer/piano/piano_2.eps}
 \\tmpcolumnbreak
 \\tmpimage{a/Auf-der-Mauer/piano/piano_3.eps}
-\\tmpplaceholder
 
 
 \\tmpchapter{S}
@@ -663,7 +658,6 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
 \\tmpimage{s/Swing-low/piano/piano_2.eps}
 \\tmpcolumnbreak
 \\tmpimage{s/Swing-low/piano/piano_3.eps}
-\\tmpplaceholder
 
 
 \\tmpchapter{Z}
@@ -897,6 +891,27 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
         it('empty', function () {
           let countTree = new PianoFilesCountTree([])
           assert.strictEqual(countTree.sum(), 0)
+        })
+      })
+
+      describe('Method “sumFiles()”', function () {
+        it('Integration', function () {
+          assert.strictEqual(countTree.sumFiles(), 9)
+        })
+
+        it('one', function () {
+          let countTree = new PianoFilesCountTree(fakeSongs({ 1: 1 }))
+          assert.strictEqual(countTree.sumFiles(), 1)
+        })
+
+        it('many', function () {
+          let countTree = new PianoFilesCountTree(fakeSongs({ 1: 1, 2: 2, 3: 3, 4: 4 }))
+          assert.strictEqual(countTree.sumFiles(), 30)
+        })
+
+        it('empty', function () {
+          let countTree = new PianoFilesCountTree([])
+          assert.strictEqual(countTree.sumFiles(), 0)
         })
       })
 

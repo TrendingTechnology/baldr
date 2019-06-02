@@ -194,8 +194,6 @@ describe('Package “@bldr/songbook-cli”', function () {
 \\tmpimage{s/Swing-low/piano/piano_1.eps}
 \\tmpcolumnbreak
 \\tmpimage{s/Swing-low/piano/piano_2.eps}
-\\tmpplaceholder
-\\tmpplaceholder
 
 
 \\tmpchapter{Z}
@@ -282,8 +280,6 @@ describe('Package “@bldr/songbook-cli”', function () {
 \\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_1.eps}
 \\tmpcolumnbreak
 \\tmpimage{z/Zum-Tanze-da-geht-ein-Maedel/piano/piano_2.eps}
-\\tmpplaceholder
-\\tmpplaceholder
 `)
     })
 
