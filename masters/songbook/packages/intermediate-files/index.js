@@ -14,6 +14,7 @@ const path = require('path')
 const spawn = require('child_process').spawnSync
 const Sqlite3 = require('better-sqlite3')
 const util = require('util')
+const os = require('os')
 
 /**
  * Check if executable is installed.
@@ -383,6 +384,17 @@ class PianoScore {
   }
 
   /**
+   * Read the content of a text file.
+   *
+   * @param {filename} The name of the text (TeX) file inside this package
+   *
+   * @returns {string}
+   */
+  read_ (filename) {
+    return fs.readFileSync(path.join(__dirname, filename), { encoding: 'utf8' })
+  }
+
+  /**
    * Build and write the TeX file.
    */
   write () {
@@ -393,7 +405,31 @@ class PianoScore {
    * Compile the TeX file using lualatex and open the compiled pdf.
    */
   compile () {
-    spawn('lualatex', [this.texFile])
+    // Assemble the Tex markup.
+    let style = this.read_('style.tex')
+    let mainTexMarkup = this.read_('piano-all.tex')
+    let songs = this.build()
+    mainTexMarkup.replace('%%style%%', style)
+    mainTexMarkup.replace('%%songs%%', songs)
+
+    // Write contents to the text file.
+    let tmpDir = fs.mkdtempSync()
+    let tmpTexFile = path.join(tmpDir, 'piano-all.tex')
+    let textFile = new TextFile(tmpTexFile)
+    textFile.write(mainTexMarkup)
+
+    // Compile the TeX file
+    spawn('lualatex', [tmpTexFile])
+
+    // Open the pdf file.
+    let tmpPdfFile = tmpTexFile.replace('.tex', '.pdf')
+    let openCommand
+    if (os.platform() === 'darwin') {
+      openCommand = 'open'
+    } else {
+      openCommand = 'xdg-open'
+    }
+    spawn(openCommand, [tmpPdfFile])
   }
 }
 
