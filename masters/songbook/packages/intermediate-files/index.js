@@ -254,16 +254,33 @@ class FileMonitor {
  */
 class PianoScore {
   /**
-   * @param {string} texFile - The path of the TeX file.
    * @param {module:baldr-songbook~Library} library - An instance of the class “Library()”
    * @param {boolean} groupAlphabetically
    * @param {boolean} pageTurnOptimized
    */
-  constructor (texFile, library, groupAlphabetically = true, pageTurnOptimized = true) {
-    this.tmpTexFile = path.join(fs.mkdtempSync('songbook'), 'songbook.tex')
-    this.texFile = new TextFile(texFile)
+  constructor (library, groupAlphabetically = true, pageTurnOptimized = true) {
+    /**
+     * A temporary file path where the content of the TeX file gets stored.
+     *
+     * @type {string}
+     */
+    this.texFile = new TextFile(path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'baldr-songbook-')), 'songbook.tex'))
+
+    /**
+     * An instance of the class “Library()”.
+     *
+     * @type {module:baldr-songbook~Library}
+     */
     this.library = library
+
+    /**
+     * @type {boolean}
+     */
     this.groupAlphabetically = groupAlphabetically
+
+    /**
+     * @type {boolean}
+     */
     this.pageTurnOptimized = pageTurnOptimized
   }
 
@@ -396,13 +413,6 @@ class PianoScore {
   }
 
   /**
-   * Build and write the TeX file.
-   */
-  write () {
-    this.texFile.append(this.build())
-  }
-
-  /**
    * Compile the TeX file using lualatex and open the compiled pdf.
    */
   compile () {
@@ -410,26 +420,26 @@ class PianoScore {
     let style = this.read_('style.tex')
     let mainTexMarkup = this.read_('piano-all.tex')
     let songs = this.build()
-    mainTexMarkup.replace('//style//', style)
-    mainTexMarkup.replace('//songs//', songs)
-    mainTexMarkup.replace('//basepath//', this.library.basePath)
+    mainTexMarkup = mainTexMarkup.replace('//style//', style)
+    mainTexMarkup = mainTexMarkup.replace('//songs//', songs)
+    mainTexMarkup = mainTexMarkup.replace('//basepath//', this.library.basePath)
 
     // Write contents to the text file.
-    let textFile = new TextFile(this.tmpTexFile)
-    textFile.append(mainTexMarkup)
+    this.texFile.append(mainTexMarkup)
+    console.log(util.format('The TeX markup was written to: %s', this.texFile.path))
 
     // Compile the TeX file
-    spawn('lualatex', [this.tmpTexFile])
+    spawn('lualatex', [this.texFile.path])
 
     // Open the pdf file.
-    let tmpPdfFile = this.tmpTexFile.replace('.tex', '.pdf')
+    let pdfFile = this.texFile.path.replace('.tex', '.pdf')
     let openCommand
     if (os.platform() === 'darwin') {
       openCommand = 'open'
     } else {
       openCommand = 'xdg-open'
     }
-    spawn(openCommand, [tmpPdfFile])
+    spawn(openCommand, [pdfFile])
   }
 }
 

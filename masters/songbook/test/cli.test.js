@@ -15,6 +15,24 @@ let script = require.resolve('@bldr/songbook-cli')
 let oldPath = process.env.PATH
 process.env.PATH = path.join(__dirname, 'bin:', process.env.PATH)
 
+function spawnGetTexFile (args) {
+  let process = spawn(script, args, { 'encoding': 'utf-8' })
+  let match = process.stdout.match(/The TeX markup was written to: (.*)/)
+  if (match) {
+    return match[1]
+  } else {
+    return false
+  }
+}
+
+function getTeXMarkup (args) {
+  let texFile = spawnGetTexFile(args)
+  let texMarkup = read(texFile)
+  texMarkup = texMarkup.replace(/^[^]*% begin song list %\n/g, '')
+  texMarkup = texMarkup.replace(/\n% end song list %[^]*$/g, '')
+  return texMarkup
+}
+
 describe('Package “@bldr/songbook-cli”', function () {
   describe('Function “parseCliArguments()”', function () {
     let parseCliArguments = cliRewired.__get__('parseCliArguments')
@@ -60,9 +78,9 @@ describe('Package “@bldr/songbook-cli”', function () {
       assert.ok(stdout.includes(removeANSI(util.format('The base path of the song collection is located at:'))))
       // assert.ok(stdout.includes(removeANSI(util.format('The base path of the song collection is located at:\n    %s\n', tmpDir))))
       assert.ok(stdout.includes(removeANSI(util.format('Found %s songs.', 1))))
+      assert.ok(stdout.includes('The TeX markup was written to: '))
 
       assertExists(tmpDir, 'a', 'Auf-der-Mauer', 'piano', 'piano.mscx')
-      assertExists(tmpDir, 'songs.tex')
       assertExists(tmpDir, 'a', 'Auf-der-Mauer', 'slides', '01.svg')
       assertExists(tmpDir, 'a', 'Auf-der-Mauer', 'projector.pdf')
     })
@@ -98,8 +116,7 @@ describe('Package “@bldr/songbook-cli”', function () {
 
     it('--group-alphabetically', function () {
       let tmpDir = tmpCopy('clean', 'some')
-      spawn(script, ['--base-path', tmpDir, '--group-alphabetically', '--piano'])
-      let texMarkup = read(path.join(tmpDir, 'songs.tex'))
+      let texMarkup = getTeXMarkup(['--base-path', tmpDir, '--group-alphabetically', '--piano'])
       assert.strictEqual(texMarkup, `
 
 \\tmpchapter{A}
@@ -151,7 +168,10 @@ describe('Package “@bldr/songbook-cli”', function () {
 
     it('--list', function () {
       let tmpDir = tmpCopy('clean', 'some')
-      let process = spawn(script, ['--base-path', tmpDir, '--list', path.join(__dirname, 'files', 'song-id-list.txt')])
+      let process = spawn(script, [
+        '--base-path', tmpDir,
+        '--list', path.join(__dirname, 'files', 'song-id-list.txt')
+      ])
       let stdout = process.stdout.toString()
       assert.ok(stdout.includes('Auf-der-Mauer'))
       assert.ok(stdout.includes('Swing-low'))
@@ -160,8 +180,12 @@ describe('Package “@bldr/songbook-cli”', function () {
 
     it('--page-turn-optimized --group-alphabetically', function () {
       let tmpDir = tmpCopy('clean', 'some')
-      spawn(script, ['--base-path', tmpDir, '--page-turn-optimized', '--group-alphabetically', '--piano'])
-      let texMarkup = read(path.join(tmpDir, 'songs.tex'))
+      let texMarkup = getTeXMarkup([
+        '--base-path', tmpDir,
+        '--page-turn-optimized',
+        '--group-alphabetically',
+        '--piano'
+      ])
       assert.strictEqual(texMarkup, `
 
 \\tmpchapter{A}
@@ -213,8 +237,13 @@ describe('Package “@bldr/songbook-cli”', function () {
 
     it('--page-turn-optimized --group-alphabetically --list', function () {
       let tmpDir = tmpCopy('clean', 'some')
-      spawn(script, ['--base-path', tmpDir, '--page-turn-optimized', '--group-alphabetically', '--list', path.join(__dirname, 'files', 'song-id-list.txt'), '--piano'])
-      let texMarkup = read(path.join(tmpDir, 'songs.tex'))
+      let texMarkup = getTeXMarkup([
+        '--base-path', tmpDir,
+        '--page-turn-optimized',
+        '--group-alphabetically',
+        '--list', path.join(__dirname, 'files', 'song-id-list.txt'),
+        '--piano'
+      ])
       assert.strictEqual(texMarkup, `
 
 \\tmpchapter{A}
@@ -244,8 +273,11 @@ describe('Package “@bldr/songbook-cli”', function () {
 
     it('--page-turn-optimized', function () {
       let tmpDir = tmpCopy('clean', 'some')
-      spawn(script, ['--base-path', tmpDir, '--page-turn-optimized', '--piano'])
-      let texMarkup = read(path.join(tmpDir, 'songs.tex'))
+      let texMarkup = getTeXMarkup([
+        '--base-path', tmpDir,
+        '--page-turn-optimized',
+        '--piano'
+      ])
       assert.strictEqual(texMarkup, `
 \\tmpmetadata
 {Auf der Mauer, auf der Lauer (1890)} % title
@@ -290,20 +322,20 @@ describe('Package “@bldr/songbook-cli”', function () {
 
     it('--piano', function () {
       let tmpDir = tmpCopy('clean', 'one')
-      spawn(script, ['--base-path', tmpDir, '--piano'])
+      let texFile = spawnGetTexFile(['--base-path', tmpDir, '--piano'])
       assertExists(tmpDir, 'a', 'Auf-der-Mauer', 'piano', 'piano.mscx')
-      assertExists(tmpDir, 'songs.tex')
+      assertExists(texFile)
       assertNotExists(tmpDir, 'a', 'Auf-der-Mauer', 'slides', '01.svg')
       assertNotExists(tmpDir, 'a', 'Auf-der-Mauer', 'projector.pdf')
     })
 
     it('--slides', function () {
       let tmpDir = tmpCopy('clean', 'one')
-      spawn(script, ['--base-path', tmpDir, '--slides'])
+      let texFile = spawnGetTexFile(['--base-path', tmpDir, '--slides'])
       assertExists(tmpDir, 'a', 'Auf-der-Mauer', 'slides', '01.svg')
       assertExists(tmpDir, 'a', 'Auf-der-Mauer', 'projector.pdf')
       assertNotExists(tmpDir, 'a', 'Auf-der-Mauer', 'piano', 'piano.mscx')
-      assertNotExists(tmpDir, 'songs.tex')
+      assert.ok(!texFile)
     })
 
     it('--song-id', function () {

@@ -11,7 +11,6 @@ const { bootstrapConfig } = require('@bldr/songbook-base')
 const { IntermediateLibrary, PianoScore, checkExecutables } = require('@bldr/songbook-intermediate-files')
 const { Command } = require('commander')
 const util = require('util')
-const path = require('path')
 
 /**
  * Wrapper around the node module “commander”.
@@ -101,8 +100,8 @@ let main = function () {
   } else {
     library.update(mode, options.force)
     if (mode === 'piano' || mode === 'all') {
-      let pianoScore = new PianoScore(path.join(library.basePath, 'songs.tex'), library, options.groupAlphabetically, options.pageTurnOptimized)
-      pianoScore.write()
+      let pianoScore = new PianoScore(library, options.groupAlphabetically, options.pageTurnOptimized)
+      pianoScore.compile()
     }
   }
 }

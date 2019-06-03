@@ -228,7 +228,7 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
       let songs = library.toArray()
 
       it('Initialisation', function () {
-        let pianoScore = new PianoScore(path.join(tmpDir, 'piano.tex'), library)
+        let pianoScore = new PianoScore(library)
         assert.ok(pianoScore)
       })
 
@@ -404,7 +404,7 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
 
         describe('Method “build()”', function () {
           it('groupAlphabetically = true, pageTurnOptimized = true', function () {
-            let pianoScore = new PianoScore(mkTmpFile(), library, true, true)
+            let pianoScore = new PianoScore(library, true, true)
             let texMarkup = pianoScore.build()
             assert.strictEqual(texMarkup, `
 
@@ -464,7 +464,7 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
           })
 
           it('groupAlphabetically = true, pageTurnOptimized = false', function () {
-            let pianoScore = new PianoScore(mkTmpFile(), library, true, false)
+            let pianoScore = new PianoScore(library, true, false)
             let texMarkup = pianoScore.build()
             assert.strictEqual(texMarkup, `
 
@@ -518,7 +518,7 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
           })
 
           it('groupAlphabetically = false, pageTurnOptimized = true', function () {
-            let pianoScore = new PianoScore(mkTmpFile(), library, false, true)
+            let pianoScore = new PianoScore(library, false, true)
             let texMarkup = pianoScore.build()
             assert.strictEqual(texMarkup, `
 \\tmpmetadata
@@ -565,7 +565,7 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
           })
 
           it('groupAlphabetically = false, pageTurnOptimized = false', function () {
-            let pianoScore = new PianoScore(mkTmpFile(), library, false, false)
+            let pianoScore = new PianoScore(library, false, false)
             let texMarkup = pianoScore.build()
             assert.strictEqual(texMarkup, `
 \\tmpmetadata
@@ -612,20 +612,26 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
           })
         })
 
-        describe('Method “write()”', function () {
+        describe('Method “compile()”', function () {
+          let cleanOutput = function (input) {
+            let output = input.replace(/^[^]*% begin song list %\n/g, '')
+            output = output.replace(/\n% end song list %[^]*$/g, '')
+            return output
+          }
+
           it('groupAlphabetically = true, pageTurnOptimized = true', function () {
-            let pianoScore = new PianoScore(mkTmpFile(), library, true, true)
-            pianoScore.write()
-            let texMarkup = pianoScore.texFile.read()
+            let pianoScore = new PianoScore(library, true, true)
+            pianoScore.compile()
+            let texMarkup = cleanOutput(pianoScore.texFile.read())
             let compare = readPathSegments('files', 'songs_page_turn_optimized.tex')
             assertExists(pianoScore.texFile.path)
             assert.strictEqual(texMarkup, compare)
           })
 
           it('groupAlphabetically = true, pageTurnOptimized = false', function () {
-            let pianoScore = new PianoScore(mkTmpFile(), library, true, false)
-            pianoScore.write()
-            let texMarkup = pianoScore.texFile.read()
+            let pianoScore = new PianoScore(library, true, false)
+            pianoScore.compile()
+            let texMarkup = cleanOutput(pianoScore.texFile.read())
             let compare = readPathSegments('files', 'songs_processed.tex')
             assertExists(pianoScore.texFile.path)
             assert.strictEqual(texMarkup, compare)
@@ -634,9 +640,9 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
           })
 
           it('defaults', function () {
-            let pianoScore = new PianoScore(mkTmpFile(), library)
-            pianoScore.write()
-            let texMarkup = pianoScore.texFile.read()
+            let pianoScore = new PianoScore(library)
+            pianoScore.compile()
+            let texMarkup = cleanOutput(pianoScore.texFile.read())
             assert.strictEqual(texMarkup, `
 
 \\tmpchapter{A}
