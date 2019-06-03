@@ -456,8 +456,14 @@ class PianoScore {
     this.texFile.append(mainTexMarkup)
     console.log(util.format('The TeX markup was written to: %s', this.texFile.path))
 
+    // To avoid temporary TeX files in the working directory of the shell
+    // the command is running from.
+    let cwd = path.dirname(this.texFile.path)
+
     // Compile the TeX file
-    spawn('lualatex', [this.texFile.path])
+    spawn('lualatex', [this.texFile.path], { 'cwd': cwd })
+    // Compile twice for the table of contents
+    spawn('lualatex', [this.texFile.path], { 'cwd': cwd })
 
     // Open the pdf file.
     let pdfFile = this.texFile.path.replace('.tex', '.pdf')
