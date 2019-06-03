@@ -103,6 +103,8 @@
 % Custom macros
 %-----------------------------------------------------------------------
 
+\newcommand{\tmpbasepath}{//basepath//}
+
 %%
 % \tmpcolumnbreak
 % To be more flexible in the future. We can extend this minimal
@@ -128,7 +130,7 @@
 %%
 \newcommand{\tmpimage}[1]{%
   \begin{center}
-  \includegraphics[scale=0.95]{#1}%
+  \includegraphics[scale=0.95]{\tmpbasepath/#1}%
   \end{center}
 }
 
