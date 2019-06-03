@@ -23,10 +23,12 @@ god. He is the of god of light.
 ```
 npm install -g lerna
 lerna bootstrap
-npm test
-npm run build
-pacman -U dist/baldur-0.0.1.pacman
-dpkg -i dist/baldur-0.0.1.deb
+```
+
+# Publishing
+
+```
+lerna publish
 ```
 
 # Testing

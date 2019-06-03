@@ -1,28 +1,4 @@
-[![npm](https://img.shields.io/npm/v/baldr-songbook.svg)](https://www.npmjs.com/package/baldr-songbook)
-[![Build Status](https://travis-ci.org/Josef-Friedrich/baldr-songbook.svg?branch=master)](https://travis-ci.org/Josef-Friedrich/baldr-songbook)
-
-# baldr-songbook - BALDUR Songbook
-
-A fullscreen electron app to display songs in a class room using a
-projector.
-
-Further informations can be found on the
-[API documentation site](https://josef-friedrich.github.io/baldr-songbook)
-of the project.
-
-## Installation
-
-```
-npm install
-npm run-script build
-npm run-script start
-```
-
-## Testing
-
-```
-npm test
-```
+# @bldr/songbook
 
 ## Songs tree
 
@@ -127,7 +103,3 @@ line utility `baldr-songbook-updater`.
             └── 02.svg
 
 ```
-
-A tool to mirror displays on Mac OS is
-[mirror-display](https://github.com/fcanas/mirror-displays).
-The binary `mirror` is included in this repository.
