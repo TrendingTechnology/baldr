@@ -277,7 +277,7 @@ class FileMonitor {
  * Generate the TeX file for the piano version of the songbook. The page
  * orientation of the score is in the landscape format. Two
  * EPS files exported from MuseScore fit on one page. To avoid page breaks
- * within a song, a piano accompaniment must not have more than four
+ * within a song a piano accompaniment must not have more than four
  * EPS files.
  */
 class PianoScore {
@@ -288,6 +288,7 @@ class PianoScore {
    * @param {boolean} pageTurnOptimized
    */
   constructor (texFile, library, groupAlphabetically = true, pageTurnOptimized = true) {
+    this.tmpTexFile = path.join(fs.mkdtempSync('songbook'), 'songbook.tex')
     this.texFile = new TextFile(texFile)
     this.library = library
     this.groupAlphabetically = groupAlphabetically
@@ -437,20 +438,19 @@ class PianoScore {
     let style = this.read_('style.tex')
     let mainTexMarkup = this.read_('piano-all.tex')
     let songs = this.build()
-    mainTexMarkup.replace('%%style%%', style)
-    mainTexMarkup.replace('%%songs%%', songs)
+    mainTexMarkup.replace('//style//', style)
+    mainTexMarkup.replace('//songs//', songs)
+    mainTexMarkup.replace('//basepath//', this.library.basePath)
 
     // Write contents to the text file.
-    let tmpDir = fs.mkdtempSync()
-    let tmpTexFile = path.join(tmpDir, 'piano-all.tex')
-    let textFile = new TextFile(tmpTexFile)
-    textFile.write(mainTexMarkup)
+    let textFile = new TextFile(this.tmpTexFile)
+    textFile.append(mainTexMarkup)
 
     // Compile the TeX file
-    spawn('lualatex', [tmpTexFile])
+    spawn('lualatex', [this.tmpTexFile])
 
     // Open the pdf file.
-    let tmpPdfFile = tmpTexFile.replace('.tex', '.pdf')
+    let tmpPdfFile = this.tmpTexFile.replace('.tex', '.pdf')
     let openCommand
     if (os.platform() === 'darwin') {
       openCommand = 'open'
