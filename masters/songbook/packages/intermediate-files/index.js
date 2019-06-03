@@ -420,12 +420,13 @@ class PianoScore {
     let style = this.read_('style.tex')
     let mainTexMarkup = this.read_('piano-all.tex')
     let songs = this.build()
-    mainTexMarkup = mainTexMarkup.replace('//style//', style)
-    mainTexMarkup = mainTexMarkup.replace('//songs//', songs)
-    mainTexMarkup = mainTexMarkup.replace('//basepath//', this.library.basePath)
+    let texMarkup = mainTexMarkup.replace('//style//', style)
+    texMarkup = texMarkup.replace('//songs//', songs)
+    texMarkup = texMarkup.replace('//created//', new Date().toLocaleString())
+    texMarkup = texMarkup.replace('//basepath//', this.library.basePath)
 
     // Write contents to the text file.
-    this.texFile.append(mainTexMarkup)
+    this.texFile.append(texMarkup)
     console.log(util.format('The TeX markup was written to: %s', this.texFile.path))
 
     // To avoid temporary TeX files in the working directory of the shell
