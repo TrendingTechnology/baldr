@@ -360,6 +360,8 @@ class PianoScore {
   }
 
   /**
+   * Build the TeX markup for all songs.
+   *
    * @param {boolean} groupAlphabetically
    * @param {boolean} pageTurnOptimized
    *
@@ -385,6 +387,13 @@ class PianoScore {
    */
   write () {
     this.texFile.append(this.build())
+  }
+
+  /**
+   * Compile the TeX file using lualatex and open the compiled pdf.
+   */
+  compile () {
+    spawn('lualatex', [this.texFile])
   }
 }
 

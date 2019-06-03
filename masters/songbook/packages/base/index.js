@@ -9,7 +9,6 @@ const fs = require('fs-extra')
 const glob = require('glob')
 const os = require('os')
 const path = require('path')
-const spawn = require('child_process').spawnSync
 const util = require('util')
 const yaml = require('js-yaml')
 require('colors')
