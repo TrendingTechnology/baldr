@@ -437,6 +437,8 @@ class PianoScore {
     spawn('lualatex', [this.texFile.path], { 'cwd': cwd })
     // Compile twice for the table of contents
     spawn('lualatex', [this.texFile.path], { 'cwd': cwd })
+    // The page numbers in the toc only matches after three runs.
+    spawn('lualatex', [this.texFile.path], { 'cwd': cwd })
 
     // Open the pdf file.
     let pdfFile = this.texFile.path.replace('.tex', '.pdf')
