@@ -676,10 +676,6 @@ describe('Package “@bldr/songbook-base”', function () {
           assert.strictEqual(Object.keys(result).length, 2)
         })
 
-        it('Method “gitPull()”', function () {
-          assert.ok(!library.gitPull())
-        })
-
         describe('Method “getSongById()”', function () {
           it('No exception', function () {
             assert.strictEqual(library.getSongById('Auf-der-Mauer').metaData.title, 'Auf der Mauer, auf der Lauer')

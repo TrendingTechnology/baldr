@@ -1000,6 +1000,10 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
       })
 
       describe('Methods', function () {
+        it('Method “gitPull()”', function () {
+          assert.ok(!library.gitPull())
+        })
+
         it('Method “collectSongs_()”', function () {
           assert.strictEqual(library.detectSongs_().length, 4)
           let songs = library.collectSongs_()

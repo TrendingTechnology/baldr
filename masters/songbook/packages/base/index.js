@@ -787,17 +787,6 @@ class Library {
   }
 
   /**
-   * Execute git pull if repository exists.
-   */
-  gitPull () {
-    if (fs.existsSync(path.join(this.basePath, '.git'))) {
-      return spawn('git', ['pull'], { cwd: this.basePath })
-    } else {
-      return false
-    }
-  }
-
-  /**
    * Return only the existing ABC folders.
    *
    * @return {Array}
