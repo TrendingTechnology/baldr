@@ -21,14 +21,14 @@
   "dependencies": {
     "@bldr/songbook-base": "^0.1.0",
     "font-awesome": "^4.7.0",
-    "jquery": "^3.2.1",
-    "mousetrap": "^1.6.1",
+    "jquery": "^3.4.1",
+    "mousetrap": "^1.6.3",
     "selectize": "^0.12.4"
   },
   "devDependencies": {
-    "electron": "^4.0.1",
-    "electron-packager": "^13.0.1",
-    "electron-rebuild": "^1.6.0"
+    "electron": "^5.0.2",
+    "electron-packager": "^13.1.1",
+    "electron-rebuild": "^1.8.5"
   },
   "scripts": {
     "build": "electron-packager . --out=dist --app-version=$npm_package_version --asar --prune --overwrite --arch=x64 --icon=./icon.icns",

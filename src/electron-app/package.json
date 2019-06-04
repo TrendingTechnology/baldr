@@ -23,7 +23,7 @@
     "@bldr/test-helper": "^0.0.5",
     "@bldr/theme-default": "^0.0.5",
     "@bldr/theme-handwriting": "^0.0.5",
-    "electron": "^4.0.0",
+    "electron": "^5.0.2",
     "font-awesome": "^4.7.0",
     "mousetrap": "^1.6.2"
   },
