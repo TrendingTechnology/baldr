@@ -128,7 +128,7 @@ let loadURL = function () {
  * @function createWindow
  */
 let createWindow = function () {
-  mainWindow = new BrowserWindow({ width: 800, height: 600 })
+  mainWindow = new BrowserWindow({ width: 800, height: 600, webPreferences: { nodeIntegration: true } })
   loadURL('render.html')
   buildMenu()
 

@@ -131,7 +131,7 @@ function mirrorMonitors (state) {
 }
 
 function createWindow () {
-  win = new BrowserWindow({ fullscreen: true })
+  win = new BrowserWindow({ fullscreen: true, webPreferences: { nodeIntegration: true } })
 
   win.loadURL(setUrl('index.html'))
 
