@@ -462,11 +462,14 @@ class PianoScore {
     let cwd = path.dirname(this.texFile.path)
 
     // Compile the TeX file
-    spawn('lualatex', [this.texFile.path], { 'cwd': cwd })
+    // Error on Mac OS: conversion of the eps files to pdf files doesn t work.
+    // not allowed in restricted mode.
+    // --shell-escape
+    spawn('lualatex', ['--shell-escape', this.texFile.path], { 'cwd': cwd })
     // Compile twice for the table of contents
-    spawn('lualatex', [this.texFile.path], { 'cwd': cwd })
+    spawn('lualatex', ['--shell-escape', this.texFile.path], { 'cwd': cwd })
     // The page numbers in the toc only matches after three runs.
-    spawn('lualatex', [this.texFile.path], { 'cwd': cwd })
+    spawn('lualatex', ['--shell-escape', this.texFile.path], { 'cwd': cwd })
 
     // Open the pdf file.
     let pdfFile = this.texFile.path.replace('.tex', '.pdf')
