@@ -1,10 +1,10 @@
 {
   "name": "@bldr/test-helper",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
   "dependencies": {
-    "@bldr/core": "^0.0.5",
-    "@bldr/foundation-master": "^0.0.5",
+    "@bldr/core": "^0.0.6",
+    "@bldr/foundation-master": "^0.0.6",
     "electron-packager": "^13.0.1",
     "jsdom": "^13.1.0",
     "rewire": "^4.0.1"

@@ -6,7 +6,7 @@
   "dependencies": {
     "js-yaml": "^3.10.0"
   },
-  "version": "0.0.5",
+  "version": "0.0.6",
   "gitHead": "1071a4332e0793ccb92d323493a018af9105c758",
   "publishConfig": {
     "access": "public"
