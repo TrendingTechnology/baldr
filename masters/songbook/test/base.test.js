@@ -294,7 +294,8 @@ describe('Package “@bldr/songbook-base”', function () {
             'source',
             'subtitle',
             'title',
-            'year'
+            'year',
+            'youtube'
           ])
         })
 
