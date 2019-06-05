@@ -2,14 +2,9 @@
   "name": "@bldr/camera-electron-app",
   "description": "A fullscreen electron app to display the video output from document cameras.",
   "version": "0.0.10",
-  "main": "main.js",
-  "repository": {
-    "type": "git",
-    "url": "git@github.com:Josef-Friedrich/baldr-document-camera.git"
-  },
+  "main": "electron-main.js",
   "scripts": {
     "build": "electron-packager ./ --out=dist --app-version=$npm_package_version --prune --asar --overwrite --arch=x64 --icon=./icon.icns",
-    "doc": "jsdoc --configure ./docs/jsdoc-config.json --destination ./docs/ .",
     "start": "electron .",
     "test": "mocha"
   },
@@ -22,12 +17,10 @@
   "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
   "devDependencies": {
     "@bldr/test-helper": "^0.0.6",
-    "electron": "^4.0.1",
+    "electron": "^5.0.2",
     "electron-packager": "^13.0.1",
     "electron-rebuild": "^1.6.0",
-    "jsdoc": "^3.5.5",
     "mocha": "^5.2.0",
-    "mocha-jshint": "^2.3.1",
     "spectron": "^5.0.0"
   },
   "standard": {
