@@ -3,6 +3,7 @@
   "version": "0.1.5",
   "description": "A try to write my presentations for school in HTML5, CSS3 and Javascript using Electron. Virtual top level package for tooling support.",
   "scripts": {
+    "clean": "lerna clean; rm -rf src/electron-app/dist; rm -rf masters/songbook/packages/electron-app/dist",
     "build": "electron-builder",
     "doc-show": "xdg-open ./docs/index.html",
     "doc": "rm -f docs/*.html; jsdoc --configure ./docs/jsdoc-config.json --readme API.md .",

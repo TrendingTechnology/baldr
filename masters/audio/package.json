@@ -1,5 +1,6 @@
 {
   "name": "@bldr/master-audio",
+  "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
   "version": "0.0.5",
   "dependencies": {
     "howler": "^2.0.5",

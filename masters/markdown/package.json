@@ -1,5 +1,6 @@
 {
   "name": "@bldr/master-markdown",
+  "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
   "dependencies": {
     "marked": "^0.6.0"
   },

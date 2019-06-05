@@ -19,7 +19,7 @@
     "url": "https://josef.friedrich.rocks"
   },
   "license": "MIT",
-  "homepage": "https://github.com/Josef-Friedrich/baldr-document-camera",
+  "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
   "devDependencies": {
     "@bldr/test-helper": "^0.0.5",
     "electron": "^4.0.1",

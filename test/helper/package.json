@@ -1,6 +1,7 @@
 {
   "name": "@bldr/test-helper",
   "version": "0.0.5",
+  "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
   "dependencies": {
     "@bldr/core": "^0.0.5",
     "@bldr/foundation-master": "^0.0.5",
