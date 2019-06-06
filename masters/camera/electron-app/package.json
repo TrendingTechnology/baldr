@@ -22,7 +22,7 @@
   "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
   "devDependencies": {
     "@bldr/test-helper": "^0.0.6",
-    "electron": "^4.0.1",
+    "electron": "^5.0.2",
     "electron-packager": "^13.0.1",
     "electron-rebuild": "^1.6.0",
     "jsdoc": "^3.5.5",
