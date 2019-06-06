@@ -29,8 +29,8 @@ lerna bootstrap
 
 ```
 sudo npm install -g npm-check-updates
-lerna exec ncu -u
-lerna exec npm update
+lerna exec "ncu -u"
+lerna exec "npm update"
 ```
 
 # Publishing
