@@ -7,7 +7,7 @@ describe('application launch', function () {
   this.timeout(10000)
 
   beforeEach(function () {
-    this.spectron = new Spectron('@bldr/camera-electron-app', 'test/files/steps.baldr')
+    this.spectron = new Spectron('@bldr/camera-electron-app')
     this.app = this.spectron.getApp()
     return this.spectron.start()
   })
