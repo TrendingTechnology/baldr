@@ -13,7 +13,8 @@
   "license": "MIT",
   "author": {
     "name": "Josef Friedrich",
-    "email": "josef@friedrich.rocks"
+    "email": "josef@friedrich.rocks",
+    "url": "https://josef.friedrich.rocks"
   },
   "scripts": {
     "build": "electron-builder",

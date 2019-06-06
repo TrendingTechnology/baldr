@@ -12,7 +12,8 @@
   "license": "MIT",
   "author": {
     "name": "Josef Friedrich",
-    "email": "josef@friedrich.rocks"
+    "email": "josef@friedrich.rocks",
+    "url": "https://josef.friedrich.rocks"
   },
   "main": "index.js",
   "dependencies": {
