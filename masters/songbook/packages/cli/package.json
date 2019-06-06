@@ -21,7 +21,7 @@
   "dependencies": {
     "@bldr/songbook-base": "^0.1.1",
     "@bldr/songbook-intermediate-files": "^0.1.5",
-    "commander": "^2.11.0"
+    "commander": "^2.20.0"
   },
   "bin": {
     "baldr-songbook-updater": "./index.js"

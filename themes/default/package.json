@@ -3,9 +3,9 @@
   "main": "index.js",
   "dependencies": {
     "typeface-alegreya": "^0.0.69",
-    "typeface-alegreya-sans": "^0.0.54",
+    "typeface-alegreya-sans": "^0.0.72",
     "typeface-alegreya-sans-sc": "^0.0.54",
-    "typeface-alegreya-sc": "^0.0.54"
+    "typeface-alegreya-sc": "^0.0.72"
   },
   "version": "0.0.6",
   "homepage": "https://github.com/Josef-Friedrich/baldr#readme",

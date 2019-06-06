@@ -2,7 +2,7 @@
   "name": "@bldr/theme-handwriting",
   "main": "index.js",
   "dependencies": {
-    "typeface-kalam": "^0.0.54"
+    "typeface-kalam": "^0.0.72"
   },
   "version": "0.0.6",
   "homepage": "https://github.com/Josef-Friedrich/baldr#readme",

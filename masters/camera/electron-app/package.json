@@ -16,11 +16,11 @@
   "license": "MIT",
   "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
   "devDependencies": {
-    "@bldr/test-helper": "^0.0.6",
+    "@bldr/test-helper": "0.0.6",
     "electron": "^5.0.2",
-    "electron-packager": "^13.0.1",
-    "electron-rebuild": "^1.6.0",
-    "mocha": "^5.2.0",
+    "electron-packager": "^13.1.1",
+    "electron-rebuild": "^1.8.5",
+    "mocha": "^6.1.4",
     "spectron": "^5.0.0"
   },
   "standard": {

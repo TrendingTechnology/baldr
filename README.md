@@ -25,6 +25,14 @@ npm install -g lerna
 lerna bootstrap
 ```
 
+# Upgrading
+
+```
+sudo npm install -g npm-check-updates
+lerna exec ncu -u
+lerna exec npm update
+```
+
 # Publishing
 
 ```
