@@ -33,6 +33,13 @@ lerna exec "ncu -u"
 lerna exec "npm update"
 ```
 
+# Sort package.json
+
+```
+sudo npm install -g sort-package-json
+lerna exec "sort-package-json"
+```
+
 # Publishing
 
 ```

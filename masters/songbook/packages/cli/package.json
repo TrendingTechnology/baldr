@@ -1,29 +1,29 @@
 {
   "name": "@bldr/songbook-cli",
-  "main": "index.js",
-  "description": "A command line utility to generate the intermediate files needed by the Electron songbook app",
   "version": "0.1.5",
+  "description": "A command line utility to generate the intermediate files needed by the Electron songbook app",
+  "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
   "repository": {
     "type": "git",
     "url": "git@github.com:Josef-Friedrich/baldr-songbook.git"
   },
+  "license": "MIT",
   "author": {
     "name": "Josef Friedrich",
     "email": "josef@friedrich.rocks",
     "url": "https://josef.friedrich.rocks"
   },
-  "license": "MIT",
-  "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
-  "gitHead": "1071a4332e0793ccb92d323493a018af9105c758",
-  "publishConfig": {
-    "access": "public"
+  "main": "index.js",
+  "bin": {
+    "baldr-songbook-updater": "./index.js"
   },
   "dependencies": {
     "@bldr/songbook-base": "^0.1.1",
     "@bldr/songbook-intermediate-files": "^0.1.5",
     "commander": "^2.20.0"
   },
-  "bin": {
-    "baldr-songbook-updater": "./index.js"
-  }
+  "publishConfig": {
+    "access": "public"
+  },
+  "gitHead": "1071a4332e0793ccb92d323493a018af9105c758"
 }

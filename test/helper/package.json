@@ -2,6 +2,18 @@
   "name": "@bldr/test-helper",
   "version": "0.0.6",
   "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
+  "bugs": {
+    "url": "https://github.com/Josef-Friedrich/baldr/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Josef-Friedrich/baldr.git"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Josef Friedrich",
+    "email": "josef@friedrich.rocks"
+  },
   "dependencies": {
     "@bldr/core": "0.0.6",
     "@bldr/foundation-master": "0.0.6",
@@ -9,8 +21,8 @@
     "jsdom": "^15.1.1",
     "rewire": "^4.0.1"
   },
-  "gitHead": "1071a4332e0793ccb92d323493a018af9105c758",
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "gitHead": "1071a4332e0793ccb92d323493a018af9105c758"
 }

@@ -1,22 +1,22 @@
 {
   "name": "@bldr/songbook-electron-app",
-  "main": "electron-main.js",
-  "description": "A fullscreen electron app to display songs in a class room using a projector.",
   "version": "0.1.2",
+  "description": "A fullscreen electron app to display songs in a class room using a projector.",
+  "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
   "repository": {
     "type": "git",
     "url": "git@github.com:Josef-Friedrich/baldr-songbook.git"
   },
+  "license": "MIT",
   "author": {
     "name": "Josef Friedrich",
     "email": "josef@friedrich.rocks",
     "url": "https://josef.friedrich.rocks"
   },
-  "license": "MIT",
-  "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
-  "gitHead": "1071a4332e0793ccb92d323493a018af9105c758",
-  "publishConfig": {
-    "access": "public"
+  "main": "electron-main.js",
+  "scripts": {
+    "build": "electron-packager . --out=dist --app-version=$npm_package_version --asar --prune --overwrite --arch=x64 --icon=./icon.icns",
+    "start": "electron ."
   },
   "dependencies": {
     "@bldr/songbook-base": "^0.1.1",
@@ -30,8 +30,8 @@
     "electron-packager": "^13.1.1",
     "electron-rebuild": "^1.8.5"
   },
-  "scripts": {
-    "build": "electron-packager . --out=dist --app-version=$npm_package_version --asar --prune --overwrite --arch=x64 --icon=./icon.icns",
-    "start": "electron ."
-  }
+  "publishConfig": {
+    "access": "public"
+  },
+  "gitHead": "1071a4332e0793ccb92d323493a018af9105c758"
 }
