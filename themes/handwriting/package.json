@@ -1,6 +1,7 @@
 {
   "name": "@bldr/theme-handwriting",
   "version": "0.0.7",
+  "description": "Theme “handwriting” of the baldr project.",
   "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
   "bugs": {
     "url": "https://github.com/Josef-Friedrich/baldr/issues"

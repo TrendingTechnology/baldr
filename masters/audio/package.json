@@ -1,6 +1,7 @@
 {
   "name": "@bldr/master-audio",
   "version": "0.0.7",
+  "description": "Master slide “audio” of the baldr project.",
   "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
   "bugs": {
     "url": "https://github.com/Josef-Friedrich/baldr/issues"
