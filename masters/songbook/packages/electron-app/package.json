@@ -28,10 +28,29 @@
   "devDependencies": {
     "electron": "^5.0.2",
     "electron-packager": "^13.1.1",
+    "electron-prebuilt-compile": "4.0.0",
     "electron-rebuild": "^1.8.5"
   },
   "publishConfig": {
     "access": "public"
+  },
+  "config": {
+    "forge": {
+      "packagerConfig": {
+        "name": "baldr-songbook",
+        "derefSymlinks": true
+      },
+      "make_targets": {
+        "win32": ["squirrel"],
+        "darwin": ["dmg"],
+        "linux": ["deb"]
+      },
+      "makers": [
+        {
+          "name": "@electron-forge/maker-deb"
+        }
+      ]
+    }
   },
   "gitHead": "1071a4332e0793ccb92d323493a018af9105c758"
 }
