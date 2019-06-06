@@ -67,6 +67,7 @@
     "@bldr/songbook-cli": "^0.1.5",
     "@bldr/songbook-electron-app": "^0.1.2",
     "@bldr/songbook-intermediate-files": "^0.1.5",
+    "@bldr/camera-electron-app": "*",
     "@bldr/test-helper": "^0.0.6",
     "@bldr/theme-default": "^0.0.6",
     "@bldr/theme-handwriting": "^0.0.6",

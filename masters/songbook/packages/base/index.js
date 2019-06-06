@@ -359,7 +359,8 @@ class SongMetaData {
       'source',
       'subtitle',
       'title',
-      'year'
+      'year',
+      'youtube'
     ]
 
     if (!fs.existsSync(folder)) {
