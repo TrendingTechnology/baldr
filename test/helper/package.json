@@ -1,6 +1,6 @@
 {
   "name": "@bldr/test-helper",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
   "bugs": {
     "url": "https://github.com/Josef-Friedrich/baldr/issues"
@@ -16,8 +16,8 @@
     "url": "https://josef.friedrich.rocks"
   },
   "dependencies": {
-    "@bldr/core": "0.0.6",
-    "@bldr/foundation-master": "0.0.6",
+    "@bldr/core": "^0.0.7",
+    "@bldr/foundation-master": "^0.0.7",
     "electron-packager": "^13.1.1",
     "jsdom": "^15.1.1",
     "rewire": "^4.0.1"
