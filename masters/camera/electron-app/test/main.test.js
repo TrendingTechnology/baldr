@@ -4,7 +4,7 @@ const {
 } = require('@bldr/test-helper')
 
 describe('application launch', function () {
-  this.timeout(10000)
+  this.timeout(50000)
 
   beforeEach(function () {
     this.spectron = new Spectron('@bldr/camera-electron-app')

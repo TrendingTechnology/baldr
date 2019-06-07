@@ -5,10 +5,10 @@ const {
 } = require('@bldr/test-helper')
 
 describe('Package “@bldr/songbook-electron-app”', function () {
-  this.timeout(40000)
+  this.timeout(50000)
 
   beforeEach(function () {
-    this.timeout(40000)
+    this.timeout(50000)
     process.env.BALDR_SONGBOOK_PATH = path.resolve(__dirname, 'songs', 'real')
     this.spectron = new Spectron('@bldr/songbook-electron-app')
     this.app = this.spectron.getApp()

@@ -7,7 +7,7 @@ const {
 describe('General Spectron tests #spectron', () => {
   describe('build', () => {
     it(`exists “Spectron.appPath”`, function () {
-      this.timeout(40000)
+      this.timeout(50000)
       let spectron = new Spectron('@bldr/electron-app')
       assert.ok(fs.existsSync(spectron.appPath))
     })
@@ -15,7 +15,7 @@ describe('General Spectron tests #spectron', () => {
 
   describe('Lauch without baldr file', function () {
     beforeEach(function () {
-      this.timeout(40000)
+      this.timeout(50000)
       this.spectron = new Spectron('@bldr/electron-app')
       this.app = this.spectron.getApp()
       return this.spectron.start()
@@ -42,7 +42,7 @@ describe('General Spectron tests #spectron', () => {
   })
 
   describe('Launch minimal.baldr', function () {
-    this.timeout(10000)
+    this.timeout(50000)
 
     beforeEach(function () {
       this.spectron = new Spectron('@bldr/electron-app', 'test/files/minimal.baldr')
@@ -137,7 +137,7 @@ describe('General Spectron tests #spectron', () => {
   })
 
   describe('Launch steps.baldr', function () {
-    this.timeout(10000)
+    this.timeout(50000)
 
     beforeEach(function () {
       this.spectron = new Spectron('@bldr/electron-app', 'test/files/steps.baldr')
@@ -282,7 +282,7 @@ describe('General Spectron tests #spectron', () => {
   })
 
   describe('Launch single-slide.baldr', function () {
-    this.timeout(10000)
+    this.timeout(50000)
 
     beforeEach(function () {
       this.spectron = new Spectron('@bldr/electron-app', 'test/files/single-slide.baldr')
@@ -306,7 +306,7 @@ describe('General Spectron tests #spectron', () => {
   })
 
   describe('Launch error.baldr', function () {
-    this.timeout(10000)
+    this.timeout(50000)
 
     beforeEach(function () {
       this.spectron = new Spectron('@bldr/electron-app', 'test/files/error.baldr')
@@ -328,7 +328,7 @@ describe('General Spectron tests #spectron', () => {
   })
 
   describe('Launch themes.baldr', function () {
-    this.timeout(10000)
+    this.timeout(50000)
 
     beforeEach(function () {
       this.spectron = new Spectron('@bldr/electron-app', 'test/files/themes.baldr')
