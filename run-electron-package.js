@@ -3,27 +3,36 @@
 const path = require('path')
 const process = require('process')
 const packager = require('electron-packager')
+const os = require('os')
+const fs = require('fs')
 
-async function packageElectronApp(packageName) {
+let currentUser = os.userInfo()
+
+if (currentUser.username !== 'root') {
+  throw new Error('You must be root!')
+}
+
+let platform = os.platform()
+
+let distPrefix
+if (platform === 'darwin') {
+  distPrefix = path.join('/', 'Applications')
+} else {
+  distPrefix = path.join('/', 'opt', 'electron')
+}
+
+async function packageElectronApp (packageName, distName) {
   let packagePath = path.dirname(require.resolve(packageName))
   let packageJson = require(path.join(packagePath, 'package.json'))
-  let electronName = packageJson.name.replace('/', '-')
-  //let appName = util.format('%s-%s-%s', electronName, process.platform, process.arch)
-  //let distFolder = path.join(packagePath, 'dist')
-  let distFolder = '/home/jf/Downloads/songbook'
+  let out = path.join(distPrefix, distName)
+  fs.mkdirSync(out, { 'recursive': true })
 
-  let darwinPath = []
-  if (process.platform === 'darwin') {
-    darwinPath = [electronName + '.app', 'Contents', 'MacOS']
-  }
-  //appPath = path.join(this.distFolder, this.appName, ...darwinPath, electronName)
-
-  // derefSymlinks: lerna symlinks the some dependencies.
+  // derefSymlinks: lerna symlinks the same dependencies.
   // This symlinks are broken without the option derefSymlinks in the folder
   // packages/electron-app/dist/@bldr-songbook-electron-app-linux-x64/resources/app/node_modules/@bldr
-  return await packager({
+  return packager({
     dir: packagePath,
-    out: distFolder,
+    out: path.join(distPrefix, distName),
     prune: false,
     derefSymlinks: true,
     overwrite: true,
@@ -34,4 +43,17 @@ async function packageElectronApp(packageName) {
   })
 }
 
-packageElectronApp('@bldr/songbook-electron-app')
+// /usr/share/applications
+
+// [Desktop Entry]
+// Name=LinDVD
+// Exec=lindvd
+// Icon=/usr/share/pixmaps/LinDVD.xpm
+// Terminal=false
+// Type=Application
+// Categories=AudioVideo;Player;
+// MimeType=video/mpeg;audio/mpeg;
+
+// /usr/share/icons/
+
+packageElectronApp('@bldr/songbook-electron-app', 'songbook')

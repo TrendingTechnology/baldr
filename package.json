@@ -105,7 +105,8 @@
       "expect"
     ],
     "ignore": [
-      "docs"
+      "docs",
+      "out"
     ]
   }
 }
