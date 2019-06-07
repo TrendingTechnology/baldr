@@ -16,7 +16,8 @@
   "main": "electron-main.js",
   "scripts": {
     "build": "electron-packager . --out=dist --app-version=$npm_package_version --asar --prune --overwrite --arch=x64 --icon=./icon.icns",
-    "start": "electron ."
+    "start": "electron .",
+    "dist": "electron-builder"
   },
   "dependencies": {
     "@bldr/songbook-base": "^0.1.2",
@@ -26,6 +27,7 @@
     "selectize": "^0.12.6"
   },
   "devDependencies": {
+    "@electron-forge/maker-deb": "^6.0.0-beta.39",
     "electron": "^5.0.2",
     "electron-packager": "^13.1.1",
     "electron-prebuilt-compile": "4.0.0",
@@ -34,16 +36,27 @@
   "publishConfig": {
     "access": "public"
   },
+  "build": {
+    "appId": "rocks.friedrich.baldr.songbook"
+  },
   "config": {
     "forge": {
       "packagerConfig": {
         "name": "baldr-songbook",
-        "derefSymlinks": true
+        "executableName": "baldr-songbook",
+        "derefSymlinks": false,
+        "out": "baldr-songbook"
       },
       "make_targets": {
-        "win32": ["squirrel"],
-        "darwin": ["dmg"],
-        "linux": ["deb"]
+        "win32": [
+          "squirrel"
+        ],
+        "darwin": [
+          "dmg"
+        ],
+        "linux": [
+          "deb"
+        ]
       },
       "makers": [
         {

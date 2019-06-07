@@ -9,7 +9,7 @@
     },
     "source": {
         "includePattern": ".+\\.js(doc)?$",
-        "excludePattern": "(node_modules|dist)"
+        "excludePattern": "(node_modules|dist|out)"
     },
     "plugins": ["plugins/markdown"],
     "templates": {
