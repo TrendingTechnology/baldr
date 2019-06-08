@@ -27,6 +27,16 @@ async function packageElectronApp (packageName, distName) {
   let out = path.join(distPrefix, distName)
   fs.mkdirSync(out, { 'recursive': true })
 
+  //   let desktopFile = `[Desktop Entry]
+  // Name=${distName}
+  // Exec=lindvd
+  // Icon=/usr/share/icons/LinDVD.xpm
+  // Terminal=false
+  // Type=Application
+  // Categories=AudioVideo;Player;
+  // MimeType=video/mpeg;audio/mpeg;`
+  //   desktopFile
+
   // derefSymlinks: lerna symlinks the same dependencies.
   // This symlinks are broken without the option derefSymlinks in the folder
   // packages/electron-app/dist/@bldr-songbook-electron-app-linux-x64/resources/app/node_modules/@bldr
@@ -45,15 +55,11 @@ async function packageElectronApp (packageName, distName) {
 
 // /usr/share/applications
 
-// [Desktop Entry]
-// Name=LinDVD
-// Exec=lindvd
-// Icon=/usr/share/pixmaps/LinDVD.xpm
-// Terminal=false
-// Type=Application
-// Categories=AudioVideo;Player;
-// MimeType=video/mpeg;audio/mpeg;
-
 // /usr/share/icons/
+async function packageElectronApps () {
+  await packageElectronApp('@bldr/songbook-electron-app', 'songbook')
+  await packageElectronApp('@bldr/camera-electron-app', 'camera')
+  await packageElectronApp('@bldr/electron-app', 'baldr')
+}
 
-packageElectronApp('@bldr/songbook-electron-app', 'songbook')
+packageElectronApps()
