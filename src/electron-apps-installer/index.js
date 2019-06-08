@@ -1,11 +1,11 @@
 #! /usr/bin/env node
 
+const childProcess = require('child_process')
 const fs = require('fs')
 const os = require('os')
 const path = require('path')
 const process = require('process')
 const util = require('util')
-const childProcess = require('child_process')
 
 const packager = require('electron-packager')
 
