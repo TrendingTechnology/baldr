@@ -1,6 +1,6 @@
 {
   "name": "baldr",
-  "version": "0.1.10",
+  "version": "0.1.11",
   "description": "A try to write my presentations for school in HTML5, CSS3 and Javascript using Electron. Virtual top level package for tooling support.",
   "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
   "bugs": {
