@@ -7,7 +7,7 @@ const path = require('path')
 const process = require('process')
 const util = require('util')
 
-var commander = require('commander');
+var commander = require('commander')
 const packager = require('electron-packager')
 
 let currentUser = os.userInfo()
@@ -110,7 +110,7 @@ commander
   .option('-b, --baldr', 'Install “baldr” (@bldr/electron-app)')
   .option('-c, --camera', 'Install “camera” (@bldr/camera-electron-app)')
   .option('-s, --songbook', 'Install “songbook” (@bldr/songbook-electron-app)')
-  .parse(process.argv);
+  .parse(process.argv)
 
 if (commander.baldr) {
   packageElectronApp('@bldr/electron-app', 'baldr')
