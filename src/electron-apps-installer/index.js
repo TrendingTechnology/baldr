@@ -5,6 +5,7 @@ const os = require('os')
 const path = require('path')
 const process = require('process')
 const util = require('util')
+const childProcess = require('child_process')
 
 const packager = require('electron-packager')
 
@@ -35,20 +36,20 @@ async function packageElectronApp (packageName, destName) {
   let packagePath = path.dirname(require.resolve(packageName))
   let packageJson = require(path.join(packagePath, 'package.json'))
 
-  // /opt/electron/songbook
-  let out = path.join(destPrefix, destName)
-  fs.mkdirSync(out, { 'recursive': true })
+  let out
+  if (platform === 'darwin') {
+    out = fs.mkdtempSync(path.join(os.tmpdir(), 'electron-'))
+  } else if (platform === 'linux') {
+    // /opt/electron/songbook
+    out = path.join(destPrefix, destName)
+    fs.mkdirSync(out, { 'recursive': true })
+  }
 
   // @bldr-songbook-electron-app
   let executableName = packageJson.name.replace('/', '-')
 
   // @bldr-songbook-electron-app-linux-x64
   let folderName = util.format('%s-%s-%s', executableName, platform, process.arch)
-  // let darwinPath = []
-  // if (process.platform === 'darwin') {
-  //   darwinPath = [electronName + '.app', 'Contents', 'MacOS']
-  // }
-  // this.appPath = path.join(this.distFolder, appName, ...darwinPath, electronName)
 
   if (platform === 'linux') {
     // Icons
@@ -73,7 +74,7 @@ Type=Application`
   }
 
   console.log(util.format('Destination folder “%s”', out))
-  return packager({
+  let packageConfig = {
     // name: destName,
     // executableName: 'entry-point',
     dir: packagePath,
@@ -88,7 +89,19 @@ Type=Application`
     icon: path.join(packagePath, 'icon.icns'),
     appVersion: packageJson.version,
     asar: false // Maybe asar true is very slow.
-  })
+  }
+  console.log(packageConfig)
+  if (platform === 'darwin') {
+    return packager(packageConfig).then(function (paths) {
+      let tmpAppPath = path.join(paths[0], executableName + '.app')
+      let destAppPath = path.join(destPrefix, destName + '.app')
+      console.log(util.format('mv %s %s'), tmpAppPath, destAppPath)
+      let process = childProcess.spawnSync('mv', [tmpAppPath, destAppPath])
+      console.log(process)
+    })
+  } else {
+    return packager(packageConfig)
+  }
 }
 
 async function packageElectronApps () {

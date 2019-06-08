@@ -8,7 +8,7 @@ console.log('Environment:\n')
 console.log(process.env)
 console.log('\n\n')
 
-let files = glob.sync('*.test.js', { ignore: '**/node_modules/**', matchBase: true })
+let files = glob.sync('*.test.js', { ignore: ['**/node_modules/**', '**/dist/**'], matchBase: true })
 
 let mocha = new Mocha()
 
