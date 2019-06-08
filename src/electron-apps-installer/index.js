@@ -7,6 +7,7 @@ const path = require('path')
 const process = require('process')
 const util = require('util')
 
+var commander = require('commander');
 const packager = require('electron-packager')
 
 let currentUser = os.userInfo()
@@ -104,10 +105,25 @@ Type=Application`
   }
 }
 
-async function packageElectronApps () {
-  await packageElectronApp('@bldr/songbook-electron-app', 'songbook')
-  await packageElectronApp('@bldr/camera-electron-app', 'camera')
-  await packageElectronApp('@bldr/electron-app', 'baldr')
+commander
+  .version(require('./package.json').version)
+  .option('-b, --baldr', 'Install “baldr” (@bldr/electron-app)')
+  .option('-c, --camera', 'Install “camera” (@bldr/camera-electron-app)')
+  .option('-s, --songbook', 'Install “songbook” (@bldr/songbook-electron-app)')
+  .parse(process.argv);
+
+if (commander.baldr) {
+  packageElectronApp('@bldr/electron-app', 'baldr')
 }
 
-packageElectronApps()
+if (commander.camera) {
+  packageElectronApp('@bldr/camera-electron-app', 'camera')
+}
+
+if (commander.songbook) {
+  packageElectronApp('@bldr/songbook-electron-app', 'songbook')
+}
+
+if (!process.argv.slice(2).length) {
+  commander.outputHelp()
+}
