@@ -23,5 +23,9 @@
     "@bldr/songbook-electron-app": "^0.1.4",
     "commander": "^2.20.0",
     "electron-packager": "^13.1.1"
-  }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "gitHead": "dbe1cf29ca97af285afb8e5e8eb17370afe6eaf2"
 }
