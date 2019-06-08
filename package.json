@@ -32,6 +32,7 @@
     "@bldr/camera-electron-app": "^0.0.11",
     "@bldr/core": "^0.0.7",
     "@bldr/electron-app": "^0.0.9",
+    "@bldr/electron-apps-installer": "^0.0.9",
     "@bldr/foundation-master": "^0.0.7",
     "@bldr/master-audio": "^0.0.7",
     "@bldr/master-camera": "^0.0.7",
@@ -105,6 +106,7 @@
       "expect"
     ],
     "ignore": [
+      "node_modules",
       "docs",
       "out"
     ]
