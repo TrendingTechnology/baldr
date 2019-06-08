@@ -1,8 +1,12 @@
 .npmignore
 .travis.yml
 .vscode
+API.md
+arrows.html
+description
 dist/
 docs/
+lerna-debug.log
 lerna.json
 masters/
 run-mocha.js
