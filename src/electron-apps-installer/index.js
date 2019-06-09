@@ -71,9 +71,9 @@ class PackageElectronApp {
      */
     this.destPrefix = ''
     if (this.platform === 'darwin') {
-      this.destPrefix = path.join('/', 'Applications')
+      this.destPrefix = path.join(path.sep, 'Applications')
     } else {
-      this.destPrefix = path.join('/', 'opt', 'electron')
+      this.destPrefix = path.join(path.sep, 'opt', 'electron')
     }
 
     /**
@@ -106,15 +106,29 @@ class PackageElectronApp {
     /**
      * The absolute path of the electron app entry point, for example
      * `/opt/electron/songbook/@bldr-songbook-electron-app-linux-x64/@bldr-songbook-electron-app`
+     * on Linux or
+     * `/Applications/songbook.app/Contents/MacOS/@bldr-songbook-electron-app`
+     * on MacOS.
      *
      * @type {string}
      */
-    this.executablePath = path.join(
-      this.destPrefix,
-      this.destName,
-      this.folderName,
-      this.executableName
-    )
+    this.executablePath = ''
+    if (this.platform === 'linux') {
+      this.executablePath = path.join(
+        this.destPrefix,
+        this.destName,
+        this.folderName,
+        this.executableName
+      )
+    } else if (this.platform === 'darwin') {
+      this.executablePath = path.join(
+        this.destPrefix,
+        this.destName + '.app',
+        'Contents',
+        'MacOS',
+        this.executableName
+      )
+    }
 
     /**
      * The path of the icons folder on linux
@@ -182,6 +196,7 @@ ${this.executablePath} > /dev/null 2>&1 &
   moveElectronAppIntoApplicationsOnMacOs (paths) {
     let tmpAppPath = path.join(paths[0], this.executableName + '.app')
     let destAppPath = path.join(this.destPrefix, this.destName + '.app')
+    fs.removeSync(destAppPath)
     fs.moveSync(tmpAppPath, destAppPath)
     log('move %s %s', tmpAppPath, destAppPath)
   }
@@ -223,7 +238,9 @@ ${this.executablePath} > /dev/null 2>&1 &
     }
     log(packageConfig)
     if (this.platform === 'darwin') {
-      return packager(packageConfig).then(this.moveElectronAppIntoApplicationsOnMacOs)
+      return packager(packageConfig).then((path) => {
+        this.moveElectronAppIntoApplicationsOnMacOs(path)
+      })
     } else {
       return packager(packageConfig)
     }
