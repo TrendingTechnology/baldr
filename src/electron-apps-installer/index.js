@@ -1,7 +1,6 @@
 #! /usr/bin/env node
 
-const childProcess = require('child_process')
-const fs = require('fs')
+const fs = require('fs-extra')
 const os = require('os')
 const path = require('path')
 const process = require('process')
@@ -14,6 +13,10 @@ let currentUser = os.userInfo()
 
 if (currentUser.username !== 'root') {
   throw new Error('You must be root!')
+}
+
+function log () {
+  console.log(util.format(...arguments))
 }
 
 /**
@@ -86,7 +89,8 @@ class PackageElectronApp {
     }
 
     /**
-     * `@bldr-songbook-electron-app`
+     * The name of the executable inside the electron app, for example
+     * `@bldr-songbook-electron-app`.
      *
      * @type {string}
      */
@@ -98,6 +102,19 @@ class PackageElectronApp {
      * @type {string}
      */
     this.folderName = util.format('%s-%s-%s', this.executableName, this.platform, process.arch)
+
+    /**
+     * The absolute path of the electron app entry point, for example
+     * `/opt/electron/songbook/@bldr-songbook-electron-app-linux-x64/@bldr-songbook-electron-app`
+     *
+     * @type {string}
+     */
+    this.executablePath = path.join(
+      this.destPrefix,
+      this.destName,
+      this.folderName,
+      this.executableName
+    )
 
     /**
      * The path of the icons folder on linux
@@ -116,23 +133,43 @@ class PackageElectronApp {
     let iconDest = path.join(this.iconPath, this.destName + '.png')
     fs.mkdirSync(this.iconPath, { 'recursive': true })
     fs.copyFileSync(iconSrc, iconDest)
-    console.log(util.format('Copy icon from %s to %s', iconSrc, iconDest))
+    log('Copy icon from %s to %s', iconSrc, iconDest)
   }
 
   /**
    * Install the `*.desktop` file in the application folder.
    */
   installDesktopFileOnLinux () {
-    let desktopFile = `[Desktop Entry]
+    let desktopContent = `[Desktop Entry]
 Name=${this.destName}
-Exec=${this.destPrefix}/${this.destName}/${this.folderName}/${this.executableName}
+Exec=${this.executablePath}
 Icon=${this.iconPath}/${this.destName}.png
 Terminal=false
 Type=Application`
     let desktopPrefix = path.join('/', 'usr', 'share', 'applications')
     let desktopPath = path.join(desktopPrefix, this.destName + '.desktop')
-    fs.appendFileSync(desktopPath, desktopFile)
-    console.log(util.format('Create *.desktop file at the location: %s', desktopPath))
+    fs.removeSync(desktopPath)
+    fs.appendFileSync(desktopPath, desktopContent)
+    log('Create *.desktop file at the location: %s', desktopPath)
+    log('The content of the start script is: %s', desktopContent)
+  }
+
+  /**
+   * Install a start script into /usr/local/bin
+   */
+  installStarterScript () {
+    let scriptContent = `#! /bin/sh
+
+${this.executablePath} > /dev/null 2>&1 &
+`
+    let scriptPath = path.join(
+      path.sep, 'usr', 'local', 'bin', this.destName + '_open-electron-app'
+    )
+    fs.removeSync(scriptPath)
+    fs.appendFileSync(scriptPath, scriptContent)
+    fs.chmodSync(scriptPath, '755')
+    log('Create starter script at the location: %s', scriptPath)
+    log('The content of the start script is: %s', scriptContent)
   }
 
   /**
@@ -145,23 +182,29 @@ Type=Application`
   moveElectronAppIntoApplicationsOnMacOs (paths) {
     let tmpAppPath = path.join(paths[0], this.executableName + '.app')
     let destAppPath = path.join(this.destPrefix, this.destName + '.app')
-    console.log(util.format('mv %s %s'), tmpAppPath, destAppPath)
-    let process = childProcess.spawnSync('mv', [tmpAppPath, destAppPath])
-    console.log(process)
+    fs.moveSync(tmpAppPath, destAppPath)
+    log('move %s %s', tmpAppPath, destAppPath)
   }
 
   /**
    * You have to run this method to package the electron app.
    */
   async packageElectronApp () {
-    console.log(util.format('Package node package “%s” into a electron app.', this.packageName))
+    log('Package node package “%s” into a electron app.', this.packageName)
+
+    if (fs.existsSync(this.out)) {
+      fs.removeSync(this.out)
+      log('Clean up directory: %s', this.out)
+    }
+
+    this.installStarterScript()
 
     if (this.platform === 'linux') {
       this.installIconOnLinux()
       this.installDesktopFileOnLinux()
     }
 
-    console.log(util.format('Destination folder “%s”', this.out))
+    log('Destination folder “%s”', this.out)
     let packageConfig = {
       // name: destName,
       // executableName: 'entry-point',
@@ -178,7 +221,7 @@ Type=Application`
       appVersion: this.packageJson.version,
       asar: false // Maybe asar true is very slow.
     }
-    console.log(packageConfig)
+    log(packageConfig)
     if (this.platform === 'darwin') {
       return packager(packageConfig).then(this.moveElectronAppIntoApplicationsOnMacOs)
     } else {

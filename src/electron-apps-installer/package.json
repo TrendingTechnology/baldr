@@ -22,7 +22,8 @@
     "@bldr/electron-app": "^0.0.10",
     "@bldr/songbook-electron-app": "^0.1.4",
     "commander": "^2.20.0",
-    "electron-packager": "^13.1.1"
+    "electron-packager": "^13.1.1",
+    "fs-extra": "^8.0.1"
   },
   "publishConfig": {
     "access": "public"
