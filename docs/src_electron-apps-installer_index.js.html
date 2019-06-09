@@ -44,29 +44,37 @@ if (currentUser.username !== 'root') {
   throw new Error('You must be root!')
 }
 
-let platform = os.platform()
-
-let destPrefix
-if (platform === 'darwin') {
-  destPrefix = path.join('/', 'Applications')
-} else {
-  destPrefix = path.join('/', 'opt', 'electron')
-}
-
 /**
- * @param {string} packageName - The name of the node module on npmjs.com
+ * Package an electron app.
+ *
+ * @param {string} packageName - The name of the node module on npmjs.com to
+ *   build an electron app from.
  * @param {string} destName - The name of the installed electron package on the
  *   destination path.
  */
 class PackageElectronApp {
+  constructor (packageName, destName) {
+    /**
+     * The name of the node module on npmjs.com to build an electron app from,
+     * for example `@bldr/songbook-electron-app`
+     *
+     * @type {string}
+     */
+    this.packageName = packageName
 
-  constructor (packageName) {
+    /**
+     * The name of the installed electron package on the destination path.
+     *
+     * @type {string}
+     */
+    this.destName = destName
+
     /**
      * Absolute path to the node package to build an electron app with.
      *
      * @type {string}
      */
-    this.packagePath = path.dirname(require.resolve(packageName))
+    this.packagePath = path.dirname(require.resolve(this.packageName))
 
     /**
      * The `package.json` of the node package to build an electron app with
@@ -74,86 +82,136 @@ class PackageElectronApp {
      *
      * @type {object}
      */
-    this.packageJson = require(path.join(packagePath, 'package.json'))
+    this.packageJson = require(path.join(this.packagePath, 'package.json'))
 
-    let out
-    if (platform === 'darwin') {
-      out = fs.mkdtempSync(path.join(os.tmpdir(), 'electron-'))
-    } else if (platform === 'linux') {
-      // /opt/electron/songbook
-      out = path.join(destPrefix, destName)
-      fs.mkdirSync(out, { 'recursive': true })
+    /**
+     * The platform, for example `linux` or `darwin`.
+     *
+     * @type {string}
+     */
+    this.platform = os.platform()
+
+    /**
+     * @type {string}
+     */
+    this.destPrefix = ''
+    if (this.platform === 'darwin') {
+      this.destPrefix = path.join('/', 'Applications')
+    } else {
+      this.destPrefix = path.join('/', 'opt', 'electron')
     }
 
-    // @bldr-songbook-electron-app
-    let executableName = packageJson.name.replace('/', '-')
+    /**
+     * @type {string}
+     */
+    this.out = ''
+    if (this.platform === 'darwin') {
+      this.out = fs.mkdtempSync(path.join(os.tmpdir(), 'electron-'))
+    } else if (this.platform === 'linux') {
+      // /opt/electron/songbook
+      this.out = path.join(this.destPrefix, this.destName)
+      fs.mkdirSync(this.out, { 'recursive': true })
+    }
 
-    // @bldr-songbook-electron-app-linux-x64
-    let folderName = util.format('%s-%s-%s', executableName, platform, process.arch)
+    /**
+     * `@bldr-songbook-electron-app`
+     *
+     * @type {string}
+     */
+    this.executableName = this.packageJson.name.replace('/', '-')
 
+    /**
+     * `@bldr-songbook-electron-app-linux-x64`
+     *
+     * @type {string}
+     */
+    this.folderName = util.format('%s-%s-%s', this.executableName, this.platform, process.arch)
+
+    /**
+     * The path of the icons folder on linux
+     * (`/usr/share/icons/baldr-electron-apps`).
+     *
+     * @type {string}
+     */
+    this.iconPath = path.join('/', 'usr', 'share', 'icons', 'baldr-electron-apps')
   }
 
-}
-
-/**
- *
- * @param {string} packageName - The name of the node module on npmjs.com
- * @param {string} destName - The name of the installed electron package on the
- *   destination path.
- */
-async function packageElectronApp (packageName, destName) {
-  console.log(util.format('Package node package “%s” into a electron app.', packageName))
-
-  if (platform === 'linux') {
-    // Icons
-    let iconPath = path.join('/', 'usr', 'share', 'icons', 'baldr-electron-apps')
-    let iconSrc = path.join(packagePath, 'icon.iconset', 'icon_256x256.png')
-    let iconDest = path.join(iconPath, destName + '.png')
-    fs.mkdirSync(iconPath, { 'recursive': true })
+  /**
+   * Install a icon into the icons folder on linux.
+   */
+  installIconOnLinux () {
+    let iconSrc = path.join(this.packagePath, 'icon.iconset', 'icon_256x256.png')
+    let iconDest = path.join(this.iconPath, this.destName + '.png')
+    fs.mkdirSync(this.iconPath, { 'recursive': true })
     fs.copyFileSync(iconSrc, iconDest)
     console.log(util.format('Copy icon from %s to %s', iconSrc, iconDest))
+  }
 
-    // *.desktop file
+  /**
+   * Install the `*.desktop` file in the application folder.
+   */
+  installDesktopFileOnLinux () {
     let desktopFile = `[Desktop Entry]
-Name=${destName}
-Exec=${destPrefix}/${destName}/${folderName}/${executableName}
-Icon=${iconPath}/${destName}.png
+Name=${this.destName}
+Exec=${this.destPrefix}/${this.destName}/${this.folderName}/${this.executableName}
+Icon=${this.iconPath}/${this.destName}.png
 Terminal=false
 Type=Application`
     let desktopPrefix = path.join('/', 'usr', 'share', 'applications')
-    let desktopPath = path.join(desktopPrefix, destName + '.desktop')
+    let desktopPath = path.join(desktopPrefix, this.destName + '.desktop')
     fs.appendFileSync(desktopPath, desktopFile)
     console.log(util.format('Create *.desktop file at the location: %s', desktopPath))
   }
 
-  console.log(util.format('Destination folder “%s”', out))
-  let packageConfig = {
-    // name: destName,
-    // executableName: 'entry-point',
-    dir: packagePath,
-    out: out,
-    prune: false,
-    // derefSymlinks: lerna symlinks the same dependencies.
-    // This symlinks are broken without the option derefSymlinks in the folder
-    // packages/electron-app/dist/@bldr-songbook-electron-app-linux-x64/resources/app/node_modules/@bldr
-    derefSymlinks: true,
-    overwrite: true,
-    arch: process.arch,
-    icon: path.join(packagePath, 'icon.icns'),
-    appVersion: packageJson.version,
-    asar: false // Maybe asar true is very slow.
+  /**
+   * Move a packaged electron folder (from the /tmp folder) into the
+   * applications `/Applications` folder
+   *
+   * @param {array} paths - An array of paths where the electron was packaged
+   *   into.
+   */
+  moveElectronAppIntoApplicationsOnMacOs (paths) {
+    let tmpAppPath = path.join(paths[0], this.executableName + '.app')
+    let destAppPath = path.join(this.destPrefix, this.destName + '.app')
+    console.log(util.format('mv %s %s'), tmpAppPath, destAppPath)
+    let process = childProcess.spawnSync('mv', [tmpAppPath, destAppPath])
+    console.log(process)
   }
-  console.log(packageConfig)
-  if (platform === 'darwin') {
-    return packager(packageConfig).then(function (paths) {
-      let tmpAppPath = path.join(paths[0], executableName + '.app')
-      let destAppPath = path.join(destPrefix, destName + '.app')
-      console.log(util.format('mv %s %s'), tmpAppPath, destAppPath)
-      let process = childProcess.spawnSync('mv', [tmpAppPath, destAppPath])
-      console.log(process)
-    })
-  } else {
-    return packager(packageConfig)
+
+  /**
+   * You have to run this method to package the electron app.
+   */
+  async packageElectronApp () {
+    console.log(util.format('Package node package “%s” into a electron app.', this.packageName))
+
+    if (this.platform === 'linux') {
+      this.installIconOnLinux()
+      this.installDesktopFileOnLinux()
+    }
+
+    console.log(util.format('Destination folder “%s”', this.out))
+    let packageConfig = {
+      // name: destName,
+      // executableName: 'entry-point',
+      dir: this.packagePath,
+      out: this.out,
+      prune: false,
+      // derefSymlinks: lerna symlinks the same dependencies.
+      // This symlinks are broken without the option derefSymlinks in the folder
+      // packages/electron-app/dist/@bldr-songbook-electron-app-linux-x64/resources/app/node_modules/@bldr
+      derefSymlinks: true,
+      overwrite: true,
+      arch: process.arch,
+      icon: path.join(this.packagePath, 'icon.icns'),
+      appVersion: this.packageJson.version,
+      asar: false // Maybe asar true is very slow.
+    }
+    console.log(packageConfig)
+    if (this.platform === 'darwin') {
+      return packager(packageConfig).then(this.moveElectronAppIntoApplicationsOnMacOs)
+    } else {
+      return packager(packageConfig)
+    }
   }
 }
 
@@ -165,15 +223,15 @@ commander
   .parse(process.argv)
 
 if (commander.baldr) {
-  packageElectronApp('@bldr/electron-app', 'baldr')
+  new PackageElectronApp('@bldr/electron-app', 'baldr').packageElectronApp()
 }
 
 if (commander.camera) {
-  packageElectronApp('@bldr/camera-electron-app', 'camera')
+  new PackageElectronApp('@bldr/camera-electron-app', 'camera').packageElectronApp()
 }
 
 if (commander.songbook) {
-  packageElectronApp('@bldr/songbook-electron-app', 'songbook')
+  new PackageElectronApp('@bldr/songbook-electron-app', 'songbook').packageElectronApp()
 }
 
 if (!process.argv.slice(2).length) {
@@ -189,7 +247,7 @@ if (!process.argv.slice(2).length) {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-@bldr_core.html">@bldr/core</a></li><li><a href="module-@bldr_core_masters.html">@bldr/core/masters</a></li><li><a href="module-@bldr_core_quick-start.html">@bldr/core/quick-start</a></li><li><a href="module-@bldr_core_slides.html">@bldr/core/slides</a></li><li><a href="module-@bldr_core_slides-switcher.html">@bldr/core/slides-switcher</a></li><li><a href="module-@bldr_core_themes.html">@bldr/core/themes</a></li><li><a href="module-@bldr_foundation-master.html">@bldr/foundation-master</a></li><li><a href="module-@bldr_foundation-master_config.html">@bldr/foundation-master/config</a></li><li><a href="module-@bldr_foundation-master_helper.html">@bldr/foundation-master/helper</a></li><li><a href="module-@bldr_foundation-master_media.html">@bldr/foundation-master/media</a></li><li><a href="module-@bldr_foundation-master_player.html">@bldr/foundation-master/player</a></li><li><a href="module-@bldr_master-audio.html">@bldr/master-audio</a></li><li><a href="module-@bldr_master-camera.html">@bldr/master-camera</a></li><li><a href="module-@bldr_master-editor.html">@bldr/master-editor</a></li><li><a href="module-@bldr_master-image.html">@bldr/master-image</a></li><li><a href="module-@bldr_master-markdown.html">@bldr/master-markdown</a></li><li><a href="module-@bldr_master-person.html">@bldr/master-person</a></li><li><a href="module-@bldr_master-question.html">@bldr/master-question</a></li><li><a href="module-@bldr_master-quote.html">@bldr/master-quote</a></li><li><a href="module-@bldr_master-svg.html">@bldr/master-svg</a></li><li><a href="module-@bldr_master-video.html">@bldr/master-video</a></li><li><a href="module-@bldr_master-website.html">@bldr/master-website</a></li><li><a href="module-@bldr_songbook-base.html">@bldr/songbook-base</a></li><li><a href="module-@bldr_songbook-cli.html">@bldr/songbook-cli</a></li><li><a href="module-@bldr_songbook-electron-app.html">@bldr/songbook-electron-app</a></li><li><a href="module-@bldr_songbook-intermediate-files.html">@bldr/songbook-intermediate-files</a></li><li><a href="module-@bldr_test-helper.html">@bldr/test-helper</a></li><li><a href="module-baldr.html">baldr</a></li><li><a href="module-baldr_render.html">baldr/render</a></li></ul><h3>Classes</h3><ul><li><a href="ModalManager.html">ModalManager</a></li><li><a href="ModalWindowElement.html">ModalWindowElement</a></li><li><a href="module-@bldr_core_masters-Master.html">Master</a></li><li><a href="module-@bldr_core_masters-Masters.html">Masters</a></li><li><a href="module-@bldr_core_quick-start-QuickStart.html">QuickStart</a></li><li><a href="module-@bldr_core_quick-start-QuickStartEntry.html">QuickStartEntry</a></li><li><a href="module-@bldr_core_slides-switcher-SlidesSwitcher.html">SlidesSwitcher</a></li><li><a href="module-@bldr_core_slides-Slide.html">Slide</a></li><li><a href="module-@bldr_core_slides-SlideData.html">SlideData</a></li><li><a href="module-@bldr_core_slides-Slides.html">Slides</a></li><li><a href="module-@bldr_core_slides-StepSwitcher.html">StepSwitcher</a></li><li><a href="module-@bldr_core_themes-Themes.html">Themes</a></li><li><a href="module-@bldr_core-Environment.html">Environment</a></li><li><a href="module-@bldr_core-ShowRunner.html">ShowRunner</a></li><li><a href="module-@bldr_foundation-master_config-Config.html">Config</a></li><li><a href="module-@bldr_foundation-master_media-FileInfo.html">FileInfo</a></li><li><a href="module-@bldr_foundation-master_media-Media.html">Media</a></li><li><a href="module-@bldr_foundation-master_player-Player.html">Player</a></li><li><a href="module-@bldr_master-audio-Audio.html">Audio</a></li><li><a href="module-@bldr_master-video-VideoPlayer.html">VideoPlayer</a></li><li><a href="module-@bldr_songbook-base-AlphabeticalSongsTree.html">AlphabeticalSongsTree</a></li><li><a href="module-@bldr_songbook-base-Folder.html">Folder</a></li><li><a href="module-@bldr_songbook-base-Library.html">Library</a></li><li><a href="module-@bldr_songbook-base-Song.html">Song</a></li><li><a href="module-@bldr_songbook-base-SongMetaData.html">SongMetaData</a></li><li><a href="module-@bldr_songbook-base-SongMetaDataCombined.html">SongMetaDataCombined</a></li><li><a href="module-@bldr_songbook-intermediate-files-FileMonitor.html">FileMonitor</a></li><li><a href="module-@bldr_songbook-intermediate-files-IntermediateLibrary.html">IntermediateLibrary</a></li><li><a href="module-@bldr_songbook-intermediate-files-IntermediateSong.html">IntermediateSong</a></li><li><a href="module-@bldr_songbook-intermediate-files-PianoFilesCountTree.html">PianoFilesCountTree</a></li><li><a href="module-@bldr_songbook-intermediate-files-PianoScore.html">PianoScore</a></li><li><a href="module-@bldr_songbook-intermediate-files-Sqlite.html">Sqlite</a></li><li><a href="module-@bldr_songbook-intermediate-files-TextFile.html">TextFile</a></li><li><a href="module-@bldr_test-helper-Spectron.html">Spectron</a></li><li><a href="PackageElectronApp.html">PackageElectronApp</a></li><li><a href="SongbookSearchElement.html">SongbookSearchElement</a></li><li><a href="SongSlideElement.html">SongSlideElement</a></li><li><a href="TableOfContentsElement.html">TableOfContentsElement</a></li></ul><h3>Global</h3><ul><li><a href="global.html#bindButtons">bindButtons</a></li><li><a href="global.html#bindShortcuts">bindShortcuts</a></li><li><a href="global.html#defineCustomElements">defineCustomElements</a></li><li><a href="global.html#fakeSong">fakeSong</a></li><li><a href="global.html#fakeSongs">fakeSongs</a></li><li><a href="global.html#main">main</a></li><li><a href="global.html#packageElectronApp">packageElectronApp</a></li><li><a href="global.html#read">read</a></li><li><a href="global.html#readPathSegments">readPathSegments</a></li><li><a href="global.html#removeANSI">removeANSI</a></li><li><a href="global.html#setNextSong">setNextSong</a></li><li><a href="global.html#setPreviousSong">setPreviousSong</a></li><li><a href="global.html#setRandomSong">setRandomSong</a></li><li><a href="global.html#tmpCopy">tmpCopy</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-@bldr_core.html">@bldr/core</a></li><li><a href="module-@bldr_core_masters.html">@bldr/core/masters</a></li><li><a href="module-@bldr_core_quick-start.html">@bldr/core/quick-start</a></li><li><a href="module-@bldr_core_slides.html">@bldr/core/slides</a></li><li><a href="module-@bldr_core_slides-switcher.html">@bldr/core/slides-switcher</a></li><li><a href="module-@bldr_core_themes.html">@bldr/core/themes</a></li><li><a href="module-@bldr_foundation-master.html">@bldr/foundation-master</a></li><li><a href="module-@bldr_foundation-master_config.html">@bldr/foundation-master/config</a></li><li><a href="module-@bldr_foundation-master_helper.html">@bldr/foundation-master/helper</a></li><li><a href="module-@bldr_foundation-master_media.html">@bldr/foundation-master/media</a></li><li><a href="module-@bldr_foundation-master_player.html">@bldr/foundation-master/player</a></li><li><a href="module-@bldr_master-audio.html">@bldr/master-audio</a></li><li><a href="module-@bldr_master-camera.html">@bldr/master-camera</a></li><li><a href="module-@bldr_master-editor.html">@bldr/master-editor</a></li><li><a href="module-@bldr_master-image.html">@bldr/master-image</a></li><li><a href="module-@bldr_master-markdown.html">@bldr/master-markdown</a></li><li><a href="module-@bldr_master-person.html">@bldr/master-person</a></li><li><a href="module-@bldr_master-question.html">@bldr/master-question</a></li><li><a href="module-@bldr_master-quote.html">@bldr/master-quote</a></li><li><a href="module-@bldr_master-svg.html">@bldr/master-svg</a></li><li><a href="module-@bldr_master-video.html">@bldr/master-video</a></li><li><a href="module-@bldr_master-website.html">@bldr/master-website</a></li><li><a href="module-@bldr_songbook-base.html">@bldr/songbook-base</a></li><li><a href="module-@bldr_songbook-cli.html">@bldr/songbook-cli</a></li><li><a href="module-@bldr_songbook-electron-app.html">@bldr/songbook-electron-app</a></li><li><a href="module-@bldr_songbook-intermediate-files.html">@bldr/songbook-intermediate-files</a></li><li><a href="module-@bldr_test-helper.html">@bldr/test-helper</a></li><li><a href="module-baldr.html">baldr</a></li><li><a href="module-baldr_render.html">baldr/render</a></li></ul><h3>Classes</h3><ul><li><a href="ModalManager.html">ModalManager</a></li><li><a href="ModalWindowElement.html">ModalWindowElement</a></li><li><a href="module-@bldr_core_masters-Master.html">Master</a></li><li><a href="module-@bldr_core_masters-Masters.html">Masters</a></li><li><a href="module-@bldr_core_quick-start-QuickStart.html">QuickStart</a></li><li><a href="module-@bldr_core_quick-start-QuickStartEntry.html">QuickStartEntry</a></li><li><a href="module-@bldr_core_slides-switcher-SlidesSwitcher.html">SlidesSwitcher</a></li><li><a href="module-@bldr_core_slides-Slide.html">Slide</a></li><li><a href="module-@bldr_core_slides-SlideData.html">SlideData</a></li><li><a href="module-@bldr_core_slides-Slides.html">Slides</a></li><li><a href="module-@bldr_core_slides-StepSwitcher.html">StepSwitcher</a></li><li><a href="module-@bldr_core_themes-Themes.html">Themes</a></li><li><a href="module-@bldr_core-Environment.html">Environment</a></li><li><a href="module-@bldr_core-ShowRunner.html">ShowRunner</a></li><li><a href="module-@bldr_foundation-master_config-Config.html">Config</a></li><li><a href="module-@bldr_foundation-master_media-FileInfo.html">FileInfo</a></li><li><a href="module-@bldr_foundation-master_media-Media.html">Media</a></li><li><a href="module-@bldr_foundation-master_player-Player.html">Player</a></li><li><a href="module-@bldr_master-audio-Audio.html">Audio</a></li><li><a href="module-@bldr_master-video-VideoPlayer.html">VideoPlayer</a></li><li><a href="module-@bldr_songbook-base-AlphabeticalSongsTree.html">AlphabeticalSongsTree</a></li><li><a href="module-@bldr_songbook-base-Folder.html">Folder</a></li><li><a href="module-@bldr_songbook-base-Library.html">Library</a></li><li><a href="module-@bldr_songbook-base-Song.html">Song</a></li><li><a href="module-@bldr_songbook-base-SongMetaData.html">SongMetaData</a></li><li><a href="module-@bldr_songbook-base-SongMetaDataCombined.html">SongMetaDataCombined</a></li><li><a href="module-@bldr_songbook-intermediate-files-FileMonitor.html">FileMonitor</a></li><li><a href="module-@bldr_songbook-intermediate-files-IntermediateLibrary.html">IntermediateLibrary</a></li><li><a href="module-@bldr_songbook-intermediate-files-IntermediateSong.html">IntermediateSong</a></li><li><a href="module-@bldr_songbook-intermediate-files-PianoFilesCountTree.html">PianoFilesCountTree</a></li><li><a href="module-@bldr_songbook-intermediate-files-PianoScore.html">PianoScore</a></li><li><a href="module-@bldr_songbook-intermediate-files-Sqlite.html">Sqlite</a></li><li><a href="module-@bldr_songbook-intermediate-files-TextFile.html">TextFile</a></li><li><a href="module-@bldr_test-helper-Spectron.html">Spectron</a></li><li><a href="PackageElectronApp.html">PackageElectronApp</a></li><li><a href="SongbookSearchElement.html">SongbookSearchElement</a></li><li><a href="SongSlideElement.html">SongSlideElement</a></li><li><a href="TableOfContentsElement.html">TableOfContentsElement</a></li></ul><h3>Global</h3><ul><li><a href="global.html#bindButtons">bindButtons</a></li><li><a href="global.html#bindShortcuts">bindShortcuts</a></li><li><a href="global.html#defineCustomElements">defineCustomElements</a></li><li><a href="global.html#fakeSong">fakeSong</a></li><li><a href="global.html#fakeSongs">fakeSongs</a></li><li><a href="global.html#main">main</a></li><li><a href="global.html#read">read</a></li><li><a href="global.html#readPathSegments">readPathSegments</a></li><li><a href="global.html#removeANSI">removeANSI</a></li><li><a href="global.html#setNextSong">setNextSong</a></li><li><a href="global.html#setPreviousSong">setPreviousSong</a></li><li><a href="global.html#setRandomSong">setRandomSong</a></li><li><a href="global.html#tmpCopy">tmpCopy</a></li></ul>
 </nav>
 
 <br class="clear">
