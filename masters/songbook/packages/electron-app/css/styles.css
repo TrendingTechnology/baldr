@@ -129,6 +129,9 @@ a:active {
 }
 
 .icon-musescore {
-	background-size: 16px 16px;
 	background: url('../icons/musescore.svg') left center no-repeat;
+}
+
+.icon-youtube {
+	background: url('../icons/youtube.svg') left center no-repeat;
 }

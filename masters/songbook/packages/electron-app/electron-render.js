@@ -9,7 +9,6 @@ const jquery = require('jquery')
 const mousetrap = require('mousetrap')
 const path = require('path')
 const { bootstrapConfig, Library, AlphabeticalSongsTree } = require('@bldr/songbook-base')
-const util = require('util')
 require('selectize')
 
 const electron = require('electron')
@@ -72,16 +71,23 @@ class TableOfContentsElement extends HTMLElement {
       let abcUl = document.createElement('ul')
 
       for (let song of tree[abc]) {
-        let li = document.createElement('li')
-        let a = document.createElement('a')
-        a.setAttribute('href', '#' + song.songID)
-        a.setAttribute('id', 'song_' + song.songID)
-        a.innerHTML = song.metaDataCombined.title
-        li.appendChild(a)
+        let liHTML = '<li class="song">'
+        liHTML += `<a class="title" title="${song.songID}" href="#${song.songID}" id="song_${song.songID}">
+          ${song.metaDataCombined.title}
+        </a>`
+
+        if (song.metaDataCombined.subtitle) liHTML += ` <span class="subtitle">${song.metaDataCombined.subtitle}</span>`
+        if (song.metaDataCombined.composer) liHTML += ` <span class="composer">${song.metaDataCombined.composer}</span>`
+        if (song.metaDataCombined.lyricist) liHTML += ` <span class="lyricist">${song.metaDataCombined.lyricist}</span>`
+
         if (song.metaData.musescore) {
-          li.innerHTML += util.format(' <a class="icon icon-musescore" href="%s"></a>', song.metaData.musescore)
+          liHTML += ` <a class="icon icon-musescore" title="Musescore" href="${song.metaData.musescore}"></a>`
         }
-        abcUl.appendChild(li)
+        if (song.metaData.youtube) {
+          liHTML += ` <a class="icon icon-youtube" title="Youtube" href="https://youtu.be/${song.metaData.youtube}"></a>`
+        }
+        liHTML += '</li>'
+        abcUl.innerHTML += liHTML
       }
 
       topUl.appendChild(abcLi)
