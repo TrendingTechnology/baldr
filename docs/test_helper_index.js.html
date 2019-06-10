@@ -31,16 +31,22 @@
  * @module @bldr/test-helper
  */
 
+// Node library
 const assert = require('assert')
 const fs = require('fs')
 const path = require('path')
-const { JSDOM } = require('jsdom')
-const rewire = require('rewire')
-const { getConfig } = require('@bldr/foundation-master')
-const { Environment } = require('@bldr/core')
 const process = require('process')
 const util = require('util')
+
+// Third party
+const { JSDOM } = require('jsdom')
+const rewire = require('rewire')
 const packager = require('electron-packager')
+const { Application } = require('spectron')
+
+// Project packages
+const { getConfig } = require('@bldr/foundation-master')
+const { Environment } = require('@bldr/core')
 
 /**
  * Require a file as a module in the “src” folder.
@@ -196,23 +202,51 @@ class Spectron {
    * @param {string} baldrFile - The path of a BALDR file.
    */
   constructor (packageName, baldrFile = false) {
+    /**
+     * Absolute path to the node package to build an electron app with.
+     *
+     * @type {string}
+     */
     this.packagePath = path.dirname(require.resolve(packageName))
+
+    /**
+     * The `package.json` of the node package to build an electron app with
+     * as an object.
+     *
+     * @type {object}
+     */
     this.packageJson = require(path.join(this.packagePath, 'package.json'))
     let electronName = this.packageJson.name.replace('/', '-')
+
+    /**
+     *
+     */
     this.appName = util.format('%s-%s-%s', electronName, process.platform, process.arch)
-    this.packagePath = path.dirname(require.resolve(packageName))
+
+    /**
+     * The destination folder to build the electron app into.
+     *
+     * @type {string}
+     */
     this.distFolder = path.join(this.packagePath, 'dist')
     let darwinPath = []
     if (process.platform === 'darwin') {
       darwinPath = [electronName + '.app', 'Contents', 'MacOS']
     }
+
+    /**
+     * @type {string}
+     */
     this.appPath = path.join(this.distFolder, this.appName, ...darwinPath, electronName)
 
-    let { Application } = require('spectron')
     let config = {
       path: this.appPath
     }
     if (baldrFile) config.args = [baldrFile]
+
+    /**
+     *
+     */
     this.app = new Application(config)
   }
 
@@ -251,10 +285,13 @@ class Spectron {
   }
 
   /**
+   * Start the electron app. If the electron apps doesn’t exist, create it
+   * first.
    *
+   * @param {boolean} rebuild - Rebuild the electron on every test.
    */
-  start () {
-    return this.buildElectronApp().then(() => {
+  start (rebuild = false) {
+    return this.buildElectronApp(rebuild).then(() => {
       return this.app.start()
     })
   }
