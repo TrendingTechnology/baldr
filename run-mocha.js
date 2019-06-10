@@ -1,12 +1,21 @@
 #! /usr/bin/env node
 
-let glob = require('glob')
-var Mocha = require('mocha')
-let util = require('util')
+// Node libary
+const util = require('util')
+
+// Third party
+const glob = require('glob')
+const Mocha = require('mocha')
+const fs = require('fs-extra')
 
 console.log('Environment:\n')
 console.log(process.env)
 console.log('\n\n')
+
+for (let distPath of ['src/electron-app/dist', 'masters/songbook/packages/electron-app/dist', 'masters/camera/electron-app/dist']) {
+  fs.removeSync(distPath)
+  console.log(util.format('Delete electron app at the location: %s', distPath))
+}
 
 let files = glob.sync('*.test.js', { ignore: ['**/node_modules/**', '**/dist/**'], matchBase: true })
 

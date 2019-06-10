@@ -59,22 +59,21 @@ function showByHash () {
 class TableOfContentsElement extends HTMLElement {
   constructor () {
     super()
-    const shadowRoot = this.attachShadow({ mode: 'open' })
     let tree = new AlphabeticalSongsTree(library.toArray())
     let outABC = ''
     Object.keys(tree).forEach((abc) => {
       outABC += this.templateABC(tree, abc)
     })
-    shadowRoot.innerHTML = `
+    this.innerHTML = `
     <section>
       <style type="text/css">
-        section {
+        #tableofcontents section {
           display: block;
           overflow-y: scroll;
           height: 90%;
         }
 
-        .icon {
+        #tableofcontents .icon {
           height: 1em;
           width: 1em;
           display: inline-block;
@@ -91,11 +90,11 @@ class TableOfContentsElement extends HTMLElement {
       <ul>${outABC}</ul>
     </section>`
 
-    this.bindExternalLinks(shadowRoot)
+    this.bindExternalLinks(this)
   }
 
   /**
-   * Open external links in the browser
+   * Open external links in the browser.
    *
    * @see {@link https://gist.github.com/luizcarraro/2d04d83e66e3f03bef9b2e714ea8c0d7#gistcomment-2819880}
    *
@@ -115,6 +114,15 @@ class TableOfContentsElement extends HTMLElement {
     }
   }
 
+  /**
+   * Generate the table of contents listings of songs in the same
+   * alphabetical category.
+   *
+   * @param {module:@bldr/songbook-base~AlphabeticalSongsTree} tree
+   * @param {string} abc - Lowercase a b c etc
+   *
+   * @returns {string}
+   */
   templateABC (tree, abc) {
     let outSongs = ''
     for (let song of tree[abc]) {
@@ -125,6 +133,14 @@ class TableOfContentsElement extends HTMLElement {
             </li>`
   }
 
+  /**
+   * Generate the HTML markup of one song in the table of contents hierarchial
+   * list.
+   *
+   * @param {module:@bldr/songbook-base~Song} song - The song object
+   *
+   * @returns {string}
+   */
   templateSong (song) {
     let out = '<li class="song">'
     out += `<a class="title" title="${song.songID}" href="#${song.songID}" id="song_${song.songID}">

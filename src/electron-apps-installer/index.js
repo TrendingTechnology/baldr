@@ -77,6 +77,8 @@ class PackageElectronApp {
     }
 
     /**
+     * The destination folder to build the electron app into.
+     *
      * @type {string}
      */
     this.out = ''
@@ -97,7 +99,8 @@ class PackageElectronApp {
     this.executableName = this.packageJson.name.replace('/', '-')
 
     /**
-     * `@bldr-songbook-electron-app-linux-x64`
+     * The name of the folder where the electron executable is located in, for
+     * example `@bldr-songbook-electron-app-linux-x64`.
      *
      * @type {string}
      */
