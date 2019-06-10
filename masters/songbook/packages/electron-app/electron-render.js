@@ -59,43 +59,39 @@ function showByHash () {
 class TableOfContentsElement extends HTMLElement {
   constructor () {
     super()
-    let topUl = document.createElement('ul')
-
+    const shadowRoot = this.attachShadow({ mode: 'open' })
     let tree = new AlphabeticalSongsTree(library.toArray())
-
+    let outABC = ''
     Object.keys(tree).forEach((abc) => {
-      let abcLi = document.createElement('li')
-      abcLi.setAttribute('class', 'abc')
-      abcLi.innerHTML = abc
-
-      let abcUl = document.createElement('ul')
-
-      for (let song of tree[abc]) {
-        let liHTML = '<li class="song">'
-        liHTML += `<a class="title" title="${song.songID}" href="#${song.songID}" id="song_${song.songID}">
-          ${song.metaDataCombined.title}
-        </a>`
-
-        if (song.metaDataCombined.subtitle) liHTML += ` <span class="subtitle">${song.metaDataCombined.subtitle}</span>`
-        if (song.metaDataCombined.composer) liHTML += ` <span class="composer">${song.metaDataCombined.composer}</span>`
-        if (song.metaDataCombined.lyricist) liHTML += ` <span class="lyricist">${song.metaDataCombined.lyricist}</span>`
-
-        if (song.metaData.musescore) {
-          liHTML += ` <a class="icon icon-musescore" title="Musescore" href="${song.metaData.musescore}"></a>`
-        }
-        if (song.metaData.youtube) {
-          liHTML += ` <a class="icon icon-youtube" title="Youtube" href="https://youtu.be/${song.metaData.youtube}"></a>`
-        }
-        liHTML += '</li>'
-        abcUl.innerHTML += liHTML
-      }
-
-      topUl.appendChild(abcLi)
-      abcLi.appendChild(abcUl)
+      outABC += this.templateABC(tree, abc)
     })
-    this.appendChild(topUl)
+    shadowRoot.innerHTML = `
+    <section>
+      <style type="text/css">
+        section {
+          display: block;
+          overflow-y: scroll;
+          height: 90%;
+        }
 
-    this.bindExternalLinks(topUl)
+        .icon {
+          height: 1em;
+          width: 1em;
+          display: inline-block;
+        }
+
+        .icon-musescore {
+          background: url('icons/musescore.svg') left center no-repeat;
+        }
+
+        .icon-youtube {
+          background: url('icons/youtube.svg') left center no-repeat;
+        }
+      </style>
+      <ul>${outABC}</ul>
+    </section>`
+
+    this.bindExternalLinks(shadowRoot)
   }
 
   /**
@@ -117,6 +113,36 @@ class TableOfContentsElement extends HTMLElement {
         })
       })
     }
+  }
+
+  templateABC (tree, abc) {
+    let outSongs = ''
+    for (let song of tree[abc]) {
+      outSongs += this.templateSong(song)
+    }
+    return `<li class="abc">${abc}
+              <ul>${outSongs}</ul>
+            </li>`
+  }
+
+  templateSong (song) {
+    let out = '<li class="song">'
+    out += `<a class="title" title="${song.songID}" href="#${song.songID}" id="song_${song.songID}">
+      ${song.metaDataCombined.title}
+    </a>`
+
+    if (song.metaDataCombined.subtitle) out += ` <span class="subtitle">${song.metaDataCombined.subtitle}</span>`
+    if (song.metaDataCombined.composer) out += ` <span class="composer">${song.metaDataCombined.composer}</span>`
+    if (song.metaDataCombined.lyricist) out += ` <span class="lyricist">${song.metaDataCombined.lyricist}</span>`
+
+    if (song.metaData.musescore) {
+      out += ` <a class="icon icon-musescore" title="Musescore" href="${song.metaData.musescore}"></a>`
+    }
+    if (song.metaData.youtube) {
+      out += ` <a class="icon icon-youtube" title="Youtube" href="https://youtu.be/${song.metaData.youtube}"></a>`
+    }
+    out += '</li>'
+    return out
   }
 }
 

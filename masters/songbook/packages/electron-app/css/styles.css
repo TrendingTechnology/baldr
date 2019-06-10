@@ -48,16 +48,6 @@ modal-window .close {
 }
 
 /**
- * Table of contents
- */
-
-#tableofcontents table-of-contents {
-	display: block;
-	overflow-y: scroll;
-	height: 90%;
-}
-
-/**
  * search selectize overrides
  */
 .selectize-dropdown {
@@ -122,16 +112,3 @@ a:active {
 	color: rgba(255, 0, 0, 0.4);
 }
 
-.icon {
-	height: 1em;
-	width: 1em;
-	display: inline-block;
-}
-
-.icon-musescore {
-	background: url('../icons/musescore.svg') left center no-repeat;
-}
-
-.icon-youtube {
-	background: url('../icons/youtube.svg') left center no-repeat;
-}
