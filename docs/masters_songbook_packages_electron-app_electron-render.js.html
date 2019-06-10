@@ -87,43 +87,39 @@ function showByHash () {
 class TableOfContentsElement extends HTMLElement {
   constructor () {
     super()
-    let topUl = document.createElement('ul')
-
+    const shadowRoot = this.attachShadow({ mode: 'open' })
     let tree = new AlphabeticalSongsTree(library.toArray())
-
+    let outABC = ''
     Object.keys(tree).forEach((abc) => {
-      let abcLi = document.createElement('li')
-      abcLi.setAttribute('class', 'abc')
-      abcLi.innerHTML = abc
-
-      let abcUl = document.createElement('ul')
-
-      for (let song of tree[abc]) {
-        let liHTML = '&lt;li class="song">'
-        liHTML += `&lt;a class="title" title="${song.songID}" href="#${song.songID}" id="song_${song.songID}">
-          ${song.metaDataCombined.title}
-        &lt;/a>`
-
-        if (song.metaDataCombined.subtitle) liHTML += ` &lt;span class="subtitle">${song.metaDataCombined.subtitle}&lt;/span>`
-        if (song.metaDataCombined.composer) liHTML += ` &lt;span class="composer">${song.metaDataCombined.composer}&lt;/span>`
-        if (song.metaDataCombined.lyricist) liHTML += ` &lt;span class="lyricist">${song.metaDataCombined.lyricist}&lt;/span>`
-
-        if (song.metaData.musescore) {
-          liHTML += ` &lt;a class="icon icon-musescore" title="Musescore" href="${song.metaData.musescore}">&lt;/a>`
-        }
-        if (song.metaData.youtube) {
-          liHTML += ` &lt;a class="icon icon-youtube" title="Youtube" href="https://youtu.be/${song.metaData.youtube}">&lt;/a>`
-        }
-        liHTML += '&lt;/li>'
-        abcUl.innerHTML += liHTML
-      }
-
-      topUl.appendChild(abcLi)
-      abcLi.appendChild(abcUl)
+      outABC += this.templateABC(tree, abc)
     })
-    this.appendChild(topUl)
+    shadowRoot.innerHTML = `
+    &lt;section>
+      &lt;style type="text/css">
+        section {
+          display: block;
+          overflow-y: scroll;
+          height: 90%;
+        }
 
-    this.bindExternalLinks(topUl)
+        .icon {
+          height: 1em;
+          width: 1em;
+          display: inline-block;
+        }
+
+        .icon-musescore {
+          background: url('icons/musescore.svg') left center no-repeat;
+        }
+
+        .icon-youtube {
+          background: url('icons/youtube.svg') left center no-repeat;
+        }
+      &lt;/style>
+      &lt;ul>${outABC}&lt;/ul>
+    &lt;/section>`
+
+    this.bindExternalLinks(shadowRoot)
   }
 
   /**
@@ -145,6 +141,36 @@ class TableOfContentsElement extends HTMLElement {
         })
       })
     }
+  }
+
+  templateABC (tree, abc) {
+    let outSongs = ''
+    for (let song of tree[abc]) {
+      outSongs += this.templateSong(song)
+    }
+    return `&lt;li class="abc">${abc}
+              &lt;ul>${outSongs}&lt;/ul>
+            &lt;/li>`
+  }
+
+  templateSong (song) {
+    let out = '&lt;li class="song">'
+    out += `&lt;a class="title" title="${song.songID}" href="#${song.songID}" id="song_${song.songID}">
+      ${song.metaDataCombined.title}
+    &lt;/a>`
+
+    if (song.metaDataCombined.subtitle) out += ` &lt;span class="subtitle">${song.metaDataCombined.subtitle}&lt;/span>`
+    if (song.metaDataCombined.composer) out += ` &lt;span class="composer">${song.metaDataCombined.composer}&lt;/span>`
+    if (song.metaDataCombined.lyricist) out += ` &lt;span class="lyricist">${song.metaDataCombined.lyricist}&lt;/span>`
+
+    if (song.metaData.musescore) {
+      out += ` &lt;a class="icon icon-musescore" title="Musescore" href="${song.metaData.musescore}">&lt;/a>`
+    }
+    if (song.metaData.youtube) {
+      out += ` &lt;a class="icon icon-youtube" title="Youtube" href="https://youtu.be/${song.metaData.youtube}">&lt;/a>`
+    }
+    out += '&lt;/li>'
+    return out
   }
 }
 
