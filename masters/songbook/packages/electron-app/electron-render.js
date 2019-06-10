@@ -189,7 +189,9 @@ class SongbookSearchElement extends HTMLElement {
 }
 
 /**
- * Build the drop down menu for selectize
+ * A modal window.
+ *
+ *     <modal-window title="title"></modal-window>
  */
 class ModalWindowElement extends HTMLElement {
   constructor () {
@@ -206,10 +208,16 @@ class ModalWindowElement extends HTMLElement {
     this.style.display = 'none'
   }
 
+  /**
+   * Close the modal window.
+   */
   close () {
     this.style.display = 'none'
   }
 
+  /**
+   * Boolean indicates if the window is open.
+   */
   get isOpen () {
     if (this.style.display === 'none') {
       return false
@@ -218,10 +226,16 @@ class ModalWindowElement extends HTMLElement {
     }
   }
 
+  /**
+   * Open the modal window.
+   */
   open () {
     this.style.display = 'block'
   }
 
+  /**
+   * Toggle the modal window.
+   */
   toggle () {
     if (this.style.display === 'none') {
       this.style.display = 'block'
@@ -285,6 +299,12 @@ class SongSlideElement extends HTMLElement {
     this.no = 1
   }
 
+  /**
+   *
+   * @param {string} name - The name of the attribute.
+   * @param {mixed} oldValue - The old value.
+   * @param {mixed} newValue - The new value.
+   */
   attributeChangedCallback (name, oldValue, newValue) {
     if (name === 'songid') {
       this.setSongByID_(newValue)
@@ -293,6 +313,9 @@ class SongSlideElement extends HTMLElement {
     }
   }
 
+  /**
+   * Set the metadata fields.
+   */
   setMetaData_ () {
     for (let property in this.metaDataElements) {
       if (this.song.metaDataCombined[property]) {
@@ -305,7 +328,7 @@ class SongSlideElement extends HTMLElement {
   }
 
   /**
-   * Set a song
+   * Set a song.
    *
    * @param {string} songID
    */
