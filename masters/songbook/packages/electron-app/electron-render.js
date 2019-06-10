@@ -12,6 +12,8 @@ const { bootstrapConfig, Library, AlphabeticalSongsTree } = require('@bldr/songb
 const util = require('util')
 require('selectize')
 
+const electron = require('electron')
+
 const config = bootstrapConfig()
 const library = new Library(config.path)
 let modalManager
@@ -86,6 +88,29 @@ class TableOfContentsElement extends HTMLElement {
       abcLi.appendChild(abcUl)
     })
     this.appendChild(topUl)
+
+    this.bindExternalLinks(topUl)
+  }
+
+  /**
+   * Open external links in the browser
+   *
+   * @see {@link https://gist.github.com/luizcarraro/2d04d83e66e3f03bef9b2e714ea8c0d7#gistcomment-2819880}
+   *
+   * @param {HTMLUListElement} topUl
+   */
+  bindExternalLinks (topUl) {
+    const aAll = topUl.querySelectorAll('a.icon')
+    if (aAll && aAll.length) {
+      aAll.forEach((a) => {
+        a.addEventListener('click', (event) => {
+          if (event.target) {
+            event.preventDefault()
+            electron.shell.openExternal(event.target.href)
+          }
+        })
+      })
+    }
   }
 }
 
@@ -201,7 +226,8 @@ class SongSlideElement extends HTMLElement {
 
     /**
      * The song object
-     * @type {module:baldr-songbook~lib.Song}
+     *
+     * @type {module:@bldr/songbook-base~Song}
      */
     this.song = {}
 
