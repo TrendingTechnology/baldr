@@ -124,10 +124,11 @@ class TableOfContentsElement extends HTMLElement {
    * Open external links in the browser
    *
    * @see {@link https://gist.github.com/luizcarraro/2d04d83e66e3f03bef9b2e714ea8c0d7#gistcomment-2819880}
+   *
    * @param {HTMLUListElement} topUl
    */
-  bindExternalLinks(topUl) {
-    const aAll = topUl.querySelectorAll('a.icon');
+  bindExternalLinks (topUl) {
+    const aAll = topUl.querySelectorAll('a.icon')
     if (aAll &amp;&amp; aAll.length) {
       aAll.forEach((a) => {
         a.addEventListener('click', (event) => {
