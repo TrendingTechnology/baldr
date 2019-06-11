@@ -28,7 +28,7 @@ How to write a bladr master slide: [Interface](module-@bldr/core_masters-Master.
 
 ## n
 
-* `no`: `@param no A integer starting from 1`
+* `no`: `@param {integer} no - A integer starting from 1.`
 
 ## q
 

@@ -5,13 +5,17 @@
 
 /* global HTMLElement location customElements */
 
+// Node packages.
+const path = require('path')
+
+// Third party packages.
 const jquery = require('jquery')
 const mousetrap = require('mousetrap')
-const path = require('path')
-const { bootstrapConfig, Library, AlphabeticalSongsTree } = require('@bldr/songbook-base')
 require('selectize')
-
 const electron = require('electron')
+
+// Project packages.
+const { bootstrapConfig, Library, AlphabeticalSongsTree } = require('@bldr/songbook-base')
 
 const config = bootstrapConfig()
 const library = new Library(config.path)
@@ -39,6 +43,9 @@ function bindButtons (bindings) {
   }
 }
 
+/**
+ * Show elements of the electron on hash change.
+ */
 function showByHash () {
   if (location.hash === '#search') {
     modalManager.openByID('search')
@@ -246,7 +253,9 @@ class ModalWindowElement extends HTMLElement {
 }
 
 /**
+ * The song slide element.
  *
+ *     <song-slide no="1" song-id="Backwater-Blues"></song-slide>
  */
 class SongSlideElement extends HTMLElement {
   static get observedAttributes () {
@@ -259,7 +268,113 @@ class SongSlideElement extends HTMLElement {
 
     shadowRoot.innerHTML = `
       <section>
-        <link href="css/song-slide.css" rel="stylesheet" type="text/css">
+        <style type="text/css">
+          .metadata {
+            padding-top: 0.2vw;
+            position: absolute;
+            width: 100%;
+          }
+
+          .people {
+            display: flex;
+            font-size: 2vh;
+            padding: 5vw;
+          }
+
+          .people > div {
+            flex: 1;
+          }
+
+          .composer {
+            text-align: right;
+          }
+
+          .lyricist {
+            text-align: left;
+          }
+
+          h1, h2 {
+            font-family: 'Alegreya Sans' !important;
+            margin: 1vh;
+          }
+
+          h1 {
+            font-size: 5vh;
+          }
+
+          h2 {
+            font-size: 3vh;
+            font-style: italic;
+          }
+
+          section {
+            max-width: 100%;
+            max-height: 100%;
+            text-align: center;
+          }
+
+          img {
+            width: 100%;
+            height: 100%;
+            vertical-align: middle;
+            background-color: white;
+          }
+
+          .slide-number {
+            padding: 1vw;
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            z-index: 1;
+            font-size: 1vw;
+            opacity: 0;
+          }
+
+          .fade-out {
+            animation: fadeout 2s linear forwards;
+          }
+
+          @keyframes fadeout {
+            0% { opacity: 1; }
+            100% { opacity: 0; }
+          }
+
+          ul {
+            bottom: 0;
+            display: flex;
+            height: 4vw;
+            margin: 0;
+            padding: 0;
+            position: fixed;
+            right: 0;
+            width: 10vw;
+            z-index: 2;
+          }
+
+          li {
+            width: 4vw;
+            height: 4vw;
+            background-size: 100%;
+            opacity: 0.1;
+            display: block;
+          }
+
+          li:hover {
+            opacity: 1 !important;
+          }
+
+          ul:hover li {
+            opacity: 0.3;
+          }
+
+          .previous {
+            background-image: url('icons/chevron-left.svg');
+          }
+
+          .next {
+            background-image: url('icons/chevron-right.svg');
+          }
+        </style>
         <div class="metadata">
           <h1></h1>
           <h2></h2>
@@ -276,9 +391,26 @@ class SongSlideElement extends HTMLElement {
         <div class="slide-number"></div>
       </section>`
 
+    /**
+     * The image element.
+     */
     this.imgElement = shadowRoot.querySelector('img')
+
+    /**
+     * The metadata block element.
+     */
     this.metaDataBlockElement = shadowRoot.querySelector('.metadata')
+
+    /**
+     * The slide number element.
+     */
     this.slideNumberElement = shadowRoot.querySelector('.slide-number')
+
+    /**
+     * An object of metadata elements.
+     *
+     * @type {object}
+     */
     this.metaDataElements = {
       title: shadowRoot.querySelector('h1'),
       subtitle: shadowRoot.querySelector('h2'),
@@ -362,6 +494,11 @@ class SongSlideElement extends HTMLElement {
     }
   }
 
+  /**
+   * Set the song slide by number.
+   *
+   * @param {integer} no - A integer starting from 1.
+   */
   setSlideByNo_ (no) {
     // Maybe no is a string
     if (parseInt(no) === 1) {
@@ -377,6 +514,11 @@ class SongSlideElement extends HTMLElement {
     setTimeout(() => { this.slideNumberElement.classList.add('fade-out') }, 1)
   }
 
+  /**
+   * Set the song slide number through the attribute.
+   *
+   * @param {integer} no - A integer starting from 1.
+   */
   setNoViaAttr (no) {
     this.setAttribute('no', no)
     this.no = no
