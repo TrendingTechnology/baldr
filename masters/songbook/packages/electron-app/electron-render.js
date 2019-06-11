@@ -203,16 +203,15 @@ class SongbookSearchElement extends HTMLElement {
 class ModalWindowElement extends HTMLElement {
   constructor () {
     super()
-    let elmementClose = document.createElement('div')
-    elmementClose.addEventListener('click', () => { this.close() })
-    elmementClose.classList.add('close', 'button', 'fa', 'fa-times')
+    let markup = `<div class="close button fa fa-times"></div>`
     if (this.hasAttribute('title')) {
-      let elementH2 = document.createElement('h2')
-      elementH2.innerHTML = this.getAttribute('title')
-      this.prepend(elementH2)
+      let title = this.getAttribute('title')
+      markup += `<h2>${title}</h2>`
     }
-    this.prepend(elmementClose)
     this.style.display = 'none'
+    this.innerHTML = markup + this.innerHTML
+    let elmementClose = this.querySelector('.close')
+    elmementClose.addEventListener('click', () => { this.close() })
   }
 
   /**
@@ -433,9 +432,10 @@ class SongSlideElement extends HTMLElement {
     }
 
     this.musescoreElement = shadowRoot.querySelector('.musescore')
-    this.musescoreElement.addEventListener('click', () => { this.loadExternalIntoIframe() })
+    this.musescoreElement.addEventListener('click', () => { this.loadExternalIntoIframe('musescore') })
 
     this.youtubeElement = shadowRoot.querySelector('.youtube')
+    this.youtubeElement.addEventListener('click', () => { this.loadExternalIntoIframe('youtube') })
 
     /**
      * The song object
@@ -483,18 +483,39 @@ class SongSlideElement extends HTMLElement {
       this.musescoreElement.style.display = 'none'
     }
 
-    if (this.song.metaData.yotube) {
+    if (this.song.metaData.youtube) {
       this.youtubeElement.style.display = 'inline-block'
     } else {
       this.youtubeElement.style.display = 'none'
     }
   }
 
-  loadExternalIntoIframe () {
+  loadExternalIntoIframe (destination) {
     let elementModalWindow = new ModalWindowElement()
     elementModalWindow.open()
     let elementBody = document.querySelector('body')
     elementBody.appendChild(elementModalWindow)
+    if (destination === 'musescore') {
+      let link = this.song.metaData.musescore
+      elementModalWindow.innerHTML = elementModalWindow.innerHTML +
+        `<iframe src="${link}" width="90%" height="100%">
+         </iframe>`
+    }
+
+    if (destination === 'youtube') {
+      let id = this.song.metaData.youtube
+      elementModalWindow.innerHTML = elementModalWindow.innerHTML +
+      `<iframe src="https://youtu.be/${id}" width="100%" height="100%">
+       </iframe>`
+      // `<iframe
+      //   width="560"
+      //   height="315"
+      //   src="https://www.youtube.com/embed/${id}"
+      //   frameborder="0"
+      //   allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen
+      // ></iframe>`
+    }
+
   }
 
   /**
