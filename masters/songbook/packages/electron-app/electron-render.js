@@ -289,6 +289,16 @@ class SongSlideElement extends HTMLElement {
             text-align: right;
           }
 
+          .links {
+            position: absolute;
+            left: 5vw;
+            top: 1vh;
+          }
+
+          .links > div {
+            flex: 1;
+          }
+
           .lyricist {
             text-align: left;
           }
@@ -382,6 +392,10 @@ class SongSlideElement extends HTMLElement {
             <div class="lyricist"></div>
             <div class="composer"></div>
           </div>
+          <div class="links">
+            <div class="musescore">M</div>
+            <div class="youtube">Y</div>
+          </div>
         </div>
         <img>
         <ul>
@@ -417,6 +431,11 @@ class SongSlideElement extends HTMLElement {
       composer: shadowRoot.querySelector('.composer'),
       lyricist: shadowRoot.querySelector('.lyricist')
     }
+
+    this.musescoreElement = shadowRoot.querySelector('.musescore')
+    this.musescoreElement.addEventListener('click', () => { this.loadExternalIntoIframe() })
+
+    this.youtubeElement = shadowRoot.querySelector('.youtube')
 
     /**
      * The song object
@@ -457,6 +476,25 @@ class SongSlideElement extends HTMLElement {
         this.metaDataElements[property].style.display = 'none'
       }
     }
+
+    if (this.song.metaData.musescore) {
+      this.musescoreElement.style.display = 'inline-block'
+    } else {
+      this.musescoreElement.style.display = 'none'
+    }
+
+    if (this.song.metaData.yotube) {
+      this.youtubeElement.style.display = 'inline-block'
+    } else {
+      this.youtubeElement.style.display = 'none'
+    }
+  }
+
+  loadExternalIntoIframe () {
+    let elementModalWindow = new ModalWindowElement()
+    elementModalWindow.open()
+    let elementBody = document.querySelector('body')
+    elementBody.appendChild(elementModalWindow)
   }
 
   /**
