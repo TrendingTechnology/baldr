@@ -383,6 +383,25 @@ class SongSlideElement extends HTMLElement {
           .next {
             background-image: url('icons/chevron-right.svg');
           }
+
+          .icon {
+            height: 3vw;
+            width: 3vw;
+            display: inline-block;
+            opacity: 0.1;
+          }
+
+          .icon:hover {
+            opacity: 1;
+          }
+
+          .musescore {
+            background: url('icons/musescore.svg') left center no-repeat;
+          }
+
+          .youtube {
+            background: url('icons/youtube.svg') left center no-repeat;
+          }
         </style>
         <div class="metadata">
           <h1></h1>
@@ -392,8 +411,8 @@ class SongSlideElement extends HTMLElement {
             <div class="composer"></div>
           </div>
           <div class="links">
-            <div class="musescore">M</div>
-            <div class="youtube">Y</div>
+            <a style="display: none;" class="icon musescore" title="Musescore" href=""></a>
+            <a style="display: none;" class="icon youtube" title="Youtube" href=""></a>
           </div>
         </div>
         <img>
@@ -425,17 +444,17 @@ class SongSlideElement extends HTMLElement {
      * @type {object}
      */
     this.metaDataElements = {
-      title: shadowRoot.querySelector('h1'),
-      subtitle: shadowRoot.querySelector('h2'),
-      composer: shadowRoot.querySelector('.composer'),
-      lyricist: shadowRoot.querySelector('.lyricist')
+      'title': shadowRoot.querySelector('h1'),
+      'subtitle': shadowRoot.querySelector('h2'),
+      'composer': shadowRoot.querySelector('.composer'),
+      'lyricist': shadowRoot.querySelector('.lyricist')
     }
 
-    this.musescoreElement = shadowRoot.querySelector('.musescore')
-    this.musescoreElement.addEventListener('click', () => { this.loadExternalIntoIframe('musescore') })
-
-    this.youtubeElement = shadowRoot.querySelector('.youtube')
-    this.youtubeElement.addEventListener('click', () => { this.loadExternalIntoIframe('youtube') })
+    this.externalLinks = {
+      'musescore': shadowRoot.querySelector('.musescore'),
+      'youtube': shadowRoot.querySelector('.youtube')
+    }
+    this.bindExternalLinks(Object.values(this.externalLinks))
 
     /**
      * The song object
@@ -448,6 +467,24 @@ class SongSlideElement extends HTMLElement {
      * The current slide number. The lowest slide number is 1 not 0.
      */
     this.no = 1
+  }
+
+  /**
+   * Open external links in the browser.
+   *
+   * @see {@link https://gist.github.com/luizcarraro/2d04d83e66e3f03bef9b2e714ea8c0d7#gistcomment-2819880}
+   *
+   * @param {HTMLUListElement} topUl
+   */
+  bindExternalLinks (elements) {
+    elements.forEach((a) => {
+      a.addEventListener('click', (event) => {
+        if (event.target) {
+          event.preventDefault()
+          electron.shell.openExternal(event.target.href)
+        }
+      })
+    })
   }
 
   /**
@@ -476,46 +513,18 @@ class SongSlideElement extends HTMLElement {
         this.metaDataElements[property].style.display = 'none'
       }
     }
-
-    if (this.song.metaData.musescore) {
-      this.musescoreElement.style.display = 'inline-block'
-    } else {
-      this.musescoreElement.style.display = 'none'
+    for (let property in this.externalLinks) {
+      if (this.song.metaData[property]) {
+        this.externalLinks[property].style.display = 'inline-block'
+        if (property === 'youtube') {
+          this.externalLinks[property].href = 'https://youtu.be/' + this.song.metaData[property]
+        } else {
+          this.externalLinks[property].href = this.song.metaData[property]
+        }
+      } else {
+        this.externalLinks[property].style.display = 'none'
+      }
     }
-
-    if (this.song.metaData.youtube) {
-      this.youtubeElement.style.display = 'inline-block'
-    } else {
-      this.youtubeElement.style.display = 'none'
-    }
-  }
-
-  loadExternalIntoIframe (destination) {
-    let elementModalWindow = new ModalWindowElement()
-    elementModalWindow.open()
-    let elementBody = document.querySelector('body')
-    elementBody.appendChild(elementModalWindow)
-    if (destination === 'musescore') {
-      let link = this.song.metaData.musescore
-      elementModalWindow.innerHTML = elementModalWindow.innerHTML +
-        `<iframe src="${link}" width="90%" height="100%">
-         </iframe>`
-    }
-
-    if (destination === 'youtube') {
-      let id = this.song.metaData.youtube
-      elementModalWindow.innerHTML = elementModalWindow.innerHTML +
-      `<iframe src="https://youtu.be/${id}" width="100%" height="100%">
-       </iframe>`
-      // `<iframe
-      //   width="560"
-      //   height="315"
-      //   src="https://www.youtube.com/embed/${id}"
-      //   frameborder="0"
-      //   allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen
-      // ></iframe>`
-    }
-
   }
 
   /**

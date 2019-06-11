@@ -132,22 +132,6 @@ function mirrorMonitors (state) {
 
 function createWindow () {
   win = new BrowserWindow({ fullscreen: true, webPreferences: { nodeIntegration: true } })
-  // https://gist.github.com/jangnezda/50855df0afb3abe6dc7b315cd77bdebe
-  // remove 'x-frame-options' header to allow embedding external pages into an 'iframe'
-
-  // By default, Electron (well, underlying Chrome browser) will reject loading external URLs
-  // to an <iframe>. To circumvent this limitation, we can manipulate response headers from any
-  // http request and feed them to the Electron window.
-
-  // The 'onHeadersReceived' listener is documented here:
-  // http://electron.atom.io/docs/api/session/#webrequestonheadersreceivedfilter-listener
-
-  win.webContents.session.webRequest.onHeadersReceived({}, (details, callback) => {
-    if(details.responseHeaders['x-frame-options']) {
-        delete details.responseHeaders['x-frame-options']
-    }
-    callback({ cancel: false, responseHeaders: details.responseHeaders })
-  })
 
   win.loadURL(setUrl('index.html'))
 
