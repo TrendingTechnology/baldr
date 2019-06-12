@@ -5,9 +5,11 @@
 
 'use strict'
 
+// Third party packages.
 const mousetrap = require('mousetrap')
 const { Howl } = require('howler')
 
+// Project packages.
 const { Media } = require('@bldr/foundation-master')
 
 let audioFiles = {}

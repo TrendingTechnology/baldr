@@ -5,6 +5,7 @@
 
 'use strict'
 
+// Third party packages.
 const markdown = require('marked')
 
 /***********************************************************************

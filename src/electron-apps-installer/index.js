@@ -1,12 +1,14 @@
 #! /usr/bin/env node
 
-const fs = require('fs-extra')
+// Node packages.
 const os = require('os')
 const path = require('path')
 const process = require('process')
 const util = require('util')
 
-var commander = require('commander')
+// Third party packages.
+const commander = require('commander')
+const fs = require('fs-extra')
 const packager = require('electron-packager')
 
 let currentUser = os.userInfo()

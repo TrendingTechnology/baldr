@@ -56,6 +56,21 @@ This npm commands execute tests:
 * `npm run spectron`: All spectron tests
 * `npm run standard`: standardjs linting
 
+# Coding style
+
+## Imports
+
+```js
+// Node packages.
+const path = require('path')
+
+// Third party packages.
+const jquery = require('jquery')
+
+// Project packages.
+const { bootstrapConfig, Library, AlphabeticalSongsTree } = require('@bldr/songbook-base')
+```
+
 # Terminology
 
 * `presentation`:

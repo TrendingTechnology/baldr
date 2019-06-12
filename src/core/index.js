@@ -4,8 +4,10 @@
 
 'use strict'
 
+// Node packages.
 const path = require('path')
 
+// Project packages.
 const { getConfig } = require('@bldr/foundation-master')
 
 /**

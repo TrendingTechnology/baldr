@@ -6,11 +6,16 @@
  * @module @bldr/songbook-cli
  */
 
+// Node packages.
+const util = require('util')
+
+// Third party packages.
+const { Command } = require('commander')
+
+// Project packages.
 const pckg = require('./package.json')
 const { bootstrapConfig } = require('@bldr/songbook-base')
 const { IntermediateLibrary, PianoScore, checkExecutables } = require('@bldr/songbook-intermediate-files')
-const { Command } = require('commander')
-const util = require('util')
 
 /**
  * Wrapper around the node module “commander”.

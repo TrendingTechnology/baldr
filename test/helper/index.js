@@ -3,20 +3,20 @@
  * @module @bldr/test-helper
  */
 
-// Node library
+// Node packages.
 const assert = require('assert')
 const fs = require('fs')
 const path = require('path')
 const process = require('process')
 const util = require('util')
 
-// Third party
+// Third party packages.
 const { JSDOM } = require('jsdom')
 const rewire = require('rewire')
 const packager = require('electron-packager')
 const { Application } = require('spectron')
 
-// Project packages
+// Project packages.
 const { getConfig } = require('@bldr/foundation-master')
 const { Environment } = require('@bldr/core')
 
