@@ -35,14 +35,19 @@
  * @module @bldr/songbook-intermediate-files
  */
 
-const { Song, Library, message, AlphabeticalSongsTree } = require('@bldr/songbook-base')
+// Node packages.
 const crypto = require('crypto')
-const fs = require('fs-extra')
 const path = require('path')
 const spawn = require('child_process').spawnSync
-const Sqlite3 = require('better-sqlite3')
 const util = require('util')
 const os = require('os')
+
+// Third party packages.
+const Sqlite3 = require('better-sqlite3')
+const fs = require('fs-extra')
+
+// Project packages.
+const { Song, Library, message, AlphabeticalSongsTree } = require('@bldr/songbook-base')
 
 /**
  * Check if executable is installed.
