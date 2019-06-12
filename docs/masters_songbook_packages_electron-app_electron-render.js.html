@@ -114,6 +114,23 @@ class TableOfContentsElement extends HTMLElement {
           display: inline-block;
         }
 
+        .title {
+          font-size: 1.5em;
+        }
+
+        .subtitle {
+          opacity: 0.8;
+        }
+
+        .composer {
+          font-style: italic;
+          opacity: 0.6;
+        }
+
+        .lyricist {
+          opacity: 0.6;
+        }
+
         .icon-musescore {
           background: url('icons/musescore.svg') left center no-repeat;
         }
@@ -219,6 +236,7 @@ class SongbookSearchElement extends HTMLElement {
       option.innerHTML = song.metaDataCombined.title
       select.appendChild(option)
     }
+    // The constructor gets called twice.
     this.innerHTML = ''
     this.appendChild(select)
   }
