@@ -191,6 +191,7 @@ class SongbookSearchElement extends HTMLElement {
       option.innerHTML = song.metaDataCombined.title
       select.appendChild(option)
     }
+    this.innerHTML = ''
     this.appendChild(select)
   }
 }
