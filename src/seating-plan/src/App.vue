@@ -1,12 +1,23 @@
 <template>
   <div id="app">
     <SeatingPlan :seats="seats" :seatDepth="seatDepth" :seatWidth="seatWidth"/>
+    <PeopleList :people="people"/>
   </div>
 </template>
 
 <script>
 import Seat from './components/Seat.vue'
 import SeatingPlan from './components/SeatingPlan.vue'
+import PeopleList from './components/PeopleList.vue'
+
+
+let people = [
+  { firstName: 'Wolfgang Amadeus', lastName: 'Mozart' },
+  { firstName: 'Joseph', lastName: 'Haydn' },
+  { firstName: 'Ludwig van', lastName: 'Beethoven' },
+  { firstName: 'Johann Sebastian', lastName: 'Bach' },
+  { firstName: 'Georg Friedrich', lastName: 'Händel' }
+]
 
 let roomWidth = 100 // %
 let roomDepth = 100 // %
@@ -49,13 +60,14 @@ for (let row of seatBlocks) {
 export default {
   name: 'app',
   components: {
-    Seat, SeatingPlan
+    Seat, SeatingPlan, PeopleList
   },
   data: function () {
     return {
       seats: seats,
       seatDepth: seatDepth,
-      seatWidth: seatWidth
+      seatWidth: seatWidth,
+      people: people
     }
   }
 }
@@ -64,5 +76,11 @@ export default {
 <style>
 body {
   margin: 2px;
+}
+#app {
+  display: flex;
+}
+.people-list {
+  flex-shrink: 2;
 }
 </style>
