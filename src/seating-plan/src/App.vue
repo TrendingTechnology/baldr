@@ -18,7 +18,7 @@ let peopleList = [
   { firstName: 'Georg Friedrich', lastName: 'Händel', grade: 'Baroque' }
 ]
 
-class Human {
+class Person {
   constructor (firstName, lastName, grade) {
     this.firstName = firstName
     this.lastName = lastName
@@ -35,29 +35,41 @@ class People {
     this.list = {}
   }
 
-  add (human) {
+  add (person) {
     // grade
-    if (!this.list.hasOwnProperty(human.grade)) {
-      this.list[human.grade] = {}
+    if (!this.list.hasOwnProperty(person.grade)) {
+      this.list[person.grade] = {}
     }
 
     // lastName
-    if (!this.list[human.grade].hasOwnProperty(human.lastName)) {
-      this.list[human.grade][human.lastName] = {}
+    if (!this.list[person.grade].hasOwnProperty(person.lastName)) {
+      this.list[person.grade][person.lastName] = {}
     }
 
     // firstName
-    if (this.list[human.grade][human.lastName].hasOwnProperty(human.firstName)) {
-      throw new Error(`Human already exists ${human.firstName} ${human.lastName} ${human.grade}`)
+    if (this.list[person.grade][person.lastName].hasOwnProperty(person.firstName)) {
+      throw new Error(`Person already exists ${person.firstName} ${person.lastName} ${person.grade}`)
     }
 
-    this.list[human.grade][human.lastName][human.firstName] = human
+    this.list[person.grade][person.lastName][person.firstName] = person
+  }
+
+  flattenList () {
+    let people = []
+    for (let grade of Object.keys(this.list).sort()) {
+      for (let lastName of Object.keys(this.list[grade]).sort()) {
+        for (let firstName of Object.keys(this.list[grade][lastName]).sort()) {
+          people.push(this.list[grade][lastName][firstName])
+       }
+      }
+    }
+    return people
   }
 }
 
 let people = new People()
-for (let humanFromList of peopleList) {
-  people.add(new Human(humanFromList.firstName, humanFromList.lastName, humanFromList.grade))
+for (let personFromList of peopleList) {
+  people.add(new Person(personFromList.firstName, personFromList.lastName, personFromList.grade))
 }
 
 /**
@@ -116,7 +128,7 @@ export default {
       seats: seats.seats,
       seatDepth: seats.seatDepth,
       seatWidth: seats.seatWidth,
-      people: peopleList
+      people: people.flattenList()
     }
   }
 }
