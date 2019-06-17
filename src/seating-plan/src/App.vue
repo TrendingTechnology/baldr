@@ -37,18 +37,21 @@ class People {
 
   add (human) {
     // grade
-    if (this.list.hasOwnProperty(human.grade)) {
-      this.list[human.grade]
-    } else {
+    if (!this.list.hasOwnProperty(human.grade)) {
       this.list[human.grade] = {}
     }
 
     // lastName
-    if (this.list[human.grade].hasOwnProperty(human.lastName)) {
-      this.list[human.grade][human.lastName].push(human)
-    } else {
-      this.list[human.grade][human.lastName] = [human]
+    if (!this.list[human.grade].hasOwnProperty(human.lastName)) {
+      this.list[human.grade][human.lastName] = {}
     }
+
+    // firstName
+    if (this.list[human.grade][human.lastName].hasOwnProperty(human.firstName)) {
+      throw new Error(`Human already exists ${human.firstName} ${human.lastName} ${human.grade}`)
+    }
+
+    this.list[human.grade][human.lastName][human.firstName] = human
   }
 }
 
