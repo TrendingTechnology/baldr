@@ -1,6 +1,6 @@
 <template>
   <div class="seating-plan">
-    <Seat v-for="seat of seats"
+    <seat-placement v-for="seat of seats"
       :no="seat.no"
       :person="seat.person"
       :x="seat.x"
@@ -13,12 +13,12 @@
 </template>
 
 <script>
-import Seat from './Seat.vue'
+import SeatPlacement from './SeatPlacement.vue'
 
 export default {
   name: 'SeatingPlan',
   components: {
-    Seat
+    SeatPlacement
   },
   computed: {
     seats() {

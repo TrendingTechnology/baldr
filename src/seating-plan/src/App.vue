@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <SeatingPlan/>
-    <PeopleList/>
+    <seating-plan/>
+    <people-list/>
   </div>
 </template>
 

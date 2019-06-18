@@ -8,7 +8,7 @@
 
 <script>
 export default {
-  name: 'Seat',
+  name: 'Seat-Placement',
   props: {
     person: Object,
     depth: Number,
