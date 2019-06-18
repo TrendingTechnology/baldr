@@ -7,12 +7,9 @@
 <script>
 export default {
   name: 'PeopleList',
-  props: {
-    people: Object
-  },
   computed: {
     peopleList() {
-      return this.people.flattenList()
+      return this.$root.$data.seatingPlan.people.flattenList()
     }
   }
 }

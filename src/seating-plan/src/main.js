@@ -68,7 +68,7 @@ class Seat {
  *
  * 1  2  3  4     5  6  7  8
  */
-class SeatingPlan {
+class Seats {
   constructor () {
     let roomWidth = 100 // %
     let roomDepth = 100 // %
@@ -100,6 +100,13 @@ class SeatingPlan {
   }
 }
 
+class SeatingPlan {
+  constructor (people, seats) {
+    this.people = people
+    this.seats = seats
+  }
+}
+
 let peopleList = [
   { firstName: 'Wolfgang Amadeus', lastName: 'Mozart', grade: 'Classic' },
   { firstName: 'Joseph', lastName: 'Haydn', grade: 'Classic' },
@@ -113,15 +120,16 @@ for (let personFromList of peopleList) {
   people.add(new Person(personFromList.firstName, personFromList.lastName, personFromList.grade))
 }
 
-let seatingPlan = new SeatingPlan()
+let seats = new Seats()
+
+let seatingPlan = new SeatingPlan(people, seats)
 
 Vue.config.productionTip = false
 
 new Vue({
   data: function () {
     return {
-      seatingPlan: seatingPlan,
-      people: people
+      seatingPlan: seatingPlan
     }
   },
   render: function (h) { return h(App) }

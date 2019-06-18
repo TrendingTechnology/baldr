@@ -1,13 +1,13 @@
 <template>
   <div class="seating-plan">
-    <Seat v-for="seat of seatingPlan.seats"
+    <Seat v-for="seat of seats"
       :no="seat.no"
       :person="seat.person"
       :x="seat.x"
       :y="seat.y"
       :key="seat.no"
-      :width="seatingPlan.seatWidth"
-      :depth="seatingPlan.seatDepth"
+      :width="seatWidth"
+      :depth="seatDepth"
       />
   </div>
 </template>
@@ -20,8 +20,16 @@ export default {
   components: {
     Seat
   },
-  props: {
-    seatingPlan: Object
+  computed: {
+    seats() {
+      return this.$root.$data.seatingPlan.seats.seats
+    },
+    seatWidth() {
+      return this.$root.$data.seatingPlan.seats.seatWidth
+    },
+    seatDepth() {
+      return this.$root.$data.seatingPlan.seats.seatDepth
+    }
   }
 }
 </script>
