@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <CompSeatingPlan :seats="seats" :seatDepth="seatDepth" :seatWidth="seatWidth"/>
+    <CompSeatingPlan :seatingPlan="seatingPlan"/>
     <CompPeopleList :people="people"/>
   </div>
 </template>
@@ -132,11 +132,12 @@ export default {
   },
   data: function () {
     return {
-      seats: Object.values(seatingPlan.seats),
-      seatDepth: seatingPlan.seatDepth,
-      seatWidth: seatingPlan.seatWidth,
-      people: people.flattenList()
+      seatingPlan: seatingPlan,
+      people: people
     }
+  },
+  created: function () {
+    this.seatingPlan.seats[1].person = this.people.list['Classic']['Mozart']['Wolfgang Amadeus']
   }
 }
 </script>

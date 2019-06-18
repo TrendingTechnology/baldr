@@ -1,6 +1,6 @@
 <template>
   <ol class="people-list">
-    <li v-for="person in people" :key="person.lastname">{{ person.lastName }}, {{ person.firstName }}</li>
+    <li v-for="person in peopleList" :key="person.lastname">{{ person.lastName }}, {{ person.firstName }}</li>
   </ol>
 </template>
 
@@ -8,7 +8,12 @@
 export default {
   name: 'CompPeopleList',
   props: {
-    people: Array
+    people: Object
+  },
+  computed: {
+    peopleList() {
+      return this.people.flattenList()
+    }
   }
 }
 </script>

@@ -1,13 +1,13 @@
 <template>
   <div class="seating-plan">
-    <CompSeat v-for="seat in seats"
+    <CompSeat v-for="seat of seatingPlan.seats"
       :no="seat.no"
       :person="seat.person"
       :x="seat.x"
       :y="seat.y"
       :key="seat.no"
-      :width="seatWidth"
-      :depth="seatDepth"
+      :width="seatingPlan.seatWidth"
+      :depth="seatingPlan.seatDepth"
       />
   </div>
 </template>
@@ -21,9 +21,7 @@ export default {
     CompSeat
   },
   props: {
-    seats: Array,
-    seatWidth: Number,
-    seatDepth: Number
+    seatingPlan: Object
   }
 }
 </script>

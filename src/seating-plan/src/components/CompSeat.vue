@@ -2,6 +2,7 @@
   <div :style="style" class="seat" :id=no>
     <div class="first-name">{{ firstName }}</div>
     <div class="last-name">{{ lastName }}</div>
+    <div class="no">{{ no }}</div>
   </div>
 </template>
 
@@ -41,5 +42,11 @@ export default {
   }
   .last-name {
     font-style: italic;
+  }
+  .no {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    opacity: 0.2;
   }
 </style>
