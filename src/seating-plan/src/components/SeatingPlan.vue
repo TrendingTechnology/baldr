@@ -34,7 +34,6 @@ export default {
 }
 </script>
 
-
 <style scoped>
 /* DIN A 4 Landscape: width: 297 height: 210
   (210 / 297) * 100 = 70.707070

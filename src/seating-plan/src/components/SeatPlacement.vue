@@ -1,5 +1,11 @@
 <template>
-  <div :style="style" class="seat" :id=no>
+  <div class="seat"
+       :id=no
+       :style="style"
+       @dragover.prevent="dragover"
+       @dragleave.prevent="dragleave"
+       @drop="drop"
+  >
     <div class="first-name">{{ firstName }}</div>
     <div class="last-name">{{ lastName }}</div>
     <div class="no">{{ no }}</div>
@@ -27,6 +33,17 @@ export default {
     lastName () {
       return this.person.lastName
     }
+  },
+  methods: {
+    dragover (event) {
+      event.target.classList.add('dragover')
+    },
+    dragleave (event) {
+      if (event.target.classList) event.target.classList.remove('dragover')
+    },
+    drop (event) {
+      if (event.target.classList) event.target.classList.remove('dragover')
+    }
   }
 }
 </script>
@@ -48,5 +65,8 @@ export default {
     top: 50%;
     left: 50%;
     opacity: 0.2;
+  }
+  .dragover {
+    background-color: red;
   }
 </style>

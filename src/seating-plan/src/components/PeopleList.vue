@@ -1,6 +1,11 @@
 <template>
   <ol class="people-list">
-    <li v-for="person in peopleList" :key="person.lastname">{{ person.lastName }}, {{ person.firstName }}</li>
+    <li draggable="true" v-for="person in peopleList"
+        :key="person.lastname"
+        @dragstart="dragstart"
+    >
+      {{ person.lastName }}, {{ person.firstName }}
+    </li>
   </ol>
 </template>
 
@@ -11,6 +16,12 @@ export default {
     peopleList() {
       return this.$root.$data.seatingPlan.people.flattenList()
     }
+  },
+  methods: {
+    dragstart (event) {
+      event.dataTransfer.dropEffect = "move"
+      event.dataTransfer.setData("text/plain", 'lol')
+    }
   }
 }
 </script>
@@ -19,5 +30,12 @@ export default {
   .people-list {
     width: 100%;
     background-color: rosybrown;
+  }
+  .people-list li {
+    opacity: 0.5;
+    cursor: grab;
+  }
+  .people-list li:hover {
+    opacity: 1;
   }
 </style>
