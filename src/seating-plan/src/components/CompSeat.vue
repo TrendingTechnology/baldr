@@ -1,17 +1,16 @@
 <template>
-<div :style="style" class="seat" :id=no>
-  <div class="first-name">{{ firstName }}</div>
-  <div class="last-name">{{ lastName }}</div>
-</div>
+  <div :style="style" class="seat" :id=no>
+    <div class="first-name">{{ firstName }}</div>
+    <div class="last-name">{{ lastName }}</div>
+  </div>
 </template>
 
 <script>
 export default {
-  name: 'Seat',
+  name: 'CompSeat',
   props: {
-    firstName: String,
+    person: Object,
     depth: Number,
-    lastName: String,
     no: Number,
     width: Number,
     x: Number,
@@ -20,6 +19,12 @@ export default {
   computed: {
     style () {
       return `bottom: ${this.y}%; height: ${this.depth}%; left: ${this.x}%; width: ${this.width}%;`;
+    },
+    firstName () {
+      return this.person.firstName
+    },
+    lastName () {
+      return this.person.lastName
     }
   }
 }

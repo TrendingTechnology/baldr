@@ -1,9 +1,8 @@
 <template>
   <div class="seating-plan">
-    <Seat v-for="seat in seats"
+    <CompSeat v-for="seat in seats"
       :no="seat.no"
-      :firstName="seat.firstName"
-      :lastName="seat.lastName"
+      :person="seat.person"
       :x="seat.x"
       :y="seat.y"
       :key="seat.no"
@@ -14,12 +13,12 @@
 </template>
 
 <script>
-import Seat from './Seat.vue'
+import CompSeat from './CompSeat.vue'
 
 export default {
-  name: 'SeatingPlan',
+  name: 'CompSeatingPlan',
   components: {
-    Seat
+    CompSeat
   },
   props: {
     seats: Array,
