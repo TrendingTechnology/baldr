@@ -8,7 +8,7 @@
 
 <script>
 export default {
-  name: 'CompSeat',
+  name: 'Seat',
   props: {
     person: Object,
     depth: Number,

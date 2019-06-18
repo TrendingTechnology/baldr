@@ -6,7 +6,7 @@
 
 <script>
 export default {
-  name: 'CompPeopleList',
+  name: 'PeopleList',
   props: {
     people: Object
   },

@@ -1,20 +1,19 @@
 <template>
   <div id="app">
-    <CompSeatingPlan :seatingPlan="seatingPlan"/>
-    <CompPeopleList :people="people"/>
+    <SeatingPlan :seatingPlan="seatingPlan"/>
+    <PeopleList :people="people"/>
   </div>
 </template>
 
 <script>
-import CompSeat from './components/CompSeat.vue'
-import CompSeatingPlan from './components/CompSeatingPlan.vue'
-import CompPeopleList from './components/CompPeopleList.vue'
-
+import Seat from './components/Seat.vue'
+import SeatingPlan from './components/SeatingPlan.vue'
+import PeopleList from './components/PeopleList.vue'
 
 export default {
   name: 'app',
   components: {
-    CompSeat, CompSeatingPlan, CompPeopleList
+    Seat, SeatingPlan, PeopleList
   },
   data: function () {
     return {

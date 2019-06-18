@@ -1,6 +1,6 @@
 <template>
   <div class="seating-plan">
-    <CompSeat v-for="seat of seatingPlan.seats"
+    <Seat v-for="seat of seatingPlan.seats"
       :no="seat.no"
       :person="seat.person"
       :x="seat.x"
@@ -13,12 +13,12 @@
 </template>
 
 <script>
-import CompSeat from './CompSeat.vue'
+import Seat from './Seat.vue'
 
 export default {
-  name: 'CompSeatingPlan',
+  name: 'SeatingPlan',
   components: {
-    CompSeat
+    Seat
   },
   props: {
     seatingPlan: Object
