@@ -6,6 +6,8 @@ class Person {
     this.firstName = firstName
     this.lastName = lastName
     this.grade = grade
+    this.placed = false
+    this.seatNo = 0
   }
 
   get id () {
@@ -112,6 +114,7 @@ class Seats {
 class SeatingPlan {
   constructor (people, seats) {
     this.people = people
+    this.nonePerson = new Person('', '', '')
     this.seats = seats
   }
 }

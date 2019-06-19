@@ -1,13 +1,8 @@
 <template>
   <div class="seating-plan">
     <seat-placement v-for="seat of seats"
-      :no="seat.no"
-      :person="seat.person"
-      :x="seat.x"
-      :y="seat.y"
+      :seat="seat"
       :key="seat.no"
-      :width="seatWidth"
-      :depth="seatDepth"
       />
   </div>
 </template>
@@ -23,12 +18,6 @@ export default {
   computed: {
     seats() {
       return this.$root.$data.seatingPlan.seats.seats
-    },
-    seatWidth() {
-      return this.$root.$data.seatingPlan.seats.seatWidth
-    },
-    seatDepth() {
-      return this.$root.$data.seatingPlan.seats.seatDepth
     }
   }
 }
@@ -41,7 +30,7 @@ export default {
   .seating-plan {
     width: 100%;
     height: 70.70707070vw;
-    background-color: azure;
+    background-color: whitesmoke;
     border: 1px solid black;
     position: relative;
     box-sizing: border-box;

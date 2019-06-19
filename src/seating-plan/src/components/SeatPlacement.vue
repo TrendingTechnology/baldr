@@ -1,14 +1,16 @@
 <template>
   <div class="seat"
-       :id=no
+       :id=seatWidth
        :style="style"
+       :title="personId"
        @dragover.prevent="dragover"
        @dragleave.prevent="dragleave"
+       @dragstart="dragstart"
        @drop.prevent="drop"
   >
-    <div class="first-name">{{ firstName }}</div>
-    <div class="last-name">{{ lastName }}</div>
-    <div class="no">{{ no }}</div>
+    <div class="first-name">{{ personFirstName }}</div>
+    <div class="last-name">{{ personLastName }}</div>
+    <div class="no">{{ seat.no }}</div>
   </div>
 </template>
 
@@ -16,28 +18,39 @@
 export default {
   name: 'Seat-Placement',
   props: {
-    person: Object,
-    depth: Number,
-    no: Number,
-    width: Number,
-    x: Number,
-    y: Number
+    seat: Object,
   },
   computed: {
     style () {
-      return `bottom: ${this.y}%; height: ${this.depth}%; left: ${this.x}%; width: ${this.width}%;`;
+      return `bottom: ${this.seat.y}%; height: ${this.seatDepth}%; left: ${this.seat.x}%; width: ${this.seatWidth}%;`;
     },
-    firstName () {
-      return this.person.firstName
+    personFirstName () {
+      return this.seat.person.firstName
     },
-    lastName () {
-      return this.person.lastName
+    personLastName () {
+      return this.seat.person.lastName
+    },
+    personId () {
+      return this.seat.person.id
     },
     people() {
       return this.$root.$data.seatingPlan.people
+    },
+    seatWidth() {
+      return this.$root.$data.seatingPlan.seats.seatWidth
+    },
+    seatDepth() {
+      return this.$root.$data.seatingPlan.seats.seatDepth
+    },
+    seats () {
+      return this.$root.$data.seatingPlan.seats
     }
   },
   methods: {
+    dragstart (event) {
+      event.dataTransfer.dropEffect = 'move'
+      event.dataTransfer.setData('text/plain', event.currentTarget.title)
+    },
     dragover (event) {
       event.currentTarget.classList.add('dragover')
     },
@@ -46,8 +59,22 @@ export default {
     },
     drop (event) {
       let data = event.dataTransfer.getData('text/plain')
-      let person = this.people.getPersonById(data)
-      console.log(person)
+      let personToBePlaced = this.people.getPersonById(data)
+      personToBePlaced.placed = true
+      // Drop over a seat which is already placed
+      if (this.seat.person.hasOwnProperty('firstName')) {
+        let alreadyPlaced = document.querySelector(`.people-item[title="${this.seat.person.id}"]`)
+        alreadyPlaced.draggable = true
+      }
+      if (personToBePlaced.seatNo) {
+        this.seats.seats[personToBePlaced.seatNo].person = {}
+      }
+      personToBePlaced.seatNo = this.seat.no
+      this.seat.person = personToBePlaced
+      // Disable dragging in the people list of already placed persons.
+      let dragSource = document.querySelector(`.people-item[title="${personToBePlaced.id}"]`)
+      dragSource.draggable = false
+      this.$el.draggable = "true"
       if (event.currentTarget.classList) event.currentTarget.classList.remove('dragover')
     }
   }
