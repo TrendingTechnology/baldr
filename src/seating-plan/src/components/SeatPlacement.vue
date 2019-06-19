@@ -58,22 +58,21 @@ export default {
       if (event.currentTarget.classList) event.currentTarget.classList.remove('dragover')
     },
     drop (event) {
-      let data = event.dataTransfer.getData('text/plain')
-      let personToBePlaced = this.people.getPersonById(data)
+      let personId = event.dataTransfer.getData('text/plain')
+      let personToBePlaced = this.people.getPersonById(personId)
       personToBePlaced.placed = true
-      // Drop over a seat which is already placed
+      // Drop over a seat which is already placed a person.
+      // Reset the seat number first.
       if (this.seat.person.hasOwnProperty('firstName')) {
-        let alreadyPlaced = document.querySelector(`.people-item[title="${this.seat.person.id}"]`)
-        alreadyPlaced.draggable = true
+        this.seat.person.seatNo = 0
       }
+      // Remove person from seat
       if (personToBePlaced.seatNo) {
         this.seats.seats[personToBePlaced.seatNo].person = {}
       }
+      // Set new seat number to the person.
       personToBePlaced.seatNo = this.seat.no
       this.seat.person = personToBePlaced
-      // Disable dragging in the people list of already placed persons.
-      let dragSource = document.querySelector(`.people-item[title="${personToBePlaced.id}"]`)
-      dragSource.draggable = false
       this.$el.draggable = "true"
       if (event.currentTarget.classList) event.currentTarget.classList.remove('dragover')
     }
@@ -86,6 +85,9 @@ export default {
     border: 1px solid black;
     position: absolute;
     background-color: white;
+  }
+  [draggable="true"] {
+    cursor: grab;
   }
   .first-name {
     font-weight: bold;

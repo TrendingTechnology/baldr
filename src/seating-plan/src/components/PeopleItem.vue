@@ -3,7 +3,7 @@
       :title="person.id"
       :key="person.lastname"
       @dragstart="dragstart"
-      draggable="true"
+      :draggable="draggable"
       class="people-item"
       :class="{ placed: person.placed }"
   >
@@ -16,6 +16,15 @@ export default {
   name: 'PeopleItem',
   props: {
     person: Object
+  },
+  computed: {
+    draggable () {
+      if (this.person.seatNo >= 1 && this.person.seatNo <= 32) {
+        return 'false'
+      } else {
+        return 'true'
+      }
+    }
   },
   methods: {
     dragstart (event) {
@@ -30,13 +39,14 @@ export default {
   /* .people-item {
     opacity: 0.5;
   } */
-  .people-item[draggable="true"] {
+  [draggable="true"] {
     cursor: grab;
   }
-  .people-item[draggable="true"]:hover {
+  [draggable="true"]:hover {
     color: red;
   }
-  .people-item[draggable="false"] {
+  [draggable="false"] {
     text-decoration: line-through;
+    color: grey;
   }
 </style>
