@@ -91,9 +91,11 @@ export default {
   }
   .first-name {
     font-weight: bold;
+    text-align: center;
   }
   .last-name {
     font-style: italic;
+    text-align: center;
   }
   .no {
     position: absolute;

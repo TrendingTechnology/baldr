@@ -29,10 +29,9 @@ export default {
 */
   .seating-plan {
     width: 100%;
-    height: 70.70707070vw;
-    background-color: whitesmoke;
-    border: 1px solid black;
+    height: 96vh;
     position: relative;
     box-sizing: border-box;
+    margin: 2vh;
   }
 </style>

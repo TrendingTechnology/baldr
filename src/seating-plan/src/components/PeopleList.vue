@@ -25,6 +25,7 @@ export default {
 
 <style scoped>
   .people-list {
-    width: 100%;
+    display: block;
+    white-space: nowrap;
   }
 </style>

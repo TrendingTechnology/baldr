@@ -36,9 +36,6 @@ export default {
 </script>
 
 <style scoped>
-  /* .people-item {
-    opacity: 0.5;
-  } */
   [draggable="true"] {
     cursor: grab;
   }

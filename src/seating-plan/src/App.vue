@@ -23,8 +23,9 @@ body {
 }
 #app {
   display: flex;
+  align-items: stretch;
 }
 .people-list {
-  flex-shrink: 2;
+  flex-basis: content;
 }
 </style>
