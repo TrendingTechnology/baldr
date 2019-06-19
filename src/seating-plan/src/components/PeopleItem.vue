@@ -2,7 +2,7 @@
   <li
       :title="person.id"
       :key="person.lastname"
-      @dragstart="dragstart"
+      @dragstart="eventListenerDragStart"
       :draggable="draggable"
       class="people-item"
       :class="{ placed: person.placed }"
@@ -27,7 +27,7 @@ export default {
     }
   },
   methods: {
-    dragstart (event) {
+    eventListenerDragStart (event) {
       event.dataTransfer.dropEffect = 'move'
       event.dataTransfer.setData('text/plain', event.currentTarget.title)
     }

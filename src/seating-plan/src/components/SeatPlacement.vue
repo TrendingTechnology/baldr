@@ -3,10 +3,10 @@
        :id=seatWidth
        :style="style"
        :title="personId"
-       @dragover.prevent="dragover"
-       @dragleave.prevent="dragleave"
-       @dragstart="dragstart"
-       @drop.prevent="drop"
+       @dragover.prevent="eventListenerDragOver"
+       @dragleave.prevent="eventListenerDragLeave"
+       @dragstart="eventListenerDragStart"
+       @drop.prevent="eventListenerDrop"
   >
     <div class="first-name">{{ personFirstName }}</div>
     <div class="last-name">{{ personLastName }}</div>
@@ -47,17 +47,17 @@ export default {
     }
   },
   methods: {
-    dragstart (event) {
+    eventListenerDragStart (event) {
       event.dataTransfer.dropEffect = 'move'
       event.dataTransfer.setData('text/plain', event.currentTarget.title)
     },
-    dragover (event) {
+    eventListenerDragOver (event) {
       event.currentTarget.classList.add('dragover')
     },
-    dragleave (event) {
+    eventListenerDragLeave (event) {
       if (event.currentTarget.classList) event.currentTarget.classList.remove('dragover')
     },
-    drop (event) {
+    eventListenerDrop (event) {
       let personId = event.dataTransfer.getData('text/plain')
       let personToBePlaced = this.people.getPersonById(personId)
       personToBePlaced.placed = true
