@@ -4,7 +4,7 @@
        :style="style"
        @dragover.prevent="dragover"
        @dragleave.prevent="dragleave"
-       @drop="drop"
+       @drop.prevent="drop"
   >
     <div class="first-name">{{ firstName }}</div>
     <div class="last-name">{{ lastName }}</div>
@@ -32,17 +32,23 @@ export default {
     },
     lastName () {
       return this.person.lastName
+    },
+    people() {
+      return this.$root.$data.seatingPlan.people
     }
   },
   methods: {
     dragover (event) {
-      event.target.classList.add('dragover')
+      event.currentTarget.classList.add('dragover')
     },
     dragleave (event) {
-      if (event.target.classList) event.target.classList.remove('dragover')
+      if (event.currentTarget.classList) event.currentTarget.classList.remove('dragover')
     },
     drop (event) {
-      if (event.target.classList) event.target.classList.remove('dragover')
+      let data = event.dataTransfer.getData('text/plain')
+      let person = this.people.getPersonById(data)
+      console.log(person)
+      if (event.currentTarget.classList) event.currentTarget.classList.remove('dragover')
     }
   }
 }

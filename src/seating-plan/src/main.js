@@ -8,7 +8,7 @@ class Person {
     this.grade = grade
   }
 
-  get sortString () {
+  get id () {
     return `${this.grade}: ${this.lastName}, ${this.firstName}`
   }
 }
@@ -16,6 +16,15 @@ class Person {
 class People {
   constructor () {
     this.list = {}
+  }
+
+  getPersonById (id) {
+    let match = id.match(/(.+): (.+), (.+)/)
+    return this.getPerson(match[3], match[2], match[1])
+  }
+
+  getPerson (firstName, lastName, grade) {
+    return this.list[grade][lastName][firstName]
   }
 
   add (person) {

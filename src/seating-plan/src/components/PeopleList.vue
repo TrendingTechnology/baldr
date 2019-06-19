@@ -1,8 +1,10 @@
 <template>
   <ol class="people-list">
-    <li draggable="true" v-for="person in peopleList"
+    <li v-for="person in peopleList"
+        :title="person.id"
         :key="person.lastname"
         @dragstart="dragstart"
+        draggable="true"
     >
       {{ person.lastName }}, {{ person.firstName }}
     </li>
@@ -20,7 +22,7 @@ export default {
   methods: {
     dragstart (event) {
       event.dataTransfer.dropEffect = "move"
-      event.dataTransfer.setData("text/plain", 'lol')
+      event.dataTransfer.setData("text/plain", event.currentTarget.title)
     }
   }
 }
