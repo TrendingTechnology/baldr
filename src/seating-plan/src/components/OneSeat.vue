@@ -19,7 +19,7 @@ import dataStore from '../data-store.js'
 let seats = dataStore.getData().seats
 
 export default {
-  name: 'Seat-Placement',
+  name: 'OneSeat',
   props: {
     seat: Object,
   },
