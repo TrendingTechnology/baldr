@@ -2,7 +2,6 @@ import Vue from 'vue'
 import App from './App.vue'
 import dataStore from './data-store.js'
 import VueRouter from 'vue-router'
-import SeatingPlan from './components/SeatingPlan.vue'
 
 class Person {
   constructor (firstName, lastName, grade) {
