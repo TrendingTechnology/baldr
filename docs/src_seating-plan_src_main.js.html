@@ -219,7 +219,8 @@ let seatingPlan = new SeatingPlan(people, seats)
 for (let personFromList of peopleList) {
   dataStore.addPerson(personFromList.firstName, personFromList.lastName, personFromList.grade)
 }
-console.log(dataStore)
+
+dataStore.syncData()
 
 Vue.config.productionTip = false
 
@@ -228,7 +229,8 @@ Vue.use(VueRouter)
 new Vue({
   data: function () {
     return {
-      seatingPlan: seatingPlan
+      seatingPlan: seatingPlan,
+      data: dataStore.data
     }
   },
   render: function (h) { return h(App) }
