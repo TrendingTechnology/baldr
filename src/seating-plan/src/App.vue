@@ -1,19 +1,24 @@
 <template>
   <div id="app">
-    <seating-plan/>
-    <people-list/>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import SeatingPlan from './components/SeatingPlan.vue'
-import PeopleList from './components/PeopleList.vue'
+import VueRouter from 'vue-router'
+import SeatingPlanView from './components/SeatingPlanView.vue'
+import GradesList from './components/GradesList.vue'
+
+const routes = [
+  { path: '/grades-list', component: GradesList },
+  { path: '/grade/:grade', component: SeatingPlanView }
+]
+
+const router = new VueRouter({routes})
 
 export default {
   name: 'app',
-  components: {
-    SeatingPlan, PeopleList
-  }
+  router
 }
 </script>
 
@@ -21,11 +26,5 @@ export default {
 body {
   margin: 2px;
 }
-#app {
-  display: flex;
-  align-items: stretch;
-}
-.people-list {
-  flex-basis: content;
-}
+
 </style>

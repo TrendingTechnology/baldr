@@ -117,6 +117,15 @@ const dataStore = {
   },
   getSeats () {
     return this.data.seats.positions
+  },
+  getGrades () {
+    return this.data.grades
+  },
+  getCurrentGrade () {
+    return this.data.currentGrade
+  },
+  setCurrentGrade (grade) {
+    this.data.currentGrade = grade
   }
 }
 

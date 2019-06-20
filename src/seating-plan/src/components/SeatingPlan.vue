@@ -30,7 +30,7 @@ export default {
 */
   .seating-plan {
     width: 100%;
-    height: 96vh;
+    height: 90vh;
     position: relative;
     box-sizing: border-box;
     margin: 2vh;

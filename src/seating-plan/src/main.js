@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import App from './App.vue'
 import dataStore from './data-store.js'
+import VueRouter from 'vue-router'
+import SeatingPlan from './components/SeatingPlan.vue'
 
 class Person {
   constructor (firstName, lastName, grade) {
@@ -193,6 +195,8 @@ for (let personFromList of peopleList) {
 console.log(dataStore)
 
 Vue.config.productionTip = false
+
+Vue.use(VueRouter)
 
 new Vue({
   data: function () {

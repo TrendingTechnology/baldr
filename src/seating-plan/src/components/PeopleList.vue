@@ -18,7 +18,7 @@ export default {
   },
   computed: {
     persons() {
-      return dataStore.getPersons()
+      return dataStore.getPersons(dataStore.getCurrentGrade())
     }
   }
 }
