@@ -15,6 +15,9 @@
 </template>
 
 <script>
+import dataStore from '../data-store.js'
+let seats = dataStore.getData().seats
+
 export default {
   name: 'Seat-Placement',
   props: {
@@ -22,7 +25,7 @@ export default {
   },
   computed: {
     style () {
-      return `bottom: ${this.seat.y}%; height: ${this.seatDepth}%; left: ${this.seat.x}%; width: ${this.seatWidth}%;`;
+      return `bottom: ${this.seat.y}%; height: ${seats.dimension.depth}%; left: ${this.seat.x}%; width: ${seats.dimension.width}%;`;
     },
     personFirstName () {
       return this.seat.person.firstName

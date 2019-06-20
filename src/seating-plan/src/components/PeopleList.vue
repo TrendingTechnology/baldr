@@ -1,6 +1,6 @@
 <template>
   <ol class="people-list">
-    <people-item v-for="person in peopleList"
+    <people-item v-for="person in persons"
                  :person="person"
                  :key="person.id"
     />
@@ -9,6 +9,7 @@
 
 <script>
 import PeopleItem from './PeopleItem.vue'
+import dataStore from '../data-store.js'
 
 export default {
   name: 'PeopleList',
@@ -16,8 +17,8 @@ export default {
     PeopleItem
   },
   computed: {
-    peopleList() {
-      return this.$root.$data.seatingPlan.people.flattenList()
+    persons() {
+      return dataStore.getPersons()
     }
   }
 }
