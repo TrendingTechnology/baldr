@@ -25,7 +25,8 @@ export default {
     }
   },
   created: function () {
-    dataStore.setCurrentGrade(this.$route.params.grade)
+    let grade = this.$route.params.grade
+    dataStore.setCurrentGrade(grade)
   }
 }
 </script>

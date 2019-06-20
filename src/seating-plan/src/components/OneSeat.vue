@@ -27,20 +27,29 @@ export default {
     style () {
       return `bottom: ${this.seat.y}%; height: ${seats.dimension.depth}%; left: ${this.seat.x}%; width: ${seats.dimension.width}%;`;
     },
+    person () {
+      return dataStore.getPersonBySeatNo(this.seat.no)
+    },
     personFirstName () {
-      //return this.seat.person.firstName
+      if (this.person) {
+        return this.person.firstName
+      } else {
+        return ''
+      }
     },
     personLastName () {
-      //return this.seat.person.lastName
+      if (this.person) {
+        return this.person.lastName
+      } else {
+        return ''
+      }
     },
     personId () {
-      //return this.seat.person.id
-    },
-    people() {
-      return this.$root.$data.seatingPlan.people
-    },
-    seats () {
-      return this.$root.$data.seatingPlan.seats
+      if (this.person) {
+        return this.person.id
+      } else {
+        return ''
+      }
     }
   },
   methods: {
@@ -56,21 +65,22 @@ export default {
     },
     eventListenerDrop (event) {
       let personId = event.dataTransfer.getData('text/plain')
-      let personToBePlaced = this.people.getPersonById(personId)
-      personToBePlaced.placed = true
-      // Drop over a seat which is already placed a person.
-      // Reset the seat number first.
-      if (this.seat.person.hasOwnProperty('firstName')) {
-        this.seat.person.seatNo = 0
-      }
-      // Remove person from seat
-      if (personToBePlaced.seatNo) {
-        this.seats.seats[personToBePlaced.seatNo].person = {}
-      }
-      // Set new seat number to the person.
-      personToBePlaced.seatNo = this.seat.no
-      this.seat.person = personToBePlaced
-      this.$el.draggable = "true"
+      dataStore.placePersonById(this.seat.no, personId)
+      // let personToBePlaced = this.people.getPersonById(personId)
+      // personToBePlaced.placed = true
+      // // Drop over a seat which is already placed a person.
+      // // Reset the seat number first.
+      // if (this.seat.person.hasOwnProperty('firstName')) {
+      //   this.seat.person.seatNo = 0
+      // }
+      // // Remove person from seat
+      // if (personToBePlaced.seatNo) {
+      //   this.seats.seats[personToBePlaced.seatNo].person = {}
+      // }
+      // // Set new seat number to the person.
+      // personToBePlaced.seatNo = this.seat.no
+      // this.seat.person = personToBePlaced
+      // this.$el.draggable = "true"
       if (event.currentTarget.classList) event.currentTarget.classList.remove('dragover')
     }
   }

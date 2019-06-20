@@ -10,7 +10,7 @@ import SeatingPlanView from './components/SeatingPlanView.vue'
 import GradesList from './components/GradesList.vue'
 
 const routes = [
-  { path: '/grades-list', component: GradesList },
+  { path: '/grades-list', component: GradesList, alias: '/' },
   { path: '/grade/:grade', component: SeatingPlanView }
 ]
 

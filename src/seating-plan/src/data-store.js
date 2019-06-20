@@ -115,6 +115,21 @@ const dataStore = {
     }
     return persons
   },
+  getPerson (firstName, lastName, grade) {
+    return this.data.persons[grade][lastName][firstName]
+  },
+  getPersonById (id) {
+    let match = id.match(/(.+): (.+), (.+)/)
+    return this.getPerson(match[3], match[2], match[1])
+  },
+  getPersonBySeatNo (no) {
+    let personId = this.data.plans[this.data.currentGrade][no]
+    if (personId) {
+      return this.getPersonById(personId)
+    } else {
+      return {}
+    }
+  },
   getSeats () {
     return this.data.seats.positions
   },
@@ -126,6 +141,27 @@ const dataStore = {
   },
   setCurrentGrade (grade) {
     this.data.currentGrade = grade
+  },
+  initPlan (grade) {
+    let plans = this.data.plans
+    if (!plans.hasOwnProperty(grade)) {
+      plans[grade] = {}
+    }
+    for (let no = 1; no <= this.data.seats.count; no++) {
+      if (!plans[grade].hasOwnProperty(no)) {
+        plans[grade][no] = ''
+      }
+    }
+  },
+  placePersonById (no, id) {
+    this.data.plans[this.data.currentGrade][no] = id
+    let person = this.getPersonById(id)
+    person.seatNo = no
+  },
+  syncData () {
+    for (let grade of this.data.grades) {
+      this.initPlan(grade)
+    }
   }
 }
 
