@@ -154,8 +154,23 @@ const dataStore = {
     }
   },
   placePersonById (no, id) {
-    this.data.plans[this.data.currentGrade][no] = id
+    let plan = this.data.plans[this.data.currentGrade]
     let person = this.getPersonById(id)
+
+    // Replace a already placed person and remove it from the plan.
+    let replacedPersonId = plan[no]
+    if (replacedPersonId) {
+      let replacedPerson = this.getPersonById(replacedPersonId)
+      replacedPerson.seatNo = 0
+    }
+
+    // Move the same person to another seat.
+    if (person.seatNo) {
+      plan[person.seatNo] = ''
+    }
+
+    // Place the person.
+    plan[no] = id
     person.seatNo = no
   },
   syncData () {

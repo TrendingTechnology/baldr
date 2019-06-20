@@ -66,21 +66,7 @@ export default {
     eventListenerDrop (event) {
       let personId = event.dataTransfer.getData('text/plain')
       dataStore.placePersonById(this.seat.no, personId)
-      // let personToBePlaced = this.people.getPersonById(personId)
-      // personToBePlaced.placed = true
-      // // Drop over a seat which is already placed a person.
-      // // Reset the seat number first.
-      // if (this.seat.person.hasOwnProperty('firstName')) {
-      //   this.seat.person.seatNo = 0
-      // }
-      // // Remove person from seat
-      // if (personToBePlaced.seatNo) {
-      //   this.seats.seats[personToBePlaced.seatNo].person = {}
-      // }
-      // // Set new seat number to the person.
-      // personToBePlaced.seatNo = this.seat.no
-      // this.seat.person = personToBePlaced
-      // this.$el.draggable = "true"
+      this.$el.draggable = "true"
       if (event.currentTarget.classList) event.currentTarget.classList.remove('dragover')
     }
   }
