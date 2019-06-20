@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import App from './App.vue'
+import dataStore from './data-store.js'
 
 class Person {
   constructor (firstName, lastName, grade) {
@@ -58,6 +59,10 @@ class People {
       }
     }
     return people
+  }
+
+  grades () {
+    return Object.keys(this.list).sort()
   }
 }
 
@@ -135,6 +140,11 @@ for (let personFromList of peopleList) {
 let seats = new Seats()
 
 let seatingPlan = new SeatingPlan(people, seats)
+
+for (let personFromList of peopleList) {
+  dataStore.addPerson(personFromList.firstName, personFromList.lastName, personFromList.grade)
+}
+console.log(dataStore)
 
 Vue.config.productionTip = false
 
