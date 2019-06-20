@@ -1,6 +1,6 @@
 <template>
   <div class="seating-plan">
-    <one-seat v-for="seat of seats"
+    <one-seat v-for="seat in seats"
       :seat="seat"
       :key="seat.no"
       />
@@ -9,6 +9,7 @@
 
 <script>
 import OneSeat from './OneSeat.vue'
+import dataStore from '../data-store.js'
 
 export default {
   name: 'SeatingPlan',
@@ -17,7 +18,7 @@ export default {
   },
   computed: {
     seats() {
-      return this.$root.$data.seatingPlan.seats.seats
+      return dataStore.getSeats()
     }
   }
 }

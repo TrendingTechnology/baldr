@@ -49,6 +49,7 @@ const seatingPlanLayout = new SeatingPlanLayout()
 
 const dataStore = {
   data: {
+    currentGrade: '',
     persons: {},
     grades: [],
     seats: {
@@ -113,6 +114,9 @@ const dataStore = {
       }
     }
     return persons
+  },
+  getSeats () {
+    return this.data.seats.positions
   }
 }
 

@@ -1,6 +1,6 @@
 <template>
   <div class="seat"
-       :id=seatWidth
+       :id=seat.no
        :style="style"
        :title="personId"
        @dragover.prevent="eventListenerDragOver"
@@ -28,22 +28,16 @@ export default {
       return `bottom: ${this.seat.y}%; height: ${seats.dimension.depth}%; left: ${this.seat.x}%; width: ${seats.dimension.width}%;`;
     },
     personFirstName () {
-      return this.seat.person.firstName
+      //return this.seat.person.firstName
     },
     personLastName () {
-      return this.seat.person.lastName
+      //return this.seat.person.lastName
     },
     personId () {
-      return this.seat.person.id
+      //return this.seat.person.id
     },
     people() {
       return this.$root.$data.seatingPlan.people
-    },
-    seatWidth() {
-      return this.$root.$data.seatingPlan.seats.seatWidth
-    },
-    seatDepth() {
-      return this.$root.$data.seatingPlan.seats.seatDepth
     },
     seats () {
       return this.$root.$data.seatingPlan.seats
