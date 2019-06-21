@@ -45,6 +45,13 @@ class SeatingPlanLayout {
   }
 }
 
+/**
+ * @see {@link https://stackoverflow.com/a/38641281}
+ */
+function naturalSort (a, b) {
+ return a.localeCompare(b, 'de', { numeric: true, sensitivity: 'base' })
+}
+
 const seatingPlanLayout = new SeatingPlanLayout()
 
 const dataStore = {
@@ -93,7 +100,7 @@ const dataStore = {
     // Add grade to grade list.
     if (!this.data.grades.includes(grade)) {
       this.data.grades.push(grade)
-      this.data.grades.sort()
+      this.data.grades.sort(naturalSort)
     }
   },
   getPersons (grade = null) {

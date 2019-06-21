@@ -3,6 +3,7 @@
        :id=seat.no
        :style="style"
        :title="personId"
+       :draggable="draggable"
        @dragover.prevent="eventListenerDragOver"
        @dragleave.prevent="eventListenerDragLeave"
        @dragstart="eventListenerDragStart"
@@ -24,6 +25,13 @@ export default {
     seat: Object,
   },
   computed: {
+    draggable () {
+      if (this.person.seatNo >= 1 && this.person.seatNo <= seats.count) {
+        return 'true'
+      } else {
+        return 'false'
+      }
+    },
     style () {
       return `bottom: ${this.seat.y}%; height: ${seats.dimension.depth}%; left: ${this.seat.x}%; width: ${seats.dimension.width}%;`;
     },
@@ -61,13 +69,16 @@ export default {
       event.currentTarget.classList.add('dragover')
     },
     eventListenerDragLeave (event) {
-      if (event.currentTarget.classList) event.currentTarget.classList.remove('dragover')
+      if (event.currentTarget.classList) {
+        event.currentTarget.classList.remove('dragover')
+      }
     },
     eventListenerDrop (event) {
       let personId = event.dataTransfer.getData('text/plain')
       dataStore.placePersonById(this.seat.no, personId)
-      this.$el.draggable = "true"
-      if (event.currentTarget.classList) event.currentTarget.classList.remove('dragover')
+      if (event.currentTarget.classList) {
+        event.currentTarget.classList.remove('dragover')
+      }
     }
   }
 }

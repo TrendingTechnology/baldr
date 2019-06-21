@@ -12,6 +12,9 @@
 </template>
 
 <script>
+import dataStore from '../data-store.js'
+let seats = dataStore.getData().seats
+
 export default {
   name: 'PeopleItem',
   props: {
@@ -19,7 +22,7 @@ export default {
   },
   computed: {
     draggable () {
-      if (this.person.seatNo >= 1 && this.person.seatNo <= 32) {
+      if (this.person.seatNo >= 1 && this.person.seatNo <= seats.count) {
         return 'false'
       } else {
         return 'true'
