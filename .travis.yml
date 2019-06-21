@@ -7,7 +7,7 @@ node_js:
 install:
   - npm install --global npm
   - npm install --global lerna
-  - lerna bootstrap
+  - lerna bootstrap --no-ci
 
 before_script:
   - "export DISPLAY=:99.0"
