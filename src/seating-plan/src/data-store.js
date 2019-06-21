@@ -22,7 +22,7 @@ class SeatingPlanLayout {
       [[1, 2, 3, 4], [5, 6, 7, 8]],
       [[9, 10, 11, 12], [13, 14, 15, 16]],
       [[17, 18, 19, 20], [21, 22, 23, 24]],
-      [[25, 26, 27, 28], [29, 30, 31, 32]],
+      [[25, 26, 27, 28], [29, 30, 31, 32]]
     ]
   }
 
@@ -49,7 +49,7 @@ class SeatingPlanLayout {
  * @see {@link https://stackoverflow.com/a/38641281}
  */
 function naturalSort (a, b) {
- return a.localeCompare(b, 'de', { numeric: true, sensitivity: 'base' })
+  return a.localeCompare(b, 'de', { numeric: true, sensitivity: 'base' })
 }
 
 const seatingPlanLayout = new SeatingPlanLayout()
@@ -187,4 +187,4 @@ const dataStore = {
   }
 }
 
-export default dataStore;
+export default dataStore
