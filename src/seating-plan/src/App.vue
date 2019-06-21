@@ -14,7 +14,7 @@ const routes = [
   { path: '/grade/:grade', component: SeatingPlanView }
 ]
 
-const router = new VueRouter({routes})
+const router = new VueRouter({ routes })
 
 export default {
   name: 'app',

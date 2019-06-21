@@ -22,7 +22,7 @@ let seats = dataStore.getData().seats
 export default {
   name: 'OneSeat',
   props: {
-    seat: Object,
+    seat: Object
   },
   computed: {
     draggable () {
@@ -33,7 +33,7 @@ export default {
       }
     },
     style () {
-      return `bottom: ${this.seat.y}%; height: ${seats.dimension.depth}%; left: ${this.seat.x}%; width: ${seats.dimension.width}%;`;
+      return `bottom: ${this.seat.y}%; height: ${seats.dimension.depth}%; left: ${this.seat.x}%; width: ${seats.dimension.width}%;`
     },
     person () {
       return dataStore.getPersonBySeatNo(this.seat.no)

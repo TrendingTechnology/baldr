@@ -17,7 +17,7 @@ export default {
     PeopleItem
   },
   computed: {
-    persons() {
+    persons () {
       return dataStore.getPersons(dataStore.getCurrentGrade())
     }
   }

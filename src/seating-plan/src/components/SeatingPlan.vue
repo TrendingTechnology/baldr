@@ -17,7 +17,7 @@ export default {
     OneSeat
   },
   computed: {
-    seats() {
+    seats () {
       return dataStore.getSeats()
     }
   }
