@@ -1,6 +1,9 @@
 <template>
   <div class="seating-plan-view">
-    <h1>Sitzplan der Klasse “{{ currentGrade }}”</h1>
+    <header>
+      <router-link to='/' class="back-link">zurück</router-link>
+      <h1>Sitzplan der Klasse “{{ currentGrade }}”</h1>
+    </header>
     <section>
       <seating-plan/>
       <people-list/>
@@ -32,10 +35,19 @@ export default {
 </script>
 
 <style scoped>
+header {
+  display: inline-flex;
+}
+
+h1 {
+  padding-left: 2em;
+}
+
 .seating-plan-view section {
   display: flex;
   align-items: stretch;
 }
+
 .people-list {
   flex-basis: content;
 }

@@ -1,5 +1,6 @@
 <template>
   <div class="grades-list">
+    <h1>Sitzpläne Musiksaal E 17</h1>
     <ul>
       <li v-for="grade in grades" :key="grade">
         <router-link :to="'/grade/' + grade">
