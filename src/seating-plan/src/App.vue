@@ -8,6 +8,7 @@
 import VueRouter from 'vue-router'
 import SeatingPlanView from './components/SeatingPlanView.vue'
 import GradesList from './components/GradesList.vue'
+import '@bldr/theme-default-css'
 
 const routes = [
   { path: '/grades-list', component: GradesList, alias: '/' },
