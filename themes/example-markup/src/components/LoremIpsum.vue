@@ -19,14 +19,26 @@
     <h4>Heading 4</h4>
 
     Person: <p class="person">Ludwig van Beethoven</p>
-    Piece: <p class="piece">Symphonie Nr. 5</p>
 
+    <markup-sample
+      title="Class .person"
+      markup="<p class='person'>Ludwig van Beethoven</p>"
+    />
 
+    <markup-sample
+      title="Class .piece"
+      markup="<p class='piece'>Symphonie Nr. 5</p>"
+    />
   </div>
 </template>
 
 <script>
+import MarkupSample from './MarkupSample'
+
 export default {
-  name: 'LoremIpsum'
+  name: 'LoremIpsum',
+  components: {
+    MarkupSample
+  }
 }
 </script>
