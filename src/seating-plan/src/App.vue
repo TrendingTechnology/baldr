@@ -24,6 +24,8 @@ export default {
 </script>
 
 <style>
+@import '../node_modules/@bldr/theme-default-css/styles.css';
+
 body {
   margin: 2px;
 }

@@ -184,6 +184,11 @@ const dataStore = {
     for (let grade of this.data.grades) {
       this.initPlan(grade)
     }
+  },
+  removePersonFromSeat (personId, seatNo) {
+    let person = this.getPersonById(personId)
+    person.seatNo = 0
+    this.data.plans[this.data.currentGrade][seatNo] = ''
   }
 }
 

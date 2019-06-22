@@ -12,10 +12,12 @@
     <div class="first-name">{{ personFirstName }}</div>
     <div class="last-name">{{ personLastName }}</div>
     <div class="no">{{ seat.no }}</div>
+    <div class="close mdi mdi-close" @click="eventListenerRemove"></div>
   </div>
 </template>
 
 <script>
+// import '@mdi/font'
 import dataStore from '../data-store.js'
 let seats = dataStore.getData().seats
 
@@ -79,12 +81,17 @@ export default {
       if (event.currentTarget.classList) {
         event.currentTarget.classList.remove('dragover')
       }
+    },
+    eventListenerRemove (event) {
+      dataStore.removePersonFromSeat(this.personId, this.seat.no)
     }
   }
 }
 </script>
 
 <style scoped>
+  @import '../../node_modules/@mdi/font/css/materialdesignicons.css';
+
   .seat {
     border: 1px solid black;
     position: absolute;
@@ -109,5 +116,15 @@ export default {
   }
   .dragover {
     background-color: red;
+  }
+  .seat .close {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    display: none;
+  }
+  .seat[title]:hover .close {
+    display: block;
+    cursor: pointer;
   }
 </style>
