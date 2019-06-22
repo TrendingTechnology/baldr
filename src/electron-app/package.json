@@ -1,6 +1,6 @@
 {
   "name": "@bldr/electron-app",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "description": "The main electron app.",
   "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
   "bugs": {
@@ -21,22 +21,22 @@
     "start": "electron ."
   },
   "dependencies": {
-    "@bldr/core": "^0.0.10",
-    "@bldr/foundation-master": "^0.0.10",
-    "@bldr/master-audio": "^0.0.10",
+    "@bldr/core": "^0.0.11",
+    "@bldr/foundation-master": "^0.0.11",
+    "@bldr/master-audio": "^0.0.11",
     "@bldr/master-camera": "^0.0.10",
-    "@bldr/master-editor": "^0.0.10",
+    "@bldr/master-editor": "^0.0.11",
     "@bldr/master-image": "^0.0.10",
-    "@bldr/master-markdown": "^0.0.10",
+    "@bldr/master-markdown": "^0.0.11",
     "@bldr/master-person": "^0.0.10",
     "@bldr/master-question": "^0.0.8",
     "@bldr/master-quote": "^0.0.8",
     "@bldr/master-svg": "^0.0.8",
     "@bldr/master-video": "^0.0.10",
     "@bldr/master-website": "^0.0.8",
-    "@bldr/test-helper": "^0.0.10",
-    "@bldr/theme-default": "^0.0.10",
-    "@bldr/theme-handwriting": "^0.0.10",
+    "@bldr/test-helper": "^0.0.11",
+    "@bldr/theme-default": "^0.0.11",
+    "@bldr/theme-handwriting": "^0.0.11",
     "electron": "^5.0.4",
     "font-awesome": "^4.7.0",
     "mousetrap": "^1.6.3"
