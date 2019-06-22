@@ -1,6 +1,6 @@
 {
   "name": "@bldr/camera-electron-app",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "description": "A fullscreen electron app to display the video output from document cameras.",
   "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
   "repository": {
@@ -19,7 +19,7 @@
     "test": "mocha"
   },
   "devDependencies": {
-    "@bldr/test-helper": "^0.0.9",
+    "@bldr/test-helper": "^0.0.10",
     "electron": "^5.0.4",
     "electron-packager": "^13.1.1",
     "electron-rebuild": "^1.8.5",
