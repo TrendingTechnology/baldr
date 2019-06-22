@@ -1,3 +1,5 @@
 .npmignore
 test/
 *.baldr
+images/
+images2/

@@ -45,5 +45,6 @@
   "browserslist": [
     "> 1%",
     "last 2 versions"
-  ]
+  ],
+  "gitHead": "4fe9a039cfe88fd48d1289cb464b9a5a341578d3"
 }
