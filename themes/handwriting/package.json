@@ -17,6 +17,7 @@
     "url": "https://josef.friedrich.rocks"
   },
   "main": "index.js",
+  "style": "styles.css",
   "dependencies": {
     "typeface-kalam": "^0.0.72"
   },

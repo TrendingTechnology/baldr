@@ -17,6 +17,7 @@
     "url": "https://josef.friedrich.rocks"
   },
   "main": "index.js",
+  "style": "styles.css",
   "dependencies": {
     "typeface-alegreya": "^0.0.69",
     "typeface-alegreya-sans": "^0.0.72",

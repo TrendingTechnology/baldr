@@ -1,6 +1,21 @@
 {
   "name": "@bldr/seating-plan",
   "version": "0.1.0",
+  "description": "Seating plan of the baldr project.",
+  "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
+  "bugs": {
+    "url": "https://github.com/Josef-Friedrich/baldr/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Josef-Friedrich/baldr.git"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Josef Friedrich",
+    "email": "josef@friedrich.rocks",
+    "url": "https://josef.friedrich.rocks"
+  },
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
@@ -9,6 +24,9 @@
   "dependencies": {
     "vue": "^2.6.10",
     "vue-router": "^3.0.6"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "devDependencies": {
     "@vue/cli-plugin-eslint": "^3.8.0",

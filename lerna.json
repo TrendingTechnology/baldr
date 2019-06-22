@@ -8,12 +8,5 @@
     "test/helper",
     "themes/*"
   ],
-  "version": "independent",
-  "command": {
-    "publish": {
-      "ignoreChanges": [
-        "*.md"
-      ]
-    }
-  }
+  "version": "independent"
 }
