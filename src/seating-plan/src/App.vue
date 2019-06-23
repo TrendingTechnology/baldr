@@ -9,13 +9,15 @@ import VueRouter from 'vue-router'
 import SeatingPlanView from './components/SeatingPlanView.vue'
 import GradesList from './components/GradesList.vue'
 import ImportPersons from './components/ImportPersons.vue'
+import ExportData from './components/ExportData.vue'
 
 import '@bldr/theme-default-css'
 
 const routes = [
   { path: '/grades-list', component: GradesList, alias: '/' },
   { path: '/grade/:grade', component: SeatingPlanView },
-  { path: '/import-persons', component: ImportPersons }
+  { path: '/import-persons', component: ImportPersons },
+  { path: '/export-data', component: ExportData }
 ]
 
 const router = new VueRouter({ routes })
