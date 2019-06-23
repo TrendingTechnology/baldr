@@ -26,7 +26,8 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>
+            <pre class="prettyprint source linenums"><code>import Vue from 'vue'
+
 /**
  * 25 26 27 28    29 30 31 32
  *
@@ -103,12 +104,12 @@ const dataStore = {
   addPerson (firstName, lastName, grade) {
     // grade
     if (!this.data.persons.hasOwnProperty(grade)) {
-      this.data.persons[grade] = {}
+      Vue.set(this.data.persons, grade, {})
     }
 
     // lastName
     if (!this.data.persons[grade].hasOwnProperty(lastName)) {
-      this.data.persons[grade][lastName] = {}
+      Vue.set(this.data.persons[grade], lastName, {})
     }
 
     // firstName
@@ -116,14 +117,14 @@ const dataStore = {
       throw new Error(`Person already exists ${firstName} ${lastName} ${grade}`)
     }
 
-    this.data.persons[grade][lastName][firstName] = {
+    Vue.set(this.data.persons[grade][lastName], firstName, {
       id: `${grade}: ${lastName}, ${firstName}`,
       firstName: firstName,
       lastName: lastName,
       grade: grade,
       seatNo: 0,
       placed: false
-    }
+    })
 
     // Add grade to grade list.
     if (!this.data.grades.includes(grade)) {
@@ -180,11 +181,11 @@ const dataStore = {
   initPlan (grade) {
     let plans = this.data.plans
     if (!plans.hasOwnProperty(grade)) {
-      plans[grade] = {}
+      Vue.set(this.data.plans, grade, {})
     }
     for (let no = 1; no &lt;= this.data.seats.count; no++) {
       if (!plans[grade].hasOwnProperty(no)) {
-        plans[grade][no] = ''
+        Vue.set(this.data.plans[grade], no, '')
       }
     }
   },
