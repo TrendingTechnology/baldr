@@ -220,7 +220,10 @@ const dataStore = {
     this.data.plans[this.data.currentGrade][seatNo] = ''
   },
   importData (jsonString) {
-    Vue.set(this.data, JSON.parse(jsonString))
+    let newData = JSON.parse(jsonString)
+    let reactiveData = Vue.observable(newData)
+    Vue.set(this, 'data', reactiveData)
+    console.log(this.data)
   }
 }
 
