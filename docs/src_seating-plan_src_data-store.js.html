@@ -218,6 +218,9 @@ const dataStore = {
     let person = this.getPersonById(personId)
     person.seatNo = 0
     this.data.plans[this.data.currentGrade][seatNo] = ''
+  },
+  importData (jsonString) {
+    Vue.set(this.data, JSON.parse(jsonString))
   }
 }
 
