@@ -19,7 +19,7 @@ for (let distPath of ['src/electron-app/dist', 'masters/songbook/packages/electr
 
 let files = glob.sync('*.test.js', { ignore: ['**/node_modules/**', '**/dist/**'], matchBase: true })
 
-let mocha = new Mocha()
+let mocha = new Mocha({ timeout: 50000 })
 
 for (let file of files) {
   console.log(util.format('Load test file: %s', file))
