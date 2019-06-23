@@ -7,7 +7,7 @@
 
 <script>
 import dataStore from '../data-store.js'
-import HeadingTitle from './HeadingTitle'
+import HeadingTitle from './HeadingTitle.vue'
 
 export default {
   name: 'ImportData',
@@ -22,7 +22,6 @@ export default {
       reader.onload = readerEvent => {
         let content = readerEvent.target.result
         dataStore.importData(content)
-        console.log(dataStore.getData())
       }
     }
   }

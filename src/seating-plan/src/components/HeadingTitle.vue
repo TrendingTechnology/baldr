@@ -1,8 +1,9 @@
 <template>
-  <div class="heading-title">
+  <header>
     <vue-headful :title="title"/>
+    <router-link to='/' class="back-link">zurück</router-link>
     <h1>{{ title }}</h1>
-  </div>
+  </header>
 </template>
 
 <script>
@@ -18,3 +19,16 @@ export default {
   }
 }
 </script>
+
+    <vue-headful :title="title"/>
+
+<style scoped>
+header {
+  display: inline-flex;
+  width: 100%;
+}
+
+header h1 {
+  padding-left: 2em;
+}
+</style>

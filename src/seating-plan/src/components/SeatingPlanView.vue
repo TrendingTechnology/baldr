@@ -1,15 +1,10 @@
 <template>
   <div class="seating-plan-view">
-    <vue-headful :title="title"/>
-    <header>
-      <router-link to='/' class="back-link">zurück</router-link>
-      <h1>{{ title }}</h1>
-    </header>
+    <heading-title :title="title"/>
     <section>
       <seating-plan/>
       <people-list/>
     </section>
-
   </div>
 </template>
 
@@ -17,14 +12,14 @@
 import SeatingPlan from './SeatingPlan.vue'
 import PeopleList from './PeopleList.vue'
 import dataStore from '../data-store.js'
-import vueHeadful from 'vue-headful'
+import HeadingTitle from './HeadingTitle.vue'
 
 export default {
   name: 'SeatingPlanView',
   components: {
     SeatingPlan,
     PeopleList,
-    vueHeadful
+    HeadingTitle
   },
   computed: {
     currentGrade () {
@@ -42,14 +37,6 @@ export default {
 </script>
 
 <style scoped>
-header {
-  display: inline-flex;
-}
-
-h1 {
-  padding-left: 2em;
-}
-
 .seating-plan-view section {
   display: flex;
   align-items: stretch;

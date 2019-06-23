@@ -1,29 +1,33 @@
 <template>
   <div class="export-data">
-    <vue-headful title="Daten exportieren"/>
-    <h1>Daten exportieren</h1>
+    <heading-title title="Daten exportieren"/>
     <a
       :href="dataString"
-      download="seating-plan.json"
+      :download="`seating-plan${dateTime}.json`"
     >
-      DOWNLOAD DATA AS JSON
+      Die Sitzplan-Daten als JSON exportieren
     </a>
   </div>
 </template>
 
 <script>
 import dataStore from '../data-store.js'
-import vueHeadful from 'vue-headful'
+import HeadingTitle from './HeadingTitle.vue'
 
 export default {
   name: 'ExportData',
   components: {
-    vueHeadful
+    HeadingTitle
   },
   computed: {
     dataString () {
       let string = encodeURIComponent(JSON.stringify(dataStore.getData()))
       return `data:text/json;charset=utf-8,${string}`
+    },
+    dateTime () {
+      let date = new Date()
+      let isoString = date.toISOString()
+      return isoString.replace(':', '-')
     }
   }
 }

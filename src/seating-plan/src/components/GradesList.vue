@@ -1,7 +1,8 @@
 <template>
   <div class="grades-list">
-    <vue-headful title="Sitzpläne Musiksaal E 17"/>
-    <h1>Sitzpläne Musiksaal E 17</h1>
+    <heading-title title="Sitzpläne Musiksaal E 17"/>
+
+    <h2>Sitzpläne</h2>
     <ul>
       <li v-for="grade in grades" :key="grade">
         <router-link :to="'/grade/' + grade">
@@ -10,18 +11,25 @@
       </li>
     </ul>
 
-    <router-link to='/import-persons'>importieren</router-link>
+    <h2>Administration</h2>
+
+    <ul>
+      <li><router-link to='/import-persons'>importieren (Str+c aus LibreOffice)</router-link></li>
+      <li><router-link to='/export-data'>Daten exportieren (als JSON)</router-link></li>
+      <li><router-link to='/import-data'>Daten importieren (von JSON)</router-link></li>
+    </ul>
+
   </div>
 </template>
 
 <script>
 import dataStore from '../data-store.js'
-import vueHeadful from 'vue-headful'
+import HeadingTitle from './HeadingTitle.vue'
 
 export default {
   name: 'GradesList',
   components: {
-    vueHeadful
+    HeadingTitle
   },
   computed: {
     grades () {
