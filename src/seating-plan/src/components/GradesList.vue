@@ -17,6 +17,7 @@
       <li><router-link to='/import-persons'>importieren (Str+c aus LibreOffice)</router-link></li>
       <li><router-link to='/export-data'>Daten exportieren (als JSON)</router-link></li>
       <li><router-link to='/import-data'>Daten importieren (von JSON)</router-link></li>
+      <li><a href='#' @click="eventListenerClick">Test-Daten erzeugen</a></li>
     </ul>
 
   </div>
@@ -34,6 +35,11 @@ export default {
   computed: {
     grades () {
       return dataStore.getGrades()
+    }
+  },
+  methods: {
+    eventListenerClick () {
+      dataStore.createTestData()
     }
   }
 }

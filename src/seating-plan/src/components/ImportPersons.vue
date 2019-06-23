@@ -1,10 +1,12 @@
 <template>
   <div class="import-persons">
     <heading-title title="SchülerInnen importieren"/>
+    <pre>Familienname\tVorname\tGeschlecht\tKlasse\tGeburtsdatum
+Insgesamt:
+Mustermann\tMax\tmännlich\t05a\t17.11.2006</pre>
 
     <textarea rows="10" cols="80" v-model="importString"></textarea>
     <p><button @click="eventListenerClick">importieren</button></p>
-    {{ importString }}
   </div>
 </template>
 
