@@ -9,6 +9,8 @@
         </router-link>
       </li>
     </ul>
+
+    <router-link to='/import-persons'>importieren</router-link>
   </div>
 </template>
 
