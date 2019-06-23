@@ -1,6 +1,7 @@
 <template>
   <div class="import-persons">
-    <h1>SchülerInnen importieren</h1>
+    <heading-title title="SchülerInnen importieren"/>
+
     <textarea rows="10" cols="80" v-model="importString"></textarea>
     <p><button @click="eventListenerClick">importieren</button></p>
     {{ importString }}
@@ -9,9 +10,13 @@
 
 <script>
 import dataStore from '../data-store.js'
+import HeadingTitle from './HeadingTitle'
 
 export default {
   name: 'ImportPersons',
+  components: {
+    HeadingTitle
+  },
   data: function () {
     return {
       importString: '',
