@@ -16,3 +16,4 @@ before_script:
 
 script:
   - npm test
+  - cd src/seating-plan; npm run test:unit
