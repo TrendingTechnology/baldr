@@ -3,7 +3,7 @@
     <heading-title title="Daten exportieren"/>
     <a
       :href="dataString"
-      :download="`seating-plan${dateTime}.json`"
+      :download="`seating-plan_${dateTime}.json`"
     >
       Die Sitzplan-Daten als JSON exportieren
     </a>
@@ -27,7 +27,8 @@ export default {
     dateTime () {
       let date = new Date()
       let isoString = date.toISOString()
-      return isoString.replace(':', '-')
+      isoString = isoString.replace(/\.\d+Z/, '')
+      return isoString.replace(new RegExp(':', 'g'), '-')
     }
   }
 }
