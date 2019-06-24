@@ -1,6 +1,11 @@
 <template>
   <div class="seating-plan-view">
-    <dynamic-select-overlay/>
+    <modal-dialog
+      v-show="stateShowModal"
+      @close="closeModal"
+    >
+      <person-select/>
+    </modal-dialog>
     <heading-title :title="title"/>
     <section>
       <seating-plan/>
@@ -11,7 +16,8 @@
 
 <script>
 import HeadingTitle from './HeadingTitle.vue'
-import DynamicSelectOverlay from './DynamicSelectOverlay.vue'
+import ModalDialog from './ModalDialog.vue'
+import PersonSelect from './PersonSelect.vue'
 import SeatingPlan from './SeatingPlan.vue'
 import PeopleList from './PeopleList.vue'
 import dataStore from '../data-store.js'
@@ -22,7 +28,8 @@ export default {
     SeatingPlan,
     PeopleList,
     HeadingTitle,
-    DynamicSelectOverlay
+    PersonSelect,
+    ModalDialog
   },
   computed: {
     currentGrade () {
@@ -30,6 +37,17 @@ export default {
     },
     title () {
       return 'Sitzplan der Klasse “' + this.currentGrade + '”'
+    },
+    stateShowModal () {
+      return dataStore.data.showModalPersonSelect
+    }
+  },
+  methods: {
+    showModal () {
+      dataStore.data.showModalPersonSelect = true
+    },
+    closeModal () {
+      dataStore.data.showModalPersonSelect = false
     }
   },
   created: function () {

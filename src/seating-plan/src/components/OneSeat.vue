@@ -87,7 +87,12 @@ export default {
       dataStore.removePersonFromSeat(this.personId, this.seat.no)
     },
     eventListenerAdd (event) {
-
+      dataStore.setCurrentSeat(this.seat.no)
+      dataStore.data.showModalPersonSelect = true
+      let el = document.querySelector('.vue-dynamic-select')
+      let e = new Event('focusin')
+      el.dispatchEvent(e)
+      document.querySelector('.vue-dynamic-select .search').focus()
     }
   }
 }

@@ -1,8 +1,11 @@
 // https://vuejs.org/v2/examples/modal.html
 <template>
-  <div class="modal-mask">
+  <div
+    class="modal-mask"
+  >
     <div class="modal-wrapper">
       <div class="modal-container">
+        <div class="mdi mdi-close close" @click="close"></div>
         <div class="modal-body">
           <slot>
             default body
@@ -15,7 +18,12 @@
 
 <script>
 export default {
-  name: 'ModalDialog'
+  name: 'ModalDialog',
+  methods: {
+    close (event) {
+      this.$emit('close')
+    }
+  }
 }
 </script>
 
@@ -45,14 +53,17 @@ export default {
   border-radius: 2px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
   transition: all .3s ease;
-  font-family: Helvetica, Arial, sans-serif;
+  position: relative;
 }
 
 .modal-body {
   margin: 20px 0;
 }
 
-.modal-default-button {
-  float: right;
+.close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 10000;
 }
 </style>

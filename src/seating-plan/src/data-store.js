@@ -58,6 +58,8 @@ const seatingPlanLayout = new SeatingPlanLayout()
 const dataStore = {
   data: {
     currentGrade: '',
+    currentSeat: null,
+    showModalPersonSelect: false,
     persons: {},
     grades: [],
     seats: {
@@ -149,6 +151,9 @@ const dataStore = {
   },
   setCurrentGrade (grade) {
     this.data.currentGrade = grade
+  },
+  setCurrentSeat (seatNo) {
+    this.data.currentSeat = seatNo
   },
   initPlan (grade) {
     let plans = this.data.plans
