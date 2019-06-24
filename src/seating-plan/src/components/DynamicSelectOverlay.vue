@@ -1,5 +1,5 @@
 <template>
-  <div class="dynamic-select-overlay">
+  <modal-dialog>
     <dynamic-select
       :options="persons"
       option-value="id"
@@ -7,11 +7,12 @@
       v-model="selectedPerson"
       @input="eventListenerSearch"
     />
-  </div>
+  </modal-dialog>
 </template>
 
 <script>
 import DynamicSelect from './DynamicSelect.vue'
+import ModalDialog from './ModalDialog.vue'
 
 import dataStore from '../data-store.js'
 
@@ -23,7 +24,8 @@ export default {
     }
   },
   components: {
-    DynamicSelect
+    DynamicSelect,
+    ModalDialog
   },
   computed: {
     persons () {
@@ -42,15 +44,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.dynamic-select-overlay {
-  display: fixed;
-  z-index: 9;
-  background-color: green;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-}
-</style>
