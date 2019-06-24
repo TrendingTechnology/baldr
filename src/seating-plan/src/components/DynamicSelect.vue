@@ -1,16 +1,50 @@
 // https://raw.githubusercontent.com/silasmontgomery/vue-dynamic-select/master/src/DynamicSelect.vue
 <template>
-    <div>
-        <div tabindex="0" @focusin="hasFocus=true" class="vue-dynamic-select">
-            <div v-if="showPlaceholder" class="placeholder" v-text="placeholder"></div>
-            <div class="selected-option" v-text="selectedOption[optionText]" v-if="selectedOption && !hasFocus" />
-            <input @focus="hasFocus=true" autocomplete="off" class="search" ref="search" v-model="search" @keyup="moveToResults" @keydown="removeOption" />
-            <i class="dropdown" />
-            <div v-if="showResultList" ref="resultList" class="result-list">
-                <div tabindex="0" ref="result" class="result" v-for="result in results" :key="result[optionValue]" v-html="highlight(result[optionText])" @click="selectOption(result)" @keyup.prevent="navigateResults(result, $event)" />
-            </div>
-        </div>
+  <div>
+    <div
+      tabindex="0"
+      @focusin="hasFocus=true"
+      class="vue-dynamic-select"
+    >
+      <div
+        v-if="showPlaceholder"
+        class="placeholder"
+        v-text="placeholder"
+      >
+      </div>
+      <div
+        class="selected-option"
+        v-text="selectedOption[optionText]"
+        v-if="selectedOption && !hasFocus"
+      />
+      <input
+        @focus="hasFocus=true"
+        autocomplete="off"
+        class="search"
+        ref="search"
+        v-model="search"
+        @keyup="moveToResults"
+        @keydown="removeOption"
+      />
+      <i class="dropdown" />
+      <div
+        v-if="showResultList"
+        ref="resultList"
+        class="result-list"
+      >
+        <div
+          tabindex="0"
+          ref="result"
+          class="result"
+          v-for="result in results"
+          :key="result[optionValue]"
+          v-html="highlight(result[optionText])"
+          @click="selectOption(result)"
+          @keyup.prevent="navigateResults(result, $event)"
+        />
+      </div>
     </div>
+  </div>
 </template>
 
 <script>
