@@ -13,6 +13,7 @@
     <div class="last-name">{{ personLastName }}</div>
     <div class="no">{{ seat.no }}</div>
     <div class="close mdi mdi-close" @click="eventListenerRemove"></div>
+    <div class="add mdi mdi-account-plus" @click="eventListenerAdd"></div>
   </div>
 </template>
 
@@ -84,6 +85,9 @@ export default {
     },
     eventListenerRemove (event) {
       dataStore.removePersonFromSeat(this.personId, this.seat.no)
+    },
+    eventListenerAdd (event) {
+
     }
   }
 }
@@ -117,6 +121,8 @@ export default {
   .dragover {
     background-color: red;
   }
+
+  /* close */
   .seat .close {
     position: absolute;
     bottom: 0;
@@ -126,5 +132,19 @@ export default {
   .seat[title]:hover .close {
     display: block;
     cursor: pointer;
+  }
+
+  /* add */
+  .seat .add {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+  }
+  .seat:not([title]) .add {
+    display: block;
+  }
+
+  .seat[title] .add {
+    display: none;
   }
 </style>

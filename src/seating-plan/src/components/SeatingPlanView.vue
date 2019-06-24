@@ -1,5 +1,6 @@
 <template>
   <div class="seating-plan-view">
+    <dynamic-select-overlay/>
     <heading-title :title="title"/>
     <section>
       <seating-plan/>
@@ -9,17 +10,19 @@
 </template>
 
 <script>
+import HeadingTitle from './HeadingTitle.vue'
+import DynamicSelectOverlay from './DynamicSelectOverlay.vue'
 import SeatingPlan from './SeatingPlan.vue'
 import PeopleList from './PeopleList.vue'
 import dataStore from '../data-store.js'
-import HeadingTitle from './HeadingTitle.vue'
 
 export default {
   name: 'SeatingPlanView',
   components: {
     SeatingPlan,
     PeopleList,
-    HeadingTitle
+    HeadingTitle,
+    DynamicSelectOverlay
   },
   computed: {
     currentGrade () {
@@ -40,6 +43,7 @@ export default {
 .seating-plan-view section {
   display: flex;
   align-items: stretch;
+  position: relative;
 }
 
 .people-list {
