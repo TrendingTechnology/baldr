@@ -6,19 +6,9 @@
       @focusin="hasFocus=true"
       class="vue-dynamic-select"
     >
-      <div
-        v-if="showPlaceholder"
-        class="placeholder"
-        v-text="placeholder"
-      >
-      </div>
-      <div
-        class="selected-option"
-        v-text="selectedOption[optionText]"
-        v-if="selectedOption && !hasFocus"
-      />
       <input
         @focus="hasFocus=true"
+        :placeholder="placeholder"
         autocomplete="off"
         class="search"
         ref="search"
@@ -26,7 +16,6 @@
         @keyup="moveToResults"
         @keydown="removeOption"
       />
-      <i class="dropdown" />
       <div
         v-if="showResultList"
         ref="resultList"
@@ -73,7 +62,6 @@ export default {
       required: true
     },
     value: {
-      type: Object,
       default: function () {
         return null
       },
@@ -190,6 +178,7 @@ export default {
       return value
     },
     stopScroll: function (event) {
+      // 40: ArrowDown, 38: ArrowUp
       if (event.keyCode === 40 || event.keyCode === 38) {
         event.preventDefault()
       }
@@ -204,56 +193,40 @@ export default {
 </script>
 
 <style scoped>
-    .vue-dynamic-select {
-        border: 1px solid #ced4da;
-        position: relative;
-        padding: .375em .5em;
-        border-radius: .25em;
-        cursor: text;
-        display: block;
-    }
-    .vue-dynamic-select i.dropdown {
-        width: 0;
-        height: 0;
-        border-left: 4px solid transparent;
-        border-right: 4px solid transparent;
-        border-top: 4px solid;
-        float: right;
-        top: .75em;
-        opacity: .8;
-        cursor: pointer;
-    }
-    .vue-dynamic-select .placeholder {
-        display: inline-block;
-        color: #ccc;
-    }
-    .vue-dynamic-select .result-list {
-        border: 1px solid #ced4da;
-        margin: calc(.375em - 1px) calc(-.5em - 1px);
-        width: calc(100% + 2px);
-        min-width: calc(100% + 2px);
-        border-radius: 0 0 .25em .25em;
-        cursor: pointer;
-        position: absolute;
-        z-index: 10;
-        background-color: #fff;
-    }
-    .vue-dynamic-select .result-list .result {
-        padding: .375em .75em;
-        color: #333;
-    }
-    .vue-dynamic-select .result-list .result:hover, .vue-dynamic-select .result-list .result:focus {
-        background-color: #efefef;
-        outline: none;
-    }
-    .vue-dynamic-select .selected-option {
-        display: inline-block;
-    }
-    .vue-dynamic-select .search {
-        border: none;
-        width: 50px;
-    }
-    .vue-dynamic-select .search:focus {
-        outline: none;
-    }
+  .vue-dynamic-select {
+    border: 1px solid #ced4da;
+    position: relative;
+    padding: .375em .5em;
+    cursor: text;
+    display: block;
+  }
+  .vue-dynamic-select .result-list {
+    border: 1px solid #ced4da;
+    margin: calc(.375em - 1px) calc(-.5em - 1px);
+    width: calc(100% + 2px);
+    min-width: calc(100% + 2px);
+    cursor: pointer;
+    position: absolute;
+    z-index: 10;
+    background-color: #fff;
+  }
+  .vue-dynamic-select .result-list .result {
+    padding: .375em .75em;
+    color: #333;
+  }
+  .vue-dynamic-select .result-list .result:hover,
+  .vue-dynamic-select .result-list .result:focus {
+    background-color: #efefef;
+    outline: none;
+  }
+  .vue-dynamic-select .selected-option {
+    display: inline-block;
+  }
+  .vue-dynamic-select .search {
+    border: none;
+    width: 100%;
+  }
+  .vue-dynamic-select .search:focus {
+    outline: none;
+  }
 </style>
