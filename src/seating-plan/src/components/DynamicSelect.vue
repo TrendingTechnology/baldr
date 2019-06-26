@@ -10,6 +10,7 @@
         @focus="hasFocus=true"
         :placeholder="placeholder"
         autocomplete="off"
+        autofocus
         class="search"
         ref="search"
         v-model="search"
@@ -75,13 +76,6 @@ export default {
       selectedOption: this.value,
       selectedResult: 0
     }
-  },
-  mounted () {
-    // Add onclick method to body to hide result list when component loses focus
-    window.addEventListener('click', this.loseFocus)
-  },
-  destroyed () {
-    window.removeEventListener('click', this.loseFocus)
   },
   computed: {
     results: function () {
@@ -174,18 +168,12 @@ export default {
           value = String(value).replace(matchStr, '<span style="font-weight: bold; background-color: #efefef;">' + matchStr + '</span>')
         }
       }
-
       return value
     },
     stopScroll: function (event) {
       // 40: ArrowDown, 38: ArrowUp
       if (event.keyCode === 40 || event.keyCode === 38) {
         event.preventDefault()
-      }
-    },
-    loseFocus: function (event) {
-      if (!this.$el.contains(event.target)) {
-        this.hasFocus = false
       }
     }
   }

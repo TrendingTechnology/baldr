@@ -89,6 +89,9 @@ export default {
     eventListenerAdd (event) {
       dataStore.setCurrentSeat(this.seat.no)
       dataStore.data.showModalPersonSelect = true
+      this.$nextTick(() => {
+        document.querySelector('.vue-dynamic-select').focus()
+      })
     }
   }
 }

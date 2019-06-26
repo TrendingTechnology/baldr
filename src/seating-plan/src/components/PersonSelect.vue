@@ -6,6 +6,7 @@
     v-model="selectedPerson"
     @input="eventListenerSearch"
   />
+  <!-- <input class="vue-dynamic-select"/> -->
 </template>
 
 <script>
