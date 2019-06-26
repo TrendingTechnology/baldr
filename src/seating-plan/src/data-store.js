@@ -101,10 +101,14 @@ const dataStore = {
     })
 
     // Add grade to grade list.
-    if (!this.data.grades.includes(grade)) {
-      this.data.grades.push(grade)
-      this.data.grades.sort(naturalSort)
+    if (!this.data.grades[grade]) {
+      Vue.set(this.data.grades, grade, {
+        name: grade,
+        personsCount: 0,
+        placed: 0
+      })
     }
+    this.data.grades[grade].personsCount += 1
   },
   getPersons (grade = null) {
     let persons = []
@@ -144,7 +148,8 @@ const dataStore = {
     return this.data.seats.positions
   },
   getGrades () {
-    return this.data.grades
+    let grades = Object.keys(this.data.grades)
+    return grades.sort(naturalSort)
   },
   getCurrentGrade () {
     return this.data.currentGrade
@@ -169,12 +174,18 @@ const dataStore = {
   placePersonById (no, id) {
     let plan = this.data.plans[this.data.currentGrade]
     let person = this.getPersonById(id)
+    let grade = this.getCurrentGrade()
 
     // Replace a already placed person and remove it from the plan.
     let replacedPersonId = plan[no]
     if (replacedPersonId) {
       let replacedPerson = this.getPersonById(replacedPersonId)
       replacedPerson.seatNo = 0
+      if (person.seatNo) {
+        this.data.grades[grade].placed -= 1
+      }
+    } else {
+      this.data.grades[grade].placed += 1
     }
 
     // Move the same person to another seat.
@@ -187,14 +198,16 @@ const dataStore = {
     person.seatNo = no
   },
   syncData () {
-    for (let grade of this.data.grades) {
+    for (let grade of this.getGrades()) {
       this.initPlan(grade)
     }
   },
   removePersonFromSeat (personId, seatNo) {
     let person = this.getPersonById(personId)
     person.seatNo = 0
-    this.data.plans[this.data.currentGrade][seatNo] = ''
+    let grade = this.getCurrentGrade()
+    this.data.plans[grade][seatNo] = ''
+    this.data.grades[grade].placed -= 1
   },
   importData (jsonString) {
     let newData = JSON.parse(jsonString)
@@ -256,6 +269,14 @@ const dataStore = {
       this.addPerson(person.firstName, person.lastName, person.grade)
     }
     this.syncData()
+  },
+  getCurrentPersonsCount () {
+    let grade = this.getCurrentGrade()
+    return this.data.grades[grade].personsCount
+  },
+  getCurrentPlacedPersonsCount () {
+    let grade = this.getCurrentGrade()
+    return this.data.grades[grade].placed
   }
 }
 

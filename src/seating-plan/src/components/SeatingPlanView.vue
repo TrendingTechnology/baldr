@@ -11,6 +11,7 @@
       <seating-plan/>
       <people-list/>
     </section>
+    <seating-plan-footer/>
   </div>
 </template>
 
@@ -19,6 +20,7 @@ import HeadingTitle from './HeadingTitle.vue'
 import ModalDialog from './ModalDialog.vue'
 import PersonSelect from './PersonSelect.vue'
 import SeatingPlan from './SeatingPlan.vue'
+import SeatingPlanFooter from './SeatingPlanFooter.vue'
 import PeopleList from './PeopleList.vue'
 import dataStore from '../data-store.js'
 
@@ -29,7 +31,8 @@ export default {
     PeopleList,
     HeadingTitle,
     PersonSelect,
-    ModalDialog
+    ModalDialog,
+    SeatingPlanFooter
   },
   computed: {
     currentGrade () {
