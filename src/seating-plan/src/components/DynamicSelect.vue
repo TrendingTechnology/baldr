@@ -1,19 +1,18 @@
-// https://raw.githubusercontent.com/silasmontgomery/vue-dynamic-select/master/src/DynamicSelect.vue
+// https://raw.githubusercontent.com/silasmontgomery/dynamic-select/master/src/DynamicSelect.vue
 <template>
   <div>
     <div
       tabindex="0"
       @focusin="hasFocus=true"
-      class="vue-dynamic-select"
+      class="dynamic-select"
     >
       <input
         @focus="hasFocus=true"
         :placeholder="placeholder"
         autocomplete="off"
-        autofocus
         class="search"
         ref="search"
-        v-model="search"
+        v-model="searchText"
         @keyup="moveToResults"
         @keydown="removeOption"
       />
@@ -72,7 +71,7 @@ export default {
   data: function () {
     return {
       hasFocus: false,
-      search: null,
+      searchText: null,
       selectedOption: this.value,
       selectedResult: 0
     }
@@ -80,7 +79,14 @@ export default {
   computed: {
     results: function () {
       // Filter items on search text (if not empty, case insensitive) and when item isn't already selected (else return all items not selected)
-      return this.search ? this.options.filter(i => String(i[this.optionText]).toLowerCase().indexOf(this.search.toLowerCase()) > -1) : this.options
+      if (this.searchText) {
+        return this.options.filter((option) => {
+          let optionText = String(option[this.optionText]).toLowerCase()
+          return optionText.contains(this.searchText.toLowerCase())
+        })
+      } else {
+        return this.options
+      }
     },
     showResultList: function () {
       return this.hasFocus && this.results.length > 0
@@ -92,12 +98,10 @@ export default {
   watch: {
     hasFocus: function (hasFocus) {
       // Clear the search box when component loses focus
-      window.removeEventListener('keydown', this.stopScroll)
       if (hasFocus) {
-        window.addEventListener('keydown', this.stopScroll)
         this.$refs.search.focus()
       } else {
-        this.search = null
+        this.searchText = null
         this.selectedResult = 0
         this.$refs.search.blur()
       }
@@ -116,7 +120,7 @@ export default {
     },
     search: function () {
       // Provide search text to parent (for ajax fetching, etc)
-      this.$emit('search', this.search)
+      this.$emit('search', this.searchText)
     }
   },
   methods: {
@@ -126,7 +130,7 @@ export default {
     },
     removeOption: function (event) {
       // Remove selected option if user hits backspace on empty search field
-      if (event.keyCode === 8 && (this.search == null || this.search === '')) {
+      if (event.keyCode === 8 && (this.searchText == null || this.searchText === '')) {
         this.selectedOption = null
         this.hasFocus = false
       }
@@ -161,60 +165,53 @@ export default {
     },
     highlight: function (value) {
       // Highlights the part of each result that matches the search text
-      if (this.search) {
-        let matchPos = String(value).toLowerCase().indexOf(this.search.toLowerCase())
+      if (this.searchText) {
+        let matchPos = String(value).toLowerCase().indexOf(this.searchText.toLowerCase())
         if (matchPos > -1) {
-          let matchStr = String(value).substr(matchPos, this.search.length)
+          let matchStr = String(value).substr(matchPos, this.searchText.length)
           value = String(value).replace(matchStr, '<span style="font-weight: bold; background-color: #efefef;">' + matchStr + '</span>')
         }
       }
       return value
-    },
-    stopScroll: function (event) {
-      // 40: ArrowDown, 38: ArrowUp
-      if (event.keyCode === 40 || event.keyCode === 38) {
-        event.preventDefault()
-      }
     }
   }
 }
 </script>
 
 <style scoped>
-  .vue-dynamic-select {
+  .dynamic-select {
     border: 1px solid #ced4da;
     position: relative;
     padding: .375em .5em;
     cursor: text;
     display: block;
   }
-  .vue-dynamic-select .result-list {
+  .dynamic-select .result-list {
     border: 1px solid #ced4da;
     margin: calc(.375em - 1px) calc(-.5em - 1px);
-    width: calc(100% + 2px);
-    min-width: calc(100% + 2px);
+    width: 100%;
     cursor: pointer;
     position: absolute;
     z-index: 10;
     background-color: #fff;
   }
-  .vue-dynamic-select .result-list .result {
+  .dynamic-select .result-list .result {
     padding: .375em .75em;
     color: #333;
   }
-  .vue-dynamic-select .result-list .result:hover,
-  .vue-dynamic-select .result-list .result:focus {
+  .dynamic-select .result-list .result:hover,
+  .dynamic-select .result-list .result:focus {
     background-color: #efefef;
     outline: none;
   }
-  .vue-dynamic-select .selected-option {
+  .dynamic-select .selected-option {
     display: inline-block;
   }
-  .vue-dynamic-select .search {
+  .dynamic-select .search {
     border: none;
     width: 100%;
   }
-  .vue-dynamic-select .search:focus {
+  .dynamic-select .search:focus {
     outline: none;
   }
 </style>
