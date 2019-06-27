@@ -1,3 +1,7 @@
+/**
+ * @module @bldr/seating-plan
+ */
+
 import Vue from 'vue'
 import App from './App.vue'
 import dataStore from './data-store.js'

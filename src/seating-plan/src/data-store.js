@@ -1,3 +1,7 @@
+/**
+ * @module @bldr/seating-plan/data-store
+ */
+
 import Vue from 'vue'
 
 /**
@@ -277,6 +281,17 @@ const dataStore = {
   getCurrentPlacedPersonsCount () {
     let grade = this.getCurrentGrade()
     return this.data.grades[grade].placed
+  },
+  /**
+   * Indicate if all persons in a grade are having a seat and are places.
+   *
+   * @returns boolean
+   */
+  gradeIsPlaced () {
+    if (this.getCurrentPersonsCount() === this.getCurrentPlacedPersonsCount()) {
+      return true
+    }
+    return false
   }
 }
 

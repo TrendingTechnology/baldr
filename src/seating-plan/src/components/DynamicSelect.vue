@@ -82,7 +82,7 @@ export default {
       if (this.searchText) {
         return this.options.filter((option) => {
           let optionText = String(option[this.optionText]).toLowerCase()
-          return optionText.contains(this.searchText.toLowerCase())
+          return optionText.includes(this.searchText.toLowerCase())
         })
       } else {
         return this.options

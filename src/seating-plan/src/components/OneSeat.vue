@@ -13,7 +13,7 @@
     <div class="last-name">{{ personLastName }}</div>
     <div class="no">{{ seat.no }}</div>
     <div class="close mdi mdi-close" @click="eventListenerRemove"></div>
-    <div class="add mdi mdi-account-plus" @click="eventListenerAdd"></div>
+    <div v-if="gradeIsNotPlaced" class="add mdi mdi-account-plus" @click="eventListenerAdd"></div>
   </div>
 </template>
 
@@ -31,9 +31,8 @@ export default {
     draggable () {
       if (this.person.seatNo >= 1 && this.person.seatNo <= seats.count) {
         return 'true'
-      } else {
-        return 'false'
       }
+      return 'false'
     },
     style () {
       return `bottom: ${this.seat.y}%; height: ${seats.dimension.depth}%; left: ${this.seat.x}%; width: ${seats.dimension.width}%;`
@@ -44,23 +43,23 @@ export default {
     personFirstName () {
       if (this.person) {
         return this.person.firstName
-      } else {
-        return ''
       }
+      return ''
     },
     personLastName () {
       if (this.person) {
         return this.person.lastName
-      } else {
-        return ''
       }
+      return ''
     },
     personId () {
       if (this.person) {
         return this.person.id
-      } else {
-        return ''
       }
+      return ''
+    },
+    gradeIsNotPlaced () {
+      return !dataStore.gradeIsPlaced()
     }
   },
   methods: {
