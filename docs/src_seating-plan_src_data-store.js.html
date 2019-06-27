@@ -207,20 +207,22 @@ const dataStore = {
     let plan = this.data.plans[this.data.currentGrade]
     let person = this.getPersonById(id)
     let grade = this.getCurrentGrade()
-
     // Replace a already placed person and remove it from the plan.
     let replacedPersonId = plan[no]
     if (replacedPersonId) {
       let replacedPerson = this.getPersonById(replacedPersonId)
       replacedPerson.seatNo = 0
-      if (person.seatNo) {
-        this.data.grades[grade].placed -= 1
-      }
-    } else {
+    }
+    // Update placed counter
+    // Decrease counter when one person is dragged over another person.
+    if (replacedPersonId &amp;&amp; person.seatNo) {
+      this.data.grades[grade].placed -= 1
+    // Increase placed counter only if person had not yet a seat.
+    } else if (!person.seatNo) {
       this.data.grades[grade].placed += 1
     }
 
-    // Move the same person to another seat.
+    // Move the same person to another seat. Free the previously taken seat.
     if (person.seatNo) {
       plan[person.seatNo] = ''
     }
