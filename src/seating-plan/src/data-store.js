@@ -74,7 +74,8 @@ const dataStore = {
       },
       positions: seatingPlanLayout.getSeatPositions()
     },
-    plans: {}
+    plans: {},
+    jobs: []
   },
   getData () {
     return this.data
