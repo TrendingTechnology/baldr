@@ -295,6 +295,24 @@ const dataStore = {
       return true
     }
     return false
+  },
+  addJob (newJob) {
+    let jobs = this.data.jobs
+    if (!jobs.includes(newJob)) {
+      jobs.push(newJob)
+      jobs.sort(naturalSort)
+      return newJob
+    }
+    return false
+  },
+  deleteJob (job) {
+    let jobs = this.data.jobs
+    for (let i = 0; i < jobs.length; i++) {
+      if (jobs[i] === job) {
+        jobs.splice(i, 1)
+        i--
+      }
+    }
   }
 }
 
