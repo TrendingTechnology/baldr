@@ -1,8 +1,8 @@
 <template>
   <div class="jobs-manager">
     <heading-title title="Dienste verwalten"/>
-    <ul v-for="job in jobs" :key="job.name">
-      <li>
+    <ul>
+      <li v-for="job in jobs" :key="job.name">
         <span :class="'mdi mdi-' + job.icon"></span>
         {{ job.name }}
         <span class="mdi mdi-delete" @click="deleteJob(job.name)"></span>

@@ -59,13 +59,35 @@ function naturalSort (a, b) {
 
 const seatingPlanLayout = new SeatingPlanLayout()
 
+class Person {
+  constructor (firstName, lastName, grade) {
+    this.firstName = firstName
+    this.lastName = lastName
+    this.grade = grade
+    this.seatNo = 0
+    this.placed = false
+  }
+
+  get id () {
+    return `${this.grade}: ${this.lastName}, ${this.firstName}`
+  }
+
+  toJSON () {
+    return {
+      firstName: this.firstName,
+      lastName: this.lastName,
+      grade: this.grade
+    }
+  }
+}
+
 const dataStore = {
   data: {
     currentGrade: '',
     currentSeat: null,
     showModalPersonSelect: false,
     persons: {},
-    grades: [],
+    grades: {},
     seats: {
       count: seatingPlanLayout.seatCount,
       dimension: {
@@ -96,14 +118,18 @@ const dataStore = {
       throw new Error(`Person already exists ${firstName} ${lastName} ${grade}`)
     }
 
-    Vue.set(this.data.persons[grade][lastName], firstName, {
-      id: `${grade}: ${lastName}, ${firstName}`,
-      firstName: firstName,
-      lastName: lastName,
-      grade: grade,
-      seatNo: 0,
-      placed: false
-    })
+    // Vue.set(this.data.persons[grade][lastName], firstName, {
+    //   id: `${grade}: ${lastName}, ${firstName}`,
+    //   firstName: firstName,
+    //   lastName: lastName,
+    //   grade: grade,
+    //   seatNo: 0,
+    //   placed: false
+    // })
+
+    Vue.set(this.data.persons[grade][lastName], firstName, new Person(
+      firstName, lastName, grade
+    ))
 
     // Add grade to grade list.
     if (!this.data.grades[grade]) {
@@ -316,6 +342,23 @@ const dataStore = {
     }
     return false
   },
+  addPersontoJob (personId, jobName) {
+    let grade = this.getCurrentGrade()
+
+    let gradeObject = this.data.grades[grade]
+
+    if (!gradeObject.hasOwnProperty('jobs')) {
+      Vue.set(gradeObject, 'jobs', {})
+    }
+
+    if (!gradeObject.jobs.hasOwnProperty(jobName)) {
+      Vue.set(gradeObject.jobs, jobName, [])
+    }
+
+    if (!gradeObject.jobs[jobName].includes(personId)) {
+      gradeObject.jobs[jobName].push(personId)
+    }
+  },
   listJobs () {
     let names = Object.keys(this.data.jobs).sort(naturalSort)
     let jobs = []
@@ -323,6 +366,13 @@ const dataStore = {
       jobs.push(this.data.jobs[name])
     }
     return jobs
+  },
+  getJobsPerGrade () {
+    let grade = this.data.grades[dataStore.getCurrentGrade()]
+    if (grade.hasOwnProperty('jobs')) {
+      return grade.jobs
+    }
+    return {}
   },
   deleteJob (name) {
     Vue.delete(this.data.jobs, name)

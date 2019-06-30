@@ -14,6 +14,15 @@
     <div class="no">{{ seat.no }}</div>
     <div class="close mdi mdi-close" @click="eventListenerRemove"></div>
     <div v-if="gradeIsNotPlaced" class="add mdi mdi-account-plus" @click="eventListenerAdd"></div>
+    <ul v-if="personId" class="jobs">
+      <li v-for="job in jobs" :key="job.name">
+        <div
+          :class="'mdi mdi-' + job.icon"
+          :title="job.name"
+          @click="eventListenerAddPersontoJob(personId, job.name)"
+        ></div>
+    </li>
+    </ul>
   </div>
 </template>
 
@@ -60,6 +69,9 @@ export default {
     },
     gradeIsNotPlaced () {
       return !dataStore.gradeIsPlaced()
+    },
+    jobs () {
+      return dataStore.listJobs()
     }
   },
   methods: {
@@ -91,6 +103,9 @@ export default {
       this.$nextTick(() => {
         document.querySelector('.dynamic-select').focus()
       })
+    },
+    eventListenerAddPersontoJob (personId, jobName) {
+      dataStore.addPersontoJob(personId, jobName)
     }
   }
 }
@@ -149,5 +164,24 @@ export default {
 
   .seat[title] .add {
     display: none;
+  }
+
+  ul.jobs {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+  }
+  .jobs li {
+    display: inline-block;
+  }
+
+  .seat[title] .jobs {
+    display: none;
+  }
+
+  .seat[title]:hover .jobs {
+    display: block;
+    cursor: pointer;
   }
 </style>

@@ -2,6 +2,13 @@
   <div class="footer">
     SchülerInnen: {{ personsCount }}
     plaziert: {{ placedPersonsCount }}
+
+    <span v-for="(names, jobName) in jobs" :key="jobName">
+      <strong>{{ jobName }}:</strong>
+      <span v-for="name in names" :key="name">
+        {{ name }}
+      </span>
+    </span>
   </div>
 </template>
 
@@ -16,6 +23,9 @@ export default {
     },
     placedPersonsCount () {
       return dataStore.getCurrentPlacedPersonsCount()
+    },
+    jobs () {
+      return dataStore.getJobsPerGrade()
     }
   }
 }
