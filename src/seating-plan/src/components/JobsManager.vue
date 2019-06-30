@@ -1,10 +1,17 @@
 <template>
   <div class="jobs-manager">
     <heading-title title="Dienste verwalten"/>
-    <ul v-for="job in jobs" :key="job">
-      <li>{{ job }} <span class="mdi mdi-delete" @click="deleteJob(job)"></span></li>
+    <ul v-for="job in jobs" :key="job.name">
+      <li>{{ job.name }} <span class="mdi mdi-delete" @click="deleteJob(job.name)"></span></li>
     </ul>
-    <input ref="inputField" type="text" v-model="newJob" @keyup.enter="addJob()"/>
+    <label>
+      Name:
+      <input ref="name" type="text" v-model="newName" @keyup.enter="addJob()"/>
+    </label>
+    <label>
+      Icon:
+      <input ref="icon" type="text" v-model="newIcon" @keyup.enter="addJob()"/>
+    </label>
   </div>
 </template>
 
@@ -19,7 +26,8 @@ export default {
   },
   data: function () {
     return {
-      newJob: ''
+      newName: '',
+      newIcon: ''
     }
   },
   computed: {
@@ -29,13 +37,17 @@ export default {
   },
   methods: {
     addJob () {
-      dataStore.addJob(this.newJob)
-      this.$nextTick(() => {
-        this.$refs.inputField.value = ''
-      })
+      if (this.newName && this.newIcon) {
+        dataStore.addJob(this.newName, this.newIcon)
+        this.$nextTick(() => {
+          this.$refs.name.value = ''
+          this.$refs.icon.value = ''
+        })
+      }
     },
-    deleteJob (job) {
-      dataStore.deleteJob(job)
+    deleteJob (name) {
+      console.log(name)
+      dataStore.deleteJob(name)
     }
   }
 }
