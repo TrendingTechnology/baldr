@@ -299,10 +299,19 @@ const dataStore = {
       { firstName: 'Richard', lastName: 'Heinz', grade: 'Q11' },
       { firstName: 'Thomas', lastName: 'Grimmer', grade: 'Q11' }
     ]
-
     for (let person of peopleList) {
       this.addPerson(person.firstName, person.lastName, person.grade)
     }
+
+    let jobs = [
+      { name: 'Schaltwart', icon: 'video-switch' },
+      { name: 'Lüftwart', icon: 'window-maximize' },
+      { name: 'Austeilwart', icon: 'file-outline' }
+    ]
+    for (let job of jobs) {
+      this.addJob(job.name, job.icon)
+    }
+
     this.syncData()
   },
   getCurrentPersonsCount () {
@@ -331,14 +340,20 @@ const dataStore = {
         icon: icon
       }
       Vue.set(this.data.jobs, name, job)
-      console.log(this.data.jobs)
       return job
     }
     return false
   },
+  listJobs () {
+    let names = Object.keys(this.data.jobs).sort(naturalSort)
+    let jobs = []
+    for (let name of names) {
+      jobs.push(this.data.jobs[name])
+    }
+    return jobs
+  },
   deleteJob (name) {
-    let jobs = this.data.jobs
-    return delete jobs[name]
+    Vue.delete(this.data.jobs, name)
   }
 }
 
