@@ -2,7 +2,11 @@
   <div class="jobs-manager">
     <heading-title title="Dienste verwalten"/>
     <ul v-for="job in jobs" :key="job.name">
-      <li>{{ job.name }} <span class="mdi mdi-delete" @click="deleteJob(job.name)"></span></li>
+      <li>
+        <span :class="'mdi mdi-' + job.icon"></span>
+        {{ job.name }}
+        <span class="mdi mdi-delete" @click="deleteJob(job.name)"></span>
+      </li>
     </ul>
     <label>
       Name:
@@ -32,7 +36,7 @@ export default {
   },
   computed: {
     jobs () {
-      return dataStore.getData().jobs
+      return dataStore.listJobs()
     }
   },
   methods: {
@@ -46,7 +50,6 @@ export default {
       }
     },
     deleteJob (name) {
-      console.log(name)
       dataStore.deleteJob(name)
     }
   }
