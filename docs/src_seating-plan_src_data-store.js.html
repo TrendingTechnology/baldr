@@ -103,7 +103,7 @@ const dataStore = {
       positions: seatingPlanLayout.getSeatPositions()
     },
     plans: {},
-    jobs: []
+    jobs: {}
   },
   getData () {
     return this.data
@@ -324,23 +324,21 @@ const dataStore = {
     }
     return false
   },
-  addJob (newJob) {
-    let jobs = this.data.jobs
-    if (!jobs.includes(newJob)) {
-      jobs.push(newJob)
-      jobs.sort(naturalSort)
-      return newJob
+  addJob (name, icon) {
+    if (!this.data.jobs.hasOwnProperty(name)) {
+      let job = {
+        name: name,
+        icon: icon
+      }
+      Vue.set(this.data.jobs, name, job)
+      console.log(this.data.jobs)
+      return job
     }
     return false
   },
-  deleteJob (job) {
+  deleteJob (name) {
     let jobs = this.data.jobs
-    for (let i = 0; i &lt; jobs.length; i++) {
-      if (jobs[i] === job) {
-        jobs.splice(i, 1)
-        i--
-      }
-    }
+    return delete jobs[name]
   }
 }
 
