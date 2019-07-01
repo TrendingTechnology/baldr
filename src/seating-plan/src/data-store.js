@@ -81,6 +81,13 @@ class Person {
   }
 }
 
+class Job {
+  constructor (name, icon) {
+    this.name = name
+    this.icon = icon
+  }
+}
+
 const dataStore = {
   data: {
     currentGrade: '',
@@ -208,6 +215,12 @@ const dataStore = {
     let grade = this.getCurrentGrade()
     // Replace a already placed person and remove it from the plan.
     let replacedPersonId = plan[no]
+
+    // Drag the same placed person over the same seat
+    if (replacedPersonId === person.id) {
+      return
+    }
+
     if (replacedPersonId) {
       let replacedPerson = this.getPersonById(replacedPersonId)
       replacedPerson.seatNo = 0
@@ -217,7 +230,8 @@ const dataStore = {
     if (replacedPersonId && person.seatNo) {
       this.data.grades[grade].placed -= 1
     // Increase placed counter only if person had not yet a seat.
-    } else if (!person.seatNo) {
+    // and whom doesn’t replace a person.
+    } else if (!replacedPersonId && !person.seatNo) {
       this.data.grades[grade].placed += 1
     }
 
@@ -333,10 +347,7 @@ const dataStore = {
   },
   addJob (name, icon) {
     if (!this.data.jobs.hasOwnProperty(name)) {
-      let job = {
-        name: name,
-        icon: icon
-      }
+      let job = new Job(name, icon)
       Vue.set(this.data.jobs, name, job)
       return job
     }
@@ -354,9 +365,9 @@ const dataStore = {
     if (!gradeObject.jobs.hasOwnProperty(jobName)) {
       Vue.set(gradeObject.jobs, jobName, [])
     }
-
-    if (!gradeObject.jobs[jobName].includes(personId)) {
-      gradeObject.jobs[jobName].push(personId)
+    let person = this.getPersonById(personId)
+    if (!gradeObject.jobs[jobName].includes(person)) {
+      gradeObject.jobs[jobName].push(person)
     }
   },
   listJobs () {

@@ -3,10 +3,10 @@
     SchülerInnen: {{ personsCount }}
     plaziert: {{ placedPersonsCount }}
 
-    <span v-for="(names, jobName) in jobs" :key="jobName">
+    <span v-for="(persons, jobName) in jobs" :key="jobName">
       <strong>{{ jobName }}:</strong>
-      <span v-for="name in names" :key="name">
-        {{ name }}
+      <span v-for="person in persons" :key="person.id">
+        {{ person.lastName }}, {{ person.firstName }}
       </span>
     </span>
   </div>
