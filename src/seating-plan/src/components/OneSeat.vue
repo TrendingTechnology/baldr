@@ -11,13 +11,13 @@
   >
     <div class="first-name">{{ personFirstName }}</div>
     <div class="last-name">{{ personLastName }}
-      <div v-for="job in jobs" :key="job.name">
+      <span v-for="job in jobs" :key="job.name">
         <material-icon
           v-if="hasPersonJob(personId, job.name)"
           :name="job.icon"
           :title="job.name"
         />
-      </div>
+      </span>
     </div>
     <div class="no">{{ seat.no }}</div>
     <material-icon class="close" name="close" @click.native="eventListenerRemove"/>

@@ -7,10 +7,10 @@
       <strong>{{ jobName }}:</strong>
       <span v-for="person in persons" :key="person.id">
         {{ person.lastName }}, {{ person.firstName }}
-        <span
-          class="mdi mdi-delete"
-          @click="removePersonFromJob(person.id, jobName)">
-        </span>
+        <material-icon
+          name="delete"
+          @click.native="removePersonFromJob(person.id, jobName)"
+        />
       </span>
     </span>
   </div>
@@ -18,9 +18,13 @@
 
 <script>
 import dataStore from '../data-store.js'
+import MaterialIcon from './MaterialIcon.vue'
 
 export default {
   name: 'SeatingPlanFooter',
+  components: {
+    MaterialIcon
+  },
   computed: {
     personsCount () {
       return dataStore.getCurrentPersonsCount()
@@ -39,6 +43,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-</style>

@@ -5,7 +5,7 @@
   >
     <div class="modal-wrapper">
       <div class="modal-container">
-        <div class="mdi mdi-close close" @click="close"></div>
+        <material-icon class="close" name="close" @click.native="close"/>
         <div class="modal-body">
           <slot>
             default body
@@ -17,8 +17,13 @@
 </template>
 
 <script>
+import MaterialIcon from './MaterialIcon.vue'
+
 export default {
   name: 'ModalDialog',
+  components: {
+    MaterialIcon
+  },
   methods: {
     close (event) {
       this.$emit('close')
@@ -64,6 +69,5 @@ export default {
   position: absolute;
   top: 0;
   right: 0;
-  z-index: 10000;
 }
 </style>
