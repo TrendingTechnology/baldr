@@ -12,35 +12,39 @@
     <div class="first-name">{{ personFirstName }}</div>
     <div class="last-name">{{ personLastName }}
       <div v-for="job in jobs" :key="job.name">
-        <div
+        <material-icon
           v-if="hasPersonJob(personId, job.name)"
-          :class="'mdi mdi-' + job.icon"
+          :name="job.icon"
           :title="job.name"
-        ></div>
+        />
       </div>
     </div>
     <div class="no">{{ seat.no }}</div>
-    <div class="close mdi mdi-close" @click="eventListenerRemove"></div>
-    <div v-if="gradeIsNotPlaced" class="add mdi mdi-account-plus" @click="eventListenerAdd"></div>
+    <material-icon class="close" name="close" @click.native="eventListenerRemove"/>
+    <material-icon class="add" v-if="gradeIsNotPlaced" name="account-plus" @click.native="eventListenerAdd"/>
     <ul v-if="personId" class="jobs">
       <li v-for="job in jobs" :key="job.name">
-        <div
-          :class="'mdi mdi-' + job.icon"
+        <material-icon
+          v-if="!hasPersonJob(personId, job.name)"
+          :name="job.icon"
           :title="job.name"
-          @click="eventListenerAddPersontoJob(personId, job.name)"
-        ></div>
+          @click.native="eventListenerAddPersontoJob(personId, job.name)"
+        />
     </li>
     </ul>
   </div>
 </template>
 
 <script>
-// import '@mdi/font'
 import dataStore from '../data-store.js'
+import MaterialIcon from './MaterialIcon.vue'
 let seats = dataStore.getData().seats
 
 export default {
   name: 'OneSeat',
+  components: {
+    MaterialIcon
+  },
   props: {
     seat: Object
   },
@@ -123,8 +127,6 @@ export default {
 </script>
 
 <style scoped>
-  @import '../../node_modules/@mdi/font/css/materialdesignicons.css';
-
   .seat {
     border: 1px solid black;
     position: absolute;
