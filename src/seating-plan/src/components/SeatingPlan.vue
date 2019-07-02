@@ -10,6 +10,15 @@
 <script>
 import OneSeat from './OneSeat.vue'
 import dataStore from '../data-store.js'
+import ResizeObserver from 'resize-observer-polyfill'
+
+let resizeObserver = new ResizeObserver(entries => {
+  for (let entry of entries) {
+    // DIN A 4 Landscape: width: 297 height: 210
+    // (210 / 297) * 100 = 70.707070
+    entry.target.style.height = 0.70707070 * entry.contentRect.width + 'px'
+  }
+})
 
 export default {
   name: 'SeatingPlan',
@@ -25,17 +34,17 @@ export default {
     eventListenerOnresize (event) {
       console.log(event)
     }
+  },
+  mounted () {
+    resizeObserver.observe(this.$el)
   }
 }
 </script>
 
 <style scoped>
-/* DIN A 4 Landscape: width: 297 height: 210
-  (210 / 297) * 100 = 70.707070
-*/
+
   .seating-plan {
     width: 100%;
-    height: 86vh;
     position: relative;
     box-sizing: border-box;
     margin: 2vh;
