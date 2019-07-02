@@ -398,6 +398,15 @@ const dataStore = {
     if (Object.keys(grade.jobs[jobName]).length === 0) {
       Vue.delete(grade.jobs, jobName)
     }
+  },
+  hasPersonJob (personId, jobName) {
+    if (!personId) {
+      return false
+    }
+    let grade = this.data.grades[dataStore.getCurrentGrade()]
+    return grade.hasOwnProperty('jobs') &&
+      grade.jobs.hasOwnProperty(jobName) &&
+      grade.jobs[jobName].hasOwnProperty(personId)
   }
 }
 

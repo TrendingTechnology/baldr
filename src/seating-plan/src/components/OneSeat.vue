@@ -10,7 +10,15 @@
        @drop.prevent="eventListenerDrop"
   >
     <div class="first-name">{{ personFirstName }}</div>
-    <div class="last-name">{{ personLastName }}</div>
+    <div class="last-name">{{ personLastName }}
+      <div v-for="job in jobs" :key="job.name">
+        <div
+          v-if="hasPersonJob(personId, job.name)"
+          :class="'mdi mdi-' + job.icon"
+          :title="job.name"
+        ></div>
+      </div>
+    </div>
     <div class="no">{{ seat.no }}</div>
     <div class="close mdi mdi-close" @click="eventListenerRemove"></div>
     <div v-if="gradeIsNotPlaced" class="add mdi mdi-account-plus" @click="eventListenerAdd"></div>
@@ -106,6 +114,9 @@ export default {
     },
     eventListenerAddPersontoJob (personId, jobName) {
       dataStore.addPersontoJob(personId, jobName)
+    },
+    hasPersonJob (personId, jobName) {
+      return dataStore.hasPersonJob(personId, jobName)
     }
   }
 }
