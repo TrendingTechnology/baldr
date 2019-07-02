@@ -53,6 +53,12 @@ export default {
       dataStore.data.showModalPersonSelect = false
     }
   },
+  beforeCreate: function () {
+    let grade = this.$route.params.grade
+    if (!dataStore.isGradeSet(grade)) {
+      this.$router.push('/grades-list')
+    }
+  },
   created: function () {
     let grade = this.$route.params.grade
     dataStore.setCurrentGrade(grade)

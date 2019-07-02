@@ -7,6 +7,10 @@
       <strong>{{ jobName }}:</strong>
       <span v-for="person in persons" :key="person.id">
         {{ person.lastName }}, {{ person.firstName }}
+        <span
+          class="mdi mdi-delete"
+          @click="removePersonFromJob(person.id, jobName)">
+        </span>
       </span>
     </span>
   </div>
@@ -26,6 +30,11 @@ export default {
     },
     jobs () {
       return dataStore.getJobsPerGrade()
+    }
+  },
+  methods: {
+    removePersonFromJob (personId, jobName) {
+      dataStore.removePersonFromJob(personId, jobName)
     }
   }
 }

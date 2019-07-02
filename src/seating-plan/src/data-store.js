@@ -195,6 +195,9 @@ const dataStore = {
   setCurrentGrade (grade) {
     this.data.currentGrade = grade
   },
+  isGradeSet (grade) {
+    return this.data.plans.hasOwnProperty(grade)
+  },
   setCurrentSeat (seatNo) {
     this.data.currentSeat = seatNo
   },
@@ -363,11 +366,12 @@ const dataStore = {
     }
 
     if (!gradeObject.jobs.hasOwnProperty(jobName)) {
-      Vue.set(gradeObject.jobs, jobName, [])
+      Vue.set(gradeObject.jobs, jobName, {})
     }
+
     let person = this.getPersonById(personId)
-    if (!gradeObject.jobs[jobName].includes(person)) {
-      gradeObject.jobs[jobName].push(person)
+    if (!gradeObject.jobs[jobName].hasOwnProperty(personId)) {
+      Vue.set(gradeObject.jobs[jobName], personId, person)
     }
   },
   listJobs () {
@@ -387,6 +391,13 @@ const dataStore = {
   },
   deleteJob (name) {
     Vue.delete(this.data.jobs, name)
+  },
+  removePersonFromJob (personId, jobName) {
+    let grade = this.data.grades[dataStore.getCurrentGrade()]
+    Vue.delete(grade.jobs[jobName], personId)
+    if (Object.keys(grade.jobs[jobName]).length === 0) {
+      Vue.delete(grade.jobs, jobName)
+    }
   }
 }
 
