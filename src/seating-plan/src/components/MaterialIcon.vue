@@ -3,7 +3,7 @@
 </template>
 
 <script>
-//import '@mdi/font'
+// import '@mdi/font'
 export default {
   name: 'MaterialIcon',
   props: {

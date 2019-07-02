@@ -1,5 +1,5 @@
 <template>
-  <div class="seating-plan">
+  <div class="seating-plan" @onresize="eventListenerOnresize">
     <one-seat v-for="seat in seats"
       :seat="seat"
       :key="seat.no"
@@ -19,6 +19,11 @@ export default {
   computed: {
     seats () {
       return dataStore.getSeats()
+    }
+  },
+  methods: {
+    eventListenerOnresize (event) {
+      console.log(event)
     }
   }
 }
