@@ -4,4 +4,5 @@
 
 # @bldr/master-question
 
-Master slide “question” of the [baldr project](https://github.com/Josef-Friedrich/baldr).
+Master slide “question” of the
+[baldr project](https://github.com/Josef-Friedrich/baldr).

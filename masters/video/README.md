@@ -4,4 +4,5 @@
 
 # @bldr/master-video
 
-Master slide “video” of the [baldr project](https://github.com/Josef-Friedrich/baldr).
+Master slide “video” of the
+[baldr project](https://github.com/Josef-Friedrich/baldr).

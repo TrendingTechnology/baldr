@@ -4,4 +4,5 @@
 
 # @bldr/master-camera
 
-Master slide “camera” of the [baldr project](https://github.com/Josef-Friedrich/baldr).
+Master slide “camera” of the
+[baldr project](https://github.com/Josef-Friedrich/baldr).

@@ -4,4 +4,5 @@
 
 # @bldr/master-audio
 
-Master slide “audio” of the [baldr project](https://github.com/Josef-Friedrich/baldr).
+Master slide “audio” of the
+[baldr project](https://github.com/Josef-Friedrich/baldr).

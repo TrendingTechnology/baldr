@@ -4,7 +4,8 @@
 
 # @bldr/master-editor
 
-Master slide “editor” of the [baldr project](https://github.com/Josef-Friedrich/baldr).
+Master slide “editor” of the
+[baldr project](https://github.com/Josef-Friedrich/baldr).
 
 # Free editors
 

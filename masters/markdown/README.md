@@ -4,4 +4,5 @@
 
 # @bldr/master-markdown
 
-Master slide “markdown” of the [baldr project](https://github.com/Josef-Friedrich/baldr).
+Master slide “markdown” of the
+[baldr project](https://github.com/Josef-Friedrich/baldr).

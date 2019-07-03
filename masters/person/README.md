@@ -4,4 +4,5 @@
 
 # @bldr/master-person
 
-Master slide “person” of the [baldr project](https://github.com/Josef-Friedrich/baldr).
+Master slide “person” of the
+[baldr project](https://github.com/Josef-Friedrich/baldr).

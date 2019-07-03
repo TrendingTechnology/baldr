@@ -4,4 +4,5 @@
 
 # @bldr/master-website
 
-Master slide “website” of the [baldr project](https://github.com/Josef-Friedrich/baldr).
+Master slide “website” of the
+[baldr project](https://github.com/Josef-Friedrich/baldr).
