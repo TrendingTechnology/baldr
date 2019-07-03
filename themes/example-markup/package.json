@@ -10,6 +10,9 @@
     "type": "git",
     "url": "git+https://github.com/Josef-Friedrich/baldr.git"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "license": "MIT",
   "author": {
     "name": "Josef Friedrich",
@@ -58,5 +61,5 @@
     "> 1%",
     "last 2 versions"
   ],
-  "gitHead": "b0f6b81672cc1fa3897192718dc34951a3814004"
+  "gitHead": "2eadc451ebbeaa981210b2d91360533a5ef0f009"
 }
