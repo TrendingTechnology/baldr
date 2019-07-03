@@ -1,7 +1,7 @@
 {
   "name": "@bldr/master-svg",
   "description": "Master slide “svg” of the baldr project.",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
   "bugs": {
     "url": "https://github.com/Josef-Friedrich/baldr/issues"
