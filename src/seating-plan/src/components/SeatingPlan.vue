@@ -13,10 +13,20 @@ import dataStore from '../data-store.js'
 import ResizeObserver from 'resize-observer-polyfill'
 
 let resizeObserver = new ResizeObserver(entries => {
+  let headerHeight = document.querySelector('header').clientHeight
+  let footerHeight = document.querySelector('footer').clientHeight
+  let windowHeight = window.innerHeight
+  // To avoid scroll bars minus buffer
+  let maxHeight = windowHeight - headerHeight - footerHeight - 10
+  // DIN A 4 Landscape: width: 297 height: 210
+  let aspectRatio = { width: 297, height: 210 }
   for (let entry of entries) {
-    // DIN A 4 Landscape: width: 297 height: 210
-    // (210 / 297) * 100 = 70.707070
-    entry.target.style.height = 0.70707070 * entry.contentRect.width + 'px'
+    let height = aspectRatio.height / aspectRatio.width * entry.contentRect.width
+    if (height > maxHeight) {
+      entry.target.style.height = `${maxHeight}px`
+    } else {
+      entry.target.style.height = `${height}px`
+    }
   }
 })
 
@@ -47,6 +57,5 @@ export default {
     width: 100%;
     position: relative;
     box-sizing: border-box;
-    margin: 2vh;
   }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="footer">
+  <footer>
     SchülerInnen: {{ personsCount }}
     plaziert: {{ placedPersonsCount }}
 
@@ -13,7 +13,7 @@
         />
       </span>
     </span>
-  </div>
+  </footer>
 </template>
 
 <script>
