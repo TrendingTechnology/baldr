@@ -1,13 +1,15 @@
 <template>
   <footer>
-    SchülerInnen: {{ personsCount }}
-    plaziert: {{ placedPersonsCount }}
+    <span class="count">
+    Schülerzahl: {{ personsCount }}
+    </span>
 
-    <span v-for="(persons, jobName) in jobs" :key="jobName">
+    <span class="job" v-for="(persons, jobName) in jobs" :key="jobName">
       <strong>{{ jobName }}:</strong>
       <span v-for="person in persons" :key="person.id">
-        {{ person.lastName }}, {{ person.firstName }}
-        <material-icon
+        {{ person.lastName }},
+        {{ person.firstName }}<!--
+     --><material-icon
           name="delete"
           @click.native="removePersonFromJob(person.id, jobName)"
         />
@@ -29,9 +31,6 @@ export default {
     personsCount () {
       return dataStore.getCurrentPersonsCount()
     },
-    placedPersonsCount () {
-      return dataStore.getCurrentPlacedPersonsCount()
-    },
     jobs () {
       return dataStore.getJobsPerGrade()
     }
@@ -43,3 +42,18 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+span.count {
+  padding-right: 3em;
+}
+
+span.job {
+  padding-right: 1em;
+  font-size: 0.9em
+}
+
+.mdi {
+  font-size: 0.8em;
+}
+</style>

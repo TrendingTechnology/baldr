@@ -37,6 +37,7 @@ export default {
 
 body {
   margin: 2px;
+  font-size: 1.2vw;
 }
 
 </style>

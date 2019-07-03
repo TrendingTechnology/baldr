@@ -17,7 +17,6 @@ export default {
   div {
     cursor: pointer;
     display: inline-block;
-    font-size: 1.2em;
   }
   div:hover {
     color: red;

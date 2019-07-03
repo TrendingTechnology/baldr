@@ -17,7 +17,7 @@ class SeatingPlanLayout {
   constructor () {
     let roomWidth = 100 // %
     let roomDepth = 100 // %
-    this.aisle = 0.10 * roomWidth
+    this.aisle = 0.05 * roomWidth
     this.seatWidth = (roomWidth - this.aisle) / 8
     this.seatDepth = (roomDepth - (3 * this.aisle)) / 4
 
