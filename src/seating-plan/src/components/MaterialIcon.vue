@@ -27,4 +27,9 @@ export default {
   div:focus {
     color: slategray;
   }
+  @media print {
+    div {
+      display: none;
+    }
+  }
 </style>

@@ -23,12 +23,17 @@ export default {
     <vue-headful :title="title"/>
 
 <style scoped>
-header {
-  display: inline-flex;
-  width: 100%;
-}
+  header {
+    display: inline-flex;
+    width: 100%;
+  }
 
-header h1 {
-  padding-left: 2em;
-}
+  header h1 {
+    padding-left: 2em;
+  }
+  @media print {
+    .back-link {
+      display: none;
+    }
+  }
 </style>

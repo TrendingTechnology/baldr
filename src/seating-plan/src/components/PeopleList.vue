@@ -31,4 +31,9 @@ export default {
     display: block;
     white-space: nowrap;
   }
+  @media print {
+    .people-list {
+      display: none;
+    }
+  }
 </style>
