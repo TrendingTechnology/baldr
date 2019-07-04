@@ -6,12 +6,12 @@
     >
       <person-select/>
     </modal-dialog>
-    <heading-title :title="title"/>
-    <section>
+    <main>
+      <heading-title :title="title"/>
       <seating-plan/>
-      <people-list/>
-    </section>
-    <seating-plan-footer/>
+      <seating-plan-footer/>
+    </main>
+    <people-list/>
   </div>
 </template>
 
@@ -67,13 +67,17 @@ export default {
 </script>
 
 <style scoped>
-.seating-plan-view section {
-  display: flex;
-  align-items: stretch;
-  position: relative;
-}
+  .seating-plan-view {
+    display: flex;
+    align-items: stretch;
+    position: relative;
+  }
 
-.people-list {
-  flex-basis: content;
-}
+  main {
+    width: 100%;
+  }
+
+  .people-list {
+    flex-basis: content;
+  }
 </style>

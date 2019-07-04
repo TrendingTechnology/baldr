@@ -10,7 +10,8 @@
        @drop.prevent="eventListenerDrop"
   >
     <div class="first-name">{{ personFirstName }}</div>
-    <div class="last-name">{{ personLastName }}
+    <div class="last-name">{{ personLastName }}</div>
+    <div class="jobs-of-person" >
       <span v-for="job in jobs" :key="job.name">
         <material-icon
           v-if="hasPersonJob(personId, job.name)"
@@ -20,18 +21,20 @@
       </span>
     </div>
     <div class="no">{{ seat.no }}</div>
-    <material-icon class="close" name="close" @click.native="eventListenerRemove"/>
-    <material-icon class="add" v-if="gradeIsNotPlaced" name="account-plus" @click.native="eventListenerAdd"/>
-    <ul v-if="personId" class="jobs">
-      <li v-for="job in jobs" :key="job.name">
-        <material-icon
-          v-if="!hasPersonJob(personId, job.name)"
-          :name="job.icon"
-          :title="job.name"
-          @click.native="eventListenerAddPersontoJob(personId, job.name)"
-        />
-    </li>
-    </ul>
+    <div class="icons">
+      <material-icon class="add" v-if="gradeIsNotPlaced" name="account-plus" @click.native="eventListenerAdd"/>
+      <span v-if="personId" class="jobs">
+        <span v-for="job in jobs" :key="job.name">
+          <material-icon
+            v-if="!hasPersonJob(personId, job.name)"
+            :name="job.icon"
+            :title="job.name"
+            @click.native="eventListenerAddPersontoJob(personId, job.name)"
+          />
+        </span>
+      </span>
+      <material-icon v-if="personId" class="close" name="close" @click.native="eventListenerRemove"/>
+    </div>
   </div>
 </template>
 
@@ -132,68 +135,47 @@ export default {
     position: absolute;
     background-color: white;
   }
+
   [draggable="true"] {
     cursor: grab;
   }
+
   .first-name {
     font-weight: bold;
     text-align: center;
   }
+
   .last-name {
     font-style: italic;
     text-align: center;
   }
+
+  .jobs-of-person {
+    text-align: center;
+  }
+
   .no {
     position: absolute;
     top: 50%;
     left: 50%;
     opacity: 0.2;
   }
+
   .dragover {
     background-color: red;
   }
 
-  /* close */
-  .seat .close {
+  .icons {
     position: absolute;
     bottom: 0;
     right: 0;
-    display: none;
-  }
-  .seat[title]:hover .close {
-    display: block;
-    cursor: pointer;
   }
 
-  /* add */
-  .seat .add {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-  }
-  .seat:not([title]) .add {
-    display: block;
-  }
-
-  .seat[title] .add {
+  .seat .icons {
     display: none;
   }
 
-  ul.jobs {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    text-align: center;
-  }
-  .jobs li {
-    display: inline-block;
-  }
-
-  .seat[title] .jobs {
-    display: none;
-  }
-
-  .seat[title]:hover .jobs {
+  .seat:hover .icons {
     display: block;
     cursor: pointer;
   }

@@ -37,7 +37,6 @@ export default {
   },
   methods: {
     eventListenerSearch () {
-      console.log(this.selectedPerson)
       dataStore.placePersonById(dataStore.data.currentSeat, this.selectedPerson.id)
       dataStore.data.showModalPersonSelect = false
     }

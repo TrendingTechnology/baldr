@@ -320,8 +320,11 @@ const dataStore = {
 
     let jobs = [
       { name: 'Schaltwart', icon: 'video-switch' },
-      { name: 'Lüftwart', icon: 'window-maximize' },
-      { name: 'Austeilwart', icon: 'file-outline' }
+      // { name: 'Lüftwart', icon: 'window-maximize' },
+      { name: 'Lüftwart', icon: 'air-filter' },
+      { name: 'Austeilwart', icon: 'file-outline' },
+      { name: 'Klassenbuchführer', icon: 'notebook' },
+      { name: 'Klassensprecher', icon: 'account-star' }
     ]
     for (let job of jobs) {
       this.addJob(job.name, job.icon)

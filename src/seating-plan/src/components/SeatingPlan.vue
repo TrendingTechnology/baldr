@@ -1,10 +1,10 @@
 <template>
-  <div class="seating-plan" @onresize="eventListenerOnresize">
+  <section class="seating-plan" @onresize="eventListenerOnresize">
     <one-seat v-for="seat in seats"
       :seat="seat"
       :key="seat.no"
       />
-  </div>
+  </section>
 </template>
 
 <script>
@@ -54,7 +54,6 @@ export default {
 </script>
 
 <style scoped>
-
   .seating-plan {
     width: 100%;
     position: relative;
