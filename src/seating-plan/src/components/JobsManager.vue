@@ -22,6 +22,7 @@
 <script>
 import dataStore from '../data-store.js'
 import HeadingTitle from './HeadingTitle.vue'
+import { mapActions } from 'vuex'
 
 export default {
   name: 'JobsManager',
@@ -40,8 +41,10 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['addJobX']),
     addJob () {
       if (this.newName && this.newIcon) {
+        this.addJobX({ name: this.newName, icon: this.newIcon })
         dataStore.addJob(this.newName, this.newIcon)
         this.$nextTick(() => {
           this.$refs.name.value = ''
