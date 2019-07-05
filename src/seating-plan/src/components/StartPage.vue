@@ -17,7 +17,7 @@
       <li><router-link to='/import-persons'>importieren (Str+c aus LibreOffice)</router-link></li>
       <li><router-link to='/export-data'>Daten exportieren (als JSON)</router-link></li>
       <li><router-link to='/import-data'>Daten importieren (von JSON)</router-link></li>
-      <li><a href='#' @click="eventListenerClick">Test-Daten erzeugen</a></li>
+      <li><router-link to='/test-data'>Test-Daten erzeugen</router-link></li>
       <li><router-link to='/jobs-manager'>Dienste verwalten</router-link></li>
     </ul>
 
@@ -29,18 +29,13 @@ import dataStore from '../data-store.js'
 import HeadingTitle from './HeadingTitle.vue'
 
 export default {
-  name: 'GradesList',
+  name: 'StartPage',
   components: {
     HeadingTitle
   },
   computed: {
     grades () {
       return dataStore.getGrades()
-    }
-  },
-  methods: {
-    eventListenerClick () {
-      dataStore.createTestData()
     }
   }
 }

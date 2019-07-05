@@ -56,7 +56,7 @@ export default {
   beforeCreate: function () {
     let grade = this.$route.params.grade
     if (!dataStore.isGradeSet(grade)) {
-      this.$router.push('/grades-list')
+      this.$router.push('/')
     }
   },
   created: function () {
