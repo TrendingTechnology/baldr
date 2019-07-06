@@ -3,9 +3,9 @@
     <heading-title title="Dienste verwalten"/>
     <ul>
       <li v-for="job in jobs" :key="job.name">
-        <span :class="'mdi mdi-' + job.icon"></span>
+        <material-icon :name="job.icon"/>
         {{ job.name }}
-        <span class="mdi mdi-delete" @click="deleteJob(job.name)"></span>
+        <material-icon name="delete" @click.native="deleteJob(job.name)"/>
       </li>
     </ul>
     <label>
@@ -22,12 +22,12 @@
 <script>
 import dataStore from '../data-store.js'
 import HeadingTitle from './HeadingTitle.vue'
-import { mapActions } from 'vuex'
+import MaterialIcon from './MaterialIcon.vue'
 
 export default {
   name: 'JobsManager',
   components: {
-    HeadingTitle
+    HeadingTitle, MaterialIcon
   },
   data: function () {
     return {
@@ -37,15 +37,15 @@ export default {
   },
   computed: {
     jobs () {
-      return dataStore.listJobs()
+      return this.$store.getters['listJobs']
+      // return dataStore.listJobs() // TODO: remove
     }
   },
   methods: {
-    ...mapActions(['addJobX']),
     addJob () {
       if (this.newName && this.newIcon) {
-        this.addJobX({ name: this.newName, icon: this.newIcon })
-        dataStore.addJob(this.newName, this.newIcon)
+        this.$store.dispatch('addJob', { name: this.newName, icon: this.newIcon })
+        dataStore.addJob(this.newName, this.newIcon) // TODO: remove
         this.$nextTick(() => {
           this.$refs.name.value = ''
           this.$refs.icon.value = ''
@@ -53,7 +53,8 @@ export default {
       }
     },
     deleteJob (name) {
-      dataStore.deleteJob(name)
+      this.$store.dispatch('deleteJob', name)
+      dataStore.deleteJob(name) // TODO remove
     }
   }
 }

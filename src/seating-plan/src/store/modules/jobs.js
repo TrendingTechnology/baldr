@@ -1,3 +1,5 @@
+import Vue from 'vue'
+
 class Job {
   constructor (name, icon) {
     this.name = name
@@ -8,11 +10,11 @@ class Job {
 const state = {}
 
 const getters = {
-  listJobs () {
-    let names = Object.keys(state).sort()
+  listJobs: (state) => {
+    let names = Object.keys(state)
     let jobs = []
     for (let name of names) {
-      jobs.push(state.jobs[name])
+      jobs.push(state[name])
     }
     return jobs
   }
@@ -22,14 +24,20 @@ const actions = {
   addJob ({ commit }, { name, icon }) {
     let job = new Job(name, icon)
     commit('addJob', job)
+  },
+  deleteJob ({ commit }, jobName) {
+    commit('deleteJob', jobName)
   }
 }
 
 const mutations = {
   addJob (state, job) {
     if (!state.hasOwnProperty(job.name)) {
-      state[job.name] = job
+      Vue.set(state, job.name, job)
     }
+  },
+  deleteJob (state, jobName) {
+    Vue.delete(state, jobName)
   }
 }
 
