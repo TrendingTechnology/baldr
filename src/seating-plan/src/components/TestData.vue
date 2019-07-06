@@ -66,6 +66,7 @@ export default {
       ]
       for (let person of peopleList) {
         dataStore.addPerson(person.firstName, person.lastName, person.grade)
+        this.$store.dispatch('addPerson', person)
       }
 
       let jobs = [
@@ -78,7 +79,7 @@ export default {
       ]
       for (let job of jobs) {
         dataStore.addJob(job.name, job.icon)
-        this.$store.dispatch('addJobX', job)
+        this.$store.dispatch('addJob', job)
       }
       dataStore.syncData()
     }

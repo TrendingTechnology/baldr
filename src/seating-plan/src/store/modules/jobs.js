@@ -21,7 +21,7 @@ const getters = {
 }
 
 const actions = {
-  addJobX ({ commit }, { name, icon }) {
+  addJob ({ commit }, { name, icon }) {
     let job = new Job(name, icon)
     commit('addJob', job)
   }
