@@ -5,13 +5,11 @@ class Job {
   }
 }
 
-const state = {
-  jobs: {}
-}
+const state = {}
 
 const getters = {
   listJobs () {
-    let names = Object.keys(state.jobs).sort()
+    let names = Object.keys(state).sort()
     let jobs = []
     for (let name of names) {
       jobs.push(state.jobs[name])
@@ -29,8 +27,8 @@ const actions = {
 
 const mutations = {
   addJob (state, job) {
-    if (!state.jobs.hasOwnProperty(job.name)) {
-      state.jobs[job.name] = job
+    if (!state.hasOwnProperty(job.name)) {
+      state[job.name] = job
     }
   }
 }

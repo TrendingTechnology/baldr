@@ -8,14 +8,12 @@ class Grade {
   }
 }
 
-const state = {
-  grades: {}
-}
+const state = {}
 
 const getters = {
   getGrade: (state) => (name) => {
-    if (state.grades.hasOwnProperty(name)) {
-      return state.grades[name]
+    if (state.hasOwnProperty(name)) {
+      return state[name]
     }
     return false
   }
@@ -32,10 +30,10 @@ const actions = {
 
 const mutations = {
   addGrade (state, grade) {
-    Vue.set(state.grades, grade.name, grade)
+    Vue.set(state, grade.name, grade)
   },
   incrementPersons (state, gradeName) {
-    state.grades[gradeName].personsCount += 1
+    state[gradeName].personsCount += 1
   }
 }
 

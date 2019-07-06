@@ -22,16 +22,14 @@ class Person {
   }
 }
 
-const state = {
-  persons: {}
-}
+const state = {}
 
 const getters = {
   getPerson: (state) => ({ firstName, lastName, grade }) => {
-    if (state.persons.hasOwnProperty(grade) &&
-    state.persons[grade].hasOwnProperty(lastName) &&
-    state.persons[grade][lastName].hasOwnProperty(firstName)) {
-      return state.persons[grade][lastName][firstName]
+    if (state.hasOwnProperty(grade) &&
+    state[grade].hasOwnProperty(lastName) &&
+    state[grade][lastName].hasOwnProperty(firstName)) {
+      return state[grade][lastName][firstName]
     }
     return false
   }
@@ -51,14 +49,14 @@ const actions = {
 const mutations = {
   addPerson (state, person) {
     // grade
-    if (!state.persons.hasOwnProperty(person.grade)) {
-      Vue.set(state.persons, person.grade, {})
+    if (!state.hasOwnProperty(person.grade)) {
+      Vue.set(state, person.grade, {})
     }
     // lastName
-    if (!state.persons[person.grade].hasOwnProperty(person.lastName)) {
-      Vue.set(state.persons[person.grade], person.lastName, {})
+    if (!state[person.grade].hasOwnProperty(person.lastName)) {
+      Vue.set(state[person.grade], person.lastName, {})
     }
-    Vue.set(state.persons[person.grade][person.lastName], person.firstName, person)
+    Vue.set(state[person.grade][person.lastName], person.firstName, person)
   }
 }
 
