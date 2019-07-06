@@ -16,6 +16,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 import HeadingTitle from './HeadingTitle.vue'
 import ModalDialog from './ModalDialog.vue'
 import PersonSelect from './PersonSelect.vue'
@@ -35,11 +37,9 @@ export default {
     SeatingPlanFooter
   },
   computed: {
-    currentGrade () {
-      return dataStore.getCurrentGrade()
-    },
+    ...mapGetters(['getCurrentGrade']),
     title () {
-      return 'Sitzplan der Klasse “' + this.currentGrade + '”'
+      return 'Sitzplan der Klasse “' + this.getCurrentGrade + '”'
     },
     stateShowModal () {
       return dataStore.data.showModalPersonSelect
@@ -60,8 +60,9 @@ export default {
     }
   },
   created: function () {
-    let grade = this.$route.params.grade
-    dataStore.setCurrentGrade(grade)
+    let gradeName = this.$route.params.grade
+    dataStore.setCurrentGrade(gradeName) // TODO: remove
+    this.$store.commit('setCurrentGrade', gradeName)
   }
 }
 </script>

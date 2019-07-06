@@ -1,5 +1,5 @@
 <template>
-  <div :class="'mdi mdi-' + name"></div>
+  <div :class="classes"></div>
 </template>
 
 <script>
@@ -7,7 +7,21 @@
 export default {
   name: 'MaterialIcon',
   props: {
-    name: String
+    name: {
+      type: String
+    },
+    disabled: {
+      type: Boolean,
+      default: false
+    }
+  },
+  computed: {
+    classes () {
+      let classes = ['mdi']
+      classes.push(`mdi-${this.name}`)
+      if (this.disabled) classes.push('disabled')
+      return classes.join(' ')
+    }
   }
 }
 </script>
@@ -15,17 +29,23 @@ export default {
 <style scoped>
   @import '../../node_modules/@mdi/font/css/materialdesignicons.css';
   div {
+    display: inline-block;
+  }
+  div:not(.disabled) {
     cursor: pointer;
     display: inline-block;
   }
-  div:hover {
+  div:not(.disabled):hover {
     color: red;
   }
-  div:active {
+  div:not(.disabled):active {
     color: grey;
   }
-  div:focus {
+  div:not(.disabled):focus {
     color: slategray;
+  }
+  div.disabled {
+    color: grey;
   }
   @media print {
     div {

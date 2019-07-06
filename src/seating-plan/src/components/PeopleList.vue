@@ -20,6 +20,7 @@ export default {
   },
   computed: {
     persons () {
+      // return this.$store.getters.getPersonsByCurrentGrade
       return dataStore.getPersons(dataStore.getCurrentGrade())
     }
   }

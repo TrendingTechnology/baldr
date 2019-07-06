@@ -32,6 +32,18 @@ const getters = {
       return state[grade][lastName][firstName]
     }
     return false
+  },
+  getPersonsByGrade: (state) => (grade) => {
+    let persons = []
+    for (let lastName of Object.keys(state[grade]).sort()) {
+      for (let firstName of Object.keys(state[grade][lastName]).sort()) {
+        persons.push(state[grade][lastName][firstName])
+      }
+    }
+    return persons
+  },
+  getPersonsByCurrentGrade: (state, getters) => {
+    return getters.getPersonsByGrade(getters.getCurrentGrade)
   }
 }
 

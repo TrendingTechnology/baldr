@@ -3,7 +3,7 @@
     <heading-title title="Dienste verwalten"/>
     <ul>
       <li v-for="job in jobs" :key="job.name">
-        <material-icon :name="job.icon"/>
+        <material-icon disabled :name="job.icon"/>
         {{ job.name }}
         <material-icon name="delete" @click.native="deleteJob(job.name)"/>
       </li>
