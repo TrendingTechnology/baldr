@@ -25,19 +25,8 @@ export default {
   },
   methods: {
     eventListenerClick (event) {
-      for (let line of this.importString.split('\n')) {
-        let match = line.match(/(.*)\t(.*)\t(.*)\t(.*)\t([^]*)/)
-        if (match && match[1] !== 'Familienname' && match[1] !== 'Insgesamt:') {
-          let lastName = match[1]
-          let firstName = match[2]
-          let grade = match[4]
-          this.$store.dispatch('addPerson', { firstName, lastName, grade })
-        }
-      }
+      this.$store.dispatch('importFromSpreadsheet', this.importString)
     }
   }
 }
 </script>
-
-<style scoped>
-</style>
