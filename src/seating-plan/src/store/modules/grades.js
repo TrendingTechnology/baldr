@@ -4,7 +4,7 @@ class Grade {
   constructor (name) {
     this.name = name
     this.personsCount = 0
-    this.personsPlaced = 0
+    this.personsPlacedCount = 0
   }
 }
 
@@ -29,11 +29,17 @@ const actions = {
 }
 
 const mutations = {
-  addGrade (state, grade) {
+  addGrade: (state, grade) => {
     Vue.set(state, grade.name, grade)
   },
-  incrementPersons (state, gradeName) {
+  incrementPersonsCount: (state, gradeName) => {
     state[gradeName].personsCount += 1
+  },
+  incrementPersonsPlacedCount: (state, gradeName) => {
+    state[gradeName].personsPlacedCount += 1
+  },
+  decrementPersonsPlacedCount: (state, gradeName) => {
+    state[gradeName].personsPlacedCount -= 1
   }
 }
 
