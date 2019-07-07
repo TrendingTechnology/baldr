@@ -6,7 +6,6 @@ class Person {
     this.lastName = lastName
     this.grade = grade
     this.seatNo = 0
-    this.placed = false
   }
 
   get id () {
@@ -43,12 +42,14 @@ const getters = {
   },
   getPersonsByGrade: (state) => (grade) => {
     let persons = []
-    for (let lastName of Object.keys(state[grade]).sort()) {
-      for (let firstName of Object.keys(state[grade][lastName]).sort()) {
-        persons.push(state[grade][lastName][firstName])
+    if (state.hasOwnProperty(grade)) {
+      for (let lastName of Object.keys(state[grade]).sort()) {
+        for (let firstName of Object.keys(state[grade][lastName]).sort()) {
+          persons.push(state[grade][lastName][firstName])
+        }
       }
+      return persons
     }
-    return persons
   },
   getPersonsByCurrentGrade: (state, getters) => {
     return getters.getPersonsByGrade(getters.getCurrentGrade)
@@ -74,7 +75,7 @@ const actions = {
     }
 
     if (oldPerson) {
-      oldPerson.seatNo = 0
+      commit('setPersonsSeatNo', oldPerson)
     }
     // Update placed counter
     // Decrease counter when one person is dragged over another person.
@@ -93,12 +94,12 @@ const actions = {
 
     // Place the person.
     commit('addPersonToPlan', { person: newPerson, seatNo: seatNo }, { root: true })
-    newPerson.seatNo = seatNo // TODO: remove
+    commit('setPersonsSeatNo', { person: newPerson, seatNo: seatNo })
   }
 }
 
 const mutations = {
-  addPerson (state, person) {
+  addPerson: (state, person) => {
     // grade
     if (!state.hasOwnProperty(person.grade)) {
       Vue.set(state, person.grade, {})
@@ -108,6 +109,12 @@ const mutations = {
       Vue.set(state[person.grade], person.lastName, {})
     }
     Vue.set(state[person.grade][person.lastName], person.firstName, person)
+  },
+  setPersonsSeatNo: (state, { person, seatNo }) => {
+    person.seatNo = seatNo
+  },
+  resetPersonsSeatNo: (state, person) => {
+    person.seatNo = 0
   }
 }
 

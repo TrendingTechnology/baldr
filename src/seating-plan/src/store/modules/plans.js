@@ -6,7 +6,7 @@ const state = {
 const getters = {
   getPersonByGradeAndSeatNo: (state, getters) => (grade, seatNo) => {
     if (state.hasOwnProperty(grade) && state[grade].hasOwnProperty(seatNo)) {
-      return getters.getPersonById(state[grade][seatNo])
+      return state[grade][seatNo]
     }
     return false
   },
@@ -23,11 +23,10 @@ const mutations = {
     if (!state.hasOwnProperty(person.grade)) {
       Vue.set(state, person.grade, {})
     }
-    Vue.set(state[person.grade], seatNo, {})
-    Vue.set(state[person.grade][seatNo], person)
+    Vue.set(state[person.grade], seatNo, person)
   },
   removePersonFromPlan: (state, { person, seatNo }) => {
-    Vue.set(state[person.grade], seatNo)
+    Vue.delete(state[person.grade], seatNo)
   }
 }
 
