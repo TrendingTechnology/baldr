@@ -17,6 +17,12 @@ const getters = {
     }
     return false
   },
+  getCurrentGradeObject: (state, getters) => {
+    let gradeName = getters.getCurrentGrade
+    if (gradeName) {
+      return getters.getGrade(gradeName)
+    }
+  },
   getCurrentPersonsCount: (state, getters) => {
     let grade = getters.getGrade(getters.getCurrentGrade)
     return grade.personsCount
@@ -30,6 +36,27 @@ const getters = {
   },
   getJobsOfCurrentGrade: (state, getters) => {
     return getters.getJobsOfGrade(getters.getCurrentGrade)
+  },
+  /**
+   * Indicate if all persons in a grade are having a seat and are places.
+   *
+   * @returns boolean
+   */
+  isGradePlaced: (state, getters) => {
+    let grade = getters.getCurrentGradeObject
+    if (grade && grade.personsCount === grade.personsPlacedCount) {
+      return true
+    }
+    return false
+  },
+  hasPersonJob: (state, getters) => (personId, jobName) => {
+    if (!personId) {
+      return false
+    }
+    let grade = getters.getCurrentGradeObject
+    return grade.hasOwnProperty('jobs') &&
+      grade.jobs.hasOwnProperty(jobName) &&
+      grade.jobs[jobName].hasOwnProperty(personId)
   }
 }
 

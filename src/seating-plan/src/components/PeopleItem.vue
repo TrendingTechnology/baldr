@@ -5,7 +5,7 @@
       @dragstart="eventListenerDragStart"
       :draggable="draggable"
       class="people-item"
-      :class="{ placed: person.placed }"
+      :class="{ placed: person.seatNo }"
   >
     {{ person.lastName }}, {{ person.firstName }}
   </li>

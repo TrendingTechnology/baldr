@@ -20,7 +20,6 @@
 </template>
 
 <script>
-import dataStore from '../data-store.js'
 import MaterialIcon from './MaterialIcon.vue'
 import { mapGetters } from 'vuex'
 
@@ -29,16 +28,10 @@ export default {
   components: {
     MaterialIcon
   },
-  computed: {
-    ...mapGetters(['getCurrentPersonsCount', 'getJobsOfCurrentGrade']),
-    jobs () {
-      return dataStore.getJobsPerGrade()
-    }
-  },
+  computed: mapGetters(['getCurrentPersonsCount', 'getJobsOfCurrentGrade']),
   methods: {
     removePersonFromJob (personId, jobName) {
       this.$store.dispatch('removePersonFromJob', { personId, jobName })
-      dataStore.removePersonFromJob(personId, jobName)
     }
   }
 }

@@ -1,6 +1,6 @@
 <template>
   <section class="seating-plan" @onresize="eventListenerOnresize">
-    <one-seat v-for="seat in seats"
+    <one-seat v-for="seat in getSeats"
       :seat="seat"
       :key="seat.no"
       />
@@ -9,8 +9,8 @@
 
 <script>
 import OneSeat from './OneSeat.vue'
-import dataStore from '../data-store.js'
 import ResizeObserver from 'resize-observer-polyfill'
+import { mapGetters } from 'vuex'
 
 let resizeObserver = new ResizeObserver(entries => {
   let headerHeight = document.querySelector('header').clientHeight
@@ -37,11 +37,7 @@ export default {
   components: {
     OneSeat
   },
-  computed: {
-    seats () {
-      return dataStore.getSeats()
-    }
-  },
+  computed: mapGetters(['getSeats']),
   methods: {
     eventListenerOnresize (event) {
       console.log(event)

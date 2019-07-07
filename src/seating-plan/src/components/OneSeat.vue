@@ -12,7 +12,7 @@
     <div class="first-name">{{ personFirstName }}</div>
     <div class="last-name">{{ personLastName }}</div>
     <div class="jobs-of-person" >
-      <span v-for="job in jobs" :key="job.name">
+      <span v-for="job in listJobs" :key="job.name">
         <material-icon
           v-if="hasPersonJob(personId, job.name)"
           :name="job.icon"
@@ -24,7 +24,7 @@
     <div class="icons">
       <material-icon class="add" v-if="gradeIsNotPlaced" name="account-plus" @click.native="eventListenerAdd"/>
       <span v-if="personId" class="jobs">
-        <span v-for="job in jobs" :key="job.name">
+        <span v-for="job in listJobs" :key="job.name">
           <material-icon
             v-if="!hasPersonJob(personId, job.name)"
             :name="job.icon"
@@ -41,6 +41,7 @@
 <script>
 import dataStore from '../data-store.js'
 import MaterialIcon from './MaterialIcon.vue'
+import { mapGetters } from 'vuex'
 let seats = dataStore.getData().seats
 
 export default {
@@ -52,6 +53,7 @@ export default {
     seat: Object
   },
   computed: {
+    ...mapGetters(['listJobs']),
     draggable () {
       if (this.person.seatNo >= 1 && this.person.seatNo <= seats.count) {
         return 'true'
@@ -62,7 +64,7 @@ export default {
       return `bottom: ${this.seat.y}%; height: ${seats.dimension.depth}%; left: ${this.seat.x}%; width: ${seats.dimension.width}%;`
     },
     person () {
-      return dataStore.getPersonBySeatNo(this.seat.no)
+      return this.$store.getters.getPersonByCurrentGradeAndSeatNo(this.seat.no)
     },
     personFirstName () {
       if (this.person) {
@@ -83,10 +85,7 @@ export default {
       return ''
     },
     gradeIsNotPlaced () {
-      return !dataStore.gradeIsPlaced()
-    },
-    jobs () {
-      return dataStore.listJobs()
+      return !this.$store.getters.isGradePlaced
     }
   },
   methods: {
@@ -104,28 +103,26 @@ export default {
     },
     eventListenerDrop (event) {
       let personId = event.dataTransfer.getData('text/plain')
-      dataStore.placePersonById(this.seat.no, personId)
       this.$store.dispatch('placePersonById', { seatNo: this.seat.no, personId: personId })
       if (event.currentTarget.classList) {
         event.currentTarget.classList.remove('dragover')
       }
     },
     eventListenerRemove (event) {
-      dataStore.removePersonFromSeat(this.personId, this.seat.no)
+      this.$store.dispatch('removePersonFromPlan', { personId: this.personId, seatNo: this.seat.no })
     },
     eventListenerAdd (event) {
-      dataStore.setCurrentSeat(this.seat.no)
-      dataStore.data.showModalPersonSelect = true
+      this.$store.commit('setCurrentSeat', this.seat.no)
+      this.$store.dispatch('showModal')
       this.$nextTick(() => {
         document.querySelector('.dynamic-select').focus()
       })
     },
     eventListenerAddPersontoJob (personId, jobName) {
       this.$store.dispatch('addPersonToJob', { personId, jobName })
-      dataStore.addPersontoJob(personId, jobName)
     },
     hasPersonJob (personId, jobName) {
-      return dataStore.hasPersonJob(personId, jobName)
+      return this.$store.getters.hasPersonJob(personId, jobName)
     }
   }
 }

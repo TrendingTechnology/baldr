@@ -16,6 +16,11 @@ const getters = {
 }
 
 const actions = {
+  removePersonFromPlan: ({ commit, getters }, { personId, seatNo }) => {
+    let person = getters.getPersonById(personId)
+    let seat = getters.getSeatByNo(seatNo)
+    commit('removePersonFromPlan', { person, seat })
+  }
 }
 
 const mutations = {
@@ -25,8 +30,9 @@ const mutations = {
     }
     Vue.set(state[person.grade], seatNo, person)
   },
-  removePersonFromPlan: (state, { person, seatNo }) => {
-    Vue.delete(state[person.grade], seatNo)
+  removePersonFromPlan: (state, { person, seat }) => {
+    Vue.delete(state[person.grade], seat.no)
+    person.seatNo = 0
   }
 }
 

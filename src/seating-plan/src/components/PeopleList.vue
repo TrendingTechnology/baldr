@@ -11,7 +11,6 @@
 
 <script>
 import PeopleItem from './PeopleItem.vue'
-import dataStore from '../data-store.js'
 
 export default {
   name: 'PeopleList',
@@ -20,8 +19,7 @@ export default {
   },
   computed: {
     persons () {
-      // return this.$store.getters.getPersonsByCurrentGrade
-      return dataStore.getPersons(dataStore.getCurrentGrade())
+      return this.$store.getters.getPersonsByCurrentGrade
     }
   }
 }

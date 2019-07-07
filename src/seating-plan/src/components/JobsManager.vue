@@ -20,7 +20,6 @@
 </template>
 
 <script>
-import dataStore from '../data-store.js'
 import HeadingTitle from './HeadingTitle.vue'
 import MaterialIcon from './MaterialIcon.vue'
 
@@ -38,14 +37,12 @@ export default {
   computed: {
     jobs () {
       return this.$store.getters['listJobs']
-      // return dataStore.listJobs() // TODO: remove
     }
   },
   methods: {
     addJob () {
       if (this.newName && this.newIcon) {
         this.$store.dispatch('addJob', { name: this.newName, icon: this.newIcon })
-        dataStore.addJob(this.newName, this.newIcon) // TODO: remove
         this.$nextTick(() => {
           this.$refs.name.value = ''
           this.$refs.icon.value = ''
@@ -54,7 +51,6 @@ export default {
     },
     deleteJob (name) {
       this.$store.dispatch('deleteJob', name)
-      dataStore.deleteJob(name) // TODO remove
     }
   }
 }

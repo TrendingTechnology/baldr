@@ -89,7 +89,8 @@ const actions = {
 
     // Move the same person to another seat. Free the previously taken seat.
     if (newPerson.seatNo) {
-      commit('removePersonFromPlan', { person: newPerson, seatNo: newPerson.seatNo }, { root: true })
+      let seat = getters.getSeatByNo(newPerson.seatNo)
+      commit('removePersonFromPlan', { person: newPerson, seat: seat }, { root: true })
     }
 
     // Place the person.

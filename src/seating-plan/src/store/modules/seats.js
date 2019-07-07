@@ -1,3 +1,11 @@
+class Seat {
+  constructor (no, x, y) {
+    this.no = no
+    this.x = x
+    this.y = y
+  }
+}
+
 /**
  * 25 26 27 28    29 30 31 32
  *
@@ -32,7 +40,7 @@ class SeatingPlanLayout {
     for (let row of this.seatBlocks) {
       for (let block of row) {
         for (let seatNo of block) {
-          seats[seatNo] = { no: seatNo, x: seatX, y: seatY }
+          seats[seatNo] = new Seat(seatNo, seatX, seatY)
           seatX += this.seatWidth
         }
         seatX += this.aisle
@@ -58,6 +66,9 @@ const state = {
 const getters = {
   getSeats: (state) => {
     return state.positions
+  },
+  getSeatByNo: (state) => (seatNo) => {
+    return state.positions[seatNo]
   }
 }
 

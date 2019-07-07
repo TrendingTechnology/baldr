@@ -6,12 +6,10 @@
     v-model="selectedPerson"
     @input="eventListenerSearch"
   />
-  <!-- <input class="vue-dynamic-select"/> -->
 </template>
 
 <script>
 import DynamicSelect from './DynamicSelect.vue'
-import dataStore from '../data-store.js'
 
 export default {
   name: 'PersonSelect',
@@ -25,7 +23,7 @@ export default {
   },
   computed: {
     persons () {
-      let personsOrig = dataStore.getPersons(dataStore.getCurrentGrade())
+      let personsOrig = this.$store.getters.getPersonsByCurrentGrade
       let persons = []
       for (let person of personsOrig) {
         if (!person.seatNo) {
@@ -37,8 +35,8 @@ export default {
   },
   methods: {
     eventListenerSearch () {
-      dataStore.placePersonById(dataStore.data.currentSeat, this.selectedPerson.id)
-      dataStore.data.showModalPersonSelect = false
+      this.$store.dispatch('placePersonById', { seatNo: this.$store.getters.getCurrentSeat, personId: this.selectedPerson.id })
+      this.$store.dispatch('closeModal')
     }
   }
 }
