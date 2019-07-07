@@ -21,22 +21,22 @@ const getters = {
 }
 
 const actions = {
-  addJob ({ commit }, { name, icon }) {
+  addJob: ({ commit }, { name, icon }) => {
     let job = new Job(name, icon)
     commit('addJob', job)
   },
-  deleteJob ({ commit }, jobName) {
+  deleteJob: ({ commit }, jobName) =>{
     commit('deleteJob', jobName)
   }
 }
 
 const mutations = {
-  addJob (state, job) {
+  addJob: (state, job) => {
     if (!state.hasOwnProperty(job.name)) {
       Vue.set(state, job.name, job)
     }
   },
-  deleteJob (state, jobName) {
+  deleteJob: (state, jobName) => {
     Vue.delete(state, jobName)
   }
 }

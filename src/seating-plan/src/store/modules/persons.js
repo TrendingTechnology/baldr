@@ -57,7 +57,7 @@ const getters = {
 }
 
 const actions = {
-  addPerson ({ commit, getters, dispatch }, { firstName, lastName, grade }) {
+  addPerson: ({ commit, getters, dispatch }, { firstName, lastName, grade }) => {
     if (!getters.getPerson({ firstName, lastName, grade })) {
       let person = new Person(firstName, lastName, grade)
       commit('addPerson', person)
@@ -65,7 +65,7 @@ const actions = {
       commit('incrementPersonsCount', grade, { root: true })
     }
   },
-  placePersonById ({ commit, getters }, { seatNo, personId }) {
+  placePersonById: ({ commit, getters }, { seatNo, personId }) => {
     let oldPerson = getters.getPersonByCurrentGradeAndSeatNo(seatNo)
     let newPerson = getters.getPersonById(personId)
 

@@ -20,7 +20,7 @@ const getters = {
 }
 
 const actions = {
-  addGrade ({ commit, getters }, name) {
+  addGrade: ({ commit, getters }, name) => {
     if (!getters.getGrade(name)) {
       let grade = new Grade(name)
       commit('addGrade', grade)
