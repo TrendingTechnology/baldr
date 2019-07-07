@@ -75,7 +75,7 @@ const actions = {
     }
 
     if (oldPerson) {
-      commit('setPersonsSeatNo', oldPerson)
+      commit('resetPersonsSeatNo', oldPerson)
     }
     // Update placed counter
     // Decrease counter when one person is dragged over another person.

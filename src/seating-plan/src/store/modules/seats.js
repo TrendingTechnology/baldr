@@ -65,6 +65,9 @@ const state = {
 
 const getters = {
   getSeats: (state) => {
+    return state
+  },
+  getSeatPositions: (state) => {
     return state.positions
   },
   getSeatByNo: (state) => (seatNo) => {

@@ -39,10 +39,8 @@
 </template>
 
 <script>
-import dataStore from '../data-store.js'
 import MaterialIcon from './MaterialIcon.vue'
 import { mapGetters } from 'vuex'
-let seats = dataStore.getData().seats
 
 export default {
   name: 'OneSeat',
@@ -53,15 +51,15 @@ export default {
     seat: Object
   },
   computed: {
-    ...mapGetters(['listJobs']),
+    ...mapGetters(['listJobs', 'getSeats']),
     draggable () {
-      if (this.person.seatNo >= 1 && this.person.seatNo <= seats.count) {
+      if (this.person.seatNo >= 1 && this.person.seatNo <= this.getSeats.count) {
         return 'true'
       }
       return 'false'
     },
     style () {
-      return `bottom: ${this.seat.y}%; height: ${seats.dimension.depth}%; left: ${this.seat.x}%; width: ${seats.dimension.width}%;`
+      return `bottom: ${this.seat.y}%; height: ${this.getSeats.dimension.depth}%; left: ${this.seat.x}%; width: ${this.getSeats.dimension.width}%;`
     },
     person () {
       return this.$store.getters.getPersonByCurrentGradeAndSeatNo(this.seat.no)

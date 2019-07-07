@@ -4,9 +4,9 @@
 
     <h2>Sitzpläne</h2>
     <ul>
-      <li v-for="grade in grades" :key="grade">
-        <router-link :to="'/grade/' + grade">
-          {{ grade }}
+      <li v-for="gradeName in getGradeNames" :key="gradeName">
+        <router-link :to="'/grade/' + gradeName">
+          {{ gradeName }}
         </router-link>
       </li>
     </ul>
@@ -25,19 +25,15 @@
 </template>
 
 <script>
-import dataStore from '../data-store.js'
 import HeadingTitle from './HeadingTitle.vue'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'StartPage',
   components: {
     HeadingTitle
   },
-  computed: {
-    grades () {
-      return dataStore.getGrades()
-    }
-  }
+  computed: mapGetters(['getGradeNames'])
 }
 </script>
 

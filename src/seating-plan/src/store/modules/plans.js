@@ -29,6 +29,7 @@ const mutations = {
       Vue.set(state, person.grade, {})
     }
     Vue.set(state[person.grade], seatNo, person)
+    // person.seatNo = seatNo
   },
   removePersonFromPlan: (state, { person, seat }) => {
     Vue.delete(state[person.grade], seat.no)

@@ -20,8 +20,6 @@ export default {
 }
 </script>
 
-    <vue-headful :title="title"/>
-
 <style scoped>
   header {
     display: inline-flex;

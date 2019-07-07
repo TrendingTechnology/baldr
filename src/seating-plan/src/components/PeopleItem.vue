@@ -12,8 +12,7 @@
 </template>
 
 <script>
-import dataStore from '../data-store.js'
-let seats = dataStore.getData().seats
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'PeopleItem',
@@ -21,8 +20,9 @@ export default {
     person: Object
   },
   computed: {
+    ...mapGetters(['getSeats']),
     draggable () {
-      if (this.person.seatNo >= 1 && this.person.seatNo <= seats.count) {
+      if (this.person.seatNo >= 1 && this.person.seatNo <= this.getSeats.count) {
         return 'false'
       } else {
         return 'true'

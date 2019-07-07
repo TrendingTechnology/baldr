@@ -7,7 +7,6 @@
 
 <script>
 import HeadingTitle from './HeadingTitle.vue'
-import dataStore from '../data-store.js'
 
 export default {
   name: 'TestData',
@@ -65,7 +64,6 @@ export default {
         { firstName: 'Thomas', lastName: 'Grimmer', grade: 'Q11' }
       ]
       for (let person of peopleList) {
-        dataStore.addPerson(person.firstName, person.lastName, person.grade)
         this.$store.dispatch('addPerson', person)
       }
 
@@ -78,10 +76,8 @@ export default {
         { name: 'Klassensprecher', icon: 'account-star' }
       ]
       for (let job of jobs) {
-        dataStore.addJob(job.name, job.icon)
         this.$store.dispatch('addJob', job)
       }
-      dataStore.syncData()
     }
   }
 }

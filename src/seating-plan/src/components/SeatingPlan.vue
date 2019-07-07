@@ -1,6 +1,6 @@
 <template>
   <section class="seating-plan" @onresize="eventListenerOnresize">
-    <one-seat v-for="seat in getSeats"
+    <one-seat v-for="seat in getSeatPositions"
       :seat="seat"
       :key="seat.no"
       />
@@ -37,7 +37,7 @@ export default {
   components: {
     OneSeat
   },
-  computed: mapGetters(['getSeats']),
+  computed: mapGetters(['getSeatPositions']),
   methods: {
     eventListenerOnresize (event) {
       console.log(event)

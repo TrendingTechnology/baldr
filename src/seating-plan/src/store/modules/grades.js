@@ -8,6 +8,13 @@ class Grade {
   }
 }
 
+/**
+ * @see {@link https://stackoverflow.com/a/38641281}
+ */
+function naturalSort (a, b) {
+  return a.localeCompare(b, 'de', { numeric: true, sensitivity: 'base' })
+}
+
 const state = {}
 
 const getters = {
@@ -16,6 +23,10 @@ const getters = {
       return state[name]
     }
     return false
+  },
+  getGradeNames: (state) => {
+    let gradeNames = Object.keys(state)
+    return gradeNames.sort(naturalSort)
   },
   getCurrentGradeObject: (state, getters) => {
     let gradeName = getters.getCurrentGrade

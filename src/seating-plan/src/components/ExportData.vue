@@ -11,7 +11,6 @@
 </template>
 
 <script>
-import dataStore from '../data-store.js'
 import HeadingTitle from './HeadingTitle.vue'
 
 export default {
@@ -21,7 +20,7 @@ export default {
   },
   computed: {
     dataString () {
-      let string = encodeURIComponent(JSON.stringify(dataStore.getData()))
+      let string = encodeURIComponent(JSON.stringify(this.$store.getters.getState))
       return `data:text/json;charset=utf-8,${string}`
     },
     dateTime () {
@@ -33,6 +32,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-</style>

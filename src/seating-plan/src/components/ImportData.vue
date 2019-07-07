@@ -6,7 +6,6 @@
 </template>
 
 <script>
-import dataStore from '../data-store.js'
 import HeadingTitle from './HeadingTitle.vue'
 
 export default {
@@ -21,7 +20,7 @@ export default {
       reader.readAsText(file, 'utf-8')
       reader.onload = readerEvent => {
         let content = readerEvent.target.result
-        dataStore.importData(content)
+        this.$store.dispatch('importState', content)
       }
     }
   }

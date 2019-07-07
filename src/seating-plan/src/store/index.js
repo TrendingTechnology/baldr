@@ -10,6 +10,20 @@ import seats from './modules/seats'
 
 Vue.use(Vuex)
 
+const getters = {
+  getState: (state) => {
+    return state
+  }
+}
+
+const actions = {
+  importState: ({ commit }, jsonString) => {
+
+  }
+}
+
 export default new Vuex.Store({
-  modules: { app, grades, jobs, persons, plans, seats }
+  modules: { app, grades, jobs, persons, plans, seats },
+  getters,
+  actions
 })

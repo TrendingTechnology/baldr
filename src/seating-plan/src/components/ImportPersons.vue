@@ -11,7 +11,6 @@ Mustermann\tMax\tmännlich\t05a\t17.11.2006</pre>
 </template>
 
 <script>
-import dataStore from '../data-store.js'
 import HeadingTitle from './HeadingTitle'
 
 export default {
@@ -19,10 +18,9 @@ export default {
   components: {
     HeadingTitle
   },
-  data: function () {
+  data () {
     return {
-      importString: '',
-      data: dataStore.getData()
+      importString: ''
     }
   },
   methods: {
@@ -33,8 +31,7 @@ export default {
           let lastName = match[1]
           let firstName = match[2]
           let grade = match[4]
-          dataStore.addPerson(firstName, lastName, grade)
-          dataStore.syncData()
+          this.$store.dispatch('addPerson', { firstName, lastName, grade })
         }
       }
     }
