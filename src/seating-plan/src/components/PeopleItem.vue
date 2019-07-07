@@ -20,9 +20,9 @@ export default {
     person: Object
   },
   computed: {
-    ...mapGetters(['getSeats']),
+    ...mapGetters(['seats']),
     draggable () {
-      if (this.person.seatNo >= 1 && this.person.seatNo <= this.getSeats.count) {
+      if (this.person.seatNo >= 1 && this.person.seatNo <= this.seats.count) {
         return 'false'
       } else {
         return 'true'

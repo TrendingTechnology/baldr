@@ -4,7 +4,7 @@
 
     <h2>Sitzpläne</h2>
     <ul>
-      <li v-for="gradeName in getGradeNames" :key="gradeName">
+      <li v-for="gradeName in gradeNames" :key="gradeName">
         <router-link :to="'/grade/' + gradeName">
           {{ gradeName }}
         </router-link>
@@ -33,7 +33,7 @@ export default {
   components: {
     HeadingTitle
   },
-  computed: mapGetters(['getGradeNames'])
+  computed: mapGetters(['gradeNames'])
 }
 </script>
 

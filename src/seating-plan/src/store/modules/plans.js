@@ -4,21 +4,21 @@ const state = {
 }
 
 const getters = {
-  getPersonByGradeAndSeatNo: (state, getters) => (grade, seatNo) => {
+  personByGradeAndSeatNo: (state) => (grade, seatNo) => {
     if (state.hasOwnProperty(grade) && state[grade].hasOwnProperty(seatNo)) {
       return state[grade][seatNo]
     }
     return false
   },
-  getPersonByCurrentGradeAndSeatNo: (state, getters) => (seatNo) => {
-    return getters.getPersonByGradeAndSeatNo(getters.getCurrentGrade, seatNo)
+  personByCurrentGradeAndSeatNo: (state, get) => (seatNo) => {
+    return get.personByGradeAndSeatNo(get.currentGrade, seatNo)
   }
 }
 
 const actions = {
   removePersonFromPlan: ({ commit, getters }, { personId, seatNo }) => {
-    let person = getters.getPersonById(personId)
-    let seat = getters.getSeatByNo(seatNo)
+    let person = getters.personById(personId)
+    let seat = getters.seatByNo(seatNo)
     commit('removePersonFromPlan', { person, seat })
   }
 }

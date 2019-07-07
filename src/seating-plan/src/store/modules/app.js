@@ -5,13 +5,13 @@ const state = {
 }
 
 const getters = {
-  getCurrentGrade: (state) => {
+  currentGrade: (state) => {
     return state.currentGrade
   },
-  getCurrentSeat: (state) => {
+  currentSeat: (state) => {
     return state.currentSeat
   },
-  getModalState: (state) => {
+  modalState: (state) => {
     return state.showModal
   }
 }

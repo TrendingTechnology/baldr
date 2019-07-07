@@ -23,7 +23,7 @@ export default {
   },
   computed: {
     persons () {
-      let personsOrig = this.$store.getters.getPersonsByCurrentGrade
+      let personsOrig = this.$store.getters.personsByCurrentGrade
       let persons = []
       for (let person of personsOrig) {
         if (!person.seatNo) {
@@ -35,7 +35,7 @@ export default {
   },
   methods: {
     eventListenerSearch () {
-      this.$store.dispatch('placePersonById', { seatNo: this.$store.getters.getCurrentSeat, personId: this.selectedPerson.id })
+      this.$store.dispatch('placePersonById', { seatNo: this.$store.getters.currentSeat, personId: this.selectedPerson.id })
       this.$store.dispatch('closeModal')
     }
   }

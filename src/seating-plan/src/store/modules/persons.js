@@ -24,7 +24,7 @@ class Person {
 const state = {}
 
 const getters = {
-  getPerson: (state) => ({ firstName, lastName, grade }) => {
+  person: (state) => ({ firstName, lastName, grade }) => {
     if (state.hasOwnProperty(grade) &&
     state[grade].hasOwnProperty(lastName) &&
     state[grade][lastName].hasOwnProperty(firstName)) {
@@ -32,15 +32,15 @@ const getters = {
     }
     return false
   },
-  getPersonById: (state, getters) => (personId) => {
+  personById: (state, get) => (personId) => {
     let match = personId.match(/(.+): (.+), (.+)/)
-    return getters.getPerson({
+    return get.person({
       firstName: match[3],
       lastName: match[2],
       grade: match[1]
     })
   },
-  getPersonsByGrade: (state) => (grade) => {
+  personsByGrade: (state) => (grade) => {
     let persons = []
     if (state.hasOwnProperty(grade)) {
       for (let lastName of Object.keys(state[grade]).sort()) {
@@ -51,14 +51,14 @@ const getters = {
       return persons
     }
   },
-  getPersonsByCurrentGrade: (state, getters) => {
-    return getters.getPersonsByGrade(getters.getCurrentGrade)
+  personsByCurrentGrade: (state, get) => {
+    return get.personsByGrade(get.currentGrade)
   }
 }
 
 const actions = {
   addPerson: ({ commit, getters, dispatch }, { firstName, lastName, grade }) => {
-    if (!getters.getPerson({ firstName, lastName, grade })) {
+    if (!getters.person({ firstName, lastName, grade })) {
       let person = new Person(firstName, lastName, grade)
       commit('addPerson', person)
       dispatch('addGrade', grade, { root: true })
@@ -66,8 +66,8 @@ const actions = {
     }
   },
   placePersonById: ({ commit, getters }, { seatNo, personId }) => {
-    let oldPerson = getters.getPersonByCurrentGradeAndSeatNo(seatNo)
-    let newPerson = getters.getPersonById(personId)
+    let oldPerson = getters.personByCurrentGradeAndSeatNo(seatNo)
+    let newPerson = getters.personById(personId)
 
     // Drag the same placed person over the same seat
     if (oldPerson && oldPerson.id === newPerson.id) {
@@ -80,16 +80,16 @@ const actions = {
     // Update placed counter
     // Decrease counter when one person is dragged over another person.
     if (oldPerson && newPerson.seatNo) {
-      commit('decrementPersonsPlacedCount', getters.getCurrentGrade, { root: true })
+      commit('decrementPersonsPlacedCount', getters.currentGrade, { root: true })
     // Increase placed counter only if person had not yet a seat.
     // and whom doesn’t replace a person.
     } else if (!oldPerson && !newPerson.seatNo) {
-      commit('incrementPersonsPlacedCount', getters.getCurrentGrade, { root: true })
+      commit('incrementPersonsPlacedCount', getters.currentGrade, { root: true })
     }
 
     // Move the same person to another seat. Free the previously taken seat.
     if (newPerson.seatNo) {
-      let seat = getters.getSeatByNo(newPerson.seatNo)
+      let seat = getters.seatByNo(newPerson.seatNo)
       commit('removePersonFromPlan', { person: newPerson, seat: seat }, { root: true })
     }
 

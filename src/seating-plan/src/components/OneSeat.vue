@@ -51,18 +51,18 @@ export default {
     seat: Object
   },
   computed: {
-    ...mapGetters(['listJobs', 'getSeats']),
+    ...mapGetters(['listJobs', 'seats']),
     draggable () {
-      if (this.person.seatNo >= 1 && this.person.seatNo <= this.getSeats.count) {
+      if (this.person.seatNo >= 1 && this.person.seatNo <= this.seats.count) {
         return 'true'
       }
       return 'false'
     },
     style () {
-      return `bottom: ${this.seat.y}%; height: ${this.getSeats.dimension.depth}%; left: ${this.seat.x}%; width: ${this.getSeats.dimension.width}%;`
+      return `bottom: ${this.seat.y}%; height: ${this.seats.dimension.depth}%; left: ${this.seat.x}%; width: ${this.seats.dimension.width}%;`
     },
     person () {
-      return this.$store.getters.getPersonByCurrentGradeAndSeatNo(this.seat.no)
+      return this.$store.getters.personByCurrentGradeAndSeatNo(this.seat.no)
     },
     personFirstName () {
       if (this.person) {

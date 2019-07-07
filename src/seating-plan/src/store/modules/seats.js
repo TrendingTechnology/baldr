@@ -33,7 +33,7 @@ class SeatingPlanLayout {
     ]
   }
 
-  getSeatPositions () {
+  seatPositions () {
     let seats = {}
     let seatY = 0
     let seatX = 0
@@ -60,17 +60,17 @@ const state = {
     width: seatingPlanLayout.seatWidth,
     depth: seatingPlanLayout.seatDepth
   },
-  positions: seatingPlanLayout.getSeatPositions()
+  positions: seatingPlanLayout.seatPositions()
 }
 
 const getters = {
-  getSeats: (state) => {
+  seats: (state) => {
     return state
   },
-  getSeatPositions: (state) => {
+  seatPositions: (state) => {
     return state.positions
   },
-  getSeatByNo: (state) => (seatNo) => {
+  seatByNo: (state) => (seatNo) => {
     return state.positions[seatNo]
   }
 }

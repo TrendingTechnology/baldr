@@ -18,53 +18,53 @@ function naturalSort (a, b) {
 const state = {}
 
 const getters = {
-  getGrade: (state) => (name) => {
+  grade: (state) => (name) => {
     if (state.hasOwnProperty(name)) {
       return state[name]
     }
     return false
   },
-  getGradeNames: (state) => {
+  gradeNames: (state) => {
     let gradeNames = Object.keys(state)
     return gradeNames.sort(naturalSort)
   },
-  getCurrentGradeObject: (state, getters) => {
-    let gradeName = getters.getCurrentGrade
+  currentGradeObject: (state, get) => {
+    let gradeName = get.currentGrade
     if (gradeName) {
-      return getters.getGrade(gradeName)
+      return get.grade(gradeName)
     }
   },
-  getCurrentPersonsCount: (state, getters) => {
-    let grade = getters.getGrade(getters.getCurrentGrade)
+  currentPersonsCount: (state, get) => {
+    let grade = get.grade(get.currentGrade)
     return grade.personsCount
   },
-  getJobsOfGrade: (state, getters) => (gradeName) => {
-    let grade = getters.getGrade(gradeName)
+  jobsOfGrade: (state, get) => (gradeName) => {
+    let grade = get.grade(gradeName)
     if (grade.hasOwnProperty('jobs')) {
       return grade.jobs
     }
     return {}
   },
-  getJobsOfCurrentGrade: (state, getters) => {
-    return getters.getJobsOfGrade(getters.getCurrentGrade)
+  jobsOfCurrentGrade: (state, get) => {
+    return get.jobsOfGrade(get.currentGrade)
   },
   /**
    * Indicate if all persons in a grade are having a seat and are places.
    *
    * @returns boolean
    */
-  isGradePlaced: (state, getters) => {
-    let grade = getters.getCurrentGradeObject
+  isGradePlaced: (state, get) => {
+    let grade = get.currentGradeObject
     if (grade && grade.personsCount === grade.personsPlacedCount) {
       return true
     }
     return false
   },
-  hasPersonJob: (state, getters) => (personId, jobName) => {
+  hasPersonJob: (state, get) => (personId, jobName) => {
     if (!personId) {
       return false
     }
-    let grade = getters.getCurrentGradeObject
+    let grade = get.currentGradeObject
     return grade.hasOwnProperty('jobs') &&
       grade.jobs.hasOwnProperty(jobName) &&
       grade.jobs[jobName].hasOwnProperty(personId)
@@ -73,23 +73,23 @@ const getters = {
 
 const actions = {
   addGrade: ({ commit, getters }, name) => {
-    if (!getters.getGrade(name)) {
+    if (!getters.grade(name)) {
       let grade = new Grade(name)
       commit('addGrade', grade)
     }
   },
   addPersonToJob: ({ commit, getters }, { personId, jobName }) => {
-    let gradeName = getters.getCurrentGrade
-    let grade = getters.getGrade(gradeName)
-    let person = getters.getPersonById(personId)
-    let job = getters.getJobByName(jobName)
+    let gradeName = getters.currentGrade
+    let grade = getters.grade(gradeName)
+    let person = getters.personById(personId)
+    let job = getters.jobByName(jobName)
     commit('addPersonToJob', { grade, person, job })
   },
   removePersonFromJob: ({ commit, getters }, { personId, jobName }) => {
-    let gradeName = getters.getCurrentGrade
-    let grade = getters.getGrade(gradeName)
-    let person = getters.getPersonById(personId)
-    let job = getters.getJobByName(jobName)
+    let gradeName = getters.currentGrade
+    let grade = getters.grade(gradeName)
+    let person = getters.personById(personId)
+    let job = getters.jobByName(jobName)
     commit('removePersonFromJob', { grade, person, job })
   }
 }

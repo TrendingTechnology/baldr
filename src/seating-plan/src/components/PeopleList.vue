@@ -19,7 +19,7 @@ export default {
   },
   computed: {
     persons () {
-      return this.$store.getters.getPersonsByCurrentGrade
+      return this.$store.getters.personsByCurrentGrade
     }
   }
 }

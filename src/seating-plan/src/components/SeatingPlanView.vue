@@ -1,7 +1,7 @@
 <template>
   <div class="seating-plan-view">
     <modal-dialog
-      v-show="getModalState"
+      v-show="modalState"
       @close="closeModal"
     >
       <person-select/>
@@ -36,9 +36,9 @@ export default {
     SeatingPlanFooter
   },
   computed: {
-    ...mapGetters(['getCurrentGrade', 'getModalState']),
+    ...mapGetters(['currentGrade', 'modalState']),
     title () {
-      return 'Sitzplan der Klasse “' + this.getCurrentGrade + '”'
+      return 'Sitzplan der Klasse “' + this.currentGrade + '”'
     }
   },
   methods: {
@@ -46,7 +46,7 @@ export default {
   },
   beforeCreate: function () {
     let grade = this.$route.params.grade
-    if (!this.$store.getters.getGrade(grade)) {
+    if (!this.$store.getters.grade(grade)) {
       this.$router.push('/')
     }
   },

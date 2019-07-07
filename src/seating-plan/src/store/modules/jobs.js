@@ -18,7 +18,7 @@ const getters = {
     }
     return jobs
   },
-  getJobByName: (state) => (jobName) => {
+  jobByName: (state) => (jobName) => {
     return state[jobName]
   }
 }
