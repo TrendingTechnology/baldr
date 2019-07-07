@@ -4,36 +4,30 @@ const state = {
 }
 
 const getters = {
-  isPlanSet: (state) => (gradeName) => {
-    return state.hasOwnProperty(gradeName)
-  },
-  getPersonIdByGradeAndSeatNo: (state) => (grade, seatNo) => {
+  getPersonByGradeAndSeatNo: (state, getters) => (grade, seatNo) => {
     if (state.hasOwnProperty(grade) && state[grade].hasOwnProperty(seatNo)) {
-      return state[grade][seatNo]
+      return getters.getPersonById(state[grade][seatNo])
     }
     return false
   },
-  getPersonIdByCurrentGradeAndSeatNo: (state, getters) => (seatNo) => {
-    return getters.getPersonIdByGradeAndSeatNo(getters.getCurrentGrade, seatNo)
+  getPersonByCurrentGradeAndSeatNo: (state, getters) => (seatNo) => {
+    return getters.getPersonByGradeAndSeatNo(getters.getCurrentGrade, seatNo)
   }
 }
 
 const actions = {
-  initPlan ({ commit, getters }, gradeName) {
-    if (!getters.isPlanSet(gradeName)) {
-      commit('initPlan', gradeName)
-    }
-  }
 }
 
 const mutations = {
-  initPlan (state, gradeName) {
-    Vue.set(state, gradeName, {})
-    // for (let no = 1; no <= this.data.seats.count; no++) {
-    //   if (!state[gradeName].hasOwnProperty(no)) {
-    //     Vue.set(state[gradeName], no, '')
-    //   }
-    // }
+  addPersonToPlan: (state, { person, seatNo }) => {
+    if (!state.hasOwnProperty(person.grade)) {
+      Vue.set(state, person.grade, {})
+    }
+    Vue.set(state[person.grade], seatNo, {})
+    Vue.set(state[person.grade][seatNo], person)
+  },
+  removePersonFromPlan: (state, { person, seatNo }) => {
+    Vue.set(state[person.grade], seatNo)
   }
 }
 

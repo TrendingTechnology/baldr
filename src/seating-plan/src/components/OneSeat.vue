@@ -105,6 +105,7 @@ export default {
     eventListenerDrop (event) {
       let personId = event.dataTransfer.getData('text/plain')
       dataStore.placePersonById(this.seat.no, personId)
+      this.$store.dispatch('placePersonById', { seatNo: this.seat.no, personId: personId })
       if (event.currentTarget.classList) {
         event.currentTarget.classList.remove('dragover')
       }

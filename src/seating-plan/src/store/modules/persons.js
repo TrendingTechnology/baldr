@@ -65,41 +65,35 @@ const actions = {
     }
   },
   placePersonById ({ commit, getters }, { seatNo, personId }) {
-    let plan = this.data.plans[this.data.currentGrade]
-    let person = this.getPersonById(personId)
-    let grade = this.getCurrentGrade()
-    // Replace a already placed person and remove it from the plan.
-    let replacedPersonId = plan[seatNo]
+    let oldPerson = getters.getPersonByCurrentGradeAndSeatNo(seatNo)
+    let newPerson = getters.getPersonById(personId)
 
     // Drag the same placed person over the same seat
-    if (replacedPersonId === person.id) {
+    if (oldPerson && oldPerson.id === newPerson.id) {
       return
     }
 
-    if (replacedPersonId) {
-      let replacedPerson = this.getPersonById(replacedPersonId)
-      replacedPerson.seatNo = 0
+    if (oldPerson) {
+      oldPerson.seatNo = 0
     }
     // Update placed counter
     // Decrease counter when one person is dragged over another person.
-    if (replacedPersonId && person.seatNo) {
-      this.data.grades[grade].placed -= 1 // TODO: remove
-      commit('decrementPersonsPlacedCounter', null, { root: true })
+    if (oldPerson && newPerson.seatNo) {
+      commit('decrementPersonsPlacedCount', getters.getCurrentGrade, { root: true })
     // Increase placed counter only if person had not yet a seat.
     // and whom doesn’t replace a person.
-    } else if (!replacedPersonId && !person.seatNo) {
-      this.data.grades[grade].placed += 1 // TODO: remove
-      commit('incrementPersonsPlacedCounter', null, { root: true })
+    } else if (!oldPerson && !newPerson.seatNo) {
+      commit('incrementPersonsPlacedCount', getters.getCurrentGrade, { root: true })
     }
 
     // Move the same person to another seat. Free the previously taken seat.
-    if (person.seatNo) {
-      plan[person.seatNo] = ''
+    if (newPerson.seatNo) {
+      commit('removePersonFromPlan', { person: newPerson, seatNo: newPerson.seatNo }, { root: true })
     }
 
     // Place the person.
-    plan[seatNo] = personId
-    person.seatNo = seatNo
+    commit('addPersonToPlan', { person: newPerson, seatNo: seatNo }, { root: true })
+    newPerson.seatNo = seatNo // TODO: remove
   }
 }
 
@@ -114,41 +108,6 @@ const mutations = {
       Vue.set(state[person.grade], person.lastName, {})
     }
     Vue.set(state[person.grade][person.lastName], person.firstName, person)
-  },
-  placePersonById (seatNo, personId) {
-    let plan = this.data.plans[this.data.currentGrade]
-    let person = this.getPersonById(personId)
-    let grade = this.getCurrentGrade()
-    // Replace a already placed person and remove it from the plan.
-    let replacedPersonId = plan[seatNo]
-
-    // Drag the same placed person over the same seat
-    if (replacedPersonId === person.id) {
-      return
-    }
-
-    if (replacedPersonId) {
-      let replacedPerson = this.getPersonById(replacedPersonId)
-      replacedPerson.seatNo = 0
-    }
-    // Update placed counter
-    // Decrease counter when one person is dragged over another person.
-    if (replacedPersonId && person.seatNo) {
-      this.data.grades[grade].placed -= 1
-    // Increase placed counter only if person had not yet a seat.
-    // and whom doesn’t replace a person.
-    } else if (!replacedPersonId && !person.seatNo) {
-      this.data.grades[grade].placed += 1
-    }
-
-    // Move the same person to another seat. Free the previously taken seat.
-    if (person.seatNo) {
-      plan[person.seatNo] = ''
-    }
-
-    // Place the person.
-    plan[seatNo] = personId
-    person.seatNo = seatNo
   }
 }
 
