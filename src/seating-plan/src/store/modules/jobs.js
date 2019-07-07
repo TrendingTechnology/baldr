@@ -17,6 +17,9 @@ const getters = {
       jobs.push(state[name])
     }
     return jobs
+  },
+  getJobByName: (state) => (jobName) => {
+    return state[jobName]
   }
 }
 
@@ -25,7 +28,7 @@ const actions = {
     let job = new Job(name, icon)
     commit('addJob', job)
   },
-  deleteJob: ({ commit }, jobName) =>{
+  deleteJob: ({ commit }, jobName) => {
     commit('deleteJob', jobName)
   }
 }

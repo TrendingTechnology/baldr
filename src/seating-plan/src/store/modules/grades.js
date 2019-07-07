@@ -16,6 +16,20 @@ const getters = {
       return state[name]
     }
     return false
+  },
+  getCurrentPersonsCount: (state, getters) => {
+    let grade = getters.getGrade(getters.getCurrentGrade)
+    return grade.personsCount
+  },
+  getJobsOfGrade: (state, getters) => (gradeName) => {
+    let grade = getters.getGrade(gradeName)
+    if (grade.hasOwnProperty('jobs')) {
+      return grade.jobs
+    }
+    return {}
+  },
+  getJobsOfCurrentGrade: (state, getters) => {
+    return getters.getJobsOfGrade(getters.getCurrentGrade)
   }
 }
 
@@ -25,6 +39,20 @@ const actions = {
       let grade = new Grade(name)
       commit('addGrade', grade)
     }
+  },
+  addPersonToJob: ({ commit, getters }, { personId, jobName }) => {
+    let gradeName = getters.getCurrentGrade
+    let grade = getters.getGrade(gradeName)
+    let person = getters.getPersonById(personId)
+    let job = getters.getJobByName(jobName)
+    commit('addPersonToJob', { grade, person, job })
+  },
+  removePersonFromJob: ({ commit, getters }, { personId, jobName }) => {
+    let gradeName = getters.getCurrentGrade
+    let grade = getters.getGrade(gradeName)
+    let person = getters.getPersonById(personId)
+    let job = getters.getJobByName(jobName)
+    commit('removePersonFromJob', { grade, person, job })
   }
 }
 
@@ -40,6 +68,19 @@ const mutations = {
   },
   decrementPersonsPlacedCount: (state, gradeName) => {
     state[gradeName].personsPlacedCount -= 1
+  },
+  addPersonToJob: (state, { grade, person, job }) => {
+    if (!grade.hasOwnProperty('jobs')) Vue.set(grade, 'jobs', {})
+    if (!grade.jobs.hasOwnProperty(job.name)) Vue.set(grade.jobs, job.name, {})
+    if (!grade.jobs[job.name].hasOwnProperty(person.id)) {
+      Vue.set(grade.jobs[job.name], person.id, person)
+    }
+  },
+  removePersonFromJob: (state, { grade, person, job }) => {
+    Vue.delete(grade.jobs[job.name], person.id)
+    if (Object.keys(grade.jobs[job.name]).length === 0) {
+      Vue.delete(grade.jobs, job.name)
+    }
   }
 }
 

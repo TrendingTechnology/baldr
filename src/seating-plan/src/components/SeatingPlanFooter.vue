@@ -1,10 +1,10 @@
 <template>
   <footer>
     <div class="count">
-    Schülerzahl: {{ personsCount }}
+    Schülerzahl: {{ getCurrentPersonsCount }}
     </div>
     <div class="jobs">
-      <span class="job" v-for="(persons, jobName) in jobs" :key="jobName">
+      <span class="job" v-for="(persons, jobName) in getJobsOfCurrentGrade" :key="jobName">
         <strong>{{ jobName }}:</strong>
         <span v-for="person in persons" :key="person.id">
           {{ person.lastName }},
@@ -22,6 +22,7 @@
 <script>
 import dataStore from '../data-store.js'
 import MaterialIcon from './MaterialIcon.vue'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'SeatingPlanFooter',
@@ -29,15 +30,14 @@ export default {
     MaterialIcon
   },
   computed: {
-    personsCount () {
-      return dataStore.getCurrentPersonsCount()
-    },
+    ...mapGetters(['getCurrentPersonsCount', 'getJobsOfCurrentGrade']),
     jobs () {
       return dataStore.getJobsPerGrade()
     }
   },
   methods: {
     removePersonFromJob (personId, jobName) {
+      this.$store.dispatch('removePersonFromJob', { personId, jobName })
       dataStore.removePersonFromJob(personId, jobName)
     }
   }

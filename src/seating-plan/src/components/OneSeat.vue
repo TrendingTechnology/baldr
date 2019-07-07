@@ -121,6 +121,7 @@ export default {
       })
     },
     eventListenerAddPersontoJob (personId, jobName) {
+      this.$store.dispatch('addPersonToJob', { personId, jobName })
       dataStore.addPersontoJob(personId, jobName)
     },
     hasPersonJob (personId, jobName) {
