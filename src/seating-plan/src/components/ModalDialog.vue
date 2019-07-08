@@ -1,8 +1,6 @@
 // https://vuejs.org/v2/examples/modal.html
 <template>
-  <div
-    class="modal-mask"
-  >
+  <div class="modal-mask">
     <div class="modal-wrapper">
       <div class="modal-container">
         <material-icon class="close" name="close" @click.native="close"/>

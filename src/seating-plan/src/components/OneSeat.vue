@@ -1,13 +1,14 @@
 <template>
-  <div class="seat"
-       :id=seat.no
-       :style="style"
-       :title="person.id"
-       :draggable="draggable"
-       @dragover.prevent="eventListenerDragOver"
-       @dragleave.prevent="eventListenerDragLeave"
-       @dragstart="eventListenerDragStart"
-       @drop.prevent="eventListenerDrop"
+  <div
+    class="seat"
+    :id=seat.no
+    :style="style"
+    :title="person.id"
+    :draggable="draggable"
+    @dragover.prevent="eventListenerDragOver"
+    @dragleave.prevent="eventListenerDragLeave"
+    @dragstart="eventListenerDragStart"
+    @drop.prevent="eventListenerDrop"
   >
     <div class="first-name">{{ person.firstName }}</div>
     <div class="last-name">{{ person.lastName }}</div>

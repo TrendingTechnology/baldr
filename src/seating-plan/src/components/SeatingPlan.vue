@@ -1,6 +1,7 @@
 <template>
   <section class="seating-plan">
-    <one-seat v-for="seat in seatPositions"
+    <one-seat
+      v-for="seat in seatPositions"
       :seat="seat"
       :key="seat.no"
       />

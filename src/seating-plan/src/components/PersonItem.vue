@@ -1,11 +1,11 @@
 <template>
   <li
-      :title="person.id"
-      :key="person.lastname"
-      @dragstart="eventListenerDragStart"
-      :draggable="draggable"
-      class="people-item"
-      :class="{ placed: person.seatNo }"
+    :title="person.id"
+    :key="person.lastname"
+    @dragstart="eventListenerDragStart"
+    :draggable="draggable"
+    class="people-item"
+    :class="{ placed: person.seatNo }"
   >
     {{ person.lastName }}, {{ person.firstName }}
     <persons-jobs :person="person"/>
