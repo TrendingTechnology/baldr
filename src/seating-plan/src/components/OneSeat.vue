@@ -11,14 +11,8 @@
   >
     <div class="first-name">{{ personFirstName }}</div>
     <div class="last-name">{{ personLastName }}</div>
-    <div class="jobs-of-person" >
-      <span v-for="job in listJobs" :key="job.name">
-        <material-icon
-          v-if="hasPersonJob(personId, job.name)"
-          :name="job.icon"
-          :title="job.name"
-        />
-      </span>
+    <div class="jobs-of-person">
+      <persons-jobs :person="person"/>
     </div>
     <div class="no">{{ seat.no }}</div>
     <div class="icons">
@@ -40,12 +34,14 @@
 
 <script>
 import MaterialIcon from './MaterialIcon.vue'
+import PersonsJobs from './PersonsJobs.vue'
+
 import { mapGetters } from 'vuex'
 
 export default {
   name: 'OneSeat',
   components: {
-    MaterialIcon
+    MaterialIcon, PersonsJobs
   },
   props: {
     seat: Object

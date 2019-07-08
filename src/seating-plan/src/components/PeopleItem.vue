@@ -8,17 +8,20 @@
       :class="{ placed: person.seatNo }"
   >
     {{ person.lastName }}, {{ person.firstName }}
+    <persons-jobs :person="person"/>
   </li>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
+import PersonsJobs from './PersonsJobs.vue'
 
 export default {
   name: 'PeopleItem',
   props: {
     person: Object
   },
+  components: { PersonsJobs },
   computed: {
     ...mapGetters(['seats']),
     draggable () {

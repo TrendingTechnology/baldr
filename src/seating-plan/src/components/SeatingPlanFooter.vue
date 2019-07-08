@@ -5,7 +5,7 @@
     </div>
     <div class="jobs">
       <span class="job" v-for="(persons, jobName) in jobsOfCurrentGrade" :key="jobName">
-        <strong>{{ jobName }}:</strong>
+        <strong><material-icon disabled :name="getJobIconFromName(jobName)"/> {{ jobName }}:</strong>
         <span v-for="person in persons" :key="person.id">
           {{ person.lastName }},
           {{ person.firstName }}<!--
@@ -32,6 +32,10 @@ export default {
   methods: {
     removePersonFromJob (personId, jobName) {
       this.$store.dispatch('removePersonFromJob', { personId, jobName })
+    },
+    getJobIconFromName (jobName) {
+      let job = this.$store.getters.jobByName(jobName)
+      return job.icon
     }
   }
 }
