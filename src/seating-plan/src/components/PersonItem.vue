@@ -17,7 +17,7 @@ import { mapGetters } from 'vuex'
 import PersonsJobs from './PersonsJobs.vue'
 
 export default {
-  name: 'PeopleItem',
+  name: 'PersonItem',
   props: {
     person: Object
   },

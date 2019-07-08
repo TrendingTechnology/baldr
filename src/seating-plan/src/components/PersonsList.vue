@@ -1,7 +1,7 @@
 <template>
   <div class="people-list">
     <ol>
-      <people-item v-for="person in persons"
+      <person-item v-for="person in persons"
                   :person="person"
                   :key="person.id"
       />
@@ -10,12 +10,12 @@
 </template>
 
 <script>
-import PeopleItem from './PeopleItem.vue'
+import PersonItem from './PersonItem.vue'
 
 export default {
-  name: 'PeopleList',
+  name: 'PersonsList',
   components: {
-    PeopleItem
+    PersonItem
   },
   computed: {
     persons () {

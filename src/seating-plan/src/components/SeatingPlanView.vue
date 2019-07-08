@@ -11,7 +11,7 @@
       <seating-plan/>
       <seating-plan-footer/>
     </main>
-    <people-list/>
+    <persons-list/>
   </div>
 </template>
 
@@ -23,13 +23,13 @@ import ModalDialog from './ModalDialog.vue'
 import PersonSelect from './PersonSelect.vue'
 import SeatingPlan from './SeatingPlan.vue'
 import SeatingPlanFooter from './SeatingPlanFooter.vue'
-import PeopleList from './PeopleList.vue'
+import PersonsList from './PersonsList.vue'
 
 export default {
   name: 'SeatingPlanView',
   components: {
     SeatingPlan,
-    PeopleList,
+    PersonsList,
     HeadingTitle,
     PersonSelect,
     ModalDialog,
