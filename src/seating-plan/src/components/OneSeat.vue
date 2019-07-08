@@ -17,16 +17,7 @@
     <div class="no">{{ seat.no }}</div>
     <div class="icons">
       <material-icon class="add" v-if="gradeIsNotPlaced" name="account-plus" @click.native="eventListenerAdd"/>
-      <span v-if="personId" class="jobs">
-        <span v-for="job in listJobs" :key="job.name">
-          <material-icon
-            v-if="!hasPersonJob(personId, job.name)"
-            :name="job.icon"
-            :title="job.name"
-            @click.native="eventListenerAddPersontoJob(personId, job.name)"
-          />
-        </span>
-      </span>
+      <add-job-icons :person="person"/>
       <material-icon v-if="personId" class="close" name="close" @click.native="eventListenerRemove"/>
     </div>
   </div>
@@ -35,13 +26,14 @@
 <script>
 import MaterialIcon from './MaterialIcon.vue'
 import PersonsJobs from './PersonsJobs.vue'
+import AddJobIcons from './AddJobIcons.vue'
 
 import { mapGetters } from 'vuex'
 
 export default {
   name: 'OneSeat',
   components: {
-    MaterialIcon, PersonsJobs
+    MaterialIcon, PersonsJobs, AddJobIcons
   },
   props: {
     seat: Object

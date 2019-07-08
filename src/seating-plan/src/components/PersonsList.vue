@@ -2,8 +2,8 @@
   <div class="people-list">
     <ol>
       <person-item v-for="person in persons"
-                  :person="person"
-                  :key="person.id"
+                   :person="person"
+                   :key="person.id"
       />
     </ol>
   </div>
