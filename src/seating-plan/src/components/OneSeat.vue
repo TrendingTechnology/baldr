@@ -2,15 +2,15 @@
   <div class="seat"
        :id=seat.no
        :style="style"
-       :title="personId"
+       :title="person.id"
        :draggable="draggable"
        @dragover.prevent="eventListenerDragOver"
        @dragleave.prevent="eventListenerDragLeave"
        @dragstart="eventListenerDragStart"
        @drop.prevent="eventListenerDrop"
   >
-    <div class="first-name">{{ personFirstName }}</div>
-    <div class="last-name">{{ personLastName }}</div>
+    <div class="first-name">{{ person.firstName }}</div>
+    <div class="last-name">{{ person.lastName }}</div>
     <div class="jobs-of-person">
       <persons-jobs :person="person"/>
     </div>
@@ -18,7 +18,7 @@
     <div class="icons">
       <material-icon class="add" v-if="gradeIsNotPlaced" name="account-plus" @click.native="eventListenerAdd"/>
       <add-job-icons :person="person"/>
-      <material-icon v-if="personId" class="close" name="close" @click.native="eventListenerRemove"/>
+      <material-icon v-if="person.id" class="close" name="close" @click.native="eventListenerRemove"/>
     </div>
   </div>
 </template>
@@ -52,24 +52,6 @@ export default {
     person () {
       return this.$store.getters.personByCurrentGradeAndSeatNo(this.seat.no)
     },
-    personFirstName () {
-      if (this.person) {
-        return this.person.firstName
-      }
-      return ''
-    },
-    personLastName () {
-      if (this.person) {
-        return this.person.lastName
-      }
-      return ''
-    },
-    personId () {
-      if (this.person) {
-        return this.person.id
-      }
-      return ''
-    },
     gradeIsNotPlaced () {
       return !this.$store.getters.isGradePlaced
     }
@@ -95,7 +77,7 @@ export default {
       }
     },
     eventListenerRemove (event) {
-      this.$store.dispatch('removePersonFromPlan', { personId: this.personId, seatNo: this.seat.no })
+      this.$store.dispatch('removePersonFromPlan', { personId: this.person.id, seatNo: this.seat.no })
     },
     eventListenerAdd (event) {
       this.$store.commit('setCurrentSeat', this.seat.no)
@@ -103,12 +85,6 @@ export default {
       this.$nextTick(() => {
         document.querySelector('.dynamic-select').focus()
       })
-    },
-    eventListenerAddPersontoJob (personId, jobName) {
-      this.$store.dispatch('addPersonToJob', { personId, jobName })
-    },
-    hasPersonJob (personId, jobName) {
-      return this.$store.getters.hasPersonJob(personId, jobName)
     }
   }
 }
