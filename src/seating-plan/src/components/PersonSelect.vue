@@ -24,13 +24,16 @@ export default {
   computed: {
     persons () {
       let personsOrig = this.$store.getters.personsByCurrentGrade
-      let persons = []
-      for (let person of personsOrig) {
-        if (!person.seatNo) {
-          persons.push({ id: person.id, name: `${person.lastName}, ${person.firstName}` })
+      if (personsOrig) {
+        let persons = []
+        for (let person of personsOrig) {
+          if (!person.seatNo) {
+            persons.push({ id: person.id, name: `${person.lastName}, ${person.firstName}` })
+          }
         }
+        return persons
       }
-      return persons
+      return []
     }
   },
   methods: {

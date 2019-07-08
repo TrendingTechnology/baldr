@@ -20,6 +20,7 @@ const actions = {
     let person = getters.personById(personId)
     let seat = getters.seatByNo(seatNo)
     commit('removePersonFromPlan', { person, seat })
+    commit('decrementPersonsPlacedCount', person.grade)
   }
 }
 
