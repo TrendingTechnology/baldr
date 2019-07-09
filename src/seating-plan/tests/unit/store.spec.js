@@ -7,6 +7,15 @@ import store from '../../src/store'
 store.dispatch('createTestData')
 store.commit('setCurrentGrade', '1a')
 
+function flushState () {
+  let state = store.state
+  let newState = {}
+  Object.keys(state).forEach(key => {
+    newState[key] = {}
+  })
+  store.replaceState(newState)
+}
+
 describe('Vuex global store #unittest', () => {
   describe('getters', () => {
     it('person', () => {
@@ -33,6 +42,14 @@ describe('Vuex global store #unittest', () => {
       let grade1a = store.getters.personsByCurrentGrade
       assert.equal(grade1a.length, 1)
       assert.equal(grade1a[0].firstName, 'Josef')
+    })
+  })
+
+  describe('mutations', () => {
+    it('flushJobs', () => {
+      assert.equal(store.getters.listJobs.length, 5)
+      flushState()
+      assert.equal(store.getters.listJobs.length, 0)
     })
   })
 })
