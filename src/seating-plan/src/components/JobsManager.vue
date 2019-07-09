@@ -2,7 +2,7 @@
   <div class="jobs-manager">
     <heading-title title="Dienste verwalten"/>
     <ul>
-      <li v-for="job in jobs" :key="job.name">
+      <li v-for="job in listJobs" :key="job.name">
         <material-icon disabled :name="job.icon"/>
         {{ job.name }}
         <material-icon name="delete" @click.native="deleteJob(job.name)"/>
@@ -22,6 +22,7 @@
 <script>
 import HeadingTitle from './HeadingTitle.vue'
 import MaterialIcon from './MaterialIcon.vue'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'JobsManager',
@@ -34,11 +35,7 @@ export default {
       newIcon: ''
     }
   },
-  computed: {
-    jobs () {
-      return this.$store.getters['listJobs']
-    }
-  },
+  computed: mapGetters(['listJobs']),
   methods: {
     addJob () {
       if (this.newName && this.newIcon) {

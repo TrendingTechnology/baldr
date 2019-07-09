@@ -20,6 +20,10 @@ const getters = {
   },
   jobByName: (state) => (jobName) => {
     return state[jobName]
+  },
+  jobIconFromName: (state, get) => (jobName) => {
+    let job = get.jobByName(jobName)
+    return job.icon
   }
 }
 

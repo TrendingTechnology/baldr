@@ -32,8 +32,7 @@ export default {
   methods: {
     ...mapActions(['removePersonFromJob']),
     getJobIconFromName (jobName) {
-      let job = this.$store.getters.jobByName(jobName)
-      return job.icon
+      return this.$store.getters.jobIconFromName(jobName)
     }
   }
 }
