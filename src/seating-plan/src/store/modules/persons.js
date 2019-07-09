@@ -61,13 +61,13 @@ const actions = {
     if (!getters.person({ firstName, lastName, grade })) {
       let person = new Person(firstName, lastName, grade)
       commit('addPerson', person)
-      dispatch('addGrade', grade, { root: true })
-      commit('incrementPersonsCount', grade, { root: true })
+      dispatch('addGrade', grade)
+      commit('incrementPersonsCount', grade)
     }
   },
   deletePerson: ({ commit, dispatch }, person) => {
-    dispatch('removePersonFromPlanWithoutSeatNo', person, { root: true })
-    commit('decrementPersonsCount', person.grade, { root: true })
+    dispatch('removePersonFromPlanWithoutSeatNo', person)
+    commit('decrementPersonsCount', person.grade)
     commit('deletePerson', person)
   },
   placePersonById: ({ commit, getters }, { seatNo, personId }) => {
@@ -85,21 +85,21 @@ const actions = {
     // Update placed counter
     // Decrease counter when one person is dragged over another person.
     if (oldPerson && newPerson.seatNo) {
-      commit('decrementPersonsPlacedCount', getters.currentGrade, { root: true })
+      commit('decrementPersonsPlacedCount', getters.currentGrade)
     // Increase placed counter only if person had not yet a seat.
     // and whom doesn’t replace a person.
     } else if (!oldPerson && !newPerson.seatNo) {
-      commit('incrementPersonsPlacedCount', getters.currentGrade, { root: true })
+      commit('incrementPersonsPlacedCount', getters.currentGrade)
     }
 
     // Move the same person to another seat. Free the previously taken seat.
     if (newPerson.seatNo) {
       let seat = getters.seatByNo(newPerson.seatNo)
-      commit('removePersonFromPlan', { person: newPerson, seat: seat }, { root: true })
+      commit('removePersonFromPlan', { person: newPerson, seat: seat })
     }
 
     // Place the person.
-    commit('addPersonToPlan', { person: newPerson, seatNo: seatNo }, { root: true })
+    commit('addPersonToPlan', { person: newPerson, seatNo: seatNo })
     commit('setPersonsSeatNo', { person: newPerson, seatNo: seatNo })
   }
 }
