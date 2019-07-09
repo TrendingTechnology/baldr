@@ -24,6 +24,9 @@ const getters = {
     }
     return false
   },
+  gradeOfPerson: (state, get) => (person) => {
+    return get.grade(person.name)
+  },
   gradeNames: (state) => {
     let gradeNames = Object.keys(state)
     return gradeNames.sort(naturalSort)
@@ -68,6 +71,19 @@ const getters = {
     return grade.hasOwnProperty('jobs') &&
       grade.jobs.hasOwnProperty(jobName) &&
       grade.jobs[jobName].hasOwnProperty(personId)
+  },
+  getJobsOfPerson: (state, get) => (person) => {
+    let grade = get.gradeOfPerson(person)
+    let jobsNames = []
+    if (grade.hasOwnProperty('jobs')) {
+      for (const [jobName, persons] of Object.entries(grade.jobs)) {
+        for (const [personId, person] of Object.entries(persons)) {
+          if (person.id === personId) {
+            jobsNames.push(jobName)
+          }
+        }
+      }
+    }
   }
 }
 
