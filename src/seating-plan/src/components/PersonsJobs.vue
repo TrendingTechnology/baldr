@@ -5,14 +5,14 @@
         v-if="hasPersonJob(person.id, job.name)"
         :name="job.icon"
         :title="job.name"
-        @click.native="eventListenerRemovePersonFromJob(person.id, job.name)"
+        @click.native="removePersonFromJob({ personId: person.id, jobName: job.name })"
       />
     </span>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import MaterialIcon from './MaterialIcon.vue'
 
 export default {
@@ -23,9 +23,7 @@ export default {
   components: { MaterialIcon },
   computed: mapGetters(['listJobs']),
   methods: {
-    eventListenerRemovePersonFromJob (personId, jobName) {
-      this.$store.dispatch('removePersonFromJob', { personId, jobName })
-    },
+    ...mapActions(['removePersonFromJob']),
     hasPersonJob (personId, jobName) {
       return this.$store.getters.hasPersonJob(personId, jobName)
     }

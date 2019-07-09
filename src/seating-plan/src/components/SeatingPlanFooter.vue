@@ -11,7 +11,7 @@
           {{ person.firstName }}<!--
       --><material-icon
             name="delete"
-            @click.native="removePersonFromJob(person.id, jobName)"
+            @click.native="removePersonFromJob({ personId: person.id, jobName: jobName })"
           />
         </span>
       </span>
@@ -21,7 +21,7 @@
 
 <script>
 import MaterialIcon from './MaterialIcon.vue'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'SeatingPlanFooter',
@@ -30,9 +30,7 @@ export default {
   },
   computed: mapGetters(['currentPersonsCount', 'jobsOfCurrentGrade']),
   methods: {
-    removePersonFromJob (personId, jobName) {
-      this.$store.dispatch('removePersonFromJob', { personId, jobName })
-    },
+    ...mapActions(['removePersonFromJob']),
     getJobIconFromName (jobName) {
       let job = this.$store.getters.jobByName(jobName)
       return job.icon

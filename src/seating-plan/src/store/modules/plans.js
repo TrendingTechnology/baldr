@@ -25,13 +25,15 @@ const actions = {
   },
   removePersonFromPlanWithoutSeatNo: ({ commit, getters }, person) => {
     let plans = getters.plans
-    let gradePlan = plans[person.grade]
-    for (const [seatNo, personInPlan] of Object.entries(gradePlan)) {
-      if (personInPlan === person) {
-        let seat = getters.seatByNo(seatNo)
-        commit('removePersonFromPlan', { person, seat })
-        commit('decrementPersonsPlacedCount', person.grade)
-        return
+    if (plans.hasOwnProperty(person.grade)) {
+      let gradePlan = plans[person.grade]
+      for (const [seatNo, personInPlan] of Object.entries(gradePlan)) {
+        if (personInPlan === person) {
+          let seat = getters.seatByNo(seatNo)
+          commit('removePersonFromPlan', { person, seat })
+          commit('decrementPersonsPlacedCount', person.grade)
+          return
+        }
       }
     }
   }
@@ -46,8 +48,10 @@ const mutations = {
     // person.seatNo = seatNo
   },
   removePersonFromPlan: (state, { person, seat }) => {
-    Vue.delete(state[person.grade], seat.no)
-    person.seatNo = 0
+    if (state.hasOwnProperty(person.grade)) {
+      Vue.delete(state[person.grade], seat.no)
+      person.seatNo = 0
+    }
   }
 }
 
