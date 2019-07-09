@@ -25,7 +25,7 @@ const actions = {
     // https://realnamecreator.alexjonas.de/?l=de#
     let peopleList = [
       // 1a
-      { firstName: 'Josef', lastname: 'Friedrich', grade: '1a' },
+      { firstName: 'Josef', lastName: 'Friedrich', grade: '1a' },
       // 1b
       { firstName: 'Nicolas', lastName: 'Wagenknecht', grade: '1b' },
       { firstName: 'Cornelia', lastName: 'Fierek', grade: '1b' },
