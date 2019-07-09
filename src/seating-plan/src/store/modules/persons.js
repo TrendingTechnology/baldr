@@ -65,6 +65,11 @@ const actions = {
       commit('incrementPersonsCount', grade, { root: true })
     }
   },
+  deletePerson: ({ commit, dispatch }, person) => {
+    dispatch('removePersonFromPlanWithoutSeatNo', person, { root: true })
+    commit('decrementPersonsCount', person.grade, { root: true })
+    commit('deletePerson', person)
+  },
   placePersonById: ({ commit, getters }, { seatNo, personId }) => {
     let oldPerson = getters.personByCurrentGradeAndSeatNo(seatNo)
     let newPerson = getters.personById(personId)
@@ -110,6 +115,9 @@ const mutations = {
       Vue.set(state[person.grade], person.lastName, {})
     }
     Vue.set(state[person.grade][person.lastName], person.firstName, person)
+  },
+  deletePerson: (state, person) => {
+    Vue.delete(state[person.grade][person.lastName], person.firstName)
   },
   setPersonsSeatNo: (state, { person, seatNo }) => {
     person.seatNo = seatNo

@@ -2,7 +2,7 @@
   <div class="people-list">
     <ol>
       <person-item
-        v-for="person in persons"
+        v-for="person in personsByCurrentGrade"
         :person="person"
         :key="person.id"
       />
@@ -12,17 +12,14 @@
 
 <script>
 import PersonItem from './PersonItem.vue'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'PersonsList',
   components: {
     PersonItem
   },
-  computed: {
-    persons () {
-      return this.$store.getters.personsByCurrentGrade
-    }
-  }
+  computed: mapGetters(['personsByCurrentGrade'])
 }
 </script>
 

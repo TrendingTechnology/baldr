@@ -4,6 +4,7 @@ const state = {
 }
 
 const getters = {
+  plans: (state) => state,
   personByGradeAndSeatNo: (state) => (grade, seatNo) => {
     if (state.hasOwnProperty(grade) && state[grade].hasOwnProperty(seatNo)) {
       return state[grade][seatNo]
@@ -21,6 +22,18 @@ const actions = {
     let seat = getters.seatByNo(seatNo)
     commit('removePersonFromPlan', { person, seat })
     commit('decrementPersonsPlacedCount', person.grade)
+  },
+  removePersonFromPlanWithoutSeatNo: ({ commit, getters }, person) => {
+    let plans = getters.plans
+    let gradePlan = plans[person.grade]
+    for (const [seatNo, personInPlan] of Object.entries(gradePlan)) {
+      if (personInPlan === person) {
+        let seat = getters.seatByNo(seatNo)
+        commit('removePersonFromPlan', { person, seat })
+        commit('decrementPersonsPlacedCount', person.grade)
+        return
+      }
+    }
   }
 }
 

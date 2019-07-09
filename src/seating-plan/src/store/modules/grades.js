@@ -101,6 +101,9 @@ const mutations = {
   incrementPersonsCount: (state, gradeName) => {
     state[gradeName].personsCount += 1
   },
+  decrementPersonsCount: (state, gradeName) => {
+    state[gradeName].personsCount -= 1
+  },
   incrementPersonsPlacedCount: (state, gradeName) => {
     state[gradeName].personsPlacedCount += 1
   },

@@ -9,19 +9,24 @@
   >
     {{ person.lastName }}, {{ person.firstName }}
     <persons-jobs :person="person"/>
+    <material-icon
+      name="delete"
+      @click.native="deletePerson(person)"
+    />
   </li>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import PersonsJobs from './PersonsJobs.vue'
+import MaterialIcon from './MaterialIcon.vue'
 
 export default {
   name: 'PersonItem',
   props: {
     person: Object
   },
-  components: { PersonsJobs },
+  components: { PersonsJobs, MaterialIcon },
   computed: {
     ...mapGetters(['seats']),
     draggable () {
@@ -33,6 +38,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['deletePerson']),
     eventListenerDragStart (event) {
       event.dataTransfer.dropEffect = 'move'
       event.dataTransfer.setData('text/plain', event.currentTarget.title)
