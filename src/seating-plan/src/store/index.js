@@ -90,8 +90,21 @@ const actions = {
   }
 }
 
-export default new Vuex.Store({
-  modules: { app, grades, importer, jobs, persons, plans, seats },
+const modules = { app, grades, importer, jobs, persons, plans, seats }
+
+const store = new Vuex.Store({
+  modules,
   getters,
   actions
 })
+
+export default store
+
+export const flushState = function () {
+  let state = store.state
+  let newState = {}
+  Object.keys(state).forEach(key => {
+    newState[key] = {}
+  })
+  store.replaceState(newState)
+}

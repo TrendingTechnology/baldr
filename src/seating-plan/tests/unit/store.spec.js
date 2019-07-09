@@ -1,22 +1,29 @@
-/* globals describe it */
+/* globals describe it beforeEach afterEach */
 
 import { assert } from 'chai'
 
-import store from '../../src/store'
+import store, { flushState } from '../../src/store'
 
 store.dispatch('createTestData')
 store.commit('setCurrentGrade', '1a')
 
-function flushState () {
-  let state = store.state
-  let newState = {}
-  Object.keys(state).forEach(key => {
-    newState[key] = {}
-  })
-  store.replaceState(newState)
-}
+// function flushState () {
+//   let state = store.state
+//   let newState = {}
+//   Object.keys(state).forEach(key => {
+//     newState[key] = {}
+//   })
+//   store.replaceState(newState)
+// }
 
 describe('Vuex global store #unittest', () => {
+  beforeEach(() => {
+    store.dispatch('createTestData')
+    store.commit('setCurrentGrade', '1a')
+  })
+
+  afterEach(() => flushState())
+
   describe('getters', () => {
     it('person', () => {
       let person = store.getters.person({ firstName: 'Josef', lastName: 'Friedrich', grade: '1a' })
@@ -46,7 +53,7 @@ describe('Vuex global store #unittest', () => {
   })
 
   describe('mutations', () => {
-    it('flushJobs', () => {
+    it('flush', () => {
       assert.equal(store.getters.listJobs.length, 5)
       flushState()
       assert.equal(store.getters.listJobs.length, 0)
