@@ -104,7 +104,12 @@ export const flushState = function () {
   let state = store.state
   let newState = {}
   Object.keys(state).forEach(key => {
-    newState[key] = {}
+    if (modules[key].hasOwnProperty('InitState')) {
+      let InitState = modules[key].InitState
+      newState[key] = new InitState()
+    } else {
+      newState[key] = {}
+    }
   })
   store.replaceState(newState)
 }

@@ -15,15 +15,17 @@ class Seat {
  *
  * 1  2  3  4     5  6  7  8
  */
-class SeatingPlanLayout {
+class InitState {
   constructor () {
     let roomWidth = 100 // %
     let roomDepth = 100 // %
     this.aisle = 0.05 * roomWidth
-    this.seatWidth = (roomWidth - this.aisle) / 8
-    this.seatDepth = (roomDepth - (3 * this.aisle)) / 4
+    this.dimension = {
+      width: (roomWidth - this.aisle) / 8,
+      depth: (roomDepth - (3 * this.aisle)) / 4
+    }
 
-    this.seatCount = 32
+    this.count = 32
 
     this.seatBlocks = [
       [[1, 2, 3, 4], [5, 6, 7, 8]],
@@ -31,9 +33,10 @@ class SeatingPlanLayout {
       [[17, 18, 19, 20], [21, 22, 23, 24]],
       [[25, 26, 27, 28], [29, 30, 31, 32]]
     ]
+    this.positions = this.calculatePositions()
   }
 
-  seatPositions () {
+  calculatePositions () {
     let seats = {}
     let seatY = 0
     let seatX = 0
@@ -41,27 +44,18 @@ class SeatingPlanLayout {
       for (let block of row) {
         for (let seatNo of block) {
           seats[seatNo] = new Seat(seatNo, seatX, seatY)
-          seatX += this.seatWidth
+          seatX += this.dimension.width
         }
         seatX += this.aisle
       }
-      seatY += this.seatDepth + this.aisle
+      seatY += this.dimension.depth + this.aisle
       seatX = 0
     }
     return seats
   }
 }
 
-const seatingPlanLayout = new SeatingPlanLayout()
-
-const state = {
-  count: seatingPlanLayout.seatCount,
-  dimension: {
-    width: seatingPlanLayout.seatWidth,
-    depth: seatingPlanLayout.seatDepth
-  },
-  positions: seatingPlanLayout.seatPositions()
-}
+const state = new InitState()
 
 const getters = {
   seats: (state) => {
@@ -76,6 +70,7 @@ const getters = {
 }
 
 export default {
+  InitState,
   state,
   getters
 }
