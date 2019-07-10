@@ -65,14 +65,19 @@ const actions = {
       commit('incrementPersonsCount', grade)
     }
   },
-  deletePerson: ({ commit, dispatch }, person) => {
+  deletePerson: ({ commit, dispatch, getters }, person) => {
     dispatch('removePersonFromPlanWithoutSeatNo', person)
+    let jobs = getters.getJobsOfPerson(person)
+    for (let jobName of jobs) {
+      dispatch('removePersonFromJob', { personId: person.id, jobName })
+    }
     commit('decrementPersonsCount', person.grade)
     commit('deletePerson', person)
   },
   placePersonById: ({ commit, getters }, { seatNo, personId }) => {
     let oldPerson = getters.personByCurrentGradeAndSeatNo(seatNo)
     let newPerson = getters.personById(personId)
+    let gradeName = newPerson.grade
 
     // Drag the same placed person over the same seat
     if (oldPerson && oldPerson.id === newPerson.id) {
@@ -85,11 +90,11 @@ const actions = {
     // Update placed counter
     // Decrease counter when one person is dragged over another person.
     if (oldPerson && newPerson.seatNo) {
-      commit('decrementPersonsPlacedCount', getters.currentGrade)
+      commit('decrementPersonsPlacedCount', gradeName)
     // Increase placed counter only if person had not yet a seat.
     // and whom doesn’t replace a person.
     } else if (!oldPerson && !newPerson.seatNo) {
-      commit('incrementPersonsPlacedCount', getters.currentGrade)
+      commit('incrementPersonsPlacedCount', gradeName)
     }
 
     // Move the same person to another seat. Free the previously taken seat.

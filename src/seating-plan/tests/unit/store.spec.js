@@ -72,20 +72,35 @@ describe('Vuex global store #unittest', () => {
       assert.strictEqual(grade.name, '1x')
       let persons = store.getters.personsByGrade(person.grade)
       assert.strictEqual(persons.length, 1)
+      // personsCount is 1
+      assert.strictEqual(store.state.grades['1x'].personsCount, 1)
     })
 
     it('deletePerson', function () {
       let person = new Person('Max', 'Mustermann', '1x')
       store.dispatch('addPerson', person)
-      let personById = store.getters.personById('1x: Mustermann, Max')
-      assert.strictEqual(personById.firstName, 'Max')
-      let grade = store.getters.grade(person.grade)
-      assert.strictEqual(grade.name, '1x')
-      let persons = store.getters.personsByGrade(person.grade)
-      assert.strictEqual(persons.length, 1)
+      store.dispatch('placePersonById', {
+        seatNo: 1,
+        personId: '1x: Mustermann, Max'
+      })
+      store.dispatch('addPersonToJob', {
+        personId: '1x: Mustermann, Max',
+        jobName: 'Lüftwart'
+      })
+
+      // Delete
       store.dispatch('deletePerson', person)
-      persons = store.getters.personsByGrade(person.grade)
+      // personsCount is 0
+      assert.strictEqual(store.state.grades['1x'].personsCount, 0)
+      // personsPlacedCount is 0
+      assert.strictEqual(store.state.grades['1x'].personsPlacedCount, 0)
+      // Grade is empty
+      let persons = store.getters.personsByGrade(person.grade)
       assert.strictEqual(persons.length, 0)
+      // Person has no seat
+      assert.isFalse(store.state.plans['1x'].hasOwnProperty(1))
+      // Person has no jobs
+      assert.isFalse(store.state.grades['1x'].jobs.hasOwnProperty('Lüftwart'))
     })
 
     it('placePersonById', function () {

@@ -96,16 +96,14 @@ const actions = {
     }
   },
   addPersonToJob: ({ commit, getters }, { personId, jobName }) => {
-    let gradeName = getters.currentGrade
-    let grade = getters.grade(gradeName)
     let person = getters.personById(personId)
+    let grade = getters.grade(person.grade)
     let job = getters.jobByName(jobName)
     commit('addPersonToJob', { grade, person, job })
   },
   removePersonFromJob: ({ commit, getters }, { personId, jobName }) => {
-    let gradeName = getters.currentGrade
-    let grade = getters.grade(gradeName)
     let person = getters.personById(personId)
+    let grade = getters.grade(person.grade)
     let job = getters.jobByName(jobName)
     commit('removePersonFromJob', { grade, person, job })
   }
