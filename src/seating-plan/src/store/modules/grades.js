@@ -25,7 +25,7 @@ const getters = {
     return false
   },
   gradeOfPerson: (state, get) => (person) => {
-    return get.grade(person.name)
+    return get.grade(person.grade)
   },
   gradeNames: (state) => {
     let gradeNames = Object.keys(state)

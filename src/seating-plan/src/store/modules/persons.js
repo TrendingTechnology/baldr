@@ -1,6 +1,6 @@
 import Vue from 'vue'
 
-class Person {
+export class Person {
   constructor (firstName, lastName, grade) {
     this.firstName = firstName
     this.lastName = lastName
