@@ -74,16 +74,17 @@ const getters = {
   },
   getJobsOfPerson: (state, get) => (person) => {
     let grade = get.gradeOfPerson(person)
-    let jobsNames = []
+    let jobNames = []
     if (grade.hasOwnProperty('jobs')) {
       for (const [jobName, persons] of Object.entries(grade.jobs)) {
         for (const [personId, person] of Object.entries(persons)) {
           if (person.id === personId) {
-            jobsNames.push(jobName)
+            jobNames.push(jobName)
           }
         }
       }
     }
+    return jobNames
   }
 }
 

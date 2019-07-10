@@ -39,9 +39,41 @@ describe('Vuex global store #unittest', () => {
       assert.strictEqual(grade1a.length, 1)
       assert.strictEqual(grade1a[0].firstName, 'Josef')
     })
+
+    it('getJobsOfPerson', () => {
+      let person = store.getters.personById('1a: Friedrich, Josef')
+
+      // Lüftwart
+      store.dispatch('addPersonToJob', {
+        personId: '1a: Friedrich, Josef',
+        jobName: 'Lüftwart'
+      })
+      assert.deepEqual(store.getters.getJobsOfPerson(person), ['Lüftwart'])
+
+      // Schaltwart
+      store.dispatch('addPersonToJob', {
+        personId: '1a: Friedrich, Josef',
+        jobName: 'Schaltwart'
+      })
+      assert.deepEqual(
+        store.getters.getJobsOfPerson(person),
+        ['Lüftwart', 'Schaltwart']
+      )
+    })
   })
 
   describe('actions', function () {
+    it('addPerson', function () {
+      let person = new Person('Max', 'Mustermann', '1x')
+      store.dispatch('addPerson', person)
+      let personById = store.getters.personById('1x: Mustermann, Max')
+      assert.strictEqual(personById.firstName, 'Max')
+      let grade = store.getters.grade(person.grade)
+      assert.strictEqual(grade.name, '1x')
+      let persons = store.getters.personsByGrade(person.grade)
+      assert.strictEqual(persons.length, 1)
+    })
+
     it('deletePerson', function () {
       let person = new Person('Max', 'Mustermann', '1x')
       store.dispatch('addPerson', person)
@@ -54,6 +86,25 @@ describe('Vuex global store #unittest', () => {
       store.dispatch('deletePerson', person)
       persons = store.getters.personsByGrade(person.grade)
       assert.strictEqual(persons.length, 0)
+    })
+
+    it('placePersonById', function () {
+      store.dispatch('placePersonById', {
+        seatNo: 1,
+        personId: '1a: Friedrich, Josef'
+      })
+      assert.strictEqual(store.state.plans['1a'][1].firstName, 'Josef')
+    })
+
+    it('addPersonToJob', function () {
+      store.dispatch('addPersonToJob', {
+        personId: '1a: Friedrich, Josef',
+        jobName: 'Lüftwart'
+      })
+      let jobs = store.state.grades['1a'].jobs
+      assert.strictEqual(
+        jobs['Lüftwart']['1a: Friedrich, Josef'].firstName, 'Josef'
+      )
     })
   })
 
