@@ -7,6 +7,9 @@
         :key="person.id"
       />
     </ol>
+  <input v-model="lastName" type="text" placeholder="Nachname">
+  <input v-model="firstName" type="text" placeholder="Vorname" @keyup.enter="addPerson">
+  <button @click="addPerson">hinzufügen</button>
   </div>
 </template>
 
@@ -19,7 +22,22 @@ export default {
   components: {
     PersonItem
   },
-  computed: mapGetters(['personsByCurrentGrade'])
+  data: function () {
+    return {
+      lastName: '',
+      firstName: ''
+    }
+  },
+  computed: mapGetters(['personsByCurrentGrade', 'currentGrade']),
+  methods: {
+    addPerson () {
+      if (this.lastName && this.firstName) {
+        this.$store.dispatch('addPerson', { firstName: this.firstName, lastName: this.lastName, grade: this.currentGrade })
+        this.lastName = ''
+        this.firstName = ''
+      }
+    }
+  }
 }
 </script>
 
