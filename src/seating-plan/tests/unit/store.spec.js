@@ -76,6 +76,14 @@ describe('Vuex global store #unittest', () => {
       assert.strictEqual(store.state.grades['1x'].personsCount, 1)
     })
 
+    it('addPerson: trim support', function () {
+      store.dispatch('addPerson', { firstName: 'Max ', lastName: ' Mustermann', grade: ' 1x ' })
+      let person = store.getters.personById('1x: Mustermann, Max')
+      assert.strictEqual(person.firstName, 'Max')
+      assert.strictEqual(person.lastName, 'Mustermann')
+      assert.strictEqual(person.grade, '1x')
+    })
+
     it('deletePerson', function () {
       let person = new Person('Max', 'Mustermann', '1x')
       store.dispatch('addPerson', person)

@@ -2,9 +2,9 @@ import Vue from 'vue'
 
 export class Person {
   constructor (firstName, lastName, grade) {
-    this.firstName = firstName
-    this.lastName = lastName
-    this.grade = grade
+    this.firstName = firstName.trim()
+    this.lastName = lastName.trim()
+    this.grade = grade.trim()
     this.seatNo = 0
   }
 
