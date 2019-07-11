@@ -1,15 +1,9 @@
 <template>
-  <div class="grades-list">
+  <div class="start-page">
     <heading-title title="Sitzpläne Musiksaal E 17"/>
 
     <h2>Sitzpläne</h2>
-    <ul>
-      <li v-for="gradeName in gradeNames" :key="gradeName">
-        <router-link :to="'/grade/' + gradeName">
-          {{ gradeName }}
-        </router-link>
-      </li>
-    </ul>
+    <grades-list/>
 
     <h2>Administration</h2>
 
@@ -28,18 +22,16 @@
 import { mapGetters, mapActions } from 'vuex'
 
 // Components
+import GradesList from './GradesList.vue'
 import HeadingTitle from './HeadingTitle.vue'
 
 export default {
   name: 'StartPage',
   components: {
-    HeadingTitle
+    GradesList, HeadingTitle
   },
   computed: mapGetters(['gradeNames']),
   methods: mapActions(['createTestData'])
 }
 </script>
 
-<style scoped>
-
-</style>
