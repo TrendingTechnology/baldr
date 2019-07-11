@@ -129,6 +129,17 @@ describe('Vuex global store #unittest', () => {
         jobs['Lüftwart']['1a: Friedrich, Josef'].firstName, 'Josef'
       )
     })
+
+    it('addGrade', function () {
+      store.dispatch('addGrade', '1x')
+      assert.strictEqual(store.state.grades['1x'].name, '1x')
+    })
+
+    it('deleteGrade', function () {
+      store.dispatch('deleteGrade', '1a')
+      assert.isFalse(store.state.grades.hasOwnProperty('1a'))
+      assert.isFalse(store.state.persons['1a'].hasOwnProperty('Friedrich'))
+    })
   })
 
   describe('flushState', () => {

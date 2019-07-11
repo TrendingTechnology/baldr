@@ -40,12 +40,12 @@ const getters = {
       grade: match[1]
     })
   },
-  personsByGrade: (state) => (grade) => {
+  personsByGrade: (state) => (gradeName) => {
     let persons = []
-    if (state.hasOwnProperty(grade)) {
-      for (let lastName of Object.keys(state[grade]).sort()) {
-        for (let firstName of Object.keys(state[grade][lastName]).sort()) {
-          persons.push(state[grade][lastName][firstName])
+    if (state.hasOwnProperty(gradeName)) {
+      for (let lastName of Object.keys(state[gradeName]).sort()) {
+        for (let firstName of Object.keys(state[gradeName][lastName]).sort()) {
+          persons.push(state[gradeName][lastName][firstName])
         }
       }
       return persons
@@ -123,6 +123,9 @@ const mutations = {
   },
   deletePerson: (state, person) => {
     Vue.delete(state[person.grade][person.lastName], person.firstName)
+    if (!Object.keys(state[person.grade][person.lastName]).length) {
+      Vue.delete(state[person.grade], person.lastName)
+    }
   },
   setPersonsSeatNo: (state, { person, seatNo }) => {
     person.seatNo = seatNo

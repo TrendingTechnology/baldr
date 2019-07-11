@@ -95,7 +95,11 @@ const actions = {
       commit('addGrade', grade)
     }
   },
-  deleteGrade: ({ commit }, gradeName) => {
+  deleteGrade: ({ commit, getters }, gradeName) => {
+    const persons = getters.personsByGrade(gradeName)
+    for (let person of persons) {
+      commit('deletePerson', person)
+    }
     commit('deleteGrade', gradeName)
   },
   addPersonToJob: ({ commit, getters }, { personId, jobName }) => {
