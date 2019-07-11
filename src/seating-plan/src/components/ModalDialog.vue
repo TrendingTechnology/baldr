@@ -15,6 +15,7 @@
 </template>
 
 <script>
+// Components
 import MaterialIcon from './MaterialIcon.vue'
 
 export default {

@@ -6,13 +6,13 @@
 
 <script>
 import VueRouter from 'vue-router'
-import SeatingPlanView from './components/SeatingPlanView.vue'
-import StartPage from './components/StartPage.vue'
-import TestData from './components/TestData.vue'
-import ImportPersons from './components/ImportPersons.vue'
+
 import ExportData from './components/ExportData.vue'
 import ImportData from './components/ImportData.vue'
+import ImportPersons from './components/ImportPersons.vue'
 import JobsManager from './components/JobsManager.vue'
+import SeatingPlanView from './components/SeatingPlanView.vue'
+import StartPage from './components/StartPage.vue'
 
 import '@bldr/theme-default-css'
 
@@ -22,8 +22,7 @@ const routes = [
   { path: '/import-persons', component: ImportPersons },
   { path: '/export-data', component: ExportData },
   { path: '/import-data', component: ImportData },
-  { path: '/jobs-manager', component: JobsManager },
-  { path: '/test-data', component: TestData }
+  { path: '/jobs-manager', component: JobsManager }
 ]
 
 const router = new VueRouter({ routes })

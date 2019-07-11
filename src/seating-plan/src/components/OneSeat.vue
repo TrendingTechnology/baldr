@@ -25,11 +25,12 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
+// Components
+import AddJobIcons from './AddJobIcons.vue'
 import MaterialIcon from './MaterialIcon.vue'
 import PersonsJobs from './PersonsJobs.vue'
-import AddJobIcons from './AddJobIcons.vue'
-
-import { mapGetters } from 'vuex'
 
 export default {
   name: 'OneSeat',

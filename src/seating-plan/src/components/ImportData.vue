@@ -6,6 +6,7 @@
 </template>
 
 <script>
+// Components
 import HeadingTitle from './HeadingTitle.vue'
 
 export default {

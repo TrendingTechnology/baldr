@@ -11,6 +11,7 @@ Mustermann\tMax\tmännlich\t05a\t17.11.2006</pre>
 </template>
 
 <script>
+// Components
 import HeadingTitle from './HeadingTitle'
 
 export default {

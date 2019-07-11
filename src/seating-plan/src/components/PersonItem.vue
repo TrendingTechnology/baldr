@@ -18,8 +18,10 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import PersonsJobs from './PersonsJobs.vue'
+
+// Components
 import MaterialIcon from './MaterialIcon.vue'
+import PersonsJobs from './PersonsJobs.vue'
 
 export default {
   name: 'PersonItem',

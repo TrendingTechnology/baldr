@@ -18,12 +18,13 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 
+// Components
 import HeadingTitle from './HeadingTitle.vue'
 import ModalDialog from './ModalDialog.vue'
 import PersonSelect from './PersonSelect.vue'
+import PersonsList from './PersonsList.vue'
 import SeatingPlan from './SeatingPlan.vue'
 import SeatingPlanFooter from './SeatingPlanFooter.vue'
-import PersonsList from './PersonsList.vue'
 
 export default {
   name: 'SeatingPlanView',

@@ -14,8 +14,10 @@
 </template>
 
 <script>
-import PersonItem from './PersonItem.vue'
 import { mapGetters } from 'vuex'
+
+// Components
+import PersonItem from './PersonItem.vue'
 
 export default {
   name: 'PersonsList',

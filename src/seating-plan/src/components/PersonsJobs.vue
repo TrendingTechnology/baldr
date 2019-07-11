@@ -13,6 +13,8 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+
+// Components
 import MaterialIcon from './MaterialIcon.vue'
 
 export default {

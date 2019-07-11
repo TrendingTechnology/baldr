@@ -9,9 +9,11 @@
 </template>
 
 <script>
-import OneSeat from './OneSeat.vue'
 import ResizeObserver from 'resize-observer-polyfill'
 import { mapGetters } from 'vuex'
+
+// Components
+import OneSeat from './OneSeat.vue'
 
 let resizeObserver = new ResizeObserver(entries => {
   let headerHeight = document.querySelector('header').clientHeight

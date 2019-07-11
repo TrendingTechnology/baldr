@@ -17,7 +17,7 @@
       <li><router-link to='/import-persons'>importieren (Str+c aus LibreOffice)</router-link></li>
       <li><router-link to='/export-data'>Daten exportieren (als JSON)</router-link></li>
       <li><router-link to='/import-data'>Daten importieren (von JSON)</router-link></li>
-      <li><router-link to='/test-data'>Test-Daten erzeugen</router-link></li>
+      <li><a href="#" @click.prevent="createTestData">Test-Daten erzeugen</a></li>
       <li><router-link to='/jobs-manager'>Dienste verwalten</router-link></li>
     </ul>
 
@@ -25,15 +25,18 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
+
+// Components
 import HeadingTitle from './HeadingTitle.vue'
-import { mapGetters } from 'vuex'
 
 export default {
   name: 'StartPage',
   components: {
     HeadingTitle
   },
-  computed: mapGetters(['gradeNames'])
+  computed: mapGetters(['gradeNames']),
+  methods: mapActions(['createTestData'])
 }
 </script>
 

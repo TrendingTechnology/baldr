@@ -9,6 +9,7 @@
 </template>
 
 <script>
+// Components
 import DynamicSelect from './DynamicSelect.vue'
 
 export default {

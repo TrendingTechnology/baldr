@@ -20,8 +20,10 @@
 </template>
 
 <script>
-import MaterialIcon from './MaterialIcon.vue'
 import { mapGetters, mapActions } from 'vuex'
+
+// Components
+import MaterialIcon from './MaterialIcon.vue'
 
 export default {
   name: 'SeatingPlanFooter',

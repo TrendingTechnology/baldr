@@ -20,9 +20,11 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
+// Components
 import HeadingTitle from './HeadingTitle.vue'
 import MaterialIcon from './MaterialIcon.vue'
-import { mapGetters } from 'vuex'
 
 export default {
   name: 'JobsManager',
