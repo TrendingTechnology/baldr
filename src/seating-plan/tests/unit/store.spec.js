@@ -140,6 +140,12 @@ describe('Vuex global store #unittest', () => {
       assert.isFalse(store.state.grades.hasOwnProperty('1a'))
       assert.isFalse(store.state.persons['1a'].hasOwnProperty('Friedrich'))
     })
+
+    it('deleteGrade: without persons', function () {
+      store.dispatch('addGrade', '1x')
+      store.dispatch('deleteGrade', '1x')
+      assert.isFalse(store.state.grades.hasOwnProperty('1x'))
+    })
   })
 
   describe('flushState', () => {

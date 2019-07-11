@@ -97,8 +97,10 @@ const actions = {
   },
   deleteGrade: ({ commit, getters }, gradeName) => {
     const persons = getters.personsByGrade(gradeName)
-    for (let person of persons) {
-      commit('deletePerson', person)
+    if (persons) {
+      for (let person of persons) {
+        commit('deletePerson', person)
+      }
     }
     commit('deleteGrade', gradeName)
   },
