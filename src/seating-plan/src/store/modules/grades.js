@@ -95,6 +95,9 @@ const actions = {
       commit('addGrade', grade)
     }
   },
+  deleteGrade: ({ commit }, gradeName) => {
+    commit('deleteGrade', gradeName)
+  },
   addPersonToJob: ({ commit, getters }, { personId, jobName }) => {
     let person = getters.personById(personId)
     let grade = getters.grade(person.grade)
@@ -112,6 +115,9 @@ const actions = {
 const mutations = {
   addGrade: (state, grade) => {
     Vue.set(state, grade.name, grade)
+  },
+  deleteGrade: (state, gradeName) => {
+    Vue.delete(state, gradeName)
   },
   incrementPersonsCount: (state, gradeName) => {
     state[gradeName].personsCount += 1

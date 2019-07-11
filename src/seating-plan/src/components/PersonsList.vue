@@ -8,7 +8,12 @@
       />
     </ol>
   <input v-model="lastName" type="text" placeholder="Nachname">
-  <input v-model="firstName" type="text" placeholder="Vorname" @keyup.enter="addPerson">
+  <input
+    v-model="firstName"
+    type="text"
+    placeholder="Vorname"
+    @keyup.enter="addPerson"
+  >
   <button @click="addPerson">hinzufügen</button>
   </div>
 </template>

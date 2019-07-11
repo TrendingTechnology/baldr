@@ -42,10 +42,8 @@ export default {
     addJob () {
       if (this.newName && this.newIcon) {
         this.$store.dispatch('addJob', { name: this.newName, icon: this.newIcon })
-        this.$nextTick(() => {
-          this.$refs.name.value = ''
-          this.$refs.icon.value = ''
-        })
+        this.newName = ''
+        this.newIcon = ''
       }
     },
     deleteJob (name) {
