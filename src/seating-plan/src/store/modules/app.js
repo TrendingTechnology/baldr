@@ -1,8 +1,12 @@
-const state = {
-  currentGrade: null,
-  currentSeat: null,
-  showModal: false
+class InitState {
+  constructor () {
+    this.currentGrade = null
+    this.currentSeat = null
+    this.showModal = false
+  }
 }
+
+const state = new InitState()
 
 const getters = {
   currentGrade: (state) => {
@@ -38,6 +42,7 @@ const mutations = {
 }
 
 export default {
+  InitState,
   state,
   getters,
   actions,

@@ -5,7 +5,7 @@
         v-if="!hasPersonJob(person.id, job.name)"
         :name="job.icon"
         :title="job.name"
-        @click.native="eventListenerAddPersontoJob(person.id, job.name)"
+        @click.native="addPersonToJob({ personId: person.id, jobName: job.name})"
       />
     </span>
   </span>
@@ -13,7 +13,7 @@
 
 <script>
 import MaterialIcon from './MaterialIcon.vue'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'AddJobIcons',
@@ -23,9 +23,7 @@ export default {
   },
   computed: mapGetters(['listJobs']),
   methods: {
-    eventListenerAddPersontoJob (personId, jobName) {
-      this.$store.dispatch('addPersonToJob', { personId, jobName })
-    },
+    ...mapActions(['addPersonToJob']),
     hasPersonJob (personId, jobName) {
       return this.$store.getters.hasPersonJob(personId, jobName)
     }
