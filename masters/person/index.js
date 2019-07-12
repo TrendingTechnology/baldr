@@ -48,7 +48,7 @@ exports.normalizeData = function (rawSlideData, config) {
 
   const images = new Media(config.sessionDir)
   const image = images.list(rawSlideData.image, 'image')
-  if (image && image !== [] && image[0] && image[0].hasOwnProperty('path')) {
+  if (image && image !== [] && image[0] && {}.hasOwnProperty.call(image[0], 'path')) {
     data.imagePath = image[0].path
   }
 

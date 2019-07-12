@@ -45,9 +45,9 @@ class FileInfo {
    * @type {string}
    */
   get titleSafe () {
-    if (this.hasOwnProperty('artist') && this.hasOwnProperty('title')) {
+    if ({}.hasOwnProperty.call(this, 'artist') && {}.hasOwnProperty.call(this, 'title')) {
       return this.artist + ': ' + this.title
-    } else if (this.hasOwnProperty('title')) {
+    } else if ({}.hasOwnProperty.call(this, 'title')) {
       return this.title
     } else {
       return this.basename

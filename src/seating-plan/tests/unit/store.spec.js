@@ -159,7 +159,7 @@ describe('Vuex global store #unittest', () => {
     it('deleteGrade: without persons', function () {
       store.dispatch('addGrade', '1x')
       store.dispatch('deleteGrade', '1x')
-      assert.isFalse(store.state.grades.hasOwnProperty('1x'))
+      assert.isFalse({}.hasOwnProperty.call(store.state.grades, '1x'))
     })
   })
 

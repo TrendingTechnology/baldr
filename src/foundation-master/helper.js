@@ -53,7 +53,7 @@ exports.checkProperty = {
   isString: function (object, property) {
     if (
       typeof object === 'object' &&
-      object.hasOwnProperty(property) &&
+      {}.hasOwnProperty.call(object, property) &&
       typeof object[property] === 'string'
     ) {
       return true
@@ -71,7 +71,7 @@ exports.checkProperty = {
   empty: function (object, property) {
     if (
       typeof object === 'object' &&
-      object.hasOwnProperty(property) &&
+      {}.hasOwnProperty.call(object, property) &&
       object[property]
     ) {
       return false

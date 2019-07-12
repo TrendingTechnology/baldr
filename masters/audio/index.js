@@ -34,7 +34,7 @@ class Audio {
     this.current = new Howl({ src: [fileInfo.path] })
     this.id = this.current.play()
 
-    if (this.hasOwnProperty('element')) {
+    if ({}.hasOwnProperty.call(this, 'element')) {
       this.element.innerHTML = fileInfo.titleSafe
       this.element.style.zIndex = 1
       this.element.style.visibility = 'visible'
@@ -49,7 +49,7 @@ class Audio {
    *
    */
   stop () {
-    if (this.hasOwnProperty('current') && this.current.playing()) {
+    if ({}.hasOwnProperty.call(this, 'current') && this.current.playing()) {
       this.current.stop()
     }
   }
@@ -58,7 +58,7 @@ class Audio {
    *
    */
   pausePlay () {
-    if (this.hasOwnProperty('current')) {
+    if ({}.hasOwnProperty.call(this, 'current')) {
       if (this.current.playing()) {
         this.current.pause()
       } else {
@@ -71,7 +71,7 @@ class Audio {
    *
    */
   fadeOut () {
-    if (this.hasOwnProperty('current') && this.current.playing()) {
+    if ({}.hasOwnProperty.call(this, 'current') && this.current.playing()) {
       this.current.fade(1, 0, 5000)
     }
   }

@@ -88,8 +88,8 @@ const main = function () {
   }
 
   // To avoid strange behavior when creating the piano score
-  if (!options.hasOwnProperty('groupAlphabetically')) options.groupAlphabetically = false
-  if (!options.hasOwnProperty('pageTurnOptimized')) options.pageTurnOptimized = false
+  if (!{}.hasOwnProperty.call(options, 'groupAlphabetically')) options.groupAlphabetically = false
+  if (!{}.hasOwnProperty.call(options, 'pageTurnOptimized')) options.pageTurnOptimized = false
 
   console.log(util.format('The base path of the song collection is located at:\n    %s\n', config.path.cyan))
   const library = new IntermediateLibrary(config.path)

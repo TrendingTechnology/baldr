@@ -699,7 +699,7 @@ class PianoFilesCountTree {
   sum () {
     let count = 0
     for (const validCount of this.validCounts_) {
-      if (this.hasOwnProperty(validCount)) {
+      if ({}.hasOwnProperty.call(this, validCount)) {
         count = count + this[validCount].length
       }
     }
@@ -712,7 +712,7 @@ class PianoFilesCountTree {
   sumFiles () {
     let count = 0
     for (const validCount of this.validCounts_) {
-      if (this.hasOwnProperty(validCount)) {
+      if ({}.hasOwnProperty.call(this, validCount)) {
         count += validCount * this[validCount].length
       }
     }
@@ -741,7 +741,7 @@ class PianoFilesCountTree {
    */
   shift (count) {
     this.checkCount_(count)
-    if (this.hasOwnProperty(count)) return this[count].shift()
+    if ({}.hasOwnProperty.call(this, count)) return this[count].shift()
   }
 }
 
@@ -850,7 +850,7 @@ class IntermediateLibrary extends Library {
    */
   updateSongBySongId (songID, mode = 'all') {
     let song
-    if (this.songs.hasOwnProperty(songID)) {
+    if ({}.hasOwnProperty.call(this.songs, songID)) {
       song = this.songs[songID]
     } else {
       throw new Error(util.format('The song with the song ID “%s” is unkown.', songID))

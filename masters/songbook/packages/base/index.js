@@ -668,7 +668,7 @@ class AlphabeticalSongsTree {
    */
   constructor (songs) {
     for (const song of songs) {
-      if (!this.hasOwnProperty(song.abc)) this[song.abc] = []
+      if (!{}.hasOwnProperty.call(this, song.abc)) this[song.abc] = []
       this[song.abc].push(song)
     }
     for (const abc in this) {
@@ -779,7 +779,7 @@ class Library {
     const songIDs = parseSongIDList(listFile)
     const songs = {}
     for (const songID of songIDs) {
-      if (this.songs.hasOwnProperty(songID)) {
+      if ({}.hasOwnProperty.call(this.songs, songID)) {
         songs[songID] = this.songs[songID]
       } else {
         throw new Error(util.format('There is no song with song ID “%s”', songID))

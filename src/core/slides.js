@@ -272,7 +272,7 @@ class SlideData {
    *
    */
   pullProperty_ (rawSlideData, property) {
-    if (rawSlideData.hasOwnProperty(property)) {
+    if ({}.hasOwnProperty.call(rawSlideData, property)) {
       const out = rawSlideData[property]
       delete rawSlideData[property]
       return out
@@ -339,7 +339,7 @@ class SlideData {
    *
    */
   pullTheme_ (rawSlideData, themeNames) {
-    if (!rawSlideData.hasOwnProperty('theme')) {
+    if (!{}.hasOwnProperty.call(rawSlideData, 'theme')) {
       return false
     } else if (themeNames.includes(rawSlideData.theme)) {
       const theme = rawSlideData.theme
@@ -490,7 +490,7 @@ class Slide {
    *
    */
   set (oldSlide) {
-    if (oldSlide && oldSlide.hasOwnProperty('master')) {
+    if (oldSlide && {}.hasOwnProperty.call(oldSlide, 'master')) {
       this.env.masters[oldSlide.master.name]
         .cleanUp(this.env.document, oldSlide, this)
     }

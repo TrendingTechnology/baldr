@@ -132,7 +132,7 @@ class QuickStart {
       const rawEntries = this.env.masters[masterName].quickStartEntries()
       for (const index in rawEntries) {
         rawEntries[index].masterName = masterName
-        if (!rawEntries[index].hasOwnProperty('data')) {
+        if (!{}.hasOwnProperty.call(rawEntries[index], 'data')) {
           rawEntries[index].data = true
         }
       }
@@ -197,7 +197,7 @@ class QuickStart {
       }
       // To allow unit tests without window object.
       // mousetrap returns in this situation an empty object.
-      if (mousetrap && mousetrap.hasOwnProperty('bind')) {
+      if (mousetrap && {}.hasOwnProperty.call(mousetrap, 'bind')) {
         mousetrap.bind(entry.shortcut, func)
       }
       this.env.document
