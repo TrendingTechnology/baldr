@@ -8,6 +8,10 @@ export class Person {
     this.seatNo = 0
   }
 
+  get name () {
+    return `${this.lastName}, ${this.firstName}`
+  }
+
   get id () {
     return `${this.grade}: ${this.lastName}, ${this.firstName}`
   }
@@ -25,10 +29,10 @@ const state = {}
 
 const getters = {
   person: (state) => ({ firstName, lastName, grade }) => {
+    const name = `${lastName}, ${firstName}`
     if ({}.hasOwnProperty.call(state, grade) &&
-        {}.hasOwnProperty.call(state[grade], lastName) &&
-        {}.hasOwnProperty.call(state[grade][lastName], firstName)) {
-      return state[grade][lastName][firstName]
+        {}.hasOwnProperty.call(state[grade], name)) {
+      return state[grade][name]
     }
     return false
   },
@@ -43,13 +47,12 @@ const getters = {
   personsByGrade: (state) => (gradeName) => {
     const persons = []
     if ({}.hasOwnProperty.call(state, gradeName)) {
-      for (const lastName of Object.keys(state[gradeName]).sort()) {
-        for (const firstName of Object.keys(state[gradeName][lastName]).sort()) {
-          persons.push(state[gradeName][lastName][firstName])
-        }
+      for (const name of Object.keys(state[gradeName]).sort()) {
+        persons.push(state[gradeName][name])
       }
       return persons
     }
+    return []
   },
   personsByCurrentGrade: (state, get) => {
     return get.personsByGrade(get.currentGrade)
@@ -115,16 +118,12 @@ const mutations = {
     if (!{}.hasOwnProperty.call(state, person.grade)) {
       Vue.set(state, person.grade, {})
     }
-    // lastName
-    if (!{}.hasOwnProperty.call(state[person.grade], person.lastName)) {
-      Vue.set(state[person.grade], person.lastName, {})
-    }
-    Vue.set(state[person.grade][person.lastName], person.firstName, person)
+    Vue.set(state[person.grade], person.name, person)
   },
   deletePerson: (state, person) => {
-    Vue.delete(state[person.grade][person.lastName], person.firstName)
-    if (!Object.keys(state[person.grade][person.lastName]).length) {
-      Vue.delete(state[person.grade], person.lastName)
+    Vue.delete(state[person.grade], person.name)
+    if (!Object.keys(state[person.grade]).length) {
+      Vue.delete(state, person.grade)
     }
   },
   setPersonsSeatNo: (state, { person, seatNo }) => {
