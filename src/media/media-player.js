@@ -1,8 +1,8 @@
 /* globals Audio HTMLElement customElements */
 
 let currentAudio = {
-  'start': function () {},
-  'stop': function () {}
+  start: function () {},
+  stop: function () {}
 }
 
 class AudioFile {

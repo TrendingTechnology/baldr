@@ -133,8 +133,8 @@ class VideoPlayer {
    *
    */
   setTime () {
-    let minutes = Math.floor(this.media.currentTime / 60)
-    let seconds = Math.floor(this.media.currentTime - minutes * 60)
+    const minutes = Math.floor(this.media.currentTime / 60)
+    const seconds = Math.floor(this.media.currentTime - minutes * 60)
     let minuteValue
     let secondValue
 
@@ -153,7 +153,7 @@ class VideoPlayer {
     this.mediaTime = minuteValue + ':' + secondValue
     this.timer.textContent = this.mediaTime
 
-    let barLength = this.timerWrapper.clientWidth * (this.media.currentTime / this.media.duration)
+    const barLength = this.timerWrapper.clientWidth * (this.media.currentTime / this.media.duration)
     this.timerBar.style.width = barLength + 'px'
   }
 }
@@ -176,7 +176,7 @@ exports.normalizeData = function (rawSlideData, config) {
  * @see {@link module:@bldr/core/masters~Master#mainHTML}
  */
 exports.mainHTML = function (slide, config, document) {
-  let video = slide.masterData[0].path
+  const video = slide.masterData[0].path
   return `<div class="player">
     <video>
       <source src="${video}" type="video/mp4">
@@ -199,6 +199,6 @@ exports.mainHTML = function (slide, config, document) {
  * @see {@link module:@bldr/core/masters~Master#postSet}
  */
 exports.postSet = function (slide, config, document) {
-  let vid = new VideoPlayer(document)
+  const vid = new VideoPlayer(document)
   return vid
 }

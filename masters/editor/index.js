@@ -60,7 +60,7 @@ exports.postSet = function (slide, config, document) {
     new ContentTools.Style('Author', 'author', ['p'])
   ])
 
-  let editor = ContentTools.EditorApp.get()
+  const editor = ContentTools.EditorApp.get()
   editor.init('*[data-editable]', 'data-name')
 }
 
@@ -68,8 +68,8 @@ exports.postSet = function (slide, config, document) {
  * @see {@link module:@bldr/core/masters~Master#cleanUp}
  */
 exports.cleanUp = function (document, oldSlide, newSlide) {
-  let elements = document.querySelectorAll('.ct-app')
-  for (let element of elements) {
+  const elements = document.querySelectorAll('.ct-app')
+  for (const element of elements) {
     element.remove()
   }
 }

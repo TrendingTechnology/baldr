@@ -8,13 +8,13 @@ const getters = {
 
 const actions = {
   importFromSpreadsheet: ({ dispatch }, importString) => {
-    let lines = importString.split('\n')
-    for (let line of lines) {
-      let match = line.match(/(.*)\t(.*)\t(.*)\t(.*)\t([^]*)/)
+    const lines = importString.split('\n')
+    for (const line of lines) {
+      const match = line.match(/(.*)\t(.*)\t(.*)\t(.*)\t([^]*)/)
       if (match && match[1] !== 'Familienname' && match[1] !== 'Insgesamt:') {
-        let lastName = match[1]
-        let firstName = match[2]
-        let grade = match[4]
+        const lastName = match[1]
+        const firstName = match[2]
+        const grade = match[4]
         console.log(line)
         dispatch('addPerson', { firstName, lastName, grade })
       }

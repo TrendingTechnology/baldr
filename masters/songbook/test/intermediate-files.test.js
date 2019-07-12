@@ -20,7 +20,7 @@ process.env.BALDR_SONGBOOK_PATH = path.resolve(__dirname, 'songs', 'clean', 'som
 describe('Package “@bldr/songbook-intermediate-files”', function () {
   describe('Functions', function () {
     describe('Function “checkExecutable()”', function () {
-      let checkExecutable = intermediateRewired.__get__('checkExecutable')
+      const checkExecutable = intermediateRewired.__get__('checkExecutable')
 
       it('Function “checkExecutable()”: existing executable', function () {
         assert.strictEqual(checkExecutable('echo'), true)
@@ -32,34 +32,34 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
     })
 
     describe('Function “checkExecutables()”', function () {
-      let checkExecutables = intermediateRewired.__get__('checkExecutables')
+      const checkExecutables = intermediateRewired.__get__('checkExecutables')
 
       it('all are existing', function () {
-        let { status, unavailable } = checkExecutables(['echo', 'ls'])
+        const { status, unavailable } = checkExecutables(['echo', 'ls'])
         assert.strictEqual(status, true)
         assert.deepStrictEqual(unavailable, [])
       })
 
       it('one executable', function () {
-        let { status, unavailable } = checkExecutables(['echo'])
+        const { status, unavailable } = checkExecutables(['echo'])
         assert.strictEqual(status, true)
         assert.deepStrictEqual(unavailable, [])
       })
 
       it('one nonexisting executable', function () {
-        let { status, unavailable } = checkExecutables(['echo', 'loooooool'])
+        const { status, unavailable } = checkExecutables(['echo', 'loooooool'])
         assert.strictEqual(status, false)
         assert.deepStrictEqual(unavailable, ['loooooool'])
       })
 
       it('two nonexisting executable', function () {
-        let { status, unavailable } = checkExecutables(['troooooool', 'loooooool'])
+        const { status, unavailable } = checkExecutables(['troooooool', 'loooooool'])
         assert.strictEqual(status, false)
         assert.deepStrictEqual(unavailable, ['troooooool', 'loooooool'])
       })
 
       it('without arguments', function () {
-        let { status, unavailable } = checkExecutables()
+        const { status, unavailable } = checkExecutables()
         assert.strictEqual(status, true)
         assert.deepStrictEqual(unavailable, [])
       })
@@ -67,34 +67,34 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
   })
   describe('Classes', function () {
     describe('Class “TextFile()”', function () {
-      let TextFile = intermediateRewired.__get__('TextFile')
+      const TextFile = intermediateRewired.__get__('TextFile')
 
       it('Property “path”', function () {
-        let tmpFile = mkTmpFile()
-        let texFile = new TextFile(tmpFile)
+        const tmpFile = mkTmpFile()
+        const texFile = new TextFile(tmpFile)
         assert.strictEqual(texFile.path, tmpFile)
       })
 
       describe('Methods', function () {
         it('Method “append()”', function () {
-          let texFile = new TextFile(mkTmpFile())
+          const texFile = new TextFile(mkTmpFile())
           texFile.append('test')
         })
 
         it('Method “read()”', function () {
-          let texFile = new TextFile(mkTmpFile())
+          const texFile = new TextFile(mkTmpFile())
           texFile.append('test')
           assert.strictEqual(texFile.read(), 'test')
         })
 
         it('Method “flush()”', function () {
-          let texFile = new TextFile(mkTmpFile())
+          const texFile = new TextFile(mkTmpFile())
           texFile.append('test')
           texFile.flush('test')
           assert.strictEqual(texFile.read(), '')
         })
         it('Method “remove()”', function () {
-          let texFile = new TextFile(mkTmpFile())
+          const texFile = new TextFile(mkTmpFile())
           assertExists(texFile.path)
           texFile.remove()
           assertNotExists(texFile.path)
@@ -103,9 +103,9 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
     })
 
     describe('Class “Sqlite()”', function () {
-      let Sqlite = intermediateRewired.__get__('Sqlite')
-      let tmpDir = mkTmpDir()
-      let testDb = path.join(tmpDir, 'test.db')
+      const Sqlite = intermediateRewired.__get__('Sqlite')
+      const tmpDir = mkTmpDir()
+      const testDb = path.join(tmpDir, 'test.db')
       let db
 
       beforeEach(function () {
@@ -136,7 +136,7 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
         describe('Method “insert()”', function () {
           it('Successful insert', function () {
             db.insert('lol', 'toll')
-            let row = db.select('lol')
+            const row = db.select('lol')
             assert.strictEqual(row.hash, 'toll')
           })
 
@@ -159,10 +159,10 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
     })
 
     describe('Class “FileMonitor()”', function () {
-      let FileMonitor = intermediateRewired.__get__('FileMonitor')
-      let tmpDir = mkTmpDir()
-      let testDb = path.join(tmpDir, 'file-monitor.db')
-      let testFile = path.join(tmpDir, 'file-monitor.txt')
+      const FileMonitor = intermediateRewired.__get__('FileMonitor')
+      const tmpDir = mkTmpDir()
+      const testDb = path.join(tmpDir, 'file-monitor.db')
+      const testFile = path.join(tmpDir, 'file-monitor.txt')
       let monitor
 
       beforeEach(function () {
@@ -220,15 +220,15 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
     })
 
     describe('Class “PianoScore()”', function () {
-      let PianoScore = intermediateRewired.__get__('PianoScore')
-      let PianoFilesCountTree = intermediateRewired.__get__('PianoFilesCountTree')
-      let IntermediateLibrary = intermediateRewired.__get__('IntermediateLibrary')
-      let tmpDir = tmpCopy('processed', 'some')
-      let library = new IntermediateLibrary(tmpDir)
-      let songs = library.toArray()
+      const PianoScore = intermediateRewired.__get__('PianoScore')
+      const PianoFilesCountTree = intermediateRewired.__get__('PianoFilesCountTree')
+      const IntermediateLibrary = intermediateRewired.__get__('IntermediateLibrary')
+      const tmpDir = tmpCopy('processed', 'some')
+      const library = new IntermediateLibrary(tmpDir)
+      const songs = library.toArray()
 
       it('Initialisation', function () {
-        let pianoScore = new PianoScore(library)
+        const pianoScore = new PianoScore(library)
         assert.ok(pianoScore)
       })
 
@@ -243,27 +243,27 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
           })
         })
         describe('Static method “selectSongs()”', function () {
-          let fakeSelectSongs = function (pageCount, config) {
-            let songs = fakeSongs(config)
-            let countTree = new PianoFilesCountTree(songs)
+          const fakeSelectSongs = function (pageCount, config) {
+            const songs = fakeSongs(config)
+            const countTree = new PianoFilesCountTree(songs)
             return PianoScore.selectSongs(countTree, [], pageCount)
           }
 
           it('4 pages per unit <- 1-page-song, 2-page-song x2, 3-page-song x3', function () {
-            let result = fakeSelectSongs(4, { 1: 1, 2: 2, 3: 3 })
+            const result = fakeSelectSongs(4, { 1: 1, 2: 2, 3: 3 })
             assert.strictEqual(result.length, 2)
             assert.strictEqual(result[0].pianoFiles.length, '3')
             assert.strictEqual(result[1].pianoFiles.length, '1')
           })
 
           it('2 pages per unit <- 1-page-song x1', function () {
-            let result = fakeSelectSongs(2, { 1: 1 })
+            const result = fakeSelectSongs(2, { 1: 1 })
             assert.strictEqual(result.length, 1)
             assert.strictEqual(result[0].pianoFiles.length, '1')
           })
 
           it('4 pages per unit <- 1-page-song x4', function () {
-            let result = fakeSelectSongs(4, { 1: 4 })
+            const result = fakeSelectSongs(4, { 1: 4 })
             assert.strictEqual(result.length, 4)
             assert.strictEqual(result[0].pianoFiles.length, '1')
             assert.strictEqual(result[1].pianoFiles.length, '1')
@@ -272,36 +272,36 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
           })
 
           it('4 pages per unit <- 4-page-song x2', function () {
-            let result = fakeSelectSongs(4, { 4: 2 })
+            const result = fakeSelectSongs(4, { 4: 2 })
             assert.strictEqual(result.length, 1)
             assert.strictEqual(result[0].pianoFiles.length, '4')
           })
 
           it('2 pages per unit <- 2-page-song x2', function () {
-            let result = fakeSelectSongs(2, { 2: 2 })
+            const result = fakeSelectSongs(2, { 2: 2 })
             assert.strictEqual(result.length, 1)
             assert.strictEqual(result[0].pianoFiles.length, '2')
           })
 
           it('2 pages per unit <- 2-page-song', function () {
-            let result = fakeSelectSongs(2, { 2: 1 })
+            const result = fakeSelectSongs(2, { 2: 1 })
             assert.strictEqual(result.length, 1)
             assert.strictEqual(result[0].pianoFiles.length, '2')
           })
 
           it('4 pages per unit <- 1-page-song, 2-page-song, 4-page-song x2', function () {
-            let result = fakeSelectSongs(4, { 1: 1, 2: 1, 4: 2 })
+            const result = fakeSelectSongs(4, { 1: 1, 2: 1, 4: 2 })
             assert.strictEqual(result.length, 1)
             assert.strictEqual(result[0].pianoFiles.length, '4')
           })
 
           it('2 pages per unit <- 3-page-song', function () {
-            let result = fakeSelectSongs(2, { 3: 1 })
+            const result = fakeSelectSongs(2, { 3: 1 })
             assert.strictEqual(result.length, 0)
           })
 
           it('4 pages per unit <- 1-page-song x3, 2-page-song x3, 3-page-song x3', function () {
-            let result = fakeSelectSongs(4, { 1: 3, 2: 3, 3: 3 })
+            const result = fakeSelectSongs(4, { 1: 3, 2: 3, 3: 3 })
             assert.strictEqual(result.length, 2)
             assert.strictEqual(result[0].pianoFiles.length, '3')
             assert.strictEqual(result[1].pianoFiles.length, '1')
@@ -310,7 +310,7 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
 
         describe('Static method “buildSongList()”', function () {
           it('pageTurnOptimized = false', function () {
-            let texMarkup = PianoScore.buildSongList(songs, false)
+            const texMarkup = PianoScore.buildSongList(songs, false)
             assert.strictEqual(texMarkup, `
 \\tmpmetadata
 {Auf der Mauer, auf der Lauer} % title
@@ -356,7 +356,7 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
           })
 
           it('pageTurnOptimized = true', function () {
-            let texMarkup = PianoScore.buildSongList(songs, true)
+            const texMarkup = PianoScore.buildSongList(songs, true)
             assert.strictEqual(texMarkup, `
 \\tmpmetadata
 {Zum Tanze, da geht ein Mädel} % title
@@ -404,8 +404,8 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
 
         describe('Method “build()”', function () {
           it('groupAlphabetically = true, pageTurnOptimized = true', function () {
-            let pianoScore = new PianoScore(library, true, true)
-            let texMarkup = pianoScore.build()
+            const pianoScore = new PianoScore(library, true, true)
+            const texMarkup = pianoScore.build()
             assert.strictEqual(texMarkup, `
 
 \\tmpchapter{A}
@@ -464,8 +464,8 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
           })
 
           it('groupAlphabetically = true, pageTurnOptimized = false', function () {
-            let pianoScore = new PianoScore(library, true, false)
-            let texMarkup = pianoScore.build()
+            const pianoScore = new PianoScore(library, true, false)
+            const texMarkup = pianoScore.build()
             assert.strictEqual(texMarkup, `
 
 \\tmpchapter{A}
@@ -518,8 +518,8 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
           })
 
           it('groupAlphabetically = false, pageTurnOptimized = true', function () {
-            let pianoScore = new PianoScore(library, false, true)
-            let texMarkup = pianoScore.build()
+            const pianoScore = new PianoScore(library, false, true)
+            const texMarkup = pianoScore.build()
             assert.strictEqual(texMarkup, `
 \\tmpmetadata
 {Zum Tanze, da geht ein Mädel} % title
@@ -565,8 +565,8 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
           })
 
           it('groupAlphabetically = false, pageTurnOptimized = false', function () {
-            let pianoScore = new PianoScore(library, false, false)
-            let texMarkup = pianoScore.build()
+            const pianoScore = new PianoScore(library, false, false)
+            const texMarkup = pianoScore.build()
             assert.strictEqual(texMarkup, `
 \\tmpmetadata
 {Auf der Mauer, auf der Lauer} % title
@@ -613,26 +613,26 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
         })
 
         describe('Method “compile()”', function () {
-          let cleanOutput = function (input) {
+          const cleanOutput = function (input) {
             let output = input.replace(/^[^]*% begin song list %\n/g, '')
             output = output.replace(/\n% end song list %[^]*$/g, '')
             return output
           }
 
           it('groupAlphabetically = true, pageTurnOptimized = true', function () {
-            let pianoScore = new PianoScore(library, true, true)
+            const pianoScore = new PianoScore(library, true, true)
             pianoScore.compile()
-            let texMarkup = cleanOutput(pianoScore.texFile.read())
-            let compare = readPathSegments('files', 'songs_page_turn_optimized.tex')
+            const texMarkup = cleanOutput(pianoScore.texFile.read())
+            const compare = readPathSegments('files', 'songs_page_turn_optimized.tex')
             assertExists(pianoScore.texFile.path)
             assert.strictEqual(texMarkup, compare)
           })
 
           it('groupAlphabetically = true, pageTurnOptimized = false', function () {
-            let pianoScore = new PianoScore(library, true, false)
+            const pianoScore = new PianoScore(library, true, false)
             pianoScore.compile()
-            let texMarkup = cleanOutput(pianoScore.texFile.read())
-            let compare = readPathSegments('files', 'songs_processed.tex')
+            const texMarkup = cleanOutput(pianoScore.texFile.read())
+            const compare = readPathSegments('files', 'songs_processed.tex')
             assertExists(pianoScore.texFile.path)
             assert.strictEqual(texMarkup, compare)
             assert.ok(texMarkup.indexOf('\\tmpimage') > -1)
@@ -640,9 +640,9 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
           })
 
           it('defaults', function () {
-            let pianoScore = new PianoScore(library)
+            const pianoScore = new PianoScore(library)
             pianoScore.compile()
-            let texMarkup = cleanOutput(pianoScore.texFile.read())
+            const texMarkup = cleanOutput(pianoScore.texFile.read())
             assert.strictEqual(texMarkup, `
 
 \\tmpchapter{A}
@@ -704,11 +704,11 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
     })
 
     describe('Class “IntermediateSong()”', function () {
-      let IntermediateSong = intermediateRewired.__get__('IntermediateSong')
-      let FileMonitor = intermediateRewired.__get__('FileMonitor')
-      let fileMonitor = new FileMonitor(mkTmpFile())
-      let folder = path.join(__dirname, 'songs', 'clean', 'some', 'a', 'Auf-der-Mauer')
-      let song = new IntermediateSong(folder, fileMonitor)
+      const IntermediateSong = intermediateRewired.__get__('IntermediateSong')
+      const FileMonitor = intermediateRewired.__get__('FileMonitor')
+      const fileMonitor = new FileMonitor(mkTmpFile())
+      const folder = path.join(__dirname, 'songs', 'clean', 'some', 'a', 'Auf-der-Mauer')
+      const song = new IntermediateSong(folder, fileMonitor)
 
       afterEach(function () {
         fileMonitor.flush()
@@ -716,8 +716,8 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
 
       describe('Methods', function () {
         it('Method “formatPianoTeXEpsFile_()”', function () {
-          let folder = path.join(__dirname, 'songs', 'processed', 'some', 's', 'Swing-low')
-          let song = new IntermediateSong(folder)
+          const folder = path.join(__dirname, 'songs', 'processed', 'some', 's', 'Swing-low')
+          const song = new IntermediateSong(folder)
           assert.strictEqual(
             song.formatPianoTeXEpsFile_(0),
             '\\tmpimage{s/Swing-low/piano/piano_1.eps}\n'
@@ -736,8 +736,8 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
 
         describe('Method “formatPianoTex()”', function () {
           it('Markup', function () {
-            let folder = path.join(__dirname, 'songs', 'processed', 'some', 's', 'Swing-low')
-            let song = new IntermediateSong(folder)
+            const folder = path.join(__dirname, 'songs', 'processed', 'some', 's', 'Swing-low')
+            const song = new IntermediateSong(folder)
             assert.strictEqual(
               song.formatPianoTex(),
               '\n' +
@@ -751,7 +751,7 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
           })
 
           it('Exception: no EPS files', function () {
-            let song = new IntermediateSong(folder)
+            const song = new IntermediateSong(folder)
             song.pianoFiles = []
             assert.throws(
               function () {
@@ -762,7 +762,7 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
           })
 
           it('Exception: more than 4 EPS files', function () {
-            let song = new IntermediateSong(folder)
+            const song = new IntermediateSong(folder)
             song.pianoFiles = [1, 2, 3, 4, 5]
             assert.throws(
               function () {
@@ -774,7 +774,7 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
         })
 
         it('Method “generatePDF_()”', function () {
-          let file = song.generatePDF_('projector', 'projector')
+          const file = song.generatePDF_('projector', 'projector')
           assert.strictEqual(file, 'projector.pdf')
           assertExists(folder, 'projector.pdf')
         })
@@ -782,7 +782,7 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
         it('Method “generateSlides_()”', function () {
           song.generatePDF_('projector')
           const slides = path.join(folder, 'slides')
-          let files = song.generateSlides_(folder)
+          const files = song.generateSlides_(folder)
 
           assert.deepStrictEqual(
             files,
@@ -799,13 +799,13 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
 
         describe('Method “generatePiano_()”', function () {
           it('lead', function () {
-            let folderSwing = path.join(__dirname, 'songs', 'clean', 'some', 's', 'Swing-low')
-            let songSwing = new IntermediateSong(folderSwing, fileMonitor)
-            let files = songSwing.generatePiano_()
+            const folderSwing = path.join(__dirname, 'songs', 'clean', 'some', 's', 'Swing-low')
+            const songSwing = new IntermediateSong(folderSwing, fileMonitor)
+            const files = songSwing.generatePiano_()
 
-            assert.deepStrictEqual(files, [ 'piano_1.eps', 'piano_2.eps' ])
+            assert.deepStrictEqual(files, ['piano_1.eps', 'piano_2.eps'])
 
-            let result = [
+            const result = [
               [folderSwing, 'piano'],
               [folderSwing, 'piano', 'piano.mscx'],
               [folderSwing, 'piano', 'piano_1.eps']
@@ -816,14 +816,14 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
           })
 
           it('piano', function () {
-            let files = song.generatePiano_()
+            const files = song.generatePiano_()
 
             assert.deepStrictEqual(
               files,
               ['piano_1.eps', 'piano_2.eps']
             )
 
-            let result = [
+            const result = [
               [folder, 'piano'],
               [folder, 'piano', 'piano.mscx'],
               [folder, 'piano', 'piano_1.eps']
@@ -836,25 +836,25 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
 
         describe('Method “generateIntermediateFiles()”', function () {
           it('First run', function () {
-            let status = song.generateIntermediateFiles('all', false)
+            const status = song.generateIntermediateFiles('all', false)
             status.folder = 'test'
             assert.deepStrictEqual(
               status,
               {
-                'changed': {
-                  'piano': true,
-                  'slides': true
+                changed: {
+                  piano: true,
+                  slides: true
                 },
-                'folder': 'test',
-                'folderName': 'Auf-der-Mauer',
-                'force': false,
-                'generated': {
-                  'piano': [
+                folder: 'test',
+                folderName: 'Auf-der-Mauer',
+                force: false,
+                generated: {
+                  piano: [
                     'piano_1.eps',
                     'piano_2.eps'
                   ],
-                  'projector': 'projector.pdf',
-                  'slides': [
+                  projector: 'projector.pdf',
+                  slides: [
                     '01.svg',
                     '02.svg'
                   ]
@@ -865,13 +865,13 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
 
           it('Second run', function () {
             song.generateIntermediateFiles('all', false)
-            let status = song.generateIntermediateFiles('all', false)
+            const status = song.generateIntermediateFiles('all', false)
             assert.strictEqual(status.changed.piano, false)
             assert.strictEqual(status.changed.slides, false)
           })
 
           it('force', function () {
-            let status = song.generateIntermediateFiles('all', true)
+            const status = song.generateIntermediateFiles('all', true)
             assert.strictEqual(status.force, true)
           })
         })
@@ -886,11 +886,11 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
     })
 
     describe('Class “PianoFilesCountTree()”', function () {
-      let PianoFilesCountTree = intermediateRewired.__get__('PianoFilesCountTree')
-      let Library = intermediateRewired.__get__('Library')
-      let library = new Library(path.join(__dirname, 'songs', 'processed', 'some'))
-      let songs = Object.values(library.songs)
-      let countTree = new PianoFilesCountTree(songs)
+      const PianoFilesCountTree = intermediateRewired.__get__('PianoFilesCountTree')
+      const Library = intermediateRewired.__get__('Library')
+      const library = new Library(path.join(__dirname, 'songs', 'processed', 'some'))
+      const songs = Object.values(library.songs)
+      const countTree = new PianoFilesCountTree(songs)
 
       it('Initialisation', function () {
         assert.ok(countTree)
@@ -906,17 +906,17 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
         })
 
         it('one', function () {
-          let countTree = new PianoFilesCountTree(fakeSongs({ 1: 1 }))
+          const countTree = new PianoFilesCountTree(fakeSongs({ 1: 1 }))
           assert.strictEqual(countTree.sum(), 1)
         })
 
         it('many', function () {
-          let countTree = new PianoFilesCountTree(fakeSongs({ 1: 1, 2: 2, 3: 3, 4: 4 }))
+          const countTree = new PianoFilesCountTree(fakeSongs({ 1: 1, 2: 2, 3: 3, 4: 4 }))
           assert.strictEqual(countTree.sum(), 10)
         })
 
         it('empty', function () {
-          let countTree = new PianoFilesCountTree([])
+          const countTree = new PianoFilesCountTree([])
           assert.strictEqual(countTree.sum(), 0)
         })
       })
@@ -927,17 +927,17 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
         })
 
         it('one', function () {
-          let countTree = new PianoFilesCountTree(fakeSongs({ 1: 1 }))
+          const countTree = new PianoFilesCountTree(fakeSongs({ 1: 1 }))
           assert.strictEqual(countTree.sumFiles(), 1)
         })
 
         it('many', function () {
-          let countTree = new PianoFilesCountTree(fakeSongs({ 1: 1, 2: 2, 3: 3, 4: 4 }))
+          const countTree = new PianoFilesCountTree(fakeSongs({ 1: 1, 2: 2, 3: 3, 4: 4 }))
           assert.strictEqual(countTree.sumFiles(), 30)
         })
 
         it('empty', function () {
-          let countTree = new PianoFilesCountTree([])
+          const countTree = new PianoFilesCountTree([])
           assert.strictEqual(countTree.sumFiles(), 0)
         })
       })
@@ -948,27 +948,27 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
         })
 
         it('true', function () {
-          let countTree = new PianoFilesCountTree([])
+          const countTree = new PianoFilesCountTree([])
           assert.strictEqual(countTree.isEmpty(), true)
         })
 
         it('false', function () {
-          let countTree = new PianoFilesCountTree(fakeSongs({ 1: 1 }))
+          const countTree = new PianoFilesCountTree(fakeSongs({ 1: 1 }))
           assert.strictEqual(countTree.isEmpty(), false)
         })
       })
 
       describe('Method “shift()”', function () {
         it('No exception', function () {
-          let countTree = new PianoFilesCountTree(songs)
-          let song1 = countTree.shift(1)
+          const countTree = new PianoFilesCountTree(songs)
+          const song1 = countTree.shift(1)
           assert.strictEqual(song1.metaData.title, 'Stille Nacht')
-          let song2 = countTree.shift(1)
+          const song2 = countTree.shift(1)
           assert.strictEqual(song2, undefined)
         })
 
         it('No songs anymore in count category', function () {
-          let countTree = new PianoFilesCountTree(songs)
+          const countTree = new PianoFilesCountTree(songs)
           assert.strictEqual(countTree.shift(4), undefined)
         })
 
@@ -984,7 +984,7 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
     })
 
     describe('Class “IntermediateLibrary()”', function () {
-      let IntermediateLibrary = intermediateRewired.__get__('IntermediateLibrary')
+      const IntermediateLibrary = intermediateRewired.__get__('IntermediateLibrary')
       let library
       let basePath
 
@@ -996,7 +996,7 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
 
       describe('Properties', function () {
         it('Property “fileMonitor”', function () {
-          let FileMonitor = intermediateRewired.__get__('FileMonitor')
+          const FileMonitor = intermediateRewired.__get__('FileMonitor')
           assert.ok(library.fileMonitor instanceof FileMonitor)
         })
 
@@ -1012,7 +1012,7 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
 
         it('Method “collectSongs_()”', function () {
           assert.strictEqual(library.detectSongs_().length, 4)
-          let songs = library.collectSongs_()
+          const songs = library.collectSongs_()
           assert.strictEqual(songs['Auf-der-Mauer'].songID, 'Auf-der-Mauer')
         })
 
@@ -1021,20 +1021,20 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
         })
 
         it('Method “cleanIntermediateFiles()”', function () {
-          let tmpDir = mkTmpDir()
+          const tmpDir = mkTmpDir()
           fs.copySync(basePath, tmpDir)
-          let library = new IntermediateLibrary(tmpDir)
+          const library = new IntermediateLibrary(tmpDir)
           library.cleanIntermediateFiles()
           assert.ok(!fs.existsSync(path.join(library.basePath, 'songs.tex')))
         })
 
         describe('Method “generateIntermediateFiles()”', function () {
           it('force = false', function () {
-            let spy = sinon.spy()
-            let stub = sinon.stub()
+            const spy = sinon.spy()
+            const stub = sinon.stub()
             intermediateRewired.__set__('message.songFolder', stub)
-            let library = new IntermediateLibrary(basePath)
-            for (let songID in library.songs) {
+            const library = new IntermediateLibrary(basePath)
+            for (const songID in library.songs) {
               library.songs[songID].generateIntermediateFiles = spy
             }
             library.generateIntermediateFiles('all', false)
@@ -1044,11 +1044,11 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
           })
 
           it('force = true', function () {
-            let spy = sinon.spy()
-            let stub = sinon.stub()
+            const spy = sinon.spy()
+            const stub = sinon.stub()
             intermediateRewired.__set__('message.songFolder', stub)
-            let library = new IntermediateLibrary(basePath)
-            for (let songID in library.songs) {
+            const library = new IntermediateLibrary(basePath)
+            for (const songID in library.songs) {
               library.songs[songID].generateIntermediateFiles = spy
             }
             library.generateIntermediateFiles('all', true)
@@ -1059,7 +1059,7 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
 
         describe('Method “updateSongByPath()”', function () {
           it('No exception', function () {
-            let clean = path.join(__dirname, 'songs', 'clean', 'some')
+            const clean = path.join(__dirname, 'songs', 'clean', 'some')
             library = new IntermediateLibrary(clean)
             library.updateSongByPath(path.join(clean, 'a', 'Auf-der-Mauer'))
             assertExists(path.join(library.basePath, 'a', 'Auf-der-Mauer', 'slides', '01.svg'))
@@ -1077,7 +1077,7 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
 
         describe('Method “updateSongBySongId()”', function () {
           it('No exception', function () {
-            let clean = path.join(__dirname, 'songs', 'clean', 'some')
+            const clean = path.join(__dirname, 'songs', 'clean', 'some')
             library = new IntermediateLibrary(clean)
             library.updateSongBySongId('Auf-der-Mauer')
             assertExists(path.join(library.basePath, 'a', 'Auf-der-Mauer', 'slides', '01.svg'))
@@ -1094,12 +1094,12 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
         })
 
         describe('Method “update()”', function () {
-          let stub = sinon.stub()
+          const stub = sinon.stub()
           intermediateRewired.__set__('message.songFolder', stub)
 
-          let songs = path.join(__dirname, 'songs', 'clean', 'some')
+          const songs = path.join(__dirname, 'songs', 'clean', 'some')
 
-          let buildFolderList = function (basePath) {
+          const buildFolderList = function (basePath) {
             return [
               path.join(basePath, 'a', 'Auf-der-Mauer'),
               path.join(basePath, 's', 'Swing-low'),
@@ -1118,9 +1118,9 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
           })
 
           it('mode = all', function () {
-            let tmpDir = mkTmpDir()
+            const tmpDir = mkTmpDir()
             fs.copySync(songs, tmpDir)
-            let library = new IntermediateLibrary(tmpDir)
+            const library = new IntermediateLibrary(tmpDir)
             library.update()
 
             const folders = buildFolderList(tmpDir)
@@ -1139,16 +1139,16 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
           })
 
           it('mode = piano', function () {
-            let stub = sinon.stub()
+            const stub = sinon.stub()
             intermediateRewired.__set__('message.songFolder', stub)
 
-            let songs = path.join(__dirname, 'songs', 'clean', 'some')
+            const songs = path.join(__dirname, 'songs', 'clean', 'some')
             const auf = path.join(songs, 'a', 'Auf-der-Mauer')
             const swing = path.join(songs, 's', 'Swing-low')
             const zum = path.join(songs, 'z', 'Zum-Tanze-da-geht-ein-Maedel')
             const folders = [auf, swing, zum]
 
-            let library = new IntermediateLibrary(songs)
+            const library = new IntermediateLibrary(songs)
             library.fileMonitor.flush()
             library.update()
 
@@ -1168,9 +1168,9 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
           })
 
           it('mode = slides', function () {
-            let tmpDir = mkTmpDir()
+            const tmpDir = mkTmpDir()
             fs.copySync(songs, tmpDir)
-            let library = new IntermediateLibrary(tmpDir)
+            const library = new IntermediateLibrary(tmpDir)
             library.update('slides')
 
             // const folders = buildFolderList(tmpDir)

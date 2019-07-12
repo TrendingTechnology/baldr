@@ -8,7 +8,7 @@ const {
 } = require('@bldr/test-helper')
 
 const { getMasters } = requireFile('@bldr/core', 'masters.js')
-let masters = getMasters(getDOM())
+const masters = getMasters(getDOM())
 
 /***********************************************************************
  *
@@ -18,8 +18,8 @@ describe('Class “Master()” #unittest', () => {
   let person
 
   beforeEach(() => {
-    let mastersJs = rewire(path.join(__dirname, '..', 'masters.js'))
-    let Master = mastersJs.__get__('Master')
+    const mastersJs = rewire(path.join(__dirname, '..', 'masters.js'))
+    const Master = mastersJs.__get__('Master')
     person = new Master('@bldr/master-person')
   })
 
@@ -141,7 +141,7 @@ describe('Class “Masters()” #unittest', () => {
 describe('Function getMasters()” #unittest', function () {
   it('simple', function () {
     const { getMasters } = requireFile('@bldr/core', 'masters.js')
-    let masters = getMasters(getDOM())
+    const masters = getMasters(getDOM())
     assert.equal(typeof masters.all, 'object')
   })
 })

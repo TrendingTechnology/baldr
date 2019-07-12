@@ -40,14 +40,14 @@ exports.documentation = {
  * @see {@link module:@bldr/core/masters~Master#normalizeData}
  */
 exports.normalizeData = function (rawSlideData, config) {
-  let data = {}
+  const data = {}
 
   if (checkProperty.isString(rawSlideData, 'name')) {
     data.name = rawSlideData.name
   }
 
-  let images = new Media(config.sessionDir)
-  let image = images.list(rawSlideData.image, 'image')
+  const images = new Media(config.sessionDir)
+  const image = images.list(rawSlideData.image, 'image')
   if (image && image !== [] && image[0] && image[0].hasOwnProperty('path')) {
     data.imagePath = image[0].path
   }
@@ -80,7 +80,7 @@ exports.normalizeData = function (rawSlideData, config) {
  * @see {@link module:@bldr/core/masters~Master#mainHTML}
  */
 exports.mainHTML = function (slide, config, document) {
-  let data = slide.masterData
+  const data = slide.masterData
 
   let birthAndDeath
   if (data.birthAndDeath) {

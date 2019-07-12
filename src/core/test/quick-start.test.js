@@ -6,7 +6,7 @@ const {
 
 const { QuickStart } = requireFile('@bldr/core', 'quick-start.js')
 
-let initiateQuickStart = function () {
+const initiateQuickStart = function () {
   return new QuickStart(freshEnv())
 }
 
@@ -33,7 +33,7 @@ describe('Class “QuickStart()” #unittest', () => {
 
   describe('Methods', () => {
     it('Method “collectEntries_()”', () => {
-      let entries = quickStart.collectEntries_()
+      const entries = quickStart.collectEntries_()
       assert.equal(entries[0].title, 'Audio')
       assert.equal(entries[0].masterName, 'audio')
       assert.equal(entries[0].cssID, 'quick-start-entry_audio_1')
@@ -46,11 +46,11 @@ describe('Class “QuickStart()” #unittest', () => {
     })
 
     it('Method “renderButton_()”', () => {
-      let entry = {
+      const entry = {
         title: 'lol',
         fontawesome: 'lol'
       }
-      let button = quickStart.renderButton_(entry)
+      const button = quickStart.renderButton_(entry)
       assert.equal(button.nodeName, 'BUTTON')
       assert.equal(button.title, 'lol')
       assert.equal(button.classList.item(0), 'fa')
@@ -59,13 +59,13 @@ describe('Class “QuickStart()” #unittest', () => {
 
     it('Method “renderNavigationMenu_()”', () => {
       quickStart.renderNavigationMenu_()
-      let buttons = quickStart.env.document.querySelectorAll('#nav-quick-start button')
+      const buttons = quickStart.env.document.querySelectorAll('#nav-quick-start button')
       assert.equal(buttons[0].title, 'Audio (ctrl+alt+a)')
     })
 
     it('Method “set()”', () => {
       quickStart.set()
-      let buttons = quickStart.env.document.querySelectorAll('#nav-quick-start button')
+      const buttons = quickStart.env.document.querySelectorAll('#nav-quick-start button')
       assert.equal(buttons[0].title, 'Audio (ctrl+alt+a)')
     })
   })

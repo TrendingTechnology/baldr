@@ -10,20 +10,20 @@ const {
 const question = require('@bldr/master-question')
 const questionRewired = rewire(packageFilePath('@bldr/master-question', 'index.js'))
 
-let normalizeData = function (data) {
+const normalizeData = function (data) {
   return question.normalizeData(data)
 }
 
-let mainHTML = function (data) {
-  let masterData = question.normalizeData(data)
+const mainHTML = function (data) {
+  const masterData = question.normalizeData(data)
   return question.mainHTML({ masterData: masterData })
 }
 
-let dataSingleWithout = 'One?'
-let dataSingleWithAnswer = { question: 'One?', answer: 'One' }
+const dataSingleWithout = 'One?'
+const dataSingleWithAnswer = { question: 'One?', answer: 'One' }
 
-let dataMultipleWithout = ['One?', 'Two?']
-let dataMultipleWithAnswer = [
+const dataMultipleWithout = ['One?', 'Two?']
+const dataMultipleWithAnswer = [
   { question: 'One?', answer: 'One' },
   { question: 'Two?', answer: 'Two' }
 ]
@@ -63,8 +63,8 @@ describe('Master slide “question” #unittest', () => {
 
   it('Method “templatQAPair()”', () => {
     const templatQAPair = questionRewired.__get__('templatQAPair')
-    let html = templatQAPair('question', 'answer')
-    let dom = makeDOM(html)
+    const html = templatQAPair('question', 'answer')
+    const dom = makeDOM(html)
     assert.equal(
       dom.querySelector('.question').textContent,
       'question'
@@ -77,8 +77,8 @@ describe('Master slide “question” #unittest', () => {
 
   it('Method “templatQAPair()”: answer empty string', () => {
     const templatQAPair = questionRewired.__get__('templatQAPair')
-    let html = templatQAPair('question', '')
-    let dom = makeDOM(html)
+    const html = templatQAPair('question', '')
+    const dom = makeDOM(html)
     assert.equal(
       dom.querySelector('.answer'),
       null
@@ -86,8 +86,8 @@ describe('Master slide “question” #unittest', () => {
   })
 
   it('Method “mainHTML()”: dataSingleWithout', () => {
-    let html = mainHTML(dataSingleWithout)
-    let dom = makeDOM(html)
+    const html = mainHTML(dataSingleWithout)
+    const dom = makeDOM(html)
     assert.equal(
       dom.querySelector('.question').textContent,
       'One?'
@@ -99,8 +99,8 @@ describe('Master slide “question” #unittest', () => {
   })
 
   it('Method “mainHTML()”: dataSingleWithAnswer', () => {
-    let html = mainHTML(dataSingleWithAnswer)
-    let dom = makeDOM(html)
+    const html = mainHTML(dataSingleWithAnswer)
+    const dom = makeDOM(html)
     assert.equal(
       dom.querySelector('.question').textContent,
       'One?'
@@ -112,8 +112,8 @@ describe('Master slide “question” #unittest', () => {
   })
 
   it('Method “mainHTML()”: dataMultipleWithout', () => {
-    let html = mainHTML(dataMultipleWithout)
-    let dom = makeDOM(html)
+    const html = mainHTML(dataMultipleWithout)
+    const dom = makeDOM(html)
     assert.equal(
       dom.querySelector('ol li:nth-child(1) p.question').textContent,
       'One?'
@@ -125,8 +125,8 @@ describe('Master slide “question” #unittest', () => {
   })
 
   it('Method “mainHTML()”: dataMultipleWithAnswer', () => {
-    let html = mainHTML(dataMultipleWithAnswer)
-    let dom = makeDOM(html)
+    const html = mainHTML(dataMultipleWithAnswer)
+    const dom = makeDOM(html)
     assert.equal(
       dom.querySelector('ol li:nth-child(1) p.question').textContent,
       'One?'
@@ -140,25 +140,25 @@ describe('Master slide “question” #unittest', () => {
   describe('Step support', () => {
     const { Slide } = requireFile('@bldr/core', 'slides.js')
 
-    let getQuestion = function () {
-      return new Slide({ 'question': ['1', '2', '3'] }, freshEnv())
+    const getQuestion = function () {
+      return new Slide({ question: ['1', '2', '3'] }, freshEnv())
     }
 
     it('Property “this.visited', () => {
-      let question = getQuestion(['1', '2', '3'])
+      const question = getQuestion(['1', '2', '3'])
       assert.equal(question.steps.visited, false)
       question.set()
       assert.equal(question.steps.visited, true)
     })
 
     it('Property “this.steps.count', () => {
-      let question = getQuestion(['1', '2', '3'])
+      const question = getQuestion(['1', '2', '3'])
       question.set()
       assert.equal(question.steps.count, 3)
     })
 
     it('Property “this.steps.stepData', () => {
-      let question = getQuestion(['1', '2', '3'])
+      const question = getQuestion(['1', '2', '3'])
       question.set()
       assert.equal(question.steps.stepData[1].tagName, 'P')
       assert.equal(question.steps.stepData[2].tagName, 'P')
@@ -166,11 +166,11 @@ describe('Master slide “question” #unittest', () => {
     })
 
     it('Method “steps.next()”', () => {
-      let question = getQuestion(['1', '2', '3'])
+      const question = getQuestion(['1', '2', '3'])
       question.set()
-      let q1 = question.env.document.querySelector('li:nth-child(1) .question')
-      let q2 = question.env.document.querySelector('li:nth-child(2) .question')
-      let q3 = question.env.document.querySelector('li:nth-child(3) .question')
+      const q1 = question.env.document.querySelector('li:nth-child(1) .question')
+      const q2 = question.env.document.querySelector('li:nth-child(2) .question')
+      const q3 = question.env.document.querySelector('li:nth-child(3) .question')
 
       assert.equal(question.steps.no, 1)
       assert.equal(q1.style.visibility, 'visible')
@@ -191,12 +191,12 @@ describe('Master slide “question” #unittest', () => {
     })
 
     it('Method “steps.prev()”', () => {
-      let question = getQuestion(['1', '2', '3'])
+      const question = getQuestion(['1', '2', '3'])
       question.set()
 
-      let q1 = question.env.document.querySelector('li:nth-child(1) .question')
-      let q2 = question.env.document.querySelector('li:nth-child(2) .question')
-      let q3 = question.env.document.querySelector('li:nth-child(3) .question')
+      const q1 = question.env.document.querySelector('li:nth-child(1) .question')
+      const q2 = question.env.document.querySelector('li:nth-child(2) .question')
+      const q3 = question.env.document.querySelector('li:nth-child(3) .question')
 
       assert.equal(question.steps.no, 1)
       assert.equal(q1.style.visibility, 'visible')

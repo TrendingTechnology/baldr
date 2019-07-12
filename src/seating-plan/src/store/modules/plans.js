@@ -27,18 +27,18 @@ function arePersonsEqual (personA, personB) {
 
 const actions = {
   removePersonFromPlan: ({ commit, getters }, { personId, seatNo }) => {
-    let person = getters.personById(personId)
-    let seat = getters.seatByNo(seatNo)
+    const person = getters.personById(personId)
+    const seat = getters.seatByNo(seatNo)
     commit('removePersonFromPlan', { person, seat })
     commit('decrementPersonsPlacedCount', person.grade)
   },
   removePersonFromPlanWithoutSeatNo: ({ commit, getters }, person) => {
-    let plans = getters.plans
+    const plans = getters.plans
     if (plans.hasOwnProperty(person.grade)) {
-      let gradePlan = plans[person.grade]
+      const gradePlan = plans[person.grade]
       for (const [seatNo, personInPlan] of Object.entries(gradePlan)) {
         if (arePersonsEqual(personInPlan, person)) {
-          let seat = getters.seatByNo(seatNo)
+          const seat = getters.seatByNo(seatNo)
           commit('removePersonFromPlan', { person, seat })
           commit('decrementPersonsPlacedCount', person.grade)
           return

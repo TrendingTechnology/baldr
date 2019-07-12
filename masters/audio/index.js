@@ -12,7 +12,7 @@ const { Howl } = require('howler')
 // Project packages.
 const { Media } = require('@bldr/foundation-master')
 
-let audioFiles = {}
+const audioFiles = {}
 let audio
 
 /**
@@ -122,8 +122,8 @@ exports.quickStartEntries = function () {
  * @see {@link module:@bldr/core/masters~Master#normalizeData}
  */
 exports.normalizeData = function (rawSlideData, config) {
-  let inputFiles = new Media(config.sessionDir)
-  let files = inputFiles.orderedList(rawSlideData, 'audio')
+  const inputFiles = new Media(config.sessionDir)
+  const files = inputFiles.orderedList(rawSlideData, 'audio')
 
   var mousetrapbind = function (key, combo) {
     audio.play(audioFiles[key.key])
@@ -141,7 +141,7 @@ exports.normalizeData = function (rawSlideData, config) {
  */
 exports.mainHTML = function (slide, config, document) {
   let out = ''
-  for (let audioFile of slide.masterData) {
+  for (const audioFile of slide.masterData) {
     out += `
 <li>
   <span class="artist">${audioFile.artist}</span>:

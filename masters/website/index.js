@@ -42,6 +42,6 @@ exports.quickStartEntries = function () {
  * @see {@link module:@bldr/core/masters~Master#mainHTML}
  */
 exports.mainHTML = function (slide, config, document) {
-  let data = slide.masterData
+  const data = slide.masterData
   return `<webview src="${data}"></webview>`
 }

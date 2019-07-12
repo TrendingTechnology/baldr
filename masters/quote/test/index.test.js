@@ -5,19 +5,19 @@ const {
 
 const quote = require('@bldr/master-quote')
 
-let render = function (data) {
+const render = function (data) {
   return quote.mainHTML({ masterData: data })
 }
 
 describe('Master slide “quote”: unit tests #unittest', () => {
   it('function “hookSetHTMLSlide()”: all values', () => {
-    let html = render({
+    const html = render({
       text: 'text',
       author: 'author',
       date: 'date'
     })
 
-    let doc = makeDOM(html)
+    const doc = makeDOM(html)
     assert.ok(html.includes('text'))
     assert.equal(
       doc.querySelector('.text').textContent,
@@ -46,11 +46,11 @@ describe('Master slide “quote”: unit tests #unittest', () => {
   })
 
   it('function “hookSetHTMLSlide()”: no author', () => {
-    let html = render({
+    const html = render({
       text: 'text',
       date: 'date'
     })
-    let doc = makeDOM(html)
+    const doc = makeDOM(html)
     assert.equal(
       doc.querySelector('.date').textContent,
       'date'
@@ -62,11 +62,11 @@ describe('Master slide “quote”: unit tests #unittest', () => {
   })
 
   it('function “hookSetHTMLSlide()”: no date', () => {
-    let html = render({
+    const html = render({
       text: 'text',
       author: 'author'
     })
-    let doc = makeDOM(html)
+    const doc = makeDOM(html)
     assert.equal(
       doc.querySelector('.author').textContent,
       'author'
@@ -78,10 +78,10 @@ describe('Master slide “quote”: unit tests #unittest', () => {
   })
 
   it('function “hookSetHTMLSlide()”: only text', () => {
-    let html = render({
+    const html = render({
       text: 'text'
     })
-    let doc = makeDOM(html)
+    const doc = makeDOM(html)
     assert.equal(
       doc.querySelector('.attribution'),
       null

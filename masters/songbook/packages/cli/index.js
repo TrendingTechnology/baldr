@@ -46,14 +46,14 @@ function parseCliArguments (argv, version) {
  * Main function: This function gets executed when the script is called
  * on the command line.
  */
-let main = function () {
-  let options = parseCliArguments(process.argv, pckg.version)
+const main = function () {
+  const options = parseCliArguments(process.argv, pckg.version)
 
   if (options.folder) {
     options.force = true
   }
 
-  let { status, unavailable } = checkExecutables([
+  const { status, unavailable } = checkExecutables([
     'mscore-to-eps.sh',
     'pdf2svg',
     'pdfcrop',
@@ -63,7 +63,7 @@ let main = function () {
   ])
 
   if (!status) {
-    let e = new Error(
+    const e = new Error(
       'Some dependencies are not installed: “' +
       unavailable.join('”, “') +
       '”'
@@ -72,7 +72,7 @@ let main = function () {
     throw e
   }
 
-  let config = bootstrapConfig()
+  const config = bootstrapConfig()
 
   let mode
   if (options.slides) {
@@ -92,7 +92,7 @@ let main = function () {
   if (!options.hasOwnProperty('pageTurnOptimized')) options.pageTurnOptimized = false
 
   console.log(util.format('The base path of the song collection is located at:\n    %s\n', config.path.cyan))
-  let library = new IntermediateLibrary(config.path)
+  const library = new IntermediateLibrary(config.path)
   console.log(util.format('Found %s songs.', library.countSongs()))
   if (options.list) library.loadSongList(options.list)
 
@@ -105,7 +105,7 @@ let main = function () {
   } else {
     library.update(mode, options.force)
     if (mode === 'piano' || mode === 'all') {
-      let pianoScore = new PianoScore(library, options.groupAlphabetically, options.pageTurnOptimized)
+      const pianoScore = new PianoScore(library, options.groupAlphabetically, options.pageTurnOptimized)
       pianoScore.compile()
     }
   }

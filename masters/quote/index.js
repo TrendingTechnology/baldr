@@ -8,7 +8,7 @@
 /**
  *
  */
-let renderAttribution = function (author = '', date = '') {
+const renderAttribution = function (author = '', date = '') {
   let comma = ''
 
   if (author) {
@@ -22,7 +22,7 @@ let renderAttribution = function (author = '', date = '') {
   if (author && date) {
     comma = ', '
   }
-  let attribution = author + comma + date
+  const attribution = author + comma + date
 
   if (attribution) {
     return `<p class="attribution">${attribution}</p>`
@@ -34,7 +34,7 @@ let renderAttribution = function (author = '', date = '') {
 /**
  *
  */
-let renderQuotationMark = function (begin = true) {
+const renderQuotationMark = function (begin = true) {
   let mark = '»'
   let id = 'begin'
   if (!begin) {
@@ -61,10 +61,10 @@ exports.config = {
  * @see {@link module:@bldr/core/masters~Master#mainHTML}
  */
 exports.mainHTML = function (slide, config, document) {
-  let data = slide.masterData
-  let attribution = renderAttribution(data.author, data.date)
-  let begin = renderQuotationMark()
-  let end = renderQuotationMark(false)
+  const data = slide.masterData
+  const attribution = renderAttribution(data.author, data.date)
+  const begin = renderQuotationMark()
+  const end = renderQuotationMark(false)
   return `
 <section id="@bldr/master-quote">
 

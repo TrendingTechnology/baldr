@@ -29,7 +29,7 @@ const { Environment } = require('@bldr/core')
  * @returns {string} The path of the required file inside the package.
  */
 exports.packageFilePath = function (packageName, pathSegment) {
-  let segments = Array.from(arguments).slice(1)
+  const segments = Array.from(arguments).slice(1)
   return path.join(path.dirname(require.resolve(packageName)), ...segments)
 }
 
@@ -101,7 +101,7 @@ exports.makeDOM = function (html) {
   return new JSDOM(html).window.document
 }
 
-let renderHTMLPath = path.join(path.dirname(require.resolve('@bldr/electron-app')), 'render.html')
+const renderHTMLPath = path.join(path.dirname(require.resolve('@bldr/electron-app')), 'render.html')
 
 /**
  * The document object (DOM) of the file “render.html”.
@@ -188,7 +188,7 @@ class Spectron {
      * @type {object}
      */
     this.packageJson = require(path.join(this.packagePath, 'package.json'))
-    let electronName = this.packageJson.name.replace('/', '-')
+    const electronName = this.packageJson.name.replace('/', '-')
 
     /**
      *
@@ -211,7 +211,7 @@ class Spectron {
      */
     this.appPath = path.join(this.distFolder, this.appName, ...darwinPath, electronName)
 
-    let config = {
+    const config = {
       path: this.appPath
     }
     if (baldrFile) config.args = [baldrFile]

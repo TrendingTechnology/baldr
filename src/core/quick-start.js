@@ -128,9 +128,9 @@ class QuickStart {
    */
   collectEntries_ () {
     let entries = []
-    for (let masterName of this.env.masters.all) {
-      let rawEntries = this.env.masters[masterName].quickStartEntries()
-      for (let index in rawEntries) {
+    for (const masterName of this.env.masters.all) {
+      const rawEntries = this.env.masters[masterName].quickStartEntries()
+      for (const index in rawEntries) {
         rawEntries[index].masterName = masterName
         if (!rawEntries[index].hasOwnProperty('data')) {
           rawEntries[index].data = true
@@ -139,9 +139,9 @@ class QuickStart {
       entries = entries.concat(rawEntries)
     }
 
-    let out = []
-    for (let index in entries) {
-      let no = Number.parseInt(index) + 1
+    const out = []
+    for (const index in entries) {
+      const no = Number.parseInt(index) + 1
       out.push(new QuickStartEntry(entries[index], entries[index].masterName, no))
     }
 
@@ -154,7 +154,7 @@ class QuickStart {
    * @return {object} {@link https://developer.mozilla.org/en-US/docs/Web/API/HTMLButtonElement HTMLButtonElement}
    */
   renderButton_ (entry) {
-    let button = this.env.document.createElement('button')
+    const button = this.env.document.createElement('button')
     let shortcut = ''
     if (checkProperty.isString(entry, 'shortcut')) {
       shortcut = ` (${entry.shortcut})`
@@ -170,8 +170,8 @@ class QuickStart {
    *
    */
   renderNavigationMenu_ () {
-    for (let entry of this.entries) {
-      let button = this.renderButton_(entry)
+    for (const entry of this.entries) {
+      const button = this.renderButton_(entry)
       this.elemNavigationMenu.appendChild(button)
     }
   }
@@ -187,8 +187,8 @@ class QuickStart {
    *
    */
   bind (showRunner, mousetrap) {
-    for (let entry of this.entries) {
-      let func = () => {
+    for (const entry of this.entries) {
+      const func = () => {
         showRunner.setInstantSlide(
           entry.masterName,
           entry.data,

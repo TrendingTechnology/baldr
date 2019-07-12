@@ -6,12 +6,12 @@ const tmp = require('tmp')
 const util = require('util')
 
 exports.assertExists = function () {
-  let file = path.join.apply(null, arguments)
+  const file = path.join.apply(null, arguments)
   assert.ok(fs.existsSync(file), util.format('File exists not: %s', file))
 }
 
 exports.assertNotExists = function () {
-  let file = path.join.apply(null, arguments)
+  const file = path.join.apply(null, arguments)
   assert.ok(!fs.existsSync(file), util.format('File exists: %s', file))
 }
 
@@ -27,7 +27,7 @@ exports.mkTmpFile = function () {
 /**
  * @param {number} pianoFilesCount - Number of piano files
  */
-let fakeSong = function (pianoFilesCount) {
+const fakeSong = function (pianoFilesCount) {
   return {
     title: `${pianoFilesCount} piano file(s)`,
     pianoFiles: {
@@ -53,11 +53,11 @@ let fakeSong = function (pianoFilesCount) {
  * </pre><code>
  */
 exports.fakeSongs = function (config) {
-  let songs = []
+  const songs = []
   // Level 1: countCategory
-  for (let numberPianoFiles in config) {
+  for (const numberPianoFiles in config) {
     // Level 2: numberOfSongs
-    let numberOfSongs = config[numberPianoFiles]
+    const numberOfSongs = config[numberPianoFiles]
     for (let i = 1; i <= numberOfSongs; i++) {
       songs.push(fakeSong(numberPianoFiles))
     }
@@ -73,7 +73,7 @@ exports.fakeSongs = function (config) {
  * @return {string} Path of the temporary directory.
  */
 exports.tmpCopy = function (folder1, folder2) {
-  let tmpDir = mkTmpDir()
+  const tmpDir = mkTmpDir()
   fs.copySync(path.resolve(__dirname, 'songs', folder1, folder2), tmpDir)
   return tmpDir
 }

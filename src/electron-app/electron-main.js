@@ -21,7 +21,7 @@ let mainWindow
  * Build menu for the main process.
  * @function buildMenu
  */
-let buildMenu = function () {
+const buildMenu = function () {
   const template = [
     {
       label: 'View',
@@ -115,7 +115,7 @@ let buildMenu = function () {
   )
 }
 
-let loadURL = function () {
+const loadURL = function () {
   mainWindow.loadURL(url.format({
     pathname: path.join(__dirname, ...arguments),
     protocol: 'file:',
@@ -127,7 +127,7 @@ let loadURL = function () {
  * Create render window.
  * @function createWindow
  */
-let createWindow = function () {
+const createWindow = function () {
   mainWindow = new BrowserWindow({ width: 800, height: 600, webPreferences: { nodeIntegration: true } })
   loadURL('render.html')
   buildMenu()

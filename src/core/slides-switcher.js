@@ -57,7 +57,7 @@ class SlidesSwitcher {
    *
    */
   setVisibility_ (state) {
-    for (let prop in this.elemNavigationButtons) {
+    for (const prop in this.elemNavigationButtons) {
       this.elemNavigationButtons[prop].style.visibility = state
     }
   }

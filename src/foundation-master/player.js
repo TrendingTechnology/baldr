@@ -130,8 +130,8 @@ class Player {
    *
    */
   setTime () {
-    let minutes = Math.floor(this.media.currentTime / 60)
-    let seconds = Math.floor(this.media.currentTime - minutes * 60)
+    const minutes = Math.floor(this.media.currentTime / 60)
+    const seconds = Math.floor(this.media.currentTime - minutes * 60)
     let minuteValue
     let secondValue
 
@@ -150,7 +150,7 @@ class Player {
     this.mediaTime = minuteValue + ':' + secondValue
     this.timer.textContent = this.mediaTime
 
-    let barLength = this.timerWrapper.clientWidth * (this.media.currentTime / this.media.duration)
+    const barLength = this.timerWrapper.clientWidth * (this.media.currentTime / this.media.duration)
     this.timerBar.style.width = barLength + 'px'
   }
 }

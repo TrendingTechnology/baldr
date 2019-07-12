@@ -14,9 +14,9 @@ const { ShowRunner } = require('@bldr/core')
 /**
  * Toogle the modal window
  */
-let toggleModal = function () {
-  let modal = document.getElementById('modal')
-  let state = modal.style.display
+const toggleModal = function () {
+  const modal = document.getElementById('modal')
+  const state = modal.style.display
   if (state === 'none') {
     modal.style.display = 'block'
     return 'block'
@@ -31,15 +31,15 @@ let toggleModal = function () {
 /**
  *
  */
-let bindFunction = function (binding) {
+const bindFunction = function (binding) {
   if (binding.keys) {
-    for (let key of binding.keys) {
+    for (const key of binding.keys) {
       mousetrap.bind(key, binding.function)
     }
   }
 
   if (binding.IDs) {
-    for (let ID of binding.IDs) {
+    for (const ID of binding.IDs) {
       document
         .getElementById(ID)
         .addEventListener('click', binding.function)
@@ -50,8 +50,8 @@ let bindFunction = function (binding) {
 /**
  *
  */
-let bindFunctions = function (bindings) {
-  for (let binding of bindings) {
+const bindFunctions = function (bindings) {
+  for (const binding of bindings) {
     bindFunction(binding)
   }
 }
@@ -59,7 +59,7 @@ let bindFunctions = function (bindings) {
 /**
  *
  */
-let errorPage = function (message, source, lineNo, colNo, error) {
+const errorPage = function (message, source, lineNo, colNo, error) {
   document.getElementById('slide-content').innerHTML = `
   <p>${message}</p>
   <p>Source: ${source}</p>
@@ -76,9 +76,9 @@ let errorPage = function (message, source, lineNo, colNo, error) {
 /**
  * Initialize the presentaton session.
  */
-let main = function () {
+const main = function () {
   window.onerror = errorPage
-  let show = new ShowRunner(remote.process.argv, document, mousetrap)
+  const show = new ShowRunner(remote.process.argv, document, mousetrap)
 
   bindFunctions(
     [

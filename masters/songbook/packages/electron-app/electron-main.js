@@ -14,8 +14,8 @@ let win
  * @param {string} hash The URL hash starting with “#”
  * @return {string} The formated URL string
  */
-let setUrl = function (htmlFile, hash = false) {
-  let url = {
+const setUrl = function (htmlFile, hash = false) {
+  const url = {
     protocol: 'file',
     slashes: true,
     pathname: require('path').join(__dirname, htmlFile)
@@ -121,7 +121,7 @@ const menu = Menu.buildFromTemplate(template)
 
 function mirrorMonitors (state) {
   if (process.platform === 'darwin') {
-    let exec = require('child_process').exec
+    const exec = require('child_process').exec
     exec('/usr/local/bin/mirror -' + state, function (error, stdout, stderr) {
       if (error !== null) {
         console.log('exec error: ' + error)

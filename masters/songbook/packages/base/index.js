@@ -38,8 +38,8 @@ function bootstrapConfig () {
   let config = configDefault
 
   // config file
-  let configFile = path.join(os.homedir(), '.baldr.json')
-  let configFileExits = fs.existsSync(configFile)
+  const configFile = path.join(os.homedir(), '.baldr.json')
+  const configFileExits = fs.existsSync(configFile)
   if (configFileExits) {
     config = Object.assign(config, require(configFile).songbook)
   }
@@ -55,7 +55,7 @@ function bootstrapConfig () {
 }
 
 function parseSongIDList (listPath) {
-  let content = fs.readFileSync(listPath, { encoding: 'utf-8' })
+  const content = fs.readFileSync(listPath, { encoding: 'utf-8' })
   return content.split(/\s+/).filter(songID => songID)
 }
 
@@ -183,7 +183,7 @@ class Message {
   }
 }
 
-let message = new Message()
+const message = new Message()
 
 /**
  *
@@ -377,13 +377,13 @@ class SongMetaData {
      */
     this.folder = folder
 
-    let ymlFile = path.join(folder, this.yamlFile)
+    const ymlFile = path.join(folder, this.yamlFile)
     if (!fs.existsSync(ymlFile)) {
       throw new Error(util.format('YAML file could not be found: %s', ymlFile))
     }
-    let raw = yaml.safeLoad(fs.readFileSync(ymlFile, 'utf8'))
+    const raw = yaml.safeLoad(fs.readFileSync(ymlFile, 'utf8'))
 
-    for (let key in raw) {
+    for (const key in raw) {
       if (!this.allowedProperties.includes(key)) {
         throw new Error(util.format('Unsupported key: %s', key))
       }
@@ -419,8 +419,8 @@ class SongMetaDataCombined {
    * @params {object} object - An object.
    */
   static collectProperties_ (properties, object) {
-    let parts = []
-    for (let property of properties) {
+    const parts = []
+    for (const property of properties) {
       if (property in object && object[property]) {
         parts.push(object[property])
       }
@@ -600,8 +600,8 @@ class Song {
    * @return {string} A single character
    */
   recognizeABCFolder_ (folder) {
-    let pathSegments = folder.split(path.sep)
-    let abc = pathSegments[pathSegments.length - 2]
+    const pathSegments = folder.split(path.sep)
+    const abc = pathSegments[pathSegments.length - 2]
     return abc
   }
 
@@ -616,7 +616,7 @@ class Song {
    */
   detectFile_ (file) {
     let absPath
-    for (let argument of arguments) {
+    for (const argument of arguments) {
       absPath = path.join(this.folder, argument)
       if (fs.existsSync(absPath)) {
         return absPath
@@ -635,7 +635,7 @@ class Song {
    * @return {array} An array of file names.
    */
   getFolderFiles_ (subFolder, filter) {
-    let folder = path.join(this.folder, subFolder)
+    const folder = path.join(this.folder, subFolder)
     if (fs.existsSync(folder)) {
       return fs.readdirSync(folder).filter((file) => {
         return file.indexOf(filter) > -1
@@ -667,11 +667,11 @@ class AlphabeticalSongsTree {
    * @param {module:baldr-songbook~songs} songs - An array of song objects.
    */
   constructor (songs) {
-    for (let song of songs) {
+    for (const song of songs) {
       if (!this.hasOwnProperty(song.abc)) this[song.abc] = []
       this[song.abc].push(song)
     }
-    for (let abc in this) {
+    for (const abc in this) {
       this[abc].sort(sortObjectsByProperty('songID'))
     }
   }
@@ -759,9 +759,9 @@ class Library {
    * objects.
    */
   collectSongs_ () {
-    let songs = {}
-    for (let songPath of this.detectSongs_()) {
-      let song = new Song(path.join(this.basePath, songPath))
+    const songs = {}
+    for (const songPath of this.detectSongs_()) {
+      const song = new Song(path.join(this.basePath, songPath))
       if (song.songID in songs) {
         throw new Error(
           util.format('A song with the same songID already exists: %s',
@@ -776,9 +776,9 @@ class Library {
    * @param {string} listFile
    */
   loadSongList (listFile) {
-    let songIDs = parseSongIDList(listFile)
-    let songs = {}
-    for (let songID of songIDs) {
+    const songIDs = parseSongIDList(listFile)
+    const songs = {}
+    for (const songID of songIDs) {
       if (this.songs.hasOwnProperty(songID)) {
         songs[songID] = this.songs[songID]
       } else {
@@ -795,9 +795,9 @@ class Library {
    * @return {Array}
    */
   getABCFolders_ () {
-    let abc = '0abcdefghijklmnopqrstuvwxyz'.split('')
+    const abc = '0abcdefghijklmnopqrstuvwxyz'.split('')
     return abc.filter((file) => {
-      let folder = path.join(this.basePath, file)
+      const folder = path.join(this.basePath, file)
       if (fs.existsSync(folder) && fs.statSync(folder).isDirectory()) {
         return true
       } else {

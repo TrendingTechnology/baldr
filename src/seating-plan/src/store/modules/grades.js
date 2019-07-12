@@ -28,21 +28,21 @@ const getters = {
     return get.grade(person.grade)
   },
   gradeNames: (state) => {
-    let gradeNames = Object.keys(state)
+    const gradeNames = Object.keys(state)
     return gradeNames.sort(naturalSort)
   },
   currentGradeObject: (state, get) => {
-    let gradeName = get.currentGrade
+    const gradeName = get.currentGrade
     if (gradeName) {
       return get.grade(gradeName)
     }
   },
   currentPersonsCount: (state, get) => {
-    let grade = get.grade(get.currentGrade)
+    const grade = get.grade(get.currentGrade)
     return grade.personsCount
   },
   jobsOfGrade: (state, get) => (gradeName) => {
-    let grade = get.grade(gradeName)
+    const grade = get.grade(gradeName)
     if (grade.hasOwnProperty('jobs')) {
       return grade.jobs
     }
@@ -57,7 +57,7 @@ const getters = {
    * @returns boolean
    */
   isGradePlaced: (state, get) => {
-    let grade = get.currentGradeObject
+    const grade = get.currentGradeObject
     if (grade && grade.personsCount === grade.personsPlacedCount) {
       return true
     }
@@ -67,14 +67,14 @@ const getters = {
     if (!personId) {
       return false
     }
-    let grade = get.currentGradeObject
+    const grade = get.currentGradeObject
     return grade.hasOwnProperty('jobs') &&
       grade.jobs.hasOwnProperty(jobName) &&
       grade.jobs[jobName].hasOwnProperty(personId)
   },
   getJobsOfPerson: (state, get) => (person) => {
-    let grade = get.gradeOfPerson(person)
-    let jobNames = []
+    const grade = get.gradeOfPerson(person)
+    const jobNames = []
     if (grade.hasOwnProperty('jobs')) {
       for (const [jobName, persons] of Object.entries(grade.jobs)) {
         for (const [personId, person] of Object.entries(persons)) {
@@ -91,27 +91,27 @@ const getters = {
 const actions = {
   addGrade: ({ commit, getters }, name) => {
     if (!getters.grade(name)) {
-      let grade = new Grade(name)
+      const grade = new Grade(name)
       commit('addGrade', grade)
     }
   },
   deleteGrade: ({ commit, getters }, gradeName) => {
     const persons = getters.personsByGrade(gradeName)
-    for (let person of persons) {
+    for (const person of persons) {
       commit('deletePerson', person)
     }
     commit('deleteGrade', gradeName)
   },
   addPersonToJob: ({ commit, getters }, { personId, jobName }) => {
-    let person = getters.personById(personId)
-    let grade = getters.grade(person.grade)
-    let job = getters.jobByName(jobName)
+    const person = getters.personById(personId)
+    const grade = getters.grade(person.grade)
+    const job = getters.jobByName(jobName)
     commit('addPersonToJob', { grade, person, job })
   },
   removePersonFromJob: ({ commit, getters }, { personId, jobName }) => {
-    let person = getters.personById(personId)
-    let grade = getters.grade(person.grade)
-    let job = getters.jobByName(jobName)
+    const person = getters.personById(personId)
+    const grade = getters.grade(person.grade)
+    const job = getters.jobByName(jobName)
     commit('removePersonFromJob', { grade, person, job })
   }
 }

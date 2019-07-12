@@ -11,8 +11,8 @@
  *
  */
 exports.reIndex = function (array) {
-  let out = {}
-  for (let index in array) {
+  const out = {}
+  for (const index in array) {
     out[Number.parseInt(index) + 1] = array[index]
   }
   return out
@@ -27,7 +27,7 @@ exports.reIndex = function (array) {
  * @param {string} className A CSS class name to add to the link element.
  */
 exports.addCSSFile = function (document, cssFile, className = false) {
-  let link = document.createElement('link')
+  const link = document.createElement('link')
   link.rel = 'stylesheet'
   link.type = 'text/css'
   if (className) {

@@ -12,16 +12,16 @@ console.log('Environment:\n')
 console.log(process.env)
 console.log('\n\n')
 
-for (let distPath of ['src/electron-app/dist', 'masters/songbook/packages/electron-app/dist', 'masters/camera/electron-app/dist']) {
+for (const distPath of ['src/electron-app/dist', 'masters/songbook/packages/electron-app/dist', 'masters/camera/electron-app/dist']) {
   fs.removeSync(distPath)
   console.log(util.format('Delete electron app at the location: %s', distPath))
 }
 
-let files = glob.sync('*.test.js', { ignore: ['**/node_modules/**', '**/dist/**'], matchBase: true })
+const files = glob.sync('*.test.js', { ignore: ['**/node_modules/**', '**/dist/**'], matchBase: true })
 
-let mocha = new Mocha({ timeout: 50000 })
+const mocha = new Mocha({ timeout: 50000 })
 
-for (let file of files) {
+for (const file of files) {
   console.log(util.format('Load test file: %s', file))
   mocha.addFile(file)
 }

@@ -13,7 +13,7 @@ const { getConfig } = require('@bldr/foundation-master')
 /**
  * @param {string} fileName
  */
-let requireLib = function (fileName) {
+const requireLib = function (fileName) {
   return require(path.join(__dirname, fileName + '.js'))
 }
 

@@ -7,15 +7,15 @@ const {
 
 const person = require('@bldr/master-person')
 
-let config = cloneConfig()
+const config = cloneConfig()
 config.sessionDir = path.resolve(__dirname, '..')
 
-let normalizeData = function (data) {
+const normalizeData = function (data) {
   return person.normalizeData(data, config)
 }
 
-let mainHTML = function (data) {
-  let masterData = person.normalizeData(data, config)
+const mainHTML = function (data) {
+  const masterData = person.normalizeData(data, config)
   return person.mainHTML({ masterData: masterData }, config)
 }
 
@@ -49,12 +49,12 @@ describe('Master slide “person” #unittest', () => {
   })
 
   it('function “mainHTML()”', () => {
-    let html = mainHTML({
+    const html = mainHTML({
       name: 'Ludwig van Beethoven',
       image: 'beethoven.jpg'
     })
 
-    let doc = makeDOM(html)
+    const doc = makeDOM(html)
     assert.equal(
       doc.querySelector('.info-box .person').textContent,
       'Ludwig van Beethoven'

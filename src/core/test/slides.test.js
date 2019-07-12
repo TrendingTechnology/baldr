@@ -5,7 +5,7 @@ const {
   packageFilePath
 } = require('@bldr/test-helper')
 
-let slidesJsPath = packageFilePath('@bldr/core', 'slides.js')
+const slidesJsPath = packageFilePath('@bldr/core', 'slides.js')
 const { Slide } = require(slidesJsPath)
 const Slides = rewire(slidesJsPath).__get__('Slides')
 const SlideData = rewire(slidesJsPath).__get__('SlideData')
@@ -17,29 +17,29 @@ let slide
  **********************************************************************/
 
 describe('Class “SlideData()” #unittest', () => {
-  let getInput = function (rawSlideData) {
+  const getInput = function (rawSlideData) {
     return new SlideData(rawSlideData, freshEnv())
   }
-  let input = getInput({ markdown: 'text' })
+  const input = getInput({ markdown: 'text' })
 
   describe('Instantiation', () => {
     describe('Valid input on “rawSlideData”', () => {
       it('String', () => {
-        let input = getInput('camera')
+        const input = getInput('camera')
         assert.equal(input.masterName, 'camera')
         assert.equal(input.rawMasterData, true)
         assert.equal(input.themeName, false)
       })
 
       it('Object: only master property', () => {
-        let input = getInput({ 'camera': true })
+        const input = getInput({ camera: true })
         assert.equal(input.masterName, 'camera')
         assert.equal(input.rawMasterData, true)
         assert.equal(input.themeName, false)
       })
 
       it('Object: only master property', () => {
-        let input = getInput({ camera: true, theme: 'default' })
+        const input = getInput({ camera: true, theme: 'default' })
         assert.equal(input.masterName, 'camera')
         assert.equal(input.rawMasterData, true)
         assert.equal(input.themeName, 'default')
@@ -191,10 +191,10 @@ describe('Class “SlideData()” #unittest', () => {
 describe('Class “Slide()” #unittest', () => {
   beforeEach(() => {
     slide = new Slide({
-      'question': [
+      question: [
         {
-          'question': 'question',
-          'answer': 'answer'
+          question: 'question',
+          answer: 'answer'
         }
       ] },
     freshEnv()
@@ -249,7 +249,7 @@ describe('Class “Slide()” #unittest', () => {
   describe('Methods', () => {
     it('Method “setCover_()”', () => {
       slide.setCover_('red', 99)
-      let cover = slide.env.document.getElementById('cover')
+      const cover = slide.env.document.getElementById('cover')
       assert.equal(cover.style.backgroundColor, 'red')
       assert.equal(cover.style.zIndex, 99)
     })
@@ -267,13 +267,13 @@ describe('Class “Slide()” #unittest', () => {
   })
 
   describe('Method “setDataset_()”', () => {
-    let env = freshEnv()
+    const env = freshEnv()
 
-    let slide = new Slide({
-      'question': [
+    const slide = new Slide({
+      question: [
         {
-          'question': 'question',
-          'answer': 'answer'
+          question: 'question',
+          answer: 'answer'
         }
       ] },
     env
@@ -324,7 +324,7 @@ describe('Class “Slides()”', () => {
 
   describe('Methods', () => {
     it('Method “get()”', () => {
-      let result = slidesClass.get()
+      const result = slidesClass.get()
       assert.equal(result[1].master.name, 'quote')
       assert.equal(result[2].master.name, 'question')
       assert.equal(result[3].master.name, 'person')

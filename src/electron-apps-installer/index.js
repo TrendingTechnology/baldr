@@ -11,7 +11,7 @@ const commander = require('commander')
 const fs = require('fs-extra')
 const packager = require('electron-packager')
 
-let currentUser = os.userInfo()
+const currentUser = os.userInfo()
 
 if (currentUser.username !== 'root') {
   throw new Error('You must be root!')
@@ -89,7 +89,7 @@ class PackageElectronApp {
     } else if (this.platform === 'linux') {
       // /opt/electron/songbook
       this.out = path.join(this.destPrefix, this.destName)
-      fs.mkdirSync(this.out, { 'recursive': true })
+      fs.mkdirSync(this.out, { recursive: true })
     }
 
     /**
@@ -148,9 +148,9 @@ class PackageElectronApp {
    * Install a icon into the icons folder on linux.
    */
   installIconOnLinux () {
-    let iconSrc = path.join(this.packagePath, 'icon.iconset', 'icon_256x256.png')
-    let iconDest = path.join(this.iconPath, this.destName + '.png')
-    fs.mkdirSync(this.iconPath, { 'recursive': true })
+    const iconSrc = path.join(this.packagePath, 'icon.iconset', 'icon_256x256.png')
+    const iconDest = path.join(this.iconPath, this.destName + '.png')
+    fs.mkdirSync(this.iconPath, { recursive: true })
     fs.copyFileSync(iconSrc, iconDest)
     log('Copy icon from %s to %s', iconSrc, iconDest)
   }
@@ -159,14 +159,14 @@ class PackageElectronApp {
    * Install the `*.desktop` file in the application folder.
    */
   installDesktopFileOnLinux () {
-    let desktopContent = `[Desktop Entry]
+    const desktopContent = `[Desktop Entry]
 Name=${this.destName}
 Exec=${this.executablePath}
 Icon=${this.iconPath}/${this.destName}.png
 Terminal=false
 Type=Application`
-    let desktopPrefix = path.join('/', 'usr', 'share', 'applications')
-    let desktopPath = path.join(desktopPrefix, this.destName + '.desktop')
+    const desktopPrefix = path.join('/', 'usr', 'share', 'applications')
+    const desktopPath = path.join(desktopPrefix, this.destName + '.desktop')
     fs.removeSync(desktopPath)
     fs.appendFileSync(desktopPath, desktopContent)
     log('Create *.desktop file at the location: %s', desktopPath)
@@ -177,11 +177,11 @@ Type=Application`
    * Install a start script into /usr/local/bin
    */
   installStarterScript () {
-    let scriptContent = `#! /bin/sh
+    const scriptContent = `#! /bin/sh
 
 ${this.executablePath} > /dev/null 2>&1 &
 `
-    let scriptPath = path.join(
+    const scriptPath = path.join(
       path.sep, 'usr', 'local', 'bin', this.destName + '_open-electron-app'
     )
     fs.removeSync(scriptPath)
@@ -199,8 +199,8 @@ ${this.executablePath} > /dev/null 2>&1 &
    *   into.
    */
   moveElectronAppIntoApplicationsOnMacOs (paths) {
-    let tmpAppPath = path.join(paths[0], this.executableName + '.app')
-    let destAppPath = path.join(this.destPrefix, this.destName + '.app')
+    const tmpAppPath = path.join(paths[0], this.executableName + '.app')
+    const destAppPath = path.join(this.destPrefix, this.destName + '.app')
     fs.removeSync(destAppPath)
     fs.moveSync(tmpAppPath, destAppPath)
     log('move %s %s', tmpAppPath, destAppPath)
@@ -225,7 +225,7 @@ ${this.executablePath} > /dev/null 2>&1 &
     }
 
     log('Destination folder “%s”', this.out)
-    let packageConfig = {
+    const packageConfig = {
       // name: destName,
       // executableName: 'entry-point',
       dir: this.packagePath,

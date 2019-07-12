@@ -31,7 +31,7 @@ describe('Class “Config()” #unittest', () => {
 
   describe('Methods', () => {
     it('Method “parseYamlFile_()”', () => {
-      let yml = config.parseYamlFile_(testFileMinimal)
+      const yml = config.parseYamlFile_(testFileMinimal)
       assert.equal(yml.slides[0].quote.author, 'Johann Wolfgang von Goethe')
       assert.equal(yml.slides[1].question, 'When did Ludwig van Beethoven die?')
     })

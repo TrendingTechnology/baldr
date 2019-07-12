@@ -67,6 +67,6 @@ exports.config = {
  * @see {@link module:@bldr/core/masters~Master#mainHTML}
  */
 exports.mainHTML = function (slide, config, document) {
-  let path = slide.masterData[0].path
+  const path = slide.masterData[0].path
   return `<img id="@bldr/master-image" src="${path}">`
 }

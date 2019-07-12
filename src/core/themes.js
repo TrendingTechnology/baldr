@@ -49,8 +49,8 @@ class Themes {
      * @type {array}
      */
     this.all = []
-    for (let packageName of this.packageNames) {
-      let theme = require(packageName)
+    for (const packageName of this.packageNames) {
+      const theme = require(packageName)
       this.themes[theme.name] = theme
       this.all.push(theme.name)
     }
@@ -61,10 +61,10 @@ class Themes {
    * dependencies of the theme and then the real theme CSS file
    */
   getAllCSSFiles_ () {
-    let cssFiles = []
-    for (let packageName of this.packageNames) {
-      let theme = require(packageName)
-      for (let cssFile of theme.cssFiles) {
+    const cssFiles = []
+    for (const packageName of this.packageNames) {
+      const theme = require(packageName)
+      for (const cssFile of theme.cssFiles) {
         cssFiles.push(cssFile)
       }
       cssFiles.push(path.join(path.dirname(require.resolve(packageName)), 'styles.css'))
@@ -77,7 +77,7 @@ class Themes {
    * DOM.
    */
   loadThemes () {
-    for (let cssFile of this.getAllCSSFiles_()) {
+    for (const cssFile of this.getAllCSSFiles_()) {
       addCSSFile(this.document, cssFile, 'baldr-theme')
     }
   }
@@ -92,7 +92,7 @@ class Themes {
  *   object of the browser (DOM).
  */
 exports.getThemes = function (document) {
-  let themes = new Themes(document)
+  const themes = new Themes(document)
   themes.loadThemes()
   return themes
 }

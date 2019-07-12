@@ -17,7 +17,7 @@
 /**
  *
  */
-let normalizeDataQAPair = function (pair) {
+const normalizeDataQAPair = function (pair) {
   if (typeof pair === 'string') {
     return { question: pair, answer: false }
   } else if (typeof pair === 'object') {
@@ -36,7 +36,7 @@ let normalizeDataQAPair = function (pair) {
 /**
  *
  */
-let templatQAPair = function (question, answer) {
+const templatQAPair = function (question, answer) {
   let out = ''
   if (question) {
     out += `<p class="question">${question}</p>`
@@ -50,10 +50,10 @@ let templatQAPair = function (question, answer) {
 /**
  *
  */
-let template = function (data) {
+const template = function (data) {
   if (data.length > 1) {
     let li = ''
-    for (let pair of data) {
+    for (const pair of data) {
       li +=
         '<li>' +
         templatQAPair(pair.question, pair.answer) +
@@ -76,8 +76,8 @@ exports.name = 'question'
  */
 exports.normalizeData = function (rawSlideData, config) {
   if (typeof rawSlideData === 'object' && Array.isArray(rawSlideData)) {
-    let out = []
-    for (let pair of rawSlideData) {
+    const out = []
+    for (const pair of rawSlideData) {
       out.push(normalizeDataQAPair(pair))
     }
     return out
@@ -103,7 +103,7 @@ exports.setStepByNo = function (no, count, stepData, document) {
       stepData[i].style.visibility = 'visible'
     }
 
-    let visibility = stepData[i].style.visibility
+    const visibility = stepData[i].style.visibility
     if (visibility === 'visible' && no < i) {
       stepData[i].style.visibility = 'hidden'
     } else if (visibility === 'hidden' && no >= i) {
@@ -128,8 +128,8 @@ exports.mainHTML = function (slide, config, document) {
  * @see {@link module:@bldr/core/masters~Master#initStepsEveryVisit}
  */
 exports.initStepsEveryVisit = function (document, slide, config) {
-  let data = {}
-  let elements = document.querySelectorAll('p')
+  const data = {}
+  const elements = document.querySelectorAll('p')
   elements.forEach((element, index) => {
     data[index + 1] = element
   })

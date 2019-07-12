@@ -7,9 +7,9 @@ const {
 const { getSlides } = requireFile('@bldr/core', 'slides.js')
 const { SlidesSwitcher } = requireFile('@bldr/core', 'slides-switcher.js')
 
-let env = freshEnv()
-let slides = getSlides(env)
-let slidesSwitcher = new SlidesSwitcher(slides, env)
+const env = freshEnv()
+const slides = getSlides(env)
+const slidesSwitcher = new SlidesSwitcher(slides, env)
 
 /***********************************************************************
  *
@@ -50,17 +50,17 @@ describe('Class “SlidesSwitcher()” #unittest', () => {
 
   describe('Methods', () => {
     it('Method “getByNo()”', () => {
-      let slide = slidesSwitcher.getByNo(2)
+      const slide = slidesSwitcher.getByNo(2)
       assert.equal(slide.no, 2)
     })
 
     it('Method “prev()”', () => {
-      let slide = slidesSwitcher.prev()
+      const slide = slidesSwitcher.prev()
       assert.equal(slide.no, 3)
     })
 
     it('Method “next()”', () => {
-      let slide = slidesSwitcher.next()
+      const slide = slidesSwitcher.next()
       assert.equal(slide.no, 1)
     })
   })

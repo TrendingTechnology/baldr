@@ -6,21 +6,21 @@ const {
   packageFilePath
 } = require('@bldr/test-helper')
 
-let mediaJsPath = packageFilePath('@bldr/foundation-master', 'media.js')
+const mediaJsPath = packageFilePath('@bldr/foundation-master', 'media.js')
 const { Media } = require(mediaJsPath)
-let mediaRewired = rewire(mediaJsPath)
-let FileInfo = mediaRewired.__get__('FileInfo')
+const mediaRewired = rewire(mediaJsPath)
+const FileInfo = mediaRewired.__get__('FileInfo')
 
-let testFiles = path.resolve('test', 'files', 'mixed-extensions')
-let media = new Media(testFiles)
+const testFiles = path.resolve('test', 'files', 'mixed-extensions')
+const media = new Media(testFiles)
 
-let resolve = function (folder, file) {
+const resolve = function (folder, file) {
   return path.join(testFiles, folder, file)
 }
 
 describe('Class “FileInfo()” #unittest', () => {
   it('Instantiation', () => {
-    let list = new FileInfo(testFileMinimal)
+    const list = new FileInfo(testFileMinimal)
     assert.equal(typeof list, 'object')
     assert.equal(list.path, testFileMinimal)
     assert.equal(list.basename, 'minimal.baldr')
@@ -29,22 +29,22 @@ describe('Class “FileInfo()” #unittest', () => {
 
   describe('Properties', () => {
     it('Property “this.path”', () => {
-      let list = new FileInfo(testFileMinimal)
+      const list = new FileInfo(testFileMinimal)
       assert.equal(list.path, testFileMinimal)
     })
 
     it('Property “this.basename”', () => {
-      let list = new FileInfo(testFileMinimal)
+      const list = new FileInfo(testFileMinimal)
       assert.equal(list.basename, 'minimal.baldr')
     })
 
     it('Property “this.extension”', () => {
-      let list = new FileInfo(testFileMinimal)
+      const list = new FileInfo(testFileMinimal)
       assert.equal(list.extension, 'baldr')
     })
 
     it('Property “this.titleSafe', () => {
-      let getFileInfo = function () {
+      const getFileInfo = function () {
         return new FileInfo(
           path.resolve('test', 'files', 'media', ...arguments)
         )
@@ -67,12 +67,12 @@ describe('Class “FileInfo()” #unittest', () => {
 
   describe('Methods', () => {
     it('Method “readInfoYaml_()”', () => {
-      let basePath = path.resolve('test', 'files', 'media', 'image')
+      const basePath = path.resolve('test', 'files', 'media', 'image')
 
-      let testInfo = function (fileName, result) {
-        let filePath = path.resolve(basePath, fileName)
-        let file = new FileInfo(filePath)
-        let info = file.readInfoYaml_()
+      const testInfo = function (fileName, result) {
+        const filePath = path.resolve(basePath, fileName)
+        const file = new FileInfo(filePath)
+        const info = file.readInfoYaml_()
         assert.equal(info.title, result)
         assert.equal(file.title, result)
       }
@@ -163,7 +163,7 @@ describe('Class “Media()” #unittest', () => {
       })
 
       it('A folder', function () {
-        let out = media.list(
+        const out = media.list(
           path.resolve('test/files/mixed-extensions/image')
         )
         assert.equal(out[2].basename, 'mozart.jpeg')
@@ -194,27 +194,27 @@ describe('Class “Media()” #unittest', () => {
 
     describe('Method “orderedList()”', () => {
       it('Single file as string', () => {
-        let out = media.orderedList('image/beethoven.jpg')
+        const out = media.orderedList('image/beethoven.jpg')
         assert.equal(out[0].basename, 'beethoven.jpg')
       })
 
       it('Single file as array', () => {
-        let out = media.orderedList(['image/beethoven.jpg'])
+        const out = media.orderedList(['image/beethoven.jpg'])
         assert.equal(out[0].basename, 'beethoven.jpg')
       })
 
       it('Single folder as string', () => {
-        let out = media.orderedList('image')
+        const out = media.orderedList('image')
         assert.equal(out[2].basename, 'mozart.jpeg')
       })
 
       it('Single folder as array', () => {
-        let out = media.orderedList(['image'])
+        const out = media.orderedList(['image'])
         assert.equal(out[2].basename, 'mozart.jpeg')
       })
 
       it('Multiple folders as array', () => {
-        let out = media.orderedList(['image', 'audio'])
+        const out = media.orderedList(['image', 'audio'])
         assert.equal(out[0].basename, 'beethoven.jpg')
         assert.equal(out[0].path, path.join(testFiles, 'image', 'beethoven.jpg'))
         assert.equal(out[1].basename, 'haydn.png')
@@ -226,7 +226,7 @@ describe('Class “Media()” #unittest', () => {
       })
 
       it('Multiple files as array', () => {
-        let out = media.orderedList(
+        const out = media.orderedList(
           [
             'video/haydn.mp4',
             'audio/beethoven.m4a',
@@ -241,7 +241,7 @@ describe('Class “Media()” #unittest', () => {
     })
 
     it('Method “listRecursively_()”', () => {
-      let list = media.listRecursively_(
+      const list = media.listRecursively_(
         path.resolve('test', 'files', 'mixed-extensions')
       )
       assert.ok(list[0].includes('audio/beethoven.m4a'))
@@ -249,10 +249,10 @@ describe('Class “Media()” #unittest', () => {
     })
 
     it('Method “groupByTypes_()”', () => {
-      let list = media.listRecursively_(
+      const list = media.listRecursively_(
         path.resolve('test', 'files', 'mixed-extensions')
       )
-      let group = media.groupByTypes_(list)
+      const group = media.groupByTypes_(list)
 
       assert.equal(group.audio.length, 3)
       assert.equal(group.image.length, 4)
@@ -260,8 +260,8 @@ describe('Class “Media()” #unittest', () => {
     })
 
     it('Method “getMedia()”', () => {
-      let media = new Media(path.resolve('test', 'files', 'media'))
-      let out = media.getMedia()
+      const media = new Media(path.resolve('test', 'files', 'media'))
+      const out = media.getMedia()
 
       assert.equal(out.audio.length, 3)
       assert.equal(out.image.length, 3)

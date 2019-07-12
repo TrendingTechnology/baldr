@@ -33,7 +33,7 @@ const getters = {
     return false
   },
   personById: (state, get) => (personId) => {
-    let match = personId.match(/(.+): (.+), (.+)/)
+    const match = personId.match(/(.+): (.+), (.+)/)
     return get.person({
       firstName: match[3],
       lastName: match[2],
@@ -41,10 +41,10 @@ const getters = {
     })
   },
   personsByGrade: (state) => (gradeName) => {
-    let persons = []
+    const persons = []
     if (state.hasOwnProperty(gradeName)) {
-      for (let lastName of Object.keys(state[gradeName]).sort()) {
-        for (let firstName of Object.keys(state[gradeName][lastName]).sort()) {
+      for (const lastName of Object.keys(state[gradeName]).sort()) {
+        for (const firstName of Object.keys(state[gradeName][lastName]).sort()) {
           persons.push(state[gradeName][lastName][firstName])
         }
       }
@@ -59,7 +59,7 @@ const getters = {
 const actions = {
   addPerson: ({ commit, getters, dispatch }, { firstName, lastName, grade }) => {
     if (!getters.person({ firstName, lastName, grade })) {
-      let person = new Person(firstName, lastName, grade)
+      const person = new Person(firstName, lastName, grade)
       commit('addPerson', person)
       dispatch('addGrade', grade)
       commit('incrementPersonsCount', grade)
@@ -67,17 +67,17 @@ const actions = {
   },
   deletePerson: ({ commit, dispatch, getters }, person) => {
     dispatch('removePersonFromPlanWithoutSeatNo', person)
-    let jobs = getters.getJobsOfPerson(person)
-    for (let jobName of jobs) {
+    const jobs = getters.getJobsOfPerson(person)
+    for (const jobName of jobs) {
       dispatch('removePersonFromJob', { personId: person.id, jobName })
     }
     commit('decrementPersonsCount', person.grade)
     commit('deletePerson', person)
   },
   placePersonById: ({ commit, getters }, { seatNo, personId }) => {
-    let oldPerson = getters.personByCurrentGradeAndSeatNo(seatNo)
-    let newPerson = getters.personById(personId)
-    let gradeName = newPerson.grade
+    const oldPerson = getters.personByCurrentGradeAndSeatNo(seatNo)
+    const newPerson = getters.personById(personId)
+    const gradeName = newPerson.grade
 
     // Drag the same placed person over the same seat
     if (oldPerson && oldPerson.id === newPerson.id) {
@@ -99,7 +99,7 @@ const actions = {
 
     // Move the same person to another seat. Free the previously taken seat.
     if (newPerson.seatNo) {
-      let seat = getters.seatByNo(newPerson.seatNo)
+      const seat = getters.seatByNo(newPerson.seatNo)
       commit('removePersonFromPlan', { person: newPerson, seat: seat })
     }
 

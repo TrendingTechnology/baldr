@@ -27,7 +27,7 @@ let selectized
  * Map some keyboard shortcuts to the corresponding methods.
  */
 function bindShortcuts (shortcuts) {
-  for (let shortcut in shortcuts) {
+  for (const shortcut in shortcuts) {
     mousetrap.bind(shortcut, shortcuts[shortcut])
   }
 }
@@ -36,7 +36,7 @@ function bindShortcuts (shortcuts) {
  * Map some buttons to the corresponding methods.
  */
 function bindButtons (bindings) {
-  for (let binding of arguments) {
+  for (const binding of arguments) {
     document
       .querySelector(binding[0])
       .addEventListener('click', binding[1])
@@ -66,7 +66,7 @@ function showByHash () {
 class TableOfContentsElement extends HTMLElement {
   constructor () {
     super()
-    let tree = new AlphabeticalSongsTree(library.toArray())
+    const tree = new AlphabeticalSongsTree(library.toArray())
     let outABC = ''
     Object.keys(tree).forEach((abc) => {
       outABC += this.templateABC(tree, abc)
@@ -149,7 +149,7 @@ class TableOfContentsElement extends HTMLElement {
    */
   templateABC (tree, abc) {
     let outSongs = ''
-    for (let song of tree[abc]) {
+    for (const song of tree[abc]) {
       outSongs += this.templateSong(song)
     }
     return `<li class="abc">${abc}
@@ -193,7 +193,7 @@ class SongbookSearchElement extends HTMLElement {
   constructor () {
     super()
 
-    let select = document.createElement('select')
+    const select = document.createElement('select')
     select.setAttribute('id', 'select')
     select.setAttribute('placeholder', 'Suche nach einem Lied')
 
@@ -201,8 +201,8 @@ class SongbookSearchElement extends HTMLElement {
     option.setAttribute('value', '')
     select.appendChild(option)
 
-    for (let songID in library.songs) {
-      let song = library.songs[songID]
+    for (const songID in library.songs) {
+      const song = library.songs[songID]
       option = document.createElement('option')
       option.setAttribute('value', songID)
       option.innerHTML = song.metaDataCombined.title
@@ -224,12 +224,12 @@ class ModalWindowElement extends HTMLElement {
     super()
     let markup = `<div class="close button fa fa-times"></div>`
     if (this.hasAttribute('title')) {
-      let title = this.getAttribute('title')
+      const title = this.getAttribute('title')
       markup += `<h2>${title}</h2>`
     }
     this.style.display = 'none'
     this.innerHTML = markup + this.innerHTML
-    let elmementClose = this.querySelector('.close')
+    const elmementClose = this.querySelector('.close')
     elmementClose.addEventListener('click', () => { this.close() })
   }
 
@@ -463,15 +463,15 @@ class SongSlideElement extends HTMLElement {
      * @type {object}
      */
     this.metaDataElements = {
-      'title': shadowRoot.querySelector('h1'),
-      'subtitle': shadowRoot.querySelector('h2'),
-      'composer': shadowRoot.querySelector('.composer'),
-      'lyricist': shadowRoot.querySelector('.lyricist')
+      title: shadowRoot.querySelector('h1'),
+      subtitle: shadowRoot.querySelector('h2'),
+      composer: shadowRoot.querySelector('.composer'),
+      lyricist: shadowRoot.querySelector('.lyricist')
     }
 
     this.externalLinks = {
-      'musescore': shadowRoot.querySelector('.musescore'),
-      'youtube': shadowRoot.querySelector('.youtube')
+      musescore: shadowRoot.querySelector('.musescore'),
+      youtube: shadowRoot.querySelector('.youtube')
     }
     this.bindExternalLinks(Object.values(this.externalLinks))
 
@@ -524,7 +524,7 @@ class SongSlideElement extends HTMLElement {
    * Set the metadata fields.
    */
   setMetaData_ () {
-    for (let property in this.metaDataElements) {
+    for (const property in this.metaDataElements) {
       if (this.song.metaDataCombined[property]) {
         this.metaDataElements[property].style.display = 'block'
         this.metaDataElements[property].innerHTML = this.song.metaDataCombined[property]
@@ -532,7 +532,7 @@ class SongSlideElement extends HTMLElement {
         this.metaDataElements[property].style.display = 'none'
       }
     }
-    for (let property in this.externalLinks) {
+    for (const property in this.externalLinks) {
       if (this.song.metaData[property]) {
         this.externalLinks[property].style.display = 'inline-block'
         if (property === 'youtube') {
@@ -641,9 +641,9 @@ class SongSlideElement extends HTMLElement {
  */
 class ModalManager {
   constructor () {
-    let modals = document.querySelectorAll('modal-window')
+    const modals = document.querySelectorAll('modal-window')
     this.modals = {}
-    for (let modal of modals) {
+    for (const modal of modals) {
       this.modals[modal.id] = modal
     }
   }
@@ -653,14 +653,14 @@ class ModalManager {
   }
 
   closeAll () {
-    for (let modalID in this.modals) {
+    for (const modalID in this.modals) {
       this.modals[modalID].close()
     }
   }
 
   openByID (modalID) {
-    for (let id in this.modals) {
-      let modal = this.modals[id]
+    for (const id in this.modals) {
+      const modal = this.modals[id]
       if (modal.id === modalID) {
         modal.open()
       } else {
@@ -675,7 +675,7 @@ class ModalManager {
  * @param {*} mapping
  */
 function defineCustomElements (mapping) {
-  for (let element of arguments) {
+  for (const element of arguments) {
     customElements.define(element[0], element[1])
   }
 }
@@ -720,7 +720,7 @@ function newSearch () {
 /**
  * Main function to enter in the render process.
  */
-let main = function () {
+const main = function () {
   defineCustomElements(
     ['songbook-search', SongbookSearchElement],
     ['table-of-contents', TableOfContentsElement],
@@ -732,8 +732,8 @@ let main = function () {
   modalManager = new ModalManager()
 
   bindButtons(
-    [ '#menu #menu-search', () => { modalManager.openByID('search') } ],
-    [ '#menu #menu-tableofcontents', () => { modalManager.openByID('tableofcontents') } ]
+    ['#menu #menu-search', () => { modalManager.openByID('search') }],
+    ['#menu #menu-tableofcontents', () => { modalManager.openByID('tableofcontents') }]
   )
 
   songSlide.shadowRoot.querySelector('.previous').addEventListener('click', () => { songSlide.previous() })
@@ -742,13 +742,13 @@ let main = function () {
   window.onhashchange = showByHash
 
   bindShortcuts({
-    'left': function () { songSlide.previous() },
-    'right': function () { songSlide.next() },
-    'esc': newSearch,
-    'alt': function () { modalManager.toggleByID('tableofcontents') },
+    left: function () { songSlide.previous() },
+    right: function () { songSlide.next() },
+    esc: newSearch,
+    alt: function () { modalManager.toggleByID('tableofcontents') },
     'ctrl+left': setPreviousSong,
     'ctrl+right': setNextSong,
-    'r': setRandomSong
+    r: setRandomSong
   })
   selectized = jquery('select').selectize({
     onItemAdd: setSongAfterSearch

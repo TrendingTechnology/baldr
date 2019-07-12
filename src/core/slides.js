@@ -242,7 +242,7 @@ class SlideData {
 
     // string
     if (typeof rawSlideData === 'string') {
-      let { masterName, rawMasterData } = this.pullMasterfromString_(
+      const { masterName, rawMasterData } = this.pullMasterfromString_(
         rawSlideData, env.masters.all
       )
       rawSlideData = {}
@@ -250,7 +250,7 @@ class SlideData {
       this.rawMasterData = rawMasterData
     // object
     } else if (typeof rawSlideData === 'object' && !Array.isArray(rawSlideData)) {
-      let { masterName, rawMasterData } = this.pullMasterfromObject_(
+      const { masterName, rawMasterData } = this.pullMasterfromObject_(
         rawSlideData, env.masters.all
       )
       this.masterName = masterName
@@ -313,7 +313,7 @@ class SlideData {
    *
    */
   pullMasterfromObject_ (rawSlideData, masterNames) {
-    let intersection = this.intersect_(
+    const intersection = this.intersect_(
       masterNames,
       Object.keys(rawSlideData)
     )
@@ -325,8 +325,8 @@ class SlideData {
     if (intersection.length > 1) {
       throw Error(`Each slide must have only one master slide: ${this.toString_(rawSlideData)}`)
     }
-    let masterName = intersection[0]
-    let rawMasterData = rawSlideData[masterName]
+    const masterName = intersection[0]
+    const rawMasterData = rawSlideData[masterName]
     this.pullProperty_(rawSlideData, masterName)
 
     return {
@@ -342,7 +342,7 @@ class SlideData {
     if (!rawSlideData.hasOwnProperty('theme')) {
       return false
     } else if (themeNames.includes(rawSlideData.theme)) {
-      let theme = rawSlideData.theme
+      const theme = rawSlideData.theme
       this.pullProperty_(rawSlideData, 'theme')
       return theme
     } else {
@@ -457,7 +457,7 @@ class Slide {
    *
    */
   setDataset_ () {
-    let dataset = this.env.document.body.dataset
+    const dataset = this.env.document.body.dataset
     dataset.centerVertically = this.master.config.centerVertically
     dataset.margin = this.master.config.margin
     dataset.master = this.master.name
@@ -528,7 +528,7 @@ class Slide {
  * @return {module:@bldr/core/slides~Slide}
  */
 exports.getInstantSlide = function (masterName, rawSlideData, env) {
-  let rawSlide = {}
+  const rawSlide = {}
   if (!rawSlideData) {
     rawSlideData = true
   }
@@ -597,10 +597,10 @@ class Slides {
    * @return {object}
    */
   get () {
-    let out = {}
+    const out = {}
 
     this.rawSlides.forEach((rawSlide, index) => {
-      let slide = new Slide(rawSlide, this.env)
+      const slide = new Slide(rawSlide, this.env)
       slide.no = index + 1
       out[index + 1] = slide
     })

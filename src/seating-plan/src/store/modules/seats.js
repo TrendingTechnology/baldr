@@ -17,8 +17,8 @@ class Seat {
  */
 class InitState {
   constructor () {
-    let roomWidth = 100 // %
-    let roomDepth = 100 // %
+    const roomWidth = 100 // %
+    const roomDepth = 100 // %
     this.aisle = 0.05 * roomWidth
     this.dimension = {
       width: (roomWidth - this.aisle) / 8,
@@ -37,12 +37,12 @@ class InitState {
   }
 
   calculatePositions () {
-    let seats = {}
+    const seats = {}
     let seatY = 0
     let seatX = 0
-    for (let row of this.seatBlocks) {
-      for (let block of row) {
-        for (let seatNo of block) {
+    for (const row of this.seatBlocks) {
+      for (const block of row) {
+        for (const seatNo of block) {
           seats[seatNo] = new Seat(seatNo, seatX, seatY)
           seatX += this.dimension.width
         }

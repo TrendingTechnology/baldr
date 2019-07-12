@@ -59,10 +59,10 @@ class Config {
    * @return {string} The path of a BALDUR file.
    */
   pickSessionFile_ (argv) {
-    let clone = argv.slice(0)
+    const clone = argv.slice(0)
     clone.reverse()
 
-    for (let arg of clone) {
+    for (const arg of clone) {
       if (arg.search(/\.baldr$/ig) > -1) {
         return arg
       }

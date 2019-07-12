@@ -11,9 +11,9 @@ const state = {}
 
 const getters = {
   listJobs: (state) => {
-    let names = Object.keys(state)
-    let jobs = []
-    for (let name of names) {
+    const names = Object.keys(state)
+    const jobs = []
+    for (const name of names) {
       jobs.push(state[name])
     }
     return jobs
@@ -22,14 +22,14 @@ const getters = {
     return state[jobName]
   },
   jobIconFromName: (state, get) => (jobName) => {
-    let job = get.jobByName(jobName)
+    const job = get.jobByName(jobName)
     return job.icon
   }
 }
 
 const actions = {
   addJob: ({ commit }, { name, icon }) => {
-    let job = new Job(name, icon)
+    const job = new Job(name, icon)
     commit('addJob', job)
   },
   deleteJob: ({ commit }, jobName) => {

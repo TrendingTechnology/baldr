@@ -35,8 +35,8 @@ class FileInfo {
      * @type {string}
      */
     this.extension = path.extname(filePath).replace('.', '')
-    let info = this.readInfoYaml_()
-    for (let property in info) {
+    const info = this.readInfoYaml_()
+    for (const property in info) {
       this[property] = info[property]
     }
   }
@@ -67,11 +67,11 @@ class FileInfo {
    * `/home/baldr/beethoven.jpg.yml`
    */
   readInfoYaml_ () {
-    let infoFile = this.path + '.yml'
+    const infoFile = this.path + '.yml'
     if (fs.existsSync(infoFile)) {
-      let info = yaml.safeLoad(fs.readFileSync(infoFile, 'utf8'))
+      const info = yaml.safeLoad(fs.readFileSync(infoFile, 'utf8'))
       if (typeof info === 'string') {
-        return { 'title': info }
+        return { title: info }
       } else {
         return info
       }
@@ -161,14 +161,14 @@ class Media {
       return true
     }
 
-    let filterExtensions = this.getExtensions_(extensions)
+    const filterExtensions = this.getExtensions_(extensions)
       .map((value) => {
         return '.' + value.toLowerCase()
       })
 
-    let inputExtension = path.extname(inputPath).toLowerCase()
+    const inputExtension = path.extname(inputPath).toLowerCase()
 
-    for (let filterExtension of filterExtensions) {
+    for (const filterExtension of filterExtensions) {
       if (inputExtension === filterExtension) return true
     }
     return false
@@ -179,8 +179,8 @@ class Media {
    * @return {object}
    */
   groupByTypes_ (fileList) {
-    let out = {}
-    for (let type of Object.keys(this.types)) {
+    const out = {}
+    for (const type of Object.keys(this.types)) {
       out[type] = fileList.filter(
         /* jshint -W083 */
         file => this.filterFile(file, this.types[type])
@@ -238,10 +238,10 @@ class Media {
    * @see https://gist.github.com/kethinov/6658166
    */
   listRecursively_ (folder, filelist) {
-    let files = fs.readdirSync(folder).sort()
+    const files = fs.readdirSync(folder).sort()
     filelist = filelist || []
     files.forEach((file) => {
-      let filePath = path.resolve(folder, file)
+      const filePath = path.resolve(folder, file)
       if (fs.statSync(filePath).isDirectory()) {
         filelist = this.listRecursively_(filePath, filelist)
       } else {
@@ -262,12 +262,12 @@ class Media {
    * @return {array} A array of absolute file paths or an empty array.
    */
   list (inputPath, extensions) {
-    let absPath = this.resolvePath_(inputPath)
+    const absPath = this.resolvePath_(inputPath)
 
     if (!fs.existsSync(absPath)) {
       return []
     }
-    let stat = fs.statSync(absPath)
+    const stat = fs.statSync(absPath)
     if (!stat.isDirectory() && this.filterFile(absPath, extensions)) {
       return [new FileInfo(absPath)]
     } else if (stat.isDirectory()) {
@@ -299,10 +299,10 @@ class Media {
     } else {
       normalizedPaths = inputPaths
     }
-    let list = []
-    for (let filePath of normalizedPaths) {
-      let sortedList = this.list(filePath, extensions)
-      for (let file of sortedList) {
+    const list = []
+    for (const filePath of normalizedPaths) {
+      const sortedList = this.list(filePath, extensions)
+      for (const file of sortedList) {
         list.push(file)
       }
     }

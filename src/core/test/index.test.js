@@ -16,9 +16,9 @@ const mousetrap = require('mousetrap')
  **********************************************************************/
 
 describe('Class “Environment()” #unittest', () => {
-  let indexJsPath = packageFilePath('@bldr/core', 'index.js')
+  const indexJsPath = packageFilePath('@bldr/core', 'index.js')
   const Environment = rewire(indexJsPath).__get__('Environment')
-  let env = new Environment([testFileMinimal], getDOM())
+  const env = new Environment([testFileMinimal], getDOM())
 
   it('config', () => {
     assert.equal(typeof env.config, 'object')

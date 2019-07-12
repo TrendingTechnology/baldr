@@ -4,7 +4,7 @@ const {
   Spectron
 } = require('@bldr/test-helper')
 
-let resolve = function (image) {
+const resolve = function (image) {
   return 'file://' + path.resolve('masters/image/images', image)
 }
 

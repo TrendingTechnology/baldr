@@ -30,7 +30,7 @@ describe('Class “Themes()” #unittest', () => {
 
   describe('Methods', () => {
     it('Method “getAllCSSFiles_()”', () => {
-      let cssFiles = themes.getAllCSSFiles_()
+      const cssFiles = themes.getAllCSSFiles_()
       assert.strictEqual(cssFiles.length, 7)
     })
 

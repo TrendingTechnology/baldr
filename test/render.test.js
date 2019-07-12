@@ -14,8 +14,8 @@ describe.skip('“render.js” #unittest', function () {
   })
 
   it('“Function toggleModal()”', () => {
-    let toggleModal = rewire.__get__('toggleModal')
-    let modal = document.getElementById('modal')
+    const toggleModal = rewire.__get__('toggleModal')
+    const modal = document.getElementById('modal')
 
     assert.equal(toggleModal(), 'block')
     assert.equal(modal.style.display, 'block')
@@ -28,12 +28,12 @@ describe.skip('“render.js” #unittest', function () {
   })
 
   it('Function “errorPage()”', () => {
-    let errorPage = rewire.__get__('errorPage')
-    let error = {
+    const errorPage = rewire.__get__('errorPage')
+    const error = {
       stack: 'stack'
     }
     errorPage('message', 'source', 'lineNo', 'colNo', error)
-    let getText = function (selector) {
+    const getText = function (selector) {
       return document.querySelector(selector).textContent
     }
     assert.equal(getText('#slide p:nth-child(1)'), 'message')

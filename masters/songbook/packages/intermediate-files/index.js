@@ -27,7 +27,7 @@ const { Song, Library, message, AlphabeticalSongsTree } = require('@bldr/songboo
  * @param {string} executable - Name of the executable.
  */
 function checkExecutable (executable) {
-  let exec = spawn(executable, ['--help'])
+  const exec = spawn(executable, ['--help'])
   if (exec.status === null) {
     return false
   } else {
@@ -42,15 +42,15 @@ function checkExecutable (executable) {
  */
 function checkExecutables (executables = []) {
   let status = true
-  let unavailable = []
+  const unavailable = []
   executables.forEach((exec) => {
-    let check = checkExecutable(exec)
+    const check = checkExecutable(exec)
     if (!check) {
       status = false
       unavailable.push(exec)
     }
   })
-  return { 'status': status, 'unavailable': unavailable }
+  return { status: status, unavailable: unavailable }
 }
 
 /**
@@ -144,7 +144,7 @@ class Sqlite {
   insert (filename, hash) {
     this.db
       .prepare('INSERT INTO hashes values ($filename, $hash)')
-      .run({ 'filename': filename, 'hash': hash })
+      .run({ filename: filename, hash: hash })
   }
 
   /**
@@ -155,7 +155,7 @@ class Sqlite {
   select (filename) {
     return this.db
       .prepare('SELECT * FROM hashes WHERE filename = $filename')
-      .get({ 'filename': filename })
+      .get({ filename: filename })
   }
 
   /**
@@ -167,7 +167,7 @@ class Sqlite {
   update (filename, hash) {
     this.db
       .prepare('UPDATE hashes SET hash = $hash WHERE filename = $filename')
-      .run({ 'filename': filename, 'hash': hash })
+      .run({ filename: filename, hash: hash })
   }
 
   /**
@@ -216,8 +216,8 @@ class FileMonitor {
       return false
     }
 
-    let hash = this.hashSHA1(filename)
-    let row = this.db.select(filename)
+    const hash = this.hashSHA1(filename)
+    const row = this.db.select(filename)
     let hashStored = ''
 
     if (row) {
@@ -319,9 +319,9 @@ class PianoScore {
   static selectSongs (countTree, songs, pageCount) {
     for (let i = pageCount; i > 0; i--) {
       if (!countTree.isEmpty()) {
-        let song = countTree.shift(i)
+        const song = countTree.shift(i)
         if (song) {
-          let missingPages = pageCount - i
+          const missingPages = pageCount - i
           songs.push(song)
           if (missingPages <= 0) {
             return songs
@@ -342,29 +342,29 @@ class PianoScore {
    * @return {string}
    */
   static buildSongList (songs, pageTurnOptimized = false) {
-    let doublePages = []
+    const doublePages = []
     if (pageTurnOptimized) {
       let firstPage = true
-      let countTree = new PianoFilesCountTree(songs)
+      const countTree = new PianoFilesCountTree(songs)
       while (!countTree.isEmpty()) {
         // One page with two columns or two pages with 4 columns
-        let doublePage = []
+        const doublePage = []
         let maxPages = 4
         let actualPages = 0
         if (firstPage) {
           maxPages = 2
           firstPage = false
         }
-        let songs = PianoScore.selectSongs(countTree, [], maxPages)
-        for (let song of songs) {
+        const songs = PianoScore.selectSongs(countTree, [], maxPages)
+        for (const song of songs) {
           actualPages = actualPages + song.pianoFiles.length
           doublePage.push(song.formatPianoTex())
         }
         // Do not add placeholder on the end of list.
         if (countTree.sumFiles() > maxPages) {
           // Add placeholder for blank pages
-          let placeholder = PianoScore.texCmd('placeholder')
-          let countPlaceholders = maxPages - actualPages
+          const placeholder = PianoScore.texCmd('placeholder')
+          const countPlaceholders = maxPages - actualPages
           // To avoid empty entries in the list: We use join later on.
           if (countPlaceholders) {
             for (let index = 0; index < countPlaceholders; index++) {
@@ -375,7 +375,7 @@ class PianoScore {
         doublePages.push(doublePage.join('\\tmpcolumnbreak\n'))
       }
     } else {
-      for (let song of songs) {
+      for (const song of songs) {
         doublePages.push(song.formatPianoTex())
       }
     }
@@ -392,10 +392,10 @@ class PianoScore {
    * @returns {string}
    */
   build () {
-    let output = []
-    let songs = this.library.toArray()
+    const output = []
+    const songs = this.library.toArray()
     if (this.groupAlphabetically) {
-      let abcTree = new AlphabeticalSongsTree(songs)
+      const abcTree = new AlphabeticalSongsTree(songs)
       Object.keys(abcTree).forEach((abc) => {
         output.push('\n\n' + PianoScore.texCmd('chapter', abc.toUpperCase()))
         output.push(PianoScore.buildSongList(abcTree[abc], this.pageTurnOptimized))
@@ -422,9 +422,9 @@ class PianoScore {
    */
   compile () {
     // Assemble the Tex markup.
-    let style = this.read_('style.tex')
-    let mainTexMarkup = this.read_('piano-all.tex')
-    let songs = this.build()
+    const style = this.read_('style.tex')
+    const mainTexMarkup = this.read_('piano-all.tex')
+    const songs = this.build()
     let texMarkup = mainTexMarkup.replace('//style//', style)
     texMarkup = texMarkup.replace('//songs//', songs)
     texMarkup = texMarkup.replace('//created//', new Date().toLocaleString())
@@ -436,20 +436,20 @@ class PianoScore {
 
     // To avoid temporary TeX files in the working directory of the shell
     // the command is running from.
-    let cwd = path.dirname(this.texFile.path)
+    const cwd = path.dirname(this.texFile.path)
 
     // Compile the TeX file
     // Error on Mac OS: conversion of the eps files to pdf files doesn t work.
     // not allowed in restricted mode.
     // --shell-escape
-    spawn('lualatex', ['--shell-escape', this.texFile.path], { 'cwd': cwd })
+    spawn('lualatex', ['--shell-escape', this.texFile.path], { cwd: cwd })
     // Compile twice for the table of contents
-    spawn('lualatex', ['--shell-escape', this.texFile.path], { 'cwd': cwd })
+    spawn('lualatex', ['--shell-escape', this.texFile.path], { cwd: cwd })
     // The page numbers in the toc only matches after three runs.
-    spawn('lualatex', ['--shell-escape', this.texFile.path], { 'cwd': cwd })
+    spawn('lualatex', ['--shell-escape', this.texFile.path], { cwd: cwd })
 
     // Open the pdf file.
-    let pdfFile = this.texFile.path.replace('.tex', '.pdf')
+    const pdfFile = this.texFile.path.replace('.tex', '.pdf')
     let openCommand
     if (os.platform() === 'darwin') {
       openCommand = 'open'
@@ -516,20 +516,20 @@ class IntermediateSong extends Song {
         'The song “%s” has more than 4 EPS piano score files.',
         this.metaData.title))
     }
-    let template = `\n\\tmpmetadata
+    const template = `\n\\tmpmetadata
 {%s} % title
 {%s} % subtitle
 {%s} % composer
 {%s} % lyricist
 `
-    let output = util.format(
+    const output = util.format(
       template,
       this.metaDataCombined.title,
       this.metaDataCombined.subtitle,
       this.metaDataCombined.composer,
       this.metaDataCombined.lyricist
     )
-    let epsFiles = []
+    const epsFiles = []
     for (let i = 0; i < this.pianoFiles.length; i++) {
       epsFiles.push(this.formatPianoTeXEpsFile_(i))
     }
@@ -546,7 +546,7 @@ class IntermediateSong extends Song {
     if (destination === '') {
       destination = source
     }
-    let pdf = path.join(this.folder, destination + '.pdf')
+    const pdf = path.join(this.folder, destination + '.pdf')
     spawn('mscore', [
       '--export-to',
       path.join(pdf),
@@ -571,7 +571,7 @@ class IntermediateSong extends Song {
       path.join(this.folderSlides.get(), '%02d.svg'),
       'all'
     ])
-    let result = this.getFolderFiles_('slides', '.svg')
+    const result = this.getFolderFiles_('slides', '.svg')
     if (!result) {
       throw new Error('The SVG files for the slides couldn’t be generated.')
     }
@@ -586,10 +586,10 @@ class IntermediateSong extends Song {
    */
   generatePiano_ () {
     this.folderPiano.empty()
-    let pianoFile = path.join(this.folderPiano.get(), 'piano.mscx')
+    const pianoFile = path.join(this.folderPiano.get(), 'piano.mscx')
     fs.copySync(this.mscxPiano, pianoFile)
     spawn('mscore-to-eps.sh', [pianoFile])
-    let result = this.getFolderFiles_('piano', '.eps')
+    const result = this.getFolderFiles_('piano', '.eps')
     if (!result) {
       throw new Error('The EPS files for the piano score couldn’t be generated.')
     }
@@ -605,7 +605,7 @@ class IntermediateSong extends Song {
    * @param {boolean} force - Force the regeneration of intermediate files.
    */
   generateIntermediateFiles (mode = 'all', force = false) {
-    let status = { changed: {}, generated: {} }
+    const status = { changed: {}, generated: {} }
 
     status.folder = this.folder
     status.folderName = path.basename(this.folder)
@@ -634,7 +634,7 @@ class IntermediateSong extends Song {
    * Delete all generated files of a song folder.
    */
   cleanIntermediateFiles () {
-    let files = [
+    const files = [
       'piano',
       'slides',
       'projector.pdf'
@@ -686,8 +686,8 @@ class PianoFilesCountTree {
    * @param {module:baldr-songbook~songs} songs - An array of song objects.
    */
   build_ (songs) {
-    for (let song of songs) {
-      let count = song.pianoFiles.length
+    for (const song of songs) {
+      const count = song.pianoFiles.length
       if (!(count in this)) this[count] = []
       this[count].push(song)
     }
@@ -698,7 +698,7 @@ class PianoFilesCountTree {
    */
   sum () {
     let count = 0
-    for (let validCount of this.validCounts_) {
+    for (const validCount of this.validCounts_) {
       if (this.hasOwnProperty(validCount)) {
         count = count + this[validCount].length
       }
@@ -711,7 +711,7 @@ class PianoFilesCountTree {
    */
   sumFiles () {
     let count = 0
-    for (let validCount of this.validCounts_) {
+    for (const validCount of this.validCounts_) {
       if (this.hasOwnProperty(validCount)) {
         count += validCount * this[validCount].length
       }
@@ -774,9 +774,9 @@ class IntermediateLibrary extends Library {
   }
 
   collectSongs_ () {
-    let songs = {}
-    for (let songPath of this.detectSongs_()) {
-      let song = new IntermediateSong(path.join(this.basePath, songPath), this.fileMonitor)
+    const songs = {}
+    for (const songPath of this.detectSongs_()) {
+      const song = new IntermediateSong(path.join(this.basePath, songPath), this.fileMonitor)
       if (song.songID in songs) {
         throw new Error(
           util.format('A song with the same songID already exists: %s',
@@ -804,7 +804,7 @@ class IntermediateLibrary extends Library {
    * Clean all intermediate media files.
    */
   cleanIntermediateFiles () {
-    for (let songID in this.songs) {
+    for (const songID in this.songs) {
       this.songs[songID].cleanIntermediateFiles()
     }
     this.deleteFiles_([
@@ -821,9 +821,9 @@ class IntermediateLibrary extends Library {
    * @param {boolean} force - Force the regeneration of intermediate files.
    */
   generateIntermediateFiles (mode = 'all', force = false) {
-    for (let songID in this.songs) {
-      let song = this.songs[songID]
-      let status = song.generateIntermediateFiles(mode, force)
+    for (const songID in this.songs) {
+      const song = this.songs[songID]
+      const status = song.generateIntermediateFiles(mode, force)
       message.songFolder(status, song)
     }
   }
@@ -836,8 +836,8 @@ class IntermediateLibrary extends Library {
    *   and piano files. Possible values: “all”, “slides” or “piano”
    */
   updateSongByPath (folder, mode = 'all') {
-    let song = new IntermediateSong(folder, this.fileMonitor)
-    let status = song.generateIntermediateFiles(mode, true)
+    const song = new IntermediateSong(folder, this.fileMonitor)
+    const status = song.generateIntermediateFiles(mode, true)
     message.songFolder(status, song)
   }
 
@@ -855,7 +855,7 @@ class IntermediateLibrary extends Library {
     } else {
       throw new Error(util.format('The song with the song ID “%s” is unkown.', songID))
     }
-    let status = song.generateIntermediateFiles(mode, true)
+    const status = song.generateIntermediateFiles(mode, true)
     message.songFolder(status, song)
   }
 

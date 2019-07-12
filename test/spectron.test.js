@@ -8,7 +8,7 @@ describe('General Spectron tests #spectron', () => {
   describe('build', () => {
     it(`exists “Spectron.appPath”`, function () {
       this.timeout(50000)
-      let spectron = new Spectron('@bldr/electron-app')
+      const spectron = new Spectron('@bldr/electron-app')
       assert.ok(fs.existsSync(spectron.appPath))
     })
   })

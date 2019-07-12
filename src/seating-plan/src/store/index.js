@@ -23,7 +23,7 @@ const actions = {
   },
   createTestData: ({ dispatch }) => {
     // https://realnamecreator.alexjonas.de/?l=de#
-    let peopleList = [
+    const peopleList = [
       // 1a
       { firstName: 'Josef', lastName: 'Friedrich', grade: '1a' },
       // 1b
@@ -72,11 +72,11 @@ const actions = {
       { firstName: 'Richard', lastName: 'Heinz', grade: 'Q11' },
       { firstName: 'Thomas', lastName: 'Grimmer', grade: 'Q11' }
     ]
-    for (let person of peopleList) {
+    for (const person of peopleList) {
       dispatch('addPerson', person)
     }
 
-    let jobs = [
+    const jobs = [
       { name: 'Schaltwart', icon: 'video-switch' },
       // { name: 'Lüftwart', icon: 'window-maximize' },
       { name: 'Lüftwart', icon: 'air-filter' },
@@ -84,7 +84,7 @@ const actions = {
       { name: 'Klassenbuchführer', icon: 'notebook' },
       { name: 'Klassensprecher', icon: 'account-star' }
     ]
-    for (let job of jobs) {
+    for (const job of jobs) {
       dispatch('addJob', job)
     }
   }
@@ -101,11 +101,11 @@ const store = new Vuex.Store({
 export default store
 
 export const flushState = function () {
-  let state = store.state
-  let newState = {}
+  const state = store.state
+  const newState = {}
   Object.keys(state).forEach(key => {
     if (modules[key].hasOwnProperty('InitState')) {
-      let InitState = modules[key].InitState
+      const InitState = modules[key].InitState
       newState[key] = new InitState()
     } else {
       newState[key] = {}

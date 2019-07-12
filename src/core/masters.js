@@ -37,8 +37,8 @@ class Master {
    * @param {string} packageName - The name of the node package which is a master.
    */
   constructor (packageName) {
-    let defaults = this.setDefaults_(packageName)
-    let dirname = path.dirname(require.resolve(packageName))
+    const defaults = this.setDefaults_(packageName)
+    const dirname = path.dirname(require.resolve(packageName))
 
     /*******************************************************************
      * Members
@@ -235,26 +235,26 @@ class Master {
    *
    */
   setDefaults_ (packageName) {
-    let requireObject = require(packageName)
-    let emptyFunc = function () {}
-    let returnEmpty = function () { return '' }
-    let funcFalse = function () { return false }
+    const requireObject = require(packageName)
+    const emptyFunc = function () {}
+    const returnEmpty = function () { return '' }
+    const funcFalse = function () { return false }
 
-    let config = {
+    const config = {
       centerVertically: false,
       margin: true,
       stepSupport: false,
       theme: 'default'
     }
 
-    let documentation = {
+    const documentation = {
       examples: []
     }
 
     requireObject.config = Object.assign({}, config, requireObject.config)
     requireObject.documentation = Object.assign({}, documentation, requireObject.documentation)
 
-    let defaultObject = {
+    const defaultObject = {
       cleanUp: emptyFunc,
       init: emptyFunc,
       initSteps: funcFalse,
@@ -290,7 +290,7 @@ class Masters {
      */
     this.document = document
 
-    let all = [
+    const all = [
       '@bldr/master-audio',
       '@bldr/master-camera',
       '@bldr/master-editor',
@@ -310,8 +310,8 @@ class Masters {
      */
     this.all = []
 
-    for (let packageName of all) {
-      let master = this.initMaster_(packageName)
+    for (const packageName of all) {
+      const master = this.initMaster_(packageName)
       this.all.push(master.name)
       this[master.name] = master
     }
@@ -331,7 +331,7 @@ class Masters {
    *
    */
   addCSS_ () {
-    for (let masterName of this.all) {
+    for (const masterName of this.all) {
       if (this[masterName].css) {
         addCSSFile(
           this.document,
@@ -346,9 +346,9 @@ class Masters {
    *
    */
   execAll (hookName) {
-    let args = Array.from(arguments)
+    const args = Array.from(arguments)
     args.shift()
-    for (let master of this.all) {
+    for (const master of this.all) {
       this[master][hookName](...args)
     }
   }

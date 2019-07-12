@@ -20,44 +20,44 @@ describe('Package “@bldr/songbook-base”', function () {
       })
 
       it('config.path', function () {
-        let bootstrapConfig = baseRewired.__get__('bootstrapConfig')
-        let config = bootstrapConfig()
+        const bootstrapConfig = baseRewired.__get__('bootstrapConfig')
+        const config = bootstrapConfig()
         assert.strictEqual(config.path, path.resolve(__dirname, 'songs', 'clean', 'some'))
       })
     })
 
     it('Function “parseSongIDList()”', function () {
-      let parseSongIDList = baseRewired.__get__('parseSongIDList')
-      let result = parseSongIDList(path.join(__dirname, 'files', 'song-id-list.txt'))
+      const parseSongIDList = baseRewired.__get__('parseSongIDList')
+      const result = parseSongIDList(path.join(__dirname, 'files', 'song-id-list.txt'))
       assert.deepStrictEqual(result, ['Auf-der-Mauer', 'Swing-low'])
     })
   })
 
   describe('Classes', function () {
     describe('Class “Message()”', function () {
-      let Message = baseRewired.__get__('Message')
-      let message = baseRewired.__get__('message')
-      let Song = baseRewired.__get__('Song')
-      let song = new Song(path.resolve(__dirname, 'songs', 'processed', 'some', 'a', 'Auf-der-Mauer'))
+      const Message = baseRewired.__get__('Message')
+      const message = baseRewired.__get__('message')
+      const Song = baseRewired.__get__('Song')
+      const song = new Song(path.resolve(__dirname, 'songs', 'processed', 'some', 'a', 'Auf-der-Mauer'))
 
       const status = {
-        'changed': {
-          'piano': false,
-          'slides': false
+        changed: {
+          piano: false,
+          slides: false
         },
-        'folder': 'songs/a/Auf-der-Mauer',
-        'folderName': 'Auf-der-Mauer',
-        'force': false,
-        'generated': {}
+        folder: 'songs/a/Auf-der-Mauer',
+        folderName: 'Auf-der-Mauer',
+        force: false,
+        generated: {}
       }
 
-      let clone = function (object) {
+      const clone = function (object) {
         return JSON.parse(JSON.stringify(object))
       }
 
-      let assertSongFolder = function (status, output) {
-        let stub = sinon.stub()
-        let message = new Message()
+      const assertSongFolder = function (status, output) {
+        const stub = sinon.stub()
+        const message = new Message()
         message.print = stub
         message.songFolder(status, song)
         assert.strictEqual(removeANSI(String(stub.args[0])), removeANSI(String(output)))
@@ -79,16 +79,16 @@ describe('Package “@bldr/songbook-base”', function () {
 
       describe('Methods', function () {
         it('Method “print()”', function () {
-          let stub = sinon.stub()
-          let message = new Message()
+          const stub = sinon.stub()
+          const message = new Message()
           message.print = stub
           message.print('lol')
           assert.strictEqual(stub.called, true)
         })
 
         it('Method “noConfigPath()”', function () {
-          let stub = sinon.stub()
-          let message = new Message()
+          const stub = sinon.stub()
+          const message = new Message()
           message.print = stub
 
           try {
@@ -104,7 +104,7 @@ describe('Package “@bldr/songbook-base”', function () {
 
         describe('Method “songFolder()”', function () {
           it('finished', function () {
-            let finished = clone(status)
+            const finished = clone(status)
             assertSongFolder(
               finished,
               '\u001b[32m☑\u001b[39m  \u001b[32mAuf-der-Mauer\u001b[39m: Auf der Mauer, auf der Lauer'
@@ -112,7 +112,7 @@ describe('Package “@bldr/songbook-base”', function () {
           })
 
           it('progress', function () {
-            let progress = clone(status)
+            const progress = clone(status)
             progress.changed.slides = true
             assertSongFolder(
               progress,
@@ -121,15 +121,15 @@ describe('Package “@bldr/songbook-base”', function () {
           })
 
           it('forced', function () {
-            let forced = clone(status)
+            const forced = clone(status)
             forced.generated =
               {
-                'piano': [
+                piano: [
                   'piano_1.eps',
                   'piano_2.eps'
                 ],
-                'projector': 'projector.pdf',
-                'slides': [
+                projector: 'projector.pdf',
+                slides: [
                   '01.svg',
                   '02.svg'
                 ]
@@ -142,11 +142,11 @@ describe('Package “@bldr/songbook-base”', function () {
           })
 
           it('generatedPiano', function () {
-            let generatedPiano = clone(status)
+            const generatedPiano = clone(status)
             generatedPiano.changed.piano = true
             generatedPiano.generated =
               {
-                'piano': [
+                piano: [
                   'piano_1.eps',
                   'piano_2.eps'
                 ]
@@ -158,12 +158,12 @@ describe('Package “@bldr/songbook-base”', function () {
           })
 
           it('generatedSlides', function () {
-            let generatedSlides = clone(status)
+            const generatedSlides = clone(status)
             generatedSlides.changed.slides = true
             generatedSlides.generated =
               {
-                'projector': 'projector.pdf',
-                'slides': [
+                projector: 'projector.pdf',
+                slides: [
                   '01.svg',
                   '02.svg'
                 ]
@@ -178,45 +178,45 @@ describe('Package “@bldr/songbook-base”', function () {
     })
 
     describe('Class “Folder()”', function () {
-      let Folder = baseRewired.__get__('Folder')
+      const Folder = baseRewired.__get__('Folder')
 
       describe('Initialisation', function () {
         it('Using one path string.', function () {
-          let tmpDir = mkTmpDir()
-          let folder = new Folder(tmpDir)
+          const tmpDir = mkTmpDir()
+          const folder = new Folder(tmpDir)
           assert.strictEqual(folder.folderPath, tmpDir)
         })
 
         it('Using two arguments', function () {
-          let tmpDir = mkTmpDir()
-          let folder = new Folder(tmpDir, 'test')
+          const tmpDir = mkTmpDir()
+          const folder = new Folder(tmpDir, 'test')
           assert.strictEqual(folder.folderPath, path.join(tmpDir, 'test'))
         })
       })
 
       it('Property “folderPath”', function () {
-        let tmpDir = mkTmpDir()
-        let folder = new Folder(tmpDir)
+        const tmpDir = mkTmpDir()
+        const folder = new Folder(tmpDir)
         assert.strictEqual(folder.folderPath, tmpDir)
       })
 
       describe('Methods', function () {
         it('Method “get()”', function () {
-          let tmpDir = mkTmpDir()
-          let folder = new Folder(tmpDir)
+          const tmpDir = mkTmpDir()
+          const folder = new Folder(tmpDir)
           assert.strictEqual(folder.get(), tmpDir)
         })
 
         it('Method “empty()”', function () {
-          let tmpDir = mkTmpDir()
-          let folder = new Folder(tmpDir)
+          const tmpDir = mkTmpDir()
+          const folder = new Folder(tmpDir)
           folder.empty()
           assert.ok(fs.existsSync(folder.folderPath))
         })
 
         it('Method “remove()”', function () {
-          let tmpDir = mkTmpDir()
-          let folder = new Folder(tmpDir)
+          const tmpDir = mkTmpDir()
+          const folder = new Folder(tmpDir)
           folder.remove()
           assert.ok(!fs.existsSync(folder.folderPath))
         })
@@ -224,9 +224,9 @@ describe('Package “@bldr/songbook-base”', function () {
     })
 
     describe('Class “SongMetaData()”', function () {
-      let songPath = path.resolve(__dirname, 'songs', 'clean', 'some', 'a', 'Auf-der-Mauer')
-      let SongMetaData = baseRewired.__get__('SongMetaData')
-      let song = new SongMetaData(songPath)
+      const songPath = path.resolve(__dirname, 'songs', 'clean', 'some', 'a', 'Auf-der-Mauer')
+      const SongMetaData = baseRewired.__get__('SongMetaData')
+      const song = new SongMetaData(songPath)
 
       describe('Properties', function () {
         it('Property “alias”', function () {
@@ -315,7 +315,7 @@ describe('Package “@bldr/songbook-base”', function () {
         })
 
         it('Exception: No yaml file', function () {
-          let tmpDir = mkTmpDir()
+          const tmpDir = mkTmpDir()
           assert.throws(
             function () {
               return new SongMetaData(tmpDir)
@@ -335,79 +335,79 @@ describe('Package “@bldr/songbook-base”', function () {
       })
 
       it('on regular song folder', function () {
-        let song = new SongMetaData(songPath)
+        const song = new SongMetaData(songPath)
         assert.strictEqual(song.title, 'Auf der Mauer, auf der Lauer')
       })
     })
 
     describe('Class “SongMetaDataCombined()”', function () {
-      let SongMetaDataCombined = baseRewired.__get__('SongMetaDataCombined')
+      const SongMetaDataCombined = baseRewired.__get__('SongMetaDataCombined')
 
       describe('get title', function () {
         it('title only', function () {
-          let song = new SongMetaDataCombined({ 'title': 'lol' })
+          const song = new SongMetaDataCombined({ title: 'lol' })
           assert.strictEqual(song.title, 'lol')
         })
         it('title and year', function () {
-          let song = new SongMetaDataCombined({ 'title': 'lol', 'year': 1984 })
+          const song = new SongMetaDataCombined({ title: 'lol', year: 1984 })
           assert.strictEqual(song.title, 'lol (1984)')
         })
       })
 
       describe('get subtitle', function () {
         it('all properties', function () {
-          let song = new SongMetaDataCombined({ 'subtitle': 's', 'alias': 'a', 'country': 'c' })
+          const song = new SongMetaDataCombined({ subtitle: 's', alias: 'a', country: 'c' })
           assert.strictEqual(song.subtitle, 's - a - c')
         })
         it('no properties', function () {
-          let song = new SongMetaDataCombined({})
+          const song = new SongMetaDataCombined({})
           assert.strictEqual(song.subtitle, '')
         })
       })
 
       describe('get composer', function () {
         it('all properties', function () {
-          let song = new SongMetaDataCombined({ 'composer': 'c', 'artist': 'a', 'genre': 'g' })
+          const song = new SongMetaDataCombined({ composer: 'c', artist: 'a', genre: 'g' })
           assert.strictEqual(song.composer, 'c, a, g')
         })
 
         it('artist and composer are identical', function () {
-          let song = new SongMetaDataCombined({ 'composer': 'i', 'artist': 'i', 'genre': 'g' })
+          const song = new SongMetaDataCombined({ composer: 'i', artist: 'i', genre: 'g' })
           assert.strictEqual(song.composer, 'i, g')
         })
 
         it('no properties', function () {
-          let song = new SongMetaDataCombined({})
+          const song = new SongMetaDataCombined({})
           assert.strictEqual(song.composer, '')
         })
       })
 
       describe('get lyricist', function () {
         it('all properties', function () {
-          let song = new SongMetaDataCombined({ 'lyricist': 'l' })
+          const song = new SongMetaDataCombined({ lyricist: 'l' })
           assert.strictEqual(song.lyricist, 'l')
         })
 
         it('lyricist and composer are identical', function () {
-          let song = new SongMetaDataCombined({ 'lyricist': 'i', 'composer': 'i' })
+          const song = new SongMetaDataCombined({ lyricist: 'i', composer: 'i' })
           assert.strictEqual(song.lyricist, '')
         })
 
         it('lyricist and artist are identical', function () {
-          let song = new SongMetaDataCombined({ 'lyricist': 'i', 'artist': 'i' })
+          const song = new SongMetaDataCombined({ lyricist: 'i', artist: 'i' })
           assert.strictEqual(song.lyricist, '')
         })
 
         it('no properties', function () {
-          let song = new SongMetaDataCombined({})
+          const song = new SongMetaDataCombined({})
           assert.strictEqual(song.lyricist, '')
         })
       })
       describe('Real world example', function () {
-        let SongMetaData = baseRewired.__get__('SongMetaData')
-        let folder = path.join(__dirname, 'songs', 'clean', 'some', 'a', 'Auf-der-Mauer')
-        let metaData = new SongMetaData(folder)
-        let combined = new SongMetaDataCombined(metaData)
+        const SongMetaData = baseRewired.__get__('SongMetaData')
+        const folder = path.join(__dirname, 'songs', 'clean', 'some', 'a', 'Auf-der-Mauer')
+        const metaData = new SongMetaData(folder)
+        const combined = new SongMetaDataCombined(metaData)
         it('title', function () {
           assert.strictEqual(combined.title, 'Auf der Mauer, auf der Lauer (1890)')
         })
@@ -424,23 +424,23 @@ describe('Package “@bldr/songbook-base”', function () {
     })
 
     describe('Class “Song()”', function () {
-      let Song = baseRewired.__get__('Song')
-      let folder = path.join(__dirname, 'songs', 'clean', 'some', 'a', 'Auf-der-Mauer')
-      let song = new Song(folder)
+      const Song = baseRewired.__get__('Song')
+      const folder = path.join(__dirname, 'songs', 'clean', 'some', 'a', 'Auf-der-Mauer')
+      const song = new Song(folder)
 
       describe('Initialisation', function () {
         it('with a directory', function () {
-          let song = new Song(folder)
+          const song = new Song(folder)
           assert.strictEqual(song.folder, folder)
         })
 
         it('with info.yml', function () {
-          let song = new Song(path.join(folder, 'info.yml'))
+          const song = new Song(path.join(folder, 'info.yml'))
           assert.strictEqual(song.folder, folder)
         })
 
         it('with projector.mscx', function () {
-          let song = new Song(path.join(folder, 'projector.mscx'))
+          const song = new Song(path.join(folder, 'projector.mscx'))
           assert.strictEqual(song.folder, folder)
         })
       })
@@ -459,22 +459,22 @@ describe('Package “@bldr/songbook-base”', function () {
         })
 
         it('Property “metaData”', function () {
-          let SongMetaData = baseRewired.__get__('SongMetaData')
+          const SongMetaData = baseRewired.__get__('SongMetaData')
           assert.ok(song.metaData instanceof SongMetaData)
         })
 
         it('Property “metaDataCombined”', function () {
-          let SongMetaDataCombined = baseRewired.__get__('SongMetaDataCombined')
+          const SongMetaDataCombined = baseRewired.__get__('SongMetaDataCombined')
           assert.ok(song.metaDataCombined instanceof SongMetaDataCombined)
         })
 
         it('Property “folderSlides”', function () {
-          let Folder = baseRewired.__get__('Folder')
+          const Folder = baseRewired.__get__('Folder')
           assert.ok(song.folderSlides instanceof Folder)
         })
 
         it('Property “folderPiano”', function () {
-          let Folder = baseRewired.__get__('Folder')
+          const Folder = baseRewired.__get__('Folder')
           assert.ok(song.folderPiano instanceof Folder)
         })
 
@@ -488,24 +488,24 @@ describe('Package “@bldr/songbook-base”', function () {
 
         describe('Property “pianoFiles”', function () {
           it('empty', function () {
-            let song = new Song(path.join(__dirname, 'songs', 'clean', 'some', 's', 'Swing-low'))
+            const song = new Song(path.join(__dirname, 'songs', 'clean', 'some', 's', 'Swing-low'))
             assert.deepStrictEqual(song.pianoFiles, [])
           })
 
           it('not empty', function () {
-            let song = new Song(path.join(__dirname, 'songs', 'processed', 'some', 's', 'Swing-low'))
+            const song = new Song(path.join(__dirname, 'songs', 'processed', 'some', 's', 'Swing-low'))
             assert.deepStrictEqual(song.pianoFiles, ['piano_1.eps', 'piano_2.eps', 'piano_3.eps'])
           })
         })
 
         describe('Property “slidesFiles”', function () {
           it('empty', function () {
-            let song = new Song(path.join(__dirname, 'songs', 'clean', 'some', 's', 'Swing-low'))
+            const song = new Song(path.join(__dirname, 'songs', 'clean', 'some', 's', 'Swing-low'))
             assert.deepStrictEqual(song.slidesFiles, [])
           })
 
           it('not empty', function () {
-            let song = new Song(path.join(__dirname, 'songs', 'processed', 'some', 's', 'Swing-low'))
+            const song = new Song(path.join(__dirname, 'songs', 'processed', 'some', 's', 'Swing-low'))
             assert.deepStrictEqual(song.slidesFiles, ['01.svg', '02.svg', '03.svg'])
           })
         })
@@ -546,24 +546,24 @@ describe('Package “@bldr/songbook-base”', function () {
           })
 
           it('Return value', function () {
-            let result = song.detectFile_('projector.mscx')
+            const result = song.detectFile_('projector.mscx')
             assert.ok(result.includes('projector.mscx'))
           })
 
           it('Return value by two files', function () {
-            let result = song.detectFile_('xxx.mscx', 'projector.mscx')
+            const result = song.detectFile_('xxx.mscx', 'projector.mscx')
             assert.ok(result.includes('projector.mscx'))
           })
 
           it('Return value by two files, get first', function () {
-            let result = song.detectFile_('projector.mscx', 'xxx.mscx')
+            const result = song.detectFile_('projector.mscx', 'xxx.mscx')
             assert.ok(result.includes('projector.mscx'))
           })
         })
 
         describe('Method “getFolderFiles_()”', function () {
-          let folder = path.join(__dirname, 'songs', 'processed', 'one', 'a', 'Auf-der-Mauer')
-          let song = new Song(folder)
+          const folder = path.join(__dirname, 'songs', 'processed', 'one', 'a', 'Auf-der-Mauer')
+          const song = new Song(folder)
 
           it('Method “getFolderFiles_()”: eps', function () {
             const files = song.getFolderFiles_('piano', '.eps')
@@ -592,20 +592,20 @@ describe('Package “@bldr/songbook-base”', function () {
     })
 
     describe('Class “AlphabeticalSongsTree()”', function () {
-      let AlphabeticalSongsTree = baseRewired.__get__('AlphabeticalSongsTree')
-      let Library = baseRewired.__get__('Library')
-      let library = new Library(path.join(__dirname, 'songs', 'processed', 'some'))
-      let songs = Object.values(library.songs)
+      const AlphabeticalSongsTree = baseRewired.__get__('AlphabeticalSongsTree')
+      const Library = baseRewired.__get__('Library')
+      const library = new Library(path.join(__dirname, 'songs', 'processed', 'some'))
+      const songs = Object.values(library.songs)
 
       it('Initialisation', function () {
-        let abcTree = new AlphabeticalSongsTree(songs)
+        const abcTree = new AlphabeticalSongsTree(songs)
         assert.strictEqual(abcTree.a[0].metaData.title, 'Auf der Mauer, auf der Lauer')
         assert.strictEqual(abcTree.s[0].metaData.title, 'Stille Nacht')
       })
     })
 
     describe('Class “Library()”', function () {
-      let Library = baseRewired.__get__('Library')
+      const Library = baseRewired.__get__('Library')
       let library
       let basePath
 
@@ -616,7 +616,7 @@ describe('Package “@bldr/songbook-base”', function () {
       })
 
       it('Exceptions', function () {
-        let basePath = path.join(__dirname, 'songs', 'processed')
+        const basePath = path.join(__dirname, 'songs', 'processed')
         assert.throws(
           function () {
             return new Library(basePath)
@@ -649,7 +649,7 @@ describe('Package “@bldr/songbook-base”', function () {
 
       describe('Methods', function () {
         it('Method “toArray()”', function () {
-          let songs = library.toArray()
+          const songs = library.toArray()
           assert.strictEqual(songs.length, 4)
         })
 
@@ -667,12 +667,12 @@ describe('Package “@bldr/songbook-base”', function () {
 
         it('Method “collectSongs_()”', function () {
           assert.strictEqual(library.detectSongs_().length, 4)
-          let songs = library.collectSongs_()
+          const songs = library.collectSongs_()
           assert.strictEqual(songs['Auf-der-Mauer'].songID, 'Auf-der-Mauer')
         })
 
         it('Method “loadSongList()”', function () {
-          let result = library.loadSongList(path.join(__dirname, 'files', 'song-id-list.txt'))
+          const result = library.loadSongList(path.join(__dirname, 'files', 'song-id-list.txt'))
           assert.deepStrictEqual(result, library.songs)
           assert.strictEqual(Object.keys(result).length, 2)
         })
@@ -713,7 +713,7 @@ describe('Package “@bldr/songbook-base”', function () {
         })
 
         it('Method “getABCFolders_()”', function () {
-          let folders = library.getABCFolders_()
+          const folders = library.getABCFolders_()
           assert.strictEqual(folders.length, 3)
           assert.deepStrictEqual(folders, ['a', 's', 'z'])
         })
