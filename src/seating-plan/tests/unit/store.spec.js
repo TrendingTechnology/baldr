@@ -106,9 +106,9 @@ describe('Vuex global store #unittest', () => {
       const persons = store.getters.personsByGrade(person.grade)
       assert.strictEqual(persons.length, 0)
       // Person has no seat
-      assert.isFalse(store.state.plans['1x'].hasOwnProperty(1))
+      assert.isFalse({}.hasOwnProperty.call(store.state.plans['1x'], 1))
       // Person has no jobs
-      assert.isFalse(store.state.grades['1x'].jobs.hasOwnProperty('Lüftwart'))
+      assert.isFalse({}.hasOwnProperty.call(store.state.grades['1x'].jobs, 'Lüftwart'))
     })
 
     it('placePersonById', function () {
@@ -137,8 +137,8 @@ describe('Vuex global store #unittest', () => {
 
     it('deleteGrade', function () {
       store.dispatch('deleteGrade', '1a')
-      assert.isFalse(store.state.grades.hasOwnProperty('1a'))
-      assert.isFalse(store.state.persons['1a'].hasOwnProperty('Friedrich'))
+      assert.isFalse({}.hasOwnProperty.call(store.state.grades, '1a'))
+      assert.isFalse({}.hasOwnProperty.call(store.state.persons['1a'], 'Friedrich'))
     })
   })
 

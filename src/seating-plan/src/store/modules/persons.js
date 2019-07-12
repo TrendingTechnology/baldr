@@ -25,9 +25,9 @@ const state = {}
 
 const getters = {
   person: (state) => ({ firstName, lastName, grade }) => {
-    if (state.hasOwnProperty(grade) &&
-    state[grade].hasOwnProperty(lastName) &&
-    state[grade][lastName].hasOwnProperty(firstName)) {
+    if ({}.hasOwnProperty.call(state, grade) &&
+        {}.hasOwnProperty.call(state[grade], lastName) &&
+        {}.hasOwnProperty.call(state[grade][lastName], firstName)) {
       return state[grade][lastName][firstName]
     }
     return false
@@ -42,7 +42,7 @@ const getters = {
   },
   personsByGrade: (state) => (gradeName) => {
     const persons = []
-    if (state.hasOwnProperty(gradeName)) {
+    if ({}.hasOwnProperty.call(state, gradeName)) {
       for (const lastName of Object.keys(state[gradeName]).sort()) {
         for (const firstName of Object.keys(state[gradeName][lastName]).sort()) {
           persons.push(state[gradeName][lastName][firstName])
@@ -112,11 +112,11 @@ const actions = {
 const mutations = {
   addPerson: (state, person) => {
     // grade
-    if (!state.hasOwnProperty(person.grade)) {
+    if (!{}.hasOwnProperty.call(state, person.grade)) {
       Vue.set(state, person.grade, {})
     }
     // lastName
-    if (!state[person.grade].hasOwnProperty(person.lastName)) {
+    if (!{}.hasOwnProperty.call(state[person.grade], person.lastName)) {
       Vue.set(state[person.grade], person.lastName, {})
     }
     Vue.set(state[person.grade][person.lastName], person.firstName, person)

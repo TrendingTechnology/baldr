@@ -19,7 +19,7 @@ const state = {}
 
 const getters = {
   grade: (state) => (name) => {
-    if (state.hasOwnProperty(name)) {
+    if ({}.hasOwnProperty.call(state, name)) {
       return state[name]
     }
     return false
@@ -43,7 +43,7 @@ const getters = {
   },
   jobsOfGrade: (state, get) => (gradeName) => {
     const grade = get.grade(gradeName)
-    if (grade.hasOwnProperty('jobs')) {
+    if ({}.hasOwnProperty.call(grade, 'jobs')) {
       return grade.jobs
     }
     return {}
@@ -68,14 +68,14 @@ const getters = {
       return false
     }
     const grade = get.currentGradeObject
-    return grade.hasOwnProperty('jobs') &&
-      grade.jobs.hasOwnProperty(jobName) &&
-      grade.jobs[jobName].hasOwnProperty(personId)
+    return {}.hasOwnProperty.call(grade, 'jobs') &&
+      {}.hasOwnProperty.call(grade.jobs, jobName) &&
+      {}.hasOwnProperty.call(grade.jobs[jobName], personId)
   },
   getJobsOfPerson: (state, get) => (person) => {
     const grade = get.gradeOfPerson(person)
     const jobNames = []
-    if (grade.hasOwnProperty('jobs')) {
+    if ({}.hasOwnProperty.call(grade, 'jobs')) {
       for (const [jobName, persons] of Object.entries(grade.jobs)) {
         for (const [personId, person] of Object.entries(persons)) {
           if (person.id === personId) {
@@ -136,9 +136,9 @@ const mutations = {
     state[gradeName].personsPlacedCount -= 1
   },
   addPersonToJob: (state, { grade, person, job }) => {
-    if (!grade.hasOwnProperty('jobs')) Vue.set(grade, 'jobs', {})
-    if (!grade.jobs.hasOwnProperty(job.name)) Vue.set(grade.jobs, job.name, {})
-    if (!grade.jobs[job.name].hasOwnProperty(person.id)) {
+    if (!{}.hasOwnProperty.call(grade, 'jobs')) Vue.set(grade, 'jobs', {})
+    if (!{}.hasOwnProperty.call(grade.jobs, job.name)) Vue.set(grade.jobs, job.name, {})
+    if (!{}.hasOwnProperty.call(grade.jobs[job.name], person.id)) {
       Vue.set(grade.jobs[job.name], person.id, person)
     }
   },

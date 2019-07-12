@@ -39,7 +39,7 @@ const actions = {
 
 const mutations = {
   addJob: (state, job) => {
-    if (!state.hasOwnProperty(job.name)) {
+    if (!{}.hasOwnProperty.call(state, job.name)) {
       Vue.set(state, job.name, job)
     }
   },
