@@ -54,7 +54,7 @@
     "@bldr/theme-default": "^0.0.13",
     "@bldr/theme-handwriting": "^0.0.13",
     "electron": "^5.0.6",
-    "electron-builder": "^20.44.4",
+    "electron-builder": "^21.0.15",
     "electron-packager": "^14.0.1",
     "electron-rebuild": "^1.8.5",
     "fs-extra": "^8.1.0",
@@ -68,7 +68,7 @@
     "rewire": "^4.0.1",
     "sinon": "^7.3.2",
     "spectron": "^7.0.0",
-    "standard": "^13.0.0",
+    "standard": "^13.0.1",
     "tmp": "0.1.0"
   },
   "publishConfig": {
