@@ -66,14 +66,14 @@ describe('Vuex global store #unittest', () => {
       assert.strictEqual(persons['Friedrich, Josef'].firstName, 'Josef')
     })
 
-    it('currentPersonsCountNg: 1a', function () {
+    it('currentPersonsCount: 1a', function () {
       store.commit('setCurrentGrade', '1a')
-      assert.strictEqual(store.getters.currentPersonsCountNg, 1)
+      assert.strictEqual(store.getters.currentPersonsCount, 1)
     })
 
-    it('currentPersonsCountNg: Q11', function () {
+    it('currentPersonsCount: Q11', function () {
       store.commit('setCurrentGrade', 'Q11')
-      assert.strictEqual(store.getters.currentPersonsCountNg, 16)
+      assert.strictEqual(store.getters.currentPersonsCount, 16)
     })
   })
 
@@ -88,7 +88,7 @@ describe('Vuex global store #unittest', () => {
       const persons = store.getters.personsByGrade(person.grade)
       assert.strictEqual(persons.length, 1)
       // personsCount is 1
-      assert.strictEqual(store.state.grades['1x'].personsCount, 1)
+      assert.strictEqual(store.getters.personsCount('1x'), 1)
     })
 
     it('addPerson: trim support', function () {
@@ -114,7 +114,7 @@ describe('Vuex global store #unittest', () => {
       // Delete
       store.dispatch('deletePerson', person)
       // personsCount is 0
-      assert.strictEqual(store.state.grades['1x'].personsCount, 0)
+      assert.strictEqual(store.getters.personsCount('1x'), 0)
       // personsPlacedCount is 0
       assert.strictEqual(store.state.grades['1x'].personsPlacedCount, 0)
       // Grade is empty

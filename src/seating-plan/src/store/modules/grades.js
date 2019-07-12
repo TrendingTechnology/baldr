@@ -3,7 +3,6 @@ import Vue from 'vue'
 class Grade {
   constructor (name) {
     this.name = name
-    this.personsCount = 0
     this.personsPlacedCount = 0
   }
 }
@@ -37,13 +36,12 @@ const getters = {
       return get.grade(gradeName)
     }
   },
-  currentPersonsCount: (state, get) => {
-    const grade = get.grade(get.currentGrade)
-    return grade.personsCount
-  },
-  currentPersonsCountNg: (state, get) => {
-    const persons = get.personsByGradeAsObject(get.currentGrade)
+  personsCount: (state, get) => (gradeName) => {
+    const persons = get.personsByGradeAsObject(gradeName)
     return Object.keys(persons).length
+  },
+  currentPersonsCount: (state, get) => {
+    return get.personsCount(get.currentGrade)
   },
   jobsOfGrade: (state, get) => (gradeName) => {
     const grade = get.grade(gradeName)
@@ -128,12 +126,6 @@ const mutations = {
   },
   deleteGrade: (state, gradeName) => {
     Vue.delete(state, gradeName)
-  },
-  incrementPersonsCount: (state, gradeName) => {
-    state[gradeName].personsCount += 1
-  },
-  decrementPersonsCount: (state, gradeName) => {
-    state[gradeName].personsCount -= 1
   },
   incrementPersonsPlacedCount: (state, gradeName) => {
     state[gradeName].personsPlacedCount += 1

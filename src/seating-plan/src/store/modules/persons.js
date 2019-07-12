@@ -71,7 +71,6 @@ const actions = {
       const person = new Person(firstName, lastName, grade)
       commit('addPerson', person)
       dispatch('addGrade', grade)
-      commit('incrementPersonsCount', grade)
     }
   },
   deletePerson: ({ commit, dispatch, getters }, person) => {
@@ -80,7 +79,6 @@ const actions = {
     for (const jobName of jobs) {
       dispatch('removePersonFromJob', { personId: person.id, jobName })
     }
-    commit('decrementPersonsCount', person.grade)
     commit('deletePerson', person)
   },
   placePersonById: ({ commit, getters }, { seatNo, personId }) => {
