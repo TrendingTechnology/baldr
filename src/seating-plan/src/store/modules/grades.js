@@ -41,6 +41,10 @@ const getters = {
     const grade = get.grade(get.currentGrade)
     return grade.personsCount
   },
+  currentPersonsCountNg: (state, get) => {
+    const persons = get.personsByGradeAsObject(get.currentGrade)
+    return Object.keys(persons).length
+  },
   jobsOfGrade: (state, get) => (gradeName) => {
     const grade = get.grade(gradeName)
     if ({}.hasOwnProperty.call(grade, 'jobs')) {

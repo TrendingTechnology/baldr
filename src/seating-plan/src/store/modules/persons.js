@@ -54,6 +54,12 @@ const getters = {
     }
     return []
   },
+  personsByGradeAsObject: (state) => (gradeName) => {
+    if ({}.hasOwnProperty.call(state, gradeName)) {
+      return state[gradeName]
+    }
+    return {}
+  },
   personsByCurrentGrade: (state, get) => {
     return get.personsByGrade(get.currentGrade)
   }

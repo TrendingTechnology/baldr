@@ -60,6 +60,21 @@ describe('Vuex global store #unittest', () => {
         ['Lüftwart', 'Schaltwart']
       )
     })
+
+    it('personsByGradeAsObject', function () {
+      const persons = store.getters.personsByGradeAsObject('1a')
+      assert.strictEqual(persons['Friedrich, Josef'].firstName, 'Josef')
+    })
+
+    it('currentPersonsCountNg: 1a', function () {
+      store.commit('setCurrentGrade', '1a')
+      assert.strictEqual(store.getters.currentPersonsCountNg, 1)
+    })
+
+    it('currentPersonsCountNg: Q11', function () {
+      store.commit('setCurrentGrade', 'Q11')
+      assert.strictEqual(store.getters.currentPersonsCountNg, 16)
+    })
   })
 
   describe('actions', function () {
