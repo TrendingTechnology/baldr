@@ -67,13 +67,25 @@ const getters = {
     return get.jobsOfGrade(get.currentGrade)
   },
   /**
-   * Indicate if all persons in a grade are having a seat and are places.
+   * Indicate if all persons in a grade are having a seat and are placed.
    *
    * @returns boolean
    */
   isGradePlaced: (state, get) => {
     const grade = get.currentGradeObject
     if (grade && grade.personsCount === grade.personsPlacedCount) {
+      return true
+    }
+    return false
+  },
+  /**
+   * Indicate if all persons in a grade are having a seat and are placed.
+   *
+   * @returns boolean
+   */
+  isGradePlacedCurrent: (state, get) => {
+    const grade = get.currentGradeObject
+    if (grade && get.personsCount(grade.name) === get.personsPlacedCount(grade.name)) {
       return true
     }
     return false

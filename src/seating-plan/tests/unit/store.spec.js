@@ -87,6 +87,15 @@ describe('Vuex global store #unittest', () => {
       })
       assert.strictEqual(store.getters.personsPlacedCount('1a'), 1)
     })
+
+    it('isGradePlacedCurrent', function () {
+      assert.isFalse(store.getters.isGradePlacedCurrent)
+      store.dispatch('placePersonById', {
+        seatNo: 1,
+        personId: '1a: Friedrich, Josef'
+      })
+      assert.isTrue(store.getters.isGradePlacedCurrent)
+    })
   })
 
   describe('actions', function () {
