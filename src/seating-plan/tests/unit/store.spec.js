@@ -75,6 +75,18 @@ describe('Vuex global store #unittest', () => {
       store.commit('setCurrentGrade', 'Q11')
       assert.strictEqual(store.getters.currentPersonsCount, 16)
     })
+
+    it('personsPlacedCount', function () {
+      assert.strictEqual(store.getters.personsPlacedCount('1a'), 0)
+    })
+
+    it('personsPlacedCount: Place one', function () {
+      store.dispatch('placePersonById', {
+        seatNo: 1,
+        personId: '1a: Friedrich, Josef'
+      })
+      assert.strictEqual(store.getters.personsPlacedCount('1a'), 1)
+    })
   })
 
   describe('actions', function () {

@@ -43,6 +43,19 @@ const getters = {
   currentPersonsCount: (state, get) => {
     return get.personsCount(get.currentGrade)
   },
+  personsPlacedCount: (state, get) => (gradeName) => {
+    const persons = get.personsByGradeAsObject(gradeName)
+    let count = 0
+    for (const personName in persons) {
+      if (persons[personName].seatNo) {
+        count += 1
+      }
+    }
+    return count
+  },
+  currentPersonsPlacedCount: (state, get) => {
+    return get.personsPlacedCount(get.currentGrade)
+  },
   jobsOfGrade: (state, get) => (gradeName) => {
     const grade = get.grade(gradeName)
     if ({}.hasOwnProperty.call(grade, 'jobs')) {
