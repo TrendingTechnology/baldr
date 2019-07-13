@@ -123,6 +123,7 @@ describe('Vuex global store #unittest', () => {
     it('deletePerson', function () {
       const person = new Person('Max', 'Mustermann', '1x')
       store.dispatch('addPerson', person)
+      store.commit('setCurrentGrade', person.grade)
       store.dispatch('placePersonById', {
         seatNo: 1,
         personId: '1x: Mustermann, Max'
@@ -137,7 +138,7 @@ describe('Vuex global store #unittest', () => {
       // personsCount is 0
       assert.strictEqual(store.getters.personsCount('1x'), 0)
       // personsPlacedCount is 0
-      assert.strictEqual(store.state.grades['1x'].personsPlacedCount, 0)
+      assert.strictEqual(store.getters.currentPersonsPlacedCount, 0)
       // Grade is empty
       const persons = store.getters.personsByGrade(person.grade)
       assert.strictEqual(persons.length, 0)
