@@ -13,7 +13,7 @@ export class Person {
     this.lastName = lastName.trim()
     this.grade = grade.trim()
     this.seatNo = 0
-    this.jobs = {}
+    this.jobs = []
   }
 
   get name () {
@@ -22,14 +22,6 @@ export class Person {
 
   get id () {
     return `${this.grade}: ${this.lastName}, ${this.firstName}`
-  }
-
-  toJSON () {
-    return {
-      firstName: this.firstName,
-      lastName: this.lastName,
-      grade: this.grade
-    }
   }
 }
 
@@ -87,7 +79,7 @@ const getters = {
     const jobs = {}
     for (const [personName, person] of Object.entries(persons)) {
       if (person.jobs) {
-        for (const jobName of Object.keys(person.jobs)) {
+        for (const jobName of person.jobs) {
           if (!{}.hasOwnProperty.call(jobs, jobName)) {
             jobs[jobName] = {}
           }
@@ -129,10 +121,10 @@ const getters = {
       return false
     }
     const person = get.personById(personId)
-    return {}.hasOwnProperty.call(person.jobs, jobName)
+    return person.jobs.includes(jobName)
   },
   jobsOfPerson: (state, get) => (person) => {
-    return Object.keys(person.jobs)
+    return person.jobs
   },
   person: (state) => ({ firstName, lastName, grade }) => {
     const name = `${lastName}, ${firstName}`
@@ -195,9 +187,11 @@ const actions = {
     commit('deleteGrade', gradeName)
   },
   addPersonToJob: ({ commit, getters }, { personId, jobName }) => {
-    const person = getters.personById(personId)
-    const job = getters.jobByName(jobName)
-    commit('addPersonToJob', { person, job })
+    if (!getters.hasPersonJob(personId, jobName)) {
+      const person = getters.personById(personId)
+      const job = getters.jobByName(jobName)
+      commit('addPersonToJob', { person, job })
+    }
   },
   removePersonFromJob: ({ commit, getters }, { personId, jobName }) => {
     const person = getters.personById(personId)
@@ -247,10 +241,15 @@ const mutations = {
     Vue.delete(state, gradeName)
   },
   addPersonToJob: (state, { person, job }) => {
-    Vue.set(person.jobs, job.name, job)
+    person.jobs.push(job.name)
   },
   removePersonFromJob: (state, { person, job }) => {
-    Vue.delete(person.jobs, job.name)
+    for (let i = 0; i < person.jobs.length; i++) {
+      if (person.jobs[i] === job.name) {
+        person.jobs.splice(i, 1)
+        break
+      }
+    }
   },
   addPerson: (state, person) => {
     Vue.set(state[person.grade].persons, person.name, person)

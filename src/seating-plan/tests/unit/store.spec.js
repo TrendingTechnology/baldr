@@ -190,6 +190,16 @@ describe('Vuex global store #unittest', () => {
       store.dispatch('deleteGrade', '1x')
       assert.isFalse({}.hasOwnProperty.call(store.state.grades, '1x'))
     })
+
+    it('removePersonFromJob', function () {
+      const personId = '1a: Friedrich, Josef'
+      const jobName = 'Lüftwart'
+      store.dispatch('addPersonToJob', { personId, jobName })
+      store.dispatch('removePersonFromJob', { personId, jobName })
+      const person = store.getters.personById(personId)
+      const jobs = store.getters.jobsOfPerson(person)
+      assert.deepEqual(jobs, [])
+    })
   })
 
   describe('flushState', () => {
