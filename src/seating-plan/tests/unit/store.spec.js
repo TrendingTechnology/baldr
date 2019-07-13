@@ -48,7 +48,7 @@ describe('Vuex global store #unittest', () => {
         personId: '1a: Friedrich, Josef',
         jobName: 'Lüftwart'
       })
-      assert.deepEqual(store.getters.getJobsOfPerson(person), ['Lüftwart'])
+      assert.deepEqual(store.getters.jobsOfPerson(person), ['Lüftwart'])
 
       // Schaltwart
       store.dispatch('addPersonToJob', {
@@ -56,7 +56,7 @@ describe('Vuex global store #unittest', () => {
         jobName: 'Schaltwart'
       })
       assert.deepEqual(
-        store.getters.getJobsOfPerson(person),
+        store.getters.jobsOfPerson(person),
         ['Lüftwart', 'Schaltwart']
       )
     })
@@ -96,6 +96,16 @@ describe('Vuex global store #unittest', () => {
       })
       assert.isTrue(store.getters.isGradePlacedCurrent)
     })
+
+    it('jobsOfGrade', function () {
+      const personId = '1a: Friedrich, Josef'
+      store.dispatch('addPersonToJob', {
+        personId,
+        jobName: 'Lüftwart'
+      })
+      const jobs = store.getters.jobsOfGrade('1a')
+      assert.strictEqual(jobs['Lüftwart']['Friedrich, Josef'].firstName, 'Josef')
+    })
   })
 
   describe('actions', function () {
@@ -112,13 +122,12 @@ describe('Vuex global store #unittest', () => {
       assert.strictEqual(store.getters.personsCount('1x'), 1)
     })
 
-    it.only('addPerson: trim support', function () {
+    it('addPerson: trim support', function () {
       store.dispatch('addPerson', { firstName: 'Max ', lastName: ' Mustermann', grade: ' 1x ' })
-
-      // const person = store.getters.personById('1x: Mustermann, Max')
-      // assert.strictEqual(person.firstName, 'Max')
-      // assert.strictEqual(person.lastName, 'Mustermann')
-      // assert.strictEqual(person.grade, '1x')
+      const person = store.getters.personById('1x: Mustermann, Max')
+      assert.strictEqual(person.firstName, 'Max')
+      assert.strictEqual(person.lastName, 'Mustermann')
+      assert.strictEqual(person.grade, '1x')
     })
 
     it('deletePerson', function () {
@@ -142,30 +151,28 @@ describe('Vuex global store #unittest', () => {
       assert.strictEqual(store.getters.currentPersonsPlacedCount, 0)
       // Grade is empty
       const persons = store.getters.personsByGrade(person.grade)
-      assert.strictEqual(persons.length, 0)
-      // Person has no seat
-      assert.isFalse({}.hasOwnProperty.call(store.state.plans['1x'], 1))
-      // Person has no jobs
-      assert.isFalse({}.hasOwnProperty.call(store.state.grades['1x'].jobs, 'Lüftwart'))
+      assert.strictEqual(Object.keys(persons).length, 0)
     })
 
     it('placePersonById', function () {
+      const personId = '1a: Friedrich, Josef'
       store.dispatch('placePersonById', {
         seatNo: 1,
-        personId: '1a: Friedrich, Josef'
+        personId
       })
-      assert.strictEqual(store.state.plans['1a'][1].firstName, 'Josef')
+      const person = store.getters.personById(personId)
+      assert.strictEqual(person.seatNo, 1)
     })
 
     it('addPersonToJob', function () {
+      const personId = '1a: Friedrich, Josef'
       store.dispatch('addPersonToJob', {
-        personId: '1a: Friedrich, Josef',
+        personId,
         jobName: 'Lüftwart'
       })
-      const jobs = store.state.grades['1a'].jobs
-      assert.strictEqual(
-        jobs['Lüftwart']['1a: Friedrich, Josef'].firstName, 'Josef'
-      )
+      const person = store.getters.personById(personId)
+      const jobs = store.getters.jobsOfPerson(person)
+      assert.deepStrictEqual(jobs, ['Lüftwart'])
     })
 
     it('addGrade', function () {
@@ -176,7 +183,6 @@ describe('Vuex global store #unittest', () => {
     it('deleteGrade', function () {
       store.dispatch('deleteGrade', '1a')
       assert.isFalse({}.hasOwnProperty.call(store.state.grades, '1a'))
-      assert.isFalse({}.hasOwnProperty.call(store.state.persons, '1a'))
     })
 
     it('deleteGrade: without persons', function () {

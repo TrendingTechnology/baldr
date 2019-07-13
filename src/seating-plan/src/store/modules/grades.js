@@ -13,7 +13,7 @@ export class Person {
     this.lastName = lastName.trim()
     this.grade = grade.trim()
     this.seatNo = 0
-    this.jobs = []
+    this.jobs = {}
   }
 
   get name () {
@@ -31,15 +31,6 @@ export class Person {
       grade: this.grade
     }
   }
-}
-
-function arePersonsEqual (personA, personB) {
-  if (personA.firstName === personB.firstName &&
-      personA.lastName === personB.lastName &&
-      personA.grade === personB.grade) {
-    return true
-  }
-  return false
 }
 
 /**
@@ -92,11 +83,19 @@ const getters = {
     return get.personsPlacedCount(get.currentGrade)
   },
   jobsOfGrade: (state, get) => (gradeName) => {
-    const grade = get.grade(gradeName)
-    if ({}.hasOwnProperty.call(grade, 'jobs')) {
-      return grade.jobs
+    const persons = get.personsByGrade(gradeName)
+    const jobs = {}
+    for (const [personName, person] of Object.entries(persons)) {
+      if (person.jobs) {
+        for (const jobName of Object.keys(person.jobs)) {
+          if (!{}.hasOwnProperty.call(jobs, jobName)) {
+            jobs[jobName] = {}
+          }
+          jobs[jobName][personName] = person
+        }
+      }
     }
-    return {}
+    return jobs
   },
   jobsOfCurrentGrade: (state, get) => {
     return get.jobsOfGrade(get.currentGrade)
@@ -129,24 +128,11 @@ const getters = {
     if (!personId) {
       return false
     }
-    const grade = get.currentGradeObject
-    return {}.hasOwnProperty.call(grade, 'jobs') &&
-      {}.hasOwnProperty.call(grade.jobs, jobName) &&
-      {}.hasOwnProperty.call(grade.jobs[jobName], personId)
+    const person = get.personById(personId)
+    return {}.hasOwnProperty.call(person.jobs, jobName)
   },
-  getJobsOfPerson: (state, get) => (person) => {
-    const grade = get.gradeOfPerson(person)
-    const jobNames = []
-    if ({}.hasOwnProperty.call(grade, 'jobs')) {
-      for (const [jobName, persons] of Object.entries(grade.jobs)) {
-        for (const [personId, person] of Object.entries(persons)) {
-          if (person.id === personId) {
-            jobNames.push(jobName)
-          }
-        }
-      }
-    }
-    return jobNames
+  jobsOfPerson: (state, get) => (person) => {
+    return Object.keys(person.jobs)
   },
   person: (state) => ({ firstName, lastName, grade }) => {
     const name = `${lastName}, ${firstName}`
@@ -210,20 +196,18 @@ const actions = {
   },
   addPersonToJob: ({ commit, getters }, { personId, jobName }) => {
     const person = getters.personById(personId)
-    const grade = getters.grade(person.grade)
     const job = getters.jobByName(jobName)
-    commit('addPersonToJob', { grade, person, job })
+    commit('addPersonToJob', { person, job })
   },
   removePersonFromJob: ({ commit, getters }, { personId, jobName }) => {
     const person = getters.personById(personId)
-    const grade = getters.grade(person.grade)
     const job = getters.jobByName(jobName)
-    commit('removePersonFromJob', { grade, person, job })
+    commit('removePersonFromJob', { person, job })
   },
   addPerson: ({ commit, getters, dispatch }, { firstName, lastName, grade }) => {
     if (!getters.person({ firstName, lastName, grade })) {
       const person = new Person(firstName, lastName, grade)
-      dispatch('addGrade', grade)
+      dispatch('addGrade', person.grade)
       commit('addPerson', person)
     }
   },
@@ -262,18 +246,11 @@ const mutations = {
   deleteGrade: (state, gradeName) => {
     Vue.delete(state, gradeName)
   },
-  addPersonToJob: (state, { grade, person, job }) => {
-    if (!{}.hasOwnProperty.call(grade, 'jobs')) Vue.set(grade, 'jobs', {})
-    if (!{}.hasOwnProperty.call(grade.jobs, job.name)) Vue.set(grade.jobs, job.name, {})
-    if (!{}.hasOwnProperty.call(grade.jobs[job.name], person.id)) {
-      Vue.set(grade.jobs[job.name], person.id, person)
-    }
+  addPersonToJob: (state, { person, job }) => {
+    Vue.set(person.jobs, job.name, job)
   },
-  removePersonFromJob: (state, { grade, person, job }) => {
-    Vue.delete(grade.jobs[job.name], person.id)
-    if (Object.keys(grade.jobs[job.name]).length === 0) {
-      Vue.delete(grade.jobs, job.name)
-    }
+  removePersonFromJob: (state, { person, job }) => {
+    Vue.delete(person.jobs, job.name)
   },
   addPerson: (state, person) => {
     Vue.set(state[person.grade].persons, person.name, person)
