@@ -2,7 +2,7 @@
   <div class="people-list">
     <ol>
       <person-item
-        v-for="person in personsByCurrentGrade"
+        v-for="person in personsByGradeAsListSortedCurrent"
         :person="person"
         :key="person.id"
       />
@@ -35,7 +35,7 @@ export default {
       firstName: ''
     }
   },
-  computed: mapGetters(['personsByCurrentGrade', 'currentGrade']),
+  computed: mapGetters(['personsByGradeAsListSortedCurrent', 'currentGrade']),
   methods: {
     addPerson () {
       if (this.lastName && this.firstName) {

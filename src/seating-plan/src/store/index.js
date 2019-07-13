@@ -5,8 +5,6 @@ import app from './modules/app'
 import grades from './modules/grades'
 import importer from './modules/importer'
 import jobs from './modules/jobs'
-import persons from './modules/persons'
-import plans from './modules/plans'
 import seats from './modules/seats'
 
 Vue.use(Vuex)
@@ -90,7 +88,7 @@ const actions = {
   }
 }
 
-const modules = { app, grades, importer, jobs, persons, plans, seats }
+const modules = { app, grades, importer, jobs, seats }
 
 const store = new Vuex.Store({
   modules,

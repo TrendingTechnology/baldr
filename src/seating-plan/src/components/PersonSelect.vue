@@ -24,7 +24,7 @@ export default {
   },
   computed: {
     persons () {
-      let personsOrig = this.$store.getters.personsByCurrentGrade
+      let personsOrig = this.$store.getters.personsByGradeAsListSortedCurrent
       if (personsOrig) {
         let persons = []
         for (let person of personsOrig) {

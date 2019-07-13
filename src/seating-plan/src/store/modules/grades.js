@@ -3,7 +3,43 @@ import Vue from 'vue'
 class Grade {
   constructor (name) {
     this.name = name
+    this.persons = {}
   }
+}
+
+export class Person {
+  constructor (firstName, lastName, grade) {
+    this.firstName = firstName.trim()
+    this.lastName = lastName.trim()
+    this.grade = grade.trim()
+    this.seatNo = 0
+    this.jobs = []
+  }
+
+  get name () {
+    return `${this.lastName}, ${this.firstName}`
+  }
+
+  get id () {
+    return `${this.grade}: ${this.lastName}, ${this.firstName}`
+  }
+
+  toJSON () {
+    return {
+      firstName: this.firstName,
+      lastName: this.lastName,
+      grade: this.grade
+    }
+  }
+}
+
+function arePersonsEqual (personA, personB) {
+  if (personA.firstName === personB.firstName &&
+      personA.lastName === personB.lastName &&
+      personA.grade === personB.grade) {
+    return true
+  }
+  return false
 }
 
 /**
@@ -36,14 +72,14 @@ const getters = {
     }
   },
   personsCount: (state, get) => (gradeName) => {
-    const persons = get.personsByGradeAsObject(gradeName)
+    const persons = get.personsByGrade(gradeName)
     return Object.keys(persons).length
   },
   currentPersonsCount: (state, get) => {
     return get.personsCount(get.currentGrade)
   },
   personsPlacedCount: (state, get) => (gradeName) => {
-    const persons = get.personsByGradeAsObject(gradeName)
+    const persons = get.personsByGrade(gradeName)
     let count = 0
     for (const personName in persons) {
       if (persons[personName].seatNo) {
@@ -111,23 +147,65 @@ const getters = {
       }
     }
     return jobNames
+  },
+  person: (state) => ({ firstName, lastName, grade }) => {
+    const name = `${lastName}, ${firstName}`
+    if ({}.hasOwnProperty.call(state, grade) &&
+        {}.hasOwnProperty.call(state[grade].persons, name)) {
+      return state[grade].persons[name]
+    }
+    return false
+  },
+  personById: (state, get) => (personId) => {
+    const match = personId.match(/(.+): (.+), (.+)/)
+    return get.person({
+      firstName: match[3],
+      lastName: match[2],
+      grade: match[1]
+    })
+  },
+  personsByGrade: (state) => (gradeName) => {
+    if ({}.hasOwnProperty.call(state, gradeName)) {
+      return state[gradeName].persons
+    }
+    return {}
+  },
+  personsByGradeAsListSortedCurrent: (state, get) => {
+    const persons = get.personsByGrade(get.currentGrade)
+    const out = []
+    if (persons) {
+      for (const name of Object.keys(persons).sort()) {
+        out.push(persons[name])
+      }
+      return out
+    }
+    return []
+  },
+  personsByCurrentGrade: (state, get) => {
+    return get.personsByGrade(get.currentGrade)
+  },
+  personByGradeAndSeatNo: (state, get) => (gradeName, seatNo) => {
+    const persons = get.personsByGrade(gradeName)
+    for (const personName in persons) {
+      const person = persons[personName]
+      if (seatNo === person.seatNo) return person
+    }
+    return {}
+  },
+  personByCurrentGradeAndSeatNo: (state, get) => (seatNo) => {
+    const gradeName = get.currentGrade
+    return get.personByGradeAndSeatNo(gradeName, seatNo)
   }
 }
 
 const actions = {
-  addGrade: ({ commit, getters }, name) => {
-    if (!getters.grade(name)) {
-      const grade = new Grade(name)
+  addGrade: ({ commit, getters }, gradeName) => {
+    if (!getters.grade(gradeName)) {
+      const grade = new Grade(gradeName)
       commit('addGrade', grade)
     }
   },
   deleteGrade: ({ commit, getters }, gradeName) => {
-    const persons = getters.personsByGrade(gradeName)
-    if (persons) {
-      for (const person of persons) {
-        commit('deletePerson', person)
-      }
-    }
     commit('deleteGrade', gradeName)
   },
   addPersonToJob: ({ commit, getters }, { personId, jobName }) => {
@@ -141,6 +219,39 @@ const actions = {
     const grade = getters.grade(person.grade)
     const job = getters.jobByName(jobName)
     commit('removePersonFromJob', { grade, person, job })
+  },
+  addPerson: ({ commit, getters, dispatch }, { firstName, lastName, grade }) => {
+    if (!getters.person({ firstName, lastName, grade })) {
+      const person = new Person(firstName, lastName, grade)
+      dispatch('addGrade', grade)
+      commit('addPerson', person)
+    }
+  },
+  deletePerson: ({ commit, dispatch, getters }, person) => {
+    commit('deletePerson', person)
+  },
+  placePersonById: ({ commit, getters }, { seatNo, personId }) => {
+    const oldPerson = getters.personByCurrentGradeAndSeatNo(seatNo)
+    const newPerson = getters.personById(personId)
+
+    // Drag the same placed person over the same seat
+    if (oldPerson && oldPerson.id === newPerson.id) {
+      return
+    }
+
+    // Move the same person to another seat. Free the previously taken seat.
+    if (newPerson.seatNo) {
+      const seat = getters.seatByNo(newPerson.seatNo)
+      commit('removePersonFromPlan', { person: newPerson, seat: seat })
+    }
+
+    // Place the person.
+    commit('addPersonToPlan', { person: newPerson, seatNo: seatNo })
+  },
+  removePersonFromPlan: ({ commit, getters }, { personId, seatNo }) => {
+    const person = getters.personById(personId)
+    const seat = getters.seatByNo(seatNo)
+    commit('removePersonFromPlan', { person, seat })
   }
 }
 
@@ -163,6 +274,18 @@ const mutations = {
     if (Object.keys(grade.jobs[job.name]).length === 0) {
       Vue.delete(grade.jobs, job.name)
     }
+  },
+  addPerson: (state, person) => {
+    Vue.set(state[person.grade].persons, person.name, person)
+  },
+  deletePerson: (state, person) => {
+    Vue.delete(state[person.grade].persons, person.name)
+  },
+  addPersonToPlan: (state, { person, seatNo }) => {
+    person.seatNo = seatNo
+  },
+  removePersonFromPlan: (state, { person, seat }) => {
+    person.seatNo = 0
   }
 }
 
