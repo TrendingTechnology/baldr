@@ -12,7 +12,14 @@ const getters = {
     return false
   },
   personByCurrentGradeAndSeatNo: (state, get) => (seatNo) => {
-    return get.personByGradeAndSeatNo(get.currentGrade, seatNo)
+    // return get.personByGradeAndSeatNo(get.currentGrade, seatNo)
+    const gradeName = get.currentGrade
+    const persons = get.personsByGradeAsObject(gradeName)
+    for (const personName in persons) {
+      const person = persons[personName]
+      if (seatNo === person.seatNo) return person
+    }
+    return {}
   }
 }
 

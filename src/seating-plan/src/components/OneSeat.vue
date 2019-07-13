@@ -55,7 +55,7 @@ export default {
       return this.$store.getters.personByCurrentGradeAndSeatNo(this.seat.no)
     },
     gradeIsNotPlaced () {
-      return !this.$store.getters.isGradePlaced
+      return !this.$store.getters.isGradePlacedCurrent
     }
   },
   methods: {
