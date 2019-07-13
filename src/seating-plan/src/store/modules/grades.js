@@ -3,7 +3,6 @@ import Vue from 'vue'
 class Grade {
   constructor (name) {
     this.name = name
-    this.personsPlacedCount = 0
   }
 }
 
@@ -151,12 +150,6 @@ const mutations = {
   },
   deleteGrade: (state, gradeName) => {
     Vue.delete(state, gradeName)
-  },
-  incrementPersonsPlacedCount: (state, gradeName) => {
-    state[gradeName].personsPlacedCount += 1
-  },
-  decrementPersonsPlacedCount: (state, gradeName) => {
-    state[gradeName].personsPlacedCount -= 1
   },
   addPersonToJob: (state, { grade, person, job }) => {
     if (!{}.hasOwnProperty.call(grade, 'jobs')) Vue.set(grade, 'jobs', {})

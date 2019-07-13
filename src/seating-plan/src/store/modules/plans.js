@@ -12,7 +12,6 @@ const getters = {
     return false
   },
   personByCurrentGradeAndSeatNo: (state, get) => (seatNo) => {
-    // return get.personByGradeAndSeatNo(get.currentGrade, seatNo)
     const gradeName = get.currentGrade
     const persons = get.personsByGradeAsObject(gradeName)
     for (const personName in persons) {
@@ -37,7 +36,6 @@ const actions = {
     const person = getters.personById(personId)
     const seat = getters.seatByNo(seatNo)
     commit('removePersonFromPlan', { person, seat })
-    commit('decrementPersonsPlacedCount', person.grade)
   },
   removePersonFromPlanWithoutSeatNo: ({ commit, getters }, person) => {
     const plans = getters.plans
@@ -47,7 +45,6 @@ const actions = {
         if (arePersonsEqual(personInPlan, person)) {
           const seat = getters.seatByNo(seatNo)
           commit('removePersonFromPlan', { person, seat })
-          commit('decrementPersonsPlacedCount', person.grade)
           return
         }
       }
