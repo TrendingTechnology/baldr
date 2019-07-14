@@ -44,4 +44,12 @@ describe('Vuex store: jobs #unittest', function () {
       assert.strictEqual(jobs.length, 4)
     })
   })
+
+  describe('mutations', function () {
+    it('flushJobsState', function () {
+      store.commit('flushJobsState')
+      const jobs = store.getters.jobsAsArray
+      assert.deepEqual(jobs, [])
+    })
+  })
 })

@@ -47,6 +47,16 @@ const actions = {
   },
   deleteJob: ({ commit }, jobName) => {
     commit('deleteJob', jobName)
+  },
+  importJobsState: ({ dispatch, commit }, newState) => {
+    commit('flushJobsState')
+    for (const jobName in newState) {
+      const job = newState[jobName]
+      dispatch('createJob', {
+        name: jobName,
+        icon: job.icon
+      })
+    }
   }
 }
 
@@ -65,6 +75,11 @@ const mutations = {
   },
   deleteJob: (state, jobName) => {
     Vue.delete(state, jobName)
+  },
+  flushJobsState: (state) => {
+    for (const property of Object.keys(state)) {
+      delete state[property]
+    }
   }
 }
 

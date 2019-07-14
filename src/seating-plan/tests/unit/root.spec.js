@@ -16,6 +16,14 @@ describe('Vuex store: root #unittest', function () {
   })
 
   describe('getters', function () {
+    it('exportState', function () {
+      const state = store.getters.exportState
+      assert.isFalse({}.hasOwnProperty.call(state, 'app'))
+      assert.isFalse({}.hasOwnProperty.call(state, 'importer'))
+      assert.isFalse({}.hasOwnProperty.call(state, 'seats'))
+      assert.isTrue({}.hasOwnProperty.call(state, 'grades'))
+      assert.isTrue({}.hasOwnProperty.call(state, 'jobs'))
+    })
     it('state', function () {
       const state = store.getters.state
       assert.isTrue({}.hasOwnProperty.call(state, 'grades'))
@@ -32,12 +40,17 @@ describe('Vuex store: root #unittest', function () {
       const exportJsonFile = path.resolve('tests', 'files', 'export.json')
       const jsonString = fs.readFileSync(exportJsonFile, { encoding: 'utf-8' })
       store.dispatch('importState', jsonString)
+      // Person with jobs and seat number.
       let person = store.getters.personById('1a: Friedrich, Josef')
       assert.strictEqual(person.seatNo, 1)
       assert.deepEqual(person.jobs, ['Lüftwart'])
+      // Person without jobs and seat number.
       person = store.getters.personById('1b: Wagenknecht, Nicolas')
       assert.strictEqual(person.seatNo, 0)
       assert.deepEqual(person.jobs, [])
+      // Job only available in the export.json
+      const job = store.getters.jobByName('Testjob')
+      assert.strictEqual(job.icon, 'test')
     })
   })
 

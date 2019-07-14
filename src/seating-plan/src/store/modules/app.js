@@ -30,6 +30,12 @@ const actions = {
 }
 
 const mutations = {
+  flushAppState: (state) => {
+    const cleanState = new InitState()
+    for (const property in cleanState) {
+      state[property] = cleanState[property]
+    }
+  },
   setCurrentGrade: (state, gradeName) => {
     state.currentGrade = gradeName
   },

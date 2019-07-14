@@ -62,20 +62,11 @@
     },
     "importer": {},
     "jobs": {
-        "Schaltwart": {
-            "icon": "video-switch"
+        "Testjob": {
+            "icon": "test"
         },
         "Lüftwart": {
             "icon": "air-filter"
-        },
-        "Austeilwart": {
-            "icon": "file-outline"
-        },
-        "Klassenbuchführer": {
-            "icon": "notebook"
-        },
-        "Klassensprecher": {
-            "icon": "account-star"
         }
     },
     "seats": {

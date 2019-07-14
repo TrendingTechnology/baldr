@@ -10,20 +10,25 @@ import seats from './modules/seats'
 Vue.use(Vuex)
 
 const getters = {
+  exportState: (state, getters) => {
+    // Object.asign does not work with getters
+    const stateCopy = JSON.parse(JSON.stringify(getters.state))
+    delete stateCopy['app']
+    delete stateCopy['seats']
+    delete stateCopy['importer']
+    return stateCopy
+  },
   state: (state) => {
     return state
   },
   stateAsURIComponent: (state, getters) => {
-    const string = encodeURIComponent(JSON.stringify(getters.state))
+    const stateCopy = getters.exportState
+    const string = encodeURIComponent(JSON.stringify(stateCopy))
     return `data:text/json;charset=utf-8,${string}`
   }
 }
 
 const actions = {
-  importState: ({ commit, dispatch }, jsonString) => {
-    const newState = JSON.parse(jsonString)
-    dispatch('importGradesState', newState.grades)
-  },
   createTestData: ({ dispatch }) => {
     // https://realnamecreator.alexjonas.de/?l=de#
     const peopleList = [
@@ -90,6 +95,16 @@ const actions = {
     for (const job of jobs) {
       dispatch('createJob', job)
     }
+  },
+  importState: ({ commit, dispatch }, jsonString) => {
+    const newState = JSON.parse(jsonString)
+    if ({}.hasOwnProperty.call(newState, 'grades')) {
+      dispatch('importGradesState', newState.grades)
+    }
+    if ({}.hasOwnProperty.call(newState, 'jobs')) {
+      dispatch('importJobsState', newState.jobs)
+    }
+    commit('flushAppState')
   }
 }
 
