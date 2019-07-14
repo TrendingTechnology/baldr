@@ -10,7 +10,7 @@ import seats from './modules/seats'
 Vue.use(Vuex)
 
 const getters = {
-  exportState: (state, getters) => {
+  exportStateObject: (state, getters) => {
     // Object.asign does not work with getters
     const stateCopy = JSON.parse(JSON.stringify(getters.state))
     delete stateCopy['app']
@@ -18,12 +18,14 @@ const getters = {
     delete stateCopy['importer']
     return stateCopy
   },
+  exportStateString: (state, getters) => {
+    return JSON.stringify(getters.exportStateObject)
+  },
   state: (state) => {
     return state
   },
   stateAsURIComponent: (state, getters) => {
-    const stateCopy = getters.exportState
-    const string = encodeURIComponent(JSON.stringify(stateCopy))
+    const string = encodeURIComponent(getters.exportStateString)
     return `data:text/json;charset=utf-8,${string}`
   }
 }

@@ -16,14 +16,20 @@ describe('Vuex store: root #unittest', function () {
   })
 
   describe('getters', function () {
-    it('exportState', function () {
-      const state = store.getters.exportState
+    it('exportStateObject', function () {
+      const state = store.getters.exportStateObject
       assert.isFalse({}.hasOwnProperty.call(state, 'app'))
       assert.isFalse({}.hasOwnProperty.call(state, 'importer'))
       assert.isFalse({}.hasOwnProperty.call(state, 'seats'))
       assert.isTrue({}.hasOwnProperty.call(state, 'grades'))
       assert.isTrue({}.hasOwnProperty.call(state, 'jobs'))
     })
+
+    it('exportStateString', function () {
+      const state = store.getters.exportStateString
+      assert.strictEqual(state.indexOf('{"grades":{"1a":'), 0)
+    })
+
     it('state', function () {
       const state = store.getters.state
       assert.isTrue({}.hasOwnProperty.call(state, 'grades'))
@@ -31,7 +37,11 @@ describe('Vuex store: root #unittest', function () {
 
     it('stateAsURIComponent', function () {
       const component = store.getters.stateAsURIComponent
-      assert.strictEqual(component.indexOf('data:text/json;charset=utf-8,'), 0)
+      const prefix = 'data:text/json;charset=utf-8,'
+      assert.strictEqual(component.indexOf(prefix), 0)
+      const jsonString = decodeURIComponent(component.replace(prefix, ''))
+      const state = JSON.parse(jsonString)
+      assert.deepEqual(state.grades['1a']['Friedrich, Josef'], {})
     })
   })
 

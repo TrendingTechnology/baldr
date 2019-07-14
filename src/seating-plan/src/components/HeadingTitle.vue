@@ -3,11 +3,15 @@
     <vue-headful :title="title"/>
     <router-link to='/' class="back-link">zurück</router-link>
     <h1>{{ title }}</h1>
+    <material-icon name="content-save" @click.native="saveToLocalStorage"/>
   </header>
 </template>
 
 <script>
 import vueHeadful from 'vue-headful'
+
+// Components
+import MaterialIcon from './MaterialIcon.vue'
 
 export default {
   name: 'HeadingTitle',
@@ -15,7 +19,12 @@ export default {
     title: String
   },
   components: {
-    vueHeadful
+    vueHeadful, MaterialIcon
+  },
+  methods: {
+    saveToLocalStorage () {
+      localStorage.setItem('state', this.$store.getters.exportStateString)
+    }
   }
 }
 </script>
