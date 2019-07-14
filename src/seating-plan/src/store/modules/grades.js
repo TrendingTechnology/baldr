@@ -9,6 +9,10 @@ class Grade {
     this.name = name
     this.persons = {}
   }
+
+  toJSON () {
+    return this.persons
+  }
 }
 
 export class Person {
@@ -26,6 +30,17 @@ export class Person {
 
   get id () {
     return `${this.grade}: ${this.lastName}, ${this.firstName}`
+  }
+
+  toJSON () {
+    const json = {
+      // firstName: this.firstName,
+      // lastName: this.lastName,
+      // grade: this.grade
+    }
+    if (this.seatNo) json.seatNo = this.seatNo
+    if (this.jobs.length) json.jobs = this.jobs
+    return json
   }
 }
 
