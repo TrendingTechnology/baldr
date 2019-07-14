@@ -5,6 +5,12 @@ class Job {
     this.name = name
     this.icon = icon
   }
+
+  toJSON () {
+    return {
+      icon: this.icon
+    }
+  }
 }
 
 const state = {}
