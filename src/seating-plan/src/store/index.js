@@ -14,7 +14,7 @@ const getters = {
     return state
   },
   stateAsURIComponent: (state, getters) => {
-    let string = encodeURIComponent(JSON.stringify(getters.state))
+    const string = encodeURIComponent(JSON.stringify(getters.state))
     return `data:text/json;charset=utf-8,${string}`
   }
 }
