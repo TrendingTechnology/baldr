@@ -115,7 +115,8 @@ const modules = { app, grades, importer, jobs, seats }
 const store = new Vuex.Store({
   modules,
   getters,
-  actions
+  actions,
+  strict: true
 })
 
 export default store
