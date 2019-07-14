@@ -1,6 +1,6 @@
 <template>
   <span v-if="person.id" class="jobs">
-    <span v-for="job in listJobs" :key="job.name">
+    <span v-for="job in jobsAsArray" :key="job.name">
       <material-icon
         v-if="!hasPersonJob(person.id, job.name)"
         :name="job.icon"
@@ -23,7 +23,7 @@ export default {
   props: {
     person: [Object, Boolean]
   },
-  computed: mapGetters(['listJobs']),
+  computed: mapGetters(['jobsAsArray']),
   methods: {
     ...mapActions(['addJobToPerson']),
     hasPersonJob (personId, jobName) {

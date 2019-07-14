@@ -83,7 +83,7 @@ const actions = {
       { name: 'Klassensprecher', icon: 'account-star' }
     ]
     for (const job of jobs) {
-      dispatch('addJob', job)
+      dispatch('createJob', job)
     }
   }
 }

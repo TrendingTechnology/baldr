@@ -181,7 +181,7 @@ const getters = {
 }
 
 /**
- * Naming convenitions:
+ * Naming convention:
  *
  * CRUD:
  * - create
@@ -245,7 +245,7 @@ const actions = {
 }
 
 /**
- * Naming convenitions:
+ * Naming convention:
  *
  * CRUD:
  * - create

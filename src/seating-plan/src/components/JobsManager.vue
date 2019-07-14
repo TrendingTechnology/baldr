@@ -2,7 +2,7 @@
   <div class="jobs-manager">
     <heading-title title="Dienste verwalten"/>
     <ul>
-      <li v-for="job in listJobs" :key="job.name">
+      <li v-for="job in jobsAsArray" :key="job.name">
         <material-icon disabled :name="job.icon"/>
         {{ job.name }}
         <material-icon name="delete" @click.native="deleteJob(job.name)"/>
@@ -10,11 +10,11 @@
     </ul>
     <label>
       Name:
-      <input ref="name" type="text" v-model="newName" @keyup.enter="addJob()"/>
+      <input ref="name" type="text" v-model="newName" @keyup.enter="createJob()"/>
     </label>
     <label>
       Icon:
-      <input ref="icon" type="text" v-model="newIcon" @keyup.enter="addJob()"/>
+      <input ref="icon" type="text" v-model="newIcon" @keyup.enter="createJob()"/>
     </label>
   </div>
 </template>
@@ -37,11 +37,11 @@ export default {
       newIcon: ''
     }
   },
-  computed: mapGetters(['listJobs']),
+  computed: mapGetters(['jobsAsArray']),
   methods: {
-    addJob () {
+    createJob () {
       if (this.newName && this.newIcon) {
-        this.$store.dispatch('addJob', { name: this.newName, icon: this.newIcon })
+        this.$store.dispatch('createJob', { name: this.newName, icon: this.newIcon })
         this.newName = ''
         this.newIcon = ''
       }

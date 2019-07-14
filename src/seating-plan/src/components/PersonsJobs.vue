@@ -1,6 +1,6 @@
 <template>
   <div class="persons-jobs">
-    <span v-for="job in listJobs" :key="job.name">
+    <span v-for="job in jobsAsArray" :key="job.name">
       <material-icon
         v-if="hasPersonJob(person.id, job.name)"
         :name="job.icon"
@@ -23,7 +23,7 @@ export default {
     person: [Object, Boolean]
   },
   components: { MaterialIcon },
-  computed: mapGetters(['listJobs']),
+  computed: mapGetters(['jobsAsArray']),
   methods: {
     ...mapActions(['removeJobFromPerson']),
     hasPersonJob (personId, jobName) {

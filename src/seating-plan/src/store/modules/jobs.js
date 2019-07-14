@@ -10,35 +10,49 @@ class Job {
 const state = {}
 
 const getters = {
-  listJobs: (state) => {
-    const names = Object.keys(state)
-    const jobs = []
-    for (const name of names) {
-      jobs.push(state[name])
-    }
-    return jobs
-  },
   jobByName: (state) => (jobName) => {
     return state[jobName]
   },
   jobIconFromName: (state, get) => (jobName) => {
     const job = get.jobByName(jobName)
     return job.icon
+  },
+  jobsAsArray: (state) => {
+    const names = Object.keys(state)
+    const jobs = []
+    for (const name of names) {
+      jobs.push(state[name])
+    }
+    return jobs
   }
 }
 
+/**
+ * Naming convention:
+ *
+ * CRUD:
+ * - create
+ * - delete
+ */
 const actions = {
-  addJob: ({ commit }, { name, icon }) => {
+  createJob: ({ commit }, { name, icon }) => {
     const job = new Job(name, icon)
-    commit('addJob', job)
+    commit('createJob', job)
   },
   deleteJob: ({ commit }, jobName) => {
     commit('deleteJob', jobName)
   }
 }
 
+/**
+ * Naming convention:
+ *
+ * CRUD:
+ * - create
+ * - delete
+ */
 const mutations = {
-  addJob: (state, job) => {
+  createJob: (state, job) => {
     if (!{}.hasOwnProperty.call(state, job.name)) {
       Vue.set(state, job.name, job)
     }

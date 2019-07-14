@@ -5,7 +5,7 @@ import { assert } from 'chai'
 import store, { flushState } from '../../src/store'
 import { Person } from '../../src/store/modules/grades'
 
-describe('Vuex global store #unittest', function () {
+describe('Vuex store: grades #unittest', function () {
   beforeEach(function () {
     store.dispatch('createTestData')
     store.commit('setCurrentGrade', '1a')
@@ -26,14 +26,16 @@ describe('Vuex global store #unittest', function () {
       assert.strictEqual(person.firstName, 'Josef')
     })
 
-    it('personsByGrade: 1a', function () {
-      const persons = store.getters.personsByGrade('1a')
-      assert.strictEqual(persons['Friedrich, Josef'].firstName, 'Josef')
-    })
+    describe('personsByGrade', function () {
+      it('1a', function () {
+        const persons = store.getters.personsByGrade('1a')
+        assert.strictEqual(persons['Friedrich, Josef'].firstName, 'Josef')
+      })
 
-    it('personsByGrade: 1b', function () {
-      const persons = store.getters.personsByGrade('1b')
-      assert.strictEqual(Object.keys(persons).length, 7)
+      it('1b', function () {
+        const persons = store.getters.personsByGrade('1b')
+        assert.strictEqual(Object.keys(persons).length, 7)
+      })
     })
 
     it('personsByCurrentGrade', function () {
@@ -68,26 +70,30 @@ describe('Vuex global store #unittest', function () {
       assert.strictEqual(persons['Friedrich, Josef'].firstName, 'Josef')
     })
 
-    it('currentPersonsCount: 1a', function () {
-      store.commit('setCurrentGrade', '1a')
-      assert.strictEqual(store.getters.currentPersonsCount, 1)
-    })
-
-    it('currentPersonsCount: Q11', function () {
-      store.commit('setCurrentGrade', 'Q11')
-      assert.strictEqual(store.getters.currentPersonsCount, 16)
-    })
-
-    it('personsPlacedCount', function () {
-      assert.strictEqual(store.getters.personsPlacedCount('1a'), 0)
-    })
-
-    it('personsPlacedCount: Place one', function () {
-      store.dispatch('placePerson', {
-        seatNo: 1,
-        personId: '1a: Friedrich, Josef'
+    describe('currentPersonsCount', function () {
+      it('1a', function () {
+        store.commit('setCurrentGrade', '1a')
+        assert.strictEqual(store.getters.currentPersonsCount, 1)
       })
-      assert.strictEqual(store.getters.personsPlacedCount('1a'), 1)
+
+      it('Q11', function () {
+        store.commit('setCurrentGrade', 'Q11')
+        assert.strictEqual(store.getters.currentPersonsCount, 16)
+      })
+    })
+
+    describe('personsPlacedCount', function () {
+      it('Unplaced', function () {
+        assert.strictEqual(store.getters.personsPlacedCount('1a'), 0)
+      })
+
+      it('Place one', function () {
+        store.dispatch('placePerson', {
+          seatNo: 1,
+          personId: '1a: Friedrich, Josef'
+        })
+        assert.strictEqual(store.getters.personsPlacedCount('1a'), 1)
+      })
     })
 
     it('isGradePlacedCurrent', function () {
@@ -212,26 +218,6 @@ describe('Vuex global store #unittest', function () {
       store.dispatch('unplacePerson', { personId, seatNo })
       const person = store.getters.personById(personId)
       assert.strictEqual(person.seatNo, 0)
-    })
-  })
-
-  describe('flushState', function () {
-    it('app', function () {
-      store.dispatch('showModal')
-      assert.strictEqual(store.state.app.showModal, true)
-      flushState()
-      assert.strictEqual(store.state.app.showModal, false)
-    })
-
-    it('jobs', function () {
-      assert.strictEqual(store.getters.listJobs.length, 5)
-      flushState()
-      assert.strictEqual(store.getters.listJobs.length, 0)
-    })
-
-    it('seats', function () {
-      flushState()
-      assert.strictEqual(store.state.seats.count, 32)
     })
   })
 })
