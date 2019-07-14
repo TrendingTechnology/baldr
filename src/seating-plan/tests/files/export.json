@@ -6,7 +6,10 @@
     },
     "grades": {
         "1a": {
-            "Friedrich, Josef": {}
+            "Friedrich, Josef": {
+                "seatNo": 1,
+                "jobs": ["Lüftwart"]
+            }
         },
         "1b": {
             "Wagenknecht, Nicolas": {},

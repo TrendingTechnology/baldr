@@ -42,6 +42,14 @@ export class Person {
     if (this.jobs.length) json.jobs = this.jobs
     return json
   }
+
+  splitName (name) {
+    const segments = name.split(', ')
+    return {
+      firstName: segments[1],
+      lastName: segments[0]
+    }
+  }
 }
 
 /**
@@ -223,11 +231,27 @@ const actions = {
       commit('createPerson', person)
     }
   },
-  deleteGrade: ({ commit, getters }, gradeName) => {
+  deleteGrade: ({ commit }, gradeName) => {
     commit('deleteGrade', gradeName)
   },
   deletePerson: ({ commit }, person) => {
     commit('deletePerson', person)
+  },
+  importGradesState: ({ dispatch, commit }, newState) => {
+    commit('flushGradesState')
+    for (const gradeName in newState) {
+      for (const personName in newState[gradeName]) {
+        const name = Person.prototype.splitName(personName)
+        const person = newState[gradeName][personName]
+        dispatch('createPerson', {
+          firstName: name.firstName,
+          lastName: name.lastName,
+          grade: gradeName,
+          seatNo: person.seatNo,
+          jobs: person.jobs
+        })
+      }
+    }
   },
   placePerson: ({ commit, getters }, { seatNo, personId }) => {
     const oldPerson = getters.personByCurrentGradeAndSeatNo(seatNo)
@@ -284,6 +308,11 @@ const mutations = {
   },
   deletePerson: (state, person) => {
     Vue.delete(state[person.grade].persons, person.name)
+  },
+  flushGradesState: (state) => {
+    for (const property of Object.keys(state)) {
+      delete state[property]
+    }
   },
   placePerson: (state, { person, seatNo }) => {
     person.seatNo = seatNo

@@ -220,4 +220,21 @@ describe('Vuex store: grades #unittest', function () {
       assert.strictEqual(person.seatNo, 0)
     })
   })
+
+  describe('Mutations', function () {
+    it('flushGradesState', function () {
+      store.commit('flushGradesState')
+      assert.deepEqual(store.getters.gradeNames, [])
+    })
+  })
+
+  describe('Classes', function () {
+    it('Person.prototype.splitName', function () {
+      const result = Person.prototype.splitName('Friedrich, Josef')
+      assert.deepEqual(result, {
+        firstName: 'Josef',
+        lastName: 'Friedrich'
+      })
+    })
+  })
 })

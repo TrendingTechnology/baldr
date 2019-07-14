@@ -32,6 +32,12 @@ describe('Vuex store: root #unittest', function () {
       const exportJsonFile = path.resolve('tests', 'files', 'export.json')
       const jsonString = fs.readFileSync(exportJsonFile, { encoding: 'utf-8' })
       store.dispatch('importState', jsonString)
+      let person = store.getters.personById('1a: Friedrich, Josef')
+      assert.strictEqual(person.seatNo, 1)
+      assert.deepEqual(person.jobs, ['Lüftwart'])
+      person = store.getters.personById('1b: Wagenknecht, Nicolas')
+      assert.strictEqual(person.seatNo, 0)
+      assert.deepEqual(person.jobs, [])
     })
   })
 

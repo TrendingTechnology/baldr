@@ -20,8 +20,9 @@ const getters = {
 }
 
 const actions = {
-  importState: ({ commit }, jsonString) => {
-
+  importState: ({ commit, dispatch }, jsonString) => {
+    const newState = JSON.parse(jsonString)
+    dispatch('importGradesState', newState.grades)
   },
   createTestData: ({ dispatch }) => {
     // https://realnamecreator.alexjonas.de/?l=de#
@@ -92,19 +93,12 @@ const actions = {
   }
 }
 
-const mutations = {
-  importState: (state, newState) => {
-
-  }
-}
-
 const modules = { app, grades, importer, jobs, seats }
 
 const store = new Vuex.Store({
   modules,
   getters,
-  actions,
-  mutations
+  actions
 })
 
 export default store
