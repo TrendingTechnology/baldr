@@ -16,12 +16,12 @@ class Grade {
 }
 
 export class Person {
-  constructor (firstName, lastName, grade) {
+  constructor (firstName, lastName, grade, seatNo = 0, jobs = []) {
     this.firstName = firstName.trim()
     this.lastName = lastName.trim()
     this.grade = grade.trim()
-    this.seatNo = 0
-    this.jobs = []
+    this.seatNo = seatNo
+    this.jobs = jobs
   }
 
   get name () {
@@ -216,9 +216,9 @@ const actions = {
       commit('createGrade', grade)
     }
   },
-  createPerson: ({ commit, getters, dispatch }, { firstName, lastName, grade }) => {
+  createPerson: ({ commit, getters, dispatch }, { firstName, lastName, grade, seatNo, jobs }) => {
     if (!getters.person({ firstName, lastName, grade })) {
-      const person = new Person(firstName, lastName, grade)
+      const person = new Person(firstName, lastName, grade, seatNo, jobs)
       dispatch('createGrade', person.grade)
       commit('createPerson', person)
     }
@@ -238,10 +238,13 @@ const actions = {
       return
     }
 
+    if (oldPerson) {
+      commit('unplacePerson', { person: oldPerson })
+    }
+
     // Move the same person to another seat. Free the previously taken seat.
     if (newPerson.seatNo) {
-      const seat = getters.seatByNo(newPerson.seatNo)
-      commit('unplacePerson', { person: newPerson, seat: seat })
+      commit('unplacePerson', { person: newPerson })
     }
 
     // Place the person.
@@ -293,7 +296,7 @@ const mutations = {
       }
     }
   },
-  unplacePerson: (state, { person, seat }) => {
+  unplacePerson: (state, { person }) => {
     person.seatNo = 0
   }
 }

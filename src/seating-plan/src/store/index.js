@@ -92,12 +92,19 @@ const actions = {
   }
 }
 
+const mutations = {
+  importState: (state, newState) => {
+
+  }
+}
+
 const modules = { app, grades, importer, jobs, seats }
 
 const store = new Vuex.Store({
   modules,
   getters,
-  actions
+  actions,
+  mutations
 })
 
 export default store
