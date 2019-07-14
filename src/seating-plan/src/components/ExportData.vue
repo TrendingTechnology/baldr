@@ -2,7 +2,7 @@
   <div class="export-data">
     <heading-title title="Daten exportieren"/>
     <a
-      :href="dataString"
+      :href="stateAsURIComponent"
       :download="`seating-plan_${dateTime}.json`"
     >
       Die Sitzplan-Daten als JSON exportieren
@@ -11,6 +11,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 // Components
 import HeadingTitle from './HeadingTitle.vue'
 
@@ -20,10 +22,7 @@ export default {
     HeadingTitle
   },
   computed: {
-    dataString () {
-      let string = encodeURIComponent(JSON.stringify(this.$store.getters.getState))
-      return `data:text/json;charset=utf-8,${string}`
-    },
+    ...mapGetters(['stateAsURIComponent']),
     dateTime () {
       let date = new Date()
       let isoString = date.toISOString()

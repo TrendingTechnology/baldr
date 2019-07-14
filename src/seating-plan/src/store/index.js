@@ -10,8 +10,12 @@ import seats from './modules/seats'
 Vue.use(Vuex)
 
 const getters = {
-  getState: (state) => {
+  state: (state) => {
     return state
+  },
+  stateAsURIComponent: (state, getters) => {
+    let string = encodeURIComponent(JSON.stringify(getters.state))
+    return `data:text/json;charset=utf-8,${string}`
   }
 }
 
