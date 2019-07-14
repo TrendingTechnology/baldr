@@ -73,13 +73,13 @@ export default {
     },
     eventListenerDrop (event) {
       let personId = event.dataTransfer.getData('text/plain')
-      this.$store.dispatch('placePersonById', { seatNo: this.seat.no, personId: personId })
+      this.$store.dispatch('placePerson', { seatNo: this.seat.no, personId: personId })
       if (event.currentTarget.classList) {
         event.currentTarget.classList.remove('dragover')
       }
     },
     eventListenerRemove (event) {
-      this.$store.dispatch('removePersonFromPlan', { personId: this.person.id, seatNo: this.seat.no })
+      this.$store.dispatch('unplacePerson', { personId: this.person.id, seatNo: this.seat.no })
     },
     eventListenerAdd (event) {
       this.$store.commit('setCurrentSeat', this.seat.no)

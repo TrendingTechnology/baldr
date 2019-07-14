@@ -5,7 +5,7 @@
         v-if="!hasPersonJob(person.id, job.name)"
         :name="job.icon"
         :title="job.name"
-        @click.native="addPersonToJob({ personId: person.id, jobName: job.name})"
+        @click.native="addJobToPerson({ personId: person.id, jobName: job.name})"
       />
     </span>
   </span>
@@ -25,7 +25,7 @@ export default {
   },
   computed: mapGetters(['listJobs']),
   methods: {
-    ...mapActions(['addPersonToJob']),
+    ...mapActions(['addJobToPerson']),
     hasPersonJob (personId, jobName) {
       return this.$store.getters.hasPersonJob(personId, jobName)
     }

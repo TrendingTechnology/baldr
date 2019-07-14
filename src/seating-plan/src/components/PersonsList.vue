@@ -12,9 +12,9 @@
     v-model="firstName"
     type="text"
     placeholder="Vorname"
-    @keyup.enter="addPerson"
+    @keyup.enter="createPerson"
   >
-  <button @click="addPerson">hinzufügen</button>
+  <button @click="createPerson">hinzufügen</button>
   </div>
 </template>
 
@@ -37,9 +37,9 @@ export default {
   },
   computed: mapGetters(['personsByGradeAsListSortedCurrent', 'currentGrade']),
   methods: {
-    addPerson () {
+    createPerson () {
       if (this.lastName && this.firstName) {
-        this.$store.dispatch('addPerson', { firstName: this.firstName, lastName: this.lastName, grade: this.currentGrade })
+        this.$store.dispatch('createPerson', { firstName: this.firstName, lastName: this.lastName, grade: this.currentGrade })
         this.lastName = ''
         this.firstName = ''
       }

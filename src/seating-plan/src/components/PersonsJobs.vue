@@ -5,7 +5,7 @@
         v-if="hasPersonJob(person.id, job.name)"
         :name="job.icon"
         :title="job.name"
-        @click.native="removePersonFromJob({ personId: person.id, jobName: job.name })"
+        @click.native="removeJobFromPerson({ personId: person.id, jobName: job.name })"
       />
     </span>
   </div>
@@ -25,7 +25,7 @@ export default {
   components: { MaterialIcon },
   computed: mapGetters(['listJobs']),
   methods: {
-    ...mapActions(['removePersonFromJob']),
+    ...mapActions(['removeJobFromPerson']),
     hasPersonJob (personId, jobName) {
       return this.$store.getters.hasPersonJob(personId, jobName)
     }

@@ -1,3 +1,7 @@
+/**
+ * Sort alphabetically
+ */
+
 import Vue from 'vue'
 
 class Grade {
@@ -176,39 +180,41 @@ const getters = {
   }
 }
 
+/**
+ * Naming convenitions:
+ *
+ * CRUD:
+ * - create
+ * - delete
+ */
 const actions = {
-  addGrade: ({ commit, getters }, gradeName) => {
+  addJobToPerson: ({ commit, getters }, { personId, jobName }) => {
+    if (!getters.hasPersonJob(personId, jobName)) {
+      const person = getters.personById(personId)
+      const job = getters.jobByName(jobName)
+      commit('addJobToPerson', { person, job })
+    }
+  },
+  createGrade: ({ commit, getters }, gradeName) => {
     if (!getters.grade(gradeName)) {
       const grade = new Grade(gradeName)
-      commit('addGrade', grade)
+      commit('createGrade', grade)
+    }
+  },
+  createPerson: ({ commit, getters, dispatch }, { firstName, lastName, grade }) => {
+    if (!getters.person({ firstName, lastName, grade })) {
+      const person = new Person(firstName, lastName, grade)
+      dispatch('createGrade', person.grade)
+      commit('createPerson', person)
     }
   },
   deleteGrade: ({ commit, getters }, gradeName) => {
     commit('deleteGrade', gradeName)
   },
-  addPersonToJob: ({ commit, getters }, { personId, jobName }) => {
-    if (!getters.hasPersonJob(personId, jobName)) {
-      const person = getters.personById(personId)
-      const job = getters.jobByName(jobName)
-      commit('addPersonToJob', { person, job })
-    }
-  },
-  removePersonFromJob: ({ commit, getters }, { personId, jobName }) => {
-    const person = getters.personById(personId)
-    const job = getters.jobByName(jobName)
-    commit('removePersonFromJob', { person, job })
-  },
-  addPerson: ({ commit, getters, dispatch }, { firstName, lastName, grade }) => {
-    if (!getters.person({ firstName, lastName, grade })) {
-      const person = new Person(firstName, lastName, grade)
-      dispatch('addGrade', person.grade)
-      commit('addPerson', person)
-    }
-  },
-  deletePerson: ({ commit, dispatch, getters }, person) => {
+  deletePerson: ({ commit }, person) => {
     commit('deletePerson', person)
   },
-  placePersonById: ({ commit, getters }, { seatNo, personId }) => {
+  placePerson: ({ commit, getters }, { seatNo, personId }) => {
     const oldPerson = getters.personByCurrentGradeAndSeatNo(seatNo)
     const newPerson = getters.personById(personId)
 
@@ -220,30 +226,51 @@ const actions = {
     // Move the same person to another seat. Free the previously taken seat.
     if (newPerson.seatNo) {
       const seat = getters.seatByNo(newPerson.seatNo)
-      commit('removePersonFromPlan', { person: newPerson, seat: seat })
+      commit('unplacePerson', { person: newPerson, seat: seat })
     }
 
     // Place the person.
-    commit('addPersonToPlan', { person: newPerson, seatNo: seatNo })
+    commit('placePerson', { person: newPerson, seatNo: seatNo })
   },
-  removePersonFromPlan: ({ commit, getters }, { personId, seatNo }) => {
+  removeJobFromPerson: ({ commit, getters }, { personId, jobName }) => {
+    const person = getters.personById(personId)
+    const job = getters.jobByName(jobName)
+    commit('removeJobFromPerson', { person, job })
+  },
+  unplacePerson: ({ commit, getters }, { personId, seatNo }) => {
     const person = getters.personById(personId)
     const seat = getters.seatByNo(seatNo)
-    commit('removePersonFromPlan', { person, seat })
+    commit('unplacePerson', { person, seat })
   }
 }
 
+/**
+ * Naming convenitions:
+ *
+ * CRUD:
+ * - create
+ * - delete
+ */
 const mutations = {
-  addGrade: (state, grade) => {
+  addJobToPerson: (state, { person, job }) => {
+    person.jobs.push(job.name)
+  },
+  createGrade: (state, grade) => {
     Vue.set(state, grade.name, grade)
+  },
+  createPerson: (state, person) => {
+    Vue.set(state[person.grade].persons, person.name, person)
   },
   deleteGrade: (state, gradeName) => {
     Vue.delete(state, gradeName)
   },
-  addPersonToJob: (state, { person, job }) => {
-    person.jobs.push(job.name)
+  deletePerson: (state, person) => {
+    Vue.delete(state[person.grade].persons, person.name)
   },
-  removePersonFromJob: (state, { person, job }) => {
+  placePerson: (state, { person, seatNo }) => {
+    person.seatNo = seatNo
+  },
+  removeJobFromPerson: (state, { person, job }) => {
     for (let i = 0; i < person.jobs.length; i++) {
       if (person.jobs[i] === job.name) {
         person.jobs.splice(i, 1)
@@ -251,16 +278,7 @@ const mutations = {
       }
     }
   },
-  addPerson: (state, person) => {
-    Vue.set(state[person.grade].persons, person.name, person)
-  },
-  deletePerson: (state, person) => {
-    Vue.delete(state[person.grade].persons, person.name)
-  },
-  addPersonToPlan: (state, { person, seatNo }) => {
-    person.seatNo = seatNo
-  },
-  removePersonFromPlan: (state, { person, seat }) => {
+  unplacePerson: (state, { person, seat }) => {
     person.seatNo = 0
   }
 }

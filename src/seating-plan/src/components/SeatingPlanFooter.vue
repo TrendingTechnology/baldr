@@ -11,7 +11,7 @@
           {{ person.firstName }}<!--
       --><material-icon
             name="delete"
-            @click.native="removePersonFromJob({ personId: person.id, jobName: jobName })"
+            @click.native="removeJobFromPerson({ personId: person.id, jobName: jobName })"
           />
         </span>
       </span>
@@ -32,7 +32,7 @@ export default {
   },
   computed: mapGetters(['currentPersonsCount', 'jobsOfCurrentGrade']),
   methods: {
-    ...mapActions(['removePersonFromJob']),
+    ...mapActions(['removeJobFromPerson']),
     getJobIconFromName (jobName) {
       return this.$store.getters.jobIconFromName(jobName)
     }

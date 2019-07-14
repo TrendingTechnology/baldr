@@ -16,7 +16,7 @@ const actions = {
         const firstName = match[2]
         const grade = match[4]
         console.log(line)
-        dispatch('addPerson', { firstName, lastName, grade })
+        dispatch('createPerson', { firstName, lastName, grade })
       }
     }
   }

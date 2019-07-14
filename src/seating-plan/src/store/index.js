@@ -71,7 +71,7 @@ const actions = {
       { firstName: 'Thomas', lastName: 'Grimmer', grade: 'Q11' }
     ]
     for (const person of peopleList) {
-      dispatch('addPerson', person)
+      dispatch('createPerson', person)
     }
 
     const jobs = [

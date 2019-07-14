@@ -16,9 +16,9 @@
       v-model="gradeName"
       type="text"
       placeholder="Klasse"
-      @keyup.enter="addGrade"
+      @keyup.enter="createGrade"
     >
-    <button @click="addGrade">hinzufügen</button>
+    <button @click="createGrade">hinzufügen</button>
   </div>
 </template>
 
@@ -39,9 +39,9 @@ export default {
   },
   methods: {
     ...mapActions(['deleteGrade']),
-    addGrade () {
+    createGrade () {
       if (this.gradeName) {
-        this.$store.dispatch('addGrade', this.gradeName)
+        this.$store.dispatch('createGrade', this.gradeName)
         this.gradeName = ''
       }
     }
