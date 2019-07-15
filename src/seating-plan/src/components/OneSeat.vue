@@ -82,7 +82,7 @@ export default {
       this.$store.dispatch('unplacePerson', { personId: this.person.id, seatNo: this.seat.no })
     },
     eventListenerAdd (event) {
-      this.$store.commit('setCurrentSeat', this.seat.no)
+      this.$store.commit('setSeatNoCurrent', this.seat.no)
       this.$store.dispatch('showModal')
       this.$nextTick(() => {
         document.querySelector('.dynamic-select').focus()

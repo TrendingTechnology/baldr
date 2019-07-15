@@ -8,7 +8,7 @@ import { Person } from '../../src/store/modules/grades'
 describe('Vuex store: grades #unittest', function () {
   beforeEach(function () {
     store.dispatch('createTestData')
-    store.commit('setCurrentGrade', '1a')
+    store.commit('setGradeNameCurrent', '1a')
   })
 
   afterEach(function () {
@@ -72,12 +72,12 @@ describe('Vuex store: grades #unittest', function () {
 
     describe('personsCountCurrent', function () {
       it('1a', function () {
-        store.commit('setCurrentGrade', '1a')
+        store.commit('setGradeNameCurrent', '1a')
         assert.strictEqual(store.getters.personsCountCurrent, 1)
       })
 
       it('Q11', function () {
-        store.commit('setCurrentGrade', 'Q11')
+        store.commit('setGradeNameCurrent', 'Q11')
         assert.strictEqual(store.getters.personsCountCurrent, 16)
       })
     })
@@ -172,7 +172,7 @@ describe('Vuex store: grades #unittest', function () {
     it('deletePerson', function () {
       const person = new Person('Max', 'Mustermann', '1x')
       store.dispatch('createPerson', person)
-      store.commit('setCurrentGrade', person.grade)
+      store.commit('setGradeNameCurrent', person.grade)
       store.dispatch('placePerson', {
         seatNo: 1,
         personId: '1x: Mustermann, Max'

@@ -107,16 +107,29 @@ const actions = {
       dispatch('importJobsState', newState.jobs)
     }
     commit('flushAppState')
+    commit('setImportInProgress', false)
   }
 }
 
 const modules = { app, grades, importer, jobs, seats }
 
+const plugin = (store) => {
+  store.subscribe((mutation, state) => {
+    if (!store.getters.importInProgress &&
+        mutation.type !== 'setGradeNameCurrent' &&
+        mutation.type !== 'setStateChanged' &&
+        mutation.type !== 'importInProgress') {
+      store.commit('setStateChanged', true)
+    }
+  })
+}
+
 const store = new Vuex.Store({
   modules,
   getters,
   actions,
-  strict: true
+  strict: true,
+  plugins: [plugin]
 })
 
 export default store

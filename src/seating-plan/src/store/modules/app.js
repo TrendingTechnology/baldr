@@ -1,8 +1,10 @@
 class InitState {
   constructor () {
     this.gradeNameCurrent = null
+    this.importInProgress = true
     this.seatNoCurrent = null
     this.showModal = false
+    this.stateChanged = false
   }
 }
 
@@ -12,20 +14,26 @@ const getters = {
   gradeNameCurrent: (state) => {
     return state.gradeNameCurrent
   },
+  importInProgress: (state) => {
+    return state.importInProgress
+  },
+  showModal: (state) => {
+    return state.showModal
+  },
   seatNoCurrent: (state) => {
     return state.seatNoCurrent
   },
-  modalState: (state) => {
-    return state.showModal
+  stateChanged: (state) => {
+    return state.stateChanged
   }
 }
 
 const actions = {
   showModal: ({ commit }) => {
-    commit('setModal', true)
+    commit('setShowModal', true)
   },
   closeModal: ({ commit }) => {
-    commit('setModal', false)
+    commit('setShowModal', false)
   }
 }
 
@@ -36,14 +44,20 @@ const mutations = {
       state[property] = cleanState[property]
     }
   },
-  setCurrentGrade: (state, gradeName) => {
+  setGradeNameCurrent: (state, gradeName) => {
     state.gradeNameCurrent = gradeName
   },
-  setCurrentSeat: (state, seatNo) => {
+  setImportInProgress: (state, status) => {
+    state.importInProgress = status
+  },
+  setSeatNoCurrent: (state, seatNo) => {
     state.seatNoCurrent = seatNo
   },
-  setModal: (state, open) => {
-    state.showModal = open
+  setShowModal: (state, status) => {
+    state.showModal = status
+  },
+  setStateChanged: (state, status) => {
+    state.stateChanged = status
   }
 }
 

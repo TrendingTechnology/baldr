@@ -1,7 +1,7 @@
 <template>
   <div class="seating-plan-view">
     <modal-dialog
-      v-show="modalState"
+      v-show="showModal"
       @close="closeModal"
     >
       <person-select/>
@@ -37,7 +37,7 @@ export default {
     SeatingPlanFooter
   },
   computed: {
-    ...mapGetters(['gradeNameCurrent', 'modalState']),
+    ...mapGetters(['gradeNameCurrent', 'showModal']),
     title () {
       return 'Sitzplan der Klasse “' + this.gradeNameCurrent + '”'
     }
@@ -53,7 +53,7 @@ export default {
   },
   created: function () {
     let gradeName = this.$route.params.grade
-    this.$store.commit('setCurrentGrade', gradeName)
+    this.$store.commit('setGradeNameCurrent', gradeName)
   }
 }
 </script>

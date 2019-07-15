@@ -8,7 +8,7 @@ import store, { flushState } from '../../src/store'
 describe('Vuex store: root #unittest', function () {
   beforeEach(function () {
     store.dispatch('createTestData')
-    store.commit('setCurrentGrade', '1a')
+    store.commit('setGradeNameCurrent', '1a')
   })
 
   afterEach(function () {

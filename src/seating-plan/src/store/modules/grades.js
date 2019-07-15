@@ -132,7 +132,7 @@ const getters = {
       const person = persons[personName]
       if (seatNo === person.seatNo) return person
     }
-    return {}
+    return false
   },
   personByGradeAndSeatNoCurrent: (state, getters) => (seatNo) => {
     const gradeName = getters.gradeNameCurrent
