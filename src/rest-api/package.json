@@ -20,7 +20,8 @@
     "access": "public"
   },
   "scripts": {
-    "debug": "babel-node src/index.js"
+    "debug": "babel-node src/index.js",
+    "dist": "babel -d ./dist ./src -s"
   },
   "dependencies": {
     "express": "^4.17.1"
