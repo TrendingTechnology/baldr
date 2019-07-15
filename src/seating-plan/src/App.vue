@@ -7,7 +7,6 @@
 <script>
 import VueRouter from 'vue-router'
 
-import ExportData from './components/ExportData.vue'
 import ImportData from './components/ImportData.vue'
 import ImportPersons from './components/ImportPersons.vue'
 import JobsManager from './components/JobsManager.vue'
@@ -20,7 +19,6 @@ const routes = [
   { path: '/', component: StartPage },
   { path: '/grade/:grade', component: SeatingPlanView },
   { path: '/import-persons', component: ImportPersons },
-  { path: '/export-data', component: ExportData },
   { path: '/import-data', component: ImportData },
   { path: '/jobs-manager', component: JobsManager }
 ]

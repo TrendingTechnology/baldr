@@ -26,6 +26,12 @@ export default {
 }
 </script>
 
+<style>
+a .mdi {
+  color: black;
+}
+</style>
+
 <style scoped>
   @import '../../node_modules/@mdi/font/css/materialdesignicons.css';
   div {

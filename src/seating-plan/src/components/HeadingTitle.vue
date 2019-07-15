@@ -1,17 +1,19 @@
 <template>
   <header>
     <vue-headful :title="title"/>
-    <router-link to='/' class="back-link">zurück</router-link>
+    <router-link v-if="isNotHome" to='/' class="back-link" title="zurück">
+      <material-icon name="arrow-left"/>
+    </router-link>
     <h1>{{ title }}</h1>
-    <material-icon :disabled="!stateChanged" name="content-save" @click.native="saveToLocalStorage"/>
+    <main-menu/>
   </header>
 </template>
 
 <script>
 import vueHeadful from 'vue-headful'
-import { mapGetters } from 'vuex'
 
 // Components
+import MainMenu from './MainMenu.vue'
 import MaterialIcon from './MaterialIcon.vue'
 
 export default {
@@ -20,13 +22,14 @@ export default {
     title: String
   },
   components: {
-    vueHeadful, MaterialIcon
+    vueHeadful, MainMenu, MaterialIcon
   },
-  computed: mapGetters(['stateChanged']),
-  methods: {
-    saveToLocalStorage () {
-      localStorage.setItem('state', this.$store.getters.exportStateString)
-      this.$store.commit('setStateChanged', false)
+  computed: {
+    isNotHome () {
+      if (this.$route.path !== '/') {
+        return true
+      }
+      return false
     }
   }
 }
@@ -36,6 +39,7 @@ export default {
   header {
     display: inline-flex;
     width: 100%;
+    justify-content: space-between;
   }
 
   header h1 {
