@@ -43,7 +43,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['showModal', 'closeModal'])
+    ...mapActions(['closeModal'])
   },
   beforeCreate: function () {
     let grade = this.$route.params.grade

@@ -1,26 +1,21 @@
 <template>
-  <div class="export-data">
-    <heading-title title="Daten exportieren"/>
-    <a
-      :href="stateAsURIComponent"
-      :download="`seating-plan_${dateTime}.json`"
-    >
-      Die Sitzplan-Daten als JSON exportieren
-    </a>
-  </div>
+  <a
+    :href="stateAsURIComponent"
+    :download="`seating-plan_${dateTime}.json`"
+    title="Daten exportieren (als JSON)"
+  >
+    <material-icon name="export" />
+  </a>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
 
 // Components
-import HeadingTitle from './HeadingTitle.vue'
-
+import MaterialIcon from './MaterialIcon.vue'
 export default {
-  name: 'ExportData',
-  components: {
-    HeadingTitle
-  },
+  name: 'ExportLink',
+  components: { MaterialIcon },
   computed: {
     ...mapGetters(['stateAsURIComponent']),
     dateTime () {
