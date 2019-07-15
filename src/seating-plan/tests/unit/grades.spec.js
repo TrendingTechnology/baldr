@@ -70,15 +70,15 @@ describe('Vuex store: grades #unittest', function () {
       assert.strictEqual(persons['Friedrich, Josef'].firstName, 'Josef')
     })
 
-    describe('currentPersonsCount', function () {
+    describe('personsCountCurrent', function () {
       it('1a', function () {
         store.commit('setCurrentGrade', '1a')
-        assert.strictEqual(store.getters.currentPersonsCount, 1)
+        assert.strictEqual(store.getters.personsCountCurrent, 1)
       })
 
       it('Q11', function () {
         store.commit('setCurrentGrade', 'Q11')
-        assert.strictEqual(store.getters.currentPersonsCount, 16)
+        assert.strictEqual(store.getters.personsCountCurrent, 16)
       })
     })
 
@@ -187,7 +187,7 @@ describe('Vuex store: grades #unittest', function () {
       // personsCount is 0
       assert.strictEqual(store.getters.personsCount('1x'), 0)
       // personsPlacedCount is 0
-      assert.strictEqual(store.getters.currentPersonsPlacedCount, 0)
+      assert.strictEqual(store.getters.personsPlacedCountCurrent, 0)
       // Grade is empty
       const persons = store.getters.personsByGrade(person.grade)
       assert.strictEqual(Object.keys(persons).length, 0)

@@ -75,7 +75,7 @@ const getters = {
     const gradeNames = Object.keys(state)
     return gradeNames.sort(naturalSort)
   },
-  currentGradeObject: (state, get) => {
+  gradeCurrent: (state, get) => {
     const gradeName = get.currentGrade
     if (gradeName) {
       return get.grade(gradeName)
@@ -85,7 +85,7 @@ const getters = {
     const persons = get.personsByGrade(gradeName)
     return Object.keys(persons).length
   },
-  currentPersonsCount: (state, get) => {
+  personsCountCurrent: (state, get) => {
     return get.personsCount(get.currentGrade)
   },
   personsPlacedCount: (state, get) => (gradeName) => {
@@ -98,7 +98,7 @@ const getters = {
     }
     return count
   },
-  currentPersonsPlacedCount: (state, get) => {
+  personsPlacedCountCurrent: (state, get) => {
     return get.personsPlacedCount(get.currentGrade)
   },
   jobsOfGrade: (state, get) => (gradeName) => {
@@ -116,7 +116,7 @@ const getters = {
     }
     return jobs
   },
-  jobsOfCurrentGrade: (state, get) => {
+  jobsOfGradeCurrent: (state, get) => {
     return get.jobsOfGrade(get.currentGrade)
   },
   /**
@@ -125,7 +125,7 @@ const getters = {
    * @returns boolean
    */
   isGradePlaced: (state, get) => {
-    const grade = get.currentGradeObject
+    const grade = get.gradeCurrent
     if (grade && grade.personsCount === grade.personsPlacedCount) {
       return true
     }
@@ -137,7 +137,7 @@ const getters = {
    * @returns boolean
    */
   isGradePlacedCurrent: (state, get) => {
-    const grade = get.currentGradeObject
+    const grade = get.gradeCurrent
     if (grade && get.personsCount(grade.name) === get.personsPlacedCount(grade.name)) {
       return true
     }
@@ -197,7 +197,7 @@ const getters = {
     }
     return {}
   },
-  personByCurrentGradeAndSeatNo: (state, get) => (seatNo) => {
+  personByGradeAndSeatNoCurrent: (state, get) => (seatNo) => {
     const gradeName = get.currentGrade
     return get.personByGradeAndSeatNo(gradeName, seatNo)
   }
@@ -254,7 +254,7 @@ const actions = {
     }
   },
   placePerson: ({ commit, getters }, { seatNo, personId }) => {
-    const oldPerson = getters.personByCurrentGradeAndSeatNo(seatNo)
+    const oldPerson = getters.personByGradeAndSeatNoCurrent(seatNo)
     const newPerson = getters.personById(personId)
 
     // Drag the same placed person over the same seat

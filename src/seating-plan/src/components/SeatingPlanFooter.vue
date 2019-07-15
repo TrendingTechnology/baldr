@@ -1,10 +1,10 @@
 <template>
   <footer>
     <div class="count">
-    Schülerzahl: {{ currentPersonsCount }}
+    Schülerzahl: {{ personsCountCurrent }}
     </div>
     <div class="jobs">
-      <span class="job" v-for="(persons, jobName) in jobsOfCurrentGrade" :key="jobName">
+      <span class="job" v-for="(persons, jobName) in jobsOfGradeCurrent" :key="jobName">
         <strong><material-icon disabled :name="getJobIconFromName(jobName)"/> {{ jobName }}:</strong>
         <span v-for="person in persons" :key="person.id">
           {{ person.lastName }},
@@ -30,7 +30,7 @@ export default {
   components: {
     MaterialIcon
   },
-  computed: mapGetters(['currentPersonsCount', 'jobsOfCurrentGrade']),
+  computed: mapGetters(['personsCountCurrent', 'jobsOfGradeCurrent']),
   methods: {
     ...mapActions(['removeJobFromPerson']),
     getJobIconFromName (jobName) {

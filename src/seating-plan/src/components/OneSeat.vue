@@ -52,7 +52,7 @@ export default {
       return `bottom: ${this.seat.y}%; height: ${this.seats.dimension.depth}%; left: ${this.seat.x}%; width: ${this.seats.dimension.width}%;`
     },
     person () {
-      return this.$store.getters.personByCurrentGradeAndSeatNo(this.seat.no)
+      return this.$store.getters.personByGradeAndSeatNoCurrent(this.seat.no)
     },
     gradeIsNotPlaced () {
       return !this.$store.getters.isGradePlacedCurrent
