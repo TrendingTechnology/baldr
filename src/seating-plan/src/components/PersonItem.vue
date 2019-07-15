@@ -43,7 +43,7 @@ export default {
     ...mapActions(['deletePerson']),
     eventListenerDragStart (event) {
       event.dataTransfer.dropEffect = 'move'
-      event.dataTransfer.setData('text/plain', event.currentTargetters.title)
+      event.dataTransfer.setData('text/plain', event.currentTarget.title)
     }
   }
 }

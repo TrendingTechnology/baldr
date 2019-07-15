@@ -26,11 +26,11 @@ let resizeObserver = new ResizeObserver(entries => {
   for (let entry of entries) {
     let height = aspectRatio.height / aspectRatio.width * entry.contentRect.width
     if (height > maxHeight) {
-      entry.targetters.style.height = `${maxHeight}px`
+      entry.target.style.height = `${maxHeight}px`
       let maxWidth = aspectRatio.width / aspectRatio.height * maxHeight
-      entry.targetters.style.width = `${maxWidth}px`
+      entry.target.style.width = `${maxWidth}px`
     } else {
-      entry.targetters.style.height = `${height}px`
+      entry.target.style.height = `${height}px`
     }
   }
 })

@@ -2,7 +2,7 @@
   <div class="grades-list">
     <ul>
       <li v-for="gradeName in gradeNames" :key="gradeName">
-        <router-link :to="'/grade/' + gradeName">
+        <router-link :class="{placed: isGradePlaced(gradeName)}" :to="'/grade/' + gradeName">
           {{ gradeName }}
         </router-link>
         <material-icon
@@ -30,7 +30,7 @@ import MaterialIcon from './MaterialIcon.vue'
 
 export default {
   name: 'GradesList',
-  computed: mapGetters(['gradeNames']),
+  computed: mapGetters(['gradeNames', 'isGradePlaced']),
   components: { MaterialIcon },
   data: function () {
     return {
@@ -48,3 +48,10 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+  .placed {
+    text-decoration: line-through;
+    color: grey;
+  }
+</style>
