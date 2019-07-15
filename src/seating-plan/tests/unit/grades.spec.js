@@ -38,8 +38,8 @@ describe('Vuex store: grades #unittest', function () {
       })
     })
 
-    it('personsByCurrentGrade', function () {
-      const persons = store.getters.personsByCurrentGrade
+    it('personsByGradeCurrent', function () {
+      const persons = store.getters.personsByGradeCurrent
       assert.strictEqual(Object.keys(persons).length, 1)
       assert.strictEqual(persons['Friedrich, Josef'].firstName, 'Josef')
     })

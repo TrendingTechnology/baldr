@@ -1,7 +1,7 @@
 class InitState {
   constructor () {
-    this.currentGrade = null
-    this.currentSeat = null
+    this.gradeNameCurrent = null
+    this.seatNoCurrent = null
     this.showModal = false
   }
 }
@@ -9,11 +9,11 @@ class InitState {
 const state = new InitState()
 
 const getters = {
-  currentGrade: (state) => {
-    return state.currentGrade
+  gradeNameCurrent: (state) => {
+    return state.gradeNameCurrent
   },
-  currentSeat: (state) => {
-    return state.currentSeat
+  seatNoCurrent: (state) => {
+    return state.seatNoCurrent
   },
   modalState: (state) => {
     return state.showModal
@@ -37,10 +37,10 @@ const mutations = {
     }
   },
   setCurrentGrade: (state, gradeName) => {
-    state.currentGrade = gradeName
+    state.gradeNameCurrent = gradeName
   },
   setCurrentSeat: (state, seatNo) => {
-    state.currentSeat = seatNo
+    state.seatNoCurrent = seatNo
   },
   setModal: (state, open) => {
     state.showModal = open

@@ -37,9 +37,9 @@ export default {
     SeatingPlanFooter
   },
   computed: {
-    ...mapGetters(['currentGrade', 'modalState']),
+    ...mapGetters(['gradeNameCurrent', 'modalState']),
     title () {
-      return 'Sitzplan der Klasse “' + this.currentGrade + '”'
+      return 'Sitzplan der Klasse “' + this.gradeNameCurrent + '”'
     }
   },
   methods: {

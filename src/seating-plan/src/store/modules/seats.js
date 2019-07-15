@@ -65,14 +65,14 @@ class InitState {
 const state = new InitState()
 
 const getters = {
-  seats: (state) => {
-    return state
+  seatByNo: (state) => (seatNo) => {
+    return state.positions[seatNo]
   },
   seatPositions: (state) => {
     return state.positions
   },
-  seatByNo: (state) => (seatNo) => {
-    return state.positions[seatNo]
+  seats: (state) => {
+    return state
   }
 }
 

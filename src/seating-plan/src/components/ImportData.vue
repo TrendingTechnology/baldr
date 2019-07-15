@@ -16,11 +16,11 @@ export default {
   },
   methods: {
     eventListenerChange (event) {
-      let file = event.target.files[0]
+      let file = event.targetters.files[0]
       let reader = new FileReader()
       reader.readAsText(file, 'utf-8')
       reader.onload = readerEvent => {
-        let content = readerEvent.target.result
+        let content = readerEvent.targetters.result
         this.$store.dispatch('importState', content)
       }
     }

@@ -32,19 +32,19 @@ describe('Vuex store: app #unittest', function () {
       store.dispatch('showModal')
 
       store.commit('flushAppState')
-      assert.strictEqual(store.getters.currentGrade, null)
-      assert.strictEqual(store.getters.currentSeat, null)
+      assert.strictEqual(store.getters.gradeNameCurrent, null)
+      assert.strictEqual(store.getters.seatNoCurrent, null)
       assert.strictEqual(store.getters.modalState, false)
     })
 
     it('setCurrentGrade', function () {
       store.commit('setCurrentGrade', '1x')
-      assert.strictEqual(store.getters.currentGrade, '1x')
+      assert.strictEqual(store.getters.gradeNameCurrent, '1x')
     })
 
     it('setCurrentSeat', function () {
       store.commit('setCurrentSeat', 69)
-      assert.strictEqual(store.getters.currentSeat, 69)
+      assert.strictEqual(store.getters.seatNoCurrent, 69)
     })
   })
 })

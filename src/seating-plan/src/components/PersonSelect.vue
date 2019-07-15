@@ -39,7 +39,7 @@ export default {
   },
   methods: {
     eventListenerSearch () {
-      this.$store.dispatch('placePerson', { seatNo: this.$store.getters.currentSeat, personId: this.selectedPerson.id })
+      this.$store.dispatch('placePerson', { seatNo: this.$store.getters.seatNoCurrent, personId: this.selectedPerson.id })
       this.$store.dispatch('closeModal')
     }
   }

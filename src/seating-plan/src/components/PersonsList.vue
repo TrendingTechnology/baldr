@@ -35,11 +35,11 @@ export default {
       firstName: ''
     }
   },
-  computed: mapGetters(['personsByGradeAsListSortedCurrent', 'currentGrade']),
+  computed: mapGetters(['personsByGradeAsListSortedCurrent', 'gradeNameCurrent']),
   methods: {
     createPerson () {
       if (this.lastName && this.firstName) {
-        this.$store.dispatch('createPerson', { firstName: this.firstName, lastName: this.lastName, grade: this.currentGrade })
+        this.$store.dispatch('createPerson', { firstName: this.firstName, lastName: this.lastName, grade: this.gradeNameCurrent })
         this.lastName = ''
         this.firstName = ''
       }

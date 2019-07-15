@@ -61,21 +61,21 @@ export default {
   methods: {
     eventListenerDragStart (event) {
       event.dataTransfer.dropEffect = 'move'
-      event.dataTransfer.setData('text/plain', event.currentTarget.title)
+      event.dataTransfer.setData('text/plain', event.currentTargetters.title)
     },
     eventListenerDragOver (event) {
-      event.currentTarget.classList.add('dragover')
+      event.currentTargetters.classList.add('dragover')
     },
     eventListenerDragLeave (event) {
-      if (event.currentTarget.classList) {
-        event.currentTarget.classList.remove('dragover')
+      if (event.currentTargetters.classList) {
+        event.currentTargetters.classList.remove('dragover')
       }
     },
     eventListenerDrop (event) {
       let personId = event.dataTransfer.getData('text/plain')
       this.$store.dispatch('placePerson', { seatNo: this.seat.no, personId: personId })
-      if (event.currentTarget.classList) {
-        event.currentTarget.classList.remove('dragover')
+      if (event.currentTargetters.classList) {
+        event.currentTargetters.classList.remove('dragover')
       }
     },
     eventListenerRemove (event) {

@@ -1,11 +1,3 @@
-const state = {
-
-}
-
-const getters = {
-
-}
-
 const actions = {
   importFromSpreadsheet: ({ dispatch }, importString) => {
     const lines = importString.split('\n')
@@ -22,13 +14,6 @@ const actions = {
   }
 }
 
-const mutations = {
-
-}
-
 export default {
-  state,
-  getters,
-  actions,
-  mutations
+  actions
 }

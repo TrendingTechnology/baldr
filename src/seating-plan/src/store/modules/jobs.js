@@ -19,8 +19,8 @@ const getters = {
   jobByName: (state) => (jobName) => {
     return state[jobName]
   },
-  jobIconFromName: (state, get) => (jobName) => {
-    const job = get.jobByName(jobName)
+  jobIconFromName: (state, getters) => (jobName) => {
+    const job = getters.jobByName(jobName)
     return job.icon
   },
   jobsAsArray: (state) => {

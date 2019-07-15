@@ -1,7 +1,7 @@
 {
     "app": {
-        "currentGrade": "1a",
-        "currentSeat": null,
+        "gradeNameCurrent": "1a",
+        "seatNoCurrent": null,
         "showModal": false
     },
     "grades": {

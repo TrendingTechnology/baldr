@@ -62,47 +62,43 @@ function naturalSort (a, b) {
 const state = {}
 
 const getters = {
-  grade: (state) => (name) => {
-    if ({}.hasOwnProperty.call(state, name)) {
-      return state[name]
+  grade: (state) => (gradeName) => {
+    if ({}.hasOwnProperty.call(state, gradeName)) {
+      return state[gradeName]
     }
     return false
   },
-  gradeOfPerson: (state, get) => (person) => {
-    return get.grade(person.grade)
+  gradeCurrent: (state, getters) => {
+    const gradeName = getters.gradeNameCurrent
+    if (gradeName) {
+      return getters.grade(gradeName)
+    }
   },
   gradeNames: (state) => {
     const gradeNames = Object.keys(state)
     return gradeNames.sort(naturalSort)
   },
-  gradeCurrent: (state, get) => {
-    const gradeName = get.currentGrade
-    if (gradeName) {
-      return get.grade(gradeName)
+  gradeOfPerson: (state, getters) => (person) => {
+    return getters.grade(person.grade)
+  },
+  hasPersonJob: (state, getters) => (personId, jobName) => {
+    if (!personId) {
+      return false
     }
+    const person = getters.personById(personId)
+    return person.jobs.includes(jobName)
   },
-  personsCount: (state, get) => (gradeName) => {
-    const persons = get.personsByGrade(gradeName)
-    return Object.keys(persons).length
-  },
-  personsCountCurrent: (state, get) => {
-    return get.personsCount(get.currentGrade)
-  },
-  personsPlacedCount: (state, get) => (gradeName) => {
-    const persons = get.personsByGrade(gradeName)
-    let count = 0
-    for (const personName in persons) {
-      if (persons[personName].seatNo) {
-        count += 1
-      }
+  isGradePlaced: (state, getters) => (gradeName) => {
+    if (getters.personsCount(gradeName) === getters.personsPlacedCount(gradeName)) {
+      return true
     }
-    return count
+    return false
   },
-  personsPlacedCountCurrent: (state, get) => {
-    return get.personsPlacedCount(get.currentGrade)
+  isGradePlacedCurrent: (state, getters) => {
+    return getters.isGradePlaced(getters.gradeNameCurrent)
   },
-  jobsOfGrade: (state, get) => (gradeName) => {
-    const persons = get.personsByGrade(gradeName)
+  jobsOfGrade: (state, getters) => (gradeName) => {
+    const persons = getters.personsByGrade(gradeName)
     const jobs = {}
     for (const [personName, person] of Object.entries(persons)) {
       if (person.jobs) {
@@ -116,41 +112,10 @@ const getters = {
     }
     return jobs
   },
-  jobsOfGradeCurrent: (state, get) => {
-    return get.jobsOfGrade(get.currentGrade)
+  jobsOfGradeCurrent: (state, getters) => {
+    return getters.jobsOfGrade(getters.gradeNameCurrent)
   },
-  /**
-   * Indicate if all persons in a grade are having a seat and are placed.
-   *
-   * @returns boolean
-   */
-  isGradePlaced: (state, get) => {
-    const grade = get.gradeCurrent
-    if (grade && grade.personsCount === grade.personsPlacedCount) {
-      return true
-    }
-    return false
-  },
-  /**
-   * Indicate if all persons in a grade are having a seat and are placed.
-   *
-   * @returns boolean
-   */
-  isGradePlacedCurrent: (state, get) => {
-    const grade = get.gradeCurrent
-    if (grade && get.personsCount(grade.name) === get.personsPlacedCount(grade.name)) {
-      return true
-    }
-    return false
-  },
-  hasPersonJob: (state, get) => (personId, jobName) => {
-    if (!personId) {
-      return false
-    }
-    const person = get.personById(personId)
-    return person.jobs.includes(jobName)
-  },
-  jobsOfPerson: (state, get) => (person) => {
+  jobsOfPerson: (state, getters) => (person) => {
     return person.jobs
   },
   person: (state) => ({ firstName, lastName, grade }) => {
@@ -161,9 +126,21 @@ const getters = {
     }
     return false
   },
-  personById: (state, get) => (personId) => {
+  personByGradeAndSeatNo: (state, getters) => (gradeName, seatNo) => {
+    const persons = getters.personsByGrade(gradeName)
+    for (const personName in persons) {
+      const person = persons[personName]
+      if (seatNo === person.seatNo) return person
+    }
+    return {}
+  },
+  personByGradeAndSeatNoCurrent: (state, getters) => (seatNo) => {
+    const gradeName = getters.gradeNameCurrent
+    return getters.personByGradeAndSeatNo(gradeName, seatNo)
+  },
+  personById: (state, getters) => (personId) => {
     const match = personId.match(/(.+): (.+), (.+)/)
-    return get.person({
+    return getters.person({
       firstName: match[3],
       lastName: match[2],
       grade: match[1]
@@ -175,8 +152,8 @@ const getters = {
     }
     return {}
   },
-  personsByGradeAsListSortedCurrent: (state, get) => {
-    const persons = get.personsByGrade(get.currentGrade)
+  personsByGradeAsListSortedCurrent: (state, getters) => {
+    const persons = getters.personsByGrade(getters.gradeNameCurrent)
     const out = []
     if (persons) {
       for (const name of Object.keys(persons).sort()) {
@@ -186,20 +163,28 @@ const getters = {
     }
     return []
   },
-  personsByCurrentGrade: (state, get) => {
-    return get.personsByGrade(get.currentGrade)
+  personsByGradeCurrent: (state, getters) => {
+    return getters.personsByGrade(getters.gradeNameCurrent)
   },
-  personByGradeAndSeatNo: (state, get) => (gradeName, seatNo) => {
-    const persons = get.personsByGrade(gradeName)
+  personsCount: (state, getters) => (gradeName) => {
+    const persons = getters.personsByGrade(gradeName)
+    return Object.keys(persons).length
+  },
+  personsCountCurrent: (state, getters) => {
+    return getters.personsCount(getters.gradeNameCurrent)
+  },
+  personsPlacedCount: (state, getters) => (gradeName) => {
+    const persons = getters.personsByGrade(gradeName)
+    let count = 0
     for (const personName in persons) {
-      const person = persons[personName]
-      if (seatNo === person.seatNo) return person
+      if (persons[personName].seatNo) {
+        count += 1
+      }
     }
-    return {}
+    return count
   },
-  personByGradeAndSeatNoCurrent: (state, get) => (seatNo) => {
-    const gradeName = get.currentGrade
-    return get.personByGradeAndSeatNo(gradeName, seatNo)
+  personsPlacedCountCurrent: (state, getters) => {
+    return getters.personsPlacedCount(getters.gradeNameCurrent)
   }
 }
 
