@@ -19,17 +19,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "scripts": {
-    "debug": "babel-node src/index.js",
-    "dist": "babel -d ./dist ./src -s"
-  },
   "dependencies": {
     "express": "^4.17.1"
-  },
-  "devDependencies": {
-    "@babel/cli": "^7.5.0",
-    "@babel/core": "^7.5.4",
-    "@babel/node": "^7.5.0",
-    "@babel/preset-env": "^7.5.4"
   }
 }

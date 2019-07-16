@@ -1,5 +1,5 @@
-import express from 'express'
-import fs from 'fs'
+const express = require('express')
+const fs = require('fs')
 // import path from 'path'
 
 const PORT = 5000
