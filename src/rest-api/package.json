@@ -16,10 +16,15 @@
     "email": "josef@friedrich.rocks",
     "url": "https://josef.friedrich.rocks"
   },
+  "main": "index.js",
+  "bin": {
+    "baldr-rest-api": "./index.js"
+  },
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
+    "commander": "^2.20.0",
     "express": "^4.17.1"
   }
 }
