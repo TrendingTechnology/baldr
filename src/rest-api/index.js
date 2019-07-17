@@ -16,13 +16,13 @@ const app = express()
 
 app.use(express.json())
 
-app.get('/version', (req, res) => {
+app.get('/api/version', (req, res) => {
   res.status(200).send({
     version: package.version
   })
 })
 
-app.post('/store', (req, res) => {
+app.post('/api/store', (req, res) => {
   const timeStampMsec = new Date().getTime()
   const body = JSON.stringify(req.body)
   fs.writeFile(`./seating-plan_${timeStampMsec}.json`, body, { encoding: 'utf-8' }, (err) => {
