@@ -6,6 +6,7 @@ const path = require('path')
 
 // Third party packages.
 const { Command } = require('commander')
+const cors = require('cors')
 const express = require('express')
 
 // Project packages.
@@ -16,6 +17,7 @@ const STORE = process.env.BALDR_REST_API_STORE
 
 const app = express()
 
+app.use(cors())
 app.use(express.json())
 
 app.get('/api/version', (req, res) => {

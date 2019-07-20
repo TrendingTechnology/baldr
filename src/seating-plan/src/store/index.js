@@ -1,5 +1,6 @@
-import Vuex from 'vuex'
+import axios from 'axios'
 import Vue from 'vue'
+import Vuex from 'vuex'
 
 import app from './modules/app'
 import grades from './modules/grades'
@@ -97,6 +98,12 @@ const actions = {
     for (const job of jobs) {
       dispatch('createJob', job)
     }
+  },
+  async exportToRestAPI ({ getters }) {
+    await axios.post(
+      'https://baldr.friedrich.rocks/api/store',
+      getters.exportStateObject
+    )
   },
   importState: ({ commit, dispatch }, jsonString) => {
     const newState = JSON.parse(jsonString)

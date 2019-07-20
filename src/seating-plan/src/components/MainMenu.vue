@@ -31,6 +31,13 @@
       <export-link/>
     </li>
 
+    <!-- json import -->
+    <li>
+      <a href="#" @click.prevent="exportToRestAPI" title="">
+        <material-icon name="cloud-upload"/>
+      </a>
+    </li>
+
     <!-- test -->
     <li>
       <a href="#" @click.prevent="createTestData" title="Test-Daten erzeugen">
@@ -52,7 +59,7 @@ export default {
   name: 'MainMenu',
   components: { MaterialIcon, SaveLink, ExportLink },
   methods: {
-    ...mapActions(['createTestData'])
+    ...mapActions(['createTestData', 'exportToRestAPI'])
   }
 }
 </script>
