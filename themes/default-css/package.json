@@ -1,6 +1,6 @@
 {
   "name": "@bldr/theme-default-css",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Theme “default” (CSS only version) of the baldr project.",
   "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
   "bugs": {
