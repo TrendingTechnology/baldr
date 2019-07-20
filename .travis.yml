@@ -9,11 +9,14 @@ install:
   - npm install --global lerna
   - lerna bootstrap --no-ci
 
-before_script:
-  - "export DISPLAY=:99.0"
-  - "sh -e /etc/init.d/xvfb start"
-  - sleep 3
+# https://docs.travis-ci.com/user/gui-and-headless-browsers/#using-xvfb-to-run-tests-that-require-a-gui
+services:
+  - xvfb
 
 script:
   - npm test
   - cd src/seating-plan; npm run test:unit
+
+# https://docs.travis-ci.com/user/conditional-builds-stages-jobs
+# https://docs.travis-ci.com/user/conditions-v1
+if: tag IS blank
