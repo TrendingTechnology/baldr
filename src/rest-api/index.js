@@ -13,7 +13,7 @@ const express = require('express')
 const packageJson = require('./package.json')
 
 const PORT = 46328
-const STORE = process.env.BALDR_REST_API_STORE
+let store
 
 const app = express()
 
@@ -30,7 +30,7 @@ app.post('/api/store', (req, res) => {
   const timeStampMsec = new Date().getTime()
   const body = JSON.stringify(req.body)
   fs.writeFile(
-    path.join(STORE, `seating-plan_${timeStampMsec}.json`),
+    path.join(store, `seating-plan_${timeStampMsec}.json`),
     body,
     { encoding: 'utf-8' },
     (err) => {
@@ -47,6 +47,18 @@ app.post('/api/store', (req, res) => {
   console.log(responseMessage)
 })
 
+app.get('/api/store', (req, res) => {
+  const states = []
+  fs.readdirSync(store).forEach(file => {
+    const regExp = /seating-plan_(\d+)\.json/g
+    const match = regExp.exec(file)
+    if (match) {
+      states.push(match[1])
+    }
+  })
+  res.status(200).send(states)
+})
+
 const main = function () {
   // To get a clean commander. Otherwise we get options from mocha in the tests.
   // https://github.com/tj/commander.js/issues/438#issuecomment-274285003
@@ -54,9 +66,17 @@ const main = function () {
   const options = commander
     .version(packageJson.version)
     .option('-p, --port <port>', 'Port to listen to.')
+    .option('-s, --store <store>', 'Directory to store the JSON dump files into.')
     .parse(process.argv)
 
   let port
+
+  if (options.store) {
+    store = options.store
+  } else if ({}.hasOwnProperty.call(process.env, 'BALDR_REST_API_STORE') &&
+             process.env.BALDR_REST_API_STORE) {
+    store = process.env.BALDR_REST_API_STORE
+  }
 
   if (options.port) {
     port = options.port
@@ -66,8 +86,10 @@ const main = function () {
   } else {
     port = PORT
   }
+
   app.listen(port, () => {
     console.log(`The BALDR REST API is running on port ${port}.`)
+    console.log(`The JSON dumps are stored into the directory ${store}.`)
   })
 }
 
