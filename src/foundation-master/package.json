@@ -1,6 +1,6 @@
 {
   "name": "@bldr/foundation-master",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "description": "Some low level library functions and classes used by the master modules.",
   "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
   "bugs": {

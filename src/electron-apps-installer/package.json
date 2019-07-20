@@ -1,6 +1,6 @@
 {
   "name": "@bldr/electron-apps-installer",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "description": "A command line utility to install the different electron apps of the BALDR project on linux and darwin.",
   "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
   "repository": {
@@ -18,9 +18,9 @@
     "baldr-electron-apps-installer": "./index.js"
   },
   "dependencies": {
-    "@bldr/camera-electron-app": "^0.0.19",
-    "@bldr/electron-app": "^0.0.19",
-    "@bldr/songbook-electron-app": "^0.1.11",
+    "@bldr/camera-electron-app": "^0.0.20",
+    "@bldr/electron-app": "^0.0.20",
+    "@bldr/songbook-electron-app": "^0.1.12",
     "commander": "^2.20.0",
     "electron-packager": "^14.0.1",
     "fs-extra": "^8.1.0"
