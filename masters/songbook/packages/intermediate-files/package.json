@@ -15,7 +15,7 @@
 	},
 	"main": "index.js",
 	"dependencies": {
-		"better-sqlite3": "^5.4.0"
+		"better-sqlite3": "^5.4.1"
 	},
 	"publishConfig": {
 		"access": "public"

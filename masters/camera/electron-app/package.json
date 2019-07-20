@@ -20,10 +20,10 @@
   },
   "devDependencies": {
     "@bldr/test-helper": "^0.0.16",
-    "electron": "^5.0.6",
-    "electron-packager": "^14.0.1",
+    "electron": "^5.0.7",
+    "electron-packager": "^14.0.2",
     "electron-rebuild": "^1.8.5",
-    "mocha": "^6.1.4",
+    "mocha": "^6.2.0",
     "spectron": "^7.0.0"
   },
   "publishConfig": {

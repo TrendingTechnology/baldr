@@ -28,8 +28,8 @@
   },
   "devDependencies": {
     "@electron-forge/maker-deb": "^6.0.0-beta.39",
-    "electron": "^5.0.6",
-    "electron-packager": "^14.0.1",
+    "electron": "^5.0.7",
+    "electron-packager": "^14.0.2",
     "electron-prebuilt-compile": "4.0.0",
     "electron-rebuild": "^1.8.5"
   },

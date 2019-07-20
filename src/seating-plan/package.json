@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "@bldr/theme-default-css": "^0.0.6",
-    "@mdi/font": "^3.7.95",
+    "@mdi/font": "^3.8.95",
     "vue": "^2.6.10",
     "vue-headful": "^2.0.1",
     "vue-router": "^3.0.7",
@@ -36,7 +36,7 @@
   "devDependencies": {
     "@vue/cli-plugin-eslint": "^3.9.2",
     "@vue/cli-plugin-unit-mocha": "^3.9.0",
-    "@vue/cli-service": "^3.9.2",
+    "@vue/cli-service": "^3.9.3",
     "@vue/eslint-config-standard": "^4.0.0",
     "babel-eslint": "^10.0.2",
     "chai": "^4.2.0",
