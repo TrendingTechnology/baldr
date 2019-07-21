@@ -17,7 +17,10 @@ import '@bldr/theme-default-css'
 
 const routes = [
   { path: '/', component: StartPage },
-  { path: '/grade/:grade', component: SeatingPlanView },
+  {
+    path: '/grade/:grade',
+    component: SeatingPlanView
+  },
   { path: '/import-persons', component: ImportPersons },
   { path: '/import-data', component: ImportData },
   { path: '/jobs-manager', component: JobsManager }

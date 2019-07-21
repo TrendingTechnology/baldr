@@ -54,6 +54,10 @@ export default {
   created: function () {
     let gradeName = this.$route.params.grade
     this.$store.commit('setGradeNameCurrent', gradeName)
+  },
+  beforeRouteUpdate (to, from, next) {
+    this.$store.commit('setGradeNameCurrent', to.params.grade)
+    next()
   }
 }
 </script>
