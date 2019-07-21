@@ -8,14 +8,17 @@
         <material-icon name="delete" @click.native="deleteJob(job.name)"/>
       </li>
     </ul>
-    <label>
-      Name:
-      <input ref="name" type="text" v-model="newName" @keyup.enter="createJob()"/>
-    </label>
-    <label>
-      Icon:
-      <input ref="icon" type="text" v-model="newIcon" @keyup.enter="createJob()"/>
-    </label>
+    <form @submit="createJob">
+      <label>
+        Name:
+        <input ref="name" type="text" v-model="newName" @keyup.enter="createJob"/>
+      </label>
+      <label>
+        Icon:
+        <input ref="icon" type="text" v-model="newIcon" @keyup.enter="createJob"/>
+      </label>
+      <button>hinzufügen</button>
+    </form>
   </div>
 </template>
 

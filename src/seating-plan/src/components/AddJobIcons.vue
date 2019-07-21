@@ -30,6 +30,5 @@ export default {
       return this.$store.getters.hasPersonJob(personId, jobName)
     }
   }
-
 }
 </script>

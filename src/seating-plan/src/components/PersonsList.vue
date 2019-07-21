@@ -7,14 +7,21 @@
         :key="person.id"
       />
     </ol>
-  <input v-model="lastName" type="text" placeholder="Nachname">
-  <input
-    v-model="firstName"
-    type="text"
-    placeholder="Vorname"
-    @keyup.enter="createPerson"
-  >
-  <button @click="createPerson">hinzufügen</button>
+    <form @submit="createPerson">
+      <input
+        v-model="lastName"
+        type="text"
+        placeholder="Nachname"
+        @keyup.enter="createPerson"
+      >
+      <input
+        v-model="firstName"
+        type="text"
+        placeholder="Vorname"
+        @keyup.enter="createPerson"
+      >
+      <button>hinzufügen</button>
+    </form>
   </div>
 </template>
 

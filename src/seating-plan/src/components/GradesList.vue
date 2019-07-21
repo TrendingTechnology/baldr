@@ -1,13 +1,15 @@
 <template>
   <div class="grades-list">
     <grades-items delete-icons/>
-    <input
-      v-model="gradeName"
-      type="text"
-      placeholder="Klasse"
-      @keyup.enter="createGrade"
-    >
-    <button @click="createGrade">hinzufügen</button>
+    <form @submit="createGrade">
+      <input
+        v-model="gradeName"
+        type="text"
+        placeholder="Klasse"
+        @keyup.enter="createGrade"
+      >
+      <button>hinzufügen</button>
+    </form>
   </div>
 </template>
 
