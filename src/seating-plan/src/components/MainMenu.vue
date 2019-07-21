@@ -91,4 +91,10 @@ export default {
   li {
     float: left;
   }
+
+  @media print {
+    .main-menu {
+      display: none
+    }
+  }
 </style>

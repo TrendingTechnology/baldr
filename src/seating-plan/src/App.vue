@@ -41,11 +41,14 @@ export default {
 </script>
 
 <style>
-@import '../node_modules/@bldr/theme-default-css/styles.css';
+  @import '../node_modules/@bldr/theme-default-css/styles.css';
 
-body {
-  margin: 2px;
-  font-size: 1.2vw;
-}
+  body {
+    margin: 2px;
+    font-size: 1.2vw;
+  }
 
+  @page {
+    size: A4 landscape;
+  }
 </style>
