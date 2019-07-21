@@ -3,6 +3,7 @@
 // Node packages.
 const fs = require('fs')
 const path = require('path')
+const os = require('os')
 
 // Third party packages.
 const { Command } = require('commander')
@@ -14,6 +15,7 @@ const packageJson = require('./package.json')
 
 const PORT = 46328
 let store
+let server
 
 const app = express()
 
@@ -76,6 +78,8 @@ const main = function () {
   } else if ({}.hasOwnProperty.call(process.env, 'BALDR_REST_API_STORE') &&
              process.env.BALDR_REST_API_STORE) {
     store = process.env.BALDR_REST_API_STORE
+  } else {
+    store = fs.mkdtempSync(path.join(os.tmpdir(), 'baldr-rest-api-'))
   }
 
   if (options.port) {
@@ -87,10 +91,21 @@ const main = function () {
     port = PORT
   }
 
-  app.listen(port, () => {
+  server = app.listen(port, () => {
     console.log(`The BALDR REST API is running on port ${port}.`)
     console.log(`The JSON dumps are stored into the directory ${store}.`)
   })
+
+  return app
 }
 
-main()
+const stop = function () {
+  server.close()
+}
+
+if (require.main === module) {
+  main()
+} else {
+  module.exports = main()
+  module.exports.stop = stop
+}

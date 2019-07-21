@@ -20,6 +20,9 @@
   "bin": {
     "baldr-rest-api": "./index.js"
   },
+  "scripts": {
+    "test": "mocha tests"
+  },
   "publishConfig": {
     "access": "public"
   },
@@ -27,5 +30,10 @@
     "commander": "^2.20.0",
     "cors": "^2.8.5",
     "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
+    "mocha": "^6.2.0"
   }
 }
