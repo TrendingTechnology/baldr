@@ -35,7 +35,9 @@ import PersonsJobs from './PersonsJobs.vue'
 export default {
   name: 'OneSeat',
   components: {
-    MaterialIcon, PersonsJobs, AddJobIcons
+    AddJobIcons,
+    MaterialIcon,
+    PersonsJobs
   },
   props: {
     seat: Object

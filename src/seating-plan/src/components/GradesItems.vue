@@ -32,7 +32,9 @@ export default {
     }
   },
   computed: mapGetters(['gradeNames', 'isGradePlaced']),
-  components: { MaterialIcon },
+  components: {
+    MaterialIcon
+  },
   data: function () {
     return {
       gradeName: ''

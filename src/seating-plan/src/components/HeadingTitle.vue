@@ -22,7 +22,9 @@ export default {
     title: String
   },
   components: {
-    vueHeadful, MainMenu, MaterialIcon
+    MainMenu,
+    MaterialIcon,
+    vueHeadful
   },
   computed: {
     isNotHome () {

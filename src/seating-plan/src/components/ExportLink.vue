@@ -15,7 +15,9 @@ import { mapGetters } from 'vuex'
 import MaterialIcon from './MaterialIcon.vue'
 export default {
   name: 'ExportLink',
-  components: { MaterialIcon },
+  components: {
+    MaterialIcon
+  },
   computed: {
     ...mapGetters(['stateAsURIComponent']),
     dateTime () {

@@ -17,7 +17,8 @@ import HeadingTitle from './HeadingTitle.vue'
 export default {
   name: 'StartPage',
   components: {
-    GradesList, HeadingTitle
+    GradesList,
+    HeadingTitle
   },
   computed: mapGetters(['gradeNames']),
   methods: mapActions(['createTestData'])

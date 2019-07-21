@@ -59,7 +59,12 @@ import SaveLink from './SaveLink.vue'
 
 export default {
   name: 'MainMenu',
-  components: { MaterialIcon, SaveLink, ExportLink, GradesItems },
+  components: {
+    ExportLink,
+    GradesItems,
+    MaterialIcon,
+    SaveLink
+  },
   methods: {
     ...mapActions(['createTestData', 'exportToRestAPI'])
   }

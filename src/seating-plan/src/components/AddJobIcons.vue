@@ -19,7 +19,9 @@ import MaterialIcon from './MaterialIcon.vue'
 
 export default {
   name: 'AddJobIcons',
-  components: { MaterialIcon },
+  components: {
+    MaterialIcon
+  },
   props: {
     person: [Object, Boolean]
   },

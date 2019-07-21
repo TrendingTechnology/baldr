@@ -29,11 +29,11 @@ import SeatingPlanFooter from './SeatingPlanFooter.vue'
 export default {
   name: 'SeatingPlanView',
   components: {
-    SeatingPlan,
-    PersonsList,
     HeadingTitle,
-    PersonSelect,
     ModalDialog,
+    PersonSelect,
+    PersonsList,
+    SeatingPlan,
     SeatingPlanFooter
   },
   computed: {

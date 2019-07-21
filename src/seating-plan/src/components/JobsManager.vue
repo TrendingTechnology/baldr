@@ -32,7 +32,8 @@ import MaterialIcon from './MaterialIcon.vue'
 export default {
   name: 'JobsManager',
   components: {
-    HeadingTitle, MaterialIcon
+    HeadingTitle,
+    MaterialIcon
   },
   data: function () {
     return {

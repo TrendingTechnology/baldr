@@ -28,7 +28,10 @@ export default {
   props: {
     person: Object
   },
-  components: { PersonsJobs, MaterialIcon },
+  components: {
+    MaterialIcon,
+    PersonsJobs
+  },
   computed: {
     ...mapGetters(['seats']),
     draggable () {

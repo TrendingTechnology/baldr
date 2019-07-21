@@ -22,7 +22,9 @@ import GradesItems from './GradesItems.vue'
 export default {
   name: 'GradesList',
   computed: mapGetters(['gradeNames', 'isGradePlaced']),
-  components: { GradesItems },
+  components: {
+    GradesItems
+  },
   data: function () {
     return {
       gradeName: ''
