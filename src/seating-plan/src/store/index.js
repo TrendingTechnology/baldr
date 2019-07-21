@@ -101,7 +101,7 @@ const actions = {
   },
   async exportToRestAPI ({ getters }) {
     await axios.post(
-      'https://baldr.friedrich.rocks/api/store',
+      'https://baldr.friedrich.rocks/api/seating-plan',
       getters.exportStateObject
     )
   },
