@@ -1,5 +1,6 @@
 <template>
   <div class="seating-plan-view">
+    <heading-title :title="title"/>
     <modal-dialog
       v-show="showModal"
       @close="closeModal"
@@ -7,11 +8,10 @@
       <person-select/>
     </modal-dialog>
     <main>
-      <heading-title :title="title"/>
       <seating-plan/>
-      <seating-plan-footer/>
+      <persons-list/>
     </main>
-    <persons-list/>
+    <seating-plan-footer/>
   </div>
 </template>
 
@@ -63,13 +63,10 @@ export default {
 </script>
 
 <style scoped>
-  .seating-plan-view {
+  main {
     display: flex;
     align-items: stretch;
     position: relative;
-  }
-
-  main {
     width: 100%;
   }
 
