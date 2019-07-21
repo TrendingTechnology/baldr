@@ -13,9 +13,14 @@ const express = require('express')
 // Project packages.
 const packageJson = require('./package.json')
 
-const PORT = 46328
+const DEFAULT_PORT = 46328
 let store
+let port
 let server
+
+function timeStampMsecToPath (timeStampMsec) {
+  return path.join(store, `seating-plan_${timeStampMsec}.json`)
+}
 
 const app = express()
 
@@ -28,11 +33,11 @@ app.get('/api/version', (req, res) => {
   })
 })
 
-app.post('/api/store', (req, res) => {
+app.post('/api/seating-plan', (req, res) => {
   const timeStampMsec = new Date().getTime()
   const body = JSON.stringify(req.body)
   fs.writeFile(
-    path.join(store, `seating-plan_${timeStampMsec}.json`),
+    timeStampMsecToPath(timeStampMsec),
     body,
     { encoding: 'utf-8' },
     (err) => {
@@ -49,7 +54,7 @@ app.post('/api/store', (req, res) => {
   console.log(responseMessage)
 })
 
-app.get('/api/store', (req, res) => {
+app.get('/api/seating-plan', (req, res) => {
   const states = []
   fs.readdirSync(store).forEach(file => {
     const regExp = /seating-plan_(\d+)\.json/g
@@ -61,6 +66,17 @@ app.get('/api/store', (req, res) => {
   res.status(200).send(states)
 })
 
+app.get('/api/seating-plan/:timeStampMsec', (req, res) => {
+  const timeStampMsec = req.params.timeStampMsec
+  const storePath = timeStampMsecToPath(timeStampMsec)
+  if (fs.existsSync(storePath)) {
+    const jsonString = fs.readFileSync(storePath, { encoding: 'utf-8' })
+    res.status(200).send(JSON.parse(jsonString))
+  } else {
+    res.sendStatus(404)
+  }
+})
+
 const main = function () {
   // To get a clean commander. Otherwise we get options from mocha in the tests.
   // https://github.com/tj/commander.js/issues/438#issuecomment-274285003
@@ -70,8 +86,6 @@ const main = function () {
     .option('-p, --port <port>', 'Port to listen to.')
     .option('-s, --store <store>', 'Directory to store the JSON dump files into.')
     .parse(process.argv)
-
-  let port
 
   if (options.store) {
     store = options.store
@@ -88,7 +102,7 @@ const main = function () {
              process.env.BALDR_REST_API_PORT) {
     port = process.env.BALDR_REST_API_PORT
   } else {
-    port = PORT
+    port = DEFAULT_PORT
   }
 
   server = app.listen(port, () => {
@@ -108,4 +122,6 @@ if (require.main === module) {
 } else {
   module.exports = main()
   module.exports.stop = stop
+  module.exports.store = store
+  module.exports.port = port
 }
