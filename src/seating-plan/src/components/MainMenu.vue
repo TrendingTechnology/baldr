@@ -66,7 +66,16 @@ export default {
     SaveLink
   },
   methods: {
-    ...mapActions(['createTestData', 'exportToRestAPI'])
+    ...mapActions(['createTestData']),
+    exportToRestAPI () {
+      this.$store.dispatch('exportToRestAPI').then((result) => {
+        const date = new Date(result.data.timeStampMsec)
+        this.$notify({
+          type: 'success',
+          text: date.toLocaleDateString() + ' ' + date.toLocaleTimeString()
+        })
+      })
+    }
   }
 }
 </script>

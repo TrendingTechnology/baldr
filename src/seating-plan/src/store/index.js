@@ -99,8 +99,8 @@ const actions = {
       dispatch('createJob', job)
     }
   },
-  async exportToRestAPI ({ getters }) {
-    await axios.post(
+  exportToRestAPI ({ getters }) {
+    return axios.post(
       'https://baldr.friedrich.rocks/api/seating-plan',
       getters.exportStateObject
     )

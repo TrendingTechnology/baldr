@@ -1,5 +1,6 @@
 <template>
   <header>
+    <notifications position="top center"/>
     <vue-headful :title="title"/>
     <router-link v-if="isNotHome" to='/' class="back-link" title="zurück">
       <material-icon name="arrow-left"/>
