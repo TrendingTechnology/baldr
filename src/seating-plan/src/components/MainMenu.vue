@@ -1,5 +1,6 @@
 <template>
   <ul class="main-menu">
+    <li><grades-items inline/></li>
     <!-- save -->
     <li>
       <save-link/>
@@ -51,13 +52,14 @@
 import { mapActions } from 'vuex'
 
 // Components
+import ExportLink from './ExportLink.vue'
+import GradesItems from './GradesItems.vue'
 import MaterialIcon from './MaterialIcon.vue'
 import SaveLink from './SaveLink.vue'
-import ExportLink from './ExportLink.vue'
 
 export default {
   name: 'MainMenu',
-  components: { MaterialIcon, SaveLink, ExportLink },
+  components: { MaterialIcon, SaveLink, ExportLink, GradesItems },
   methods: {
     ...mapActions(['createTestData', 'exportToRestAPI'])
   }

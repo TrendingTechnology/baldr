@@ -1,17 +1,6 @@
 <template>
   <div class="grades-list">
-    <ul>
-      <li v-for="gradeName in gradeNames" :key="gradeName">
-        <router-link :class="{placed: isGradePlaced(gradeName)}" :to="'/grade/' + gradeName">
-          {{ gradeName }}
-        </router-link>
-        <material-icon
-          name="delete"
-          @click.native="deleteGrade(gradeName)"
-        />
-      </li>
-    </ul>
-
+    <grades-items delete-icons/>
     <input
       v-model="gradeName"
       type="text"
@@ -26,12 +15,12 @@
 import { mapGetters, mapActions } from 'vuex'
 
 // Components
-import MaterialIcon from './MaterialIcon.vue'
+import GradesItems from './GradesItems.vue'
 
 export default {
   name: 'GradesList',
   computed: mapGetters(['gradeNames', 'isGradePlaced']),
-  components: { MaterialIcon },
+  components: { GradesItems },
   data: function () {
     return {
       gradeName: ''
@@ -48,10 +37,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-  .placed {
-    text-decoration: line-through;
-    color: grey;
-  }
-</style>
