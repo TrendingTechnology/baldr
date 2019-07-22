@@ -89,4 +89,24 @@ describe('BALDR REST API', () => {
         done()
       })
   })
+
+  it('DELETE /api/seating-plan/:timeStampMsec', (done) => {
+    chai.request(server)
+      .delete(`/api/seating-plan/${timeStampMsec}`)
+      .end((err, res) => {
+        res.should.have.status(200)
+        res.body.should.be.an('object')
+        res.body.timeStampMsec.should.be.an('string')
+        assert.isNotOk(
+          fs.existsSync(
+            path.join(
+              store,
+              `seating-plan_${timeStampMsec}.json`
+            )
+          )
+        )
+        if (err) throw err
+        done()
+      })
+  })
 })

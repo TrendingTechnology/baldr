@@ -77,6 +77,17 @@ app.get('/api/seating-plan/:timeStampMsec', (req, res) => {
   }
 })
 
+app.delete('/api/seating-plan/:timeStampMsec', (req, res) => {
+  const timeStampMsec = req.params.timeStampMsec
+  const storePath = timeStampMsecToPath(timeStampMsec)
+  if (fs.existsSync(storePath)) {
+    fs.unlinkSync(storePath)
+    res.status(200).send({ timeStampMsec: timeStampMsec })
+  } else {
+    res.sendStatus(404)
+  }
+})
+
 const main = function () {
   // To get a clean commander. Otherwise we get options from mocha in the tests.
   // https://github.com/tj/commander.js/issues/438#issuecomment-274285003
