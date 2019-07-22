@@ -35,7 +35,8 @@ const actions = {
     const response = await axios.get(
       'https://baldr.friedrich.rocks/api/seating-plan'
     )
-    commit('fetchSavedStatesDates', response.data)
+    const dates = response.data.sort().reverse().slice(0, 10)
+    commit('fetchSavedStatesDates', dates)
   }
 }
 
