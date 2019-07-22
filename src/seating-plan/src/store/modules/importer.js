@@ -44,6 +44,12 @@ const actions = {
     )
     dispatch('importState', response.data)
     return timeStampMsec
+  },
+  async deleteStateFromRestAPI ({ dispatch }, timeStampMsec) {
+    await axios.delete(
+      `https://baldr.friedrich.rocks/api/seating-plan/${timeStampMsec}`
+    )
+    dispatch('fetchSavedStatesDates')
   }
 }
 
