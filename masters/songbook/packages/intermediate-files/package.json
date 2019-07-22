@@ -1,6 +1,6 @@
 {
 	"name": "@bldr/songbook-intermediate-files",
-	"version": "0.1.15",
+	"version": "0.1.16",
 	"description": "A collection of classes and functions to generate the intermediate files for the BALDR songbook.",
 	"homepage": "https://github.com/Josef-Friedrich/baldr#readme",
 	"repository": {

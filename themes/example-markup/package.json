@@ -1,6 +1,6 @@
 {
   "name": "@bldr/example-markup",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Vue app to test the themes",
   "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
   "bugs": {
@@ -25,7 +25,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "@bldr/theme-default-css": "^0.0.7",
+    "@bldr/theme-default-css": "^0.0.8",
     "core-js": "^3.1.4",
     "vue": "^2.6.10"
   },
