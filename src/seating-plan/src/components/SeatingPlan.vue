@@ -58,4 +58,10 @@ export default {
     position: relative;
     box-sizing: border-box;
   }
+  @media print {
+    .seating-plan {
+      width: 100% !important;
+      height: 48em !important;
+    }
+  }
 </style>
