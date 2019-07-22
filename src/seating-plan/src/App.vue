@@ -7,7 +7,9 @@
 <script>
 import VueRouter from 'vue-router'
 
+// Components
 import ImportData from './components/ImportData.vue'
+import ImportFromCloud from './components/ImportFromCloud.vue'
 import ImportPersons from './components/ImportPersons.vue'
 import JobsManager from './components/JobsManager.vue'
 import SeatingPlanView from './components/SeatingPlanView.vue'
@@ -16,14 +18,30 @@ import StartPage from './components/StartPage.vue'
 import '@bldr/theme-default-css'
 
 const routes = [
-  { path: '/', component: StartPage },
+  {
+    path: '/',
+    component: StartPage
+  },
   {
     path: '/grade/:grade',
     component: SeatingPlanView
   },
-  { path: '/import-persons', component: ImportPersons },
-  { path: '/import-data', component: ImportData },
-  { path: '/jobs-manager', component: JobsManager }
+  {
+    path: '/import-persons',
+    component: ImportPersons
+  },
+  {
+    path: '/import-data',
+    component: ImportData
+  },
+  {
+    path: '/import-from-cloud',
+    component: ImportFromCloud
+  },
+  {
+    path: '/jobs-manager',
+    component: JobsManager
+  }
 ]
 
 const router = new VueRouter({ routes })

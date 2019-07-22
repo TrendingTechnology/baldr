@@ -32,11 +32,18 @@
       <export-link/>
     </li>
 
-    <!-- json import -->
+    <!-- cloud upload -->
     <li>
       <a href="#" @click.prevent="exportToRestAPI" title="">
         <material-icon name="cloud-upload"/>
       </a>
+    </li>
+
+    <!-- cloud download -->
+    <li>
+      <router-link to='/import-from-cloud' title="Aus der Cloud importieren">
+        <material-icon name="cloud-download"/>
+      </router-link>
     </li>
 
     <!-- test -->
