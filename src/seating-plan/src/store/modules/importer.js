@@ -37,6 +37,13 @@ const actions = {
     )
     const dates = response.data.sort().reverse().slice(0, 10)
     commit('fetchSavedStatesDates', dates)
+  },
+  async importFromRestAPI ({ dispatch }, timeStampMsec) {
+    const response = await axios.get(
+      `https://baldr.friedrich.rocks/api/seating-plan/${timeStampMsec}`
+    )
+    dispatch('importState', response.data)
+    return timeStampMsec
   }
 }
 

@@ -105,8 +105,13 @@ const actions = {
       getters.exportStateObject
     )
   },
-  importState: ({ commit, dispatch }, jsonString) => {
-    const newState = JSON.parse(jsonString)
+  importState: ({ commit, dispatch }, jsonObject) => {
+    let newState
+    if (typeof jsonObject === 'string') {
+      newState = JSON.parse(jsonObject)
+    } else {
+      newState = jsonObject
+    }
     if ({}.hasOwnProperty.call(newState, 'grades')) {
       dispatch('importGradesState', newState.grades)
     }

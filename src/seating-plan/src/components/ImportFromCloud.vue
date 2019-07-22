@@ -2,8 +2,13 @@
   <div>
     <heading-title title="Aus der Cloud importieren"/>
     <ul>
-      <li v-for="timeStampMsec in savedStatesDates" :key="timeStampMsec">
-        {{ toLocaleDateTimeString(timeStampMsec) }}
+      <li
+        v-for="timeStampMsec in savedStatesDates"
+        :key="timeStampMsec"
+      >
+        <a href="#" @click.prevent="importFromRestAPI(timeStampMsec)">
+          {{ toLocaleDateTimeString(timeStampMsec) }}
+        </a>
       </li>
     </ul>
   </div>
@@ -26,7 +31,16 @@ export default {
     this.$store.dispatch('fetchSavedStatesDates')
   },
   methods: {
-    toLocaleDateTimeString
+    toLocaleDateTimeString,
+    importFromRestAPI (timeStampMsec) {
+      this.$store.dispatch('importFromRestAPI', timeStampMsec).then((result) => {
+        const date = toLocaleDateTimeString(timeStampMsec)
+        this.$notify({
+          type: 'success',
+          text: date
+        })
+      })
+    }
   }
 }
 </script>
