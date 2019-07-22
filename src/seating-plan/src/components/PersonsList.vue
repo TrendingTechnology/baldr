@@ -20,7 +20,7 @@
         placeholder="Vorname"
         @keyup.enter="createPerson"
       >
-      <button>hinzufügen</button>
+      <button><material-icon name="plus-box-outline"/></button>
     </form>
   </div>
 </template>
@@ -29,11 +29,13 @@
 import { mapGetters } from 'vuex'
 
 // Components
+import MaterialIcon from './MaterialIcon.vue'
 import PersonItem from './PersonItem.vue'
 
 export default {
   name: 'PersonsList',
   components: {
+    MaterialIcon,
     PersonItem
   },
   data: function () {
@@ -60,6 +62,15 @@ export default {
     display: block;
     white-space: nowrap;
   }
+
+  form {
+    padding-left: 1em;
+  }
+
+  input {
+    max-width: 5em;
+  }
+
   @media print {
     .people-list {
       display: none;
