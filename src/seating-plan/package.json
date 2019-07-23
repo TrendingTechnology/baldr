@@ -19,6 +19,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
+    "publish": "rsync -av --delete dist/ serverway:/var/www/baldr.friedrich.rocks/seating-plan/",
     "lint": "vue-cli-service lint",
     "test:unit": "vue-cli-service test:unit"
   },

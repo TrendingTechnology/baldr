@@ -60,6 +60,10 @@ export default {
 
 <style>
   @import '../node_modules/@bldr/theme-default-css/styles.css';
+  @import '../node_modules/@bldr/theme-default-css/node_modules/typeface-alegreya/index.css';
+  @import '../node_modules/@bldr/theme-default-css/node_modules/typeface-alegreya-sans/index.css';
+  @import '../node_modules/@bldr/theme-default-css/node_modules/typeface-alegreya-sans-sc/index.css';
+  @import '../node_modules/@bldr/theme-default-css/node_modules/typeface-alegreya-sans-sc/index.css';
 
   body {
     margin: 2px;
