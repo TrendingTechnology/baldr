@@ -17,6 +17,7 @@ const getters = {
     delete stateCopy['app']
     delete stateCopy['seats']
     delete stateCopy['importer']
+    stateCopy['timeStampMsec'] = new Date().getTime()
     return stateCopy
   },
   exportStateString: (state, getters) => {

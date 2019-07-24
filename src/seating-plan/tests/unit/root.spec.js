@@ -23,6 +23,7 @@ describe('Vuex store: root #unittest', function () {
       assert.isFalse({}.hasOwnProperty.call(state, 'seats'))
       assert.isTrue({}.hasOwnProperty.call(state, 'grades'))
       assert.isTrue({}.hasOwnProperty.call(state, 'jobs'))
+      assert.isNumber(state.timeStampMsec)
     })
 
     it('exportStateString', function () {
