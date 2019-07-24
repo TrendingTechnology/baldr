@@ -33,7 +33,8 @@ a .mdi {
 </style>
 
 <style scoped>
-  @import '../../node_modules/@mdi/font/css/materialdesignicons.css';
+  @import '~@mdi/font/css/materialdesignicons.css';
+
   div {
     display: inline-block;
   }

@@ -1,3 +1,8 @@
+@import '~typeface-alegreya/index.css';
+@import '~typeface-alegreya-sans/index.css';
+@import '~typeface-alegreya-sans-sc/index.css';
+@import '~typeface-alegreya-sc/index.css';
+
 body {
   font-family: 'Alegreya';
 }
