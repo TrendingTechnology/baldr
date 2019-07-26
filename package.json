@@ -1,6 +1,6 @@
 {
   "name": "baldr",
-  "version": "0.1.29",
+  "version": "0.1.30",
   "description": "A try to write my presentations for school in HTML5, CSS3 and Javascript using Electron. Virtual top level package for tooling support.",
   "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
   "bugs": {
@@ -45,7 +45,7 @@
     "@bldr/master-svg": "^0.0.11",
     "@bldr/master-video": "^0.0.13",
     "@bldr/master-website": "^0.0.11",
-    "@bldr/seating-plan": "^0.1.10",
+    "@bldr/seating-plan": "^0.1.11",
     "@bldr/songbook-base": "^0.1.13",
     "@bldr/songbook-cli": "^0.1.17",
     "@bldr/songbook-electron-app": "^0.1.14",
