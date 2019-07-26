@@ -13,13 +13,39 @@ const express = require('express')
 // Project packages.
 const packageJson = require('./package.json')
 
+
+/**
+ * Default TCP port the server listens on.
+ */
 const DEFAULT_PORT = 46328
+
+/**
+ * Directory where to store the json state objects.
+ */
 let store
+
+/**
+ * TCP Port on which the express js server listens on.
+ */
 let port
+
+/**
+ * Express js server instance. Returned by app.listen()
+ */
 let server
 
 function timeStampMsecToPath (timeStampMsec) {
   return path.join(store, `seating-plan_${timeStampMsec}.json`)
+}
+
+function getStateByTimeStampMsec (timeStampMsec) {
+  const storePath = timeStampMsecToPath(timeStampMsec)
+  if (fs.existsSync(storePath)) {
+    const jsonString = fs.readFileSync(storePath, { encoding: 'utf-8' })
+    return JSON.parse(jsonString)
+  } else {
+    return false
+  }
 }
 
 const app = express()
@@ -34,11 +60,25 @@ app.get('/api/version', (req, res) => {
 })
 
 app.post('/api/seating-plan', (req, res) => {
-  const timeStampMsec = new Date().getTime()
-  const body = JSON.stringify(req.body)
+  const body = req.body
+
+  if (!{}.hasOwnProperty.call(body, 'timeStampMsec')) {
+    res.sendStatus(404)
+  }
+
   fs.writeFile(
-    timeStampMsecToPath(timeStampMsec),
-    body,
+    path.join(store, 'latest'),
+    body.timeStampMsec,
+    { encoding: 'utf-8' },
+    (err) => {
+      if (err) throw err
+      console.log('The file has been saved!')
+    }
+  )
+
+  fs.writeFile(
+    timeStampMsecToPath(body.timeStampMsec),
+    JSON.stringify(req.body),
     { encoding: 'utf-8' },
     (err) => {
       if (err) throw err
@@ -47,7 +87,7 @@ app.post('/api/seating-plan', (req, res) => {
   )
 
   const responseMessage = {
-    timeStampMsec: timeStampMsec,
+    success: body.timeStampMsec,
     storedObject: req.body
   }
   res.json(responseMessage)
@@ -66,18 +106,28 @@ app.get('/api/seating-plan', (req, res) => {
   res.status(200).send(states)
 })
 
-app.get('/api/seating-plan/:timeStampMsec', (req, res) => {
-  const timeStampMsec = req.params.timeStampMsec
-  const storePath = timeStampMsecToPath(timeStampMsec)
-  if (fs.existsSync(storePath)) {
-    const jsonString = fs.readFileSync(storePath, { encoding: 'utf-8' })
-    res.status(200).send(JSON.parse(jsonString))
+app.get('/api/seating-plan/latest', (req, res) => {
+  const latestPath = path.join(store, 'latest')
+  if (fs.existsSync(latestPath)) {
+    const latest = fs.readFileSync(latestPath, { encoding: 'utf-8' })
+    const state = getStateByTimeStampMsec(Number(latest))
+    res.status(200).send(state)
   } else {
     res.sendStatus(404)
   }
 })
 
-app.delete('/api/seating-plan/:timeStampMsec', (req, res) => {
+app.get('/api/seating-plan/by-time/:timeStampMsec', (req, res) => {
+  const timeStampMsec = req.params.timeStampMsec
+  const state = getStateByTimeStampMsec(timeStampMsec)
+  if (state) {
+    res.status(200).send(state)
+  } else {
+    res.sendStatus(404)
+  }
+})
+
+app.delete('/api/seating-plan/by-time/:timeStampMsec', (req, res) => {
   const timeStampMsec = req.params.timeStampMsec
   const storePath = timeStampMsecToPath(timeStampMsec)
   if (fs.existsSync(storePath)) {

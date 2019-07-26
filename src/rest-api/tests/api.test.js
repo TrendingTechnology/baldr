@@ -35,21 +35,19 @@ describe('BALDR REST API', () => {
   it('POST /api/seating-plan', (done) => {
     chai.request(server)
       .post('/api/seating-plan')
-      .send({ test: 'test' })
+      .send({ timeStampMsec: 1234, test: 'test' })
       .end((err, res) => {
         res.should.have.status(200)
         const body = res.body
-        timeStampMsec = body.timeStampMsec
-        body.storedObject.should.be.eql({ test: 'test' })
-        body.timeStampMsec.should.be.a('number')
-        assert.strictEqual(
+        timeStampMsec = body.storedObject.timeStampMsec
+        body.storedObject.should.be.eql({ timeStampMsec: 1234, test: 'test' })
+        body.success.should.be.a('number')
+        body.success.should.be.eql(1234)
+        assert.isTrue(fs.existsSync(path.join(store, 'latest')))
+        assert.isTrue(
           fs.existsSync(
-            path.join(
-              store,
-              `seating-plan_${body.timeStampMsec}.json`
-            )
-          ),
-          true
+            path.join(store, `seating-plan_${timeStampMsec}.json`)
+          )
         )
         if (err) throw err
         done()
@@ -68,21 +66,33 @@ describe('BALDR REST API', () => {
       })
   })
 
-  it('GET /api/seating-plan/:timeStampMsec', (done) => {
+  it('GET /api/seating-plan/latest', (done) => {
     chai.request(server)
-      .get(`/api/seating-plan/${timeStampMsec}`)
+      .get('/api/seating-plan/latest')
       .end((err, res) => {
         res.should.have.status(200)
         res.body.should.be.an('object')
-        res.body.should.be.eql({ test: 'test' })
+        res.body.should.be.eql({ timeStampMsec: 1234, test: 'test' })
         if (err) throw err
         done()
       })
   })
 
-  it('GET /api/seating-plan/:timeStampMsec: None existing timeStamp', (done) => {
+  it(`GET /api/seating-plan/by-time/:timeStampMsec`, (done) => {
     chai.request(server)
-      .get('/api/seating-plan/xxx')
+      .get(`/api/seating-plan/by-time/${timeStampMsec}`)
+      .end((err, res) => {
+        res.should.have.status(200)
+        res.body.should.be.an('object')
+        res.body.should.be.eql({ timeStampMsec: timeStampMsec, test: 'test' })
+        if (err) throw err
+        done()
+      })
+  })
+
+  it('GET /api/seating-plan/by-time/:timeStampMsec: None existing timeStamp', (done) => {
+    chai.request(server)
+      .get('/api/seating-plan/by-time/xxx')
       .end((err, res) => {
         res.should.have.status(404)
         if (err) throw err
@@ -90,9 +100,9 @@ describe('BALDR REST API', () => {
       })
   })
 
-  it('DELETE /api/seating-plan/:timeStampMsec', (done) => {
+  it('DELETE /api/seating-plan/by-time/:timeStampMsec', (done) => {
     chai.request(server)
-      .delete(`/api/seating-plan/${timeStampMsec}`)
+      .delete(`/api/seating-plan/by-time/${timeStampMsec}`)
       .end((err, res) => {
         res.should.have.status(200)
         res.body.should.be.an('object')
