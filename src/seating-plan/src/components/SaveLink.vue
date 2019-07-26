@@ -25,7 +25,7 @@ export default {
       const stateString = JSON.stringify(state)
       localStorage.setItem('state', stateString)
       localStorage.setItem(`state_${state.timeStampMsec}`, stateString)
-      localStorage.setItem(`latest_state`, state.timeStampMsec)
+      localStorage.setItem(`latest`, state.timeStampMsec)
       this.$store.commit('setStateChanged', false)
     },
     dateTime () {
