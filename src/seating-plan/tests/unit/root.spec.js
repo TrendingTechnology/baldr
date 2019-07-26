@@ -63,6 +63,10 @@ describe('Vuex store: root #unittest', function () {
       const job = store.getters.jobByName('Testjob')
       assert.strictEqual(job.icon, 'test')
     })
+
+    it.skip('saveToLocalStorage', function () {
+      store.dispatch('saveToLocalStorage')
+    })
   })
 
   describe('flushState', function () {

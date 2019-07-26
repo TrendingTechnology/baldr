@@ -121,6 +121,13 @@ const actions = {
     }
     commit('flushAppState')
     commit('setImportInProgress', false)
+  },
+  saveToLocalStorage: ({ commit, getters }) => {
+    const state = getters.exportStateObject
+    const stateString = JSON.stringify(state)
+    localStorage.setItem('latest', state.timeStampMsec)
+    localStorage.setItem(`state_${state.timeStampMsec}`, stateString)
+    commit('setStateChanged', false)
   }
 }
 
