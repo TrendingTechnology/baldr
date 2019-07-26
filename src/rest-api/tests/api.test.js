@@ -9,6 +9,7 @@ const chaiHttp = require('chai-http')
 const server = require('../index')
 const { stop, store } = require('../index')
 const packageJson = require('../package.json')
+const childProcess = require('child_process')
 
 chai.should()
 
@@ -118,5 +119,12 @@ describe('BALDR REST API', () => {
         if (err) throw err
         done()
       })
+  })
+
+  it('CLI --version', function () {
+    const cli = childProcess.spawnSync(path.join(__dirname, '..', 'index.js'), ['--version'], { encoding: 'utf-8' })
+    const pckg = require(path.join(__dirname, '..', 'package.json'))
+    assert.strictEqual(cli.stdout.toString(), pckg.version + '\n')
+    assert.strictEqual(cli.status, 0)
   })
 })

@@ -42,9 +42,15 @@ function getStateByTimeStampMsec (timeStampMsec) {
   if (fs.existsSync(storePath)) {
     const jsonString = fs.readFileSync(storePath, { encoding: 'utf-8' })
     return JSON.parse(jsonString)
-  } else {
-    return false
   }
+  return false
+}
+
+function checkEnv (envName) {
+  if ({}.hasOwnProperty.call(process.env, envName) && process.env[envName]) {
+    return true
+  }
+  return false
 }
 
 const app = express()
@@ -149,8 +155,7 @@ const main = function () {
 
   if (options.store) {
     store = options.store
-  } else if ({}.hasOwnProperty.call(process.env, 'BALDR_REST_API_STORE') &&
-             process.env.BALDR_REST_API_STORE) {
+  } else if (checkEnv('BALDR_REST_API_STORE')) {
     store = process.env.BALDR_REST_API_STORE
   } else {
     store = fs.mkdtempSync(path.join(os.tmpdir(), 'baldr-rest-api-'))
@@ -158,8 +163,7 @@ const main = function () {
 
   if (options.port) {
     port = options.port
-  } else if ({}.hasOwnProperty.call(process.env, 'BALDR_REST_API_PORT') &&
-             process.env.BALDR_REST_API_PORT) {
+  } else if (checkEnv('BALDR_REST_API_PORT')) {
     port = process.env.BALDR_REST_API_PORT
   } else {
     port = DEFAULT_PORT
