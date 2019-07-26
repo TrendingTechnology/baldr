@@ -21,7 +21,11 @@ export default {
   computed: mapGetters(['stateChanged']),
   methods: {
     saveToLocalStorage () {
-      localStorage.setItem('state', this.$store.getters.exportStateString)
+      const state = this.$store.getters.exportStateObject
+      const stateString = JSON.stringify(state)
+      localStorage.setItem('state', stateString)
+      localStorage.setItem(`state_${state.timeStampMsec}`, stateString)
+      localStorage.setItem(`latest_state`, state.timeStampMsec)
       this.$store.commit('setStateChanged', false)
     },
     dateTime () {
