@@ -17,10 +17,11 @@ const getters = {
   exportStateObject: (state, getters) => {
     // Object.asign does not work with getters
     const stateCopy = JSON.parse(JSON.stringify(getters.state))
+    const timeStampMsec = stateCopy.importer.timeStampMsec
     delete stateCopy['app']
     delete stateCopy['seats']
     delete stateCopy['importer']
-    stateCopy['timeStampMsec'] = new Date().getTime()
+    stateCopy['timeStampMsec'] = timeStampMsec
     return stateCopy
   },
   exportStateString: (state, getters) => {
@@ -119,7 +120,8 @@ const actions = {
     commit('flushAppState')
     commit('setImportInProgress', false)
   },
-  save ({ dispatch }) {
+  save ({ dispatch, commit }) {
+    commit('setTimeStampMsec')
     dispatch('saveToLocalStorage')
     dispatch('saveToExternalStorage')
   },

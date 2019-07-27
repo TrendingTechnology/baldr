@@ -9,6 +9,7 @@ describe('Vuex store: root #unittest', function () {
   beforeEach(function () {
     store.dispatch('createTestData')
     store.commit('setGradeNameCurrent', '1a')
+    store.commit('setTimeStampMsec')
   })
 
   afterEach(function () {

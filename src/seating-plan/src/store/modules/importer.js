@@ -7,7 +7,8 @@ const state = {
   externalStateDates: [],
   latestExternalState: {},
   latestLocalState: {},
-  localStateDates: []
+  localStateDates: [],
+  timeStampMsec: 0
 }
 
 const getters = {
@@ -140,6 +141,9 @@ const mutations = {
   },
   importLatestLocalState: (state, importedState) => {
     state.latestLocalState = importedState
+  },
+  setTimeStampMsec: (state) => {
+    state.timeStampMsec = new Date().getTime()
   }
 }
 

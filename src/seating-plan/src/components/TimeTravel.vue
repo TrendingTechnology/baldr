@@ -9,7 +9,7 @@
         :key="timeStampMsec"
       >
         <a href="#" @click.prevent="importFromExternalByTime(timeStampMsec)">
-          {{ toLocaleDateTimeString(timeStampMsec) }} [{{ timeStampMsec }}]
+          {{ toLocaleDateTimeString(timeStampMsec) }}
         </a>
         <material-icon
           name="delete"
@@ -25,7 +25,7 @@
         :key="timeStampMsec"
       >
         <a href="#" @click.prevent="importFromLocalByTime(timeStampMsec)">
-          {{ toLocaleDateTimeString(timeStampMsec) }} [{{ timeStampMsec }}]
+          {{ toLocaleDateTimeString(timeStampMsec) }}
         </a>
         <material-icon
           name="delete"
