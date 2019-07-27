@@ -4,14 +4,15 @@
 import axios from 'axios'
 
 const state = {
-  savedStatesDates: [],
+  externalStateDates: [],
   latestExternalState: {},
-  latestLocalState: {}
+  latestLocalState: {},
+  localStateDates: []
 }
 
 const getters = {
-  savedStatesDates: (state) => {
-    return state.savedStatesDates
+  externalStateDates: (state) => {
+    return state.externalStateDates
   },
   latestExternalState: (state) => {
     if (state.latestExternalState.timeStampMsec) {
@@ -24,6 +25,9 @@ const getters = {
       return state.latestLocalState
     }
     return { timeStampMsec: 0 }
+  },
+  localStateDates: (state) => {
+    return state.localStateDates
   }
 }
 
@@ -47,12 +51,26 @@ const actions = {
       }
     }
   },
-  async fetchSavedStatesDates ({ commit }) {
+  async fetchExternalStateDates ({ commit }) {
     const response = await axios.get(
       'https://baldr.friedrich.rocks/api/seating-plan'
     )
-    const dates = response.data.sort().reverse().slice(0, 10)
-    commit('fetchSavedStatesDates', dates)
+    const dates = response.data.sort().reverse()
+    commit('fetchExternalStateDates', dates)
+  },
+  fetchLocalStateDates ({ commit }) {
+    // const entries = Object.entries(localStorage)
+    // console.log(entries)
+    const dates = []
+    for (let i = 0, len = localStorage.length; i < len; ++i) {
+      const key = localStorage.key(i)
+      const match = key.match(/state_(\d+)/)
+      if (match) {
+        dates.push(match[1])
+      }
+    }
+    dates.sort().reverse()
+    commit('fetchLocalStateDates', dates)
   },
   async importLatestState ({ dispatch, getters }) {
     await dispatch('importLatestExternalState')
@@ -82,18 +100,18 @@ const actions = {
       }
     }
   },
-  async importFromRestAPI ({ dispatch }, timeStampMsec) {
+  async importFromExternalByTime ({ dispatch }, timeStampMsec) {
     const response = await axios.get(
       `https://baldr.friedrich.rocks/api/seating-plan/by-time/${timeStampMsec}`
     )
     dispatch('importState', response.data)
     return timeStampMsec
   },
-  async deleteStateFromRestAPI ({ dispatch }, timeStampMsec) {
+  async deleteFromExternalByTime ({ dispatch }, timeStampMsec) {
     await axios.delete(
       `https://baldr.friedrich.rocks/api/seating-plan/by-time/${timeStampMsec}`
     )
-    dispatch('fetchSavedStatesDates')
+    dispatch('fetchExternalStateDates')
   }
 }
 
@@ -105,8 +123,11 @@ const actions = {
  * - delete
  */
 const mutations = {
-  fetchSavedStatesDates: (state, dates) => {
-    state.savedStatesDates = dates
+  fetchExternalStateDates: (state, dates) => {
+    state.externalStateDates = dates
+  },
+  fetchLocalStateDates: (state, dates) => {
+    state.localStateDates = dates
   },
   importLatestExternalState: (state, importedState) => {
     state.latestExternalState = importedState

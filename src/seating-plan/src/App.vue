@@ -9,7 +9,7 @@ import VueRouter from 'vue-router'
 
 // Components
 import ImportData from './components/ImportData.vue'
-import ImportFromCloud from './components/ImportFromCloud.vue'
+import TimeTravel from './components/TimeTravel.vue'
 import ImportPersons from './components/ImportPersons.vue'
 import JobsManager from './components/JobsManager.vue'
 import SeatingPlanView from './components/SeatingPlanView.vue'
@@ -35,8 +35,8 @@ const routes = [
     component: ImportData
   },
   {
-    path: '/import-from-cloud',
-    component: ImportFromCloud
+    path: '/time-travel',
+    component: TimeTravel
   },
   {
     path: '/jobs-manager',

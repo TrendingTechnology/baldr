@@ -20,6 +20,11 @@
       </router-link>
     </li>
 
+    <!-- json export -->
+    <li>
+      <export-link/>
+    </li>
+
     <!-- json import -->
     <li>
       <router-link to='/import-data' title="Daten importieren (als JSON)">
@@ -27,22 +32,10 @@
       </router-link>
     </li>
 
-    <!-- json export -->
-    <li>
-      <export-link/>
-    </li>
-
-    <!-- cloud upload -->
-    <li>
-      <a href="#" @click.prevent="saveToExternalStorage" title="">
-        <material-icon name="cloud-upload"/>
-      </a>
-    </li>
-
     <!-- cloud download -->
     <li>
-      <router-link to='/import-from-cloud' title="Aus der Cloud importieren">
-        <material-icon name="cloud-download"/>
+      <router-link to='/time-travel' title="Zeitreise">
+        <material-icon name="timeline-text"/>
       </router-link>
     </li>
 
@@ -57,7 +50,6 @@
 
 <script>
 import { mapActions } from 'vuex'
-import { toLocaleDateTimeString } from '../lib.js'
 
 // Components
 import ExportLink from './ExportLink.vue'
@@ -74,16 +66,7 @@ export default {
     SaveLink
   },
   methods: {
-    ...mapActions(['createTestData']),
-    saveToExternalStorage () {
-      this.$store.dispatch('saveToExternalStorage').then((result) => {
-        const date = toLocaleDateTimeString(result.data.timeStampMsec)
-        this.$notify({
-          type: 'success',
-          text: date
-        })
-      })
-    }
+    ...mapActions(['createTestData'])
   }
 }
 </script>
@@ -98,6 +81,7 @@ export default {
 
   li {
     float: left;
+    padding: 0.3em;
   }
 
   @media print {
