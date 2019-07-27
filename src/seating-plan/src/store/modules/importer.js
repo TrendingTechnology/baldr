@@ -1,7 +1,11 @@
+/* globals localStorage */
+
 import axios from 'axios'
 
 const state = {
-  savedStatesDates: []
+  savedStatesDates: [],
+  latestExternalState: {},
+  latestLocalState: {}
 }
 
 const getters = {
@@ -37,16 +41,35 @@ const actions = {
     const dates = response.data.sort().reverse().slice(0, 10)
     commit('fetchSavedStatesDates', dates)
   },
+  async importLatestState ({ dispatch }) {
+    await dispatch('importLatestExternalState')
+    dispatch('importLatestLocalState')
+  },
+  async importLatestExternalState ({ commit }) {
+    const response = await axios.get(
+      `https://baldr.friedrich.rocks/api/seating-plan/latest`
+    )
+    commit('importLatestExternalState', response.data)
+  },
+  importLatestLocalState ({ commit }) {
+    const timeStampMsec = localStorage.getItem('latest')
+    if (timeStampMsec) {
+      const localState = localStorage.getItem(`state_${timeStampMsec}`)
+      if (localState) {
+        commit('importLatestExternalState', JSON.parse(localState))
+      }
+    }
+  },
   async importFromRestAPI ({ dispatch }, timeStampMsec) {
     const response = await axios.get(
-      `https://baldr.friedrich.rocks/api/seating-plan/${timeStampMsec}`
+      `https://baldr.friedrich.rocks/api/seating-plan/by-time/${timeStampMsec}`
     )
     dispatch('importState', response.data)
     return timeStampMsec
   },
   async deleteStateFromRestAPI ({ dispatch }, timeStampMsec) {
     await axios.delete(
-      `https://baldr.friedrich.rocks/api/seating-plan/${timeStampMsec}`
+      `https://baldr.friedrich.rocks/api/seating-plan/by-time/${timeStampMsec}`
     )
     dispatch('fetchSavedStatesDates')
   }
@@ -62,6 +85,12 @@ const actions = {
 const mutations = {
   fetchSavedStatesDates: (state, dates) => {
     state.savedStatesDates = dates
+  },
+  importLatestExternalState: (state, importedState) => {
+    state.latestExternalState = importedState
+  },
+  importLatestLocalState: (state, importedState) => {
+    state.latestLocalState = importedState
   }
 }
 

@@ -1,3 +1,5 @@
+/* globals localStorage */
+
 import axios from 'axios'
 import Vue from 'vue'
 import Vuex from 'vuex'
@@ -100,12 +102,6 @@ const actions = {
       dispatch('createJob', job)
     }
   },
-  exportToRestAPI ({ getters }) {
-    return axios.post(
-      'https://baldr.friedrich.rocks/api/seating-plan',
-      getters.exportStateObject
-    )
-  },
   importState: ({ commit, dispatch }, jsonObject) => {
     let newState
     if (typeof jsonObject === 'string') {
@@ -121,6 +117,16 @@ const actions = {
     }
     commit('flushAppState')
     commit('setImportInProgress', false)
+  },
+  save ({ dispatch }) {
+    dispatch('saveToLocalStorage')
+    dispatch('saveToExternalStorage')
+  },
+  saveToExternalStorage ({ getters }) {
+    return axios.post(
+      'https://baldr.friedrich.rocks/api/seating-plan',
+      getters.exportStateObject
+    )
   },
   saveToLocalStorage: ({ commit, getters }) => {
     const state = getters.exportStateObject

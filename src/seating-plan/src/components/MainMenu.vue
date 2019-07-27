@@ -34,7 +34,7 @@
 
     <!-- cloud upload -->
     <li>
-      <a href="#" @click.prevent="exportToRestAPI" title="">
+      <a href="#" @click.prevent="saveToExternalStorage" title="">
         <material-icon name="cloud-upload"/>
       </a>
     </li>
@@ -75,8 +75,8 @@ export default {
   },
   methods: {
     ...mapActions(['createTestData']),
-    exportToRestAPI () {
-      this.$store.dispatch('exportToRestAPI').then((result) => {
+    saveToExternalStorage () {
+      this.$store.dispatch('saveToExternalStorage').then((result) => {
         const date = toLocaleDateTimeString(result.data.timeStampMsec)
         this.$notify({
           type: 'success',
