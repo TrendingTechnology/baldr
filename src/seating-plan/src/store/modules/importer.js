@@ -59,8 +59,6 @@ const actions = {
     commit('fetchExternalStateDates', dates)
   },
   fetchLocalStateDates ({ commit }) {
-    // const entries = Object.entries(localStorage)
-    // console.log(entries)
     const dates = []
     for (let i = 0, len = localStorage.length; i < len; ++i) {
       const key = localStorage.key(i)
@@ -107,11 +105,19 @@ const actions = {
     dispatch('importState', response.data)
     return timeStampMsec
   },
+  importFromLocalByTime ({ dispatch }, timeStampMsec) {
+    const state = localStorage.getItem(`state_${timeStampMsec}`)
+    dispatch('importState', state)
+  },
   async deleteFromExternalByTime ({ dispatch }, timeStampMsec) {
     await axios.delete(
       `https://baldr.friedrich.rocks/api/seating-plan/by-time/${timeStampMsec}`
     )
     dispatch('fetchExternalStateDates')
+  },
+  deleteFromLocalByTime ({ dispatch }, timeStampMsec) {
+    localStorage.removeItem(`state_${timeStampMsec}`)
+    dispatch('fetchLocalStateDates')
   }
 }
 

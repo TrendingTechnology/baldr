@@ -9,7 +9,7 @@
         :key="timeStampMsec"
       >
         <a href="#" @click.prevent="importFromExternalByTime(timeStampMsec)">
-          {{ toLocaleDateTimeString(timeStampMsec) }}
+          {{ toLocaleDateTimeString(timeStampMsec) }} [{{ timeStampMsec }}]
         </a>
         <material-icon
           name="delete"
@@ -25,7 +25,7 @@
         :key="timeStampMsec"
       >
         <a href="#" @click.prevent="importFromLocalByTime(timeStampMsec)">
-          {{ toLocaleDateTimeString(timeStampMsec) }}
+          {{ toLocaleDateTimeString(timeStampMsec) }} [{{ timeStampMsec }}]
         </a>
         <material-icon
           name="delete"
@@ -56,7 +56,7 @@ export default {
     this.$store.dispatch('fetchLocalStateDates')
   },
   methods: {
-    ...mapActions(['deleteFromExternalByTime']),
+    ...mapActions(['deleteFromExternalByTime', 'deleteFromLocalByTime', 'importFromLocalByTime']),
     toLocaleDateTimeString,
     importFromExternalByTime (timeStampMsec) {
       this.$store.dispatch('importFromExternalByTime', timeStampMsec).then((result) => {
