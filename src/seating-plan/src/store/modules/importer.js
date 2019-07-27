@@ -1,3 +1,4 @@
+// eslint-disable-next-line
 /* globals localStorage */
 
 import axios from 'axios'
@@ -11,6 +12,18 @@ const state = {
 const getters = {
   savedStatesDates: (state) => {
     return state.savedStatesDates
+  },
+  latestExternalState: (state) => {
+    if (state.latestExternalState.timeStampMsec) {
+      return state.latestExternalState
+    }
+    return { timeStampMsec: 0 }
+  },
+  latestLocalState: (state) => {
+    if (state.latestLocalState.timeStampMsec) {
+      return state.latestLocalState
+    }
+    return { timeStampMsec: 0 }
   }
 }
 
@@ -41,9 +54,18 @@ const actions = {
     const dates = response.data.sort().reverse().slice(0, 10)
     commit('fetchSavedStatesDates', dates)
   },
-  async importLatestState ({ dispatch }) {
+  async importLatestState ({ dispatch, getters }) {
     await dispatch('importLatestExternalState')
     dispatch('importLatestLocalState')
+    const external = getters.latestExternalState
+    const local = getters.latestLocalState
+    if (external.timeStampMsec === local.timeStampMsec === 0) {
+      // Do nothing
+    } else if (external.timeStampMsec >= local.timeStampMsec) {
+      dispatch('importState', external)
+    } else if (local.timeStampMsec >= external.timeStampMsec) {
+      dispatch('importState', local)
+    }
   },
   async importLatestExternalState ({ commit }) {
     const response = await axios.get(

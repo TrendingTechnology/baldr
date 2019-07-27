@@ -50,10 +50,7 @@ export default {
   name: 'app',
   router,
   created: function () {
-    const state = localStorage.getItem('state')
-    if (state) {
-      this.$store.dispatch('importState', state)
-    }
+    this.$store.dispatch('importLatestState')
   }
 }
 </script>

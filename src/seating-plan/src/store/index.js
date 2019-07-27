@@ -1,3 +1,4 @@
+// eslint-disable-next-line
 /* globals localStorage */
 
 import axios from 'axios'
