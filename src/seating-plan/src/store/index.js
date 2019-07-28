@@ -112,7 +112,7 @@ const plugin = (store) => {
     if (!store.getters.importInProgress &&
         mutation.type !== 'setGradeNameCurrent' &&
         mutation.type !== 'setStateChanged' &&
-        mutation.type !== 'importInProgress') {
+        mutation.type !== 'setImportInProgress') {
       store.commit('setStateChanged', true)
     }
   })
