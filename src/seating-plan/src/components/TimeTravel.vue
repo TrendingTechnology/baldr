@@ -56,17 +56,13 @@ export default {
     this.$store.dispatch('fetchLocalStateDates')
   },
   methods: {
-    ...mapActions(['deleteFromExternalByTime', 'deleteFromLocalByTime', 'importFromLocalByTime']),
-    toLocaleDateTimeString,
-    importFromExternalByTime (timeStampMsec) {
-      this.$store.dispatch('importFromExternalByTime', timeStampMsec).then((result) => {
-        const date = toLocaleDateTimeString(timeStampMsec)
-        this.$notify({
-          type: 'success',
-          text: date
-        })
-      })
-    }
+    ...mapActions([
+      'deleteFromExternalByTime',
+      'deleteFromLocalByTime',
+      'importFromExternalByTime',
+      'importFromLocalByTime'
+    ]),
+    toLocaleDateTimeString
   }
 }
 </script>
