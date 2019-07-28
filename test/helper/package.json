@@ -19,7 +19,7 @@
   "dependencies": {
     "@bldr/core": "^0.0.17",
     "@bldr/foundation-master": "^0.0.17",
-    "electron-packager": "^14.0.2",
+    "electron-packager": "^14.0.3",
     "jsdom": "^15.1.1",
     "rewire": "^4.0.1"
   },
