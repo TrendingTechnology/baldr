@@ -2,6 +2,10 @@
 /* globals localStorage */
 
 import axios from 'axios'
+const axiosInstance = axios.create({
+  baseURL: 'https://baldr.friedrich.rocks/api/seating-plan/',
+  timeout: 1000
+})
 
 const state = {
   externalStateDates: [],
@@ -40,24 +44,20 @@ const getters = {
  * - delete
  */
 const actions = {
-  importFromSpreadsheet: ({ dispatch }, importString) => {
-    const lines = importString.split('\n')
-    for (const line of lines) {
-      const match = line.match(/(.*)\t(.*)\t(.*)\t(.*)\t([^]*)/)
-      if (match && match[1] !== 'Familienname' && match[1] !== 'Insgesamt:') {
-        const lastName = match[1]
-        const firstName = match[2]
-        const grade = match[4]
-        dispatch('createPerson', { firstName, lastName, grade })
-      }
-    }
+  deleteFromExternalByTime ({ dispatch }, timeStampMsec) {
+    return axiosInstance.delete(`/by-time/${timeStampMsec}`).then(() => {
+      dispatch('fetchExternalStateDates')
+    }).catch(() => true)
   },
-  async fetchExternalStateDates ({ commit }) {
-    const response = await axios.get(
-      'https://baldr.friedrich.rocks/api/seating-plan'
-    )
-    const dates = response.data.sort().reverse()
-    commit('fetchExternalStateDates', dates)
+  deleteFromLocalByTime ({ dispatch }, timeStampMsec) {
+    localStorage.removeItem(`state_${timeStampMsec}`)
+    dispatch('fetchLocalStateDates')
+  },
+  fetchExternalStateDates ({ commit }) {
+    return axiosInstance.get('/').then((response) => {
+      const dates = response.data.sort().reverse()
+      commit('fetchExternalStateDates', dates)
+    }).catch(() => true)
   },
   fetchLocalStateDates ({ commit }) {
     const dates = []
@@ -70,6 +70,41 @@ const actions = {
     }
     dates.sort().reverse()
     commit('fetchLocalStateDates', dates)
+  },
+  importFromExternalByTime ({ dispatch }, timeStampMsec) {
+    return axiosInstance.get(`/by-time/${timeStampMsec}`).then((response) => {
+      dispatch('importState', response.data)
+    }).catch(() => true)
+  },
+  importFromLocalByTime ({ dispatch }, timeStampMsec) {
+    const state = localStorage.getItem(`state_${timeStampMsec}`)
+    dispatch('importState', state)
+  },
+  importFromSpreadsheet: ({ dispatch }, importString) => {
+    const lines = importString.split('\n')
+    for (const line of lines) {
+      const match = line.match(/(.*)\t(.*)\t(.*)\t(.*)\t([^]*)/)
+      if (match && match[1] !== 'Familienname' && match[1] !== 'Insgesamt:') {
+        const lastName = match[1]
+        const firstName = match[2]
+        const grade = match[4]
+        dispatch('createPerson', { firstName, lastName, grade })
+      }
+    }
+  },
+  importLatestExternalState ({ commit }) {
+    return axiosInstance.get('/latest').then((response) => {
+      commit('importLatestExternalState', response.data)
+    }).catch(() => true)
+  },
+  importLatestLocalState ({ commit }) {
+    const timeStampMsec = localStorage.getItem('latest')
+    if (timeStampMsec) {
+      const localState = localStorage.getItem(`state_${timeStampMsec}`)
+      if (localState) {
+        commit('importLatestExternalState', JSON.parse(localState))
+      }
+    }
   },
   async importLatestState ({ dispatch, getters }) {
     await dispatch('importLatestExternalState')
@@ -84,41 +119,36 @@ const actions = {
       dispatch('importState', local)
     }
   },
-  async importLatestExternalState ({ commit }) {
-    const response = await axios.get(
-      `https://baldr.friedrich.rocks/api/seating-plan/latest`
-    )
-    commit('importLatestExternalState', response.data)
-  },
-  importLatestLocalState ({ commit }) {
-    const timeStampMsec = localStorage.getItem('latest')
-    if (timeStampMsec) {
-      const localState = localStorage.getItem(`state_${timeStampMsec}`)
-      if (localState) {
-        commit('importLatestExternalState', JSON.parse(localState))
-      }
+  importState: ({ commit, dispatch }, jsonObject) => {
+    let newState
+    if (typeof jsonObject === 'string') {
+      newState = JSON.parse(jsonObject)
+    } else {
+      newState = jsonObject
     }
+    if ({}.hasOwnProperty.call(newState, 'grades')) {
+      dispatch('importGradesState', newState.grades)
+    }
+    if ({}.hasOwnProperty.call(newState, 'jobs')) {
+      dispatch('importJobsState', newState.jobs)
+    }
+    commit('flushAppState')
+    commit('setImportInProgress', false)
   },
-  async importFromExternalByTime ({ dispatch }, timeStampMsec) {
-    const response = await axios.get(
-      `https://baldr.friedrich.rocks/api/seating-plan/by-time/${timeStampMsec}`
-    )
-    dispatch('importState', response.data)
-    return timeStampMsec
+  save ({ dispatch, commit }) {
+    commit('setTimeStampMsec')
+    dispatch('saveToLocalStorage')
+    dispatch('saveToExternalStorage')
   },
-  importFromLocalByTime ({ dispatch }, timeStampMsec) {
-    const state = localStorage.getItem(`state_${timeStampMsec}`)
-    dispatch('importState', state)
+  saveToExternalStorage ({ getters }) {
+    return axiosInstance.post('/', getters.exportStateObject).catch(() => true)
   },
-  async deleteFromExternalByTime ({ dispatch }, timeStampMsec) {
-    await axios.delete(
-      `https://baldr.friedrich.rocks/api/seating-plan/by-time/${timeStampMsec}`
-    )
-    dispatch('fetchExternalStateDates')
-  },
-  deleteFromLocalByTime ({ dispatch }, timeStampMsec) {
-    localStorage.removeItem(`state_${timeStampMsec}`)
-    dispatch('fetchLocalStateDates')
+  saveToLocalStorage: ({ commit, getters }) => {
+    const state = getters.exportStateObject
+    const stateString = JSON.stringify(state)
+    localStorage.setItem('latest', state.timeStampMsec)
+    localStorage.setItem(`state_${state.timeStampMsec}`, stateString)
+    commit('setStateChanged', false)
   }
 }
 

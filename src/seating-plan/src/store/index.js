@@ -1,7 +1,6 @@
 // eslint-disable-next-line
 /* globals localStorage */
 
-import axios from 'axios'
 import Vue from 'vue'
 import Vuex from 'vuex'
 
@@ -103,40 +102,6 @@ const actions = {
     for (const job of jobs) {
       dispatch('createJob', job)
     }
-  },
-  importState: ({ commit, dispatch }, jsonObject) => {
-    let newState
-    if (typeof jsonObject === 'string') {
-      newState = JSON.parse(jsonObject)
-    } else {
-      newState = jsonObject
-    }
-    if ({}.hasOwnProperty.call(newState, 'grades')) {
-      dispatch('importGradesState', newState.grades)
-    }
-    if ({}.hasOwnProperty.call(newState, 'jobs')) {
-      dispatch('importJobsState', newState.jobs)
-    }
-    commit('flushAppState')
-    commit('setImportInProgress', false)
-  },
-  save ({ dispatch, commit }) {
-    commit('setTimeStampMsec')
-    dispatch('saveToLocalStorage')
-    dispatch('saveToExternalStorage')
-  },
-  saveToExternalStorage ({ getters }) {
-    return axios.post(
-      'https://baldr.friedrich.rocks/api/seating-plan',
-      getters.exportStateObject
-    )
-  },
-  saveToLocalStorage: ({ commit, getters }) => {
-    const state = getters.exportStateObject
-    const stateString = JSON.stringify(state)
-    localStorage.setItem('latest', state.timeStampMsec)
-    localStorage.setItem(`state_${state.timeStampMsec}`, stateString)
-    commit('setStateChanged', false)
   }
 }
 
