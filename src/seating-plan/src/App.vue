@@ -9,7 +9,7 @@ import VueRouter from 'vue-router'
 
 // Components
 import ImportData from './components/ImportData.vue'
-import TimeTravel from './components/TimeTravel.vue'
+import TimeTravel from '@/pages/TimeTravel'
 import ImportPersons from './components/ImportPersons.vue'
 import JobsManager from './components/JobsManager.vue'
 import SeatingPlanView from './components/SeatingPlanView.vue'
