@@ -25,7 +25,7 @@
 import { mapGetters } from 'vuex'
 
 // Components
-import MaterialIcon from './MaterialIcon.vue'
+import MaterialIcon from '@/components/MaterialIcon'
 
 export default {
   name: 'JobsManager',

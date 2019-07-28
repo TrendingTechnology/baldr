@@ -7,7 +7,7 @@
       <person-select/>
     </modal-dialog>
     <main>
-      <seating-plan/>
+      <seating-plan-seats/>
       <persons-list/>
     </main>
     <seating-plan-footer/>
@@ -18,11 +18,11 @@
 import { mapGetters, mapActions } from 'vuex'
 
 // Components
-import ModalDialog from './ModalDialog.vue'
-import PersonSelect from './PersonSelect.vue'
-import PersonsList from './PersonsList.vue'
-import SeatingPlan from './SeatingPlan.vue'
-import SeatingPlanFooter from './SeatingPlanFooter.vue'
+import ModalDialog from '@/components/ModalDialog.vue'
+import PersonSelect from '@/components/PersonSelect.vue'
+import PersonsList from '@/components/PersonsList.vue'
+import SeatingPlanSeats from './SeatingPlanSeats'
+import SeatingPlanFooter from './SeatingPlanFooter'
 
 export default {
   name: 'SeatingPlanView',
@@ -30,7 +30,7 @@ export default {
     ModalDialog,
     PersonSelect,
     PersonsList,
-    SeatingPlan,
+    SeatingPlanSeats,
     SeatingPlanFooter
   },
   computed: mapGetters(['gradeNameCurrent', 'showModal']),

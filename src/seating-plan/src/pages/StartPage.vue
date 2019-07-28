@@ -9,7 +9,7 @@
 import { mapGetters, mapActions } from 'vuex'
 
 // Components
-import GradesList from './GradesList.vue'
+import GradesList from '@/components/GradesList'
 
 export default {
   name: 'StartPage',

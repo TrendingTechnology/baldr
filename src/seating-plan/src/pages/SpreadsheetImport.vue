@@ -11,7 +11,7 @@ Mustermann\tMax\tmännlich\t05a\t17.11.2006</pre>
 
 <script>
 export default {
-  name: 'ImportPersons',
+  name: 'SpreadsheetImport',
   data () {
     return {
       importString: ''

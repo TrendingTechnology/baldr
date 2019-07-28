@@ -17,7 +17,7 @@
 
     <!-- spreadsheet import -->
     <li>
-      <router-link to='/import-persons' title="importieren (Str+c aus LibreOffice)">
+      <router-link to='/spreadsheet-import' title="importieren (Str+c aus LibreOffice)">
         <material-icon name="google-spreadsheet"/>
       </router-link>
     </li>
@@ -29,7 +29,7 @@
 
     <!-- json import -->
     <li>
-      <router-link to='/import-data' title="Daten importieren (als JSON)">
+      <router-link to='/json-import' title="Daten importieren (als JSON)">
         <material-icon name="import"/>
       </router-link>
     </li>

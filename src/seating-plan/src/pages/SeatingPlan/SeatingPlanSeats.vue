@@ -13,7 +13,7 @@ import ResizeObserver from 'resize-observer-polyfill'
 import { mapGetters } from 'vuex'
 
 // Components
-import OneSeat from './OneSeat.vue'
+import OneSeat from '@/components/OneSeat.vue'
 
 let resizeObserver = new ResizeObserver(entries => {
   const elHeader = document.querySelector('header')

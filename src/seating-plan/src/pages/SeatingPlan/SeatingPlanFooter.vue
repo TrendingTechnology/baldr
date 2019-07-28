@@ -23,7 +23,7 @@
 import { mapGetters, mapActions } from 'vuex'
 
 // Components
-import MaterialIcon from './MaterialIcon.vue'
+import MaterialIcon from '@/components/MaterialIcon.vue'
 
 export default {
   name: 'SeatingPlanFooter',

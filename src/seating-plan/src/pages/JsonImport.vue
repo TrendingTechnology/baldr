@@ -6,7 +6,7 @@
 
 <script>
 export default {
-  name: 'ImportData',
+  name: 'JsonImport',
   methods: {
     eventListenerChange (event) {
       let file = event.target.files[0]

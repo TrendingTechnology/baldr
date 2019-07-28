@@ -9,13 +9,15 @@
 import VueRouter from 'vue-router'
 
 // Components
-import ImportData from './components/ImportData.vue'
-import TimeTravel from '@/pages/TimeTravel'
-import ImportPersons from './components/ImportPersons.vue'
-import JobsManager from './components/JobsManager.vue'
-import SeatingPlanView from './components/SeatingPlanView.vue'
-import StartPage from './components/StartPage.vue'
 import HeadingTitle from '@/components/HeadingTitle'
+
+// Page components
+import JobsManager from '@/pages/JobsManager'
+import JsonImport from '@/pages/JsonImport'
+import SeatingPlan from '@/pages/SeatingPlan'
+import SpreadsheetImport from '@/pages/SpreadsheetImport'
+import StartPage from '@/pages/StartPage'
+import TimeTravel from '@/pages/TimeTravel'
 
 import '@bldr/theme-default-css'
 
@@ -29,20 +31,20 @@ const routes = [
   },
   {
     path: '/grade/:grade',
-    component: SeatingPlanView
+    component: SeatingPlan
   },
   {
-    path: '/import-persons',
-    component: ImportPersons,
+    path: '/spreadsheet-import',
+    component: SpreadsheetImport,
     meta: {
-      title: 'SchülerInnen importieren'
+      title: 'Aus Excel / Calc importieren'
     }
   },
   {
-    path: '/import-data',
-    component: ImportData,
+    path: '/json-import',
+    component: JsonImport,
     meta: {
-      title: 'Daten importieren'
+      title: 'JSON-Dump importieren'
     }
   },
   {
