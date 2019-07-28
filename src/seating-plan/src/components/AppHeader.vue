@@ -17,7 +17,7 @@ import MainMenu from './MainMenu.vue'
 import MaterialIcon from './MaterialIcon.vue'
 
 export default {
-  name: 'HeadingTitle',
+  name: 'AppHeader',
   props: {
     title: String
   },

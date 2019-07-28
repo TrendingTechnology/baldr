@@ -1,7 +1,8 @@
 <template>
   <div id="app">
-    <heading-title :title="title"/>
+    <app-header :title="title"/>
     <router-view></router-view>
+    <app-footer/>
   </div>
 </template>
 
@@ -9,7 +10,8 @@
 import VueRouter from 'vue-router'
 
 // Components
-import HeadingTitle from '@/components/HeadingTitle'
+import AppHeader from '@/components/AppHeader'
+import AppFooter from '@/components/AppFooter'
 
 // Page components
 import JobsManager from '@/pages/JobsManager'
@@ -68,7 +70,8 @@ const router = new VueRouter({ routes })
 export default {
   name: 'app',
   components: {
-    HeadingTitle
+    AppHeader,
+    AppFooter
   },
   router,
   computed: {
