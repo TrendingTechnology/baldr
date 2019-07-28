@@ -1,6 +1,8 @@
 // eslint-disable-next-line
 /* globals localStorage */
 
+import { toLocaleDateTimeString } from '../../lib.js'
+
 import axios from 'axios'
 const axiosInstance = axios.create({
   baseURL: 'https://baldr.friedrich.rocks/api/seating-plan/',
@@ -33,6 +35,12 @@ const getters = {
   },
   localStateDates: (state) => {
     return state.localStateDates
+  },
+  stateDateCurrent: (state) => {
+    if (state.timeStampMsec) {
+      return toLocaleDateTimeString(state.timeStampMsec)
+    }
+    return ''
   }
 }
 
@@ -132,6 +140,7 @@ const actions = {
     if ({}.hasOwnProperty.call(newState, 'jobs')) {
       dispatch('importJobsState', newState.jobs)
     }
+    commit('setTimeStampMsec', newState.timeStampMsec)
     commit('flushAppState')
     commit('setImportInProgress', false)
   },
@@ -172,8 +181,12 @@ const mutations = {
   importLatestLocalState: (state, importedState) => {
     state.latestLocalState = importedState
   },
-  setTimeStampMsec: (state) => {
-    state.timeStampMsec = new Date().getTime()
+  setTimeStampMsec: (state, timeStampMsec = null) => {
+    if (!timeStampMsec) {
+      state.timeStampMsec = new Date().getTime()
+    } else {
+      state.timeStampMsec = timeStampMsec
+    }
   }
 }
 

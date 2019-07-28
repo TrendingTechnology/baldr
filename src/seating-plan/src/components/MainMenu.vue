@@ -1,5 +1,7 @@
 <template>
   <ul class="main-menu">
+    <li>Stand: {{ stateDateCurrent }}</li>
+
     <li><grades-items inline/></li>
     <!-- save -->
     <li>
@@ -49,7 +51,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 // Components
 import ExportLink from './ExportLink.vue'
@@ -65,6 +67,7 @@ export default {
     MaterialIcon,
     SaveLink
   },
+  computed: mapGetters(['stateDateCurrent']),
   methods: {
     ...mapActions(['createTestData'])
   }
