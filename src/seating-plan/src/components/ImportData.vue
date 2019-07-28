@@ -1,19 +1,12 @@
 <template>
   <div class="import-data">
-    <heading-title title="Daten importieren"/>
     <input type="file" @change="eventListenerChange"/>
   </div>
 </template>
 
 <script>
-// Components
-import HeadingTitle from './HeadingTitle.vue'
-
 export default {
   name: 'ImportData',
-  components: {
-    HeadingTitle
-  },
   methods: {
     eventListenerChange (event) {
       let file = event.target.files[0]

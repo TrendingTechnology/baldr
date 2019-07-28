@@ -1,6 +1,5 @@
 <template>
   <div class="jobs-manager">
-    <heading-title title="Dienste verwalten"/>
     <ul>
       <li v-for="job in jobsAsArray" :key="job.name">
         <material-icon disabled :name="job.icon"/>
@@ -26,13 +25,11 @@
 import { mapGetters } from 'vuex'
 
 // Components
-import HeadingTitle from './HeadingTitle.vue'
 import MaterialIcon from './MaterialIcon.vue'
 
 export default {
   name: 'JobsManager',
   components: {
-    HeadingTitle,
     MaterialIcon
   },
   data: function () {

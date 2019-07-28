@@ -1,6 +1,5 @@
 <template>
   <div class="import-persons">
-    <heading-title title="SchülerInnen importieren"/>
     <pre>Familienname\tVorname\tGeschlecht\tKlasse\tGeburtsdatum
 Insgesamt:
 Mustermann\tMax\tmännlich\t05a\t17.11.2006</pre>
@@ -11,14 +10,8 @@ Mustermann\tMax\tmännlich\t05a\t17.11.2006</pre>
 </template>
 
 <script>
-// Components
-import HeadingTitle from './HeadingTitle'
-
 export default {
   name: 'ImportPersons',
-  components: {
-    HeadingTitle
-  },
   data () {
     return {
       importString: ''

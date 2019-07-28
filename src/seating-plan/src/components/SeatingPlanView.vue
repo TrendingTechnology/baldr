@@ -1,6 +1,5 @@
 <template>
   <div class="seating-plan-view">
-    <heading-title :title="title"/>
     <modal-dialog
       v-show="showModal"
       @close="closeModal"
@@ -19,7 +18,6 @@
 import { mapGetters, mapActions } from 'vuex'
 
 // Components
-import HeadingTitle from './HeadingTitle.vue'
 import ModalDialog from './ModalDialog.vue'
 import PersonSelect from './PersonSelect.vue'
 import PersonsList from './PersonsList.vue'
@@ -29,19 +27,13 @@ import SeatingPlanFooter from './SeatingPlanFooter.vue'
 export default {
   name: 'SeatingPlanView',
   components: {
-    HeadingTitle,
     ModalDialog,
     PersonSelect,
     PersonsList,
     SeatingPlan,
     SeatingPlanFooter
   },
-  computed: {
-    ...mapGetters(['gradeNameCurrent', 'showModal']),
-    title () {
-      return 'Sitzplan der Klasse “' + this.gradeNameCurrent + '”'
-    }
-  },
+  computed: mapGetters(['gradeNameCurrent', 'showModal']),
   methods: {
     ...mapActions(['closeModal'])
   },

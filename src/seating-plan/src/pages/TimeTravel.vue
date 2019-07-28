@@ -1,7 +1,5 @@
 <template>
   <div>
-    <heading-title title="Zeitreise"/>
-
     <main>
       <section class="external">
         <h1>Extern</h1>
@@ -48,13 +46,11 @@ import { mapGetters, mapActions } from 'vuex'
 import { toLocaleDateTimeString } from '../lib.js'
 
 // Components
-import HeadingTitle from '@/components/HeadingTitle'
 import MaterialIcon from '@/components/MaterialIcon'
 
 export default {
   name: 'TimeTravel',
   components: {
-    HeadingTitle,
     MaterialIcon
   },
   computed: mapGetters(['externalStateDates', 'localStateDates']),
