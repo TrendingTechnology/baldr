@@ -1,6 +1,6 @@
 {
   "name": "@bldr/test-helper",
-  "version": "0.0.18",
+  "version": "0.0.19",
   "description": "Helper module for unit testing baldr.",
   "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
   "bugs": {
@@ -17,8 +17,8 @@
     "url": "https://josef.friedrich.rocks"
   },
   "dependencies": {
-    "@bldr/core": "^0.0.17",
-    "@bldr/foundation-master": "^0.0.17",
+    "@bldr/core": "^0.0.18",
+    "@bldr/foundation-master": "^0.0.18",
     "electron-packager": "^14.0.3",
     "jsdom": "^15.1.1",
     "rewire": "^4.0.1"
