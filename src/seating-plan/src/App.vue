@@ -10,8 +10,8 @@
 import VueRouter from 'vue-router'
 
 // Components
-import AppHeader from '@/components/AppHeader'
-import AppFooter from '@/components/AppFooter'
+import AppHeader from '@/components/layout/AppHeader'
+import AppFooter from '@/components/layout/AppFooter'
 
 // Page components
 import JobsManager from '@/pages/JobsManager'

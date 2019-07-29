@@ -17,7 +17,7 @@
 import { mapGetters, mapActions } from 'vuex'
 
 // Components
-import GradesItems from './GradesItems.vue'
+import GradesItems from '@/components/GradesItems'
 
 export default {
   name: 'GradesList',

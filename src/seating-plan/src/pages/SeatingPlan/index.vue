@@ -22,9 +22,9 @@
 import { mapGetters, mapActions } from 'vuex'
 
 // Components
-import ModalDialog from '@/components/ModalDialog.vue'
-import PersonSelect from '@/components/PersonSelect.vue'
-import PersonsList from '@/components/PersonsList.vue'
+import ModalDialog from '@/components/ModalDialog'
+import PersonSelect from '@/components/PersonSelect'
+import PersonsList from './PersonsList'
 import PlanFooter from './Footer'
 import PlanHeader from './Header'
 import PlanSeats from './Seats'

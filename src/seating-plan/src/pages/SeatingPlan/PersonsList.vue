@@ -29,8 +29,8 @@
 import { mapGetters } from 'vuex'
 
 // Components
-import MaterialIcon from './MaterialIcon.vue'
-import PersonItem from './PersonItem.vue'
+import MaterialIcon from '@/components/MaterialIcon'
+import PersonItem from './PersonItem'
 
 export default {
   name: 'PersonsList',

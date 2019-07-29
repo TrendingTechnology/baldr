@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import packageJson from '../../package.json'
+import packageJson from '@/../package.json'
 
 export default {
   name: 'AppFooter',

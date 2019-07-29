@@ -28,9 +28,9 @@
 import { mapGetters } from 'vuex'
 
 // Components
-import AddJobIcons from './AddJobIcons.vue'
-import MaterialIcon from './MaterialIcon.vue'
-import PersonsJobs from './PersonsJobs.vue'
+import AddJobIcons from '@/components/AddJobIcons'
+import MaterialIcon from '@/components/MaterialIcon'
+import PersonsJobs from './PersonsJobs'
 
 export default {
   name: 'OneSeat',

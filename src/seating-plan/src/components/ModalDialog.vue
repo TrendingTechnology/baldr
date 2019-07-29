@@ -16,7 +16,7 @@
 
 <script>
 // Components
-import MaterialIcon from './MaterialIcon.vue'
+import MaterialIcon from '@/components/MaterialIcon'
 
 export default {
   name: 'ModalDialog',

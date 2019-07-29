@@ -23,7 +23,7 @@
 import { mapGetters, mapActions } from 'vuex'
 
 // Components
-import MaterialIcon from '@/components/MaterialIcon.vue'
+import MaterialIcon from '@/components/MaterialIcon'
 
 export default {
   name: 'PlanFooter',

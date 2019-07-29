@@ -17,7 +17,7 @@
 import { mapGetters, mapActions } from 'vuex'
 
 // Components
-import MaterialIcon from './MaterialIcon.vue'
+import MaterialIcon from '@/components/MaterialIcon'
 
 export default {
   name: 'GradesItems',

@@ -20,8 +20,8 @@
 import { mapGetters, mapActions } from 'vuex'
 
 // Components
-import MaterialIcon from './MaterialIcon.vue'
-import PersonsJobs from './PersonsJobs.vue'
+import MaterialIcon from '@/components/MaterialIcon'
+import PersonsJobs from './PersonsJobs'
 
 export default {
   name: 'PersonItem',

@@ -54,10 +54,10 @@
 import { mapActions, mapGetters } from 'vuex'
 
 // Components
-import ExportLink from './ExportLink.vue'
-import GradesItems from './GradesItems.vue'
-import MaterialIcon from './MaterialIcon.vue'
-import SaveLink from './SaveLink.vue'
+import ExportLink from './ExportLink'
+import GradesItems from '@/components/GradesItems'
+import MaterialIcon from '@/components/MaterialIcon'
+import SaveLink from './SaveLink'
 
 export default {
   name: 'MainMenu',
