@@ -109,10 +109,14 @@ const modules = { app, grades, importer, jobs, seats }
 
 const plugin = (store) => {
   store.subscribe((mutation, state) => {
-    if (!store.getters.importInProgress &&
-        mutation.type !== 'setGradeNameCurrent' &&
-        mutation.type !== 'setStateChanged' &&
-        mutation.type !== 'setImportInProgress') {
+    const blackList = [
+      'fetchExternalStateDates',
+      'fetchLocalStateDates',
+      'setGradeNameCurrent',
+      'setImportInProgress',
+      'setStateChanged'
+    ]
+    if (!store.getters.importInProgress && !blackList.includes(mutation.type)) {
       store.commit('setStateChanged', true)
     }
   })
