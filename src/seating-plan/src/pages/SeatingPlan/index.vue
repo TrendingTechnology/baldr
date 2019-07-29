@@ -8,7 +8,7 @@
     </modal-dialog>
 
     <div class="container">
-      <section>
+      <section id="print-area">
         <plan-header/>
         <plan-seats/>
         <plan-footer/>
@@ -65,6 +65,10 @@ export default {
     display: flex;
     align-items: stretch;
     position: relative;
+    width: 100%;
+  }
+
+  .container > section {
     width: 100%;
   }
 

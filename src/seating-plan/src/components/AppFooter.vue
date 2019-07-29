@@ -33,4 +33,10 @@ export default {
     width: 100%;
     text-align: right;
   }
+
+  @media print {
+    footer {
+      display: none;
+    }
+  }
 </style>

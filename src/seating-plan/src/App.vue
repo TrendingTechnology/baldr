@@ -76,13 +76,10 @@ export default {
   router,
   computed: {
     title () {
-      if (this.$route.params.grade) {
-        return `Sitzplan der Klasse “${this.$route.params.grade}”`
-      } else if (this.$route.meta.title) {
+      if (this.$route.meta.title) {
         return this.$route.meta.title
-      } else {
-        return 'Sitzpläne Musiksaal E 17'
       }
+      return null
     }
   },
   created: function () {

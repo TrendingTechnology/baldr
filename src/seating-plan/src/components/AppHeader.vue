@@ -47,8 +47,9 @@ export default {
   header h1 {
     padding-left: 2em;
   }
+
   @media print {
-    .back-link {
+    header {
       display: none;
     }
   }
