@@ -1,9 +1,25 @@
 <template>
   <ul :class="{ inline: inline }" >
     <li v-for="gradeName in gradeNames" :key="gradeName">
-      <router-link :class="{placed: isGradePlaced(gradeName)}" :to="'/grade/' + gradeName">
+
+      <span v-if="linkAsIcon">
+        <span
+          contenteditable
+          @blur="rename(gradeName, $event)"
+        >{{ gradeName }}</span>
+        <router-link :to="'/grade/' + gradeName">
+          <material-icon name="open-in-new"/>
+        </router-link>
+      </span>
+
+      <router-link
+        v-else
+        :class="{placed: isGradePlaced(gradeName)}"
+        :to="'/grade/' + gradeName"
+      >
         {{ gradeName }}
       </router-link>
+
       <material-icon
         v-if="deleteIcons"
         name="delete"
@@ -29,6 +45,10 @@ export default {
     inline: {
       type: Boolean,
       default: false
+    },
+    linkAsIcon: {
+      type: Boolean,
+      default: false
     }
   },
   computed: mapGetters(['gradeNames', 'isGradePlaced']),
@@ -47,6 +67,13 @@ export default {
         this.$store.dispatch('createGrade', this.gradeName)
         this.gradeName = ''
       }
+    },
+    rename (oldGradeName, event) {
+      const newGradeName = event.target.innerText
+      this.$store.commit('renameGrade', {
+        oldGradeName: oldGradeName,
+        newGradeName: newGradeName
+      })
     }
   }
 }

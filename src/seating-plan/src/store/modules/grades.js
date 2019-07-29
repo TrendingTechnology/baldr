@@ -310,6 +310,15 @@ const mutations = {
       }
     }
   },
+  renameGrade: (state, { oldGradeName, newGradeName }) => {
+    if (oldGradeName === newGradeName || !newGradeName) return
+    const persons = state[oldGradeName].persons
+    for (const personName in persons) {
+      persons[personName].grade = newGradeName
+    }
+    Vue.set(state, newGradeName, state[oldGradeName])
+    Vue.delete(state, oldGradeName)
+  },
   unplacePerson: (state, { person }) => {
     person.seatNo = 0
   }

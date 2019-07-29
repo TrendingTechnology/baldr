@@ -1,7 +1,7 @@
 <template>
   <main class="start-page">
     <h2>Sitzpläne</h2>
-    <grades-list/>
+    <grades-list linkAsIcon/>
   </main>
 </template>
 

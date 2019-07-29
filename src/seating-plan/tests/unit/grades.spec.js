@@ -226,6 +226,38 @@ describe('Vuex store: grades #unittest', function () {
       store.commit('flushGradesState')
       assert.deepEqual(store.getters.gradeNames, [])
     })
+
+    describe('renameGrade', function () {
+      it('1a -> 1x', function () {
+        store.commit('renameGrade', {
+          oldGradeName: '1a',
+          newGradeName: '1x'
+        })
+        const person = store.getters.personById('1x: Friedrich, Josef')
+        assert.strictEqual(person.firstName, 'Josef')
+        assert.strictEqual(person.grade, '1x')
+      })
+
+      it('1a -> 1a', function () {
+        store.commit('renameGrade', {
+          oldGradeName: '1a',
+          newGradeName: '1a'
+        })
+        const person = store.getters.personById('1a: Friedrich, Josef')
+        assert.strictEqual(person.firstName, 'Josef')
+        assert.strictEqual(person.grade, '1a')
+      })
+
+      it('1a -> ', function () {
+        store.commit('renameGrade', {
+          oldGradeName: '1a',
+          newGradeName: ''
+        })
+        const person = store.getters.personById('1a: Friedrich, Josef')
+        assert.strictEqual(person.firstName, 'Josef')
+        assert.strictEqual(person.grade, '1a')
+      })
+    })
   })
 
   describe('Classes', function () {

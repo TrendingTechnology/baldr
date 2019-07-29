@@ -1,6 +1,6 @@
 <template>
   <div class="grades-list">
-    <grades-items delete-icons/>
+    <grades-items delete-icons link-as-icon/>
     <form @submit="createGrade">
       <input
         v-model="gradeName"
