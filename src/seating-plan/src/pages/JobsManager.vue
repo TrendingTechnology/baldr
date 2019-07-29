@@ -1,5 +1,5 @@
 <template>
-  <div class="jobs-manager">
+  <main>
     <ul>
       <li v-for="job in jobsAsArray" :key="job.name">
         <material-icon disabled :name="job.icon"/>
@@ -18,7 +18,7 @@
       </label>
       <button>hinzufügen</button>
     </form>
-  </div>
+  </main>
 </template>
 
 <script>

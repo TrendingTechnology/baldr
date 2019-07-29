@@ -1,17 +1,21 @@
 <template>
-  <div class="seating-plan-view">
+  <main>
     <modal-dialog
       v-show="showModal"
       @close="closeModal"
     >
       <person-select/>
     </modal-dialog>
-    <main>
-      <seating-plan-seats/>
+
+    <div class="container">
+      <section>
+        <plan-header/>
+        <plan-seats/>
+        <plan-footer/>
+      </section>
       <persons-list/>
-    </main>
-    <seating-plan-footer/>
-  </div>
+    </div>
+  </main>
 </template>
 
 <script>
@@ -21,8 +25,9 @@ import { mapGetters, mapActions } from 'vuex'
 import ModalDialog from '@/components/ModalDialog.vue'
 import PersonSelect from '@/components/PersonSelect.vue'
 import PersonsList from '@/components/PersonsList.vue'
-import SeatingPlanSeats from './SeatingPlanSeats'
-import SeatingPlanFooter from './SeatingPlanFooter'
+import PlanFooter from './Footer'
+import PlanHeader from './Header'
+import PlanSeats from './Seats'
 
 export default {
   name: 'SeatingPlanView',
@@ -30,8 +35,9 @@ export default {
     ModalDialog,
     PersonSelect,
     PersonsList,
-    SeatingPlanSeats,
-    SeatingPlanFooter
+    PlanFooter,
+    PlanHeader,
+    PlanSeats
   },
   computed: mapGetters(['gradeNameCurrent', 'showModal']),
   methods: {
@@ -55,7 +61,7 @@ export default {
 </script>
 
 <style scoped>
-  main {
+  .container {
     display: flex;
     align-items: stretch;
     position: relative;

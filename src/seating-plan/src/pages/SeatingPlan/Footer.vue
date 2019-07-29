@@ -26,7 +26,7 @@ import { mapGetters, mapActions } from 'vuex'
 import MaterialIcon from '@/components/MaterialIcon.vue'
 
 export default {
-  name: 'SeatingPlanFooter',
+  name: 'PlanFooter',
   components: {
     MaterialIcon
   },

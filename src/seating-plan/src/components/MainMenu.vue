@@ -1,8 +1,8 @@
 <template>
   <ul class="main-menu">
-    <li>Stand: {{ stateDateCurrent }}</li>
 
     <li><grades-items inline/></li>
+
     <!-- save -->
     <li>
       <save-link/>

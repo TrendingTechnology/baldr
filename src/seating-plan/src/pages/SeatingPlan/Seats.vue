@@ -1,11 +1,11 @@
 <template>
-  <section class="seating-plan">
+  <div class="seating-plan">
     <one-seat
       v-for="seat in seatPositions"
       :seat="seat"
       :key="seat.no"
       />
-  </section>
+  </div>
 </template>
 
 <script>
@@ -16,9 +16,10 @@ import { mapGetters } from 'vuex'
 import OneSeat from '@/components/OneSeat.vue'
 
 let resizeObserver = new ResizeObserver(entries => {
-  const elHeader = document.querySelector('header')
+  const elHeader = document.querySelector('#app > header')
   // Startpage has no footer
-  const elFooter = document.querySelector('footer')
+  const elFooter = document.querySelector('#app > footer')
+
   if (elHeader && elFooter) {
     let headerHeight = elHeader.clientHeight
     let footerHeight = elFooter.clientHeight
@@ -41,7 +42,7 @@ let resizeObserver = new ResizeObserver(entries => {
 })
 
 export default {
-  name: 'SeatingPlan',
+  name: 'PlanSeats',
   components: {
     OneSeat
   },
@@ -58,6 +59,7 @@ export default {
     position: relative;
     box-sizing: border-box;
   }
+
   @media print {
     .seating-plan {
       width: 100% !important;

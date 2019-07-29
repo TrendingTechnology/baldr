@@ -1,8 +1,8 @@
 <template>
-  <div class="start-page">
+  <main class="start-page">
     <h2>Sitzpläne</h2>
     <grades-list/>
-  </div>
+  </main>
 </template>
 
 <script>

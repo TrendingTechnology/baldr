@@ -1,7 +1,7 @@
 <template>
-  <div class="import-data">
+  <main>
     <input type="file" @change="eventListenerChange"/>
-  </div>
+  </main>
 </template>
 
 <script>
