@@ -7,7 +7,8 @@ const os = require('os')
 
 // Third party packages.
 const { Command } = require('commander')
-const cors = require('cors')
+// We do CORS now over Nginx
+// const cors = require('cors')
 const express = require('express')
 
 // Project packages.
@@ -55,7 +56,8 @@ function checkEnv (envName) {
 
 const app = express()
 
-app.use(cors())
+// We do CORS now over Nginx
+// app.use(cors())
 app.use(express.json())
 
 app.get('/api/version', (req, res) => {
