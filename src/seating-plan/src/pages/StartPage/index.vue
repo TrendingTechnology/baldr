@@ -1,7 +1,7 @@
 <template>
   <main class="start-page">
     <h2>Sitzpläne</h2>
-    <grades-list linkAsIcon/>
+    <grades-overview/>
   </main>
 </template>
 
@@ -9,12 +9,12 @@
 import { mapGetters, mapActions } from 'vuex'
 
 // Components
-import GradesList from '@/components/GradesList'
+import GradesOverview from './GradesOverview'
 
 export default {
   name: 'StartPage',
   components: {
-    GradesList
+    GradesOverview
   },
   computed: mapGetters(['gradeNames']),
   methods: mapActions(['createTestData'])

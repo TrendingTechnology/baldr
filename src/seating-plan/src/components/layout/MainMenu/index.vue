@@ -55,7 +55,7 @@ import { mapActions, mapGetters } from 'vuex'
 
 // Components
 import ExportLink from './ExportLink'
-import GradesItems from '@/components/GradesItems'
+import GradesItems from './GradesItems'
 import MaterialIcon from '@/components/MaterialIcon'
 import SaveLink from './SaveLink'
 

@@ -2,38 +2,46 @@
   <main>
     <section class="external">
       <h1>Extern</h1>
-      <ul>
-        <li
+      <table>
+        <tr
           v-for="timeStampMsec in externalStateDates"
           :key="timeStampMsec"
         >
-          <a href="#" @click.prevent="importFromExternalByTime(timeStampMsec)">
-            {{ toLocaleDateTimeString(timeStampMsec) }}
-          </a>
-          <material-icon
-            name="delete"
-            @click.native="deleteFromExternalByTime(timeStampMsec)"
-          />
-        </li>
-      </ul>
+          <td>
+            <a href="#" @click.prevent="importFromExternalByTime(timeStampMsec)">
+              {{ toLocaleDateTimeString(timeStampMsec) }}
+            </a>
+          </td>
+          <td>
+            <material-icon
+              name="delete"
+              @click.native="deleteFromExternalByTime(timeStampMsec)"
+            />
+          </td>
+        </tr>
+      </table>
     </section>
 
     <section class="local">
       <h1>Lokal</h1>
-      <ul>
-        <li
+      <table>
+        <tr
           v-for="timeStampMsec in localStateDates"
           :key="timeStampMsec"
         >
-          <a href="#" @click.prevent="importFromLocalByTime(timeStampMsec)">
-            {{ toLocaleDateTimeString(timeStampMsec) }}
-          </a>
-          <material-icon
-            name="delete"
-            @click.native="deleteFromLocalByTime(timeStampMsec)"
-          />
-        </li>
-      </ul>
+          <td>
+            <a href="#" @click.prevent="importFromLocalByTime(timeStampMsec)">
+              {{ toLocaleDateTimeString(timeStampMsec) }}
+            </a>
+          </td>
+          <td>
+            <material-icon
+              name="delete"
+              @click.native="deleteFromLocalByTime(timeStampMsec)"
+            />
+          </td>
+        </tr>
+      </table>
     </section>
   </main>
 </template>

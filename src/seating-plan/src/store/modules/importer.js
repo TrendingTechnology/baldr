@@ -6,7 +6,7 @@ import { toLocaleDateTimeString } from '../../lib.js'
 import axios from 'axios'
 const axiosInstance = axios.create({
   baseURL: 'https://baldr.friedrich.rocks/api/seating-plan/',
-  timeout: 1000,
+  timeout: 3000,
   auth: {
     username: 'baldr-rest-api',
     password: 'owerNH(2sgf8ud7z234234'

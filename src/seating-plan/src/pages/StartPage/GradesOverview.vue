@@ -1,6 +1,6 @@
 <template>
   <div class="grades-list">
-    <grades-items delete-icons link-as-icon/>
+    <grades-table/>
     <form @submit="createGrade">
       <input
         v-model="gradeName"
@@ -17,13 +17,13 @@
 import { mapGetters, mapActions } from 'vuex'
 
 // Components
-import GradesItems from '@/components/GradesItems'
+import GradesTable from './GradesTable'
 
 export default {
-  name: 'GradesList',
+  name: 'GradesOverview',
   computed: mapGetters(['gradeNames', 'isGradePlaced']),
   components: {
-    GradesItems
+    GradesTable
   },
   data: function () {
     return {
