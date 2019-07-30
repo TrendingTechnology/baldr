@@ -258,6 +258,44 @@ describe('Vuex store: grades #unittest', function () {
         assert.strictEqual(person.grade, '1a')
       })
     })
+
+    describe('renamePerson', function () {
+      it('Josef Friedrich -> Josi Friedrich', function () {
+        const person = store.getters.personById('1a: Friedrich, Josef')
+        store.commit('renamePerson', {
+          person: person,
+          newFirstName: 'Josi',
+          newLastName: 'Friedrich'
+        })
+        const newPerson = store.getters.personById('1a: Friedrich, Josi')
+        assert.strictEqual(newPerson.firstName, 'Josi')
+        assert.strictEqual(newPerson.lastName, 'Friedrich')
+        const oldPerson = store.getters.personById('1a: Friedrich, Josef')
+        assert.strictEqual(oldPerson, false)
+      })
+
+      it('Josef Friedrich -> Josi (Friedrich)', function () {
+        const person = store.getters.personById('1a: Friedrich, Josef')
+        store.commit('renamePerson', {
+          person: person,
+          newFirstName: 'Josi'
+        })
+        const newPerson = store.getters.personById('1a: Friedrich, Josi')
+        assert.strictEqual(newPerson.firstName, 'Josi')
+      })
+
+      it('Josef Friedrich -> Josef Friedrich', function () {
+        const person = store.getters.personById('1a: Friedrich, Josef')
+        store.commit('renamePerson', {
+          person: person,
+          newFirstName: 'Josef',
+          newLastName: 'Friedrich'
+        })
+        const newPerson = store.getters.personById('1a: Friedrich, Josef')
+        assert.strictEqual(newPerson.firstName, 'Josef')
+        assert.strictEqual(newPerson.lastName, 'Friedrich')
+      })
+    })
   })
 
   describe('Classes', function () {
