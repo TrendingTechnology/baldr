@@ -1,17 +1,21 @@
 <template>
   <footer>
-    <a :href="npmPackageLink">{{ packageJson.name }}</a>
-    &nbsp;
-    <a :href="npmVersionLink">{{ version }}</a>
+    <span v-if="apiVersion">
+      <a href="https://www.npmjs.com/package/@baldr/rest-api">@baldr/rest-api ({{ apiVersion }})</a>
+      &nbsp;
+    </span>
+    <a :href="npmPackageLink">{{ packageJson.name }} ({{ version }})</a>
   </footer>
 </template>
 
 <script>
 import packageJson from '@/../package.json'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'AppFooter',
   computed: {
+    ...mapGetters(['apiVersion']),
     packageJson () {
       return packageJson
     },
@@ -20,9 +24,6 @@ export default {
     },
     npmPackageLink () {
       return `https://www.npmjs.com/package/${this.packageJson.name}`
-    },
-    npmVersionLink () {
-      return `https://www.npmjs.com/package/${this.packageJson.name}/v/${this.packageJson.version}`
     }
   }
 }
@@ -32,6 +33,7 @@ export default {
   footer {
     width: 100%;
     text-align: right;
+    font-size: 0.7em;
   }
 
   @media print {

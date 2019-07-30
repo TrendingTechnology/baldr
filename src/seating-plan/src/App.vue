@@ -84,10 +84,13 @@ export default {
   },
   created: function () {
     this.$store.dispatch('importLatestState')
+
     window.addEventListener('beforeunload', event => {
       event.preventDefault()
       event.returnValue = ''
     })
+
+    this.$store.dispatch('checkApi')
   }
 }
 </script>

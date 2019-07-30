@@ -5,7 +5,7 @@ import { toLocaleDateTimeString } from '../../lib.js'
 
 import axios from 'axios'
 const axiosInstance = axios.create({
-  baseURL: 'https://baldr.friedrich.rocks/api/seating-plan/',
+  baseURL: 'https://baldr.friedrich.rocks/api/',
   timeout: 3000,
   auth: {
     username: 'baldr-rest-api',
@@ -14,6 +14,7 @@ const axiosInstance = axios.create({
 })
 
 const state = {
+  apiVersion: null,
   externalStateDates: [],
   latestExternalState: {},
   latestLocalState: {},
@@ -22,6 +23,9 @@ const state = {
 }
 
 const getters = {
+  apiVersion: (state) => {
+    return state.apiVersion
+  },
   externalStateDates: (state) => {
     return state.externalStateDates
   },
@@ -56,8 +60,15 @@ const getters = {
  * - delete
  */
 const actions = {
+  checkApi ({ commit }) {
+    return axiosInstance.get('/version').then((response) => {
+      commit('setApiVersion', response.data.version)
+    }).catch(() => {
+      commit('setApiVersion', null)
+    })
+  },
   deleteFromExternalByTime ({ dispatch }, timeStampMsec) {
-    return axiosInstance.delete(`/by-time/${timeStampMsec}`).then(() => {
+    return axiosInstance.delete(`/seating-plan/by-time/${timeStampMsec}`).then(() => {
       dispatch('fetchExternalStateDates')
     }).catch(() => true)
   },
@@ -66,7 +77,7 @@ const actions = {
     dispatch('fetchLocalStateDates')
   },
   fetchExternalStateDates ({ commit }) {
-    return axiosInstance.get('/').then((response) => {
+    return axiosInstance.get('/seating-plan/').then((response) => {
       const dates = response.data.sort().reverse()
       commit('fetchExternalStateDates', dates)
     }).catch(() => true)
@@ -84,7 +95,7 @@ const actions = {
     commit('fetchLocalStateDates', dates)
   },
   importFromExternalByTime ({ dispatch }, timeStampMsec) {
-    return axiosInstance.get(`/by-time/${timeStampMsec}`).then((response) => {
+    return axiosInstance.get(`/seating-plan/by-time/${timeStampMsec}`).then((response) => {
       dispatch('importState', response.data)
     }).catch(() => true)
   },
@@ -105,7 +116,7 @@ const actions = {
     }
   },
   importLatestExternalState ({ commit }) {
-    return axiosInstance.get('/latest').then((response) => {
+    return axiosInstance.get('/seating-plan/latest').then((response) => {
       commit('importLatestExternalState', response.data)
     }).catch(() => true)
   },
@@ -156,7 +167,7 @@ const actions = {
     }
   },
   saveToExternalStorage ({ getters }) {
-    return axiosInstance.post('/', getters.exportStateObject).catch(() => true)
+    return axiosInstance.post('/seating-plan/', getters.exportStateObject).catch(() => true)
   },
   saveToLocalStorage: ({ commit, getters }) => {
     const state = getters.exportStateObject
@@ -186,6 +197,9 @@ const mutations = {
   },
   importLatestLocalState: (state, importedState) => {
     state.latestLocalState = importedState
+  },
+  setApiVersion: (state, version) => {
+    state.apiVersion = version
   },
   setTimeStampMsec: (state, timeStampMsec = null) => {
     if (!timeStampMsec) {
