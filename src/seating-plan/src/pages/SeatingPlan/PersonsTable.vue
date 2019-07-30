@@ -22,8 +22,7 @@ export default {
     PersonsTableRow
   },
   computed: mapGetters([
-    'personsByGradeAsListSortedCurrent',
-    'gradeNameCurrent'
+    'personsByGradeAsListSortedCurrent'
   ])
 }
 </script>

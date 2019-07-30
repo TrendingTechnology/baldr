@@ -1,5 +1,6 @@
 <template>
   <aside id="persons-sidebar">
+    <router-link :to="'/grade/' + gradeNameCurrent + '/persons'">Personen verwalten</router-link>
     <ol>
       <persons-table/>
     </ol>
