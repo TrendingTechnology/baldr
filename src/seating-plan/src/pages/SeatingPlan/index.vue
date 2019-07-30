@@ -13,7 +13,7 @@
         <plan-seats/>
         <plan-footer/>
       </section>
-      <persons-list/>
+      <persons-sidebar/>
     </div>
   </main>
 </template>
@@ -24,7 +24,7 @@ import { mapGetters, mapActions } from 'vuex'
 // Components
 import ModalDialog from '@/components/ModalDialog'
 import PersonSelect from '@/components/PersonSelect'
-import PersonsList from './PersonsList'
+import PersonsSidebar from './PersonsSidebar'
 import PlanFooter from './Footer'
 import PlanHeader from './Header'
 import PlanSeats from './Seats'
@@ -34,7 +34,7 @@ export default {
   components: {
     ModalDialog,
     PersonSelect,
-    PersonsList,
+    PersonsSidebar,
     PlanFooter,
     PlanHeader,
     PlanSeats

@@ -1,11 +1,7 @@
 <template>
-  <div class="people-list">
+  <aside id="persons-sidebar">
     <ol>
-      <person-item
-        v-for="person in personsByGradeAsListSortedCurrent"
-        :person="person"
-        :key="person.id"
-      />
+      <persons-table/>
     </ol>
     <form @submit="createPerson">
       <input
@@ -22,7 +18,7 @@
       >
       <button><material-icon name="plus-box-outline"/></button>
     </form>
-  </div>
+  </aside>
 </template>
 
 <script>
@@ -30,13 +26,13 @@ import { mapGetters } from 'vuex'
 
 // Components
 import MaterialIcon from '@/components/MaterialIcon'
-import PersonItem from './PersonItem'
+import PersonsTable from './PersonsTable'
 
 export default {
-  name: 'PersonsList',
+  name: 'PersonsSidebar',
   components: {
     MaterialIcon,
-    PersonItem
+    PersonsTable
   },
   data: function () {
     return {
@@ -44,11 +40,18 @@ export default {
       firstName: ''
     }
   },
-  computed: mapGetters(['personsByGradeAsListSortedCurrent', 'gradeNameCurrent']),
+  computed: mapGetters([
+    'gradeNameCurrent',
+    'personsByGradeAsListSortedCurrent'
+  ]),
   methods: {
     createPerson () {
       if (this.lastName && this.firstName) {
-        this.$store.dispatch('createPerson', { firstName: this.firstName, lastName: this.lastName, grade: this.gradeNameCurrent })
+        this.$store.dispatch('createPerson', {
+          firstName: this.firstName,
+          lastName: this.lastName,
+          grade: this.gradeNameCurrent
+        })
         this.lastName = ''
         this.firstName = ''
       }
@@ -58,21 +61,21 @@ export default {
 </script>
 
 <style scoped>
-  .people-list {
+  #persons-sidebar {
     display: block;
     white-space: nowrap;
   }
 
-  form {
+  #persons-sidebar form {
     padding-left: 1em;
   }
 
-  input {
+  #persons-sidebar input {
     max-width: 5em;
   }
 
   @media print {
-    .people-list {
+    #persons-sidebar {
       display: none;
     }
   }

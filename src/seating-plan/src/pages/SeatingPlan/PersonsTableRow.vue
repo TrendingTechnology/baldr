@@ -1,19 +1,33 @@
 <template>
-  <li
+  <tr
     :title="person.id"
     :key="person.lastname"
-    @dragstart="eventListenerDragStart"
+    @dragstart="dragStart"
     :draggable="draggable"
     class="people-item"
     :class="{ placed: person.seatNo }"
   >
-    {{ person.lastName }}, {{ person.firstName }}
-    <persons-jobs :person="person"/>
-    <material-icon
-      name="delete"
-      @click.native="deletePerson(person)"
-    />
-  </li>
+
+    <td>
+      {{ no }}.
+    </td>
+
+    <td>
+      {{ person.lastName }}, {{ person.firstName }}
+    </td>
+
+    <td>
+      <persons-jobs :person="person"/>
+    </td>
+
+    <td>
+      <material-icon
+        name="delete"
+        @click.native="deletePerson(person)"
+      />
+    </td>
+
+  </tr>
 </template>
 
 <script>
@@ -24,9 +38,10 @@ import MaterialIcon from '@/components/MaterialIcon'
 import PersonsJobs from './PersonsJobs'
 
 export default {
-  name: 'PersonItem',
+  name: 'PersonsTableRow',
   props: {
-    person: Object
+    person: Object,
+    no: Number
   },
   components: {
     MaterialIcon,
@@ -35,16 +50,13 @@ export default {
   computed: {
     ...mapGetters(['seats']),
     draggable () {
-      if (this.person.seatNo >= 1 && this.person.seatNo <= this.seats.count) {
-        return 'false'
-      } else {
-        return 'true'
-      }
+      if (!this.person.seatNo) return 'true'
+      return 'false'
     }
   },
   methods: {
     ...mapActions(['deletePerson']),
-    eventListenerDragStart (event) {
+    dragStart (event) {
       event.dataTransfer.dropEffect = 'move'
       event.dataTransfer.setData('text/plain', event.currentTarget.title)
     }
