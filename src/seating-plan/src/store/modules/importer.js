@@ -114,7 +114,7 @@ const actions = {
     if (timeStampMsec) {
       const localState = localStorage.getItem(`state_${timeStampMsec}`)
       if (localState) {
-        commit('importLatestExternalState', JSON.parse(localState))
+        commit('importLatestLocalState', JSON.parse(localState))
       }
     }
   },
