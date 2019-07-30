@@ -148,10 +148,12 @@ const actions = {
     commit('flushAppState')
     commit('setImportInProgress', false)
   },
-  save ({ dispatch, commit }) {
-    commit('setTimeStampMsec')
-    dispatch('saveToLocalStorage')
-    dispatch('saveToExternalStorage')
+  save ({ dispatch, commit, getters }) {
+    if (getters.stateChanged) {
+      commit('setTimeStampMsec')
+      dispatch('saveToLocalStorage')
+      dispatch('saveToExternalStorage')
+    }
   },
   saveToExternalStorage ({ getters }) {
     return axiosInstance.post('/', getters.exportStateObject).catch(() => true)

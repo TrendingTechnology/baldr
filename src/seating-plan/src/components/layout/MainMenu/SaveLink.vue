@@ -3,7 +3,7 @@
     :disabled="!stateChanged"
     name="content-save"
     @click.native="save"
-    title="lokal speichern"
+    title="speichern"
   />
 </template>
 
