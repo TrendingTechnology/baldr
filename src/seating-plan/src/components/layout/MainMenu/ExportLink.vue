@@ -19,7 +19,9 @@ export default {
     MaterialIcon
   },
   computed: {
-    ...mapGetters(['stateAsURIComponent']),
+    ...mapGetters([
+      'stateAsURIComponent'
+    ]),
     dateTime () {
       let date = new Date()
       let isoString = date.toISOString()

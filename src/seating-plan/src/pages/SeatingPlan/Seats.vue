@@ -46,7 +46,9 @@ export default {
   components: {
     OneSeat
   },
-  computed: mapGetters(['seatPositions']),
+  computed: mapGetters([
+    'seatPositions'
+  ]),
   mounted () {
     resizeObserver.observe(this.$el)
   }

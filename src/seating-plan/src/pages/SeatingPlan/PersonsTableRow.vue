@@ -48,14 +48,18 @@ export default {
     PersonsJobs
   },
   computed: {
-    ...mapGetters(['seats']),
+    ...mapGetters([
+      'seats'
+    ]),
     draggable () {
       if (!this.person.seatNo) return 'true'
       return 'false'
     }
   },
   methods: {
-    ...mapActions(['deletePerson']),
+    ...mapActions([
+      'deletePerson'
+    ]),
     dragStart (event) {
       event.dataTransfer.dropEffect = 'move'
       event.dataTransfer.setData('text/plain', event.currentTarget.title)

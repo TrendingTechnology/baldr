@@ -67,9 +67,13 @@ export default {
     MaterialIcon,
     SaveLink
   },
-  computed: mapGetters(['stateDateCurrent']),
+  computed: mapGetters([
+    'stateDateCurrent'
+  ]),
   methods: {
-    ...mapActions(['createTestData'])
+    ...mapActions([
+      'createTestData'
+    ])
   }
 }
 </script>

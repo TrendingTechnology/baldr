@@ -38,7 +38,9 @@ export default {
       newIcon: ''
     }
   },
-  computed: mapGetters(['jobsAsArray']),
+  computed: mapGetters([
+    'jobsAsArray'
+  ]),
   methods: {
     createJob () {
       if (this.newName && this.newIcon) {

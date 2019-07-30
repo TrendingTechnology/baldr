@@ -14,14 +14,11 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
-
 // Components
 import GradesTable from './GradesTable'
 
 export default {
   name: 'GradesOverview',
-  computed: mapGetters(['gradeNames', 'isGradePlaced']),
   components: {
     GradesTable
   },
@@ -31,7 +28,6 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['deleteGrade']),
     createGrade () {
       if (this.gradeName) {
         this.$store.dispatch('createGrade', this.gradeName)

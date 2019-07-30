@@ -40,7 +40,9 @@ export default {
     MaterialIcon
   },
   methods: {
-    ...mapActions(['deleteGrade']),
+    ...mapActions([
+      'deleteGrade'
+    ]),
     rename (oldGradeName, event) {
       const newGradeName = event.target.innerText
       this.$store.commit('renameGrade', {

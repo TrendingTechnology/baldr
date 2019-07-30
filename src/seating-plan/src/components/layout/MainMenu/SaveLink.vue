@@ -18,7 +18,11 @@ export default {
   components: {
     MaterialIcon
   },
-  computed: mapGetters(['stateChanged']),
-  methods: mapActions(['save'])
+  computed: mapGetters([
+    'stateChanged'
+  ]),
+  methods: mapActions([
+    'save'
+  ])
 }
 </script>

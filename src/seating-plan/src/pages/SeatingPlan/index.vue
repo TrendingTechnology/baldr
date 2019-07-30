@@ -39,9 +39,14 @@ export default {
     PlanHeader,
     PlanSeats
   },
-  computed: mapGetters(['gradeNameCurrent', 'showModal']),
+  computed: mapGetters([
+    'gradeNameCurrent',
+    'showModal'
+  ]),
   methods: {
-    ...mapActions(['closeModal'])
+    ...mapActions([
+      'closeModal'
+    ])
   },
   beforeCreate: function () {
     let grade = this.$route.params.grade

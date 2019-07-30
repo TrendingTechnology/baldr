@@ -16,7 +16,9 @@ import { mapGetters } from 'vuex'
 export default {
   name: 'PlanHeader',
   computed: {
-    ...mapGetters(['stateDateCurrent']),
+    ...mapGetters([
+      'stateDateCurrent'
+    ]),
     title () {
       return `Sitzplan der Klasse „${this.$store.getters.gradeNameCurrent}“`
     }

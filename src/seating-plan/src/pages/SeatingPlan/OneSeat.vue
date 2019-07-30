@@ -43,7 +43,10 @@ export default {
     seat: Object
   },
   computed: {
-    ...mapGetters(['jobsAsArray', 'seats']),
+    ...mapGetters([
+      'jobsAsArray',
+      'seats'
+    ]),
     draggable () {
       if (this.person.seatNo >= 1 && this.person.seatNo <= this.seats.count) {
         return 'true'

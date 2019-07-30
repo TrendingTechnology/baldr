@@ -58,7 +58,10 @@ export default {
   components: {
     MaterialIcon
   },
-  computed: mapGetters(['externalStateDates', 'localStateDates']),
+  computed: mapGetters([
+    'externalStateDates',
+    'localStateDates'
+  ]),
   beforeCreate: function () {
     this.$store.dispatch('fetchExternalStateDates')
     this.$store.dispatch('fetchLocalStateDates')

@@ -23,9 +23,13 @@ export default {
     person: [Object, Boolean]
   },
   components: { MaterialIcon },
-  computed: mapGetters(['jobsAsArray']),
+  computed: mapGetters([
+    'jobsAsArray'
+  ]),
   methods: {
-    ...mapActions(['removeJobFromPerson']),
+    ...mapActions([
+      'removeJobFromPerson'
+    ]),
     hasPersonJob (personId, jobName) {
       return this.$store.getters.hasPersonJob(personId, jobName)
     }

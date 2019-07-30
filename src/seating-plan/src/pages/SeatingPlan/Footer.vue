@@ -30,9 +30,14 @@ export default {
   components: {
     MaterialIcon
   },
-  computed: mapGetters(['personsCountCurrent', 'jobsOfGradeCurrent']),
+  computed: mapGetters([
+    'jobsOfGradeCurrent',
+    'personsCountCurrent'
+  ]),
   methods: {
-    ...mapActions(['removeJobFromPerson']),
+    ...mapActions([
+      'removeJobFromPerson'
+    ]),
     getJobIconFromName (jobName) {
       return this.$store.getters.jobIconFromName(jobName)
     }

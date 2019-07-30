@@ -25,9 +25,13 @@ export default {
   props: {
     person: [Object, Boolean]
   },
-  computed: mapGetters(['jobsAsArray']),
+  computed: mapGetters([
+    'jobsAsArray'
+  ]),
   methods: {
-    ...mapActions(['addJobToPerson']),
+    ...mapActions([
+      'addJobToPerson'
+    ]),
     hasPersonJob (personId, jobName) {
       return this.$store.getters.hasPersonJob(personId, jobName)
     }
