@@ -112,6 +112,7 @@ const plugin = (store) => {
     const blackList = [
       'fetchExternalStateDates',
       'fetchLocalStateDates',
+      'setApiVersion',
       'setGradeNameCurrent',
       'setImportInProgress',
       'setStateChanged'

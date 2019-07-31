@@ -19,20 +19,12 @@ describe('Vuex store: app #unittest', function () {
       assert.strictEqual(store.getters.gradeNameCurrent, '1a')
     })
 
-    it('importInProgress', function () {
-      assert.strictEqual(store.getters.importInProgress, true)
-    })
-
     it('showModal', function () {
       assert.strictEqual(store.getters.showModal, false)
     })
 
     it('seatNoCurrent', function () {
       assert.strictEqual(store.getters.seatNoCurrent, null)
-    })
-
-    it('stateChanged', function () {
-      assert.strictEqual(store.getters.stateChanged, false)
     })
   })
 
@@ -64,11 +56,6 @@ describe('Vuex store: app #unittest', function () {
       assert.strictEqual(store.getters.gradeNameCurrent, '1x')
     })
 
-    it('setImportInProgress', function () {
-      store.commit('setImportInProgress', true)
-      assert.strictEqual(store.getters.importInProgress, true)
-    })
-
     it('setSeatNoCurrent', function () {
       store.commit('setSeatNoCurrent', 69)
       assert.strictEqual(store.getters.seatNoCurrent, 69)
@@ -77,11 +64,6 @@ describe('Vuex store: app #unittest', function () {
     it('setShowModal', function () {
       store.commit('setShowModal', true)
       assert.strictEqual(store.getters.showModal, true)
-    })
-
-    it('setStateChanged', function () {
-      store.commit('setStateChanged', true)
-      assert.strictEqual(store.getters.stateChanged, true)
     })
   })
 })

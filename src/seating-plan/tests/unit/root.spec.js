@@ -78,6 +78,12 @@ describe('Vuex store: root #unittest', function () {
       assert.strictEqual(store.state.app.showModal, false)
     })
 
+    it('importer', function () {
+      store.commit('setTimeStampMsec', 1234)
+      flushState()
+      assert.strictEqual(store.getters.timeStampMsec, 0)
+    })
+
     it('jobs', function () {
       assert.strictEqual(store.getters.jobsAsArray.length, 5)
       flushState()

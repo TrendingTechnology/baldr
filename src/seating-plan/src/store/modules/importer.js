@@ -13,14 +13,20 @@ const axiosInstance = axios.create({
   }
 })
 
-const state = {
-  apiVersion: null,
-  externalStateDates: [],
-  latestExternalState: {},
-  latestLocalState: {},
-  localStateDates: [],
-  timeStampMsec: 0
+class InitState {
+  constructor () {
+    this.apiVersion = null
+    this.externalStateDates = []
+    this.importInProgress = true
+    this.latestExternalState = {}
+    this.latestLocalState = {}
+    this.localStateDates = []
+    this.stateChanged = false
+    this.timeStampMsec = 0
+  }
 }
+
+const state = new InitState()
 
 const getters = {
   apiVersion: (state) => {
@@ -28,6 +34,9 @@ const getters = {
   },
   externalStateDates: (state) => {
     return state.externalStateDates
+  },
+  importInProgress: (state) => {
+    return state.importInProgress
   },
   latestExternalState: (state) => {
     if (state.latestExternalState.timeStampMsec) {
@@ -44,11 +53,17 @@ const getters = {
   localStateDates: (state) => {
     return state.localStateDates
   },
+  stateChanged: (state) => {
+    return state.stateChanged
+  },
   stateDateCurrent: (state) => {
     if (state.timeStampMsec) {
       return toLocaleDateTimeString(state.timeStampMsec)
     }
     return ''
+  },
+  timeStampMsec: (state) => {
+    return state.timeStampMsec
   }
 }
 
@@ -201,6 +216,12 @@ const mutations = {
   setApiVersion: (state, version) => {
     state.apiVersion = version
   },
+  setImportInProgress: (state, status) => {
+    state.importInProgress = status
+  },
+  setStateChanged: (state, status) => {
+    state.stateChanged = status
+  },
   setTimeStampMsec: (state, timeStampMsec = null) => {
     if (!timeStampMsec) {
       state.timeStampMsec = new Date().getTime()
@@ -211,6 +232,7 @@ const mutations = {
 }
 
 export default {
+  InitState,
   state,
   getters,
   actions,
