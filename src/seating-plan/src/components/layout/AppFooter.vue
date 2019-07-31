@@ -1,7 +1,7 @@
 <template>
   <footer>
     <span v-if="apiVersion">
-      <a href="https://www.npmjs.com/package/@baldr/rest-api">@baldr/rest-api ({{ apiVersion }})</a>
+      <a href="https://www.npmjs.com/package/@bldr/rest-api">@bldr/rest-api ({{ apiVersion }})</a>
       &nbsp;
     </span>
     <a :href="npmPackageLink">{{ packageJson.name }} ({{ version }})</a>
