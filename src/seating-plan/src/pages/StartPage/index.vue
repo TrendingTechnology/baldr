@@ -1,18 +1,37 @@
 <template>
   <main class="start-page">
-    <h2>Sitzpläne</h2>
-    <grades-overview/>
+    <section>
+      <h2>Sitzpläne</h2>
+      <grades-overview/>
+    </section>
+
+    <section>
+      <h2>Angaben</h2>
+      <meta-table/>
+    </section>
   </main>
 </template>
 
 <script>
 // Components
 import GradesOverview from './GradesOverview'
+import MetaTable from './MetaTable'
 
 export default {
   name: 'StartPage',
   components: {
-    GradesOverview
+    GradesOverview,
+    MetaTable
   }
 }
 </script>
+
+<style scoped>
+  main {
+    display: flex;
+  }
+
+  section {
+    width: 100%;
+  }
+</style>

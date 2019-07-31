@@ -1,0 +1,43 @@
+<template>
+  <table>
+    <tr>
+      <td><strong>Schule</strong></td>
+      <td contenteditable @blur="setMeta('location', $event)">
+        {{ getMeta('location') }}
+      </td>
+    </tr>
+    <tr>
+      <td><strong>Schuljahr</strong></td>
+      <td contenteditable @blur="setMeta('year', $event)">
+        {{ getMeta('year') }}
+      </td>
+    </tr>
+    <tr>
+      <td><strong>Lehrer</strong></td>
+      <td contenteditable @blur="setMeta('teacher', $event)">
+        {{ getMeta('teacher') }}
+      </td>
+    </tr>
+  </table>
+</template>
+
+<script>
+
+export default {
+  name: 'MetaTable',
+  methods: {
+    getMeta (key) {
+      const value = this.$store.getters.meta(key)
+      if (!value) return '_'
+      return value
+    },
+    setMeta (key, event) {
+      const value = event.target.innerText
+      this.$store.commit('setMeta', {
+        key: key,
+        value: value
+      })
+    }
+  }
+}
+</script>

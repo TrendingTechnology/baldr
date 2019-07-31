@@ -1,5 +1,5 @@
 <template>
-  <table :class="{ inline: inline }" >
+  <table>
     <tr v-for="gradeName in gradeNames" :key="gradeName">
       <td
         contenteditable

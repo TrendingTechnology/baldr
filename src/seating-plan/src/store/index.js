@@ -8,6 +8,7 @@ import app from './modules/app'
 import grades from './modules/grades'
 import importer from './modules/importer'
 import jobs from './modules/jobs'
+import meta from './modules/meta'
 import seats from './modules/seats'
 
 Vue.use(Vuex)
@@ -105,7 +106,14 @@ const actions = {
   }
 }
 
-const modules = { app, grades, importer, jobs, seats }
+const modules = {
+  app,
+  grades,
+  importer,
+  jobs,
+  meta,
+  seats
+}
 
 const plugin = (store) => {
   store.subscribe((mutation, state) => {

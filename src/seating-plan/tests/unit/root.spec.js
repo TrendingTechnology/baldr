@@ -63,6 +63,7 @@ describe('Vuex store: root #unittest', function () {
       // Job only available in the export.json
       const job = store.getters.jobByName('Testjob')
       assert.strictEqual(job.icon, 'test')
+      assert.strictEqual(store.getters.meta('teacher'), 'OStR Josef Friedrich')
     })
 
     it.skip('saveToLocalStorage', function () {

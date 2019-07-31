@@ -170,6 +170,9 @@ const actions = {
     if ({}.hasOwnProperty.call(newState, 'jobs')) {
       dispatch('importJobsState', newState.jobs)
     }
+    if ({}.hasOwnProperty.call(newState, 'meta')) {
+      dispatch('importMetaState', newState.meta)
+    }
     commit('setTimeStampMsec', newState.timeStampMsec)
     commit('flushAppState')
     commit('setImportInProgress', false)
