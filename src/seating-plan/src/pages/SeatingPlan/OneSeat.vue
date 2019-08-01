@@ -62,29 +62,17 @@ export default {
       }
       return 'false'
     },
-    style () {
-      return `bottom: ${this.seat.y}%; height: ${this.seats.dimension.depth}%; left: ${this.seat.x}%; width: ${this.seats.dimension.width}%;`
+    gradeIsNotPlaced () {
+      return !this.$store.getters.isGradePlacedCurrent
     },
     person () {
       return this.$store.getters.personByGradeAndSeatNoCurrent(this.seat.no)
     },
-    gradeIsNotPlaced () {
-      return !this.$store.getters.isGradePlacedCurrent
+    style () {
+      return `bottom: ${this.seat.y}%; height: ${this.seats.dimension.depth}%; left: ${this.seat.x}%; width: ${this.seats.dimension.width}%;`
     }
   },
   methods: {
-    dragStart (event) {
-      event.dataTransfer.dropEffect = 'move'
-      event.dataTransfer.setData('text/plain', event.currentTarget.title)
-    },
-    dragOver (event) {
-      event.currentTarget.classList.add('dragover')
-    },
-    dragLeave (event) {
-      if (event.currentTarget.classList) {
-        event.currentTarget.classList.remove('dragover')
-      }
-    },
     dragDrop (event) {
       let personId = event.dataTransfer.getData('text/plain')
       this.$store.dispatch('placePerson', { seatNo: this.seat.no, personId: personId })
@@ -92,8 +80,17 @@ export default {
         event.currentTarget.classList.remove('dragover')
       }
     },
-    unplacePerson (event) {
-      this.$store.dispatch('unplacePerson', { personId: this.person.id, seatNo: this.seat.no })
+    dragLeave (event) {
+      if (event.currentTarget.classList) {
+        event.currentTarget.classList.remove('dragover')
+      }
+    },
+    dragOver (event) {
+      event.currentTarget.classList.add('dragover')
+    },
+    dragStart (event) {
+      event.dataTransfer.dropEffect = 'move'
+      event.dataTransfer.setData('text/plain', event.currentTarget.title)
     },
     openModalPersonSelect (event) {
       this.$store.commit('setSeatNoCurrent', this.seat.no)
@@ -101,6 +98,9 @@ export default {
       this.$nextTick(() => {
         document.querySelector('.dynamic-select').focus()
       })
+    },
+    unplacePerson (event) {
+      this.$store.dispatch('unplacePerson', { personId: this.person.id, seatNo: this.seat.no })
     }
   }
 }

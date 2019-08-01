@@ -16,14 +16,14 @@ export default {
   name: 'AppFooter',
   computed: {
     ...mapGetters(['apiVersion']),
+    npmPackageLink () {
+      return `https://www.npmjs.com/package/${this.packageJson.name}`
+    },
     packageJson () {
       return packageJson
     },
     version () {
       return this.packageJson.version
-    },
-    npmPackageLink () {
-      return `https://www.npmjs.com/package/${this.packageJson.name}`
     }
   }
 }

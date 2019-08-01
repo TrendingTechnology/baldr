@@ -88,11 +88,11 @@ export default {
         return this.options
       }
     },
-    showResultList: function () {
-      return this.hasFocus && this.results.length > 0
-    },
     showPlaceholder: function () {
       return !this.hasFocus && !this.selectedOption
+    },
+    showResultList: function () {
+      return this.hasFocus && this.results.length > 0
     }
   },
   watch: {
@@ -114,26 +114,26 @@ export default {
         }
       })
     },
-    selectedOption: function () {
-      // Provide selected item to parent
-      this.$emit('input', this.selectedOption)
-    },
     search: function () {
       // Provide search text to parent (for ajax fetching, etc)
       this.$emit('search', this.searchText)
+    },
+    selectedOption: function () {
+      // Provide selected item to parent
+      this.$emit('input', this.selectedOption)
     }
   },
   methods: {
-    selectOption: function (option) {
-      this.selectedOption = option
-      this.hasFocus = false
-    },
-    removeOption: function (event) {
-      // Remove selected option if user hits backspace on empty search field
-      if (event.keyCode === 8 && (this.searchText == null || this.searchText === '')) {
-        this.selectedOption = null
-        this.hasFocus = false
+    highlight: function (value) {
+      // Highlights the part of each result that matches the search text
+      if (this.searchText) {
+        let matchPos = String(value).toLowerCase().indexOf(this.searchText.toLowerCase())
+        if (matchPos > -1) {
+          let matchStr = String(value).substr(matchPos, this.searchText.length)
+          value = String(value).replace(matchStr, '<span style="font-weight: bold; background-color: #efefef;">' + matchStr + '</span>')
+        }
       }
+      return value
     },
     moveToResults: function (event) {
       // Move down to first result if user presses down arrow (from search field)
@@ -163,16 +163,16 @@ export default {
         }
       }
     },
-    highlight: function (value) {
-      // Highlights the part of each result that matches the search text
-      if (this.searchText) {
-        let matchPos = String(value).toLowerCase().indexOf(this.searchText.toLowerCase())
-        if (matchPos > -1) {
-          let matchStr = String(value).substr(matchPos, this.searchText.length)
-          value = String(value).replace(matchStr, '<span style="font-weight: bold; background-color: #efefef;">' + matchStr + '</span>')
-        }
+    removeOption: function (event) {
+      // Remove selected option if user hits backspace on empty search field
+      if (event.keyCode === 8 && (this.searchText == null || this.searchText === '')) {
+        this.selectedOption = null
+        this.hasFocus = false
       }
-      return value
+    },
+    selectOption: function (option) {
+      this.selectedOption = option
+      this.hasFocus = false
     }
   }
 }
