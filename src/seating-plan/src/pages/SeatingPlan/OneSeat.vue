@@ -15,7 +15,6 @@
     <div class="jobs-of-person">
       <persons-jobs :person="person"/>
     </div>
-    <div class="no">{{ seat.no }}</div>
     <div class="icons">
       <material-icon class="add" v-if="gradeIsNotPlaced" name="account-plus" @click.native="eventListenerAdd"/>
       <add-job-icons :person="person"/>
@@ -120,13 +119,6 @@ export default {
 
   .jobs-of-person {
     text-align: center;
-  }
-
-  .no {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    opacity: 0.2;
   }
 
   .dragover {
