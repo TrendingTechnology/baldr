@@ -5,10 +5,10 @@
     :style="style"
     :title="person.id"
     :draggable="draggable"
-    @dragover.prevent="eventListenerDragOver"
-    @dragleave.prevent="eventListenerDragLeave"
-    @dragstart="eventListenerDragStart"
-    @drop.prevent="eventListenerDrop"
+    @dragover.prevent="dragOver"
+    @dragleave.prevent="dragLeave"
+    @dragstart="dragStart"
+    @drop.prevent="dragDrop"
   >
     <div class="first-name">{{ person.firstName }}</div>
     <div class="last-name">{{ person.lastName }}</div>
@@ -16,9 +16,19 @@
       <persons-jobs :person="person"/>
     </div>
     <div class="icons">
-      <material-icon class="add" v-if="gradeIsNotPlaced" name="account-plus" @click.native="eventListenerAdd"/>
+      <material-icon
+        class="add"
+        v-if="gradeIsNotPlaced"
+        name="account-plus"
+        @click.native="openModalPersonSelect"
+      />
       <add-job-icons :person="person"/>
-      <material-icon v-if="person.id" class="close" name="close" @click.native="eventListenerRemove"/>
+      <material-icon
+        v-if="person.id"
+        class="close"
+        name="close"
+        @click.native="unplacePerson"
+      />
     </div>
   </div>
 </template>
@@ -63,29 +73,29 @@ export default {
     }
   },
   methods: {
-    eventListenerDragStart (event) {
+    dragStart (event) {
       event.dataTransfer.dropEffect = 'move'
       event.dataTransfer.setData('text/plain', event.currentTarget.title)
     },
-    eventListenerDragOver (event) {
+    dragOver (event) {
       event.currentTarget.classList.add('dragover')
     },
-    eventListenerDragLeave (event) {
+    dragLeave (event) {
       if (event.currentTarget.classList) {
         event.currentTarget.classList.remove('dragover')
       }
     },
-    eventListenerDrop (event) {
+    dragDrop (event) {
       let personId = event.dataTransfer.getData('text/plain')
       this.$store.dispatch('placePerson', { seatNo: this.seat.no, personId: personId })
       if (event.currentTarget.classList) {
         event.currentTarget.classList.remove('dragover')
       }
     },
-    eventListenerRemove (event) {
+    unplacePerson (event) {
       this.$store.dispatch('unplacePerson', { personId: this.person.id, seatNo: this.seat.no })
     },
-    eventListenerAdd (event) {
+    openModalPersonSelect (event) {
       this.$store.commit('setSeatNoCurrent', this.seat.no)
       this.$store.dispatch('showModal')
       this.$nextTick(() => {

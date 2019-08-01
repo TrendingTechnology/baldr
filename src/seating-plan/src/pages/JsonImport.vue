@@ -1,6 +1,6 @@
 <template>
   <main>
-    <input type="file" @change="eventListenerChange"/>
+    <input type="file" @change="readTextFile"/>
   </main>
 </template>
 
@@ -8,7 +8,7 @@
 export default {
   name: 'JsonImport',
   methods: {
-    eventListenerChange (event) {
+    readTextFile (event) {
       let file = event.target.files[0]
       let reader = new FileReader()
       reader.readAsText(file, 'utf-8')

@@ -4,7 +4,7 @@
     option-value="id"
     option-text="name"
     v-model="selectedPerson"
-    @input="eventListenerSearch"
+    @input="placePerson"
   />
 </template>
 
@@ -38,7 +38,7 @@ export default {
     }
   },
   methods: {
-    eventListenerSearch () {
+    placePerson () {
       this.$store.dispatch('placePerson', {
         seatNo: this.$store.getters.seatNoCurrent,
         personId: this.selectedPerson.id
