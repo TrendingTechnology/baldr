@@ -1,22 +1,8 @@
 <template>
   <main>
     <section>
-      <ol>
-        <li
-          v-for="person in personsByGradeAsListSortedCurrent"
-          :key="person.id"
-        >
-          <span
-            contenteditable
-            @blur="rename(person, 'lastName', $event)"
-          >{{ person.lastName }}</span>,
-          <span
-            contenteditable
-            @blur="rename(person, 'firstName', $event)"
-          >{{ person.firstName }}</span>
-        </li>
-      </ol>
-
+      <persons-table/>
+      <form-add-person/>
     </section>
 
   </main>
@@ -25,8 +11,15 @@
 <script>
 import { mapGetters } from 'vuex'
 
+import FormAddPerson from './form'
+import PersonsTable from './PersonsTable'
+
 export default {
-  name: 'PersonsAdmin',
+  name: 'AdministerPersons',
+  components: {
+    FormAddPerson,
+    PersonsTable
+  },
   computed: mapGetters([
     'personsByGradeAsListSortedCurrent'
   ]),

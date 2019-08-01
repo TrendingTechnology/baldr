@@ -16,7 +16,7 @@ import AppFooter from '@/components/layout/AppFooter'
 // Page components
 import JobsManager from '@/pages/JobsManager'
 import JsonImport from '@/pages/JsonImport'
-import PersonsAdmin from '@/pages/PersonsAdmin'
+import AdministerPersons from '@/pages/AdministerPersons'
 import SeatingPlan from '@/pages/SeatingPlan'
 import SpreadsheetImport from '@/pages/SpreadsheetImport'
 import StartPage from '@/pages/StartPage'
@@ -37,8 +37,8 @@ const routes = [
     component: SeatingPlan
   },
   {
-    path: '/grade/:grade/persons',
-    component: PersonsAdmin
+    path: '/grade/:grade/administer-persons',
+    component: AdministerPersons
   },
   {
     path: '/spreadsheet-import',

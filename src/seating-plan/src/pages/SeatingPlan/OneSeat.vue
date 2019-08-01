@@ -39,7 +39,7 @@ import { mapGetters } from 'vuex'
 // Components
 import AddJobIcons from '@/components/AddJobIcons'
 import MaterialIcon from '@/components/MaterialIcon'
-import PersonsJobs from './PersonsJobs'
+import PersonsJobs from '@/components/PersonsJobs'
 
 export default {
   name: 'OneSeat',

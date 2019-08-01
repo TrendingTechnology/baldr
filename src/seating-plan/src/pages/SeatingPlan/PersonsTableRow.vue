@@ -35,7 +35,7 @@ import { mapGetters, mapActions } from 'vuex'
 
 // Components
 import MaterialIcon from '@/components/MaterialIcon'
-import PersonsJobs from './PersonsJobs'
+import PersonsJobs from '@/components/PersonsJobs'
 
 export default {
   name: 'PersonsTableRow',
