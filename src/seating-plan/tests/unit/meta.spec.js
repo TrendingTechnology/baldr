@@ -18,6 +18,18 @@ describe('Vuex store: meta #unittest', function () {
     it('meta', function () {
       assert.strictEqual(store.getters.meta('teacher'), '')
     })
+
+    it('metaLocation', function () {
+      assert.strictEqual(store.getters.metaLocation, '')
+    })
+
+    it('metaTeacher', function () {
+      assert.strictEqual(store.getters.metaTeacher, '')
+    })
+
+    it('metaYear', function () {
+      assert.strictEqual(store.getters.metaYear, '')
+    })
   })
 
   describe('mutations', function () {

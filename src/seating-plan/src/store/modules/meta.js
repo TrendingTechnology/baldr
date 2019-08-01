@@ -1,8 +1,8 @@
 class InitState {
   constructor () {
     this.location = ''
-    this.year = ''
     this.teacher = ''
+    this.year = ''
   }
 }
 
@@ -11,6 +11,15 @@ const state = new InitState()
 const getters = {
   meta: (state) => (key) => {
     return state[key]
+  },
+  metaLocation: (state) => {
+    return state.location
+  },
+  metaTeacher: (state) => {
+    return state.teacher
+  },
+  metaYear: (state) => {
+    return state.year
   }
 }
 

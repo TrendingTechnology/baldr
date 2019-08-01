@@ -4,7 +4,7 @@
       {{ title }}
     </h1>
     <div class="meta">
-      <aside class="left">Pirckheimer-Gymnasium, Nürnberg</aside>
+      <aside class="left">{{ metaLocation }}</aside>
       <aside class="right"><strong>Stand:</strong> {{ stateDateCurrent }}</aside>
     </div>
   </header>
@@ -17,10 +17,13 @@ export default {
   name: 'PlanHeader',
   computed: {
     ...mapGetters([
+      'gradeNameCurrent',
+      'metaLocation',
+      'metaYear',
       'stateDateCurrent'
     ]),
     title () {
-      return `Sitzplan der Klasse „${this.$store.getters.gradeNameCurrent}“`
+      return `Sitzplan der Klasse „${this.gradeNameCurrent}“ (Schuljahr ${this.metaYear})`
     }
   }
 }
