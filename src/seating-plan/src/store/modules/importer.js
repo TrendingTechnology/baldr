@@ -3,13 +3,17 @@
 
 import { toLocaleDateTimeString } from '../../lib.js'
 
+import config from '$HOME/.baldr.json'
+
+console.log(config)
+
 import axios from 'axios'
 const axiosInstance = axios.create({
   baseURL: 'https://baldr.friedrich.rocks/api/',
   timeout: 3000,
   auth: {
-    username: 'baldr-rest-api',
-    password: 'owerNH(2sgf8ud7z234234'
+    username: config.restApi.username,
+    password: config.restApi.password
   }
 })
 
