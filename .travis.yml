@@ -5,6 +5,7 @@ node_js:
   - "12"
 
 install:
+  - cp .baldr.json $HOME/.baldr.json
   - npm install --global npm
   - npm install --global lerna
   - lerna bootstrap --no-ci

@@ -1,0 +1,9 @@
+{
+	"songbook": {
+		"path": "/var/songbook"
+	},
+	"restApi": {
+		"username": "test",
+		"password": "1234"
+	}
+}

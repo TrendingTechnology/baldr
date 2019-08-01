@@ -9,9 +9,9 @@ module.exports = {
   configureWebpack: {
     resolve: {
       alias: {
-        '$HOME': os.homedir()
+        $HOME: os.homedir()
       }
-    },
+    }
   },
   publicPath: process.env.NODE_ENV === 'production' ? '/seating-plan/' : '/'
 }

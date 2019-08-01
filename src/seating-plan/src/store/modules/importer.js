@@ -2,12 +2,12 @@
 /* globals localStorage */
 
 import { toLocaleDateTimeString } from '../../lib.js'
-
 import config from '$HOME/.baldr.json'
-
-console.log(config)
-
 import axios from 'axios'
+
+console.log(`Rest-API: Using username '${config.restApi.username}'`)
+console.log(`Rest-API: Using password '${config.restApi.password}'`)
+
 const axiosInstance = axios.create({
   baseURL: 'https://baldr.friedrich.rocks/api/',
   timeout: 3000,
