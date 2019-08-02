@@ -805,6 +805,8 @@ class Library {
 
   /**
    * @param {string} listFile
+   *
+   * @returns {pbject}
    */
   loadSongList (listFile) {
     const songIDs = parseSongIDList(listFile)
@@ -900,6 +902,10 @@ class Library {
    */
   getRandomSong () {
     return this.getSongById(this.songIDs[Math.floor(Math.random() * this.songIDs.length)])
+  }
+
+  toJSON () {
+    return new AlphabeticalSongsTree(this.toArray())
   }
 }
 

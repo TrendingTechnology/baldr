@@ -758,6 +758,11 @@ describe('Package “@bldr/songbook-base”', function () {
           assert.strictEqual(folders.length, 3)
           assert.deepStrictEqual(folders, ['a', 's', 'z'])
         })
+
+        it('Method “toJSON()”', function () {
+          const libraryJSON = JSON.parse(JSON.stringify(library))
+          assert.strictEqual(libraryJSON.s[0].metaData.title, 'Stille Nacht')
+        })
       })
     })
   })
