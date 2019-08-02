@@ -356,12 +356,14 @@ class SongMetaData {
       'artist',
       'composer',
       'country',
+      'description',
       'genre',
       'lyricist',
       'musescore',
       'source',
       'subtitle',
       'title',
+      'wikipedia',
       'year',
       'youtube'
     ]

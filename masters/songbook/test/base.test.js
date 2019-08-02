@@ -288,12 +288,14 @@ describe('Package “@bldr/songbook-base”', function () {
             'artist',
             'composer',
             'country',
+            'description',
             'genre',
             'lyricist',
             'musescore',
             'source',
             'subtitle',
             'title',
+            'wikipedia',
             'year',
             'youtube'
           ])

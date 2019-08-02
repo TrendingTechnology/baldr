@@ -1,5 +1,11 @@
 # @bldr/songbook
 
+## Testing
+
+```
+mocha
+```
+
 ## Songs tree
 
 ### clean

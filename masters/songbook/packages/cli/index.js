@@ -31,6 +31,8 @@ function parseCliArguments (argv, version) {
     .version(version)
     .option('-a, --group-alphabetically', 'List the songs in an alphabetical tree.')
     .option('-b --base-path <base-path>', 'Base path of a song collection.')
+    .option('-P --piano-path <piano-path>', 'Directory to store intermediate files for the piano score (*.eps).')
+    .option('-B --projector-path <projector-path>', 'Directory to store intermediate files for the projector app.')
     .option('-c, --clean', 'Clean up (delete all generated files)')
     .option('-F, --folder <folder>', 'Process only the given song folder')
     .option('-f, --force', 'Rebuild all images')
