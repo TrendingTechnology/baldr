@@ -26,8 +26,8 @@ require('colors')
  ******************************************************************************/
 
 /**
- * By default this module reads the config file ~/.baldr to generate its config
- * object.
+ * By default this module reads the config file ~/.baldr.json to generate its
+ * config object.
  */
 function bootstrapConfig () {
   const configDefault = {
@@ -392,6 +392,16 @@ class SongMetaData {
       this[key] = raw[key]
     }
   }
+
+  toJSON () {
+    const output = {}
+    for (const key of this.allowedProperties) {
+      if (this[key]) {
+        output[key] = this[key]
+      }
+    }
+    return output
+  }
 }
 
 /**
@@ -487,6 +497,15 @@ class SongMetaDataCombined {
       return this.metaData.lyricist
     } else {
       return ''
+    }
+  }
+
+  toJSON () {
+    return {
+      title: this.title,
+      subtitle: this.subtitle,
+      composer: this.composer,
+      lyricist: this.lyricist
     }
   }
 }
@@ -644,6 +663,16 @@ class Song {
       })
     } else {
       return []
+    }
+  }
+
+  toJSON () {
+    return {
+      folder: this.folder,
+      abc: this.abc,
+      songID: this.songID,
+      metaData: this.metaData,
+      metaDataCombined: this.metaDataCombined
     }
   }
 }

@@ -340,6 +340,21 @@ describe('Package “@bldr/songbook-base”', function () {
         const song = new SongMetaData(songPath)
         assert.strictEqual(song.title, 'Auf der Mauer, auf der Lauer')
       })
+
+      it('toJSON', function () {
+        const song = new SongMetaData(songPath)
+        const songJSON = JSON.parse(JSON.stringify(song))
+        assert.deepStrictEqual(
+          songJSON,
+          {
+            composer: 'Georg Lehmann',
+            country: 'Deutschland',
+            lyricist: 'unbekannt',
+            title: 'Auf der Mauer, auf der Lauer',
+            year: 1890
+          }
+        )
+      })
     })
 
     describe('Class “SongMetaDataCombined()”', function () {
@@ -410,17 +425,34 @@ describe('Package “@bldr/songbook-base”', function () {
         const folder = path.join(__dirname, 'songs', 'clean', 'some', 'a', 'Auf-der-Mauer')
         const metaData = new SongMetaData(folder)
         const combined = new SongMetaDataCombined(metaData)
+
         it('title', function () {
           assert.strictEqual(combined.title, 'Auf der Mauer, auf der Lauer (1890)')
         })
+
         it('subtitle', function () {
           assert.strictEqual(combined.subtitle, 'Deutschland')
         })
+
         it('composer', function () {
           assert.strictEqual(combined.composer, 'Georg Lehmann')
         })
+
         it('lyricist', function () {
           assert.strictEqual(combined.lyricist, 'unbekannt')
+        })
+
+        it('toJSON', function () {
+          const combinedJSON = JSON.parse(JSON.stringify(combined))
+          assert.deepStrictEqual(
+            combinedJSON,
+            {
+              composer: 'Georg Lehmann',
+              lyricist: 'unbekannt',
+              subtitle: 'Deutschland',
+              title: 'Auf der Mauer, auf der Lauer (1890)'
+            }
+          )
         })
       })
     })
@@ -526,6 +558,13 @@ describe('Package “@bldr/songbook-base”', function () {
 
         it('Method “recognizeABCFolder_(): file', function () {
           assert.strictEqual(song.recognizeABCFolder_(folder), 'a')
+        })
+
+        it('toJSON', function () {
+          const song = new Song(path.join(__dirname, 'songs', 'processed', 'some', 's', 'Swing-low'))
+          const songJSON = JSON.parse(JSON.stringify(song))
+          assert.strictEqual(songJSON.songID, 'Swing-low')
+          assert.strictEqual(songJSON.abc, 's')
         })
 
         describe('Method “detectFile_()”', function () {
