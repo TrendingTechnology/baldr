@@ -9,7 +9,7 @@
 import { mapGetters } from 'vuex'
 
 // Components
-import PersonsTable from './PersonsTable'
+import PersonsList from './PersonsList'
 
 export default {
   name: 'PersonsSidebar',

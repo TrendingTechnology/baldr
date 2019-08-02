@@ -1,25 +1,24 @@
 <template>
-  <table class="persons-list">
-    <persons-table-row
+  <ol>
+    <persons-list-item
       v-for="(person, index) in personsByGradeAsListSortedCurrent"
       :person="person"
       :no="index + 1"
       :key="person.id"
     />
-  </table>
-
+  </ol>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
 
 // Components
-import PersonsTableRow from './PersonsTableRow'
+import PersonsListItem from './PersonsListItem'
 
 export default {
   name: 'PersonsTable',
   components: {
-    PersonsTableRow
+    PersonsListItem
   },
   computed: mapGetters([
     'personsByGradeAsListSortedCurrent'

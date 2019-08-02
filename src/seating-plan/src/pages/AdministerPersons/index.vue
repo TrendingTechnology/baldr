@@ -1,16 +1,20 @@
 <template>
   <main>
     <section>
-      <persons-table/>
+      <persons-table :start=1 :count=12 />
+
+      <persons-table :start=13 :count=12 />
+
+      <persons-table :start=25 :count=12 />
+
       <form-add-person/>
+
     </section>
 
   </main>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-
 import FormAddPerson from './form'
 import PersonsTable from './PersonsTable'
 
@@ -20,9 +24,6 @@ export default {
     FormAddPerson,
     PersonsTable
   },
-  computed: mapGetters([
-    'personsByGradeAsListSortedCurrent'
-  ]),
   beforeCreate: function () {
     let grade = this.$route.params.grade
     if (!this.$store.getters.grade(grade)) {
