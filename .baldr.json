@@ -1,8 +1,8 @@
 {
 	"songbook": {
 		"path": "/var/songbook",
-		"pianoPath": "/var/songbook/piano",
-		"projectorPath": "/var/songbook/projector"
+		"projectorPath": "/var/songbook/projector",
+		"pianoPath": "/var/songbook/piano"
 	},
 	"restApi": {
 		"username": "test",

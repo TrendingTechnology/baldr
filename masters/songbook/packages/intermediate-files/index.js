@@ -749,8 +749,24 @@ class IntermediateLibrary extends Library {
   /**
    * @param {string} - The base path of the song library
    */
-  constructor (basePath) {
+  constructor (basePath, projectorPath, pianoPath) {
     super(basePath)
+
+    /**
+     * Directory to store intermediate files for the projector app
+     * (*.svg, *.json).
+     *
+     * @type {string}
+     */
+    this.projectorPath = projectorPath
+
+    /**
+     * Directory to store intermediate files for the piano score (*.eps).
+     *
+     * @type {string}
+     */
+    this.pianoPath = pianoPath
+
     /**
      * A instance of the FileMonitor class.
      *

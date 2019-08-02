@@ -995,6 +995,20 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
       })
 
       describe('Properties', function () {
+        it('Property “projectorPath”', function () {
+          assert.strictEqual(library.projectorPath, undefined)
+        })
+
+        it('Property “pianoPath”', function () {
+          assert.strictEqual(library.pianoPath, undefined)
+        })
+
+        it('Properties “projectorPath” and “pianoPath”', function () {
+          library = new IntermediateLibrary(basePath, '/var/projector', '/var/piano')
+          assert.strictEqual(library.projectorPath, '/var/projector')
+          assert.strictEqual(library.pianoPath, '/var/piano')
+        })
+
         it('Property “fileMonitor”', function () {
           const FileMonitor = intermediateRewired.__get__('FileMonitor')
           assert.ok(library.fileMonitor instanceof FileMonitor)
