@@ -103,15 +103,15 @@ describe('Package “@bldr/songbook-cli”', function () {
 
     it('--folder', function () {
       const tmpDir = tmpCopy('clean', 'some')
-      spawn(script, ['--base-path', tmpDir, '--folder', path.join(tmpDir, 'a', 'Auf-der-Mauer')])
+      spawn(script, ['--base-path', tmpDir, '--folder', path.join(tmpDir, 'a', 'Auf-der-Mauer'), ...argsOnlyBasePath])
       assertExists(tmpDir, 'a', 'Auf-der-Mauer', 'slides', '01.svg')
     })
 
     it('--force', function () {
       const tmpDir = tmpCopy('clean', 'one')
-      const notForced = spawn(script, ['--base-path', tmpDir])
+      const notForced = spawn(script, ['--base-path', tmpDir, ...argsOnlyBasePath])
       assert.ok(!notForced.stdout.toString().includes('(forced)'))
-      const forced = spawn(script, ['--base-path', tmpDir, '--force'])
+      const forced = spawn(script, ['--base-path', tmpDir, '--force', ...argsOnlyBasePath])
       assert.ok(forced.stdout.toString().includes('(forced)'))
     })
 
@@ -176,7 +176,8 @@ describe('Package “@bldr/songbook-cli”', function () {
       const tmpDir = tmpCopy('clean', 'some')
       const process = spawn(script, [
         '--base-path', tmpDir,
-        '--list', path.join(__dirname, 'files', 'song-id-list.txt')
+        '--list', path.join(__dirname, 'files', 'song-id-list.txt'),
+        ...argsOnlyBasePath
       ])
       const stdout = process.stdout.toString()
       assert.ok(stdout.includes('Auf-der-Mauer'))
