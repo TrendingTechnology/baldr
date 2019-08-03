@@ -15,6 +15,7 @@
 	},
 	"main": "index.js",
 	"dependencies": {
+		"@bldr/core": "^0.0.18",
 		"better-sqlite3": "^5.4.1"
 	},
 	"publishConfig": {

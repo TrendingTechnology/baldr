@@ -11,14 +11,13 @@ const commander = require('commander')
 const fs = require('fs-extra')
 const packager = require('electron-packager')
 
+// Project packages.
+const { utils } = require('@bldr/core')
+
 const currentUser = os.userInfo()
 
 if (currentUser.username !== 'root') {
   throw new Error('You must be root!')
-}
-
-function log () {
-  console.log(util.format(...arguments))
 }
 
 /**
@@ -152,7 +151,7 @@ class PackageElectronApp {
     const iconDest = path.join(this.iconPath, this.destName + '.png')
     fs.mkdirSync(this.iconPath, { recursive: true })
     fs.copyFileSync(iconSrc, iconDest)
-    log('Copy icon from %s to %s', iconSrc, iconDest)
+    utils.log('Copy icon from %s to %s', iconSrc, iconDest)
   }
 
   /**
@@ -169,8 +168,8 @@ Type=Application`
     const desktopPath = path.join(desktopPrefix, this.destName + '.desktop')
     fs.removeSync(desktopPath)
     fs.appendFileSync(desktopPath, desktopContent)
-    log('Create *.desktop file at the location: %s', desktopPath)
-    log('The content of the start script is: %s', desktopContent)
+    utils.log('Create *.desktop file at the location: %s', desktopPath)
+    utils.log('The content of the start script is: %s', desktopContent)
   }
 
   /**
@@ -187,8 +186,8 @@ ${this.executablePath} > /dev/null 2>&1 &
     fs.removeSync(scriptPath)
     fs.appendFileSync(scriptPath, scriptContent)
     fs.chmodSync(scriptPath, '755')
-    log('Create starter script at the location: %s', scriptPath)
-    log('The content of the start script is: %s', scriptContent)
+    utils.log('Create starter script at the location: %s', scriptPath)
+    utils.log('The content of the start script is: %s', scriptContent)
   }
 
   /**
@@ -203,18 +202,18 @@ ${this.executablePath} > /dev/null 2>&1 &
     const destAppPath = path.join(this.destPrefix, this.destName + '.app')
     fs.removeSync(destAppPath)
     fs.moveSync(tmpAppPath, destAppPath)
-    log('move %s %s', tmpAppPath, destAppPath)
+    utils.log('move %s %s', tmpAppPath, destAppPath)
   }
 
   /**
    * You have to run this method to package the electron app.
    */
   async packageElectronApp () {
-    log('Package node package “%s” into a electron app.', this.packageName)
+    utils.log('Package node package “%s” into a electron app.', this.packageName)
 
     if (fs.existsSync(this.out)) {
       fs.removeSync(this.out)
-      log('Clean up directory: %s', this.out)
+      utils.log('Clean up directory: %s', this.out)
     }
 
     this.installStarterScript()
@@ -224,7 +223,7 @@ ${this.executablePath} > /dev/null 2>&1 &
       this.installDesktopFileOnLinux()
     }
 
-    log('Destination folder “%s”', this.out)
+    utils.log('Destination folder “%s”', this.out)
     const packageConfig = {
       // name: destName,
       // executableName: 'entry-point',
@@ -241,7 +240,7 @@ ${this.executablePath} > /dev/null 2>&1 &
       appVersion: this.packageJson.version,
       asar: false // Maybe asar true is very slow.
     }
-    log(packageConfig)
+    utils.log(packageConfig)
     if (this.platform === 'darwin') {
       return packager(packageConfig).then((path) => {
         this.moveElectronAppIntoApplicationsOnMacOs(path)

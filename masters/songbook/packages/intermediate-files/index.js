@@ -26,6 +26,7 @@ const {
   message,
   Song
 } = require('@bldr/songbook-base')
+const { utils } = require('@bldr/core')
 
 /**
  * Check if executable is installed.
@@ -438,7 +439,7 @@ class PianoScore {
 
     // Write contents to the text file.
     this.texFile.append(texMarkup)
-    console.log(util.format('The TeX markup was written to: %s', this.texFile.path))
+    utils.log('The TeX markup was written to: %s', this.texFile.path)
 
     // To avoid temporary TeX files in the working directory of the shell
     // the command is running from.

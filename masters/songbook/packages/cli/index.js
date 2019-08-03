@@ -6,6 +6,10 @@
  * @module @bldr/songbook-cli
  */
 
+// Node packages.
+const fs = require('fs')
+const path = require('path')
+
 // Third party packages.
 const { Command } = require('commander')
 
@@ -31,8 +35,14 @@ function parseCliArguments (argv, version) {
   const commander = new Command()
   return commander
     .version(version)
-    .option('-a, --group-alphabetically', 'List the songs in an alphabetical tree.')
-    .option('-b, --base-path <base-path>', 'Base path of a song collection.')
+    .option(
+      '-a, --group-alphabetically',
+      'List the songs in an alphabetical tree.'
+    )
+    .option(
+      '-b, --base-path <base-path>',
+      'Base path of a song collection.'
+    )
     .option(
       '-B, --projector-path <projector-path>',
       'Directory to store intermediate files for the projector app (*.svg, *.json). Special value: “none”.'
@@ -41,14 +51,38 @@ function parseCliArguments (argv, version) {
       '-P, --piano-path <piano-path>',
       'Directory to store intermediate files for the piano score (*.eps). Special value: “none”.'
     )
-    .option('-c, --clean', 'Clean up (delete all generated files)')
-    .option('-F, --folder <folder>', 'Process only the given song folder')
-    .option('-f, --force', 'Rebuild all images')
-    .option('-i, --song-id <song-id>', 'Process only the song with the given song ID (The parent song folder).')
-    .option('-l, --list <song-id-list>', 'Use a list of song IDs in a text file to specify which songs should be updated.')
-    .option('-p, --piano', 'Generate the piano files only.')
-    .option('-s, --slides', 'Generate the slides only.')
-    .option('-t, --page-turn-optimized', 'Generate a page turn friendly piano score version.')
+    .option(
+      '-c, --clean',
+      'Clean up (delete all generated files)'
+    )
+    .option(
+      '-F, --folder <folder>',
+      'Process only the given song folder'
+    )
+    .option(
+      '-f, --force',
+      'Rebuild all images'
+    )
+    .option(
+      '-i, --song-id <song-id>',
+      'Process only the song with the given song ID (The parent song folder).'
+    )
+    .option(
+      '-l, --list <song-id-list>',
+      'Use a list of song IDs in a text file to specify which songs should be updated.'
+    )
+    .option(
+      '-p, --piano',
+      'Generate the piano files only.'
+    )
+    .option(
+      '-s, --slides',
+      'Generate the slides only.'
+    )
+    .option(
+      '-t, --page-turn-optimized',
+      'Generate a page turn friendly piano score version.'
+    )
     .parse(argv)
 }
 
@@ -153,6 +187,14 @@ const main = function () {
         options.pageTurnOptimized
       )
       pianoScore.compile()
+    }
+    if (config.projectorPath) {
+      const projectorPath = path.join(config.projectorPath, 'songs.json')
+      fs.writeFileSync(
+        projectorPath,
+        JSON.stringify(library, null, '  ')
+      )
+      utils.log('Create JSON file: %s', projectorPath.yellow)
     }
   }
 }

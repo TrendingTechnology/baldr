@@ -18,6 +18,7 @@
     "baldr-electron-apps-installer": "./index.js"
   },
   "dependencies": {
+		"@bldr/core": "^0.0.18",
     "@bldr/camera-electron-app": "^0.0.23",
     "@bldr/electron-app": "^0.0.23",
     "@bldr/songbook-electron-app": "^0.1.15",
