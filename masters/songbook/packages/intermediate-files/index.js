@@ -20,7 +20,7 @@ const fs = require('fs-extra')
 
 // Project packages.
 const {
-  AlphabeticalSongsTree ,
+  AlphabeticalSongsTree,
   Folder,
   Library,
   message,
