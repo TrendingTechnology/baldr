@@ -186,7 +186,7 @@ class Message {
 const message = new Message()
 
 /**
- *
+ * A wrapper class for a folder.
  */
 class Folder {
   /**
@@ -199,7 +199,7 @@ class Folder {
      */
     this.folderPath = path.join(...arguments)
     if (!fs.existsSync(this.folderPath)) {
-      fs.mkdirSync(this.folderPath)
+      fs.mkdirSync(this.folderPath, { recursive: true })
     }
   }
 
@@ -602,16 +602,24 @@ class Song {
   }
 
   /**
+   * Get the song folder.
+   *
    * @param {string} songPath - The path of the directory containing the song
-   * files or a path of a file inside the song folder (not nested in subfolders)
+   *   files or a path of a file inside the song folder (not nested in
+   *   subfolders) or a non-existing song path.
    *
    * @return {string} The path of the parent directory of the song.
    */
   normalizeSongFolder_ (songPath) {
-    if (fs.lstatSync(songPath).isDirectory()) {
-      return songPath
-    } else {
-      return path.dirname(songPath)
+    try {
+      const stat = fs.lstatSync(songPath)
+      if (stat.isDirectory()) {
+        return songPath
+      } else if (stat.isFile()) {
+        return path.dirname(songPath)
+      }
+    } catch (error) {
+      return songPath.replace(`${path.sep}info.yml`, '')
     }
   }
 
@@ -915,3 +923,4 @@ exports.Library = Library
 exports.message = message
 exports.parseSongIDList = parseSongIDList
 exports.Song = Song
+exports.Folder = Folder

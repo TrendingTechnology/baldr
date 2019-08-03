@@ -19,7 +19,13 @@ const Sqlite3 = require('better-sqlite3')
 const fs = require('fs-extra')
 
 // Project packages.
-const { Song, Library, message, AlphabeticalSongsTree } = require('@bldr/songbook-base')
+const {
+  AlphabeticalSongsTree ,
+  Folder,
+  Library,
+  message,
+  Song
+} = require('@bldr/songbook-base')
 
 /**
  * Check if executable is installed.
@@ -464,11 +470,38 @@ class IntermediateSong extends Song {
   /**
    * @param {string} songPath - The path of the directory containing the song
    * files or a path of a file inside the song folder (not nested in subfolders)
+   * @param {string} projectorPath - Directory to store intermediate files for
+   *   the projector app (*.svg, *.json).
+   * @param {string} pianoPath - Directory to store intermediate files for
+   *   the piano score (*.eps).
    * @param {module:baldr-songbook~FileMonitor} fileMonitor - A instance
    * of the FileMonitor() class.
    */
-  constructor (songPath, fileMonitor) {
+  constructor (songPath, projectorPath, pianoPath, fileMonitor) {
     super(songPath)
+
+    /**
+     * Directory to store intermediate files for the projector app
+     * (*.svg, *.json).
+     *
+     * @type {string}
+     */
+    this.projectorPath = projectorPath
+    if (this.projectorPath) {
+      this.projectorPath = this.normalizeSongFolder_(this.projectorPath)
+      this.folderSlides = new Folder(this.projectorPath)
+    }
+
+    /**
+     * Directory to store intermediate files for the piano score (*.eps).
+     *
+     * @type {string}
+     */
+    this.pianoPath = pianoPath
+    if (this.pianoPath) {
+      this.pianoPath = this.normalizeSongFolder_(this.pianoPath)
+      this.folderPiano = new Folder(this.pianoPath)
+    }
 
     /**
      * A instance of the FileMonitor class.
@@ -747,7 +780,11 @@ class PianoFilesCountTree {
 
 class IntermediateLibrary extends Library {
   /**
-   * @param {string} - The base path of the song library
+   * @param {string} basePath - The base path of the song library
+   * @param {string} projectorPath - Directory to store intermediate files for
+   *   the projector app (*.svg, *.json).
+   * @param {string} pianoPath - Directory to store intermediate files for
+   *   the piano score (*.eps).
    */
   constructor (basePath, projectorPath, pianoPath) {
     super(basePath)
@@ -775,6 +812,9 @@ class IntermediateLibrary extends Library {
     this.fileMonitor = new FileMonitor(path.join(this.basePath,
       'filehashes.db'))
 
+    /**
+     * @type {object}
+     */
     this.songs = this.collectSongs_()
   }
 
@@ -792,7 +832,16 @@ class IntermediateLibrary extends Library {
   collectSongs_ () {
     const songs = {}
     for (const songPath of this.detectSongs_()) {
-      const song = new IntermediateSong(path.join(this.basePath, songPath), this.fileMonitor)
+      let projectorPath = null
+      if (this.projectorPath) projectorPath = path.join(this.projectorPath, songPath)
+      let pianoPath = null
+      if (this.pianoPath) pianoPath = path.join(this.pianoPath, songPath)
+      const song = new IntermediateSong(
+        path.join(this.basePath, songPath),
+        projectorPath,
+        pianoPath,
+        this.fileMonitor
+      )
       if (song.songID in songs) {
         throw new Error(
           util.format('A song with the same songID already exists: %s',
@@ -852,7 +901,9 @@ class IntermediateLibrary extends Library {
    *   and piano files. Possible values: “all”, “slides” or “piano”
    */
   updateSongByPath (folder, mode = 'all') {
-    const song = new IntermediateSong(folder, this.fileMonitor)
+    // To throw an error if the folder doesn’t exist.
+    fs.lstatSync(folder)
+    const song = new IntermediateSong(folder, null, null, this.fileMonitor)
     const status = song.generateIntermediateFiles(mode, true)
     message.songFolder(status, song)
   }

@@ -708,7 +708,7 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
       const FileMonitor = intermediateRewired.__get__('FileMonitor')
       const fileMonitor = new FileMonitor(mkTmpFile())
       const folder = path.join(__dirname, 'songs', 'clean', 'some', 'a', 'Auf-der-Mauer')
-      const song = new IntermediateSong(folder, fileMonitor)
+      const song = new IntermediateSong(folder, null, null, fileMonitor)
 
       afterEach(function () {
         fileMonitor.flush()
@@ -800,7 +800,7 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
         describe('Method “generatePiano_()”', function () {
           it('lead', function () {
             const folderSwing = path.join(__dirname, 'songs', 'clean', 'some', 's', 'Swing-low')
-            const songSwing = new IntermediateSong(folderSwing, fileMonitor)
+            const songSwing = new IntermediateSong(folderSwing, null, null, fileMonitor)
             const files = songSwing.generatePiano_()
 
             assert.deepStrictEqual(files, ['piano_1.eps', 'piano_2.eps'])
@@ -1004,9 +1004,15 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
         })
 
         it('Properties “projectorPath” and “pianoPath”', function () {
-          library = new IntermediateLibrary(basePath, '/var/projector', '/var/piano')
-          assert.strictEqual(library.projectorPath, '/var/projector')
-          assert.strictEqual(library.pianoPath, '/var/piano')
+          const projectorPath = mkTmpDir()
+          const pianoPath = mkTmpDir()
+          library = new IntermediateLibrary(
+            basePath,
+            projectorPath,
+            pianoPath
+          )
+          assert.strictEqual(typeof library.projectorPath, 'string')
+          assert.strictEqual(typeof library.pianoPath, 'string')
         })
 
         it('Property “fileMonitor”', function () {
