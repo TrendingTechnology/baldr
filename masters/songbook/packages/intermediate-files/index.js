@@ -314,6 +314,10 @@ class PianoScore {
     return `\\tmp${command}${markupValue}\n`
   }
 
+  static sanitize (markup) {
+    return markup.replace('&', '\\&')
+  }
+
   /**
    * Fill a certain number of pages with piano score files.
    *
@@ -435,7 +439,11 @@ class PianoScore {
     let texMarkup = mainTexMarkup.replace('//style//', style)
     texMarkup = texMarkup.replace('//songs//', songs)
     texMarkup = texMarkup.replace('//created//', new Date().toLocaleString())
-    texMarkup = texMarkup.replace('//basepath//', this.library.basePath)
+    let basePath = this.library.basePath
+    if (this.library.pianoPath) {
+      basePath = this.library.pianoPath
+    }
+    texMarkup = texMarkup.replace('//basepath//', basePath)
 
     // Write contents to the text file.
     this.texFile.append(texMarkup)
@@ -520,8 +528,16 @@ class IntermediateSong extends Song {
    * @return {string} TeX markup for one EPS image file of a piano score.
    */
   formatPianoTeXEpsFile_ (index) {
-    return PianoScore.texCmd('image',
-      path.join(this.abc, this.songID, 'piano', this.pianoFiles[index]))
+    let subFolder
+    if (!this.pianoPath) {
+      subFolder = path.join(this.abc, this.songID, 'piano', this.pianoFiles[index])
+    } else {
+      subFolder = path.join(this.abc, this.songID, this.pianoFiles[index])
+    }
+    return PianoScore.texCmd(
+      'image',
+      subFolder
+    )
   }
 
   /**
@@ -558,10 +574,10 @@ class IntermediateSong extends Song {
 `
     const output = util.format(
       template,
-      this.metaDataCombined.title,
-      this.metaDataCombined.subtitle,
-      this.metaDataCombined.composer,
-      this.metaDataCombined.lyricist
+      PianoScore.sanitize(this.metaDataCombined.title),
+      PianoScore.sanitize(this.metaDataCombined.subtitle),
+      PianoScore.sanitize(this.metaDataCombined.composer),
+      PianoScore.sanitize(this.metaDataCombined.lyricist)
     )
     const epsFiles = []
     for (let i = 0; i < this.pianoFiles.length; i++) {
