@@ -25,6 +25,7 @@ const {
 } = requireLib('slides')
 const { SlidesSwitcher } = requireLib('slides-switcher')
 const { getThemes } = requireLib('themes')
+const utils = requireLib('utils')
 
 /***********************************************************************
  *
@@ -209,3 +210,4 @@ class ShowRunner {
 
 exports.Environment = Environment
 exports.ShowRunner = ShowRunner
+exports.utils = utils

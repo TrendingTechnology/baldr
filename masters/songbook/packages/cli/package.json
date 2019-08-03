@@ -18,6 +18,7 @@
     "baldr-songbook-updater": "./index.js"
   },
   "dependencies": {
+    "@bldr/core": "^0.0.18",
     "@bldr/songbook-base": "^0.1.14",
     "@bldr/songbook-intermediate-files": "^0.1.17",
     "commander": "^2.20.0"
