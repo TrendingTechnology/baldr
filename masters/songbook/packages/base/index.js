@@ -676,11 +676,12 @@ class Song {
 
   toJSON () {
     return {
-      folder: this.folder,
       abc: this.abc,
-      songID: this.songID,
+      folder: this.folder,
       metaData: this.metaData,
-      metaDataCombined: this.metaDataCombined
+      metaDataCombined: this.metaDataCombined,
+      songID: this.songID,
+      slidesCount: this.slidesFiles.length
     }
   }
 }

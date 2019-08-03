@@ -10,7 +10,7 @@
 // Node packages.
 const crypto = require('crypto')
 const path = require('path')
-const spawn = require('child_process').spawnSync
+const childProcess = require('child_process')
 const util = require('util')
 const os = require('os')
 
@@ -34,7 +34,7 @@ const { utils } = require('@bldr/core')
  * @param {string} executable - Name of the executable.
  */
 function checkExecutable (executable) {
-  const exec = spawn(executable, ['--help'])
+  const exec = childProcess.spawnSync(executable, ['--help'])
   if (exec.status === null) {
     return false
   } else {
@@ -428,6 +428,22 @@ class PianoScore {
     return fs.readFileSync(path.join(__dirname, filename), { encoding: 'utf8' })
   }
 
+  spawnTex_ (texFile, cwd) {
+    // Error on Mac OS: conversion of the eps files to pdf files doesn’t work.
+    // not allowed in restricted mode.
+    // --shell-escape
+    const result = childProcess.spawnSync(
+      'lualatex', ['--shell-escape', texFile],
+      {
+        cwd: cwd,
+        encoding: 'utf-8'
+      }
+    )
+    if (result.status !== 0) {
+      throw new Error(result.stdout)
+    }
+  }
+
   /**
    * Compile the TeX file using lualatex and open the compiled pdf.
    */
@@ -454,14 +470,11 @@ class PianoScore {
     const cwd = path.dirname(this.texFile.path)
 
     // Compile the TeX file
-    // Error on Mac OS: conversion of the eps files to pdf files doesn t work.
-    // not allowed in restricted mode.
-    // --shell-escape
-    spawn('lualatex', ['--shell-escape', this.texFile.path], { cwd: cwd })
     // Compile twice for the table of contents
-    spawn('lualatex', ['--shell-escape', this.texFile.path], { cwd: cwd })
     // The page numbers in the toc only matches after three runs.
-    spawn('lualatex', ['--shell-escape', this.texFile.path], { cwd: cwd })
+    for (let index = 0; index < 3; index++) {
+      this.spawnTex_(this.texFile.path, cwd)
+    }
 
     // Open the pdf file.
     const pdfFile = this.texFile.path.replace('.tex', '.pdf')
@@ -471,7 +484,7 @@ class PianoScore {
     } else {
       openCommand = 'xdg-open'
     }
-    spawn(openCommand, [pdfFile])
+    childProcess.spawnSync(openCommand, [pdfFile])
   }
 }
 
@@ -597,7 +610,7 @@ class IntermediateSong extends Song {
       destination = source
     }
     const pdf = path.join(this.folder, destination + '.pdf')
-    spawn('mscore', [
+    childProcess.spawnSync('mscore', [
       '--export-to',
       path.join(pdf),
       path.join(this.folder, source + '.mscx')
@@ -616,7 +629,7 @@ class IntermediateSong extends Song {
    */
   generateSlides_ () {
     this.folderSlides.empty()
-    spawn('pdf2svg', [
+    childProcess.spawnSync('pdf2svg', [
       path.join(this.folder, 'projector.pdf'),
       path.join(this.folderSlides.get(), '%02d.svg'),
       'all'
@@ -638,7 +651,7 @@ class IntermediateSong extends Song {
     this.folderPiano.empty()
     const pianoFile = path.join(this.folderPiano.get(), 'piano.mscx')
     fs.copySync(this.mscxPiano, pianoFile)
-    spawn('mscore-to-eps.sh', [pianoFile])
+    childProcess.spawnSync('mscore-to-eps.sh', [pianoFile])
     const result = this.getFolderFiles_('piano', '.eps')
     if (!result) {
       throw new Error('The EPS files for the piano score couldn’t be generated.')
@@ -840,10 +853,9 @@ class IntermediateLibrary extends Library {
    */
   gitPull () {
     if (fs.existsSync(path.join(this.basePath, '.git'))) {
-      return spawn('git', ['pull'], { cwd: this.basePath })
-    } else {
-      return false
+      return childProcess.spawnSync('git', ['pull'], { cwd: this.basePath })
     }
+    return false
   }
 
   collectSongs_ () {
