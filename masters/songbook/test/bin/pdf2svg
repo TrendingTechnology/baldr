@@ -2,8 +2,8 @@
 
 # echo "1: $1 2: $2 3: $3 pwd: $(pwd)" >> $HOME/debug_pdf2svg.sh
 
-# 1: /home/jf/git-repositories/jf/baldr/songbook/modules/library-update/songs/Swing-low/projector.pdf
-# 2: /home/jf/git-repositories/jf/baldr/songbook/modules/library-update/songs/Swing-low/slides/%02d.svg
+# 1: songs/z/Swing-low/projector.pdf
+# 2: songs/z/Swing-low/slides/%02d.svg
 # 3: all
 # pwd: /home/jf/git-repositories/jf/baldr/songbook/modules/library-update
 

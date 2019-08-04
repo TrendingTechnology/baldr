@@ -2,7 +2,7 @@
 
 # echo "1: $1 2: $2 3: $3" >> $HOME/debug_mscore-to-eps.sh
 
-# 1: /home/jf/git-repositories/jf/baldr/songbook/modules/library-update/songs/Zum-Tanze-da-geht-ein-Maedel/piano/piano.mscx
+# 1: songs/z/Zum-Tanze-da-geht-ein-Maedel/piano/piano.mscx
 # 2:
 # 3:
 

@@ -348,11 +348,12 @@ describe('Package “@bldr/songbook-cli”', function () {
     it('--projector-path', function () {
       const basePath = tmpCopy('clean', 'one')
       const projectorPath = mkTmpDir()
-      spawn(script, [
+      const result = spawn(script, [
         '--base-path', basePath,
         '--projector-path', projectorPath,
         '--slides'
-      ])
+      ], { encoding: 'utf-8' })
+      console.log(result)
       assertExists(projectorPath, 'a', 'Auf-der-Mauer', '01.svg')
       assertExists(projectorPath, 'a', 'Auf-der-Mauer', '02.svg')
       assertExists(projectorPath, 'songs.json')
