@@ -634,11 +634,13 @@ class IntermediateSong extends Song {
     for (const oldSVG of oldSVGs) {
       fs.unlinkSync(path.join(dest, oldSVG))
     }
+    const src = path.join(dest, 'projector.pdf')
     childProcess.spawnSync('pdf2svg', [
-      path.join(dest, 'projector.pdf'),
+      src,
       path.join(dest, '%02d.svg'),
       'all'
     ])
+    fs.unlinkSync(src)
     const result = listFiles(dest, '.svg')
     if (!result) {
       throw new Error('The SVG files for the slides couldn’t be generated.')

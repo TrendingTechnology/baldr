@@ -879,9 +879,9 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
         it('Method “cleanIntermediateFiles()”', function () {
           const song = new IntermediateSong(path.join(__dirname, 'songs', 'clean', 'some', 's', 'Swing-low'), null, null, fileMonitor)
           song.generateIntermediateFiles('all', false)
-          assert.ok(fs.existsSync(path.join(song.folder, 'slides', 'projector.pdf')))
+          assert.ok(fs.existsSync(path.join(song.folder, 'slides', '01.svg')))
           song.cleanIntermediateFiles()
-          assert.ok(!fs.existsSync(path.join(song.folder, 'slides', 'projector.pdf')))
+          assert.ok(!fs.existsSync(path.join(song.folder, 'slides', '01.svg')))
         })
       })
     })
