@@ -610,7 +610,7 @@ class IntermediateSong extends Song {
     if (destination === '') {
       destination = source
     }
-    const pdf = path.join(this.folder, destination + '.pdf')
+    const pdf = path.join(this.folderSlides.get(), destination + '.pdf')
     childProcess.spawnSync('mscore', [
       '--export-to',
       path.join(pdf),
@@ -629,10 +629,13 @@ class IntermediateSong extends Song {
    * @param {string} folder - A song folder.
    */
   generateSlides_ () {
-    this.folderSlides.empty()
     const dest = this.folderSlides.get()
+    const oldSVGs = listFiles(dest, '.svg')
+    for (const oldSVG of oldSVGs) {
+      fs.unlinkSync(path.join(dest, oldSVG))
+    }
     childProcess.spawnSync('pdf2svg', [
-      path.join(this.folder, 'projector.pdf'),
+      path.join(dest, 'projector.pdf'),
       path.join(dest, '%02d.svg'),
       'all'
     ])

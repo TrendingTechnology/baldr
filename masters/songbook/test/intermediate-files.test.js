@@ -776,7 +776,7 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
         it('Method “generatePDF_()”', function () {
           const file = song.generatePDF_('projector', 'projector')
           assert.strictEqual(file, 'projector.pdf')
-          assertExists(folder, 'projector.pdf')
+          assertExists(folder, 'slides', 'projector.pdf')
         })
 
         it('Method “generateSlides_()”', function () {
@@ -877,10 +877,11 @@ describe('Package “@bldr/songbook-intermediate-files”', function () {
         })
 
         it('Method “cleanIntermediateFiles()”', function () {
+          const song = new IntermediateSong(path.join(__dirname, 'songs', 'clean', 'some', 's', 'Swing-low'), null, null, fileMonitor)
           song.generateIntermediateFiles('all', false)
-          assert.ok(fs.existsSync(path.join(song.folder, 'projector.pdf')))
+          assert.ok(fs.existsSync(path.join(song.folder, 'slides', 'projector.pdf')))
           song.cleanIntermediateFiles()
-          assert.ok(!fs.existsSync(path.join(song.folder, 'projector.pdf')))
+          assert.ok(!fs.existsSync(path.join(song.folder, 'slides', 'projector.pdf')))
         })
       })
     })

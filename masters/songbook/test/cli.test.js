@@ -85,7 +85,7 @@ describe('Package “@bldr/songbook-cli”', function () {
 
       assertExists(tmpDir, 'a', 'Auf-der-Mauer', 'piano', 'piano.mscx')
       assertExists(tmpDir, 'a', 'Auf-der-Mauer', 'slides', '01.svg')
-      assertExists(tmpDir, 'a', 'Auf-der-Mauer', 'projector.pdf')
+      assertExists(tmpDir, 'a', 'Auf-der-Mauer', 'slides', 'projector.pdf')
     })
 
     it('--clean', function () {
@@ -373,7 +373,7 @@ describe('Package “@bldr/songbook-cli”', function () {
         '--slides'
       ])
       assertExists(tmpDir, 'a', 'Auf-der-Mauer', 'slides', '01.svg')
-      assertExists(tmpDir, 'a', 'Auf-der-Mauer', 'projector.pdf')
+      assertExists(tmpDir, 'a', 'Auf-der-Mauer', 'slides', 'projector.pdf')
       assertNotExists(tmpDir, 'a', 'Auf-der-Mauer', 'piano', 'piano.mscx')
       assert.ok(!texFile)
     })
