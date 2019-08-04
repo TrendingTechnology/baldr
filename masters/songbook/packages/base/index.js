@@ -71,6 +71,24 @@ function sortObjectsByProperty (property) {
   }
 }
 
+/**
+ * List files in a a directory. You have to use a filter to
+ * select the files.
+ *
+ * @param {string} basePath - A directory
+ * @param {string} filter - String to filter, e. g. “.eps”
+ *
+ * @return {array} An array of file names.
+ */
+function listFiles (basePath, filter) {
+  if (fs.existsSync(basePath)) {
+    return fs.readdirSync(basePath).filter((file) => {
+      return file.indexOf(filter) > -1
+    })
+  }
+  return []
+}
+
 /*******************************************************************************
  * Utility classes
  ******************************************************************************/
@@ -591,14 +609,14 @@ class Song {
      *
      * @type {array}
      */
-    this.pianoFiles = this.getFolderFiles_('piano', '.eps')
+    this.pianoFiles = listFiles(this.folderPiano.get(), '.eps')
 
     /**
      * An array of slides file in the SVG format.
      *
      * @type {array}
      */
-    this.slidesFiles = this.getFolderFiles_('slides', '.svg')
+    this.slidesFiles = listFiles(this.folderSlides.get(), '.svg')
   }
 
   /**
@@ -652,26 +670,6 @@ class Song {
       }
     }
     throw new Error(util.format('File doesn’t exist: %s', absPath))
-  }
-
-  /**
-   * List files in a subfolder of the song folder. You have to use a filter to
-   * select the files.
-   *
-   * @param {string} subFolder - A subfolder relative to this.folder
-   * @param {string} filter - String to filter, e. g. “.eps”
-   *
-   * @return {array} An array of file names.
-   */
-  getFolderFiles_ (subFolder, filter) {
-    const folder = path.join(this.folder, subFolder)
-    if (fs.existsSync(folder)) {
-      return fs.readdirSync(folder).filter((file) => {
-        return file.indexOf(filter) > -1
-      })
-    } else {
-      return []
-    }
   }
 
   toJSON () {
@@ -914,10 +912,11 @@ class Library {
   }
 
   toJSON () {
-    return new AlphabeticalSongsTree(this.toArray())
+    return this.songs
   }
 }
 
+exports.listFiles = listFiles
 exports.AlphabeticalSongsTree = AlphabeticalSongsTree
 exports.bootstrapConfig = bootstrapConfig
 exports.Library = Library

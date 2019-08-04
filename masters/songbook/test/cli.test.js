@@ -1,10 +1,12 @@
 const assert = require('assert')
+const fs = require('fs')
 const path = require('path')
 const spawn = require('child_process').spawnSync
 const util = require('util')
 const {
   assertExists,
   assertNotExists,
+  mkTmpDir,
   removeANSI,
   read,
   tmpCopy
@@ -341,6 +343,26 @@ describe('Package “@bldr/songbook-cli”', function () {
       assertExists(texFile)
       assertNotExists(tmpDir, 'a', 'Auf-der-Mauer', 'slides', '01.svg')
       assertNotExists(tmpDir, 'a', 'Auf-der-Mauer', 'projector.pdf')
+    })
+
+    it('--projector-path', function () {
+      const basePath = tmpCopy('clean', 'one')
+      const projectorPath = mkTmpDir()
+      spawn(script, [
+        '--base-path', basePath,
+        '--projector-path', projectorPath,
+        '--slides'
+      ])
+      assertExists(projectorPath, 'a', 'Auf-der-Mauer', '01.svg')
+      assertExists(projectorPath, 'a', 'Auf-der-Mauer', '02.svg')
+      assertExists(projectorPath, 'songs.json')
+      const songs = JSON.parse(
+        fs.readFileSync(
+          path.join(projectorPath, 'songs.json'), { encoding: 'utf-8' }
+        )
+      )
+      assert.strictEqual(songs['Auf-der-Mauer'].songID, 'Auf-der-Mauer')
+      assert.strictEqual(songs['Auf-der-Mauer'].slidesCount, 2)
     })
 
     it('--slides', function () {

@@ -23,6 +23,7 @@ const {
   AlphabeticalSongsTree,
   Folder,
   Library,
+  listFiles,
   message,
   Song
 } = require('@bldr/songbook-base')
@@ -629,12 +630,13 @@ class IntermediateSong extends Song {
    */
   generateSlides_ () {
     this.folderSlides.empty()
+    const dest = this.folderSlides.get()
     childProcess.spawnSync('pdf2svg', [
       path.join(this.folder, 'projector.pdf'),
-      path.join(this.folderSlides.get(), '%02d.svg'),
+      path.join(dest, '%02d.svg'),
       'all'
     ])
-    const result = this.getFolderFiles_('slides', '.svg')
+    const result = listFiles(dest, '.svg')
     if (!result) {
       throw new Error('The SVG files for the slides couldn’t be generated.')
     }
@@ -649,10 +651,11 @@ class IntermediateSong extends Song {
    */
   generatePiano_ () {
     this.folderPiano.empty()
-    const pianoFile = path.join(this.folderPiano.get(), 'piano.mscx')
+    const dest = this.folderPiano.get()
+    const pianoFile = path.join(dest, 'piano.mscx')
     fs.copySync(this.mscxPiano, pianoFile)
     childProcess.spawnSync('mscore-to-eps.sh', [pianoFile])
-    const result = this.getFolderFiles_('piano', '.eps')
+    const result = listFiles(dest, '.eps')
     if (!result) {
       throw new Error('The EPS files for the piano score couldn’t be generated.')
     }

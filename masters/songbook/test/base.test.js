@@ -1,6 +1,7 @@
 const assert = require('assert')
 const fs = require('fs-extra')
 const baseRewired = require('rewire')('@bldr/songbook-base')
+const { listFiles } = require('@bldr/songbook-base')
 const path = require('path')
 const process = require('process')
 const sinon = require('sinon')
@@ -23,6 +24,32 @@ describe('Package “@bldr/songbook-base”', function () {
         const bootstrapConfig = baseRewired.__get__('bootstrapConfig')
         const config = bootstrapConfig()
         assert.strictEqual(config.path, path.resolve(__dirname, 'songs', 'clean', 'some'))
+      })
+    })
+
+    describe('Method “listFiles()”', function () {
+      const folder = path.join(__dirname, 'songs', 'processed', 'one', 'a', 'Auf-der-Mauer')
+
+      it('eps', function () {
+        const files = listFiles(path.join(folder, 'piano'), '.eps')
+        assert.deepStrictEqual(files, ['piano.eps'])
+      })
+
+      it('svg', function () {
+        const files = listFiles(path.join(folder, 'slides'), '.svg')
+        assert.deepStrictEqual(files, ['01.svg'])
+      })
+
+      it('non existent folder', function () {
+        const files = listFiles('lol', '.svg')
+        assert.deepStrictEqual(files, [])
+      })
+
+      it('empty folder', function () {
+        const empty = mkTmpDir()
+        const files = listFiles(empty, '.svg')
+        assert.deepStrictEqual(files, [])
+        fs.rmdirSync(empty)
       })
     })
 
@@ -601,34 +628,6 @@ describe('Package “@bldr/songbook-base”', function () {
             assert.ok(result.includes('projector.mscx'))
           })
         })
-
-        describe('Method “getFolderFiles_()”', function () {
-          const folder = path.join(__dirname, 'songs', 'processed', 'one', 'a', 'Auf-der-Mauer')
-          const song = new Song(folder)
-
-          it('Method “getFolderFiles_()”: eps', function () {
-            const files = song.getFolderFiles_('piano', '.eps')
-            assert.deepStrictEqual(files, ['piano.eps'])
-          })
-
-          it('Method “getFolderFiles_()”: svg', function () {
-            const files = song.getFolderFiles_('slides', '.svg')
-            assert.deepStrictEqual(files, ['01.svg'])
-          })
-
-          it('Method “getFolderFiles_()”: non existent folder', function () {
-            const files = song.getFolderFiles_('lol', '.svg')
-            assert.deepStrictEqual(files, [])
-          })
-
-          it('Method “getFolderFiles_()”: empty folder', function () {
-            const empty = path.join('test', 'files', 'empty')
-            fs.mkdirSync(empty)
-            const files = song.getFolderFiles_('empty', '.svg')
-            assert.deepStrictEqual(files, [])
-            fs.rmdirSync(empty)
-          })
-        })
       })
     })
 
@@ -761,7 +760,7 @@ describe('Package “@bldr/songbook-base”', function () {
 
         it('Method “toJSON()”', function () {
           const libraryJSON = JSON.parse(JSON.stringify(library))
-          assert.strictEqual(libraryJSON.s[0].metaData.title, 'Stille Nacht')
+          assert.strictEqual(libraryJSON['Stille-Nacht'].metaData.title, 'Stille Nacht')
         })
       })
     })
