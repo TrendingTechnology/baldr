@@ -20,5 +20,5 @@ module.exports = {
       ])
     ]
   },
-  publicPath: process.env.NODE_ENV === 'production' ? '/seating-plan/' : '/'
+  publicPath: process.env.NODE_ENV === 'production' ? '/songbook/' : '/'
 }
