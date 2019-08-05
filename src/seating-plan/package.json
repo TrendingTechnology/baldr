@@ -21,7 +21,8 @@
     "build": "vue-cli-service build",
     "publish": "rsync -av --delete dist/ serverway:/var/www/baldr.friedrich.rocks/seating-plan/",
     "lint": "vue-cli-service lint",
-    "test:unit": "vue-cli-service test:unit"
+    "test:unit": "vue-cli-service test:unit",
+    "test:e2e": "vue-cli-service test:e2e"
   },
   "dependencies": {
     "@bldr/theme-default-css": "^0.0.10",
@@ -37,6 +38,7 @@
   },
   "devDependencies": {
     "@vue/cli-plugin-eslint": "^3.9.2",
+    "@vue/cli-plugin-e2e-cypress": "^3.10.0",
     "@vue/cli-plugin-unit-mocha": "^3.9.0",
     "@vue/cli-service": "^3.9.3",
     "@vue/eslint-config-standard": "^4.0.0",
