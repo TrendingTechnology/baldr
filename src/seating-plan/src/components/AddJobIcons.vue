@@ -15,7 +15,7 @@
 import { mapGetters, mapActions } from 'vuex'
 
 // Components
-import MaterialIcon from '@/components/MaterialIcon'
+import { MaterialIcon } from '@bldr/vue-components'
 
 export default {
   name: 'AddJobIcons',

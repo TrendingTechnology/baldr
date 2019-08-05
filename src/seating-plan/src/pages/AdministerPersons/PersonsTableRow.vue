@@ -39,7 +39,7 @@
 import { mapActions } from 'vuex'
 
 // Components
-import MaterialIcon from '@/components/MaterialIcon'
+import { MaterialIcon } from '@bldr/vue-components'
 import PersonsJobs from '@/components/PersonsJobs'
 
 export default {

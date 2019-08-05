@@ -10,7 +10,7 @@
 
 <script>
 // Components
-import DynamicSelect from '@/components/DynamicSelect'
+import { DynamicSelect } from '@bldr/vue-components'
 
 export default {
   name: 'PersonSelect',

@@ -51,7 +51,7 @@ import { mapGetters, mapActions } from 'vuex'
 import { toLocaleDateTimeString } from '../lib.js'
 
 // Components
-import MaterialIcon from '@/components/MaterialIcon'
+import { MaterialIcon } from '@bldr/vue-components'
 
 export default {
   name: 'TimeTravel',

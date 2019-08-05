@@ -25,7 +25,7 @@
   },
   "dependencies": {
     "@bldr/theme-default-css": "^0.0.10",
-    "@mdi/font": "^3.8.95",
+    "@bldr/vue-components": "^0.1.0",
     "axios": "^0.19.0",
     "vue": "^2.6.10",
     "vue-headful": "^2.0.1",

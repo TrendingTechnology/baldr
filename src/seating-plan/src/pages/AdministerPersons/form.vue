@@ -20,7 +20,7 @@
 import { mapGetters } from 'vuex'
 
 // Components
-import MaterialIcon from '@/components/MaterialIcon'
+import { MaterialIcon } from '@bldr/vue-components'
 
 export default {
   name: 'FormAddPerson',

@@ -14,7 +14,7 @@ import vueHeadful from 'vue-headful'
 
 // Components
 import MainMenu from '@/components/layout/MainMenu'
-import MaterialIcon from '@/components/MaterialIcon'
+import { MaterialIcon } from '@bldr/vue-components'
 
 export default {
   name: 'AppHeader',
