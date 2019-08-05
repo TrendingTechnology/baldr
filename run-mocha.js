@@ -14,8 +14,8 @@ console.log('\n\n')
 
 for (const distPath of [
   'src/electron-app/dist',
-  'masters/songbook/packages/electron-app/dist',
-  'masters/camera/electron-app/dist'
+  'masters/songbook/src/electron-app/dist',
+  'masters/camera/src/electron-app/dist'
 ]) {
   fs.removeSync(distPath)
   utils.log('Delete electron app at the location: %s', distPath)

@@ -2,10 +2,10 @@
   "packages": [
     ".",
     "masters/*",
-    "masters/songbook/packages/*",
-    "masters/camera/electron-app",
+    "masters/songbook/src/*",
+    "masters/camera/src/*",
     "src/*",
-    "test/helper",
+    "tests/helper",
     "themes/*"
   ],
   "version": "independent"
