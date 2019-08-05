@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapActions } from 'vuex'
 
 // Components
 import MaterialIcon from '@/components/MaterialIcon'
@@ -71,4 +71,3 @@ export default {
   }
 }
 </script>
-

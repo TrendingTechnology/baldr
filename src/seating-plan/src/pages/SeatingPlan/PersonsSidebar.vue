@@ -1,7 +1,7 @@
 <template>
   <aside id="persons-sidebar">
     <router-link :to="'/grade/' + gradeNameCurrent + '/administer-persons'">Personen verwalten</router-link>
-    <persons-table/>
+    <persons-list/>
   </aside>
 </template>
 
@@ -14,7 +14,7 @@ import PersonsList from './PersonsList'
 export default {
   name: 'PersonsSidebar',
   components: {
-    PersonsTable
+    PersonsList
   },
   data: function () {
     return {
