@@ -1,6 +1,10 @@
 <template>
   <tr>
-    <td>{{ song.metaData.title }}</td>
+    <td>
+      <router-link :to="{ name: 'song', params: { songID: song.songID, slideNo: 1 }}">
+        {{ song.metaData.title }}
+      </router-link>
+    </td>
   </tr>
 </template>
 

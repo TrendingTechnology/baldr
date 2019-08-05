@@ -10,7 +10,6 @@
     "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {
-    "@bldr/songbook-base": "^0.1.14",
     "core-js": "^2.6.5",
     "vue-router": "^3.0.3",
     "vue": "^2.6.10",

@@ -2,7 +2,7 @@
   <div>
     <h1>Inhaltsverzeichnis</h1>
       <toc-abc
-        v-for="(songList, abc) in songs"
+        v-for="(songList, abc) in alphabeticalSongsTree"
         :key="abc"
         :songs="songList"
         :abc="abc"
@@ -19,6 +19,6 @@ export default {
   components: {
     TocAbc
   },
-  computed: mapGetters(['songs'])
+  computed: mapGetters(['alphabeticalSongsTree'])
 }
 </script>

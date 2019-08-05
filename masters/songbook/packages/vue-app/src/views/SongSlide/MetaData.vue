@@ -1,10 +1,10 @@
 <template>
   <div class="metadata">
-    <h1></h1>
-    <h2></h2>
+    <h1>{{ title }}</h1>
+    <h2 v-if="subtitle">{{ subtitle }}</h2>
     <div class="people">
-      <div class="lyricist"></div>
-      <div class="composer"></div>
+      <div v-if="lyricist" class="lyricist">{{ lyricist }}</div>
+      <div v-if="composer" class="composer">{{ composer }}</div>
     </div>
     <div class="links">
       <a style="display: none;" class="icon musescore" title="Musescore" href=""></a>
@@ -14,8 +14,25 @@
 </template>
 
 <script>
-export default {
+import { mapGetters } from 'vuex'
 
+export default {
+  name: 'MetaData',
+  computed: {
+    ...mapGetters(['songCurrent']),
+    title () {
+      return this.songCurrent.metaDataCombined.title
+    },
+    subtitle () {
+      return this.songCurrent.metaDataCombined.subtitle
+    },
+    lyricist () {
+      return this.songCurrent.metaDataCombined.lyricist
+    },
+    composer () {
+      return this.songCurrent.metaDataCombined.composer
+    }
+  }
 }
 </script>
 
@@ -68,11 +85,11 @@ export default {
     font-style: italic;
   }
 
-  .musescore {
+  /* .musescore {
     background: url('icons/musescore.svg') left center no-repeat;
   }
 
   .youtube {
     background: url('icons/youtube.svg') left center no-repeat;
-  }
+  } */
 </style>

@@ -1,17 +1,41 @@
 <template>
   <section>
-    <img>
-
+    <meta-data/>
+    <img :src="imageSrc">
     <div class="slide-number"></div>
   </section>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+import MetaData from './MetaData'
+
 export default {
   name: 'SongSlide',
+  components: {
+    MetaData
+  },
+  computed: {
+    ...mapGetters(['songCurrent', 'slideNoCurrent']),
+    abc () {
+      return this.songCurrent.abc
+    },
+    songID () {
+      return this.songCurrent.songID
+    },
+    slideNo () {
+      if (this.slideNoCurrent <= 9) {
+        return `0${this.slideNoCurrent}`
+      }
+      return this.slideNoCurrent
+    },
+    imageSrc () {
+      return `songs/${this.abc}/${this.songID}/${this.slideNo}.svg`
+    }
+  },
   created: function () {
-    let songID = this.$route.params.songid
-    this.$store.commit('setSongCurrent', songID)
+    this.$store.dispatch('setSongCurrent', this.$route.params.songID)
+    this.$store.commit('setSlideNoCurrent', this.$route.params.slideNo)
   }
 }
 </script>

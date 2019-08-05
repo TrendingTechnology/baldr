@@ -15,7 +15,7 @@ export default new Router({
       component: Home
     },
     {
-      path: '/song/:song-id/:slide-no',
+      path: '/song/:songID/:slideNo',
       name: 'song',
       component: SongSlide
     },
