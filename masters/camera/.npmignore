@@ -1,4 +1,4 @@
 .npmignore
-electron-app/
-test/
+src/electron-app/
+tests/
 *.baldr

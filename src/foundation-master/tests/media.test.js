@@ -11,7 +11,8 @@ const { Media } = require(mediaJsPath)
 const mediaRewired = rewire(mediaJsPath)
 const FileInfo = mediaRewired.__get__('FileInfo')
 
-const testFiles = path.resolve('test', 'files', 'mixed-extensions')
+const baseTestsFolder = path.resolve(__dirname, '..', '..', '..', 'tests')
+const testFiles = path.join(baseTestsFolder, 'files', 'mixed-extensions')
 const media = new Media(testFiles)
 
 const resolve = function (folder, file) {
@@ -46,7 +47,7 @@ describe('Class “FileInfo()” #unittest', () => {
     it('Property “this.titleSafe', () => {
       const getFileInfo = function () {
         return new FileInfo(
-          path.resolve('test', 'files', 'media', ...arguments)
+          path.join(baseTestsFolder, 'files', 'media', ...arguments)
         )
       }
       assert.equal(
@@ -67,7 +68,7 @@ describe('Class “FileInfo()” #unittest', () => {
 
   describe('Methods', () => {
     it('Method “readInfoYaml_()”', () => {
-      const basePath = path.resolve('test', 'files', 'media', 'image')
+      const basePath = path.join(baseTestsFolder, 'files', 'media', 'image')
 
       const testInfo = function (fileName, result) {
         const filePath = path.resolve(basePath, fileName)
@@ -89,7 +90,7 @@ describe('Class “Media()” #unittest', () => {
     it('this.parentPath', function () {
       assert.equal(
         media.parentPath,
-        path.resolve('test', 'files', 'mixed-extensions')
+        path.resolve(baseTestsFolder, 'files', 'mixed-extensions')
       )
     })
 
@@ -164,7 +165,7 @@ describe('Class “Media()” #unittest', () => {
 
       it('A folder', function () {
         const out = media.list(
-          path.resolve('test/files/mixed-extensions/image')
+          path.join(baseTestsFolder, 'files', 'mixed-extensions', 'image')
         )
         assert.equal(out[2].basename, 'mozart.jpeg')
       })
@@ -242,7 +243,7 @@ describe('Class “Media()” #unittest', () => {
 
     it('Method “listRecursively_()”', () => {
       const list = media.listRecursively_(
-        path.resolve('test', 'files', 'mixed-extensions')
+        path.resolve(baseTestsFolder, 'files', 'mixed-extensions')
       )
       assert.ok(list[0].includes('audio/beethoven.m4a'))
       assert.ok(list.pop().includes('video/mozart.mp4'))
@@ -250,7 +251,7 @@ describe('Class “Media()” #unittest', () => {
 
     it('Method “groupByTypes_()”', () => {
       const list = media.listRecursively_(
-        path.resolve('test', 'files', 'mixed-extensions')
+        path.resolve(baseTestsFolder, 'files', 'mixed-extensions')
       )
       const group = media.groupByTypes_(list)
 
@@ -260,7 +261,7 @@ describe('Class “Media()” #unittest', () => {
     })
 
     it('Method “getMedia()”', () => {
-      const media = new Media(path.resolve('test', 'files', 'media'))
+      const media = new Media(path.resolve(baseTestsFolder, 'files', 'media'))
       const out = media.getMedia()
 
       assert.equal(out.audio.length, 3)

@@ -1,4 +1,4 @@
 .npmignore
 files/
-test/
+tests/
 *.baldr

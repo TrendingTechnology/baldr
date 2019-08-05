@@ -11,5 +11,5 @@ lerna.json
 masters/
 run-mocha.js
 src/
-test/
+tests/
 themes/

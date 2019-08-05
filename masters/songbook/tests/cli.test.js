@@ -391,7 +391,7 @@ describe('Package “@bldr/songbook-cli”', function () {
 
     it('--version', function () {
       const cli = spawn(script, ['--version'])
-      const pckg = require(path.join(__dirname, '..', 'packages', 'cli', 'package.json'))
+      const pckg = require(path.join(__dirname, '..', 'src', 'cli', 'package.json'))
       assert.strictEqual(cli.stdout.toString(), pckg.version + '\n')
       assert.strictEqual(cli.status, 0)
     })

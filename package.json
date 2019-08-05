@@ -18,15 +18,15 @@
   },
   "scripts": {
     "build": "electron-builder",
-    "clean": "lerna clean; rm -rf dist; rm -rf src/electron-app/dist; rm -rf masters/songbook/packages/electron-app/dist; rm -rf masters/camera/electron-app/dist",
+    "clean": "lerna clean; rm -rf dist; rm -rf src/electron-app/dist; rm -rf masters/songbook/src/electron-app/dist; rm -rf masters/camera/src/electron-app/dist",
     "doc": "rm -f docs/*.html; jsdoc --configure ./docs/jsdoc-config.json --readme API.md .",
     "doc-show": "xdg-open ./docs/index.html",
     "pack": "electron-builder --dir",
-    "spectron": "mocha --fgrep '#spectron' 'test/*.js' 'src/app/test/*.js' 'src/lib/test/*.js' 'masters/audio/test/*.js' 'masters/camera/test/*.js' 'masters/editor/test/*.js' 'masters/image/test/*.js' 'masters/markdown/test/*.js' 'masters/person/test/*.js' 'masters/question/test/*.js' 'masters/quote/test/*.js' 'masters/svg/test/*.js' 'masters/website/test/*.js'",
+    "spectron": "mocha --fgrep '#spectron' 'tests/*.js' 'src/app/tests/*.js' 'src/lib/tests/*.js' 'masters/audio/tests/*.js' 'masters/camera/tests/*.js' 'masters/editor/tests/*.js' 'masters/image/tests/*.js' 'masters/markdown/tests/*.js' 'masters/person/tests/*.js' 'masters/question/tests/*.js' 'masters/quote/tests/*.js' 'masters/svg/tests/*.js' 'masters/website/tests/*.js'",
     "standard": "standard",
     "start": "electron .",
     "test": "./run-mocha.js",
-    "unittest": "mocha --fgrep '#unittest' 'test/*.js' 'src/app/test/*.js' 'src/lib/test/*.js' 'masters/audio/test/*.js' 'masters/camera/test/*.js' 'masters/editor/test/*.js' 'masters/image/test/*.js' 'masters/markdown/test/*.js' 'masters/person/test/*.js' 'masters/question/test/*.js' 'masters/quote/test/*.js' 'masters/svg/test/*.js' 'masters/website/test/*.js'"
+    "unittest": "mocha --fgrep '#unittest' 'tests/*.js' 'src/app/tests/*.js' 'src/lib/tests/*.js' 'masters/audio/tests/*.js' 'masters/camera/tests/*.js' 'masters/editor/tests/*.js' 'masters/image/tests/*.js' 'masters/markdown/tests/*.js' 'masters/person/tests/*.js' 'masters/question/tests/*.js' 'masters/quote/tests/*.js' 'masters/svg/tests/*.js' 'masters/website/tests/*.js'"
   },
   "devDependencies": {
     "@bldr/camera-electron-app": "^0.0.23",

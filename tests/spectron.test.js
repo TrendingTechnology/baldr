@@ -1,8 +1,12 @@
 const {
   assert,
   fs,
-  Spectron
+  Spectron,
+  path
 } = require('@bldr/test-helper')
+
+const testsFiles = path.resolve(__dirname, 'files')
+const baldrFile = path.join(testsFiles, 'minimal.baldr')
 
 describe('General Spectron tests #spectron', () => {
   describe('build', () => {
@@ -45,7 +49,7 @@ describe('General Spectron tests #spectron', () => {
     this.timeout(50000)
 
     beforeEach(function () {
-      this.spectron = new Spectron('@bldr/electron-app', 'test/files/minimal.baldr')
+      this.spectron = new Spectron('@bldr/electron-app', baldrFile)
       this.app = this.spectron.getApp()
       return this.spectron.start()
     })
@@ -140,7 +144,7 @@ describe('General Spectron tests #spectron', () => {
     this.timeout(50000)
 
     beforeEach(function () {
-      this.spectron = new Spectron('@bldr/electron-app', 'test/files/steps.baldr')
+      this.spectron = new Spectron('@bldr/electron-app', path.join(testsFiles, 'steps.baldr'))
       this.app = this.spectron.getApp()
       return this.spectron.start()
     })
@@ -285,7 +289,7 @@ describe('General Spectron tests #spectron', () => {
     this.timeout(50000)
 
     beforeEach(function () {
-      this.spectron = new Spectron('@bldr/electron-app', 'test/files/single-slide.baldr')
+      this.spectron = new Spectron('@bldr/electron-app', path.join(testsFiles, 'single-slide.baldr'))
       this.app = this.spectron.getApp()
       return this.spectron.start()
     })
@@ -309,7 +313,7 @@ describe('General Spectron tests #spectron', () => {
     this.timeout(50000)
 
     beforeEach(function () {
-      this.spectron = new Spectron('@bldr/electron-app', 'test/files/error.baldr')
+      this.spectron = new Spectron('@bldr/electron-app', path.join(testsFiles, 'error.baldr'))
       this.app = this.spectron.getApp()
       return this.spectron.start()
     })
@@ -331,7 +335,7 @@ describe('General Spectron tests #spectron', () => {
     this.timeout(50000)
 
     beforeEach(function () {
-      this.spectron = new Spectron('@bldr/electron-app', 'test/files/themes.baldr')
+      this.spectron = new Spectron('@bldr/electron-app', path.join(testsFiles, 'themes.baldr'))
       this.app = this.spectron.getApp()
       return this.spectron.start()
     })
