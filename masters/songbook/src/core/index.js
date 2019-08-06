@@ -138,6 +138,23 @@ class SongMetaDataCombined {
     }
   }
 
+  get wikipediaURL () {
+    if ('wikipedia' in this.metaData) {
+      // https://de.wikipedia.org/wiki/Gesch%C3%BCtztes_Leerzeichen
+      // https://en.wikipedia.org/wiki/Non-breaking_space
+      const segments = this.metaData.wikipedia.split(':')
+      const lang = segments[0]
+      const slug = encodeURIComponent(segments[1])
+      return `https://${lang}.wikipedia.org/wiki/${slug}`
+    }
+  }
+
+  get youtubeURL () {
+    if ('youtube' in this.metaData) {
+      return `https://youtu.be/${this.metaData.youtube}`
+    }
+  }
+
   toJSON () {
     return {
       title: this.title,

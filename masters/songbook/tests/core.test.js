@@ -79,6 +79,39 @@ describe('Package “@bldr/songbook-core”', function () {
           assert.strictEqual(song.lyricist, '')
         })
       })
+
+      describe('get wikipediaURL', function () {
+        it('de', function () {
+          const song = new SongMetaDataCombined({
+            wikipedia: 'de:Geschütztes_Leerzeichen'
+          })
+          assert.strictEqual(
+            song.wikipediaURL,
+            'https://de.wikipedia.org/wiki/Gesch%C3%BCtztes_Leerzeichen'
+          )
+        })
+
+        it('en', function () {
+          const song = new SongMetaDataCombined({
+            wikipedia: 'en:Non-breaking_space'
+          })
+          assert.strictEqual(
+            song.wikipediaURL,
+            'https://en.wikipedia.org/wiki/Non-breaking_space'
+          )
+        })
+      })
+
+      it('get youtubeURL', function () {
+        const song = new SongMetaDataCombined({
+          youtube: 'ESRwx36lvOM'
+        })
+        assert.strictEqual(
+          song.youtubeURL,
+          'https://youtu.be/ESRwx36lvOM'
+        )
+      })
+
       describe('Real world example', function () {
         const SongMetaData = baseRewired.__get__('SongMetaData')
         const folder = path.join(__dirname, 'songs', 'clean', 'some', 'a', 'Auf-der-Mauer')
