@@ -1,22 +1,21 @@
 <template>
   <main>
     <section>
-      <persons-table :start=1 :count=12 />
-
-      <persons-table :start=13 :count=12 />
-
-      <persons-table :start=25 :count=12 />
-
-      <form-add-person/>
-
+      <h1>Klassenliste der Klasse „{{ gradeNameCurrent }}“ verwalten</h1>
+      <div class="list">
+        <persons-table :start=1 :count=12 />
+        <persons-table :start=13 :count=12 />
+        <persons-table :start=25 :count=12 />
+        <form-add-person/>
+      </div>
     </section>
-
   </main>
 </template>
 
 <script>
 import FormAddPerson from './form'
 import PersonsTable from './PersonsTable'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'AdministerPersons',
@@ -30,6 +29,7 @@ export default {
       this.$router.push('/')
     }
   },
+  computed: mapGetters(['gradeNameCurrent']),
   created: function () {
     let gradeName = this.$route.params.grade
     this.$store.commit('setGradeNameCurrent', gradeName)
@@ -52,7 +52,7 @@ export default {
 </script>
 
 <style scoped>
-  section {
+  .list {
     column-count: 3;
   }
 </style>

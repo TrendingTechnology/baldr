@@ -12,7 +12,21 @@
         <router-link
           :to="{ name: 'seating-plan', params: { grade: gradeName } }"
         >
-          <material-icon name="open-in-new"/>
+          <material-icon
+            :title="`Sitzplan der Klasse „${gradeName}“ öffnen`"
+            name="open-in-new"
+          />
+        </router-link>
+      </td>
+
+      <td>
+        <router-link
+          :to="{ name: 'administer-persons', params: { grade: gradeName } }"
+        >
+          <material-icon
+            :title="`Klassenliste der Klasse „${gradeName}“ verwalten`"
+            name="account-group"
+          />
         </router-link>
       </td>
 
@@ -20,6 +34,7 @@
         <material-icon
           name="delete"
           @click.native="deleteGrade(gradeName)"
+          :title="`Klasse „${gradeName}“ löschen`"
         />
       </td>
     </tr>

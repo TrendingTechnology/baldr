@@ -6,7 +6,7 @@
         params: { grade: gradeNameCurrent }
       }"
     >
-      Personen verwalten
+      Klassenliste verwalten
     </router-link>
     <persons-list/>
   </aside>
