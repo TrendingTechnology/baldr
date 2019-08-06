@@ -155,6 +155,12 @@ class SongMetaDataCombined {
     }
   }
 
+  get musescoreURL () {
+    if ('musescore' in this.metaData) {
+      return `https://musescore.com/score/${this.metaData.musescore}`
+    }
+  }
+
   toJSON () {
     return {
       title: this.title,

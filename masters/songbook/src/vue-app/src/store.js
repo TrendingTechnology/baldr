@@ -1,7 +1,10 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import songs from '/home/jf/.local/share/baldr/projector/songs.json'
-import { AlphabeticalSongsTree } from '@bldr/songbook-core'
+import {
+  AlphabeticalSongsTree,
+  SongMetaDataCombined
+} from '@bldr/songbook-core'
 
 Vue.use(Vuex)
 
@@ -27,6 +30,10 @@ export default new Vuex.Store({
   },
   actions: {
     importSongs ({ commit }) {
+      for (const songID in songs) {
+        const song = songs[songID]
+        song.metaDataCombined = new SongMetaDataCombined(song.metaData)
+      }
       commit('importSongs', songs)
     },
     setSongCurrent ({ commit, getters }, songID) {

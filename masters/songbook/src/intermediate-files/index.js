@@ -463,8 +463,11 @@ class PianoScore {
     texMarkup = texMarkup.replace('//basepath//', basePath)
 
     // Write contents to the text file.
+    utils.log(
+      'The TeX markup was written to: %s',
+      this.texFile.path.yellow
+    )
     this.texFile.append(texMarkup)
-    utils.log('The TeX markup was written to: %s', this.texFile.path)
 
     // To avoid temporary TeX files in the working directory of the shell
     // the command is running from.
@@ -474,6 +477,11 @@ class PianoScore {
     // Compile twice for the table of contents
     // The page numbers in the toc only matches after three runs.
     for (let index = 0; index < 3; index++) {
+      utils.log(
+        'Compile the TeX file “%s” the %d time.',
+        this.texFile.path.yellow,
+        index + 1
+      )
       this.spawnTex_(this.texFile.path, cwd)
     }
 
@@ -485,7 +493,12 @@ class PianoScore {
     } else {
       openCommand = 'xdg-open'
     }
-    childProcess.spawnSync(openCommand, [pdfFile])
+    const child = childProcess.spawn(
+      openCommand,
+      [pdfFile],
+      { detached: true, stdio: 'ignore' }
+    )
+    child.unref()
   }
 }
 

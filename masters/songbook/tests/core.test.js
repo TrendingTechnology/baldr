@@ -112,6 +112,16 @@ describe('Package “@bldr/songbook-core”', function () {
         )
       })
 
+      it('get musescoreURL', function () {
+        const song = new SongMetaDataCombined({
+          musescore: 1234
+        })
+        assert.strictEqual(
+          song.musescoreURL,
+          'https://musescore.com/score/1234'
+        )
+      })
+
       describe('Real world example', function () {
         const SongMetaData = baseRewired.__get__('SongMetaData')
         const folder = path.join(__dirname, 'songs', 'clean', 'some', 'a', 'Auf-der-Mauer')
