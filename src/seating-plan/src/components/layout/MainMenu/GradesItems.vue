@@ -3,7 +3,7 @@
     <li v-for="gradeName in gradeNames" :key="gradeName">
       <router-link
         :class="{placed: isGradePlaced(gradeName)}"
-        :to="'/grade/' + gradeName"
+        :to="{ name: 'seating-plan', params: { grade: gradeName } }"
       >
         {{ gradeName }}
       </router-link>

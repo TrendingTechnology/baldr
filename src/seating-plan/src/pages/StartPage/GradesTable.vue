@@ -9,7 +9,9 @@
       </td>
 
       <td>
-        <router-link :to="'/grade/' + gradeName">
+        <router-link
+          :to="{ name: 'seating-plan', params: { grade: gradeName } }"
+        >
           <material-icon name="open-in-new"/>
         </router-link>
       </td>

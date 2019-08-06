@@ -1,6 +1,10 @@
 <template>
   <aside id="persons-sidebar">
-    <router-link :to="'/grade/' + gradeNameCurrent + '/administer-persons'">Personen verwalten</router-link>
+    <router-link
+      :to="{ name: 'administer-persons', params: { grade: gradeName } }"
+    >
+      Personen verwalten
+    </router-link>
     <persons-list/>
   </aside>
 </template>
