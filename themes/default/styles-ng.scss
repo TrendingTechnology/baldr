@@ -1,0 +1,59 @@
+@import '~typeface-alegreya/index.css';
+@import '~typeface-alegreya-sans/index.css';
+@import '~typeface-alegreya-sans-sc/index.css';
+@import '~typeface-alegreya-sc/index.css';
+
+body[baldr-theme="default"] {
+  font-family: 'Alegreya';
+
+  h1, h2, h3, h4 {
+    font-family: 'Alegreya Sans';
+    font-weight: 700;
+  }
+
+  a {
+    text-decoration: none;
+
+    &:link {
+      color: gray;
+      font-weight: 700;
+    }
+
+    &:visited {
+      color: #437A16;
+    }
+
+    &:focus {
+      border-bottom: 1px solid;
+      background: #BAE498;
+    }
+
+    &:hover {
+      opacity: 0.6;
+      border-bottom: 1px solid;
+
+    }
+
+    &:active {
+      background: #265301;
+      color: #CDFEAA;
+    }
+  }
+
+  .important {
+    font-family: 'Alegreya Sans';
+    font-weight: bolder
+  }
+
+  .important.person {
+    font-family: 'Alegreya Sans SC';
+  }
+
+  .person {
+    font-family: 'Alegreya SC';
+  }
+
+  .piece {
+    font-style: italic;
+  }
+}

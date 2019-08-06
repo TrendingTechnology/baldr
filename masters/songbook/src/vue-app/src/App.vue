@@ -16,3 +16,7 @@ export default {
   }
 }
 </script>
+
+<style>
+@import '~@bldr/theme-default/styles-ng.css';
+</style>

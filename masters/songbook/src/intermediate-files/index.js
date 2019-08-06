@@ -464,8 +464,8 @@ class PianoScore {
 
     // Write contents to the text file.
     utils.log(
-      'The TeX markup was written to: %s',
-      this.texFile.path.yellow
+      'The TeX markup was written to: %s', // Do not change text: This will break tests.
+      this.texFile.path // No color: This will break tests.
     )
     this.texFile.append(texMarkup)
 

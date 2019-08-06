@@ -10,6 +10,9 @@
     "type": "git",
     "url": "git+https://github.com/Josef-Friedrich/baldr.git"
   },
+  "scripts": {
+    "compile": "sassc --style=expanded --sourcemap styles-ng.scss styles-ng.css"
+  },
   "license": "MIT",
   "author": {
     "name": "Josef Friedrich",
