@@ -2,13 +2,13 @@ import Vue from 'vue'
 import Router from 'vue-router'
 
 // Page components
-import JobsManager from '@/pages/JobsManager'
-import JsonImport from '@/pages/JsonImport'
-import AdministerPersons from '@/pages/AdministerPersons'
-import SeatingPlan from '@/pages/SeatingPlan'
-import SpreadsheetImport from '@/pages/SpreadsheetImport'
-import StartPage from '@/pages/StartPage'
-import TimeTravel from '@/pages/TimeTravel'
+import JobsManager from '@/views/JobsManager'
+import JsonImport from '@/views/JsonImport'
+import AdministerPersons from '@/views/AdministerPersons'
+import SeatingPlan from '@/views/SeatingPlan'
+import SpreadsheetImport from '@/views/SpreadsheetImport'
+import StartPage from '@/views/StartPage'
+import TimeTravel from '@/views/TimeTravel'
 
 Vue.use(Router)
 
