@@ -492,6 +492,16 @@ describe('Package “@bldr/songbook-base”', function () {
           const songJSON = JSON.parse(JSON.stringify(song))
           assert.strictEqual(songJSON.songID, 'Swing-low')
           assert.strictEqual(songJSON.abc, 's')
+          assert.strictEqual(typeof songJSON.folder, 'string')
+          delete songJSON.folder
+          assert.deepStrictEqual(songJSON, {
+            abc: 's',
+            metaData: {
+              title: 'Swing low'
+            },
+            slidesCount: 3,
+            songID: 'Swing-low'
+          })
         })
 
         describe('Method “detectFile_()”', function () {

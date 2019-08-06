@@ -561,7 +561,6 @@ class Song {
       abc: this.abc,
       folder: this.folder,
       metaData: this.metaData,
-      metaDataCombined: this.metaDataCombined,
       songID: this.songID,
       slidesCount: this.slidesFiles.length
     }
