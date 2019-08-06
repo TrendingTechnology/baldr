@@ -15,7 +15,8 @@
     "vue-router": "^3.0.3",
     "vue": "^2.6.10",
     "vuex": "^3.0.1",
-    "@bldr/vue-components": "^0.1.0"
+    "@bldr/vue-components": "^0.1.0",
+    "@bldr/songbook-core": "^0.1.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.10.0",

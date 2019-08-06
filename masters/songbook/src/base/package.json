@@ -5,7 +5,7 @@
   "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
   "repository": {
     "type": "git",
-    "url": "git@github.com:Josef-Friedrich/baldr-songbook.git"
+    "url": "git+https://github.com/Josef-Friedrich/baldr.git"
   },
   "license": "MIT",
   "author": {

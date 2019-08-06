@@ -47,6 +47,7 @@
     "@bldr/master-website": "^0.0.11",
     "@bldr/seating-plan": "^0.1.12",
     "@bldr/songbook-base": "^0.1.14",
+    "@bldr/songbook-core": "^0.1.0",
     "@bldr/songbook-cli": "^0.1.18",
     "@bldr/songbook-electron-app": "^0.1.15",
     "@bldr/songbook-intermediate-files": "^0.1.17",

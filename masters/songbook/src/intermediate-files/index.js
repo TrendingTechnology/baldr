@@ -20,13 +20,13 @@ const fs = require('fs-extra')
 
 // Project packages.
 const {
-  AlphabeticalSongsTree,
   Folder,
   Library,
   listFiles,
   message,
   Song
 } = require('@bldr/songbook-base')
+const { AlphabeticalSongsTree } = require('@bldr/songbook-core')
 const { utils } = require('@bldr/core')
 
 /**

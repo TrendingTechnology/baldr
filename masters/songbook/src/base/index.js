@@ -60,18 +60,6 @@ function parseSongIDList (listPath) {
 }
 
 /**
- * Sort alphabetically an array of objects by some specific property.
- *
- * @param {String} property Key of the object to sort.
- * @see {@link https://ourcodeworld.com/articles/read/764/how-to-sort-alphabetically-an-array-of-objects-by-key-in-javascript Tutorial}
- */
-function sortObjectsByProperty (property) {
-  return function (a, b) {
-    return a[property].localeCompare(b[property])
-  }
-}
-
-/**
  * List files in a a directory. You have to use a filter to
  * select the files.
  *
@@ -689,33 +677,6 @@ class Song {
  ******************************************************************************/
 
 /**
- * A tree of songs where the song arrays are placed in alphabetical properties.
- * An instanace of this class would look like this example:
- *
- * <pre><code>
- * {
- *   "a": [ song, song ],
- *   "s": [ song, song ],
- *   "z": [ song, song ]
- * }
- * </code></pre>
- */
-class AlphabeticalSongsTree {
-  /**
-   * @param {module:baldr-songbook~songs} songs - An array of song objects.
-   */
-  constructor (songs) {
-    for (const song of songs) {
-      if (!{}.hasOwnProperty.call(this, song.abc)) this[song.abc] = []
-      this[song.abc].push(song)
-    }
-    for (const abc in this) {
-      this[abc].sort(sortObjectsByProperty('songID'))
-    }
-  }
-}
-
-/**
  * The song library - a collection of songs
  */
 class Library {
@@ -917,7 +878,6 @@ class Library {
 }
 
 exports.listFiles = listFiles
-exports.AlphabeticalSongsTree = AlphabeticalSongsTree
 exports.bootstrapConfig = bootstrapConfig
 exports.Library = Library
 exports.message = message

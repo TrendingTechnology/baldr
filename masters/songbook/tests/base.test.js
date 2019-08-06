@@ -631,19 +631,6 @@ describe('Package “@bldr/songbook-base”', function () {
       })
     })
 
-    describe('Class “AlphabeticalSongsTree()”', function () {
-      const AlphabeticalSongsTree = baseRewired.__get__('AlphabeticalSongsTree')
-      const Library = baseRewired.__get__('Library')
-      const library = new Library(path.join(__dirname, 'songs', 'processed', 'some'))
-      const songs = Object.values(library.songs)
-
-      it('Initialisation', function () {
-        const abcTree = new AlphabeticalSongsTree(songs)
-        assert.strictEqual(abcTree.a[0].metaData.title, 'Auf der Mauer, auf der Lauer')
-        assert.strictEqual(abcTree.s[0].metaData.title, 'Stille Nacht')
-      })
-    })
-
     describe('Class “Library()”', function () {
       const Library = baseRewired.__get__('Library')
       let library

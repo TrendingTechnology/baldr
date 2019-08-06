@@ -15,7 +15,8 @@ require('selectize')
 const electron = require('electron')
 
 // Project packages.
-const { bootstrapConfig, Library, AlphabeticalSongsTree } = require('@bldr/songbook-base')
+const { bootstrapConfig, Library } = require('@bldr/songbook-base')
+const { AlphabeticalSongsTree } = require('@bldr/songbook-core')
 
 const config = bootstrapConfig()
 const library = new Library(config.path)

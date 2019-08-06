@@ -1,7 +1,7 @@
 {
-  "name": "@bldr/songbook-cli",
-  "version": "0.1.18",
-  "description": "A command line utility to generate the intermediate files needed by the Electron songbook app",
+  "name": "@bldr/songbook-core",
+  "version": "0.1.0",
+  "description": "Core functionality for the BALDR songbook without a node dependency.",
   "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
   "repository": {
     "type": "git",
@@ -14,15 +14,6 @@
     "url": "https://josef.friedrich.rocks"
   },
   "main": "index.js",
-  "bin": {
-    "baldr-songbook-updater": "./index.js"
-  },
-  "dependencies": {
-    "@bldr/core": "^0.0.18",
-    "@bldr/songbook-base": "^0.1.14",
-    "@bldr/songbook-intermediate-files": "^0.1.17",
-    "commander": "^2.20.0"
-  },
   "publishConfig": {
     "access": "public"
   },
