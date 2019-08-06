@@ -1,7 +1,7 @@
 <template>
   <tr>
     <td class="main-column">
-      <router-link :to="{ name: 'song', params: { songID: song.songID, slideNo: 1 }}">
+      <router-link :to="{ name: 'song', params: { songID: song.songID }}">
         <span class="title" v-if="meta.title">{{ meta.title }} </span>
         <span class="subtitle" v-if="meta.subtitle">{{ meta.subtitle }} </span>
         <span class="composer" v-if="meta.composer">{{ meta.composer }} </span>

@@ -1,5 +1,5 @@
 {
-  "name": "vue-app",
+  "name": "@baldr/songbook-vue-app",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -33,5 +33,28 @@
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
     "vue-template-compiler": "^2.6.10"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/essential",
+      "@vue/standard"
+    ],
+    "rules": {},
+    "parserOptions": {
+      "parser": "babel-eslint"
+    }
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions"
+  ],
+  "babel": {
+    "presets": [
+      "@vue/app"
+    ]
   }
 }

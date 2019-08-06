@@ -30,12 +30,11 @@ export default {
       return this.slideNoCurrent
     },
     imageSrc () {
-      return `songs/${this.abc}/${this.songID}/${this.slideNo}.svg`
+      return `/songs/${this.abc}/${this.songID}/${this.slideNo}.svg`
     }
   },
   created: function () {
     this.$store.dispatch('setSongCurrent', this.$route.params.songID)
-    this.$store.commit('setSlideNoCurrent', this.$route.params.slideNo)
   }
 }
 </script>
