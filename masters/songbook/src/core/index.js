@@ -149,3 +149,4 @@ class SongMetaDataCombined {
 }
 
 exports.AlphabeticalSongsTree = AlphabeticalSongsTree
+exports.SongMetaDataCombined = SongMetaDataCombined

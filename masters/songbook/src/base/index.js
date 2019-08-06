@@ -16,6 +16,8 @@ const glob = require('glob')
 const yaml = require('js-yaml')
 require('colors')
 
+const { SongMetaDataCombined } = require('@bldr/songbook-core')
+
 /**
  * An array of song objects.
  * @typedef {module:baldr-songbook~Song[]} songs
@@ -407,112 +409,6 @@ class SongMetaData {
       }
     }
     return output
-  }
-}
-
-/**
- * Combine some song metadata properties
- *
- * Mapping
- *
- * * title: title (year)
- * * subtitle: subtitle - alias - country
- * * composer: composer, artist, genre
- * * lyricist: lyricist
- */
-class SongMetaDataCombined {
-  /**
-   * @param {module:baldr-songbook~SongMetaData} songMetaData - A song
-   * metadata object.
-   */
-  constructor (songMetaData) {
-    this.metaData = songMetaData
-  }
-
-  /**
-   * Extract values of given properties of an object and collect it in
-   * an array.
-   *
-   * @params {array} properties - Some object properties to collect strings from.
-   * @params {object} object - An object.
-   */
-  static collectProperties_ (properties, object) {
-    const parts = []
-    for (const property of properties) {
-      if (property in object && object[property]) {
-        parts.push(object[property])
-      }
-    }
-    return parts
-  }
-
-  /**
-   * title (year)
-   */
-  get title () {
-    let out
-    if ('title' in this.metaData) {
-      out = this.metaData.title
-    } else {
-      out = ''
-    }
-
-    if ('year' in this.metaData && this.metaData.year) {
-      return `${out} (${this.metaData.year})`
-    } else {
-      return out
-    }
-  }
-
-  /**
-   * subtitle - alias - country
-   */
-  get subtitle () {
-    return SongMetaDataCombined.collectProperties_(
-      ['subtitle', 'alias', 'country'],
-      this.metaData
-    ).join(' - ')
-  }
-
-  /**
-   * composer, artist, genre
-   */
-  get composer () {
-    let properties
-    if (this.metaData.composer === this.metaData.artist) {
-      properties = ['composer', 'genre']
-    } else {
-      properties = ['composer', 'artist', 'genre']
-    }
-    return SongMetaDataCombined.collectProperties_(
-      properties,
-      this.metaData
-    ).join(', ')
-  }
-
-  /**
-   * lyricist
-   */
-  get lyricist () {
-    if (
-      'lyricist' in this.metaData &&
-      this.metaData.lyricist &&
-      this.metaData.lyricist !== this.metaData.artist &&
-      this.metaData.lyricist !== this.metaData.composer
-    ) {
-      return this.metaData.lyricist
-    } else {
-      return ''
-    }
-  }
-
-  toJSON () {
-    return {
-      title: this.title,
-      subtitle: this.subtitle,
-      composer: this.composer,
-      lyricist: this.lyricist
-    }
   }
 }
 
