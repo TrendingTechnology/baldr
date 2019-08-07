@@ -1,5 +1,8 @@
 <template>
-  <div :class="classes"></div>
+  <div
+    :style="styleFontSize"
+    :class="classes"
+  />
 </template>
 
 <script>
@@ -13,6 +16,9 @@ export default {
     disabled: {
       type: Boolean,
       default: false
+    },
+    size: {
+      type: String
     }
   },
   computed: {
@@ -21,6 +27,11 @@ export default {
       classes.push(`mdi-${this.name}`)
       if (this.disabled) classes.push('disabled')
       return classes.join(' ')
+    },
+    styleFontSize () {
+      if (this.size) {
+        return `font-size: ${this.size}`
+      }
     }
   }
 }

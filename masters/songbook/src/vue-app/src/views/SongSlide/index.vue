@@ -1,18 +1,27 @@
+
 <template>
   <section>
     <meta-data/>
     <img :src="imageSrc">
     <div class="slide-number"></div>
+    <cursor-cross
+      :click-left="setSlidePrevious"
+      :click-right="setSlideNext"
+      size="5vw"
+    />
   </section>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
+
+import { CursorCross } from '@bldr/vue-components'
 import MetaData from './MetaData'
 
 export default {
   name: 'SongSlide',
   components: {
+    CursorCross,
     MetaData
   },
   computed: {
@@ -33,6 +42,7 @@ export default {
       return `/songs/${this.abc}/${this.songID}/${this.slideNo}.svg`
     }
   },
+  methods: mapActions(['setSlideNext', 'setSlidePrevious']),
   created: function () {
     this.$store.dispatch('setSongCurrent', this.$route.params.songID)
   }
