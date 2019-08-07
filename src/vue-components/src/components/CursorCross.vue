@@ -2,25 +2,29 @@
   <div>
     <material-icon
       :size="size"
-      @click.native="clickWrapper('clickLeft')"
+      @click.native="left"
       name="chevron-left"
       title="Vorhergehende Seite (Tastenkürzel: linke Pfeiltaste)"
+      v-if="left"
     />
     <material-icon
       :size="size"
-      @click.native="clickWrapper('clickRight')"
+      @click.native="right"
       name="chevron-right"
       title="Nächste Seite (Tastenkürzel: rechte Pfeiltaste)"
+      v-if="right"
     />
     <material-icon
       :size="size"
-      @click.native="clickWrapper('clickUp')"
+      @click.native="up"
       name="chevron-up"
+      v-if="up"
     />
     <material-icon
       :size="size"
-      @click.native="clickWrapper('clickDown')"
+      @click.native="down"
       name="chevron-down"
+      v-if="down"
     />
   </div>
 </template>
@@ -31,27 +35,20 @@ import MaterialIcon from './MaterialIcon'
 export default {
   name: 'CursorCross',
   props: {
-    clickLeft: {
+    left: {
       type: Function
     },
-    clickRight: {
+    right: {
       type: Function
     },
-    clickUp: {
+    up: {
       type: Function
     },
-    clickDown: {
+    down: {
       type: Function
     },
     size: {
       type: String
-    }
-  },
-  methods: {
-    clickWrapper (funcName) {
-      if (typeof this[funcName] === 'function') {
-        this[funcName]()
-      }
     }
   },
   components: {

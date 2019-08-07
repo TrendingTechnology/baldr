@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import {
   AlphabeticalSongsTree,
+  CoreLibrary,
   SongMetaDataCombined
 } from '@bldr/songbook-core'
 
@@ -10,12 +11,15 @@ Vue.use(Vuex)
 const state = {
   slideNoCurrent: 0,
   songCurrent: {},
-  songs: {}
+  library: {}
 }
 
 const getters = {
   alphabeticalSongsTree: (state, getters) => {
     return new AlphabeticalSongsTree(Object.values(getters.songs))
+  },
+  library: (state) => {
+    return state.library
   },
   slideNoCurrent: (state) => {
     return state.slideNoCurrent
@@ -24,7 +28,7 @@ const getters = {
     return state.songCurrent
   },
   songs: (state) => {
-    return state.songs
+    return state.library.songs
   }
 }
 
@@ -56,20 +60,36 @@ const actions = {
   },
   setSongCurrent ({ commit, getters }, songID) {
     const song = getters.songs[songID]
+    commit('updateCurrentSongIndex', songID)
     commit('setSongCurrent', song)
     commit('setSlideNoCurrent', 1)
+  },
+  setSongNext ({ dispatch, getters }) {
+    const song = getters.library.getNextSong()
+    dispatch('setSongCurrent', song.songID)
+  },
+  setSongPrevious ({ dispatch, getters }) {
+    const song = getters.library.getPreviousSong()
+    dispatch('setSongCurrent', song.songID)
+  },
+  setSongRandom ({ dispatch, getters }) {
+    const song = getters.library.getRandomSong()
+    dispatch('setSongCurrent', song.songID)
   }
 }
 
 const mutations = {
   importSongs (state, songs) {
-    state.songs = songs
+    state.library = new CoreLibrary(songs)
   },
   setSlideNoCurrent (state, slideNoCurrent) {
     state.slideNoCurrent = parseInt(slideNoCurrent)
   },
   setSongCurrent (state, song) {
     state.songCurrent = song
+  },
+  updateCurrentSongIndex (state, songID) {
+    state.library.updateCurrentSongIndex(songID)
   }
 }
 

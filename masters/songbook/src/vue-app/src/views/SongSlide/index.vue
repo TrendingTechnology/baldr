@@ -5,23 +5,28 @@
     <img :src="imageSrc">
     <div class="slide-number"></div>
     <cursor-cross
-      :click-left="setSlidePrevious"
-      :click-right="setSlideNext"
+      :left="setSlidePrevious"
+      :right="setSlideNext"
+      :up="setSongPrevious"
+      :down="setSongNext"
       size="5vw"
     />
+    <material-icon size="5vw" @click.native="setSongRandom" name="dice-multiple"/>
   </section>
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
 
-import { CursorCross } from '@bldr/vue-components'
+import { CursorCross, MaterialIcon } from '@bldr/vue-components'
+
 import MetaData from './MetaData'
 
 export default {
   name: 'SongSlide',
   components: {
     CursorCross,
+    MaterialIcon,
     MetaData
   },
   computed: {
@@ -42,7 +47,13 @@ export default {
       return `/songs/${this.abc}/${this.songID}/${this.slideNo}.svg`
     }
   },
-  methods: mapActions(['setSlideNext', 'setSlidePrevious']),
+  methods: mapActions([
+    'setSlideNext',
+    'setSlidePrevious',
+    'setSongNext',
+    'setSongPrevious',
+    'setSongRandom'
+  ]),
   created: function () {
     this.$store.dispatch('setSongCurrent', this.$route.params.songID)
   }

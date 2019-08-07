@@ -27,7 +27,7 @@ describe('Package “@bldr/songbook-base”', function () {
       })
     })
 
-    describe('Method “listFiles()”', function () {
+    describe('Function “listFiles()”', function () {
       const folder = path.join(__dirname, 'songs', 'processed', 'one', 'a', 'Auf-der-Mauer')
 
       it('eps', function () {
@@ -57,6 +57,13 @@ describe('Package “@bldr/songbook-base”', function () {
       const parseSongIDList = baseRewired.__get__('parseSongIDList')
       const result = parseSongIDList(path.join(__dirname, 'files', 'song-id-list.txt'))
       assert.deepStrictEqual(result, ['Auf-der-Mauer', 'Swing-low'])
+    })
+
+    it('Function “collectSongs()”', function () {
+      const collectSongs = baseRewired.__get__('collectSongs')
+      const basePath = path.join(__dirname, 'songs', 'processed', 'some')
+      const songs = collectSongs(basePath)
+      assert.strictEqual(songs['Auf-der-Mauer'].songID, 'Auf-der-Mauer')
     })
   })
 
@@ -585,79 +592,14 @@ describe('Package “@bldr/songbook-base”', function () {
       })
 
       describe('Methods', function () {
-        it('Method “toArray()”', function () {
-          const songs = library.toArray()
-          assert.strictEqual(songs.length, 4)
-        })
-
-        it('Method “countSongs()”', function () {
-          assert.strictEqual(library.countSongs(), 4)
-        })
-
-        it('Method “updateCurrentSongIndex()”', function () {
-          assert.strictEqual(library.updateCurrentSongIndex('Auf-der-Mauer'), 0)
-        })
-
         it('Method “detectSongs_()”', function () {
           assert.strictEqual(library.detectSongs_().length, 4)
-        })
-
-        it('Method “collectSongs_()”', function () {
-          assert.strictEqual(library.detectSongs_().length, 4)
-          const songs = library.collectSongs_()
-          assert.strictEqual(songs['Auf-der-Mauer'].songID, 'Auf-der-Mauer')
         })
 
         it('Method “loadSongList()”', function () {
           const result = library.loadSongList(path.join(__dirname, 'files', 'song-id-list.txt'))
           assert.deepStrictEqual(result, library.songs)
           assert.strictEqual(Object.keys(result).length, 2)
-        })
-
-        describe('Method “getSongById()”', function () {
-          it('No exception', function () {
-            assert.strictEqual(library.getSongById('Auf-der-Mauer').metaData.title, 'Auf der Mauer, auf der Lauer')
-          })
-
-          it('Exception', function () {
-            assert.throws(
-              function () {
-                return library.getSongById('test')
-              },
-              /^.*There is no song with the songID: test$/
-            )
-          })
-        })
-
-        it('Method “getPreviousSong()”', function () {
-          assert.strictEqual(library.getPreviousSong().songID, 'Zum-Tanze-da-geht-ein-Maedel')
-          assert.strictEqual(library.getPreviousSong().songID, 'Swing-low')
-          assert.strictEqual(library.getPreviousSong().songID, 'Stille-Nacht')
-          assert.strictEqual(library.getPreviousSong().songID, 'Auf-der-Mauer')
-          assert.strictEqual(library.getPreviousSong().songID, 'Zum-Tanze-da-geht-ein-Maedel')
-        })
-
-        it('Method “getNextSong()”', function () {
-          assert.strictEqual(library.getNextSong().songID, 'Stille-Nacht')
-          assert.strictEqual(library.getNextSong().songID, 'Swing-low')
-          assert.strictEqual(library.getNextSong().songID, 'Zum-Tanze-da-geht-ein-Maedel')
-          assert.strictEqual(library.getNextSong().songID, 'Auf-der-Mauer')
-          assert.strictEqual(library.getNextSong().songID, 'Stille-Nacht')
-        })
-
-        it('Method “getRandomSong()”', function () {
-          assert.ok(library.getRandomSong().songID)
-        })
-
-        it('Method “getABCFolders_()”', function () {
-          const folders = library.getABCFolders_()
-          assert.strictEqual(folders.length, 3)
-          assert.deepStrictEqual(folders, ['a', 's', 'z'])
-        })
-
-        it('Method “toJSON()”', function () {
-          const libraryJSON = JSON.parse(JSON.stringify(library))
-          assert.strictEqual(libraryJSON['Stille-Nacht'].metaData.title, 'Stille Nacht')
         })
       })
     })
