@@ -3,8 +3,29 @@
 @import '~typeface-alegreya-sans-sc/index.css';
 @import '~typeface-alegreya-sc/index.css';
 
+
+// https://github.com/zoxon/vscode-theme-monokai-light/blob/master/themes/Monokai%20Light%20Theme-color-theme.json
+$beige: #75715E;
+$yellow: #998f2f;
+$blue: #684d99;
+$c: #49483e;
+$red: #f9005a;
+$blue: #0089b3;
+$gree: #679c00;
+$orange: #cf7000;
+$white: #F8F8F0;
+$c2: #E0EDDD;
+$c3: #dc322f;
+$c4: #cb4b16;
+$blue-light: #219186;
+$c6: #22aa44;
+$c7: #9966b8;
+$c8: #ddbb88;
+$black: #49483E;
+
 body[baldr-theme="default"] {
   font-family: 'Alegreya';
+  color: $black;
 
   h1, h2, h3, h4 {
     font-family: 'Alegreya Sans';
@@ -15,28 +36,23 @@ body[baldr-theme="default"] {
     text-decoration: none;
 
     &:link {
-      color: gray;
-      font-weight: 700;
+      color: $black;
     }
 
     &:visited {
-      color: #437A16;
+      color: $black;
     }
 
     &:focus {
       border-bottom: 1px solid;
-      background: #BAE498;
     }
 
     &:hover {
       opacity: 0.6;
-      border-bottom: 1px solid;
-
     }
 
     &:active {
-      background: #265301;
-      color: #CDFEAA;
+      color: $red;
     }
   }
 
