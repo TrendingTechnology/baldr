@@ -39,4 +39,8 @@ export default {
 
 <style>
 @import '~@bldr/theme-default/styles-ng.css';
+
+body {
+  margin: 0;
+}
 </style>

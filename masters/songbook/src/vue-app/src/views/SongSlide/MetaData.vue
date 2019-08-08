@@ -1,5 +1,5 @@
 <template>
-  <div class="metadata">
+  <div v-if="slideNoCurrent === 1" class="metadata">
     <h1>{{ title }}</h1>
     <h2 v-if="subtitle">{{ subtitle }}</h2>
     <div class="people">
@@ -7,8 +7,9 @@
       <div v-if="composer" class="composer">{{ composer }}</div>
     </div>
     <div class="links">
-      <a style="display: none;" class="icon musescore" title="Musescore" href=""></a>
-      <a style="display: none;" class="icon youtube" title="Youtube" href=""></a>
+      <icon-link icon="file-music-outline" :link="metadata.musescoreURL"/>
+      <icon-link icon="wikipedia" :link="metadata.wikipediaURL"/>
+      <icon-link icon="youtube" :link="metadata.youtubeURL"/>
     </div>
   </div>
 </template>
@@ -16,21 +17,32 @@
 <script>
 import { mapGetters } from 'vuex'
 
+import IconLink from '@/components/IconLink'
+
 export default {
   name: 'MetaData',
+  components: {
+    IconLink
+  },
   computed: {
-    ...mapGetters(['songCurrent']),
+    ...mapGetters([
+      'slideNoCurrent',
+      'songCurrent'
+    ]),
+    metadata () {
+      return this.songCurrent.metaDataCombined
+    },
     title () {
-      return this.songCurrent.metaDataCombined.title
+      return this.metadata.title
     },
     subtitle () {
-      return this.songCurrent.metaDataCombined.subtitle
+      return this.metadata.subtitle
     },
     lyricist () {
-      return this.songCurrent.metaDataCombined.lyricist
+      return this.metadata.lyricist
     },
     composer () {
-      return this.songCurrent.metaDataCombined.composer
+      return this.metadata.composer
     }
   }
 }
@@ -45,8 +57,8 @@ export default {
 
   .people {
     display: flex;
-    font-size: 2vh;
-    padding: 5vw;
+    font-size: 2vw;
+    padding: 3vw;
   }
 
   .people > div {
@@ -60,7 +72,7 @@ export default {
   .links {
     position: absolute;
     left: 5vw;
-    top: 1vh;
+    top: 1vw;
   }
 
   .links > div {
@@ -72,24 +84,15 @@ export default {
   }
 
   h1, h2 {
-    font-family: 'Alegreya Sans' !important;
-    margin: 1vh;
+    margin: 1vw;
   }
 
   h1 {
-    font-size: 5vh;
+    font-size: 4vw;
   }
 
   h2 {
-    font-size: 3vh;
+    font-size: 3vw;
     font-style: italic;
   }
-
-  /* .musescore {
-    background: url('icons/musescore.svg') left center no-repeat;
-  }
-
-  .youtube {
-    background: url('icons/youtube.svg') left center no-repeat;
-  } */
 </style>

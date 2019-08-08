@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="cursor-cross">
     <material-icon
       :size="size"
       @click.native="left"

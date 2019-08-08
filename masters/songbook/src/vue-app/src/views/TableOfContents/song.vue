@@ -10,40 +10,27 @@
     </td>
 
     <td>
-      <a
-        v-if="meta.musescoreURL"
-        :href="meta.musescoreURL"
-      >
-        <material-icon name="file-music-outline"/>
-      </a>
+      <icon-link icon="file-music-outline" :link="meta.musescoreURL"/>
     </td>
 
     <td>
-      <a
-        v-if="meta.wikipediaURL"
-        :href="meta.wikipediaURL"
-      >
-        <material-icon name="wikipedia"/>
-      </a>
+      <icon-link icon="wikipedia" :link="meta.wikipediaURL"/>
     </td>
 
     <td>
-      <a
-        v-if="meta.youtubeURL"
-        :href="meta.youtubeURL"
-      >
-        <material-icon name="youtube"/>
-      </a>
+      <icon-link icon="youtube" :link="meta.youtubeURL"/>
     </td>
   </tr>
 </template>
 
 <script>
 import { MaterialIcon } from '@bldr/vue-components'
+import IconLink from '@/components/IconLink'
 
 export default {
   name: 'TocSong',
   components: {
+    IconLink,
     MaterialIcon
   },
   computed: {

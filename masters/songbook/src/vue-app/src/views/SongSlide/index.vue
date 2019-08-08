@@ -11,7 +11,12 @@
       :down="setSongNext"
       size="5vw"
     />
-    <material-icon size="5vw" @click.native="setSongRandom" name="dice-multiple"/>
+    <material-icon
+      @click.native="setSongRandom"
+      class="random"
+      name="dice-multiple"
+      size="5vw"
+    />
   </section>
 </template>
 
@@ -93,15 +98,15 @@ export default {
     100% { opacity: 0; }
   }
 
-  .icon {
-    height: 3vw;
-    width: 3vw;
-    display: inline-block;
-    opacity: 0.1;
+  .cursor-cross {
+    position: absolute;
+    bottom: 0;
+    right: 0;
   }
 
-  .icon:hover {
-    opacity: 1;
+  .random {
+    position: absolute;
+    bottom: 0;
+    left: 0;
   }
-
 </style>
