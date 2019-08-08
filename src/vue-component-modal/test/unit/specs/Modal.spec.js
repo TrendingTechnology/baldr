@@ -1,3 +1,5 @@
+/* globals describe it expect */
+
 import { createLocalVue, shallow } from '@vue/test-utils'
 import CuteModalPlugin from '@/index'
 import CuteModal from '@/Modal'
