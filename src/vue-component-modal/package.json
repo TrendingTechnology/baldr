@@ -2,11 +2,15 @@
   "name": "@bldr/vue-component-modal",
   "version": "0.1.0",
   "description": "A simple modal implementation in Vue.",
-  "author": "Dillon Chanis <dillonchanis92@gmail.com>",
+  "author": {
+    "name": "Josef Friedrich",
+    "email": "josef@friedrich.rocks",
+    "url": "https://josef.friedrich.rocks"
+  },
   "license": "MIT",
   "repository": {
-    "url": "dillonchanis/vue-cute-modal",
-    "type": "git"
+    "type": "git",
+    "url": "git+https://github.com/Josef-Friedrich/baldr.git"
   },
   "main": "src/index.js",
   "dependencies": {
@@ -30,11 +34,5 @@
     "> 1%",
     "last 2 versions",
     "not ie <= 8"
-  ],
-  "keywords": [
-    "vue",
-    "modal",
-    "simple",
-    "cute"
   ]
 }

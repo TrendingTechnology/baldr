@@ -2,11 +2,11 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 
-import CuteModal from '@bldr/vue-component-modal'
+import ModalDialog from '@bldr/vue-component-modal'
 
 Vue.config.productionTip = false
 
-Vue.use(CuteModal)
+Vue.use(ModalDialog)
 
 new Vue({
   router,
