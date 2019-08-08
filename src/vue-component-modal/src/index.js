@@ -1,6 +1,6 @@
-import CuteModal from './Modal.vue'
+import ModalDialog from './ModalDialog.vue'
 
-const DEFAULT_NAME = 'cute-modal'
+const DEFAULT_NAME = 'modal-dialog'
 
 const DEFAULT_OPTIONS = {
   body: 'cute-modal__body',
@@ -9,7 +9,6 @@ const DEFAULT_OPTIONS = {
   header: 'cute-modal__header',
   height: 'auto',
   overlay: 'cute-modal__overlay',
-  transition: 'modal',
   width: '600px',
   onOpen: null,
   onClose: null
@@ -24,7 +23,7 @@ const Plugin = {
       name = options.component
     }
 
-    Vue.prototype.$cuteModal = {
+    Vue.prototype.$modal = {
       open (name) {
         Plugin.event.$emit('toggle', name)
       },
@@ -38,7 +37,7 @@ const Plugin = {
       }
     }
 
-    Vue.component(name, CuteModal)
+    Vue.component('modal-dialog', ModalDialog)
   }
 }
 

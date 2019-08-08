@@ -1,8 +1,8 @@
 <script>
-import CuteModal from './index'
+import ModalDialog from './index'
 
 export default {
-  name: 'cute-modal',
+  name: 'ModalDialog',
   props: {
     bodyClass: {
       type: String
@@ -39,7 +39,7 @@ export default {
     }
   },
   mounted () {
-    CuteModal.event.$on('toggle', this.toggle)
+    ModalDialog.event.$on('toggle', this.toggle)
   },
   methods: {
     hide () {
@@ -51,12 +51,11 @@ export default {
       if (this.name === name) {
         this.$emit('cute:toggle')
         this.isOpen = !this.isOpen
-
         this.triggerEvents()
       }
     },
     triggerEvents () {
-      const { onClose, onOpen } = this.$cuteModal.options()
+      const { onClose, onOpen } = this.$modal.options()
 
       if (this.isOpen && onOpen) {
         onOpen()
@@ -75,38 +74,24 @@ export default {
       header,
       height,
       overlay,
-      transition,
       width
-    } = this.$cuteModal.options()
+    } = this.$modal.options()
 
     return (
-      <transition name={this.transition || transition}>
+      <div>
         {this.isOpen ? (
           <div class="modal-base">
-            <div class={this.overlayClass || overlay} on-click={this.hide} />
+            <div class="cute-modal__overlay" on-click={this.hide} />
             <div class='cute-modal' role='dialog'>
-              <div class={this.containerClass || container}
-                style={{ width: (this.width || width), height: (this.height || height) }}>
-                {
-                  this.$scopedSlots.header
-                    ? (<header class={this.headerClass || header}>{this.$scopedSlots.header({ $hide: this.hide })}</header>)
-                    : null
-                }
-
-                <div class={this.bodyClass || body}>
+              <div class="cute-modal__container">
+                <div class="cute-modal__body">
                   {this.$slots.default}
                 </div>
-
-                {
-                  this.$scopedSlots.footer
-                    ? (<footer class={this.footerClass || footer}>{this.$scopedSlots.footer({ $hide: this.hide })}</footer>)
-                    : null
-                }
               </div>
             </div>
           </div>
         ) : null}
-      </transition>
+      </div>
     )
   }
 }
@@ -141,13 +126,6 @@ export default {
     box-shadow: 0 10px 40px 0 rgba(62,57,107,0.07), 0 2px 9px 0 rgba(62,57,107,0.06);
     transition: all 0.3s ease;
   }
-  .cute-modal__footer {
-    padding: 0.5rem 1rem;
-  }
-  .cute-modal__header {
-    padding: 0.5rem 1rem;
-    background-color: #fff;
-  }
   .cute-modal__overlay {
     position: absolute;
     z-index: 9990;
@@ -157,18 +135,5 @@ export default {
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
     transition: opacity 0.3s ease;
-  }
-
-  /* Default Transition */
-  .modal-enter {
-    opacity: 0;
-  }
-  .modal-leave-active {
-    opacity: 0;
-  }
-  .modal-enter .cute-modal__container,
-  .modal-leave-active .cute-modal__container {
-    -webkit-transform: scale(1.1);
-    transform: scale(1.1);
   }
 </style>

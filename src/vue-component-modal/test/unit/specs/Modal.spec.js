@@ -1,21 +1,21 @@
 /* globals describe it expect */
 
 import { createLocalVue, shallow } from '@vue/test-utils'
-import CuteModalPlugin from '@/index'
-import CuteModal from '@/Modal'
+import ModalDialogPlugin from '@/index'
+import ModalDialog from '@/Modal'
 
-describe('CuteModal', () => {
-  it('adds a $cuteModal method to the Vue prototype', () => {
+describe('ModalDialog', () => {
+  it('adds a $modal method to the Vue prototype', () => {
     const localVue = createLocalVue()
-    localVue.use(CuteModalPlugin)
-    expect(typeof localVue.prototype.$cuteModal).toBe('object')
+    localVue.use(ModalDialogPlugin)
+    expect(typeof localVue.prototype.$modal).toBe('object')
   })
 
   it('should render a slotted header', () => {
     const localVue = createLocalVue()
-    localVue.use(CuteModalPlugin)
+    localVue.use(ModalDialogPlugin)
 
-    const wrapper = shallow(CuteModal, {
+    const wrapper = shallow(ModalDialog, {
       localVue,
       propsData: {
         name: 'test-modal'
@@ -33,9 +33,9 @@ describe('CuteModal', () => {
 
   it('should render a slotted body', () => {
     const localVue = createLocalVue()
-    localVue.use(CuteModalPlugin)
+    localVue.use(ModalDialogPlugin)
 
-    const wrapper = shallow(CuteModal, {
+    const wrapper = shallow(ModalDialog, {
       localVue,
       propsData: {
         name: 'test-modal'
@@ -53,9 +53,9 @@ describe('CuteModal', () => {
 
   it('should render a slotted footer', () => {
     const localVue = createLocalVue()
-    localVue.use(CuteModalPlugin)
+    localVue.use(ModalDialogPlugin)
 
-    const wrapper = shallow(CuteModal, {
+    const wrapper = shallow(ModalDialog, {
       localVue,
       propsData: {
         name: 'test-modal'
@@ -73,9 +73,9 @@ describe('CuteModal', () => {
 
   it('should take a height and width prop', () => {
     const localVue = createLocalVue()
-    localVue.use(CuteModalPlugin)
+    localVue.use(ModalDialogPlugin)
 
-    const wrapper = shallow(CuteModal, {
+    const wrapper = shallow(ModalDialog, {
       localVue,
       propsData: {
         name: 'test-modal',

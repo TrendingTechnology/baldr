@@ -36,9 +36,9 @@ For In-DOM templates include the JS CDN and optionally the CSS in your project:
 Include the plugin at the root of your application
 
 ```javascript
-import CuteModal from 'vue-cute-modal'
+import ModalDialog from 'vue-cute-modal'
 
-Vue.use(CuteModal)
+Vue.use(ModalDialog)
 ```
 
 ### Creating a Modal
@@ -55,10 +55,10 @@ Then open/hide the modal within the app:
 
 ```javascript
 // Opens the modal
-this.$cuteModal.open('example')
+this.$modal.open('example')
 
 // Hides the modal
-this.$cuteModal.hide('example')
+this.$modal.hide('example')
 ```
 
 ### Basic Example
@@ -77,7 +77,7 @@ this.$cuteModal.hide('example')
 export default {
   methods: {
     open () {
-      this.$cuteModal.open('hello')
+      this.$modal.open('hello')
     }
   }
 }
@@ -111,7 +111,7 @@ const DEFAULT_OPTIONS = {
   onClose: null // available in 1.1
 }
 
-Vue.use(CuteModal, {
+Vue.use(ModalDialog, {
   // Override the component's name to match your app's
   // Default 'cute-modal' = <cute-modal>
   component: '',
@@ -170,10 +170,10 @@ Full prop list
 
 ```javascript
 // Open a Modal
-this.$cuteModal.open(/* modal name */)
+this.$modal.open(/* modal name */)
 
 // Close a Modal
-this.$cuteModal.hide(/* modal name */)
+this.$modal.hide(/* modal name */)
 ```
 
 ### 1.1 Updates

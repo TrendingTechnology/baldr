@@ -22,14 +22,12 @@ export default {
 </script>
 
 <style scoped>
-.markup-sample .code {
-  background-color: grey;
-  border: 1px black solid;
-}
+  .markup-sample .code {
+    background-color: grey;
+    border: 1px black solid;
+  }
 
-.markup-sample .rendered {
+  .markup-sample .rendered {
 
-}
-
-
+  }
 </style>

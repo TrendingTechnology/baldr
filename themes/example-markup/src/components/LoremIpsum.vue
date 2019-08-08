@@ -1,10 +1,5 @@
 <template>
   <div class="lorem">
-    <button @click="open">Open Modal</button>
-    <cute-modal name="example">
-      Your modal content.
-    </cute-modal>
-
     <h1>Lorem ipsum</h1>
 
     <p>Paragraph: Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
@@ -43,11 +38,6 @@ export default {
   name: 'LoremIpsum',
   components: {
     MarkupSample
-  },
-  methods: {
-    open () {
-      this.$cuteModal.open('example')
-    }
   }
 }
 </script>
