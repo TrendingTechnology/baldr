@@ -5,11 +5,14 @@ const Plugin = {
     this.event = new Vue()
 
     Vue.prototype.$modal = {
-      open (name) {
-        Plugin.event.$emit('toggle', name)
-      },
       hide (name) {
-        Plugin.event.$emit('toggle', name)
+        Plugin.event.$emit('modalhide', name)
+      },
+      toggle (name) {
+        Plugin.event.$emit('modaltoggle', name)
+      },
+      show (name) {
+        Plugin.event.$emit('modalshow', name)
       }
     }
 

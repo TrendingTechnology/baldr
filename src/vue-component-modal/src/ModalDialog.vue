@@ -1,13 +1,10 @@
 <template>
-  <div v-show="isOpen">
-    <div class="modal-base">
-      <div class="modal-dialog__overlay" @click="hide"/>
-      <div class="modal-dialog" role="dialog">
-        <div class="modal-dialog__container">
-          <div class="modal-dialog__body">
-            <slot></slot>
-          </div>
-        </div>
+  <div class="modal-dialog-base" v-show="isVisible">
+    <div class="modal-dialog-overlay" @click="hide(name)"/>
+    <div class="modal-dialog-container" role="dialog">
+      <div class="modal-dialog-body">
+        <material-icon class="close" name="close" @click.native="hide(name)"/>
+        <slot></slot>
       </div>
     </div>
   </div>
@@ -16,8 +13,14 @@
 <script>
 import ModalDialog from './index'
 
+// Components
+import { MaterialIcon } from '@bldr/vue-components'
+
 export default {
   name: 'ModalDialog',
+  components: {
+    MaterialIcon
+  },
   props: {
     name: {
       type: String,
@@ -26,19 +29,24 @@ export default {
   },
   data () {
     return {
-      isOpen: false
+      isVisible: false
     }
   },
   mounted () {
-    ModalDialog.event.$on('toggle', this.toggle)
+    ModalDialog.event.$on('modalhide', this.hide)
+    ModalDialog.event.$on('modalshow', this.show)
+    ModalDialog.event.$on('modaltoggle', this.toggle)
   },
   methods: {
-    hide () {
-      this.isOpen = false
+    hide (name) {
+      if (this.name === name) this.isVisible = false
+    },
+    show (name) {
+      if (this.name === name) this.isVisible = true
     },
     toggle (name) {
       if (this.name === name) {
-        this.isOpen = !this.isOpen
+        this.isVisible = !this.isVisible
       }
     }
   }
@@ -46,41 +54,44 @@ export default {
 </script>
 
 <style scoped>
-  .modal-base {
-    position: absolute;
-    top: 0;
-    left: 0;
+  .modal-dialog-base {
+    align-items: center;
     display: flex;
     height: 100%;
-    width: 100%;
-    align-items: center;
     justify-content: center;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
   }
-  .modal-dialog {
+
+  .modal-dialog-container {
+    box-sizing: border-box;
     position: fixed;
     z-index: 9999;
-    box-sizing: border-box;
   }
-  .modal-dialog__body {
-    height: 100%;
-    padding: 0.75rem 1rem;
-    background-color: #f1f5f8;
-  }
-  .modal-dialog__container {
-    margin: 0 auto;
+
+  .modal-dialog-body {
     background-color: #fff;
-    border-radius: 4px;
-    box-shadow: 0 10px 40px 0 rgba(62,57,107,0.07), 0 2px 9px 0 rgba(62,57,107,0.06);
-    transition: all 0.3s ease;
-  }
-  .modal-dialog__overlay {
-    position: absolute;
-    z-index: 9990;
-    top: 0;
-    left: 0;
-    width: 100%;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
     height: 100%;
+    margin: 1vw;
+    padding: 1vw;
+  }
+
+  .modal-dialog-overlay {
     background-color: rgba(0, 0, 0, 0.5);
-    transition: opacity 0.3s ease;
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: 9990;
+  }
+
+  .close {
+    position: absolute;
+    top: 2vw;
+    right: 2vw;
   }
 </style>

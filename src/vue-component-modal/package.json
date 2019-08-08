@@ -15,7 +15,8 @@
   "main": "src/index.js",
   "dependencies": {
     "core-js": "^2.6.5",
-    "vue": "^2.6.10"
+    "vue": "^2.6.10",
+    "@bldr/vue-components": "^0.1.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.10.0",

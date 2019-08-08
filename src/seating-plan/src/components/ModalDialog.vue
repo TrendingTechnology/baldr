@@ -3,8 +3,8 @@
   <div class="modal-mask">
     <div class="modal-wrapper">
       <div class="modal-container">
-        <material-icon class="close" name="close" @click.native="close"/>
         <div class="modal-body">
+          <material-icon class="close" name="close" @click.native="close"/>
           <slot>
             default body
           </slot>
@@ -66,7 +66,7 @@ export default {
 
 .close {
   position: absolute;
-  top: 0;
-  right: 0;
+  top: 2vw;
+  right: 2vw;
 }
 </style>
