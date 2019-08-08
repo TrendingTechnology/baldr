@@ -15,6 +15,9 @@
         {
             "name": "@bldr/seating-plan",
             "path": "../src/seating-plan"
+        },
+        {
+            "path": "/home/jf/git-repositories/github/Josef-Friedrich/baldr/themes/default"
         }
     ],
     "settings": {

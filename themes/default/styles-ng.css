@@ -4,7 +4,7 @@
 @import url(~typeface-alegreya-sc/index.css);
 body[baldr-theme="default"] {
   font-family: 'Alegreya';
-  color: #49483E;
+  color: #000000;
 }
 
 body[baldr-theme="default"] h1, body[baldr-theme="default"] h2, body[baldr-theme="default"] h3, body[baldr-theme="default"] h4 {
@@ -17,11 +17,11 @@ body[baldr-theme="default"] a {
 }
 
 body[baldr-theme="default"] a:link {
-  color: #49483E;
+  color: #000000;
 }
 
 body[baldr-theme="default"] a:visited {
-  color: #49483E;
+  color: #000000;
 }
 
 body[baldr-theme="default"] a:focus {

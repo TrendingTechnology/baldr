@@ -3,7 +3,6 @@
 @import '~typeface-alegreya-sans-sc/index.css';
 @import '~typeface-alegreya-sc/index.css';
 
-
 // https://github.com/zoxon/vscode-theme-monokai-light/blob/master/themes/Monokai%20Light%20Theme-color-theme.json
 $beige: #75715E;
 $yellow: #998f2f;
@@ -21,7 +20,8 @@ $blue-light: #219186;
 $c6: #22aa44;
 $c7: #9966b8;
 $c8: #ddbb88;
-$black: #49483E;
+// $black: #49483E;
+$black: #000000;
 
 body[baldr-theme="default"] {
   font-family: 'Alegreya';
