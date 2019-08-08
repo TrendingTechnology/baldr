@@ -1,7 +1,7 @@
 import ModalDialog from './ModalDialog.vue'
 
 const Plugin = {
-  install (Vue, options) {
+  install (Vue) {
     this.event = new Vue()
 
     Vue.prototype.$modal = {

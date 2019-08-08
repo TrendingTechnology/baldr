@@ -1,3 +1,18 @@
+<template>
+  <div v-show="isOpen">
+    <div class="modal-base">
+      <div class="modal-dialog__overlay" @click="hide"/>
+      <div class="modal-dialog" role="dialog">
+        <div class="modal-dialog__container">
+          <div class="modal-dialog__body">
+            <slot></slot>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
 <script>
 import ModalDialog from './index'
 
@@ -19,33 +34,13 @@ export default {
   },
   methods: {
     hide () {
-      this.$emit('cute:hide')
       this.isOpen = false
     },
     toggle (name) {
       if (this.name === name) {
-        this.$emit('cute:toggle')
         this.isOpen = !this.isOpen
       }
     }
-  },
-  render (h) {
-    return (
-      <div>
-        {this.isOpen ? (
-          <div class="modal-base">
-            <div class="modal-dialog__overlay" on-click={this.hide} />
-            <div class='modal-dialog' role='dialog'>
-              <div class="modal-dialog__container">
-                <div class="modal-dialog__body">
-                  {this.$slots.default}
-                </div>
-              </div>
-            </div>
-          </div>
-        ) : null}
-      </div>
-    )
   }
 }
 </script>

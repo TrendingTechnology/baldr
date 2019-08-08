@@ -1,9 +1,14 @@
 <template>
   <main>
-    <button @click="open">Open Modal</button>
-    <modal-dialog name="example">
+    <button @click="open('modal1')">Open Modal 1</button>
+    <modal-dialog name="modal1">
       Your modal content.
       <lorem-ipsum/>
+    </modal-dialog>
+
+    <button @click="open('modal2')">Open Modal 2</button>
+    <modal-dialog name="modal2">
+      Your modal content.
     </modal-dialog>
   </main>
 </template>
@@ -17,8 +22,8 @@ export default {
     LoremIpsum
   },
   methods: {
-    open () {
-      this.$modal.open('example')
+    open (name) {
+      this.$modal.open(name)
     }
   }
 }
