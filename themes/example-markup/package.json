@@ -26,6 +26,7 @@
   },
   "dependencies": {
     "@bldr/theme-default-css": "^0.0.10",
+    "@bldr/vue-component-modal": "^0.1.0",
     "core-js": "^3.1.4",
     "vue": "^2.6.10"
   },
