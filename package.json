@@ -19,6 +19,7 @@
   "scripts": {
     "build": "electron-builder",
     "clean": "lerna clean; rm -rf dist; rm -rf src/electron-app/dist; rm -rf masters/songbook/src/electron-app/dist; rm -rf masters/camera/src/electron-app/dist",
+    "code:vue": "code .vscode/vue.code-workspace",
     "doc": "rm -f docs/*.html; jsdoc --configure ./docs/jsdoc-config.json --readme API.md .",
     "doc-show": "xdg-open ./docs/index.html",
     "pack": "electron-builder --dir",

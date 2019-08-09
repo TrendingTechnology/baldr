@@ -2,22 +2,27 @@
     "folders": [
         {
             "name": "@bldr/vue-components",
-            "path": "../src/vue-components"
+            "path": "../src/vue-components/src"
+        },
+        {
+            "name": "@bldr/vue-component-modal",
+            "path": "../src/vue-component-modal/src"
         },
         {
             "name": "@bldr/example-markup",
-            "path": "../themes/example-markup"
+            "path": "../themes/example-markup/src"
         },
         {
             "name": "@bldr/songbook-vue-app",
-            "path": "../masters/songbook/src/vue-app"
+            "path": "../masters/songbook/src/vue-app/src"
         },
         {
             "name": "@bldr/seating-plan",
-            "path": "../src/seating-plan"
+            "path": "../src/seating-plan/src"
         },
         {
-            "path": "/home/jf/git-repositories/github/Josef-Friedrich/baldr/themes/default"
+            "name": "@bldr/theme-default",
+            "path": "../themes/default"
         }
     ],
     "settings": {
