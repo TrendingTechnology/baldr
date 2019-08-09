@@ -3,7 +3,8 @@
     <nav id="nav">
       <router-link to="/">Home</router-link> |
       <router-link to="/typography">Typography</router-link> |
-      <router-link to="/Modal">Modal</router-link>
+      <router-link to="/modal">Modal</router-link> |
+      <router-link to="/dynamic-select">Dynamic select</router-link>
 
     </nav>
     <router-view/>

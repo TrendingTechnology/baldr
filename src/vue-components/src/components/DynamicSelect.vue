@@ -23,7 +23,7 @@
       >
         <div
           :key="result.id"
-          @click.once="selectOption(result)"
+          @click="selectOption(result)"
           @keyup.prevent="navigateResults(result, $event)"
           class="result"
           ref="result"

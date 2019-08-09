@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
+import DynamicSelectView from '@/views/DynamicSelectView'
 import HomeView from '@/views/HomeView'
 import ModalView from '@/views/ModalView'
 import TypographyView from '@/views/TypographyView'
@@ -23,6 +24,11 @@ export default new Router({
       path: '/modal',
       name: 'modal',
       component: ModalView
+    },
+    {
+      path: '/dynamic-select',
+      name: 'dynamic-select',
+      component: DynamicSelectView
     }
   ]
 })

@@ -60,11 +60,6 @@ export default {
     SongSlide,
     TableOfContents
   },
-  data () {
-    return {
-      selectedSong: null
-    }
-  },
   computed: {
     ...mapGetters(['songCurrent', 'slideNoCurrent', 'library']),
     abc () {
