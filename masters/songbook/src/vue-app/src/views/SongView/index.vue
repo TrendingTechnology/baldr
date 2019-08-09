@@ -20,7 +20,7 @@
       <dynamic-select
         :options="library.toDynamicSelect()"
         @input="selectSong"
-        v-model="selectedSongID"
+        v-model="selectedSong"
       />
     </modal-dialog>
     <modal-dialog name="table-of-contents">
@@ -62,7 +62,7 @@ export default {
   },
   data () {
     return {
-      selectedSongID: null
+      selectedSong: null
     }
   },
   computed: {
@@ -91,11 +91,9 @@ export default {
       'setSongPrevious',
       'setSongRandom'
     ]),
-    selectSong: function () {
-      if (this.selectedSongID) {
-        this.$store.dispatch('setSongCurrent', this.selectedSongID)
-        this.$modal.hide('search')
-      }
+    selectSong () {
+      this.$store.dispatch('setSongCurrent', this.selectedSong.id)
+      this.$modal.hide('search')
     }
   },
   created: function () {
