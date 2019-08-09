@@ -17,7 +17,11 @@
     </div>
 
     <modal-dialog name="search">
-      <dynamic-select :options="library.toDynamicSelect()"/>
+      <dynamic-select
+        :options="library.toDynamicSelect()"
+        @input="selectSong"
+        v-model="selectedSongID"
+      />
     </modal-dialog>
     <modal-dialog name="table-of-contents">
       <table-of-contents/>
@@ -56,6 +60,11 @@ export default {
     SongSlide,
     TableOfContents
   },
+  data () {
+    return {
+      selectedSongID: null
+    }
+  },
   computed: {
     ...mapGetters(['songCurrent', 'slideNoCurrent', 'library']),
     abc () {
@@ -74,13 +83,21 @@ export default {
       return `/songs/${this.abc}/${this.songID}/${this.slideNo}.svg`
     }
   },
-  methods: mapActions([
-    'setSlideNext',
-    'setSlidePrevious',
-    'setSongNext',
-    'setSongPrevious',
-    'setSongRandom'
-  ]),
+  methods: {
+    ...mapActions([
+      'setSlideNext',
+      'setSlidePrevious',
+      'setSongNext',
+      'setSongPrevious',
+      'setSongRandom'
+    ]),
+    selectSong: function () {
+      if (this.selectedSongID) {
+        this.$store.dispatch('setSongCurrent', this.selectedSongID)
+        this.$modal.hide('search')
+      }
+    }
+  },
   created: function () {
     this.$store.dispatch('setSongCurrent', this.$route.params.songID)
   }

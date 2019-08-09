@@ -1,10 +1,8 @@
 <template>
   <dynamic-select
     :options="persons"
-    option-value="id"
-    option-text="name"
-    v-model="selectedPerson"
     @input="placePerson"
+    v-model="selectedPerson"
   />
 </template>
 

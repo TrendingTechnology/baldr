@@ -2,34 +2,34 @@
 <template>
   <div>
     <div
-      tabindex="0"
       @focusin="hasFocus=true"
       class="dynamic-select"
+      tabindex="0"
     >
       <input
-        @focus="hasFocus=true"
         :placeholder="placeholder"
+        @focus="hasFocus=true"
+        @keydown="removeOption"
+        @keyup="moveToResults"
         autocomplete="off"
         class="search"
         ref="search"
         v-model="searchText"
-        @keyup="moveToResults"
-        @keydown="removeOption"
       />
       <div
-        v-if="showResultList"
-        ref="resultList"
         class="result-list"
+        ref="resultList"
+        v-if="showResultList"
       >
         <div
-          tabindex="0"
-          ref="result"
-          class="result"
-          v-for="result in results"
-          :key="result[optionValue]"
-          v-html="highlight(result[optionText])"
+          :key="result.id"
           @click="selectOption(result)"
           @keyup.prevent="navigateResults(result, $event)"
+          class="result"
+          ref="result"
+          tabindex="0"
+          v-for="result in results"
+          v-html="highlight(result.name)"
         />
       </div>
     </div>
@@ -49,16 +49,6 @@ export default {
       default: function () {
         return []
       },
-      required: true
-    },
-    optionValue: {
-      type: String,
-      default: 'id',
-      required: true
-    },
-    optionText: {
-      type: String,
-      default: 'name',
       required: true
     },
     value: {
@@ -81,7 +71,7 @@ export default {
       // Filter items on search text (if not empty, case insensitive) and when item isn't already selected (else return all items not selected)
       if (this.searchText) {
         return this.options.filter((option) => {
-          let optionText = String(option[this.optionText]).toLowerCase()
+          let optionText = String(option.name).toLowerCase()
           return optionText.includes(this.searchText.toLowerCase())
         })
       } else {
@@ -109,7 +99,7 @@ export default {
     value: function () {
       // Load selected option on prop value change
       this.options.forEach(option => {
-        if (this.value && option[this.optionValue] === this.value[this.optionValue]) {
+        if (this.value && option.id === this.value.id) {
           this.selectedOption = option
         }
       })
