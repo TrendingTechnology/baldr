@@ -43,7 +43,7 @@ export default {
         seatNo: this.$store.getters.seatNoCurrent,
         personId: this.selectedPerson.id
       })
-      this.$store.dispatch('closeModal')
+      this.$modal.hide('person-select')
     }
   }
 }

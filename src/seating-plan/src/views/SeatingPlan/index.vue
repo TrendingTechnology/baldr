@@ -1,9 +1,6 @@
 <template>
   <main>
-    <modal-dialog
-      v-show="showModal"
-      @close="closeModal"
-    >
+    <modal-dialog name="person-select">
       <person-select/>
     </modal-dialog>
 
@@ -19,10 +16,9 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
 
 // Components
-import ModalDialog from '@/components/ModalDialog'
 import PersonSelect from '@/components/PersonSelect'
 import PersonsSidebar from './PersonsSidebar'
 import PlanFooter from './Footer'
@@ -32,7 +28,6 @@ import PlanSeats from './Seats'
 export default {
   name: 'SeatingPlanView',
   components: {
-    ModalDialog,
     PersonSelect,
     PersonsSidebar,
     PlanFooter,
@@ -40,14 +35,8 @@ export default {
     PlanSeats
   },
   computed: mapGetters([
-    'gradeNameCurrent',
-    'showModal'
+    'gradeNameCurrent'
   ]),
-  methods: {
-    ...mapActions([
-      'closeModal'
-    ])
-  },
   beforeCreate: function () {
     let grade = this.$route.params.grade
     if (!this.$store.getters.grade(grade)) {
