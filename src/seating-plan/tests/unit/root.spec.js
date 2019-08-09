@@ -73,10 +73,10 @@ describe('Vuex store: root #unittest', function () {
 
   describe('flushState', function () {
     it('app', function () {
-      store.dispatch('showModal')
-      assert.strictEqual(store.state.app.showModal, true)
+      store.commit('setGradeNameCurrent', '1x')
+      assert.strictEqual(store.getters.gradeNameCurrent, '1x')
       flushState()
-      assert.strictEqual(store.state.app.showModal, false)
+      assert.strictEqual(store.getters.gradeNameCurrent, null)
     })
 
     it('importer', function () {
