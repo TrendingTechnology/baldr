@@ -191,7 +191,7 @@ class CoreLibrary {
      *
      * @type {array}
      */
-    this.songIDs = Object.keys(this.songs)
+    this.songIDs = Object.keys(this.songs).sort()
 
     /**
      * The current index of the array this.songIDs. Used for the methods
@@ -207,6 +207,18 @@ class CoreLibrary {
    */
   toArray () {
     return Object.values(this.songs)
+  }
+
+  /**
+   * @returns {array}
+   */
+  toDynamicSelect () {
+    const result = []
+    for (const songID of this.songIDs) {
+      const song = this.getSongById(songID)
+      result.push({id: song.songID, name: song.metaData.title})
+    }
+    return result
   }
 
   /**

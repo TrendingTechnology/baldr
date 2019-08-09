@@ -1,6 +1,27 @@
 
 <template>
   <section>
+    <div class="top-icons">
+      <material-icon
+        @click.native="$modal.show('search')"
+        class="table-of-contents"
+        name="magnify"
+        size="5vw"
+      />
+      <material-icon
+        @click.native="$modal.show('table-of-contents')"
+        class="table-of-contents"
+        name="table-of-contents"
+        size="5vw"
+      />
+    </div>
+
+    <modal-dialog name="search">
+      <dynamic-select :options="library.toDynamicSelect()"/>
+    </modal-dialog>
+    <modal-dialog name="table-of-contents">
+      <table-of-contents/>
+    </modal-dialog>
     <meta-data/>
     <img :src="imageSrc">
     <div class="slide-number"></div>
@@ -23,19 +44,22 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 
-import { CursorCross, MaterialIcon } from '@bldr/vue-components'
+import { CursorCross, DynamicSelect, MaterialIcon } from '@bldr/vue-components'
 
 import MetaData from './MetaData'
+import TableOfContents from '@/views/TableOfContents'
 
 export default {
   name: 'SongSlide',
   components: {
     CursorCross,
+    DynamicSelect,
     MaterialIcon,
-    MetaData
+    MetaData,
+    TableOfContents
   },
   computed: {
-    ...mapGetters(['songCurrent', 'slideNoCurrent']),
+    ...mapGetters(['songCurrent', 'slideNoCurrent', 'library']),
     abc () {
       return this.songCurrent.abc
     },
@@ -108,5 +132,12 @@ export default {
     position: absolute;
     bottom: 0;
     left: 0;
+  }
+
+  .top-icons {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 1;
   }
 </style>

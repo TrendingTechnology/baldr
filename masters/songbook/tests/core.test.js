@@ -252,6 +252,13 @@ describe('Package “@bldr/songbook-core”', function () {
           assert.strictEqual(songs.length, 4)
         })
 
+        it('Method “toDynamicSelect()”', function () {
+          const songs = library.toDynamicSelect()
+          assert.strictEqual(songs.length, 4)
+          assert.strictEqual(songs[0].id, 'Auf-der-Mauer')
+          assert.strictEqual(songs[0].name, 'Auf der Mauer, auf der Lauer')
+        })
+
         it('Method “countSongs()”', function () {
           assert.strictEqual(library.countSongs(), 4)
         })
