@@ -216,7 +216,7 @@ class CoreLibrary {
     const result = []
     for (const songID of this.songIDs) {
       const song = this.getSongById(songID)
-      result.push({id: song.songID, name: song.metaData.title})
+      result.push({ id: song.songID, name: song.metaData.title })
     }
     return result
   }
