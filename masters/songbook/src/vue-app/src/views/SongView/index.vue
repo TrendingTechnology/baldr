@@ -92,7 +92,6 @@ export default {
       'setSongRandom'
     ]),
     selectSong () {
-      console.log(this.selectedSong.id)
       this.$store.dispatch('setSongCurrent', this.selectedSong.id)
       this.$modal.hide('search')
     }

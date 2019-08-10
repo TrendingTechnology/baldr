@@ -2,8 +2,8 @@
   <div class="modal-dialog-base" v-show="isVisible">
     <div class="modal-dialog-overlay" @click="hide(name)"/>
     <div class="modal-dialog-container" role="dialog">
+      <material-icon class="close" name="close" @click.native="hide(name)"/>
       <div class="modal-dialog-body">
-        <material-icon class="close" name="close" @click.native="hide(name)"/>
         <slot></slot>
       </div>
     </div>
@@ -69,14 +69,18 @@ export default {
     box-sizing: border-box;
     position: fixed;
     z-index: 9999;
+    width: 90%;
+    height: 85%;
   }
 
   .modal-dialog-body {
     background-color: #fff;
     box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
-    height: 100%;
+    height: 95%;
     margin: 1vw;
     padding: 1vw;
+    padding-top: 3vw;
+    overflow-y: scroll;
   }
 
   .modal-dialog-overlay {
