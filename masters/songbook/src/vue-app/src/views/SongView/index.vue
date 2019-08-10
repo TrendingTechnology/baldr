@@ -3,7 +3,7 @@
   <div class="song-view">
     <div class="top-icons">
       <material-icon
-        @click.native="$modal.show('search')"
+        @click.native="showSearch"
         class="table-of-contents"
         name="magnify"
         size="5vw"
@@ -46,7 +46,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 
-import { CursorCross, DynamicSelect, MaterialIcon } from '@bldr/vue-components'
+import { CursorCross, MaterialIcon } from '@bldr/vue-components'
 
 import SongSlide from './SongSlide'
 import TableOfContents from '@/views/TableOfContents'
@@ -55,7 +55,6 @@ export default {
   name: 'SongView',
   components: {
     CursorCross,
-    DynamicSelect,
     MaterialIcon,
     SongSlide,
     TableOfContents
@@ -94,6 +93,10 @@ export default {
     selectSong () {
       this.$store.dispatch('setSongCurrent', this.selectedSong.id)
       this.$modal.hide('search')
+    },
+    showSearch () {
+      this.$modal.show('search')
+      this.$dynamicSelect.focus()
     }
   },
   created: function () {

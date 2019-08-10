@@ -37,6 +37,8 @@
 </template>
 
 <script>
+import DynamicSelect from './index'
+
 export default {
   props: {
     placeholder: {
@@ -59,6 +61,9 @@ export default {
       selectedOption: null,
       selectedResult: 0
     }
+  },
+  mounted () {
+    DynamicSelect.event.$on('dynamicselectfocus', this.focus)
   },
   computed: {
     results: function () {
@@ -149,6 +154,9 @@ export default {
     selectOption: function (option) {
       this.selectedOption = option
       this.hasFocus = false
+    },
+    focus: function () {
+      this.hasFocus = true
     }
   }
 }
