@@ -15,9 +15,11 @@ module.exports = {
       }
     },
     plugins: [
-      new CopyPlugin([
-        { from: '/home/jf/.local/share/baldr/projector', to: 'songs' }
-      ])
+      new CopyPlugin([{
+        from: '/home/jf/.local/share/baldr/projector',
+        to: 'songs',
+        ignore: ['.git/**']
+      }])
     ]
   },
   publicPath: process.env.NODE_ENV === 'production' ? '/songbook/' : '/'

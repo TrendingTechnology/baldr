@@ -24,14 +24,12 @@
 </template>
 
 <script>
-import { MaterialIcon } from '@bldr/vue-components'
 import IconLink from '@/components/IconLink'
 
 export default {
   name: 'TocSong',
   components: {
-    IconLink,
-    MaterialIcon
+    IconLink
   },
   computed: {
     meta () {

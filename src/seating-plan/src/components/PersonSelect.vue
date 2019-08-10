@@ -7,18 +7,12 @@
 </template>
 
 <script>
-// Components
-import { DynamicSelect } from '@bldr/vue-components'
-
 export default {
   name: 'PersonSelect',
   data () {
     return {
       selectedPerson: ''
     }
-  },
-  components: {
-    DynamicSelect
   },
   computed: {
     persons () {

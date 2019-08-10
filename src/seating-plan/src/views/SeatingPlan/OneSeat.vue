@@ -95,9 +95,10 @@ export default {
     openModalPersonSelect (event) {
       this.$store.commit('setSeatNoCurrent', this.seat.no)
       this.$modal.show('person-select')
-      this.$nextTick(() => {
-        document.querySelector('.dynamic-select').focus()
-      })
+      this.$dynamicSelect.focus()
+      // this.$nextTick(() => {
+      //   document.querySelector('.dynamic-select').focus()
+      // })
     },
     unplacePerson (event) {
       this.$store.dispatch('unplacePerson', { personId: this.person.id, seatNo: this.seat.no })

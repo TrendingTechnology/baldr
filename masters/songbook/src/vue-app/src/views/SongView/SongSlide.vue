@@ -32,7 +32,7 @@ export default {
       return this.slideNoCurrent
     },
     imageSrc () {
-      return `/songs/${this.abc}/${this.songID}/${this.slideNo}.svg`
+      return `./songs/${this.abc}/${this.songID}/${this.slideNo}.svg`
     }
   }
 }

@@ -7,12 +7,9 @@
 </template>
 
 <script>
-
 // Components
 import AppHeader from '@/components/layout/AppHeader'
 import AppFooter from '@/components/layout/AppFooter'
-
-import '@bldr/theme-default-css'
 
 export default {
   name: 'app',
@@ -42,7 +39,7 @@ export default {
 </script>
 
 <style>
-  @import '~@bldr/theme-default-css/styles.css';
+  @import '~@bldr/theme-default/styles-ng.css';
 
   body {
     margin: 2px;
