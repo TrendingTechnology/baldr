@@ -101,6 +101,11 @@ export default {
   },
   created: function () {
     this.$store.dispatch('setSongCurrent', this.$route.params.songID)
+  },
+  beforeRouteUpdate (to, from, next) {
+    this.$store.dispatch('setSongCurrent', to.params.songID)
+    this.$modal.hide('table-of-contents')
+    next()
   }
 }
 </script>

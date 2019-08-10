@@ -38,18 +38,18 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
   section {
-    max-width: 100%;
-    max-height: 100%;
     text-align: center;
   }
 
   img {
-    width: 100%;
-    height: 100%;
-    vertical-align: middle;
     background-color: white;
+    height: auto;
+    max-height: 100vh;
+    max-width: 100%;
+    vertical-align: middle;
+    width: 100%;
   }
 
   .slide-number {

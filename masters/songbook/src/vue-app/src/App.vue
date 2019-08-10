@@ -38,9 +38,15 @@ export default {
 </script>
 
 <style>
-@import '~@bldr/theme-default/styles-ng.css';
+  @import '~@bldr/theme-default/styles-ng.css';
 
-body {
-  margin: 0;
-}
+  body {
+    margin: 0;
+  }
+
+  #nav {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
 </style>
