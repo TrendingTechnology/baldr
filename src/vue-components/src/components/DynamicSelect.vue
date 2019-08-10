@@ -50,19 +50,13 @@ export default {
         return []
       },
       required: true
-    },
-    value: {
-      default: function () {
-        return null
-      },
-      required: false
     }
   },
   data: function () {
     return {
       hasFocus: false,
       searchText: null,
-      selectedOption: this.value,
+      selectedOption: null,
       selectedResult: 0
     }
   },
@@ -95,14 +89,6 @@ export default {
         this.selectedResult = 0
         this.$refs.search.blur()
       }
-    },
-    value: function () {
-      // Load selected option on prop value change
-      this.options.forEach(option => {
-        if (this.value && option.id === this.value.id) {
-          this.selectedOption = option
-        }
-      })
     },
     search: function () {
       // Provide search text to parent (for ajax fetching, etc)

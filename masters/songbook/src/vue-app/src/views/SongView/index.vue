@@ -60,6 +60,11 @@ export default {
     SongSlide,
     TableOfContents
   },
+  data () {
+    return {
+      selectedSong: null
+    }
+  },
   computed: {
     ...mapGetters(['songCurrent', 'slideNoCurrent', 'library']),
     abc () {
@@ -87,6 +92,7 @@ export default {
       'setSongRandom'
     ]),
     selectSong () {
+      console.log(this.selectedSong.id)
       this.$store.dispatch('setSongCurrent', this.selectedSong.id)
       this.$modal.hide('search')
     }
