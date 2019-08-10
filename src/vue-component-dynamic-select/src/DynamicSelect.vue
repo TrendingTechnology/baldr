@@ -118,7 +118,7 @@ export default {
     },
     moveToResults: function (event) {
       // Move down to first result if user presses down arrow (from search field)
-      if (event.keyCode === 40) {
+      if (event.key === 'ArrowDown') {
         if (this.$refs.result.length > 0) {
           this.$refs.resultList.children.item(0).focus()
         }
@@ -126,13 +126,13 @@ export default {
     },
     navigateResults: function (option, event) {
       // Add option to selected items on enter key
-      if (event.keyCode === 13) {
+      if (event.key === 'Enter') {
         this.selectOption(option)
         // Move up or down items in result list with up or down arrow keys
-      } else if (event.keyCode === 40 || event.keyCode === 38) {
-        if (event.keyCode === 40) {
+      } else if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+        if (event.key === 'ArrowDown') {
           this.selectedResult++
-        } else if (event.keyCode === 38) {
+        } else if (event.key === 'ArrowUp') {
           this.selectedResult--
         }
         let next = this.$refs.resultList.children.item(this.selectedResult)
@@ -146,7 +146,7 @@ export default {
     },
     removeOption: function (event) {
       // Remove selected option if user hits backspace on empty search field
-      if (event.keyCode === 8 && (this.searchText == null || this.searchText === '')) {
+      if (event.key === 'Backspace' && (this.searchText == null || this.searchText === '')) {
         this.selectedOption = null
         this.hasFocus = false
       }

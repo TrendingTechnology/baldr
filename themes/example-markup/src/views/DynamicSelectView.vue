@@ -9,24 +9,23 @@
 </template>
 
 <script>
-import { DynamicSelect } from '@bldr/vue-components'
-
 export default {
   name: 'DynamicSelectView',
-  components: {
-    DynamicSelect
-  },
   data: function () {
     return {
       selectedComposer: {},
       composer: [
         {
           id: 1,
-          name: 'Ludwig van Beethoven'
+          name: 'Joseph Haydn'
         },
         {
           id: 2,
           name: 'Wolfgang Amadeus Mozart'
+        },
+        {
+          id: 3,
+          name: 'Ludwig van Beethoven'
         }
       ]
     }

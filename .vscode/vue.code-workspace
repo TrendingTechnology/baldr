@@ -5,6 +5,10 @@
             "path": "../src/vue-components/src"
         },
         {
+            "name": "@bldr/vue-component-dynamic-select",
+            "path": "../src/vue-component-dynamic-select/src"
+        },
+        {
             "name": "@bldr/vue-component-modal",
             "path": "../src/vue-component-modal/src"
         },
