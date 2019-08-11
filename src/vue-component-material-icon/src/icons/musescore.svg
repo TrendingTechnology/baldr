@@ -5,16 +5,41 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
-   width="100%"
-   height="100%"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="24"
+   height="24"
    viewBox="0 0 24 24"
    version="1.1"
-   id="svg8">
+   id="svg8"
+   sodipodi:docname="musescore.svg"
+   inkscape:version="0.92.3 (2405546, 2018-03-11)">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1916"
+     inkscape:window-height="685"
+     id="namedview12"
+     showgrid="false"
+     units="px"
+     inkscape:zoom="9.8333333"
+     inkscape:cx="-14.59322"
+     inkscape:cy="12"
+     inkscape:window-x="0"
+     inkscape:window-y="1448"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg8" />
   <defs
      id="defs2" />
   <g
      id="layer1"
-     transform="matrix(0.09074445,0,0,0.07747838,2.6041131,-2.7055114)">
+     transform="matrix(0.07002226,0,0,0.0597856,5.8244444,0.96740575)">
     <g
        transform="matrix(0.35277777,0,0,-0.35277777,-51.206691,350.35202)"
        id="g18">
@@ -34,7 +59,8 @@
         <path
            id="path54"
            d="m 6316.8008,2191.6289 c -174.7783,0 -338.6803,23.7419 -490.209,71.6406 l -1.8301,0.5782 -1.8066,0.6484 c -147.669,52.9919 -280.0591,130.8323 -393.6426,233.2305 l -1.7441,1.5742 -1.67,1.6523 c -108.9116,107.8797 -195.1623,237.8962 -258.1308,387.1309 l -0.709,1.6777 -0.6465,1.7031 c -46.1107,121.4482 -55.6654,244.7703 -62.3047,371.5977 l -0.1133,2.1758 -0.02,2.1777 c -0.416,47.6218 -0.4141,103.5538 -0.4141,152.0938 v 84.7129 l -0.1777,-0.029 -3.8906,918.6445 v 0.2109 c 0,148.6666 -13.7543,281.6939 -40.4219,399.9532 l -0.2851,1.2695 -0.254,1.2754 c -22.2867,112.3734 -63.7918,204.9424 -123.7539,281.0625 l -0.9121,1.1582 -0.8789,1.1836 c -54.5994,73.6798 -129.9097,131.697 -232.1816,175.0351 l -0.6016,0.2539 -0.5976,0.2637 c -94.0643,41.3177 -224.1472,64.7461 -388.834,64.7461 -140.2405,0 -262.8473,-27.4299 -372.3008,-81.1953 l -1.1836,-0.582 -1.1973,-0.5489 c -111.5819,-51.2054 -205.2521,-121.57 -283.3125,-212.5527 -78.0091,-91.5144 -138.1261,-198.058 -179.6386,-321.1484 l -0.209,-0.6172 -0.2168,-0.6133 c -41.8071,-118.8285 -62.9121,-245.4951 -62.9121,-382.3418 V 2258.6191 h -324.0996 v 2115.5 c 0,141.0657 -12.1613,273.5457 -35.7715,396.7149 l -0.3203,1.6738 -0.2637,1.6836 c -18.5565,118.5128 -55.5935,218.5938 -109.7285,304.3965 -52.0756,81.5628 -124.2826,146.2334 -222.1445,196.0937 -92.8088,47.0674 -222.6582,74.5684 -389.8614,74.5684 -143.4834,0 -274.9172,-30.2553 -385.4707,-93.2168 l -1.1035,-0.627 -1.1191,-0.6015 c -115.8009,-62.1106 -217.7895,-150.002 -300.3262,-260.668 -79.6408,-107.8941 -142.5005,-235.3443 -189.4609,-384.6933 -41.6956,-145.4022 -54.5196,-303.2239 -54.5196,-473.5743 v -1877.25 h -324.5097 v 1877.25 c 0,304.6582 43.8587,520.7018 97.8554,675.0625 53.9967,154.3608 120.6598,250.2623 147.7793,294.7872 v 0 c 73.0286,119.894 182.5217,219.6146 275.832,299.3242 l 0.1719,0.1465 0.1719,0.1465 c 101.4704,85.8903 217.6368,149.6848 334.6953,193.7559 125.8421,50.2817 264.6847,72.705 400.0019,72.705 l -3.2148,-0.051 c 266.9825,8.5882 501.2612,-61.1053 686.5215,-210.8925 123.1444,-94.497 218.3895,-214.0455 289.3691,-354.4082 74.8262,134.0453 176.8893,249.7552 304.416,344.0117 l 0.072,0.053 0.074,0.055 c 199.8499,147.1523 438.8605,221.2324 705.9219,221.2324 204.9286,0 379.9421,-29.7455 525.4785,-94.207 l 0.1191,-0.053 0.1192,-0.053 c 141.4717,-63.1061 259.2682,-152.7916 348.5137,-267.5586 88.8265,-111.0366 150.6982,-245.4191 186.9062,-399.7656 35.1619,-147.2562 52.5039,-309.3913 52.5039,-487.1133 l 1.1094,-1050.6797 c 1.6123,-151.9868 12.7921,-278.3396 51.082,-370.1211 48.6317,-113.905 112.6419,-206.7995 191.6797,-281.83 85.1528,-72.6058 179.981,-126.2473 286.9063,-162.1778 114.1176,-34 234.2409,-50.6914 361.6113,-50.6914 178.4898,0 329.8443,31.866 459.7012,93.293 133.3187,68.0764 241.1871,153.7916 326.5761,260.0273 l 0.1856,0.2305 0.1875,0.2285 c 90.8787,111.7042 159.5184,240.5826 206.2441,388.7129 46.2817,148.4669 69.7363,304.9282 69.7363,470.6992 V 5597.9805 H 7703.541 V 3720.7402 c 0,-212.3579 -22.4923,-367.5952 -45.8848,-471.4277 -17.3003,-76.7914 -36.7892,-128.9103 -45.8007,-150.9512 -66.6411,-270.0319 -246.6044,-481.0728 -453.1758,-646.123 -217.3497,-177.1749 -510.1886,-260.6094 -841.8789,-260.6094 z m 104.5,3967.4414 c -131.5962,0 -242.459,107.3732 -242.459,239.9785 0,132.5483 110.8628,239.7813 242.459,239.7813 131.7324,0 242.4707,-107.587 242.4707,-239.7813 0,-132.2522 -110.7383,-239.9785 -242.4707,-239.9785 z m -1352.0196,74.4004 v 100 c 0,371.4934 151.4946,697.9671 431.9024,925.1309 245.876,199.2094 577.3417,309.7285 916.1387,309.7285 334.4076,0 647.4489,-105.429 880.9414,-302.3574 v 0 0 c 265.9942,-224.3657 406.9746,-553.3015 406.9746,-932.4981 v -100 h -312.8008 v 100 c 0,297.9745 -102.6296,531.9172 -296.5937,695.5195 -172.1764,145.2238 -412.9527,228.5196 -678.5254,228.5196 -261.2862,0 -523.8931,-82.5371 -716.4121,-237.7598 -192.5191,-155.2227 -318.8379,-378.4509 -318.8379,-686.2793 v -100 z"
-           style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:200;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate" />
+           style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:200;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+           inkscape:connector-curvature="0" />
       </g>
     </g>
   </g>
@@ -44,6 +70,9 @@
       <cc:Work
          rdf:about="">
         <dc:title></dc:title>
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
       </cc:Work>
     </rdf:RDF>
   </metadata>

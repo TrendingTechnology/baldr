@@ -1,0 +1,21 @@
+@font-face {
+  font-family: "Baldr Icons";
+  src: url("./baldr-icons.woff2") format("woff2"), url("./baldr-icons.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+.baldr-icons:before,
+.baldr-icons-set {
+  display: inline-block;
+  font: normal normal normal 24px/1 "Baldr Icons";
+  font-size: inherit;
+  text-rendering: auto;
+  line-height: inherit;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.baldr-icons-access-point::before {
+  content: "\F002";
+}

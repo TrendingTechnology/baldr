@@ -16,7 +16,8 @@
   "dependencies": {
     "core-js": "^2.6.5",
     "vue": "^2.6.10",
-    "@mdi/font": "^3.8.95"
+    "@mdi/font": "^3.8.95",
+    "webfont": "^9.0.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.10.0",
