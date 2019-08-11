@@ -329,6 +329,7 @@ describe('Package “@bldr/songbook-base”', function () {
             'source',
             'subtitle',
             'title',
+            'wikidata',
             'wikipedia',
             'year',
             'youtube'

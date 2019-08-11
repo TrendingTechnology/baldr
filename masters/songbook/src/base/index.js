@@ -273,78 +273,110 @@ class SongMetaData {
     this.alias = null
 
     /**
-     * .
+     * The arranger of a song.
      *
      * @type {string}
      */
     this.arranger = null
 
     /**
-     * .
+     * The artist of a song.
      *
      * @type {string}
      */
     this.artist = null
 
     /**
-     * .
+     * The composer of a song.
      *
      * @type {string}
      */
     this.composer = null
 
     /**
-     * .
+     * The country the song is from.
      *
      * @type {string}
      */
     this.country = null
 
     /**
-     * .
+     * A longer text which describes the song.
+     *
+     * @type {string}
+     */
+    this.description = null
+
+    /**
+     * The genre of the song.
      *
      * @type {string}
      */
     this.genre = null
 
     /**
-     * .
+     * The lyricist of the song.
+     *
      * @type {string}
      */
     this.lyricist = null
 
     /**
-     * .
+     * The MuseScore score ID from musescore.com, for example the score ID
+     * from https://musescore.com/user/1601631/scores/1299601 is 1299601.
+     *
      * @type {string}
      */
     this.musescore = null
 
     /**
-     * .
+     * A text or a URL which describes the source of a song.
+     *
      * @type {string}
      */
     this.source = null
 
     /**
-     * .
+     * The subtitle of a song.
      *
      * @type {string}
      */
     this.subtitle = null
 
     /**
-     * .
+     * The title of a song.
      *
      * @type {string}
      */
     this.title = null
 
     /**
-     * .
+     * The Wikidata data item ID (without the Q prefix)
+     *
+     * @type {string}
+     */
+    this.wikidata = null
+
+    /**
+     * ID of a wikipedia article (e. g. en:A_Article)
+     *
+     * @type {string}
+     */
+    this.wikipedia = null
+
+    /**
+     * The year the song was released.
      *
      * @type {string}
      */
     this.year = null
+
+    /**
+     * The youtube ID (e. g. CQYypFMTQcE)
+     *
+     * @type {string}
+     */
+    this.youtube = null
 
     /**
      * The file name of the YAML file.
@@ -371,6 +403,7 @@ class SongMetaData {
       'source',
       'subtitle',
       'title',
+      'wikidata',
       'wikipedia',
       'year',
       'youtube'

@@ -43,7 +43,7 @@ class AlphabeticalSongsTree {
 }
 
 /**
- * Combine some song metadata properties
+ * Combine transform some song metadata properties.
  *
  * Mapping
  *
@@ -79,34 +79,6 @@ class SongMetaDataCombined {
   }
 
   /**
-   * title (year)
-   */
-  get title () {
-    let out
-    if ('title' in this.metaData) {
-      out = this.metaData.title
-    } else {
-      out = ''
-    }
-
-    if ('year' in this.metaData && this.metaData.year) {
-      return `${out} (${this.metaData.year})`
-    } else {
-      return out
-    }
-  }
-
-  /**
-   * subtitle - alias - country
-   */
-  get subtitle () {
-    return SongMetaDataCombined.collectProperties_(
-      ['subtitle', 'alias', 'country'],
-      this.metaData
-    ).join(' - ')
-  }
-
-  /**
    * composer, artist, genre
    */
   get composer () {
@@ -138,6 +110,56 @@ class SongMetaDataCombined {
     }
   }
 
+  /**
+   * https://musescore.com/score/1234
+   */
+  get musescoreURL () {
+    if ('musescore' in this.metaData) {
+      return `https://musescore.com/score/${this.metaData.musescore}`
+    }
+  }
+
+  /**
+   * subtitle - alias - country
+   */
+  get subtitle () {
+    return SongMetaDataCombined.collectProperties_(
+      ['subtitle', 'alias', 'country'],
+      this.metaData
+    ).join(' - ')
+  }
+
+  /**
+   * title (year)
+   */
+  get title () {
+    let out
+    if ('title' in this.metaData) {
+      out = this.metaData.title
+    } else {
+      out = ''
+    }
+
+    if ('year' in this.metaData && this.metaData.year) {
+      return `${out} (${this.metaData.year})`
+    } else {
+      return out
+    }
+  }
+
+  /**
+   * https://www.wikidata.org/wiki/Q42
+   */
+  get wikidataURL () {
+    if ('wikidata' in this.metaData) {
+      // https://www.wikidata.org/wiki/Q42
+      return `https://www.wikidata.org/wiki/Q${this.metaData.wikidata}`
+    }
+  }
+
+  /**
+   * https://en.wikipedia.org/wiki/A_Article
+   */
   get wikipediaURL () {
     if ('wikipedia' in this.metaData) {
       // https://de.wikipedia.org/wiki/Gesch%C3%BCtztes_Leerzeichen
@@ -149,15 +171,12 @@ class SongMetaDataCombined {
     }
   }
 
+  /**
+   * https://youtu.be/CQYypFMTQcE
+   */
   get youtubeURL () {
     if ('youtube' in this.metaData) {
       return `https://youtu.be/${this.metaData.youtube}`
-    }
-  }
-
-  get musescoreURL () {
-    if ('musescore' in this.metaData) {
-      return `https://musescore.com/score/${this.metaData.musescore}`
     }
   }
 

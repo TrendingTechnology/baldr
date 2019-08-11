@@ -14,6 +14,10 @@
     </td>
 
     <td>
+      <icon-link icon="barcode" :link="meta.wikidataURL"/>
+    </td>
+
+    <td>
       <icon-link icon="wikipedia" :link="meta.wikipediaURL"/>
     </td>
 

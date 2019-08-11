@@ -71,28 +71,6 @@ describe('Package “@bldr/songbook-core”', function () {
     })
 
     describe('Class “SongMetaDataCombined()”', function () {
-      describe('get title', function () {
-        it('title only', function () {
-          const song = new SongMetaDataCombined({ title: 'lol' })
-          assert.strictEqual(song.title, 'lol')
-        })
-        it('title and year', function () {
-          const song = new SongMetaDataCombined({ title: 'lol', year: 1984 })
-          assert.strictEqual(song.title, 'lol (1984)')
-        })
-      })
-
-      describe('get subtitle', function () {
-        it('all properties', function () {
-          const song = new SongMetaDataCombined({ subtitle: 's', alias: 'a', country: 'c' })
-          assert.strictEqual(song.subtitle, 's - a - c')
-        })
-        it('no properties', function () {
-          const song = new SongMetaDataCombined({})
-          assert.strictEqual(song.subtitle, '')
-        })
-      })
-
       describe('get composer', function () {
         it('all properties', function () {
           const song = new SongMetaDataCombined({ composer: 'c', artist: 'a', genre: 'g' })
@@ -132,6 +110,48 @@ describe('Package “@bldr/songbook-core”', function () {
         })
       })
 
+      it('get musescoreURL', function () {
+        const song = new SongMetaDataCombined({
+          musescore: 1234
+        })
+        assert.strictEqual(
+          song.musescoreURL,
+          'https://musescore.com/score/1234'
+        )
+      })
+
+      describe('get subtitle', function () {
+        it('all properties', function () {
+          const song = new SongMetaDataCombined({ subtitle: 's', alias: 'a', country: 'c' })
+          assert.strictEqual(song.subtitle, 's - a - c')
+        })
+        it('no properties', function () {
+          const song = new SongMetaDataCombined({})
+          assert.strictEqual(song.subtitle, '')
+        })
+      })
+
+      describe('get title', function () {
+        it('title only', function () {
+          const song = new SongMetaDataCombined({ title: 'lol' })
+          assert.strictEqual(song.title, 'lol')
+        })
+        it('title and year', function () {
+          const song = new SongMetaDataCombined({ title: 'lol', year: 1984 })
+          assert.strictEqual(song.title, 'lol (1984)')
+        })
+      })
+
+      it('get wikidataURL', function () {
+        const song = new SongMetaDataCombined({
+          wikidata: 42
+        })
+        assert.strictEqual(
+          song.wikidataURL,
+          'https://www.wikidata.org/wiki/Q42'
+        )
+      })
+
       describe('get wikipediaURL', function () {
         it('de', function () {
           const song = new SongMetaDataCombined({
@@ -161,16 +181,6 @@ describe('Package “@bldr/songbook-core”', function () {
         assert.strictEqual(
           song.youtubeURL,
           'https://youtu.be/ESRwx36lvOM'
-        )
-      })
-
-      it('get musescoreURL', function () {
-        const song = new SongMetaDataCombined({
-          musescore: 1234
-        })
-        assert.strictEqual(
-          song.musescoreURL,
-          'https://musescore.com/score/1234'
         )
       })
 
