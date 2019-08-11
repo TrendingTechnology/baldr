@@ -9,7 +9,7 @@
         size="5vw"
       />
       <material-icon
-        @click.native="$modal.show('table-of-contents')"
+        @click.native="showTableOfContents"
         class="table-of-contents"
         name="table-of-contents"
         size="5vw"
@@ -33,12 +33,17 @@
       :up="setSongPrevious"
       :down="setSongNext"
       size="5vw"
+      left-title="Vorhergehende Seite"
+      right-title="Nächste Seite"
+      up-title="Vorhergehendes Lied"
+      down-title="Nächstes Lied"
     />
     <material-icon
       @click.native="setSongRandom"
       class="random"
       name="dice-multiple"
       size="5vw"
+      title="Zufälliges Lied"
     />
   </div>
 </template>
@@ -95,8 +100,11 @@ export default {
       this.$modal.hide('search')
     },
     showSearch () {
-      this.$modal.show('search')
+      this.$modal.toggle('search')
       this.$dynamicSelect.focus()
+    },
+    showTableOfContents () {
+      this.$modal.show('table-of-contents')
     }
   },
   created: function () {
@@ -106,6 +114,30 @@ export default {
     this.$store.dispatch('setSongCurrent', to.params.songID)
     this.$modal.hide('table-of-contents')
     next()
+  },
+  mounted: function () {
+    this.$nextTick(function () {
+      window.addEventListener('keydown', event => {
+        if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(event.key)) {
+          event.preventDefault()
+        }
+      })
+      window.addEventListener('keyup', event => {
+        if (event.key === 'ArrowLeft') {
+          this.setSlidePrevious()
+        } else if (event.key === 'ArrowRight') {
+          this.setSlideNext()
+        } else if (event.key === 'ArrowUp') {
+          this.setSongPrevious()
+        } else if (event.key === 'ArrowDown') {
+          this.setSongNext()
+        } else if (event.ctrlKey && event.key === 'z') {
+          this.setSongRandom()
+        } else if (event.key === 'Escape') {
+          this.showSearch()
+        }
+      })
+    })
   }
 }
 </script>

@@ -17,23 +17,7 @@ export default {
   beforeCreate: function () {
     this.$store.dispatch('importSongs', songs)
   },
-  methods: mapActions(['setSlideNext', 'setSlidePrevious']),
-  mounted: function () {
-    this.$nextTick(function () {
-      window.addEventListener('keydown', event => {
-        if (['ArrowLeft', 'ArrowRight'].includes(event.key)) {
-          event.preventDefault()
-        }
-      })
-      window.addEventListener('keyup', event => {
-        if (event.key === 'ArrowLeft') {
-          this.setSlidePrevious()
-        } else if (event.key === 'ArrowRight') {
-          this.setSlideNext()
-        }
-      })
-    })
-  }
+  methods: mapActions(['setSlideNext', 'setSlidePrevious'])
 }
 </script>
 
