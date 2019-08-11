@@ -18,6 +18,7 @@
     "@bldr/vue-components": "^0.1.0",
     "@bldr/vue-component-modal": "^0.1.0",
     "@bldr/vue-component-dynamic-select": "^0.1.0",
+    "@bldr/vue-component-material-icon": "^0.1.0",
     "@bldr/theme-default": "^0.0.18",
     "@bldr/songbook-core": "^0.1.0"
   },

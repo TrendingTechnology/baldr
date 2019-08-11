@@ -8,13 +8,8 @@
 </template>
 
 <script>
-import { MaterialIcon } from '@bldr/vue-components'
-
 export default {
   name: 'IconLink',
-  components: {
-    MaterialIcon
-  },
   props: {
     link: {
       type: String

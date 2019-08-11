@@ -51,7 +51,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 
-import { CursorCross, MaterialIcon } from '@bldr/vue-components'
+import { CursorCross } from '@bldr/vue-components'
 
 import SongSlide from './SongSlide'
 import TableOfContents from '@/views/TableOfContents'
@@ -60,7 +60,6 @@ export default {
   name: 'SongView',
   components: {
     CursorCross,
-    MaterialIcon,
     SongSlide,
     TableOfContents
   },
