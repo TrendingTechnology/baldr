@@ -28,8 +28,8 @@ export default {
   computed: {
     classes () {
       if (this.icon) return ''
-      let classes = ['mdi']
-      classes.push(`mdi-${this.name}`)
+      let classes = ['baldr-icons']
+      classes.push(`baldr-icons-${this.name}`)
       if (this.disabled) classes.push('disabled')
       return classes.join(' ')
     },
@@ -49,7 +49,7 @@ a .mdi {
 </style>
 
 <style scoped>
-  @import '~@mdi/font/css/materialdesignicons.css';
+  @import './style.css';
 
   div {
     display: inline-block;

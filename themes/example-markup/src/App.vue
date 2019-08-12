@@ -5,7 +5,7 @@
       <router-link to="/typography">Typography</router-link> |
       <router-link to="/modal">Modal</router-link> |
       <router-link to="/dynamic-select">Dynamic select</router-link>
-
+      <router-link to="/material-icon">Material icon</router-link>
     </nav>
     <router-view/>
   </div>

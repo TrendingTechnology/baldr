@@ -19,23 +19,3 @@
 .baldr-icons-access-point::before {
   content: "\F002";
 }
-
-.baldr-icons-chevron-down::before {
-  content: "\ea01";
-}
-
-.baldr-icons-chevron-left::before {
-  content: "\ea02";
-}
-
-.baldr-icons-chevron-right::before {
-  content: "\ea03";
-}
-
-.baldr-icons-chevron-up::before {
-  content: "\ea04";
-}
-
-.baldr-icons-musescore::before {
-  content: "\ea05";
-}

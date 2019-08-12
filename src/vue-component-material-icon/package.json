@@ -16,10 +16,11 @@
   "dependencies": {
     "core-js": "^2.6.5",
     "vue": "^2.6.10",
-    "@mdi/font": "^3.8.95",
-    "webfont": "^9.0.0"
+    "@mdi/font": "^3.8.95"
   },
   "devDependencies": {
+    "webfont": "^9.0.0",
+    "chalk": "^2.4.2",
     "@vue/cli-plugin-babel": "^3.10.0",
     "@vue/cli-plugin-eslint": "^3.10.0",
     "@vue/cli-service": "^3.10.0",

@@ -29,6 +29,7 @@
     "@bldr/vue-component-modal": "^0.1.0",
     "@bldr/vue-components": "^0.1.0",
     "@bldr/vue-component-dynamic-select": "^0.1.0",
+    "@bldr/vue-component-material-icon": "^0.1.0",
     "core-js": "^3.1.4",
     "vue": "^2.6.10",
     "vue-router": "^3.1.1"

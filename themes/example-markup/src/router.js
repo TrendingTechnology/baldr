@@ -4,6 +4,8 @@ import Router from 'vue-router'
 import DynamicSelectView from '@/views/DynamicSelectView'
 import HomeView from '@/views/HomeView'
 import ModalView from '@/views/ModalView'
+
+import MaterialIconView from '@/views/MaterialIconView'
 import TypographyView from '@/views/TypographyView'
 
 Vue.use(Router)
@@ -29,6 +31,11 @@ export default new Router({
       path: '/dynamic-select',
       name: 'dynamic-select',
       component: DynamicSelectView
+    },
+    {
+      path: '/material-icon',
+      name: 'material-icon',
+      component: MaterialIconView
     }
   ]
 })
