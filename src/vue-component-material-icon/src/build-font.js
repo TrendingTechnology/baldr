@@ -3,11 +3,14 @@
 const webfont = require('webfont').default
 const fs = require('fs')
 const chalk = require('chalk')
+const path = require('path')
+
+const basePath = path.resolve(__dirname)
 
 // https://github.com/Templarian/MaterialDesign-Font-Build/blob/master/bin/index.js
 
 webfont({
-  files: 'icons/*.svg',
+  files: `${basePath}/icons/*.svg`,
   fontName: 'baldr-icons',
   formats: ['woff', 'woff2'],
   fontHeight: 512
@@ -15,7 +18,7 @@ webfont({
   .then(result => {
     const css = []
 
-    const header = fs.readFileSync('style_header.css', { encoding: 'utf-8' })
+    const header = fs.readFileSync(path.join(basePath, 'style_header.css'), { encoding: 'utf-8' })
     css.push(header)
 
     for (const glyphData of result.glyphsData) {
@@ -29,9 +32,9 @@ webfont({
       css.push(cssGlyph)
       console.log(`name: ${chalk.red(name)} unicode glyph: ${chalk.yellow(unicodeGlyph)} unicode escape hex: ${chalk.green(cssUnicodeEscape)}`)
     }
-    fs.writeFileSync('style.css', css.join('\n'), { encoding: 'utf-8' })
-    fs.writeFileSync('baldr-icons.woff', result.woff)
-    fs.writeFileSync('baldr-icons.woff2', result.woff2)
+    fs.writeFileSync(path.join(basePath, 'style.css'), css.join('\n'), { encoding: 'utf-8' })
+    fs.writeFileSync(path.join(basePath, 'baldr-icons.woff'), result.woff)
+    fs.writeFileSync(path.join(basePath, 'baldr-icons.woff2'), result.woff2)
     return result
   })
   .catch(error => {

@@ -6,4 +6,18 @@ const Plugin = {
   }
 }
 
+export const icons = [
+  'chevron-down',
+  'chevron-left',
+  'chevron-right',
+  'chevron-up',
+  'musescore',
+  'dice-multiple',
+  'table-of-contents',
+  'magnify',
+  'wikipedia',
+  'wikidata',
+  'youtube'
+]
+
 export default Plugin

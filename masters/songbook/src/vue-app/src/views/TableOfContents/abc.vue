@@ -25,3 +25,11 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+  h2 {
+    text-transform: capitalize;
+    font-style: normal;
+    font-size: 4vw;
+  }
+</style>

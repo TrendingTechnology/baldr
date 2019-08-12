@@ -13,10 +13,6 @@ export default {
     name: {
       type: String
     },
-    icon: {
-      default: null,
-      type: String
-    },
     disabled: {
       type: Boolean,
       default: false
@@ -27,7 +23,6 @@ export default {
   },
   computed: {
     classes () {
-      if (this.icon) return ''
       let classes = ['baldr-icons']
       classes.push(`baldr-icons-${this.name}`)
       if (this.disabled) classes.push('disabled')
@@ -43,9 +38,9 @@ export default {
 </script>
 
 <style>
-a .mdi {
-  color: black;
-}
+  a .baldr-icons {
+    color: black;
+  }
 </style>
 
 <style scoped>
@@ -74,15 +69,5 @@ a .mdi {
     div {
       display: none;
     }
-  }
-
-  .icon {
-    height: 1em;
-    width: 1em;
-    display: inline-block;
-  }
-
-  .icon-musescore {
-    background: url('icons/musescore.svg') left center no-repeat;
   }
 </style>

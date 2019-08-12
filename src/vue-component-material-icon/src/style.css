@@ -36,6 +36,30 @@
   content: "\ea04";
 }
 
-.baldr-icons-musescore::before {
+.baldr-icons-dice-multiple::before {
   content: "\ea05";
+}
+
+.baldr-icons-magnify::before {
+  content: "\ea06";
+}
+
+.baldr-icons-musescore::before {
+  content: "\ea07";
+}
+
+.baldr-icons-table-of-contents::before {
+  content: "\ea08";
+}
+
+.baldr-icons-wikidata::before {
+  content: "\ea09";
+}
+
+.baldr-icons-wikipedia::before {
+  content: "\ea0a";
+}
+
+.baldr-icons-youtube::before {
+  content: "\ea0b";
 }

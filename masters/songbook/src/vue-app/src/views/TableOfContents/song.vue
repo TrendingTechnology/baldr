@@ -9,19 +9,19 @@
       </router-link>
     </td>
 
-    <td>
-      <icon-link icon="file-music-outline" :link="meta.musescoreURL"/>
+    <td class="icon-cell">
+      <icon-link icon="musescore" :link="meta.musescoreURL"/>
     </td>
 
-    <td>
-      <icon-link icon="barcode" :link="meta.wikidataURL"/>
+    <td class="icon-cell">
+      <icon-link icon="wikidata" :link="meta.wikidataURL"/>
     </td>
 
-    <td>
+    <td class="icon-cell">
       <icon-link icon="wikipedia" :link="meta.wikipediaURL"/>
     </td>
 
-    <td>
+    <td class="icon-cell">
       <icon-link icon="youtube" :link="meta.youtubeURL"/>
     </td>
   </tr>
@@ -53,6 +53,7 @@ export default {
     overflow: hidden;
     text-overflow: ellipsis;
     max-width: 0;
+    font-size: 1.5vw;
   }
 
   .title {
@@ -70,5 +71,9 @@ export default {
 
   .lyricist {
     opacity: 0.6;
+  }
+
+  .icon-cell {
+    min-width: 4vw;
   }
 </style>

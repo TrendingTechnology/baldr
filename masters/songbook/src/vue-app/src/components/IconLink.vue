@@ -3,7 +3,7 @@
     v-if="link"
     :href="link"
   >
-    <material-icon :name="icon"/>
+    <material-icon size="3vw" :name="icon"/>
   </a>
 </template>
 

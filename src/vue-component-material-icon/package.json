@@ -15,8 +15,7 @@
   "main": "src/index.js",
   "dependencies": {
     "core-js": "^2.6.5",
-    "vue": "^2.6.10",
-    "@mdi/font": "^3.8.95"
+    "vue": "^2.6.10"
   },
   "devDependencies": {
     "webfont": "^9.0.0",

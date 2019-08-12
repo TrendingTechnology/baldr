@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="table-of-contents">
     <h1>Inhaltsverzeichnis</h1>
       <toc-abc
         v-for="(songList, abc) in alphabeticalSongsTree"
@@ -22,3 +22,9 @@ export default {
   computed: mapGetters(['alphabeticalSongsTree'])
 }
 </script>
+
+<style scoped>
+  .table-of-contents {
+    margin: 2vw;
+  }
+</style>

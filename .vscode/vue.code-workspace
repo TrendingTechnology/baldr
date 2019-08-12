@@ -13,6 +13,10 @@
             "path": "../src/vue-component-modal/src"
         },
         {
+          "name": "@bldr/vue-component-material-icon",
+          "path": "../src/vue-component-material-icon/src"
+        },
+        {
             "name": "@bldr/example-markup",
             "path": "../themes/example-markup/src"
         },
