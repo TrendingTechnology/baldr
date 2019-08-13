@@ -16,7 +16,7 @@
   "dependencies": {
     "core-js": "^2.6.5",
     "vue": "^2.6.10",
-    "@bldr/vue-components": "^0.1.0"
+    "@bldr/vue-component-material-icon": "^0.1.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.10.0",

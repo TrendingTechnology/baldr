@@ -1,8 +1,10 @@
-import MaterialIcon from './MaterialIcon.vue'
+import MaterialIconSFC from './MaterialIcon.vue'
+
+export const MaterialIcon = MaterialIconSFC
 
 const Plugin = {
   install (Vue) {
-    Vue.component('material-icon', MaterialIcon)
+    Vue.component('material-icon', MaterialIconSFC)
   }
 }
 
@@ -11,12 +13,13 @@ export const icons = [
   'chevron-left',
   'chevron-right',
   'chevron-up',
-  'musescore',
+  'close',
   'dice-multiple',
-  'table-of-contents',
   'magnify',
-  'wikipedia',
+  'musescore',
+  'table-of-contents',
   'wikidata',
+  'wikipedia',
   'youtube'
 ]
 

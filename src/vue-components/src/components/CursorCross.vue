@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import MaterialIcon from './MaterialIcon'
+import { MaterialIcon } from '@bldr/vue-component-material-icon'
 
 export default {
   name: 'CursorCross',

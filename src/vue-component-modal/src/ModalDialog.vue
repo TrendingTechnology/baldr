@@ -14,7 +14,7 @@
 import ModalDialog from './index'
 
 // Components
-import { MaterialIcon } from '@bldr/vue-components'
+import { MaterialIcon } from '@bldr/vue-component-material-icon'
 
 export default {
   name: 'ModalDialog',
