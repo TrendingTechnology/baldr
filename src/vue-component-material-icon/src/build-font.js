@@ -1,9 +1,10 @@
 #! /usr/bin/env node
 
-const webfont = require('webfont').default
 const fs = require('fs')
-const chalk = require('chalk')
 const path = require('path')
+
+const chalk = require('chalk')
+const webfont = require('webfont').default
 
 const basePath = path.resolve(__dirname)
 
