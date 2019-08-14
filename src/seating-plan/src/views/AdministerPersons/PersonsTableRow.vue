@@ -39,7 +39,6 @@
 import { mapActions } from 'vuex'
 
 // Components
-import { MaterialIcon } from '@bldr/vue-components'
 import PersonsJobs from '@/components/PersonsJobs'
 
 export default {
@@ -49,7 +48,6 @@ export default {
     no: Number
   },
   components: {
-    MaterialIcon,
     PersonsJobs
   },
   methods: {

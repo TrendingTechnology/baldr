@@ -44,18 +44,12 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 
-// Components
-import { MaterialIcon } from '@bldr/vue-components'
-
 export default {
   name: 'GradesTable',
   computed: mapGetters([
     'gradeNames',
     'isGradePlaced'
   ]),
-  components: {
-    MaterialIcon
-  },
   methods: {
     ...mapActions([
       'deleteGrade'

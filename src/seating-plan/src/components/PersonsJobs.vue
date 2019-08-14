@@ -14,15 +14,11 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 
-// Components
-import { MaterialIcon } from '@bldr/vue-components'
-
 export default {
   name: 'PersonsJob',
   props: {
     person: [Object, Boolean]
   },
-  components: { MaterialIcon },
   computed: mapGetters([
     'jobsAsArray'
   ]),

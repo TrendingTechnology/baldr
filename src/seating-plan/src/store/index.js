@@ -98,7 +98,7 @@ const actions = {
       { name: 'Lüftwart', icon: 'air-filter' },
       { name: 'Austeilwart', icon: 'file-outline' },
       { name: 'Klassenbuchführer', icon: 'notebook' },
-      { name: 'Klassensprecher', icon: 'account-star' }
+      { name: 'Klassensprecher', icon: 'account-star-outline' }
     ]
     for (const job of jobs) {
       dispatch('createJob', job)

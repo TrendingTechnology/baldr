@@ -14,14 +14,8 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 
-// Components
-import { MaterialIcon } from '@bldr/vue-components'
-
 export default {
   name: 'AddJobIcons',
-  components: {
-    MaterialIcon
-  },
   props: {
     person: [Object, Boolean]
   },

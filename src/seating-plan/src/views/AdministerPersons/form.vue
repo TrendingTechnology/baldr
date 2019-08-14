@@ -12,21 +12,15 @@
       placeholder="Vorname"
       @keyup.enter="createPerson"
     >
-    <button><material-icon name="plus-box-outline"/></button>
+    <button>hinzufügen</button>
   </form>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
 
-// Components
-import { MaterialIcon } from '@bldr/vue-components'
-
 export default {
   name: 'FormAddPerson',
-  components: {
-    MaterialIcon
-  },
   data: function () {
     return {
       lastName: '',

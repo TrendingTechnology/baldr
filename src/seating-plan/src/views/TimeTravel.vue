@@ -50,14 +50,8 @@
 import { mapGetters, mapActions } from 'vuex'
 import { toLocaleDateTimeString } from '../lib.js'
 
-// Components
-import { MaterialIcon } from '@bldr/vue-components'
-
 export default {
   name: 'TimeTravel',
-  components: {
-    MaterialIcon
-  },
   computed: mapGetters([
     'externalStateDates',
     'localStateDates'

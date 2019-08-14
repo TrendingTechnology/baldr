@@ -11,13 +11,8 @@
 <script>
 import { mapGetters } from 'vuex'
 
-// Components
-import { MaterialIcon } from '@bldr/vue-components'
 export default {
   name: 'ExportLink',
-  components: {
-    MaterialIcon
-  },
   computed: {
     ...mapGetters([
       'stateAsURIComponent'

@@ -2,11 +2,14 @@
   <div
     :style="styleFontSize"
     :class="classes"
-  />
+  >
+   {{ warningText }}
+  </div>
 </template>
 
 <script>
-// import '@mdi/font'
+import icons from './icons.json'
+
 export default {
   name: 'MaterialIcon',
   props: {
@@ -31,6 +34,13 @@ export default {
     styleFontSize () {
       if (this.size) {
         return `font-size: ${this.size}`
+      }
+    },
+    warningText () {
+      if (!icons.includes(this.name)) {
+        const message = `No icon named “${this.name}” found!`
+        console.warn(message)
+        return message
       }
     }
   }

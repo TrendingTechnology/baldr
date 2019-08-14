@@ -22,14 +22,8 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 
-// Components
-import { MaterialIcon } from '@bldr/vue-components'
-
 export default {
   name: 'PlanFooter',
-  components: {
-    MaterialIcon
-  },
   computed: mapGetters([
     'jobsOfGradeCurrent',
     'personsCountCurrent'
