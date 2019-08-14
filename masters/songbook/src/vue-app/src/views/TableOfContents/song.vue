@@ -9,25 +9,18 @@
       </router-link>
     </td>
 
-    <td class="icon-cell">
-      <icon-link icon="musescore" :link="meta.musescoreURL"/>
-    </td>
-
-    <td class="icon-cell">
-      <icon-link icon="wikidata" :link="meta.wikidataURL"/>
-    </td>
-
-    <td class="icon-cell">
-      <icon-link icon="wikipedia" :link="meta.wikipediaURL"/>
-    </td>
-
-    <td class="icon-cell">
-      <icon-link icon="youtube" :link="meta.youtubeURL"/>
+    <td class="icon-cell"
+      v-for="externalSite in externalSites"
+      :key="externalSite"
+    >
+      <icon-link :icon="externalSite" :link="meta[externalSite + 'URL']"/>
     </td>
   </tr>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 import IconLink from '@/components/IconLink'
 
 export default {
@@ -36,6 +29,9 @@ export default {
     IconLink
   },
   computed: {
+    ...mapGetters([
+      'externalSites'
+    ]),
     meta () {
       return this.song.metaDataCombined
     }

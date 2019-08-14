@@ -7,9 +7,12 @@
       <div v-if="composer" class="composer">{{ composer }}</div>
     </div>
     <div class="links">
-      <icon-link icon="file-music-outline" :link="metadata.musescoreURL"/>
-      <icon-link icon="wikipedia" :link="metadata.wikipediaURL"/>
-      <icon-link icon="youtube" :link="metadata.youtubeURL"/>
+      <icon-link
+        v-for="externalSite in externalSites"
+        :key="externalSite"
+        :icon="externalSite"
+        :link="metadata[externalSite + 'URL']"
+      />
     </div>
   </div>
 </template>
@@ -26,6 +29,7 @@ export default {
   },
   computed: {
     ...mapGetters([
+      'externalSites',
       'slideNoCurrent',
       'songCurrent'
     ]),

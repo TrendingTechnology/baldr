@@ -18,6 +18,9 @@ const getters = {
   alphabeticalSongsTree: (state, getters) => {
     return new AlphabeticalSongsTree(Object.values(getters.songs))
   },
+  externalSites: () => {
+    return SongMetaDataCombined.externalSites()
+  },
   library: (state) => {
     return state.library
   },

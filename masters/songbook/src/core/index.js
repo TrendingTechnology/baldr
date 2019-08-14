@@ -58,7 +58,27 @@ class SongMetaDataCombined {
    * metadata object.
    */
   constructor (songMetaData) {
+
+    /**
+     * The raw metadata object originating from the info.yml file.
+     * @type {object}
+     */
     this.metaData = songMetaData
+  }
+
+  /**
+   * An array of external sites a song is linked to. Each external site has
+   * its ...URL property.
+   *
+   * @return {array}
+   */
+  static externalSites () {
+    return [
+      'musescore',
+      'wikidata',
+      'wikipedia',
+      'youtube'
+    ]
   }
 
   /**

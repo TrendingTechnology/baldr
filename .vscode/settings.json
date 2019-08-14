@@ -5,5 +5,10 @@
     "**/package-lock.json": true,
     "**/dist": true,
     "**/out": true
+  },
+  "files.watcherExclude": {
+    "**/.git/objects/**": true,
+    "**/.git/subtree-cache/**": true,
+    "**/node_modules/*/**": true
   }
 }
