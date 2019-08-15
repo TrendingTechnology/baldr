@@ -121,6 +121,9 @@ export default {
         }
       })
       window.addEventListener('keyup', event => {
+        if (this.$modal.isOpen()) {
+          return
+        }
         if (event.key === 'ArrowLeft') {
           this.setSlidePrevious()
         } else if (event.key === 'ArrowRight') {

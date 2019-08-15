@@ -12,6 +12,7 @@
 
 <script>
 import ModalDialog from './index'
+import { dialogsWatcher } from './index'
 
 // Components
 import { MaterialIcon } from '@bldr/vue-component-material-icon'
@@ -39,16 +40,26 @@ export default {
   },
   methods: {
     hide (name) {
-      if (this.name === name) this.isVisible = false
+      if (this.name === name) {
+        this.isVisible = false
+        dialogsWatcher.setVisiblity(name, this.isVisible)
+      }
     },
     show (name) {
-      if (this.name === name) this.isVisible = true
+      if (this.name === name) {
+        this.isVisible = true
+        dialogsWatcher.setVisiblity(name, this.isVisible)
+      }
     },
     toggle (name) {
       if (this.name === name) {
         this.isVisible = !this.isVisible
+        dialogsWatcher.setVisiblity(name, this.isVisible)
       }
     }
+  },
+  created: function () {
+    dialogsWatcher.createDialog(this.name)
   }
 }
 </script>
