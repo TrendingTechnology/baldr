@@ -5,29 +5,31 @@
       <router-link to="/table-of-contents">Inhaltsverzeichnis</router-link>
     </div>
     <router-view/>
-    <footer>
-      {{ compilationTime }}
-      {{ compilationVersion }}
-    </footer>
+    <compilation-info package-name="@bldr/songbook-vue-app" :version="version"/>
   </div>
 </template>
 
 <script>
-/* globals compilationTime compilationVersion songsJson */
+/* globals songsJson */
 import { mapActions } from 'vuex'
+import { CompilationInfo } from '@bldr/vue-components'
+
+import packageJson from '../package.json'
 
 export default {
   name: 'App',
+  components: {
+    CompilationInfo
+  },
+  data () {
+    return {
+      version: packageJson.version
+    }
+  },
   beforeCreate: function () {
     this.$store.dispatch('importSongs', songsJson)
   },
-  methods: mapActions(['setSlideNext', 'setSlidePrevious']),
-  data () {
-    return {
-      compilationVersion: compilationVersion,
-      compilationTime: new Date(compilationTime).toLocaleString()
-    }
-  }
+  methods: mapActions(['setSlideNext', 'setSlidePrevious'])
 }
 </script>
 

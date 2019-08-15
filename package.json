@@ -24,7 +24,7 @@
     "doc-show": "xdg-open ./docs/index.html",
     "pack": "electron-builder --dir",
     "spectron": "mocha --fgrep '#spectron' 'tests/*.js' 'src/app/tests/*.js' 'src/lib/tests/*.js' 'masters/audio/tests/*.js' 'masters/camera/tests/*.js' 'masters/editor/tests/*.js' 'masters/image/tests/*.js' 'masters/markdown/tests/*.js' 'masters/person/tests/*.js' 'masters/question/tests/*.js' 'masters/quote/tests/*.js' 'masters/svg/tests/*.js' 'masters/website/tests/*.js'",
-    "standard": "standard",
+    "standard": "standard --verbose --fix",
     "start": "electron .",
     "test": "./run-mocha.js",
     "unittest": "mocha --fgrep '#unittest' 'tests/*.js' 'src/app/tests/*.js' 'src/lib/tests/*.js' 'masters/audio/tests/*.js' 'masters/camera/tests/*.js' 'masters/editor/tests/*.js' 'masters/image/tests/*.js' 'masters/markdown/tests/*.js' 'masters/person/tests/*.js' 'masters/question/tests/*.js' 'masters/quote/tests/*.js' 'masters/svg/tests/*.js' 'masters/website/tests/*.js'"

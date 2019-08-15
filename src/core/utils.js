@@ -3,7 +3,7 @@
  * @module @bldr/core/utils
  */
 
- // Node packages.
+// Node packages.
 const fs = require('fs')
 const os = require('os')
 const path = require('path')
@@ -33,7 +33,7 @@ function bootstrapConfig (configDefault) {
   if (fs.existsSync(configFile)) {
     const configJson = require(configFile)
     if (configDefault) {
-      return Object.assign(config, configJson)
+      return Object.assign(configDefault, configJson)
     }
     return configJson
   }
@@ -43,19 +43,15 @@ function bootstrapConfig (configDefault) {
 /**
  * Generate a revision string in the form version-gitshort(-dirty)
  *
- * @param {string} version - The version
- *   string from package.json
  */
-function revisionString (version) {
-  const segments = []
-  if (version) {
-    segments.push(version)
+function gitHead () {
+  return {
+    short: git.short(),
+    long: git.long(),
+    isDirty: git.isDirty()
   }
-  segments.push(git.short())
-  if (git.isDirty()) segments.push('dirty')
-  return segments.join('-')
 }
 
-exports.log = log
 exports.bootstrapConfig = bootstrapConfig
-exports.revisionString = revisionString
+exports.log = log
+exports.gitHead = gitHead
