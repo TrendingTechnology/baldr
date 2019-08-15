@@ -52,7 +52,7 @@ function revisionString (version) {
     segments.push(version)
   }
   segments.push(git.short())
-  if (git.isDirty) segments.push('dirty')
+  if (git.isDirty()) segments.push('dirty')
   return segments.join('-')
 }
 
