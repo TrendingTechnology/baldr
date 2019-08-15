@@ -3,7 +3,8 @@
 @import url(~typeface-alegreya-sans-sc/index.css);
 @import url(~typeface-alegreya-sc/index.css);
 body[baldr-theme="default"] {
-  font-family: 'Alegreya';
+  font-family: "Alegreya";
+  font-size: 1.5vw;
   color: #000000;
 }
 
@@ -33,7 +34,7 @@ body[baldr-theme="default"] a:hover {
 }
 
 body[baldr-theme="default"] a:active {
-  color: #f9005a;
+  color: #e0585b;
 }
 
 body[baldr-theme="default"] .important {
@@ -51,6 +52,12 @@ body[baldr-theme="default"] .person {
 
 body[baldr-theme="default"] .piece {
   font-style: italic;
+}
+
+body[baldr-theme="default"] ::placeholder {
+  font-family: "Alegreya";
+  font-size: 1.5vw;
+  color: #bab0ac;
 }
 
 /*# sourceMappingURL=styles-ng.css.map */

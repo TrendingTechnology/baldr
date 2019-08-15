@@ -181,6 +181,7 @@ export default {
     cursor: text;
     display: block;
   }
+
   .dynamic-select .result-list {
     border: 1px solid #ced4da;
     margin: calc(.375em - 1px) calc(-.5em - 1px);
@@ -190,23 +191,29 @@ export default {
     z-index: 10;
     background-color: #fff;
   }
+
   .dynamic-select .result-list .result {
     padding: .375em .75em;
     color: #333;
   }
+
   .dynamic-select .result-list .result:hover,
   .dynamic-select .result-list .result:focus {
     background-color: #efefef;
     outline: none;
   }
+
   .dynamic-select .selected-option {
     display: inline-block;
   }
+
   .dynamic-select .search {
     border: none;
     width: 100%;
   }
+
   .dynamic-select .search:focus {
     outline: none;
   }
+
 </style>

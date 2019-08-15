@@ -1,7 +1,6 @@
 import ModalDialog from './ModalDialog.vue'
 
 class DialogsWatcher {
-
   constructor () {
     this.dialogs = {}
   }
@@ -11,6 +10,12 @@ class DialogsWatcher {
       throw new Error(`<modal-dialog/> with the name “${name}” already exists.`)
     }
     this.dialogs[name] = null
+  }
+
+  destroyDialog (name) {
+    if (name in this.dialogs) {
+      delete this.dialogs[name]
+    }
   }
 
   setVisiblity (name, isVisible) {

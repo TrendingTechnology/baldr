@@ -60,6 +60,9 @@ export default {
   },
   created: function () {
     dialogsWatcher.createDialog(this.name)
+  },
+  destroyed: function () {
+    dialogsWatcher.destroyDialog(this.name)
   }
 }
 </script>

@@ -49,7 +49,7 @@ export default {
     overflow: hidden;
     text-overflow: ellipsis;
     max-width: 0;
-    font-size: 1.5vw;
+    font-size: 0.8em;
   }
 
   .title {

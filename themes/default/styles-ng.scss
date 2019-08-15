@@ -3,28 +3,24 @@
 @import '~typeface-alegreya-sans-sc/index.css';
 @import '~typeface-alegreya-sc/index.css';
 
-// https://github.com/zoxon/vscode-theme-monokai-light/blob/master/themes/Monokai%20Light%20Theme-color-theme.json
-$beige: #75715E;
-$yellow: #998f2f;
-$blue: #684d99;
-$c: #49483e;
-$red: #f9005a;
-$blue: #0089b3;
-$gree: #679c00;
-$orange: #cf7000;
-$white: #F8F8F0;
-$c2: #E0EDDD;
-$c3: #dc322f;
-$c4: #cb4b16;
-$blue-light: #219186;
-$c6: #22aa44;
-$c7: #9966b8;
-$c8: #ddbb88;
-// $black: #49483E;
+// https://www.tableau.com/about/blog/2016/7/colors-upgrade-tableau-10-56782
 $black: #000000;
+$blue: #4e79a7;
+$brown: #9c755f;
+$gray: #bab0ac;
+$green: #59a14e;
+$orange: #f18f3b;
+$purple: #af7aa0; // lila
+$red: #e0585b;
+$white: #F8F8F0;
+$yellow: #edc958;
+
+$font-family: 'Alegreya';
+$font-size: 1.5vw;
 
 body[baldr-theme="default"] {
-  font-family: 'Alegreya';
+  font-family: $font-family;
+  font-size: $font-size;
   color: $black;
 
   h1, h2, h3, h4 {
@@ -71,5 +67,11 @@ body[baldr-theme="default"] {
 
   .piece {
     font-style: italic;
+  }
+
+  ::placeholder {
+    font-family: $font-family;
+    font-size: $font-size;
+    color: $gray;
   }
 }

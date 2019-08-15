@@ -34,6 +34,7 @@ export default {
 
   body {
     margin: 0;
+    font-size: 2vw;
   }
 
   #nav {
