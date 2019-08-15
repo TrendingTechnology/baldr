@@ -1,5 +1,5 @@
 {
-  "name": "@baldr/songbook-vue-app",
+  "name": "@bldr/songbook-vue-app",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -21,7 +21,7 @@
     "@bldr/vue-component-material-icon": "^0.1.0",
     "@bldr/theme-default": "^0.0.18",
     "@bldr/songbook-core": "^0.1.0",
-    "git-rev-sync": "^1.12.0"
+    "@bldr/core": "0.0.18"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.10.0",

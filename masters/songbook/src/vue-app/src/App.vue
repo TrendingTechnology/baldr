@@ -7,25 +7,24 @@
     <router-view/>
     <footer>
       {{ compilationTime }}
-      {{ gitRevision }}
+      {{ compilationVersion }}
     </footer>
   </div>
 </template>
 
 <script>
-/* globals compilationTime gitRevision */
-import songs from '/home/jf/.local/share/baldr/projector/songs.json'
+/* globals compilationTime compilationVersion songsJson */
 import { mapActions } from 'vuex'
 
 export default {
   name: 'App',
   beforeCreate: function () {
-    this.$store.dispatch('importSongs', songs)
+    this.$store.dispatch('importSongs', songsJson)
   },
   methods: mapActions(['setSlideNext', 'setSlidePrevious']),
   data () {
     return {
-      gitRevision: gitRevision,
+      compilationVersion: compilationVersion,
       compilationTime: new Date(compilationTime).toLocaleString()
     }
   }

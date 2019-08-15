@@ -1,13 +1,22 @@
+// Node packages.
 const os = require('os')
+const path = require('path')
 
+// Third party packages.
 const CopyPlugin = require('copy-webpack-plugin')
 const { DefinePlugin } = require('webpack')
-const git = require('git-rev-sync')
 
-// https://forum.vuejs.org/t/vue-cli-does-not-work-with-symlinked-node-modules-using-lerna/61700
-// https://cli.vuejs.org/guide/troubleshooting.html#symbolic-links-in-node-modules
+// Project packages.
+const { utils } = require('@bldr/core')
+
+const packageJson = require('./package.json')
+
+const config = utils.bootstrapConfig()
+
 module.exports = {
   chainWebpack: (config) => {
+    // https://forum.vuejs.org/t/vue-cli-does-not-work-with-symlinked-node-modules-using-lerna/61700
+    // https://cli.vuejs.org/guide/troubleshooting.html#symbolic-links-in-node-modules
     config.resolve.symlinks(false)
   },
   configureWebpack: {
@@ -18,15 +27,16 @@ module.exports = {
     },
     plugins: [
       new CopyPlugin([{
-        from: '/home/jf/.local/share/baldr/projector',
+        from: config.songbook.projectorPath,
         to: 'songs',
         ignore: ['.git/**']
       }]),
       new DefinePlugin({
         // https://webpack.js.org/plugins/define-plugin/
         // If the value is a string it will be used as a code fragment.
-        'gitRevision': JSON.stringify(git.short()),
-        'compilationTime': new Date().getTime()
+        compilationTime: new Date().getTime(),
+        compilationVersion: JSON.stringify(utils.revisionString(packageJson.version)),
+        songsJson: JSON.stringify(require(path.join(config.songbook.projectorPath, 'songs.json')))
       })
     ]
   },
