@@ -58,7 +58,6 @@ class SongMetaDataCombined {
    * metadata object.
    */
   constructor (songMetaData) {
-
     /**
      * The raw metadata object originating from the info.yml file.
      * @type {object}
