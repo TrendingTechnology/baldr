@@ -5,10 +5,15 @@
       <router-link to="/table-of-contents">Inhaltsverzeichnis</router-link>
     </div>
     <router-view/>
+    <footer>
+      {{ compilationTime }}
+      {{ gitRevision }}
+    </footer>
   </div>
 </template>
 
 <script>
+/* globals compilationTime gitRevision */
 import songs from '/home/jf/.local/share/baldr/projector/songs.json'
 import { mapActions } from 'vuex'
 
@@ -17,7 +22,13 @@ export default {
   beforeCreate: function () {
     this.$store.dispatch('importSongs', songs)
   },
-  methods: mapActions(['setSlideNext', 'setSlidePrevious'])
+  methods: mapActions(['setSlideNext', 'setSlidePrevious']),
+  data () {
+    return {
+      gitRevision: gitRevision,
+      compilationTime: new Date(compilationTime).toLocaleString()
+    }
+  }
 }
 </script>
 
