@@ -1,9 +1,5 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/table-of-contents">Inhaltsverzeichnis</router-link>
-    </div>
     <router-view/>
     <compilation-info package-name="@bldr/songbook-vue-app" :version="version"/>
   </div>

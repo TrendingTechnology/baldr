@@ -4,13 +4,11 @@
     <div class="top-icons">
       <material-icon
         @click.native="showSearch"
-        class="table-of-contents"
         name="magnify"
         size="5vw"
       />
       <material-icon
         @click.native="showTableOfContents"
-        class="table-of-contents"
         name="table-of-contents"
         size="5vw"
       />
@@ -18,6 +16,7 @@
 
     <modal-dialog name="search">
       <dynamic-select
+        placeholder="Suche nach einem Lied"
         :options="library.toDynamicSelect()"
         @input="selectSong"
         v-model="selectedSong"

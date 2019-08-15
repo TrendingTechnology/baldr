@@ -1,43 +1,44 @@
-// https://raw.githubusercontent.com/silasmontgomery/dynamic-select/master/src/DynamicSelect.vue
+// https://github.com/silasmontgomery/vue-dynamic-select
+// https://raw.githubusercontent.com/silasmontgomery/vue-dynamic-select/master/src/DynamicSelect.vue
 <template>
-  <div>
+  <div
+    @focusin="hasFocus=true"
+    class="dynamic-select"
+    tabindex="0"
+  >
+    <input
+      :placeholder="placeholder"
+      @focus="hasFocus=true"
+      @keydown="removeOption"
+      @keyup="moveToResults"
+      autocomplete="off"
+      class="search"
+      ref="search"
+      v-model="searchText"
+    />
     <div
-      @focusin="hasFocus=true"
-      class="dynamic-select"
-      tabindex="0"
+      class="result-list"
+      ref="resultList"
+      v-if="showResultList"
     >
-      <input
-        :placeholder="placeholder"
-        @focus="hasFocus=true"
-        @keydown="removeOption"
-        @keyup="moveToResults"
-        autocomplete="off"
-        class="search"
-        ref="search"
-        v-model="searchText"
-      />
       <div
-        class="result-list"
-        ref="resultList"
-        v-if="showResultList"
-      >
-        <div
-          :key="result.id"
-          @click="selectOption(result)"
-          @keyup.prevent="navigateResults(result, $event)"
-          class="result"
-          ref="result"
-          tabindex="0"
-          v-for="result in results"
-          v-html="highlight(result.name)"
-        />
-      </div>
+        :key="result.id"
+        @click="selectOption(result)"
+        @keyup.prevent="navigateResults(result, $event)"
+        class="result"
+        ref="result"
+        tabindex="0"
+        v-for="result in results"
+        v-html="highlight(result.name)"
+      />
     </div>
   </div>
 </template>
 
 <script>
 import DynamicSelect from './index'
+
+const resultListMaxCount = 20
 
 export default {
   props: {
@@ -67,15 +68,18 @@ export default {
   },
   computed: {
     results: function () {
-      // Filter items on search text (if not empty, case insensitive) and when item isn't already selected (else return all items not selected)
+      // Filter items on search text (if not empty, case insensitive) and when
+      // item isn't already selected (else return all items not selected)
+      let list
       if (this.searchText) {
-        return this.options.filter((option) => {
+        list = this.options.filter((option) => {
           let optionText = String(option.name).toLowerCase()
           return optionText.includes(this.searchText.toLowerCase())
         })
       } else {
-        return this.options
+        list = this.options.slice(0, resultListMaxCount)
       }
+      return list.slice(0, resultListMaxCount)
     },
     showPlaceholder: function () {
       return !this.hasFocus && !this.selectedOption
@@ -87,7 +91,9 @@ export default {
   watch: {
     hasFocus: function (hasFocus) {
       // Clear the search box when component loses focus
+      window.removeEventListener('keydown', this.preventDefaultCursorKeys)
       if (hasFocus) {
+        window.addEventListener('keydown', this.preventDefaultCursorKeys)
         this.$refs.search.focus()
       } else {
         this.searchText = null
@@ -157,6 +163,11 @@ export default {
     },
     focus: function () {
       this.hasFocus = true
+    },
+    preventDefaultCursorKeys: function (event) {
+      if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+        event.preventDefault()
+      }
     }
   }
 }
