@@ -61,7 +61,7 @@ export default {
 
   .people {
     display: flex;
-    font-size: 2vw;
+    font-size: 1.5vw;
     padding: 3vw;
   }
 
@@ -92,11 +92,11 @@ export default {
   }
 
   h1 {
-    font-size: 4vw;
+    font-size: 3vw;
   }
 
   h2 {
-    font-size: 3vw;
+    font-size: 2vw;
     font-style: italic;
   }
 </style>

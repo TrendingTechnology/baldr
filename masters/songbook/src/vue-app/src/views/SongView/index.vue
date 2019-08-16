@@ -88,14 +88,23 @@ export default {
   methods: {
     ...mapActions([
       'setSlideNext',
-      'setSlidePrevious',
-      'setSongNext',
-      'setSongPrevious',
-      'setSongRandom'
+      'setSlidePrevious'
     ]),
     selectSong () {
-      this.$store.dispatch('setSongCurrent', this.selectedSong.id)
       this.$modal.hide('search')
+      this.setSong(this.selectedSong.id)
+    },
+    setSong (songID) {
+      this.$router.push({ name: 'song', params: { songID: songID } })
+    },
+    setSongNext () {
+      this.setSong(this.library.getNextSong().songID)
+    },
+    setSongPrevious () {
+      this.setSong(this.library.getPreviousSong().songID)
+    },
+    setSongRandom () {
+      this.setSong(this.library.getRandomSong().songID)
     },
     showSearch () {
       this.$modal.toggle('search')
