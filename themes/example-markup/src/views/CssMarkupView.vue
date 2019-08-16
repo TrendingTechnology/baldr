@@ -14,6 +14,11 @@
       title="Class <code>.important</code>"
       markup="<span class='important'>Important:</span> very important"
     />
+
+    <markup-sample
+      title="Tag: code"
+      markup="<code>print(Hello World)</code>"
+    />
   </main>
 </template>
 

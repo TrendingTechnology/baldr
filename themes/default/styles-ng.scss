@@ -2,6 +2,7 @@
 @import '~typeface-alegreya-sans/index.css';
 @import '~typeface-alegreya-sans-sc/index.css';
 @import '~typeface-alegreya-sc/index.css';
+@import '~typeface-anonymous-pro/index.css';
 
 @import './globals/_variables.scss';
 
@@ -13,6 +14,14 @@
   h1, h2, h3, h4 {
     font-family: 'Alegreya Sans';
     font-weight: 700;
+  }
+
+  code {
+    font-family: 'Anonymous Pro';
+    background-color: scale-color($gray, $lightness: 50%);
+    font-weight: normal;
+    font-size: 0.8em;
+    padding: 0 0.1em;
   }
 
   a {
@@ -56,7 +65,7 @@
     font-style: italic;
   }
 
-  ul {
+  ul.content {
     list-style-type: none;
 
     & > li {
