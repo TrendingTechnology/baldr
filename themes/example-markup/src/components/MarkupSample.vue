@@ -20,14 +20,16 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+  .markup-sample {
+    .code {
+      font-size: 0.8em;
+      background-color: scale-color($gray, $lightness: 50%);
+      padding: 0.2em 1em;
+    }
 
-<style scoped>
-  .markup-sample .code {
-    background-color: grey;
-    border: 1px black solid;
-  }
-
-  .markup-sample .rendered {
-
+    .rendered {
+      font-size: 1.4em;
+    }
   }
 </style>

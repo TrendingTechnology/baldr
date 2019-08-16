@@ -3,20 +3,7 @@
 @import '~typeface-alegreya-sans-sc/index.css';
 @import '~typeface-alegreya-sc/index.css';
 
-// https://www.tableau.com/about/blog/2016/7/colors-upgrade-tableau-10-56782
-$black: #000000;
-$blue: #4e79a7;
-$brown: #9c755f;
-$gray: #bab0ac;
-$green: #59a14e;
-$orange: #f18f3b;
-$purple: #af7aa0; // lila
-$red: #e0585b;
-$white: #F8F8F0;
-$yellow: #edc958;
-
-$font-family: 'Alegreya';
-$font-size: 1.5vw;
+@import 'variables';
 
 body[baldr-theme="default"] {
   font-family: $font-family;

@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <main>
     <lorem-ipsum/>
-  </div>
+  </main>
 </template>
 
 <script>

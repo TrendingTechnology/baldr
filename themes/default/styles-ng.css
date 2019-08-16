@@ -5,7 +5,7 @@
 body[baldr-theme="default"] {
   font-family: "Alegreya";
   font-size: 1.5vw;
-  color: #000000;
+  color: #000001;
 }
 
 body[baldr-theme="default"] h1, body[baldr-theme="default"] h2, body[baldr-theme="default"] h3, body[baldr-theme="default"] h4 {
@@ -18,11 +18,11 @@ body[baldr-theme="default"] a {
 }
 
 body[baldr-theme="default"] a:link {
-  color: #000000;
+  color: #000001;
 }
 
 body[baldr-theme="default"] a:visited {
-  color: #000000;
+  color: #000001;
 }
 
 body[baldr-theme="default"] a:focus {

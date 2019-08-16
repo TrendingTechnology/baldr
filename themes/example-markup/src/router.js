@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
+import CssMarkupView from '@/views/CssMarkupView'
 import DynamicSelectView from '@/views/DynamicSelectView'
 import HomeView from '@/views/HomeView'
 import MaterialIconView from '@/views/MaterialIconView'
@@ -35,6 +36,11 @@ export default new Router({
       path: '/material-icon',
       name: 'material-icon',
       component: MaterialIconView
+    },
+    {
+      path: '/css-markup',
+      name: 'css-markup',
+      component: CssMarkupView
     }
   ]
 })

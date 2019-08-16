@@ -1,11 +1,11 @@
 <template>
-  <div>
+  <main>
     <dynamic-select
       :options="composer"
       @input="onInput"
       v-model="selectedComposer"
     />
-  </div>
+  </main>
 </template>
 
 <script>
