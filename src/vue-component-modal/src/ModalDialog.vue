@@ -61,6 +61,9 @@ export default {
   created: function () {
     dialogsWatcher.createDialog(this.name)
   },
+  beforeUpdate: function () {
+    dialogsWatcher.destroyDialog(this.name)
+  },
   destroyed: function () {
     dialogsWatcher.destroyDialog(this.name)
   }
