@@ -3,7 +3,7 @@
 @import '~typeface-alegreya-sans-sc/index.css';
 @import '~typeface-alegreya-sc/index.css';
 
-@import 'variables';
+@import './globals/_variables.scss';
 
 [baldr-theme="default"] {
   font-family: $font-family;

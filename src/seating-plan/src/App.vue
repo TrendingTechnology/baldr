@@ -38,12 +38,13 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
   @import '~@bldr/theme-default/styles-ng.css';
 
   body {
     margin: 2px;
     font-size: 1.2vw;
+    background-color: $white;
   }
 
   @page {

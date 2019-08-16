@@ -44,7 +44,6 @@ export default {
   }
 
   img {
-    background-color: white;
     height: auto;
     max-height: 100vh;
     max-width: 100%;

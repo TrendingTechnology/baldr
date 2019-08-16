@@ -1,4 +1,6 @@
+// Node packages.
 const path = require('path')
+
 const themePath = path.dirname(require.resolve('@bldr/theme-default'))
 
 module.exports = {

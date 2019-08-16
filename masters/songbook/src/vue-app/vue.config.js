@@ -11,6 +11,8 @@ const { utils } = require('@bldr/core')
 
 const config = utils.bootstrapConfig()
 
+const themePath = path.dirname(require.resolve('@bldr/theme-default'))
+
 module.exports = {
   chainWebpack: (config) => {
     // https://forum.vuejs.org/t/vue-cli-does-not-work-with-symlinked-node-modules-using-lerna/61700
@@ -38,5 +40,13 @@ module.exports = {
       })
     ]
   },
-  publicPath: process.env.NODE_ENV === 'production' ? '/songbook/' : '/'
+  publicPath: process.env.NODE_ENV === 'production' ? '/songbook/' : '/',
+  pluginOptions: {
+    'style-resources-loader': {
+      preProcessor: 'scss',
+      patterns: [
+        path.join(themePath, 'globals', '_variables.scss'),
+      ]
+    }
+  }
 }
