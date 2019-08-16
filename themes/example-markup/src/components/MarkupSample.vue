@@ -1,14 +1,15 @@
 <template>
-  <div class="markup-sample">
+  <section class="markup-sample">
 
-    <p>{{ title }}</p>
+    <h2 v-html="title">>{{ title }}</h2>
 
     <div class="code"><code><pre>{{ markup }}</pre></code></div>
 
-    <div class="rendered" v-html="markup">{{ markup }}</div>
+    <div class="rendered" v-html="markup">
+      {{ markup }}
+    </div>
 
-    <hr>
-  </div>
+  </section>
 </template>
 
 <script>
@@ -21,15 +22,22 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+  $padding: 0.2vw 2vw;
+  $margin: 1vw;
+
   .markup-sample {
     .code {
+      background-color: scale-color($gray, $lightness: 70%);
       font-size: 0.8em;
-      background-color: scale-color($gray, $lightness: 50%);
-      padding: 0.2em 1em;
+      margin: $margin;
+      padding: $padding;
     }
 
     .rendered {
+      background-color: scale-color($yellow, $lightness: 90%);
       font-size: 1.4em;
+      margin: $margin;
+      padding: $padding;
     }
   }
 </style>

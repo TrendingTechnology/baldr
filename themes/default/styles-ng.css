@@ -2,62 +2,198 @@
 @import url(~typeface-alegreya-sans/index.css);
 @import url(~typeface-alegreya-sans-sc/index.css);
 @import url(~typeface-alegreya-sc/index.css);
-body[baldr-theme="default"] {
+[baldr-theme="default"] {
   font-family: "Alegreya";
   font-size: 1.5vw;
-  color: #000001;
+  color: #141110;
+  /**
+   * Colors
+   */
 }
 
-body[baldr-theme="default"] h1, body[baldr-theme="default"] h2, body[baldr-theme="default"] h3, body[baldr-theme="default"] h4 {
+[baldr-theme="default"] h1, [baldr-theme="default"] h2, [baldr-theme="default"] h3, [baldr-theme="default"] h4 {
   font-family: 'Alegreya Sans';
   font-weight: 700;
 }
 
-body[baldr-theme="default"] a {
+[baldr-theme="default"] a {
   text-decoration: none;
 }
 
-body[baldr-theme="default"] a:link {
-  color: #000001;
+[baldr-theme="default"] a:link {
+  color: #141110;
 }
 
-body[baldr-theme="default"] a:visited {
-  color: #000001;
+[baldr-theme="default"] a:visited {
+  color: #141110;
 }
 
-body[baldr-theme="default"] a:focus {
+[baldr-theme="default"] a:focus {
   border-bottom: 1px solid;
 }
 
-body[baldr-theme="default"] a:hover {
+[baldr-theme="default"] a:hover {
   opacity: 0.6;
 }
 
-body[baldr-theme="default"] a:active {
+[baldr-theme="default"] a:active {
   color: #e0585b;
 }
 
-body[baldr-theme="default"] .important {
+[baldr-theme="default"] .important {
   font-family: 'Alegreya Sans';
   font-weight: bolder;
 }
 
-body[baldr-theme="default"] .important.person {
+[baldr-theme="default"] .important.person {
   font-family: 'Alegreya Sans SC';
 }
 
-body[baldr-theme="default"] .person {
+[baldr-theme="default"] .person {
   font-family: 'Alegreya SC';
 }
 
-body[baldr-theme="default"] .piece {
+[baldr-theme="default"] .piece {
   font-style: italic;
 }
 
-body[baldr-theme="default"] ::placeholder {
+[baldr-theme="default"] ul {
+  list-style-type: none;
+}
+
+[baldr-theme="default"] ul > li {
+  text-indent: -1em;
+}
+
+[baldr-theme="default"] ul > li:before {
+  content: "- ";
+  text-indent: -1em;
+}
+
+[baldr-theme="default"] ::placeholder {
   font-family: "Alegreya";
   font-size: 1.5vw;
   color: #bab0ac;
+}
+
+[baldr-theme="default"] .white {
+  background-color: #fcfbfb;
+}
+
+[baldr-theme="default"] .yellow {
+  background-color: #edc958;
+}
+
+[baldr-theme="default"] .orange {
+  background-color: #f18f3b;
+}
+
+[baldr-theme="default"] .red {
+  background-color: #e0585b;
+}
+
+[baldr-theme="default"] .brown {
+  background-color: #9c755f;
+}
+
+[baldr-theme="default"] .gray {
+  background-color: #bab0ac;
+}
+
+[baldr-theme="default"] .green {
+  background-color: #59a14e;
+}
+
+[baldr-theme="default"] .blue {
+  background-color: #4e79a7;
+}
+
+[baldr-theme="default"] .purple {
+  background-color: #af7aa0;
+}
+
+[baldr-theme="default"] .black {
+  background-color: #141110;
+}
+
+[baldr-theme="default"] .white-light {
+  background-color: #fdfdfd;
+}
+
+[baldr-theme="default"] .yellow-light {
+  background-color: #f6e4ac;
+}
+
+[baldr-theme="default"] .orange-light {
+  background-color: #f8c79d;
+}
+
+[baldr-theme="default"] .red-light {
+  background-color: #f0acad;
+}
+
+[baldr-theme="default"] .brown-light {
+  background-color: #cebaaf;
+}
+
+[baldr-theme="default"] .gray-light {
+  background-color: #ddd8d6;
+}
+
+[baldr-theme="default"] .green-light {
+  background-color: #aad3a4;
+}
+
+[baldr-theme="default"] .blue-light {
+  background-color: #a5bcd5;
+}
+
+[baldr-theme="default"] .purple-light {
+  background-color: #d7bdd0;
+}
+
+[baldr-theme="default"] .black-light {
+  background-color: #93847e;
+}
+
+[baldr-theme="default"] .white-dark {
+  background-color: #897972;
+}
+
+[baldr-theme="default"] .yellow-dark {
+  background-color: #937310;
+}
+
+[baldr-theme="default"] .orange-dark {
+  background-color: #8c460a;
+}
+
+[baldr-theme="default"] .red-dark {
+  background-color: #84181b;
+}
+
+[baldr-theme="default"] .brown-dark {
+  background-color: #4e3b30;
+}
+
+[baldr-theme="default"] .gray-dark {
+  background-color: #625651;
+}
+
+[baldr-theme="default"] .green-dark {
+  background-color: #2d5127;
+}
+
+[baldr-theme="default"] .blue-dark {
+  background-color: #273d54;
+}
+
+[baldr-theme="default"] .purple-dark {
+  background-color: #5d3852;
+}
+
+[baldr-theme="default"] .black-dark {
+  background-color: #0a0908;
 }
 
 /*# sourceMappingURL=styles-ng.css.map */

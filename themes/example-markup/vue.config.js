@@ -1,6 +1,5 @@
 const path = require('path')
 const themePath = path.dirname(require.resolve('@bldr/theme-default'))
-const globalScss = path.join(themePath, 'globals', '_variables.scss')
 
 module.exports = {
   chainWebpack: (config) => {
@@ -11,7 +10,9 @@ module.exports = {
   pluginOptions: {
     'style-resources-loader': {
       preProcessor: 'scss',
-      patterns: [globalScss]
+      patterns: [
+        path.join(themePath, 'globals', '_variables.scss'),
+      ]
     }
   }
 }

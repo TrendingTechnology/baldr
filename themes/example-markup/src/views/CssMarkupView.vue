@@ -1,13 +1,18 @@
 <template>
   <main>
     <markup-sample
-      title="Class .person"
+      title="Class <code>.person</code>"
       markup="<p class='person'>Ludwig van Beethoven</p>"
     />
 
     <markup-sample
-      title="Class .piece"
+      title="Class <code>.piece</code>"
       markup="<p class='piece'>Symphonie Nr. 5</p>"
+    />
+
+    <markup-sample
+      title="Class <code>.important</code>"
+      markup="<span class='important'>Important:</span> very important"
     />
   </main>
 </template>

@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
+import ColorsView from '@/views/ColorsView'
 import CssMarkupView from '@/views/CssMarkupView'
 import DynamicSelectView from '@/views/DynamicSelectView'
 import HomeView from '@/views/HomeView'
@@ -41,6 +42,11 @@ export default new Router({
       path: '/css-markup',
       name: 'css-markup',
       component: CssMarkupView
+    },
+    {
+      path: '/colors',
+      name: 'colors',
+      component: ColorsView
     }
   ]
 })

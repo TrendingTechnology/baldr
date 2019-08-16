@@ -4,6 +4,7 @@
       <router-link to="/">Home</router-link> |
       <router-link to="/typography">Typography</router-link> |
       <router-link to="/css-markup">CSS markup</router-link> |
+      <router-link to="/colors">Colors</router-link> |
       <router-link to="/modal">Modal</router-link> |
       <router-link to="/dynamic-select">Dynamic select</router-link> |
       <router-link to="/material-icon">Material icon</router-link>

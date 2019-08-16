@@ -18,6 +18,23 @@
     <h3>Heading 3</h3>
     <h4>Heading 4</h4>
 
+
+    <h1>Ordered lists</h1>
+
+    <ol>
+      <li>one</li>
+      <li>two</li>
+      <li>three</li>
+    </ol>
+
+    <h1>Unordered lists</h1>
+
+    <ul>
+      <li>one</li>
+      <li>two</li>
+      <li>three</li>
+    </ul>
+
   </div>
 </template>
 

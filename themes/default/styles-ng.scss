@@ -5,7 +5,7 @@
 
 @import 'variables';
 
-body[baldr-theme="default"] {
+[baldr-theme="default"] {
   font-family: $font-family;
   font-size: $font-size;
   color: $black;
@@ -56,9 +56,44 @@ body[baldr-theme="default"] {
     font-style: italic;
   }
 
+  ul {
+    list-style-type: none;
+
+    & > li {
+      text-indent: -1em;
+    }
+
+    & > li:before {
+      content: "- ";
+      text-indent: -1em;
+    }
+  }
+
   ::placeholder {
     font-family: $font-family;
     font-size: $font-size;
     color: $gray;
+  }
+
+  /**
+   * Colors
+   */
+
+   @each $name, $value in $colors {
+    .#{$name} {
+      background-color: $value;
+    }
+  }
+
+  @each $name, $value in $colors {
+    .#{$name}-light {
+      background-color: scale-color($value, $lightness: 50%);
+    }
+  }
+
+  @each $name, $value in $colors {
+    .#{$name}-dark {
+      background-color: scale-color($value, $lightness: -50%);
+    }
   }
 }
