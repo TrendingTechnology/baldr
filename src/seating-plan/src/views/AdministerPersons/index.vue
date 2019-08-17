@@ -52,6 +52,10 @@ export default {
 </script>
 
 <style scoped>
+  main {
+    padding: 0 3vw;
+  }
+
   .list {
     column-count: 3;
   }

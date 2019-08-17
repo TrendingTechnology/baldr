@@ -1,19 +1,19 @@
 <template>
   <table>
     <tr>
-      <td><strong>Schule</strong></td>
+      <td><span class="important">Schule</span></td>
       <td contenteditable @blur="setMeta('location', $event)">
         {{ getMeta('location') }}
       </td>
     </tr>
     <tr>
-      <td><strong>Schuljahr</strong></td>
+      <td><span class="important">Schuljahr</span></td>
       <td contenteditable @blur="setMeta('year', $event)">
         {{ getMeta('year') }}
       </td>
     </tr>
     <tr>
-      <td><strong>Lehrer</strong></td>
+      <td><span class="important">Lehrer</span></td>
       <td contenteditable @blur="setMeta('teacher', $event)">
         {{ getMeta('teacher') }}
       </td>

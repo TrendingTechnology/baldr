@@ -29,9 +29,6 @@ export default {
 <style scoped>
   main {
     display: flex;
-  }
-
-  section {
-    width: 100%;
+    justify-content: space-around;
   }
 </style>

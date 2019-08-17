@@ -8,6 +8,9 @@
   font-size: 1.5vw;
   color: #141110;
   /**
+   * Formts
+   */
+  /**
    * Colors
    */
 }
@@ -79,10 +82,29 @@
   text-indent: -1em;
 }
 
-[baldr-theme="default"] ::placeholder {
-  font-family: "Alegreya";
-  font-size: 1.5vw;
-  color: #bab0ac;
+[baldr-theme="default"] input, [baldr-theme="default"] button {
+  display: inline-block;
+  padding: 0.2em;
+  margin: 0;
+}
+
+[baldr-theme="default"] input, [baldr-theme="default"] button, [baldr-theme="default"] ::placeholder {
+  font-size: inherit;
+  font-family: "Alegreya Sans";
+}
+
+[baldr-theme="default"] input {
+  border: 1px solid #bab0ac;
+}
+
+[baldr-theme="default"] button {
+  background-color: #bab0ac;
+  border: 1px solid transparent;
+}
+
+[baldr-theme="default"] button:active {
+  background-color: #4e79a7;
+  color: #fcfbfb;
 }
 
 [baldr-theme="default"] .white {

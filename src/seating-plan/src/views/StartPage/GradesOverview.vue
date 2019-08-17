@@ -3,10 +3,11 @@
     <grades-table/>
     <form @submit="createGrade">
       <input
-        v-model="gradeName"
-        type="text"
-        placeholder="Klasse"
         @keyup.enter="createGrade"
+        placeholder="Klasse"
+        type="text"
+        size="8"
+        v-model="gradeName"
       >
       <button>hinzufügen</button>
     </form>
