@@ -515,7 +515,7 @@ class IntermediateSong extends Song {
    * of the FileMonitor() class.
    */
   constructor (songPath, projectorPath, pianoPath, fileMonitor) {
-    super(songPath)
+    super(songPath, projectorPath, pianoPath)
 
     /**
      * Directory to store intermediate files for the projector app
@@ -525,7 +525,7 @@ class IntermediateSong extends Song {
      */
     this.projectorPath = projectorPath
     if (this.projectorPath) {
-      this.projectorPath = this.normalizeSongFolder_(this.projectorPath)
+      this.projectorPath = this.getSongFolder_(this.projectorPath)
       this.folderSlides = new Folder(this.projectorPath)
     }
 
@@ -536,7 +536,7 @@ class IntermediateSong extends Song {
      */
     this.pianoPath = pianoPath
     if (this.pianoPath) {
-      this.pianoPath = this.normalizeSongFolder_(this.pianoPath)
+      this.pianoPath = this.getSongFolder_(this.pianoPath)
       this.folderPiano = new Folder(this.pianoPath)
     }
 

@@ -466,14 +466,18 @@ class Song {
   /**
    * @param {string} songPath - The path of the directory containing the song
    * files or a path of a file inside the song folder (not nested in subfolders)
+   * @param {string} projectorPath - Directory to store intermediate files for
+   *   the projector app (*.svg, *.json).
+   * @param {string} pianoPath - Directory to store intermediate files for
+   *   the piano score (*.eps).
    */
-  constructor (songPath) {
+  constructor (songPath, projectorPath, pianoPath) {
     /**
      * The directory containing the song files.
      *
      * @type {string}
      */
-    this.folder = this.normalizeSongFolder_(songPath)
+    this.folder = this.getSongFolder_(songPath)
 
     /**
      * The character of the alphabetical folder. The song folders must
@@ -509,14 +513,41 @@ class Song {
      *
      * @type {module:baldr-songbook~Folder}
      */
-    this.folderSlides = new Folder(this.folder, 'slides')
+    this.folderSlides = null
+
+    /**
+     * Directory to store intermediate files for the projector app
+     * (*.svg, *.json).
+     *
+     * @type {string}
+     */
+    this.projectorPath = projectorPath
+    if (this.projectorPath) {
+      this.projectorPath = this.getSongFolder_(this.projectorPath)
+      this.folderSlides = new Folder(this.projectorPath)
+    } else {
+      this.folderSlides = new Folder(this.folder, 'slides')
+    }
 
     /**
      * The piano folder
      *
      * @type {module:baldr-songbook~Folder}
      */
-    this.folderPiano = new Folder(this.folder, 'piano')
+    this.folderPiano = null
+
+    /**
+     * Directory to store intermediate files for the piano score (*.eps).
+     *
+     * @type {string}
+     */
+    this.pianoPath = pianoPath
+    if (this.pianoPath) {
+      this.pianoPath = this.getSongFolder_(this.pianoPath)
+      this.folderPiano = new Folder(this.pianoPath)
+    } else {
+      this.folderPiano = new Folder(this.folder, 'piano')
+    }
 
     /**
      * Path of the MuseScore file 'projector.mscx', relative to the base folder
@@ -559,7 +590,7 @@ class Song {
    *
    * @return {string} The path of the parent directory of the song.
    */
-  normalizeSongFolder_ (songPath) {
+  getSongFolder_ (songPath) {
     try {
       const stat = fs.lstatSync(songPath)
       if (stat.isDirectory()) {
