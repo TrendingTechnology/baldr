@@ -47,36 +47,42 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
   a .baldr-icons {
-    color: black;
+    color: $black;
   }
 </style>
 
-<style scoped>
+<style lang="scss" scoped>
   @import './style.css';
 
-  div {
+  .baldr-icons {
     display: inline-block;
+
+    &:not(.disabled) {
+      cursor: pointer;
+      display: inline-block;
+    }
+
+    &:not(.disabled):hover {
+      color: $red;
+    }
+
+    &:not(.disabled):active {
+      color: $blue;
+    }
+
+    &:not(.disabled):focus {
+      color: scale-color($gray, $lightness: -20%);
+    }
+
+    &.disabled {
+      color: $gray;
+    }
   }
-  div:not(.disabled) {
-    cursor: pointer;
-    display: inline-block;
-  }
-  div:not(.disabled):hover {
-    color: red;
-  }
-  div:not(.disabled):active {
-    color: grey;
-  }
-  div:not(.disabled):focus {
-    color: slategray;
-  }
-  div.disabled {
-    color: grey;
-  }
+
   @media print {
-    div {
+    .baldr-icons {
       display: none;
     }
   }
