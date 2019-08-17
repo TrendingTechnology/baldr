@@ -21,7 +21,6 @@ const Sqlite3 = require('better-sqlite3')
 
 // Project packages.
 const {
-  Folder,
   Library,
   listFiles,
   message,

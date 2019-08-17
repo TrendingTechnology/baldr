@@ -6,7 +6,6 @@
 'use strict'
 
 // Node packages.
-const os = require('os')
 const path = require('path')
 const util = require('util')
 
