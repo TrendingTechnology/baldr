@@ -1,16 +1,21 @@
 <template>
   <div class="compilation-info">
-    Version:
+    <span class="important">Version:</span>
     <a :href="`https://www.npmjs.com/package/${packageName}`">
      {{ packageName }} {{ version }}
     </a>
 
-    Git revision:
+    <span class="spacer"></span>
+
+    <span class="important">Git revision:</span>
     <a :href="`https://github.com/Josef-Friedrich/baldr/commit/${gitHead.long}`">
      {{ gitHead.short }}<span v-if="gitHead.isDirty">-dirty</span>
     </a>
 
-    Compilation time: {{ compilationTime }}
+    <span class="spacer"></span>
+
+    <span class="important">Compilation time:</span>
+    {{ compilationTime }}
   </div>
 </template>
 
@@ -38,16 +43,23 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
   .compilation-info {
-    position: absolute;
     bottom: 0;
+    color: $gray;
+    font-size: 0.8em;
     left: 0;
     opacity: 0;
     padding: 0.4vw;
-  }
+    position: absolute;
 
-  .compilation-info:hover {
-    opacity: 1;
+    .spacer {
+      display: inline-block;
+      width: 1em;
+    }
+
+    &:hover {
+      opacity: 1;
+    }
   }
 </style>
