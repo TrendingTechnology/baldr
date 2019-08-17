@@ -518,29 +518,6 @@ class IntermediateSong extends Song {
     super(songPath, projectorPath, pianoPath)
 
     /**
-     * Directory to store intermediate files for the projector app
-     * (*.svg, *.json).
-     *
-     * @type {string}
-     */
-    this.projectorPath = projectorPath
-    if (this.projectorPath) {
-      this.projectorPath = this.getSongFolder_(this.projectorPath)
-      this.folderSlides = new Folder(this.projectorPath)
-    }
-
-    /**
-     * Directory to store intermediate files for the piano score (*.eps).
-     *
-     * @type {string}
-     */
-    this.pianoPath = pianoPath
-    if (this.pianoPath) {
-      this.pianoPath = this.getSongFolder_(this.pianoPath)
-      this.folderPiano = new Folder(this.pianoPath)
-    }
-
-    /**
      * A instance of the FileMonitor class.
      *
      * @type {module:baldr-songbook~FileMonitor}
