@@ -481,13 +481,13 @@ describe('Package “@bldr/songbook-base”', function () {
       })
 
       describe('Methods', function () {
-        describe('Method “normalizeSongFolder_()”', function () {
+        describe('Method “getSongFolder_()”', function () {
           it('folder”', function () {
-            assert.strictEqual(song.normalizeSongFolder_(folder), folder)
+            assert.strictEqual(song.getSongFolder_(folder), folder)
           })
 
           it('file', function () {
-            assert.strictEqual(song.normalizeSongFolder_(path.join(folder, 'info.yml')), folder)
+            assert.strictEqual(song.getSongFolder_(path.join(folder, 'info.yml')), folder)
           })
         })
 

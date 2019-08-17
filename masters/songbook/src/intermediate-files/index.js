@@ -515,30 +515,7 @@ class IntermediateSong extends Song {
    * of the FileMonitor() class.
    */
   constructor (songPath, projectorPath, pianoPath, fileMonitor) {
-    super(songPath)
-
-    /**
-     * Directory to store intermediate files for the projector app
-     * (*.svg, *.json).
-     *
-     * @type {string}
-     */
-    this.projectorPath = projectorPath
-    if (this.projectorPath) {
-      this.projectorPath = this.normalizeSongFolder_(this.projectorPath)
-      this.folderSlides = new Folder(this.projectorPath)
-    }
-
-    /**
-     * Directory to store intermediate files for the piano score (*.eps).
-     *
-     * @type {string}
-     */
-    this.pianoPath = pianoPath
-    if (this.pianoPath) {
-      this.pianoPath = this.normalizeSongFolder_(this.pianoPath)
-      this.folderPiano = new Folder(this.pianoPath)
-    }
+    super(songPath, projectorPath, pianoPath)
 
     /**
      * A instance of the FileMonitor class.
