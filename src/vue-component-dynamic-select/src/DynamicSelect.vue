@@ -117,7 +117,7 @@ export default {
         let matchPos = String(value).toLowerCase().indexOf(this.searchText.toLowerCase())
         if (matchPos > -1) {
           let matchStr = String(value).substr(matchPos, this.searchText.length)
-          value = String(value).replace(matchStr, '<span style="font-weight: bold; background-color: #efefef;">' + matchStr + '</span>')
+          value = String(value).replace(matchStr, `<span style="font-weight: bold;">${matchStr}</span>`)
         }
       }
       return value
@@ -173,47 +173,48 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+  $padding-left-right: 0.3em ;
+
   .dynamic-select {
-    border: 1px solid #ced4da;
     position: relative;
-    padding: .375em .5em;
-    cursor: text;
-    display: block;
-  }
 
-  .dynamic-select .result-list {
-    border: 1px solid #ced4da;
-    margin: calc(.375em - 1px) calc(-.5em - 1px);
-    width: 100%;
-    cursor: pointer;
-    position: absolute;
-    z-index: 10;
-    background-color: #fff;
-  }
+    .result-list {
+      background-color: scale-color($white, $lightness: -1%);
+      border: 1px solid $gray;
+      border-top: 0;
+      box-sizing: border-box;
+      cursor: pointer;
+      position: absolute;
+      width: 100%;
+      z-index: 10;
 
-  .dynamic-select .result-list .result {
-    padding: .375em .75em;
-    color: #333;
-  }
+      .result {
+        color: $black;
+        padding: 0.2em $padding-left-right;
+        &:hover,
+        &:focus {
+          background-color: scale-color($gray, $lightness: 70%);
+          outline: none;
+        }
+      }
+    }
 
-  .dynamic-select .result-list .result:hover,
-  .dynamic-select .result-list .result:focus {
-    background-color: #efefef;
-    outline: none;
-  }
+    .selected-option {
+      display: inline-block;
+    }
 
-  .dynamic-select .selected-option {
-    display: inline-block;
-  }
+    input.search {
+      border: 1px solid $gray;
+      box-sizing: border-box;
+      font-family: inherit;
+      font-size: inherit;
+      padding: 0.5em $padding-left-right;
+      width: 100%;
 
-  .dynamic-select .search {
-    border: none;
-    width: 100%;
+      &:focus {
+        outline: none;
+      }
+    }
   }
-
-  .dynamic-select .search:focus {
-    outline: none;
-  }
-
 </style>

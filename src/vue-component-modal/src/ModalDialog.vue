@@ -70,7 +70,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
   .modal-dialog-base {
     align-items: center;
     display: flex;
@@ -91,7 +91,7 @@ export default {
   }
 
   .modal-dialog-body {
-    background-color: #fff;
+    background-color: scale-color($white, $lightness: 30%);
     box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
     height: 95%;
     margin: 1vw;
