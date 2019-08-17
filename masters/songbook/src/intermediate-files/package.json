@@ -17,7 +17,8 @@
     "dependencies": {
         "@bldr/core": "^0.0.18",
         "@bldr/songbook-core": "^0.1.0",
-        "better-sqlite3": "^5.4.1"
+        "better-sqlite3": "^5.4.1",
+        "chalk": "^2.4.2"
     },
     "publishConfig": {
         "access": "public"

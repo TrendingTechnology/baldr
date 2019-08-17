@@ -12,6 +12,7 @@ const path = require('path')
 
 // Third party packages.
 const { Command } = require('commander')
+const chalk = require('chalk')
 
 // Project packages.
 const pckg = require('./package.json')
@@ -149,7 +150,7 @@ const main = function () {
   if (config.projectorPath) {
     utils.log(
       'The folder where all projector related files are stored is:\n    %s\n',
-      config.projectorPath.green
+      chalk.green(config.projectorPath)
     )
   }
 
@@ -160,7 +161,7 @@ const main = function () {
   if (config.pianoPath) {
     utils.log(
       'The folder where all piano related files are stored is:\n    %s\n',
-      config.pianoPath.green
+      chalk.green(config.pianoPath)
     )
   }
 
@@ -194,7 +195,7 @@ const main = function () {
         projectorPath,
         JSON.stringify(library, null, '  ')
       )
-      utils.log('Create JSON file: %s', projectorPath.yellow)
+      utils.log('Create JSON file: %s', chalk.yellow(projectorPath))
     }
   }
 }

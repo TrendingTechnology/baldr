@@ -8,15 +8,16 @@
  */
 
 // Node packages.
-const crypto = require('crypto')
-const path = require('path')
 const childProcess = require('child_process')
-const util = require('util')
+const crypto = require('crypto')
 const os = require('os')
+const path = require('path')
+const util = require('util')
 
 // Third party packages.
-const Sqlite3 = require('better-sqlite3')
+const chalk = require('chalk')
 const fs = require('fs-extra')
+const Sqlite3 = require('better-sqlite3')
 
 // Project packages.
 const {
@@ -479,7 +480,7 @@ class PianoScore {
     for (let index = 0; index < 3; index++) {
       utils.log(
         'Compile the TeX file “%s” the %d time.',
-        this.texFile.path.yellow,
+        chalk.yellow(this.texFile.path),
         index + 1
       )
       this.spawnTex_(this.texFile.path, cwd)

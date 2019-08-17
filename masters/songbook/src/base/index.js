@@ -14,7 +14,7 @@ const util = require('util')
 const fs = require('fs-extra')
 const glob = require('glob')
 const yaml = require('js-yaml')
-require('colors')
+const chalk = require('chalk')
 
 const { SongMetaDataCombined, CoreLibrary } = require('@bldr/songbook-core')
 
@@ -85,9 +85,9 @@ function listFiles (basePath, filter) {
 
 class Message {
   constructor () {
-    this.error = '☒'.red
-    this.finished = '☑'.green
-    this.progress = '☐'.yellow
+    this.error = chalk.red('☒')
+    this.finished = chalk.green('☑')
+    this.progress = chalk.yellow('☐')
   }
 
   /**
@@ -148,7 +148,7 @@ class Message {
   songFolder (status, song) {
     let forced
     if (status.force) {
-      forced = ' ' + '(forced)'.red
+      forced = ' ' + chalk.red('(forced)')
     } else {
       forced = ''
     }
@@ -164,18 +164,18 @@ class Message {
 
     let title
     if (!song.metaData.title) {
-      title = status.folderName.red
+      title = chalk.red(status.folderName)
     } else if (!status.changed.slides && !status.changed.piano) {
-      title = status.folderName.green + ': ' + song.metaData.title
+      title = chalk.green(status.folderName) + ': ' + song.metaData.title
     } else {
-      title = status.folderName.yellow + ': ' + song.metaData.title
+      title = chalk.yellow(status.folderName) + ': ' + song.metaData.title
     }
 
     let output = symbol + '  ' + title + forced
     if (status.generated.slides) {
       output +=
         '\n\t' +
-        'slides'.yellow +
+        chalk.yellow('slides') +
         ': ' +
         status.generated.slides.join(', ')
     }
@@ -183,7 +183,7 @@ class Message {
     if (status.generated.piano) {
       output +=
         '\n\t' +
-        'piano'.yellow +
+        chalk.yellow('piano') +
         ': ' +
         status.generated.piano.join(', ')
     }
