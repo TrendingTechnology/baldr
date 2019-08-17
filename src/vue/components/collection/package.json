@@ -1,5 +1,5 @@
 {
-  "name": "@bldr/vue-components",
+  "name": "@bldr/vue-components-collection",
   "description": "A collection of different vue components.",
   "version": "0.1.0",
   "scripts": {

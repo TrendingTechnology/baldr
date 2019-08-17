@@ -16,7 +16,8 @@ services:
 
 script:
   - npm test
-  - cd src/seating-plan; npm run test:unit
+  - cd src/vue/apps/seating-plan; npm run test:unit
+  - cd src/vue/apps/songbook; npm run test:unit
 
 # https://docs.travis-ci.com/user/conditional-builds-stages-jobs
 # https://docs.travis-ci.com/user/conditions-v1

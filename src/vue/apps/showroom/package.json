@@ -1,5 +1,5 @@
 {
-  "name": "@bldr/example-markup",
+  "name": "@bldr/showroom",
   "version": "0.0.10",
   "description": "Vue app to test the themes",
   "author": {
@@ -16,8 +16,8 @@
     "@bldr/theme-default": "^0.0.18",
     "@bldr/vue-component-dynamic-select": "^0.1.0",
     "@bldr/vue-component-material-icon": "^0.1.0",
-    "@bldr/vue-component-modal": "^0.1.0",
-    "@bldr/vue-components": "^0.1.0",
+    "@bldr/vue-component-modal-dialog": "^0.1.0",
+    "@bldr/vue-components-collection": "^0.1.0",
     "core-js": "^3.1.4",
     "vue": "^2.6.10",
     "vue-router": "^3.1.1"

@@ -5,6 +5,8 @@
     "masters/songbook/src/*",
     "masters/camera/src/*",
     "src/*",
+    "src/vue/apps/*",
+    "src/vue/components/*",
     "tests/helper",
     "themes/*"
   ],

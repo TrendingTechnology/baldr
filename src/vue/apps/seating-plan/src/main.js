@@ -8,7 +8,7 @@ import VueRouter from 'vue-router'
 
 import store from './store'
 import router from './router'
-import ModalDialog from '@bldr/vue-component-modal'
+import ModalDialog from '@bldr/vue-component-modal-dialog'
 import DynamicSelect from '@bldr/vue-component-dynamic-select'
 import MaterialIcon from '@bldr/vue-component-material-icon'
 
