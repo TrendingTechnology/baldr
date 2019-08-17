@@ -1,5 +1,3 @@
-require('typeface-anonymous-pro')
-
 exports.name = 'default'
 
 exports.cssFiles = [
