@@ -16,7 +16,9 @@ const glob = require('glob')
 const yaml = require('js-yaml')
 const chalk = require('chalk')
 
+// Project packages.
 const { SongMetaDataCombined, CoreLibrary } = require('@bldr/songbook-core')
+const { utils } = require('@bldr/core')
 
 /**
  * An array of song objects.
@@ -36,15 +38,8 @@ function bootstrapConfig () {
     force: false
   }
 
-  // default object
-  let config = configDefault
-
-  // config file
-  const configFile = path.join(os.homedir(), '.baldr.json')
-  const configFileExits = fs.existsSync(configFile)
-  if (configFileExits) {
-    config = Object.assign(config, require(configFile).songbook)
-  }
+  const configGlobal = utils.bootstrapConfig()
+  const config = Object.assign(configDefault, configGlobal.songbook)
 
   if (process.env.BALDR_SONGBOOK_PATH) {
     config.path = process.env.BALDR_SONGBOOK_PATH

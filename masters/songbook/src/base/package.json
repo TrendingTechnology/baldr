@@ -16,6 +16,7 @@
   "main": "index.js",
   "dependencies": {
     "@bldr/songbook-core": "^0.1.0",
+    "@bldr/core": "^0.0.18",
     "chalk": "^2.4.2",
     "fs-extra": "^8.1.0",
     "glob": "^7.1.4",

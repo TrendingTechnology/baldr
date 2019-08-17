@@ -27,6 +27,7 @@ module.exports = {
         // https://webpack.js.org/plugins/define-plugin/
         // If the value is a string it will be used as a code fragment.
         compilationTime: new Date().getTime(),
+        config: JSON.stringify(utils.bootstrapConfig()),
         gitHead: JSON.stringify(utils.gitHead())
       })
     ]

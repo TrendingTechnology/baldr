@@ -1,8 +1,7 @@
 // eslint-disable-next-line
-/* globals localStorage */
+/* globals localStorage config */
 
 import { toLocaleDateTimeString } from '../../lib.js'
-import config from '$HOME/.baldr.json'
 import axios from 'axios'
 
 console.log(`Rest-API: Using username '${config.restApi.username}'`)
