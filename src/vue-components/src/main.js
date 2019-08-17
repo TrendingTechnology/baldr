@@ -1,5 +1,5 @@
 import SFCCursorCross from './components/CursorCross.vue'
-import SFCCompilationInfo from './components/CompilationInfo.vue'
+import SFCAppInfo from './components/AppInfo.vue'
 
 export const CursorCross = SFCCursorCross
-export const CompilationInfo = SFCCompilationInfo
+export const AppInfo = SFCAppInfo

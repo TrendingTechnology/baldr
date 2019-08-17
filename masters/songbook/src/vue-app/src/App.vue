@@ -1,21 +1,21 @@
 <template>
   <div id="app">
     <router-view/>
-    <compilation-info package-name="@bldr/songbook-vue-app" :version="version"/>
+    <app-info package-name="@bldr/songbook-vue-app" :version="version"/>
   </div>
 </template>
 
 <script>
 /* globals songsJson */
 import { mapActions } from 'vuex'
-import { CompilationInfo } from '@bldr/vue-components'
+import { AppInfo } from '@bldr/vue-components'
 
 import packageJson from '../package.json'
 
 export default {
   name: 'App',
   components: {
-    CompilationInfo
+    AppInfo
   },
   data () {
     return {

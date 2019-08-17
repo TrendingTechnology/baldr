@@ -33,15 +33,17 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
   [draggable="true"] {
     cursor: grab;
   }
+
   [draggable="true"]:hover {
-    color: red;
+    color: $red;
   }
+
   [draggable="false"] {
     text-decoration: line-through;
-    color: grey;
+    color: $gray;
   }
 </style>

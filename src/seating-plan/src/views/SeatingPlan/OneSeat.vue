@@ -105,11 +105,10 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
   .seat {
-    border: 1px solid black;
+    border: 1px solid $black;
     position: absolute;
-    background-color: white;
   }
 
   [draggable="true"] {
@@ -131,7 +130,7 @@ export default {
   }
 
   .dragover {
-    background-color: red;
+    background-color: $red;
   }
 
   .icons {

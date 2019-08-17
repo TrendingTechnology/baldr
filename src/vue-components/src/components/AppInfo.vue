@@ -1,5 +1,10 @@
 <template>
-  <div class="compilation-info">
+  <div class="compilation-info" v-if="show">
+    <span class="important app-info">App-Info:</span>
+
+    <span class="spacer"></span>
+
+
     <span class="important">Version:</span>
     <a :href="`https://www.npmjs.com/package/${packageName}`">
      {{ packageName }} {{ version }}
@@ -16,14 +21,21 @@
 
     <span class="important">Compilation time:</span>
     {{ compilationTime }}
+
+    <material-icon
+      class="close"
+      name="close"
+      @click.native="toggle"
+    />
   </div>
 </template>
 
 <script>
 /* globals compilationTime gitHead */
+import { MaterialIcon } from '@bldr/vue-component-material-icon'
 
 export default {
-  name: 'CompilationInfo',
+  name: 'AppInfo',
   props: {
     packageName: {
       required: true,
@@ -34,32 +46,58 @@ export default {
       type: String
     }
   },
+  components: {
+    MaterialIcon
+  },
   data () {
     return {
+      show: false,
       gitHead: gitHead,
       compilationTime: new Date(compilationTime).toLocaleString()
     }
+  },
+  methods: {
+    toggle: function () {
+      this.show = !this.show
+    }
+  },
+  mounted: function () {
+    this.$nextTick(function () {
+      window.addEventListener('keyup', event => {
+        if (event.key === ',' && event.ctrlKey) {
+          this.toggle()
+        }
+      })
+    })
   }
 }
 </script>
 
 <style lang="scss" scoped>
   .compilation-info {
+    background-color: $yellow;
     bottom: 0;
-    color: $gray;
-    font-size: 0.8em;
+    box-sizing: border-box;
+    font-size: 1.1em;
     left: 0;
-    opacity: 0;
     padding: 0.4vw;
     position: absolute;
+    text-align: left;
+    width: 100%;
+
+    .app-info {
+      text-transform: uppercase;
+    }
 
     .spacer {
       display: inline-block;
       width: 1em;
     }
 
-    &:hover {
-      opacity: 1;
+    .close {
+      position: absolute;
+      top: 0.5em;
+      right: 1em;
     }
   }
 </style>
