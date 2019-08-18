@@ -9,13 +9,8 @@
 </template>
 
 <script>
-import CircleIcon from './CircleIcon'
-
 export default {
-  name: 'HomeView',
-  components: {
-    CircleIcon
-  }
+  name: 'HomeView'
 }
 </script>
 

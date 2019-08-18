@@ -7,6 +7,8 @@
 </template>
 
 <script>
+import MaterialIcon from './MaterialIcon'
+
 export default {
   name: 'CircleIcon',
   props: {
@@ -31,8 +33,10 @@ export default {
     height: 10vw;
     line-height: 10vw;
     text-align: center;
+
     .baldr-icons {
       color: $white;
+
       &.normal:hover {
         color: $white;
       }
