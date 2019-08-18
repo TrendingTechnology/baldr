@@ -3,6 +3,7 @@ Most icons originating from https://materialdesignicons.com.
 Custom icons:
 
 * musescore
+* wikidata
 
 Icon size:
 

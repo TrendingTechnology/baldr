@@ -5,12 +5,12 @@
       <material-icon
         @click.native="showSearch"
         name="magnify"
-        size="5vw"
+        :size="materialIconSize"
       />
       <material-icon
         @click.native="showTableOfContents"
         name="table-of-contents"
-        size="5vw"
+       :size="materialIconSize"
       />
     </div>
 
@@ -31,7 +31,7 @@
       :right="setSlideNext"
       :up="setSongPrevious"
       :down="setSongNext"
-      size="5vw"
+      :size="materialIconSize"
       left-title="Vorhergehende Seite"
       right-title="Nächste Seite"
       up-title="Vorhergehendes Lied"
@@ -41,7 +41,7 @@
       @click.native="setSongRandom"
       class="random"
       name="dice-multiple"
-      size="5vw"
+      :size="materialIconSize"
       title="Zufälliges Lied"
     />
   </div>
@@ -64,7 +64,8 @@ export default {
   },
   data () {
     return {
-      selectedSong: null
+      selectedSong: null,
+      materialIconSize: '3vw'
     }
   },
   computed: {

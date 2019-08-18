@@ -8,10 +8,11 @@
     </div>
     <div class="links">
       <icon-link
-        v-for="externalSite in externalSites"
-        :key="externalSite"
         :icon="externalSite"
+        :key="externalSite"
         :link="metadata[externalSite + 'URL']"
+        show-on-hover
+        v-for="externalSite in externalSites"
       />
     </div>
   </div>

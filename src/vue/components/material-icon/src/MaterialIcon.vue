@@ -20,6 +20,10 @@ export default {
       type: Boolean,
       default: false
     },
+    showOnHover: {
+      type: Boolean,
+      default: false
+    },
     size: {
       type: String
     }
@@ -28,7 +32,7 @@ export default {
     classes () {
       let classes = ['baldr-icons']
       classes.push(`baldr-icons-${this.name}`)
-      if (this.disabled) classes.push('disabled')
+      classes.push(this.displayMode)
       return classes.join(' ')
     },
     styleFontSize () {
@@ -41,6 +45,15 @@ export default {
         const message = `No icon named “${this.name}” found!`
         console.warn(message)
         return message
+      }
+    },
+    displayMode () {
+      if (this.showOnHover) {
+        return 'show-on-hover'
+      } else if (this.disable) {
+        return 'disabled'
+      } else {
+        return 'normal'
       }
     }
   }
@@ -58,26 +71,35 @@ export default {
 
   .baldr-icons {
     display: inline-block;
+    cursor: pointer;
+    color: scale-color($black, $lightness: 60%);
 
-    &:not(.disabled) {
-      cursor: pointer;
-      display: inline-block;
+    &.normal {
+      &:hover {
+        color: $red;
+      }
     }
 
-    &:not(.disabled):hover {
-      color: $red;
+    &.normal, &.show-on-hover {
+      &:active {
+        color: $blue;
+      }
+
+      &:focus {
+        color: scale-color($gray, $lightness: -20%);
+      }
     }
 
-    &:not(.disabled):active {
-      color: $blue;
-    }
+    &.show-on-hover {
+      opacity: 0;
 
-    &:not(.disabled):focus {
-      color: scale-color($gray, $lightness: -20%);
+      &:hover {
+        opacity: 1;
+      }
     }
 
     &.disabled {
-      color: $gray;
+      color: scale-color($black, $lightness: 90%);
     }
   }
 

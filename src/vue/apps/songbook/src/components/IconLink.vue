@@ -1,9 +1,13 @@
 <template>
   <a
-    v-if="link"
     :href="link"
+    v-if="link"
   >
-    <material-icon size="3vw" :name="icon"/>
+    <material-icon
+      :name="icon"
+      :show-on-hover="showOnHover"
+      size="3vw"
+    />
   </a>
 </template>
 
@@ -16,6 +20,10 @@ export default {
     },
     icon: {
       type: String
+    },
+    showOnHover: {
+      default: false,
+      type: Boolean
     }
   }
 }
