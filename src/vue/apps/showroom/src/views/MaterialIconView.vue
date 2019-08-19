@@ -1,15 +1,23 @@
 <template>
   <main>
+
+    <h1>As a link</h1>
+
+    <material-icon href="https://de.wikipedia.org/wiki/Cloud_Computing" name="cloud"/>
+
     <section class="available-icons">
       <h1>Available icons</h1>
-      <p
-        v-for="icon in icons"
-        :key="icon"
-        :name="icon"
-      >
-        <material-icon :size="size" :name="icon"/>
-        <span class="description">{{ icon }}</span>
-      </p>
+
+      <div class="columns">
+        <p
+          v-for="icon in icons"
+          :key="icon"
+          :name="icon"
+        >
+          <material-icon :size="size" :name="icon"/>
+          <span class="description">{{ icon }}</span>
+        </p>
+      </div>
     </section>
 
     <section class="circle-icons">
@@ -47,7 +55,9 @@ export default {
 
 <style lang="scss" scoped>
   .available-icons {
-    columns: 3;
+    .columns {
+      columns: 3;
+    }
 
     .description {
       margin-left: 1vw;

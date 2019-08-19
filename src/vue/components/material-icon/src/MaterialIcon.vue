@@ -1,12 +1,3 @@
-<template>
-  <div
-    :style="styleFontSize"
-    :class="classes"
-  >
-   {{ warningText }}
-  </div>
-</template>
-
 <script>
 import icons from './icons.json'
 
@@ -26,6 +17,9 @@ export default {
     },
     size: {
       type: String
+    },
+    href: {
+      type: String
     }
   },
   computed: {
@@ -34,11 +28,6 @@ export default {
       classes.push(`baldr-icons-${this.name}`)
       classes.push(this.displayMode)
       return classes.join(' ')
-    },
-    styleFontSize () {
-      if (this.size) {
-        return `font-size: ${this.size}`
-      }
     },
     warningText () {
       if (!icons.includes(this.name)) {
@@ -55,7 +44,27 @@ export default {
       } else {
         return 'normal'
       }
+    },
+  },
+  render: function (createElement) {
+    let elementName = 'div'
+    const attributes = {
+      class: this.classes,
+      style: {
+        fontSize: this.size
+      }
     }
+    if (this.href) {
+      elementName = 'a'
+      attributes.attrs = {
+        href: this.href
+      }
+    }
+    return createElement(
+      elementName,
+      attributes,
+      this.warningText
+    )
   }
 }
 </script>
