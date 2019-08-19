@@ -20,13 +20,23 @@ export default {
     },
     href: {
       type: String
+    },
+    circle: {
+      type: Boolean,
+      default: false
+    },
+    square: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
     classes () {
       let classes = ['baldr-icons']
-      classes.push(`baldr-icons-${this.name}`)
+      classes.push(`baldr-icon_${this.name}`)
       classes.push(this.displayMode)
+      if (this.circle) classes.push('circle')
+      if (this.square) classes.push('square')
       return classes.join(' ')
     },
     warningText () {
@@ -77,6 +87,23 @@ export default {
 
 <style lang="scss" scoped>
   @import './style.css';
+
+  .baldr-icons.circle {
+    background-color: $red;
+    border-radius: 50%;
+    padding: 0.5em;
+    &::before {
+      color: $white;
+    }
+  }
+
+  .baldr-icons.square {
+    background-color: $red;
+    padding: 0.5em;
+    &::before {
+      color: $white;
+    }
+  }
 
   .baldr-icons {
     display: inline-block;

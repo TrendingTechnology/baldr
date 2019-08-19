@@ -5,8 +5,8 @@
   font-style: normal;
 }
 
-.baldr-icons:before,
-.baldr-icons-set {
+.baldr-icons,
+.baldr-icons:before {
   display: inline-block;
   font: normal normal normal 24px/1 "Baldr Icons";
   font-size: inherit;
@@ -14,8 +14,4 @@
   line-height: inherit;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-.baldr-icons-access-point::before {
-  content: "\F002";
 }

@@ -5,6 +5,10 @@
 
     <material-icon href="https://de.wikipedia.org/wiki/Cloud_Computing" name="cloud"/>
 
+    <material-icon circle name="cloud"/>
+
+    <material-icon square name="cloud"/>
+
     <section class="available-icons">
       <h1>Available icons</h1>
 
@@ -38,8 +42,13 @@
 
 <script>
 import { icons } from '@bldr/vue-component-material-icon'
+import MarkupSample from '@/components/MarkupSample'
+
 export default {
   name: 'MaterialIconView',
+  components: {
+    MarkupSample
+  },
   data () {
     return {
       size: '2.5vw'
