@@ -72,7 +72,7 @@ export default {
   .baldr-icons {
     display: inline-block;
     cursor: pointer;
-    color: scale-color($black, $lightness: 60%);
+    color: $black;
 
     &.normal {
       &:hover {
@@ -99,7 +99,7 @@ export default {
     }
 
     &.disabled {
-      color: scale-color($black, $lightness: 90%);
+      color: scale-color($black, $lightness: 70%);
     }
   }
 
