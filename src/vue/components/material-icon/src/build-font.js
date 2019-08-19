@@ -33,6 +33,7 @@ function downloadIcon (url, name, newName) {
 }
 
 function downloadIcons (iconMapping, urlTemplate) {
+  console.log(`New download task using this template: ${chalk.red(urlTemplate)}`)
   for (const icon in iconMapping) {
     const url = urlTemplate.replace('{icon}', icon)
     console.log(`Download icon “${chalk.blue(icon)}” from “${chalk.yellow(url)}”`)
@@ -42,6 +43,25 @@ function downloadIcons (iconMapping, urlTemplate) {
     }
     downloadIcon(url, icon, newName)
   }
+}
+
+function copyIcons (srcFolder, destFolder) {
+  const icons = fs.readdirSync(srcFolder)
+  for (const icon of icons) {
+    if (icons.includes('.svg') > -1) {
+      fs.copyFileSync(
+        path.join(srcFolder, icon),
+        path.join(destFolder, icon)
+      )
+      console.log(`Copy the file “${chalk.magenta(icon)}” from the destination folder “${chalk.green(icon)}” to the destination folder “${chalk.yellow(icon)}”.`)
+    }
+  }
+}
+
+function writeFileToDest (destFileName, content) {
+  const destPath = basePath(destFileName)
+  fs.writeFileSync(destPath, content)
+  console.log(`Create file: ${chalk.cyan(destPath)}`)
 }
 
 function buildFont (config) {
@@ -70,10 +90,10 @@ function buildFont (config) {
         css.push(cssGlyph)
         console.log(`name: ${chalk.red(name)} unicode glyph: ${chalk.yellow(unicodeGlyph)} unicode escape hex: ${chalk.green(cssUnicodeEscape)}`)
       }
-      fs.writeFileSync(basePath('style.css'), css.join('\n'), { encoding: 'utf-8' })
-      fs.writeFileSync(basePath('baldr-icons.woff'), result.woff)
-      fs.writeFileSync(basePath('baldr-icons.woff2'), result.woff2)
-      fs.writeFileSync(basePath('icons.json'), JSON.stringify(names, null, '  '))
+      writeFileToDest('style.css', css.join('\n'))
+      writeFileToDest('baldr-icons.woff', result.woff)
+      writeFileToDest('baldr-icons.woff2', result.woff2)
+      writeFileToDest('icons.json', JSON.stringify(names, null, '  '))
       return result
     })
     .catch(error => {
@@ -84,19 +104,9 @@ function buildFont (config) {
 function main (options) {
   for (const task of options) {
     if ('urlTemplate' in task) {
-      console.log(`New download task using this template: ${chalk.red(task.urlTemplate)}`)
       downloadIcons(task.iconMapping, task.urlTemplate)
     } else if ('folder' in task) {
-      const icons = fs.readdirSync(task.folder)
-      for (const icon of icons) {
-        if (icons.includes('.svg') > -1) {
-          fs.copyFileSync(
-            path.join(task.folder, icon),
-            path.join(tmpDir, icon)
-          )
-        }
-        console.log(`Copy file ${icon}`)
-      }
+      copyIcons(task.folder, tmpDir)
     }
   }
   buildFont({

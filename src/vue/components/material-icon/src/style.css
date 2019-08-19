@@ -5,8 +5,8 @@
   font-style: normal;
 }
 
-.baldr-icons,
-.baldr-icons:before {
+.baldr-icon,
+.baldr-icon::before {
   display: inline-block;
   font: normal normal normal 24px/1 "Baldr Icons";
   font-size: inherit;
