@@ -5,7 +5,7 @@
       <tr
         v-for="icon in icons"
         :key="icon"
-        size="4vw"
+        size="1.5vw"
         :name="icon"
       >
         <td>
