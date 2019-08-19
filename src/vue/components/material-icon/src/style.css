@@ -17,125 +17,138 @@
 }
 
 .baldr-icon_account-group::before {
-  content: "\ea01";
-}
-
+    content: "\ea01";
+  }
+  
 .baldr-icon_account-plus::before {
-  content: "\ea02";
-}
-
-.baldr-icon_account-star-outline::before {
-  content: "\ea03";
-}
-
+    content: "\ea02";
+  }
+  
+.baldr-icon_account-star::before {
+    content: "\ea03";
+  }
+  
 .baldr-icon_air-filter::before {
-  content: "\ea04";
-}
-
+    content: "\ea04";
+  }
+  
 .baldr-icon_arrow-left::before {
-  content: "\ea05";
-}
-
+    content: "\ea05";
+  }
+  
+.baldr-icon_baldr::before {
+    content: "\ea06";
+  }
+  
 .baldr-icon_cctv::before {
-  content: "\ea06";
-}
-
+    content: "\ea07";
+  }
+  
 .baldr-icon_chevron-down::before {
-  content: "\ea07";
-}
-
+    content: "\ea08";
+  }
+  
 .baldr-icon_chevron-left::before {
-  content: "\ea08";
-}
-
+    content: "\ea09";
+  }
+  
 .baldr-icon_chevron-right::before {
-  content: "\ea09";
-}
-
+    content: "\ea0a";
+  }
+  
 .baldr-icon_chevron-up::before {
-  content: "\ea0a";
-}
-
+    content: "\ea0b";
+  }
+  
 .baldr-icon_close::before {
-  content: "\ea0b";
-}
-
+    content: "\ea0c";
+  }
+  
 .baldr-icon_cloud::before {
-  content: "\ea0c";
-}
-
-.baldr-icon_content-save::before {
-  content: "\ea0d";
-}
-
+    content: "\ea0d";
+  }
+  
 .baldr-icon_delete::before {
-  content: "\ea0e";
-}
-
+    content: "\ea0e";
+  }
+  
 .baldr-icon_dice-multiple::before {
-  content: "\ea0f";
-}
-
+    content: "\ea0f";
+  }
+  
 .baldr-icon_export::before {
-  content: "\ea10";
-}
-
+    content: "\ea10";
+  }
+  
 .baldr-icon_file-outline::before {
-  content: "\ea11";
-}
-
+    content: "\ea11";
+  }
+  
 .baldr-icon_google-spreadsheet::before {
-  content: "\ea12";
-}
-
+    content: "\ea12";
+  }
+  
 .baldr-icon_import::before {
-  content: "\ea13";
-}
-
+    content: "\ea13";
+  }
+  
 .baldr-icon_magnify::before {
-  content: "\ea14";
-}
-
+    content: "\ea14";
+  }
+  
+.baldr-icon_musescore::before {
+    content: "\ea15";
+  }
+  
 .baldr-icon_music::before {
-  content: "\ea15";
-}
-
+    content: "\ea16";
+  }
+  
 .baldr-icon_notebook::before {
-  content: "\ea16";
-}
-
+    content: "\ea17";
+  }
+  
 .baldr-icon_open-in-new::before {
-  content: "\ea17";
-}
-
+    content: "\ea18";
+  }
+  
+.baldr-icon_save::before {
+    content: "\ea19";
+  }
+  
 .baldr-icon_seat-outline::before {
-  content: "\ea18";
-}
-
+    content: "\ea1a";
+  }
+  
 .baldr-icon_table-of-contents::before {
-  content: "\ea19";
-}
-
+    content: "\ea1b";
+  }
+  
 .baldr-icon_test-tube::before {
-  content: "\ea1a";
-}
-
+    content: "\ea1c";
+  }
+  
 .baldr-icon_timeline-text::before {
-  content: "\ea1b";
-}
-
+    content: "\ea1d";
+  }
+  
 .baldr-icon_video-switch::before {
-  content: "\ea1c";
-}
-
+    content: "\ea1e";
+  }
+  
+.baldr-icon_wikidata::before {
+    content: "\ea1f";
+  }
+  
 .baldr-icon_wikipedia::before {
-  content: "\ea1d";
-}
-
+    content: "\ea20";
+  }
+  
 .baldr-icon_worker::before {
-  content: "\ea1e";
-}
-
+    content: "\ea21";
+  }
+  
 .baldr-icon_youtube::before {
-  content: "\ea1f";
-}
+    content: "\ea22";
+  }
+  
