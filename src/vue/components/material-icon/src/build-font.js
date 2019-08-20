@@ -2,16 +2,17 @@
 
 // https://github.com/Templarian/MaterialDesign-Font-Build/blob/master/bin/index.js
 
+// Node packages.
 const fs = require('fs')
 const path = require('path')
 const childProcess = require('child_process')
 const os = require('os')
 
-const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), path.sep))
-
+// Third party packages.
 const chalk = require('chalk')
 const webfont = require('webfont').default
 
+const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), path.sep))
 const basePathDir = path.resolve(__dirname)
 
 console.log(`The base dir is located at: ${chalk.yellow(tmpDir)}`)

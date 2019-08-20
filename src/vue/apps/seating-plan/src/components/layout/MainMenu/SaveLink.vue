@@ -1,7 +1,7 @@
 <template>
   <material-icon
     :disabled="!stateChanged"
-    name="content-save"
+    name="save"
     @click.native="save"
     title="speichern"
   />
