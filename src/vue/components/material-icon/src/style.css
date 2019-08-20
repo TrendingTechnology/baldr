@@ -120,43 +120,47 @@
     content: "\ea1a";
   }
   
-.baldr-icon_save::before {
+.baldr-icon_presentation::before {
     content: "\ea1b";
   }
   
-.baldr-icon_seat-outline::before {
+.baldr-icon_save::before {
     content: "\ea1c";
   }
   
-.baldr-icon_table-of-contents::before {
+.baldr-icon_seat-outline::before {
     content: "\ea1d";
   }
   
-.baldr-icon_test-tube::before {
+.baldr-icon_table-of-contents::before {
     content: "\ea1e";
   }
   
-.baldr-icon_timeline-text::before {
+.baldr-icon_test-tube::before {
     content: "\ea1f";
   }
   
-.baldr-icon_video-switch::before {
+.baldr-icon_timeline-text::before {
     content: "\ea20";
   }
   
-.baldr-icon_wikidata::before {
+.baldr-icon_video-switch::before {
     content: "\ea21";
   }
   
-.baldr-icon_wikipedia::before {
+.baldr-icon_wikidata::before {
     content: "\ea22";
   }
   
-.baldr-icon_worker::before {
+.baldr-icon_wikipedia::before {
     content: "\ea23";
   }
   
-.baldr-icon_youtube::before {
+.baldr-icon_worker::before {
     content: "\ea24";
+  }
+  
+.baldr-icon_youtube::before {
+    content: "\ea25";
   }
   

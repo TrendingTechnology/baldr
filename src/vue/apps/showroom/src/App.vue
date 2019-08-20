@@ -10,12 +10,24 @@
       <router-link to="/material-icon">Material icon</router-link>
     </nav>
     <router-view/>
+    <app-info package-name="@bldr/showroom" :version="version"/>
   </div>
 </template>
 
 <script>
+import packageJson from '@/../package.json'
+import { AppInfo } from '@bldr/vue-components-collection'
+
 export default {
-  name: 'app'
+  name: 'app',
+  components: {
+    AppInfo
+  },
+  computed: {
+    version () {
+      return packageJson.version
+    }
+  }
 }
 </script>
 

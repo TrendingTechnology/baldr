@@ -6,21 +6,30 @@
 
     <section class="sub-projects">
       <material-icon
-       color="blue"
-       href="https://baldr.friedrich.rocks/seating-plan"
-       name="seat-outline"
-       outline="circle"
+        color="orange"
+        href="https://baldr.friedrich.rocks/presentation"
+        name="presentation"
+        outline="circle"
       />
+
       <material-icon
         color="green"
         href="https://baldr.friedrich.rocks/songbook"
         name="music"
         outline="circle"
       />
+
       <material-icon
         color="red"
         name="document-camera"
         outline="circle"
+      />
+
+      <material-icon
+       color="blue"
+       href="https://baldr.friedrich.rocks/seating-plan"
+       name="seat-outline"
+       outline="circle"
       />
     </section>
   </main>

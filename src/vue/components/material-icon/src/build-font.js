@@ -143,6 +143,7 @@ if (require.main === module) {
         'google-spreadsheet': '',
         import: '',
         magnify: '',
+        'presentation-play': 'presentation',
         music: '',
         notebook: '',
         'open-in-new': '',
