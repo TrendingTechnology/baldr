@@ -1,13 +1,12 @@
 <template>
   <div id="app">
-    lol
     <div id="nav">
       <router-link to="/">Home</router-link> |
-      <router-link to="/overview">Overview</router-link>
+      <router-link to="/overview">Overview</router-link> |
+      <router-link to="/document-camera">Document Camera</router-link> |
     </div>
     <router-view/>
     <app-info package-name="@bldr/showroom" :version="version"/>
-
   </div>
 </template>
 
@@ -27,8 +26,7 @@ export default {
   }
 }
 </script>
-
-<style lang="scss">
+<style lang="css">
   @import '~@bldr/theme-default/styles-ng.css';
 
   body {
