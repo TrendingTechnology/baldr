@@ -19,7 +19,7 @@
       />
       <material-icon
         color="red"
-        name="cctv"
+        name="document-camera"
         outline="circle"
       />
     </section>

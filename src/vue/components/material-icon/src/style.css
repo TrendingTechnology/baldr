@@ -76,79 +76,87 @@
     content: "\ea0f";
   }
   
-.baldr-icon_export::before {
+.baldr-icon_document-camera::before {
     content: "\ea10";
   }
   
-.baldr-icon_file-outline::before {
+.baldr-icon_export::before {
     content: "\ea11";
   }
   
-.baldr-icon_google-spreadsheet::before {
+.baldr-icon_file-outline::before {
     content: "\ea12";
   }
   
-.baldr-icon_import::before {
+.baldr-icon_google-spreadsheet::before {
     content: "\ea13";
   }
   
-.baldr-icon_magnify::before {
+.baldr-icon_import::before {
     content: "\ea14";
   }
   
-.baldr-icon_musescore::before {
+.baldr-icon_magnify::before {
     content: "\ea15";
   }
   
-.baldr-icon_music::before {
+.baldr-icon_musescore::before {
     content: "\ea16";
   }
   
-.baldr-icon_notebook::before {
+.baldr-icon_music::before {
     content: "\ea17";
   }
   
-.baldr-icon_open-in-new::before {
+.baldr-icon_notebook::before {
     content: "\ea18";
   }
   
-.baldr-icon_save::before {
+.baldr-icon_open-in-new::before {
     content: "\ea19";
   }
   
-.baldr-icon_seat-outline::before {
+.baldr-icon_open-window::before {
     content: "\ea1a";
   }
   
-.baldr-icon_table-of-contents::before {
+.baldr-icon_save::before {
     content: "\ea1b";
   }
   
-.baldr-icon_test-tube::before {
+.baldr-icon_seat-outline::before {
     content: "\ea1c";
   }
   
-.baldr-icon_timeline-text::before {
+.baldr-icon_table-of-contents::before {
     content: "\ea1d";
   }
   
-.baldr-icon_video-switch::before {
+.baldr-icon_test-tube::before {
     content: "\ea1e";
   }
   
-.baldr-icon_wikidata::before {
+.baldr-icon_timeline-text::before {
     content: "\ea1f";
   }
   
-.baldr-icon_wikipedia::before {
+.baldr-icon_video-switch::before {
     content: "\ea20";
   }
   
-.baldr-icon_worker::before {
+.baldr-icon_wikidata::before {
     content: "\ea21";
   }
   
-.baldr-icon_youtube::before {
+.baldr-icon_wikipedia::before {
     content: "\ea22";
+  }
+  
+.baldr-icon_worker::before {
+    content: "\ea23";
+  }
+  
+.baldr-icon_youtube::before {
+    content: "\ea24";
   }
   
