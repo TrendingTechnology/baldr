@@ -22,7 +22,7 @@ describe('Vuex store: jobs #unittest', function () {
 
     it('jobIconFromName', function () {
       const icon = store.getters.jobIconFromName('Lüftwart')
-      assert.strictEqual(icon, 'air-filter')
+      assert.strictEqual(icon, 'open-window')
     })
 
     it('jobsAsArray', function () {
