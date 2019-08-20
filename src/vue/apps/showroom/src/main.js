@@ -6,10 +6,11 @@ import ModalDialog from '@bldr/vue-component-modal-dialog'
 import DynamicSelect from '@bldr/vue-component-dynamic-select'
 import MaterialIcon from '@bldr/vue-component-material-icon'
 
+Vue.config.productionTip = false
+
 Vue.use(DynamicSelect)
 Vue.use(ModalDialog)
 Vue.use(MaterialIcon)
-Vue.config.productionTip = false
 
 new Vue({
   router,

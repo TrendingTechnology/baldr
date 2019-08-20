@@ -10,6 +10,24 @@ const state = {
 const getters = {
   mediaDevices: state => {
     return state.mediaDevices
+  },
+  mediaDevicesDynamicSelect: (state, getters) => {
+    const resultList = []
+    for (const device of getters.mediaDevices) {
+      if (device.kind === 'videoinput') {
+        let label
+        if (device.label) {
+          label = device.label
+        } else {
+          label = `${device.kind} (${device.deviceId})`
+        }
+        resultList.push({
+          id: device.deviceId,
+          name: label
+        })
+      }
+    }
+    return resultList
   }
 }
 

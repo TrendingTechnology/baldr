@@ -24,10 +24,12 @@
     "publish": "rsync -av --delete dist/ serverway:/var/www/baldr.friedrich.rocks/presentation/"
   },
   "dependencies": {
-    "@bldr/theme-default": "^0.0.18",
-    "@bldr/vue-components-collection": "^0.1.0",
-    "@bldr/vue-component-material-icon": "^0.1.0",
     "@bldr/core": "0.0.18",
+    "@bldr/theme-default": "^0.0.18",
+    "@bldr/vue-component-dynamic-select": "^0.1.0",
+    "@bldr/vue-component-material-icon": "^0.1.0",
+    "@bldr/vue-component-modal-dialog": "^0.1.0",
+    "@bldr/vue-components-collection": "^0.1.0",
     "core-js": "^2.6.5",
     "vue-router": "^3.0.3",
     "vue": "^2.6.10",

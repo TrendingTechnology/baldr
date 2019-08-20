@@ -4,10 +4,13 @@ import router from './router'
 import store from './store'
 
 import MaterialIcon from '@bldr/vue-component-material-icon'
+import ModalDialog from '@bldr/vue-component-modal-dialog'
+import DynamicSelect from '@bldr/vue-component-dynamic-select'
 
-Vue.config.productionTip = false
-
+Vue.use(DynamicSelect)
+Vue.use(ModalDialog)
 Vue.use(MaterialIcon)
+Vue.config.productionTip = false
 
 new Vue({
   router,

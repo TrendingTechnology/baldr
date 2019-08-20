@@ -1,12 +1,19 @@
 <template>
   <main class="document-camera">
     <h1>Document Camera</h1>
-    <video autoplay="true" id="video"></video>
 
-    <p v-for="device in mediaDevices" :key="device.deviceId">
-      {{ device.deviceId }} {{ device.kind }} {{ device.label }}  {{ device.groupId}}
+    <a href="#" @click="showDeviceSelect">Video-Ausgabegerät auswählen</a>
 
-    </p>
+    <modal-dialog name="select-video-device">
+      <dynamic-select
+        placeholder="Wähle ein Video-Device aus"
+        :options="mediaDevicesDynamicSelect"
+        @input="setDeviceId"
+        v-model="deviceId"
+      />
+    </modal-dialog>
+
+    <video ref="videoTag" autoplay="true" id="video"></video>
   </main>
 </template>
 
@@ -15,6 +22,21 @@
 /**
  * @file Master slide “camera”
  *
+ * To create virtual video devices on linux run this commands:
+ *
+ * <code><pre>
+ * sudo apt install v4l2loopback-dkms
+ * sudo modprobe v4l2loopback devices=4
+ * sudo apt install apt install v4l2loopback-utils
+ * # Capture desktop
+ * ffmpeg -f x11grab -r 15 -s 1280x720 -i :0.0+0,0 -vcodec rawvideo -pix_fmt yuv420p -threads 0 -f v4l2 /dev/video0
+ *
+ * # Show image
+ * ffmpeg -loop 1 -re -i image.jpg -f v4l2 -vcodec rawvideo -pix_fmt yuv420p /dev/video0
+ *
+ * # Show video
+ * ffmpeg -re -i video.mp4 -f v4l2 /dev/video2
+ * </pre></code>
  *
  * https://webrtc.github.io/samples/
  * mediaStream.getVideoTracks()[0].getConstraints()
@@ -58,74 +80,52 @@
  * @module @bldr/master-camera
  */
 
-/**
- * Handles being called several times to update labels. Preserve
- * values.
- */
-// function gotDevices (deviceInfos) {
-//   while (elemSelect.firstChild) {
-//     elemSelect.removeChild(elemSelect.firstChild)
-//   }
-
-//   for (var i = 0; i !== deviceInfos.length; ++i) {
-//     var deviceInfo = deviceInfos[i]
-//     var option = document.createElement('option')
-//     option.value = deviceInfo.deviceId
-//     if (deviceInfo.kind === 'videoinput') {
-//       option.text = deviceInfo.label || 'camera ' + (elemSelect.length + 1)
-//       elemSelect.appendChild(option)
-//     }
-//   }
-// }
-
-/**
- * Make stream available to console. Refresh button list in case
- * labels have become available
- */
-// function gotStream (stream) {
-//   window.stream = stream
-//   elemVideo.srcObject = stream
-//   return navigator.mediaDevices.enumerateDevices()
-// }
-
-/**
- *
- */
-// function start () {
-//   if (window.stream) {
-//     window.stream.getTracks().forEach(function (track) {
-//       track.stop()
-//     })
-//   }
-//   var videoSource = elemSelect.value
-//   var constraints = {
-//     audio: false,
-//     video: { deviceId: videoSource ? { exact: videoSource } : undefined }
-//   }
-//   navigator.mediaDevices.getUserMedia(constraints)
-//     .then(gotStream)
-//     .then(gotDevices)
-// }
-
 import { mapGetters } from 'vuex'
 
 export default {
   name: 'DocumentCamera',
-  computed: mapGetters(['mediaDevices']),
-  beforeCreate () {
+  data () {
+    return {
+      deviceId: ''
+    }
+  },
+  computed: mapGetters(['mediaDevices', 'mediaDevicesDynamicSelect']),
+  methods: {
+    setDeviceId () {
+      this.$modal.hide('select-video-device')
+      const constraints = {
+        audio: false,
+        video: { deviceId: { exact: this.deviceId.id } }
+      }
+      console.log(constraints)
+      this.setVideoStream(constraints)
+    },
+    showDeviceSelect () {
+      this.$modal.toggle('select-video-device')
+      this.$dynamicSelect.focus()
+    },
+    setVideoStream (constraints) {
+      if (!constraints) {
+        constraints = { audio: false, video: true }
+      }
+      navigator.mediaDevices.getUserMedia(constraints)
+        .then((stream) => {
+          console.log(stream)
+          this.$refs.videoTag.srcObject = stream
+          this.$store.dispatch('setMediaDevices')
+        })
+        .catch(function (error) {
+          console.error(error)
+        })
+    }
+  },
+  created () {
     if (window.stream) {
       window.stream.getTracks().forEach(function (track) {
         track.stop()
       })
     }
-    navigator.mediaDevices.getUserMedia({ audio: false, video: true })
-      .then(function (stream) {
-        console.log(stream)
-      })
-      .catch(function (error) {
-        console.log(error)
-      })
-    this.$store.dispatch('setMediaDevices')
+    this.setVideoStream()
   }
 }
 </script>
