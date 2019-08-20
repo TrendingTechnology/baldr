@@ -13,6 +13,8 @@
   /**
    * Colors
    */
+  /* Background color */
+  /* Text color */
 }
 
 [baldr-theme="default"] h1, [baldr-theme="default"] h2, [baldr-theme="default"] h3, [baldr-theme="default"] h4 {
@@ -108,123 +110,243 @@
 }
 
 [baldr-theme="default"] .white {
-  background-color: #fcfbfb;
+  background-color: #fcfbfb !important;
 }
 
 [baldr-theme="default"] .yellow {
-  background-color: #edc958;
+  background-color: #edc958 !important;
 }
 
 [baldr-theme="default"] .orange {
-  background-color: #f18f3b;
+  background-color: #f18f3b !important;
 }
 
 [baldr-theme="default"] .red {
-  background-color: #e0585b;
+  background-color: #e0585b !important;
 }
 
 [baldr-theme="default"] .brown {
-  background-color: #9c755f;
+  background-color: #9c755f !important;
 }
 
 [baldr-theme="default"] .gray {
-  background-color: #bab0ac;
+  background-color: #bab0ac !important;
 }
 
 [baldr-theme="default"] .green {
-  background-color: #59a14e;
+  background-color: #59a14e !important;
 }
 
 [baldr-theme="default"] .blue {
-  background-color: #4e79a7;
+  background-color: #4e79a7 !important;
 }
 
 [baldr-theme="default"] .purple {
-  background-color: #af7aa0;
+  background-color: #af7aa0 !important;
 }
 
 [baldr-theme="default"] .black {
-  background-color: #141110;
+  background-color: #141110 !important;
 }
 
 [baldr-theme="default"] .white-light {
-  background-color: #fdfdfd;
+  background-color: #fdfcfc !important;
 }
 
 [baldr-theme="default"] .yellow-light {
-  background-color: #f6e4ac;
+  background-color: #f2d98a !important;
 }
 
 [baldr-theme="default"] .orange-light {
-  background-color: #f8c79d;
+  background-color: #f5b176 !important;
 }
 
 [baldr-theme="default"] .red-light {
-  background-color: #f0acad;
+  background-color: #e98a8c !important;
 }
 
 [baldr-theme="default"] .brown-light {
-  background-color: #cebaaf;
+  background-color: #ba9e8e !important;
 }
 
 [baldr-theme="default"] .gray-light {
-  background-color: #ddd8d6;
+  background-color: #cfc8c5 !important;
 }
 
 [baldr-theme="default"] .green-light {
-  background-color: #aad3a4;
+  background-color: #88c17f !important;
 }
 
 [baldr-theme="default"] .blue-light {
-  background-color: #a5bcd5;
+  background-color: #81a1c4 !important;
 }
 
 [baldr-theme="default"] .purple-light {
-  background-color: #d7bdd0;
+  background-color: #c7a2bd !important;
 }
 
 [baldr-theme="default"] .black-light {
-  background-color: #93847e;
+  background-color: #615651 !important;
 }
 
 [baldr-theme="default"] .white-dark {
-  background-color: #897972;
+  background-color: #b7ada9 !important;
 }
 
 [baldr-theme="default"] .yellow-dark {
-  background-color: #937310;
+  background-color: #cda116 !important;
 }
 
 [baldr-theme="default"] .orange-dark {
-  background-color: #8c460a;
+  background-color: #c4620e !important;
 }
 
 [baldr-theme="default"] .red-dark {
-  background-color: #84181b;
+  background-color: #b82226 !important;
 }
 
 [baldr-theme="default"] .brown-dark {
-  background-color: #4e3b30;
+  background-color: #6d5243 !important;
 }
 
 [baldr-theme="default"] .gray-dark {
-  background-color: #625651;
+  background-color: #897872 !important;
 }
 
 [baldr-theme="default"] .green-dark {
-  background-color: #2d5127;
+  background-color: #3e7137 !important;
 }
 
 [baldr-theme="default"] .blue-dark {
-  background-color: #273d54;
+  background-color: #375575 !important;
 }
 
 [baldr-theme="default"] .purple-dark {
-  background-color: #5d3852;
+  background-color: #824e73 !important;
 }
 
 [baldr-theme="default"] .black-dark {
-  background-color: #0a0908;
+  background-color: #0e0c0b !important;
+}
+
+[baldr-theme="default"] .text-white {
+  color: #fcfbfb !important;
+}
+
+[baldr-theme="default"] .text-yellow {
+  color: #edc958 !important;
+}
+
+[baldr-theme="default"] .text-orange {
+  color: #f18f3b !important;
+}
+
+[baldr-theme="default"] .text-red {
+  color: #e0585b !important;
+}
+
+[baldr-theme="default"] .text-brown {
+  color: #9c755f !important;
+}
+
+[baldr-theme="default"] .text-gray {
+  color: #bab0ac !important;
+}
+
+[baldr-theme="default"] .text-green {
+  color: #59a14e !important;
+}
+
+[baldr-theme="default"] .text-blue {
+  color: #4e79a7 !important;
+}
+
+[baldr-theme="default"] .text-purple {
+  color: #af7aa0 !important;
+}
+
+[baldr-theme="default"] .text-black {
+  color: #141110 !important;
+}
+
+[baldr-theme="default"] .text-white-light {
+  color: #fdfcfc !important;
+}
+
+[baldr-theme="default"] .text-yellow-light {
+  color: #f2d98a !important;
+}
+
+[baldr-theme="default"] .text-orange-light {
+  color: #f5b176 !important;
+}
+
+[baldr-theme="default"] .text-red-light {
+  color: #e98a8c !important;
+}
+
+[baldr-theme="default"] .text-brown-light {
+  color: #ba9e8e !important;
+}
+
+[baldr-theme="default"] .text-gray-light {
+  color: #cfc8c5 !important;
+}
+
+[baldr-theme="default"] .text-green-light {
+  color: #88c17f !important;
+}
+
+[baldr-theme="default"] .text-blue-light {
+  color: #81a1c4 !important;
+}
+
+[baldr-theme="default"] .text-purple-light {
+  color: #c7a2bd !important;
+}
+
+[baldr-theme="default"] .text-black-light {
+  color: #615651 !important;
+}
+
+[baldr-theme="default"] .text-white-dark {
+  color: #b7ada9 !important;
+}
+
+[baldr-theme="default"] .text-yellow-dark {
+  color: #cda116 !important;
+}
+
+[baldr-theme="default"] .text-orange-dark {
+  color: #c4620e !important;
+}
+
+[baldr-theme="default"] .text-red-dark {
+  color: #b82226 !important;
+}
+
+[baldr-theme="default"] .text-brown-dark {
+  color: #6d5243 !important;
+}
+
+[baldr-theme="default"] .text-gray-dark {
+  color: #897872 !important;
+}
+
+[baldr-theme="default"] .text-green-dark {
+  color: #3e7137 !important;
+}
+
+[baldr-theme="default"] .text-blue-dark {
+  color: #375575 !important;
+}
+
+[baldr-theme="default"] .text-purple-dark {
+  color: #824e73 !important;
+}
+
+[baldr-theme="default"] .text-black-dark {
+  color: #0e0c0b !important;
 }
 
 /*# sourceMappingURL=styles-ng.css.map */

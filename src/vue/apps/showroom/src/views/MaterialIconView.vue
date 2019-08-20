@@ -2,12 +2,40 @@
   <main>
 
     <h1>As a link</h1>
+    <material-icon href="https://de.wikipedia.org/wiki/Cloud_Computing" size="8vw" name="cloud"/>
 
-    <material-icon href="https://de.wikipedia.org/wiki/Cloud_Computing" name="cloud"/>
+    <h1>Outlines</h1>
+    <p>
+      <code>icon</code>:
+      <material-icon outline="icon" size="8vw" name="cloud"/>
+    </p>
 
-    <material-icon circle name="cloud"/>
+    <p>
+    <code>circle</code>:
+    <material-icon outline="circle" size="8vw" name="cloud"/>
+    </p>
 
-    <material-icon square name="cloud"/>
+    <p>
+    <code>square</code>:
+    <material-icon outline="square" size="8vw" name="cloud"/>
+    </p>
+
+    <h1>Display</h1>
+
+    <p>
+    <code>normal</code>:
+    <material-icon display="normal" size="8vw" name="cloud"/>
+    </p>
+
+    <p>
+    <code>disabled</code>:
+    <material-icon display="disabled" size="8vw" name="cloud"/>
+    </p>
+
+    <p>
+    <code>show-on-hover</code>:
+    <material-icon display="show-on-hover" size="8vw" name="cloud"/>
+    </p>
 
     <section class="available-icons">
       <h1>Available icons</h1>
@@ -24,17 +52,6 @@
       </div>
     </section>
 
-    <section class="circle-icons">
-      <h1>Circle icons</h1>
-      <p
-        v-for="icon in icons"
-        :key="icon"
-        :name="icon"
-      >
-        <circle-icon :icon="icon"/>
-      </p>
-    </section>
-
     <h1>Warning</h1>
     <material-icon class="red" :size="size" name="xxx"/>
   </main>
@@ -42,13 +59,9 @@
 
 <script>
 import { icons } from '@bldr/vue-component-material-icon'
-import MarkupSample from '@/components/MarkupSample'
 
 export default {
   name: 'MaterialIconView',
-  components: {
-    MarkupSample
-  },
   data () {
     return {
       size: '2.5vw'
@@ -75,10 +88,6 @@ export default {
     .baldr-icons {
       transform: translate(0, 0.5vw)
     }
-  }
-
-  .circle-icons {
-    columns: 2;
   }
 
 </style>

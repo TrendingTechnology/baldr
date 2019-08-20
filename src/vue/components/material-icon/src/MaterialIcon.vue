@@ -7,37 +7,59 @@ export default {
     name: {
       type: String
     },
-    disabled: {
-      type: Boolean,
-      default: false
-    },
-    showOnHover: {
-      type: Boolean,
-      default: false
-    },
     size: {
       type: String
+    },
+    color: {
+      type: String,
+      default: 'black',
+      validator: function (value) {
+        return [
+          "white",
+          "yellow",
+          "orange",
+          "red",
+          "brown",
+          "gray",
+          "green",
+          "blue",
+          "purple",
+          "black"
+        ].includes(value)
+      }
     },
     href: {
       type: String
     },
-    circle: {
-      type: Boolean,
-      default: false
+    display: {
+      type: String,
+      default: 'normal',
+      validator: function (value) {
+        return ['disabled', 'normal', 'show-on-hover'].includes(value)
+      }
     },
-    square: {
-      type: Boolean,
-      default: false
+    // Umriss
+    outline: {
+      type: String,
+      default: 'icon',
+      validator: function (value) {
+        return ['circle', 'icon', 'square'].includes(value)
+      }
     }
   },
   computed: {
     classes () {
-      let classes = ['baldr-icons']
+      let classes = ['baldr-icon']
+      classes.push(`baldr-icon_outline_${this.outline}`)
+      classes.push(`baldr-icon_display_${this.display}`)
       classes.push(`baldr-icon_${this.name}`)
-      classes.push(this.displayMode)
-      if (this.circle) classes.push('circle')
-      if (this.square) classes.push('square')
-      return classes.join(' ')
+      if (this.outline !== 'icon') {
+        classes.push(`${this.color}`)
+        classes.push(`text-white`)
+      } else {
+        classes.push(`text-${this.color}`)
+      }
+      return classes
     },
     warningText () {
       if (!icons.includes(this.name)) {
@@ -45,16 +67,7 @@ export default {
         console.warn(message)
         return message
       }
-    },
-    displayMode () {
-      if (this.showOnHover) {
-        return 'show-on-hover'
-      } else if (this.disable) {
-        return 'disabled'
-      } else {
-        return 'normal'
-      }
-    },
+    }
   },
   render: function (createElement) {
     let elementName = 'div'
@@ -70,11 +83,8 @@ export default {
         href: this.href
       }
     }
-    return createElement(
-      elementName,
-      attributes,
-      this.warningText
-    )
+
+    return createElement(elementName, attributes, this.warningText)
   }
 }
 </script>
@@ -88,45 +98,38 @@ export default {
 <style lang="scss" scoped>
   @import './style.css';
 
-  .baldr-icons.circle {
-    background-color: $red;
-    border-radius: 50%;
-    padding: 0.5em;
-    &::before {
-      color: $white;
-    }
-  }
+  $outline-padding: 0.25em;
 
-  .baldr-icons.square {
-    background-color: $red;
-    padding: 0.5em;
-    &::before {
-      color: $white;
-    }
-  }
-
-  .baldr-icons {
+  .baldr-icon {
     display: inline-block;
     cursor: pointer;
-    color: $black;
 
-    &.normal {
+    &.baldr-icon_outline_circle {
+      border-radius: 50%;
+      padding: $outline-padding;
+    }
+
+    &.baldr-icon_outline_square {
+      padding: $outline-padding;
+    }
+
+    &.baldr-icon_display_normal {
       &:hover {
-        color: $red;
+        color: $red !important;
       }
     }
 
-    &.normal, &.show-on-hover {
+    &.baldr-icon_display_normal, &.baldr-icon_display_show-on-hover {
       &:active {
-        color: $blue;
+        color: $blue !important;
       }
 
       &:focus {
-        color: scale-color($gray, $lightness: -20%);
+        color: scale-color($gray, $lightness: -20%) !important;
       }
     }
 
-    &.show-on-hover {
+    &.baldr-icon_display_show-on-hover {
       opacity: 0;
 
       &:hover {
@@ -134,8 +137,8 @@ export default {
       }
     }
 
-    &.disabled {
-      color: scale-color($black, $lightness: 70%);
+    &.baldr-icon_display_disabled {
+      color: scale-color($black, $lightness: 70%) !important;
     }
   }
 

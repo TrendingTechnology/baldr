@@ -111,21 +111,43 @@
    * Colors
    */
 
-   @each $name, $value in $colors {
+  /* Background color */
+
+  @each $name, $value in $colors {
     .#{$name} {
-      background-color: $value;
+      background-color: $value !important;
     }
   }
 
   @each $name, $value in $colors {
     .#{$name}-light {
-      background-color: scale-color($value, $lightness: 50%);
+      background-color: scale-color($value, $lightness: 30%) !important;
     }
   }
 
   @each $name, $value in $colors {
     .#{$name}-dark {
-      background-color: scale-color($value, $lightness: -50%);
+      background-color: scale-color($value, $lightness: -30%) !important;
+    }
+  }
+
+  /* Text color */
+
+  @each $name, $value in $colors {
+    .text-#{$name} {
+      color: $value !important;
+    }
+  }
+
+  @each $name, $value in $colors {
+    .text-#{$name}-light {
+      color: scale-color($value, $lightness: 30%) !important;
+    }
+  }
+
+  @each $name, $value in $colors {
+    .text-#{$name}-dark {
+      color: scale-color($value, $lightness: -30%) !important;
     }
   }
 }

@@ -4,11 +4,24 @@
        <material-icon name="baldr"/>
     </section>
 
-
     <section class="sub-projects">
-      <circle-icon href="https://baldr.friedrich.rocks/seating-plan" icon="seat-outline"/>
-      <circle-icon href="https://baldr.friedrich.rocks/songbook" icon="music" color="green"/>
-      <circle-icon icon="cctv" color="red"/>
+      <material-icon
+       color="blue"
+       href="https://baldr.friedrich.rocks/seating-plan"
+       name="seat-outline"
+       outline="circle"
+      />
+      <material-icon
+        color="green"
+        href="https://baldr.friedrich.rocks/songbook"
+        name="music"
+        outline="circle"
+      />
+      <material-icon
+        color="red"
+        name="cctv"
+        outline="circle"
+      />
     </section>
   </main>
 </template>
@@ -23,7 +36,7 @@ export default {
   .main-project-logo {
     text-align: center;
   }
-  .baldr-icons-baldr {
+  .baldr-icon_baldr {
     font-size: 50vw;
     color: $purple !important;
   }
@@ -31,5 +44,9 @@ export default {
   .sub-projects {
     display: flex;
     justify-content: space-around;
+
+    .baldr-icon {
+      font-size: 10vw;
+    }
   }
 </style>
