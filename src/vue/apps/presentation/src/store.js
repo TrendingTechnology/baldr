@@ -33,7 +33,6 @@ const getters = {
 
 const actions = {
   async setMediaDevices ({ commit }) {
-    navigator.mediaDevices.enumerateDevices()
     commit('setMediaDevices', await navigator.mediaDevices.enumerateDevices())
   }
 }

@@ -4,6 +4,10 @@
 
     <a href="#" @click="showDeviceSelect">Video-Ausgabegerät auswählen</a>
 
+    <a href="#" @click="stopVideoStream">Video-Ausgabegerät deaktivieren</a>
+
+    <a href="#" @click="setFullScreen">Full screen</a>
+
     <modal-dialog name="select-video-device">
       <dynamic-select
         placeholder="Wähle ein Video-Device aus"
@@ -65,16 +69,17 @@
  * }
  * </pre></code>
  *
- * videoinput: Integrated Camera: Integrated C (04f2:b221) id = 1981dfec8d8861d2407ba74d86a2d777ec4b9d51d11644bad7f20645fd775eb2
- * supportedConstraints
- *
  * <code><pre>
- * {
- *   "deviceId": "21c19a409344f4bee3a71d7b1b14d1bb452dcd86cba8c9c5136a992c33241c08",
- *   "kind": "videoinput",
- *   "label": "USB Webcam (0bda:5727)",
- *   "groupId": ""
- * }
+ * navigator.mediaDevices.enumerateDevices()
+ * [
+ *   {
+ *     "deviceId": "21c19a409344f4bee3a71d7b1b14d1bb452dcd86cba8c9c5136a992c33241c08",
+ *     "kind": "videoinput",
+ *     "label": "USB Webcam (0bda:5727)",
+ *     "groupId": ""
+ *   }
+ * ]
+ *
  * </pre></code>
  *
  * @module @bldr/master-camera
@@ -86,10 +91,11 @@ export default {
   name: 'DocumentCamera',
   data () {
     return {
-      deviceId: ''
+      deviceId: '',
+      stream: null
     }
   },
-  computed: mapGetters(['mediaDevices', 'mediaDevicesDynamicSelect']),
+  computed: mapGetters(['mediaDevicesDynamicSelect']),
   methods: {
     setDeviceId () {
       this.$modal.hide('select-video-device')
@@ -97,7 +103,6 @@ export default {
         audio: false,
         video: { deviceId: { exact: this.deviceId.id } }
       }
-      console.log(constraints)
       this.setVideoStream(constraints)
     },
     showDeviceSelect () {
@@ -110,22 +115,31 @@ export default {
       }
       navigator.mediaDevices.getUserMedia(constraints)
         .then((stream) => {
-          console.log(stream)
           this.$refs.videoTag.srcObject = stream
+          this.stream = stream
           this.$store.dispatch('setMediaDevices')
         })
         .catch(function (error) {
-          console.error(error)
+          throw error
         })
+    },
+    stopVideoStream () {
+      if (this.stream) {
+        this.stream.getTracks().forEach(track => {
+          track.stop()
+        })
+      }
+    },
+    setFullScreen () {
+      this.$refs.videoTag.requestFullscreen()
     }
   },
   created () {
-    if (window.stream) {
-      window.stream.getTracks().forEach(function (track) {
-        track.stop()
-      })
-    }
     this.setVideoStream()
   }
 }
 </script>
+
+<style lang="scss" scoped>
+
+</style>
