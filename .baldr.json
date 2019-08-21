@@ -1,7 +1,7 @@
 {
 	"songbook": {
 		"path": "/var/songbook",
-		"projectorPath": "/var/songbook/projector",
+		"projectorPath": "/home/travis/build/Josef-Friedrich/baldr/src/vue/apps/songbook",
 		"pianoPath": "/var/songbook/piano"
 	},
 	"restApi": {

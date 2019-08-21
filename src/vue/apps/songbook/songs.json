@@ -1,0 +1,59 @@
+{
+  "Auf-der-Mauer_auf-der-Lauer": {
+    "abc": "a",
+    "folder": "/home/jf/git-repositories/content/lieder/a/Auf-der-Mauer_auf-der-Lauer",
+    "metaData": {
+      "artist": "Volksweise",
+      "musescore": 5354717,
+      "title": "Auf der Mauer, auf der Lauer",
+      "wikidata": 15784365,
+      "wikipedia": "de:Auf_der_Mauer,_auf_der_Lauer",
+      "year": 1890
+    },
+    "songID": "Auf-der-Mauer_auf-der-Lauer",
+    "slidesCount": 4
+  },
+  "Stille-Nacht": {
+    "abc": "s",
+    "folder": "/home/jf/git-repositories/content/lieder/s/Stille-Nacht",
+    "metaData": {
+      "arranger": "Eberhard Kraus, nach dem Orgelbuch „Lob Gottes“",
+      "composer": "Franz Gruber (+ 1863)",
+      "lyricist": "Josef Mohr (1792-1848)",
+      "musescore": 5642007,
+      "title": "Stille Nacht",
+      "wikidata": 172152,
+      "wikipedia": "de:Stille_Nacht,_heilige_Nacht"
+    },
+    "songID": "Stille-Nacht",
+    "slidesCount": 2
+  },
+  "Swing-low": {
+    "abc": "s",
+    "folder": "/home/jf/git-repositories/content/lieder/s/Swing-low",
+    "metaData": {
+      "composer": "Wallis Willis",
+      "genre": "Spiritual",
+      "title": "Swing Low, Sweet Chariot",
+      "wikidata": 1750385,
+      "wikipedia": "en:Swing_Low,_Sweet_Chariot",
+      "year": "vor 1862"
+    },
+    "songID": "Swing-low",
+    "slidesCount": 5
+  },
+  "Zum-Tanze-da-geht-ein-Maedel": {
+    "abc": "z",
+    "folder": "/home/jf/git-repositories/content/lieder/z/Zum-Tanze-da-geht-ein-Maedel",
+    "metaData": {
+      "country": "Schweden",
+      "musescore": 5641095,
+      "title": "Zum Tanze, da geht ein Mädel",
+      "wikidata": 10606286,
+      "wikipedia": "sv:Och_flickan_hon_går_i_dansen",
+      "year": 1908
+    },
+    "songID": "Zum-Tanze-da-geht-ein-Maedel",
+    "slidesCount": 2
+  }
+}
