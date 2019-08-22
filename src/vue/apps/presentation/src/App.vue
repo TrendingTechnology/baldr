@@ -1,10 +1,8 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/overview">Overview</router-link> |
-      <router-link to="/document-camera">Document Camera</router-link> |
-    </div>
+      <modal-dialog name="menu">
+        <main-menu/>
+      </modal-dialog>
     <router-view/>
     <app-info package-name="@bldr/showroom" :version="version"/>
   </div>
@@ -13,16 +11,34 @@
 <script>
 import packageJson from '@/../package.json'
 import { AppInfo } from '@bldr/vue-components-collection'
+import MainMenu from '@/components/MainMenu'
 
 export default {
   name: 'app',
   components: {
-    AppInfo
+    AppInfo,
+    MainMenu
   },
   computed: {
     version () {
       return packageJson.version
     }
+  },
+  mounted: function () {
+    this.$nextTick(function () {
+      window.addEventListener('keydown', event => {
+        if (event.ctrlKey && event.key === 'm') {
+          // Disable Mute audio
+          event.preventDefault()
+        }
+      })
+
+      window.addEventListener('keyup', event => {
+        if (event.ctrlKey && event.key === 'm') {
+          this.$modal.toggle('menu')
+        }
+      })
+    })
   }
 }
 </script>

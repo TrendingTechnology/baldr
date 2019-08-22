@@ -83,10 +83,10 @@ export default {
 
     .container {
       box-sizing: border-box;
-      position: fixed;
-      z-index: 9999;
-      width: 90%;
       height: 85%;
+      position: fixed;
+      width: 90%;
+      z-index: 9999;
     }
 
     .body {
@@ -96,7 +96,7 @@ export default {
       margin: 1vw;
       padding: 1vw;
       padding-top: 3vw;
-      overflow-y: scroll;
+      overflow-y: auto;
     }
 
     .overlay {

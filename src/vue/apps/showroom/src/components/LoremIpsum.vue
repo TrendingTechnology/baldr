@@ -34,6 +34,24 @@
       <li>three</li>
     </ul>
 
+    <h1>Blockquote</h1>
+
+    <blockquote>
+      Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit,
+      amet, adipisci nemo minima autem corporis ea ad animi quas libero,
+      pariatur voluptate accusantium possimus vitae doloribus? Commodi
+      cum veniam laudantium.
+    </blockquote>
+
+    Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ab, sunt
+    non. Quod, quaerat! Minus esse dolor ipsum facere quasi aspernatur
+    temporibus. Id, rem. Nemo unde dicta fugiat. Amet, error
+    consequuntur!
+
+    Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ab, sunt
+    non. Quod, quaerat! Minus esse dolor ipsum facere quasi aspernatur
+    temporibus. Id, rem. Nemo unde dicta fugiat. Amet, error
+    consequuntur!
   </div>
 </template>
 
