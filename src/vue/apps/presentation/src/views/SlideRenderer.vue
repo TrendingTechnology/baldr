@@ -1,8 +1,10 @@
 <script>
 import QuoteMaster from '@/masters/QuoteMaster'
+import MarkdownMaster from '@/masters/MarkdownMaster'
 
 const components = {
-  QuoteMaster
+  QuoteMaster,
+  MarkdownMaster
 }
 
 function toClassName (masterName) {

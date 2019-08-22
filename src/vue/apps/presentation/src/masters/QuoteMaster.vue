@@ -14,6 +14,25 @@
 </template>
 
 <script>
+const examples = [
+  {
+    path: 'all',
+    title: 'All properties',
+    data: {
+      text: 'Der Tag der Gunst ist wie der Tag der Ernte, man muss geschäftig sein sobald sie reift.',
+      author: 'Johann Wolfgang von Goethe',
+      date: 1801
+    }
+  },
+  {
+    path: 'only-text',
+    title: 'Only text',
+    data: {
+      text: 'Der Tag der Gunst ist wie der Tag der Ernte, man muss geschäftig sein sobald sie reift.'
+    }
+  }
+]
+
 export default {
   name: 'QuoteMaster',
   props: {
@@ -29,7 +48,8 @@ export default {
     }
   },
   centerVertically: true,
-  darkMode: true
+  darkMode: true,
+  examples
 }
 </script>
 <style lang="scss" scoped>
