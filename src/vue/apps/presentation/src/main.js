@@ -12,7 +12,6 @@ Vue.use(ModalDialog)
 Vue.use(MaterialIcon)
 Vue.config.productionTip = false
 
-
 class BodyAttributes {
   constructor () {
     this.attributeName = ''
