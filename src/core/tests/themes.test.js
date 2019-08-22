@@ -36,7 +36,7 @@ describe('Class “Themes()” #unittest', () => {
 
     it('Method “loadThemes()”', () => {
       assert.equal(
-        themes.document.querySelectorAll('link.baldr-theme').length,
+        themes.document.querySelectorAll('link.b-theme').length,
         7
       )
     })

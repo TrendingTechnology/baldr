@@ -12,10 +12,45 @@ Vue.use(ModalDialog)
 Vue.use(MaterialIcon)
 Vue.config.productionTip = false
 
-Vue.prototype.$centerVertically = function (state = true) {
-  const elBody = document.querySelector('body')
-  elBody.setAttribute('b-center-vertically', state)
+
+class BodyAttributes {
+  constructor () {
+    this.attributeName = ''
+    this.state = false
+  }
+
+  toggle () {
+    this.set(!this.state)
+  }
+
+  set (state = false) {
+    if (typeof state !== 'boolean') {
+      state = this.state
+    }
+    document.querySelector('body').setAttribute(this.attributeName, state)
+    this.state = state
+  }
 }
+
+class CenterVertically extends BodyAttributes {
+  constructor () {
+    super()
+    this.attributeName = 'b-center-vertically'
+    this.state = true
+  }
+}
+
+Vue.prototype.$centerVertically = new CenterVertically()
+
+class DarkMode extends BodyAttributes {
+  constructor () {
+    super()
+    this.attributeName = 'b-dark-mode'
+    this.state = false
+  }
+}
+
+Vue.prototype.$darkMode = new DarkMode()
 
 new Vue({
   router,

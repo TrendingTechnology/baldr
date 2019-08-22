@@ -3,10 +3,10 @@
 @import url(~typeface-alegreya-sans-sc/index.css);
 @import url(~typeface-alegreya-sc/index.css);
 @import url(~typeface-anonymous-pro/index.css);
-[baldr-theme="default"] {
+[b-theme="default"] {
   font-family: "Alegreya";
   font-size: 1.5vw;
-  color: #141110;
+  /* dash only in unordered lists which are marked with .content */
   /**
    * Formts
    */
@@ -17,12 +17,22 @@
   /* Text color */
 }
 
-[baldr-theme="default"] h1, [baldr-theme="default"] h2, [baldr-theme="default"] h3, [baldr-theme="default"] h4 {
+[b-theme="default"], [b-theme="default"][b-dark-mode="false"] {
+  background-color: #fcfbfb;
+  color: #141110;
+}
+
+[b-theme="default"][b-dark-mode="true"] {
+  background-color: #141110;
+  color: #fcfbfb;
+}
+
+[b-theme="default"] h1, [b-theme="default"] h2, [b-theme="default"] h3, [b-theme="default"] h4 {
   font-family: 'Alegreya Sans';
   font-weight: 700;
 }
 
-[baldr-theme="default"] code {
+[b-theme="default"] code {
   font-family: 'Anonymous Pro';
   background-color: #ddd8d6;
   font-weight: normal;
@@ -30,322 +40,322 @@
   padding: 0 0.1em;
 }
 
-[baldr-theme="default"] a {
+[b-theme="default"] a {
   text-decoration: none;
 }
 
-[baldr-theme="default"] a:link {
+[b-theme="default"] a:link {
   color: #141110;
 }
 
-[baldr-theme="default"] a:visited {
+[b-theme="default"] a:visited {
   color: #141110;
 }
 
-[baldr-theme="default"] a:focus {
+[b-theme="default"] a:focus {
   border-bottom: 1px solid;
 }
 
-[baldr-theme="default"] a:hover {
+[b-theme="default"] a:hover {
   opacity: 0.6;
 }
 
-[baldr-theme="default"] a:active {
+[b-theme="default"] a:active {
   color: #e0585b;
 }
 
-[baldr-theme="default"] .important {
+[b-theme="default"] .important {
   font-family: 'Alegreya Sans';
   font-weight: bolder;
 }
 
-[baldr-theme="default"] .important.person {
+[b-theme="default"] .important.person {
   font-family: 'Alegreya Sans SC';
 }
 
-[baldr-theme="default"] .person {
+[b-theme="default"] .person {
   font-family: 'Alegreya SC';
 }
 
-[baldr-theme="default"] .piece {
+[b-theme="default"] .piece {
   font-style: italic;
 }
 
-[baldr-theme="default"] ul.content {
+[b-theme="default"] ul.content {
   list-style-type: none;
 }
 
-[baldr-theme="default"] ul.content li {
+[b-theme="default"] ul.content li {
   text-indent: -1em;
 }
 
-[baldr-theme="default"] ul.content li:before {
+[b-theme="default"] ul.content li:before {
   content: "- ";
   text-indent: -1em;
 }
 
-[baldr-theme="default"] input, [baldr-theme="default"] button {
+[b-theme="default"] input, [b-theme="default"] button {
   display: inline-block;
   padding: 0.2em;
   margin: 0;
 }
 
-[baldr-theme="default"] input, [baldr-theme="default"] button, [baldr-theme="default"] ::placeholder {
+[b-theme="default"] input, [b-theme="default"] button, [b-theme="default"] ::placeholder {
   font-size: inherit;
   font-family: "Alegreya Sans";
 }
 
-[baldr-theme="default"] input {
+[b-theme="default"] input {
   border: 1px solid #bab0ac;
 }
 
-[baldr-theme="default"] button {
+[b-theme="default"] button {
   background-color: #bab0ac;
   border: 1px solid transparent;
 }
 
-[baldr-theme="default"] button:active {
+[b-theme="default"] button:active {
   background-color: #4e79a7;
   color: #fcfbfb;
 }
 
-[baldr-theme="default"] .white {
+[b-theme="default"] .white {
   background-color: #fcfbfb !important;
 }
 
-[baldr-theme="default"] .yellow {
+[b-theme="default"] .yellow {
   background-color: #edc958 !important;
 }
 
-[baldr-theme="default"] .orange {
+[b-theme="default"] .orange {
   background-color: #f18f3b !important;
 }
 
-[baldr-theme="default"] .red {
+[b-theme="default"] .red {
   background-color: #e0585b !important;
 }
 
-[baldr-theme="default"] .brown {
+[b-theme="default"] .brown {
   background-color: #9c755f !important;
 }
 
-[baldr-theme="default"] .gray {
+[b-theme="default"] .gray {
   background-color: #bab0ac !important;
 }
 
-[baldr-theme="default"] .green {
+[b-theme="default"] .green {
   background-color: #59a14e !important;
 }
 
-[baldr-theme="default"] .blue {
+[b-theme="default"] .blue {
   background-color: #4e79a7 !important;
 }
 
-[baldr-theme="default"] .purple {
+[b-theme="default"] .purple {
   background-color: #af7aa0 !important;
 }
 
-[baldr-theme="default"] .black {
+[b-theme="default"] .black {
   background-color: #141110 !important;
 }
 
-[baldr-theme="default"] .white-light {
+[b-theme="default"] .white-light {
   background-color: #fdfcfc !important;
 }
 
-[baldr-theme="default"] .yellow-light {
+[b-theme="default"] .yellow-light {
   background-color: #f2d98a !important;
 }
 
-[baldr-theme="default"] .orange-light {
+[b-theme="default"] .orange-light {
   background-color: #f5b176 !important;
 }
 
-[baldr-theme="default"] .red-light {
+[b-theme="default"] .red-light {
   background-color: #e98a8c !important;
 }
 
-[baldr-theme="default"] .brown-light {
+[b-theme="default"] .brown-light {
   background-color: #ba9e8e !important;
 }
 
-[baldr-theme="default"] .gray-light {
+[b-theme="default"] .gray-light {
   background-color: #cfc8c5 !important;
 }
 
-[baldr-theme="default"] .green-light {
+[b-theme="default"] .green-light {
   background-color: #88c17f !important;
 }
 
-[baldr-theme="default"] .blue-light {
+[b-theme="default"] .blue-light {
   background-color: #81a1c4 !important;
 }
 
-[baldr-theme="default"] .purple-light {
+[b-theme="default"] .purple-light {
   background-color: #c7a2bd !important;
 }
 
-[baldr-theme="default"] .black-light {
+[b-theme="default"] .black-light {
   background-color: #615651 !important;
 }
 
-[baldr-theme="default"] .white-dark {
+[b-theme="default"] .white-dark {
   background-color: #b7ada9 !important;
 }
 
-[baldr-theme="default"] .yellow-dark {
+[b-theme="default"] .yellow-dark {
   background-color: #cda116 !important;
 }
 
-[baldr-theme="default"] .orange-dark {
+[b-theme="default"] .orange-dark {
   background-color: #c4620e !important;
 }
 
-[baldr-theme="default"] .red-dark {
+[b-theme="default"] .red-dark {
   background-color: #b82226 !important;
 }
 
-[baldr-theme="default"] .brown-dark {
+[b-theme="default"] .brown-dark {
   background-color: #6d5243 !important;
 }
 
-[baldr-theme="default"] .gray-dark {
+[b-theme="default"] .gray-dark {
   background-color: #897872 !important;
 }
 
-[baldr-theme="default"] .green-dark {
+[b-theme="default"] .green-dark {
   background-color: #3e7137 !important;
 }
 
-[baldr-theme="default"] .blue-dark {
+[b-theme="default"] .blue-dark {
   background-color: #375575 !important;
 }
 
-[baldr-theme="default"] .purple-dark {
+[b-theme="default"] .purple-dark {
   background-color: #824e73 !important;
 }
 
-[baldr-theme="default"] .black-dark {
+[b-theme="default"] .black-dark {
   background-color: #0e0c0b !important;
 }
 
-[baldr-theme="default"] .text-white {
+[b-theme="default"] .text-white {
   color: #fcfbfb !important;
 }
 
-[baldr-theme="default"] .text-yellow {
+[b-theme="default"] .text-yellow {
   color: #edc958 !important;
 }
 
-[baldr-theme="default"] .text-orange {
+[b-theme="default"] .text-orange {
   color: #f18f3b !important;
 }
 
-[baldr-theme="default"] .text-red {
+[b-theme="default"] .text-red {
   color: #e0585b !important;
 }
 
-[baldr-theme="default"] .text-brown {
+[b-theme="default"] .text-brown {
   color: #9c755f !important;
 }
 
-[baldr-theme="default"] .text-gray {
+[b-theme="default"] .text-gray {
   color: #bab0ac !important;
 }
 
-[baldr-theme="default"] .text-green {
+[b-theme="default"] .text-green {
   color: #59a14e !important;
 }
 
-[baldr-theme="default"] .text-blue {
+[b-theme="default"] .text-blue {
   color: #4e79a7 !important;
 }
 
-[baldr-theme="default"] .text-purple {
+[b-theme="default"] .text-purple {
   color: #af7aa0 !important;
 }
 
-[baldr-theme="default"] .text-black {
+[b-theme="default"] .text-black {
   color: #141110 !important;
 }
 
-[baldr-theme="default"] .text-white-light {
+[b-theme="default"] .text-white-light {
   color: #fdfcfc !important;
 }
 
-[baldr-theme="default"] .text-yellow-light {
+[b-theme="default"] .text-yellow-light {
   color: #f2d98a !important;
 }
 
-[baldr-theme="default"] .text-orange-light {
+[b-theme="default"] .text-orange-light {
   color: #f5b176 !important;
 }
 
-[baldr-theme="default"] .text-red-light {
+[b-theme="default"] .text-red-light {
   color: #e98a8c !important;
 }
 
-[baldr-theme="default"] .text-brown-light {
+[b-theme="default"] .text-brown-light {
   color: #ba9e8e !important;
 }
 
-[baldr-theme="default"] .text-gray-light {
+[b-theme="default"] .text-gray-light {
   color: #cfc8c5 !important;
 }
 
-[baldr-theme="default"] .text-green-light {
+[b-theme="default"] .text-green-light {
   color: #88c17f !important;
 }
 
-[baldr-theme="default"] .text-blue-light {
+[b-theme="default"] .text-blue-light {
   color: #81a1c4 !important;
 }
 
-[baldr-theme="default"] .text-purple-light {
+[b-theme="default"] .text-purple-light {
   color: #c7a2bd !important;
 }
 
-[baldr-theme="default"] .text-black-light {
+[b-theme="default"] .text-black-light {
   color: #615651 !important;
 }
 
-[baldr-theme="default"] .text-white-dark {
+[b-theme="default"] .text-white-dark {
   color: #b7ada9 !important;
 }
 
-[baldr-theme="default"] .text-yellow-dark {
+[b-theme="default"] .text-yellow-dark {
   color: #cda116 !important;
 }
 
-[baldr-theme="default"] .text-orange-dark {
+[b-theme="default"] .text-orange-dark {
   color: #c4620e !important;
 }
 
-[baldr-theme="default"] .text-red-dark {
+[b-theme="default"] .text-red-dark {
   color: #b82226 !important;
 }
 
-[baldr-theme="default"] .text-brown-dark {
+[b-theme="default"] .text-brown-dark {
   color: #6d5243 !important;
 }
 
-[baldr-theme="default"] .text-gray-dark {
+[b-theme="default"] .text-gray-dark {
   color: #897872 !important;
 }
 
-[baldr-theme="default"] .text-green-dark {
+[b-theme="default"] .text-green-dark {
   color: #3e7137 !important;
 }
 
-[baldr-theme="default"] .text-blue-dark {
+[b-theme="default"] .text-blue-dark {
   color: #375575 !important;
 }
 
-[baldr-theme="default"] .text-purple-dark {
+[b-theme="default"] .text-purple-dark {
   color: #824e73 !important;
 }
 
-[baldr-theme="default"] .text-black-dark {
+[b-theme="default"] .text-black-dark {
   color: #0e0c0b !important;
 }
 

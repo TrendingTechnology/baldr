@@ -78,7 +78,7 @@ class Themes {
    */
   loadThemes () {
     for (const cssFile of this.getAllCSSFiles_()) {
-      addCSSFile(this.document, cssFile, 'baldr-theme')
+      addCSSFile(this.document, cssFile, 'b-theme')
     }
   }
 }

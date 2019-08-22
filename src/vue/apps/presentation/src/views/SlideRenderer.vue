@@ -17,14 +17,24 @@ function masterOptions (masterName) {
 export default {
   name: 'SlideRenderer',
   components,
+  computed: {
+    masterName () {
+      return this.$route.meta.master
+    },
+    masterData () {
+      return this.$route.meta.data
+    }
+  },
+  created: function () {
+    const options = masterOptions(this.masterName)
+    this.$centerVertically.set(options.centerVertically)
+    this.$darkMode.set(options.darkMode)
+  },
   render: function (createElement) {
-    const masterName = this.$route.meta.master
-    const masterData = this.$route.meta.data
-    this.$centerVertically(masterOptions(masterName).centerVertically)
     return createElement(
-      `${masterName}-master`,
+      `${this.masterName}-master`,
       {
-        props: masterData
+        props: this.masterData
       }
     )
   }

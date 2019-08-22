@@ -28,7 +28,8 @@ export default {
       type: [String, Number]
     }
   },
-  centerVertically: true
+  centerVertically: true,
+  darkMode: true
 }
 </script>
 <style lang="scss" scoped>

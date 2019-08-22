@@ -34,12 +34,19 @@ export default {
         if (event.ctrlKey && event.key === 'm') {
           // Disable Mute audio
           event.preventDefault()
+        } else if (event.ctrlKey && event.key === 'd') {
+          // edit bookmarks
+          event.preventDefault()
         }
       })
 
       window.addEventListener('keyup', event => {
         if (event.ctrlKey && event.key === 'm') {
           this.$modal.toggle('menu')
+        } else if (event.ctrlKey && event.key === 'd') {
+          this.$darkMode.toggle()
+        } else if (event.ctrlKey && event.altKey && event.key === 'v') {
+          this.$centerVertically.toggle()
         }
       })
     })
