@@ -1,11 +1,5 @@
 <script>
-import QuoteMaster from '@/masters/QuoteMaster'
-import MarkdownMaster from '@/masters/MarkdownMaster'
-
-const components = {
-  QuoteMaster,
-  MarkdownMaster
-}
+import { components } from '@/masters.js'
 
 function toClassName (masterName) {
   const titleCase = masterName.charAt(0).toUpperCase() + masterName.substr(1).toLowerCase()
