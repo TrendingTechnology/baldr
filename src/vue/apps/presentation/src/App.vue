@@ -3,7 +3,11 @@
       <modal-dialog name="menu">
         <main-menu/>
       </modal-dialog>
-    <router-view/>
+    <main>
+      <div id='content'>
+        <router-view/>
+      </div>
+    </main>
     <app-info package-name="@bldr/showroom" :version="version"/>
   </div>
 </template>
@@ -42,10 +46,35 @@ export default {
   }
 }
 </script>
-<style lang="css">
+<style lang="scss">
   @import '~@bldr/theme-default/styles-ng.css';
 
   body {
-    font-size: 1em;
+    margin: 0;
   }
+
+  /* Every root element in each view should be main. */
+  main {
+    font-size: 4vw;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+  }
+
+ [b-center-vertically="true"] {
+    main {
+      display: table;
+    }
+
+    #content {
+      display: table-cell;
+      vertical-align: middle;
+      height: 100%;
+    }
+  }
+
+  [data-margin="true"] #slide-content {
+    padding: 5vw;
+  }
+
 </style>

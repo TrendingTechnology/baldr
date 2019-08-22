@@ -12,26 +12,27 @@ export default new Router({
     {
       path: '/',
       name: 'home',
+      title: 'Home',
       component: Home
     },
     {
       path: '/overview',
-      name: 'overview',
+      title: 'overview',
       component: Overview
     },
     {
       path: '/document-camera',
-      name: 'document-camera',
+      title: 'document-camera',
       component: DocumentCamera
     },
     {
       path: '/examples',
-      name: 'examples',
+      title: 'examples',
       component: SlideRenderer,
       children: [
         {
           path: 'quote',
-          name: 'Master “quote”',
+          title: 'Master “quote”',
           component: SlideRenderer,
           meta: {
             master: 'quote',
@@ -44,7 +45,7 @@ export default new Router({
           children: [
             {
               path: 'only-text',
-              name: 'Only text',
+              title: 'Only text',
               component: SlideRenderer,
               meta: {
                 master: 'quote',

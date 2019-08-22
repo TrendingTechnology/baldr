@@ -4,10 +4,10 @@
        @click.native="$modal.hide('menu')"
       :to="path()"
     >
-      {{ item.name }}
+      {{ item.title }}
     </router-link>
 
-    <ul v-if="item.children && item.children.length">
+    <ul v-if="item.children && item.children.length" class="content">
       <span
         v-for="item in item.children"
         :key="item.name"

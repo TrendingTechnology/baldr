@@ -75,11 +75,11 @@
   list-style-type: none;
 }
 
-[baldr-theme="default"] ul.content > li {
+[baldr-theme="default"] ul.content li {
   text-indent: -1em;
 }
 
-[baldr-theme="default"] ul.content > li:before {
+[baldr-theme="default"] ul.content li:before {
   content: "- ";
   text-indent: -1em;
 }

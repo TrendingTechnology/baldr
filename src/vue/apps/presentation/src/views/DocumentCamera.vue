@@ -1,5 +1,5 @@
 <template>
-  <main class="document-camera">
+  <div class="document-camera">
     <h1>Document Camera</h1>
 
     <a href="#" @click="showDeviceSelect">Video-Ausgabegerät auswählen</a>
@@ -18,7 +18,7 @@
     </modal-dialog>
 
     <video ref="videoTag" autoplay="true" id="video"></video>
-  </main>
+  </div>
 </template>
 
 <script>

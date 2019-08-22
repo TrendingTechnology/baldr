@@ -12,6 +12,11 @@ Vue.use(ModalDialog)
 Vue.use(MaterialIcon)
 Vue.config.productionTip = false
 
+Vue.prototype.$centerVertically = function (state = true) {
+  const elBody = document.querySelector('body')
+  elBody.setAttribute('b-center-vertically', state)
+}
+
 new Vue({
   router,
   store,

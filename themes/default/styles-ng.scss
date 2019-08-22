@@ -65,14 +65,15 @@
     font-style: italic;
   }
 
+  /* dash only in unordered lists which are marked with .content */
   ul.content {
     list-style-type: none;
 
-    & > li {
+    & li {
       text-indent: -1em;
     }
 
-    & > li:before {
+    & li:before {
       content: "- ";
       text-indent: -1em;
     }

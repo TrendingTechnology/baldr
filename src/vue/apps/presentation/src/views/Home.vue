@@ -1,10 +1,10 @@
 <template>
-  <main>
+  <div>
     <material-icon
       size="20vw"
       outline="circle"
       name="presentation"
       color="orange"
     />
-  </main>
+  </div>
 </template>

@@ -1,12 +1,12 @@
 <template>
-  <div class="main-menu">
+  <ul class="main-menu content">
     <menu-item
       v-for="item in $router.options.routes"
       :key="item.name"
       :item="item"
       :prefix="item.path"
     />
-  </div>
+  </ul>
 </template>
 
 <script>

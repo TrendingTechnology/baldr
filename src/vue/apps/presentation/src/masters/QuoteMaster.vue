@@ -1,5 +1,5 @@
 <template>
-  <main class='quote-master'>
+  <div class='quote-master'>
     <p class="text">
       <span class="quotation-mark">»</span>
         {{text }}
@@ -10,7 +10,7 @@
       <span v-if="author && date">, </span>
       <span class="date" v-if="date">{{ date }}</span>
     </p>
-  </main>
+  </div>
 </template>
 
 <script>
@@ -27,7 +27,8 @@ export default {
     date: {
       type: [String, Number]
     }
-  }
+  },
+  centerVertically: true
 }
 </script>
 <style lang="scss" scoped>
