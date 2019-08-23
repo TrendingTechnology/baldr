@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import yaml from 'js-yaml'
+import { parseYamlFile } from './slides.js'
 
 Vue.use(Vuex)
 
@@ -37,13 +37,8 @@ const actions = {
     commit('setMediaDevices', await navigator.mediaDevices.enumerateDevices())
   },
   openPresentation ({ commit }, content) {
-    console.log(content)
-    try {
-      const presentation = yaml.safeLoad(content)
-      console.log(presentation)
-    } catch (e) {
-      console.log(e)
-    }
+    const slides = parseYamlFile(content)
+    console.log(slides)
   }
 }
 

@@ -1,3 +1,7 @@
+/**
+ * @file Gather informations about all masters.
+ */
+
 import QuoteMaster from '@/masters/QuoteMaster'
 import MarkdownMaster from '@/masters/MarkdownMaster'
 
@@ -18,6 +22,13 @@ export function toClassName (masterName) {
 
 export function masterOptions (masterName) {
   return components[toClassName(masterName)]
+}
+
+export function callMasterFunc (masterName, funcName, payload) {
+  const options = masterOptions(masterName)
+  if (funcName in options && typeof options[funcName] === 'function') {
+    return options[funcName](payload)
+  }
 }
 
 export default {
