@@ -106,6 +106,7 @@ class RawSlideObject {
     }
     this.raw = rawData
   }
+
   /**
    * Cut properties from the raw object: delete the property
    *
