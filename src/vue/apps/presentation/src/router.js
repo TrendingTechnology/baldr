@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home.vue'
-import Overview from './views/Overview.vue'
+import OpenNewPresentation from './views/OpenNewPresentation.vue'
 import DocumentCamera from './views/DocumentCamera.vue'
 import { masterNames, masterOptions } from './masters.js'
 import SlideRenderer from '@/views/SlideRenderer.vue'
@@ -58,9 +58,9 @@ const routes = [
     component: Home
   },
   {
-    path: '/overview',
-    title: 'overview',
-    component: Overview
+    path: '/open',
+    title: 'Open a new presentation',
+    component: OpenNewPresentation
   },
   {
     path: '/document-camera',

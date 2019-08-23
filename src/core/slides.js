@@ -24,7 +24,7 @@
  *
  *     - title: A quote
  *       quote:
- *         author: Goehte
+ *         author: Goethe
  *         text: lol
  *
  * # String:
