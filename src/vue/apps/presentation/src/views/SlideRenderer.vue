@@ -1,19 +1,8 @@
 <script>
-import { components } from '@/masters.js'
 import { mapGetters } from 'vuex'
-
-function toClassName (masterName) {
-  const titleCase = masterName.charAt(0).toUpperCase() + masterName.substr(1).toLowerCase()
-  return `${titleCase}Master`
-}
-
-function masterOptions (masterName) {
-  return components[toClassName(masterName)]
-}
 
 export default {
   name: 'SlideRenderer',
-  components,
   computed: {
     ...mapGetters(['slideCurrent']),
     masterName () {
@@ -30,9 +19,9 @@ export default {
     }
   },
   created: function () {
-    const options = masterOptions(this.masterName)
-    this.$centerVertically.set(options.centerVertically)
-    this.$darkMode.set(options.darkMode)
+    const master = this.$masters[this.masterName]
+    this.$centerVertically.set(master.centerVertically)
+    this.$darkMode.set(master.darkMode)
   },
   render: function (createElement) {
     return createElement(

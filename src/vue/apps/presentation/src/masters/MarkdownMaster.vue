@@ -77,17 +77,6 @@ export default {
     markupConverted () {
       return marked(this.markup)
     }
-  },
-  master: 'markdown',
-  centerVertically: true,
-  darkMode: false,
-  examples,
-  normalizeData (data) {
-    if (typeof data === 'string') {
-      return {
-        markup: data
-      }
-    }
   }
 }
 </script>

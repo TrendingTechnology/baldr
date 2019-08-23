@@ -53,10 +53,7 @@ export default {
     date: {
       type: [String, Number]
     }
-  },
-  centerVertically: true,
-  darkMode: true,
-  examples
+  }
 }
 </script>
 <style lang="scss" scoped>
