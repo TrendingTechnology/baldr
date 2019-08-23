@@ -1,7 +1,10 @@
 
+File name: `name.vue`
+
+The master name is: `name`
+
 ```js
 export const master = {
-  name: 'markdown',
   centerVertically: true,
   darkMode: false,
   examples: [

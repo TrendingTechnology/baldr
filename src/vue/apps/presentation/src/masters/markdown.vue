@@ -52,7 +52,6 @@ anim id est laborum.`
 ]
 
 export const master = {
-  name: 'markdown',
   centerVertically: true,
   darkMode: false,
   examples,
@@ -66,7 +65,6 @@ export const master = {
 }
 
 export default {
-  name: 'MarkdownMaster',
   props: {
     markup: {
       type: String,

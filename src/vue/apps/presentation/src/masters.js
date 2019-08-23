@@ -22,10 +22,12 @@ export const masters = {}
 // For each matching file name...
 requireComponent.keys().forEach((fileName) => {
   // Get the component config
+  const masterName = fileName.replace('./', '').replace('.vue', '')
   const componentConfig = requireComponent(fileName)
   const masterConfig = componentConfig.master
-  masters[masterConfig.name] = masterConfig
-  componentDefaults[masterConfig.name] = componentConfig.default
+  masters[masterName] = masterConfig
+  masters[masterName].name = masterName
+  componentDefaults[masterName] = componentConfig.default
 })
 
 export function registerMasterComponents () {
@@ -35,11 +37,6 @@ export function registerMasterComponents () {
 }
 
 export const masterNames = Object.keys(masters)
-
-export function toClassName (masterName) {
-  const titleCase = masterName.charAt(0).toUpperCase() + masterName.substr(1).toLowerCase()
-  return `${titleCase}Master`
-}
 
 export function masterOptions (masterName) {
   return masters[masterName]

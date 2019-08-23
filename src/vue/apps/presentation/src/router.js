@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home.vue'
 import OpenNewPresentation from './views/OpenNewPresentation.vue'
-import CameraMaster from '@/masters/CameraMaster.vue'
+import CameraMaster from '@/masters/camera.vue'
 import { masterNames, masterOptions } from './masters.js'
 import SlideRenderer from '@/views/SlideRenderer.vue'
 
