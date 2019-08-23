@@ -87,8 +87,12 @@
 
 import { mapGetters } from 'vuex'
 
+export const master = {
+  name: 'camera'
+}
+
 export default {
-  name: 'DocumentCamera',
+  name: 'CameraMaster',
   data () {
     return {
       deviceId: '',

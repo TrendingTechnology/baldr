@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home.vue'
 import OpenNewPresentation from './views/OpenNewPresentation.vue'
-import DocumentCamera from './views/DocumentCamera.vue'
+import CameraMaster from '@/masters/CameraMaster.vue'
 import { masterNames, masterOptions } from './masters.js'
 import SlideRenderer from '@/views/SlideRenderer.vue'
 
@@ -70,7 +70,7 @@ const routes = [
   {
     path: '/document-camera',
     title: 'document-camera',
-    component: DocumentCamera
+    component: CameraMaster
   }
 ]
 

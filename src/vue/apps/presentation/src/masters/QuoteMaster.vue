@@ -33,6 +33,13 @@ const examples = [
   }
 ]
 
+export const master = {
+  name: 'quote',
+  centerVertically: true,
+  darkMode: true,
+  examples
+}
+
 export default {
   name: 'QuoteMaster',
   props: {

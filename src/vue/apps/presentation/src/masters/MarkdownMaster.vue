@@ -51,6 +51,20 @@ anim id est laborum.`
   }
 ]
 
+export const master = {
+  name: 'markdown',
+  centerVertically: true,
+  darkMode: false,
+  examples,
+  normalizeData (data) {
+    if (typeof data === 'string') {
+      return {
+        markup: data
+      }
+    }
+  }
+}
+
 export default {
   name: 'MarkdownMaster',
   props: {
