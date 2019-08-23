@@ -5,7 +5,9 @@ import { parseContentFile } from './content-file.js'
 Vue.use(Vuex)
 
 const state = {
-  mediaDevices: []
+  mediaDevices: [],
+  slides: {},
+  slideNoCurrent: null
 }
 
 const getters = {
@@ -29,6 +31,20 @@ const getters = {
       }
     }
     return resultList
+  },
+  slideNoCurrent: state => {
+    return state.slideNoCurrent
+  },
+  slideCurrent: state => {
+    if (state.slideNoCurrent) {
+      return state.slides[state.slideNoCurrent]
+    }
+  },
+  slides: state => {
+    return state.slides
+  },
+  slidesCount: (state, getters) => {
+    return Object.keys(getters.slides).length
   }
 }
 
@@ -38,13 +54,38 @@ const actions = {
   },
   openPresentation ({ commit }, content) {
     const contentFile = parseContentFile(content)
-    console.log(contentFile)
+    commit('setSlides', contentFile.slides)
+    commit('setSlideNoCurrent', 1)
+  },
+  setSlideNext ({ commit, getters }) {
+    const no = getters.slideNoCurrent
+    const count = getters.slidesCount
+    if (no === count) {
+      commit('setSlideNoCurrent', 1)
+    } else {
+      commit('setSlideNoCurrent', no + 1)
+    }
+  },
+  setSlidePrevious ({ commit, getters }) {
+    const no = getters.slideNoCurrent
+    const count = getters.slidesCount
+    if (no === 1) {
+      commit('setSlideNoCurrent', count)
+    } else {
+      commit('setSlideNoCurrent', no - 1)
+    }
   }
 }
 
 const mutations = {
   setMediaDevices (state, mediaDevices) {
     state.mediaDevices = mediaDevices
+  },
+  setSlides (state, slides) {
+    Vue.set(state, 'slides', slides)
+  },
+  setSlideNoCurrent (state, slideNoCurrent) {
+    state.slideNoCurrent = parseInt(slideNoCurrent)
   }
 }
 

@@ -67,6 +67,13 @@ export default {
   master: 'markdown',
   centerVertically: true,
   darkMode: false,
-  examples
+  examples,
+  normalizeData (data) {
+    if (typeof data === 'string') {
+      return {
+        markup: data
+      }
+    }
+  }
 }
 </script>

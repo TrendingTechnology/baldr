@@ -63,6 +63,11 @@ const routes = [
     component: OpenNewPresentation
   },
   {
+    path: '/slides',
+    title: 'slides',
+    component: SlideRenderer
+  },
+  {
     path: '/document-camera',
     title: 'document-camera',
     component: DocumentCamera

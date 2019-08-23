@@ -16,6 +16,7 @@
 import packageJson from '@/../package.json'
 import { AppInfo } from '@bldr/vue-components-collection'
 import MainMenu from '@/components/MainMenu'
+import { mapActions } from 'vuex'
 
 export default {
   name: 'app',
@@ -28,6 +29,7 @@ export default {
       return packageJson.version
     }
   },
+  methods: mapActions(['setSlidePrevious', 'setSlideNext']),
   mounted: function () {
     this.$nextTick(function () {
       window.addEventListener('keydown', event => {
@@ -36,6 +38,8 @@ export default {
           event.preventDefault()
         } else if (event.ctrlKey && event.key === 'd') {
           // edit bookmarks
+          event.preventDefault()
+        } else if (['ArrowLeft', 'ArrowRight'].includes(event.key)) {
           event.preventDefault()
         }
       })
@@ -47,6 +51,10 @@ export default {
           this.$darkMode.toggle()
         } else if (event.ctrlKey && event.altKey && event.key === 'v') {
           this.$centerVertically.toggle()
+        } else if (event.key === 'ArrowLeft') {
+          this.setSlidePrevious()
+        } else if (event.key === 'ArrowRight') {
+          this.setSlideNext()
         }
       })
     })
