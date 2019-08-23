@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { parseYamlFile } from './slides.js'
+import { parseContentFile } from './content-file.js'
 
 Vue.use(Vuex)
 
@@ -37,8 +37,8 @@ const actions = {
     commit('setMediaDevices', await navigator.mediaDevices.enumerateDevices())
   },
   openPresentation ({ commit }, content) {
-    const slides = parseYamlFile(content)
-    console.log(slides)
+    const contentFile = parseContentFile(content)
+    console.log(contentFile)
   }
 }
 
