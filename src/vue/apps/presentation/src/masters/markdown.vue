@@ -8,7 +8,6 @@ import marked from 'marked'
 
 const examples = [
   {
-    path: 'heading',
     title: 'Heading',
     data: {
       markup: `# heading 1
@@ -17,7 +16,6 @@ const examples = [
     }
   },
   {
-    path: 'lorem',
     title: 'Lorem ipsum',
     data: {
       markup: `Lorem ipsum dolor sit amet ...
@@ -32,7 +30,6 @@ anim id est laborum.`
     }
   },
   {
-    path: 'ordered-list',
     title: 'Ordered list',
     data: {
       markup: `1. one
@@ -41,7 +38,6 @@ anim id est laborum.`
     }
   },
   {
-    path: 'unordered-list',
     title: 'Unordered list',
     data: {
       markup: `* one

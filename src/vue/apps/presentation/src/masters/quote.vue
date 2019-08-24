@@ -16,7 +16,6 @@
 <script>
 const examples = [
   {
-    path: 'all',
     title: 'All properties',
     data: {
       text: 'Der Tag der Gunst ist wie der Tag der Ernte, man muss geschäftig sein sobald sie reift.',
@@ -25,7 +24,6 @@ const examples = [
     }
   },
   {
-    path: 'only-text',
     title: 'Only text',
     data: {
       text: 'Der Tag der Gunst ist wie der Tag der Ernte, man muss geschäftig sein sobald sie reift.'
@@ -33,10 +31,17 @@ const examples = [
   }
 ]
 
+const documentation = `
+
+# props
+
+`
+
 export const master = {
   centerVertically: true,
   darkMode: true,
-  examples
+  examples,
+  documentation
 }
 
 export default {

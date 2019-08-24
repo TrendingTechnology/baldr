@@ -5,25 +5,23 @@ import OpenNewPresentation from './views/OpenNewPresentation.vue'
 import CameraMaster from '@/masters/camera.vue'
 import { masterNames, masterOptions } from './masters.js'
 import SlideRenderer from '@/views/SlideRenderer.vue'
-
-function makeRouteObject (masterName, { path, title, data }) {
-  return {
-    path: path,
-    title: title,
-    component: SlideRenderer,
-    meta: {
-      master: masterName,
-      data
-    }
-  }
-}
+import MasterDocumentation from '@/views/MasterDocumentation.vue'
 
 function masterExample (masterName) {
   const options = masterOptions(masterName)
   if ('examples' in options) {
     const routes = []
-    for (const example of options.examples) {
-      routes.push(makeRouteObject(masterName, example))
+    for (const index in options.examples) {
+      const example = options.examples[index]
+      routes.push({
+        path: String(parseInt(index) + 1),
+        title: example.title,
+        component: SlideRenderer,
+        meta: {
+          master: masterName,
+          data: example.data
+        }
+      })
     }
     return {
       path: masterName,
@@ -71,6 +69,11 @@ const routes = [
     path: '/document-camera',
     title: 'document-camera',
     component: CameraMaster
+  },
+  {
+    path: '/examples/:master',
+    title: 'Master Documentation',
+    component: MasterDocumentation
   }
 ]
 
