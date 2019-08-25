@@ -68,12 +68,15 @@ export default {
     margin: 0;
   }
 
-  /* Every root element in each view should be main. */
   main {
     font-size: 4vw;
     height: 100vh;
     width: 100vw;
     overflow: hidden;
+
+    #content {
+      padding: 2vw 8vw;
+    }
   }
 
  [b-center-vertically="true"] {
