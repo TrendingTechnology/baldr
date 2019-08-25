@@ -27,6 +27,7 @@ requireComponent.keys().forEach((fileName) => {
   const masterConfig = componentConfig.master
   masters[masterName] = masterConfig
   masters[masterName].name = masterName
+  masters[masterName].vue = componentConfig.default
   componentDefaults[masterName] = componentConfig.default
 })
 

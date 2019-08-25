@@ -8,6 +8,11 @@ import SlideRenderer from '@/views/SlideRenderer.vue'
 import MasterDocumentation from '@/views/MasterDocumentation.vue'
 
 function masterExample (masterName) {
+  const masterRoute = {
+    path: masterName,
+    title: masterName,
+    component: MasterDocumentation
+  }
   const options = masterOptions(masterName)
   if ('examples' in options) {
     const routes = []
@@ -23,13 +28,9 @@ function masterExample (masterName) {
         }
       })
     }
-    return {
-      path: masterName,
-      title: masterName,
-      component: SlideRenderer,
-      children: routes
-    }
+    masterRoute.children = routes
   }
+  return masterRoute
 }
 
 export function mastersExamples () {
