@@ -7,6 +7,7 @@ The master name is: `name`
 export const master = {
   centerVertically: true,
   darkMode: false,
+  documentation = `# Markdown`,
   examples: [
     {
       path: 'all',
@@ -16,7 +17,7 @@ export const master = {
         author: 'Johann Wolfgang von Goethe',
         date: 1801
       }
-    },
+    }
   ]
   // result must fit to props
   normalizeData (data) {

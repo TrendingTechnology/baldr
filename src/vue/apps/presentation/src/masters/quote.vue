@@ -31,17 +31,10 @@ const examples = [
   }
 ]
 
-const documentation = `
-
-# props
-
-`
-
 export const master = {
   centerVertically: true,
   darkMode: true,
-  examples,
-  documentation
+  examples
 }
 
 export default {

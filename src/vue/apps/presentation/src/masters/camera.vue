@@ -87,15 +87,7 @@
 
 import { mapGetters } from 'vuex'
 
-const documentation = `
-
-# props
-
-`
-
-export const master = {
-  documentation
-}
+export const master = {}
 
 export default {
   data () {

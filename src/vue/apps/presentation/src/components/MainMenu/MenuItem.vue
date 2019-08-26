@@ -1,5 +1,5 @@
 <template>
-  <li class="menu-item">
+  <li class="menu-item" v-if="!isDynamicRoute()">
     <router-link
        @click.native="$modal.hide('menu')"
       :to="path()"
@@ -36,6 +36,10 @@ export default {
   methods: {
     path () {
       return `${this.prefix}`
+    },
+    isDynamicRoute () {
+      if (this.item.path.indexOf(':') > 0) return true
+      return false
     }
   }
 }
