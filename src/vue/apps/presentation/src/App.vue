@@ -90,9 +90,4 @@ export default {
       height: 100%;
     }
   }
-
-  [data-margin="true"] #slide-content {
-    padding: 5vw;
-  }
-
 </style>

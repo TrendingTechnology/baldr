@@ -7,10 +7,10 @@ The master name is: `name`
 export const master = {
   centerVertically: true,
   darkMode: false,
+  slidePadding: '4vw',
   documentation = `# Markdown`,
   examples: [
     {
-      path: 'all',
       title: 'All properties',
       data: {
         text: 'Der Tag der Gunst ist wie der Tag der Ernte, man muss geschäftig sein sobald sie reift.',

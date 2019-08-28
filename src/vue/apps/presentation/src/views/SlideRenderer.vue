@@ -33,6 +33,11 @@ export default {
     const master = this.$masters[this.masterName]
     this.$centerVertically.set(master.centerVertically)
     this.$darkMode.set(master.darkMode)
+    if ('slidePadding' in master) {
+      this.$slidePadding.set(master.slidePadding)
+    } else {
+      this.$slidePadding.default()
+    }
   },
   render: function (createElement) {
     if (this.masterName) {

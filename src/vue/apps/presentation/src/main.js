@@ -52,6 +52,18 @@ class DarkMode extends BodyAttributes {
 
 Vue.prototype.$darkMode = new DarkMode()
 
+Vue.prototype.$slidePadding = {
+  default: function () {
+    document.querySelector('main #content').style.padding = null
+  },
+  set: function (padding) {
+    document.querySelector('main #content').style.padding = padding
+  },
+  none: function () {
+    document.querySelector('main #content').style.padding = 0
+  }
+}
+
 Vue.prototype.$masters = masters
 
 // Must be before new Vue()
