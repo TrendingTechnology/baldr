@@ -1,0 +1,29 @@
+{
+  "name": "@bldr/media-server",
+  "version": "0.1.0",
+  "description": "A media server which provides a REST API to find files",
+  "author": {
+    "name": "Josef Friedrich",
+    "email": "josef@friedrich.rocks",
+    "url": "https://josef.friedrich.rocks"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Josef-Friedrich/baldr.git"
+  },
+  "main": "src/index.js",
+  "style": "src/style.css",
+  "dependencies": {
+    "glob": "7.1.4",
+    "commander": "3.0.0"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not ie <= 8"
+  ],
+  "bin": {
+    "baldr-media-server": "./src/cli.js"
+  }
+}
