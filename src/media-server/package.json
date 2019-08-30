@@ -16,7 +16,8 @@
   "style": "src/style.css",
   "dependencies": {
     "glob": "7.1.4",
-    "commander": "3.0.0"
+    "commander": "3.0.0",
+    "better-sqlite3": "5.4.2"
   },
   "browserslist": [
     "> 1%",
