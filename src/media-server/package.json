@@ -17,7 +17,8 @@
     "glob": "^7.1.4",
     "commander": "^3.0.0",
     "better-sqlite3": "^5.4.2",
-    "js-yaml": "^3.13.1"
+    "js-yaml": "^3.13.1",
+    "@bldr/core": "^0.0.18"
   },
   "bin": {
     "baldr-media-server": "./src/cli.js"
