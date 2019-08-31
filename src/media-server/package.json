@@ -13,17 +13,12 @@
     "url": "git+https://github.com/Josef-Friedrich/baldr.git"
   },
   "main": "src/index.js",
-  "style": "src/style.css",
   "dependencies": {
-    "glob": "7.1.4",
-    "commander": "3.0.0",
-    "better-sqlite3": "5.4.2"
+    "glob": "^7.1.4",
+    "commander": "^3.0.0",
+    "better-sqlite3": "^5.4.2",
+    "js-yaml": "^3.13.1"
   },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not ie <= 8"
-  ],
   "bin": {
     "baldr-media-server": "./src/cli.js"
   }

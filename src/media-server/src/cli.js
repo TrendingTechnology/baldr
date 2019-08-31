@@ -8,6 +8,70 @@ const path = require('path')
 const commander = require('commander')
 const glob = require('glob')
 const Sqlite3 = require('better-sqlite3')
+const yaml = require('js-yaml')
+
+let basePath
+let subcommand
+
+/**
+ *
+ */
+class MetaData {
+  constructor (filePath) {
+    /**
+     * Absolute path ot the file.
+     * @type {string}
+     */
+    this.path = filePath.replace(basePath, '').replace(/^\//, '')
+
+    /**
+     * The basename (filename) of the file.
+     * @type {string}
+     */
+    this.filename = path.basename(filePath)
+
+    /**
+     * The extension of the file.
+     * @type {string}
+     */
+    this.extension = path.extname(filePath).replace('.', '')
+
+    const data = this.readInfoYaml_()
+
+    /**
+     * @type {string}
+     */
+    this.id = ''
+    if ('id' in data) {
+      this.id = data.id
+    }
+
+    /**
+     * @type {object}
+     */
+    this.data = JSON.stringify(data)
+  }
+
+  /**
+   * Parse the info file of a media file.
+   *
+   * Each media file can have a info file that stores additional
+   * metadata informations.
+   *
+   * File path:
+   * `/home/baldr/beethoven.jpg`
+   *
+   * Info file in the YAML file format:
+   * `/home/baldr/beethoven.jpg.yml`
+   */
+  readInfoYaml_ () {
+    const infoFile = this.path + '.yml'
+    if (fs.existsSync(infoFile)) {
+      return yaml.safeLoad(fs.readFileSync(infoFile, 'utf8'))
+    }
+    return {}
+  }
+}
 
 /**
  * Sqlite database wrapper.
@@ -26,21 +90,20 @@ class Sqlite {
 
     /**
      * A instance of the class “Sqlite3”.
-     *
      */
     this.db = new Sqlite3(this.dbFile)
     this.prepare_(
-        `CREATE TABLE IF NOT EXISTS files (
-          path TEXT UNIQUE,
-          filename TEXT,
-          id TEXT,
-          data TEXT
-        )`
-      )
+      `CREATE TABLE IF NOT EXISTS files (
+        path TEXT UNIQUE,
+        filename TEXT,
+        extension TEXT,
+        id TEXT UNIQUE,
+        data TEXT
+      )`
+    )
 
     this.prepare_('CREATE INDEX IF NOT EXISTS id ON files(id)')
     this.prepare_('CREATE INDEX IF NOT EXISTS filename ON files(filename)')
-
   }
 
   prepare_ (sql, data) {
@@ -51,17 +114,18 @@ class Sqlite {
     }
   }
 
-  update (path, filename, id, data) {
+  update ({ path, filename, extension, id, data }) {
     this.prepare_(
       'INSERT OR IGNORE INTO files (path) VALUES ($path)',
       { path: path }
     )
 
-    this.prepare_(`
-      UPDATE files
+    this.prepare_(
+      `UPDATE files
         SET
           path = $path,
           filename = $filename,
+          extension = $extension,
           id = $id,
           data = $data
         WHERE path = $path
@@ -69,6 +133,7 @@ class Sqlite {
       {
         path: path,
         filename: filename,
+        extension: extension,
         id: id,
         data: data
       }
@@ -88,15 +153,6 @@ class Sqlite {
     this.db.prepare('DELETE FROM hashes').run()
   }
 }
-
-function update () {
-
-}
-
-let sqlite
-let basePath
-
-let subcommand
 
 commander
   .version(require('../package.json').version)
@@ -119,14 +175,16 @@ if (commander.basePath) {
   basePath = commander.basePath
   dbFile = path.join(basePath, 'files.db')
 }
-sqlite = new Sqlite(dbFile)
+
+const sqlite = new Sqlite(dbFile)
 
 if (subcommand === 'update') {
   const files = glob.sync(path.join(basePath, '**/*'), { ignore: ['**/*.db'] })
   for (const file of files) {
     if (!fs.lstatSync(file).isDirectory()) {
-      console.log(file)
-      sqlite.update(file, path.basename(file), 'id', '{"data": "data"}')
+      const metaData = new MetaData(file)
+      console.log(metaData)
+      sqlite.update(metaData)
     }
   }
 } else if (subcommand === 'list') {
