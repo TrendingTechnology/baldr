@@ -12,14 +12,11 @@ const yaml = require('js-yaml')
 // Project packages.
 const { utils } = require('@bldr/core')
 
-let basePath
-let sqlite
-
 /**
  *
  */
 class MetaData {
-  constructor (filePath) {
+  constructor (filePath, basePath) {
     /**
      * Absolute path ot the file.
      * @type {string}
@@ -142,57 +139,87 @@ class Sqlite {
     )
   }
 
+  queryByID (id) {
+    const results = this.db
+      .prepare('SELECT * FROM files WHERE id = $id')
+      .all({ id: id })
+
+    if (results.length > 1) {
+      console.log(results)
+      throw new Error(`Multiple ids '${id}' found.`)
+    }
+    return results[0]
+  }
+
+  queryByFilename (filename) {
+    const results = this.db
+      .prepare('SELECT * FROM files WHERE filename = $filename')
+      .all({ filename: filename })
+
+    if (results.length === 0) {
+      return { error: `'${filename}' not found.` }
+    }
+
+    if (results.length > 1) {
+      console.log(results)
+      throw new Error(`Multiple file names '${filename}' found.`)
+    }
+    return results[0]
+  }
+
   list () {
     return this.db
       .prepare('SELECT * FROM files')
       .all()
   }
-
-  /**
-   * Delete all rows from the table “hashes”.
-   */
-  flush () {
-    this.db.prepare('DELETE FROM hashes').run()
-  }
 }
 
-function setup (customBasePath) {
-  if (!customBasePath) {
-    const config = utils.bootstrapConfig()
-    basePath = config.mediaServer.path
-  } else {
-    basePath = customBasePath
+class MediaServer {
+  constructor (basePath) {
+    if (!basePath) {
+      const config = utils.bootstrapConfig()
+      if (!('mediaServer' in config)) {
+        throw new Error('Missing property mediaServer in config.')
+      }
+      if (!('path' in config.mediaServer)) {
+        throw new Error('Missing property path in config.mediaServer')
+      }
+      this.basePath = config.mediaServer.path
+    } else {
+      this.basePath = basePath
+    }
+    if (!fs.existsSync(this.basePath)) {
+      throw new Error(`The base path of the media server doesn’t exist: ${this.basePath}`)
+    }
+    const dbFile = path.join(this.basePath, 'files.db')
+    this.sqlite = new Sqlite(dbFile)
   }
-  const dbFile = path.join(basePath, 'files.db')
-  sqlite = new Sqlite(dbFile)
-}
 
-function update () {
-  const files = glob.sync(path.join(basePath, '**/*'), { ignore: ['**/*.db'] })
-  for (const file of files) {
-    if (!fs.lstatSync(file).isDirectory()) {
-      const metaData = new MetaData(file)
-      console.log(metaData)
-      sqlite.update(metaData)
+  update () {
+    const files = glob.sync(path.join(this.basePath, '**/*'), { ignore: ['**/*.db'] })
+    for (const file of files) {
+      if (!fs.lstatSync(file).isDirectory()) {
+        const metaData = new MetaData(file, this.basePath)
+        console.log(metaData)
+        this.sqlite.update(metaData)
+      }
     }
   }
+
+  list () {
+    const result = this.sqlite.list()
+    console.log(result)
+  }
+
+  queryByID (id) {
+    const result = this.sqlite.queryByID(id)
+    console.log(result)
+  }
+
+  queryByFilename (filename) {
+    const result = this.sqlite.queryByFilename(filename)
+    console.log(result)
+  }
 }
 
-function list () {
-  const result = sqlite.list()
-  console.log(result)
-}
-
-function queryByID (id) {
-  console.log(id)
-}
-
-function queryByFilename (filename) {
-  console.log(filename)
-}
-
-exports.setup = setup
-exports.update = update
-exports.list = list
-exports.queryByFilename = queryByFilename
-exports.queryByID = queryByID
+exports.MediaServer = MediaServer
