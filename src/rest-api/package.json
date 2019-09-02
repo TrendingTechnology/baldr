@@ -35,5 +35,6 @@
     "chai": "^4.2.0",
     "chai-http": "^4.3.0",
     "mocha": "^6.2.0"
-  }
+  },
+  "gitHead": "0c4b90d86cbd37744ce11ecb10ce2f92e8496a75"
 }
