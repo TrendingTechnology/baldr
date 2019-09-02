@@ -1,6 +1,6 @@
 {
   "name": "@bldr/showroom",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "description": "Vue app to test the themes",
   "author": {
     "name": "Josef Friedrich",
@@ -14,11 +14,11 @@
     "upload": "rsync -av --delete dist/ serverway:/var/www/baldr.friedrich.rocks/showroom/"
   },
   "dependencies": {
-    "@bldr/theme-default": "^0.0.22",
-    "@bldr/vue-component-dynamic-select": "^0.1.4",
-    "@bldr/vue-component-material-icon": "^0.1.4",
-    "@bldr/vue-component-modal-dialog": "^0.1.4",
-    "@bldr/vue-components-collection": "^0.1.4",
+    "@bldr/theme-default": "^0.0.23",
+    "@bldr/vue-component-dynamic-select": "^0.1.5",
+    "@bldr/vue-component-material-icon": "^0.1.5",
+    "@bldr/vue-component-modal-dialog": "^0.1.5",
+    "@bldr/vue-components-collection": "^0.1.5",
     "core-js": "^3.1.4",
     "vue": "^2.6.10",
     "vue-router": "^3.1.1"
