@@ -1,6 +1,6 @@
 {
   "name": "@bldr/songbook-vue-app",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -11,17 +11,17 @@
     "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {
+    "@bldr/core": "^0.0.19",
+    "@bldr/songbook-core": "^0.1.1",
+    "@bldr/theme-default": "^0.0.19",
+    "@bldr/vue-component-dynamic-select": "^0.1.1",
+    "@bldr/vue-component-material-icon": "^0.1.1",
+    "@bldr/vue-component-modal-dialog": "^0.1.1",
+    "@bldr/vue-components-collection": "^0.1.1",
     "core-js": "^2.6.5",
-    "vue-router": "^3.0.3",
     "vue": "^2.6.10",
-    "vuex": "^3.0.1",
-    "@bldr/vue-components-collection": "^0.1.0",
-    "@bldr/vue-component-modal-dialog": "^0.1.0",
-    "@bldr/vue-component-dynamic-select": "^0.1.0",
-    "@bldr/vue-component-material-icon": "^0.1.0",
-    "@bldr/theme-default": "^0.0.18",
-    "@bldr/songbook-core": "^0.1.0",
-    "@bldr/core": "0.0.18"
+    "vue-router": "^3.0.3",
+    "vuex": "^3.0.1"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.10.0",
@@ -34,8 +34,8 @@
     "babel-eslint": "^10.0.1",
     "chai": "^4.1.2",
     "copy-webpack-plugin": "^5.0.4",
-    "eslint-plugin-vue": "^5.0.0",
     "eslint": "^5.16.0",
+    "eslint-plugin-vue": "^5.0.0",
     "node-sass": "^4.12.0",
     "sass-loader": "^7.2.0",
     "style-resources-loader": "^1.2.1",

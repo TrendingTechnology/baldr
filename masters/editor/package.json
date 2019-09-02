@@ -1,7 +1,7 @@
 {
   "name": "@bldr/master-editor",
   "description": "Master slide “editor” of the baldr project.",
-  "version": "0.0.19",
+  "version": "0.0.20",
   "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
   "bugs": {
     "url": "https://github.com/Josef-Friedrich/baldr/issues"

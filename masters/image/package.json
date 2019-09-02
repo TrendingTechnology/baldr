@@ -1,7 +1,7 @@
 {
   "name": "@bldr/master-image",
   "description": "Master slide “image” of the baldr project.",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
   "bugs": {
     "url": "https://github.com/Josef-Friedrich/baldr/issues"
