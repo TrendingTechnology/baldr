@@ -4,7 +4,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "publish": "rsync -av --delete dist/ serverway:/var/www/baldr.friedrich.rocks/songbook/",
+    "upload": "rsync -av --delete dist/ serverway:/var/www/baldr.friedrich.rocks/songbook/",
     "lint": "vue-cli-service lint",
     "test:e2e": "vue-cli-service test:e2e",
     "test:unit": "vue-cli-service test:unit"
@@ -67,5 +67,5 @@
       "@vue/app"
     ]
   },
-  "gitHead": "e6e2b4fdba887dc693e11729f3b349ee9c4f9d40"
+  "gitHead": "ed4f60e66c8f420711d3eb15185620f7688e6fc9"
 }

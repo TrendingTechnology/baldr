@@ -11,7 +11,7 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "publish": "rsync -av --delete dist/ serverway:/var/www/baldr.friedrich.rocks/showroom/"
+    "upload": "rsync -av --delete dist/ serverway:/var/www/baldr.friedrich.rocks/showroom/"
   },
   "dependencies": {
     "@bldr/theme-default": "^0.0.22",
@@ -62,7 +62,7 @@
   "bugs": {
     "url": "https://github.com/Josef-Friedrich/baldr/issues"
   },
-  "gitHead": "e6e2b4fdba887dc693e11729f3b349ee9c4f9d40",
+  "gitHead": "ed4f60e66c8f420711d3eb15185620f7688e6fc9",
   "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
   "license": "MIT",
   "publishConfig": {
