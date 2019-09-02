@@ -1,7 +1,7 @@
 {
   "name": "@bldr/master-video",
   "description": "Master slide “video” of the baldr project.",
-  "version": "0.0.15",
+  "version": "0.0.16",
   "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
   "bugs": {
     "url": "https://github.com/Josef-Friedrich/baldr/issues"
