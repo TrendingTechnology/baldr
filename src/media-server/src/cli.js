@@ -15,6 +15,11 @@ commander
   .option('-b, --base-path <base-path>', 'A path where all there the media files are.')
 
 commander
+  .command('flush')
+  .alias('f')
+  .action(() => { subcommand = 'flush' })
+
+commander
   .command('update')
   .alias('u')
   .action(() => { subcommand = 'update' })
@@ -45,14 +50,16 @@ if (!subcommand) {
 
 const mediaServer = new MediaServer(commander.basePath)
 
-if (subcommand === 'update') {
+if (subcommand === 'flush') {
+  mediaServer.flush()
+} else if (subcommand === 'update') {
   mediaServer.update()
 } else if (subcommand === 'list') {
-  mediaServer.list()
+  console.log(mediaServer.list())
 } else if (subcommand === 'query') {
   if (options.fileName) {
-    mediaServer.queryByFilename(searchString)
+    console.log(mediaServer.queryByFilename(searchString))
   } else {
-    mediaServer.queryByID(searchString)
+    console.log(mediaServer.queryByID(searchString))
   }
 }

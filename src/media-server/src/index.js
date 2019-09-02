@@ -144,6 +144,10 @@ class Sqlite {
       .prepare('SELECT * FROM files WHERE id = $id')
       .all({ id: id })
 
+    if (results.length === 0) {
+      return { error: `Media file with the '${id}' not found.` }
+    }
+
     if (results.length > 1) {
       console.log(results)
       throw new Error(`Multiple ids '${id}' found.`)
@@ -171,6 +175,10 @@ class Sqlite {
     return this.db
       .prepare('SELECT * FROM files')
       .all()
+  }
+
+  flush () {
+    this.db.prepare('DELETE FROM files').run()
   }
 }
 
@@ -206,19 +214,37 @@ class MediaServer {
     }
   }
 
+  flattenFileObject_ (result) {
+    if (result && !result.error) {
+      result = Object.assign(result, JSON.parse(result.data))
+      delete result.data
+      if (!result.id) delete result.id
+      return result
+    }
+    return result
+  }
+
   list () {
-    const result = this.sqlite.list()
-    console.log(result)
+    const results = this.sqlite.list()
+    const output = []
+    for (const result of results) {
+      output.push(this.flattenFileObject_(result))
+    }
+    return output
   }
 
   queryByID (id) {
     const result = this.sqlite.queryByID(id)
-    console.log(result)
+    return this.flattenFileObject_(result)
   }
 
   queryByFilename (filename) {
     const result = this.sqlite.queryByFilename(filename)
-    console.log(result)
+    return this.flattenFileObject_(result)
+  }
+
+  flush () {
+    this.sqlite.flush()
   }
 }
 
