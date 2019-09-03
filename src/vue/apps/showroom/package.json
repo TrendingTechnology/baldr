@@ -1,6 +1,6 @@
 {
   "name": "@bldr/showroom",
-  "version": "0.0.17",
+  "version": "0.0.18",
   "description": "Vue app to test the themes",
   "author": {
     "name": "Josef Friedrich",
@@ -18,7 +18,7 @@
     "@bldr/vue-component-dynamic-select": "^0.1.6",
     "@bldr/vue-component-material-icon": "^0.1.6",
     "@bldr/vue-component-modal-dialog": "^0.1.6",
-    "@bldr/vue-components-collection": "^0.1.6",
+    "@bldr/vue-components-collection": "^0.1.7",
     "core-js": "^3.1.4",
     "vue": "^2.6.10",
     "vue-router": "^3.1.1"

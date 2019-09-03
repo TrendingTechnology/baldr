@@ -1,7 +1,7 @@
 {
   "name": "@bldr/vue-components-collection",
   "description": "A collection of different vue components.",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
@@ -9,7 +9,7 @@
   },
   "main": "src/main.js",
   "dependencies": {
-    "@bldr/core": "^0.0.24",
+    "@bldr/core": "^0.0.25",
     "@bldr/vue-component-material-icon": "^0.1.6",
     "core-js": "^2.6.5",
     "vue": "^2.6.10"
