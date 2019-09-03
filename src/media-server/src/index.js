@@ -17,6 +17,7 @@ const { utils } = require('@bldr/core')
  */
 class MetaData {
   constructor (filePath, basePath) {
+    this.absPath = path.resolve(filePath)
     /**
      * Absolute path ot the file.
      * @type {string}
@@ -30,10 +31,22 @@ class MetaData {
     this.filename = path.basename(filePath)
 
     /**
+     * The basename (filename) of the file.
+     * @type {string}
+     */
+    this.filename = path.basename(filePath)
+
+    /**
      * The extension of the file.
      * @type {string}
      */
     this.extension = path.extname(filePath).replace('.', '')
+
+    /**
+     * The basename (filename without extension) of the file.
+     * @type {string}
+     */
+    this.basename = path.basename(filePath, `.${this.extension}`)
 
     const data = this.readInfoYaml_()
 
@@ -64,7 +77,7 @@ class MetaData {
    * `/home/baldr/beethoven.jpg.yml`
    */
   readInfoYaml_ () {
-    const infoFile = this.path + '.yml'
+    const infoFile = this.absPath + '.yml'
     if (fs.existsSync(infoFile)) {
       return yaml.safeLoad(fs.readFileSync(infoFile, 'utf8'))
     }
@@ -184,6 +197,10 @@ class Sqlite {
 
 class MediaServer {
   constructor (basePath) {
+    /**
+     *
+     */
+    this.basePath = ''
     if (!basePath) {
       const config = utils.bootstrapConfig()
       if (!('mediaServer' in config)) {
@@ -200,11 +217,48 @@ class MediaServer {
       throw new Error(`The base path of the media server doesn’t exist: ${this.basePath}`)
     }
     const dbFile = path.join(this.basePath, 'files.db')
+
+    /**
+     *
+     */
     this.sqlite = new Sqlite(dbFile)
+
+    /**
+     *
+     */
+    this.ignore = [
+      '**/*.db',
+      '**/*.yml'
+    ]
+  }
+
+  glob_ (searchPath) {
+    return glob.sync(path.join(searchPath, '**/*'), { ignore: this.ignore })
+  }
+
+  createInfoFiles () {
+    const cwd = process.cwd()
+    const files = this.glob_(cwd)
+    for (const file of files) {
+      const yamlFile = `${file}.yml`
+      if (!fs.lstatSync(file).isDirectory() && !fs.existsSync(yamlFile)) {
+        const metaData = new MetaData(file, this.basePath)
+        const title = metaData.basename.replace('_', ', ').replace('-', ' ')
+        const yamlMarkup = `---
+# path: ${metaData.path}
+# filename: ${metaData.filename}
+# extension: ${metaData.extension}
+title: ${title}
+id: ${metaData.basename}
+`
+        console.log(yamlMarkup)
+        fs.writeFileSync(yamlFile, yamlMarkup)
+      }
+    }
   }
 
   update () {
-    const files = glob.sync(path.join(this.basePath, '**/*'), { ignore: ['**/*.db'] })
+    const files = this.glob_(this.basePath)
     for (const file of files) {
       if (!fs.lstatSync(file).isDirectory()) {
         const metaData = new MetaData(file, this.basePath)
@@ -226,11 +280,16 @@ class MediaServer {
 
   list () {
     const results = this.sqlite.list()
-    const output = []
-    for (const result of results) {
-      output.push(this.flattenFileObject_(result))
+    if (results.length > 0) {
+      const output = []
+      for (const result of results) {
+        output.push(this.flattenFileObject_(result))
+      }
+      return output
     }
-    return output
+    return {
+      warning: 'No media files found.'
+    }
   }
 
   queryByID (id) {

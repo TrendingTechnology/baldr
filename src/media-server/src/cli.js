@@ -1,5 +1,8 @@
 #! /usr/bin/env node
 
+// Node packages.
+const childProcess = require('child_process')
+
 // Third party packages.
 const commander = require('commander')
 
@@ -9,6 +12,24 @@ const { MediaServer } = require('./index.js')
 let subcommand
 let options
 let searchString
+
+function rsync (toRemote = false) {
+  const dir = '~/.local/share/baldr/media/'
+  const local = dir
+  const remote = `serverway:${dir}`
+  const options = ['-av', '--delete', '--exclude', 'files.db']
+
+  let args = []
+  if (toRemote) {
+    args = [...options, local, remote]
+  } else {
+    args = [...options, remote, local]
+  }
+  console.log('rsync ' + args.join(' '))
+  const process = childProcess.spawnSync('rsync', args, { encoding: 'utf-8', shell: true })
+  console.log(process.stdout)
+  console.log(process.stderr)
+}
 
 commander
   .version(require('../package.json').version)
@@ -20,6 +41,16 @@ commander
   .action(() => { subcommand = 'flush' })
 
 commander
+  .command('to-remote')
+  .alias('to')
+  .action(() => { subcommand = 'to-remote' })
+
+commander
+  .command('from-remote')
+  .alias('from')
+  .action(() => { subcommand = 'from-remote' })
+
+commander
   .command('update')
   .alias('u')
   .action(() => { subcommand = 'update' })
@@ -28,6 +59,11 @@ commander
   .command('list')
   .alias('l')
   .action(() => { subcommand = 'list' })
+
+commander
+  .command('yaml')
+  .alias('y')
+  .action(() => { subcommand = 'yaml' })
 
 commander
   .command('query <search>')
@@ -62,4 +98,10 @@ if (subcommand === 'flush') {
   } else {
     console.log(mediaServer.queryByID(searchString))
   }
+} else if (subcommand === 'yaml') {
+  mediaServer.createInfoFiles()
+} else if (subcommand === 'to-remote') {
+  rsync(true)
+} else if (subcommand === 'from-remote') {
+  rsync(false)
 }
