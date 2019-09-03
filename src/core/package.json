@@ -1,6 +1,6 @@
 {
   "name": "@bldr/core",
-  "version": "0.0.18",
+  "version": "0.0.23",
   "description": "High level classes and functions used by Electron app.",
   "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
   "bugs": {
@@ -18,13 +18,13 @@
   },
   "main": "index.js",
   "dependencies": {
-    "@bldr/foundation-master": "^0.0.18",
+    "@bldr/foundation-master": "^0.0.23",
+    "git-rev-sync": "1.12.0",
     "js-yaml": "^3.13.1",
-    "mousetrap": "^1.6.3",
-    "git-rev-sync": "1.12.0"
+    "mousetrap": "^1.6.3"
   },
   "publishConfig": {
     "access": "public"
   },
-  "gitHead": "2eadc451ebbeaa981210b2d91360533a5ef0f009"
+  "gitHead": "ed4f60e66c8f420711d3eb15185620f7688e6fc9"
 }

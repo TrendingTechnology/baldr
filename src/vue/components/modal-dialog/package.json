@@ -1,6 +1,6 @@
 {
   "name": "@bldr/vue-component-modal-dialog",
-  "version": "0.1.0",
+  "version": "0.1.5",
   "description": "A simple modal implementation in Vue.",
   "author": {
     "name": "Josef Friedrich",
@@ -14,9 +14,9 @@
   },
   "main": "src/index.js",
   "dependencies": {
+    "@bldr/vue-component-material-icon": "^0.1.5",
     "core-js": "^2.6.5",
-    "vue": "^2.6.10",
-    "@bldr/vue-component-material-icon": "^0.1.0"
+    "vue": "^2.6.10"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.10.0",
@@ -35,5 +35,9 @@
     "> 1%",
     "last 2 versions",
     "not ie <= 8"
-  ]
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "gitHead": "ed4f60e66c8f420711d3eb15185620f7688e6fc9"
 }

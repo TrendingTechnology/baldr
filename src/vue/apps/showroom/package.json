@@ -1,6 +1,6 @@
 {
   "name": "@bldr/showroom",
-  "version": "0.0.10",
+  "version": "0.0.16",
   "description": "Vue app to test the themes",
   "author": {
     "name": "Josef Friedrich",
@@ -11,14 +11,14 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "publish": "rsync -av --delete dist/ serverway:/var/www/baldr.friedrich.rocks/showroom/"
+    "upload": "rsync -av --delete dist/ serverway:/var/www/baldr.friedrich.rocks/showroom/"
   },
   "dependencies": {
-    "@bldr/theme-default": "^0.0.18",
-    "@bldr/vue-component-dynamic-select": "^0.1.0",
-    "@bldr/vue-component-material-icon": "^0.1.0",
-    "@bldr/vue-component-modal-dialog": "^0.1.0",
-    "@bldr/vue-components-collection": "^0.1.0",
+    "@bldr/theme-default": "^0.0.23",
+    "@bldr/vue-component-dynamic-select": "^0.1.5",
+    "@bldr/vue-component-material-icon": "^0.1.5",
+    "@bldr/vue-component-modal-dialog": "^0.1.5",
+    "@bldr/vue-components-collection": "^0.1.5",
     "core-js": "^3.1.4",
     "vue": "^2.6.10",
     "vue-router": "^3.1.1"
@@ -28,8 +28,8 @@
     "@vue/cli-plugin-eslint": "^3.9.2",
     "@vue/cli-service": "^3.9.3",
     "babel-eslint": "^10.0.2",
-    "eslint-plugin-vue": "^5.2.3",
     "eslint": "^6.1.0",
+    "eslint-plugin-vue": "^5.2.3",
     "node-sass": "^4.12.0",
     "sass-loader": "^7.2.0",
     "style-resources-loader": "^1.2.1",
@@ -62,7 +62,7 @@
   "bugs": {
     "url": "https://github.com/Josef-Friedrich/baldr/issues"
   },
-  "gitHead": "2eadc451ebbeaa981210b2d91360533a5ef0f009",
+  "gitHead": "ed4f60e66c8f420711d3eb15185620f7688e6fc9",
   "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
   "license": "MIT",
   "publishConfig": {

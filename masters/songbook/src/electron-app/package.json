@@ -1,6 +1,6 @@
 {
   "name": "@bldr/songbook-electron-app",
-  "version": "0.1.15",
+  "version": "0.1.20",
   "description": "A fullscreen electron app to display songs in a class room using a projector.",
   "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
   "repository": {
@@ -20,12 +20,12 @@
     "dist": "electron-builder"
   },
   "dependencies": {
-    "@bldr/songbook-base": "^0.1.14",
+    "@bldr/songbook-base": "^0.1.19",
+    "@bldr/songbook-core": "^0.1.5",
     "font-awesome": "^4.7.0",
     "jquery": "^3.4.1",
     "mousetrap": "^1.6.3",
-    "selectize": "^0.12.6",
-    "@bldr/songbook-core": "^0.1.0"
+    "selectize": "^0.12.6"
   },
   "devDependencies": {
     "@electron-forge/maker-deb": "^6.0.0-beta.39",
@@ -66,5 +66,5 @@
       ]
     }
   },
-  "gitHead": "2eadc451ebbeaa981210b2d91360533a5ef0f009"
+  "gitHead": "ed4f60e66c8f420711d3eb15185620f7688e6fc9"
 }

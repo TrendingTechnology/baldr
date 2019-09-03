@@ -1,6 +1,6 @@
 {
   "name": "@bldr/theme-handwriting",
-  "version": "0.0.18",
+  "version": "0.0.23",
   "description": "Theme “handwriting” of the baldr project.",
   "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
   "bugs": {
@@ -24,5 +24,5 @@
   "publishConfig": {
     "access": "public"
   },
-  "gitHead": "2eadc451ebbeaa981210b2d91360533a5ef0f009"
+  "gitHead": "ed4f60e66c8f420711d3eb15185620f7688e6fc9"
 }

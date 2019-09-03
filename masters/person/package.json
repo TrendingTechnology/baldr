@@ -1,7 +1,7 @@
 {
   "name": "@bldr/master-person",
   "description": "Master slide “person” of the baldr project.",
-  "version": "0.0.13",
+  "version": "0.0.18",
   "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
   "bugs": {
     "url": "https://github.com/Josef-Friedrich/baldr/issues"
@@ -19,5 +19,5 @@
   "publishConfig": {
     "access": "public"
   },
-  "gitHead": "4fe9a039cfe88fd48d1289cb464b9a5a341578d3"
+  "gitHead": "ed4f60e66c8f420711d3eb15185620f7688e6fc9"
 }

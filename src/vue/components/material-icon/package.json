@@ -1,6 +1,6 @@
 {
   "name": "@bldr/vue-component-material-icon",
-  "version": "0.1.0",
+  "version": "0.1.5",
   "description": "Material design icons (https://materialdesignicons.com) extended with some custom icons.",
   "author": {
     "name": "Josef Friedrich",
@@ -19,19 +19,19 @@
     "vue": "^2.6.10"
   },
   "devDependencies": {
-    "webfont": "^9.0.0",
-    "chalk": "^2.4.2",
     "@vue/cli-plugin-babel": "^3.10.0",
     "@vue/cli-plugin-eslint": "^3.10.0",
     "@vue/cli-service": "^3.10.0",
     "@vue/eslint-config-standard": "^4.0.0",
     "@vue/test-utils": "1.0.0-beta.29",
     "babel-eslint": "^10.0.1",
+    "chalk": "^2.4.2",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
     "sass": "^1.18.0",
     "sass-loader": "^7.1.0",
-    "vue-template-compiler": "^2.6.10"
+    "vue-template-compiler": "^2.6.10",
+    "webfont": "^9.0.0"
   },
   "browserslist": [
     "> 1%",
@@ -40,5 +40,9 @@
   ],
   "bin": {
     "baldr-build-icon-font": "./src/build-font.js"
-  }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "gitHead": "ed4f60e66c8f420711d3eb15185620f7688e6fc9"
 }

@@ -1,6 +1,6 @@
 {
     "name": "@bldr/songbook-intermediate-files",
-    "version": "0.1.17",
+    "version": "0.1.22",
     "description": "A collection of classes and functions to generate the intermediate files for the BALDR songbook.",
     "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
     "repository": {
@@ -15,13 +15,13 @@
     },
     "main": "index.js",
     "dependencies": {
-        "@bldr/core": "^0.0.18",
-        "@bldr/songbook-core": "^0.1.0",
+        "@bldr/core": "^0.0.23",
+        "@bldr/songbook-core": "^0.1.5",
         "better-sqlite3": "^5.4.1",
         "chalk": "^2.4.2"
     },
     "publishConfig": {
         "access": "public"
     },
-    "gitHead": "2eadc451ebbeaa981210b2d91360533a5ef0f009"
+    "gitHead": "ed4f60e66c8f420711d3eb15185620f7688e6fc9"
 }
