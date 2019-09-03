@@ -1,6 +1,6 @@
 {
   "name": "@bldr/songbook-vue-app",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
@@ -10,13 +10,13 @@
     "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {
-    "@bldr/core": "^0.0.23",
-    "@bldr/songbook-core": "^0.1.5",
-    "@bldr/theme-default": "^0.0.23",
-    "@bldr/vue-component-dynamic-select": "^0.1.5",
-    "@bldr/vue-component-material-icon": "^0.1.5",
-    "@bldr/vue-component-modal-dialog": "^0.1.5",
-    "@bldr/vue-components-collection": "^0.1.5",
+    "@bldr/core": "^0.0.24",
+    "@bldr/songbook-core": "^0.1.6",
+    "@bldr/theme-default": "^0.0.24",
+    "@bldr/vue-component-dynamic-select": "^0.1.6",
+    "@bldr/vue-component-material-icon": "^0.1.6",
+    "@bldr/vue-component-modal-dialog": "^0.1.6",
+    "@bldr/vue-components-collection": "^0.1.6",
     "core-js": "^2.6.5",
     "vue": "^2.6.10",
     "vue-router": "^3.0.3",

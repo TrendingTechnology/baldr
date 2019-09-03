@@ -1,6 +1,6 @@
 {
   "name": "@bldr/electron-app",
-  "version": "0.0.28",
+  "version": "0.0.29",
   "description": "The main electron app.",
   "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
   "bugs": {
@@ -21,8 +21,8 @@
     "start": "electron ."
   },
   "dependencies": {
-    "@bldr/core": "^0.0.23",
-    "@bldr/foundation-master": "^0.0.23",
+    "@bldr/core": "^0.0.24",
+    "@bldr/foundation-master": "^0.0.24",
     "@bldr/master-audio": "^0.0.24",
     "@bldr/master-camera": "^0.0.24",
     "@bldr/master-editor": "^0.0.24",
@@ -34,9 +34,9 @@
     "@bldr/master-svg": "^0.0.16",
     "@bldr/master-video": "^0.0.18",
     "@bldr/master-website": "^0.0.16",
-    "@bldr/test-helper": "^0.0.24",
-    "@bldr/theme-default": "^0.0.23",
-    "@bldr/theme-handwriting": "^0.0.23",
+    "@bldr/test-helper": "^0.0.25",
+    "@bldr/theme-default": "^0.0.24",
+    "@bldr/theme-handwriting": "^0.0.24",
     "electron": "^5.0.8",
     "font-awesome": "^4.7.0",
     "mousetrap": "^1.6.3"
