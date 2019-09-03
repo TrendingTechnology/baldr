@@ -195,6 +195,14 @@ class Sqlite {
   }
 }
 
+function bootstrapConfig () {
+  const config = utils.bootstrapConfig()
+  if (!('mediaServer' in config)) {
+    throw new Error('Missing property mediaServer in config.')
+  }
+  return config.mediaServer
+}
+
 class MediaServer {
   constructor (basePath) {
     /**
@@ -202,14 +210,11 @@ class MediaServer {
      */
     this.basePath = ''
     if (!basePath) {
-      const config = utils.bootstrapConfig()
-      if (!('mediaServer' in config)) {
-        throw new Error('Missing property mediaServer in config.')
+      const config = bootstrapConfig()
+      if (!('basePathLocal' in config)) {
+        throw new Error('Missing property “basePathLocal” in config.mediaServer')
       }
-      if (!('path' in config.mediaServer)) {
-        throw new Error('Missing property path in config.mediaServer')
-      }
-      this.basePath = config.mediaServer.path
+      this.basePath = config.basePathLocal
     } else {
       this.basePath = basePath
     }
@@ -228,7 +233,8 @@ class MediaServer {
      */
     this.ignore = [
       '**/*.db',
-      '**/*.yml'
+      '**/*.yml',
+      '**/*robots.txt'
     ]
   }
 
@@ -308,3 +314,4 @@ id: ${metaData.basename}
 }
 
 exports.MediaServer = MediaServer
+exports.bootstrapConfig = bootstrapConfig

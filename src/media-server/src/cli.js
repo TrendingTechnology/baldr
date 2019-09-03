@@ -7,16 +7,16 @@ const childProcess = require('child_process')
 const commander = require('commander')
 
 // Third party packages.
-const { MediaServer } = require('./index.js')
+const { MediaServer, bootstrapConfig } = require('./index.js')
 
 let subcommand
 let options
 let searchString
 
 function rsync (toRemote = false) {
-  const dir = '~/.local/share/baldr/media/'
-  const local = dir
-  const remote = `serverway:${dir}`
+  const config = bootstrapConfig()
+  const local = config.basePathLocal
+  const remote = `${config.sshAliasRemote}:${config.basePathRemote}`
   const options = ['-av', '--delete', '--exclude', 'files.db']
 
   let args = []
@@ -37,36 +37,19 @@ commander
 
 commander
   .command('flush')
+  .description('Remove all entries in the SQLite database.')
   .alias('f')
   .action(() => { subcommand = 'flush' })
 
 commander
-  .command('to-remote')
-  .alias('to')
-  .action(() => { subcommand = 'to-remote' })
-
-commander
-  .command('from-remote')
-  .alias('from')
-  .action(() => { subcommand = 'from-remote' })
-
-commander
-  .command('update')
-  .alias('u')
-  .action(() => { subcommand = 'update' })
-
-commander
   .command('list')
+  .description('List all media files.')
   .alias('l')
   .action(() => { subcommand = 'list' })
 
 commander
-  .command('yaml')
-  .alias('y')
-  .action(() => { subcommand = 'yaml' })
-
-commander
   .command('query <search>')
+  .description('Query the SQLite database.')
   .option('-f, --file-name', 'Query by file name.')
   .option('-i, --id', 'Query by id (default)')
   .alias('q')
@@ -75,6 +58,30 @@ commander
     searchString = query
     options = opts
   })
+
+commander
+  .command('rsync-from-remote')
+  .description('Rsync FROM the remote media server to the local.')
+  .alias('from')
+  .action(() => { subcommand = 'rsync-from-remote' })
+
+commander
+  .command('rsync-to-remote')
+  .description('Rsync from the local media server TO the remote.')
+  .alias('to')
+  .action(() => { subcommand = 'rsync-to-remote' })
+
+commander
+  .command('update')
+  .description('Update the SQLite database, add new entries, update the entries.')
+  .alias('u')
+  .action(() => { subcommand = 'update' })
+
+commander
+  .command('yaml')
+  .description('Create info files in the YAML format in the current working directory.')
+  .alias('y')
+  .action(() => { subcommand = 'yaml' })
 
 commander.parse(process.argv)
 
@@ -86,22 +93,29 @@ if (!subcommand) {
 
 const mediaServer = new MediaServer(commander.basePath)
 
+// flush
 if (subcommand === 'flush') {
   mediaServer.flush()
-} else if (subcommand === 'update') {
-  mediaServer.update()
+// list
 } else if (subcommand === 'list') {
   console.log(mediaServer.list())
+// query
 } else if (subcommand === 'query') {
   if (options.fileName) {
     console.log(mediaServer.queryByFilename(searchString))
   } else {
     console.log(mediaServer.queryByID(searchString))
   }
+// rsync-from-remote
+} else if (subcommand === 'rsync-from-remote') {
+  rsync(false)
+// rsync-to-remote
+} else if (subcommand === 'rsync-to-remote') {
+  rsync(true)
+// update
+} else if (subcommand === 'update') {
+  mediaServer.update()
+// yaml
 } else if (subcommand === 'yaml') {
   mediaServer.createInfoFiles()
-} else if (subcommand === 'to-remote') {
-  rsync(true)
-} else if (subcommand === 'from-remote') {
-  rsync(false)
 }
