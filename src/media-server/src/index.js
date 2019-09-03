@@ -214,7 +214,17 @@ class MediaServer {
       if (!('basePathLocal' in config)) {
         throw new Error('Missing property “basePathLocal” in config.mediaServer')
       }
-      this.basePath = config.basePathLocal
+      if (!('basePathRemote' in config)) {
+        throw new Error('Missing property “basePathRemote” in config.mediaServer')
+      }
+      if (!('location' in config)) {
+        throw new Error('Missing property “location” in config.mediaServer')
+      }
+      if (config.location === 'remote') {
+        this.basePath = config.basePathRemote
+      } else {
+        this.basePath = config.basePathLocal
+      }
     } else {
       this.basePath = basePath
     }
