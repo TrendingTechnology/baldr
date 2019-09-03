@@ -29,15 +29,22 @@ function log (format) {
  * @return {object}
  */
 function bootstrapConfig (configDefault) {
-  const configFile = path.join(os.homedir(), '.baldr.json')
-  if (fs.existsSync(configFile)) {
-    const configJson = require(configFile)
-    if (configDefault) {
-      return Object.assign(configDefault, configJson)
-    }
-    return configJson
+  const configFileHome = path.join(os.homedir(), '.baldr.json')
+  const configFileEtc = path.join(path.sep, 'etc', 'baldr.json')
+
+  let configJson
+  if (fs.existsSync(configFileHome)) {
+    configJson = require(configFileHome)
+  } else if (fs.existsSync(configFileEtc)) {
+    configJson = require(configFileEtc)
   }
-  throw new Error(`No configuration file found: ${configFile}`)
+
+  if (!configJson) throw new Error(`No configuration file found: ${configFile}`)
+
+  if (configDefault) {
+    return Object.assign(configDefault, configJson)
+  }
+  return configJson
 }
 
 /**

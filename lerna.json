@@ -1,5 +1,6 @@
 {
   "packages": [
+    ".",
     "masters/songbook/src/*",
     "src/*",
     "src/vue/apps/*",

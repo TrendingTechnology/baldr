@@ -13,6 +13,8 @@ const express = require('express')
 
 // Project packages.
 const packageJson = require('./package.json')
+const { MediaServer } = require('@bldr/media-server')
+const mediaServer = new MediaServer()
 
 /**
  * Default TCP port the server listens on.
@@ -142,6 +144,28 @@ app.delete('/api/seating-plan/by-time/:timeStampMsec', (req, res) => {
     res.status(200).send({ timeStampMsec: timeStampMsec })
   } else {
     res.sendStatus(404)
+  }
+})
+
+app.post('/api/media-server/query-by-id', (req, res) => {
+  const body = req.body
+  if (!{}.hasOwnProperty.call(body, 'id')) {
+    res.sendStatus(400)
+  } else {
+    const responeMessage = mediaServer.queryByID(body.id)
+    res.json(responeMessage)
+    console.log(responeMessage)
+  }
+})
+
+app.post('/api/media-server/query-by-filename', (req, res) => {
+  const body = req.body
+  if (!{}.hasOwnProperty.call(body, 'filename')) {
+    res.sendStatus(400)
+  } else {
+    const responeMessage = mediaServer.queryByFilename(body.filename)
+    res.json(responeMessage)
+    console.log(responeMessage)
   }
 })
 

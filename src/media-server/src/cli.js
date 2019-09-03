@@ -41,6 +41,12 @@ commander
   .alias('f')
   .action(() => { subcommand = 'flush' })
 
+  commander
+  .command('info')
+  .description('Show some debug messages.')
+  .alias('i')
+  .action(() => { subcommand = 'info' })
+
 commander
   .command('list')
   .description('List all media files.')
@@ -96,6 +102,9 @@ const mediaServer = new MediaServer(commander.basePath)
 // flush
 if (subcommand === 'flush') {
   mediaServer.flush()
+// info
+} else if (subcommand === 'info') {
+  console.log(bootstrapConfig())
 // list
 } else if (subcommand === 'list') {
   console.log(mediaServer.list())
