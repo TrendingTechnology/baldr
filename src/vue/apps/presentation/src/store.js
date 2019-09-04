@@ -71,6 +71,18 @@ const actions = {
   async setMediaDevices ({ commit }) {
     commit('setMediaDevices', await navigator.mediaDevices.enumerateDevices())
   },
+  findMediaServer ({ commit }) {
+    const conf = config.mediaServer
+    axios.get(`http://localhost:${conf.portRestApi}/version`)
+      .then(function (response) {
+      // handle success
+        console.log(response)
+      })
+      .catch(function (error) {
+      // handle error
+        console.log(error)
+      })
+  },
   openPresentation ({ commit }, content) {
     const contentFile = parseContentFile(content)
     commit('setSlides', contentFile.slides)

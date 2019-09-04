@@ -30,6 +30,9 @@ export default {
     }
   },
   methods: mapActions(['setSlidePrevious', 'setSlideNext']),
+  created: function () {
+    this.$store.dispatch('findMediaServer')
+  },
   mounted: function () {
     this.$nextTick(function () {
       window.addEventListener('keydown', event => {

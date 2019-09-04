@@ -2,8 +2,7 @@
 
 // Third party packages.
 const { Command } = require('commander')
-// We do CORS now over Nginx
-// const cors = require('cors')
+const cors = require('cors')
 const express = require('express')
 
 // Project packages.
@@ -20,8 +19,7 @@ function sendJsonMessage (res, message) {
 
 const app = express()
 
-// We do CORS now over Nginx
-// app.use(cors())
+app.use(cors())
 app.use(express.json())
 
 app.get('/version', (req, res) => {
