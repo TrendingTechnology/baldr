@@ -15,7 +15,6 @@ services:
   - xvfb
 
 script:
-  - npm test
   - cd /home/travis/build/Josef-Friedrich/baldr/src/vue/apps/seating-plan; npm run test:unit
   - cd /home/travis/build/Josef-Friedrich/baldr/src/vue/apps/songbook; npm run test:unit
 

@@ -1,7 +1,0 @@
----
-slides:
-  - markdown: handwriting
-    theme: handwriting
-  - markdown: default
-    theme: default
-  - markdown: No slide setting for theme
