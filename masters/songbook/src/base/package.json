@@ -1,6 +1,6 @@
 {
   "name": "@bldr/songbook-base",
-  "version": "0.1.21",
+  "version": "0.1.22",
   "description": "Some base classes and functions for the BALDR songbook. This classes are used by the electron app as well by the command line utilty.",
   "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
   "repository": {
@@ -15,8 +15,8 @@
   },
   "main": "index.js",
   "dependencies": {
-    "@bldr/core": "^0.0.25",
-    "@bldr/songbook-core": "^0.1.6",
+    "@bldr/core": "^0.0.26",
+    "@bldr/songbook-core": "^0.1.7",
     "chalk": "^2.4.2",
     "fs-extra": "^8.1.0",
     "glob": "^7.1.4",

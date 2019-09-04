@@ -1,6 +1,6 @@
 {
   "name": "@bldr/songbook-core",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "Core functionality for the BALDR songbook without a node dependency.",
   "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
   "repository": {
