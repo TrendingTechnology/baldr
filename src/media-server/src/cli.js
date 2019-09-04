@@ -15,8 +15,8 @@ let searchString
 
 function rsync (toRemote = false) {
   const config = bootstrapConfig()
-  const local = config.basePathLocal
-  const remote = `${config.sshAliasRemote}:${config.basePathRemote}`
+  const local = `${config.basePath}/`
+  const remote = `${config.sshAliasRemote}:${config.basePath}/`
   const options = ['-av', '--delete', '--exclude', 'files.db']
 
   let args = []
@@ -41,7 +41,7 @@ commander
   .alias('f')
   .action(() => { subcommand = 'flush' })
 
-  commander
+commander
   .command('info')
   .description('Show some debug messages.')
   .alias('i')
