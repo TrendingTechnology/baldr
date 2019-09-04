@@ -1,6 +1,6 @@
 {
   "name": "@bldr/presentation",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "description": "The main app of the BALDR project: a presentation app using YAML files.",
   "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
   "bugs": {
