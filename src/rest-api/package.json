@@ -28,7 +28,7 @@
   },
   "dependencies": {
     "@bldr/media-server": "^0.1.7",
-    "commander": "^2.20.0",
+    "commander": "^3.0.1",
     "cors": "^2.8.5",
     "express": "^4.17.1"
   },

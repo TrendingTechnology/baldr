@@ -22,7 +22,7 @@
     "@bldr/songbook-base": "^0.1.21",
     "@bldr/songbook-intermediate-files": "^0.1.24",
     "chalk": "^2.4.2",
-    "commander": "^2.20.0"
+    "commander": "^3.0.1"
   },
   "publishConfig": {
     "access": "public"
