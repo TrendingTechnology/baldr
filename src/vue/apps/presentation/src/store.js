@@ -5,23 +5,16 @@ import Vuex from 'vuex'
 import { parseContentFile } from './content-file.js'
 import axios from 'axios'
 
-console.log(`Rest-API: Using username '${config.restApi.username}'`)
-console.log(`Rest-API: Using password '${config.restApi.password}'`)
-
-const axiosInstance = axios.create({
-  baseURL: 'https://baldr.friedrich.rocks/api/',
-  timeout: 3000,
-  auth: {
-    username: config.restApi.username,
-    password: config.restApi.password
-  }
-})
+const axiosInstance = axios.create({ timeout: 3000 })
 
 Vue.use(Vuex)
 
 const state = {
   media: {},
-  mediaServerIp: '',
+  mediaServerDomains: {
+    restApi: '',
+    httpMedia: ''
+  },
   mediaDevices: [],
   slideNoCurrent: null,
   slides: {}
@@ -33,6 +26,9 @@ const getters = {
   },
   mediaDevices: state => {
     return state.mediaDevices
+  },
+  mediaServerDomains: state => {
+    return state.mediaServerDomains
   },
   mediaDevicesDynamicSelect: (state, getters) => {
     const resultList = []
@@ -72,19 +68,35 @@ const actions = {
   async setMediaDevices ({ commit }) {
     commit('setMediaDevices', await navigator.mediaDevices.enumerateDevices())
   },
-  findMediaServer ({ commit }) {
+  setMediaServerDomains ({ commit }) {
     const conf = config.mediaServer
-    axios.get(`http://12.0.0.1:${conf.portRestApi}/version`, { timeout: 3000 })
+
+    axiosInstance.get(`http://${conf.domainLocal}:${conf.portRestApi}/version`)
       .then(function (response) {
         if ('version' in response.data) {
-          commit('setMediaServerIp', '127.0.0.1')
+          commit('setMediaServerDomains', { type: 'restApi', ip: conf.domainLocal })
         }
       })
       .catch(function () {
-        axios.get(`http://${conf.domainRemote}:${conf.portRestApi}/version`, { timeout: 3000 })
+        axiosInstance.get(`http://${conf.domainRemote}:${conf.portRestApi}/version`)
           .then(function (response) {
             if ('version' in response.data) {
-              commit('setMediaServerIp', conf.domainRemote)
+              commit('setMediaServerDomains', { type: 'restApi', ip: conf.domainRemote })
+            }
+          })
+      })
+
+    axiosInstance.get(`http://${conf.domainLocal}:${conf.portHttpMedia}/robots.txt`, { crossdomain: true })
+      .then(function (response) {
+        if (response.data.indexOf('User-agent') > -1) {
+          commit('setMediaServerDomains', { type: 'httpMedia', ip: conf.domainLocal })
+        }
+      })
+      .catch(function () {
+        axiosInstance.get(`http://${conf.domainRemote}:${conf.portHttpMedia}/robots.txt`, { crossdomain: true })
+          .then(function (response) {
+            if (response.data.indexOf('User-agent') > -1) {
+              commit('setMediaServerDomains', { type: 'httpMedia', ip: conf.domainRemote })
             }
           })
       })
@@ -112,32 +124,33 @@ const actions = {
       commit('setSlideNoCurrent', no - 1)
     }
   },
-  resolveMedia ({ commit }, URL) {
+  resolveMedia ({ commit, getters }, URL) {
     const segments = URL.split(':')
     const schemeName = segments[0]
     const urlParameter = segments[1]
     const conf = config.mediaServer
+    const domains = getters.mediaServerDomains
     if (schemeName === 'http' || schemeName === 'https') {
       commit('resolveMedia', { URL: URL, resolvedMedia: URL })
     } else if (schemeName === 'id') {
       axiosInstance
-        .post('/media-server/query-by-id', { id: urlParameter })
+        .post(`http://${domains.restApi}:${conf.portRestApi}/query-by-id`, { id: urlParameter })
         .then((response) => {
           const data = response.data
           commit('resolveMedia', {
             URL: URL,
-            resolvedMedia: `http://${conf.domainRemote}:${conf.port}/${data.path}`
+            resolvedMedia: `http://${domains.httpMedia}:${conf.portHttpMedia}/${data.path}`
           })
         })
         .catch(() => true)
     } else if (schemeName === 'filename') {
       axiosInstance
-        .post('/media-server/query-by-filename', { filename: urlParameter })
+        .post(`http://${domains.restApi}:${conf.portRestApi}/query-by-filename`, { filename: urlParameter })
         .then((response) => {
           const data = response.data
           commit('resolveMedia', {
             URL: URL,
-            resolvedMedia: `http://${conf.domainRemote}:${conf.port}/${data.path}`
+            resolvedMedia: `http://${domains.httpMedia}:${conf.portHttpMedia}/${data.path}`
           })
         })
         .catch(() => true)
@@ -149,8 +162,8 @@ const mutations = {
   resolveMedia (state, { URL, resolvedMedia }) {
     Vue.set(state.media, URL, resolvedMedia)
   },
-  setMediaServerIp (state, ip) {
-    state.mediaServerIp = ip
+  setMediaServerDomains (state, { type, ip }) {
+    state.mediaServerDomains[type] = ip
   },
   setMediaDevices (state, mediaDevices) {
     state.mediaDevices = mediaDevices

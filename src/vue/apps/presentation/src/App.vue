@@ -31,7 +31,7 @@ export default {
   },
   methods: mapActions(['setSlidePrevious', 'setSlideNext']),
   created: function () {
-    this.$store.dispatch('findMediaServer')
+    this.$store.dispatch('setMediaServerDomains')
   },
   mounted: function () {
     this.$nextTick(function () {
