@@ -21,6 +21,7 @@ Vue.use(Vuex)
 
 const state = {
   media: {},
+  mediaServerIp: '',
   mediaDevices: [],
   slideNoCurrent: null,
   slides: {}
@@ -73,14 +74,19 @@ const actions = {
   },
   findMediaServer ({ commit }) {
     const conf = config.mediaServer
-    axios.get(`http://localhost:${conf.portRestApi}/version`)
+    axios.get(`http://12.0.0.1:${conf.portRestApi}/version`, { timeout: 3000 })
       .then(function (response) {
-      // handle success
-        console.log(response)
+        if ('version' in response.data) {
+          commit('setMediaServerIp', '127.0.0.1')
+        }
       })
-      .catch(function (error) {
-      // handle error
-        console.log(error)
+      .catch(function () {
+        axios.get(`http://${conf.domainRemote}:${conf.portRestApi}/version`, { timeout: 3000 })
+          .then(function (response) {
+            if ('version' in response.data) {
+              commit('setMediaServerIp', conf.domainRemote)
+            }
+          })
       })
   },
   openPresentation ({ commit }, content) {
@@ -142,6 +148,9 @@ const actions = {
 const mutations = {
   resolveMedia (state, { URL, resolvedMedia }) {
     Vue.set(state.media, URL, resolvedMedia)
+  },
+  setMediaServerIp (state, ip) {
+    state.mediaServerIp = ip
   },
   setMediaDevices (state, mediaDevices) {
     state.mediaDevices = mediaDevices
