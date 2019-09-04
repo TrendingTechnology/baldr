@@ -17,11 +17,13 @@
     "@bldr/core": "^0.0.25",
     "better-sqlite3": "^5.4.2",
     "commander": "^3.0.1",
+    "express": "4.17.1",
     "glob": "^7.1.4",
     "js-yaml": "^3.13.1"
   },
   "bin": {
-    "baldr-media-server": "./src/cli.js"
+    "baldr-media-server-cli": "./src/cli.js",
+    "baldr-media-server-rest-api": "./src/rest-api.js"
   },
   "publishConfig": {
     "access": "public"
