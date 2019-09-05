@@ -9,12 +9,13 @@ const commander = require('commander')
 // Third party packages.
 const { MediaServer, bootstrapConfig } = require('./index.js')
 
+const config = bootstrapConfig()
+
 let subcommand
 let options
 let searchString
 
 function rsync (toRemote = false) {
-  const config = bootstrapConfig()
   const local = `${config.basePath}/`
   const remote = `${config.sshAliasRemote}:${config.basePath}/`
   const options = ['-av', '--delete', '--exclude', 'files.db']
@@ -52,6 +53,12 @@ commander
   .description('List all media files.')
   .alias('l')
   .action(() => { subcommand = 'list' })
+
+commander
+  .command('open')
+  .description('Open the base directory in a file browser')
+  .alias('o')
+  .action(() => { subcommand = 'open' })
 
 commander
   .command('query <search>')
@@ -108,6 +115,10 @@ if (subcommand === 'flush') {
 // list
 } else if (subcommand === 'list') {
   console.log(mediaServer.list())
+// open
+} else if (subcommand === 'open') {
+  const process = childProcess.spawn('xdg-open', [config.basePath], { detached: true })
+  process.unref()
 // query
 } else if (subcommand === 'query') {
   if (options.fileName) {

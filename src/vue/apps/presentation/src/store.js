@@ -124,6 +124,30 @@ const actions = {
       commit('setSlideNoCurrent', no - 1)
     }
   },
+  setStepNext ({ commit, getters }) {
+    let stepNoCurrent
+    const slideCurrent = getters.slideCurrent
+    const no = slideCurrent.master.stepNoCurrent
+    const count = slideCurrent.master.stepCount
+    if (no === count) {
+      stepNoCurrent = 1
+    } else {
+      stepNoCurrent = no + 1
+    }
+    commit('setStepNoCurrent', { slideCurrent, stepNoCurrent })
+  },
+  setStepPrevious ({ commit, getters }) {
+    let stepNoCurrent
+    const slideCurrent = getters.slideCurrent
+    const no = slideCurrent.master.stepNoCurrent
+    const count = slideCurrent.master.stepCount
+    if (no === 1) {
+      stepNoCurrent = count
+    } else {
+      stepNoCurrent = no - 1
+    }
+    commit('setStepNoCurrent', { slideCurrent, stepNoCurrent })
+  },
   resolveMedia ({ commit, getters }, URL) {
     const segments = URL.split(':')
     const schemeName = segments[0]
@@ -173,6 +197,9 @@ const mutations = {
   },
   setSlideNoCurrent (state, slideNoCurrent) {
     state.slideNoCurrent = parseInt(slideNoCurrent)
+  },
+  setStepNoCurrent (state, { slideCurrent, stepNoCurrent }) {
+    slideCurrent.master.stepNoCurrent = stepNoCurrent
   }
 }
 

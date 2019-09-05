@@ -11,7 +11,7 @@
     "url": "git+https://github.com/Josef-Friedrich/baldr.git"
   },
   "scripts": {
-    "compile": "sassc --style=expanded --sourcemap --load-path=globals styles-ng.scss styles-ng.css"
+    "compile": "sassc --style=expanded --sourcemap --load-path=globals styles.scss styles.css"
   },
   "license": "MIT",
   "author": {

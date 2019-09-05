@@ -5,6 +5,7 @@
       </modal-dialog>
     <main>
       <div id='content'>
+        <div class="slide-no" v-if="$store.getters.slideNoCurrent">{{ $store.getters.slideNoCurrent }}</div>
         <router-view/>
       </div>
     </main>
@@ -29,7 +30,7 @@ export default {
       return packageJson.version
     }
   },
-  methods: mapActions(['setSlidePrevious', 'setSlideNext']),
+  methods: mapActions(['setSlidePrevious', 'setSlideNext', 'setStepPrevious', 'setStepNext']),
   created: function () {
     this.$store.dispatch('setMediaServerDomains')
   },
@@ -58,6 +59,10 @@ export default {
           this.setSlidePrevious()
         } else if (event.key === 'ArrowRight') {
           this.setSlideNext()
+        } else if (event.key === 'ArrowUp') {
+          this.setStepPrevious()
+        } else if (event.key === 'ArrowDown') {
+          this.setStepNext()
         }
       })
     })
@@ -65,7 +70,7 @@ export default {
 }
 </script>
 <style lang="scss">
-  @import '~@bldr/theme-default/styles-ng.css';
+  @import '~@bldr/theme-default/styles.css';
 
   body {
     margin: 0;
@@ -79,6 +84,12 @@ export default {
 
     #content {
       padding: 2vw 8vw;
+
+      .slide-no {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+      }
     }
   }
 

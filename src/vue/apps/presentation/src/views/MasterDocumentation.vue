@@ -29,6 +29,14 @@
       </ul>
     </section>
 
+    <section v-if="master.exampleYaml">
+      <h2>YAML example</h2>
+
+      <a @click="openExampleYaml">open</a>
+
+      <pre><code>{{ master.exampleYaml }}</code></pre>
+    </section>
+
     <section v-html="documentation"/>
   </div>
 </template>
@@ -53,6 +61,12 @@ export default {
         return marked(this.master.documentation)
       }
       return ''
+    }
+  },
+  methods: {
+    openExampleYaml () {
+      this.$store.dispatch('openPresentation', this.master.exampleYaml)
+      this.$router.push('/slides')
     }
   },
   created: function () {

@@ -33,6 +33,17 @@
     padding: 0 0.1em;
   }
 
+  pre  {
+    background-color: scale-color($gray, $lightness: 50%);
+    padding: 0.3em;
+    overflow-y: auto;
+
+    code {
+      padding: 0;
+      background-color: none;
+    }
+  }
+
   a {
     text-decoration: none;
 

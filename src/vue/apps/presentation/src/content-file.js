@@ -165,6 +165,16 @@ class MasterData {
 
     const normalizedData = callMasterFunc(this.name, 'normalizeData', this.data)
     if (normalizedData) this.data = normalizedData
+
+    /**
+     * @type {number}
+     */
+    this.stepCount = callMasterFunc(this.name, 'stepCount', this.data)
+
+    /**
+     * @type {number}
+     */
+    this.stepNoCurrent = 1
   }
 }
 
@@ -194,7 +204,9 @@ export class ThemeData {
 }
 
 export class MetaData {
-
+  constructor (rawSlideObject) {
+    this.title = rawSlideObject.cut('title')
+  }
 }
 
 /**
@@ -213,6 +225,8 @@ class Slide {
      * @type {module:@bldr/core/slides~SlideData}
      */
     this.master = new MasterData(rawSlideObject)
+
+    this.metaData = new MetaData(rawSlideObject)
 
     if (!rawSlideObject.isEmpty()) {
       throw Error(`Unknown slide properties: ${toString(rawSlideObject.raw)}`)
