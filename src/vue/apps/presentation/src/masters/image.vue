@@ -30,7 +30,11 @@ export const master = {
   centerVertically: true,
   darkMode: true,
   slidePadding: 0,
-  examples
+  examples,
+  normalizeData (data) {
+    if (typeof data === 'string') return [data]
+    return data
+  }
 }
 
 export default {
@@ -53,14 +57,21 @@ export default {
 
 <style lang="scss" scoped>
 .image-master {
-  width: 100%;
-  height: 100%;
-  text-align: center;
+  height: 100vh;
+  position: relative;
+  width: 100vw;
 
   img {
-    min-height: 100%;
+    bottom: 0;
+    height: auto;
+    left: 0;
+    margin: auto;
     max-height: 100%;
     max-width: 100%;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: auto;
   }
 }
 </style>
