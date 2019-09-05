@@ -9,16 +9,12 @@ export const master = {
   darkMode: false,
   slidePadding: '4vw',
   documentation = `# Markdown`,
-  examples: [
-    {
-      title: 'All properties',
-      data: {
-        text: 'Der Tag der Gunst ist wie der Tag der Ernte, man muss geschäftig sein sobald sie reift.',
-        author: 'Johann Wolfgang von Goethe',
-        date: 1801
-      }
-    }
-  ]
+  example: `
+slides:
+- title: 'URL: id:'
+  image:
+    src: id:Haydn_Joseph
+`
   // result must fit to props
   normalizeData (data) {
     if (typeof data === 'string') {
@@ -26,6 +22,9 @@ export const master = {
         markup: data
       }
     }
+  },
+  stepCount (data) {
+    return data.src.length
   }
 }
 ```

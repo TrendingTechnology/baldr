@@ -5,36 +5,21 @@
     <section>
       <h2>Props</h2>
 
-      <ul class="content" v-for="(spec, name) in props" :key="name">
-        <li>{{ name }} <span v-if="spec.required">*</span></li>
-      </ul>
-    </section>
-
-    <section v-if="master.examples">
-      <h2>Examples</h2>
-
-      <ul v-for="(example, index) in master.examples" :key="index">
-        <li>
-          <router-link :to="{
-              name: 'master-example',
-              params: {
-                master: master.name,
-                no: index
-              }
-            }"
-          >
-            {{ example.title }}
-          </router-link>
+      <ul class="content" >
+        <li
+          v-for="(spec, name) in props"
+          :key="name"
+        >
+          {{ name }}
+          <span v-if="spec.required">*</span>
         </li>
       </ul>
     </section>
 
-    <section v-if="master.exampleYaml">
-      <h2>YAML example</h2>
+    <section v-if="master.example">
+      <h2>Example <material-icon name="presentation" @click.native="openExample"/></h2>
 
-      <a @click="openExampleYaml">open</a>
-
-      <pre><code>{{ master.exampleYaml }}</code></pre>
+      <pre><code>{{ master.example }}</code></pre>
     </section>
 
     <section v-html="documentation"/>
@@ -64,8 +49,8 @@ export default {
     }
   },
   methods: {
-    openExampleYaml () {
-      this.$store.dispatch('openPresentation', this.master.exampleYaml)
+    openExample () {
+      this.$store.dispatch('openPresentation', this.master.example)
       this.$router.push('/slides')
     }
   },

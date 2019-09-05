@@ -5,28 +5,7 @@
 </template>
 
 <script>
-const examples = [
-  {
-    title: 'URL: https:',
-    data: {
-      src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Johannes_Brahms_LCCN2016872659.jpg/1280px-Johannes_Brahms_LCCN2016872659.jpg'
-    }
-  },
-  {
-    title: 'URL: id:',
-    data: {
-      src: 'id:Haydn_Joseph'
-    }
-  },
-  {
-    title: 'URL: filename:',
-    data: {
-      src: 'filename:Beethoven_Ludwig-van.jpg'
-    }
-  }
-]
-
-const exampleYaml = `
+const example = `
 ---
 slides:
 
@@ -79,8 +58,7 @@ export const master = {
   centerVertically: true,
   darkMode: true,
   slidePadding: 0,
-  examples,
-  exampleYaml,
+  example,
   normalizeData (data) {
     if (typeof data === 'string' || Array.isArray(data)) {
       data = { src: data }

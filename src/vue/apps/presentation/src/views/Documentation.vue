@@ -1,16 +1,28 @@
 <template>
 <div class="documentation">
-  Documentation
+  <h1>Documentation</h1>
 
-  <h1>Master slides</h1>
+  <section>
+    <h2>Master slides</h2>
 
-  <ul v-for="(master, masterName) in $masters" :key="masterName">
-    <li>
-      <router-link :to="{ name: 'documentation-master', params: { master: masterName } }">
-        {{ masterName }}
-      </router-link>
-    </li>
-  </ul>
+    <ul>
+      <li
+        v-for="(master, masterName) in $masters"
+        :key="masterName"
+      >
+        <router-link :to="{ name: 'documentation-master', params: { master: masterName } }">
+          {{ masterName }}
+        </router-link>
+
+        <material-icon
+          v-if="master.example"
+          name="presentation"
+          @click.native="openExample(master)"
+        />
+      </li>
+    </ul>
+  </section>
+
 </div>
 </template>
 
@@ -20,6 +32,12 @@ export default {
   created: function () {
     this.$centerVertically.set(false)
     this.$darkMode.set(false)
+  },
+  methods: {
+    openExample (master) {
+      this.$store.dispatch('openPresentation', master.example)
+      this.$router.push('/slides')
+    }
   }
 }
 </script>

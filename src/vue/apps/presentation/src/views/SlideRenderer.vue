@@ -13,8 +13,6 @@ export default {
     masterName () {
       if ('master' in this.$route.meta) {
         return this.$route.meta.master
-      } else if (this.$route.name === 'master-example') {
-        return this.$route.params.master
       } else if (this.slideCurrent) {
         return this.slideCurrent.master.name
       }
@@ -23,8 +21,6 @@ export default {
     masterData () {
       if ('data' in this.$route.meta) {
         return this.$route.meta.data
-      } else if (this.$route.name === 'master-example') {
-        return this.$masters[this.masterName].examples[this.$route.params.no].data
       }
       return this.slideCurrent.master.data
     }

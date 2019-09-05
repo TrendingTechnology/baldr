@@ -14,27 +14,25 @@
 </template>
 
 <script>
-const examples = [
-  {
-    title: 'All properties',
-    data: {
-      text: 'Der Tag der Gunst ist wie der Tag der Ernte, man muss geschäftig sein sobald sie reift.',
-      author: 'Johann Wolfgang von Goethe',
-      date: 1801
-    }
-  },
-  {
-    title: 'Only text',
-    data: {
-      text: 'Der Tag der Gunst ist wie der Tag der Ernte, man muss geschäftig sein sobald sie reift.'
-    }
-  }
-]
+const example = `
+---
+slides:
+
+- title: All properties
+  quote:
+    text: Der Tag der Gunst ist wie der Tag der Ernte, man muss geschäftig sein sobald sie reift.
+    author: Johann Wolfgang von Goethe
+    date: 1801
+
+- title: Only text
+  quote:
+    text: Der Tag der Gunst ist wie der Tag der Ernte, man muss geschäftig sein sobald sie reift.
+`
 
 export const master = {
   centerVertically: true,
   darkMode: true,
-  examples
+  example
 }
 
 export default {
