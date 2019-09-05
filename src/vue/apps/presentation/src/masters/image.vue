@@ -30,6 +30,13 @@ const exampleYaml = `
 ---
 slides:
 
+- title: 'Multiple images to resolve'
+  image:
+  - id:Bach_Johann-Sebastian
+  - filename:Haendel_Georg-Friedrich.jpg
+  - id:Haydn_Joseph
+  - filename:Beethoven_Ludwig-van.jpg
+
 - title: 'Multiple images without src: Simon & Garfunkel'
   image:
   - https://upload.wikimedia.org/wikipedia/commons/f/f9/Simon_and_Garfunkel_1968.jpg
