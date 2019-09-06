@@ -109,15 +109,11 @@ export default {
 
   img {
     bottom: 0;
-    height: auto;
     left: 0;
-    margin: auto;
-    max-height: 100%;
-    max-width: 100%;
+    height: 100vh;
+    width: 100vw;
+    object-fit: contain;
     position: absolute;
-    right: 0;
-    top: 0;
-    width: auto;
   }
 }
 </style>
