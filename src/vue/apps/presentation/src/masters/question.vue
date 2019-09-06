@@ -1,11 +1,11 @@
 <template>
   <div class="question-master">
-    <ol>
-      <li v-for="pair in questions" :key="pair.question">
+    <ul :class="{ numbers: showNumbers }">
+      <li v-for="(pair, index) in questions" :key="pair.question">
         <p class="question">{{ pair.question }}</p>
-        <p v-if="pair.answer" class="answer">{{ pair.answer }}</p>
+        <p v-if="pair.answer" :class="getClassHidden(index + 1)" class="answer">{{ pair.answer }}</p>
       </li>
-    </ol>
+    </ul>
   </div>
 </template>
 
@@ -64,6 +64,9 @@ export const master = {
       return { questions: out }
     }
     return { questions: [normalizeDataQAPair(data)] }
+  },
+  stepCount (data) {
+    return data.questions.length + 1
   }
 }
 
@@ -72,6 +75,29 @@ export default {
     questions: {
       type: Array,
       required: true
+    },
+    numbers: {
+      type: Boolean,
+      default: true
+    }
+  },
+  computed: {
+    stepNoCurrent () {
+      return this.$store.getters.slideCurrent.master.stepNoCurrent
+    },
+    showNumbers () {
+      if (this.numbers && this.questions.length > 1) {
+        return true
+      }
+      return false
+    }
+  },
+  methods: {
+    getClassHidden (answerNo) {
+      if (this.stepNoCurrent <= answerNo) {
+        return 'hidden'
+      }
+      return ''
     }
   }
 }
@@ -86,10 +112,20 @@ export default {
     li {
       margin-top: 2vw;
       margin-bottom: 2vw;
+      list-style-type: none;
+    }
+
+    ul.numbers li {
+      list-style-type: decimal;
     }
 
     .answer {
       font-style: italic;
+      font-size: 0.8em
+    }
+
+    .hidden {
+      visibility: hidden;
     }
   }
 </style>
