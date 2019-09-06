@@ -1,12 +1,10 @@
 <template>
-  <div class="document-camera">
-    <h1>Document Camera</h1>
-
-    <a href="#" @click="showDeviceSelect">Video-Ausgabegerät auswählen</a>
+  <div class="camera-master">
+    <!-- <a href="#" @click="showDeviceSelect">Video-Ausgabegerät auswählen</a>
 
     <a href="#" @click="stopVideoStream">Video-Ausgabegerät deaktivieren</a>
 
-    <a href="#" @click="setFullScreen">Full screen</a>
+    <a href="#" @click="setFullScreen">Full screen</a> -->
 
     <modal-dialog name="select-video-device">
       <dynamic-select
@@ -30,14 +28,18 @@
  *
  * <code><pre>
  * sudo apt install v4l2loopback-dkms
- * sudo modprobe v4l2loopback devices=4
  * sudo apt install apt install v4l2loopback-utils
+ * sudo modprobe v4l2loopback devices=4
+ *
  * # Capture desktop
  * ffmpeg -f x11grab -r 15 -s 1280x720 -i :0.0+0,0 -vcodec rawvideo -pix_fmt yuv420p -threads 0 -f v4l2 /dev/video0
- *
+ * /usr/share/backgrounds/Headstock_by_Bernhard_Hanakam.jpg
  * # Show image
  * ffmpeg -loop 1 -re -i image.jpg -f v4l2 -vcodec rawvideo -pix_fmt yuv420p /dev/video0
  *
+ * # For example
+ * ffmpeg -loop 1 -re -i /usr/share/backgrounds/Headstock_by_Bernhard_Hanakam.jpg -f v4l2 -vcodec rawvideo -pix_fmt yuv420p /dev/video0
+ * ffmpeg -loop 1 -re -i /usr/share/backgrounds/More_Kamikochi_by_mendhak.jpg  -f v4l2 -vcodec rawvideo -pix_fmt yuv420p /dev/video1
  * # Show video
  * ffmpeg -re -i video.mp4 -f v4l2 /dev/video2
  * </pre></code>
@@ -79,7 +81,6 @@
  *     "groupId": ""
  *   }
  * ]
- *
  * </pre></code>
  *
  * @module @bldr/master-camera
@@ -136,11 +137,22 @@ export default {
     }
   },
   created () {
+    this.$slidePadding.set(0)
+    this.$darkMode.set(true)
     this.setVideoStream()
   }
 }
 </script>
 
 <style lang="scss" scoped>
-
+  .camera-master {
+    video {
+      height: 100vh;
+      left: 0;
+      object-fit: contain;
+      position: absolute;
+      top: 0;
+      width: 100vw;
+    }
+  }
 </style>
