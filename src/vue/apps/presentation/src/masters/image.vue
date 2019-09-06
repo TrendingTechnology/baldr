@@ -80,23 +80,18 @@ export default {
       required: true
     }
   },
-  computed: {
+  asyncComputed: {
     srcResolved () {
-      return this.$store.getters.media(this.src[this.stepNoCurrent])
-    },
+      return this.$resolveMedia(this.src[this.stepNoCurrent])
+    }
+  },
+  computed: {
     slide () {
       return this.$store.getters.slideCurrent
     },
     stepNoCurrent () {
       return this.slide.master.stepNoCurrent - 1
     }
-  },
-  created () {
-    this.$store.dispatch('resolveMedia', this.src[this.stepNoCurrent])
-  },
-  // hook created is not enough, when the same master slides follow.
-  beforeUpdate () {
-    this.$store.dispatch('resolveMedia', this.src[this.stepNoCurrent])
   }
 }
 </script>

@@ -3,6 +3,8 @@ import App from './App.vue'
 import router from './router.js'
 import store from './store.js'
 import { registerMasterComponents, masters } from './masters.js'
+import AsyncComputed from 'vue-async-computed'
+import { resolveMedia } from '@/media-server-resolver.js'
 
 import MaterialIcon from '@bldr/vue-component-material-icon'
 import ModalDialog from '@bldr/vue-component-modal-dialog'
@@ -11,6 +13,7 @@ import DynamicSelect from '@bldr/vue-component-dynamic-select'
 Vue.use(DynamicSelect)
 Vue.use(ModalDialog)
 Vue.use(MaterialIcon)
+Vue.use(AsyncComputed)
 Vue.config.productionTip = false
 
 class BodyAttributes {
@@ -65,6 +68,7 @@ Vue.prototype.$slidePadding = {
 }
 
 Vue.prototype.$masters = masters
+Vue.prototype.$resolveMedia = resolveMedia
 
 // Must be before new Vue()
 registerMasterComponents()

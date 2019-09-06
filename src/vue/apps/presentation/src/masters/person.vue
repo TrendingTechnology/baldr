@@ -54,16 +54,10 @@ export default {
       type: String
     }
   },
-  computed: {
+  asyncComputed: {
     imageResolved () {
-      return this.$store.getters.media(this.image)
+      return this.$resolveMedia(this.image)
     }
-  },
-  created () {
-    this.$store.dispatch('resolveMedia', this.image)
-  },
-  beforeUpdate () {
-    this.$store.dispatch('resolveMedia', this.image)
   }
 }
 </script>
