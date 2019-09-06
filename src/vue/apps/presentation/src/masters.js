@@ -28,6 +28,10 @@ requireComponent.keys().forEach((fileName) => {
   masters[masterName] = masterConfig
   masters[masterName].name = masterName
   masters[masterName].vue = componentConfig.default
+  // Remove the empty line at the beginning of the backtick string example.
+  if ('example' in masters[masterName]) {
+    masters[masterName].example = masters[masterName].example.replace(/^\n*/, '')
+  }
   componentDefaults[masterName] = componentConfig.default
 })
 

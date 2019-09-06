@@ -5,7 +5,7 @@
     <section>
       <h2>Props</h2>
 
-      <ul class="content" >
+      <ul class="content">
         <li
           v-for="(spec, name) in props"
           :key="name"
@@ -57,6 +57,7 @@ export default {
   created: function () {
     this.$centerVertically.set(false)
     this.$darkMode.set(false)
+    this.$overflow.set(false)
   }
 }
 </script>

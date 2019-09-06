@@ -32,7 +32,7 @@ export default {
   },
   methods: mapActions(['setSlidePrevious', 'setSlideNext', 'setStepPrevious', 'setStepNext']),
   created: function () {
-    this.$store.dispatch('setMediaServerDomains')
+    this.$overflow.set(true)
   },
   mounted: function () {
     this.$nextTick(function () {
@@ -80,7 +80,6 @@ export default {
     font-size: 4vw;
     height: 100vh;
     width: 100vw;
-    overflow: hidden;
 
     #content {
       padding: 2vw 8vw;
@@ -93,7 +92,13 @@ export default {
     }
   }
 
- [b-center-vertically="true"] {
+  [b-overflow="true"] {
+    main {
+      overflow: hidden;
+    }
+  }
+
+  [b-center-vertically="true"] {
     main {
       display: table;
     }
