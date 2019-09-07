@@ -4,8 +4,9 @@ import Home from './views/Home.vue'
 
 // Components.
 import CameraMaster from '@/masters/camera.vue'
-import MasterDocumentation from '@/views/MasterDocumentation.vue'
 import Documentation from '@/views/Documentation.vue'
+import MasterDocumentation from '@/views/MasterDocumentation.vue'
+import MediaOverview from '@/views/MediaOverview.vue'
 import OpenNewPresentation from '@/views/OpenNewPresentation.vue'
 import SlideRenderer from '@/views/SlideRenderer.vue'
 
@@ -27,6 +28,11 @@ const routes = [
     path: '/slides',
     title: 'slides',
     component: SlideRenderer
+  },
+  {
+    path: '/media',
+    title: 'Media',
+    component: MediaOverview
   },
   {
     path: '/document-camera',

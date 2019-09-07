@@ -34,6 +34,9 @@ export const master = {
     if ('birth' in data) data.birth = `* ${data.birth}`
     if ('death' in data) data.death = `† ${data.death}`
     return data
+  },
+  mediaURIs (props) {
+    return [props.image]
   }
 }
 

@@ -13,6 +13,12 @@ const state = {
 }
 
 const getters = {
+  media: state => {
+    return state.media
+  },
+  isMedia: (state, getters) => {
+    return Object.keys(getters.media).length > 0
+  },
   mediaDevices: state => {
     return state.mediaDevices
   },
@@ -117,7 +123,7 @@ const mutations = {
     slideCurrent.master.stepNoCurrent = stepNoCurrent
   },
   addMediumData (state, mediumData) {
-    state.media[mediumData.URI] = mediumData
+    Vue.set(state.media, mediumData.URI, mediumData)
   }
 }
 
