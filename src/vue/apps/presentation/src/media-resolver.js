@@ -31,6 +31,45 @@ const conf = config.mediaServer
 
 const media = {}
 
+class Types {
+  constructor () {
+    this.types = {
+      audio: ['mp3'],
+      image: ['jpg', 'jpeg', 'png'],
+      video: ['mp4']
+    }
+    this.extensions_ = this.spreadExtensions_()
+  }
+
+  spreadExtensions_ () {
+    const out = {}
+    for (const type in this.types) {
+      for (const extension of this.types[type]) {
+        out[extension] = type
+      }
+    }
+    return out
+  }
+
+  extensionToType (extension) {
+    const ext = extension.toLowerCase()
+    if (ext in this.extensions_) {
+      return this.extensions_[ext]
+    }
+    throw new Error(`Unkown extension “${ext}”`)
+  }
+}
+
+const types = new Types()
+
+function extensionFromHTTPUrl (URL) {
+  return URL.split('.').pop().toLowerCase()
+}
+
+function filenameFromHTTPUrl (URL) {
+  return URL.split('/').pop()
+}
+
 async function checkDomains (domains, urlPlaceholder) {
   for (const domain of domains) {
     try {
@@ -90,14 +129,18 @@ export async function retrieveMediumData (URI) {
 
   let mediumData = {}
   mediumData.uriScheme = scheme
+  mediumData.URI = decodeURI(URI)
+
   if (scheme === 'http' || scheme === 'https') {
-    mediumData.URI = URI
-    mediumData.httpURL = URI
+    mediumData.httpURL = mediumData.URI
+    mediumData.filename = filenameFromHTTPUrl(mediumData.URI)
+    mediumData.extension = extensionFromHTTPUrl(mediumData.URI)
   } else if (scheme === 'id' || scheme === 'filename') {
-    mediumData.URI = URI
     const response = await query(scheme, authority)
     mediumData = Object.assign(mediumData, response.data)
   }
+
+  mediumData.type = types.extensionToType(mediumData.extension)
   media[URI] = mediumData
   return mediumData
 }

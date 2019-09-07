@@ -3,7 +3,7 @@
     <h1>Media</h1>
     <ul v-if="isMedia">
       <li v-for="mediumData in media" :key="mediumData.URI">
-        {{ mediumData.URI }}
+        <material-icon :name="`file-${mediumData.type}`"/> {{ mediumData.filename }}
       </li>
     </ul>
 
@@ -16,6 +16,13 @@ import { mapGetters } from 'vuex'
 
 export default {
   name: 'MediaOverview',
-  computed: mapGetters(['media', 'isMedia'])
+  computed: mapGetters(['media', 'isMedia']),
+  mounted () {
+    this.$styleConfig.set({
+      overflow: true,
+      darkMode: false,
+      centerVertically: false
+    })
+  }
 }
 </script>

@@ -73,7 +73,7 @@ Vue.prototype.$overflow = new Overflow()
 
 /******************************************************************************/
 
-Vue.prototype.$slidePadding = {
+const slidePadding = {
   default: function () {
     document.querySelector('main #content').style.padding = null
   },
@@ -84,6 +84,31 @@ Vue.prototype.$slidePadding = {
     document.querySelector('main #content').style.padding = 0
   }
 }
+
+Vue.prototype.$slidePadding = slidePadding
+
+class StyleConfig {
+  constructor () {
+    this.configObjects = {
+      centerVertically: Vue.prototype.$centerVertically,
+      darkMode: Vue.prototype.$darkMode,
+      overflow: Vue.prototype.$overflow,
+      slidePadding: Vue.prototype.$slidePadding
+    }
+  }
+
+  set (styleConfig) {
+    for (const config in styleConfig) {
+      if (config in this.configObjects) {
+        this.configObjects[config].set(styleConfig[config])
+      } else {
+        throw new Error(`Unkown style config “${config}”.`)
+      }
+    }
+  }
+}
+
+Vue.prototype.$styleConfig = new StyleConfig()
 
 /******************************************************************************/
 
