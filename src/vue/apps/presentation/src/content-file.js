@@ -5,8 +5,9 @@
 import yaml from 'js-yaml'
 import { themeNames } from '@/themes.js'
 import { masterNames, callMasterFunc } from '@/masters.js'
-import { retrieveMediumData } from '@/media-resolver.js'
+import { getMediaFile, mediaTypes, MediaFile } from '@/media.js'
 import store from '@/store.js'
+import router from '@/router.js'
 
 /**
  * A raw slide object or a raw slide string.
@@ -171,7 +172,7 @@ class MasterData {
       const mediaURIs = callMasterFunc(this.name, 'mediaURIs', normalizedData)
       if (mediaURIs) {
         for (const mediaURI of mediaURIs) {
-          retrieveMediumData(mediaURI).then((mediumData) => {
+          getMediaFile(mediaURI).then((mediumData) => {
             store.commit('addMediumData', mediumData)
           })
         }
@@ -280,5 +281,34 @@ export function parseContentFile (content) {
   }
   return {
     slides: slides
+  }
+}
+
+/**
+ * Open, analyze and handle a file, which is dragged into the application or
+ * opened with the file dialog. Distinct between media files and the YAML
+ * *.baldr.yml file format.
+ *
+ * @type {File} file - A file interface.
+ */
+export function openFile (file) {
+  console.log(file)
+  if (file.type === 'application/x-yaml' &&
+      file.name.toLowerCase().indexOf('.baldr.yml') > -1) {
+    let reader = new FileReader()
+    reader.readAsText(file, 'utf-8')
+    reader.onload = readerEvent => {
+      let content = readerEvent.target.result
+      store.dispatch('openPresentation', content)
+      router.push('/slides')
+    }
+  } else if (mediaTypes.isMedia(file.name)) {
+    const URI = URL.createObjectURL(file)
+    const mediaFile = new MediaFile({
+      URI: URI,
+      httpURL: URI,
+      filename: file.name
+    })
+    store.commit('addMediumData', mediaFile)
   }
 }

@@ -2,8 +2,10 @@
   <div class="media-overview">
     <h1>Media</h1>
     <ul v-if="isMedia">
-      <li v-for="mediumData in media" :key="mediumData.URI">
-        <material-icon :name="`file-${mediumData.type}`"/> {{ mediumData.filename }}
+      <li v-for="mediaFile in media" :key="mediaFile.URI">
+        <material-icon :name="`file-${mediaFile.type}`"/>
+        <img v-if="mediaFile.httpURL" :src="mediaFile.httpURL"/>
+        {{ mediaFile.filename }}
       </li>
     </ul>
 
@@ -26,3 +28,17 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+  .media-overview {
+    font-size: 1.8vw;
+    img {
+      width: 5vw;
+      height: 5vw;
+      object-fit: contain;
+      background-color: $black;
+      padding: 0.3vw;
+    }
+  }
+
+</style>

@@ -1,7 +1,7 @@
 
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { parseContentFile } from './content-file.js'
+import { parseContentFile } from '@/content-file.js'
 
 Vue.use(Vuex)
 

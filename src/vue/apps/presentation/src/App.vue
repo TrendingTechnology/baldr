@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" @drop.prevent="dropHandler" @dragover.prevent>
       <modal-dialog name="menu">
         <main-menu/>
       </modal-dialog>
@@ -18,6 +18,7 @@ import packageJson from '@/../package.json'
 import { AppInfo } from '@bldr/vue-components-collection'
 import MainMenu from '@/components/MainMenu'
 import { mapActions } from 'vuex'
+import { openFile } from '@/content-file.js'
 
 export default {
   name: 'app',
@@ -30,7 +31,14 @@ export default {
       return packageJson.version
     }
   },
-  methods: mapActions(['setSlidePrevious', 'setSlideNext', 'setStepPrevious', 'setStepNext']),
+  methods: {
+    ...mapActions(['setSlidePrevious', 'setSlideNext', 'setStepPrevious', 'setStepNext']),
+    dropHandler (event) {
+      for (const file of event.dataTransfer.files) {
+        openFile(file)
+      }
+    }
+  },
   created: function () {
     this.$overflow.set(true)
     this.$resolveHttpURL('id:Haydn_Joseph')
