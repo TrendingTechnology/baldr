@@ -6,6 +6,7 @@ import { parseContentFile } from './content-file.js'
 Vue.use(Vuex)
 
 const state = {
+  media: {},
   mediaDevices: [],
   slideNoCurrent: null,
   slides: {}
@@ -114,6 +115,9 @@ const mutations = {
   },
   setStepNoCurrent (state, { slideCurrent, stepNoCurrent }) {
     slideCurrent.master.stepNoCurrent = stepNoCurrent
+  },
+  addMediumData (state, mediumData) {
+    state.media[mediumData.URI] = mediumData
   }
 }
 

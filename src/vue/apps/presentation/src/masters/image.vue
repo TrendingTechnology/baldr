@@ -70,6 +70,9 @@ export const master = {
   },
   stepCount (data) {
     return data.src.length
+  },
+  mediaURIs (props) {
+    return props.src
   }
 }
 

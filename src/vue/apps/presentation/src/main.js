@@ -4,7 +4,7 @@ import router from './router.js'
 import store from './store.js'
 import { registerMasterComponents, masters } from './masters.js'
 import AsyncComputed from 'vue-async-computed'
-import { resolveHttpURL } from '@/media-server-resolver.js'
+import { resolveHttpURL } from '@/media-resolver.js'
 
 import MaterialIcon from '@bldr/vue-component-material-icon'
 import ModalDialog from '@bldr/vue-component-modal-dialog'

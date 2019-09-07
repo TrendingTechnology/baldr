@@ -3,8 +3,10 @@
  */
 
 import yaml from 'js-yaml'
-import { themeNames } from './themes.js'
-import { masterNames, callMasterFunc } from './masters.js'
+import { themeNames } from '@/themes.js'
+import { masterNames, callMasterFunc } from '@/masters.js'
+import { retrieveMediumData } from '@/media-resolver.js'
+import store from '@/store.js'
 
 /**
  * A raw slide object or a raw slide string.
@@ -164,7 +166,17 @@ class MasterData {
     this.data = rawSlideObject.cut(this.name)
 
     const normalizedData = callMasterFunc(this.name, 'normalizeData', this.data)
-    if (normalizedData) this.data = normalizedData
+    if (normalizedData) {
+      this.data = normalizedData
+      const mediaURIs = callMasterFunc(this.name, 'mediaURIs', normalizedData)
+      if (mediaURIs) {
+        for (const mediaURI of mediaURIs) {
+          retrieveMediumData(mediaURI).then((mediumData) => {
+            store.commit('addMediumData', mediumData)
+          })
+        }
+      }
+    }
 
     /**
      * @type {number}
