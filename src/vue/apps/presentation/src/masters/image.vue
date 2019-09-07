@@ -82,7 +82,7 @@ export default {
   },
   asyncComputed: {
     srcResolved () {
-      return this.$resolveMedia(this.src[this.stepNoCurrent])
+      return this.$resolveHttpURL(this.src[this.stepNoCurrent])
     }
   },
   computed: {

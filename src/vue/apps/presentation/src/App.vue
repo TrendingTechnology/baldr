@@ -33,6 +33,7 @@ export default {
   methods: mapActions(['setSlidePrevious', 'setSlideNext', 'setStepPrevious', 'setStepNext']),
   created: function () {
     this.$overflow.set(true)
+    this.$resolveHttpURL('id:Haydn_Joseph')
   },
   mounted: function () {
     this.$nextTick(function () {
