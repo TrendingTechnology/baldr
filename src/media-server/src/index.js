@@ -234,7 +234,8 @@ class MediaServer {
     this.ignore = [
       '**/*.db',
       '**/*.yml',
-      '**/*robots.txt'
+      '**/*robots.txt',
+      '**/*_preview.jpg'
     ]
   }
 

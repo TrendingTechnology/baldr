@@ -20,7 +20,7 @@ const media = {}
 class MediaTypes {
   constructor () {
     this.types = {
-      audio: ['mp3'],
+      audio: ['mp3', 'm4a'],
       image: ['jpg', 'jpeg', 'png'],
       video: ['mp4']
     }
@@ -74,6 +74,8 @@ export const mediaTypes = new MediaTypes()
  * @property {string} id - An identifier, for example `Haydn_Joseph`.
  * @property {string} type - The media type, for example `image`, `audio` or
  *   `video`.
+ * @property {string} previewHttpUrl - Each media file can have a preview
+ *   image. On the path is `_preview.jpg` appended.
  */
 export class MediaFile {
   /**
@@ -163,6 +165,14 @@ async function query (key, value) {
   throw new Error(`Media with the ${key} ”${value}” couldn’t be resolved.`)
 }
 
+async function findPreviewImage (httpUrl) {
+  const previewHttpUrl = `${httpUrl}_preview.jpg`
+  try {
+    await ax.get(previewHttpUrl, { crossdomain: true })
+    return previewHttpUrl
+  } catch (error) {}
+}
+
 /**
  * @param {MediaFile} mediaFile
  *
@@ -199,6 +209,14 @@ export async function getMediaFile (URI) {
   }
 
   mediaFile.type = mediaTypes.extensionToType(mediaFile.extension)
+
+  if (mediaFile.type === 'audio' && (mediaFile.uriScheme !== 'http' || mediaFile.uriScheme !== 'https')) {
+    const previewHttpUrl = await findPreviewImage(mediaFile.httpURL)
+    if (previewHttpUrl) {
+      mediaFile.previewHttpUrl = previewHttpUrl
+    }
+  }
+
   media[URI] = mediaFile
   return mediaFile
 }
