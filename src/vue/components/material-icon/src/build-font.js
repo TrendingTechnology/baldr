@@ -145,6 +145,8 @@ if (require.main === module) {
         'table-of-contents': '',
         'test-tube': '',
         'timeline-text': '',
+        'unfold-more-horizontal': 'steps',
+        'unfold-more-vertical': 'slides',
         'video-switch': '',
         cctv: '',
         close: '',
@@ -157,7 +159,7 @@ if (require.main === module) {
         notebook: '',
         wikipedia: '',
         worker: '',
-        youtube: ''
+        youtube: '',
       }
     },
     {

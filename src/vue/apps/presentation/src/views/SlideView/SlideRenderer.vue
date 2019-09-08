@@ -1,12 +1,12 @@
 <script>
 import { mapGetters } from 'vuex'
 
-import OpenNewPresentation from '@/views/OpenFiles.vue'
+import OpenFiles from '@/views/OpenFiles.vue'
 
 export default {
   name: 'SlideRenderer',
   components: {
-    OpenNewPresentation
+    OpenFiles
   },
   computed: {
     ...mapGetters(['slideCurrent']),

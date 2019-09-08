@@ -5,7 +5,6 @@
       </modal-dialog>
     <main>
       <div id='content'>
-        <div class="slide-no" v-if="$store.getters.slideNoCurrent">{{ $store.getters.slideNoCurrent }}</div>
         <router-view/>
       </div>
     </main>
@@ -112,12 +111,6 @@ export default {
 
     #content {
       padding: 2vw 8vw;
-
-      .slide-no {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-      }
     }
   }
 

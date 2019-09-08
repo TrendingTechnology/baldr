@@ -8,7 +8,7 @@ import Documentation from '@/views/Documentation.vue'
 import MasterDocumentation from '@/views/MasterDocumentation.vue'
 import MediaOverview from '@/views/MediaOverview.vue'
 import OpenFiles from '@/views/OpenFiles.vue'
-import SlideRenderer from '@/views/SlideRenderer.vue'
+import SlideView from '@/views/SlideView'
 import ShortcutsOverview from '@/views/ShortcutsOverview.vue'
 
 Vue.use(Router)
@@ -28,7 +28,7 @@ const routes = [
   {
     path: '/slides',
     title: 'slides',
-    component: SlideRenderer
+    component: SlideView
   },
   {
     path: '/media',
