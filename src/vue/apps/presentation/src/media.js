@@ -17,14 +17,6 @@ const conf = config.mediaServer
 
 const media = {}
 
-function extensionFromString (URL) {
-  return URL.split('.').pop().toLowerCase()
-}
-
-function filenameFromHTTPUrl (URL) {
-  return URL.split('/').pop()
-}
-
 class MediaTypes {
   constructor () {
     this.types = {
@@ -54,7 +46,7 @@ class MediaTypes {
   }
 
   isMedia (filename) {
-    const extension = extensionFromString(filename).toLowerCase()
+    const extension = filename.split('.').pop().toLowerCase()
     if (extension in this.extensions_) {
       return true
     }
@@ -100,11 +92,19 @@ export class MediaFile {
     this.uriAuthority = segments[1]
 
     if ('filename' in this && !('extension' in this)) {
-      this.extension = extensionFromString(this.filename)
+      this.extensionFromString(this.filename)
     }
     if ('extension' in this && !('type' in this)) {
       this.type = mediaTypes.extensionToType(this.extension)
     }
+  }
+
+  extensionFromString (string) {
+    this.extension = string.split('.').pop().toLowerCase()
+  }
+
+  filenameFromHTTPUrl (URL) {
+    this.filename = URL.split('/').pop()
   }
 
   /**
@@ -190,8 +190,8 @@ export async function getMediaFile (URI) {
 
   if (mediaFile.uriScheme === 'http' || mediaFile.uriScheme === 'https') {
     mediaFile.httpURL = mediaFile.URI
-    mediaFile.filename = filenameFromHTTPUrl(mediaFile.URI)
-    mediaFile.extension = extensionFromString(mediaFile.URI)
+    mediaFile.filenameFromHTTPUrl(mediaFile.URI)
+    mediaFile.extensionFromString(mediaFile.URI)
   } else if (mediaFile.uriScheme === 'id' || mediaFile.uriScheme === 'filename') {
     const response = await query(mediaFile.uriScheme, mediaFile.uriAuthority)
     mediaFile.addProperties(response.data)
