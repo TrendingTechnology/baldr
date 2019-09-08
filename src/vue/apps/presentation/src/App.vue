@@ -45,9 +45,37 @@ export default {
   },
   mounted: function () {
     this.$nextTick(function () {
-      this.$bindShortcut('g m', () => { this.$router.push('/media') }, 'Open media')
-      this.$bindShortcut('g s', () => { this.$router.push('/slides') }, 'Go to slides')
-      this.$bindShortcut('g d', () => { this.$router.push('/documentation') }, 'Go to documentation')
+      this.$shortcuts.add('g m', () => { this.$router.push('/media') }, 'Go to media')
+      this.$shortcuts.add('g s', () => { this.$router.push('/slides') }, 'Go to slides')
+      this.$shortcuts.add('g d', () => { this.$router.push('/documentation') }, 'Go to documentation')
+
+      this.$shortcuts.addMultiple([
+        {
+          keys: 'g S',
+          callback: () => { this.$router.push('/shortcuts') },
+          description: 'Go to shortcuts'
+        },
+        {
+          keys: 'left',
+          callback: () => { this.setSlidePrevious() },
+          description: 'Previous slide'
+        },
+        {
+          keys: 'right',
+          callback: () => { this.setSlideNext() },
+          description: 'Next slide'
+        },
+        {
+          keys: 'up',
+          callback: () => { this.setStepPrevious() },
+          description: 'Previous stop'
+        },
+        {
+          keys: 'down',
+          callback: () => { this.setStepNext() },
+          description: 'Next step'
+        }
+      ])
 
       window.addEventListener('keydown', event => {
         if (event.ctrlKey && event.key === 'm') {
@@ -55,8 +83,6 @@ export default {
           event.preventDefault()
         } else if (event.ctrlKey && event.key === 'd') {
           // edit bookmarks
-          event.preventDefault()
-        } else if (['ArrowLeft', 'ArrowRight'].includes(event.key)) {
           event.preventDefault()
         }
       })
@@ -68,14 +94,6 @@ export default {
           this.$darkMode.toggle()
         } else if (event.ctrlKey && event.altKey && event.key === 'v') {
           this.$centerVertically.toggle()
-        } else if (event.key === 'ArrowLeft') {
-          this.setSlidePrevious()
-        } else if (event.key === 'ArrowRight') {
-          this.setSlideNext()
-        } else if (event.key === 'ArrowUp') {
-          this.setStepPrevious()
-        } else if (event.key === 'ArrowDown') {
-          this.setStepNext()
         }
       })
     })

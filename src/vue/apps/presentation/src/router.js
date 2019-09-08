@@ -9,6 +9,7 @@ import MasterDocumentation from '@/views/MasterDocumentation.vue'
 import MediaOverview from '@/views/MediaOverview.vue'
 import OpenNewPresentation from '@/views/OpenNewPresentation.vue'
 import SlideRenderer from '@/views/SlideRenderer.vue'
+import ShortcutsOverview from '@/views/ShortcutsOverview.vue'
 
 Vue.use(Router)
 
@@ -49,6 +50,12 @@ const routes = [
     name: 'documentation-master',
     title: 'Master Documentation',
     component: MasterDocumentation
+  },
+  {
+    path: '/shortcuts',
+    name: 'shortcuts',
+    title: 'Shortcuts',
+    component: ShortcutsOverview
   }
 ]
 
