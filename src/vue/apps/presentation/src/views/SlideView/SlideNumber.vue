@@ -7,7 +7,7 @@
     </span>
 
     <span v-if="stepCount > 1">
-      <material-icon name="steps"/>
+      <material-icon color="white" name="steps"/>
       <span class="number">{{ stepNo }}</span>
       <span class="count"> / {{ stepCount }}</span>
     </span>
@@ -58,6 +58,10 @@ export default {
       padding-left: 0.2em;
       text-align: left;
       width: 2em;
+    }
+
+    .baldr-icon {
+      font-size: 0.6em;
     }
   }
 </style>
