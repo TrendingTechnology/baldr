@@ -18,7 +18,7 @@ import packageJson from '@/../package.json'
 import { AppInfo } from '@bldr/vue-components-collection'
 import MainMenu from '@/components/MainMenu'
 import { mapActions } from 'vuex'
-import { openFile } from '@/content-file.js'
+import { openFiles } from '@/content-file.js'
 
 export default {
   name: 'app',
@@ -34,9 +34,7 @@ export default {
   methods: {
     ...mapActions(['setSlidePrevious', 'setSlideNext', 'setStepPrevious', 'setStepNext']),
     dropHandler (event) {
-      for (const file of event.dataTransfer.files) {
-        openFile(file)
-      }
+      openFiles(event.dataTransfer.files)
     }
   },
   created: function () {

@@ -291,8 +291,7 @@ export function parseContentFile (content) {
  *
  * @type {File} file - A file interface.
  */
-export function openFile (file) {
-  console.log(file)
+function openFile (file) {
   if (file.type === 'application/x-yaml' &&
       file.name.toLowerCase().indexOf('.baldr.yml') > -1) {
     let reader = new FileReader()
@@ -310,5 +309,16 @@ export function openFile (file) {
       filename: file.name
     })
     store.commit('addMediumData', mediaFile)
+  }
+}
+
+/**
+ * Open multiple files.
+ *
+ * @param {array} files - An array of File objects.
+ */
+export function openFiles (files) {
+  for (const file of files) {
+    openFile(file)
   }
 }
