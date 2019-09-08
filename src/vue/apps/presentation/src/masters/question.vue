@@ -98,7 +98,11 @@ export const master = {
     return { questions: normalizeQuestions(data) }
   },
   stepCount (data) {
-    return data.questions.length + 1
+    let count = 0
+    for (const question of data.questions) {
+      if ('answer' in question && question.answer) count += 1
+    }
+    return count + 1
   }
 }
 
