@@ -1,7 +1,7 @@
 <script>
 import { mapGetters } from 'vuex'
 
-import OpenNewPresentation from '@/views/OpenNewPresentation.vue'
+import OpenNewPresentation from '@/views/OpenFiles.vue'
 
 export default {
   name: 'SlideRenderer',
@@ -46,7 +46,7 @@ export default {
         }
       )
     }
-    return createElement('open-new-presentation')
+    return createElement('open-files')
   }
 }
 </script>

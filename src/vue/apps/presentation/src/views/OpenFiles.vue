@@ -8,7 +8,7 @@
 import { openFiles } from '@/content-file.js'
 
 export default {
-  name: 'OpenNewPresentation',
+  name: 'OpenFiles',
   methods: {
     openPresentation (event) {
       openFiles(event.target.files)

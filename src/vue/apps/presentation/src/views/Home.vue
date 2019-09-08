@@ -18,16 +18,16 @@
         </div>
       </div>
     </section>
-    <open-new-presentation/>
+    <open-files/>
   </div>
 </template>
 
 <script>
-import OpenNewPresentation from './OpenNewPresentation.vue'
+import OpenFiles from './OpenFiles.vue'
 export default {
   name: 'Home',
   components: {
-    OpenNewPresentation
+    OpenFiles
   },
   created: function () {
     this.$centerVertically.set(true)

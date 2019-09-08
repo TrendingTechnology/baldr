@@ -7,7 +7,7 @@ import CameraMaster from '@/masters/camera.vue'
 import Documentation from '@/views/Documentation.vue'
 import MasterDocumentation from '@/views/MasterDocumentation.vue'
 import MediaOverview from '@/views/MediaOverview.vue'
-import OpenNewPresentation from '@/views/OpenNewPresentation.vue'
+import OpenFiles from '@/views/OpenFiles.vue'
 import SlideRenderer from '@/views/SlideRenderer.vue'
 import ShortcutsOverview from '@/views/ShortcutsOverview.vue'
 
@@ -22,8 +22,8 @@ const routes = [
   },
   {
     path: '/open',
-    title: 'Open a new presentation',
-    component: OpenNewPresentation
+    title: 'Open',
+    component: OpenFiles
   },
   {
     path: '/slides',
