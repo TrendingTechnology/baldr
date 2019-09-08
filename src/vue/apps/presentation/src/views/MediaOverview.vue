@@ -21,7 +21,7 @@ export default {
   computed: mapGetters(['media', 'isMedia']),
   mounted () {
     this.$styleConfig.set({
-      overflow: true,
+      overflow: false,
       darkMode: false,
       centerVertically: false
     })

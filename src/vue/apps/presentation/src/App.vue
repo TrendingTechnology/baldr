@@ -45,6 +45,10 @@ export default {
   },
   mounted: function () {
     this.$nextTick(function () {
+      this.$bindShortcut('g m', () => { this.$router.push('/media') }, 'Open media')
+      this.$bindShortcut('g s', () => { this.$router.push('/slides') }, 'Go to slides')
+      this.$bindShortcut('g d', () => { this.$router.push('/documentation') }, 'Go to documentation')
+
       window.addEventListener('keydown', event => {
         if (event.ctrlKey && event.key === 'm') {
           // Disable Mute audio

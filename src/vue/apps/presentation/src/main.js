@@ -5,6 +5,7 @@ import store from '@/store.js'
 import { registerMasterComponents, masters } from '@/masters.js'
 import AsyncComputed from 'vue-async-computed'
 import { resolveHttpURL } from '@/media.js'
+import { bindShortcut } from '@/shortcuts.js'
 
 import MaterialIcon from '@bldr/vue-component-material-icon'
 import ModalDialog from '@bldr/vue-component-modal-dialog'
@@ -114,6 +115,7 @@ Vue.prototype.$styleConfig = new StyleConfig()
 
 Vue.prototype.$masters = masters
 Vue.prototype.$resolveHttpURL = resolveHttpURL
+Vue.prototype.$bindShortcut = bindShortcut
 
 // Must be before new Vue()
 registerMasterComponents()

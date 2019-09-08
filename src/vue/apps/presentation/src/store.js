@@ -9,7 +9,8 @@ const state = {
   media: {},
   mediaDevices: [],
   slideNoCurrent: null,
-  slides: {}
+  slides: {},
+  shortcuts: {}
 }
 
 const getters = {
@@ -124,6 +125,9 @@ const mutations = {
   },
   addMediumData (state, mediumData) {
     Vue.set(state.media, mediumData.URI, mediumData)
+  },
+  addShortcut (state, shortcut) {
+    Vue.set(state.shortcuts, shortcut.keys, shortcut)
   }
 }
 
