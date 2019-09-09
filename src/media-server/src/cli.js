@@ -37,35 +37,30 @@ commander
   .option('-b, --base-path <base-path>', 'A path where all there the media files are.')
 
 commander
-  .command('flush')
+  .command('flush').alias('f')
   .description('Remove all entries in the SQLite database.')
-  .alias('f')
   .action(() => { subcommand = 'flush' })
 
 commander
-  .command('info')
+  .command('info').alias('i')
   .description('Show some debug messages.')
-  .alias('i')
   .action(() => { subcommand = 'info' })
 
 commander
-  .command('list')
+  .command('list').alias('l')
   .description('List all media files.')
-  .alias('l')
   .action(() => { subcommand = 'list' })
 
 commander
-  .command('open')
+  .command('open').alias('o')
   .description('Open the base directory in a file browser')
-  .alias('o')
   .action(() => { subcommand = 'open' })
 
 commander
-  .command('query <search>')
+  .command('query <search>').alias('q')
   .description('Query the SQLite database.')
   .option('-f, --file-name', 'Query by file name.')
   .option('-i, --id', 'Query by id (default)')
-  .alias('q')
   .action((query, opts) => {
     subcommand = 'query'
     searchString = query
@@ -73,69 +68,87 @@ commander
   })
 
 commander
-  .command('rsync-from-remote')
+  .command('rename').alias('r')
+  .description('Rename files, clean file names, remove all whitespaces and special characters')
+  .action(() => { subcommand = 'rename' })
+
+commander
+  .command('rsync-from-remote').alias('from')
   .description('Rsync FROM the remote media server to the local.')
-  .alias('from')
   .action(() => { subcommand = 'rsync-from-remote' })
 
 commander
-  .command('rsync-to-remote')
+  .command('rsync-to-remote').alias('to')
   .description('Rsync from the local media server TO the remote.')
-  .alias('to')
   .action(() => { subcommand = 'rsync-to-remote' })
 
 commander
-  .command('update')
+  .command('update').alias('u')
   .description('Update the SQLite database, add new entries, update the entries.')
-  .alias('u')
   .action(() => { subcommand = 'update' })
 
 commander
-  .command('yaml')
+  .command('yaml').alias('y')
   .description('Create info files in the YAML format in the current working directory.')
-  .alias('y')
   .action(() => { subcommand = 'yaml' })
 
 commander.parse(process.argv)
 
-if (!subcommand) {
+function help () {
   console.log('Specify a subcommand.')
   commander.outputHelp()
   process.exit(1)
 }
 
+if (!subcommand) {
+  help()
+}
+
 const mediaServer = new MediaServer(commander.basePath)
 
-// flush
-if (subcommand === 'flush') {
-  mediaServer.flush()
-// info
-} else if (subcommand === 'info') {
-  console.log(bootstrapConfig())
-// list
-} else if (subcommand === 'list') {
-  console.log(mediaServer.list())
-// open
-} else if (subcommand === 'open') {
-  const process = childProcess.spawn('xdg-open', [config.basePath], { detached: true })
-  process.unref()
-// query
-} else if (subcommand === 'query') {
-  if (options.fileName) {
-    console.log(mediaServer.queryByFilename(searchString))
-  } else {
-    console.log(mediaServer.queryByID(searchString))
-  }
-// rsync-from-remote
-} else if (subcommand === 'rsync-from-remote') {
-  rsync(false)
-// rsync-to-remote
-} else if (subcommand === 'rsync-to-remote') {
-  rsync(true)
-// update
-} else if (subcommand === 'update') {
-  mediaServer.update()
-// yaml
-} else if (subcommand === 'yaml') {
-  mediaServer.createInfoFiles()
+switch (subcommand) {
+  case 'flush':
+    mediaServer.flush()
+    break
+
+  case 'info':
+    console.log(bootstrapConfig())
+    break
+
+  case 'open':
+    const process = childProcess.spawn('xdg-open', [config.basePath], { detached: true })
+    process.unref()
+    break
+
+  case 'query':
+    if (options.fileName) {
+      console.log(mediaServer.queryByFilename(searchString))
+    } else {
+      console.log(mediaServer.queryByID(searchString))
+    }
+    break
+
+  case 'rename':
+    mediaServer.rename()
+    break
+
+  case 'rsync-from-remote':
+    rsync(false)
+    break
+
+  case 'rsync-to-remote':
+    rsync(true)
+    break
+
+  case 'update':
+    mediaServer.update()
+    break
+
+  case 'yaml':
+    mediaServer.createInfoFiles()
+    break
+
+  default:
+    help()
+    break
 }

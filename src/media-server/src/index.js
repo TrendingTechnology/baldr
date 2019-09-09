@@ -250,7 +250,15 @@ class MediaServer {
       const yamlFile = `${file}.yml`
       if (!fs.lstatSync(file).isDirectory() && !fs.existsSync(yamlFile)) {
         const metaData = new MetaData(file, this.basePath)
-        const title = metaData.basename.replace('_', ', ').replace('-', ' ')
+        const title = metaData.basename
+          .replace(/_/g, ', ')
+          .replace(/-/g, ' ')
+          .replace(/Ae/g, 'Ä')
+          .replace(/ae/g, 'ä')
+          .replace(/Oe/g, 'Ö')
+          .replace(/oe/g, 'ö')
+          .replace(/Ue/g, 'Ü')
+          .replace(/ue/g, 'ü')
         const yamlMarkup = `---
 # path: ${metaData.path}
 # filename: ${metaData.filename}
@@ -260,6 +268,31 @@ id: ${metaData.basename}
 `
         console.log(yamlMarkup)
         fs.writeFileSync(yamlFile, yamlMarkup)
+      }
+    }
+  }
+
+  rename () {
+    const cwd = process.cwd()
+    const files = this.glob_(cwd)
+    for (const oldPath of files) {
+      console.log(oldPath)
+      const newPath = oldPath
+        .replace(/[,.] /g, '_')
+        .replace(/ +- +/g, '_')
+        .replace(/\s+/g, '-')
+        .replace(/-+/g, '-')
+        .replace(/-*_-*/g, '_')
+        .replace(/Ä/g, 'Ae')
+        .replace(/ä/g, 'ae')
+        .replace(/Ö/g, 'Oe')
+        .replace(/ö/g, 'oe')
+        .replace(/Ü/g, 'Ue')
+        .replace(/ü/g, 'ue')
+        .replace(/ß/g, 'ss')
+      if (oldPath !== newPath) {
+        console.log(newPath)
+        fs.renameSync(oldPath, newPath)
       }
     }
   }

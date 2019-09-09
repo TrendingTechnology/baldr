@@ -1,23 +1,6 @@
 <template>
-  <div class="audio-master">
-    <img
-      :src="mediaFile.previewHttpUrl"
-      class="preview"
-      v-if="mediaFile.previewHttpUrl"
-    />
-
-    <p>
-      <audio controls :src="srcResolved"/>
-    </p>
-
-    <p
-      class="title piece"
-      v-if="mediaFile.title"
-    >{{ mediaFile.title }}</p>
-    <p
-      class="artist person"
-      v-if="mediaFile.artist"
-    >{{ mediaFile.artist }}</p>
+  <div class="video-master">
+    <video controls :src="srcResolved"/>
   </div>
 </template>
 
@@ -27,15 +10,15 @@ const example = `
 slides:
 
 - title: 'URL: id:'
-  audio:
+  video:
     src: id:Du-bist-als-Kind-zu-heiss-gebadet-worden
 
 - title: 'URL: filename:'
-  audio:
+  video:
     src: filename:Ich-hab-zu-Haus-ein-Grammophon.m4a
 
-- title: 'Multiple audio files to resolve'
-  audio:
+- title: 'Multiple video files to resolve'
+  video:
   - id:Du-bist-als-Kind-zu-heiss-gebadet-worden
   - filename:Ich-hab-zu-Haus-ein-Grammophon.m4a
 `
@@ -92,21 +75,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.audio-master {
+.video-master {
   text-align: center;
-
-  .artist {
-    font-size: 0.9em;
-  }
-
-  .title {
-    font-size: 1.1em;
-  }
-
-  img.preview {
-    height: 30vh;
-    width: 30vh;
-    object-fit: cover;
-  }
 }
 </style>
