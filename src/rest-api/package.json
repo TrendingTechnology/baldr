@@ -1,6 +1,6 @@
 {
   "name": "@bldr/rest-api",
-  "version": "0.1.20",
+  "version": "0.1.21",
   "description": "A REST API to save states of the seating plan app..",
   "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
   "bugs": {
@@ -27,7 +27,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@bldr/media-server": "^0.1.10",
+    "@bldr/media-server": "^0.1.11",
     "commander": "^3.0.1",
     "cors": "^2.8.5",
     "express": "^4.17.1"
