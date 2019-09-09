@@ -11,7 +11,7 @@ const cors = require('cors')
 const express = require('express')
 
 // Project packages.
-const packageJson = require('./package.json')
+const packageJson = require('../package.json')
 
 /**
  * Default TCP port the server listens on.
