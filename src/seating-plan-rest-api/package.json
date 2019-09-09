@@ -1,6 +1,6 @@
 {
   "name": "@bldr/seating-plan-api",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A REST API to save states of the seating plan app..",
   "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
   "bugs": {
