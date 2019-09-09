@@ -7,14 +7,11 @@ const os = require('os')
 
 // Third party packages.
 const { Command } = require('commander')
-// We do CORS now over Nginx
-// const cors = require('cors')
+const cors = require('cors')
 const express = require('express')
 
 // Project packages.
 const packageJson = require('./package.json')
-const { MediaServer } = require('@bldr/media-server')
-const mediaServer = new MediaServer()
 
 /**
  * Default TCP port the server listens on.
@@ -58,17 +55,16 @@ function checkEnv (envName) {
 
 const app = express()
 
-// We do CORS now over Nginx
-// app.use(cors())
+app.use(cors())
 app.use(express.json())
 
-app.get('/api/version', (req, res) => {
+app.get('/version', (req, res) => {
   res.status(200).send({
     version: packageJson.version
   })
 })
 
-app.post('/api/seating-plan', (req, res) => {
+app.post('/', (req, res) => {
   const body = req.body
 
   if (!{}.hasOwnProperty.call(body, 'timeStampMsec')) {
@@ -103,7 +99,7 @@ app.post('/api/seating-plan', (req, res) => {
   console.log(responseMessage)
 })
 
-app.get('/api/seating-plan', (req, res) => {
+app.get('/', (req, res) => {
   const states = []
   fs.readdirSync(store).forEach(file => {
     const regExp = /seating-plan_(\d+)\.json/g
@@ -115,7 +111,7 @@ app.get('/api/seating-plan', (req, res) => {
   res.status(200).send(states)
 })
 
-app.get('/api/seating-plan/latest', (req, res) => {
+app.get('/latest', (req, res) => {
   const latestPath = path.join(store, 'latest')
   if (fs.existsSync(latestPath)) {
     const latest = fs.readFileSync(latestPath, { encoding: 'utf-8' })
@@ -126,7 +122,7 @@ app.get('/api/seating-plan/latest', (req, res) => {
   }
 })
 
-app.get('/api/seating-plan/by-time/:timeStampMsec', (req, res) => {
+app.get('/by-time/:timeStampMsec', (req, res) => {
   const timeStampMsec = req.params.timeStampMsec
   const state = getStateByTimeStampMsec(timeStampMsec)
   if (state) {
@@ -136,7 +132,7 @@ app.get('/api/seating-plan/by-time/:timeStampMsec', (req, res) => {
   }
 })
 
-app.delete('/api/seating-plan/by-time/:timeStampMsec', (req, res) => {
+app.delete('/by-time/:timeStampMsec', (req, res) => {
   const timeStampMsec = req.params.timeStampMsec
   const storePath = timeStampMsecToPath(timeStampMsec)
   if (fs.existsSync(storePath)) {
@@ -144,28 +140,6 @@ app.delete('/api/seating-plan/by-time/:timeStampMsec', (req, res) => {
     res.status(200).send({ timeStampMsec: timeStampMsec })
   } else {
     res.sendStatus(404)
-  }
-})
-
-app.post('/api/media-server/query-by-id', (req, res) => {
-  const body = req.body
-  if (!{}.hasOwnProperty.call(body, 'id')) {
-    res.sendStatus(400)
-  } else {
-    const responeMessage = mediaServer.queryByID(body.id)
-    res.json(responeMessage)
-    console.log(responeMessage)
-  }
-})
-
-app.post('/api/media-server/query-by-filename', (req, res) => {
-  const body = req.body
-  if (!{}.hasOwnProperty.call(body, 'filename')) {
-    res.sendStatus(400)
-  } else {
-    const responeMessage = mediaServer.queryByFilename(body.filename)
-    res.json(responeMessage)
-    console.log(responeMessage)
   }
 })
 

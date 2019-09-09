@@ -29,14 +29,11 @@ function log (format) {
  * @return {object}
  */
 function bootstrapConfig (configDefault) {
-  const configFileHome = path.join(os.homedir(), '.baldr.json')
-  const configFileEtc = path.join(path.sep, 'etc', 'baldr.json')
+  const configFile = path.join(path.sep, 'etc', 'baldr.json')
 
   let configJson
-  if (fs.existsSync(configFileHome)) {
-    configJson = require(configFileHome)
-  } else if (fs.existsSync(configFileEtc)) {
-    configJson = require(configFileEtc)
+  if (fs.existsSync(configFile)) {
+    configJson = require(configFile)
   }
 
   if (!configJson) throw new Error(`No configuration file found: ${configFile}`)
