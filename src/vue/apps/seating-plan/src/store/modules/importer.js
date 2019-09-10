@@ -2,19 +2,7 @@
 /* globals localStorage config */
 
 import { toLocaleDateTimeString } from '../../lib.js'
-import axios from 'axios'
-
-console.log(`Rest-API: Using username '${config.restApi.username}'`)
-console.log(`Rest-API: Using password '${config.restApi.password}'`)
-
-const axiosInstance = axios.create({
-  baseURL: 'https://baldr.friedrich.rocks/api/',
-  timeout: 3000,
-  auth: {
-    username: config.restApi.username,
-    password: config.restApi.password
-  }
-})
+import request from '@bldr/http-request'
 
 class InitState {
   constructor () {
@@ -79,14 +67,14 @@ const getters = {
  */
 const actions = {
   checkApi ({ commit }) {
-    return axiosInstance.get('/version').then((response) => {
+    return request.request({ method: 'get', url: '/api/seating-plan/version' }).then((response) => {
       commit('setApiVersion', response.data.version)
     }).catch(() => {
       commit('setApiVersion', null)
     })
   },
   deleteFromExternalByTime ({ dispatch }, timeStampMsec) {
-    return axiosInstance.delete(`/seating-plan/by-time/${timeStampMsec}`).then(() => {
+    return request.request({ method: 'delete', url: `/api/seating-plan/by-time/${timeStampMsec}` }).then(() => {
       dispatch('fetchExternalStateDates')
     }).catch(() => true)
   },
@@ -95,7 +83,7 @@ const actions = {
     dispatch('fetchLocalStateDates')
   },
   fetchExternalStateDates ({ commit }) {
-    return axiosInstance.get('/seating-plan/').then((response) => {
+    return request.request({ method: 'post', url: '/api/seating-plan/' }).then((response) => {
       const dates = response.data.sort().reverse()
       commit('fetchExternalStateDates', dates)
     }).catch(() => true)
@@ -113,7 +101,7 @@ const actions = {
     commit('fetchLocalStateDates', dates)
   },
   importFromExternalByTime ({ dispatch }, timeStampMsec) {
-    return axiosInstance.get(`/seating-plan/by-time/${timeStampMsec}`).then((response) => {
+    return request.request({ method: 'get', url: `/api/seating-plan/by-time/${timeStampMsec}` }).then((response) => {
       dispatch('importState', response.data)
     }).catch(() => true)
   },
@@ -134,7 +122,7 @@ const actions = {
     }
   },
   importLatestExternalState ({ commit }) {
-    return axiosInstance.get('/seating-plan/latest').then((response) => {
+    return request.request({ method: 'get', url: '/api/seating-plan/latest' }).then((response) => {
       commit('importLatestExternalState', response.data)
     }).catch(() => true)
   },
@@ -188,7 +176,7 @@ const actions = {
     }
   },
   saveToExternalStorage ({ getters }) {
-    return axiosInstance.post('/seating-plan/', getters.exportStateObject).catch(() => true)
+    return request.request({ method: 'post', url: '/api/seating-plan/', data: getters.exportStateObject }).catch(() => true)
   },
   saveToLocalStorage: ({ commit, getters }) => {
     const state = getters.exportStateObject

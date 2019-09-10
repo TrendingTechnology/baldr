@@ -1,0 +1,30 @@
+{
+  "name": "@bldr/http-request",
+  "version": "0.1.0",
+  "description": "Make HTTP requests on two axios instances: local and remote.",
+  "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
+  "bugs": {
+    "url": "https://github.com/Josef-Friedrich/baldr/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Josef-Friedrich/baldr.git"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Josef Friedrich",
+    "email": "josef@friedrich.rocks",
+    "url": "https://josef.friedrich.rocks"
+  },
+  "main": "src/index.js",
+  "scripts": {
+    "test": "mocha tests"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "axios": "^0.19.0"
+  },
+  "gitHead": "ed4f60e66c8f420711d3eb15185620f7688e6fc9"
+}
