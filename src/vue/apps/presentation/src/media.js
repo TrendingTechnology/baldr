@@ -4,9 +4,9 @@
 
 /* globals config */
 
-import { defaultServers, Request } from '@bldr/http-request'
+import { getDefaultServers, Request } from '@bldr/http-request'
 
-const request = new Request(defaultServers, '/api/media-server')
+const request = new Request(getDefaultServers(), '/api/media-server')
 
 const media = {}
 

@@ -2,7 +2,16 @@
 /* globals localStorage config */
 
 import { toLocaleDateTimeString } from '../../lib.js'
-import request from '@bldr/http-request'
+import { getDefaultServers, Request } from '@bldr/http-request'
+
+const defaultServers = getDefaultServers()
+// remote first
+const servers = {
+  remote: defaultServers.remote,
+  local: defaultServers.local
+}
+
+const request = new Request(servers, '/api/seating-plan')
 
 class InitState {
   constructor () {
@@ -67,14 +76,14 @@ const getters = {
  */
 const actions = {
   checkApi ({ commit }) {
-    return request.request({ method: 'get', url: '/api/seating-plan/version' }).then((response) => {
+    return request.request({ method: 'get', url: 'version' }).then((response) => {
       commit('setApiVersion', response.data.version)
     }).catch(() => {
       commit('setApiVersion', null)
     })
   },
   deleteFromExternalByTime ({ dispatch }, timeStampMsec) {
-    return request.request({ method: 'delete', url: `/api/seating-plan/by-time/${timeStampMsec}` }).then(() => {
+    return request.request({ method: 'delete', url: `by-time/${timeStampMsec}` }).then(() => {
       dispatch('fetchExternalStateDates')
     }).catch(() => true)
   },
@@ -83,7 +92,7 @@ const actions = {
     dispatch('fetchLocalStateDates')
   },
   fetchExternalStateDates ({ commit }) {
-    return request.request({ method: 'get', url: '/api/seating-plan/' }).then((response) => {
+    return request.request({ method: 'get', url: '' }).then((response) => {
       const dates = response.data.sort().reverse()
       commit('fetchExternalStateDates', dates)
     }).catch(() => true)
@@ -101,7 +110,7 @@ const actions = {
     commit('fetchLocalStateDates', dates)
   },
   importFromExternalByTime ({ dispatch }, timeStampMsec) {
-    return request.request({ method: 'get', url: `/api/seating-plan/by-time/${timeStampMsec}` }).then((response) => {
+    return request.request({ method: 'get', url: `by-time/${timeStampMsec}` }).then((response) => {
       dispatch('importState', response.data)
     }).catch(() => true)
   },
@@ -122,7 +131,7 @@ const actions = {
     }
   },
   importLatestExternalState ({ commit }) {
-    return request.request({ method: 'get', url: '/api/seating-plan/latest' }).then((response) => {
+    return request.request({ method: 'get', url: 'latest' }).then((response) => {
       commit('importLatestExternalState', response.data)
     }).catch(() => true)
   },
@@ -176,7 +185,7 @@ const actions = {
     }
   },
   saveToExternalStorage ({ getters }) {
-    return request.request({ method: 'post', url: '/api/seating-plan/', data: getters.exportStateObject }).catch(() => true)
+    return request.request({ method: 'post', url: '', data: getters.exportStateObject }).catch(() => true)
   },
   saveToLocalStorage: ({ commit, getters }) => {
     const state = getters.exportStateObject

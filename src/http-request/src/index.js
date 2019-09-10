@@ -6,7 +6,7 @@
 
 import axios from 'axios'
 
-export const defaultServers = {
+const defaultServers = {
   local: {
     baseURL: config.http.domainLocal,
     https: false,
@@ -23,6 +23,15 @@ export const defaultServers = {
   }
 }
 
+function deepClone(object) {
+  // We change the object so we need a deep clone.
+  return JSON.parse(JSON.stringify(object))
+}
+
+export function getDefaultServers () {
+  return deepClone(defaultServers)
+}
+
 export class Request {
   constructor (servers, urlFillIn) {
     this.urlFillIn = urlFillIn
@@ -31,8 +40,7 @@ export class Request {
       crossDomain: true
     }
 
-    // We change the object so we need a deep clone.
-    this.servers = JSON.parse(JSON.stringify(servers))
+    this.servers = servers
     for (const name in this.servers) {
       this.servers[name] = Object.assign(this.servers[name], this.defaultConfig)
 
@@ -116,4 +124,4 @@ export class Request {
   }
 }
 
-export default new Request(defaultServers)
+export default new Request(getDefaultServers())
