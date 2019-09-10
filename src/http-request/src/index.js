@@ -6,17 +6,14 @@
 
 import axios from 'axios'
 
-export const defaultConnections = {
+export const defaultServer = {
   local: {
     baseUrl: config.http.domainLocal,
-    apiPath: 'api/media-server',
     https: false,
     checkUrl: 'version'
   },
   remote: {
-    name: 'remote',
     baseUrl: config.http.domainRemote,
-    apiPath: 'api/media-server',
     https: true,
     checkUrl: 'version',
     auth: {
@@ -26,8 +23,6 @@ export const defaultConnections = {
   }
 }
 
-
-
 /**
  * connection = {
  *   name: local|remote
@@ -36,63 +31,72 @@ export const defaultConnections = {
  *   checkUrl: 'api/media-server/version
  * }
  */
-class Request {
-  constructor () {
+export class Request {
+  constructor (server, urlFillIn) {
+    this.urlFillIn = urlFillIn
     this.defaultConfig = {
       timeout: 3000,
       crossDomain: true
     }
 
-    this.localConfig = {
-      ...this.defaultConfig,
-      baseURL: `http://${config.http.domainLocal}`,
-      serverLocation: 'local'
+    this.server = server
+    for (const name in this.server) {
+      this.server[name] = Object.assign(this.server[name], defaultConfig)
+
+      let httpString
+      if (this.server[name].https) {
+        httpString = 'https://'
+      } else {
+        httpString = 'http://'
+      }
+      this.server[name].baseUrl = `${httpString}${this.server[name].baseUrl}`
     }
 
-    this.remoteConfig = {
-      ...this.defaultConfig,
-      baseURL: `https://${config.http.domainRemote}`,
-      auth: {
-        username: config.http.username,
-        password: config.http.password
-      },
-      serverLocation: 'remote'
-    }
-
-    this.configs = [this.localConfig, this.remoteConfig]
-    this.axiosInstance_ = null
-    this.serverLocation_ = null
+    this.axiosInstances = []
   }
 
   /**
    * Reset the Axios instance to get a new instance. To check different
    * URL.
    */
-  reset () {
-    this.axiosInstance_ = null
-    this.serverLocation_ = null
+  resetAxiosInstances_ () {
+    this.axiosInstances_ = []
   }
 
-  async serverLocation () {
-    if (this.serverLocation_) {
-      return this.serverLocation_
+  formatUrl (url) {
+    if (this.urlFillIn && url.substr(0, 1) !== '/') {
+      return `${this.urlFillIn}/${url}`
     }
-    await this.createAxiosInstance_()
-    return this.serverLocation_
+    return url
   }
 
-  async createAxiosInstance_ () {
-    if (this.axiosInstance_) {
-      return this.axiosInstance_
+  isOnline () {
+    return this.axiosInstances_.length > 0
+  }
+
+  async createAxiosInstances_ () {
+    if (this.isOnline()) {
+      return
     }
-    for (const conf of this.configs) {
+    for (const name in this.server) {
+      const conn = this.server[name]
       try {
-        const axiosInstance = axios.create(conf)
-        await axiosInstance.get('/api/media-server/version')
-        this.axiosInstance_ = axiosInstance
-        this.serverLocation_ = conf.serverLocation
-        return this.axiosInstance_
+        const axiosInstance = axios.create(conn)
+        await axiosInstance.get(this.formatUrl(conn.checkUrl))
+        this.axiosInstances_.push(axiosInstance)
       } catch (error) {}
+    }
+  }
+
+  async axiosRequest (config, requestAllServer = false) {
+    if (requestAllServer) {
+      const results = []
+      for (const instance of this.axiosInstances_) {
+        results.push(await instance.request(config))
+      }
+      return results
+    } else {
+      return this.axiosInstances_[0].request(config)
     }
   }
 
@@ -101,16 +105,16 @@ class Request {
    *
    * @param {object} config
    */
-  async request (config, requestAllConnections = false) {
+  async request (config, requestAllServer = false) {
     try {
-      if (!this.axios) await this.createAxiosInstance_()
-      return this.axiosInstance_.request(config)
+      if (!this.isOnline()) await this.createAxiosInstances_()
+      return this.axiosRequest(config, requestAllServer)
     } catch (error) {
-      this.reset()
+      this.resetAxiosInstances_()
       await this.createAxiosInstance_()
-      return this.axiosInstance_.request(config)
+      return this.axiosRequest(config, requestAllServer)
     }
   }
 }
 
-export default new Request()
+export default new Request(defaultServer)
