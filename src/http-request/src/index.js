@@ -6,14 +6,14 @@
 
 import axios from 'axios'
 
-export const defaultServer = {
+export const defaultServers = {
   local: {
-    baseUrl: config.http.domainLocal,
+    baseURL: config.http.domainLocal,
     https: false,
     checkUrl: 'version'
   },
   remote: {
-    baseUrl: config.http.domainRemote,
+    baseURL: config.http.domainRemote,
     https: true,
     checkUrl: 'version',
     auth: {
@@ -23,35 +23,28 @@ export const defaultServer = {
   }
 }
 
-/**
- * connection = {
- *   name: local|remote
- *   baseUrl:
- *   https: false
- *   checkUrl: 'api/media-server/version
- * }
- */
 export class Request {
-  constructor (server, urlFillIn) {
+  constructor (servers, urlFillIn) {
     this.urlFillIn = urlFillIn
     this.defaultConfig = {
       timeout: 3000,
       crossDomain: true
     }
 
-    this.server = server
-    for (const name in this.server) {
-      this.server[name] = Object.assign(this.server[name], defaultConfig)
+    // We change the object so we need a deep clone.
+    this.servers = JSON.parse(JSON.stringify(servers))
+    for (const name in this.servers) {
+      this.servers[name] = Object.assign(this.servers[name], this.defaultConfig)
 
       let httpString
-      if (this.server[name].https) {
+      if (this.servers[name].https) {
         httpString = 'https://'
       } else {
         httpString = 'http://'
       }
-      this.server[name].baseUrl = `${httpString}${this.server[name].baseUrl}`
+      delete this.servers[name].https
+      this.servers[name].baseURL = `${httpString}${this.servers[name].baseURL}`
     }
-
     this.axiosInstances = []
   }
 
@@ -70,25 +63,31 @@ export class Request {
     return url
   }
 
-  isOnline () {
+  initalised () {
     return this.axiosInstances_.length > 0
   }
 
   async createAxiosInstances_ () {
-    if (this.isOnline()) {
+    if (this.initalised()) {
       return
     }
-    for (const name in this.server) {
-      const conn = this.server[name]
+    for (const name in this.servers) {
+      const conn = this.servers[name]
       try {
         const axiosInstance = axios.create(conn)
-        await axiosInstance.get(this.formatUrl(conn.checkUrl))
+        axiosInstance.get(this.formatUrl(conn.checkUrl))
         this.axiosInstances_.push(axiosInstance)
       } catch (error) {}
     }
   }
 
+  async getFirstBaseURL () {
+    await this.createAxiosInstances_()
+    if (this.initalised()) return this.axiosInstances_[0].defaults.baseURL
+  }
+
   async axiosRequest (config, requestAllServer = false) {
+    config.url = this.formatUrl(config.url)
     if (requestAllServer) {
       const results = []
       for (const instance of this.axiosInstances_) {
@@ -107,14 +106,14 @@ export class Request {
    */
   async request (config, requestAllServer = false) {
     try {
-      if (!this.isOnline()) await this.createAxiosInstances_()
+      if (!this.initalised()) await this.createAxiosInstances_()
       return this.axiosRequest(config, requestAllServer)
     } catch (error) {
       this.resetAxiosInstances_()
-      await this.createAxiosInstance_()
+      await this.createAxiosInstances_()
       return this.axiosRequest(config, requestAllServer)
     }
   }
 }
 
-export default new Request(defaultServer)
+export default new Request(defaultServers)

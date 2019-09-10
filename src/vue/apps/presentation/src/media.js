@@ -4,7 +4,9 @@
 
 /* globals config */
 
-import request from '@bldr/http-request'
+import { defaultServers, Request } from '@bldr/http-request'
+
+const request = new Request(defaultServers, '/api/media-server')
 
 const media = {}
 
@@ -118,7 +120,7 @@ async function query (key, value) {
   const response = await request.request(
     {
       method: 'post',
-      url: `/api/media-server/query-by-${key}`,
+      url: `query-by-${key}`,
       data: postBody
     }
   )
@@ -147,7 +149,7 @@ async function findPreviewImage (httpUrl) {
 export async function generateHttpURL (mediaFile) {
   if ('httpURL' in mediaFile) return mediaFile.httpURL
   if ('path' in mediaFile) {
-    const serverLocation = await request.serverLocation()
+    const serverLocation = await request.getFirstBaseURL()
     if (serverLocation === 'local') {
       return `http://${config.http.domainLocal}/media/${mediaFile.path}`
     } else {
