@@ -83,7 +83,7 @@ const actions = {
     dispatch('fetchLocalStateDates')
   },
   fetchExternalStateDates ({ commit }) {
-    return request.request({ method: 'post', url: '/api/seating-plan/' }).then((response) => {
+    return request.request({ method: 'get', url: '/api/seating-plan/' }).then((response) => {
       const dates = response.data.sort().reverse()
       commit('fetchExternalStateDates', dates)
     }).catch(() => true)
