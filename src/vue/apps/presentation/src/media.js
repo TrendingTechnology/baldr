@@ -6,14 +6,76 @@
 
 import axios from 'axios'
 
-const ax = axios.create({ timeout: 3000 })
+class Request {
+  constructor () {
+    const url = 'api/media-server/'
+    this.defaultConfig = {
+      timeout: 3000,
+      crossDomain: true
+    }
 
-const domains = {
-  restApi: null,
-  httpMedia: null
+    this.localConfig = {
+      ...this.defaultConfig,
+      baseURL: `http://${config.http.domainLocal}/${url}`,
+      serverLocation: 'local'
+    }
+
+    this.remoteConfig = {
+      ...this.defaultConfig,
+      baseURL: `https://${config.http.domainRemote}/${url}`,
+      auth: {
+        username: config.http.username,
+        password: config.http.password
+      },
+      serverLocation: 'remote'
+    }
+
+    this.configs = [this.localConfig, this.remoteConfig]
+    this.axiosInstance_ = null
+    this.serverLocation_ = null
+  }
+
+  reset () {
+    this.axiosInstance_ = null
+    this.serverLocation_ = null
+  }
+
+  async serverLocation () {
+    if (this.serverLocation_) {
+      return this.serverLocation_
+    }
+    await this.createAxiosInstance_()
+    return this.serverLocation_
+  }
+
+  async createAxiosInstance_ () {
+    if (this.axiosInstance_) {
+      return this.axiosInstance_
+    }
+    for (const conf of this.configs) {
+      try {
+        const axiosInstance = axios.create(conf)
+        await axiosInstance.get('/version')
+        this.axiosInstance_ = axiosInstance
+        this.serverLocation_ = conf.serverLocation
+        return this.axiosInstance_
+      } catch (error) {}
+    }
+  }
+
+  async request (config) {
+    try {
+      if (!this.axios) await this.createAxiosInstance_()
+      return this.axiosInstance_.request(config)
+    } catch (error) {
+      this.reset()
+      await this.createAxiosInstance_()
+      return this.axiosInstance_.request(config)
+    }
+  }
 }
 
-const conf = config.mediaServer
+const request = new Request()
 
 const media = {}
 
@@ -121,43 +183,15 @@ export class MediaFile {
   }
 }
 
-async function checkDomains (domains, urlPlaceholder) {
-  for (const domain of domains) {
-    try {
-      const url = urlPlaceholder.replace('$domain', domain)
-      await ax.get(url, { crossdomain: true })
-      return conf.domainLocal
-    } catch (error) {}
-  }
-}
-
-async function getDomainRestApi () {
-  if (domains.restApi) return domains.restApi
-  const domain = await checkDomains(
-    [conf.domainLocal, conf.domainRemote],
-    `http://$domain:${conf.portRestApi}/version`
-  )
-  domains.restApi = domain
-  return domain
-}
-
-async function getDomainHttpMedia () {
-  if (domains.httpMedia) return domains.httpMedia
-  const domain = await checkDomains(
-    [conf.domainLocal, conf.domainRemote],
-    `http://$domain:${conf.portHttpMedia}/robots.txt`
-  )
-  domains.httpMedia = domain
-  return domain
-}
-
 async function query (key, value) {
-  const domainRestApi = await getDomainRestApi()
   const postBody = {}
   postBody[key] = value
-  const response = await ax.post(
-    `http://${domainRestApi}:${conf.portRestApi}/query-by-${key}`,
-    postBody
+  const response = await request.request(
+    {
+      method: 'post',
+      url: `query-by-${key}`,
+      data: postBody
+    }
   )
   if ('data' in response && 'path' in response.data) {
     return response
@@ -168,7 +202,10 @@ async function query (key, value) {
 async function findPreviewImage (httpUrl) {
   const previewHttpUrl = `${httpUrl}_preview.jpg`
   try {
-    await ax.get(previewHttpUrl, { crossdomain: true })
+    await request.request({
+      method: 'get',
+      url: previewHttpUrl
+    })
     return previewHttpUrl
   } catch (error) {}
 }
@@ -181,8 +218,12 @@ async function findPreviewImage (httpUrl) {
 export async function generateHttpURL (mediaFile) {
   if ('httpURL' in mediaFile) return mediaFile.httpURL
   if ('path' in mediaFile) {
-    const domainHttpMedia = await getDomainHttpMedia()
-    return `http://${domainHttpMedia}:${conf.portHttpMedia}/${mediaFile.path}`
+    const serverLocation = await request.serverLocation()
+    if (serverLocation === 'local') {
+      return `http://${config.http.domainLocal}/media/${mediaFile.path}`
+    } else {
+      return `https://${config.http.domainRemote}/media/${mediaFile.path}`
+    }
   }
   throw new Error(`Can not generate HTTP URL.`)
 }
