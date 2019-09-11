@@ -55,7 +55,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
   .seating-plan {
     width: 100%;
     position: relative;
@@ -65,7 +65,8 @@ export default {
   @media print {
     .seating-plan {
       width: 100% !important;
-      height: 48em !important;
+      // Firefox
+      height: 35em !important;
     }
   }
 </style>
