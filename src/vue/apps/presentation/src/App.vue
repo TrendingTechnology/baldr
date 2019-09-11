@@ -45,6 +45,7 @@ export default {
       this.$shortcuts.add('g m', () => { this.$router.push('/media') }, 'Go to media')
       this.$shortcuts.add('g s', () => { this.$router.push('/slides') }, 'Go to slides')
       this.$shortcuts.add('g d', () => { this.$router.push('/documentation') }, 'Go to documentation')
+      this.$shortcuts.add('g r', () => { this.$router.push('/rest-api') }, 'Go to REST API overview')
 
       this.$shortcuts.addMultiple([
         {

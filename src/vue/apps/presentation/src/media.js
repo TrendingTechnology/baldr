@@ -2,11 +2,9 @@
  * @file Resolve media files.
  */
 
-/* globals config */
-
 import { getDefaultServers, Request } from '@bldr/http-request'
 
-const request = new Request(getDefaultServers(), '/api/media-server')
+export const request = new Request(getDefaultServers(), '/api/media-server')
 
 const media = {}
 
@@ -149,12 +147,8 @@ async function findPreviewImage (httpUrl) {
 export async function generateHttpURL (mediaFile) {
   if ('httpURL' in mediaFile) return mediaFile.httpURL
   if ('path' in mediaFile) {
-    const serverLocation = await request.getFirstBaseURL()
-    if (serverLocation === 'local') {
-      return `http://${config.http.domainLocal}/media/${mediaFile.path}`
-    } else {
-      return `https://${config.http.domainRemote}/media/${mediaFile.path}`
-    }
+    const baseURL = await request.getFirstBaseURL()
+    return `${baseURL}/media/${mediaFile.path}`
   }
   throw new Error(`Can not generate HTTP URL.`)
 }

@@ -2,15 +2,17 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import { parseContentFile } from '@/content-file.js'
+import { request } from '@/media.js'
 
 Vue.use(Vuex)
 
 const state = {
   media: {},
   mediaDevices: [],
+  restApiServers: [],
+  shortcuts: {},
   slideNoCurrent: null,
-  slides: {},
-  shortcuts: {}
+  slides: {}
 }
 
 const getters = {
@@ -40,6 +42,9 @@ const getters = {
       }
     }
     return resultList
+  },
+  restApiServers: state => {
+    return state.restApiServers
   },
   slideNoCurrent: state => {
     return state.slideNoCurrent
@@ -110,6 +115,10 @@ const actions = {
       stepNoCurrent = no - 1
     }
     commit('setStepNoCurrent', { slideCurrent, stepNoCurrent })
+  },
+  async setRestApiServers ({ commit }) {
+    const servers = await request.getServers()
+    commit('setRestApiServers', servers)
   }
 }
 
@@ -134,6 +143,9 @@ const mutations = {
   },
   removeShortcut (state, keys) {
     Vue.delete(state.shortcuts, keys)
+  },
+  setRestApiServers (state, restApiServers) {
+    Vue.set(state, 'restApiServers', restApiServers)
   }
 }
 

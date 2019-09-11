@@ -10,6 +10,7 @@ import MediaOverview from '@/views/MediaOverview.vue'
 import OpenFiles from '@/views/OpenFiles.vue'
 import SlideView from '@/views/SlideView'
 import ShortcutsOverview from '@/views/ShortcutsOverview.vue'
+import RestApiOverview from '@/views/RestApiOverview.vue'
 
 Vue.use(Router)
 
@@ -56,6 +57,12 @@ const routes = [
     name: 'shortcuts',
     title: 'Shortcuts',
     component: ShortcutsOverview
+  },
+  {
+    path: '/rest-api',
+    name: 'rest-api',
+    title: 'REST-API',
+    component: RestApiOverview
   }
 ]
 

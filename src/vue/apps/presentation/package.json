@@ -21,7 +21,7 @@
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "test:unit": "vue-cli-service test:unit",
-    "upload": "rsync -av --delete dist/ serverway:/var/www/baldr.friedrich.rocks/presentation/"
+    "upload": "rsync -av --delete dist/ serverway:/var/www/baldr/presentation/"
   },
   "dependencies": {
     "@bldr/core": "^0.0.27",

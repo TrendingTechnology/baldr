@@ -94,6 +94,15 @@ export class Request {
     if (this.initalised()) return this.axiosInstances_[0].defaults.baseURL
   }
 
+  async getServers () {
+    await this.createAxiosInstances_()
+    const servers = []
+    for (const axiosInstance of this.axiosInstances_) {
+      servers.push(axiosInstance.defaults)
+    }
+    return servers
+  }
+
   async axiosRequest (config, requestAllServer = false) {
     config.url = this.formatUrl(config.url)
     if (requestAllServer) {
