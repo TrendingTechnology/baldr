@@ -95,7 +95,7 @@ const actions = {
     const jobs = [
       { name: 'Schaltwart', icon: 'video-switch' },
       // { name: 'Lüftwart', icon: 'window-maximize' },
-      { name: 'Lüftwart', icon: 'open-window' },
+      { name: 'Lüftwart', icon: 'window-open' },
       { name: 'Austeilwart', icon: 'file-outline' },
       { name: 'Klassenbuchführer', icon: 'notebook' },
       { name: 'Klassensprecher', icon: 'account-star' }

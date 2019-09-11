@@ -27,7 +27,6 @@
   "music",
   "notebook",
   "open-in-new",
-  "open-window",
   "presentation",
   "save",
   "seat-outline",
@@ -39,6 +38,7 @@
   "video-switch",
   "wikidata",
   "wikipedia",
+  "window-open",
   "worker",
   "youtube"
 ]

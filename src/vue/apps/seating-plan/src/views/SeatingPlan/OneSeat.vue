@@ -16,19 +16,24 @@
       <persons-jobs :person="person"/>
     </div>
     <div class="icons">
-      <material-icon
-        class="add"
-        v-if="gradeIsNotPlaced"
-        name="account-plus"
-        @click.native="openModalPersonSelect"
-      />
       <add-job-icons :person="person"/>
-      <material-icon
-        v-if="person.id"
-        class="close"
-        name="close"
-        @click.native="unplacePerson"
-      />
+
+      <div class="management-icons">
+        <material-icon
+          class="add"
+          v-if="gradeIsNotPlaced"
+          name="account-plus"
+          title="SchülerIn auf diesen Sitz platzieren"
+          @click.native="openModalPersonSelect"
+        />
+        <material-icon
+          v-if="person.id"
+          class="close"
+          name="close"
+          title="SchülerIn aus dem Sitzplan entfernen"
+          @click.native="unplacePerson"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -134,9 +139,15 @@ export default {
   }
 
   .icons {
+    width: 100%;
+    text-align: center;
     position: absolute;
     bottom: 0;
     right: 0;
+
+    .jobs {
+      font-size: 0.8em;
+    }
   }
 
   .seat .icons {

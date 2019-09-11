@@ -148,6 +148,7 @@ if (require.main === module) {
         'unfold-more-horizontal': 'steps',
         'unfold-more-vertical': 'slides',
         'video-switch': '',
+        'window-open': '',
         cctv: '',
         close: '',
         cloud: '',

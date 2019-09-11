@@ -41,12 +41,6 @@
       </router-link>
     </li>
 
-    <!-- test -->
-    <li>
-      <a href="#" @click.prevent="createTestData" title="Test-Daten erzeugen">
-        <material-icon name="test-tube"/>
-      </a>
-    </li>
   </ul>
 </template>
 

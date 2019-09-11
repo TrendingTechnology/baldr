@@ -1,5 +1,5 @@
 <template>
-  <span v-if="person.id" class="jobs">
+  <div v-if="person.id" class="jobs">
     <span v-for="job in jobsAsArray" :key="job.name">
       <material-icon
         v-if="!hasPersonJob(person.id, job.name)"
@@ -8,7 +8,7 @@
         @click.native="addJobToPerson({ personId: person.id, jobName: job.name})"
       />
     </span>
-  </span>
+  </div>
 </template>
 
 <script>
