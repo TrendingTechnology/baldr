@@ -128,17 +128,6 @@ async function query (key, value) {
   throw new Error(`Media with the ${key} ”${value}” couldn’t be resolved.`)
 }
 
-async function findPreviewImage (httpUrl) {
-  const previewHttpUrl = `${httpUrl}_preview.jpg`
-  try {
-    await request.request({
-      method: 'get',
-      url: previewHttpUrl
-    })
-    return previewHttpUrl
-  } catch (error) {}
-}
-
 /**
  * @param {MediaFile} mediaFile
  *
@@ -172,17 +161,12 @@ export async function getMediaFile (URI) {
     const response = await query(mediaFile.uriScheme, mediaFile.uriAuthority)
     mediaFile.addProperties(response.data)
     mediaFile.httpURL = await generateHttpURL(mediaFile)
-  }
-
-  mediaFile.type = mediaTypes.extensionToType(mediaFile.extension)
-
-  if (mediaFile.type === 'audio' && (mediaFile.uriScheme !== 'http' || mediaFile.uriScheme !== 'https')) {
-    const previewHttpUrl = await findPreviewImage(mediaFile.httpURL)
-    if (previewHttpUrl) {
-      mediaFile.previewHttpUrl = previewHttpUrl
+    if ('previewImage' in mediaFile) {
+      mediaFile.previewHttpUrl = `${mediaFile.httpURL}_preview.jpg`
     }
   }
 
+  mediaFile.type = mediaTypes.extensionToType(mediaFile.extension)
   media[URI] = mediaFile
   return mediaFile
 }
