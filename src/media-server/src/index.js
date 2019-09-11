@@ -31,12 +31,6 @@ class MetaData {
     this.filename = path.basename(filePath)
 
     /**
-     * The basename (filename) of the file.
-     * @type {string}
-     */
-    this.filename = path.basename(filePath)
-
-    /**
      * The extension of the file.
      * @type {string}
      */
@@ -313,6 +307,10 @@ id: ${metaData.basename}
       result = Object.assign(result, JSON.parse(result.data))
       delete result.data
       if (!result.id) delete result.id
+      const previewImage = `${result.path}_preview.jpg`
+      if (fs.existsSync(path.join(this.basePath, previewImage))) {
+        result.previewImage = previewImage
+      }
       return result
     }
     return result

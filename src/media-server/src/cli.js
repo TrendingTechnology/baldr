@@ -115,6 +115,10 @@ switch (subcommand) {
     console.log(bootstrapConfig())
     break
 
+  case 'list':
+    console.log(mediaServer.list())
+    break
+
   case 'open':
     const process = childProcess.spawn('xdg-open', [config.basePath], { detached: true })
     process.unref()
