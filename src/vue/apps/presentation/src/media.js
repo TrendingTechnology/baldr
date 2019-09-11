@@ -101,7 +101,7 @@ export class MediaFile {
   }
 
   /**
-   * Add an object to the class properties.
+   * Merge an object into the class object.
    *
    * @param {object} properties - Add an object to the class properties.
    */

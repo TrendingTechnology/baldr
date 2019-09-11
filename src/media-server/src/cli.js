@@ -53,7 +53,7 @@ commander
 
 commander
   .command('open').alias('o')
-  .description('Open the base directory in a file browser')
+  .description('Open the base directory in a file browser.')
   .action(() => { subcommand = 'open' })
 
 commander
@@ -68,8 +68,13 @@ commander
   })
 
 commander
+  .command('re-initialize-db').alias('ri')
+  .description('Delete the SQLite db file and create a new one.')
+  .action(() => { subcommand = 're-initialize-db' })
+
+commander
   .command('rename').alias('r')
-  .description('Rename files, clean file names, remove all whitespaces and special characters')
+  .description('Rename files, clean file names, remove all whitespaces and special characters.')
   .action(() => { subcommand = 'rename' })
 
 commander
@@ -131,6 +136,10 @@ switch (subcommand) {
       console.log(mediaServer.queryByID(searchString))
     }
     break
+
+  case 're-initialize-db':
+      mediaServer.reInitializeDb()
+      break
 
   case 'rename':
     mediaServer.rename()

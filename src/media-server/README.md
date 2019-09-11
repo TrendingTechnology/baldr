@@ -8,6 +8,4 @@ Database: sqlite3
 |-----------|-------------|----------------------------|
 | path      | TEXT UNIQUE | Absolute Path              |
 | filename  | TEXT        | The file name.             |
-| extension | TEXT        | The extension of the file. |
 | id        | TEXT UNIQUE | An unique identifer.       |
-| data      | TEXT        | Stringified JSON object.   |

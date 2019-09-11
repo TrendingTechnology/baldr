@@ -1,5 +1,10 @@
 #! /usr/bin/env node
 
+/**
+ * @file Base code for the cli and the rest interface.
+ * @module @bldr/media-server
+ */
+
 // Node packages.
 const fs = require('fs')
 const path = require('path')
@@ -13,10 +18,17 @@ const yaml = require('js-yaml')
 const { utils } = require('@bldr/core')
 
 /**
- *
+ * This class is used both for the entries in the SQLite database as well for
+ * the queries.
  */
 class MetaData {
-  constructor (filePath, basePath) {
+  /**
+   * @param {string} filePath - The file path of the media file.
+   * @param {string} basePath - The base path of the media server.
+   * @param {boolean} dbInsertOnly - Gather a minimal amount of data needed for
+   *   db update.
+   */
+  constructor (filePath, basePath, dbInsertOnly = false) {
     this.absPath = path.resolve(filePath)
     /**
      * Absolute path ot the file.
@@ -31,31 +43,65 @@ class MetaData {
     this.filename = path.basename(filePath)
 
     /**
-     * The extension of the file.
+     * The absolute path of the info file in the YAML format. On the absolute
+     * media file path `.yml` is appended.
      * @type {string}
      */
-    this.extension = path.extname(filePath).replace('.', '')
+    this.infoFile = `${this.absPath}.yml`
 
-    /**
-     * The basename (filename without extension) of the file.
-     * @type {string}
-     */
-    this.basename = path.basename(filePath, `.${this.extension}`)
+    const data = this.readInfoYaml_(this.infoFile)
+    this.mergeObject(data)
 
-    const data = this.readInfoYaml_()
+    if (!dbInsertOnly) {
 
-    /**
-     * @type {string}
-     */
-    this.id = ''
-    if ('id' in data) {
-      this.id = data.id
+      const stats = fs.statSync(this.absPath)
+
+      /**
+       * The file size in bytes.
+       * @type {number}
+       */
+      this.size = stats.size
+
+      /**
+       * The timestamp indicating the last time this file was modified
+       * expressed in milliseconds since the POSIX Epoch.
+       * @type {float}
+       */
+      this.timeModified = stats.mtimeMs
+
+      /**
+       * The basename (filename without extension) of the file.
+       * @type {string}
+       */
+      this.basename = path.basename(filePath, `.${this.extension}`)
+
+
+      const previewImage = `${this.absPath}_preview.jpg`
+      if (fs.existsSync(previewImage)) {
+        /**
+         * The absolute path of the preview image.
+         * @type {string}
+         */
+        this.previewImage = previewImage
+      }
+
+      /**
+       * The extension of the file.
+       * @type {string}
+       */
+      this.extension = path.extname(filePath).replace('.', '')
     }
+  }
 
-    /**
-     * @type {object}
-     */
-    this.data = JSON.stringify(data)
+  /**
+   * Merge an object into the class object.
+   *
+   * @param {object} properties - Add an object to the class properties.
+   */
+  mergeObject (object) {
+    for (const property in object) {
+      this[property] = object[property]
+    }
   }
 
   /**
@@ -70,8 +116,7 @@ class MetaData {
    * Info file in the YAML file format:
    * `/home/baldr/beethoven.jpg.yml`
    */
-  readInfoYaml_ () {
-    const infoFile = this.absPath + '.yml'
+  readInfoYaml_ (infoFile) {
     if (fs.existsSync(infoFile)) {
       return yaml.safeLoad(fs.readFileSync(infoFile, 'utf8'))
     }
@@ -102,9 +147,7 @@ class Sqlite {
       `CREATE TABLE IF NOT EXISTS files (
         path TEXT UNIQUE,
         filename TEXT,
-        extension TEXT,
-        id TEXT UNIQUE,
-        data TEXT
+        id TEXT UNIQUE
       )`
     )
 
@@ -120,7 +163,7 @@ class Sqlite {
     }
   }
 
-  update ({ path, filename, extension, id, data }) {
+  update ({ path, filename, id }) {
     this.prepare_(
       'INSERT OR IGNORE INTO files (path) VALUES ($path)',
       { path: path }
@@ -131,17 +174,13 @@ class Sqlite {
         SET
           path = $path,
           filename = $filename,
-          extension = $extension,
-          id = $id,
-          data = $data
+          id = $id
         WHERE path = $path
       `,
       {
         path: path,
         filename: filename,
-        extension: extension,
-        id: id,
-        data: data
+        id: id
       }
     )
   }
@@ -200,7 +239,7 @@ function bootstrapConfig () {
 class MediaServer {
   constructor (basePath) {
     /**
-     *
+     * @type {string}
      */
     this.basePath = ''
     if (!basePath) {
@@ -215,15 +254,19 @@ class MediaServer {
     if (!fs.existsSync(this.basePath)) {
       throw new Error(`The base path of the media server doesn’t exist: ${this.basePath}`)
     }
-    const dbFile = path.join(this.basePath, 'files.db')
+
+    /**
+     * @type {string}
+     */
+    this.SQLiteDBfile = path.join(this.basePath, 'files.db')
 
     /**
      *
      */
-    this.sqlite = new Sqlite(dbFile)
+    this.sqlite = this.initSQLite_()
 
     /**
-     *
+     * @type {array}
      */
     this.ignore = [
       '**/*.db',
@@ -231,6 +274,10 @@ class MediaServer {
       '**/*robots.txt',
       '**/*_preview.jpg'
     ]
+  }
+
+  initSQLite_ () {
+    return new Sqlite(this.SQLiteDBfile)
   }
 
   glob_ (searchPath) {
@@ -295,23 +342,16 @@ id: ${metaData.basename}
     const files = this.glob_(this.basePath)
     for (const file of files) {
       if (!fs.lstatSync(file).isDirectory()) {
-        const metaData = new MetaData(file, this.basePath)
+        const metaData = new MetaData(file, this.basePath, true)
         console.log(metaData)
         this.sqlite.update(metaData)
       }
     }
   }
 
-  flattenFileObject_ (result) {
+  loadMediaDataObject (result) {
     if (result && !result.error) {
-      result = Object.assign(result, JSON.parse(result.data))
-      delete result.data
-      if (!result.id) delete result.id
-      const previewImage = `${result.path}_preview.jpg`
-      if (fs.existsSync(path.join(this.basePath, previewImage))) {
-        result.previewImage = previewImage
-      }
-      return result
+      return new MetaData(path.join(this.basePath, result.path), this.basePath)
     }
     return result
   }
@@ -321,7 +361,7 @@ id: ${metaData.basename}
     if (results.length > 0) {
       const output = []
       for (const result of results) {
-        output.push(this.flattenFileObject_(result))
+        output.push(this.loadMediaDataObject(result))
       }
       return output
     }
@@ -332,18 +372,33 @@ id: ${metaData.basename}
 
   queryByID (id) {
     const result = this.sqlite.queryByID(id)
-    return this.flattenFileObject_(result)
+    return this.loadMediaDataObject(result)
   }
 
   queryByFilename (filename) {
     const result = this.sqlite.queryByFilename(filename)
-    return this.flattenFileObject_(result)
+    return this.loadMediaDataObject(result)
   }
 
   flush () {
     this.sqlite.flush()
   }
+
+  /**
+   * Delete the SQLite db file and create a new one.
+   */
+  reInitializeDb () {
+    fs.unlinkSync(this.SQLiteDBfile)
+    this.sqlite = this.initSQLite_()
+  }
 }
 
+/**
+ * The main class.
+ */
 exports.MediaServer = MediaServer
+
+/**
+ * Helper function to get configurations.
+ */
 exports.bootstrapConfig = bootstrapConfig
