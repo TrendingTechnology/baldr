@@ -70,13 +70,19 @@ class MetaData {
       this.timeModified = stats.mtimeMs
 
       /**
+       * The extension of the file.
+       * @type {string}
+       */
+      this.extension = path.extname(filePath).replace('.', '')
+
+      /**
        * The basename (filename without extension) of the file.
        * @type {string}
        */
       this.basename = path.basename(filePath, `.${this.extension}`)
 
-
       const previewImage = `${this.absPath}_preview.jpg`
+
       if (fs.existsSync(previewImage)) {
         /**
          * The absolute path of the preview image.
@@ -84,12 +90,6 @@ class MetaData {
          */
         this.previewImage = previewImage
       }
-
-      /**
-       * The extension of the file.
-       * @type {string}
-       */
-      this.extension = path.extname(filePath).replace('.', '')
     }
   }
 
@@ -215,6 +215,11 @@ class Sqlite {
       throw new Error(`Multiple file names '${filename}' found.`)
     }
     return results[0]
+  }
+
+  queryByPath (path) {
+    return this.db
+      .prepare('SELECT * FROM files WHERE instr("path", ?) > 0').all(path)
   }
 
   list () {
@@ -356,6 +361,14 @@ id: ${metaData.basename}
     return result
   }
 
+  loadMediaDataObjects (results) {
+    const output = []
+    for (const result of results) {
+      output.push(this.loadMediaDataObject(result))
+    }
+    return output
+  }
+
   list () {
     const results = this.sqlite.list()
     if (results.length > 0) {
@@ -378,6 +391,11 @@ id: ${metaData.basename}
   queryByFilename (filename) {
     const result = this.sqlite.queryByFilename(filename)
     return this.loadMediaDataObject(result)
+  }
+
+  queryByPath (path) {
+    const results = this.sqlite.queryByPath(path)
+    return this.loadMediaDataObjects(results)
   }
 
   flush () {

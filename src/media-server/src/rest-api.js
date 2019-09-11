@@ -39,10 +39,19 @@ app.post('/query-by-id', (req, res) => {
 
 app.post('/query-by-filename', (req, res) => {
   const body = req.body
-  if (!{}.hasOwnProperty.call(body, 'filename')) {
+  if (!('filename', body)) {
     res.sendStatus(400)
   } else {
     sendJsonMessage(res, mediaServer.queryByFilename(body.filename))
+  }
+})
+
+app.post('/query-by-path', (req, res) => {
+  const body = req.body
+  if (!('path' in body)) {
+    res.sendStatus(400)
+  } else {
+    sendJsonMessage(res, mediaServer.queryByPath(body.filename))
   }
 })
 
