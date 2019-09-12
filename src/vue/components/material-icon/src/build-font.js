@@ -66,12 +66,8 @@ function writeFileToDest (destFileName, content) {
 }
 
 function buildFont (config) {
-  webfont({
-    files: `${tmpDir}/*.svg`,
-    fontName: 'baldr-icons',
-    formats: ['woff', 'woff2'],
-    fontHeight: 512
-  })
+  console.log(config)
+  webfont(config)
     .then(result => {
       const css = []
       const names = []
@@ -85,9 +81,9 @@ function buildFont (config) {
         const unicodeGlyph = glyphData.metadata.unicode[0]
         const cssUnicodeEscape = '\\' + unicodeGlyph.charCodeAt(0).toString(16)
         const cssGlyph = `.baldr-icon_${name}::before {
-    content: "${cssUnicodeEscape}";
-  }
-  `
+  content: "${cssUnicodeEscape}";
+}
+`
         css.push(cssGlyph)
         console.log(`name: ${chalk.red(name)} unicode glyph: ${chalk.yellow(unicodeGlyph)} unicode escape hex: ${chalk.green(cssUnicodeEscape)}`)
       }
@@ -168,7 +164,8 @@ if (require.main === module) {
       iconMapping: {
         baldr: '',
         musescore: '',
-        wikidata: ''
+        wikidata: '',
+        'document-camera': ''
       }
     }
   ])
