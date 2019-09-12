@@ -3,6 +3,7 @@
     :options="persons"
     @input="placePerson"
     v-model="selectedPerson"
+    placeholder="Suche eine/n SchülerIn"
   />
 </template>
 

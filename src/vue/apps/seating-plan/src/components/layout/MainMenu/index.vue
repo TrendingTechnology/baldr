@@ -41,6 +41,10 @@
       </router-link>
     </li>
 
+    <li>
+      <material-icon name="fullscreen"/>
+    </li>
+
   </ul>
 </template>
 

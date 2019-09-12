@@ -10,9 +10,15 @@
     @dragstart="dragStart"
     @drop.prevent="dragDrop"
   >
-    <div class="first-name">{{ person.firstName }}</div>
-    <div class="last-name">{{ person.lastName }}</div>
-    <div class="jobs-of-person">
+    <div
+      @click="openModalPersonSelect"
+      class="person-select-area"
+      title="SchülerIn auf diesen Sitz platzieren"
+      v-if="!person"
+    />
+    <div v-if="person" class="first-name">{{ person.firstName }}</div>
+    <div v-if="person" class="last-name">{{ person.lastName }}</div>
+    <div v-if="person" class="jobs-of-person">
       <persons-jobs :person="person"/>
     </div>
     <div class="icons">
@@ -96,12 +102,10 @@ export default {
       event.dataTransfer.setData('text/plain', event.currentTarget.title)
     },
     openModalPersonSelect (event) {
+      if (this.person) return
       this.$store.commit('setSeatNoCurrent', this.seat.no)
       this.$modal.show('person-select')
       this.$dynamicSelect.focus()
-      // this.$nextTick(() => {
-      //   document.querySelector('.dynamic-select').focus()
-      // })
     },
     unplacePerson (event) {
       this.$store.dispatch('unplacePerson', { personId: this.person.id, seatNo: this.seat.no })
@@ -157,5 +161,12 @@ export default {
   .seat:hover .icons {
     display: block;
     cursor: pointer;
+  }
+
+  .person-select-area {
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
   }
 </style>
