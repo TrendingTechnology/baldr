@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div ref="app" id="app">
     <app-header :title="title"/>
     <router-view></router-view>
     <app-footer/>
@@ -25,6 +25,11 @@ export default {
       return null
     }
   },
+  methods: {
+    requestFullScreen () {
+      this.$refs.app.requestFullscreen()
+    }
+  },
   created: function () {
     this.$store.dispatch('importLatestState')
 
@@ -34,6 +39,15 @@ export default {
     })
 
     this.$store.dispatch('checkApi')
+  },
+  mounted: function () {
+    this.$nextTick(function () {
+      window.addEventListener('keyup', event => {
+        if (event.ctrlKey && event.altKey && event.key === 'f') {
+          this.requestFullScreen()
+        }
+      })
+    })
   }
 }
 </script>
@@ -44,6 +58,10 @@ export default {
   body {
     margin: 2px;
     font-size: 1.2vw;
+    background-color: $white;
+  }
+
+  #app:fullscreen {
     background-color: $white;
   }
 
