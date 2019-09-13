@@ -41,13 +41,9 @@ export default {
     this.$store.dispatch('checkApi')
   },
   mounted: function () {
-    this.$nextTick(function () {
-      window.addEventListener('keyup', event => {
-        if (event.ctrlKey && event.altKey && event.key === 'f') {
-          this.requestFullScreen()
-        }
-      })
-    })
+    this.$shortcuts.fromRoutes()
+    this.$shortcuts.add('f f', () => { this.requestFullScreen() }, 'Fullscreen')
+    this.$shortcuts.add('ctrl+s', () => { this.$store.dispatch('save') }, 'save')
   }
 }
 </script>

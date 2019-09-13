@@ -18,6 +18,7 @@ export default new Router({
       name: 'start-page',
       path: '/',
       component: StartPage,
+      shortcut: 'h',
       meta: {
         title: 'Sitzpläne Musiksaal E 17'
       }
@@ -35,6 +36,7 @@ export default new Router({
     {
       name: 'spreadsheet-import',
       path: '/spreadsheet-import',
+      shortcut: 's',
       component: SpreadsheetImport,
       meta: {
         title: 'Aus Excel / Calc importieren'
@@ -43,6 +45,7 @@ export default new Router({
     {
       name: 'json-import',
       path: '/json-import',
+      shortcut: 'j',
       component: JsonImport,
       meta: {
         title: 'JSON-Dump importieren'
@@ -51,6 +54,7 @@ export default new Router({
     {
       name: 'time-travel',
       path: '/time-travel',
+      shortcut: 't',
       component: TimeTravel,
       meta: {
         title: 'Zeitreise'
@@ -59,6 +63,7 @@ export default new Router({
     {
       name: 'jobs-manager',
       path: '/jobs-manager',
+      shortcut: 'm',
       component: JobsManager,
       meta: {
         title: 'Dienste verwalten'
