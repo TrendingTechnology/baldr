@@ -14,7 +14,8 @@
   },
   "main": "src/index.js",
   "dependencies": {
-    "mousetrap": "1.6.3"
+    "mousetrap": "1.6.3",
+    "vue": "2.6.10"
   },
   "publishConfig": {
     "access": "public"

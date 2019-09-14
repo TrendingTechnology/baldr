@@ -4,6 +4,7 @@
 
 import Mousetrap from 'mousetrap'
 import Vue from 'vue'
+import ShortcutsOverview from './ShortcutsOverview.vue'
 
 const state = {}
 
@@ -32,6 +33,12 @@ class Shortcuts {
   constructor(store, router) {
     this.$store = store
     this.$router = router
+    this.$router.addRoutes([{
+      path: '/shortcuts',
+      shortcut: 's',
+      name: 'shortcuts',
+      component: ShortcutsOverview
+    }])
   }
 
   add (keys, callback, description) {

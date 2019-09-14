@@ -25,14 +25,7 @@ import { mapGetters } from 'vuex'
 
 export default {
   name: 'ShortcutsOverview',
-  computed: mapGetters(['shortcuts']),
-  mounted () {
-    this.$styleConfig.set({
-      overflow: false,
-      darkMode: false,
-      centerVertically: false
-    })
-  }
+  computed: mapGetters(['shortcuts'])
 }
 </script>
 
