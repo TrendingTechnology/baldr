@@ -33,12 +33,15 @@ class Shortcuts {
   constructor(store, router) {
     this.$store = store
     this.$router = router
-    this.$router.addRoutes([{
+
+    const route = {
       path: '/shortcuts',
-      shortcut: 's',
+      shortcut: 'ctrl+ö',
       name: 'shortcuts',
       component: ShortcutsOverview
-    }])
+    }
+    this.$router.addRoutes([route])
+    this.fromRoute()
   }
 
   add (keys, callback, description) {
@@ -66,29 +69,39 @@ class Shortcuts {
     this.$store.commit('removeShortcut', keys)
   }
 
+  fromRoute (route) {
+    if ('shortcut' in route) {
+      let routeTitle
+      if ('meta' in route && 'title' in route.meta) {
+        routeTitle = route.meta.title
+      } else if ('title' in route) {
+        routeTitle = route.title
+      } else if ('name' in route) {
+        routeTitle = route.name
+      } else {
+        routeTitle = route.path
+      }
+      let key
+      if (route.shortcut.length == 1) {
+        key = `g ${route.shortcut}`
+      } else {
+        key = route.shortcut
+      }
+      this.add(
+        key,
+        ( ) => { this.router.push(route.path) },
+        `Go to route: ${routeTitle}`
+      )
+    }
+  }
+
   /**
    * @param {object} router - The router object of the Vue router (this.$router)
    */
-  fromRoutes (router) {
-    if (!router) router = this.$router
-    for (const route of router.options.routes) {
-      if ('shortcut' in route) {
-        let routeTitle
-        if ('meta' in route && 'title' in route.meta) {
-          routeTitle = route.meta.title
-        } else if ('title' in route) {
-          routeTitle = route.title
-        } else if ('name' in route) {
-          routeTitle = route.name
-        } else {
-          routeTitle = route.path
-        }
-        this.add(
-          `g ${route.shortcut}`,
-          ( ) => { router.push(route.path) },
-          `Go to route: ${routeTitle}`
-        )
-      }
+  fromRoutes () {
+    for (const route of this.router.options.routes) {
+      console.log(route)
+      this.fromRoute(route)
     }
   }
 }
