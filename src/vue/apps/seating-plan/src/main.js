@@ -19,7 +19,11 @@ Vue.use(VueRouter)
 Vue.use(ModalDialog)
 Vue.use(DynamicSelect)
 Vue.use(MaterialIcon)
-Vue.use(shortcuts, store, router)
+Vue.use(shortcuts, router, store)
+
+Vue.prototype.$fullscreen = function () {
+  document.querySelector('#app').requestFullscreen()
+}
 
 new Vue({
   router,

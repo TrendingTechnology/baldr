@@ -96,35 +96,35 @@
   content: "\ea14";
 }
 
-.baldr-icon_google-spreadsheet::before {
+.baldr-icon_fullscreen::before {
   content: "\ea15";
 }
 
-.baldr-icon_import::before {
+.baldr-icon_google-spreadsheet::before {
   content: "\ea16";
 }
 
-.baldr-icon_magnify::before {
+.baldr-icon_import::before {
   content: "\ea17";
 }
 
-.baldr-icon_musescore::before {
+.baldr-icon_magnify::before {
   content: "\ea18";
 }
 
-.baldr-icon_music::before {
+.baldr-icon_musescore::before {
   content: "\ea19";
 }
 
-.baldr-icon_notebook::before {
+.baldr-icon_music::before {
   content: "\ea1a";
 }
 
-.baldr-icon_open-in-new::before {
+.baldr-icon_notebook::before {
   content: "\ea1b";
 }
 
-.baldr-icon_overscan::before {
+.baldr-icon_open-in-new::before {
   content: "\ea1c";
 }
 

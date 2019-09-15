@@ -162,13 +162,14 @@ if (require.main === module) {
     },
     {
       folder: basePath('icons'),
+      // iconMapping not used
       iconMapping: {
         baldr: '',
         musescore: '',
         wikidata: '',
         'document-camera': '',
-        // Google icon, not downloadable via github?
-        overscan: 'fullscreen',
+        // Google icon „overscan“, not downloadable via github?
+        fullscreen: '',
       }
     }
   ])

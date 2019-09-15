@@ -42,7 +42,7 @@
     </li>
 
     <li>
-      <material-icon name="fullscreen"/>
+      <material-icon @click.native="$fullscreen" name="fullscreen"/>
     </li>
 
   </ul>
