@@ -5,12 +5,13 @@ import store from '@/store.js'
 import { registerMasterComponents, masters } from '@/masters.js'
 import AsyncComputed from 'vue-async-computed'
 import { resolveHttpURL } from '@/media.js'
-import shortcuts from '@/shortcuts.js'
+import shortcuts from '@bldr/vue-shortcuts'
 
 import MaterialIcon from '@bldr/vue-component-material-icon'
 import ModalDialog from '@bldr/vue-component-modal-dialog'
 import DynamicSelect from '@bldr/vue-component-dynamic-select'
 
+Vue.use(shortcuts, router, store)
 Vue.use(DynamicSelect)
 Vue.use(ModalDialog)
 Vue.use(MaterialIcon)
@@ -115,7 +116,6 @@ Vue.prototype.$styleConfig = new StyleConfig()
 
 Vue.prototype.$masters = masters
 Vue.prototype.$resolveHttpURL = resolveHttpURL
-Vue.prototype.$shortcuts = shortcuts
 
 // Must be before new Vue()
 registerMasterComponents()

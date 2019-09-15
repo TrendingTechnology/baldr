@@ -9,7 +9,6 @@ import MasterDocumentation from '@/views/MasterDocumentation.vue'
 import MediaOverview from '@/views/MediaOverview.vue'
 import OpenFiles from '@/views/OpenFiles.vue'
 import SlideView from '@/views/SlideView'
-import ShortcutsOverview from '@/views/ShortcutsOverview.vue'
 import RestApiOverview from '@/views/RestApiOverview.vue'
 
 Vue.use(Router)
@@ -19,6 +18,7 @@ const routes = [
     path: '/',
     name: 'home',
     title: 'Home',
+    shortcut: 'h',
     component: Home
   },
   {
@@ -28,22 +28,26 @@ const routes = [
   },
   {
     path: '/slides',
+    shortcut: 's',
     title: 'slides',
     component: SlideView
   },
   {
     path: '/media',
+    shortcut: 'm',
     title: 'Media',
     component: MediaOverview
   },
   {
     path: '/document-camera',
     title: 'document-camera',
+    shortcut: 'c',
     component: CameraMaster
   },
   {
     path: '/documentation',
     title: 'Documentation',
+    shortcut: 'd',
     component: Documentation
   },
   {
@@ -53,14 +57,9 @@ const routes = [
     component: MasterDocumentation
   },
   {
-    path: '/shortcuts',
-    name: 'shortcuts',
-    title: 'Shortcuts',
-    component: ShortcutsOverview
-  },
-  {
     path: '/rest-api',
     name: 'rest-api',
+    shortcut: 'r',
     title: 'REST-API',
     component: RestApiOverview
   }

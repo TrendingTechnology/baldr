@@ -38,63 +38,45 @@ export default {
   },
   created: function () {
     this.$overflow.set(true)
-    this.$resolveHttpURL('id:Haydn_Joseph')
   },
   mounted: function () {
-    this.$nextTick(function () {
-      this.$shortcuts.add('g m', () => { this.$router.push('/media') }, 'Go to media')
-      this.$shortcuts.add('g s', () => { this.$router.push('/slides') }, 'Go to slides')
-      this.$shortcuts.add('g d', () => { this.$router.push('/documentation') }, 'Go to documentation')
-      this.$shortcuts.add('g r', () => { this.$router.push('/rest-api') }, 'Go to REST API overview')
-
-      this.$shortcuts.addMultiple([
-        {
-          keys: 'g S',
-          callback: () => { this.$router.push('/shortcuts') },
-          description: 'Go to shortcuts'
-        },
-        {
-          keys: 'left',
-          callback: () => { this.setSlidePrevious() },
-          description: 'Previous slide'
-        },
-        {
-          keys: 'right',
-          callback: () => { this.setSlideNext() },
-          description: 'Next slide'
-        },
-        {
-          keys: 'up',
-          callback: () => { this.setStepPrevious() },
-          description: 'Previous stop'
-        },
-        {
-          keys: 'down',
-          callback: () => { this.setStepNext() },
-          description: 'Next step'
-        }
-      ])
-
-      window.addEventListener('keydown', event => {
-        if (event.ctrlKey && event.key === 'm') {
-          // Disable Mute audio
-          event.preventDefault()
-        } else if (event.ctrlKey && event.key === 'd') {
-          // edit bookmarks
-          event.preventDefault()
-        }
-      })
-
-      window.addEventListener('keyup', event => {
-        if (event.ctrlKey && event.key === 'm') {
-          this.$modal.toggle('menu')
-        } else if (event.ctrlKey && event.key === 'd') {
-          this.$darkMode.toggle()
-        } else if (event.ctrlKey && event.altKey && event.key === 'v') {
-          this.$centerVertically.toggle()
-        }
-      })
-    })
+    this.$shortcuts.addMultiple([
+      {
+        keys: 'left',
+        callback: () => { this.setSlidePrevious() },
+        description: 'Previous slide'
+      },
+      {
+        keys: 'right',
+        callback: () => { this.setSlideNext() },
+        description: 'Next slide'
+      },
+      {
+        keys: 'up',
+        callback: () => { this.setStepPrevious() },
+        description: 'Previous stop'
+      },
+      {
+        keys: 'down',
+        callback: () => { this.setStepNext() },
+        description: 'Next step'
+      },
+      {
+        keys: 'ctrl+m',
+        callback: () => { this.$modal.toggle('menu') },
+        description: 'Main menu'
+      },
+      {
+        keys: 'ctrl+alt+d',
+        callback: () => { this.$darkMode.toggle() },
+        description: 'Dark mode'
+      },
+      {
+        keys: 'ctrl+alt+v',
+        callback: () => { this.$centerVertically.toggle() },
+        description: 'center vertically'
+      }
+    ])
   }
 }
 </script>

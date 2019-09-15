@@ -10,7 +10,6 @@ const state = {
   media: {},
   mediaDevices: [],
   restApiServers: [],
-  shortcuts: {},
   slideNoCurrent: null,
   slides: {}
 }
@@ -59,9 +58,6 @@ const getters = {
   },
   slidesCount: (state, getters) => {
     return Object.keys(getters.slides).length
-  },
-  shortcuts: (state) => {
-    return state.shortcuts
   }
 }
 
@@ -137,12 +133,6 @@ const mutations = {
   },
   addMediumData (state, mediumData) {
     Vue.set(state.media, mediumData.URI, mediumData)
-  },
-  addShortcut (state, shortcut) {
-    Vue.set(state.shortcuts, shortcut.keys, shortcut)
-  },
-  removeShortcut (state, keys) {
-    Vue.delete(state.shortcuts, keys)
   },
   setRestApiServers (state, restApiServers) {
     Vue.set(state, 'restApiServers', restApiServers)

@@ -1,5 +1,6 @@
 /**
  * @file Wrapper functions around mousetrap
+ * @module @bldr/vue-shortcuts
  */
 
 import Mousetrap from 'mousetrap'
@@ -16,6 +17,9 @@ const getters = {
 
 const mutations = {
   addShortcut (state, shortcut) {
+    if (shortcut.keys in state) {
+      throw new Error(`Keyboard shortcut “${shortcut.keys}” “${shortcut.description}” already taken.`)
+    }
     Vue.set(state, shortcut.keys, shortcut)
   },
   removeShortcut (state, keys) {
@@ -30,18 +34,20 @@ const storeModule = {
 }
 
 class Shortcuts {
-  constructor(store, router) {
-    this.store_ = store
+  constructor(router, store) {
     this.router_ = router
+    this.store_ = store
 
-    const route = {
-      path: '/shortcuts',
-      shortcut: 'ctrl+h',
-      name: 'shortcuts',
-      component: ShortcutsOverview
+    if (this.router_) {
+      const route = {
+        path: '/shortcuts',
+        shortcut: 'ctrl+h',
+        name: 'shortcuts',
+        component: ShortcutsOverview
+      }
+      this.addRoute(route)
+      this.fromRoutes()
     }
-    this.addRoute(route)
-    this.fromRoutes()
   }
 
   add (keys, callback, description) {
@@ -52,7 +58,7 @@ class Shortcuts {
       return false
     }
     Mousetrap.bind(keys, prevent)
-    this.store_.commit('addShortcut', { keys, description })
+    if (this.store_) this.store_.commit('addShortcut', { keys, description })
   }
 
   /**
@@ -66,7 +72,7 @@ class Shortcuts {
 
   remove (keys) {
     Mousetrap.unbind(keys)
-    this.store_.commit('removeShortcut', keys)
+    if (this.store_) this.store_.commit('removeShortcut', keys)
   }
 
   addRoute (route) {
@@ -113,11 +119,11 @@ class Shortcuts {
 }
 
 // https://stackoverflow.com/a/56501461
-// Vue.use(shortcuts, store, router)
+// Vue.use(shortcuts, router, store)
 const Plugin = {
-  install (Vue, store, router) {
-    store.registerModule('shortcuts', storeModule)
-    Vue.prototype.$shortcuts = new Shortcuts(store, router)
+  install (Vue, router, store) {
+    if (store) store.registerModule('shortcuts', storeModule)
+    Vue.prototype.$shortcuts = new Shortcuts(router, store)
   }
 }
 

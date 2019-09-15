@@ -10,5 +10,5 @@ overview over all shortcuts.
 ```js
 import shortcuts from '@bldr/vue-shortcuts'
 
-Vue.use(shortcuts, store, router)
+Vue.use(shortcuts, router, store)
 ```
