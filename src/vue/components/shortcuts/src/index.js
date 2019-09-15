@@ -31,17 +31,17 @@ const storeModule = {
 
 class Shortcuts {
   constructor(store, router) {
-    this.$store = store
-    this.$router = router
+    this.store_ = store
+    this.router_ = router
 
     const route = {
       path: '/shortcuts',
-      shortcut: 'ctrl+ö',
+      shortcut: 'ctrl+h',
       name: 'shortcuts',
       component: ShortcutsOverview
     }
-    this.$router.addRoutes([route])
-    this.fromRoute()
+    this.addRoute(route)
+    this.fromRoutes()
   }
 
   add (keys, callback, description) {
@@ -52,7 +52,7 @@ class Shortcuts {
       return false
     }
     Mousetrap.bind(keys, prevent)
-    this.$store.commit('addShortcut', { keys, description })
+    this.store_.commit('addShortcut', { keys, description })
   }
 
   /**
@@ -66,7 +66,12 @@ class Shortcuts {
 
   remove (keys) {
     Mousetrap.unbind(keys)
-    this.$store.commit('removeShortcut', keys)
+    this.store_.commit('removeShortcut', keys)
+  }
+
+  addRoute (route) {
+    this.router_.addRoutes([route])
+    this.router_.options.routes.push(route)
   }
 
   fromRoute (route) {
@@ -89,7 +94,9 @@ class Shortcuts {
       }
       this.add(
         key,
-        ( ) => { this.router.push(route.path) },
+        () => {
+          this.router_.push(route.path)
+        },
         `Go to route: ${routeTitle}`
       )
     }
@@ -99,8 +106,7 @@ class Shortcuts {
    * @param {object} router - The router object of the Vue router (this.$router)
    */
   fromRoutes () {
-    for (const route of this.router.options.routes) {
-      console.log(route)
+    for (const route of this.router_.options.routes) {
       this.fromRoute(route)
     }
   }
