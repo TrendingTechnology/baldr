@@ -69,8 +69,7 @@
   }
 
   .important {
-    font-family: 'Alegreya Sans';
-    font-weight: bolder
+    @include important;
   }
 
   .important.person {
@@ -100,33 +99,58 @@
   }
 
   /**
-   * Formts
+   * Tables
    */
 
-   input, button {
-      display: inline-block;
-      padding: 0.2em;
-      margin: 0;
+  table {
+    border-collapse: collapse;
+  }
+
+  thead {
+    @include important;
+    tr {
+      border-bottom: 2px solid $black;
+    }
+  }
+
+  tbody {
+    tr {
+      border-bottom: 1px solid $black;
     }
 
-    input, button, ::placeholder {
-      font-size: inherit;
-      font-family: $font-family-sans;
+    tr:last-child {
+      border-bottom: none;
     }
+  }
 
-    input {
-      border: 1px solid $gray;
+  /**
+   * Forms
+   */
+
+  input, button {
+    display: inline-block;
+    padding: 0.2em;
+    margin: 0;
+  }
+
+  input, button, ::placeholder {
+    font-size: inherit;
+    font-family: $font-family-sans;
+  }
+
+  input {
+    border: 1px solid $gray;
+  }
+
+  button {
+    background-color: $gray;
+    border: 1px solid transparent;
+
+    &:active {
+      background-color: $blue;
+      color: $white;
     }
-
-    button {
-      background-color: $gray;
-      border: 1px solid transparent;
-
-      &:active {
-        background-color: $blue;
-        color: $white;
-      }
-    }
+  }
 
   /**
    * Colors

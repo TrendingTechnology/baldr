@@ -8,7 +8,10 @@
   font-size: 1.5vw;
   /* dash only in unordered lists which are marked with .content */
   /**
-   * Formts
+   * Tables
+   */
+  /**
+   * Forms
    */
   /**
    * Colors
@@ -103,6 +106,27 @@
 [b-theme="default"] ul.content li:before {
   content: "- ";
   text-indent: -1em;
+}
+
+[b-theme="default"] table {
+  border-collapse: collapse;
+}
+
+[b-theme="default"] thead {
+  font-family: 'Alegreya Sans';
+  font-weight: bolder;
+}
+
+[b-theme="default"] thead tr {
+  border-bottom: 2px solid #141110;
+}
+
+[b-theme="default"] tbody tr {
+  border-bottom: 1px solid #141110;
+}
+
+[b-theme="default"] tbody tr:last-child {
+  border-bottom: none;
 }
 
 [b-theme="default"] input, [b-theme="default"] button {

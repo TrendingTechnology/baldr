@@ -36,5 +36,9 @@ export default {
     .description {
       font-style: italic;
     }
+
+    td {
+      padding: 0 0.3em;
+    }
   }
 </style>
