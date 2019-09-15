@@ -69,6 +69,7 @@ function buildFont (config) {
   console.log(config)
   webfont(config)
     .then(result => {
+      console.log(result)
       const css = []
       const names = []
 
@@ -94,6 +95,7 @@ function buildFont (config) {
       return result
     })
     .catch(error => {
+      console.log(error)
       throw error
     })
 }
@@ -153,7 +155,6 @@ if (require.main === module) {
         magnify: '',
         music: '',
         notebook: '',
-        overscan: 'fullscreen',
         wikipedia: '',
         worker: '',
         youtube: '',
@@ -165,7 +166,9 @@ if (require.main === module) {
         baldr: '',
         musescore: '',
         wikidata: '',
-        'document-camera': ''
+        'document-camera': '',
+        // Google icon, not downloadable via github?
+        overscan: 'fullscreen',
       }
     }
   ])
