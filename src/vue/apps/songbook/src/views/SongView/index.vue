@@ -94,6 +94,7 @@ export default {
     selectSong () {
       this.$modal.hide('search')
       this.setSong(this.selectedSong.id)
+      this.$shortcuts.unpause()
     },
     setSong (songID) {
       this.$router.push({ name: 'song', params: { songID: songID } })
@@ -124,31 +125,41 @@ export default {
     next()
   },
   mounted: function () {
-    this.$nextTick(function () {
-      window.addEventListener('keydown', event => {
-        if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(event.key)) {
-          event.preventDefault()
-        }
-      })
-      window.addEventListener('keyup', event => {
-        if (this.$modal.isOpen()) {
-          return
-        }
-        if (event.key === 'ArrowLeft') {
-          this.setSlidePrevious()
-        } else if (event.key === 'ArrowRight') {
-          this.setSlideNext()
-        } else if (event.key === 'ArrowUp') {
-          this.setSongPrevious()
-        } else if (event.key === 'ArrowDown') {
-          this.setSongNext()
-        } else if (event.ctrlKey && event.key === 'z') {
-          this.setSongRandom()
-        } else if (event.key === 'Escape') {
+    this.$shortcuts.addMultiple([
+      {
+        keys: 'left',
+        callback: () => { this.setSlidePrevious() },
+        description: 'Previous slide'
+      },
+      {
+        keys: 'right',
+        callback: () => { this.setSlideNext() },
+        description: 'Next slide'
+      },
+      {
+        keys: 'up',
+        callback: () => { this.setSongPrevious() },
+        description: 'Previous song'
+      },
+      {
+        keys: 'down',
+        callback: () => { this.setSongNext() },
+        description: 'Next song'
+      },
+      {
+        keys: 'ctrl+z',
+        callback: () => { this.setSongRandom() },
+        description: 'Random song'
+      },
+      {
+        keys: 'ctrl+s',
+        callback: () => {
+          this.$shortcuts.pause()
           this.showSearch()
-        }
-      })
-    })
+        },
+        description: 'Show search'
+      }
+    ])
   }
 }
 </script>

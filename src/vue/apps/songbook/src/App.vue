@@ -30,7 +30,7 @@ export default {
 </script>
 
 <style lang="scss">
-  @import '~@bldr/theme-default/styles-ng.css';
+  @import '~@bldr/theme-default/styles.css';
 
   body {
     margin: 0;

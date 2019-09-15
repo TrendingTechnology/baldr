@@ -12,6 +12,7 @@ export default new Router({
     {
       path: '/',
       name: 'home',
+      shortcut: 'h',
       component: Home
     },
     {
@@ -21,6 +22,7 @@ export default new Router({
     },
     {
       path: '/table-of-contents',
+      shortcut: 't',
       name: 'toc',
       component: TableOfContents
     }

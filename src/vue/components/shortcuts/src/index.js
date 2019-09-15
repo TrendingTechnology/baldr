@@ -7,10 +7,36 @@ import Mousetrap from 'mousetrap'
 import Vue from 'vue'
 import ShortcutsOverview from './ShortcutsOverview.vue'
 
+// https://github.com/ccampbell/mousetrap/blob/master/plugins/pause/mousetrap-pause.js
+
+var _originalStopCallback = Mousetrap.prototype.stopCallback
+
+Mousetrap.prototype.stopCallback = function (e, element, combo) {
+  var self = this
+
+  if (self.paused) {
+    return true
+  }
+
+  return _originalStopCallback.call(self, e, element, combo)
+}
+
+Mousetrap.prototype.pause = function () {
+  var self = this
+  self.paused = true
+}
+
+Mousetrap.prototype.unpause = function () {
+  var self = this
+  self.paused = false
+}
+
+Mousetrap.init()
+
 const state = {}
 
 const getters = {
-   shortcuts: (state) => {
+  shortcuts: (state) => {
     return state
   }
 }
@@ -34,7 +60,7 @@ const storeModule = {
 }
 
 class Shortcuts {
-  constructor(router, store) {
+  constructor (router, store) {
     this.router_ = router
     this.store_ = store
 
@@ -93,7 +119,7 @@ class Shortcuts {
         routeTitle = route.path
       }
       let key
-      if (route.shortcut.length == 1) {
+      if (route.shortcut.length === 1) {
         key = `g ${route.shortcut}`
       } else {
         key = route.shortcut
@@ -115,6 +141,14 @@ class Shortcuts {
     for (const route of this.router_.options.routes) {
       this.fromRoute(route)
     }
+  }
+
+  pause () {
+    Mousetrap.pause()
+  }
+
+  unpause () {
+    Mousetrap.unpause()
   }
 }
 
