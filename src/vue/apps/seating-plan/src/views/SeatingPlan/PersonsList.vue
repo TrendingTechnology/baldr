@@ -1,5 +1,5 @@
 <template>
-  <ol>
+  <ol class="persons-list">
     <persons-list-item
       v-for="(person, index) in personsByGradeAsListSortedCurrent"
       :person="person"
@@ -26,6 +26,8 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style lang="scss" scoped>
+  .persons-list {
+    font-size: 1.8vh;
+  }
 </style>
