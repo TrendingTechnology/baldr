@@ -51,10 +51,6 @@ export default {
     background-color: $white;
   }
 
-  #app:fullscreen {
-    background-color: $white;
-  }
-
   @page {
     size: A4 landscape;
     margin: 2em;

@@ -10,12 +10,15 @@
   font-family: $font-family;
   font-size: $font-size;
 
-  &, &[b-dark-mode="false"] {
+  &,
+  &[b-dark-mode="false"],
+  &[b-dark-mode="false"] #app:fullscreen {
     background-color: $white;
     color: $black;
   }
 
-  &[b-dark-mode="true"] {
+  &[b-dark-mode="true"],
+  &[b-dark-mode="true"] #app:fullscreen {
     background-color: $black;
     color: $white;
   }

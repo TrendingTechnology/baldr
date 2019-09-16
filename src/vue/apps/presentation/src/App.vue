@@ -73,6 +73,11 @@ export default {
         keys: 'ctrl+alt+v',
         callback: () => { this.getMediaFile.toggle() },
         description: 'center vertically'
+      },
+      {
+        keys: 'ctrl+f',
+        callback: () => { this.$fullscreen() },
+        description: 'Fullscreen'
       }
     ])
   }

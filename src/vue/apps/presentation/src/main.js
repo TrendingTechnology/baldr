@@ -113,6 +113,10 @@ Vue.prototype.$styleConfig = new StyleConfig()
 Vue.prototype.$masters = masters
 Vue.prototype.$resolveHttpURL = resolveHttpURL
 
+Vue.prototype.$fullscreen = function () {
+  document.querySelector('#app').requestFullscreen()
+}
+
 // Must be before new Vue()
 registerMasterComponents()
 

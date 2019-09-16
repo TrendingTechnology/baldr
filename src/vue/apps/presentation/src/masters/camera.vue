@@ -1,11 +1,5 @@
 <template>
   <div class="camera-master">
-    <!-- <a href="#" @click="showDeviceSelect">Video-Ausgabegerät auswählen</a>
-
-    <a href="#" @click="stopVideoStream">Video-Ausgabegerät deaktivieren</a>
-
-    <a href="#" @click="setFullScreen">Full screen</a> -->
-
     <modal-dialog name="select-video-device">
       <dynamic-select
         placeholder="Wähle ein Video-Device aus"
@@ -141,9 +135,16 @@ export default {
     this.$slidePadding.set(0)
     this.$darkMode.set(true)
     this.setVideoStream()
-    this.$shortcuts.add('c s', () => { this.showDeviceSelect() }, 'Dokumentenkamera auswählen')
-    this.$shortcuts.add('c d', () => { this.stopVideoStream() }, 'Video-Ausgabegerät deaktivieren')
-    this.$shortcuts.add('c f', () => { this.setFullScreen() }, 'Fullscreen')
+    this.$shortcuts.add(
+      'c s',
+      () => { this.showDeviceSelect() },
+      'Dokumentenkamera auswählen'
+    )
+    this.$shortcuts.add(
+      'c d',
+      () => { this.stopVideoStream() },
+      'Video-Ausgabegerät deaktivieren'
+    )
   }
 }
 </script>
