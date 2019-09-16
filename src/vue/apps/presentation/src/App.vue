@@ -75,6 +75,11 @@ export default {
         description: 'center vertically'
       },
       {
+        keys: 'ctrl+alt+s',
+        callback: () => { this.$styleConfig.setDefaults() },
+        description: 'set style config defaults'
+      },
+      {
         keys: 'ctrl+f',
         callback: () => { this.$fullscreen() },
         description: 'Fullscreen'

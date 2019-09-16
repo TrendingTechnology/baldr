@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import Home from './views/Home.vue'
 
 // Components.
-import CameraMaster from '@/masters/camera.vue'
+import MasterRenderer from '@/views/SlideView/MasterRenderer.vue'
 import Documentation from '@/views/Documentation.vue'
 import MasterDocumentation from '@/views/MasterDocumentation.vue'
 import MediaOverview from '@/views/MediaOverview.vue'
@@ -39,10 +39,13 @@ const routes = [
     component: MediaOverview
   },
   {
-    path: '/document-camera',
-    title: 'document-camera',
+    path: '/camera',
+    title: 'camera',
     shortcut: 'c',
-    component: CameraMaster
+    component: MasterRenderer,
+    meta: {
+      master: 'camera'
+    }
   },
   {
     path: '/documentation',

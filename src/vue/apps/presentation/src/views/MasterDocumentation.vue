@@ -53,9 +53,6 @@ export default {
       this.$store.dispatch('openPresentation', this.master.example)
       this.$router.push('/slides')
     }
-  },
-  created: function () {
-    this.$styleConfig.setDefaults()
   }
 }
 </script>

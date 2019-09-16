@@ -34,6 +34,11 @@ export default {
       this.$store.dispatch('openPresentation', master.example)
       this.$router.push('/slides')
     }
+  },
+  mounted: function () {
+    this.$styleConfig.set({
+      centerVertically: false
+    })
   }
 }
 </script>

@@ -133,7 +133,7 @@ const mutations = {
 export const master = {
   styleConfig: {
     darkMode: true,
-    paddding: 0
+    slidePadding: 0
   },
   store: {
     state,

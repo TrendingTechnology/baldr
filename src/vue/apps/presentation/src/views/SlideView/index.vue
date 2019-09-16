@@ -1,18 +1,18 @@
 <template>
   <div>
     <slide-number/>
-    <slide-renderer/>
+    <master-renderer/>
   </div>
 </template>
 
 <script>
-import SlideRenderer from './SlideRenderer.vue'
+import MasterRenderer from './MasterRenderer.vue'
 import SlideNumber from './SlideNumber.vue'
 
 export default {
   name: 'SlideView',
   components: {
-    SlideRenderer,
+    MasterRenderer,
     SlideNumber
   }
 }

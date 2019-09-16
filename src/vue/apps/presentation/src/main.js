@@ -87,10 +87,10 @@ class StyleConfig {
 
   defaults_ () {
     return {
-      centerVertically: false,
+      centerVertically: true,
       darkMode: false,
       overflow: false,
-      slidePadding: 0
+      slidePadding: '2vw 8vw'
     }
   }
 

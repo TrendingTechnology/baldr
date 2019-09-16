@@ -40,9 +40,6 @@ const getters = {
 }
 
 const actions = {
-  async setMediaDevices ({ commit }) {
-    commit('setMediaDevices', await navigator.mediaDevices.enumerateDevices())
-  },
   openPresentation ({ commit }, content) {
     const contentFile = parseContentFile(content)
     commit('setSlides', contentFile.slides)

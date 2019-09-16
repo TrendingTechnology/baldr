@@ -1,15 +1,18 @@
 <script>
-import { mapGetters } from 'vuex'
-
 import OpenFiles from '@/views/OpenFiles.vue'
 
 export default {
-  name: 'SlideRenderer',
+  name: 'MasterRenderer',
   components: {
     OpenFiles
   },
   computed: {
-    ...mapGetters(['slideCurrent']),
+    slideCurrent () {
+      if (this.$store.getters.slideCurrent) {
+        return this.$store.getters.slideCurrent
+      }
+      return false
+    },
     masterName () {
       if ('master' in this.$route.meta) {
         return this.$route.meta.master
@@ -21,8 +24,10 @@ export default {
     masterData () {
       if ('data' in this.$route.meta) {
         return this.$route.meta.data
+      } else if (this.slideCurrent) {
+        return this.slideCurrent.master.data
       }
-      return this.slideCurrent.master.data
+      return {}
     }
   },
   created: function () {

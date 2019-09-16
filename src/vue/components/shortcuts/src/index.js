@@ -43,9 +43,9 @@ const getters = {
 
 const mutations = {
   add (state, shortcut) {
-    if (shortcut.keys in state) {
-      throw new Error(`Keyboard shortcut “${shortcut.keys}” “${shortcut.description}” already taken.`)
-    }
+    // if (shortcut.keys in state) {
+    //   throw new Error(`Keyboard shortcut “${shortcut.keys}” “${shortcut.description}” already taken.`)
+    // }
     Vue.set(state, shortcut.keys, shortcut)
   },
   remove (state, keys) {
