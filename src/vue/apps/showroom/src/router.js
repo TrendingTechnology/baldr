@@ -16,36 +16,43 @@ export default new Router({
     {
       path: '/',
       name: 'home',
+      shortcut: 'h',
       component: HomeView
     },
     {
       path: '/typography',
       name: 'typography',
+      shortcut: 't',
       component: TypographyView
     },
     {
       path: '/modal',
       name: 'modal',
+      shortcut: 'm',
       component: ModalView
     },
     {
       path: '/dynamic-select',
       name: 'dynamic-select',
+      shortcut: 'd',
       component: DynamicSelectView
     },
     {
       path: '/material-icon',
       name: 'material-icon',
+      shortcut: 'i',
       component: MaterialIconView
     },
     {
       path: '/css-markup',
       name: 'css-markup',
+      shortcut: 'c',
       component: CssMarkupView
     },
     {
       path: '/colors',
       name: 'colors',
+      shortcut: 'f',
       component: ColorsView
     }
   ]

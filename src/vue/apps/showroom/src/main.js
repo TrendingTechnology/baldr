@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
+import Vuex from 'vuex'
 
 import ModalDialog from '@bldr/vue-component-modal-dialog'
 import DynamicSelect from '@bldr/vue-component-dynamic-select'
@@ -9,12 +10,19 @@ import shortcuts from '@bldr/vue-shortcuts'
 
 Vue.config.productionTip = false
 
-Vue.use(shortcuts)
+Vue.use(Vuex)
+
+const store = new Vuex.Store({
+  strict: true
+})
+
+Vue.use(shortcuts, router, store)
 Vue.use(DynamicSelect)
 Vue.use(ModalDialog)
 Vue.use(MaterialIcon)
 
 new Vue({
+  store,
   router,
   render: h => h(App)
 }).$mount('#app')
