@@ -8,7 +8,7 @@
         <router-view/>
       </div>
     </main>
-    <app-info package-name="@bldr/showroom" :version="version"/>
+    <app-info package-name="@bldr/presentation" :version="version"/>
   </div>
 </template>
 

@@ -85,7 +85,10 @@ export default {
       return this.src[this.stepNoCurrent]
     },
     mediaFile () {
-      return this.$store.getters.media[this.uriCurrent]
+      if (this.uriCurrent in this.$store.getters.media) {
+        return this.$store.getters.media[this.uriCurrent]
+      }
+      return {}
     }
   }
 }
