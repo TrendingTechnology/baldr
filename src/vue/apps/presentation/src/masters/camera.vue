@@ -3,13 +3,15 @@
     <modal-dialog name="select-video-device">
       <dynamic-select
         placeholder="Wähle ein Video-Device aus"
-        :options="mediaDevicesDynamicSelect"
+        :options="mediaDevices"
         @input="setDeviceId"
         v-model="deviceId"
       />
     </modal-dialog>
 
-    <video ref="videoTag" autoplay="true" id="video"></video>
+    <video v-if="stream" ref="videoTag" autoplay="true" id="video"></video>
+
+    <a v-if="!stream" href="#" @click="showDeviceSelect">Select the document camera.</a>
   </div>
 </template>
 
@@ -27,7 +29,7 @@
  *
  * # Capture desktop
  * ffmpeg -f x11grab -r 15 -s 1280x720 -i :0.0+0,0 -vcodec rawvideo -pix_fmt yuv420p -threads 0 -f v4l2 /dev/video0
- * /usr/share/backgrounds/Headstock_by_Bernhard_Hanakam.jpg
+ *
  * # Show image
  * ffmpeg -loop 1 -re -i image.jpg -f v4l2 -vcodec rawvideo -pix_fmt yuv420p /dev/video0
  *
@@ -80,12 +82,56 @@
  * @module @bldr/master-camera
  */
 
-import { mapGetters } from 'vuex'
+const state = {
+  mediaDevices: []
+}
+
+const getters = {
+  allMediaDevices: state => {
+    return state.mediaDevices
+  },
+  forDynamicSelect: (state, getters) => {
+    const resultList = []
+    for (const device of getters.allMediaDevices) {
+      if (device.kind === 'videoinput') {
+        let label
+        if (device.label) {
+          label = device.label
+        } else {
+          label = `${device.kind} (${device.deviceId})`
+        }
+        resultList.push({
+          id: device.deviceId,
+          name: label
+        })
+      }
+    }
+    return resultList
+  }
+}
+
+const actions = {
+  async setMediaDevices ({ commit }) {
+    commit('setMediaDevices', await navigator.mediaDevices.enumerateDevices())
+  }
+}
+
+const mutations = {
+  setMediaDevices (state, mediaDevices) {
+    state.mediaDevices = mediaDevices
+  }
+}
 
 export const master = {
   styleConfig: {
     darkMode: true,
     paddding: 0
+  },
+  store: {
+    state,
+    getters,
+    actions,
+    mutations
   }
 }
 
@@ -96,7 +142,11 @@ export default {
       stream: null
     }
   },
-  computed: mapGetters(['mediaDevicesDynamicSelect']),
+  computed: {
+    mediaDevices () {
+      return this.$store.getters['camera/forDynamicSelect']
+    }
+  },
   methods: {
     setDeviceId () {
       this.$modal.hide('select-video-device')
@@ -118,7 +168,7 @@ export default {
         .then((stream) => {
           this.$refs.videoTag.srcObject = stream
           this.stream = stream
-          this.$store.dispatch('setMediaDevices')
+          this.$store.dispatch('camera/setMediaDevices')
         })
         .catch(function (error) {
           throw error
@@ -130,9 +180,6 @@ export default {
           track.stop()
         })
       }
-    },
-    setFullScreen () {
-      this.$refs.videoTag.requestFullscreen()
     }
   },
   created () {
@@ -153,6 +200,7 @@ export default {
 
 <style lang="scss" scoped>
   .camera-master {
+    font-size: 1.5vw;
     video {
       height: 100vh;
       left: 0;

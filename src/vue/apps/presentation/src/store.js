@@ -8,7 +8,6 @@ Vue.use(Vuex)
 
 const state = {
   media: {},
-  mediaDevices: [],
   restApiServers: [],
   slideNoCurrent: null,
   slides: {}
@@ -20,27 +19,6 @@ const getters = {
   },
   isMedia: (state, getters) => {
     return Object.keys(getters.media).length > 0
-  },
-  mediaDevices: state => {
-    return state.mediaDevices
-  },
-  mediaDevicesDynamicSelect: (state, getters) => {
-    const resultList = []
-    for (const device of getters.mediaDevices) {
-      if (device.kind === 'videoinput') {
-        let label
-        if (device.label) {
-          label = device.label
-        } else {
-          label = `${device.kind} (${device.deviceId})`
-        }
-        resultList.push({
-          id: device.deviceId,
-          name: label
-        })
-      }
-    }
-    return resultList
   },
   restApiServers: state => {
     return state.restApiServers
@@ -119,9 +97,6 @@ const actions = {
 }
 
 const mutations = {
-  setMediaDevices (state, mediaDevices) {
-    state.mediaDevices = mediaDevices
-  },
   setSlides (state, slides) {
     Vue.set(state, 'slides', slides)
   },

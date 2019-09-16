@@ -17,7 +17,12 @@ slides:
 - title: 'URL: id:'
   image:
     src: id:Haydn_Joseph
-`
+`,
+  store: {
+    getters,
+    actions,
+    mutations
+  },
   // result must fit to props
   normalizeData (data) {
     if (typeof data === 'string') {

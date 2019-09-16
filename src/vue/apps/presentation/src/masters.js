@@ -3,6 +3,7 @@
  */
 
 import Vue from 'vue'
+import store from '@/store.js'
 
 // https://github.com/chrisvfritz/vue-enterprise-boilerplate/blob/master/src/components/_globals.js
 // https://webpack.js.org/guides/dependency-management/#require-context
@@ -31,6 +32,12 @@ requireComponent.keys().forEach((fileName) => {
   // Remove the empty line at the beginning of the backtick string example.
   if ('example' in masters[masterName]) {
     masters[masterName].example = masters[masterName].example.replace(/^\n*/, '')
+  }
+
+  if ('store' in masters[masterName]) {
+    const storeModule = masters[masterName].store
+    storeModule.namespaced = true
+    store.registerModule(masterName, storeModule)
   }
   componentDefaults[masterName] = componentConfig.default
 })
