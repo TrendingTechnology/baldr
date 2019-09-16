@@ -11,7 +11,7 @@
       </thead>
       <tbody>
         <tr v-for="shortcut in shortcutsAll" :key="shortcut.keys">
-          <td>{{ shortcut.keys }}</td>
+          <td v-html="keyCombinationToHtml(shortcut.keys)"></td>
           <td class="description">{{ shortcut.description }}</td>
         </tr>
       </tbody>
@@ -22,12 +22,34 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { keyCombinationToArray } from './index.js'
 
 export default {
   name: 'ShortcutsOverview',
   computed: {
     shortcutsAll() {
       return this.$store.getters['shortcuts/all']
+    }
+  },
+  created () {
+    for (const keys in this.shortcutsAll) {
+      console.log(this.keyCombinationToHtml(keys))
+    }
+  },
+  methods: {
+    keyCombinationToHtml (keys) {
+      // sequence: a b c
+      // combination: a+b
+      const sequenceHtml = []
+      for (const sequence of keys.split(' ')) {
+        const combination = sequence.split('+')
+        const combinationHtml = []
+        for (const key of combination) {
+          combinationHtml.push(`<span class="key">${key}</span>`)
+        }
+        sequenceHtml.push(combinationHtml.join(' + '))
+      }
+      return sequenceHtml.join(' ')
     }
   }
 }
@@ -36,6 +58,9 @@ export default {
 <style lang="scss" scoped>
   .shortcuts-overview {
     font-size: 1.8vw;
+    table {
+      margin: 0 auto;
+    }
 
     .description {
       font-style: italic;
@@ -43,6 +68,22 @@ export default {
 
     td {
       padding: 0 0.3em;
+    }
+  }
+</style>
+
+<style lang="scss" >
+  .shortcuts-overview {
+    .key {
+      background-color: $gray;
+      border-radius: 0.1em;
+      color: $white;
+      display: inline-block;
+      font-family: $font-family-mono;
+      margin: 0.1em;
+      min-width: 2em;
+      padding: 0.1em;
+      text-align: center;
     }
   }
 </style>
