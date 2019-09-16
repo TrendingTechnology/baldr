@@ -10,7 +10,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="shortcut in shortcuts" :key="shortcut.keys">
+        <tr v-for="shortcut in shortcutsAll" :key="shortcut.keys">
           <td>{{ shortcut.keys }}</td>
           <td class="description">{{ shortcut.description }}</td>
         </tr>
@@ -25,7 +25,11 @@ import { mapGetters } from 'vuex'
 
 export default {
   name: 'ShortcutsOverview',
-  computed: mapGetters(['shortcuts'])
+  computed: {
+    shortcutsAll() {
+      return this.$store.getters['shortcuts/all']
+    }
+  }
 }
 </script>
 

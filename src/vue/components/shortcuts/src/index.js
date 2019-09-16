@@ -36,24 +36,25 @@ Mousetrap.init()
 const state = {}
 
 const getters = {
-  shortcuts: (state) => {
+  all: (state) => {
     return state
   }
 }
 
 const mutations = {
-  addShortcut (state, shortcut) {
+  add (state, shortcut) {
     if (shortcut.keys in state) {
       throw new Error(`Keyboard shortcut “${shortcut.keys}” “${shortcut.description}” already taken.`)
     }
     Vue.set(state, shortcut.keys, shortcut)
   },
-  removeShortcut (state, keys) {
+  remove (state, keys) {
     Vue.delete(state, keys)
   }
 }
 
 const storeModule = {
+  namespaced: true,
   state,
   getters,
   mutations
@@ -84,7 +85,7 @@ class Shortcuts {
       return false
     }
     Mousetrap.bind(keys, prevent)
-    if (this.store_) this.store_.commit('addShortcut', { keys, description })
+    if (this.store_) this.store_.commit('shortcuts/add', { keys, description })
   }
 
   /**
@@ -98,7 +99,7 @@ class Shortcuts {
 
   remove (keys) {
     Mousetrap.unbind(keys)
-    if (this.store_) this.store_.commit('removeShortcut', keys)
+    if (this.store_) this.store_.commit('shortcuts/remove', keys)
   }
 
   addRoute (route) {
