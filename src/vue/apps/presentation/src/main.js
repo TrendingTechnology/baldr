@@ -94,15 +94,23 @@ class StyleConfig {
     }
   }
 
-  set (styleConfig) {
-    if (!styleConfig) styleConfig = {}
-    for (const config in Object.assign(this.defaults_(), styleConfig)) {
+  setDefaults () {
+    this.set_(this.defaults_())
+  }
+
+  set_ (styleConfig) {
+    for (const config in styleConfig) {
       if (config in this.configObjects) {
         this.configObjects[config].set(styleConfig[config])
       } else {
         throw new Error(`Unkown style config “${config}”.`)
       }
     }
+  }
+
+  set (styleConfig) {
+    if (!styleConfig) styleConfig = {}
+    this.set_(Object.assign(this.defaults_(), styleConfig))
   }
 }
 

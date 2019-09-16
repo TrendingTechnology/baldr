@@ -54,8 +54,8 @@ export default {
       this.$router.push('/slides')
     }
   },
-  mounted: function () {
-    this.$styleConfig.set()
+  created: function () {
+    this.$styleConfig.setDefaults()
   }
 }
 </script>

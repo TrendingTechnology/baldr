@@ -83,6 +83,10 @@
 import { mapGetters } from 'vuex'
 
 export const master = {
+  styleConfig: {
+    darkMode: true,
+    paddding: 0
+  }
 }
 
 export default {
@@ -132,8 +136,6 @@ export default {
     }
   },
   created () {
-    this.$slidePadding.set(0)
-    this.$darkMode.set(true)
     this.setVideoStream()
     this.$shortcuts.add(
       'c s',

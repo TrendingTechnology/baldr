@@ -66,12 +66,12 @@ export default {
       },
       {
         keys: 'ctrl+alt+d',
-        callback: () => { this.$darkMode.toggle() },
+        callback: () => { this.$styleConfig.configObjects.darkMode.toggle() },
         description: 'Dark mode'
       },
       {
         keys: 'ctrl+alt+v',
-        callback: () => { this.getMediaFile.toggle() },
+        callback: () => { this.$styleConfig.configObjects.centerVertically.toggle() },
         description: 'center vertically'
       },
       {
