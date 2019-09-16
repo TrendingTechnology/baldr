@@ -140,6 +140,9 @@ export default {
     this.$slidePadding.set(0)
     this.$darkMode.set(true)
     this.setVideoStream()
+    this.$shortcuts.add('c s', () => { this.showDeviceSelect() }, 'Dokumentenkamera auswählen')
+    this.$shortcuts.add('c d', () => { this.stopVideoStream() }, 'Video-Ausgabegerät deaktivieren')
+    this.$shortcuts.add('c f', () => { this.setFullScreen() }, 'Fullscreen')
   }
 }
 </script>
