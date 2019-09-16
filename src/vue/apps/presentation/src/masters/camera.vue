@@ -88,7 +88,8 @@
 
 import { mapGetters } from 'vuex'
 
-export const master = {}
+export const master = {
+}
 
 export default {
   data () {

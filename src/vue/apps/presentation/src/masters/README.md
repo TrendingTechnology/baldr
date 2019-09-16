@@ -5,9 +5,12 @@ The master name is: `name`
 
 ```js
 export const master = {
-  centerVertically: true,
-  darkMode: false,
-  slidePadding: '4vw',
+  styleConfig: {
+    centerVertically: true,
+    darkMode: false,
+    overflow: false,
+    slidePadding: '4vw'
+  },
   documentation = `# Markdown`,
   example: `
 slides:

@@ -42,8 +42,10 @@ slides:
 `
 
 export const master = {
-  centerVertically: true,
-  darkMode: false,
+  styleConfig: {
+    centerVertically: true,
+    darkMode: false
+  },
   example,
   normalizeData (data) {
     if (typeof data === 'string') {

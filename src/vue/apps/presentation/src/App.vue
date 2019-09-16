@@ -36,10 +36,8 @@ export default {
       openFiles(event.dataTransfer.files)
     }
   },
-  created: function () {
-    this.$overflow.set(true)
-  },
   mounted: function () {
+    this.$styleConfig.set({ overflow: true })
     this.$shortcuts.addMultiple([
       {
         keys: 'left',
@@ -73,7 +71,7 @@ export default {
       },
       {
         keys: 'ctrl+alt+v',
-        callback: () => { this.$centerVertically.toggle() },
+        callback: () => { this.getMediaFile.toggle() },
         description: 'center vertically'
       }
     ])

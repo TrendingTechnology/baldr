@@ -28,12 +28,10 @@ export default {
   created: function () {
     const master = this.$masters[this.masterName]
     if (master) {
-      this.$centerVertically.set(master.centerVertically)
-      this.$darkMode.set(master.darkMode)
-      if ('slidePadding' in master) {
-        this.$slidePadding.set(master.slidePadding)
+      if ('styleConfig' in master) {
+        this.$styleConfig.set(master.styleConfig)
       } else {
-        this.$slidePadding.default()
+        this.$styleConfig.set()
       }
     }
   },

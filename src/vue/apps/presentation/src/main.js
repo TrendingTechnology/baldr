@@ -18,6 +18,8 @@ Vue.use(MaterialIcon)
 Vue.use(AsyncComputed)
 Vue.config.productionTip = false
 
+/******************************************************************************/
+
 class BodyAttributes {
   constructor () {
     this.attributeName = ''
@@ -37,8 +39,6 @@ class BodyAttributes {
   }
 }
 
-/******************************************************************************/
-
 class CenterVertically extends BodyAttributes {
   constructor () {
     super()
@@ -46,10 +46,6 @@ class CenterVertically extends BodyAttributes {
     this.state = true
   }
 }
-
-Vue.prototype.$centerVertically = new CenterVertically()
-
-/******************************************************************************/
 
 class DarkMode extends BodyAttributes {
   constructor () {
@@ -59,10 +55,6 @@ class DarkMode extends BodyAttributes {
   }
 }
 
-Vue.prototype.$darkMode = new DarkMode()
-
-/******************************************************************************/
-
 class Overflow extends BodyAttributes {
   constructor () {
     super()
@@ -70,10 +62,6 @@ class Overflow extends BodyAttributes {
     this.state = true
   }
 }
-
-Vue.prototype.$overflow = new Overflow()
-
-/******************************************************************************/
 
 const slidePadding = {
   default: function () {
@@ -87,20 +75,28 @@ const slidePadding = {
   }
 }
 
-Vue.prototype.$slidePadding = slidePadding
-
 class StyleConfig {
   constructor () {
     this.configObjects = {
-      centerVertically: Vue.prototype.$centerVertically,
-      darkMode: Vue.prototype.$darkMode,
-      overflow: Vue.prototype.$overflow,
-      slidePadding: Vue.prototype.$slidePadding
+      centerVertically: new CenterVertically(),
+      darkMode: new DarkMode(),
+      overflow: new Overflow(),
+      slidePadding: slidePadding
+    }
+  }
+
+  defaults_ () {
+    return {
+      centerVertically: false,
+      darkMode: false,
+      overflow: false,
+      slidePadding: 0
     }
   }
 
   set (styleConfig) {
-    for (const config in styleConfig) {
+    if (!styleConfig) styleConfig = {}
+    for (const config in Object.assign(this.defaults_(), styleConfig)) {
       if (config in this.configObjects) {
         this.configObjects[config].set(styleConfig[config])
       } else {

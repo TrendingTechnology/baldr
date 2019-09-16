@@ -29,9 +29,8 @@ export default {
   components: {
     OpenFiles
   },
-  created: function () {
-    this.$centerVertically.set(true)
-    this.$darkMode.set(false)
+  mounted: function () {
+    this.$styleConfig.set()
   }
 }
 </script>

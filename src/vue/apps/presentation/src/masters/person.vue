@@ -27,8 +27,10 @@ slides:
 `
 
 export const master = {
-  centerVertically: true,
-  darkMode: true,
+  styleConfig: {
+    centerVertically: true,
+    darkMode: true
+  },
   example,
   normalizeData (data) {
     if ('birth' in data) data.birth = `* ${data.birth}`

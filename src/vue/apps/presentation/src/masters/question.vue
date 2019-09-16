@@ -87,8 +87,10 @@ const normalizeQuestions = function (questions) {
 }
 
 export const master = {
-  centerVertically: true,
-  darkMode: true,
+  styleConfig: {
+    centerVertically: true,
+    darkMode: true
+  },
   example,
   normalizeData (data) {
     if (typeof data === 'object' && !Array.isArray(data) && 'questions' in data) {

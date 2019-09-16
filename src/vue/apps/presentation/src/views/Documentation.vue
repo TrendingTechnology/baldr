@@ -29,10 +29,6 @@
 <script>
 export default {
   name: 'Documentation',
-  created: function () {
-    this.$centerVertically.set(false)
-    this.$darkMode.set(false)
-  },
   methods: {
     openExample (master) {
       this.$store.dispatch('openPresentation', master.example)

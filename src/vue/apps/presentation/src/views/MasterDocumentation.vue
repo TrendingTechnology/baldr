@@ -54,10 +54,8 @@ export default {
       this.$router.push('/slides')
     }
   },
-  created: function () {
-    this.$centerVertically.set(false)
-    this.$darkMode.set(false)
-    this.$overflow.set(false)
+  mounted: function () {
+    this.$styleConfig.set()
   }
 }
 </script>
