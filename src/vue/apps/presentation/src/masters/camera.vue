@@ -9,7 +9,7 @@
       />
     </modal-dialog>
 
-    <video v-if="stream" ref="videoTag" autoplay="true" id="video"></video>
+    <video v-show="stream" ref="videoTag" autoplay="true" id="video"></video>
 
     <a v-if="!stream" href="#" @click="showDeviceSelect">Select the document camera.</a>
   </div>
@@ -83,7 +83,9 @@
  */
 
 const state = {
-  mediaDevices: []
+  mediaDevices: [],
+  deviceId: '',
+  stream: null
 }
 
 const getters = {
@@ -119,6 +121,12 @@ const actions = {
 const mutations = {
   setMediaDevices (state, mediaDevices) {
     state.mediaDevices = mediaDevices
+  },
+  setDeviceId (state, deviceId) {
+    state.deviceId = deviceId
+  },
+  setStream (state, stream) {
+    state.stream = stream
   }
 }
 
@@ -154,6 +162,7 @@ export default {
         audio: false,
         video: { deviceId: { exact: this.deviceId.id } }
       }
+      this.$store.commit('camera/setDeviceId', this.deviceId.id)
       this.setVideoStream(constraints)
     },
     showDeviceSelect () {
@@ -168,6 +177,7 @@ export default {
         .then((stream) => {
           this.$refs.videoTag.srcObject = stream
           this.stream = stream
+          this.$store.commit('camera/setStream', stream)
           this.$store.dispatch('camera/setMediaDevices')
         })
         .catch(function (error) {

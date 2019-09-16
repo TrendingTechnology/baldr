@@ -31,7 +31,7 @@ export default {
       if ('styleConfig' in master) {
         this.$styleConfig.set(master.styleConfig)
       } else {
-        this.$styleConfig.set()
+        this.$styleConfig.setDefaults()
       }
     }
   },
