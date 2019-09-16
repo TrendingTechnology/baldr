@@ -62,13 +62,7 @@ export default {
     }
   },
   mounted: function () {
-    this.$nextTick(function () {
-      window.addEventListener('keyup', event => {
-        if (event.key === ',' && event.ctrlKey) {
-          this.toggle()
-        }
-      })
-    })
+    this.$shortcuts.add('ctrl+,', () => { this.toggle() }, 'Show the app info.')
   }
 }
 </script>

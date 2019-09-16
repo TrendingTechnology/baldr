@@ -31,11 +31,6 @@ export default {
       return this.$store.getters['shortcuts/all']
     }
   },
-  created () {
-    for (const keys in this.shortcutsAll) {
-      console.log(this.keyCombinationToHtml(keys))
-    }
-  },
   methods: {
     keyCombinationToHtml (keys) {
       // sequence: a b c

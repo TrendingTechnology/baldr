@@ -53,7 +53,12 @@ export class Request {
       delete this.servers[name].https
       this.servers[name].baseURL = `${httpString}${this.servers[name].baseURL}`
     }
-    this.axiosInstances = []
+
+    /**
+     * An array of Axios instances
+     * @type {array}
+     */
+    this.axiosInstances_ = []
   }
 
   /**
