@@ -7,12 +7,70 @@ import Vue from 'vue'
 
 export const request = new Request(getDefaultServers(), '/api/media-server')
 
+class Player {
+  constructor (store) {
+    this.store_ = store
+  }
+
+  getPlaying_ () {
+    return this.store_.getters['media/playing']
+  }
+
+  toHttpUrl_ (uriOrMediaFileObject) {
+    const mixed = uriOrMediaFileObject
+    if (typeof mixed === 'object') {
+      return mixed.httpURL
+    }
+    return this.store_.getters['media/httpUrlByUri'](mixed)
+  }
+
+  stop () {
+    const audio = this.getPlaying_()
+    if (!audio) return
+    audio.pause()
+    audio.currentTime = 0
+    this.store_.commit('media/setPlaying', null)
+  }
+
+  start (uriOrMediaFileObject) {
+    const url = this.toHttpUrl_(uriOrMediaFileObject)
+    this.stop()
+    const audio = new Audio(url)
+    audio.volume = 1
+    audio.currentTime = 0
+    audio.play()
+    this.store_.commit('media/setPlaying', audio)
+  }
+
+  fadeOut (duration = 3.1) {
+    const audio = this.getPlaying_()
+    if (!audio) return
+    var actualVolume = audio.volume
+    var steps = actualVolume / 100
+    // in milliseconds: duration * 1000 / 100
+    var delay = duration * 10
+    var fadeOutInterval = setInterval(() => {
+      actualVolume -= steps
+      if (actualVolume >= 0) {
+        audio.volume = actualVolume.toFixed(2)
+      } else {
+        this.stop()
+        clearInterval(fadeOutInterval)
+      }
+    }, parseInt(delay))
+  }
+}
+
 const state = {
   mediaFiles: {},
-  restApiServers: []
+  restApiServers: [],
+  playing: null
 }
 
 const getters = {
+  playing: state => {
+    return state.playing
+  },
   mediaFiles: state => {
     return state.mediaFiles
   },
@@ -51,6 +109,9 @@ const mutations = {
   },
   setRestApiServers (state, restApiServers) {
     Vue.set(state, 'restApiServers', restApiServers)
+  },
+  setPlaying (state, audio) {
+    state.playing = audio
   }
 }
 
@@ -173,6 +234,7 @@ class MediaResolver {
   constructor (router, store) {
     this.router_ = router
     this.store_ = store
+    this.player = new Player(store)
   }
 
   /**
