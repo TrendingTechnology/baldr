@@ -1,5 +1,5 @@
 <template>
-  <div class="audio-master">
+  <div v-if="mediaFile" class="audio-master">
     <img
       :src="mediaFile.previewHttpUrl"
       class="preview"
@@ -7,7 +7,7 @@
     />
 
     <p>
-      <audio controls :src="srcResolved"/>
+      <audio controls :src="mediaFile.httpURL"/>
     </p>
 
     <p
@@ -71,11 +71,6 @@ export default {
       required: true
     }
   },
-  asyncComputed: {
-    srcResolved () {
-      return this.$resolveHttpURL(this.uriCurrent)
-    }
-  },
   computed: {
     slide () {
       return this.$store.getters.slideCurrent
@@ -87,10 +82,7 @@ export default {
       return this.src[this.stepNoCurrent]
     },
     mediaFile () {
-      if (this.uriCurrent in this.$store.getters['media/mediaFiles']) {
-        return this.$store.getters['media/mediaFiles'][this.uriCurrent]
-      }
-      return {}
+      return this.$store.getters['media/mediaFileByUri'](this.uriCurrent)
     }
   }
 }

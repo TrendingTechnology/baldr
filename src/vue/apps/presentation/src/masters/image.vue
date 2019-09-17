@@ -1,6 +1,6 @@
 <template>
   <div class="image-master">
-    <img :src="srcResolved"/>
+    <img v-if="mediaFile" :src="mediaFile.httpURL"/>
   </div>
 </template>
 
@@ -85,17 +85,18 @@ export default {
       required: true
     }
   },
-  asyncComputed: {
-    srcResolved () {
-      return this.$resolveHttpURL(this.src[this.stepNoCurrent])
-    }
-  },
   computed: {
     slide () {
       return this.$store.getters.slideCurrent
     },
     stepNoCurrent () {
       return this.slide.master.stepNoCurrent - 1
+    },
+    uriCurrent () {
+      return this.src[this.stepNoCurrent]
+    },
+    mediaFile () {
+      return this.$store.getters['media/mediaFileByUri'](this.uriCurrent)
     }
   }
 }

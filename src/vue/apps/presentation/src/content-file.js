@@ -2,10 +2,11 @@
  * @file Parse, process and validate the presentation content file (YAML).
  */
 
+import Vue from 'vue'
 import yaml from 'js-yaml'
 import { themeNames } from '@/themes.js'
 import { masterNames, callMasterFunc } from '@/masters.js'
-import { getMediaFile, mediaTypes, MediaFile } from '@/media.js'
+import { mediaTypes, MediaFile } from '@bldr/vue-media-resolver'
 import store from '@/store.js'
 import router from '@/router.js'
 
@@ -172,9 +173,7 @@ class MasterData {
       const mediaURIs = callMasterFunc(this.name, 'mediaURIs', normalizedData)
       if (mediaURIs) {
         for (const mediaURI of mediaURIs) {
-          getMediaFile(mediaURI).then((mediaFile) => {
-            store.commit('media/addMediaFile', mediaFile)
-          })
+          Vue.prototype.$mediaResolver.resolve(mediaURI)
         }
       }
     }

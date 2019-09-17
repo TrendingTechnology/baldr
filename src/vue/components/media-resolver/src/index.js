@@ -23,6 +23,13 @@ const getters = {
     }
     return null
   },
+  httpUrlByUri: (state, getters) => uri => {
+    const media = getters.mediaFiles
+    if (uri in media) {
+      return media[uri].httpURL
+    }
+    return null
+  },
   isMedia: (state, getters) => {
     return Object.keys(getters.mediaFiles).length > 0
   },
@@ -204,7 +211,8 @@ class MediaResolver {
   }
 
   /**
-   * @param {string} URI - Uniform Resource Identifier
+   * @param {string} URI - Uniform Resource Identifier, for example
+   *   `id:Joseph_haydn` or `filename:beethoven.jpg`
    *
    * @return {MediaFile}
    */
@@ -230,6 +238,17 @@ class MediaResolver {
     mediaFile.type = mediaTypes.extensionToType(mediaFile.extension)
     this.store_.commit('media/addMediaFile', mediaFile)
     return mediaFile
+  }
+
+  /**
+   * Resolve a media file by URI. The media file gets stored in the vuex
+   * store module `media`. Use getters to access the `mediaFile` object.
+   *
+   * @param {string} URI - Uniform Resource Identifier, for example
+   *   `id:Joseph_haydn` or `filename:beethoven.jpg`
+   */
+  resolve (URI) {
+    this.getMediaFile(URI)
   }
 
   /**

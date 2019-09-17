@@ -2,13 +2,20 @@
 [![Build Status](https://travis-ci.org/Josef-Friedrich/baldr.svg?branch=master)](https://travis-ci.org/Josef-Friedrich/baldr)
 [![GitHub repo size](https://img.shields.io/github/repo-size/Josef-Friedrich/baldr.svg)](https://github.com/Josef-Friedrich/baldr)
 
-# @bldr/vue-shortcuts
+# @bldr/vue-media-resolver
 
-A wrapper around mousetrap to register keyboard shortcuts and display an
-overview over all shortcuts.
+Resolve media files. Counter part of the BALDR media server.
 
 ```js
-import shortcuts from '@bldr/vue-shortcuts'
+import mediaResolver from '@bldr/vue-media-resolver'
 
-Vue.use(shortcuts, router, store)
+Vue.use(mediaResolver, router, store)
+```
+
+On every Vue instance:
+
+```js
+this.$mediaResolver.resolve('id:Haydn_Joseph')
+
+const mediaFile = this.$store.getters['media/mediaFileByUri']('id:Haydn_Joseph')
 ```

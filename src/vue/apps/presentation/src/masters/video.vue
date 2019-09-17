@@ -1,6 +1,6 @@
 <template>
   <div class="video-master">
-    <video controls :src="srcResolved"/>
+    <video v-if="mediaFile" controls :src="mediaFile.httpURL"/>
   </div>
 </template>
 
@@ -54,11 +54,6 @@ export default {
       required: true
     }
   },
-  asyncComputed: {
-    srcResolved () {
-      return this.$resolveHttpURL(this.uriCurrent)
-    }
-  },
   computed: {
     slide () {
       return this.$store.getters.slideCurrent
@@ -70,7 +65,7 @@ export default {
       return this.src[this.stepNoCurrent]
     },
     mediaFile () {
-      return this.$store.getters.media[this.uriCurrent]
+      return this.$store.getters['media/mediaFileByUri'](this.uriCurrent)
     }
   }
 }
