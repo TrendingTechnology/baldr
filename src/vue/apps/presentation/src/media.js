@@ -10,20 +10,36 @@ export const request = new Request(getDefaultServers(), '/api/media-server')
 
 const media = {}
 
-const state = {}
+const state = {
+  mediaFiles: {},
+  restApiServers: []
+}
 
 const getters = {
-  media: state => {
-    return state
+  mediaFiles: state => {
+    return state.mediaFiles
   },
   isMedia: (state, getters) => {
-    return Object.keys(getters.media).length > 0
+    return Object.keys(getters.mediaFiles).length > 0
+  },
+  restApiServers: state => {
+    return state.restApiServers
+  }
+}
+
+const actions = {
+  async setRestApiServers ({ commit }) {
+    const servers = await request.getServers()
+    commit('setRestApiServers', servers)
   }
 }
 
 const mutations = {
-  add (state, mediaFile) {
-    Vue.set(state.media, mediaFile.URI, mediaFile)
+  addMediaFile (state, mediaFile) {
+    Vue.set(state.mediaFiles, mediaFile.URI, mediaFile)
+  },
+  setRestApiServers (state, restApiServers) {
+    Vue.set(state, 'restApiServers', restApiServers)
   }
 }
 
@@ -31,6 +47,7 @@ store.registerModule('media', {
   namespaced: true,
   state,
   getters,
+  actions,
   mutations
 })
 

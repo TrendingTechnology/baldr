@@ -87,8 +87,8 @@ export default {
       return this.src[this.stepNoCurrent]
     },
     mediaFile () {
-      if (this.uriCurrent in this.$store.getters['media/media']) {
-        return this.$store.getters['media/media'][this.uriCurrent]
+      if (this.uriCurrent in this.$store.getters['media/mediaFiles']) {
+        return this.$store.getters['media/mediaFiles'][this.uriCurrent]
       }
       return {}
     }

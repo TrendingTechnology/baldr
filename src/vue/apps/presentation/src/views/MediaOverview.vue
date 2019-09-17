@@ -2,7 +2,7 @@
   <div class="media-overview">
     <h1>Media</h1>
     <ul v-if="isMedia">
-      <li v-for="mediaFile in media" :key="mediaFile.URI">
+      <li v-for="mediaFile in mediaFiles" :key="mediaFile.URI">
         <material-icon :name="`file-${mediaFile.type}`"/>
         <img v-if="mediaFile.httpURL" :src="mediaFile.httpURL"/>
         {{ mediaFile.filename }}
@@ -19,7 +19,7 @@ const { mapGetters } = createNamespacedHelpers('media')
 
 export default {
   name: 'MediaOverview',
-  computed: mapGetters(['media', 'isMedia']),
+  computed: mapGetters(['mediaFiles', 'isMedia']),
   mounted () {
     this.$styleConfig.set({
       overflow: false,

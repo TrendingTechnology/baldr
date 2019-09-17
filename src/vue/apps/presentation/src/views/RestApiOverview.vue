@@ -13,13 +13,14 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { createNamespacedHelpers } from 'vuex'
+const { mapGetters } = createNamespacedHelpers('media')
 
 export default {
   name: 'RestApiOverview',
   computed: mapGetters(['restApiServers']),
   created () {
-    this.$store.dispatch('setRestApiServers')
+    this.$store.dispatch('media/setRestApiServers')
   }
 }
 </script>

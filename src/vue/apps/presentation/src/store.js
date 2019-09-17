@@ -2,20 +2,15 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import { parseContentFile } from '@/content-file.js'
-//import { request } from '@/media.js'
 
 Vue.use(Vuex)
 
 const state = {
-  restApiServers: [],
   slideNoCurrent: null,
   slides: {}
 }
 
 const getters = {
-  restApiServers: state => {
-    return state.restApiServers
-  },
   slideNoCurrent: state => {
     return state.slideNoCurrent
   },
@@ -79,10 +74,6 @@ const actions = {
       stepNoCurrent = no - 1
     }
     commit('setStepNoCurrent', { slideCurrent, stepNoCurrent })
-  },
-  async setRestApiServers ({ commit }) {
-    const servers = await request.getServers()
-    commit('setRestApiServers', servers)
   }
 }
 
@@ -95,9 +86,6 @@ const mutations = {
   },
   setStepNoCurrent (state, { slideCurrent, stepNoCurrent }) {
     slideCurrent.master.stepNoCurrent = stepNoCurrent
-  },
-  setRestApiServers (state, restApiServers) {
-    Vue.set(state, 'restApiServers', restApiServers)
   }
 }
 

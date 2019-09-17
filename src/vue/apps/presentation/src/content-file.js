@@ -173,7 +173,7 @@ class MasterData {
       if (mediaURIs) {
         for (const mediaURI of mediaURIs) {
           getMediaFile(mediaURI).then((mediaFile) => {
-            store.commit('media/add', mediaFile)
+            store.commit('media/addMediaFile', mediaFile)
           })
         }
       }
@@ -308,7 +308,7 @@ function openFile (file) {
       httpURL: URI,
       filename: file.name
     })
-    store.commit('media/add', mediaFile)
+    store.commit('media/addMediaFile', mediaFile)
   }
 }
 
