@@ -1,5 +1,5 @@
 /**
- * This package bundles all objects functions together which are used to
+ * This package bundles all objects functions together, which are used to
  * generate the intermediate files for the songbook. It has to be it’s own
  * package, because the dependency better-sqlite3 must be complied and that
  * causes trouble in the electron app.

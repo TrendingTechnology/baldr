@@ -64,10 +64,5 @@
     "> 1%",
     "last 2 versions"
   ],
-  "babel": {
-    "presets": [
-      "@vue/app"
-    ]
-  },
   "gitHead": "ed4f60e66c8f420711d3eb15185620f7688e6fc9"
 }

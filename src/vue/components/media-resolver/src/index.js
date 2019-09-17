@@ -16,6 +16,13 @@ const getters = {
   mediaFiles: state => {
     return state.mediaFiles
   },
+  mediaFileByUri: (state, getters) => uri => {
+    const media = getters.mediaFiles
+    if (uri in media) {
+      return media[uri]
+    }
+    return null
+  },
   isMedia: (state, getters) => {
     return Object.keys(getters.mediaFiles).length > 0
   },
@@ -159,7 +166,6 @@ class MediaResolver {
   constructor (router, store) {
     this.router_ = router
     this.store_ = store
-    this.media = {}
   }
 
   /**
@@ -203,9 +209,9 @@ class MediaResolver {
    * @return {MediaFile}
    */
   async getMediaFile (URI) {
-    if (URI in this.media) {
-      return this.media[URI]
-    }
+    const storedMediaFile = this.store_.getters['media/mediaFileByUri'](URI)
+    if (storedMediaFile) return storedMediaFile
+
     const mediaFile = new MediaFile({ URI: URI })
 
     if (mediaFile.uriScheme === 'http' || mediaFile.uriScheme === 'https') {
@@ -222,7 +228,7 @@ class MediaResolver {
     }
 
     mediaFile.type = mediaTypes.extensionToType(mediaFile.extension)
-    this.media[URI] = mediaFile
+    this.store_.commit('media/addMediaFile', mediaFile)
     return mediaFile
   }
 

@@ -2,6 +2,7 @@
   <div v-if="slideNoCurrent === 1" class="metadata">
     <h1>{{ title }}</h1>
     <h2 v-if="subtitle">{{ subtitle }}</h2>
+    <audio v-if="audio" controls :src="audio"></audio>
     <div class="people">
       <div v-if="lyricist" class="lyricist">{{ lyricist }}</div>
       <div v-if="composer" class="composer">{{ composer }}</div>
@@ -48,6 +49,19 @@ export default {
     },
     composer () {
       return this.metadata.composer
+    },
+    audio () {
+      const uri = this.songCurrent.metaData.audio
+      if (uri) {
+        const mediaFile = this.mediaFileByUri(uri)
+        if (mediaFile) return mediaFile.httpURL
+      }
+      return false
+    }
+  },
+  methods: {
+    mediaFileByUri (uri) {
+      return this.$store.getters['media/mediaFileByUri'](uri)
     }
   }
 }

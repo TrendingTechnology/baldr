@@ -281,6 +281,13 @@ class SongMetaData {
     this.artist = null
 
     /**
+     * A media server URI of a audio file for example (id:A_Song).
+     *
+     * @type {string}
+     */
+    this.audio = null
+
+    /**
      * The composer of a song.
      *
      * @type {string}
@@ -382,12 +389,13 @@ class SongMetaData {
     /**
      * All in the YAML file “info.yml” allowed properties (keys).
      *
-     * @type {arry}
+     * @type {array}
      */
     this.allowedProperties = [
       'alias',
       'arranger',
       'artist',
+      'audio',
       'composer',
       'country',
       'description',

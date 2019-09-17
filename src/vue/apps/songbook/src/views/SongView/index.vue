@@ -114,6 +114,11 @@ export default {
     },
     showTableOfContents () {
       this.$modal.show('table-of-contents')
+    },
+    resolveAudio () {
+      if (this.songCurrent.metaData.audio) {
+        this.$mediaResolver.getMediaFile(this.songCurrent.metaData.audio)
+      }
     }
   },
   created: function () {
@@ -121,10 +126,12 @@ export default {
   },
   beforeRouteUpdate (to, from, next) {
     this.$store.dispatch('setSongCurrent', to.params.songID)
+    this.resolveAudio()
     this.$modal.hide('table-of-contents')
     next()
   },
   mounted: function () {
+    this.resolveAudio()
     this.$shortcuts.addMultiple([
       {
         keys: 'left',
