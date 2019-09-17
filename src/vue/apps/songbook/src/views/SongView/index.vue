@@ -117,7 +117,7 @@ export default {
     },
     resolveAudio () {
       if (this.songCurrent.metaData.audio) {
-        this.$mediaResolver.getMediaFile(this.songCurrent.metaData.audio)
+        this.$mediaResolver.resolve(this.songCurrent.metaData.audio)
       }
     }
   },
