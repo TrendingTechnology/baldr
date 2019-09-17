@@ -11,16 +11,16 @@ slides:
 
 - title: 'URL: id:'
   video:
-    src: id:Du-bist-als-Kind-zu-heiss-gebadet-worden
+    src: id:Die-Geschichte-des-Jazz_Worksongs
 
 - title: 'URL: filename:'
   video:
-    src: filename:Ich-hab-zu-Haus-ein-Grammophon.m4a
+    src: filename:Die-Geschichte-des-Jazz_Entstehung-aus-soziologischer-Sicht.mp4
 
 - title: 'Multiple video files to resolve'
   video:
-  - id:Du-bist-als-Kind-zu-heiss-gebadet-worden
-  - filename:Ich-hab-zu-Haus-ein-Grammophon.m4a
+  - id:Die-Geschichte-des-Jazz_Worksongs
+  - filename:Die-Geschichte-des-Jazz_Entstehung-aus-soziologischer-Sicht.mp4
 `
 
 export const master = {
