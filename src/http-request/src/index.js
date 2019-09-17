@@ -40,18 +40,20 @@ export class Request {
       crossDomain: true
     }
 
-    this.servers = servers
-    for (const name in this.servers) {
-      this.servers[name] = Object.assign(this.servers[name], this.defaultConfig)
+    this.servers = {}
+    for (const name in servers) {
+      if (location.protocol === 'http:' || (location.protocol === 'https:' && servers[name].https)) {
+        this.servers[name] = Object.assign(servers[name], this.defaultConfig)
 
-      let httpString
-      if (this.servers[name].https) {
-        httpString = 'https://'
-      } else {
-        httpString = 'http://'
+        let httpString
+        if (this.servers[name].https) {
+          httpString = 'https://'
+        } else {
+          httpString = 'http://'
+        }
+        delete this.servers[name].https
+        this.servers[name].baseURL = `${httpString}${this.servers[name].baseURL}`
       }
-      delete this.servers[name].https
-      this.servers[name].baseURL = `${httpString}${this.servers[name].baseURL}`
     }
 
     /**
