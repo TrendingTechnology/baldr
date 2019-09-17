@@ -172,8 +172,8 @@ class MasterData {
       const mediaURIs = callMasterFunc(this.name, 'mediaURIs', normalizedData)
       if (mediaURIs) {
         for (const mediaURI of mediaURIs) {
-          getMediaFile(mediaURI).then((mediumData) => {
-            store.commit('addMediumData', mediumData)
+          getMediaFile(mediaURI).then((mediaFile) => {
+            store.commit('media/add', mediaFile)
           })
         }
       }
@@ -308,7 +308,7 @@ function openFile (file) {
       httpURL: URI,
       filename: file.name
     })
-    store.commit('addMediumData', mediaFile)
+    store.commit('media/add', mediaFile)
   }
 }
 

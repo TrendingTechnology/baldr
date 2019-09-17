@@ -3,10 +3,36 @@
  */
 
 import { getDefaultServers, Request } from '@bldr/http-request'
+import store from '@/store.js'
+import Vue from 'vue'
 
 export const request = new Request(getDefaultServers(), '/api/media-server')
 
 const media = {}
+
+const state = {}
+
+const getters = {
+  media: state => {
+    return state
+  },
+  isMedia: (state, getters) => {
+    return Object.keys(getters.media).length > 0
+  }
+}
+
+const mutations = {
+  add (state, mediaFile) {
+    Vue.set(state.media, mediaFile.URI, mediaFile)
+  }
+}
+
+store.registerModule('media', {
+  namespaced: true,
+  state,
+  getters,
+  mutations
+})
 
 class MediaTypes {
   constructor () {

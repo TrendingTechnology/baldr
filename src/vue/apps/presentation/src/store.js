@@ -2,24 +2,17 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import { parseContentFile } from '@/content-file.js'
-import { request } from '@/media.js'
+//import { request } from '@/media.js'
 
 Vue.use(Vuex)
 
 const state = {
-  media: {},
   restApiServers: [],
   slideNoCurrent: null,
   slides: {}
 }
 
 const getters = {
-  media: state => {
-    return state.media
-  },
-  isMedia: (state, getters) => {
-    return Object.keys(getters.media).length > 0
-  },
   restApiServers: state => {
     return state.restApiServers
   },
@@ -102,9 +95,6 @@ const mutations = {
   },
   setStepNoCurrent (state, { slideCurrent, stepNoCurrent }) {
     slideCurrent.master.stepNoCurrent = stepNoCurrent
-  },
-  addMediumData (state, mediumData) {
-    Vue.set(state.media, mediumData.URI, mediumData)
   },
   setRestApiServers (state, restApiServers) {
     Vue.set(state, 'restApiServers', restApiServers)
