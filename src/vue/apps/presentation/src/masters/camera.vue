@@ -82,6 +82,13 @@
  * @module @bldr/master-camera
  */
 
+const example = `
+---
+slides:
+  - title: Camera
+    camera: yes
+`
+
 const state = {
   mediaDevices: [],
   deviceId: '',
@@ -135,6 +142,7 @@ export const master = {
     darkMode: true,
     slidePadding: 0
   },
+  example,
   store: {
     state,
     getters,
