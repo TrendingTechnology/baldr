@@ -170,10 +170,10 @@ class MasterData {
     const normalizedData = callMasterFunc(this.name, 'normalizeData', this.data)
     if (normalizedData) {
       this.data = normalizedData
-      const mediaURIs = callMasterFunc(this.name, 'mediaURIs', normalizedData)
-      if (mediaURIs) {
-        for (const mediaURI of mediaURIs) {
-          Vue.prototype.$media.resolve(mediaURI)
+      const mediaUris = callMasterFunc(this.name, 'mediaUris', normalizedData)
+      if (mediaUris) {
+        for (const mediaUri of mediaUris) {
+          Vue.prototype.$media.resolve(mediaUri)
         }
       }
     }
@@ -301,10 +301,10 @@ function openFile (file) {
       router.push('/slides')
     }
   } else if (mediaTypes.isMedia(file.name)) {
-    const URI = URL.createObjectURL(file)
+    const uri = URL.createObjectURL(file)
     const mediaFile = new MediaFile({
-      URI: URI,
-      httpURL: URI,
+      uri: uri,
+      httpUrl: uri,
       filename: file.name
     })
     store.commit('media/addMediaFile', mediaFile)

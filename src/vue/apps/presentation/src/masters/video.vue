@@ -1,6 +1,6 @@
 <template>
   <div class="video-master">
-    <video v-if="mediaFile" controls :src="mediaFile.httpURL"/>
+    <video v-if="mediaFile" controls :src="mediaFile.httpUrl"/>
   </div>
 </template>
 
@@ -42,7 +42,7 @@ export const master = {
   stepCount (data) {
     return data.src.length
   },
-  mediaURIs (props) {
+  mediaUris (props) {
     return props.src
   }
 }

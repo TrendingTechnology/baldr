@@ -35,7 +35,7 @@ slides:
     return data.src.length
   },
   // An array of media URIs to resolve (like [id:beethoven, filename:mozart.mp3])
-  mediaURIs (props) {
+  mediaUris (props) {
     return props.src
   }
 }

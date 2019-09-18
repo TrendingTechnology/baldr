@@ -2,9 +2,9 @@
   <div class="media-overview">
     <h1>Media</h1>
     <ul v-if="isMedia">
-      <li v-for="mediaFile in mediaFiles" :key="mediaFile.URI" @click="play(mediaFile.URI)">
+      <li v-for="mediaFile in mediaFiles" :key="mediaFile.uri" @click="play(mediaFile.uri)">
         <material-icon :name="`file-${mediaFile.type}`" />
-        <img v-if="mediaFile.httpURL && mediaFile.type === 'image'" :src="mediaFile.httpURL" />
+        <img v-if="mediaFile.httpUrl && mediaFile.type === 'image'" :src="mediaFile.httpUrl" />
         {{ mediaFile.filename }}
       </li>
     </ul>

@@ -19,7 +19,7 @@ class Player {
   toHttpUrl_ (uriOrMediaFileObject) {
     const mixed = uriOrMediaFileObject
     if (typeof mixed === 'object') {
-      return mixed.httpURL
+      return mixed.httpUrl
     }
     return this.store_.getters['media/httpUrlByUri'](mixed)
   }
@@ -84,7 +84,7 @@ const getters = {
   httpUrlByUri: (state, getters) => uri => {
     const media = getters.mediaFiles
     if (uri in media) {
-      return media[uri].httpURL
+      return media[uri].httpUrl
     }
     return null
   },
@@ -105,7 +105,7 @@ const actions = {
 
 const mutations = {
   addMediaFile (state, mediaFile) {
-    Vue.set(state.mediaFiles, mediaFile.URI, mediaFile)
+    Vue.set(state.mediaFiles, mediaFile.uri, mediaFile)
   },
   setRestApiServers (state, restApiServers) {
     Vue.set(state, 'restApiServers', restApiServers)
@@ -165,13 +165,13 @@ export const mediaTypes = new MediaTypes()
 /**
  * Hold various data of a media file as class properties.
  *
- * @property {string} URI - Uniform Resource Identifier, for example
+ * @property {string} uri - Uniform Resource Identifier, for example
  *   `id:Haydn_Joseph`, `filename:Haydn_Joseph.jpg` or
  *   `http://example.com/Haydn_Joseph.jpg`.
  * @property {string} uriScheme - for example: `http`, `https`, `blob`
  * @property {string} uriAuthority - for example:
  *   `//example.com/Haydn_Joseph.jpg`.
- * @property {string} httpURL - HTTP Uniform Resource Locator, for example
+ * @property {string} httpUrl - HTTP Uniform Resource Locator, for example
  *   `http://example.com/Haydn_Joseph.jpg`.
  * @property {string} path - The relative path on the HTTP server, for example
  *   `composer/Haydn_Joseph.jpg`.
@@ -185,17 +185,17 @@ export const mediaTypes = new MediaTypes()
  */
 export class MediaFile {
   /**
-   * @param {object} mediaData - Mandatory properties are: `URI`
+   * @param {object} mediaData - Mandatory properties are: `uri`
    */
   constructor (mediaData) {
     for (const property in mediaData) {
       this[property] = mediaData[property]
     }
-    if (!('URI' in this)) {
-      throw new Error('Media file needs a URI property.')
+    if (!('uri' in this)) {
+      throw new Error('Media file needs a uri property.')
     }
-    this.URI = decodeURI(this.URI)
-    const segments = this.URI.split(':')
+    this.uri = decodeURI(this.uri)
+    const segments = this.uri.split(':')
     this.uriScheme = segments[0]
     this.uriAuthority = segments[1]
 
@@ -264,7 +264,7 @@ class Media {
    * @return {string} HTTP URL
    */
   async generateHttpURL (mediaFile) {
-    if ('httpURL' in mediaFile) return mediaFile.httpURL
+    if ('httpUrl' in mediaFile) return mediaFile.httpUrl
     if ('path' in mediaFile) {
       const baseURL = await request.getFirstBaseURL()
       return `${baseURL}/media/${mediaFile.path}`
@@ -273,27 +273,27 @@ class Media {
   }
 
   /**
-   * @param {string} URI - Uniform Resource Identifier, for example
+   * @param {string} uri - Uniform Resource Identifier, for example
    *   `id:Joseph_haydn` or `filename:beethoven.jpg`
    *
    * @return {MediaFile}
    */
-  async getMediaFile (URI) {
-    const storedMediaFile = this.store_.getters['media/mediaFileByUri'](URI)
+  async getMediaFile (uri) {
+    const storedMediaFile = this.store_.getters['media/mediaFileByUri'](uri)
     if (storedMediaFile) return storedMediaFile
 
-    const mediaFile = new MediaFile({ URI: URI })
+    const mediaFile = new MediaFile({ uri: uri })
 
     if (mediaFile.uriScheme === 'http' || mediaFile.uriScheme === 'https') {
-      mediaFile.httpURL = mediaFile.URI
-      mediaFile.filenameFromHTTPUrl(mediaFile.URI)
-      mediaFile.extensionFromString(mediaFile.URI)
+      mediaFile.httpUrl = mediaFile.uri
+      mediaFile.filenameFromHTTPUrl(mediaFile.uri)
+      mediaFile.extensionFromString(mediaFile.uri)
     } else if (mediaFile.uriScheme === 'id' || mediaFile.uriScheme === 'filename') {
       const response = await this.query(mediaFile.uriScheme, mediaFile.uriAuthority)
       mediaFile.addProperties(response.data)
-      mediaFile.httpURL = await this.generateHttpURL(mediaFile)
+      mediaFile.httpUrl = await this.generateHttpURL(mediaFile)
       if ('previewImage' in mediaFile) {
-        mediaFile.previewHttpUrl = `${mediaFile.httpURL}_preview.jpg`
+        mediaFile.previewHttpUrl = `${mediaFile.httpUrl}_preview.jpg`
       }
     }
 
@@ -303,24 +303,24 @@ class Media {
   }
 
   /**
-   * Resolve a media file by URI. The media file gets stored in the vuex
+   * Resolve a media file by uri. The media file gets stored in the vuex
    * store module `media`. Use getters to access the `mediaFile` object.
    *
-   * @param {string} URI - Uniform Resource Identifier, for example
+   * @param {string} uri - Uniform Resource Identifier, for example
    *   `id:Joseph_haydn` or `filename:beethoven.jpg`
    */
-  resolve (URI) {
-    this.getMediaFile(URI)
+  resolve (uri) {
+    this.getMediaFile(uri)
   }
 
   /**
-   * @param {string} URI - Uniform Resource Identifier
+   * @param {string} uri - Uniform Resource Identifier
    *
    * @return {string} A HTTP URL (http://..)
    */
-  async resolveHttpURL (URI) {
-    let mediaFile = await this.getMediaFile(URI)
-    return mediaFile.httpURL
+  async resolveHttpURL (uri) {
+    let mediaFile = await this.getMediaFile(uri)
+    return mediaFile.httpUrl
   }
 }
 

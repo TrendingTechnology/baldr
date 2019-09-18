@@ -1,6 +1,6 @@
 <template>
   <div class="image-master">
-    <img v-if="mediaFile" :src="mediaFile.httpURL"/>
+    <img v-if="mediaFile" :src="mediaFile.httpUrl"/>
   </div>
 </template>
 
@@ -73,7 +73,7 @@ export const master = {
   stepCount (data) {
     return data.src.length
   },
-  mediaURIs (props) {
+  mediaUris (props) {
     return props.src
   }
 }

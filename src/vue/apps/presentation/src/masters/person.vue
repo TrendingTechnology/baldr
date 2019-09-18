@@ -37,7 +37,7 @@ export const master = {
     if ('death' in data) data.death = `† ${data.death}`
     return data
   },
-  mediaURIs (props) {
+  mediaUris (props) {
     return [props.image]
   }
 }

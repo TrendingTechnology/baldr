@@ -54,7 +54,7 @@ export default {
       const uri = this.songCurrent.metaData.audio
       if (uri) {
         const mediaFile = this.mediaFileByUri(uri)
-        if (mediaFile) return mediaFile.httpURL
+        if (mediaFile) return mediaFile.httpUrl
       }
       return false
     }

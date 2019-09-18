@@ -7,7 +7,7 @@
     />
 
     <p>
-      <audio controls :src="mediaFile.httpURL"/>
+      <audio controls :src="mediaFile.httpUrl"/>
     </p>
 
     <p
@@ -59,7 +59,7 @@ export const master = {
   stepCount (data) {
     return data.src.length
   },
-  mediaURIs (props) {
+  mediaUris (props) {
     return props.src
   }
 }
