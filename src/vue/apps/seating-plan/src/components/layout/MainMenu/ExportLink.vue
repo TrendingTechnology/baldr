@@ -1,6 +1,6 @@
 <template>
   <a
-    :href="stateAsURIComponent"
+    :href="stateAsUriComponent"
     :download="`seating-plan_${dateTime}.json`"
     title="Daten exportieren (als JSON)"
   >
@@ -15,7 +15,7 @@ export default {
   name: 'ExportLink',
   computed: {
     ...mapGetters([
-      'stateAsURIComponent'
+      'stateAsUriComponent'
     ]),
     dateTime () {
       let date = new Date()

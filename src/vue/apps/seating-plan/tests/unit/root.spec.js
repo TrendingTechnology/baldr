@@ -37,8 +37,8 @@ describe('Vuex store: root #unittest', function () {
       assert.isTrue({}.hasOwnProperty.call(state, 'grades'))
     })
 
-    it('stateAsURIComponent', function () {
-      const component = store.getters.stateAsURIComponent
+    it('stateAsUriComponent', function () {
+      const component = store.getters.stateAsUriComponent
       const prefix = 'data:text/json;charset=utf-8,'
       assert.strictEqual(component.indexOf(prefix), 0)
       const jsonString = decodeURIComponent(component.replace(prefix, ''))

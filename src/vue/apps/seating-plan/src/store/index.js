@@ -30,7 +30,7 @@ const getters = {
   state: (state) => {
     return state
   },
-  stateAsURIComponent: (state, getters) => {
+  stateAsUriComponent: (state, getters) => {
     const string = encodeURIComponent(getters.exportStateString)
     return `data:text/json;charset=utf-8,${string}`
   }
