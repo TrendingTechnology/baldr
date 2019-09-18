@@ -227,14 +227,9 @@ export class MediaFile {
   }
 }
 
-/**
- *
- */
-class Media {
-  constructor (router, store) {
-    this.router_ = router
+class Resolver {
+  constructor (store) {
     this.store_ = store
-    this.player = new Player(store)
   }
 
   /**
@@ -242,7 +237,7 @@ class Media {
    * @param {string} key
    * @param {string|json} value
    */
-  async query (key, value) {
+  async queryMediaServer_ (key, value) {
     const postBody = {}
     postBody[key] = value
     const response = await request.request(
@@ -263,10 +258,10 @@ class Media {
    *
    * @return {string} HTTP URL
    */
-  async generateHttpURL (mediaFile) {
+  async resolveHttpUrl_ (mediaFile) {
     if ('httpUrl' in mediaFile) return mediaFile.httpUrl
     if ('path' in mediaFile) {
-      const baseURL = await request.getFirstBaseURL()
+      const baseURL = await request.getFirstBaseUrl()
       return `${baseURL}/media/${mediaFile.path}`
     }
     throw new Error(`Can not generate HTTP URL.`)
@@ -289,9 +284,9 @@ class Media {
       mediaFile.filenameFromHTTPUrl(mediaFile.uri)
       mediaFile.extensionFromString(mediaFile.uri)
     } else if (mediaFile.uriScheme === 'id' || mediaFile.uriScheme === 'filename') {
-      const response = await this.query(mediaFile.uriScheme, mediaFile.uriAuthority)
+      const response = await this.queryMediaServer_(mediaFile.uriScheme, mediaFile.uriAuthority)
       mediaFile.addProperties(response.data)
-      mediaFile.httpUrl = await this.generateHttpURL(mediaFile)
+      mediaFile.httpUrl = await this.resolveHttpUrl_(mediaFile)
       if ('previewImage' in mediaFile) {
         mediaFile.previewHttpUrl = `${mediaFile.httpUrl}_preview.jpg`
       }
@@ -303,6 +298,29 @@ class Media {
   }
 
   /**
+   * @param {string} uri - Uniform Resource Identifier, for example
+   *   `id:Joseph_haydn` or `filename:beethoven.jpg`
+   *
+   * @return {string} A HTTP URL (http://..)
+   */
+  async getHttpURL (uri) {
+    let mediaFile = await this.getMediaFile(uri)
+    return mediaFile.httpUrl
+  }
+}
+
+/**
+ *
+ */
+class Media {
+  constructor (router, store) {
+    this.router_ = router
+    this.store_ = store
+    this.player = new Player(store)
+    this.resolver = new Resolver(store)
+  }
+
+  /**
    * Resolve a media file by uri. The media file gets stored in the vuex
    * store module `media`. Use getters to access the `mediaFile` object.
    *
@@ -310,17 +328,7 @@ class Media {
    *   `id:Joseph_haydn` or `filename:beethoven.jpg`
    */
   resolve (uri) {
-    this.getMediaFile(uri)
-  }
-
-  /**
-   * @param {string} uri - Uniform Resource Identifier
-   *
-   * @return {string} A HTTP URL (http://..)
-   */
-  async resolveHttpURL (uri) {
-    let mediaFile = await this.getMediaFile(uri)
-    return mediaFile.httpUrl
+    this.resolver.getMediaFile(uri)
   }
 }
 

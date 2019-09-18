@@ -61,7 +61,7 @@ export default {
   },
   asyncComputed: {
     imageResolved () {
-      return this.$resolveHttpURL(this.image)
+      return this.$getHttpURL(this.image)
     }
   }
 }

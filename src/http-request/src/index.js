@@ -96,7 +96,7 @@ export class Request {
     }
   }
 
-  async getFirstBaseURL () {
+  async getFirstBaseUrl () {
     await this.createAxiosInstances_()
     if (this.initalised()) return this.axiosInstances_[0].defaults.baseURL
   }
