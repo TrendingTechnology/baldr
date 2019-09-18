@@ -29,7 +29,7 @@ export default {
   },
   methods: {
     play (uri) {
-      this.$mediaResolver.player.start(uri)
+      this.$media.player.start(uri)
     }
   }
 }

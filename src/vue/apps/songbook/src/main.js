@@ -6,10 +6,10 @@ import ModalDialog from '@bldr/vue-component-modal-dialog'
 import DynamicSelect from '@bldr/vue-component-dynamic-select'
 import MaterialIcon from '@bldr/vue-component-material-icon'
 import shortcuts from '@bldr/vue-shortcuts'
-import mediaResolver from '@bldr/vue-media-resolver'
+import media from '@bldr/vue-media'
 
 Vue.use(shortcuts, router, store)
-Vue.use(mediaResolver, router, store)
+Vue.use(media, router, store)
 
 Vue.use(MaterialIcon)
 Vue.use(ModalDialog)

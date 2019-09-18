@@ -18,7 +18,7 @@
     "@bldr/vue-component-modal-dialog": "^0.1.8",
     "@bldr/vue-components-collection": "^0.1.10",
     "@bldr/vue-shortcuts": "^0.1.0",
-    "@bldr/vue-media-resolver": "^0.1.0",
+    "@bldr/vue-media": "^0.1.0",
     "core-js": "^3.2.1",
     "vue": "^2.6.10",
     "vue-router": "^3.1.3",

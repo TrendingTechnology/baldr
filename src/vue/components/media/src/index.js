@@ -230,7 +230,7 @@ export class MediaFile {
 /**
  *
  */
-class MediaResolver {
+class Media {
   constructor (router, store) {
     this.router_ = router
     this.store_ = store
@@ -325,11 +325,11 @@ class MediaResolver {
 }
 
 // https://stackoverflow.com/a/56501461
-// Vue.use(mediaResolver, router, store)
+// Vue.use(media, router, store)
 const Plugin = {
   install (Vue, router, store) {
     if (store) store.registerModule('media', storeModule)
-    Vue.prototype.$mediaResolver = new MediaResolver(router, store)
+    Vue.prototype.$media = new Media(router, store)
   }
 }
 

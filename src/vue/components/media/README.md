@@ -2,20 +2,20 @@
 [![Build Status](https://travis-ci.org/Josef-Friedrich/baldr.svg?branch=master)](https://travis-ci.org/Josef-Friedrich/baldr)
 [![GitHub repo size](https://img.shields.io/github/repo-size/Josef-Friedrich/baldr.svg)](https://github.com/Josef-Friedrich/baldr)
 
-# @bldr/vue-media-resolver
+# @bldr/vue-media
 
 Resolve media files. Counter part of the BALDR media server.
 
 ```js
-import mediaResolver from '@bldr/vue-media-resolver'
+import media from '@bldr/vue-media'
 
-Vue.use(mediaResolver, router, store)
+Vue.use(media, router, store)
 ```
 
 On every Vue instance:
 
 ```js
-this.$mediaResolver.resolve('id:Haydn_Joseph')
+this.$media.resolve('id:Haydn_Joseph')
 
 const mediaFile = this.$store.getters['media/mediaFileByUri']('id:Haydn_Joseph')
 ```

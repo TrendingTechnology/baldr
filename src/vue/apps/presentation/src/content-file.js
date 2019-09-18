@@ -6,7 +6,7 @@ import Vue from 'vue'
 import yaml from 'js-yaml'
 import { themeNames } from '@/themes.js'
 import { masterNames, callMasterFunc } from '@/masters.js'
-import { mediaTypes, MediaFile } from '@bldr/vue-media-resolver'
+import { mediaTypes, MediaFile } from '@bldr/vue-media'
 import store from '@/store.js'
 import router from '@/router.js'
 
@@ -173,7 +173,7 @@ class MasterData {
       const mediaURIs = callMasterFunc(this.name, 'mediaURIs', normalizedData)
       if (mediaURIs) {
         for (const mediaURI of mediaURIs) {
-          Vue.prototype.$mediaResolver.resolve(mediaURI)
+          Vue.prototype.$media.resolve(mediaURI)
         }
       }
     }
