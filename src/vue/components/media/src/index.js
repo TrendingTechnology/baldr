@@ -4,6 +4,7 @@
 
 import { getDefaultServers, Request } from '@bldr/http-request'
 import Vue from 'vue'
+import AudioVisual from 'vue-audio-visual'
 
 export const request = new Request(getDefaultServers(), '/api/media-server')
 
@@ -336,6 +337,7 @@ class Media {
 // Vue.use(media, router, store)
 const Plugin = {
   install (Vue, router, store) {
+    Vue.use(AudioVisual)
     if (store) store.registerModule('media', storeModule)
     Vue.prototype.$media = new Media(router, store)
   }
