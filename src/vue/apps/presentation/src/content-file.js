@@ -2,13 +2,13 @@
  * @file Parse, process and validate the presentation content file (YAML).
  */
 
-import Vue from 'vue'
+// import Vue from 'vue'
 import yaml from 'js-yaml'
 import { themeNames } from '@/themes.js'
 import { masterNames, callMasterFunc } from '@/masters.js'
-import { mediaTypes, MediaFile } from '@bldr/vue-media'
 import store from '@/store.js'
 import router from '@/router.js'
+import Vue from '@/main.js'
 
 /**
  * A raw slide object or a raw slide string.
@@ -173,7 +173,7 @@ class MasterData {
       const mediaUris = callMasterFunc(this.name, 'mediaUris', normalizedData)
       if (mediaUris) {
         for (const mediaUri of mediaUris) {
-          Vue.prototype.$media.resolve(mediaUri)
+          Vue.$media.resolve(mediaUri)
         }
       }
     }
@@ -300,14 +300,8 @@ function openFile (file) {
       store.dispatch('openPresentation', content)
       router.push('/slides')
     }
-  } else if (mediaTypes.isMedia(file.name)) {
-    const uri = URL.createObjectURL(file)
-    const mediaFile = new MediaFile({
-      uri: uri,
-      httpUrl: uri,
-      filename: file.name
-    })
-    store.commit('media/addMediaFile', mediaFile)
+  } else {
+    Vue.$media.addFromFileSystem(file)
   }
 }
 

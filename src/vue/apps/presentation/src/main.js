@@ -11,7 +11,7 @@ import DynamicSelect from '@bldr/vue-component-dynamic-select'
 import media from '@bldr/vue-media'
 
 Vue.use(shortcuts, router, store)
-Vue.use(media, router, store)
+Vue.use(media, router, store, Vue.prototype.$shortcuts)
 
 Vue.use(DynamicSelect)
 Vue.use(ModalDialog)
@@ -127,7 +127,7 @@ Vue.prototype.$fullscreen = function () {
 // Must be before new Vue()
 registerMasterComponents()
 
-new Vue({
+export default new Vue({
   router,
   store,
   render: h => h(App)

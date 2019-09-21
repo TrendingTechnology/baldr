@@ -10,11 +10,11 @@ export const request = new Request(getDefaultServers(), '/api/media-server')
 
 class Player {
   constructor (store) {
-    this.store_ = store
+    this.$store = store
   }
 
   getPlaying_ () {
-    return this.store_.getters['media/playing']
+    return this.$store.getters['media/playing']
   }
 
   toHttpUrl_ (uriOrMediaFileObject) {
@@ -22,7 +22,7 @@ class Player {
     if (typeof mixed === 'object') {
       return mixed.httpUrl
     }
-    return this.store_.getters['media/httpUrlByUri'](mixed)
+    return this.$store.getters['media/httpUrlByUri'](mixed)
   }
 
   stop () {
@@ -30,7 +30,7 @@ class Player {
     if (!audio) return
     audio.pause()
     audio.currentTime = 0
-    this.store_.commit('media/setPlaying', null)
+    this.$store.commit('media/setPlaying', null)
   }
 
   start (uriOrMediaFileObject) {
@@ -40,7 +40,7 @@ class Player {
     audio.volume = 1
     audio.currentTime = 0
     audio.play()
-    this.store_.commit('media/setPlaying', audio)
+    this.$store.commit('media/setPlaying', audio)
   }
 
   fadeOut (duration = 3.1) {
@@ -64,6 +64,11 @@ class Player {
 
 const state = {
   mediaFiles: {},
+  mediaTypes: {
+    audio: {},
+    video: {},
+    image: {}
+  },
   restApiServers: [],
   playing: null
 }
@@ -74,6 +79,9 @@ const getters = {
   },
   mediaFiles: state => {
     return state.mediaFiles
+  },
+  typeCount: state => type => {
+    return Object.keys(state.mediaTypes[type]).length
   },
   mediaFileByUri: (state, getters) => uri => {
     const media = getters.mediaFiles
@@ -101,12 +109,19 @@ const actions = {
   async setRestApiServers ({ commit }) {
     const servers = await request.getServers()
     commit('setRestApiServers', servers)
+  },
+  addMediaFile ({ commit }, mediaFile) {
+    commit('addMediaFile', mediaFile)
+    commit('addMediaFileToTypes', mediaFile)
   }
 }
 
 const mutations = {
   addMediaFile (state, mediaFile) {
     Vue.set(state.mediaFiles, mediaFile.uri, mediaFile)
+  },
+  addMediaFileToTypes (state, mediaFile) {
+    Vue.set(state.mediaTypes[mediaFile.type], mediaFile.uri, mediaFile)
   },
   setRestApiServers (state, restApiServers) {
     Vue.set(state, 'restApiServers', restApiServers)
@@ -183,6 +198,7 @@ export const mediaTypes = new MediaTypes()
  *   `video`.
  * @property {string} previewHttpUrl - Each media file can have a preview
  *   image. On the path is `_preview.jpg` appended.
+ * @property {string} hasShortcut - If a keyboard shortcut is set to play this media file.
  */
 export class MediaFile {
   /**
@@ -195,17 +211,39 @@ export class MediaFile {
     if (!('uri' in this)) {
       throw new Error('Media file needs a uri property.')
     }
+
+    /**
+     *
+     */
     this.uri = decodeURI(this.uri)
     const segments = this.uri.split(':')
+
+    /**
+     *
+     */
     this.uriScheme = segments[0]
+
+    /**
+     *
+     */
     this.uriAuthority = segments[1]
 
     if ('filename' in this && !('extension' in this)) {
       this.extensionFromString(this.filename)
     }
     if ('extension' in this && !('type' in this)) {
+      /**
+       *
+       */
       this.type = mediaTypes.extensionToType(this.extension)
     }
+
+    /**
+     * If a keyboard shortcut is set to play this media file.
+     *
+     * @type {boolean}
+     */
+    this.hasShortcut = false
   }
 
   extensionFromString (string) {
@@ -226,11 +264,17 @@ export class MediaFile {
       this[property] = properties[property]
     }
   }
+
+  get titleSafe () {
+    if ('title' in this) return this.title
+    if ('filename' in this) return this.filename
+    if ('uri' in this) return this.uri
+  }
 }
 
 class Resolver {
   constructor (store) {
-    this.store_ = store
+    this.$store = store
   }
 
   /**
@@ -275,7 +319,7 @@ class Resolver {
    * @return {MediaFile}
    */
   async getMediaFile (uri) {
-    const storedMediaFile = this.store_.getters['media/mediaFileByUri'](uri)
+    const storedMediaFile = this.$store.getters['media/mediaFileByUri'](uri)
     if (storedMediaFile) return storedMediaFile
 
     const mediaFile = new MediaFile({ uri: uri })
@@ -294,8 +338,12 @@ class Resolver {
     }
 
     mediaFile.type = mediaTypes.extensionToType(mediaFile.extension)
-    this.store_.commit('media/addMediaFile', mediaFile)
+    this.storeMediaFile(mediaFile)
     return mediaFile
+  }
+
+  storeMediaFile (mediaFile) {
+    this.$store.dispatch('media/addMediaFile', mediaFile)
   }
 
   /**
@@ -314,9 +362,10 @@ class Resolver {
  *
  */
 class Media {
-  constructor (router, store) {
-    this.router_ = router
-    this.store_ = store
+  constructor (router, store, shortcuts) {
+    this.$router = router
+    this.$store = store
+    this.$shortcuts = shortcuts
     this.player = new Player(store)
     this.resolver = new Resolver(store)
   }
@@ -328,18 +377,57 @@ class Media {
    * @param {string} uri - Uniform Resource Identifier, for example
    *   `id:Joseph_haydn` or `filename:beethoven.jpg`
    */
-  resolve (uri) {
-    this.resolver.getMediaFile(uri)
+  async resolve (uri) {
+    const mediaFile = await this.resolver.getMediaFile(uri)
+    this.addShortcutForMediaFile_(mediaFile)
+  }
+
+  addShortcutForMediaFile_ (mediaFile) {
+    if (mediaFile.hasShortcut) return
+    if (!['audio', 'video'].includes(mediaFile.type)) return
+    const number = this.$store.getters['media/typeCount'](mediaFile.type)
+    this.$shortcuts.add(
+      `a ${number}`,
+      () => {
+        this.player.start(mediaFile.uri)
+      },
+      `Play ${mediaFile.titleSafe}`
+    )
+  }
+
+  addFromFileSystem (file) {
+    if (mediaTypes.isMedia(file.name)) {
+      const uri = URL.createObjectURL(file)
+      const mediaFile = new MediaFile({
+        uri: uri,
+        httpUrl: uri,
+        filename: file.name
+      })
+      this.resolver.storeMediaFile(mediaFile)
+      this.addShortcutForMediaFile_(mediaFile)
+    }
   }
 }
 
 // https://stackoverflow.com/a/56501461
 // Vue.use(media, router, store)
 const Plugin = {
-  install (Vue, router, store) {
+  install (Vue, router, store, shortcuts) {
+    if (!router || router.constructor.name !== 'VueRouter') {
+      throw new Error('Pass a instance of VueRouter')
+    }
+
+    if (!store || store.constructor.name !== 'Store') {
+      throw new Error('Pass a instance of Store')
+    }
+
+    if (!shortcuts || shortcuts.constructor.name !== 'Shortcuts') {
+      throw new Error('Pass a instance of Shortcuts')
+    }
+
     Vue.use(AudioVisual)
     if (store) store.registerModule('media', storeModule)
-    Vue.prototype.$media = new Media(router, store)
+    Vue.prototype.$media = new Media(router, store, shortcuts)
   }
 }
 
