@@ -112,7 +112,8 @@ function main (options) {
     files: `${tmpDir}/*.svg`,
     fontName: 'baldr-icons',
     formats: ['woff', 'woff2'],
-    fontHeight: 512
+    fontHeight: 512,
+    descent: 64
   })
 }
 

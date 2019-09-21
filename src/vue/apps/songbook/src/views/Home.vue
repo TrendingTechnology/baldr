@@ -14,9 +14,7 @@
 
       <div class="block">
         <router-link :to="{ name: 'toc'}">
-          <material-icon
-            name="table-of-contents"
-          />
+          <plain-icon name="table-of-contents"/>
           Inhaltsverzeichnis
         </router-link>
       </div>
@@ -26,6 +24,7 @@
       </div>
 
     </section>
+
   </div>
 </template>
 
@@ -59,6 +58,7 @@ export default {
 
   .row {
     margin-top: 10vw;
+    font-size: 3vw;
     display: flex;
     justify-content: center;
   }
