@@ -21,6 +21,7 @@
 }
 
 [b-theme="default"], [b-theme="default"][b-dark-mode="false"],
+[b-theme="default"] #app:fullscreen,
 [b-theme="default"][b-dark-mode="false"] #app:fullscreen {
   background-color: #fcfbfb;
   color: #141110;

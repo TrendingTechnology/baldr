@@ -12,6 +12,11 @@
         name="table-of-contents"
        :size="materialIconSize"
       />
+      <material-icon
+        @click.native="$fullscreen()"
+        name="fullscreen"
+       :size="materialIconSize"
+      />
     </div>
 
     <modal-dialog name="search">
@@ -165,6 +170,11 @@ export default {
           this.showSearch()
         },
         description: 'Show search'
+      },
+      {
+        keys: 'ctrl+f',
+        callback: () => { this.$fullscreen() },
+        description: 'Fullscreen'
       }
     ])
   }

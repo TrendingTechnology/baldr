@@ -12,6 +12,7 @@
 
   &,
   &[b-dark-mode="false"],
+  & #app:fullscreen,
   &[b-dark-mode="false"] #app:fullscreen {
     background-color: $white;
     color: $black;
