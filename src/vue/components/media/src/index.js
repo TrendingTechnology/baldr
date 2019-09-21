@@ -33,6 +33,12 @@ class Player {
     this.$store.commit('media/setPlaying', null)
   }
 
+  pause () {
+    const audio = this.getPlaying_()
+    if (!audio) return
+    audio.pause()
+  }
+
   start (uriOrMediaFileObject) {
     const url = this.toHttpUrl_(uriOrMediaFileObject)
     this.stop()
@@ -198,7 +204,7 @@ export const mediaTypes = new MediaTypes()
  *   `video`.
  * @property {string} previewHttpUrl - Each media file can have a preview
  *   image. On the path is `_preview.jpg` appended.
- * @property {string} hasShortcut - If a keyboard shortcut is set to play this media file.
+ * @property {string} keyboard - The keyboard shortcut to play the media.
  */
 export class MediaFile {
   /**
@@ -213,18 +219,22 @@ export class MediaFile {
     }
 
     /**
-     *
+     * Uniform Resource Identifier, for example  `id:Haydn_Joseph`,
+     * `filename:Haydn_Joseph.jpg` or `http://example.com/Haydn_Joseph.jpg`.
+     * @type {string}
      */
     this.uri = decodeURI(this.uri)
     const segments = this.uri.split(':')
 
     /**
-     *
+     * for example: `http`, `https`, `blob`
+     * @type {string}
      */
     this.uriScheme = segments[0]
 
     /**
-     *
+     * for example: `//example.com/Haydn_Joseph.jpg`.
+     * @type {string}
      */
     this.uriAuthority = segments[1]
 
@@ -233,17 +243,17 @@ export class MediaFile {
     }
     if ('extension' in this && !('type' in this)) {
       /**
-       *
+       * The media type, for example `image`, `audio` or `video`.
+       * @type {string}
        */
       this.type = mediaTypes.extensionToType(this.extension)
     }
 
     /**
-     * If a keyboard shortcut is set to play this media file.
-     *
-     * @type {boolean}
+     * The keyboard shortcut to play the media
+     * @type {string}
      */
-    this.hasShortcut = false
+    this.shortcut = null
   }
 
   extensionFromString (string) {
@@ -278,7 +288,6 @@ class Resolver {
   }
 
   /**
-   *
    * @param {string} key
    * @param {string|json} value
    */
@@ -368,6 +377,14 @@ class Media {
     this.$shortcuts = shortcuts
     this.player = new Player(store)
     this.resolver = new Resolver(store)
+
+    this.$shortcuts.addMultiple([
+      {
+        keys: 'space',
+        callback: () => { this.player.pause() },
+        description: 'Media player: pause'
+      },
+    ])
   }
 
   /**
@@ -383,24 +400,41 @@ class Media {
   }
 
   addShortcutForMediaFile_ (mediaFile) {
-    if (mediaFile.hasShortcut) return
+    if (mediaFile.shortcut) return
     if (!['audio', 'video'].includes(mediaFile.type)) return
     const number = this.$store.getters['media/typeCount'](mediaFile.type)
+    let key
+    switch (mediaFile.type) {
+      case 'audio':
+        key = 'a'
+        break;
+
+      case 'video':
+        key = 'v'
+        break;
+
+      default:
+        key = 'm'
+        break;
+    }
+    const shortcut = `${key} ${number}`
     this.$shortcuts.add(
-      `a ${number}`,
+      shortcut,
       () => {
         this.player.start(mediaFile.uri)
       },
       `Play ${mediaFile.titleSafe}`
     )
+    mediaFile.shortcut = shortcut
   }
 
   addFromFileSystem (file) {
     if (mediaTypes.isMedia(file.name)) {
-      const uri = URL.createObjectURL(file)
+      const httpUrl = URL.createObjectURL(file)
+      const uri = `localfile:${file.name}`
       const mediaFile = new MediaFile({
         uri: uri,
-        httpUrl: uri,
+        httpUrl: httpUrl,
         filename: file.name
       })
       this.resolver.storeMediaFile(mediaFile)
