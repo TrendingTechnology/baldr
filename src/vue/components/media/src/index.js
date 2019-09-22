@@ -49,6 +49,20 @@ class Player {
     this.$store.commit('media/setPlaying', audio)
   }
 
+  play () {
+    const media = this.getPlaying_()
+    media.play()
+  }
+
+  toggle () {
+    const media = this.getPlaying_()
+    if (media.paused) {
+      this.play()
+    } else {
+      this.pause()
+    }
+  }
+
   fadeOut (duration = 3.1) {
     const audio = this.getPlaying_()
     if (!audio) return
@@ -381,8 +395,8 @@ class Media {
     this.$shortcuts.addMultiple([
       {
         keys: 'space',
-        callback: () => { this.player.pause() },
-        description: 'Media player: pause'
+        callback: () => { this.player.toggle() },
+        description: 'Media player: play/pause'
       },
     ])
   }
