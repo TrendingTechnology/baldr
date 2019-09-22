@@ -8,6 +8,7 @@
         <router-view/>
       </div>
     </main>
+    <media-player/>
     <app-info package-name="@bldr/presentation" :version="version"/>
   </div>
 </template>

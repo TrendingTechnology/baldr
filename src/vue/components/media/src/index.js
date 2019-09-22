@@ -8,6 +8,7 @@ import { getDefaultServers, Request } from '@bldr/http-request'
 import Vue from 'vue'
 import AudioVisual from 'vue-audio-visual'
 import MediaOverview from './MediaOverview.vue'
+import MediaPlayer from './MediaPlayer.vue'
 
 export const request = new Request(getDefaultServers(), '/api/media-server')
 
@@ -536,6 +537,7 @@ const Plugin = {
     Vue.use(AudioVisual)
     if (store) store.registerModule('media', storeModule)
     Vue.prototype.$media = new Media(router, store, shortcuts)
+    Vue.component('media-player', MediaPlayer)
   }
 }
 
