@@ -31,7 +31,6 @@ let resizeObserver = new ResizeObserver(entries => {
     let windowHeight = window.innerHeight
     // To avoid scroll bars minus buffer
     let maxHeight = windowHeight - headerHeight - footerHeight - printHeaderHeight - printFooterHeight - 10
-    console.log(maxHeight)
     // DIN A 4 Landscape: width: 297 height: 210
     let aspectRatio = { width: 297, height: 210 }
     for (let entry of entries) {
