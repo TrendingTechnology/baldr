@@ -553,17 +553,17 @@ class Media {
 // Vue.use(media, router, store)
 const Plugin = {
   install (Vue, router, store, shortcuts) {
-    if (!router || router.constructor.name !== 'VueRouter') {
-      throw new Error('Pass in an instance of “VueRouter”.')
-    }
+    // if (!router || router.constructor.name !== 'VueRouter') {
+    //   throw new Error('Pass in an instance of “VueRouter”.')
+    // }
 
-    if (!store || store.constructor.name !== 'Store') {
-      throw new Error('Pass in an instance of “Store”.')
-    }
+    // if (!store || store.constructor.name !== 'Store') {
+    //   throw new Error('Pass in an instance of “Store”.')
+    // }
 
-    if (!shortcuts || shortcuts.constructor.name !== 'Shortcuts') {
-      throw new Error('Pass in an instance of “Shortcuts“.')
-    }
+    // if (!shortcuts || shortcuts.constructor.name !== 'Shortcuts') {
+    //   throw new Error('Pass in an instance of “Shortcuts“.')
+    // }
 
     Vue.use(AudioVisual)
 
