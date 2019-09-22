@@ -12,7 +12,7 @@ import MediaPlayer from './MediaPlayer.vue'
 
 export const request = new Request(getDefaultServers(), '/api/media-server')
 
-export function formatTime (duration) {
+export function formatDuration (duration) {
   if (!duration) return '00:00'
   duration = parseInt(duration)
   let seconds = duration % 60
@@ -57,15 +57,6 @@ class Player {
     const mediaFile = this.toMediaFile_(uriOrMediaFile)
     if (!mediaFile) return
     this.stop()
-    if (!mediaFile.mediaElement) {
-      if (mediaFile.type === 'audio') {
-        mediaFile.mediaElement = new Audio(mediaFile.httpUrl)
-      } else if (mediaFile.type === 'video') {
-        mediaFile.mediaElement = new Video(mediaFile.httpUrl)
-      } else {
-        throw new Error('Can not play media file.')
-      }
-    }
     this.unload()
     this.$store.commit('media/setCurrent', mediaFile)
     return mediaFile
@@ -155,6 +146,9 @@ const getters = {
   },
   typeCount: state => type => {
     return Object.keys(state.mediaTypes[type]).length
+  },
+  mediaFilesByType: state => type => {
+    return state.mediaTypes[type]
   },
   mediaFileByUri: (state, getters) => uri => {
     const media = getters.mediaFiles
@@ -322,11 +316,7 @@ export class MediaFile {
      */
     this.shortcut = null
 
-    /**
-     * The HTMLMediaElement of the media file.
-     * @type {object}
-     */
-    this.mediaElement = null
+    this.mediaElement_ = null
   }
 
   extensionFromString (string) {
@@ -352,6 +342,33 @@ export class MediaFile {
     if ('title' in this) return this.title
     if ('filename' in this) return this.filename
     if ('uri' in this) return this.uri
+  }
+
+  set mediaElement (mediaElement) {
+    this.mediaElement_ = mediaElement
+  }
+
+  /**
+   * The HTMLMediaElement of the media file.
+   * @type {object}
+   */
+  get mediaElement () {
+    if (this.mediaElement_) return this.mediaElement_
+
+    if (this.type === 'audio') {
+      this.mediaElement_ = new Audio(this.httpUrl)
+    } else if (this.type === 'video') {
+      this.mediaElement_ = new Video(this.httpUrl)
+    } else if (this.type === 'image') {
+      this.mediaElement_ = new Image(this.httpUrl)
+    }
+
+    if (['audio', 'video'].includes(this.type)) {
+      this.mediaElement_.onloadedmetadata = (event) => {
+        Vue.set(this, 'duration', event.target.duration)
+      }
+    }
+    return this.mediaElement_
   }
 }
 
@@ -549,7 +566,10 @@ const Plugin = {
     }
 
     Vue.use(AudioVisual)
+
     if (store) store.registerModule('media', storeModule)
+
+    Vue.filter('duration', formatDuration)
     Vue.prototype.$media = new Media(router, store, shortcuts)
     Vue.component('media-player', MediaPlayer)
   }

@@ -21,7 +21,7 @@
 <script>
 /* globals compilationTime gitHead */
 import { MaterialIcon } from '@bldr/vue-component-material-icon'
-import { formatTime } from './index.js'
+import { formatDuration } from './index.js'
 
 export default {
   name: 'MediaPlayer',
@@ -47,12 +47,12 @@ export default {
   watch: {
     mediaElement () {
       this.mediaElement.ontimeupdate = (event) => {
-        this.currentTime = formatTime(event.target.currentTime)
+        this.currentTime = formatDuration(event.target.currentTime)
       }
       this.mediaElement.oncanplaythrough = (event) => {
-        this.duration = formatTime(event.target.duration)
+        this.duration = formatDuration(event.target.duration)
       }
-      if (this.videoElement) this.videoElement.remove()
+      if (this.videoElement) this.$refs.videoContainer.removeChild(this.videoElement)
       if (this.mediaFile.type === 'video') {
         this.$refs.videoContainer.appendChild(this.mediaElement)
         this.videoElement = this.mediaElement
