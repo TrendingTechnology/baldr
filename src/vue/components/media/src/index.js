@@ -2,61 +2,99 @@
  * @file Resolve media files.
  */
 
+/* globals document */
+
 import { getDefaultServers, Request } from '@bldr/http-request'
 import Vue from 'vue'
 import AudioVisual from 'vue-audio-visual'
+import MediaOverview from './MediaOverview.vue'
 
 export const request = new Request(getDefaultServers(), '/api/media-server')
+
+function Video(src) {
+  const video = document.createElement('video')
+  video.src = src
+  return video
+}
 
 class Player {
   constructor (store) {
     this.$store = store
   }
 
-  getPlaying_ () {
-    return this.$store.getters['media/playing']
+  getCurrentMediaFile_ () {
+    return this.$store.getters['media/current']
   }
 
-  toHttpUrl_ (uriOrMediaFileObject) {
-    const mixed = uriOrMediaFileObject
-    if (typeof mixed === 'object') {
-      return mixed.httpUrl
+  getCurrentMediaElement_ () {
+    const mediaFile = this.getCurrentMediaFile_()
+    if (mediaFile) return mediaFile.mediaElement
+  }
+
+  toMediaFile_ (uriOrMediaFile) {
+    if (typeof uriOrMediaFile === 'object') {
+      return uriOrMediaFile
     }
-    return this.$store.getters['media/httpUrlByUri'](mixed)
+    return this.$store.getters['media/mediaFileByUri'](uriOrMediaFile)
+  }
+
+  load (uriOrMediaFile) {
+    const mediaFile = this.toMediaFile_(uriOrMediaFile)
+    if (mediaFile) {
+      if (mediaFile.type === 'audio') {
+        mediaFile.mediaElement = new Audio(mediaFile.httpUrl)
+      } else if (mediaFile.type === 'video') {
+        mediaFile.mediaElement = new Video(mediaFile.httpUrl)
+      } else {
+        throw new Error('Can not play media file.')
+      }
+      this.stop()
+      this.unload()
+      this.$store.commit('media/setCurrent', mediaFile)
+      return mediaFile
+    }
+  }
+
+  unload () {
+    const mediaFile = this.getCurrentMediaFile_()
+    if (mediaFile) {
+      mediaFile.mediaElement.remove()
+      this.$store.commit('media/setCurrent', null)
+    }
   }
 
   stop () {
-    const audio = this.getPlaying_()
-    if (!audio) return
-    audio.pause()
-    audio.currentTime = 0
-    this.$store.commit('media/setPlaying', null)
+    const mediaElement = this.getCurrentMediaElement_()
+    if (!mediaElement) return
+    mediaElement.pause()
+    mediaElement.currentTime = 0
   }
 
   pause () {
-    const audio = this.getPlaying_()
-    if (!audio) return
-    audio.pause()
+    const mediaElement = this.getCurrentMediaElement_()
+    if (!mediaElement) return
+    mediaElement.pause()
   }
 
-  start (uriOrMediaFileObject) {
-    const url = this.toHttpUrl_(uriOrMediaFileObject)
-    this.stop()
-    const audio = new Audio(url)
-    audio.volume = 1
-    audio.currentTime = 0
-    audio.play()
-    this.$store.commit('media/setPlaying', audio)
+  start (uriOrMediaFile) {
+    this.load(uriOrMediaFile)
+    let mediaElement = this.getCurrentMediaElement_()
+    mediaElement.volume = 1
+    mediaElement.currentTime = 0
+    mediaElement.play()
   }
 
   play () {
-    const media = this.getPlaying_()
-    media.play()
+    const mediaElement = this.getCurrentMediaElement_()
+    if (!mediaElement) return
+    mediaElement.volume = 1
+    mediaElement.play()
   }
 
   toggle () {
-    const media = this.getPlaying_()
-    if (media.paused) {
+    const mediaElement = this.getCurrentMediaElement_()
+    if (!mediaElement) return
+    if (mediaElement.paused) {
       this.play()
     } else {
       this.pause()
@@ -64,16 +102,16 @@ class Player {
   }
 
   fadeOut (duration = 3.1) {
-    const audio = this.getPlaying_()
-    if (!audio) return
-    var actualVolume = audio.volume
+    const mediaElement = this.getCurrentMediaElement_()
+    if (!mediaElement) return
+    var actualVolume = mediaElement.volume
     var steps = actualVolume / 100
     // in milliseconds: duration * 1000 / 100
     var delay = duration * 10
     var fadeOutInterval = setInterval(() => {
       actualVolume -= steps
       if (actualVolume >= 0) {
-        audio.volume = actualVolume.toFixed(2)
+        mediaElement.volume = actualVolume.toFixed(2)
       } else {
         this.stop()
         clearInterval(fadeOutInterval)
@@ -90,12 +128,12 @@ const state = {
     image: {}
   },
   restApiServers: [],
-  playing: null
+  current: null
 }
 
 const getters = {
-  playing: state => {
-    return state.playing
+  current: state => {
+    return state.current
   },
   mediaFiles: state => {
     return state.mediaFiles
@@ -146,8 +184,8 @@ const mutations = {
   setRestApiServers (state, restApiServers) {
     Vue.set(state, 'restApiServers', restApiServers)
   },
-  setPlaying (state, audio) {
-    state.playing = audio
+  setCurrent (state, audio) {
+    state.current = audio
   }
 }
 
@@ -268,6 +306,12 @@ export class MediaFile {
      * @type {string}
      */
     this.shortcut = null
+
+    /**
+     * The HTMLMediaElement of the media file.
+     * @type {object}
+     */
+    this.mediaElement = null
   }
 
   extensionFromString (string) {
@@ -398,7 +442,23 @@ class Media {
         callback: () => { this.player.toggle() },
         description: 'Media player: play/pause'
       },
+      {
+        keys: 'p f',
+        callback: () => { this.player.fadeOut() },
+        description: 'Media player: fade out'
+      },
     ])
+
+    if (this.$router) {
+      const route = {
+        path: '/media',
+        shortcut: 'm',
+        title: 'Media',
+        component: MediaOverview
+      }
+      this.$router.addRoutes([route])
+      this.$shortcuts.fromRoute(route)
+    }
   }
 
   /**

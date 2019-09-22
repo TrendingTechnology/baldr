@@ -20,13 +20,6 @@ const { mapGetters } = createNamespacedHelpers('media')
 export default {
   name: 'MediaOverview',
   computed: mapGetters(['mediaFiles', 'isMedia']),
-  mounted () {
-    this.$styleConfig.set({
-      overflow: false,
-      darkMode: false,
-      centerVertically: false
-    })
-  },
   methods: {
     play (uri) {
       this.$media.player.start(uri)

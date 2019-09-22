@@ -6,7 +6,6 @@ import Home from './views/Home.vue'
 import MasterRenderer from '@/views/SlideView/MasterRenderer.vue'
 import Documentation from '@/views/Documentation.vue'
 import MasterDocumentation from '@/views/MasterDocumentation.vue'
-import MediaOverview from '@/views/MediaOverview.vue'
 import OpenFiles from '@/views/OpenFiles.vue'
 import SlideView from '@/views/SlideView'
 import RestApiOverview from '@/views/RestApiOverview.vue'
@@ -31,12 +30,6 @@ const routes = [
     shortcut: 's',
     title: 'slides',
     component: SlideView
-  },
-  {
-    path: '/media',
-    shortcut: 'm',
-    title: 'Media',
-    component: MediaOverview
   },
   {
     path: '/camera',
