@@ -55,7 +55,9 @@ class Player {
 
   load (uriOrMediaFile) {
     const mediaFile = this.toMediaFile_(uriOrMediaFile)
-    if (mediaFile) {
+    if (!mediaFile) return
+    this.stop()
+    if (!mediaFile.mediaElement) {
       if (mediaFile.type === 'audio') {
         mediaFile.mediaElement = new Audio(mediaFile.httpUrl)
       } else if (mediaFile.type === 'video') {
@@ -63,17 +65,15 @@ class Player {
       } else {
         throw new Error('Can not play media file.')
       }
-      this.stop()
-      this.unload()
-      this.$store.commit('media/setCurrent', mediaFile)
-      return mediaFile
     }
+    this.unload()
+    this.$store.commit('media/setCurrent', mediaFile)
+    return mediaFile
   }
 
   unload () {
     const mediaFile = this.getCurrentMediaFile_()
     if (mediaFile) {
-      mediaFile.mediaElement.remove()
       this.$store.commit('media/setCurrent', null)
     }
   }
@@ -271,7 +271,7 @@ export const mediaTypes = new MediaTypes()
  *   `video`.
  * @property {string} previewHttpUrl - Each media file can have a preview
  *   image. On the path is `_preview.jpg` appended.
- * @property {string} keyboard - The keyboard shortcut to play the media.
+ * @property {string} shortcut - The keyboard shortcut to play the media.
  */
 export class MediaFile {
   /**

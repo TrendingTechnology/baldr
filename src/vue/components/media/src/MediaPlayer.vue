@@ -1,6 +1,7 @@
 <template>
   <div class="media-player" v-show="show">
     <div v-if="mediaFile">
+      <img v-if="mediaFile.previewHttpUrl" :src="mediaFile.previewHttpUrl"/>
       {{ mediaFile.titleSafe }}
       {{ currentTime }} /
       {{ duration }}
@@ -51,9 +52,10 @@ export default {
       this.mediaElement.oncanplaythrough = (event) => {
         this.duration = formatTime(event.target.duration)
       }
+      if (this.videoElement) this.videoElement.remove()
       if (this.mediaFile.type === 'video') {
-        if (this.videoElement) this.videoElement.remove()
         this.$refs.videoContainer.appendChild(this.mediaElement)
+        this.videoElement = this.mediaElement
       }
     }
   },
