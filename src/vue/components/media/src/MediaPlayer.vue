@@ -5,10 +5,10 @@
       {{ mediaFile.titleSafe }}
       {{ currentTime }} /
       {{ duration }}
-      <div ref="videoContainer"></div>
     </div>
-
     <p v-else>No media file loaded</p>
+
+    <div ref="videoContainer"></div>
 
     <material-icon
       class="close"
@@ -52,8 +52,9 @@ export default {
       this.mediaElement.oncanplaythrough = (event) => {
         this.duration = formatDuration(event.target.duration)
       }
-      if (this.videoElement) this.$refs.videoContainer.removeChild(this.videoElement)
+      if (this.videoElement) this.videoElement.style.display = 'none'
       if (this.mediaFile.type === 'video') {
+        this.mediaElement.style.display = 'block'
         this.$refs.videoContainer.appendChild(this.mediaElement)
         this.videoElement = this.mediaElement
       }

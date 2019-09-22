@@ -316,7 +316,11 @@ export class MediaFile {
      */
     this.shortcut = null
 
-    this.mediaElement_ = null
+    /**
+     * The HTMLMediaElement of the media file.
+     * @type {object}
+     */
+    this.mediaElement = null
   }
 
   extensionFromString (string) {
@@ -344,31 +348,18 @@ export class MediaFile {
     if ('uri' in this) return this.uri
   }
 
-  set mediaElement (mediaElement) {
-    this.mediaElement_ = mediaElement
-  }
-
-  /**
-   * The HTMLMediaElement of the media file.
-   * @type {object}
-   */
-  get mediaElement () {
-    if (this.mediaElement_) return this.mediaElement_
-
+  createMediaElement () {
+    let mediaElement
     if (this.type === 'audio') {
-      this.mediaElement_ = new Audio(this.httpUrl)
+      mediaElement = new Audio(this.httpUrl)
     } else if (this.type === 'video') {
-      this.mediaElement_ = new Video(this.httpUrl)
+      mediaElement = new Video(this.httpUrl)
     } else if (this.type === 'image') {
-      this.mediaElement_ = new Image(this.httpUrl)
+      mediaElement = new Image()
+      mediaElement.src = this.httpUrl
     }
-
-    if (['audio', 'video'].includes(this.type)) {
-      this.mediaElement_.onloadedmetadata = (event) => {
-        Vue.set(this, 'duration', event.target.duration)
-      }
-    }
-    return this.mediaElement_
+    this.mediaElement = mediaElement
+    return mediaElement
   }
 }
 
@@ -442,7 +433,16 @@ class Resolver {
   }
 
   storeMediaFile (mediaFile) {
-    this.$store.dispatch('media/addMediaFile', mediaFile)
+    const mediaElement = mediaFile.createMediaElement()
+    if (['audio', 'video'].includes(mediaFile.type)) {
+      mediaElement.onloadedmetadata = () => {
+        this.$store.dispatch('media/addMediaFile', mediaFile)
+      }
+    } else {
+      mediaElement.onload = () => {
+        this.$store.dispatch('media/addMediaFile', mediaFile)
+      }
+    }
   }
 
   /**

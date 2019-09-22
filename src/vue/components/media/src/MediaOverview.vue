@@ -16,8 +16,7 @@
             >
               <td><img v-if="mediaFile.previewHttpUrl" :src="mediaFile.previewHttpUrl"/></td>
               <td>{{ mediaFile.titleSafe }}</td>
-              <td>{{ mediaFile.mediaElement.duration }}</td>
-              <td>{{ mediaFile.duration | duration }}</td>
+              <td>{{ mediaFile.mediaElement.duration | duration }}</td>
             </tr>
           </tbody>
         </table>
@@ -38,9 +37,7 @@
                 <material-icon v-else class="placeholder-icon" name="file-video" color="red"/>
               </td>
               <td>{{ mediaFile.titleSafe }}</td>
-              <td>{{ mediaFile.mediaElement.duration }}</td>
-              <td>{{ mediaFile.duration | duration }}</td>
-
+              <td>{{ mediaFile.mediaElement.duration | duration }}</td>
             </tr>
           </tbody>
         </table>
@@ -53,6 +50,8 @@
             <tr v-for="mediaFile in mediaFilesByType('image')" :key="mediaFile.uri">
               <td><img v-if="mediaFile.httpUrl" :src="mediaFile.httpUrl"/></td>
               <td>{{ mediaFile.titleSafe }}</td>
+              <td>{{ mediaFile.mediaElement.width }} x {{ mediaFile.mediaElement.height }}</td>
+
             </tr>
           </tbody>
         </table>
@@ -118,6 +117,10 @@ export default {
 
       td:first-child {
         width: 5vw;
+      }
+
+      td:last-child {
+        text-align: right;
       }
     }
   }
