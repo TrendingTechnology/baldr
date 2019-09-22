@@ -12,6 +12,20 @@ import MediaPlayer from './MediaPlayer.vue'
 
 export const request = new Request(getDefaultServers(), '/api/media-server')
 
+export function formatTime (duration) {
+  if (!duration) return '00:00'
+  duration = parseInt(duration)
+  let seconds = duration % 60
+  if (seconds < 10) {
+    seconds = `0${seconds}`
+  }
+  let minutes = parseInt(duration / 60)
+  if (minutes < 10) {
+    minutes = `0${minutes}`
+  }
+  return `${minutes}:${seconds}`
+}
+
 function Video(src) {
   const video = document.createElement('video')
   video.src = src

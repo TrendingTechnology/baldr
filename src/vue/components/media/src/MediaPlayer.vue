@@ -1,11 +1,10 @@
 <template>
   <div class="media-player" v-show="show">
-    <h1>Media player</h1>
-
     <div v-if="mediaFile">
       {{ mediaFile.titleSafe }}
       {{ currentTime }} /
-      {{ mediaElement.duration }}
+      {{ duration }}
+      <div ref="videoContainer"></div>
     </div>
 
     <p v-else>No media file loaded</p>
@@ -21,18 +20,19 @@
 <script>
 /* globals compilationTime gitHead */
 import { MaterialIcon } from '@bldr/vue-component-material-icon'
-
+import { formatTime } from './index.js'
 
 export default {
   name: 'MediaPlayer',
-
   components: {
     MaterialIcon
   },
   data () {
     return {
       show: false,
-      currentTime: 0
+      currentTime: 0,
+      duration: 0,
+      videoElement: null
     }
   },
   computed: {
@@ -45,7 +45,16 @@ export default {
   },
   watch: {
     mediaElement () {
-      this.currentTime = parseInt(this.mediaFile.currentTime);
+      this.mediaElement.ontimeupdate = (event) => {
+        this.currentTime = formatTime(event.target.currentTime)
+      }
+      this.mediaElement.oncanplaythrough = (event) => {
+        this.duration = formatTime(event.target.duration)
+      }
+      if (this.mediaFile.type === 'video') {
+        if (this.videoElement) this.videoElement.remove()
+        this.$refs.videoContainer.appendChild(this.mediaElement)
+      }
     }
   },
   methods: {
@@ -57,6 +66,9 @@ export default {
     this.$shortcuts.add('m s', () => { this.toggle() }, 'Show the media player.')
   }
 }
+
+
+
 </script>
 
 <style lang="scss" scoped>
