@@ -9,7 +9,7 @@ import shortcuts from '@bldr/vue-shortcuts'
 import media from '@bldr/vue-media'
 
 Vue.use(shortcuts, router, store)
-Vue.use(media, router, store)
+Vue.use(media, router, store, Vue.prototype.$shortcuts)
 
 Vue.use(MaterialIcon)
 Vue.use(ModalDialog)

@@ -11,7 +11,7 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "upload": "rsync -av --delete dist/ serverway:/var/www/baldr.friedrich.rocks/showroom/"
+    "upload": "rsync -av --delete dist/ serverway:/var/www/baldr/showroom/"
   },
   "dependencies": {
     "@bldr/theme-default": "^0.0.26",
