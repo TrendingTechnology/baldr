@@ -9,9 +9,11 @@
           :src="mediaFile.previewHttpUrl"
         />
         <div
+          :class="{ fullscreen: videoFullscreen }"
           v-show="mediaFile && mediaFile.type === 'video'"
           class="video-container"
           ref="videoContainer"
+          @click="videoToggleFullscreen"
         />
       </div>
 
@@ -23,6 +25,7 @@
         <material-icon name="play" @click.native="$media.player.play()"/>
         <material-icon name="pause" @click.native="$media.player.pause()"/>
         <material-icon name="skip-next"/>
+        <material-icon name="fullscreen" @click.native="videoToggleFullscreen"/>
       </div>
       <p v-else>No media file loaded</p>
     </div>
@@ -50,7 +53,8 @@ export default {
       show: false,
       currentTime: 0,
       duration: 0,
-      videoElement: null
+      videoElement: null,
+      videoFullscreen: false
     }
   },
   computed: {
@@ -80,6 +84,9 @@ export default {
   methods: {
     toggle: function () {
       this.show = !this.show
+    },
+    videoToggleFullscreen: function () {
+      this.videoFullscreen = !this.videoFullscreen
     }
   },
   mounted: function () {
@@ -93,11 +100,10 @@ export default {
 
   .media-player {
     bottom: 0;
-    background-color: $white;
-    box-sizing: border-box;
+    background-color: scale-color(rgba($gray, 0.7), $alpha: 10%);
     left: 0;
     padding: 0.4vw;
-    position: absolute;
+    position: fixed;
     text-align: left;
     width: 100%;
     color: $black;
@@ -121,6 +127,10 @@ export default {
       height: $preview-size;
     }
 
+    .preview-image, .video-container {
+      background-color: $black;
+    }
+
     .close {
       position: absolute;
       top: 0.5em;
@@ -138,6 +148,18 @@ export default {
         width: $preview-size;
         height: $preview-size;
         object-fit: contain;
+      }
+      &.fullscreen {
+        width: 100vw;
+        height: 100vh;
+        position: fixed;
+        top: 0;
+        left: 0;
+        video {
+          width: 100%;
+          height: 100%;
+          object-fit: contain;
+        }
       }
     }
   }
