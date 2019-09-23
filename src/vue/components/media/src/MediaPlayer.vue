@@ -1,14 +1,31 @@
 <template>
   <div class="media-player" v-show="show">
-    <div v-if="mediaFile">
-      <img v-if="mediaFile.previewHttpUrl" :src="mediaFile.previewHttpUrl"/>
-      {{ mediaFile.titleSafe }}
-      {{ currentTime }} /
-      {{ duration }}
-    </div>
-    <p v-else>No media file loaded</p>
 
-    <div ref="videoContainer"></div>
+    <div class="player-container">
+      <div class="preview-container">
+        <img
+          class="preview-image"
+          v-if="mediaFile && mediaFile.previewHttpUrl"
+          :src="mediaFile.previewHttpUrl"
+        />
+        <div
+          v-show="mediaFile && mediaFile.type === 'video'"
+          class="video-container"
+          ref="videoContainer"
+        />
+      </div>
+
+      <div class="meta-data" v-if="mediaFile">
+        {{ mediaFile.titleSafe }}
+        {{ currentTime }} /
+        {{ duration }}
+        <material-icon name="skip-previous"/>
+        <material-icon name="play" @click.native="$media.player.play()"/>
+        <material-icon name="pause" @click.native="$media.player.pause()"/>
+        <material-icon name="skip-next"/>
+      </div>
+      <p v-else>No media file loaded</p>
+    </div>
 
     <material-icon
       class="close"
@@ -69,12 +86,11 @@ export default {
     this.$shortcuts.add('m s', () => { this.toggle() }, 'Show the media player.')
   }
 }
-
-
-
 </script>
 
 <style lang="scss" scoped>
+  $preview-size: 8vw;
+
   .media-player {
     bottom: 0;
     background-color: $white;
@@ -86,10 +102,43 @@ export default {
     width: 100%;
     color: $black;
 
+    .player-container {
+      display: flex;
+    }
+
+    .meta-data {
+      padding: 1em;
+    }
+
+    .preview-image {
+      width: $preview-size;
+      height: $preview-size;
+      object-fit: cover;
+    }
+
+    .video-container {
+      width: $preview-size;
+      height: $preview-size;
+    }
+
     .close {
       position: absolute;
       top: 0.5em;
       right: 1em;
+    }
+  }
+</style>
+
+<style lang="scss">
+  $preview-size: 8vw;
+
+  .media-player {
+    .video-container {
+      video {
+        width: $preview-size;
+        height: $preview-size;
+        object-fit: contain;
+      }
     }
   }
 </style>

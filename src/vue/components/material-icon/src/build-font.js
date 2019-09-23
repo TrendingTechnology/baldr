@@ -159,6 +159,10 @@ if (require.main === module) {
         wikipedia: '',
         worker: '',
         youtube: '',
+        play: '',
+        pause: '',
+        'skip-next': '',
+        'skip-previous': ''
       }
     },
     {
