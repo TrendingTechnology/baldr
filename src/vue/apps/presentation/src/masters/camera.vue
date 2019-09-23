@@ -79,6 +79,14 @@
  * ]
  * </pre></code>
  *
+ * Secure contexts:
+ *
+ * Chrome
+ *
+ * Also you can add whiltelist by open chrome://flags and search for unsafely-treat-insecure-origin-as-secure:
+ * chrome://flags/#unsafely-treat-insecure-origin-as-secure
+ *
+ *
  * @module @bldr/master-camera
  */
 
