@@ -58,7 +58,7 @@ class Player {
     if (!mediaFile) return
     this.stop()
     this.unload()
-    this.$store.commit('media/setCurrent', mediaFile)
+    this.$store.dispatch('media/setMediaFileCurrent', mediaFile)
     return mediaFile
   }
 
@@ -88,6 +88,18 @@ class Player {
     mediaElement.volume = 1
     mediaElement.currentTime = 0
     mediaElement.play()
+  }
+
+  startPrevious () {
+    this.stop()
+    this.$store.dispatch('media/setMediaFilePrevious')
+    this.play()
+  }
+
+  startNext () {
+    this.stop()
+    this.$store.dispatch('media/setMediaFileNext')
+    this.play()
   }
 
   play () {
@@ -130,6 +142,7 @@ const state = {
   current: null,
   mediaFiles: {},
   mediaList: [],
+  mediaNoCurrent: null,
   mediaTypes: {
     audio: {},
     video: {},
@@ -139,27 +152,8 @@ const state = {
 }
 
 const getters = {
-  current: state => {
-    return state.current
-  },
-  mediaFiles: state => {
-    return state.mediaFiles
-  },
-  mediaList: state => {
-    return state.mediaList
-  },
-  typeCount: state => type => {
-    return Object.keys(state.mediaTypes[type]).length
-  },
-  mediaFilesByType: state => type => {
-    return state.mediaTypes[type]
-  },
-  mediaFileByUri: (state, getters) => uri => {
-    const media = getters.mediaFiles
-    if (uri in media) {
-      return media[uri]
-    }
-    return null
+  current: (state, getters) => {
+    return getters.mediaFiles[getters.mediaList[getters.mediaNoCurrent - 1]]
   },
   httpUrlByUri: (state, getters) => uri => {
     const media = getters.mediaFiles
@@ -171,8 +165,30 @@ const getters = {
   isMedia: (state, getters) => {
     return Object.keys(getters.mediaFiles).length > 0
   },
+  mediaFileByUri: (state, getters) => uri => {
+    const media = getters.mediaFiles
+    if (uri in media) {
+      return media[uri]
+    }
+    return null
+  },
+  mediaFiles: state => {
+    return state.mediaFiles
+  },
+  mediaFilesByType: state => type => {
+    return state.mediaTypes[type]
+  },
+  mediaList: state => {
+    return state.mediaList
+  },
+  mediaNoCurrent: state => {
+    return state.mediaNoCurrent
+  },
   restApiServers: state => {
     return state.restApiServers
+  },
+  typeCount: state => type => {
+    return Object.keys(state.mediaTypes[type]).length
   }
 }
 
@@ -192,6 +208,28 @@ const actions = {
     if (!list.includes(mediaFile.uri)) {
       commit('addMediaFileToList', mediaFile)
     }
+  },
+  setMediaFileNext ({ commit, getters }) {
+    const no = getters.mediaNoCurrent
+    const count = getters.mediaList.length
+    if (no === count) {
+      commit('setMediaNoCurrent', 1)
+    } else {
+      commit('setMediaNoCurrent', no + 1)
+    }
+  },
+  setMediaFilePrevious ({ commit, getters }) {
+    const no = getters.mediaNoCurrent
+    const count = getters.mediaList.length
+    if (no === 1) {
+      commit('setMediaNoCurrent', count)
+    } else {
+      commit('setMediaNoCurrent', no - 1)
+    }
+  },
+  setMediaFileCurrent ({ commit, getters }, mediaFile) {
+    const no = getters.mediaList.indexOf(mediaFile.uri) + 1
+    commit('setMediaNoCurrent', no)
   }
 }
 
@@ -208,8 +246,8 @@ const mutations = {
   setRestApiServers (state, restApiServers) {
     Vue.set(state, 'restApiServers', restApiServers)
   },
-  setCurrent (state, audio) {
-    state.current = audio
+  setMediaNoCurrent (state, no) {
+    state.mediaNoCurrent = no
   }
 }
 

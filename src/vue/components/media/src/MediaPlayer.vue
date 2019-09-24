@@ -21,11 +21,28 @@
         {{ mediaFile.titleSafe }}
         {{ currentTime }} /
         {{ duration }}
-        <material-icon name="skip-previous"/>
-        <material-icon v-if="paused" name="play" @click.native="$media.player.play()"/>
-        <material-icon v-if="!paused" name="pause" @click.native="$media.player.pause()"/>
-        <material-icon name="skip-next"/>
-        <material-icon name="fullscreen" @click.native="videoToggleFullscreen"/>
+        <material-icon
+          name="skip-previous"
+          @click.native="$media.player.startPrevious()"
+        />
+        <material-icon
+          v-if="paused"
+          name="play"
+          @click.native="$media.player.play()"
+        />
+        <material-icon
+          v-if="!paused"
+          name="pause"
+          @click.native="$media.player.pause()"
+        />
+        <material-icon
+          name="skip-next"
+          @click.native="$media.player.startNext()"
+        />
+        <material-icon
+          name="fullscreen"
+          @click.native="videoToggleFullscreen"
+        />
       </div>
       <p v-else>No media file loaded</p>
     </div>
