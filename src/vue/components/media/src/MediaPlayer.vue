@@ -22,8 +22,8 @@
         {{ currentTime }} /
         {{ duration }}
         <material-icon name="skip-previous"/>
-        <material-icon name="play" @click.native="$media.player.play()"/>
-        <material-icon name="pause" @click.native="$media.player.pause()"/>
+        <material-icon v-if="paused" name="play" @click.native="$media.player.play()"/>
+        <material-icon v-if="!paused" name="pause" @click.native="$media.player.pause()"/>
         <material-icon name="skip-next"/>
         <material-icon name="fullscreen" @click.native="videoToggleFullscreen"/>
       </div>
@@ -53,6 +53,7 @@ export default {
       show: false,
       currentTime: 0,
       duration: 0,
+      paused: true,
       videoElement: null,
       videoFullscreen: false
     }
@@ -72,6 +73,12 @@ export default {
       }
       this.mediaElement.oncanplaythrough = (event) => {
         this.duration = formatDuration(event.target.duration)
+      }
+      this.mediaElement.onplay = (event) => {
+        this.paused = false
+      }
+      this.mediaElement.onpause = (event) => {
+        this.paused = true
       }
       if (this.videoElement) this.videoElement.style.display = 'none'
       if (this.mediaFile.type === 'video') {
@@ -149,12 +156,14 @@ export default {
         height: $preview-size;
         object-fit: contain;
       }
+
       &.fullscreen {
         width: 100vw;
         height: 100vh;
         position: fixed;
         top: 0;
         left: 0;
+
         video {
           width: 100%;
           height: 100%;

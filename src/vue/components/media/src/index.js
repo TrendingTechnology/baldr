@@ -127,14 +127,15 @@ class Player {
 }
 
 const state = {
+  current: null,
   mediaFiles: {},
+  mediaList: [],
   mediaTypes: {
     audio: {},
     video: {},
     image: {}
   },
-  restApiServers: [],
-  current: null
+  restApiServers: []
 }
 
 const getters = {
@@ -143,6 +144,9 @@ const getters = {
   },
   mediaFiles: state => {
     return state.mediaFiles
+  },
+  mediaList: state => {
+    return state.mediaList
   },
   typeCount: state => type => {
     return Object.keys(state.mediaTypes[type]).length
@@ -177,15 +181,26 @@ const actions = {
     const servers = await request.getServers()
     commit('setRestApiServers', servers)
   },
-  addMediaFile ({ commit }, mediaFile) {
+  addMediaFile ({ commit, dispatch }, mediaFile) {
     commit('addMediaFile', mediaFile)
     commit('addMediaFileToTypes', mediaFile)
+    dispatch('addMediaFileToList', mediaFile)
+
+  },
+  addMediaFileToList ({ commit, getters }, mediaFile) {
+    const list = getters.mediaList
+    if (!list.includes(mediaFile.uri)) {
+      commit('addMediaFileToList', mediaFile)
+    }
   }
 }
 
 const mutations = {
   addMediaFile (state, mediaFile) {
     Vue.set(state.mediaFiles, mediaFile.uri, mediaFile)
+  },
+  addMediaFileToList (state, mediaFile) {
+    state.mediaList.push(mediaFile.uri)
   },
   addMediaFileToTypes (state, mediaFile) {
     Vue.set(state.mediaTypes[mediaFile.type], mediaFile.uri, mediaFile)
