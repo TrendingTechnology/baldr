@@ -170,9 +170,9 @@ class MasterData {
     const normalizedData = callMasterFunc(this.name, 'normalizeProps', this.data)
     if (normalizedData) {
       this.data = normalizedData
-      const mediaUris = callMasterFunc(this.name, 'mediaUris', normalizedData)
-      if (mediaUris) {
-        for (const mediaUri of mediaUris) {
+      const resolveMediaUris = callMasterFunc(this.name, 'resolveMediaUris', normalizedData)
+      if (resolveMediaUris) {
+        for (const mediaUri of resolveMediaUris) {
           Vue.$media.resolve(mediaUri)
         }
       }

@@ -37,7 +37,7 @@ export const master = {
     if ('death' in props) props.death = `† ${props.death}`
     return props
   },
-  mediaUris (props) {
+  resolveMediaUris (props) {
     return [props.image]
   }
 }

@@ -42,7 +42,7 @@ export const master = {
   stepCount (props) {
     return props.src.length
   },
-  mediaUris (props) {
+  resolveMediaUris (props) {
     return props.src
   }
 }
