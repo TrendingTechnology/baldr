@@ -2,6 +2,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import { parseContentFile } from '@/content-file.js'
+import { callMasterFunc } from '@/masters.js'
 
 Vue.use(Vuex)
 
@@ -28,28 +29,35 @@ const getters = {
 }
 
 const actions = {
-  openPresentation ({ commit }, content) {
+  openPresentation ({ commit, dispatch }, content) {
     const contentFile = parseContentFile(content)
     commit('setSlides', contentFile.slides)
-    commit('setSlideNoCurrent', 1)
+    dispatch('setSlideNoCurrent', 1)
   },
-  setSlideNext ({ commit, getters }) {
+  setSlideNext ({ dispatch, getters }) {
     const no = getters.slideNoCurrent
     const count = getters.slidesCount
     if (no === count) {
-      commit('setSlideNoCurrent', 1)
+      dispatch('setSlideNoCurrent', 1)
     } else {
-      commit('setSlideNoCurrent', no + 1)
+      dispatch('setSlideNoCurrent', no + 1)
     }
   },
-  setSlidePrevious ({ commit, getters }) {
+  setSlidePrevious ({ dispatch, getters }) {
     const no = getters.slideNoCurrent
     const count = getters.slidesCount
     if (no === 1) {
-      commit('setSlideNoCurrent', count)
+      dispatch('setSlideNoCurrent', count)
     } else {
-      commit('setSlideNoCurrent', no - 1)
+      dispatch('setSlideNoCurrent', no - 1)
     }
+  },
+  setSlideNoCurrent ({ commit, getters }, no) {
+    if (getters.slideCurrent) {
+      callMasterFunc(getters.slideCurrent.master.name, 'leaveSlide', null, new Vue())
+    }
+    commit('setSlideNoCurrent', no)
+    callMasterFunc(getters.slideCurrent.master.name, 'enterSlide', null, new Vue())
   },
   setStepNext ({ commit, getters }) {
     let stepNoCurrent

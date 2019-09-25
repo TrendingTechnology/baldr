@@ -37,6 +37,10 @@ slides:
   // An array of media URIs to resolve (like [id:beethoven, filename:mozart.mp3])
   resolveMediaUris (props) {
     return props.src
+  },
+  enterSlide () {
+  },
+  leaveSlide () {
   }
 }
 ```

@@ -54,9 +54,12 @@ export function masterOptions (masterName) {
   return masters[masterName]
 }
 
-export function callMasterFunc (masterName, funcName, payload) {
+export function callMasterFunc (masterName, funcName, payload, context) {
   const options = masterOptions(masterName)
   if (funcName in options && typeof options[funcName] === 'function') {
+    if (context) {
+      return options[funcName].call(context, payload)
+    }
     return options[funcName](payload)
   }
 }
