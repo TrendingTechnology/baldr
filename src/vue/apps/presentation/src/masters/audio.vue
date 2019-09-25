@@ -76,7 +76,8 @@ export const master = {
     return props.src.length
   },
   mediaUris (props) {
-    const uris = props.src
+    // Clone array to prevent false step count.
+    const uris = props.src.slice(0)
     if (props.cover) uris.push(props.cover)
     return uris
   }
