@@ -123,14 +123,14 @@ export default {
   $preview-size: 8vw;
 
   .media-player {
-    bottom: 0;
     background-color: scale-color(rgba($gray, 0.7), $alpha: 10%);
+    bottom: 0;
+    color: $black;
     left: 0;
     padding: 0.4vw;
     position: fixed;
     text-align: left;
     width: 100%;
-    color: $black;
 
     .player-container {
       display: flex;
@@ -141,14 +141,14 @@ export default {
     }
 
     .preview-image {
-      width: $preview-size;
       height: $preview-size;
       object-fit: cover;
+      width: $preview-size;
     }
 
     .video-container {
-      width: $preview-size;
       height: $preview-size;
+      width: $preview-size;
     }
 
     .preview-image, .video-container {
@@ -157,8 +157,8 @@ export default {
 
     .close {
       position: absolute;
-      top: 0.5em;
       right: 1em;
+      top: 0.5em;
     }
   }
 </style>
@@ -169,22 +169,22 @@ export default {
   .media-player {
     .video-container {
       video {
-        width: $preview-size;
         height: $preview-size;
         object-fit: contain;
+        width: $preview-size;
       }
 
       &.fullscreen {
-        width: 100vw;
         height: 100vh;
+        left: 0;
         position: fixed;
         top: 0;
-        left: 0;
+        width: 100vw;
 
         video {
-          width: 100%;
           height: 100%;
           object-fit: contain;
+          width: 100%;
         }
       }
     }

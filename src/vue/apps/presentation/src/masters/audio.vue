@@ -1,9 +1,9 @@
 <template>
   <div v-if="mediaFile" class="audio-master">
     <img
-      :src="mediaFile.previewHttpUrl"
+      :src="coverComputed"
       class="preview"
-      v-if="mediaFile.previewHttpUrl"
+      v-if="coverComputed"
     />
 
     <p>
@@ -12,12 +12,12 @@
 
     <p
       class="title piece"
-      v-if="mediaFile.title"
-    >{{ mediaFile.title }}</p>
+      v-if="titleComputed"
+    >{{ titleComputed }}</p>
     <p
       class="artist person"
-      v-if="mediaFile.artist"
-    >{{ mediaFile.artist }}</p>
+      v-if="artistComputed"
+    >{{ artistComputed }}</p>
   </div>
 </template>
 
@@ -25,6 +25,22 @@
 const example = `
 ---
 slides:
+
+- title: 'Custom title'
+  audio:
+    src: id:Du-bist-als-Kind-zu-heiss-gebadet-worden
+    title: Custom title
+
+- title: 'Custom artist'
+  audio:
+    src: id:Du-bist-als-Kind-zu-heiss-gebadet-worden
+    artist: Custom artist
+
+- title: 'Custom cover'
+  audio:
+    src: id:Du-bist-als-Kind-zu-heiss-gebadet-worden
+    cover: filename:Beethoven_Ludwig-van.jpg
+    title: Custom cover
 
 - title: 'URL: id:'
   audio:
@@ -52,7 +68,7 @@ export const master = {
       data = { src: data }
     }
     if (typeof data.src === 'string') {
-      data = { src: [data.src] }
+      data.src = [data.src]
     }
     return data
   },
@@ -60,7 +76,9 @@ export const master = {
     return data.src.length
   },
   mediaUris (props) {
-    return props.src
+    const uris = props.src
+    if (props.cover) uris.push(props.cover)
+    return uris
   }
 }
 
@@ -69,14 +87,45 @@ export default {
     src: {
       type: [String, Array],
       required: true
+    },
+    title: {
+      type: String
+    },
+    artist: {
+      type: String
+    },
+    autoplay: {
+      type: Boolean,
+      default: true
+    },
+    cover: {
+      type: String
     }
   },
   computed: {
+    artistComputed () {
+      if (this.artist) return this.artist
+      if ('artist' in this.mediaFile) return this.mediaFile.artist
+      return ''
+    },
+    coverComputed () {
+      if (this.cover) {
+        const mediaFile = this.$store.getters['media/mediaFileByUri'](this.cover)
+        return mediaFile.httpUrl
+      }
+      if ('previewHttpUrl' in this.mediaFile) return this.mediaFile.previewHttpUrl
+      return ''
+    },
     slide () {
       return this.$store.getters.slideCurrent
     },
     stepNoCurrent () {
       return this.slide.master.stepNoCurrent - 1
+    },
+    titleComputed () {
+      if (this.title) return this.title
+      if ('title' in this.mediaFile) return this.mediaFile.title
+      return ''
     },
     uriCurrent () {
       return this.src[this.stepNoCurrent]
