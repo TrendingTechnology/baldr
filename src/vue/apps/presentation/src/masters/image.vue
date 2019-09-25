@@ -61,17 +61,17 @@ export const master = {
     slidePadding: 0
   },
   example,
-  normalizeData (data) {
-    if (typeof data === 'string' || Array.isArray(data)) {
-      data = { src: data }
+  normalizeProps (props) {
+    if (typeof props === 'string' || Array.isArray(props)) {
+      props = { src: props }
     }
-    if (typeof data.src === 'string') {
-      data = { src: [data.src] }
+    if (typeof props.src === 'string') {
+      props = { src: [props.src] }
     }
-    return data
+    return props
   },
-  stepCount (data) {
-    return data.src.length
+  stepCount (props) {
+    return props.src.length
   },
   mediaUris (props) {
     return props.src

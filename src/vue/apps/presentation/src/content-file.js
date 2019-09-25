@@ -167,7 +167,7 @@ class MasterData {
      */
     this.data = rawSlideObject.cut(this.name)
 
-    const normalizedData = callMasterFunc(this.name, 'normalizeData', this.data)
+    const normalizedData = callMasterFunc(this.name, 'normalizeProps', this.data)
     if (normalizedData) {
       this.data = normalizedData
       const mediaUris = callMasterFunc(this.name, 'mediaUris', normalizedData)

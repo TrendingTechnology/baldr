@@ -92,16 +92,16 @@ export const master = {
     darkMode: true
   },
   example,
-  normalizeData (data) {
-    if (typeof data === 'object' && !Array.isArray(data) && 'questions' in data) {
-      data.questions = normalizeQuestions(data.questions)
-      return data
+  normalizeProps (props) {
+    if (typeof props === 'object' && !Array.isArray(props) && 'questions' in props) {
+      props.questions = normalizeQuestions(props.questions)
+      return props
     }
-    return { questions: normalizeQuestions(data) }
+    return { questions: normalizeQuestions(props) }
   },
-  stepCount (data) {
+  stepCount (props) {
     let count = 0
-    for (const question of data.questions) {
+    for (const question of props.questions) {
       if ('answer' in question && question.answer) count += 1
     }
     return count + 1

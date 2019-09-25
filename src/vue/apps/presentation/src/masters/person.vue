@@ -32,10 +32,10 @@ export const master = {
     darkMode: true
   },
   example,
-  normalizeData (data) {
-    if ('birth' in data) data.birth = `* ${data.birth}`
-    if ('death' in data) data.death = `† ${data.death}`
-    return data
+  normalizeData (props) {
+    if ('birth' in props) props.birth = `* ${props.birth}`
+    if ('death' in props) props.death = `† ${props.death}`
+    return props
   },
   mediaUris (props) {
     return [props.image]

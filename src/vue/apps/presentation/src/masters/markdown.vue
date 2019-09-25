@@ -47,10 +47,10 @@ export const master = {
     darkMode: false
   },
   example,
-  normalizeData (data) {
-    if (typeof data === 'string') {
+  normalizeProps (props) {
+    if (typeof props === 'string') {
       return {
-        markup: data
+        markup: props
       }
     }
   }

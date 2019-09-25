@@ -24,15 +24,15 @@ slides:
     mutations
   },
   // result must fit to props
-  normalizeData (data) {
-    if (typeof data === 'string') {
+  normalizeProps (props) {
+    if (typeof props === 'string') {
       return {
-        markup: data
+        markup: props
       }
     }
   },
-  stepCount (data) {
-    return data.src.length
+  stepCount (props) {
+    return props.src.length
   },
   // An array of media URIs to resolve (like [id:beethoven, filename:mozart.mp3])
   mediaUris (props) {
