@@ -33,9 +33,8 @@ function Video(src) {
 }
 
 class Player {
-  constructor (store, resolver) {
+  constructor (store) {
     this.$store = store
-    this.$resolver = resolver
   }
 
   getCurrentMediaFile_ () {
@@ -54,11 +53,8 @@ class Player {
     return this.$store.getters['media/mediaFileByUri'](uriOrMediaFile)
   }
 
-  async load (uriOrMediaFile) {
-    if (typeof uriOrMediaFile === 'object') {
-      return uriOrMediaFile
-    }
-    const mediaFile = await this.$resolver.getMediaFile(uriOrMediaFile)
+  load (uriOrMediaFile) {
+    const mediaFile = this.toMediaFile_(uriOrMediaFile)
     if (!mediaFile) return
     this.stop()
     this.unload()
@@ -86,9 +82,9 @@ class Player {
     mediaElement.pause()
   }
 
-  async start (uriOrMediaFile) {
-    const mediaFile = await this.load(uriOrMediaFile)
-    const mediaElement = await mediaFile.createMediaElement()
+  start (uriOrMediaFile) {
+    this.load(uriOrMediaFile)
+    let mediaElement = this.getCurrentMediaElement_()
     mediaElement.volume = 1
     mediaElement.currentTime = 0
     mediaElement.play()
@@ -405,8 +401,7 @@ export class MediaFile {
     if ('uri' in this) return this.uri
   }
 
-  async createMediaElement () {
-    if (this.mediaElement) return this.mediaElement
+  createMediaElement () {
     let mediaElement
     if (this.type === 'audio') {
       mediaElement = new Audio(this.httpUrl)
@@ -417,20 +412,7 @@ export class MediaFile {
       mediaElement.src = this.httpUrl
     }
     this.mediaElement = mediaElement
-    return new Promise((resolve, reject) => {
-      mediaElement.onerror = () => {
-        reject()
-      }
-      if (['audio', 'video'].includes(this.type)) {
-        mediaElement.onloadedmetadata = () => {
-          resolve(mediaElement)
-        }
-      } else {
-        mediaElement.onload = () => {
-          resolve(mediaElement)
-        }
-      }
-    })
+    return mediaElement
   }
 }
 
@@ -503,9 +485,17 @@ class Resolver {
     return mediaFile
   }
 
-  async storeMediaFile (mediaFile) {
-    await mediaFile.createMediaElement()
-    this.$store.dispatch('media/addMediaFile', mediaFile)
+  storeMediaFile (mediaFile) {
+    const mediaElement = mediaFile.createMediaElement()
+    if (['audio', 'video'].includes(mediaFile.type)) {
+      mediaElement.onloadedmetadata = () => {
+        this.$store.dispatch('media/addMediaFile', mediaFile)
+      }
+    } else {
+      mediaElement.onload = () => {
+        this.$store.dispatch('media/addMediaFile', mediaFile)
+      }
+    }
   }
 
   /**
@@ -528,8 +518,8 @@ class Media {
     this.$router = router
     this.$store = store
     this.$shortcuts = shortcuts
+    this.player = new Player(store)
     this.resolver = new Resolver(store)
-    this.player = new Player(store, this.resolver)
 
     this.$shortcuts.addMultiple([
       {
