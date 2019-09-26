@@ -82,8 +82,8 @@ export const master = {
     return uris
   },
   enterSlide ({ oldSlide, newSlide }) {
-    console.log(newSlide)
-    this.$media.player.start(newSlide.master.data.src[0])
+    // console.log(newSlide)
+    // this.$media.player.start(newSlide.master.data.src[0])
     // console.log('enter slide')
     // console.log(oldSlide)
     // console.log(newSlide)
