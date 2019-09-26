@@ -38,9 +38,11 @@ slides:
   resolveMediaUris (props) {
     return props.src
   },
-  enterSlide () {
+  // Called when entering a slide.
+  enterSlide ({ oldSlide, newSlide }) {
   },
-  leaveSlide () {
+  // Called when leaving a slide.
+  leaveSlide ({ oldSlide, newSlide }) {
   }
 }
 ```

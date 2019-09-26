@@ -20,6 +20,9 @@ const getters = {
       return state.slides[state.slideNoCurrent]
     }
   },
+  slideByNo: state => no => {
+    return state.slides[no]
+  },
   slides: state => {
     return state.slides
   },
@@ -53,11 +56,14 @@ const actions = {
     }
   },
   setSlideNoCurrent ({ commit, getters }, no) {
+    let oldSlide
+    let newSlide = getters.slideByNo(no)
     if (getters.slideCurrent) {
-      callMasterFunc(getters.slideCurrent.master.name, 'leaveSlide', null, new Vue())
+      oldSlide = getters.slideCurrent
+      callMasterFunc(getters.slideCurrent.master.name, 'leaveSlide', { oldSlide, newSlide }, new Vue())
     }
     commit('setSlideNoCurrent', no)
-    callMasterFunc(getters.slideCurrent.master.name, 'enterSlide', null, new Vue())
+    callMasterFunc(getters.slideCurrent.master.name, 'enterSlide', { oldSlide, newSlide }, new Vue())
   },
   setStepNext ({ commit, getters }) {
     let stepNoCurrent

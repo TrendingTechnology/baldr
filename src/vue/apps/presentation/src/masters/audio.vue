@@ -80,6 +80,16 @@ export const master = {
     const uris = props.src.slice(0)
     if (props.cover) uris.push(props.cover)
     return uris
+  },
+  enterSlide ({ oldSlide, newSlide }) {
+    console.log('enter')
+    console.log(oldSlide)
+    console.log(newSlide)
+  },
+  leaveSlide ({ oldSlide, newSlide }) {
+    console.log('leave')
+    console.log(oldSlide)
+    console.log(newSlide)
   }
 }
 
