@@ -59,6 +59,7 @@ class Player {
       return uriOrMediaFile
     }
     const mediaFile = await this.$resolver.getMediaFile(uriOrMediaFile)
+    if (!mediaFile) return
     this.stop()
     this.unload()
     this.$store.dispatch('media/setMediaFileCurrent', mediaFile)
