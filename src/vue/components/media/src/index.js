@@ -65,7 +65,7 @@ class Player {
   unload () {
     const mediaFile = this.getCurrentMediaFile_()
     if (mediaFile) {
-      this.$store.commit('media/setCurrent', null)
+      this.$store.dispatch('media/setMediaFileCurrent', null)
     }
   }
 

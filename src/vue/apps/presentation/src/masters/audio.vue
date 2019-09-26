@@ -82,14 +82,27 @@ export const master = {
     return uris
   },
   enterSlide ({ oldSlide, newSlide }) {
-    console.log('enter')
-    console.log(oldSlide)
     console.log(newSlide)
+    this.$media.player.start(newSlide.master.data.src[0])
+    // console.log('enter slide')
+    // console.log(oldSlide)
+    // console.log(newSlide)
   },
   leaveSlide ({ oldSlide, newSlide }) {
-    console.log('leave')
-    console.log(oldSlide)
-    console.log(newSlide)
+    // console.log('leave slide')
+    // console.log(oldSlide)
+    // console.log(newSlide)
+  },
+  enterStep ({ oldStepNo, newStepNo }) {
+    // console.log('enter step')
+    // console.log(oldStepNo)
+    // console.log(newStepNo)
+  },
+  // Called when leaving a step.
+  leaveStep ({ oldStepNo, newStepNo }) {
+    // console.log('leave step')
+    // console.log(oldStepNo)
+    // console.log(newStepNo)
   }
 }
 

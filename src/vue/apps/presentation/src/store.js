@@ -65,7 +65,7 @@ const actions = {
     commit('setSlideNoCurrent', no)
     callMasterFunc(getters.slideCurrent.master.name, 'enterSlide', { oldSlide, newSlide }, new Vue())
   },
-  setStepNext ({ commit, getters }) {
+  setStepNext ({ dispatch, getters }) {
     let stepNoCurrent
     const slideCurrent = getters.slideCurrent
     const no = slideCurrent.master.stepNoCurrent
@@ -75,9 +75,9 @@ const actions = {
     } else {
       stepNoCurrent = no + 1
     }
-    commit('setStepNoCurrent', { slideCurrent, stepNoCurrent })
+    dispatch('setStepNoCurrent', { slideCurrent, stepNoCurrent })
   },
-  setStepPrevious ({ commit, getters }) {
+  setStepPrevious ({ dispatch, getters }) {
     let stepNoCurrent
     const slideCurrent = getters.slideCurrent
     const no = slideCurrent.master.stepNoCurrent
@@ -87,7 +87,14 @@ const actions = {
     } else {
       stepNoCurrent = no - 1
     }
+    dispatch('setStepNoCurrent', { slideCurrent, stepNoCurrent })
+  },
+  setStepNoCurrent ({ commit }, { slideCurrent, stepNoCurrent }) {
+    let oldStepNo = slideCurrent.master.stepNoCurrent
+    let newStepNo = stepNoCurrent
+    callMasterFunc(slideCurrent.master.name, 'leaveStep', { oldStepNo, newStepNo }, new Vue())
     commit('setStepNoCurrent', { slideCurrent, stepNoCurrent })
+    callMasterFunc(slideCurrent.master.name, 'enterStep', { oldStepNo, newStepNo }, new Vue())
   }
 }
 

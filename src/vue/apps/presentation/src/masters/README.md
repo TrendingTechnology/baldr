@@ -44,5 +44,11 @@ slides:
   // Called when leaving a slide.
   leaveSlide ({ oldSlide, newSlide }) {
   }
+  // Called when entering a step.
+  enterStep ({ oldStepNo, newStepNo }) {
+  },
+  // Called when leaving a step.
+  leaveStep ({ oldStepNo, newStepNo }) {
+  }
 }
 ```
