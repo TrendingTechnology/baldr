@@ -517,6 +517,108 @@ class Resolver {
 }
 
 /**
+ * Order of resolution:
+ *
+ * 1. mediaFile
+ * 2. httpUrl
+ * 3. mediaElement
+ */
+class ResolverNextGeneration {
+
+  /**
+   * @param {string} key
+   * @param {string|json} value
+   */
+  async queryMediaServer_ (key, value) {
+    const postBody = {}
+    postBody[key] = value
+    const response = await request.request(
+      {
+        method: 'post',
+        url: `query-by-${key}`,
+        data: postBody
+      }
+    )
+    if ('data' in response && 'path' in response.data) {
+      return response
+    }
+    throw new Error(`Media with the ${key} ”${value}” couldn’t be resolved.`)
+  }
+
+  resolveMediaElement_ (mediaFile) {
+    let mediaElement
+    if (mediaFile.type === 'audio') {
+      mediaElement = new Audio(mediaFile.httpUrl)
+    } else if (this.type === 'video') {
+      mediaElement = new Video(mediaFile.httpUrl)
+    } else if (mediaFile.type === 'image') {
+      mediaElement = new Image()
+      mediaElement.src = mediaFile.httpUrl
+    }
+
+    return new Promise(function(resolve, reject) {
+      // do a thing, possibly async, then…
+      if (['audio', 'video'].includes(mediaFile.type)) {
+        mediaElement.onloadedmetadata = () => {
+          resolve(mediaElement)
+        }
+      } else {
+        mediaElement.onload = () => {
+          resolve(mediaElement)
+        }
+      }
+
+      mediaElement.onerror = () => {
+        reject(Error("It broke"));
+      }
+    })
+  }
+
+  async resolveHttpUrl_ (mediaFile) {
+    if ('httpUrl' in mediaFile) return mediaFile.httpUrl
+    if ('path' in mediaFile) {
+      const baseURL = await request.getFirstBaseUrl()
+      return `${baseURL}/media/${mediaFile.path}`
+    }
+    throw new Error(`Can not generate HTTP URL.`)
+  }
+
+  async resolveMediaFile_ (uri) {
+    const mediaFile = new MediaFile({ uri: uri })
+    if (mediaFile.uriScheme === 'http' || mediaFile.uriScheme === 'https') {
+      mediaFile.httpUrl = mediaFile.uri
+      mediaFile.filenameFromHTTPUrl(mediaFile.uri)
+      mediaFile.extensionFromString(mediaFile.uri)
+    } else if (mediaFile.uriScheme === 'id' || mediaFile.uriScheme === 'filename') {
+      const response = await this.queryMediaServer_(mediaFile.uriScheme, mediaFile.uriAuthority)
+      mediaFile.addProperties(response.data)
+      mediaFile.httpUrl = await this.resolveHttpUrl_(mediaFile)
+      if ('previewImage' in mediaFile) {
+        mediaFile.previewHttpUrl = `${mediaFile.httpUrl}_preview.jpg`
+      }
+    }
+    mediaFile.type = mediaTypes.extensionToType(mediaFile.extension)
+    // After type
+    mediaFile.mediaElement = await this.resolveMediaElement_(mediaFile)
+    return mediaFile
+  }
+
+  resolve (uris) {
+    const uniqueUris = []
+    for (const uri of uris) {
+      if (!uniqueUris.includes(uri)) {
+        uniqueUris.push(uri)
+      }
+    }
+    const promises = []
+    for (const uri of uniqueUris) {
+      promises.push(this.resolveMediaFile_(uri))
+    }
+    return Promise.all(promises)
+  }
+}
+
+/**
  *
  */
 class Media {
@@ -526,6 +628,7 @@ class Media {
     this.$shortcuts = shortcuts
     this.player = new Player(store)
     this.resolver = new Resolver(store)
+    this.resolverNg = new ResolverNextGeneration()
 
     this.$shortcuts.addMultiple([
       {

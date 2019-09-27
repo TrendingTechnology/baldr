@@ -167,11 +167,17 @@ class MasterData {
      */
     this.data = rawSlideObject.cut(this.name)
 
+    /**
+     * @type {array}
+     */
+    this.mediaUris = []
+
     const normalizedData = callMasterFunc(this.name, 'normalizeProps', this.data)
     if (normalizedData) {
       this.data = normalizedData
       const resolveMediaUris = callMasterFunc(this.name, 'resolveMediaUris', normalizedData)
       if (resolveMediaUris) {
+        this.mediaUris = resolveMediaUris
         for (const mediaUri of resolveMediaUris) {
           Vue.$media.resolve(mediaUri)
         }
@@ -275,8 +281,18 @@ export function parseContentFile (content) {
   // Slides
   const indexedSlides = reIndex(rawYaml.slides)
   const slides = {}
+  const mediaUris = []
   for (const slideNo in indexedSlides) {
-    slides[slideNo] = new Slide(indexedSlides[slideNo], slideNo)
+    const slide = new Slide(indexedSlides[slideNo], slideNo)
+    slides[slideNo] = slide
+    for (const mediaUri of slide.master.mediaUris) {
+      mediaUris.push(mediaUri)
+    }
+  }
+  if (mediaUris.length > 0) {
+    Vue.$media.resolverNg.resolve(mediaUris).then((mediaFiles) => {
+      console.log(mediaFiles)
+    })
   }
   return {
     slides: slides
