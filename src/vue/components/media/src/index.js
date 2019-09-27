@@ -148,7 +148,8 @@ const state = {
     video: {},
     image: {}
   },
-  restApiServers: []
+  restApiServers: [],
+  resolveQueue: []
 }
 
 const getters = {
@@ -239,6 +240,9 @@ const mutations = {
   },
   addMediaFileToList (state, mediaFile) {
     state.mediaList.push(mediaFile.uri)
+  },
+  addPromiseToResolveQueue (state, promise) {
+    state.resolveQueue.push(promise)
   },
   addMediaFileToTypes (state, mediaFile) {
     Vue.set(state.mediaTypes[mediaFile.type], mediaFile.uri, mediaFile)
@@ -472,7 +476,9 @@ class Resolver {
       mediaFile.filenameFromHTTPUrl(mediaFile.uri)
       mediaFile.extensionFromString(mediaFile.uri)
     } else if (mediaFile.uriScheme === 'id' || mediaFile.uriScheme === 'filename') {
-      const response = await this.queryMediaServer_(mediaFile.uriScheme, mediaFile.uriAuthority)
+      const promiseQuery = this.queryMediaServer_(mediaFile.uriScheme, mediaFile.uriAuthority)
+      this.$store.commit('media/addPromiseToResolveQueue', promiseQuery)
+      const response = await promiseQuery
       mediaFile.addProperties(response.data)
       mediaFile.httpUrl = await this.resolveHttpUrl_(mediaFile)
       if ('previewImage' in mediaFile) {
