@@ -205,7 +205,7 @@ const actions = {
   },
   addMediaFileToList ({ commit, getters }, mediaFile) {
     const list = getters.mediaList
-    if (!list.includes(mediaFile.uri)) {
+    if (!list.includes(mediaFile.uri) && mediaFile.type !== 'image') {
       commit('addMediaFileToList', mediaFile)
     }
   },
