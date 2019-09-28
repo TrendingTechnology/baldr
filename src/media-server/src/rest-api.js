@@ -46,12 +46,21 @@ app.post('/query-by-filename', (req, res) => {
   }
 })
 
-app.post('/query-by-path', (req, res) => {
-  const body = req.body
-  if (!('path' in body)) {
+app.get('/search-in-path', (req, res) => {
+  const query = req.query
+  if (!('path' in query) || !query.path) {
     res.sendStatus(400)
   } else {
-    sendJsonMessage(res, mediaServer.queryByPath(body.filename))
+    sendJsonMessage(res, mediaServer.searchInPath(query.path))
+  }
+})
+
+app.get('/search-in-id', (req, res) => {
+  const query = req.query
+  if (!('id' in query) || !query.id) {
+    res.sendStatus(400)
+  } else {
+    sendJsonMessage(res, mediaServer.searchInId(query.id))
   }
 })
 

@@ -61,7 +61,8 @@ commander
   .description('Query the SQLite database.')
   .option('-f, --file-name', 'Query by file name.')
   .option('-i, --id', 'Query by id (default)')
-  .option('-p, --path', 'Query by id path')
+  .option('-p, --path', 'Search by path substring')
+  .option('--id-sub', 'Search by id substring')
   .action((query, opts) => {
     subcommand = 'query'
     searchString = query
@@ -136,7 +137,10 @@ switch (subcommand) {
     } else if (options.id) {
       console.log(mediaServer.queryByID(searchString))
     } else if (options.path) {
-      console.log(mediaServer.queryByPath(searchString))
+      console.log(mediaServer.searchInPath(searchString))
+    } else if (options.idSub) {
+      console.log(searchString)
+      console.log(mediaServer.searchInId(searchString))
     }
     break
 

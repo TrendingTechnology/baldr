@@ -8,6 +8,7 @@
 // Node packages.
 const fs = require('fs')
 const path = require('path')
+const childProcess = require('child_process')
 
 // Third party packages.
 const glob = require('glob')
@@ -88,7 +89,7 @@ class MetaData {
          * The absolute path of the preview image.
          * @type {string}
          */
-        this.previewImage = previewImage
+        this.previewImage = true
       }
     }
   }
@@ -217,9 +218,14 @@ class Sqlite {
     return results[0]
   }
 
-  queryByPath (path) {
+  searchInPath (pathSubstring) {
     return this.db
-      .prepare('SELECT * FROM files WHERE instr("path", ?) > 0').all(path)
+      .prepare('SELECT * FROM files WHERE instr("path", ?) > 0 LIMIT 10').all(pathSubstring)
+  }
+
+  searchInId (idSubstring) {
+    return this.db
+      .prepare('SELECT * FROM files WHERE INSTR(LOWER("id"), ?) > 0 LIMIT 10').all(idSubstring)
   }
 
   list () {
@@ -277,7 +283,8 @@ class MediaServer {
       '**/*.db',
       '**/*.yml',
       '**/*robots.txt',
-      '**/*_preview.jpg'
+      '**/*_preview.jpg',
+      '**/README.md'
     ]
   }
 
@@ -344,6 +351,11 @@ id: ${metaData.basename}
   }
 
   update () {
+    console.log('Run git pull')
+    const gitPull = childProcess.spawnSync('git', ['pull'], { cwd: this.basePath, encoding: 'utf-8' })
+    console.log(gitPull.stderr)
+    console.log(gitPull.stdout)
+    if (gitPull.status !== 0) throw new Error(`git pull exits with an none zero status code.`)
     const files = this.glob_(this.basePath)
     for (const file of files) {
       if (!fs.lstatSync(file).isDirectory()) {
@@ -354,17 +366,21 @@ id: ${metaData.basename}
     }
   }
 
-  loadMediaDataObject (result) {
+  loadMediaDataObject_ (result) {
     if (result && !result.error) {
-      return new MetaData(path.join(this.basePath, result.path), this.basePath)
+      const metaData = new MetaData(path.join(this.basePath, result.path), this.basePath)
+      delete metaData.absPath
+      delete metaData.infoFile
+      delete metaData.basename
+      return metaData
     }
     return result
   }
 
-  loadMediaDataObjects (results) {
+  loadMediaDataObjects_ (results) {
     const output = []
     for (const result of results) {
-      output.push(this.loadMediaDataObject(result))
+      output.push(this.loadMediaDataObject_(result))
     }
     return output
   }
@@ -374,7 +390,7 @@ id: ${metaData.basename}
     if (results.length > 0) {
       const output = []
       for (const result of results) {
-        output.push(this.loadMediaDataObject(result))
+        output.push(this.loadMediaDataObject_(result))
       }
       return output
     }
@@ -385,17 +401,22 @@ id: ${metaData.basename}
 
   queryByID (id) {
     const result = this.sqlite.queryByID(id)
-    return this.loadMediaDataObject(result)
+    return this.loadMediaDataObject_(result)
   }
 
   queryByFilename (filename) {
     const result = this.sqlite.queryByFilename(filename)
-    return this.loadMediaDataObject(result)
+    return this.loadMediaDataObject_(result)
   }
 
-  queryByPath (path) {
-    const results = this.sqlite.queryByPath(path)
-    return this.loadMediaDataObjects(results)
+  searchInPath (pathSubstring) {
+    const results = this.sqlite.searchInPath(pathSubstring)
+    return this.loadMediaDataObjects_(results)
+  }
+
+  searchInId (idSubstring) {
+    const results = this.sqlite.searchInId(idSubstring.toLowerCase())
+    return this.loadMediaDataObjects_(results)
   }
 
   flush () {
