@@ -17,23 +17,48 @@
         <material-icon
           v-if="master.example"
           name="presentation"
-          @click.native="openExample(master)"
+          @click.native="openExample(master.example)"
         />
       </li>
     </ul>
+  </section>
+
+  <section>
+    <h2>Examples</h2>
+
+    <ul>
+      <li
+        v-for="(yamlContent, exampleName) in examples"
+        :key="exampleName"
+      >
+        {{ exampleName }}
+        <material-icon
+          name="presentation"
+          @click.native="openExample(yamlContent)"
+        />
+      </li>
+    </ul>
+
   </section>
 
 </div>
 </template>
 
 <script>
+import examples from '@/examples.js'
+
 export default {
   name: 'Documentation',
   methods: {
-    openExample (master) {
-      this.$store.dispatch('openPresentation', master.example).then(() => {
+    openExample (yamlString) {
+      this.$store.dispatch('openPresentation', yamlString).then(() => {
         this.$router.push('/slides')
       })
+    }
+  },
+  data () {
+    return {
+      examples
     }
   },
   mounted: function () {

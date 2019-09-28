@@ -243,7 +243,7 @@ class MediaTypes {
   constructor () {
     this.types = {
       audio: ['mp3', 'm4a'],
-      image: ['jpg', 'jpeg', 'png'],
+      image: ['jpg', 'jpeg', 'png', 'svg'],
       video: ['mp4']
     }
     this.extensions_ = this.spreadExtensions_()
