@@ -37,57 +37,36 @@ class Player {
     this.$store = store
   }
 
-  getCurrentMediaFile_ () {
+  get mediaFile () {
     return this.$store.getters['media/current']
   }
 
-  getCurrentMediaElement_ () {
-    const mediaFile = this.getCurrentMediaFile_()
-    if (mediaFile) return mediaFile.mediaElement
-  }
-
-  toMediaFile_ (uriOrMediaFile) {
-    if (typeof uriOrMediaFile === 'object') {
-      return uriOrMediaFile
-    }
-    return this.$store.getters['media/mediaFileByUri'](uriOrMediaFile)
-  }
-
-  load (uriOrMediaFile) {
-    const mediaFile = this.toMediaFile_(uriOrMediaFile)
-    if (!mediaFile) return
-    this.stop()
-    this.unload()
-    this.$store.dispatch('media/setMediaFileCurrent', mediaFile)
-    return mediaFile
-  }
-
-  unload () {
-    const mediaFile = this.getCurrentMediaFile_()
-    if (mediaFile) {
-      this.$store.dispatch('media/setMediaFileCurrent', null)
-    }
-  }
-
-  stop () {
-    const mediaElement = this.getCurrentMediaElement_()
-    if (!mediaElement) return
-    mediaElement.pause()
-    mediaElement.currentTime = 0
-  }
-
-  pause () {
-    const mediaElement = this.getCurrentMediaElement_()
-    if (!mediaElement) return
-    mediaElement.pause()
+  get mediaElement () {
+    if (this.mediaFile) return this.mediaFile.mediaElement
   }
 
   start (uriOrMediaFile) {
-    this.load(uriOrMediaFile)
-    let mediaElement = this.getCurrentMediaElement_()
-    mediaElement.volume = 1
-    mediaElement.currentTime = 0
-    mediaElement.play()
+    let mediaFile
+    if (typeof uriOrMediaFile === 'object') {
+      mediaFile = uriOrMediaFile
+    } else {
+      mediaFile = this.$store.getters['media/mediaFileByUri'](uriOrMediaFile)
+    }
+    if (!mediaFile) throw new Error(`mediaFile couldn’t played`)
+    this.stop()
+    this.$store.dispatch('media/setMediaFileCurrent', mediaFile)
+    this.mediaElement.volume = 1
+    this.mediaElement.currentTime = 0
+    this.mediaElement.play()
+  }
+
+  stop () {
+    if (!this.mediaElement) return
+    this.mediaElement.pause()
+    this.mediaElement.currentTime = 0
+    if (this.mediaFile) {
+      this.$store.dispatch('media/setMediaFileCurrent', null)
+    }
   }
 
   startPrevious () {
@@ -103,16 +82,19 @@ class Player {
   }
 
   play () {
-    const mediaElement = this.getCurrentMediaElement_()
-    if (!mediaElement) return
-    mediaElement.volume = 1
-    mediaElement.play()
+    if (!this.mediaElement) return
+    this.mediaElement.volume = 1
+    this.mediaElement.play()
+  }
+
+  pause () {
+    if (!this.mediaElement) return
+    this.mediaElement.pause()
   }
 
   toggle () {
-    const mediaElement = this.getCurrentMediaElement_()
-    if (!mediaElement) return
-    if (mediaElement.paused) {
+    if (!this.mediaElement) return
+    if (this.mediaElement.paused) {
       this.play()
     } else {
       this.pause()
@@ -120,8 +102,7 @@ class Player {
   }
 
   fadeOut (duration = 3.1) {
-    const mediaElement = this.getCurrentMediaElement_()
-    if (!mediaElement) return
+    if (!this.mediaElement) return
     var actualVolume = mediaElement.volume
     var steps = actualVolume / 100
     // in milliseconds: duration * 1000 / 100
@@ -129,7 +110,7 @@ class Player {
     var fadeOutInterval = setInterval(() => {
       actualVolume -= steps
       if (actualVolume >= 0) {
-        mediaElement.volume = actualVolume.toFixed(2)
+        this.mediaElement.volume = actualVolume.toFixed(2)
       } else {
         this.stop()
         clearInterval(fadeOutInterval)
