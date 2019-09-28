@@ -57,13 +57,17 @@ const actions = {
   },
   setSlideNoCurrent ({ commit, getters }, no) {
     let oldSlide
+    let oldProps
     let newSlide = getters.slideByNo(no)
+    let newProps = newSlide.master.data
+    let context = new Vue()
     if (getters.slideCurrent) {
       oldSlide = getters.slideCurrent
-      callMasterFunc(getters.slideCurrent.master.name, 'leaveSlide', { oldSlide, newSlide }, new Vue())
+      oldProps = oldSlide.master.data
+      callMasterFunc(getters.slideCurrent.master.name, 'leaveSlide', { oldSlide, oldProps, newSlide, newProps }, context)
     }
     commit('setSlideNoCurrent', no)
-    callMasterFunc(getters.slideCurrent.master.name, 'enterSlide', { oldSlide, newSlide }, new Vue())
+    callMasterFunc(getters.slideCurrent.master.name, 'enterSlide', { oldSlide, oldProps, newSlide, newProps }, context)
   },
   setStepNext ({ dispatch, getters }) {
     let stepNoCurrent

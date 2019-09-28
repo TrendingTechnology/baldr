@@ -39,10 +39,10 @@ slides:
     return props.src
   },
   // Called when entering a slide.
-  enterSlide ({ oldSlide, newSlide }) {
+  enterSlide ({ oldSlide, oldProps, newSlide, newProps }) {
   },
   // Called when leaving a slide.
-  leaveSlide ({ oldSlide, newSlide }) {
+  leaveSlide ({ oldSlide, oldProps, newSlide, newProps }) {
   }
   // Called when entering a step.
   enterStep ({ oldStepNo, newStepNo }) {

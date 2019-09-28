@@ -26,6 +26,18 @@ const example = `
 ---
 slides:
 
+- title: 'Autoplay: yes'
+  audio:
+    src: id:Du-bist-als-Kind-zu-heiss-gebadet-worden
+    title: Custom title
+    autoplay: true
+
+- title: 'Autoplay: no'
+  audio:
+    src: id:Du-bist-als-Kind-zu-heiss-gebadet-worden
+    title: Custom title
+    autoplay: false
+
 - title: 'Custom title'
   audio:
     src: id:Du-bist-als-Kind-zu-heiss-gebadet-worden
@@ -81,9 +93,9 @@ export const master = {
     if (props.cover) uris.push(props.cover)
     return uris
   },
-  enterSlide ({ oldSlide, newSlide }) {
-    // console.log(newSlide)
-    // this.$media.player.start(newSlide.master.data.src[0])
+  enterSlide ({ newProps }) {
+    const props = newProps
+    this.$media.player.start(props.src[0])
     // console.log('enter slide')
     // console.log(oldSlide)
     // console.log(newSlide)
@@ -121,6 +133,10 @@ export default {
     autoplay: {
       type: Boolean,
       default: true
+    },
+    playthrough: {
+      type: Boolean,
+      default: false
     },
     cover: {
       type: String
