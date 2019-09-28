@@ -433,13 +433,24 @@ class Resolver {
 
   resolveMediaElement_ (mediaFile) {
     let mediaElement
-    if (mediaFile.type === 'audio') {
-      mediaElement = new Audio(mediaFile.httpUrl)
-    } else if (this.type === 'video') {
-      mediaElement = new Video(mediaFile.httpUrl)
-    } else if (mediaFile.type === 'image') {
-      mediaElement = new Image()
-      mediaElement.src = mediaFile.httpUrl
+    if (!('type' in mediaFile)) throw new Error(`mediaFile “${mediaFile}” has no type.`)
+
+    switch (mediaFile.type) {
+      case 'audio':
+        mediaElement = new Audio(mediaFile.httpUrl)
+        break
+
+      case 'video':
+        mediaElement = new Video(mediaFile.httpUrl)
+        break
+
+      case 'image':
+        mediaElement = new Image()
+        mediaElement.src = mediaFile.httpUrl
+        break
+
+      default:
+        throw new Error(`Not supported mediaFile type “${mediaFile.type}”.`)
     }
 
     return new Promise(function(resolve, reject) {
