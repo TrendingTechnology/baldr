@@ -11,9 +11,15 @@
     </p>
 
     <p
+      class="composer person"
+      v-if="composerComputed"
+    >{{ composerComputed }}</p>
+
+    <p
       class="title piece"
       v-if="titleComputed"
     >{{ titleComputed }}</p>
+
     <p
       class="artist person"
       v-if="artistComputed"
@@ -25,6 +31,11 @@
 const example = `
 ---
 slides:
+
+- title: Custom composer
+  audio:
+    src: id:Fischer-Dieskau_Marmotte
+    composer: Ludwig B. (Custom composer)
 
 - title: 'Autoplay: yes'
   audio:
@@ -130,6 +141,9 @@ export default {
     artist: {
       type: String
     },
+    composer: {
+      type: String
+    },
     autoplay: {
       type: Boolean,
       default: true
@@ -156,6 +170,11 @@ export default {
       if ('previewHttpUrl' in this.mediaFile) return this.mediaFile.previewHttpUrl
       return ''
     },
+    composerComputed () {
+      if (this.composer) return this.composer
+      if ('composer' in this.mediaFile) return this.mediaFile.composer
+      return ''
+    },
     slide () {
       return this.$store.getters.slideCurrent
     },
@@ -180,6 +199,10 @@ export default {
 <style lang="scss" scoped>
 .audio-master {
   text-align: center;
+
+  .composer {
+    font-size: 1.2em;
+  }
 
   .artist {
     font-size: 0.9em;
