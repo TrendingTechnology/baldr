@@ -64,9 +64,6 @@ class Player {
     if (!this.mediaElement) return
     this.mediaElement.pause()
     this.mediaElement.currentTime = 0
-    if (this.mediaFile) {
-      this.$store.dispatch('media/setMediaFileCurrent', null)
-    }
   }
 
   startPrevious () {
