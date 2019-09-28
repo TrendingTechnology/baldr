@@ -272,7 +272,13 @@ function reIndex (slides) {
  * @returns {object}
  */
 export async function parseContentFile (content) {
-  const rawYaml = yaml.safeLoad(content)
+  let rawYaml
+  try {
+    rawYaml = yaml.safeLoad(content)
+  } catch (error) {
+    throw new Error(`${error.name}: ${error.message}`)
+  }
+  console.log(rawYaml)
   // Slides
   const indexedSlides = reIndex(rawYaml.slides)
   const slides = {}

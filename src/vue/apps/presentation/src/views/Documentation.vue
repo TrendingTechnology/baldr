@@ -31,11 +31,10 @@
         v-for="(yamlContent, exampleName) in examples"
         :key="exampleName"
       >
-        {{ exampleName }}
-        <material-icon
-          name="presentation"
-          @click.native="openExample(yamlContent)"
-        />
+        <a @click="openExample(yamlContent)">
+          {{ exampleName }}
+          <material-icon name="presentation"/>
+        </a>
       </li>
     </ul>
 
@@ -72,5 +71,9 @@ export default {
 <style lang="scss" scoped>
   .documentation {
     font-size: 1.4vw;
+
+    a {
+      cursor: pointer;
+    }
   }
 </style>

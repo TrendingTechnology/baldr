@@ -1,6 +1,10 @@
 <template>
   <div class="image-master">
     <img v-if="mediaFile" :src="mediaFile.httpUrl"/>
+    <div v-if="titleComputed || descriptionComputed" class="metadata">
+      <h1 v-if="titleComputed" class="title">{{ titleComputed }}</h1>
+      <p v-if="descriptionComputed" class="description">{{ descriptionComputed }}</p>
+    </div>
   </div>
 </template>
 
@@ -81,11 +85,27 @@ export const master = {
 export default {
   props: {
     src: {
-      type: [String, Array],
+      type: [Array],
       required: true
+    },
+    title: {
+      type: String
+    },
+    description: {
+      type: String
     }
   },
   computed: {
+    titleComputed () {
+      if (this.title) return this.title
+      if ('title' in this.mediaFile) return this.mediaFile.title
+      return ''
+    },
+    descriptionComputed () {
+      if (this.description) return this.description
+      if ('description' in this.mediaFile) return this.mediaFile.description
+      return ''
+    },
     slide () {
       return this.$store.getters.slideCurrent
     },
@@ -115,6 +135,24 @@ export default {
     width: 100vw;
     object-fit: contain;
     position: absolute;
+  }
+
+  .metadata {
+    bottom: 0;
+    position: absolute;
+    right: 0;
+    width: 100%;
+    background: rgba(170, 170, 170, 0.3);
+
+    .title {
+      font-size: 0.5em;
+      text-align: center;
+    }
+
+    .description {
+      font-size: 0.3em;
+      padding: 1em;
+    }
   }
 }
 </style>
