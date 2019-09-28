@@ -400,115 +400,6 @@ export class MediaFile {
     if ('filename' in this) return this.filename
     if ('uri' in this) return this.uri
   }
-
-  createMediaElement () {
-    let mediaElement
-    if (this.type === 'audio') {
-      mediaElement = new Audio(this.httpUrl)
-    } else if (this.type === 'video') {
-      mediaElement = new Video(this.httpUrl)
-    } else if (this.type === 'image') {
-      mediaElement = new Image()
-      mediaElement.src = this.httpUrl
-    }
-    this.mediaElement = mediaElement
-    return mediaElement
-  }
-}
-
-class Resolver {
-  constructor (store) {
-    this.$store = store
-  }
-
-  /**
-   * @param {string} key
-   * @param {string|json} value
-   */
-  async queryMediaServer_ (key, value) {
-    const postBody = {}
-    postBody[key] = value
-    const response = await request.request(
-      {
-        method: 'post',
-        url: `query-by-${key}`,
-        data: postBody
-      }
-    )
-    if ('data' in response && 'path' in response.data) {
-      return response
-    }
-    throw new Error(`Media with the ${key} ”${value}” couldn’t be resolved.`)
-  }
-
-  /**
-   * @param {MediaFile} mediaFile
-   *
-   * @return {string} HTTP URL
-   */
-  async resolveHttpUrl_ (mediaFile) {
-    if ('httpUrl' in mediaFile) return mediaFile.httpUrl
-    if ('path' in mediaFile) {
-      const baseURL = await request.getFirstBaseUrl()
-      return `${baseURL}/media/${mediaFile.path}`
-    }
-    throw new Error(`Can not generate HTTP URL.`)
-  }
-
-  /**
-   * @param {string} uri - Uniform Resource Identifier, for example
-   *   `id:Joseph_haydn` or `filename:beethoven.jpg`
-   *
-   * @return {MediaFile}
-   */
-  async getMediaFile (uri) {
-    const storedMediaFile = this.$store.getters['media/mediaFileByUri'](uri)
-    if (storedMediaFile) return storedMediaFile
-
-    const mediaFile = new MediaFile({ uri: uri })
-
-    if (mediaFile.uriScheme === 'http' || mediaFile.uriScheme === 'https') {
-      mediaFile.httpUrl = mediaFile.uri
-      mediaFile.filenameFromHTTPUrl(mediaFile.uri)
-      mediaFile.extensionFromString(mediaFile.uri)
-    } else if (mediaFile.uriScheme === 'id' || mediaFile.uriScheme === 'filename') {
-      const promiseQuery = this.queryMediaServer_(mediaFile.uriScheme, mediaFile.uriAuthority)
-      const response = await promiseQuery
-      mediaFile.addProperties(response.data)
-      mediaFile.httpUrl = await this.resolveHttpUrl_(mediaFile)
-      if ('previewImage' in mediaFile) {
-        mediaFile.previewHttpUrl = `${mediaFile.httpUrl}_preview.jpg`
-      }
-    }
-
-    mediaFile.type = mediaTypes.extensionToType(mediaFile.extension)
-    this.storeMediaFile(mediaFile)
-    return mediaFile
-  }
-
-  storeMediaFile (mediaFile) {
-    const mediaElement = mediaFile.createMediaElement()
-    if (['audio', 'video'].includes(mediaFile.type)) {
-      mediaElement.onloadedmetadata = () => {
-        this.$store.dispatch('media/addMediaFile', mediaFile)
-      }
-    } else {
-      mediaElement.onload = () => {
-        this.$store.dispatch('media/addMediaFile', mediaFile)
-      }
-    }
-  }
-
-  /**
-   * @param {string} uri - Uniform Resource Identifier, for example
-   *   `id:Joseph_haydn` or `filename:beethoven.jpg`
-   *
-   * @return {string} A HTTP URL (http://..)
-   */
-  async getHttpURL (uri) {
-    let mediaFile = await this.getMediaFile(uri)
-    return mediaFile.httpUrl
-  }
 }
 
 /**
@@ -518,11 +409,7 @@ class Resolver {
  * 2. httpUrl
  * 3. mediaElement
  */
-class ResolverNextGeneration {
-
-  constructor (store) {
-    this.$store = store
-  }
+class Resolver {
 
   /**
    * @param {string} key
@@ -582,6 +469,13 @@ class ResolverNextGeneration {
     throw new Error(`Can not generate HTTP URL.`)
   }
 
+  /**
+   * Order of resolution:
+   *
+   * 1. mediaFile
+   * 2. httpUrl
+   * 3. mediaElement
+   */
   async resolveMediaFile_ (uri) {
     const mediaFile = new MediaFile({ uri: uri })
     if (mediaFile.uriScheme === 'http' || mediaFile.uriScheme === 'https') {
@@ -602,7 +496,14 @@ class ResolverNextGeneration {
     return mediaFile
   }
 
-  async resolve (uris) {
+  /**
+   * Resolve media files by URIs.
+   *
+   * @param {string|array} uris - A single URI as a string or a array of URIs.
+   *   Uniform Resource Identifier, for example
+   *   `id:Joseph_haydn` or `filename:beethoven.jpg`
+   */
+  resolve (uris) {
     if (typeof uris === 'string') uris = [uris]
     const uniqueUris = []
     for (const uri of uris) {
@@ -614,13 +515,7 @@ class ResolverNextGeneration {
     for (const uri of uniqueUris) {
       promises.push(this.resolveMediaFile_(uri))
     }
-    const mediaFiles = await Promise.all(promises)
-    const output = {}
-    for (const mediaFile of mediaFiles) {
-      this.$store.dispatch('media/addMediaFile', mediaFile)
-      output[mediaFile.uri] = mediaFile
-    }
-    return output
+    return Promise.all(promises)
   }
 }
 
@@ -633,8 +528,7 @@ class Media {
     this.$store = store
     this.$shortcuts = shortcuts
     this.player = new Player(store)
-    this.resolver = new Resolver(store)
-    this.resolverNg = new ResolverNextGeneration(store)
+    this.resolver = new Resolver()
 
     this.$shortcuts.addMultiple([
       {
@@ -662,15 +556,22 @@ class Media {
   }
 
   /**
-   * Resolve a media file by uri. The media file gets stored in the vuex
-   * store module `media`. Use getters to access the `mediaFile` object.
+   * Resolve media files by URIs. The media file gets stored in the vuex
+   * store module `media`. Use getters to access the `mediaFile` objects.
    *
-   * @param {string} uri - Uniform Resource Identifier, for example
+   * @param {string|array} uris - A single URI as a string or a array of URIs.
+   *   Uniform Resource Identifier, for example
    *   `id:Joseph_haydn` or `filename:beethoven.jpg`
    */
-  async resolve (uri) {
-    const mediaFile = await this.resolver.getMediaFile(uri)
-    this.addShortcutForMediaFile_(mediaFile)
+  async resolve (uris) {
+    const output = {}
+    const mediaFiles = await this.resolver.resolve(uris)
+    for (const mediaFile of mediaFiles) {
+      this.$store.dispatch('media/addMediaFile', mediaFile)
+      this.addShortcutForMediaFile_(mediaFile)
+      output[mediaFile.uri] = mediaFile
+    }
+    return output
   }
 
   addShortcutForMediaFile_ (mediaFile) {

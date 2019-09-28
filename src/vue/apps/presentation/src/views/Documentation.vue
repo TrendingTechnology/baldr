@@ -31,8 +31,9 @@ export default {
   name: 'Documentation',
   methods: {
     openExample (master) {
-      this.$store.dispatch('openPresentation', master.example)
-      this.$router.push('/slides')
+      this.$store.dispatch('openPresentation', master.example).then(() => {
+        this.$router.push('/slides')
+      })
     }
   },
   mounted: function () {

@@ -32,8 +32,8 @@ const getters = {
 }
 
 const actions = {
-  openPresentation ({ commit, dispatch }, content) {
-    const contentFile = parseContentFile(content)
+  async openPresentation ({ commit, dispatch }, content) {
+    const contentFile = await parseContentFile(content)
     commit('setSlides', contentFile.slides)
     dispatch('setSlideNoCurrent', 1)
   },

@@ -50,8 +50,9 @@ export default {
   },
   methods: {
     openExample () {
-      this.$store.dispatch('openPresentation', this.master.example)
-      this.$router.push('/slides')
+      this.$store.dispatch('openPresentation', this.master.example).then(() => {
+        this.$router.push('/slides')
+      })
     }
   }
 }

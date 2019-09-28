@@ -175,13 +175,8 @@ class MasterData {
     const normalizedData = callMasterFunc(this.name, 'normalizeProps', this.data)
     if (normalizedData) {
       this.data = normalizedData
-      const resolveMediaUris = callMasterFunc(this.name, 'resolveMediaUris', normalizedData)
-      if (resolveMediaUris) {
-        this.mediaUris = resolveMediaUris
-        for (const mediaUri of resolveMediaUris) {
-          Vue.$media.resolve(mediaUri)
-        }
-      }
+      const mediaUris = callMasterFunc(this.name, 'resolveMediaUris', normalizedData)
+      if (mediaUris) this.mediaUris = mediaUris
     }
 
     /**
@@ -276,7 +271,7 @@ function reIndex (slides) {
  *
  * @returns {object}
  */
-export function parseContentFile (content) {
+export async function parseContentFile (content) {
   const rawYaml = yaml.safeLoad(content)
   // Slides
   const indexedSlides = reIndex(rawYaml.slides)
@@ -290,9 +285,7 @@ export function parseContentFile (content) {
     }
   }
   if (mediaUris.length > 0) {
-    Vue.$media.resolverNg.resolve(mediaUris).then((mediaFiles) => {
-      console.log(mediaFiles)
-    })
+    await Vue.$media.resolve(mediaUris)
   }
   return {
     slides: slides
@@ -313,8 +306,9 @@ function openFile (file) {
     reader.readAsText(file, 'utf-8')
     reader.onload = readerEvent => {
       let content = readerEvent.target.result
-      store.dispatch('openPresentation', content)
-      router.push('/slides')
+      store.dispatch('openPresentation', content).then(() => {
+        router.push('/slides')
+      })
     }
   } else {
     Vue.$media.addFromFileSystem(file)
