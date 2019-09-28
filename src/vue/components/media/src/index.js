@@ -139,7 +139,6 @@ class Player {
 }
 
 const state = {
-  current: null,
   mediaFiles: {},
   mediaList: [],
   mediaNoCurrent: null,
@@ -228,7 +227,10 @@ const actions = {
     }
   },
   setMediaFileCurrent ({ commit, getters }, mediaFile) {
-    const no = getters.mediaList.indexOf(mediaFile.uri) + 1
+    let no = null
+    if (mediaFile) {
+      no = getters.mediaList.indexOf(mediaFile.uri) + 1
+    }
     commit('setMediaNoCurrent', no)
   }
 }
