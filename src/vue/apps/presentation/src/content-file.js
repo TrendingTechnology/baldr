@@ -278,7 +278,6 @@ export async function parseContentFile (content) {
   } catch (error) {
     throw new Error(`${error.name}: ${error.message}`)
   }
-  console.log(rawYaml)
   // Slides
   const indexedSlides = reIndex(rawYaml.slides)
   const slides = {}

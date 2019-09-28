@@ -30,17 +30,21 @@ export default {
       return {}
     }
   },
-  created: function () {
-    const master = this.$masters[this.masterName]
-    if (master) {
-      if ('styleConfig' in master) {
-        this.$styleConfig.set(master.styleConfig)
-      } else {
-        this.$styleConfig.setDefaults()
+  methods: {
+    setMasterStyle () {
+      const master = this.$masters[this.masterName]
+      if (master) {
+        if ('styleConfig' in master) {
+          this.$styleConfig.set(master.styleConfig)
+        } else {
+          this.$styleConfig.setDefaults()
+        }
       }
     }
   },
+
   render: function (createElement) {
+    this.setMasterStyle()
     if (this.masterName) {
       return createElement(
         `${this.masterName}-master`,

@@ -1,5 +1,5 @@
 <template>
-  <div class='markdown-master' v-html="markupConverted">
+  <div class="markdown-master" v-html="markupConverted">
   </div>
 </template>
 
@@ -70,3 +70,9 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+  .markdown-master {
+    font-size: 2vw;
+  }
+</style>
