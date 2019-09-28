@@ -148,8 +148,7 @@ const state = {
     video: {},
     image: {}
   },
-  restApiServers: [],
-  resolveQueue: []
+  restApiServers: []
 }
 
 const getters = {
@@ -240,9 +239,6 @@ const mutations = {
   },
   addMediaFileToList (state, mediaFile) {
     state.mediaList.push(mediaFile.uri)
-  },
-  addPromiseToResolveQueue (state, promise) {
-    state.resolveQueue.push(promise)
   },
   addMediaFileToTypes (state, mediaFile) {
     Vue.set(state.mediaTypes[mediaFile.type], mediaFile.uri, mediaFile)
@@ -477,7 +473,6 @@ class Resolver {
       mediaFile.extensionFromString(mediaFile.uri)
     } else if (mediaFile.uriScheme === 'id' || mediaFile.uriScheme === 'filename') {
       const promiseQuery = this.queryMediaServer_(mediaFile.uriScheme, mediaFile.uriAuthority)
-      this.$store.commit('media/addPromiseToResolveQueue', promiseQuery)
       const response = await promiseQuery
       mediaFile.addProperties(response.data)
       mediaFile.httpUrl = await this.resolveHttpUrl_(mediaFile)
@@ -524,6 +519,10 @@ class Resolver {
  * 3. mediaElement
  */
 class ResolverNextGeneration {
+
+  constructor (store) {
+    this.$store = store
+  }
 
   /**
    * @param {string} key
@@ -603,7 +602,8 @@ class ResolverNextGeneration {
     return mediaFile
   }
 
-  resolve (uris) {
+  async resolve (uris) {
+    if (typeof uris === 'string') uris = [uris]
     const uniqueUris = []
     for (const uri of uris) {
       if (!uniqueUris.includes(uri)) {
@@ -614,7 +614,13 @@ class ResolverNextGeneration {
     for (const uri of uniqueUris) {
       promises.push(this.resolveMediaFile_(uri))
     }
-    return Promise.all(promises)
+    const mediaFiles = await Promise.all(promises)
+    const output = {}
+    for (const mediaFile of mediaFiles) {
+      this.$store.dispatch('media/addMediaFile', mediaFile)
+      output[mediaFile.uri] = mediaFile
+    }
+    return output
   }
 }
 
@@ -628,7 +634,7 @@ class Media {
     this.$shortcuts = shortcuts
     this.player = new Player(store)
     this.resolver = new Resolver(store)
-    this.resolverNg = new ResolverNextGeneration()
+    this.resolverNg = new ResolverNextGeneration(store)
 
     this.$shortcuts.addMultiple([
       {
