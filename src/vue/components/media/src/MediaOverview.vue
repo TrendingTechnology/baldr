@@ -2,6 +2,8 @@
   <div class="media-overview">
     <h1>Media</h1>
 
+    <media-search/>
+
     <div v-if="isMedia">
 
       <section v-if="typeCount('audio')">
@@ -63,11 +65,15 @@
 </template>
 
 <script>
+import MediaSearch from './MediaSearch.vue'
 import { createNamespacedHelpers } from 'vuex'
 const { mapGetters } = createNamespacedHelpers('media')
 
 export default {
   name: 'MediaOverview',
+  components: {
+    MediaSearch
+  },
   computed: mapGetters(['mediaFilesByType', 'isMedia', 'typeCount']),
   methods: {
     play (uri) {

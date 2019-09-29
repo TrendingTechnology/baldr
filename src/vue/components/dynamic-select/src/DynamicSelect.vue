@@ -41,6 +41,7 @@ import DynamicSelect from './index'
 const resultListMaxCount = 20
 
 export default {
+  name: 'DynamicSelect',
   props: {
     placeholder: {
       type: String,
@@ -101,7 +102,7 @@ export default {
         this.$refs.search.blur()
       }
     },
-    search: function () {
+    searchText: function () {
       // Provide search text to parent (for ajax fetching, etc)
       this.$emit('search', this.searchText)
     },

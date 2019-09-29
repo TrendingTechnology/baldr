@@ -7,6 +7,8 @@
 import { getDefaultServers, Request } from '@bldr/http-request'
 import Vue from 'vue'
 import AudioVisual from 'vue-audio-visual'
+import DynamicSelect from '@bldr/vue-component-dynamic-select'
+
 import MediaOverview from './MediaOverview.vue'
 import MediaPlayer from './MediaPlayer.vue'
 
@@ -626,6 +628,7 @@ const Plugin = {
     // }
 
     Vue.use(AudioVisual)
+    Vue.use(DynamicSelect)
 
     if (store) store.registerModule('media', storeModule)
 

@@ -1,4 +1,6 @@
-import DynamicSelect from './DynamicSelect.vue'
+import component from './DynamicSelect.vue'
+
+export const DynamicSelect = component
 
 const Plugin = {
   install (Vue) {
@@ -9,8 +11,7 @@ const Plugin = {
         Plugin.event.$emit('dynamicselectfocus', name)
       }
     }
-
-    Vue.component('dynamic-select', DynamicSelect)
+    Vue.component('dynamic-select', component)
   }
 }
 
