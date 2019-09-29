@@ -10,6 +10,14 @@ const example = `
 ---
 slides:
 
+- title: hr to generate steps
+  markdown: |
+    step 1
+
+    ---
+
+    step 2
+
 - title: Using props
   markdown:
     markup: Using props
@@ -189,16 +197,29 @@ export const master = {
       converted.push(marked(markup))
     }
 
-    // Split large texts into smaller chunks
+    // Split by <hr>
     const steps = []
     for (const html of converted) {
-      const chunks = splitHtmlintoChunks(html)
-      for (const chunk of chunks) {
-        steps.push(chunk)
+      if (html.indexOf('<hr>') > -1) {
+        const chunks = html.split('<hr>')
+        for (const chunk of chunks) {
+          steps.push(chunk)
+        }
+      } else {
+        steps.push(html)
       }
     }
 
-    props.markup = steps
+    // Split large texts into smaller chunks
+    const markup = []
+    for (const html of steps) {
+      const chunks = splitHtmlintoChunks(html)
+      for (const chunk of chunks) {
+        markup.push(chunk)
+      }
+    }
+
+    props.markup = markup
     return props
   },
   stepCount (props) {
