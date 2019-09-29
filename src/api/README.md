@@ -2,7 +2,7 @@
 [![Build Status](https://travis-ci.org/Josef-Friedrich/baldr.svg?branch=master)](https://travis-ci.org/Josef-Friedrich/baldr)
 [![GitHub repo size](https://img.shields.io/github/repo-size/Josef-Friedrich/baldr.svg)](https://github.com/Josef-Friedrich/baldr)
 
-# @bldr/rest-api
+# @bldr/api
 
-A REST API for the baldr project. To store data for the seating plan
-VUE JS app.
+A REST API made with express.js. The sub apps are outsourced in
+different modules.

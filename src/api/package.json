@@ -1,0 +1,33 @@
+{
+  "name": "@bldr/api",
+  "version": "0.1.0",
+  "description": "A REST API made with express.js. The sub apps are outsourced in different modules.",
+  "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
+  "bugs": {
+    "url": "https://github.com/Josef-Friedrich/baldr/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Josef-Friedrich/baldr.git"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Josef Friedrich",
+    "email": "josef@friedrich.rocks",
+    "url": "https://josef.friedrich.rocks"
+  },
+  "main": "src/index.js",
+  "bin": {
+    "baldr-api": "./src/index.js"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "commander": "^3.0.1",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "@bldr/api-seating-plan": "^0.1.0",
+    "@bldr/api-media-server": "^0.1.0"
+  }
+}

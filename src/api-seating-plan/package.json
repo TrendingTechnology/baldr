@@ -1,7 +1,7 @@
 {
-  "name": "@bldr/seating-plan-api",
-  "version": "0.1.4",
-  "description": "A REST API to save states of the seating plan app..",
+  "name": "@bldr/api-seating-plan",
+  "version": "0.1.0",
+  "description": "A REST API to save states of the seating plan app.",
   "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
   "bugs": {
     "url": "https://github.com/Josef-Friedrich/baldr/issues"
@@ -17,9 +17,6 @@
     "url": "https://josef.friedrich.rocks"
   },
   "main": "src/index.js",
-  "bin": {
-    "baldr-seating-plan-rest-api": "./src/index.js"
-  },
   "scripts": {
     "test": "mocha tests"
   },
@@ -27,8 +24,7 @@
     "access": "public"
   },
   "dependencies": {
-    "commander": "^3.0.1",
-    "cors": "^2.8.5",
+    "@bldr/core": "^0.0.28",
     "express": "^4.17.1"
   },
   "devDependencies": {

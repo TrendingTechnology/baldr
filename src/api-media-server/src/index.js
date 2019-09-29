@@ -14,9 +14,13 @@ const childProcess = require('child_process')
 const glob = require('glob')
 const Sqlite3 = require('better-sqlite3')
 const yaml = require('js-yaml')
+const express = require('express')
 
 // Project packages.
 const { utils } = require('@bldr/core')
+
+// Project packages.
+const packageJson = require('../package.json')
 
 /**
  * This class is used both for the entries in the SQLite database as well for
@@ -432,6 +436,57 @@ id: ${metaData.basename}
   }
 }
 
+const mediaServer = new MediaServer()
+
+function sendJsonMessage (res, message) {
+  res.json(message)
+  console.log(message)
+}
+
+const app = express()
+
+app.get('/version', (req, res) => {
+  sendJsonMessage(res, {
+    version: packageJson.version
+  })
+})
+
+app.post('/query-by-id', (req, res) => {
+  const body = req.body
+  if (!('id' in body)) {
+    res.sendStatus(400)
+  } else {
+    sendJsonMessage(res, mediaServer.queryByID(body.id))
+  }
+})
+
+app.post('/query-by-filename', (req, res) => {
+  const body = req.body
+  if (!('filename', body)) {
+    res.sendStatus(400)
+  } else {
+    sendJsonMessage(res, mediaServer.queryByFilename(body.filename))
+  }
+})
+
+app.get('/search-in-path', (req, res) => {
+  const query = req.query
+  if (!('path' in query) || !query.path) {
+    res.sendStatus(400)
+  } else {
+    sendJsonMessage(res, mediaServer.searchInPath(query.path))
+  }
+})
+
+app.get('/search-in-id', (req, res) => {
+  const query = req.query
+  if (!('id' in query) || !query.id) {
+    res.sendStatus(400)
+  } else {
+    sendJsonMessage(res, mediaServer.searchInId(query.id))
+  }
+})
+
 /**
  * The main class.
  */
@@ -441,3 +496,5 @@ exports.MediaServer = MediaServer
  * Helper function to get configurations.
  */
 exports.bootstrapConfig = bootstrapConfig
+
+exports.expressApp = app

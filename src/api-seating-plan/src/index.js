@@ -3,35 +3,20 @@
 // Node packages.
 const fs = require('fs')
 const path = require('path')
-const os = require('os')
 
 // Third party packages.
-const { Command } = require('commander')
-const cors = require('cors')
 const express = require('express')
 
 // Project packages.
 const packageJson = require('../package.json')
+const { utils } = require('@bldr/core')
 
-/**
- * Default TCP port the server listens on.
- */
-const DEFAULT_PORT = 46328
+let config = utils.bootstrapConfig()
 
 /**
  * Directory where to store the json state objects.
  */
-let store
-
-/**
- * TCP Port on which the express js server listens on.
- */
-let port
-
-/**
- * Express js server instance. Returned by app.listen()
- */
-let server
+const store = config.seatingPlan.store
 
 function timeStampMsecToPath (timeStampMsec) {
   return path.join(store, `seating-plan_${timeStampMsec}.json`)
@@ -46,20 +31,11 @@ function getStateByTimeStampMsec (timeStampMsec) {
   return false
 }
 
-function checkEnv (envName) {
-  if ({}.hasOwnProperty.call(process.env, envName) && process.env[envName]) {
-    return true
-  }
-  return false
-}
-
 const app = express()
-
-app.use(cors())
-app.use(express.json())
 
 app.get('/version', (req, res) => {
   res.status(200).send({
+    name: packageJson.name,
     version: packageJson.version
   })
 })
@@ -143,49 +119,4 @@ app.delete('/by-time/:timeStampMsec', (req, res) => {
   }
 })
 
-const main = function () {
-  // To get a clean commander. Otherwise we get options from mocha in the tests.
-  // https://github.com/tj/commander.js/issues/438#issuecomment-274285003
-  const commander = new Command()
-  const options = commander
-    .version(packageJson.version)
-    .option('-p, --port <port>', 'Port to listen to.')
-    .option('-s, --store <store>', 'Directory to store the JSON dump files into.')
-    .parse(process.argv)
-
-  if (options.store) {
-    store = options.store
-  } else if (checkEnv('BALDR_REST_API_STORE')) {
-    store = process.env.BALDR_REST_API_STORE
-  } else {
-    store = fs.mkdtempSync(path.join(os.tmpdir(), 'baldr-rest-api-'))
-  }
-
-  if (options.port) {
-    port = options.port
-  } else if (checkEnv('BALDR_REST_API_PORT')) {
-    port = process.env.BALDR_REST_API_PORT
-  } else {
-    port = DEFAULT_PORT
-  }
-
-  server = app.listen(port, () => {
-    console.log(`The BALDR REST API is running on port ${port}.`)
-    console.log(`The JSON dumps are stored into the directory ${store}.`)
-  })
-
-  return app
-}
-
-const stop = function () {
-  server.close()
-}
-
-if (require.main === module) {
-  main()
-} else {
-  module.exports = main()
-  module.exports.stop = stop
-  module.exports.store = store
-  module.exports.port = port
-}
+module.exports = app
