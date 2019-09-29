@@ -1,9 +1,9 @@
 <template>
   <div class="media-search">
     <dynamic-select
-      :options="composer"
+      :options="options"
       @input="onInput"
-      v-model="selectedComposer"
+      v-model="mediaFile"
       @search="searchDebounced"
     />
 
@@ -12,26 +12,7 @@
 
 <script>
 import { DynamicSelect } from '@bldr/vue-component-dynamic-select'
-// https://codeburst.io/throttling-and-debouncing-in-javascript-646d076d0a44
-
-// ES6
-function debounced(delay, fn) {
-  let timerId
-  return function (...args) {
-    if (timerId) {
-      clearTimeout(timerId)
-    }
-    timerId = setTimeout(() => {
-      fn(...args)
-      timerId = null
-    }, delay)
-  }
-}
-
-function search (text) {
-  console.log(text)
-}
-
+import { request } from './index.js'
 
 export default {
   name: 'MediaSearch',
@@ -40,31 +21,51 @@ export default {
   },
   data: function () {
     return {
-      selectedComposer: {},
-      composer: [
-        {
-          id: 1,
-          name: 'Joseph Haydn'
-        },
-        {
-          id: 2,
-          name: 'Wolfgang Amadeus Mozart'
-        },
-        {
-          id: 3,
-          name: 'Ludwig van Beethoven'
-        }
-      ]
+      mediaFile: {},
+      options: []
     }
   },
   methods: {
     onInput () {
-      console.log(this.selectedComposer.name)
+      console.log(this.mediaFile)
+    },
+    // https://codeburst.io/throttling-and-debouncing-in-javascript-646d076d0a44
+    debounced(delay, fn) {
+      let timerId
+      return function (...args) {
+        if (timerId) {
+          clearTimeout(timerId)
+        }
+        timerId = setTimeout(() => {
+          fn(...args)
+          timerId = null
+        }, delay)
+      }
     },
     search (text) {
+      if (!text) return
       console.log(text)
-    },
-    searchDebounced: debounced(400, search)
+      request.request({
+        url: 'search-in-id',
+        method: 'get',
+        params: {
+          id: text
+        }
+      }).then((response) => {
+        console.log(response)
+        const options = []
+        for (const mediaFile of response.data) {
+          options.push({
+            id: mediaFile.id,
+            name: `${mediaFile.id} (${mediaFile.title})`
+          })
+        }
+        this.options = options
+      })
+    }
+  },
+  created () {
+    this.searchDebounced = this.debounced(400, this.search)
   }
 }
 </script>
