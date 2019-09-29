@@ -1,5 +1,5 @@
 <template>
-  <div class="markdown-master" v-html="markupConverted">
+  <div class="markdown-master" v-html="markupCurrent">
   </div>
 </template>
 
@@ -9,6 +9,43 @@ import marked from 'marked'
 const example = `
 ---
 slides:
+
+- title: Using props
+  markdown:
+    markup: Using props
+
+- title: Step support
+  markdown:
+    markup:
+    - Step 1
+    - Step 2
+
+- title: Long text in stepts
+  markdown:
+    markup:
+    - |
+      Step 1: Tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim
+      veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex ea
+      commodi consequat.
+
+    - |
+      Step 2: Quis aute iure reprehenderit in voluptate velit esse
+      cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat
+      cupiditat non proident, sunt in culpa qui officia deserunt mollit anim
+      id est laborum.
+
+- title: Top level step support
+  markdown:
+  - |
+    Step 1: Tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim
+    veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex ea
+    commodi consequat.
+
+  - |
+    Step 2: Quis aute iure reprehenderit in voluptate velit esse
+    cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat
+    cupiditat non proident, sunt in culpa qui officia deserunt mollit anim
+    id est laborum.
 
 - title: Long text
   markdown: |
@@ -110,10 +147,12 @@ slides:
 `
 
 function splitHtmlintoChunks (htmlString) {
+  const threshold = 500
+  if (htmlString.length < threshold) return [htmlString]
+
   const domParser = new DOMParser()
   const dom = domParser.parseFromString(htmlString, 'text/html')
 
-  const threshold = 500
   let buffer = ''
   const chunks = []
 
@@ -135,25 +174,51 @@ export const master = {
   },
   example,
   normalizeProps (props) {
-    if (typeof props === 'string') {
-      return {
+    if (typeof props === 'string' || Array.isArray(props)) {
+      props = {
         markup: props
       }
     }
+    if (typeof props.markup === 'string') {
+      props.markup = [props.markup]
+    }
+
+    // Convert into HTML
+    const converted = []
+    for (const markup of props.markup) {
+      converted.push(marked(markup))
+    }
+
+    // Split large texts into smaller chunks
+    const steps = []
+    for (const html of converted) {
+      const chunks = splitHtmlintoChunks(html)
+      for (const chunk of chunks) {
+        steps.push(chunk)
+      }
+    }
+
+    props.markup = steps
+    return props
+  },
+  stepCount (props) {
+    return props.markup.length
   }
 }
 
 export default {
   props: {
     markup: {
-      type: String,
+      type: [String, Array],
       required: true
     }
   },
   computed: {
-    markupConverted () {
-      const htmlString = marked(this.markup)
-      return htmlString
+    stepNoCurrent () {
+      return this.$store.getters.slideCurrent.master.stepNoCurrent
+    },
+    markupCurrent () {
+      return this.markup[this.stepNoCurrent - 1]
     }
   }
 }
