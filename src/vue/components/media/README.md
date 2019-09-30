@@ -15,7 +15,7 @@ Vue.use(media, router, store)
 On every Vue instance:
 
 ```js
-this.$media.resolve('id:Haydn_Joseph')
+this.$media.resolve('id:Haydn')
 
-const mediaFile = this.$store.getters['media/mediaFileByUri']('id:Haydn_Joseph')
+const mediaFile = this.$store.getters['media/mediaFileByUri']('id:Haydn')
 ```

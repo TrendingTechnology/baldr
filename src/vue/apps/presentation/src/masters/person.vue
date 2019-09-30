@@ -1,9 +1,9 @@
 <template>
   <div class="person-master">
-    <img :src="imageResolved">
+    <img :src="imageFile.httpUrl">
     <div class="info-box">
-      <p v-if="birth || death" class="birth-and-death">{{ birth }} {{ death }}</p>
-      <p class="person important">{{ name }}</p>
+      <p v-if="birthComputed || deathComputed" class="birth-and-death">{{ birthComputed }} {{ deathComputed }}</p>
+      <p class="person important">{{ nameComputed }}</p>
     </div>
   </div>
 </template>
@@ -16,14 +16,18 @@ slides:
 - title: Not birth and death
   person:
      name: Joseph Haydn
-     image: id:Haydn_Joseph
+     image: id:Haydn
 
 - title: All properties
   person:
      name: Ludwig van Beethoven
-     image: id:Beethoven_Ludwig-van
+     image: id:Beethoven
      birth: 1770
      death: 1827
+
+- title: props from media file
+  person:
+     image: id:Goethe
 `
 
 export const master = {
@@ -32,11 +36,6 @@ export const master = {
     darkMode: true
   },
   example,
-  normalizeData (props) {
-    if ('birth' in props) props.birth = `* ${props.birth}`
-    if ('death' in props) props.death = `† ${props.death}`
-    return props
-  },
   resolveMediaUris (props) {
     return [props.image]
   }
@@ -45,23 +44,54 @@ export const master = {
 export default {
   props: {
     name: {
-      type: String,
-      required: true
+      type: String
     },
     image: {
       type: String,
       required: true
     },
     birth: {
-      type: String
+      type: [String, Number]
     },
     death: {
-      type: String
+      type: [String, Number]
     }
   },
-  asyncComputed: {
-    imageResolved () {
-      return this.$getHttpURL(this.image)
+  computed: {
+    imageFile () {
+      return this.$store.getters['media/mediaFileByUri'](this.image)
+    },
+    nameComputed () {
+      if ('name' in this && this.name) {
+        return this.name
+      } else if ('name' in this.imageFile) {
+        return this.imageFile.name
+      }
+      return ''
+    },
+    birthComputed () {
+      let birth
+      if ('birth' in this && this.birth) {
+        birth = this.birth
+      } else if ('birth' in this.imageFile) {
+        birth = this.imageFile.birth
+      }
+      if (birth) {
+        return `* ${birth}`
+      }
+      return ''
+    },
+    deathComputed () {
+      let death
+      if ('death' in this && this.death) {
+        death = this.death
+      } else if ('death' in this.imageFile) {
+        death = this.imageFile.death
+      }
+      if (death) {
+        return `† ${death}`
+      }
+      return ''
     }
   }
 }

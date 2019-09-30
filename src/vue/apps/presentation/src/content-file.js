@@ -175,9 +175,10 @@ class MasterData {
     const normalizedData = callMasterFunc(this.name, 'normalizeProps', this.data)
     if (normalizedData) {
       this.data = normalizedData
-      const mediaUris = callMasterFunc(this.name, 'resolveMediaUris', normalizedData)
-      if (mediaUris) this.mediaUris = mediaUris
     }
+
+    const mediaUris = callMasterFunc(this.name, 'resolveMediaUris', this.data)
+    if (mediaUris) this.mediaUris = mediaUris
 
     /**
      * @type {number}

@@ -16,7 +16,7 @@ export const master = {
 slides:
 - title: 'URL: id:'
   image:
-    src: id:Haydn_Joseph
+    src: id:Haydn
 `,
   store: {
     getters,

@@ -284,7 +284,7 @@ export const mediaTypes = new MediaTypes()
  * Hold various data of a media file as class properties.
  *
  * @property {string} uri - Uniform Resource Identifier, for example
- *   `id:Haydn_Joseph`, `filename:Haydn_Joseph.jpg` or
+ *   `id:Haydn`, `filename:Haydn_Joseph.jpg` or
  *   `http://example.com/Haydn_Joseph.jpg`.
  * @property {string} uriScheme - for example: `http`, `https`, `blob`
  * @property {string} uriAuthority - for example:
@@ -315,7 +315,7 @@ export class MediaFile {
     }
 
     /**
-     * Uniform Resource Identifier, for example  `id:Haydn_Joseph`,
+     * Uniform Resource Identifier, for example  `id:Haydn`,
      * `filename:Haydn_Joseph.jpg` or `http://example.com/Haydn_Joseph.jpg`.
      * @type {string}
      */

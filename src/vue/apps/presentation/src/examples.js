@@ -5,6 +5,13 @@
 const marmotte = `
 ---
 slides:
+
+- person:
+    image: id:Beethoven
+
+- person:
+    image: id:Goethe
+
 - markdown: |
     Beethovens frühe Jahre in Bonn verliefen sehr ungeordnet. Eine
     Schulbildung im heutigen Sinn genoss er nicht; aber er war ungemein

@@ -15,9 +15,9 @@ slides:
 
 - title: 'Multiple images to resolve'
   image:
-  - id:Bach_Johann-Sebastian
+  - id:Bach
   - filename:Haendel_Georg-Friedrich.jpg
-  - id:Haydn_Joseph
+  - id:Haydn
   - filename:Beethoven_Ludwig-van.jpg
 
 - title: 'Multiple images without src: Simon & Garfunkel'
@@ -34,7 +34,7 @@ slides:
     - https://upload.wikimedia.org/wikipedia/commons/4/42/George_Harrison_1974.jpg
 
 - title: 'As a string'
-  image: id:Bach_Johann-Sebastian
+  image: id:Bach
 
 - title: 'As a list'
   image:
@@ -51,7 +51,7 @@ slides:
 
 - title: 'URL: id:'
   image:
-    src: id:Haydn_Joseph
+    src: id:Haydn
 
 - title: 'URL: filename:'
   image:
