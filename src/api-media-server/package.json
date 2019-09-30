@@ -23,8 +23,7 @@
     "js-yaml": "^3.13.1"
   },
   "bin": {
-    "baldr-media-server-cli": "./src/cli.js",
-    "baldr-media-server-rest-api": "./src/rest-api.js"
+    "baldr-media-server-cli": "./src/cli.js"
   },
   "publishConfig": {
     "access": "public"
