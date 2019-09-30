@@ -1,6 +1,6 @@
 {
   "name": "@bldr/api-media-server",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A media server which provides a REST API to find files",
   "author": {
     "name": "Josef Friedrich",
