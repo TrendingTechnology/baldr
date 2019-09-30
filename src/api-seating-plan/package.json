@@ -17,20 +17,12 @@
     "url": "https://josef.friedrich.rocks"
   },
   "main": "src/index.js",
-  "scripts": {
-    "test": "mocha tests"
-  },
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
     "@bldr/core": "^0.0.29",
     "express": "^4.17.1"
-  },
-  "devDependencies": {
-    "chai": "^4.2.0",
-    "chai-http": "^4.3.0",
-    "mocha": "^6.2.0"
   },
   "gitHead": "ed4f60e66c8f420711d3eb15185620f7688e6fc9"
 }

@@ -28,6 +28,7 @@
     "@bldr/api-seating-plan": "^0.1.1",
     "commander": "^3.0.1",
     "cors": "^2.8.5",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "@bldr/core": "^0.0.29"
   }
 }

@@ -9,11 +9,14 @@ const mediaServer = require('@bldr/api-media-server').expressApp
 
 // Project packages.
 const packageJson = require('../package.json')
+const { utils } = require('@bldr/core')
+
+const config = utils.bootstrapConfig()
 
 /**
  * Default TCP port the server listens on.
  */
-const DEFAULT_PORT = 44523
+const DEFAULT_PORT = config.api.port
 
 /**
  * TCP Port on which the express js server listens on.
