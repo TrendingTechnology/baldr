@@ -249,6 +249,12 @@ class MediaTypes {
       image: ['jpg', 'jpeg', 'png', 'svg'],
       video: ['mp4']
     }
+
+    this.typeColors = {
+      audio: 'brown',
+      image: 'blue',
+      video: 'purple'
+    }
     this.extensions_ = this.spreadExtensions_()
   }
 
@@ -268,6 +274,10 @@ class MediaTypes {
       return this.extensions_[ext]
     }
     throw new Error(`Unkown extension “${ext}”`)
+  }
+
+  typeToColor (type) {
+    return this.typeColors[type]
   }
 
   isMedia (filename) {

@@ -1,7 +1,16 @@
 <template>
   <tr>
-    <td><preview-image :media-file="mediaFile"/></td>
-    <td>{{ mediaFile.titleSafe }}</td>
+    <td><preview-image @click.native="play(mediaFile.uri)" :media-file="mediaFile"/></td>
+    <td>
+      <router-link :to="{
+        name: 'media-file',
+        params: {
+          id: mediaFile.id
+        }
+      }">
+        {{ mediaFile.titleSafe }}
+      </router-link>
+    </td>
     <td>{{ mediaFile.shortcut }}</td>
     <td>{{ dimension }}</td>
   </tr>
@@ -27,6 +36,11 @@ export default {
         dimension = formatDuration(file.mediaElement.duration)
       }
       return dimension
+    }
+  },
+  methods: {
+    play (uri) {
+      this.$media.player.start(uri)
     }
   }
 }

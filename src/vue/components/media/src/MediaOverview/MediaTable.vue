@@ -1,0 +1,47 @@
+<template>
+  <section v-if="typeCount(type)">
+    <h2>
+      <material-icon
+        :name="`file-${type}`"
+        :color="typeToColor(type)"
+      />
+        {{ type }}
+    </h2>
+    <table>
+      <tbody>
+        <table-row
+          v-for="mediaFile in mediaFilesByType(type)"
+          :key="mediaFile.uri"
+          :media-file="mediaFile"
+        />
+      </tbody>
+    </table>
+  </section>
+</template>
+
+<script>
+import { mediaTypes } from '../index.js'
+import TableRow from './TableRow.vue'
+import { createNamespacedHelpers } from 'vuex'
+const { mapGetters } = createNamespacedHelpers('media')
+
+export default {
+  name: 'MediaTable',
+  components: {
+    TableRow
+  },
+  props: ['mediaFiles', 'type'],
+  computed: mapGetters(['mediaFilesByType', 'typeCount']),
+  methods: {
+    typeToColor (type) {
+      return mediaTypes.typeToColor(type)
+    }
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+  table {
+    width: 100%;
+  }
+</style>
