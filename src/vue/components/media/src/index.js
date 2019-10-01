@@ -9,6 +9,7 @@ import Vue from 'vue'
 import AudioVisual from 'vue-audio-visual'
 import DynamicSelect from '@bldr/vue-component-dynamic-select'
 
+import ComponentMediaFile from './MediaFile.vue'
 import MediaOverview from './MediaOverview.vue'
 import MediaPlayer from './MediaPlayer.vue'
 
@@ -537,14 +538,22 @@ class Media {
     ])
 
     if (this.$router) {
-      const route = {
-        path: '/media',
-        shortcut: 'm',
-        title: 'Media',
-        component: MediaOverview
-      }
-      this.$router.addRoutes([route])
-      this.$shortcuts.fromRoute(route)
+      const routes = [
+        {
+          path: '/media',
+          shortcut: 'm',
+          title: 'Media',
+          component: MediaOverview
+        },
+        {
+          path: '/media/:id',
+          title: 'Media file',
+          name: 'media-file',
+          component: ComponentMediaFile
+        },
+      ]
+      this.$router.addRoutes(routes)
+      this.$shortcuts.fromRoute(routes[0])
     }
   }
 

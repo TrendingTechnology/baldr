@@ -27,7 +27,16 @@ export default {
   },
   methods: {
     onInput () {
-      console.log(this.mediaFile)
+      const uri = `id:${this.mediaFile.id}`
+      this.$media.resolve(uri).then((mediaFiles) => {
+        const mediaFile = mediaFiles[uri]
+        this.$router.push({
+          name: 'media-file',
+          params: {
+            id: mediaFile.id
+          }
+        })
+      })
     },
     // https://codeburst.io/throttling-and-debouncing-in-javascript-646d076d0a44
     debounced(delay, fn) {
@@ -52,7 +61,6 @@ export default {
           id: text
         }
       }).then((response) => {
-        console.log(response)
         const options = []
         for (const mediaFile of response.data) {
           options.push({
