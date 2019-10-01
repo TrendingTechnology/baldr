@@ -10,7 +10,7 @@ import AudioVisual from 'vue-audio-visual'
 import DynamicSelect from '@bldr/vue-component-dynamic-select'
 
 import ComponentMediaFile from './MediaFile.vue'
-import MediaOverview from './MediaOverview.vue'
+import MediaOverview from './MediaOverview'
 import MediaPlayer from './MediaPlayer.vue'
 
 export const request = new Request(getDefaultServers(), '/api/media-server')

@@ -12,7 +12,7 @@
 
 <script>
 import { DynamicSelect } from '@bldr/vue-component-dynamic-select'
-import { request } from './index.js'
+import { request } from '../index.js'
 
 export default {
   name: 'MediaSearch',
