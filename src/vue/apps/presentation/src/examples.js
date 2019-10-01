@@ -12,6 +12,30 @@ slides:
 - person:
     image: id:Goethe
 
+- question:
+    heading: Fragen zum Text
+    questions:
+      - Wie wurde Beethoven auf Goethes Gedicht aufmerksam?
+      - Von was handelt das Lied "Marmotte"?
+
+- markdown: |
+    # Verhältnis Beethoven-Goethe
+
+    * Der wissbegierige Beethoven war großer Anhänger des deutschen Dichters
+      Goethe
+    * Er vertonte mehrere Gedichte von Goethe
+
+    # Thematik des Liedes "Marmotte"
+
+    Arme Kinder aus Savoyen (französische Alpen) sangen und spielten mit dem
+    Dudelsack oder einer Drehleier um Geld hinzu zu verdienen. Als besondere
+    Attraktion tanzten dressierte Murmeltiere dazu.
+
+    # Klavierbegleitung
+
+    Die gleichbleibende Bassbegleitung soll an die Dudelsack- oder
+    Drehleiherbegleitung erinnern.
+
 - markdown: |
     Beethovens frühe Jahre in Bonn verliefen sehr ungeordnet. Eine
     Schulbildung im heutigen Sinn genoss er nicht; aber er war ungemein
