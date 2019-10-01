@@ -171,7 +171,7 @@ function splitHtmlintoChunks (htmlString) {
       buffer = ''
     }
   }
-
+  chunks.push(buffer)
   return chunks
 }
 
