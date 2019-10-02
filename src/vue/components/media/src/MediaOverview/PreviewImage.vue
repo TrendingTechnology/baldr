@@ -8,7 +8,7 @@ export default {
 
     if (file.type === 'image') {
       return createElement('img', { attrs: { src: file.httpUrl } })
-    } else if (['audio', 'video'].includes(file.type) && 'previewHttpUrl' in file) {
+    } else if (file.isPlayable && 'previewHttpUrl' in file) {
       return createElement('img', { attrs: { src: file.previewHttpUrl } })
     } else if (file.type === 'video') {
       return createElement('video', { attrs: { src: file.httpUrl } })

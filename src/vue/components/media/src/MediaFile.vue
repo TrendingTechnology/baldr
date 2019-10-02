@@ -22,7 +22,7 @@ export default {
     }
   },
   mounted () {
-    if (['audio', 'video'].includes(this.mediaFile.type)) {
+    if (this.mediaFile.isPlayable) {
       this.mediaFile.mediaElement.controls = true
     }
     this.$refs.mediaElementContainer.appendChild(this.mediaFile.mediaElement)

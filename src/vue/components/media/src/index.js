@@ -392,6 +392,10 @@ export class MediaFile {
     if ('filename' in this) return this.filename
     if ('uri' in this) return this.uri
   }
+
+  get isPlayable () {
+    return ['audio', 'video'].includes(this.type)
+  }
 }
 
 /**
@@ -446,8 +450,7 @@ class Resolver {
     }
 
     return new Promise(function(resolve, reject) {
-      // do a thing, possibly async, then…
-      if (['audio', 'video'].includes(mediaFile.type)) {
+      if (mediaFile.isPlayable) {
         mediaElement.onloadedmetadata = () => {
           resolve(mediaElement)
         }
@@ -587,7 +590,7 @@ class Media {
 
   addShortcutForMediaFile_ (mediaFile) {
     if (mediaFile.shortcut) return
-    if (!['audio', 'video'].includes(mediaFile.type)) return
+    if (!mediaFile.isPlayable) return
     const number = this.$store.getters['media/typeCount'](mediaFile.type)
     let key
     switch (mediaFile.type) {
