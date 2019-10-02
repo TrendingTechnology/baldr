@@ -6,7 +6,6 @@
 
 import { getDefaultServers, Request } from '@bldr/http-request'
 import Vue from 'vue'
-import AudioVisual from 'vue-audio-visual'
 import DynamicSelect from '@bldr/vue-component-dynamic-select'
 
 import ComponentMediaFile from './MediaFile.vue'
@@ -631,22 +630,21 @@ class Media {
 }
 
 // https://stackoverflow.com/a/56501461
-// Vue.use(media, router, store)
+// Vue.use(media, router, store, shortcuts)
 const Plugin = {
   install (Vue, router, store, shortcuts) {
-    // if (!router || router.constructor.name !== 'VueRouter') {
-    //   throw new Error('Pass in an instance of “VueRouter”.')
-    // }
+    if (!router) {
+      throw new Error('Pass in an instance of “VueRouter”.')
+    }
 
-    // if (!store || store.constructor.name !== 'Store') {
-    //   throw new Error('Pass in an instance of “Store”.')
-    // }
+    if (!store) {
+      throw new Error('Pass in an instance of “Store”.')
+    }
 
-    // if (!shortcuts || shortcuts.constructor.name !== 'Shortcuts') {
-    //   throw new Error('Pass in an instance of “Shortcuts“.')
-    // }
+    if (!shortcuts) {
+      throw new Error('Pass in an instance of “Shortcuts“.')
+    }
 
-    Vue.use(AudioVisual)
     Vue.use(DynamicSelect)
 
     if (store) store.registerModule('media', storeModule)
