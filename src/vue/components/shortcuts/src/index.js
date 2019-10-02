@@ -157,6 +157,7 @@ class Shortcuts {
 // Vue.use(shortcuts, router, store)
 const Plugin = {
   install (Vue, router, store) {
+    if (!router) throw new Error('Pass in an instance of “VueRouter”.')
     if (store) store.registerModule('shortcuts', storeModule)
     Vue.prototype.$shortcuts = new Shortcuts(router, store)
   }

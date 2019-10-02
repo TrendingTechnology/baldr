@@ -633,17 +633,9 @@ class Media {
 // Vue.use(media, router, store, shortcuts)
 const Plugin = {
   install (Vue, router, store, shortcuts) {
-    if (!router) {
-      throw new Error('Pass in an instance of “VueRouter”.')
-    }
-
-    if (!store) {
-      throw new Error('Pass in an instance of “Store”.')
-    }
-
-    if (!shortcuts) {
-      throw new Error('Pass in an instance of “Shortcuts“.')
-    }
+    if (!router) throw new Error('Pass in an instance of “VueRouter”.')
+    if (!store) throw new Error('Pass in an instance of “Store”.')
+    if (!shortcuts) throw new Error('Pass in an instance of “Shortcuts“.')
 
     Vue.use(DynamicSelect)
 
