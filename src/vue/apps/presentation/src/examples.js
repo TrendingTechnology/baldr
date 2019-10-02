@@ -58,8 +58,19 @@ slides:
 - image: id:Landkarte-Savoien
 
 - question: |
-    Untersucht die Klavierbegleitung. Inwiefern weist sie auf das begleitende
+    Untersucht die Klavierbegleitung! Inwiefern weist sie auf das begleitende
     Instrument der Savoyardenkinder hin?
+
+- question: |
+    Sucht in der Bassstimme alle Vorkommen des großen G und markiert diesen Ton.
+
+- camera: true
+
+- question:
+    - Bestimmt die gebrochenen Dreiklänge in Takt 10 und Takt 13 im Bassschlüssel!
+    - Auf welchen Stufen stehen diese Dreiklänge in der g-Moll-Tonleiter?
+
+- camera: true
 
 - question: Hört das Lied und diskutiert über die Interpretation!
 
