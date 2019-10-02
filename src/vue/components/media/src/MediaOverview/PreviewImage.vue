@@ -9,9 +9,9 @@ export default {
     if (file.type === 'image') {
       return createElement('img', { attrs: { src: file.httpUrl } })
     } else if (file.isPlayable && 'previewHttpUrl' in file) {
-      return createElement('img', { attrs: { src: file.previewHttpUrl } })
+      return createElement('img', { attrs: { src: file.previewHttpUrl, title: 'abspielen' } })
     } else if (file.type === 'video') {
-      return createElement('video', { attrs: { src: file.httpUrl } })
+      return createElement('video', { attrs: { src: file.httpUrl, title: 'abspielen' } })
     } else {
       return createElement('material-icon', { props: { name: `file-${file.type}` } })
     }

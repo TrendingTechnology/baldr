@@ -2,16 +2,19 @@
   <tr>
     <td><preview-image @click.native="play(mediaFile.uri)" :media-file="mediaFile"/></td>
     <td>
-      <router-link :to="{
-        name: 'media-file',
-        params: {
-          id: mediaFile.id
-        }
-      }">
+      <router-link
+        title="Medien-Datei-Überblick öffnen"
+        :to="{
+          name: 'media-file',
+          params: {
+            id: mediaFile.id
+          }
+        }"
+      >
         {{ mediaFile.titleSafe }}
       </router-link>
     </td>
-    <td>{{ mediaFile.shortcut }}</td>
+    <td class="shortcut">{{ mediaFile.shortcut }}</td>
     <td>{{ dimension }}</td>
   </tr>
 </template>
@@ -50,13 +53,18 @@ export default {
   td {
     padding: 0.3em;
     padding-bottom: 0em;
-  }
 
-  td:first-child {
-    width: 5vw;
-  }
+    &:first-child {
+      width: 5vw;
+    }
 
-  td:last-child {
-    text-align: right;
+    &.shortcut {
+      width: 6vw;
+    }
+
+    &:last-child {
+      text-align: right;
+      width: 10vw;
+    }
   }
 </style>

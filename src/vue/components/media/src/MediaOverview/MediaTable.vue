@@ -8,6 +8,14 @@
         {{ type }}
     </h2>
     <table>
+      <thead>
+        <tr>
+          <td></td>
+          <td>Title</td>
+          <td>Shortcut</td>
+          <td></td>
+        </tr>
+      </thead>
       <tbody>
         <table-row
           v-for="mediaFile in mediaFilesByType(type)"
