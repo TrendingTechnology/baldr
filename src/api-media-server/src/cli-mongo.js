@@ -212,8 +212,7 @@ async function upsert () {
           { $set: mediaFile },
           { upsert: true }
         )
-        console.log(result)
-        //console.log(mediaFile)
+        console.log(mediaFile)
       }
     }
 
