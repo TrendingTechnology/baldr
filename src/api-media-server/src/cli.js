@@ -8,6 +8,7 @@ const commander = require('commander')
 
 // Third party packages.
 const { MediaServer, bootstrapConfig } = require('./index.js')
+const queryMongo = require('./mongodb.js')
 
 const config = bootstrapConfig()
 
@@ -35,6 +36,11 @@ function rsync (toRemote = false) {
 commander
   .version(require('../package.json').version)
   .option('-b, --base-path <base-path>', 'A path where all there the media files are.')
+
+commander
+  .command('count').alias('c')
+  .description('Count the media files in the database.')
+  .action(() => { subcommand = 'count' })
 
 commander
   .command('flush').alias('f')
@@ -114,8 +120,14 @@ if (!subcommand) {
 const mediaServer = new MediaServer(commander.basePath)
 
 switch (subcommand) {
+  case 'count':
+    queryMongo('countFiles').then((count) => {
+      console.log(count)
+    })
+    break
+
   case 'flush':
-    mediaServer.flush()
+    queryMongo('flushFiles')
     break
 
   case 'info':
@@ -135,7 +147,9 @@ switch (subcommand) {
     if (options.fileName) {
       console.log(mediaServer.queryByFilename(searchString))
     } else if (options.id) {
-      console.log(mediaServer.queryByID(searchString))
+      queryMongo('queryById', searchString).then((result) => {
+        console.log(result)
+      })
     } else if (options.path) {
       console.log(mediaServer.searchInPath(searchString))
     } else if (options.idSub) {

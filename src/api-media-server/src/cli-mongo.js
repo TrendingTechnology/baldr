@@ -142,79 +142,58 @@ const files = glob.sync(path.join(config.mediaServer.basePath, '**/*'), { ignore
   '**/README.md'
 ] })
 
-async function setup () {
-  console.log('setup')
-  return client.connect().then((client) => {
-    const db = client.db(dbName)
-    db.createCollection('files')
-    db.collection('files').createIndex( { id: 1 }, { unique: true } )
-    client.close()
-  }).catch((err) => { throw err })
+async function connectToDb () {
+  await client.connect()
+  return client.db(dbName)
 }
 
-async function flushFiles () {
-  console.log('flush')
-  return client.connect().then((client) => {
-    const db = client.db(dbName)
-    client.close()
-  }).catch((err) => { throw err })
-}
-
-async function upsert () {
-  return client.connect(async (err, client) => {
-    const db = client.db(dbName)
-    for (const file of files) {
-      if (!fs.lstatSync(file).isDirectory()) {
-        const mediaFile = new MediaFile(file, config.mediaServer.basePath, false)
-        delete mediaFile.absPath
-        delete mediaFile.infoFile
-        delete mediaFile.basename
-        await db.collection('files').updateOne(
-          { id: mediaFile.id },
-          { $set: mediaFile },
-          { upsert: true }
-        )
-        console.log(mediaFile)
-      }
-    }
-    client.close()
-  })
-}
-
-(async function() {
+async function main () {
 
   try {
-    await client.connect()
-    console.log("Connected correctly to server");
+    const db = await connectToDb()
 
-    const db = client.db(dbName);
-
-    console.log('setup')
     // setup
-    await db.createCollection('files')
-    await db.collection('files').createIndex( { id: 1 }, { unique: true } )
-
-    console.log('flush')
+    const coll = await db.createCollection('files')
+    await coll.createIndex( { id: 1 }, { unique: true } )
+    await coll.createIndex( { path: 1 }, { unique: true } )
 
     // flush
-    await db.collection('files').deleteMany({})
+    await coll.deleteMany({})
 
-    console.log('Upsert')
-
+    // upsert
     for (const file of files) {
       if (!fs.lstatSync(file).isDirectory()) {
         const mediaFile = new MediaFile(file, config.mediaServer.basePath, false)
         delete mediaFile.absPath
         delete mediaFile.infoFile
         delete mediaFile.basename
-        const result = await db.collection('files').updateOne(
-          { id: mediaFile.id },
+        await coll.updateOne(
+          { path: mediaFile.path },
           { $set: mediaFile },
           { upsert: true }
         )
         console.log(mediaFile)
       }
     }
+
+    // count media files
+    console.log(await coll.countDocuments())
+
+    // get by id
+    console.log(await coll.find( { id: 'Beethoven' } ).next())
+
+    // get by filename
+    console.log(await coll.find( { filename: 'Savoyarde-mit-Murmeltier.jpg' } ).next())
+
+    const result = await coll.aggregate([
+      {
+        $match: {
+          $expr: { $gt: [{ $indexOfCP: [ "$path", "video/Jazz" ] }, -1]}
+        }
+      }
+    ]).toArray()
+    console.log(result)
+
 
   } catch (err) {
     console.log(err.stack);
@@ -222,4 +201,6 @@ async function upsert () {
 
   // Close connection
   client.close()
-})()
+}
+
+main()
