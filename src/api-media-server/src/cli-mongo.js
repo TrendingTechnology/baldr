@@ -142,22 +142,33 @@ const files = glob.sync(path.join(config.mediaServer.basePath, '**/*'), { ignore
   '**/README.md'
 ] })
 
-
-async function flushFiles () {
-  client.connect((err, client) => {
+async function setup () {
+  console.log('setup')
+  return client.connect().then((client) => {
     const db = client.db(dbName)
-    db.collection('files').deleteMany({})
+    db.createCollection('files')
+    db.collection('files').createIndex( { id: 1 }, { unique: true } )
     client.close()
-  })
+  }).catch((err) => { throw err })
 }
 
+async function flushFiles () {
+  console.log('flush')
+  return client.connect().then((client) => {
+    const db = client.db(dbName)
+    client.close()
+  }).catch((err) => { throw err })
+}
 
-function upsert () {
-  client.connect(async (err, client) => {
+async function upsert () {
+  return client.connect(async (err, client) => {
     const db = client.db(dbName)
     for (const file of files) {
       if (!fs.lstatSync(file).isDirectory()) {
-        const mediaFile = new MediaFile(file, this.basePath, false)
+        const mediaFile = new MediaFile(file, config.mediaServer.basePath, false)
+        delete mediaFile.absPath
+        delete mediaFile.infoFile
+        delete mediaFile.basename
         await db.collection('files').updateOne(
           { id: mediaFile.id },
           { $set: mediaFile },
@@ -170,4 +181,46 @@ function upsert () {
   })
 }
 
-upsert()
+(async function() {
+
+  try {
+    await client.connect()
+    console.log("Connected correctly to server");
+
+    const db = client.db(dbName);
+
+    console.log('setup')
+    // setup
+    await db.createCollection('files')
+    await db.collection('files').createIndex( { id: 1 }, { unique: true } )
+
+    console.log('flush')
+
+    // flush
+    await db.collection('files').deleteMany({})
+
+    console.log('Upsert')
+
+    for (const file of files) {
+      if (!fs.lstatSync(file).isDirectory()) {
+        const mediaFile = new MediaFile(file, config.mediaServer.basePath, false)
+        delete mediaFile.absPath
+        delete mediaFile.infoFile
+        delete mediaFile.basename
+        const result = await db.collection('files').updateOne(
+          { id: mediaFile.id },
+          { $set: mediaFile },
+          { upsert: true }
+        )
+        console.log(result)
+        //console.log(mediaFile)
+      }
+    }
+
+  } catch (err) {
+    console.log(err.stack);
+  }
+
+  // Close connection
+  client.close()
+})()
