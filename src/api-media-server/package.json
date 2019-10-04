@@ -19,7 +19,8 @@
     "express": "4.17.1",
     "glob": "^7.1.4",
     "js-yaml": "^3.13.1",
-    "mongodb": "^3.3.2"
+    "mongodb": "^3.3.2",
+    "saslprep": "1.0.3"
   },
   "publishConfig": {
     "access": "public"

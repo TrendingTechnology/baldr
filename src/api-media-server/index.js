@@ -21,8 +21,17 @@ const { utils } = require('@bldr/core')
 const packageJson = require('./package.json')
 
 const config = utils.bootstrapConfig()
+
+function setupMongoUrl () {
+  const conf = config.databases.mongodb
+  const user = encodeURIComponent(conf.user)
+  const password = encodeURIComponent(conf.password)
+  const authMechanism = 'DEFAULT'
+  return `mongodb://${user}:${password}@${conf.url}/${conf.dbName}?authMechanism=${authMechanism}`
+}
+
 const mongoClient = new MongoClient(
-  `${config.databases.mongodb.url}/${config.databases.mongodb.dbName}`,
+  setupMongoUrl(),
   { useNewUrlParser: true, useUnifiedTopology: true }
 )
 
