@@ -1,6 +1,6 @@
 const MongoClient = require('mongodb').MongoClient;
 const url = 'mongodb://localhost:27017'
-const dbName = 'baldr-media-server'
+const dbName = 'baldr'
 const client = new MongoClient(
   `${url}/${dbName}`,
   { useNewUrlParser: true, useUnifiedTopology: true }
@@ -21,6 +21,9 @@ const queries = {
   },
   queryById (db, id) {
     return db.collection('files').find( { id: id } ).next()
+  },
+  queryByFilename (db, filename) {
+    return db.collection('files').find( { filename: filename } ).next()
   }
 }
 

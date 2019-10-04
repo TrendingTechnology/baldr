@@ -7,18 +7,15 @@ const childProcess = require('child_process')
 const commander = require('commander')
 
 // Third party packages.
-const { MediaServer, bootstrapConfig } = require('./index.js')
-const queryMongo = require('./mongodb.js')
-
-const config = bootstrapConfig()
+const { MediaServer, config } = require('./index.js')
 
 let subcommand
 let options
 let searchString
 
 function rsync (toRemote = false) {
-  const local = `${config.basePath}/`
-  const remote = `${config.sshAliasRemote}:${config.basePath}/`
+  const local = `${config.mediaServer.basePath}/`
+  const remote = `${config.mediaServer.sshAliasRemote}:${config.mediaServer.basePath}/`
   const options = ['-av', '--delete', '--exclude', 'files.db']
 
   let args = []
@@ -127,7 +124,7 @@ switch (subcommand) {
     break
 
   case 'flush':
-    queryMongo('flushFiles')
+    mediaServer.flushFiles()
     break
 
   case 'info':
@@ -139,15 +136,17 @@ switch (subcommand) {
     break
 
   case 'open':
-    const process = childProcess.spawn('xdg-open', [config.basePath], { detached: true })
+    const process = childProcess.spawn('xdg-open', [config.mediaServer.basePath], { detached: true })
     process.unref()
     break
 
   case 'query':
     if (options.fileName) {
-      console.log(mediaServer.queryByFilename(searchString))
+      mediaServer.queryByFilename(searchString).then((result) => {
+        console.log(result)
+      })
     } else if (options.id) {
-      queryMongo('queryById', searchString).then((result) => {
+      mediaServer.queryById(searchString).then((result) => {
         console.log(result)
       })
     } else if (options.path) {
@@ -175,7 +174,9 @@ switch (subcommand) {
     break
 
   case 'update':
-    mediaServer.update()
+    mediaServer.update().then(() => {
+      console.log('Finished')
+    })
     break
 
   case 'yaml':

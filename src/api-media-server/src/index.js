@@ -12,15 +12,49 @@ const childProcess = require('child_process')
 
 // Third party packages.
 const glob = require('glob')
-const Sqlite3 = require('better-sqlite3')
 const yaml = require('js-yaml')
 const express = require('express')
+const MongoClient = require('mongodb').MongoClient;
 
 // Project packages.
 const { utils } = require('@bldr/core')
-
-// Project packages.
 const packageJson = require('../package.json')
+
+const config = utils.bootstrapConfig()
+const mongoClient = new MongoClient(
+  `${config.databases.mongodb.url}/${config.databases.mongodb.dbName}`,
+  { useNewUrlParser: true, useUnifiedTopology: true }
+)
+
+const mongoDbQueries = {
+  flushFiles (db) {
+    return db.collection('files').deleteMany({})
+  },
+  countFiles (db) {
+    return db.collection('files').countDocuments()
+  },
+  queryById (db, id) {
+    return db.collection('files').find( { id: id } ).next()
+  }
+}
+
+/**
+ * @return {Promise}
+ */
+async function connectMongodb () {
+  await mongoClient.connect()
+  return mongoClient.db(config.databases.mongodb.dbName)
+}
+
+/**
+ * @return {Promise}
+ */
+async function queryMongodb (queryName, payload) {
+  const db = await connectMongodb()
+  const result = await mongoDbQueries[queryName](db, payload)
+  mongoClient.close()
+  return result
+}
 
 /**
  * This class is used both for the entries in the SQLite database as well for
@@ -129,128 +163,6 @@ class MetaData {
   }
 }
 
-/**
- * Sqlite database wrapper.
- */
-class Sqlite {
-  /**
-   * @param {string} dbFile - The path of the Sqlite database.
-   */
-  constructor (dbFile) {
-    /**
-     * The path of the Sqlite database.
-     *
-     * @type {string}
-     */
-    this.dbFile = dbFile
-
-    /**
-     * A instance of the class “Sqlite3”.
-     */
-    this.db = new Sqlite3(this.dbFile)
-    this.prepare_(
-      `CREATE TABLE IF NOT EXISTS files (
-        path TEXT UNIQUE,
-        filename TEXT,
-        id TEXT UNIQUE
-      )`
-    )
-
-    this.prepare_('CREATE INDEX IF NOT EXISTS id ON files(id)')
-    this.prepare_('CREATE INDEX IF NOT EXISTS filename ON files(filename)')
-  }
-
-  prepare_ (sql, data) {
-    if (data) {
-      this.db.prepare(sql).run(data)
-    } else {
-      this.db.prepare(sql).run()
-    }
-  }
-
-  update ({ path, filename, id }) {
-    this.prepare_(
-      'INSERT OR IGNORE INTO files (path) VALUES ($path)',
-      { path: path }
-    )
-
-    this.prepare_(
-      `UPDATE files
-        SET
-          path = $path,
-          filename = $filename,
-          id = $id
-        WHERE path = $path
-      `,
-      {
-        path: path,
-        filename: filename,
-        id: id
-      }
-    )
-  }
-
-  queryByID (id) {
-    const results = this.db
-      .prepare('SELECT * FROM files WHERE id = $id')
-      .all({ id: id })
-
-    if (results.length === 0) {
-      return { error: `Media file with the '${id}' not found.` }
-    }
-
-    if (results.length > 1) {
-      console.log(results)
-      throw new Error(`Multiple ids '${id}' found.`)
-    }
-    return results[0]
-  }
-
-  queryByFilename (filename) {
-    const results = this.db
-      .prepare('SELECT * FROM files WHERE filename = $filename')
-      .all({ filename: filename })
-
-    if (results.length === 0) {
-      return { error: `'${filename}' not found.` }
-    }
-
-    if (results.length > 1) {
-      console.log(results)
-      throw new Error(`Multiple file names '${filename}' found.`)
-    }
-    return results[0]
-  }
-
-  searchInPath (pathSubstring) {
-    return this.db
-      .prepare('SELECT * FROM files WHERE instr("path", ?) > 0 LIMIT 10').all(pathSubstring)
-  }
-
-  searchInId (idSubstring) {
-    return this.db
-      .prepare('SELECT * FROM files WHERE INSTR(LOWER("id"), ?) > 0 LIMIT 10').all(idSubstring)
-  }
-
-  list () {
-    return this.db
-      .prepare('SELECT * FROM files')
-      .all()
-  }
-
-  flush () {
-    this.db.prepare('DELETE FROM files').run()
-  }
-}
-
-function bootstrapConfig () {
-  const config = utils.bootstrapConfig()
-  if (!('mediaServer' in config)) {
-    throw new Error('Missing property mediaServer in config.')
-  }
-  return config.mediaServer
-}
-
 class MediaServer {
   constructor (basePath) {
     /**
@@ -258,27 +170,16 @@ class MediaServer {
      */
     this.basePath = ''
     if (!basePath) {
-      const config = bootstrapConfig()
-      if (!('basePath' in config)) {
+      if (!('basePath' in config.mediaServer)) {
         throw new Error('Missing property “basePath” in config.mediaServer')
       }
-      this.basePath = config.basePath
+      this.basePath = config.mediaServer.basePath
     } else {
       this.basePath = basePath
     }
     if (!fs.existsSync(this.basePath)) {
       throw new Error(`The base path of the media server doesn’t exist: ${this.basePath}`)
     }
-
-    /**
-     * @type {string}
-     */
-    this.SQLiteDBfile = path.join(this.basePath, 'files.db')
-
-    /**
-     *
-     */
-    this.sqlite = this.initSQLite_()
 
     /**
      * @type {array}
@@ -290,10 +191,6 @@ class MediaServer {
       '**/*_preview.jpg',
       '**/README.md'
     ]
-  }
-
-  initSQLite_ () {
-    return new Sqlite(this.SQLiteDBfile)
   }
 
   glob_ (searchPath) {
@@ -354,37 +251,45 @@ id: ${metaData.basename}
     }
   }
 
-  update () {
+  async update () {
     console.log('Run git pull')
     const gitPull = childProcess.spawnSync('git', ['pull'], { cwd: this.basePath, encoding: 'utf-8' })
     console.log(gitPull.stderr)
     console.log(gitPull.stdout)
     if (gitPull.status !== 0) throw new Error(`git pull exits with an none zero status code.`)
+
+    const db = await connectMongodb()
+
     const files = this.glob_(this.basePath)
     for (const file of files) {
       if (!fs.lstatSync(file).isDirectory()) {
         const metaData = new MetaData(file, this.basePath, true)
+        delete metaData.absPath
+        delete metaData.infoFile
+        delete metaData.basename
         console.log(metaData)
-        this.sqlite.update(metaData)
+        await db.collection('files').updateOne(
+          { path: metaData.path },
+          { $set: metaData },
+          { upsert: true }
+        )
       }
     }
+    mongoClient.close()
   }
 
-  loadMediaDataObject_ (result) {
+  normalizeResult_ (result) {
     if (result && !result.error) {
-      const metaData = new MetaData(path.join(this.basePath, result.path), this.basePath)
-      delete metaData.absPath
-      delete metaData.infoFile
-      delete metaData.basename
-      return metaData
+      delete result._id
+      return result
     }
     return result
   }
 
-  loadMediaDataObjects_ (results) {
+  normalizeResults_ (results) {
     const output = []
     for (const result of results) {
-      output.push(this.loadMediaDataObject_(result))
+      output.push(this.normalizeResult_(result))
     }
     return output
   }
@@ -403,28 +308,35 @@ id: ${metaData.basename}
     }
   }
 
-  queryByID (id) {
-    const result = this.sqlite.queryByID(id)
-    return this.loadMediaDataObject_(result)
+  /**
+   * @returns {Promise}
+   */
+  async queryById (id) {
+    return this.normalizeResult_(await queryMongodb('queryById', id))
   }
 
-  queryByFilename (filename) {
-    const result = this.sqlite.queryByFilename(filename)
-    return this.loadMediaDataObject_(result)
+  /**
+   * @returns {Promise}
+   */
+  async queryByFilename (filename) {
+    return this.normalizeResult_(await queryMongodb('queryById', filename))
   }
 
   searchInPath (pathSubstring) {
     const results = this.sqlite.searchInPath(pathSubstring)
-    return this.loadMediaDataObjects_(results)
+    return this.normalizeResults_(results)
   }
 
   searchInId (idSubstring) {
     const results = this.sqlite.searchInId(idSubstring.toLowerCase())
-    return this.loadMediaDataObjects_(results)
+    return this.normalizeResults_(results)
   }
 
-  flush () {
-    this.sqlite.flush()
+  /**
+   * @returns {Promise}
+   */
+  flushFiles () {
+    return queryMongodb('flushFiles')
   }
 
   /**
@@ -487,14 +399,8 @@ app.get('/search-in-id', (req, res) => {
   }
 })
 
-/**
- * The main class.
- */
-exports.MediaServer = MediaServer
-
-/**
- * Helper function to get configurations.
- */
-exports.bootstrapConfig = bootstrapConfig
-
-exports.expressApp = app
+module.exports = {
+  config,
+  MediaServer,
+  expressApp: app
+}
