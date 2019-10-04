@@ -27,25 +27,7 @@ const mongoClient = new MongoClient(
 )
 
 /**
- * @return {Promise}
- */
-async function connectMongodb () {
-  await mongoClient.connect()
-  return mongoClient.db(config.databases.mongodb.dbName)
-}
-
-/**
- * @return {Promise}
- */
-async function queryMongodb (queryName, payload) {
-  const db = await connectMongodb()
-  const result = await mongoDbQueries[queryName](db, payload)
-  mongoClient.close()
-  return result
-}
-
-/**
- * This class is used both for the entries in the SQLite database as well for
+ * This class is used both for the entries in the MongoDB database as well for
  * the queries.
  */
 class MediaAsset {
@@ -309,20 +291,38 @@ id: ${mediaAsset.basename}
   /**
    * @returns {Promise}
    */
-  async queryById (id) {
+  async getMediaAssetById (id) {
     return this.normalizeResult_(await this.db.collection('mediaAssets').find( { id: id } ).next())
   }
 
   /**
    * @returns {Promise}
    */
-  async queryByFilename (filename) {
-    return this.normalizeResult_(await queryMongodb('queryById', filename))
+  async getMediaAssetByFilename (filename) {
+    const cursor = await this.db.collection('mediaAssets').find( { filename: filename } )
+    const count = await cursor.count()
+    if (count !== 1) throw new Error(`filename “${filename}” is not unambiguous.`)
+    return this.normalizeResult_(await cursor.next())
   }
 
-  searchInPath (pathSubstring) {
-    const results = this.sqlite.searchInPath(pathSubstring)
-    return this.normalizeResults_(results)
+  /**
+   * @returns {Promise}
+   */
+  async searchInPath (pathSubstring) {
+    return await this.db.collection('mediaAssets').aggregate([
+      {
+        $match: {
+          $expr: { $gt: [{ $indexOfCP: [ "$path", pathSubstring ] }, -1]}
+        }
+      },
+      {
+        $project: {
+          _id: false,
+          id: 1,
+          path: 1
+        }
+      }
+    ]).toArray()
   }
 
   searchInId (idSubstring) {
@@ -373,32 +373,32 @@ id: ${mediaAsset.basename}
   /**
    * @returns {Promise}
    */
-  async dropDb_ (db) {
-    const collections = await db.listCollections().toArray()
+  async dropDb () {
+    const collections = await this.db.listCollections().toArray()
+    const droppedCollections = []
     for (const collection of collections) {
-      console.log(collection.name)
-      await db.dropCollection(collection.name)
+      await this.db.dropCollection(collection.name)
+      droppedCollections.push(collection.name)
     }
-    console.log('finished')
+    return {
+      droppedCollections
+    }
   }
 
   /**
    * @returns {Promise}
    */
   async reInitializeDb () {
-    const db = await connectMongodb()
-    await this.dropDb_(db)
-    await this.initializeDb_(db)
-    mongoClient.close()
+    const dropDb = await this.dropDb()
+    const initializeDb = await this.initializeDb()
+    return {
+      dropDb,
+      initializeDb
+    }
   }
 }
 
 const mediaServer = new MediaServer()
-
-function sendJsonMessage (res, message) {
-  res.json(message)
-  console.log(message)
-}
 
 const app = express()
 
@@ -413,24 +413,23 @@ app.get(['/', '/version'], (req, res) => {
   })
 })
 
-app.post('/query-by-id', (req, res) => {
-  const body = req.body
-  if (!('id' in body)) {
-    res.sendStatus(400)
-  } else {
-    sendJsonMessage(res, mediaServer.queryByID(body.id))
-  }
-})
-
-app.get('/asset/by-id/:id', async (req, res, next) => {
+app.get('/media-asset/by-id/:id', async (req, res, next) => {
   try {
-    res.json(await mediaServer.queryById(req.params.id))
+    res.json(await mediaServer.getMediaAssetById(req.params.id))
   } catch (error) {
     next(error)
   }
 })
 
-app.get('/assets/count', async (req, res, next) => {
+app.get('/media-asset/by-filename/:filename', async (req, res, next) => {
+  try {
+    res.json(await mediaServer.getMediaAssetByFilename(req.params.filename))
+  } catch (error) {
+    next(error)
+  }
+})
+
+app.get('/statistics/media-asset-count', async (req, res, next) => {
   try {
     res.json({ count: await mediaServer.countMediaAssets() })
   } catch (error) {
@@ -438,21 +437,15 @@ app.get('/assets/count', async (req, res, next) => {
   }
 })
 
-app.post('/query-by-filename', (req, res) => {
-  const body = req.body
-  if (!('filename', body)) {
-    res.sendStatus(400)
-  } else {
-    sendJsonMessage(res, mediaServer.queryByFilename(body.filename))
-  }
-})
-
-app.get('/search-in-path', (req, res) => {
-  const query = req.query
-  if (!('path' in query) || !query.path) {
-    res.sendStatus(400)
-  } else {
-    sendJsonMessage(res, mediaServer.searchInPath(query.path))
+app.get('/search-in/path', async (req, res, next) => {
+  try {
+    if (!('path' in req.query) || !req.query.path) {
+      res.sendStatus(400)
+    } else {
+      res.json(await mediaServer.searchInPath(req.query.path))
+    }
+  } catch (error) {
+    next(error)
   }
 })
 
@@ -468,6 +461,14 @@ app.get('/search-in-id', (req, res) => {
 app.get('/management/initialize-db', async (req, res, next) => {
   try {
     res.json(await mediaServer.initializeDb())
+  } catch (error) {
+    next(error)
+  }
+})
+
+app.get('/management/re-initialize-db', async (req, res, next) => {
+  try {
+    res.json(await mediaServer.reInitializeDb())
   } catch (error) {
     next(error)
   }

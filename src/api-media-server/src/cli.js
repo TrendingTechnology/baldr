@@ -101,11 +101,11 @@ if (connectDb) {
     switch (subcommand) {
       case 'query':
         if (options.fileName) {
-          mediaServer.queryByFilename(searchString).then((result) => {
+          mediaServer.getMediaAssetByFilename(searchString).then((result) => {
             console.log(result)
           })
         } else if (options.id) {
-          mediaServer.queryById(searchString).then((result) => {
+          mediaServer.getMediaAssetById(searchString).then((result) => {
             console.log(result)
           })
         } else if (options.path) {
