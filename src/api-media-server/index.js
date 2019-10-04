@@ -8,7 +8,6 @@
 // Node packages.
 const fs = require('fs')
 const path = require('path')
-const childProcess = require('child_process')
 
 // Third party packages.
 const glob = require('glob')
@@ -196,9 +195,6 @@ class MediaServer {
   }
 
   async update () {
-    const gitPull = childProcess.spawnSync('git', ['pull'], { cwd: this.basePath, encoding: 'utf-8' })
-    if (gitPull.status !== 0) throw new Error(`git pull exits with an none zero status code.`)
-
     const files = this.glob_(this.basePath)
     for (const file of files) {
       if (!fs.lstatSync(file).isDirectory()) {
