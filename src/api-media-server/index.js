@@ -18,7 +18,7 @@ const MongoClient = require('mongodb').MongoClient;
 
 // Project packages.
 const { utils } = require('@bldr/core')
-const packageJson = require('../package.json')
+const packageJson = require('./package.json')
 
 const config = utils.bootstrapConfig()
 const mongoClient = new MongoClient(
@@ -186,60 +186,6 @@ class MediaServer {
     return glob.sync(path.join(searchPath, '**/*'), { ignore: this.ignore })
   }
 
-  createInfoFiles () {
-    const cwd = process.cwd()
-    const files = this.glob_(cwd)
-    for (const file of files) {
-      const yamlFile = `${file}.yml`
-      if (!fs.lstatSync(file).isDirectory() && !fs.existsSync(yamlFile)) {
-        const mediaAsset = new MediaAsset(file)
-        const title = mediaAsset.basename
-          .replace(/_/g, ', ')
-          .replace(/-/g, ' ')
-          .replace(/Ae/g, 'Ä')
-          .replace(/ae/g, 'ä')
-          .replace(/Oe/g, 'Ö')
-          .replace(/oe/g, 'ö')
-          .replace(/Ue/g, 'Ü')
-          .replace(/ue/g, 'ü')
-        const yamlMarkup = `---
-# path: ${mediaAsset.path}
-# filename: ${mediaAsset.filename}
-# extension: ${mediaAsset.extension}
-title: ${title}
-id: ${mediaAsset.basename}
-`
-        console.log(yamlMarkup)
-        fs.writeFileSync(yamlFile, yamlMarkup)
-      }
-    }
-  }
-
-  rename () {
-    const cwd = process.cwd()
-    const files = this.glob_(cwd)
-    for (const oldPath of files) {
-      console.log(oldPath)
-      const newPath = oldPath
-        .replace(/[,.] /g, '_')
-        .replace(/ +- +/g, '_')
-        .replace(/\s+/g, '-')
-        .replace(/-+/g, '-')
-        .replace(/-*_-*/g, '_')
-        .replace(/Ä/g, 'Ae')
-        .replace(/ä/g, 'ae')
-        .replace(/Ö/g, 'Oe')
-        .replace(/ö/g, 'oe')
-        .replace(/Ü/g, 'Ue')
-        .replace(/ü/g, 'ue')
-        .replace(/ß/g, 'ss')
-      if (oldPath !== newPath) {
-        console.log(newPath)
-        fs.renameSync(oldPath, newPath)
-      }
-    }
-  }
-
   async update () {
     const gitPull = childProcess.spawnSync('git', ['pull'], { cwd: this.basePath, encoding: 'utf-8' })
     if (gitPull.status !== 0) throw new Error(`git pull exits with an none zero status code.`)
@@ -274,20 +220,6 @@ id: ${mediaAsset.basename}
     return output
   }
 
-  list () {
-    const results = this.sqlite.list()
-    if (results.length > 0) {
-      const output = []
-      for (const result of results) {
-        output.push(this.loadMediaDataObject_(result))
-      }
-      return output
-    }
-    return {
-      warning: 'No media files found.'
-    }
-  }
-
   /**
    * @returns {Promise}
    */
@@ -308,26 +240,41 @@ id: ${mediaAsset.basename}
   /**
    * @returns {Promise}
    */
-  async searchInPath (pathSubstring) {
+  async searchInPath (substring) {
     return await this.db.collection('mediaAssets').aggregate([
       {
         $match: {
-          $expr: { $gt: [{ $indexOfCP: [ "$path", pathSubstring ] }, -1]}
+          $expr: { $gt: [{ $indexOfCP: [ "$path", substring ] }, -1]}
         }
       },
       {
         $project: {
           _id: false,
-          id: 1,
-          path: 1
+          id: true,
+          name: '$path'
         }
       }
     ]).toArray()
   }
 
-  searchInId (idSubstring) {
-    const results = this.sqlite.searchInId(idSubstring.toLowerCase())
-    return this.normalizeResults_(results)
+  /**
+   * @returns {Promise}
+   */
+  async searchInId (substring) {
+    return await this.db.collection('mediaAssets').aggregate([
+      {
+        $match: {
+          $expr: { $gt: [{ $indexOfCP: [ "$id", substring ] }, -1]}
+        }
+      },
+      {
+        $project: {
+          _id: false,
+          id: true,
+          name: '$title'
+        }
+      }
+    ]).toArray()
   }
 
   /**
@@ -437,24 +384,27 @@ app.get('/statistics/media-asset-count', async (req, res, next) => {
   }
 })
 
-app.get('/search-in/path', async (req, res, next) => {
+app.get('/search-in/id', async (req, res, next) => {
   try {
-    if (!('path' in req.query) || !req.query.path) {
+    if (!('substring' in req.query) || !req.query.substring) {
       res.sendStatus(400)
     } else {
-      res.json(await mediaServer.searchInPath(req.query.path))
+      res.json(await mediaServer.searchInId(req.query.substring))
     }
   } catch (error) {
     next(error)
   }
 })
 
-app.get('/search-in-id', (req, res) => {
-  const query = req.query
-  if (!('id' in query) || !query.id) {
-    res.sendStatus(400)
-  } else {
-    sendJsonMessage(res, mediaServer.searchInId(query.id))
+app.get('/search-in/path', async (req, res, next) => {
+  try {
+    if (!('substring' in req.query) || !req.query.substring) {
+      res.sendStatus(400)
+    } else {
+      res.json(await mediaServer.searchInPath(req.query.substring))
+    }
+  } catch (error) {
+    next(error)
   }
 })
 
@@ -489,7 +439,6 @@ app.get('/management/flush-media-assets', async (req, res, next) => {
     next(error)
   }
 })
-
 
 module.exports = {
   config,
