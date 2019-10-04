@@ -1,6 +1,6 @@
 {
   "name": "@bldr/presentation",
-  "version": "0.1.17",
+  "version": "0.1.18",
   "description": "The main app of the BALDR project: a presentation app using YAML files.",
   "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
   "bugs": {
@@ -26,11 +26,11 @@
   "dependencies": {
     "@bldr/core": "^0.0.29",
     "@bldr/theme-default": "^0.0.28",
-    "@bldr/vue-component-dynamic-select": "^0.1.9",
+    "@bldr/vue-component-dynamic-select": "^0.1.10",
     "@bldr/vue-component-material-icon": "^0.1.10",
     "@bldr/vue-component-modal-dialog": "^0.1.10",
     "@bldr/vue-components-collection": "^0.1.12",
-    "@bldr/vue-media": "^0.1.3",
+    "@bldr/vue-media": "^0.1.4",
     "@bldr/vue-shortcuts": "^0.1.3",
     "core-js": "^3.2.1",
     "js-yaml": "3.13.1",
