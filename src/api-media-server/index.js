@@ -195,6 +195,10 @@ class MediaServer {
   }
 
   async update () {
+    await this.initializeDb()
+    await this.flushMediaAssets()
+    const begin = new Date().getTime()
+    this.db.collection('updates').insertOne({ begin: begin, end: 0 })
     const files = this.glob_(this.basePath)
     for (const file of files) {
       if (!fs.lstatSync(file).isDirectory()) {
@@ -206,7 +210,14 @@ class MediaServer {
         )
       }
     }
-    return { finished: true }
+    const end = new Date().getTime()
+    await this.db.collection('updates').updateOne({ begin: begin }, { $set: { end: end } })
+    return {
+      finished: true,
+      begin,
+      end,
+      duration: end - begin
+    }
   }
 
   normalizeResult_ (result) {
@@ -307,6 +318,10 @@ class MediaServer {
     const mediaAssets = await this.db.createCollection('mediaAssets')
     await mediaAssets.createIndex( { path: 1 }, { unique: true } )
     await mediaAssets.createIndex( { id: 1 }, { unique: true } )
+
+    const updates = await this.db.createCollection('updates')
+    await updates.createIndex( { begin: 1 } )
+
     const result = {}
     const collections = await this.db.listCollections().toArray()
     for (const collection of collections) {
@@ -356,6 +371,7 @@ const app = express()
 
 app.on('mount', async () => {
   await mediaServer.connectDb()
+  await mediaServer.initializeDb()
 })
 
 app.get(['/', '/version'], (req, res) => {
@@ -381,9 +397,22 @@ app.get('/media-asset/by-filename/:filename', async (req, res, next) => {
   }
 })
 
-app.get('/statistics/media-asset-count', async (req, res, next) => {
+app.get('/stats/count', async (req, res, next) => {
   try {
     res.json({ count: await mediaServer.countMediaAssets() })
+  } catch (error) {
+    next(error)
+  }
+})
+
+app.get('/stats/updates', async (req, res, next) => {
+  try {
+    res.json(await mediaServer.db.collection('updates')
+      .find({}, { projection: { _id: 0 } })
+      .sort({ begin: -1 })
+      .limit(20)
+      .toArray()
+    )
   } catch (error) {
     next(error)
   }
