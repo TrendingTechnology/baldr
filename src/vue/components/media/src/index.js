@@ -412,13 +412,10 @@ class Resolver {
    * @param {string|json} value
    */
   async queryMediaServer_ (key, value) {
-    const postBody = {}
-    postBody[key] = value
     const response = await request.request(
       {
-        method: 'post',
-        url: `query-by-${key}`,
-        data: postBody
+        method: 'get',
+        url: `media-asset/by-${key}/${value}`
       }
     )
     if ('data' in response && 'path' in response.data) {

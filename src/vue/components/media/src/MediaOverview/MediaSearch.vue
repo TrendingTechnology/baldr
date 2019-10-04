@@ -53,22 +53,14 @@ export default {
     },
     search (text) {
       if (!text) return
-      console.log(text)
       request.request({
-        url: 'search-in-id',
+        url: 'search-in/id',
         method: 'get',
         params: {
-          id: text
+          substring: text
         }
       }).then((response) => {
-        const options = []
-        for (const mediaFile of response.data) {
-          options.push({
-            id: mediaFile.id,
-            name: `${mediaFile.id} (${mediaFile.title})`
-          })
-        }
-        this.options = options
+        this.options = response.data
       })
     }
   },
