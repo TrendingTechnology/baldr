@@ -40,7 +40,6 @@ export default {
     },
     search (text) {
       if (!text) return
-      console.log(text)
       request.request({
         url: 'search-in/id',
         method: 'get',

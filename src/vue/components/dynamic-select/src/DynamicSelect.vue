@@ -68,7 +68,7 @@ export default {
     DynamicSelect.event.$on('dynamicselectfocus', this.focus)
   },
   created () {
-    this.searchDebounced = this.debounced(400, this.search)
+    this.searchDebounced = this.debounced(200, this.search)
   },
   computed: {
     results: function () {
