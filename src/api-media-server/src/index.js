@@ -28,13 +28,13 @@ const mongoClient = new MongoClient(
 
 const mongoDbQueries = {
   flushFiles (db) {
-    return db.collection('files').deleteMany({})
+    return db.collection('mediaAssets').deleteMany({})
   },
-  countFiles (db) {
-    return db.collection('files').countDocuments()
+  countMediaAssets (db) {
+    return db.collection('mediaAssets').countDocuments()
   },
   queryById (db, id) {
-    return db.collection('files').find( { id: id } ).next()
+    return db.collection('mediaAssets').find( { id: id } ).next()
   }
 }
 
@@ -60,7 +60,7 @@ async function queryMongodb (queryName, payload) {
  * This class is used both for the entries in the SQLite database as well for
  * the queries.
  */
-class MetaData {
+class MediaAsset {
   /**
    * @param {string} filePath - The file path of the media file.
    * @param {string} basePath - The base path of the media server.
@@ -203,8 +203,8 @@ class MediaServer {
     for (const file of files) {
       const yamlFile = `${file}.yml`
       if (!fs.lstatSync(file).isDirectory() && !fs.existsSync(yamlFile)) {
-        const metaData = new MetaData(file, this.basePath)
-        const title = metaData.basename
+        const mediaAsset = new MediaAsset(file, this.basePath)
+        const title = mediaAsset.basename
           .replace(/_/g, ', ')
           .replace(/-/g, ' ')
           .replace(/Ae/g, 'Ä')
@@ -214,11 +214,11 @@ class MediaServer {
           .replace(/Ue/g, 'Ü')
           .replace(/ue/g, 'ü')
         const yamlMarkup = `---
-# path: ${metaData.path}
-# filename: ${metaData.filename}
-# extension: ${metaData.extension}
+# path: ${mediaAsset.path}
+# filename: ${mediaAsset.filename}
+# extension: ${mediaAsset.extension}
 title: ${title}
-id: ${metaData.basename}
+id: ${mediaAsset.basename}
 `
         console.log(yamlMarkup)
         fs.writeFileSync(yamlFile, yamlMarkup)
@@ -263,14 +263,14 @@ id: ${metaData.basename}
     const files = this.glob_(this.basePath)
     for (const file of files) {
       if (!fs.lstatSync(file).isDirectory()) {
-        const metaData = new MetaData(file, this.basePath, true)
-        delete metaData.absPath
-        delete metaData.infoFile
-        delete metaData.basename
-        console.log(metaData)
-        await db.collection('files').updateOne(
-          { path: metaData.path },
-          { $set: metaData },
+        const mediaAsset = new MediaAsset(file, this.basePath, true)
+        delete mediaAsset.absPath
+        delete mediaAsset.infoFile
+        delete mediaAsset.basename
+        console.log(mediaAsset)
+        await db.collection('mediaAssets').updateOne(
+          { path: mediaAsset.path },
+          { $set: mediaAsset },
           { upsert: true }
         )
       }
@@ -340,11 +340,64 @@ id: ${metaData.basename}
   }
 
   /**
-   * Delete the SQLite db file and create a new one.
+   * @returns {Promise}
    */
-  reInitializeDb () {
-    fs.unlinkSync(this.SQLiteDBfile)
-    this.sqlite = this.initSQLite_()
+  countMediaAssets () {
+    return queryMongodb('countMediaAssets')
+  }
+
+  /**
+   * @returns {Promise}
+   */
+  async initializeDb_ (db) {
+    const mediaAssets = await db.createCollection('mediaAssets')
+    await mediaAssets.createIndex( { path: 1 }, { unique: true } )
+    await mediaAssets.createIndex( { id: 1 }, { unique: true } )
+    const result = {}
+    const collections = await db.listCollections().toArray()
+    for (const collection of collections) {
+      const indexes = await db.collection(collection.name).listIndexes().toArray()
+      result[collection.name] = {
+        name: collection.name,
+        indexes: {}
+      }
+      for (const index of indexes) {
+        result[collection.name].indexes[index.name] = index.unique
+      }
+    }
+    return result
+  }
+
+  /**
+   * @returns {Promise}
+   */
+  async initializeDb () {
+    const db = await connectMongodb()
+    const result = await this.initializeDb_(db)
+    mongoClient.close()
+    return result
+  }
+
+  /**
+   * @returns {Promise}
+   */
+  async dropDb_ (db) {
+    const collections = await db.listCollections().toArray()
+    for (const collection of collections) {
+      console.log(collection.name)
+      await db.dropCollection(collection.name)
+    }
+    console.log('finished')
+  }
+
+  /**
+   * @returns {Promise}
+   */
+  async reInitializeDb () {
+    const db = await connectMongodb()
+    await this.dropDb_(db)
+    await this.initializeDb_(db)
+    mongoClient.close()
   }
 }
 
@@ -357,8 +410,9 @@ function sendJsonMessage (res, message) {
 
 const app = express()
 
-app.get('/version', (req, res) => {
-  sendJsonMessage(res, {
+app.get(['/', '/version'], (req, res) => {
+  res.json({
+    name: packageJson.name,
     version: packageJson.version
   })
 })
@@ -369,6 +423,14 @@ app.post('/query-by-id', (req, res) => {
     res.sendStatus(400)
   } else {
     sendJsonMessage(res, mediaServer.queryByID(body.id))
+  }
+})
+
+app.get('/asset/by-id/:id', async (req, res, next) => {
+  try {
+    res.json(await mediaServer.queryById(req.params.id))
+  } catch (error) {
+    next(error)
   }
 })
 

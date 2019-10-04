@@ -13,41 +13,29 @@ let subcommand
 let options
 let searchString
 
-function rsync (toRemote = false) {
-  const local = `${config.mediaServer.basePath}/`
-  const remote = `${config.mediaServer.sshAliasRemote}:${config.mediaServer.basePath}/`
-  const options = ['-av', '--delete', '--exclude', 'files.db']
-
-  let args = []
-  if (toRemote) {
-    args = [...options, local, remote]
-  } else {
-    args = [...options, remote, local]
-  }
-  console.log('rsync ' + args.join(' '))
-  const process = childProcess.spawnSync('rsync', args, { encoding: 'utf-8', shell: true })
-  console.log(process.stdout)
-  console.log(process.stderr)
-}
-
 commander
   .version(require('../package.json').version)
-  .option('-b, --base-path <base-path>', 'A path where all there the media files are.')
+  .option('-b, --base-path <base-path>', 'A path where all the media assets are located.')
 
 commander
   .command('count').alias('c')
-  .description('Count the media files in the database.')
+  .description('Count the media assets in the database.')
   .action(() => { subcommand = 'count' })
 
 commander
   .command('flush').alias('f')
-  .description('Remove all entries in the SQLite database.')
+  .description('Remove all media assets from the MongoDB database.')
   .action(() => { subcommand = 'flush' })
 
 commander
   .command('info').alias('i')
   .description('Show some debug messages.')
   .action(() => { subcommand = 'info' })
+
+commander
+  .command('initialize-db').alias('in')
+  .description('Initialize the MongoDB database..')
+  .action(() => { subcommand = 'initialize-db' })
 
 commander
   .command('list').alias('l')
@@ -61,7 +49,7 @@ commander
 
 commander
   .command('query <search>').alias('q')
-  .description('Query the SQLite database.')
+  .description('Query for media assets')
   .option('-f, --file-name', 'Query by file name.')
   .option('-i, --id', 'Query by id (default)')
   .option('-p, --path', 'Search by path substring')
@@ -81,16 +69,6 @@ commander
   .command('rename').alias('r')
   .description('Rename files, clean file names, remove all whitespaces and special characters.')
   .action(() => { subcommand = 'rename' })
-
-commander
-  .command('rsync-from-remote').alias('from')
-  .description('Rsync FROM the remote media server to the local.')
-  .action(() => { subcommand = 'rsync-from-remote' })
-
-commander
-  .command('rsync-to-remote').alias('to')
-  .description('Rsync from the local media server TO the remote.')
-  .action(() => { subcommand = 'rsync-to-remote' })
 
 commander
   .command('update').alias('u')
@@ -118,7 +96,7 @@ const mediaServer = new MediaServer(commander.basePath)
 
 switch (subcommand) {
   case 'count':
-    queryMongo('countFiles').then((count) => {
+    mediaServer.countMediaAssets().then((count) => {
       console.log(count)
     })
     break
@@ -129,6 +107,12 @@ switch (subcommand) {
 
   case 'info':
     console.log(bootstrapConfig())
+    break
+
+  case 'initialize-db':
+    mediaServer.initializeDb().then((collections) => {
+      console.log(collections)
+    })
     break
 
   case 'list':
