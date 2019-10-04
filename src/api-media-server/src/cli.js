@@ -9,6 +9,7 @@ const commander = require('commander')
 // Third party packages.
 const { MediaServer, config } = require('./index.js')
 
+let connectDb = false
 let subcommand
 let options
 let searchString
@@ -55,6 +56,7 @@ commander
   .option('-p, --path', 'Search by path substring')
   .option('--id-sub', 'Search by id substring')
   .action((query, opts) => {
+    connectDb = true
     subcommand = 'query'
     searchString = query
     options = opts
@@ -94,80 +96,81 @@ if (!subcommand) {
 
 const mediaServer = new MediaServer(commander.basePath)
 
-switch (subcommand) {
-  case 'count':
-    mediaServer.countMediaAssets().then((count) => {
-      console.log(count)
-    })
-    break
-
-  case 'flush':
-    mediaServer.flushFiles()
-    break
-
-  case 'info':
-    console.log(bootstrapConfig())
-    break
-
-  case 'initialize-db':
-    mediaServer.initializeDb().then((collections) => {
-      console.log(collections)
-    })
-    break
-
-  case 'list':
-    console.log(mediaServer.list())
-    break
-
-  case 'open':
-    const process = childProcess.spawn('xdg-open', [config.mediaServer.basePath], { detached: true })
-    process.unref()
-    break
-
-  case 'query':
-    if (options.fileName) {
-      mediaServer.queryByFilename(searchString).then((result) => {
-        console.log(result)
-      })
-    } else if (options.id) {
-      mediaServer.queryById(searchString).then((result) => {
-        console.log(result)
-      })
-    } else if (options.path) {
-      console.log(mediaServer.searchInPath(searchString))
-    } else if (options.idSub) {
-      console.log(searchString)
-      console.log(mediaServer.searchInId(searchString))
+if (connectDb) {
+  mediaServer.connectDb().then(() => {
+    switch (subcommand) {
+      case 'query':
+        if (options.fileName) {
+          mediaServer.queryByFilename(searchString).then((result) => {
+            console.log(result)
+          })
+        } else if (options.id) {
+          mediaServer.queryById(searchString).then((result) => {
+            console.log(result)
+          })
+        } else if (options.path) {
+          console.log(mediaServer.searchInPath(searchString))
+        } else if (options.idSub) {
+          console.log(searchString)
+          console.log(mediaServer.searchInId(searchString))
+        }
+        break
     }
-    break
+    mediaServer.closeDb()
+  })
 
-  case 're-initialize-db':
-      mediaServer.reInitializeDb()
+} else {
+  switch (subcommand) {
+    case 'count':
+      mediaServer.countMediaAssets().then((count) => {
+        console.log(count)
+      })
       break
 
-  case 'rename':
-    mediaServer.rename()
-    break
+    case 'flush':
+      mediaServer.flushFiles()
+      break
 
-  case 'rsync-from-remote':
-    rsync(false)
-    break
+    case 'info':
+      console.log(bootstrapConfig())
+      break
 
-  case 'rsync-to-remote':
-    rsync(true)
-    break
+    case 'initialize-db':
+      mediaServer.initializeDb().then((collections) => {
+        console.log(collections)
+      })
+      break
 
-  case 'update':
-    mediaServer.update().then(() => {
-      console.log('Finished')
-    })
-    break
+    case 'list':
+      console.log(mediaServer.list())
+      break
 
-  case 'yaml':
-    mediaServer.createInfoFiles()
-    break
+    case 'open':
+      const process = childProcess.spawn('xdg-open', [config.mediaServer.basePath], { detached: true })
+      process.unref()
+      break
 
-  default:
-    help()
-    break
+    case 're-initialize-db':
+        mediaServer.reInitializeDb()
+        break
+
+    case 'rename':
+      mediaServer.rename()
+      break
+
+    case 'update':
+      mediaServer.update().then(() => {
+        console.log('Finished')
+      })
+      break
+
+    case 'yaml':
+      mediaServer.createInfoFiles()
+      break
+
+    default:
+      help()
+      break
+  }
 }
+

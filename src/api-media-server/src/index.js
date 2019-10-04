@@ -26,18 +26,6 @@ const mongoClient = new MongoClient(
   { useNewUrlParser: true, useUnifiedTopology: true }
 )
 
-const mongoDbQueries = {
-  flushFiles (db) {
-    return db.collection('mediaAssets').deleteMany({})
-  },
-  countMediaAssets (db) {
-    return db.collection('mediaAssets').countDocuments()
-  },
-  queryById (db, id) {
-    return db.collection('mediaAssets').find( { id: id } ).next()
-  }
-}
-
 /**
  * @return {Promise}
  */
@@ -63,17 +51,14 @@ async function queryMongodb (queryName, payload) {
 class MediaAsset {
   /**
    * @param {string} filePath - The file path of the media file.
-   * @param {string} basePath - The base path of the media server.
-   * @param {boolean} dbInsertOnly - Gather a minimal amount of data needed for
-   *   db update.
    */
-  constructor (filePath, basePath, dbInsertOnly = false) {
-    this.absPath = path.resolve(filePath)
+  constructor (filePath) {
+    this.absPath_ = path.resolve(filePath)
     /**
      * Absolute path ot the file.
      * @type {string}
      */
-    this.path = filePath.replace(basePath, '').replace(/^\//, '')
+    this.path = filePath.replace(config.mediaServer.basePath, '').replace(/^\//, '')
 
     /**
      * The basename (filename) of the file.
@@ -86,50 +71,59 @@ class MediaAsset {
      * media file path `.yml` is appended.
      * @type {string}
      */
-    this.infoFile = `${this.absPath}.yml`
+    this.infoFile_ = `${this.absPath_}.yml`
 
-    const data = this.readInfoYaml_(this.infoFile)
+    const data = this.readInfoYaml_(this.infoFile_)
     this.mergeObject(data)
+  }
 
-    if (!dbInsertOnly) {
+  gatherMetaData () {
+    const stats = fs.statSync(this.absPath_)
 
-      const stats = fs.statSync(this.absPath)
+    /**
+     * The file size in bytes.
+     * @type {number}
+     */
+    this.size = stats.size
 
+    /**
+     * The timestamp indicating the last time this file was modified
+     * expressed in milliseconds since the POSIX Epoch.
+     * @type {float}
+     */
+    this.timeModified = stats.mtimeMs
+
+    /**
+     * The extension of the file.
+     * @type {string}
+     */
+    this.extension = path.extname(this.absPath_).replace('.', '')
+
+    /**
+     * The basename (filename without extension) of the file.
+     * @type {string}
+     */
+    this.basename_ = path.basename(this.absPath_, `.${this.extension}`)
+
+    const previewImage = `${this.absPath_}_preview.jpg`
+
+    if (fs.existsSync(previewImage)) {
       /**
-       * The file size in bytes.
-       * @type {number}
-       */
-      this.size = stats.size
-
-      /**
-       * The timestamp indicating the last time this file was modified
-       * expressed in milliseconds since the POSIX Epoch.
-       * @type {float}
-       */
-      this.timeModified = stats.mtimeMs
-
-      /**
-       * The extension of the file.
+       * The absolute path of the preview image.
        * @type {string}
        */
-      this.extension = path.extname(filePath).replace('.', '')
+      this.previewImage = true
+    }
+    return this
+  }
 
-      /**
-       * The basename (filename without extension) of the file.
-       * @type {string}
-       */
-      this.basename = path.basename(filePath, `.${this.extension}`)
-
-      const previewImage = `${this.absPath}_preview.jpg`
-
-      if (fs.existsSync(previewImage)) {
-        /**
-         * The absolute path of the preview image.
-         * @type {string}
-         */
-        this.previewImage = true
+  cleanTmpProperties () {
+    for (const property in this) {
+      if (property.match(/_$/)) {
+        delete this[property]
       }
     }
+    return this
   }
 
   /**
@@ -193,6 +187,19 @@ class MediaServer {
     ]
   }
 
+  /**
+   * @return {Promise}
+   */
+  async connectDb () {
+    await mongoClient.connect()
+    this.db = mongoClient.db(config.databases.mongodb.dbName)
+    return this.db
+  }
+
+  closeDb () {
+    mongoClient.close()
+  }
+
   glob_ (searchPath) {
     return glob.sync(path.join(searchPath, '**/*'), { ignore: this.ignore })
   }
@@ -203,7 +210,7 @@ class MediaServer {
     for (const file of files) {
       const yamlFile = `${file}.yml`
       if (!fs.lstatSync(file).isDirectory() && !fs.existsSync(yamlFile)) {
-        const mediaAsset = new MediaAsset(file, this.basePath)
+        const mediaAsset = new MediaAsset(file)
         const title = mediaAsset.basename
           .replace(/_/g, ', ')
           .replace(/-/g, ' ')
@@ -252,30 +259,21 @@ id: ${mediaAsset.basename}
   }
 
   async update () {
-    console.log('Run git pull')
     const gitPull = childProcess.spawnSync('git', ['pull'], { cwd: this.basePath, encoding: 'utf-8' })
-    console.log(gitPull.stderr)
-    console.log(gitPull.stdout)
     if (gitPull.status !== 0) throw new Error(`git pull exits with an none zero status code.`)
-
-    const db = await connectMongodb()
 
     const files = this.glob_(this.basePath)
     for (const file of files) {
       if (!fs.lstatSync(file).isDirectory()) {
-        const mediaAsset = new MediaAsset(file, this.basePath, true)
-        delete mediaAsset.absPath
-        delete mediaAsset.infoFile
-        delete mediaAsset.basename
-        console.log(mediaAsset)
-        await db.collection('mediaAssets').updateOne(
+        const mediaAsset = new MediaAsset(file).gatherMetaData().cleanTmpProperties()
+        await this.db.collection('mediaAssets').updateOne(
           { path: mediaAsset.path },
           { $set: mediaAsset },
           { upsert: true }
         )
       }
     }
-    mongoClient.close()
+    return { finished: true }
   }
 
   normalizeResult_ (result) {
@@ -312,7 +310,7 @@ id: ${mediaAsset.basename}
    * @returns {Promise}
    */
   async queryById (id) {
-    return this.normalizeResult_(await queryMongodb('queryById', id))
+    return this.normalizeResult_(await this.db.collection('mediaAssets').find( { id: id } ).next())
   }
 
   /**
@@ -335,28 +333,32 @@ id: ${mediaAsset.basename}
   /**
    * @returns {Promise}
    */
-  flushFiles () {
-    return queryMongodb('flushFiles')
+  async flushMediaAssets () {
+    const countBefore = await this.countMediaAssets()
+    await this.db.collection('mediaAssets').deleteMany({})
+    const countAfter = await this.countMediaAssets()
+    if (countAfter !== 0) throw new Error('Flush was not successfull')
+    return { flushCount: countBefore }
   }
 
   /**
    * @returns {Promise}
    */
   countMediaAssets () {
-    return queryMongodb('countMediaAssets')
+    return this.db.collection('mediaAssets').countDocuments()
   }
 
   /**
    * @returns {Promise}
    */
-  async initializeDb_ (db) {
-    const mediaAssets = await db.createCollection('mediaAssets')
+  async initializeDb () {
+    const mediaAssets = await this.db.createCollection('mediaAssets')
     await mediaAssets.createIndex( { path: 1 }, { unique: true } )
     await mediaAssets.createIndex( { id: 1 }, { unique: true } )
     const result = {}
-    const collections = await db.listCollections().toArray()
+    const collections = await this.db.listCollections().toArray()
     for (const collection of collections) {
-      const indexes = await db.collection(collection.name).listIndexes().toArray()
+      const indexes = await this.db.collection(collection.name).listIndexes().toArray()
       result[collection.name] = {
         name: collection.name,
         indexes: {}
@@ -365,16 +367,6 @@ id: ${mediaAsset.basename}
         result[collection.name].indexes[index.name] = index.unique
       }
     }
-    return result
-  }
-
-  /**
-   * @returns {Promise}
-   */
-  async initializeDb () {
-    const db = await connectMongodb()
-    const result = await this.initializeDb_(db)
-    mongoClient.close()
     return result
   }
 
@@ -410,6 +402,10 @@ function sendJsonMessage (res, message) {
 
 const app = express()
 
+app.on('mount', async () => {
+  await mediaServer.connectDb()
+})
+
 app.get(['/', '/version'], (req, res) => {
   res.json({
     name: packageJson.name,
@@ -429,6 +425,14 @@ app.post('/query-by-id', (req, res) => {
 app.get('/asset/by-id/:id', async (req, res, next) => {
   try {
     res.json(await mediaServer.queryById(req.params.id))
+  } catch (error) {
+    next(error)
+  }
+})
+
+app.get('/assets/count', async (req, res, next) => {
+  try {
+    res.json({ count: await mediaServer.countMediaAssets() })
   } catch (error) {
     next(error)
   }
@@ -460,6 +464,31 @@ app.get('/search-in-id', (req, res) => {
     sendJsonMessage(res, mediaServer.searchInId(query.id))
   }
 })
+
+app.get('/management/initialize-db', async (req, res, next) => {
+  try {
+    res.json(await mediaServer.initializeDb())
+  } catch (error) {
+    next(error)
+  }
+})
+
+app.get('/management/update', async (req, res, next) => {
+  try {
+    res.json(await mediaServer.update())
+  } catch (error) {
+    next(error)
+  }
+})
+
+app.get('/management/flush-media-assets', async (req, res, next) => {
+  try {
+    res.json(await mediaServer.flushMediaAssets())
+  } catch (error) {
+    next(error)
+  }
+})
+
 
 module.exports = {
   config,
