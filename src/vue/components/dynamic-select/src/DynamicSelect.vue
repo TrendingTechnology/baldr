@@ -67,6 +67,9 @@ export default {
   mounted () {
     DynamicSelect.event.$on('dynamicselectfocus', this.focus)
   },
+  created () {
+    this.searchDebounced = this.debounced(400, this.search)
+  },
   computed: {
     results: function () {
       // Filter items on search text (if not empty, case insensitive) and when
@@ -103,8 +106,7 @@ export default {
       }
     },
     searchText: function () {
-      // Provide search text to parent (for ajax fetching, etc)
-      this.$emit('search', this.searchText)
+      this.searchDebounced(this.searchText)
     },
     selectedOption: function () {
       // Provide selected item to parent
@@ -112,6 +114,22 @@ export default {
     }
   },
   methods: {
+    // https://codeburst.io/throttling-and-debouncing-in-javascript-646d076d0a44
+    debounced (delay, fn) {
+      let timerId
+      return function (...args) {
+        if (timerId) {
+          clearTimeout(timerId)
+        }
+        timerId = setTimeout(() => {
+          fn(...args)
+          timerId = null
+        }, delay)
+      }
+    },
+    search (searchText) {
+      this.$emit('search', searchText)
+    },
     highlight: function (value) {
       // Highlights the part of each result that matches the search text
       if (this.searchText) {

@@ -4,7 +4,7 @@
       :options="options"
       @input="onInput"
       v-model="mediaFile"
-      @search="searchDebounced"
+      @search="search"
     />
 
   </div>
@@ -38,21 +38,9 @@ export default {
         })
       })
     },
-    // https://codeburst.io/throttling-and-debouncing-in-javascript-646d076d0a44
-    debounced(delay, fn) {
-      let timerId
-      return function (...args) {
-        if (timerId) {
-          clearTimeout(timerId)
-        }
-        timerId = setTimeout(() => {
-          fn(...args)
-          timerId = null
-        }, delay)
-      }
-    },
     search (text) {
       if (!text) return
+      console.log(text)
       request.request({
         url: 'search-in/id',
         method: 'get',
@@ -63,9 +51,6 @@ export default {
         this.options = response.data
       })
     }
-  },
-  created () {
-    this.searchDebounced = this.debounced(400, this.search)
   }
 }
 </script>
