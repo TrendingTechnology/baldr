@@ -34,17 +34,17 @@ const mongoClient = new MongoClient(
 )
 
 /**
- * This class is used both for the entries in the MongoDB database as well for
- * the queries.
+ * Base class to be extended.
  */
-class MediaAsset {
-  /**
-   * @param {string} filePath - The file path of the media file.
-   */
+class MediaFile {
   constructor (filePath) {
-    this.absPath_ = path.resolve(filePath)
     /**
      * Absolute path ot the file.
+     * @type {string}
+     */
+    this.absPath_ = path.resolve(filePath)
+    /**
+     * Relative path ot the file.
      * @type {string}
      */
     this.path = filePath.replace(config.mediaServer.basePath, '').replace(/^\//, '')
@@ -54,6 +54,59 @@ class MediaAsset {
      * @type {string}
      */
     this.filename = path.basename(filePath)
+  }
+
+  addFileInfos () {
+    const stats = fs.statSync(this.absPath_)
+
+    /**
+     * The file size in bytes.
+     * @type {number}
+     */
+    this.size = stats.size
+
+    /**
+     * The timestamp indicating the last time this file was modified
+     * expressed in milliseconds since the POSIX Epoch.
+     * @type {float}
+     */
+    this.timeModified = stats.mtimeMs
+
+    /**
+     * The extension of the file.
+     * @type {string}
+     */
+    this.extension = path.extname(this.absPath_).replace('.', '')
+
+    /**
+     * The basename (filename without extension) of the file.
+     * @type {string}
+     */
+    this.basename_ = path.basename(this.absPath_, `.${this.extension}`)
+
+    return this
+  }
+
+  cleanTmpProperties () {
+    for (const property in this) {
+      if (property.match(/_$/)) {
+        delete this[property]
+      }
+    }
+    return this
+  }
+}
+
+/**
+ * This class is used both for the entries in the MongoDB database as well for
+ * the queries.
+ */
+class MediaAsset extends MediaFile {
+  /**
+   * @param {string} filePath - The file path of the media file.
+   */
+  constructor (filePath) {
+    super(filePath)
 
     /**
      * The absolute path of the info file in the YAML format. On the absolute
@@ -106,15 +159,6 @@ class MediaAsset {
     return this
   }
 
-  cleanTmpProperties () {
-    for (const property in this) {
-      if (property.match(/_$/)) {
-        delete this[property]
-      }
-    }
-    return this
-  }
-
   /**
    * Merge an object into the class object.
    *
@@ -146,17 +190,28 @@ class MediaAsset {
   }
 }
 
-function isMedia (fileName) {
+class Presentation extends MediaFile {
+  constructor (filePath) {
+    super(filePath)
+  }
+}
+
+function isMediaAsset (fileName) {
   if (fileName.indexOf('_preview.jpg') > -1) {
     return false
-  } else if (fileName.indexOf('.baldr.yml') > -1) {
-    return true
   }
   const extension = path.extname(fileName).substr(1)
   if (['yml', 'db', 'md'].includes(extension)) {
     return false
   }
   return true
+}
+
+function isPresentation (fileName) {
+  if (fileName.indexOf('.baldr.yml') > -1) {
+    return true
+  }
+  return false
 }
 
 class MediaServer {
@@ -196,16 +251,22 @@ class MediaServer {
     await this.db.collection('mediaAssets').insertOne(mediaAsset)
   }
 
+  async addPresentation_ (relPath) {
+    const presentation = new Presentation(relPath).addFileInfos().cleanTmpProperties()
+    await this.db.collection('presentations').insertOne(presentation)
+  }
+
   async walkSync_ (dir) {
     const files = fs.readdirSync(dir)
     for (const fileName of files) {
+      const relPath = path.join(dir, fileName)
       // Exclude .git/
       if (fileName.substr(0, 1) !== '.') {
-        const relPath = path.join(dir, fileName)
         if (fs.statSync(relPath).isDirectory()) {
           this.walkSync_(relPath)
-        }
-        else if (isMedia(fileName)) {
+        } else if (isPresentation(fileName)) {
+          await this.addPresentation_(relPath)
+        } else if (isMediaAsset(fileName)) {
           await this.addMediaAsset_(relPath)
         }
       }
@@ -214,7 +275,7 @@ class MediaServer {
 
   async update () {
     await this.initializeDb()
-    await this.flushMediaAssets()
+    await this.flushMediaFiles()
     const begin = new Date().getTime()
     this.db.collection('updates').insertOne({ begin: begin, end: 0 })
     await this.walkSync_(this.basePath)
@@ -304,19 +365,9 @@ class MediaServer {
   /**
    * @returns {Promise}
    */
-  async flushMediaAssets () {
-    const countBefore = await this.countMediaAssets()
+  async flushMediaFiles () {
     await this.db.collection('mediaAssets').deleteMany({})
-    const countAfter = await this.countMediaAssets()
-    if (countAfter !== 0) throw new Error('Flush was not successfull')
-    return { flushCount: countBefore }
-  }
-
-  /**
-   * @returns {Promise}
-   */
-  countMediaAssets () {
-    return this.db.collection('mediaAssets').countDocuments()
+    await this.db.collection('presentations').deleteMany({})
   }
 
   /**
@@ -326,6 +377,9 @@ class MediaServer {
     const mediaAssets = await this.db.createCollection('mediaAssets')
     await mediaAssets.createIndex( { path: 1 }, { unique: true } )
     await mediaAssets.createIndex( { id: 1 }, { unique: true } )
+
+    const presentations = await this.db.createCollection('presentations')
+    await presentations.createIndex( { id: 1 }, { unique: true } )
 
     const updates = await this.db.createCollection('updates')
     await updates.createIndex( { begin: 1 } )
@@ -407,7 +461,10 @@ app.get('/media-asset/by-filename/:filename', async (req, res, next) => {
 
 app.get('/stats/count', async (req, res, next) => {
   try {
-    res.json({ count: await mediaServer.countMediaAssets() })
+    res.json({
+      mediaAssets: await mediaServer.db.collection('mediaAssets').countDocuments(),
+      presentations: await mediaServer.db.collection('presentations').countDocuments()
+    })
   } catch (error) {
     next(error)
   }
@@ -476,7 +533,7 @@ app.get('/management/update', async (req, res, next) => {
 
 app.get('/management/flush-media-assets', async (req, res, next) => {
   try {
-    res.json(await mediaServer.flushMediaAssets())
+    res.json(await mediaServer.flushMediaFiles())
   } catch (error) {
     next(error)
   }
