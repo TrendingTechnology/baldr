@@ -10,7 +10,6 @@ const fs = require('fs')
 const path = require('path')
 
 // Third party packages.
-const glob = require('glob')
 const yaml = require('js-yaml')
 const express = require('express')
 const MongoClient = require('mongodb').MongoClient;
@@ -147,6 +146,19 @@ class MediaAsset {
   }
 }
 
+function isMedia (fileName) {
+  if (fileName.indexOf('_preview.jpg') > -1) {
+    return false
+  } else if (fileName.indexOf('.baldr.yml') > -1) {
+    return true
+  }
+  const extension = path.extname(fileName).substr(1)
+  if (['yml', 'db', 'md'].includes(extension)) {
+    return false
+  }
+  return true
+}
+
 class MediaServer {
   constructor (basePath) {
     /**
@@ -164,17 +176,6 @@ class MediaServer {
     if (!fs.existsSync(this.basePath)) {
       throw new Error(`The base path of the media server doesn’t exist: ${this.basePath}`)
     }
-
-    /**
-     * @type {array}
-     */
-    this.ignore = [
-      '**/*.db',
-      '**/*.yml',
-      '**/*robots.txt',
-      '**/*_preview.jpg',
-      '**/README.md'
-    ]
   }
 
   /**
@@ -190,8 +191,25 @@ class MediaServer {
     mongoClient.close()
   }
 
-  glob_ (searchPath) {
-    return glob.sync(path.join(searchPath, '**/*'), { ignore: this.ignore })
+  async addMediaAsset_ (relPath) {
+    const mediaAsset = new MediaAsset(relPath).gatherMetaData().cleanTmpProperties()
+    await this.db.collection('mediaAssets').insertOne(mediaAsset)
+  }
+
+  async walkSync_ (dir) {
+    const files = fs.readdirSync(dir)
+    for (const fileName of files) {
+      // Exclude .git/
+      if (fileName.substr(0, 1) !== '.') {
+        const relPath = path.join(dir, fileName)
+        if (fs.statSync(relPath).isDirectory()) {
+          this.walkSync_(relPath)
+        }
+        else if (isMedia(fileName)) {
+          await this.addMediaAsset_(relPath)
+        }
+      }
+    }
   }
 
   async update () {
@@ -199,17 +217,7 @@ class MediaServer {
     await this.flushMediaAssets()
     const begin = new Date().getTime()
     this.db.collection('updates').insertOne({ begin: begin, end: 0 })
-    const files = this.glob_(this.basePath)
-    for (const file of files) {
-      if (!fs.lstatSync(file).isDirectory()) {
-        const mediaAsset = new MediaAsset(file).gatherMetaData().cleanTmpProperties()
-        await this.db.collection('mediaAssets').updateOne(
-          { path: mediaAsset.path },
-          { $set: mediaAsset },
-          { upsert: true }
-        )
-      }
-    }
+    await this.walkSync_(this.basePath)
     const end = new Date().getTime()
     await this.db.collection('updates').updateOne({ begin: begin }, { $set: { end: end } })
     return {
