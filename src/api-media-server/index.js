@@ -406,6 +406,8 @@ function registerRestApi () {
 
   /* query */
 
+  /* assets */
+
   app.get('/query/asset/match/filename/:filename', async (req, res, next) => {
     await matchByField('assets', 'filename', req, res, next)
   })
@@ -425,6 +427,8 @@ function registerRestApi () {
   app.get('/query/assets/search/title', async (req, res, next) => {
     await searchInField('assets', 'title', req, res, next)
   })
+
+  /* presentations */
 
   app.get('/query/presentation/match/id/:id', async (req, res, next) => {
     await matchByField('presentations', 'id', req, res, next)
