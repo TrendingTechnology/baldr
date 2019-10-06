@@ -77,7 +77,7 @@ class MediaFile {
     this.filename = path.basename(filePath)
   }
 
-  addFileInfos () {
+  addFileInfos_ () {
     const stats = fs.statSync(this.absPath_)
 
     /**
@@ -106,6 +106,29 @@ class MediaFile {
     this.basename_ = path.basename(this.absPath_, `.${this.extension}`)
 
     return this
+  }
+
+  /**
+   * Parse the info file of a media file.
+   *
+   * Each media file can have a info file that stores additional
+   * metadata informations.
+   *
+   * File path:
+   * `/home/baldr/beethoven.jpg`
+   *
+   * Info file in the YAML file format:
+   * `/home/baldr/beethoven.jpg.yml`
+   */
+  readYaml_ (filePath) {
+    if (fs.existsSync(filePath)) {
+      return yaml.safeLoad(fs.readFileSync(filePath, 'utf8'))
+    }
+    return {}
+  }
+
+  addFileInfos () {
+    return this.addFileInfos_()
   }
 
   cleanTmpProperties () {
@@ -122,7 +145,7 @@ class MediaFile {
  * This class is used both for the entries in the MongoDB database as well for
  * the queries.
  */
-class MediaAsset extends MediaFile {
+class Asset extends MediaFile {
   /**
    * @param {string} filePath - The file path of the media file.
    */
@@ -136,37 +159,12 @@ class MediaAsset extends MediaFile {
      */
     this.infoFile_ = `${this.absPath_}.yml`
 
-    const data = this.readInfoYaml_(this.infoFile_)
+    const data = this.readYaml_(this.infoFile_)
     this.mergeObject(data)
   }
 
-  gatherMetaData () {
-    const stats = fs.statSync(this.absPath_)
-
-    /**
-     * The file size in bytes.
-     * @type {number}
-     */
-    this.size = stats.size
-
-    /**
-     * The timestamp indicating the last time this file was modified
-     * expressed in milliseconds since the POSIX Epoch.
-     * @type {float}
-     */
-    this.timeModified = stats.mtimeMs
-
-    /**
-     * The extension of the file.
-     * @type {string}
-     */
-    this.extension = path.extname(this.absPath_).replace('.', '')
-
-    /**
-     * The basename (filename without extension) of the file.
-     * @type {string}
-     */
-    this.basename_ = path.basename(this.absPath_, `.${this.extension}`)
+  addFileInfos () {
+    this.addFileInfos_()
 
     const previewImage = `${this.absPath_}_preview.jpg`
 
@@ -190,33 +188,19 @@ class MediaAsset extends MediaFile {
       this[property] = object[property]
     }
   }
-
-  /**
-   * Parse the info file of a media file.
-   *
-   * Each media file can have a info file that stores additional
-   * metadata informations.
-   *
-   * File path:
-   * `/home/baldr/beethoven.jpg`
-   *
-   * Info file in the YAML file format:
-   * `/home/baldr/beethoven.jpg.yml`
-   */
-  readInfoYaml_ (infoFile) {
-    if (fs.existsSync(infoFile)) {
-      return yaml.safeLoad(fs.readFileSync(infoFile, 'utf8'))
-    }
-    return {}
-  }
 }
 
 class Presentation extends MediaFile {
+  constructor(filePath) {
+    super(filePath)
+    const presentation = this.readYaml_(filePath)
+    this.title = presentation.meta.title
+  }
 }
 
 /* Checks *********************************************************************/
 
-function isMediaAsset (fileName) {
+function isAsset (fileName) {
   if (fileName.indexOf('_preview.jpg') > -1) {
     return false
   }
@@ -236,9 +220,9 @@ function isPresentation (fileName) {
 
 /* Insert *********************************************************************/
 
-async function insertMediaAsset (relPath) {
-  const mediaAsset = new MediaAsset(relPath).gatherMetaData().cleanTmpProperties()
-  await db.collection('mediaAssets').insertOne(mediaAsset)
+async function insertAsset (relPath) {
+  const asset = new Asset(relPath).addFileInfos().cleanTmpProperties()
+  await db.collection('assets').insertOne(asset)
 }
 
 async function insertPresentation (relPath) {
@@ -256,8 +240,8 @@ async function walkSync (dir) {
         walkSync(relPath)
       } else if (isPresentation(fileName)) {
         await insertPresentation(relPath)
-      } else if (isMediaAsset(fileName)) {
-        await insertMediaAsset(relPath)
+      } else if (isAsset(fileName)) {
+        await insertAsset(relPath)
       }
     }
   }
@@ -285,9 +269,9 @@ async function update () {
  * @returns {Promise}
  */
 async function initializeDb () {
-  const mediaAssets = await db.createCollection('mediaAssets')
-  await mediaAssets.createIndex({ path: 1 }, { unique: true })
-  await mediaAssets.createIndex({ id: 1 }, { unique: true })
+  const assets = await db.createCollection('assets')
+  await assets.createIndex({ path: 1 }, { unique: true })
+  await assets.createIndex({ id: 1 }, { unique: true })
 
   const presentations = await db.createCollection('presentations')
   await presentations.createIndex({ id: 1 }, { unique: true })
@@ -341,7 +325,7 @@ async function reInitializeDb () {
  * @returns {Promise}
  */
 async function flushMediaFiles () {
-  await db.collection('mediaAssets').deleteMany({})
+  await db.collection('assets').deleteMany({})
   await db.collection('presentations').deleteMany({})
 }
 
@@ -375,7 +359,7 @@ function registerRestApi () {
 
   app.get('/media-asset/by-id/:id', async (req, res, next) => {
     try {
-      res.json(await db.collection('mediaAssets').find({ id: req.params.id }).next())
+      res.json(await db.collection('assets').find({ id: req.params.id }).next())
     } catch (error) {
       next(error)
     }
@@ -383,7 +367,7 @@ function registerRestApi () {
 
   app.get('/media-asset/by-filename/:filename', async (req, res, next) => {
     try {
-      const cursor = await db.collection('mediaAssets').find({ filename: req.params.filename })
+      const cursor = await db.collection('assets').find({ filename: req.params.filename })
       const count = await cursor.count()
       if (count !== 1) throw new Error(`filename “${req.params.filename}” is not unambiguous.`)
       res.json(await cursor.next())
@@ -392,14 +376,12 @@ function registerRestApi () {
     }
   })
 
-
-
   app.get('/search-in/id', async (req, res, next) => {
     try {
       if (!('substring' in req.query) || !req.query.substring) {
         res.sendStatus(400)
       } else {
-        res.json(await db.collection('mediaAssets').aggregate([
+        res.json(await db.collection('assets').aggregate([
           {
             $match: {
               $expr: { $gt: [{ $indexOfCP: ['$id', req.query.substring] }, -1] }
@@ -424,7 +406,7 @@ function registerRestApi () {
       if (!('substring' in req.query) || !req.query.substring) {
         res.sendStatus(400)
       } else {
-        res.json(await db.collection('mediaAssets').aggregate([
+        res.json(await db.collection('assets').aggregate([
           {
             $match: {
               $expr: { $gt: [{ $indexOfCP: ['$path', req.query.substring] }, -1] }
@@ -484,7 +466,7 @@ function registerRestApi () {
   app.get('/stats/count', async (req, res, next) => {
     try {
       res.json({
-        mediaAssets: await db.collection('mediaAssets').countDocuments(),
+        assets: await db.collection('assets').countDocuments(),
         presentations: await db.collection('presentations').countDocuments()
       })
     } catch (error) {
