@@ -532,6 +532,7 @@ class Media {
     this.$shortcuts = shortcuts
     this.player = new Player(store)
     this.resolver = new Resolver()
+    this.request = request
 
     this.$shortcuts.addMultiple([
       {
@@ -555,7 +556,7 @@ class Media {
           component: MediaOverview
         },
         {
-          path: '/media/:id',
+          path: '/media/:uriScheme/:uriAuthority',
           title: 'Media file',
           name: 'media-file',
           component: ComponentMediaFile

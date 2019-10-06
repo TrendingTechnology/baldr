@@ -6,7 +6,6 @@
       v-model="mediaFile"
       @search="search"
     />
-
   </div>
 </template>
 
@@ -28,15 +27,7 @@ export default {
   methods: {
     onInput () {
       const uri = `id:${this.mediaFile.id}`
-      this.$media.resolve(uri).then((mediaFiles) => {
-        const mediaFile = mediaFiles[uri]
-        this.$router.push({
-          name: 'media-file',
-          params: {
-            id: mediaFile.id
-          }
-        })
-      })
+      this.$media.resolve(uri)
     },
     search (text) {
       if (!text) return
@@ -53,4 +44,3 @@ export default {
   }
 }
 </script>
-

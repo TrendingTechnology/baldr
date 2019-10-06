@@ -23,29 +23,10 @@
     </ul>
   </section>
 
-  <section>
-    <h2>Examples</h2>
-
-    <ul>
-      <li
-        v-for="(yamlContent, exampleName) in examples"
-        :key="exampleName"
-      >
-        <a @click="openExample(yamlContent)">
-          {{ exampleName }}
-          <material-icon name="presentation"/>
-        </a>
-      </li>
-    </ul>
-
-  </section>
-
 </div>
 </template>
 
 <script>
-import examples from '@/examples.js'
-
 export default {
   name: 'Documentation',
   methods: {
@@ -53,11 +34,6 @@ export default {
       this.$store.dispatch('openPresentation', yamlString).then(() => {
         this.$router.push('/slides')
       })
-    }
-  },
-  data () {
-    return {
-      examples
     }
   },
   mounted: function () {

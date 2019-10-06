@@ -17,7 +17,8 @@ export default {
   name: 'MediaFile',
   computed: {
     mediaFile () {
-      let uri = `id:${this.$route.params.id}`
+      const params = this.$route.params
+      let uri = `${params.uriScheme}:${params.uriAuthority}`
       return this.$store.getters['media/mediaFileByUri'](uri)
     }
   },

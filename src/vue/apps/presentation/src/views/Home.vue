@@ -1,5 +1,11 @@
 <template>
   <div>
+    <dynamic-select
+      :options="options"
+      @input="onInput"
+      v-model="presentation"
+      @search="search"
+    />
     <section class="brand">
       <div>
         <material-icon
@@ -31,6 +37,39 @@ export default {
   },
   mounted: function () {
     this.$styleConfig.set()
+  },
+  data: function () {
+    return {
+      presentation: {},
+      options: []
+    }
+  },
+  methods: {
+    async onInput () {
+      let response = await this.$media.request.request({
+        url: `query/presentation/match/id/${this.presentation.id}`,
+        method: 'get'
+      })
+      const presentation = response.data
+      response = await this.$media.request.request({
+        url: `/media/${presentation.path}`,
+        method: 'get'
+      })
+      await this.$store.dispatch('openPresentation', response.data)
+      this.$router.push('/slides')
+    },
+    search (title) {
+      if (!title) return
+      this.$media.request.request({
+        url: 'query/presentations/search/title',
+        method: 'get',
+        params: {
+          substring: title
+        }
+      }).then((response) => {
+        this.options = response.data
+      })
+    }
   }
 }
 </script>

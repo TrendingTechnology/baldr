@@ -7,7 +7,8 @@
         :to="{
           name: 'media-file',
           params: {
-            id: mediaFile.id
+            uriScheme: mediaFile.uriScheme,
+            uriAuthority: mediaFile.uriAuthority
           }
         }"
       >
