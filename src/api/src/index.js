@@ -4,8 +4,8 @@
 const { Command } = require('commander')
 const cors = require('cors')
 const express = require('express')
-const seatingPlan = require('@bldr/api-seating-plan')
-const mediaServer = require('@bldr/api-media-server').expressApp
+const registerSeatingPlan = require('@bldr/api-seating-plan').registerRestApi
+const registerMediaServer = require('@bldr/api-media-server').registerRestApi
 
 // Project packages.
 const packageJson = require('../package.json')
@@ -33,8 +33,8 @@ const app = express()
 app.use(cors())
 app.use(express.json())
 
-app.use('/seating-plan', seatingPlan)
-app.use('/media-server', mediaServer)
+app.use('/seating-plan', registerSeatingPlan())
+app.use('/media-server', registerMediaServer())
 
 app.get(['/', 'version'], (req, res) => {
   res.status(200).send({

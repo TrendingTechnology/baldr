@@ -5,3 +5,9 @@
 # @bldr/api-media-server
 
 A media server which provides a REST API to find files.
+
+## Objects
+
+* presentation
+* mediaAsset
+  * multipart mediaAsset

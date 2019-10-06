@@ -1,8 +1,6 @@
-#! /usr/bin/env node
-
 /**
  * @file Base code for the cli and the rest interface.
- * @module @bldr/media-server
+ * @module @bldr/api-media-server
  */
 
 // Node packages.
@@ -12,13 +10,20 @@ const path = require('path')
 // Third party packages.
 const yaml = require('js-yaml')
 const express = require('express')
-const MongoClient = require('mongodb').MongoClient;
+const MongoClient = require('mongodb').MongoClient
 
 // Project packages.
 const { utils } = require('@bldr/core')
 const packageJson = require('./package.json')
 
 const config = utils.bootstrapConfig()
+
+/**
+ * Base path of the media server file store.
+ */
+const basePath = config.mediaServer.basePath
+
+/* MongoDb setup **************************************************************/
 
 function setupMongoUrl () {
   const conf = config.databases.mongodb
@@ -34,6 +39,22 @@ const mongoClient = new MongoClient(
 )
 
 /**
+ * The MongoDB Db instance
+ * @type {mongodb~Db}
+ */
+let db
+
+/**
+ * @return {Promise}
+ */
+async function connectDb () {
+  await mongoClient.connect()
+  db = mongoClient.db(config.databases.mongodb.dbName)
+}
+
+/* Media objects **************************************************************/
+
+/**
  * Base class to be extended.
  */
 class MediaFile {
@@ -47,7 +68,7 @@ class MediaFile {
      * Relative path ot the file.
      * @type {string}
      */
-    this.path = filePath.replace(config.mediaServer.basePath, '').replace(/^\//, '')
+    this.path = filePath.replace(basePath, '').replace(/^\//, '')
 
     /**
      * The basename (filename) of the file.
@@ -191,10 +212,9 @@ class MediaAsset extends MediaFile {
 }
 
 class Presentation extends MediaFile {
-  constructor (filePath) {
-    super(filePath)
-  }
 }
+
+/* Checks *********************************************************************/
 
 function isMediaAsset (fileName) {
   if (fileName.indexOf('_preview.jpg') > -1) {
@@ -214,333 +234,280 @@ function isPresentation (fileName) {
   return false
 }
 
-class MediaServer {
-  constructor (basePath) {
-    /**
-     * @type {string}
-     */
-    this.basePath = ''
-    if (!basePath) {
-      if (!('basePath' in config.mediaServer)) {
-        throw new Error('Missing property “basePath” in config.mediaServer')
+/* Insert *********************************************************************/
+
+async function insertMediaAsset (relPath) {
+  const mediaAsset = new MediaAsset(relPath).gatherMetaData().cleanTmpProperties()
+  await db.collection('mediaAssets').insertOne(mediaAsset)
+}
+
+async function insertPresentation (relPath) {
+  const presentation = new Presentation(relPath).addFileInfos().cleanTmpProperties()
+  await db.collection('presentations').insertOne(presentation)
+}
+
+async function walkSync (dir) {
+  const files = fs.readdirSync(dir)
+  for (const fileName of files) {
+    const relPath = path.join(dir, fileName)
+    // Exclude .git/
+    if (fileName.substr(0, 1) !== '.') {
+      if (fs.statSync(relPath).isDirectory()) {
+        walkSync(relPath)
+      } else if (isPresentation(fileName)) {
+        await insertPresentation(relPath)
+      } else if (isMediaAsset(fileName)) {
+        await insertMediaAsset(relPath)
       }
-      this.basePath = config.mediaServer.basePath
-    } else {
-      this.basePath = basePath
-    }
-    if (!fs.existsSync(this.basePath)) {
-      throw new Error(`The base path of the media server doesn’t exist: ${this.basePath}`)
-    }
-  }
-
-  /**
-   * @return {Promise}
-   */
-  async connectDb () {
-    await mongoClient.connect()
-    this.db = mongoClient.db(config.databases.mongodb.dbName)
-    return this.db
-  }
-
-  closeDb () {
-    mongoClient.close()
-  }
-
-  async addMediaAsset_ (relPath) {
-    const mediaAsset = new MediaAsset(relPath).gatherMetaData().cleanTmpProperties()
-    await this.db.collection('mediaAssets').insertOne(mediaAsset)
-  }
-
-  async addPresentation_ (relPath) {
-    const presentation = new Presentation(relPath).addFileInfos().cleanTmpProperties()
-    await this.db.collection('presentations').insertOne(presentation)
-  }
-
-  async walkSync_ (dir) {
-    const files = fs.readdirSync(dir)
-    for (const fileName of files) {
-      const relPath = path.join(dir, fileName)
-      // Exclude .git/
-      if (fileName.substr(0, 1) !== '.') {
-        if (fs.statSync(relPath).isDirectory()) {
-          this.walkSync_(relPath)
-        } else if (isPresentation(fileName)) {
-          await this.addPresentation_(relPath)
-        } else if (isMediaAsset(fileName)) {
-          await this.addMediaAsset_(relPath)
-        }
-      }
-    }
-  }
-
-  async update () {
-    await this.initializeDb()
-    await this.flushMediaFiles()
-    const begin = new Date().getTime()
-    this.db.collection('updates').insertOne({ begin: begin, end: 0 })
-    await this.walkSync_(this.basePath)
-    const end = new Date().getTime()
-    await this.db.collection('updates').updateOne({ begin: begin }, { $set: { end: end } })
-    return {
-      finished: true,
-      begin,
-      end,
-      duration: end - begin
-    }
-  }
-
-  normalizeResult_ (result) {
-    if (result && !result.error) {
-      delete result._id
-      return result
-    }
-    return result
-  }
-
-  normalizeResults_ (results) {
-    const output = []
-    for (const result of results) {
-      output.push(this.normalizeResult_(result))
-    }
-    return output
-  }
-
-  /**
-   * @returns {Promise}
-   */
-  async getMediaAssetById (id) {
-    return this.normalizeResult_(await this.db.collection('mediaAssets').find( { id: id } ).next())
-  }
-
-  /**
-   * @returns {Promise}
-   */
-  async getMediaAssetByFilename (filename) {
-    const cursor = await this.db.collection('mediaAssets').find( { filename: filename } )
-    const count = await cursor.count()
-    if (count !== 1) throw new Error(`filename “${filename}” is not unambiguous.`)
-    return this.normalizeResult_(await cursor.next())
-  }
-
-  /**
-   * @returns {Promise}
-   */
-  async searchInPath (substring) {
-    return await this.db.collection('mediaAssets').aggregate([
-      {
-        $match: {
-          $expr: { $gt: [{ $indexOfCP: [ "$path", substring ] }, -1]}
-        }
-      },
-      {
-        $project: {
-          _id: false,
-          id: true,
-          name: '$path'
-        }
-      }
-    ]).toArray()
-  }
-
-  /**
-   * @returns {Promise}
-   */
-  async searchInId (substring) {
-    return await this.db.collection('mediaAssets').aggregate([
-      {
-        $match: {
-          $expr: { $gt: [{ $indexOfCP: [ "$id", substring ] }, -1]}
-        }
-      },
-      {
-        $project: {
-          _id: false,
-          id: true,
-          name: '$title'
-        }
-      }
-    ]).toArray()
-  }
-
-  /**
-   * @returns {Promise}
-   */
-  async flushMediaFiles () {
-    await this.db.collection('mediaAssets').deleteMany({})
-    await this.db.collection('presentations').deleteMany({})
-  }
-
-  /**
-   * @returns {Promise}
-   */
-  async initializeDb () {
-    const mediaAssets = await this.db.createCollection('mediaAssets')
-    await mediaAssets.createIndex( { path: 1 }, { unique: true } )
-    await mediaAssets.createIndex( { id: 1 }, { unique: true } )
-
-    const presentations = await this.db.createCollection('presentations')
-    await presentations.createIndex( { id: 1 }, { unique: true } )
-
-    const updates = await this.db.createCollection('updates')
-    await updates.createIndex( { begin: 1 } )
-
-    const result = {}
-    const collections = await this.db.listCollections().toArray()
-    for (const collection of collections) {
-      const indexes = await this.db.collection(collection.name).listIndexes().toArray()
-      result[collection.name] = {
-        name: collection.name,
-        indexes: {}
-      }
-      for (const index of indexes) {
-        result[collection.name].indexes[index.name] = index.unique
-      }
-    }
-    return result
-  }
-
-  /**
-   * @returns {Promise}
-   */
-  async dropDb () {
-    const collections = await this.db.listCollections().toArray()
-    const droppedCollections = []
-    for (const collection of collections) {
-      await this.db.dropCollection(collection.name)
-      droppedCollections.push(collection.name)
-    }
-    return {
-      droppedCollections
-    }
-  }
-
-  /**
-   * @returns {Promise}
-   */
-  async reInitializeDb () {
-    const dropDb = await this.dropDb()
-    const initializeDb = await this.initializeDb()
-    return {
-      dropDb,
-      initializeDb
     }
   }
 }
 
-const mediaServer = new MediaServer()
+async function update () {
+  await initializeDb()
+  await flushMediaFiles()
+  const begin = new Date().getTime()
+  db.collection('updates').insertOne({ begin: begin, end: 0 })
+  await walkSync(basePath)
+  const end = new Date().getTime()
+  await db.collection('updates').updateOne({ begin: begin }, { $set: { end: end } })
+  return {
+    finished: true,
+    begin,
+    end,
+    duration: end - begin
+  }
+}
 
-const app = express()
+/* MongoDb Management *********************************************************/
 
-app.on('mount', async () => {
-  await mediaServer.connectDb()
-  await mediaServer.initializeDb()
-})
+/**
+ * @returns {Promise}
+ */
+async function initializeDb () {
+  const mediaAssets = await db.createCollection('mediaAssets')
+  await mediaAssets.createIndex({ path: 1 }, { unique: true })
+  await mediaAssets.createIndex({ id: 1 }, { unique: true })
 
-app.get(['/', '/version'], (req, res) => {
-  res.json({
-    name: packageJson.name,
-    version: packageJson.version
+  const presentations = await db.createCollection('presentations')
+  await presentations.createIndex({ id: 1 }, { unique: true })
+
+  const updates = await db.createCollection('updates')
+  await updates.createIndex({ begin: 1 })
+
+  const result = {}
+  const collections = await db.listCollections().toArray()
+  for (const collection of collections) {
+    const indexes = await db.collection(collection.name).listIndexes().toArray()
+    result[collection.name] = {
+      name: collection.name,
+      indexes: {}
+    }
+    for (const index of indexes) {
+      result[collection.name].indexes[index.name] = index.unique
+    }
+  }
+  return result
+}
+
+/**
+ * @returns {Promise}
+ */
+async function dropDb () {
+  const collections = await db.listCollections().toArray()
+  const droppedCollections = []
+  for (const collection of collections) {
+    await db.dropCollection(collection.name)
+    droppedCollections.push(collection.name)
+  }
+  return {
+    droppedCollections
+  }
+}
+
+/**
+ * @returns {Promise}
+ */
+async function reInitializeDb () {
+  const resultdropDb = await dropDb()
+  const resultInitializeDb = await initializeDb()
+  return {
+    resultdropDb,
+    resultInitializeDb
+  }
+}
+
+/**
+ * @returns {Promise}
+ */
+async function flushMediaFiles () {
+  await db.collection('mediaAssets').deleteMany({})
+  await db.collection('presentations').deleteMany({})
+}
+
+/* Express Rest API ***********************************************************/
+
+function registerRestApi () {
+  const app = express()
+
+  app.on('mount', async () => {
+    await connectDb()
+    await initializeDb()
   })
-})
 
-app.get('/media-asset/by-id/:id', async (req, res, next) => {
-  try {
-    res.json(await mediaServer.getMediaAssetById(req.params.id))
-  } catch (error) {
-    next(error)
-  }
-})
-
-app.get('/media-asset/by-filename/:filename', async (req, res, next) => {
-  try {
-    res.json(await mediaServer.getMediaAssetByFilename(req.params.filename))
-  } catch (error) {
-    next(error)
-  }
-})
-
-app.get('/stats/count', async (req, res, next) => {
-  try {
+  app.get('/', (req, res) => {
     res.json({
-      mediaAssets: await mediaServer.db.collection('mediaAssets').countDocuments(),
-      presentations: await mediaServer.db.collection('presentations').countDocuments()
+      '/mgmt/flush': 'Delete all media files (assets, presentations) from the database.',
+      '/mgmt/init': 'Initialize the MongoDB database.',
+      '/mgmt/re-init': 'Re-Initialize the MongoDB database (Drop all collections and initialize).',
+      '/mgmt/update': 'Update the media server database (Flush and insert).',
+      '/stats/count': 'Count / sum of the media files (assets, presentations) in the database.',
+      '/stats/updates': 'Journal of the update processes with timestamps.'
     })
-  } catch (error) {
-    next(error)
-  }
-})
+  })
 
-app.get('/stats/updates', async (req, res, next) => {
-  try {
-    res.json(await mediaServer.db.collection('updates')
-      .find({}, { projection: { _id: 0 } })
-      .sort({ begin: -1 })
-      .limit(20)
-      .toArray()
-    )
-  } catch (error) {
-    next(error)
-  }
-})
+  app.get('/version', (req, res) => {
+    res.json({
+      name: packageJson.name,
+      version: packageJson.version
+    })
+  })
 
-app.get('/search-in/id', async (req, res, next) => {
-  try {
-    if (!('substring' in req.query) || !req.query.substring) {
-      res.sendStatus(400)
-    } else {
-      res.json(await mediaServer.searchInId(req.query.substring))
+  app.get('/media-asset/by-id/:id', async (req, res, next) => {
+    try {
+      res.json(await db.collection('mediaAssets').find({ id: req.params.id }).next())
+    } catch (error) {
+      next(error)
     }
-  } catch (error) {
-    next(error)
-  }
-})
+  })
 
-app.get('/search-in/path', async (req, res, next) => {
-  try {
-    if (!('substring' in req.query) || !req.query.substring) {
-      res.sendStatus(400)
-    } else {
-      res.json(await mediaServer.searchInPath(req.query.substring))
+  app.get('/media-asset/by-filename/:filename', async (req, res, next) => {
+    try {
+      const cursor = await db.collection('mediaAssets').find({ filename: req.params.filename })
+      const count = await cursor.count()
+      if (count !== 1) throw new Error(`filename “${req.params.filename}” is not unambiguous.`)
+      res.json(await cursor.next())
+    } catch (error) {
+      next(error)
     }
-  } catch (error) {
-    next(error)
-  }
-})
+  })
 
-app.get('/management/initialize-db', async (req, res, next) => {
-  try {
-    res.json(await mediaServer.initializeDb())
-  } catch (error) {
-    next(error)
-  }
-})
 
-app.get('/management/re-initialize-db', async (req, res, next) => {
-  try {
-    res.json(await mediaServer.reInitializeDb())
-  } catch (error) {
-    next(error)
-  }
-})
 
-app.get('/management/update', async (req, res, next) => {
-  try {
-    res.json(await mediaServer.update())
-  } catch (error) {
-    next(error)
-  }
-})
+  app.get('/search-in/id', async (req, res, next) => {
+    try {
+      if (!('substring' in req.query) || !req.query.substring) {
+        res.sendStatus(400)
+      } else {
+        res.json(await db.collection('mediaAssets').aggregate([
+          {
+            $match: {
+              $expr: { $gt: [{ $indexOfCP: ['$id', req.query.substring] }, -1] }
+            }
+          },
+          {
+            $project: {
+              _id: false,
+              id: true,
+              name: '$title'
+            }
+          }
+        ]).toArray())
+      }
+    } catch (error) {
+      next(error)
+    }
+  })
 
-app.get('/management/flush-media-assets', async (req, res, next) => {
-  try {
-    res.json(await mediaServer.flushMediaFiles())
-  } catch (error) {
-    next(error)
-  }
-})
+  app.get('/search-in/path', async (req, res, next) => {
+    try {
+      if (!('substring' in req.query) || !req.query.substring) {
+        res.sendStatus(400)
+      } else {
+        res.json(await db.collection('mediaAssets').aggregate([
+          {
+            $match: {
+              $expr: { $gt: [{ $indexOfCP: ['$path', req.query.substring] }, -1] }
+            }
+          },
+          {
+            $project: {
+              _id: false,
+              id: true,
+              name: '$path'
+            }
+          }
+        ]).toArray())
+      }
+    } catch (error) {
+      next(error)
+    }
+  })
+
+  /* mgmt = management */
+
+  app.get('/mgmt/flush', async (req, res, next) => {
+    try {
+      await flushMediaFiles()
+      res.json({ status: 'ok' })
+    } catch (error) {
+      next(error)
+    }
+  })
+
+  app.get('/mgmt/init', async (req, res, next) => {
+    try {
+      res.json(await initializeDb())
+    } catch (error) {
+      next(error)
+    }
+  })
+
+  app.get('/mgmt/re-init', async (req, res, next) => {
+    try {
+      res.json(await reInitializeDb())
+    } catch (error) {
+      next(error)
+    }
+  })
+
+  app.get('/mgmt/update', async (req, res, next) => {
+    try {
+      res.json(await update())
+    } catch (error) {
+      next(error)
+    }
+  })
+
+  /* stats = statistics */
+
+  app.get('/stats/count', async (req, res, next) => {
+    try {
+      res.json({
+        mediaAssets: await db.collection('mediaAssets').countDocuments(),
+        presentations: await db.collection('presentations').countDocuments()
+      })
+    } catch (error) {
+      next(error)
+    }
+  })
+
+  app.get('/stats/updates', async (req, res, next) => {
+    try {
+      res.json(await db.collection('updates')
+        .find({}, { projection: { _id: 0 } })
+        .sort({ begin: -1 })
+        .limit(20)
+        .toArray()
+      )
+    } catch (error) {
+      next(error)
+    }
+  })
+
+  return app
+}
 
 module.exports = {
-  config,
-  MediaServer,
-  expressApp: app
+  registerRestApi
 }

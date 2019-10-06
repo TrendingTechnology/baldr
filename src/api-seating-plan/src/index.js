@@ -31,92 +31,98 @@ function getStateByTimeStampMsec (timeStampMsec) {
   return false
 }
 
-const app = express()
+function registerRestApi () {
+  const app = express()
 
-app.get('/version', (req, res) => {
-  res.status(200).send({
-    name: packageJson.name,
-    version: packageJson.version
+  app.get('/version', (req, res) => {
+    res.status(200).send({
+      name: packageJson.name,
+      version: packageJson.version
+    })
   })
-})
 
-app.post('/', (req, res) => {
-  const body = req.body
+  app.post('/', (req, res) => {
+    const body = req.body
 
-  if (!{}.hasOwnProperty.call(body, 'timeStampMsec')) {
-    res.sendStatus(404)
-  }
-
-  fs.writeFile(
-    path.join(store, 'latest'),
-    body.timeStampMsec,
-    { encoding: 'utf-8' },
-    (err) => {
-      if (err) throw err
-      console.log('The file has been saved!')
+    if (!{}.hasOwnProperty.call(body, 'timeStampMsec')) {
+      res.sendStatus(404)
     }
-  )
 
-  fs.writeFile(
-    timeStampMsecToPath(body.timeStampMsec),
-    JSON.stringify(req.body),
-    { encoding: 'utf-8' },
-    (err) => {
-      if (err) throw err
-      console.log('The file has been saved!')
+    fs.writeFile(
+      path.join(store, 'latest'),
+      body.timeStampMsec,
+      { encoding: 'utf-8' },
+      (err) => {
+        if (err) throw err
+        console.log('The file has been saved!')
+      }
+    )
+
+    fs.writeFile(
+      timeStampMsecToPath(body.timeStampMsec),
+      JSON.stringify(req.body),
+      { encoding: 'utf-8' },
+      (err) => {
+        if (err) throw err
+        console.log('The file has been saved!')
+      }
+    )
+
+    const responseMessage = {
+      success: body.timeStampMsec,
+      storedObject: req.body
     }
-  )
+    res.json(responseMessage)
+    console.log(responseMessage)
+  })
 
-  const responseMessage = {
-    success: body.timeStampMsec,
-    storedObject: req.body
-  }
-  res.json(responseMessage)
-  console.log(responseMessage)
-})
+  app.get('/', (req, res) => {
+    const states = []
+    fs.readdirSync(store).forEach(file => {
+      const regExp = /seating-plan_(\d+)\.json/g
+      const match = regExp.exec(file)
+      if (match) {
+        states.push(match[1])
+      }
+    })
+    res.status(200).send(states)
+  })
 
-app.get('/', (req, res) => {
-  const states = []
-  fs.readdirSync(store).forEach(file => {
-    const regExp = /seating-plan_(\d+)\.json/g
-    const match = regExp.exec(file)
-    if (match) {
-      states.push(match[1])
+  app.get('/latest', (req, res) => {
+    const latestPath = path.join(store, 'latest')
+    if (fs.existsSync(latestPath)) {
+      const latest = fs.readFileSync(latestPath, { encoding: 'utf-8' })
+      const state = getStateByTimeStampMsec(Number(latest))
+      res.status(200).send(state)
+    } else {
+      res.sendStatus(404)
     }
   })
-  res.status(200).send(states)
-})
 
-app.get('/latest', (req, res) => {
-  const latestPath = path.join(store, 'latest')
-  if (fs.existsSync(latestPath)) {
-    const latest = fs.readFileSync(latestPath, { encoding: 'utf-8' })
-    const state = getStateByTimeStampMsec(Number(latest))
-    res.status(200).send(state)
-  } else {
-    res.sendStatus(404)
-  }
-})
+  app.get('/by-time/:timeStampMsec', (req, res) => {
+    const timeStampMsec = req.params.timeStampMsec
+    const state = getStateByTimeStampMsec(timeStampMsec)
+    if (state) {
+      res.status(200).send(state)
+    } else {
+      res.sendStatus(404)
+    }
+  })
 
-app.get('/by-time/:timeStampMsec', (req, res) => {
-  const timeStampMsec = req.params.timeStampMsec
-  const state = getStateByTimeStampMsec(timeStampMsec)
-  if (state) {
-    res.status(200).send(state)
-  } else {
-    res.sendStatus(404)
-  }
-})
+  app.delete('/by-time/:timeStampMsec', (req, res) => {
+    const timeStampMsec = req.params.timeStampMsec
+    const storePath = timeStampMsecToPath(timeStampMsec)
+    if (fs.existsSync(storePath)) {
+      fs.unlinkSync(storePath)
+      res.status(200).send({ timeStampMsec: timeStampMsec })
+    } else {
+      res.sendStatus(404)
+    }
+  })
 
-app.delete('/by-time/:timeStampMsec', (req, res) => {
-  const timeStampMsec = req.params.timeStampMsec
-  const storePath = timeStampMsecToPath(timeStampMsec)
-  if (fs.existsSync(storePath)) {
-    fs.unlinkSync(storePath)
-    res.status(200).send({ timeStampMsec: timeStampMsec })
-  } else {
-    res.sendStatus(404)
-  }
-})
+  return app
+}
 
-module.exports = app
+module.exports = {
+  registerRestApi
+}
