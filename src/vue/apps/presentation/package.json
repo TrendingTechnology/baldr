@@ -20,7 +20,6 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "test:unit": "vue-cli-service test:unit",
     "upload": "rsync -av --delete dist/ serverway:/var/www/baldr/presentation/"
   },
   "dependencies": {
@@ -42,12 +41,9 @@
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.11.0",
     "@vue/cli-plugin-eslint": "^3.11.0",
-    "@vue/cli-plugin-unit-mocha": "^3.11.0",
     "@vue/cli-service": "^3.11.0",
     "@vue/eslint-config-standard": "^4.0.0",
-    "@vue/test-utils": "1.0.0-beta.29",
     "babel-eslint": "^10.0.3",
-    "chai": "^4.2.0",
     "eslint": "^6.3.0",
     "eslint-plugin-vue": "^5.2.3",
     "node-sass": "^4.12.0",
