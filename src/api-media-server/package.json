@@ -1,6 +1,6 @@
 {
   "name": "@bldr/api-media-server",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "A media server which provides a REST API to find files.",
   "author": {
     "name": "Josef Friedrich",
@@ -14,7 +14,7 @@
   },
   "main": "index.js",
   "dependencies": {
-    "@bldr/core": "^0.0.29",
+    "@bldr/core": "^0.0.30",
     "cors": "2.8.5",
     "express": "4.17.1",
     "js-yaml": "^3.13.1",
