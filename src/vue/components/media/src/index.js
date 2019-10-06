@@ -415,7 +415,7 @@ class Resolver {
     const response = await request.request(
       {
         method: 'get',
-        url: `media-asset/by-${key}/${value}`
+        url: `query/asset/match/${key}/${value}`
       }
     )
     if ('data' in response && 'path' in response.data) {

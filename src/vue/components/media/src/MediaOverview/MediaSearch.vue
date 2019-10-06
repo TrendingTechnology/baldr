@@ -41,7 +41,7 @@ export default {
     search (text) {
       if (!text) return
       request.request({
-        url: 'search-in/id',
+        url: 'query/assets/search/id',
         method: 'get',
         params: {
           substring: text
