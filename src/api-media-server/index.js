@@ -195,6 +195,7 @@ class Presentation extends MediaFile {
     super(filePath)
     const presentation = this.readYaml_(filePath)
     this.title = presentation.meta.title
+    this.id = presentation.meta.id
   }
 }
 
@@ -332,6 +333,45 @@ async function flushMediaFiles () {
 /* Express Rest API ***********************************************************/
 
 function registerRestApi () {
+  async function matchByField (collection, field, req, res, next) {
+    try {
+      query = {}
+      query[field] = req.params[field]
+      res.json(
+        await db.collection(collection)
+          .find(query, { projection: { _id: 0 } })
+          .next()
+      )
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  async function searchInField (collection, field, req, res, next) {
+    try {
+      if (!('substring' in req.query) || !req.query.substring) {
+        res.sendStatus(400)
+      } else {
+        res.json(await db.collection(collection).aggregate([
+          {
+            $match: {
+              $expr: { $gt: [{ $indexOfCP: [`$${field}`, req.query.substring] }, -1] }
+            }
+          },
+          {
+            $project: {
+              _id: false,
+              id: true,
+              name: `$${field}`
+            }
+          }
+        ]).toArray())
+      }
+    } catch (error) {
+      next(error)
+    }
+  }
+
   const app = express()
 
   app.on('mount', async () => {
@@ -345,6 +385,13 @@ function registerRestApi () {
       '/mgmt/init': 'Initialize the MongoDB database.',
       '/mgmt/re-init': 'Re-Initialize the MongoDB database (Drop all collections and initialize).',
       '/mgmt/update': 'Update the media server database (Flush and insert).',
+      '/query/asset/match/filename/:id': '',
+      '/query/asset/match/id/:id': '',
+      '/query/assets/search/id?substring=:substring': '',
+      '/query/assets/search/path?substring=:substring': '',
+      '/query/assets/search/title?substring=:substring': '',
+      '/query/presentation/match/id/:id': '',
+      '/query/presentations/search/title?substring=:substring': '',
       '/stats/count': 'Count / sum of the media files (assets, presentations) in the database.',
       '/stats/updates': 'Journal of the update processes with timestamps.'
     })
@@ -357,73 +404,34 @@ function registerRestApi () {
     })
   })
 
-  app.get('/media-asset/by-id/:id', async (req, res, next) => {
-    try {
-      res.json(await db.collection('assets').find({ id: req.params.id }).next())
-    } catch (error) {
-      next(error)
-    }
+  /* query */
+
+  app.get('/query/asset/match/filename/:filename', async (req, res, next) => {
+    await matchByField('assets', 'filename', req, res, next)
   })
 
-  app.get('/media-asset/by-filename/:filename', async (req, res, next) => {
-    try {
-      const cursor = await db.collection('assets').find({ filename: req.params.filename })
-      const count = await cursor.count()
-      if (count !== 1) throw new Error(`filename “${req.params.filename}” is not unambiguous.`)
-      res.json(await cursor.next())
-    } catch (error) {
-      next(error)
-    }
+  app.get('/query/asset/match/id/:id', async (req, res, next) => {
+    await matchByField('assets', 'id', req, res, next)
   })
 
-  app.get('/search-in/id', async (req, res, next) => {
-    try {
-      if (!('substring' in req.query) || !req.query.substring) {
-        res.sendStatus(400)
-      } else {
-        res.json(await db.collection('assets').aggregate([
-          {
-            $match: {
-              $expr: { $gt: [{ $indexOfCP: ['$id', req.query.substring] }, -1] }
-            }
-          },
-          {
-            $project: {
-              _id: false,
-              id: true,
-              name: '$title'
-            }
-          }
-        ]).toArray())
-      }
-    } catch (error) {
-      next(error)
-    }
+  app.get('/query/assets/search/id', async (req, res, next) => {
+    await searchInField('assets', 'id', req, res, next)
   })
 
-  app.get('/search-in/path', async (req, res, next) => {
-    try {
-      if (!('substring' in req.query) || !req.query.substring) {
-        res.sendStatus(400)
-      } else {
-        res.json(await db.collection('assets').aggregate([
-          {
-            $match: {
-              $expr: { $gt: [{ $indexOfCP: ['$path', req.query.substring] }, -1] }
-            }
-          },
-          {
-            $project: {
-              _id: false,
-              id: true,
-              name: '$path'
-            }
-          }
-        ]).toArray())
-      }
-    } catch (error) {
-      next(error)
-    }
+  app.get('/query/assets/search/path', async (req, res, next) => {
+    await searchInField('assets', 'path', req, res, next)
+  })
+
+  app.get('/query/assets/search/title', async (req, res, next) => {
+    await searchInField('assets', 'title', req, res, next)
+  })
+
+  app.get('/query/presentation/match/id/:id', async (req, res, next) => {
+    await matchByField('presentations', 'id', req, res, next)
+  })
+
+  app.get('/query/presentations/search/title', async (req, res, next) => {
+    await searchInField('presentations', 'title', req, res, next)
   })
 
   /* mgmt = management */
