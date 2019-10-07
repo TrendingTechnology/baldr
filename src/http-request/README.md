@@ -2,7 +2,7 @@
 [![Build Status](https://travis-ci.org/Josef-Friedrich/baldr.svg?branch=master)](https://travis-ci.org/Josef-Friedrich/baldr)
 [![GitHub repo size](https://img.shields.io/github/repo-size/Josef-Friedrich/baldr.svg)](https://github.com/Josef-Friedrich/baldr)
 
-# @bldr/rest-api
+# @bldr/http-request
 
-A REST API for the baldr project. To store data for the seating plan
-VUE JS app.
+Make HTTP requests on multiple servers, for example on a local and a
+remote HTTP server.

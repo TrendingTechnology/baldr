@@ -1,5 +1,7 @@
 /**
- * @file Make HTTP requests on two axios instances: local and remote.
+ * @file Make HTTP requests on multiple servers, for example on a local and a
+ *   remote HTTP server.
+ * @module @bldr/http-request
  */
 
 /* globals config */
@@ -90,7 +92,7 @@ export class Request {
       const conn = this.servers[name]
       try {
         const axiosInstance = axios.create(conn)
-        axiosInstance.get(this.formatUrl(conn.checkUrl))
+        await axiosInstance.get(this.formatUrl(conn.checkUrl))
         this.axiosInstances_.push(axiosInstance)
       } catch (error) {}
     }
@@ -126,9 +128,22 @@ export class Request {
   /**
    * Wrapper around axios.request. See axios.request
    *
+   * <pre><code>
+   * {
+   *   method: 'get',
+   *   url: 'data/entry'
+   * }
+   * </code></pre>
+   *
    * @param {object} config
    */
   async request (config, requestAllServer = false) {
+    if (typeof config === 'string') {
+      config = { method: 'get', url: config }
+    }
+    if (!('method' in config)) {
+      config.method = 'get'
+    }
     try {
       if (!this.initalised()) await this.createAxiosInstances_()
       return this.axiosRequest(config, requestAllServer)

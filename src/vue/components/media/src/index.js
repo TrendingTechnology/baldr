@@ -7,6 +7,7 @@
 import { getDefaultServers, Request } from '@bldr/http-request'
 import Vue from 'vue'
 import DynamicSelect from '@bldr/vue-component-dynamic-select'
+import axios from 'axios'
 
 import ComponentMediaFile from './MediaFile.vue'
 import MediaOverview from './MediaOverview'
@@ -174,7 +175,23 @@ const getters = {
 const actions = {
   async setRestApiServers ({ commit }) {
     const servers = await request.getServers()
-    commit('setRestApiServers', servers)
+    const versions = await request.request({
+      url: 'version'
+    }, true)
+
+    const counts = await request.request('stats/count', true)
+    const updates = await request.request('stats/updates', true)
+
+    const result = []
+    for (let index = 0; index < servers.length; index++) {
+      result.push({
+        baseUrl: servers[index].baseURL,
+        version: versions[index].data.version,
+        count: counts[index].data,
+        update: updates[index].data[0].begin
+      })
+    }
+    commit('setRestApiServers', result)
   },
   addMediaFile ({ commit, dispatch }, mediaFile) {
     commit('addMediaFile', mediaFile)

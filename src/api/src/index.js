@@ -36,7 +36,7 @@ app.use(express.json())
 app.use('/seating-plan', registerSeatingPlan())
 app.use('/media-server', registerMediaServer())
 
-app.get(['/', 'version'], (req, res) => {
+app.get(['/', '/version'], (req, res) => {
   res.status(200).send({
     name: packageJson.name,
     version: packageJson.version
