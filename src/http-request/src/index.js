@@ -4,7 +4,7 @@
  * @module @bldr/http-request
  */
 
-/* globals config */
+/* globals config location */
 
 import axios from 'axios'
 
@@ -25,7 +25,7 @@ const defaultServers = {
   }
 }
 
-function deepClone(object) {
+function deepClone (object) {
   // We change the object so we need a deep clone.
   return JSON.parse(JSON.stringify(object))
 }
@@ -34,7 +34,12 @@ export function getDefaultServers () {
   return deepClone(defaultServers)
 }
 
-export class Request {
+/**
+ * @param {object} servers - A object represention multiple servers.
+ * @param {string} urlFillIn - A string which gets filled between the base URL
+ *   and the last part of the URL.
+ */
+export class HttpRequest {
   constructor (servers, urlFillIn) {
     this.urlFillIn = urlFillIn
     this.defaultConfig = {
@@ -155,4 +160,4 @@ export class Request {
   }
 }
 
-export default new Request(getDefaultServers())
+export default new HttpRequest(getDefaultServers())

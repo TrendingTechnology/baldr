@@ -11,7 +11,6 @@
 
 <script>
 import { DynamicSelect } from '@bldr/vue-component-dynamic-select'
-import { request } from '../index.js'
 
 export default {
   name: 'MediaSearch',
@@ -31,7 +30,7 @@ export default {
     },
     search (text) {
       if (!text) return
-      request.request({
+      this.$media.httpRequest.request({
         url: 'query/assets/search/id',
         method: 'get',
         params: {

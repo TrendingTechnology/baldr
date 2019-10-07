@@ -4,16 +4,15 @@
 
 /* globals document */
 
-import { getDefaultServers, Request } from '@bldr/http-request'
+import { getDefaultServers, HttpRequest } from '@bldr/http-request'
 import Vue from 'vue'
 import DynamicSelect from '@bldr/vue-component-dynamic-select'
-import axios from 'axios'
 
 import ComponentMediaFile from './MediaFile.vue'
 import MediaOverview from './MediaOverview'
 import MediaPlayer from './MediaPlayer.vue'
 
-export const request = new Request(getDefaultServers(), '/api/media-server')
+export const httpRequest = new HttpRequest(getDefaultServers(), '/api/media-server')
 
 export function formatDuration (duration) {
   if (!duration) return '00:00'
@@ -174,13 +173,13 @@ const getters = {
 
 const actions = {
   async setRestApiServers ({ commit }) {
-    const servers = await request.getServers()
-    const versions = await request.request({
+    const servers = await httpRequest.getServers()
+    const versions = await httpRequest.request({
       url: 'version'
     }, true)
 
-    const counts = await request.request('stats/count', true)
-    const updates = await request.request('stats/updates', true)
+    const counts = await httpRequest.request('stats/count', true)
+    const updates = await httpRequest.request('stats/updates', true)
 
     const result = []
     for (let index = 0; index < servers.length; index++) {
@@ -197,7 +196,6 @@ const actions = {
     commit('addMediaFile', mediaFile)
     commit('addMediaFileToTypes', mediaFile)
     dispatch('addMediaFileToList', mediaFile)
-
   },
   addMediaFileToList ({ commit, getters }, mediaFile) {
     const list = getters.mediaList
@@ -429,7 +427,7 @@ class Resolver {
    * @param {string|json} value
    */
   async queryMediaServer_ (key, value) {
-    const response = await request.request(
+    const response = await httpRequest.request(
       {
         method: 'get',
         url: `query/asset/match/${key}/${value}`
@@ -483,7 +481,7 @@ class Resolver {
   async resolveHttpUrl_ (mediaFile) {
     if ('httpUrl' in mediaFile) return mediaFile.httpUrl
     if ('path' in mediaFile) {
-      const baseURL = await request.getFirstBaseUrl()
+      const baseURL = await httpRequest.getFirstBaseUrl()
       return `${baseURL}/media/${mediaFile.path}`
     }
     throw new Error(`Can not generate HTTP URL.`)
@@ -547,9 +545,21 @@ class Media {
     this.$router = router
     this.$store = store
     this.$shortcuts = shortcuts
+
+    /**
+     *
+     */
     this.player = new Player(store)
+
+    /**
+     *
+     */
     this.resolver = new Resolver()
-    this.request = request
+
+    /**
+     *
+     */
+    this.httpRequest = httpRequest
 
     this.$shortcuts.addMultiple([
       {

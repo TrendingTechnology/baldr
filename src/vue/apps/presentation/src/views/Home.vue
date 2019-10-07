@@ -46,12 +46,12 @@ export default {
   },
   methods: {
     async onInput () {
-      let response = await this.$media.request.request({
+      let response = await this.$media.httpRequest.request({
         url: `query/presentation/match/id/${this.presentation.id}`,
         method: 'get'
       })
       const presentation = response.data
-      response = await this.$media.request.request({
+      response = await this.$media.httpRequest.request({
         url: `/media/${presentation.path}`,
         method: 'get'
       })
@@ -60,7 +60,7 @@ export default {
     },
     search (title) {
       if (!title) return
-      this.$media.request.request({
+      this.$media.httpRequest.request({
         url: 'query/presentations/search/title',
         method: 'get',
         params: {
