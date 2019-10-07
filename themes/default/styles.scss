@@ -51,11 +51,7 @@
   a {
     text-decoration: none;
 
-    &:link {
-      color: $black;
-    }
-
-    &:visited {
+    &:link, &:visited {
       color: $black;
     }
 
@@ -69,6 +65,12 @@
 
     &:active {
       color: $red;
+    }
+  }
+
+  &[b-dark-mode="true"] a {
+    &:link, &:visited {
+      color: $white;
     }
   }
 

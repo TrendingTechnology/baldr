@@ -2,7 +2,7 @@
   <div class="camera-master">
     <modal-dialog name="select-video-device">
       <dynamic-select
-        placeholder="Wähle ein Video-Device aus"
+        placeholder="Wähle eine Dokumentenkamera aus"
         :options="mediaDevices"
         @input="setDeviceId"
         v-model="deviceId"
@@ -11,7 +11,14 @@
 
     <video v-show="stream" ref="videoTag" autoplay="true" id="video"></video>
 
-    <a v-if="!stream" href="#" @click="showDeviceSelect">Select the document camera.</a>
+    <div v-if="!stream" class="no-stream">
+      <plain-icon v-if="!cameraNotFound" name="document-camera"/>
+      <plain-icon v-if="cameraNotFound" name="document-camera-off"/>
+      <div>
+        <a v-if="!stream" href="#" @click="showDeviceSelect">Dokumentenkamera auswählen</a>
+      </div>
+    </div>
+
   </div>
 </template>
 
@@ -100,7 +107,8 @@ slides:
 const state = {
   mediaDevices: [],
   deviceId: '',
-  stream: null
+  stream: null,
+  cameraNotFound: false
 }
 
 const getters = {
@@ -124,6 +132,9 @@ const getters = {
       }
     }
     return resultList
+  },
+  cameraNotFound: state => {
+    return state.cameraNotFound
   }
 }
 
@@ -142,6 +153,9 @@ const mutations = {
   },
   setStream (state, stream) {
     state.stream = stream
+  },
+  setCameraNotFound (state, cameraNotFound) {
+    state.cameraNotFound = cameraNotFound
   }
 }
 
@@ -169,6 +183,9 @@ export default {
   computed: {
     mediaDevices () {
       return this.$store.getters['camera/forDynamicSelect']
+    },
+    cameraNotFound () {
+      return this.$store.getters['camera/cameraNotFound']
     }
   },
   methods: {
@@ -196,8 +213,8 @@ export default {
           this.$store.commit('camera/setStream', stream)
           this.$store.dispatch('camera/setMediaDevices')
         })
-        .catch(function (error) {
-          throw error
+        .catch(() => {
+          this.$store.commit('camera/setCameraNotFound', true)
         })
     },
     stopVideoStream () {
@@ -227,6 +244,7 @@ export default {
 <style lang="scss" scoped>
   .camera-master {
     font-size: 1.5vw;
+
     video {
       height: 100vh;
       left: 0;
@@ -234,6 +252,16 @@ export default {
       position: absolute;
       top: 0;
       width: 100vw;
+    }
+
+    .no-stream {
+      width: 100%;
+      text-align: center;
+    }
+
+    .baldr-icon_document-camera,
+    .baldr-icon_document-camera-off {
+      font-size: 50vw;
     }
   }
 </style>

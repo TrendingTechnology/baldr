@@ -61,11 +61,7 @@
   text-decoration: none;
 }
 
-[b-theme="default"] a:link {
-  color: #141110;
-}
-
-[b-theme="default"] a:visited {
+[b-theme="default"] a:link, [b-theme="default"] a:visited {
   color: #141110;
 }
 
@@ -79,6 +75,10 @@
 
 [b-theme="default"] a:active {
   color: #e0585b;
+}
+
+[b-theme="default"][b-dark-mode="true"] a:link, [b-theme="default"][b-dark-mode="true"] a:visited {
+  color: #fcfbfb;
 }
 
 [b-theme="default"] .important {
