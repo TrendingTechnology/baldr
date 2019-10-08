@@ -21,6 +21,9 @@
     "mongodb": "^3.3.2",
     "saslprep": "1.0.3"
   },
+  "bin": {
+    "baldr-media-server-cli": "./src/cli.js"
+  },
   "publishConfig": {
     "access": "public"
   },
