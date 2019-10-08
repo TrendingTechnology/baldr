@@ -22,7 +22,7 @@
     "saslprep": "1.0.3"
   },
   "bin": {
-    "baldr-media-server-cli": "./src/cli.js"
+    "baldr-media-server-cli": "./cli.js"
   },
   "publishConfig": {
     "access": "public"

@@ -231,18 +231,25 @@ async function insertPresentation (relPath) {
   await db.collection('presentations').insertOne(presentation)
 }
 
-async function walkSync (dir) {
+/**
+ * @param {string} dir
+ * @param {object} on - An object with callbacks. Properties: presentation,
+ *   asset, all.
+ */
+async function walk (dir, on) {
   const files = fs.readdirSync(dir)
   for (const fileName of files) {
     const relPath = path.join(dir, fileName)
     // Exclude .git/
     if (fileName.substr(0, 1) !== '.') {
       if (fs.statSync(relPath).isDirectory()) {
-        walkSync(relPath)
+        walk(relPath, on)
       } else if (isPresentation(fileName)) {
-        await insertPresentation(relPath)
+        if ('presentation' in on) await on.presentation(relPath)
+        if ('all' in on) await on.all(relPath)
       } else if (isAsset(fileName)) {
-        await insertAsset(relPath)
+        if ('asset' in on) await on.asset(relPath)
+        if ('all' in on) await on.all(relPath)
       }
     }
   }
@@ -253,7 +260,10 @@ async function update () {
   await flushMediaFiles()
   const begin = new Date().getTime()
   db.collection('updates').insertOne({ begin: begin, end: 0 })
-  await walkSync(basePath)
+  await walk(basePath, {
+    presentation: insertPresentation,
+    asset: insertAsset
+  })
   const end = new Date().getTime()
   await db.collection('updates').updateOne({ begin: begin }, { $set: { end: end } })
   return {
@@ -503,5 +513,7 @@ function registerRestApi () {
 }
 
 module.exports = {
-  registerRestApi
+  registerRestApi,
+  walk,
+  Asset
 }
