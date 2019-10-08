@@ -6,9 +6,18 @@ const fs = require('fs')
 
 // Third party packages.
 const commander = require('commander')
+const chalk = require('chalk')
 
 // Project packages
 const { Asset, walk } = require('./index.js')
+const { utils } = require('@bldr/core')
+
+// Project packages.
+const config = utils.bootstrapConfig()
+
+function makeAsset (mediaFile) {
+  return new Asset(mediaFile).addFileInfos()
+}
 
 // console.log('Run git pull')
 // const gitPull = childProcess.spawnSync('git', ['pull'], { cwd: this.basePath, encoding: 'utf-8' })
@@ -20,10 +29,45 @@ commander
   .version(require('./package.json').version)
 
 commander
+  .command('convert <input>').alias('c')
+  .description('Convert media files in the appropriate format.')
+  .action((input) => {
+    const asset = makeAsset(input)
+    console.log(asset)
+    let convert
+    if (asset.extension === 'mp3') {
+      const output = `${input}.m4a`
+      convert = childProcess.spawn('ffmpeg', [
+        '-i', input,
+        '-c:a', 'libfdk_aac',
+        '-profile:a', 'aac_he_v2',
+        '-vn', // Disable video recording
+        '-map_metadata', '-1', // remove metadata
+        '-y', // Overwrite output files without asking
+        output
+      ])
+    }
+
+    if (convert) {
+      convert.stdout.on('data', (data) => {
+        console.log(chalk.green(data))
+      })
+
+      convert.stderr.on('data', (data) => {
+        console.log(chalk.red(data))
+      })
+
+      convert.on('close', (code) => {
+        console.log(`child process exited with code ${code}`);
+      })
+    }
+  })
+
+commander
   .command('open').alias('o')
   .description('Open the base directory in a file browser.')
   .action(() => {
-    const process = childProcess.spawn('xdg-open', [config.basePath], { detached: true })
+    const process = childProcess.spawn('xdg-open', [config.mediaServer.basePath], { detached: true })
     process.unref()
   })
 
@@ -31,11 +75,10 @@ commander
   .command('rename').alias('r')
   .description('Rename files, clean file names, remove all whitespaces and special characters.')
   .action(() => {
-    const cwd = process.cwd()
-    const files = this.glob_(cwd)
-    for (const oldPath of files) {
-      console.log(oldPath)
+    function rename (oldPath) {
+      console.log(`old: ${oldPath}`)
       const newPath = oldPath
+        .replace(/[\(\)]/g, '')
         .replace(/[,.] /g, '_')
         .replace(/ +- +/g, '_')
         .replace(/\s+/g, '-')
@@ -49,10 +92,15 @@ commander
         .replace(/ü/g, 'ue')
         .replace(/ß/g, 'ss')
       if (oldPath !== newPath) {
-        console.log(newPath)
+        console.log(`new: ${newPath}`)
         fs.renameSync(oldPath, newPath)
       }
     }
+    walk(process.cwd(), {
+      all (oldPath) {
+        rename(oldPath)
+      }
+    })
   })
 
 commander
