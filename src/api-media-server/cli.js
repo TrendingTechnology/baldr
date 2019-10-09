@@ -41,7 +41,7 @@ commander
       convert = childProcess.spawn('ffmpeg', [
         '-i', input,
         '-c:a', 'libfdk_aac',
-        '-profile:a', 'aac_he_v2',
+        '-profile:a', 'aac_he_v2', // https://trac.ffmpeg.org/wiki/Encode/AAC
         '-vn', // Disable video recording
         '-map_metadata', '-1', // remove metadata
         '-y', // Overwrite output files without asking
