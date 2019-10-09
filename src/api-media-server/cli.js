@@ -33,9 +33,10 @@ commander
   .description('Convert media files in the appropriate format.')
   .action((input) => {
     const asset = makeAsset(input)
+    const inputExtension = asset.extension.toLowerCase()
     console.log(asset)
     let convert
-    if (asset.extension === 'mp3') {
+    if (['mp3', 'flac', 'm4a', 'wma', 'wav', 'aac'].includes(inputExtension)) {
       const output = `${input}.m4a`
       convert = childProcess.spawn('ffmpeg', [
         '-i', input,
@@ -44,6 +45,15 @@ commander
         '-vn', // Disable video recording
         '-map_metadata', '-1', // remove metadata
         '-y', // Overwrite output files without asking
+        output
+      ])
+    } else if (['jpg', 'jpeg', 'pgn', 'gif'].includes(inputExtension)) {
+      const output = input.replace(`.${asset.extension}`, '_preview.jpg')
+      convert = childProcess.spawn('magick', [
+        'convert',
+        input,
+        '-resize', '1000x1000>', // http://www.imagemagick.org/Usage/resize/#shrink
+        '-quality', '70', // https://imagemagick.org/script/command-line-options.php#quality
         output
       ])
     }
