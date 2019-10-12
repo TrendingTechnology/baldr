@@ -1,6 +1,6 @@
 {
   "name": "@bldr/vue-component-dynamic-select",
-  "version": "0.1.10",
+  "version": "0.1.11",
   "description": "A simple modal implementation in Vue.",
   "author": {
     "name": "Josef Friedrich",
