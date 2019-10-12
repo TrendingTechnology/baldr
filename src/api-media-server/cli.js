@@ -19,12 +19,6 @@ function makeAsset (mediaFile) {
   return new Asset(mediaFile).addFileInfos()
 }
 
-// console.log('Run git pull')
-// const gitPull = childProcess.spawnSync('git', ['pull'], { cwd: this.basePath, encoding: 'utf-8' })
-// console.log(gitPull.stderr)
-// console.log(gitPull.stdout)
-// if (gitPull.status !== 0) throw new Error(`git pull exits with an none zero status code.`)
-
 commander
   .version(require('./package.json').version)
 

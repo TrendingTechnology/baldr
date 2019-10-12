@@ -48,8 +48,10 @@ let db
  * @return {Promise}
  */
 async function connectDb () {
-  await mongoClient.connect()
-  db = mongoClient.db(config.databases.mongodb.dbName)
+  if (!db) {
+    await mongoClient.connect()
+    db = mongoClient.db(config.databases.mongodb.dbName)
+  }
 }
 
 /* Media objects **************************************************************/
@@ -256,6 +258,13 @@ async function walk (dir, on) {
 }
 
 async function update () {
+  console.log('Run git pull')
+  const gitPull = childProcess.spawnSync('git', ['pull'], { basePath, encoding: 'utf-8' })
+  console.log(gitPull.stderr)
+  console.log(gitPull.stdout)
+  if (gitPull.status !== 0) throw new Error(`git pull exits with an non-zero status code.`)
+
+  await connectDb()
   await initializeDb()
   await flushMediaFiles()
   const begin = new Date().getTime()
@@ -345,6 +354,7 @@ async function flushMediaFiles () {
 function registerRestApi () {
   async function matchByField (collection, field, req, res, next) {
     try {
+      await connectDb()
       query = {}
       query[field] = req.params[field]
       res.json(
@@ -359,6 +369,7 @@ function registerRestApi () {
 
   async function searchInField (collection, field, req, res, next) {
     try {
+      await connectDb()
       if (!('substring' in req.query) || !req.query.substring) {
         res.sendStatus(400)
       } else {
