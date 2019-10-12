@@ -24,11 +24,23 @@ export default {
     slidesCount () {
       return this.$store.getters.slidesCount
     },
+    slideCurrent () {
+      if (this.$store.getters.slideCurrent) {
+        return this.$store.getters.slideCurrent
+      }
+      return null
+    },
     stepNo () {
-      return this.$store.getters.slideCurrent.master.stepNoCurrent
+      if (this.slideCurrent) {
+        return this.slideCurrent.master.stepNoCurrent
+      }
+      return 1
     },
     stepCount () {
-      return this.$store.getters.slideCurrent.master.stepCount
+      if (this.slideCurrent) {
+        return this.slideCurrent.master.stepCount
+      }
+      return 1
     }
   }
 }
