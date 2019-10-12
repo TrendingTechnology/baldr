@@ -260,17 +260,21 @@ async function walk (dir, on) {
 
 async function update () {
   console.log('Run git pull')
+  const gitSettings =  {
+    cwd: basePath,
+    encoding: 'utf-8'
+  }
   const gitPull = childProcess.spawnSync(
     'git', ['pull'],
-    {
-      cwd: basePath,
-      encoding: 'utf-8'
-    }
+    gitSettings
   )
-  console.log(`stderr: ${gitPull.stderr}`)
-  console.log(`stdout: ${gitPull.stdout}`)
+  console.log(`git pull stderr: ${gitPull.stderr.replace(/\n$/, '')}`)
+  console.log(`git pull stdout: ${gitPull.stdout.replace(/\n$/, '')}`)
   if (gitPull.status !== 0) throw new Error(`git pull exits with an non-zero status code.`)
 
+  const gitRevParse = childProcess.spawnSync('git', ['rev-parse', 'HEAD'], gitSettings)
+  const lastCommitId = gitRevParse.stdout.replace(/\n$/, '')
+  console.log(`lastCommitId: ${lastCommitId}`)
   await connectDb()
   await initializeDb()
   await flushMediaFiles()
@@ -281,12 +285,13 @@ async function update () {
     asset: insertAsset
   })
   const end = new Date().getTime()
-  await db.collection('updates').updateOne({ begin: begin }, { $set: { end: end } })
+  await db.collection('updates').updateOne({ begin: begin }, { $set: { end: end, lastCommitId } })
   return {
     finished: true,
     begin,
     end,
-    duration: end - begin
+    duration: end - begin,
+    lastCommitId
   }
 }
 
