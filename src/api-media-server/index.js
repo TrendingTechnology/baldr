@@ -260,9 +260,15 @@ async function walk (dir, on) {
 
 async function update () {
   console.log('Run git pull')
-  const gitPull = childProcess.spawnSync('git', ['pull'], { basePath, encoding: 'utf-8' })
-  console.log(gitPull.stderr)
-  console.log(gitPull.stdout)
+  const gitPull = childProcess.spawnSync(
+    'git', ['pull'],
+    {
+      cwd: basePath,
+      encoding: 'utf-8'
+    }
+  )
+  console.log(`stderr: ${gitPull.stderr}`)
+  console.log(`stdout: ${gitPull.stdout}`)
   if (gitPull.status !== 0) throw new Error(`git pull exits with an non-zero status code.`)
 
   await connectDb()
