@@ -1,6 +1,6 @@
 {
   "name": "@bldr/http-request",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Make HTTP requests on two axios instances: local and remote.",
   "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
   "bugs": {
