@@ -86,6 +86,11 @@ export default {
         description: 'Fullscreen'
       }
     ])
+    this.$router.afterEach((to, from) => {
+      if ('style' in to.meta) {
+        this.$styleConfig.set(to.meta.style)
+      }
+    })
   }
 }
 </script>

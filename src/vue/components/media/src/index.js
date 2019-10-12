@@ -576,17 +576,24 @@ class Media {
     ])
 
     if (this.$router) {
+      const style = {
+        darkMode: false,
+        centerVertically: false,
+      }
       const routes = [
         {
           path: '/media',
+          name: 'media-overview',
           shortcut: 'm',
           title: 'Media',
+          meta: { style },
           component: MediaOverview
         },
         {
           path: '/media/:uriScheme/:uriAuthority',
           title: 'Media file',
           name: 'media-file',
+          meta: { style },
           component: ComponentMediaFile
         },
       ]
