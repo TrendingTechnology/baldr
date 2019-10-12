@@ -1,0 +1,24 @@
+{
+  "name": "@bldr/core-browser",
+  "version": "0.10.0",
+  "description": "Base core functionality for code running in the browser without node.",
+  "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
+  "bugs": {
+    "url": "https://github.com/Josef-Friedrich/baldr/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Josef-Friedrich/baldr.git"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Josef Friedrich",
+    "email": "josef@friedrich.rocks",
+    "url": "https://josef.friedrich.rocks"
+  },
+  "main": "index.js",
+  "publishConfig": {
+    "access": "public"
+  },
+  "gitHead": "ed4f60e66c8f420711d3eb15185620f7688e6fc9"
+}

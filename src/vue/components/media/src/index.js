@@ -187,7 +187,8 @@ const actions = {
         baseUrl: servers[index].baseURL,
         version: versions[index].data.version,
         count: counts[index].data,
-        update: updates[index].data[0].begin
+        update: updates[index].data[0].begin,
+        commitId: updates[index].data[0].lastCommitId
       })
     }
     commit('setRestApiServers', result)

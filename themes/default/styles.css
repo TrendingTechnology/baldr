@@ -122,6 +122,7 @@
 
 [b-theme="default"] thead tr {
   border-bottom: 2px solid #141110;
+  text-align: left;
 }
 
 [b-theme="default"] tbody tr {

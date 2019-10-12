@@ -5,23 +5,28 @@
     <table>
       <thead>
         <tr>
+          <th>No</th>
           <th>URL</th>
           <th>Version</th>
-          <th>Assets</th>
-          <th>Presentations</th>
+          <th>Ass.</th>
+          <th>Pres.</th>
           <th>Update</th>
+          <th>Commit ID</th>
         </tr>
       </thead>
       <tbody>
         <tr
-          v-for="server in this.restApiServers"
+          v-for="(server, index) in this.restApiServers"
           :key="server.baseUrl"
         >
+          <td>{{ index + 1 }}</td>
           <td>{{ server.baseUrl }}</td>
           <td>{{ server.version }}</td>
           <td>{{ server.count.assets }}</td>
           <td>{{ server.count.presentations }}</td>
-          <td>{{ server.update }}</td>
+          <td>{{ toLocaleDateTimeString(server.update) }}</td>
+          <td>{{ server.commitId.substring(0, 8) }}</td>
+
         </tr>
       </tbody>
 
@@ -31,6 +36,7 @@
 </template>
 
 <script>
+import { toLocaleDateTimeString } from '@bldr/core-browser'
 import { createNamespacedHelpers } from 'vuex'
 const { mapGetters } = createNamespacedHelpers('media')
 
@@ -39,6 +45,12 @@ export default {
   computed: mapGetters(['restApiServers']),
   created () {
     this.$store.dispatch('media/setRestApiServers')
+  },
+  methods: {
+    toLocaleDateTimeString
+  },
+  mounted () {
+    this.$styleConfig.set({ centerVertically: false })
   }
 }
 </script>

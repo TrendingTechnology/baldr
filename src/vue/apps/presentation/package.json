@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "@bldr/core": "^0.0.32",
+    "@bldr/core-browser": "^0.10.0",
     "@bldr/theme-default": "^0.0.30",
     "@bldr/vue-component-dynamic-select": "^0.1.12",
     "@bldr/vue-component-material-icon": "^0.1.11",
