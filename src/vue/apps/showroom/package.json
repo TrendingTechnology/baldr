@@ -14,8 +14,8 @@
     "upload": "rsync -av --delete dist/ serverway:/var/www/baldr/showroom/"
   },
   "dependencies": {
-    "@bldr/core": "^0.0.30",
-    "@bldr/theme-default": "^0.0.28",
+    "@bldr/core": "0.0.30",
+    "@bldr/theme-default": "0.0.28",
     "@bldr/vue-component-dynamic-select": "^0.1.10",
     "@bldr/vue-component-material-icon": "^0.1.10",
     "@bldr/vue-component-modal-dialog": "^0.1.10",
@@ -27,11 +27,11 @@
     "vuex": "^3.1.1"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^3.11.0",
-    "@vue/cli-plugin-eslint": "^3.11.0",
-    "@vue/cli-service": "^3.11.0",
+    "@vue/cli-plugin-babel": "^3.12.0",
+    "@vue/cli-plugin-eslint": "^3.12.0",
+    "@vue/cli-service": "^3.12.0",
     "babel-eslint": "^10.0.3",
-    "eslint": "^6.3.0",
+    "eslint": "^6.5.1",
     "eslint-plugin-vue": "^5.2.3",
     "node-sass": "^4.12.0",
     "sass-loader": "^8.0.0",

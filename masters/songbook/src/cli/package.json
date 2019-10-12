@@ -18,11 +18,11 @@
     "baldr-songbook-updater": "./index.js"
   },
   "dependencies": {
-    "@bldr/core": "^0.0.30",
+    "@bldr/core": "0.0.30",
     "@bldr/songbook-base": "^0.1.26",
     "@bldr/songbook-intermediate-files": "^0.1.29",
     "chalk": "^2.4.2",
-    "commander": "^3.0.1"
+    "commander": "^3.0.2"
   },
   "publishConfig": {
     "access": "public"

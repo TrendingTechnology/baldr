@@ -15,10 +15,10 @@
     },
     "main": "index.js",
     "dependencies": {
-        "@bldr/core": "^0.0.30",
+        "@bldr/core": "0.0.30",
         "@bldr/songbook-base": "^0.1.26",
         "@bldr/songbook-core": "^0.1.7",
-        "better-sqlite3": "^5.4.2",
+        "better-sqlite3": "^5.4.3",
         "chalk": "^2.4.2",
         "fs-extra": " ^8.1.0"
     },
