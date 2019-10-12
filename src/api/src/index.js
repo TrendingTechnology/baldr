@@ -34,7 +34,7 @@ app.use(cors())
 app.use(express.json())
 
 app.use('/seating-plan', registerSeatingPlan())
-app.use('/media-server', registerMediaServer())
+app.use('/media', registerMediaServer())
 
 app.get(['/', '/version'], (req, res) => {
   res.status(200).send({
