@@ -26,7 +26,6 @@
           <td>{{ server.count.presentations }}</td>
           <td>{{ toLocaleDateTimeString(server.update) }}</td>
           <td>{{ server.commitId.substring(0, 8) }}</td>
-
         </tr>
       </tbody>
 
