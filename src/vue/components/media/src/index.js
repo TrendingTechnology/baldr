@@ -12,7 +12,7 @@ import ComponentMediaFile from './MediaFile.vue'
 import MediaOverview from './MediaOverview'
 import MediaPlayer from './MediaPlayer.vue'
 
-export const httpRequest = new HttpRequest(getDefaultServers(), '/api/media-server')
+export const httpRequest = new HttpRequest(getDefaultServers(), '/api/media')
 
 export function formatDuration (duration) {
   if (!duration) return '00:00'
