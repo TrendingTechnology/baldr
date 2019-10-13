@@ -388,7 +388,7 @@ function registerRestApi () {
         res.json(await db.collection(collection).aggregate([
           {
             $match: {
-              $expr: { $gt: [{ $indexOfCP: [`$${field}`, req.query.substring] }, -1] }
+              $expr: { $gt: [{ $indexOfCP: [{ $toLower: `$${field}` }, { $toLower: req.query.substring } ] }, -1] } // https://stackoverflow.com/a/56808870
             }
           },
           {
