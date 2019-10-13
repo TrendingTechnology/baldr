@@ -120,7 +120,7 @@ function main (options) {
 if (require.main === module) {
   main([
     {
-      urlTemplate: 'https://raw.githubusercontent.com/Templarian/MaterialDesign/master/icons/svg/{icon}.svg',
+      urlTemplate: 'https://raw.githubusercontent.com/Templarian/MaterialDesign/master/svg/{icon}.svg',
       iconMapping: {
         'account-group': '',
         'account-plus': '',
