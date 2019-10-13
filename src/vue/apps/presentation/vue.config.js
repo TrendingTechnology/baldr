@@ -7,7 +7,9 @@ const { DefinePlugin } = require('webpack')
 // Project packages
 const { utils } = require('@bldr/core')
 
-const themePath = path.dirname(require.resolve('@bldr/theme-default'))
+function stylePath (packageName) {
+  return path.join(path.dirname(require.resolve(packageName)), 'styles.scss')
+}
 
 // https://forum.vuejs.org/t/vue-cli-does-not-work-with-symlinked-node-modules-using-lerna/61700
 // https://cli.vuejs.org/guide/troubleshooting.html#symbolic-links-in-node-modules
@@ -31,7 +33,8 @@ module.exports = {
     'style-resources-loader': {
       preProcessor: 'scss',
       patterns: [
-        path.join(themePath, 'styles.scss')
+        stylePath('@bldr/theme-default'),
+        stylePath('@bldr/theme-handwriting')
       ]
     }
   }
