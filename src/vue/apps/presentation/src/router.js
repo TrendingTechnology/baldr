@@ -3,12 +3,14 @@ import Router from 'vue-router'
 import Home from './views/Home.vue'
 
 // Components.
-import MasterRenderer from '@/views/SlideView/MasterRenderer.vue'
-import Documentation from '@/views/Documentation.vue'
-import MasterDocumentation from '@/views/MasterDocumentation.vue'
 import OpenFiles from '@/views/OpenFiles.vue'
-import SlideView from '@/views/SlideView'
 import RestApiOverview from '@/views/RestApiOverview.vue'
+
+const Documentation = () => import(/* webpackChunkName: "documentation" */ '@/views/Documentation.vue')
+const MasterDocumentation = () => import(/* webpackChunkName: "documentation" */ '@/views/MasterDocumentation.vue')
+
+const SlideView = () => import(/* webpackChunkName: "slides" */ '@/views/SlideView')
+const MasterRenderer = () => import(/* webpackChunkName: "slides" */ '@/views/SlideView/MasterRenderer.vue')
 
 Vue.use(Router)
 
