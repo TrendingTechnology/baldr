@@ -4,7 +4,7 @@
 @import '~typeface-alegreya-sc/index.css';
 @import '~typeface-anonymous-pro/index.css';
 
-@import './globals/_variables.scss';
+@import './globals.scss';
 
 [b-theme="default"] {
   font-family: $font-family;
