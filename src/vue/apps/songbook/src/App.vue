@@ -30,8 +30,6 @@ export default {
 </script>
 
 <style lang="scss">
-  @import '~@bldr/theme-default/styles.css';
-
   body {
     margin: 0;
     font-size: 2vw;

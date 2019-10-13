@@ -37,7 +37,7 @@ module.exports = {
     'style-resources-loader': {
       preProcessor: 'scss',
       patterns: [
-        path.join(themePath, 'globals.scss')
+        path.join(themePath, 'styles.scss')
       ]
     }
   }

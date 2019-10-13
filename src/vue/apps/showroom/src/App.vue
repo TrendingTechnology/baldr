@@ -32,8 +32,6 @@ export default {
 </script>
 
 <style>
-@import '~@bldr/theme-default/styles.css';
-
 main {
   margin: 2vw;
 }
