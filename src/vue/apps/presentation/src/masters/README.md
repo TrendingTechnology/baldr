@@ -9,7 +9,8 @@ export const master = {
     centerVertically: true,
     darkMode: false,
     overflow: false,
-    slidePadding: '4vw'
+    slidePadding: '4vw',
+    theme: 'default'
   },
   documentation = `# Markdown`,
   example: `

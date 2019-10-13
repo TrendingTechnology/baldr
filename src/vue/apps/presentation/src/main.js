@@ -24,6 +24,7 @@ class BodyAttributes {
   constructor () {
     this.attributeName = ''
     this.state = false
+    this.bodyEl_ = document.querySelector('body')
   }
 
   toggle () {
@@ -31,10 +32,7 @@ class BodyAttributes {
   }
 
   set (state = false) {
-    if (typeof state !== 'boolean') {
-      state = this.state
-    }
-    document.querySelector('body').setAttribute(this.attributeName, state)
+    this.bodyEl_.setAttribute(this.attributeName, state)
     this.state = state
   }
 }
@@ -63,6 +61,14 @@ class Overflow extends BodyAttributes {
   }
 }
 
+class Theme extends BodyAttributes {
+  constructor () {
+    super()
+    this.attributeName = 'b-theme'
+    this.state = 'default'
+  }
+}
+
 const slidePadding = {
   default: function () {
     document.querySelector('main #content').style.padding = null
@@ -81,7 +87,8 @@ class StyleConfig {
       centerVertically: new CenterVertically(),
       darkMode: new DarkMode(),
       overflow: new Overflow(),
-      slidePadding: slidePadding
+      slidePadding: slidePadding,
+      theme: new Theme()
     }
   }
 
@@ -90,7 +97,8 @@ class StyleConfig {
       centerVertically: true,
       darkMode: false,
       overflow: false,
-      slidePadding: '2vw 8vw'
+      slidePadding: '2vw 8vw',
+      theme: 'default'
     }
   }
 
