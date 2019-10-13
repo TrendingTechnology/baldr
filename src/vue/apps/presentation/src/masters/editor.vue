@@ -1,5 +1,5 @@
 <template>
-  <div class="quote-editor" spellcheck="false" v-html="markup">
+  <div class="editor-master" spellcheck="false" v-html="markup">
   </div>
 </template>
 
@@ -12,7 +12,8 @@ slides:
   editor: true
 
 - title: Show second editor
-  editor: true
+  editor:
+    markup: <p contenteditable>y</p>
 
 - title: Markup
   editor:
@@ -63,6 +64,11 @@ export const master = {
         markup: props
       }
     }
+  },
+  // Called when leaving a slide.
+  leaveSlide ({ oldSlide, oldProps, newSlide, newProps }) {
+    const element = document.querySelector('.editor-master')
+    if (element) oldProps.markup = element.innerHTML
   }
 }
 
