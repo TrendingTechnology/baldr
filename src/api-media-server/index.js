@@ -405,6 +405,28 @@ function registerRestApi () {
     }
   }
 
+  // https://stackoverflow.com/a/38427476/10193818
+  function escapeRegex(text) {
+    return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&")
+  }
+
+  // https://stackoverflow.com/a/38427476/10193818
+  async function fuzzySearchInFieldRegEx (collection, field, req, res, next) {
+    try {
+      await connectDb()
+      if (!('substring' in req.query) || !req.query.substring) {
+        res.sendStatus(400)
+      } else {
+        const regex = new RegExp(escapeRegex(req.query.substring), 'gi');
+        const find = {}
+        find[field] = regex
+        res.json(await db.collection(collection).find( find ).toArray())
+      }
+    } catch (error) {
+      next(error)
+    }
+  }
+
   const app = express()
 
   app.on('mount', async () => {
@@ -425,6 +447,7 @@ function registerRestApi () {
       '/query/assets/search/title?substring=:substring': '',
       '/query/presentation/match/id/:id': '',
       '/query/presentations/search/title?substring=:substring': '',
+      '/query/presentations/regex-search/title?substring=:substring': '',
       '/stats/count': 'Count / sum of the media files (assets, presentations) in the database.',
       '/stats/updates': 'Journal of the update processes with timestamps.'
     })
@@ -465,6 +488,10 @@ function registerRestApi () {
 
   app.get('/query/presentation/match/id/:id', async (req, res, next) => {
     await matchByField('presentations', 'id', req, res, next)
+  })
+
+  app.get('/query/presentations/regex-search/title', async (req, res, next) => {
+    await fuzzySearchInFieldRegEx('presentations', 'title', req, res, next)
   })
 
   app.get('/query/presentations/search/title', async (req, res, next) => {
