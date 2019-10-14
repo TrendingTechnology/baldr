@@ -7,6 +7,7 @@ const fs = require('fs')
 // Third party packages.
 const commander = require('commander')
 const chalk = require('chalk')
+const yaml = require('js-yaml')
 
 // Project packages
 const { Asset, walk } = require('./index.js')
@@ -135,6 +136,13 @@ commander
         createYml(relPath)
       }
     })
+  })
+
+commander
+  .command('yaml-validate [input]').alias('yv')
+  .description('Validate the yaml files.')
+  .action((filePath) => {
+    yaml.safeLoad(fs.readFileSync(filePath, 'utf8'))
   })
 
 commander.parse(process.argv)
