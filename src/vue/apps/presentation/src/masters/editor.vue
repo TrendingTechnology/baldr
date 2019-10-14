@@ -4,6 +4,8 @@
 </template>
 
 <script>
+let editorId = 0
+
 const example = `
 ---
 slides:
@@ -12,8 +14,7 @@ slides:
   editor: true
 
 - title: Show second editor
-  editor:
-    markup: <p contenteditable>y</p>
+  editor: true
 
 - title: Markup
   editor:
@@ -56,8 +57,10 @@ export const master = {
   example,
   normalizeProps (props) {
     if (typeof props === 'boolean') {
+      // Somehow two editor slides get the same edited content.
+      editorId += 1
       return {
-        markup: '<p contenteditable>x</p>'
+        markup: `<p contenteditable class="editor-${editorId}">x</p>`
       }
     } else if (typeof props === 'string') {
       return {
