@@ -29,26 +29,34 @@
    * Tables
    */
 
+  $handwriting-border-thin: 0.1vw;
+  $handwriting-border-thick: 0.2vw;
+
   table {
     border-collapse: collapse;
 
-    td {
+    td, th {
       padding: 0 0.3em;
       vertical-align: top;
     }
-  }
 
-  td {
-    border-right: 1px solid $handwriting-blue;
+    td {
+      border-right: $handwriting-border-thin solid $handwriting-blue;
 
-    &:last-child {
-      border-right: none;
+      &:last-child {
+        border-right: none;
+      }
+    }
+
+    th {
+      text-align: right;
+      border-right: $handwriting-border-thick solid $handwriting-blue;
     }
   }
 
   thead {
     tr {
-      border-bottom: 2px solid $handwriting-blue;
+      border-bottom: $handwriting-border-thick solid $handwriting-blue;
       text-align: left;
       font-weight: bold;
     }
@@ -56,7 +64,7 @@
 
   tbody {
     tr {
-      border-bottom: 1px solid $handwriting-blue;
+      border-bottom: $handwriting-border-thin solid $handwriting-blue;
 
       &:last-child {
         border-bottom: none;
