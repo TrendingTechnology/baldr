@@ -51,7 +51,7 @@ slides:
       </tbody>
     </table>
 
-- title: 'HTML: <table*> replace with contenteditable'
+- title: 'HTML: <table> replace * with contenteditable'
   editor: |
     <table>
       <thead>
