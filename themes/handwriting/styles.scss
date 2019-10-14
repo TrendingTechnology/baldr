@@ -1,7 +1,53 @@
 @import '~/typeface-kalam/index.css';
 
+@import './globals.scss';
+
 [b-theme="handwriting"] {
-  background-color: white;
-  color: blue;
-  font-family: 'Kalam';
+  background-color: $handwriting-gray;
+  color: $handwriting-blue;
+  font-family: $handwriting-font-family;
+
+  [contenteditable] {
+    background-color: $handwriting-white;
+    padding: 0.3em;
+  }
+
+  /**
+   * Tables
+   */
+
+  table {
+    border-collapse: collapse;
+
+    td {
+      padding: 0 0.3em;
+      vertical-align: top;
+    }
+  }
+
+  td {
+    border-right: 1px solid $handwriting-blue;
+
+    &:last-child {
+      border-right: none;
+    }
+  }
+
+  thead {
+    tr {
+      border-bottom: 2px solid $handwriting-blue;
+      text-align: left;
+      font-weight: bold;
+    }
+  }
+
+  tbody {
+    tr {
+      border-bottom: 1px solid $handwriting-blue;
+
+      &:last-child {
+        border-bottom: none;
+      }
+    }
+  }
 }
