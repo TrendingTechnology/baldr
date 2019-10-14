@@ -1,5 +1,5 @@
 <template>
-  <div class="editor-master" spellcheck="false" v-html="markup">
+  <div class="editor-master mousetrap" spellcheck="false" v-html="markup">
   </div>
 </template>
 
@@ -80,6 +80,23 @@ export default {
     markup: {
       type: String
     }
+  },
+  methods: {
+    bold () {
+      const selection = window.getSelection()
+      if (selection.rangeCount) {
+        console.log(selection)
+      }
+    }
+  },
+  created () {
+      this.$shortcuts.addMultiple([
+      {
+        keys: 'ctrl+b',
+        callback: () => { this.bold() },
+        description: 'bold'
+      }
+    ])
   }
 }
 </script>
