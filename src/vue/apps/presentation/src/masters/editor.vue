@@ -85,18 +85,20 @@ export default {
     bold () {
       const selection = window.getSelection()
       if (selection.rangeCount) {
-        console.log(selection)
+        const range = selection.getRangeAt(0)
+        const elStrong = document.createElement('strong')
+        range.surroundContents(elStrong)
       }
     }
   },
   created () {
-      this.$shortcuts.addMultiple([
-      {
-        keys: 'ctrl+b',
-        callback: () => { this.bold() },
-        description: 'bold'
+    // We can not use mousetrap because mousetrap is disable in contenteditable areas.
+    document.addEventListener('keydown', (event) => {
+      if (event.ctrlKey && event.code === 'KeyB') {
+        event.preventDefault()
+        this.bold()
       }
-    ])
+    })
   }
 }
 </script>
