@@ -128,8 +128,9 @@ Vue.prototype.$styleConfig = new StyleConfig()
 
 Vue.prototype.$masters = masters
 
+// https://stackoverflow.com/a/45032366/10193818
 Vue.prototype.$fullscreen = function () {
-  document.querySelector('#app').requestFullscreen()
+  document.documentElement.requestFullscreen()
 }
 
 // Must be before new Vue()
