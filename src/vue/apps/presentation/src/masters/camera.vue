@@ -261,7 +261,7 @@ export default {
 
     .baldr-icon_document-camera,
     .baldr-icon_document-camera-off {
-      font-size: 50vw;
+      font-size: 30vw;
     }
   }
 </style>

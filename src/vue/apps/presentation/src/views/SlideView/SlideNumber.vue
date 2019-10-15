@@ -1,15 +1,16 @@
 <template>
   <div class="slide-number">
-    <span v-if="slideNo">
-      <material-icon color="white" name="slides"/>
-      <span class="number">{{ slideNo }}</span>
-      <span class="count"> / {{ slidesCount }}</span>
-    </span>
 
     <span v-if="stepCount > 1">
-      <material-icon color="white" name="steps"/>
+      <plain-icon color="white" name="steps"/>
       <span class="number">{{ stepNo }}</span>
       <span class="count"> / {{ stepCount }}</span>
+    </span>
+
+    <span v-if="slideNo">
+      <plain-icon color="white" name="slides"/>
+      <span class="number">{{ slideNo }}</span>
+      <span class="count"> / {{ slidesCount }}</span>
     </span>
   </div>
 </template>
@@ -48,12 +49,12 @@ export default {
 
 <style lang="scss" scoped>
   .slide-number {
-    bottom: 1vw;
+    top: 1vw;
     font-family: $font-family-sans;
-    font-size: 3vw;
-    left: 1vw;
-    opacity: 0.5;
-    position: absolute;
+    font-size: 1vw;
+    right: 1vw;
+    opacity: 0.2;
+    position: fixed;
     z-index: 1;
 
     .number, .count {
@@ -62,11 +63,11 @@ export default {
 
     .number {
       text-align: right;
-      width: 0.8em;
+      width: 0.9em;
     }
 
     .count {
-      font-size: 2vw;
+      font-size: 0.5em;
       padding-left: 0.2em;
       text-align: left;
       width: 2em;

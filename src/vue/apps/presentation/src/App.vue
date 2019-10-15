@@ -103,6 +103,7 @@ export default {
     font-size: 4vw;
     height: 100vh;
     width: 100vw;
+    overflow-x: hidden;
 
     #content {
       padding: 2vw 8vw;

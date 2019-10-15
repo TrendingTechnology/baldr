@@ -200,16 +200,21 @@ export default {
 .audio-master {
   text-align: center;
 
+  p {
+    margin: 0;
+  }
+
   .composer {
     font-size: 1.2em;
   }
 
-  .artist {
-    font-size: 0.9em;
-  }
-
   .title {
     font-size: 1.1em;
+  }
+
+  .artist {
+    margin-top: 5vw;
+    font-size: 0.7em;
   }
 
   img.preview {
