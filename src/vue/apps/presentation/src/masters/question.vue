@@ -87,6 +87,8 @@ const normalizeQuestions = function (questions) {
 }
 
 export const master = {
+  title: 'Arbeitsauftrag',
+  icon: 'frequently-asked-questions',
   styleConfig: {
     centerVertically: true,
     darkMode: true

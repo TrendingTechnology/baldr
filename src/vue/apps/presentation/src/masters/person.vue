@@ -31,6 +31,8 @@ slides:
 `
 
 export const master = {
+  title: 'Porträt',
+  icon: 'clipboard-account',
   styleConfig: {
     centerVertically: true,
     darkMode: true

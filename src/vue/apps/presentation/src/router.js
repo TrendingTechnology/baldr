@@ -11,6 +11,7 @@ import MasterDocumentation from '@/views/MasterDocumentation.vue'
 
 import SlideView from '@/views/SlideView'
 import MasterRenderer from '@/views/SlideView/MasterRenderer.vue'
+import SlidesOverview from '@/views/SlidesOverview'
 
 // Failed to load chunks in the subfolder presentation
 // const Documentation = () => import(/* webpackChunkName: "documentation" */ '@/views/Documentation.vue')
@@ -39,6 +40,12 @@ const routes = [
     shortcut: 's',
     title: 'slides',
     component: SlideView
+  },
+  {
+    path: '/slides-overview',
+    shortcut: 'o',
+    title: 'slides-overview',
+    component: SlidesOverview
   },
   {
     path: '/camera',

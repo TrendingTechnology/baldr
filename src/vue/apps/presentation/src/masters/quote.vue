@@ -30,6 +30,8 @@ slides:
 `
 
 export const master = {
+  title: 'Zitat',
+  icon: 'comment-quote',
   styleConfig: {
     centerVertically: true,
     darkMode: true

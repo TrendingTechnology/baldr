@@ -24,6 +24,8 @@ slides:
 `
 
 export const master = {
+  title: 'Video',
+  icon: 'video-vintage',
   styleConfig: {
     centerVertically: true,
     darkMode: true,

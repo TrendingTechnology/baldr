@@ -80,6 +80,8 @@ slides:
 `
 
 export const master = {
+  title: 'Hörbeispiel',
+  icon: 'music',
   styleConfig: {
     centerVertically: true,
     darkMode: true,

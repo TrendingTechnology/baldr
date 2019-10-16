@@ -14,6 +14,8 @@
           {{ masterName }}
         </router-link>
 
+        <material-icon :name="master.icon"/>
+
         <material-icon
           v-if="master.example"
           name="presentation"

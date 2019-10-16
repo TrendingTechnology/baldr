@@ -59,6 +59,8 @@ slides:
 `
 
 export const master = {
+  title: 'Bild',
+  icon: 'image',
   styleConfig: {
     centerVertically: true,
     darkMode: true,

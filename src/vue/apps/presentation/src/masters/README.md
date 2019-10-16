@@ -5,6 +5,8 @@ The master name is: `name`
 
 ```js
 export const master = {
+  title: 'Bild',
+  icon: 'file-image'
   styleConfig: {
     centerVertically: true,
     darkMode: false,

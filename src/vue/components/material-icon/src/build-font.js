@@ -153,7 +153,7 @@ if (require.main === module) {
         delete: '',
         export: '',
         import: '',
-        magnify: '',
+        'magnify-outline': 'maginfy',
         music: '',
         notebook: '',
         wikipedia: '',
@@ -162,7 +162,15 @@ if (require.main === module) {
         play: '',
         pause: '',
         'skip-next': '',
-        'skip-previous': ''
+        'skip-previous': '',
+        'pencil': '',
+        'video-vintage' : '',
+        'comment-quote': '',
+        'frequently-asked-questions': '',
+        'clipboard-account': '',
+        'file-presentation-box': '',
+        'image': '',
+        'music': ''
       }
     },
     {

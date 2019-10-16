@@ -92,6 +92,8 @@ slides:
 `
 
 export const master = {
+  title: 'Hefteintrag',
+  icon: 'pencil',
   styleConfig: {
     centerVertically: false,
     overflow: false,

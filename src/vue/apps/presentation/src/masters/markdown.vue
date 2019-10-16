@@ -176,6 +176,8 @@ function splitHtmlintoChunks (htmlString) {
 }
 
 export const master = {
+  title: 'Folie',
+  icon: 'file-presentation-box',
   styleConfig: {
     centerVertically: true,
     darkMode: false
