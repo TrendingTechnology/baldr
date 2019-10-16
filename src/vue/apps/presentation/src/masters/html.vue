@@ -51,6 +51,7 @@ slides:
 export const master = {
   title: 'Folie',
   icon: 'file-presentation-box',
+  color: 'gray',
   styleConfig: {
     centerVertically: true,
     darkMode: false

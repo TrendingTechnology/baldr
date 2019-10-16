@@ -33,6 +33,7 @@ slides:
 export const master = {
   title: 'Porträt',
   icon: 'clipboard-account',
+  color: 'orange',
   styleConfig: {
     centerVertically: true,
     darkMode: true

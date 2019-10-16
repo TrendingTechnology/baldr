@@ -267,7 +267,7 @@ class MediaTypes {
 
     this.typeColors = {
       audio: 'brown',
-      image: 'blue',
+      image: 'green',
       video: 'purple'
     }
     this.extensions_ = this.spreadExtensions_()

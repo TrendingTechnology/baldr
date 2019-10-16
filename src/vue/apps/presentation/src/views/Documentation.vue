@@ -5,24 +5,39 @@
   <section>
     <h2>Master slides</h2>
 
-    <ul>
-      <li
-        v-for="(master, masterName) in $masters"
-        :key="masterName"
-      >
-        <router-link :to="{ name: 'documentation-master', params: { master: masterName } }">
-          {{ masterName }}
-        </router-link>
+    <table>
+      <thead>
+        <tr>
+          <td></td>
+          <td>ID</td>
+          <td>Title</td>
+          <td>Example</td>
 
-        <material-icon :name="master.icon"/>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          v-for="(master, masterName) in $masters"
+          :key="masterName"
+        >
+          <td><material-icon :name="master.icon" :color="master.color"/></td>
+          <td>
+            <router-link :to="{ name: 'documentation-master', params: { master: masterName } }">
+              {{ masterName }}
+            </router-link>
+          </td>
+          <td>{{ master.title }}</td>
+          <td>
+            <material-icon
+              v-if="master.example"
+              name="presentation"
+              @click.native="openExample(master.example)"
+            />
+          </td>
+        </tr>
+      </tbody>
+    </table>
 
-        <material-icon
-          v-if="master.example"
-          name="presentation"
-          @click.native="openExample(master.example)"
-        />
-      </li>
-    </ul>
   </section>
 
 </div>
@@ -48,10 +63,14 @@ export default {
 
 <style lang="scss" scoped>
   .documentation {
-    font-size: 1.4vw;
+    font-size: 2vw;
 
     a {
       cursor: pointer;
+    }
+
+    table {
+      width: 100%;
     }
   }
 </style>

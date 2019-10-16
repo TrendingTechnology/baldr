@@ -162,6 +162,7 @@ const mutations = {
 export const master = {
   title: 'Dokumentenkamera',
   icon: 'document-camera',
+  color: 'red',
   styleConfig: {
     darkMode: true,
     slidePadding: 0

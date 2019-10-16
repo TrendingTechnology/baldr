@@ -5,7 +5,7 @@
 // import Vue from 'vue'
 import yaml from 'js-yaml'
 import { themeNames } from '@/themes.js'
-import { masterNames, callMasterFunc } from '@/masters.js'
+import { masterNames, callMasterFunc, masterOptions } from '@/masters.js'
 import store from '@/store.js'
 import router from '@/router.js'
 import Vue from '@/main.js'
@@ -236,9 +236,14 @@ class Slide {
 
     /**
      * Normalized slide data.
-     * @type {module:@bldr/core/slides~SlideData}
+     * TODO: rename: maybe slideData, renderData ?
      */
     this.master = new MasterData(rawSlideObject)
+
+    /**
+     * TODO: rename: master
+     */
+    this.masterObject = masterOptions(this.master.name)
 
     this.metaData = new MetaData(rawSlideObject)
 
