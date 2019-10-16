@@ -170,7 +170,8 @@ if (require.main === module) {
         'clipboard-account': '',
         'file-presentation-box': '',
         'image': '',
-        'music': ''
+        'music': '',
+        'folder-open': ''
       }
     },
     {

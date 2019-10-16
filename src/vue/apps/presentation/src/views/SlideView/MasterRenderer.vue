@@ -1,10 +1,10 @@
 <script>
-import OpenFiles from '@/views/OpenFiles.vue'
+import OpenInterface from '@/components/OpenInterface'
 
 export default {
   name: 'MasterRenderer',
   components: {
-    OpenFiles
+    OpenInterface
   },
   computed: {
     slideCurrent () {
@@ -53,7 +53,7 @@ export default {
         }
       )
     }
-    return createElement('open-files')
+    return createElement('open-interface')
   }
 }
 </script>

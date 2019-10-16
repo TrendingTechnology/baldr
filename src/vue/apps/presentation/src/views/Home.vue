@@ -1,11 +1,6 @@
 <template>
   <div class="home">
-    <dynamic-select
-      :options="options"
-      @input="onInput"
-      v-model="presentation"
-      @search="search"
-    />
+    <open-interface/>
     <section class="brand">
       <div>
         <material-icon
@@ -24,52 +19,18 @@
         </div>
       </div>
     </section>
-    <open-files/>
   </div>
 </template>
 
 <script>
-import OpenFiles from './OpenFiles.vue'
+import OpenInterface from '@/components/OpenInterface'
 export default {
   name: 'Home',
   components: {
-    OpenFiles
+    OpenInterface
   },
   mounted: function () {
     this.$styleConfig.set()
-  },
-  data: function () {
-    return {
-      presentation: {},
-      options: []
-    }
-  },
-  methods: {
-    async onInput () {
-      let response = await this.$media.httpRequest.request({
-        url: `query/presentation/match/id/${this.presentation.id}`,
-        method: 'get'
-      })
-      const presentation = response.data
-      response = await this.$media.httpRequest.request({
-        url: `/media/${presentation.path}`,
-        method: 'get'
-      })
-      await this.$store.dispatch('openPresentation', response.data)
-      this.$router.push('/slides')
-    },
-    search (title) {
-      if (!title) return
-      this.$media.httpRequest.request({
-        url: 'query/presentations/search/title',
-        method: 'get',
-        params: {
-          substring: title
-        }
-      }).then((response) => {
-        this.options = response.data
-      })
-    }
   }
 }
 </script>

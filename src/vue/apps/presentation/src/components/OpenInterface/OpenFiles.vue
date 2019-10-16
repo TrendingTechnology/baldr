@@ -1,7 +1,8 @@
 <template>
-  <div>
+  <label>
+    Präsentation oder Mediendateien öffnen
     <input type="file" @change="openPresentation"/>
-  </div>
+  </label>
 </template>
 
 <script>

@@ -1,24 +1,32 @@
 <template>
   <div class="slides-overview">
     <h1>Überblick über die Stunde</h1>
-    <ol>
+    <ol v-if="slides">
       <li
         v-for="slide in slides"
         :key="slide.no"
         @click="gotToSlide(slide.no)"
+        :title="`Zur Folie Nr. ${slide.no}`"
       >
         <material-icon
           :name="slide.masterObject.icon"
           :color="slide.masterObject.color"
         />
+        {{ slide.title }}
       </li>
     </ol>
+    <open-interface v-else/>
   </div>
 </template>
 
 <script>
+import OpenInterface from '@/components/OpenInterface'
+
 export default {
   name: 'SlidesOverview',
+  components: {
+    OpenInterface
+  },
   mounted: function () {
     this.$styleConfig.set({
       centerVertically: false,
@@ -27,7 +35,9 @@ export default {
   },
   computed: {
     slides () {
-      return this.$store.getters.slides
+      if (this.$store.getters.slidesCount) {
+        return this.$store.getters.slides
+      }
     },
     getMaster (masterName) {
       return this.$masters[masterName]
@@ -46,5 +56,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+  .slides-overview {
+    li {
+      cursor: pointer;
+      list-style-type: none;
+    }
+  }
 </style>

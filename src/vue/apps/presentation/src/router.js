@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import Home from './views/Home.vue'
 
 // Components.
-import OpenFiles from '@/views/OpenFiles.vue'
+import OpenInterface from '@/components/OpenInterface'
 import RestApiOverview from '@/views/RestApiOverview.vue'
 
 import Documentation from '@/views/Documentation.vue'
@@ -33,7 +33,7 @@ const routes = [
   {
     path: '/open',
     title: 'Open',
-    component: OpenFiles
+    component: OpenInterface
   },
   {
     path: '/slides',

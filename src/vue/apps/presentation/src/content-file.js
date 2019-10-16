@@ -251,6 +251,14 @@ class Slide {
       throw Error(`Unknown slide properties: ${toString(rawSlideObject.raw)}`)
     }
   }
+
+  get title () {
+    if (this.metaData.title) {
+      return this.metaData.title
+    } else {
+      return this.masterObject.title
+    }
+  }
 }
 
 /**
