@@ -516,6 +516,25 @@ class Resolver {
   }
 
   /**
+   * @param {File} file - File object https://developer.mozilla.org/de/docs/Web/API/File
+   */
+  async resolveMediaFileFileSystem_ (file) {
+    if (mediaTypes.isMedia(file.name)) {
+      const httpUrl = URL.createObjectURL(file)
+      const uri = `localfile:${file.name}`
+      const mediaFile = new MediaFile({
+        uri: uri,
+        httpUrl: httpUrl,
+        filename: file.name
+      })
+      mediaFile.type = mediaTypes.extensionToType(mediaFile.extension)
+      // After type
+      mediaFile.mediaElement = await this.resolveMediaElement_(mediaFile)
+      return mediaFile
+    }
+  }
+
+  /**
    * Resolve media files by URIs.
    *
    * @param {string|array} uris - A single URI as a string or a array of URIs.
@@ -650,16 +669,10 @@ class Media {
     mediaFile.shortcut = shortcut
   }
 
-  addFromFileSystem (file) {
-    if (mediaTypes.isMedia(file.name)) {
-      const httpUrl = URL.createObjectURL(file)
-      const uri = `localfile:${file.name}`
-      const mediaFile = new MediaFile({
-        uri: uri,
-        httpUrl: httpUrl,
-        filename: file.name
-      })
-      this.resolver.storeMediaFile(mediaFile)
+  async addFromFileSystem (file) {
+    const mediaFile = await this.resolver.resolveMediaFileFileSystem_(file)
+    if (mediaFile) {
+      this.$store.dispatch('media/addMediaFile', mediaFile)
       this.addShortcutForMediaFile_(mediaFile)
     }
   }
