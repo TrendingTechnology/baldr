@@ -30,7 +30,7 @@ export default {
   mounted: function () {
     this.$styleConfig.set({
       centerVertically: false,
-      overflow: true
+      overflow: false
     })
   },
   computed: {
@@ -57,6 +57,10 @@ export default {
 
 <style lang="scss" scoped>
   .slides-overview {
+    h1 {
+      font-size: 1.1em;
+    }
+
     li {
       cursor: pointer;
       list-style-type: none;
