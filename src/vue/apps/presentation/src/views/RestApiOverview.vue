@@ -12,6 +12,7 @@
           <th>Pres.</th>
           <th>Update</th>
           <th>Commit ID</th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
@@ -26,6 +27,7 @@
           <td>{{ server.count.presentations }}</td>
           <td>{{ toLocaleDateTimeString(server.update) }}</td>
           <td>{{ server.commitId.substring(0, 8) }}</td>
+          <td @click="updateMediaServer(server.name)">update</td>
         </tr>
       </tbody>
     </table>
@@ -34,6 +36,10 @@
 </template>
 
 <script>
+import { getDefaultRestEndpoints, HttpRequestNg } from '@bldr/http-request'
+const restEndpoints = getDefaultRestEndpoints()
+const httpRequestNg = new HttpRequestNg(restEndpoints, '/api/media')
+
 import { toLocaleDateTimeString } from '@bldr/core-browser'
 import { createNamespacedHelpers } from 'vuex'
 const { mapGetters } = createNamespacedHelpers('media')
@@ -45,7 +51,12 @@ export default {
     this.$store.dispatch('media/setRestApiServers')
   },
   methods: {
-    toLocaleDateTimeString
+    toLocaleDateTimeString,
+    updateMediaServer (endpointName) {
+      httpRequestNg.request('mgmt/update', endpointName).then((result) => {
+        this.$store.dispatch('media/setRestApiServers')
+      })
+    }
   },
   mounted () {
     this.$styleConfig.set({ centerVertically: false })

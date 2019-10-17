@@ -19,7 +19,6 @@ const restEndpoints = getDefaultRestEndpoints()
 // })
 
 export const httpRequestNg = new HttpRequestNg(restEndpoints, '/api/media')
-
 export const httpRequest = new HttpRequest(getDefaultServers(), '/api/media')
 
 export function formatDuration (duration) {
@@ -181,22 +180,20 @@ const getters = {
 
 const actions = {
   async setRestApiServers ({ commit }) {
-    const servers = await httpRequest.getServers()
-    const versions = await httpRequest.request({
-      url: 'version'
-    }, true)
-
-    const counts = await httpRequest.request('stats/count', true)
-    const updates = await httpRequest.request('stats/updates', true)
+    const servers = await httpRequestNg.restEndpoints.getReachable()
+    const versions = await httpRequestNg.request('version', 'all')
+    const counts = await httpRequestNg.request('stats/count', 'all')
+    const updates = await httpRequestNg.request('stats/updates', 'all')
 
     const result = []
-    for (let index = 0; index < servers.length; index++) {
+    for (const endpointName in servers) {
       result.push({
-        baseUrl: servers[index].baseURL,
-        version: versions[index].data.version,
-        count: counts[index].data,
-        update: updates[index].data[0].begin,
-        commitId: updates[index].data[0].lastCommitId
+        name:  servers[endpointName].name,
+        baseUrl: servers[endpointName].baseUrl,
+        version: versions[endpointName].data.version,
+        count: counts[endpointName].data,
+        update: updates[endpointName].data[0].begin,
+        commitId: updates[endpointName].data[0].lastCommitId
       })
     }
     commit('setRestApiServers', result)
@@ -436,13 +433,13 @@ class Resolver {
    * @param {string|json} value
    */
   async queryMediaServer_ (key, value) {
-    const responseNg = await httpRequestNg.request(
-      {
-        method: 'get',
-        url: `query/asset/match/${key}/${value}`
-      }
-    )
-    console.log(responseNg.data)
+    // const responseNg = await httpRequestNg.request(
+    //   {
+    //     method: 'get',
+    //     url: `query/asset/match/${key}/${value}`
+    //   }
+    // )
+    // console.log(responseNg.data)
     const response = await httpRequest.request(
       {
         method: 'get',
@@ -497,9 +494,9 @@ class Resolver {
   async resolveHttpUrl_ (mediaFile) {
     if ('httpUrl' in mediaFile) return mediaFile.httpUrl
     if ('path' in mediaFile) {
-      console.log(mediaFile.path)
-      const baseUrlNg = await httpRequestNg.restEndpoints.getFirstBaseUrl()
-      console.log(baseUrlNg)
+      // console.log(mediaFile.path)
+      // const baseUrlNg = await httpRequestNg.restEndpoints.getFirstBaseUrl()
+      // console.log(baseUrlNg)
       const baseURL = await httpRequest.getFirstBaseUrl()
       return `${baseURL}/media/${mediaFile.path}`
     }

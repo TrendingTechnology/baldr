@@ -81,6 +81,20 @@ class RestEndpoints {
     return result
   }
 
+  async getReachable () {
+    if (!this.checked_) {
+      await this.checkReachability()
+    }
+    const reachable = {}
+    for (const endpointName of this.nameList_) {
+      const endpoint = this.store_[endpointName]
+      if (endpoint.isReachable) {
+        reachable[endpointName] = endpoint
+      }
+    }
+    return reachable
+  }
+
   /**
    * @param {*} config
    * @param {String|Array} endpointSelector `'all'`, `'first'`, `'remote'` or  `['local', 'remote']`
@@ -107,32 +121,28 @@ class RestEndpoints {
       requestList = endpointSelector
     }
 
-    const results = []
+    const results = {}
     for (const endpointName of requestList) {
       const endpoint = this.store_[endpointName]
       if (endpoint.isReachable) {
-        results.push(await endpoint.request(config))
+        results[endpointName] = await endpoint.request(config)
       }
     }
-    if (results.length === 1) {
-      return results[0]
+    if (Object.keys(results).length === 1) {
+      for (const endpointName in results) {
+          return results[endpointName]
+      }
     } else {
       return results
     }
   }
 
   async getFirstBaseUrl () {
-    let result
-    //console.log(this.checked_)
     if (!this.checked_) {
-      result = await this.checkReachability()
-      //console.log(result)
+      await this.checkReachability()
     }
-    //console.log(result)
     for (const endpointName of this.nameList_) {
       const endpoint = this.store_[endpointName]
-      //console.log(endpoint)
-      //console.log(endpoint.isReachable)
       if (endpoint.isReachable) {
         return endpoint.baseUrl
       }
@@ -175,6 +185,12 @@ export class HttpRequestNg {
   }
 
   async request (config, endpointSelector) {
+    if (typeof config === 'string') {
+      config = { method: 'get', url: config }
+    }
+    if (!('method' in config)) {
+      config.method = 'get'
+    }
     config.url = this.formatUrl(config.url)
     try {
       return await this.restEndpoints.request(config, endpointSelector)
