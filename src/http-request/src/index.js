@@ -26,16 +26,30 @@ const defaultServers = {
 }
 
 class RestEndpoint {
-  constructor ({ name, baseUrl, https, checkUrl, auth }) {
+  constructor ({ name, domain, https, checkPath, auth }) {
+    let httpScheme
+    if (https) {
+      httpScheme = 'https://'
+    } else {
+      httpScheme = 'http://'
+    }
+    this.baseUrl = `${httpScheme}${domain}`
     this.name = name
-    this.baseUrl = baseUrl
-    this.https = https
-    this.checkUrl = checkUrl
+    this.domain = domain
+    this.checkPath = checkPath
     this.auth = auth
     this.axiosInstance_ = null
+    this.checked_ = false
   }
 
-  ping () {
+  axiosConfig () {
+    this.defaultConfig = {
+      timeout: 3000,
+      crossDomain: true
+    }
+  }
+
+  async checkReachability () {
     try {
       const axiosInstance = axios.create(conn)
       await axiosInstance.get(this.formatUrl(conn.checkUrl))
@@ -46,9 +60,28 @@ class RestEndpoint {
   }
 
   isReachable () {
-    return Boolean(this.axiosInstance_)
+    if (this.axiosInstance_) {
+      return true
+    }
+    return false
   }
 }
+
+class RestEndpoints {
+
+  constructor (restEndpointList) {
+    this.restEndpointList_ = restEndpointList
+  }
+
+  checkReachability () {
+
+  }
+}
+
+function getDefaultRestEndpoints () {
+
+}
+
 
 function deepClone (object) {
   // We change the object so we need a deep clone.
