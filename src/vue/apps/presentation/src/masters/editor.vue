@@ -106,14 +106,14 @@ export const master = {
     if (typeof props === 'boolean') {
       // Somehow two editor slides get the same edited content.
       editorId += 1
-      propsNormalized.markup = `<p class="editor-${editorId}" contenteditable>x</p>`
+      propsNormalized.markup = `<p class="editor-${editorId}" contenteditable>…</p>`
 
     } else if (typeof props === 'string') {
       propsNormalized.markup = props
     } else {
       propsNormalized = props
     }
-    propsNormalized.markup = propsNormalized.markup.replace(/>\w*\*\w*</g, ' contenteditable>.<')
+    propsNormalized.markup = propsNormalized.markup.replace(/>\w*\*\w*</g, ' contenteditable>…<')
     return propsNormalized
   },
   // Called when leaving a slide.
@@ -135,13 +135,19 @@ export default {
     }
   },
   methods: {
-    bold () {
+    surround_ (elementName) {
       const selection = window.getSelection()
       if (selection.rangeCount) {
         const range = selection.getRangeAt(0)
-        const elStrong = document.createElement('strong')
-        range.surroundContents(elStrong)
+        const element = document.createElement(elementName)
+        range.surroundContents(element)
       }
+    },
+    bold () {
+      this.surround_('strong')
+    },
+    underline () {
+      this.surround_('u')
     },
     increaseFontSize () {
       this.fontSize += 0.25
@@ -156,6 +162,9 @@ export default {
       if (event.ctrlKey && event.key === 'b') {
         event.preventDefault()
         this.bold()
+      } else if (event.ctrlKey && event.key === 'u') {
+        event.preventDefault()
+        this.underline()
       } else if (event.ctrlKey && event.key === '+') {
         event.preventDefault()
         this.increaseFontSize()

@@ -57,6 +57,18 @@ const routes = [
     }
   },
   {
+    path: '/editor',
+    title: 'editor',
+    shortcut: 'e',
+    component: MasterRenderer,
+    meta: {
+      master: 'editor',
+      data: {
+        markup: '<p class="editor-ad-hoc" contenteditable>…</p>'
+      }
+    }
+  },
+  {
     path: '/documentation',
     title: 'Documentation',
     shortcut: 'd',
