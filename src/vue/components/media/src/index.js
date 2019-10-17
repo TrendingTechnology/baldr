@@ -4,13 +4,21 @@
 
 /* globals document */
 
-import { getDefaultServers, HttpRequest } from '@bldr/http-request'
+import { getDefaultServers, HttpRequest, getDefaultRestEndpoints, HttpRequestNg } from '@bldr/http-request'
 import Vue from 'vue'
 import DynamicSelect from '@bldr/vue-component-dynamic-select'
 
 import ComponentMediaFile from './MediaFile.vue'
 import MediaOverview from './MediaOverview'
 import MediaPlayer from './MediaPlayer.vue'
+
+const restEndpoints = getDefaultRestEndpoints()
+// console.log(restEndpoints)
+// restEndpoints.checkReachability().then((result) => {
+//   console.log(result)
+// })
+
+export const httpRequestNg = new HttpRequestNg(restEndpoints, '/api/media')
 
 export const httpRequest = new HttpRequest(getDefaultServers(), '/api/media')
 
@@ -482,6 +490,9 @@ class Resolver {
   async resolveHttpUrl_ (mediaFile) {
     if ('httpUrl' in mediaFile) return mediaFile.httpUrl
     if ('path' in mediaFile) {
+      httpRequestNg.restEndpoints.getFirstBaseUrl().then((baseUrl) => {
+        console.log(baseUrl)
+      })
       const baseURL = await httpRequest.getFirstBaseUrl()
       return `${baseURL}/media/${mediaFile.path}`
     }

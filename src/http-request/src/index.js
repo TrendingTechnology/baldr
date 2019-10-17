@@ -8,23 +8,6 @@
 
 import axios from 'axios'
 
-const defaultServers = {
-  local: {
-    baseURL: config.http.domainLocal,
-    https: false,
-    checkUrl: 'version'
-  },
-  remote: {
-    baseURL: config.http.domainRemote,
-    https: true,
-    checkUrl: 'version',
-    auth: {
-      username: config.http.username,
-      password: config.http.password
-    }
-  }
-}
-
 class RestEndpoint {
   constructor ({ name, domain, https, checkPath, auth }) {
     let httpScheme
@@ -42,46 +25,186 @@ class RestEndpoint {
     this.checked_ = false
   }
 
-  axiosConfig () {
-    this.defaultConfig = {
+  getAxiosConfig () {
+    const config = {
       timeout: 3000,
-      crossDomain: true
+      crossDomain: true,
+      baseURL: this.baseUrl
     }
+    if (this.auth) {
+      config.auth = this.auth
+    }
+    return config
   }
 
   async checkReachability () {
+    this.checked_ = true
     try {
-      const axiosInstance = axios.create(conn)
-      await axiosInstance.get(this.formatUrl(conn.checkUrl))
+      const axiosInstance = axios.create(this.getAxiosConfig())
+      await axiosInstance.get(this.checkPath)
       this.axiosInstance_ = axiosInstance
+      console.log(this.axiosInstance_)
+      return true
     } catch (error) {
       this.axiosInstance_ = null
     }
   }
 
-  isReachable () {
+  get isReachable () {
     if (this.axiosInstance_) {
       return true
     }
     return false
   }
+
+  request (config) {
+    return this.axiosInstance_.request(config)
+  }
 }
 
 class RestEndpoints {
-
   constructor (restEndpointList) {
-    this.restEndpointList_ = restEndpointList
+    this.nameList_ = []
+    this.store_ = {}
+    for (const restEndpoint of restEndpointList) {
+      this.store_[restEndpoint.name] = restEndpoint
+      this.nameList_.push(restEndpoint.name)
+    }
+    this.checked_ = false
   }
 
-  checkReachability () {
+  async checkReachability () {
+    this.checked_ = true
+    const result = {}
+    for (const endpointName of this.nameList_) {
+      result[endpointName] = await this.store_[endpointName].checkReachability()
+    }
+    return result
+  }
 
+  /**
+   * @param {*} config
+   * @param {String|Array} endpointSelector `'all'`, `'first'`, `'remote'` or  `['local', 'remote']`
+   */
+  async request (config, endpointSelector) {
+    if (!this.checked_) {
+      await this.checkReachability()
+    }
+
+    if (!endpointSelector) {
+      endpointSelector = 'first'
+    }
+
+    let requestList
+    if (typeof endpointSelector === 'string') {
+      if (endpointSelector === 'all') {
+        requestList = this.nameList_
+      } else if (endpointSelector === 'first') {
+        requestList = [this.nameList_[0]]
+      } else {
+        requestList = [endpointSelector]
+      }
+    } else {
+      requestList = endpointSelector
+    }
+
+    const results = []
+    for (const endpointName of requestList) {
+      const endpoint = this.store_[endpointName]
+      if (endpoint.isReachable) {
+        results.push(await endpoint.request(config))
+      }
+    }
+    if (results.length === 1) {
+      return results[0]
+    } else {
+      return results
+    }
+  }
+
+  async getFirstBaseUrl () {
+    let result
+    //console.log(this.checked_)
+    //if (!this.checked_) {
+    result = await this.checkReachability()
+      //console.log(result)
+    //}
+    console.log(result)
+    //console.log(result)
+    for (const endpointName of this.nameList_) {
+      const endpoint = this.store_[endpointName]
+      //console.log(endpoint)
+      //console.log(endpoint.isReachable)
+      if (endpoint.isReachable) {
+        return endpoint.baseUrl
+      }
+    }
   }
 }
 
-function getDefaultRestEndpoints () {
-
+export function getDefaultRestEndpoints () {
+  return new RestEndpoints([
+    new RestEndpoint({
+      name: 'local',
+      domain: config.http.domainLocal,
+      https: false,
+      checkPath: 'api/version'
+    }),
+    new RestEndpoint({
+      name: 'remote',
+      domain: config.http.domainRemote,
+      https: true,
+      checkPath: 'api/version',
+      auth: {
+        username: config.http.username,
+        password: config.http.password
+      }
+    })
+  ])
 }
 
+export class HttpRequestNg {
+  constructor (restEndpoints, urlFillIn) {
+    this.urlFillIn = urlFillIn
+    this.restEndpoints = restEndpoints
+  }
+
+  formatUrl (url) {
+    if (this.urlFillIn && url.substr(0, 1) !== '/') {
+      return `${this.urlFillIn}/${url}`
+    }
+    return url
+  }
+
+  async request (config, endpointSelector) {
+    config.url = this.formatUrl(config.url)
+    try {
+      return await this.restEndpoints.request(config, endpointSelector)
+    } catch (error) {
+      await this.restEndpoints.checkReachability()
+      return await this.restEndpoints.request(config, endpointSelector)
+    }
+  }
+}
+
+/*** Old Code *****************************************************************/
+
+const defaultServers = {
+  local: {
+    baseURL: config.http.domainLocal,
+    https: false,
+    checkUrl: 'version'
+  },
+  remote: {
+    baseURL: config.http.domainRemote,
+    https: true,
+    checkUrl: 'version',
+    auth: {
+      username: config.http.username,
+      password: config.http.password
+    }
+  }
+}
 
 function deepClone (object) {
   // We change the object so we need a deep clone.
