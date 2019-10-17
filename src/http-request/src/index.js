@@ -25,6 +25,31 @@ const defaultServers = {
   }
 }
 
+class RestEndpoint {
+  constructor ({ name, baseUrl, https, checkUrl, auth }) {
+    this.name = name
+    this.baseUrl = baseUrl
+    this.https = https
+    this.checkUrl = checkUrl
+    this.auth = auth
+    this.axiosInstance_ = null
+  }
+
+  ping () {
+    try {
+      const axiosInstance = axios.create(conn)
+      await axiosInstance.get(this.formatUrl(conn.checkUrl))
+      this.axiosInstance_ = axiosInstance
+    } catch (error) {
+      this.axiosInstance_ = null
+    }
+  }
+
+  isReachable () {
+    return Boolean(this.axiosInstance_)
+  }
+}
+
 function deepClone (object) {
   // We change the object so we need a deep clone.
   return JSON.parse(JSON.stringify(object))
@@ -68,6 +93,8 @@ export class HttpRequest {
      * @type {array}
      */
     this.axiosInstances_ = []
+
+    this.serverList_ = []
   }
 
   /**
@@ -76,6 +103,7 @@ export class HttpRequest {
    */
   resetAxiosInstances_ () {
     this.axiosInstances_ = []
+    this.serverList_ = []
   }
 
   formatUrl (url) {
@@ -99,6 +127,7 @@ export class HttpRequest {
         const axiosInstance = axios.create(conn)
         await axiosInstance.get(this.formatUrl(conn.checkUrl))
         this.axiosInstances_.push(axiosInstance)
+        this.serverList_.push(name)
       } catch (error) {}
     }
   }
