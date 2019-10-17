@@ -43,7 +43,6 @@ class RestEndpoint {
       const axiosInstance = axios.create(this.getAxiosConfig())
       await axiosInstance.get(this.checkPath)
       this.axiosInstance_ = axiosInstance
-      console.log(this.axiosInstance_)
       return true
     } catch (error) {
       this.axiosInstance_ = null
@@ -125,11 +124,10 @@ class RestEndpoints {
   async getFirstBaseUrl () {
     let result
     //console.log(this.checked_)
-    //if (!this.checked_) {
-    result = await this.checkReachability()
+    if (!this.checked_) {
+      result = await this.checkReachability()
       //console.log(result)
-    //}
-    console.log(result)
+    }
     //console.log(result)
     for (const endpointName of this.nameList_) {
       const endpoint = this.store_[endpointName]

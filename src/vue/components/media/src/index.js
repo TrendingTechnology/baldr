@@ -436,6 +436,13 @@ class Resolver {
    * @param {string|json} value
    */
   async queryMediaServer_ (key, value) {
+    const responseNg = await httpRequestNg.request(
+      {
+        method: 'get',
+        url: `query/asset/match/${key}/${value}`
+      }
+    )
+    console.log(responseNg.data)
     const response = await httpRequest.request(
       {
         method: 'get',
@@ -490,9 +497,9 @@ class Resolver {
   async resolveHttpUrl_ (mediaFile) {
     if ('httpUrl' in mediaFile) return mediaFile.httpUrl
     if ('path' in mediaFile) {
-      httpRequestNg.restEndpoints.getFirstBaseUrl().then((baseUrl) => {
-        console.log(baseUrl)
-      })
+      console.log(mediaFile.path)
+      const baseUrlNg = await httpRequestNg.restEndpoints.getFirstBaseUrl()
+      console.log(baseUrlNg)
       const baseURL = await httpRequest.getFirstBaseUrl()
       return `${baseURL}/media/${mediaFile.path}`
     }
