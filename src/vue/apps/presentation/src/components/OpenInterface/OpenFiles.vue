@@ -1,6 +1,6 @@
 <template>
-  <label>
-    Präsentation oder Mediendateien öffnen
+  <label class="open-files">
+    <material-icon title="Präsentation oder Mediendateien öffnen" name="folder-open"/>
     <input type="file" @change="openPresentation"/>
   </label>
 </template>
@@ -17,3 +17,11 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+  .open-files {
+    input {
+      display: none;
+    }
+  }
+</style>
