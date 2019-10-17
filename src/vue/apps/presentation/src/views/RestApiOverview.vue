@@ -28,7 +28,6 @@
           <td>{{ server.commitId.substring(0, 8) }}</td>
         </tr>
       </tbody>
-
     </table>
 
   </div>
