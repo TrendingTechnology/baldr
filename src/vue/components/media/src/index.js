@@ -13,11 +13,6 @@ import MediaOverview from './MediaOverview'
 import MediaPlayer from './MediaPlayer.vue'
 
 const restEndpoints = getDefaultRestEndpoints()
-// console.log(restEndpoints)
-// restEndpoints.checkReachability().then((result) => {
-//   console.log(result)
-// })
-
 export const httpRequestNg = new HttpRequestNg(restEndpoints, '/api/media')
 export const httpRequest = new HttpRequest(getDefaultServers(), '/api/media')
 
@@ -433,19 +428,7 @@ class Resolver {
    * @param {string|json} value
    */
   async queryMediaServer_ (key, value) {
-    // const responseNg = await httpRequestNg.request(
-    //   {
-    //     method: 'get',
-    //     url: `query/asset/match/${key}/${value}`
-    //   }
-    // )
-    // console.log(responseNg.data)
-    const response = await httpRequest.request(
-      {
-        method: 'get',
-        url: `query/asset/match/${key}/${value}`
-      }
-    )
+    const response = await httpRequest.request(`query/asset/match/${key}/${value}`)
     if ('data' in response && 'path' in response.data) {
       return response
     }

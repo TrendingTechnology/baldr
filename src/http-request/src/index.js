@@ -38,14 +38,16 @@ class RestEndpoint {
   }
 
   async checkReachability () {
-    this.checked_ = true
-    try {
-      const axiosInstance = axios.create(this.getAxiosConfig())
-      await axiosInstance.get(this.checkPath)
-      this.axiosInstance_ = axiosInstance
+    if (!this.checked_) {
+      try {
+        const axiosInstance = axios.create(this.getAxiosConfig())
+        await axiosInstance.get(this.checkPath)
+        this.axiosInstance_ = axiosInstance
+        this.checked_ = true
+      } catch (error) {
+        this.axiosInstance_ = null
+      }
       return true
-    } catch (error) {
-      this.axiosInstance_ = null
     }
   }
 
@@ -73,18 +75,18 @@ class RestEndpoints {
   }
 
   async checkReachability () {
-    this.checked_ = true
-    const result = {}
-    for (const endpointName of this.nameList_) {
-      result[endpointName] = await this.store_[endpointName].checkReachability()
+    if (!this.checked_) {
+      const result = {}
+      for (const endpointName of this.nameList_) {
+        result[endpointName] = await this.store_[endpointName].checkReachability()
+      }
+      this.checked_ = true
+      return result
     }
-    return result
   }
 
   async getReachable () {
-    if (!this.checked_) {
-      await this.checkReachability()
-    }
+    await this.checkReachability()
     const reachable = {}
     for (const endpointName of this.nameList_) {
       const endpoint = this.store_[endpointName]
@@ -100,9 +102,7 @@ class RestEndpoints {
    * @param {String|Array} endpointSelector `'all'`, `'first'`, `'remote'` or  `['local', 'remote']`
    */
   async request (config, endpointSelector) {
-    if (!this.checked_) {
-      await this.checkReachability()
-    }
+    await this.checkReachability()
 
     if (!endpointSelector) {
       endpointSelector = 'first'
@@ -120,7 +120,6 @@ class RestEndpoints {
     } else {
       requestList = endpointSelector
     }
-
     const results = {}
     for (const endpointName of requestList) {
       const endpoint = this.store_[endpointName]
@@ -138,9 +137,7 @@ class RestEndpoints {
   }
 
   async getFirstBaseUrl () {
-    if (!this.checked_) {
-      await this.checkReachability()
-    }
+    await this.checkReachability()
     for (const endpointName of this.nameList_) {
       const endpoint = this.store_[endpointName]
       if (endpoint.isReachable) {
