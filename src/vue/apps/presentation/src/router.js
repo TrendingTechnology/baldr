@@ -62,7 +62,7 @@ const routes = [
     shortcut: 'e',
     component: MasterRenderer,
     meta: {
-      master: 'editor'
+      master: 'editor',
     }
   },
   {
