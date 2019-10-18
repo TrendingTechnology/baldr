@@ -172,7 +172,8 @@ if (require.main === module) {
         'music': '', // imaster-icon: audio
         'folder-open': '',
         'comment-alert': '', // imaster-icon: task
-        'comment-question': '' // imaster-icon: question
+        'comment-question': '', // imaster-icon: question
+        'update': '' // Update icon for the REST API overview.
       }
     },
     {

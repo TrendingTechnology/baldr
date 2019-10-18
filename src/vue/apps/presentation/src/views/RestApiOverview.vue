@@ -21,13 +21,25 @@
           :key="server.baseUrl"
         >
           <td>{{ index + 1 }}</td>
-          <td>{{ server.baseUrl }}</td>
+          <td>
+            <a
+              target="_blank"
+              :href="`${server.baseUrl}/api`"
+            >
+             {{ server.baseUrl }}
+            </a>
+          </td>
           <td>{{ server.version }}</td>
           <td>{{ server.count.assets }}</td>
           <td>{{ server.count.presentations }}</td>
           <td>{{ toLocaleDateTimeString(server.update) }}</td>
           <td>{{ server.commitId.substring(0, 8) }}</td>
-          <td @click="updateMediaServer(server.name)">update</td>
+          <td
+            @click="updateMediaServer(server.name)"
+            title="update"
+          >
+            <material-icon name="update"/>
+          </td>
         </tr>
       </tbody>
     </table>
@@ -66,10 +78,14 @@ export default {
 
 <style lang="scss" scoped>
   .rest-api-overview {
-    font-size: 2vw;
+    font-size: 1.6vw;
 
     td, th {
       padding: 0 0.5em;
+    }
+
+    table {
+      width: 100%
     }
   }
 </style>

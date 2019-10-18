@@ -20,6 +20,7 @@ export default {
 
 <style lang="scss" scoped>
   .open-interface {
+    font-size: 2vw;
     display: flex;
 
     .dynamic-select {

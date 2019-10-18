@@ -52,7 +52,7 @@
     text-decoration: none;
 
     &:link, &:visited {
-      color: $black;
+      color: scale-color($gray, $lightness: -20%);
     }
 
     &:focus {

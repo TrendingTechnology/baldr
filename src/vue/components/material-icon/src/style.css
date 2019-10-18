@@ -212,30 +212,34 @@
   content: "\ea31";
 }
 
-.baldr-icon_video-switch::before {
+.baldr-icon_update::before {
   content: "\ea32";
 }
 
-.baldr-icon_video-vintage::before {
+.baldr-icon_video-switch::before {
   content: "\ea33";
 }
 
-.baldr-icon_wikidata::before {
+.baldr-icon_video-vintage::before {
   content: "\ea34";
 }
 
-.baldr-icon_wikipedia::before {
+.baldr-icon_wikidata::before {
   content: "\ea35";
 }
 
-.baldr-icon_window-open::before {
+.baldr-icon_wikipedia::before {
   content: "\ea36";
 }
 
-.baldr-icon_worker::before {
+.baldr-icon_window-open::before {
   content: "\ea37";
 }
 
-.baldr-icon_youtube::before {
+.baldr-icon_worker::before {
   content: "\ea38";
+}
+
+.baldr-icon_youtube::before {
+  content: "\ea39";
 }
