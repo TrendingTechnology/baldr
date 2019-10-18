@@ -5,7 +5,6 @@
       <li v-for="(pair, index) in questions" :key="pair.question">
         <p class="question">{{ pair.question }}</p>
         <p v-if="pair.answer">… <span :class="getClassHidden(index + 1)" class="answer">{{ pair.answer }}</span></p>
-
       </li>
     </ul>
   </div>
@@ -87,8 +86,8 @@ const normalizeQuestions = function (questions) {
 }
 
 export const master = {
-  title: 'Arbeitsauftrag',
-  icon: 'frequently-asked-questions',
+  title: 'Frage',
+  icon: 'comment-question',
   color: 'yellow',
   styleConfig: {
     centerVertically: true,

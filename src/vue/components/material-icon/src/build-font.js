@@ -163,15 +163,16 @@ if (require.main === module) {
         pause: '',
         'skip-next': '',
         'skip-previous': '',
-        'pencil': '',
-        'video-vintage' : '',
-        'comment-quote': '',
-        'frequently-asked-questions': '',
+        'pencil': '', // master-icon: editor
+        'video-vintage' : '', // master-icon: video
+        'comment-quote': '', // master-icon: quote
         'clipboard-account': '',
         'file-presentation-box': '',
-        'image': '',
-        'music': '',
-        'folder-open': ''
+        'image': '', // imaster-icon: image
+        'music': '', // imaster-icon: audio
+        'folder-open': '',
+        'comment-alert': '', // imaster-icon: task
+        'comment-question': '' // imaster-icon: question
       }
     },
     {
