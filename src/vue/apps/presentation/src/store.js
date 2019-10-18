@@ -1,4 +1,6 @@
-
+/**
+ * @file vuex store
+ */
 import Vue from 'vue'
 import Vuex from 'vuex'
 import { parseContentFile } from '@/content-file.js'

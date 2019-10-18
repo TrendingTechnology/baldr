@@ -316,7 +316,7 @@ export async function parseContentFile (content) {
  * opened with the file dialog. Distinct between media files and the YAML
  * *.baldr.yml file format.
  *
- * @type {File} file - A file interface.
+ * @param {File} file - A file interface.
  */
 function openFile (file) {
   if (file.type === 'application/x-yaml' &&
