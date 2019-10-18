@@ -41,6 +41,13 @@ export const master = {
   example,
   resolveMediaUris (props) {
     return [props.image]
+  },
+  titleFromProps (props) {
+    if ('name' in props) {
+      return props.name
+    } else {
+      return props.image
+    }
   }
 }
 
@@ -134,5 +141,4 @@ export default {
       }
     }
   }
-
 </style>

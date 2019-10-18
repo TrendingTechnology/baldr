@@ -57,6 +57,8 @@ export default {
 
 <style lang="scss" scoped>
   .slides-overview {
+    font-size: 1.5vw;
+
     h1 {
       font-size: 1.1em;
     }

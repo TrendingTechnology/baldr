@@ -42,6 +42,8 @@ slides:
   resolveMediaUris (props) {
     return props.src
   },
+  titleFromProps (props) {
+  },
   // Called when entering a slide.
   enterSlide ({ oldSlide, oldProps, newSlide, newProps }) {
   },

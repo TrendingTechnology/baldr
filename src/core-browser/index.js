@@ -25,3 +25,7 @@ export function toLocaleDateTimeString (timeStampMsec) {
   const timeString = date.toLocaleTimeString()
   return `${dayString} ${dateString} ${timeString}`
 }
+
+export function shortenTextOnBoundaries (text) {
+  return text.replace(/^(.{30}[^\s]*).y*/, "$1")
+}

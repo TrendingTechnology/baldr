@@ -253,11 +253,17 @@ class Slide {
   }
 
   get title () {
+    const title = []
+    title.push(this.masterObject.title)
     if (this.metaData.title) {
-      return this.metaData.title
-    } else {
-      return this.masterObject.title
+      title.push(this.metaData.title)
+      return title.join(': ')
     }
+    const titleFromProps = callMasterFunc(this.masterObject.name, 'titleFromProps', this.master.data)
+    if (titleFromProps) {
+      title.push(titleFromProps)
+    }
+    return title.join(': ')
   }
 }
 
