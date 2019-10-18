@@ -1,10 +1,10 @@
 <template>
-  <div class="task-master">
-    {{ markup }}
-  </div>
+  <div class="task-master" v-html="markup"/>
 </template>
 
 <script>
+import marked from 'marked'
+
 const example = `
 ---
 slides:
@@ -14,6 +14,20 @@ slides:
   - title: Simple example (as a prop)
     task:
       markup: “Do this” specifed as a prop!
+
+  - title: Specified in the markdown format
+    task:
+      markup: |
+        # Heading
+
+        *“Do this”* specified in the markdown format!
+
+  - title: Specified in the HTML format
+    task:
+      markup: |
+        <h1>Heading</h1>
+
+        <em>“Do this”</em> specified in the HTML format!
 `
 
 export const master = {
@@ -31,6 +45,7 @@ export const master = {
         markup: props
       }
     }
+    props.markup = marked(props.markup)
     return props
   }
 }
