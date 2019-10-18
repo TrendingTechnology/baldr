@@ -62,10 +62,7 @@ const routes = [
     shortcut: 'e',
     component: MasterRenderer,
     meta: {
-      master: 'editor',
-      data: {
-        markup: '<p class="editor-ad-hoc" contenteditable>…</p>'
-      }
+      master: 'editor'
     }
   },
   {

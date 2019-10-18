@@ -2,7 +2,7 @@
   <div
     class="editor-master"
     spellcheck="false"
-    v-html="markup"
+    v-html="markupSafe"
     :style="{ fontSize: fontSize + 'vw' }">
   </div>
 </template>
@@ -13,7 +13,7 @@ let editorId = 0
 
 const placeholder = '…'
 const placeholderTag = `<span class="editor-placeholder">${placeholder}</span>`
-
+const defaultMarkup = `<p class="editor-${editorId}" contenteditable>${placeholderTag}</p>`
 const example = `
 ---
 slides:
@@ -141,6 +141,15 @@ export default {
   data () {
     return {
       fontSize: 2
+    }
+  },
+  computed: {
+    markupSafe () {
+      if (this.markup) {
+        return this.markup
+      } else {
+        return defaultMarkup
+      }
     }
   },
   methods: {
