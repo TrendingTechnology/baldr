@@ -153,7 +153,7 @@ if (require.main === module) {
         delete: '',
         export: '',
         import: '',
-        'magnify-outline': 'maginfy',
+        'magnify-outline': 'magnify',
         music: '',
         notebook: '',
         wikipedia: '',
