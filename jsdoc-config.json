@@ -8,9 +8,12 @@
         "allowUnknownTags": true
     },
     "source": {
-        "includePattern": ".+\\.js(doc)?$",
+        "includePattern": "\\.(js|vue)$",
         "excludePattern": "(^|\\/|\\\\)_",
         "exclude": ["node_modules"]
-    }
+    },
+    "plugins": [
+        "jsdoc-vuejs"
+    ]
 }
 
