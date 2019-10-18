@@ -8,7 +8,10 @@
 </template>
 
 <script>
+import marked from 'marked'
 let editorId = 0
+
+const placeholder = '…'
 
 const example = `
 ---
@@ -89,6 +92,12 @@ slides:
         </tr>
       </tbody>
     </table>
+
+- title: 'Markdown'
+  editor: |
+    # heading 1
+
+    lorem ipsum
 `
 
 export const master = {
@@ -106,14 +115,14 @@ export const master = {
     if (typeof props === 'boolean') {
       // Somehow two editor slides get the same edited content.
       editorId += 1
-      propsNormalized.markup = `<p class="editor-${editorId}" contenteditable>…</p>`
-
+      propsNormalized.markup = `<p class="editor-${editorId}" contenteditable>${placeholder}</p>`
     } else if (typeof props === 'string') {
       propsNormalized.markup = props
     } else {
       propsNormalized = props
     }
-    propsNormalized.markup = propsNormalized.markup.replace(/>\w*\*\w*</g, ' contenteditable>…<')
+    propsNormalized.markup = propsNormalized.markup.replace(/>\w*\*\w*</g, ` contenteditable>${placeholder}<`)
+    propsNormalized.markup = marked(propsNormalized.markup)
     return propsNormalized
   },
   // Called when leaving a slide.
