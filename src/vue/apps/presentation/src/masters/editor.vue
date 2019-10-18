@@ -12,6 +12,7 @@ import marked from 'marked'
 let editorId = 0
 
 const placeholder = '…'
+const placeholderTag = `<span class="editor-placeholder">${placeholder}</span>`
 
 const example = `
 ---
@@ -115,17 +116,16 @@ export const master = {
     if (typeof props === 'boolean') {
       // Somehow two editor slides get the same edited content.
       editorId += 1
-      propsNormalized.markup = `<p class="editor-${editorId}" contenteditable>${placeholder}</p>`
+      propsNormalized.markup = `<p class="editor-${editorId}" contenteditable>${placeholderTag}</p>`
     } else if (typeof props === 'string') {
       propsNormalized.markup = props
     } else {
       propsNormalized = props
     }
-    propsNormalized.markup = propsNormalized.markup.replace(/>\w*\*\w*</g, ` contenteditable>${placeholder}<`)
+    propsNormalized.markup = propsNormalized.markup.replace(/>\w*\*\w*</g, ` contenteditable>${placeholderTag}<`)
     propsNormalized.markup = marked(propsNormalized.markup)
     return propsNormalized
   },
-  // Called when leaving a slide.
   leaveSlide ({ oldSlide, oldProps, newSlide, newProps }) {
     const element = document.querySelector('.editor-master')
     if (element) oldProps.markup = element.innerHTML
@@ -144,6 +144,18 @@ export default {
     }
   },
   methods: {
+    removePlaceholder () {
+      function eventListener (event) {
+        const element = event.target
+        if (element.innerHTML === placeholderTag) {
+          element.innerHTML = ''
+        }
+      }
+      const elements = document.querySelectorAll('#content [contenteditable]')
+      for (const element of elements) {
+        element.addEventListener('focus', eventListener)
+      }
+    },
     surround_ (elementName) {
       const selection = window.getSelection()
       if (selection.rangeCount) {
@@ -182,6 +194,24 @@ export default {
         this.decreaseFontSize()
       }
     })
+  },
+  mounted () {
+    this.removePlaceholder()
+  },
+  updated () {
+    this.removePlaceholder()
   }
 }
 </script>
+
+<style lang="scss">
+  .editor-placeholder {
+    font-size: 0.5em;
+    color: gray;
+    opacity: 0.5;
+  }
+
+  [contenteditable] {
+    min-height: 1.5em;
+  }
+</style>
