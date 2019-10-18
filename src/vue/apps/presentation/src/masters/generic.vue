@@ -11,7 +11,7 @@ const example = `
 slides:
 
 - title: hr to generate steps
-  markdown: |
+  generic: |
     step 1
 
     ---
@@ -19,17 +19,17 @@ slides:
     step 2
 
 - title: Using props
-  markdown:
+  generic:
     markup: Using props
 
 - title: Step support
-  markdown:
+  generic:
     markup:
     - Step 1
     - Step 2
 
 - title: Long text in stepts
-  markdown:
+  generic:
     markup:
     - |
       Step 1: Tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim
@@ -43,7 +43,7 @@ slides:
       id est laborum.
 
 - title: Top level step support
-  markdown:
+  generic:
   - |
     Step 1: Tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim
     veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex ea
@@ -55,8 +55,8 @@ slides:
     cupiditat non proident, sunt in culpa qui officia deserunt mollit anim
     id est laborum.
 
-- title: Long text
-  markdown: |
+- title: Long text (specified as Markdown)
+  generic: |
     # Heading 1
 
     Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod
@@ -123,14 +123,14 @@ slides:
     clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit
     amet.
 
-- title: Heading
-  markdown: |
+- title: Heading (specified as Markdown)
+  generic: |
     # heading 1
     ## heading 2
     ### heading 3
 
-- title: Lorem ipsum
-  markdown: |
+- title: Lorem ipsum (specified as Markdown)
+  generic: |
     Lorem ipsum dolor sit amet ...
 
     consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
@@ -142,16 +142,51 @@ slides:
     anim id est laborum.
 
 - title: Ordered list
-  markdown: |
+  generic: |
     1. one
     2. two
     3. three
 
-- title: Unordered list
-  markdown: |
+- title: Unordered list (specified as Markdown)
+  generic: |
     * one
     * two
     * three
+
+- title: Heading (specifed as HTML)
+  generic: |
+    <h1>Heading 1</h1>
+    <h2>Heading 2</h2>
+    <h3>Heading 3</h3>
+
+- title: Lorem ipsum (specifed as HTML)
+  generic: |
+    <p>Lorem ipsum dolor sit amet ...</p>
+
+    <p>consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
+    labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+    exercitation ullamco laboris nisi ut aliquip ex ea commodo
+    consequat. Duis aute irure dolor in reprehenderit in voluptate velit
+    esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
+    cupidatat non proident, sunt in culpa qui officia deserunt mollit
+    anim id est laborum.</p>
+
+
+- title: Ordered list (specifed as HTML)
+  generic: |
+    <ol>
+      <li>one</li>
+      <li>two</li>
+      <li>three</li>
+    </ol>
+
+- title: Unordered list (specifed as HTML)
+  generic: |
+    <ul>
+      <li>one</li>
+      <li>two</li>
+      <li>three</li>
+    </ul>
 `
 
 function splitHtmlintoChunks (htmlString) {
