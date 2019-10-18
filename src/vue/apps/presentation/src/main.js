@@ -1,5 +1,5 @@
 /**
- * @module {@bldr/presentation}
+ * @module @bldr/presentation
  */
 import Vue from 'vue'
 import App from '@/App.vue'
@@ -23,6 +23,9 @@ Vue.config.productionTip = false
 
 /******************************************************************************/
 
+/**
+ *
+ */
 class BodyAttributes {
   constructor () {
     this.attributeName = ''
