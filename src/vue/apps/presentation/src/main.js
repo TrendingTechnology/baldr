@@ -43,6 +43,9 @@ class BodyAttributes {
   }
 }
 
+/**
+ *
+ */
 class CenterVertically extends BodyAttributes {
   constructor () {
     super()
@@ -51,6 +54,9 @@ class CenterVertically extends BodyAttributes {
   }
 }
 
+/**
+ *
+ */
 class DarkMode extends BodyAttributes {
   constructor () {
     super()
@@ -59,6 +65,9 @@ class DarkMode extends BodyAttributes {
   }
 }
 
+/**
+ *
+ */
 class Overflow extends BodyAttributes {
   constructor () {
     super()
@@ -67,6 +76,9 @@ class Overflow extends BodyAttributes {
   }
 }
 
+/**
+ *
+ */
 class Theme extends BodyAttributes {
   constructor () {
     super()
@@ -75,6 +87,9 @@ class Theme extends BodyAttributes {
   }
 }
 
+/**
+ *
+ */
 const slidePadding = {
   default: function () {
     document.querySelector('main #content').style.padding = null
@@ -87,6 +102,9 @@ const slidePadding = {
   }
 }
 
+/**
+ *
+ */
 class StyleConfig {
   constructor () {
     this.configObjects = {
@@ -128,10 +146,16 @@ class StyleConfig {
   }
 }
 
+/**
+ *
+ */
 Vue.prototype.$styleConfig = new StyleConfig()
 
 /******************************************************************************/
 
+/**
+ *
+ */
 Vue.prototype.$masters = masters
 
 // https://stackoverflow.com/a/45032366/10193818
