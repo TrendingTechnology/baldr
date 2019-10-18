@@ -16,6 +16,19 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.baldr-icon-spin:before {
+  animation: baldr-icon-spin 2s infinite linear;
+}
+
+@keyframes baldr-icon-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(359deg);
+  }
+}
+
 .baldr-icon_account-group::before {
   content: "\ea01";
 }

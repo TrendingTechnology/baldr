@@ -35,10 +35,12 @@
           <td>{{ toLocaleDateTimeString(server.update) }}</td>
           <td>{{ server.commitId.substring(0, 8) }}</td>
           <td
-            @click="updateMediaServer(server.name)"
+            @click="updateMediaServer(server.name, $event)"
             title="update"
           >
-            <material-icon name="update"/>
+            <material-icon
+              name="update"
+            />
           </td>
         </tr>
       </tbody>
@@ -64,8 +66,10 @@ export default {
   },
   methods: {
     toLocaleDateTimeString,
-    updateMediaServer (endpointName) {
+    updateMediaServer (endpointName, event) {
+      event.target.classList.add('baldr-icon-spin')
       httpRequestNg.request('mgmt/update', endpointName).then((result) => {
+        event.target.classList.remove('baldr-icon-spin')
         this.$store.dispatch('media/setRestApiServers')
       })
     }
