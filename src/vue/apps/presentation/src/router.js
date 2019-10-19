@@ -59,7 +59,7 @@ const routes = [
     }
   },
   {
-    path: '/camera',
+    path: '/ad-hoc/camera',
     name: 'camera',
     component: MasterRenderer,
     meta: {
@@ -69,7 +69,7 @@ const routes = [
     }
   },
   {
-    path: '/editor',
+    path: '/ad-hoc/editor',
     name: 'editor',
     component: MasterRenderer,
     meta: {
@@ -81,8 +81,9 @@ const routes = [
   {
     path: '/documentation',
     component: Documentation,
+    name: 'documentation',
     meta: {
-      title: 'Documentation',
+      title: 'Dokumentation',
       shortcut: 'd'
     }
   },

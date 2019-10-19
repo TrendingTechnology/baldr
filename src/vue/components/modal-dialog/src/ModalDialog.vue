@@ -80,6 +80,7 @@ export default {
     position: absolute;
     top: 0;
     width: 100%;
+    color: $black;
 
     .container {
       box-sizing: border-box;
@@ -115,5 +116,4 @@ export default {
       right: 2vw;
     }
   }
-
 </style>

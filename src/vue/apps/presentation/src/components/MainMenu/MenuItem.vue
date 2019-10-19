@@ -1,6 +1,9 @@
 <template>
   <li>
-    <router-link :to="resolved.normalizedTo">
+    <router-link
+      @click.native="$modal.hide('menu')"
+      :to="resolved.normalizedTo"
+    >
       {{ resolved.route.meta.title }}
     </router-link>
   </li>

@@ -6,6 +6,10 @@
         <menu-item :to="{ name: 'editor' }"/>
       </ul>
     </li>
+
+    <menu-item :to="{ name: 'documentation' }"/>
+    <menu-item :to="{ name: 'rest-api' }"/>
+
   </ul>
 </template>
 
