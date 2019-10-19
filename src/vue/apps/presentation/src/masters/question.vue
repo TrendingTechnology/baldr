@@ -134,7 +134,7 @@ export default {
   },
   computed: {
     stepNoCurrent () {
-      return this.$store.getters.slideCurrent.master.stepNoCurrent
+      return this.$store.getters.slideCurrent.renderData.stepNoCurrent
     },
     showNumbers () {
       if (this.numbers && this.questions.length > 1) {

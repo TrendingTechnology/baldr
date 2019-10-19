@@ -113,7 +113,7 @@ export default {
       return this.$store.getters.slideCurrent
     },
     stepNoCurrent () {
-      return this.slide.master.stepNoCurrent - 1
+      return this.slide.renderData.stepNoCurrent - 1
     },
     uriCurrent () {
       return this.src[this.stepNoCurrent]

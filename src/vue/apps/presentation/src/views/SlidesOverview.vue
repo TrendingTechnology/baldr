@@ -9,10 +9,10 @@
         :title="`Zur Folie Nr. ${slide.no}`"
       >
         <material-icon
-          :name="slide.masterObject.icon"
-          :color="slide.masterObject.color"
+          :name="slide.master.icon"
+          :color="slide.master.color"
         />
-        <span class="master-title"> {{ slide.masterObject.title }}</span>
+        <span class="master-title"> {{ slide.master.title }}</span>
         {{ slide.title }}
         <span class="plain-text">{{ slide.plainText }}</span>
       </li>

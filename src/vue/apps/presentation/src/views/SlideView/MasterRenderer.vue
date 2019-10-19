@@ -17,7 +17,7 @@ export default {
       if ('master' in this.$route.meta) {
         return this.$route.meta.master
       } else if (this.slideCurrent) {
-        return this.slideCurrent.master.name
+        return this.slideCurrent.renderData.name
       }
       return false
     },
@@ -25,7 +25,7 @@ export default {
       if ('data' in this.$route.meta) {
         return this.$route.meta.data
       } else if (this.slideCurrent) {
-        return this.slideCurrent.master.data
+        return this.slideCurrent.renderData.data
       }
       return {}
     }

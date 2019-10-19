@@ -133,13 +133,15 @@ class RawSlideObject {
 }
 
 /**
+ * Provide data to render a slide.
+ *
  * Normalize the slide data to allow different input formats from the yaml
  * file.
  *
  * @param {module:@bldr/core/slides~rawSlideData} rawSlideData
  *   Various types of data to render a slide.
  */
-class MasterData {
+class RenderData {
   constructor (rawSlideObject) {
     const intersection = intersect(
       masterNames,
@@ -225,7 +227,7 @@ export class MetaData {
 }
 
 /**
- * Maybe the class SlideData and Slide should be merged.
+ * A slide.
  */
 class Slide {
   /**
@@ -233,18 +235,21 @@ class Slide {
    */
   constructor (rawSlideData, slideNo) {
     const rawSlideObject = new RawSlideObject(rawSlideData)
+    /**
+     * The slide number
+     * @type {Number}
+     */
     this.no = slideNo
 
     /**
      * Normalized slide data.
-     * TODO: rename: maybe slideData, renderData ?
      */
-    this.master = new MasterData(rawSlideObject)
+    this.renderData = new RenderData(rawSlideObject)
 
     /**
-     * TODO: rename: master
+     *
      */
-    this.masterObject = masterOptions(this.master.name)
+    this.master = masterOptions(this.renderData.name)
 
     this.metaData = new MetaData(rawSlideObject)
 
@@ -264,7 +269,7 @@ class Slide {
 
   get plainText () {
     const output = []
-    const fromProps = callMasterFunc(this.masterObject.name, 'plainTextFromProps', this.master.data)
+    const fromProps = callMasterFunc(this.master.name, 'plainTextFromProps', this.renderData.data)
     if (fromProps) output.push(fromProps)
     for (const mediaFile of this.mediaFiles) {
       output.push(mediaFile.plainText)
@@ -274,7 +279,7 @@ class Slide {
 
   get mediaFiles () {
     const mediaFiles = []
-    for (const mediaUri of this.master.mediaUris) {
+    for (const mediaUri of this.renderData.mediaUris) {
       mediaFiles.push(store.getters['media/mediaFileByUri'](mediaUri))
     }
     return mediaFiles
@@ -319,7 +324,7 @@ export async function parseContentFile (content) {
   for (const slideNo in indexedSlides) {
     const slide = new Slide(indexedSlides[slideNo], slideNo)
     slides[slideNo] = slide
-    for (const mediaUri of slide.master.mediaUris) {
+    for (const mediaUri of slide.renderData.mediaUris) {
       mediaUris.push(mediaUri)
     }
   }

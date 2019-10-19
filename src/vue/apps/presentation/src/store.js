@@ -61,21 +61,21 @@ const actions = {
     let oldSlide
     let oldProps
     let newSlide = getters.slideByNo(no)
-    let newProps = newSlide.master.data
+    let newProps = newSlide.renderData.data
     let context = new Vue()
     if (getters.slideCurrent) {
       oldSlide = getters.slideCurrent
-      oldProps = oldSlide.master.data
-      callMasterFunc(getters.slideCurrent.master.name, 'leaveSlide', { oldSlide, oldProps, newSlide, newProps }, context)
+      oldProps = oldSlide.renderData.data
+      callMasterFunc(getters.slideCurrent.renderData.name, 'leaveSlide', { oldSlide, oldProps, newSlide, newProps }, context)
     }
     commit('setSlideNoCurrent', no)
-    callMasterFunc(getters.slideCurrent.master.name, 'enterSlide', { oldSlide, oldProps, newSlide, newProps }, context)
+    callMasterFunc(getters.slideCurrent.renderData.name, 'enterSlide', { oldSlide, oldProps, newSlide, newProps }, context)
   },
   setStepNext ({ dispatch, getters }) {
     let stepNoCurrent
     const slideCurrent = getters.slideCurrent
-    const no = slideCurrent.master.stepNoCurrent
-    const count = slideCurrent.master.stepCount
+    const no = slideCurrent.renderData.stepNoCurrent
+    const count = slideCurrent.renderData.stepCount
     if (no === count) {
       stepNoCurrent = 1
     } else {
@@ -86,8 +86,8 @@ const actions = {
   setStepPrevious ({ dispatch, getters }) {
     let stepNoCurrent
     const slideCurrent = getters.slideCurrent
-    const no = slideCurrent.master.stepNoCurrent
-    const count = slideCurrent.master.stepCount
+    const no = slideCurrent.renderData.stepNoCurrent
+    const count = slideCurrent.renderData.stepCount
     if (no === 1) {
       stepNoCurrent = count
     } else {
@@ -96,11 +96,11 @@ const actions = {
     dispatch('setStepNoCurrent', { slideCurrent, stepNoCurrent })
   },
   setStepNoCurrent ({ commit }, { slideCurrent, stepNoCurrent }) {
-    let oldStepNo = slideCurrent.master.stepNoCurrent
+    let oldStepNo = slideCurrent.renderData.stepNoCurrent
     let newStepNo = stepNoCurrent
-    callMasterFunc(slideCurrent.master.name, 'leaveStep', { oldStepNo, newStepNo }, new Vue())
+    callMasterFunc(slideCurrent.renderData.name, 'leaveStep', { oldStepNo, newStepNo }, new Vue())
     commit('setStepNoCurrent', { slideCurrent, stepNoCurrent })
-    callMasterFunc(slideCurrent.master.name, 'enterStep', { oldStepNo, newStepNo }, new Vue())
+    callMasterFunc(slideCurrent.renderData.name, 'enterStep', { oldStepNo, newStepNo }, new Vue())
   }
 }
 
@@ -112,7 +112,7 @@ const mutations = {
     state.slideNoCurrent = parseInt(slideNoCurrent)
   },
   setStepNoCurrent (state, { slideCurrent, stepNoCurrent }) {
-    slideCurrent.master.stepNoCurrent = stepNoCurrent
+    slideCurrent.renderData.stepNoCurrent = stepNoCurrent
   }
 }
 

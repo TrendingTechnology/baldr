@@ -33,13 +33,13 @@ export default {
     },
     stepNo () {
       if (this.slideCurrent) {
-        return this.slideCurrent.master.stepNoCurrent
+        return this.slideCurrent.renderData.stepNoCurrent
       }
       return 1
     },
     stepCount () {
       if (this.slideCurrent) {
-        return this.slideCurrent.master.stepCount
+        return this.slideCurrent.renderData.stepCount
       }
       return 1
     }

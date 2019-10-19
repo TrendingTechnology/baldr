@@ -282,7 +282,7 @@ export default {
   },
   computed: {
     stepNoCurrent () {
-      return this.$store.getters.slideCurrent.master.stepNoCurrent
+      return this.$store.getters.slideCurrent.renderData.stepNoCurrent
     },
     markupCurrent () {
       return this.markup[this.stepNoCurrent - 1]
