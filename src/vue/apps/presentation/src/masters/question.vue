@@ -11,6 +11,7 @@
 </template>
 
 <script>
+import { shortenText } from '@bldr/core-browser'
 
 const example = `
 ---
@@ -107,6 +108,9 @@ export const master = {
       if ('answer' in question && question.answer) count += 1
     }
     return count + 1
+  },
+  titleFromProps (props) {
+    return shortenText(props.questions[0].question, { stripTags: true } )
   }
 }
 

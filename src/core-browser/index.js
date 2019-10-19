@@ -26,6 +26,22 @@ export function toLocaleDateTimeString (timeStampMsec) {
   return `${dayString} ${dateString} ${timeString}`
 }
 
-export function shortenTextOnBoundaries (text) {
-  return text.replace(/^(.{30}[^\s]*).y*/, "$1")
+export function plainText (text) {
+  // const markup = new DOMParser().parseFromString(text, 'text/html')
+  // return markup.body.textContent || ''
+
+  // https://stackoverflow.com/a/5002157
+  const div = document.createElement('div')
+  div.innerHTML = text
+  return div.innerText
+}
+
+export function shortenText (text, { maxLength, stripTags } ) {
+  if (!maxLength) maxLength = 48
+  if (stripTags) text = plainText(text)
+  // https://stackoverflow.com/a/5454303
+  // trim the string to the maximum length
+  var trimmedString = text.substr(0, maxLength);
+  // re-trim if we are in the middle of a word
+  return trimmedString.substr(0, Math.min(trimmedString.length, trimmedString.lastIndexOf(" ")))
 }

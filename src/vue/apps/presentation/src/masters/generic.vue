@@ -5,7 +5,7 @@
 
 <script>
 import marked from 'marked'
-import { shortenTextOnBoundaries } from '@bldr/core-browser'
+import { shortenText } from '@bldr/core-browser'
 
 const example = `
 ---
@@ -265,9 +265,7 @@ export const master = {
     return props.markup.length
   },
   titleFromProps (props) {
-    const markup = new DOMParser().parseFromString(props.markup, 'text/html')
-    const plainText = markup.body.textContent || ''
-    return plainText.substring(0, 35)
+    return shortenText(props.markup[0], { stripTags: true } )
   }
 }
 

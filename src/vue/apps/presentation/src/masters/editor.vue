@@ -9,6 +9,8 @@
 
 <script>
 import marked from 'marked'
+import { shortenText } from '@bldr/core-browser'
+
 let editorId = 0
 
 const placeholder = '…'
@@ -129,6 +131,9 @@ export const master = {
   leaveSlide ({ oldSlide, oldProps, newSlide, newProps }) {
     const element = document.querySelector('.editor-master')
     if (element) oldProps.markup = element.innerHTML
+  },
+  titleFromProps (props) {
+    return shortenText(props.markup, { stripTags: true } )
   }
 }
 

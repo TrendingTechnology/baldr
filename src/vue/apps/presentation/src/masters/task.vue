@@ -4,6 +4,7 @@
 
 <script>
 import marked from 'marked'
+import { shortenText } from '@bldr/core-browser'
 
 const example = `
 ---
@@ -47,6 +48,9 @@ export const master = {
     }
     props.markup = marked(props.markup)
     return props
+  },
+  titleFromProps (props) {
+    return shortenText(props.markup, { stripTags: true } )
   }
 }
 
