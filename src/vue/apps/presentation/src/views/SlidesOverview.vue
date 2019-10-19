@@ -1,6 +1,6 @@
 <template>
   <div class="slides-overview">
-    <h1>Überblick über die Stunde</h1>
+    <h1>Überblick</h1>
     <ol v-if="slides">
       <li
         v-for="slide in slides"
@@ -56,7 +56,7 @@ export default {
     font-size: 1.5vw;
 
     h1 {
-      font-size: 1.1em;
+      font-size: 1.4em;
     }
 
     li {

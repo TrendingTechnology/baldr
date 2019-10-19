@@ -1,5 +1,10 @@
 <template>
   <ul class="main-menu content">
+    <menu-item :to="{ name: 'home' }"/>
+    <menu-item :to="{ name: 'open' }"/>
+    <menu-item :to="{ name: 'slides' }"/>
+    <menu-item :to="{ name: 'slides-overview' }"/>
+
     <li>Ad-Hoc-Folien
       <ul>
         <menu-item :to="{ name: 'camera' }"/>
@@ -7,8 +12,21 @@
       </ul>
     </li>
 
-    <menu-item :to="{ name: 'documentation' }"/>
-    <menu-item :to="{ name: 'rest-api' }"/>
+    <menu-item :to="{ name: 'documentation' }">
+      <ul>
+        <menu-item
+          v-for="(master, masterName) in $masters"
+          :key="masterName"
+          :to="`/documentation/${masterName}`"
+          :text="masterName"
+        />
+      </ul>
+    </menu-item>
+    <li>Administration
+      <ul>
+        <menu-item :to="{ name: 'rest-api' }"/>
+      </ul>
+    </li>
 
   </ul>
 </template>

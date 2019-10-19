@@ -38,24 +38,27 @@ const routes = [
   {
     path: '/open',
     component: OpenInterface,
+    name: 'open',
     meta: {
-      title: 'Open',
+      title: 'Präsentation/Medien-Dateien öffnen',
     }
   },
   {
     path: '/slides',
+    name: 'slides',
     component: SlideView,
     meta: {
       shortcut: 's',
-      title: 'slides'
+      title: 'Folien'
     }
   },
   {
-    path: '/slides-overview',
+    path: '/slides/overview',
     component: SlidesOverview,
+    name: 'slides-overview',
     meta: {
       shortcut: 'o',
-      title: 'slides-overview'
+      title: 'Überblick über alle Folien'
     }
   },
   {
@@ -101,7 +104,7 @@ const routes = [
     component: RestApiOverview,
     meta: {
       shortcut: 'r',
-      title: 'REST-API'
+      title: 'Überblick REST-API-Server'
     }
   }
 ]

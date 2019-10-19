@@ -94,6 +94,10 @@
   ul.content {
     list-style-type: none;
 
+    ul {
+      list-style-type: none;
+    }
+
     & li {
       text-indent: -1em;
     }
