@@ -156,6 +156,7 @@ export default {
 
 <style lang="scss" scoped>
   .question-master {
+    font-size: 2vw;
     p {
       margin: 0;
     }
