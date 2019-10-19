@@ -104,11 +104,11 @@ class Player {
 
   fadeOut (duration = 3.1) {
     if (!this.mediaElement) return
-    var actualVolume = this.mediaElement.volume
-    var steps = actualVolume / 100
+    let actualVolume = this.mediaElement.volume
+    const steps = actualVolume / 100
     // in milliseconds: duration * 1000 / 100
-    var delay = duration * 10
-    var fadeOutInterval = setInterval(() => {
+    const delay = duration * 10
+    const fadeOutInterval = setInterval(() => {
       actualVolume -= steps
       if (actualVolume >= 0) {
         this.mediaElement.volume = actualVolume.toFixed(2)
