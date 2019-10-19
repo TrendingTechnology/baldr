@@ -412,6 +412,33 @@ export class MediaFile {
   get isPlayable () {
     return ['audio', 'video'].includes(this.type)
   }
+
+  get plainText () {
+    const output = []
+    const excludedProperties = [
+      'extension',
+      'filename',
+      'httpUrl',
+      'id',
+      'mediaElement',
+      'path',
+      'shortcut',
+      'size',
+      'previewImage',
+      'previewHttpUrl',
+      'timeModified',
+      'type',
+      'uri',
+      'uriAuthority',
+      'uriScheme'
+    ]
+    for (const property in this) {
+      if (this.hasOwnProperty(property) && !excludedProperties.includes(property)) {
+        output.push(this[property])
+      }
+    }
+    return output.join(' | ')
+  }
 }
 
 /**
@@ -477,9 +504,6 @@ class Resolver {
   async resolveHttpUrl_ (mediaFile) {
     if ('httpUrl' in mediaFile) return mediaFile.httpUrl
     if ('path' in mediaFile) {
-      // console.log(mediaFile.path)
-      // const baseUrlNg = await httpRequestNg.restEndpoints.getFirstBaseUrl()
-      // console.log(baseUrlNg)
       const baseURL = await httpRequest.getFirstBaseUrl()
       return `${baseURL}/media/${mediaFile.path}`
     }

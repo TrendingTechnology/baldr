@@ -12,7 +12,9 @@
           :name="slide.masterObject.icon"
           :color="slide.masterObject.color"
         />
+        <span class="master-title"> {{ slide.masterObject.title }}</span>
         {{ slide.title }}
+        <span class="plain-text">{{ slide.plainText }}</span>
       </li>
     </ol>
     <open-interface v-else/>
@@ -38,13 +40,7 @@ export default {
       if (this.$store.getters.slidesCount) {
         return this.$store.getters.slides
       }
-    },
-    getMaster (masterName) {
-      return this.$masters[masterName]
-    },
-    masterIcon (masterName) {
-      return this.getMaster(masterName).icon
-    },
+    }
   },
   methods: {
     gotToSlide (slideNo) {
@@ -66,6 +62,19 @@ export default {
     li {
       cursor: pointer;
       list-style-type: none;
+
+      &:hover {
+        background-color: scale-color($gray, $lightness: 80%);
+      }
+
+      .master-title {
+        font-weight: bold;
+      }
+
+      .plain-text {
+        font-size: 0.5em;
+        color: $gray;
+      }
     }
   }
 </style>

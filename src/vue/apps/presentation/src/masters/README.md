@@ -42,7 +42,7 @@ slides:
   resolveMediaUris (props) {
     return props.src
   },
-  titleFromProps (props) {
+  plainTextFromProps (props) {
   },
   // Called when entering a slide.
   enterSlide ({ oldSlide, oldProps, newSlide, newProps }) {

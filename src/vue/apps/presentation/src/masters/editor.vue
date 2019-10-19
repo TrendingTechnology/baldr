@@ -9,7 +9,7 @@
 
 <script>
 import marked from 'marked'
-import { shortenText } from '@bldr/core-browser'
+import { plainText } from '@bldr/core-browser'
 
 let editorId = 0
 
@@ -132,8 +132,8 @@ export const master = {
     const element = document.querySelector('.editor-master')
     if (element) oldProps.markup = element.innerHTML
   },
-  titleFromProps (props) {
-    return shortenText(props.markup, { stripTags: true } )
+  plainTextFromProps (props) {
+    return plainText(props.markup)
   }
 }
 

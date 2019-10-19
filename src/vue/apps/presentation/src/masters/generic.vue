@@ -5,7 +5,7 @@
 
 <script>
 import marked from 'marked'
-import { shortenText } from '@bldr/core-browser'
+import { plainText } from '@bldr/core-browser'
 
 const example = `
 ---
@@ -264,8 +264,12 @@ export const master = {
   stepCount (props) {
     return props.markup.length
   },
-  titleFromProps (props) {
-    return shortenText(props.markup[0], { stripTags: true } )
+  plainTextFromProps (props) {
+    const output = []
+    for (const markup of props.markup) {
+      output.push(plainText(markup))
+    }
+    return output.join(' | ')
   }
 }
 

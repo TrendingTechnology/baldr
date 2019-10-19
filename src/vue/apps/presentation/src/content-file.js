@@ -4,6 +4,7 @@
 
 // import Vue from 'vue'
 import yaml from 'js-yaml'
+import { shortenText } from '@bldr/core-browser'
 import { themeNames } from '@/themes.js'
 import { masterNames, callMasterFunc, masterOptions } from '@/masters.js'
 import store from '@/store.js'
@@ -253,17 +254,30 @@ class Slide {
   }
 
   get title () {
-    const title = []
-    title.push(this.masterObject.title)
     if (this.metaData.title) {
-      title.push(this.metaData.title)
-      return title.join(': ')
+      return this.metaData.title
     }
-    const titleFromProps = callMasterFunc(this.masterObject.name, 'titleFromProps', this.master.data)
-    if (titleFromProps) {
-      title.push(titleFromProps)
+    let plain = this.plainText
+    plain = plain.replace(/\|/g, '')
+    return shortenText(plain)
+  }
+
+  get plainText () {
+    const output = []
+    const fromProps = callMasterFunc(this.masterObject.name, 'plainTextFromProps', this.master.data)
+    if (fromProps) output.push(fromProps)
+    for (const mediaFile of this.mediaFiles) {
+      output.push(mediaFile.plainText)
     }
-    return title.join(': ')
+    return output.join(' | ')
+  }
+
+  get mediaFiles () {
+    const mediaFiles = []
+    for (const mediaUri of this.master.mediaUris) {
+      mediaFiles.push(store.getters['media/mediaFileByUri'](mediaUri))
+    }
+    return mediaFiles
   }
 }
 

@@ -37,7 +37,14 @@ export const master = {
     centerVertically: true,
     darkMode: true
   },
-  example
+  example,
+  plainTextFromProps (props) {
+    const output = []
+    if ('text' in props) output.push(props.text)
+    if ('author' in props) output.push(props.author)
+    if ('date' in props) output.push(props.date)
+    return output.join(' | ')
+  }
 }
 
 export default {

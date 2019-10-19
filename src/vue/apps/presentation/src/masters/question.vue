@@ -11,8 +11,6 @@
 </template>
 
 <script>
-import { shortenText } from '@bldr/core-browser'
-
 const example = `
 ---
 slides:
@@ -109,8 +107,14 @@ export const master = {
     }
     return count + 1
   },
-  titleFromProps (props) {
-    return shortenText(props.questions[0].question, { stripTags: true } )
+  plainTextFromProps (props) {
+    const output = []
+    if ('heading' in props && props.heading) output.push(props.heading)
+    for (const question of props.questions) {
+      output.push(question.question)
+      if ('answer' in question && question.answer) output.push(question.answer)
+    }
+    return output.join(' | ')
   }
 }
 
