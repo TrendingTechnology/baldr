@@ -247,12 +247,15 @@ async function walk (dir, on) {
     if (fileName.substr(0, 1) !== '.') {
       if (fs.statSync(relPath).isDirectory()) {
         walk(relPath, on)
-      } else if (isPresentation(fileName)) {
-        if ('presentation' in on) await on.presentation(relPath)
-        if ('all' in on) await on.all(relPath)
-      } else if (isAsset(fileName)) {
-        if ('asset' in on) await on.asset(relPath)
-        if ('all' in on) await on.all(relPath)
+      } else {
+        if ('everyFile' in on) await on.everyFile(relPath)
+        if (isPresentation(fileName)) {
+          if ('presentation' in on) await on.presentation(relPath)
+          if ('all' in on) await on.all(relPath)
+        } else if (isAsset(fileName)) {
+          if ('asset' in on) await on.asset(relPath)
+          if ('all' in on) await on.all(relPath)
+        }
       }
     }
   }

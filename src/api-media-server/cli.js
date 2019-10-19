@@ -142,7 +142,28 @@ commander
   .command('yaml-validate [input]').alias('yv')
   .description('Validate the yaml files.')
   .action((filePath) => {
-    yaml.safeLoad(fs.readFileSync(filePath, 'utf8'))
+    function validateYaml (filePath) {
+      console.log(`Validate: ${chalk.yellow(filePath)}`)
+      try {
+        const result = yaml.safeLoad(fs.readFileSync(filePath, 'utf8'))
+        console.log(chalk.green('ok!'))
+        console.log(result)
+      } catch (error) {
+        console.log(`${chalk.red(error.name)}: ${error.message}`)
+      }
+    }
+
+    if (filePath) {
+      validateYaml(filePath)
+    } else {
+      walk(process.cwd(), {
+        everyFile (relPath) {
+          if (relPath.toLowerCase().indexOf('.yml') > -1) {
+            validateYaml(relPath)
+          }
+        }
+      })
+    }
   })
 
 commander.parse(process.argv)
