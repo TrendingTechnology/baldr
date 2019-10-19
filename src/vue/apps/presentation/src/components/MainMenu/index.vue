@@ -1,16 +1,16 @@
 <template>
   <ul class="main-menu content">
-    <menu-item
-      v-for="item in $router.options.routes"
-      :key="item.name"
-      :item="item"
-      :prefix="item.path"
-    />
+    <li>Ad-Hoc-Folien
+      <ul>
+        <menu-item :to="{ name: 'camera' }"/>
+        <menu-item :to="{ name: 'editor' }"/>
+      </ul>
+    </li>
   </ul>
 </template>
 
 <script>
-import MenuItem from './MenuItem'
+import MenuItem from './MenuItem.vue'
 export default {
   name: 'MainMenu',
   components: {

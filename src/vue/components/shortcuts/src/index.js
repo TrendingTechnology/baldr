@@ -68,7 +68,9 @@ class Shortcuts {
     if (this.$router) {
       const route = {
         path: '/shortcuts',
-        shortcut: 'ctrl+h',
+        meta: {
+          shortcut: 'ctrl+h'
+        },
         name: 'shortcuts',
         component: ShortcutsOverview
       }
@@ -108,22 +110,20 @@ class Shortcuts {
   }
 
   fromRoute (route) {
-    if ('shortcut' in route) {
+    if ('meta' in route && 'shortcut' in route.meta) {
       let routeTitle
-      if ('meta' in route && 'title' in route.meta) {
+      if ('title' in route.meta) {
         routeTitle = route.meta.title
-      } else if ('title' in route) {
-        routeTitle = route.title
       } else if ('name' in route) {
         routeTitle = route.name
       } else {
         routeTitle = route.path
       }
       let key
-      if (route.shortcut.length === 1) {
-        key = `g ${route.shortcut}`
+      if (route.meta.shortcut.length === 1) {
+        key = `g ${route.meta.shortcut}`
       } else {
-        key = route.shortcut
+        key = route.meta.shortcut
       }
       this.add(
         key,

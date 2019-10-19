@@ -625,16 +625,20 @@ class Media {
         {
           path: '/media',
           name: 'media-overview',
-          shortcut: 'm',
-          title: 'Media',
-          meta: { style },
+          meta: {
+            shortcut: 'm',
+            title: 'Media',
+            style
+          },
           component: MediaOverview
         },
         {
           path: '/media/:uriScheme/:uriAuthority',
-          title: 'Media file',
           name: 'media-file',
-          meta: { style },
+          meta: {
+            title: 'Media file',
+            style
+          },
           component: ComponentMediaFile
         },
       ]

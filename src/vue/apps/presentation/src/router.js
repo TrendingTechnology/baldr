@@ -29,63 +29,79 @@ const routes = [
   {
     path: '/',
     name: 'home',
-    title: 'Home',
-    shortcut: 'h',
-    component: Home
+    component: Home,
+    meta: {
+      shortcut: 'h',
+      title: 'Startseite'
+    }
   },
   {
     path: '/open',
-    title: 'Open',
-    component: OpenInterface
+    component: OpenInterface,
+    meta: {
+      title: 'Open',
+    }
   },
   {
     path: '/slides',
-    shortcut: 's',
-    title: 'slides',
-    component: SlideView
+    component: SlideView,
+    meta: {
+      shortcut: 's',
+      title: 'slides'
+    }
   },
   {
     path: '/slides-overview',
-    shortcut: 'o',
-    title: 'slides-overview',
-    component: SlidesOverview
+    component: SlidesOverview,
+    meta: {
+      shortcut: 'o',
+      title: 'slides-overview'
+    }
   },
   {
     path: '/camera',
-    title: 'camera',
-    shortcut: 'c',
+    name: 'camera',
     component: MasterRenderer,
     meta: {
-      master: 'camera'
+      title: 'Dokumentenkamera',
+      master: 'camera',
+      shortcut: 'c'
     }
   },
   {
     path: '/editor',
-    title: 'editor',
-    shortcut: 'e',
+    name: 'editor',
     component: MasterRenderer,
     meta: {
+      title: 'Hefteintrag',
       master: 'editor',
+      shortcut: 'e'
     }
   },
   {
     path: '/documentation',
-    title: 'Documentation',
-    shortcut: 'd',
-    component: Documentation
+    component: Documentation,
+    meta: {
+      title: 'Documentation',
+      shortcut: 'd'
+    }
   },
   {
     path: '/documentation/:master',
     name: 'documentation-master',
-    title: 'Master Documentation',
-    component: MasterDocumentation
+    component: MasterDocumentation,
+    meta: {
+      title: 'Master Documentation'
+    }
   },
   {
     path: '/rest-api',
     name: 'rest-api',
-    shortcut: 'r',
-    title: 'REST-API',
-    component: RestApiOverview
+    component: RestApiOverview,
+    meta: {
+      shortcut: 'r',
+      title: 'REST-API'
+    }
   }
 ]
 
