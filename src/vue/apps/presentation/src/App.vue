@@ -1,10 +1,10 @@
 <template>
   <div id="app" @drop.prevent="dropHandler" @dragover.prevent>
-      <modal-dialog name="menu">
-        <main-menu/>
-      </modal-dialog>
+    <modal-dialog name="menu">
+      <main-menu/>
+    </modal-dialog>
     <main>
-      <div id='content'>
+      <div id='content' b-content-theme="default">
         <router-view/>
       </div>
     </main>

@@ -110,7 +110,7 @@ export const master = {
   styleConfig: {
     centerVertically: false,
     overflow: false,
-    theme: 'handwriting'
+    contentTheme: 'handwriting'
   },
   example,
   normalizeProps (props) {

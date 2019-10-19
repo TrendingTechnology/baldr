@@ -13,7 +13,9 @@ export const master = {
     darkMode: false,
     overflow: false,
     slidePadding: '4vw',
-    theme: 'default'
+    theme: 'default',
+    contentTheme: 'default',
+    uiTheme: 'default'
   },
   documentation = `# Markdown`,
   example: `

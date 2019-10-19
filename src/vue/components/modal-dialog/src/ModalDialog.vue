@@ -1,5 +1,5 @@
 <template>
-  <div class="modal-dialog" v-show="isVisible">
+  <div b-ui-theme="default" b-dark-mode="false" b-theme="default" class="modal-dialog" v-show="isVisible">
     <div class="overlay" @click="hide(name)"/>
     <div class="container" role="dialog">
       <material-icon class="close" name="close" @click.native="hide(name)"/>

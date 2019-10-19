@@ -51,10 +51,6 @@
   a {
     text-decoration: none;
 
-    &:link, &:visited {
-      color: scale-color($gray, $lightness: -20%);
-    }
-
     &:focus {
       border-bottom: 1px solid;
     }
@@ -65,6 +61,12 @@
 
     &:active {
       color: $red;
+    }
+  }
+
+  &[b-dark-mode="false"] a {
+    &:link, &:visited {
+      color: scale-color($gray, $lightness: -20%);
     }
   }
 

@@ -24,6 +24,23 @@ Vue.config.productionTip = false
 /******************************************************************************/
 
 /**
+ * Set multiple attributes at the same time
+ */
+class MultipleAttributes {
+
+  constructor () {
+    this.attributeName = ''
+  }
+
+  set (value) {
+    const elements = document.querySelectorAll(`[${this.attributeName}]`)
+    for (const element of elements) {
+      element.attributes[this.attributeName].value = value
+    }
+  }
+}
+
+/**
  *
  */
 class BodyAttributes {
@@ -87,6 +104,20 @@ class Theme extends BodyAttributes {
   }
 }
 
+class ContentTheme extends MultipleAttributes {
+  constructor () {
+    super()
+    this.attributeName = 'b-content-theme'
+  }
+}
+
+class UiTheme extends MultipleAttributes {
+  constructor () {
+    super()
+    this.attributeName = 'b-ui-theme'
+  }
+}
+
 /**
  *
  */
@@ -102,6 +133,8 @@ const slidePadding = {
   }
 }
 
+
+
 /**
  *
  */
@@ -112,7 +145,9 @@ class StyleConfig {
       darkMode: new DarkMode(),
       overflow: new Overflow(),
       slidePadding: slidePadding,
-      theme: new Theme()
+      theme: new Theme(),
+      contentTheme: new ContentTheme(),
+      uiTheme: new UiTheme()
     }
   }
 
@@ -122,7 +157,9 @@ class StyleConfig {
       darkMode: false,
       overflow: false,
       slidePadding: '2vw 8vw',
-      theme: 'default'
+      theme: 'default',
+      contentTheme: 'default',
+      uiTheme: 'default'
     }
   }
 
