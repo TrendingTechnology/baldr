@@ -104,7 +104,7 @@ class Player {
 
   fadeOut (duration = 3.1) {
     if (!this.mediaElement) return
-    var actualVolume = mediaElement.volume
+    var actualVolume = this.mediaElement.volume
     var steps = actualVolume / 100
     // in milliseconds: duration * 1000 / 100
     var delay = duration * 10
