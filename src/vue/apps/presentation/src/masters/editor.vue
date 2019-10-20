@@ -165,7 +165,7 @@ export default {
           element.innerHTML = ''
         }
       }
-      const elements = document.querySelectorAll('#content [contenteditable]')
+      const elements = document.querySelectorAll('.vc_editor_master [contenteditable]')
       for (const element of elements) {
         element.addEventListener('focus', eventListener)
       }
@@ -219,13 +219,15 @@ export default {
 </script>
 
 <style lang="scss">
-  .vc_editor_placeholder {
-    font-size: 0.5em;
-    color: gray;
-    opacity: 0.5;
-  }
+  .vc_editor_master {
+    .editor-placeholder {
+      font-size: 0.5em;
+      color: gray;
+      opacity: 0.5;
+    }
 
-  [contenteditable] {
-    min-height: 1.5em;
+    [contenteditable] {
+      min-height: 1.5em;
+    }
   }
 </style>

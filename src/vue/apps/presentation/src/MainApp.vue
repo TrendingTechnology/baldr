@@ -4,9 +4,7 @@
       <main-menu/>
     </modal-dialog>
     <main>
-      <div id="content">
-        <router-view/>
-      </div>
+      <router-view/>
     </main>
     <media-player/>
     <app-info package-name="@bldr/presentation" :version="version"/>
@@ -118,21 +116,4 @@ export default {
     }
   }
 
-  [b-overflow="true"] {
-    main {
-      overflow: hidden;
-    }
-  }
-
-  [b-center-vertically="true"] {
-    main {
-      display: table;
-    }
-
-    #content {
-      display: table-cell;
-      vertical-align: middle;
-      height: 100%;
-    }
-  }
 </style>

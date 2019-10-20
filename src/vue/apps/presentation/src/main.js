@@ -116,19 +116,25 @@ class UiTheme extends MultipleAttributes {
 /**
  *
  */
-const slidePadding = {
-  default: function () {
-    document.querySelector('main #content').style.padding = null
-  },
-  set: function (padding) {
-    document.querySelector('main #content').style.padding = padding
-  },
-  none: function () {
-    document.querySelector('main #content').style.padding = 0
+
+function setPadding (padding) {
+  const element = document.querySelector('.vc_master_renderer')
+  if (element) {
+    element.style.padding = padding
   }
 }
 
-
+const slidePadding = {
+  default: function () {
+    setPadding(null)
+  },
+  set: function (padding) {
+    setPadding(padding)
+  },
+  none: function () {
+    setPadding(0)
+  }
+}
 
 /**
  *
