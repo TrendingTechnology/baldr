@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from './views/Home'
 
+// Components.
+import StartPage from './views/StartPage'
 import TableOfContents from './views/TableOfContents'
 import SongView from './views/SongView'
 
@@ -13,7 +14,7 @@ export default new Router({
       path: '/',
       name: 'home',
       shortcut: 'h',
-      component: Home
+      component: StartPage
     },
     {
       path: '/song/:songID',

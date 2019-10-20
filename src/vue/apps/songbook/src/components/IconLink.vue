@@ -1,5 +1,6 @@
 <template>
   <a
+    class="vc_icon_link"
     :href="link"
     v-if="link"
   >

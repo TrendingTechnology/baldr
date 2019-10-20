@@ -1,6 +1,6 @@
 
 <template>
-  <div class="song-view">
+  <div class="vc_song_view">
     <div class="top-icons">
       <material-icon
         @click.native="showSearch"
@@ -181,23 +181,25 @@ export default {
 }
 </script>
 
-<style>
-  .cursor-cross {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-  }
+<style lang="scss" scoped>
+  .vc_song_view {
+    .vc_cursor_cross {
+      bottom: 0;
+      position: fixed;
+      right: 0;
+    }
 
-  .random {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-  }
+    .random {
+      bottom: 0;
+      left: 0;
+      position: fixed;
+    }
 
-  .top-icons {
-    position: absolute;
-    top: 0;
-    right: 0;
-    z-index: 1;
+    .top-icons {
+      position: fixed;
+      right: 0;
+      top: 0;
+      z-index: 1;
+    }
   }
 </style>

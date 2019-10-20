@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="vc_top_abc">
     <h2>{{ abc }}</h2>
     <table>
       <toc-song
@@ -26,10 +26,12 @@ export default {
 }
 </script>
 
-<style scoped>
-  h2 {
-    text-transform: capitalize;
-    font-style: normal;
-    font-size: 4vw;
+<style lang="scss" scoped>
+  .vc_top_abc {
+    h2 {
+      text-transform: capitalize;
+      font-style: normal;
+      font-size: 4vw;
+    }
   }
 </style>

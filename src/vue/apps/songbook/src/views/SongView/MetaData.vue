@@ -1,5 +1,5 @@
 <template>
-  <div v-if="slideNoCurrent === 1" class="metadata">
+  <div v-if="slideNoCurrent === 1" class="vc_meta_data">
     <h1>{{ title }}</h1>
     <h2 v-if="subtitle">{{ subtitle }}</h2>
     <audio v-if="audio" controls :src="audio"></audio>
@@ -74,51 +74,51 @@ export default {
 }
 </script>
 
-<style>
-  .metadata {
+<style lang="scss" scoped>
+  .vc_meta_data {
     padding-top: 0.2vw;
     position: absolute;
     width: 100%;
-  }
 
-  .people {
-    display: flex;
-    font-size: 1.5vw;
-    padding: 3vw;
-  }
+    .people {
+      display: flex;
+      font-size: 1.5vw;
+      padding: 3vw;
+    }
 
-  .people > div {
-    flex: 1;
-  }
+    .people > div {
+      flex: 1;
+    }
 
-  .composer {
-    text-align: right;
-  }
+    .composer {
+      text-align: right;
+    }
 
-  .links {
-    position: absolute;
-    left: 5vw;
-    top: 1vw;
-  }
+    .links {
+      position: absolute;
+      left: 5vw;
+      top: 1vw;
+    }
 
-  .links > div {
-    flex: 1;
-  }
+    .links > div {
+      flex: 1;
+    }
 
-  .lyricist {
-    text-align: left;
-  }
+    .lyricist {
+      text-align: left;
+    }
 
-  h1, h2 {
-    margin: 1vw;
-  }
+    h1, h2 {
+      margin: 1vw;
+    }
 
-  h1 {
-    font-size: 3vw;
-  }
+    h1 {
+      font-size: 3vw;
+    }
 
-  h2 {
-    font-size: 2vw;
-    font-style: italic;
+    h2 {
+      font-size: 2vw;
+      font-style: italic;
+    }
   }
 </style>

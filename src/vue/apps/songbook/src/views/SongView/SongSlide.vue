@@ -1,6 +1,6 @@
 
 <template>
-  <section class="song-slide">
+  <section class="vc_song_slide">
     <meta-data/>
     <img :src="imageSrc">
     <div class="slide-number"></div>
@@ -38,54 +38,16 @@ export default {
 }
 </script>
 
-<style scoped>
-  section {
+<style lang="scss" scoped>
+  .vc_song_slide {
     text-align: center;
-  }
 
-  img {
-    height: auto;
-    max-height: 100vh;
-    max-width: 100%;
-    vertical-align: middle;
-    width: 100%;
-  }
-
-  .slide-number {
-    padding: 1vw;
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    z-index: 1;
-    font-size: 1vw;
-    opacity: 0;
-  }
-
-  .fade-out {
-    animation: fadeout 2s linear forwards;
-  }
-
-  @keyframes fadeout {
-    0% { opacity: 1; }
-    100% { opacity: 0; }
-  }
-
-  .cursor-cross {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-  }
-
-  .random {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-  }
-
-  .top-icons {
-    position: absolute;
-    top: 0;
-    right: 0;
-    z-index: 1;
+    img {
+      height: auto;
+      max-height: 100vh;
+      max-width: 100%;
+      vertical-align: middle;
+      width: 100%;
+    }
   }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div class="vc_main_app">
     <router-view/>
     <app-info package-name="@bldr/songbook-vue-app" :version="version"/>
   </div>
@@ -13,7 +13,7 @@ import { AppInfo } from '@bldr/vue-components-collection'
 import packageJson from '../package.json'
 
 export default {
-  name: 'App',
+  name: 'MainApp',
   components: {
     AppInfo
   },

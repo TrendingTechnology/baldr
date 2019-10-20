@@ -1,5 +1,5 @@
 <template>
-  <div class="table-of-contents">
+  <div class="vc_table_of_contents">
     <h1>Inhaltsverzeichnis</h1>
       <toc-abc
         v-for="(songList, abc) in alphabeticalSongsTree"
@@ -24,7 +24,7 @@ export default {
 </script>
 
 <style scoped>
-  .table-of-contents {
+  .vc_table_of_contents {
     margin: 2vw;
   }
 </style>

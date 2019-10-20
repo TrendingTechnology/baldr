@@ -10,7 +10,13 @@
  * all: ui + content
  *********************************************************************/
 
+$link-color: scale-color($gray, $lightness: -40%);
+
 [b-ui-theme="default"], [b-content-theme="default"] {
+
+  :fullscreen {
+    background-color: $white;
+  }
 
   /**
    * Typography
@@ -27,7 +33,7 @@
     text-decoration: none;
 
     &:link, &:visited {
-      color: scale-color($gray, $lightness: -20%);
+      color: $link-color;
     }
 
     &:focus {
@@ -220,8 +226,12 @@
 [b-dark-mode="false"] {
   // all
   [b-ui-theme="default"], [b-content-theme="default"] {
-    background-color: white;
+    background-color: $white;
     color: $black;
+
+    :fullscreen {
+      background-color: $white;
+    }
   }
 }
 
@@ -235,6 +245,10 @@
     background-color: $black;
     color: $white;
 
+    :fullscreen {
+      background-color: $black;
+    }
+
     a {
       &:link, &:visited {
         color: $white;
@@ -242,3 +256,4 @@
     }
   }
 }
+

@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="vc_start_page">
     <h1>Liederbuch</h1>
 
     <dynamic-select
@@ -32,7 +32,7 @@
 import { mapGetters } from 'vuex'
 
 export default {
-  name: 'Home',
+  name: 'StartPage',
   data () {
     return {
       selectedSong: null
@@ -48,22 +48,24 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  h1 {
-    text-align: center;
-  }
+  .vc_start_page {
+    h1 {
+      text-align: center;
+    }
 
-  .dynamic-select-wrapper {
-    margin: 1vw 10vw;
-  }
+    .dynamic-select-wrapper {
+      margin: 1vw 10vw;
+    }
 
-  .row {
-    margin-top: 10vw;
-    font-size: 3vw;
-    display: flex;
-    justify-content: center;
-  }
+    .row {
+      margin-top: 10vw;
+      font-size: 3vw;
+      display: flex;
+      justify-content: center;
+    }
 
-  .block {
-    width: 30vw;
+    .block {
+      width: 30vw;
+    }
   }
 </style>
