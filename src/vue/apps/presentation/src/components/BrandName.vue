@@ -1,5 +1,5 @@
 <template>
-  <section class="brand">
+  <section class="vc_brand_name">
     <div>
       <material-icon
         size="20vw"
@@ -26,7 +26,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .brand {
+  .vc_brand_name {
     display: flex;
     padding: 3vw 0;
     text-align: center;

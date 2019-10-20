@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="vc_slide_view">
     <slide-number/>
     <master-renderer/>
   </div>

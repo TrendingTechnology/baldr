@@ -1,5 +1,5 @@
 <template>
-  <div class="slide-number" b-ui-theme="default">
+  <div class="vc_slide_number" b-ui-theme="default">
 
     <span v-if="stepCount > 1">
       <plain-icon color="white" name="steps"/>
@@ -48,7 +48,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .slide-number {
+  .vc_slide_number {
     top: 1vw;
     font-family: $font-family-sans;
     font-size: 1vw;

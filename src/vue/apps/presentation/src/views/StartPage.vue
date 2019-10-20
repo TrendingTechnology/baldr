@@ -1,5 +1,5 @@
 <template>
-  <div class="home" b-ui-theme="default">
+  <div class="vc_start_page" b-ui-theme="default">
     <open-interface/>
   </div>
 </template>
@@ -7,7 +7,7 @@
 <script>
 import OpenInterface from '@/components/OpenInterface'
 export default {
-  name: 'Home',
+  name: 'StartPage',
   components: {
     OpenInterface
   },
@@ -18,7 +18,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .home {
+  .vc_start_page {
     font-size: 2vw;
   }
 </style>

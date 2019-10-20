@@ -1,5 +1,6 @@
 <template>
   <dynamic-select
+    class="vc_search_presentation"
     :options="options"
     @input="onInput"
     v-model="presentation"

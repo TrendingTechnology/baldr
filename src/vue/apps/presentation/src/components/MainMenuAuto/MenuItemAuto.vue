@@ -1,5 +1,5 @@
 <template>
-  <li class="menu-item" v-if="!isDynamicRoute()">
+  <li class="vc_menu_item_auto" v-if="!isDynamicRoute()">
     <router-link
        @click.native="$modal.hide('menu')"
       :to="path()"

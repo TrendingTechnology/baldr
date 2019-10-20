@@ -1,5 +1,5 @@
 <template>
-  <label class="open-files">
+  <label class="vc_open_files">
     <material-icon title="Präsentation oder Mediendateien öffnen" name="folder-open"/>
     <input type="file" @change="openPresentation"/>
   </label>
@@ -19,7 +19,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .open-files {
+  .vc_open_files {
+    font-size: 4vw;
+    width: 5vw;
+    padding-left: 1vw;
+
     input {
       display: none;
     }

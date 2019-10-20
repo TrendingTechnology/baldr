@@ -1,5 +1,5 @@
 <template>
-  <div class="slides-overview" b-content-theme="default">
+  <div class="vc_slides_overview" b-content-theme="default">
     <h1>Überblick</h1>
     <ol v-if="slides">
       <li
@@ -52,7 +52,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .slides-overview {
+  .vc_slides_overview {
     font-size: 1.5vw;
 
     h1 {

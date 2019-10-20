@@ -1,5 +1,5 @@
 <template>
-  <div class="master-documentation" b-ui-theme="default">
+  <div class="vc_master_documentation" b-ui-theme="default">
     <h1>Master slide “{{ masterName }}”</h1>
 
     <section>
@@ -59,7 +59,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .master-documentation {
+  .vc_master_documentation {
     font-size: 1.4vw;
   }
 </style>

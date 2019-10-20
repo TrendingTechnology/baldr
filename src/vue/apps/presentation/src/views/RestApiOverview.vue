@@ -1,5 +1,5 @@
 <template>
-  <div class="rest-api-overview" b-ui-theme="default">
+  <div class="vc_rest_api_overview" b-ui-theme="default">
     <h1>REST API servers</h1>
 
     <table>
@@ -81,7 +81,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .rest-api-overview {
+  .vc_rest_api_overview {
     font-size: 1.6vw;
 
     td, th {

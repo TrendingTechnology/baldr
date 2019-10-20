@@ -1,10 +1,10 @@
 <template>
-  <div id="app" @drop.prevent="dropHandler" @dragover.prevent>
+  <div class="vc_main_app" @drop.prevent="dropHandler" @dragover.prevent>
     <modal-dialog name="menu">
       <main-menu/>
     </modal-dialog>
     <main>
-      <div id='content'>
+      <div id="content">
         <router-view/>
       </div>
     </main>
@@ -21,7 +21,7 @@ import { mapActions } from 'vuex'
 import { openFiles } from '@/content-file.js'
 
 export default {
-  name: 'app',
+  name: 'MainApp',
   components: {
     AppInfo,
     MainMenu

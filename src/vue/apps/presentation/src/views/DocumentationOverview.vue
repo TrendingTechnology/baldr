@@ -1,5 +1,5 @@
 <template>
-<div class="documentation" b-ui-theme="default">
+<div class="vc_documentation_overview" b-ui-theme="default">
   <h1>Documentation</h1>
 
   <section>
@@ -12,7 +12,6 @@
           <td>ID</td>
           <td>Title</td>
           <td>Example</td>
-
         </tr>
       </thead>
       <tbody>
@@ -45,7 +44,7 @@
 
 <script>
 export default {
-  name: 'Documentation',
+  name: 'DocumentationOverview',
   methods: {
     openExample (yamlString) {
       this.$store.dispatch('openPresentation', yamlString).then(() => {
@@ -62,7 +61,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .documentation {
+  .vc_documentation_overview {
     font-size: 2vw;
 
     a {

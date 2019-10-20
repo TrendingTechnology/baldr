@@ -1,5 +1,5 @@
 <template>
-  <div class="open-interface">
+  <div class="vc_open_interface">
     <search-presentation/>
     <open-files/>
   </div>
@@ -19,18 +19,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .open-interface {
+  .vc_open_interface {
     font-size: 2vw;
     display: flex;
 
     .dynamic-select {
       flex-grow: 1;
-    }
-
-    .open-files {
-      font-size: 4vw;
-      width: 5vw;
-      padding-left: 1vw;
     }
   }
 </style>

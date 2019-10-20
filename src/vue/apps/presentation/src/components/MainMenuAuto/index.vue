@@ -1,5 +1,5 @@
 <template>
-  <ul class="main-menu content">
+  <ul class="vc_main_menu_auto">
     <menu-item
       v-for="item in $router.options.routes"
       :key="item.name"

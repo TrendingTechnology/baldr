@@ -70,3 +70,14 @@ const jquery = require('jquery')
 // Project packages.
 const { bootstrapConfig, Library, AlphabeticalSongsTree } = require('@bldr/songbook-base')
 ```
+
+### vue
+
+#### Component name
+
+* At least two words
+* `MyComponent.vue` (Pascal Case)
+* `name: 'MyComponent'` (Pascal Case)
+* Top level Vue component css class, prefix with `vc` = Vue component: Snake Case
+  * HTML: `class="vc_my_component"`
+  * CSS: `.vc_my_component`

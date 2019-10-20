@@ -2,7 +2,7 @@
  * @module @bldr/presentation
  */
 import Vue from 'vue'
-import App from '@/App.vue'
+import MainApp from '@/MainApp.vue'
 import router from '@/router.js'
 import store from '@/store.js'
 import { registerMasterComponents, masters } from '@/masters.js'
@@ -199,5 +199,5 @@ registerMasterComponents()
 export default new Vue({
   router,
   store,
-  render: h => h(App)
+  render: h => h(MainApp)
 }).$mount('#app')

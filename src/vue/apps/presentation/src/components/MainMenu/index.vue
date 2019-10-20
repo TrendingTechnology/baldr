@@ -1,5 +1,5 @@
 <template>
-  <ul class="main-menu content">
+  <ul class="vc_main_menu">
     <menu-item :to="{ name: 'home' }"/>
     <menu-item :to="{ name: 'open' }"/>
     <menu-item :to="{ name: 'slides' }"/>

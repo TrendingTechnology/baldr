@@ -3,13 +3,14 @@
  */
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from './views/Home.vue'
 
 // Components.
+import StartPage from './views/StartPage.vue'
+
 import OpenInterface from '@/components/OpenInterface'
 import RestApiOverview from '@/views/RestApiOverview.vue'
 
-import Documentation from '@/views/Documentation.vue'
+import DocumentationOverview from '@/views/DocumentationOverview.vue'
 import MasterDocumentation from '@/views/MasterDocumentation.vue'
 
 import SlideView from '@/views/SlideView'
@@ -29,7 +30,7 @@ const routes = [
   {
     path: '/',
     name: 'home',
-    component: Home,
+    component: StartPage,
     meta: {
       shortcut: 'h',
       title: 'Startseite'
@@ -83,7 +84,7 @@ const routes = [
   },
   {
     path: '/documentation',
-    component: Documentation,
+    component: DocumentationOverview,
     name: 'documentation',
     meta: {
       title: 'Dokumentation',

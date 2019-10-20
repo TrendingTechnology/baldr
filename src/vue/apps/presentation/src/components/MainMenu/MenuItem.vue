@@ -1,5 +1,5 @@
 <template>
-  <li>
+  <li class="vc_menu_item">
     <router-link
       @click.native="$modal.hide('menu')"
       :to="resolved.normalizedTo"
