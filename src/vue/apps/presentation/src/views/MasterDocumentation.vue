@@ -1,5 +1,5 @@
 <template>
-  <div class="vc_master_documentation" b-ui-theme="default">
+  <div class="vc_master_documentation default-padding" b-ui-theme="default">
     <h1>Master slide “{{ masterName }}”</h1>
 
     <section>

@@ -116,36 +116,12 @@ class UiTheme extends MultipleAttributes {
 /**
  *
  */
-
-function setPadding (padding) {
-  const element = document.querySelector('.vc_master_renderer')
-  if (element) {
-    element.style.padding = padding
-  }
-}
-
-const slidePadding = {
-  default: function () {
-    setPadding(null)
-  },
-  set: function (padding) {
-    setPadding(padding)
-  },
-  none: function () {
-    setPadding(0)
-  }
-}
-
-/**
- *
- */
 class StyleConfig {
   constructor () {
     this.configObjects = {
       centerVertically: new CenterVertically(),
       darkMode: new DarkMode(),
       overflow: new Overflow(),
-      slidePadding: slidePadding,
       contentTheme: new ContentTheme(),
       uiTheme: new UiTheme()
     }
@@ -156,7 +132,6 @@ class StyleConfig {
       centerVertically: true,
       darkMode: false,
       overflow: false,
-      slidePadding: '2vw 8vw',
       contentTheme: 'default',
       uiTheme: 'default'
     }

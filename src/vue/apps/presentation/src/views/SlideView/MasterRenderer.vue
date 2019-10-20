@@ -47,16 +47,50 @@ export default {
     this.setMasterStyle()
     if (this.masterName) {
       return createElement(
-        `${this.masterName}-master`,
+        'div',
         {
-          props: this.masterData,
           attrs: {
             'b-content-theme': this.slideCurrent.contentTheme
+          },
+          class: {
+            'vc_master_renderer': true,
           }
-        }
+        },
+        [
+          createElement(
+            `${this.masterName}-master`,
+            {
+              props: this.masterData,
+              class: {
+                'master-inner': true
+              }
+            }
+          )
+        ]
       )
     }
     return createElement('open-interface')
   }
 }
 </script>
+
+<style lang="scss" scoped>
+  .vc_master_renderer {
+    box-sizing: border-box;
+    display: table;
+    font-size: 4vw;
+    height: 100vh;
+    width: 100vw;
+  }
+</style>
+
+<style lang="scss">
+  [b-center-vertically="true"] {
+    .master-inner {
+      display: table-cell;
+      height: 100%;
+      vertical-align: middle;
+    }
+  }
+</style>
+

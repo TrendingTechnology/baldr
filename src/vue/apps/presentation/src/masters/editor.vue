@@ -220,6 +220,8 @@ export default {
 
 <style lang="scss">
   .vc_editor_master {
+    padding: 3vw;
+
     .editor-placeholder {
       font-size: 0.5em;
       color: gray;

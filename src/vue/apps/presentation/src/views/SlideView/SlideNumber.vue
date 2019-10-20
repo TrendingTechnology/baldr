@@ -49,12 +49,12 @@ export default {
 
 <style lang="scss" scoped>
   .vc_slide_number {
-    top: 1vw;
     font-family: $font-family-sans;
-    font-size: 1vw;
-    right: 1vw;
+    font-size: 2vw;
     opacity: 0.2;
     position: fixed;
+    right: 1vw;
+    top: 1vw;
     z-index: 1;
 
     .number, .count {

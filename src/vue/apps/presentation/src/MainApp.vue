@@ -100,20 +100,14 @@ export default {
   }
 }
 </script>
+
 <style lang="scss">
   body {
     margin: 0;
   }
 
-  main {
-    font-size: 4vw;
-    height: 100vh;
-    width: 100vw;
-    overflow-x: hidden;
-
-    #content {
-      padding: 2vw 8vw;
-    }
+  .default-padding {
+    box-sizing: border-box;
+    padding: 2vw 8vw;
   }
-
 </style>

@@ -1,5 +1,5 @@
 <template>
-<div class="vc_documentation_overview" b-ui-theme="default">
+<div class="vc_documentation_overview default-padding" b-ui-theme="default">
   <h1>Documentation</h1>
 
   <section>

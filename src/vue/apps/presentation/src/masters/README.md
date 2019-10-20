@@ -9,11 +9,9 @@ export const master = {
   icon: 'file-image',
   color: 'green',
   styleConfig: {
-    centerVertically: true,
     darkMode: false,
     overflow: false,
     slidePadding: '4vw',
-    theme: 'default',
     contentTheme: 'default',
     uiTheme: 'default'
   },

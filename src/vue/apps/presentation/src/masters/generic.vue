@@ -6,6 +6,8 @@
 import marked from 'marked'
 import { plainText } from '@bldr/core-browser'
 
+const charactersPerStep = 800
+
 const example = `
 ---
 slides:
@@ -190,8 +192,7 @@ slides:
 `
 
 function splitHtmlintoChunks (htmlString) {
-  const threshold = 500
-  if (htmlString.length < threshold) return [htmlString]
+  if (htmlString.length < charactersPerStep) return [htmlString]
 
   const domParser = new DOMParser()
   const dom = domParser.parseFromString(htmlString, 'text/html')
@@ -201,7 +202,7 @@ function splitHtmlintoChunks (htmlString) {
 
   for (const children of dom.body.children) {
     buffer += children.outerHTML
-    if (buffer.length > threshold) {
+    if (buffer.length > charactersPerStep) {
       chunks.push(buffer)
       buffer = ''
     }
@@ -293,5 +294,6 @@ export default {
 <style lang="scss" scoped>
   .vc_generic_master {
     font-size: 2vw;
+    padding: 2vw 8vw;
   }
 </style>

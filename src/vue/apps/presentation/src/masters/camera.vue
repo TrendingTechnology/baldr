@@ -161,8 +161,7 @@ export const master = {
   icon: 'document-camera',
   color: 'red',
   styleConfig: {
-    darkMode: true,
-    slidePadding: 0
+    darkMode: true
   },
   example,
   store: {

@@ -29,8 +29,7 @@ export const master = {
   color: 'purple',
   styleConfig: {
     centerVertically: true,
-    darkMode: true,
-    slidePadding: 0
+    darkMode: true
   },
   example,
   normalizeProps (props) {

@@ -1,12 +1,23 @@
 <template>
   <div class="vc_question_master">
     <h1 v-if="heading">{{ heading }}</h1>
-    <ul :class="{ numbers: showNumbers }">
-      <li v-for="(pair, index) in questions" :key="pair.question">
+    <ol :class="{ numbers: showNumbers }">
+      <li
+        v-for="(pair, index) in questions"
+        :key="pair.question"
+      >
         <p class="question">{{ pair.question }}</p>
-        <p v-if="pair.answer">… <span :class="getClassHidden(index + 1)" class="answer">{{ pair.answer }}</span></p>
+        <p v-if="pair.answer">
+          …
+          <span
+            :class="getClassHidden(index + 1)"
+            class="answer"
+          >
+            {{ pair.answer }}
+          </span>
+        </p>
       </li>
-    </ul>
+    </ol>
   </div>
 </template>
 
@@ -157,6 +168,8 @@ export default {
 <style lang="scss" scoped>
   .vc_question_master {
     font-size: 2vw;
+    padding: 2vw 14vw;
+
     p {
       margin: 0;
     }
@@ -167,7 +180,11 @@ export default {
       list-style-type: none;
     }
 
-    ul.numbers li {
+    ol {
+      padding-left: 3vw;
+    }
+
+    ol.numbers li {
       list-style-type: decimal;
     }
 
