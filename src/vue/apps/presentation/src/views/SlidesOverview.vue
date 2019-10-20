@@ -1,5 +1,5 @@
 <template>
-  <div class="vc_slides_overview" b-content-theme="default">
+  <div class="vc_slides_overview default-padding" b-content-theme="default">
     <h1>Überblick</h1>
     <ol v-if="slides">
       <li

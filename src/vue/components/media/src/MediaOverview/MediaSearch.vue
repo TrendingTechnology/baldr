@@ -1,5 +1,5 @@
 <template>
-  <div class="media-search">
+  <div class="vc_media_search">
     <dynamic-select
       :options="options"
       @input="onInput"

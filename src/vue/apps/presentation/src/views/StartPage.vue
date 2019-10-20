@@ -1,5 +1,5 @@
 <template>
-  <div class="vc_start_page" b-ui-theme="default">
+  <div class="vc_start_page default-padding" b-ui-theme="default">
     <open-interface/>
   </div>
 </template>
@@ -20,5 +20,13 @@ export default {
 <style lang="scss" scoped>
   .vc_start_page {
     font-size: 2vw;
+    display: table;
+    height: 100vh;
+    width: 100vw;
+
+    .vc_open_interface {
+      display: table-cell;
+      vertical-align: middle;
+    }
   }
 </style>

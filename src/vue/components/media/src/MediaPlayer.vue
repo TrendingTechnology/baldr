@@ -1,5 +1,5 @@
 <template>
-  <div class="media-player" v-show="show">
+  <div class="vc_media_player" v-show="show">
 
     <div class="player-container">
       <div class="preview-container">
@@ -122,7 +122,7 @@ export default {
 <style lang="scss" scoped>
   $preview-size: 8vw;
 
-  .media-player {
+  .vc_media_player {
     background-color: scale-color(rgba($gray, 0.7), $alpha: 10%);
     bottom: 0;
     color: $black;

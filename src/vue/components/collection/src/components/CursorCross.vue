@@ -1,5 +1,5 @@
 <template>
-  <div class="cursor-cross">
+  <div class="vc_cursor_cross">
     <material-icon
       :size="size"
       :title="leftTitle"
@@ -74,7 +74,3 @@ export default {
   }
 }
 </script>
-
-<style>
-
-</style>

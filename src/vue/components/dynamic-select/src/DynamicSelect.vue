@@ -3,7 +3,7 @@
 <template>
   <div
     @focusin="hasFocus=true"
-    class="dynamic-select"
+    class="vc_dynamic_select"
     tabindex="0"
   >
     <input
@@ -195,7 +195,7 @@ export default {
 <style lang="scss" scoped>
   $padding-left-right: 0.3em ;
 
-  .dynamic-select {
+  .vc_dynamic_select {
     position: relative;
 
     .result-list {

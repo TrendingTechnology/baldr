@@ -199,7 +199,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .vc_audio-master {
+  .vc_audio_master {
     text-align: center;
 
     p {

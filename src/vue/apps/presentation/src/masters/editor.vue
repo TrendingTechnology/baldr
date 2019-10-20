@@ -129,7 +129,7 @@ export const master = {
     return propsNormalized
   },
   leaveSlide ({ oldSlide, oldProps, newSlide, newProps }) {
-    const element = document.querySelector('.editor-master')
+    const element = document.querySelector('.vc_editor_master')
     if (element) oldProps.markup = element.innerHTML
   },
   plainTextFromProps (props) {

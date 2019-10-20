@@ -1,5 +1,9 @@
 <template>
-  <div b-ui-theme="default" b-dark-mode="false" b-theme="default" class="modal-dialog" v-show="isVisible">
+  <div
+    b-ui-theme="default"
+    class="vc_modal_dialog"
+    v-show="isVisible"
+  >
     <div class="overlay" @click="hide(name)"/>
     <div class="container" role="dialog">
       <material-icon class="close" name="close" @click.native="hide(name)"/>
@@ -70,8 +74,16 @@ export default {
 }
 </script>
 
+<style lang="scss">
+  [b-dark-mode="true"] .vc_modal_dialog {
+    a, a:link, a:visited {
+      color: $gray !important;
+    }
+  }
+</style>
+
 <style lang="scss" scoped>
-  .modal-dialog {
+  .vc_modal_dialog {
     align-items: center;
     display: flex;
     height: 100%;
@@ -80,7 +92,7 @@ export default {
     position: absolute;
     top: 0;
     width: 100%;
-    color: $black;
+    color: $black !important;
 
     .container {
       box-sizing: border-box;

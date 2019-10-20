@@ -1,5 +1,5 @@
 <template>
-  <div class="media-overview">
+  <div class="vc_media_overview">
     <h1>Media</h1>
 
     <media-search/>

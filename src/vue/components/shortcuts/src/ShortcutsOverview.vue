@@ -1,5 +1,5 @@
 <template>
-  <div class="shortcuts-overview">
+  <div class="vc_shortcuts_overview">
     <h1>Shortcuts</h1>
 
     <table>
@@ -51,7 +51,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .shortcuts-overview {
+  .vc_shortcuts_overview {
     font-size: 1.8vw;
     table {
       margin: 0 auto;
@@ -68,7 +68,7 @@ export default {
 </style>
 
 <style lang="scss" >
-  .shortcuts-overview {
+  .vc_shortcuts_overview {
     .key {
       background-color: $gray;
       border-radius: 0.1em;

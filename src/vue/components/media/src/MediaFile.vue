@@ -1,5 +1,5 @@
 <template>
-  <div class="media-file">
+  <div class="vc_media_file">
     <table>
       <tr v-for="(value, key) in mediaFile" :key="key">
         <td class="key">{{ key }}</td>
@@ -32,8 +32,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .media-file {
+  .vc_media_file {
     font-size: 1vw;
+
     .key {
       font-weight: bold;
       text-align: right;

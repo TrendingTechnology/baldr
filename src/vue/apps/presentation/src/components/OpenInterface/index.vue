@@ -1,7 +1,9 @@
 <template>
   <div class="vc_open_interface">
-    <search-presentation/>
-    <open-files/>
+    <div class="flex-container">
+      <search-presentation/>
+      <open-files/>
+    </div>
   </div>
 </template>
 
@@ -21,9 +23,12 @@ export default {
 <style lang="scss" scoped>
   .vc_open_interface {
     font-size: 2vw;
-    display: flex;
 
-    .dynamic-select {
+    .flex-container {
+      display: flex;
+    }
+
+    .vc_dynamic_select {
       flex-grow: 1;
     }
   }

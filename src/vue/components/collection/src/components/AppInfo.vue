@@ -1,5 +1,5 @@
 <template>
-  <div class="compilation-info" v-if="show">
+  <div class="vc_app_info" v-if="show">
     <span class="important app-info">App-Info:</span>
 
     <span class="spacer"></span>
@@ -68,7 +68,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .compilation-info {
+  .vc_app_info {
     background-color: $yellow;
     bottom: 0;
     box-sizing: border-box;

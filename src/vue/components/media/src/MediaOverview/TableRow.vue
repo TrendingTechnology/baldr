@@ -1,5 +1,5 @@
 <template>
-  <tr>
+  <tr class="vc_table_row">
     <td><preview-image @click.native="play(mediaFile.uri)" :media-file="mediaFile"/></td>
     <td>
       <router-link

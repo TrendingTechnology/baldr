@@ -1,5 +1,5 @@
 <template>
-  <section v-if="typeCount(type)">
+  <section class="vc_media_table" v-if="typeCount(type)">
     <h2>
       <material-icon
         :name="`file-${type}`"
