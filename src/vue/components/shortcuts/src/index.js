@@ -128,7 +128,11 @@ class Shortcuts {
       this.add(
         key,
         () => {
-          this.$router.push(route.path)
+          // To avoid uncaught exception object when navigation to a already
+          // loaded route.
+          if (this.$router.currentRoute.path !== route.path) {
+            this.$router.push(route.path)
+          }
         },
         `Go to route: ${routeTitle}`
       )
