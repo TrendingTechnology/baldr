@@ -6,7 +6,7 @@
 
 @import './globals.scss';
 
-[b-theme="default"] {
+[b-content-theme="default"], [b-ui-theme="default"] {
   font-family: $font-family;
   font-size: $font-size;
 

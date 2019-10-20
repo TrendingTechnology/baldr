@@ -242,7 +242,7 @@ class Slide {
     this.no = slideNo
 
     /**
-     * Normalized slide data.
+     * Normalized slide data to render the slide.
      */
     this.renderData = new RenderData(rawSlideObject)
 
@@ -283,6 +283,14 @@ class Slide {
       mediaFiles.push(store.getters['media/mediaFileByUri'](mediaUri))
     }
     return mediaFiles
+  }
+
+  get contentTheme () {
+    if (this.master.styleConfig.contentTheme) {
+      return this.master.styleConfig.contentTheme
+    } else {
+      return 'default'
+    }
   }
 }
 

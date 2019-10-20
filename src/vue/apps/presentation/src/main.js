@@ -96,14 +96,6 @@ class Overflow extends BodyAttributes {
 /**
  *
  */
-class Theme extends BodyAttributes {
-  constructor () {
-    super()
-    this.attributeName = 'b-theme'
-    this.state = 'default'
-  }
-}
-
 class ContentTheme extends MultipleAttributes {
   constructor () {
     super()
@@ -111,6 +103,9 @@ class ContentTheme extends MultipleAttributes {
   }
 }
 
+/**
+ *
+ */
 class UiTheme extends MultipleAttributes {
   constructor () {
     super()
@@ -145,7 +140,6 @@ class StyleConfig {
       darkMode: new DarkMode(),
       overflow: new Overflow(),
       slidePadding: slidePadding,
-      theme: new Theme(),
       contentTheme: new ContentTheme(),
       uiTheme: new UiTheme()
     }
@@ -157,7 +151,6 @@ class StyleConfig {
       darkMode: false,
       overflow: false,
       slidePadding: '2vw 8vw',
-      theme: 'default',
       contentTheme: 'default',
       uiTheme: 'default'
     }

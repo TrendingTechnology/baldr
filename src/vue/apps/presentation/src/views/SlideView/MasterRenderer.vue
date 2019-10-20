@@ -49,7 +49,10 @@ export default {
       return createElement(
         `${this.masterName}-master`,
         {
-          props: this.masterData
+          props: this.masterData,
+          attrs: {
+            'b-content-theme': this.slideCurrent.contentTheme
+          }
         }
       )
     }

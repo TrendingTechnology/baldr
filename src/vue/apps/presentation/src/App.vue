@@ -4,7 +4,7 @@
       <main-menu/>
     </modal-dialog>
     <main>
-      <div id='content' b-content-theme="default">
+      <div id='content'>
         <router-view/>
       </div>
     </main>

@@ -1,5 +1,5 @@
 <template>
-  <div class="slide-number">
+  <div class="slide-number" b-ui-theme="default">
 
     <span v-if="stepCount > 1">
       <plain-icon color="white" name="steps"/>
