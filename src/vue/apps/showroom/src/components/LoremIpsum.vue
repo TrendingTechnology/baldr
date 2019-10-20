@@ -1,5 +1,5 @@
 <template>
-  <div class="lorem">
+  <div class="vc_lorem_ipsum">
     <h1>Lorem ipsum</h1>
 
     <p>Paragraph: Lorem <em>ipsum</em> dolor sit amet, consetetur

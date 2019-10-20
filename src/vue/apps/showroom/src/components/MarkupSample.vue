@@ -1,5 +1,5 @@
 <template>
-  <section class="markup-sample">
+  <section class="vc_markup_sample">
 
     <h2 v-html="title">>{{ title }}</h2>
 
@@ -25,7 +25,7 @@ export default {
   $padding: 0.2vw 2vw;
   $margin: 1vw;
 
-  .markup-sample {
+  .vc_markup_sample {
     .code {
       background-color: scale-color($gray, $lightness: 70%);
       font-size: 0.8em;

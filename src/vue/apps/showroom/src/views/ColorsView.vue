@@ -1,6 +1,5 @@
 <template>
   <main>
-
     <div
       v-for="color in colors"
       :key="color"
@@ -10,9 +9,7 @@
         <div :class="`color ${color}`">.{{ color }}</div>
         <div :class="`color ${color}-dark`">.{{ color }}-dark</div>
       </div>
-
     </div>
-
   </main>
 </template>
 
@@ -51,5 +48,4 @@ export default {
     text-align: center;
     line-height: 4vw;
   }
-
 </style>

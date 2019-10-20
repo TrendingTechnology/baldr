@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import App from './App.vue'
+import MainApp from './MainApp.vue'
 import router from './router'
 import Vuex from 'vuex'
 
@@ -24,5 +24,5 @@ Vue.use(MaterialIcon)
 new Vue({
   store,
   router,
-  render: h => h(App)
+  render: h => h(MainApp)
 }).$mount('#app')

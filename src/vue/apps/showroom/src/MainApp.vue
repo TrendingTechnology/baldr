@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="vc_main_app">
     <nav id="nav">
       <router-link to="/">Home</router-link> |
       <router-link to="/typography">Typography</router-link> |
@@ -19,7 +19,7 @@ import packageJson from '@/../package.json'
 import { AppInfo } from '@bldr/vue-components-collection'
 
 export default {
-  name: 'app',
+  name: 'MainApp',
   components: {
     AppInfo
   },
