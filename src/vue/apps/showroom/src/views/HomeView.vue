@@ -1,7 +1,7 @@
 <template>
   <main>
     <section class="main-project-logo">
-       <material-icon name="baldr"/>
+       <material-icon name="baldr" color="red"/>
     </section>
 
     <section class="sub-projects">
@@ -16,12 +16,6 @@
         color="green"
         href="/songbook"
         name="music"
-        outline="circle"
-      />
-
-      <material-icon
-        color="red"
-        name="document-camera"
         outline="circle"
       />
 

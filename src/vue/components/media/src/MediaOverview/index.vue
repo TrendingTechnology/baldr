@@ -1,5 +1,5 @@
 <template>
-  <div class="vc_media_overview">
+  <div class="vc_media_overview" b-ui-theme="default">
     <h1>Media</h1>
 
     <media-search/>
@@ -31,7 +31,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .media-overview {
-    font-size: 1.8vw;
+  .vc_media_overview {
+    font-size: 1vw;
+    padding: 2vw;
   }
 </style>

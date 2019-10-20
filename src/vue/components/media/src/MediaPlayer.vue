@@ -1,5 +1,5 @@
 <template>
-  <div class="vc_media_player" v-show="show">
+  <div class="vc_media_player" v-show="show" b-ui-theme="default">
 
     <div class="player-container">
       <div class="preview-container">
@@ -166,7 +166,7 @@ export default {
 <style lang="scss">
   $preview-size: 8vw;
 
-  .media-player {
+  .vc_media_player {
     .video-container {
       video {
         height: $preview-size;

@@ -1,5 +1,5 @@
 <template>
-  <div class="vc_shortcuts_overview">
+  <div class="vc_shortcuts_overview" b-ui-theme="default">
     <h1>Shortcuts</h1>
 
     <table>

@@ -1,5 +1,5 @@
 <template>
-  <div class="vc_media_file">
+  <div class="vc_media_file" b-ui-theme="default">
     <table>
       <tr v-for="(value, key) in mediaFile" :key="key">
         <td class="key">{{ key }}</td>
