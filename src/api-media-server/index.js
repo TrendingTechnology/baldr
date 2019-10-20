@@ -501,6 +501,57 @@ function registerRestApi () {
     await searchInField('presentations', 'title', req, res, next)
   })
 
+  app.get('/query-ng', async (req, res, next) => {
+    try {
+      const query = req.query
+      // collection
+      const collections = ['assets', 'presentations']
+      if (!('collection' in query)) query.collection = 'assets'
+      if (!collections.includes(query.collection)) {
+        throw new Error(`Unkown collection “${query.collection}”! Allowed collections: ${collections}`)
+      }
+
+      // method
+      if (!('method' in query)) query.method = 'search'
+      const methods = ['match', 'search']
+      if (!methods.includes(query.method)) {
+        throw new Error(`Unkown method “${query.method}”! Allowed methods: ${methods}`)
+      }
+
+      // id
+      if (!('field' in query)) query.field = 'id'
+
+      await connectDb()
+      const collection = db.collection(query.collection)
+
+      // find
+      let result
+      let find
+
+      // match
+      if (query.method === 'match') {
+        const findObject = {}
+        findObject[query.field] = query.search
+        find = collection.find(findObject, { projection: { _id: 0 } })
+        result = await find.next()
+
+      // search
+      } else if (query.method === 'search') {
+        // https://stackoverflow.com/a/38427476/10193818
+        const regex = new RegExp(escapeRegex(query.search), 'gi');
+        const findObject = {}
+        findObject[query.field] = regex
+        const projectionObject = { projection: { _id: 0 } }
+        projectionObject.projection[query.field] = 1
+        find = collection.find(findObject, projectionObject)
+        result = await find.toArray()
+      }
+      res.json(result)
+    } catch (error) {
+      next(error)
+    }
+  })
+
   /* mgmt = management */
 
   app.get('/mgmt/flush', async (req, res, next) => {

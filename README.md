@@ -60,6 +60,8 @@ This npm commands execute tests:
 
 ### Imports
 
+#### Node packages
+
 ```js
 // Node packages.
 const path = require('path')
@@ -69,6 +71,13 @@ const jquery = require('jquery')
 
 // Project packages.
 const { bootstrapConfig, Library, AlphabeticalSongsTree } = require('@bldr/songbook-base')
+```
+
+#### Vue imports
+
+```js
+// Vue components.
+import StartPage from './views/StartPage.vue'
 ```
 
 ### vue
