@@ -201,6 +201,7 @@ export default {
 <style lang="scss" scoped>
   .vc_audio_master {
     text-align: center;
+    font-size: 3vw;
 
     p {
       margin: 0;

@@ -6,7 +6,7 @@
 import marked from 'marked'
 import { plainText } from '@bldr/core-browser'
 
-const charactersPerStep = 800
+const charactersPerStep = 600
 
 const example = `
 ---
@@ -294,6 +294,6 @@ export default {
 <style lang="scss" scoped>
   .vc_generic_master {
     font-size: 2vw;
-    padding: 2vw 8vw;
+    padding: 2vw 10vw;
   }
 </style>

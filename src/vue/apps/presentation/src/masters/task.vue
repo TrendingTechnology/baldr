@@ -66,6 +66,8 @@ export default {
 
 <style lang="scss" scoped>
   .vc_task_master {
+    margin: 3vw;
+    font-size: 4vw;
     text-align: center;
   }
 </style>
