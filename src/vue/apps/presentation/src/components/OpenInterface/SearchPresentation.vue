@@ -25,7 +25,6 @@ export default {
     },
     search (title) {
       if (!title) return
-      console.log(title)
       this.$media.httpRequest.request({
         url: 'query-ng',
         method: 'get',
@@ -39,6 +38,9 @@ export default {
         this.options = response.data
       })
     }
+  },
+  mounted () {
+    this.$dynamicSelect.focus()
   }
 }
 </script>

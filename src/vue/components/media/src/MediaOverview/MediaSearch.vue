@@ -1,10 +1,20 @@
 <template>
   <div class="vc_media_search">
+    <div>
+      Suchfeld:
+      <a href="#/media"
+        :class="{ 'current-search-field': searchField === currentSearchField }"
+        v-for="searchField in searchFields"
+        :key="searchField"
+        @click="setSearchField(searchField)"
+      >{{ searchField }} </a>
+    </div>
     <dynamic-select
       :options="options"
       @input="onInput"
       v-model="mediaFile"
       @search="search"
+      placeholder="Suche nach Medien-Dateien"
     />
   </div>
 </template>
@@ -20,10 +30,15 @@ export default {
   data: function () {
     return {
       mediaFile: {},
-      options: []
+      options: [],
+      searchFields: ['id', 'title', 'path'],
+      currentSearchField: 'id'
     }
   },
   methods: {
+    setSearchField (searchField) {
+      this.currentSearchField = searchField
+    },
     onInput () {
       const uri = `id:${this.mediaFile.id}`
       this.$media.resolve(uri)
@@ -31,10 +46,13 @@ export default {
     search (text) {
       if (!text) return
       this.$media.httpRequest.request({
-        url: 'query/assets/search/id',
+        url: 'query-ng',
         method: 'get',
         params: {
-          substring: text
+          collection: 'assets',
+          method: 'search',
+          field: this.currentSearchField,
+          search: text
         }
       }).then((response) => {
         this.options = response.data
@@ -43,3 +61,11 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+  .vc_media_search {
+    .current-search-field {
+      font-weight: bold;
+    }
+  }
+</style>

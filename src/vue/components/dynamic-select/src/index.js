@@ -7,8 +7,8 @@ const Plugin = {
     this.event = new Vue()
 
     Vue.prototype.$dynamicSelect = {
-      focus (name) {
-        Plugin.event.$emit('dynamicselectfocus', name)
+      focus () {
+        Plugin.event.$emit('dynamicselectfocus')
       }
     }
     Vue.component('dynamic-select', component)

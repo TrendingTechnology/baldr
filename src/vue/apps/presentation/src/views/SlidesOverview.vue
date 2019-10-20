@@ -1,5 +1,9 @@
 <template>
   <div class="vc_slides_overview default-padding" b-content-theme="default">
+    <div class="view-mode" @click="switchViewMode">
+      <a href="#" v-if="!viewModeCompact">kompakt</a>
+      <a href="#" v-if="viewModeCompact">ausführlich</a>
+    </div>
     <h1>Überblick</h1>
     <ol v-if="slides">
       <li
@@ -8,13 +12,16 @@
         @click="gotToSlide(slide.no)"
         :title="`Zur Folie Nr. ${slide.no}`"
       >
-        <material-icon
-          :name="slide.master.icon"
-          :color="slide.master.color"
-        />
-        <span class="master-title"> {{ slide.master.title }}</span>
-        {{ slide.title }}
-        <span class="plain-text">{{ slide.plainText }}</span>
+        <div class="master-info">
+          <material-icon
+            :name="slide.master.icon"
+            :color="slide.master.color"
+          />
+          <span class="master-title"> {{ slide.master.title }}</span>
+        </div>
+
+        <div class="slide-title indent">{{ slide.title }}</div>
+        <div class="plain-text indent" v-if="!viewModeCompact">{{ slide.plainText }}</div>
       </li>
     </ol>
     <open-interface v-else/>
@@ -28,6 +35,11 @@ export default {
   name: 'SlidesOverview',
   components: {
     OpenInterface
+  },
+  data () {
+    return {
+      viewModeCompact: true
+    }
   },
   mounted: function () {
     this.$styleConfig.set({
@@ -46,6 +58,9 @@ export default {
     gotToSlide (slideNo) {
       this.$store.dispatch('setSlideNoCurrent', slideNo)
       this.$router.push('/slides')
+    },
+    switchViewMode () {
+      this.viewModeCompact = !this.viewModeCompact
     }
   }
 }
@@ -54,6 +69,22 @@ export default {
 <style lang="scss" scoped>
   .vc_slides_overview {
     font-size: 1.5vw;
+    box-sizing: border-box;
+    height: 100vh;
+
+    .view-mode {
+      position: absolute;
+      top: 2vw;
+      right: 2vw;
+    }
+
+    .indent {
+      padding-left: 2.5vw;
+    }
+
+    .master-info {
+      font-size: 1.5em;
+    }
 
     h1 {
       font-size: 1.4em;
@@ -69,6 +100,7 @@ export default {
 
       .master-title {
         font-weight: bold;
+        font-family: $font-family-sans;
       }
 
       .plain-text {

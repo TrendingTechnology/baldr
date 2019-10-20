@@ -32,7 +32,9 @@ export default {
 
 <style lang="scss" scoped>
   .vc_media_overview {
-    font-size: 1vw;
+    box-sizing: border-box;
+    font-size: 1.8vw;
+    height: 100vh;
     padding: 2vw;
   }
 </style>

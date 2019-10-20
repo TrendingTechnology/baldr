@@ -527,14 +527,12 @@ function registerRestApi () {
       // find
       let result
       let find
-
       // match
       if (query.method === 'match') {
         const findObject = {}
         findObject[query.field] = query.search
         find = collection.find(findObject, { projection: { _id: 0 } })
         result = await find.next()
-
       // search
       } else if (query.method === 'search') {
         // https://stackoverflow.com/a/38427476/10193818
