@@ -25,11 +25,15 @@ export default {
     },
     search (title) {
       if (!title) return
+      console.log(title)
       this.$media.httpRequest.request({
-        url: 'query/presentations/search/title',
+        url: 'query-ng',
         method: 'get',
         params: {
-          substring: title
+          collection: 'presentations',
+          method: 'search',
+          field: 'title',
+          search: title
         }
       }).then((response) => {
         this.options = response.data

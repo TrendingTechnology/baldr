@@ -541,9 +541,18 @@ function registerRestApi () {
         const regex = new RegExp(escapeRegex(query.search), 'gi');
         const findObject = {}
         findObject[query.field] = regex
-        const projectionObject = { projection: { _id: 0 } }
-        projectionObject.projection[query.field] = 1
-        find = collection.find(findObject, projectionObject)
+        find = collection.aggregate([
+          {
+            $match: findObject
+          },
+          {
+            $project: {
+              _id: false,
+              id: true,
+              name: `$${query.field}`
+            }
+          }
+        ])
         result = await find.toArray()
       }
       res.json(result)
