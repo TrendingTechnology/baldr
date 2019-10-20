@@ -49,7 +49,10 @@ const actions = {
   async openPresentationById ({ dispatch }, id) {
     let response = await vue.$media.httpRequest.request(`query/presentation/match/id/${id}`)
     const presentation = response.data
-    response = await vue.$media.httpRequest.request(`/media/${presentation.path}`)
+    response = await vue.$media.httpRequest.request({
+      url: `/media/${presentation.path}`,
+      headers: { 'Cache-Control': 'no-cache' },
+    })
     await dispatch('openPresentation', response.data)
   },
   async reloadPresentation ({ dispatch, getters }) {
