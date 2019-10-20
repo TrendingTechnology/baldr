@@ -1,5 +1,5 @@
 <template>
-  <div class="video-master">
+  <div class="vc_video_master">
     <video v-if="mediaFile" controls :src="mediaFile.httpUrl"/>
   </div>
 </template>
@@ -75,7 +75,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.video-master {
-  text-align: center;
-}
+  .vc_video_master {
+    text-align: center;
+  }
 </style>

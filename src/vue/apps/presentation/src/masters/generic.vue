@@ -1,6 +1,5 @@
 <template>
-  <div class="markdown-master" v-html="markupCurrent">
-  </div>
+  <div class="vc_generic_master" v-html="markupCurrent"/>
 </template>
 
 <script>
@@ -292,7 +291,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .markdown-master {
+  .vc_generic_master {
     font-size: 2vw;
   }
 </style>

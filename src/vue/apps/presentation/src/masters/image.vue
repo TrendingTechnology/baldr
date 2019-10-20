@@ -1,5 +1,5 @@
 <template>
-  <div class="image-master">
+  <div class="vc_image_master">
     <img v-if="mediaFile" :src="mediaFile.httpUrl"/>
     <div v-if="titleComputed || descriptionComputed" class="metadata">
       <h1 v-if="titleComputed" class="title">{{ titleComputed }}</h1>

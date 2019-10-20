@@ -1,5 +1,5 @@
 <template>
-  <div class="camera-master">
+  <div class="vc_camera_master">
     <modal-dialog name="select-video-device">
       <dynamic-select
         placeholder="Wähle eine Dokumentenkamera aus"
@@ -246,7 +246,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .camera-master {
+  .vc_camera_master {
     font-size: 1.5vw;
 
     video {

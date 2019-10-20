@@ -1,5 +1,5 @@
 <template>
-  <div v-if="mediaFile" class="audio-master">
+  <div v-if="mediaFile" class="vc_audio_master">
     <img
       :src="coverComputed"
       class="preview"
@@ -200,30 +200,30 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.audio-master {
-  text-align: center;
+  .vc_audio-master {
+    text-align: center;
 
-  p {
-    margin: 0;
-  }
+    p {
+      margin: 0;
+    }
 
-  .composer {
-    font-size: 1.2em;
-  }
+    .composer {
+      font-size: 1.2em;
+    }
 
-  .title {
-    font-size: 1.1em;
-  }
+    .title {
+      font-size: 1.1em;
+    }
 
-  .artist {
-    margin-top: 5vw;
-    font-size: 0.7em;
-  }
+    .artist {
+      margin-top: 5vw;
+      font-size: 0.7em;
+    }
 
-  img.preview {
-    height: 30vh;
-    width: 30vh;
-    object-fit: cover;
+    img.preview {
+      height: 30vh;
+      width: 30vh;
+      object-fit: cover;
+    }
   }
-}
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="person-master">
+  <div class="vc_person_master">
     <img :src="imageFile.httpUrl">
     <div class="info-box">
       <p v-if="birthComputed || deathComputed" class="birth-and-death">{{ birthComputed }} {{ deathComputed }}</p>
@@ -108,7 +108,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .person-master {
+  .vc_person_master {
     img {
       height: 100vh;
       left: 0;

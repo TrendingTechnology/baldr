@@ -1,6 +1,6 @@
 <template>
   <div
-    class="editor-master"
+    class="vc_editor_master"
     spellcheck="false"
     v-html="markupSafe"
     :style="{ fontSize: fontSize + 'vw' }">
@@ -219,7 +219,7 @@ export default {
 </script>
 
 <style lang="scss">
-  .editor-placeholder {
+  .vc_editor_placeholder {
     font-size: 0.5em;
     color: gray;
     opacity: 0.5;

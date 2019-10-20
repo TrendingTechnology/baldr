@@ -1,5 +1,5 @@
 <template>
-  <div class="task-master" v-html="markup"/>
+  <div class="vc_task_master" v-html="markup"/>
 </template>
 
 <script>
@@ -65,7 +65,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .task-master {
+  .vc_task_master {
     text-align: center;
   }
 </style>

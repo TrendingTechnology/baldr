@@ -1,5 +1,5 @@
 <template>
-  <div class='quote-master'>
+  <div class="vc_quote_master">
     <p class="text">
       <span class="quotation-mark">»</span>
         {{text }}
@@ -63,7 +63,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-  .quote-master {
+  .vc_quote_master {
     padding-left: 20%;
     padding-right: 20%;
 

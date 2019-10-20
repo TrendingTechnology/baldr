@@ -1,5 +1,5 @@
 <template>
-  <div class="question-master">
+  <div class="vc_question_master">
     <h1 v-if="heading">{{ heading }}</h1>
     <ul :class="{ numbers: showNumbers }">
       <li v-for="(pair, index) in questions" :key="pair.question">
@@ -155,7 +155,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .question-master {
+  .vc_question_master {
     font-size: 2vw;
     p {
       margin: 0;
