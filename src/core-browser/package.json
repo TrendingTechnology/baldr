@@ -1,6 +1,6 @@
 {
   "name": "@bldr/core-browser",
-  "version": "0.10.0",
+  "version": "0.10.1",
   "description": "Base core functionality for code running in the browser without node.",
   "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
   "bugs": {

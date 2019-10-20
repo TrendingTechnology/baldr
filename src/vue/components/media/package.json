@@ -1,6 +1,6 @@
 {
   "name": "@bldr/vue-media",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "Resolve media files. Counter part of the BALDR media server.",
   "author": {
     "name": "Josef Friedrich",
@@ -14,8 +14,8 @@
   },
   "main": "src/index.js",
   "dependencies": {
-    "@bldr/http-request": "^0.1.5",
-    "@bldr/vue-component-dynamic-select": "^0.1.12"
+    "@bldr/http-request": "^0.1.6",
+    "@bldr/vue-component-dynamic-select": "^0.1.13"
   },
   "publishConfig": {
     "access": "public"
