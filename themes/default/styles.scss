@@ -6,46 +6,21 @@
 
 @import './globals.scss';
 
-[b-content-theme="default"], [b-ui-theme="default"] {
+/**********************************************************************
+ * all: ui + content
+ *********************************************************************/
+
+[b-ui-theme="default"], [b-content-theme="default"] {
+
+  /**
+   * Typography
+   */
   font-family: $font-family;
   font-size: $font-size;
-
-  &,
-  &[b-dark-mode="false"],
-  & #app:fullscreen,
-  &[b-dark-mode="false"] #app:fullscreen {
-    background-color: $white;
-    color: $black;
-  }
-
-  &[b-dark-mode="true"],
-  &[b-dark-mode="true"] #app:fullscreen {
-    background-color: $black;
-    color: $white;
-  }
 
   h1, h2, h3, h4 {
     font-family: 'Alegreya Sans';
     font-weight: 700;
-  }
-
-  code {
-    font-family: 'Anonymous Pro';
-    background-color: scale-color($gray, $lightness: 50%);
-    font-weight: normal;
-    font-size: 0.8em;
-    padding: 0 0.1em;
-  }
-
-  pre  {
-    background-color: scale-color($gray, $lightness: 50%);
-    padding: 0.3em;
-    overflow-y: auto;
-
-    code {
-      padding: 0;
-      background-color: none;
-    }
   }
 
   a {
@@ -64,50 +39,43 @@
     }
   }
 
-  &[b-dark-mode="false"] a {
-    &:link, &:visited {
-      color: scale-color($gray, $lightness: -20%);
+  code {
+    font-family: $font-family-mono;
+    background-color: scale-color($gray, $lightness: 50%);
+    font-weight: normal;
+    font-size: 0.8em;
+    padding: 0 0.1em;
+  }
+
+  pre  {
+    background-color: scale-color($gray, $lightness: 50%);
+    padding: 0.3em;
+    overflow-y: auto;
+
+    code {
+      padding: 0;
+      background-color: none;
     }
   }
 
-  &[b-dark-mode="true"] a {
-    &:link, &:visited {
-      color: $white;
-    }
-  }
+  /**
+   * Semantic
+   */
 
   .important {
     @include important;
   }
 
   .important.person {
-    font-family: 'Alegreya Sans SC';
+    font-family: $font-family-sans-small-caps;
   }
 
   .person {
-    font-family: 'Alegreya SC';
+    font-family: $font-family-small-caps;
   }
 
   .piece {
     font-style: italic;
-  }
-
-  /* dash only in unordered lists which are marked with .content */
-  ul.content {
-    list-style-type: none;
-
-    ul {
-      list-style-type: none;
-    }
-
-    & li {
-      text-indent: -1em;
-    }
-
-    & li:before {
-      content: "- ";
-      text-indent: -1em;
-    }
   }
 
   /**
@@ -206,6 +174,73 @@
   @each $name, $value in $colors {
     .text-#{$name}-dark {
       color: scale-color($value, $lightness: -30%) !important;
+    }
+  }
+}
+
+/**********************************************************************
+ * ui
+ *********************************************************************/
+
+[b-ui-theme="default"] {
+//
+}
+
+/**********************************************************************
+ * content
+ *********************************************************************/
+
+[b-content-theme="default"] {
+  ul {
+    list-style-type: none;
+
+    ul {
+      list-style-type: none;
+    }
+
+    & li {
+      text-indent: -1em;
+    }
+
+    & li:before {
+      content: "- ";
+      text-indent: -1em;
+    }
+  }
+}
+
+/**********************************************************************
+ * dark mode = false
+ *********************************************************************/
+
+[b-dark-mode="false"] {
+  // all
+  [b-ui-theme="default"], [b-content-theme="default"] {
+    background-color: $white;
+    color: $black;
+
+    a {
+      &:link, &:visited {
+        color: scale-color($gray, $lightness: -20%);
+      }
+    }
+  }
+}
+
+/**********************************************************************
+ * dark mode = true
+ *********************************************************************/
+
+ [b-dark-mode="true"] {
+  // all
+  [b-ui-theme="default"], [b-content-theme="default"] {
+    background-color: $black;
+    color: $white;
+
+    a {
+      &:link, &:visited {
+        color: $white;
+      }
     }
   }
 }
