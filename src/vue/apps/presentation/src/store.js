@@ -5,6 +5,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import { callMasterFunc } from '@/masters.js'
 import { Presentation } from './content-file'
+import vue from '@/main.js'
 
 Vue.use(Vuex)
 
@@ -15,6 +16,9 @@ const state = {
 }
 
 const getters = {
+  presentation: state => {
+    return state.presentation
+  },
   slideNoCurrent: state => {
     return state.slideNoCurrent
   },
@@ -41,6 +45,18 @@ const actions = {
     commit('setPresentation', presentation)
     commit('setSlides', presentation.slides)
     dispatch('setSlideNoCurrent', 1)
+  },
+  async openPresentationById ({ dispatch }, id) {
+    let response = await vue.$media.httpRequest.request(`query/presentation/match/id/${id}`)
+    const presentation = response.data
+    response = await vue.$media.httpRequest.request(`/media/${presentation.path}`)
+    await dispatch('openPresentation', response.data)
+  },
+  async reloadPresentation ({ dispatch, getters }) {
+    const pres = getters.presentation
+    if ('meta' in pres && 'id' in pres.meta) {
+      await dispatch('openPresentationById', pres.meta.id)
+    }
   },
   setSlideNext ({ dispatch, getters }) {
     const no = getters.slideNoCurrent

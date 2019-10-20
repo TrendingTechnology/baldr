@@ -66,6 +66,14 @@ export default {
         description: 'Main menu'
       },
       {
+        keys: 'ctrl+r',
+        callback: () => {
+          console.log('reload')
+          this.$store.dispatch('reloadPresentation')
+        },
+        description: 'Reload presentation'
+      },
+      {
         keys: 'ctrl+alt+d',
         callback: () => { this.$styleConfig.configObjects.darkMode.toggle() },
         description: 'Dark mode'

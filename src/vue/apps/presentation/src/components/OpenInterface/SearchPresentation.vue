@@ -19,16 +19,7 @@ export default {
   },
   methods: {
     async onInput () {
-      let response = await this.$media.httpRequest.request({
-        url: `query/presentation/match/id/${this.presentation.id}`,
-        method: 'get'
-      })
-      const presentation = response.data
-      response = await this.$media.httpRequest.request({
-        url: `/media/${presentation.path}`,
-        method: 'get'
-      })
-      await this.$store.dispatch('openPresentation', response.data)
+      this.$store.dispatch('openPresentationById', this.presentation.id)
       this.$router.push('/slides')
     },
     search (title) {

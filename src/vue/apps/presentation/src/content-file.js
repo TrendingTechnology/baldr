@@ -9,7 +9,7 @@ import { themeNames } from '@/themes.js'
 import { masterNames, callMasterFunc, masterOptions } from '@/masters.js'
 import store from '@/store.js'
 import router from '@/router.js'
-import Vue from '@/main.js'
+import vue from '@/main.js'
 
 /**
  * A raw slide object or a raw slide string.
@@ -336,7 +336,7 @@ export class Presentation {
     }
     // media
     if (mediaUris.length > 0) {
-      this.media = await Vue.$media.resolve(mediaUris)
+      this.media = await vue.$media.resolve(mediaUris)
     }
   }
 }
@@ -360,7 +360,7 @@ function openFile (file) {
       })
     }
   } else {
-    Vue.$media.addFromFileSystem(file)
+    vue.$media.addFromFileSystem(file)
   }
 }
 
