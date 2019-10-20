@@ -3,14 +3,15 @@
  */
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { parseContentFile } from '@/content-file.js'
 import { callMasterFunc } from '@/masters.js'
+import { Presentation } from './content-file'
 
 Vue.use(Vuex)
 
 const state = {
   slideNoCurrent: null,
-  slides: {}
+  slides: {},
+  presentation: {}
 }
 
 const getters = {
@@ -35,8 +36,10 @@ const getters = {
 
 const actions = {
   async openPresentation ({ commit, dispatch }, content) {
-    const contentFile = await parseContentFile(content)
-    commit('setSlides', contentFile.slides)
+    const presentation = new Presentation()
+    await presentation.parseYamlFile(content)
+    commit('setPresentation', presentation)
+    commit('setSlides', presentation.slides)
     dispatch('setSlideNoCurrent', 1)
   },
   setSlideNext ({ dispatch, getters }) {
@@ -113,6 +116,9 @@ const mutations = {
   },
   setStepNoCurrent (state, { slideCurrent, stepNoCurrent }) {
     slideCurrent.renderData.stepNoCurrent = stepNoCurrent
+  },
+  setPresentation (state, presentation) {
+    Vue.set(state, 'presentation', presentation)
   }
 }
 

@@ -287,52 +287,57 @@ class Slide {
 }
 
 /**
- * Convert an array of raw slide data into an object. The slide data is
- * indexed by the slide number. Slides are numbered beginning from 1 not from 0.
- * We reindex.
+ * A presentation
  *
- * @param {array} slides
- *
- * @returns {object}
- */
-function reIndex (slides) {
-  const out = {}
-  for (const index in slides) {
-    out[Number.parseInt(index) + 1] = slides[index]
-  }
-  return out
-}
+ * @property {object} meta
+ * @property {object} slides
+ * @property {object} media
+ * @property {string} rawYamlString_
+ * @property {string} rawYamlObject_
 
-/**
- * Parse the presentation content file. It is in the YAML format.
- *
- * @param {string} content - The content of the YAML file as a string
- *
- * @returns {object}
  */
-export async function parseContentFile (content) {
-  let rawYaml
-  try {
-    rawYaml = yaml.safeLoad(content)
-  } catch (error) {
-    throw new Error(`${error.name}: ${error.message}`)
-  }
-  // Slides
-  const indexedSlides = reIndex(rawYaml.slides)
-  const slides = {}
-  const mediaUris = []
-  for (const slideNo in indexedSlides) {
-    const slide = new Slide(indexedSlides[slideNo], slideNo)
-    slides[slideNo] = slide
-    for (const mediaUri of slide.renderData.mediaUris) {
-      mediaUris.push(mediaUri)
+export class Presentation {
+  /**
+   * Convert an array of raw slide data into an object. The slide data is
+   * indexed by the slide number. Slides are numbered beginning from 1 not from 0.
+   * We reindex.
+   *
+   * @param {array} slides
+   *
+   * @returns {object}
+   */
+  reIndex (slides) {
+    const out = {}
+    for (const index in slides) {
+      out[Number.parseInt(index) + 1] = slides[index]
     }
+    return out
   }
-  if (mediaUris.length > 0) {
-    await Vue.$media.resolve(mediaUris)
-  }
-  return {
-    slides: slides
+
+  async parseYamlFile (rawYamlString) {
+    this.rawYamlString_ = rawYamlString
+    try {
+      this.rawYamlObject_ = yaml.safeLoad(rawYamlString)
+    } catch (error) {
+      throw new Error(`${error.name}: ${error.message}`)
+    }
+    // meta
+    this.meta = this.rawYamlObject_.meta
+    // slides
+    const indexedSlides = this.reIndex(this.rawYamlObject_.slides)
+    this.slides = {}
+    const mediaUris = []
+    for (const slideNo in indexedSlides) {
+      const slide = new Slide(indexedSlides[slideNo], slideNo)
+      this.slides[slideNo] = slide
+      for (const mediaUri of slide.renderData.mediaUris) {
+        mediaUris.push(mediaUri)
+      }
+    }
+    // media
+    if (mediaUris.length > 0) {
+      this.media = await Vue.$media.resolve(mediaUris)
+    }
   }
 }
 
