@@ -1,5 +1,5 @@
 <template>
-  <div class="master-documentation">
+  <div class="master-documentation" b-ui-theme="default">
     <h1>Master slide “{{ masterName }}”</h1>
 
     <section>

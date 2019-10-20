@@ -1,5 +1,5 @@
 <template>
-<div class="documentation">
+<div class="documentation" b-ui-theme="default">
   <h1>Documentation</h1>
 
   <section>

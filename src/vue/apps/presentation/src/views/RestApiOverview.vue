@@ -1,5 +1,5 @@
 <template>
-  <div class="rest-api-overview">
+  <div class="rest-api-overview" b-ui-theme="default">
     <h1>REST API servers</h1>
 
     <table>

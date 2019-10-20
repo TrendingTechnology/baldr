@@ -1,5 +1,5 @@
 <template>
-  <div class="slides-overview">
+  <div class="slides-overview" b-content-theme="default">
     <h1>Überblick</h1>
     <ol v-if="slides">
       <li

@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="home" b-ui-theme="default">
     <open-interface/>
   </div>
 </template>
