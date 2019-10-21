@@ -2,6 +2,7 @@
 
 PACKAGES=(
 	'src/vue/apps/presentation:presentation'
+	'src/vue/components/media:vue-media'
 )
 
 CWD="$(pwd)"
@@ -43,12 +44,14 @@ cd "$CWD"
 # npm install -g jsdoc
 # npm install -g jsdoc-vuejs
 # npm install -g vue-template-compiler
+# npm install -g documentation
 
 for i in "${PACKAGES[@]}"; do
 	REL_PATH=${i%%:*}
 	PACKAGE_NAME=${i#*:}
-	jsdoc --configure ./jsdoc-config.json --destination $DIR_GH_PAGES/$PACKAGE_NAME $DIR_SRC/$REL_PATH
+	jsdoc --configure ./jsdoc-config.json --destination "$DIR_GH_PAGES/$PACKAGE_NAME" "$DIR_SRC/$REL_PATH"
+	#documentation build "$DIR_SRC/$REL_PATH/**" --format html --output "$DIR_GH_PAGES/$PACKAGE_NAME"
 done
 
 
-xdg-open $DIR_GH_PAGES/presentation/index.html
+xdg-open $DIR_GH_PAGES/vue-media/index.html
