@@ -49,7 +49,11 @@ class Player {
     if (this.mediaFile) return this.mediaFile.mediaElement
   }
 
-  start (uriOrMediaFile) {
+  /**
+   * @param {String|Object} uriOrMediaFile
+   * @param {Number} duration  - in seconds
+   */
+  start (uriOrMediaFile, duration) {
     let mediaFile
     if (typeof uriOrMediaFile === 'object') {
       mediaFile = uriOrMediaFile
@@ -62,6 +66,12 @@ class Player {
     this.mediaElement.volume = 1
     this.mediaElement.currentTime = 0
     this.mediaElement.play()
+
+    if (duration) {
+      setTimeout(() => {
+        this.fadeOut(1)
+      }, duration * 1000)
+    }
   }
 
   stop () {
