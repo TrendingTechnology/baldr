@@ -1,4 +1,5 @@
 /**
+ * @module @bldr/vue-media
  * @file Resolve media files.
  */
 
@@ -9,13 +10,17 @@ import Vue from 'vue'
 import DynamicSelect from '@bldr/vue-component-dynamic-select'
 
 import ComponentMediaFile from './MediaFile.vue'
-import MediaOverview from './MediaOverview'
+// documentation.js could not import without /index.vue
+import MediaOverview from './MediaOverview/index.vue'
 import MediaPlayer from './MediaPlayer.vue'
 
 const restEndpoints = getDefaultRestEndpoints()
 export const httpRequestNg = new HttpRequestNg(restEndpoints, '/api/media')
 export const httpRequest = new HttpRequest(getDefaultServers(), '/api/media')
 
+/**
+ * @param {String} duration - in seconds
+ */
 export function formatDuration (duration) {
   if (!duration) return '00:00'
   duration = parseInt(duration)
@@ -30,13 +35,25 @@ export function formatDuration (duration) {
   return `${minutes}:${seconds}`
 }
 
+/**
+ * Create a video element like `new Audio() does.`
+ *
+ * @param {String} src
+ */
 function Video(src) {
   const video = document.createElement('video')
   video.src = src
   return video
 }
 
+/**
+ *
+ */
 class Player {
+  /**
+   *
+   * @param {object} store - vuex store object.
+   */
   constructor (store) {
     this.$store = store
 
@@ -52,10 +69,16 @@ class Player {
     this.stopFadeOut_ = 0.5
   }
 
+  /**
+   *
+   */
   get mediaFile () {
     return this.$store.getters['media/current']
   }
 
+  /**
+   *
+   */
   get mediaElement () {
     if (this.mediaFile) return this.mediaFile.mediaElement
   }
@@ -95,6 +118,9 @@ class Player {
     }, 100)
   }
 
+  /**
+   *
+   */
   async stop () {
     if (!this.mediaElement) return
 
@@ -109,29 +135,44 @@ class Player {
     this.mediaElement.currentTime = 0
   }
 
+  /**
+   *
+   */
   startPrevious () {
     this.stop()
     this.$store.dispatch('media/setMediaFilePrevious')
     this.play()
   }
 
+  /**
+   *
+   */
   startNext () {
     this.stop()
     this.$store.dispatch('media/setMediaFileNext')
     this.play()
   }
 
+  /**
+   *
+   */
   play () {
     if (!this.mediaElement) return
     this.mediaElement.volume = 1
     this.mediaElement.play()
   }
 
+  /**
+   *
+   */
   pause () {
     if (!this.mediaElement) return
     this.mediaElement.pause()
   }
 
+  /**
+   *
+   */
   toggle () {
     if (!this.mediaElement) return
     if (this.mediaElement.paused) {
@@ -304,6 +345,9 @@ const storeModule = {
   mutations
 }
 
+/**
+ *
+ */
 class MediaTypes {
   constructor () {
     this.types = {
@@ -320,6 +364,9 @@ class MediaTypes {
     this.extensions_ = this.spreadExtensions_()
   }
 
+  /**
+   *
+   */
   spreadExtensions_ () {
     const out = {}
     for (const type in this.types) {
@@ -330,6 +377,9 @@ class MediaTypes {
     return out
   }
 
+  /**
+   *
+   */
   extensionToType (extension) {
     const ext = extension.toLowerCase()
     if (ext in this.extensions_) {
@@ -338,10 +388,16 @@ class MediaTypes {
     throw new Error(`Unkown extension “${ext}”`)
   }
 
+  /**
+   *
+   */
   typeToColor (type) {
     return this.typeColors[type]
   }
 
+  /**
+   *
+   */
   isMedia (filename) {
     const extension = filename.split('.').pop().toLowerCase()
     if (extension in this.extensions_) {
@@ -630,6 +686,12 @@ class Resolver {
  *
  */
 class Media {
+  /**
+   *
+   * @param {object} router
+   * @param {object} store
+   * @param {object} shortcuts
+   */
   constructor (router, store, shortcuts) {
     this.$router = router
     this.$store = store
@@ -713,6 +775,9 @@ class Media {
     return output
   }
 
+  /**
+   *
+   */
   addShortcutForMediaFile_ (mediaFile) {
     if (mediaFile.shortcut) return
     if (!mediaFile.isPlayable) return
@@ -742,6 +807,9 @@ class Media {
     mediaFile.shortcut = shortcut
   }
 
+  /**
+   *
+   */
   async addFromFileSystem (file) {
     const mediaFile = await this.resolver.resolveMediaFileFileSystem_(file)
     if (mediaFile) {
