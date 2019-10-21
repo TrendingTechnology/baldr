@@ -34,12 +34,14 @@ export function plainText (html) {
 }
 
 export function shortenText (text, options = {}) {
+  if (!text) return ''
   let { maxLength, stripTags } = options
   if (!maxLength) maxLength = 48
   if (stripTags) text = plainText(text)
   // https://stackoverflow.com/a/5454303
   // trim the string to the maximum length
-  var trimmedString = text.substr(0, 48);
+  text = text.substr(0, maxLength);
   // re-trim if we are in the middle of a word
-  return trimmedString.substr(0, Math.min(trimmedString.length, trimmedString.lastIndexOf(" ")))
+  text = text.substr(0, Math.min(text.length, text.lastIndexOf(' ')))
+  return `${text} …`
 }
