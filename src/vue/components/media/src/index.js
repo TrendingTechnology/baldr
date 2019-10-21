@@ -39,6 +39,17 @@ function Video(src) {
 class Player {
   constructor (store) {
     this.$store = store
+
+    /**
+     * We have to clear the timeout. A not yet finished playbook with a duration
+     * - stopped to early - cases that the next playback gets stopped to early.
+     */
+    this.timeout_ = null
+
+    /**
+     * We never stop. Instead we fade out very short and smoothly.
+     */
+    this.stopFadeOut_ = 0.5
   }
 
   get mediaFile () {
@@ -51,9 +62,10 @@ class Player {
 
   /**
    * @param {String|Object} uriOrMediaFile
+   * @param {Number} startTime  - in seconds
    * @param {Number} duration  - in seconds
    */
-  start (uriOrMediaFile, duration) {
+  async start (uriOrMediaFile, startTime, duration) {
     let mediaFile
     if (typeof uriOrMediaFile === 'object') {
       mediaFile = uriOrMediaFile
@@ -61,22 +73,39 @@ class Player {
       mediaFile = this.$store.getters['media/mediaFileByUri'](uriOrMediaFile)
     }
     if (!mediaFile) throw new Error(`mediaFile couldn’t played`)
-    this.stop()
+    await this.stop()
     this.$store.dispatch('media/setMediaFileCurrent', mediaFile)
-    this.mediaElement.volume = 1
-    this.mediaElement.currentTime = 0
-    this.mediaElement.play()
 
-    if (duration) {
-      setTimeout(() => {
-        this.fadeOut(1)
-      }, duration * 1000)
-    }
+    // To prevent AbortError in Firefox, artefacts when switching through the
+    // audio files.
+    setTimeout(() => {
+      this.mediaElement.volume = 1
+      if (startTime) {
+        this.mediaElement.currentTime = startTime
+      } else {
+        this.mediaElement.currentTime = 0
+      }
+      this.mediaElement.play()
+
+      if (duration) {
+        this.timeout_ = setTimeout(() => {
+          this.fadeOut(this.stopFadeOut_)
+        }, (duration - this.stopFadeOut_) * 1000)
+      }
+    }, 100)
   }
 
-  stop () {
+  async stop () {
     if (!this.mediaElement) return
-    this.mediaElement.pause()
+
+    // We have to clear the timeout. A not yet finished playbook with a duration
+    // - stopped to early - cases that the next playback gets stopped to early.
+    if (this.timeout_) {
+      clearTimeout(this.timeout_)
+      this.timeout_ = null
+    }
+    //this.mediaElement.pause()
+    await this.fadeOut(this.stopFadeOut_)
     this.mediaElement.currentTime = 0
   }
 
@@ -112,21 +141,29 @@ class Player {
     }
   }
 
+  /**
+   * @param {Number} duration - in seconds
+   */
   fadeOut (duration = 3.1) {
-    if (!this.mediaElement) return
-    let actualVolume = this.mediaElement.volume
-    const steps = actualVolume / 100
-    // in milliseconds: duration * 1000 / 100
-    const delay = duration * 10
-    const fadeOutInterval = setInterval(() => {
-      actualVolume -= steps
-      if (actualVolume >= 0) {
-        this.mediaElement.volume = actualVolume.toFixed(2)
-      } else {
-        this.stop()
-        clearInterval(fadeOutInterval)
+    return new Promise((resolve, reject) => {
+      if (!this.mediaElement) {
+        reject()
       }
-    }, parseInt(delay))
+      let actualVolume = this.mediaElement.volume
+      const steps = actualVolume / 100
+      // in milliseconds: duration * 1000 / 100
+      const delay = duration * 10
+      const fadeOutInterval = setInterval(() => {
+        actualVolume -= steps
+        if (actualVolume >= 0) {
+          this.mediaElement.volume = actualVolume.toFixed(2)
+        } else {
+          this.mediaElement.pause()
+          clearInterval(fadeOutInterval)
+          resolve()
+        }
+      }, parseInt(delay))
+    })
   }
 }
 

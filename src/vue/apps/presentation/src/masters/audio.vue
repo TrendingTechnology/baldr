@@ -6,9 +6,9 @@
       v-if="coverComputed"
     />
 
-    <p>
+    <!-- <p>
       <audio controls :src="mediaFile.httpUrl"/>
-    </p>
+    </p> -->
 
     <p
       class="composer person"
@@ -95,6 +95,9 @@ export const master = {
     if (typeof props.src === 'string') {
       props.src = [props.src]
     }
+    if (props.begin && props.end && !props.duration) {
+      props.duration = props.end - props.begin
+    }
     return props
   },
   stepCount (props) {
@@ -108,7 +111,7 @@ export const master = {
   },
   enterSlide ({ newProps }) {
     const props = newProps
-    this.$media.player.start(props.src[0])
+    this.$media.player.start(props.src[0], props.begin, props.duration)
     // console.log('enter slide')
     // console.log(oldSlide)
     // console.log(newSlide)
@@ -156,6 +159,15 @@ export default {
     },
     cover: {
       type: String
+    },
+    begin: {
+      type: Number
+    },
+    end: {
+      type: Number
+    },
+    duration: {
+      type: Number
     }
   },
   computed: {
