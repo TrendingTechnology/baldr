@@ -161,7 +161,8 @@ export const master = {
   icon: 'document-camera',
   color: 'red',
   styleConfig: {
-    darkMode: true
+    darkMode: true,
+    contentTheme: 'default'
   },
   example,
   store: {

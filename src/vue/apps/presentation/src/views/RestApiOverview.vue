@@ -82,7 +82,10 @@ export default {
 
 <style lang="scss" scoped>
   .vc_rest_api_overview {
+    box-sizing: border-box;
     font-size: 1.6vw;
+    height: 100vh;
+    padding: 4vw;
 
     td, th {
       padding: 0 0.5em;

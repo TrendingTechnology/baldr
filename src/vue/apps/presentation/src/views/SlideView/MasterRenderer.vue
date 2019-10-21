@@ -7,50 +7,49 @@ export default {
     OpenInterface
   },
   computed: {
-    slideCurrent () {
-      if (this.$store.getters.slideCurrent) {
-        return this.$store.getters.slideCurrent
-      }
-      return false
-    },
-    masterName () {
+    master () {
+      let name
+      let props
+      let contentTheme
+      let styleConfig
+
+      const slide = this.$store.getters.slideCurrent
       if ('master' in this.$route.meta) {
-        return this.$route.meta.master
-      } else if (this.slideCurrent) {
-        return this.slideCurrent.renderData.name
+        name = this.$route.meta.master
+        props = this.$route.meta.data
+        contentTheme = this.$masters[name].styleConfig.contentTheme
+        styleConfig = this.$masters[name].styleConfig
+      } else if (slide) {
+        name = slide.master.name
+        props = slide.renderData.data
+        contentTheme = slide.contentTheme
+        styleConfig = slide.master.styleConfig
       }
-      return false
-    },
-    masterData () {
-      if ('data' in this.$route.meta) {
-        return this.$route.meta.data
-      } else if (this.slideCurrent) {
-        return this.slideCurrent.renderData.data
+      return {
+        name,
+        props,
+        styleConfig,
+        contentTheme
       }
-      return {}
     }
   },
   methods: {
     setMasterStyle () {
-      const master = this.$masters[this.masterName]
-      if (master) {
-        if ('styleConfig' in master) {
-          this.$styleConfig.set(master.styleConfig)
-        } else {
-          this.$styleConfig.setDefaults()
-        }
+      if (this.master.styleConfig) {
+        this.$styleConfig.set(this.master.styleConfig)
+      } else {
+        this.$styleConfig.setDefaults()
       }
     }
   },
-
   render: function (createElement) {
     this.setMasterStyle()
-    if (this.masterName) {
+    if (this.master.name) {
       return createElement(
         'div',
         {
           attrs: {
-            'b-content-theme': this.slideCurrent.contentTheme
+            'b-content-theme': this.master.contentTheme
           },
           class: {
             'vc_master_renderer': true,
@@ -58,9 +57,9 @@ export default {
         },
         [
           createElement(
-            `${this.masterName}-master`,
+            `${this.master.name}-master`,
             {
-              props: this.masterData,
+              props: this.master.props,
               class: {
                 'master-inner': true
               }
@@ -93,4 +92,3 @@ export default {
     }
   }
 </style>
-
