@@ -9,7 +9,7 @@ import Vue from 'vue'
 import DynamicSelect from '@bldr/vue-component-dynamic-select'
 
 import ComponentMediaFile from './MediaFile.vue'
-import MediaOverview from './MediaOverview'
+import MediaOverview from './MediaOverview/index.vue'
 import MediaPlayer from './MediaPlayer.vue'
 
 const restEndpoints = getDefaultRestEndpoints()
