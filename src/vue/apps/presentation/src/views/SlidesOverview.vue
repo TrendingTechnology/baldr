@@ -11,6 +11,7 @@
         :key="slide.no"
         @click="gotToSlide(slide.no)"
         :title="`Zur Folie Nr. ${slide.no}`"
+        :class="{ 'current-slide': $store.getters.slideCurrent.no === slide.no }"
       >
         <div class="master-info">
           <material-icon
@@ -19,7 +20,6 @@
           />
           <span class="master-title"> {{ slide.master.title }}</span>
         </div>
-
         <div class="slide-title indent">{{ slide.title }}</div>
         <div class="plain-text indent" v-if="!viewModeCompact">{{ slide.plainText }}</div>
       </li>
@@ -93,9 +93,18 @@ export default {
     li {
       cursor: pointer;
       list-style-type: none;
+      padding: 0 0.5em;
 
       &:hover {
         background-color: scale-color($gray, $lightness: 80%);
+      }
+
+      &.current-slide {
+        background-color: scale-color($yellow, $lightness: 80%);
+      }
+
+      &.current-slide:hover {
+        background-color: scale-color($yellow, $lightness: 50%);
       }
 
       .master-title {

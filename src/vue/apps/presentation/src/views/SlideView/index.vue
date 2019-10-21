@@ -1,5 +1,6 @@
 <template>
   <div class="vc_slide_view">
+    <master-icon/>
     <slide-number/>
     <master-renderer/>
   </div>
@@ -8,12 +9,14 @@
 <script>
 import MasterRenderer from './MasterRenderer.vue'
 import SlideNumber from './SlideNumber.vue'
+import MasterIcon from './MasterIcon.vue'
 
 export default {
   name: 'SlideView',
   components: {
     MasterRenderer,
-    SlideNumber
+    SlideNumber,
+    MasterIcon
   }
 }
 </script>
