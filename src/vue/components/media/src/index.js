@@ -51,17 +51,17 @@ function Video(src) {
  */
 class Player {
   /**
-   *
    * @param {object} store - vuex store object.
    */
   constructor (store) {
     this.$store = store
 
     /**
-     * We have to clear the timeout. A not yet finished playbook with a duration
-     * - stopped to early - cases that the next playback gets stopped to early.
+     * We have to clear the timeouts. A not yet finished playbook with a
+     * duration - stopped to early - cases that the next playback gets stopped
+     * to early.
      */
-    this.timeout_ = null
+    this.timeouts_ = []
 
     /**
      * We never stop. Instead we fade out very short and smoothly.
@@ -85,10 +85,8 @@ class Player {
 
   /**
    * @param {String|Object} uriOrMediaFile
-   * @param {Number} startTime  - in seconds
-   * @param {Number} duration  - in seconds
    */
-  async start (uriOrMediaFile, startTime, duration) {
+  load (uriOrMediaFile) {
     let mediaFile
     if (typeof uriOrMediaFile === 'object') {
       mediaFile = uriOrMediaFile
@@ -96,9 +94,15 @@ class Player {
       mediaFile = this.$store.getters['media/mediaFileByUri'](uriOrMediaFile)
     }
     if (!mediaFile) throw new Error(`mediaFile couldn’t played`)
-    await this.stop()
     this.$store.dispatch('media/setMediaFileCurrent', mediaFile)
+  }
 
+  /**
+   * @param {Number} startTime  - in seconds
+   * @param {Number} duration  - in seconds
+   */
+  play (startTime, duration) {
+    if (!this.mediaElement) return
     // To prevent AbortError in Firefox, artefacts when switching through the
     // audio files.
     setTimeout(() => {
@@ -111,9 +115,12 @@ class Player {
       this.mediaElement.play()
 
       if (duration) {
-        this.timeout_ = setTimeout(() => {
-          this.fadeOut(this.stopFadeOut_)
-        }, (duration - this.stopFadeOut_) * 1000)
+        this.timeouts_.push(setTimeout(
+          () => {
+            this.fadeOut(this.stopFadeOut_)
+          },
+          (duration - this.stopFadeOut_) * 1000
+        ))
       }
     }, 100)
   }
@@ -123,13 +130,12 @@ class Player {
    */
   async stop () {
     if (!this.mediaElement) return
-
     // We have to clear the timeout. A not yet finished playbook with a duration
     // - stopped to early - cases that the next playback gets stopped to early.
-    if (this.timeout_) {
-      clearTimeout(this.timeout_)
-      this.timeout_ = null
+    for (const timeoutId of this.timeouts_) {
+      clearTimeout(timeoutId)
     }
+    this.timeout_ = []
     //this.mediaElement.pause()
     await this.fadeOut(this.stopFadeOut_)
     this.mediaElement.currentTime = 0
@@ -151,15 +157,6 @@ class Player {
     this.stop()
     this.$store.dispatch('media/setMediaFileNext')
     this.play()
-  }
-
-  /**
-   *
-   */
-  play () {
-    if (!this.mediaElement) return
-    this.mediaElement.volume = 1
-    this.mediaElement.play()
   }
 
   /**
@@ -217,7 +214,12 @@ const state = {
     video: {},
     image: {}
   },
-  restApiServers: []
+  restApiServers: [],
+  // To realize a playthrough and stop option on the audio and video master
+  // slides, we must track the currently playing sample and the in the future
+  // to be played sample (loaded).
+  sampleLoaded: {},
+  samplePlaying: {}
 }
 
 const getters = {
@@ -255,6 +257,12 @@ const getters = {
   },
   restApiServers: state => {
     return state.restApiServers
+  },
+  sampleLoaded: state => {
+    return state.sampleLoaded
+  },
+  samplePlaying: state => {
+    return state.samplePlaying
   },
   typeCount: state => type => {
     return Object.keys(state.mediaTypes[type]).length
@@ -334,6 +342,12 @@ const mutations = {
   },
   setMediaNoCurrent (state, no) {
     state.mediaNoCurrent = no
+  },
+  sampleLoaded (state, sample) {
+    state.sampleLoaded = sample
+  },
+  samplePlayed (state, sample) {
+    state.samplePlayed = sample
   }
 }
 
@@ -408,6 +422,21 @@ class MediaTypes {
 }
 
 export const mediaTypes = new MediaTypes()
+
+/**
+ * A sample (snippet, sprite) of a media file which should be played. A sample
+ * has typically a start time and a duration. If the start time is missing, the
+ * media file gets played from the beginning. If the duration is missing, the
+ * whole media file gets played.
+ */
+class Sample {
+  constructor (mediaFile, startTime, duration) {
+    this.mediaFile = mediaFile
+    this.mediaElement = mediaFile.mediaElement
+    this.startTime = startTime
+    this.duration = startTime
+  }
+}
 
 /**
  * Hold various data of a media file as class properties.
@@ -800,7 +829,8 @@ class Media {
     this.$shortcuts.add(
       shortcut,
       () => {
-        this.player.start(mediaFile.uri)
+        this.player.load(mediaFile.uri)
+        this.player.play()
       },
       `Play ${mediaFile.titleSafe}`
     )

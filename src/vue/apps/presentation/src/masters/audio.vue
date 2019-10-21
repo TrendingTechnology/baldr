@@ -111,7 +111,11 @@ export const master = {
   },
   enterSlide ({ newProps }) {
     const props = newProps
-    this.$media.player.start(props.src[0], props.begin, props.duration)
+    this.$media.player.load(props.src[0])
+    if (newProps.autoplay) {
+      this.$media.player.play(props.begin, props.duration)
+    }
+
     // console.log('enter slide')
     // console.log(oldSlide)
     // console.log(newSlide)
@@ -151,7 +155,7 @@ export default {
     },
     autoplay: {
       type: Boolean,
-      default: true
+      default: false
     },
     playthrough: {
       type: Boolean,

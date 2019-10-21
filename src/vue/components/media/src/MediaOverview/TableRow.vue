@@ -44,7 +44,8 @@ export default {
   },
   methods: {
     play (uri) {
-      this.$media.player.start(uri)
+      this.$media.player.load(uri)
+      this.$media.player.play()
     }
   }
 }
