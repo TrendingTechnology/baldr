@@ -1,0 +1,19 @@
+{
+    "opts": {
+        "encoding": "utf8",
+        "destination": ".",
+        "recurse": true,
+        "template": "node_modules/better-docs"
+    },
+    "tags": {
+        "allowUnknownTags": true
+    },
+    "source": {
+        "includePattern": "\\.(vue|js)$"
+    },
+    "plugins": [
+        "node_modules/jsdoc-vuejs",
+        "plugins/markdown"
+    ]
+}
+

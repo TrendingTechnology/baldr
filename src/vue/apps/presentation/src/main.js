@@ -1,4 +1,14 @@
 /**
+ *
+ * ```js
+ * function mounted () {
+ *  this.$styleConfig.setDefault()
+ *
+ *  // Set presentation app to fullscreen:
+ *  this.$fullscreen()
+ * }
+ * ```
+ *
  * @module @bldr/presentation
  */
 import Vue from 'vue'
