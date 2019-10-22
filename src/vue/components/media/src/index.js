@@ -639,6 +639,7 @@ export class MediaFile {
 class Resolver {
 
   /**
+   * @private
    * @param {string} key
    * @param {string|json} value
    */
@@ -650,6 +651,10 @@ class Resolver {
     throw new Error(`Media with the ${key} ”${value}” couldn’t be resolved.`)
   }
 
+  /**
+   * @private
+   * @param {MediaFile} mediaFile
+   */
   resolveMediaElement_ (mediaFile) {
     let mediaElement
     if (!('type' in mediaFile)) throw new Error(`mediaFile “${mediaFile}” has no type.`)
@@ -689,6 +694,10 @@ class Resolver {
     })
   }
 
+  /**
+   * @private
+   * @param {MediaFile} mediaFile
+   */
   async resolveHttpUrl_ (mediaFile) {
     if ('httpUrl' in mediaFile) return mediaFile.httpUrl
     if ('path' in mediaFile) {
@@ -699,13 +708,19 @@ class Resolver {
   }
 
   /**
-   * Order of resolution:
+   * Resolve (get the HTTP URL and some meta informations) a remote media file
+   * by its URI.
+   *
+   * Order of async resolution calls / tasks:
    *
    * 1. mediaFile
    * 2. httpUrl
    * 3. mediaElement
+   *
+   * @private
+   * @param {String} uri
    */
-  async resolveMediaFile_ (uri) {
+  async resolveRemoteFile_ (uri) {
     const mediaFile = new MediaFile({ uri: uri })
     if (mediaFile.uriScheme === 'http' || mediaFile.uriScheme === 'https') {
       mediaFile.httpUrl = mediaFile.uri
@@ -726,9 +741,14 @@ class Resolver {
   }
 
   /**
+   * Order of async resolution calls / tasks:
+   *
+   * 1. mediaElement
+   *
+   * @private
    * @param {File} file - File object https://developer.mozilla.org/de/docs/Web/API/File
    */
-  async resolveMediaFileFileSystem_ (file) {
+  async resolveLocalFile_ (file) {
     if (mediaTypes.isMedia(file.name)) {
       const httpUrl = URL.createObjectURL(file)
       const uri = `localfile:${file.name}`
@@ -745,23 +765,40 @@ class Resolver {
   }
 
   /**
-   * Resolve media files by URIs.
+   * Resolve media files by URIs or local media files by their file objects.
    *
-   * @param {string|array} uris - A single URI as a string or a array of URIs.
+   * @param {string|array|object} mixedSpecs - A single remote URI as a string or a array of URIs.
    *   Uniform Resource Identifier, for example
    *   `id:Joseph_haydn` or `filename:beethoven.jpg`
    */
-  resolve (uris) {
-    if (typeof uris === 'string') uris = [uris]
-    const uniqueUris = []
-    for (const uri of uris) {
-      if (!uniqueUris.includes(uri)) {
-        uniqueUris.push(uri)
+  resolve (mixedSpecs) {
+    if (typeof mixedSpecs === 'string' || mixedSpecs instanceof File ) {
+      mixedSpecs = [mixedSpecs]
+    }
+
+    const localFileObjects = []
+    const remoteUris = []
+    for (const mixedSpec of mixedSpecs) {
+      if (typeof mixedSpec === 'string') {
+        remoteUris.push(mixedSpec)
+      } else if (mixedSpec instanceof File) {
+        localFileObjects.push(mixedSpec)
+      }
+    }
+
+    const uniqueRemoteUris = []
+    for (const uri of remoteUris) {
+      if (!uniqueRemoteUris.includes(uri)) {
+        uniqueRemoteUris.push(uri)
       }
     }
     const promises = []
-    for (const uri of uniqueUris) {
-      promises.push(this.resolveMediaFile_(uri))
+    for (const uri of uniqueRemoteUris) {
+      promises.push(this.resolveRemoteFile_(uri))
+    }
+
+    for (const localFile of localFileObjects) {
+      promises.push(this.resolveLocalFile_(localFile))
     }
     return Promise.all(promises)
   }
@@ -861,7 +898,7 @@ class Media {
   }
 
   /**
-   *
+   * @private
    */
   addShortcutForMediaFile_ (mediaFile) {
     if (mediaFile.shortcut) return
@@ -891,17 +928,6 @@ class Media {
       `Play ${mediaFile.titleSafe}`
     )
     mediaFile.shortcut = shortcut
-  }
-
-  /**
-   *
-   */
-  async addFromFileSystem (file) {
-    const mediaFile = await this.resolver.resolveMediaFileFileSystem_(file)
-    if (mediaFile) {
-      this.$store.dispatch('media/addMediaFile', mediaFile)
-      this.addShortcutForMediaFile_(mediaFile)
-    }
   }
 }
 

@@ -368,7 +368,7 @@ function openFile (file) {
       })
     }
   } else {
-    vue.$media.addFromFileSystem(file)
+    vue.$media.resolve(file)
   }
 }
 
