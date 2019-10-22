@@ -5,16 +5,13 @@
 # baldr
 
 A try to write my presentations for school in HTML5, CSS3 and
-Javascript using [Electron](https://electron.atom.io/).
-Further informations can be found on the
-[API documentation site](https://josef-friedrich.github.io/baldr)
-of the project.
+Javascript using [Vuejs](https://vuejs.org/).
 
 This repository contains some evaluation and research code.
 
 ## About the name `baldr`
 
-![](src/vue/components/material-icon/src/icons/baldr.svg)
+<img src="src/vue/components/material-icon/src/icons/baldr.svg" style="width: 300px;">
 
 [Baldr](https://en.wikipedia.org/wiki/Baldr) is the name of a nordic
 god. He is the of god of light.
@@ -47,16 +44,9 @@ lerna exec "sort-package-json"
 lerna publish
 ```
 
-## Testing
-
-This npm commands execute tests:
-
-* `npm test`: All tests
-* `npm run untitest`: All unit tests
-* `npm run spectron`: All spectron tests
-* `npm run standard`: standardjs linting
-
 ## Coding style
+
+The Baldr project follows the [standardJS](https://standardjs.com/) style guides.
 
 ### Imports
 
