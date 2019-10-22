@@ -1,3 +1,6 @@
+/**
+ * @module @bldr/vue-component-material-icon
+ */
 import material from './MaterialIcon.vue'
 import plain from './PlainIcon.vue'
 

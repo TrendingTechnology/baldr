@@ -1,6 +1,6 @@
 /**
- * @module @bldr/vue-media
  * @file Resolve media files.
+ * @module @bldr/vue-media
  */
 
 /* globals document */
@@ -217,6 +217,7 @@ const state = {
     image: {}
   },
   restApiServers: [],
+  samples: {},
   // To realize a playthrough and stop option on the audio and video master
   // slides, we must track the currently playing sample and the in the future
   // to be played sample (loaded).
@@ -350,6 +351,9 @@ const mutations = {
   },
   samplePlayed (state, sample) {
     state.samplePlayed = sample
+  },
+  sample (state, sample) {
+    Vue.set(state.samples, sample.id, sample)
   }
 }
 
@@ -441,7 +445,16 @@ export const mediaTypes = new MediaTypes()
  * whole media file gets played.
  */
 class Sample {
-  constructor (mediaFile, title, id, startTime, { duration, endTime }) {
+  /**
+   * @param {MediaFile} mediaFile
+   * @param {object} specs
+   * @property {String} specs.title
+   * @property {String|Number} specs.id
+   * @property {String|Number} specs.startTime
+   * @property {String|Number} specs.duration
+   * @property {String|Number} specs.endTime
+   */
+  constructor (mediaFile, { title, id, startTime, duration, endTime }) {
     /**
      * @type {MediaFile}
      */
@@ -457,32 +470,32 @@ class Sample {
      */
     this.title = title
 
+    if (!id) throw new Error('A sample needs an id.')
+
     /**
-     * `uri#id` for example `id:Beethoven#0` `filename:beethoven.jpg#Theme_1`.
+     * `uri#id` for example `id:Beethoven#complete` `filename:beethoven.jpg#Theme_1`.
      * @type {String}
      */
-    this.id = id
+    this.id = `${this.mediaFile.uri}#${id}`
 
     /**
      * @type {Number}
      */
     this.startTimeSec = this.toSec_(startTime)
 
-    if (!duration && !endTime) {
-      throw new Error('Specifiy duration or endTime')
-    } else if (duration && endTime) {
+    if (duration && endTime) {
       throw new Error('Specifiy duration or endTime not both. They are mutually exclusive.')
     }
 
     /**
      * @type {Number}
      */
-    this.durationSec
+    this.durationSec = null
     duration = this.toSec_(duration)
     if (duration) {
       this.durationSec = duration
-    } else {
-      this.durationSec = this.toSec_(this.endTime) - this.startTimeSec
+    } else if (endTime) {
+      this.durationSec = this.toSec_(endTime) - this.startTimeSec
     }
   }
 
@@ -893,6 +906,21 @@ class Media {
       this.$store.dispatch('media/addMediaFile', mediaFile)
       this.addShortcutForMediaFile_(mediaFile)
       output[mediaFile.uri] = mediaFile
+
+      if (mediaFile.isPlayable) {
+        this.$store.commit('media/sample', new Sample(
+          mediaFile,
+          {
+            title: 'komplett',
+            id: 'complete',
+            startTime: 0
+          }
+        ))
+
+        for (let sampleSpec of mediaFile.samples) {
+          this.$store.commit('media/sample', new Sample(mediaFile, sampleSpec))
+        }
+      }
     }
     return output
   }
@@ -944,6 +972,11 @@ const Plugin = {
     if (store) store.registerModule('media', storeModule)
 
     Vue.filter('duration', formatDuration)
+    /**
+     * $media
+     * @memberof module:@bldr/presentation~Vue
+     * @type {module:@bldr/vue-media~Media}
+     */
     Vue.prototype.$media = new Media(router, store, shortcuts)
     Vue.component('media-player', MediaPlayer)
   }

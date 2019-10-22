@@ -1,5 +1,10 @@
 #! /usr/bin/env node
 
+/**
+ * A REST API to save states of the seating plan app.
+ * @module @bldr/api-seating-plan
+ */
+
 // Node packages.
 const fs = require('fs')
 const path = require('path')

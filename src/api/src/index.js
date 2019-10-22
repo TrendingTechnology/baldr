@@ -1,5 +1,9 @@
 #! /usr/bin/env node
 
+/**
+ * @module @bldr/api
+ */
+
 // Third party packages.
 const { Command } = require('commander')
 const cors = require('cors')

@@ -114,6 +114,16 @@ class UiTheme extends MultipleAttributes {
 }
 
 /**
+ * @typedef styleConfig
+ * @type {object}
+ * @property {styleConfig.centerVertically}
+ * @property {styleConfig.darkMode}
+ * @property {styleConfig.overflow}
+ * @property {styleConfig.contentTheme}
+ * @property {styleConfig.uiTheme}
+ */
+
+/**
  *
  */
 class StyleConfig {
@@ -151,6 +161,9 @@ class StyleConfig {
     }
   }
 
+  /**
+   * @param {module:@bldr/presentation~styleConfig} styleConfig
+   */
   set (styleConfig) {
     if (!styleConfig) styleConfig = {}
     this.set_(Object.assign(this.defaults_(), styleConfig))
@@ -158,14 +171,15 @@ class StyleConfig {
 }
 
 /**
- *
+ * $styleConfig
+ * @type {module:@bldr/presentation~StyleConfig}
  */
 Vue.prototype.$styleConfig = new StyleConfig()
 
 /******************************************************************************/
 
 /**
- *
+ * $master
  */
 Vue.prototype.$masters = masters
 
@@ -177,6 +191,10 @@ Vue.prototype.$fullscreen = function () {
 // Must be before new Vue()
 registerMasterComponents()
 
+/**
+ * Vue instance
+ * @namespace Vue
+ */
 export default new Vue({
   router,
   store,

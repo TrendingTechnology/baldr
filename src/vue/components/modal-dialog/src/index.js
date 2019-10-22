@@ -1,5 +1,11 @@
+/**
+ * @module @bldr/vue-component-modal-dialog
+ */
 import ModalDialog from './ModalDialog.vue'
 
+/**
+ *
+ */
 class DialogsWatcher {
   constructor () {
     this.dialogs = {}

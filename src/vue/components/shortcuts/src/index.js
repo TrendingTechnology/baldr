@@ -1,5 +1,5 @@
 /**
- * @file Wrapper functions around mousetrap
+ * Wrapper functions around mousetrap
  * @module @bldr/vue-shortcuts
  */
 
@@ -60,6 +60,9 @@ const storeModule = {
   mutations
 }
 
+/**
+ *
+ */
 class Shortcuts {
   constructor (router, store) {
     this.$router = router
@@ -163,6 +166,11 @@ const Plugin = {
   install (Vue, router, store) {
     if (!router) throw new Error('Pass in an instance of “VueRouter”.')
     if (store) store.registerModule('shortcuts', storeModule)
+    /**
+     * $shortcuts
+     * @memberof module:@bldr/presentation~Vue
+     * @type {module:@bldr/vue-shortcuts~Shortcuts}
+     */
     Vue.prototype.$shortcuts = new Shortcuts(router, store)
   }
 }
