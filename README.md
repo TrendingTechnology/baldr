@@ -80,6 +80,18 @@ const { bootstrapConfig, Library, AlphabeticalSongsTree } = require('@bldr/songb
 import StartPage from './views/StartPage.vue'
 ```
 
+### Private fields
+
+https://google.github.io/styleguide/jsguide.html#features-classes-fields
+
+```js
+class Foo {
+  constructor() {
+    this.bar_ = computeBar()
+  }
+}
+```
+
 ### vue
 
 #### Component name

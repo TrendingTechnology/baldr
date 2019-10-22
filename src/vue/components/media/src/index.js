@@ -20,6 +20,8 @@ export const httpRequest = new HttpRequest(getDefaultServers(), '/api/media')
 
 /**
  * @param {String} duration - in seconds
+ *
+ * @return {String}
  */
 export function formatDuration (duration) {
   if (!duration) return '00:00'
@@ -364,17 +366,26 @@ const storeModule = {
  */
 class MediaTypes {
   constructor () {
+    /**
+     * @type {object}
+     */
     this.types = {
       audio: ['mp3', 'm4a'],
       image: ['jpg', 'jpeg', 'png', 'svg'],
       video: ['mp4']
     }
 
+    /**
+     * @type {object}
+     */
     this.typeColors = {
       audio: 'brown',
       image: 'green',
       video: 'purple'
     }
+    /**
+     * @type {array}
+     */
     this.extensions_ = this.spreadExtensions_()
   }
 
@@ -424,17 +435,62 @@ class MediaTypes {
 export const mediaTypes = new MediaTypes()
 
 /**
- * A sample (snippet, sprite) of a media file which should be played. A sample
+ * A sample (snippet, sprite) of a media file which could be played. A sample
  * has typically a start time and a duration. If the start time is missing, the
  * media file gets played from the beginning. If the duration is missing, the
  * whole media file gets played.
  */
 class Sample {
-  constructor (mediaFile, startTime, duration) {
+  constructor (mediaFile, title, id, startTime, { duration, endTime }) {
+    /**
+     * @type {MediaFile}
+     */
     this.mediaFile = mediaFile
+
+    /**
+     * @type {HTMLMediaElement}
+     */
     this.mediaElement = mediaFile.mediaElement
-    this.startTime = startTime
-    this.duration = startTime
+
+    /**
+     * @type {String}
+     */
+    this.title = title
+
+    /**
+     * `uri#id` for example `id:Beethoven#0` `filename:beethoven.jpg#Theme_1`.
+     * @type {String}
+     */
+    this.id = id
+
+    /**
+     * @type {Number}
+     */
+    this.startTimeSec = this.toSec_(startTime)
+
+    if (!duration && !endTime) {
+      throw new Error('Specifiy duration or endTime')
+    } else if (duration && endTime) {
+      throw new Error('Specifiy duration or endTime not both. They are mutually exclusive.')
+    }
+
+    /**
+     * @type {Number}
+     */
+    this.durationSec
+    duration = this.toSec_(duration)
+    if (duration) {
+      this.durationSec = duration
+    } else {
+      this.durationSec = this.toSec_(this.endTime) - this.startTimeSec
+    }
+  }
+
+  /**
+   * @param {String|Number} timeIntervaleString
+   */
+  toSec_ (timeIntervaleString) {
+    return Number(timeIntervaleString)
   }
 }
 
