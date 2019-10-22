@@ -1,7 +1,13 @@
 /**
+ * Base core functionality for the code running in the browser without node.
  * @module @bldr/core-browser
  */
 
+/**
+ *
+ * @param {Number} timeStampMsec
+ * @return {String}
+ */
 export function toLocaleDateTimeString (timeStampMsec) {
   const date = new Date(Number(timeStampMsec))
   const dayNumber = date.getDay()
@@ -26,6 +32,12 @@ export function toLocaleDateTimeString (timeStampMsec) {
   return `${dayString} ${dateString} ${timeString}`
 }
 
+/**
+ *
+ * @param {String} html
+ *
+ * @return {String}
+ */
 export function plainText (html) {
   // To get spaces between heading and paragraphs
   html = html.replace(/></g, '> <')
@@ -33,6 +45,13 @@ export function plainText (html) {
   return markup.body.textContent || ''
 }
 
+/**
+ *
+ * @param {String} text
+ * @param {Object} options
+ *
+ * @return {String}
+ */
 export function shortenText (text, options = {}) {
   if (!text) return ''
   let { maxLength, stripTags } = options
