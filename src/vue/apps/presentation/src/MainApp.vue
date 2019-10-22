@@ -1,5 +1,15 @@
 <template>
-  <div class="vc_main_app" @drop.prevent="dropHandler" @dragover.prevent>
+  <div class="vc_main_app"
+    @drop.prevent="dropHandler"
+    @dragover.prevent
+    @dragenter="showDragzone"
+    @dragleave="hideDragzone"
+  >
+    <div ref="dropzone" id="dropzone" b-ui-theme="default">
+      <div class="message">
+        Medien-Dateien oder eine Präsentation öffnen durch „Drag-and-Drop“ ...
+      </div>
+    </div>
     <modal-dialog name="menu">
       <main-menu/>
     </modal-dialog>
@@ -33,6 +43,13 @@ export default {
     ...mapActions(['setSlidePrevious', 'setSlideNext', 'setStepPrevious', 'setStepNext']),
     dropHandler (event) {
       openFiles(event.dataTransfer.files)
+      this.hideDragzone()
+    },
+    showDragzone (event) {
+      this.$refs.dropzone.style.display = 'table'
+    },
+    hideDragzone (event) {
+      this.$refs.dropzone.style.display = 'none'
     }
   },
   mounted: function () {
@@ -109,5 +126,30 @@ export default {
   .default-padding {
     box-sizing: border-box;
     padding: 2vw 8vw;
+  }
+
+  #dropzone {
+    box-sizing: border-box;
+    display: none;
+    position: fixed;
+    opacity: 0.7;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    z-index: 99999;
+
+    background: $blue;
+    border: 11px dashed scale-color($blue, $lightness: -40%);
+
+    .message {
+      display: table-cell;
+      vertical-align: middle;
+      text-align: center;
+      font-size: 8vw;
+      font-weight: bold;
+      font-family: $font-family-sans;
+      opacity: 1;
+    }
   }
 </style>
