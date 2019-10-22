@@ -1,3 +1,6 @@
+/**
+ * @module @bldr/showroom
+ */
 import Vue from 'vue'
 import MainApp from './MainApp.vue'
 import router from './router'

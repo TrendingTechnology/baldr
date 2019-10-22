@@ -1,3 +1,6 @@
+/**
+ * @module @bldr/vue-component-dynamic-select
+ */
 import component from './DynamicSelect.vue'
 
 export const DynamicSelect = component

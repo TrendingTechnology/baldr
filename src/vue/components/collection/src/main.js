@@ -1,3 +1,7 @@
+/**
+ * @module @bldr/vue-components-collection
+ */
+
 import SFCCursorCross from './components/CursorCross.vue'
 import SFCAppInfo from './components/AppInfo.vue'
 

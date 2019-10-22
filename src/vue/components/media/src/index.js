@@ -1,6 +1,6 @@
 /**
- * @module @bldr/vue-media
  * @file Resolve media files.
+ * @module @bldr/vue-media
  */
 
 /* globals document */
@@ -918,6 +918,11 @@ const Plugin = {
     if (store) store.registerModule('media', storeModule)
 
     Vue.filter('duration', formatDuration)
+    /**
+     * $media
+     * @memberof module:@bldr/presentation~Vue
+     * @type {module:@bldr/vue-media~Media}
+     */
     Vue.prototype.$media = new Media(router, store, shortcuts)
     Vue.component('media-player', MediaPlayer)
   }
