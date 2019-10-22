@@ -917,8 +917,10 @@ class Media {
           }
         ))
 
-        for (let sampleSpec of mediaFile.samples) {
-          this.$store.commit('media/sample', new Sample(mediaFile, sampleSpec))
+        if (mediaFile.samples) {
+          for (let sampleSpec of mediaFile.samples) {
+            this.$store.commit('media/sample', new Sample(mediaFile, sampleSpec))
+          }
         }
       }
     }
