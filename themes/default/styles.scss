@@ -94,23 +94,28 @@ $link-color: scale-color($gray, $lightness: -40%);
 
   table {
     border-collapse: collapse;
-  }
 
-  thead {
-    @include important;
-    tr {
-      border-bottom: 2px solid $black;
-      text-align: left;
-    }
-  }
-
-  tbody {
-    tr {
-      border-bottom: 1px solid $black;
+    th {
+      @include important;
     }
 
-    tr:last-child {
-      border-bottom: none;
+    thead {
+      tr {
+        border-bottom: 2px solid $black;
+      }
+      th {
+        text-align: left;
+      }
+    }
+
+    tbody {
+      tr {
+        border-bottom: 1px solid $black;
+      }
+
+      tr:last-child {
+        border-bottom: none;
+      }
     }
   }
 

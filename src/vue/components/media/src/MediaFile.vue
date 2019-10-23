@@ -3,19 +3,23 @@
     <table class="key-value-table">
       <thead>
         <tr>
-          <th>key</th>
+          <th class="key">key</th>
           <th>value</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(value, key) in mediaFile" :key="key">
+        <tr
+          v-for="key in mediaFile.propertiesSorted"
+          :key="key"
+        >
           <th class="key">{{ key }}</th>
-          <td>{{ value }}</td>
+          <td class="value">{{ mediaFile[key] }}</td>
         </tr>
       </tbody>
-
     </table>
-    <div ref="mediaElementContainer" class="media-file-element"/>
+    <div ref="mediaElementContainer" class="media-file-element">
+      <img v-if="mediaFile.previewImage" :src="mediaFile.previewHttpUrl"/>
+    </div>
   </div>
 </template>
 
@@ -46,10 +50,22 @@ export default {
     display: flex;
     padding: 4vw;
 
+    .media-file-element, .key-value-table {
+      width: 50vw;
+      padding: 1vw;
+    }
+
     .key {
-      font-weight: bold;
       text-align: right;
       padding-right: 1em;
+    }
+
+    .value {
+      max-width: 30vw;
+      font-size: 0.8em;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
   }
 </style>

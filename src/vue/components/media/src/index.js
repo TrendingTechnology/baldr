@@ -661,6 +661,21 @@ export class MediaFile {
   get routerLink () {
     return `#/media/${this.uriScheme}/${this.uriAuthority}`
   }
+
+  get propertiesSorted () {
+    let properties = Object.keys(this)
+    properties = properties.sort()
+    function moveOnFirstPosition (properties, property) {
+      console.log(property)
+      properties = properties.filter(item => item !== property)
+      properties.unshift(property)
+      return properties
+    }
+    for (const property of ['id', 'uri', 'title']) {
+      properties = moveOnFirstPosition(properties, property)
+    }
+    return properties
+  }
 }
 
 /**
