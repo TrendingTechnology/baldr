@@ -24,8 +24,8 @@
   },
   "main": "src/main.js",
   "dependencies": {
-    "@bldr/core": "^0.0.32",
     "@bldr/core-browser": "^0.10.1",
+    "@bldr/core": "^0.0.32",
     "@bldr/http-request": "^0.1.6",
     "@bldr/theme-default": "^0.0.31",
     "@bldr/theme-handwriting": "^0.0.29",
@@ -38,8 +38,9 @@
     "core-js": "^3.2.1",
     "js-yaml": "3.13.1",
     "marked": "^0.7.0",
-    "vue": "^2.6.10",
+    "vue-notification": "^1.3.16",
     "vue-router": "^3.1.3",
+    "vue": "^2.6.10",
     "vuex": "^3.1.1"
   },
   "devDependencies": {

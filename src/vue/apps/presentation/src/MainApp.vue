@@ -6,6 +6,18 @@
     @drop.prevent="dropHandler"
     class="vc_main_app"
   >
+    <!-- <notifications group="default"/> -->
+    <notifications
+      group="default"
+      position="top right"
+    >
+      <template slot="body" slot-scope="props">
+        <div b-ui-theme="default" :class="['vue-notification', props.item.type]" @click="props.close">
+          <a class="title">{{props.item.title}}</a>
+          <div v-html="props.item.text"/>
+        </div>
+      </template>
+    </notifications>
     <div ref="dropzone" id="dropzone" b-ui-theme="default">
       <div class="message">
         Medien-Dateien oder eine Präsentation öffnen durch „Drag-and-Drop“ ...
@@ -152,6 +164,32 @@ export default {
       font-weight: bold;
       font-family: $font-family-sans;
       opacity: 1;
+    }
+  }
+
+  .vue-notification {
+    padding: 1em;
+    margin: 0 1em 1em;
+
+    font-size: 2vw;
+
+    color: #ffffff;
+    background: #44A4FC;
+    border-left: 0.5em solid #187FE7;
+
+    &.warn {
+      background: scale-color($orange, $lightness: 40%);
+      border-left-color: $orange;
+    }
+
+    &.error {
+      background: scale-color($red, $lightness: 40%);
+      border-left-color: $red;
+    }
+
+    &.success {
+      background: scale-color($green, $lightness: 40%);
+      border-left-color: $green;
     }
   }
 </style>

@@ -66,6 +66,9 @@ const { bootstrapConfig, Library, AlphabeticalSongsTree } = require('@bldr/songb
 #### Vue imports
 
 ```js
+// Vue plugins.
+import shortcuts from '@bldr/vue-shortcuts'
+
 // Vue components.
 import StartPage from './views/StartPage.vue'
 ```

@@ -6,26 +6,40 @@
  *  this.$styleConfig.setDefault()
  *
  *  // Set presentation app to fullscreen:
- *  this.$fullscreen()
+ *   this.$fullscreen()
+ *
+ *   // vue-notifications
+ *   this.$notify({
+ *     group: 'foo',
+ *     title: 'Important message',
+ *     text: 'Hello user! This is a notification!'
+ *   })
  * }
  * ```
  *
  * @module @bldr/presentation
  */
 import Vue from 'vue'
-import MainApp from '@/MainApp.vue'
+
 import router from '@/router.js'
 import store from '@/store.js'
 import { registerMasterComponents, masters } from '@/masters.js'
-import shortcuts from '@bldr/vue-shortcuts'
 
 import MaterialIcon from '@bldr/vue-component-material-icon'
 import ModalDialog from '@bldr/vue-component-modal-dialog'
 import DynamicSelect from '@bldr/vue-component-dynamic-select'
 import media from '@bldr/vue-media'
 
+// Vue plugins.
+import notifications from 'vue-notification'
+import shortcuts from '@bldr/vue-shortcuts'
+
+// Vue components.
+import MainApp from '@/MainApp.vue'
+
 Vue.use(shortcuts, router, store)
 Vue.use(media, router, store, Vue.prototype.$shortcuts)
+Vue.use(notifications)
 
 Vue.use(DynamicSelect)
 Vue.use(ModalDialog)
@@ -201,6 +215,21 @@ Vue.prototype.$fullscreen = function () {
 
 // Must be before new Vue()
 registerMasterComponents()
+
+store.subscribe((mutation, state) => {
+  if (mutation.type === 'media/addMediaFile') {
+    const mediaFile = mutation.payload
+    if (mediaFile.uriScheme === 'localfile') {
+      Vue.notify({
+        group: 'default',
+        text: `hinzugefügt: <a href="${mediaFile.routerLink}">${mediaFile.filename}</a>.`,
+        duration: -1,
+        type: 'error',
+        width: '5vw'
+      })
+    }
+  }
+})
 
 /**
  * Vue instance

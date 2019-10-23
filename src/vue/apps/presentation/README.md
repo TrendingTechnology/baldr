@@ -21,7 +21,6 @@ The main app of the BALDR project: a presentation app using YAML files.
 
 ## Structure of the `*.baldr.yml` YAML file format
 
-
 ```yml
 ---
 slides:

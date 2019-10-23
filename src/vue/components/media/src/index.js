@@ -611,10 +611,18 @@ export class MediaFile {
     if ('uri' in this) return this.uri
   }
 
+  /**
+   *
+   */
   get isPlayable () {
     return ['audio', 'video'].includes(this.type)
   }
 
+  /**
+   * All plain text collected from the properties except some special properties.
+   *
+   * @type {string}
+   */
   get plainText () {
     const output = []
     const excludedProperties = [
@@ -640,6 +648,18 @@ export class MediaFile {
       }
     }
     return output.join(' | ')
+  }
+
+  /**
+   * The vue router link of the component `MediaFile.vue`.
+   *
+   * Examples:
+   * * `#/media/localfile/013b3960-af60-4184-9d87-7c3e723550b8`
+   *
+   * @type {string}
+   */
+  get routerLink () {
+    return `#/media/${this.uriScheme}/${this.uriAuthority}`
   }
 }
 
