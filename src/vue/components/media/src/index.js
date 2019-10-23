@@ -73,56 +73,44 @@ class Player {
   }
 
   /**
-   *
+   * @param {String|Object} uriOrSample
    */
-  get mediaFile () {
-    return this.$store.getters['media/current']
-  }
-
-  /**
-   *
-   */
-  get mediaElement () {
-    if (this.mediaFile) return this.mediaFile.mediaElement
-  }
-
-  /**
-   * @param {String|Object} uriOrMediaFile
-   */
-  load (uriOrMediaFile) {
-    let mediaFile
-    if (typeof uriOrMediaFile === 'object') {
-      mediaFile = uriOrMediaFile
+  load (uriOrSample) {
+    let sample
+    if (typeof uriOrSample === 'object') {
+      sample = uriOrSample
     } else {
-      mediaFile = this.$store.getters['media/mediaFileByUri'](uriOrMediaFile)
+      sample = this.$store.getters['media/sampleByUri'](uriOrSample)
     }
-    if (!mediaFile) throw new Error(`mediaFile couldn’t played`)
-    this.$store.dispatch('media/setMediaFileCurrent', mediaFile)
+    if (!sample) throw new Error(`sample couldn’t played`)
+    this.$store.commit('media/sampleLoaded', sample)
   }
 
   /**
-   * @param {Number} startTime  - in seconds
-   * @param {Number} duration  - in seconds
+   *
    */
-  play (startTime, duration) {
-    if (!this.mediaElement) return
+  play () {
+    const sample = this.$store.getters['media/sampleLoaded']
+    if (!sample) throw new Error('First load a sample')
+    const samplePlaying = this.$store.getters['media/samplePlaying']
+    if (samplePlaying && sample.uri === samplePlaying.uri) {
+      return
+    }
+
     // To prevent AbortError in Firefox, artefacts when switching through the
     // audio files.
     setTimeout(() => {
-      this.mediaElement.volume = 1
-      if (startTime) {
-        this.mediaElement.currentTime = startTime
-      } else {
-        this.mediaElement.currentTime = 0
-      }
-      this.mediaElement.play()
+      this.$store.commit('media/samplePlaying', sample)
+      sample.mediaElement.volume = 1
+      sample.mediaElement.currentTime = sample.startTimeSec
+      sample.mediaElement.play()
 
-      if (duration) {
+      if (sample.durationSec) {
         this.timeouts_.push(setTimeout(
           () => {
             this.fadeOut(this.stopFadeOut_)
           },
-          (duration - this.stopFadeOut_) * 1000
+          (sample.durationSec - this.stopFadeOut_) * 1000
         ))
       }
     }, 100)
@@ -132,16 +120,16 @@ class Player {
    *
    */
   async stop () {
-    if (!this.mediaElement) return
+    const sample = this.$store.getters['media/samplePlaying']
+    if (!sample) return
     // We have to clear the timeout. A not yet finished playbook with a duration
     // - stopped to early - cases that the next playback gets stopped to early.
     for (const timeoutId of this.timeouts_) {
       clearTimeout(timeoutId)
     }
     this.timeout_ = []
-    //this.mediaElement.pause()
     await this.fadeOut(this.stopFadeOut_)
-    this.mediaElement.currentTime = 0
+    sample.mediaElement.currentTime = 0
   }
 
   /**
@@ -187,19 +175,21 @@ class Player {
    */
   fadeOut (duration = 3.1) {
     return new Promise((resolve, reject) => {
-      if (!this.mediaElement) {
+      const sample = this.$store.getters['media/samplePlaying']
+      if (!sample) {
         reject()
       }
-      let actualVolume = this.mediaElement.volume
+      let actualVolume = sample.mediaElement.volume
       const steps = actualVolume / 100
       // in milliseconds: duration * 1000 / 100
       const delay = duration * 10
       const fadeOutInterval = setInterval(() => {
         actualVolume -= steps
         if (actualVolume >= 0) {
-          this.mediaElement.volume = actualVolume.toFixed(2)
+          sample.mediaElement.volume = actualVolume.toFixed(2)
         } else {
-          this.mediaElement.pause()
+          sample.mediaElement.pause()
+          this.$store.commit('media/samplePlaying', null)
           clearInterval(fadeOutInterval)
           resolve()
         }
@@ -222,8 +212,8 @@ const state = {
   // To realize a playthrough and stop option on the audio and video master
   // slides, we must track the currently playing sample and the in the future
   // to be played sample (loaded).
-  sampleLoaded: {},
-  samplePlaying: {}
+  sampleLoaded: null,
+  samplePlaying: null
 }
 
 const getters = {
@@ -265,8 +255,18 @@ const getters = {
   sampleLoaded: state => {
     return state.sampleLoaded
   },
+  samples: state => {
+    return state.samples
+  },
   samplePlaying: state => {
     return state.samplePlaying
+  },
+  sampleByUri: (state, getters) => uri => {
+    const samples = getters.samples
+    if (uri in samples) {
+      return samples[uri]
+    }
+    return null
   },
   typeCount: state => type => {
     return Object.keys(state.mediaTypes[type]).length
@@ -350,11 +350,11 @@ const mutations = {
   sampleLoaded (state, sample) {
     state.sampleLoaded = sample
   },
-  samplePlayed (state, sample) {
-    state.samplePlayed = sample
+  samplePlaying (state, sample) {
+    state.samplePlaying = sample
   },
   sample (state, sample) {
-    Vue.set(state.samples, sample.id, sample)
+    Vue.set(state.samples, sample.uri, sample)
   }
 }
 
@@ -474,10 +474,15 @@ class Sample {
     if (!id) throw new Error('A sample needs an id.')
 
     /**
+     * @type {String}
+     */
+    this.id = id
+
+    /**
      * `uri#id` for example `id:Beethoven#complete` `filename:beethoven.jpg#Theme_1`.
      * @type {String}
      */
-    this.id = `${this.mediaFile.uri}#${id}`
+    this.uri = `${this.mediaFile.uri}#${id}`
 
     /**
      * @type {Number}
@@ -666,7 +671,6 @@ export class MediaFile {
     let properties = Object.keys(this)
     properties = properties.sort()
     function moveOnFirstPosition (properties, property) {
-      console.log(property)
       properties = properties.filter(item => item !== property)
       properties.unshift(property)
       return properties
@@ -951,26 +955,34 @@ class Media {
     const output = {}
     const mediaFiles = await this.resolver.resolve(uris)
     for (const mediaFile of mediaFiles) {
-      this.$store.dispatch('media/addMediaFile', mediaFile)
-      this.addShortcutForMediaFile_(mediaFile)
-      output[mediaFile.uri] = mediaFile
-
+      // First sample of each playable media file is the complete track.
+      let sample
       if (mediaFile.isPlayable) {
-        this.$store.commit('media/sample', new Sample(
+        const samples = {}
+        sample = new Sample(
           mediaFile,
           {
             title: 'komplett',
             id: 'complete',
             startTime: 0
           }
-        ))
-
+        )
+        samples[sample.uri] = sample
+        this.$store.commit('media/sample', sample)
+        // Add further samples specifed in the yaml section.
         if (mediaFile.samples) {
           for (let sampleSpec of mediaFile.samples) {
-            this.$store.commit('media/sample', new Sample(mediaFile, sampleSpec))
+            sample = new Sample(mediaFile, sampleSpec)
+            samples[sample.uri] = sample
+            this.$store.commit('media/sample', sample)
           }
+          // replace sample object with objects originates from the Sample class.
+          mediaFile.samples = samples
         }
       }
+      this.$store.dispatch('media/addMediaFile', mediaFile)
+      this.addShortcutForMediaFile_(mediaFile)
+      output[mediaFile.uri] = mediaFile
     }
     return output
   }

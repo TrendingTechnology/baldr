@@ -12,13 +12,20 @@
           v-for="key in mediaFile.propertiesSorted"
           :key="key"
         >
-          <th class="key">{{ key }}</th>
-          <td class="value">{{ mediaFile[key] }}</td>
+          <th class="key" v-if="typeof mediaFile[key] !== 'object'">{{ key }}</th>
+          <td class="value" v-if="typeof mediaFile[key] !== 'object'">{{ mediaFile[key] }}</td>
+
         </tr>
       </tbody>
     </table>
     <div ref="mediaElementContainer" class="media-file-element">
       <img v-if="mediaFile.previewImage" :src="mediaFile.previewHttpUrl"/>
+
+      <ol class="samples" >
+        <li v-for="sample in mediaFile.samples" :key="sample.id" @click="playSample(sample)">
+          {{ sample.title }}
+        </li>
+      </ol>
     </div>
   </div>
 </template>
@@ -31,6 +38,12 @@ export default {
       const params = this.$route.params
       let uri = `${params.uriScheme}:${params.uriAuthority}`
       return this.$store.getters['media/mediaFileByUri'](uri)
+    }
+  },
+  methods: {
+    playSample (sample) {
+      this.$media.player.load(sample)
+      this.$media.player.play()
     }
   },
   mounted () {
