@@ -20,10 +20,9 @@
     </table>
     <div ref="mediaElementContainer" class="media-file-element">
       <img v-if="mediaFile.previewImage" :src="mediaFile.previewHttpUrl"/>
-
       <ol class="samples" >
         <li v-for="sample in mediaFile.samples" :key="sample.id" @click="playSample(sample)">
-          {{ sample.title }}
+          <play-button :sample="sample"/> {{ sample.title }}
         </li>
       </ol>
     </div>
@@ -31,13 +30,20 @@
 </template>
 
 <script>
+import PlayButton from './PlayButton.vue'
+
 export default {
   name: 'MediaFile',
+  components: {
+    PlayButton
+  },
   computed: {
-    mediaFile () {
+    uri () {
       const params = this.$route.params
-      let uri = `${params.uriScheme}:${params.uriAuthority}`
-      return this.$store.getters['media/mediaFileByUri'](uri)
+      return `${params.uriScheme}:${params.uriAuthority}`
+    },
+    mediaFile () {
+      return this.$store.getters['media/mediaFileByUri'](this.uri)
     }
   },
   methods: {
@@ -46,7 +52,8 @@ export default {
       this.$media.player.play()
     }
   },
-  mounted () {
+  async mounted () {
+    if (!this.mediaFile) await this.$media.resolve(this.uri)
     if (this.mediaFile.isPlayable) {
       this.mediaFile.mediaElement.controls = true
     }

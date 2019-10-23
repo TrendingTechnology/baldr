@@ -72,6 +72,24 @@ class Player {
     this.stopFadeOut_ = 0.5
   }
 
+  set addTimeout_ (timeoutId) {
+    this.timeouts_.push(timeoutId)
+  }
+
+  /**
+   * Clear all timeouts.
+   *
+   * We have to clear the timeout. A not yet finished playbook with a duration
+   * - stopped during playback - cases that the next playback gets stopped to
+   * early.
+   */
+  clearTimeouts_ () {
+    for (const timeoutId of this.timeouts_) {
+      clearTimeout(timeoutId)
+    }
+    this.timeouts_ = []
+  }
+
   /**
    * @param {String|Object} uriOrSample
    */
@@ -87,9 +105,9 @@ class Player {
   }
 
   /**
-   *
+   * Play a sample from `sample.startTimeSec`.
    */
-  play () {
+  async start () {
     const sample = this.$store.getters['media/sampleLoaded']
     if (!sample) throw new Error('First load a sample')
     const samplePlaying = this.$store.getters['media/samplePlaying']
@@ -97,77 +115,37 @@ class Player {
       return
     }
 
+    if (samplePlaying) await this.stop()
+
     // To prevent AbortError in Firefox, artefacts when switching through the
     // audio files.
-    setTimeout(() => {
+    this.addTimeout_ = setTimeout(() => {
       this.$store.commit('media/samplePlaying', sample)
-      sample.mediaElement.volume = 1
       sample.mediaElement.currentTime = sample.startTimeSec
       sample.mediaElement.play()
+      sample.mediaElement.volume = 1
 
       if (sample.durationSec) {
-        this.timeouts_.push(setTimeout(
+        this.addTimeout_ = setTimeout(
           () => {
             this.fadeOut(this.stopFadeOut_)
           },
           (sample.durationSec - this.stopFadeOut_) * 1000
-        ))
+        )
       }
     }, 100)
   }
 
   /**
-   *
+   * Stop the playback and reset the play position to `sample.startTimeSec`
    */
   async stop () {
     const sample = this.$store.getters['media/samplePlaying']
     if (!sample) return
-    // We have to clear the timeout. A not yet finished playbook with a duration
-    // - stopped to early - cases that the next playback gets stopped to early.
-    for (const timeoutId of this.timeouts_) {
-      clearTimeout(timeoutId)
-    }
-    this.timeout_ = []
     await this.fadeOut(this.stopFadeOut_)
-    sample.mediaElement.currentTime = 0
-  }
-
-  /**
-   *
-   */
-  startPrevious () {
-    this.stop()
-    this.$store.dispatch('media/setMediaFilePrevious')
-    this.play()
-  }
-
-  /**
-   *
-   */
-  startNext () {
-    this.stop()
-    this.$store.dispatch('media/setMediaFileNext')
-    this.play()
-  }
-
-  /**
-   *
-   */
-  pause () {
-    if (!this.mediaElement) return
-    this.mediaElement.pause()
-  }
-
-  /**
-   *
-   */
-  toggle () {
-    if (!this.mediaElement) return
-    if (this.mediaElement.paused) {
-      this.play()
-    } else {
-      this.pause()
-    }
+    this.clearTimeouts_()
+    sample.mediaElement.currentTime = sample.startTimeSec
+    this.$store.commit('media/samplePlaying', null)
   }
 
   /**
@@ -189,12 +167,60 @@ class Player {
           sample.mediaElement.volume = actualVolume.toFixed(2)
         } else {
           sample.mediaElement.pause()
-          this.$store.commit('media/samplePlaying', null)
           clearInterval(fadeOutInterval)
           resolve()
         }
       }, parseInt(delay))
     })
+  }
+
+  /**
+   *
+   */
+  startPrevious () {
+    this.stop()
+    this.$store.dispatch('media/setMediaFilePrevious')
+    this.play()
+  }
+
+  /**
+   *
+   */
+  startNext () {
+    this.stop()
+    this.$store.dispatch('media/setMediaFileNext')
+    this.play()
+  }
+
+  /**
+   * Play a sample at the current position.
+   */
+  play () {
+    const sample = this.$store.getters['media/samplePlaying']
+    if (!sample || !sample.mediaElement) return
+    sample.mediaElement.play()
+  }
+
+  /**
+   * Pause a sample at the current position.
+   */
+  pause () {
+    const sample = this.$store.getters['media/samplePlaying']
+    if (!sample || !sample.mediaElement) return
+    sample.mediaElement.pause()
+  }
+
+  /**
+   *
+   */
+  toggle () {
+    const sample = this.$store.getters['media/samplePlaying']
+    if (!sample || !sample.mediaElement) return
+    if (sample.mediaElement.paused) {
+      this.play()
+    } else {
+      this.pause()
+    }
   }
 }
 
@@ -976,9 +1002,9 @@ class Media {
             samples[sample.uri] = sample
             this.$store.commit('media/sample', sample)
           }
-          // replace sample object with objects originates from the Sample class.
-          mediaFile.samples = samples
         }
+        // replace sample object with objects originates from the Sample class.
+        mediaFile.samples = samples
       }
       this.$store.dispatch('media/addMediaFile', mediaFile)
       this.addShortcutForMediaFile_(mediaFile)
