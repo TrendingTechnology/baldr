@@ -19,20 +19,19 @@
  *
  * @module @bldr/presentation
  */
-import Vue from 'vue'
 
-import router from '@/router.js'
-import store from '@/store.js'
+import Vue from 'vue'
 import { registerMasterComponents, masters } from '@/masters.js'
 
+// Vue plugins.
+import router from '@/router.js'
+import store from '@/store.js'
+import notifications from 'vue-notification'
+import shortcuts from '@bldr/vue-shortcuts'
 import MaterialIcon from '@bldr/vue-component-material-icon'
 import ModalDialog from '@bldr/vue-component-modal-dialog'
 import DynamicSelect from '@bldr/vue-component-dynamic-select'
 import media from '@bldr/vue-media'
-
-// Vue plugins.
-import notifications from 'vue-notification'
-import shortcuts from '@bldr/vue-shortcuts'
 
 // Vue components.
 import MainApp from '@/MainApp.vue'
@@ -223,9 +222,8 @@ store.subscribe((mutation, state) => {
       Vue.notify({
         group: 'default',
         text: `hinzugefügt: <a href="${mediaFile.routerLink}">${mediaFile.filename}</a>.`,
-        duration: -1,
-        type: 'error',
-        width: '5vw'
+        duration: 5000,
+        type: 'success'
       })
     }
   }
