@@ -33,6 +33,10 @@
 
 <script>
 import MenuItem from './MenuItem.vue'
+
+/**
+ * @component
+ */
 export default {
   name: 'MainMenu',
   components: {

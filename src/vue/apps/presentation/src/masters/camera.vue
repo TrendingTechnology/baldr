@@ -25,8 +25,6 @@
 <script>
 
 /**
- * @file Master slide “camera”
- *
  * To create virtual video devices on linux run this commands:
  *
  * ```
@@ -114,6 +112,7 @@
  *
  * Also you can add whiltelist by open chrome://flags and search for unsafely-treat-insecure-origin-as-secure:
  * chrome://flags/#unsafely-treat-insecure-origin-as-secure
+ *
  */
 
 const example = `
@@ -198,6 +197,8 @@ export const master = {
 /**
  * @vue-data {String} deviceId
  * @vue-data {String} stream
+ *
+ * @component
  */
 export default {
   data () {

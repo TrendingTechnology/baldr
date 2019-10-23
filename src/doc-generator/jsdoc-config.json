@@ -12,6 +12,7 @@
         "includePattern": "\\.(vue|js)$"
     },
     "plugins": [
+        "node_modules/better-docs/component",
         "node_modules/jsdoc-vuejs",
         "plugins/markdown"
     ]
