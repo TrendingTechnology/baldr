@@ -755,17 +755,29 @@ class Resolver {
   }
 
   /**
+   * Resolve a local file. The local files have to dropped in in the
+   * application.
+   *
    * Order of async resolution calls / tasks:
    *
    * 1. mediaElement
    *
    * @private
-   * @param {File} file - File object https://developer.mozilla.org/de/docs/Web/API/File
+   * @param {File} file - File object
+   *
+   * @see {@link https://developer.mozilla.org/de/docs/Web/API/File}
+   *
+   * @return {MediaFile}
    */
   async resolveLocalFile_ (file) {
     if (mediaTypes.isMedia(file.name)) {
+      // blob:http:/localhost:8080/8c00d9e3-6ff1-4982-a624-55f125b5c0c0
       const httpUrl = URL.createObjectURL(file)
-      const uri = `localfile:${file.name}`
+      // 8c00d9e3-6ff1-4982-a624-55f125b5c0c0
+      const uuid = httpUrl.substr(httpUrl.length - 36)
+      // We use the uuid instead of the file name. The file name can contain
+      // whitespaces and special characters. A uuid is  more reliable.
+      const uri = `localfile:${uuid}`
       const mediaFile = new MediaFile({
         uri: uri,
         httpUrl: httpUrl,
@@ -781,8 +793,8 @@ class Resolver {
   /**
    * Resolve media files by URIs or local media files by their file objects.
    *
-   * @param {string|array|object} mixedSpecs - A single remote URI as a string or a array of URIs.
-   *   Uniform Resource Identifier, for example
+   * @param {string|array|object} mixedSpecs - A single remote URI as a string
+   *   or a array of URIs. Uniform Resource Identifier, for example
    *   `id:Joseph_haydn` or `filename:beethoven.jpg`
    */
   resolve (mixedSpecs) {
