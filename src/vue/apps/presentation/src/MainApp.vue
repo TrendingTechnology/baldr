@@ -1,9 +1,10 @@
 <template>
-  <div class="vc_main_app"
-    @drop.prevent="dropHandler"
-    @dragover.prevent
-    @dragenter="showDragzone"
+  <div
+    @dragend="hideDragzone"
     @dragleave="hideDragzone"
+    @dragover.prevent="showDragzone"
+    @drop.prevent="dropHandler"
+    class="vc_main_app"
   >
     <div ref="dropzone" id="dropzone" b-ui-theme="default">
       <div class="message">
@@ -127,20 +128,21 @@ export default {
     box-sizing: border-box;
     padding: 2vw 8vw;
   }
+</style>
 
+<style lang="scss" scoped>
   #dropzone {
+    background: $blue;
+    border: 1vw dashed scale-color($blue, $lightness: -40%);
     box-sizing: border-box;
     display: none;
-    position: fixed;
-    opacity: 0.7;
-    width: 100%;
-    height: 100%;
+    height: 100vh;
     left: 0;
+    opacity: 0.7;
+    position: fixed;
     top: 0;
+    width: 100vw;
     z-index: 99999;
-
-    background: $blue;
-    border: 11px dashed scale-color($blue, $lightness: -40%);
 
     .message {
       display: table-cell;
