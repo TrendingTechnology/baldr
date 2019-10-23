@@ -4,7 +4,7 @@
 
 # @bldr/seating-plan
 
-Seating plan of the [baldr project](https://github.com/Josef-Friedrich/baldr).
+Seating plan app of the [baldr project](https://github.com/Josef-Friedrich/baldr).
 
 Disable print header and footer on Firefox:
 

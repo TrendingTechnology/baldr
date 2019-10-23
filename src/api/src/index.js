@@ -1,6 +1,8 @@
 #! /usr/bin/env node
 
 /**
+ * A REST API made with express.js. The sub apps are outsourced in different modules.
+ *
  * @module @bldr/api
  */
 

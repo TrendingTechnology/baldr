@@ -1,4 +1,6 @@
 /**
+ * Vue app of the baldr songbook.
+ *
  * @module @bldr/songbook-vue-app
  */
 import Vue from 'vue'

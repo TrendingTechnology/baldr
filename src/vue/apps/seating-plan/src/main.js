@@ -1,4 +1,6 @@
 /**
+ * Seating plan app of the baldr project.
+ *
  * @module @bldr/seating-plan
  */
 

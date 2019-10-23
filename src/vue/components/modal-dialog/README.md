@@ -4,4 +4,6 @@
 
 # @bldr/vue-component-modal-dialog
 
+A simple modal dialog component implementation in Vue.
+
 [Source](https://github.com/dillonchanis/vue-cute-modal/).

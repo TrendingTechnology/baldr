@@ -1,4 +1,6 @@
 /**
+ * High level classes and functions used by the node packages.
+ *
  * @module @bldr/core
  */
 

@@ -1,6 +1,8 @@
 #! /usr/bin/env node
 
 /**
+ * JSDoc generator for all baldr packages.
+ *
  * @module @bldr/doc-generator
  */
 

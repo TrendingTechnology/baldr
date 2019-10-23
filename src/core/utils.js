@@ -1,6 +1,6 @@
 /**
  * @file Some low level utils
- * @module @bldr/core/utils
+ *
  */
 
 // Node packages.

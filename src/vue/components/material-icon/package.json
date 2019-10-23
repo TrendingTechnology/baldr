@@ -1,7 +1,7 @@
 {
   "name": "@bldr/vue-component-material-icon",
   "version": "0.1.12",
-  "description": "Material design icons (https://materialdesignicons.com) extended with some custom icons.",
+  "description": "A selection of material design icons (https://materialdesignicons.com) extended with some custom icons.",
   "author": {
     "name": "Josef Friedrich",
     "email": "josef@friedrich.rocks",

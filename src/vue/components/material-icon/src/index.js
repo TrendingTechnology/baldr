@@ -1,4 +1,7 @@
 /**
+ * A selection of material design icons (https://materialdesignicons.com)
+ * extended with some custom icons.
+ *
  * @module @bldr/vue-component-material-icon
  */
 import material from './MaterialIcon.vue'

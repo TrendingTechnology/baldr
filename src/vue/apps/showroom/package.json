@@ -1,7 +1,7 @@
 {
   "name": "@bldr/showroom",
   "version": "0.0.29",
-  "description": "Vue app to test the themes",
+  "description": "Vue app to test the themes.",
   "author": {
     "name": "Josef Friedrich",
     "email": "josef@friedrich.rocks",

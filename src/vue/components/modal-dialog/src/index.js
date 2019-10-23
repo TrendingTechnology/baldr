@@ -1,4 +1,6 @@
 /**
+ * A simple modal dialog component implementation in Vue.
+ *
  * @module @bldr/vue-component-modal-dialog
  */
 import ModalDialog from './ModalDialog.vue'

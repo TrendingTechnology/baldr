@@ -92,3 +92,24 @@ class Foo {
 * Top level Vue component css class, prefix with `vc` = Vue component: Snake Case
   * HTML: `class="vc_my_component"`
   * CSS: `.vc_my_component`
+
+### Documentation
+
+Description in 3 places:
+
+* `README.md`
+* `main.js` above `@module`
+* `package.json`
+
+#### README.md template
+
+```md
+[![npm](https://img.shields.io/npm/v/baldr.svg)](https://www.npmjs.com/package/baldr)
+[![Build Status](https://travis-ci.org/Josef-Friedrich/baldr.svg?branch=master)](https://travis-ci.org/Josef-Friedrich/baldr)
+[![GitHub repo size](https://img.shields.io/github/repo-size/Josef-Friedrich/baldr.svg)](https://github.com/Josef-Friedrich/baldr)
+
+# @bldr/package-name
+
+Description
+
+```

@@ -4,4 +4,6 @@
 
 # @bldr/vue-component-dynamic-select
 
-[Source](https://raw.githubusercontent.com/silasmontgomery/dynamic-select/master/src/DynamicSelect.vue).
+A dynamic select form component made with Vue.
+
+Based on [silasmontgomery/dynamic-select](https://raw.githubusercontent.com/silasmontgomery/dynamic-select/master/src/DynamicSelect.vue).

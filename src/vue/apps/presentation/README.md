@@ -2,9 +2,11 @@
 [![Build Status](https://travis-ci.org/Josef-Friedrich/baldr.svg?branch=master)](https://travis-ci.org/Josef-Friedrich/baldr)
 [![GitHub repo size](https://img.shields.io/github/repo-size/Josef-Friedrich/baldr.svg)](https://github.com/Josef-Friedrich/baldr)
 
+Part of the [baldr project](https://github.com/Josef-Friedrich/baldr).
+
 # @bldr/presentation
 
-Part of the [baldr project](https://github.com/Josef-Friedrich/baldr).
+The main app of the BALDR project: a presentation app using YAML files.
 
 ## Terminology
 
@@ -16,7 +18,6 @@ Part of the [baldr project](https://github.com/Josef-Friedrich/baldr).
   * `master`: Each `slide` and `view` is derived from a `master`
   * `mediaFile`: All kind of media files (audio, video, image) that are
      located in the same folder as the *.baldr presentation file.
-
 
 ## Structure of the `*.baldr.yml` YAML file format
 

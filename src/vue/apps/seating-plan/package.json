@@ -1,7 +1,7 @@
 {
   "name": "@bldr/seating-plan",
   "version": "0.1.32",
-  "description": "Seating plan of the baldr project.",
+  "description": "Seating plan app of the baldr project.",
   "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
   "bugs": {
     "url": "https://github.com/Josef-Friedrich/baldr/issues"

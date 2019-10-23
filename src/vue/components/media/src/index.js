@@ -1,5 +1,6 @@
 /**
- * @file Resolve media files.
+ * Resolve media files. Counter part of the BALDR media server.
+ *
  * @module @bldr/vue-media
  */
 

@@ -1,6 +1,6 @@
 {
   "name": "@bldr/vue-components-collection",
-  "description": "A collection of different vue components.",
+  "description": "This package provides some SFC vue components to be used by various BALDR Vue apps.",
   "version": "0.1.16",
   "scripts": {
     "serve": "vue-cli-service serve",

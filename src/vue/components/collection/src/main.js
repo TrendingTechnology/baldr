@@ -1,4 +1,7 @@
 /**
+ * This package provides some SFC vue components to be used by various BALDR
+ * Vue apps.
+ *
  * @module @bldr/vue-components-collection
  */
 

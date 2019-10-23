@@ -1,6 +1,7 @@
 {
   "name": "@bldr/songbook-vue-app",
   "version": "0.1.19",
+  "description": "Vue app of the baldr songbook.",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",

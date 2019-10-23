@@ -1,4 +1,6 @@
 /**
+ * A dynamic select form component made with Vue.
+ *
  * @module @bldr/vue-component-dynamic-select
  */
 import component from './DynamicSelect.vue'

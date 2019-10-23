@@ -1,7 +1,7 @@
 {
   "name": "@bldr/vue-component-dynamic-select",
   "version": "0.1.13",
-  "description": "A simple modal implementation in Vue.",
+  "description": "A dynamic select form component made with Vue.",
   "author": {
     "name": "Josef Friedrich",
     "email": "josef@friedrich.rocks",
