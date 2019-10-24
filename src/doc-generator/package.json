@@ -9,7 +9,8 @@
     "jsdoc-api": "^5.0.4",
     "jsdoc-vuejs": "^3.0.4",
     "parcel-bundler": "^1.12.4",
-    "chalk": "^2.4.2"
+    "chalk": "^2.4.2",
+    "fs-extra": "^8.1.0"
   },
   "repository": {
     "type": "git",
@@ -22,6 +23,10 @@
   },
   "bin": {
     "baldr-doc-generator": "./index.js"
+  },
+  "scripts": {
+    "doc": "jsdoc --configure ./jsdoc-config.json --destination /var/data/baldr/gh-pages /home/jf/git-repositories/github/Josef-Friedrich/baldr",
+    "show": "xdg-open /var/data/baldr/gh-pages/index.html"
   },
   "homepage": "https://github.com/Josef-Friedrich/baldr#readme"
 }

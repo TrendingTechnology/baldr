@@ -6,18 +6,20 @@
  * @module @bldr/doc-generator
  */
 
+const childProcess = require('child_process')
 const glob = require('glob')
 const path = require('path')
-const childProcess = require('child_process')
 
-const jsdoc = require('jsdoc-api')
 const chalk = require('chalk')
+const fs = require('fs-extra')
+const jsdoc = require('jsdoc-api')
 
 const source = '/home/jf/git-repositories/github/Josef-Friedrich/baldr'
 console.log(`Source: ${chalk.yellow(source)}`)
 
 const destination = '/var/data/baldr/gh-pages'
 console.log(`Destination: ${chalk.green(destination)}`)
+fs.removeSync(destination)
 
 const docFiles = glob.sync(`${source}/**/*.@(js|vue)`, {
   ignore: [

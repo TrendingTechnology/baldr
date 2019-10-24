@@ -472,7 +472,7 @@ class Sample {
    */
   constructor(mediaFile, { title, id, startTime, duration, endTime }) {
     /**
-     * @type {MediaFile}
+     * @type {module:@bldr/vue-media.MediaFile}
      */
     this.mediaFile = mediaFile
 
@@ -549,6 +549,7 @@ class Sample {
  * @property {string} previewHttpUrl - Each media file can have a preview
  *   image. On the path is `_preview.jpg` appended.
  * @property {string} shortcut - The keyboard shortcut to play the media.
+ * @property {Object} samples - An object of Sample instances.
  */
 export class MediaFile {
   /**
@@ -610,8 +611,13 @@ export class MediaFile {
     this.extension = string.split('.').pop().toLowerCase()
   }
 
-  filenameFromHTTPUrl(URL) {
-    this.filename = URL.split('/').pop()
+  /**
+   * Store the file name from a HTTP URL.
+   *
+   * @param {String} url
+   */
+  filenameFromHTTPUrl(url) {
+    this.filename = url.split('/').pop()
   }
 
   /**
@@ -625,6 +631,9 @@ export class MediaFile {
     }
   }
 
+  /**
+   * @type {String}
+   */
   get titleSafe() {
     if ('title' in this) return this.title
     if ('filename' in this) return this.filename
@@ -632,7 +641,9 @@ export class MediaFile {
   }
 
   /**
+   * True if the media file is playable, for example an audio or a video file.
    *
+   * @type {Boolean}
    */
   get isPlayable() {
     return ['audio', 'video'].includes(this.type)
@@ -682,6 +693,12 @@ export class MediaFile {
     return `#/media/${this.uriScheme}/${this.uriAuthority}`
   }
 
+  /**
+   * Sort properties alphabetically a move some important ones to the beginnen
+   * of the array
+   *
+   * @return {Array}
+   */
   get propertiesSorted() {
     let properties = Object.keys(this)
     properties = properties.sort()
@@ -759,12 +776,15 @@ async function createMediaElement(mediaFile) {
  *    `https://example.com/Josef_Haydn.jg`
  * 3. A file object {@link https://developer.mozilla.org/de/docs/Web/API/File}
  *
- * @typdef {(String|File)} mediaFileSpec
+ * @typedef mediaFileSpec
+ * @type {(String|File)}
  */
 
 /**
  * An array of `mediaFileSpec` or a single `mediaFileSpec`
- * @typdef {(mediaFileSpec[]|mediaFileSpec)} mediaFileSpecs
+ *
+ * @typedef mediaFileSpecs
+ * @type {(mediaFileSpec[]|mediaFileSpec)}
  */
 
 /**
@@ -852,15 +872,15 @@ class Resolver {
    * 1. mediaElement
    *
    * @private
-   * @param {mediaFileSpec} spec - URi or File object
+   * @param {module:@bldr/vue-media~mediaFileSpec} mediaFileSpec - URI or File object
    * @return {MediaFile}
    */
-  async resolveSingle_(spec) {
+  async resolveSingle_(mediaFileSpec) {
     let mediaFile
 
     // Remote uri to resolve
-    if (typeof spec === 'string') {
-      mediaFile = new MediaFile({ uri: spec })
+    if (typeof mediaFileSpec === 'string') {
+      mediaFile = new MediaFile({ uri: mediaFileSpec })
       // Already resolved (URL from the internet for example)
       if (mediaFile.uriScheme === 'http' || mediaFile.uriScheme === 'https') {
         mediaFile.httpUrl = mediaFile.uri
@@ -876,8 +896,8 @@ class Resolver {
         }
       }
       // Local: File object from drag and drop or open dialog
-    } else if (spec instanceof File) {
-      const file = spec
+    } else if (mediaFileSpec instanceof File) {
+      const file = mediaFileSpec
       if (mediaTypes.isMedia(file.name)) {
         // blob:http:/localhost:8080/8c00d9e3-6ff1-4982-a624-55f125b5c0c0
         const httpUrl = URL.createObjectURL(file)
@@ -908,7 +928,7 @@ class Resolver {
    * Resolve one ore more remote media files by URIs, HTTP URLs or
    * local media files by their file objects.
    *
-   * @param {mediaFileSpecs} mediaFileSpecs
+   * @param {module:@bldr/vue-media~mediaFileSpecs} mediaFileSpecs
    */
   resolve(mediaFileSpecs) {
     if (typeof mediaFileSpecs === 'string' || mediaFileSpecs instanceof File) {
@@ -922,19 +942,23 @@ class Resolver {
       }
     }
     const promises = []
-    for (const spec of uniqueSpecs) {
-      promises.push(this.resolveSingle_(spec))
+    for (const mediaFileSpec of uniqueSpecs) {
+      promises.push(this.resolveSingle_(mediaFileSpec))
     }
     return Promise.all(promises)
   }
 }
 
 /**
+ * An instance of this class gets exported as a Vue plugin. Access methods
+ * and sub classes using the Vue instance property `$media`:
  *
+ * ```js
+ * this.$media.player.play()
+ * ```
  */
 class Media {
   /**
-   *
    * @param {object} router
    * @param {object} store
    * @param {object} shortcuts
@@ -945,17 +969,17 @@ class Media {
     this.$shortcuts = shortcuts
 
     /**
-     *
+     * @type {module:@bldr/vue-media~Player}
      */
     this.player = new Player(store)
 
     /**
-     *
+     *  @type {module:@bldr/vue-media~Resolver}
      */
     this.resolver = new Resolver()
 
     /**
-     *
+     *  @type {module:@bldr/http-request.HttpRequest}
      */
     this.httpRequest = httpRequest
 
@@ -1007,13 +1031,11 @@ class Media {
    * Resolve media files by URIs. The media file gets stored in the vuex
    * store module `media`. Use getters to access the `mediaFile` objects.
    *
-   * @param {string|array} uris - A single URI as a string or a array of URIs.
-   *   Uniform Resource Identifier, for example
-   *   `id:Joseph_haydn` or `filename:beethoven.jpg`
+   * @param {module:@bldr/vue-media~mediaFileSpecs} mediaFileSpecs
    */
-  async resolve(uris) {
+  async resolve(mediaFileSpecs) {
     const output = {}
-    const mediaFiles = await this.resolver.resolve(uris)
+    const mediaFiles = await this.resolver.resolve(mediaFileSpecs)
     for (const mediaFile of mediaFiles) {
       if (mediaFile.samples) {
         for (let sampleUri in mediaFile.samples) {

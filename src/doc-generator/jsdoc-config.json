@@ -9,10 +9,10 @@
         "allowUnknownTags": true
     },
     "source": {
-        "includePattern": "\\.(vue|js)$"
+        "includePattern": "\\.(vue|js)$",
+        "excludePattern": "(node_modules|dist|out|test|tests)"
     },
     "plugins": [
-        "node_modules/better-docs/component",
         "node_modules/jsdoc-vuejs",
         "plugins/markdown"
     ]
