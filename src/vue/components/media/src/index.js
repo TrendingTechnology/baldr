@@ -490,7 +490,7 @@ class Sample {
     /**
      * @type {HTMLMediaElement}
      */
-    this.mediaElement = mediaFile.mediaElement
+    this.mediaElement = null
 
     /**
      * @type {String}
@@ -709,6 +709,48 @@ export class MediaFile {
 }
 
 /**
+ * @param {MediaFile} mediaFile
+ */
+function createMediaElement (type, httpUrl, isPlayable) {
+  let mediaElement
+  if (!type) throw new Error(`Specify a type.`)
+
+  switch (mediaFile.type) {
+    case 'audio':
+      mediaElement = new Audio(httpUrl)
+      break
+
+    case 'video':
+      mediaElement = new Video(httpUrl)
+      break
+
+    case 'image':
+      mediaElement = new Image()
+      mediaElement.src = httpUrl
+      break
+
+    default:
+      throw new Error(`Not supported mediaFile type “${mediaFile.type}”.`)
+  }
+
+  return new Promise(function(resolve, reject) {
+    if (isPlayable) {
+      mediaElement.onloadedmetadata = () => {
+        resolve(mediaElement)
+      }
+    } else {
+      mediaElement.onload = () => {
+        resolve(mediaElement)
+      }
+    }
+
+    mediaElement.onerror = () => {
+      reject(Error("It broke"));
+    }
+  })
+}
+
+/**
  * Order of resolution:
  *
  * 1. mediaFile
@@ -773,6 +815,46 @@ class Resolver {
     })
   }
 
+
+  /**
+   * Each sample must have its own mediaelement
+   * @private
+   * @param {Sample} sample
+   */
+  resolveMediaElementSample_ (sample) {
+    let mediaElement
+    if (!('type' in sample.mediaFile)) throw new Error(`mediaFile “${mediaFile}” has no type.`)
+
+    switch (sample.mediaFile.type) {
+      case 'audio':
+        mediaElement = new Audio(mediaFile.httpUrl)
+        break
+
+      case 'video':
+        mediaElement = new Video(mediaFile.httpUrl)
+        break
+
+      default:
+        throw new Error(`Not supported mediaFile type “${mediaFile.type}”.`)
+    }
+
+    return new Promise(function(resolve, reject) {
+      if (mediaFile.isPlayable) {
+        mediaElement.onloadedmetadata = () => {
+          resolve(mediaElement)
+        }
+      } else {
+        mediaElement.onload = () => {
+          resolve(mediaElement)
+        }
+      }
+
+      mediaElement.onerror = () => {
+        reject(Error("It broke"));
+      }
+    })
+  }
+
   /**
    * @private
    * @param {MediaFile} mediaFile
@@ -784,6 +866,34 @@ class Resolver {
       return `${baseURL}/media/${mediaFile.path}`
     }
     throw new Error(`Can not generate HTTP URL.`)
+  }
+
+  async resolveSamples_ (mediaFile) {
+    // First sample of each playable media file is the complete track.
+    let sample
+    if (mediaFile.isPlayable) {
+      const samples = {}
+      sample = new Sample(
+        mediaFile,
+        {
+          title: 'komplett',
+          id: 'complete',
+          startTime: 0
+        }
+      )
+      samples[sample.uri] = sample
+      this.$store.commit('media/sample', sample)
+      // Add further samples specifed in the yaml section.
+      if (mediaFile.samples) {
+        for (let sampleSpec of mediaFile.samples) {
+          sample = new Sample(mediaFile, sampleSpec)
+          samples[sample.uri] = sample
+          this.$store.commit('media/sample', sample)
+        }
+      }
+      // replace sample object with objects originates from the Sample class.
+      mediaFile.samples = samples
+    }
   }
 
   /**
