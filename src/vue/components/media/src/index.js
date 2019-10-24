@@ -24,7 +24,7 @@ export const httpRequest = new HttpRequest(getDefaultServers(), '/api/media')
  *
  * @return {String}
  */
-export function formatDuration (duration) {
+export function formatDuration(duration) {
   if (!duration) return '00:00'
   duration = parseInt(duration)
   let seconds = duration % 60
@@ -45,7 +45,7 @@ class Player {
   /**
    * @param {object} store - vuex store object.
    */
-  constructor (store) {
+  constructor(store) {
     this.$store = store
 
     /**
@@ -61,7 +61,7 @@ class Player {
     this.stopFadeOut_ = 0.5
   }
 
-  set addTimeout_ (timeoutId) {
+  set addTimeout_(timeoutId) {
     this.timeouts_.push(timeoutId)
   }
 
@@ -72,7 +72,7 @@ class Player {
    * - stopped during playback - cases that the next playback gets stopped to
    * early.
    */
-  clearTimeouts_ () {
+  clearTimeouts_() {
     for (const timeoutId of this.timeouts_) {
       clearTimeout(timeoutId)
     }
@@ -82,7 +82,7 @@ class Player {
   /**
    * @param {String|Object} uriOrSample
    */
-  load (uriOrSample) {
+  load(uriOrSample) {
     let sample
     if (typeof uriOrSample === 'object') {
       sample = uriOrSample
@@ -96,7 +96,7 @@ class Player {
   /**
    * Play a sample from `sample.startTimeSec`.
    */
-  async start () {
+  async start() {
     const sample = this.$store.getters['media/sampleLoaded']
     if (!sample) throw new Error('First load a sample')
     const samplePlaying = this.$store.getters['media/samplePlaying']
@@ -128,7 +128,7 @@ class Player {
   /**
    * Stop the playback and reset the play position to `sample.startTimeSec`
    */
-  async stop () {
+  async stop() {
     const sample = this.$store.getters['media/samplePlaying']
     if (!sample) return
     await this.fadeOut(this.stopFadeOut_)
@@ -140,7 +140,7 @@ class Player {
   /**
    * @param {Number} duration - in seconds
    */
-  fadeOut (duration = 3.1) {
+  fadeOut(duration = 3.1) {
     return new Promise((resolve, reject) => {
       const sample = this.$store.getters['media/samplePlaying']
       if (!sample) {
@@ -166,7 +166,7 @@ class Player {
   /**
    *
    */
-  startPrevious () {
+  startPrevious() {
     this.stop()
     this.$store.dispatch('media/setMediaFilePrevious')
     this.play()
@@ -175,7 +175,7 @@ class Player {
   /**
    *
    */
-  startNext () {
+  startNext() {
     this.stop()
     this.$store.dispatch('media/setMediaFileNext')
     this.play()
@@ -184,7 +184,7 @@ class Player {
   /**
    * Play a sample at the current position.
    */
-  play () {
+  play() {
     const sample = this.$store.getters['media/samplePlaying']
     if (!sample || !sample.mediaElement) return
     sample.mediaElement.play()
@@ -193,7 +193,7 @@ class Player {
   /**
    * Pause a sample at the current position.
    */
-  pause () {
+  pause() {
     const sample = this.$store.getters['media/samplePlaying']
     if (!sample || !sample.mediaElement) return
     sample.mediaElement.pause()
@@ -202,7 +202,7 @@ class Player {
   /**
    *
    */
-  toggle () {
+  toggle() {
     const sample = this.$store.getters['media/samplePlaying']
     if (!sample || !sample.mediaElement) return
     if (sample.mediaElement.paused) {
@@ -289,7 +289,7 @@ const getters = {
 }
 
 const actions = {
-  async setRestApiServers ({ commit }) {
+  async setRestApiServers({ commit }) {
     const servers = await httpRequestNg.restEndpoints.getReachable()
     const versions = await httpRequestNg.request('version', 'all')
     const counts = await httpRequestNg.request('stats/count', 'all')
@@ -298,7 +298,7 @@ const actions = {
     const result = []
     for (const endpointName in servers) {
       result.push({
-        name:  servers[endpointName].name,
+        name: servers[endpointName].name,
         baseUrl: servers[endpointName].baseUrl,
         version: versions[endpointName].data.version,
         count: counts[endpointName].data,
@@ -308,18 +308,18 @@ const actions = {
     }
     commit('setRestApiServers', result)
   },
-  addMediaFile ({ commit, dispatch }, mediaFile) {
+  addMediaFile({ commit, dispatch }, mediaFile) {
     commit('addMediaFile', mediaFile)
     commit('addMediaFileToTypes', mediaFile)
     dispatch('addMediaFileToList', mediaFile)
   },
-  addMediaFileToList ({ commit, getters }, mediaFile) {
+  addMediaFileToList({ commit, getters }, mediaFile) {
     const list = getters.mediaList
     if (!list.includes(mediaFile.uri) && mediaFile.type !== 'image') {
       commit('addMediaFileToList', mediaFile)
     }
   },
-  setMediaFileNext ({ commit, getters }) {
+  setMediaFileNext({ commit, getters }) {
     const no = getters.mediaNoCurrent
     const count = getters.mediaList.length
     if (no === count) {
@@ -328,7 +328,7 @@ const actions = {
       commit('setMediaNoCurrent', no + 1)
     }
   },
-  setMediaFilePrevious ({ commit, getters }) {
+  setMediaFilePrevious({ commit, getters }) {
     const no = getters.mediaNoCurrent
     const count = getters.mediaList.length
     if (no === 1) {
@@ -337,7 +337,7 @@ const actions = {
       commit('setMediaNoCurrent', no - 1)
     }
   },
-  setMediaFileCurrent ({ commit, getters }, mediaFile) {
+  setMediaFileCurrent({ commit, getters }, mediaFile) {
     let no = null
     if (mediaFile) {
       no = getters.mediaList.indexOf(mediaFile.uri) + 1
@@ -347,28 +347,28 @@ const actions = {
 }
 
 const mutations = {
-  addMediaFile (state, mediaFile) {
+  addMediaFile(state, mediaFile) {
     Vue.set(state.mediaFiles, mediaFile.uri, mediaFile)
   },
-  addMediaFileToList (state, mediaFile) {
+  addMediaFileToList(state, mediaFile) {
     state.mediaList.push(mediaFile.uri)
   },
-  addMediaFileToTypes (state, mediaFile) {
+  addMediaFileToTypes(state, mediaFile) {
     Vue.set(state.mediaTypes[mediaFile.type], mediaFile.uri, mediaFile)
   },
-  setRestApiServers (state, restApiServers) {
+  setRestApiServers(state, restApiServers) {
     Vue.set(state, 'restApiServers', restApiServers)
   },
-  setMediaNoCurrent (state, no) {
+  setMediaNoCurrent(state, no) {
     state.mediaNoCurrent = no
   },
-  sampleLoaded (state, sample) {
+  sampleLoaded(state, sample) {
     state.sampleLoaded = sample
   },
-  samplePlaying (state, sample) {
+  samplePlaying(state, sample) {
     state.samplePlaying = sample
   },
-  sample (state, sample) {
+  sample(state, sample) {
     Vue.set(state.samples, sample.uri, sample)
   }
 }
@@ -385,7 +385,7 @@ const storeModule = {
  *
  */
 class MediaTypes {
-  constructor () {
+  constructor() {
     /**
      * @type {object}
      */
@@ -412,7 +412,7 @@ class MediaTypes {
   /**
    *
    */
-  spreadExtensions_ () {
+  spreadExtensions_() {
     const out = {}
     for (const type in this.types) {
       for (const extension of this.types[type]) {
@@ -425,7 +425,7 @@ class MediaTypes {
   /**
    *
    */
-  extensionToType (extension) {
+  extensionToType(extension) {
     const ext = extension.toLowerCase()
     if (ext in this.extensions_) {
       return this.extensions_[ext]
@@ -436,14 +436,14 @@ class MediaTypes {
   /**
    *
    */
-  typeToColor (type) {
+  typeToColor(type) {
     return this.typeColors[type]
   }
 
   /**
    *
    */
-  isMedia (filename) {
+  isMedia(filename) {
     const extension = filename.split('.').pop().toLowerCase()
     if (extension in this.extensions_) {
       return true
@@ -470,7 +470,7 @@ class Sample {
    * @property {String|Number} specs.duration
    * @property {String|Number} specs.endTime
    */
-  constructor (mediaFile, { title, id, startTime, duration, endTime }) {
+  constructor(mediaFile, { title, id, startTime, duration, endTime }) {
     /**
      * @type {MediaFile}
      */
@@ -523,7 +523,7 @@ class Sample {
   /**
    * @param {String|Number} timeIntervaleString
    */
-  toSec_ (timeIntervaleString) {
+  toSec_(timeIntervaleString) {
     return Number(timeIntervaleString)
   }
 }
@@ -554,7 +554,7 @@ export class MediaFile {
   /**
    * @param {object} mediaData - Mandatory properties are: `uri`
    */
-  constructor (mediaData) {
+  constructor(mediaData) {
     for (const property in mediaData) {
       this[property] = mediaData[property]
     }
@@ -606,11 +606,11 @@ export class MediaFile {
     this.mediaElement = null
   }
 
-  extensionFromString (string) {
+  extensionFromString(string) {
     this.extension = string.split('.').pop().toLowerCase()
   }
 
-  filenameFromHTTPUrl (URL) {
+  filenameFromHTTPUrl(URL) {
     this.filename = URL.split('/').pop()
   }
 
@@ -619,13 +619,13 @@ export class MediaFile {
    *
    * @param {object} properties - Add an object to the class properties.
    */
-  addProperties (properties) {
+  addProperties(properties) {
     for (const property in properties) {
       this[property] = properties[property]
     }
   }
 
-  get titleSafe () {
+  get titleSafe() {
     if ('title' in this) return this.title
     if ('filename' in this) return this.filename
     if ('uri' in this) return this.uri
@@ -634,7 +634,7 @@ export class MediaFile {
   /**
    *
    */
-  get isPlayable () {
+  get isPlayable() {
     return ['audio', 'video'].includes(this.type)
   }
 
@@ -643,7 +643,7 @@ export class MediaFile {
    *
    * @type {string}
    */
-  get plainText () {
+  get plainText() {
     const output = []
     const excludedProperties = [
       'extension',
@@ -678,14 +678,14 @@ export class MediaFile {
    *
    * @type {string}
    */
-  get routerLink () {
+  get routerLink() {
     return `#/media/${this.uriScheme}/${this.uriAuthority}`
   }
 
-  get propertiesSorted () {
+  get propertiesSorted() {
     let properties = Object.keys(this)
     properties = properties.sort()
-    function moveOnFirstPosition (properties, property) {
+    function moveOnFirstPosition(properties, property) {
       properties = properties.filter(item => item !== property)
       properties.unshift(property)
       return properties
@@ -700,7 +700,7 @@ export class MediaFile {
 /**
  * @param {MediaFile} mediaFile
  */
-async function createMediaElement (mediaFile) {
+async function createMediaElement(mediaFile) {
   /**
    * Create a video element like `new Audio() does.`
    *
@@ -733,7 +733,7 @@ async function createMediaElement (mediaFile) {
       throw new Error(`Not supported mediaFile type “${mediaFile.type}”.`)
   }
 
-  return new Promise(function(resolve, reject) {
+  return new Promise(function (resolve, reject) {
     if (mediaFile.isPlayable) {
       mediaElement.onloadedmetadata = () => {
         resolve(mediaElement)
@@ -751,11 +751,27 @@ async function createMediaElement (mediaFile) {
 }
 
 /**
- * Order of resolution:
+ * A `mediaFileSpec` can be:
  *
- * 1. mediaFile
- * 2. httpUrl
- * 3. mediaElement
+ * 1. A remote URI (Uniform Resource Identifier) as a string, for example
+ *    `id:Joseph_haydn` or `filename:beethoven.jpg` which has to be resolved.
+ * 2. A already resolved HTTP URL, for example
+ *    `https://example.com/Josef_Haydn.jg`
+ * 3. A file object {@link https://developer.mozilla.org/de/docs/Web/API/File}
+ *
+ * @typdef {(String|File)} mediaFileSpec
+ */
+
+/**
+ * An array of `mediaFileSpec` or a single `mediaFileSpec`
+ * @typdef {(mediaFileSpec[]|mediaFileSpec)} mediaFileSpecs
+ */
+
+/**
+ * Resolve (get the HTTP URL and some meta informations) of a remote media
+ * file by its URI. Resolve a local file. The local files have to dropped
+ * in the application. Create media elements for each media file. Create samples
+ * for playable media files.
  */
 class Resolver {
 
@@ -764,7 +780,7 @@ class Resolver {
    * @param {string} key
    * @param {string|json} value
    */
-  async queryMediaServer_ (key, value) {
+  async queryMediaServer_(key, value) {
     const response = await httpRequest.request(`query/asset/match/${key}/${value}`)
     if ('data' in response && 'path' in response.data) {
       return response
@@ -776,7 +792,7 @@ class Resolver {
    * @private
    * @param {MediaFile} mediaFile
    */
-  async resolveHttpUrl_ (mediaFile) {
+  async resolveHttpUrl_(mediaFile) {
     if ('httpUrl' in mediaFile) return mediaFile.httpUrl
     if ('path' in mediaFile) {
       const baseURL = await httpRequest.getFirstBaseUrl()
@@ -785,7 +801,7 @@ class Resolver {
     throw new Error(`Can not generate HTTP URL.`)
   }
 
-  async createSamples_ (mediaFile) {
+  async createSamples_(mediaFile) {
     // First sample of each playable media file is the complete track.
     if (mediaFile.isPlayable) {
       let sample
@@ -815,14 +831,18 @@ class Resolver {
   }
 
   /**
-   * Resolve (get the HTTP URL and some meta informations) a remote media file
-   * by its URI.
+   * # Remote
+   *
+   * Resolve (get the HTTP URL and some meta informations) of a remote media
+   * file by its URI.
    *
    * Order of async resolution calls / tasks:
    *
    * 1. mediaFile
    * 2. httpUrl
    * 3. mediaElement
+   *
+   * # Local
    *
    * Resolve a local file. The local files have to dropped in in the
    * application.
@@ -832,13 +852,10 @@ class Resolver {
    * 1. mediaElement
    *
    * @private
-   * @param {String|Object} spec - URi or File object
-   *
-   * @see {@link https://developer.mozilla.org/de/docs/Web/API/File}
-   *
+   * @param {mediaFileSpec} spec - URi or File object
    * @return {MediaFile}
    */
-  async resolveSingle_ (spec) {
+  async resolveSingle_(spec) {
     let mediaFile
 
     // Remote uri to resolve
@@ -849,7 +866,7 @@ class Resolver {
         mediaFile.httpUrl = mediaFile.uri
         mediaFile.filenameFromHTTPUrl(mediaFile.uri)
         mediaFile.extensionFromString(mediaFile.uri)
-      // Resolve HTTP URL
+        // Resolve HTTP URL
       } else if (mediaFile.uriScheme === 'id' || mediaFile.uriScheme === 'filename') {
         const response = await this.queryMediaServer_(mediaFile.uriScheme, mediaFile.uriAuthority)
         mediaFile.addProperties(response.data)
@@ -858,7 +875,7 @@ class Resolver {
           mediaFile.previewHttpUrl = `${mediaFile.httpUrl}_preview.jpg`
         }
       }
-    // Local: File object from drag and drop or open dialog
+      // Local: File object from drag and drop or open dialog
     } else if (spec instanceof File) {
       const file = spec
       if (mediaTypes.isMedia(file.name)) {
@@ -884,23 +901,22 @@ class Resolver {
     if (samples) {
       mediaFile.samples = samples
     }
-    return MediaFile
+    return mediaFile
   }
 
   /**
-   * Resolve media files by URIs or local media files by their file objects.
+   * Resolve one ore more remote media files by URIs, HTTP URLs or
+   * local media files by their file objects.
    *
-   * @param {string|array|object} specs - A single remote URI as a string
-   *   or a array of URIs. Uniform Resource Identifier, for example
-   *   `id:Joseph_haydn` or `filename:beethoven.jpg`
+   * @param {mediaFileSpecs} mediaFileSpecs
    */
-  resolve (specs) {
-    if (typeof specs === 'string' || specs instanceof File ) {
-      specs = [specs]
+  resolve(mediaFileSpecs) {
+    if (typeof mediaFileSpecs === 'string' || mediaFileSpecs instanceof File) {
+      mediaFileSpecs = [mediaFileSpecs]
     }
 
     const uniqueSpecs = []
-    for (const uri of specs) {
+    for (const uri of mediaFileSpecs) {
       if (!uniqueSpecs.includes(uri)) {
         uniqueSpecs.push(uri)
       }
@@ -923,7 +939,7 @@ class Media {
    * @param {object} store
    * @param {object} shortcuts
    */
-  constructor (router, store, shortcuts) {
+  constructor(router, store, shortcuts) {
     this.$router = router
     this.$store = store
     this.$shortcuts = shortcuts
@@ -995,20 +1011,16 @@ class Media {
    *   Uniform Resource Identifier, for example
    *   `id:Joseph_haydn` or `filename:beethoven.jpg`
    */
-  async resolve (uris) {
+  async resolve(uris) {
     const output = {}
     const mediaFiles = await this.resolver.resolve(uris)
     for (const mediaFile of mediaFiles) {
-
       if (mediaFile.samples) {
-        for (let sampleSpec of mediaFile.samples) {
-          sample = new Sample(mediaFile, sampleSpec)
-          samples[sample.uri] = sample
-          this.$store.commit('media/sample', sample)
+        for (let sampleUri in mediaFile.samples) {
+          this.$store.commit('media/sample', mediaFile.samples[sampleUri])
         }
       }
       this.$store.dispatch('media/addMediaFile', mediaFile)
-
       this.addShortcutForMediaFile_(mediaFile)
       output[mediaFile.uri] = mediaFile
     }
@@ -1018,7 +1030,7 @@ class Media {
   /**
    * @private
    */
-  addShortcutForMediaFile_ (mediaFile) {
+  addShortcutForMediaFile_(mediaFile) {
     if (mediaFile.shortcut) return
     if (!mediaFile.isPlayable) return
     const number = this.$store.getters['media/typeCount'](mediaFile.type)
@@ -1052,7 +1064,7 @@ class Media {
 // https://stackoverflow.com/a/56501461
 // Vue.use(media, router, store, shortcuts)
 const Plugin = {
-  install (Vue, router, store, shortcuts) {
+  install(Vue, router, store, shortcuts) {
     if (!router) throw new Error('Pass in an instance of “VueRouter”.')
     if (!store) throw new Error('Pass in an instance of “Store”.')
     if (!shortcuts) throw new Error('Pass in an instance of “Shortcuts“.')

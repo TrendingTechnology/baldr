@@ -6,14 +6,18 @@
  * @module @bldr/doc-generator
  */
 
-const jsdoc = require('jsdoc-api')
 const glob = require('glob')
 const path = require('path')
 const childProcess = require('child_process')
 
-const destination = '/var/data/baldr/gh-pages'
-//const source = '/var/data/baldr/src'
+const jsdoc = require('jsdoc-api')
+const chalk = require('chalk')
+
 const source = '/home/jf/git-repositories/github/Josef-Friedrich/baldr'
+console.log(`Source: ${chalk.yellow(source)}`)
+
+const destination = '/var/data/baldr/gh-pages'
+console.log(`Destination: ${chalk.green(destination)}`)
 
 const docFiles = glob.sync(`${source}/**/*.@(js|vue)`, {
   ignore: [
@@ -26,7 +30,7 @@ console.log(docFiles.length)
 
 jsdoc.renderSync({
   files: docFiles,
-  configure:  path.join(__dirname, 'jsdoc-config.json'),
+  configure: path.join(__dirname, 'jsdoc-config.json'),
   destination
 })
 
