@@ -54,11 +54,6 @@ class Player {
      * to early.
      */
     this.timeouts_ = []
-
-    /**
-     * We never stop. Instead we fade out very short and smoothly.
-     */
-    this.stopFadeOut_ = 0.5
   }
 
   set addTimeout_(timeoutId) {
@@ -110,16 +105,15 @@ class Player {
     // audio files.
     this.addTimeout_ = setTimeout(() => {
       this.$store.commit('media/samplePlaying', sample)
+      console.log(`Play sample “${sample.uri}” (startTime: ${sample.startTimeSec})`)
       sample.mediaElement.currentTime = sample.startTimeSec
+      this.fadeIn(sample.fadeInSec)
       sample.mediaElement.play()
-      sample.mediaElement.volume = 1
 
       if (sample.durationSec) {
         this.addTimeout_ = setTimeout(
-          () => {
-            this.fadeOut(this.stopFadeOut_)
-          },
-          (sample.durationSec - this.stopFadeOut_) * 1000
+          () => { this.fadeOut(sample.fadeOutSec) },
+          sample.fadeOutStartTimeMsec
         )
       }
     }, 100)
@@ -131,7 +125,7 @@ class Player {
   async stop() {
     const sample = this.$store.getters['media/samplePlaying']
     if (!sample) return
-    await this.fadeOut(this.stopFadeOut_)
+    await this.fadeOut(sample.fadeOutSec)
     this.clearTimeouts_()
     sample.mediaElement.currentTime = sample.startTimeSec
     this.$store.commit('media/samplePlaying', null)
@@ -140,26 +134,63 @@ class Player {
   /**
    * @param {Number} duration - in seconds
    */
-  fadeOut(duration = 3.1) {
+  fadeIn(duration = 2) {
     return new Promise((resolve, reject) => {
       const sample = this.$store.getters['media/samplePlaying']
       if (!sample) {
         reject()
       }
-      let actualVolume = sample.mediaElement.volume
-      const steps = actualVolume / 100
+      console.log(`Begin fade in “${sample.uri}” (duration: ${duration})`)
+      // Number from 0 - 1
+      const targetVolume = 1
+      let actualVolume = 0
+      sample.mediaElement.volume = 0
+      // Normally 0.01 by volume = 1
+      const steps = targetVolume / 100
+      // Interval: every X ms reduce volume by step
       // in milliseconds: duration * 1000 / 100
-      const delay = duration * 10
-      const fadeOutInterval = setInterval(() => {
+      const stepInterval = duration * 10
+      const id = setInterval(() => {
+        actualVolume += steps
+        if (actualVolume <= targetVolume) {
+          sample.mediaElement.volume = actualVolume.toFixed(2)
+        } else {
+          console.log(`Fade in finished “${sample.uri}” (value: ${sample.mediaElement.volume})`)
+          clearInterval(id)
+          resolve()
+        }
+      }, parseInt(stepInterval))
+    })
+  }
+
+  /**
+   * @param {Number} duration - in seconds
+   */
+  fadeOut(duration = 2) {
+    return new Promise((resolve, reject) => {
+      const sample = this.$store.getters['media/samplePlaying']
+      if (!sample) {
+        reject()
+      }
+      console.log(`Begin fade out “${sample.uri}” (duration: ${duration})`)
+      // Number from 0 - 1
+      let actualVolume = sample.mediaElement.volume
+      // Normally 0.01 by volume = 1
+      const steps = actualVolume / 100
+      // Interval: every X ms reduce volume by step
+      // in milliseconds: duration * 1000 / 100
+      const stepInterval = duration * 10
+      const id = setInterval(() => {
         actualVolume -= steps
         if (actualVolume >= 0) {
           sample.mediaElement.volume = actualVolume.toFixed(2)
         } else {
           sample.mediaElement.pause()
-          clearInterval(fadeOutInterval)
+          console.log(`Pause “${sample.uri}”`)
+          clearInterval(id)
           resolve()
         }
-      }, parseInt(delay))
+      }, parseInt(stepInterval))
     })
   }
 
@@ -466,11 +497,30 @@ class Sample {
    * @param {object} specs
    * @property {String} specs.title
    * @property {String|Number} specs.id
-   * @property {String|Number} specs.startTime
-   * @property {String|Number} specs.duration
-   * @property {String|Number} specs.endTime
+   * @property {String|Number} specs.startTime - The start time in seconds.
+   * @property {String|Number} specs.fadeIn - The fade in time in seconds. The
+   *   duration is not affected by this time specification.
+   * @property {String|Number} specs.duration - The duration in seconds of
+   *   the sample.
+   * @property {String|Number} specs.fadeOut - The fade out time in seconds. The
+   *   duration is not affected by this time specification.
+   * @property {String|Number} specs.endTime - The end time in seconds.
    */
-  constructor(mediaFile, { title, id, startTime, duration, endTime }) {
+  constructor(mediaFile, { title, id, startTime, fadeIn, duration, fadeOut, endTime }) {
+
+    /**
+     * We never stop. Instead we fade out very short and smoothly.
+     *
+     * @type {Number}
+     */
+    this.defaultFadeIn_ = 0.5
+
+    /**
+     * We never stop. Instead we fade out very short and smoothly.
+     *
+     * @type {Number}
+     */
+    this.defaultFadeOut_ = 2
     /**
      * @type {module:@bldr/vue-media.MediaFile}
      */
@@ -518,6 +568,25 @@ class Sample {
     } else if (endTime) {
       this.durationSec = this.toSec_(endTime) - this.startTimeSec
     }
+
+    /**
+     * @type {Number}
+     */
+    if (!fadeIn) {
+      this.fadeInSec = this.defaultFadeIn_
+    } else {
+      this.fadeInSec = this.toSec_(fadeIn)
+    }
+
+    /**
+     * @type {Number}
+     */
+    if (!fadeOut) {
+      this.fadeOutSec = this.defaultFadeOut_
+    } else {
+      this.fadeOutSec = this.toSec_(fadeOut)
+    }
+
   }
 
   /**
@@ -525,6 +594,13 @@ class Sample {
    */
   toSec_(timeIntervaleString) {
     return Number(timeIntervaleString)
+  }
+
+
+  get fadeOutStartTimeMsec () {
+    if (this.durationSec) {
+      return (this.durationSec - this.fadeOutSec) * 1000
+    }
   }
 }
 
