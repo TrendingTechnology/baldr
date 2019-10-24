@@ -39,17 +39,6 @@ export function formatDuration (duration) {
 }
 
 /**
- * Create a video element like `new Audio() does.`
- *
- * @param {String} src
- */
-function Video(src) {
-  const video = document.createElement('video')
-  video.src = src
-  return video
-}
-
-/**
  *
  */
 class Player {
@@ -711,22 +700,33 @@ export class MediaFile {
 /**
  * @param {MediaFile} mediaFile
  */
-function createMediaElement (type, httpUrl, isPlayable) {
+async function createMediaElement (mediaFile) {
+  /**
+   * Create a video element like `new Audio() does.`
+   *
+   * @param {String} src
+   */
+  function Video(src) {
+    const video = document.createElement('video')
+    video.src = src
+    return video
+  }
+
   let mediaElement
-  if (!type) throw new Error(`Specify a type.`)
+  if (!('type' in mediaFile)) throw new Error(`mediaFile “${mediaFile}” has no type.`)
 
   switch (mediaFile.type) {
     case 'audio':
-      mediaElement = new Audio(httpUrl)
+      mediaElement = new Audio(mediaFile.httpUrl)
       break
 
     case 'video':
-      mediaElement = new Video(httpUrl)
+      mediaElement = new Video(mediaFile.httpUrl)
       break
 
     case 'image':
       mediaElement = new Image()
-      mediaElement.src = httpUrl
+      mediaElement.src = mediaFile.httpUrl
       break
 
     default:
@@ -734,7 +734,7 @@ function createMediaElement (type, httpUrl, isPlayable) {
   }
 
   return new Promise(function(resolve, reject) {
-    if (isPlayable) {
+    if (mediaFile.isPlayable) {
       mediaElement.onloadedmetadata = () => {
         resolve(mediaElement)
       }
@@ -745,7 +745,7 @@ function createMediaElement (type, httpUrl, isPlayable) {
     }
 
     mediaElement.onerror = () => {
-      reject(Error("It broke"));
+      reject(Error("Could not create MediaElement."));
     }
   })
 }
@@ -776,89 +776,6 @@ class Resolver {
    * @private
    * @param {MediaFile} mediaFile
    */
-  resolveMediaElement_ (mediaFile) {
-    let mediaElement
-    if (!('type' in mediaFile)) throw new Error(`mediaFile “${mediaFile}” has no type.`)
-
-    switch (mediaFile.type) {
-      case 'audio':
-        mediaElement = new Audio(mediaFile.httpUrl)
-        break
-
-      case 'video':
-        mediaElement = new Video(mediaFile.httpUrl)
-        break
-
-      case 'image':
-        mediaElement = new Image()
-        mediaElement.src = mediaFile.httpUrl
-        break
-
-      default:
-        throw new Error(`Not supported mediaFile type “${mediaFile.type}”.`)
-    }
-
-    return new Promise(function(resolve, reject) {
-      if (mediaFile.isPlayable) {
-        mediaElement.onloadedmetadata = () => {
-          resolve(mediaElement)
-        }
-      } else {
-        mediaElement.onload = () => {
-          resolve(mediaElement)
-        }
-      }
-
-      mediaElement.onerror = () => {
-        reject(Error("It broke"));
-      }
-    })
-  }
-
-
-  /**
-   * Each sample must have its own mediaelement
-   * @private
-   * @param {Sample} sample
-   */
-  resolveMediaElementSample_ (sample) {
-    let mediaElement
-    if (!('type' in sample.mediaFile)) throw new Error(`mediaFile “${mediaFile}” has no type.`)
-
-    switch (sample.mediaFile.type) {
-      case 'audio':
-        mediaElement = new Audio(mediaFile.httpUrl)
-        break
-
-      case 'video':
-        mediaElement = new Video(mediaFile.httpUrl)
-        break
-
-      default:
-        throw new Error(`Not supported mediaFile type “${mediaFile.type}”.`)
-    }
-
-    return new Promise(function(resolve, reject) {
-      if (mediaFile.isPlayable) {
-        mediaElement.onloadedmetadata = () => {
-          resolve(mediaElement)
-        }
-      } else {
-        mediaElement.onload = () => {
-          resolve(mediaElement)
-        }
-      }
-
-      mediaElement.onerror = () => {
-        reject(Error("It broke"));
-      }
-    })
-  }
-
-  /**
-   * @private
-   * @param {MediaFile} mediaFile
-   */
   async resolveHttpUrl_ (mediaFile) {
     if ('httpUrl' in mediaFile) return mediaFile.httpUrl
     if ('path' in mediaFile) {
@@ -868,10 +785,10 @@ class Resolver {
     throw new Error(`Can not generate HTTP URL.`)
   }
 
-  async resolveSamples_ (mediaFile) {
+  async createSamples_ (mediaFile) {
     // First sample of each playable media file is the complete track.
-    let sample
     if (mediaFile.isPlayable) {
+      let sample
       const samples = {}
       sample = new Sample(
         mediaFile,
@@ -882,17 +799,18 @@ class Resolver {
         }
       )
       samples[sample.uri] = sample
-      this.$store.commit('media/sample', sample)
       // Add further samples specifed in the yaml section.
       if (mediaFile.samples) {
         for (let sampleSpec of mediaFile.samples) {
           sample = new Sample(mediaFile, sampleSpec)
           samples[sample.uri] = sample
-          this.$store.commit('media/sample', sample)
         }
       }
-      // replace sample object with objects originates from the Sample class.
-      mediaFile.samples = samples
+
+      for (const sampleUri in samples) {
+        samples[sampleUri].mediaElement = await createMediaElement(mediaFile)
+      }
+      return samples
     }
   }
 
@@ -906,30 +824,6 @@ class Resolver {
    * 2. httpUrl
    * 3. mediaElement
    *
-   * @private
-   * @param {String} uri
-   */
-  async resolveRemoteFile_ (uri) {
-    const mediaFile = new MediaFile({ uri: uri })
-    if (mediaFile.uriScheme === 'http' || mediaFile.uriScheme === 'https') {
-      mediaFile.httpUrl = mediaFile.uri
-      mediaFile.filenameFromHTTPUrl(mediaFile.uri)
-      mediaFile.extensionFromString(mediaFile.uri)
-    } else if (mediaFile.uriScheme === 'id' || mediaFile.uriScheme === 'filename') {
-      const response = await this.queryMediaServer_(mediaFile.uriScheme, mediaFile.uriAuthority)
-      mediaFile.addProperties(response.data)
-      mediaFile.httpUrl = await this.resolveHttpUrl_(mediaFile)
-      if ('previewImage' in mediaFile) {
-        mediaFile.previewHttpUrl = `${mediaFile.httpUrl}_preview.jpg`
-      }
-    }
-    mediaFile.type = mediaTypes.extensionToType(mediaFile.extension)
-    // After type
-    mediaFile.mediaElement = await this.resolveMediaElement_(mediaFile)
-    return mediaFile
-  }
-
-  /**
    * Resolve a local file. The local files have to dropped in in the
    * application.
    *
@@ -938,68 +832,82 @@ class Resolver {
    * 1. mediaElement
    *
    * @private
-   * @param {File} file - File object
+   * @param {String|Object} spec - URi or File object
    *
    * @see {@link https://developer.mozilla.org/de/docs/Web/API/File}
    *
    * @return {MediaFile}
    */
-  async resolveLocalFile_ (file) {
-    if (mediaTypes.isMedia(file.name)) {
-      // blob:http:/localhost:8080/8c00d9e3-6ff1-4982-a624-55f125b5c0c0
-      const httpUrl = URL.createObjectURL(file)
-      // 8c00d9e3-6ff1-4982-a624-55f125b5c0c0
-      const uuid = httpUrl.substr(httpUrl.length - 36)
-      // We use the uuid instead of the file name. The file name can contain
-      // whitespaces and special characters. A uuid is  more reliable.
-      const uri = `localfile:${uuid}`
-      const mediaFile = new MediaFile({
-        uri: uri,
-        httpUrl: httpUrl,
-        filename: file.name
-      })
-      mediaFile.type = mediaTypes.extensionToType(mediaFile.extension)
-      // After type
-      mediaFile.mediaElement = await this.resolveMediaElement_(mediaFile)
-      return mediaFile
+  async resolveSingle_ (spec) {
+    let mediaFile
+
+    // Remote uri to resolve
+    if (typeof spec === 'string') {
+      mediaFile = new MediaFile({ uri: spec })
+      // Already resolved (URL from the internet for example)
+      if (mediaFile.uriScheme === 'http' || mediaFile.uriScheme === 'https') {
+        mediaFile.httpUrl = mediaFile.uri
+        mediaFile.filenameFromHTTPUrl(mediaFile.uri)
+        mediaFile.extensionFromString(mediaFile.uri)
+      // Resolve HTTP URL
+      } else if (mediaFile.uriScheme === 'id' || mediaFile.uriScheme === 'filename') {
+        const response = await this.queryMediaServer_(mediaFile.uriScheme, mediaFile.uriAuthority)
+        mediaFile.addProperties(response.data)
+        mediaFile.httpUrl = await this.resolveHttpUrl_(mediaFile)
+        if ('previewImage' in mediaFile) {
+          mediaFile.previewHttpUrl = `${mediaFile.httpUrl}_preview.jpg`
+        }
+      }
+    // Local: File object from drag and drop or open dialog
+    } else if (spec instanceof File) {
+      const file = spec
+      if (mediaTypes.isMedia(file.name)) {
+        // blob:http:/localhost:8080/8c00d9e3-6ff1-4982-a624-55f125b5c0c0
+        const httpUrl = URL.createObjectURL(file)
+        // 8c00d9e3-6ff1-4982-a624-55f125b5c0c0
+        const uuid = httpUrl.substr(httpUrl.length - 36)
+        // We use the uuid instead of the file name. The file name can contain
+        // whitespaces and special characters. A uuid is  more reliable.
+        const uri = `localfile:${uuid}`
+        mediaFile = new MediaFile({
+          uri: uri,
+          httpUrl: httpUrl,
+          filename: file.name
+        })
+      }
     }
+
+    mediaFile.type = mediaTypes.extensionToType(mediaFile.extension)
+    // After type
+    mediaFile.mediaElement = await createMediaElement(mediaFile)
+    const samples = await this.createSamples_(mediaFile)
+    if (samples) {
+      mediaFile.samples = samples
+    }
+    return MediaFile
   }
 
   /**
    * Resolve media files by URIs or local media files by their file objects.
    *
-   * @param {string|array|object} mixedSpecs - A single remote URI as a string
+   * @param {string|array|object} specs - A single remote URI as a string
    *   or a array of URIs. Uniform Resource Identifier, for example
    *   `id:Joseph_haydn` or `filename:beethoven.jpg`
    */
-  resolve (mixedSpecs) {
-    if (typeof mixedSpecs === 'string' || mixedSpecs instanceof File ) {
-      mixedSpecs = [mixedSpecs]
+  resolve (specs) {
+    if (typeof specs === 'string' || specs instanceof File ) {
+      specs = [specs]
     }
 
-    const localFileObjects = []
-    const remoteUris = []
-    for (const mixedSpec of mixedSpecs) {
-      if (typeof mixedSpec === 'string') {
-        remoteUris.push(mixedSpec)
-      } else if (mixedSpec instanceof File) {
-        localFileObjects.push(mixedSpec)
-      }
-    }
-
-    const uniqueRemoteUris = []
-    for (const uri of remoteUris) {
-      if (!uniqueRemoteUris.includes(uri)) {
-        uniqueRemoteUris.push(uri)
+    const uniqueSpecs = []
+    for (const uri of specs) {
+      if (!uniqueSpecs.includes(uri)) {
+        uniqueSpecs.push(uri)
       }
     }
     const promises = []
-    for (const uri of uniqueRemoteUris) {
-      promises.push(this.resolveRemoteFile_(uri))
-    }
-
-    for (const localFile of localFileObjects) {
-      promises.push(this.resolveLocalFile_(localFile))
+    for (const spec of uniqueSpecs) {
+      promises.push(this.resolveSingle_(spec))
     }
     return Promise.all(promises)
   }
@@ -1091,32 +999,16 @@ class Media {
     const output = {}
     const mediaFiles = await this.resolver.resolve(uris)
     for (const mediaFile of mediaFiles) {
-      // First sample of each playable media file is the complete track.
-      let sample
-      if (mediaFile.isPlayable) {
-        const samples = {}
-        sample = new Sample(
-          mediaFile,
-          {
-            title: 'komplett',
-            id: 'complete',
-            startTime: 0
-          }
-        )
-        samples[sample.uri] = sample
-        this.$store.commit('media/sample', sample)
-        // Add further samples specifed in the yaml section.
-        if (mediaFile.samples) {
-          for (let sampleSpec of mediaFile.samples) {
-            sample = new Sample(mediaFile, sampleSpec)
-            samples[sample.uri] = sample
-            this.$store.commit('media/sample', sample)
-          }
+
+      if (mediaFile.samples) {
+        for (let sampleSpec of mediaFile.samples) {
+          sample = new Sample(mediaFile, sampleSpec)
+          samples[sample.uri] = sample
+          this.$store.commit('media/sample', sample)
         }
-        // replace sample object with objects originates from the Sample class.
-        mediaFile.samples = samples
       }
       this.$store.dispatch('media/addMediaFile', mediaFile)
+
       this.addShortcutForMediaFile_(mediaFile)
       output[mediaFile.uri] = mediaFile
     }
