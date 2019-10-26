@@ -16,11 +16,12 @@
     "main": "src/main.js",
     "dependencies": {
         "@bldr/core-node": "^0.1.0",
-        "@bldr/songbook-base": "^0.1.28",
         "@bldr/songbook-core": "^0.1.7",
         "better-sqlite3": "^5.4.3",
         "chalk": "^2.4.2",
-        "fs-extra": " ^8.1.0"
+        "fs-extra": " ^8.1.0",
+        "glob": "^7.1.4",
+        "js-yaml": "^3.13.1"
     },
     "publishConfig": {
         "access": "public"

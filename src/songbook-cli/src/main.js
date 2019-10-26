@@ -15,9 +15,8 @@ const { Command } = require('commander')
 const chalk = require('chalk')
 
 // Project packages.
-const pckg = require('./package.json')
+const pckg = require('../package.json')
 const core = require('@bldr/core-node')
-const { bootstrapConfig } = require('@bldr/songbook-base')
 const {
   checkExecutables,
   IntermediateLibrary,
@@ -117,7 +116,7 @@ const main = function () {
     throw e
   }
 
-  const config = bootstrapConfig()
+  const config = core.bootstrapConfig().songbook
 
   let mode
   if (options.slides) {
@@ -142,7 +141,7 @@ const main = function () {
 
   core.log(
     'The base path of the song collection is located at:\n    %s\n',
-    config.path.cyan
+    chalk.cyan(config.path)
   )
 
   if (options.projectorPath) config.projectorPath = options.projectorPath
