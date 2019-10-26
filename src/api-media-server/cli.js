@@ -11,10 +11,10 @@ const yaml = require('js-yaml')
 
 // Project packages
 const { Asset, walk } = require('./main.js')
-const { utils } = require('@bldr/core')
+const { bootstrapConfig } = require('@bldr/core-node')
 
 // Project packages.
-const config = utils.bootstrapConfig()
+const config = bootstrapConfig()
 
 function makeAsset (mediaFile) {
   return new Asset(mediaFile).addFileInfos()

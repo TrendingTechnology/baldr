@@ -16,7 +16,7 @@ const chalk = require('chalk')
 
 // Project packages.
 const pckg = require('./package.json')
-const { utils } = require('@bldr/core')
+const core = require('@bldr/core-node')
 const { bootstrapConfig } = require('@bldr/songbook-base')
 const {
   checkExecutables,
@@ -140,7 +140,7 @@ const main = function () {
     options.pageTurnOptimized = false
   }
 
-  utils.log(
+  core.log(
     'The base path of the song collection is located at:\n    %s\n',
     config.path.cyan
   )
@@ -148,7 +148,7 @@ const main = function () {
   if (options.projectorPath) config.projectorPath = options.projectorPath
   if (config.projectorPath === 'none') config.projectorPath = null
   if (config.projectorPath) {
-    utils.log(
+    core.log(
       'The folder where all projector related files are stored is:\n    %s\n',
       chalk.green(config.projectorPath)
     )
@@ -159,7 +159,7 @@ const main = function () {
   if (options.pianoPath) config.pianoPath = options.pianoPath
   if (config.pianoPath === 'none') config.pianoPath = null
   if (config.pianoPath) {
-    utils.log(
+    core.log(
       'The folder where all piano related files are stored is:\n    %s\n',
       chalk.green(config.pianoPath)
     )
@@ -170,7 +170,7 @@ const main = function () {
     config.projectorPath,
     config.pianoPath
   )
-  utils.log('Found %s songs.', library.countSongs())
+  core.log('Found %s songs.', library.countSongs())
   if (options.list) library.loadSongList(options.list)
 
   if (options.clean) {
@@ -195,7 +195,7 @@ const main = function () {
         projectorPath,
         JSON.stringify(library, null, '  ')
       )
-      utils.log('Create JSON file: %s', chalk.yellow(projectorPath))
+      core.log('Create JSON file: %s', chalk.yellow(projectorPath))
     }
   }
 }

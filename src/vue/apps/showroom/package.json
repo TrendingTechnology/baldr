@@ -14,7 +14,7 @@
     "upload": "rsync -av --delete dist/ serverway:/var/www/baldr/showroom/"
   },
   "dependencies": {
-    "@bldr/core": "^0.0.32",
+    "@bldr/core": "^0.1.0",
     "@bldr/theme-default": "^0.0.31",
     "@bldr/vue-component-dynamic-select": "^0.1.13",
     "@bldr/vue-component-material-icon": "^0.1.12",

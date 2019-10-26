@@ -21,7 +21,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@bldr/core": "^0.0.32",
+    "@bldr/core": "^0.1.0",
     "express": "^4.17.1"
   },
   "gitHead": "ed4f60e66c8f420711d3eb15185620f7688e6fc9"

@@ -14,9 +14,9 @@ const express = require('express')
 
 // Project packages.
 const packageJson = require('../package.json')
-const { utils } = require('@bldr/core')
+const { bootstrapConfig } = require('@bldr/core-node')
 
-let config = utils.bootstrapConfig()
+let config = bootstrapConfig()
 
 /**
  * Directory where to store the json state objects.

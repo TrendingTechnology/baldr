@@ -14,10 +14,10 @@ const express = require('express')
 const MongoClient = require('mongodb').MongoClient
 
 // Project packages.
-const { utils } = require('@bldr/core')
+const { bootstrapConfig } = require('@bldr/core-node')
 const packageJson = require('./package.json')
 
-const config = utils.bootstrapConfig()
+const config = bootstrapConfig()
 
 /**
  * Base path of the media server file store.

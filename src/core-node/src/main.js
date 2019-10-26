@@ -1,11 +1,11 @@
 /**
- * @file Some low level utils
+ * High level classes and functions used by the node packages.
  *
+ * @module @bldr/core-node
  */
 
 // Node packages.
 const fs = require('fs')
-const os = require('os')
 const path = require('path')
 const util = require('util')
 
@@ -21,8 +21,8 @@ function log (format) {
 }
 
 /**
- * By default this module reads the config file ~/.baldr.json to generate its
- * config object.
+ * By default this module reads the configuration file `/etc/baldr.json` to
+ * generate its configuration object.
  *
  * @param {object} configDefault - Default options which gets merged.
  *
@@ -46,7 +46,6 @@ function bootstrapConfig (configDefault) {
 
 /**
  * Generate a revision string in the form version-gitshort(-dirty)
- *
  */
 function gitHead () {
   return {
@@ -56,6 +55,9 @@ function gitHead () {
   }
 }
 
-exports.bootstrapConfig = bootstrapConfig
-exports.log = log
-exports.gitHead = gitHead
+
+module.exports = {
+  log,
+  bootstrapConfig,
+  gitHead
+}

@@ -27,7 +27,7 @@ const {
   Song
 } = require('@bldr/songbook-base')
 const { AlphabeticalSongsTree } = require('@bldr/songbook-core')
-const { utils } = require('@bldr/core')
+const core = require('@bldr/core-node')
 
 /**
  * Check if executable is installed.
@@ -463,7 +463,7 @@ class PianoScore {
     texMarkup = texMarkup.replace('//basepath//', basePath)
 
     // Write contents to the text file.
-    utils.log(
+    core.log(
       'The TeX markup was written to: %s', // Do not change text: This will break tests.
       this.texFile.path // No color: This will break tests.
     )
@@ -477,7 +477,7 @@ class PianoScore {
     // Compile twice for the table of contents
     // The page numbers in the toc only matches after three runs.
     for (let index = 0; index < 3; index++) {
-      utils.log(
+      core.log(
         'Compile the TeX file “%s” the %d time.',
         chalk.yellow(this.texFile.path),
         index + 1

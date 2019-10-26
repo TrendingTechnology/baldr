@@ -15,7 +15,7 @@
     },
     "main": "src/main.js",
     "dependencies": {
-        "@bldr/core": "^0.0.32",
+        "@bldr/core": "^0.1.0",
         "@bldr/songbook-base": "^0.1.28",
         "@bldr/songbook-core": "^0.1.7",
         "better-sqlite3": "^5.4.3",

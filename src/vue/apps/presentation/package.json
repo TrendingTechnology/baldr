@@ -25,7 +25,7 @@
   "main": "src/main.js",
   "dependencies": {
     "@bldr/core-browser": "^0.10.1",
-    "@bldr/core": "^0.0.32",
+    "@bldr/core": "^0.1.0",
     "@bldr/http-request": "^0.1.6",
     "@bldr/theme-default": "^0.0.31",
     "@bldr/theme-handwriting": "^0.0.29",

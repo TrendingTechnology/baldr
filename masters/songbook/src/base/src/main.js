@@ -17,7 +17,7 @@ const chalk = require('chalk')
 
 // Project packages.
 const { SongMetaDataCombined, CoreLibrary } = require('@bldr/songbook-core')
-const { utils } = require('@bldr/core')
+const { core } = require('@bldr/core-node')
 
 /**
  * An array of song objects.
@@ -37,7 +37,7 @@ function bootstrapConfig () {
     force: false
   }
 
-  const configGlobal = utils.bootstrapConfig()
+  const configGlobal = core.bootstrapConfig()
   const config = Object.assign(configDefault, configGlobal.songbook)
 
   if (process.env.BALDR_SONGBOOK_PATH) {

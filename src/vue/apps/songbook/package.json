@@ -11,7 +11,7 @@
     "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {
-    "@bldr/core": "^0.0.32",
+    "@bldr/core": "^0.1.0",
     "@bldr/songbook-core": "^0.1.7",
     "@bldr/theme-default": "^0.0.31",
     "@bldr/vue-component-dynamic-select": "^0.1.13",

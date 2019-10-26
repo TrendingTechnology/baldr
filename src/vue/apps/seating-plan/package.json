@@ -25,7 +25,7 @@
     "test:e2e": "vue-cli-service test:e2e"
   },
   "dependencies": {
-    "@bldr/core": "^0.0.32",
+    "@bldr/core": "^0.1.0",
     "@bldr/http-request": "^0.1.6",
     "@bldr/theme-default": "^0.0.31",
     "@bldr/vue-component-dynamic-select": "^0.1.13",

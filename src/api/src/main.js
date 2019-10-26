@@ -15,9 +15,9 @@ const registerMediaServer = require('@bldr/api-media-server').registerRestApi
 
 // Project packages.
 const packageJson = require('../package.json')
-const { utils } = require('@bldr/core')
+const { bootstrapConfig } = require('@bldr/core-node')
 
-const config = utils.bootstrapConfig()
+const config = bootstrapConfig()
 
 /**
  * Default TCP port the server listens on.

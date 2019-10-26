@@ -15,7 +15,7 @@
   },
   "main": "src/main.js",
   "dependencies": {
-    "@bldr/core": "^0.0.32",
+    "@bldr/core-node": "^0.1.0",
     "@bldr/songbook-core": "^0.1.7",
     "chalk": "^2.4.2",
     "fs-extra": "^8.1.0",
