@@ -1,7 +1,7 @@
 {
-  "name": "@bldr/theme-handwriting",
-  "version": "0.0.29",
-  "description": "Theme “handwriting” of the baldr project.",
+  "name": "@bldr/themes",
+  "version": "0.1.0",
+  "description": "Some SCSS/CSS themes for the baldr project.",
   "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
   "bugs": {
     "url": "https://github.com/Josef-Friedrich/baldr/issues"
@@ -19,9 +19,14 @@
     "email": "josef@friedrich.rocks",
     "url": "https://josef.friedrich.rocks"
   },
-  "main": "styles.scss",
-  "style": "styles.scss",
+  "main": "src/main.js",
+  "style": "src/default.scss",
   "dependencies": {
+    "typeface-alegreya": "^0.0.69",
+    "typeface-alegreya-sans": "^0.0.72",
+    "typeface-alegreya-sans-sc": "^0.0.75",
+    "typeface-alegreya-sc": "^0.0.72",
+    "typeface-anonymous-pro": "0.0.72",
     "typeface-kalam": "^0.0.72"
   },
   "publishConfig": {

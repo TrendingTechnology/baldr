@@ -1,10 +1,6 @@
 {
   "packages": [
-    "masters/songbook/src/*",
-    "src/*",
-    "src/vue/apps/*",
-    "src/vue/components/*",
-    "themes/*"
+    "src/*"
   ],
   "version": "independent"
 }

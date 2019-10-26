@@ -8,7 +8,7 @@ const { DefinePlugin } = require('webpack')
 // Project packages
 const core = require('@bldr/core-node')
 
-const themePath = path.dirname(require.resolve('@bldr/theme-default'))
+const themePath = path.dirname(require.resolve('@bldr/themes'))
 
 // https://forum.vuejs.org/t/vue-cli-does-not-work-with-symlinked-node-modules-using-lerna/61700
 // https://cli.vuejs.org/guide/troubleshooting.html#symbolic-links-in-node-modules

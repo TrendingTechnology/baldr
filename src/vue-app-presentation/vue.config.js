@@ -7,8 +7,8 @@ const { DefinePlugin } = require('webpack')
 // Project packages
 const core = require('@bldr/core-node')
 
-function stylePath (packageName) {
-  return path.join(path.dirname(require.resolve(packageName)), 'styles.scss')
+function stylePath (themeName) {
+  return path.join(path.dirname(require.resolve('@bldr/themes')), `${themeName}.scss`)
 }
 
 // https://forum.vuejs.org/t/vue-cli-does-not-work-with-symlinked-node-modules-using-lerna/61700
@@ -33,8 +33,8 @@ module.exports = {
     'style-resources-loader': {
       preProcessor: 'scss',
       patterns: [
-        stylePath('@bldr/theme-default'),
-        stylePath('@bldr/theme-handwriting')
+        stylePath('default'),
+        stylePath('handwriting')
       ]
     }
   }

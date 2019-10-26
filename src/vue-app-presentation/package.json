@@ -26,8 +26,7 @@
   "dependencies": {
     "@bldr/core-browser": "^0.10.1",
     "@bldr/http-request": "^0.1.6",
-    "@bldr/theme-default": "^0.0.31",
-    "@bldr/theme-handwriting": "^0.0.29",
+    "@bldr/themes": "^0.1.0",
     "@bldr/vue-plugin-components-collection": "^0.1.0",
     "@bldr/vue-plugin-dynamic-select": "^0.1.0",
     "@bldr/vue-plugin-material-icon": "^0.1.0",

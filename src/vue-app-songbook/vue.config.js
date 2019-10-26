@@ -11,7 +11,7 @@ const core = require('@bldr/core-node')
 
 const config = core.bootstrapConfig()
 
-const themePath = path.dirname(require.resolve('@bldr/theme-default'))
+const themePath = path.dirname(require.resolve('@bldr/themes'))
 
 module.exports = {
   chainWebpack: (config) => {

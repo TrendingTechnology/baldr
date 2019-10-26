@@ -7,7 +7,7 @@ const { DefinePlugin } = require('webpack')
 // Project packages
 const core = require('@bldr/core-node')
 
-const themePath = path.dirname(require.resolve('@bldr/theme-default'))
+const themePath = path.dirname(require.resolve('@bldr/themes'))
 
 module.exports = {
   chainWebpack: (config) => {
@@ -30,7 +30,7 @@ module.exports = {
     'style-resources-loader': {
       preProcessor: 'scss',
       patterns: [
-        path.join(themePath, 'styles.scss')
+        path.join(themePath, 'default.scss')
       ]
     }
   }

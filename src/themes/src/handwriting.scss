@@ -1,6 +1,10 @@
 @import '~/typeface-kalam/index.css';
 
-@import './globals.scss';
+$handwriting-blue: #0000ff;
+$handwriting-gray: #fafafa;
+$handwriting-white: #ffffff;
+
+$handwriting-font-family: 'Kalam';
 
 [b-content-theme="handwriting"] {
   background-color: $handwriting-gray;
