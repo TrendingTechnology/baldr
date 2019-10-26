@@ -122,7 +122,7 @@ describe('BALDR REST API', () => {
   })
 
   it('CLI --version', function () {
-    const cli = childProcess.spawnSync(path.join(__dirname, '..', 'index.js'), ['--version'], { encoding: 'utf-8' })
+    const cli = childProcess.spawnSync(path.join(__dirname, '..', 'main.js'), ['--version'], { encoding: 'utf-8' })
     const pckg = require(path.join(__dirname, '..', 'package.json'))
     assert.strictEqual(cli.stdout.toString(), pckg.version + '\n')
     assert.strictEqual(cli.status, 0)

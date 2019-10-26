@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import { formatDuration } from '../index.js'
+import { formatDuration } from '../main.js'
 import PreviewImage from './PreviewImage.vue'
 
 export default {

@@ -13,7 +13,7 @@
     "email": "josef@friedrich.rocks",
     "url": "https://josef.friedrich.rocks"
   },
-  "main": "index.js",
+  "main": "src/main.js",
   "dependencies": {
     "@bldr/core": "^0.0.32",
     "@bldr/songbook-core": "^0.1.7",

@@ -22,7 +22,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { keyCombinationToArray } from './index.js'
+import { keyCombinationToArray } from './main.js'
 
 export default {
   name: 'ShortcutsOverview',

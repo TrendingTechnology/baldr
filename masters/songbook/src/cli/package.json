@@ -13,9 +13,9 @@
     "email": "josef@friedrich.rocks",
     "url": "https://josef.friedrich.rocks"
   },
-  "main": "index.js",
+  "main": "src/main.js",
   "bin": {
-    "baldr-songbook-updater": "./index.js"
+    "baldr-songbook-updater": "./src/main.js"
   },
   "dependencies": {
     "@bldr/core": "^0.0.32",

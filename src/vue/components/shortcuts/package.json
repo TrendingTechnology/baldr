@@ -12,7 +12,7 @@
     "type": "git",
     "url": "git+https://github.com/Josef-Friedrich/baldr.git"
   },
-  "main": "src/index.js",
+  "main": "src/main.js",
   "dependencies": {
     "mousetrap": "1.6.3",
     "vue": "2.6.10"

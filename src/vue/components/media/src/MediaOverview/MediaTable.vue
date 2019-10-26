@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import { mediaTypes } from '../index.js'
+import { mediaTypes } from '../main.js'
 import TableRow from './TableRow.vue'
 import { createNamespacedHelpers } from 'vuex'
 const { mapGetters } = createNamespacedHelpers('media')

@@ -12,7 +12,7 @@
     "type": "git",
     "url": "git+https://github.com/Josef-Friedrich/baldr.git"
   },
-  "main": "index.js",
+  "main": "main.js",
   "dependencies": {
     "@bldr/core": "^0.0.32",
     "chalk": "^2.4.2",

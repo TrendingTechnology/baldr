@@ -15,8 +15,8 @@
 </template>
 
 <script>
-import ModalDialog from './index'
-import { dialogsWatcher } from './index'
+import ModalDialog from './main.js'
+import { dialogsWatcher } from './main.js'
 
 // Components
 import { MaterialIcon } from '@bldr/vue-component-material-icon'

@@ -10,7 +10,7 @@ const chalk = require('chalk')
 const yaml = require('js-yaml')
 
 // Project packages
-const { Asset, walk } = require('./index.js')
+const { Asset, walk } = require('./main.js')
 const { utils } = require('@bldr/core')
 
 // Project packages.

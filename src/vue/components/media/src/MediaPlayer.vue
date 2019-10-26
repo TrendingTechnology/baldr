@@ -58,7 +58,7 @@
 <script>
 /* globals compilationTime gitHead */
 import { MaterialIcon } from '@bldr/vue-component-material-icon'
-import { formatDuration } from './index.js'
+import { formatDuration } from './main.js'
 
 export default {
   name: 'MediaPlayer',

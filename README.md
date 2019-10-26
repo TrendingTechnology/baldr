@@ -46,6 +46,14 @@ lerna publish
 
 ## Coding style
 
+### `main.js`
+
+```json
+{
+  "main": "src/main.js"
+}
+```
+
 The Baldr project follows the [standardJS](https://standardjs.com/) style guides.
 
 ### Imports

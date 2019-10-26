@@ -1,5 +1,5 @@
 {
-  "name": "@bldr/jsdoc-generator",
+  "name": "@bldr/doc-generator",
   "version": "0.1.0",
   "description": "JSDoc generator for all baldr packages.",
   "main": "cli.js",
@@ -22,7 +22,7 @@
     "url": "https://github.com/Josef-Friedrich/baldr/issues"
   },
   "bin": {
-    "baldr-doc-generator": "./index.js"
+    "baldr-doc-generator": "./src/main.js"
   },
   "scripts": {
     "doc": "jsdoc --configure ./jsdoc-config.json --destination /var/data/baldr/gh-pages /home/jf/git-repositories/github/Josef-Friedrich/baldr",

@@ -12,7 +12,7 @@
     "type": "git",
     "url": "git+https://github.com/Josef-Friedrich/baldr.git"
   },
-  "main": "src/index.js",
+  "main": "src/main.js",
   "dependencies": {
     "core-js": "^3.2.1",
     "vue": "^2.6.10"

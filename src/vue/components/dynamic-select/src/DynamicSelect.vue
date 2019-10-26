@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import DynamicSelect from './index'
+import DynamicSelect from './main.js'
 
 const resultListMaxCount = 20
 
