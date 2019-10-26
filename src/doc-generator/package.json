@@ -25,7 +25,7 @@
     "baldr-doc-generator": "./src/main.js"
   },
   "scripts": {
-    "doc": "jsdoc --configure ./jsdoc-config.json --destination /var/data/baldr/gh-pages /home/jf/git-repositories/github/Josef-Friedrich/baldr",
+    "doc": "jsdoc --configure ./src/jsdoc-config.json --destination /var/data/baldr/gh-pages /home/jf/git-repositories/github/Josef-Friedrich/baldr",
     "show": "xdg-open /var/data/baldr/gh-pages/index.html"
   },
   "homepage": "https://github.com/Josef-Friedrich/baldr#readme"

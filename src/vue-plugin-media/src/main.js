@@ -65,15 +65,21 @@ export function formatDuration (duration) {
  */
 class Player {
   /**
-   * @param {object} store - vuex store object.
+   * @param {object} store - The {@link https://vuex.vuejs.org/ vuex} store
+   * instance.
    */
   constructor (store) {
+    /**
+     * The {@link https://vuex.vuejs.org/ vuex} store instance.
+     *
+     * @type {Object}
+     */
     this.$store = store
 
     /**
-     * Global volume
+     * Global volume: from 0 - 1
      *
-     * @type {Number} from 0 - 1
+     * @type {Number}
      */
     this.globalVolume = 1
 
@@ -84,12 +90,17 @@ class Player {
      * duration - stopped to early - cases that the next playback gets stopped
      * to early.
      *
+     * @type {Array}
+     *
      * @private
      */
     this.setTimeoutIds_ = []
 
     /**
      * An array of `setInterval` IDs.
+     *
+     *  @type {Array}
+     *
      * @private
      */
     this.setIntervalIds_ = []
@@ -189,7 +200,7 @@ class Player {
     }
 
     if (samplePlaying) await this.stop()
-    this.$store.commit('media/samplePlaying', sample)
+    this.$store.dispatch('media/samplePlaying', sample)
     this.play()
   }
 
@@ -267,7 +278,7 @@ class Player {
     await this.fadeOut_()
     this.clearTimerCallbacks_()
     sample.mediaElement.currentTime = sample.startTimeSec
-    this.$store.commit('media/samplePlaying', null)
+    this.$store.dispatch('media/samplePlaying', null)
   }
 
   /**
@@ -329,6 +340,53 @@ class Player {
   }
 }
 
+/**
+ * A class to manage a playlist of samples. As a store backend the vuex store
+ * is used.
+ */
+class PlayList {
+  /**
+   * @param {object} store - The {@link https://vuex.vuejs.org/ vuex} store
+   *   instance.
+   *
+   * @param {module:@bldr/vue-plugin-media~Player} player
+   */
+  constructor (store, player) {
+    /**
+     * The {@link https://vuex.vuejs.org/ vuex} store instance.
+     * @type {Object}
+     */
+    this.$store = store
+
+    /**
+     * @type module:@bldr/vue-plugin-media~Player
+     */
+    this.player = player
+  }
+
+  start_ () {
+    const sample = this.$store.getters['media/samplePlayListCurrent']
+    this.player.load(sample)
+    this.player.start()
+  }
+
+  /**
+   * Start the previous sample in the playlist.
+   */
+  startPrevious () {
+    this.$store.dispatch('media/setPlayListSamplePrevious')
+    this.start_()
+  }
+
+  /**
+   * Start the next sample in the playlist.
+   */
+  startNext () {
+    this.$store.dispatch('media/setPlayListSampleNext')
+    this.start_()
+  }
+}
+
 const state = {
   mediaFiles: {},
   playList: [],
@@ -348,8 +406,8 @@ const state = {
 }
 
 const getters = {
-  current: (state, getters) => {
-    return getters.mediaFiles[getters.playList[getters.playListNoCurrent - 1]]
+  samplePlayListCurrent: (state, getters) => {
+    return getters.samples[getters.playList[getters.playListNoCurrent - 1]]
   },
   httpUrlByUri: (state, getters) => uri => {
     const media = getters.mediaFiles
@@ -437,7 +495,7 @@ const actions = {
       commit('addSampleToPlayList', sample)
     }
   },
-  setMediaFileNext ({ commit, getters }) {
+  setPlayListSampleNext ({ commit, getters }) {
     const no = getters.playListNoCurrent
     const count = getters.playList.length
     if (no === count) {
@@ -446,7 +504,7 @@ const actions = {
       commit('setplayListNoCurrent', no + 1)
     }
   },
-  setMediaFilePrevious ({ commit, getters }) {
+  setPlayListSamplePrevious ({ commit, getters }) {
     const no = getters.playListNoCurrent
     const count = getters.playList.length
     if (no === 1) {
@@ -455,12 +513,16 @@ const actions = {
       commit('setplayListNoCurrent', no - 1)
     }
   },
-  setMediaFileCurrent ({ commit, getters }, mediaFile) {
+  setPlayListSampleCurrent ({ commit, getters }, sample) {
     let no = null
-    if (mediaFile) {
-      no = getters.playList.indexOf(mediaFile.uri) + 1
+    if (sample) {
+      no = getters.playList.indexOf(sample.uri) + 1
     }
     commit('setplayListNoCurrent', no)
+  },
+  samplePlaying ({ commit, dispatch }, sample) {
+    commit('samplePlaying', sample)
+    if (sample) dispatch('setPlayListSampleCurrent', sample)
   }
 }
 
@@ -1147,6 +1209,11 @@ class Media {
      * @type {module:@bldr/vue-plugin-media~Player}
      */
     this.player = new Player(store)
+
+    /**
+     * @type {module:@bldr/vue-plugin-media~PlayList}
+     */
+    this.playList = new PlayList(store, this.player)
 
     /**
      *  @type {module:@bldr/vue-plugin-media~Resolver}

@@ -32,6 +32,7 @@ console.log(docFiles.length)
 
 jsdoc.renderSync({
   files: docFiles,
+  pedantic: true,
   configure: path.join(__dirname, 'jsdoc-config.json'),
   destination
 })

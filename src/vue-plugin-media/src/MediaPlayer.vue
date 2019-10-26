@@ -18,12 +18,13 @@
       </div>
 
       <div class="meta-data" v-if="mediaFile">
-        {{ mediaFile.titleSafe }}
+        {{ no }}. {{ samplePlaying.title }} ({{ mediaFile.titleSafe }})
         {{ currentTime }} /
         {{ duration }}
+        <br/>
         <material-icon
           name="skip-previous"
-          @click.native="$media.player.startPrevious()"
+          @click.native="$media.playList.startPrevious()"
         />
         <material-icon
           v-if="paused"
@@ -37,7 +38,7 @@
         />
         <material-icon
           name="skip-next"
-          @click.native="$media.player.startNext()"
+          @click.native="$media.playList.startNext()"
         />
         <material-icon
           name="fullscreen"
@@ -76,11 +77,17 @@ export default {
     }
   },
   computed: {
+    samplePlaying () {
+      return this.$store.getters['media/samplePlayListCurrent']
+    },
     mediaFile () {
-      return this.$store.getters['media/current']
+      if (this.samplePlaying) return this.samplePlaying.mediaFile
     },
     mediaElement () {
-      if (this.mediaFile) return this.mediaFile.mediaElement
+      if (this.samplePlaying) return this.samplePlaying.mediaElement
+    },
+    no () {
+      return this.$store.getters['media/playListNoCurrent']
     }
   },
   watch: {
