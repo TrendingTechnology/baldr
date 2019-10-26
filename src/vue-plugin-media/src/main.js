@@ -331,8 +331,8 @@ class Player {
 
 const state = {
   mediaFiles: {},
-  mediaList: [],
-  mediaNoCurrent: null,
+  playList: [],
+  playListNoCurrent: null,
   mediaTypes: {
     audio: {},
     video: {},
@@ -349,7 +349,7 @@ const state = {
 
 const getters = {
   current: (state, getters) => {
-    return getters.mediaFiles[getters.mediaList[getters.mediaNoCurrent - 1]]
+    return getters.mediaFiles[getters.playList[getters.playListNoCurrent - 1]]
   },
   httpUrlByUri: (state, getters) => uri => {
     const media = getters.mediaFiles
@@ -374,11 +374,11 @@ const getters = {
   mediaFilesByType: state => type => {
     return state.mediaTypes[type]
   },
-  mediaList: state => {
-    return state.mediaList
+  playList: state => {
+    return state.playList
   },
-  mediaNoCurrent: state => {
-    return state.mediaNoCurrent
+  playListNoCurrent: state => {
+    return state.playListNoCurrent
   },
   restApiServers: state => {
     return state.restApiServers
@@ -427,38 +427,40 @@ const actions = {
   addMediaFile ({ commit, dispatch }, mediaFile) {
     commit('addMediaFile', mediaFile)
     commit('addMediaFileToTypes', mediaFile)
-    dispatch('addMediaFileToList', mediaFile)
+    for (const sampleUri in mediaFile.samples) {
+      dispatch('addSampleToPlayList', mediaFile.samples[sampleUri])
+    }
   },
-  addMediaFileToList ({ commit, getters }, mediaFile) {
-    const list = getters.mediaList
-    if (!list.includes(mediaFile.uri) && mediaFile.type !== 'image') {
-      commit('addMediaFileToList', mediaFile)
+  addSampleToPlayList ({ commit, getters }, sample) {
+    const list = getters.playList
+    if (!list.includes(sample.uri) && sample.mediaFile.type !== 'image') {
+      commit('addSampleToPlayList', sample)
     }
   },
   setMediaFileNext ({ commit, getters }) {
-    const no = getters.mediaNoCurrent
-    const count = getters.mediaList.length
+    const no = getters.playListNoCurrent
+    const count = getters.playList.length
     if (no === count) {
-      commit('setMediaNoCurrent', 1)
+      commit('setplayListNoCurrent', 1)
     } else {
-      commit('setMediaNoCurrent', no + 1)
+      commit('setplayListNoCurrent', no + 1)
     }
   },
   setMediaFilePrevious ({ commit, getters }) {
-    const no = getters.mediaNoCurrent
-    const count = getters.mediaList.length
+    const no = getters.playListNoCurrent
+    const count = getters.playList.length
     if (no === 1) {
-      commit('setMediaNoCurrent', count)
+      commit('setplayListNoCurrent', count)
     } else {
-      commit('setMediaNoCurrent', no - 1)
+      commit('setplayListNoCurrent', no - 1)
     }
   },
   setMediaFileCurrent ({ commit, getters }, mediaFile) {
     let no = null
     if (mediaFile) {
-      no = getters.mediaList.indexOf(mediaFile.uri) + 1
+      no = getters.playList.indexOf(mediaFile.uri) + 1
     }
-    commit('setMediaNoCurrent', no)
+    commit('setplayListNoCurrent', no)
   }
 }
 
@@ -466,8 +468,8 @@ const mutations = {
   addMediaFile (state, mediaFile) {
     Vue.set(state.mediaFiles, mediaFile.uri, mediaFile)
   },
-  addMediaFileToList (state, mediaFile) {
-    state.mediaList.push(mediaFile.uri)
+  addSampleToPlayList (state, sample) {
+    state.playList.push(sample.uri)
   },
   addMediaFileToTypes (state, mediaFile) {
     Vue.set(state.mediaTypes[mediaFile.type], mediaFile.uri, mediaFile)
@@ -475,8 +477,8 @@ const mutations = {
   setRestApiServers (state, restApiServers) {
     Vue.set(state, 'restApiServers', restApiServers)
   },
-  setMediaNoCurrent (state, no) {
-    state.mediaNoCurrent = no
+  setplayListNoCurrent (state, no) {
+    state.playListNoCurrent = no
   },
   sampleLoaded (state, sample) {
     state.sampleLoaded = sample
