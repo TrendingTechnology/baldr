@@ -53,28 +53,68 @@ class Player {
      * duration - stopped to early - cases that the next playback gets stopped
      * to early.
      */
-    this.timeouts_ = []
-  }
+    this.setTimeoutIds_ = []
 
-  set addTimeout_(timeoutId) {
-    this.timeouts_.push(timeoutId)
+    this.setIntervalIds_ = []
   }
 
   /**
-   * Clear all timeouts.
+   * Store the ID returned by `setTimeout`.
+   *
+   * @param {timeoutId}
+   */
+  set setTimeoutId(timeoutId) {
+    this.setTimeoutIds_.push(timeoutId)
+  }
+
+  /**
+   * Store the ID returned by `setInterval`.
+   *
+   * @param {intervalId}
+   */
+  set setIntervalId (intervalId) {
+    this.setIntervalIds_.push(intervalId)
+  }
+
+  /**
+   * Clear all callbacks registered by `setTimeout`.
    *
    * We have to clear the timeout. A not yet finished playbook with a duration
    * - stopped during playback - cases that the next playback gets stopped to
    * early.
    */
-  clearTimeouts_() {
-    for (const timeoutId of this.timeouts_) {
+  clearTimeoutCallbacks() {
+    for (const timeoutId of this.setTimeoutIds_) {
       clearTimeout(timeoutId)
     }
-    this.timeouts_ = []
+    this.setTimeoutIds_ = []
   }
 
   /**
+   * Clear all callbacks registered by `setInterval`.
+   *
+   * We have to clear the timeout. A not yet finished playbook with a duration
+   * - stopped during playback - cases that the next playback gets stopped to
+   * early.
+   */
+  clearIntervallCallbacks() {
+    for (const intervalId of this.setIntervalIds_) {
+      clearTimeout(intervalId)
+    }
+    this.setIntervalIds_ = []
+  }
+
+  /**
+   * Clear all timeouts and intervall callbacks.
+   */
+  clearTimerCallbacks() {
+    this.clearIntervallCallbacks()
+    this.clearTimeoutCallbacks()
+  }
+
+  /**
+   * Load a sample. Only loaded sample can be played.
+   *
    * @param {String|Object} uriOrSample
    */
   load(uriOrSample) {
@@ -89,7 +129,8 @@ class Player {
   }
 
   /**
-   * Play a sample from `sample.startTimeSec`.
+   * Play a loaded sample from the position `sample.startTimeSec` on. Stop the
+   * currently playing sample.
    */
   async start() {
     const sample = this.$store.getters['media/sampleLoaded']
@@ -100,23 +141,8 @@ class Player {
     }
 
     if (samplePlaying) await this.stop()
-
-    // To prevent AbortError in Firefox, artefacts when switching through the
-    // audio files.
-    this.addTimeout_ = setTimeout(() => {
-      this.$store.commit('media/samplePlaying', sample)
-      console.log(`Play sample “${sample.uri}” (startTime: ${sample.startTimeSec})`)
-      sample.mediaElement.currentTime = sample.startTimeSec
-      this.fadeIn(sample.fadeInSec)
-      sample.mediaElement.play()
-
-      if (sample.durationSec) {
-        this.addTimeout_ = setTimeout(
-          () => { this.fadeOut(sample.fadeOutSec) },
-          sample.fadeOutStartTimeMsec
-        )
-      }
-    }, 100)
+    this.$store.commit('media/samplePlaying', sample)
+    this.play()
   }
 
   /**
@@ -126,7 +152,7 @@ class Player {
     const sample = this.$store.getters['media/samplePlaying']
     if (!sample) return
     await this.fadeOut(sample.fadeOutSec)
-    this.clearTimeouts_()
+    this.clearTimerCallbacks()
     sample.mediaElement.currentTime = sample.startTimeSec
     this.$store.commit('media/samplePlaying', null)
   }
@@ -140,7 +166,7 @@ class Player {
       if (!sample) {
         reject()
       }
-      console.log(`Begin fade in “${sample.uri}” (duration: ${duration})`)
+      console.debug(`Begin fade in “${sample.uri}” (duration: ${duration})`)
       // Number from 0 - 1
       const targetVolume = 1
       let actualVolume = 0
@@ -155,11 +181,12 @@ class Player {
         if (actualVolume <= targetVolume) {
           sample.mediaElement.volume = actualVolume.toFixed(2)
         } else {
-          console.log(`Fade in finished “${sample.uri}” (value: ${sample.mediaElement.volume})`)
+          console.debug(`Fade in finished “${sample.uri}” (value: ${sample.mediaElement.volume})`)
           clearInterval(id)
           resolve()
         }
       }, parseInt(stepInterval))
+      this.setIntervalId = id
     })
   }
 
@@ -172,7 +199,7 @@ class Player {
       if (!sample) {
         reject()
       }
-      console.log(`Begin fade out “${sample.uri}” (duration: ${duration})`)
+      console.debug(`Begin fade out “${sample.uri}” (duration: ${duration})`)
       // Number from 0 - 1
       let actualVolume = sample.mediaElement.volume
       // Normally 0.01 by volume = 1
@@ -186,11 +213,12 @@ class Player {
           sample.mediaElement.volume = actualVolume.toFixed(2)
         } else {
           sample.mediaElement.pause()
-          console.log(`Pause “${sample.uri}”`)
+          console.debug(`Pause “${sample.uri}”`)
           clearInterval(id)
           resolve()
         }
       }, parseInt(stepInterval))
+      this.setIntervalId = id
     })
   }
 
@@ -218,7 +246,27 @@ class Player {
   play() {
     const sample = this.$store.getters['media/samplePlaying']
     if (!sample || !sample.mediaElement) return
-    sample.mediaElement.play()
+
+    if (sample.currentTimeSec) {
+      sample.mediaElement.currentTime = sample.currentTimeSec
+      sample.mediaElement.play()
+    } else {
+      // To prevent AbortError in Firefox, artefacts when switching through the
+      // audio files.
+      this.setTimeoutId = setTimeout(() => {
+        console.debug(`Play sample “${sample.uri}” (startTime: ${sample.startTimeSec})`)
+        sample.mediaElement.currentTime = sample.startTimeSec
+        this.fadeIn(sample.fadeInSec)
+        sample.mediaElement.play()
+
+        if (sample.durationSec) {
+          this.setTimeoutId = setTimeout(
+            () => { this.fadeOut(sample.fadeOutSec) },
+            sample.fadeOutStartTimeMsec
+          )
+        }
+      }, 100)
+    }
   }
 
   /**
@@ -228,6 +276,9 @@ class Player {
     const sample = this.$store.getters['media/samplePlaying']
     if (!sample || !sample.mediaElement) return
     sample.mediaElement.pause()
+    sample.currentTime = sample.mediaElement.currentTime
+    sample.currentVolume = sample.mediaElement.volume
+    this.clearTimerCallbacks()
   }
 
   /**
@@ -587,6 +638,15 @@ class Sample {
       this.fadeOutSec = this.toSec_(fadeOut)
     }
 
+    /**
+     * The current volume gets stored when the sample is paused.
+     */
+    this.currentVolume = null
+
+    /**
+     * The current time gets stored when the sample is paused.
+     */
+    this.currentTimeSec = null
   }
 
   /**

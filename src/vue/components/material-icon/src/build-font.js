@@ -173,7 +173,8 @@ if (require.main === module) {
         'folder-open': '',
         'comment-alert': '', // imaster-icon: task
         'comment-question': '', // imaster-icon: question
-        'update': '' // Update icon for the REST API overview.
+        'update': '', // Update icon for the REST API overview.
+        'play-speed': '' // Start play
       }
     },
     {

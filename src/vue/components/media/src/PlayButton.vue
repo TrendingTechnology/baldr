@@ -1,12 +1,17 @@
 <template>
   <span class="vc_play_button">
     <material-icon
-      v-if="paused"
-      name="play"
-      @click.native="play"
+      v-if="started"
+      name="play-speed"
+      class="baldr-icon-spin"
     />
     <material-icon
-      v-if="!paused"
+      v-if="!playing && !started"
+      name="play"
+      @click.native="start"
+    />
+    <material-icon
+      v-if="playing"
       name="pause"
       @click.native="$media.player.stop()"
     />
@@ -29,21 +34,24 @@ export default {
   },
   data () {
     return {
-      paused: true,
+      started: false,
+      playing: false
     }
   },
   methods: {
-    play () {
+    start () {
+      this.started = true
       this.$media.player.load(this.sample)
       this.$media.player.start()
     }
   },
   created () {
     this.sample.mediaElement.onplay = (event) => {
-      this.paused = false
+      this.playing = true
+      this.started = false
     }
     this.sample.mediaElement.onpause = (event) => {
-      this.paused = true
+      this.playing = false
     }
   }
 }
