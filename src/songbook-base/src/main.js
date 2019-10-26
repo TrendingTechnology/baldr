@@ -1,5 +1,6 @@
 /**
- * @file A collection of function and classes not using the DOM
+ * A collection of function and classes not using the DOM
+ *
  * @module @bldr/songbook-base
  */
 
