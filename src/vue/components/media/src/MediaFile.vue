@@ -21,7 +21,7 @@
     <div ref="mediaElementContainer" class="media-file-element">
       <img v-if="mediaFile.previewImage" :src="mediaFile.previewHttpUrl"/>
       <ol class="samples" >
-        <li v-for="sample in mediaFile.samples" :key="sample.id" @click="playSample(sample)">
+        <li v-for="sample in mediaFile.samples" :key="sample.id">
           <play-button :sample="sample"/> {{ sample.title }}
         </li>
       </ol>
@@ -44,12 +44,6 @@ export default {
     },
     mediaFile () {
       return this.$store.getters['media/mediaFileByUri'](this.uri)
-    }
-  },
-  methods: {
-    playSample (sample) {
-      this.$media.player.load(sample)
-      this.$media.player.play()
     }
   },
   async mounted () {

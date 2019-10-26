@@ -77,8 +77,10 @@ class Player {
    * Store the ID returned by `setTimeout`.
    *
    * @param {timeoutId}
+   *
+   * @private
    */
-  set setTimeoutId (timeoutId) {
+  set setTimeoutId_ (timeoutId) {
     this.setTimeoutIds_.push(timeoutId)
   }
 
@@ -86,8 +88,10 @@ class Player {
    * Store the ID returned by `setInterval`.
    *
    * @param {intervalId}
+   *
+   * @private
    */
-  set setIntervalId (intervalId) {
+  set setIntervalId_ (intervalId) {
     this.setIntervalIds_.push(intervalId)
   }
 
@@ -97,8 +101,10 @@ class Player {
    * We have to clear the timeout. A not yet finished playbook with a duration
    * - stopped during playback - cases that the next playback gets stopped to
    * early.
+   *
+   * @private
    */
-  clearTimeoutCallbacks () {
+  clearTimeoutCallbacks_ () {
     for (const timeoutId of this.setTimeoutIds_) {
       clearTimeout(timeoutId)
     }
@@ -111,8 +117,10 @@ class Player {
    * We have to clear the timeout. A not yet finished playbook with a duration
    * - stopped during playback - cases that the next playback gets stopped to
    * early.
+   *
+   * @private
    */
-  clearIntervallCallbacks () {
+  clearIntervallCallbacks_ () {
     for (const intervalId of this.setIntervalIds_) {
       clearTimeout(intervalId)
     }
@@ -121,10 +129,12 @@ class Player {
 
   /**
    * Clear all timeouts and intervall callbacks.
+   *
+   * @private
    */
-  clearTimerCallbacks () {
-    this.clearIntervallCallbacks()
-    this.clearTimeoutCallbacks()
+  clearTimerCallbacks_ () {
+    this.clearIntervallCallbacks_()
+    this.clearTimeoutCallbacks_()
   }
 
   /**
@@ -141,6 +151,7 @@ class Player {
     }
     if (!sample) throw new Error(`sample couldn’t played`)
     this.$store.commit('media/sampleLoaded', sample)
+    console.debug(`Load sample “${sample.uri}”`)
   }
 
   /**
@@ -166,16 +177,17 @@ class Player {
   async stop () {
     const sample = this.$store.getters['media/samplePlaying']
     if (!sample) return
-    await this.fadeOut(sample.fadeOutSec)
-    this.clearTimerCallbacks()
+    await this.fadeOut_()
+    this.clearTimerCallbacks_()
     sample.mediaElement.currentTime = sample.startTimeSec
     this.$store.commit('media/samplePlaying', null)
   }
 
   /**
    * @param {Number} duration - in seconds
+   * @private
    */
-  fadeIn (duration = defaultFadeInSec) {
+  fadeIn_ (duration = defaultFadeInSec) {
     return new Promise((resolve, reject) => {
       const sample = this.$store.getters['media/samplePlaying']
       if (!sample) {
@@ -201,14 +213,15 @@ class Player {
           resolve()
         }
       }, parseInt(stepInterval))
-      this.setIntervalId = id
+      this.setIntervalId_ = id
     })
   }
 
   /**
    * @param {Number} duration - in seconds
+   * @private
    */
-  fadeOut (duration = defaultFadeInSec) {
+  fadeOut_ (duration = defaultFadeOutSec) {
     return new Promise((resolve, reject) => {
       const sample = this.$store.getters['media/samplePlaying']
       if (!sample) {
@@ -233,7 +246,7 @@ class Player {
           resolve()
         }
       }, parseInt(stepInterval))
-      this.setIntervalId = id
+      this.setIntervalId_ = id
     })
   }
 
@@ -259,6 +272,7 @@ class Player {
    * Play a sample at the current position.
    */
   play () {
+    console.log('Enter method play()')
     const sample = this.$store.getters['media/samplePlaying']
     if (!sample || !sample.mediaElement) return
 
@@ -271,12 +285,12 @@ class Player {
       this.setTimeoutId = setTimeout(() => {
         console.debug(`Play sample “${sample.uri}” (startTime: ${sample.startTimeSec})`)
         sample.mediaElement.currentTime = sample.startTimeSec
-        this.fadeIn(sample.fadeInSec)
+        this.fadeIn_()
         sample.mediaElement.play()
 
         if (sample.durationSec) {
-          this.setTimeoutId = setTimeout(
-            () => { this.fadeOut(sample.fadeOutSec) },
+          this.setTimeoutId_ = setTimeout(
+            () => { this.fadeOut_(sample.fadeOutSec) },
             sample.fadeOutStartTimeMsec
           )
         }
@@ -287,13 +301,13 @@ class Player {
   /**
    * Pause a sample at the current position.
    */
-  pause () {
+  async pause () {
     const sample = this.$store.getters['media/samplePlaying']
     if (!sample || !sample.mediaElement) return
-    sample.mediaElement.pause()
+    await this.fadeOut_()
+    this.clearTimerCallbacks_()
     sample.currentTime = sample.mediaElement.currentTime
     sample.currentVolume = sample.mediaElement.volume
-    this.clearTimerCallbacks()
   }
 
   /**
