@@ -20,11 +20,25 @@ export const httpRequestNg = new HttpRequestNg(restEndpoints, '/api/media')
 export const httpRequest = new HttpRequest(getDefaultServers(), '/api/media')
 
 /**
+ * We fade in very short and smoothly to avoid audio artefacts.
+ *
+ * @type {Number}
+ */
+const defaultFadeInSec = 0.5
+
+/**
+ * We never stop. Instead we fade out very short and smoothly.
+ *
+ * @type {Number}
+ */
+const defaultFadeOutSec = 2
+
+/**
  * @param {String} duration - in seconds
  *
  * @return {String}
  */
-export function formatDuration(duration) {
+export function formatDuration (duration) {
   if (!duration) return '00:00'
   duration = parseInt(duration)
   let seconds = duration % 60
@@ -39,7 +53,8 @@ export function formatDuration(duration) {
 }
 
 /**
- *
+ * A deeply with vuex coupled media player. Only one media file can be
+ * played a the same time.
  */
 class Player {
   /**
@@ -537,10 +552,27 @@ class MediaTypes {
 export const mediaTypes = new MediaTypes()
 
 /**
- * A sample (snippet, sprite) of a media file which could be played. A sample
+ * A sample (snippet, sprite) of a media file which can be played. A sample
  * has typically a start time and a duration. If the start time is missing, the
  * media file gets played from the beginning. If the duration is missing, the
  * whole media file gets played.
+ *
+ * ```
+ *                  currentTimeSec
+ *                  |
+ *  fadeIn          |        fadeOut
+ *         /|-------+------|\           <- currentVolume
+ *      /   |       |      |   \
+ *   /      |       |      |     \
+ * #|#######|#######|######|#####|#### <- mediaElement
+ *  ^                            ^
+ *  startTimeSec                 endTimeSec
+ *                         ^
+ *                         |
+ *                         fadeOutStartTime
+ *
+ *  | <-      durationSec      ->|
+ * ```
  */
 class Sample {
   /**
@@ -560,18 +592,18 @@ class Sample {
   constructor(mediaFile, { title, id, startTime, fadeIn, duration, fadeOut, endTime }) {
 
     /**
-     * We never stop. Instead we fade out very short and smoothly.
+     * We fade in very short and smoothly to avoid audio artefacts.
      *
      * @type {Number}
      */
-    this.defaultFadeIn_ = 0.5
+    this.defaultFadeInSec = 0.5
 
     /**
      * We never stop. Instead we fade out very short and smoothly.
      *
      * @type {Number}
      */
-    this.defaultFadeOut_ = 2
+    this.defaultFadeOutSec = 2
     /**
      * @type {module:@bldr/vue-media.MediaFile}
      */
