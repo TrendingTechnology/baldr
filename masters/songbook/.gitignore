@@ -1,9 +1,0 @@
-dist/*
-
-out/
-.DS_Store
-*songs.json
-
-*.mscx,
-out/*
-piano/*
