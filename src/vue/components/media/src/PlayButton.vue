@@ -40,7 +40,6 @@ export default {
   },
   methods: {
     start () {
-      console.log(`Click event PlayButton “${this.sample.uri}”`)
       this.started = true
       this.$media.player.load(this.sample)
       this.$media.player.start()

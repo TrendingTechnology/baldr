@@ -24,14 +24,21 @@ export const httpRequest = new HttpRequest(getDefaultServers(), '/api/media')
  *
  * @type {Number}
  */
-const defaultFadeInSec = 0.5
+const defaultFadeInSec = 0.3
 
 /**
  * We never stop. Instead we fade out very short and smoothly.
  *
  * @type {Number}
  */
-const defaultFadeOutSec = 2
+const defaultFadeOutSec = 1
+
+/**
+ * Number of milliseconds to wait before the media file is played.
+ *
+ * @type {Number}
+ */
+const defaultPlayDelayMsec = 10
 
 /**
  * @param {String} duration - in seconds
@@ -64,12 +71,27 @@ class Player {
     this.$store = store
 
     /**
+     * Global volume
+     *
+     * @type {Number} from 0 - 1
+     */
+    this.globalVolume = 1
+
+    /**
+     * An array of `setTimeout` IDs
+     *
      * We have to clear the timeouts. A not yet finished playbook with a
      * duration - stopped to early - cases that the next playback gets stopped
      * to early.
+     *
+     * @private
      */
     this.setTimeoutIds_ = []
 
+    /**
+     * An array of `setInterval` IDs.
+     * @private
+     */
     this.setIntervalIds_ = []
   }
 
@@ -172,15 +194,36 @@ class Player {
   }
 
   /**
-   * Stop the playback and reset the play position to `sample.startTimeSec`
+   * Play a sample at the current position.
    */
-  async stop () {
+  play () {
+    console.groupEnd()
+    console.group('Enter method play()')
     const sample = this.$store.getters['media/samplePlaying']
-    if (!sample) return
-    await this.fadeOut_()
-    this.clearTimerCallbacks_()
-    sample.mediaElement.currentTime = sample.startTimeSec
-    this.$store.commit('media/samplePlaying', null)
+    if (!sample || !sample.mediaElement) return
+
+    let fadeInSec
+    if (sample.currentTimeSec) {
+      sample.mediaElement.currentTime = sample.currentTimeSec
+    } else {
+      sample.mediaElement.currentTime = sample.startTimeSec
+      fadeInSec = sample.fadeInSec
+    }
+
+    // To prevent AbortError in Firefox, artefacts when switching through the
+    // audio files.
+    this.setTimeoutId = setTimeout(() => {
+      console.debug(`Play sample “${sample.uri}” (currentTime: ${sample.mediaElement.currentTime})`)
+      this.fadeIn_(fadeInSec)
+      sample.mediaElement.play()
+
+      if (sample.durationSec) {
+        this.setTimeoutId_ = setTimeout(
+          () => { this.fadeOut_(sample.fadeOutSec) },
+          sample.fadeOutStartTimeMsec
+        )
+      }
+    }, defaultPlayDelayMsec)
   }
 
   /**
@@ -194,18 +237,16 @@ class Player {
         reject(new Error('No playing sample found.'))
       }
       console.debug(`Begin fade in “${sample.uri}” (duration: ${duration})`)
-      // Number from 0 - 1
-      const targetVolume = 1
       let actualVolume = 0
       sample.mediaElement.volume = 0
       // Normally 0.01 by volume = 1
-      const steps = targetVolume / 100
+      const steps = this.globalVolume / 100
       // Interval: every X ms reduce volume by step
       // in milliseconds: duration * 1000 / 100
       const stepInterval = duration * 10
       const id = setInterval(() => {
         actualVolume += steps
-        if (actualVolume <= targetVolume) {
+        if (actualVolume <= this.globalVolume) {
           sample.mediaElement.volume = actualVolume.toFixed(2)
         } else {
           console.debug(`Fade in finished “${sample.uri}” (value: ${sample.mediaElement.volume})`)
@@ -215,6 +256,30 @@ class Player {
       }, parseInt(stepInterval))
       this.setIntervalId_ = id
     })
+  }
+
+  /**
+   * Stop the playback and reset the play position to `sample.startTimeSec`
+   */
+  async stop () {
+    const sample = this.$store.getters['media/samplePlaying']
+    if (!sample) return
+    await this.fadeOut_()
+    this.clearTimerCallbacks_()
+    sample.mediaElement.currentTime = sample.startTimeSec
+    this.$store.commit('media/samplePlaying', null)
+  }
+
+  /**
+   * Pause a sample at the current position.
+   */
+  async pause () {
+    const sample = this.$store.getters['media/samplePlaying']
+    if (!sample || !sample.mediaElement) return
+    await this.fadeOut_()
+    this.clearTimerCallbacks_()
+    sample.currentTimeSec = sample.mediaElement.currentTime
+    sample.currentVolume = sample.mediaElement.volume
   }
 
   /**
@@ -251,67 +316,7 @@ class Player {
   }
 
   /**
-   *
-   */
-  startPrevious () {
-    this.stop()
-    this.$store.dispatch('media/setMediaFilePrevious')
-    this.play()
-  }
-
-  /**
-   *
-   */
-  startNext () {
-    this.stop()
-    this.$store.dispatch('media/setMediaFileNext')
-    this.play()
-  }
-
-  /**
-   * Play a sample at the current position.
-   */
-  play () {
-    console.log('Enter method play()')
-    const sample = this.$store.getters['media/samplePlaying']
-    if (!sample || !sample.mediaElement) return
-
-    if (sample.currentTimeSec) {
-      sample.mediaElement.currentTime = sample.currentTimeSec
-      sample.mediaElement.play()
-    } else {
-      // To prevent AbortError in Firefox, artefacts when switching through the
-      // audio files.
-      this.setTimeoutId = setTimeout(() => {
-        console.debug(`Play sample “${sample.uri}” (startTime: ${sample.startTimeSec})`)
-        sample.mediaElement.currentTime = sample.startTimeSec
-        this.fadeIn_()
-        sample.mediaElement.play()
-
-        if (sample.durationSec) {
-          this.setTimeoutId_ = setTimeout(
-            () => { this.fadeOut_(sample.fadeOutSec) },
-            sample.fadeOutStartTimeMsec
-          )
-        }
-      }, 100)
-    }
-  }
-
-  /**
-   * Pause a sample at the current position.
-   */
-  async pause () {
-    const sample = this.$store.getters['media/samplePlaying']
-    if (!sample || !sample.mediaElement) return
-    await this.fadeOut_()
-    this.clearTimerCallbacks_()
-    sample.currentTime = sample.mediaElement.currentTime
-    sample.currentVolume = sample.mediaElement.volume
-  }
-
-  /**
-   *
+   * Toggle between `Player.pause()` and `Player.play()`
    */
   toggle () {
     const sample = this.$store.getters['media/samplePlaying']
