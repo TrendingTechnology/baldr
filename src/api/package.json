@@ -26,7 +26,7 @@
   "dependencies": {
     "@bldr/api-media-server": "^0.1.14",
     "@bldr/api-seating-plan": "^0.1.6",
-    "@bldr/core": "^0.1.0",
+    "@bldr/core-node": "^0.1.0",
     "commander": "^3.0.2",
     "cors": "^2.8.5",
     "express": "^4.17.1"

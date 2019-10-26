@@ -25,7 +25,6 @@
   "main": "src/main.js",
   "dependencies": {
     "@bldr/core-browser": "^0.10.1",
-    "@bldr/core": "^0.1.0",
     "@bldr/http-request": "^0.1.6",
     "@bldr/theme-default": "^0.0.31",
     "@bldr/theme-handwriting": "^0.0.29",
@@ -45,6 +44,7 @@
   },
   "devDependencies": {
     "@vue/cli-service": "^3.12.0",
+    "@bldr/core-node": "^0.1.0",
     "node-sass": "^4.12.0",
     "sass-loader": "^8.0.0",
     "style-resources-loader": "^1.2.1",
