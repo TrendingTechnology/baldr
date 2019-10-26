@@ -1,31 +1,31 @@
 {
   "folders": [
     {
-      "name": "@bldr/seating-plan",
+      "name": "@bldr/vue-app-seating-plan",
       "path": "../src/vue/apps/seating-plan/src"
     },
     {
-      "name": "@bldr/showroom",
+      "name": "@bldr/vue-app-showroom",
       "path": "../src/vue/apps/showroom/src"
     },
     {
-      "name": "@bldr/songbook-vue-app",
+      "name": "@bldr/vue-app-songbook",
       "path": "../src/vue/apps/songbook/src"
     },
     {
-      "name": "@bldr/vue-components-collection",
+      "name": "@bldr/vue-plugin-components-collection",
       "path": "../src/vue/components/collection/src"
     },
     {
-      "name": "@bldr/vue-component-dynamic-select",
+      "name": "@bldr/vue-plugin-dynamic-select",
       "path": "../src/vue/components/dynamic-select/src"
     },
     {
-      "name": "@bldr/vue-component-material-icon",
+      "name": "@bldr/vue-plugin-material-icon",
       "path": "../src/vue/components/material-icon/src"
     },
     {
-      "name": "@bldr/vue-component-modal-dialog",
+      "name": "@bldr/vue-plugin-modal-dialog",
       "path": "../src/vue/components/modal-dialog/src"
     },
     {

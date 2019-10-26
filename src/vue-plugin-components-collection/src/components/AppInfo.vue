@@ -1,0 +1,97 @@
+<template>
+  <div class="vc_app_info" v-if="show">
+    <span class="important app-info">App-Info:</span>
+
+    <span class="spacer"></span>
+
+
+    <span class="important">Version:</span>
+    <a :href="`https://www.npmjs.com/package/${packageName}`">
+     {{ packageName }} {{ version }}
+    </a>
+
+    <span class="spacer"></span>
+
+    <span class="important">Git revision:</span>
+    <a :href="`https://github.com/Josef-Friedrich/baldr/commit/${gitHead.long}`">
+     {{ gitHead.short }}<span v-if="gitHead.isDirty">-dirty</span>
+    </a>
+
+    <span class="spacer"></span>
+
+    <span class="important">Compilation time:</span>
+    {{ compilationTime }}
+
+    <material-icon
+      class="close"
+      name="close"
+      @click.native="toggle"
+    />
+  </div>
+</template>
+
+<script>
+/* globals compilationTime gitHead */
+import { MaterialIcon } from '@bldr/vue-plugin-material-icon'
+
+export default {
+  name: 'AppInfo',
+  props: {
+    packageName: {
+      required: true,
+      type: String
+    },
+    version: {
+      required: true,
+      type: String
+    }
+  },
+  components: {
+    MaterialIcon
+  },
+  data () {
+    return {
+      show: false,
+      gitHead: gitHead,
+      compilationTime: new Date(compilationTime).toLocaleString()
+    }
+  },
+  methods: {
+    toggle: function () {
+      this.show = !this.show
+    }
+  },
+  mounted: function () {
+    this.$shortcuts.add('ctrl+,', () => { this.toggle() }, 'Show the app info.')
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+  .vc_app_info {
+    background-color: $yellow;
+    bottom: 0;
+    box-sizing: border-box;
+    font-size: 1.1em;
+    left: 0;
+    padding: 0.4vw;
+    position: absolute;
+    text-align: left;
+    width: 100%;
+
+    .app-info {
+      text-transform: uppercase;
+    }
+
+    .spacer {
+      display: inline-block;
+      width: 1em;
+    }
+
+    .close {
+      position: absolute;
+      top: 0.5em;
+      right: 1em;
+    }
+  }
+</style>
