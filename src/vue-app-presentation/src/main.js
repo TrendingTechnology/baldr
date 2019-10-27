@@ -45,6 +45,17 @@ Vue.use(ModalDialog)
 Vue.use(MaterialIcon)
 Vue.config.productionTip = false
 
+/**
+ * A `Vue` `props` object.
+ *
+ * ```js
+ * createElement('example-master', { props: props })
+ * ```
+ *
+ * @typedef props
+ * @type {Object}
+ */
+
 /******************************************************************************/
 
 /**

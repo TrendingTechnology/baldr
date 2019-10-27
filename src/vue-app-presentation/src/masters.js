@@ -19,11 +19,66 @@ class Master {
      * @type {string}
      */
     this.name = name
+
+    /**
+     * The human readable title of the master slide.
+     *
+     * @type {String}
+     */
+    this.title
+
+    /**
+     * The name of an icon of the
+     * {@link module:@bldr/vue-plugin-material-icon baldr icon font}.
+     *
+     * @type {String}
+     */
+    this.icon
+
+    /**
+     * A color name (CSS color class name) to colorize the master icon.
+     * @see {@link module:@bldr/themes}
+     *
+     * @type {String}
+     */
+    this.color
+
+    /**
+     * A style configuration object.
+     *
+     * @type {module:@bldr/vue-app-presentation~styleConfig}
+     */
+    this.styleConfig
+
+    /**
+     * Some markdown formated string to document this master slide.
+     *
+     * @type {String}
+     */
+    this.documentation
+
+    /**
+     * A example presentation file in the YAML format like `*.baldr.yml` files
+     * featuring the master.
+     *
+     * @type {String}
+     */
+    this.example
+
+    /**
+     * A vuex object containing `state`, `getters`, `actions`, `mutations`
+     * properties which buildes a submodule vuex store for each master.
+     *
+     * @type {Object}
+     */
+    this.store
   }
 
   /**
+   * The object from the exported `master` property object of the `master.vue`
+   * files.
    *
-   * @param {*} config
+   * @param {object} config
    */
   importMembers (config) {
     for (const member in config) {
@@ -32,26 +87,35 @@ class Master {
   }
 
   /**
+   * Must called after `this.store` is set.
+   */
+  registerVuexModule () {
+    if (this.store) {
+      this.store.namespaced = true
+      store.registerModule(this.name, this.store)
+    }
+  }
+
+  /**
    * result must fit to props
-   * @param {object} props
+   *
+   * @param {module:@bldr/vue-app-presentation~props} props
    */
   normalizeProps (props) {}
 
   /**
-   *
-   * @param {*} props
+   * @param {module:@bldr/vue-app-presentation~props} props
    */
   stepCount (props) {}
 
   /**
    * An array of media URIs to resolve (like [id:beethoven, filename:mozart.mp3])
-   * @param {*} props
+   * @param {module:@bldr/vue-app-presentation~props} props
    */
   resolveMediaUris (props) {}
 
   /**
-   *
-   * @param {*} props
+   * @param {module:@bldr/vue-app-presentation~props} props
    */
   plainTextFromProps (props) {}
 
@@ -74,6 +138,11 @@ class Master {
 
   /**
    * Called when leaving a step.
+   *
+   * @param {object} payload
+   * @property {object} payload
+   * @property {number} payload.oldStepNo
+   * @property {number} payload.newStepNo
    */
   leaveStep ({ oldStepNo, newStepNo }) {}
 }
@@ -108,11 +177,7 @@ requireComponent.keys().forEach((fileName) => {
     masters[masterName].example = masters[masterName].example.replace(/^\n*/, '')
   }
 
-  if ('store' in masters[masterName]) {
-    const storeModule = masters[masterName].store
-    storeModule.namespaced = true
-    store.registerModule(masterName, storeModule)
-  }
+  master.registerVuexModule()
   componentDefaults[masterName] = componentConfig.default
 })
 

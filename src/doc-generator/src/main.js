@@ -21,25 +21,55 @@ const destination = '/var/data/baldr/gh-pages'
 console.log(`Destination: ${chalk.green(destination)}`)
 fs.removeSync(destination)
 
-const docFiles = glob.sync(`${source}/**/*.@(js|vue)`, {
-  ignore: [
-    '**/node_modules/**',
-    '**/test/**',
-    '**/tests/**'
-  ]
-})
-console.log(docFiles.length)
+function generateProgrammatic () {
+  const docFiles = glob.sync(`${source}/**/*.@(js|vue)`, {
+    ignore: [
+      '**/node_modules/**',
+      '**/test/**',
+      '**/tests/**'
+    ]
+  })
+  console.log(docFiles.length)
 
-jsdoc.renderSync({
-  files: docFiles,
-  pedantic: true,
-  configure: path.join(__dirname, 'jsdoc-config.json'),
-  destination
-})
+  jsdoc.renderSync({
+    files: docFiles,
+    pedantic: true,
+    configure: path.join(__dirname, 'jsdoc-config.json'),
+    destination
+  })
+}
 
-const process = childProcess.spawn(
-  'xdg-open',
-  [path.join(destination, 'index.html')],
-  { detached: true }
-)
-process.unref()
+function openBrowser () {
+  const process = childProcess.spawn(
+    'xdg-open',
+    [path.join(destination, 'index.html')],
+    { detached: true }
+  )
+  process.unref()
+}
+
+function generateByChildProcess () {
+  const jsdoc = childProcess.spawn(
+    'jsdoc',
+    [
+      '--configure', path.join(__dirname, 'jsdoc-config.json'),
+      '--destination', destination,
+      source
+    ]
+  )
+
+  jsdoc.stdout.on('data', (data) => {
+    console.log(`stdout: ${data}`)
+  })
+
+  jsdoc.stderr.on('data', (data) => {
+    console.log(`stderr: ${data}`)
+  })
+
+  jsdoc.on('close', (code) => {
+    console.log(`child process exited with code ${code}`)
+    openBrowser()
+  })
+}
+
+generateByChildProcess()
