@@ -195,31 +195,6 @@ class RenderData {
   }
 }
 
-export class ThemeData {
-  constructor () {
-    /**
-     * The name of a theme.
-     * @type {string}
-     */
-    this.themeName = false
-  }
-
-  /**
-   *
-   */
-  pullTheme_ (rawSlideData) {
-    if (!{}.hasOwnProperty.call(rawSlideData, 'theme')) {
-      return false
-    } else if (themeNames.includes(rawSlideData.theme)) {
-      const theme = rawSlideData.theme
-      this.pullProperty_(rawSlideData, 'theme')
-      return theme
-    } else {
-      throw Error(`Unkown theme: “${this.toString_(rawSlideData.theme)}”`)
-    }
-  }
-}
-
 export class MetaData {
   constructor (rawSlideObject) {
     this.title = rawSlideObject.cut('title')
@@ -302,7 +277,6 @@ class Slide {
  * @property {object} media
  * @property {string} rawYamlString_
  * @property {string} rawYamlObject_
-
  */
 export class Presentation {
   /**
