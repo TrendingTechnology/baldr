@@ -182,7 +182,7 @@ class Player {
     } else {
       sample = this.$store.getters['media/sampleByUri'](uriOrSample)
     }
-    if (!sample) throw new Error(`sample couldn’t played`)
+    if (!sample) throw new Error(`The sample “${uriOrSample}” couldn’t be played!`)
     this.$store.commit('media/sampleLoaded', sample)
     console.debug(`Load sample “${sample.uri}”`)
   }

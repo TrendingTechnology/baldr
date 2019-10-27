@@ -13,8 +13,8 @@
     >
       <template slot="body" slot-scope="props">
         <div b-ui-theme="default" :class="['vue-notification', props.item.type]" @click="props.close">
-          <a class="title">{{props.item.title}}</a>
-          <div v-html="props.item.text"/>
+          <div class="title">{{props.item.title}}</div>
+          <div class="text" v-html="props.item.text"/>
         </div>
       </template>
     </notifications>
@@ -66,6 +66,15 @@ export default {
     }
   },
   mounted: function () {
+    window.addEventListener('error', (event) => {
+      this.$notify({
+        group: 'default',
+        title: event.error.message,
+        text: `filename: ${event.error.fileName}`,
+        duration: 5000,
+        type: 'error'
+      })
+    })
     this.$styleConfig.set({ overflow: true })
     this.$shortcuts.addMultiple([
       {
@@ -176,6 +185,10 @@ export default {
     color: #ffffff;
     background: #44A4FC;
     border-left: 0.5em solid #187FE7;
+
+    .text {
+      font-size: 0.8em;
+    }
 
     &.warn {
       background: scale-color($orange, $lightness: 40%);
