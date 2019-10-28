@@ -53,6 +53,11 @@ export default {
 <style lang="scss" scoped>
   .vc_shortcuts_overview {
     font-size: 1.8vw;
+    width: 100vw;
+    height: 100vh;
+    padding: 4vw;
+    box-sizing: border-box;
+
     table {
       margin: 0 auto;
     }
