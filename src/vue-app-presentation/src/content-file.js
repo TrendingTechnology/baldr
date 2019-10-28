@@ -242,6 +242,11 @@ class Slide {
     return shortenText(plain)
   }
 
+  /**
+   * Collect all plain text of the slide.
+   *
+   * @returns {String}
+   */
   get plainText () {
     const output = []
     const fromProps = callMasterFunc(this.master.name, 'plainTextFromProps', this.renderData.data)

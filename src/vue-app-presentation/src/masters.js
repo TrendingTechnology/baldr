@@ -97,6 +97,19 @@ class Master {
   }
 
   /**
+   * A cleaned version of `this.example`.
+   *
+   * Remove the empty line at the beginning of the backtick string example.
+   *
+   * @returns {String}
+   */
+  get exampleClean () {
+    if (this.example) {
+      return this.example.replace(/^\n*/, '')
+    }
+  }
+
+  /**
    * result must fit to props
    *
    * @param {module:@bldr/vue-app-presentation~props} props
@@ -172,11 +185,6 @@ requireComponent.keys().forEach((fileName) => {
   master.importMembers(masterConfig)
   masters[masterName] = master
   masters[masterName].vue = componentConfig.default
-  // Remove the empty line at the beginning of the backtick string example.
-  if ('example' in masters[masterName]) {
-    masters[masterName].example = masters[masterName].example.replace(/^\n*/, '')
-  }
-
   master.registerVuexModule()
   componentDefaults[masterName] = componentConfig.default
 })

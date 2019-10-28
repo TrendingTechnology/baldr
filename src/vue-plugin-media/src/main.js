@@ -912,7 +912,7 @@ export class MediaFile {
       'uriScheme'
     ]
     for (const property in this) {
-      if (property in this && this.property && !excludedProperties.includes(property)) {
+      if (property in this && this[property] && !excludedProperties.includes(property)) {
         output.push(this[property])
       }
     }

@@ -19,7 +19,7 @@
     <section v-if="master.example">
       <h2>Example <material-icon name="presentation" @click.native="openExample"/></h2>
 
-      <pre><code>{{ master.example }}</code></pre>
+      <pre><code>{{ master.exampleClean }}</code></pre>
     </section>
 
     <section v-html="documentation"/>
