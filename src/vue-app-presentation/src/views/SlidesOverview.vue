@@ -4,7 +4,7 @@
       <a href="#" v-if="!viewModeCompact">kompakt</a>
       <a href="#" v-if="viewModeCompact">ausführlich</a>
     </div>
-    <h1>Überblick</h1>
+    <h1>Überblick: {{ presentation.title }}</h1>
     <ol v-if="slides">
       <li
         v-for="slide in slides"
@@ -52,6 +52,9 @@ export default {
       if (this.$store.getters.slidesCount) {
         return this.$store.getters.slides
       }
+    },
+    presentation () {
+      return this.$store.getters.presentation
     }
   },
   methods: {

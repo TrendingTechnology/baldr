@@ -167,7 +167,7 @@ const requireComponent = require.context(
   './masters',
   // Do not look in subdirectories
   false,
-  // Only include "_base-" prefixed .vue files
+  // Only include .vue files
   /[\w-]+\.vue$/
 )
 

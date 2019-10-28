@@ -308,7 +308,16 @@ export class Presentation {
     } catch (error) {
       throw new Error(`${error.name}: ${error.message}`)
     }
-    // meta
+    /**
+     * The meta object.
+     *
+     * ```yaml
+     * meta:
+     *   title: My title
+     * ```
+     *
+     * @type {object}
+     */
     this.meta = this.rawYamlObject_.meta
     // slides
     const indexedSlides = this.reIndex(this.rawYamlObject_.slides)
@@ -325,6 +334,30 @@ export class Presentation {
     if (mediaUris.length > 0) {
       this.media = await vue.$media.resolve(mediaUris)
     }
+  }
+
+  /**
+   * The title of the presentation specified in:
+   *
+   * ```yml
+   * meta:
+   *   title: My Title
+   * ```
+   */
+  get title () {
+    if (this.meta.title) return this.meta.title
+  }
+
+  /**
+   * The ID of the presentation
+   *
+   * ```yml
+   * meta:
+   *   id: My-Presentation
+   * ```
+   */
+  get id () {
+    if (this.meta.id) return this.meta.id
   }
 }
 
