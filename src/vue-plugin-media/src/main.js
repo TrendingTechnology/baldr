@@ -180,7 +180,9 @@ class Player {
     if (typeof uriOrSample === 'object') {
       sample = uriOrSample
     } else {
-      sample = this.$store.getters['media/sampleByUri'](uriOrSample)
+      let uri = uriOrSample
+      if (uri.indexOf('#') === -1) uri = `${uri}#complete`
+      sample = this.$store.getters['media/sampleByUri'](uri)
     }
     if (!sample) throw new Error(`The sample “${uriOrSample}” couldn’t be played!`)
     this.$store.commit('media/sampleLoaded', sample)
@@ -270,12 +272,15 @@ class Player {
   }
 
   /**
-   * Stop the playback and reset the play position to `sample.startTimeSec`
+   * Stop the playback and reset the play position to `sample.startTimeSec` and
+   * unload the playing sample.
+   *
+   * @param {Number} fadeOutSec - Duration in seconds to fade out the sample.
    */
-  async stop () {
+  async stop (fadeOutSec) {
     const sample = this.$store.getters['media/samplePlaying']
     if (!sample) return
-    await this.fadeOut_()
+    await this.fadeOut_(fadeOutSec)
     this.clearTimerCallbacks_()
     sample.mediaElement.currentTime = sample.startTimeSec
     this.$store.dispatch('media/samplePlaying', null)
@@ -804,9 +809,10 @@ export class MediaFile {
     /**
      * Uniform Resource Identifier, for example  `id:Haydn`,
      * `filename:Haydn_Joseph.jpg` or `http://example.com/Haydn_Joseph.jpg`.
+     * The sample addition (`#complete`) is removed.
      * @type {string}
      */
-    this.uri = decodeURI(this.uri)
+    this.uri = decodeURI(this.uri.replace(/#.*$/, ''))
     const segments = this.uri.split(':')
 
     /**
@@ -1233,8 +1239,13 @@ class Media {
       },
       {
         keys: 'p f',
-        callback: () => { this.player.fadeOut() },
+        callback: () => { this.player.stop(7) },
         description: 'Media player: fade out'
+      },
+      {
+        keys: 'p s',
+        callback: () => { this.player.start() },
+        description: 'Media player: Start loaded sample'
       }
     ])
 
@@ -1317,7 +1328,7 @@ class Media {
       shortcut,
       () => {
         this.player.load(mediaFile.uri)
-        this.player.play()
+        this.player.start()
       },
       `Play ${mediaFile.titleSafe}`
     )

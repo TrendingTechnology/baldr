@@ -36,6 +36,7 @@ slides:
   audio:
     src: id:Fischer-Dieskau_Marmotte
     composer: Ludwig B. (Custom composer)
+    autoplay: true
 
 - title: 'Autoplay: yes'
   audio:
@@ -109,32 +110,12 @@ export const master = {
     if (props.cover) uris.push(props.cover)
     return uris
   },
-  enterSlide ({ newProps }) {
+  async enterSlide ({ newProps }) {
     const props = newProps
     this.$media.player.load(props.src[0])
     if (newProps.autoplay) {
-      this.$media.player.play(props.begin, props.duration)
+      await this.$media.player.start()
     }
-
-    // console.log('enter slide')
-    // console.log(oldSlide)
-    // console.log(newSlide)
-  },
-  leaveSlide ({ oldSlide, newSlide }) {
-    // console.log('leave slide')
-    // console.log(oldSlide)
-    // console.log(newSlide)
-  },
-  enterStep ({ oldStepNo, newStepNo }) {
-    // console.log('enter step')
-    // console.log(oldStepNo)
-    // console.log(newStepNo)
-  },
-  // Called when leaving a step.
-  leaveStep ({ oldStepNo, newStepNo }) {
-    // console.log('leave step')
-    // console.log(oldStepNo)
-    // console.log(newStepNo)
   }
 }
 
@@ -163,15 +144,6 @@ export default {
     },
     cover: {
       type: String
-    },
-    begin: {
-      type: Number
-    },
-    end: {
-      type: Number
-    },
-    duration: {
-      type: Number
     }
   },
   computed: {

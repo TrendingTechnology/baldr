@@ -21,8 +21,8 @@
     <div ref="mediaElementContainer" class="media-file-element">
       <img v-if="mediaFile.previewImage" :src="mediaFile.previewHttpUrl"/>
       <ol class="samples" >
-        <li v-for="sample in mediaFile.samples" :key="sample.id">
-          <play-button :sample="sample"/> {{ sample.title }}
+        <li v-for="sample in mediaFile.samples" :key="sample.uri">
+          <play-button :sample="sample"/> {{ sample.title }} [#{{ sample.id }}]
         </li>
       </ol>
     </div>
