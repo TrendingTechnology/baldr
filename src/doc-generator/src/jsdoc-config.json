@@ -9,7 +9,7 @@
         "allowUnknownTags": true
     },
     "source": {
-        "includePattern": "\\.(vue|js)$",
+        "includePattern": "\\.(js)$",
         "excludePattern": "(node_modules|dist|out|test|tests)"
     },
     "plugins": [
