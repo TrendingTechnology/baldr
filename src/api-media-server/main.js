@@ -1,5 +1,45 @@
 /**
- * @file Base code for the cli and the rest interface.
+ * The REST API and command line interface of the BALDR media server.
+ *
+ * # Media types:
+ *
+ * - presentation (`Presentation()`)
+ * - asset (`Asset()`)
+ *   - multipart asset
+ *
+ * # Definition of the objects:
+ *
+ * A _presentation_ is a YAML file for the BALDR presentation app. It must have
+ * the file name scheme `*.baldr.yml`. The media server stores the whole YAML
+ * file in the MongoDB database.
+ *
+ * A _asset_ is a media file which has a meta data file in the YAML format.
+ * The file name scheme for this meta data file is `media-file.jpg.yml`. The
+ * suffix `.yml` has to be appended. Only the content of the meta data file
+ * is stored into the database.
+ *
+ * # REST API
+ *
+ * - `mgmt`
+ *   - `flush`: Delete all media files (assets, presentations) from the database.
+ *   - `init`: Initialize the MongoDB database
+ *   - `re-init`: Re-Initialize the MongoDB database (Drop all collections and
+ *     initialize)
+ *   - `update`: Update the media server database (Flush and insert).
+ *   - `query`: Getting results by using query parameters. This query parameters
+ *     are available:
+ *      - `type`: `assets` (default), `presentations` (what)
+ *      - `method`: `exactMatch`, `substringSearch` (default).
+ *          - `exactMatch`: The query parameter `search` must be a perfect match
+ *            to a top level database field to get a result.
+ *          - `substringSearch`: The query parameter `search` must
+ *      - `field`: `id` (default), `title`, etc ... (where).
+ *      - `search`: Some text to search for (search for).
+ * - `stats`:
+ *   - `count`: Count / sum of the media files (assets, presentations) in the
+ *     database.
+ *   - `updates`: Journal of the update processes with timestamps.
+ *
  * @module @bldr/api-media-server
  */
 
@@ -423,7 +463,7 @@ function registerRestApi () {
       '/mgmt/init': 'Initialize the MongoDB database.',
       '/mgmt/re-init': 'Re-Initialize the MongoDB database (Drop all collections and initialize).',
       '/mgmt/update': 'Update the media server database (Flush and insert).',
-      '/query?collections=assets&fields=id&method=match': 'Get results by using query parameters.',
+      '/query?type=assets&field=id&method=exatchMatch': 'Get results by using query parameters.',
       '/stats/count': 'Count / sum of the media files (assets, presentations) in the database.',
       '/stats/updates': 'Journal of the update processes with timestamps.'
     })
@@ -438,25 +478,19 @@ function registerRestApi () {
 
   /* query */
 
-  /**
-   * Query parameters:
-   * - collection: assets, presentations
-   * - method: match, search
-   * - field: id, title,
-   */
   app.get('/query', async (req, res, next) => {
     try {
       const query = req.query
-      // collection
-      const collections = ['assets', 'presentations']
-      if (!('collection' in query)) query.collection = 'assets'
-      if (!collections.includes(query.collection)) {
-        throw new Error(`Unkown collection “${query.collection}”! Allowed collections: ${collections}`)
+      // type
+      const types = ['assets', 'presentations']
+      if (!('type' in query)) query.type = 'assets'
+      if (!types.includes(query.type)) {
+        throw new Error(`Unkown type “${query.type}”! Allowed types: ${types}`)
       }
 
       // method
-      if (!('method' in query)) query.method = 'search'
-      const methods = ['match', 'search']
+      const methods = ['exactMatch', 'substringSearch']
+      if (!('method' in query)) query.method = 'substringSearch'
       if (!methods.includes(query.method)) {
         throw new Error(`Unkown method “${query.method}”! Allowed methods: ${methods}`)
       }
@@ -465,19 +499,19 @@ function registerRestApi () {
       if (!('field' in query)) query.field = 'id'
 
       await connectDb()
-      const collection = db.collection(query.collection)
+      const collection = db.collection(query.type)
 
       // find
       let result
       let find
       // match
-      if (query.method === 'match') {
+      if (query.method === 'exactMatch') {
         const findObject = {}
         findObject[query.field] = query.search
         find = collection.find(findObject, { projection: { _id: 0 } })
         result = await find.next()
       // search
-      } else if (query.method === 'search') {
+      } else if (query.method === 'substringSearch') {
         // https://stackoverflow.com/a/38427476/10193818
         const regex = new RegExp(escapeRegex(query.search), 'gi');
         const findObject = {}

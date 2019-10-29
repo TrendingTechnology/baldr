@@ -1,7 +1,7 @@
 {
   "name": "@bldr/api-media-server",
   "version": "0.1.14",
-  "description": "A media server which provides a REST API to find files.",
+  "description": "The REST API and command line interface of the BALDR media server.",
   "author": {
     "name": "Josef Friedrich",
     "email": "josef@friedrich.rocks",

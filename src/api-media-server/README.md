@@ -4,10 +4,6 @@
 
 # @bldr/api-media-server
 
-A media server which provides a REST API to find files.
+The REST API and command line interface of the BALDR media server.
 
-## Objects
 
-* presentation
-* mediaAsset
-  * multipart mediaAsset
