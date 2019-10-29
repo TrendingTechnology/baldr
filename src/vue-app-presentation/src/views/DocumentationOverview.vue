@@ -16,7 +16,7 @@
       </thead>
       <tbody>
         <tr
-          v-for="(master, masterName) in $masters"
+          v-for="(master, masterName) in $masters.all"
           :key="masterName"
         >
           <td><material-icon :name="master.icon" :color="master.color"/></td>
@@ -63,6 +63,8 @@ export default {
 <style lang="scss" scoped>
   .vc_documentation_overview {
     font-size: 2vw;
+    width: 100vw;
+    height: 100vh;
 
     a {
       cursor: pointer;

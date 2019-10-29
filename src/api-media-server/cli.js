@@ -30,33 +30,39 @@ slides:
 - generic: Hello World!
 
 # - audio:
-#     - media/audio/mozart.mp3
-#     - media/audio/haydn.mp3
-#     - media/audio/beethoven.mp3
-
+#     src:
+#     title:
+#     artist:
+#     composer:
+#     autoplay:
+#     playthrough:
+#     cover:
 # - camera: yes
-
-# - editor: yes
-
-# - image: media/image
-
-# - generic: |
-#     # heading 1
-#     ## heading 2
-#     ### heading 3
-
+# - editor:
+#     markup:
+# - generic:
+#     markup:
+# - image:
+#     src:
+#     title:
+#     description:
 # - person:
-#     name: Ludwig van Beethoven
-#     image: beethoven.jpg
-
-# - question: When did Ludwig van Beethoven die?
-
+#     name:
+#     image:
+#     birth:
+#     death:
+# - question:
+#     questions:
+#     heading:
+#     numbers:
 # - quote:
-#     text: |
-#       Der Tag der Gunst ist wie der Tag der Ernte,
-#       man muss geschäftig sein sobald sie reift.
-#     author: Johann Wolfgang von Goethe
-#     date: 1801
+#     text:
+#     author:
+#     date:
+# - task:
+#     markup:
+# - video:
+#     src:
 `
 
 commander
