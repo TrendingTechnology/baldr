@@ -504,13 +504,13 @@ function registerRestApi () {
       // find
       let result
       let find
-      // match
+      // exactMatch
       if (query.method === 'exactMatch') {
         const findObject = {}
         findObject[query.field] = query.search
         find = collection.find(findObject, { projection: { _id: 0 } })
         result = await find.next()
-      // search
+      // substringSearch
       } else if (query.method === 'substringSearch') {
         // https://stackoverflow.com/a/38427476/10193818
         const regex = new RegExp(escapeRegex(query.search), 'gi');

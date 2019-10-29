@@ -48,7 +48,18 @@ const actions = {
     dispatch('setSlideNoCurrent', 1)
   },
   async openPresentationById ({ dispatch }, id) {
-    let response = await vue.$media.httpRequest.request(`query/presentation/match/id/${id}`)
+    // Get the path
+    let response = await vue.$media.httpRequest.request({
+      url: 'query',
+      method: 'get',
+      params: {
+        type: 'presentations',
+        method: 'exactMatch',
+        field: 'id',
+        search: id
+      }
+    })
+    // Get yaml content as a string of the presentation.
     const presentation = response.data
     response = await vue.$media.httpRequest.request({
       url: `/media/${presentation.path}`,

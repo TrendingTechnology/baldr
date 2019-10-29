@@ -26,11 +26,11 @@ export default {
     search (title) {
       if (!title) return
       this.$media.httpRequest.request({
-        url: 'query-ng',
+        url: 'query',
         method: 'get',
         params: {
-          collection: 'presentations',
-          method: 'search',
+          type: 'presentations',
+          method: 'substringSearch',
           field: 'title',
           search: title
         }

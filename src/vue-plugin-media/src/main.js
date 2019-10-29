@@ -1050,7 +1050,16 @@ class Resolver {
    * @private
    */
   async queryMediaServer_ (key, value) {
-    const response = await httpRequest.request(`query/asset/match/${key}/${value}`)
+    const response = await httpRequest.request({
+      url: 'query',
+      method: 'get',
+      params: {
+        type: 'assets',
+        method: 'exactMatch',
+        field: key,
+        search: value
+      }
+    })
     if ('data' in response && 'path' in response.data) {
       return response
     }

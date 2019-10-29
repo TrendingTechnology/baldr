@@ -46,11 +46,11 @@ export default {
     search (text) {
       if (!text) return
       this.$media.httpRequest.request({
-        url: 'query-ng',
+        url: 'query',
         method: 'get',
         params: {
-          collection: 'assets',
-          method: 'search',
+          type: 'assets',
+          method: 'substringSearch',
           field: this.currentSearchField,
           search: text
         }
