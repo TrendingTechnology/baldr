@@ -376,13 +376,14 @@ function openFile (file) {
     reader.onload = readerEvent => {
       let content = readerEvent.target.result
       store.dispatch('openPresentation', content).then(() => {
-        router.push('/slides')
+        if (router.currentRoute.name !== 'slides') router.push({ name: 'slides' })
       })
     }
   } else {
     vue.$media.resolve(file)
   }
 }
+
 
 /**
  * Open multiple files.

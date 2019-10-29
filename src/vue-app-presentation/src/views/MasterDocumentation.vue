@@ -51,7 +51,7 @@ export default {
   methods: {
     openExample () {
       this.$store.dispatch('openPresentation', this.master.example).then(() => {
-        this.$router.push('/slides')
+        if (this.$route.name !== 'slides') this.$router.push({ name: 'slides' })
       })
     }
   }

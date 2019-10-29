@@ -60,7 +60,7 @@ export default {
   methods: {
     gotToSlide (slideNo) {
       this.$store.dispatch('setSlideNoCurrent', slideNo)
-      this.$router.push('/slides')
+      if (this.$route.name !== 'slides') this.$router.push({ name: 'slides' })
     },
     switchViewMode () {
       this.viewModeCompact = !this.viewModeCompact

@@ -48,7 +48,7 @@ export default {
   methods: {
     openExample (yamlString) {
       this.$store.dispatch('openPresentation', yamlString).then(() => {
-        this.$router.push('/slides')
+        if (this.$route.name !== 'slides') this.$router.push({ name: 'slides' })
       })
     }
   },

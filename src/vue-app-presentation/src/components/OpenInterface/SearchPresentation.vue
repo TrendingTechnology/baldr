@@ -20,8 +20,8 @@ export default {
   },
   methods: {
     async onInput () {
-      this.$store.dispatch('openPresentationById', this.presentation.id)
-      this.$router.push('/slides')
+      await this.$store.dispatch('openPresentationById', this.presentation.id)
+      if (this.$route.name !== 'slides') this.$router.push({ name: 'slides' })
     },
     search (title) {
       if (!title) return

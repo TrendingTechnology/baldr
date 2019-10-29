@@ -68,7 +68,11 @@ export default {
         ]
       )
     }
-    return createElement('open-interface')
+    return createElement('open-interface', {
+      attrs: {
+        'b-content-theme': 'default'
+      }
+    })
   }
 }
 </script>
@@ -79,6 +83,15 @@ export default {
     display: table;
     font-size: 4vw;
     height: 100vh;
+    width: 100vw;
+  }
+
+  .vc_open_interface {
+    box-sizing: border-box;
+    display: table-cell;
+    height: 100vh;
+    padding: 4vw;
+    vertical-align: middle;
     width: 100vw;
   }
 </style>
