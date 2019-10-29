@@ -3,6 +3,7 @@
 // Node packages.
 const childProcess = require('child_process')
 const fs = require('fs')
+const path = require('path')
 
 // Third party packages.
 const commander = require('commander')
@@ -19,6 +20,44 @@ const config = bootstrapConfig()
 function makeAsset (mediaFile) {
   return new Asset(mediaFile).addFileInfos()
 }
+
+const templateBaldrYml = `---
+meta:
+  title:
+  id:
+
+slides:
+- generic: Hello World!
+
+# - audio:
+#     - media/audio/mozart.mp3
+#     - media/audio/haydn.mp3
+#     - media/audio/beethoven.mp3
+
+# - camera: yes
+
+# - editor: yes
+
+# - image: media/image
+
+# - generic: |
+#     # heading 1
+#     ## heading 2
+#     ### heading 3
+
+# - person:
+#     name: Ludwig van Beethoven
+#     image: beethoven.jpg
+
+# - question: When did Ludwig van Beethoven die?
+
+# - quote:
+#     text: |
+#       Der Tag der Gunst ist wie der Tag der Ernte,
+#       man muss geschäftig sein sobald sie reift.
+#     author: Johann Wolfgang von Goethe
+#     date: 1801
+`
 
 commander
   .version(require('./package.json').version)
@@ -163,6 +202,16 @@ commander
           }
         }
       })
+    }
+  })
+
+  commander
+  .command('presentation-template').alias('p')
+  .description('Create a presentation template named “Presentation.baldr.yml”.')
+  .action(() => {
+    const filePath = path.join(process.cwd(), 'Presentation.baldr.yml')
+    if (!fs.existsSync(filePath)) {
+      fs.writeFileSync(filePath, templateBaldrYml)
     }
   })
 

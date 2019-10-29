@@ -23,6 +23,10 @@ The main app of the BALDR project: a presentation app using YAML files.
 
 ```yml
 ---
+meta:
+  title:
+  id:
+
 slides:
 
   - audio:
@@ -36,7 +40,7 @@ slides:
 
   - image: media/image
 
-  - markdown: |
+  - generic: |
       # heading 1
       ## heading 2
       ### heading 3
@@ -53,6 +57,4 @@ slides:
         man muss geschäftig sein sobald sie reift.
       author: Johann Wolfgang von Goethe
       date: 1801
-
-  - website: https://google.de
 ```
