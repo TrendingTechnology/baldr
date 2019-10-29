@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: songbook-cli/src/main.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: songbook-cli/src/main.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>#! /usr/bin/env node
+
+/**
+ * @file Command line interface to generate the intermediate media files for the
+ * BALDR songbook.
+ * @module @bldr/songbook-cli
+ */
+
+// Node packages.
+const fs = require('fs')
+const path = require('path')
+
+// Third party packages.
+const { Command } = require('commander')
+const chalk = require('chalk')
+
+// Project packages.
+const pckg = require('../package.json')
+const core = require('@bldr/core-node')
+const {
+  checkExecutables,
+  IntermediateLibrary,
+  PianoScore
+} = require('@bldr/songbook-intermediate-files')
+
+/**
+ * Wrapper around the node module “commander”.
+ *
+ * @param {*} argv - The same as process.argv
+ * @param {string} version - The version string
+ */
+function parseCliArguments (argv, version) {
+  // To get a clean commander. Otherwise we get options from mocha in the tests.
+  // https://github.com/tj/commander.js/issues/438#issuecomment-274285003
+  const commander = new Command()
+  return commander
+    .version(version)
+    .option(
+      '-a, --group-alphabetically',
+      'List the songs in an alphabetical tree.'
+    )
+    .option(
+      '-b, --base-path &lt;base-path>',
+      'Base path of a song collection.'
+    )
+    .option(
+      '-B, --projector-path &lt;projector-path>',
+      'Directory to store intermediate files for the projector app (*.svg, *.json). Special value: “none”.'
+    )
+    .option(
+      '-P, --piano-path &lt;piano-path>',
+      'Directory to store intermediate files for the piano score (*.eps). Special value: “none”.'
+    )
+    .option(
+      '-c, --clean',
+      'Clean up (delete all generated files)'
+    )
+    .option(
+      '-F, --folder &lt;folder>',
+      'Process only the given song folder'
+    )
+    .option(
+      '-f, --force',
+      'Rebuild all images'
+    )
+    .option(
+      '-i, --song-id &lt;song-id>',
+      'Process only the song with the given song ID (The parent song folder).'
+    )
+    .option(
+      '-l, --list &lt;song-id-list>',
+      'Use a list of song IDs in a text file to specify which songs should be updated.'
+    )
+    .option(
+      '-p, --piano',
+      'Generate the piano files only.'
+    )
+    .option(
+      '-s, --slides',
+      'Generate the slides only.'
+    )
+    .option(
+      '-t, --page-turn-optimized',
+      'Generate a page turn friendly piano score version.'
+    )
+    .parse(argv)
+}
+
+/**
+ * Main function: This function gets executed when the script is called
+ * on the command line.
+ */
+const main = function () {
+  const options = parseCliArguments(process.argv, pckg.version)
+
+  if (options.folder) {
+    options.force = true
+  }
+
+  const { status, unavailable } = checkExecutables([
+    'mscore-to-eps.sh',
+    'pdf2svg',
+    'pdfcrop',
+    'pdfinfo',
+    'pdftops',
+    'mscore'
+  ])
+
+  if (!status) {
+    const e = new Error(
+      'Some dependencies are not installed: “' +
+      unavailable.join('”, “') +
+      '”'
+    )
+    e.name = 'UnavailableCommandsError'
+    throw e
+  }
+
+  const config = core.bootstrapConfig().songbook
+
+  let mode
+  if (options.slides) {
+    mode = 'slides'
+  } else if (options.piano) {
+    mode = 'piano'
+  } else {
+    mode = 'all'
+  }
+
+  if (options.basePath &amp;&amp; options.basePath.length > 0) {
+    config.path = options.basePath
+  }
+
+  // To avoid strange behavior when creating the piano score
+  if (!{}.hasOwnProperty.call(options, 'groupAlphabetically')) {
+    options.groupAlphabetically = false
+  }
+  if (!{}.hasOwnProperty.call(options, 'pageTurnOptimized')) {
+    options.pageTurnOptimized = false
+  }
+
+  core.log(
+    'The base path of the song collection is located at:\n    %s\n',
+    chalk.cyan(config.path)
+  )
+
+  if (options.projectorPath) config.projectorPath = options.projectorPath
+  if (config.projectorPath === 'none') config.projectorPath = null
+  if (config.projectorPath) {
+    core.log(
+      'The folder where all projector related files are stored is:\n    %s\n',
+      chalk.green(config.projectorPath)
+    )
+  }
+
+  // Maybe bug in commander ?
+  if (options.piapath) options.pianoPath = options.piapath
+  if (options.pianoPath) config.pianoPath = options.pianoPath
+  if (config.pianoPath === 'none') config.pianoPath = null
+  if (config.pianoPath) {
+    core.log(
+      'The folder where all piano related files are stored is:\n    %s\n',
+      chalk.green(config.pianoPath)
+    )
+  }
+
+  const library = new IntermediateLibrary(
+    config.path,
+    config.projectorPath,
+    config.pianoPath
+  )
+  core.log('Found %s songs.', library.countSongs())
+  if (options.list) library.loadSongList(options.list)
+
+  if (options.clean) {
+    library.cleanIntermediateFiles()
+  } else if (options.folder) {
+    library.updateSongByPath(options.folder, mode)
+  } else if (options.songId) {
+    library.updateSongBySongId(options.songId, mode)
+  } else {
+    library.update(mode, options.force)
+    if (mode === 'piano' || mode === 'all') {
+      const pianoScore = new PianoScore(
+        library,
+        options.groupAlphabetically,
+        options.pageTurnOptimized
+      )
+      pianoScore.compile()
+    }
+    if (config.projectorPath) {
+      const projectorPath = path.join(config.projectorPath, 'songs.json')
+      fs.writeFileSync(
+        projectorPath,
+        JSON.stringify(library, null, '  ')
+      )
+      core.log('Create JSON file: %s', chalk.yellow(projectorPath))
+    }
+  }
+}
+
+if (require.main === module) {
+  main()
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-@bldr_api.html">@bldr/api</a></li><li><a href="module-@bldr_api-media-server.html">@bldr/api-media-server</a></li><li><a href="module-@bldr_api-seating-plan.html">@bldr/api-seating-plan</a></li><li><a href="module-@bldr_core-browser.html">@bldr/core-browser</a></li><li><a href="module-@bldr_core-node.html">@bldr/core-node</a></li><li><a href="module-@bldr_doc-generator.html">@bldr/doc-generator</a></li><li><a href="module-@bldr_http-request.html">@bldr/http-request</a></li><li><a href="module-@bldr_songbook-cli.html">@bldr/songbook-cli</a></li><li><a href="module-@bldr_songbook-core.html">@bldr/songbook-core</a></li><li><a href="module-@bldr_songbook-intermediate-files.html">@bldr/songbook-intermediate-files</a></li><li><a href="module-@bldr_themes.html">@bldr/themes</a></li><li><a href="module-@bldr_vue-app-presentation.html">@bldr/vue-app-presentation</a></li><li><a href="module-@bldr_vue-app-presentation_masters.html">@bldr/vue-app-presentation/masters</a></li><li><a href="module-@bldr_vue-app-seating-plan.html">@bldr/vue-app-seating-plan</a></li><li><a href="module-@bldr_vue-app-showroom.html">@bldr/vue-app-showroom</a></li><li><a href="module-@bldr_vue-app-songbook.html">@bldr/vue-app-songbook</a></li><li><a href="module-@bldr_vue-plugin-components-collection.html">@bldr/vue-plugin-components-collection</a></li><li><a href="module-@bldr_vue-plugin-material-icon.html">@bldr/vue-plugin-material-icon</a></li><li><a href="module-@bldr_vue-plugin-media.html">@bldr/vue-plugin-media</a></li><li><a href="module-@bldr_vue-plugin-shortcuts.html">@bldr/vue-plugin-shortcuts</a></li></ul><h3>Namespaces</h3><ul><li><a href="module-@bldr_vue-app-presentation-Vue.html">Vue</a></li></ul><h3>Classes</h3><ul><li><a href="InitState.html">InitState</a></li><li><a href="module-@bldr_api-media-server-Asset.html">Asset</a></li><li><a href="module-@bldr_api-media-server-MediaFile.html">MediaFile</a></li><li><a href="module-@bldr_http-request.HttpRequest.html">HttpRequest</a></li><li><a href="module-@bldr_songbook-core-AlphabeticalSongsTree.html">AlphabeticalSongsTree</a></li><li><a href="module-@bldr_songbook-core-CoreLibrary.html">CoreLibrary</a></li><li><a href="module-@bldr_songbook-core-SongMetaDataCombined.html">SongMetaDataCombined</a></li><li><a href="module-@bldr_songbook-intermediate-files-FileMonitor.html">FileMonitor</a></li><li><a href="module-@bldr_songbook-intermediate-files-Folder.html">Folder</a></li><li><a href="module-@bldr_songbook-intermediate-files-IntermediateLibrary.html">IntermediateLibrary</a></li><li><a href="module-@bldr_songbook-intermediate-files-IntermediateSong.html">IntermediateSong</a></li><li><a href="module-@bldr_songbook-intermediate-files-Library.html">Library</a></li><li><a href="module-@bldr_songbook-intermediate-files-PianoFilesCountTree.html">PianoFilesCountTree</a></li><li><a href="module-@bldr_songbook-intermediate-files-PianoScore.html">PianoScore</a></li><li><a href="module-@bldr_songbook-intermediate-files-Song.html">Song</a></li><li><a href="module-@bldr_songbook-intermediate-files-SongMetaData.html">SongMetaData</a></li><li><a href="module-@bldr_songbook-intermediate-files-Sqlite.html">Sqlite</a></li><li><a href="module-@bldr_songbook-intermediate-files-TextFile.html">TextFile</a></li><li><a href="module-@bldr_vue-app-presentation_masters-Master.html">Master</a></li><li><a href="module-@bldr_vue-app-presentation_masters-Masters.html">Masters</a></li><li><a href="module-@bldr_vue-app-presentation-BodyAttributes.html">BodyAttributes</a></li><li><a href="module-@bldr_vue-app-presentation-CenterVertically.html">CenterVertically</a></li><li><a href="module-@bldr_vue-app-presentation-ContentTheme.html">ContentTheme</a></li><li><a href="module-@bldr_vue-app-presentation-DarkMode.html">DarkMode</a></li><li><a href="module-@bldr_vue-app-presentation-MultipleAttributes.html">MultipleAttributes</a></li><li><a href="module-@bldr_vue-app-presentation-Overflow.html">Overflow</a></li><li><a href="module-@bldr_vue-app-presentation-StyleConfig.html">StyleConfig</a></li><li><a href="module-@bldr_vue-app-presentation-UiTheme.html">UiTheme</a></li><li><a href="module-@bldr_vue-plugin-media.MediaFile.html">MediaFile</a></li><li><a href="module-@bldr_vue-plugin-media-Media.html">Media</a></li><li><a href="module-@bldr_vue-plugin-media-MediaTypes.html">MediaTypes</a></li><li><a href="module-@bldr_vue-plugin-media-Player.html">Player</a></li><li><a href="module-@bldr_vue-plugin-media-PlayList.html">PlayList</a></li><li><a href="module-@bldr_vue-plugin-media-Resolver.html">Resolver</a></li><li><a href="module-@bldr_vue-plugin-media-Sample.html">Sample</a></li><li><a href="module-@bldr_vue-plugin-shortcuts-Shortcuts.html">Shortcuts</a></li><li><a href="Presentation.html">Presentation</a></li><li><a href="RawSlideObject.html">RawSlideObject</a></li><li><a href="RenderData.html">RenderData</a></li><li><a href="Slide.html">Slide</a></li></ul><h3>Global</h3><ul><li><a href="global.html#actions">actions</a></li><li><a href="global.html#getType">getType</a></li><li><a href="global.html#intersect">intersect</a></li><li><a href="global.html#mutations">mutations</a></li><li><a href="global.html#naturalSort">naturalSort</a></li><li><a href="global.html#openFile">openFile</a></li><li><a href="global.html#openFiles">openFiles</a></li><li><a href="global.html#toString">toString</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Tue Oct 29 2019 13:52:37 GMT+0100 (GMT+01:00)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

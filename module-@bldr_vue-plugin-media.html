@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Module: @bldr/vue-plugin-media</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Module: @bldr/vue-plugin-media</h1>
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        
+            
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+            <div class="description"><p>Resolve media files. Counter part of the BALDR media server.</p></div>
+        
+
+        
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="vue-plugin-media_src_main.js.html">vue-plugin-media/src/main.js</a>, <a href="vue-plugin-media_src_main.js.html#line1">line 1</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+    
+    </div>
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Classes</h3>
+
+        <dl>
+            <dt><a href="module-@bldr_vue-plugin-media.MediaFile.html">MediaFile</a></dt>
+            <dd></dd>
+        
+            <dt><a href="module-@bldr_vue-plugin-media-Media.html">Media</a></dt>
+            <dd></dd>
+        
+            <dt><a href="module-@bldr_vue-plugin-media-MediaTypes.html">MediaTypes</a></dt>
+            <dd></dd>
+        
+            <dt><a href="module-@bldr_vue-plugin-media-Player.html">Player</a></dt>
+            <dd></dd>
+        
+            <dt><a href="module-@bldr_vue-plugin-media-PlayList.html">PlayList</a></dt>
+            <dd></dd>
+        
+            <dt><a href="module-@bldr_vue-plugin-media-Resolver.html">Resolver</a></dt>
+            <dd></dd>
+        
+            <dt><a href="module-@bldr_vue-plugin-media-Sample.html">Sample</a></dt>
+            <dd></dd>
+        </dl>
+    
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Members</h3>
+
+        
+            
+<h4 class="name" id="~defaultFadeInSec"><span class="type-signature">(inner, constant) </span>defaultFadeInSec<span class="type-signature"> :Number</span></h4>
+
+
+
+
+<div class="description">
+    <p>We fade in very short and smoothly to avoid audio artefacts.</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Number</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="vue-plugin-media_src_main.js.html">vue-plugin-media/src/main.js</a>, <a href="vue-plugin-media_src_main.js.html#line27">line 27</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="~defaultFadeOutSec"><span class="type-signature">(inner, constant) </span>defaultFadeOutSec<span class="type-signature"> :Number</span></h4>
+
+
+
+
+<div class="description">
+    <p>We never stop. Instead we fade out very short and smoothly.</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Number</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="vue-plugin-media_src_main.js.html">vue-plugin-media/src/main.js</a>, <a href="vue-plugin-media_src_main.js.html#line34">line 34</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="~defaultPlayDelayMsec"><span class="type-signature">(inner, constant) </span>defaultPlayDelayMsec<span class="type-signature"> :Number</span></h4>
+
+
+
+
+<div class="description">
+    <p>Number of milliseconds to wait before the media file is played.</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Number</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="vue-plugin-media_src_main.js.html">vue-plugin-media/src/main.js</a>, <a href="vue-plugin-media_src_main.js.html#line41">line 41</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id=".formatDuration"><span class="type-signature">(static) </span>formatDuration<span class="signature">(duration)</span><span class="type-signature"> &rarr; {String}</span></h4>
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>duration</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>in seconds</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="vue-plugin-media_src_main.js.html">vue-plugin-media/src/main.js</a>, <a href="vue-plugin-media_src_main.js.html#line48">line 48</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">String</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="~createMediaElement"><span class="type-signature">(async, inner) </span>createMediaElement<span class="signature">(mediaFile)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>mediaFile</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">MediaFile</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="vue-plugin-media_src_main.js.html">vue-plugin-media/src/main.js</a>, <a href="vue-plugin-media_src_main.js.html#line964">line 964</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+    
+
+    
+        <h3 class="subsection-title">Type Definitions</h3>
+
+        
+                
+<h4 class="name" id="~mediaFileSpec">mediaFileSpec</h4>
+
+
+
+
+<div class="description">
+    <p>A <code>mediaFileSpec</code> can be:</p>
+<ol>
+<li>A remote URI (Uniform Resource Identifier) as a string, for example
+<code>id:Joseph_haydn</code> or <code>filename:beethoven.jpg</code> which has to be resolved.</li>
+<li>A already resolved HTTP URL, for example
+<code>https://example.com/Josef_Haydn.jg</code></li>
+<li>A file object <a href="https://developer.mozilla.org/de/docs/Web/API/File">https://developer.mozilla.org/de/docs/Web/API/File</a></li>
+</ol>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">String</span>
+|
+
+<span class="param-type">File</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="vue-plugin-media_src_main.js.html">vue-plugin-media/src/main.js</a>, <a href="vue-plugin-media_src_main.js.html#line1014">line 1014</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+            
+                
+<h4 class="name" id="~mediaFileSpecs">mediaFileSpecs</h4>
+
+
+
+
+<div class="description">
+    <p>An array of <code>mediaFileSpec</code> or a single <code>mediaFileSpec</code></p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Array.&lt;mediaFileSpec></span>
+|
+
+<span class="param-type">mediaFileSpec</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="vue-plugin-media_src_main.js.html">vue-plugin-media/src/main.js</a>, <a href="vue-plugin-media_src_main.js.html#line1027">line 1027</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+            
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-@bldr_api.html">@bldr/api</a></li><li><a href="module-@bldr_api-media-server.html">@bldr/api-media-server</a></li><li><a href="module-@bldr_api-seating-plan.html">@bldr/api-seating-plan</a></li><li><a href="module-@bldr_core-browser.html">@bldr/core-browser</a></li><li><a href="module-@bldr_core-node.html">@bldr/core-node</a></li><li><a href="module-@bldr_doc-generator.html">@bldr/doc-generator</a></li><li><a href="module-@bldr_http-request.html">@bldr/http-request</a></li><li><a href="module-@bldr_songbook-cli.html">@bldr/songbook-cli</a></li><li><a href="module-@bldr_songbook-core.html">@bldr/songbook-core</a></li><li><a href="module-@bldr_songbook-intermediate-files.html">@bldr/songbook-intermediate-files</a></li><li><a href="module-@bldr_themes.html">@bldr/themes</a></li><li><a href="module-@bldr_vue-app-presentation.html">@bldr/vue-app-presentation</a></li><li><a href="module-@bldr_vue-app-presentation_masters.html">@bldr/vue-app-presentation/masters</a></li><li><a href="module-@bldr_vue-app-seating-plan.html">@bldr/vue-app-seating-plan</a></li><li><a href="module-@bldr_vue-app-showroom.html">@bldr/vue-app-showroom</a></li><li><a href="module-@bldr_vue-app-songbook.html">@bldr/vue-app-songbook</a></li><li><a href="module-@bldr_vue-plugin-components-collection.html">@bldr/vue-plugin-components-collection</a></li><li><a href="module-@bldr_vue-plugin-material-icon.html">@bldr/vue-plugin-material-icon</a></li><li><a href="module-@bldr_vue-plugin-media.html">@bldr/vue-plugin-media</a></li><li><a href="module-@bldr_vue-plugin-shortcuts.html">@bldr/vue-plugin-shortcuts</a></li></ul><h3>Namespaces</h3><ul><li><a href="module-@bldr_vue-app-presentation-Vue.html">Vue</a></li></ul><h3>Classes</h3><ul><li><a href="InitState.html">InitState</a></li><li><a href="module-@bldr_api-media-server-Asset.html">Asset</a></li><li><a href="module-@bldr_api-media-server-MediaFile.html">MediaFile</a></li><li><a href="module-@bldr_http-request.HttpRequest.html">HttpRequest</a></li><li><a href="module-@bldr_songbook-core-AlphabeticalSongsTree.html">AlphabeticalSongsTree</a></li><li><a href="module-@bldr_songbook-core-CoreLibrary.html">CoreLibrary</a></li><li><a href="module-@bldr_songbook-core-SongMetaDataCombined.html">SongMetaDataCombined</a></li><li><a href="module-@bldr_songbook-intermediate-files-FileMonitor.html">FileMonitor</a></li><li><a href="module-@bldr_songbook-intermediate-files-Folder.html">Folder</a></li><li><a href="module-@bldr_songbook-intermediate-files-IntermediateLibrary.html">IntermediateLibrary</a></li><li><a href="module-@bldr_songbook-intermediate-files-IntermediateSong.html">IntermediateSong</a></li><li><a href="module-@bldr_songbook-intermediate-files-Library.html">Library</a></li><li><a href="module-@bldr_songbook-intermediate-files-PianoFilesCountTree.html">PianoFilesCountTree</a></li><li><a href="module-@bldr_songbook-intermediate-files-PianoScore.html">PianoScore</a></li><li><a href="module-@bldr_songbook-intermediate-files-Song.html">Song</a></li><li><a href="module-@bldr_songbook-intermediate-files-SongMetaData.html">SongMetaData</a></li><li><a href="module-@bldr_songbook-intermediate-files-Sqlite.html">Sqlite</a></li><li><a href="module-@bldr_songbook-intermediate-files-TextFile.html">TextFile</a></li><li><a href="module-@bldr_vue-app-presentation_masters-Master.html">Master</a></li><li><a href="module-@bldr_vue-app-presentation_masters-Masters.html">Masters</a></li><li><a href="module-@bldr_vue-app-presentation-BodyAttributes.html">BodyAttributes</a></li><li><a href="module-@bldr_vue-app-presentation-CenterVertically.html">CenterVertically</a></li><li><a href="module-@bldr_vue-app-presentation-ContentTheme.html">ContentTheme</a></li><li><a href="module-@bldr_vue-app-presentation-DarkMode.html">DarkMode</a></li><li><a href="module-@bldr_vue-app-presentation-MultipleAttributes.html">MultipleAttributes</a></li><li><a href="module-@bldr_vue-app-presentation-Overflow.html">Overflow</a></li><li><a href="module-@bldr_vue-app-presentation-StyleConfig.html">StyleConfig</a></li><li><a href="module-@bldr_vue-app-presentation-UiTheme.html">UiTheme</a></li><li><a href="module-@bldr_vue-plugin-media.MediaFile.html">MediaFile</a></li><li><a href="module-@bldr_vue-plugin-media-Media.html">Media</a></li><li><a href="module-@bldr_vue-plugin-media-MediaTypes.html">MediaTypes</a></li><li><a href="module-@bldr_vue-plugin-media-Player.html">Player</a></li><li><a href="module-@bldr_vue-plugin-media-PlayList.html">PlayList</a></li><li><a href="module-@bldr_vue-plugin-media-Resolver.html">Resolver</a></li><li><a href="module-@bldr_vue-plugin-media-Sample.html">Sample</a></li><li><a href="module-@bldr_vue-plugin-shortcuts-Shortcuts.html">Shortcuts</a></li><li><a href="Presentation.html">Presentation</a></li><li><a href="RawSlideObject.html">RawSlideObject</a></li><li><a href="RenderData.html">RenderData</a></li><li><a href="Slide.html">Slide</a></li></ul><h3>Global</h3><ul><li><a href="global.html#actions">actions</a></li><li><a href="global.html#getType">getType</a></li><li><a href="global.html#intersect">intersect</a></li><li><a href="global.html#mutations">mutations</a></li><li><a href="global.html#naturalSort">naturalSort</a></li><li><a href="global.html#openFile">openFile</a></li><li><a href="global.html#openFiles">openFiles</a></li><li><a href="global.html#toString">toString</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Tue Oct 29 2019 13:52:37 GMT+0100 (GMT+01:00)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
