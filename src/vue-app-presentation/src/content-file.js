@@ -5,7 +5,6 @@
 // import Vue from 'vue'
 import yaml from 'js-yaml'
 import { shortenText } from '@bldr/core-browser'
-import { themeNames } from '@/themes.js'
 import { masterNames, callMasterFunc, masterOptions } from '@/masters.js'
 import store from '@/store.js'
 import router from '@/router.js'

@@ -78,11 +78,20 @@ class Master {
    * The object from the exported `master` property object of the `master.vue`
    * files.
    *
-   * @param {object} config
+   * @param {object} members
    */
-  importMembers (config) {
-    for (const member in config) {
-      this[member] = config[member]
+  importMembers (members) {
+    /**
+     * The object from the exported `master` property object of the `master.vue`
+     * files.
+     *
+     * @type {object}
+     */
+    this.members_ = members
+    for (const member in members) {
+      //if (typeof members[member] !== 'function') {
+        this[member] = members[member]
+      //}
     }
   }
 
@@ -110,11 +119,24 @@ class Master {
   }
 
   /**
+   */
+  callMethod_ (methodName, payload, context) {
+    if (methodName in this.members_ && typeof this.members_[methodName] === 'function') {
+      if (context) {
+        return this.members_[methodName].call(context, payload)
+      }
+      return this.members_[methodName](payload)
+    }
+  }
+
+  /**
    * result must fit to props
    *
    * @param {module:@bldr/vue-app-presentation~props} props
    */
-  normalizeProps (props) {}
+  normalizeProps (props) {
+    return this.callMethod_('normalizeProps', props)
+  }
 
   /**
    * @param {module:@bldr/vue-app-presentation~props} props
@@ -160,6 +182,29 @@ class Master {
   leaveStep ({ oldStepNo, newStepNo }) {}
 }
 
+class Masters {
+  constructor () {
+    this.store_ = {}
+  }
+
+  add (master) {
+    this.store_[master.name] = master
+    this[master.name] = master
+  }
+
+  get (name) {
+    return this.store_[name]
+  }
+
+  get all() {
+    return this.store_
+  }
+
+  get allNames () {
+    return Object.keys(this.store_)
+  }
+}
+
 // https://github.com/chrisvfritz/vue-enterprise-boilerplate/blob/master/src/components/_globals.js
 // https://webpack.js.org/guides/dependency-management/#require-context
 const requireComponent = require.context(
@@ -174,6 +219,7 @@ const requireComponent = require.context(
 const componentDefaults = {}
 
 export const masters = {}
+const masterNg = new Masters()
 
 // For each matching file name...
 requireComponent.keys().forEach((fileName) => {
