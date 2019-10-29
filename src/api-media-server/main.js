@@ -17,6 +17,9 @@ const MongoClient = require('mongodb').MongoClient
 const { bootstrapConfig } = require('@bldr/core-node')
 const packageJson = require('./package.json')
 
+/**
+ *
+ */
 const config = bootstrapConfig()
 
 /**
@@ -26,6 +29,9 @@ const basePath = config.mediaServer.basePath
 
 /* MongoDb setup **************************************************************/
 
+/**
+ *
+ */
 function setupMongoUrl () {
   const conf = config.databases.mongodb
   const user = encodeURIComponent(conf.user)
@@ -34,6 +40,9 @@ function setupMongoUrl () {
   return `mongodb://${user}:${password}@${conf.url}/${conf.dbName}?authMechanism=${authMechanism}`
 }
 
+/**
+ *
+ */
 const mongoClient = new MongoClient(
   setupMongoUrl(),
   { useNewUrlParser: true, useUnifiedTopology: true }
@@ -135,10 +144,16 @@ class MediaFile {
     return {}
   }
 
+  /**
+   *
+   */
   addFileInfos () {
     return this.addFileInfos_()
   }
 
+  /**
+   *
+   */
   cleanTmpProperties () {
     for (const property in this) {
       if (property.match(/_$/)) {
@@ -198,6 +213,9 @@ class Asset extends MediaFile {
   }
 }
 
+/**
+ *
+ */
 class Presentation extends MediaFile {
   constructor(filePath) {
     super(filePath)
@@ -209,6 +227,9 @@ class Presentation extends MediaFile {
 
 /* Checks *********************************************************************/
 
+/**
+ * @param {String} fileName
+ */
 function isAsset (fileName) {
   if (fileName.indexOf('_preview.jpg') > -1) {
     return false
@@ -220,6 +241,9 @@ function isAsset (fileName) {
   return true
 }
 
+/**
+ * @param {String} fileName
+ */
 function isPresentation (fileName) {
   if (fileName.indexOf('.baldr.yml') > -1) {
     return true
@@ -229,11 +253,17 @@ function isPresentation (fileName) {
 
 /* Insert *********************************************************************/
 
+/**
+ * @param {String} relPath
+ */
 async function insertAsset (relPath) {
   const asset = new Asset(relPath).addFileInfos().cleanTmpProperties()
   await db.collection('assets').insertOne(asset)
 }
 
+/**
+ * @param {String} relPath
+ */
 async function insertPresentation (relPath) {
   const presentation = new Presentation(relPath).addFileInfos().cleanTmpProperties()
   await db.collection('presentations').insertOne(presentation)
@@ -266,6 +296,9 @@ async function walk (dir, on) {
   }
 }
 
+/**
+ *
+ */
 async function update () {
   console.log('Run git pull')
   const gitSettings =  {
@@ -372,67 +405,9 @@ async function flushMediaFiles () {
 /* Express Rest API ***********************************************************/
 
 function registerRestApi () {
-  async function matchByField (collection, field, req, res, next) {
-    try {
-      await connectDb()
-      query = {}
-      query[field] = req.params[field]
-      res.json(
-        await db.collection(collection)
-          .find(query, { projection: { _id: 0 } })
-          .next()
-      )
-    } catch (error) {
-      next(error)
-    }
-  }
-
-  async function searchInField (collection, field, req, res, next) {
-    try {
-      await connectDb()
-      if (!('substring' in req.query) || !req.query.substring) {
-        res.sendStatus(400)
-      } else {
-        res.json(await db.collection(collection).aggregate([
-          {
-            $match: {
-              $expr: { $gt: [{ $indexOfCP: [{ $toLower: `$${field}` }, { $toLower: req.query.substring } ] }, -1] } // https://stackoverflow.com/a/56808870
-            }
-          },
-          {
-            $project: {
-              _id: false,
-              id: true,
-              name: `$${field}`
-            }
-          }
-        ]).toArray())
-      }
-    } catch (error) {
-      next(error)
-    }
-  }
-
   // https://stackoverflow.com/a/38427476/10193818
   function escapeRegex(text) {
     return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&")
-  }
-
-  // https://stackoverflow.com/a/38427476/10193818
-  async function fuzzySearchInFieldRegEx (collection, field, req, res, next) {
-    try {
-      await connectDb()
-      if (!('substring' in req.query) || !req.query.substring) {
-        res.sendStatus(400)
-      } else {
-        const regex = new RegExp(escapeRegex(req.query.substring), 'gi');
-        const find = {}
-        find[field] = regex
-        res.json(await db.collection(collection).find( find ).toArray())
-      }
-    } catch (error) {
-      next(error)
-    }
   }
 
   const app = express()
@@ -448,14 +423,7 @@ function registerRestApi () {
       '/mgmt/init': 'Initialize the MongoDB database.',
       '/mgmt/re-init': 'Re-Initialize the MongoDB database (Drop all collections and initialize).',
       '/mgmt/update': 'Update the media server database (Flush and insert).',
-      '/query/asset/match/filename/:id': '',
-      '/query/asset/match/id/:id': '',
-      '/query/assets/search/id?substring=:substring': '',
-      '/query/assets/search/path?substring=:substring': '',
-      '/query/assets/search/title?substring=:substring': '',
-      '/query/presentation/match/id/:id': '',
-      '/query/presentations/search/title?substring=:substring': '',
-      '/query/presentations/regex-search/title?substring=:substring': '',
+      '/query?collections=assets&fields=id&method=match': 'Get results by using query parameters.',
       '/stats/count': 'Count / sum of the media files (assets, presentations) in the database.',
       '/stats/updates': 'Journal of the update processes with timestamps.'
     })
@@ -470,43 +438,13 @@ function registerRestApi () {
 
   /* query */
 
-  /* assets */
-
-  app.get('/query/asset/match/filename/:filename', async (req, res, next) => {
-    await matchByField('assets', 'filename', req, res, next)
-  })
-
-  app.get('/query/asset/match/id/:id', async (req, res, next) => {
-    await matchByField('assets', 'id', req, res, next)
-  })
-
-  app.get('/query/assets/search/id', async (req, res, next) => {
-    await searchInField('assets', 'id', req, res, next)
-  })
-
-  app.get('/query/assets/search/path', async (req, res, next) => {
-    await searchInField('assets', 'path', req, res, next)
-  })
-
-  app.get('/query/assets/search/title', async (req, res, next) => {
-    await searchInField('assets', 'title', req, res, next)
-  })
-
-  /* presentations */
-
-  app.get('/query/presentation/match/id/:id', async (req, res, next) => {
-    await matchByField('presentations', 'id', req, res, next)
-  })
-
-  app.get('/query/presentations/regex-search/title', async (req, res, next) => {
-    await fuzzySearchInFieldRegEx('presentations', 'title', req, res, next)
-  })
-
-  app.get('/query/presentations/search/title', async (req, res, next) => {
-    await searchInField('presentations', 'title', req, res, next)
-  })
-
-  app.get('/query-ng', async (req, res, next) => {
+  /**
+   * Query parameters:
+   * - collection: assets, presentations
+   * - method: match, search
+   * - field: id, title,
+   */
+  app.get('/query', async (req, res, next) => {
     try {
       const query = req.query
       // collection
