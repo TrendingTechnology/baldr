@@ -38,8 +38,9 @@
 import packageJson from '@/../package.json'
 import { AppInfo } from '@bldr/vue-plugin-components-collection'
 import MainMenu from '@/components/MainMenu'
-import { mapActions } from 'vuex'
 import { openFiles } from '@/content-file.js'
+import { createNamespacedHelpers } from 'vuex'
+const { mapActions } = createNamespacedHelpers('presentation')
 
 export default {
   name: 'MainApp',
@@ -106,7 +107,7 @@ export default {
         keys: 'ctrl+r',
         callback: () => {
           console.log('reload')
-          this.$store.dispatch('reloadPresentation')
+          this.$store.dispatch('presentation/reloadPresentation')
         },
         description: 'Reload presentation'
       },

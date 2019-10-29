@@ -9,6 +9,9 @@
 </template>
 
 <script>
+import { createNamespacedHelpers } from 'vuex'
+const { mapGetters } = createNamespacedHelpers('presentation')
+
 const example = `
 ---
 slides:
@@ -98,6 +101,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['slideCurrent']),
     titleComputed () {
       if (this.title) return this.title
       if ('title' in this.mediaFile) return this.mediaFile.title
@@ -108,11 +112,8 @@ export default {
       if ('description' in this.mediaFile) return this.mediaFile.description
       return ''
     },
-    slide () {
-      return this.$store.getters.slideCurrent
-    },
     stepNoCurrent () {
-      return this.slide.renderData.stepNoCurrent - 1
+      return this.slideCurrent.renderData.stepNoCurrent - 1
     },
     uriCurrent () {
       return this.src[this.stepNoCurrent]

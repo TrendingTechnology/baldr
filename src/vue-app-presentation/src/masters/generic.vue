@@ -5,6 +5,8 @@
 <script>
 import marked from 'marked'
 import { plainText } from '@bldr/core-browser'
+import { createNamespacedHelpers } from 'vuex'
+const { mapGetters } = createNamespacedHelpers('presentation')
 
 const charactersPerStep = 600
 
@@ -281,8 +283,9 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['slideCurrent']),
     stepNoCurrent () {
-      return this.$store.getters.slideCurrent.renderData.stepNoCurrent
+      return this.slideCurrent.renderData.stepNoCurrent
     },
     markupCurrent () {
       return this.markup[this.stepNoCurrent - 1]

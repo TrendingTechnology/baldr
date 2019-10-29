@@ -11,7 +11,7 @@
         :key="slide.no"
         @click="gotToSlide(slide.no)"
         :title="`Zur Folie Nr. ${slide.no}`"
-        :class="{ 'current-slide': $store.getters.slideCurrent.no === slide.no }"
+        :class="{ 'current-slide': slideCurrent.no === slide.no }"
       >
         <div class="master-info">
           <material-icon
@@ -30,6 +30,8 @@
 
 <script>
 import OpenInterface from '@/components/OpenInterface'
+import { createNamespacedHelpers } from 'vuex'
+const { mapGetters } = createNamespacedHelpers('presentation')
 
 export default {
   name: 'SlidesOverview',
@@ -47,19 +49,15 @@ export default {
       overflow: false
     })
   },
-  computed: {
-    slides () {
-      if (this.$store.getters.slidesCount) {
-        return this.$store.getters.slides
-      }
-    },
-    presentation () {
-      return this.$store.getters.presentation
-    }
-  },
+  computed: mapGetters([
+    'presentation',
+    'slideCurrent',
+    'slides',
+    'slidesCount'
+  ]),
   methods: {
     gotToSlide (slideNo) {
-      this.$store.dispatch('setSlideNoCurrent', slideNo)
+      this.$store.dispatch('presentation/setSlideNoCurrent', slideNo)
       if (this.$route.name !== 'slides') this.$router.push({ name: 'slides' })
     },
     switchViewMode () {

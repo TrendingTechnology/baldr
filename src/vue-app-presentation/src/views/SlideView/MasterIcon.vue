@@ -12,10 +12,11 @@ export default {
   name: 'MasterIcon',
   computed: {
     master () {
+      const slide = this.$store.getters['presentation/slideCurrent']
       if ('master' in this.$route.meta) {
         return this.$masters[this.$route.meta.master]
-      } else if (this.$store.getters.slideCurrent) {
-        return this.$store.getters.slideCurrent.master
+      } else if (slide) {
+        return slide.master
       }
     }
   }

@@ -1,5 +1,7 @@
 <script>
 import OpenInterface from '@/components/OpenInterface'
+import { createNamespacedHelpers } from 'vuex'
+const { mapGetters } = createNamespacedHelpers('presentation')
 
 export default {
   name: 'MasterRenderer',
@@ -7,23 +9,23 @@ export default {
     OpenInterface
   },
   computed: {
+    ...mapGetters(['slideCurrent']),
     master () {
       let name
       let props
       let contentTheme
       let styleConfig
 
-      const slide = this.$store.getters.slideCurrent
       if ('master' in this.$route.meta) {
         name = this.$route.meta.master
         props = this.$route.meta.data
         contentTheme = this.$masters[name].styleConfig.contentTheme
         styleConfig = this.$masters[name].styleConfig
-      } else if (slide) {
-        name = slide.master.name
-        props = slide.renderData.data
-        contentTheme = slide.contentTheme
-        styleConfig = slide.master.styleConfig
+      } else if (this.slideCurrent) {
+        name = this.slideCurrent.master.name
+        props = this.slideCurrent.renderData.data
+        contentTheme = this.slideCurrent.contentTheme
+        styleConfig = this.slideCurrent.master.styleConfig
       }
       return {
         name,

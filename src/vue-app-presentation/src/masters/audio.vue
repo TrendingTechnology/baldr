@@ -28,9 +28,12 @@
 </template>
 
 <script>
+import { createNamespacedHelpers } from 'vuex'
+const { mapGetters } = createNamespacedHelpers('presentation')
+
 const example = `
 ---
-slides:
+slideCurrents:
 
 - title: Custom composer
   audio:
@@ -147,6 +150,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['slideCurrent']),
     artistComputed () {
       if (this.artist) return this.artist
       if ('artist' in this.mediaFile) return this.mediaFile.artist
@@ -165,11 +169,8 @@ export default {
       if ('composer' in this.mediaFile) return this.mediaFile.composer
       return ''
     },
-    slide () {
-      return this.$store.getters.slideCurrent
-    },
     stepNoCurrent () {
-      return this.slide.renderData.stepNoCurrent - 1
+      return this.slideCurrent.renderData.stepNoCurrent - 1
     },
     titleComputed () {
       if (this.title) return this.title

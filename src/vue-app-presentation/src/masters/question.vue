@@ -22,6 +22,9 @@
 </template>
 
 <script>
+import { createNamespacedHelpers } from 'vuex'
+const { mapGetters } = createNamespacedHelpers('presentation')
+
 const example = `
 ---
 slides:
@@ -144,8 +147,9 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['slideCurrent']),
     stepNoCurrent () {
-      return this.$store.getters.slideCurrent.renderData.stepNoCurrent
+      return this.slideCurrent.renderData.stepNoCurrent
     },
     showNumbers () {
       if (this.numbers && this.questions.length > 1) {

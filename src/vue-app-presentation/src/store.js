@@ -29,8 +29,10 @@ const getters = {
   slideByNo: state => no => {
     return state.slides[no]
   },
-  slides: state => {
-    return state.slides
+  slides: (state, getters) => {
+    if (Object.keys(state.slides).length > 0) {
+      return state.slides
+    }
   },
   slidesCount: (state, getters) => {
     return Object.keys(getters.slides).length
@@ -149,6 +151,7 @@ const mutations = {
 export default new Vuex.Store({
     modules: {
       presentation: {
+        namespaced: true,
         state,
         getters,
         actions,
