@@ -27,7 +27,7 @@ const core = require('@bldr/core-node')
 
 /**
  * An array of song objects.
- * @typedef {module:baldr-songbook~Song[]} songs
+ * @typedef {module:@bldr/songbook-intermediate-files~Song[]} songs
  */
 
 /*******************************************************************************
@@ -484,20 +484,20 @@ class Song {
 
     /**
      * An instance of the class SongMetaData().
-     * @type {module:baldr-songbook~SongMetaData}
+     * @type {module:@bldr/songbook-intermediate-files~SongMetaData}
      */
     this.metaData = new SongMetaData(this.folder)
 
     /**
      * An instance of the class SongMetaDataCombined().
-     * @type {module:baldr-songbook~SongMetaDataCombined}
+     * @type {module:@bldr/songbook-intermediate-files~SongMetaDataCombined}
      */
     this.metaDataCombined = new SongMetaDataCombined(this.metaData)
 
     /**
      * The slides folder
      *
-     * @type {module:baldr-songbook~Folder}
+     * @type {module:@bldr/songbook-intermediate-files~Folder}
      */
     this.folderSlides = null
 
@@ -518,7 +518,7 @@ class Song {
     /**
      * The piano folder
      *
-     * @type {module:baldr-songbook~Folder}
+     * @type {module:@bldr/songbook-intermediate-files~Folder}
      */
     this.folderPiano = null
 
@@ -819,7 +819,7 @@ class Sqlite {
     /**
      * A instance of the class “Sqlite3”.
      *
-     * @type {module:baldr-songbook~Sqlite3}
+     * @type {module:@bldr/songbook-intermediate-files~Sqlite3}
      */
     this.db = new Sqlite3(this.dbFile)
     this.db
@@ -957,7 +957,7 @@ class FileMonitor {
  */
 class PianoScore {
   /**
-   * @param {module:baldr-songbook~Library} library - An instance of the class “Library()”
+   * @param {module:@bldr/songbook-intermediate-files~Library} library - An instance of the class “Library()”
    * @param {boolean} groupAlphabetically
    * @param {boolean} pageTurnOptimized
    */
@@ -972,7 +972,7 @@ class PianoScore {
     /**
      * An instance of the class “Library()”.
      *
-     * @type {module:baldr-songbook~Library}
+     * @type {module:@bldr/songbook-intermediate-files~Library}
      */
     this.library = library
 
@@ -1012,11 +1012,11 @@ class PianoScore {
   /**
    * Fill a certain number of pages with piano score files.
    *
-   * @param {module:baldr-songbook~PianoFilesCountTree} countTree - Piano scores grouped by page number.
-   * @param {module:baldr-songbook~songs} songs - An array of song objects.
+   * @param {module:@bldr/songbook-intermediate-files~PianoFilesCountTree} countTree - Piano scores grouped by page number.
+   * @param {module:@bldr/songbook-intermediate-files~songs} songs - An array of song objects.
    * @param {number} pageCount - Number of pages to group together.
    *
-   * @returns {module:baldr-songbook~songs} An array of song objects, which fit in a given page number
+   * @returns {module:@bldr/songbook-intermediate-files~songs} An array of song objects, which fit in a given page number
    */
   static selectSongs (countTree, songs, pageCount) {
     for (let i = pageCount; i > 0; i--) {
@@ -1039,7 +1039,7 @@ class PianoScore {
   /**
    * Build the TeX markup of an array of song objects
    *
-   * @param {module:baldr-songbook~songs} songs - An array of song objects.
+   * @param {module:@bldr/songbook-intermediate-files~songs} songs - An array of song objects.
    *
    * @return {string}
    */
@@ -1200,7 +1200,7 @@ class IntermediateSong extends Song {
    *   the projector app (*.svg, *.json).
    * @param {string} pianoPath - Directory to store intermediate files for
    *   the piano score (*.eps).
-   * @param {module:baldr-songbook~FileMonitor} fileMonitor - A instance
+   * @param {module:@bldr/songbook-intermediate-files~FileMonitor} fileMonitor - A instance
    * of the FileMonitor() class.
    */
   constructor (songPath, projectorPath, pianoPath, fileMonitor) {
@@ -1209,7 +1209,7 @@ class IntermediateSong extends Song {
     /**
      * A instance of the FileMonitor class.
      *
-     * @type {module:baldr-songbook~FileMonitor}
+     * @type {module:@bldr/songbook-intermediate-files~FileMonitor}
      */
     this.fileMonitor = fileMonitor
   }
@@ -1415,7 +1415,7 @@ class IntermediateSong extends Song {
  */
 class PianoFilesCountTree {
   /**
-   * @param {module:baldr-songbook~songs} songs - An array of song objects.
+   * @param {module:@bldr/songbook-intermediate-files~songs} songs - An array of song objects.
    */
   constructor (songs) {
     this.validCounts_ = [1, 2, 3, 4]
@@ -1434,7 +1434,7 @@ class PianoFilesCountTree {
   }
 
   /**
-   * @param {module:baldr-songbook~songs} songs - An array of song objects.
+   * @param {module:@bldr/songbook-intermediate-files~songs} songs - An array of song objects.
    */
   build_ (songs) {
     for (const song of songs) {
@@ -1488,7 +1488,7 @@ class PianoFilesCountTree {
    *
    * @param {number} count - 1, 2, 3, 4
    *
-   * @returns {module:baldr-songbook~Song}
+   * @returns {module:@bldr/songbook-intermediate-files~Song}
    */
   shift (count) {
     this.checkCount_(count)
@@ -1525,7 +1525,7 @@ class IntermediateLibrary extends Library {
     /**
      * A instance of the FileMonitor class.
      *
-     * @type {module:baldr-songbook~FileMonitor}
+     * @type {module:@bldr/songbook-intermediate-files~FileMonitor}
      */
     this.fileMonitor = new FileMonitor(path.join(this.basePath,
       'filehashes.db'))
