@@ -5,7 +5,7 @@
 // import Vue from 'vue'
 import yaml from 'js-yaml'
 import { shortenText } from '@bldr/core-browser'
-import { masterNames, masterOptions, mastersNg } from '@/masters.js'
+import { mastersNg } from '@/masters.js'
 import store from '@/store.js'
 import router from '@/router.js'
 import vue from '@/main.js'
@@ -143,7 +143,7 @@ class RawSlideObject {
 class RenderData {
   constructor (rawSlideObject) {
     const intersection = intersect(
-      masterNames,
+      mastersNg.allNames,
       Object.keys(rawSlideObject.raw)
     )
 
@@ -224,7 +224,7 @@ class Slide {
     /**
      *
      */
-    this.master = masterOptions(this.renderData.name)
+    this.master = mastersNg.get(this.renderData.name)
 
     this.metaData = new MetaData(rawSlideObject)
 

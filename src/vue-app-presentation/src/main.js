@@ -241,11 +241,15 @@ store.subscribe((mutation, state) => {
 })
 
 /**
- * Vue instance
+ * The main vue instance
  * @namespace Vue
+ *
+ * @type {object}
  */
-export default new Vue({
+const vue = new Vue({
   router,
   store,
   render: h => h(MainApp)
 }).$mount('#app')
+
+export default vue

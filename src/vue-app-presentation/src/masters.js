@@ -293,8 +293,6 @@ const requireComponent = require.context(
   /[\w-]+\.vue$/
 )
 
-const componentDefaults = {}
-
 export const masters = {}
 export const mastersNg = new Masters()
 
@@ -306,21 +304,14 @@ requireComponent.keys().forEach((fileName) => {
   const masterConfig = componentConfig.master
   const master = new Master(masterName)
   master.importMembers(masterConfig)
+  master.vue = componentConfig.default
   mastersNg.add(master)
   masters[masterName] = master
-  masters[masterName].vue = componentConfig.default
   master.registerVuexModule()
-  componentDefaults[masterName] = componentConfig.default
 })
 
 export function registerMasterComponents () {
-  for (const masterName in masters) {
-    Vue.component(`${masterName}-master`, componentDefaults[masterName])
+  for (const masterName in mastersNg.all) {
+    Vue.component(`${masterName}-master`, mastersNg[masterName].vue)
   }
-}
-
-export const masterNames = Object.keys(masters)
-
-export function masterOptions (masterName) {
-  return masters[masterName]
 }
