@@ -5,7 +5,7 @@
 // import Vue from 'vue'
 import yaml from 'js-yaml'
 import { shortenText } from '@bldr/core-browser'
-import { masterNames, callMasterFunc, masterOptions } from '@/masters.js'
+import { masterNames, masterOptions, mastersNg } from '@/masters.js'
 import store from '@/store.js'
 import router from '@/router.js'
 import vue from '@/main.js'
@@ -174,18 +174,19 @@ class RenderData {
      */
     this.mediaUris = []
 
-    const normalizedData = callMasterFunc(this.name, 'normalizeProps', this.data)
+    const master = mastersNg.get(this.name)
+    const normalizedData = master.normalizeProps(this.data)
     if (normalizedData) {
       this.data = normalizedData
     }
 
-    const mediaUris = callMasterFunc(this.name, 'resolveMediaUris', this.data)
+    const mediaUris = master.resolveMediaUris(this.data)
     if (mediaUris) this.mediaUris = mediaUris
 
     /**
      * @type {number}
      */
-    this.stepCount = callMasterFunc(this.name, 'stepCount', this.data)
+    this.stepCount = master.stepCount(this.data)
 
     /**
      * @type {number}
@@ -248,7 +249,7 @@ class Slide {
    */
   get plainText () {
     const output = []
-    const fromProps = callMasterFunc(this.master.name, 'plainTextFromProps', this.renderData.data)
+    const fromProps = this.master.plainTextFromProps(this.renderData.data)
     if (fromProps) output.push(fromProps)
     for (const mediaFile of this.mediaFiles) {
       output.push(mediaFile.plainText)

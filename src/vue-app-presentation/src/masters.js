@@ -155,6 +155,8 @@ class Master {
    * result must fit to props
    *
    * @param {module:@bldr/vue-app-presentation~props} props
+   *
+   * @returns {object}
    */
   normalizeProps (props) {
     return this.callFunction_('normalizeProps', props)
@@ -162,6 +164,8 @@ class Master {
 
   /**
    * @param {module:@bldr/vue-app-presentation~props} props
+   *
+   * @returns {Number}
    */
   stepCount (props) {
     return this.callFunction_('stepCount', props)
@@ -170,6 +174,8 @@ class Master {
   /**
    * An array of media URIs to resolve (like [id:beethoven, filename:mozart.mp3])
    * @param {module:@bldr/vue-app-presentation~props} props
+   *
+   * @returns {Array}
    */
   resolveMediaUris (props) {
     return this.callFunction_('resolveMediaUris', props)
@@ -177,6 +183,8 @@ class Master {
 
   /**
    * @param {module:@bldr/vue-app-presentation~props} props
+   *
+   * @returns {String}
    */
   plainTextFromProps (props) {
     return this.callFunction_('plainTextFromProps', props)
@@ -225,8 +233,12 @@ class Master {
    * @property {object} payload
    * @property {number} payload.oldStepNo
    * @property {number} payload.newStepNo
+   *
+   * @param {object} thisArg - The
+   *   {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/call thisArg}
+   *   the master function is called with.
    */
-  enterStep (payload) {
+  enterStep (payload, thisArg) {
     return this.callFunction_('enterStep', payload, thisArg)
   }
 
@@ -237,9 +249,13 @@ class Master {
    * @property {object} payload
    * @property {number} payload.oldStepNo
    * @property {number} payload.newStepNo
+   *
+   * @param {object} thisArg - The
+   *   {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/call thisArg}
+   *   the master function is called with.
    */
-  leaveStep (payload) {
-    return this.callFunction_('leaveStep', payload)
+  leaveStep (payload, thisArg) {
+    return this.callFunction_('leaveStep', payload, thisArg)
   }
 }
 
@@ -280,7 +296,7 @@ const requireComponent = require.context(
 const componentDefaults = {}
 
 export const masters = {}
-const masterNg = new Masters()
+export const mastersNg = new Masters()
 
 // For each matching file name...
 requireComponent.keys().forEach((fileName) => {
@@ -290,6 +306,7 @@ requireComponent.keys().forEach((fileName) => {
   const masterConfig = componentConfig.master
   const master = new Master(masterName)
   master.importMembers(masterConfig)
+  mastersNg.add(master)
   masters[masterName] = master
   masters[masterName].vue = componentConfig.default
   master.registerVuexModule()
@@ -306,14 +323,4 @@ export const masterNames = Object.keys(masters)
 
 export function masterOptions (masterName) {
   return masters[masterName]
-}
-
-export function callMasterFunc (masterName, funcName, payload, thisArg) {
-  const options = masterOptions(masterName).members_
-  if (funcName in options && typeof options[funcName] === 'function') {
-    if (thisArg) {
-      return options[funcName].call(thisArg, payload)
-    }
-    return options[funcName](payload)
-  }
 }

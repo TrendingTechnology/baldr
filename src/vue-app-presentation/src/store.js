@@ -3,7 +3,6 @@
  */
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { callMasterFunc } from '@/masters.js'
 import { Presentation } from './content-file'
 import vue from '@/main.js'
 
@@ -126,9 +125,9 @@ const actions = {
   setStepNoCurrent ({ commit }, { slideCurrent, stepNoCurrent }) {
     let oldStepNo = slideCurrent.renderData.stepNoCurrent
     let newStepNo = stepNoCurrent
-    callMasterFunc(slideCurrent.renderData.name, 'leaveStep', { oldStepNo, newStepNo }, new Vue())
+    slideCurrent.master.leaveStep({ oldStepNo, newStepNo }, new Vue())
     commit('setStepNoCurrent', { slideCurrent, stepNoCurrent })
-    callMasterFunc(slideCurrent.renderData.name, 'enterStep', { oldStepNo, newStepNo }, new Vue())
+    slideCurrent.master.enterStep({ oldStepNo, newStepNo }, new Vue())
   }
 }
 
