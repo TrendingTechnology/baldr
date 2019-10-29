@@ -88,10 +88,16 @@ const actions = {
     if (getters.slideCurrent) {
       oldSlide = getters.slideCurrent
       oldProps = oldSlide.renderData.data
-      callMasterFunc(getters.slideCurrent.renderData.name, 'leaveSlide', { oldSlide, oldProps, newSlide, newProps }, context)
+      getters.slideCurrent.master.leaveSlide(
+        { oldSlide, oldProps, newSlide, newProps },
+        context
+      )
     }
     commit('setSlideNoCurrent', no)
-    callMasterFunc(getters.slideCurrent.renderData.name, 'enterSlide', { oldSlide, oldProps, newSlide, newProps }, context)
+    getters.slideCurrent.master.enterSlide(
+      { oldSlide, oldProps, newSlide, newProps },
+      context
+    )
   },
   setStepNext ({ dispatch, getters }) {
     let stepNoCurrent

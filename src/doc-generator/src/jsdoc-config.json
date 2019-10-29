@@ -3,7 +3,8 @@
         "encoding": "utf8",
         "destination": ".",
         "recurse": true,
-        "template": "node_modules/better-docs"
+        "template": "node_modules/better-docs",
+        "private": true
     },
     "tags": {
         "allowUnknownTags": true

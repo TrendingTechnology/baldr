@@ -86,12 +86,14 @@ class Master {
      * files.
      *
      * @type {object}
+     *
+     * @private
      */
     this.members_ = members
     for (const member in members) {
-      //if (typeof members[member] !== 'function') {
+      if (typeof members[member] !== 'function') {
         this[member] = members[member]
-      //}
+      }
     }
   }
 
@@ -119,13 +121,33 @@ class Master {
   }
 
   /**
+   * Call a master function. Master functions are definied in the `master.vue`
+   * files. They are members of the exported object called `master`.
+   *
+   * ```js
+   * export const master = {
+   *   normalizeProps (props) {
+   *     return props
+   *   }
+   * }
+   * ```
+   *
+   * @param {String} functionName - The name of the master function.
+   * @param {mixed} payload - The argument the master function is called with.
+   * @param {object} thisArg - The
+   *   {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/call thisArg}
+   *   the master function is called with.
+   *
+   * @returns {mixed}
+   *
+   * @private
    */
-  callMethod_ (methodName, payload, context) {
-    if (methodName in this.members_ && typeof this.members_[methodName] === 'function') {
-      if (context) {
-        return this.members_[methodName].call(context, payload)
+  callFunction_ (functionName, payload, thisArg) {
+    if (functionName in this.members_ && typeof this.members_[functionName] === 'function') {
+      if (thisArg) {
+        return this.members_[functionName].call(thisArg, payload)
       }
-      return this.members_[methodName](payload)
+      return this.members_[functionName](payload)
     }
   }
 
@@ -135,41 +157,78 @@ class Master {
    * @param {module:@bldr/vue-app-presentation~props} props
    */
   normalizeProps (props) {
-    return this.callMethod_('normalizeProps', props)
+    return this.callFunction_('normalizeProps', props)
   }
 
   /**
    * @param {module:@bldr/vue-app-presentation~props} props
    */
-  stepCount (props) {}
+  stepCount (props) {
+    return this.callFunction_('stepCount', props)
+  }
 
   /**
    * An array of media URIs to resolve (like [id:beethoven, filename:mozart.mp3])
    * @param {module:@bldr/vue-app-presentation~props} props
    */
-  resolveMediaUris (props) {}
+  resolveMediaUris (props) {
+    return this.callFunction_('resolveMediaUris', props)
+  }
 
   /**
    * @param {module:@bldr/vue-app-presentation~props} props
    */
-  plainTextFromProps (props) {}
+  plainTextFromProps (props) {
+    return this.callFunction_('plainTextFromProps', props)
+  }
 
   /**
    * Called when entering a slide.
-   * @param {*} param0
+   *
+   * @param {object} payload
+   * @property {object} payload
+   * @property {module:@bldr/vue-app-presentation~Slide} payload.oldSlide
+   * @property {module:@bldr/vue-app-presentation~props} payload.oldProps
+   * @property {module:@bldr/vue-app-presentation~Slide} payload.newSlide
+   * @property {module:@bldr/vue-app-presentation~props} payload.newProps
+   *
+   * @param {object} thisArg - The
+   *   {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/call thisArg}
+   *   the master function is called with.
    */
-  enterSlide ({ oldSlide, oldProps, newSlide, newProps }) {}
+  enterSlide (payload, thisArg) {
+    this.callFunction_('enterSlide', payload, thisArg)
+  }
 
   /**
    * Called when leaving a slide.
-   * @param {*} param0
+   *
+   * @param {object} payload
+   * @property {object} payload
+   * @property {module:@bldr/vue-app-presentation~Slide} payload.oldSlide
+   * @property {module:@bldr/vue-app-presentation~props} payload.oldProps
+   * @property {module:@bldr/vue-app-presentation~Slide} payload.newSlide
+   * @property {module:@bldr/vue-app-presentation~props} payload.newProps
+   *
+   * @param {object} thisArg - The
+   *   {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/call thisArg}
+   *   the master function is called with.
    */
-  leaveSlide ({ oldSlide, oldProps, newSlide, newProps }) {}
+  leaveSlide (payload, thisArg) {
+    this.callFunction_('leaveSlide', payload, thisArg)
+  }
 
   /**
    * Called when entering a step.
+   *
+   * @param {object} payload
+   * @property {object} payload
+   * @property {number} payload.oldStepNo
+   * @property {number} payload.newStepNo
    */
-  enterStep ({ oldStepNo, newStepNo }) {}
+  enterStep (payload) {
+    return this.callFunction_('enterStep', payload, thisArg)
+  }
 
   /**
    * Called when leaving a step.
@@ -179,7 +238,9 @@ class Master {
    * @property {number} payload.oldStepNo
    * @property {number} payload.newStepNo
    */
-  leaveStep ({ oldStepNo, newStepNo }) {}
+  leaveStep (payload) {
+    return this.callFunction_('leaveStep', payload)
+  }
 }
 
 class Masters {
@@ -247,11 +308,11 @@ export function masterOptions (masterName) {
   return masters[masterName]
 }
 
-export function callMasterFunc (masterName, funcName, payload, context) {
-  const options = masterOptions(masterName)
+export function callMasterFunc (masterName, funcName, payload, thisArg) {
+  const options = masterOptions(masterName).members_
   if (funcName in options && typeof options[funcName] === 'function') {
-    if (context) {
-      return options[funcName].call(context, payload)
+    if (thisArg) {
+      return options[funcName].call(thisArg, payload)
     }
     return options[funcName](payload)
   }
