@@ -80,6 +80,9 @@ class MediaFile {
     this.filename = path.basename(filePath)
   }
 
+  /**
+   * @private
+   */
   addFileInfos_ () {
     const stats = fs.statSync(this.absPath_)
 
@@ -122,6 +125,8 @@ class MediaFile {
    *
    * Info file in the YAML file format:
    * `/home/baldr/beethoven.jpg.yml`
+   *
+   * @private
    */
   readYaml_ (filePath) {
     if (fs.existsSync(filePath)) {

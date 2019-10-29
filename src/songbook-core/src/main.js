@@ -1,6 +1,39 @@
 /**
- * @file Core functionality for the BALDR songbook without a node dependency.
+ * Core functionality for the BALDR songbook without node dependencies.
  * @module @bldr/songbook-core
+ */
+
+/**
+ * A JSON version of the Song class (obtained from `Song.toJSON()`
+ * and `JSON.stringify()`) or a instance of the class `Song()`
+ *
+ * ```json
+ * {
+ *   "abc": "y",
+ *   "folder": "/home/jf/git-repositories/content/lieder/y/Yesterday",
+ *   "metaData": {
+ *     "artist": "The Beatles",
+ *     "composer": "Paul McCartney",
+ *     "title": "Yesterday",
+ *     "wikidata": 202698,
+ *     "wikipedia": "de:Yesterday",
+ *     "year": 1965,
+ *     "youtube": "wXTJBr9tt8Q"
+ *   },
+ *   "songID": "Yesterday",
+ *   "slidesCount": 2
+ * }
+ * ```
+ *
+ * @see {@link module:@bldr/songbook-intermediate-files~Song}
+ *
+ * @typedef {Object} Song
+ */
+
+/**
+ * An array of song objects.
+ *
+ * @typedef {module:@bldr/songbook-core~Song[]} songs
  */
 
 /**
@@ -29,7 +62,7 @@ function sortObjectsByProperty (property) {
  */
 class AlphabeticalSongsTree {
   /**
-   * @param {module:baldr-songbook~songs} songs - An array of song objects.
+   * @param {module:@bldr/songbook-core~songs} songs - An array of song objects.
    */
   constructor (songs) {
     for (const song of songs) {
@@ -54,7 +87,7 @@ class AlphabeticalSongsTree {
  */
 class SongMetaDataCombined {
   /**
-   * @param {module:baldr-songbook~SongMetaData} songMetaData - A song
+   * @param {module:@bldr/songbook-core~SongMetaData} songMetaData - A song
    * metadata object.
    */
   constructor (songMetaData) {
@@ -86,6 +119,8 @@ class SongMetaDataCombined {
    *
    * @params {array} properties - Some object properties to collect strings from.
    * @params {object} object - An object.
+   *
+   * @private
    */
   static collectProperties_ (properties, object) {
     const parts = []
@@ -241,7 +276,7 @@ class CoreLibrary {
   }
 
   /**
-   * @returns {module:baldr-songbook~songs}
+   * @returns {module:@bldr/songbook-core~songs}
    */
   toArray () {
     return Object.values(this.songs)
@@ -286,6 +321,8 @@ class CoreLibrary {
    *
    * @param {String} property Key of the object to sort.
    * @see {@link https://ourcodeworld.com/articles/read/764/how-to-sort-alphabetically-an-array-of-objects-by-key-in-javascript Tutorial}
+   *
+   * @private
    */
   sortByProperty_ (property) {
     return function (a, b) {
@@ -298,7 +335,7 @@ class CoreLibrary {
    *
    * @param {string} songID - The ID of the song. (The parent song folder)
    *
-   * @return {module:baldr-songbook~Song}
+   * @return {module:@bldr/songbook-core~Song}
    */
   getSongById (songID) {
     if (songID in this.songs && this.songs[songID]) {
@@ -311,7 +348,7 @@ class CoreLibrary {
   /**
    * Get the previous song
    *
-   * @return {module:baldr-songbook~Song}
+   * @return {module:@bldr/songbook-core~Song}
    */
   getPreviousSong () {
     if (this.currentSongIndex === 0) {
@@ -325,7 +362,7 @@ class CoreLibrary {
   /**
    * Get the next song
    *
-   * @return {module:baldr-songbook~Song}
+   * @return {module:@bldr/songbook-core~Song}
    */
   getNextSong () {
     if (this.currentSongIndex === this.countSongs() - 1) {
@@ -339,7 +376,7 @@ class CoreLibrary {
   /**
    * Get a random song.
    *
-   * @return {module:baldr-songbook~Song}
+   * @return {module:@bldr/songbook-core~Song}
    */
   getRandomSong () {
     const randomIndex = Math.floor(Math.random() * this.songIDs.length)

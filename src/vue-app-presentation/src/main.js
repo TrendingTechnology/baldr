@@ -172,6 +172,9 @@ class StyleConfig {
     }
   }
 
+  /**
+   * @private
+   */
   defaults_ () {
     return {
       centerVertically: true,
@@ -186,6 +189,9 @@ class StyleConfig {
     this.set_(this.defaults_())
   }
 
+  /**
+   * @private
+   */
   set_ (styleConfig) {
     for (const config in styleConfig) {
       if (config in this.configObjects) {

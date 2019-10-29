@@ -170,6 +170,9 @@ export default {
         element.addEventListener('focus', eventListener)
       }
     },
+    /**
+     * @private
+     */
     surround_ (elementName) {
       const selection = window.getSelection()
       if (selection.rangeCount) {

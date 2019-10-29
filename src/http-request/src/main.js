@@ -267,6 +267,8 @@ export class HttpRequest {
   /**
    * Reset the Axios instance to get a new instance. To check different
    * URL.
+   *
+   * @private
    */
   resetAxiosInstances_ () {
     this.axiosInstances_ = []
@@ -284,6 +286,9 @@ export class HttpRequest {
     return this.axiosInstances_.length > 0
   }
 
+  /**
+   * @private
+   */
   async createAxiosInstances_ () {
     if (this.initalised()) {
       return

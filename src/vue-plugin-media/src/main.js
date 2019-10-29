@@ -369,6 +369,9 @@ class PlayList {
     this.player = player
   }
 
+  /**
+   * @private
+   */
   start_ () {
     const sample = this.$store.getters['media/samplePlayListCurrent']
     this.player.load(sample)
@@ -595,7 +598,7 @@ class MediaTypes {
   }
 
   /**
-   *
+   * @private
    */
   spreadExtensions_ () {
     const out = {}
@@ -753,6 +756,8 @@ class Sample {
 
   /**
    * @param {String|Number} timeIntervaleString
+   *
+   * @private
    */
   toSec_ (timeIntervaleString) {
     return Number(timeIntervaleString)
@@ -1039,9 +1044,10 @@ async function createMediaElement (mediaFile) {
  */
 class Resolver {
   /**
-   * @private
    * @param {string} key
    * @param {string|json} value
+   *
+   * @private
    */
   async queryMediaServer_ (key, value) {
     const response = await httpRequest.request(`query/asset/match/${key}/${value}`)

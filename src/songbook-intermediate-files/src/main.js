@@ -575,6 +575,8 @@ class Song {
    *   subfolders) or a non-existing song path.
    *
    * @return {string} The path of the parent directory of the song.
+   *
+   * @private
    */
   getSongFolder_ (songPath) {
     try {
@@ -593,6 +595,8 @@ class Song {
    * @param {string} folder - The directory containing the song files.
    *
    * @return {string} A single character
+   *
+   * @private
    */
   recognizeABCFolder_ (folder) {
     const pathSegments = folder.split(path.sep)
@@ -608,6 +612,8 @@ class Song {
    *
    * @return A joined path of the file relative to the song collection
    *   base dir.
+   *
+   * @private
    */
   detectFile_ (file) {
     let absPath
@@ -677,6 +683,8 @@ class Library extends CoreLibrary {
 
   /**
    * Identify a song folder by searching for a file named “info.yml.”
+   *
+   * @private
    */
   detectSongs_ () {
     return glob.sync('info.yml', { cwd: this.basePath, matchBase: true })
@@ -1114,11 +1122,16 @@ class PianoScore {
    * @param {filename} The name of the text (TeX) file inside this package
    *
    * @returns {string}
+   *
+   * @private
    */
   read_ (filename) {
     return fs.readFileSync(path.join(__dirname, filename), { encoding: 'utf8' })
   }
 
+  /**
+   * @private
+   */
   spawnTex_ (texFile, cwd) {
     // Error on Mac OS: conversion of the eps files to pdf files doesn’t work.
     // not allowed in restricted mode.
@@ -1220,6 +1233,8 @@ class IntermediateSong extends Song {
    * @param {number} index The index number of the array position
    *
    * @return {string} TeX markup for one EPS image file of a piano score.
+   *
+   * @private
    */
   formatPianoTeXEpsFile_ (index) {
     let subFolder
@@ -1285,6 +1300,8 @@ class IntermediateSong extends Song {
    *
    * @param {string} source - Name of the *.mscx file without the extension.
    * @param {string} destination - Name of the PDF without the extension.
+   *
+   * @private
    */
   generatePDF_ (source, destination = '') {
     if (destination === '') {
@@ -1307,6 +1324,8 @@ class IntermediateSong extends Song {
    * Generate svg files in a 'slides' subfolder.
    *
    * @param {string} folder - A song folder.
+   *
+   * @private
    */
   generateSlides_ () {
     const dest = this.folderSlides.get()
@@ -1333,6 +1352,8 @@ class IntermediateSong extends Song {
    * Generate from the MuseScore file “piano/piano.mscx” EPS files.
    *
    * @return {array} An array of EPS piano score filenames.
+   *
+   * @private
    */
   generatePiano_ () {
     this.folderPiano.empty()
@@ -1424,6 +1445,8 @@ class PianoFilesCountTree {
 
   /**
    * @param {number} count - 1, 2, 3, 4
+   *
+   * @private
    */
   checkCount_ (count) {
     if (this.validCounts_.includes(count)) {
@@ -1435,6 +1458,8 @@ class PianoFilesCountTree {
 
   /**
    * @param {module:@bldr/songbook-intermediate-files~songs} songs - An array of song objects.
+   *
+   * @private
    */
   build_ (songs) {
     for (const song of songs) {
@@ -1546,6 +1571,9 @@ class IntermediateLibrary extends Library {
     return false
   }
 
+  /**
+   * @private
+   */
   collectSongs_ () {
     const songs = {}
     for (const songPath of this.detectSongs_()) {
@@ -1573,6 +1601,8 @@ class IntermediateLibrary extends Library {
    * Delete multiple files.
    *
    * @param {array} files - An array of files to delete.
+   *
+   * @private
    */
   deleteFiles_ (files) {
     files.forEach(

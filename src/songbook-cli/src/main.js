@@ -1,7 +1,7 @@
 #! /usr/bin/env node
 
 /**
- * @file Command line interface to generate the intermediate media files for the
+ * Command line interface to generate the intermediate media files for the
  * BALDR songbook.
  * @module @bldr/songbook-cli
  */
