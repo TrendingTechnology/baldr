@@ -1,6 +1,6 @@
 {
   "name": "@bldr/themes",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Some SCSS/CSS themes for the baldr project.",
   "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
   "bugs": {

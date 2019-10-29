@@ -1,6 +1,6 @@
 {
   "name": "@bldr/api-media-server",
-  "version": "0.1.14",
+  "version": "0.1.15",
   "description": "The REST API and command line interface of the BALDR media server.",
   "author": {
     "name": "Josef Friedrich",
@@ -14,7 +14,7 @@
   },
   "main": "main.js",
   "dependencies": {
-    "@bldr/core-node": "^0.1.0",
+    "@bldr/core-node": "^0.1.1",
     "chalk": "^2.4.2",
     "commander": "^3.0.2",
     "cors": "^2.8.5",

@@ -1,6 +1,6 @@
 {
   "name": "@bldr/vue-app-seating-plan",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Seating plan app of the baldr project.",
   "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
   "bugs": {
@@ -25,14 +25,14 @@
     "test:e2e": "vue-cli-service test:e2e"
   },
   "dependencies": {
-    "@bldr/core-node": "^0.1.0",
-    "@bldr/http-request": "^0.1.6",
-    "@bldr/themes": "^0.1.0",
-    "@bldr/vue-plugin-dynamic-select": "^0.1.0",
-    "@bldr/vue-plugin-material-icon": "^0.1.0",
-    "@bldr/vue-plugin-modal-dialog": "^0.1.0",
-    "@bldr/vue-plugin-components-collection": "^0.1.0",
-    "@bldr/vue-plugin-shortcuts": "^0.1.0",
+    "@bldr/core-node": "^0.1.1",
+    "@bldr/http-request": "^0.1.7",
+    "@bldr/themes": "^0.1.1",
+    "@bldr/vue-plugin-components-collection": "^0.1.1",
+    "@bldr/vue-plugin-dynamic-select": "^0.1.1",
+    "@bldr/vue-plugin-material-icon": "^0.1.1",
+    "@bldr/vue-plugin-modal-dialog": "^0.1.1",
+    "@bldr/vue-plugin-shortcuts": "^0.1.1",
     "vue": "^2.6.10",
     "vue-headful": "^2.0.1",
     "vue-router": "^3.1.3",
