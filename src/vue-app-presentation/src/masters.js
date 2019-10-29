@@ -1,5 +1,7 @@
 /**
- * @file Gather informations about all masters.
+ * Gather informations about all masters.
+ *
+ * @module @bldr/vue-app-presentation/masters
  */
 
 import Vue from 'vue'
@@ -259,59 +261,104 @@ class Master {
   }
 }
 
+/**
+ * Container for all registered master slides.
+ */
 class Masters {
   constructor () {
     this.store_ = {}
   }
 
+  /**
+   *
+   * @param {module:@bldr/vue-app-presentation/masters~Master} master
+   */
   add (master) {
     this.store_[master.name] = master
     this[master.name] = master
   }
 
+  /**
+   * Get a master object by the master name.
+   *
+   * @param {string} name
+   *
+   * @returns {module:@bldr/vue-app-presentation/masters~Master}
+   */
   get (name) {
     return this.store_[name]
   }
 
+  /**
+   * Get all master objects as and object with the master name as properties.
+   *
+   * @returns {object}
+   */
   get all() {
     return this.store_
   }
 
+  /**
+   * Get all master names as an array.
+   *
+   * @returns {Array}
+   */
   get allNames () {
     return Object.keys(this.store_)
   }
 }
 
-// https://github.com/chrisvfritz/vue-enterprise-boilerplate/blob/master/src/components/_globals.js
-// https://webpack.js.org/guides/dependency-management/#require-context
-const requireComponent = require.context(
-  // Look for files in the current directory
-  './masters',
-  // Do not look in subdirectories
-  false,
-  // Only include .vue files
-  /[\w-]+\.vue$/
-)
+/**
+ * Register all masters. Search for `master.vue` files in the subfolder
+ * `masters`.
+ *
+ * @see {@link https://github.com/chrisvfritz/vue-enterprise-boilerplate/blob/master/src/components/_globals.js}
+ * @see {@link https://webpack.js.org/guides/dependency-management/#require-context}
+ *
+ * @returns {module:@bldr/vue-app-presentation/masters~Masters}
+ */
+function registerMasters () {
+  //
+  const requireComponent = require.context(
+    // Look for files in the current directory
+    './masters',
+    // Do not look in subdirectories
+    false,
+    // Only include .vue files
+    /[\w-]+\.vue$/
+  )
 
-export const masters = {}
-export const mastersNg = new Masters()
+  const masters = new Masters()
 
-// For each matching file name...
-requireComponent.keys().forEach((fileName) => {
-  // Get the component config
-  const masterName = fileName.replace('./', '').replace('.vue', '')
-  const componentConfig = requireComponent(fileName)
-  const masterConfig = componentConfig.master
-  const master = new Master(masterName)
-  master.importMembers(masterConfig)
-  master.vue = componentConfig.default
-  mastersNg.add(master)
-  masters[masterName] = master
-  master.registerVuexModule()
-})
+  // For each matching file name...
+  requireComponent.keys().forEach((fileName) => {
+    // Get the component config
+    const masterName = fileName.replace('./', '').replace('.vue', '')
+    const componentConfig = requireComponent(fileName)
+    const masterConfig = componentConfig.master
+    const master = new Master(masterName)
+    master.importMembers(masterConfig)
+    master.vue = componentConfig.default
+    master.registerVuexModule()
 
+    masters.add(master)
+  })
+
+  return masters
+}
+
+/**
+ * An instance of the class `Masters()`
+ *
+ * @type {module:@bldr/vue-app-presentation/masters~Master}
+ */
+export const masters = registerMasters()
+
+/**
+ * Register all masters as Vue components.
+ */
 export function registerMasterComponents () {
-  for (const masterName in mastersNg.all) {
-    Vue.component(`${masterName}-master`, mastersNg[masterName].vue)
+  for (const masterName in masters.all) {
+    Vue.component(`${masterName}-master`, masters[masterName].vue)
   }
 }
