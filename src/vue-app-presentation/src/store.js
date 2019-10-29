@@ -147,8 +147,12 @@ const mutations = {
 }
 
 export default new Vuex.Store({
-  state,
-  getters,
-  actions,
-  mutations
-})
+    modules: {
+      presentation: {
+        state,
+        getters,
+        actions,
+        mutations
+      }
+    }
+  })
