@@ -52,8 +52,8 @@ slides:
 #     birth:
 #     death:
 # - question:
-#     questions:
 #     heading:
+#     questions:
 #     numbers:
 # - quote:
 #     text:

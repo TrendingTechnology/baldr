@@ -134,12 +134,12 @@ export const master = {
 
 export default {
   props: {
+    heading: {
+      type: String
+    },
     questions: {
       type: Array,
       required: true
-    },
-    heading: {
-      type: String
     },
     numbers: {
       type: Boolean,
