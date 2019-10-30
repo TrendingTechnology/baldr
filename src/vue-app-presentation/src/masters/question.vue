@@ -1,20 +1,19 @@
 <template>
   <div class="vc_question_master">
-    <h1 v-if="heading">{{ heading }}</h1>
+    <h1 v-if="heading" v-html="heading"/>
     <ol :class="{ numbers: showNumbers }">
       <li
         v-for="(pair, index) in questions"
         :key="pair.question"
       >
-        <p class="question">{{ pair.question }}</p>
+        <p class="question" v-html="pair.question"/>
         <p v-if="pair.answer">
           …
           <span
             :class="getClassHidden(index + 1)"
             class="answer"
-          >
-            {{ pair.answer }}
-          </span>
+            v-html="pair.answer"
+          />
         </p>
       </li>
     </ol>

@@ -120,6 +120,10 @@ $link-color: scale-color($gray, $lightness: -40%);
     font-family: $font-family-small-caps;
   }
 
+  em.person {
+    font-style: normal;
+  }
+
   .piece {
     font-style: italic;
   }
