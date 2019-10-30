@@ -10,8 +10,10 @@
           v-for="(spec, name) in props"
           :key="name"
         >
-          {{ name }}
+          <code>{{ name }}</code>
           <span v-if="spec.required">*</span>
+          <span v-if="spec.markup"> (markup)</span>
+          <span v-if="spec.description" v-html="markupToHtml(spec.description)"></span>
         </li>
       </ul>
     </section>
@@ -27,7 +29,7 @@
 </template>
 
 <script>
-import marked from 'marked'
+import {  markupToHtml } from '@/lib.js'
 
 export default {
   name: 'MasterDocumentation',
@@ -36,19 +38,20 @@ export default {
       return this.$route.params.master
     },
     master () {
-      return this.$masters[this.masterName]
+      return this.$masters.get(this.masterName)
     },
     props () {
       return this.master.vue.props
     },
     documentation () {
       if ('documentation' in this.master) {
-        return marked(this.master.documentation)
+        return markupToHtml(this.master.documentation)
       }
       return ''
     }
   },
   methods: {
+    markupToHtml,
     openExample () {
       this.$store.dispatch('presentation/openPresentation', this.master.example).then(() => {
         if (this.$route.name !== 'slides') this.$router.push({ name: 'slides' })

@@ -17,6 +17,78 @@
  * }
  * ```
  *
+ * # Structure of a master slide
+ *
+ * A master slide is a extended Vuejs component. You have to export a additional
+ * object called `master`.
+ *
+ * File name: `name.vue`
+ *
+ * The master name is: `name`
+ *
+ * ## Additional `props` keys:
+ *
+ * - `description`: String to describe the property
+ * - `markup` (boolean): The specified value can contain markup. The value can
+ *    be written in Markdown and or in HTML. is converted into HTML. The key
+ *    `type` has to be `String`.
+ *
+ * ```js
+ * export const master = {
+ *   title: 'Bild',
+ *   icon: 'file-image',
+ *   color: 'green',
+ *   styleConfig: {
+ *     darkMode: false,
+ *     overflow: false,
+ *     slidePadding: '4vw',
+ *     contentTheme: 'default',
+ *     uiTheme: 'default'
+ *   },
+ *   documentation = `# Markdown`,
+ *   example: `
+ * slides:
+ * - title: 'URL: id:'
+ *   image:
+ *     src: id:Haydn
+ * `,
+ *   store: {
+ *     getters,
+ *     actions,
+ *     mutations
+ *   },
+ *   // result must fit to props
+ *   normalizeProps (props) {
+ *     if (typeof props === 'string') {
+ *       return {
+ *         markup: props
+ *       }
+ *     }
+ *   },
+ *   stepCount (props) {
+ *     return props.src.length
+ *   },
+ *   // An array of media URIs to resolve (like [id:beethoven, filename:mozart.mp3])
+ *   resolveMediaUris (props) {
+ *     return props.src
+ *   },
+ *   plainTextFromProps (props) {
+ *   },
+ *   // Called when entering a slide.
+ *   enterSlide ({ oldSlide, oldProps, newSlide, newProps }) {
+ *   },
+ *   // Called when leaving a slide.
+ *   leaveSlide ({ oldSlide, oldProps, newSlide, newProps }) {
+ *   }
+ *   // Called when entering a step.
+ *   enterStep ({ oldStepNo, newStepNo }) {
+ *   },
+ *   // Called when leaving a step.
+ *   leaveStep ({ oldStepNo, newStepNo }) {
+ *   }
+ * }
+ * ```
+ *
  * @module @bldr/vue-app-presentation
  */
 
