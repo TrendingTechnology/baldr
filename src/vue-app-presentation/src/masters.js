@@ -271,16 +271,15 @@ class Master {
   /**
    * Convert in the props certain strings containing markup to HTML.
    *
-  * @param {module:@bldr/vue-app-presentation~props} props
-  *
-  * @returns {object}
-  */
+   * @param {module:@bldr/vue-app-presentation~props} props
+   *
+   * @returns {object}
+   */
   markupToHtml (props) {
     if (!('props' in this.vue)) return props
     for (const propName in props) {
-      //console.log(propName)
       const vueProp = this.vue.props[propName]
-      if ('markup' in vueProp && vueProp.markup)  {
+      if ('markup' in vueProp && vueProp.markup) {
         props[propName] = markupToHtml(props[propName])
       }
     }

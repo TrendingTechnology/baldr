@@ -141,7 +141,8 @@ export default {
     questions: {
       type: Array,
       description: 'Eine Liste mit Objekten mit den Schlüsseln `question` and `answer`.',
-      required: true
+      required: true,
+      markup: true
     },
     numbers: {
       type: Boolean,

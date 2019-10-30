@@ -2,7 +2,7 @@
   <div class="vc_quote_master">
     <p class="text">
       <span class="quotation-mark">»</span>
-        {{text }}
+      <span v-html="text"/>
       <span class="quotation-mark">«</span>
     </p>
     <p class="attribution" v-if="author || date">
@@ -27,6 +27,10 @@ slides:
 - title: Only text
   quote:
     text: Der Tag der Gunst ist wie der Tag der Ernte, man muss geschäftig sein sobald sie reift.
+
+- title: Markup support
+  quote:
+    text: 'With markup: __This text should be displayed as a bold text.__'
 `
 
 export const master = {
@@ -51,7 +55,8 @@ export default {
   props: {
     text: {
       type: String,
-      required: true
+      required: true,
+      markup: true
     },
     author: {
       type: String

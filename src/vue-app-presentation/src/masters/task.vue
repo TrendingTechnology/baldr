@@ -3,7 +3,6 @@
 </template>
 
 <script>
-import marked from 'marked'
 import { plainText } from '@bldr/core-browser'
 
 const example = `
@@ -46,7 +45,7 @@ export const master = {
         markup: props
       }
     }
-    props.markup = marked(props.markup)
+    props.markup = props.markup
     return props
   },
   plainTextFromProps (props) {
@@ -58,7 +57,8 @@ export default {
   props: {
     markup: {
       type: String,
-      required: true
+      required: true,
+      markup: true
     }
   }
 }

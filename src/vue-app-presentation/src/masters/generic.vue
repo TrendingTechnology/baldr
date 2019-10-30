@@ -280,6 +280,7 @@ export default {
     markup: {
       type: [String, Array],
       required: true
+      //markup: true It is complicated to convert to prop based markup conversion.
     }
   },
   computed: {

@@ -144,6 +144,9 @@ export default {
       type: String,
       markup: true
     },
+    cover: {
+      type: String
+    },
     autoplay: {
       type: Boolean,
       default: false
@@ -151,9 +154,6 @@ export default {
     playthrough: {
       type: Boolean,
       default: false
-    },
-    cover: {
-      type: String
     }
   },
   computed: {
