@@ -2,13 +2,22 @@
   <div class="vc_image_master">
     <img v-if="mediaFile" :src="mediaFile.httpUrl"/>
     <div v-if="titleComputed || descriptionComputed" class="metadata">
-      <h1 v-if="titleComputed" class="title">{{ titleComputed }}</h1>
-      <p v-if="descriptionComputed" class="description">{{ descriptionComputed }}</p>
+      <h1
+        v-if="titleComputed"
+        class="title"
+        v-html="titleComputed"
+      />
+      <p
+        v-if="descriptionComputed"
+        class="description"
+        v-html="descriptionComputed"
+      />
     </div>
   </div>
 </template>
 
 <script>
+import { markupToHtml } from '@/lib.js'
 import { createNamespacedHelpers } from 'vuex'
 const { mapGetters } = createNamespacedHelpers('presentation')
 
@@ -94,22 +103,24 @@ export default {
       required: true
     },
     title: {
-      type: String
+      type: String,
+      markup: true
     },
     description: {
-      type: String
+      type: String,
+      markup: true
     }
   },
   computed: {
     ...mapGetters(['slideCurrent']),
     titleComputed () {
       if (this.title) return this.title
-      if ('title' in this.mediaFile) return this.mediaFile.title
+      if ('title' in this.mediaFile) return markupToHtml(this.mediaFile.title)
       return ''
     },
     descriptionComputed () {
       if (this.description) return this.description
-      if ('description' in this.mediaFile) return this.mediaFile.description
+      if ('description' in this.mediaFile) return markupToHtml(this.mediaFile.description)
       return ''
     },
     stepNoCurrent () {

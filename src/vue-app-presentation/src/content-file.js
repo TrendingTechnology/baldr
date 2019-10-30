@@ -179,6 +179,8 @@ class RenderData {
     if (normalizedData) {
       this.data = normalizedData
     }
+    master.detectUnkownProps(this.data)
+    master.markupToHtml(this.data)
 
     const mediaUris = master.resolveMediaUris(this.data)
     if (mediaUris) this.mediaUris = mediaUris

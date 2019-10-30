@@ -6,6 +6,7 @@
 
 import Vue from 'vue'
 import store from '@/store.js'
+import { markupToHtml } from '@/lib.js'
 
 /**
  * Each master slide is a instance of this class. This class has many dummy
@@ -27,7 +28,7 @@ class Master {
      *
      * @type {String}
      */
-    this.title
+    this.title = null
 
     /**
      * The name of an icon of the
@@ -35,7 +36,7 @@ class Master {
      *
      * @type {String}
      */
-    this.icon
+    this.icon = null
 
     /**
      * A color name (CSS color class name) to colorize the master icon.
@@ -43,21 +44,21 @@ class Master {
      *
      * @type {String}
      */
-    this.color
+    this.color = null
 
     /**
      * A style configuration object.
      *
      * @type {module:@bldr/vue-app-presentation~styleConfig}
      */
-    this.styleConfig
+    this.styleConfig = null
 
     /**
      * Some markdown formated string to document this master slide.
      *
      * @type {String}
      */
-    this.documentation
+    this.documentation = null
 
     /**
      * A example presentation file in the YAML format like `*.baldr.yml` files
@@ -65,7 +66,7 @@ class Master {
      *
      * @type {String}
      */
-    this.example
+    this.example = null
 
     /**
      * A vuex object containing `state`, `getters`, `actions`, `mutations`
@@ -73,7 +74,14 @@ class Master {
      *
      * @type {Object}
      */
-    this.store
+    this.store = null
+
+    /**
+     * The Vue instance of the corresponding vue component.
+     *
+     * @type {Object}
+     */
+    this.vue = null
   }
 
   /**
@@ -259,6 +267,39 @@ class Master {
   leaveStep (payload, thisArg) {
     return this.callFunction_('leaveStep', payload, thisArg)
   }
+
+  /**
+   * Convert in the props certain strings containing markup to HTML.
+   *
+  * @param {module:@bldr/vue-app-presentation~props} props
+  *
+  * @returns {object}
+  */
+  markupToHtml (props) {
+    if (!('props' in this.vue)) return props
+    for (const propName in props) {
+      //console.log(propName)
+      const vueProp = this.vue.props[propName]
+      if ('markup' in vueProp && vueProp.markup)  {
+        props[propName] = markupToHtml(props[propName])
+      }
+    }
+    return props
+  }
+
+  /**
+   * Raise an error if there is an unkown prop - a not in the `props` section
+   * defined prop.
+   *
+   * @param {module:@bldr/vue-app-presentation~props} props
+   */
+  detectUnkownProps (props) {
+    for (const propName in props) {
+      if ('props' in this.vue && !(propName in this.vue.props)) {
+        throw new Error(`The master slide “${this.name}” has not prop named “${propName}”`)
+      }
+    }
+  }
 }
 
 /**
@@ -294,7 +335,7 @@ class Masters {
    *
    * @returns {object}
    */
-  get all() {
+  get all () {
     return this.store_
   }
 

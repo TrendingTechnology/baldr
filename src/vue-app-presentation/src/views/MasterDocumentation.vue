@@ -13,7 +13,7 @@
           <code>{{ name }}</code>
           <span v-if="spec.required">*</span>
           <span v-if="spec.markup"> (markup)</span>
-          <span v-if="spec.description" v-html="markupToHtml(spec.description)"></span>
+          <span v-if="spec.description" v-html="': ' + markupToHtml(spec.description)">:</span>
         </li>
       </ul>
     </section>

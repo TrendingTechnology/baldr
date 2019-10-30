@@ -13,21 +13,25 @@
     <p
       class="composer person"
       v-if="composerComputed"
-    >{{ composerComputed }}</p>
+      v-html="composerComputed"
+    />
 
     <p
       class="title piece"
       v-if="titleComputed"
-    >{{ titleComputed }}</p>
+      v-html="titleComputed"
+    />
 
     <p
       class="artist person"
       v-if="artistComputed"
-    >{{ artistComputed }}</p>
+      v-html="artistComputed"
+    />
   </div>
 </template>
 
 <script>
+import { markupToHtml } from '@/lib.js'
 import { createNamespacedHelpers } from 'vuex'
 const { mapGetters } = createNamespacedHelpers('presentation')
 
@@ -129,13 +133,16 @@ export default {
       required: true
     },
     title: {
-      type: String
+      type: String,
+      markup: true
     },
     artist: {
-      type: String
+      type: String,
+      markup: true
     },
     composer: {
-      type: String
+      type: String,
+      markup: true
     },
     autoplay: {
       type: Boolean,
@@ -153,7 +160,9 @@ export default {
     ...mapGetters(['slideCurrent']),
     artistComputed () {
       if (this.artist) return this.artist
-      if ('artist' in this.mediaFile) return this.mediaFile.artist
+      if ('artist' in this.mediaFile) {
+        return  markupToHtml(this.mediaFile.artist)
+      }
       return ''
     },
     coverComputed () {
@@ -161,12 +170,16 @@ export default {
         const mediaFile = this.$store.getters['media/mediaFileByUri'](this.cover)
         return mediaFile.httpUrl
       }
-      if ('previewHttpUrl' in this.mediaFile) return this.mediaFile.previewHttpUrl
+      if ('previewHttpUrl' in this.mediaFile) {
+        return this.mediaFile.previewHttpUrl
+      }
       return ''
     },
     composerComputed () {
       if (this.composer) return this.composer
-      if ('composer' in this.mediaFile) return this.mediaFile.composer
+      if ('composer' in this.mediaFile) {
+        return markupToHtml(this.mediaFile.composer)
+      }
       return ''
     },
     stepNoCurrent () {
@@ -174,7 +187,9 @@ export default {
     },
     titleComputed () {
       if (this.title) return this.title
-      if ('title' in this.mediaFile) return this.mediaFile.title
+      if ('title' in this.mediaFile) {
+        return markupToHtml(this.mediaFile.title)
+      }
       return ''
     },
     uriCurrent () {
