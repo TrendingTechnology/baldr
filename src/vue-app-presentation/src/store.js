@@ -95,11 +95,11 @@ const actions = {
     let oldSlide
     let oldProps
     let newSlide = getters.slideByNo(no)
-    let newProps = newSlide.renderData.data
+    let newProps = newSlide.renderData.props
     let context = new Vue()
     if (getters.slideCurrent) {
       oldSlide = getters.slideCurrent
-      oldProps = oldSlide.renderData.data
+      oldProps = oldSlide.renderData.props
       getters.slideCurrent.master.leaveSlide(
         { oldSlide, oldProps, newSlide, newProps },
         context

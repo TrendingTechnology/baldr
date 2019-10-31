@@ -23,7 +23,7 @@ export default {
         styleConfig = this.$masters[name].styleConfig
       } else if (this.slideCurrent) {
         name = this.slideCurrent.master.name
-        props = this.slideCurrent.renderData.data
+        props = this.slideCurrent.renderData.props
         contentTheme = this.slideCurrent.contentTheme
         styleConfig = this.slideCurrent.master.styleConfig
       }

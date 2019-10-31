@@ -157,9 +157,10 @@ class RenderData {
 
     /**
      * The name of the master slide.
+     *
      * @type {string}
      */
-    this.name = intersection[0]
+    this.masterName = intersection[0]
 
     /**
      * Data in various types to pass to a master slide.
@@ -167,37 +168,49 @@ class RenderData {
      * to the props of the Vue components.
      * @type {module:@bldr/core/masters~rawMasterData}
      */
-    this.data = rawSlideObject.cut(this.name)
+    this.props = rawSlideObject.cut(this.masterName)
 
     /**
+     * A list of media URIs.
+     *
      * @type {array}
      */
     this.mediaUris = []
 
-    const master = masters.get(this.name)
-    const normalizedData = master.normalizeProps(this.data)
-    if (normalizedData) {
-      this.data = normalizedData
+    const master = masters.get(this.masterName)
+    const normalizedProps = master.normalizeProps(this.props)
+    if (normalizedProps) {
+      this.props = normalizedProps
     }
-    master.detectUnkownProps(this.data)
-    master.markupToHtml(this.data)
+    master.detectUnkownProps(this.props)
+    master.markupToHtml(this.props)
 
-    const mediaUris = master.resolveMediaUris(this.data)
+    const mediaUris = master.resolveMediaUris(this.props)
     if (mediaUris) this.mediaUris = mediaUris
 
     /**
+     * How many steps the slide provides.
+     *
      * @type {number}
      */
-    this.stepCount = master.stepCount(this.data)
+    this.stepCount = master.stepCount(this.props)
 
     /**
+     * The current step number. The first number is 1 not 0.
+     *
      * @type {number}
      */
     this.stepNoCurrent = 1
   }
 }
 
+/**
+ *
+ */
 export class MetaData {
+  /**
+   * @param {*} rawSlideObject
+   */
   constructor (rawSlideObject) {
     this.title = rawSlideObject.cut('title')
   }
@@ -226,8 +239,11 @@ class Slide {
     /**
      *
      */
-    this.master = masters.get(this.renderData.name)
+    this.master = masters.get(this.renderData.masterName)
 
+    /**
+     *
+     */
     this.metaData = new MetaData(rawSlideObject)
 
     if (!rawSlideObject.isEmpty()) {
@@ -251,7 +267,7 @@ class Slide {
    */
   get plainText () {
     const output = []
-    const fromProps = this.master.plainTextFromProps(this.renderData.data)
+    const fromProps = this.master.plainTextFromProps(this.renderData.props)
     if (fromProps) output.push(fromProps)
     for (const mediaFile of this.mediaFiles) {
       output.push(mediaFile.plainText)
