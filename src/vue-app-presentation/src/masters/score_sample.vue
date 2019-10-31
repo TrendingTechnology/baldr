@@ -66,13 +66,12 @@ export default {
 
 <style lang="scss" scoped>
   .vc_score_sample_master {
+    padding: 4vw;
+
     img {
       bottom: 0;
       left: 0;
-      height: 100vh;
-      width: 100vw;
-      object-fit: contain;
-      position: absolute;
+      width: 100%;
     }
 
     audio {
