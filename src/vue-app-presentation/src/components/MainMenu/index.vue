@@ -15,7 +15,7 @@
     <menu-item :to="{ name: 'documentation' }">
       <ul>
         <menu-item
-          v-for="(master, masterName) in $masters"
+          v-for="(master, masterName) in $masters.all"
           :key="masterName"
           :to="`/documentation/${masterName}`"
           :text="masterName"
