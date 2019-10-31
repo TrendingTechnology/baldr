@@ -96,6 +96,16 @@ commander
         '-quality', '70', // https://imagemagick.org/script/command-line-options.php#quality
         output
       ])
+    } else if (['mpg', 'mp4'].includes(inputExtension)) {
+      console.log('lol')
+      const output = `${input}.mp4`
+      convert = childProcess.spawn('ffmpeg', [
+        '-i', input,
+        '-vcodec', 'libx264',
+        '-profile:v', 'baseline',
+        '-y', // Overwrite output files without asking
+        output
+      ])
     }
 
     if (convert) {
