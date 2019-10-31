@@ -12,7 +12,7 @@
     "type": "git",
     "url": "git+https://github.com/Josef-Friedrich/baldr.git"
   },
-  "main": "main.js",
+  "main": "src/main.js",
   "dependencies": {
     "@bldr/core-node": "^0.1.1",
     "chalk": "^2.4.2",
@@ -24,7 +24,7 @@
     "saslprep": "^1.0.3"
   },
   "bin": {
-    "baldr-media-server-cli": "./cli.js"
+    "baldr_media-server-cli.js": "./src/cli.js"
   },
   "publishConfig": {
     "access": "public"

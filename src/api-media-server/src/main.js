@@ -55,7 +55,7 @@ const MongoClient = require('mongodb').MongoClient
 
 // Project packages.
 const { bootstrapConfig } = require('@bldr/core-node')
-const packageJson = require('./package.json')
+const packageJson = require('../package.json')
 
 /**
  *

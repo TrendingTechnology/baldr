@@ -66,7 +66,7 @@ slides:
 `
 
 commander
-  .version(require('./package.json').version)
+  .version(require('../package.json').version)
 
 commander
   .command('convert <input>').alias('c')
