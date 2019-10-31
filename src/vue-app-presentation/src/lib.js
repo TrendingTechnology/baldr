@@ -6,6 +6,15 @@
 import marked from 'marked'
 
 /**
+ * Maybe long texts are not converted? Had to use marked() function in editor.
+ * Surpress wrapping in <p> tag.
+ * https://github.com/markedjs/marked/issues/395
+ */
+export function convertMarkdown(text) {
+  return marked.inlineLexer(text, [])
+}
+
+/**
  * Convert the specifed text to HTML. At the moment Markdown and HTML formats
  * are supported. The conversion is done in a recursive fashion, that means
  * nested strings are also converted
@@ -15,12 +24,6 @@ import marked from 'marked'
  * @returns {String}
  */
 export function markupToHtml (input) {
-  // Surpress wrapping in <p> tag.
-  // https://github.com/markedjs/marked/issues/395
-  function convertMarkdown(text) {
-    return marked.inlineLexer(text, [])
-  }
-
   // string
   if (typeof input === 'string') {
     return convertMarkdown(input)

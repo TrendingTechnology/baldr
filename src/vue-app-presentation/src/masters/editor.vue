@@ -9,6 +9,7 @@
 
 <script>
 import { plainText } from '@bldr/core-browser'
+import marked from 'marked'
 
 let editorId = 0
 
@@ -123,7 +124,10 @@ export const master = {
     } else {
       propsNormalized = props
     }
-    propsNormalized.markup = propsNormalized.markup.replace(/>\w*\*\w*</g, ` contenteditable>${placeholderTag}<`)
+    propsNormalized.markup = propsNormalized.markup.replace(
+      />\w*\*\w*</g, ` contenteditable>${placeholderTag}<`
+    )
+    propsNormalized.markup = marked(propsNormalized.markup)
     return propsNormalized
   },
   leaveSlide ({ oldSlide, oldProps, newSlide, newProps }) {

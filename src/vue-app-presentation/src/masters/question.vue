@@ -22,6 +22,7 @@
 
 <script>
 import { createNamespacedHelpers } from 'vuex'
+import { plainText } from '@bldr/core-browser'
 const { mapGetters } = createNamespacedHelpers('presentation')
 
 const example = `
@@ -122,10 +123,10 @@ export const master = {
   },
   plainTextFromProps (props) {
     const output = []
-    if ('heading' in props && props.heading) output.push(props.heading)
+    if ('heading' in props && props.heading) output.push(plainText(props.heading))
     for (const question of props.questions) {
-      output.push(question.question)
-      if ('answer' in question && question.answer) output.push(question.answer)
+      output.push(plainText(question.question))
+      if ('answer' in question && question.answer) output.push(plainText(question.answer))
     }
     return output.join(' | ')
   }

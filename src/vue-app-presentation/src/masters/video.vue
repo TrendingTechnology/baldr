@@ -77,5 +77,14 @@ export default {
 <style lang="scss" scoped>
   .vc_video_master {
     text-align: center;
+
+    video {
+      bottom: 0;
+      height: 100vh;
+      left: 0;
+      object-fit: contain;
+      position: absolute;
+      width: 100vw;
+    }
   }
 </style>
