@@ -80,7 +80,7 @@ export default {
     .top-icon {
       width: 100%;
       position: absolute;
-      top: 10vw;
+      top: 5vw;
       left: 0vw;
       text-align: center;
 

@@ -28,9 +28,8 @@ export default {
     z-index: 2;
     font-size: 5vw !important;
     position: absolute;
-    top: 2vw;
-    left: 2vw;
+    top: 0.5vw;
+    left: 1vw;
     background: none !important;
-    opacity: 0.8;
   }
 </style>
