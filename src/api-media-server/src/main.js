@@ -214,21 +214,24 @@ class MediaFile {
  * @param {Object} object
  */
 function convertProptiesToCamelCase (object) {
-  for (const snakeCase in object) {
-    const camelCase = snakeToCamel(snakeCase)
-    if (camelCase !== snakeCase) {
-      const value = object[snakeCase]
-      object[camelCase] = value
-      delete object[snakeCase]
-    }
-    if (Array.isArray(object[camelCase])) {
-      for (const item of object[camelCase]) {
-        if (typeof object[camelCase] === 'object' ) {
-          convertProptiesToCamelCase(item)
-        }
+  // Array
+  if (Array.isArray(object)) {
+    for (const item of object) {
+      if (typeof object=== 'object' ) {
+        convertProptiesToCamelCase(item)
       }
-    } else if (typeof object[camelCase] === 'object') {
-      convertProptiesToCamelCase(object[camelCase])
+    }
+  // Object
+  } else if (typeof object === 'object') {
+    for (const snakeCase in object) {
+      const camelCase = snakeToCamel(snakeCase)
+      if (camelCase !== snakeCase) {
+        const value = object[snakeCase]
+        object[camelCase] = value
+        delete object[snakeCase]
+      }
+      // Object or array
+      if (typeof object[camelCase] === 'object') convertProptiesToCamelCase(object[camelCase])
     }
   }
   return object
