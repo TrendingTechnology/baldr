@@ -65,7 +65,7 @@ function gitHead () {
  * @see {@link https://catalin.me/javascript-snake-to-camel/}
  */
 function snakeToCamel (str) {
-  str.replace(
+  return str.replace(
     /([-_][a-z])/g,
     (group) => group.toUpperCase()
       .replace('-', '')
