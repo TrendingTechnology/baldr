@@ -55,9 +55,27 @@ function gitHead () {
   }
 }
 
+/**
+ * Convert `snake_case` or `kebab-case` strings into `camelCase` strings.
+ *
+ * @param {String} str - A snake or kebab cased string
+ *
+ * @returns {String}
+ *
+ * @see {@link https://catalin.me/javascript-snake-to-camel/}
+ */
+function snakeToCamel (str) {
+  str.replace(
+    /([-_][a-z])/g,
+    (group) => group.toUpperCase()
+      .replace('-', '')
+      .replace('_', '')
+  )
+}
 
 module.exports = {
-  log,
   bootstrapConfig,
-  gitHead
+  gitHead,
+  log,
+  snakeToCamel
 }

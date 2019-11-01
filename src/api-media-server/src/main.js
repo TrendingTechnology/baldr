@@ -54,7 +54,8 @@ const express = require('express')
 const MongoClient = require('mongodb').MongoClient
 
 // Project packages.
-const { bootstrapConfig } = require('@bldr/core-node')
+const { bootstrapConfig, snakeToCamel } = require('@bldr/core-node')
+
 const packageJson = require('../package.json')
 
 /**
@@ -114,6 +115,7 @@ class MediaFile {
     /**
      * Absolute path ot the file.
      * @type {string}
+     * @private
      */
     this.absPath_ = path.resolve(filePath)
     /**
@@ -157,6 +159,7 @@ class MediaFile {
     /**
      * The basename (filename without extension) of the file.
      * @type {string}
+     * @private
      */
     this.basename_ = path.basename(this.absPath_, `.${this.extension}`)
 
@@ -185,7 +188,7 @@ class MediaFile {
   }
 
   /**
-   *
+   * Add metadata from the file system, like file size or timeModifed.
    */
   addFileInfos () {
     return this.addFileInfos_()
@@ -248,7 +251,7 @@ class Asset extends MediaFile {
    */
   mergeObject (object) {
     for (const property in object) {
-      this[property] = object[property]
+      this[snakeToCamel(property)] = object[property]
     }
   }
 }
@@ -257,7 +260,7 @@ class Asset extends MediaFile {
  *
  */
 class Presentation extends MediaFile {
-  constructor(filePath) {
+  constructor (filePath) {
     super(filePath)
     const presentation = this.readYaml_(filePath)
     this.title = presentation.meta.title
@@ -341,7 +344,7 @@ async function walk (dir, on) {
  */
 async function update () {
   console.log('Run git pull')
-  const gitSettings =  {
+  const gitSettings = {
     cwd: basePath,
     encoding: 'utf-8'
   }
@@ -446,8 +449,8 @@ async function flushMediaFiles () {
 
 function registerRestApi () {
   // https://stackoverflow.com/a/38427476/10193818
-  function escapeRegex(text) {
-    return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&")
+  function escapeRegex (text) {
+    return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&')
   }
 
   const app = express()
@@ -513,7 +516,7 @@ function registerRestApi () {
       // substringSearch
       } else if (query.method === 'substringSearch') {
         // https://stackoverflow.com/a/38427476/10193818
-        const regex = new RegExp(escapeRegex(query.search), 'gi');
+        const regex = new RegExp(escapeRegex(query.search), 'gi')
         const findObject = {}
         findObject[query.field] = regex
         find = collection.aggregate([

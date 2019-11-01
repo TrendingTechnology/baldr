@@ -3,6 +3,8 @@
  * @module @bldr/core-browser
  */
 
+/* globals DOMParser */
+
 /**
  *
  * @param {Number} timeStampMsec
@@ -58,24 +60,8 @@ export function shortenText (text, options = {}) {
   if (stripTags) text = plainText(text)
   // https://stackoverflow.com/a/5454303
   // trim the string to the maximum length
-  text = text.substr(0, maxLength);
+  text = text.substr(0, maxLength)
   // re-trim if we are in the middle of a word
   text = text.substr(0, Math.min(text.length, text.lastIndexOf(' ')))
   return `${text} …`
-}
-
-/**
- * @param {String} str - A snake or kebab cased string
- *
- * @returns {String}
- *
- * @see {@link https://catalin.me/javascript-snake-to-camel/}
- */
-export function snakeToCamel (str) {
-  str.replace(
-    /([-_][a-z])/g,
-    (group) => group.toUpperCase()
-                    .replace('-', '')
-                    .replace('_', '')
-  )
 }
