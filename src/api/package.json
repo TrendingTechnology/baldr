@@ -1,6 +1,6 @@
 {
   "name": "@bldr/api",
-  "version": "0.1.15",
+  "version": "0.1.16",
   "description": "A REST API made with express.js. The sub apps are outsourced in different modules.",
   "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
   "bugs": {
@@ -24,9 +24,9 @@
     "access": "public"
   },
   "dependencies": {
-    "@bldr/api-media-server": "^0.1.15",
-    "@bldr/api-seating-plan": "^0.1.7",
-    "@bldr/core-node": "^0.1.1",
+    "@bldr/api-media-server": "^0.1.16",
+    "@bldr/api-seating-plan": "^0.1.8",
+    "@bldr/core-node": "^0.1.2",
     "commander": "^3.0.2",
     "cors": "^2.8.5",
     "express": "^4.17.1"
