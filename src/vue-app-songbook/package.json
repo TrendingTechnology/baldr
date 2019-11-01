@@ -1,6 +1,6 @@
 {
   "name": "@bldr/vue-app-songbook",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Vue app of the baldr songbook.",
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -11,7 +11,7 @@
     "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {
-    "@bldr/core-node": "^0.1.2",
+    "@bldr/core-node": "^0.1.3",
     "@bldr/songbook-core": "^0.1.8",
     "@bldr/themes": "^0.1.2",
     "@bldr/vue-plugin-components-collection": "^0.1.1",
