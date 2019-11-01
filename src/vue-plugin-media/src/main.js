@@ -11,6 +11,7 @@ import Vue from 'vue'
 import DynamicSelect from '@bldr/vue-plugin-dynamic-select'
 
 import ComponentMediaFile from './MediaFile.vue'
+import PlayButton from './PlayButton.vue'
 // documentation.js could not import without /index.vue
 import MediaOverview from './MediaOverview/index.vue'
 import MediaPlayer from './MediaPlayer.vue'
@@ -186,7 +187,6 @@ class Player {
     }
     if (!sample) throw new Error(`The sample “${uriOrSample}” couldn’t be played!`)
     this.$store.commit('media/sampleLoaded', sample)
-    console.debug(`Load sample “${sample.uri}”`)
   }
 
   /**
@@ -197,26 +197,29 @@ class Player {
     const sample = this.$store.getters['media/sampleLoaded']
     if (!sample) throw new Error('First load a sample')
     const samplePlaying = this.$store.getters['media/samplePlaying']
-    if (samplePlaying && sample.uri === samplePlaying.uri) {
-      return
-    }
-
+    // Start should always start from `sample.startTimeSec`
+    // if (samplePlaying && sample.uri === samplePlaying.uri) {
+    //   return
+    // }
     if (samplePlaying) await this.stop()
     this.$store.dispatch('media/samplePlaying', sample)
-    this.play()
+    this.play(sample.startTimeSec)
   }
 
   /**
    * Play a sample at the current position.
+   *
+   * @param {Number} startTimeSec - Position in the sample from where to play
+   *   the sample
    */
-  play () {
-    console.groupEnd()
-    console.group('Enter method play()')
+  play (startTimeSec) {
     const sample = this.$store.getters['media/samplePlaying']
     if (!sample || !sample.mediaElement) return
 
     let fadeInSec
-    if (sample.currentTimeSec) {
+    if (startTimeSec) {
+      sample.mediaElement.currentTime = startTimeSec
+    } else if (sample.currentTimeSec) {
       sample.mediaElement.currentTime = sample.currentTimeSec
     } else {
       sample.mediaElement.currentTime = sample.startTimeSec
@@ -226,7 +229,6 @@ class Player {
     // To prevent AbortError in Firefox, artefacts when switching through the
     // audio files.
     this.setTimeoutId = setTimeout(() => {
-      console.debug(`Play sample “${sample.uri}” (currentTime: ${sample.mediaElement.currentTime})`)
       this.fadeIn_(fadeInSec)
       sample.mediaElement.play()
 
@@ -249,7 +251,6 @@ class Player {
       if (!sample) {
         reject(new Error('No playing sample found.'))
       }
-      console.debug(`Begin fade in “${sample.uri}” (duration: ${duration})`)
       let actualVolume = 0
       sample.mediaElement.volume = 0
       // Normally 0.01 by volume = 1
@@ -262,7 +263,6 @@ class Player {
         if (actualVolume <= this.globalVolume) {
           sample.mediaElement.volume = actualVolume.toFixed(2)
         } else {
-          console.debug(`Fade in finished “${sample.uri}” (value: ${sample.mediaElement.volume})`)
           clearInterval(id)
           resolve()
         }
@@ -308,7 +308,6 @@ class Player {
       if (!sample) {
         reject(new Error('No playing sample found.'))
       }
-      console.debug(`Begin fade out “${sample.uri}” (duration: ${duration})`)
       // Number from 0 - 1
       let actualVolume = sample.mediaElement.volume
       // Normally 0.01 by volume = 1
@@ -322,7 +321,6 @@ class Player {
           sample.mediaElement.volume = actualVolume.toFixed(2)
         } else {
           sample.mediaElement.pause()
-          console.debug(`Pause “${sample.uri}”`)
           clearInterval(id)
           resolve()
         }
@@ -460,6 +458,7 @@ const getters = {
   },
   sampleByUri: (state, getters) => uri => {
     const samples = getters.samples
+    if (uri.indexOf('#') === -1) uri = `${uri}#complete`
     if (uri in samples) {
       return samples[uri]
     }
@@ -1255,12 +1254,15 @@ class Media {
       {
         keys: 'p f',
         callback: () => { this.player.stop(7) },
-        description: 'Media player: fade out'
+        // Media player: fade out
+        description: 'Audio/Video-Ausschnitt langsam ausblenden'
       },
       {
         keys: 'p s',
         callback: () => { this.player.start() },
-        description: 'Media player: Start loaded sample'
+
+        // Media player: Start loaded sample
+        description: 'Starte geladenen Audio/Video-Ausschnitt'
       }
     ])
 
@@ -1371,6 +1373,7 @@ const Plugin = {
      */
     Vue.prototype.$media = new Media(router, store, shortcuts)
     Vue.component('media-player', MediaPlayer)
+    Vue.component('play-button', PlayButton)
   }
 }
 

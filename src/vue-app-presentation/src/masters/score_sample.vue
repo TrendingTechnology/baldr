@@ -1,10 +1,6 @@
 <template>
   <div class="vc_score_sample_master">
-    <audio
-      v-if="mediaFileAudio"
-      :src="mediaFileAudio.httpUrl"
-      controls
-    />
+    <play-button v-if="sample" :sample="sample"/>
     <img :src="mediaFileScore.httpUrl"/>
   </div>
 </template>
@@ -37,6 +33,9 @@ export const master = {
     uris.push(props.score)
     if ('audio' in props) uris.push(props.audio)
     return uris
+  },
+  enterSlide ({ newProps }) {
+    if ('audio' in newProps) this.$media.player.load(newProps.audio)
   }
 }
 
@@ -48,17 +47,17 @@ export default {
     },
     audio: {
       type: String,
-      description: 'URI der entsprechenden Audio-Datei.'
+      description: 'URI der entsprechenden Audio-Datei oder des Samples.'
     }
   },
   computed: {
     ...mapPresentationGetters(['slideCurrent']),
-    ...mapMediaGetters(['mediaFileByUri']),
+    ...mapMediaGetters(['mediaFileByUri', 'sampleByUri']),
     mediaFileScore () {
       return this.mediaFileByUri(this.score)
     },
-    mediaFileAudio () {
-      if (this.audio) return this.mediaFileByUri(this.audio)
+    sample () {
+      if (this.audio) return this.sampleByUri(this.audio)
     }
   }
 }
@@ -74,7 +73,7 @@ export default {
       width: 100%;
     }
 
-    audio {
+    .vc_play_button {
       position: absolute;
       bottom: 1vw;
       left: 1vw;
