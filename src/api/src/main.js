@@ -12,6 +12,7 @@ const cors = require('cors')
 const express = require('express')
 const registerSeatingPlan = require('@bldr/api-seating-plan').registerRestApi
 const registerMediaServer = require('@bldr/api-media-server').registerRestApi
+const helpMessagesMediaServer = require('@bldr/api-media-server').helpMessages
 
 // Project packages.
 const packageJson = require('../package.json')
@@ -42,11 +43,24 @@ app.use(express.json())
 app.use('/seating-plan', registerSeatingPlan())
 app.use('/media', registerMediaServer())
 
-app.get(['/', '/version'], (req, res) => {
-  res.status(200).send({
+const helpMessages = {
+  version: {
     name: packageJson.name,
     version: packageJson.version
+  }
+}
+
+app.get('/', (req, res) => {
+  res.json({
+    version: helpMessages.version,
+    navigation: {
+      media: helpMessagesMediaServer.navigation
+    }
   })
+})
+
+app.get('/version', (req, res) => {
+  res.json(helpMessages.version)
 })
 
 const main = function () {

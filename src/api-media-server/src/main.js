@@ -32,7 +32,8 @@
  *      - `method`: `exactMatch`, `substringSearch` (default).
  *          - `exactMatch`: The query parameter `search` must be a perfect match
  *            to a top level database field to get a result.
- *          - `substringSearch`: The query parameter `search` must
+ *          - `substringSearch`: The query parameter `search` is only a
+ *            substring of the string to search in.
  *      - `field`: `id` (default), `title`, etc ... (where).
  *      - `search`: Some text to search for (search for).
  * - `stats`:
@@ -447,6 +448,45 @@ async function flushMediaFiles () {
 
 /* Express Rest API ***********************************************************/
 
+/**
+ * This object hold jsons for displaying help messages in the browser on
+ * some entry point urls.
+ *
+ * Update docs on the top of this file in the JSDoc block.
+ *
+ * @type {Object}
+ */
+const helpMessages = {
+  navigation: {
+    mgmt: {
+      flush: 'Delete all media files (assets, presentations) from the database.',
+      init: 'Initialize the MongoDB database.',
+      're-init': 'Re-Initialize the MongoDB database (Drop all collections and initialize).',
+      update: 'Update the media server database (Flush and insert).',
+    },
+    query: {
+      '#description': 'Get results by using query parameters',
+      '#examples': [
+        '?type=assets&field=id&method=exactMatch&search=Egmont-Ouverture',
+        '?type=presentations&field=id&method=exactMatch&search=Beethoven_Marmotte'
+      ],
+      '#parameters': {
+        type: '`assets` (default), `presentations` (what)',
+        method: '`exactMatch`, `substringSearch` (default).`exactMatch`: The query parameter `search` must be a perfect match to a top level database field to get a result. `substringSearch`: The query parameter `search` is only a substring of the string to search in.',
+        field: '`id` (default), `title`, etc ... (where).',
+        search: 'Some text to search for (search for).'
+      }
+    },
+    stats: {
+      count: 'Count / sum of the media files (assets, presentations) in the database.',
+      updates: 'Journal of the update processes with timestamps.'
+    }
+  }
+}
+
+/**
+ * Register the express js rest api in a giant function.
+ */
 function registerRestApi () {
   // https://stackoverflow.com/a/38427476/10193818
   function escapeRegex (text) {
@@ -461,15 +501,7 @@ function registerRestApi () {
   })
 
   app.get('/', (req, res) => {
-    res.json({
-      '/mgmt/flush': 'Delete all media files (assets, presentations) from the database.',
-      '/mgmt/init': 'Initialize the MongoDB database.',
-      '/mgmt/re-init': 'Re-Initialize the MongoDB database (Drop all collections and initialize).',
-      '/mgmt/update': 'Update the media server database (Flush and insert).',
-      '/query?type=assets&field=id&method=exatchMatch': 'Get results by using query parameters.',
-      '/stats/count': 'Count / sum of the media files (assets, presentations) in the database.',
-      '/stats/updates': 'Journal of the update processes with timestamps.'
-    })
+    res.json(helpMessages.navigation)
   })
 
   app.get('/version', (req, res) => {
@@ -484,6 +516,15 @@ function registerRestApi () {
   app.get('/query', async (req, res, next) => {
     try {
       const query = req.query
+      if (Object.keys(query).length === 0) {
+        res.status(500).send({
+          error: {
+            msg: 'Missing query parameters!',
+            navigationGuide: helpMessages.navigation.query
+          }
+        })
+        return
+      }
       // type
       const types = ['assets', 'presentations']
       if (!('type' in query)) query.type = 'assets'
@@ -604,7 +645,8 @@ function registerRestApi () {
 }
 
 module.exports = {
+  Asset,
+  helpMessages,
   registerRestApi,
-  walk,
-  Asset
+  walk
 }
