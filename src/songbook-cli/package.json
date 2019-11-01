@@ -15,7 +15,7 @@
   },
   "main": "src/main.js",
   "bin": {
-    "baldr-songbook-updater": "./src/main.js"
+    "baldr_songbook-updater.js": "./src/main.js"
   },
   "dependencies": {
     "@bldr/core-node": "^0.1.3",
