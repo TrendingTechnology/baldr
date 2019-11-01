@@ -209,6 +209,26 @@ class MediaFile {
 }
 
 /**
+ * Convert all properties in a object to camelCase in a recursive fashion.
+ *
+ * @param {Object} object
+ */
+function convertProptiesToCamelCase (object) {
+  for (const snakeCase in object) {
+    const camelCase = snakeToCamel(snakeCase)
+    if (camelCase !== snakeCase) {
+      const value = object[snakeCase]
+      object[camelCase] = value
+      delete object[snakeCase]
+    }
+    if (typeof object[camelCase] === 'object' && Array.isArray(object[camelCase])) {
+      convertProptiesToCamelCase(object[camelCase])
+    }
+  }
+  return object
+}
+
+/**
  * This class is used both for the entries in the MongoDB database as well for
  * the queries.
  */
@@ -246,13 +266,15 @@ class Asset extends MediaFile {
   }
 
   /**
-   * Merge an object into the class object.
+   * Merge an object into the class object. Property can be in the `snake_case`
+   * or `kebab-case` form. They are converted in to `camelCase` in recursive fashin.
    *
    * @param {object} properties - Add an object to the class properties.
    */
   mergeObject (object) {
+    convertProptiesToCamelCase(object)
     for (const property in object) {
-      this[snakeToCamel(property)] = object[property]
+      this[property] = object[property]
     }
   }
 }
