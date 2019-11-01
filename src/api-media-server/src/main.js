@@ -221,7 +221,13 @@ function convertProptiesToCamelCase (object) {
       object[camelCase] = value
       delete object[snakeCase]
     }
-    if (typeof object[camelCase] === 'object' && Array.isArray(object[camelCase])) {
+    if (Array.isArray(object[camelCase])) {
+      for (const item of object[camelCase]) {
+        if (typeof object[camelCase] === 'object' ) {
+          convertProptiesToCamelCase(item)
+        }
+      }
+    } else if (typeof object[camelCase] === 'object') {
       convertProptiesToCamelCase(object[camelCase])
     }
   }
@@ -324,6 +330,7 @@ function isPresentation (fileName) {
  */
 async function insertAsset (relPath) {
   const asset = new Asset(relPath).addFileInfos().cleanTmpProperties()
+  console.log(asset)
   await db.collection('assets').insertOne(asset)
 }
 
