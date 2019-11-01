@@ -206,12 +206,27 @@ class MediaFile {
     }
     return this
   }
+
+  /**
+   * Merge an object into the class object. Property can be in the `snake_case`
+   * or `kebab-case` form. They are converted in to `camelCase` in recursive fashin.
+   *
+   * @param {object} properties - Add an object to the class properties.
+   */
+  mergeObject (object) {
+    convertProptiesToCamelCase(object)
+    for (const property in object) {
+      this[property] = object[property]
+    }
+  }
 }
 
 /**
  * Convert all properties in a object to camelCase in a recursive fashion.
  *
  * @param {Object} object
+ *
+ * @returns {Object}
  */
 function convertProptiesToCamelCase (object) {
   // Array
@@ -273,30 +288,31 @@ class Asset extends MediaFile {
     }
     return this
   }
-
-  /**
-   * Merge an object into the class object. Property can be in the `snake_case`
-   * or `kebab-case` form. They are converted in to `camelCase` in recursive fashin.
-   *
-   * @param {object} properties - Add an object to the class properties.
-   */
-  mergeObject (object) {
-    convertProptiesToCamelCase(object)
-    for (const property in object) {
-      this[property] = object[property]
-    }
-  }
 }
 
 /**
- *
+ * The whole presentation YAML file converted to an Javascript object. All
+ * properties are in `camelCase`.
  */
 class Presentation extends MediaFile {
   constructor (filePath) {
     super(filePath)
-    const presentation = this.readYaml_(filePath)
-    this.title = presentation.meta.title
-    this.id = presentation.meta.id
+    const data = this.readYaml_(filePath)
+    this.mergeObject(data)
+
+    /**
+     * Value is the same as `meta.title`
+     *
+     * @type {String}
+     */
+    this.title = data.meta.title
+
+    /**
+     * Value is the same as `meta.id`
+     *
+     * @type {String}
+     */
+    this.id = data.meta.id
   }
 }
 
