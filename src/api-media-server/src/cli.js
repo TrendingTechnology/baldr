@@ -266,12 +266,18 @@ function selectMetaData (metaData) {
  *
  * @param {String} inputFile - Path of the input file.
  */
-async function convert(inputFile) {
+async function convertOneFile(inputFile) {
   const asset = makeAsset(inputFile)
   console.log(asset)
 
   const inputExtension = asset.extension.toLowerCase()
-  const mediaType = mediaTypes.extensionToType(inputExtension)
+  let mediaType
+  try {
+    mediaType = mediaTypes.extensionToType(inputExtension)
+  } catch (error) {
+    console.log(`Unsupported extension ${inputExtension}`)
+    return
+  }
   const outputExtension = mediaTypes.targetExtension[mediaType]
   const outputFile = `${inputFile}.${outputExtension}`
 
@@ -331,9 +337,16 @@ async function convert(inputFile) {
   }
 }
 
+function convert(inputFiles) {
+  for (const inputFile of inputFiles) {
+    console.log(inputFile)
+    convertOneFile(inputFile)
+  }
+}
+
 commander
-  .command('convert <input>').alias('c')
-  .description('Convert media files in the appropriate format.')
+  .command('convert [input...]').alias('c')
+  .description('Convert media files in the appropriate format. Multiple files, globbing works *.mp3')
   .action(convert)
 
 commander
