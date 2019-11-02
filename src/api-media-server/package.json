@@ -22,7 +22,8 @@
     "js-yaml": "^3.13.1",
     "mongodb": "^3.3.3",
     "music-metadata": "4.8.4",
-    "saslprep": "^1.0.3"
+    "saslprep": "^1.0.3",
+    "transliteration": "^2.1.7"
   },
   "bin": {
     "baldr_media-server-cli.js": "./src/cli.js"
