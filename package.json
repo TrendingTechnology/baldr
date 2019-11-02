@@ -38,27 +38,6 @@
   "publishConfig": {
     "access": "public"
   },
-  "build": {
-    "appId": "rocks.friedrich.baldr",
-    "mac": {
-      "category": "public.app-category.education",
-      "target": "dmg"
-    },
-    "linux": {
-      "target": [
-        "deb"
-      ]
-    },
-    "fileAssociations": [
-      {
-        "ext": "baldr",
-        "name": "BALDR Presentation Software",
-        "description": "File format of the BALDR Presentation Software",
-        "icon": "icon.icns",
-        "role": "Viewer"
-      }
-    ]
-  },
   "gitHead": "ed4f60e66c8f420711d3eb15185620f7688e6fc9",
   "standard": {
     "globals": [

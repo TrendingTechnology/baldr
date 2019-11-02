@@ -20,7 +20,7 @@
         "better-sqlite3": "^5.4.3",
         "chalk": "^2.4.2",
         "fs-extra": " ^8.1.0",
-        "glob": "^7.1.4",
+        "glob": "^7.1.5",
         "js-yaml": "^3.13.1"
     },
     "publishConfig": {
