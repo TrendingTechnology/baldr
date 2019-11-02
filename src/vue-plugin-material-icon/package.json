@@ -39,7 +39,7 @@
     "not ie <= 8"
   ],
   "bin": {
-    "baldr-build-icon-font": "./src/build-font.js"
+    "baldr_build-icon-font.js": "./src/build-font.js"
   },
   "publishConfig": {
     "access": "public"
