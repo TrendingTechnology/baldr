@@ -70,6 +70,109 @@ commander
   .version(require('../package.json').version)
 
 /**
+ * Categories some media file format in three media types: `audio`, `image`,
+ * `video`.
+ *
+ * TODO: Code which can imported by ES modules and node modules.
+ * The same code is in the module @bldr/api-media-server/src/cli.js and
+ * @bldr/vue-component-media/src/main.js
+ */
+class MediaTypes {
+  constructor () {
+    /**
+     * @type {object}
+     */
+    this.types = {
+      audio: ['mp3', 'm4a'],
+      image: ['jpg', 'jpeg', 'png', 'svg'],
+      video: ['mp4']
+    }
+
+    /**
+     * If a media file should be converted we can use this object to
+     * get the wanted target extensionl
+     *
+     * @type {object}
+     */
+    this.targetExtension = {
+      audio: 'm4a',
+      image: 'jpg',
+      video: 'mp4'
+    }
+
+    /**
+     * @type {object}
+     */
+    this.typeColors = {
+      audio: 'brown',
+      image: 'green',
+      video: 'purple'
+    }
+    /**
+     * @type {array}
+     * @private
+     */
+    this.extensions_ = this.spreadExtensions_()
+  }
+
+  /**
+   * @private
+   */
+  spreadExtensions_ () {
+    const out = {}
+    for (const type in this.types) {
+      for (const extension of this.types[type]) {
+        out[extension] = type
+      }
+    }
+    return out
+  }
+
+  /**
+   * Get the media type from the extension.
+   *
+   * @param {String} extension
+   *
+   * @returns {String}
+   */
+  extensionToType (extension) {
+    const ext = extension.toLowerCase()
+    if (ext in this.extensions_) {
+      return this.extensions_[ext]
+    }
+    throw new Error(`Unkown extension “${ext}”`)
+  }
+
+  /**
+   * Get the color of the media type.
+   *
+   * @param {String} type
+   *
+   * @returns {String}
+   */
+  typeToColor (type) {
+    return this.typeColors[type]
+  }
+
+  /**
+   * Check if file is an supported media format.
+   *
+   * @param {String} filename
+   *
+   * @returns {Boolean}
+   */
+  isMedia (filename) {
+    const extension = filename.split('.').pop().toLowerCase()
+    if (extension in this.extensions_) {
+      return true
+    }
+    return false
+  }
+}
+
+const mediaTypes = new MediaTypes()
+
+/**
  * Write the metadata YAML file.
  *
  * @param {String} inputFile
@@ -165,18 +268,22 @@ function selectMetaData (metaData) {
  */
 async function convert(inputFile) {
   const asset = makeAsset(inputFile)
-  const inputExtension = asset.extension.toLowerCase()
   console.log(asset)
+
+  const inputExtension = asset.extension.toLowerCase()
+  const mediaType = mediaTypes.extensionToType(inputExtension)
+  const outputExtension = mediaTypes.targetExtension[mediaType]
+  const outputFile = `${inputFile}.${outputExtension}`
+
   let convert
 
   // audio
-  if (['mp3', 'flac', 'm4a', 'wma', 'wav', 'aac'].includes(inputExtension)) {
+  if (mediaType === 'audio') {
     const metaData = await musicMetadata.parseFile(inputFile)
     if (metaData) {
       const result = selectMetaData(metaData)
       if (result) writeMetaDataYaml(inputFile, result)
     }
-    const output = `${inputFile}.m4a`
     convert = childProcess.spawn('ffmpeg', [
       '-i', inputFile,
       '-c:a', 'libfdk_aac',
@@ -184,11 +291,11 @@ async function convert(inputFile) {
       '-vn', // Disable video recording
       '-map_metadata', '-1', // remove metadata
       '-y', // Overwrite output files without asking
-      output
+      outputFile
     ])
 
   // image
-  } else if (['jpg', 'jpeg', 'pgn', 'gif'].includes(inputExtension)) {
+  } else if (mediaType === 'image') {
     const output = inputFile.replace(`.${asset.extension}`, '_preview.jpg')
     convert = childProcess.spawn('magick', [
       'convert',
@@ -199,14 +306,13 @@ async function convert(inputFile) {
     ])
 
   // videos
-  } else if (['mpg', 'mp4'].includes(inputExtension)) {
-    const output = `${inputFile}.mp4`
+  } else if (mediaType === 'video') {
     convert = childProcess.spawn('ffmpeg', [
       '-i', inputFile,
       '-vcodec', 'libx264',
       '-profile:v', 'baseline',
       '-y', // Overwrite output files without asking
-      output
+      outputFile
     ])
   }
 

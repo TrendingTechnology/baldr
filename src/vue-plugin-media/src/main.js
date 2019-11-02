@@ -569,7 +569,12 @@ const storeModule = {
 }
 
 /**
+ * Categories some media file format in three media types: `audio`, `image`,
+ * `video`.
  *
+ * TODO: Code which can imported by ES modules and node modules.
+ * The same code is in the module @bldr/api-media-server/src/cli.js and
+ * @bldr/vue-component-media/src/main.js
  */
 class MediaTypes {
   constructor () {
@@ -583,6 +588,18 @@ class MediaTypes {
     }
 
     /**
+     * If a media file should be converted we can use this object to
+     * get the wanted target extensionl
+     *
+     * @type {object}
+     */
+    this.targetExtension = {
+      audio: 'm4a',
+      image: 'jpg',
+      video: 'mp4'
+    }
+
+    /**
      * @type {object}
      */
     this.typeColors = {
@@ -592,6 +609,7 @@ class MediaTypes {
     }
     /**
      * @type {array}
+     * @private
      */
     this.extensions_ = this.spreadExtensions_()
   }
@@ -610,7 +628,11 @@ class MediaTypes {
   }
 
   /**
+   * Get the media type from the extension.
    *
+   * @param {String} extension
+   *
+   * @returns {String}
    */
   extensionToType (extension) {
     const ext = extension.toLowerCase()
@@ -621,14 +643,22 @@ class MediaTypes {
   }
 
   /**
+   * Get the color of the media type.
    *
+   * @param {String} type
+   *
+   * @returns {String}
    */
   typeToColor (type) {
     return this.typeColors[type]
   }
 
   /**
+   * Check if file is an supported media format.
    *
+   * @param {String} filename
+   *
+   * @returns {Boolean}
    */
   isMedia (filename) {
     const extension = filename.split('.').pop().toLowerCase()
