@@ -10,6 +10,7 @@ const commander = require('commander')
 const chalk = require('chalk')
 const yaml = require('js-yaml')
 const musicMetadata = require('music-metadata')
+const { transliterate } = require('transliteration')
 
 // Project packages
 const { Asset, walk } = require('./main.js')
@@ -173,13 +174,74 @@ class MediaTypes {
 const mediaTypes = new MediaTypes()
 
 /**
+ *
+ * @param {String} input
+ */
+function asciify (input) {
+  let output = input
+    .replace(/[\(\)]/g, '')
+    .replace(/[,.] /g, '_')
+    .replace(/ +- +/g, '_')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/-*_-*/g, '_')
+    .replace(/Ä/g, 'Ae')
+    .replace(/ä/g, 'ae')
+    .replace(/Ö/g, 'Oe')
+    .replace(/ö/g, 'oe')
+    .replace(/Ü/g, 'Ue')
+    .replace(/ü/g, 'ue')
+    .replace(/ß/g, 'ss')
+  return transliterate(output)
+}
+
+/**
+ * @param {String} input
+ */
+function deasciify (input) {
+  return input
+    .replace(/_/g, ', ')
+    .replace(/-/g, ' ')
+    .replace(/Ae/g, 'Ä')
+    .replace(/ae/g, 'ä')
+    .replace(/Oe/g, 'Ö')
+    .replace(/oe/g, 'ö')
+    .replace(/Ue/g, 'Ü')
+    .replace(/ue/g, 'ü')
+}
+
+/**
  * Write the metadata YAML file.
  *
  * @param {String} inputFile
  * @param {Object} metaData
  */
-function writeMetaDataYaml (inputFile, metaData) {
-  fs.writeFileSync(`${inputFile}.yml`, '---\n' + yaml.safeDump(metaData) + '\n')
+function writeMetaDataYaml (filePath, metaData) {
+  const yamlFile = `${asciify(filePath)}.yml`
+  if (!fs.lstatSync(filePath).isDirectory() && !fs.existsSync(yamlFile)) {
+    if (!metaData) metaData = {}
+    const asset = new Asset(filePath).addFileInfos()
+
+    if (!metaData.title) {
+      metaData.title = deasciify(asset.basename_)
+    }
+
+    if (!metaData.id) {
+      metaData.id = asciify(asset.basename_)
+    }
+
+    const yamlMarkup = [
+      '---',
+      `# path: ${asset.path}`,
+      `# filename: ${asset.filename}`,
+      `# extension: ${asset.extension}`,
+      yaml.safeDump(metaData)
+    ]
+
+    const result = yamlMarkup.join('\n')
+    console.log(result)
+    fs.writeFileSync(yamlFile, result)
+  }
 }
 
 /**
@@ -237,11 +299,13 @@ function writeMetaDataYaml (inputFile, metaData) {
  * }
  * ```
  *
- * @param {object} metaData
+ * @param {String} inputFile
  *
  * @returns {object}
  */
-function selectMetaData (metaData) {
+async function collectMusicMetaData (inputFile) {
+  const metaData = await musicMetadata.parseFile(inputFile)
+
   if ('common' in metaData) {
     const output = {}
     const common = metaData.common
@@ -279,16 +343,15 @@ async function convertOneFile(inputFile) {
     return
   }
   const outputExtension = mediaTypes.targetExtension[mediaType]
-  const outputFile = `${inputFile}.${outputExtension}`
+  const outputFile = `${asciify(inputFile)}.${outputExtension}`
 
   let convert
 
   // audio
   if (mediaType === 'audio') {
-    const metaData = await musicMetadata.parseFile(inputFile)
+    const metaData = await collectMusicMetaData(inputFile)
     if (metaData) {
-      const result = selectMetaData(metaData)
-      if (result) writeMetaDataYaml(inputFile, result)
+      writeMetaDataYaml(inputFile, metaData)
     }
     convert = childProcess.spawn('ffmpeg', [
       '-i', inputFile,
@@ -337,10 +400,41 @@ async function convertOneFile(inputFile) {
   }
 }
 
+/**
+ * @param {Array} inputFiles - An array of input files to convert.
+ */
 function convert(inputFiles) {
   for (const inputFile of inputFiles) {
-    console.log(inputFile)
     convertOneFile(inputFile)
+  }
+}
+
+/**
+ * @param {String} oldPath
+ *
+ * @returns {String}
+ */
+function rename (oldPath) {
+  console.log(`old: ${oldPath}`)
+    newPath = asciify(oldPath)
+    if (oldPath !== newPath) {
+    console.log(`new: ${newPath}`)
+    fs.renameSync(oldPath, newPath)
+    return newPath
+  }
+}
+
+/**
+ * @param {String} filePath
+ */
+function validateYaml (filePath) {
+  console.log(`Validate: ${chalk.yellow(filePath)}`)
+  try {
+    const result = yaml.safeLoad(fs.readFileSync(filePath, 'utf8'))
+    console.log(chalk.green('ok!'))
+    console.log(result)
+  } catch (error) {
+    console.log(`${chalk.red(error.name)}: ${error.message}`)
   }
 }
 
@@ -361,27 +455,6 @@ commander
   .command('rename').alias('r')
   .description('Rename files, clean file names, remove all whitespaces and special characters.')
   .action(() => {
-    function rename (oldPath) {
-      console.log(`old: ${oldPath}`)
-      const newPath = oldPath
-        .replace(/[\(\)]/g, '')
-        .replace(/[,.] /g, '_')
-        .replace(/ +- +/g, '_')
-        .replace(/\s+/g, '-')
-        .replace(/-+/g, '-')
-        .replace(/-*_-*/g, '_')
-        .replace(/Ä/g, 'Ae')
-        .replace(/ä/g, 'ae')
-        .replace(/Ö/g, 'Oe')
-        .replace(/ö/g, 'oe')
-        .replace(/Ü/g, 'Ue')
-        .replace(/ü/g, 'ue')
-        .replace(/ß/g, 'ss')
-      if (oldPath !== newPath) {
-        console.log(`new: ${newPath}`)
-        fs.renameSync(oldPath, newPath)
-      }
-    }
     walk(process.cwd(), {
       all (oldPath) {
         rename(oldPath)
@@ -393,28 +466,9 @@ commander
   .command('yaml').alias('y')
   .description('Create info files in the YAML format in the current working directory.')
   .action(() => {
-    function createYml (filePath) {
-      const yamlFile = `${filePath}.yml`
-      if (!fs.lstatSync(filePath).isDirectory() && !fs.existsSync(yamlFile)) {
-        const asset = new Asset(filePath).addFileInfos()
-        const title = asset.basename_
-          .replace(/_/g, ', ')
-          .replace(/-/g, ' ')
-          .replace(/Ae/g, 'Ä')
-          .replace(/ae/g, 'ä')
-          .replace(/Oe/g, 'Ö')
-          .replace(/oe/g, 'ö')
-          .replace(/Ue/g, 'Ü')
-          .replace(/ue/g, 'ü')
-        const yamlMarkup = `---\n# path: ${asset.path}\n# filename: ${asset.filename}\n# extension: ${asset.extension}\ntitle: ${title}\nid: ${asset.basename_}\n`
-        console.log(yamlMarkup)
-        fs.writeFileSync(yamlFile, yamlMarkup)
-      }
-    }
-
     walk(process.cwd(), {
       asset (relPath) {
-        createYml(relPath)
+        writeMetaDataYaml(relPath)
       }
     })
   })
@@ -423,17 +477,6 @@ commander
   .command('yaml-validate [input]').alias('yv')
   .description('Validate the yaml files.')
   .action((filePath) => {
-    function validateYaml (filePath) {
-      console.log(`Validate: ${chalk.yellow(filePath)}`)
-      try {
-        const result = yaml.safeLoad(fs.readFileSync(filePath, 'utf8'))
-        console.log(chalk.green('ok!'))
-        console.log(result)
-      } catch (error) {
-        console.log(`${chalk.red(error.name)}: ${error.message}`)
-      }
-    }
-
     if (filePath) {
       validateYaml(filePath)
     } else {
@@ -447,7 +490,7 @@ commander
     }
   })
 
-  commander
+commander
   .command('presentation-template').alias('p')
   .description('Create a presentation template named “Presentation.baldr.yml”.')
   .action(() => {
