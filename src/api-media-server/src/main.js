@@ -232,7 +232,7 @@ function convertProptiesToCamelCase (object) {
   // Array
   if (Array.isArray(object)) {
     for (const item of object) {
-      if (typeof object=== 'object' ) {
+      if (typeof object === 'object') {
         convertProptiesToCamelCase(item)
       }
     }
@@ -510,7 +510,7 @@ const helpMessages = {
       flush: 'Delete all media files (assets, presentations) from the database.',
       init: 'Initialize the MongoDB database.',
       're-init': 'Re-Initialize the MongoDB database (Drop all collections and initialize).',
-      update: 'Update the media server database (Flush and insert).',
+      update: 'Update the media server database (Flush and insert).'
     },
     query: {
       '#description': 'Get results by using query parameters',

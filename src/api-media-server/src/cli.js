@@ -330,7 +330,7 @@ async function collectMusicMetaData (inputFile) {
  *
  * @param {String} inputFile - Path of the input file.
  */
-async function convertOneFile(inputFile) {
+async function convertOneFile (inputFile) {
   const asset = makeAsset(inputFile)
   console.log(asset)
 
@@ -395,7 +395,7 @@ async function convertOneFile(inputFile) {
     })
 
     convert.on('close', (code) => {
-      console.log(`child process exited with code ${code}`);
+      console.log(`child process exited with code ${code}`)
     })
   }
 }
@@ -403,7 +403,7 @@ async function convertOneFile(inputFile) {
 /**
  * @param {Array} inputFiles - An array of input files to convert.
  */
-function convert(inputFiles) {
+function convert (inputFiles) {
   for (const inputFile of inputFiles) {
     convertOneFile(inputFile)
   }
@@ -416,8 +416,8 @@ function convert(inputFiles) {
  */
 function rename (oldPath) {
   console.log(`old: ${oldPath}`)
-    newPath = asciify(oldPath)
-    if (oldPath !== newPath) {
+  const   newPath = asciify(oldPath)
+  if (oldPath !== newPath) {
     console.log(`new: ${newPath}`)
     fs.renameSync(oldPath, newPath)
     return newPath
