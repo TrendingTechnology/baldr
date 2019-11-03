@@ -64,6 +64,13 @@ export default {
     },
     hideDragzone (event) {
       this.$refs.dropzone.style.display = 'none'
+    },
+    toggleSlidesOverview () {
+      if (this.$route.name === 'slides') {
+        this.$router.push({ name: 'slides-overview' })
+      } else if (this.$route.name === 'slides-overview') {
+        this.$router.push({ name: 'slides' })
+      }
     }
   },
   mounted: function () {
@@ -80,56 +87,70 @@ export default {
     this.$shortcuts.addMultiple([
       {
         keys: 'left',
-        callback: () => { this.setSlidePrevious() },
-        description: 'Previous slide'
+        callback: this.setSlidePrevious,
+        // Previous slide
+        description: 'zur vorhergehenden Folie'
       },
       {
         keys: 'right',
-        callback: () => { this.setSlideNext() },
-        description: 'Next slide'
+        callback: this.setSlideNext,
+        // Next slide
+        description: 'zur nächsten Folie'
       },
       {
         keys: 'up',
-        callback: () => { this.setStepPrevious() },
-        description: 'Previous stop'
+        callback: this.setStepPrevious,
+        // Previous step
+        description: 'zur vorhergehenden Unterfolie'
       },
       {
         keys: 'down',
-        callback: () => { this.setStepNext() },
-        description: 'Next step'
+        callback: this.setStepNext,
+        // Next step
+        description: 'zur nächsten Unterfolie'
       },
       {
         keys: 'ctrl+m',
         callback: () => { this.$modal.toggle('menu') },
-        description: 'Main menu'
+        // Main menu
+        description: 'Menü anzeigen'
       },
       {
         keys: 'ctrl+r',
         callback: () => {
-          console.log('reload')
           this.$store.dispatch('presentation/reloadPresentation')
         },
-        description: 'Reload presentation'
+        // Reload presentation
+        description: 'Präsentation neu laden'
       },
       {
         keys: 'ctrl+alt+d',
         callback: () => { this.$styleConfig.configObjects.darkMode.toggle() },
+        // Dark mode
         description: 'Dark mode'
       },
       {
         keys: 'ctrl+alt+v',
         callback: () => { this.$styleConfig.configObjects.centerVertically.toggle() },
-        description: 'center vertically'
+        // center vertically
+        description: 'Vertikal zentrieren'
       },
       {
         keys: 'ctrl+alt+s',
         callback: () => { this.$styleConfig.setDefaults() },
-        description: 'set style config defaults'
+        // set style config defaults'
+        description: 'Standard-Darstellung'
       },
       {
         keys: 'ctrl+f',
-        callback: () => { this.$fullscreen() },
-        description: 'Fullscreen'
+        callback: this.$fullscreen,
+        // Fullscreen
+        description: 'Vollbild'
+      },
+      {
+        keys: 'return',
+        callback: this.toggleSlidesOverview,
+        description: 'Zwischen Folien und Folien-Überblick hin- und herschalten.'
       }
     ])
     this.$router.afterEach((to, from) => {
