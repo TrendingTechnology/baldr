@@ -343,16 +343,12 @@ async function convertOneFile (inputFile) {
     return
   }
   const outputExtension = mediaTypes.targetExtension[mediaType]
-  const outputFile = `${asciify(inputFile)}.${outputExtension}`
+  const outputFile = `${asciify(asset.basename_)}.${outputExtension}`
 
   let convert
 
   // audio
   if (mediaType === 'audio') {
-    const metaData = await collectMusicMetaData(inputFile)
-    if (metaData) {
-      writeMetaDataYaml(inputFile, metaData)
-    }
     convert = childProcess.spawn('ffmpeg', [
       '-i', inputFile,
       '-c:a', 'libfdk_aac',
@@ -394,8 +390,14 @@ async function convertOneFile (inputFile) {
       console.log(chalk.red(data))
     })
 
-    convert.on('close', (code) => {
+    convert.on('close', async (code) => {
       console.log(`child process exited with code ${code}`)
+      if (mediaType === 'audio') {
+        const metaData = await collectMusicMetaData(inputFile)
+        if (metaData) {
+          writeMetaDataYaml(outputFile, metaData)
+        }
+      }
     })
   }
 }
@@ -404,8 +406,16 @@ async function convertOneFile (inputFile) {
  * @param {Array} inputFiles - An array of input files to convert.
  */
 function convert (inputFiles) {
-  for (const inputFile of inputFiles) {
-    convertOneFile(inputFile)
+  if (Object.keys(inputFiles.length === 0)) {
+    walk(process.cwd(), {
+      all (inputFile) {
+        convertOneFile(inputFile)
+      }
+    })
+  } else {
+    for (const inputFile of inputFiles) {
+      convertOneFile(inputFile)
+    }
   }
 }
 
@@ -414,7 +424,7 @@ function convert (inputFiles) {
  *
  * @returns {String}
  */
-function rename (oldPath) {
+function renameOneFile (oldPath) {
   console.log(`old: ${oldPath}`)
   const   newPath = asciify(oldPath)
   if (oldPath !== newPath) {
@@ -424,10 +434,18 @@ function rename (oldPath) {
   }
 }
 
+function rename () {
+  walk(process.cwd(), {
+    all (oldPath) {
+      renameOneFile(oldPath)
+    }
+  })
+}
+
 /**
  * @param {String} filePath
  */
-function validateYaml (filePath) {
+function validateYamlOneFile (filePath) {
   console.log(`Validate: ${chalk.yellow(filePath)}`)
   try {
     const result = yaml.safeLoad(fs.readFileSync(filePath, 'utf8'))
@@ -438,6 +456,40 @@ function validateYaml (filePath) {
   }
 }
 
+function validateYaml (filePath) {
+  if (filePath) {
+    validateYamlOneFile(filePath)
+  } else {
+    walk(process.cwd(), {
+      everyFile (relPath) {
+        if (relPath.toLowerCase().indexOf('.yml') > -1) {
+          validateYamlOneFile(relPath)
+        }
+      }
+    })
+  }
+}
+
+function createMetaDataYaml() {
+  walk(process.cwd(), {
+    asset (relPath) {
+      writeMetaDataYaml(relPath)
+    }
+  })
+}
+
+function createPresentationTemplate () {
+  const filePath = path.join(process.cwd(), 'Presentation.baldr.yml')
+  if (!fs.existsSync(filePath)) {
+    fs.writeFileSync(filePath, templateBaldrYml)
+  }
+}
+
+function openBasePath () {
+  const process = childProcess.spawn('xdg-open', [config.mediaServer.basePath], { detached: true })
+  process.unref()
+}
+
 commander
   .command('convert [input...]').alias('c')
   .description('Convert media files in the appropriate format. Multiple files, globbing works *.mp3')
@@ -446,59 +498,27 @@ commander
 commander
   .command('open').alias('o')
   .description('Open the base directory in a file browser.')
-  .action(() => {
-    const process = childProcess.spawn('xdg-open', [config.mediaServer.basePath], { detached: true })
-    process.unref()
-  })
+  .action(openBasePath)
 
 commander
   .command('rename').alias('r')
   .description('Rename files, clean file names, remove all whitespaces and special characters.')
-  .action(() => {
-    walk(process.cwd(), {
-      all (oldPath) {
-        rename(oldPath)
-      }
-    })
-  })
+  .action(rename)
 
 commander
   .command('yaml').alias('y')
   .description('Create info files in the YAML format in the current working directory.')
-  .action(() => {
-    walk(process.cwd(), {
-      asset (relPath) {
-        writeMetaDataYaml(relPath)
-      }
-    })
-  })
+  .action(createMetaDataYaml)
 
 commander
   .command('yaml-validate [input]').alias('yv')
   .description('Validate the yaml files.')
-  .action((filePath) => {
-    if (filePath) {
-      validateYaml(filePath)
-    } else {
-      walk(process.cwd(), {
-        everyFile (relPath) {
-          if (relPath.toLowerCase().indexOf('.yml') > -1) {
-            validateYaml(relPath)
-          }
-        }
-      })
-    }
-  })
+  .action(validateYaml)
 
 commander
   .command('presentation-template').alias('p')
   .description('Create a presentation template named “Presentation.baldr.yml”.')
-  .action(() => {
-    const filePath = path.join(process.cwd(), 'Presentation.baldr.yml')
-    if (!fs.existsSync(filePath)) {
-      fs.writeFileSync(filePath, templateBaldrYml)
-    }
-  })
+  .action(createPresentationTemplate)
 
 commander.parse(process.argv)
 
