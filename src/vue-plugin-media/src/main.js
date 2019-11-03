@@ -774,13 +774,25 @@ class Sample {
 
     /**
      * The current volume gets stored when the sample is paused.
+     *
+     * @type {Number}
      */
     this.currentVolume = null
 
     /**
      * The current time gets stored when the sample is paused.
+     *
+     * @type {Number}
      */
     this.currentTimeSec = null
+
+    /**
+     * The shortcut number. 1 means: To play the sample type in “a 1” if it
+     * is a audio file or “v 1” if it is a video file.
+     *
+     * @type {Number}
+     */
+    this.shortcutNo
   }
 
   /**
@@ -801,6 +813,19 @@ class Sample {
         fadeOutSec = this.fadeOutSec
       }
       return (this.durationSec - fadeOutSec) * 1000
+    }
+  }
+
+  /**
+   * If the sample is the complete media file get the title of the media file.
+   *
+   * @returns {String}
+   */
+  get titleFormated () {
+    if (this.id === 'complete') {
+      return this.mediaFile.titleSafe
+    } else {
+      return `${this.title} (${this.mediaFile.titleSafe})`
     }
   }
 }
@@ -1355,43 +1380,56 @@ class Media {
         }
       }
       this.$store.dispatch('media/addMediaFile', mediaFile)
-      this.addShortcutForMediaFile_(mediaFile)
       output[mediaFile.uri] = mediaFile
     }
+    this.addShortcutForSamples_()
     return output
   }
 
   /**
+   * Add shortcut for each sample. Audio samples are triggered by “a number” and
+   * video files are trigger by “v number”.
+   *
    * @private
    */
-  addShortcutForMediaFile_ (mediaFile) {
-    if (mediaFile.shortcut) return
-    if (!mediaFile.isPlayable) return
-    const number = this.$store.getters['media/typeCount'](mediaFile.type)
-    let key
-    switch (mediaFile.type) {
-      case 'audio':
-        key = 'a'
-        break
+  addShortcutForSamples_ () {
+    // We have to loop through all samples to get the latest shortcut number.
+    const samples = this.$store.getters['media/samples']
 
-      case 'video':
-        key = 'v'
-        break
-
-      default:
-        key = 'm'
-        break
+    let firstTriggerKeyByType = (type) => {
+      if (type === 'audio') {
+        return 'a'
+      } else if (type === 'video') {
+        return 'v'
+      }
     }
-    const shortcut = `${key} ${number}`
-    this.$shortcuts.add(
-      shortcut,
-      () => {
-        this.player.load(mediaFile.uri)
-        this.player.start()
-      },
-      `Play ${mediaFile.titleSafe}`
-    )
-    mediaFile.shortcut = shortcut
+
+    let addShortcutsByType = (samples, type) => {
+      let lastShortcutNo = 0
+      for (const sampleUri in samples) {
+        const sample = samples[sampleUri]
+        if (sample.mediaFile.type === type) {
+          if (sample.shortcutNo) {
+            lastShortcutNo = sample.shortcutNo
+          } else {
+            lastShortcutNo += 1
+            sample.shortcutNo = lastShortcutNo
+            const shortcut = `${firstTriggerKeyByType(sample.mediaFile.type)} ${sample.shortcutNo}`
+            this.$shortcuts.add(
+              shortcut,
+              () => {
+                this.player.load(sample.uri)
+                this.player.start()
+              },
+              // Play
+              `Spiele Ausschnitt „${sample.titleFormated}“`
+            )
+          }
+        }
+      }
+    }
+    addShortcutsByType(samples, 'audio')
+    addShortcutsByType(samples, 'video')
   }
 }
 
