@@ -89,25 +89,29 @@ export default {
         keys: 'left',
         callback: this.setSlidePrevious,
         // Previous slide
-        description: 'zur vorhergehenden Folie'
+        description: 'zur vorhergehenden Folie',
+        routeNames: ['slides']
       },
       {
         keys: 'right',
         callback: this.setSlideNext,
         // Next slide
-        description: 'zur nächsten Folie'
+        description: 'zur nächsten Folie',
+        routeNames: ['slides']
       },
       {
         keys: 'up',
         callback: this.setStepPrevious,
         // Previous step
-        description: 'zur vorhergehenden Unterfolie'
+        description: 'zur vorhergehenden Unterfolie',
+        routeNames: ['slides']
       },
       {
         keys: 'down',
         callback: this.setStepNext,
         // Next step
-        description: 'zur nächsten Unterfolie'
+        description: 'zur nächsten Unterfolie',
+        routeNames: ['slides']
       },
       {
         keys: 'ctrl+m',
@@ -150,7 +154,8 @@ export default {
       {
         keys: 'return',
         callback: this.toggleSlidesOverview,
-        description: 'Zwischen Folien und Folien-Überblick hin- und herschalten.'
+        description: 'Zwischen Folien und Folien-Überblick hin- und herschalten.',
+        routeNames: ['slides', 'slides-overview']
       }
     ])
     this.$router.afterEach((to, from) => {

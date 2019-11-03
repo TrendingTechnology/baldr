@@ -1,11 +1,25 @@
 /**
- * Wrapper functions around mousetrap
+ * Wrapper functions around {@link https://craig.is/killing/mice mousetrap}.
+ *
+ * A instance of the class {@link module:@bldr/vue-plugin-shortcuts~Shortcuts Shortcuts} is mounted
+ *   under `this.$shortcuts` in the Vue apps.
  * @module @bldr/vue-plugin-shortcuts
  */
 
 import Mousetrap from 'mousetrap'
 import Vue from 'vue'
 import ShortcutsOverview from './ShortcutsOverview.vue'
+
+/**
+ * @typedef {Object} shortcutSpec
+ * @property {String} shortcutSpec.keys - Mousetrap key specification, see the
+ *   {@link https://craig.is/killing/mice documentation}.
+ * @property {Function} shortcutSpec.callback - A callback function.
+ * @property {String} shortcutSpec.description - Some text to describe the
+ *   shortcut.
+ * @property {Array} shortcutSpec.routeNames - A list of route names.
+ *   Activate this shortcut only on this routes.
+ */
 
 // https://github.com/ccampbell/mousetrap/blob/master/plugins/pause/mousetrap-pause.js
 
@@ -61,11 +75,22 @@ const storeModule = {
 }
 
 /**
- *
+ * This class is mounted under `this.$shortcuts`
  */
 class Shortcuts {
   constructor (router, store) {
+    /**
+     * A {@link https://router.vuejs.org/ vue router instance.}
+     *
+     * @type {Object}
+     */
     this.$router = router
+
+    /**
+     * A {@link https://vuex.vuejs.org/ vuex store instance.}
+     *
+     * @type {Object}
+     */
     this.$store = store
 
     if (this.$router) {
@@ -82,9 +107,26 @@ class Shortcuts {
     }
   }
 
-  add (keys, callback, description) {
+  /**
+   * Add a shortcut.
+   *
+   * @param {String} keys - Mousetrap key specification, see the
+   *   {@link https://craig.is/killing/mice documentation}.
+   * @param {Function} callback - A callback function.
+   * @param {String} description - Some text to describe the shortcut.
+   * @param {Array} routeNames - A list of route names. Activate this
+   *   shortcut only on this routes.
+   */
+  add (keys, callback, description, routeNames) {
     const prevent = () => {
-      callback()
+      if (routeNames) {
+        if (routeNames.includes(this.$router.currentRoute.name)) {
+          callback()
+        }
+      } else {
+        callback()
+      }
+
       // Prevent default
       // As a convenience you can also return false in your callback:
       return false
@@ -94,24 +136,43 @@ class Shortcuts {
   }
 
   /**
-   * @param {array} shortcuts
+   * A multiple shortcuts
+   *
+   * @param {array} shortcutSpecs - An array of
+   *   {@link module:@bldr/vue-plugin-shortcuts~shortcutSpec shortcutSpec s}.
    */
-  addMultiple (shortcuts) {
-    for (const shortcut of shortcuts) {
-      this.add(shortcut.keys, shortcut.callback, shortcut.description)
+  addMultiple (shortcutSpecs) {
+    for (const shortcut of shortcutSpecs) {
+      this.add(
+        shortcut.keys,
+        shortcut.callback,
+        shortcut.description,
+        shortcut.routeNames
+      )
     }
   }
 
+  /**
+   *
+   * @param {Object} keys
+   */
   remove (keys) {
     Mousetrap.unbind(keys)
     if (this.$store) this.$store.commit('shortcuts/remove', keys)
   }
 
+  /**
+   *
+   * @param {Object} route
+   */
   addRoute (route) {
     this.$router.addRoutes([route])
     this.$router.options.routes.push(route)
   }
 
+  /**
+   * @param {Object} route
+   */
   fromRoute (route) {
     if ('meta' in route && 'shortcut' in route.meta) {
       let routeTitle
@@ -151,10 +212,16 @@ class Shortcuts {
     }
   }
 
+  /**
+   *
+   */
   pause () {
     Mousetrap.pause()
   }
 
+  /**
+   *
+   */
   unpause () {
     Mousetrap.unpause()
   }

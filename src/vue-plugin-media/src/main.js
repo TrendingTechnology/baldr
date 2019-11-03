@@ -1251,7 +1251,19 @@ class Media {
    * @param {object} shortcuts
    */
   constructor (router, store, shortcuts) {
+
+    /**
+     * A {@link https://router.vuejs.org/ vue router instance.}
+     *
+     * @type {Object}
+     */
     this.$router = router
+
+    /**
+     * A {@link https://vuex.vuejs.org/ vuex store instance.}
+     *
+     * @type {Object}
+     */
     this.$store = store
     this.$shortcuts = shortcuts
 
