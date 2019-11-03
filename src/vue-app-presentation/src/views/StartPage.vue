@@ -79,19 +79,15 @@ export default {
 
     .top-icon {
       width: 100%;
-      position: absolute;
-      top: 5vw;
       left: 0vw;
+      position: absolute;
       text-align: center;
+      top: 5vw;
 
       .logo {
         font-size: 10vw;
         font-family: $font-family-sans-small-caps;
         color: $red;
-      }
-
-      .subtitle {
-        transform: translate(1vw);
       }
     }
   }
