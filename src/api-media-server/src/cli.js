@@ -391,7 +391,6 @@ async function convertOneFile (inputFile) {
     })
 
     convert.on('close', async (code) => {
-      console.log(`child process exited with code ${code}`)
       if (mediaType === 'audio') {
         const metaData = await collectMusicMetaData(inputFile)
         if (metaData) {
@@ -406,7 +405,7 @@ async function convertOneFile (inputFile) {
  * @param {Array} inputFiles - An array of input files to convert.
  */
 function convert (inputFiles) {
-  if (Object.keys(inputFiles.length === 0)) {
+  if (inputFiles.length === 0) {
     walk(process.cwd(), {
       all (inputFile) {
         convertOneFile(inputFile)

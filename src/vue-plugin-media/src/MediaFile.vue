@@ -1,31 +1,50 @@
 <template>
   <div class="vc_media_file" b-ui-theme="default">
-    <table class="key-value-table">
-      <thead>
-        <tr>
-          <th class="key">key</th>
-          <th>value</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          v-for="key in mediaFile.propertiesSorted"
-          :key="key"
-        >
-          <th class="key" v-if="typeof mediaFile[key] !== 'object'">{{ key }}</th>
-          <td class="value" v-if="typeof mediaFile[key] !== 'object'">{{ mediaFile[key] }}</td>
+    <section class="table-and-preview">
 
-        </tr>
-      </tbody>
-    </table>
-    <div ref="mediaElementContainer" class="media-file-element">
-      <img v-if="mediaFile.previewImage" :src="mediaFile.previewHttpUrl"/>
-      <ol class="samples" >
-        <li v-for="sample in mediaFile.samples" :key="sample.uri">
-          <play-button :sample="sample"/> {{ sample.title }} [#{{ sample.id }}]
+      <table class="key-value-table">
+        <thead>
+          <tr>
+            <th class="key">key</th>
+            <th>value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            v-for="key in mediaFile.propertiesSorted"
+            :key="key"
+          >
+            <th class="key" v-if="typeof mediaFile[key] !== 'object'">{{ key }}</th>
+            <td class="value" v-if="typeof mediaFile[key] !== 'object'">{{ mediaFile[key] }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div ref="mediaElementContainer" class="media-file-element">
+        <img v-if="mediaFile.previewImage" :src="mediaFile.previewHttpUrl"/>
+        <ol class="samples" >
+          <li v-for="sample in mediaFile.samples" :key="sample.uri">
+            <play-button :sample="sample"/> {{ sample.title }} [#{{ sample.id }}]
+          </li>
+        </ol>
+      </div>
+
+    </section>
+
+    <section>
+
+      <h2>Links</h2>
+      <ul>
+        <li v-if="mediaFile.youtube">
+          <a :href="`https://youtu.be/${mediaFile.youtube}`">YouTube</a>
         </li>
-      </ol>
-    </div>
+
+        <li v-if="mediaFile.musicbrainzRecordingId">
+          <a :href="`https://musicbrainz.org/recording/${mediaFile.musicbrainzRecordingId}`">MusicBrainz</a>
+        </li>
+      </ul>
+
+    </section>
   </div>
 </template>
 
@@ -59,24 +78,27 @@ export default {
 <style lang="scss" scoped>
   .vc_media_file {
     font-size: 1vw;
-    width: 100vw;
     height: 100vh;
-    display: flex;
     padding: 4vw;
+    width: 100vw;
+
+    .table-and-preview {
+      display: flex;
+    }
 
     .media-file-element, .key-value-table {
-      width: 50vw;
       padding: 1vw;
+      width: 50vw;
     }
 
     .key {
-      text-align: right;
       padding-right: 1em;
+      text-align: right;
     }
 
     .value {
-      max-width: 30vw;
       font-size: 0.8em;
+      max-width: 30vw;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
