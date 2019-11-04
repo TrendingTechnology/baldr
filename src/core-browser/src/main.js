@@ -58,6 +58,7 @@ export function shortenText (text, options = {}) {
   let { maxLength, stripTags } = options
   if (!maxLength) maxLength = 80
   if (stripTags) text = plainText(text)
+  if (text.length < maxLength) return text
   // https://stackoverflow.com/a/5454303
   // trim the string to the maximum length
   text = text.substr(0, maxLength)

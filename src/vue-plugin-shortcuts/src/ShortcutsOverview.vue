@@ -1,12 +1,15 @@
 <template>
   <div class="vc_shortcuts_overview" b-ui-theme="default">
-    <h1>Shortcuts</h1>
+    <!-- <h1>Shortcuts</h1> -->
+    <h1>Tastenkürzel</h1>
 
     <table>
       <thead>
         <tr>
-          <td>Keys</td>
-          <td>Description</td>
+          <!-- <td>Keys</td> -->
+           <td>Tastenkürzel</td>
+          <!-- <td>Description</td> -->
+          <td>Beschreibung</td>
         </tr>
       </thead>
       <tbody>

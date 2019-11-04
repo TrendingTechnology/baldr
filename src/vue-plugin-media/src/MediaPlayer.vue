@@ -121,7 +121,8 @@ export default {
     }
   },
   mounted: function () {
-    this.$shortcuts.add('m s', () => { this.toggle() }, 'Show the media player.')
+    // Show the media player.
+    this.$shortcuts.add('m s', () => { this.toggle() }, 'Zeige den Medien-Abspieler')
   }
 }
 </script>

@@ -62,7 +62,8 @@ export default {
     }
   },
   mounted: function () {
-    this.$shortcuts.add('ctrl+,', () => { this.toggle() }, 'Show the app info.')
+    // Show the app info.
+    this.$shortcuts.add('ctrl+,', () => { this.toggle() }, 'Zeige Hintergrundinformationen zur Applikation')
   }
 }
 </script>

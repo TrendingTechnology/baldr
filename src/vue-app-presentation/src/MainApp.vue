@@ -154,8 +154,15 @@ export default {
       {
         keys: 'return',
         callback: this.toggleSlidesOverview,
-        description: 'Zwischen Folien und Folien-Überblick hin- und herschalten.',
+        description: 'Zwischen Folien und Folien-Überblick hin- und herschalten',
         routeNames: ['slides', 'slides-overview']
+      },
+      {
+        keys: 'ctrl+u',
+        callback: () => {
+          this.$media.httpRequest.request('mgmt/update')
+        },
+        description: 'Lokalen Medienserver aktualisieren.'
       }
     ])
     this.$router.afterEach((to, from) => {

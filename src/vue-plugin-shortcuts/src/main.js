@@ -99,7 +99,8 @@ class Shortcuts {
         meta: {
           shortcut: 'ctrl+h'
         },
-        name: 'shortcuts',
+        // shortcuts
+        name: 'Tastenkürzel',
         component: ShortcutsOverview
       }
       this.addRoute(route)
@@ -198,7 +199,8 @@ class Shortcuts {
             this.$router.push(route.path)
           }
         },
-        `Go to route: ${routeTitle}`
+        // `Go to route: ${routeTitle}`
+        `Gehe zu: „${routeTitle}“`
       )
     }
   }

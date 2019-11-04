@@ -1316,20 +1316,20 @@ class Media {
       {
         keys: 'space',
         callback: () => { this.player.toggle() },
-        description: 'Media player: play/pause'
+        // Media player: Spiele/Pause
+        description: 'Medien-Abspieler: Spiele/Pausiere'
       },
       {
         keys: 'p f',
         callback: () => { this.player.stop(7) },
         // Media player: fade out
-        description: 'Audio/Video-Ausschnitt langsam ausblenden'
+        description: 'Medien-Abspieler: Audio/Video-Ausschnitt langsam ausblenden'
       },
       {
         keys: 'p s',
         callback: () => { this.player.start() },
-
         // Media player: Start loaded sample
-        description: 'Starte geladenen Audio/Video-Ausschnitt'
+        description: 'Medien-Abspieler: Starte geladenen Audio/Video-Ausschnitt'
       }
     ])
 

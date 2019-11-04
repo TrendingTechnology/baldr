@@ -4,7 +4,7 @@
       <a href="#" v-if="!viewModeCompact">kompakt</a>
       <a href="#" v-if="viewModeCompact">ausführlich</a>
     </div>
-    <h1>Überblick: {{ presentation.title }}</h1>
+    <h1>Thema: {{ presentation.title }}</h1>
     <ol v-if="slides">
       <li
         v-for="slide in slides"
@@ -114,7 +114,7 @@ export default {
       }
 
       .plain-text {
-        font-size: 0.5em;
+        font-size: 0.9em;
         color: $gray;
       }
     }
