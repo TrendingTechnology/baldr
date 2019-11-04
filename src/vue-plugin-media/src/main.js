@@ -582,7 +582,7 @@ class MediaTypes {
      * @type {object}
      */
     this.types = {
-      audio: ['mp3', 'm4a'],
+      audio: ['mp3', 'm4a', 'flac'],
       image: ['jpg', 'jpeg', 'png', 'svg'],
       video: ['mp4']
     }
