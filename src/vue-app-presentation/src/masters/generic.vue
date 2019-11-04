@@ -8,7 +8,7 @@ import { plainText } from '@bldr/core-browser'
 import { createNamespacedHelpers } from 'vuex'
 const { mapGetters } = createNamespacedHelpers('presentation')
 
-const charactersPerStep = 600
+const charactersPerStep = 400
 
 const example = `
 ---
@@ -209,7 +209,8 @@ function splitHtmlintoChunks (htmlString) {
       buffer = ''
     }
   }
-  chunks.push(buffer)
+  // Add last not full buffer
+  if (buffer) chunks.push(buffer)
   return chunks
 }
 
