@@ -4,7 +4,7 @@
 
 // import Vue from 'vue'
 import yaml from 'js-yaml'
-import { shortenText } from '@bldr/core-browser'
+import { shortenText, convertPropertiesToCamelCase } from '@bldr/core-browser'
 import { masters } from '@/masters.js'
 import store from '@/store.js'
 import router from '@/router.js'
@@ -251,6 +251,11 @@ class Slide {
     }
   }
 
+  /**
+   * The title of this slide.
+   *
+   * @returns {String}
+   */
   get title () {
     if (this.metaData.title) {
       return this.metaData.title
@@ -275,6 +280,11 @@ class Slide {
     return output.join(' | ')
   }
 
+  /**
+   * The media files of this slide as an array.
+   *
+   * @returns {Array}
+   */
   get mediaFiles () {
     const mediaFiles = []
     for (const mediaUri of this.renderData.mediaUris) {
@@ -283,6 +293,11 @@ class Slide {
     return mediaFiles
   }
 
+  /**
+   * The name of the content theme of this slide.
+   *
+   * @returns {String}
+   */
   get contentTheme () {
     if (this.master.styleConfig.contentTheme) {
       return this.master.styleConfig.contentTheme
@@ -326,6 +341,8 @@ export class Presentation {
     } catch (error) {
       throw new Error(`${error.name}: ${error.message}`)
     }
+
+    convertPropertiesToCamelCase(this.rawYamlObject_)
     /**
      * The meta object.
      *

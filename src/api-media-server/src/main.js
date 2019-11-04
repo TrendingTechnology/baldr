@@ -214,7 +214,7 @@ class MediaFile {
    * @param {object} properties - Add an object to the class properties.
    */
   mergeObject (object) {
-    convertProptiesToCamelCase(object)
+    convertPropertiesToCamelCase(object)
     for (const property in object) {
       this[property] = object[property]
     }
@@ -222,18 +222,20 @@ class MediaFile {
 }
 
 /**
- * Convert all properties in a object to camelCase in a recursive fashion.
+ * Convert all properties in an object to camelCase in a recursive fashion.
+ *
+ * TODO: Use the function in @bldr/core-browser
  *
  * @param {Object} object
  *
  * @returns {Object}
  */
-function convertProptiesToCamelCase (object) {
+function convertPropertiesToCamelCase (object) {
   // Array
   if (Array.isArray(object)) {
     for (const item of object) {
       if (typeof object === 'object') {
-        convertProptiesToCamelCase(item)
+        convertPropertiesToCamelCase(item)
       }
     }
   // Object
@@ -246,7 +248,7 @@ function convertProptiesToCamelCase (object) {
         delete object[snakeCase]
       }
       // Object or array
-      if (typeof object[camelCase] === 'object') convertProptiesToCamelCase(object[camelCase])
+      if (typeof object[camelCase] === 'object') convertPropertiesToCamelCase(object[camelCase])
     }
   }
   return object

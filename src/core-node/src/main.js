@@ -58,6 +58,8 @@ function gitHead () {
 /**
  * Convert `snake_case` or `kebab-case` strings into `camelCase` strings.
  *
+ * TODO: Use the function in @bldr/core-browser
+ *
  * @param {String} str - A snake or kebab cased string
  *
  * @returns {String}

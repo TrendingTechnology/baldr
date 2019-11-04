@@ -8,7 +8,7 @@
 /**
  *
  * @param {Number} timeStampMsec
- * @return {String}
+ * @returns {String}
  */
 export function toLocaleDateTimeString (timeStampMsec) {
   const date = new Date(Number(timeStampMsec))
@@ -38,7 +38,7 @@ export function toLocaleDateTimeString (timeStampMsec) {
  *
  * @param {String} html
  *
- * @return {String}
+ * @returns {String}
  */
 export function plainText (html) {
   // To get spaces between heading and paragraphs
@@ -51,7 +51,7 @@ export function plainText (html) {
  * @param {String} text
  * @param {Object} options
  *
- * @return {String}
+ * @returns {String}
  */
 export function shortenText (text, options = {}) {
   if (!text) return ''
@@ -64,4 +64,55 @@ export function shortenText (text, options = {}) {
   // re-trim if we are in the middle of a word
   text = text.substr(0, Math.min(text.length, text.lastIndexOf(' ')))
   return `${text} …`
+}
+
+/**
+ * Convert `snake_case` or `kebab-case` strings into `camelCase` strings.
+ *
+ * @param {String} str - A snake or kebab cased string
+ *
+ * @returns {String}
+ *
+ * @see {@link https://catalin.me/javascript-snake-to-camel/}
+ */
+function snakeToCamel (str) {
+  return str.replace(
+    /([-_][a-z])/g,
+    (group) => group.toUpperCase()
+      .replace('-', '')
+      .replace('_', '')
+  )
+}
+
+/**
+ * Convert all properties in an object to camelCase in a recursive fashion.
+ *
+ * @param {Object} object
+ *
+ * @returns {Object}
+ */
+export function convertPropertiesToCamelCase (object) {
+  // Array
+  if (Array.isArray(object)) {
+    for (const item of object) {
+      if (typeof object === 'object') {
+        convertPropertiesToCamelCase(item)
+      }
+    }
+  // Object
+  } else if (typeof object === 'object') {
+    for (const snakeCase in object) {
+      const camelCase = snakeToCamel(snakeCase)
+      if (camelCase !== snakeCase) {
+        const value = object[snakeCase]
+        object[camelCase] = value
+        delete object[snakeCase]
+      }
+      // Object or array
+      if (typeof object[camelCase] === 'object') {
+        convertPropertiesToCamelCase(object[camelCase])
+      }
+    }
+  }
+  return object
 }
