@@ -297,7 +297,7 @@ export default {
 
 <style lang="scss" scoped>
   .vc_generic_master {
-    font-size: 2vw;
+    font-size: 3vw;
     padding: 2vw 10vw;
   }
 </style>

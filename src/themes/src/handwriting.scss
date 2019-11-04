@@ -19,6 +19,7 @@ $handwriting-font-family: 'Kalam';
   h1, h2, h3, h4 {
     font-family: $handwriting-font-family;
     font-weight: 700;
+    text-decoration: underline;
   }
 
   ul {

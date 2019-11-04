@@ -176,7 +176,7 @@ export default {
 
 <style lang="scss" scoped>
   .vc_question_master {
-    font-size: 2vw;
+    font-size: 3vw;
     padding: 2vw 14vw;
 
     p {
