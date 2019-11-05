@@ -21,6 +21,8 @@
  * # REST API
  *
  * - `mgmt`
+ *   - `edit`: Open a media file specified by an ID with an editor specified in
+ *     `config.mediaServer.editor` (`/etc/baldr.json`).
  *   - `flush`: Delete all media files (assets, presentations) from the database.
  *   - `init`: Initialize the MongoDB database
  *   - `re-init`: Re-Initialize the MongoDB database (Drop all collections and
@@ -509,6 +511,13 @@ async function flushMediaFiles () {
 const helpMessages = {
   navigation: {
     mgmt: {
+      edit: {
+        '#description': 'Open a media file specified by an ID with an editor specified in `config.mediaServer.editor` (`/etc/baldr.json`).',
+        '#examples': [
+          'mgmt/edit?type=presentations&id=Beethoven_Egmont',
+          'mgmt/edit?type=assets&id=Marsch_4-Haende_op-45_no-2'
+        ]
+      },
       flush: 'Delete all media files (assets, presentations) from the database.',
       init: 'Initialize the MongoDB database.',
       're-init': 'Re-Initialize the MongoDB database (Drop all collections and initialize).',
@@ -531,6 +540,49 @@ const helpMessages = {
       count: 'Count / sum of the media files (assets, presentations) in the database.',
       updates: 'Journal of the update processes with timestamps.'
     }
+  }
+}
+
+/**
+ * Throw an error if the media type is unkown. Provide a default value.
+ *
+ * @param {String} mediaType - At the moment `assets` and `presentation`
+ *
+ * @return {String}
+ */
+function validateMediaType (mediaType) {
+  const mediaTypes = ['assets', 'presentations']
+  if (!mediaType) return 'assets'
+  if (!mediaTypes.includes(mediaType)) {
+    throw new Error(`Unkown media type “${mediaType}”! Allowed media types are: ${mediaTypes}`)
+  } else {
+    return mediaType
+  }
+}
+
+/**
+ * Open a media file specified by an ID with an editor specified in
+ *   `config.mediaServer.editor` (`/etc/baldr.json`).
+ *
+ * @param {String} mediaType - At the moment `assets` and `presentation`
+ * @param {String} id - The id of the media type.
+ *
+ * @return {Object}
+ */
+async function openEditor (mediaType, id) {
+  mediaType = validateMediaType(mediaType)
+  const result = await db.collection(mediaType).find({ id: id }).next()
+  const absPath = path.join(config.mediaServer.basePath, result.path)
+  const editor = config.mediaServer.editor
+  if (!fs.existsSync(editor)) {
+    return {
+      error: `Editor “${editor}” can’t be found.`
+    }
+  }
+  childProcess.spawn(editor, [absPath])
+  return {
+    absPath,
+    editor
   }
 }
 
@@ -576,11 +628,7 @@ function registerRestApi () {
         return
       }
       // type
-      const types = ['assets', 'presentations']
-      if (!('type' in query)) query.type = 'assets'
-      if (!types.includes(query.type)) {
-        throw new Error(`Unkown type “${query.type}”! Allowed types: ${types}`)
-      }
+      query.type = validateMediaType(query.type)
 
       // method
       const methods = ['exactMatch', 'substringSearch']
@@ -644,6 +692,14 @@ function registerRestApi () {
   app.get('/mgmt/init', async (req, res, next) => {
     try {
       res.json(await initializeDb())
+    } catch (error) {
+      next(error)
+    }
+  })
+
+  app.get('/mgmt/edit', async (req, res, next) => {
+    try {
+      res.json(await openEditor(req.query.type, req.query.id))
     } catch (error) {
       next(error)
     }
