@@ -329,8 +329,9 @@ async function collectMusicMetaData (inputFile) {
  * Convert one input file.
  *
  * @param {String} inputFile - Path of the input file.
+ * @param {Object} cmdObj - The command object from the commander.
  */
-async function convertOneFile (inputFile) {
+async function convertOneFile (inputFile, cmdObj) {
   const asset = makeAsset(inputFile)
   console.log(asset)
 
@@ -343,16 +344,28 @@ async function convertOneFile (inputFile) {
     return
   }
   const outputExtension = mediaTypes.targetExtension[mediaType]
-  const outputFile = `${asciify(asset.basename_)}.${outputExtension}`
+  let outputFile = `${asciify(asset.basename_)}.${outputExtension}`
 
   let convert
 
   // audio
+  // https://trac.ffmpeg.org/wiki/Encode/AAC
+
+  // ffmpeg aac encoder
+  // '-c:a', 'aac', '-b:a', '128k',
+
+  // aac_he
+  // '-c:a', 'libfdk_aac', '-profile:a', 'aac_he','-b:a', '64k',
+
+  // aac_he_v2
+  // '-c:a', 'libfdk_aac', '-profile:a', 'aac_he_v2'
+
   if (mediaType === 'audio') {
     convert = childProcess.spawn('ffmpeg', [
       '-i', inputFile,
-      '-c:a', 'libfdk_aac',
-      '-profile:a', 'aac_he_v2', // https://trac.ffmpeg.org/wiki/Encode/AAC
+      // '-c:a', 'aac', '-b:a', '128k',
+      '-c:a', 'libfdk_aac', '-profile:a', 'aac_he', '-b:a', '64k',
+      // '-c:a', 'libfdk_aac', '-profile:a', 'aac_he_v2',
       '-vn', // Disable video recording
       '-map_metadata', '-1', // remove metadata
       '-y', // Overwrite output files without asking
@@ -361,13 +374,17 @@ async function convertOneFile (inputFile) {
 
   // image
   } else if (mediaType === 'image') {
-    const output = inputFile.replace(`.${asset.extension}`, '_preview.jpg')
+    let size = '2000x2000>'
+    if (cmdObj.previewImage) {
+      outputFile = inputFile.replace(`.${asset.extension}`, '_preview.jpg')
+      size = '1000x1000>'
+    }
     convert = childProcess.spawn('magick', [
       'convert',
       inputFile,
-      '-resize', '1000x1000>', // http://www.imagemagick.org/Usage/resize/#shrink
-      '-quality', '70', // https://imagemagick.org/script/command-line-options.php#quality
-      output
+      '-resize', size, // http://www.imagemagick.org/Usage/resize/#shrink
+      '-quality', '60', // https://imagemagick.org/script/command-line-options.php#quality
+      outputFile
     ])
 
   // videos
@@ -402,18 +419,21 @@ async function convertOneFile (inputFile) {
 }
 
 /**
+ * Convert multiple files.
+ *
  * @param {Array} inputFiles - An array of input files to convert.
+ * @param {Object} cmdObj - The command object from the commander.
  */
-function convert (inputFiles) {
+function convert (inputFiles, cmdObj) {
   if (inputFiles.length === 0) {
     walk(process.cwd(), {
       all (inputFile) {
-        convertOneFile(inputFile)
+        convertOneFile(inputFile, cmdObj)
       }
     })
   } else {
     for (const inputFile of inputFiles) {
-      convertOneFile(inputFile)
+      convertOneFile(inputFile, cmdObj)
     }
   }
 }
@@ -491,6 +511,7 @@ function openBasePath () {
 
 commander
   .command('convert [input...]').alias('c')
+  .option('-p, --preview-image', 'Convert into preview images (Smaller and different file name)')
   .description('Convert media files in the appropriate format. Multiple files, globbing works *.mp3')
   .action(convert)
 
