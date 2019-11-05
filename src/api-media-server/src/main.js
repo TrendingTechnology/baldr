@@ -569,7 +569,7 @@ function validateMediaType (mediaType) {
  *
  * @return {Object}
  */
-async function openEditor (mediaType, id) {
+async function openEditor (id, mediaType = 'presentations') {
   mediaType = validateMediaType(mediaType)
   const result = await db.collection(mediaType).find({ id: id }).next()
   const absPath = path.join(config.mediaServer.basePath, result.path)
@@ -579,7 +579,13 @@ async function openEditor (mediaType, id) {
       error: `Editor “${editor}” can’t be found.`
     }
   }
-  childProcess.spawn(editor, [absPath])
+  childProcess.spawn(editor, [absPath], {
+    env: {
+      // Not needed
+      //XAUTHORITY: '/run/user/1000/gdm/Xauthority',
+      DISPLAY: ':0'
+    }
+  })
   return {
     absPath,
     editor
@@ -680,6 +686,14 @@ function registerRestApi () {
 
   /* mgmt = management */
 
+  app.get('/mgmt/edit', async (req, res, next) => {
+    try {
+      res.json(await openEditor(req.query.id, req.query.type))
+    } catch (error) {
+      next(error)
+    }
+  })
+
   app.get('/mgmt/flush', async (req, res, next) => {
     try {
       await flushMediaFiles()
@@ -697,13 +711,7 @@ function registerRestApi () {
     }
   })
 
-  app.get('/mgmt/edit', async (req, res, next) => {
-    try {
-      res.json(await openEditor(req.query.type, req.query.id))
-    } catch (error) {
-      next(error)
-    }
-  })
+
 
   app.get('/mgmt/re-init', async (req, res, next) => {
     try {

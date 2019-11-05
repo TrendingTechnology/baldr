@@ -128,6 +128,29 @@ export default {
         description: 'Präsentation neu laden'
       },
       {
+        keys: 'ctrl+e',
+        callback: () => {
+          const presentation = this.$store.getters['presentation/presentation']
+          if (Object.keys(presentation).length === 0) {
+            this.$notify({
+              group: 'default',
+              type: 'error',
+              title: 'Editor konnte nicht geöffnet werden.',
+              text: 'Es ist keine Präsentation geladen.'
+            })
+            return
+          }
+          this.$media.httpRequest.request({
+            url: 'mgmt/edit',
+            params: {
+              type: 'presentations',
+              id: presentation.meta.id
+            }
+          })
+        },
+        description: 'Die aktuelle Präsentation im Editor öffnen'
+      },
+      {
         keys: 'ctrl+alt+d',
         callback: () => { this.$styleConfig.configObjects.darkMode.toggle() },
         // Dark mode
