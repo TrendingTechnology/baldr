@@ -10,7 +10,8 @@
  *
  *   // vue-notifications
  *   this.$notify({
- *     group: 'foo',
+ *     group: 'default',
+ *     type: 'error',
  *     title: 'Important message',
  *     text: 'Hello user! This is a notification!'
  *   })
