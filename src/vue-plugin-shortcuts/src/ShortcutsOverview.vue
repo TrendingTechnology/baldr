@@ -55,11 +55,12 @@ export default {
 
 <style lang="scss" scoped>
   .vc_shortcuts_overview {
+    box-sizing: border-box;
     font-size: 1.8vw;
-    width: 100vw;
     height: 100vh;
     padding: 4vw;
-    box-sizing: border-box;
+    width: 100vw;
+    overflow-x: hidden;
 
     table {
       margin: 0 auto;
@@ -75,7 +76,7 @@ export default {
   }
 </style>
 
-<style lang="scss" >
+<style lang="scss">
   .vc_shortcuts_overview {
     .key {
       background-color: $gray;

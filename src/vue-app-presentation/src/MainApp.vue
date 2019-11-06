@@ -182,8 +182,22 @@ export default {
       },
       {
         keys: 'ctrl+u',
-        callback: () => {
-          this.$media.httpRequest.request('mgmt/update')
+        callback: async () => {
+          try {
+            const result = await this.$media.httpRequest.request('mgmt/update')
+            const res = result.data
+            this.$notify({
+              group: 'default',
+              type: 'success',
+              text: `Der lokale Medien-Server wurde erfolgreich aktualisiert. Git-Commit-ID: ${res.lastCommitId.substring(0, 8)}`
+            })
+          } catch (error) {
+            this.$notify({
+              group: 'default',
+              type: 'error',
+              text: error.message
+            })
+          }
         },
         description: 'Lokalen Medienserver aktualisieren.'
       }
