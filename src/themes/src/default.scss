@@ -65,7 +65,10 @@ $link-color: scale-color($gray, $lightness: -40%);
     font-weight: 700;
   }
 
-  a {
+  // @click activated link like elements
+  a, .link {
+    color: $link-color;
+    cursor: pointer;
     text-decoration: none;
 
     &:link, &:visited {
@@ -294,7 +297,9 @@ $link-color: scale-color($gray, $lightness: -40%);
       background-color: $black;
     }
 
-    a {
+    a, .link {
+      color: $white;
+
       &:link, &:visited {
         color: $white;
       }

@@ -35,7 +35,7 @@
 
       <h2>Links</h2>
       <ul>
-        <li @click="openEditor">Im Text-Editor öffnen</li>
+        <li @click="openEditor"><span class="link">Im Text-Editor öffnen</span></li>
 
         <li v-if="mediaFile.youtube">
           <a :href="`https://youtu.be/${mediaFile.youtube}`">YouTube</a>
