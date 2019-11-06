@@ -35,6 +35,8 @@
 
       <h2>Links</h2>
       <ul>
+        <li @click="openEditor">Im Text-Editor öffnen</li>
+
         <li v-if="mediaFile.youtube">
           <a :href="`https://youtu.be/${mediaFile.youtube}`">YouTube</a>
         </li>
@@ -63,6 +65,17 @@ export default {
     },
     mediaFile () {
       return this.$store.getters['media/mediaFileByUri'](this.uri)
+    }
+  },
+  methods: {
+    openEditor () {
+      this.$media.httpRequest.request({
+        url: 'mgmt/edit',
+        params: {
+          type: 'assets',
+          id: this.mediaFile.id
+        }
+      })
     }
   },
   async mounted () {

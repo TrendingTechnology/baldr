@@ -572,7 +572,13 @@ function validateMediaType (mediaType) {
 async function openEditor (id, mediaType = 'presentations') {
   mediaType = validateMediaType(mediaType)
   const result = await db.collection(mediaType).find({ id: id }).next()
-  const absPath = path.join(config.mediaServer.basePath, result.path)
+  let path
+  if (mediaType === 'assets') {
+    path = `${result.path}.yml`
+  } else {
+    path = result.path
+  }
+  const absPath = path.join(config.mediaServer.basePath, path)
   const editor = config.mediaServer.editor
   if (!fs.existsSync(editor)) {
     return {
