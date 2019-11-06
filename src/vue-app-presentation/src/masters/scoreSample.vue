@@ -65,12 +65,14 @@ export default {
 
 <style lang="scss" scoped>
   .vc_score_sample_master {
-    padding: 4vw;
+    padding: 4vh 4vw;
 
     img {
       bottom: 0;
       left: 0;
-      width: 100%;
+      object-fit: contain;
+      width: 92vw;
+      height: 90vh;
     }
 
     .vc_play_button {
