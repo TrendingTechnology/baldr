@@ -348,10 +348,17 @@ export class Presentation {
      *
      * ```yaml
      * meta:
-     *   title: My title
+     *   title: A title
+     *   id: An unique id
+     *   grade: The grade the presentation belongs to.
+     *   curriculum: Relation to the curriculum.
      * ```
      *
      * @type {object}
+     * @property {String} id - An unique id.
+     * @property {String} title - The title of the presentation.
+     * @property {String} grade - The grade the presentation belongs to.
+     * @property {String} curriculum - Relation to the curriculum.
      */
     this.meta = this.rawYamlObject_.meta
     // slides
@@ -378,9 +385,11 @@ export class Presentation {
    * meta:
    *   title: My Title
    * ```
+   *
+   * @returns {String}
    */
   get title () {
-    if (this.meta.title) return this.meta.title
+    if (this.meta && this.meta.title) return this.meta.title
   }
 
   /**
@@ -390,9 +399,39 @@ export class Presentation {
    * meta:
    *   id: My-Presentation
    * ```
+   *
+   * @returns {String}
    */
   get id () {
-    if (this.meta.id) return this.meta.id
+    if (this.meta && this.meta.id) return this.meta.id
+  }
+
+  /**
+   * The grade the presentation belongs to.
+   *
+   * ```yml
+   * meta:
+   *   grade: 7
+   * ```
+   *
+   * @returns {String}
+   */
+  get grade () {
+    if (this.meta && this.meta.grade) return this.meta.grade
+  }
+
+  /**
+   * Relation to the curriculum.
+   *
+   * ```yml
+   * meta:
+   *   curriculum: Relation to the curriculum
+   * ```
+   *
+   * @returns {String}
+   */
+  get curriculum () {
+    if (this.meta && this.meta.curriculum) return this.meta.curriculum
   }
 }
 

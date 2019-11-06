@@ -26,6 +26,8 @@ The main app of the BALDR project: a presentation app using YAML files.
 meta:
   title:
   id:
+  grade:
+  curriculum:
 
 slides:
 
