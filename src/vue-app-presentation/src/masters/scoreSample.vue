@@ -1,6 +1,7 @@
 <template>
   <div class="vc_score_sample_master">
     <play-button v-if="sample" :sample="sample"/>
+    <h1 v-if="heading" v-html="heading"/>
     <img :src="mediaFileScore.httpUrl"/>
   </div>
 </template>
@@ -41,6 +42,11 @@ export const master = {
 
 export default {
   props: {
+    heading: {
+      type: String,
+      description: 'Eine Überschrift',
+      markup: true
+    },
     score: {
       type: String,
       description: 'URI zu einer Bild-Datei, dem Notenbeispiel.'
@@ -66,6 +72,16 @@ export default {
 <style lang="scss" scoped>
   .vc_score_sample_master {
     padding: 4vh 4vw;
+    background-color: white;
+
+    h1 {
+      left: 0;
+      position: absolute;
+      text-align: center;
+      top: 1vw;
+      width: 100%;
+      background: rgba($yellow, 0.6);
+    }
 
     img {
       bottom: 0;

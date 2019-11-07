@@ -246,6 +246,11 @@ class Slide {
      */
     this.metaData = new MetaData(rawSlideObject)
 
+    /**
+     * @see {@link https://vuejs.org/v2/guide/class-and-style.html#Object-Syntax-1}
+     */
+    this.style = rawSlideObject.cut('style')
+
     if (!rawSlideObject.isEmpty()) {
       throw Error(`Unknown slide properties: ${toString(rawSlideObject.raw)}`)
     }

@@ -1,5 +1,9 @@
 <template>
-  <div class="vc_generic_master" v-html="markupCurrent"/>
+  <div
+    class="vc_generic_master"
+    v-html="markupCurrent"
+    :style="slideCurrent.style"
+  />
 </template>
 
 <script>
@@ -8,7 +12,7 @@ import { plainText } from '@bldr/core-browser'
 import { createNamespacedHelpers } from 'vuex'
 const { mapGetters } = createNamespacedHelpers('presentation')
 
-const charactersPerStep = 400
+const CHARACTERS_ON_SLIDE = 400
 
 const example = `
 ---
@@ -193,8 +197,9 @@ slides:
     </ul>
 `
 
-function splitHtmlintoChunks (htmlString) {
-  if (htmlString.length < charactersPerStep) return [htmlString]
+function splitHtmlintoChunks (htmlString, charactersOnSlide) {
+  if (!charactersOnSlide) charactersOnSlide = CHARACTERS_ON_SLIDE
+  if (htmlString.length < charactersOnSlide) return [htmlString]
 
   const domParser = new DOMParser()
   const dom = domParser.parseFromString(htmlString, 'text/html')
@@ -204,7 +209,7 @@ function splitHtmlintoChunks (htmlString) {
 
   for (const children of dom.body.children) {
     buffer += children.outerHTML
-    if (buffer.length > charactersPerStep) {
+    if (buffer.length > charactersOnSlide) {
       chunks.push(buffer)
       buffer = ''
     }
@@ -255,7 +260,7 @@ export const master = {
     // Split large texts into smaller chunks
     const markup = []
     for (const html of steps) {
-      const chunks = splitHtmlintoChunks(html)
+      const chunks = splitHtmlintoChunks(html, props.charactersOnSlide)
       for (const chunk of chunks) {
         markup.push(chunk)
       }
@@ -280,8 +285,15 @@ export default {
   props: {
     markup: {
       type: [String, Array],
-      required: true
-      //markup: true It is complicated to convert to prop based markup conversion.
+      required: true,
+      // It is complicated to convert to prop based markup conversion.
+      //markup: true
+      description:  'Markup im HTML oder Markdown-Format'
+    },
+    charactersOnSlide: {
+      type: [Number],
+      description: 'Gibt an wie viele Zeichen auf einer Folie erscheinen sollen.',
+      default: CHARACTERS_ON_SLIDE
     }
   },
   computed: {
