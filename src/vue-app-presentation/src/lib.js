@@ -52,3 +52,20 @@ export function markupToHtml (input) {
   }
   return input
 }
+
+/**
+ * Check if the input is a valid URI. Prefix with `id:` if necassary
+ *
+ * @param {String} uri -  The URI to validate.
+ *
+ * @returns {ExecFileSyncOptionsWithStringEncoding}
+ */
+export function validateUri (uri) {
+  if (typeof uri !== 'string') throw new Error(`”${uri}“ is not a string.`)
+  const segments = uri.split(':')
+  // To allow URI with out a URI scheme. This defaults to `id`.
+  if (segments.length === 1) {
+    uri = `id:${uri}`
+  }
+  return uri
+}

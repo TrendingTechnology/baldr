@@ -23,7 +23,7 @@ function makeAsset (mediaFile) {
   return new Asset(mediaFile).addFileInfos()
 }
 
-const templateBaldrYml = `---
+const presentationTemplate = `---
 meta:
   title:
   id:
@@ -31,47 +31,48 @@ meta:
   curriculum:
 
 slides:
-- generic: Hello World!
 
-# - audio:
-#     src:
-#     title:
-#     artist:
-#     composer:
-#     autoplay:
-#     playthrough:
-#     cover:
-# - camera: yes
-# - editor:
-#     markup:
-# - generic:
-#     markup:
-# - image:
-#     src:
-#     title:
-#     description:
-# - person:
-#     name:
-#     image:
-#     birth:
-#     death:
-# - question:
-#     heading:
-#     questions:
-#     numbers:
-# - quote:
-#     text:
-#     author:
-#     date:
-# - score_sample:
-#     score:
-#     audio:
-# - task:
-#     markup:
-# - video:
-#     src:
-# - youtube:
-#     id:
+- audio: Fuer-Elise#complete
+- audio:
+    src: Eine Medien-Datei-URI, z. B. id:Fuer-Elise oder eine Sample-URI (id:Fuer-Elise#complete).
+    title: Der Titel des Audio-Ausschnitts.
+    composer: Der/Die KomponistIn des Audio-Ausschnitts.
+    artist: Der/Die InterpretIn des Audio-Ausschnitts.
+    cover: Eine Medien-Datei-URI, die als Cover-Bild angezeigt werden soll.
+    autoplay: Den Audio-Ausschnitt automatisch abspielen.
+    playthrough: Über die Folien hinwegspielen. Nicht stoppen beim Folienwechsel.
+
+- camera: yes
+- editor:
+    markup:
+- generic:
+    markup:
+- image:
+    src:
+    title:
+    description:
+- person:
+    name:
+    image:
+    birth:
+    death:
+- question:
+    heading:
+    questions:
+    numbers:
+- quote:
+    text:
+    author:
+    date:
+- score_sample:
+    score:
+    audio:
+- task:
+    markup:
+- video:
+    src:
+- youtube:
+    id:
 `
 
 commander
@@ -446,7 +447,7 @@ function convert (inputFiles, cmdObj) {
 }
 
 /**
- * @param {String} oldPath
+ * @param {String} oldPath - The media file path.
  *
  * @returns {String}
  */
@@ -460,6 +461,9 @@ function renameOneFile (oldPath) {
   }
 }
 
+/**
+ *
+ */
 function rename () {
   walk(process.cwd(), {
     all (oldPath) {
@@ -469,7 +473,7 @@ function rename () {
 }
 
 /**
- * @param {String} filePath
+ * @param {String} filePath - The media file path.
  */
 function validateYamlOneFile (filePath) {
   console.log(`Validate: ${chalk.yellow(filePath)}`)
@@ -482,6 +486,9 @@ function validateYamlOneFile (filePath) {
   }
 }
 
+/**
+ * @param {String} filePath - The media file path.
+ */
 function validateYaml (filePath) {
   if (filePath) {
     validateYamlOneFile(filePath)
@@ -496,6 +503,9 @@ function validateYaml (filePath) {
   }
 }
 
+/**
+ *
+ */
 function createMetaDataYaml() {
   walk(process.cwd(), {
     asset (relPath) {
@@ -504,13 +514,22 @@ function createMetaDataYaml() {
   })
 }
 
+/**
+ * Create a presentation template named “Praesentation.baldr.yml”.
+ */
 function createPresentationTemplate () {
-  const filePath = path.join(process.cwd(), 'Presentation.baldr.yml')
+  const filePath = path.join(process.cwd(), 'Praesentation.baldr.yml')
   if (!fs.existsSync(filePath)) {
-    fs.writeFileSync(filePath, templateBaldrYml)
+    fs.writeFileSync(filePath, presentationTemplate)
+    console.log(`Presentation template created at: ${chalk.green(filePath)}`)
+  } else {
+    console.log(`Presentation already exists: ${chalk.red(filePath)}`)
   }
 }
 
+/**
+ *
+ */
 function openBasePath () {
   const process = childProcess.spawn('xdg-open', [config.mediaServer.basePath], { detached: true })
   process.unref()
@@ -544,7 +563,7 @@ commander
 
 commander
   .command('presentation-template').alias('p')
-  .description('Create a presentation template named “Presentation.baldr.yml”.')
+  .description('Create a presentation template named “Praesentation.baldr.yml”.')
   .action(createPresentationTemplate)
 
 commander.parse(process.argv)

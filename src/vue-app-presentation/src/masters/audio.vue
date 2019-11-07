@@ -31,13 +31,13 @@
 </template>
 
 <script>
-import { markupToHtml } from '@/lib.js'
+import { markupToHtml, validateUri } from '@/lib.js'
 import { createNamespacedHelpers } from 'vuex'
 const { mapGetters } = createNamespacedHelpers('presentation')
 
 const example = `
 ---
-slideCurrents:
+slides:
 
 - title: Custom composer
   audio:
@@ -80,11 +80,6 @@ slideCurrents:
 - title: 'URL: filename:'
   audio:
     src: filename:Ich-hab-zu-Haus-ein-Grammophon.m4a
-
-- title: 'Multiple audio files to resolve'
-  audio:
-  - id:Du-bist-als-Kind-zu-heiss-gebadet-worden
-  - filename:Ich-hab-zu-Haus-ein-Grammophon.m4a
 `
 
 export const master = {
@@ -97,29 +92,20 @@ export const master = {
   },
   example,
   normalizeProps (props) {
-    if (typeof props === 'string' || Array.isArray(props)) {
+    if (typeof props === 'string') {
       props = { src: props }
     }
-    if (typeof props.src === 'string') {
-      props.src = [props.src]
-    }
-    if (props.begin && props.end && !props.duration) {
-      props.duration = props.end - props.begin
-    }
+    props.src = validateUri(props.src)
     return props
   },
-  stepCount (props) {
-    return props.src.length
-  },
   resolveMediaUris (props) {
-    // Clone array to prevent false step count.
-    const uris = props.src.slice(0)
+    const uris = [props.src]
     if (props.cover) uris.push(props.cover)
     return uris
   },
   async enterSlide ({ newProps }) {
     const props = newProps
-    this.$media.player.load(props.src[0])
+    this.$media.player.load(props.src)
     if (newProps.autoplay) {
       await this.$media.player.start()
     }
@@ -130,30 +116,37 @@ export default {
   props: {
     src: {
       type: [String, Array],
-      required: true
+      required: true,
+      description: 'Eine Medien-Datei-URI, z. B. `id:Fuer-Elise` oder eine Sample-URI (`id:Fuer-Elise#complete`).'
     },
     title: {
       type: String,
-      markup: true
-    },
-    artist: {
-      type: String,
-      markup: true
+      markup: true,
+      description: 'Der Titel des Audio-Ausschnitts.'
     },
     composer: {
       type: String,
-      markup: true
+      markup: true,
+      description: 'Der/Die KomponistIn des Audio-Ausschnitts.'
+    },
+    artist: {
+      type: String,
+      markup: true,
+      description: 'Der/Die InterpretIn des Audio-Ausschnitts.'
     },
     cover: {
-      type: String
+      type: String,
+      description: 'Eine Medien-Datei-URI, die als Cover-Bild angezeigt werden soll.'
     },
     autoplay: {
       type: Boolean,
-      default: false
+      default: false,
+      description: 'Den Audio-Ausschnitt automatisch abspielen.'
     },
     playthrough: {
       type: Boolean,
-      default: false
+      default: false,
+      description: 'Über die Folien hinwegspielen. Nicht stoppen beim Folienwechsel.'
     }
   },
   computed: {
@@ -192,11 +185,8 @@ export default {
       }
       return ''
     },
-    uriCurrent () {
-      return this.src[this.stepNoCurrent]
-    },
     mediaFile () {
-      return this.$store.getters['media/mediaFileByUri'](this.uriCurrent)
+      return this.$store.getters['media/mediaFileByUri'](this.src)
     }
   }
 }

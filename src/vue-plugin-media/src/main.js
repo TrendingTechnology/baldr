@@ -872,7 +872,7 @@ export class MediaFile {
      * @type {string}
      */
     this.uri = decodeURI(this.uri.replace(/#.*$/, ''))
-    const segments = this.uri.split(':')
+    let segments = this.uri.split(':')
 
     /**
      * for example: `http`, `https`, `blob`
