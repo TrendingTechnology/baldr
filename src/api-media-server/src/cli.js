@@ -27,6 +27,8 @@ const templateBaldrYml = `---
 meta:
   title:
   id:
+  grade:
+  curriculum:
 
 slides:
 - generic: Hello World!
@@ -61,10 +63,15 @@ slides:
 #     text:
 #     author:
 #     date:
+# - score_sample:
+#     score:
+#     audio:
 # - task:
 #     markup:
 # - video:
 #     src:
+# - youtube:
+#     id:
 `
 
 commander

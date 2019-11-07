@@ -353,7 +353,7 @@ function isPresentation (fileName) {
  */
 async function insertAsset (relPath) {
   const asset = new Asset(relPath).addFileInfos().cleanTmpProperties()
-  console.log(asset)
+  console.log(asset.path)
   await db.collection('assets').insertOne(asset)
 }
 
@@ -362,6 +362,7 @@ async function insertAsset (relPath) {
  */
 async function insertPresentation (relPath) {
   const presentation = new Presentation(relPath).addFileInfos().cleanTmpProperties()
+  console.log(presentation.path)
   await db.collection('presentations').insertOne(presentation)
 }
 
