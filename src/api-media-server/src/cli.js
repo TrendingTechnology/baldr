@@ -32,12 +32,15 @@ meta:
 
 slides:
 
-- audio: Fuer-Elise#complete
-- audio:
-    src: Eine Medien-Datei-URI, z. B. id:Fuer-Elise oder eine Sample-URI (id:Fuer-Elise#complete).
-    title: Der Titel des Audio-Ausschnitts.
-    composer: Der/Die KomponistIn des Audio-Ausschnitts.
-    artist: Der/Die InterpretIn des Audio-Ausschnitts.
+- title: Kurzform
+  audio: Fuer-Elise#complete
+
+- title: Langform
+  audio:
+    src: [*] Eine Medien-Datei-URI, z. B. id:Fuer-Elise oder eine Sample-URI (id:Fuer-Elise#complete).
+    title: [markup] Der Titel des Audio-Ausschnitts.
+    composer: [markup] Der/Die KomponistIn des Audio-Ausschnitts.
+    artist: [markup] Der/Die InterpretIn des Audio-Ausschnitts.
     cover: Eine Medien-Datei-URI, die als Cover-Bild angezeigt werden soll.
     autoplay: Den Audio-Ausschnitt automatisch abspielen.
     playthrough: Über die Folien hinwegspielen. Nicht stoppen beim Folienwechsel.
