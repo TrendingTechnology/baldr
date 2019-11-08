@@ -120,6 +120,8 @@ const example = `
 slides:
   - title: Camera
     camera: yes
+
+  - camera
 `
 
 const state = {
