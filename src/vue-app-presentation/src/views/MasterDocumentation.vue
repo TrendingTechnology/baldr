@@ -12,12 +12,7 @@
         >
           <code>{{ name }}</code>
 
-          <span v-if="spec.required || spec.required || spec.mediaFileUri">[
-            <span v-if="spec.required"> required</span>
-            <span v-if="spec.markup"> markup</span>
-            <span v-if="spec.mediaFileUri"> mediaFileUri</span>
-          ]</span>
-          <span v-if="spec.description" v-html="': ' + markupToHtml(spec.description)">:</span>
+          <span v-if="spec.description" v-html="': ' + markupToHtml(spec.description) + formatPropSpec(spec)">:</span>
         </li>
       </ul>
     </section>
@@ -60,6 +55,29 @@ export default {
       this.$store.dispatch('presentation/openPresentation', this.master.example).then(() => {
         if (this.$route.name !== 'slides') this.$router.push({ name: 'slides' })
       })
+    },
+    formatPropSpec (spec) {
+      const options = []
+      if (spec.required) options.push('required')
+      if (spec.markup) options.push('markup')
+      if (spec.mediaFileUri) options.push('mediaFileUri')
+      if (spec.default) options.push(`default=${spec.default}`)
+      if (spec.type) {
+        if (spec.type.name) {
+          options.push(`type=${spec.type.name}`)
+        } else if (Array.isArray(spec.type)) {
+          const types = []
+          for (const type of spec.type) {
+            types.push(type.name)
+          }
+          options.push(`types=${types.join(',')}`)
+        }
+      }
+
+      if (options.length) {
+        return ` (${options.join(', ')})`
+      }
+      return ''
     }
   }
 }

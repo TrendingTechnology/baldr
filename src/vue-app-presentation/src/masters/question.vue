@@ -28,30 +28,10 @@ const { mapGetters } = createNamespacedHelpers('presentation')
 const example = `
 ---
 slides:
-  - title: Heading
-    question:
-      heading: Questions about the text
-      questions:
-        - question: Question one?
-          answer: Answer one
-        - question: Question two?
-          answer: Answer two
-        - question: Question three?
-          answer: Answer three
-
-  - title: Without numbers
-    question:
-      heading: Without numbers
-      questions:
-        - question: Question one?
-          answer: Answer one
-        - question: Question two?
-          answer: Answer two
-        - question: Question three?
-          answer: Answer three
-      numbers: false
-
-  - question:
+- title: Heading
+  question:
+    heading: Questions about the text
+    questions:
       - question: Question one?
         answer: Answer one
       - question: Question two?
@@ -59,20 +39,48 @@ slides:
       - question: Question three?
         answer: Answer three
 
-  - question:
-      - question: This is a question?
-        answer: This is the answer
+- title: Without numbers
+  question:
+    heading: Without numbers
+    questions:
+      - question: Question one?
+        answer: Answer one
+      - question: Question two?
+        answer: Answer two
+      - question: Question three?
+        answer: Answer three
+    numbers: false
 
-  - question:
-      - Question one?
-      - Question two?
-      - Question three?
+- question:
+    - question: Question one?
+      answer: Answer one
+    - question: Question two?
+      answer: Answer two
+    - question: Question three?
+      answer: Answer three
 
-  - question: One big question?
-
-  - question:
-      question: This is a question?
+- question:
+    - question: This is a question?
       answer: This is the answer
+
+- question:
+    - Question one?
+    - Question two?
+    - Question three?
+
+- question: One big question?
+
+- question:
+    question: This is a question?
+    answer: This is the answer
+
+- title: Kurzform (nur eine Frage)
+  question: Nur eine Frage?
+
+- title: Kurzform (Frage-Antwort-Paar)
+  question:
+    question: Frage?
+    answer: Antwort
 `
 
 const normalizeQAPair = function (pair) {
