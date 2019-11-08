@@ -39,6 +39,14 @@ export const master = {
     darkMode: true
   },
   example,
+  normalizeProps (props) {
+    if (typeof props === 'string') {
+      return {
+        image: props
+      }
+    }
+    return props
+  },
   resolveMediaUris (props) {
     return [props.image]
   },
@@ -54,18 +62,22 @@ export const master = {
 export default {
   props: {
     name: {
-      type: String
+      type: String,
+      description: 'Der Name der Person'
     },
     image: {
       type: String,
       required: true,
-      mediaFileUri: true
+      mediaFileUri: true,
+      description: 'Eine URI zu einer Bild-Datei.'
     },
     birth: {
-      type: [String, Number]
+      type: [String, Number],
+      description: 'Datumsangabe zum Geburtstag'
     },
     death: {
-      type: [String, Number]
+      type: [String, Number],
+      description: 'Datumsangabe zum Todestag'
     }
   },
   computed: {

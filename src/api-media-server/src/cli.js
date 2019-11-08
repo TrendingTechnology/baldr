@@ -30,39 +30,93 @@ meta:
   grade:
   curriculum:
 
+########################################################################
+# Kommentare (Großer Kommentar)
+########################################################################
+
+##
+# Normaler Kommentar
+##
+
+#
+# Kleiner Kommentar
+#
+
+########################################################################
+# Masters
+########################################################################
+
 slides:
 
+##
+# audio
+##
+
 - title: Kurzform
-  audio: Fuer-Elise#complete
+  audio: id:Fuer-Elise#complete
 
 - title: Langform
   audio:
-    src: [*] Eine Medien-Datei-URI, z. B. id:Fuer-Elise oder eine Sample-URI (id:Fuer-Elise#complete).
-    title: [markup] Der Titel des Audio-Ausschnitts.
-    composer: [markup] Der/Die KomponistIn des Audio-Ausschnitts.
-    artist: [markup] Der/Die InterpretIn des Audio-Ausschnitts.
-    cover: Eine Medien-Datei-URI, die als Cover-Bild angezeigt werden soll.
-    autoplay: Den Audio-Ausschnitt automatisch abspielen.
-    playthrough: Über die Folien hinwegspielen. Nicht stoppen beim Folienwechsel.
+    src: Eine Medien-Datei-URI, z. B. id:Fuer-Elise oder eine Sample-URI (id:Fuer-Elise#complete). (required, mediaFileUri, types=String,Array)
+    title: Der Titel des Audio-Ausschnitts. (markup, type=String)
+    composer: Der/Die KomponistIn des Audio-Ausschnitts. (markup, type=String)
+    artist: Der/Die InterpretIn des Audio-Ausschnitts. (markup, type=String)
+    cover: Eine Medien-Datei-URI, die als Cover-Bild angezeigt werden soll. (mediaFileUri, type=String)
+    autoplay: Den Audio-Ausschnitt automatisch abspielen. (type=Boolean)
+    playthrough: Über die Folien hinwegspielen. Nicht stoppen beim Folienwechsel. (type=Boolean)
+
 
 - camera: yes
 - editor:
     markup:
 - generic:
     markup:
-- image:
-    src:
-    title:
-    description:
-- person:
-    name:
-    image:
-    birth:
-    death:
-- question:
-    heading:
-    questions:
-    numbers:
+
+##
+# image
+##
+
+- title: Kurzform
+  image: id:Luigi-Russolo_Arte-dei-rumori
+
+- title: Langform
+  image:
+    src: Den URI zu einer Bild-Datei. (required, mediaFileUri, type=String)
+    title: Ein Titel, der angezeigt wird. (markup, type=String)
+    description: Eine Beschreibung, die angezeigt wird. (markup, type=String)
+
+##
+# person
+##
+
+- title: Kurzform
+  person: id:Beethoven
+
+- title: Langform
+  person:
+    name: Der Name der Person (type=String)
+    image: Eine URI zu einer Bild-Datei. (required, mediaFileUri, type=String)
+    birth: Datumsangabe zum Geburtstag (types=String,Number)
+    death: Datumsangabe zum Todestag (types=String,Number)
+
+##
+# question
+##
+
+- title: Kurzform (nur eine Frage)
+  question: Nur eine Frage?
+
+- title: Kurzform (Frage-Antwort-Paar)
+  question:
+    question: Frage?
+    answer: Antwort
+
+- title: Langform
+  question:
+    heading: Eine Überschrift, die über den Fragen angezeigt wird. (markup, type=String)
+    questions: Eine Liste mit Objekten mit den Schlüsseln question and answer. (required, markup, type=Array)
+    numbers: Ob die Fragen nummeriert werden sollen. (default=true, type=Boolean)
+
 - quote:
     text:
     author:
@@ -72,8 +126,18 @@ slides:
     audio:
 - task:
     markup:
-- video:
-    src:
+
+##
+# video
+##
+
+- title: Kurzform
+  video: id:Luigi-Russolo_Arte-dei-rumori
+
+- title: Langform
+  video:
+    src: Den URI zu einer Video-Datei. (required, mediaFileUri, type=String)
+
 - youtube:
     id:
 `

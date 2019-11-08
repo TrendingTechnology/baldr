@@ -12,6 +12,9 @@ const example = `
 ---
 slides:
 
+- title: Kurzform
+  video: id:Die-Geschichte-des-Jazz_Worksongs
+
 - title: 'URL: id:'
   video:
     src: id:Die-Geschichte-des-Jazz_Worksongs
@@ -19,11 +22,6 @@ slides:
 - title: 'URL: filename:'
   video:
     src: filename:Die-Geschichte-des-Jazz_Entstehung-aus-soziologischer-Sicht.mp4
-
-- title: 'Multiple video files to resolve'
-  video:
-  - id:Die-Geschichte-des-Jazz_Worksongs
-  - filename:Die-Geschichte-des-Jazz_Entstehung-aus-soziologischer-Sicht.mp4
 `
 
 export const master = {
@@ -36,39 +34,29 @@ export const master = {
   },
   example,
   normalizeProps (props) {
-    if (typeof props === 'string' || Array.isArray(props)) {
+    if (typeof props === 'string') {
       props = { src: props }
-    }
-    if (typeof props.src === 'string') {
-      props = { src: [props.src] }
     }
     return props
   },
-  stepCount (props) {
-    return props.src.length
-  },
   resolveMediaUris (props) {
-    return props.src
+    return [props.src]
   }
 }
 
 export default {
   props: {
     src: {
-      type: [String, Array],
-      required: true
+      type: String,
+      required: true,
+      description: 'Den URI zu einer Video-Datei.',
+      mediaFileUri: true
     }
   },
   computed: {
     ...mapGetters(['slideCurrent']),
-    stepNoCurrent () {
-      return this.slideCurrent.renderData.stepNoCurrent - 1
-    },
-    uriCurrent () {
-      return this.src[this.stepNoCurrent]
-    },
     mediaFile () {
-      return this.$store.getters['media/mediaFileByUri'](this.uriCurrent)
+      return this.$store.getters['media/mediaFileByUri'](this.src)
     }
   }
 }

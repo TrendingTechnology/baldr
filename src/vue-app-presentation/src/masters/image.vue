@@ -25,33 +25,8 @@ const example = `
 ---
 slides:
 
-- title: 'Multiple images to resolve'
-  image:
-  - id:Bach
-  - filename:Haendel_Georg-Friedrich.jpg
-  - id:Haydn
-  - filename:Beethoven_Ludwig-van.jpg
-
-- title: 'Multiple images without src: Simon & Garfunkel'
-  image:
-  - https://upload.wikimedia.org/wikipedia/commons/f/f9/Simon_and_Garfunkel_1968.jpg
-  - https://upload.wikimedia.org/wikipedia/commons/f/fb/Aankomst_Paul_Simon_%28links%29_en_Art_Garfunkel_op_Schiphol%2C_Bestanddeelnr_919-3035.jpg
-
-- title: 'Multiple images with src: The Beatles'
-  image:
-    src:
-    - https://upload.wikimedia.org/wikipedia/commons/e/e2/Lie_In_15_--_John_rehearses_Give_Peace_A_Chance.jpg
-    - https://upload.wikimedia.org/wikipedia/commons/d/d6/Paul_McCartney_in_October_2018.jpg
-    - https://upload.wikimedia.org/wikipedia/commons/e/e0/Ringo_Starr_%282007%29.jpg
-    - https://upload.wikimedia.org/wikipedia/commons/4/42/George_Harrison_1974.jpg
-
-- title: 'As a string'
+- title: Kurzform
   image: id:Bach
-
-- title: 'As a list'
-  image:
-    src:
-    - filename:Haendel_Georg-Friedrich.jpg
 
 - title: 'URL: http:'
   image:
@@ -80,35 +55,33 @@ export const master = {
   },
   example,
   normalizeProps (props) {
-    if (typeof props === 'string' || Array.isArray(props)) {
+    if (typeof props === 'string') {
       props = { src: props }
-    }
-    if (typeof props.src === 'string') {
-      props = { src: [props.src] }
     }
     return props
   },
-  stepCount (props) {
-    return props.src.length
-  },
   resolveMediaUris (props) {
-    return props.src
+    return [props.src]
   }
 }
 
 export default {
   props: {
     src: {
-      type: [Array],
-      required: true
+      type: String,
+      required: true,
+      description: 'Den URI zu einer Bild-Datei.',
+      mediaFileUri: true
     },
     title: {
       type: String,
-      markup: true
+      markup: true,
+      description: 'Ein Titel, der angezeigt wird.'
     },
     description: {
       type: String,
-      markup: true
+      markup: true,
+      description: 'Eine Beschreibung, die angezeigt wird.'
     }
   },
   computed: {
@@ -123,14 +96,8 @@ export default {
       if ('description' in this.mediaFile) return markupToHtml(this.mediaFile.description)
       return ''
     },
-    stepNoCurrent () {
-      return this.slideCurrent.renderData.stepNoCurrent - 1
-    },
-    uriCurrent () {
-      return this.src[this.stepNoCurrent]
-    },
     mediaFile () {
-      return this.$store.getters['media/mediaFileByUri'](this.uriCurrent)
+      return this.$store.getters['media/mediaFileByUri'](this.src)
     }
   }
 }
