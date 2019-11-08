@@ -6,7 +6,7 @@
 
 import Vue from 'vue'
 import store from '@/store.js'
-import { markupToHtml } from '@/lib.js'
+import { markupToHtml, validateUri } from '@/lib.js'
 
 /**
  * Each master slide is a instance of this class. This class has many dummy
@@ -298,6 +298,22 @@ class Master {
         throw new Error(`The master slide “${this.name}” has not prop named “${propName}”`)
       }
     }
+  }
+
+  /**
+   * Validate all media file URIs in the props of a certain slide.
+   *
+   * @param {module:@bldr/vue-app-presentation~props} props
+   */
+  validateUris (props) {
+    if (!('props' in this.vue)) return props
+    for (const propName in props) {
+      const vueProp = this.vue.props[propName]
+      if ('mediaFileUri' in vueProp && vueProp.mediaFileUri) {
+        props[propName] = validateUri(props[propName])
+      }
+    }
+    return props
   }
 }
 

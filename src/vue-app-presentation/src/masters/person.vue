@@ -58,7 +58,8 @@ export default {
     },
     image: {
       type: String,
-      required: true
+      required: true,
+      mediaFileUri: true
     },
     birth: {
       type: [String, Number]

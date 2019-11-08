@@ -17,7 +17,7 @@ export function convertMarkdown(text) {
 /**
  * Convert the specifed text to HTML. At the moment Markdown and HTML formats
  * are supported. The conversion is done in a recursive fashion, that means
- * nested strings are also converted
+ * nested strings are also converted.
  *
  * @param {String|Array|Object} input - Convert the specifed input.
  *

@@ -11,8 +11,12 @@
           :key="name"
         >
           <code>{{ name }}</code>
-          <span v-if="spec.required">*</span>
-          <span v-if="spec.markup"> (markup)</span>
+
+          <span v-if="spec.required || spec.required || spec.mediaFileUri">[
+            <span v-if="spec.required"> required</span>
+            <span v-if="spec.markup"> markup</span>
+            <span v-if="spec.mediaFileUri"> mediaFileUri</span>
+          ]</span>
           <span v-if="spec.description" v-html="': ' + markupToHtml(spec.description)">:</span>
         </li>
       </ul>

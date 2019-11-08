@@ -49,11 +49,13 @@ export default {
     },
     score: {
       type: String,
-      description: 'URI zu einer Bild-Datei, dem Notenbeispiel.'
+      description: 'URI zu einer Bild-Datei, dem Notenbeispiel.',
+      mediaFileUri: true
     },
     audio: {
       type: String,
-      description: 'URI der entsprechenden Audio-Datei oder des Samples.'
+      description: 'URI der entsprechenden Audio-Datei oder des Samples.',
+      mediaFileUri: true
     }
   },
   computed: {

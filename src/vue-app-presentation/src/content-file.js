@@ -184,6 +184,7 @@ class RenderData {
     }
     master.detectUnkownProps(this.props)
     master.markupToHtml(this.props)
+    master.validateUris(this.props)
 
     const mediaUris = master.resolveMediaUris(this.props)
     if (mediaUris) this.mediaUris = mediaUris

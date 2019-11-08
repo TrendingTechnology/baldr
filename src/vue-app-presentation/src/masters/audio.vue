@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import { markupToHtml, validateUri } from '@/lib.js'
+import { markupToHtml } from '@/lib.js'
 import { createNamespacedHelpers } from 'vuex'
 const { mapGetters } = createNamespacedHelpers('presentation')
 
@@ -73,6 +73,12 @@ slides:
     cover: filename:Beethoven_Ludwig-van.jpg
     title: Custom cover
 
+- title: 'Without media file URI schemes.'
+  audio:
+    src: Du-bist-als-Kind-zu-heiss-gebadet-worden
+    cover: Beethoven
+    title: Custom cover
+
 - title: 'URL: id:'
   audio:
     src: id:Du-bist-als-Kind-zu-heiss-gebadet-worden
@@ -95,7 +101,6 @@ export const master = {
     if (typeof props === 'string') {
       props = { src: props }
     }
-    props.src = validateUri(props.src)
     return props
   },
   resolveMediaUris (props) {
@@ -117,7 +122,8 @@ export default {
     src: {
       type: [String, Array],
       required: true,
-      description: 'Eine Medien-Datei-URI, z. B. `id:Fuer-Elise` oder eine Sample-URI (`id:Fuer-Elise#complete`).'
+      description: 'Eine Medien-Datei-URI, z. B. `id:Fuer-Elise` oder eine Sample-URI (`id:Fuer-Elise#complete`).',
+      mediaFileUri: true
     },
     title: {
       type: String,
@@ -136,7 +142,8 @@ export default {
     },
     cover: {
       type: String,
-      description: 'Eine Medien-Datei-URI, die als Cover-Bild angezeigt werden soll.'
+      description: 'Eine Medien-Datei-URI, die als Cover-Bild angezeigt werden soll.',
+      mediaFileUri: true
     },
     autoplay: {
       type: Boolean,
