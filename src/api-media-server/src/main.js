@@ -21,10 +21,17 @@
  * # REST API
  *
  * - `mgmt`
- *   - `edit`: Open a media file specified by an ID with an editor specified in
- *     `config.mediaServer.editor` (`/etc/baldr.json`).
  *   - `flush`: Delete all media files (assets, presentations) from the database.
  *   - `init`: Initialize the MongoDB database
+ *   - `open`: Open a media file specified by an ID. This query parameters are
+ *     available:
+ *       - `id`: The ID of the media file (required).
+ *       - `type`: `presentations`, `assets`. The default value is
+ *         `presentations.`
+ *       - `with`: `editor` specified in `config.mediaServer.editor`
+ *         (`/etc/baldr.json`) or `folder` to open the parent folder of the
+ *         given media file. The default value is `editor`
+ *
  *   - `re-init`: Re-Initialize the MongoDB database (Drop all collections and
  *     initialize)
  *   - `update`: Update the media server database (Flush and insert).
@@ -512,23 +519,31 @@ async function flushMediaFiles () {
 const helpMessages = {
   navigation: {
     mgmt: {
-      edit: {
-        '#description': 'Open a media file specified by an ID with an editor specified in `config.mediaServer.editor` (`/etc/baldr.json`).',
-        '#examples': [
-          'mgmt/edit?type=presentations&id=Beethoven_Egmont',
-          'mgmt/edit?type=assets&id=Marsch_4-Haende_op-45_no-2'
-        ]
-      },
       flush: 'Delete all media files (assets, presentations) from the database.',
       init: 'Initialize the MongoDB database.',
+      open: {
+        '#description': 'Open a media file specified by an ID.',
+        '#examples': [
+          'mgmt/open?id=Beethoven_Egmont',
+          'mgmt/open?with=editor&id=Beethoven_Egmont',
+          'mgmt/open?with=editor&type=presentations&id=Beethoven_Egmont',
+          'mgmt/open?with=editor&assets&id=Marsch_4-Haende_op-45_no-2',
+          'mgmt/open?with=folder&assets&id=Marsch_4-Haende_op-45_no-2'
+        ],
+        '#parameters': {
+          id: 'The ID of the media file (required).',
+          type: '`presentations`, `assets`. The default value is `presentations.`',
+          with: '`editor` specified in `config.mediaServer.editor` (`/etc/baldr.json`) or `folder` to open the parent folder of the given media file. The default value is `editor`.'
+        }
+      },
       're-init': 'Re-Initialize the MongoDB database (Drop all collections and initialize).',
       update: 'Update the media server database (Flush and insert).'
     },
     query: {
       '#description': 'Get results by using query parameters',
       '#examples': [
-        '?type=assets&field=id&method=exactMatch&search=Egmont-Ouverture',
-        '?type=presentations&field=id&method=exactMatch&search=Beethoven_Marmotte'
+        'query?type=assets&field=id&method=exactMatch&search=Egmont-Ouverture',
+        'query?type=presentations&field=id&method=exactMatch&search=Beethoven_Marmotte'
       ],
       '#parameters': {
         type: '`assets` (default), `presentations` (what)',
@@ -562,15 +577,15 @@ function validateMediaType (mediaType) {
 }
 
 /**
- * Open a media file specified by an ID with an editor specified in
- *   `config.mediaServer.editor` (`/etc/baldr.json`).
+ * Resolve a ID from a given media type (`assets`, `presentations`) to a
+ * absolute path.
  *
- * @param {String} mediaType - At the moment `assets` and `presentation`
  * @param {String} id - The id of the media type.
+ * @param {String} mediaType - At the moment `assets` and `presentation`
  *
- * @return {Object}
+ * @return {String}
  */
-async function openEditor (id, mediaType = 'presentations') {
+function getAbsPathFromId (id, mediaType = 'presentations') {
   mediaType = validateMediaType(mediaType)
   const result = await db.collection(mediaType).find({ id: id }).next()
   let relPath
@@ -579,7 +594,20 @@ async function openEditor (id, mediaType = 'presentations') {
   } else {
     relPath = result.path
   }
-  const absPath = path.join(config.mediaServer.basePath, relPath)
+  return path.join(config.mediaServer.basePath, relPath)
+}
+
+/**
+ * Open a media file specified by an ID with an editor specified in
+ *   `config.mediaServer.editor` (`/etc/baldr.json`).
+ *
+ * @param {String} id - The id of the media type.
+ * @param {String} mediaType - At the moment `assets` and `presentation`
+ *
+ * @return {Object}
+ */
+async function openEditor (id, mediaType) {
+  const absPath = getAbsPathFromId(id, mediaType)
   const editor = config.mediaServer.editor
   if (!fs.existsSync(editor)) {
     return {
@@ -596,6 +624,30 @@ async function openEditor (id, mediaType = 'presentations') {
   return {
     absPath,
     editor
+  }
+}
+
+/**
+ * Open the parent folder of a presentation, a media asset in a file explorer
+ * GUI application.
+ *
+ * @param {String} id - The id of the media type.
+ * @param {String} mediaType - At the moment `assets` and `presentation`
+ *
+ * @return {Object}
+ */
+async function openParentFolder (id, mediaType) {
+  const absPath = getAbsPathFromId(id, mediaType)
+  const parentFolder = path.dirname(absPath)
+  childProcess.spawn('xdg-open', [parentFolder], {
+    env: {
+      // Not needed
+      //XAUTHORITY: '/run/user/1000/gdm/Xauthority',
+      DISPLAY: ':0'
+    }
+  })
+  return {
+    parentFolder
   }
 }
 
@@ -693,14 +745,6 @@ function registerRestApi () {
 
   /* mgmt = management */
 
-  app.get('/mgmt/edit', async (req, res, next) => {
-    try {
-      res.json(await openEditor(req.query.id, req.query.type))
-    } catch (error) {
-      next(error)
-    }
-  })
-
   app.get('/mgmt/flush', async (req, res, next) => {
     try {
       await flushMediaFiles()
@@ -718,7 +762,21 @@ function registerRestApi () {
     }
   })
 
-
+  app.get('/mgmt/open', async (req, res, next) => {
+    try {
+      const query = req.query
+      if (!query.id) throw new Error('You have to specify an ID (?id=myfile).')
+      if (!query.with) query.with = 'editor'
+      if (!query.type) query.type = 'presentations'
+      if (query.with === 'editor') {
+        res.json(await openEditor(query.id, query.type))
+      } else if (query.with === 'folder') {
+        res.json(await openParentFolder(query.id, query.type))
+      }
+    } catch (error) {
+      next(error)
+    }
+  })
 
   app.get('/mgmt/re-init', async (req, res, next) => {
     try {
