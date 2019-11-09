@@ -141,8 +141,9 @@ export default {
             return
           }
           this.$media.httpRequest.request({
-            url: 'mgmt/edit',
+            url: 'mgmt/open',
             params: {
+              with: 'editor',
               type: 'presentations',
               id: presentation.meta.id
             }

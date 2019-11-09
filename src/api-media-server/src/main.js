@@ -527,8 +527,8 @@ const helpMessages = {
           'mgmt/open?id=Beethoven_Egmont',
           'mgmt/open?with=editor&id=Beethoven_Egmont',
           'mgmt/open?with=editor&type=presentations&id=Beethoven_Egmont',
-          'mgmt/open?with=editor&assets&id=Marsch_4-Haende_op-45_no-2',
-          'mgmt/open?with=folder&assets&id=Marsch_4-Haende_op-45_no-2'
+          'mgmt/open?with=editor&type=assets&id=Beethoven',
+          'mgmt/open?with=folder&type=assets&id=Beethoven'
         ],
         '#parameters': {
           id: 'The ID of the media file (required).',
@@ -588,6 +588,7 @@ function validateMediaType (mediaType) {
 async function getAbsPathFromId (id, mediaType = 'presentations') {
   mediaType = validateMediaType(mediaType)
   const result = await db.collection(mediaType).find({ id: id }).next()
+  if (!result) throw new Error(`Can not find media file with the type “${mediaType}” and the id “${id}”.`)
   let relPath
   if (mediaType === 'assets') {
     relPath = `${result.path}.yml`
