@@ -585,7 +585,7 @@ function validateMediaType (mediaType) {
  *
  * @return {String}
  */
-function getAbsPathFromId (id, mediaType = 'presentations') {
+async function getAbsPathFromId (id, mediaType = 'presentations') {
   mediaType = validateMediaType(mediaType)
   const result = await db.collection(mediaType).find({ id: id }).next()
   let relPath
@@ -607,7 +607,7 @@ function getAbsPathFromId (id, mediaType = 'presentations') {
  * @return {Object}
  */
 async function openEditor (id, mediaType) {
-  const absPath = getAbsPathFromId(id, mediaType)
+  const absPath = await getAbsPathFromId(id, mediaType)
   const editor = config.mediaServer.editor
   if (!fs.existsSync(editor)) {
     return {
@@ -637,7 +637,7 @@ async function openEditor (id, mediaType) {
  * @return {Object}
  */
 async function openParentFolder (id, mediaType) {
-  const absPath = getAbsPathFromId(id, mediaType)
+  const absPath = await getAbsPathFromId(id, mediaType)
   const parentFolder = path.dirname(absPath)
   childProcess.spawn('xdg-open', [parentFolder], {
     env: {
