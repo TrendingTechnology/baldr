@@ -69,6 +69,13 @@ export default {
     updateMediaServer (endpointName, event) {
       event.target.classList.add('baldr-icon-spin')
       httpRequestNg.request('mgmt/update', endpointName).then((result) => {
+        for (const errorMsg of result.data.errors) {
+          this.$notify({
+            group: 'default',
+            type: 'error',
+            text: errorMsg
+          })
+        }
         event.target.classList.remove('baldr-icon-spin')
         this.$store.dispatch('media/setRestApiServers')
       })

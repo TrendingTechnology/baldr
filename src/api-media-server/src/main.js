@@ -70,7 +70,7 @@ const { bootstrapConfig, snakeToCamel } = require('@bldr/core-node')
 const packageJson = require('../package.json')
 
 /**
- *
+ * The configuration object from `/etc/baldr.json`
  */
 const config = bootstrapConfig()
 
@@ -78,6 +78,11 @@ const config = bootstrapConfig()
  * Base path of the media server file store.
  */
 const basePath = config.mediaServer.basePath
+
+/**
+ * A container array for all error messages send out via the REST API.
+ */
+let errors = []
 
 /* MongoDb setup **************************************************************/
 
@@ -398,7 +403,7 @@ function isAsset (fileName) {
     return false
   }
   const extension = path.extname(fileName).substr(1)
-  if (['yml', 'db', 'md', 'tex'].includes(extension)) {
+  if (['yml', 'db', 'md', 'tex', 'mscx'].includes(extension)) {
     return false
   }
   return true
@@ -422,7 +427,15 @@ function isPresentation (fileName) {
 async function insertAsset (relPath) {
   const asset = new Asset(relPath).prepareForInsert()
   console.log(asset.path)
-  await db.collection('assets').insertOne(asset)
+  try {
+    await db.collection('assets').insertOne(asset)
+  } catch (error) {
+    if (error.code === 11000) {
+      const msg = `Duplicate id “${asset.id}” of media asset: ${asset.path}`
+      console.log(msg)
+      errors.push(msg)
+    }
+  }
 }
 
 /**
@@ -431,7 +444,15 @@ async function insertAsset (relPath) {
 async function insertPresentation (relPath) {
   const presentation = new Presentation(relPath).prepareForInsert()
   console.log(presentation.path)
-  await db.collection('presentations').insertOne(presentation)
+  try {
+    await db.collection('presentations').insertOne(presentation)
+  } catch (error) {
+    if (error.code === 11000) {
+      const msg = `Duplicate id “${presentation.id}” of presentation: ${presentation.path}`
+      console.log(msg)
+      errors.push(msg)
+    }
+  }
 }
 
 /**
@@ -446,7 +467,7 @@ async function walk (dir, on) {
     // Exclude .git/
     if (fileName.substr(0, 1) !== '.') {
       if (fs.statSync(relPath).isDirectory()) {
-        walk(relPath, on)
+        await walk(relPath, on)
       } else {
         if ('everyFile' in on) await on.everyFile(relPath)
         if (isPresentation(fileName)) {
@@ -485,7 +506,7 @@ async function update () {
   await initializeDb()
   await flushMediaFiles()
   const begin = new Date().getTime()
-  db.collection('updates').insertOne({ begin: begin, end: 0 })
+  await db.collection('updates').insertOne({ begin: begin, end: 0 })
   await walk(basePath, {
     presentation: insertPresentation,
     asset: insertAsset
@@ -497,7 +518,8 @@ async function update () {
     begin,
     end,
     duration: end - begin,
-    lastCommitId
+    lastCommitId,
+    errors
   }
 }
 
@@ -851,6 +873,8 @@ function registerRestApi () {
   app.get('/mgmt/update', async (req, res, next) => {
     try {
       res.json(await update())
+      // Clear error message store.
+      errors = []
     } catch (error) {
       next(error)
     }
