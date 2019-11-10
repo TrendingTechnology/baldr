@@ -403,7 +403,7 @@ function isAsset (fileName) {
     return false
   }
   const extension = path.extname(fileName).substr(1)
-  if (['yml', 'db', 'md', 'tex', 'mscx'].includes(extension)) {
+  if (['yml', 'db', 'md', 'tex', 'mscx', 'lol', 'synctex', 'pdf', 'log', 'aux'].includes(extension)) {
     return false
   }
   return true
