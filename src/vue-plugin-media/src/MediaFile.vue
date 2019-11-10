@@ -70,8 +70,9 @@ export default {
   methods: {
     openEditor () {
       this.$media.httpRequest.request({
-        url: 'mgmt/edit',
+        url: 'mgmt/open',
         params: {
+          with: 'editor',
           type: 'assets',
           id: this.mediaFile.id
         }
