@@ -1,6 +1,6 @@
 {
   "name": "@bldr/vue-app-showroom",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Vue app to test the themes.",
   "author": {
     "name": "Josef Friedrich",
@@ -16,10 +16,10 @@
   "dependencies": {
     "@bldr/core-node": "^0.1.4",
     "@bldr/themes": "^0.1.3",
-    "@bldr/vue-plugin-components-collection": "^0.1.2",
+    "@bldr/vue-plugin-components-collection": "^0.1.3",
     "@bldr/vue-plugin-dynamic-select": "^0.1.2",
-    "@bldr/vue-plugin-material-icon": "^0.1.2",
-    "@bldr/vue-plugin-modal-dialog": "^0.1.2",
+    "@bldr/vue-plugin-material-icon": "^0.1.3",
+    "@bldr/vue-plugin-modal-dialog": "^0.1.3",
     "@bldr/vue-plugin-shortcuts": "^0.1.2",
     "core-js": "^3.3.6",
     "vue": "^2.6.10",

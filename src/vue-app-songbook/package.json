@@ -1,6 +1,6 @@
 {
   "name": "@bldr/vue-app-songbook",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Vue app of the baldr songbook.",
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -14,11 +14,11 @@
     "@bldr/core-node": "^0.1.4",
     "@bldr/songbook-core": "^0.1.8",
     "@bldr/themes": "^0.1.3",
-    "@bldr/vue-plugin-components-collection": "^0.1.2",
+    "@bldr/vue-plugin-components-collection": "^0.1.3",
     "@bldr/vue-plugin-dynamic-select": "^0.1.2",
-    "@bldr/vue-plugin-material-icon": "^0.1.2",
+    "@bldr/vue-plugin-material-icon": "^0.1.3",
     "@bldr/vue-plugin-media": "^0.1.3",
-    "@bldr/vue-plugin-modal-dialog": "^0.1.2",
+    "@bldr/vue-plugin-modal-dialog": "^0.1.3",
     "@bldr/vue-plugin-shortcuts": "^0.1.2",
     "core-js": "^3.3.6",
     "vue": "^2.6.10",
