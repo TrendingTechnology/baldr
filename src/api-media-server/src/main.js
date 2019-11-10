@@ -320,6 +320,7 @@ class MediaFile {
     if (!this.id) this.id = asciify(this.basename_)
     if (!this.title) this.title = deasciify(this.id)
     this.cleanTmpProperties()
+    return this
   }
 }
 
