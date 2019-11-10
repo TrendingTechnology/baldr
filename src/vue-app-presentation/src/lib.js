@@ -8,10 +8,16 @@ import marked from 'marked'
 /**
  * Maybe long texts are not converted? Had to use marked() function in editor.
  * Surpress wrapping in <p> tag.
- * https://github.com/markedjs/marked/issues/395
+ * Other no so stable solution: https://github.com/markedjs/marked/issues/395
  */
 export function convertMarkdown(text) {
-  return marked.inlineLexer(text, [])
+  text = marked(text)
+  const dom = new DOMParser().parseFromString(text, 'text/html')
+  if (dom.body.childElementCount === 1 && dom.body.childNodes[0].tagName === 'P') {
+    return dom.body.childNodes[0].innerHTML
+  } else {
+    return dom.body.innerHTML
+  }
 }
 
 /**

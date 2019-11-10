@@ -28,6 +28,27 @@ const { mapGetters } = createNamespacedHelpers('presentation')
 const example = `
 ---
 slides:
+
+- title: Markup support
+  question:
+    heading: 'Markup support: *italic* **bold**'
+    questions:
+      - question: 'Markup support: *italic* **bold**'
+        answer: 'Markup support: *italic* **bold**'
+
+- title: Markup support in short form
+  question:
+    question: 'Markup support: *italic* **bold**'
+    answer: 'Markup support: *italic* **bold**'
+
+- title: Markup support multiline
+  question:
+    question: 'Markup support: *multiline*'
+    answer: |
+      * one
+      * two
+      * three
+
 - title: Heading
   question:
     heading: Questions about the text
