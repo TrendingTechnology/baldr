@@ -910,7 +910,9 @@ function registerRestApi () {
 }
 
 module.exports = {
+  asciify,
   Asset,
+  deasciify,
   helpMessages,
   registerRestApi,
   walk
