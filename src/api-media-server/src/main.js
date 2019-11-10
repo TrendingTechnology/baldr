@@ -398,7 +398,7 @@ function isAsset (fileName) {
     return false
   }
   const extension = path.extname(fileName).substr(1)
-  if (['yml', 'db', 'md'].includes(extension)) {
+  if (['yml', 'db', 'md', 'tex'].includes(extension)) {
     return false
   }
   return true
