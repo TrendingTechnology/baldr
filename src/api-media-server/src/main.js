@@ -62,6 +62,7 @@ const path = require('path')
 const yaml = require('js-yaml')
 const express = require('express')
 const MongoClient = require('mongodb').MongoClient
+const { transliterate } = require('transliteration')
 
 // Project packages.
 const { bootstrapConfig, snakeToCamel } = require('@bldr/core-node')
@@ -115,6 +116,86 @@ async function connectDb () {
   }
 }
 
+/* Helper functions ***********************************************************/
+
+/**
+ * This function can be used to generate ids from different file names.
+ *
+ * @param {String} input
+ *
+ * @returns {String}
+ */
+function asciify (input) {
+  let output = input
+    .replace(/[\(\)]/g, '')
+    .replace(/[,.] /g, '_')
+    .replace(/ +- +/g, '_')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/-*_-*/g, '_')
+    .replace(/Ä/g, 'Ae')
+    .replace(/ä/g, 'ae')
+    .replace(/Ö/g, 'Oe')
+    .replace(/ö/g, 'oe')
+    .replace(/Ü/g, 'Ue')
+    .replace(/ü/g, 'ue')
+    .replace(/ß/g, 'ss')
+  return transliterate(output)
+}
+
+/**
+ * This function can be used to generate a title from an ID string.
+ *
+ * @param {String} input
+ *
+ * @returns {String}
+ */
+function deasciify (input) {
+  return input
+    .replace(/_/g, ', ')
+    .replace(/-/g, ' ')
+    .replace(/Ae/g, 'Ä')
+    .replace(/ae/g, 'ä')
+    .replace(/Oe/g, 'Ö')
+    .replace(/oe/g, 'ö')
+    .replace(/Ue/g, 'Ü')
+    .replace(/ue/g, 'ü')
+}
+
+
+/**
+ * Convert all properties in an object to camelCase in a recursive fashion.
+ *
+ * TODO: Use the function in @bldr/core-browser
+ *
+ * @param {Object} object
+ *
+ * @returns {Object}
+ */
+function convertPropertiesToCamelCase (object) {
+  // Array
+  if (Array.isArray(object)) {
+    for (const item of object) {
+      if (typeof object === 'object') {
+        convertPropertiesToCamelCase(item)
+      }
+    }
+  // Object
+  } else if (typeof object === 'object') {
+    for (const snakeCase in object) {
+      const camelCase = snakeToCamel(snakeCase)
+      if (camelCase !== snakeCase) {
+        const value = object[snakeCase]
+        object[camelCase] = value
+        delete object[snakeCase]
+      }
+      // Object or array
+      if (typeof object[camelCase] === 'object') convertPropertiesToCamelCase(object[camelCase])
+    }
+  }
+  return object
+}
+
 /* Media objects **************************************************************/
 
 /**
@@ -128,6 +209,7 @@ class MediaFile {
      * @private
      */
     this.absPath_ = path.resolve(filePath)
+
     /**
      * Relative path ot the file.
      * @type {string}
@@ -228,39 +310,17 @@ class MediaFile {
       this[property] = object[property]
     }
   }
-}
 
-/**
- * Convert all properties in an object to camelCase in a recursive fashion.
- *
- * TODO: Use the function in @bldr/core-browser
- *
- * @param {Object} object
- *
- * @returns {Object}
- */
-function convertPropertiesToCamelCase (object) {
-  // Array
-  if (Array.isArray(object)) {
-    for (const item of object) {
-      if (typeof object === 'object') {
-        convertPropertiesToCamelCase(item)
-      }
-    }
-  // Object
-  } else if (typeof object === 'object') {
-    for (const snakeCase in object) {
-      const camelCase = snakeToCamel(snakeCase)
-      if (camelCase !== snakeCase) {
-        const value = object[snakeCase]
-        object[camelCase] = value
-        delete object[snakeCase]
-      }
-      // Object or array
-      if (typeof object[camelCase] === 'object') convertPropertiesToCamelCase(object[camelCase])
-    }
+  /**
+   * Prepare the object for the insert into the MongoDB database
+   * Generate `id` and `title` if this properties are not present.
+   */
+  prepareForInsert () {
+    this.addFileInfos()
+    if (!this.id) this.id = asciify(this.basename_)
+    if (!this.title) this.title = deasciify(this.id)
+    this.cleanTmpProperties()
   }
-  return object
 }
 
 /**
@@ -359,7 +419,7 @@ function isPresentation (fileName) {
  * @param {String} relPath
  */
 async function insertAsset (relPath) {
-  const asset = new Asset(relPath).addFileInfos().cleanTmpProperties()
+  const asset = new Asset(relPath).prepareForInsert()
   console.log(asset.path)
   await db.collection('assets').insertOne(asset)
 }
@@ -368,7 +428,7 @@ async function insertAsset (relPath) {
  * @param {String} relPath
  */
 async function insertPresentation (relPath) {
-  const presentation = new Presentation(relPath).addFileInfos().cleanTmpProperties()
+  const presentation = new Presentation(relPath).prepareForInsert()
   console.log(presentation.path)
   await db.collection('presentations').insertOne(presentation)
 }

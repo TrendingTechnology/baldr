@@ -10,10 +10,9 @@ const commander = require('commander')
 const chalk = require('chalk')
 const yaml = require('js-yaml')
 const musicMetadata = require('music-metadata')
-const { transliterate } = require('transliteration')
 
 // Project packages
-const { Asset, walk } = require('./main.js')
+const { Asset, walk, asciify, deasciify } = require('./main.js')
 const { bootstrapConfig } = require('@bldr/core-node')
 
 // Project packages.
@@ -247,43 +246,6 @@ class MediaTypes {
 }
 
 const mediaTypes = new MediaTypes()
-
-/**
- *
- * @param {String} input
- */
-function asciify (input) {
-  let output = input
-    .replace(/[\(\)]/g, '')
-    .replace(/[,.] /g, '_')
-    .replace(/ +- +/g, '_')
-    .replace(/\s+/g, '-')
-    .replace(/-+/g, '-')
-    .replace(/-*_-*/g, '_')
-    .replace(/Ä/g, 'Ae')
-    .replace(/ä/g, 'ae')
-    .replace(/Ö/g, 'Oe')
-    .replace(/ö/g, 'oe')
-    .replace(/Ü/g, 'Ue')
-    .replace(/ü/g, 'ue')
-    .replace(/ß/g, 'ss')
-  return transliterate(output)
-}
-
-/**
- * @param {String} input
- */
-function deasciify (input) {
-  return input
-    .replace(/_/g, ', ')
-    .replace(/-/g, ' ')
-    .replace(/Ae/g, 'Ä')
-    .replace(/ae/g, 'ä')
-    .replace(/Oe/g, 'Ö')
-    .replace(/oe/g, 'ö')
-    .replace(/Ue/g, 'Ü')
-    .replace(/ue/g, 'ü')
-}
 
 /**
  * Write the metadata YAML file.
