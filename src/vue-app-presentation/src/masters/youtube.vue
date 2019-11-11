@@ -15,7 +15,11 @@ const example = `
 ---
 slides:
 
-- youtube:
+- title: Short form
+  youtube: 5BBahdS6wu4
+
+- title: Long form
+  youtube:
     id: xtKavZG1KiM
 `
 
@@ -28,6 +32,12 @@ export const master = {
     darkMode: true
   },
   example,
+  normalizeProps (props) {
+    if (typeof props === 'string') {
+      props = { id: props }
+    }
+    return props
+  },
 }
 
 export default {
