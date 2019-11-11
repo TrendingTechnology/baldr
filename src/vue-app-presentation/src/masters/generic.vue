@@ -7,8 +7,8 @@
 </template>
 
 <script>
-import marked from 'marked'
 import { plainText } from '@bldr/core-browser'
+import { markupToHtml } from '@/lib.js'
 import { createNamespacedHelpers } from 'vuex'
 const { mapGetters } = createNamespacedHelpers('presentation')
 
@@ -17,6 +17,12 @@ const CHARACTERS_ON_SLIDE = 400
 const example = `
 ---
 slides:
+
+- title: UTF-8 Arrows
+  generic: |
+    * Leftwards Arrow: <-
+    * Rightwards Arrow: ->
+    * Left Right Arrow: <->
 
 - title: hr to generate steps
   generic: |
@@ -241,7 +247,7 @@ export const master = {
     // Convert into HTML
     const converted = []
     for (const markup of props.markup) {
-      converted.push(marked(markup))
+      converted.push(markupToHtml(markup))
     }
 
     // Split by <hr>
