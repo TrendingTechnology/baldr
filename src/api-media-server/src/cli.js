@@ -137,8 +137,16 @@ slides:
   video:
     src: Den URI zu einer Video-Datei. (required, mediaFileUri, type=String)
 
-- youtube:
-    id:
+##
+# youtube
+##
+
+- title:Kurzform
+  youtube: 5BBahdS6wu4
+
+- title: Langform
+  youtube:
+    id: xtKavZG1KiM
 `
 
 commander
