@@ -222,7 +222,10 @@ export default {
       this.$modal.hide('select-video-device')
       const constraints = {
         audio: false,
-        video: { deviceId: { exact: this.deviceId.id } }
+        // ELMO
+        // device id: "4V7Fv34BpWsE9EX1Y718KLZVUyifnZrZo7bUTxCz6XU="
+        // video: { deviceId: { exact: this.deviceId.id } }
+        video: { deviceId: { exact: '4V7Fv34BpWsE9EX1Y718KLZVUyifnZrZo7bUTxCz6XU=' } }
       }
       this.$store.commit('camera/setDeviceId', this.deviceId.id)
       this.setVideoStream(constraints)
@@ -232,17 +235,23 @@ export default {
       this.$dynamicSelect.focus()
     },
     setVideoStream (constraints) {
+      console.log('setVideoStream')
       if (!constraints) {
         constraints = { audio: false, video: true }
       }
+      // {fdf4c841-b6e0-4754-8074-e1d540ac5018}
+      // "4V7Fv34BpWsE9EX1Y718KLZVUyifnZrZo7bUTxCz6XU="
       navigator.mediaDevices.getUserMedia(constraints)
         .then((stream) => {
+          console.log('getUserMedia')
+          console.log(stream)
           this.$refs.videoTag.srcObject = stream
           this.stream = stream
           this.$store.commit('camera/setStream', stream)
           this.$store.dispatch('camera/setMediaDevices')
         })
-        .catch(() => {
+        .catch((error) => {
+          console.log(error)
           this.$store.commit('camera/setCameraNotFound', true)
         })
     },
@@ -256,16 +265,28 @@ export default {
   },
   created () {
     this.setVideoStream()
-    this.$shortcuts.add(
-      'c s',
-      () => { this.showDeviceSelect() },
-      'Dokumentenkamera auswählen'
-    )
-    this.$shortcuts.add(
-      'c d',
-      () => { this.stopVideoStream() },
-      'Video-Ausgabegerät deaktivieren'
-    )
+    this.$shortcuts.addMultiple([
+      {
+        keys: 'c s',
+        callback: this.showDeviceSelect,
+        description: 'Dokumentenkamera auswählen'
+      },
+      {
+        keys: 'c d',
+        callback: this.stopVideoStream,
+        description: 'Video-Ausgabegerät deaktivieren'
+      },
+      {
+        keys: 'c r',
+        callback: this.setVideoStream,
+        description: 'Nach der Dokumentenkamera suchen',
+      },
+      {
+        keys: 'c e',
+        callback: this.setDeviceId,
+        description: 'ELMO auswählen',
+      }
+    ])
   }
 }
 </script>
