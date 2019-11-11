@@ -138,6 +138,18 @@ slides:
     src: Den URI zu einer Video-Datei. (required, mediaFileUri, type=String)
 
 ##
+# wikipedia
+##
+
+- title: Kurzform (wird zur deutschen Wikipedia gelinkt.)
+  wikipedia: Ludwig_van_Beethoven
+
+- title: Langform
+  wikipedia:
+    title: Der Titel des Wikipedia-Artikels (z. B. „Ludwig_van_Beethoven“). (required, type=String)
+    language: Der Sprachen-Code des gewünschten Wikipedia-Artikels (z. B. „de“, „en“). (default=de, type=String)
+
+##
 # youtube
 ##
 
@@ -146,7 +158,7 @@ slides:
 
 - title: Langform
   youtube:
-    id: xtKavZG1KiM
+    id: Die Youtube-ID (z. B. xtKavZG1KiM). (required, type=String)
 `
 
 commander

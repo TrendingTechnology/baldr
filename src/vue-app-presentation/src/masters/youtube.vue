@@ -45,7 +45,7 @@ export default {
     id: {
       type: String,
       required: true,
-      description: 'Die Youtube-ID (z. B. xtKavZG1KiM)'
+      description: 'Die Youtube-ID (z. B. xtKavZG1KiM).'
     }
   }
 }
