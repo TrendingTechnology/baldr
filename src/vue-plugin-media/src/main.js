@@ -1114,7 +1114,7 @@ class Resolver {
         search: value
       }
     })
-    if ('data' in response && 'path' in response.data) {
+    if (response && 'data' in response && response.data && 'path' in response.data) {
       return response
     }
     throw new Error(`Media with the ${key} ”${value}” couldn’t be resolved.`)
