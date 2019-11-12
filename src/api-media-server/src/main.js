@@ -264,7 +264,7 @@ class MediaFile {
   }
 
   /**
-   * Parse the info file of a media file.
+   * Parse the info file of a media asset or the presenation file itself.
    *
    * Each media file can have a info file that stores additional
    * metadata informations.
@@ -274,6 +274,10 @@ class MediaFile {
    *
    * Info file in the YAML file format:
    * `/home/baldr/beethoven.jpg.yml`
+   *
+   * @param {string} filePath - The path of the YAML file.
+   *
+   * @returns {object}
    *
    * @private
    */
@@ -422,37 +426,40 @@ function isPresentation (fileName) {
 /* Insert *********************************************************************/
 
 /**
- * @param {String} relPath
+ * @param {String} filePath
  */
-async function insertAsset (relPath) {
-  const asset = new Asset(relPath).prepareForInsert()
-  console.log(asset.path)
+async function insertObject (filePath, mediaType) {
+  let object
   try {
-    await db.collection('assets').insertOne(asset)
-  } catch (error) {
-    if (error.code === 11000) {
-      const msg = `Duplicate id “${asset.id}” of media asset: ${asset.path}`
-      console.log(msg)
-      errors.push(msg)
+    if (mediaType === 'presentations') {
+      object = new Presentation(filePath)
+    } else if (mediaType === 'assets') {
+      object = new Asset(filePath)
     }
+    object = object.prepareForInsert()
+    console.log(object.path)
+    await db.collection(mediaType).insertOne(object)
+  } catch (error) {
+    let relPath = filePath.replace(config.mediaServer.basePath, '')
+    relPath = relPath.replace(new RegExp('^/'), '')
+    const msg = `${relPath}: [${error.name}] ${error.message}`
+    console.log(msg)
+    errors.push(msg)
   }
 }
 
 /**
- * @param {String} relPath
+ * @param {String} filePath
  */
-async function insertPresentation (relPath) {
-  const presentation = new Presentation(relPath).prepareForInsert()
-  console.log(presentation.path)
-  try {
-    await db.collection('presentations').insertOne(presentation)
-  } catch (error) {
-    if (error.code === 11000) {
-      const msg = `Duplicate id “${presentation.id}” of presentation: ${presentation.path}`
-      console.log(msg)
-      errors.push(msg)
-    }
-  }
+async function insertAsset (filePath) {
+  await insertObject(filePath, 'assets')
+}
+
+/**
+ * @param {String} filePath
+ */
+async function insertPresentation (filePath) {
+  await insertObject(filePath, 'presentations')
 }
 
 /**

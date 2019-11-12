@@ -210,12 +210,22 @@ export default {
         callback: async () => {
           try {
             const result = await this.$media.httpRequest.request('mgmt/update')
-            const res = result.data
-            this.$notify({
-              group: 'default',
-              type: 'success',
-              text: `Der lokale Medien-Server wurde erfolgreich aktualisiert. Git-Commit-ID: ${res.lastCommitId.substring(0, 8)}`
-            })
+            if (result.data.errors.length) {
+              for (const errorMsg of result.data.errors) {
+                this.$notify({
+                  group: 'default',
+                  type: 'error',
+                  text: errorMsg,
+                  duration: -1 // forever
+                })
+              }
+            } else {
+              this.$notify({
+                group: 'default',
+                type: 'success',
+                text: `Der lokale Medien-Server wurde erfolgreich aktualisiert. Git-Commit-ID: ${result.data.lastCommitId.substring(0, 8)}`
+              })
+            }
           } catch (error) {
             this.$notify({
               group: 'default',
@@ -276,7 +286,7 @@ export default {
     padding: 1em;
     margin: 0 1em 1em;
 
-    font-size: 2vw;
+    font-size: 12pt;
 
     color: #ffffff;
     background: #44A4FC;

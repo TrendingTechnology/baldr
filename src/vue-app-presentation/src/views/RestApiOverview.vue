@@ -73,7 +73,8 @@ export default {
           this.$notify({
             group: 'default',
             type: 'error',
-            text: errorMsg
+            text: errorMsg,
+            duration: -1 // forever
           })
         }
         event.target.classList.remove('baldr-icon-spin')
