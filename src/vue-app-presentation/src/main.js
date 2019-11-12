@@ -319,6 +319,16 @@ store.subscribe((mutation, state) => {
   }
 })
 
+Vue.config.errorHandler = function (error, vm, info) {
+  vm.$notify({
+    group: 'default',
+    title: error.name,
+    text: error.message,
+    duration: -1,
+    type: 'error'
+  })
+}
+
 /**
  * The main vue instance
  * @namespace Vue
