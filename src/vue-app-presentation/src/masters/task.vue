@@ -58,7 +58,8 @@ export default {
     markup: {
       type: String,
       required: true,
-      markup: true
+      markup: true,
+      description: 'Text im HTML oder Markdown-Format oder als reinen Text.'
     }
   }
 }

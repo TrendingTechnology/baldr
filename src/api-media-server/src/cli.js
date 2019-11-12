@@ -64,7 +64,6 @@ slides:
     autoplay: Den Audio-Ausschnitt automatisch abspielen. (type=Boolean)
     playthrough: Über die Folien hinwegspielen. Nicht stoppen beim Folienwechsel. (type=Boolean)
 
-
 - camera: yes
 - editor:
     markup:
@@ -279,19 +278,16 @@ function writeMetaDataYaml (filePath, metaData) {
     if (!metaData) metaData = {}
     const asset = new Asset(filePath).addFileInfos()
 
-    if (!metaData.title) {
-      metaData.title = deasciify(asset.basename_)
-    }
-
     if (!metaData.id) {
       metaData.id = asciify(asset.basename_)
     }
 
+    if (!metaData.title) {
+      metaData.title = deasciify(asset.basename_)
+    }
+
     const yamlMarkup = [
       '---',
-      `# path: ${asset.path}`,
-      `# filename: ${asset.filename}`,
-      `# extension: ${asset.extension}`,
       yaml.safeDump(metaData)
     ]
 

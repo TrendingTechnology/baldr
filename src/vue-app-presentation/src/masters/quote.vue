@@ -56,13 +56,16 @@ export default {
     text: {
       type: String,
       required: true,
-      markup: true
+      markup: true,
+      description: 'Haupttext des Zitats.'
     },
     author: {
-      type: String
+      type: String,
+      description: 'Der Autor des Zitats.'
     },
     date: {
-      type: [String, Number]
+      type: [String, Number],
+      description: 'Datum des Zitats.'
     }
   }
 }

@@ -143,7 +143,8 @@ export default {
   props: {
     markup: {
       type: String,
-      markup: true
+      markup: true,
+      description: 'Text im HTML oder Markdown Format oder natürlich als reiner Text.'
     }
   },
   data () {
