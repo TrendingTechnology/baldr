@@ -298,6 +298,24 @@ class Player {
     sample.currentVolume = sample.mediaElement.volume
   }
 
+  jump_ (interval = 10, direction = 'forward') {
+    const sample = this.$store.getters['media/samplePlaying']
+    if (!sample || !sample.mediaElement) return
+    if (direction === 'backward') {
+      sample.mediaElement.currentTime -= interval
+    } else {
+      sample.mediaElement.currentTime += interval
+    }
+  }
+
+  forward () {
+    this.jump_(10, 'forward')
+  }
+
+  backward () {
+    this.jump_(10, 'backward')
+  }
+
   /**
    * @param {Number} duration - in seconds
    * @private
@@ -1326,10 +1344,30 @@ class Media {
         description: 'Medien-Abspieler: Audio/Video-Ausschnitt langsam ausblenden'
       },
       {
-        keys: 'p s',
+        keys: 'ctrl+space',
         callback: () => { this.player.start() },
         // Media player: Start loaded sample
         description: 'Medien-Abspieler: Starte geladenen Audio/Video-Ausschnitt'
+      },
+      {
+        keys: 'ctrl+left',
+        callback: () => { this.playList.startPrevious() },
+        description: 'Medien-Abspieler: Spiele den vorhergehenden Ausschnitt.'
+      },
+      {
+        keys: 'ctrl+right',
+        callback: () => { this.playList.startNext() },
+        description: 'Medien-Abspieler: Spiele den nächsten Ausschnitt.'
+      },
+      {
+        keys: 'ctrl+shift+right',
+        callback: () => { this.player.forward() },
+        description: 'Medien-Abspieler: Um 10s nach vorne springen.'
+      },
+      {
+        keys: 'ctrl+shift+left',
+        callback: () => { this.player.backward() },
+        description: 'Medien-Abspieler: Um 10s nach hinten springen.'
       }
     ])
 
