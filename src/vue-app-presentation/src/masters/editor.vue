@@ -20,6 +20,8 @@ const example = `
 ---
 slides:
 
+- editor
+
 - title: Show editor
   editor: |
     # heading
@@ -134,37 +136,26 @@ export const master = {
   },
   example,
   normalizeProps (props) {
-    let propsNormalized = {}
+    console.log(props)
+    let norm = {}
+    // Somehow two editor slides get the same edited content.
+    editorId += 1
+
     if (typeof props === 'boolean') {
-      // Somehow two editor slides get the same edited content.
-      editorId += 1
-      propsNormalized.markup = `<p class="editor-${editorId}" contenteditable>…</p>`
-      //return propsNormalized
+      norm.markup = '<div>…</div>'
     } else if (typeof props === 'string') {
-      propsNormalized.markup = props
+      norm.markup = props
     } else {
-      propsNormalized = props
+      norm = props
     }
 
-    let markup = propsNormalized.markup
-    // <td>…</td>
-    // <p>…</p>
-    markup = markup.replace(
+    norm.markup = markupToHtml(norm.markup)
+    norm.markup = norm.markup.replace(
       />…</g,
-      ` contenteditable>…<`
+      ` class="editor-${editorId}" contenteditable>${placeholderTag}<`
     )
-
-    markup = markup.replace(
-      /[\w\n]…[\w\n]/g,
-      `<p contenteditable>…</p>`
-    )
-
-    markup = markup.replace(
-      /…/g,
-      `${placeholderTag}`
-    )
-    propsNormalized.markup = markupToHtml(markup)
-    return propsNormalized
+    console.log(norm)
+    return norm
   },
   leaveSlide ({ oldProps }) {
     const element = document.querySelector('.vc_editor_master')
