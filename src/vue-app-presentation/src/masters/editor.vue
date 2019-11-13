@@ -149,7 +149,7 @@ export default {
   },
   data () {
     return {
-      fontSize: 2
+      fontSize: 3.5
     }
   },
   computed: {
@@ -227,7 +227,9 @@ export default {
 
 <style lang="scss">
   .vc_editor_master {
-    padding: 3vw;
+    padding: 2vw;
+    // Font size is set by a data property.
+    // font-size: 3.5vw;
 
     .editor-placeholder {
       font-size: 0.5em;
