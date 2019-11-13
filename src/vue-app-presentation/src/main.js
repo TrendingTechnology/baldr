@@ -290,6 +290,39 @@ class StyleConfig {
  */
 Vue.prototype.$styleConfig = new StyleConfig()
 
+/**
+ * $notifySuccess
+ */
+Vue.prototype.$notifySuccess = function(text, title) {
+  const notification = {
+    group: 'default',
+    text,
+    duration: 5000,
+    type: 'success'
+  }
+  if (title) notification.title = title
+  Vue.prototype.$notify(notification)
+}
+
+/**
+ * $notifyError
+ */
+Vue.prototype.$notifyError = function(text, title) {
+  if (typeof text === 'object') {
+    const error = text
+    text = error.message
+    title = error.name
+  }
+  const notification = {
+    group: 'default',
+    text,
+    duration: -1, // forever
+    type: 'error'
+  }
+  if (title) notification.title = title
+  Vue.prototype.$notify(notification)
+}
+
 /******************************************************************************/
 
 /**
@@ -309,24 +342,13 @@ store.subscribe((mutation, state) => {
   if (mutation.type === 'media/addMediaFile') {
     const mediaFile = mutation.payload
     if (mediaFile.uriScheme === 'localfile') {
-      Vue.notify({
-        group: 'default',
-        text: `hinzugefügt: <a href="${mediaFile.routerLink}">${mediaFile.filename}</a>.`,
-        duration: 5000,
-        type: 'success'
-      })
+      Vue.prototype.$notifySuccess(`hinzugefügt: <a href="${mediaFile.routerLink}">${mediaFile.filename}</a>.`)
     }
   }
 })
 
 Vue.config.errorHandler = function (error, vm, info) {
-  vm.$notify({
-    group: 'default',
-    title: error.name,
-    text: error.message,
-    duration: -1,
-    type: 'error'
-  })
+  vm.$notifyError(error)
 }
 
 /**

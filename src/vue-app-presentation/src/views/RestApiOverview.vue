@@ -70,12 +70,7 @@ export default {
       event.target.classList.add('baldr-icon-spin')
       httpRequestNg.request('mgmt/update', endpointName).then((result) => {
         for (const errorMsg of result.data.errors) {
-          this.$notify({
-            group: 'default',
-            type: 'error',
-            text: errorMsg,
-            duration: -1 // forever
-          })
+          this.$notifyError(errorMsg)
         }
         event.target.classList.remove('baldr-icon-spin')
         this.$store.dispatch('media/setRestApiServers')

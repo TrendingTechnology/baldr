@@ -167,7 +167,6 @@ function deasciify (input) {
     .replace(/ue/g, 'ü')
 }
 
-
 /**
  * Convert all properties in an object to camelCase in a recursive fashion.
  *
@@ -428,7 +427,7 @@ function isPresentation (fileName) {
 /**
  * @param {String} filePath
  */
-async function insertObject (filePath, mediaType) {
+async function insertObjectIntoDb (filePath, mediaType) {
   let object
   try {
     if (mediaType === 'presentations') {
@@ -446,20 +445,6 @@ async function insertObject (filePath, mediaType) {
     console.log(msg)
     errors.push(msg)
   }
-}
-
-/**
- * @param {String} filePath
- */
-async function insertAsset (filePath) {
-  await insertObject(filePath, 'assets')
-}
-
-/**
- * @param {String} filePath
- */
-async function insertPresentation (filePath) {
-  await insertObject(filePath, 'presentations')
 }
 
 /**
@@ -515,8 +500,8 @@ async function update () {
   const begin = new Date().getTime()
   await db.collection('updates').insertOne({ begin: begin, end: 0 })
   await walk(basePath, {
-    presentation: insertPresentation,
-    asset: insertAsset
+    presentation: async (filePath) => { await insertObjectIntoDb(filePath, 'presentations') },
+    asset: async (filePath) => { await insertObjectIntoDb(filePath, 'assets') }
   })
   const end = new Date().getTime()
   await db.collection('updates').updateOne({ begin: begin }, { $set: { end: end, lastCommitId } })

@@ -75,13 +75,7 @@ export default {
   },
   mounted: function () {
     window.addEventListener('error', (event) => {
-      this.$notify({
-        group: 'default',
-        title: event.error.message,
-        text: `filename: ${event.error.fileName}`,
-        duration: 5000,
-        type: 'error'
-      })
+      this.$notifyError(event.error)
     })
     this.$styleConfig.set({ overflow: true })
     this.$shortcuts.addMultiple([
@@ -132,12 +126,10 @@ export default {
         callback: () => {
           const presentation = this.$store.getters['presentation/presentation']
           if (Object.keys(presentation).length === 0) {
-            this.$notify({
-              group: 'default',
-              type: 'error',
-              title: 'Editor konnte nicht geöffnet werden.',
-              text: 'Es ist keine Präsentation geladen.'
-            })
+            this.$notifyError(
+              'Es ist keine Präsentation geladen.',
+              'Editor konnte nicht geöffnet werden.'
+            )
             return
           }
           this.$media.httpRequest.request({
@@ -156,12 +148,10 @@ export default {
         callback: () => {
           const presentation = this.$store.getters['presentation/presentation']
           if (Object.keys(presentation).length === 0) {
-            this.$notify({
-              group: 'default',
-              type: 'error',
-              title: 'Der übergeordnete Ordner konnte nicht geöffnet werden.',
-              text: 'Es ist keine Präsentation geladen.'
-            })
+            this.$notifyError(
+              'Es ist keine Präsentation geladen.',
+              'Der übergeordnete Ordner konnte nicht geöffnet werden.'
+            )
             return
           }
           this.$media.httpRequest.request({
@@ -212,26 +202,13 @@ export default {
             const result = await this.$media.httpRequest.request('mgmt/update')
             if (result.data.errors.length) {
               for (const errorMsg of result.data.errors) {
-                this.$notify({
-                  group: 'default',
-                  type: 'error',
-                  text: errorMsg,
-                  duration: -1 // forever
-                })
+                this.$notifyError(errorMsg)
               }
             } else {
-              this.$notify({
-                group: 'default',
-                type: 'success',
-                text: `Der lokale Medien-Server wurde erfolgreich aktualisiert. Git-Commit-ID: ${result.data.lastCommitId.substring(0, 8)}`
-              })
+              this.$notifySuccess(`Der lokale Medien-Server wurde erfolgreich aktualisiert. Git-Commit-ID: ${result.data.lastCommitId.substring(0, 8)}`)
             }
           } catch (error) {
-            this.$notify({
-              group: 'default',
-              type: 'error',
-              text: error.message
-            })
+            this.$notifyError(error)
           }
         },
         description: 'Lokalen Medienserver aktualisieren.'
