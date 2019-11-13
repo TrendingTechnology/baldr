@@ -20,8 +20,8 @@ slides:
 
 export const master = {
   title: 'Abschnitt',
-  icon: 'file-presentation-box',
-  color: 'purple',
+  icon: 'file-tree',
+  color: 'orange-dark',
   styleConfig: {
     centerVertically: true,
     darkMode: true

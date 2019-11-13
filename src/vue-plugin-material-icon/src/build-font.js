@@ -174,7 +174,8 @@ if (require.main === module) {
         'comment-alert': '', // imaster-icon: task
         'comment-question': '', // imaster-icon: question
         'update': '', // Update icon for the REST API overview.
-        'play-speed': '' // Start play
+        'play-speed': '', // Start play
+        'file-tree': '' // Master slide section
       }
     },
     {
