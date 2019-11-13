@@ -298,6 +298,14 @@ class Player {
     sample.currentVolume = sample.mediaElement.volume
   }
 
+  /**
+   * Jump to a new time position.
+   *
+   * @param {Number} interval - Time interval in seconds.
+   * @param {String} direction - `forward` or `backward`
+   *
+   * @private
+   */
   jump_ (interval = 10, direction = 'forward') {
     const sample = this.$store.getters['media/samplePlaying']
     if (!sample || !sample.mediaElement) return
@@ -308,12 +316,22 @@ class Player {
     }
   }
 
-  forward () {
-    this.jump_(10, 'forward')
+  /**
+   * Jump forwards.
+   *
+   * @param {Number} interval - Time interval in seconds.
+   */
+  forward (interval = 10) {
+    this.jump_(interval, 'forward')
   }
 
-  backward () {
-    this.jump_(10, 'backward')
+  /**
+   * Jump backwards.
+   *
+   * @param {Number} interval - Time interval in seconds.
+   */
+  backward (interval = 10) {
+    this.jump_(interval, 'backward')
   }
 
   /**
@@ -348,12 +366,20 @@ class Player {
   }
 
   /**
-   * Toggle between `Player.pause()` and `Player.play()`
+   * Toggle between `Player.pause()` and `Player.play()`. If a sample is loaded
+   * start the this sample.
    */
   toggle () {
-    const sample = this.$store.getters['media/samplePlaying']
-    if (!sample || !sample.mediaElement) return
-    if (sample.mediaElement.paused) {
+    const samplePlaying = this.$store.getters['media/samplePlaying']
+    const sampleLoaded = this.$store.getters['media/sampleLoaded']
+
+    if ((!samplePlaying || !samplePlaying.mediaElement) && (sampleLoaded && sampleLoaded.mediaElement)) {
+      this.start()
+      return
+    }
+
+    if (!samplePlaying || !samplePlaying.mediaElement) return
+    if (samplePlaying.mediaElement.paused) {
       this.play()
     } else {
       this.pause()
