@@ -9,7 +9,7 @@
 
 <script>
 import { plainText } from '@bldr/core-browser'
-import marked from 'marked'
+import { markupToHtml } from '@/lib.js'
 
 let editorId = 0
 
@@ -21,6 +21,19 @@ const example = `
 slides:
 
 - title: Show editor
+  editor: |
+    # heading
+
+    …
+
+- title: Multple ellipsis
+  editor: |
+
+    …
+
+    …
+
+- title: Show editor
   editor: true
 
 - title: Show second editor
@@ -28,21 +41,26 @@ slides:
 
 - title: Markup
   editor:
-    markup: <strong>lol</strong>
+    markup: |
+      <strong>Specifed with prop markup</strong>:
+
+      …
 
 - title: Markup as string
   editor: |
-    <strong>Markup as string</strong>
+    <strong>Markup as string</strong>:
+
+    …
 
 - title: 'HTML: <ul>'
   editor: |
-    <ul contenteditable>
-      <li>x</li>
+    <ul>
+      <li>…</li>
     </ul>
 
 - title: 'HTML: <table>'
   editor: |
-    <table contenteditable>
+    <table>
       <thead>
         <tr>
           <td>Musikalische Merkmale</td>
@@ -51,13 +69,13 @@ slides:
       </thead>
       <tbody>
         <tr>
-          <td>x</td>
-          <td>x</td>
+          <td>…</td>
+          <td>…</td>
         </tr>
       </tbody>
     </table>
 
-- title: 'HTML: <table> replace * with contenteditable'
+- title: 'HTML: <table> replace … with contenteditable'
   editor: |
     <table>
       <thead>
@@ -70,28 +88,28 @@ slides:
       <tbody>
         <tr>
           <th>Dynamik</th>
-          <td>*</td>
-          <td>*</td>
+          <td>…</td>
+          <td>…</td>
         </tr>
         <tr>
           <th>Rhythmik</th>
-          <td>*</td>
-          <td>*</td>
+          <td>…</td>
+          <td>…</td>
         </tr>
         <tr>
           <th>Satztechnik</th>
-          <td>*</td>
-          <td>*</td>
+          <td>…</td>
+          <td>…</td>
         </tr>
         <tr>
           <th>Artikulation</th>
-          <td>*</td>
-          <td>*</td>
+          <td>…</td>
+          <td>…</td>
         </tr>
         <tr>
           <th>Tonlage</th>
-          <td>*</td>
-          <td>*</td>
+          <td>…</td>
+          <td>…</td>
         </tr>
       </tbody>
     </table>
@@ -100,7 +118,9 @@ slides:
   editor: |
     # heading 1
 
-    lorem ipsum
+    lorem **ipsum** lorem
+
+    …
 `
 
 export const master = {
@@ -118,19 +138,35 @@ export const master = {
     if (typeof props === 'boolean') {
       // Somehow two editor slides get the same edited content.
       editorId += 1
-      propsNormalized.markup = `<p class="editor-${editorId}" contenteditable>${placeholderTag}</p>`
+      propsNormalized.markup = `<p class="editor-${editorId}" contenteditable>…</p>`
+      //return propsNormalized
     } else if (typeof props === 'string') {
       propsNormalized.markup = props
     } else {
       propsNormalized = props
     }
-    propsNormalized.markup = propsNormalized.markup.replace(
-      />\w*\*\w*</g, ` contenteditable>${placeholderTag}<`
+
+    let markup = propsNormalized.markup
+    // <td>…</td>
+    // <p>…</p>
+    markup = markup.replace(
+      />…</g,
+      ` contenteditable>…<`
     )
-    propsNormalized.markup = marked(propsNormalized.markup)
+
+    markup = markup.replace(
+      /[\w\n]…[\w\n]/g,
+      `<p contenteditable>…</p>`
+    )
+
+    markup = markup.replace(
+      /…/g,
+      `${placeholderTag}`
+    )
+    propsNormalized.markup = markupToHtml(markup)
     return propsNormalized
   },
-  leaveSlide ({ oldSlide, oldProps, newSlide, newProps }) {
+  leaveSlide ({ oldProps }) {
     const element = document.querySelector('.vc_editor_master')
     if (element) oldProps.markup = element.innerHTML
   },
