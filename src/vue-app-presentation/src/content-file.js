@@ -483,7 +483,8 @@ function openFile (file) {
     reader.readAsText(file, 'utf-8')
     reader.onload = readerEvent => {
       let content = readerEvent.target.result
-      store.dispatch('openPresentation', content).then(() => {
+      store.dispatch('presentation/openPresentation', content).then(() => {
+
         if (router.currentRoute.name !== 'slides') router.push({ name: 'slides' })
       })
     }
