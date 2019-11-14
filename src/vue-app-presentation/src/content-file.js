@@ -252,6 +252,11 @@ class Slide {
      */
     this.style = rawSlideObject.cut('style')
 
+    /**
+     *
+     */
+    this.slides = []
+
     if (!rawSlideObject.isEmpty()) {
       throw Error(`Unknown slide properties: ${toString(rawSlideObject.raw)}`)
     }
@@ -322,9 +327,7 @@ function parseSlidesRecursive (slidesRaw, slidesFlat, slidesTree) {
     slide.no = slidesFlat.length
 
     if (slide.master.name === 'section' && Array.isArray(slide.renderData.props.slides)) {
-      const childSlidesTree = []
-      slidesTree.push(childSlidesTree)
-      parseSlidesRecursive(slide.renderData.props.slides, slidesFlat, childSlidesTree)
+      parseSlidesRecursive(slide.renderData.props.slides, slidesFlat, slide.slides)
     }
   }
 }
@@ -349,6 +352,7 @@ export class Presentation {
     }
 
     convertPropertiesToCamelCase(this.rawYamlObject_)
+
     /**
      * The meta object.
      *
@@ -368,20 +372,20 @@ export class Presentation {
      */
     this.meta = this.rawYamlObject_.meta
 
-    const slidesFlat = []
-    const slidesTree = []
-
-    const rawSlidesObjectCopy = JSON.parse(JSON.stringify(this.rawYamlObject_.slides))
-
-    parseSlidesRecursive (rawSlidesObjectCopy, slidesFlat, slidesTree)
-
-    // slides
+    /**
+     *
+     */
     this.slides = []
+
+    /**
+     *
+     */
+    this.slidesTree = []
+
+    parseSlidesRecursive(this.rawYamlObject_.slides, this.slides, this.slidesTree)
+
     const mediaUris = []
-    for (const rawSlideObject of this.rawYamlObject_.slides) {
-      const slide = new Slide(rawSlideObject)
-      this.slides.push(slide)
-      slide.no = this.slides.length
+    for (const slide of this.slides) {
       for (const mediaUri of slide.renderData.mediaUris) {
         mediaUris.push(mediaUri)
       }
