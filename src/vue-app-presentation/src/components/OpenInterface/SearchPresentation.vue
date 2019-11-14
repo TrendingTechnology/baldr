@@ -20,6 +20,7 @@ export default {
   },
   methods: {
     async onInput () {
+      console.log(this.presentation.id)
       await this.$store.dispatch('presentation/openPresentationById', this.presentation.id)
       if (this.$route.name !== 'slides-overview') {
         this.$router.push({ name: 'slides-overview' })

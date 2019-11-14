@@ -99,6 +99,12 @@ export default {
 </style>
 
 <style lang="scss">
+  .vc_open_interface {
+    // Input is to small
+    input.search {
+      font-size: 2vw !important;
+    }
+  }
   [b-center-vertically="true"] {
     .master-inner {
       display: table-cell;

@@ -484,7 +484,6 @@ function openFile (file) {
     reader.onload = readerEvent => {
       let content = readerEvent.target.result
       store.dispatch('presentation/openPresentation', content).then(() => {
-
         if (router.currentRoute.name !== 'slides') router.push({ name: 'slides' })
       })
     }
