@@ -253,7 +253,9 @@ class Slide {
     this.style = rawSlideObject.cut('style')
 
     /**
+     * A list of child slide objects.
      *
+     * @type {Array}
      */
     this.slides = []
 
@@ -318,16 +320,26 @@ class Slide {
   }
 }
 
+/**
+ * Parse the slide objects in a recursive fashion. Child slides can be
+ * specified under the `slides` property.
+ *
+ * @param {Array} slidesRaw - The raw slide array from the YAML presentation
+ *  file, the slides property.
+ * @param {Array} slidesFlat - A array which is filled with every slide object.
+ * @param {Array} slidesTree - A array which is filled with only top level slide
+ *   objects.
+ */
 function parseSlidesRecursive (slidesRaw, slidesFlat, slidesTree) {
   for (const slideRaw of slidesRaw) {
+    const childSlides = slideRaw.slides
+    delete slideRaw.slides
     const slide = new Slide(slideRaw)
     slidesFlat.push(slide)
     slidesTree.push(slide)
-
     slide.no = slidesFlat.length
-
-    if (slide.master.name === 'section' && Array.isArray(slide.renderData.props.slides)) {
-      parseSlidesRecursive(slide.renderData.props.slides, slidesFlat, slide.slides)
+    if (childSlides && Array.isArray(childSlides)) {
+      parseSlidesRecursive(childSlides, slidesFlat, slide.slides)
     }
   }
 }
@@ -373,12 +385,16 @@ export class Presentation {
     this.meta = this.rawYamlObject_.meta
 
     /**
+     * A flat list of slide objects. All child slides are included in this
+     * array.
      *
+     * @type {Array}
      */
     this.slides = []
 
     /**
-     *
+     * Only the top level slide objects are included in this array. Child slides
+     * can be accessed under the `slides` property.
      */
     this.slidesTree = []
 

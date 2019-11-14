@@ -41,10 +41,6 @@ export default {
       type: String,
       required: true,
       description: 'Die Überschrift / der Titel des Abschnitts.'
-    },
-    slides: {
-      type: Array,
-      description: 'Eine Liste mit Folien-Objekten.'
     }
   }
 }
