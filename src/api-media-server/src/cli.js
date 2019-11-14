@@ -64,11 +64,59 @@ slides:
     autoplay: Den Audio-Ausschnitt automatisch abspielen. (type=Boolean)
     playthrough: Über die Folien hinwegspielen. Nicht stoppen beim Folienwechsel. (type=Boolean)
 
-- camera: yes
-- editor:
-    markup:
-- generic:
-    markup:
+##
+# camera
+##
+
+- camera
+
+- title: Langform
+  camera: yes
+
+##
+# editor
+##
+
+- title: Kurzform
+  editor: '…'
+
+- title: Langform
+  editor:
+    markup: Text im HTML oder Markdown Format oder natürlich als reiner Text. (markup, type=String)
+
+- title: 'Tabelle'
+  editor: |
+    <table>
+      <thead>
+        <tr>
+          <th></th>
+          <td>Thema 1 (Spanier)</td>
+          <td>Thema 2 (Niederländer)</td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th>Dynamik</th>
+          <td>…</td>
+          <td>…</td>
+        </tr>
+      </tbody>
+    </table>
+
+##
+# generic
+##
+
+- title: Kurzform
+  generic: |
+    # Überschrift 1
+
+    ## Überschrift 2
+
+- title: Langform
+  generic:
+    markup: Markup im HTML oder Markdown-Format (required, types=String,Array)
+    charactersOnSlide: Gibt an wie viele Zeichen auf einer Folie erscheinen sollen. (default=400, types=Number)
 
 ##
 # image
@@ -115,15 +163,42 @@ slides:
     questions: Eine Liste mit Objekten mit den Schlüsseln question and answer. (required, markup, type=Array)
     numbers: Ob die Fragen nummeriert werden sollen. (default=true, type=Boolean)
 
-- quote:
-    text:
-    author:
-    date:
-- score_sample:
-    score:
-    audio:
-- task:
-    markup:
+##
+# quote
+##
+
+- title: Kurzform
+  quote: Zitat
+
+- title: Langform
+  quote:
+    text: Haupttext des Zitats. (required, markup, type=String)
+    author: Der Autor des Zitats. (type=String)
+    date: Datum des Zitats. (types=String,Number)
+
+##
+# score_sample
+##
+
+- title: Kurzform
+  score_sample: id:Bild-Datei
+
+- title: Langform
+  score_sample:
+    heading: Eine Überschrift (markup, type=String)
+    score: URI zu einer Bild-Datei, dem Notenbeispiel. (mediaFileUri, type=String)
+    audio: URI der entsprechenden Audio-Datei oder des Samples. (mediaFileUri, type=String)
+
+##
+# task
+##
+
+- title: Kurzform
+  task: Mach dies
+
+- title: Langform
+  task:
+    markup: Text im HTML oder Markdown-Format oder als reinen Text. (required, markup, type=String)
 
 ##
 # video
