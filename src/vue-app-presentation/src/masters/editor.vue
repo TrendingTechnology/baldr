@@ -136,7 +136,6 @@ export const master = {
   },
   example,
   normalizeProps (props) {
-    console.log(props)
     let norm = {}
     // Somehow two editor slides get the same edited content.
     editorId += 1
@@ -154,7 +153,6 @@ export const master = {
       />…</g,
       ` class="editor-${editorId}" contenteditable>${placeholderTag}<`
     )
-    console.log(norm)
     return norm
   },
   leaveSlide ({ oldProps }) {

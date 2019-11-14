@@ -313,6 +313,22 @@ class Slide {
   }
 }
 
+function parseSlidesRecursive (slidesRaw, slidesFlat, slidesTree) {
+  for (const slideRaw of slidesRaw) {
+    const slide = new Slide(slideRaw)
+    slidesFlat.push(slide)
+    slidesTree.push(slide)
+
+    slide.no = slidesFlat.length
+
+    if (slide.master.name === 'section' && Array.isArray(slide.renderData.props.slides)) {
+      const childSlidesTree = []
+      slidesTree.push(childSlidesTree)
+      parseSlidesRecursive(slide.renderData.props.slides, slidesFlat, childSlidesTree)
+    }
+  }
+}
+
 /**
  * A presentation
  *
@@ -367,6 +383,14 @@ export class Presentation {
      * @property {String} curriculum - Relation to the curriculum.
      */
     this.meta = this.rawYamlObject_.meta
+
+    const slidesFlat = []
+    const slidesTree = []
+
+    const rawSlidesObjectCopy = JSON.parse(JSON.stringify(this.rawYamlObject_.slides))
+
+    parseSlidesRecursive (rawSlidesObjectCopy, slidesFlat, slidesTree)
+
     // slides
     const indexedSlides = this.reIndex(this.rawYamlObject_.slides)
     this.slides = {}
@@ -463,7 +487,6 @@ function openFile (file) {
     vue.$media.resolve(file)
   }
 }
-
 
 /**
  * Open multiple files.

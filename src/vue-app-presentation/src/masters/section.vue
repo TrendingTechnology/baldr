@@ -1,6 +1,6 @@
 <template>
   <div class="vc_section_master">
-    {{ title }}
+    {{ heading }}
   </div>
 </template>
 
@@ -15,7 +15,7 @@ slides:
 
 - title: Long form
   section:
-    title: A section
+    heading: A section
 `
 
 export const master = {
@@ -29,7 +29,7 @@ export const master = {
   example,
   normalizeProps (props) {
     if (typeof props === 'string') {
-      props = { title: props }
+      props = { heading: props }
     }
     return props
   }
@@ -37,10 +37,10 @@ export const master = {
 
 export default {
   props: {
-    title: {
+    heading: {
       type: String,
       required: true,
-      description: 'Der Titel des Abschnitts.'
+      description: 'Die Überschrift / der Titel des Abschnitts.'
     },
     slides: {
       type: Array,
