@@ -21,21 +21,21 @@ const getters = {
   slideNoCurrent: state => {
     return state.slideNoCurrent
   },
-  slideCurrent: state => {
+  slideCurrent: (state, getters) => {
     if (state.slideNoCurrent) {
-      return state.slides[state.slideNoCurrent]
+      return getters.slideByNo(state.slideNoCurrent)
     }
   },
   slideByNo: state => no => {
-    return state.slides[no]
+    return state.slides[no - 1]
   },
   slides: (state, getters) => {
-    if (Object.keys(state.slides).length > 0) {
+    if (state.slides.length > 0) {
       return state.slides
     }
   },
   slidesCount: (state, getters) => {
-    return Object.keys(getters.slides).length
+    return getters.slides.length
   }
 }
 

@@ -224,13 +224,13 @@ class Slide {
   /**
    *
    */
-  constructor (rawSlideData, slideNo) {
+  constructor (rawSlideData) {
     const rawSlideObject = new RawSlideObject(rawSlideData)
     /**
      * The slide number
      * @type {Number}
      */
-    this.no = slideNo
+    this.no = null
 
     /**
      * Normalized slide data to render the slide.
@@ -339,22 +339,6 @@ function parseSlidesRecursive (slidesRaw, slidesFlat, slidesTree) {
  * @property {string} rawYamlObject_
  */
 export class Presentation {
-  /**
-   * Convert an array of raw slide data into an object. The slide data is
-   * indexed by the slide number. Slides are numbered beginning from 1 not from 0.
-   * We reindex.
-   *
-   * @param {array} slides
-   *
-   * @returns {object}
-   */
-  reIndex (slides) {
-    const out = {}
-    for (const index in slides) {
-      out[Number.parseInt(index) + 1] = slides[index]
-    }
-    return out
-  }
 
   async parseYamlFile (rawYamlString) {
     this.rawYamlString_ = rawYamlString
@@ -392,12 +376,12 @@ export class Presentation {
     parseSlidesRecursive (rawSlidesObjectCopy, slidesFlat, slidesTree)
 
     // slides
-    const indexedSlides = this.reIndex(this.rawYamlObject_.slides)
-    this.slides = {}
+    this.slides = []
     const mediaUris = []
-    for (const slideNo in indexedSlides) {
-      const slide = new Slide(indexedSlides[slideNo], slideNo)
-      this.slides[slideNo] = slide
+    for (const rawSlideObject of this.rawYamlObject_.slides) {
+      const slide = new Slide(rawSlideObject)
+      this.slides.push(slide)
+      slide.no = this.slides.length
       for (const mediaUri of slide.renderData.mediaUris) {
         mediaUris.push(mediaUri)
       }
