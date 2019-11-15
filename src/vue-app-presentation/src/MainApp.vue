@@ -116,7 +116,9 @@ export default {
       {
         keys: 'ctrl+r',
         callback: () => {
-          this.$store.dispatch('presentation/reloadPresentation')
+          this.$store.dispatch('presentation/reloadPresentation').then(() => {
+            this.$notifySuccess('Die Präsentation wurde neu geladen.')
+          })
         },
         // Reload presentation
         description: 'Präsentation neu laden'

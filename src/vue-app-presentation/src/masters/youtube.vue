@@ -38,6 +38,9 @@ export const master = {
     }
     return props
   },
+  plainTextFromProps (props) {
+    return props.id
+  }
 }
 
 export default {
