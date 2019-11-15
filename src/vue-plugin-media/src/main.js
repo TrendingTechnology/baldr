@@ -10,11 +10,12 @@ import { getDefaultServers, HttpRequest, getDefaultRestEndpoints, HttpRequestNg 
 import Vue from 'vue'
 import DynamicSelect from '@bldr/vue-plugin-dynamic-select'
 
+// Vue components
 import ComponentMediaFile from './MediaFile.vue'
-import PlayButton from './PlayButton.vue'
-// documentation.js could not import without /index.vue
-import MediaOverview from './MediaOverview/index.vue'
-import MediaPlayer from './MediaPlayer.vue'
+import ComponentMediaOverview from './MediaOverview/index.vue'
+import ComponentMediaPlayer from './MediaPlayer.vue'
+import ComponentPlayButton from './PlayButton.vue'
+import ComponentPlayLoadIndicator from './PlayLoadIndicator.vue'
 
 const restEndpoints = getDefaultRestEndpoints()
 export const httpRequestNg = new HttpRequestNg(restEndpoints, '/api/media')
@@ -1364,6 +1365,11 @@ class Media {
         description: 'Medien-Abspieler: Spiele/Pausiere'
       },
       {
+        keys: 'p s',
+        callback: () => { this.player.stop() },
+        description: 'Medien-Abspieler: Stop'
+      },
+      {
         keys: 'p f',
         callback: () => { this.player.stop(7) },
         // Media player: fade out
@@ -1371,7 +1377,10 @@ class Media {
       },
       {
         keys: 'ctrl+space',
-        callback: () => { this.player.start() },
+        callback: async () => {
+          await this.player.stop()
+          await this.player.start()
+        },
         // Media player: Start loaded sample
         description: 'Medien-Abspieler: Starte geladenen Audio/Video-Ausschnitt'
       },
@@ -1411,7 +1420,7 @@ class Media {
             title: 'Media',
             style
           },
-          component: MediaOverview
+          component: ComponentMediaOverview
         },
         {
           path: '/media/:uriScheme/:uriAuthority',
@@ -1516,8 +1525,9 @@ const Plugin = {
      * @type {module:@bldr/vue-plugin-media~Media}
      */
     Vue.prototype.$media = new Media(router, store, shortcuts)
-    Vue.component('media-player', MediaPlayer)
-    Vue.component('play-button', PlayButton)
+    Vue.component('media-player', ComponentMediaPlayer)
+    Vue.component('play-button', ComponentPlayButton)
+    Vue.component('play-load-indicator', ComponentPlayLoadIndicator)
   }
 }
 

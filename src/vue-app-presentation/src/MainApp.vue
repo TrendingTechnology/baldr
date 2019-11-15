@@ -30,6 +30,7 @@
       <router-view/>
     </main>
     <media-player/>
+    <play-load-indicator/>
     <app-info package-name="@bldr/vue-app-presentation" :version="version"/>
   </div>
 </template>
@@ -190,7 +191,7 @@ export default {
         description: 'Vollbild'
       },
       {
-        keys: 'return',
+        keys: 'ctrl+return',
         callback: this.toggleSlidesOverview,
         description: 'Zwischen Folien und Folien-Überblick hin- und herschalten',
         routeNames: ['slides', 'slides-overview']
@@ -287,5 +288,11 @@ export default {
       background: scale-color($green, $lightness: 40%);
       border-left-color: $green;
     }
+  }
+
+  .vc_play_load_indicator {
+    position: fixed;
+    bottom: 1vw;
+    left: 1vw;
   }
 </style>

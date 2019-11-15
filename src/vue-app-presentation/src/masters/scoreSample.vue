@@ -95,7 +95,7 @@ export default {
 
     .vc_play_button {
       position: absolute;
-      bottom: 1vw;
+      bottom: 5vw;
       left: 1vw;
       z-index: 1;
     }
