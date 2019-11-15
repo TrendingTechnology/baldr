@@ -259,6 +259,13 @@ class Slide {
      */
     this.slides = []
 
+    /**
+     * The level in the hierarchial slide tree.
+     *
+     * @type {Number}
+     */
+    this.level = 1
+
     if (!rawSlideObject.isEmpty()) {
       throw Error(`Unknown slide properties: ${toString(rawSlideObject.raw)}`)
     }
@@ -329,8 +336,10 @@ class Slide {
  * @param {Array} slidesFlat - A array which is filled with every slide object.
  * @param {Array} slidesTree - A array which is filled with only top level slide
  *   objects.
+ * @param {Number} level - The level in the hierachial tree the slide lies in
+ *   1: Main level, 2: First child level ...
  */
-function parseSlidesRecursive (slidesRaw, slidesFlat, slidesTree) {
+function parseSlidesRecursive (slidesRaw, slidesFlat, slidesTree, level = 1) {
   for (const slideRaw of slidesRaw) {
     const childSlides = slideRaw.slides
     delete slideRaw.slides
@@ -338,8 +347,9 @@ function parseSlidesRecursive (slidesRaw, slidesFlat, slidesTree) {
     slidesFlat.push(slide)
     slidesTree.push(slide)
     slide.no = slidesFlat.length
+    slide.level = level
     if (childSlides && Array.isArray(childSlides)) {
-      parseSlidesRecursive(childSlides, slidesFlat, slide.slides)
+      parseSlidesRecursive(childSlides, slidesFlat, slide.slides, level + 1)
     }
   }
 }
