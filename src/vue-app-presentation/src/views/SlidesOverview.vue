@@ -16,6 +16,7 @@
         @click="gotToSlide(slide.no)"
         :title="`Zur Folie Nr. ${slide.no}`"
         :class="{ 'current-slide': slideCurrent.no === slide.no }"
+        :style="{ paddingLeft: `${(slide.level - 1) * 3}em` }"
       >
         <div class="master-info">
           <material-icon

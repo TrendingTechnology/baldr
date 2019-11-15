@@ -1,13 +1,17 @@
 <template>
   <div class="vc_wikipedia_master">
-    <iframe
-      :src="`http://${language}.wikipedia.org/w/index.php?title=${title}&printable=yes`"
-      frameborder="0"
-    />
+    <p class="title">Wikipedia-Artikel: {{ title }} ({{ url }})</p>
+    <div class="iframe-wrapper">
+      <iframe
+        :src="`http://${language}.wikipedia.org/w/index.php?title=${title}&printable=yes`"
+        frameborder="0"
+      />
+    </div>
   </div>
 </template>
 
 <script>
+const defaultLanguage = 'de'
 
 const example = `
 ---
@@ -39,8 +43,12 @@ export const master = {
     if (typeof props === 'string') {
       props = { title: props }
     }
+    if (!props.language) props.language = defaultLanguage
     return props
   },
+  plainTextFromProps (props) {
+    return `${props.title} (${props.language})`
+  }
 }
 
 export default {
@@ -53,7 +61,12 @@ export default {
     language: {
       type: String,
       description: 'Der Sprachen-Code des gewünschten Wikipedia-Artikels (z. B. „de“, „en“).',
-      default: 'de'
+      default: defaultLanguage
+    }
+  },
+  computed: {
+    url () {
+      return `https://${this.language}.wikipedia.org/wiki/${this.title}`
     }
   }
 }
@@ -61,14 +74,20 @@ export default {
 
 <style lang="scss" scoped>
   .vc_wikipedia_master {
-    text-align: center;
+    .title {
+      margin-left: 10vw;
+    }
 
-    iframe {
-      width: 70vw;
-      height: 95vh;
-      border: 1px solid scale-color($gray, $lightness: 30%);
-      padding: 1vw;
-      background-color: white;
+    .iframe-wrapper {
+      text-align: center;
+
+      iframe {
+        background-color: white;
+        border: 1px solid scale-color($gray, $lightness: 30%);
+        height: 95vh;
+        padding: 1vw;
+        width: 70vw;
+      }
     }
   }
 </style>

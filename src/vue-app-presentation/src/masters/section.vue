@@ -32,6 +32,9 @@ export const master = {
       props = { heading: props }
     }
     return props
+  },
+  plainTextFromProps (props) {
+    return props.heading
   }
 }
 
