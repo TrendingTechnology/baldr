@@ -38,13 +38,14 @@
  *   - `query`: Getting results by using query parameters. This query parameters
  *     are available:
  *      - `type`: `assets` (default), `presentations` (what)
- *      - `method`: `exactMatch`, `substringSearch` (default).
+ *      - `method`: `exactMatch`, `substringSearch` (default) (how).
  *          - `exactMatch`: The query parameter `search` must be a perfect match
  *            to a top level database field to get a result.
  *          - `substringSearch`: The query parameter `search` is only a
  *            substring of the string to search in.
  *      - `field`: `id` (default), `title`, etc ... (where).
  *      - `search`: Some text to search for (search for).
+ *      - `result`: `fullObjects` (default), `dynamicSelect`
  * - `stats`:
  *   - `count`: Count / sum of the media files (assets, presentations) in the
  *     database.
@@ -712,13 +713,16 @@ const helpMessages = {
       '#description': 'Get results by using query parameters',
       '#examples': [
         'query?type=assets&field=id&method=exactMatch&search=Egmont-Ouverture',
-        'query?type=presentations&field=id&method=exactMatch&search=Beethoven_Marmotte'
+        'query?type=presentations&field=id&method=exactMatch&search=Beethoven_Marmotte',
+        'query?type=assets&field=path&method=substringSearch&search=35_Bilder-Ausstellung_Ueberblick&result=fullObjects',
+        'query?type=assets&field=path&method=substringSearch&search=35_Bilder-Ausstellung_Ueberblick&result=dynamicSelect'
       ],
       '#parameters': {
         type: '`assets` (default), `presentations` (what)',
-        method: '`exactMatch`, `substringSearch` (default).`exactMatch`: The query parameter `search` must be a perfect match to a top level database field to get a result. `substringSearch`: The query parameter `search` is only a substring of the string to search in.',
+        method: '`exactMatch`, `substringSearch` (default) (how). `exactMatch`: The query parameter `search` must be a perfect match to a top level database field to get a result. `substringSearch`: The query parameter `search` is only a substring of the string to search in.',
         field: '`id` (default), `title`, etc ... (where).',
-        search: 'Some text to search for (search for).'
+        search: 'Some text to search for (search for).',
+        result: '`fullObjects` (default), `dynamicSelect`'
       }
     },
     stats: {
@@ -872,8 +876,11 @@ function registerRestApi () {
         throw new Error(`Unkown method “${query.method}”! Allowed methods: ${methods}`)
       }
 
-      // id
+      // field
       if (!('field' in query)) query.field = 'id'
+
+      // result
+      if (!('result' in query)) query.result = 'fullObjects'
 
       await connectDb()
       const collection = db.collection(query.type)
@@ -891,20 +898,21 @@ function registerRestApi () {
       } else if (query.method === 'substringSearch') {
         // https://stackoverflow.com/a/38427476/10193818
         const regex = new RegExp(escapeRegex(query.search), 'gi')
-        const findObject = {}
-        findObject[query.field] = regex
-        find = collection.aggregate([
-          {
-            $match: findObject
-          },
-          {
-            $project: {
-              _id: false,
-              id: true,
-              name: `$${query.field}`
-            }
+        const $match = {}
+        $match[query.field] = regex
+        let $project
+        if (query.result === 'fullObjects') {
+          $project = {
+            _id: false
           }
-        ])
+        } else if (query.result === 'dynamicSelect') {
+          $project = {
+            _id: false,
+            id: true,
+            name: `$${query.field}`
+          }
+        }
+        find = collection.aggregate([{ $match }, { $project }])
         result = await find.toArray()
       }
       res.json(result)
