@@ -203,6 +203,100 @@ function convertPropertiesToCamelCase (object) {
 /* Media objects **************************************************************/
 
 /**
+ * Categories some asset file formats in three asset types: `audio`, `image`,
+ * `video`.
+ *
+ * TODO: Code which can be imported by ES modules and node modules.
+ * The same code is in the module @bldr/api-media-server/src/main.js and
+ * @bldr/vue-component-media/src/main.js
+ */
+class AssetTypes {
+  constructor (config) {
+    /**
+     * @type {object}
+     * @private
+     */
+    this.config_ = config.mediaServer.assetTypes
+
+    /**
+     * @type {object}
+     * @private
+     */
+    this.allowedExtensions_ = this.spreadExtensions_()
+  }
+
+  /**
+   * @private
+   */
+  spreadExtensions_ () {
+    const out = {}
+    for (const type in this.config_) {
+      for (const extension of this.config_[type].allowedExtensions) {
+        out[extension] = type
+      }
+    }
+    return out
+  }
+
+  /**
+   * Get the media type from the extension.
+   *
+   * @param {String} extension
+   *
+   * @returns {String}
+   */
+  extensionToType (extension) {
+    extension = extension.toLowerCase()
+    if (extension in this.allowedExtensions_) {
+      return this.allowedExtensions_[extension]
+    }
+    throw new Error(`Unkown extension “${extension}”`)
+  }
+
+  /**
+   * Get the color of the media type.
+   *
+   * @param {String} type - The asset type: for example `audio`, `image`,
+   *   `video`.
+   *
+   * @returns {String}
+   */
+  typeToColor (type) {
+    return this.config_[type].color
+  }
+
+  /**
+   * Determine the target extension (for a conversion job) by a given
+   * asset type.
+   *
+   * @param {String} type - The asset type: for example `audio`, `image`,
+   *   `video`.
+   *
+   * @returns {String}
+   */
+  typeToTargetExtension (type) {
+    return this.config_[type].targetExtension
+  }
+
+  /**
+   * Check if file is an supported asset format.
+   *
+   * @param {String} filename
+   *
+   * @returns {Boolean}
+   */
+  isAsset (filename) {
+    const extension = filename.split('.').pop().toLowerCase()
+    if (extension in this.allowedExtensions_) {
+      return true
+    }
+    return false
+  }
+}
+
+const assetTypes = new AssetTypes(config)
+
+/**
  * Base class to be extended.
  */
 class MediaFile {
@@ -399,20 +493,20 @@ class Presentation extends MediaFile {
 /* Checks *********************************************************************/
 
 /**
+ * Check if the given file is a media asset.
+ *
  * @param {String} fileName
  */
 function isAsset (fileName) {
   if (fileName.indexOf('_preview.jpg') > -1) {
     return false
   }
-  const extension = path.extname(fileName).substr(1)
-  if (['yml', 'db', 'md', 'tex', 'mscx', 'lol', 'gz', 'pdf', 'log', 'aux', 'out'].includes(extension)) {
-    return false
-  }
-  return true
+  return assetTypes.isAsset(fileName)
 }
 
 /**
+ * Checi if the given file is a presentation.
+ *
  * @param {String} fileName
  */
 function isPresentation (fileName) {
@@ -904,6 +998,7 @@ function registerRestApi () {
 module.exports = {
   asciify,
   Asset,
+  assetTypes,
   deasciify,
   helpMessages,
   registerRestApi,

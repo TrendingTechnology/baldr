@@ -12,7 +12,7 @@ const yaml = require('js-yaml')
 const musicMetadata = require('music-metadata')
 
 // Project packages
-const { Asset, walk, asciify, deasciify } = require('./main.js')
+const { Asset, walk, asciify, deasciify, assetTypes } = require('./main.js')
 const { bootstrapConfig } = require('@bldr/core-node')
 
 // Project packages.
@@ -239,179 +239,6 @@ commander
   .version(require('../package.json').version)
 
 /**
- * Categories some media file format in three media types: `audio`, `image`,
- * `video`.
- */
-class AssetTypes {
-  constructor (config) {
-    /**
-     * @type {object}
-     * @private
-     */
-    this.config_ = config.mediaServer.assetTypes
-
-    this.allowedExtensions_ = this.spreadExtensions_()
-  }
-
-  /**
-   * @private
-   */
-  spreadExtensions_ () {
-    const out = {}
-    for (const type in this.config_) {
-      for (const extension of this.types[type].allowedExtensions) {
-        out[extension] = type
-      }
-    }
-    return out
-  }
-
-  /**
-   * Get the media type from the extension.
-   *
-   * @param {String} extension
-   *
-   * @returns {String}
-   */
-  extensionToType (extension) {
-    const ext = extension.toLowerCase()
-    if (ext in this.allowedExtensions_) {
-      return this.allowedExtensions_[ext]
-    }
-    throw new Error(`Unkown extension “${ext}”`)
-  }
-
-  /**
-   * Get the color of the media type.
-   *
-   * @param {String} type
-   *
-   * @returns {String}
-   */
-  typeToColor (type) {
-    return this.config_[type].color
-  }
-
-  /**
-   * Check if file is an supported media format.
-   *
-   * @param {String} filename
-   *
-   * @returns {Boolean}
-   */
-  isAsset (filename) {
-    const extension = filename.split('.').pop().toLowerCase()
-    if (extension in this.extensions_) {
-      return true
-    }
-    return false
-  }
-}
-
-/**
- * Categories some media file format in three media types: `audio`, `image`,
- * `video`.
- *
- * TODO: Code which can imported by ES modules and node modules.
- * The same code is in the module @bldr/api-media-server/src/cli.js and
- * @bldr/vue-component-media/src/main.js
- */
-class MediaTypes {
-  constructor () {
-    /**
-     * @type {object}
-     */
-    this.types = {
-      audio: ['mp3', 'm4a', 'flac'],
-      image: ['jpg', 'jpeg', 'png', 'svg'],
-      video: ['mp4']
-    }
-
-    /**
-     * If a media file should be converted we can use this object to
-     * get the wanted target extensionl
-     *
-     * @type {object}
-     */
-    this.targetExtension = {
-      audio: 'm4a',
-      image: 'jpg',
-      video: 'mp4'
-    }
-
-    /**
-     * @type {object}
-     */
-    this.typeColors = {
-      audio: 'brown',
-      image: 'green',
-      video: 'purple'
-    }
-    /**
-     * @type {array}
-     * @private
-     */
-    this.extensions_ = this.spreadExtensions_()
-  }
-
-  /**
-   * @private
-   */
-  spreadExtensions_ () {
-    const out = {}
-    for (const type in this.types) {
-      for (const extension of this.types[type]) {
-        out[extension] = type
-      }
-    }
-    return out
-  }
-
-  /**
-   * Get the media type from the extension.
-   *
-   * @param {String} extension
-   *
-   * @returns {String}
-   */
-  extensionToType (extension) {
-    const ext = extension.toLowerCase()
-    if (ext in this.extensions_) {
-      return this.extensions_[ext]
-    }
-    throw new Error(`Unkown extension “${ext}”`)
-  }
-
-  /**
-   * Get the color of the media type.
-   *
-   * @param {String} type
-   *
-   * @returns {String}
-   */
-  typeToColor (type) {
-    return this.typeColors[type]
-  }
-
-  /**
-   * Check if file is an supported media format.
-   *
-   * @param {String} filename
-   *
-   * @returns {Boolean}
-   */
-  isMedia (filename) {
-    const extension = filename.split('.').pop().toLowerCase()
-    if (extension in this.extensions_) {
-      return true
-    }
-    return false
-  }
-}
-
-const mediaTypes = new MediaTypes()
-
-/**
  * Write the metadata YAML file.
  *
  * @param {String} inputFile
@@ -534,14 +361,14 @@ async function convertOneFile (inputFile, cmdObj) {
   console.log(asset)
 
   const inputExtension = asset.extension.toLowerCase()
-  let mediaType
+  let assetType
   try {
-    mediaType = mediaTypes.extensionToType(inputExtension)
+    assetType = assetTypes.extensionToType(inputExtension)
   } catch (error) {
     console.log(`Unsupported extension ${inputExtension}`)
     return
   }
-  const outputExtension = mediaTypes.targetExtension[mediaType]
+  const outputExtension = assetType.typeToTargetExtension(assetType)
   let outputFile = `${asciify(asset.basename_)}.${outputExtension}`
 
   let convert

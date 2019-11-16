@@ -4,7 +4,7 @@
  * @module @bldr/vue-plugin-media
  */
 
-/* globals document Audio Image File */
+/* globals config document Audio Image File */
 
 import { getDefaultServers, HttpRequest, getDefaultRestEndpoints, HttpRequestNg } from '@bldr/http-request'
 import Vue from 'vue'
@@ -442,7 +442,7 @@ const state = {
   mediaFiles: {},
   playList: [],
   playListNoCurrent: null,
-  mediaTypes: {
+  assetTypes: {
     audio: {},
     video: {},
     image: {}
@@ -481,7 +481,7 @@ const getters = {
     return state.mediaFiles
   },
   mediaFilesByType: state => type => {
-    return state.mediaTypes[type]
+    return state.assetTypes[type]
   },
   playList: state => {
     return state.playList
@@ -510,7 +510,7 @@ const getters = {
     return null
   },
   typeCount: state => type => {
-    return Object.keys(state.mediaTypes[type]).length
+    return Object.keys(state.assetTypes[type]).length
   }
 }
 
@@ -586,7 +586,7 @@ const mutations = {
     state.playList.push(sample.uri)
   },
   addMediaFileToTypes (state, mediaFile) {
-    Vue.set(state.mediaTypes[mediaFile.type], mediaFile.uri, mediaFile)
+    Vue.set(state.assetTypes[mediaFile.type], mediaFile.uri, mediaFile)
   },
   setRestApiServers (state, restApiServers) {
     Vue.set(state, 'restApiServers', restApiServers)
@@ -614,49 +614,26 @@ const storeModule = {
 }
 
 /**
- * Categories some media file format in three media types: `audio`, `image`,
+ * Categories some asset file formats in three asset types: `audio`, `image`,
  * `video`.
  *
- * TODO: Code which can imported by ES modules and node modules.
- * The same code is in the module @bldr/api-media-server/src/cli.js and
+ * TODO: Code which can be imported by ES modules and node modules.
+ * The same code is in the module @bldr/api-media-server/src/main.js and
  * @bldr/vue-component-media/src/main.js
  */
-class MediaTypes {
-  constructor () {
+class AssetTypes {
+  constructor (config) {
     /**
      * @type {object}
-     */
-    this.types = {
-      audio: ['mp3', 'm4a', 'flac'],
-      image: ['jpg', 'jpeg', 'png', 'svg'],
-      video: ['mp4']
-    }
-
-    /**
-     * If a media file should be converted we can use this object to
-     * get the wanted target extensionl
-     *
-     * @type {object}
-     */
-    this.targetExtension = {
-      audio: 'm4a',
-      image: 'jpg',
-      video: 'mp4'
-    }
-
-    /**
-     * @type {object}
-     */
-    this.typeColors = {
-      audio: 'brown',
-      image: 'green',
-      video: 'purple'
-    }
-    /**
-     * @type {array}
      * @private
      */
-    this.extensions_ = this.spreadExtensions_()
+    this.config_ = config.mediaServer.assetTypes
+
+    /**
+     * @type {object}
+     * @private
+     */
+    this.allowedExtensions_ = this.spreadExtensions_()
   }
 
   /**
@@ -664,8 +641,8 @@ class MediaTypes {
    */
   spreadExtensions_ () {
     const out = {}
-    for (const type in this.types) {
-      for (const extension of this.types[type]) {
+    for (const type in this.config_) {
+      for (const extension of this.config_[type].allowedExtensions) {
         out[extension] = type
       }
     }
@@ -680,41 +657,55 @@ class MediaTypes {
    * @returns {String}
    */
   extensionToType (extension) {
-    const ext = extension.toLowerCase()
-    if (ext in this.extensions_) {
-      return this.extensions_[ext]
+    extension = extension.toLowerCase()
+    if (extension in this.allowedExtensions_) {
+      return this.allowedExtensions_[extension]
     }
-    throw new Error(`Unkown extension “${ext}”`)
+    throw new Error(`Unkown extension “${extension}”`)
   }
 
   /**
    * Get the color of the media type.
    *
-   * @param {String} type
+   * @param {String} type - The asset type: for example `audio`, `image`,
+   *   `video`.
    *
    * @returns {String}
    */
   typeToColor (type) {
-    return this.typeColors[type]
+    return this.config_[type].color
   }
 
   /**
-   * Check if file is an supported media format.
+   * Determine the target extension (for a conversion job) by a given
+   * asset type.
+   *
+   * @param {String} type - The asset type: for example `audio`, `image`,
+   *   `video`.
+   *
+   * @returns {String}
+   */
+  typeToTargetExtension (type) {
+    return this.config_[type].targetExtension
+  }
+
+  /**
+   * Check if file is an supported asset format.
    *
    * @param {String} filename
    *
    * @returns {Boolean}
    */
-  isMedia (filename) {
+  isAsset (filename) {
     const extension = filename.split('.').pop().toLowerCase()
-    if (extension in this.extensions_) {
+    if (extension in this.allowedExtensions_) {
       return true
     }
     return false
   }
 }
 
-export const mediaTypes = new MediaTypes()
+export const assetTypes = new AssetTypes(config)
 
 /**
  * A sample (snippet, sprite) of a media file which can be played. A sample
@@ -939,7 +930,7 @@ export class MediaFile {
        * The media type, for example `image`, `audio` or `video`.
        * @type {string}
        */
-      this.type = mediaTypes.extensionToType(this.extension)
+      this.type = assetTypes.extensionToType(this.extension)
     }
 
     /**
@@ -1255,7 +1246,7 @@ class Resolver {
       // Local: File object from drag and drop or open dialog
     } else if (mediaFileSpec instanceof File) {
       const file = mediaFileSpec
-      if (mediaTypes.isMedia(file.name)) {
+      if (assetTypes.isAsset(file.name)) {
         // blob:http:/localhost:8080/8c00d9e3-6ff1-4982-a624-55f125b5c0c0
         const httpUrl = URL.createObjectURL(file)
         // 8c00d9e3-6ff1-4982-a624-55f125b5c0c0
@@ -1271,7 +1262,7 @@ class Resolver {
       }
     }
 
-    mediaFile.type = mediaTypes.extensionToType(mediaFile.extension)
+    mediaFile.type = assetTypes.extensionToType(mediaFile.extension)
     // After type
     mediaFile.mediaElement = await createMediaElement(mediaFile)
     const samples = await this.createSamples_(mediaFile)

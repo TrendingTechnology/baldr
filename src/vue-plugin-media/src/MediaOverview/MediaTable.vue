@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import { mediaTypes } from '../main.js'
+import { assetTypes } from '../main.js'
 import TableRow from './TableRow.vue'
 import { createNamespacedHelpers } from 'vuex'
 const { mapGetters } = createNamespacedHelpers('media')
@@ -42,7 +42,7 @@ export default {
   computed: mapGetters(['mediaFilesByType', 'typeCount']),
   methods: {
     typeToColor (type) {
-      return mediaTypes.typeToColor(type)
+      return assetTypes.typeToColor(type)
     }
   }
 }
