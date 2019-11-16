@@ -241,6 +241,76 @@ commander
 /**
  * Categories some media file format in three media types: `audio`, `image`,
  * `video`.
+ */
+class AssetTypes {
+  constructor (config) {
+    /**
+     * @type {object}
+     * @private
+     */
+    this.config_ = config.mediaServer.assetTypes
+
+    this.allowedExtensions_ = this.spreadExtensions_()
+  }
+
+  /**
+   * @private
+   */
+  spreadExtensions_ () {
+    const out = {}
+    for (const type in this.config_) {
+      for (const extension of this.types[type].allowedExtensions) {
+        out[extension] = type
+      }
+    }
+    return out
+  }
+
+  /**
+   * Get the media type from the extension.
+   *
+   * @param {String} extension
+   *
+   * @returns {String}
+   */
+  extensionToType (extension) {
+    const ext = extension.toLowerCase()
+    if (ext in this.allowedExtensions_) {
+      return this.allowedExtensions_[ext]
+    }
+    throw new Error(`Unkown extension “${ext}”`)
+  }
+
+  /**
+   * Get the color of the media type.
+   *
+   * @param {String} type
+   *
+   * @returns {String}
+   */
+  typeToColor (type) {
+    return this.config_[type].color
+  }
+
+  /**
+   * Check if file is an supported media format.
+   *
+   * @param {String} filename
+   *
+   * @returns {Boolean}
+   */
+  isAsset (filename) {
+    const extension = filename.split('.').pop().toLowerCase()
+    if (extension in this.extensions_) {
+      return true
+    }
+    return false
+  }
+}
+
+/**
+ * Categories some media file format in three media types: `audio`, `image`,
+ * `video`.
  *
  * TODO: Code which can imported by ES modules and node modules.
  * The same code is in the module @bldr/api-media-server/src/cli.js and
