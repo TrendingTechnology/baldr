@@ -52,7 +52,8 @@ export default {
           type: 'assets',
           method: 'substringSearch',
           field: this.currentSearchField,
-          search: text
+          search: text,
+          result: 'dynamicSelect'
         }
       }).then((response) => {
         this.options = response.data
