@@ -17,6 +17,8 @@ import SlideView from '@/views/SlideView'
 import MasterRenderer from '@/views/SlideView/MasterRenderer.vue'
 import SlidesOverview from '@/views/SlidesOverview'
 
+import MediaIdsParentDir from '@/views/MediaIdsParentDir'
+
 // Failed to load chunks in the subfolder presentation
 // const Documentation = () => import(/* webpackChunkName: "documentation" */ '@/views/Documentation.vue')
 // const MasterDocumentation = () => import(/* webpackChunkName: "documentation" */ '@/views/MasterDocumentation.vue')
@@ -106,6 +108,15 @@ const routes = [
     meta: {
       shortcut: 'r',
       title: 'Überblick REST-API-Server'
+    }
+  },
+  {
+    path: '/media-ids',
+    name: 'media-ids',
+    component: MediaIdsParentDir,
+    meta: {
+      shortcut: 'i',
+      title: 'Medien-IDs im übergeordneten Ordner'
     }
   }
 ]
