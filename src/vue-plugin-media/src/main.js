@@ -1089,7 +1089,7 @@ async function createMediaElement (mediaFile) {
       throw new Error(`Not supported mediaFile type “${mediaFile.type}”.`)
   }
 
-  return new Promise(function (resolve, reject) {
+  return new Promise((resolve, reject) => {
     if (mediaFile.isPlayable) {
       mediaElement.onloadedmetadata = () => {
         resolve(mediaElement)
@@ -1100,8 +1100,9 @@ async function createMediaElement (mediaFile) {
       }
     }
 
-    mediaElement.onerror = () => {
-      reject(Error('Could not create MediaElement.'))
+    mediaElement.onerror = (error) => {
+      console.log(error)
+      reject(Error(`Could not create the MediaElement for the MediaFile with the ID “${mediaFile.id}”.`))
     }
   })
 }
