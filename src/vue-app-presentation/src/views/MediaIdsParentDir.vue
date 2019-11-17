@@ -2,10 +2,33 @@
   <div class="vc_media_ids_parent_dir default-padding" b-content-theme="default">
     <h1>Medien-IDs im übergeordneten Ordner</h1>
 
-    <div v-for="mediaAsset in mediaAssets" :key="mediaAsset.id">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Type</th>
+          <th>Dateiendung</th>
+          <th>Titel</th>
+        </tr>
+      </thead>
 
-      {{ mediaAsset.id }}
-    </div>
+      <tbody>
+        <tr v-for="mediaAsset in mediaAssets" :key="mediaAsset.id">
+          <td class="id">{{ mediaAsset.id }}</td>
+          <td>{{ mediaAsset.assetType }}</td>
+          <td>{{ mediaAsset.extension }}</td>
+          <td>{{ mediaAsset.title }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Nur die IDs</h2>
+
+    <code>
+      <div v-for="mediaAsset in mediaAssets" :key="mediaAsset.id">
+        {{ mediaAsset.id }}
+      </div>
+    </code>
 
   </div>
 </template>
@@ -23,21 +46,31 @@ export default {
   },
   computed: mapGetters(['presentation']),
   mounted () {
-    console.log(this.presentation)
-    this.$media.httpRequest.request({
-      url: 'query',
-      method: 'get',
-      params: {
-        type: 'assets',
-        method: 'substringSearch',
-        field: 'path',
-        search: 'Ausstellung',
-        result: 'fullObjects'
-      }
-    }).then((response) => {
-      console.log(response.data)
-      this.mediaAssets = response.data
-    })
+    if (this.presentation) {
+      this.$media.httpRequest.request({
+        url: 'query',
+        method: 'get',
+        params: {
+          type: 'assets',
+          method: 'substringSearch',
+          field: 'path',
+          search: this.presentation.parentDir,
+          result: 'fullObjects'
+        }
+      }).then((response) => {
+        this.mediaAssets = response.data
+      })
+    }
   }
 }
 </script>
+
+<style lang="scss" scoped>
+  .vc_media_ids_parent_dir {
+    font-size: 1vw !important;
+
+    .id {
+      font-family: $font-family-mono;
+    }
+  }
+</style>

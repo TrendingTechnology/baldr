@@ -454,6 +454,8 @@ class Asset extends MediaFile {
 
     const previewImage = `${this.absPath_}_preview.jpg`
 
+    this.assetType = assetTypes.extensionToType(this.extension)
+
     if (fs.existsSync(previewImage)) {
       /**
        * The absolute path of the preview image.

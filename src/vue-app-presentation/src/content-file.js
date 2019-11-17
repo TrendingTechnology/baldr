@@ -357,6 +357,8 @@ function parseSlidesRecursive (slidesRaw, slidesFlat, slidesTree, level = 1) {
 /**
  * A presentation
  *
+ * @property {String} path
+ * @property {String} parentDir
  * @property {object} meta
  * @property {object} slides
  * @property {object} media
@@ -364,6 +366,12 @@ function parseSlidesRecursive (slidesRaw, slidesFlat, slidesTree, level = 1) {
  * @property {string} rawYamlObject_
  */
 export class Presentation {
+
+  setPath (path) {
+    this.path = path
+    const fileName = path.split('/').pop()
+    this.parentDir = path.replace(`/${fileName}`, '')
+  }
 
   async parseYamlFile (rawYamlString) {
     this.rawYamlString_ = rawYamlString

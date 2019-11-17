@@ -40,9 +40,10 @@ const getters = {
 }
 
 const actions = {
-  async openPresentation ({ commit, dispatch }, content) {
+  async openPresentation ({ commit, dispatch }, { rawYamlString, mongoDbObject }) {
     const presentation = new Presentation()
-    await presentation.parseYamlFile(content)
+    await presentation.parseYamlFile(rawYamlString)
+    presentation.setPath(mongoDbObject.path)
     commit('setPresentation', presentation)
     commit('setSlides', presentation.slides)
     dispatch('setSlideNoCurrent', 1)
@@ -59,13 +60,14 @@ const actions = {
         search: id
       }
     })
+    const mongoDbObject = response.data
     // Get yaml content as a string of the presentation.
-    const presentation = response.data
     response = await vue.$media.httpRequest.request({
-      url: `/media/${presentation.path}`,
+      url: `/media/${mongoDbObject.path}`,
       headers: { 'Cache-Control': 'no-cache' },
     })
-    await dispatch('openPresentation', response.data)
+    const rawYamlString = response.data
+    await dispatch('openPresentation', { rawYamlString, mongoDbObject })
   },
   async reloadPresentation ({ dispatch, getters }) {
     const pres = getters.presentation
