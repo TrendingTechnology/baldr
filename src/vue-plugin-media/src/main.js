@@ -1473,7 +1473,7 @@ class Media {
       let lastShortcutNo = 0
       for (const sampleUri in samples) {
         const sample = samples[sampleUri]
-        if (sample.mediaFile.type === type) {
+        if (!sample.customShortCut && sample.mediaFile.type === type) {
           if (sample.shortcutNo) {
             lastShortcutNo = sample.shortcutNo
           } else {
@@ -1493,6 +1493,25 @@ class Media {
         }
       }
     }
+
+    let addCustomShortCuts = (samples) => {
+      for (const sampleUri in samples) {
+        const sample = samples[sampleUri]
+        if (!sample.customShortCut && sample.mediaFile.shortcut) {
+          sample.customShortCut = true
+          this.$shortcuts.add(
+            sample.mediaFile.shortcut,
+            () => {
+              this.player.load(sample.uri)
+              this.player.start()
+            },
+            // Play
+            `Spiele Ausschnitt „${sample.titleFormated}“`
+          )
+        }
+      }
+    }
+    addCustomShortCuts(samples)
     addShortcutsByType(samples, 'audio')
     addShortcutsByType(samples, 'video')
   }

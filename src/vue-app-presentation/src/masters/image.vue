@@ -3,12 +3,12 @@
     <img v-if="mediaFile" :src="mediaFile.httpUrl"/>
     <div v-if="titleComputed || descriptionComputed" class="metadata">
       <h1
-        v-if="titleComputed"
+        v-if="!noMeta && titleComputed"
         class="title"
         v-html="titleComputed"
       />
       <p
-        v-if="descriptionComputed"
+        v-if="!noMeta && descriptionComputed"
         class="description"
         v-html="descriptionComputed"
       />
@@ -24,6 +24,20 @@ const { mapGetters } = createNamespacedHelpers('presentation')
 const example = `
 ---
 slides:
+
+- title: no_meta
+  image:
+    src: id:Bach
+    title: A title
+    description: A description
+    no_meta: true
+
+- title: no_meta
+  image:
+    src: id:Bach
+    title: A title
+    description: A description
+    no_meta: false
 
 - title: Kurzform
   image: id:Bach
@@ -82,6 +96,11 @@ export default {
       type: String,
       markup: true,
       description: 'Eine Beschreibung, die angezeigt wird.'
+    },
+    noMeta: {
+      type: Boolean,
+      description: 'Beeinflusst, ob Metainformation wie z. B. Titel oder Beschreibung angezeigt werden sollen.',
+      default: true
     }
   },
   computed: {

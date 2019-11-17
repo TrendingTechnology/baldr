@@ -52,7 +52,10 @@ export default {
   methods: {
     markupToHtml,
     openExample () {
-      this.$store.dispatch('presentation/openPresentation', this.master.example).then(() => {
+      this.$store.dispatch(
+        'presentation/openPresentation',
+        { rawYamlString: this.master.example }
+      ).then(() => {
         if (this.$route.name !== 'slides') this.$router.push({ name: 'slides' })
       })
     },

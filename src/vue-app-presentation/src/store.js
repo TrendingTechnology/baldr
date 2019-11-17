@@ -43,7 +43,7 @@ const actions = {
   async openPresentation ({ commit, dispatch }, { rawYamlString, mongoDbObject }) {
     const presentation = new Presentation()
     await presentation.parseYamlFile(rawYamlString)
-    presentation.setPath(mongoDbObject.path)
+    if (mongoDbObject) presentation.setPath(mongoDbObject.path)
     commit('setPresentation', presentation)
     commit('setSlides', presentation.slides)
     dispatch('setSlideNoCurrent', 1)

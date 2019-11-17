@@ -1,10 +1,10 @@
 <template>
   <div class="vc_play_load_indicator" b-ui-theme="default">
     <span v-if="sampleLoaded && !samplePlaying">
-      L: {{ sampleLoaded.titleFormated }}
+       L <!-- {{ sampleLoaded.titleFormated }} -->
     </span>
     <span v-if="samplePlaying">
-      P: {{ samplePlaying.titleFormated }}
+      P <!-- {{ samplePlaying.titleFormated }} -->
     </span>
   </div>
 </template>
