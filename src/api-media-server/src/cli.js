@@ -368,7 +368,7 @@ async function convertOneFile (inputFile, cmdObj) {
     console.log(`Unsupported extension ${inputExtension}`)
     return
   }
-  const outputExtension = assetType.typeToTargetExtension(assetType)
+  const outputExtension = assetTypes.typeToTargetExtension(assetType)
   let outputFile = `${asciify(asset.basename_)}.${outputExtension}`
 
   let convert
@@ -385,7 +385,7 @@ async function convertOneFile (inputFile, cmdObj) {
   // aac_he_v2
   // '-c:a', 'libfdk_aac', '-profile:a', 'aac_he_v2'
 
-  if (mediaType === 'audio') {
+  if (assetType === 'audio') {
     convert = childProcess.spawn('ffmpeg', [
       '-i', inputFile,
       // '-c:a', 'aac', '-b:a', '128k',
@@ -398,7 +398,7 @@ async function convertOneFile (inputFile, cmdObj) {
     ])
 
   // image
-  } else if (mediaType === 'image') {
+  } else if (assetType === 'image') {
     let size = '2000x2000>'
     if (cmdObj.previewImage) {
       outputFile = inputFile.replace(`.${asset.extension}`, '_preview.jpg')
@@ -413,7 +413,7 @@ async function convertOneFile (inputFile, cmdObj) {
     ])
 
   // videos
-  } else if (mediaType === 'video') {
+  } else if (assetType === 'video') {
     convert = childProcess.spawn('ffmpeg', [
       '-i', inputFile,
       '-vcodec', 'libx264',
@@ -433,7 +433,7 @@ async function convertOneFile (inputFile, cmdObj) {
     })
 
     convert.on('close', async (code) => {
-      if (mediaType === 'audio') {
+      if (assetType === 'audio') {
         const metaData = await collectMusicMetaData(inputFile)
         if (metaData) {
           writeMetaDataYaml(outputFile, metaData)
