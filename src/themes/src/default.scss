@@ -251,18 +251,19 @@ $link-color: scale-color($gray, $lightness: -40%);
 [b-content-theme="default"] {
   ul {
     list-style-type: none;
+    padding-left: 1em;
 
     ul {
       list-style-type: none;
     }
 
-    & li {
-      text-indent: -1em;
-    }
-
     & li:before {
-      content: "- ";
-      text-indent: -1em;
+      // https://stackoverflow.com/a/41856384
+      content: "-";
+      position: absolute;
+      /* change margin to move dash around */
+      margin-left: -1em;
+      padding-bottom: 0.2em;
     }
   }
 }
@@ -306,4 +307,3 @@ $link-color: scale-color($gray, $lightness: -40%);
     }
   }
 }
-

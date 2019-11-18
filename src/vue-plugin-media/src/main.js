@@ -619,7 +619,7 @@ const storeModule = {
  *
  * TODO: Code which can be imported by ES modules and node modules.
  * The same code is in the module @bldr/api-media-server/src/main.js and
- * @bldr/vue-component-media/src/main.js
+ * @bldr/vue-plugin-media/src/main.js
  */
 class AssetTypes {
   constructor (config) {
@@ -744,8 +744,9 @@ class Sample {
    * @property {String|Number} specs.fadeOut - The fade out time in seconds. The
    *   duration is not affected by this time specification.
    * @property {String|Number} specs.endTime - The end time in seconds.
+   * @property {String} specs.shortcut - A custom shortcut
    */
-  constructor (mediaFile, { title, id, startTime, fadeIn, duration, fadeOut, endTime }) {
+  constructor (mediaFile, { title, id, startTime, fadeIn, duration, fadeOut, endTime, shortcut }) {
     /**
      * @type {module:@bldr/vue-plugin-media.MediaFile}
      */
@@ -823,12 +824,27 @@ class Sample {
     this.currentTimeSec = null
 
     /**
+     * The actual shortcut. If `shortcutCustom` is set, it is the same as this
+     * value.
+     *
+     * @type {Number}
+     */
+    this.shortcut = null
+
+    /**
      * The shortcut number. 1 means: To play the sample type in “a 1” if it
      * is a audio file or “v 1” if it is a video file.
      *
      * @type {Number}
      */
-    this.shortcutNo
+    this.shortcutNo = null
+
+    /**
+     * A custom shortcut, for example “k 1”
+     *
+     * @type {String}
+     */
+    this.shortcutCustom = shortcut
   }
 
   /**
@@ -1159,7 +1175,10 @@ class Resolver {
 
   /**
    * @private
-   * @param {MediaFile} mediaFile
+   * @param {module:@bldr/vue-plugin-media.MediaFile} mediaFile - The
+   *   `mediaFile` object, a client side representation of a media asset.
+   *
+   * @returns {String} - A HTTP URL.
    */
   async resolveHttpUrl_ (mediaFile) {
     if ('httpUrl' in mediaFile) return mediaFile.httpUrl
@@ -1170,23 +1189,52 @@ class Resolver {
     throw new Error(`Can not generate HTTP URL.`)
   }
 
+  /**
+   * Create samples for each playable media file. By default each media file
+   * has one sample called “complete”.
+   *
+   * @param {module:@bldr/vue-plugin-media.MediaFile} mediaFile - The
+   *   `mediaFile` object, a client side representation of a media asset.
+   *
+   * @returns {module:@bldr/vue-plugin-media~Sample[]}
+   */
   async createSamples_ (mediaFile) {
-    // First sample of each playable media file is the complete track.
     if (mediaFile.isPlayable) {
+      // First sample of each playable media file is the “complete” track.
+      const completeSampleSpec = {
+        title: 'komplett',
+        id: 'complete',
+        startTime: 0
+      }
+      for (const prop of ['startTime', 'duration', 'endTime', 'fadeOut', 'fadeIn', 'shortcut']) {
+        if (mediaFile[prop]) {
+          completeSampleSpec[prop] = mediaFile[prop]
+          delete mediaFile[prop]
+        }
+      }
+
+      // Store all sample specs in a object to check if there is already a
+      // sample with the id “complete”.
+      let sampleSpecs = null
+      if (mediaFile.samples) {
+        sampleSpecs = {}
+        for (const sampleSpec of mediaFile.samples) {
+          sampleSpecs[sampleSpec.id] = sampleSpec
+        }
+      }
+
+      // Create the sample “complete”.
       let sample
       const samples = {}
-      sample = new Sample(
-        mediaFile,
-        {
-          title: 'komplett',
-          id: 'complete',
-          startTime: 0
-        }
-      )
-      samples[sample.uri] = sample
+      if (!sampleSpecs || (sampleSpecs && !('complete' in sampleSpecs))) {
+        sample = new Sample(mediaFile, completeSampleSpec)
+        samples[sample.uri] = sample
+      }
+
       // Add further samples specifed in the yaml section.
-      if (mediaFile.samples) {
-        for (const sampleSpec of mediaFile.samples) {
+      if (sampleSpecs) {
+        for (const sampleId in sampleSpecs) {
+          const sampleSpec = sampleSpecs[sampleId]
           sample = new Sample(mediaFile, sampleSpec)
           samples[sample.uri] = sample
         }
@@ -1221,8 +1269,10 @@ class Resolver {
    * 1. mediaElement
    *
    * @private
-   * @param {module:@bldr/vue-plugin-media~mediaFileSpec} mediaFileSpec - URI or File object
-   * @return {MediaFile}
+   * @param {module:@bldr/vue-plugin-media~mediaFileSpec} mediaFileSpec - URI
+   *   or File object
+   *
+   * @returns {module:@bldr/vue-plugin-media.MediaFile}
    */
   async resolveSingle_ (mediaFileSpec) {
     let mediaFile
@@ -1363,7 +1413,7 @@ class Media {
       },
       {
         keys: 'p f',
-        callback: () => { this.player.stop(7) },
+        callback: () => { this.player.stop(4) },
         // Media player: fade out
         description: 'Medien-Abspieler: Audio/Video-Ausschnitt langsam ausblenden'
       },
@@ -1473,15 +1523,15 @@ class Media {
       let lastShortcutNo = 0
       for (const sampleUri in samples) {
         const sample = samples[sampleUri]
-        if (!sample.customShortCut && sample.mediaFile.type === type) {
+        if (!sample.shortcutCustom && sample.mediaFile.type === type) {
           if (sample.shortcutNo) {
             lastShortcutNo = sample.shortcutNo
           } else {
             lastShortcutNo += 1
             sample.shortcutNo = lastShortcutNo
-            const shortcut = `${firstTriggerKeyByType(sample.mediaFile.type)} ${sample.shortcutNo}`
+            sample.shortcut = `${firstTriggerKeyByType(sample.mediaFile.type)} ${sample.shortcutNo}`
             this.$shortcuts.add(
-              shortcut,
+              sample.shortcut,
               () => {
                 this.player.load(sample.uri)
                 this.player.start()
@@ -1494,13 +1544,13 @@ class Media {
       }
     }
 
-    let addCustomShortCuts = (samples) => {
+    let addShortCutsCustom = (samples) => {
       for (const sampleUri in samples) {
         const sample = samples[sampleUri]
-        if (!sample.customShortCut && sample.mediaFile.shortcut) {
-          sample.customShortCut = true
+        if (sample.shortcutCustom && !sample.shortcut) {
+          sample.shortcut = sample.shortcutCustom
           this.$shortcuts.add(
-            sample.mediaFile.shortcut,
+            sample.shortcut,
             () => {
               this.player.load(sample.uri)
               this.player.start()
@@ -1511,7 +1561,7 @@ class Media {
         }
       }
     }
-    addCustomShortCuts(samples)
+    addShortCutsCustom(samples)
     addShortcutsByType(samples, 'audio')
     addShortcutsByType(samples, 'video')
   }

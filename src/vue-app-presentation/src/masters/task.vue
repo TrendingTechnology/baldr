@@ -73,3 +73,14 @@ export default {
     text-align: center;
   }
 </style>
+
+
+<style lang="scss">
+  .vc_task_master {
+    ol, ul {
+      text-align: left !important;
+      font-size: 3vw;
+      margin: 0em 3em;
+    }
+  }
+</style>
