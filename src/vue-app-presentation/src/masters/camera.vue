@@ -224,9 +224,11 @@ export default {
         audio: false,
         // ELMO
         // device id: "4V7Fv34BpWsE9EX1Y718KLZVUyifnZrZo7bUTxCz6XU="
-        // video: { deviceId: { exact: this.deviceId.id } }
-        video: { deviceId: { exact: '4V7Fv34BpWsE9EX1Y718KLZVUyifnZrZo7bUTxCz6XU=' } }
+        video: { deviceId: { exact: this.deviceId.id } }
+        //video: { deviceId: { exact: '4V7Fv34BpWsE9EX1Y718KLZVUyifnZrZo7bUTxCz6XU=' } }
       }
+      console.log('Method setDeviceId()')
+      console.log(this.deviceId)
       this.$store.commit('camera/setDeviceId', this.deviceId.id)
       this.setVideoStream(constraints)
     },
@@ -235,10 +237,13 @@ export default {
       this.$dynamicSelect.focus()
     },
     setVideoStream (constraints) {
-      console.log('setVideoStream')
+      console.log('Methods setVideoStream')
       if (!constraints) {
         constraints = { audio: false, video: true }
       }
+      console.log('constraints')
+      console.log(constraints)
+
       // {fdf4c841-b6e0-4754-8074-e1d540ac5018}
       // "4V7Fv34BpWsE9EX1Y718KLZVUyifnZrZo7bUTxCz6XU="
       navigator.mediaDevices.getUserMedia(constraints)
