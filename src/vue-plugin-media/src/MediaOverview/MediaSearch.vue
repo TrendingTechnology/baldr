@@ -32,7 +32,7 @@ export default {
       mediaFile: {},
       options: [],
       searchFields: ['id', 'title', 'path'],
-      currentSearchField: 'id'
+      currentSearchField: 'title'
     }
   },
   methods: {

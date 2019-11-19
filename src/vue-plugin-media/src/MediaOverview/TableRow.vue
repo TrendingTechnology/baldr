@@ -15,7 +15,20 @@
         {{ mediaFile.titleSafe }}
       </router-link>
     </td>
-    <td class="shortcut">{{ mediaFile.shortcut }}</td>
+    <td class="shortcut">
+      <div v-if="mediaFile.samples">
+        <div v-if="Object.keys(mediaFile.samples).length === 1">
+          <div v-for="sample in mediaFile.samples" :key="sample.id">
+            {{ sample.shortcut }}
+          </div>
+        </div>
+        <div v-if="Object.keys(mediaFile.samples).length > 1">
+          <div v-for="sample in mediaFile.samples" :key="sample.id">
+            {{ sample.shortcut }} <span class="sample-title">({{ sample.title }})</span>
+          </div>
+        </div>
+      </div>
+    </td>
     <td>{{ dimension }}</td>
   </tr>
 </template>
@@ -61,12 +74,16 @@ export default {
     }
 
     &.shortcut {
-      width: 6vw;
+      width: 12vw;
     }
 
     &:last-child {
       text-align: right;
       width: 10vw;
+    }
+
+    .sample-title {
+      font-size: 0.7em;
     }
   }
 </style>

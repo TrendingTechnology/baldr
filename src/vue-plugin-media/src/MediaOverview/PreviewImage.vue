@@ -24,7 +24,7 @@ export default {
     width: 4vw;
     height: 4vw;
     object-fit: cover;
-    background-color: scale-color($gray, $lightness: -70%);
+    background-color: scale-color($gray, $lightness: 10%);
     padding: 0.3vw;
   }
 </style>

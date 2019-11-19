@@ -193,7 +193,7 @@ export default {
         description: 'Vollbild'
       },
       {
-        keys: 'ctrl+return',
+        keys: 's',
         callback: this.toggleSlidesOverview,
         description: 'Zwischen Folien und Folien-Überblick hin- und herschalten',
         routeNames: ['slides', 'slides-overview']
