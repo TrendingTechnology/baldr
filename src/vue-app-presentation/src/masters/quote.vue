@@ -72,8 +72,9 @@ export default {
 </script>
 <style lang="scss" scoped>
   .vc_quote_master {
-    padding-left: 20%;
-    padding-right: 20%;
+    padding-left: 10%;
+    padding-right: 10%;
+    font-size: 3vw;
 
     .text {
       font-style: italic;
@@ -85,7 +86,7 @@ export default {
     }
 
     .attribution {
-      font-size: 3vw;
+      font-size: 0.8em;
       text-align: right;
     }
 

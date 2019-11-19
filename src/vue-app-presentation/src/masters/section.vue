@@ -1,10 +1,9 @@
 <template>
-  <div class="vc_section_master">
-    {{ heading }}
-  </div>
+  <div class="vc_section_master default-padding" v-html="heading"/>
 </template>
 
 <script>
+import { plainText } from '@bldr/core-browser'
 
 const example = `
 ---
@@ -34,7 +33,7 @@ export const master = {
     return props
   },
   plainTextFromProps (props) {
-    return props.heading
+    return plainText(props.heading)
   }
 }
 
@@ -43,6 +42,7 @@ export default {
     heading: {
       type: String,
       required: true,
+      markup: true,
       description: 'Die Überschrift / der Titel des Abschnitts.'
     }
   }

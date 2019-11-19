@@ -295,7 +295,7 @@ class Master {
   detectUnkownProps (props) {
     for (const propName in props) {
       if ('props' in this.vue && !(propName in this.vue.props)) {
-        throw new Error(`The master slide “${this.name}” has not prop named “${propName}”`)
+        throw new Error(`The master slide “${this.name}” has no property (prop) named “${propName}”.`)
       }
     }
   }
