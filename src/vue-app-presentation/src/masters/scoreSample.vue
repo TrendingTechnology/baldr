@@ -15,6 +15,8 @@ const example = `
 ---
 slides:
 
+- score_sample: id:Foto-Savoyarden-Musikanten-mit-Murmeltier
+
 - score_sample:
     score: id:Foto-Savoyarden-Musikanten-mit-Murmeltier
     audio: id:Fischer-Dieskau_Marmotte
@@ -37,7 +39,15 @@ export const master = {
   },
   enterSlide ({ newProps }) {
     if ('audio' in newProps) this.$media.player.load(newProps.audio)
-  }
+  },
+  normalizeProps (props) {
+    if (typeof props === 'string') {
+      return {
+        score: props
+      }
+    }
+    return props
+  },
 }
 
 export default {
