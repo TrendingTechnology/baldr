@@ -100,7 +100,7 @@ export default {
     noMeta: {
       type: Boolean,
       description: 'Beeinflusst, ob Metainformation wie z. B. Titel oder Beschreibung angezeigt werden sollen.',
-      default: true
+      default: false
     }
   },
   computed: {
