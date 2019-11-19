@@ -38,7 +38,81 @@
     <div class="container-overview">
     
         
-            <div class="description"><p>Base code for the cli and the rest interface.</p></div>
+            <div class="description"><p>The REST API and command line interface of the BALDR media server.</p>
+<h1>Media types:</h1>
+<ul>
+<li>presentation (<code>Presentation()</code>)</li>
+<li>asset (<code>Asset()</code>)
+<ul>
+<li>multipart asset</li>
+</ul>
+</li>
+</ul>
+<h1>Definition of the objects:</h1>
+<p>A <em>presentation</em> is a YAML file for the BALDR presentation app. It must have
+the file name scheme <code>*.baldr.yml</code>. The media server stores the whole YAML
+file in the MongoDB database.</p>
+<p>A <em>asset</em> is a media file which has a meta data file in the YAML format.
+The file name scheme for this meta data file is <code>media-file.jpg.yml</code>. The
+suffix <code>.yml</code> has to be appended. Only the content of the meta data file
+is stored into the database.</p>
+<h1>REST API</h1>
+<ul>
+<li><code>mgmt</code>
+<ul>
+<li>
+<p><code>flush</code>: Delete all media files (assets, presentations) from the database.</p>
+</li>
+<li>
+<p><code>init</code>: Initialize the MongoDB database</p>
+</li>
+<li>
+<p><code>open</code>: Open a media file specified by an ID. This query parameters are
+available:</p>
+<ul>
+<li><code>id</code>: The ID of the media file (required).</li>
+<li><code>type</code>: <code>presentations</code>, <code>assets</code>. The default value is
+<code>presentations.</code></li>
+<li><code>with</code>: <code>editor</code> specified in <code>config.mediaServer.editor</code>
+(<code>/etc/baldr.json</code>) or <code>folder</code> to open the parent folder of the
+given media file. The default value is <code>editor</code></li>
+</ul>
+</li>
+<li>
+<p><code>re-init</code>: Re-Initialize the MongoDB database (Drop all collections and
+initialize)</p>
+</li>
+<li>
+<p><code>update</code>: Update the media server database (Flush and insert).</p>
+</li>
+<li>
+<p><code>query</code>: Getting results by using query parameters. This query parameters
+are available:</p>
+<ul>
+<li><code>type</code>: <code>assets</code> (default), <code>presentations</code> (what)</li>
+<li><code>method</code>: <code>exactMatch</code>, <code>substringSearch</code> (default) (how).
+<ul>
+<li><code>exactMatch</code>: The query parameter <code>search</code> must be a perfect match
+to a top level database field to get a result.</li>
+<li><code>substringSearch</code>: The query parameter <code>search</code> is only a
+substring of the string to search in.</li>
+</ul>
+</li>
+<li><code>field</code>: <code>id</code> (default), <code>title</code>, etc ... (where).</li>
+<li><code>search</code>: Some text to search for (search for).</li>
+<li><code>result</code>: <code>fullObjects</code> (default), <code>dynamicSelect</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>stats</code>:
+<ul>
+<li><code>count</code>: Count / sum of the media files (assets, presentations) in the
+database.</li>
+<li><code>updates</code>: Journal of the update processes with timestamps.</li>
+</ul>
+</li>
+</ul></div>
         
 
         
@@ -87,7 +161,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="api-media-server_main.js.html">api-media-server/main.js</a>, <a href="api-media-server_main.js.html#line1">line 1</a>
+        <a href="api-media-server_src_main.js.html">api-media-server/src/main.js</a>, <a href="api-media-server_src_main.js.html#line1">line 1</a>
     </li></ul></dd>
     
 
@@ -132,7 +206,13 @@
             <dt><a href="module-@bldr_api-media-server-Asset.html">Asset</a></dt>
             <dd></dd>
         
+            <dt><a href="module-@bldr_api-media-server-AssetTypes.html">AssetTypes</a></dt>
+            <dd></dd>
+        
             <dt><a href="module-@bldr_api-media-server-MediaFile.html">MediaFile</a></dt>
+            <dd></dd>
+        
+            <dt><a href="module-@bldr_api-media-server-Presentation.html">Presentation</a></dt>
             <dd></dd>
         </dl>
     
@@ -192,7 +272,69 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="api-media-server_main.js.html">api-media-server/main.js</a>, <a href="api-media-server_main.js.html#line25">line 25</a>
+        <a href="api-media-server_src_main.js.html">api-media-server/src/main.js</a>, <a href="api-media-server_src_main.js.html#line81">line 81</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="~config"><span class="type-signature">(inner, constant) </span>config<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    <p>The configuration object from <code>/etc/baldr.json</code></p>
+</div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="api-media-server_src_main.js.html">api-media-server/src/main.js</a>, <a href="api-media-server_src_main.js.html#line76">line 76</a>
     </li></ul></dd>
     
 
@@ -264,7 +406,201 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="api-media-server_main.js.html">api-media-server/main.js</a>, <a href="api-media-server_main.js.html#line46">line 46</a>
+        <a href="api-media-server_src_main.js.html">api-media-server/src/main.js</a>, <a href="api-media-server_src_main.js.html#line113">line 113</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="~errors"><span class="type-signature">(inner) </span>errors<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    <p>A container array for all error messages send out via the REST API.</p>
+</div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="api-media-server_src_main.js.html">api-media-server/src/main.js</a>, <a href="api-media-server_src_main.js.html#line86">line 86</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="~helpMessages"><span class="type-signature">(inner, constant) </span>helpMessages<span class="type-signature"> :Object</span></h4>
+
+
+
+
+<div class="description">
+    <p>This object hold jsons for displaying help messages in the browser on
+some entry point urls.</p>
+<p>Update docs on the top of this file in the JSDoc block.</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Object</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="api-media-server_src_main.js.html">api-media-server/src/main.js</a>, <a href="api-media-server_src_main.js.html#line691">line 691</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="~mongoClient"><span class="type-signature">(inner, constant) </span>mongoClient<span class="type-signature"></span></h4>
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="api-media-server_src_main.js.html">api-media-server/src/main.js</a>, <a href="api-media-server_src_main.js.html#line104">line 104</a>
     </li></ul></dd>
     
 
@@ -285,6 +621,161 @@
 
     
         <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="~asciify"><span class="type-signature">(inner) </span>asciify<span class="signature">(input)</span><span class="type-signature"> &rarr; {String}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>This function can be used to generate ids from different file names.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>input</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="api-media-server_src_main.js.html">api-media-server/src/main.js</a>, <a href="api-media-server_src_main.js.html#line134">line 134</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">String</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
 
         
             
@@ -340,7 +831,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="api-media-server_main.js.html">api-media-server/main.js</a>, <a href="api-media-server_main.js.html#line51">line 51</a>
+        <a href="api-media-server_src_main.js.html">api-media-server/src/main.js</a>, <a href="api-media-server_src_main.js.html#line118">line 118</a>
     </li></ul></dd>
     
 
@@ -377,6 +868,317 @@
     <dd>
         
 <span class="param-type">Promise</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="~convertPropertiesToCamelCase"><span class="type-signature">(inner) </span>convertPropertiesToCamelCase<span class="signature">(object)</span><span class="type-signature"> &rarr; {Object}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Convert all properties in an object to camelCase in a recursive fashion.</p>
+<p>TODO: Use the function in @bldr/core-browser</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>object</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="api-media-server_src_main.js.html">api-media-server/src/main.js</a>, <a href="api-media-server_src_main.js.html#line180">line 180</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Object</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="~deasciify"><span class="type-signature">(inner) </span>deasciify<span class="signature">(input)</span><span class="type-signature"> &rarr; {String}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>This function can be used to generate a title from an ID string.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>input</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="api-media-server_src_main.js.html">api-media-server/src/main.js</a>, <a href="api-media-server_src_main.js.html#line159">line 159</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">String</span>
 
 
     </dd>
@@ -442,7 +1244,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="api-media-server_main.js.html">api-media-server/main.js</a>, <a href="api-media-server_main.js.html#line340">line 340</a>
+        <a href="api-media-server_src_main.js.html">api-media-server/src/main.js</a>, <a href="api-media-server_src_main.js.html#line649">line 649</a>
     </li></ul></dd>
     
 
@@ -544,7 +1346,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="api-media-server_main.js.html">api-media-server/main.js</a>, <a href="api-media-server_main.js.html#line367">line 367</a>
+        <a href="api-media-server_src_main.js.html">api-media-server/src/main.js</a>, <a href="api-media-server_src_main.js.html#line676">line 676</a>
     </li></ul></dd>
     
 
@@ -581,6 +1383,197 @@
     <dd>
         
 <span class="param-type">Promise</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="~getAbsPathFromId"><span class="type-signature">(async, inner) </span>getAbsPathFromId<span class="signature">(id, mediaType)</span><span class="type-signature"> &rarr; {String}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Resolve a ID from a given media type (<code>assets</code>, <code>presentations</code>) to a
+absolute path.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>The id of the media type.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>mediaType</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+                <td class="default">
+                
+                    presentations
+                
+                </td>
+            
+
+            <td class="description last"><p>At the moment <code>assets</code> and <code>presentation</code></p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="api-media-server_src_main.js.html">api-media-server/src/main.js</a>, <a href="api-media-server_src_main.js.html#line763">line 763</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">String</span>
 
 
     </dd>
@@ -646,7 +1639,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="api-media-server_main.js.html">api-media-server/main.js</a>, <a href="api-media-server_main.js.html#line311">line 311</a>
+        <a href="api-media-server_src_main.js.html">api-media-server/src/main.js</a>, <a href="api-media-server_src_main.js.html#line620">line 620</a>
     </li></ul></dd>
     
 
@@ -689,6 +1682,859 @@
 </dl>
 
     
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="~insertObjectIntoDb"><span class="type-signature">(async, inner) </span>insertObjectIntoDb<span class="signature">(filePath)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>filePath</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="api-media-server_src_main.js.html">api-media-server/src/main.js</a>, <a href="api-media-server_src_main.js.html#line527">line 527</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="~isAsset"><span class="type-signature">(inner) </span>isAsset<span class="signature">(fileName)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Check if the given file is a media asset.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>fileName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="api-media-server_src_main.js.html">api-media-server/src/main.js</a>, <a href="api-media-server_src_main.js.html#line503">line 503</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="~isPresentation"><span class="type-signature">(inner) </span>isPresentation<span class="signature">(fileName)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Checi if the given file is a presentation.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>fileName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="api-media-server_src_main.js.html">api-media-server/src/main.js</a>, <a href="api-media-server_src_main.js.html#line515">line 515</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="~openEditor"><span class="type-signature">(async, inner) </span>openEditor<span class="signature">(id, mediaType)</span><span class="type-signature"> &rarr; {Object}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Open a media file specified by an ID with an editor specified in
+<code>config.mediaServer.editor</code> (<code>/etc/baldr.json</code>).</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The id of the media type.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>mediaType</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>At the moment <code>assets</code> and <code>presentation</code></p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="api-media-server_src_main.js.html">api-media-server/src/main.js</a>, <a href="api-media-server_src_main.js.html#line785">line 785</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Object</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="~openParentFolder"><span class="type-signature">(async, inner) </span>openParentFolder<span class="signature">(id, mediaType)</span><span class="type-signature"> &rarr; {Object}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Open the parent folder of a presentation, a media asset in a file explorer
+GUI application.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The id of the media type.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>mediaType</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>At the moment <code>assets</code> and <code>presentation</code></p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="api-media-server_src_main.js.html">api-media-server/src/main.js</a>, <a href="api-media-server_src_main.js.html#line815">line 815</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Object</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="~registerRestApi"><span class="type-signature">(inner) </span>registerRestApi<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Register the express js rest api in a giant function.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="api-media-server_src_main.js.html">api-media-server/src/main.js</a>, <a href="api-media-server_src_main.js.html#line833">line 833</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -748,7 +2594,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="api-media-server_main.js.html">api-media-server/main.js</a>, <a href="api-media-server_main.js.html#line355">line 355</a>
+        <a href="api-media-server_src_main.js.html">api-media-server/src/main.js</a>, <a href="api-media-server_src_main.js.html#line664">line 664</a>
     </li></ul></dd>
     
 
@@ -785,6 +2631,329 @@
     <dd>
         
 <span class="param-type">Promise</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="~setupMongoUrl"><span class="type-signature">(inner) </span>setupMongoUrl<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="api-media-server_src_main.js.html">api-media-server/src/main.js</a>, <a href="api-media-server_src_main.js.html#line93">line 93</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="~update"><span class="type-signature">(async, inner) </span>update<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="api-media-server_src_main.js.html">api-media-server/src/main.js</a>, <a href="api-media-server_src_main.js.html#line577">line 577</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="~validateMediaType"><span class="type-signature">(inner) </span>validateMediaType<span class="signature">(mediaType)</span><span class="type-signature"> &rarr; {String}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Throw an error if the media type is unkown. Provide a default value.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>mediaType</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>At the moment <code>assets</code> and <code>presentation</code></p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="api-media-server_src_main.js.html">api-media-server/src/main.js</a>, <a href="api-media-server_src_main.js.html#line744">line 744</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">String</span>
 
 
     </dd>
@@ -923,7 +3092,7 @@ asset, all.</p></td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="api-media-server_main.js.html">api-media-server/main.js</a>, <a href="api-media-server_main.js.html#line247">line 247</a>
+        <a href="api-media-server_src_main.js.html">api-media-server/src/main.js</a>, <a href="api-media-server_src_main.js.html#line552">line 552</a>
     </li></ul></dd>
     
 
@@ -969,13 +3138,13 @@ asset, all.</p></td>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-@bldr_api.html">@bldr/api</a></li><li><a href="module-@bldr_api-media-server.html">@bldr/api-media-server</a></li><li><a href="module-@bldr_api-seating-plan.html">@bldr/api-seating-plan</a></li><li><a href="module-@bldr_core-browser.html">@bldr/core-browser</a></li><li><a href="module-@bldr_core-node.html">@bldr/core-node</a></li><li><a href="module-@bldr_http-request.html">@bldr/http-request</a></li><li><a href="module-@bldr_songbook-cli.html">@bldr/songbook-cli</a></li><li><a href="module-@bldr_songbook-core.html">@bldr/songbook-core</a></li><li><a href="module-@bldr_songbook-intermediate-files.html">@bldr/songbook-intermediate-files</a></li><li><a href="module-@bldr_themes.html">@bldr/themes</a></li><li><a href="module-@bldr_vue-app-presentation.html">@bldr/vue-app-presentation</a></li><li><a href="module-@bldr_vue-app-presentation_masters.html">@bldr/vue-app-presentation/masters</a></li><li><a href="module-@bldr_vue-app-seating-plan.html">@bldr/vue-app-seating-plan</a></li><li><a href="module-@bldr_vue-app-showroom.html">@bldr/vue-app-showroom</a></li><li><a href="module-@bldr_vue-app-songbook.html">@bldr/vue-app-songbook</a></li><li><a href="module-@bldr_vue-plugin-components-collection.html">@bldr/vue-plugin-components-collection</a></li><li><a href="module-@bldr_vue-plugin-material-icon.html">@bldr/vue-plugin-material-icon</a></li><li><a href="module-@bldr_vue-plugin-media.html">@bldr/vue-plugin-media</a></li><li><a href="module-@bldr_vue-plugin-shortcuts.html">@bldr/vue-plugin-shortcuts</a></li></ul><h3>Namespaces</h3><ul><li><a href="module-@bldr_vue-app-presentation-Vue.html">Vue</a></li></ul><h3>Classes</h3><ul><li><a href="InitState.html">InitState</a></li><li><a href="module-@bldr_api-media-server-Asset.html">Asset</a></li><li><a href="module-@bldr_api-media-server-MediaFile.html">MediaFile</a></li><li><a href="module-@bldr_http-request.HttpRequest.html">HttpRequest</a></li><li><a href="module-@bldr_songbook-core-AlphabeticalSongsTree.html">AlphabeticalSongsTree</a></li><li><a href="module-@bldr_songbook-core-CoreLibrary.html">CoreLibrary</a></li><li><a href="module-@bldr_songbook-core-SongMetaDataCombined.html">SongMetaDataCombined</a></li><li><a href="module-@bldr_songbook-intermediate-files-FileMonitor.html">FileMonitor</a></li><li><a href="module-@bldr_songbook-intermediate-files-Folder.html">Folder</a></li><li><a href="module-@bldr_songbook-intermediate-files-IntermediateLibrary.html">IntermediateLibrary</a></li><li><a href="module-@bldr_songbook-intermediate-files-IntermediateSong.html">IntermediateSong</a></li><li><a href="module-@bldr_songbook-intermediate-files-Library.html">Library</a></li><li><a href="module-@bldr_songbook-intermediate-files-PianoFilesCountTree.html">PianoFilesCountTree</a></li><li><a href="module-@bldr_songbook-intermediate-files-PianoScore.html">PianoScore</a></li><li><a href="module-@bldr_songbook-intermediate-files-Song.html">Song</a></li><li><a href="module-@bldr_songbook-intermediate-files-SongMetaData.html">SongMetaData</a></li><li><a href="module-@bldr_songbook-intermediate-files-Sqlite.html">Sqlite</a></li><li><a href="module-@bldr_songbook-intermediate-files-TextFile.html">TextFile</a></li><li><a href="module-@bldr_vue-app-presentation_masters-Master.html">Master</a></li><li><a href="module-@bldr_vue-app-presentation_masters-Masters.html">Masters</a></li><li><a href="module-@bldr_vue-app-presentation-BodyAttributes.html">BodyAttributes</a></li><li><a href="module-@bldr_vue-app-presentation-CenterVertically.html">CenterVertically</a></li><li><a href="module-@bldr_vue-app-presentation-ContentTheme.html">ContentTheme</a></li><li><a href="module-@bldr_vue-app-presentation-DarkMode.html">DarkMode</a></li><li><a href="module-@bldr_vue-app-presentation-MultipleAttributes.html">MultipleAttributes</a></li><li><a href="module-@bldr_vue-app-presentation-Overflow.html">Overflow</a></li><li><a href="module-@bldr_vue-app-presentation-StyleConfig.html">StyleConfig</a></li><li><a href="module-@bldr_vue-app-presentation-UiTheme.html">UiTheme</a></li><li><a href="module-@bldr_vue-plugin-media.MediaFile.html">MediaFile</a></li><li><a href="module-@bldr_vue-plugin-media-Media.html">Media</a></li><li><a href="module-@bldr_vue-plugin-media-MediaTypes.html">MediaTypes</a></li><li><a href="module-@bldr_vue-plugin-media-Player.html">Player</a></li><li><a href="module-@bldr_vue-plugin-media-PlayList.html">PlayList</a></li><li><a href="module-@bldr_vue-plugin-media-Resolver.html">Resolver</a></li><li><a href="module-@bldr_vue-plugin-media-Sample.html">Sample</a></li><li><a href="module-@bldr_vue-plugin-shortcuts-Shortcuts.html">Shortcuts</a></li><li><a href="Presentation.html">Presentation</a></li><li><a href="RawSlideObject.html">RawSlideObject</a></li><li><a href="RenderData.html">RenderData</a></li><li><a href="Slide.html">Slide</a></li></ul><h3>Global</h3><ul><li><a href="global.html#actions">actions</a></li><li><a href="global.html#getType">getType</a></li><li><a href="global.html#intersect">intersect</a></li><li><a href="global.html#mutations">mutations</a></li><li><a href="global.html#naturalSort">naturalSort</a></li><li><a href="global.html#openFile">openFile</a></li><li><a href="global.html#openFiles">openFiles</a></li><li><a href="global.html#toString">toString</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-@bldr_api.html">@bldr/api</a></li><li><a href="module-@bldr_api-media-server.html">@bldr/api-media-server</a></li><li><a href="module-@bldr_api-seating-plan.html">@bldr/api-seating-plan</a></li><li><a href="module-@bldr_core-browser.html">@bldr/core-browser</a></li><li><a href="module-@bldr_core-node.html">@bldr/core-node</a></li><li><a href="module-@bldr_http-request.html">@bldr/http-request</a></li><li><a href="module-@bldr_songbook-cli.html">@bldr/songbook-cli</a></li><li><a href="module-@bldr_songbook-core.html">@bldr/songbook-core</a></li><li><a href="module-@bldr_songbook-intermediate-files.html">@bldr/songbook-intermediate-files</a></li><li><a href="module-@bldr_themes.html">@bldr/themes</a></li><li><a href="module-@bldr_vue-app-presentation.html">@bldr/vue-app-presentation</a></li><li><a href="module-@bldr_vue-app-presentation_masters.html">@bldr/vue-app-presentation/masters</a></li><li><a href="module-@bldr_vue-app-seating-plan.html">@bldr/vue-app-seating-plan</a></li><li><a href="module-@bldr_vue-app-showroom.html">@bldr/vue-app-showroom</a></li><li><a href="module-@bldr_vue-app-songbook.html">@bldr/vue-app-songbook</a></li><li><a href="module-@bldr_vue-plugin-components-collection.html">@bldr/vue-plugin-components-collection</a></li><li><a href="module-@bldr_vue-plugin-material-icon.html">@bldr/vue-plugin-material-icon</a></li><li><a href="module-@bldr_vue-plugin-media.html">@bldr/vue-plugin-media</a></li><li><a href="module-@bldr_vue-plugin-shortcuts.html">@bldr/vue-plugin-shortcuts</a></li></ul><h3>Namespaces</h3><ul><li><a href="module-@bldr_vue-app-presentation-Vue.html">Vue</a></li></ul><h3>Classes</h3><ul><li><a href="InitState.html">InitState</a></li><li><a href="MetaData.html">MetaData</a></li><li><a href="module-@bldr_api-media-server-Asset.html">Asset</a></li><li><a href="module-@bldr_api-media-server-AssetTypes.html">AssetTypes</a></li><li><a href="module-@bldr_api-media-server-MediaFile.html">MediaFile</a></li><li><a href="module-@bldr_api-media-server-Presentation.html">Presentation</a></li><li><a href="module-@bldr_http-request.HttpRequest.html">HttpRequest</a></li><li><a href="module-@bldr_songbook-core-AlphabeticalSongsTree.html">AlphabeticalSongsTree</a></li><li><a href="module-@bldr_songbook-core-CoreLibrary.html">CoreLibrary</a></li><li><a href="module-@bldr_songbook-core-SongMetaDataCombined.html">SongMetaDataCombined</a></li><li><a href="module-@bldr_songbook-intermediate-files-FileMonitor.html">FileMonitor</a></li><li><a href="module-@bldr_songbook-intermediate-files-Folder.html">Folder</a></li><li><a href="module-@bldr_songbook-intermediate-files-IntermediateLibrary.html">IntermediateLibrary</a></li><li><a href="module-@bldr_songbook-intermediate-files-IntermediateSong.html">IntermediateSong</a></li><li><a href="module-@bldr_songbook-intermediate-files-Library.html">Library</a></li><li><a href="module-@bldr_songbook-intermediate-files-PianoFilesCountTree.html">PianoFilesCountTree</a></li><li><a href="module-@bldr_songbook-intermediate-files-PianoScore.html">PianoScore</a></li><li><a href="module-@bldr_songbook-intermediate-files-Song.html">Song</a></li><li><a href="module-@bldr_songbook-intermediate-files-SongMetaData.html">SongMetaData</a></li><li><a href="module-@bldr_songbook-intermediate-files-Sqlite.html">Sqlite</a></li><li><a href="module-@bldr_songbook-intermediate-files-TextFile.html">TextFile</a></li><li><a href="module-@bldr_vue-app-presentation_masters-Masters.html">Masters</a></li><li><a href="module-@bldr_vue-app-presentation-BodyAttributes.html">BodyAttributes</a></li><li><a href="module-@bldr_vue-app-presentation-CenterVertically.html">CenterVertically</a></li><li><a href="module-@bldr_vue-app-presentation-ContentTheme.html">ContentTheme</a></li><li><a href="module-@bldr_vue-app-presentation-DarkMode.html">DarkMode</a></li><li><a href="module-@bldr_vue-app-presentation-MultipleAttributes.html">MultipleAttributes</a></li><li><a href="module-@bldr_vue-app-presentation-Overflow.html">Overflow</a></li><li><a href="module-@bldr_vue-app-presentation-StyleConfig.html">StyleConfig</a></li><li><a href="module-@bldr_vue-app-presentation-UiTheme.html">UiTheme</a></li><li><a href="module-@bldr_vue-plugin-media.MediaFile.html">MediaFile</a></li><li><a href="module-@bldr_vue-plugin-media-AssetTypes.html">AssetTypes</a></li><li><a href="module-@bldr_vue-plugin-media-Media.html">Media</a></li><li><a href="module-@bldr_vue-plugin-media-Player.html">Player</a></li><li><a href="module-@bldr_vue-plugin-media-PlayList.html">PlayList</a></li><li><a href="module-@bldr_vue-plugin-media-Resolver.html">Resolver</a></li><li><a href="module-@bldr_vue-plugin-media-Sample.html">Sample</a></li><li><a href="module-@bldr_vue-plugin-shortcuts-Shortcuts.html">Shortcuts</a></li><li><a href="Presentation.html">Presentation</a></li><li><a href="RawSlideObject.html">RawSlideObject</a></li><li><a href="RenderData.html">RenderData</a></li><li><a href="Slide.html">Slide</a></li></ul><h3>Global</h3><ul><li><a href="global.html#actions">actions</a></li><li><a href="global.html#collectMusicMetaData">collectMusicMetaData</a></li><li><a href="global.html#convert">convert</a></li><li><a href="global.html#convertCustomMarkup">convertCustomMarkup</a></li><li><a href="global.html#convertMarkdown">convertMarkdown</a></li><li><a href="global.html#convertOneFile">convertOneFile</a></li><li><a href="global.html#createMetaDataYaml">createMetaDataYaml</a></li><li><a href="global.html#createPresentationTemplate">createPresentationTemplate</a></li><li><a href="global.html#getType">getType</a></li><li><a href="global.html#intersect">intersect</a></li><li><a href="global.html#markupToHtml">markupToHtml</a></li><li><a href="global.html#mirrorRelPath">mirrorRelPath</a></li><li><a href="global.html#mutations">mutations</a></li><li><a href="global.html#naturalSort">naturalSort</a></li><li><a href="global.html#openBasePath">openBasePath</a></li><li><a href="global.html#openFile">openFile</a></li><li><a href="global.html#openFiles">openFiles</a></li><li><a href="global.html#parseSlidesRecursive">parseSlidesRecursive</a></li><li><a href="global.html#rename">rename</a></li><li><a href="global.html#renameOneFile">renameOneFile</a></li><li><a href="global.html#toString">toString</a></li><li><a href="global.html#validateUri">validateUri</a></li><li><a href="global.html#validateYaml">validateYaml</a></li><li><a href="global.html#validateYamlOneFile">validateYamlOneFile</a></li><li><a href="global.html#writeMetaDataYaml">writeMetaDataYaml</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Tue Oct 29 2019 14:38:01 GMT+0100 (GMT+01:00)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Tue Nov 19 2019 07:54:55 GMT+0100 (GMT+01:00)
 </footer>
 
 <script> prettyPrint(); </script>

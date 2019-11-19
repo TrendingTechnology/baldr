@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: api-media-server/src/main.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: api-media-server/src/main.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * The REST API and command line interface of the BALDR media server.
+ *
+ * # Media types:
+ *
+ * - presentation (`Presentation()`)
+ * - asset (`Asset()`)
+ *   - multipart asset
+ *
+ * # Definition of the objects:
+ *
+ * A _presentation_ is a YAML file for the BALDR presentation app. It must have
+ * the file name scheme `*.baldr.yml`. The media server stores the whole YAML
+ * file in the MongoDB database.
+ *
+ * A _asset_ is a media file which has a meta data file in the YAML format.
+ * The file name scheme for this meta data file is `media-file.jpg.yml`. The
+ * suffix `.yml` has to be appended. Only the content of the meta data file
+ * is stored into the database.
+ *
+ * # REST API
+ *
+ * - `mgmt`
+ *   - `flush`: Delete all media files (assets, presentations) from the database.
+ *   - `init`: Initialize the MongoDB database
+ *   - `open`: Open a media file specified by an ID. This query parameters are
+ *     available:
+ *       - `id`: The ID of the media file (required).
+ *       - `type`: `presentations`, `assets`. The default value is
+ *         `presentations.`
+ *       - `with`: `editor` specified in `config.mediaServer.editor`
+ *         (`/etc/baldr.json`) or `folder` to open the parent folder of the
+ *         given media file. The default value is `editor`
+ *
+ *   - `re-init`: Re-Initialize the MongoDB database (Drop all collections and
+ *     initialize)
+ *   - `update`: Update the media server database (Flush and insert).
+ *   - `query`: Getting results by using query parameters. This query parameters
+ *     are available:
+ *      - `type`: `assets` (default), `presentations` (what)
+ *      - `method`: `exactMatch`, `substringSearch` (default) (how).
+ *          - `exactMatch`: The query parameter `search` must be a perfect match
+ *            to a top level database field to get a result.
+ *          - `substringSearch`: The query parameter `search` is only a
+ *            substring of the string to search in.
+ *      - `field`: `id` (default), `title`, etc ... (where).
+ *      - `search`: Some text to search for (search for).
+ *      - `result`: `fullObjects` (default), `dynamicSelect`
+ * - `stats`:
+ *   - `count`: Count / sum of the media files (assets, presentations) in the
+ *     database.
+ *   - `updates`: Journal of the update processes with timestamps.
+ *
+ * @module @bldr/api-media-server
+ */
+
+// Node packages.
+const childProcess = require('child_process')
+const fs = require('fs')
+const path = require('path')
+
+// Third party packages.
+const yaml = require('js-yaml')
+const express = require('express')
+const MongoClient = require('mongodb').MongoClient
+const { transliterate } = require('transliteration')
+
+// Project packages.
+const { bootstrapConfig, snakeToCamel } = require('@bldr/core-node')
+
+const packageJson = require('../package.json')
+
+/**
+ * The configuration object from `/etc/baldr.json`
+ */
+const config = bootstrapConfig()
+
+/**
+ * Base path of the media server file store.
+ */
+const basePath = config.mediaServer.basePath
+
+/**
+ * A container array for all error messages send out via the REST API.
+ */
+let errors = []
+
+/* MongoDb setup **************************************************************/
+
+/**
+ *
+ */
+function setupMongoUrl () {
+  const conf = config.databases.mongodb
+  const user = encodeURIComponent(conf.user)
+  const password = encodeURIComponent(conf.password)
+  const authMechanism = 'DEFAULT'
+  return `mongodb://${user}:${password}@${conf.url}/${conf.dbName}?authMechanism=${authMechanism}`
+}
+
+/**
+ *
+ */
+const mongoClient = new MongoClient(
+  setupMongoUrl(),
+  { useNewUrlParser: true, useUnifiedTopology: true }
+)
+
+/**
+ * The MongoDB Db instance
+ * @type {mongodb~Db}
+ */
+let db
+
+/**
+ * @return {Promise}
+ */
+async function connectDb () {
+  if (!db) {
+    await mongoClient.connect()
+    db = mongoClient.db(config.databases.mongodb.dbName)
+  }
+}
+
+/* Helper functions ***********************************************************/
+
+/**
+ * This function can be used to generate ids from different file names.
+ *
+ * @param {String} input
+ *
+ * @returns {String}
+ */
+function asciify (input) {
+  let output = input
+    .replace(/[\(\)]/g, '')
+    .replace(/[,.] /g, '_')
+    .replace(/ +- +/g, '_')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/-*_-*/g, '_')
+    .replace(/Ä/g, 'Ae')
+    .replace(/ä/g, 'ae')
+    .replace(/Ö/g, 'Oe')
+    .replace(/ö/g, 'oe')
+    .replace(/Ü/g, 'Ue')
+    .replace(/ü/g, 'ue')
+    .replace(/ß/g, 'ss')
+  return transliterate(output)
+}
+
+/**
+ * This function can be used to generate a title from an ID string.
+ *
+ * @param {String} input
+ *
+ * @returns {String}
+ */
+function deasciify (input) {
+  return input
+    .replace(/_/g, ', ')
+    .replace(/-/g, ' ')
+    .replace(/Ae/g, 'Ä')
+    .replace(/ae/g, 'ä')
+    .replace(/Oe/g, 'Ö')
+    .replace(/oe/g, 'ö')
+    .replace(/Ue/g, 'Ü')
+    .replace(/ue/g, 'ü')
+}
+
+/**
+ * Convert all properties in an object to camelCase in a recursive fashion.
+ *
+ * TODO: Use the function in @bldr/core-browser
+ *
+ * @param {Object} object
+ *
+ * @returns {Object}
+ */
+function convertPropertiesToCamelCase (object) {
+  // Array
+  if (Array.isArray(object)) {
+    for (const item of object) {
+      if (typeof object === 'object') {
+        convertPropertiesToCamelCase(item)
+      }
+    }
+  // Object
+  } else if (typeof object === 'object') {
+    for (const snakeCase in object) {
+      const camelCase = snakeToCamel(snakeCase)
+      if (camelCase !== snakeCase) {
+        const value = object[snakeCase]
+        object[camelCase] = value
+        delete object[snakeCase]
+      }
+      // Object or array
+      if (typeof object[camelCase] === 'object') convertPropertiesToCamelCase(object[camelCase])
+    }
+  }
+  return object
+}
+
+/* Media objects **************************************************************/
+
+/**
+ * Categories some asset file formats in three asset types: `audio`, `image`,
+ * `video`.
+ *
+ * TODO: Code which can be imported by ES modules and node modules.
+ * The same code is in the module @bldr/api-media-server/src/main.js and
+ * @bldr/vue-component-media/src/main.js
+ */
+class AssetTypes {
+  constructor (config) {
+    /**
+     * @type {object}
+     * @private
+     */
+    this.config_ = config.mediaServer.assetTypes
+
+    /**
+     * @type {object}
+     * @private
+     */
+    this.allowedExtensions_ = this.spreadExtensions_()
+  }
+
+  /**
+   * @private
+   */
+  spreadExtensions_ () {
+    const out = {}
+    for (const type in this.config_) {
+      for (const extension of this.config_[type].allowedExtensions) {
+        out[extension] = type
+      }
+    }
+    return out
+  }
+
+  /**
+   * Get the media type from the extension.
+   *
+   * @param {String} extension
+   *
+   * @returns {String}
+   */
+  extensionToType (extension) {
+    extension = extension.toLowerCase()
+    if (extension in this.allowedExtensions_) {
+      return this.allowedExtensions_[extension]
+    }
+    throw new Error(`Unkown extension “${extension}”`)
+  }
+
+  /**
+   * Get the color of the media type.
+   *
+   * @param {String} type - The asset type: for example `audio`, `image`,
+   *   `video`.
+   *
+   * @returns {String}
+   */
+  typeToColor (type) {
+    return this.config_[type].color
+  }
+
+  /**
+   * Determine the target extension (for a conversion job) by a given
+   * asset type.
+   *
+   * @param {String} type - The asset type: for example `audio`, `image`,
+   *   `video`.
+   *
+   * @returns {String}
+   */
+  typeToTargetExtension (type) {
+    return this.config_[type].targetExtension
+  }
+
+  /**
+   * Check if file is an supported asset format.
+   *
+   * @param {String} filename
+   *
+   * @returns {Boolean}
+   */
+  isAsset (filename) {
+    const extension = filename.split('.').pop().toLowerCase()
+    if (extension in this.allowedExtensions_) {
+      return true
+    }
+    return false
+  }
+}
+
+const assetTypes = new AssetTypes(config)
+
+/**
+ * Base class to be extended.
+ */
+class MediaFile {
+  constructor (filePath) {
+    /**
+     * Absolute path ot the file.
+     * @type {string}
+     * @private
+     */
+    this.absPath_ = path.resolve(filePath)
+
+    /**
+     * Relative path ot the file.
+     * @type {string}
+     */
+    this.path = filePath.replace(basePath, '').replace(/^\//, '')
+
+    /**
+     * The basename (filename) of the file.
+     * @type {string}
+     */
+    this.filename = path.basename(filePath)
+  }
+
+  /**
+   * @private
+   */
+  addFileInfos_ () {
+    const stats = fs.statSync(this.absPath_)
+
+    /**
+     * The file size in bytes.
+     * @type {number}
+     */
+    this.size = stats.size
+
+    /**
+     * The timestamp indicating the last time this file was modified
+     * expressed in milliseconds since the POSIX Epoch.
+     * @type {float}
+     */
+    this.timeModified = stats.mtimeMs
+
+    /**
+     * The extension of the file.
+     * @type {string}
+     */
+    this.extension = path.extname(this.absPath_).replace('.', '')
+
+    /**
+     * The basename (filename without extension) of the file.
+     * @type {string}
+     * @private
+     */
+    this.basename_ = path.basename(this.absPath_, `.${this.extension}`)
+
+    return this
+  }
+
+  /**
+   * Parse the info file of a media asset or the presenation file itself.
+   *
+   * Each media file can have a info file that stores additional
+   * metadata informations.
+   *
+   * File path:
+   * `/home/baldr/beethoven.jpg`
+   *
+   * Info file in the YAML file format:
+   * `/home/baldr/beethoven.jpg.yml`
+   *
+   * @param {string} filePath - The path of the YAML file.
+   *
+   * @returns {object}
+   *
+   * @private
+   */
+  readYaml_ (filePath) {
+    if (fs.existsSync(filePath)) {
+      return yaml.safeLoad(fs.readFileSync(filePath, 'utf8'))
+    }
+    return {}
+  }
+
+  /**
+   * Add metadata from the file system, like file size or timeModifed.
+   */
+  addFileInfos () {
+    return this.addFileInfos_()
+  }
+
+  /**
+   *
+   */
+  cleanTmpProperties () {
+    for (const property in this) {
+      if (property.match(/_$/)) {
+        delete this[property]
+      }
+    }
+    return this
+  }
+
+  /**
+   * Merge an object into the class object. Property can be in the `snake_case`
+   * or `kebab-case` form. They are converted in to `camelCase` in recursive fashin.
+   *
+   * @param {object} properties - Add an object to the class properties.
+   */
+  mergeObject (object) {
+    convertPropertiesToCamelCase(object)
+    for (const property in object) {
+      this[property] = object[property]
+    }
+  }
+
+  /**
+   * Prepare the object for the insert into the MongoDB database
+   * Generate `id` and `title` if this properties are not present.
+   */
+  prepareForInsert () {
+    this.addFileInfos()
+    if (!this.id) this.id = asciify(this.basename_)
+    if (!this.title) this.title = deasciify(this.id)
+    this.cleanTmpProperties()
+    return this
+  }
+}
+
+/**
+ * This class is used both for the entries in the MongoDB database as well for
+ * the queries.
+ */
+class Asset extends MediaFile {
+  /**
+   * @param {string} filePath - The file path of the media file.
+   */
+  constructor (filePath) {
+    super(filePath)
+
+    /**
+     * The absolute path of the info file in the YAML format. On the absolute
+     * media file path `.yml` is appended.
+     * @type {string}
+     */
+    this.infoFile_ = `${this.absPath_}.yml`
+
+    const data = this.readYaml_(this.infoFile_)
+    this.mergeObject(data)
+  }
+
+  addFileInfos () {
+    this.addFileInfos_()
+
+    const previewImage = `${this.absPath_}_preview.jpg`
+
+    this.assetType = assetTypes.extensionToType(this.extension)
+
+    if (fs.existsSync(previewImage)) {
+      /**
+       * The absolute path of the preview image.
+       * @type {string}
+       */
+      this.previewImage = true
+    }
+    return this
+  }
+}
+
+/**
+ * The whole presentation YAML file converted to an Javascript object. All
+ * properties are in `camelCase`.
+ */
+class Presentation extends MediaFile {
+  constructor (filePath) {
+    super(filePath)
+    const data = this.readYaml_(filePath)
+    this.mergeObject(data)
+
+    /**
+     * Value is the same as `meta.title`
+     *
+     * @type {String}
+     */
+    this.title = data.meta.title
+
+    /**
+     * Value is the same as `meta.id`
+     *
+     * @type {String}
+     */
+    this.id = data.meta.id
+  }
+}
+
+/* Checks *********************************************************************/
+
+/**
+ * Check if the given file is a media asset.
+ *
+ * @param {String} fileName
+ */
+function isAsset (fileName) {
+  if (fileName.indexOf('_preview.jpg') > -1) {
+    return false
+  }
+  return assetTypes.isAsset(fileName)
+}
+
+/**
+ * Checi if the given file is a presentation.
+ *
+ * @param {String} fileName
+ */
+function isPresentation (fileName) {
+  if (fileName.indexOf('.baldr.yml') > -1) {
+    return true
+  }
+  return false
+}
+
+/* Insert *********************************************************************/
+
+/**
+ * @param {String} filePath
+ */
+async function insertObjectIntoDb (filePath, mediaType) {
+  let object
+  try {
+    if (mediaType === 'presentations') {
+      object = new Presentation(filePath)
+    } else if (mediaType === 'assets') {
+      object = new Asset(filePath)
+    }
+    object = object.prepareForInsert()
+    console.log(object.path)
+    await db.collection(mediaType).insertOne(object)
+  } catch (error) {
+    let relPath = filePath.replace(config.mediaServer.basePath, '')
+    relPath = relPath.replace(new RegExp('^/'), '')
+    const msg = `${relPath}: [${error.name}] ${error.message}`
+    console.log(msg)
+    errors.push(msg)
+  }
+}
+
+/**
+ * @param {string} dir
+ * @param {object} on - An object with callbacks. Properties: presentation,
+ *   asset, all.
+ */
+async function walk (dir, on) {
+  const files = fs.readdirSync(dir)
+  for (const fileName of files) {
+    const relPath = path.join(dir, fileName)
+    // Exclude .git/
+    if (fileName.substr(0, 1) !== '.') {
+      if (fs.statSync(relPath).isDirectory()) {
+        await walk(relPath, on)
+      } else {
+        if ('everyFile' in on) await on.everyFile(relPath)
+        if (isPresentation(fileName)) {
+          if ('presentation' in on) await on.presentation(relPath)
+          if ('all' in on) await on.all(relPath)
+        } else if (isAsset(fileName)) {
+          if ('asset' in on) await on.asset(relPath)
+          if ('all' in on) await on.all(relPath)
+        }
+      }
+    }
+  }
+}
+
+/**
+ *
+ */
+async function update () {
+  console.log('Run git pull')
+  const gitSettings = {
+    cwd: basePath,
+    encoding: 'utf-8'
+  }
+  const gitPull = childProcess.spawnSync(
+    'git', ['pull'],
+    gitSettings
+  )
+  console.log(`git pull stderr: ${gitPull.stderr.replace(/\n$/, '')}`)
+  console.log(`git pull stdout: ${gitPull.stdout.replace(/\n$/, '')}`)
+  if (gitPull.status !== 0) throw new Error(`git pull exits with an non-zero status code.`)
+
+  const gitRevParse = childProcess.spawnSync('git', ['rev-parse', 'HEAD'], gitSettings)
+  const lastCommitId = gitRevParse.stdout.replace(/\n$/, '')
+  console.log(`lastCommitId: ${lastCommitId}`)
+  await connectDb()
+  await initializeDb()
+  await flushMediaFiles()
+  const begin = new Date().getTime()
+  await db.collection('updates').insertOne({ begin: begin, end: 0 })
+  await walk(basePath, {
+    presentation: async (filePath) => { await insertObjectIntoDb(filePath, 'presentations') },
+    asset: async (filePath) => { await insertObjectIntoDb(filePath, 'assets') }
+  })
+  const end = new Date().getTime()
+  await db.collection('updates').updateOne({ begin: begin }, { $set: { end: end, lastCommitId } })
+  return {
+    finished: true,
+    begin,
+    end,
+    duration: end - begin,
+    lastCommitId,
+    errors
+  }
+}
+
+/* MongoDb Management *********************************************************/
+
+/**
+ * @returns {Promise}
+ */
+async function initializeDb () {
+  const assets = await db.createCollection('assets')
+  await assets.createIndex({ path: 1 }, { unique: true })
+  await assets.createIndex({ id: 1 }, { unique: true })
+
+  const presentations = await db.createCollection('presentations')
+  await presentations.createIndex({ id: 1 }, { unique: true })
+
+  const updates = await db.createCollection('updates')
+  await updates.createIndex({ begin: 1 })
+
+  const result = {}
+  const collections = await db.listCollections().toArray()
+  for (const collection of collections) {
+    const indexes = await db.collection(collection.name).listIndexes().toArray()
+    result[collection.name] = {
+      name: collection.name,
+      indexes: {}
+    }
+    for (const index of indexes) {
+      result[collection.name].indexes[index.name] = index.unique
+    }
+  }
+  return result
+}
+
+/**
+ * @returns {Promise}
+ */
+async function dropDb () {
+  const collections = await db.listCollections().toArray()
+  const droppedCollections = []
+  for (const collection of collections) {
+    await db.dropCollection(collection.name)
+    droppedCollections.push(collection.name)
+  }
+  return {
+    droppedCollections
+  }
+}
+
+/**
+ * @returns {Promise}
+ */
+async function reInitializeDb () {
+  const resultdropDb = await dropDb()
+  const resultInitializeDb = await initializeDb()
+  return {
+    resultdropDb,
+    resultInitializeDb
+  }
+}
+
+/**
+ * @returns {Promise}
+ */
+async function flushMediaFiles () {
+  await db.collection('assets').deleteMany({})
+  await db.collection('presentations').deleteMany({})
+}
+
+/* Express Rest API ***********************************************************/
+
+/**
+ * This object hold jsons for displaying help messages in the browser on
+ * some entry point urls.
+ *
+ * Update docs on the top of this file in the JSDoc block.
+ *
+ * @type {Object}
+ */
+const helpMessages = {
+  navigation: {
+    mgmt: {
+      flush: 'Delete all media files (assets, presentations) from the database.',
+      init: 'Initialize the MongoDB database.',
+      open: {
+        '#description': 'Open a media file specified by an ID.',
+        '#examples': [
+          'mgmt/open?id=Beethoven_Egmont',
+          'mgmt/open?with=editor&amp;id=Beethoven_Egmont',
+          'mgmt/open?with=editor&amp;type=presentations&amp;id=Beethoven_Egmont',
+          'mgmt/open?with=editor&amp;type=assets&amp;id=Beethoven',
+          'mgmt/open?with=folder&amp;type=assets&amp;id=Beethoven'
+        ],
+        '#parameters': {
+          id: 'The ID of the media file (required).',
+          type: '`presentations`, `assets`. The default value is `presentations.`',
+          with: '`editor` specified in `config.mediaServer.editor` (`/etc/baldr.json`) or `folder` to open the parent folder of the given media file. The default value is `editor`.'
+        }
+      },
+      're-init': 'Re-Initialize the MongoDB database (Drop all collections and initialize).',
+      update: 'Update the media server database (Flush and insert).'
+    },
+    query: {
+      '#description': 'Get results by using query parameters',
+      '#examples': [
+        'query?type=assets&amp;field=id&amp;method=exactMatch&amp;search=Egmont-Ouverture',
+        'query?type=presentations&amp;field=id&amp;method=exactMatch&amp;search=Beethoven_Marmotte',
+        'query?type=assets&amp;field=path&amp;method=substringSearch&amp;search=35_Bilder-Ausstellung_Ueberblick&amp;result=fullObjects',
+        'query?type=assets&amp;field=path&amp;method=substringSearch&amp;search=35_Bilder-Ausstellung_Ueberblick&amp;result=dynamicSelect'
+      ],
+      '#parameters': {
+        type: '`assets` (default), `presentations` (what)',
+        method: '`exactMatch`, `substringSearch` (default) (how). `exactMatch`: The query parameter `search` must be a perfect match to a top level database field to get a result. `substringSearch`: The query parameter `search` is only a substring of the string to search in.',
+        field: '`id` (default), `title`, etc ... (where).',
+        search: 'Some text to search for (search for).',
+        result: '`fullObjects` (default), `dynamicSelect`'
+      }
+    },
+    stats: {
+      count: 'Count / sum of the media files (assets, presentations) in the database.',
+      updates: 'Journal of the update processes with timestamps.'
+    }
+  }
+}
+
+/**
+ * Throw an error if the media type is unkown. Provide a default value.
+ *
+ * @param {String} mediaType - At the moment `assets` and `presentation`
+ *
+ * @return {String}
+ */
+function validateMediaType (mediaType) {
+  const mediaTypes = ['assets', 'presentations']
+  if (!mediaType) return 'assets'
+  if (!mediaTypes.includes(mediaType)) {
+    throw new Error(`Unkown media type “${mediaType}”! Allowed media types are: ${mediaTypes}`)
+  } else {
+    return mediaType
+  }
+}
+
+/**
+ * Resolve a ID from a given media type (`assets`, `presentations`) to a
+ * absolute path.
+ *
+ * @param {String} id - The id of the media type.
+ * @param {String} mediaType - At the moment `assets` and `presentation`
+ *
+ * @return {String}
+ */
+async function getAbsPathFromId (id, mediaType = 'presentations') {
+  mediaType = validateMediaType(mediaType)
+  const result = await db.collection(mediaType).find({ id: id }).next()
+  if (!result) throw new Error(`Can not find media file with the type “${mediaType}” and the id “${id}”.`)
+  let relPath
+  if (mediaType === 'assets') {
+    relPath = `${result.path}.yml`
+  } else {
+    relPath = result.path
+  }
+  return path.join(config.mediaServer.basePath, relPath)
+}
+
+/**
+ * Open a media file specified by an ID with an editor specified in
+ *   `config.mediaServer.editor` (`/etc/baldr.json`).
+ *
+ * @param {String} id - The id of the media type.
+ * @param {String} mediaType - At the moment `assets` and `presentation`
+ *
+ * @return {Object}
+ */
+async function openEditor (id, mediaType) {
+  const absPath = await getAbsPathFromId(id, mediaType)
+  const editor = config.mediaServer.editor
+  if (!fs.existsSync(editor)) {
+    return {
+      error: `Editor “${editor}” can’t be found.`
+    }
+  }
+  childProcess.spawn(editor, [absPath], {
+    env: {
+      // Not needed
+      //XAUTHORITY: '/run/user/1000/gdm/Xauthority',
+      DISPLAY: ':0'
+    }
+  })
+  return {
+    absPath,
+    editor
+  }
+}
+
+/**
+ * Open the parent folder of a presentation, a media asset in a file explorer
+ * GUI application.
+ *
+ * @param {String} id - The id of the media type.
+ * @param {String} mediaType - At the moment `assets` and `presentation`
+ *
+ * @return {Object}
+ */
+async function openParentFolder (id, mediaType) {
+  const absPath = await getAbsPathFromId(id, mediaType)
+  const parentFolder = path.dirname(absPath)
+  childProcess.spawn('xdg-open', [parentFolder], {
+    env: {
+      // Not needed
+      //XAUTHORITY: '/run/user/1000/gdm/Xauthority',
+      DISPLAY: ':0'
+    }
+  })
+  return {
+    parentFolder
+  }
+}
+
+/**
+ * Register the express js rest api in a giant function.
+ */
+function registerRestApi () {
+  // https://stackoverflow.com/a/38427476/10193818
+  function escapeRegex (text) {
+    return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&amp;')
+  }
+
+  const app = express()
+
+  app.on('mount', async () => {
+    await connectDb()
+    await initializeDb()
+  })
+
+  app.get('/', (req, res) => {
+    res.json(helpMessages.navigation)
+  })
+
+  app.get('/version', (req, res) => {
+    res.json({
+      name: packageJson.name,
+      version: packageJson.version
+    })
+  })
+
+  /* query */
+
+  app.get('/query', async (req, res, next) => {
+    try {
+      const query = req.query
+      if (Object.keys(query).length === 0) {
+        res.status(500).send({
+          error: {
+            msg: 'Missing query parameters!',
+            navigationGuide: helpMessages.navigation.query
+          }
+        })
+        return
+      }
+      // type
+      query.type = validateMediaType(query.type)
+
+      // method
+      const methods = ['exactMatch', 'substringSearch']
+      if (!('method' in query)) query.method = 'substringSearch'
+      if (!methods.includes(query.method)) {
+        throw new Error(`Unkown method “${query.method}”! Allowed methods: ${methods}`)
+      }
+
+      // field
+      if (!('field' in query)) query.field = 'id'
+
+      // result
+      if (!('result' in query)) query.result = 'fullObjects'
+
+      await connectDb()
+      const collection = db.collection(query.type)
+
+      // find
+      let result
+      let find
+      // exactMatch
+      if (query.method === 'exactMatch') {
+        const findObject = {}
+        findObject[query.field] = query.search
+        find = collection.find(findObject, { projection: { _id: 0 } })
+        result = await find.next()
+      // substringSearch
+      } else if (query.method === 'substringSearch') {
+        // https://stackoverflow.com/a/38427476/10193818
+        const regex = new RegExp(escapeRegex(query.search), 'gi')
+        const $match = {}
+        $match[query.field] = regex
+        let $project
+        if (query.result === 'fullObjects') {
+          $project = {
+            _id: false
+          }
+        } else if (query.result === 'dynamicSelect') {
+          $project = {
+            _id: false,
+            id: true,
+            name: `$${query.field}`
+          }
+        }
+        find = collection.aggregate([{ $match }, { $project }])
+        result = await find.toArray()
+      }
+      res.json(result)
+    } catch (error) {
+      next(error)
+    }
+  })
+
+  /* mgmt = management */
+
+  app.get('/mgmt/flush', async (req, res, next) => {
+    try {
+      await flushMediaFiles()
+      res.json({ status: 'ok' })
+    } catch (error) {
+      next(error)
+    }
+  })
+
+  app.get('/mgmt/init', async (req, res, next) => {
+    try {
+      res.json(await initializeDb())
+    } catch (error) {
+      next(error)
+    }
+  })
+
+  app.get('/mgmt/open', async (req, res, next) => {
+    try {
+      const query = req.query
+      if (!query.id) throw new Error('You have to specify an ID (?id=myfile).')
+      if (!query.with) query.with = 'editor'
+      if (!query.type) query.type = 'presentations'
+      if (query.with === 'editor') {
+        res.json(await openEditor(query.id, query.type))
+      } else if (query.with === 'folder') {
+        res.json(await openParentFolder(query.id, query.type))
+      }
+    } catch (error) {
+      next(error)
+    }
+  })
+
+  app.get('/mgmt/re-init', async (req, res, next) => {
+    try {
+      res.json(await reInitializeDb())
+    } catch (error) {
+      next(error)
+    }
+  })
+
+  app.get('/mgmt/update', async (req, res, next) => {
+    try {
+      res.json(await update())
+      // Clear error message store.
+      errors = []
+    } catch (error) {
+      next(error)
+    }
+  })
+
+  /* stats = statistics */
+
+  app.get('/stats/count', async (req, res, next) => {
+    try {
+      res.json({
+        assets: await db.collection('assets').countDocuments(),
+        presentations: await db.collection('presentations').countDocuments()
+      })
+    } catch (error) {
+      next(error)
+    }
+  })
+
+  app.get('/stats/updates', async (req, res, next) => {
+    try {
+      res.json(await db.collection('updates')
+        .find({}, { projection: { _id: 0 } })
+        .sort({ begin: -1 })
+        .limit(20)
+        .toArray()
+      )
+    } catch (error) {
+      next(error)
+    }
+  })
+
+  return app
+}
+
+module.exports = {
+  asciify,
+  Asset,
+  assetTypes,
+  deasciify,
+  helpMessages,
+  registerRestApi,
+  walk
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-@bldr_api.html">@bldr/api</a></li><li><a href="module-@bldr_api-media-server.html">@bldr/api-media-server</a></li><li><a href="module-@bldr_api-seating-plan.html">@bldr/api-seating-plan</a></li><li><a href="module-@bldr_core-browser.html">@bldr/core-browser</a></li><li><a href="module-@bldr_core-node.html">@bldr/core-node</a></li><li><a href="module-@bldr_http-request.html">@bldr/http-request</a></li><li><a href="module-@bldr_songbook-cli.html">@bldr/songbook-cli</a></li><li><a href="module-@bldr_songbook-core.html">@bldr/songbook-core</a></li><li><a href="module-@bldr_songbook-intermediate-files.html">@bldr/songbook-intermediate-files</a></li><li><a href="module-@bldr_themes.html">@bldr/themes</a></li><li><a href="module-@bldr_vue-app-presentation.html">@bldr/vue-app-presentation</a></li><li><a href="module-@bldr_vue-app-presentation_masters.html">@bldr/vue-app-presentation/masters</a></li><li><a href="module-@bldr_vue-app-seating-plan.html">@bldr/vue-app-seating-plan</a></li><li><a href="module-@bldr_vue-app-showroom.html">@bldr/vue-app-showroom</a></li><li><a href="module-@bldr_vue-app-songbook.html">@bldr/vue-app-songbook</a></li><li><a href="module-@bldr_vue-plugin-components-collection.html">@bldr/vue-plugin-components-collection</a></li><li><a href="module-@bldr_vue-plugin-material-icon.html">@bldr/vue-plugin-material-icon</a></li><li><a href="module-@bldr_vue-plugin-media.html">@bldr/vue-plugin-media</a></li><li><a href="module-@bldr_vue-plugin-shortcuts.html">@bldr/vue-plugin-shortcuts</a></li></ul><h3>Namespaces</h3><ul><li><a href="module-@bldr_vue-app-presentation-Vue.html">Vue</a></li></ul><h3>Classes</h3><ul><li><a href="InitState.html">InitState</a></li><li><a href="MetaData.html">MetaData</a></li><li><a href="module-@bldr_api-media-server-Asset.html">Asset</a></li><li><a href="module-@bldr_api-media-server-AssetTypes.html">AssetTypes</a></li><li><a href="module-@bldr_api-media-server-MediaFile.html">MediaFile</a></li><li><a href="module-@bldr_api-media-server-Presentation.html">Presentation</a></li><li><a href="module-@bldr_http-request.HttpRequest.html">HttpRequest</a></li><li><a href="module-@bldr_songbook-core-AlphabeticalSongsTree.html">AlphabeticalSongsTree</a></li><li><a href="module-@bldr_songbook-core-CoreLibrary.html">CoreLibrary</a></li><li><a href="module-@bldr_songbook-core-SongMetaDataCombined.html">SongMetaDataCombined</a></li><li><a href="module-@bldr_songbook-intermediate-files-FileMonitor.html">FileMonitor</a></li><li><a href="module-@bldr_songbook-intermediate-files-Folder.html">Folder</a></li><li><a href="module-@bldr_songbook-intermediate-files-IntermediateLibrary.html">IntermediateLibrary</a></li><li><a href="module-@bldr_songbook-intermediate-files-IntermediateSong.html">IntermediateSong</a></li><li><a href="module-@bldr_songbook-intermediate-files-Library.html">Library</a></li><li><a href="module-@bldr_songbook-intermediate-files-PianoFilesCountTree.html">PianoFilesCountTree</a></li><li><a href="module-@bldr_songbook-intermediate-files-PianoScore.html">PianoScore</a></li><li><a href="module-@bldr_songbook-intermediate-files-Song.html">Song</a></li><li><a href="module-@bldr_songbook-intermediate-files-SongMetaData.html">SongMetaData</a></li><li><a href="module-@bldr_songbook-intermediate-files-Sqlite.html">Sqlite</a></li><li><a href="module-@bldr_songbook-intermediate-files-TextFile.html">TextFile</a></li><li><a href="module-@bldr_vue-app-presentation_masters-Masters.html">Masters</a></li><li><a href="module-@bldr_vue-app-presentation-BodyAttributes.html">BodyAttributes</a></li><li><a href="module-@bldr_vue-app-presentation-CenterVertically.html">CenterVertically</a></li><li><a href="module-@bldr_vue-app-presentation-ContentTheme.html">ContentTheme</a></li><li><a href="module-@bldr_vue-app-presentation-DarkMode.html">DarkMode</a></li><li><a href="module-@bldr_vue-app-presentation-MultipleAttributes.html">MultipleAttributes</a></li><li><a href="module-@bldr_vue-app-presentation-Overflow.html">Overflow</a></li><li><a href="module-@bldr_vue-app-presentation-StyleConfig.html">StyleConfig</a></li><li><a href="module-@bldr_vue-app-presentation-UiTheme.html">UiTheme</a></li><li><a href="module-@bldr_vue-plugin-media.MediaFile.html">MediaFile</a></li><li><a href="module-@bldr_vue-plugin-media-AssetTypes.html">AssetTypes</a></li><li><a href="module-@bldr_vue-plugin-media-Media.html">Media</a></li><li><a href="module-@bldr_vue-plugin-media-Player.html">Player</a></li><li><a href="module-@bldr_vue-plugin-media-PlayList.html">PlayList</a></li><li><a href="module-@bldr_vue-plugin-media-Resolver.html">Resolver</a></li><li><a href="module-@bldr_vue-plugin-media-Sample.html">Sample</a></li><li><a href="module-@bldr_vue-plugin-shortcuts-Shortcuts.html">Shortcuts</a></li><li><a href="Presentation.html">Presentation</a></li><li><a href="RawSlideObject.html">RawSlideObject</a></li><li><a href="RenderData.html">RenderData</a></li><li><a href="Slide.html">Slide</a></li></ul><h3>Global</h3><ul><li><a href="global.html#actions">actions</a></li><li><a href="global.html#collectMusicMetaData">collectMusicMetaData</a></li><li><a href="global.html#convert">convert</a></li><li><a href="global.html#convertCustomMarkup">convertCustomMarkup</a></li><li><a href="global.html#convertMarkdown">convertMarkdown</a></li><li><a href="global.html#convertOneFile">convertOneFile</a></li><li><a href="global.html#createMetaDataYaml">createMetaDataYaml</a></li><li><a href="global.html#createPresentationTemplate">createPresentationTemplate</a></li><li><a href="global.html#getType">getType</a></li><li><a href="global.html#intersect">intersect</a></li><li><a href="global.html#markupToHtml">markupToHtml</a></li><li><a href="global.html#mirrorRelPath">mirrorRelPath</a></li><li><a href="global.html#mutations">mutations</a></li><li><a href="global.html#naturalSort">naturalSort</a></li><li><a href="global.html#openBasePath">openBasePath</a></li><li><a href="global.html#openFile">openFile</a></li><li><a href="global.html#openFiles">openFiles</a></li><li><a href="global.html#parseSlidesRecursive">parseSlidesRecursive</a></li><li><a href="global.html#rename">rename</a></li><li><a href="global.html#renameOneFile">renameOneFile</a></li><li><a href="global.html#toString">toString</a></li><li><a href="global.html#validateUri">validateUri</a></li><li><a href="global.html#validateYaml">validateYaml</a></li><li><a href="global.html#validateYamlOneFile">validateYamlOneFile</a></li><li><a href="global.html#writeMetaDataYaml">writeMetaDataYaml</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Tue Nov 19 2019 07:54:54 GMT+0100 (GMT+01:00)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

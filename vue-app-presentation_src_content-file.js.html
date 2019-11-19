@@ -32,7 +32,7 @@
 
 // import Vue from 'vue'
 import yaml from 'js-yaml'
-import { shortenText } from '@bldr/core-browser'
+import { shortenText, convertPropertiesToCamelCase } from '@bldr/core-browser'
 import { masters } from '@/masters.js'
 import store from '@/store.js'
 import router from '@/router.js'
@@ -129,9 +129,9 @@ function intersect (array1, array2) {
 class RawSlideObject {
   constructor (rawData) {
     if (getType(rawData) === 'string') {
-      rawData = {
-        rawData: true
-      }
+      let masterName = rawData
+      rawData = {}
+      rawData[masterName] = true
     }
     if (getType(rawData) !== 'object') {
       throw Error(`Unsupported input type “${getType(rawData)}” on input data: ${toString(rawData)}`)
@@ -185,9 +185,10 @@ class RenderData {
 
     /**
      * The name of the master slide.
+     *
      * @type {string}
      */
-    this.name = intersection[0]
+    this.masterName = intersection[0]
 
     /**
      * Data in various types to pass to a master slide.
@@ -195,35 +196,50 @@ class RenderData {
      * to the props of the Vue components.
      * @type {module:@bldr/core/masters~rawMasterData}
      */
-    this.data = rawSlideObject.cut(this.name)
+    this.props = rawSlideObject.cut(this.masterName)
 
     /**
+     * A list of media URIs.
+     *
      * @type {array}
      */
     this.mediaUris = []
 
-    const master = masters.get(this.name)
-    const normalizedData = master.normalizeProps(this.data)
-    if (normalizedData) {
-      this.data = normalizedData
+    const master = masters.get(this.masterName)
+    const normalizedProps = master.normalizeProps(this.props)
+    if (normalizedProps) {
+      this.props = normalizedProps
     }
+    master.detectUnkownProps(this.props)
+    master.markupToHtml(this.props)
+    master.validateUris(this.props)
 
-    const mediaUris = master.resolveMediaUris(this.data)
+    const mediaUris = master.resolveMediaUris(this.props)
     if (mediaUris) this.mediaUris = mediaUris
 
     /**
+     * How many steps the slide provides.
+     *
      * @type {number}
      */
-    this.stepCount = master.stepCount(this.data)
+    this.stepCount = master.stepCount(this.props)
 
     /**
+     * The current step number. The first number is 1 not 0.
+     *
      * @type {number}
      */
     this.stepNoCurrent = 1
   }
 }
 
+/**
+ *
+ */
 export class MetaData {
+  /**
+   * @param {*} rawSlideObject
+   */
   constructor (rawSlideObject) {
     this.title = rawSlideObject.cut('title')
   }
@@ -236,13 +252,13 @@ class Slide {
   /**
    *
    */
-  constructor (rawSlideData, slideNo) {
+  constructor (rawSlideData) {
     const rawSlideObject = new RawSlideObject(rawSlideData)
     /**
      * The slide number
      * @type {Number}
      */
-    this.no = slideNo
+    this.no = null
 
     /**
      * Normalized slide data to render the slide.
@@ -252,15 +268,42 @@ class Slide {
     /**
      *
      */
-    this.master = masters.get(this.renderData.name)
+    this.master = masters.get(this.renderData.masterName)
 
+    /**
+     *
+     */
     this.metaData = new MetaData(rawSlideObject)
+
+    /**
+     * @see {@link https://vuejs.org/v2/guide/class-and-style.html#Object-Syntax-1}
+     */
+    this.style = rawSlideObject.cut('style')
+
+    /**
+     * A list of child slide objects.
+     *
+     * @type {Array}
+     */
+    this.slides = []
+
+    /**
+     * The level in the hierarchial slide tree.
+     *
+     * @type {Number}
+     */
+    this.level = 1
 
     if (!rawSlideObject.isEmpty()) {
       throw Error(`Unknown slide properties: ${toString(rawSlideObject.raw)}`)
     }
   }
 
+  /**
+   * The title of this slide.
+   *
+   * @returns {String}
+   */
   get title () {
     if (this.metaData.title) {
       return this.metaData.title
@@ -277,7 +320,7 @@ class Slide {
    */
   get plainText () {
     const output = []
-    const fromProps = this.master.plainTextFromProps(this.renderData.data)
+    const fromProps = this.master.plainTextFromProps(this.renderData.props)
     if (fromProps) output.push(fromProps)
     for (const mediaFile of this.mediaFiles) {
       output.push(mediaFile.plainText)
@@ -285,6 +328,11 @@ class Slide {
     return output.join(' | ')
   }
 
+  /**
+   * The media files of this slide as an array.
+   *
+   * @returns {Array}
+   */
   get mediaFiles () {
     const mediaFiles = []
     for (const mediaUri of this.renderData.mediaUris) {
@@ -293,6 +341,11 @@ class Slide {
     return mediaFiles
   }
 
+  /**
+   * The name of the content theme of this slide.
+   *
+   * @returns {String}
+   */
   get contentTheme () {
     if (this.master.styleConfig.contentTheme) {
       return this.master.styleConfig.contentTheme
@@ -303,8 +356,37 @@ class Slide {
 }
 
 /**
+ * Parse the slide objects in a recursive fashion. Child slides can be
+ * specified under the `slides` property.
+ *
+ * @param {Array} slidesRaw - The raw slide array from the YAML presentation
+ *  file, the slides property.
+ * @param {Array} slidesFlat - A array which is filled with every slide object.
+ * @param {Array} slidesTree - A array which is filled with only top level slide
+ *   objects.
+ * @param {Number} level - The level in the hierachial tree the slide lies in
+ *   1: Main level, 2: First child level ...
+ */
+function parseSlidesRecursive (slidesRaw, slidesFlat, slidesTree, level = 1) {
+  for (const slideRaw of slidesRaw) {
+    const childSlides = slideRaw.slides
+    delete slideRaw.slides
+    const slide = new Slide(slideRaw)
+    slidesFlat.push(slide)
+    slidesTree.push(slide)
+    slide.no = slidesFlat.length
+    slide.level = level
+    if (childSlides &amp;&amp; Array.isArray(childSlides)) {
+      parseSlidesRecursive(childSlides, slidesFlat, slide.slides, level + 1)
+    }
+  }
+}
+
+/**
  * A presentation
  *
+ * @property {String} path
+ * @property {String} parentDir
  * @property {object} meta
  * @property {object} slides
  * @property {object} media
@@ -312,21 +394,11 @@ class Slide {
  * @property {string} rawYamlObject_
  */
 export class Presentation {
-  /**
-   * Convert an array of raw slide data into an object. The slide data is
-   * indexed by the slide number. Slides are numbered beginning from 1 not from 0.
-   * We reindex.
-   *
-   * @param {array} slides
-   *
-   * @returns {object}
-   */
-  reIndex (slides) {
-    const out = {}
-    for (const index in slides) {
-      out[Number.parseInt(index) + 1] = slides[index]
-    }
-    return out
+
+  setPath (path) {
+    this.path = path
+    const fileName = path.split('/').pop()
+    this.parentDir = path.replace(`/${fileName}`, '')
   }
 
   async parseYamlFile (rawYamlString) {
@@ -336,24 +408,46 @@ export class Presentation {
     } catch (error) {
       throw new Error(`${error.name}: ${error.message}`)
     }
+
+    convertPropertiesToCamelCase(this.rawYamlObject_)
+
     /**
      * The meta object.
      *
      * ```yaml
      * meta:
-     *   title: My title
+     *   title: A title
+     *   id: An unique id
+     *   grade: The grade the presentation belongs to.
+     *   curriculum: Relation to the curriculum.
      * ```
      *
      * @type {object}
+     * @property {String} id - An unique id.
+     * @property {String} title - The title of the presentation.
+     * @property {String} grade - The grade the presentation belongs to.
+     * @property {String} curriculum - Relation to the curriculum.
      */
     this.meta = this.rawYamlObject_.meta
-    // slides
-    const indexedSlides = this.reIndex(this.rawYamlObject_.slides)
-    this.slides = {}
+
+    /**
+     * A flat list of slide objects. All child slides are included in this
+     * array.
+     *
+     * @type {Array}
+     */
+    this.slides = []
+
+    /**
+     * Only the top level slide objects are included in this array. Child slides
+     * can be accessed under the `slides` property.
+     */
+    this.slidesTree = []
+
+    parseSlidesRecursive(this.rawYamlObject_.slides, this.slides, this.slidesTree)
+
     const mediaUris = []
-    for (const slideNo in indexedSlides) {
-      const slide = new Slide(indexedSlides[slideNo], slideNo)
-      this.slides[slideNo] = slide
+    for (const slide of this.slides) {
       for (const mediaUri of slide.renderData.mediaUris) {
         mediaUris.push(mediaUri)
       }
@@ -371,9 +465,11 @@ export class Presentation {
    * meta:
    *   title: My Title
    * ```
+   *
+   * @returns {String}
    */
   get title () {
-    if (this.meta.title) return this.meta.title
+    if (this.meta &amp;&amp; this.meta.title) return this.meta.title
   }
 
   /**
@@ -383,9 +479,39 @@ export class Presentation {
    * meta:
    *   id: My-Presentation
    * ```
+   *
+   * @returns {String}
    */
   get id () {
-    if (this.meta.id) return this.meta.id
+    if (this.meta &amp;&amp; this.meta.id) return this.meta.id
+  }
+
+  /**
+   * The grade the presentation belongs to.
+   *
+   * ```yml
+   * meta:
+   *   grade: 7
+   * ```
+   *
+   * @returns {String}
+   */
+  get grade () {
+    if (this.meta &amp;&amp; this.meta.grade) return this.meta.grade
+  }
+
+  /**
+   * Relation to the curriculum.
+   *
+   * ```yml
+   * meta:
+   *   curriculum: Relation to the curriculum
+   * ```
+   *
+   * @returns {String}
+   */
+  get curriculum () {
+    if (this.meta &amp;&amp; this.meta.curriculum) return this.meta.curriculum
   }
 }
 
@@ -403,7 +529,7 @@ function openFile (file) {
     reader.readAsText(file, 'utf-8')
     reader.onload = readerEvent => {
       let content = readerEvent.target.result
-      store.dispatch('openPresentation', content).then(() => {
+      store.dispatch('presentation/openPresentation', content).then(() => {
         if (router.currentRoute.name !== 'slides') router.push({ name: 'slides' })
       })
     }
@@ -411,7 +537,6 @@ function openFile (file) {
     vue.$media.resolve(file)
   }
 }
-
 
 /**
  * Open multiple files.
@@ -433,13 +558,13 @@ export function openFiles (files) {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-@bldr_api.html">@bldr/api</a></li><li><a href="module-@bldr_api-media-server.html">@bldr/api-media-server</a></li><li><a href="module-@bldr_api-seating-plan.html">@bldr/api-seating-plan</a></li><li><a href="module-@bldr_core-browser.html">@bldr/core-browser</a></li><li><a href="module-@bldr_core-node.html">@bldr/core-node</a></li><li><a href="module-@bldr_http-request.html">@bldr/http-request</a></li><li><a href="module-@bldr_songbook-cli.html">@bldr/songbook-cli</a></li><li><a href="module-@bldr_songbook-core.html">@bldr/songbook-core</a></li><li><a href="module-@bldr_songbook-intermediate-files.html">@bldr/songbook-intermediate-files</a></li><li><a href="module-@bldr_themes.html">@bldr/themes</a></li><li><a href="module-@bldr_vue-app-presentation.html">@bldr/vue-app-presentation</a></li><li><a href="module-@bldr_vue-app-presentation_masters.html">@bldr/vue-app-presentation/masters</a></li><li><a href="module-@bldr_vue-app-seating-plan.html">@bldr/vue-app-seating-plan</a></li><li><a href="module-@bldr_vue-app-showroom.html">@bldr/vue-app-showroom</a></li><li><a href="module-@bldr_vue-app-songbook.html">@bldr/vue-app-songbook</a></li><li><a href="module-@bldr_vue-plugin-components-collection.html">@bldr/vue-plugin-components-collection</a></li><li><a href="module-@bldr_vue-plugin-material-icon.html">@bldr/vue-plugin-material-icon</a></li><li><a href="module-@bldr_vue-plugin-media.html">@bldr/vue-plugin-media</a></li><li><a href="module-@bldr_vue-plugin-shortcuts.html">@bldr/vue-plugin-shortcuts</a></li></ul><h3>Namespaces</h3><ul><li><a href="module-@bldr_vue-app-presentation-Vue.html">Vue</a></li></ul><h3>Classes</h3><ul><li><a href="InitState.html">InitState</a></li><li><a href="module-@bldr_api-media-server-Asset.html">Asset</a></li><li><a href="module-@bldr_api-media-server-MediaFile.html">MediaFile</a></li><li><a href="module-@bldr_http-request.HttpRequest.html">HttpRequest</a></li><li><a href="module-@bldr_songbook-core-AlphabeticalSongsTree.html">AlphabeticalSongsTree</a></li><li><a href="module-@bldr_songbook-core-CoreLibrary.html">CoreLibrary</a></li><li><a href="module-@bldr_songbook-core-SongMetaDataCombined.html">SongMetaDataCombined</a></li><li><a href="module-@bldr_songbook-intermediate-files-FileMonitor.html">FileMonitor</a></li><li><a href="module-@bldr_songbook-intermediate-files-Folder.html">Folder</a></li><li><a href="module-@bldr_songbook-intermediate-files-IntermediateLibrary.html">IntermediateLibrary</a></li><li><a href="module-@bldr_songbook-intermediate-files-IntermediateSong.html">IntermediateSong</a></li><li><a href="module-@bldr_songbook-intermediate-files-Library.html">Library</a></li><li><a href="module-@bldr_songbook-intermediate-files-PianoFilesCountTree.html">PianoFilesCountTree</a></li><li><a href="module-@bldr_songbook-intermediate-files-PianoScore.html">PianoScore</a></li><li><a href="module-@bldr_songbook-intermediate-files-Song.html">Song</a></li><li><a href="module-@bldr_songbook-intermediate-files-SongMetaData.html">SongMetaData</a></li><li><a href="module-@bldr_songbook-intermediate-files-Sqlite.html">Sqlite</a></li><li><a href="module-@bldr_songbook-intermediate-files-TextFile.html">TextFile</a></li><li><a href="module-@bldr_vue-app-presentation_masters-Master.html">Master</a></li><li><a href="module-@bldr_vue-app-presentation_masters-Masters.html">Masters</a></li><li><a href="module-@bldr_vue-app-presentation-BodyAttributes.html">BodyAttributes</a></li><li><a href="module-@bldr_vue-app-presentation-CenterVertically.html">CenterVertically</a></li><li><a href="module-@bldr_vue-app-presentation-ContentTheme.html">ContentTheme</a></li><li><a href="module-@bldr_vue-app-presentation-DarkMode.html">DarkMode</a></li><li><a href="module-@bldr_vue-app-presentation-MultipleAttributes.html">MultipleAttributes</a></li><li><a href="module-@bldr_vue-app-presentation-Overflow.html">Overflow</a></li><li><a href="module-@bldr_vue-app-presentation-StyleConfig.html">StyleConfig</a></li><li><a href="module-@bldr_vue-app-presentation-UiTheme.html">UiTheme</a></li><li><a href="module-@bldr_vue-plugin-media.MediaFile.html">MediaFile</a></li><li><a href="module-@bldr_vue-plugin-media-Media.html">Media</a></li><li><a href="module-@bldr_vue-plugin-media-MediaTypes.html">MediaTypes</a></li><li><a href="module-@bldr_vue-plugin-media-Player.html">Player</a></li><li><a href="module-@bldr_vue-plugin-media-PlayList.html">PlayList</a></li><li><a href="module-@bldr_vue-plugin-media-Resolver.html">Resolver</a></li><li><a href="module-@bldr_vue-plugin-media-Sample.html">Sample</a></li><li><a href="module-@bldr_vue-plugin-shortcuts-Shortcuts.html">Shortcuts</a></li><li><a href="Presentation.html">Presentation</a></li><li><a href="RawSlideObject.html">RawSlideObject</a></li><li><a href="RenderData.html">RenderData</a></li><li><a href="Slide.html">Slide</a></li></ul><h3>Global</h3><ul><li><a href="global.html#actions">actions</a></li><li><a href="global.html#getType">getType</a></li><li><a href="global.html#intersect">intersect</a></li><li><a href="global.html#mutations">mutations</a></li><li><a href="global.html#naturalSort">naturalSort</a></li><li><a href="global.html#openFile">openFile</a></li><li><a href="global.html#openFiles">openFiles</a></li><li><a href="global.html#toString">toString</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-@bldr_api.html">@bldr/api</a></li><li><a href="module-@bldr_api-media-server.html">@bldr/api-media-server</a></li><li><a href="module-@bldr_api-seating-plan.html">@bldr/api-seating-plan</a></li><li><a href="module-@bldr_core-browser.html">@bldr/core-browser</a></li><li><a href="module-@bldr_core-node.html">@bldr/core-node</a></li><li><a href="module-@bldr_http-request.html">@bldr/http-request</a></li><li><a href="module-@bldr_songbook-cli.html">@bldr/songbook-cli</a></li><li><a href="module-@bldr_songbook-core.html">@bldr/songbook-core</a></li><li><a href="module-@bldr_songbook-intermediate-files.html">@bldr/songbook-intermediate-files</a></li><li><a href="module-@bldr_themes.html">@bldr/themes</a></li><li><a href="module-@bldr_vue-app-presentation.html">@bldr/vue-app-presentation</a></li><li><a href="module-@bldr_vue-app-presentation_masters.html">@bldr/vue-app-presentation/masters</a></li><li><a href="module-@bldr_vue-app-seating-plan.html">@bldr/vue-app-seating-plan</a></li><li><a href="module-@bldr_vue-app-showroom.html">@bldr/vue-app-showroom</a></li><li><a href="module-@bldr_vue-app-songbook.html">@bldr/vue-app-songbook</a></li><li><a href="module-@bldr_vue-plugin-components-collection.html">@bldr/vue-plugin-components-collection</a></li><li><a href="module-@bldr_vue-plugin-material-icon.html">@bldr/vue-plugin-material-icon</a></li><li><a href="module-@bldr_vue-plugin-media.html">@bldr/vue-plugin-media</a></li><li><a href="module-@bldr_vue-plugin-shortcuts.html">@bldr/vue-plugin-shortcuts</a></li></ul><h3>Namespaces</h3><ul><li><a href="module-@bldr_vue-app-presentation-Vue.html">Vue</a></li></ul><h3>Classes</h3><ul><li><a href="InitState.html">InitState</a></li><li><a href="MetaData.html">MetaData</a></li><li><a href="module-@bldr_api-media-server-Asset.html">Asset</a></li><li><a href="module-@bldr_api-media-server-AssetTypes.html">AssetTypes</a></li><li><a href="module-@bldr_api-media-server-MediaFile.html">MediaFile</a></li><li><a href="module-@bldr_api-media-server-Presentation.html">Presentation</a></li><li><a href="module-@bldr_http-request.HttpRequest.html">HttpRequest</a></li><li><a href="module-@bldr_songbook-core-AlphabeticalSongsTree.html">AlphabeticalSongsTree</a></li><li><a href="module-@bldr_songbook-core-CoreLibrary.html">CoreLibrary</a></li><li><a href="module-@bldr_songbook-core-SongMetaDataCombined.html">SongMetaDataCombined</a></li><li><a href="module-@bldr_songbook-intermediate-files-FileMonitor.html">FileMonitor</a></li><li><a href="module-@bldr_songbook-intermediate-files-Folder.html">Folder</a></li><li><a href="module-@bldr_songbook-intermediate-files-IntermediateLibrary.html">IntermediateLibrary</a></li><li><a href="module-@bldr_songbook-intermediate-files-IntermediateSong.html">IntermediateSong</a></li><li><a href="module-@bldr_songbook-intermediate-files-Library.html">Library</a></li><li><a href="module-@bldr_songbook-intermediate-files-PianoFilesCountTree.html">PianoFilesCountTree</a></li><li><a href="module-@bldr_songbook-intermediate-files-PianoScore.html">PianoScore</a></li><li><a href="module-@bldr_songbook-intermediate-files-Song.html">Song</a></li><li><a href="module-@bldr_songbook-intermediate-files-SongMetaData.html">SongMetaData</a></li><li><a href="module-@bldr_songbook-intermediate-files-Sqlite.html">Sqlite</a></li><li><a href="module-@bldr_songbook-intermediate-files-TextFile.html">TextFile</a></li><li><a href="module-@bldr_vue-app-presentation_masters-Masters.html">Masters</a></li><li><a href="module-@bldr_vue-app-presentation-BodyAttributes.html">BodyAttributes</a></li><li><a href="module-@bldr_vue-app-presentation-CenterVertically.html">CenterVertically</a></li><li><a href="module-@bldr_vue-app-presentation-ContentTheme.html">ContentTheme</a></li><li><a href="module-@bldr_vue-app-presentation-DarkMode.html">DarkMode</a></li><li><a href="module-@bldr_vue-app-presentation-MultipleAttributes.html">MultipleAttributes</a></li><li><a href="module-@bldr_vue-app-presentation-Overflow.html">Overflow</a></li><li><a href="module-@bldr_vue-app-presentation-StyleConfig.html">StyleConfig</a></li><li><a href="module-@bldr_vue-app-presentation-UiTheme.html">UiTheme</a></li><li><a href="module-@bldr_vue-plugin-media.MediaFile.html">MediaFile</a></li><li><a href="module-@bldr_vue-plugin-media-AssetTypes.html">AssetTypes</a></li><li><a href="module-@bldr_vue-plugin-media-Media.html">Media</a></li><li><a href="module-@bldr_vue-plugin-media-Player.html">Player</a></li><li><a href="module-@bldr_vue-plugin-media-PlayList.html">PlayList</a></li><li><a href="module-@bldr_vue-plugin-media-Resolver.html">Resolver</a></li><li><a href="module-@bldr_vue-plugin-media-Sample.html">Sample</a></li><li><a href="module-@bldr_vue-plugin-shortcuts-Shortcuts.html">Shortcuts</a></li><li><a href="Presentation.html">Presentation</a></li><li><a href="RawSlideObject.html">RawSlideObject</a></li><li><a href="RenderData.html">RenderData</a></li><li><a href="Slide.html">Slide</a></li></ul><h3>Global</h3><ul><li><a href="global.html#actions">actions</a></li><li><a href="global.html#collectMusicMetaData">collectMusicMetaData</a></li><li><a href="global.html#convert">convert</a></li><li><a href="global.html#convertCustomMarkup">convertCustomMarkup</a></li><li><a href="global.html#convertMarkdown">convertMarkdown</a></li><li><a href="global.html#convertOneFile">convertOneFile</a></li><li><a href="global.html#createMetaDataYaml">createMetaDataYaml</a></li><li><a href="global.html#createPresentationTemplate">createPresentationTemplate</a></li><li><a href="global.html#getType">getType</a></li><li><a href="global.html#intersect">intersect</a></li><li><a href="global.html#markupToHtml">markupToHtml</a></li><li><a href="global.html#mirrorRelPath">mirrorRelPath</a></li><li><a href="global.html#mutations">mutations</a></li><li><a href="global.html#naturalSort">naturalSort</a></li><li><a href="global.html#openBasePath">openBasePath</a></li><li><a href="global.html#openFile">openFile</a></li><li><a href="global.html#openFiles">openFiles</a></li><li><a href="global.html#parseSlidesRecursive">parseSlidesRecursive</a></li><li><a href="global.html#rename">rename</a></li><li><a href="global.html#renameOneFile">renameOneFile</a></li><li><a href="global.html#toString">toString</a></li><li><a href="global.html#validateUri">validateUri</a></li><li><a href="global.html#validateYaml">validateYaml</a></li><li><a href="global.html#validateYamlOneFile">validateYamlOneFile</a></li><li><a href="global.html#writeMetaDataYaml">writeMetaDataYaml</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Tue Oct 29 2019 14:38:01 GMT+0100 (GMT+01:00)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Tue Nov 19 2019 07:54:54 GMT+0100 (GMT+01:00)
 </footer>
 
 <script> prettyPrint(); </script>

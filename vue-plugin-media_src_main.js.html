@@ -32,16 +32,18 @@
  * @module @bldr/vue-plugin-media
  */
 
-/* globals document Audio Image File */
+/* globals config document Audio Image File */
 
 import { getDefaultServers, HttpRequest, getDefaultRestEndpoints, HttpRequestNg } from '@bldr/http-request'
 import Vue from 'vue'
 import DynamicSelect from '@bldr/vue-plugin-dynamic-select'
 
+// Vue components
 import ComponentMediaFile from './MediaFile.vue'
-// documentation.js could not import without /index.vue
-import MediaOverview from './MediaOverview/index.vue'
-import MediaPlayer from './MediaPlayer.vue'
+import ComponentMediaOverview from './MediaOverview/index.vue'
+import ComponentMediaPlayer from './MediaPlayer.vue'
+import ComponentPlayButton from './PlayButton.vue'
+import ComponentPlayLoadIndicator from './PlayLoadIndicator.vue'
 
 const restEndpoints = getDefaultRestEndpoints()
 export const httpRequestNg = new HttpRequestNg(restEndpoints, '/api/media')
@@ -214,7 +216,6 @@ class Player {
     }
     if (!sample) throw new Error(`The sample “${uriOrSample}” couldn’t be played!`)
     this.$store.commit('media/sampleLoaded', sample)
-    console.debug(`Load sample “${sample.uri}”`)
   }
 
   /**
@@ -225,26 +226,29 @@ class Player {
     const sample = this.$store.getters['media/sampleLoaded']
     if (!sample) throw new Error('First load a sample')
     const samplePlaying = this.$store.getters['media/samplePlaying']
-    if (samplePlaying &amp;&amp; sample.uri === samplePlaying.uri) {
-      return
-    }
-
+    // Start should always start from `sample.startTimeSec`
+    // if (samplePlaying &amp;&amp; sample.uri === samplePlaying.uri) {
+    //   return
+    // }
     if (samplePlaying) await this.stop()
     this.$store.dispatch('media/samplePlaying', sample)
-    this.play()
+    this.play(sample.startTimeSec)
   }
 
   /**
    * Play a sample at the current position.
+   *
+   * @param {Number} startTimeSec - Position in the sample from where to play
+   *   the sample
    */
-  play () {
-    console.groupEnd()
-    console.group('Enter method play()')
+  play (startTimeSec) {
     const sample = this.$store.getters['media/samplePlaying']
     if (!sample || !sample.mediaElement) return
 
     let fadeInSec
-    if (sample.currentTimeSec) {
+    if (startTimeSec) {
+      sample.mediaElement.currentTime = startTimeSec
+    } else if (sample.currentTimeSec) {
       sample.mediaElement.currentTime = sample.currentTimeSec
     } else {
       sample.mediaElement.currentTime = sample.startTimeSec
@@ -254,7 +258,6 @@ class Player {
     // To prevent AbortError in Firefox, artefacts when switching through the
     // audio files.
     this.setTimeoutId = setTimeout(() => {
-      console.debug(`Play sample “${sample.uri}” (currentTime: ${sample.mediaElement.currentTime})`)
       this.fadeIn_(fadeInSec)
       sample.mediaElement.play()
 
@@ -277,7 +280,6 @@ class Player {
       if (!sample) {
         reject(new Error('No playing sample found.'))
       }
-      console.debug(`Begin fade in “${sample.uri}” (duration: ${duration})`)
       let actualVolume = 0
       sample.mediaElement.volume = 0
       // Normally 0.01 by volume = 1
@@ -290,7 +292,6 @@ class Player {
         if (actualVolume &lt;= this.globalVolume) {
           sample.mediaElement.volume = actualVolume.toFixed(2)
         } else {
-          console.debug(`Fade in finished “${sample.uri}” (value: ${sample.mediaElement.volume})`)
           clearInterval(id)
           resolve()
         }
@@ -327,6 +328,42 @@ class Player {
   }
 
   /**
+   * Jump to a new time position.
+   *
+   * @param {Number} interval - Time interval in seconds.
+   * @param {String} direction - `forward` or `backward`
+   *
+   * @private
+   */
+  jump_ (interval = 10, direction = 'forward') {
+    const sample = this.$store.getters['media/samplePlaying']
+    if (!sample || !sample.mediaElement) return
+    if (direction === 'backward') {
+      sample.mediaElement.currentTime -= interval
+    } else {
+      sample.mediaElement.currentTime += interval
+    }
+  }
+
+  /**
+   * Jump forwards.
+   *
+   * @param {Number} interval - Time interval in seconds.
+   */
+  forward (interval = 10) {
+    this.jump_(interval, 'forward')
+  }
+
+  /**
+   * Jump backwards.
+   *
+   * @param {Number} interval - Time interval in seconds.
+   */
+  backward (interval = 10) {
+    this.jump_(interval, 'backward')
+  }
+
+  /**
    * @param {Number} duration - in seconds
    * @private
    */
@@ -336,7 +373,6 @@ class Player {
       if (!sample) {
         reject(new Error('No playing sample found.'))
       }
-      console.debug(`Begin fade out “${sample.uri}” (duration: ${duration})`)
       // Number from 0 - 1
       let actualVolume = sample.mediaElement.volume
       // Normally 0.01 by volume = 1
@@ -350,7 +386,6 @@ class Player {
           sample.mediaElement.volume = actualVolume.toFixed(2)
         } else {
           sample.mediaElement.pause()
-          console.debug(`Pause “${sample.uri}”`)
           clearInterval(id)
           resolve()
         }
@@ -360,12 +395,20 @@ class Player {
   }
 
   /**
-   * Toggle between `Player.pause()` and `Player.play()`
+   * Toggle between `Player.pause()` and `Player.play()`. If a sample is loaded
+   * start the this sample.
    */
   toggle () {
-    const sample = this.$store.getters['media/samplePlaying']
-    if (!sample || !sample.mediaElement) return
-    if (sample.mediaElement.paused) {
+    const samplePlaying = this.$store.getters['media/samplePlaying']
+    const sampleLoaded = this.$store.getters['media/sampleLoaded']
+
+    if ((!samplePlaying || !samplePlaying.mediaElement) &amp;&amp; (sampleLoaded &amp;&amp; sampleLoaded.mediaElement)) {
+      this.start()
+      return
+    }
+
+    if (!samplePlaying || !samplePlaying.mediaElement) return
+    if (samplePlaying.mediaElement.paused) {
       this.play()
     } else {
       this.pause()
@@ -427,7 +470,7 @@ const state = {
   mediaFiles: {},
   playList: [],
   playListNoCurrent: null,
-  mediaTypes: {
+  assetTypes: {
     audio: {},
     video: {},
     image: {}
@@ -466,7 +509,7 @@ const getters = {
     return state.mediaFiles
   },
   mediaFilesByType: state => type => {
-    return state.mediaTypes[type]
+    return state.assetTypes[type]
   },
   playList: state => {
     return state.playList
@@ -488,13 +531,14 @@ const getters = {
   },
   sampleByUri: (state, getters) => uri => {
     const samples = getters.samples
+    if (uri.indexOf('#') === -1) uri = `${uri}#complete`
     if (uri in samples) {
       return samples[uri]
     }
     return null
   },
   typeCount: state => type => {
-    return Object.keys(state.mediaTypes[type]).length
+    return Object.keys(state.assetTypes[type]).length
   }
 }
 
@@ -570,7 +614,7 @@ const mutations = {
     state.playList.push(sample.uri)
   },
   addMediaFileToTypes (state, mediaFile) {
-    Vue.set(state.mediaTypes[mediaFile.type], mediaFile.uri, mediaFile)
+    Vue.set(state.assetTypes[mediaFile.type], mediaFile.uri, mediaFile)
   },
   setRestApiServers (state, restApiServers) {
     Vue.set(state, 'restApiServers', restApiServers)
@@ -598,31 +642,26 @@ const storeModule = {
 }
 
 /**
+ * Categories some asset file formats in three asset types: `audio`, `image`,
+ * `video`.
  *
+ * TODO: Code which can be imported by ES modules and node modules.
+ * The same code is in the module @bldr/api-media-server/src/main.js and
+ * @bldr/vue-plugin-media/src/main.js
  */
-class MediaTypes {
-  constructor () {
+class AssetTypes {
+  constructor (config) {
     /**
      * @type {object}
+     * @private
      */
-    this.types = {
-      audio: ['mp3', 'm4a'],
-      image: ['jpg', 'jpeg', 'png', 'svg'],
-      video: ['mp4']
-    }
+    this.config_ = config.mediaServer.assetTypes
 
     /**
      * @type {object}
+     * @private
      */
-    this.typeColors = {
-      audio: 'brown',
-      image: 'green',
-      video: 'purple'
-    }
-    /**
-     * @type {array}
-     */
-    this.extensions_ = this.spreadExtensions_()
+    this.allowedExtensions_ = this.spreadExtensions_()
   }
 
   /**
@@ -630,8 +669,8 @@ class MediaTypes {
    */
   spreadExtensions_ () {
     const out = {}
-    for (const type in this.types) {
-      for (const extension of this.types[type]) {
+    for (const type in this.config_) {
+      for (const extension of this.config_[type].allowedExtensions) {
         out[extension] = type
       }
     }
@@ -639,36 +678,62 @@ class MediaTypes {
   }
 
   /**
+   * Get the media type from the extension.
    *
+   * @param {String} extension
+   *
+   * @returns {String}
    */
   extensionToType (extension) {
-    const ext = extension.toLowerCase()
-    if (ext in this.extensions_) {
-      return this.extensions_[ext]
+    extension = extension.toLowerCase()
+    if (extension in this.allowedExtensions_) {
+      return this.allowedExtensions_[extension]
     }
-    throw new Error(`Unkown extension “${ext}”`)
+    throw new Error(`Unkown extension “${extension}”`)
   }
 
   /**
+   * Get the color of the media type.
    *
+   * @param {String} type - The asset type: for example `audio`, `image`,
+   *   `video`.
+   *
+   * @returns {String}
    */
   typeToColor (type) {
-    return this.typeColors[type]
+    return this.config_[type].color
   }
 
   /**
+   * Determine the target extension (for a conversion job) by a given
+   * asset type.
    *
+   * @param {String} type - The asset type: for example `audio`, `image`,
+   *   `video`.
+   *
+   * @returns {String}
    */
-  isMedia (filename) {
+  typeToTargetExtension (type) {
+    return this.config_[type].targetExtension
+  }
+
+  /**
+   * Check if file is an supported asset format.
+   *
+   * @param {String} filename
+   *
+   * @returns {Boolean}
+   */
+  isAsset (filename) {
     const extension = filename.split('.').pop().toLowerCase()
-    if (extension in this.extensions_) {
+    if (extension in this.allowedExtensions_) {
       return true
     }
     return false
   }
 }
 
-export const mediaTypes = new MediaTypes()
+export const assetTypes = new AssetTypes(config)
 
 /**
  * A sample (snippet, sprite) of a media file which can be played. A sample
@@ -707,8 +772,9 @@ class Sample {
    * @property {String|Number} specs.fadeOut - The fade out time in seconds. The
    *   duration is not affected by this time specification.
    * @property {String|Number} specs.endTime - The end time in seconds.
+   * @property {String} specs.shortcut - A custom shortcut
    */
-  constructor (mediaFile, { title, id, startTime, fadeIn, duration, fadeOut, endTime }) {
+  constructor (mediaFile, { title, id, startTime, fadeIn, duration, fadeOut, endTime, shortcut }) {
     /**
      * @type {module:@bldr/vue-plugin-media.MediaFile}
      */
@@ -773,13 +839,40 @@ class Sample {
 
     /**
      * The current volume gets stored when the sample is paused.
+     *
+     * @type {Number}
      */
     this.currentVolume = null
 
     /**
      * The current time gets stored when the sample is paused.
+     *
+     * @type {Number}
      */
     this.currentTimeSec = null
+
+    /**
+     * The actual shortcut. If `shortcutCustom` is set, it is the same as this
+     * value.
+     *
+     * @type {Number}
+     */
+    this.shortcut = null
+
+    /**
+     * The shortcut number. 1 means: To play the sample type in “a 1” if it
+     * is a audio file or “v 1” if it is a video file.
+     *
+     * @type {Number}
+     */
+    this.shortcutNo = null
+
+    /**
+     * A custom shortcut, for example “k 1”
+     *
+     * @type {String}
+     */
+    this.shortcutCustom = shortcut
   }
 
   /**
@@ -800,6 +893,19 @@ class Sample {
         fadeOutSec = this.fadeOutSec
       }
       return (this.durationSec - fadeOutSec) * 1000
+    }
+  }
+
+  /**
+   * If the sample is the complete media file get the title of the media file.
+   *
+   * @returns {String}
+   */
+  get titleFormated () {
+    if (this.id === 'complete') {
+      return this.mediaFile.titleSafe
+    } else {
+      return `${this.title} (${this.mediaFile.titleSafe})`
     }
   }
 }
@@ -846,7 +952,7 @@ export class MediaFile {
      * @type {string}
      */
     this.uri = decodeURI(this.uri.replace(/#.*$/, ''))
-    const segments = this.uri.split(':')
+    let segments = this.uri.split(':')
 
     /**
      * for example: `http`, `https`, `blob`
@@ -868,7 +974,7 @@ export class MediaFile {
        * The media type, for example `image`, `audio` or `video`.
        * @type {string}
        */
-      this.type = mediaTypes.extensionToType(this.extension)
+      this.type = assetTypes.extensionToType(this.extension)
     }
 
     /**
@@ -1027,7 +1133,7 @@ async function createMediaElement (mediaFile) {
       throw new Error(`Not supported mediaFile type “${mediaFile.type}”.`)
   }
 
-  return new Promise(function (resolve, reject) {
+  return new Promise((resolve, reject) => {
     if (mediaFile.isPlayable) {
       mediaElement.onloadedmetadata = () => {
         resolve(mediaElement)
@@ -1038,8 +1144,9 @@ async function createMediaElement (mediaFile) {
       }
     }
 
-    mediaElement.onerror = () => {
-      reject(Error('Could not create MediaElement.'))
+    mediaElement.onerror = (error) => {
+      console.log(error)
+      reject(Error(`Could not create the MediaElement for the MediaFile with the ID “${mediaFile.id}”.`))
     }
   })
 }
@@ -1078,8 +1185,17 @@ class Resolver {
    * @private
    */
   async queryMediaServer_ (key, value) {
-    const response = await httpRequest.request(`query/asset/match/${key}/${value}`)
-    if ('data' in response &amp;&amp; 'path' in response.data) {
+    const response = await httpRequest.request({
+      url: 'query',
+      method: 'get',
+      params: {
+        type: 'assets',
+        method: 'exactMatch',
+        field: key,
+        search: value
+      }
+    })
+    if (response &amp;&amp; 'data' in response &amp;&amp; response.data &amp;&amp; 'path' in response.data) {
       return response
     }
     throw new Error(`Media with the ${key} ”${value}” couldn’t be resolved.`)
@@ -1087,7 +1203,10 @@ class Resolver {
 
   /**
    * @private
-   * @param {MediaFile} mediaFile
+   * @param {module:@bldr/vue-plugin-media.MediaFile} mediaFile - The
+   *   `mediaFile` object, a client side representation of a media asset.
+   *
+   * @returns {String} - A HTTP URL.
    */
   async resolveHttpUrl_ (mediaFile) {
     if ('httpUrl' in mediaFile) return mediaFile.httpUrl
@@ -1098,23 +1217,52 @@ class Resolver {
     throw new Error(`Can not generate HTTP URL.`)
   }
 
+  /**
+   * Create samples for each playable media file. By default each media file
+   * has one sample called “complete”.
+   *
+   * @param {module:@bldr/vue-plugin-media.MediaFile} mediaFile - The
+   *   `mediaFile` object, a client side representation of a media asset.
+   *
+   * @returns {module:@bldr/vue-plugin-media~Sample[]}
+   */
   async createSamples_ (mediaFile) {
-    // First sample of each playable media file is the complete track.
     if (mediaFile.isPlayable) {
+      // First sample of each playable media file is the “complete” track.
+      const completeSampleSpec = {
+        title: 'komplett',
+        id: 'complete',
+        startTime: 0
+      }
+      for (const prop of ['startTime', 'duration', 'endTime', 'fadeOut', 'fadeIn', 'shortcut']) {
+        if (mediaFile[prop]) {
+          completeSampleSpec[prop] = mediaFile[prop]
+          delete mediaFile[prop]
+        }
+      }
+
+      // Store all sample specs in a object to check if there is already a
+      // sample with the id “complete”.
+      let sampleSpecs = null
+      if (mediaFile.samples) {
+        sampleSpecs = {}
+        for (const sampleSpec of mediaFile.samples) {
+          sampleSpecs[sampleSpec.id] = sampleSpec
+        }
+      }
+
+      // Create the sample “complete”.
       let sample
       const samples = {}
-      sample = new Sample(
-        mediaFile,
-        {
-          title: 'komplett',
-          id: 'complete',
-          startTime: 0
-        }
-      )
-      samples[sample.uri] = sample
+      if (!sampleSpecs || (sampleSpecs &amp;&amp; !('complete' in sampleSpecs))) {
+        sample = new Sample(mediaFile, completeSampleSpec)
+        samples[sample.uri] = sample
+      }
+
       // Add further samples specifed in the yaml section.
-      if (mediaFile.samples) {
-        for (const sampleSpec of mediaFile.samples) {
+      if (sampleSpecs) {
+        for (const sampleId in sampleSpecs) {
+          const sampleSpec = sampleSpecs[sampleId]
           sample = new Sample(mediaFile, sampleSpec)
           samples[sample.uri] = sample
         }
@@ -1149,8 +1297,10 @@ class Resolver {
    * 1. mediaElement
    *
    * @private
-   * @param {module:@bldr/vue-plugin-media~mediaFileSpec} mediaFileSpec - URI or File object
-   * @return {MediaFile}
+   * @param {module:@bldr/vue-plugin-media~mediaFileSpec} mediaFileSpec - URI
+   *   or File object
+   *
+   * @returns {module:@bldr/vue-plugin-media.MediaFile}
    */
   async resolveSingle_ (mediaFileSpec) {
     let mediaFile
@@ -1175,7 +1325,7 @@ class Resolver {
       // Local: File object from drag and drop or open dialog
     } else if (mediaFileSpec instanceof File) {
       const file = mediaFileSpec
-      if (mediaTypes.isMedia(file.name)) {
+      if (assetTypes.isAsset(file.name)) {
         // blob:http:/localhost:8080/8c00d9e3-6ff1-4982-a624-55f125b5c0c0
         const httpUrl = URL.createObjectURL(file)
         // 8c00d9e3-6ff1-4982-a624-55f125b5c0c0
@@ -1191,7 +1341,7 @@ class Resolver {
       }
     }
 
-    mediaFile.type = mediaTypes.extensionToType(mediaFile.extension)
+    mediaFile.type = assetTypes.extensionToType(mediaFile.extension)
     // After type
     mediaFile.mediaElement = await createMediaElement(mediaFile)
     const samples = await this.createSamples_(mediaFile)
@@ -1241,7 +1391,19 @@ class Media {
    * @param {object} shortcuts
    */
   constructor (router, store, shortcuts) {
+
+    /**
+     * A {@link https://router.vuejs.org/ vue router instance.}
+     *
+     * @type {Object}
+     */
     this.$router = router
+
+    /**
+     * A {@link https://vuex.vuejs.org/ vuex store instance.}
+     *
+     * @type {Object}
+     */
     this.$store = store
     this.$shortcuts = shortcuts
 
@@ -1269,17 +1431,48 @@ class Media {
       {
         keys: 'space',
         callback: () => { this.player.toggle() },
-        description: 'Media player: play/pause'
-      },
-      {
-        keys: 'p f',
-        callback: () => { this.player.stop(7) },
-        description: 'Media player: fade out'
+        // Media player: Spiele/Pause
+        description: 'Medien-Abspieler: Spiele/Pausiere'
       },
       {
         keys: 'p s',
-        callback: () => { this.player.start() },
-        description: 'Media player: Start loaded sample'
+        callback: () => { this.player.stop() },
+        description: 'Medien-Abspieler: Stop'
+      },
+      {
+        keys: 'p f',
+        callback: () => { this.player.stop(4) },
+        // Media player: fade out
+        description: 'Medien-Abspieler: Audio/Video-Ausschnitt langsam ausblenden'
+      },
+      {
+        keys: 'ctrl+space',
+        callback: async () => {
+          await this.player.stop()
+          await this.player.start()
+        },
+        // Media player: Start loaded sample
+        description: 'Medien-Abspieler: Starte geladenen Audio/Video-Ausschnitt'
+      },
+      {
+        keys: 'ctrl+left',
+        callback: () => { this.playList.startPrevious() },
+        description: 'Medien-Abspieler: Spiele den vorhergehenden Ausschnitt.'
+      },
+      {
+        keys: 'ctrl+right',
+        callback: () => { this.playList.startNext() },
+        description: 'Medien-Abspieler: Spiele den nächsten Ausschnitt.'
+      },
+      {
+        keys: 'ctrl+shift+right',
+        callback: () => { this.player.forward() },
+        description: 'Medien-Abspieler: Um 10s nach vorne springen.'
+      },
+      {
+        keys: 'ctrl+shift+left',
+        callback: () => { this.player.backward() },
+        description: 'Medien-Abspieler: Um 10s nach hinten springen.'
       }
     ])
 
@@ -1297,7 +1490,7 @@ class Media {
             title: 'Media',
             style
           },
-          component: MediaOverview
+          component: ComponentMediaOverview
         },
         {
           path: '/media/:uriScheme/:uriAuthority',
@@ -1330,43 +1523,75 @@ class Media {
         }
       }
       this.$store.dispatch('media/addMediaFile', mediaFile)
-      this.addShortcutForMediaFile_(mediaFile)
       output[mediaFile.uri] = mediaFile
     }
+    this.addShortcutForSamples_()
     return output
   }
 
   /**
+   * Add shortcut for each sample. Audio samples are triggered by “a number” and
+   * video files are trigger by “v number”.
+   *
    * @private
    */
-  addShortcutForMediaFile_ (mediaFile) {
-    if (mediaFile.shortcut) return
-    if (!mediaFile.isPlayable) return
-    const number = this.$store.getters['media/typeCount'](mediaFile.type)
-    let key
-    switch (mediaFile.type) {
-      case 'audio':
-        key = 'a'
-        break
+  addShortcutForSamples_ () {
+    // We have to loop through all samples to get the latest shortcut number.
+    const samples = this.$store.getters['media/samples']
 
-      case 'video':
-        key = 'v'
-        break
-
-      default:
-        key = 'm'
-        break
+    let firstTriggerKeyByType = (type) => {
+      if (type === 'audio') {
+        return 'a'
+      } else if (type === 'video') {
+        return 'v'
+      }
     }
-    const shortcut = `${key} ${number}`
-    this.$shortcuts.add(
-      shortcut,
-      () => {
-        this.player.load(mediaFile.uri)
-        this.player.start()
-      },
-      `Play ${mediaFile.titleSafe}`
-    )
-    mediaFile.shortcut = shortcut
+
+    let addShortcutsByType = (samples, type) => {
+      let lastShortcutNo = 0
+      for (const sampleUri in samples) {
+        const sample = samples[sampleUri]
+        if (!sample.shortcutCustom &amp;&amp; sample.mediaFile.type === type) {
+          if (sample.shortcutNo) {
+            lastShortcutNo = sample.shortcutNo
+          } else {
+            lastShortcutNo += 1
+            sample.shortcutNo = lastShortcutNo
+            sample.shortcut = `${firstTriggerKeyByType(sample.mediaFile.type)} ${sample.shortcutNo}`
+            this.$shortcuts.add(
+              sample.shortcut,
+              () => {
+                this.player.load(sample.uri)
+                this.player.start()
+              },
+              // Play
+              `Spiele Ausschnitt „${sample.titleFormated}“`
+            )
+          }
+        }
+      }
+    }
+
+    let addShortCutsCustom = (samples) => {
+      for (const sampleUri in samples) {
+        const sample = samples[sampleUri]
+        if (sample.shortcutCustom &amp;&amp; !sample.shortcut) {
+          sample.shortcut = sample.shortcutCustom
+          this.$shortcuts.add(
+            sample.shortcut,
+            () => {
+              this.player.load(sample.uri)
+              this.player.start()
+            },
+            // Play
+            `Spiele Ausschnitt „${sample.titleFormated}“`
+          )
+        }
+      }
+    }
+    addShortCutsCustom(samples)
+    addShortcutsByType(samples, 'audio')
+    addShortcutsByType(samples, 'video')
   }
 }
 
@@ -1389,7 +1614,9 @@ const Plugin = {
      * @type {module:@bldr/vue-plugin-media~Media}
      */
     Vue.prototype.$media = new Media(router, store, shortcuts)
-    Vue.component('media-player', MediaPlayer)
+    Vue.component('media-player', ComponentMediaPlayer)
+    Vue.component('play-button', ComponentPlayButton)
+    Vue.component('play-load-indicator', ComponentPlayLoadIndicator)
   }
 }
 
@@ -1404,13 +1631,13 @@ export default Plugin
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-@bldr_api.html">@bldr/api</a></li><li><a href="module-@bldr_api-media-server.html">@bldr/api-media-server</a></li><li><a href="module-@bldr_api-seating-plan.html">@bldr/api-seating-plan</a></li><li><a href="module-@bldr_core-browser.html">@bldr/core-browser</a></li><li><a href="module-@bldr_core-node.html">@bldr/core-node</a></li><li><a href="module-@bldr_http-request.html">@bldr/http-request</a></li><li><a href="module-@bldr_songbook-cli.html">@bldr/songbook-cli</a></li><li><a href="module-@bldr_songbook-core.html">@bldr/songbook-core</a></li><li><a href="module-@bldr_songbook-intermediate-files.html">@bldr/songbook-intermediate-files</a></li><li><a href="module-@bldr_themes.html">@bldr/themes</a></li><li><a href="module-@bldr_vue-app-presentation.html">@bldr/vue-app-presentation</a></li><li><a href="module-@bldr_vue-app-presentation_masters.html">@bldr/vue-app-presentation/masters</a></li><li><a href="module-@bldr_vue-app-seating-plan.html">@bldr/vue-app-seating-plan</a></li><li><a href="module-@bldr_vue-app-showroom.html">@bldr/vue-app-showroom</a></li><li><a href="module-@bldr_vue-app-songbook.html">@bldr/vue-app-songbook</a></li><li><a href="module-@bldr_vue-plugin-components-collection.html">@bldr/vue-plugin-components-collection</a></li><li><a href="module-@bldr_vue-plugin-material-icon.html">@bldr/vue-plugin-material-icon</a></li><li><a href="module-@bldr_vue-plugin-media.html">@bldr/vue-plugin-media</a></li><li><a href="module-@bldr_vue-plugin-shortcuts.html">@bldr/vue-plugin-shortcuts</a></li></ul><h3>Namespaces</h3><ul><li><a href="module-@bldr_vue-app-presentation-Vue.html">Vue</a></li></ul><h3>Classes</h3><ul><li><a href="InitState.html">InitState</a></li><li><a href="module-@bldr_api-media-server-Asset.html">Asset</a></li><li><a href="module-@bldr_api-media-server-MediaFile.html">MediaFile</a></li><li><a href="module-@bldr_http-request.HttpRequest.html">HttpRequest</a></li><li><a href="module-@bldr_songbook-core-AlphabeticalSongsTree.html">AlphabeticalSongsTree</a></li><li><a href="module-@bldr_songbook-core-CoreLibrary.html">CoreLibrary</a></li><li><a href="module-@bldr_songbook-core-SongMetaDataCombined.html">SongMetaDataCombined</a></li><li><a href="module-@bldr_songbook-intermediate-files-FileMonitor.html">FileMonitor</a></li><li><a href="module-@bldr_songbook-intermediate-files-Folder.html">Folder</a></li><li><a href="module-@bldr_songbook-intermediate-files-IntermediateLibrary.html">IntermediateLibrary</a></li><li><a href="module-@bldr_songbook-intermediate-files-IntermediateSong.html">IntermediateSong</a></li><li><a href="module-@bldr_songbook-intermediate-files-Library.html">Library</a></li><li><a href="module-@bldr_songbook-intermediate-files-PianoFilesCountTree.html">PianoFilesCountTree</a></li><li><a href="module-@bldr_songbook-intermediate-files-PianoScore.html">PianoScore</a></li><li><a href="module-@bldr_songbook-intermediate-files-Song.html">Song</a></li><li><a href="module-@bldr_songbook-intermediate-files-SongMetaData.html">SongMetaData</a></li><li><a href="module-@bldr_songbook-intermediate-files-Sqlite.html">Sqlite</a></li><li><a href="module-@bldr_songbook-intermediate-files-TextFile.html">TextFile</a></li><li><a href="module-@bldr_vue-app-presentation_masters-Master.html">Master</a></li><li><a href="module-@bldr_vue-app-presentation_masters-Masters.html">Masters</a></li><li><a href="module-@bldr_vue-app-presentation-BodyAttributes.html">BodyAttributes</a></li><li><a href="module-@bldr_vue-app-presentation-CenterVertically.html">CenterVertically</a></li><li><a href="module-@bldr_vue-app-presentation-ContentTheme.html">ContentTheme</a></li><li><a href="module-@bldr_vue-app-presentation-DarkMode.html">DarkMode</a></li><li><a href="module-@bldr_vue-app-presentation-MultipleAttributes.html">MultipleAttributes</a></li><li><a href="module-@bldr_vue-app-presentation-Overflow.html">Overflow</a></li><li><a href="module-@bldr_vue-app-presentation-StyleConfig.html">StyleConfig</a></li><li><a href="module-@bldr_vue-app-presentation-UiTheme.html">UiTheme</a></li><li><a href="module-@bldr_vue-plugin-media.MediaFile.html">MediaFile</a></li><li><a href="module-@bldr_vue-plugin-media-Media.html">Media</a></li><li><a href="module-@bldr_vue-plugin-media-MediaTypes.html">MediaTypes</a></li><li><a href="module-@bldr_vue-plugin-media-Player.html">Player</a></li><li><a href="module-@bldr_vue-plugin-media-PlayList.html">PlayList</a></li><li><a href="module-@bldr_vue-plugin-media-Resolver.html">Resolver</a></li><li><a href="module-@bldr_vue-plugin-media-Sample.html">Sample</a></li><li><a href="module-@bldr_vue-plugin-shortcuts-Shortcuts.html">Shortcuts</a></li><li><a href="Presentation.html">Presentation</a></li><li><a href="RawSlideObject.html">RawSlideObject</a></li><li><a href="RenderData.html">RenderData</a></li><li><a href="Slide.html">Slide</a></li></ul><h3>Global</h3><ul><li><a href="global.html#actions">actions</a></li><li><a href="global.html#getType">getType</a></li><li><a href="global.html#intersect">intersect</a></li><li><a href="global.html#mutations">mutations</a></li><li><a href="global.html#naturalSort">naturalSort</a></li><li><a href="global.html#openFile">openFile</a></li><li><a href="global.html#openFiles">openFiles</a></li><li><a href="global.html#toString">toString</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-@bldr_api.html">@bldr/api</a></li><li><a href="module-@bldr_api-media-server.html">@bldr/api-media-server</a></li><li><a href="module-@bldr_api-seating-plan.html">@bldr/api-seating-plan</a></li><li><a href="module-@bldr_core-browser.html">@bldr/core-browser</a></li><li><a href="module-@bldr_core-node.html">@bldr/core-node</a></li><li><a href="module-@bldr_http-request.html">@bldr/http-request</a></li><li><a href="module-@bldr_songbook-cli.html">@bldr/songbook-cli</a></li><li><a href="module-@bldr_songbook-core.html">@bldr/songbook-core</a></li><li><a href="module-@bldr_songbook-intermediate-files.html">@bldr/songbook-intermediate-files</a></li><li><a href="module-@bldr_themes.html">@bldr/themes</a></li><li><a href="module-@bldr_vue-app-presentation.html">@bldr/vue-app-presentation</a></li><li><a href="module-@bldr_vue-app-presentation_masters.html">@bldr/vue-app-presentation/masters</a></li><li><a href="module-@bldr_vue-app-seating-plan.html">@bldr/vue-app-seating-plan</a></li><li><a href="module-@bldr_vue-app-showroom.html">@bldr/vue-app-showroom</a></li><li><a href="module-@bldr_vue-app-songbook.html">@bldr/vue-app-songbook</a></li><li><a href="module-@bldr_vue-plugin-components-collection.html">@bldr/vue-plugin-components-collection</a></li><li><a href="module-@bldr_vue-plugin-material-icon.html">@bldr/vue-plugin-material-icon</a></li><li><a href="module-@bldr_vue-plugin-media.html">@bldr/vue-plugin-media</a></li><li><a href="module-@bldr_vue-plugin-shortcuts.html">@bldr/vue-plugin-shortcuts</a></li></ul><h3>Namespaces</h3><ul><li><a href="module-@bldr_vue-app-presentation-Vue.html">Vue</a></li></ul><h3>Classes</h3><ul><li><a href="InitState.html">InitState</a></li><li><a href="MetaData.html">MetaData</a></li><li><a href="module-@bldr_api-media-server-Asset.html">Asset</a></li><li><a href="module-@bldr_api-media-server-AssetTypes.html">AssetTypes</a></li><li><a href="module-@bldr_api-media-server-MediaFile.html">MediaFile</a></li><li><a href="module-@bldr_api-media-server-Presentation.html">Presentation</a></li><li><a href="module-@bldr_http-request.HttpRequest.html">HttpRequest</a></li><li><a href="module-@bldr_songbook-core-AlphabeticalSongsTree.html">AlphabeticalSongsTree</a></li><li><a href="module-@bldr_songbook-core-CoreLibrary.html">CoreLibrary</a></li><li><a href="module-@bldr_songbook-core-SongMetaDataCombined.html">SongMetaDataCombined</a></li><li><a href="module-@bldr_songbook-intermediate-files-FileMonitor.html">FileMonitor</a></li><li><a href="module-@bldr_songbook-intermediate-files-Folder.html">Folder</a></li><li><a href="module-@bldr_songbook-intermediate-files-IntermediateLibrary.html">IntermediateLibrary</a></li><li><a href="module-@bldr_songbook-intermediate-files-IntermediateSong.html">IntermediateSong</a></li><li><a href="module-@bldr_songbook-intermediate-files-Library.html">Library</a></li><li><a href="module-@bldr_songbook-intermediate-files-PianoFilesCountTree.html">PianoFilesCountTree</a></li><li><a href="module-@bldr_songbook-intermediate-files-PianoScore.html">PianoScore</a></li><li><a href="module-@bldr_songbook-intermediate-files-Song.html">Song</a></li><li><a href="module-@bldr_songbook-intermediate-files-SongMetaData.html">SongMetaData</a></li><li><a href="module-@bldr_songbook-intermediate-files-Sqlite.html">Sqlite</a></li><li><a href="module-@bldr_songbook-intermediate-files-TextFile.html">TextFile</a></li><li><a href="module-@bldr_vue-app-presentation_masters-Masters.html">Masters</a></li><li><a href="module-@bldr_vue-app-presentation-BodyAttributes.html">BodyAttributes</a></li><li><a href="module-@bldr_vue-app-presentation-CenterVertically.html">CenterVertically</a></li><li><a href="module-@bldr_vue-app-presentation-ContentTheme.html">ContentTheme</a></li><li><a href="module-@bldr_vue-app-presentation-DarkMode.html">DarkMode</a></li><li><a href="module-@bldr_vue-app-presentation-MultipleAttributes.html">MultipleAttributes</a></li><li><a href="module-@bldr_vue-app-presentation-Overflow.html">Overflow</a></li><li><a href="module-@bldr_vue-app-presentation-StyleConfig.html">StyleConfig</a></li><li><a href="module-@bldr_vue-app-presentation-UiTheme.html">UiTheme</a></li><li><a href="module-@bldr_vue-plugin-media.MediaFile.html">MediaFile</a></li><li><a href="module-@bldr_vue-plugin-media-AssetTypes.html">AssetTypes</a></li><li><a href="module-@bldr_vue-plugin-media-Media.html">Media</a></li><li><a href="module-@bldr_vue-plugin-media-Player.html">Player</a></li><li><a href="module-@bldr_vue-plugin-media-PlayList.html">PlayList</a></li><li><a href="module-@bldr_vue-plugin-media-Resolver.html">Resolver</a></li><li><a href="module-@bldr_vue-plugin-media-Sample.html">Sample</a></li><li><a href="module-@bldr_vue-plugin-shortcuts-Shortcuts.html">Shortcuts</a></li><li><a href="Presentation.html">Presentation</a></li><li><a href="RawSlideObject.html">RawSlideObject</a></li><li><a href="RenderData.html">RenderData</a></li><li><a href="Slide.html">Slide</a></li></ul><h3>Global</h3><ul><li><a href="global.html#actions">actions</a></li><li><a href="global.html#collectMusicMetaData">collectMusicMetaData</a></li><li><a href="global.html#convert">convert</a></li><li><a href="global.html#convertCustomMarkup">convertCustomMarkup</a></li><li><a href="global.html#convertMarkdown">convertMarkdown</a></li><li><a href="global.html#convertOneFile">convertOneFile</a></li><li><a href="global.html#createMetaDataYaml">createMetaDataYaml</a></li><li><a href="global.html#createPresentationTemplate">createPresentationTemplate</a></li><li><a href="global.html#getType">getType</a></li><li><a href="global.html#intersect">intersect</a></li><li><a href="global.html#markupToHtml">markupToHtml</a></li><li><a href="global.html#mirrorRelPath">mirrorRelPath</a></li><li><a href="global.html#mutations">mutations</a></li><li><a href="global.html#naturalSort">naturalSort</a></li><li><a href="global.html#openBasePath">openBasePath</a></li><li><a href="global.html#openFile">openFile</a></li><li><a href="global.html#openFiles">openFiles</a></li><li><a href="global.html#parseSlidesRecursive">parseSlidesRecursive</a></li><li><a href="global.html#rename">rename</a></li><li><a href="global.html#renameOneFile">renameOneFile</a></li><li><a href="global.html#toString">toString</a></li><li><a href="global.html#validateUri">validateUri</a></li><li><a href="global.html#validateYaml">validateYaml</a></li><li><a href="global.html#validateYamlOneFile">validateYamlOneFile</a></li><li><a href="global.html#writeMetaDataYaml">writeMetaDataYaml</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Tue Oct 29 2019 14:38:01 GMT+0100 (GMT+01:00)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Tue Nov 19 2019 07:54:54 GMT+0100 (GMT+01:00)
 </footer>
 
 <script> prettyPrint(); </script>
