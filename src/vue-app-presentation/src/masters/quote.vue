@@ -9,6 +9,7 @@
       <span class="author" v-if="author">{{ author }}</span>
       <span v-if="author && date">, </span>
       <span class="date" v-if="date">{{ date }}</span>
+      <span class="source" v-if="source" v-html="` - aus: ${this.source}`"/>
     </p>
   </div>
 </template>
@@ -17,6 +18,9 @@
 const example = `
 ---
 slides:
+
+- title: short from
+  quote: Short form quote
 
 - title: All properties
   quote:
@@ -31,6 +35,13 @@ slides:
 - title: Markup support
   quote:
     text: 'With markup: __This text should be displayed as a bold text.__'
+
+- title: Prop source
+  quote:
+    text: 'With prop source'
+    author: Johann Wolfgang von Goethe
+    date: 1801
+    source: Doktor Fastus
 `
 
 export const master = {
@@ -48,7 +59,15 @@ export const master = {
     if ('author' in props) output.push(props.author)
     if ('date' in props) output.push(props.date)
     return output.join(' | ')
-  }
+  },
+  normalizeProps (props) {
+    if (typeof props === 'string') {
+      return {
+        text: props
+      }
+    }
+    return props
+  },
 }
 
 export default {
@@ -66,6 +85,11 @@ export default {
     date: {
       type: [String, Number],
       description: 'Datum des Zitats.'
+    },
+    source: {
+      type: String,
+      markup: true,
+      description: 'Die Quelle des Zitats'
     }
   }
 }

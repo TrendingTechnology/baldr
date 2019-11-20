@@ -175,6 +175,7 @@ slides:
     text: Haupttext des Zitats. (required, markup, type=String)
     author: Der Autor des Zitats. (type=String)
     date: Datum des Zitats. (types=String,Number)
+    source: Die Quelle des Zitats (markup, type=String)
 
 ##
 # score_sample
