@@ -21,6 +21,19 @@ slides:
   svg: id:Notenbeispiel_Freude-schoener-Goetterfunken_Anfang
 `
 
+function setGroupDisplayByStepNo (stepNo) {
+  const elGroups = document.querySelectorAll('.baldr-group')
+  let count = 1
+  for (const elGroup of elGroups) {
+    if (stepNo > count) {
+      elGroup.style.display = 'block'
+    } else {
+      elGroup.style.display = 'none'
+    }
+    count += 1
+  }
+}
+
 export const master = {
   title: 'Bild',
   icon: 'image',
@@ -38,6 +51,9 @@ export const master = {
   },
   resolveMediaUris (props) {
     return [props.src]
+  },
+  enterStep ({ newStepNo }) {
+    setGroupDisplayByStepNo(newStepNo)
   }
 }
 
@@ -51,6 +67,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['slideCurrent']),
     mediaFile () {
       return this.$store.getters['media/mediaFileByUri'](this.src)
     }
@@ -62,13 +79,9 @@ export default {
         method: 'get'
       })
       this.$refs.svgWrapper.innerHTML = response.data
-
       const elGroups = document.querySelectorAll('.baldr-group')
-      for (const elGroup of elGroups) {
-        console.log(elGroup)
-        elGroup.style.display = 'block'
-
-      }
+      this.slideCurrent.renderData.stepCount = elGroups.length + 1
+      setGroupDisplayByStepNo(this.slideCurrent.renderData.stepNoCurrent)
     }
   },
   async mounted () {
