@@ -61,8 +61,14 @@ export default {
         url: `/media/${this.mediaFile.path}`,
         method: 'get'
       })
-      console.log(this.$refs.svgWrapper)
       this.$refs.svgWrapper.innerHTML = response.data
+
+      const elGroups = document.querySelectorAll('.baldr-group')
+      for (const elGroup of elGroups) {
+        console.log(elGroup)
+        elGroup.style.display = 'block'
+
+      }
     }
   },
   async mounted () {
