@@ -5,7 +5,7 @@
       <a href="#" v-if="viewModeCompact">ausführlich</a>
     </div>
     <h1>Thema: {{ presentation.title }}</h1>
-
+    <h2 v-if="presentation.subtitle">{{ presentation.subtitle }}</h2>
     <p v-if="presentation.grade"><strong>Jahrgangsstufe:</strong> {{ presentation.grade }}</p>
     <p v-if="presentation.curriculum"><strong>Lehrplanbezug:</strong> {{ presentation.curriculum }}</p>
 

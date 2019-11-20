@@ -397,8 +397,10 @@ export class Presentation {
      * @type {object}
      * @property {String} id - An unique id.
      * @property {String} title - The title of the presentation.
+     * @property {String} subtitle - The subtitle of the presentation.
      * @property {String} grade - The grade the presentation belongs to.
      * @property {String} curriculum - Relation to the curriculum.
+     * @property {String} curriculum_url - URL of the curriculum web page.
      */
     this.meta = this.rawYamlObject_.meta
 
@@ -442,6 +444,20 @@ export class Presentation {
    */
   get title () {
     if (this.meta && this.meta.title) return this.meta.title
+  }
+
+  /**
+   * The subtitle of the presentation specified in:
+   *
+   * ```yml
+   * meta:
+   *   subtitle: My Title
+   * ```
+   *
+   * @returns {String}
+   */
+  get subtitle () {
+    if (this.meta && this.meta.subtitle) return this.meta.subtitle
   }
 
   /**
