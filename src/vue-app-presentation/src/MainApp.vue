@@ -66,12 +66,40 @@ export default {
     hideDragzone (event) {
       this.$refs.dropzone.style.display = 'none'
     },
-    toggleSlidesOverview () {
-      if (this.$route.name === 'slides') {
-        this.$router.push({ name: 'slides-overview' })
-      } else if (this.$route.name === 'slides-overview') {
+    /**
+     * Toggle between to routes:
+     *
+     * 1. The route with the name `sides` and
+     * 2. the route with the name specified with the argument
+     *    `routeNameTo`.
+     *
+     * If the current route is neither `slides` nor `routeNameTo` move
+     * to `routeNameTo`.
+     *
+     * @params {string} routeNameTo - The route name to move to or move
+     *   from.
+     */
+    toggleSlidesRouteTo (routeNameTo) {
+      if (this.$route.name !== routeNameTo) {
+        this.$router.push({ name: routeNameTo })
+      } else {
         this.$router.push({ name: 'slides' })
       }
+    },
+    getToggleShortcutObject (keys, routeNameTo) {
+      return {
+        keys: keys,
+        callback: () => { this.toggleSlidesRouteTo(routeNameTo) },
+        description: `Zwischen “slides” und “${routeNameTo}”  hin- und herschalten`
+      }
+    },
+    getToggleShortcutObjects (toggleRouteSpecs) {
+      const shortcutObjects = []
+      for (const spec of toggleRouteSpecs) {
+        console.log(spec)
+        shortcutObjects.push(this.getToggleShortcutObject(...spec))
+      }
+      return shortcutObjects
     }
   },
   mounted: function () {
@@ -192,12 +220,16 @@ export default {
         // Fullscreen
         description: 'Vollbild'
       },
-      {
-        keys: 's',
-        callback: this.toggleSlidesOverview,
-        description: 'Zwischen Folien und Folien-Überblick hin- und herschalten',
-        routeNames: ['slides', 'slides-overview']
-      },
+      ...this.getToggleShortcutObjects([
+        ['c', 'camera'],
+        ['d', 'documentation'],
+        ['e', 'editor'],
+        ['h', 'home'],
+        ['i', 'media-ids'],
+        ['m', 'media-overview'],
+        ['r', 'rest-api'],
+        ['s', 'slides-overview']
+      ]),
       {
         keys: 'ctrl+u',
         callback: async () => {
