@@ -471,6 +471,8 @@ const getters = {
     return Object.keys(getters.mediaFiles).length > 0
   },
   mediaFileByUri: (state, getters) => uri => {
+    // mediaFile URI is specifed as a sample
+    if (uri.indexOf('#') > -1) uri = uri.replace(/#.*$/, '')
     const media = getters.mediaFiles
     if (uri in media) {
       return media[uri]
