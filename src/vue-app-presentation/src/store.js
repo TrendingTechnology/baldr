@@ -6,12 +6,13 @@ import Vuex from 'vuex'
 import { Presentation } from './content-file'
 import vue from '@/main.js'
 
-function getVueChildrenInstanceByName (children, name) {
+function getVueChildrenInstanceByName (name, children) {
+  if (!children) children = vue.$children
   for (const child of children) {
     if (child.$options.name === name) {
       return child
     } else if (child.$children.length) {
-      const result = getVueChildrenInstanceByName(child.$children, name)
+      const result = getVueChildrenInstanceByName(name, child.$children)
       if (result) return result
     }
   }
@@ -151,9 +152,10 @@ const actions = {
   setStepNoCurrent ({ commit }, { slideCurrent, stepNoCurrent }) {
     let oldStepNo = slideCurrent.renderData.stepNoCurrent
     let newStepNo = stepNoCurrent
-    slideCurrent.master.leaveStep({ oldStepNo, newStepNo }, getVueChildrenInstanceByName(vue.$children, `${slideCurrent.master.name}-master`))
+    const thisArg = getVueChildrenInstanceByName(`${slideCurrent.master.name}-master`)
+    slideCurrent.master.leaveStep({ oldStepNo, newStepNo }, thisArg)
     commit('setStepNoCurrent', { slideCurrent, stepNoCurrent })
-    slideCurrent.master.enterStep({ oldStepNo, newStepNo }, getVueChildrenInstanceByName(vue.$children, `${slideCurrent.master.name}-master`))
+    slideCurrent.master.enterStep({ oldStepNo, newStepNo }, thisArg)
   }
 }
 
