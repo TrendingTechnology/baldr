@@ -27,7 +27,7 @@ class RestEndpoint {
 
   getAxiosConfig () {
     const config = {
-      timeout: 3000,
+      timeout: 10000,
       crossDomain: true,
       baseURL: this.baseUrl
     }
@@ -235,7 +235,7 @@ export class HttpRequest {
   constructor (servers, urlFillIn) {
     this.urlFillIn = urlFillIn
     this.defaultConfig = {
-      timeout: 3000,
+      timeout: 10000,
       crossDomain: true
     }
 

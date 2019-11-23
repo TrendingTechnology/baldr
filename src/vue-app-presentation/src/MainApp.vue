@@ -96,7 +96,6 @@ export default {
     getToggleShortcutObjects (toggleRouteSpecs) {
       const shortcutObjects = []
       for (const spec of toggleRouteSpecs) {
-        console.log(spec)
         shortcutObjects.push(this.getToggleShortcutObject(...spec))
       }
       return shortcutObjects

@@ -6,6 +6,17 @@ import Vuex from 'vuex'
 import { Presentation } from './content-file'
 import vue from '@/main.js'
 
+function getVueChildrenInstanceByName (children, name) {
+  for (const child of children) {
+    if (child.$options.name === name) {
+      return child
+    } else if (child.$children.length) {
+      const result = getVueChildrenInstanceByName(child.$children, name)
+      if (result) return result
+    }
+  }
+}
+
 Vue.use(Vuex)
 
 const state = {
@@ -140,9 +151,9 @@ const actions = {
   setStepNoCurrent ({ commit }, { slideCurrent, stepNoCurrent }) {
     let oldStepNo = slideCurrent.renderData.stepNoCurrent
     let newStepNo = stepNoCurrent
-    slideCurrent.master.leaveStep({ oldStepNo, newStepNo }, new Vue())
+    slideCurrent.master.leaveStep({ oldStepNo, newStepNo }, getVueChildrenInstanceByName(vue.$children, `${slideCurrent.master.name}-master`))
     commit('setStepNoCurrent', { slideCurrent, stepNoCurrent })
-    slideCurrent.master.enterStep({ oldStepNo, newStepNo }, new Vue())
+    slideCurrent.master.enterStep({ oldStepNo, newStepNo }, getVueChildrenInstanceByName(vue.$children, `${slideCurrent.master.name}-master`))
   }
 }
 
@@ -162,13 +173,13 @@ const mutations = {
 }
 
 export default new Vuex.Store({
-    modules: {
-      presentation: {
-        namespaced: true,
-        state,
-        getters,
-        actions,
-        mutations
-      }
+  modules: {
+    presentation: {
+      namespaced: true,
+      state,
+      getters,
+      actions,
+      mutations
     }
-  })
+  }
+})
