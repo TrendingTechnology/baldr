@@ -93,12 +93,28 @@ export default {
         this.setGroupDisplayByStepNoFullUpdate(newStepNo)
         return
       }
-      // First step: all groups aren’t displayed.
+      let group
+      let display
       if (newStepNo > oldStepNo) {
-        this.clozeGroups[newStepNo - 2].style.display = 'block'
+        // First step: all groups aren’t displayed
+        group = this.clozeGroups[newStepNo - 2]
+        display = 'block'
       } else {
-        this.clozeGroups[newStepNo - 1].style.display = 'none'
+        group = this.clozeGroups[newStepNo - 1]
+        display = 'none'
       }
+      // e. g.: 1892
+      // svg.clientHeight
+      const svg = document.querySelector('svg')
+      // e. g.: 794.4473876953125
+      // bBox.height
+      const bBox = svg.getBBox()
+      const glyph = group.children[0]
+      // e. g.: 125.11000061035156
+      const y = svg.clientHeight / bBox.height * glyph.y.baseVal.value
+      const adjustedY = y - 0.8 * window.screen.height
+      window.scrollTo({ top: adjustedY, left: 0, behavior: "smooth" });
+      group.style.display = display
     },
     collectClozeGroups () {
       const gElements = document.querySelectorAll('svg g')
@@ -130,7 +146,8 @@ export default {
 <style lang="scss">
   .vc_cloze_master {
     svg {
-      width: 100% !important;
+      width: 100vw;
+      height: auto
     }
   }
 </style>
