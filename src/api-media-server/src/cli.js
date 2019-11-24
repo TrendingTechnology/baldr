@@ -236,6 +236,42 @@ slides:
     id: Die Youtube-ID (z. B. xtKavZG1KiM). (required, type=String)
 `
 
+function audacityTextToYaml (filePath) {
+  const text = fs.readFileSync(filePath, { encoding: 'utf-8' })
+  console.log(text)
+
+  const lines = text.split('\n')
+  samples = []
+  for (const line of lines) {
+    const match = line.match(/([\d\.]+)\t([\d\.]+)\t(.+)/)
+    if (match) {
+      const startTime = Number(match[1])
+      let endTime = Number(match[2])
+      const title = match[3]
+      const id = title.toLowerCase()
+
+      if (startTime === endTime) {
+        endTime = null
+      }
+      const sample = {
+        id,
+        title,
+        'start_time': startTime,
+
+      }
+      if (endTime) sample['end_time'] = endTime
+      samples.push(sample)
+    }
+  }
+  for (const index in samples) {
+    const sample = samples[index]
+    if (!sample.end_time && index < samples.length - 1) {
+      sample['end_time'] = samples[parseInt(index) + 1]['start_time']
+    }
+  }
+  console.log(yaml.safeDump(samples))
+}
+
 commander
   .version(require('../package.json').version)
 
@@ -607,6 +643,11 @@ function mirrorRelPath () {
     process.unref()
   }
 }
+
+commander
+  .command('audacity <input>').alias('a')
+  .description('Convert audacity text mark file into a yaml file.')
+  .action(audacityTextToYaml)
 
 commander
   .command('convert [input...]').alias('c')
