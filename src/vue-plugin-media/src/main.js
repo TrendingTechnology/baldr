@@ -549,6 +549,20 @@ const actions = {
       commit('addSampleToPlayList', sample)
     }
   },
+  clear ({ dispatch }) {
+    dispatch('removeMediaFilesAll')
+  },
+  removeMediaFile ({ commit, getters }, mediaFile) {
+    for (const sampleUri in mediaFile.samples) {
+      commit('removeSample', mediaFile.samples[sampleUri])
+    }
+    commit('removeMediaFile', mediaFile)
+  },
+  removeMediaFilesAll ({ dispatch, getters }) {
+    for (const mediaFileUri in getters.mediaFiles) {
+      dispatch('removeMediaFile', getters.mediaFiles[mediaFileUri])
+    }
+  },
   setPlayListSampleNext ({ commit, getters }) {
     const no = getters.playListNoCurrent
     const count = getters.playList.length
@@ -589,6 +603,12 @@ const mutations = {
   },
   addMediaFileToTypes (state, mediaFile) {
     Vue.set(state.assetTypes[mediaFile.type], mediaFile.uri, mediaFile)
+  },
+  removeMediaFile (state, mediaFile) {
+    Vue.delete(state.mediaFiles, mediaFile.uri)
+  },
+  removeSample (state, sample) {
+    Vue.delete(state.samples, sample.uri)
   },
   setRestApiServers (state, restApiServers) {
     Vue.set(state, 'restApiServers', restApiServers)
