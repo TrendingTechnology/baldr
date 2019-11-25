@@ -556,6 +556,7 @@ const actions = {
     for (const sampleUri in mediaFile.samples) {
       commit('removeSample', mediaFile.samples[sampleUri])
     }
+    commit('removeMediaFileFromTypes', mediaFile)
     commit('removeMediaFile', mediaFile)
   },
   removeMediaFilesAll ({ dispatch, getters }) {
@@ -606,6 +607,9 @@ const mutations = {
   },
   removeMediaFile (state, mediaFile) {
     Vue.delete(state.mediaFiles, mediaFile.uri)
+  },
+  removeMediaFileFromTypes (state, mediaFile) {
+    Vue.delete(state.assetTypes[mediaFile.type], mediaFile.uri)
   },
   removeSample (state, sample) {
     Vue.delete(state.samples, sample.uri)

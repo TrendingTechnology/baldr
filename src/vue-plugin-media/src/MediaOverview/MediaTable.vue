@@ -14,6 +14,7 @@
           <td>Title</td>
           <td>Shortcut</td>
           <td></td>
+          <td></td>
         </tr>
       </thead>
       <tbody>

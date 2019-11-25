@@ -30,12 +30,20 @@
       </div>
     </td>
     <td>{{ dimension }}</td>
+    <td>
+      <material-icon
+        name="close"
+        @click.native="removeMediaFile(mediaFile)"
+      />
+    </td>
   </tr>
 </template>
 
 <script>
 import { formatDuration } from '../main.js'
 import PreviewImage from './PreviewImage.vue'
+import { createNamespacedHelpers } from 'vuex'
+const { mapActions } = createNamespacedHelpers('media')
 
 export default {
   name: 'TableRow',
@@ -59,7 +67,8 @@ export default {
     play (uri) {
       this.$media.player.load(uri)
       this.$media.player.start()
-    }
+    },
+    ...mapActions(['removeMediaFile'])
   }
 }
 </script>
