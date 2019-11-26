@@ -425,9 +425,9 @@ async function convertOneFile (inputFile, cmdObj) {
   if (assetType === 'audio') {
     convert = childProcess.spawn('ffmpeg', [
       '-i', inputFile,
-      '-c:a', 'aac', '-b:a', '128k',
+      // '-c:a', 'aac', '-b:a', '128k',
       // '-c:a', 'libfdk_aac', '-profile:a', 'aac_he', '-b:a', '64k',
-      // '-c:a', 'libfdk_aac', '-profile:a', 'aac_he_v2',
+      '-c:a', 'libfdk_aac', '-profile:a', 'aac_he_v2',
       '-vn', // Disable video recording
       '-map_metadata', '-1', // remove metadata
       '-y', // Overwrite output files without asking
