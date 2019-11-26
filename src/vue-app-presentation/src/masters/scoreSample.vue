@@ -1,6 +1,6 @@
 <template>
   <div class="vc_score_sample_master">
-    <play-button v-if="sample" :sample="sample"/>
+    <!-- <play-button v-if="sample" :sample="sample"/> -->
     <h1 v-if="heading" v-html="heading"/>
     <img :src="mediaFileScore.httpUrl"/>
   </div>

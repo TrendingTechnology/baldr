@@ -30,7 +30,7 @@
       <router-view/>
     </main>
     <media-player/>
-    <play-load-indicator/>
+    <!-- <play-load-indicator/> -->
     <app-info package-name="@bldr/vue-app-presentation" :version="version"/>
   </div>
 </template>
