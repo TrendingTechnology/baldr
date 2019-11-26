@@ -20,7 +20,7 @@ slides:
 
 export const master = {
   title: 'Lückentext',
-  icon: 'image',
+  icon: 'cloze',
   color: 'blue',
   styleConfig: {
     centerVertically: true,
