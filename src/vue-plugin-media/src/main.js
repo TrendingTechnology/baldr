@@ -538,7 +538,9 @@ const actions = {
   },
   removeMediaFile ({ commit, getters }, mediaFile) {
     for (const sampleUri in mediaFile.samples) {
-      commit('removeSample', mediaFile.samples[sampleUri])
+      const sample = mediaFile.samples[sampleUri]
+      commit('removeSample', sample)
+      commit('removeSampleFromPlayList', sample)
     }
     commit('removeMediaFileFromTypes', mediaFile)
     commit('removeMediaFile', mediaFile)
@@ -621,9 +623,11 @@ const mutations = {
     Vue.delete(state.samples, sample.uri)
   },
   removeSampleFromPlayList (state, sample) {
-    var index = state.playList.indexOf(sample.uri)
-    if (index > -1) {
-      state.playList.splice(index, 1);
+    while (state.playList.indexOf(sample.uri) > -1) {
+      const index = state.playList.indexOf(sample.uri)
+      if (index > -1) {
+        state.playList.splice(index, 1)
+      }
     }
   },
   setPlayListNoCurrent (state, no) {
@@ -1579,7 +1583,7 @@ class Media {
       }
     }
 
-    let addShortCutsCustom = (samples) => {
+    let addShortcutsCustom = (samples) => {
       for (const sampleUri in samples) {
         const sample = samples[sampleUri]
         if (sample.shortcutCustom && !sample.shortcut) {
@@ -1596,7 +1600,7 @@ class Media {
         }
       }
     }
-    addShortCutsCustom(samples)
+    addShortcutsCustom(samples)
     addShortcutsByType(samples, 'audio')
     addShortcutsByType(samples, 'video')
   }
