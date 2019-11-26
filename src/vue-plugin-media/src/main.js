@@ -187,7 +187,7 @@ class Player {
       sample = this.$store.getters['media/sampleByUri'](uri)
     }
     if (!sample) throw new Error(`The sample “${uriOrSample}” couldn’t be played!`)
-    this.$store.commit('media/sampleLoaded', sample)
+    this.$store.commit('media/setSampleLoaded', sample)
   }
 
   /**
@@ -203,7 +203,7 @@ class Player {
     //   return
     // }
     if (samplePlaying) await this.stop()
-    this.$store.dispatch('media/samplePlaying', sample)
+    this.$store.dispatch('media/setSamplePlaying', sample)
     this.play(sample.startTimeSec)
   }
 
@@ -284,7 +284,7 @@ class Player {
     await this.fadeOut_(fadeOutSec)
     this.clearTimerCallbacks_()
     sample.mediaElement.currentTime = sample.startTimeSec
-    this.$store.dispatch('media/samplePlaying', null)
+    this.$store.dispatch('media/setSamplePlaying', null)
   }
 
   /**
@@ -517,6 +517,62 @@ const getters = {
 }
 
 const actions = {
+  addMediaFile ({ commit, dispatch }, mediaFile) {
+    commit('addMediaFile', mediaFile)
+    commit('addMediaFileToTypes', mediaFile)
+    for (const sampleUri in mediaFile.samples) {
+      dispatch('addSampleToPlayList', mediaFile.samples[sampleUri])
+    }
+  },
+  addSampleToPlayList ({ commit, getters }, sample) {
+    const list = getters.playList
+    if (!list.includes(sample.uri) && sample.mediaFile.type !== 'image') {
+      commit('addSampleToPlayList', sample)
+    }
+  },
+  clear ({ dispatch, commit }) {
+    dispatch('removeMediaFilesAll')
+    commit('setSampleLoaded', null)
+    commit('setSamplePlaying', null)
+    commit('setPlayListNoCurrent', null)
+  },
+  removeMediaFile ({ commit, getters }, mediaFile) {
+    for (const sampleUri in mediaFile.samples) {
+      commit('removeSample', mediaFile.samples[sampleUri])
+    }
+    commit('removeMediaFileFromTypes', mediaFile)
+    commit('removeMediaFile', mediaFile)
+  },
+  removeMediaFilesAll ({ dispatch, getters }) {
+    for (const mediaFileUri in getters.mediaFiles) {
+      dispatch('removeMediaFile', getters.mediaFiles[mediaFileUri])
+    }
+  },
+  setPlayListSampleCurrent ({ commit, getters }, sample) {
+    let no = null
+    if (sample) {
+      no = getters.playList.indexOf(sample.uri) + 1
+    }
+    commit('setPlayListNoCurrent', no)
+  },
+  setPlayListSampleNext ({ commit, getters }) {
+    const no = getters.playListNoCurrent
+    const count = getters.playList.length
+    if (no === count) {
+      commit('setPlayListNoCurrent', 1)
+    } else {
+      commit('setPlayListNoCurrent', no + 1)
+    }
+  },
+  setPlayListSamplePrevious ({ commit, getters }) {
+    const no = getters.playListNoCurrent
+    const count = getters.playList.length
+    if (no === 1) {
+      commit('setPlayListNoCurrent', count)
+    } else {
+      commit('setPlayListNoCurrent', no - 1)
+    }
+  },
   async setRestApiServers ({ commit }) {
     const servers = await httpRequestNg.restEndpoints.getReachable()
     const versions = await httpRequestNg.request('version', 'all')
@@ -536,61 +592,8 @@ const actions = {
     }
     commit('setRestApiServers', result)
   },
-  addMediaFile ({ commit, dispatch }, mediaFile) {
-    commit('addMediaFile', mediaFile)
-    commit('addMediaFileToTypes', mediaFile)
-    for (const sampleUri in mediaFile.samples) {
-      dispatch('addSampleToPlayList', mediaFile.samples[sampleUri])
-    }
-  },
-  addSampleToPlayList ({ commit, getters }, sample) {
-    const list = getters.playList
-    if (!list.includes(sample.uri) && sample.mediaFile.type !== 'image') {
-      commit('addSampleToPlayList', sample)
-    }
-  },
-  clear ({ dispatch }) {
-    dispatch('removeMediaFilesAll')
-  },
-  removeMediaFile ({ commit, getters }, mediaFile) {
-    for (const sampleUri in mediaFile.samples) {
-      commit('removeSample', mediaFile.samples[sampleUri])
-    }
-    commit('removeMediaFileFromTypes', mediaFile)
-    commit('removeMediaFile', mediaFile)
-  },
-  removeMediaFilesAll ({ dispatch, getters }) {
-    for (const mediaFileUri in getters.mediaFiles) {
-      dispatch('removeMediaFile', getters.mediaFiles[mediaFileUri])
-    }
-  },
-  setPlayListSampleNext ({ commit, getters }) {
-    const no = getters.playListNoCurrent
-    const count = getters.playList.length
-    if (no === count) {
-      commit('setplayListNoCurrent', 1)
-    } else {
-      commit('setplayListNoCurrent', no + 1)
-    }
-  },
-  setPlayListSamplePrevious ({ commit, getters }) {
-    const no = getters.playListNoCurrent
-    const count = getters.playList.length
-    if (no === 1) {
-      commit('setplayListNoCurrent', count)
-    } else {
-      commit('setplayListNoCurrent', no - 1)
-    }
-  },
-  setPlayListSampleCurrent ({ commit, getters }, sample) {
-    let no = null
-    if (sample) {
-      no = getters.playList.indexOf(sample.uri) + 1
-    }
-    commit('setplayListNoCurrent', no)
-  },
-  samplePlaying ({ commit, dispatch }, sample) {
-    commit('samplePlaying', sample)
+  setSamplePlaying ({ commit, dispatch }, sample) {
+    commit('setSamplePlaying', sample)
     if (sample) dispatch('setPlayListSampleCurrent', sample)
   }
 }
@@ -599,11 +602,14 @@ const mutations = {
   addMediaFile (state, mediaFile) {
     Vue.set(state.mediaFiles, mediaFile.uri, mediaFile)
   },
-  addSampleToPlayList (state, sample) {
-    state.playList.push(sample.uri)
-  },
   addMediaFileToTypes (state, mediaFile) {
     Vue.set(state.assetTypes[mediaFile.type], mediaFile.uri, mediaFile)
+  },
+  addSample (state, sample) {
+    Vue.set(state.samples, sample.uri, sample)
+  },
+  addSampleToPlayList (state, sample) {
+    state.playList.push(sample.uri)
   },
   removeMediaFile (state, mediaFile) {
     Vue.delete(state.mediaFiles, mediaFile.uri)
@@ -614,20 +620,23 @@ const mutations = {
   removeSample (state, sample) {
     Vue.delete(state.samples, sample.uri)
   },
+  removeSampleFromPlayList (state, sample) {
+    var index = state.playList.indexOf(sample.uri)
+    if (index > -1) {
+      state.playList.splice(index, 1);
+    }
+  },
+  setPlayListNoCurrent (state, no) {
+    state.playListNoCurrent = no
+  },
   setRestApiServers (state, restApiServers) {
     Vue.set(state, 'restApiServers', restApiServers)
   },
-  setplayListNoCurrent (state, no) {
-    state.playListNoCurrent = no
-  },
-  sampleLoaded (state, sample) {
+  setSampleLoaded (state, sample) {
     state.sampleLoaded = sample
   },
-  samplePlaying (state, sample) {
+  setSamplePlaying (state, sample) {
     state.samplePlaying = sample
-  },
-  sample (state, sample) {
-    Vue.set(state.samples, sample.uri, sample)
   }
 }
 
@@ -1517,7 +1526,7 @@ class Media {
     for (const mediaFile of mediaFiles) {
       if (mediaFile.samples) {
         for (const sampleUri in mediaFile.samples) {
-          this.$store.commit('media/sample', mediaFile.samples[sampleUri])
+          this.$store.commit('media/addSample', mediaFile.samples[sampleUri])
         }
       }
       this.$store.dispatch('media/addMediaFile', mediaFile)
