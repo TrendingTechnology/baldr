@@ -22,6 +22,24 @@ slides:
 
 - editor
 
+- title: Unordered list
+  editor: |
+    # heading
+
+    - …
+
+- title: Unordered list as HTML
+  editor: |
+    <ul contenteditable>
+      <li>.</li>
+    </ul>
+
+- title: Unordered list as HTML with …
+  editor: |
+    <ul contenteditable>
+      <li>…</li>
+    </ul>
+
 - title: Show editor
   editor: |
     # heading
@@ -187,17 +205,21 @@ export default {
     }
   },
   methods: {
-    removePlaceholder () {
-      function eventListener (event) {
+    onSlideChange () {
+      for (const element of document.querySelectorAll('.vc_editor_master [contenteditable]')) {
+        element.addEventListener('focus', (event) => {
         const element = event.target
         if (element.innerHTML === placeholderTag) {
           element.innerHTML = ''
         }
+      })
       }
-      const elements = document.querySelectorAll('.vc_editor_master [contenteditable]')
-      for (const element of elements) {
-        element.addEventListener('focus', eventListener)
-      }
+      for (const element of document.querySelectorAll('.vc_editor_master ul[contenteditable] li')) {
+        element.addEventListener('click', (event) => {
+          const element = event.target
+          element.innerHTML = ''
+        }
+      )}
     },
     /**
      * @private
@@ -210,11 +232,10 @@ export default {
         range.surroundContents(element)
       }
     },
-    bold () {
-      this.surround_('strong')
-    },
-    underline () {
-      this.surround_('u')
+    insertHtml(html) {
+      const range = document.getSelection().getRangeAt(0)
+      const fragment = document.createRange().createContextualFragment(html)
+      range.insertNode(fragment)
     },
     increaseFontSize () {
       this.fontSize += 0.25
@@ -228,10 +249,19 @@ export default {
     document.addEventListener('keydown', (event) => {
       if (event.ctrlKey && event.key === 'b') {
         event.preventDefault()
-        this.bold()
+        this.surround_('strong')
       } else if (event.ctrlKey && event.key === 'u') {
         event.preventDefault()
-        this.underline()
+        this.surround_('u')
+      } else if (event.ctrlKey && event.key === 'l') {
+        event.preventDefault()
+        this.insertHtml('<ul><li>.</li></ul>')
+      } else if (event.ctrlKey && event.key === '1') {
+        event.preventDefault()
+        this.surround_('h1')
+      } else if (event.ctrlKey && event.key === '2') {
+        event.preventDefault()
+        this.surround_('h2')
       } else if (event.ctrlKey && event.key === '+') {
         event.preventDefault()
         this.increaseFontSize()
@@ -242,10 +272,10 @@ export default {
     })
   },
   mounted () {
-    this.removePlaceholder()
+    this.onSlideChange()
   },
   updated () {
-    this.removePlaceholder()
+    this.onSlideChange()
   }
 }
 </script>
@@ -265,6 +295,10 @@ export default {
 
     [contenteditable] {
       min-height: 1.5em;
+    }
+
+    table {
+      table-layout: fixed;
     }
   }
 </style>
