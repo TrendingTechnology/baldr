@@ -3,7 +3,7 @@
     <p class="title">Wikipedia-Artikel: {{ title }} ({{ url }})</p>
     <div class="iframe-wrapper">
       <iframe
-        :src="`http://${language}.wikipedia.org/w/index.php?title=${title}&printable=yes`"
+        :src="`https://${language}.wikipedia.org/w/index.php?title=${title}&printable=yes`"
         frameborder="0"
       />
     </div>
