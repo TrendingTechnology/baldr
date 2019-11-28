@@ -238,6 +238,12 @@ class Player {
           () => { this.fadeOut_(sample.fadeOutSec) },
           sample.fadeOutStartTimeMsec
         )
+      // Always fadeout at the end. Maybe the samples are cut without a fade out.
+      } else {
+        this.setTimeoutId_ = setTimeout(
+          () => { this.fadeOut_(defaultFadeOutSec) },
+          (sample.mediaElement.duration - sample.startTimeSec - defaultFadeOutSec) * 1000
+        )
       }
     }, defaultPlayDelayMsec)
   }
