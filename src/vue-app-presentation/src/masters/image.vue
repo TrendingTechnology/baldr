@@ -61,8 +61,11 @@ slides:
 
 export const master = {
   title: 'Bild',
-  icon: 'image',
-  color: 'green',
+  icon: {
+    name: 'image',
+    color: 'green',
+    showOnSlides: true
+  },
   styleConfig: {
     centerVertically: true,
     darkMode: true

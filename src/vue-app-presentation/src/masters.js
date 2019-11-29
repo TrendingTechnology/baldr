@@ -9,6 +9,44 @@ import store from '@/store.js'
 import { markupToHtml, validateUri } from '@/lib.js'
 
 /**
+ * The icon of a master slide. This icon is shown in the documentation or
+ * on the left corner of a slide.
+ */
+class MasterIcon {
+  constructor ({ name, color, size, showOnSlides }) {
+    /**
+     * For allowed icon names the materical icon font. The name of an icon
+     * of the {@link module:@bldr/vue-plugin-material-icon baldr icon font}
+     *
+     * @type {String}
+     */
+    this.name = name
+
+    /**
+     * A color name (CSS color class name) to colorize the master icon.
+     * @see {@link module:@bldr/themes}
+     *
+     * @type {String}
+     */
+    this.color = color ? color : 'orange'
+
+    /**
+     * Show the icon the on slide view.
+     *
+     * @type {Boolean}
+     */
+    this.showOnSlides = showOnSlides ? showOnSlides : true
+
+    /**
+     * `small` or `large`
+     *
+     * @type {String}
+     */
+    this.size = size ? size : 'small'
+  }
+}
+
+/**
  * Each master slide is a instance of this class. This class has many dummy
  * methods. They are there for documentation reasons. On the other side they
  * are useful as default methods. You have not to check if a master slide
@@ -31,20 +69,11 @@ class Master {
     this.title = null
 
     /**
-     * The name of an icon of the
-     * {@link module:@bldr/vue-plugin-material-icon baldr icon font}.
+     * A instance of `MasterIcon` which holds information about the master icon.
      *
-     * @type {String}
+     * @type {module:@bldr/vue-app-presentation/masters~MasterIcon}
      */
     this.icon = null
-
-    /**
-     * A color name (CSS color class name) to colorize the master icon.
-     * @see {@link module:@bldr/themes}
-     *
-     * @type {String}
-     */
-    this.color = null
 
     /**
      * A style configuration object.
