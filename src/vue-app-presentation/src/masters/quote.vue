@@ -49,6 +49,7 @@ export const master = {
   icon: {
     name: 'comment-quote',
     color: 'brown',
+    size: 'large'
   },
   styleConfig: {
     centerVertically: true,

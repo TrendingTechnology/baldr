@@ -131,7 +131,8 @@ export const master = {
   title: 'Frage',
   icon: {
     name: 'comment-question',
-    color: 'yellow'
+    color: 'yellow',
+    size: 'large'
   },
   styleConfig: {
     centerVertically: true,

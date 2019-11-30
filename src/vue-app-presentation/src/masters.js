@@ -14,8 +14,15 @@ import { markupToHtml, validateUri } from '@/lib.js'
  */
 class MasterIcon {
   constructor ({ name, color, size, showOnSlides }) {
+    if (size && !['small', 'large'].includes(size)) {
+      throw new Error(`The property “size” of the “MasterIcon” has to be “small” or “large” not ${size}`)
+    }
+
+    if (showOnSlides !== undefined && typeof showOnSlides !== 'boolean') {
+      throw new Error(`The property “showOnSlide” of the “MasterIcon” has to be “boolean” not ${showOnSlides}`)
+    }
     /**
-     * For allowed icon names the materical icon font. The name of an icon
+     * For allowed icon names the materical icon font. The nasizeme of an icon
      * of the {@link module:@bldr/vue-plugin-material-icon baldr icon font}
      *
      * @type {String}
@@ -35,7 +42,7 @@ class MasterIcon {
      *
      * @type {Boolean}
      */
-    this.showOnSlides = showOnSlides !== undefined ? showOnSlides : true
+    this.showOnSlides = showOnSlides === false ? false : true
 
     /**
      * `small` or `large`

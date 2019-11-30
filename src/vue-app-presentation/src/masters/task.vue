@@ -34,7 +34,8 @@ export const master = {
   title: 'Arbeitsauftrag',
   icon: {
     name: 'comment-alert',
-    color: 'yellow-dark'
+    color: 'yellow-dark',
+    size: 'large'
   },
   styleConfig: {
     centerVertically: true,

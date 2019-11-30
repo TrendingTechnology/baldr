@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="master && master.icon.showOnSlides"
-    class="vc_master_icon"
+    :class="['vc_master_icon', master.icon.size]"
     b-content-theme="default"
   >
     <material-icon
@@ -30,10 +30,16 @@ export default {
 <style lang="scss" scoped>
   .vc_master_icon {
     background: none !important;
-    font-size: 5vw !important;
     left: 1vw;
     position: absolute;
     top: 0.5vw;
     z-index: 2;
+
+    &.small {
+      font-size: 5vw !important;
+    }
+    &.large {
+      font-size: 10vw !important;
+    }
   }
 </style>
