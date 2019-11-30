@@ -1,7 +1,8 @@
 <template>
   <div class="vc_svg_master">
     <div ref="svgWrapper" id="svg-wrapper"/>
-    {{ mediaFile.httpUrl }}
+    <!-- TODO: remove needed to get updated hook -->
+    <div class="hidden">{{ mediaFile.httpUrl }}</div>
   </div>
 </template>
 
@@ -120,6 +121,11 @@ export default {
       object-fit: contain;
       width: 92vw;
       height: 90vh;
+    }
+
+    .hidden {
+      visibility: hidden;
+      position: absolute;
     }
   }
 </style>
