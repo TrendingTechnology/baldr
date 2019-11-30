@@ -47,7 +47,7 @@ export default {
   name: 'DocumentationOverview',
   methods: {
     openExample (yamlString) {
-      this.$store.dispatch('presentation/openPresentation', yamlString).then(() => {
+      this.$store.dispatch('presentation/openPresentation', { rawYamlString: yamlString }).then(() => {
         if (this.$route.name !== 'slides') this.$router.push({ name: 'slides' })
       })
     }
