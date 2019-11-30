@@ -2,7 +2,6 @@
   <div
     class="vc_generic_master"
     v-html="markupCurrent"
-    :style="slideCurrent.style"
   />
 </template>
 

@@ -64,7 +64,8 @@ export default {
               props: this.master.props,
               class: {
                 'master-inner': true
-              }
+              },
+              style: this.slideCurrent.style
             }
           )
         ]
