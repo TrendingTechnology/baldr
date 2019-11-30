@@ -145,8 +145,10 @@ slides:
 
 export const master = {
   title: 'Hefteintrag',
-  icon: 'pencil',
-  color: 'blue',
+  icon: {
+    name: 'pencil',
+    color: 'blue'
+  },
   styleConfig: {
     centerVertically: false,
     overflow: false,

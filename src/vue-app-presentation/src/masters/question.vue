@@ -129,8 +129,10 @@ const normalizeQuestions = function (questions) {
 
 export const master = {
   title: 'Frage',
-  icon: 'comment-question',
-  color: 'yellow',
+  icon: {
+    name: 'comment-question',
+    color: 'yellow'
+  },
   styleConfig: {
     centerVertically: true,
     darkMode: true

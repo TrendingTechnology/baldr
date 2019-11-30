@@ -25,8 +25,10 @@ slides:
 
 export const master = {
   title: 'YouTube',
-  icon: 'youtube',
-  color: 'red',
+  icon: {
+    name: 'youtube',
+    color: 'red'
+  },
   styleConfig: {
     centerVertically: true,
     darkMode: true

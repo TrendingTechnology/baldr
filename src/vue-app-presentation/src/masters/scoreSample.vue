@@ -24,8 +24,10 @@ slides:
 
 export const master = {
   title: 'Notenbeispiel',
-  icon: 'file-audio',
-  color: 'black',
+  icon: {
+    name: 'file-audio',
+    color: 'black',
+  },
   styleConfig: {
     centerVertically: true,
     darkMode: false

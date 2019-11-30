@@ -20,8 +20,10 @@ slides:
 
 export const master = {
   title: 'Lückentext',
-  icon: 'cloze',
-  color: 'blue',
+  icon: {
+    name: 'cloze',
+    color: 'blue'
+  },
   styleConfig: {
     centerVertically: true,
     darkMode: false

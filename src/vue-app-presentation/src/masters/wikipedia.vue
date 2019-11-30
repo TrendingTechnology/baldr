@@ -32,8 +32,10 @@ slides:
 
 export const master = {
   title: 'Wikipedia',
-  icon: 'wikipedia',
-  color: 'black',
+  icon: {
+    name: 'wikipedia',
+    color: 'black'
+  },
   styleConfig: {
     centerVertically: true,
     darkMode: false

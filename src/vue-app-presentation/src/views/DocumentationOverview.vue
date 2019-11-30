@@ -19,7 +19,7 @@
           v-for="(master, masterName) in $masters.all"
           :key="masterName"
         >
-          <td><material-icon :name="master.icon" :color="master.color"/></td>
+          <td><material-icon :name="master.icon.name" :color="master.icon.color"/></td>
           <td>
             <router-link :to="{ name: 'documentation-master', params: { master: masterName } }">
               {{ masterName }}

@@ -1,8 +1,12 @@
 <template>
-  <div v-if="master" class="vc_master_icon" b-content-theme="default">
+  <div
+    v-if="master && master.icon.showOnSlides"
+    class="vc_master_icon"
+    b-content-theme="default"
+  >
     <material-icon
-      :name="master.icon"
-      :color="master.color"
+      :name="master.icon.name"
+      :color="master.icon.color"
     />
   </div>
 </template>
@@ -25,11 +29,11 @@ export default {
 
 <style lang="scss" scoped>
   .vc_master_icon {
-    z-index: 2;
+    background: none !important;
     font-size: 5vw !important;
+    left: 1vw;
     position: absolute;
     top: 0.5vw;
-    left: 1vw;
-    background: none !important;
+    z-index: 2;
   }
 </style>

@@ -32,8 +32,10 @@ slides:
 
 export const master = {
   title: 'Arbeitsauftrag',
-  icon: 'comment-alert',
-  color: 'yellow-dark',
+  icon: {
+    name: 'comment-alert',
+    color: 'yellow-dark'
+  },
   styleConfig: {
     centerVertically: true,
     darkMode: true

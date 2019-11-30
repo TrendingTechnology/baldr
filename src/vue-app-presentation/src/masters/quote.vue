@@ -46,8 +46,10 @@ slides:
 
 export const master = {
   title: 'Zitat',
-  icon: 'comment-quote',
-  color: 'brown',
+  icon: {
+    name: 'comment-quote',
+    color: 'brown',
+  },
   styleConfig: {
     centerVertically: true,
     darkMode: true

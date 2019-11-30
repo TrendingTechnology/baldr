@@ -36,8 +36,10 @@ function setGroupDisplayByStepNo (stepNo) {
 
 export const master = {
   title: 'Bild',
-  icon: 'image',
-  color: 'blue',
+  icon: {
+    name: 'image',
+    color: 'blue'
+  },
   styleConfig: {
     centerVertically: true,
     darkMode: false

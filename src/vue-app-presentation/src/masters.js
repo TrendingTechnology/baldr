@@ -35,7 +35,7 @@ class MasterIcon {
      *
      * @type {Boolean}
      */
-    this.showOnSlides = showOnSlides ? showOnSlides : true
+    this.showOnSlides = showOnSlides !== undefined ? showOnSlides : true
 
     /**
      * `small` or `large`
@@ -114,10 +114,11 @@ class Master {
   }
 
   /**
-   * The object from the exported `master` property object of the `master.vue`
-   * files.
+   * Import non function properties of the master object of the master.vue
+   * components.
    *
-   * @param {object} members
+   * @param {object} members - The object from the exported `master` property
+   * object of the `master.vue` files.
    */
   importMembers (members) {
     /**
@@ -130,7 +131,9 @@ class Master {
      */
     this.members_ = members
     for (const member in members) {
-      if (typeof members[member] !== 'function') {
+      if (member === 'icon') {
+        this.icon = new MasterIcon(members.icon)
+      } else if (typeof members[member] !== 'function') {
         this[member] = members[member]
       }
     }

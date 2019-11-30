@@ -227,8 +227,11 @@ function splitHtmlintoChunks (htmlString, charactersOnSlide) {
 
 export const master = {
   title: 'Folie',
-  icon: 'file-presentation-box',
-  color: 'gray',
+  icon: {
+    name: 'file-presentation-box',
+    color: 'gray',
+    showOnSlides: false
+  },
   styleConfig: {
     centerVertically: true,
     darkMode: false

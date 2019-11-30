@@ -20,8 +20,8 @@
       >
         <div class="master-info">
           <material-icon
-            :name="slide.master.icon"
-            :color="slide.master.color"
+            :name="slide.master.icon.name"
+            :color="slide.master.icon.color"
           />
           <span class="master-title"> {{ slide.master.title }}</span>
         </div>

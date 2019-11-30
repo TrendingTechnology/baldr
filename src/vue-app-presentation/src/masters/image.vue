@@ -63,8 +63,7 @@ export const master = {
   title: 'Bild',
   icon: {
     name: 'image',
-    color: 'green',
-    showOnSlides: true
+    color: 'green'
   },
   styleConfig: {
     centerVertically: true,

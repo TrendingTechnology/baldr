@@ -90,8 +90,10 @@ slides:
 
 export const master = {
   title: 'Hörbeispiel',
-  icon: 'music',
-  color: 'brown',
+  icon: {
+    name: 'music',
+    color: 'brown'
+  },
   styleConfig: {
     centerVertically: true,
     darkMode: true
