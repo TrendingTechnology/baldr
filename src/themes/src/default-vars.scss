@@ -1,0 +1,32 @@
+// https://www.tableau.com/about/blog/2016/7/colors-upgrade-tableau-10-56782
+$blue: #4e79a7;
+$brown: #9c755f;
+$gray: #bab0ac;
+$green: #59a14e;
+$orange: #f18f3b;
+$purple: #af7aa0; // lila
+$red: #e0585b;
+$yellow: #edc958;
+
+$white: scale-color($gray, $lightness: 95%);
+$black: scale-color($gray, $lightness: -90%);
+
+$colors: (
+  "white": $white,
+  "yellow": $yellow,
+  "orange": $orange,
+  "red": $red,
+  "brown": $brown,
+  "gray": $gray,
+  "green": $green,
+  "blue": $blue,
+  "purple": $purple,
+  "black": $black
+);
+
+$font-family: 'Alegreya';
+$font-family-small-caps: 'Alegreya SC';
+$font-family-sans: 'Alegreya Sans';
+$font-family-sans-small-caps: 'Alegreya Sans SC';
+$font-family-mono: 'Anonymous Pro';
+$font-size: 1.5vw;

@@ -8,6 +8,15 @@ import { plainText } from '@bldr/core-browser'
 const example = `
 ---
 slides:
+
+  - title: Different background color
+    task: Background color blue
+    style:
+      background_color: $green;
+      color: $blue;
+      font_size: 8vw
+      font_weight: bold
+
   - title: Simple example (as a string)
     task: “Do this” specified as a string!
 
