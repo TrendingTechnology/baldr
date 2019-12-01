@@ -105,6 +105,15 @@ export default {
         this.$refs.search.blur()
       }
     },
+    options (input) {
+      if (input.length === 1) {
+        setTimeout(() => {
+          if (this.$refs.resultList && this.$refs.resultList.children.length === 1) {
+            this.$refs.resultList.children[0].focus()
+          }
+        }, 10)
+      }
+    },
     searchText: function () {
       this.searchDebounced(this.searchText)
     },
@@ -193,7 +202,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  $padding-left-right: 0.3em ;
+  $padding-left-right: 0.3em;
 
   .vc_dynamic_select {
     position: relative;
@@ -213,7 +222,7 @@ export default {
         padding: 0.2em $padding-left-right;
         &:hover,
         &:focus {
-          background-color: scale-color($gray, $lightness: 70%);
+          background-color: scale-color($yellow, $lightness: 70%);
           outline: none;
         }
       }
