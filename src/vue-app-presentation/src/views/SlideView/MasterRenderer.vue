@@ -15,17 +15,20 @@ export default {
       let props
       let contentTheme
       let styleConfig
+      let styleInline
 
       if ('master' in this.$route.meta) {
         name = this.$route.meta.master
         props = this.$route.meta.data
         contentTheme = this.$masters[name].styleConfig.contentTheme
         styleConfig = this.$masters[name].styleConfig
+        styleInline = {}
       } else if (this.slideCurrent) {
         name = this.slideCurrent.master.name
         props = this.slideCurrent.renderData.props
         contentTheme = this.slideCurrent.contentTheme
         styleConfig = this.slideCurrent.master.styleConfig
+        styleInline = this.slideCurrent.style
       }
       return {
         name,
@@ -65,7 +68,7 @@ export default {
               class: {
                 'master-inner': true
               },
-              style: this.slideCurrent.style
+              style: this.master.styleInline
             }
           )
         ]
