@@ -505,10 +505,20 @@ function convert (inputFiles, cmdObj) {
  * @returns {String}
  */
 function renameOneFile (oldPath) {
-  console.log(`old: ${oldPath}`)
-  const newPath = asciify(oldPath)
+  console.log(`old: ${chalk.yellow(oldPath)}`)
+  let newPath = asciify(oldPath)
+  const basename = path.basename(newPath)
+  // Remove a- and v- prefixes
+  const cleanedBasename = basename.replace(/^[va]-/g,'')
+  if (cleanedBasename !== basename) {
+    newPath = path.join(path.dirname(newPath), cleanedBasename)
+  }
   if (oldPath !== newPath) {
-    console.log(`new: ${newPath}`)
+    console.log(`new: ${chalk.green(newPath)}`)
+    if (fs.existsSync(`${oldPath}.yml`)) {
+      fs.renameSync(`${oldPath}.yml`, `${newPath}.yml`)
+      console.log(`new: ${chalk.cyan(newPath + '.yml')}`)
+    }
     fs.renameSync(oldPath, newPath)
     return newPath
   }
@@ -520,6 +530,7 @@ function renameOneFile (oldPath) {
 function rename () {
   walk(process.cwd(), {
     all (oldPath) {
+      console.log(oldPath)
       renameOneFile(oldPath)
     }
   })

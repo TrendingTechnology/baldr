@@ -554,7 +554,7 @@ async function walk (dir, on) {
   for (const fileName of files) {
     const relPath = path.join(dir, fileName)
     // Exclude .git/
-    if (fileName.substr(0, 1) !== '.') {
+    if (fs.existsSync(relPath) && fileName.substr(0, 1) !== '.') {
       if (fs.statSync(relPath).isDirectory()) {
         await walk(relPath, on)
       } else {
