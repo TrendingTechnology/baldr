@@ -568,6 +568,60 @@ function validateYaml (filePath) {
 }
 
 /**
+ * Rename a media asset after the `id` in the meta data file.
+ *
+ * @param {String} filePath - The media file path.
+ */
+function idToFileNameOneFile (filePath) {
+  console.log(`old: ${chalk.yellow(filePath)}`)
+  result = yaml.safeLoad(fs.readFileSync(`${filePath}.yml`, 'utf8'))
+  if ('id' in result && result.id) {
+    const oldPath = filePath
+
+    // .mp4
+    const extension = path.extname(oldPath)
+    const oldBaseName = path.basename(oldPath, extension)
+    let newPath = null
+    if (result.id !== oldBaseName) {
+      newPath = path.join(path.dirname(oldPath), `${result.id}${extension}`)
+    } else {
+      return
+    }
+    if (newPath && oldPath !== newPath) {
+      console.log(`new: ${chalk.green(newPath)}`)
+      if (fs.existsSync(`${oldPath}.yml`)) {
+        fs.renameSync(`${oldPath}.yml`, `${newPath}.yml`)
+        console.log(`new: ${chalk.cyan(newPath + '.yml')}`)
+      }
+      fs.renameSync(oldPath, newPath)
+      return newPath
+    } else {
+      console.log(chalk.red('No id found.'))
+    }
+  }
+}
+
+/**
+ * Rename a media asset or all child asset of the parrent working directory
+ * after the `id` in the meta data file.
+ *
+ * @param {String} filePath - The media file path.
+ */
+function idToFileName (filePath) {
+  if (filePath) {
+    idToFileNameOneFile(filePath)
+  } else {
+    walk(process.cwd(), {
+      asset (relPath) {
+        if (fs.existsSync(`${relPath}.yml`)) {
+          idToFileNameOneFile(relPath)
+        }
+      }
+    })
+  }
+}
+
+/**
  *
  */
 function createMetaDataYaml () {
@@ -663,6 +717,11 @@ commander
   .option('-p, --preview-image', 'Convert into preview images (Smaller and different file name)')
   .description('Convert media files in the appropriate format. Multiple files, globbing works *.mp3')
   .action(convert)
+
+  commander
+  .command('id-to-filename [input]').alias('i')
+  .description('Rename media assets after the id.')
+  .action(idToFileName)
 
 commander
   .command('mirror').alias('m')

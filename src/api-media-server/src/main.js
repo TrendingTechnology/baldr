@@ -546,8 +546,8 @@ async function insertObjectIntoDb (filePath, mediaType) {
 
 /**
  * @param {string} dir
- * @param {object} on - An object with callbacks. Properties: presentation,
- *   asset, all.
+ * @param {object} on - An object with callbacks. Properties: `presentation`,
+ *   `asset`, `all` (`presentation`, `asset`), `everyFile`.
  */
 async function walk (dir, on) {
   const files = fs.readdirSync(dir)
