@@ -241,9 +241,9 @@ function audacityTextToYaml (filePath) {
   console.log(text)
 
   const lines = text.split('\n')
-  samples = []
+  const samples = []
   for (const line of lines) {
-    const match = line.match(/([\d\.]+)\t([\d\.]+)\t(.+)/)
+    const match = line.match(/([\d\.]+)\t([\d\.]+)\t(.+)/) // eslint-disable-line
     if (match) {
       const startTime = Number(match[1])
       let endTime = Number(match[2])
@@ -256,8 +256,7 @@ function audacityTextToYaml (filePath) {
       const sample = {
         id,
         title,
-        'start_time': startTime,
-
+        start_time: startTime
       }
       if (endTime) sample['end_time'] = endTime
       samples.push(sample)
@@ -507,7 +506,7 @@ function convert (inputFiles, cmdObj) {
  */
 function renameOneFile (oldPath) {
   console.log(`old: ${oldPath}`)
-  const   newPath = asciify(oldPath)
+  const newPath = asciify(oldPath)
   if (oldPath !== newPath) {
     console.log(`new: ${newPath}`)
     fs.renameSync(oldPath, newPath)
@@ -516,7 +515,7 @@ function renameOneFile (oldPath) {
 }
 
 /**
- *
+ * Rename all child files in the current working directory.
  */
 function rename () {
   walk(process.cwd(), {
@@ -560,7 +559,7 @@ function validateYaml (filePath) {
 /**
  *
  */
-function createMetaDataYaml() {
+function createMetaDataYaml () {
   walk(process.cwd(), {
     asset (relPath) {
       writeMetaDataYaml(relPath)
@@ -620,7 +619,6 @@ function mirrorRelPath () {
     for (const basePath of currentBasePaths) {
       if (cwd.indexOf(basePath) === 0) {
         return cwd.replace(basePath, '')
-
       }
     }
   }
