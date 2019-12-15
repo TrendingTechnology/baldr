@@ -500,6 +500,24 @@ function convert (inputFiles, cmdObj) {
 }
 
 /**
+ * Rename a media asset and it’s corresponding meta data file (`*.yml`)
+ *
+ * @param {String} oldPath - The old path of a media asset.
+ * @param {String} newPath - The new path of a media asset.
+ */
+function renameAsset (oldPath, newPath) {
+  if (newPath && oldPath !== newPath) {
+    console.log(`new: ${chalk.green(newPath)}`)
+    if (fs.existsSync(`${oldPath}.yml`)) {
+      fs.renameSync(`${oldPath}.yml`, `${newPath}.yml`)
+      console.log(`new: ${chalk.cyan(newPath + '.yml')}`)
+    }
+    fs.renameSync(oldPath, newPath)
+    return newPath
+  }
+}
+
+/**
  * @param {String} oldPath - The media file path.
  *
  * @returns {String}
@@ -513,15 +531,7 @@ function renameOneFile (oldPath) {
   if (cleanedBasename !== basename) {
     newPath = path.join(path.dirname(newPath), cleanedBasename)
   }
-  if (oldPath !== newPath) {
-    console.log(`new: ${chalk.green(newPath)}`)
-    if (fs.existsSync(`${oldPath}.yml`)) {
-      fs.renameSync(`${oldPath}.yml`, `${newPath}.yml`)
-      console.log(`new: ${chalk.cyan(newPath + '.yml')}`)
-    }
-    fs.renameSync(oldPath, newPath)
-    return newPath
-  }
+  renameAsset(newPath, oldPath)
 }
 
 /**
@@ -572,7 +582,7 @@ function validateYaml (filePath) {
  *
  * @param {String} filePath - The media file path.
  */
-function idToFileNameOneFile (filePath) {
+function renameFromIdOneFile (filePath) {
   console.log(`old: ${chalk.yellow(filePath)}`)
   result = yaml.safeLoad(fs.readFileSync(`${filePath}.yml`, 'utf8'))
   if ('id' in result && result.id) {
@@ -587,17 +597,7 @@ function idToFileNameOneFile (filePath) {
     } else {
       return
     }
-    if (newPath && oldPath !== newPath) {
-      console.log(`new: ${chalk.green(newPath)}`)
-      if (fs.existsSync(`${oldPath}.yml`)) {
-        fs.renameSync(`${oldPath}.yml`, `${newPath}.yml`)
-        console.log(`new: ${chalk.cyan(newPath + '.yml')}`)
-      }
-      fs.renameSync(oldPath, newPath)
-      return newPath
-    } else {
-      console.log(chalk.red('No id found.'))
-    }
+    renameAsset(oldPath, newPath)
   }
 }
 
@@ -607,14 +607,14 @@ function idToFileNameOneFile (filePath) {
  *
  * @param {String} filePath - The media file path.
  */
-function idToFileName (filePath) {
+function renameFromId (filePath) {
   if (filePath) {
-    idToFileNameOneFile(filePath)
+    renameFromIdOneFile(filePath)
   } else {
     walk(process.cwd(), {
       asset (relPath) {
         if (fs.existsSync(`${relPath}.yml`)) {
-          idToFileNameOneFile(relPath)
+          renameFromIdOneFile(relPath)
         }
       }
     })
@@ -721,7 +721,7 @@ commander
   commander
   .command('id-to-filename [input]').alias('i')
   .description('Rename media assets after the id.')
-  .action(idToFileName)
+  .action(renameFromId)
 
 commander
   .command('mirror').alias('m')
