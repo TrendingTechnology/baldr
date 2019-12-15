@@ -274,6 +274,78 @@ function audacityTextToYaml (filePath) {
 commander
   .version(require('../package.json').version)
 
+  /**
+   * Sort the keys and clean up some entires.
+   *
+   * @param {Object} metaData - The object representation of the yaml meta data
+   *   file.
+   */
+function normalizeMetaData (metaData) {
+  const normalized = {}
+
+  if (metaData.id) metaData.id = metaData.id.replace(/^[va]-/, '')
+  if (metaData.title) metaData.title = metaData.title.replace(/^[va] /, '')
+
+  for (const key of ['id', 'title', 'description']) {
+    if (key in metaData) {
+      normalized[key] = metaData[key]
+      delete metaData[key]
+    }
+  }
+
+  for (const key in metaData) {
+    if (metaData.hasOwnProperty(key)) {
+      normalized[key] = metaData[key]
+      delete metaData[key]
+    }
+  }
+  return normalized
+}
+
+/**
+ * Create and write the meta data YAML to the disk.
+ *
+ * @param {String} filePath - The file path of the destination yaml file. The yml
+ *   extension has to be included.
+ * @param {Object} metaData - The object to convert into yaml and write to
+ *   the disk.
+ */
+function writeMetaDataYamlFile (filePath, metaData) {
+  const yamlMarkup = [
+    '---',
+    yaml.safeDump(metaData)
+  ]
+  const result = yamlMarkup.join('\n')
+  console.log(result)
+  fs.writeFileSync(filePath, result)
+}
+
+/**
+ * @param {String} filePath - The media asset file path.
+ */
+function normalizeMetaDataYamlOneFile (filePath) {
+  const yamlFile = `${filePath}.yml`
+  const metaData = yaml.safeLoad(fs.readFileSync(yamlFile, 'utf8'))
+  writeMetaDataYamlFile(yamlFile, normalizeMetaData(metaData))
+}
+
+/**
+ * @param {String} filePath - The media asset file path.
+ */
+function normalizeMetaDataYaml (filePath) {
+  if (filePath) {
+    normalizeMetaDataYamlOneFile(filePath)
+  } else {
+    walk(process.cwd(), {
+      asset (relPath) {
+        if (fs.existsSync(`${relPath}.yml`)) {
+          normalizeMetaDataYamlOneFile(relPath)
+        }
+      }
+    })
+  }
+}
+
 /**
  * Write the metadata YAML file.
  *
@@ -285,23 +357,13 @@ function writeMetaDataYaml (filePath, metaData) {
   if (!fs.lstatSync(filePath).isDirectory() && !fs.existsSync(yamlFile)) {
     if (!metaData) metaData = {}
     const asset = new Asset(filePath).addFileInfos()
-
     if (!metaData.id) {
-      metaData.id = asciify(asset.basename_)
+      metaData.id = asset.basename_
     }
-
     if (!metaData.title) {
       metaData.title = deasciify(asset.basename_)
     }
-
-    const yamlMarkup = [
-      '---',
-      yaml.safeDump(metaData)
-    ]
-
-    const result = yamlMarkup.join('\n')
-    console.log(result)
-    fs.writeFileSync(yamlFile, result)
+    writeMetaDataYamlFile(yamlFile, normalizeMetaData(metaData))
   }
 }
 
@@ -506,11 +568,14 @@ function convert (inputFiles, cmdObj) {
  * @param {String} newPath - The new path of a media asset.
  */
 function renameAsset (oldPath, newPath) {
+  const oldRelPath = oldPath.replace(process.cwd(), '')
+  console.log(`old: ${chalk.yellow(oldRelPath)}`)
   if (newPath && oldPath !== newPath) {
-    console.log(`new: ${chalk.green(newPath)}`)
+    const newRelPath = newPath.replace(process.cwd(), '')
+    console.log(`new: ${chalk.green(newRelPath)}`)
     if (fs.existsSync(`${oldPath}.yml`)) {
       fs.renameSync(`${oldPath}.yml`, `${newPath}.yml`)
-      console.log(`new: ${chalk.cyan(newPath + '.yml')}`)
+      console.log(`new: ${chalk.cyan(newRelPath + '.yml')}`)
     }
     fs.renameSync(oldPath, newPath)
     return newPath
@@ -523,7 +588,6 @@ function renameAsset (oldPath, newPath) {
  * @returns {String}
  */
 function renameOneFile (oldPath) {
-  console.log(`old: ${chalk.yellow(oldPath)}`)
   let newPath = asciify(oldPath)
   const basename = path.basename(newPath)
   // Remove a- and v- prefixes
@@ -540,7 +604,6 @@ function renameOneFile (oldPath) {
 function rename () {
   walk(process.cwd(), {
     all (oldPath) {
-      console.log(oldPath)
       renameOneFile(oldPath)
     }
   })
@@ -580,10 +643,9 @@ function validateYaml (filePath) {
 /**
  * Rename a media asset after the `id` in the meta data file.
  *
- * @param {String} filePath - The media file path.
+ * @param {String} filePath - The media asset file path.
  */
 function renameFromIdOneFile (filePath) {
-  console.log(`old: ${chalk.yellow(filePath)}`)
   result = yaml.safeLoad(fs.readFileSync(`${filePath}.yml`, 'utf8'))
   if ('id' in result && result.id) {
     const oldPath = filePath
@@ -727,6 +789,11 @@ commander
   .command('mirror').alias('m')
   .description('Create and open in the file explorer a relative path in different base paths.')
   .action(mirrorRelPath)
+
+commander
+  .command('normalize [input]').alias('n')
+  .description('Normalize the meta data files in the YAML format (Sort, clean up).')
+  .action(normalizeMetaDataYaml)
 
 commander
   .command('open').alias('o')
