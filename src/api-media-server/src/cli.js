@@ -437,12 +437,15 @@ async function collectMusicMetaData (inputFile) {
       ['albumartist', 'artist'],
       ['artist', 'composer'],
       ['album', 'album'],
-      ['year', 'recording_year'],
       ['musicbrainz_recordingid', 'musicbrainz_recording_id']
     ]) {
       if (property[0] in common && common[property[0]]) {
         output[property[1]] = common[property[0]]
       }
+    }
+    if (output.album && output.title) {
+      output.title = `${output.album}: ${output.title}`
+      delete output.album
     }
     return output
   }
