@@ -98,7 +98,7 @@ const main = function () {
   }
 
   const { status, unavailable } = checkExecutables([
-    'mscore-to-eps.sh',
+    'mscore-to-vector.sh',
     'pdf2svg',
     'pdfcrop',
     'pdfinfo',

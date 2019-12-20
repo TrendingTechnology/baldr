@@ -1360,7 +1360,7 @@ class IntermediateSong extends Song {
     const dest = this.folderPiano.get()
     const pianoFile = path.join(dest, 'piano.mscx')
     fs.copySync(this.mscxPiano, pianoFile)
-    childProcess.spawnSync('mscore-to-eps.sh', [pianoFile])
+    childProcess.spawnSync('mscore-to-vector.sh', ['-e', pianoFile])
     const result = listFiles(dest, '.eps')
     if (!result) {
       throw new Error('The EPS files for the piano score couldn’t be generated.')
