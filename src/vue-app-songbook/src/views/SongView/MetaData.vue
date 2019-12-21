@@ -3,12 +3,6 @@
     <h1>{{ title }}</h1>
     <h2 v-if="subtitle">{{ subtitle }}</h2>
     <audio v-if="audio" controls :src="audio"></audio>
-    <av-bars
-      v-if="audio"
-      :audio-src="audio"
-      cors-anonym
-      >
-    </av-bars>
 
     <div class="people">
       <div v-if="lyricist" class="lyricist">{{ lyricist }}</div>

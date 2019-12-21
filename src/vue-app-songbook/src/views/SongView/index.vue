@@ -96,6 +96,8 @@ export default {
   },
   methods: {
     ...mapActions([
+      'browseAllSlidesNext',
+      'browseAllSlidesPrevious',
       'setSlideNext',
       'setSlidePrevious'
     ]),
@@ -149,22 +151,38 @@ export default {
       {
         keys: 'left',
         callback: () => { this.setSlidePrevious() },
-        description: 'Previous slide'
+        // 'Previous slide'
+        description: 'Vorhergehende Folie'
       },
       {
         keys: 'right',
         callback: () => { this.setSlideNext() },
-        description: 'Next slide'
+        // 'Next slide'
+        description: 'Nächste Folie'
+      },
+      {
+        keys: 'alt+left',
+        callback: () => { this.browseAllSlidesPrevious() },
+        // 'Previous slide'
+        description: 'Vorhergehende Folie (durch alle Lieder blättern)'
+      },
+      {
+        keys: 'alt+right',
+        callback: () => { this.browseAllSlidesNext() },
+        // 'Next slide'
+        description: 'Nächste Folie (durch alle Lieder blättern)'
       },
       {
         keys: 'up',
         callback: () => { this.setSongPrevious() },
-        description: 'Previous song'
+        // 'Previous song'
+        description: 'Nächstes Lied'
       },
       {
         keys: 'down',
         callback: () => { this.setSongNext() },
-        description: 'Next song'
+        // 'Next song'
+        description: 'Vorhergehendes Lied'
       },
       {
         keys: 'z',

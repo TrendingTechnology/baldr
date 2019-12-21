@@ -36,6 +36,23 @@ const getters = {
 }
 
 const actions = {
+  browseAllSlidesNext ({ commit, getters, dispatch }) {
+    const no = getters.slideNoCurrent
+    const count = getters.songCurrent.slidesCount
+    if (no === count) {
+      dispatch('setSongNext')
+    } else {
+      commit('setSlideNoCurrent', no + 1)
+    }
+  },
+  browseAllSlidesPrevious ({ commit, getters, dispatch }) {
+    const no = getters.slideNoCurrent
+    if (no === 1) {
+      dispatch('setSongPrevious')
+    } else {
+      commit('setSlideNoCurrent', no - 1)
+    }
+  },
   importSongs ({ commit }, songs) {
     for (const songID in songs) {
       const song = songs[songID]
