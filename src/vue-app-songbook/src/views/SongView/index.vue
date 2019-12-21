@@ -6,16 +6,19 @@
         @click.native="showSearch"
         name="magnify"
         :size="materialIconSize"
+        title="Suche nach einem Lied (Tastenkürzel: s)"
       />
       <material-icon
         @click.native="showTableOfContents"
         name="table-of-contents"
        :size="materialIconSize"
+       title="Inhaltsverzeichnis (Tastenkürzel: i)"
       />
       <material-icon
         @click.native="$fullscreen()"
         name="fullscreen"
        :size="materialIconSize"
+       title="Vollbild (Tastenkürzel: f)"
       />
     </div>
 
@@ -37,17 +40,17 @@
       :up="setSongPrevious"
       :down="setSongNext"
       :size="materialIconSize"
-      left-title="Vorhergehende Seite"
-      right-title="Nächste Seite"
-      up-title="Vorhergehendes Lied"
-      down-title="Nächstes Lied"
+      left-title="Vorhergehende Seite (Tastenkürzel: Cursor links)"
+      right-title="Nächste Seite (Tastenkürzel: Cursor rechts)"
+      up-title="Vorhergehendes Lied (Tastenkürzel: Cursor oben)"
+      down-title="Nächstes Lied (Tastenkürzel: Cursor unten)"
     />
     <material-icon
       @click.native="setSongRandom"
       class="random"
       name="dice-multiple"
       :size="materialIconSize"
-      title="Zufälliges Lied"
+      title="Zufälliges Lied (Tastenkürzel: z)"
     />
   </div>
 </template>
@@ -114,7 +117,12 @@ export default {
       this.setSong(this.library.getRandomSong().songID)
     },
     showSearch () {
-      this.$modal.toggle('search')
+      const visibility = this.$modal.toggle('search')
+      if (visibility) {
+        this.$shortcuts.pause()
+      } else {
+        this.$shortcuts.unpause()
+      }
       this.$dynamicSelect.focus()
     },
     showTableOfContents () {
@@ -159,22 +167,23 @@ export default {
         description: 'Next song'
       },
       {
-        keys: 'ctrl+z',
+        keys: 'z',
         callback: () => { this.setSongRandom() },
-        description: 'Random song'
+        description: 'Einen zufälliges Lied einblenden'
       },
       {
-        keys: 'ctrl+s',
+        keys: 'i',
         callback: () => {
-          this.$shortcuts.pause()
+          this.$modal.toggle('table-of-contents')
+        },
+        description: 'Das Inhaltsverzeichnis einblenden'
+      },
+      {
+        keys: 's',
+        callback: () => {
           this.showSearch()
         },
-        description: 'Show search'
-      },
-      {
-        keys: 'ctrl+f',
-        callback: () => { this.$fullscreen() },
-        description: 'Fullscreen'
+        description: 'Die Liedersuche einblenden'
       }
     ])
   }

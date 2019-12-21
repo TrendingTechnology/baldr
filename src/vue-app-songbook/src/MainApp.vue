@@ -25,7 +25,16 @@ export default {
   beforeCreate: function () {
     this.$store.dispatch('importSongs', songsJson)
   },
-  methods: mapActions(['setSlideNext', 'setSlidePrevious'])
+  methods: mapActions(['setSlideNext', 'setSlidePrevious']),
+  mounted: function () {
+    this.$shortcuts.addMultiple([
+      {
+        keys: 'f',
+        callback: () => { this.$fullscreen() },
+        description: 'Vollbild anzeigen'
+      }
+    ])
+  }
 }
 </script>
 
