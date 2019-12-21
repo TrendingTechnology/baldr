@@ -4,7 +4,7 @@
   "description": "Vue app of the baldr songbook.",
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "build": "vue-cli-service build; rsync -av --delete dist/ serverway:/var/www/baldr/songbook/",
     "upload": "rsync -av --delete dist/ serverway:/var/www/baldr/songbook/",
     "lint": "vue-cli-service lint",
     "test:e2e": "vue-cli-service test:e2e",

@@ -81,9 +81,17 @@ export default {
           return optionText.includes(this.searchText.toLowerCase())
         })
       } else {
-        list = this.options.slice(0, resultListMaxCount)
+        list = this.options
       }
-      return list.slice(0, resultListMaxCount)
+      list = list.slice(0, resultListMaxCount)
+      if (list.length === 1) {
+        setTimeout(() => {
+          if (this.$refs.resultList && this.$refs.resultList.children.length === 1) {
+            this.$refs.resultList.children[0].focus()
+          }
+        }, 10)
+      }
+      return list
     },
     showPlaceholder: function () {
       return !this.hasFocus && !this.selectedOption
@@ -103,15 +111,6 @@ export default {
         this.searchText = null
         this.selectedResult = 0
         this.$refs.search.blur()
-      }
-    },
-    options (input) {
-      if (input.length === 1) {
-        setTimeout(() => {
-          if (this.$refs.resultList && this.$refs.resultList.children.length === 1) {
-            this.$refs.resultList.children[0].focus()
-          }
-        }, 10)
       }
     },
     searchText: function () {
