@@ -49,6 +49,7 @@ const actions = {
     const no = getters.slideNoCurrent
     if (no === 1) {
       dispatch('setSongPrevious')
+      commit('setSlideNoCurrent', getters.songCurrent.slidesCount)
     } else {
       commit('setSlideNoCurrent', no - 1)
     }
