@@ -72,6 +72,12 @@ export default {
 
     table {
       width: 100%;
+
+      tbody {
+        tr:hover {
+          background-color: scale-color($gray, $lightness: 70%);
+        }
+      }
     }
   }
 </style>

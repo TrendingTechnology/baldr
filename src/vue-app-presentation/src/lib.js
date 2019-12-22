@@ -114,6 +114,8 @@ export function validateUri (uri) {
  * @param {Array} elements - A list of HTML elements to display on step number
  *   change.
  * @param {Number} stepNo - The current step number.
+ *
+ * @returns {Object} The element that is displayed by the new step number.
  */
 export function displayElementByStepFull (elements, stepNo) {
   let count = 1
@@ -125,6 +127,12 @@ export function displayElementByStepFull (elements, stepNo) {
     }
     count += 1
   }
+  if (stepNo === 1) {
+    return elements[0]
+  }
+  // First step: no elements are displayed
+  // Array index begin with 0, steps with 1
+  return elements[stepNo - 2]
 }
 
 /**
@@ -134,16 +142,18 @@ export function displayElementByStepFull (elements, stepNo) {
  *   change.
  * @param {Number} oldStepNo
  * @param {Number} newStepNo
+ *
+ * @returns {Object} The element that is displayed by the new step number.
  */
 export function displayElementByStepMinimal (elements, oldStepNo, newStepNo) {
   if (newStepNo === 1 || (oldStepNo === 1 && newStepNo === elements.length + 1)) {
-    displayElementByStepFull(elements, newStepNo)
-    return
+    return displayElementByStepFull(elements, newStepNo)
   }
   let element
   let display
   if (newStepNo > oldStepNo) {
     // First step: no elements are displayed
+    // Array index begin with 0, steps with 1
     element = elements[newStepNo - 2]
     display = 'block'
   } else {
@@ -151,4 +161,5 @@ export function displayElementByStepMinimal (elements, oldStepNo, newStepNo) {
     display = 'none'
   }
   element.style.display = display
+  return element
 }

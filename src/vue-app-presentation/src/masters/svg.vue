@@ -1,7 +1,7 @@
 <template>
   <div class="vc_svg_master">
     <div ref="svgWrapper" id="svg-wrapper"/>
-    <!-- TODO: remove needed to get updated hook -->
+    <!-- TODO: remove this tag. It is needed to get the `updated` hook -->
     <div class="hidden">{{ mediaFile.httpUrl }}</div>
   </div>
 </template>
