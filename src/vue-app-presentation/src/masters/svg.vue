@@ -22,18 +22,6 @@ slides:
   svg: id:Notenbeispiel_Freude-schoener-Goetterfunken_Anfang
 `
 
-function setGroupDisplayByStepNo (stepNo) {
-  const elGroups = document.querySelectorAll('.baldr-group')
-  let count = 1
-  for (const elGroup of elGroups) {
-    if (stepNo > count) {
-      elGroup.style.display = 'block'
-    } else {
-      elGroup.style.display = 'none'
-    }
-    count += 1
-  }
-}
 
 export const master = {
   title: 'Bild',
@@ -57,7 +45,7 @@ export const master = {
     return [props.src]
   },
   enterStep ({ newStepNo }) {
-    setGroupDisplayByStepNo(newStepNo)
+    this.setGroupDisplayByStepNo(newStepNo)
   }
 }
 
@@ -68,6 +56,10 @@ export default {
       required: true,
       description: 'Den URI zu einer SVG-Datei.',
       mediaFileUri: true
+    },
+    stepSelector: {
+      default: 'g',
+      description: 'Selektor, der Elemente auswählt, die als Schritte eingeblendet werden sollen.'
     }
   },
   computed: {
@@ -76,16 +68,34 @@ export default {
       return this.$store.getters['media/mediaFileByUri'](this.src)
     }
   },
+  data () {
+    return {
+      elGroups: null
+    }
+  },
   methods: {
+    setGroupDisplayByStepNo (stepNo) {
+      let count = 1
+      for (const elGroup of this.elGroups) {
+        if (stepNo > count) {
+          elGroup.style.display = 'block'
+        } else {
+          elGroup.style.display = 'none'
+        }
+        count += 1
+      }
+    },
     async loadSvg () {
       let response = await this.$media.httpRequest.request({
         url: `/media/${this.mediaFile.path}`,
         method: 'get'
       })
       this.$refs.svgWrapper.innerHTML = response.data
-      const elGroups = document.querySelectorAll('.baldr-group')
-      this.slideCurrent.renderData.stepCount = elGroups.length + 1
-      setGroupDisplayByStepNo(this.slideCurrent.renderData.stepNoCurrent)
+      console.log(this.stepSelector)
+      this.elGroups = document.querySelectorAll(this.stepSelector)
+      console.log(this.elGroups)
+      this.slideCurrent.renderData.stepCount = this.elGroups.length + 1
+      this.setGroupDisplayByStepNo(this.slideCurrent.renderData.stepNoCurrent)
     }
   },
   async mounted () {
