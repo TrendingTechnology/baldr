@@ -105,3 +105,50 @@ export function validateUri (uri) {
   }
   return uri
 }
+
+/**
+ * Set the display state on elements. Loop through all elements. On the first
+ * step no elements are displayed. The number of steps is: number of elements
+ * + 1.
+ *
+ * @param {Array} elements - A list of HTML elements to display on step number
+ *   change.
+ * @param {Number} stepNo - The current step number.
+ */
+export function displayElementByStepFull (elements, stepNo) {
+  let count = 1
+  for (const element of elements) {
+    if (stepNo > count) {
+      element.style.display = 'block'
+    } else {
+      element.style.display = 'none'
+    }
+    count += 1
+  }
+}
+
+/**
+ * Don’t loop through all elements. Update only the next element.
+ *
+ * @param {Array} elements - A list of HTML elements to display on step number
+ *   change.
+ * @param {Number} oldStepNo
+ * @param {Number} newStepNo
+ */
+export function displayElementByStepMinimal (elements, oldStepNo, newStepNo) {
+  if (newStepNo === 1 || (oldStepNo === 1 && newStepNo === elements.length + 1)) {
+    displayElementByStepFull(elements, newStepNo)
+    return
+  }
+  let element
+  let display
+  if (newStepNo > oldStepNo) {
+    // First step: no elements are displayed
+    element = elements[newStepNo - 2]
+    display = 'block'
+  } else {
+    element = elements[newStepNo - 1]
+    display = 'none'
+  }
+  element.style.display = display
+}
