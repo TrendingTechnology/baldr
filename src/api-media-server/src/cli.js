@@ -667,7 +667,7 @@ function renameFromIdOneFile (filePath) {
 }
 
 /**
- * Rename a media asset or all child asset of the parrent working directory
+ * Rename a media asset or all child asset of the parent working directory
  * after the `id` in the meta data file.
  *
  * @param {String} filePath - The media file path.
@@ -689,12 +689,16 @@ function renameFromId (filePath) {
 /**
  *
  */
-function createMetaDataYaml () {
-  walk(process.cwd(), {
-    asset (relPath) {
-      writeMetaDataYaml(relPath)
-    }
-  })
+function createMetaDataYaml (filePath) {
+  if (filePath) {
+    writeMetaDataYaml(filePath)
+  } else {
+    walk(process.cwd(), {
+      asset (relPath) {
+        writeMetaDataYaml(relPath)
+      }
+    })
+  }
 }
 
 /**
@@ -809,7 +813,7 @@ commander
   .action(rename)
 
 commander
-  .command('yaml').alias('y')
+  .command('yaml [input]').alias('y')
   .description('Create info files in the YAML format in the current working directory.')
   .action(createMetaDataYaml)
 

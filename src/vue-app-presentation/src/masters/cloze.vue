@@ -19,6 +19,14 @@ slides:
 - title: Long form
   cloze:
     src: id:Bebop_AB
+
+- title: Table 1
+  cloze:
+    src: New-Orleans-Dixieland_AB1
+
+- title: Table 2
+  cloze:
+    src: New-Orleans-Dixieland_AB2
 `
 
 export const master = {
