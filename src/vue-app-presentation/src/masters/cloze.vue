@@ -84,11 +84,11 @@ export default {
     },
     stepBegin: {
       type: Number,
-      description: 'Beginne bei dieser Schrittnumber Lückentextwörter einzublenden'
+      description: 'Beginne bei dieser Schrittnumber Lückentextwörter einzublenden.'
     },
     stepEnd: {
       type: Number,
-      description: 'Höre bei dieser Schrittnumber auf Lückentextwörter einzublenden'
+      description: 'Höre bei dieser Schrittnumber auf Lückentextwörter einzublenden.'
     }
   },
   data () {
