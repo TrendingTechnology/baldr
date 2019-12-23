@@ -64,7 +64,7 @@ export default {
     src: {
       type: String,
       required: true,
-      description: 'Den URI zu einer SVG-Datei die den Lückentext enthält.',
+      description: 'Den URI zu einer SVG-Datei, die den Lückentext enthält.',
       mediaFileUri: true
     }
   },
