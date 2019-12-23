@@ -18,6 +18,10 @@ function getVueChildrenInstanceByName (name, children) {
   }
 }
 
+function getMasterVueInstance (masterName) {
+  return getVueChildrenInstanceByName(`${masterName}-master`)
+}
+
 Vue.use(Vuex)
 
 const state = {
@@ -110,20 +114,21 @@ const actions = {
     let oldProps
     let newSlide = getters.slideByNo(no)
     let newProps = newSlide.renderData.props
-    let context = new Vue()
     if (getters.slideCurrent) {
       oldSlide = getters.slideCurrent
       oldProps = oldSlide.renderData.props
       getters.slideCurrent.master.leaveSlide(
         { oldSlide, oldProps, newSlide, newProps },
-        context
+        getMasterVueInstance(oldSlide.master.name)
       )
     }
     commit('setSlideNoCurrent', no)
-    getters.slideCurrent.master.enterSlide(
-      { oldSlide, oldProps, newSlide, newProps },
-      context
-    )
+    Vue.nextTick(function () {
+      getters.slideCurrent.master.enterSlide(
+        { oldSlide, oldProps, newSlide, newProps },
+        getMasterVueInstance(newSlide.master.name)
+      )
+    })
   },
   setStepNext ({ dispatch, getters }) {
     let stepNoCurrent
@@ -149,10 +154,10 @@ const actions = {
     }
     dispatch('setStepNoCurrent', { slideCurrent, stepNoCurrent })
   },
-  setStepNoCurrent ({ commit }, { slideCurrent, stepNoCurrent }) {
+  setStepNoCurrent ({ commit }, {getMasterVueInstance slideCurrent, stepNoCurrent }) {
     let oldStepNo = slideCurrent.renderData.stepNoCurrent
     let newStepNo = stepNoCurrent
-    const thisArg = getVueChildrenInstanceByName(`${slideCurrent.master.name}-master`)
+    const thisArg = getMasterVueInstance(slideCurrent.master.name)
     slideCurrent.master.leaveStep({ oldStepNo, newStepNo }, thisArg)
     commit('setStepNoCurrent', { slideCurrent, stepNoCurrent })
     slideCurrent.master.enterStep({ oldStepNo, newStepNo }, thisArg)
