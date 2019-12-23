@@ -15,6 +15,10 @@ slides:
 
 - title: Short form
   cloze: id:AB_Bachs-vergebliche-Reise
+
+- title: Long form
+  cloze:
+    src: id:Bebop_AB
 `
 
 export const master = {
