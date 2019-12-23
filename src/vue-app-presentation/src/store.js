@@ -124,11 +124,13 @@ const actions = {
     }
     commit('setSlideNoCurrent', no)
     Vue.nextTick(function () {
-      console.log(getMasterVueInstance(newSlide.master.name))
-      getters.slideCurrent.master.enterSlide(
-        { oldSlide, oldProps, newSlide, newProps },
-        getMasterVueInstance(newSlide.master.name)
-      )
+      // TODO: Remove this timeout
+      setTimeout(function () {
+        getters.slideCurrent.master.enterSlide(
+          { oldSlide, oldProps, newSlide, newProps },
+          getMasterVueInstance(newSlide.master.name)
+        )
+      }, 10)
     })
   },
   setStepNext ({ dispatch, getters }) {
