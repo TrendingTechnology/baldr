@@ -1,8 +1,6 @@
 <template>
   <div class="vc_cloze_master">
     <div ref="clozeWrapper" id="cloze-wrapper"/>
-    <!-- TODO: remove this tag. It is needed to trigger the `updated` hook -->
-    <div class="hidden">{{ mediaFile.httpUrl }}</div>
   </div>
 </template>
 
@@ -42,6 +40,10 @@ export const master = {
   enterStep ({ oldStepNo, newStepNo }) {
     const newClozeGroup = displayElementByStepMinimal(this.clozeGroups, oldStepNo, newStepNo)
     this.scroll(newClozeGroup)
+  },
+  async enterSlide () {
+    console.log(this)
+    this.loadSvg()
   }
 }
 
@@ -103,12 +105,6 @@ export default {
       }
       return clozeGElements
     }
-  },
-  async mounted () {
-    this.loadSvg()
-  },
-  async updated () {
-    this.loadSvg()
   }
 }
 </script>
@@ -125,10 +121,6 @@ export default {
     svg {
       width: 100vw;
       height: auto
-    }
-    .hidden {
-      visibility: hidden;
-      position: absolute;
     }
   }
 </style>

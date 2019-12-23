@@ -1,8 +1,6 @@
 <template>
   <div class="vc_svg_master">
     <div ref="svgWrapper" id="svg-wrapper"/>
-    <!-- TODO: remove this tag. It is needed to trigger the `updated` hook -->
-    <div class="hidden">{{ mediaFile.httpUrl }}</div>
   </div>
 </template>
 
@@ -59,6 +57,9 @@ export const master = {
   },
   enterStep ({ oldStepNo, newStepNo }) {
     displayElementByStepMinimal(this.elGroups, oldStepNo, newStepNo)
+  },
+  async enterSlide () {
+    this.loadSvg()
   }
 }
 
@@ -121,12 +122,6 @@ export default {
       this.slideCurrent.renderData.stepCount = this.elGroups.length + 1
       displayElementByStepFull(this.elGroups, this.slideCurrent.renderData.stepNoCurrent)
     }
-  },
-  async mounted () {
-    this.loadSvg()
-  },
-  async updated () {
-    this.loadSvg()
   }
 }
 </script>
@@ -155,11 +150,6 @@ export default {
       object-fit: contain;
       width: 92vw;
       height: 90vh;
-    }
-
-    .hidden {
-      visibility: hidden;
-      position: absolute;
     }
   }
 </style>

@@ -124,6 +124,7 @@ const actions = {
     }
     commit('setSlideNoCurrent', no)
     Vue.nextTick(function () {
+      console.log(getMasterVueInstance(newSlide.master.name))
       getters.slideCurrent.master.enterSlide(
         { oldSlide, oldProps, newSlide, newProps },
         getMasterVueInstance(newSlide.master.name)
@@ -154,7 +155,7 @@ const actions = {
     }
     dispatch('setStepNoCurrent', { slideCurrent, stepNoCurrent })
   },
-  setStepNoCurrent ({ commit }, {getMasterVueInstance slideCurrent, stepNoCurrent }) {
+  setStepNoCurrent ({ commit }, { slideCurrent, stepNoCurrent }) {
     let oldStepNo = slideCurrent.renderData.stepNoCurrent
     let newStepNo = stepNoCurrent
     const thisArg = getMasterVueInstance(slideCurrent.master.name)
