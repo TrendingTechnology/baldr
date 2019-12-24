@@ -9,7 +9,7 @@
 
 <script>
 import { plainText } from '@bldr/core-browser'
-import { markupToHtml, masterMixin } from '@/lib.js'
+import { markupToHtml } from '@/lib.js'
 
 let editorId = 0
 
@@ -185,7 +185,6 @@ export const master = {
 }
 
 export default {
-  mixins: [masterMixin],
   props: {
     markup: {
       type: String,

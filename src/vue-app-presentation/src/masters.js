@@ -6,7 +6,7 @@
 
 import Vue from 'vue'
 import store from '@/store.js'
-import { markupToHtml, validateUri } from '@/lib.js'
+import { markupToHtml, validateUri, masterMixin } from '@/lib.js'
 
 /**
  * The icon of a master slide. This icon is shown in the documentation or
@@ -430,6 +430,7 @@ function registerMasters () {
     // Get the component config
     const masterName = fileName.replace('./', '').replace('.vue', '')
     const componentConfig = requireComponent(fileName)
+    componentConfig.default.mixins = [masterMixin]
     const masterConfig = componentConfig.master
     const master = new Master(masterName)
     master.importMembers(masterConfig)

@@ -166,6 +166,6 @@ export function displayElementByStepMinimal (elements, oldStepNo, newStepNo) {
 
 export const masterMixin = {
   mounted () {
-    console.log('mounted')
+    console.log(this)
   }
 }

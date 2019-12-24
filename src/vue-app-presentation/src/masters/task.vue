@@ -3,7 +3,6 @@
 </template>
 
 <script>
-import { masterMixin } from '@/lib.js'
 import { plainText } from '@bldr/core-browser'
 
 const example = `
@@ -67,7 +66,6 @@ export const master = {
 }
 
 export default {
-  mixins: [masterMixin],
   props: {
     markup: {
       type: String,
