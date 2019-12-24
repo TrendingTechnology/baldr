@@ -18,68 +18,20 @@ const { bootstrapConfig } = require('@bldr/core-node')
 // Project packages.
 const config = bootstrapConfig()
 
+/*******************************************************************************
+ * Common functions
+ ******************************************************************************/
+
 function makeAsset (mediaFile) {
   return new Asset(mediaFile).addFileInfos()
 }
 
-const presentationTemplate = `---
-meta:
-  title:
-  subtitle:
-  id:
-  grade:
-  curriculum:
-  curriculum_url:
-
-slides:
-
-- generic: Hello world
-`
-
-function audacityTextToYaml (filePath) {
-  const text = fs.readFileSync(filePath, { encoding: 'utf-8' })
-  console.log(text)
-
-  const lines = text.split('\n')
-  const samples = []
-  for (const line of lines) {
-    const match = line.match(/([\d\.]+)\t([\d\.]+)\t(.+)/) // eslint-disable-line
-    if (match) {
-      const startTime = Number(match[1])
-      let endTime = Number(match[2])
-      const title = match[3]
-      const id = title.toLowerCase()
-
-      if (startTime === endTime) {
-        endTime = null
-      }
-      const sample = {
-        id,
-        title,
-        start_time: startTime
-      }
-      if (endTime) sample['end_time'] = endTime
-      samples.push(sample)
-    }
-  }
-  for (const index in samples) {
-    const sample = samples[index]
-    if (!sample.end_time && index < samples.length - 1) {
-      sample['end_time'] = samples[parseInt(index) + 1]['start_time']
-    }
-  }
-  console.log(yaml.safeDump(samples))
-}
-
-commander
-  .version(require('../package.json').version)
-
-  /**
-   * Sort the keys and clean up some entires.
-   *
-   * @param {Object} metaData - The object representation of the yaml meta data
-   *   file.
-   */
+/**
+ * Sort the keys and clean up some entires.
+ *
+ * @param {Object} metaData - The object representation of the yaml meta data
+ *   file.
+ */
 function normalizeMetaData (metaData) {
   const normalized = {}
 
@@ -121,32 +73,6 @@ function writeMetaDataYamlFile (filePath, metaData) {
 }
 
 /**
- * @param {String} filePath - The media asset file path.
- */
-function normalizeMetaDataYamlOneFile (filePath) {
-  const yamlFile = `${filePath}.yml`
-  const metaData = yaml.safeLoad(fs.readFileSync(yamlFile, 'utf8'))
-  writeMetaDataYamlFile(yamlFile, normalizeMetaData(metaData))
-}
-
-/**
- * @param {String} filePath - The media asset file path.
- */
-function normalizeMetaDataYaml (filePath) {
-  if (filePath) {
-    normalizeMetaDataYamlOneFile(filePath)
-  } else {
-    walk(process.cwd(), {
-      asset (relPath) {
-        if (fs.existsSync(`${relPath}.yml`)) {
-          normalizeMetaDataYamlOneFile(relPath)
-        }
-      }
-    })
-  }
-}
-
-/**
  * Write the metadata YAML file.
  *
  * @param {String} inputFile
@@ -166,6 +92,75 @@ function writeMetaDataYaml (filePath, metaData) {
     writeMetaDataYamlFile(yamlFile, normalizeMetaData(metaData))
   }
 }
+
+/**
+ * Rename a media asset and it’s corresponding meta data file (`*.yml`)
+ *
+ * @param {String} oldPath - The old path of a media asset.
+ * @param {String} newPath - The new path of a media asset.
+ */
+function renameAsset (oldPath, newPath) {
+  const oldRelPath = oldPath.replace(process.cwd(), '')
+  console.log(`old: ${chalk.yellow(oldRelPath)}`)
+  if (newPath && oldPath !== newPath) {
+    const newRelPath = newPath.replace(process.cwd(), '')
+    console.log(`new: ${chalk.green(newRelPath)}`)
+    if (fs.existsSync(`${oldPath}.yml`)) {
+      fs.renameSync(`${oldPath}.yml`, `${newPath}.yml`)
+      console.log(`new: ${chalk.cyan(newRelPath + '.yml')}`)
+    }
+    fs.renameSync(oldPath, newPath)
+    return newPath
+  }
+}
+
+/*******************************************************************************
+ * Subcommands
+ ******************************************************************************/
+
+/*** audacity / a *************************************************************/
+
+function audacityTextToYaml (filePath) {
+  const text = fs.readFileSync(filePath, { encoding: 'utf-8' })
+  console.log(text)
+
+  const lines = text.split('\n')
+  const samples = []
+  for (const line of lines) {
+    const match = line.match(/([\d\.]+)\t([\d\.]+)\t(.+)/) // eslint-disable-line
+    if (match) {
+      const startTime = Number(match[1])
+      let endTime = Number(match[2])
+      const title = match[3]
+      const id = title.toLowerCase()
+
+      if (startTime === endTime) {
+        endTime = null
+      }
+      const sample = {
+        id,
+        title,
+        start_time: startTime
+      }
+      if (endTime) sample['end_time'] = endTime
+      samples.push(sample)
+    }
+  }
+  for (const index in samples) {
+    const sample = samples[index]
+    if (!sample.end_time && index < samples.length - 1) {
+      sample['end_time'] = samples[parseInt(index) + 1]['start_time']
+    }
+  }
+  console.log(yaml.safeDump(samples))
+}
+
+commander
+  .command('audacity <input>').alias('a')
+  .description('Convert audacity text mark file into a yaml file.')
+  .action(audacityTextToYaml)
+
+/*** convert / c **************************************************************/
 
 /**
  * Output from `music-metadata`:
@@ -364,84 +359,21 @@ function convert (inputFiles, cmdObj) {
   }
 }
 
-/**
- * Rename a media asset and it’s corresponding meta data file (`*.yml`)
- *
- * @param {String} oldPath - The old path of a media asset.
- * @param {String} newPath - The new path of a media asset.
- */
-function renameAsset (oldPath, newPath) {
-  const oldRelPath = oldPath.replace(process.cwd(), '')
-  console.log(`old: ${chalk.yellow(oldRelPath)}`)
-  if (newPath && oldPath !== newPath) {
-    const newRelPath = newPath.replace(process.cwd(), '')
-    console.log(`new: ${chalk.green(newRelPath)}`)
-    if (fs.existsSync(`${oldPath}.yml`)) {
-      fs.renameSync(`${oldPath}.yml`, `${newPath}.yml`)
-      console.log(`new: ${chalk.cyan(newRelPath + '.yml')}`)
-    }
-    fs.renameSync(oldPath, newPath)
-    return newPath
-  }
+commander
+  .command('convert [input...]').alias('c')
+  .option('-p, --preview-image', 'Convert into preview images (Smaller and different file name)')
+  .description('Convert media files in the appropriate format. Multiple files, globbing works *.mp3')
+  .action(convert)
+
+/*** --help / -h **************************************************************/
+
+function help () {
+  console.log('Specify a subcommand.')
+  commander.outputHelp()
+  process.exit(1)
 }
 
-/**
- * @param {String} oldPath - The media file path.
- *
- * @returns {String}
- */
-function renameOneFile (oldPath) {
-  let newPath = asciify(oldPath)
-  const basename = path.basename(newPath)
-  // Remove a- and v- prefixes
-  const cleanedBasename = basename.replace(/^[va]-/g,'')
-  if (cleanedBasename !== basename) {
-    newPath = path.join(path.dirname(newPath), cleanedBasename)
-  }
-  renameAsset(newPath, oldPath)
-}
-
-/**
- * Rename all child files in the current working directory.
- */
-function rename () {
-  walk(process.cwd(), {
-    all (oldPath) {
-      renameOneFile(oldPath)
-    }
-  })
-}
-
-/**
- * @param {String} filePath - The media file path.
- */
-function validateYamlOneFile (filePath) {
-  console.log(`Validate: ${chalk.yellow(filePath)}`)
-  try {
-    const result = yaml.safeLoad(fs.readFileSync(filePath, 'utf8'))
-    console.log(chalk.green('ok!'))
-    console.log(result)
-  } catch (error) {
-    console.log(`${chalk.red(error.name)}: ${error.message}`)
-  }
-}
-
-/**
- * @param {String} filePath - The media file path.
- */
-function validateYaml (filePath) {
-  if (filePath) {
-    validateYamlOneFile(filePath)
-  } else {
-    walk(process.cwd(), {
-      everyFile (relPath) {
-        if (relPath.toLowerCase().indexOf('.yml') > -1) {
-          validateYamlOneFile(relPath)
-        }
-      }
-    })
-  }
-}
+/*** id-to-filename / i *******************************************************/
 
 /**
  * Rename a media asset after the `id` in the meta data file.
@@ -486,41 +418,12 @@ function renameFromId (filePath) {
   }
 }
 
-/**
- *
- */
-function createMetaDataYaml (filePath) {
-  if (filePath) {
-    writeMetaDataYaml(filePath)
-  } else {
-    walk(process.cwd(), {
-      asset (relPath) {
-        writeMetaDataYaml(relPath)
-      }
-    })
-  }
-}
+commander
+  .command('id-to-filename [input]').alias('i')
+  .description('Rename media assets after the id.')
+  .action(renameFromId)
 
-/**
- * Create a presentation template named “Praesentation.baldr.yml”.
- */
-function createPresentationTemplate () {
-  const filePath = path.join(process.cwd(), 'Praesentation.baldr.yml')
-  if (!fs.existsSync(filePath)) {
-    fs.writeFileSync(filePath, presentationTemplate)
-    console.log(`Presentation template created at: ${chalk.green(filePath)}`)
-  } else {
-    console.log(`Presentation already exists: ${chalk.red(filePath)}`)
-  }
-}
-
-/**
- *
- */
-function openBasePath () {
-  const process = childProcess.spawn('xdg-open', [config.mediaServer.basePath], { detached: true })
-  process.unref()
-}
+/*** mirror / m ***************************************************************/
 
 /**
  * Create and open a relative path in different base paths.
@@ -528,8 +431,7 @@ function openBasePath () {
 function mirrorRelPath () {
   const basePaths = [
     '/var/data/baldr/media/',
-    '/home/jf/schule/',
-    '/mnt/nnas/school/archive/'
+    '/home/jf/schule-archiv/'
   ]
 
   const currentBasePaths = []
@@ -577,63 +479,196 @@ function mirrorRelPath () {
 }
 
 commander
-  .command('audacity <input>').alias('a')
-  .description('Convert audacity text mark file into a yaml file.')
-  .action(audacityTextToYaml)
-
-commander
-  .command('convert [input...]').alias('c')
-  .option('-p, --preview-image', 'Convert into preview images (Smaller and different file name)')
-  .description('Convert media files in the appropriate format. Multiple files, globbing works *.mp3')
-  .action(convert)
-
-  commander
-  .command('id-to-filename [input]').alias('i')
-  .description('Rename media assets after the id.')
-  .action(renameFromId)
-
-commander
   .command('mirror').alias('m')
   .description('Create and open in the file explorer a relative path in different base paths.')
   .action(mirrorRelPath)
+
+/*** normalize / n ************************************************************/
+
+/**
+ * @param {String} filePath - The media asset file path.
+ */
+function normalizeMetaDataYamlOneFile (filePath) {
+  const yamlFile = `${filePath}.yml`
+  const metaData = yaml.safeLoad(fs.readFileSync(yamlFile, 'utf8'))
+  writeMetaDataYamlFile(yamlFile, normalizeMetaData(metaData))
+}
+
+/**
+ * @param {String} filePath - The media asset file path.
+ */
+function normalizeMetaDataYaml (filePath) {
+  if (filePath) {
+    normalizeMetaDataYamlOneFile(filePath)
+  } else {
+    walk(process.cwd(), {
+      asset (relPath) {
+        if (fs.existsSync(`${relPath}.yml`)) {
+          normalizeMetaDataYamlOneFile(relPath)
+        }
+      }
+    })
+  }
+}
 
 commander
   .command('normalize [input]').alias('n')
   .description('Normalize the meta data files in the YAML format (Sort, clean up).')
   .action(normalizeMetaDataYaml)
 
+/*** open / o *****************************************************************/
+
+/**
+ * Open base path.
+ */
+function openBasePath () {
+  const process = childProcess.spawn('xdg-open', [config.mediaServer.basePath], { detached: true })
+  process.unref()
+}
+
 commander
   .command('open').alias('o')
   .description('Open the base directory in a file browser.')
   .action(openBasePath)
 
-commander
-  .command('rename').alias('r')
-  .description('Rename files, clean file names, remove all whitespaces and special characters.')
-  .action(rename)
+/*** presentation-template / p ************************************************/
 
-commander
-  .command('yaml [input]').alias('y')
-  .description('Create info files in the YAML format in the current working directory.')
-  .action(createMetaDataYaml)
+const presentationTemplate = `---
+meta:
+  title:
+  subtitle:
+  id:
+  grade:
+  curriculum:
+  curriculum_url:
 
-commander
-  .command('yaml-validate [input]').alias('yv')
-  .description('Validate the yaml files.')
-  .action(validateYaml)
+slides:
+
+- generic: Hello world
+`
+
+/**
+ * Create a presentation template named “Praesentation.baldr.yml”.
+ */
+function createPresentationTemplate () {
+  const filePath = path.join(process.cwd(), 'Praesentation.baldr.yml')
+  if (!fs.existsSync(filePath)) {
+    fs.writeFileSync(filePath, presentationTemplate)
+    console.log(`Presentation template created at: ${chalk.green(filePath)}`)
+  } else {
+    console.log(`Presentation already exists: ${chalk.red(filePath)}`)
+  }
+}
 
 commander
   .command('presentation-template').alias('p')
   .description('Create a presentation template named “Praesentation.baldr.yml”.')
   .action(createPresentationTemplate)
 
-commander.parse(process.argv)
+/*** rename / r ***************************************************************/
 
-function help () {
-  console.log('Specify a subcommand.')
-  commander.outputHelp()
-  process.exit(1)
+/**
+ * @param {String} oldPath - The media file path.
+ *
+ * @returns {String}
+ */
+function renameOneFile (oldPath) {
+  let newPath = asciify(oldPath)
+  const basename = path.basename(newPath)
+  // Remove a- and v- prefixes
+  const cleanedBasename = basename.replace(/^[va]-/g,'')
+  if (cleanedBasename !== basename) {
+    newPath = path.join(path.dirname(newPath), cleanedBasename)
+  }
+  renameAsset(newPath, oldPath)
 }
+
+/**
+ * Rename all child files in the current working directory.
+ */
+function rename () {
+  walk(process.cwd(), {
+    all (oldPath) {
+      renameOneFile(oldPath)
+    }
+  })
+}
+
+commander
+  .command('rename').alias('r')
+  .description('Rename files, clean file names, remove all whitespaces and special characters.')
+  .action(rename)
+
+/*** --version / -v ***********************************************************/
+
+commander
+  .version(require('../package.json').version)
+
+/*** yaml / y *****************************************************************/
+
+/**
+ *
+ */
+function createMetaDataYaml (filePath) {
+  if (filePath) {
+    writeMetaDataYaml(filePath)
+  } else {
+    walk(process.cwd(), {
+      asset (relPath) {
+        writeMetaDataYaml(relPath)
+      }
+    })
+  }
+}
+
+commander
+  .command('yaml [input]').alias('y')
+  .description('Create info files in the YAML format in the current working directory.')
+  .action(createMetaDataYaml)
+
+/*** yaml-validate / yv *******************************************************/
+
+/**
+ * @param {String} filePath - The media file path.
+ */
+function validateYamlOneFile (filePath) {
+  console.log(`Validate: ${chalk.yellow(filePath)}`)
+  try {
+    const result = yaml.safeLoad(fs.readFileSync(filePath, 'utf8'))
+    console.log(chalk.green('ok!'))
+    console.log(result)
+  } catch (error) {
+    console.log(`${chalk.red(error.name)}: ${error.message}`)
+  }
+}
+
+/**
+ * @param {String} filePath - The media file path.
+ */
+function validateYaml (filePath) {
+  if (filePath) {
+    validateYamlOneFile(filePath)
+  } else {
+    walk(process.cwd(), {
+      everyFile (relPath) {
+        if (relPath.toLowerCase().indexOf('.yml') > -1) {
+          validateYamlOneFile(relPath)
+        }
+      }
+    })
+  }
+}
+
+commander
+  .command('yaml-validate [input]').alias('yv')
+  .description('Validate the yaml files.')
+  .action(validateYaml)
+
+/*******************************************************************************
+ * main
+ ******************************************************************************/
+
+commander.parse(process.argv)
 
 // [
 //  '/usr/local/bin/node',
