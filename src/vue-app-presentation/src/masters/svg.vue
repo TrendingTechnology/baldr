@@ -13,6 +13,11 @@ const example = `
 ---
 slides:
 
+- title: Shortcuts
+  svg:
+    src: id:Requiem_NB_Confutatis_1-Takt
+    step_exclude: 1
+
 - title: Kurzform
   svg: id:Notenbeispiel_Freude-schoener-Goetterfunken
 
@@ -55,11 +60,15 @@ export const master = {
   resolveMediaUris (props) {
     return [props.src]
   },
+  async enterSlide () {
+    await this.loadSvg()
+    this.shortcutsRegister(this.elGroups)
+  },
+  leaveSlide () {
+    this.shortcutsUnregister(this.elGroups)
+  },
   enterStep ({ oldStepNo, newStepNo }) {
     displayElementByStepMinimal(this.elGroups, oldStepNo, newStepNo)
-  },
-  async enterSlide () {
-    this.loadSvg()
   }
 }
 
@@ -111,13 +120,29 @@ export default {
       }
       return elements
     },
+    shortcutsRegister (elements) {
+      for (const element of elements) {
+        const shortcut = element.getAttribute('baldr-shortcut')
+        const description = element.getAttribute('inkscape:label')
+        this.$shortcuts.add(`q ${shortcut}`, () => {
+          element.style.display = 'block'
+        }, `${description} (einblenden in SVG: „${this.mediaFile.title}“)`)
+      }
+    },
+    shortcutsUnregister (elements) {
+      for (const element of elements) {
+        const shortcut = element.getAttribute('baldr-shortcut')
+        this.$shortcuts.remove(`q ${shortcut}`)
+      }
+    },
     async loadSvg () {
       let response = await this.$media.httpRequest.request({
         url: `/media/${this.mediaFile.path}`,
         method: 'get'
       })
-      this.$refs.svgWrapper.innerHTML = response.data
-      this.elGroups = document.querySelectorAll(this.stepSelector)
+      const svg = this.$refs.svgWrapper
+      svg.innerHTML = response.data
+      this.elGroups = svg.querySelectorAll(this.stepSelector)
       this.elGroups = this.removeElementsFromSteps(this.elGroups, this.stepExclude)
       this.slideCurrent.renderData.stepCount = this.elGroups.length + 1
       displayElementByStepFull(this.elGroups, this.slideCurrent.renderData.stepNoCurrent)
