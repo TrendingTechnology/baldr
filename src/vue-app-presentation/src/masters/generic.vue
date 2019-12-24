@@ -7,7 +7,7 @@
 
 <script>
 import { plainText } from '@bldr/core-browser'
-import { markupToHtml } from '@/lib.js'
+import { markupToHtml, masterMixin } from '@/lib.js'
 import { createNamespacedHelpers } from 'vuex'
 const { mapGetters } = createNamespacedHelpers('presentation')
 
@@ -290,6 +290,7 @@ export const master = {
 }
 
 export default {
+  mixins: [masterMixin],
   props: {
     markup: {
       type: [String, Array],

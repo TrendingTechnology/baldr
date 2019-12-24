@@ -21,6 +21,7 @@
 </template>
 
 <script>
+import { masterMixin } from '@/lib.js'
 import { createNamespacedHelpers } from 'vuex'
 import { plainText } from '@bldr/core-browser'
 const { mapGetters } = createNamespacedHelpers('presentation')
@@ -165,6 +166,7 @@ export const master = {
 }
 
 export default {
+  mixins: [masterMixin],
   props: {
     heading: {
       type: String,

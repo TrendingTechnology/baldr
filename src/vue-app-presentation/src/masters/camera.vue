@@ -23,6 +23,7 @@
 </template>
 
 <script>
+import { masterMixin } from '@/lib.js'
 
 /**
  * To create virtual video devices on linux run this commands:
@@ -205,6 +206,7 @@ export const master = {
  * @component
  */
 export default {
+  mixins: [masterMixin],
   data () {
     return {
       deviceId: '',

@@ -11,6 +11,7 @@
 </template>
 
 <script>
+import { masterMixin } from '@/lib.js'
 const defaultLanguage = 'de'
 
 const example = `
@@ -54,6 +55,7 @@ export const master = {
 }
 
 export default {
+  mixins: [masterMixin],
   props: {
     title: {
       type: String,

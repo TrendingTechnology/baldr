@@ -10,6 +10,7 @@
 </template>
 
 <script>
+import { masterMixin } from '@/lib.js'
 
 const example = `
 ---
@@ -46,6 +47,7 @@ export const master = {
 }
 
 export default {
+  mixins: [masterMixin],
   props: {
     id: {
       type: String,

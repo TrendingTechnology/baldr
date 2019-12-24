@@ -9,6 +9,8 @@
 </template>
 
 <script>
+import { masterMixin } from '@/lib.js'
+
 const example = `
 ---
 slides:
@@ -62,6 +64,7 @@ export const master = {
 }
 
 export default {
+  mixins: [masterMixin],
   props: {
     name: {
       type: String,
