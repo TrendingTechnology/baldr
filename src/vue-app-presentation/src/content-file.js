@@ -281,6 +281,7 @@ class Slide {
     if (style) {
       normalizeStyle(style)
     }
+
     /**
      * Css properties in camelCase for the style property of the vue js
      * render function.

@@ -473,7 +473,7 @@ function mirrorRelPath () {
       fs.mkdirSync(absPath, { recursive: true })
     }
     console.log(`Open directory: ${chalk.green(absPath)}`)
-    const process = childProcess.spawn('Thunar', [absPath], { detached: true })
+    const process = childProcess.spawn('xdg-open', [absPath], { detached: true })
     process.unref()
   }
 }
