@@ -7,7 +7,7 @@
 
 <script>
 import { plainText } from '@bldr/core-browser'
-import { markupToHtml, wrapWords } from '@/lib.js'
+import { markupToHtml, wrapWords, displayElementByStepNg } from '@/lib.js'
 import { createNamespacedHelpers } from 'vuex'
 const { mapGetters } = createNamespacedHelpers('presentation')
 
@@ -18,16 +18,17 @@ const example = `
 slides:
 
 - title: Test word wrap
-  generic: |
-    # Heading 1
+  generic:
+    step_words: true
+    markup: |
+      # Heading 1
 
-    Lorem ipsum [dolor sit amet](https://google.de), consectetur adipisici elit, sed eiusmod
-    tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim
-    veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex ea
-    commodi consequat. Quis aute iure reprehenderit in voluptate velit esse
-    cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat
-    cupiditat non proident, sunt in culpa qui officia deserunt mollit anim
-    id est laborum.
+      Lorem ipsum [dolor sit amet](https://google.de), consectetur:
+
+      ## Adipisici elit, sed eiusmod
+
+      * Tempor incidunt ut labore.
+      * Veniam, quis nostrud.
 
 - title: UTF-8 Arrows
   generic: |
@@ -286,7 +287,11 @@ export const master = {
       }
     }
 
-    props.markup = markup
+    if (props.stepWords) {
+      props.markup = [wrapWords(markup.join(' '))]
+    } else {
+      props.markup = markup
+    }
     return props
   },
   stepCount (props) {
@@ -300,7 +305,25 @@ export const master = {
     return output.join(' | ')
   },
   enterSlide () {
-    wrapWords(this.markup)
+    if (this.stepWords) {
+      this.steps = document.querySelectorAll('span.word')
+      this.slideCurrent.renderData.stepCount = this.steps.length + 1
+      displayElementByStepNg({
+        elements: this.steps,
+        stepNo: this.slideCurrent.renderData.stepNoCurrent,
+        full: true,
+        visibility: true
+      })
+    }
+  },
+  enterStep ({ oldStepNo, newStepNo }) {
+    const stepNo = newStepNo
+    if (this.stepWords) displayElementByStepNg({
+      elements: this.steps,
+      oldStepNo,
+      stepNo,
+      visibility: true
+    })
   }
 }
 
@@ -317,6 +340,16 @@ export default {
       type: [Number],
       description: 'Gibt an wie viele Zeichen auf einer Folie erscheinen sollen.',
       default: CHARACTERS_ON_SLIDE
+    },
+    stepWords: {
+      type: [Boolean],
+      description: 'Wörtern einblenden',
+      default: false
+    }
+  },
+  data () {
+    return {
+      steps: null
     }
   },
   computed: {
@@ -325,6 +358,9 @@ export default {
       return this.slideCurrent.renderData.stepNoCurrent
     },
     markupCurrent () {
+      if (this.stepWords) {
+        return this.markup[0]
+      }
       return this.markup[this.stepNoCurrent - 1]
     }
   }

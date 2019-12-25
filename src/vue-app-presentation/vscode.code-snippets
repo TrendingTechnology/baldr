@@ -74,8 +74,8 @@
       "- title: Langform",
       "  cloze:",
       "    src: Den URI zu einer SVG-Datei, die den Lückentext enthält. (required, mediaFileUri, type=String)",
-      "    stepBegin: Beginne bei dieser Schrittnumber Lückentextwörter einzublenden. (type=Number)",
-      "    stepEnd: Höre bei dieser Schrittnumber auf Lückentextwörter einzublenden. (type=Number)"
+      "    step_begin: Beginne bei dieser Schrittnumber Lückentextwörter einzublenden. (type=Number)",
+      "    step_end: Höre bei dieser Schrittnumber auf Lückentextwörter einzublenden. (type=Number)"
     ],
     "description": "Baldr master: cloze",
     "scope": "yaml"
@@ -124,7 +124,7 @@
       "- title: Langform",
       "  generic:",
       "    markup: Markup im HTML oder Markdown-Format (required, types=String,Array)",
-      "    charactersOnSlide: Gibt an wie viele Zeichen auf einer Folie erscheinen sollen. (default=400, types=Number)"
+      "    characters_on_slide: Gibt an wie viele Zeichen auf einer Folie erscheinen sollen. (default=400, types=Number)"
     ],
     "description": "Baldr master: generic",
     "scope": "yaml"
@@ -237,8 +237,8 @@
       "- title: Langform",
       "  svg:",
       "    src: Den URI zu einer SVG-Datei. (required, mediaFileUri, type=String)",
-      "    stepSelector: Selektor, der Elemente auswählt, die als Schritte eingeblendet werden sollen. (default=g)",
-      "    stepExclude: Schritt-Number der Elemente, die nicht als Schritte eingeblendet werden sollen. (z. B. 1, oder [1, 2, 3]) (types=Array,Number)"
+      "    step_selector: Selektor, der Elemente auswählt, die als Schritte eingeblendet werden sollen. (default=g)",
+      "    step_exclude: Schritt-Number der Elemente, die nicht als Schritte eingeblendet werden sollen. (z. B. 1, oder [1, 2, 3]) (types=Array,Number)"
     ],
     "description": "Baldr master: svg",
     "scope": "yaml"

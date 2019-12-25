@@ -164,7 +164,62 @@ export function displayElementByStepMinimal (elements, oldStepNo, newStepNo) {
     element = elements[newStepNo - 1]
     display = 'none'
   }
+  console.log(display)
+  console.log(element)
   element.style.display = display
+  return element
+}
+
+/**
+ * Don’t loop through all elements. Update only the next element.
+ *
+ * @param {Array} elements - A list of HTML elements to display on step number
+ *   change.
+ * @param {Number} oldStepNo
+ * @param {Number} newStepNo
+ *
+ * @returns {Object} The element that is displayed by the new step number.
+ */
+export function displayElementByStepNg ({ elements, stepNo, oldStepNo, full, visibility }) {
+
+  function showElement(element, show) {
+    if (visibility) {
+      if (show) {
+        element.style.visibility = 'visible'
+      } else {
+        element.style.visibility = 'hidden'
+      }
+    } else {
+      if (show) {
+        element.style.display = 'block'
+      } else {
+        element.style.display = 'none'
+      }
+    }
+  }
+
+  if (!oldStepNo || full || stepNo === 1 || (oldStepNo === 1 && stepNo === elements.length + 1)) {
+    let count = 1
+    for (const element of elements) {
+      showElement(element, stepNo > count)
+      count += 1
+    }
+    if (stepNo === 1) {
+      return elements[0]
+    }
+    // First step: no elements are displayed
+    // Array index begin with 0, steps with 1
+    return elements[stepNo - 2]
+  }
+  let element
+  if (stepNo > oldStepNo) {
+    // First step: no elements are displayed
+    // Array index begin with 0, steps with 1
+    element = elements[stepNo - 2]
+  } else {
+    element = elements[stepNo - 1]
+  }
+  showElement(element, stepNo > oldStepNo)
   return element
 }
 
