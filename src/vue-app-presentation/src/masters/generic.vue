@@ -54,7 +54,7 @@ slides:
     - Step 1
     - Step 2
 
-- title: Long text in stepts
+- title: Long text in steps
   generic:
     markup:
     - |
