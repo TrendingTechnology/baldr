@@ -77,7 +77,7 @@ export const master = {
     this.shortcutsRegister(this.elGroups)
   },
   leaveSlide () {
-    this.shortcutsUnregister(this.elGroups)
+    if ('shortcutsUnregister' in this) this.shortcutsUnregister(this.elGroups)
   },
   enterStep ({ oldStepNo, newStepNo }) {
     displayElementByStepNo({
