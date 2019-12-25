@@ -3,8 +3,10 @@
  * @file
  */
 
-import vue from '@/main.js'
-import { customStore } from '@/main.js'
+/* globals DOMParser */
+
+import vue, { customStore } from '@/main.js'
+
 import marked from 'marked'
 
 /**
@@ -14,11 +16,11 @@ import marked from 'marked'
  */
 function convertCustomMarkup (text) {
   return text
-    // ↔	8596	2194	&harr;	LEFT RIGHT ARROW
+    // ↔ 8596 2194 &harr; LEFT RIGHT ARROW
     .replace(/<->/g, '↔')
-    // →	8594	2192	&rarr;	RIGHTWARDS ARROW
+    // → 8594 2192 &rarr; RIGHTWARDS ARROW
     .replace(/->/g, '→')
-    // ←	8592	2190	&larr;	LEFTWARDS ARROW
+    // ← 8592 2190 &larr; LEFTWARDS ARROW
     .replace(/<-/g, '←')
 }
 
@@ -171,7 +173,7 @@ export function displayElementByStepMinimal (elements, oldStepNo, newStepNo) {
  */
 export const masterMixin = {
   mounted () {
-    let oldSlide = vue.$store.getters['presentation/slideOld']
+    const oldSlide = vue.$store.getters['presentation/slideOld']
     let oldProps
     if (oldSlide) {
       oldProps = oldSlide.renderData.props
@@ -182,7 +184,7 @@ export const masterMixin = {
     customStore.vueMasterInstanceCurrent = this
   },
   destroyed () {
-    let oldSlide = vue.$store.getters['presentation/slideOld']
+    const oldSlide = vue.$store.getters['presentation/slideOld']
     let oldProps
     if (oldSlide) {
       oldProps = oldSlide.renderData.props
@@ -192,4 +194,69 @@ export const masterMixin = {
     newSlide.master.leaveSlide({ oldSlide, oldProps, newSlide, newProps }, this)
     customStore.vueMasterInstanceCurrent = null
   }
+}
+
+// https://stackoverflow.com/a/26030835
+export function wrapWords (text) {
+  if (Array.isArray(text)) {
+    text = text.join(' ')
+  }
+  text = text.replace(/\n+/g, '')
+  text = text.replace(/\s+/g, ' ')
+  const dom = new DOMParser().parseFromString(text, 'text/html')
+  // First a simple implementation of recursive descent,
+  // visit all nodes in the DOM and process it with a callback:
+  function walkDOM (node, callback) {
+    if (node.nodeName !== 'SCRIPT') { // ignore javascript
+      callback(node)
+      for (let i = 0; i < node.childNodes.length; i++) {
+        walkDOM(node.childNodes[i], callback)
+      }
+    }
+  }
+
+  const textNodes = []
+  walkDOM(dom.body, function (n) {
+    if (n.nodeType === 3) {
+      textNodes.push(n)
+    }
+  })
+
+  // simple utility functions to avoid a lot of typing:
+  function insertBefore (new_element, element) {
+    element.parentNode.insertBefore(new_element, element)
+  }
+
+  function removeElement (element) {
+    element.parentNode.removeChild(element)
+  }
+
+  function makeSpan (txt) {
+    const span = document.createElement('span')
+    span.classList.add('word')
+    span.appendChild(makeText(txt))
+    return span
+  }
+
+  function makeText (txt) {
+    return document.createTextNode(txt)
+  }
+
+  for (let i = 0; i < textNodes.length; i++) {
+    const n = textNodes[i]
+    const txt = n.nodeValue
+    console.log(txt)
+    const words = txt.split(' ')
+
+    // Insert span surrounded words:
+    insertBefore(makeSpan(words[0]), n)
+    for (let j = 1; j < words.length; j++) {
+      insertBefore(makeText(' '), n) // join the words with spaces
+      insertBefore(makeSpan(words[j]), n)
+    }
+    // Now remove the original text node:
+    removeElement(n)
+  }
+  const markup = dom.body.innerHTML
+  return markup
 }
