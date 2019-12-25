@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { markupToHtml, displayElementByStepFull, displayElementByStepMinimal } from '@/lib.js'
+import { markupToHtml, displayElementByStepNo } from '@/lib.js'
 import { createNamespacedHelpers } from 'vuex'
 const { mapGetters } = createNamespacedHelpers('presentation')
 
@@ -66,7 +66,11 @@ export const master = {
     return [props.src]
   },
   enterStep ({ oldStepNo, newStepNo }) {
-    const newClozeGroup = displayElementByStepMinimal(this.clozeGroups, oldStepNo, newStepNo)
+    const newClozeGroup = displayElementByStepNo({
+      elements: this.clozeGroups,
+      oldStepNo,
+      stepNo: newStepNo
+    })
     this.scroll(newClozeGroup)
   },
   async enterSlide () {
@@ -116,7 +120,10 @@ export default {
       for (const group of this.allClozeGroups) {
         group.style.display = 'none'
       }
-      const newClozeGroup = displayElementByStepFull(this.clozeGroups, this.slideCurrent.renderData.stepNoCurrent)
+      const newClozeGroup = displayElementByStepNo({
+        elements: this.clozeGroups,
+        stepNo: this.slideCurrent.renderData.stepNoCurrent
+      })
       this.scroll(newClozeGroup)
     },
     /**

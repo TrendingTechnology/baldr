@@ -7,7 +7,7 @@
 
 <script>
 import { plainText } from '@bldr/core-browser'
-import { markupToHtml, wrapWords, displayElementByStepNg } from '@/lib.js'
+import { markupToHtml, wrapWords, displayElementByStepNo } from '@/lib.js'
 import { createNamespacedHelpers } from 'vuex'
 const { mapGetters } = createNamespacedHelpers('presentation')
 
@@ -308,7 +308,7 @@ export const master = {
     if (this.stepWords) {
       this.steps = document.querySelectorAll('span.word')
       this.slideCurrent.renderData.stepCount = this.steps.length + 1
-      displayElementByStepNg({
+      displayElementByStepNo({
         elements: this.steps,
         stepNo: this.slideCurrent.renderData.stepNoCurrent,
         full: true,
@@ -318,7 +318,7 @@ export const master = {
   },
   enterStep ({ oldStepNo, newStepNo }) {
     const stepNo = newStepNo
-    if (this.stepWords) displayElementByStepNg({
+    if (this.stepWords) displayElementByStepNo({
       elements: this.steps,
       oldStepNo,
       stepNo,

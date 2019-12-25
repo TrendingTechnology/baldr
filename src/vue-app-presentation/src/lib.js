@@ -111,76 +111,23 @@ export function validateUri (uri) {
 }
 
 /**
- * Set the display state on elements. Loop through all elements. On the first
- * step no elements are displayed. The number of steps is: number of elements
- * + 1.
- *
- * @param {Array} elements - A list of HTML elements to display on step number
- *   change.
- * @param {Number} stepNo - The current step number.
- *
- * @returns {Object} The element that is displayed by the new step number.
- */
-export function displayElementByStepFull (elements, stepNo) {
-  let count = 1
-  for (const element of elements) {
-    if (stepNo > count) {
-      element.style.display = 'block'
-    } else {
-      element.style.display = 'none'
-    }
-    count += 1
-  }
-  if (stepNo === 1) {
-    return elements[0]
-  }
-  // First step: no elements are displayed
-  // Array index begin with 0, steps with 1
-  return elements[stepNo - 2]
-}
-
-/**
+ * Set the display / visiblilty state on elements. Loop through all elements or
+ * perform a minimal update On the first step no elements are displayed.
+ * The number of steps is: number of elements + 1.
  * Don’t loop through all elements. Update only the next element.
  *
- * @param {Array} elements - A list of HTML elements to display on step number
+ * @param {config}
+ * @property {Array} elements - A list of HTML elements to display on step number
  *   change.
- * @param {Number} oldStepNo
- * @param {Number} newStepNo
+ * @property {Number} oldStepNo - The previous step number
+ * @property {Number} stepNo - The current step number.
+ * @property {Boolean} full - Performe a full update
+ * @property {Boolean} visiblilty - Set the visibility `element.style.visibility`
+ *   instead of the the display state.
  *
  * @returns {Object} The element that is displayed by the new step number.
  */
-export function displayElementByStepMinimal (elements, oldStepNo, newStepNo) {
-  if (newStepNo === 1 || (oldStepNo === 1 && newStepNo === elements.length + 1)) {
-    return displayElementByStepFull(elements, newStepNo)
-  }
-  let element
-  let display
-  if (newStepNo > oldStepNo) {
-    // First step: no elements are displayed
-    // Array index begin with 0, steps with 1
-    element = elements[newStepNo - 2]
-    display = 'block'
-  } else {
-    element = elements[newStepNo - 1]
-    display = 'none'
-  }
-  console.log(display)
-  console.log(element)
-  element.style.display = display
-  return element
-}
-
-/**
- * Don’t loop through all elements. Update only the next element.
- *
- * @param {Array} elements - A list of HTML elements to display on step number
- *   change.
- * @param {Number} oldStepNo
- * @param {Number} newStepNo
- *
- * @returns {Object} The element that is displayed by the new step number.
- */
-export function displayElementByStepNg ({ elements, stepNo, oldStepNo, full, visibility }) {
+export function displayElementByStepNo ({ elements, stepNo, oldStepNo, full, visibility }) {
 
   function showElement(element, show) {
     if (visibility) {

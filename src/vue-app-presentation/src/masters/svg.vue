@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { markupToHtml, displayElementByStepMinimal, displayElementByStepFull } from '@/lib.js'
+import { markupToHtml, displayElementByStepNo } from '@/lib.js'
 import { createNamespacedHelpers } from 'vuex'
 const { mapGetters } = createNamespacedHelpers('presentation')
 
@@ -61,14 +61,30 @@ export const master = {
     return [props.src]
   },
   async enterSlide () {
-    await this.loadSvg()
+    let response = await this.$media.httpRequest.request({
+      url: `/media/${this.mediaFile.path}`,
+      method: 'get'
+    })
+    const svg = this.$refs.svgWrapper
+    svg.innerHTML = response.data
+    this.elGroups = svg.querySelectorAll(this.stepSelector)
+    this.elGroups = this.removeElementsFromSteps(this.elGroups, this.stepExclude)
+    this.slideCurrent.renderData.stepCount = this.elGroups.length + 1
+    displayElementByStepNo({
+      elements: this.elGroups,
+      stepNo: this.slideCurrent.renderData.stepNoCurrent
+    })
     this.shortcutsRegister(this.elGroups)
   },
   leaveSlide () {
     this.shortcutsUnregister(this.elGroups)
   },
   enterStep ({ oldStepNo, newStepNo }) {
-    displayElementByStepMinimal(this.elGroups, oldStepNo, newStepNo)
+    displayElementByStepNo({
+      elements: this.elGroups,
+      oldStepNo,
+      stepNo: newStepNo
+    })
   }
 }
 
@@ -134,18 +150,6 @@ export default {
         const shortcut = element.getAttribute('baldr-shortcut')
         this.$shortcuts.remove(`q ${shortcut}`)
       }
-    },
-    async loadSvg () {
-      let response = await this.$media.httpRequest.request({
-        url: `/media/${this.mediaFile.path}`,
-        method: 'get'
-      })
-      const svg = this.$refs.svgWrapper
-      svg.innerHTML = response.data
-      this.elGroups = svg.querySelectorAll(this.stepSelector)
-      this.elGroups = this.removeElementsFromSteps(this.elGroups, this.stepExclude)
-      this.slideCurrent.renderData.stepCount = this.elGroups.length + 1
-      displayElementByStepFull(this.elGroups, this.slideCurrent.renderData.stepNoCurrent)
     }
   }
 }
