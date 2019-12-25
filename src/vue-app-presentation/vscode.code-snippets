@@ -124,7 +124,8 @@
       "- title: Langform",
       "  generic:",
       "    markup: Markup im HTML oder Markdown-Format (required, types=String,Array)",
-      "    characters_on_slide: Gibt an wie viele Zeichen auf einer Folie erscheinen sollen. (default=400, types=Number)"
+      "    characters_on_slide: Gibt an wie viele Zeichen auf einer Folie erscheinen sollen. (default=400, types=Number)",
+      "    step_words: Wörtern einblenden (types=Boolean)"
     ],
     "description": "Baldr master: generic",
     "scope": "yaml"
