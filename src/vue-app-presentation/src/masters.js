@@ -4,9 +4,10 @@
  * @module @bldr/vue-app-presentation/masters
  */
 
+import vue, { customStore } from '@/main.js'
 import Vue from 'vue'
 import store from '@/store.js'
-import { markupToHtml, validateUri, masterMixin } from '@/lib.js'
+import { markupToHtml, validateUri } from '@/lib.js'
 
 /**
  * The icon of a master slide. This icon is shown in the documentation or
@@ -400,6 +401,34 @@ class Masters {
    */
   get allNames () {
     return Object.keys(this.store_)
+  }
+}
+
+/**
+ * This object is mixed in into each master component.
+ */
+const masterMixin = {
+  mounted () {
+    const oldSlide = vue.$store.getters['presentation/slideOld']
+    let oldProps
+    if (oldSlide) {
+      oldProps = oldSlide.renderData.props
+    }
+    const newSlide = vue.$store.getters['presentation/slideCurrent']
+    const newProps = newSlide.renderData.props
+    newSlide.master.enterSlide({ oldSlide, oldProps, newSlide, newProps }, this)
+    customStore.vueMasterInstanceCurrent = this
+  },
+  destroyed () {
+    const oldSlide = vue.$store.getters['presentation/slideOld']
+    let oldProps
+    if (oldSlide) {
+      oldProps = oldSlide.renderData.props
+    }
+    const newSlide = vue.$store.getters['presentation/slideCurrent']
+    const newProps = newSlide.renderData.props
+    newSlide.master.leaveSlide({ oldSlide, oldProps, newSlide, newProps }, this)
+    customStore.vueMasterInstanceCurrent = null
   }
 }
 

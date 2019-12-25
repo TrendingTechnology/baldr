@@ -5,8 +5,6 @@
 
 /* globals DOMParser */
 
-import vue, { customStore } from '@/main.js'
-
 import marked from 'marked'
 
 /**
@@ -154,48 +152,20 @@ export function displayElementByStepNo ({ elements, stepNo, oldStepNo, full, vis
     if (stepNo === 1) {
       return elements[0]
     }
-    // First step: no elements are displayed
-    // Array index begin with 0, steps with 1
+    // First step: No elements are displayed.
+    // The array index begins with 0, steps with 1.
     return elements[stepNo - 2]
   }
   let element
   if (stepNo > oldStepNo) {
-    // First step: no elements are displayed
-    // Array index begin with 0, steps with 1
+    // First step: No elements are displayed.
+    // The array index begins with 0, steps with 1.
     element = elements[stepNo - 2]
   } else {
     element = elements[stepNo - 1]
   }
   showElement(element, stepNo > oldStepNo)
   return element
-}
-
-/**
- * This object is mixed in into each master component.
- */
-export const masterMixin = {
-  mounted () {
-    const oldSlide = vue.$store.getters['presentation/slideOld']
-    let oldProps
-    if (oldSlide) {
-      oldProps = oldSlide.renderData.props
-    }
-    const newSlide = vue.$store.getters['presentation/slideCurrent']
-    const newProps = newSlide.renderData.props
-    newSlide.master.enterSlide({ oldSlide, oldProps, newSlide, newProps }, this)
-    customStore.vueMasterInstanceCurrent = this
-  },
-  destroyed () {
-    const oldSlide = vue.$store.getters['presentation/slideOld']
-    let oldProps
-    if (oldSlide) {
-      oldProps = oldSlide.renderData.props
-    }
-    const newSlide = vue.$store.getters['presentation/slideCurrent']
-    const newProps = newSlide.renderData.props
-    newSlide.master.leaveSlide({ oldSlide, oldProps, newSlide, newProps }, this)
-    customStore.vueMasterInstanceCurrent = null
-  }
 }
 
 // https://stackoverflow.com/a/26030835
