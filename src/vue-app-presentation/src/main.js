@@ -365,3 +365,7 @@ const vue = new Vue({
 }).$mount('#app')
 
 export default vue
+
+// To be able to store Vue compoment instances. If we store a vue component
+// instance in a vuex store there are many errors raised.
+export const customStore = {}

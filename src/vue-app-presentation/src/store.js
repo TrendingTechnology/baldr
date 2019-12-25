@@ -5,30 +5,16 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import { Presentation } from './content-file'
 import vue from '@/main.js'
-
-function getVueChildrenInstanceByName (name, children) {
-  if (!children) children = vue.$children
-  for (const child of children) {
-    if (child.$options.name === name) {
-      return child
-    } else if (child.$children.length) {
-      const result = getVueChildrenInstanceByName(name, child.$children)
-      if (result) return result
-    }
-  }
-}
-
-function getMasterVueInstance (masterName) {
-  return getVueChildrenInstanceByName(`${masterName}-master`)
-}
+import { customStore } from '@/main.js'
 
 Vue.use(Vuex)
 
 const state = {
+  showBlank: true,
+  slideNoOld: null,
   slideNoCurrent: null,
   slides: {},
-  presentation: {},
-  vueMasterInstanceCurrent: null
+  presentation: {}
 }
 
 const getters = {
@@ -43,6 +29,11 @@ const getters = {
       return getters.slideByNo(state.slideNoCurrent)
     }
   },
+  slideOld: (state, getters) => {
+    if (state.slideNoOld) {
+      return getters.slideByNo(state.slideNoOld)
+    }
+  },
   slideByNo: state => no => {
     return state.slides[no - 1]
   },
@@ -53,6 +44,9 @@ const getters = {
   },
   slidesCount: (state, getters) => {
     return getters.slides.length
+  },
+  showBlank: (state) => {
+    return state.showBlank
   }
 }
 
@@ -111,28 +105,11 @@ const actions = {
     }
   },
   setSlideNoCurrent ({ commit, getters }, no) {
-    let oldSlide
-    let oldProps
-    let newSlide = getters.slideByNo(no)
-    let newProps = newSlide.renderData.props
     if (getters.slideCurrent) {
-      oldSlide = getters.slideCurrent
-      oldProps = oldSlide.renderData.props
-      getters.slideCurrent.master.leaveSlide(
-        { oldSlide, oldProps, newSlide, newProps },
-        getMasterVueInstance(oldSlide.master.name)
-      )
+      commit('setSlideNoOld', getters.slideCurrent.no)
     }
+    commit('setShowBlank', true)
     commit('setSlideNoCurrent', no)
-    Vue.nextTick(function () {
-      // TODO: Remove this timeout
-      setTimeout(function () {
-        getters.slideCurrent.master.enterSlide(
-          { oldSlide, oldProps, newSlide, newProps },
-          getMasterVueInstance(newSlide.master.name)
-        )
-      }, 10)
-    })
   },
   setStepNext ({ dispatch, getters }) {
     let stepNoCurrent
@@ -161,7 +138,7 @@ const actions = {
   setStepNoCurrent ({ commit }, { slideCurrent, stepNoCurrent }) {
     let oldStepNo = slideCurrent.renderData.stepNoCurrent
     let newStepNo = stepNoCurrent
-    const thisArg = getMasterVueInstance(slideCurrent.master.name)
+    const thisArg = customStore.vueMasterInstanceCurrent
     slideCurrent.master.leaveStep({ oldStepNo, newStepNo }, thisArg)
     commit('setStepNoCurrent', { slideCurrent, stepNoCurrent })
     slideCurrent.master.enterStep({ oldStepNo, newStepNo }, thisArg)
@@ -172,6 +149,9 @@ const mutations = {
   setSlides (state, slides) {
     Vue.set(state, 'slides', slides)
   },
+  setSlideNoOld (state, slideNoOld) {
+    state.slideNoOld = parseInt(slideNoOld)
+  },
   setSlideNoCurrent (state, slideNoCurrent) {
     state.slideNoCurrent = parseInt(slideNoCurrent)
   },
@@ -181,8 +161,8 @@ const mutations = {
   setPresentation (state, presentation) {
     Vue.set(state, 'presentation', presentation)
   },
-  setVueMasterInstanceCurrent (state, vue) {
-    Vue.set(state, 'vueMasterInstanceCurrent', vue)
+  setShowBlank (state, showBlank) {
+    Vue.set(state, 'showBlank', showBlank)
   }
 }
 

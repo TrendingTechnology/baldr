@@ -4,6 +4,7 @@
  */
 
 import vue from '@/main.js'
+import { customStore } from '@/main.js'
 import marked from 'marked'
 
 /**
@@ -165,11 +166,30 @@ export function displayElementByStepMinimal (elements, oldStepNo, newStepNo) {
   return element
 }
 
+/**
+ * This object is mixed in into each master component.
+ */
 export const masterMixin = {
   mounted () {
-    vue.$store.commit('presentation/setVueMasterInstanceCurrent', this)
+    let oldSlide = vue.$store.getters['presentation/slideOld']
+    let oldProps
+    if (oldSlide) {
+      oldProps = oldSlide.renderData.props
+    }
+    const newSlide = vue.$store.getters['presentation/slideCurrent']
+    const newProps = newSlide.renderData.props
+    newSlide.master.enterSlide({ oldSlide, oldProps, newSlide, newProps }, this)
+    customStore.vueMasterInstanceCurrent = this
   },
   destroyed () {
-    vue.$store.commit('presentation/setVueMasterInstanceCurrent', null)
+    let oldSlide = vue.$store.getters['presentation/slideOld']
+    let oldProps
+    if (oldSlide) {
+      oldProps = oldSlide.renderData.props
+    }
+    const newSlide = vue.$store.getters['presentation/slideCurrent']
+    const newProps = newSlide.renderData.props
+    newSlide.master.leaveSlide({ oldSlide, oldProps, newSlide, newProps }, this)
+    customStore.vueMasterInstanceCurrent = null
   }
 }
