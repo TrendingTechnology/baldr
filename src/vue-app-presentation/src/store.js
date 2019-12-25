@@ -27,7 +27,8 @@ Vue.use(Vuex)
 const state = {
   slideNoCurrent: null,
   slides: {},
-  presentation: {}
+  presentation: {},
+  vueMasterInstanceCurrent: null
 }
 
 const getters = {
@@ -179,6 +180,9 @@ const mutations = {
   },
   setPresentation (state, presentation) {
     Vue.set(state, 'presentation', presentation)
+  },
+  setVueMasterInstanceCurrent (state, vue) {
+    Vue.set(state, 'vueMasterInstanceCurrent', vue)
   }
 }
 

@@ -3,6 +3,7 @@
  * @file
  */
 
+import vue from '@/main.js'
 import marked from 'marked'
 
 /**
@@ -166,6 +167,9 @@ export function displayElementByStepMinimal (elements, oldStepNo, newStepNo) {
 
 export const masterMixin = {
   mounted () {
-    console.log(this)
+    vue.$store.commit('presentation/setVueMasterInstanceCurrent', this)
+  },
+  destroyed () {
+    vue.$store.commit('presentation/setVueMasterInstanceCurrent', null)
   }
 }

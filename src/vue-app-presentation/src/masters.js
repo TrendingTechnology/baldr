@@ -430,7 +430,12 @@ function registerMasters () {
     // Get the component config
     const masterName = fileName.replace('./', '').replace('.vue', '')
     const componentConfig = requireComponent(fileName)
-    componentConfig.default.mixins = [masterMixin]
+    const dataMixin = {
+      data () {
+        return { masterName }
+      }
+    }
+    componentConfig.default.mixins = [masterMixin, dataMixin]
     const masterConfig = componentConfig.master
     const master = new Master(masterName)
     master.importMembers(masterConfig)
