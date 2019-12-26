@@ -12,7 +12,7 @@ const yaml = require('js-yaml')
 const musicMetadata = require('music-metadata')
 
 // Project packages
-const { Asset, walk, asciify, deasciify, assetTypes } = require('./main.js')
+const { Asset, walk, asciify, deasciify, assetTypes, readHierarchicalFolderTitles } = require('./main.js')
 const { bootstrapConfig } = require('@bldr/core-node')
 
 // Project packages.
@@ -602,6 +602,25 @@ commander
   .command('rename').alias('r')
   .description('Rename files, clean file names, remove all whitespaces and special characters.')
   .action(rename)
+
+/*** t / folder-title *********************************************************/
+
+function listHierarchicalFolderTitles (filePath) {
+  if (filePath) {
+    readHierarchicalFolderTitles(filePath)
+  } else {
+    walk(process.cwd(), {
+      presentation (relPath) {
+        readHierarchicalFolderTitles(relPath)
+      }
+    })
+  }
+}
+
+commander
+  .command('folder-title [input]').alias('t')
+  .description('List all hierachical folder titles')
+  .action(listHierarchicalFolderTitles)
 
 /*** --version / -v ***********************************************************/
 

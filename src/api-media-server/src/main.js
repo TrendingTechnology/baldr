@@ -468,6 +468,28 @@ class Asset extends MediaFile {
 }
 
 /**
+ *
+ * @param {String} filePath - The path of the presentation file.
+ */
+function readHierarchicalFolderTitles (filePath) {
+  const segments = filePath.split(path.sep)
+  const depth = segments.length
+  const minDepth = basePath.split(path.sep).length
+  const relPath = filePath.replace(basePath, '')
+  const hierarchTitles = []
+  for (let index = minDepth + 1; index < depth; index++) {
+    const titleTxt = [...segments.slice(0, index), 'title.txt'].join('/')
+    if (fs.existsSync(titleTxt)) {
+      const title = fs.readFileSync(titleTxt, { encoding: 'utf-8'}).replace(/\n$/, '')
+      if (title) {
+        hierarchTitles.push(title)
+      }
+    }
+  }
+  console.log(hierarchTitles)
+}
+
+/**
  * The whole presentation YAML file converted to an Javascript object. All
  * properties are in `camelCase`.
  */
@@ -1011,6 +1033,7 @@ module.exports = {
   assetTypes,
   deasciify,
   helpMessages,
+  readHierarchicalFolderTitles,
   registerRestApi,
   walk
 }
