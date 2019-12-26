@@ -608,12 +608,13 @@ commander
 function listHierarchicalFolderTitles (filePath) {
 
   function read (filePath) {
-    const titles = new HierarchicalFolderTitles()
-    titles.read(filePath)
+    const titles = new HierarchicalFolderTitles(filePath)
     console.log(titles.all)
+    console.log(`  id: ${chalk.cyan(titles.id)}`)
     console.log(`  title: ${chalk.yellow(titles.title)}`)
     if (titles.subtitle) console.log(`  subtitle: ${chalk.green(titles.subtitle)}`)
     console.log(`  curriculum: ${chalk.red(titles.curriculum)}`)
+    console.log(`  grade: ${chalk.red(titles.grade)}`)
   }
 
   if (filePath) {

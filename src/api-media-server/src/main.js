@@ -204,6 +204,90 @@ function convertPropertiesToCamelCase (object) {
 /* Media objects **************************************************************/
 
 /**
+ * Hold some data about a folder and its title.
+ */
+class FolderTitle {
+  constructor({ title, subtile, folderName }) {
+    this.title = title
+    this.subtitle = subtile
+    this.folderName = folderName
+  }
+}
+
+/**
+ *
+ */
+class HierarchicalFolderTitles {
+  /**
+   * @param {String} filePath - The path of the presentation file.
+   */
+  constructor (filePath) {
+    this.titles_ = []
+    this.read_(filePath)
+  }
+
+  /**
+   * @param {String} filePath - The path of the presentation file.
+   *
+   * @private
+   */
+  read_ (filePath) {
+    const segments = filePath.split(path.sep)
+    const depth = segments.length
+    const minDepth = basePath.split(path.sep).length
+    for (let index = minDepth + 1; index < depth; index++) {
+      const titleTxt = [...segments.slice(0, index), 'title.txt'].join('/')
+      if (fs.existsSync(titleTxt)) {
+        const titleRaw = fs.readFileSync(titleTxt, { encoding: 'utf-8' })
+        const titles = titleRaw.split('\n')
+        const folderTitle = new FolderTitle({})
+        if (titles.length > 0) {
+          folderTitle.title = titles[0]
+          folderTitle.folderName = segments[index - 1]
+        } else if (titles.length > 1) {
+          folderTitle.subtitle = titles[1]
+        }
+        this.titles_.push(folderTitle)
+      }
+    }
+  }
+
+  get all () {
+    return this.onlyTitles_.join(' / ')
+  }
+
+  get curriculum () {
+    return this.onlyTitles_.slice(0, this.titles_.length - 1).join(' / ')
+  }
+
+  get onlyTitles_() {
+    return this.titles_.map(folderTitle => folderTitle.title)
+  }
+
+  get lastTitle_ () {
+    return this.titles_[this.titles_.length - 1]
+  }
+
+  get id () {
+    return this.lastTitle_.folderName.replace(/\d\d_/, '')
+  }
+
+  get title () {
+    return this.lastTitle_.title
+  }
+
+  get subtitle () {
+    if (this.lastTitle_.subtitle) {
+      return this.lastTitle_.subtitle
+    }
+  }
+
+  get grade () {
+    return this.titles_[0].title.replace(/[^\d]+$/, '')
+  }
+}
+
+/**
  * Categories some asset file formats in three asset types: `audio`, `image`,
  * `video`.
  *
@@ -467,72 +551,6 @@ class Asset extends MediaFile {
   }
 }
 
-class FolderTitle {
-  constructor({ title, subtile, folderName }) {
-    this.title = title
-    this.subtitle = subtile
-    this.folderName = folderName
-  }
-}
-
-class HierarchicalFolderTitles {
-  constructor () {
-    this.titles_ = []
-  }
-
-  /**
-   *
-   * @param {String} filePath - The path of the presentation file.
-   */
-  read (filePath) {
-    const segments = filePath.split(path.sep)
-    const depth = segments.length
-    const minDepth = basePath.split(path.sep).length
-    for (let index = minDepth + 1; index < depth; index++) {
-      const titleTxt = [...segments.slice(0, index), 'title.txt'].join('/')
-      if (fs.existsSync(titleTxt)) {
-        const titleRaw = fs.readFileSync(titleTxt, { encoding: 'utf-8' })
-        const titles = titleRaw.split('\n')
-        const folderTitle = new FolderTitle({})
-        if (titles.length > 0) {
-          this.titles_.push(titles)
-          folderTitle.title = titles[0]
-          folderTitle.folderName = segments[index - 1]
-        } else if (titles.length > 1) {
-          folderTitle.subtitle = titles[1]
-        }
-        console.log(folderTitle)
-      }
-    }
-  }
-
-  get all () {
-    return this.onlyTitles_.join(' / ')
-  }
-
-  get curriculum () {
-    return this.onlyTitles_.slice(0, this.titles_.length - 1).join(' / ')
-  }
-
-  get onlyTitles_() {
-    return this.titles_.map(title => title[0])
-  }
-
-  get lastTitle_ () {
-    return this.titles_[this.titles_.length - 1]
-  }
-
-  get title () {
-    return this.lastTitle_[0]
-  }
-
-  get subtitle () {
-    if (this.lastTitle_.length > 1) {
-      return this.lastTitle_[1]
-    }
-  }
-}
-
 /**
  * The whole presentation YAML file converted to an Javascript object. All
  * properties are in `camelCase`.
@@ -542,6 +560,13 @@ class Presentation extends MediaFile {
     super(filePath)
     const data = this.readYaml_(filePath)
     this.mergeObject(data)
+
+    const folderTitles = new HierarchicalFolderTitles(filePath)
+
+    if (!this.meta) this.meta = {}
+    for (const property of ['id', 'title', 'subtitle', 'curriculum', 'grade']) {
+      if (!this.meta[property]) this.meta[property] = folderTitles[property]
+    }
 
     /**
      * Value is the same as `meta.title`
