@@ -383,14 +383,18 @@ function help () {
 function renameFromIdOneFile (filePath) {
   result = yaml.safeLoad(fs.readFileSync(`${filePath}.yml`, 'utf8'))
   if ('id' in result && result.id) {
+    let id = result.id
     const oldPath = filePath
 
     // .mp4
     const extension = path.extname(oldPath)
     const oldBaseName = path.basename(oldPath, extension)
     let newPath = null
-    if (result.id !== oldBaseName) {
-      newPath = path.join(path.dirname(oldPath), `${result.id}${extension}`)
+    // Gregorianik_HB_Alleluia-Ostermesse -> Alleluia-Ostermesse
+    id = id.replace(/.*_[A-Z]{2,}_/, '')
+    console.log(id)
+    if (id !== oldBaseName) {
+      newPath = path.join(path.dirname(oldPath), `${id}${extension}`)
     } else {
       return
     }
