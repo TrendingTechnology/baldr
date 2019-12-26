@@ -259,7 +259,27 @@ class Master {
   }
 
   /**
-   * Called when leaving a slide.
+   * Called before leaving a slide. This hook is triggered before the new
+   * slide number `slideNoCurrent` is set in the vuex store.
+   *
+   * @param {object} payload
+   * @property {object} payload
+   * @property {module:@bldr/vue-app-presentation~Slide} payload.oldSlide
+   * @property {module:@bldr/vue-app-presentation~props} payload.oldProps
+   * @property {module:@bldr/vue-app-presentation~Slide} payload.newSlide
+   * @property {module:@bldr/vue-app-presentation~props} payload.newProps
+   *
+   * @param {object} thisArg - The
+   *   {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/call thisArg}
+   *   the master function is called with.
+   */
+  beforeLeaveSlide (payload, thisArg) {
+    this.callFunction_('beforeLeaveSlide', payload, thisArg)
+  }
+
+  /**
+   * Called when leaving a slide. This hook is triggered by the Vue lifecycle
+   * hook `beforeDestroy`.
    *
    * @param {object} payload
    * @property {object} payload

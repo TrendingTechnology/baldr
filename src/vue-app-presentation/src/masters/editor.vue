@@ -205,7 +205,7 @@ export const master = {
       })
     }
   },
-  leaveSlide ({ oldProps }) {
+  beforeLeaveSlide ({ oldProps }) {
     const element = document.querySelector('.vc_editor_master')
     if (element) oldProps.markup = element.innerHTML
   },

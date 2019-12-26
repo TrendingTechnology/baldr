@@ -105,8 +105,19 @@ const actions = {
     }
   },
   setSlideNoCurrent ({ commit, getters }, no) {
+    let oldSlide
+    let oldProps
+    let newSlide = getters.slideByNo(no)
+    let newProps = newSlide.renderData.props
+
     if (getters.slideCurrent) {
-      commit('setSlideNoOld', getters.slideCurrent.no)
+      oldSlide = getters.slideCurrent
+      commit('setSlideNoOld', oldSlide.no)
+      oldProps = oldSlide.renderData.props
+      getters.slideCurrent.master.beforeLeaveSlide(
+        { oldSlide, oldProps, newSlide, newProps },
+        customStore.vueMasterInstanceCurrent
+      )
     }
     commit('setShowBlank', true)
     commit('setSlideNoCurrent', no)
