@@ -419,7 +419,7 @@ const masterMixin = {
     newSlide.master.enterSlide({ oldSlide, oldProps, newSlide, newProps }, this)
     customStore.vueMasterInstanceCurrent = this
   },
-  destroyed () {
+  beforeDestroy () {
     const oldSlide = vue.$store.getters['presentation/slideOld']
     let oldProps
     if (oldSlide) {

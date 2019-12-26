@@ -168,7 +168,15 @@ export function displayElementByStepNo ({ elements, stepNo, oldStepNo, full, vis
   return element
 }
 
-// https://stackoverflow.com/a/26030835
+/**
+ * Wrap each word in a string into `<span class="word">…</span>`
+ *
+ * @param {String} text - A string
+ *
+ * @see {@link https://stackoverflow.com/a/26030835}
+ *
+ * @returns {String}
+ */
 export function wrapWords (text) {
   if (Array.isArray(text)) {
     text = text.join(' ')
@@ -195,8 +203,8 @@ export function wrapWords (text) {
   })
 
   // simple utility functions to avoid a lot of typing:
-  function insertBefore (new_element, element) {
-    element.parentNode.insertBefore(new_element, element)
+  function insertBefore (newElement, element) {
+    element.parentNode.insertBefore(newElement, element)
   }
 
   function removeElement (element) {
@@ -215,20 +223,18 @@ export function wrapWords (text) {
   }
 
   for (let i = 0; i < textNodes.length; i++) {
-    const n = textNodes[i]
-    const txt = n.nodeValue
-    console.log(txt)
+    const node = textNodes[i]
+    const txt = node.nodeValue
     const words = txt.split(' ')
 
     // Insert span surrounded words:
-    insertBefore(makeSpan(words[0]), n)
+    insertBefore(makeSpan(words[0]), node)
     for (let j = 1; j < words.length; j++) {
-      insertBefore(makeText(' '), n) // join the words with spaces
-      insertBefore(makeSpan(words[j]), n)
+      insertBefore(makeText(' '), node) // join the words with spaces
+      insertBefore(makeSpan(words[j]), node)
     }
     // Now remove the original text node:
-    removeElement(n)
+    removeElement(node)
   }
-  const markup = dom.body.innerHTML
-  return markup
+  return dom.body.innerHTML
 }
