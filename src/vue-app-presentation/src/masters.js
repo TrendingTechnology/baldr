@@ -245,9 +245,9 @@ class Master {
    *
    * @param {object} payload
    * @property {object} payload
-   * @property {module:@bldr/vue-app-presentation~Slide} payload.oldSlide
+   * @property {module:@bldr/vue-app-presentation/content-file~Slide} payload.oldSlide
    * @property {module:@bldr/vue-app-presentation~props} payload.oldProps
-   * @property {module:@bldr/vue-app-presentation~Slide} payload.newSlide
+   * @property {module:@bldr/vue-app-presentation/content-file~Slide} payload.newSlide
    * @property {module:@bldr/vue-app-presentation~props} payload.newProps
    *
    * @param {object} thisArg - The
@@ -264,9 +264,9 @@ class Master {
    *
    * @param {object} payload
    * @property {object} payload
-   * @property {module:@bldr/vue-app-presentation~Slide} payload.oldSlide
+   * @property {module:@bldr/vue-app-presentation/content-file~Slide} payload.oldSlide
    * @property {module:@bldr/vue-app-presentation~props} payload.oldProps
-   * @property {module:@bldr/vue-app-presentation~Slide} payload.newSlide
+   * @property {module:@bldr/vue-app-presentation/content-file~Slide} payload.newSlide
    * @property {module:@bldr/vue-app-presentation~props} payload.newProps
    *
    * @param {object} thisArg - The
@@ -283,9 +283,9 @@ class Master {
    *
    * @param {object} payload
    * @property {object} payload
-   * @property {module:@bldr/vue-app-presentation~Slide} payload.oldSlide
+   * @property {module:@bldr/vue-app-presentation/content-file~Slide} payload.oldSlide
    * @property {module:@bldr/vue-app-presentation~props} payload.oldProps
-   * @property {module:@bldr/vue-app-presentation~Slide} payload.newSlide
+   * @property {module:@bldr/vue-app-presentation/content-file~Slide} payload.newSlide
    * @property {module:@bldr/vue-app-presentation~props} payload.newProps
    *
    * @param {object} thisArg - The

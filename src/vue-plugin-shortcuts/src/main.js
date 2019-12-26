@@ -1,8 +1,9 @@
 /**
  * Wrapper functions around {@link https://craig.is/killing/mice mousetrap}.
  *
- * A instance of the class {@link module:@bldr/vue-plugin-shortcuts~Shortcuts Shortcuts} is mounted
- *   under `this.$shortcuts` in the Vue apps.
+ * A instance of the class
+ * {@link module:@bldr/vue-plugin-shortcuts~Shortcuts Shortcuts} is mounted
+ * under `this.$shortcuts` in the Vue apps.
  * @module @bldr/vue-plugin-shortcuts
  */
 

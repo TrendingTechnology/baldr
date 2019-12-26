@@ -1,5 +1,7 @@
 /**
- * @file Parse, process and validate the presentation content file (YAML).
+ * Parse, process and validate the presentation content file (YAML).
+ *
+ * @module @bldr/vue-app-presentation/content-file
  */
 
 /* globals defaultThemeSassVars */
