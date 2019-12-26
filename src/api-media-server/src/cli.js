@@ -12,7 +12,7 @@ const yaml = require('js-yaml')
 const musicMetadata = require('music-metadata')
 
 // Project packages
-const { Asset, walk, asciify, deasciify, assetTypes, readHierarchicalFolderTitles } = require('./main.js')
+const { Asset, walk, asciify, deasciify, assetTypes, HierarchicalFolderTitles } = require('./main.js')
 const { bootstrapConfig } = require('@bldr/core-node')
 
 // Project packages.
@@ -606,12 +606,22 @@ commander
 /*** t / folder-title *********************************************************/
 
 function listHierarchicalFolderTitles (filePath) {
+
+  function read (filePath) {
+    const titles = new HierarchicalFolderTitles()
+    titles.read(filePath)
+    console.log(titles.all)
+    console.log(`  title: ${chalk.yellow(titles.title)}`)
+    if (titles.subtitle) console.log(`  subtitle: ${chalk.green(titles.subtitle)}`)
+    console.log(`  curriculum: ${chalk.red(titles.curriculum)}`)
+  }
+
   if (filePath) {
-    readHierarchicalFolderTitles(filePath)
+    read(filePath)
   } else {
     walk(process.cwd(), {
       presentation (relPath) {
-        readHierarchicalFolderTitles(relPath)
+        read(relPath)
       }
     })
   }
@@ -622,12 +632,12 @@ commander
   .description('List all hierachical folder titles')
   .action(listHierarchicalFolderTitles)
 
-/*** --version / -v ***********************************************************/
+/*** -v / --version ***********************************************************/
 
 commander
   .version(require('../package.json').version)
 
-/*** yaml / y *****************************************************************/
+/*** y / yaml *****************************************************************/
 
 /**
  *
@@ -649,7 +659,7 @@ commander
   .description('Create info files in the YAML format in the current working directory.')
   .action(createMetaDataYaml)
 
-/*** yaml-validate / yv *******************************************************/
+/*** yv / yaml-validate *******************************************************/
 
 /**
  * @param {String} filePath - The media file path.

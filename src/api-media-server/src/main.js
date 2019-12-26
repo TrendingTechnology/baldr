@@ -467,26 +467,56 @@ class Asset extends MediaFile {
   }
 }
 
-/**
- *
- * @param {String} filePath - The path of the presentation file.
- */
-function readHierarchicalFolderTitles (filePath) {
-  const segments = filePath.split(path.sep)
-  const depth = segments.length
-  const minDepth = basePath.split(path.sep).length
-  const relPath = filePath.replace(basePath, '')
-  const hierarchTitles = []
-  for (let index = minDepth + 1; index < depth; index++) {
-    const titleTxt = [...segments.slice(0, index), 'title.txt'].join('/')
-    if (fs.existsSync(titleTxt)) {
-      const title = fs.readFileSync(titleTxt, { encoding: 'utf-8'}).replace(/\n$/, '')
-      if (title) {
-        hierarchTitles.push(title)
+class HierarchicalFolderTitles {
+  constructor () {
+    this.titles_ = []
+  }
+
+  /**
+   *
+   * @param {String} filePath - The path of the presentation file.
+   */
+  read (filePath) {
+    const segments = filePath.split(path.sep)
+    const depth = segments.length
+    const minDepth = basePath.split(path.sep).length
+    for (let index = minDepth + 1; index < depth; index++) {
+      const titleTxt = [...segments.slice(0, index), 'title.txt'].join('/')
+      if (fs.existsSync(titleTxt)) {
+        const titleRaw = fs.readFileSync(titleTxt, { encoding: 'utf-8' })
+        const titles = titleRaw.split('\n')
+        if (titles.length > 0) {
+          this.titles_.push(titles)
+        }
       }
     }
   }
-  console.log(hierarchTitles)
+
+  get all () {
+    return this.onlyTitles_.join(' / ')
+  }
+
+  get curriculum () {
+    return this.onlyTitles_.slice(0, this.titles_.length - 1).join(' / ')
+  }
+
+  get onlyTitles_() {
+    return this.titles_.map(title => title[0])
+  }
+
+  get lastTitle_ () {
+    return this.titles_[this.titles_.length - 1]
+  }
+
+  get title () {
+    return this.lastTitle_[0]
+  }
+
+  get subtitle () {
+    if (this.lastTitle_.length > 1) {
+      return this.lastTitle_[1]
+    }
+  }
 }
 
 /**
@@ -1033,7 +1063,7 @@ module.exports = {
   assetTypes,
   deasciify,
   helpMessages,
-  readHierarchicalFolderTitles,
+  HierarchicalFolderTitles,
   registerRestApi,
   walk
 }
