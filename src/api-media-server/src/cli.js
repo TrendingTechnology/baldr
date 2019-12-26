@@ -12,7 +12,7 @@ const yaml = require('js-yaml')
 const musicMetadata = require('music-metadata')
 
 // Project packages
-const { Asset, walk, asciify, deasciify, assetTypes, HierarchicalFolderTitles } = require('./main.js')
+const { Asset, walk, asciify, deasciify, assetTypes, HierarchicalFolderTitles, FolderTitleTree } = require('./main.js')
 const { bootstrapConfig } = require('@bldr/core-node')
 
 // Project packages.
@@ -605,27 +605,31 @@ commander
 
 /*** t / folder-title *********************************************************/
 
-function listHierarchicalFolderTitles (filePath) {
+async function listHierarchicalFolderTitles (filePath) {
+  const tree = new FolderTitleTree()
 
   function read (filePath) {
     const titles = new HierarchicalFolderTitles(filePath)
-    console.log(titles.all)
-    console.log(`  id: ${chalk.cyan(titles.id)}`)
-    console.log(`  title: ${chalk.yellow(titles.title)}`)
-    if (titles.subtitle) console.log(`  subtitle: ${chalk.green(titles.subtitle)}`)
-    console.log(`  curriculum: ${chalk.red(titles.curriculum)}`)
-    console.log(`  grade: ${chalk.red(titles.grade)}`)
+    tree.add(titles)
+    // console.log(titles.all)
+    // console.log(`  id: ${chalk.cyan(titles.id)}`)
+    // console.log(`  title: ${chalk.yellow(titles.title)}`)
+    // if (titles.subtitle) console.log(`  subtitle: ${chalk.green(titles.subtitle)}`)
+    // console.log(`  curriculum: ${chalk.red(titles.curriculum)}`)
+    // console.log(`  grade: ${chalk.red(titles.grade)}`)
   }
 
   if (filePath) {
     read(filePath)
   } else {
-    walk(process.cwd(), {
+    await walk(process.cwd(), {
       presentation (relPath) {
         read(relPath)
       }
     })
   }
+  console.log(tree.tree_)
+  console.log('lol')
 }
 
 commander

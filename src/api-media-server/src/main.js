@@ -285,6 +285,29 @@ class HierarchicalFolderTitles {
   get grade () {
     return this.titles_[0].title.replace(/[^\d]+$/, '')
   }
+
+  list() {
+    return this.titles_
+  }
+}
+
+class FolderTitleTree {
+  constructor () {
+    this.tree_ = {}
+  }
+
+  add (folderTitles) {
+    let tmp = this.tree_
+    for (const title of folderTitles.list()) {
+      if (title.folderName in tmp) {
+        tmp = tmp[title.folderName]
+      } else {
+        tmp[title.folderName] = {
+          _title: title
+        }
+      }
+    }
+  }
 }
 
 /**
@@ -1104,6 +1127,7 @@ module.exports = {
   Asset,
   assetTypes,
   deasciify,
+  FolderTitleTree,
   helpMessages,
   HierarchicalFolderTitles,
   registerRestApi,
