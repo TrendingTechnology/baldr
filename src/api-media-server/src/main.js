@@ -492,9 +492,11 @@ class MediaFile {
    * @param {object} properties - Add an object to the class properties.
    */
   mergeObject (object) {
-    convertPropertiesToCamelCase(object)
-    for (const property in object) {
-      this[property] = object[property]
+    if (typeof object === 'object') {
+      convertPropertiesToCamelCase(object)
+      for (const property in object) {
+        this[property] = object[property]
+      }
     }
   }
 
@@ -559,13 +561,13 @@ class Presentation extends MediaFile {
   constructor (filePath) {
     super(filePath)
     const data = this.readYaml_(filePath)
-    this.mergeObject(data)
+    if (data) this.mergeObject(data)
 
     const folderTitles = new HierarchicalFolderTitles(filePath)
 
-    if (!this.meta) this.meta = {}
+    if (typeof this.meta === 'undefined') this.meta = {}
     for (const property of ['id', 'title', 'subtitle', 'curriculum', 'grade']) {
-      if (!this.meta[property]) this.meta[property] = folderTitles[property]
+      if (typeof this.meta[property] === 'undefined') this.meta[property] = folderTitles[property]
     }
 
     /**
@@ -573,14 +575,14 @@ class Presentation extends MediaFile {
      *
      * @type {String}
      */
-    this.title = data.meta.title
+    this.title = this.meta.title
 
     /**
      * Value is the same as `meta.id`
      *
      * @type {String}
      */
-    this.id = data.meta.id
+    this.id = this.meta.id
   }
 }
 
@@ -627,6 +629,7 @@ async function insertObjectIntoDb (filePath, mediaType) {
     console.log(object.path)
     await db.collection(mediaType).insertOne(object)
   } catch (error) {
+    console.log(error)
     let relPath = filePath.replace(config.mediaServer.basePath, '')
     relPath = relPath.replace(new RegExp('^/'), '')
     const msg = `${relPath}: [${error.name}] ${error.message}`
