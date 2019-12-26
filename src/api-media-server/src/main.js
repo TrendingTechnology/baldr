@@ -467,6 +467,14 @@ class Asset extends MediaFile {
   }
 }
 
+class FolderTitle {
+  constructor({ title, subtile, folderName }) {
+    this.title = title
+    this.subtitle = subtile
+    this.folderName = folderName
+  }
+}
+
 class HierarchicalFolderTitles {
   constructor () {
     this.titles_ = []
@@ -485,9 +493,15 @@ class HierarchicalFolderTitles {
       if (fs.existsSync(titleTxt)) {
         const titleRaw = fs.readFileSync(titleTxt, { encoding: 'utf-8' })
         const titles = titleRaw.split('\n')
+        const folderTitle = new FolderTitle({})
         if (titles.length > 0) {
           this.titles_.push(titles)
+          folderTitle.title = titles[0]
+          folderTitle.folderName = segments[index - 1]
+        } else if (titles.length > 1) {
+          folderTitle.subtitle = titles[1]
         }
+        console.log(folderTitle)
       }
     }
   }
