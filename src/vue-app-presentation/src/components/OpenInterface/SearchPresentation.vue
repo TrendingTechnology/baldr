@@ -10,6 +10,8 @@
 </template>
 
 <script>
+import { openPresentation } from '@/lib.js'
+
 export default {
   name: 'SearchPresentation',
   data: function () {
@@ -20,11 +22,7 @@ export default {
   },
   methods: {
     async onInput () {
-      this.$store.dispatch('media/clear')
-      await this.$store.dispatch('presentation/openPresentationById', this.presentation.id)
-      if (this.$route.name !== 'slides-overview') {
-        this.$router.push({ name: 'slides-overview' })
-      }
+      await openPresentation(this.presentation.id)
     },
     search (title) {
       if (!title) return

@@ -16,7 +16,7 @@ import MasterDocumentation from '@/views/MasterDocumentation.vue'
 import SlideView from '@/views/SlideView'
 import MasterRenderer from '@/views/SlideView/MasterRenderer.vue'
 import SlidesOverview from '@/views/SlidesOverview'
-import PresentationOverview from '@/views/PresentationOverview'
+import PresentationOverview from '@/views/PresentationOverview/index.vue'
 
 import MediaIdsParentDir from '@/views/MediaIdsParentDir'
 

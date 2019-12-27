@@ -6,6 +6,7 @@
 /* globals DOMParser */
 
 import marked from 'marked'
+import vue from '@/main.js'
 
 /**
  * @param {String} text - The raw input text coming directly form YAML
@@ -237,4 +238,13 @@ export function wrapWords (text) {
     removeElement(node)
   }
   return dom.body.innerHTML
+}
+
+export async function openPresentation (presentationId) {
+  console.log(presentationId)
+  vue.$store.dispatch('media/clear')
+  await vue.$store.dispatch('presentation/openPresentationById', presentationId)
+  if (vue.$route.name !== 'slides-overview') {
+    vue.$router.push({ name: 'slides-overview' })
+  }
 }
