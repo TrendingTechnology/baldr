@@ -20,9 +20,11 @@ export default {
     }
   },
   async mounted () {
-    const response = await this.$media.httpRequest.request('get/folder-title-tree')
+    const response = await this.$media.httpRequest.request({
+      url: 'get/folder-title-tree',
+      headers: { 'Cache-Control': 'no-cache' }
+    })
     this.tree = response.data
-    console.log(this.tree)
   }
 }
 </script>
