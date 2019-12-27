@@ -2,9 +2,11 @@
   <div class="vc_start_page default-padding" b-ui-theme="default">
 
     <nav>
-      <router-link :to="{ name: 'documentation'}">Dokumentation </router-link>
-      <router-link :to="{ name: 'editor'}">Hefteintrag </router-link>
-      <router-link :to="{ name: 'camera'}">Dokumentenkamera </router-link>
+      <router-link :to="{ name: 'documentation' }">Dokumentation </router-link>
+      <router-link :to="{ name: 'presentation-overview' }">alle Präsentationen </router-link>
+
+      <router-link :to="{ name: 'editor' }">Hefteintrag </router-link>
+      <router-link :to="{ name: 'camera' }">Dokumentenkamera </router-link>
     </nav>
 
     <div class="top-icon">

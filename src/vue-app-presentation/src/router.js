@@ -16,6 +16,7 @@ import MasterDocumentation from '@/views/MasterDocumentation.vue'
 import SlideView from '@/views/SlideView'
 import MasterRenderer from '@/views/SlideView/MasterRenderer.vue'
 import SlidesOverview from '@/views/SlidesOverview'
+import PresentationOverview from '@/views/PresentationOverview'
 
 import MediaIdsParentDir from '@/views/MediaIdsParentDir'
 
@@ -62,6 +63,15 @@ const routes = [
     meta: {
       shortcut: 'o',
       title: 'Überblick über alle Folien'
+    }
+  },
+  {
+    path: '/presentation-overview',
+    component: PresentationOverview,
+    name: 'presentation-overview',
+    meta: {
+      shortcut: 'p',
+      title: 'Überblick über alle Presentation'
     }
   },
   {
