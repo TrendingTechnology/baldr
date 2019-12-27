@@ -299,13 +299,12 @@ class FolderTitleTree {
   add (folderTitles) {
     let tmp = this.tree_
     for (const title of folderTitles.list()) {
-      if (title.folderName in tmp) {
-        tmp = tmp[title.folderName]
-      } else {
+      if (!(title.folderName in tmp)) {
         tmp[title.folderName] = {
           _title: title
         }
       }
+      tmp = tmp[title.folderName]
     }
   }
 }
