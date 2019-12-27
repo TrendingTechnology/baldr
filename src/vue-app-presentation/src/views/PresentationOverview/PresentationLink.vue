@@ -2,6 +2,7 @@
   <span
     class="vc_presentation_link link"
     @click="openPresentation(id)"
+    :title="`ID: ${id}`"
   >
   {{ title }}
   </span>
