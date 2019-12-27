@@ -19,7 +19,9 @@
  * is stored into the database.
  *
  * # REST API
- *
+ * - `get`
+ *   - `folder-title-tree`: Get the folder title tree as a hierarchical json
+ *     object.
  * - `mgmt`
  *   - `flush`: Delete all media files (assets, presentations) from the database.
  *   - `init`: Initialize the MongoDB database
@@ -207,10 +209,10 @@ function convertPropertiesToCamelCase (object) {
  * Hold some data about a folder and its title.
  */
 class FolderTitle {
-  constructor({ title, subtile, folderName }) {
-    this.title = title
-    this.subtitle = subtile
-    this.folderName = folderName
+  constructor({ title, subtitle, folderName }) {
+    if (title) this.title = title
+    if (subtitle) this.subtitle = subtitle
+    if (folderName) this.folderName = folderName
   }
 }
 
@@ -291,11 +293,18 @@ class HierarchicalFolderTitles {
   }
 }
 
+/**
+ *
+ */
 class FolderTitleTree {
   constructor () {
     this.tree_ = {}
   }
 
+  /**
+   *
+   * @param {HierarchicalFolderTitles} folderTitles
+   */
   add (folderTitles) {
     let tmp = this.tree_
     for (const title of folderTitles.list()) {
@@ -307,7 +316,13 @@ class FolderTitleTree {
       tmp = tmp[title.folderName]
     }
   }
+
+  get () {
+    return this.tree_
+  }
 }
+
+const folderTitleTree = new FolderTitleTree()
 
 /**
  * Categories some asset file formats in three asset types: `audio`, `image`,
@@ -586,6 +601,7 @@ class Presentation extends MediaFile {
     if (data) this.mergeObject(data)
 
     const folderTitles = new HierarchicalFolderTitles(filePath)
+    folderTitleTree.add(folderTitles)
 
     if (typeof this.meta === 'undefined') this.meta = {}
     for (const property of ['id', 'title', 'subtitle', 'curriculum', 'grade']) {
@@ -716,6 +732,7 @@ async function update () {
     presentation: async (filePath) => { await insertObjectIntoDb(filePath, 'presentations') },
     asset: async (filePath) => { await insertObjectIntoDb(filePath, 'assets') }
   })
+  db.collection('folderTitleTree').insertOne(folderTitleTree.get())
   const end = new Date().getTime()
   await db.collection('updates').updateOne({ begin: begin }, { $set: { end: end, lastCommitId } })
   return {
@@ -743,6 +760,9 @@ async function initializeDb () {
 
   const updates = await db.createCollection('updates')
   await updates.createIndex({ begin: 1 })
+
+  // https://stackoverflow.com/a/35868933
+  await db.createCollection('folderTitleTree', { capped: true, size: 5000, max: 1 })
 
   const result = {}
   const collections = await db.listCollections().toArray()
@@ -806,6 +826,9 @@ async function flushMediaFiles () {
  */
 const helpMessages = {
   navigation: {
+    get: {
+      'folder-title-tree': 'Get the folder title tree as a hierarchical json object.'
+    },
     mgmt: {
       flush: 'Delete all media files (assets, presentations) from the database.',
       init: 'Initialize the MongoDB database.',
@@ -1034,6 +1057,16 @@ function registerRestApi () {
         result = await find.toArray()
       }
       res.json(result)
+    } catch (error) {
+      next(error)
+    }
+  })
+
+  /* get */
+
+  app.get('/get/folder-title-tree', async (req, res, next) => {
+    try {
+      res.json(await db.collection('folderTitleTree').find({}, { projection: { _id: 0 } }).next())
     } catch (error) {
       next(error)
     }
