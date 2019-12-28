@@ -732,13 +732,11 @@ async function update () {
     presentation: async (filePath) => { await insertObjectIntoDb(filePath, 'presentations') },
     asset: async (filePath) => { await insertObjectIntoDb(filePath, 'assets') }
   })
-  db.collection('folderTitleTree').updateOne(
+  db.collection('folderTitleTree').replaceOne(
     { id: 'root' },
     {
-      $set: {
-        id: 'root',
-        tree: folderTitleTree.get()
-      }
+      id: 'root',
+      tree: folderTitleTree.get()
     },
     { upsert: true }
   )

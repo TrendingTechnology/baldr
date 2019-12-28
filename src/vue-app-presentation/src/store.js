@@ -10,6 +10,7 @@ import { customStore } from '@/main.js'
 Vue.use(Vuex)
 
 const state = {
+  folderTitleTree: null,
   showBlank: true,
   slideNoOld: null,
   slideNoCurrent: null,
@@ -18,6 +19,9 @@ const state = {
 }
 
 const getters = {
+  folderTitleTree: state => {
+    return state.folderTitleTree
+  },
   presentation: state => {
     return state.presentation
   },
@@ -153,10 +157,24 @@ const actions = {
     slideCurrent.master.leaveStep({ oldStepNo, newStepNo }, thisArg)
     commit('setStepNoCurrent', { slideCurrent, stepNoCurrent })
     slideCurrent.master.enterStep({ oldStepNo, newStepNo }, thisArg)
+  },
+  async updateFolderTitleTree ( { commit } ) {
+    const response = await vue.$media.httpRequest.request({
+      url: 'get/folder-title-tree',
+      method: 'get',
+      headers: { 'Cache-Control': 'no-cache' },
+      params: {
+        timestamp: new Date().getTime()
+      }
+    })
+    commit('setFolderTitleTree', response.data)
   }
 }
 
 const mutations = {
+  setFolderTitleTree (state, tree) {
+    Vue.set(state, 'folderTitleTree', tree)
+  },
   setSlides (state, slides) {
     Vue.set(state, 'slides', slides)
   },
