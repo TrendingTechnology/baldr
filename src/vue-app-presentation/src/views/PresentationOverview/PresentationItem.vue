@@ -1,7 +1,11 @@
 <template>
   <li class="vc_presentation_item">
-    <span v-if="hasChilds">{{ title }}</span>
-    <presentation-link v-else :title="title" :id="id"/>
+    <presentation-link
+      :hasChilds="hasChilds"
+      :id="id"
+      :subtitle="subtitle"
+      :title="title"
+    />
     <ul v-if="hasChilds">
       <presentation-item
         :item="item"
@@ -31,6 +35,12 @@ export default {
         return this.item._title.title
       } else {
         return '…'
+      }
+    },
+    subtitle () {
+      console.log(this.item._title)
+      if (this.item && '_title' in this.item && this.item._title.subtitle) {
+        return this.item._title.subtitle
       }
     },
     id () {
