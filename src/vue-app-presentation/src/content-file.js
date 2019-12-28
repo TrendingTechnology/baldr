@@ -457,6 +457,13 @@ export class Presentation {
     }
   }
 
+  /**
+   * Convert a YAML string into a javascript object. Normalize properties.
+   * Parse slides recursive. Add a placeholder slide if the presentation is
+   * empty.
+   *
+   * @param {String} rawYamlString
+   */
   async parseYamlFile (rawYamlString) {
     this.rawYamlString_ = rawYamlString
     try {
@@ -465,7 +472,17 @@ export class Presentation {
       throw new Error(`${error.name}: ${error.message}`)
     }
 
-    if (!this.rawYamlObject_) throw new Error(`The presentation is empty.`)
+    if (!this.rawYamlObject_) {
+      this.rawYamlObject_ = {
+        meta: null,
+        slides: [
+          {
+            title: 'Die Präsentation hat noch keine Folien',
+            generic: 'Die Präsentation hat noch keine Folien'
+          }
+        ]
+      }
+    }
 
     convertPropertiesToCamelCase(this.rawYamlObject_)
 

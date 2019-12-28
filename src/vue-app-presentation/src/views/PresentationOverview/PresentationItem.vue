@@ -38,7 +38,6 @@ export default {
       }
     },
     subtitle () {
-      console.log(this.item._title)
       if (this.item && '_title' in this.item && this.item._title.subtitle) {
         return this.item._title.subtitle
       }
