@@ -735,13 +735,14 @@ async function update () {
     presentation: async (filePath) => { await insertObjectIntoDb(filePath, 'presentations') },
     asset: async (filePath) => { await insertObjectIntoDb(filePath, 'assets') }
   })
-  db.collection('folderTitleTree').replaceOne(
-    { id: 'root' },
+
+  // .replaceOne and upsert: Problems with merge objects?
+  await db.collection('folderTitleTree').deleteOne({ id: 'root' })
+  await db.collection('folderTitleTree').insertOne(
     {
       id: 'root',
       tree: folderTitleTree.get()
-    },
-    { upsert: true }
+    }
   )
   const end = new Date().getTime()
   await db.collection('updates').updateOne({ begin: begin }, { $set: { end: end, lastCommitId } })
