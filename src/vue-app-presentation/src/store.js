@@ -75,6 +75,9 @@ const actions = {
         search: id
       }
     })
+    if (!response.data) {
+      throw new Error(`Unkown presentation with the id “${id}”`)
+    }
     const mongoDbObject = response.data
     // Get yaml content as a string of the presentation.
     response = await vue.$media.httpRequest.request({

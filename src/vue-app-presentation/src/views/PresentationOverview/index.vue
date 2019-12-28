@@ -20,6 +20,9 @@ export default {
   computed: mapGetters(['folderTitleTree']),
   mounted () {
     this.$store.dispatch('presentation/updateFolderTitleTree')
+  },
+  update () {
+    this.$store.dispatch('presentation/updateFolderTitleTree')
   }
 }
 </script>

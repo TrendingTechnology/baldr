@@ -433,6 +433,8 @@ export class Presentation {
       throw new Error(`${error.name}: ${error.message}`)
     }
 
+    if (!this.rawYamlObject_) throw new Error(`The presentation is empty.`)
+
     convertPropertiesToCamelCase(this.rawYamlObject_)
 
     /**
