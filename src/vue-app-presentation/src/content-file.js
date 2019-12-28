@@ -419,10 +419,42 @@ function parseSlidesRecursive (slidesRaw, slidesFlat, slidesTree, level = 1) {
  */
 export class Presentation {
 
-  setPath (path) {
-    this.path = path
-    const fileName = path.split('/').pop()
-    this.parentDir = path.replace(`/${fileName}`, '')
+  /**
+   * Some meta data fields are only available in the mongodb object, for
+   * example the path of the presentation. We prefer the object fetched
+   * over axios from the HTTP media server to be able to update the
+   * presentations without updating the whole mongo db. This fields are
+   * merged from the mongodb object:
+   *
+   *
+   * ```js
+   * this.path
+   * this.parentDir
+   * this.meta.id
+   * this.meta.title
+   * this.meta.subtitle
+   * this.meta.grade
+   * this.meta.curriculum
+   * ```
+   *
+   * @param {Object} presentationMongo
+   */
+  mergeFromMongo (presentation) {
+    if ('path' in presentation) {
+      this.path = presentation.path
+      const fileName = presentation.path.split('/').pop()
+      this.parentDir = presentation.path.replace(`/${fileName}`, '')
+    }
+
+    if ('meta' in presentation) {
+      const meta = presentation.meta
+      if (!this.meta) this.meta = {}
+      for (const key of ['id', 'title', 'subtitle', 'curriculum', 'grade']) {
+        if (!this.meta[key] && meta[key]) {
+          this.meta[key] = meta[key]
+        }
+      }
+    }
   }
 
   async parseYamlFile (rawYamlString) {
