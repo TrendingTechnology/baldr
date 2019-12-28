@@ -732,7 +732,16 @@ async function update () {
     presentation: async (filePath) => { await insertObjectIntoDb(filePath, 'presentations') },
     asset: async (filePath) => { await insertObjectIntoDb(filePath, 'assets') }
   })
-  db.collection('folderTitleTree').insertOne(folderTitleTree.get())
+  db.collection('folderTitleTree').updateOne(
+    { id: 'root' },
+    {
+      $set: {
+        id: 'root',
+        tree: folderTitleTree.get()
+      }
+    },
+    { upsert: true }
+  )
   const end = new Date().getTime()
   await db.collection('updates').updateOne({ begin: begin }, { $set: { end: end, lastCommitId } })
   return {
@@ -762,7 +771,8 @@ async function initializeDb () {
   await updates.createIndex({ begin: 1 })
 
   // https://stackoverflow.com/a/35868933
-  await db.createCollection('folderTitleTree', { capped: true, size: 5000, max: 1 })
+  const folderTitleTree = await db.createCollection('folderTitleTree')
+  await folderTitleTree.createIndex({ id: 1 }, { unique: true })
 
   const result = {}
   const collections = await db.listCollections().toArray()
@@ -1066,7 +1076,8 @@ function registerRestApi () {
 
   app.get('/get/folder-title-tree', async (req, res, next) => {
     try {
-      res.json(await db.collection('folderTitleTree').find({}, { projection: { _id: 0 } }).next())
+      const result = await db.collection('folderTitleTree').find({ id: 'root' }, { projection: { _id: 0 } }).next()
+      res.json(result.tree)
     } catch (error) {
       next(error)
     }
