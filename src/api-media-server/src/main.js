@@ -98,7 +98,6 @@ function setupMongoUrl () {
   const password = encodeURIComponent(conf.password)
   const authMechanism = 'DEFAULT'
   const url = `mongodb://${user}:${password}@${conf.url}/${conf.dbName}?authMechanism=${authMechanism}`
-  console.log(url)
   return url
 }
 

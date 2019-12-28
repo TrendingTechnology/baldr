@@ -118,7 +118,7 @@ function renameAsset (oldPath, newPath) {
  * Subcommands
  ******************************************************************************/
 
-/*** audacity / a *************************************************************/
+/*** a / audacity *************************************************************/
 
 function audacityTextToYaml (filePath) {
   const text = fs.readFileSync(filePath, { encoding: 'utf-8' })
@@ -160,7 +160,7 @@ commander
   .description('Convert audacity text mark file into a yaml file.')
   .action(audacityTextToYaml)
 
-/*** convert / c **************************************************************/
+/*** c / convert **************************************************************/
 
 /**
  * Output from `music-metadata`:
@@ -365,7 +365,7 @@ commander
   .description('Convert media files in the appropriate format. Multiple files, globbing works *.mp3')
   .action(convert)
 
-/*** --help / -h **************************************************************/
+/*** -h / --help **************************************************************/
 
 function help () {
   console.log('Specify a subcommand.')
@@ -373,7 +373,7 @@ function help () {
   process.exit(1)
 }
 
-/*** id-to-filename / i *******************************************************/
+/*** i / id-to-filename *******************************************************/
 
 /**
  * Rename a media asset after the `id` in the meta data file.
@@ -427,7 +427,7 @@ commander
   .description('Rename media assets after the id.')
   .action(renameFromId)
 
-/*** mirror / m ***************************************************************/
+/*** m / mirror ***************************************************************/
 
 /**
  * Create and open a relative path in different base paths.
@@ -487,7 +487,7 @@ commander
   .description('Create and open in the file explorer a relative path in different base paths.')
   .action(mirrorRelPath)
 
-/*** normalize / n ************************************************************/
+/*** n / normalize ************************************************************/
 
 /**
  * @param {String} filePath - The media asset file path.
@@ -520,7 +520,7 @@ commander
   .description('Normalize the meta data files in the YAML format (Sort, clean up).')
   .action(normalizeMetaDataYaml)
 
-/*** open / o *****************************************************************/
+/*** o / open *****************************************************************/
 
 /**
  * Open base path.
@@ -535,7 +535,7 @@ commander
   .description('Open the base directory in a file browser.')
   .action(openBasePath)
 
-/*** presentation-template / p ************************************************/
+/*** p / presentation-template ************************************************/
 
 const presentationTemplate = `---
 meta:
@@ -554,22 +554,55 @@ slides:
 /**
  * Create a presentation template named “Praesentation.baldr.yml”.
  */
-function createPresentationTemplate () {
-  const filePath = path.join(process.cwd(), 'Praesentation.baldr.yml')
-  if (!fs.existsSync(filePath)) {
-    fs.writeFileSync(filePath, presentationTemplate)
-    console.log(`Presentation template created at: ${chalk.green(filePath)}`)
-  } else {
-    console.log(`Presentation already exists: ${chalk.red(filePath)}`)
-  }
+function presentationFromTemplate (filePath) {
+  fs.writeFileSync(filePath, presentationTemplate)
+}
+
+async function presentationFromAssets (filePath) {
+  const slides = []
+  await walk(process.cwd(), {
+    asset (relPath) {
+      const asset = makeAsset(relPath)
+      slides.push(
+        {
+          [asset.assetType]: {
+            src: `id:${asset.id}`
+          }
+        }
+      )
+    }
+  })
+  const yamlMarkup = [
+    '---',
+    yaml.safeDump({
+      slides
+    })
+  ]
+  const result = yamlMarkup.join('\n')
+  console.log(result)
+  fs.writeFileSync(filePath, result)
 }
 
 commander
   .command('presentation-template').alias('p')
+  .option('-a, --from-assets', 'Create a presentation from the assets of the current working dir.')
+  .option('-f, --force', 'Overwrite existing presentation.')
   .description('Create a presentation template named “Praesentation.baldr.yml”.')
-  .action(createPresentationTemplate)
+  .action(async function (command) {
+    const filePath = path.join(process.cwd(), 'Praesentation.baldr.yml')
+    if (!fs.existsSync(filePath) || command.force) {
+      if (command.fromAssets) {
+        await presentationFromAssets(filePath)
+      } else {
+        presentationFromTemplate(filePath)
+      }
+      console.log(`Presentation template created at: ${chalk.green(filePath)}`)
+    } else {
+      console.log(`Presentation already exists: ${chalk.red(filePath)}`)
+    }
+  })
 
-/*** rename / r ***************************************************************/
+/*** r / rename ***************************************************************/
 
 /**
  * @param {String} oldPath - The media file path.
