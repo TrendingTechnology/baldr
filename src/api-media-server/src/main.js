@@ -249,7 +249,7 @@ class HierarchicalFolderTitles {
           folderTitle.title = titles[0]
           folderTitle.folderName = segments[index - 1]
         }
-        if (titles.length > 1) {
+        if (titles.length > 1 && titles[1]) {
           folderTitle.subtitle = titles[1]
         }
         this.titles_.push(folderTitle)
