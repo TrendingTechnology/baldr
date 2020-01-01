@@ -9,16 +9,28 @@
 
 <script>
 import { plainText } from '@bldr/core-browser'
-import { markupToHtml } from '@/lib.js'
-
-let editorId = 0
+import { markupToHtml, wrapWords, displayElementByStepNo } from '@/lib.js'
+import { createNamespacedHelpers } from 'vuex'
+const { mapGetters } = createNamespacedHelpers('presentation')
 
 const placeholder = '…'
 const placeholderTag = `<span class="editor-placeholder">${placeholder}</span>`
-const defaultMarkup = `<p class="editor-${editorId}" contenteditable>${placeholderTag}</p>`
+const defaultMarkup = `<p contenteditable>${placeholderTag}</p>`
 const example = `
 ---
 slides:
+
+- title: Step words
+  editor:
+    step_words: true
+    markup: |
+      # heading
+
+      * one
+      * two
+      * three
+
+      lorem ipsum
 
 - editor
 
@@ -156,31 +168,55 @@ export const master = {
   },
   example,
   normalizeProps (props) {
-    let norm = {}
-    // Somehow two editor slides get the same edited content.
-    editorId += 1
-
     if (typeof props === 'boolean') {
-      norm.markup = '<div>…</div>'
+      props = {
+        markup: '<div>…</div>'
+      }
     } else if (typeof props === 'string') {
-      norm.markup = props
-    } else {
-      norm = props
+      props = {
+        markup: props
+      }
     }
 
-    norm.markup = markupToHtml(norm.markup)
-    norm.markup = norm.markup.replace(
+    props.markup = markupToHtml(props.markup)
+    props.markup = props.markup.replace(
       />…</g,
-      ` class="editor-${editorId}" contenteditable>${placeholderTag}<`
+      ` contenteditable>${placeholderTag}<`
     )
-    return norm
-  },
-  leaveSlide ({ oldProps }) {
-    const element = document.querySelector('.vc_editor_master')
-    if (element) oldProps.markup = element.innerHTML
+
+    if (props.stepWords) {
+      props.markup = wrapWords(props.markup)
+    }
+    return props
   },
   plainTextFromProps (props) {
     return plainText(props.markup)
+  },
+  enterSlide () {
+    this.onSlideChange()
+    if (this.stepWords) {
+      this.steps = document.querySelectorAll('span.word')
+      this.slideCurrent.renderData.stepCount = this.steps.length + 1
+      displayElementByStepNo({
+        elements: this.steps,
+        stepNo: this.slideCurrent.renderData.stepNoCurrent,
+        full: true,
+        visibility: true
+      })
+    }
+  },
+  beforeLeaveSlide ({ oldProps }) {
+    const element = document.querySelector('.vc_editor_master')
+    if (element) oldProps.markup = element.innerHTML
+  },
+  enterStep ({ oldStepNo, newStepNo }) {
+    const stepNo = newStepNo
+    if (this.stepWords) displayElementByStepNo({
+      elements: this.steps,
+      oldStepNo,
+      stepNo,
+      visibility: true
+    })
   }
 }
 
@@ -190,6 +226,11 @@ export default {
       type: String,
       markup: true,
       description: 'Text im HTML oder Markdown Format oder natürlich als reiner Text.'
+    },
+    stepWords: {
+      type: Boolean,
+      description: 'Wörtern einblenden',
+      default: false
     }
   },
   data () {
@@ -198,6 +239,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['slideCurrent']),
     markupSafe () {
       if (this.markup) {
         return this.markup
@@ -247,7 +289,8 @@ export default {
     }
   },
   created () {
-    // We can not use mousetrap because mousetrap is disable in contenteditable areas.
+    // We can not use mousetrap because mousetrap is disable in
+    // contenteditable areas.
     document.addEventListener('keydown', (event) => {
       if (event.ctrlKey && event.key === 'b') {
         event.preventDefault()
@@ -272,12 +315,6 @@ export default {
         this.decreaseFontSize()
       }
     })
-  },
-  mounted () {
-    this.onSlideChange()
-  },
-  updated () {
-    this.onSlideChange()
   }
 }
 </script>

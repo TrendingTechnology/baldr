@@ -1,6 +1,14 @@
 <template>
   <div class="vc_start_page default-padding" b-ui-theme="default">
 
+    <nav>
+      <router-link :to="{ name: 'documentation' }">Dokumentation </router-link>
+      <router-link :to="{ name: 'presentation-overview' }">alle Präsentationen </router-link>
+
+      <router-link :to="{ name: 'editor' }">Hefteintrag </router-link>
+      <router-link :to="{ name: 'camera' }">Dokumentenkamera </router-link>
+    </nav>
+
     <div class="top-icon">
       <div class="logo"><material-icon color="red" name="baldr"/>Baldr</div>
       <div class="subtitle">Software im Browser für den Musikunterricht</div>
@@ -89,6 +97,13 @@ export default {
         font-family: $font-family-sans-small-caps;
         color: $red;
       }
+    }
+
+    nav {
+      position: absolute;
+      top: 1vw;
+      left: 1vw;
+      font-size: 0.8em;
     }
   }
 </style>

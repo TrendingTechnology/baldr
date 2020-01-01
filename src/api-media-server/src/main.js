@@ -19,7 +19,9 @@
  * is stored into the database.
  *
  * # REST API
- *
+ * - `get`
+ *   - `folder-title-tree`: Get the folder title tree as a hierarchical json
+ *     object.
  * - `mgmt`
  *   - `flush`: Delete all media files (assets, presentations) from the database.
  *   - `init`: Initialize the MongoDB database
@@ -95,7 +97,8 @@ function setupMongoUrl () {
   const user = encodeURIComponent(conf.user)
   const password = encodeURIComponent(conf.password)
   const authMechanism = 'DEFAULT'
-  return `mongodb://${user}:${password}@${conf.url}/${conf.dbName}?authMechanism=${authMechanism}`
+  const url = `mongodb://${user}:${password}@${conf.url}/${conf.dbName}?authMechanism=${authMechanism}`
+  return url
 }
 
 /**
@@ -133,7 +136,7 @@ async function connectDb () {
  */
 function asciify (input) {
   let output = input
-    .replace(/[\(\)]/g, '')
+    .replace(/[\(\)]';/g, '')
     .replace(/[,.] /g, '_')
     .replace(/ +- +/g, '_')
     .replace(/\s+/g, '-')
@@ -202,6 +205,126 @@ function convertPropertiesToCamelCase (object) {
 }
 
 /* Media objects **************************************************************/
+
+/**
+ * Hold some data about a folder and its title.
+ */
+class FolderTitle {
+  constructor({ title, subtitle, folderName }) {
+    if (title) this.title = title
+    if (subtitle) this.subtitle = subtitle
+    if (folderName) this.folderName = folderName
+  }
+}
+
+/**
+ *
+ */
+class HierarchicalFolderTitles {
+  /**
+   * @param {String} filePath - The path of the presentation file.
+   */
+  constructor (filePath) {
+    this.titles_ = []
+    this.read_(filePath)
+  }
+
+  /**
+   * @param {String} filePath - The path of the presentation file.
+   *
+   * @private
+   */
+  read_ (filePath) {
+    const segments = filePath.split(path.sep)
+    const depth = segments.length
+    const minDepth = basePath.split(path.sep).length
+    for (let index = minDepth + 1; index < depth; index++) {
+      const titleTxt = [...segments.slice(0, index), 'title.txt'].join('/')
+      if (fs.existsSync(titleTxt)) {
+        const titleRaw = fs.readFileSync(titleTxt, { encoding: 'utf-8' })
+        const titles = titleRaw.split('\n')
+        const folderTitle = new FolderTitle({})
+        if (titles.length > 0) {
+          folderTitle.title = titles[0]
+          folderTitle.folderName = segments[index - 1]
+        }
+        if (titles.length > 1 && titles[1]) {
+          folderTitle.subtitle = titles[1]
+        }
+        this.titles_.push(folderTitle)
+      }
+    }
+  }
+
+  get all () {
+    return this.onlyTitles_.join(' / ')
+  }
+
+  get curriculum () {
+    return this.onlyTitles_.slice(0, this.titles_.length - 1).join(' / ')
+  }
+
+  get onlyTitles_() {
+    return this.titles_.map(folderTitle => folderTitle.title)
+  }
+
+  get lastTitle_ () {
+    return this.titles_[this.titles_.length - 1]
+  }
+
+  get id () {
+    return this.lastTitle_.folderName.replace(/\d\d_/, '')
+  }
+
+  get title () {
+    return this.lastTitle_.title
+  }
+
+  get subtitle () {
+    if (this.lastTitle_.subtitle) {
+      return this.lastTitle_.subtitle
+    }
+  }
+
+  get grade () {
+    return this.titles_[0].title.replace(/[^\d]+$/, '')
+  }
+
+  list() {
+    return this.titles_
+  }
+}
+
+/**
+ *
+ */
+class FolderTitleTree {
+  constructor () {
+    this.tree_ = {}
+  }
+
+  /**
+   *
+   * @param {HierarchicalFolderTitles} folderTitles
+   */
+  add (folderTitles) {
+    let tmp = this.tree_
+    for (const title of folderTitles.list()) {
+      if (!(title.folderName in tmp)) {
+        tmp[title.folderName] = {
+          _title: title
+        }
+      }
+      tmp = tmp[title.folderName]
+    }
+  }
+
+  get () {
+    return this.tree_
+  }
+}
+
+const folderTitleTree = new FolderTitleTree()
 
 /**
  * Categories some asset file formats in three asset types: `audio`, `image`,
@@ -408,9 +531,11 @@ class MediaFile {
    * @param {object} properties - Add an object to the class properties.
    */
   mergeObject (object) {
-    convertPropertiesToCamelCase(object)
-    for (const property in object) {
-      this[property] = object[property]
+    if (typeof object === 'object') {
+      convertPropertiesToCamelCase(object)
+      for (const property in object) {
+        this[property] = object[property]
+      }
     }
   }
 
@@ -475,21 +600,29 @@ class Presentation extends MediaFile {
   constructor (filePath) {
     super(filePath)
     const data = this.readYaml_(filePath)
-    this.mergeObject(data)
+    if (data) this.mergeObject(data)
+
+    const folderTitles = new HierarchicalFolderTitles(filePath)
+    folderTitleTree.add(folderTitles)
+
+    if (typeof this.meta === 'undefined') this.meta = {}
+    for (const property of ['id', 'title', 'subtitle', 'curriculum', 'grade']) {
+      if (typeof this.meta[property] === 'undefined') this.meta[property] = folderTitles[property]
+    }
 
     /**
      * Value is the same as `meta.title`
      *
      * @type {String}
      */
-    this.title = data.meta.title
+    this.title = this.meta.title
 
     /**
      * Value is the same as `meta.id`
      *
      * @type {String}
      */
-    this.id = data.meta.id
+    this.id = this.meta.id
   }
 }
 
@@ -536,6 +669,7 @@ async function insertObjectIntoDb (filePath, mediaType) {
     console.log(object.path)
     await db.collection(mediaType).insertOne(object)
   } catch (error) {
+    console.log(error)
     let relPath = filePath.replace(config.mediaServer.basePath, '')
     relPath = relPath.replace(new RegExp('^/'), '')
     const msg = `${relPath}: [${error.name}] ${error.message}`
@@ -600,6 +734,15 @@ async function update () {
     presentation: async (filePath) => { await insertObjectIntoDb(filePath, 'presentations') },
     asset: async (filePath) => { await insertObjectIntoDb(filePath, 'assets') }
   })
+
+  // .replaceOne and upsert: Problems with merge objects?
+  await db.collection('folderTitleTree').deleteOne({ id: 'root' })
+  await db.collection('folderTitleTree').insertOne(
+    {
+      id: 'root',
+      tree: folderTitleTree.get()
+    }
+  )
   const end = new Date().getTime()
   await db.collection('updates').updateOne({ begin: begin }, { $set: { end: end, lastCommitId } })
   return {
@@ -627,6 +770,10 @@ async function initializeDb () {
 
   const updates = await db.createCollection('updates')
   await updates.createIndex({ begin: 1 })
+
+  // https://stackoverflow.com/a/35868933
+  const folderTitleTree = await db.createCollection('folderTitleTree')
+  await folderTitleTree.createIndex({ id: 1 }, { unique: true })
 
   const result = {}
   const collections = await db.listCollections().toArray()
@@ -690,6 +837,9 @@ async function flushMediaFiles () {
  */
 const helpMessages = {
   navigation: {
+    get: {
+      'folder-title-tree': 'Get the folder title tree as a hierarchical json object.'
+    },
     mgmt: {
       flush: 'Delete all media files (assets, presentations) from the database.',
       init: 'Initialize the MongoDB database.',
@@ -923,6 +1073,17 @@ function registerRestApi () {
     }
   })
 
+  /* get */
+
+  app.get('/get/folder-title-tree', async (req, res, next) => {
+    try {
+      const result = await db.collection('folderTitleTree').find({ id: 'root' }, { projection: { _id: 0 } }).next()
+      res.json(result.tree)
+    } catch (error) {
+      next(error)
+    }
+  })
+
   /* mgmt = management */
 
   app.get('/mgmt/flush', async (req, res, next) => {
@@ -1010,7 +1171,9 @@ module.exports = {
   Asset,
   assetTypes,
   deasciify,
+  FolderTitleTree,
   helpMessages,
+  HierarchicalFolderTitles,
   registerRestApi,
   walk
 }

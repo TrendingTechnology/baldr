@@ -5,13 +5,18 @@
 </template>
 
 <script>
-import { markupToHtml, displayElementByStepMinimal, displayElementByStepFull } from '@/lib.js'
+import { markupToHtml, displayElementByStepNo } from '@/lib.js'
 import { createNamespacedHelpers } from 'vuex'
 const { mapGetters } = createNamespacedHelpers('presentation')
 
 const example = `
 ---
 slides:
+
+- title: Shortcuts
+  svg:
+    src: id:Requiem_NB_Confutatis_1-Takt
+    step_exclude: 1
 
 - title: Kurzform
   svg: id:Notenbeispiel_Freude-schoener-Goetterfunken
@@ -55,11 +60,31 @@ export const master = {
   resolveMediaUris (props) {
     return [props.src]
   },
-  enterStep ({ oldStepNo, newStepNo }) {
-    displayElementByStepMinimal(this.elGroups, oldStepNo, newStepNo)
-  },
   async enterSlide () {
-    this.loadSvg()
+    let response = await this.$media.httpRequest.request({
+      url: `/media/${this.mediaFile.path}`,
+      method: 'get'
+    })
+    const svg = this.$refs.svgWrapper
+    svg.innerHTML = response.data
+    this.elGroups = svg.querySelectorAll(this.stepSelector)
+    this.elGroups = this.removeElementsFromSteps(this.elGroups, this.stepExclude)
+    this.slideCurrent.renderData.stepCount = this.elGroups.length + 1
+    displayElementByStepNo({
+      elements: this.elGroups,
+      stepNo: this.slideCurrent.renderData.stepNoCurrent
+    })
+    this.shortcutsRegister(this.elGroups)
+  },
+  leaveSlide () {
+    if ('shortcutsUnregister' in this) this.shortcutsUnregister(this.elGroups)
+  },
+  enterStep ({ oldStepNo, newStepNo }) {
+    displayElementByStepNo({
+      elements: this.elGroups,
+      oldStepNo,
+      stepNo: newStepNo
+    })
   }
 }
 
@@ -111,16 +136,20 @@ export default {
       }
       return elements
     },
-    async loadSvg () {
-      let response = await this.$media.httpRequest.request({
-        url: `/media/${this.mediaFile.path}`,
-        method: 'get'
-      })
-      this.$refs.svgWrapper.innerHTML = response.data
-      this.elGroups = document.querySelectorAll(this.stepSelector)
-      this.elGroups = this.removeElementsFromSteps(this.elGroups, this.stepExclude)
-      this.slideCurrent.renderData.stepCount = this.elGroups.length + 1
-      displayElementByStepFull(this.elGroups, this.slideCurrent.renderData.stepNoCurrent)
+    shortcutsRegister (elements) {
+      for (const element of elements) {
+        const shortcut = element.getAttribute('baldr-shortcut')
+        const description = element.getAttribute('inkscape:label')
+        this.$shortcuts.add(`q ${shortcut}`, () => {
+          element.style.display = 'block'
+        }, `${description} (einblenden in SVG: „${this.mediaFile.title}“)`)
+      }
+    },
+    shortcutsUnregister (elements) {
+      for (const element of elements) {
+        const shortcut = element.getAttribute('baldr-shortcut')
+        this.$shortcuts.remove(`q ${shortcut}`)
+      }
     }
   }
 }

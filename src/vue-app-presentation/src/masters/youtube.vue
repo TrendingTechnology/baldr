@@ -10,7 +10,6 @@
 </template>
 
 <script>
-
 const example = `
 ---
 slides:

@@ -1,5 +1,7 @@
 /**
- * @file Parse, process and validate the presentation content file (YAML).
+ * Parse, process and validate the presentation content file (YAML).
+ *
+ * @module @bldr/vue-app-presentation/content-file
  */
 
 /* globals defaultThemeSassVars */
@@ -281,6 +283,7 @@ class Slide {
     if (style) {
       normalizeStyle(style)
     }
+
     /**
      * Css properties in camelCase for the style property of the vue js
      * render function.
@@ -416,18 +419,69 @@ function parseSlidesRecursive (slidesRaw, slidesFlat, slidesTree, level = 1) {
  */
 export class Presentation {
 
-  setPath (path) {
-    this.path = path
-    const fileName = path.split('/').pop()
-    this.parentDir = path.replace(`/${fileName}`, '')
+  /**
+   * Some meta data fields are only available in the mongodb object, for
+   * example the path of the presentation. We prefer the object fetched
+   * over axios from the HTTP media server to be able to update the
+   * presentations without updating the whole mongo db. This fields are
+   * merged from the mongodb object:
+   *
+   *
+   * ```js
+   * this.path
+   * this.parentDir
+   * this.meta.id
+   * this.meta.title
+   * this.meta.subtitle
+   * this.meta.grade
+   * this.meta.curriculum
+   * ```
+   *
+   * @param {Object} presentationMongo
+   */
+  mergeFromMongo (presentation) {
+    if ('path' in presentation) {
+      this.path = presentation.path
+      const fileName = presentation.path.split('/').pop()
+      this.parentDir = presentation.path.replace(`/${fileName}`, '')
+    }
+
+    if ('meta' in presentation) {
+      const meta = presentation.meta
+      if (!this.meta) this.meta = {}
+      for (const key of ['id', 'title', 'subtitle', 'curriculum', 'grade']) {
+        if (!this.meta[key] && meta[key]) {
+          this.meta[key] = meta[key]
+        }
+      }
+    }
   }
 
+  /**
+   * Convert a YAML string into a javascript object. Normalize properties.
+   * Parse slides recursive. Add a placeholder slide if the presentation is
+   * empty.
+   *
+   * @param {String} rawYamlString
+   */
   async parseYamlFile (rawYamlString) {
     this.rawYamlString_ = rawYamlString
     try {
       this.rawYamlObject_ = yaml.safeLoad(rawYamlString)
     } catch (error) {
       throw new Error(`${error.name}: ${error.message}`)
+    }
+
+    if (!this.rawYamlObject_) {
+      this.rawYamlObject_ = {
+        meta: null,
+        slides: [
+          {
+            title: 'Die Präsentation hat noch keine Folien',
+            generic: 'Die Präsentation hat noch keine Folien'
+          }
+        ]
+      }
     }
 
     convertPropertiesToCamelCase(this.rawYamlObject_)

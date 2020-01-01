@@ -1339,8 +1339,15 @@ class Resolver {
         if ('previewImage' in mediaFile) {
           mediaFile.previewHttpUrl = `${mediaFile.httpUrl}_preview.jpg`
         }
+        if ('cover' in mediaFile) {
+          const cover = new MediaFile({ uri: mediaFile.cover })
+          const response = await this.queryMediaServer_(cover.uriScheme, cover.uriAuthority)
+          cover.addProperties(response.data)
+          cover.httpUrl = await this.resolveHttpUrl_(cover)
+          mediaFile.previewHttpUrl = cover.httpUrl
+        }
       }
-      // Local: File object from drag and drop or open dialog
+    // Local: File object from drag and drop or open dialog
     } else if (mediaFileSpec instanceof File) {
       const file = mediaFileSpec
       if (assetTypes.isAsset(file.name)) {
@@ -1370,7 +1377,7 @@ class Resolver {
   }
 
   /**
-   * Resolve one ore more remote media files by URIs, HTTP URLs or
+   * Resolve one or more remote media files by URIs, HTTP URLs or
    * local media files by their file objects.
    *
    * @param {module:@bldr/vue-plugin-media~mediaFileSpecs} mediaFileSpecs

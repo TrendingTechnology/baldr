@@ -1,0 +1,28 @@
+<template>
+  <div class="vc_presentation_overview default-padding" b-content-theme="default">
+    <h1>Überblick über alle Präsentationen</h1>
+    <ul>
+      <presentation-item :item="folderTitleTree"/>
+    </ul>
+  </div>
+</template>
+
+<script>
+import PresentationItem from './PresentationItem.vue'
+import { createNamespacedHelpers } from 'vuex'
+const { mapGetters } = createNamespacedHelpers('presentation')
+
+export default {
+  name: 'PresentationOverview',
+  components: {
+    PresentationItem
+  },
+  computed: mapGetters(['folderTitleTree']),
+  mounted () {
+    this.$store.dispatch('presentation/updateFolderTitleTree')
+  },
+  update () {
+    this.$store.dispatch('presentation/updateFolderTitleTree')
+  }
+}
+</script>

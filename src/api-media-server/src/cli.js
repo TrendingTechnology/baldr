@@ -12,229 +12,151 @@ const yaml = require('js-yaml')
 const musicMetadata = require('music-metadata')
 
 // Project packages
-const { Asset, walk, asciify, deasciify, assetTypes } = require('./main.js')
+const { Asset, walk, asciify, deasciify, assetTypes, HierarchicalFolderTitles, FolderTitleTree } = require('./main.js')
 const { bootstrapConfig } = require('@bldr/core-node')
 
 // Project packages.
 const config = bootstrapConfig()
 
+/*******************************************************************************
+ * Common functions
+ ******************************************************************************/
+
 function makeAsset (mediaFile) {
   return new Asset(mediaFile).addFileInfos()
 }
 
-const presentationTemplate = `---
-meta:
-  title:
-  id:
-  grade:
-  curriculum:
+/**
+ * Sort the keys and clean up some entires.
+ *
+ * @param {String} filePath - The media asset file path.
+ * @param {Object} metaData - The object representation of the yaml meta data
+ *   file.
+ */
+function normalizeMetaData (filePath, metaData) {
+  const normalized = {}
 
-########################################################################
-# Kommentare (Großer Kommentar)
-########################################################################
+  // a-Strawinsky-Petruschka-Abschnitt-0_22
+  if (metaData.id) metaData.id = metaData.id.replace(/^[va]-/, '')
+  // a Strawinsky Petruschka Abschnitt 0_22
+  if (metaData.title) metaData.title = metaData.title.replace(/^[va] /, '')
 
-##
-# Normaler Kommentar
-##
+  for (const key of ['id', 'title', 'description']) {
+    if (key in metaData) {
+      normalized[key] = metaData[key]
+      delete metaData[key]
+    }
+  }
 
-#
-# Kleiner Kommentar
-#
+  // HB_Ausstellung_Gnome -> Ausstellung_HB_Gnome
+  normalized.id = normalized.id.replace(/^([A-Z]{2,})_([a-zA-Z0-9-]+)_/, '$2_$1_')
 
-########################################################################
-# Masters
-########################################################################
+  function generateIdPrefix (filePath) {
+    const pathSegments = filePath.split('/')
+    // HB
+    const parentDir = pathSegments[pathSegments.length - 2]
+    if (parentDir.length !== 2 || !parentDir.match(/[A-Z]{2,}/)) {
+      return
+    }
+    const assetTypeAbbreviation = parentDir
+    // 20_Strawinsky-Petruschka
+    const subParentDir = pathSegments[pathSegments.length - 3]
+    // Strawinsky-Petruschka
+    const presentationId = subParentDir.replace(/^[0-9]{2,}_/, '')
+    // Strawinsky-Petruschka_HB
+    const idPrefix = `${presentationId}_${assetTypeAbbreviation}`
+    return idPrefix
+  }
+  const idPrefix = generateIdPrefix(filePath)
+  if (idPrefix && normalized.id.indexOf(idPrefix) === -1) {
+    normalized.id = `${idPrefix}_${normalized.id}`
+  }
 
-slides:
+  for (const key in metaData) {
+    if (metaData.hasOwnProperty(key)) {
+      normalized[key] = metaData[key]
+      delete metaData[key]
+    }
+  }
 
-##
-# audio
-##
+  // title: 'Tonart CD 4: Spur 29'
+  if ('title' in normalized && normalized.title.match(/.+CD.+Spur/)) {
+    delete normalized.title
+  }
 
-- title: Kurzform
-  audio: id:Fuer-Elise#complete
+  // composer: Helbling-Verlag
+  if ('composer' in normalized && normalized.composer.indexOf('Verlag') > -1) {
+    delete normalized.composer
+  }
 
-- title: Langform
-  audio:
-    src: Eine Medien-Datei-URI, z. B. id:Fuer-Elise oder eine Sample-URI (id:Fuer-Elise#complete). (required, mediaFileUri, types=String,Array)
-    title: Der Titel des Audio-Ausschnitts. (markup, type=String)
-    composer: Der/Die KomponistIn des Audio-Ausschnitts. (markup, type=String)
-    artist: Der/Die InterpretIn des Audio-Ausschnitts. (markup, type=String)
-    cover: Eine Medien-Datei-URI, die als Cover-Bild angezeigt werden soll. (mediaFileUri, type=String)
-    autoplay: Den Audio-Ausschnitt automatisch abspielen. (type=Boolean)
-    playthrough: Über die Folien hinwegspielen. Nicht stoppen beim Folienwechsel. (type=Boolean)
+  return normalized
+}
 
-##
-# camera
-##
+/**
+ * Create and write the meta data YAML to the disk.
+ *
+ * @param {String} filePath - The file path of the destination yaml file. The yml
+ *   extension has to be included.
+ * @param {Object} metaData - The object to convert into yaml and write to
+ *   the disk.
+ */
+function writeMetaDataYamlFile (filePath, metaData) {
+  const yamlMarkup = [
+    '---',
+    yaml.safeDump(metaData)
+  ]
+  const result = yamlMarkup.join('\n')
+  console.log(result)
+  fs.writeFileSync(filePath, result)
+}
 
-- camera
+/**
+ * Write the metadata YAML file.
+ *
+ * @param {String} inputFile
+ * @param {Object} metaData
+ */
+function writeMetaDataYaml (filePath, metaData) {
+  const yamlFile = `${asciify(filePath)}.yml`
+  if (!fs.lstatSync(filePath).isDirectory() && !fs.existsSync(yamlFile)) {
+    if (!metaData) metaData = {}
+    const asset = new Asset(filePath).addFileInfos()
+    if (!metaData.id) {
+      metaData.id = asset.basename_
+    }
+    if (!metaData.title) {
+      metaData.title = deasciify(asset.basename_)
+    }
+    writeMetaDataYamlFile(yamlFile, normalizeMetaData(filePath, metaData))
+  }
+}
 
-- title: Langform
-  camera: yes
+/**
+ * Rename a media asset and it’s corresponding meta data file (`*.yml`)
+ *
+ * @param {String} oldPath - The old path of a media asset.
+ * @param {String} newPath - The new path of a media asset.
+ */
+function renameAsset (oldPath, newPath) {
+  const oldRelPath = oldPath.replace(process.cwd(), '')
+  console.log(`old: ${chalk.yellow(oldRelPath)}`)
+  if (newPath && oldPath !== newPath) {
+    const newRelPath = newPath.replace(process.cwd(), '')
+    console.log(`new: ${chalk.green(newRelPath)}`)
+    if (fs.existsSync(`${oldPath}.yml`)) {
+      fs.renameSync(`${oldPath}.yml`, `${newPath}.yml`)
+      console.log(`new: ${chalk.cyan(newRelPath + '.yml')}`)
+    }
+    fs.renameSync(oldPath, newPath)
+    return newPath
+  }
+}
 
-##
-# editor
-##
+/*******************************************************************************
+ * Subcommands
+ ******************************************************************************/
 
-- title: Kurzform
-  editor: '…'
-
-- title: Langform
-  editor:
-    markup: Text im HTML oder Markdown Format oder natürlich als reiner Text. (markup, type=String)
-
-- title: 'Tabelle'
-  editor: |
-    <table>
-      <thead>
-        <tr>
-          <th></th>
-          <td>Thema 1 (Spanier)</td>
-          <td>Thema 2 (Niederländer)</td>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <th>Dynamik</th>
-          <td>…</td>
-          <td>…</td>
-        </tr>
-      </tbody>
-    </table>
-
-##
-# generic
-##
-
-- title: Kurzform
-  generic: |
-    # Überschrift 1
-
-    ## Überschrift 2
-
-- title: Langform
-  generic:
-    markup: Markup im HTML oder Markdown-Format (required, types=String,Array)
-    charactersOnSlide: Gibt an wie viele Zeichen auf einer Folie erscheinen sollen. (default=400, types=Number)
-
-##
-# image
-##
-
-- title: Kurzform
-  image: id:Luigi-Russolo_Arte-dei-rumori
-
-- title: Langform
-  image:
-    src: Den URI zu einer Bild-Datei. (required, mediaFileUri, type=String)
-    title: Ein Titel, der angezeigt wird. (markup, type=String)
-    description: Eine Beschreibung, die angezeigt wird. (markup, type=String)
-
-##
-# person
-##
-
-- title: Kurzform
-  person: id:Beethoven
-
-- title: Langform
-  person:
-    name: Der Name der Person (type=String)
-    image: Eine URI zu einer Bild-Datei. (required, mediaFileUri, type=String)
-    birth: Datumsangabe zum Geburtstag (types=String,Number)
-    death: Datumsangabe zum Todestag (types=String,Number)
-
-##
-# question
-##
-
-- title: Kurzform (nur eine Frage)
-  question: Nur eine Frage?
-
-- title: Kurzform (Frage-Antwort-Paar)
-  question:
-    question: Frage?
-    answer: Antwort
-
-- title: Langform
-  question:
-    heading: Eine Überschrift, die über den Fragen angezeigt wird. (markup, type=String)
-    questions: Eine Liste mit Objekten mit den Schlüsseln question and answer. (required, markup, type=Array)
-    numbers: Ob die Fragen nummeriert werden sollen. (default=true, type=Boolean)
-
-##
-# quote
-##
-
-- title: Kurzform
-  quote: Zitat
-
-- title: Langform
-  quote:
-    text: Haupttext des Zitats. (required, markup, type=String)
-    author: Der Autor des Zitats. (type=String)
-    date: Datum des Zitats. (types=String,Number)
-    source: Die Quelle des Zitats (markup, type=String)
-
-##
-# score_sample
-##
-
-- title: Kurzform
-  score_sample: id:Bild-Datei
-
-- title: Langform
-  score_sample:
-    heading: Eine Überschrift (markup, type=String)
-    score: URI zu einer Bild-Datei, dem Notenbeispiel. (mediaFileUri, type=String)
-    audio: URI der entsprechenden Audio-Datei oder des Samples. (mediaFileUri, type=String)
-
-##
-# task
-##
-
-- title: Kurzform
-  task: Mach dies
-
-- title: Langform
-  task:
-    markup: Text im HTML oder Markdown-Format oder als reinen Text. (required, markup, type=String)
-
-##
-# video
-##
-
-- title: Kurzform
-  video: id:Luigi-Russolo_Arte-dei-rumori
-
-- title: Langform
-  video:
-    src: Den URI zu einer Video-Datei. (required, mediaFileUri, type=String)
-
-##
-# wikipedia
-##
-
-- title: Kurzform (wird zur deutschen Wikipedia gelinkt.)
-  wikipedia: Ludwig_van_Beethoven
-
-- title: Langform
-  wikipedia:
-    title: Der Titel des Wikipedia-Artikels (z. B. „Ludwig_van_Beethoven“). (required, type=String)
-    language: Der Sprachen-Code des gewünschten Wikipedia-Artikels (z. B. „de“, „en“). (default=de, type=String)
-
-##
-# youtube
-##
-
-- title:Kurzform
-  youtube: 5BBahdS6wu4
-
-- title: Langform
-  youtube:
-    id: Die Youtube-ID (z. B. xtKavZG1KiM). (required, type=String)
-`
+/*** a / audacity *************************************************************/
 
 function audacityTextToYaml (filePath) {
   const text = fs.readFileSync(filePath, { encoding: 'utf-8' })
@@ -272,100 +194,11 @@ function audacityTextToYaml (filePath) {
 }
 
 commander
-  .version(require('../package.json').version)
+  .command('audacity <input>').alias('a')
+  .description('Convert audacity text mark file into a yaml file.')
+  .action(audacityTextToYaml)
 
-  /**
-   * Sort the keys and clean up some entires.
-   *
-   * @param {Object} metaData - The object representation of the yaml meta data
-   *   file.
-   */
-function normalizeMetaData (metaData) {
-  const normalized = {}
-
-  if (metaData.id) metaData.id = metaData.id.replace(/^[va]-/, '')
-  if (metaData.title) metaData.title = metaData.title.replace(/^[va] /, '')
-
-  for (const key of ['id', 'title', 'description']) {
-    if (key in metaData) {
-      normalized[key] = metaData[key]
-      delete metaData[key]
-    }
-  }
-
-  for (const key in metaData) {
-    if (metaData.hasOwnProperty(key)) {
-      normalized[key] = metaData[key]
-      delete metaData[key]
-    }
-  }
-  return normalized
-}
-
-/**
- * Create and write the meta data YAML to the disk.
- *
- * @param {String} filePath - The file path of the destination yaml file. The yml
- *   extension has to be included.
- * @param {Object} metaData - The object to convert into yaml and write to
- *   the disk.
- */
-function writeMetaDataYamlFile (filePath, metaData) {
-  const yamlMarkup = [
-    '---',
-    yaml.safeDump(metaData)
-  ]
-  const result = yamlMarkup.join('\n')
-  console.log(result)
-  fs.writeFileSync(filePath, result)
-}
-
-/**
- * @param {String} filePath - The media asset file path.
- */
-function normalizeMetaDataYamlOneFile (filePath) {
-  const yamlFile = `${filePath}.yml`
-  const metaData = yaml.safeLoad(fs.readFileSync(yamlFile, 'utf8'))
-  writeMetaDataYamlFile(yamlFile, normalizeMetaData(metaData))
-}
-
-/**
- * @param {String} filePath - The media asset file path.
- */
-function normalizeMetaDataYaml (filePath) {
-  if (filePath) {
-    normalizeMetaDataYamlOneFile(filePath)
-  } else {
-    walk(process.cwd(), {
-      asset (relPath) {
-        if (fs.existsSync(`${relPath}.yml`)) {
-          normalizeMetaDataYamlOneFile(relPath)
-        }
-      }
-    })
-  }
-}
-
-/**
- * Write the metadata YAML file.
- *
- * @param {String} inputFile
- * @param {Object} metaData
- */
-function writeMetaDataYaml (filePath, metaData) {
-  const yamlFile = `${asciify(filePath)}.yml`
-  if (!fs.lstatSync(filePath).isDirectory() && !fs.existsSync(yamlFile)) {
-    if (!metaData) metaData = {}
-    const asset = new Asset(filePath).addFileInfos()
-    if (!metaData.id) {
-      metaData.id = asset.basename_
-    }
-    if (!metaData.title) {
-      metaData.title = deasciify(asset.basename_)
-    }
-    writeMetaDataYamlFile(yamlFile, normalizeMetaData(metaData))
-  }
-}
+/*** c / convert **************************************************************/
 
 /**
  * Output from `music-metadata`:
@@ -564,84 +397,21 @@ function convert (inputFiles, cmdObj) {
   }
 }
 
-/**
- * Rename a media asset and it’s corresponding meta data file (`*.yml`)
- *
- * @param {String} oldPath - The old path of a media asset.
- * @param {String} newPath - The new path of a media asset.
- */
-function renameAsset (oldPath, newPath) {
-  const oldRelPath = oldPath.replace(process.cwd(), '')
-  console.log(`old: ${chalk.yellow(oldRelPath)}`)
-  if (newPath && oldPath !== newPath) {
-    const newRelPath = newPath.replace(process.cwd(), '')
-    console.log(`new: ${chalk.green(newRelPath)}`)
-    if (fs.existsSync(`${oldPath}.yml`)) {
-      fs.renameSync(`${oldPath}.yml`, `${newPath}.yml`)
-      console.log(`new: ${chalk.cyan(newRelPath + '.yml')}`)
-    }
-    fs.renameSync(oldPath, newPath)
-    return newPath
-  }
+commander
+  .command('convert [input...]').alias('c')
+  .option('-p, --preview-image', 'Convert into preview images (Smaller and different file name)')
+  .description('Convert media files in the appropriate format. Multiple files, globbing works *.mp3')
+  .action(convert)
+
+/*** -h / --help **************************************************************/
+
+function help () {
+  console.log('Specify a subcommand.')
+  commander.outputHelp()
+  process.exit(1)
 }
 
-/**
- * @param {String} oldPath - The media file path.
- *
- * @returns {String}
- */
-function renameOneFile (oldPath) {
-  let newPath = asciify(oldPath)
-  const basename = path.basename(newPath)
-  // Remove a- and v- prefixes
-  const cleanedBasename = basename.replace(/^[va]-/g,'')
-  if (cleanedBasename !== basename) {
-    newPath = path.join(path.dirname(newPath), cleanedBasename)
-  }
-  renameAsset(newPath, oldPath)
-}
-
-/**
- * Rename all child files in the current working directory.
- */
-function rename () {
-  walk(process.cwd(), {
-    all (oldPath) {
-      renameOneFile(oldPath)
-    }
-  })
-}
-
-/**
- * @param {String} filePath - The media file path.
- */
-function validateYamlOneFile (filePath) {
-  console.log(`Validate: ${chalk.yellow(filePath)}`)
-  try {
-    const result = yaml.safeLoad(fs.readFileSync(filePath, 'utf8'))
-    console.log(chalk.green('ok!'))
-    console.log(result)
-  } catch (error) {
-    console.log(`${chalk.red(error.name)}: ${error.message}`)
-  }
-}
-
-/**
- * @param {String} filePath - The media file path.
- */
-function validateYaml (filePath) {
-  if (filePath) {
-    validateYamlOneFile(filePath)
-  } else {
-    walk(process.cwd(), {
-      everyFile (relPath) {
-        if (relPath.toLowerCase().indexOf('.yml') > -1) {
-          validateYamlOneFile(relPath)
-        }
-      }
-    })
-  }
-}
+/*** i / id-to-filename *******************************************************/
 
 /**
  * Rename a media asset after the `id` in the meta data file.
@@ -651,14 +421,18 @@ function validateYaml (filePath) {
 function renameFromIdOneFile (filePath) {
   result = yaml.safeLoad(fs.readFileSync(`${filePath}.yml`, 'utf8'))
   if ('id' in result && result.id) {
+    let id = result.id
     const oldPath = filePath
 
     // .mp4
     const extension = path.extname(oldPath)
     const oldBaseName = path.basename(oldPath, extension)
     let newPath = null
-    if (result.id !== oldBaseName) {
-      newPath = path.join(path.dirname(oldPath), `${result.id}${extension}`)
+    // Gregorianik_HB_Alleluia-Ostermesse -> Alleluia-Ostermesse
+    id = id.replace(/.*_[A-Z]{2,}_/, '')
+    console.log(id)
+    if (id !== oldBaseName) {
+      newPath = path.join(path.dirname(oldPath), `${id}${extension}`)
     } else {
       return
     }
@@ -667,7 +441,7 @@ function renameFromIdOneFile (filePath) {
 }
 
 /**
- * Rename a media asset or all child asset of the parrent working directory
+ * Rename a media asset or all child asset of the parent working directory
  * after the `id` in the meta data file.
  *
  * @param {String} filePath - The media file path.
@@ -686,37 +460,12 @@ function renameFromId (filePath) {
   }
 }
 
-/**
- *
- */
-function createMetaDataYaml () {
-  walk(process.cwd(), {
-    asset (relPath) {
-      writeMetaDataYaml(relPath)
-    }
-  })
-}
+commander
+  .command('id-to-filename [input]').alias('i')
+  .description('Rename media assets after the id.')
+  .action(renameFromId)
 
-/**
- * Create a presentation template named “Praesentation.baldr.yml”.
- */
-function createPresentationTemplate () {
-  const filePath = path.join(process.cwd(), 'Praesentation.baldr.yml')
-  if (!fs.existsSync(filePath)) {
-    fs.writeFileSync(filePath, presentationTemplate)
-    console.log(`Presentation template created at: ${chalk.green(filePath)}`)
-  } else {
-    console.log(`Presentation already exists: ${chalk.red(filePath)}`)
-  }
-}
-
-/**
- *
- */
-function openBasePath () {
-  const process = childProcess.spawn('xdg-open', [config.mediaServer.basePath], { detached: true })
-  process.unref()
-}
+/*** m / mirror ***************************************************************/
 
 /**
  * Create and open a relative path in different base paths.
@@ -724,8 +473,7 @@ function openBasePath () {
 function mirrorRelPath () {
   const basePaths = [
     '/var/data/baldr/media/',
-    '/home/jf/schule/',
-    '/mnt/nnas/school/archive/'
+    '/home/jf/schule-archiv/'
   ]
 
   const currentBasePaths = []
@@ -767,69 +515,268 @@ function mirrorRelPath () {
       fs.mkdirSync(absPath, { recursive: true })
     }
     console.log(`Open directory: ${chalk.green(absPath)}`)
-    const process = childProcess.spawn('Thunar', [absPath], { detached: true })
+    const process = childProcess.spawn('xdg-open', [absPath], { detached: true })
     process.unref()
   }
 }
-
-commander
-  .command('audacity <input>').alias('a')
-  .description('Convert audacity text mark file into a yaml file.')
-  .action(audacityTextToYaml)
-
-commander
-  .command('convert [input...]').alias('c')
-  .option('-p, --preview-image', 'Convert into preview images (Smaller and different file name)')
-  .description('Convert media files in the appropriate format. Multiple files, globbing works *.mp3')
-  .action(convert)
-
-  commander
-  .command('id-to-filename [input]').alias('i')
-  .description('Rename media assets after the id.')
-  .action(renameFromId)
 
 commander
   .command('mirror').alias('m')
   .description('Create and open in the file explorer a relative path in different base paths.')
   .action(mirrorRelPath)
 
+/*** n / normalize ************************************************************/
+
+/**
+ * @param {String} filePath - The media asset file path.
+ */
+function normalizeMetaDataYamlOneFile (filePath) {
+  const yamlFile = `${filePath}.yml`
+  const metaData = yaml.safeLoad(fs.readFileSync(yamlFile, 'utf8'))
+  writeMetaDataYamlFile(yamlFile, normalizeMetaData(filePath, metaData))
+}
+
+/**
+ * @param {String} filePath - The media asset file path.
+ */
+function normalizeMetaDataYaml (filePath) {
+  if (filePath) {
+    normalizeMetaDataYamlOneFile(filePath)
+  } else {
+    walk(process.cwd(), {
+      asset (relPath) {
+        if (fs.existsSync(`${relPath}.yml`)) {
+          normalizeMetaDataYamlOneFile(relPath)
+        }
+      }
+    })
+  }
+}
+
 commander
   .command('normalize [input]').alias('n')
   .description('Normalize the meta data files in the YAML format (Sort, clean up).')
   .action(normalizeMetaDataYaml)
+
+/*** o / open *****************************************************************/
+
+/**
+ * Open base path.
+ */
+function openBasePath () {
+  const process = childProcess.spawn('xdg-open', [config.mediaServer.basePath], { detached: true })
+  process.unref()
+}
 
 commander
   .command('open').alias('o')
   .description('Open the base directory in a file browser.')
   .action(openBasePath)
 
+/*** p / presentation-template ************************************************/
+
+const presentationTemplate = `---
+meta:
+  title:
+  subtitle:
+  id:
+  grade:
+  curriculum:
+  curriculum_url:
+
+slides:
+
+- generic: Hello world
+`
+
+/**
+ * Create a presentation template named “Praesentation.baldr.yml”.
+ */
+function presentationFromTemplate (filePath) {
+  fs.writeFileSync(filePath, presentationTemplate)
+}
+
+async function presentationFromAssets (filePath) {
+  const slides = []
+  await walk(process.cwd(), {
+    asset (relPath) {
+      const asset = makeAsset(relPath)
+      slides.push(
+        {
+          [asset.assetType]: {
+            src: `id:${asset.id}`
+          }
+        }
+      )
+    }
+  })
+  const yamlMarkup = [
+    '---',
+    yaml.safeDump({
+      slides
+    })
+  ]
+  const result = yamlMarkup.join('\n')
+  console.log(result)
+  fs.writeFileSync(filePath, result)
+}
+
+commander
+  .command('presentation-template').alias('p')
+  .option('-a, --from-assets', 'Create a presentation from the assets of the current working dir.')
+  .option('-f, --force', 'Overwrite existing presentation.')
+  .description('Create a presentation template named “Praesentation.baldr.yml”.')
+  .action(async function (command) {
+    const filePath = path.join(process.cwd(), 'Praesentation.baldr.yml')
+    if (!fs.existsSync(filePath) || command.force) {
+      if (command.fromAssets) {
+        await presentationFromAssets(filePath)
+      } else {
+        presentationFromTemplate(filePath)
+      }
+      console.log(`Presentation template created at: ${chalk.green(filePath)}`)
+    } else {
+      console.log(`Presentation already exists: ${chalk.red(filePath)}`)
+    }
+  })
+
+/*** r / rename ***************************************************************/
+
+/**
+ * @param {String} oldPath - The media file path.
+ *
+ * @returns {String}
+ */
+function renameOneFile (oldPath) {
+  let newPath = asciify(oldPath)
+  const basename = path.basename(newPath)
+  // Remove a- and v- prefixes
+  const cleanedBasename = basename.replace(/^[va]-/g,'')
+  if (cleanedBasename !== basename) {
+    newPath = path.join(path.dirname(newPath), cleanedBasename)
+  }
+  renameAsset(newPath, oldPath)
+}
+
+/**
+ * Rename all child files in the current working directory.
+ */
+function rename () {
+  walk(process.cwd(), {
+    all (oldPath) {
+      renameOneFile(oldPath)
+    }
+  })
+}
+
 commander
   .command('rename').alias('r')
   .description('Rename files, clean file names, remove all whitespaces and special characters.')
   .action(rename)
 
+/*** t / folder-title *********************************************************/
+
+async function listHierarchicalFolderTitles (filePath) {
+  const tree = new FolderTitleTree()
+
+  function read (filePath) {
+    const titles = new HierarchicalFolderTitles(filePath)
+    tree.add(titles)
+    console.log(titles.all)
+    console.log(`  id: ${chalk.cyan(titles.id)}`)
+    console.log(`  title: ${chalk.yellow(titles.title)}`)
+    if (titles.subtitle) console.log(`  subtitle: ${chalk.green(titles.subtitle)}`)
+    console.log(`  curriculum: ${chalk.red(titles.curriculum)}`)
+    console.log(`  grade: ${chalk.red(titles.grade)}`)
+  }
+
+  if (filePath) {
+    read(filePath)
+  } else {
+    await walk(process.cwd(), {
+      presentation (relPath) {
+        read(relPath)
+      }
+    })
+  }
+  console.log(JSON.stringify(tree.tree_, null, 2))
+}
+
 commander
-  .command('yaml').alias('y')
+  .command('folder-title [input]').alias('t')
+  .description('List all hierachical folder titles')
+  .action(listHierarchicalFolderTitles)
+
+/*** -v / --version ***********************************************************/
+
+commander
+  .version(require('../package.json').version)
+
+/*** y / yaml *****************************************************************/
+
+/**
+ *
+ */
+function createMetaDataYaml (filePath) {
+  if (filePath) {
+    writeMetaDataYaml(filePath)
+  } else {
+    walk(process.cwd(), {
+      asset (relPath) {
+        writeMetaDataYaml(relPath)
+      }
+    })
+  }
+}
+
+commander
+  .command('yaml [input]').alias('y')
   .description('Create info files in the YAML format in the current working directory.')
   .action(createMetaDataYaml)
+
+/*** yv / yaml-validate *******************************************************/
+
+/**
+ * @param {String} filePath - The media file path.
+ */
+function validateYamlOneFile (filePath) {
+  console.log(`Validate: ${chalk.yellow(filePath)}`)
+  try {
+    const result = yaml.safeLoad(fs.readFileSync(filePath, 'utf8'))
+    console.log(chalk.green('ok!'))
+    console.log(result)
+  } catch (error) {
+    console.log(`${chalk.red(error.name)}: ${error.message}`)
+  }
+}
+
+/**
+ * @param {String} filePath - The media file path.
+ */
+function validateYaml (filePath) {
+  if (filePath) {
+    validateYamlOneFile(filePath)
+  } else {
+    walk(process.cwd(), {
+      everyFile (relPath) {
+        if (relPath.toLowerCase().indexOf('.yml') > -1) {
+          validateYamlOneFile(relPath)
+        }
+      }
+    })
+  }
+}
 
 commander
   .command('yaml-validate [input]').alias('yv')
   .description('Validate the yaml files.')
   .action(validateYaml)
 
-commander
-  .command('presentation-template').alias('p')
-  .description('Create a presentation template named “Praesentation.baldr.yml”.')
-  .action(createPresentationTemplate)
+/*******************************************************************************
+ * main
+ ******************************************************************************/
 
 commander.parse(process.argv)
-
-function help () {
-  console.log('Specify a subcommand.')
-  commander.outputHelp()
-  process.exit(1)
-}
 
 // [
 //  '/usr/local/bin/node',

@@ -1,0 +1,300 @@
+{
+  "commentLarge": {
+    "body": [
+      "",
+      "########################################################################",
+      "# ${1}",
+      "########################################################################",
+      ""
+    ],
+    "description": "Comment (large): ###… # ###…",
+    "prefix": "coml",
+    "scope": "yaml"
+  },
+  "commentRegular": {
+    "body": [
+      "",
+      "#-----------------------------------------------------------------------",
+      "# ${1}",
+      "#-----------------------------------------------------------------------",
+      ""
+    ],
+    "description": "Comment (regular): #--… # #--…",
+    "prefix": "com",
+    "scope": "yaml"
+  },
+  "commentSmall": {
+    "body": [
+      "",
+      "##",
+      "# ${1}",
+      "##",
+      ""
+    ],
+    "description": "Comment (small): ## # ##",
+    "prefix": "coms",
+    "scope": "yaml"
+  },
+  "masterAudio": {
+    "prefix": "audio",
+    "body": [
+      "- title: Kurzform",
+      "  audio: id:Fuer-Elise#complete",
+      "",
+      "- title: Langform",
+      "  audio:",
+      "    src: Eine Medien-Datei-URI, z. B. id:Fuer-Elise oder eine Sample-URI (id:Fuer-Elise#complete). (required, mediaFileUri, types=String,Array)",
+      "    title: Der Titel des Audio-Ausschnitts. (markup, type=String)",
+      "    composer: Der/Die KomponistIn des Audio-Ausschnitts. (markup, type=String)",
+      "    artist: Der/Die InterpretIn des Audio-Ausschnitts. (markup, type=String)",
+      "    cover: Eine Medien-Datei-URI, die als Cover-Bild angezeigt werden soll. (mediaFileUri, type=String)",
+      "    autoplay: Den Audio-Ausschnitt automatisch abspielen. (type=Boolean)",
+      "    playthrough: Über die Folien hinwegspielen. Nicht stoppen beim Folienwechsel. (type=Boolean)"
+    ],
+    "description": "Baldr master: audio",
+    "scope": "yaml"
+  },
+  "masterCamera": {
+    "prefix": "camera",
+    "body": [
+      "- camera",
+      "",
+      "- title: Langform",
+      "  camera: yes"
+    ],
+    "description": "Baldr master: camera",
+    "scope": "yaml"
+  },
+  "masterCloze": {
+    "prefix": "cloze",
+    "body": [
+      "- title: Kurzform",
+      "  cloze: id:AB",
+      "",
+      "- title: Langform",
+      "  cloze:",
+      "    src: Den URI zu einer SVG-Datei, die den Lückentext enthält. (required, mediaFileUri, type=String)",
+      "    step_begin: Beginne bei dieser Schrittnumber Lückentextwörter einzublenden. (type=Number)",
+      "    step_end: Höre bei dieser Schrittnumber auf Lückentextwörter einzublenden. (type=Number)"
+    ],
+    "description": "Baldr master: cloze",
+    "scope": "yaml"
+  },
+  "masterEditor": {
+    "prefix": "editor",
+    "body": [
+      "- title: Kurzform",
+      "  editor: '…'",
+      "",
+      "- title: Langform",
+      "  editor:",
+      "    markup: Text im HTML oder Markdown Format oder natürlich als reiner Text. (markup, type=String)",
+      "",
+      "- title: 'Tabelle'",
+      "  editor: |",
+      "    <table>",
+      "      <thead>",
+      "        <tr>",
+      "          <th></th>",
+      "          <td>Thema 1 (Spanier)</td>",
+      "          <td>Thema 2 (Niederländer)</td>",
+      "        </tr>",
+      "      </thead>",
+      "      <tbody>",
+      "        <tr>",
+      "          <th>Dynamik</th>",
+      "          <td>…</td>",
+      "          <td>…</td>",
+      "        </tr>",
+      "      </tbody>",
+      "    </table>",
+    ],
+    "description": "Baldr master: editor",
+    "scope": "yaml"
+  },
+  "masterGeneric": {
+    "prefix": "generic",
+    "body": [
+      "- title: Kurzform",
+      "  generic: |",
+      "    # Überschrift 1",
+      "",
+      "    ## Überschrift 2",
+      "",
+      "- title: Langform",
+      "  generic:",
+      "    markup: Markup im HTML oder Markdown-Format (required, types=String,Array)",
+      "    characters_on_slide: Gibt an wie viele Zeichen auf einer Folie erscheinen sollen. (default=400, types=Number)",
+      "    step_words: Wörtern einblenden (types=Boolean)"
+    ],
+    "description": "Baldr master: generic",
+    "scope": "yaml"
+  },
+  "masterImage": {
+    "prefix": "image",
+    "body": [
+      "- title: Kurzform",
+      "  image: id:Luigi-Russolo_Arte-dei-rumori",
+      "",
+      "- title: Langform",
+      "  image:",
+      "    src: Den URI zu einer Bild-Datei. (required, mediaFileUri, type=String)",
+      "    title: Ein Titel, der angezeigt wird. (markup, type=String)",
+      "    description: Eine Beschreibung, die angezeigt wird. (markup, type=String)"
+    ],
+    "description": "Baldr master: image",
+    "scope": "yaml"
+  },
+  "masterPerson": {
+    "prefix": "person",
+    "body": [
+      "- title: Kurzform",
+      "  person: id:Beethoven",
+      "",
+      "- title: Langform",
+      "  person:",
+      "    name: Der Name der Person (type=String)",
+      "    image: Eine URI zu einer Bild-Datei. (required, mediaFileUri, type=String)",
+      "    birth: Datumsangabe zum Geburtstag (types=String,Number)",
+      "    death: Datumsangabe zum Todestag (types=String,Number)"
+    ],
+    "description": "Baldr master: person",
+    "scope": "yaml"
+  },
+  "masterQuestion": {
+    "prefix": "question",
+    "body": [
+      "- title: Kurzform (nur eine Frage)",
+      "  question: Nur eine Frage?",
+      "",
+      "- title: Kurzform (Frage-Antwort-Paar)",
+      "  question:",
+      "    question: Frage?",
+      "    answer: Antwort",
+      "",
+      "- title: Langform",
+      "  question:",
+      "    heading: Eine Überschrift, die über den Fragen angezeigt wird. (markup, type=String)",
+      "    questions: Eine Liste mit Objekten mit den Schlüsseln question and answer. (required, markup, type=Array)",
+      "    numbers: Ob die Fragen nummeriert werden sollen. (default=true, type=Boolean)"
+    ],
+    "description": "Baldr master: question",
+    "scope": "yaml"
+  },
+  "masterQuote": {
+    "prefix": "quote",
+    "body": [
+      "- title: Kurzform",
+      "  quote: Zitat",
+      "",
+      "- title: Langform",
+      "  quote:",
+      "    text: Haupttext des Zitats. (required, markup, type=String)",
+      "    author: Der Autor des Zitats. (type=String)",
+      "    date: Datum des Zitats. (types=String,Number)",
+      "    source: Die Quelle des Zitats (markup, type=String)"
+    ],
+    "description": "Baldr master: quote",
+    "scope": "yaml"
+  },
+  "masterScoreSample": {
+    "prefix": "scoresample",
+    "body": [
+      "- title: Kurzform",
+      "  score_sample: id:Bild-Datei",
+      "",
+      "- title: Langform",
+      "  score_sample:",
+      "    heading: Eine Überschrift (markup, type=String)",
+      "    score: URI zu einer Bild-Datei, dem Notenbeispiel. (mediaFileUri, type=String)",
+      "    audio: URI der entsprechenden Audio-Datei oder des Samples. (mediaFileUri, type=String)"
+    ],
+    "description": "Baldr master: score_sample",
+    "scope": "yaml"
+  },
+  "masterSection": {
+    "prefix": "section",
+    "body": [
+      "- title: Kurzform",
+      "  section:",
+      "  slides:",
+      "  - generic: Hallo world",
+      "",
+      "- title: Langform",
+      "  section:",
+      "    heading: Die Überschrift / der Titel des Abschnitts. (required, markup, type=String)",
+      "  slides:",
+      "  - generic: Hallo world"
+    ],
+    "description": "Baldr master: section",
+    "scope": "yaml"
+  },
+  "masterSvg": {
+    "prefix": "svg",
+    "body": [
+      "- title: Kurzform",
+      "  svg: id:Grafik",
+      "",
+      "- title: Langform",
+      "  svg:",
+      "    src: Den URI zu einer SVG-Datei. (required, mediaFileUri, type=String)",
+      "    step_selector: Selektor, der Elemente auswählt, die als Schritte eingeblendet werden sollen. (default=g)",
+      "    step_exclude: Schritt-Number der Elemente, die nicht als Schritte eingeblendet werden sollen. (z. B. 1, oder [1, 2, 3]) (types=Array,Number)"
+    ],
+    "description": "Baldr master: svg",
+    "scope": "yaml"
+  },
+  "masterTask": {
+    "prefix": "task",
+    "body": [
+      "- title: Kurzform",
+      "  task: Mach dies",
+      "",
+      "- title: Langform",
+      "  task:",
+      "    markup: Text im HTML oder Markdown-Format oder als reinen Text. (required, markup, type=String)"
+    ],
+    "description": "Baldr master: task",
+    "scope": "yaml"
+  },
+  "masterVideo": {
+    "prefix": "video",
+    "body": [
+      "- title: Kurzform",
+      "  video: id:Luigi-Russolo_Arte-dei-rumori",
+      "",
+      "- title: Langform",
+      "  video:",
+      "    src: Den URI zu einer Video-Datei. (required, mediaFileUri, type=String)"
+    ],
+    "description": "Baldr master: video",
+    "scope": "yaml"
+  },
+  "masterWikipedia": {
+    "prefix": "wikipedia",
+    "body": [
+      "- title: Kurzform (wird zur deutschen Wikipedia gelinkt.)",
+      "  wikipedia: Ludwig_van_Beethoven",
+      "",
+      "- title: Langform",
+      "  wikipedia:",
+      "    title: Der Titel des Wikipedia-Artikels (z. B. „Ludwig_van_Beethoven“). (required, type=String)",
+      "    language: Der Sprachen-Code des gewünschten Wikipedia-Artikels (z. B. „de“, „en“). (default=de, type=String)"
+    ],
+    "description": "Baldr master: wikipedia",
+    "scope": "yaml"
+  },
+  "masterYoutube": {
+    "prefix": "youtube",
+    "body": [
+      "- title:Kurzform",
+      "  youtube: 5BBahdS6wu4",
+      "",
+      "- title: Langform",
+      "  youtube:",
+      "    id: Die Youtube-ID (z. B. xtKavZG1KiM). (required, type=String)"
+    ],
+    "description": "Baldr master: youtube",
+    "scope": "yaml"
+  }
+}

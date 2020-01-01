@@ -7,7 +7,7 @@
 
 <script>
 import { plainText } from '@bldr/core-browser'
-import { markupToHtml } from '@/lib.js'
+import { markupToHtml, wrapWords, displayElementByStepNo } from '@/lib.js'
 import { createNamespacedHelpers } from 'vuex'
 const { mapGetters } = createNamespacedHelpers('presentation')
 
@@ -16,6 +16,19 @@ const CHARACTERS_ON_SLIDE = 400
 const example = `
 ---
 slides:
+
+- title: Test word wrap
+  generic:
+    step_words: true
+    markup: |
+      # Heading 1
+
+      Lorem ipsum [dolor sit amet](https://google.de), consectetur:
+
+      ## Adipisici elit, sed eiusmod
+
+      * Tempor incidunt ut labore.
+      * Veniam, quis nostrud.
 
 - title: UTF-8 Arrows
   generic: |
@@ -41,7 +54,7 @@ slides:
     - Step 1
     - Step 2
 
-- title: Long text in stepts
+- title: Long text in steps
   generic:
     markup:
     - |
@@ -184,7 +197,6 @@ slides:
     cupidatat non proident, sunt in culpa qui officia deserunt mollit
     anim id est laborum.</p>
 
-
 - title: Ordered list (specifed as HTML)
   generic: |
     <ol>
@@ -274,7 +286,11 @@ export const master = {
       }
     }
 
-    props.markup = markup
+    if (props.stepWords) {
+      props.markup = [wrapWords(markup.join(' '))]
+    } else {
+      props.markup = markup
+    }
     return props
   },
   stepCount (props) {
@@ -286,6 +302,27 @@ export const master = {
       output.push(plainText(markup))
     }
     return output.join(' | ')
+  },
+  enterSlide () {
+    if (this.stepWords) {
+      this.steps = document.querySelectorAll('span.word')
+      this.slideCurrent.renderData.stepCount = this.steps.length + 1
+      displayElementByStepNo({
+        elements: this.steps,
+        stepNo: this.slideCurrent.renderData.stepNoCurrent,
+        full: true,
+        visibility: true
+      })
+    }
+  },
+  enterStep ({ oldStepNo, newStepNo }) {
+    const stepNo = newStepNo
+    if (this.stepWords) displayElementByStepNo({
+      elements: this.steps,
+      oldStepNo,
+      stepNo,
+      visibility: true
+    })
   }
 }
 
@@ -302,6 +339,16 @@ export default {
       type: [Number],
       description: 'Gibt an wie viele Zeichen auf einer Folie erscheinen sollen.',
       default: CHARACTERS_ON_SLIDE
+    },
+    stepWords: {
+      type: [Boolean],
+      description: 'Wörtern einblenden',
+      default: false
+    }
+  },
+  data () {
+    return {
+      steps: null
     }
   },
   computed: {
@@ -310,6 +357,9 @@ export default {
       return this.slideCurrent.renderData.stepNoCurrent
     },
     markupCurrent () {
+      if (this.stepWords) {
+        return this.markup[0]
+      }
       return this.markup[this.stepNoCurrent - 1]
     }
   }

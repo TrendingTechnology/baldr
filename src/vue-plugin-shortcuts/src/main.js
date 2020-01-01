@@ -1,8 +1,9 @@
 /**
  * Wrapper functions around {@link https://craig.is/killing/mice mousetrap}.
  *
- * A instance of the class {@link module:@bldr/vue-plugin-shortcuts~Shortcuts Shortcuts} is mounted
- *   under `this.$shortcuts` in the Vue apps.
+ * A instance of the class
+ * {@link module:@bldr/vue-plugin-shortcuts~Shortcuts Shortcuts} is mounted
+ * under `this.$shortcuts` in the Vue apps.
  * @module @bldr/vue-plugin-shortcuts
  */
 
@@ -140,7 +141,7 @@ class Shortcuts {
    * A multiple shortcuts
    *
    * @param {array} shortcutSpecs - An array of
-   *   {@link module:@bldr/vue-plugin-shortcuts~shortcutSpec shortcutSpec s}.
+   *   {@link module:@bldr/vue-plugin-shortcuts~shortcutSpec shortcutSpec}.
    */
   addMultiple (shortcutSpecs) {
     for (const shortcut of shortcutSpecs) {
@@ -154,8 +155,10 @@ class Shortcuts {
   }
 
   /**
+   * Remove a shortcut.
    *
-   * @param {Object} keys
+   * @param {String} keys - Mousetrap key specification, see the
+   *   {@link https://craig.is/killing/mice documentation}.
    */
   remove (keys) {
     Mousetrap.unbind(keys)

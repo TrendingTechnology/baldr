@@ -23,7 +23,6 @@
 </template>
 
 <script>
-
 /**
  * To create virtual video devices on linux run this commands:
  *

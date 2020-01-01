@@ -234,6 +234,7 @@ export default {
         callback: async () => {
           try {
             const result = await this.$media.httpRequest.request('mgmt/update')
+            this.$store.dispatch('presentation/updateFolderTitleTree')
             if (result.data.errors.length) {
               for (const errorMsg of result.data.errors) {
                 this.$notifyError(errorMsg)

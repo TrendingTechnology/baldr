@@ -5,32 +5,23 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import { Presentation } from './content-file'
 import vue from '@/main.js'
-
-function getVueChildrenInstanceByName (name, children) {
-  if (!children) children = vue.$children
-  for (const child of children) {
-    if (child.$options.name === name) {
-      return child
-    } else if (child.$children.length) {
-      const result = getVueChildrenInstanceByName(name, child.$children)
-      if (result) return result
-    }
-  }
-}
-
-function getMasterVueInstance (masterName) {
-  return getVueChildrenInstanceByName(`${masterName}-master`)
-}
+import { customStore } from '@/main.js'
 
 Vue.use(Vuex)
 
 const state = {
+  folderTitleTree: null,
+  showBlank: true,
+  slideNoOld: null,
   slideNoCurrent: null,
   slides: {},
   presentation: {}
 }
 
 const getters = {
+  folderTitleTree: state => {
+    return state.folderTitleTree
+  },
   presentation: state => {
     return state.presentation
   },
@@ -40,6 +31,11 @@ const getters = {
   slideCurrent: (state, getters) => {
     if (state.slideNoCurrent) {
       return getters.slideByNo(state.slideNoCurrent)
+    }
+  },
+  slideOld: (state, getters) => {
+    if (state.slideNoOld) {
+      return getters.slideByNo(state.slideNoOld)
     }
   },
   slideByNo: state => no => {
@@ -52,6 +48,9 @@ const getters = {
   },
   slidesCount: (state, getters) => {
     return getters.slides.length
+  },
+  showBlank: (state) => {
+    return state.showBlank
   }
 }
 
@@ -59,7 +58,9 @@ const actions = {
   async openPresentation ({ commit, dispatch }, { rawYamlString, mongoDbObject }) {
     const presentation = new Presentation()
     await presentation.parseYamlFile(rawYamlString)
-    if (mongoDbObject) presentation.setPath(mongoDbObject.path)
+    if (mongoDbObject) {
+      presentation.mergeFromMongo(mongoDbObject)
+    }
     commit('setPresentation', presentation)
     commit('setSlides', presentation.slides)
     dispatch('setSlideNoCurrent', 1)
@@ -76,6 +77,9 @@ const actions = {
         search: id
       }
     })
+    if (!response.data) {
+      throw new Error(`Unkown presentation with the id “${id}”`)
+    }
     const mongoDbObject = response.data
     // Get yaml content as a string of the presentation.
     response = await vue.$media.httpRequest.request({
@@ -114,15 +118,19 @@ const actions = {
     let oldProps
     let newSlide = getters.slideByNo(no)
     let newProps = newSlide.renderData.props
+
     if (getters.slideCurrent) {
       oldSlide = getters.slideCurrent
+      commit('setSlideNoOld', oldSlide.no)
       oldProps = oldSlide.renderData.props
-      getters.slideCurrent.master.leaveSlide(
+      getters.slideCurrent.master.beforeLeaveSlide(
         { oldSlide, oldProps, newSlide, newProps },
-        getMasterVueInstance(oldSlide.master.name)
+        customStore.vueMasterInstanceCurrent
       )
     }
+    commit('setShowBlank', true)
     commit('setSlideNoCurrent', no)
+<<<<<<< HEAD
     Vue.nextTick(function () {
       // TODO: Remove this timeout. We have to wait until the master
       // component instance is present in vue.$children.
@@ -133,6 +141,8 @@ const actions = {
         )
       }, 10)
     })
+=======
+>>>>>>> 353ebc1af337dbbfcde4b1a20a003ef344deb5dd
   },
   setStepNext ({ dispatch, getters }) {
     let stepNoCurrent
@@ -161,16 +171,33 @@ const actions = {
   setStepNoCurrent ({ commit }, { slideCurrent, stepNoCurrent }) {
     let oldStepNo = slideCurrent.renderData.stepNoCurrent
     let newStepNo = stepNoCurrent
-    const thisArg = getMasterVueInstance(slideCurrent.master.name)
+    const thisArg = customStore.vueMasterInstanceCurrent
     slideCurrent.master.leaveStep({ oldStepNo, newStepNo }, thisArg)
     commit('setStepNoCurrent', { slideCurrent, stepNoCurrent })
     slideCurrent.master.enterStep({ oldStepNo, newStepNo }, thisArg)
+  },
+  async updateFolderTitleTree ( { commit } ) {
+    const response = await vue.$media.httpRequest.request({
+      url: 'get/folder-title-tree',
+      method: 'get',
+      headers: { 'Cache-Control': 'no-cache' },
+      params: {
+        timestamp: new Date().getTime()
+      }
+    })
+    commit('setFolderTitleTree', response.data)
   }
 }
 
 const mutations = {
+  setFolderTitleTree (state, tree) {
+    Vue.set(state, 'folderTitleTree', tree)
+  },
   setSlides (state, slides) {
     Vue.set(state, 'slides', slides)
+  },
+  setSlideNoOld (state, slideNoOld) {
+    state.slideNoOld = parseInt(slideNoOld)
   },
   setSlideNoCurrent (state, slideNoCurrent) {
     state.slideNoCurrent = parseInt(slideNoCurrent)
@@ -180,6 +207,9 @@ const mutations = {
   },
   setPresentation (state, presentation) {
     Vue.set(state, 'presentation', presentation)
+  },
+  setShowBlank (state, showBlank) {
+    Vue.set(state, 'showBlank', showBlank)
   }
 }
 

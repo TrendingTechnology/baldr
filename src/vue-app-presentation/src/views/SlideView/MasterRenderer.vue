@@ -1,15 +1,18 @@
 <script>
 import OpenInterface from '@/components/OpenInterface'
+import BlankMaster from '@/components/BlankMaster'
+
 import { createNamespacedHelpers } from 'vuex'
 const { mapGetters } = createNamespacedHelpers('presentation')
 
 export default {
   name: 'MasterRenderer',
   components: {
+    BlankMaster,
     OpenInterface
   },
   computed: {
-    ...mapGetters(['slideCurrent']),
+    ...mapGetters(['slideCurrent', 'showBlank']),
     master () {
       let name
       let props
@@ -48,6 +51,9 @@ export default {
     }
   },
   render: function (createElement) {
+    if (this.showBlank && this.master.name) {
+      return createElement('blank-master')
+    }
     this.setMasterStyle()
     if (this.master.name) {
       return createElement(

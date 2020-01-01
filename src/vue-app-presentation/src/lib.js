@@ -3,7 +3,10 @@
  * @file
  */
 
+/* globals DOMParser */
+
 import marked from 'marked'
+import vue from '@/main.js'
 
 /**
  * @param {String} text - The raw input text coming directly form YAML
@@ -12,11 +15,11 @@ import marked from 'marked'
  */
 function convertCustomMarkup (text) {
   return text
-    // ↔	8596	2194	&harr;	LEFT RIGHT ARROW
+    // ↔ 8596 2194 &harr; LEFT RIGHT ARROW
     .replace(/<->/g, '↔')
-    // →	8594	2192	&rarr;	RIGHTWARDS ARROW
+    // → 8594 2192 &rarr; RIGHTWARDS ARROW
     .replace(/->/g, '→')
-    // ←	8592	2190	&larr;	LEFTWARDS ARROW
+    // ← 8592 2190 &larr; LEFTWARDS ARROW
     .replace(/<-/g, '←')
 }
 
@@ -107,59 +110,140 @@ export function validateUri (uri) {
 }
 
 /**
- * Set the display state on elements. Loop through all elements. On the first
- * step no elements are displayed. The number of steps is: number of elements
- * + 1.
+ * Set the display / visiblilty state on elements. Loop through all elements or
+ * perform a minimal update On the first step no elements are displayed.
+ * The number of steps is: number of elements + 1.
+ * Don’t loop through all elements. Update only the next element.
  *
- * @param {Array} elements - A list of HTML elements to display on step number
+ * @param {config}
+ * @property {Array} elements - A list of HTML elements to display on step number
  *   change.
- * @param {Number} stepNo - The current step number.
+ * @property {Number} oldStepNo - The previous step number
+ * @property {Number} stepNo - The current step number.
+ * @property {Boolean} full - Performe a full update
+ * @property {Boolean} visiblilty - Set the visibility `element.style.visibility`
+ *   instead of the the display state.
  *
  * @returns {Object} The element that is displayed by the new step number.
  */
-export function displayElementByStepFull (elements, stepNo) {
-  let count = 1
-  for (const element of elements) {
-    if (stepNo > count) {
-      element.style.display = 'block'
+export function displayElementByStepNo ({ elements, stepNo, oldStepNo, full, visibility }) {
+
+  function showElement(element, show) {
+    if (visibility) {
+      if (show) {
+        element.style.visibility = 'visible'
+      } else {
+        element.style.visibility = 'hidden'
+      }
     } else {
-      element.style.display = 'none'
+      if (show) {
+        element.style.display = 'block'
+      } else {
+        element.style.display = 'none'
+      }
     }
-    count += 1
   }
-  if (stepNo === 1) {
-    return elements[0]
+
+  if (!oldStepNo || full || stepNo === 1 || (oldStepNo === 1 && stepNo === elements.length + 1)) {
+    let count = 1
+    for (const element of elements) {
+      showElement(element, stepNo > count)
+      count += 1
+    }
+    if (stepNo === 1) {
+      return elements[0]
+    }
+    // First step: No elements are displayed.
+    // The array index begins with 0, steps with 1.
+    return elements[stepNo - 2]
   }
-  // First step: no elements are displayed
-  // Array index begin with 0, steps with 1
-  return elements[stepNo - 2]
+  let element
+  if (stepNo > oldStepNo) {
+    // First step: No elements are displayed.
+    // The array index begins with 0, steps with 1.
+    element = elements[stepNo - 2]
+  } else {
+    element = elements[stepNo - 1]
+  }
+  showElement(element, stepNo > oldStepNo)
+  return element
 }
 
 /**
- * Don’t loop through all elements. Update only the next element.
+ * Wrap each word in a string into `<span class="word">…</span>`
  *
- * @param {Array} elements - A list of HTML elements to display on step number
- *   change.
- * @param {Number} oldStepNo
- * @param {Number} newStepNo
+ * @param {String} text - A string
  *
- * @returns {Object} The element that is displayed by the new step number.
+ * @see {@link https://stackoverflow.com/a/26030835}
+ *
+ * @returns {String}
  */
-export function displayElementByStepMinimal (elements, oldStepNo, newStepNo) {
-  if (newStepNo === 1 || (oldStepNo === 1 && newStepNo === elements.length + 1)) {
-    return displayElementByStepFull(elements, newStepNo)
+export function wrapWords (text) {
+  if (Array.isArray(text)) {
+    text = text.join(' ')
   }
-  let element
-  let display
-  if (newStepNo > oldStepNo) {
-    // First step: no elements are displayed
-    // Array index begin with 0, steps with 1
-    element = elements[newStepNo - 2]
-    display = 'block'
-  } else {
-    element = elements[newStepNo - 1]
-    display = 'none'
+  text = text.replace(/\n+/g, '')
+  text = text.replace(/\s+/g, ' ')
+  const dom = new DOMParser().parseFromString(text, 'text/html')
+  // First a simple implementation of recursive descent,
+  // visit all nodes in the DOM and process it with a callback:
+  function walkDOM (node, callback) {
+    if (node.nodeName !== 'SCRIPT') { // ignore javascript
+      callback(node)
+      for (let i = 0; i < node.childNodes.length; i++) {
+        walkDOM(node.childNodes[i], callback)
+      }
+    }
   }
-  element.style.display = display
-  return element
+
+  const textNodes = []
+  walkDOM(dom.body, function (n) {
+    if (n.nodeType === 3) {
+      textNodes.push(n)
+    }
+  })
+
+  // simple utility functions to avoid a lot of typing:
+  function insertBefore (newElement, element) {
+    element.parentNode.insertBefore(newElement, element)
+  }
+
+  function removeElement (element) {
+    element.parentNode.removeChild(element)
+  }
+
+  function makeSpan (txt) {
+    const span = document.createElement('span')
+    span.classList.add('word')
+    span.appendChild(makeText(txt))
+    return span
+  }
+
+  function makeText (txt) {
+    return document.createTextNode(txt)
+  }
+
+  for (let i = 0; i < textNodes.length; i++) {
+    const node = textNodes[i]
+    const txt = node.nodeValue
+    const words = txt.split(' ')
+
+    // Insert span surrounded words:
+    insertBefore(makeSpan(words[0]), node)
+    for (let j = 1; j < words.length; j++) {
+      insertBefore(makeText(' '), node) // join the words with spaces
+      insertBefore(makeSpan(words[j]), node)
+    }
+    // Now remove the original text node:
+    removeElement(node)
+  }
+  return dom.body.innerHTML
+}
+
+export async function openPresentation (presentationId) {
+  vue.$store.dispatch('media/clear')
+  await vue.$store.dispatch('presentation/openPresentationById', presentationId)
+  if (vue.$route.name !== 'slides-overview') {
+    vue.$router.push({ name: 'slides-overview' })
+  }
 }

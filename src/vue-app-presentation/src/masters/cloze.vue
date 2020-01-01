@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { markupToHtml, displayElementByStepFull, displayElementByStepMinimal } from '@/lib.js'
+import { markupToHtml, displayElementByStepNo } from '@/lib.js'
 import { createNamespacedHelpers } from 'vuex'
 const { mapGetters } = createNamespacedHelpers('presentation')
 
@@ -13,8 +13,36 @@ const example = `
 ---
 slides:
 
+- title: Begin end
+  cloze:
+    src: id:AB_Bachs-vergebliche-Reise
+    step_begin: 3
+    step_end: 5
+
+- title: end
+  cloze:
+    src: id:AB_Bachs-vergebliche-Reise
+    step_end: 20
+
+- title: Begin
+  cloze:
+    src: id:AB_Bachs-vergebliche-Reise
+    step_begin: 21
+
 - title: Short form
   cloze: id:AB_Bachs-vergebliche-Reise
+
+- title: Long form
+  cloze:
+    src: id:Bebop_AB
+
+- title: Table 1
+  cloze:
+    src: New-Orleans-Dixieland_AB1
+
+- title: Table 2
+  cloze:
+    src: New-Orleans-Dixieland_AB2
 `
 
 export const master = {
@@ -38,11 +66,14 @@ export const master = {
     return [props.src]
   },
   enterStep ({ oldStepNo, newStepNo }) {
-    const newClozeGroup = displayElementByStepMinimal(this.clozeGroups, oldStepNo, newStepNo)
+    const newClozeGroup = displayElementByStepNo({
+      elements: this.clozeGroups,
+      oldStepNo,
+      stepNo: newStepNo
+    })
     this.scroll(newClozeGroup)
   },
   async enterSlide () {
-    console.log(this)
     this.loadSvg()
   }
 }
@@ -52,12 +83,21 @@ export default {
     src: {
       type: String,
       required: true,
-      description: 'Den URI zu einer SVG-Datei die den Lückentext enthält.',
+      description: 'Den URI zu einer SVG-Datei, die den Lückentext enthält.',
       mediaFileUri: true
+    },
+    stepBegin: {
+      type: Number,
+      description: 'Beginne bei dieser Schrittnumber Lückentextwörter einzublenden.'
+    },
+    stepEnd: {
+      type: Number,
+      description: 'Höre bei dieser Schrittnumber auf Lückentextwörter einzublenden.'
     }
   },
   data () {
     return {
+      allClozeGroups: null,
       clozeGroups: []
     }
   },
@@ -74,9 +114,16 @@ export default {
         method: 'get'
       })
       this.$refs.clozeWrapper.innerHTML = response.data
-      this.clozeGroups = this.collectClozeGroups()
+      this.allClozeGroups = this.collectClozeGroups()
+      this.clozeGroups = this.selectClozeGroups(this.allClozeGroups)
       this.slideCurrent.renderData.stepCount = this.clozeGroups.length + 1
-      const newClozeGroup = displayElementByStepFull(this.clozeGroups, this.slideCurrent.renderData.stepNoCurrent)
+      for (const group of this.allClozeGroups) {
+        group.style.display = 'none'
+      }
+      const newClozeGroup = displayElementByStepNo({
+        elements: this.clozeGroups,
+        stepNo: this.slideCurrent.renderData.stepNoCurrent
+      })
       this.scroll(newClozeGroup)
     },
     /**
@@ -104,6 +151,17 @@ export default {
         }
       }
       return clozeGElements
+    },
+    selectClozeGroups (clozeGroups) {
+      let begin = 0
+      if (this.stepBegin && this.stepBegin > 1) {
+        begin = this.stepBegin - 2
+      }
+      let end = clozeGroups.length - 1
+      if (this.stepEnd && this.stepEnd > 1) {
+        end = this.stepEnd - 2
+      }
+      return clozeGroups.splice(begin, end - begin + 1)
     }
   }
 }

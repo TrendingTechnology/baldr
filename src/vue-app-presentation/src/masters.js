@@ -4,6 +4,7 @@
  * @module @bldr/vue-app-presentation/masters
  */
 
+import vue, { customStore } from '@/main.js'
 import Vue from 'vue'
 import store from '@/store.js'
 import { markupToHtml, validateUri } from '@/lib.js'
@@ -244,9 +245,9 @@ class Master {
    *
    * @param {object} payload
    * @property {object} payload
-   * @property {module:@bldr/vue-app-presentation~Slide} payload.oldSlide
+   * @property {module:@bldr/vue-app-presentation/content-file~Slide} payload.oldSlide
    * @property {module:@bldr/vue-app-presentation~props} payload.oldProps
-   * @property {module:@bldr/vue-app-presentation~Slide} payload.newSlide
+   * @property {module:@bldr/vue-app-presentation/content-file~Slide} payload.newSlide
    * @property {module:@bldr/vue-app-presentation~props} payload.newProps
    *
    * @param {object} thisArg - The
@@ -258,13 +259,33 @@ class Master {
   }
 
   /**
-   * Called when leaving a slide.
+   * Called before leaving a slide. This hook is triggered before the new
+   * slide number `slideNoCurrent` is set in the vuex store.
    *
    * @param {object} payload
    * @property {object} payload
-   * @property {module:@bldr/vue-app-presentation~Slide} payload.oldSlide
+   * @property {module:@bldr/vue-app-presentation/content-file~Slide} payload.oldSlide
    * @property {module:@bldr/vue-app-presentation~props} payload.oldProps
-   * @property {module:@bldr/vue-app-presentation~Slide} payload.newSlide
+   * @property {module:@bldr/vue-app-presentation/content-file~Slide} payload.newSlide
+   * @property {module:@bldr/vue-app-presentation~props} payload.newProps
+   *
+   * @param {object} thisArg - The
+   *   {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/call thisArg}
+   *   the master function is called with.
+   */
+  beforeLeaveSlide (payload, thisArg) {
+    this.callFunction_('beforeLeaveSlide', payload, thisArg)
+  }
+
+  /**
+   * Called when leaving a slide. This hook is triggered by the Vue lifecycle
+   * hook `beforeDestroy`.
+   *
+   * @param {object} payload
+   * @property {object} payload
+   * @property {module:@bldr/vue-app-presentation/content-file~Slide} payload.oldSlide
+   * @property {module:@bldr/vue-app-presentation~props} payload.oldProps
+   * @property {module:@bldr/vue-app-presentation/content-file~Slide} payload.newSlide
    * @property {module:@bldr/vue-app-presentation~props} payload.newProps
    *
    * @param {object} thisArg - The
@@ -404,6 +425,34 @@ class Masters {
 }
 
 /**
+ * This object is mixed in into each master component.
+ */
+const masterMixin = {
+  mounted () {
+    const oldSlide = vue.$store.getters['presentation/slideOld']
+    let oldProps
+    if (oldSlide) {
+      oldProps = oldSlide.renderData.props
+    }
+    const newSlide = vue.$store.getters['presentation/slideCurrent']
+    const newProps = newSlide.renderData.props
+    newSlide.master.enterSlide({ oldSlide, oldProps, newSlide, newProps }, this)
+    customStore.vueMasterInstanceCurrent = this
+  },
+  beforeDestroy () {
+    const oldSlide = vue.$store.getters['presentation/slideOld']
+    let oldProps
+    if (oldSlide) {
+      oldProps = oldSlide.renderData.props
+    }
+    const newSlide = vue.$store.getters['presentation/slideCurrent']
+    const newProps = newSlide.renderData.props
+    newSlide.master.leaveSlide({ oldSlide, oldProps, newSlide, newProps }, this)
+    customStore.vueMasterInstanceCurrent = null
+  }
+}
+
+/**
  * Register all masters. Search for `master.vue` files in the subfolder
  * `masters`.
  *
@@ -430,6 +479,12 @@ function registerMasters () {
     // Get the component config
     const masterName = fileName.replace('./', '').replace('.vue', '')
     const componentConfig = requireComponent(fileName)
+    const dataMixin = {
+      data () {
+        return { masterName }
+      }
+    }
+    componentConfig.default.mixins = [masterMixin, dataMixin]
     const masterConfig = componentConfig.master
     const master = new Master(masterName)
     master.importMembers(masterConfig)
