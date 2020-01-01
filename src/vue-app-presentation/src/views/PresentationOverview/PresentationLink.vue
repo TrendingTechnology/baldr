@@ -1,15 +1,15 @@
 <template>
-  <span class="vc_presentation_link">
+  <span class="vc_presentation_link" :class="`level-${level}`">
     <span
       v-if="!hasChilds"
-      class="link"
+      class="title link"
       @click="openPresentation(id)"
       :title="`ID: ${id}`"
     >
       {{ title }}
     </span>
-    <span v-else>{{ title }}</span>
-    <span v-if="subtitle">({{ subtitle }})</span>
+    <span class="title" v-else>{{ title }}</span>
+    <span class="subtitle" v-if="subtitle"> - {{ subtitle }}</span>
   </span>
 </template>
 
@@ -30,6 +30,9 @@ export default {
     },
     hasChilds: {
       type: Boolean
+    },
+    level: {
+      type: Number
     }
   },
   methods: {
@@ -37,3 +40,26 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+  .level-1 .title {
+    font-family: $font-family-sans;
+    font-size: 1.6em;
+    font-weight: bold;
+  }
+
+  .level-2 .title {
+    font-family: $font-family-sans;
+    font-weight: bold;
+    font-size: 1.4em;
+  }
+
+  .level-3 .title {
+    font-family: $font-family-sans;
+    font-size: 1.2em;
+  }
+
+  .subtitle {
+    font-style: italic;
+  }
+</style>

@@ -5,8 +5,9 @@
       :id="id"
       :subtitle="subtitle"
       :title="title"
+      :level="level"
     />
-    <ul v-if="hasChilds">
+    <ul :class="`ul-level-${level}`" v-if="hasChilds">
       <presentation-item
         :item="item"
         v-for="item in childs"
@@ -30,21 +31,31 @@ export default {
     }
   },
   computed: {
-    title () {
+    folderTitle () {
       if (this.item && '_title' in this.item) {
-        return this.item._title.title
+        return this.item._title
+      }
+    },
+    title () {
+      if (this.folderTitle) {
+        return this.folderTitle.title
       } else {
         return '…'
       }
     },
     subtitle () {
-      if (this.item && '_title' in this.item && this.item._title.subtitle) {
-        return this.item._title.subtitle
+      if (this.folderTitle && this.folderTitle.subtitle) {
+        return this.folderTitle.subtitle
+      }
+    },
+    level () {
+      if (this.folderTitle && this.folderTitle.level) {
+        return this.folderTitle.level
       }
     },
     id () {
-      if (this.item && '_title' in this.item) {
-        return this.item._title.folderName.substr(3)
+      if (this.folderTitle) {
+        return this.folderTitle.folderName.substr(3)
       }
     },
     hasChilds () {
@@ -62,3 +73,20 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+  ul li:before {
+    content: '' !important;
+  }
+  ul {
+    padding-left: 2em !important;
+  }
+
+  ul.ul-level-1 {
+    margin-bottom: 2em;
+  }
+
+  .ul-level-1 > li {
+    margin-top: 1em;
+  }
+</style>

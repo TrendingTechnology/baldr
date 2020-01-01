@@ -218,7 +218,7 @@ class FolderTitle {
 }
 
 /**
- *
+ * Hold metadata about a folder in a hierachical folder structur
  */
 class HierarchicalFolderTitles {
   /**
@@ -309,13 +309,16 @@ class FolderTitleTree {
    */
   add (folderTitles) {
     let tmp = this.tree_
+    let count = 1
     for (const title of folderTitles.list()) {
       if (!(title.folderName in tmp)) {
         tmp[title.folderName] = {
           _title: title
         }
+        tmp[title.folderName]._title.level = count
       }
       tmp = tmp[title.folderName]
+      count += 1
     }
   }
 
