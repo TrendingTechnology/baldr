@@ -29,13 +29,16 @@ function makeAsset (mediaFile) {
 /**
  * Sort the keys and clean up some entires.
  *
+ * @param {String} filePath - The media asset file path.
  * @param {Object} metaData - The object representation of the yaml meta data
  *   file.
  */
-function normalizeMetaData (metaData) {
+function normalizeMetaData (filePath, metaData) {
   const normalized = {}
 
+  // a-Strawinsky-Petruschka-Abschnitt-0_22
   if (metaData.id) metaData.id = metaData.id.replace(/^[va]-/, '')
+  // a Strawinsky Petruschka Abschnitt 0_22
   if (metaData.title) metaData.title = metaData.title.replace(/^[va] /, '')
 
   for (const key of ['id', 'title', 'description']) {
@@ -45,12 +48,47 @@ function normalizeMetaData (metaData) {
     }
   }
 
+  // HB_Ausstellung_Gnome -> Ausstellung_HB_Gnome
+  normalized.id = normalized.id.replace(/^([A-Z]{2,})_([a-zA-Z0-9-]+)_/, '$2_$1_')
+
+  function generateIdPrefix (filePath) {
+    const pathSegments = filePath.split('/')
+    // HB
+    const parentDir = pathSegments[pathSegments.length - 2]
+    if (parentDir.length !== 2 || !parentDir.match(/[A-Z]{2,}/)) {
+      return
+    }
+    const assetTypeAbbreviation = parentDir
+    // 20_Strawinsky-Petruschka
+    const subParentDir = pathSegments[pathSegments.length - 3]
+    // Strawinsky-Petruschka
+    const presentationId = subParentDir.replace(/^[0-9]{2,}_/, '')
+    // Strawinsky-Petruschka_HB
+    const idPrefix = `${presentationId}_${assetTypeAbbreviation}`
+    return idPrefix
+  }
+  const idPrefix = generateIdPrefix(filePath)
+  if (idPrefix && normalized.id.indexOf(idPrefix) === -1) {
+    normalized.id = `${idPrefix}_${normalized.id}`
+  }
+
   for (const key in metaData) {
     if (metaData.hasOwnProperty(key)) {
       normalized[key] = metaData[key]
       delete metaData[key]
     }
   }
+
+  // title: 'Tonart CD 4: Spur 29'
+  if ('title' in normalized && normalized.title.match(/.+CD.+Spur/)) {
+    delete normalized.title
+  }
+
+  // composer: Helbling-Verlag
+  if ('composer' in normalized && normalized.composer.indexOf('Verlag') > -1) {
+    delete normalized.composer
+  }
+
   return normalized
 }
 
@@ -89,7 +127,7 @@ function writeMetaDataYaml (filePath, metaData) {
     if (!metaData.title) {
       metaData.title = deasciify(asset.basename_)
     }
-    writeMetaDataYamlFile(yamlFile, normalizeMetaData(metaData))
+    writeMetaDataYamlFile(yamlFile, normalizeMetaData(filePath, metaData))
   }
 }
 
@@ -495,7 +533,7 @@ commander
 function normalizeMetaDataYamlOneFile (filePath) {
   const yamlFile = `${filePath}.yml`
   const metaData = yaml.safeLoad(fs.readFileSync(yamlFile, 'utf8'))
-  writeMetaDataYamlFile(yamlFile, normalizeMetaData(metaData))
+  writeMetaDataYamlFile(yamlFile, normalizeMetaData(filePath, metaData))
 }
 
 /**
