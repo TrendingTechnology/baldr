@@ -124,7 +124,8 @@ const actions = {
     }
     commit('setSlideNoCurrent', no)
     Vue.nextTick(function () {
-      // TODO: Remove this timeout
+      // TODO: Remove this timeout. We have to wait until the master
+      // component instance is present in vue.$children.
       setTimeout(function () {
         getters.slideCurrent.master.enterSlide(
           { oldSlide, oldProps, newSlide, newProps },
