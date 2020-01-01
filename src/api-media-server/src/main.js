@@ -136,7 +136,7 @@ async function connectDb () {
  */
 function asciify (input) {
   let output = input
-    .replace(/[\(\)]';/g, '')
+    .replace(/[\(\)';]/g, '')
     .replace(/[,.] /g, '_')
     .replace(/ +- +/g, '_')
     .replace(/\s+/g, '-')

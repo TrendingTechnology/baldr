@@ -41,7 +41,7 @@ function normalizeMetaData (filePath, metaData) {
   // a Strawinsky Petruschka Abschnitt 0_22
   if (metaData.title) metaData.title = metaData.title.replace(/^[va] /, '')
 
-  for (const key of ['id', 'title', 'description']) {
+  for (const key of ['id', 'title', 'description', 'composer']) {
     if (key in metaData) {
       normalized[key] = metaData[key]
       delete metaData[key]
