@@ -130,19 +130,6 @@ const actions = {
     }
     commit('setShowBlank', true)
     commit('setSlideNoCurrent', no)
-<<<<<<< HEAD
-    Vue.nextTick(function () {
-      // TODO: Remove this timeout. We have to wait until the master
-      // component instance is present in vue.$children.
-      setTimeout(function () {
-        getters.slideCurrent.master.enterSlide(
-          { oldSlide, oldProps, newSlide, newProps },
-          getMasterVueInstance(newSlide.master.name)
-        )
-      }, 10)
-    })
-=======
->>>>>>> 353ebc1af337dbbfcde4b1a20a003ef344deb5dd
   },
   setStepNext ({ dispatch, getters }) {
     let stepNoCurrent
