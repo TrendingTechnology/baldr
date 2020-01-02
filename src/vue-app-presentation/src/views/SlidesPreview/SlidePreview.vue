@@ -8,29 +8,20 @@ export default {
   },
   render: function (createElement) {
     if (this.slide) {
-      return createElement(
-        'div',
-        {
-          attrs: {
-            'b-content-theme': this.slide.master.contentTheme
-          },
-          class: {
-            'vc_slide_preview': true,
+      if (this.slide.renderData.propsPreview) {
+        return createElement(
+          `${this.slide.master.name}-master-preview`,
+          {
+            props: this.slide.renderData.propsPreview,
           }
-        },
-        [
-          createElement(
-            `${this.slide.master.name}-master`,
-            {
-              props: this.slide.renderData.props,
-              class: {
-                'master-inner': true
-              },
-              style: this.slide.styleInline
-            }
-          )
-        ]
-      )
+        )
+      } else {
+        return createElement('div', {
+          domProps: {
+            innerHTML: 'baz'
+          },
+        })
+      }
     }
   }
 }

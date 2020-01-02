@@ -375,6 +375,14 @@ class Master {
     }
     return props
   }
+
+  collectPropsMain (props, thisArg) {
+    return this.callFunction_('collectPropsMain', props, thisArg)
+  }
+
+  collectPropsPreview (props, thisArg) {
+    return this.callFunction_('collectPropsPreview', props, thisArg)
+  }
 }
 
 /**
@@ -397,7 +405,7 @@ class Masters {
   /**
    * Get a master object by the master name.
    *
-   * @param {string} name
+   * @param {string} name - The name of the master slide.
    *
    * @returns {module:@bldr/vue-app-presentation/masters~Master}
    */
@@ -421,6 +429,18 @@ class Masters {
    */
   get allNames () {
     return Object.keys(this.store_)
+  }
+
+  /**
+   * Check if a master exist.
+   *
+   * @param {string} name - The name of the master slide.
+   *
+   * @returns {Boolean}
+   */
+  exists (name) {
+    if (name in this.store_) return true
+    return false
   }
 }
 
@@ -549,12 +569,12 @@ export function registerMasterComponents () {
   }
 
   for (const masterName in mastersNg.all) {
-    const master =  masters[masterName]
+    const master = mastersNg.get(masterName)
     if (master.componentMain) {
-      Vue.component(`${masterName}-master-main`, masters[masterName].componentMain)
+      Vue.component(`${masterName}-master-main`, master.componentMain)
     }
     if (master.componentPreview) {
-      Vue.component(`${masterName}-master-preview`, masters[masterName].componentPreview)
+      Vue.component(`${masterName}-master-preview`, master.componentPreview)
     }
   }
 }

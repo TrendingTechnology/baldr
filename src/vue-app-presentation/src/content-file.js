@@ -9,7 +9,7 @@
 // import Vue from 'vue'
 import yaml from 'js-yaml'
 import { shortenText, convertPropertiesToCamelCase } from '@bldr/core-browser'
-import { masters } from '@/masters.js'
+import { masters, mastersNg } from '@/masters.js'
 import store from '@/store.js'
 import router from '@/router.js'
 import vue from '@/main.js'
@@ -173,6 +173,16 @@ class RenderData {
      * @type {module:@bldr/core/masters~rawMasterData}
      */
     this.props = rawSlideObject.cut(this.masterName)
+
+    /**
+     * Props (properties) to send to the main Vue master component.
+     */
+    this.propsMain = null
+
+    /**
+     * Props (properties) to send to the preview Vue master component.
+     */
+    this.propsPreview = null
 
     /**
      * A list of media URIs.
@@ -532,6 +542,14 @@ export class Presentation {
     // media
     if (mediaUris.length > 0) {
       this.media = await vue.$media.resolve(mediaUris)
+    }
+
+    for (const slide of this.slides) {
+      if (mastersNg.exists(slide.master.name)) {
+        const masterNg = mastersNg.get(slide.master.name)
+        slide.renderData.propsMain = masterNg.collectPropsMain(slide.renderData.props, vue)
+        slide.renderData.propsPreview = masterNg.collectPropsPreview(slide.renderData.props, vue)
+      }
     }
   }
 

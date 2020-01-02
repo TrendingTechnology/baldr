@@ -78,5 +78,14 @@ export default {
   },
   resolveMediaUris (props) {
     return [props.src]
+  },
+  collectPropsMain (props) {
+
+  },
+  collectPropsPreview (props) {
+    const mediaFile = this.$store.getters['media/mediaFileByUri'](props.src)
+    return {
+      httpUrl: mediaFile.httpUrl
+    }
   }
 }
