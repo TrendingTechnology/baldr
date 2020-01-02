@@ -18,7 +18,7 @@ export default {
     master () {
       const slide = this.$store.getters['presentation/slideCurrent']
       if ('master' in this.$route.meta) {
-        return this.$masters[this.$route.meta.master]
+        return this.$masters.get(this.$route.meta.master)
       } else if (slide) {
         return slide.master
       }

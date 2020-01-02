@@ -394,12 +394,12 @@ class Masters {
   }
 
   /**
+   * Add a master to the masters container.
    *
    * @param {module:@bldr/vue-app-presentation/masters~Master} master
    */
   add (master) {
     this.store_[master.name] = master
-    this[master.name] = master
   }
 
   /**
@@ -572,7 +572,7 @@ export const masters = registerMasters()
  */
 export function registerMasterComponents () {
   for (const masterName in masters.all) {
-    Vue.component(`${masterName}-master`, masters[masterName].vue)
+    Vue.component(`${masterName}-master`, masters.get(masterName).vue)
   }
 
   for (const masterName in mastersNg.all) {

@@ -23,8 +23,8 @@ export default {
       if ('master' in this.$route.meta) {
         name = this.$route.meta.master
         props = this.$route.meta.data
-        contentTheme = this.$masters[name].styleConfig.contentTheme
-        styleConfig = this.$masters[name].styleConfig
+        contentTheme = this.$masters.get(name).styleConfig.contentTheme
+        styleConfig = this.$masters.get(name).styleConfig
         styleInline = {}
       } else if (this.slideCurrent) {
         name = this.slideCurrent.master.name
