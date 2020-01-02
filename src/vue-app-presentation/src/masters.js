@@ -454,9 +454,13 @@ const masterMixin = {
     if (oldSlide) {
       oldProps = oldSlide.renderData.props
     }
+    // On instant slides like camera or editor there is no newSlide
     const newSlide = vue.$store.getters['presentation/slideCurrent']
-    const newProps = newSlide.renderData.props
-    newSlide.master.enterSlide({ oldSlide, oldProps, newSlide, newProps }, this)
+    let newProps
+    if (newSlide) {
+      newProps = newSlide.renderData.props
+      newSlide.master.enterSlide({ oldSlide, oldProps, newSlide, newProps }, this)
+    }
     customStore.vueMasterInstanceCurrent = this
   },
   beforeDestroy () {
@@ -465,9 +469,12 @@ const masterMixin = {
     if (oldSlide) {
       oldProps = oldSlide.renderData.props
     }
+    // On instant slides like camera or editor there is no newSlide
     const newSlide = vue.$store.getters['presentation/slideCurrent']
-    const newProps = newSlide.renderData.props
-    newSlide.master.leaveSlide({ oldSlide, oldProps, newSlide, newProps }, this)
+    if (newSlide) {
+      const newProps = newSlide.renderData.props
+      newSlide.master.leaveSlide({ oldSlide, oldProps, newSlide, newProps }, this)
+    }
     customStore.vueMasterInstanceCurrent = null
   }
 }
