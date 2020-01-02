@@ -497,6 +497,42 @@ function registerMasters () {
   return masters
 }
 
+function registerMastersNg () {
+  function findMasterName (fileName) {
+    return fileName.match(/\.\/([\w]+)\/.*/)[1]
+  }
+
+  const masters = new Masters()
+  const requireMaster = require.context('./masters-ng', true, /.+main\.js$/)
+  requireMaster.keys().forEach((fileName) => {
+    // ./masterName/main.js
+    const masterName = findMasterName(fileName)
+    const masterObject = requireMaster(fileName)
+    const master = new Master(masterName)
+    master.importMembers(masterObject.default)
+    masters.add(master)
+  })
+
+  const requireComponentMain = require.context('./masters-ng', true, /.+main\.vue$/)
+  requireComponentMain.keys().forEach((fileName) => {
+    // ./masterName/main.vue
+    const masterName = findMasterName(fileName)
+    const master = masters.get(masterName)
+    master.componentMain = requireComponentMain(fileName).default
+  })
+
+  const requireComponentPreview = require.context('./masters-ng', true, /.+preview\.vue$/)
+  requireComponentPreview.keys().forEach((fileName) => {
+    // ./masterName/preview.vue
+    const masterName = findMasterName(fileName)
+    const master = masters.get(masterName)
+    master.componentPreview = requireComponentPreview(fileName).default
+  })
+  return masters
+}
+
+export const mastersNg = registerMastersNg()
+
 /**
  * An instance of the class `Masters()`
  *
@@ -510,5 +546,15 @@ export const masters = registerMasters()
 export function registerMasterComponents () {
   for (const masterName in masters.all) {
     Vue.component(`${masterName}-master`, masters[masterName].vue)
+  }
+
+  for (const masterName in mastersNg.all) {
+    const master =  masters[masterName]
+    if (master.componentMain) {
+      Vue.component(`${masterName}-master-main`, masters[masterName].componentMain)
+    }
+    if (master.componentPreview) {
+      Vue.component(`${masterName}-master-preview`, masters[masterName].componentPreview)
+    }
   }
 }
