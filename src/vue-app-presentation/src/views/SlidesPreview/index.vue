@@ -1,5 +1,6 @@
 <template>
   <div class="vc_slides_preview default-padding" b-content-theme="default">
+    <h1>Folien-Vorschau</h1>
     <ol v-if="slides">
       <li
         v-for="slide in slides"
@@ -8,7 +9,14 @@
         :title="`Zur Folie Nr. ${slide.no}`"
         :class="{ 'current-slide': slideCurrent.no === slide.no }"
       >
-        <slide-preview :slide="slide"/>
+        <div class="slide-preview-wrapper">
+          <slide-preview :slide="slide"/>
+        </div>
+          <material-icon
+            :name="slide.master.icon.name"
+            :color="slide.master.icon.color"
+            outline="circle"
+          />
       </li>
     </ol>
     <open-interface v-else/>
@@ -48,3 +56,26 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+  .vc_slides_preview {
+    .slide-preview-wrapper {
+      height: 30vw;
+      width: 40vw;
+      background-color: $black;
+      margin: 1vw;
+      color: $white;
+    }
+
+    li {
+      position: relative;
+    }
+
+    .baldr-icon {
+      position: absolute;
+      top: -2vw;
+      left: 0;
+      font-size: 3vw;
+    }
+  }
+</style>

@@ -18,7 +18,7 @@ export default {
       } else {
         return createElement('div', {
           domProps: {
-            innerHTML: 'baz'
+            innerHTML: this.slide.plainText
           },
         })
       }

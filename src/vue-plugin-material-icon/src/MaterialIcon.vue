@@ -71,7 +71,7 @@ export default {
   },
   computed: {
     classes () {
-      let classes = ['baldr-icon', 'vc_masterial_icon']
+      let classes = ['baldr-icon', 'vc_material_icon']
       classes.push(`baldr-icon_outline_${this.outline}`)
       classes.push(`baldr-icon_display_${this.display}`)
       classes.push(`baldr-icon_${this.name}`)

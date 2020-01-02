@@ -226,7 +226,8 @@ export default {
         ['h', 'home'],
         ['i', 'media-ids'],
         ['m', 'media-overview'],
-        ['p', 'slides-preview'],
+        // p: is already taken by p f or p s
+        ['l', 'slides-preview'],
         ['r', 'rest-api'],
         ['s', 'slides-overview']
       ]),
