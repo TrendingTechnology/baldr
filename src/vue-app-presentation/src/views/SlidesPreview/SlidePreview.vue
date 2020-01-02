@@ -15,7 +15,7 @@ export default {
             'b-content-theme': this.slide.master.contentTheme
           },
           class: {
-            'vc_master_renderer': true,
+            'vc_slide_preview': true,
           }
         },
         [
