@@ -691,7 +691,7 @@ async function walk (dir, on) {
   for (const fileName of files) {
     const relPath = path.join(dir, fileName)
     // Exclude .git/
-    if (fs.existsSync(relPath) && fileName.substr(0, 1) !== '.') {
+    if (fs.existsSync(relPath) && fileName.substr(0, 4) !== '.git') {
       if (fs.statSync(relPath).isDirectory()) {
         await walk(relPath, on)
       } else {
@@ -734,6 +734,12 @@ async function update () {
   const begin = new Date().getTime()
   await db.collection('updates').insertOne({ begin: begin, end: 0 })
   await walk(basePath, {
+    everyFile: (filePath) => {
+      if (filePath.match(/\.(aux|out|log|synctex\.gz|mscx,)$/)) {
+        console.log(`Delete temporary file ${filePath}`)
+        fs.unlinkSync(filePath)
+      }
+    },
     presentation: async (filePath) => { await insertObjectIntoDb(filePath, 'presentations') },
     asset: async (filePath) => { await insertObjectIntoDb(filePath, 'assets') }
   })
