@@ -16,6 +16,8 @@ import MasterDocumentation from '@/views/MasterDocumentation.vue'
 import SlideView from '@/views/SlideView'
 import MasterRenderer from '@/views/SlideView/MasterRenderer.vue'
 import SlidesOverview from '@/views/SlidesOverview'
+import SlidesPreview from '@/views/SlidesPreview/index.vue'
+
 import PresentationOverview from '@/views/PresentationOverview/index.vue'
 
 import MediaIdsParentDir from '@/views/MediaIdsParentDir'
@@ -63,6 +65,14 @@ const routes = [
     meta: {
       shortcut: 'o',
       title: 'Überblick über alle Folien'
+    }
+  },
+  {
+    path: '/slides/preview',
+    component: SlidesPreview,
+    name: 'slides-preview',
+    meta: {
+      title: 'Folienvorschau'
     }
   },
   {

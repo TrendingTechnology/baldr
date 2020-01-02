@@ -226,6 +226,7 @@ export default {
         ['h', 'home'],
         ['i', 'media-ids'],
         ['m', 'media-overview'],
+        ['p', 'slides-preview'],
         ['r', 'rest-api'],
         ['s', 'slides-overview']
       ]),
