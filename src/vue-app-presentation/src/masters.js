@@ -550,7 +550,20 @@ function registerMasters () {
 
 function registerMastersNg () {
   function findMasterName (fileName) {
-    return fileName.match(/\.\/([\w]+)\/.*/)[1]
+    const match = fileName.match(/\.\/([\w]+)\/.*/)
+    if (!match) {
+      throw new Error(`The master name couldn’t be retrieved from ${fileName}”`)
+    }
+    return match[1]
+  }
+
+  function checkExport (fileName, requiredObject) {
+    if (!requiredObject) {
+      throw new Error(`“${fileName}” couldn’t be imported.`)
+    }
+    if (!requiredObject.default) {
+      throw new Error(`“${fileName}” must export a default object.`)
+    }
   }
 
   const masters = new Masters()
@@ -559,6 +572,7 @@ function registerMastersNg () {
     // ./masterName/main.js
     const masterName = findMasterName(fileName)
     const masterObject = requireMaster(fileName)
+    checkExport(fileName, masterObject)
     const master = new Master(masterName)
     master.importMembers(masterObject.default)
     masters.add(master)
@@ -569,7 +583,9 @@ function registerMastersNg () {
     // ./masterName/main.vue
     const masterName = findMasterName(fileName)
     const master = masters.get(masterName)
-    master.componentMain = requireComponentMain(fileName).default
+    const componentMain = requireComponentMain(fileName)
+    checkExport(fileName, componentMain)
+    master.componentMain = componentMain.default
   })
 
   const requireComponentPreview = require.context('./masters-ng', true, /.+preview\.vue$/)
@@ -577,7 +593,9 @@ function registerMastersNg () {
     // ./masterName/preview.vue
     const masterName = findMasterName(fileName)
     const master = masters.get(masterName)
-    master.componentPreview = requireComponentPreview(fileName).default
+    const componentPreview = requireComponentPreview(fileName)
+    checkExport(fileName, componentPreview)
+    master.componentPreview = componentPreview.default
   })
   return masters
 }
