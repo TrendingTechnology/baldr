@@ -1,5 +1,9 @@
 <template>
-  <div class="vc_slides_preview" b-content-theme="default">
+  <div
+    class="vc_slides_preview"
+    b-content-theme="default"
+    :style="{ fontSize: fontSize + 'vw' }"
+  >
     <h1>Folien-Vorschau</h1>
     <ol v-if="slides">
       <li
@@ -36,11 +40,31 @@ export default {
     OpenInterface,
     SlidePreview
   },
+  data () {
+    return {
+      fontSize: 0.75
+    }
+  },
   mounted: function () {
     this.$styleConfig.set({
       centerVertically: false,
       overflow: false
     })
+
+    this.$shortcuts.addMultiple([
+      {
+        keys: '+',
+        callback: this.increaseFontSize,
+        description: 'Folien-Vorschauen vergrößern',
+        routeNames: ['slides-preview']
+      },
+      {
+        keys: '-',
+        callback: this.decreaseFontSize,
+        description: 'Folien-Vorschauen verkleiner',
+        routeNames: ['slides-preview']
+      }
+    ])
   },
   computed: mapGetters([
     'presentation',
@@ -52,6 +76,12 @@ export default {
     gotToSlide (slideNo) {
       this.$store.dispatch('presentation/setSlideNoCurrent', slideNo)
       if (this.$route.name !== 'slides') this.$router.push({ name: 'slides' })
+    },
+    increaseFontSize () {
+      this.fontSize += 0.1
+    },
+    decreaseFontSize () {
+      this.fontSize -= 0.1
     }
   }
 }
@@ -59,7 +89,10 @@ export default {
 
 <style lang="scss" scoped>
   .vc_slides_preview {
-    padding: 1em;
+    h1 {
+      font-size: 4vw;
+    }
+    padding: 1vw;
 
     .slide-preview-wrapper {
       background-color: $black;
@@ -88,11 +121,5 @@ export default {
       position: absolute;
       top: -0.3em;
     }
-  }
-</style>
-
-<style lang="scss">
-  .vc_slides_preview {
-    font-size: 0.75vw !important;
   }
 </style>
