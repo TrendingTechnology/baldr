@@ -166,6 +166,17 @@ class Shortcuts {
   }
 
   /**
+   * Remove multiple shortcuts at once.
+   *
+   * @param {Array} keysList - An array of Mousetrap key specification.
+   */
+  removeMultiple (keysList) {
+    for (const keys of keysList) {
+      this.remove(keys)
+    }
+  }
+
+  /**
    *
    * @param {Object} route
    */

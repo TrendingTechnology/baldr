@@ -50,7 +50,6 @@ export default {
       centerVertically: false,
       overflow: false
     })
-
     this.$shortcuts.addMultiple([
       {
         keys: '+',
@@ -65,6 +64,9 @@ export default {
         routeNames: ['slides-preview']
       }
     ])
+  },
+  destroyed: function () {
+    this.$shortcuts.removeMultiple(['+', '-'])
   },
   computed: mapGetters([
     'presentation',
