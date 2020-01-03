@@ -1,4 +1,4 @@
-import { markupToHtml } from '@/lib.js'
+import { GrabFromObjects } from '@/lib.js'
 
 const example = `
 ---
@@ -84,19 +84,11 @@ export default {
   collectPropsMain (props) {
     const mediaFile = this.$store.getters['media/mediaFileByUri'](props.src)
 
-    let title
-    if (props.title) {
-      title = props.title
-    } else if ('title' in mediaFile) {
-      title = markupToHtml(mediaFile.title)
-    }
+    const grab = new GrabFromObjects(props, mediaFile)
 
-    let description
-    if (props.description) {
-      description = props.description
-    } else if ('description' in mediaFile) {
-      description = markupToHtml(mediaFile.description)
-    }
+    const title = grab.property('title')
+    const description = grab.property('description')
+
     return {
       title,
       description,

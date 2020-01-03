@@ -1,3 +1,5 @@
+import { GrabFromObjects } from '@/lib.js'
+
 const example = `
 ---
 slides:
@@ -73,32 +75,13 @@ export default {
     const image = this.$store.getters['media/mediaFileByUri'](props.image)
     const imageHttpUrl = image.httpUrl
 
-    let name
-    if ('name' in props && props.name) {
-      name = props.name
-    } else if ('name' in image) {
-      name = image.name
-    }
+    const grab = new GrabFromObjects(props, image, false)
+    const name = grab.property('name')
+    let birth = grab.property('birth')
+    let death = grab.property('death')
 
-    let birth
-    if ('birth' in props && props.birth) {
-      birth = props.birth
-    } else if ('birth' in image) {
-      birth = image.birth
-    }
-    if (birth) {
-      birth = `* ${birth}`
-    }
-
-    let death
-    if ('death' in props && props.death) {
-      death = props.death
-    } else if ('death' in image) {
-      death = image.death
-    }
-    if (death) {
-      death = `† ${death}`
-    }
+    if (birth) birth = `* ${birth}`
+    if (death) death = `† ${death}`
 
     return {
       name, birth, death, imageHttpUrl

@@ -1,7 +1,6 @@
 <template>
   <div class="vc_image_master">
     <img :src="imageHttpUrl"/>
-    lol
     <div
       v-if="!noMeta && (title || description)"
       class="metadata"

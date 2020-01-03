@@ -1,7 +1,4 @@
-
-import { markupToHtml } from '@/lib.js'
-import { createNamespacedHelpers } from 'vuex'
-const { mapGetters } = createNamespacedHelpers('presentation')
+import { GrabFromObjects } from '@/lib.js'
 
 const example = `
 ---
@@ -55,24 +52,6 @@ slides:
   audio:
     src: filename:Ich-hab-zu-Haus-ein-Grammophon.m4a
 `
-
-class GrabFromObjects {
-  constructor (object1, object2) {
-    this.object1 = object1
-    this.object2 = object2
-  }
-
-  property(property, markup=true) {
-    if (this.object1[property]) return this.object1[property]
-    if (this.object2[property]) {
-      if (markup) {
-        return markupToHtml(this.object2[property])
-      } else {
-        return this.object2[property]
-      }
-    }
-  }
-}
 
 export default {
   title: 'Hörbeispiel',

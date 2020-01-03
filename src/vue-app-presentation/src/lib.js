@@ -247,3 +247,37 @@ export async function openPresentation (presentationId) {
     vue.$router.push({ name: 'slides-overview' })
   }
 }
+
+/**
+ * Grab / select value from two objects. The first object is preferred.
+ */
+export class GrabFromObjects {
+  /**
+   * @param {Object} object1
+   * @param {Object} object2
+   * @param {Boolean} markup - Apply `markupToHtml()` to the value of the
+   *   second object
+   */
+  constructor (object1, object2, markup=true) {
+    this.object1 = object1
+    this.object2 = object2
+    this.markup = markup
+  }
+
+  /**
+   * Grab a value from two objects.
+   *
+   * @param {String} property - The name of property to look for
+   * @returns {Mixed}
+   */
+  property(property) {
+    if (this.object1[property]) return this.object1[property]
+    if (this.object2[property]) {
+      if (this.markup) {
+        return markupToHtml(this.object2[property])
+      } else {
+        return this.object2[property]
+      }
+    }
+  }
+}
