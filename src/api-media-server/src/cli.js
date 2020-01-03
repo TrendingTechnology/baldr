@@ -26,6 +26,12 @@ function makeAsset (mediaFile) {
   return new Asset(mediaFile).addFileInfos()
 }
 
+function filePathToAssetType (filePath) {
+  const asset = makeAsset(filePath)
+  const inputExtension = asset.extension.toLowerCase()
+  return assetTypes.extensionToType(inputExtension)
+}
+
 /**
  * Sort the keys and clean up some entires.
  *
@@ -706,6 +712,42 @@ commander
   .command('folder-title [input]').alias('t')
   .description('List all hierachical folder titles')
   .action(listHierarchicalFolderTitles)
+
+/*** v / video-preview ********************************************************/
+
+function createVideoPreviewImageOneFile (filePath, second) {
+  const assetType = filePathToAssetType(filePath)
+  if (assetType === 'video') {
+    const output = `${filePath}_preview.jpg`
+    const outputFileName = path.basename(output)
+    console.log(`Preview image: ${chalk.green(outputFileName)} at second ${chalk.green(second)})`)
+    convert = childProcess.spawnSync('ffmpeg', [
+      '-i', filePath,
+      '-ss', second, // Position in seconds
+      '-vframes', '1', // only handle one video frame
+      '-qscale:v', '10', // Effective range for JPEG is 2-31 with 31 being the worst quality.
+      '-y', // Overwrite output files without asking
+      output
+    ])
+  }
+}
+
+function createVideoPreviewImages (filePath, second=10) {
+  if (filePath) {
+    createVideoPreviewImageOneFile(filePath, second)
+  } else {
+    walk(process.cwd(), {
+      asset (relPath) {
+        createVideoPreviewImageOneFile(relPath, second)
+      }
+    })
+  }
+}
+
+commander
+  .command('video-preview [input] [second]').alias('v')
+  .description('Create video preview images')
+  .action(createVideoPreviewImages)
 
 /*** -v / --version ***********************************************************/
 
