@@ -1,6 +1,10 @@
 <template>
   <div class="vc_video_master">
-    <video v-if="mediaFile" controls :src="mediaFile.httpUrl"/>
+    <video
+      controls
+      :src="httpUrl"
+      :poster="previewHttpUrl"
+    />
   </div>
 </template>
 
@@ -10,6 +14,9 @@ export default {
     httpUrl: {
       type: String,
       required: true
+    },
+    previewHttpUrl: {
+      type: String
     }
   }
 }

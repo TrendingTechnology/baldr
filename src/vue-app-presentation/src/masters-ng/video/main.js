@@ -49,7 +49,13 @@ export default {
   collectPropsMain (props) {
     const mediaFile = this.$store.getters['media/mediaFileByUri'](props.src)
     return {
-      httpUrl: mediaFile.httpUrl
+      httpUrl: mediaFile.httpUrl,
+      previewHttpUrl: mediaFile.previewHttpUrl
+    }
+  },
+  collectPropsPreview ({ propsMain }) {
+    return {
+      previewHttpUrl: propsMain.previewHttpUrl
     }
   }
 }
