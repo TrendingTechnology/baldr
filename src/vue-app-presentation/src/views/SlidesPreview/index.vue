@@ -91,10 +91,12 @@ export default {
 
 <style lang="scss" scoped>
   .vc_slides_preview {
+    padding: 1vw;
+    background-color: scale-color($yellow, $lightness: 60%) !important;
+
     h1 {
       font-size: 4vw;
     }
-    padding: 1vw;
 
     .slide-preview-wrapper {
       background-color: $black;

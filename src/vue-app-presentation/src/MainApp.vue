@@ -281,6 +281,7 @@ export default {
     overflow: hidden;
     text-align: center;
     width: 100%;
+    border: 1px solid $gray;
   }
 </style>
 
@@ -310,14 +311,12 @@ export default {
   }
 
   .vue-notification {
-    padding: 1em;
-    margin: 0 1em 1em;
-
-    font-size: 12pt;
-
-    color: #ffffff;
     background: #44A4FC;
     border-left: 0.5em solid #187FE7;
+    color: #ffffff;
+    font-size: 12pt;
+    margin: 0 1em 1em;
+    padding: 1em;
 
     .text {
       font-size: 0.8em;
