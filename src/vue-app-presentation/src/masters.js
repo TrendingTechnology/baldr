@@ -8,6 +8,7 @@ import vue, { customStore } from '@/main.js'
 import Vue from 'vue'
 import store from '@/store.js'
 import { markupToHtml, validateUri } from '@/lib.js'
+import SlidePreviewPlayButton from '@/views/SlidesPreview/PlayButton.vue'
 
 /**
  * The icon of a master slide. This icon is shown in the documentation or
@@ -615,6 +616,15 @@ export const mastersNg = registerMastersNg()
 export const masters = registerMasters()
 
 /**
+ * This object is mixed in into each preview master vue component.
+ */
+const componentPreviewMixin = {
+  components: {
+    SlidePreviewPlayButton
+  }
+}
+
+/**
  * Register all masters as Vue components.
  */
 export function registerMasterComponents () {
@@ -628,6 +638,7 @@ export function registerMasterComponents () {
       Vue.component(`${masterName}-master-main`, master.componentMain)
     }
     if (master.componentPreview) {
+      master.componentPreview.mixins = [componentPreviewMixin]
       Vue.component(`${masterName}-master-preview`, master.componentPreview)
     }
   }

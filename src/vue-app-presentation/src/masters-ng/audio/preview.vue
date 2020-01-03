@@ -1,12 +1,11 @@
 <template>
   <div class="vc_audio_master_preview slide-preview-wrapper">
-    <div class="inner">
-      <img
-        :src="previewHttpUrl"
-        class="preview"
-        v-if="previewHttpUrl"
-      />
-
+    <img
+      :src="previewHttpUrl"
+      class="image-contain"
+      v-if="previewHttpUrl"
+    />
+    <div class="metadata">
       <p
         class="composer person"
         v-if="composer"
@@ -18,13 +17,8 @@
         v-if="title"
         v-html="title"
       />
-
-      <p
-        class="artist person"
-        v-if="artist"
-        v-html="artist"
-      />
     </div>
+    <slide-preview-play-button/>
   </div>
 </template>
 
@@ -40,9 +34,6 @@ export default {
     },
     composer: {
       type: String
-    },
-    artist: {
-      type: String
     }
   }
 }
@@ -54,6 +45,10 @@ export default {
       margin: 0;
     }
 
+    .metadata {
+      position: absolute;
+      bottom: 0
+    }
     .composer {
       font-size: 1.2em;
     }
@@ -62,15 +57,6 @@ export default {
       font-size: 1.1em;
     }
 
-    .artist {
-      margin-top: 1em;
-      font-size: 0.7em;
-    }
 
-    img.preview {
-      height: 1em;
-      width: 1em;
-      object-fit: cover;
-    }
   }
 </style>
