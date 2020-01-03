@@ -15,14 +15,14 @@ export default {
   .vc_task_master_preview {
     display: flex;
     flex-direction: column;
-    font-size: 2vw;
+    font-size: 1em;
     height: 100%;
     justify-content: center;
     text-align: center;
     width: 100%;
     .inner {
-      margin: 1vw;
-      padding: 1vw;
+      margin: 1em;
+      padding: 1em;
     }
   }
 </style>

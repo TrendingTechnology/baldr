@@ -1,5 +1,5 @@
 <template>
-  <div class="vc_slides_preview default-padding" b-content-theme="default">
+  <div class="vc_slides_preview" b-content-theme="default">
     <h1>Folien-Vorschau</h1>
     <ol v-if="slides">
       <li
@@ -59,23 +59,40 @@ export default {
 
 <style lang="scss" scoped>
   .vc_slides_preview {
+    padding: 1em;
+
     .slide-preview-wrapper {
-      height: 30vw;
-      width: 40vw;
       background-color: $black;
-      margin: 1vw;
       color: $white;
+      height: 15em;
+      margin: 0em;
+      width: 20em;
+    }
+
+    ol {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      padding: 0;
     }
 
     li {
+      list-style: none;
       position: relative;
+      margin: 0.3em;
     }
 
     .baldr-icon {
+      font-size: 2.5em;
+      left: -0.3em;
       position: absolute;
-      top: -2vw;
-      left: 0;
-      font-size: 3vw;
+      top: -0.3em;
     }
+  }
+</style>
+
+<style lang="scss">
+  .vc_slides_preview {
+    font-size: 0.75vw !important;
   }
 </style>
