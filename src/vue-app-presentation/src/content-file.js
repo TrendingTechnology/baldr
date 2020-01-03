@@ -533,14 +533,17 @@ export class Presentation {
 
     parseSlidesRecursive(this.rawYamlObject_.slides, this.slides, this.slidesTree)
 
+    // Resolve all media files.
     const mediaUris = []
     for (const slide of this.slides) {
       for (const mediaUri of slide.renderData.mediaUris) {
         mediaUris.push(mediaUri)
       }
     }
-    // media
     if (mediaUris.length > 0) {
+      /**
+       * @type {Object}
+       */
       this.media = await vue.$media.resolve(mediaUris)
     }
 
@@ -548,7 +551,13 @@ export class Presentation {
       if (mastersNg.exists(slide.master.name)) {
         const masterNg = mastersNg.get(slide.master.name)
         slide.renderData.propsMain = masterNg.collectPropsMain(slide.renderData.props, vue)
-        slide.renderData.propsPreview = masterNg.collectPropsPreview(slide.renderData.props, vue)
+        slide.renderData.propsPreview = masterNg.collectPropsPreview(
+          {
+            props: slide.renderData.props,
+            propsMain: slide.renderData.propsMain
+          },
+          vue
+        )
       }
     }
   }

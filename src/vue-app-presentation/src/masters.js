@@ -376,12 +376,36 @@ class Master {
     return props
   }
 
+  /**
+   * Collect the props (properties) for the main Vue component.
+   *
+   * @param {object} props - The props of the master slide.
+   * @param {object} thisArg - The
+   *   {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/call thisArg}
+   *   the master function is called with.
+   *
+   * @returns {Object} - The props for the main component as a object.
+   */
   collectPropsMain (props, thisArg) {
     return this.callFunction_('collectPropsMain', props, thisArg)
   }
 
-  collectPropsPreview (props, thisArg) {
-    return this.callFunction_('collectPropsPreview', props, thisArg)
+  /**
+   * Collect the props (properties) for the preview Vue component.
+   *
+   * @param {object} payload
+   * @property {object} payload
+   * @property {number} payload.props - The props of the master slide.
+   * @property {number} payload.propsMain - The props of the main Vue component.
+   *
+   * @param {object} thisArg - The
+   *   {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/call thisArg}
+   *   the master function is called with.
+   *
+   * @returns {Object} - The props for the preview component as a object.
+   */
+  collectPropsPreview (payload, thisArg) {
+    return this.callFunction_('collectPropsPreview', payload, thisArg)
   }
 }
 
@@ -414,7 +438,7 @@ class Masters {
   }
 
   /**
-   * Get all master objects as and object with the master name as properties.
+   * Get all master objects as an object with the master name as properties.
    *
    * @returns {object}
    */
