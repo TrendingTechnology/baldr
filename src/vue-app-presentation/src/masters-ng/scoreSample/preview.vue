@@ -1,5 +1,5 @@
 <template>
-  <div class="vc_score_sample_master_preview">
+  <div class="vc_score_sample_master_preview slide-preview-wrapper">
     <img :src="scoreHttpUrl"/>
   </div>
 </template>
@@ -17,8 +17,6 @@ export default {
 
 <style lang="scss" scoped>
   .vc_score_sample_master_preview {
-    width: 100%;
-    height: 100%;
     background-color: $white;
 
     img {

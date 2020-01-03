@@ -1,5 +1,5 @@
 <template>
-  <div class="vc_image_master_preview">
+  <div class="vc_image_master_preview slide-preview-wrapper">
     <img :src="imageHttpUrl"/>
   </div>
 </template>
@@ -16,9 +16,6 @@ export default {
 
 <style lang="scss" scoped>
   .vc_image_master_preview {
-    width: 100%;
-    height: 100%;
-
     img {
       width: 100%;
       height: 100%;

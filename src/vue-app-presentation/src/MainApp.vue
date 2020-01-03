@@ -269,6 +269,19 @@ export default {
     box-sizing: border-box;
     padding: 2vw 8vw;
   }
+
+  // Center vertically and horizontally, made for slide previews.
+  .slide-preview-wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: center;
+    max-height: 100%;
+    max-width: 100%;
+    overflow: hidden;
+    text-align: center;
+    width: 100%;
+  }
 </style>
 
 <style lang="scss" scoped>

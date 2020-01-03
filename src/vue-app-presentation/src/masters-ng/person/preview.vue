@@ -1,5 +1,5 @@
 <template>
-  <div class="vc_person_master_preview">
+  <div class="vc_person_master_preview slide-preview-wrapper">
     <img :src="imageHttpUrl">
     <div class="info-box">
       <p class="person important">{{ name }}</p>
@@ -25,9 +25,6 @@ export default {
 
 <style lang="scss" scoped>
   .vc_person_master_preview {
-    height: 100%;
-    width: 100%;
-
     img {
       height: 100%;
       width: 100%;
