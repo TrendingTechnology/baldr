@@ -66,11 +66,5 @@ export default {
   },
   plainTextFromProps (props) {
     return plainText(props.markup)
-  },
-  collectPropsMain (props) {
-    return props
-  },
-  collectPropsPreview ({ propsMain }) {
-    return propsMain
   }
 }

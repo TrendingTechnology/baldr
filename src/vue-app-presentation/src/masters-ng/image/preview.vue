@@ -1,6 +1,6 @@
 <template>
   <div class="vc_image_master_preview slide-preview-wrapper">
-    <img :src="imageHttpUrl"/>
+    <img :src="imageHttpUrl" class="image-contain"/>
   </div>
 </template>
 
@@ -13,13 +13,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-  .vc_image_master_preview {
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-    }
-  }
-</style>

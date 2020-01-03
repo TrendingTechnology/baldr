@@ -142,8 +142,5 @@ export default {
       composer,
       title
     }
-  },
-  collectPropsPreview ({ propsMain }) {
-    return propsMain
   }
 }

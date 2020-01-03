@@ -387,7 +387,9 @@ class Master {
    * @returns {Object} - The props for the main component as a object.
    */
   collectPropsMain (props, thisArg) {
-    return this.callFunction_('collectPropsMain', props, thisArg)
+    const propsMain = this.callFunction_('collectPropsMain', props, thisArg)
+    if (propsMain) return propsMain
+    if (props) return props
   }
 
   /**
@@ -405,7 +407,10 @@ class Master {
    * @returns {Object} - The props for the preview component as a object.
    */
   collectPropsPreview (payload, thisArg) {
-    return this.callFunction_('collectPropsPreview', payload, thisArg)
+    const propsPreview = this.callFunction_('collectPropsPreview', payload, thisArg)
+    if (propsPreview) return propsPreview
+    if (payload.propsMain) return payload.propsMain
+    if (payload.props) return payload.props
   }
 }
 

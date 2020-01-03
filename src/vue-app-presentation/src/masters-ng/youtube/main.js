@@ -1,30 +1,27 @@
-import { plainText } from '@bldr/core-browser'
-
 const example = `
 ---
 slides:
 
 - title: Short form
-  section: A section
+  youtube: 5BBahdS6wu4
 
 - title: Long form
-  section:
-    heading: A section
+  youtube:
+    id: xtKavZG1KiM
 `
 
 export default {
-  title: 'Abschnitt',
+  title: 'YouTube',
   props: {
-    heading: {
+    id: {
       type: String,
       required: true,
-      markup: true,
-      description: 'Die Überschrift / der Titel des Abschnitts.'
+      description: 'Die Youtube-ID (z. B. xtKavZG1KiM).'
     }
   },
   icon: {
-    name: 'file-tree',
-    color: 'orange-dark'
+    name: 'youtube',
+    color: 'red'
   },
   styleConfig: {
     centerVertically: true,
@@ -33,11 +30,11 @@ export default {
   example,
   normalizeProps (props) {
     if (typeof props === 'string') {
-      props = { heading: props }
+      props = { id: props }
     }
     return props
   },
   plainTextFromProps (props) {
-    return plainText(props.heading)
+    return props.id
   }
 }

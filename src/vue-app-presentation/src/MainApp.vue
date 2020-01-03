@@ -272,6 +272,7 @@ export default {
 
   // Center vertically and horizontally, made for slide previews.
   .slide-preview-wrapper {
+    border: 1px solid $gray;
     display: flex;
     flex-direction: column;
     height: 100%;
@@ -281,7 +282,12 @@ export default {
     overflow: hidden;
     text-align: center;
     width: 100%;
-    border: 1px solid $gray;
+  }
+
+  .image-contain {
+    height: 100%;
+    object-fit: contain;
+    width: 100%;
   }
 </style>
 
@@ -301,12 +307,12 @@ export default {
 
     .message {
       display: table-cell;
-      vertical-align: middle;
-      text-align: center;
+      font-family: $font-family-sans;
       font-size: 8vw;
       font-weight: bold;
-      font-family: $font-family-sans;
       opacity: 1;
+      text-align: center;
+      vertical-align: middle;
     }
   }
 
