@@ -1,6 +1,7 @@
 <script>
 import OpenInterface from '@/components/OpenInterface'
 import BlankMaster from '@/components/BlankMaster'
+import vue from '@/main.js'
 
 import { createNamespacedHelpers } from 'vuex'
 const { mapGetters } = createNamespacedHelpers('presentation')
@@ -56,6 +57,30 @@ export default {
     }
     this.setMasterStyle()
     if (this.master.name) {
+      let masterElement
+      if (`${this.master.name}-master-main` in vue.$options.components) {
+        masterElement = createElement(
+          `${this.master.name}-master-main`,
+          {
+            props: this.slideCurrent.renderData.propsMain,
+            class: {
+              'master-inner': true
+            },
+            style: this.master.styleInline
+          }
+        )
+      } else {
+        masterElement = createElement(
+          `${this.master.name}-master`,
+          {
+            props: this.master.props,
+            class: {
+              'master-inner': true
+            },
+            style: this.master.styleInline
+          }
+        )
+      }
       return createElement(
         'div',
         {
@@ -66,18 +91,7 @@ export default {
             'vc_master_renderer': true,
           }
         },
-        [
-          createElement(
-            `${this.master.name}-master`,
-            {
-              props: this.master.props,
-              class: {
-                'master-inner': true
-              },
-              style: this.master.styleInline
-            }
-          )
-        ]
+        [masterElement]
       )
     }
     return createElement('open-interface', {

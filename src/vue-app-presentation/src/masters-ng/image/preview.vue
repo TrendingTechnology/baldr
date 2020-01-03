@@ -1,12 +1,16 @@
 <template>
   <div class="vc_image_master_preview">
-    <img :src="httpUrl"/>
+    <img :src="imageHttpUrl"/>
   </div>
 </template>
 
 <script>
 export default {
-  props: ['httpUrl']
+  props: {
+    imageHttpUrl: {
+      type: String
+    }
+  }
 }
 </script>
 

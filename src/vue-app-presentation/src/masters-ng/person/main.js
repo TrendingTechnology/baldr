@@ -24,7 +24,8 @@ export default {
   props: {
     name: {
       type: String,
-      description: 'Der Name der Person'
+      description: 'Der Name der Person',
+      required: true
     },
     image: {
       type: String,

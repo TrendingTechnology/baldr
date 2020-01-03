@@ -1,3 +1,5 @@
+import { markupToHtml } from '@/lib.js'
+
 const example = `
 ---
 slides:
@@ -81,13 +83,30 @@ export default {
   },
   collectPropsMain (props) {
     const mediaFile = this.$store.getters['media/mediaFileByUri'](props.src)
+
+    let title
+    if (props.title) {
+      title = props.title
+    } else if ('title' in mediaFile) {
+      title = markupToHtml(mediaFile.title)
+    }
+
+    let description
+    if (props.description) {
+      description = props.description
+    } else if ('description' in mediaFile) {
+      description = markupToHtml(mediaFile.description)
+    }
     return {
-      httpUrl: mediaFile.httpUrl
+      title,
+      description,
+      imageHttpUrl: mediaFile.httpUrl,
+      noMeta: props.noMeta
     }
   },
   collectPropsPreview ({ propsMain }) {
     return {
-      httpUrl: propsMain.httpUrl
+      imageHttpUrl: propsMain.imageHttpUrl
     }
   }
 }

@@ -12,10 +12,12 @@
 export default {
   props: {
     name: {
-      type: String
+      type: String,
+      required: true
     },
     imageHttpUrl: {
-      type: String
+      type: String,
+      required: true
     }
   }
 }

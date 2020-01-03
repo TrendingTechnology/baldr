@@ -5,9 +5,13 @@
 </template>
 
 <script>
-
 export default {
-  props: ['markup']
+  props: {
+    markup: {
+      type: String,
+      required: true
+    }
+  }
 }
 </script>
 

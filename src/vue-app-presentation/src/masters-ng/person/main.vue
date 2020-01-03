@@ -1,122 +1,34 @@
 <template>
   <div class="vc_person_master">
-    <img :src="imageFile.httpUrl">
+    <img :src="imageHttpUrl">
     <div class="info-box">
-      <p v-if="birthComputed || deathComputed" class="birth-and-death">{{ birthComputed }} {{ deathComputed }}</p>
-      <p class="person important">{{ nameComputed }}</p>
+      <p
+        v-if="birth || death" class="birth-and-death"
+      >
+        {{ birth }} {{ death }}
+      </p>
+      <p class="person important">{{ name }}</p>
     </div>
   </div>
 </template>
 
 <script>
-const example = `
----
-slides:
-
-- title: Not birth and death
-  person:
-     name: Joseph Haydn
-     image: id:Haydn
-
-- title: All properties
-  person:
-     name: Ludwig van Beethoven
-     image: id:Beethoven
-     birth: 1770
-     death: 1827
-
-- title: props from media file
-  person:
-     image: id:Goethe
-`
-
-export const master = {
-  title: 'Porträt',
-  icon: {
-    name: 'clipboard-account',
-    color: 'orange'
-  },
-  styleConfig: {
-    centerVertically: true,
-    darkMode: true
-  },
-  example,
-  normalizeProps (props) {
-    if (typeof props === 'string') {
-      return {
-        image: props
-      }
-    }
-    return props
-  },
-  resolveMediaUris (props) {
-    return [props.image]
-  },
-  titleFromProps (props) {
-    if ('name' in props) {
-      return props.name
-    } else {
-      return props.image
-    }
-  }
-}
-
 export default {
   props: {
     name: {
       type: String,
-      description: 'Der Name der Person'
+      description: 'Der Name der Person',
+      required: true
     },
-    image: {
+    imageHttpUrl: {
       type: String,
-      required: true,
-      mediaFileUri: true,
-      description: 'Eine URI zu einer Bild-Datei.'
+      required: true
     },
     birth: {
-      type: [String, Number],
-      description: 'Datumsangabe zum Geburtstag'
+      type: String
     },
     death: {
-      type: [String, Number],
-      description: 'Datumsangabe zum Todestag'
-    }
-  },
-  computed: {
-    imageFile () {
-      return this.$store.getters['media/mediaFileByUri'](this.image)
-    },
-    nameComputed () {
-      if ('name' in this && this.name) {
-        return this.name
-      } else if ('name' in this.imageFile) {
-        return this.imageFile.name
-      }
-      return ''
-    },
-    birthComputed () {
-      let birth
-      if ('birth' in this && this.birth) {
-        birth = this.birth
-      } else if ('birth' in this.imageFile) {
-        birth = this.imageFile.birth
-      }
-      if (birth) {
-        return `* ${birth}`
-      }
-      return ''
-    },
-    deathComputed () {
-      let death
-      if ('death' in this && this.death) {
-        death = this.death
-      } else if ('death' in this.imageFile) {
-        death = this.imageFile.death
-      }
-      if (death) {
-        return `† ${death}`
-      }
-      return ''
+      type: String
     }
   }
 }

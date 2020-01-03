@@ -1,42 +1,39 @@
 <template>
   <div class="vc_image_master">
-    <img v-if="mediaFile" :src="mediaFile.httpUrl"/>
-    <div v-if="titleComputed || descriptionComputed" class="metadata">
+    <img :src="imageHttpUrl"/>
+    lol
+    <div
+      v-if="!noMeta && (title || description)"
+      class="metadata"
+    >
       <h1
-        v-if="!noMeta && titleComputed"
+        v-if="title"
         class="title"
-        v-html="titleComputed"
+        v-html="title"
       />
       <p
-        v-if="!noMeta && descriptionComputed"
+        v-if="description"
         class="description"
-        v-html="descriptionComputed"
+        v-html="description"
       />
     </div>
   </div>
 </template>
 
 <script>
-import { markupToHtml } from '@/lib.js'
-import { createNamespacedHelpers } from 'vuex'
-const { mapGetters } = createNamespacedHelpers('presentation')
-
-
 export default {
-  computed: {
-    ...mapGetters(['slideCurrent']),
-    titleComputed () {
-      if (this.title) return this.title
-      if ('title' in this.mediaFile) return markupToHtml(this.mediaFile.title)
-      return ''
+  props: {
+    imageHttpUrl: {
+      type: String
     },
-    descriptionComputed () {
-      if (this.description) return this.description
-      if ('description' in this.mediaFile) return markupToHtml(this.mediaFile.description)
-      return ''
+    title: {
+      type: String
     },
-    mediaFile () {
-      return this.$store.getters['media/mediaFileByUri'](this.src)
+    description: {
+      type: String
+    },
+    noMeta: {
+      type: Boolean
     }
   }
 }

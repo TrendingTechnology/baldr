@@ -14,13 +14,26 @@ slides:
     audio: id:Fischer-Dieskau_Marmotte
 `
 
-const getters = {
-  ...mapPresentationGetters(['slideCurrent']),
-  ...mapMediaGetters(['mediaFileByUri', 'sampleByUri'])
-}
-
 export default {
   title: 'Notenbeispiel',
+  props: {
+    heading: {
+      type: String,
+      description: 'Eine Überschrift',
+      markup: true
+    },
+    score: {
+      type: String,
+      description: 'URI zu einer Bild-Datei, dem Notenbeispiel.',
+      mediaFileUri: true,
+      required: true
+    },
+    audio: {
+      type: String,
+      description: 'URI der entsprechenden Audio-Datei oder des Samples.',
+      mediaFileUri: true
+    }
+  },
   icon: {
     name: 'file-audio',
     color: 'black',
@@ -49,13 +62,14 @@ export default {
   },
   collectPropsMain (props) {
     return {
-      scoreHttpUrl : this.$store.getters['media/mediaFileByUri'](props.score).httpUrl,
+      heading: props.heading,
+      scoreHttpUrl: this.$store.getters['media/mediaFileByUri'](props.score).httpUrl,
       audioHttpUrl: this.$store.getters['media/sampleByUri'](props.audio).httpUrl
     }
   },
   collectPropsPreview ({ propsMain }) {
     return {
-      httpUrl: propsMain.scoreHttpUrl
+      scoreHttpUrl: propsMain.scoreHttpUrl
     }
   }
 }
