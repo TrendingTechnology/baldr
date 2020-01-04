@@ -582,6 +582,12 @@ function registerMastersNg () {
     const masterName = findMasterName(fileName)
     const masterObject = requireMaster(fileName)
     checkExport(fileName, masterObject)
+    const dataMixin = {
+      data () {
+        return { masterName }
+      }
+    }
+    masterObject.default.mixins = [masterMixin, dataMixin]
     const master = new Master(masterName)
     master.importMembers(masterObject.default)
     masters.add(master)

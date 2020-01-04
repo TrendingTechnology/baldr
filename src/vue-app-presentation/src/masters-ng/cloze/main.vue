@@ -5,25 +5,21 @@
 </template>
 
 <script>
-import { markupToHtml, displayElementByStepNo } from '@/lib.js'
+import { displayElementByStepNo } from '@/lib.js'
 import { createNamespacedHelpers } from 'vuex'
 const { mapGetters } = createNamespacedHelpers('presentation')
 
 export default {
   props: {
-    src: {
+    svgPath: {
       type: String,
-      required: true,
-      description: 'Den URI zu einer SVG-Datei, die den Lückentext enthält.',
-      mediaFileUri: true
+      required: true
     },
     stepBegin: {
-      type: Number,
-      description: 'Beginne bei dieser Schrittnumber Lückentextwörter einzublenden.'
+      type: Number
     },
     stepEnd: {
-      type: Number,
-      description: 'Höre bei dieser Schrittnumber auf Lückentextwörter einzublenden.'
+      type: Number
     }
   },
   data () {
@@ -32,21 +28,17 @@ export default {
       clozeGroups: []
     }
   },
-  computed: {
-    ...mapGetters(['slideCurrent']),
-    mediaFile () {
-      return this.$store.getters['media/mediaFileByUri'](this.src)
-    }
-  },
+  computed: mapGetters(['slideCurrent']),
   methods: {
     async loadSvg () {
       let response = await this.$media.httpRequest.request({
-        url: `/media/${this.mediaFile.path}`,
+        url: `/media/${this.svgPath}`,
         method: 'get'
       })
       this.$refs.clozeWrapper.innerHTML = response.data
       this.allClozeGroups = this.collectClozeGroups()
       this.clozeGroups = this.selectClozeGroups(this.allClozeGroups)
+      console.log(this.clozeGroups)
       this.slideCurrent.renderData.stepCount = this.clozeGroups.length + 1
       for (const group of this.allClozeGroups) {
         group.style.display = 'none'
@@ -94,6 +86,9 @@ export default {
       }
       return clozeGroups.splice(begin, end - begin + 1)
     }
+  },
+  mounted () {
+    this.loadSvg()
   }
 }
 </script>

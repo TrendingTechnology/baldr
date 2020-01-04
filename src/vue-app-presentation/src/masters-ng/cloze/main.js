@@ -75,6 +75,7 @@ export default {
     return [props.src]
   },
   enterStep ({ oldStepNo, newStepNo }) {
+    console.log(this.clozeGroups)
     const newClozeGroup = displayElementByStepNo({
       elements: this.clozeGroups,
       oldStepNo,
@@ -82,14 +83,13 @@ export default {
     })
     this.scroll(newClozeGroup)
   },
-  async enterSlide () {
-    this.loadSvg()
-  },
   collectPropsMain (props) {
     const svgMediaFile = this.$store.getters['media/mediaFileByUri'](props.src)
-    const svgHttpUrl = svgMediaFile.httpUrl
     return {
-      svgHttpUrl
+      svgPath: svgMediaFile.path,
+      svgHttpUrl: svgMediaFile.httpUrl,
+      stepBegin: props.stepBegin,
+      stepEnd: props.stepEnd
     }
   },
   collectPropsPreview ({ propsMain }) {
