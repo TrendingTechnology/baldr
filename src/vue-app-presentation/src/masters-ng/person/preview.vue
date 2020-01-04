@@ -1,5 +1,8 @@
 <template>
-  <div class="vc_person_master_preview slide-preview-wrapper">
+  <div class="
+    vc_person_master_preview
+    slide-preview-fullscreen
+  ">
     <img :src="imageHttpUrl">
     <div class="info-box">
       <p class="person important">{{ name }}</p>

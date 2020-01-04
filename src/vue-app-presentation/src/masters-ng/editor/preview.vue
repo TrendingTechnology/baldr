@@ -1,33 +1,21 @@
 <template>
   <div
-    class="vc_editor_master_preview"
+    class="
+      vc_editor_master_preview
+      slide-preview-valign-top
+      slide-preview-fix-typograph
+      slide-preview-fullscreen
+    "
     spellcheck="false"
-    v-html="markupSafe"
-    :style="{ fontSize: fontSize + 'vw' }">
+    v-html="markup">
   </div>
 </template>
 
 <script>
-import { plainText } from '@bldr/core-browser'
-import { markupToHtml, wrapWords, displayElementByStepNo } from '@/lib.js'
-import { createNamespacedHelpers } from 'vuex'
-const { mapGetters } = createNamespacedHelpers('presentation')
-
-const placeholder = '…'
-const placeholderTag = `<span class="editor-placeholder">${placeholder}</span>`
-const defaultMarkup = `<p contenteditable>${placeholderTag}</p>`
-
 export default {
   props: {
     markup: {
-      type: String,
-      markup: true,
-      description: 'Text im HTML oder Markdown Format oder natürlich als reiner Text.'
-    },
-    stepWords: {
-      type: Boolean,
-      description: 'Wörtern einblenden',
-      default: false
+      type: String
     }
   }
 }
@@ -35,5 +23,12 @@ export default {
 
 <style lang="scss">
   .vc_editor_master_preview {
+    background-color:$handwriting-white;
+    color: $handwriting-blue;
+    font-family: $handwriting-font-family;
+
+    h1, h2, h3, h4 {
+      font-family: $handwriting-font-family !important;
+    }
   }
 </style>

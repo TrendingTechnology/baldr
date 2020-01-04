@@ -1,5 +1,5 @@
 <template>
-  <div class="vc_video_master_preview slide-preview-wrapper">
+  <div class="vc_video_master_preview">
     <img
       v-if="previewHttpUrl"
       :src="previewHttpUrl"

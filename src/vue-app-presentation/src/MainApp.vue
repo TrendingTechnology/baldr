@@ -265,25 +265,82 @@ export default {
     margin: 0;
   }
 
+  /*********************************************************************
+   * Master main components
+   ********************************************************************/
+
   .default-padding {
     box-sizing: border-box;
     padding: 2vw 8vw;
   }
 
-  // Center vertically and horizontally, made for slide previews.
-  .slide-preview-wrapper {
-    border: 1px solid $gray;
-    display: flex;
-    flex-direction: column;
+  /*********************************************************************
+   * Master preview components
+   ********************************************************************/
+
+  /**
+   * Applied to the top level preview div
+   */
+
+  // Fill the whole preview room
+  .slide-preview-fullscreen {
+    box-sizing: border-box;
     height: 100%;
-    justify-content: center;
     max-height: 100%;
     max-width: 100%;
-    overflow: hidden;
-    text-align: center;
     width: 100%;
   }
 
+  // Center vertically and horizontally
+  .slide-preview-valign-center {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+  }
+
+  // Show top content, hide bottom content on the preview slides.
+  .slide-preview-valign-top {
+    display: flex;
+    flex-flow: column;
+    overflow: hidden;
+  }
+
+  // generic, editor
+  .slide-preview-fix-typograph {
+    text-align: left;
+    padding: 1em;
+
+    h1 {
+      font-size: 1.2em;
+    }
+
+    h2 {
+      font-size: 1.1em;
+    }
+
+    h3, h4 {
+      font-size: 1em;
+    }
+
+    h1, h2, h3, h4 {
+      margin: 0;
+    }
+
+    p {
+      margin: 0;
+    }
+
+    ol, ul {
+      padding-left: 0.5em;
+    }
+  }
+
+  /**
+   * Applied to <img>
+   */
+
+  // Show the whole image on the slide previews.
   .image-contain {
     height: 100%;
     object-fit: contain;

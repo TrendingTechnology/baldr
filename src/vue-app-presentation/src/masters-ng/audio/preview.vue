@@ -1,5 +1,8 @@
 <template>
-  <div class="vc_audio_master_preview slide-preview-wrapper">
+  <div class="
+    vc_audio_master_preview
+    slide-preview-wrapper
+  ">
     <img
       :src="previewHttpUrl"
       class="image-contain"
@@ -56,7 +59,5 @@ export default {
     .title {
       font-size: 1.1em;
     }
-
-
   }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="vc_youtube_master_preview slide-preview-wrapper">
+  <div class="vc_youtube_master_preview">
     <img :src="httpUrl" class="image-contain"/>
     <slide-preview-play-button/>
   </div>

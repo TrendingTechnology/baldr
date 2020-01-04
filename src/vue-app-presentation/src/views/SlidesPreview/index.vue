@@ -100,9 +100,11 @@ export default {
 
     .slide-preview-wrapper {
       background-color: $black;
+      border: 1px solid $gray;
       color: $white;
       height: 15em;
       margin: 0em;
+      overflow: hidden;
       width: 20em;
     }
 

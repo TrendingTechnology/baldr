@@ -84,5 +84,17 @@ export default {
   },
   async enterSlide () {
     this.loadSvg()
+  },
+  collectPropsMain (props) {
+    const svgMediaFile = this.$store.getters['media/mediaFileByUri'](props.src)
+    const svgHttpUrl = svgMediaFile.httpUrl
+    return {
+      svgHttpUrl
+    }
+  },
+  collectPropsPreview ({ propsMain }) {
+    return {
+      svgHttpUrl: propsMain.svgHttpUrl
+    }
   }
 }

@@ -1,5 +1,8 @@
 <template>
-  <div class="vc_score_sample_master_preview slide-preview-wrapper">
+  <div class="
+    vc_score_sample_master_preview
+    slide-preview-fullscreen
+  ">
     <img :src="scoreHttpUrl"/>
   </div>
 </template>

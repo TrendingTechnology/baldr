@@ -1,5 +1,9 @@
 <template>
-  <div class="vc_wikipedia_master_preview slide-preview-wrapper">
+  <div class="
+    vc_wikipedia_master_preview
+    slide-preview-valign-center
+    slide-preview-fullscreen
+  ">
     <p class="title">
       Wikipedia-Artikel: <br/>
       {{ title }}

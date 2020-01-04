@@ -1,12 +1,14 @@
 <template>
-  <div class="vc_section_master_preview slide-preview-wrapper">
+  <div class="
+    vc_section_master_preview
+    slide-preview-fullscreen
+    slide-preview-valign-center
+  ">
     <div class="inner" v-html="heading"/>
   </div>
 </template>
 
 <script>
-import { plainText } from '@bldr/core-browser'
-
 export default {
   props: {
     heading: {
