@@ -153,7 +153,7 @@ const mutations = {
   }
 }
 
-export const master = {
+export default {
   title: 'Dokumentenkamera',
   icon: {
     name: 'document-camera',

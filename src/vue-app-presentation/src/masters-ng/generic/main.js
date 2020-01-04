@@ -334,5 +334,15 @@ export default {
       stepNo,
       visibility: true
     })
+  },
+  collectPropsMain (props) {
+    return {
+      markup: props.markup
+    }
+  },
+  collectPropsPreview ({ props }) {
+    return {
+      markup: props.markup[0]
+    }
   }
 }

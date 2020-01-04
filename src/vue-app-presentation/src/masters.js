@@ -440,6 +440,9 @@ class Masters {
    * @returns {module:@bldr/vue-app-presentation/masters~Master}
    */
   get (name) {
+    if (!(name in this.store_)) {
+      throw new Error(`Class Masters.get(): No master named “${name}”`)
+    }
     return this.store_[name]
   }
 
