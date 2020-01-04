@@ -17,7 +17,7 @@ export default {
       left: 1.2em;
       top: 0.6em;
       font-size: 6em;
-      opacity: 0.5;
+      opacity: 0.7;
     }
   }
 </style>

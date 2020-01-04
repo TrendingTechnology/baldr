@@ -552,12 +552,6 @@ function registerMasters () {
     const masterName = findMasterName(fileName)
     const masterObject = requireMaster(fileName)
     checkExport(fileName, masterObject)
-    const dataMixin = {
-      data () {
-        return { masterName }
-      }
-    }
-    masterObject.default.mixins = [masterMixin, dataMixin]
     const master = new Master(masterName)
     master.importMembers(masterObject.default)
     master.registerVuexModule()
@@ -570,6 +564,12 @@ function registerMasters () {
     const masterName = findMasterName(fileName)
     const master = masters.get(masterName)
     const componentMain = requireComponentMain(fileName)
+    const dataMixin = {
+      data () {
+        return { masterName }
+      }
+    }
+    componentMain.default.mixins = [masterMixin, dataMixin]
     checkExport(fileName, componentMain)
     master.componentMain = componentMain.default
   })

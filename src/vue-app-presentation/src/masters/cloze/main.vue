@@ -38,7 +38,6 @@ export default {
       this.$refs.clozeWrapper.innerHTML = response.data
       this.allClozeGroups = this.collectClozeGroups()
       this.clozeGroups = this.selectClozeGroups(this.allClozeGroups)
-      console.log(this.clozeGroups)
       this.slideCurrent.renderData.stepCount = this.clozeGroups.length + 1
       for (const group of this.allClozeGroups) {
         group.style.display = 'none'

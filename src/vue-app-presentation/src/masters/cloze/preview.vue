@@ -1,5 +1,8 @@
 <template>
-  <div class="vc_cloze_master_preview slide-preview-valign-top">
+  <div class="
+    vc_cloze_master_preview
+    slide-preview-valign-top
+  ">
     <img :src="svgHttpUrl"/>
   </div>
 </template>

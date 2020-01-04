@@ -1,7 +1,7 @@
 <template>
   <div class="
     vc_audio_master_preview
-    slide-preview-wrapper
+    slide-preview-fullscreen
   ">
     <img
       :src="previewHttpUrl"
@@ -14,7 +14,6 @@
         v-if="composer"
         v-html="composer"
       />
-
       <p
         class="title piece"
         v-if="title"
@@ -49,15 +48,19 @@ export default {
     }
 
     .metadata {
+      background-color: rgba(170, 170, 170, 0.6);
+      bottom: 0;
       position: absolute;
-      bottom: 0
+      text-align: center;
+      width: 100%;
     }
+
     .composer {
       font-size: 1.2em;
     }
 
     .title {
-      font-size: 1.1em;
+      font-size: 2em;
     }
   }
 </style>

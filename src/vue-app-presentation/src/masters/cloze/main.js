@@ -75,7 +75,6 @@ export default {
     return [props.src]
   },
   enterStep ({ oldStepNo, newStepNo }) {
-    console.log(this.clozeGroups)
     const newClozeGroup = displayElementByStepNo({
       elements: this.clozeGroups,
       oldStepNo,
