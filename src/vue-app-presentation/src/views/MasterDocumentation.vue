@@ -40,7 +40,7 @@ export default {
       return this.$masters.get(this.masterName)
     },
     props () {
-      return this.master.vue.props
+      return this.master.props
     },
     documentation () {
       if ('documentation' in this.master) {

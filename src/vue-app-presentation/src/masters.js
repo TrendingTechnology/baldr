@@ -115,11 +115,17 @@ class Master {
     this.store = null
 
     /**
-     * The Vue instance of the corresponding vue component.
+     * Formal description of a property of a master slide.
      *
+     * Properties:
+     * description: 'Eine URI zu einer Bild-Datei.'
+     * type: String, TODO Implement
+     * required: TODO Implement
+     * mediaFileUri: true,
+     * markup:
      * @type {Object}
      */
-    this.vue = null
+    this.props = null
   }
 
   /**
@@ -337,10 +343,10 @@ class Master {
    * @returns {object}
    */
   markupToHtml (props) {
-    if (!('props' in this.vue)) return props
+    if (!this.props) return props
     for (const propName in props) {
-      const vueProp = this.vue.props[propName]
-      if ('markup' in vueProp && vueProp.markup) {
+      const prop = this.props[propName]
+      if ('markup' in prop && prop.markup) {
         props[propName] = markupToHtml(props[propName])
       }
     }
@@ -355,8 +361,8 @@ class Master {
    */
   detectUnkownProps (props) {
     for (const propName in props) {
-      if ('props' in this.vue && !(propName in this.vue.props)) {
-        throw new Error(`The master slide “${this.name}” has no property (prop) named “${propName}”.`)
+      if (this.props && !(propName in this.props)) {
+        throw new Error(`The master slide “${this.name}” has no property named “${propName}”.`)
       }
     }
   }
@@ -367,10 +373,10 @@ class Master {
    * @param {module:@bldr/vue-app-presentation~props} props
    */
   validateUris (props) {
-    if (!('props' in this.vue)) return props
+    if (!this.props)  return props
     for (const propName in props) {
-      const vueProp = this.vue.props[propName]
-      if ('mediaFileUri' in vueProp && vueProp.mediaFileUri) {
+      const prop = this.props[propName]
+      if ('mediaFileUri' in prop && prop.mediaFileUri) {
         props[propName] = validateUri(props[propName])
       }
     }
@@ -513,8 +519,8 @@ const masterMixin = {
 }
 
 /**
- * Register all masters. Search for `master.vue` files in the subfolder
- * `masters`.
+ * Register all masters. Search for `main.js`, `main.vue` and `preview.vue`
+ * files in the subfolder `masters`.
  *
  * @see {@link https://github.com/chrisvfritz/vue-enterprise-boilerplate/blob/master/src/components/_globals.js}
  * @see {@link https://webpack.js.org/guides/dependency-management/#require-context}
@@ -522,42 +528,6 @@ const masterMixin = {
  * @returns {module:@bldr/vue-app-presentation/masters~Masters}
  */
 function registerMasters () {
-  //
-  const requireComponent = require.context(
-    // Look for files in the current directory
-    './masters',
-    // Do not look in subdirectories
-    false,
-    // Only include .vue files
-    /[\w-]+\.vue$/
-  )
-
-  const masters = new Masters()
-
-  // For each matching file name...
-  requireComponent.keys().forEach((fileName) => {
-    // Get the component config
-    const masterName = fileName.replace('./', '').replace('.vue', '')
-    const componentConfig = requireComponent(fileName)
-    const dataMixin = {
-      data () {
-        return { masterName }
-      }
-    }
-    componentConfig.default.mixins = [masterMixin, dataMixin]
-    const masterConfig = componentConfig.master
-    const master = new Master(masterName)
-    master.importMembers(masterConfig)
-    master.vue = componentConfig.default
-    master.registerVuexModule()
-
-    masters.add(master)
-  })
-
-  return masters
-}
-
-function registerMastersNg () {
   function findMasterName (fileName) {
     const match = fileName.match(/\.\/([\w]+)\/.*/)
     if (!match) {
@@ -576,7 +546,7 @@ function registerMastersNg () {
   }
 
   const masters = new Masters()
-  const requireMaster = require.context('./masters-ng', true, /.+main\.js$/)
+  const requireMaster = require.context('./masters', true, /.+main\.js$/)
   requireMaster.keys().forEach((fileName) => {
     // ./masterName/main.js
     const masterName = findMasterName(fileName)
@@ -590,10 +560,11 @@ function registerMastersNg () {
     masterObject.default.mixins = [masterMixin, dataMixin]
     const master = new Master(masterName)
     master.importMembers(masterObject.default)
+    master.registerVuexModule()
     masters.add(master)
   })
 
-  const requireComponentMain = require.context('./masters-ng', true, /.+main\.vue$/)
+  const requireComponentMain = require.context('./masters', true, /.+main\.vue$/)
   requireComponentMain.keys().forEach((fileName) => {
     // ./masterName/main.vue
     const masterName = findMasterName(fileName)
@@ -603,7 +574,7 @@ function registerMastersNg () {
     master.componentMain = componentMain.default
   })
 
-  const requireComponentPreview = require.context('./masters-ng', true, /.+preview\.vue$/)
+  const requireComponentPreview = require.context('./masters', true, /.+preview\.vue$/)
   requireComponentPreview.keys().forEach((fileName) => {
     // ./masterName/preview.vue
     const masterName = findMasterName(fileName)
@@ -614,8 +585,6 @@ function registerMastersNg () {
   })
   return masters
 }
-
-export const mastersNg = registerMastersNg()
 
 /**
  * An instance of the class `Masters()`
@@ -638,11 +607,7 @@ const componentPreviewMixin = {
  */
 export function registerMasterComponents () {
   for (const masterName in masters.all) {
-    Vue.component(`${masterName}-master`, masters.get(masterName).vue)
-  }
-
-  for (const masterName in mastersNg.all) {
-    const master = mastersNg.get(masterName)
+    const master = masters.get(masterName)
     if (master.componentMain) {
       Vue.component(`${masterName}-master-main`, master.componentMain)
     }

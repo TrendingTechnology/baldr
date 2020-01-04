@@ -57,30 +57,16 @@ export default {
     }
     this.setMasterStyle()
     if (this.master.name) {
-      let masterElement
-      if (`${this.master.name}-master-main` in vue.$options.components) {
-        masterElement = createElement(
-          `${this.master.name}-master-main`,
-          {
-            props: this.slideCurrent.renderData.propsMain,
-            class: {
-              'master-inner': true
-            },
-            style: this.master.styleInline
-          }
-        )
-      } else {
-        masterElement = createElement(
-          `${this.master.name}-master`,
-          {
-            props: this.master.props,
-            class: {
-              'master-inner': true
-            },
-            style: this.master.styleInline
-          }
-        )
-      }
+      const masterElement = createElement(
+        `${this.master.name}-master-main`,
+        {
+          props: this.slideCurrent.renderData.propsMain,
+          class: {
+            'master-inner': true
+          },
+          style: this.master.styleInline
+        }
+      )
       return createElement(
         'div',
         {

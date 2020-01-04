@@ -9,7 +9,7 @@
 // import Vue from 'vue'
 import yaml from 'js-yaml'
 import { shortenText, convertPropertiesToCamelCase } from '@bldr/core-browser'
-import { masters, mastersNg } from '@/masters.js'
+import { masters } from '@/masters.js'
 import store from '@/store.js'
 import router from '@/router.js'
 import vue from '@/main.js'
@@ -548,10 +548,10 @@ export class Presentation {
     }
 
     for (const slide of this.slides) {
-      if (mastersNg.exists(slide.master.name)) {
-        const masterNg = mastersNg.get(slide.master.name)
-        slide.renderData.propsMain = masterNg.collectPropsMain(slide.renderData.props, vue)
-        slide.renderData.propsPreview = masterNg.collectPropsPreview(
+      if (masters.exists(slide.master.name)) {
+        const master = masters.get(slide.master.name)
+        slide.renderData.propsMain = master.collectPropsMain(slide.renderData.props, vue)
+        slide.renderData.propsPreview = master.collectPropsPreview(
           {
             props: slide.renderData.props,
             propsMain: slide.renderData.propsMain
