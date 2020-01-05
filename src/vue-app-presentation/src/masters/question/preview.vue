@@ -30,9 +30,17 @@ export default {
       type: Array,
       required: true
     },
-    showNumbers: {
+    numbers: {
       type: Boolean,
       default: true
+    }
+  },
+  computed: {
+    showNumbers () {
+      if (this.numbers && this.questions.length > 1) {
+        return true
+      }
+      return false
     }
   }
 }

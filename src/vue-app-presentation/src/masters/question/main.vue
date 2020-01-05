@@ -33,7 +33,7 @@ export default {
       type: Array,
       required: true
     },
-    showNumbers: {
+    numbers: {
       type: Boolean,
       default: true
     }
