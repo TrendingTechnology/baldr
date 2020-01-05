@@ -8,31 +8,15 @@
     :style="{ fontSize: fontSize + 'vw' }"
   >
     <h1>Folien-Vorschau</h1>
-    <ol v-if="slides">
-      <li
-        v-for="slide in slides"
-        :key="slide.no"
-        @click="gotToSlide(slide.no)"
-        :title="`Zur Folie Nr. ${slide.no}`"
-        :class="{ 'current-slide': slideCurrent.no === slide.no }"
-      >
-        <div class="slide-preview-wrapper">
-          <slide-preview :slide="slide"/>
-        </div>
-          <material-icon
-            :name="slide.master.icon.name"
-            :color="slide.master.icon.color"
-            outline="circle"
-          />
-      </li>
-    </ol>
+
+    <slide-list v-if="slides" :slides="presentation.slidesTree"/>
     <open-interface v-else/>
   </div>
 </template>
 
 <script>
 import OpenInterface from '@/components/OpenInterface'
-import SlidePreview from './SlidePreview.vue'
+import SlideList from './SlideList.vue'
 
 import { createNamespacedHelpers } from 'vuex'
 const { mapGetters } = createNamespacedHelpers('presentation')
@@ -41,7 +25,7 @@ export default {
   name: 'SlidesPreview',
   components: {
     OpenInterface,
-    SlidePreview
+    SlideList
   },
   data () {
     return {
@@ -78,10 +62,6 @@ export default {
     'slidesCount'
   ]),
   methods: {
-    gotToSlide (slideNo) {
-      this.$store.dispatch('presentation/setSlideNoCurrent', slideNo)
-      if (this.$route.name !== 'slides') this.$router.push({ name: 'slides' })
-    },
     increaseFontSize () {
       this.fontSize += 0.1
     },
@@ -98,36 +78,6 @@ export default {
 
     h1 {
       font-size: 4vw;
-    }
-
-    .slide-preview-wrapper {
-      background-color: $black;
-      border: 1px solid $gray;
-      color: $white;
-      height: 15em;
-      margin: 0em;
-      overflow: hidden;
-      width: 20em;
-    }
-
-    ol {
-      display: flex;
-      flex-direction: row;
-      flex-wrap: wrap;
-      padding: 0;
-    }
-
-    li {
-      list-style: none;
-      position: relative;
-      margin: 0.3em;
-    }
-
-    .baldr-icon {
-      font-size: 2.5em;
-      left: -0.3em;
-      position: absolute;
-      top: -0.3em;
     }
   }
 </style>

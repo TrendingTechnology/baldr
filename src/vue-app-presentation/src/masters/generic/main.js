@@ -1,7 +1,5 @@
 import { plainText } from '@bldr/core-browser'
 import { markupToHtml, wrapWords, displayElementByStepNo } from '@/lib.js'
-import { createNamespacedHelpers } from 'vuex'
-const { mapGetters } = createNamespacedHelpers('presentation')
 
 const CHARACTERS_ON_SLIDE = 400
 
@@ -206,12 +204,25 @@ slides:
     </ul>
 `
 
+/**
+ * Split a HTML text into smaller chunks by looping over the children.
+ *
+ * @param {String} htmlString
+ * @param {Number} charactersOnSlide
+ *
+ * @returns {Array}
+ */
 function splitHtmlintoChunks (htmlString, charactersOnSlide) {
   if (!charactersOnSlide) charactersOnSlide = CHARACTERS_ON_SLIDE
   if (htmlString.length < charactersOnSlide) return [htmlString]
 
   const domParser = new DOMParser()
-  const dom = domParser.parseFromString(htmlString, 'text/html')
+  let dom = domParser.parseFromString(htmlString, 'text/html')
+
+  // If htmlString is a text without tags
+  if (!dom.body.children.length) {
+    dom = domParser.parseFromString(`<p>${htmlString}</p>`, 'text/html')
+  }
 
   let buffer = ''
   const chunks = []

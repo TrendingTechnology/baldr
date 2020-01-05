@@ -30,7 +30,7 @@ export default {
       type: Array,
       required: true
     },
-    numbers: {
+    showNumbers: {
       type: Boolean,
       default: true
     }

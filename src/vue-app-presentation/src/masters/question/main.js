@@ -118,7 +118,7 @@ export default {
       required: true,
       markup: true
     },
-    numbers: {
+    showNumbers: {
       type: Boolean,
       description: 'Ob die Fragen nummeriert werden sollen.',
       default: true
