@@ -1,6 +1,9 @@
 <template>
   <div
-    class="vc_slides_preview"
+    class="
+      vc_slides_preview
+      main-app-fullscreen
+    "
     b-content-theme="default"
     :style="{ fontSize: fontSize + 'vw' }"
   >

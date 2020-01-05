@@ -1,5 +1,5 @@
 <template>
-  <div class="vc_section_master default-padding" v-html="heading"/>
+  <div class="vc_section_master main-app-padding" v-html="heading"/>
 </template>
 
 <script>

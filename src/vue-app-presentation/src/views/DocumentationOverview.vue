@@ -1,45 +1,50 @@
 <template>
-<div class="vc_documentation_overview default-padding" b-ui-theme="default">
-  <h1>Documentation</h1>
+  <div
+    class="
+      vc_documentation_overview
+      main-app-padding
+      main-app-fullscreen
+    "
+    b-ui-theme="default"
+  >
+    <h1>Documentation</h1>
 
-  <section>
-    <h2>Master slides</h2>
+    <section>
+      <h2>Master slides</h2>
 
-    <table>
-      <thead>
-        <tr>
-          <td></td>
-          <td>ID</td>
-          <td>Title</td>
-          <td>Example</td>
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          v-for="(master, masterName) in $masters.all"
-          :key="masterName"
-        >
-          <td><material-icon :name="master.icon.name" :color="master.icon.color"/></td>
-          <td>
-            <router-link :to="{ name: 'documentation-master', params: { master: masterName } }">
-              {{ masterName }}
-            </router-link>
-          </td>
-          <td>{{ master.title }}</td>
-          <td>
-            <material-icon
-              v-if="master.example"
-              name="presentation"
-              @click.native="openExample(master.example)"
-            />
-          </td>
-        </tr>
-      </tbody>
-    </table>
-
-  </section>
-
-</div>
+      <table>
+        <thead>
+          <tr>
+            <td></td>
+            <td>ID</td>
+            <td>Title</td>
+            <td>Example</td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            v-for="(master, masterName) in $masters.all"
+            :key="masterName"
+          >
+            <td><material-icon :name="master.icon.name" :color="master.icon.color"/></td>
+            <td>
+              <router-link :to="{ name: 'documentation-master', params: { master: masterName } }">
+                {{ masterName }}
+              </router-link>
+            </td>
+            <td>{{ master.title }}</td>
+            <td>
+              <material-icon
+                v-if="master.example"
+                name="presentation"
+                @click.native="openExample(master.example)"
+              />
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </div>
 </template>
 
 <script>

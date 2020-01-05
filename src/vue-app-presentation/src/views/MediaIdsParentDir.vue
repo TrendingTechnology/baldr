@@ -1,5 +1,12 @@
 <template>
-  <div class="vc_media_ids_parent_dir default-padding" b-content-theme="default">
+  <div
+    class="
+      vc_media_ids_parent_dir
+      main-app-padding
+      main-app-fullscreen
+    "
+    b-content-theme="default"
+  >
     <h1>Medien-IDs im übergeordneten Ordner</h1>
 
     <table>

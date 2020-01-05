@@ -1,5 +1,12 @@
 <template>
-  <div class="vc_presentation_overview default-padding" b-content-theme="default">
+  <div
+    class="
+      vc_presentation_overview
+      main-app-padding
+      main-app-fullscreen
+    "
+    b-content-theme="default"
+  >
     <h1>Überblick über alle Präsentationen</h1>
     <ul>
       <presentation-item :item="folderTitleTree"/>

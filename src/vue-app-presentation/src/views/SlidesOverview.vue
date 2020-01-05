@@ -1,5 +1,9 @@
 <template>
-  <div class="vc_slides_overview default-padding" b-content-theme="default">
+  <div class="
+    vc_slides_overview
+    main-app-padding
+    main-app-fullscreen
+  " b-content-theme="default">
     <div class="view-mode" @click="switchViewMode">
       <a href="#" v-if="!viewModeCompact">kompakt</a>
       <a href="#" v-if="viewModeCompact">ausführlich</a>

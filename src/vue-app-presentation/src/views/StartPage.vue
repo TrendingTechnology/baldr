@@ -1,5 +1,5 @@
 <template>
-  <div class="vc_start_page default-padding" b-ui-theme="default">
+  <div class="vc_start_page main-app-padding main-app-fullscreen" b-ui-theme="default">
 
     <nav>
       <router-link :to="{ name: 'documentation' }">Dokumentation </router-link>
@@ -57,8 +57,6 @@ export default {
   .vc_start_page {
     font-size: 2vw;
     display: table;
-    height: 100vh;
-    width: 100vw;
 
     .vc_open_interface {
       display: table-cell;

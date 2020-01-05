@@ -269,9 +269,15 @@ export default {
    * Master main components
    ********************************************************************/
 
-  .default-padding {
+  .main-app-padding {
     box-sizing: border-box;
     padding: 2vw 8vw;
+  }
+
+  .main-app-fullscreen {
+    box-sizing: border-box;
+    height: 100vh;
+    width: 100vw;
   }
 
   /*********************************************************************
