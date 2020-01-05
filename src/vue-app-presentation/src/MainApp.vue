@@ -307,7 +307,7 @@ export default {
   }
 
   // generic, editor
-  .slide-preview-fix-typograph {
+  .slide-preview-fix-typography {
     text-align: left;
     padding: 1em;
 

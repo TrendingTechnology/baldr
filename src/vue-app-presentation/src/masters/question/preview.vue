@@ -1,20 +1,17 @@
 <template>
-  <div class="vc_question_master_preview">
+  <div class="
+    vc_question_master_preview
+    slide-preview-fix-typography
+    slide-preview-valign-center
+    slide-preview-fullscreen
+  ">
     <h1 v-if="heading" v-html="heading"/>
     <ol :class="{ numbers: showNumbers }">
       <li
-        v-for="(pair, index) in questions"
+        v-for="pair in questions"
         :key="pair.question"
       >
         <p class="question" v-html="pair.question"/>
-        <p v-if="pair.answer">
-          …
-          <span
-            :class="getClassHidden(index + 1)"
-            class="answer"
-            v-html="pair.answer"
-          />
-        </p>
       </li>
     </ol>
   </div>
@@ -22,25 +19,19 @@
 
 <script>
 import { createNamespacedHelpers } from 'vuex'
-import { plainText } from '@bldr/core-browser'
 const { mapGetters } = createNamespacedHelpers('presentation')
 
 export default {
   props: {
     heading: {
-      type: String,
-      description: 'Eine Überschrift, die über den Fragen angezeigt wird.',
-      markup: true
+      type: String
     },
     questions: {
       type: Array,
-      description: 'Eine Liste mit Objekten mit den Schlüsseln `question` and `answer`.',
-      required: true,
-      markup: true
+      required: true
     },
     numbers: {
       type: Boolean,
-      description: 'Ob die Fragen nummeriert werden sollen.',
       default: true
     }
   }
@@ -49,5 +40,11 @@ export default {
 
 <style lang="scss" scoped>
   .vc_question_master_preview {
+    padding: 3em;
+    font-size: 1.2em;
+
+    ol {
+      padding-left: 2em;
+    }
   }
 </style>

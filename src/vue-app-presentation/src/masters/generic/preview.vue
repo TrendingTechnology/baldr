@@ -3,7 +3,7 @@
     class="
       vc_generic_master_preview
       slide-preview-valign-top
-      slide-preview-fix-typograph
+      slide-preview-fix-typography
       slide-preview-fullscreen
     "
     v-html="markup"

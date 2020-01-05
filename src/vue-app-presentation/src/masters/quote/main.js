@@ -29,6 +29,27 @@ slides:
 
 export default {
   title: 'Zitat',
+  props: {
+    text: {
+      type: String,
+      required: true,
+      markup: true,
+      description: 'Haupttext des Zitats.'
+    },
+    author: {
+      type: String,
+      description: 'Der Autor des Zitats.'
+    },
+    date: {
+      type: [String, Number],
+      description: 'Datum des Zitats.'
+    },
+    source: {
+      type: String,
+      markup: true,
+      description: 'Die Quelle des Zitats'
+    }
+  },
   icon: {
     name: 'comment-quote',
     color: 'brown',

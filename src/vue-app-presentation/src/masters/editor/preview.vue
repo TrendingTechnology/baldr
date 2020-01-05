@@ -3,7 +3,7 @@
     class="
       vc_editor_master_preview
       slide-preview-valign-top
-      slide-preview-fix-typograph
+      slide-preview-fix-typography
       slide-preview-fullscreen
     "
     b-content-theme="handwriting"

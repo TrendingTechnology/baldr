@@ -106,6 +106,24 @@ const normalizeQuestions = function (questions) {
 
 export default {
   title: 'Frage',
+  props: {
+    heading: {
+      type: String,
+      description: 'Eine Überschrift, die über den Fragen angezeigt wird.',
+      markup: true
+    },
+    questions: {
+      type: Array,
+      description: 'Eine Liste mit Objekten mit den Schlüsseln `question` and `answer`.',
+      required: true,
+      markup: true
+    },
+    numbers: {
+      type: Boolean,
+      description: 'Ob die Fragen nummeriert werden sollen.',
+      default: true
+    }
+  },
   icon: {
     name: 'comment-question',
     color: 'yellow',

@@ -22,25 +22,19 @@
 
 <script>
 import { createNamespacedHelpers } from 'vuex'
-import { plainText } from '@bldr/core-browser'
 const { mapGetters } = createNamespacedHelpers('presentation')
 
 export default {
   props: {
     heading: {
-      type: String,
-      description: 'Eine Überschrift, die über den Fragen angezeigt wird.',
-      markup: true
+      type: String
     },
     questions: {
       type: Array,
-      description: 'Eine Liste mit Objekten mit den Schlüsseln `question` and `answer`.',
-      required: true,
-      markup: true
+      required: true
     },
     numbers: {
       type: Boolean,
-      description: 'Ob die Fragen nummeriert werden sollen.',
       default: true
     }
   },
