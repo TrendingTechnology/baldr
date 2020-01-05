@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { displayElementByStepNo } from '@/lib.js'
+import { displayElementByStepNo, warnSvgWidthHeight } from '@/lib.js'
 import { createNamespacedHelpers } from 'vuex'
 const { mapGetters } = createNamespacedHelpers('presentation')
 
@@ -30,12 +30,14 @@ export default {
   },
   computed: mapGetters(['slideCurrent']),
   methods: {
+
     async loadSvg () {
       let response = await this.$media.httpRequest.request({
         url: `/media/${this.svgPath}`,
         method: 'get'
       })
       this.$refs.clozeWrapper.innerHTML = response.data
+      warnSvgWidthHeight()
       this.allClozeGroups = this.collectClozeGroups()
       this.clozeGroups = this.selectClozeGroups(this.allClozeGroups)
       this.slideCurrent.renderData.stepCount = this.clozeGroups.length + 1

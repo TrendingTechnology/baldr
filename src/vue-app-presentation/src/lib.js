@@ -281,3 +281,18 @@ export class GrabFromObjects {
     }
   }
 }
+
+/**
+ * Search for SVG files in the HTML tree and warn if there are width and
+ * height attributes set. With width and height attributes SVGs could
+ * not resized easily in IMG tags. The slide preview depends on resizeable
+ * SVGs.
+ */
+export function warnSvgWidthHeight () {
+  const svgs = document.querySelectorAll('svg')
+  for (const svg of svgs) {
+    if (svg.attributes.height || svg.attributes.width) {
+      vue.$notifyError(`SVG file has width and height set`)
+    }
+  }
+}
