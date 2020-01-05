@@ -6,6 +6,8 @@
       slide-preview-fix-typograph
       slide-preview-fullscreen
     "
+    b-content-theme="handwriting"
+    b-content-theme-unchangeable
     spellcheck="false"
     v-html="markup">
   </div>
@@ -20,15 +22,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss">
-  .vc_editor_master_preview {
-    background-color:$handwriting-white;
-    color: $handwriting-blue;
-    font-family: $handwriting-font-family;
-
-    h1, h2, h3, h4 {
-      font-family: $handwriting-font-family !important;
-    }
-  }
-</style>

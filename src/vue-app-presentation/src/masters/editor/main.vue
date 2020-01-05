@@ -20,13 +20,10 @@ const defaultMarkup = `<p contenteditable>${placeholderTag}</p>`
 export default {
   props: {
     markup: {
-      type: String,
-      markup: true,
-      description: 'Text im HTML oder Markdown Format oder natürlich als reiner Text.'
+      type: String
     },
     stepWords: {
       type: Boolean,
-      description: 'Wörtern einblenden',
       default: false
     }
   },
