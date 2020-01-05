@@ -22,3 +22,16 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+  .vc_editor_master_preview {
+    ul li {
+      text-indent: 0 !important;
+
+      &::before {
+        margin-left: 0 !important;
+      }
+    }
+
+  }
+</style>

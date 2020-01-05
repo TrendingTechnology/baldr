@@ -48,11 +48,8 @@ export default {
 
 <style lang="scss" scoped>
   .vc_question_master_preview {
-    padding: 3em;
-    font-size: 1.2em;
-
     ol {
-      padding-left: 2em;
+      padding-left: 1em;
     }
   }
 </style>
