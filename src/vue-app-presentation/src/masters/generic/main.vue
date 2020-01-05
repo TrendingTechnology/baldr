@@ -6,8 +6,6 @@
 </template>
 
 <script>
-import { plainText } from '@bldr/core-browser'
-import { markupToHtml, wrapWords, displayElementByStepNo } from '@/lib.js'
 import { createNamespacedHelpers } from 'vuex'
 const { mapGetters } = createNamespacedHelpers('presentation')
 

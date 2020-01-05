@@ -3,8 +3,6 @@
 </template>
 
 <script>
-import { plainText } from '@bldr/core-browser'
-
 export default {
   props: {
     heading: {

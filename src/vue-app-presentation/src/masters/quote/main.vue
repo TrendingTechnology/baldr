@@ -15,27 +15,20 @@
 </template>
 
 <script>
-
 export default {
   props: {
     text: {
       type: String,
-      required: true,
-      markup: true,
-      description: 'Haupttext des Zitats.'
+      required: true
     },
     author: {
-      type: String,
-      description: 'Der Autor des Zitats.'
+      type: String
     },
     date: {
-      type: [String, Number],
-      description: 'Datum des Zitats.'
+      type: [String, Number]
     },
     source: {
-      type: String,
-      markup: true,
-      description: 'Die Quelle des Zitats'
+      type: String
     }
   }
 }
