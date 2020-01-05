@@ -30,7 +30,6 @@ export default {
   },
   computed: mapGetters(['slideCurrent']),
   methods: {
-
     async loadSvg () {
       let response = await this.$media.httpRequest.request({
         url: `/media/${this.svgPath}`,

@@ -1,7 +1,5 @@
 
-import { markupToHtml, displayElementByStepNo } from '@/lib.js'
-import { createNamespacedHelpers } from 'vuex'
-const { mapGetters } = createNamespacedHelpers('presentation')
+import { displayElementByStepNo, warnSvgWidthHeight } from '@/lib.js'
 
 const example = `
 ---
@@ -72,11 +70,12 @@ export default {
   },
   async enterSlide () {
     let response = await this.$media.httpRequest.request({
-      url: `/media/${this.mediaFile.path}`,
+      url: `/media/${this.svgPath}`,
       method: 'get'
     })
     const svg = this.$refs.svgWrapper
     svg.innerHTML = response.data
+    warnSvgWidthHeight(this.svgPath)
     this.elGroups = svg.querySelectorAll(this.stepSelector)
     this.elGroups = this.removeElementsFromSteps(this.elGroups, this.stepExclude)
     this.slideCurrent.renderData.stepCount = this.elGroups.length + 1
@@ -95,5 +94,20 @@ export default {
       oldStepNo,
       stepNo: newStepNo
     })
+  },
+  collectPropsMain (props) {
+    const svgMediaFile = this.$store.getters['media/mediaFileByUri'](props.src)
+    return {
+      svgPath: svgMediaFile.path,
+      svgTitle: svgMediaFile.title,
+      svgHttpUrl: svgMediaFile.httpUrl,
+      stepSelector: props.stepSelector,
+      stepExclude: props.stepExclude
+    }
+  },
+  collectPropsPreview ({ propsMain }) {
+    return {
+      svgHttpUrl: propsMain.svgHttpUrl
+    }
   }
 }

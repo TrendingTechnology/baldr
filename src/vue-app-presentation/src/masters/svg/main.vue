@@ -5,31 +5,24 @@
 </template>
 
 <script>
-import { markupToHtml, displayElementByStepNo } from '@/lib.js'
 import { createNamespacedHelpers } from 'vuex'
 const { mapGetters } = createNamespacedHelpers('presentation')
 
 export default {
   props: {
-    src: {
+    svgPath: {
       type: String,
-      required: true,
-      description: 'Den URI zu einer SVG-Datei.',
-      mediaFileUri: true
+      required: true
+    },
+    svgTitle: {
+      type: String,
+      required: true
     },
     stepSelector: {
       default: 'g',
-      description: 'Selektor, der Elemente auswählt, die als Schritte eingeblendet werden sollen.'
     },
     stepExclude: {
-      type: [Array, Number],
-      description: 'Schritt-Number der Elemente, die nicht als Schritte eingeblendet werden sollen. (z. B. 1, oder [1, 2, 3])'
-    }
-  },
-  computed: {
-    ...mapGetters(['slideCurrent']),
-    mediaFile () {
-      return this.$store.getters['media/mediaFileByUri'](this.src)
+      type: [Array, Number]
     }
   },
   data () {
@@ -37,6 +30,7 @@ export default {
       elGroups: null
     }
   },
+  computed: mapGetters(['slideCurrent']),
   methods: {
     /**
      * Remove some element from the step nodelist. The node list is
@@ -63,7 +57,7 @@ export default {
         const description = element.getAttribute('inkscape:label')
         this.$shortcuts.add(`q ${shortcut}`, () => {
           element.style.display = 'block'
-        }, `${description} (einblenden in SVG: „${this.mediaFile.title}“)`)
+        }, `${description} (einblenden in SVG: „${this.svgTitle}“)`)
       }
     },
     shortcutsUnregister (elements) {

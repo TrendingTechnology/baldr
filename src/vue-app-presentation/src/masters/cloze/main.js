@@ -1,6 +1,4 @@
-import { markupToHtml, displayElementByStepNo } from '@/lib.js'
-import { createNamespacedHelpers } from 'vuex'
-const { mapGetters } = createNamespacedHelpers('presentation')
+import {displayElementByStepNo } from '@/lib.js'
 
 const example = `
 ---

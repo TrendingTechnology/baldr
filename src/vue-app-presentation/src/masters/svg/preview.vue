@@ -1,29 +1,19 @@
 <template>
-  <div class="vc_svg_master_preview">
-    <div ref="svgWrapper" id="svg-wrapper"/>
+  <div class="
+    vc_svg_master_preview
+    slide-preview-fullscreen
+    slide-preview-valign-center
+  ">
+    <img :src="svgHttpUrl"/>
   </div>
 </template>
 
 <script>
-import { markupToHtml, displayElementByStepNo } from '@/lib.js'
-import { createNamespacedHelpers } from 'vuex'
-const { mapGetters } = createNamespacedHelpers('presentation')
-
 export default {
   props: {
-    src: {
+    svgHttpUrl: {
       type: String,
-      required: true,
-      description: 'Den URI zu einer SVG-Datei.',
-      mediaFileUri: true
-    },
-    stepSelector: {
-      default: 'g',
-      description: 'Selektor, der Elemente auswählt, die als Schritte eingeblendet werden sollen.'
-    },
-    stepExclude: {
-      type: [Array, Number],
-      description: 'Schritt-Number der Elemente, die nicht als Schritte eingeblendet werden sollen. (z. B. 1, oder [1, 2, 3])'
+      required: true
     }
   }
 }
@@ -31,5 +21,7 @@ export default {
 
 <style lang="scss" scoped>
   .vc_svg_master_preview {
+    background-color: $white;
+    padding: 1em;
   }
 </style>

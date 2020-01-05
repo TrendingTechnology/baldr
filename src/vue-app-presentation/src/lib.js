@@ -287,12 +287,16 @@ export class GrabFromObjects {
  * height attributes set. With width and height attributes SVGs could
  * not resized easily in IMG tags. The slide preview depends on resizeable
  * SVGs.
+ *
+ * @param {string} filePath - Path of the SVG. Only need for better error
+ *   messages.
  */
-export function warnSvgWidthHeight () {
+export function warnSvgWidthHeight (filePath) {
   const svgs = document.querySelectorAll('svg')
   for (const svg of svgs) {
     if (svg.attributes.height || svg.attributes.width) {
-      vue.$notifyError(`SVG file has width and height set`)
+      if (filePath) filePath = ` (${filePath})`
+      vue.$notifyError(`SVG file${filePath} has width and height attributes set.`)
     }
   }
 }
