@@ -11,7 +11,7 @@
       <presentation-item
         :item="item"
         v-for="item in childs"
-        :key="item._title.title"
+        :key="item._title.path"
       />
     </ul>
   </li>

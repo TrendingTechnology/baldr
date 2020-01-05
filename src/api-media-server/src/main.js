@@ -210,10 +210,29 @@ function convertPropertiesToCamelCase (object) {
  * Hold some data about a folder and its title.
  */
 class FolderTitle {
-  constructor({ title, subtitle, folderName }) {
+  constructor({ title, subtitle, folderName, path }) {
+    /**
+     * @type {String}
+     */
     if (title) this.title = title
+
+    /**
+     * @type {String}
+     */
     if (subtitle) this.subtitle = subtitle
+
+    /**
+     * for example `10_Konzertierende-Musiker`
+     *
+     * @type {String}
+     */
     if (folderName) this.folderName = folderName
+    /**
+     * for example `12/10_Interpreten/10_Konzertierende-Musiker`
+     *
+     * @type {String}
+     */
+    if (path) this.path = path
   }
 }
 
@@ -238,15 +257,19 @@ class HierarchicalFolderTitles {
     const segments = filePath.split(path.sep)
     const depth = segments.length
     const minDepth = basePath.split(path.sep).length
+    // to build the path property of the FolderTitle class.
+    const folderNames = []
     for (let index = minDepth + 1; index < depth; index++) {
+      let folderName = segments[index - 1]
+      folderNames.push(folderName)
       const titleTxt = [...segments.slice(0, index), 'title.txt'].join('/')
       if (fs.existsSync(titleTxt)) {
         const titleRaw = fs.readFileSync(titleTxt, { encoding: 'utf-8' })
         const titles = titleRaw.split('\n')
-        const folderTitle = new FolderTitle({})
+        const folderTitle = new FolderTitle({ path: folderNames.join(path.sep) })
         if (titles.length > 0) {
           folderTitle.title = titles[0]
-          folderTitle.folderName = segments[index - 1]
+          folderTitle.folderName = folderName
         }
         if (titles.length > 1 && titles[1]) {
           folderTitle.subtitle = titles[1]
