@@ -50,7 +50,6 @@ export default {
      */
     async setDeviceId () {
       this.$modal.hide('select-video-device')
-      console.log(this.device)
       this.$store.commit('camera/setDeviceId', this.device.id)
       this.setVideoStream(await this.buildConstraints(this.device.id))
     },

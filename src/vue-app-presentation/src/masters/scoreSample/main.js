@@ -61,10 +61,15 @@ export default {
     return props
   },
   collectPropsMain (props) {
+    let audioHttpUrl
+    const audio = this.$store.getters['media/sampleByUri'](props.audio)
+    if (audio) {
+      audioHttpUrl = audio.httpUrl
+    }
     return {
       heading: props.heading,
       scoreHttpUrl: this.$store.getters['media/mediaFileByUri'](props.score).httpUrl,
-      audioHttpUrl: this.$store.getters['media/sampleByUri'](props.audio).httpUrl
+      audioHttpUrl
     }
   },
   collectPropsPreview ({ propsMain }) {

@@ -510,12 +510,12 @@ const getters = {
     return state.samplePlaying
   },
   sampleByUri: (state, getters) => uri => {
+    if (!uri) return
     const samples = getters.samples
     if (uri.indexOf('#') === -1) uri = `${uri}#complete`
     if (uri in samples) {
       return samples[uri]
     }
-    return null
   },
   typeCount: state => type => {
     return Object.keys(state.assetTypes[type]).length
