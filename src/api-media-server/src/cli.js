@@ -693,7 +693,7 @@ commander
 
 /** t / folder-title **********************************************************/
 
-async function actionFolderTitlesactionFolderTitles (filePath) {
+async function actionFolderTitles (filePath) {
   const tree = new FolderTitleTree()
 
   function read (filePath) {
@@ -756,14 +756,16 @@ function patchTexFileWithTitles (filePath) {
     setzeTitle.untertitel = titles.subtitle
   }
 
-  const lines = ['\\setzetitle{']
+  const lines = ['\\setzetitel{']
   for (const key in setzeTitle) {
     lines.push(`  ${key} = {${setzeTitle[key]}},`)
   }
   lines.push('}')
-  const texFileString = fs.readFileSync(filePath, { encoding: 'utf-8' })
-  texFileString.replace(
-    /\\setzetitel\{.*,?\n\}\n/s,
+  lines.push('') // to get a empty line
+
+  let texFileString = fs.readFileSync(filePath, { encoding: 'utf-8' })
+  texFileString = texFileString.replace(
+    /\\setzetitel\{.+?,?\n\}\n/s, // /s s (dotall) modifier, +? one or more (non-greedy)
     lines.join('\n')
   )
   fs.writeFileSync(filePath, texFileString)

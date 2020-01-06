@@ -293,6 +293,8 @@ class HierarchicalFolderTitles {
    * @private
    */
   read_ (filePath) {
+    // We need absolute paths. The cli gives us relative paths.
+    filePath = path.resolve(filePath)
     const segments = filePath.split(path.sep)
     const depth = segments.length
     const minDepth = basePath.split(path.sep).length
