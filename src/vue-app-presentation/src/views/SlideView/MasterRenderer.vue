@@ -16,18 +16,19 @@ export default {
     ...mapGetters(['slideCurrent', 'showBlank']),
     data_ () {
       if ('master' in this.$route.meta) {
-        let masterName = this.$route.meta.master
+        const masterName = this.$route.meta.master
+        const master = this.$masters.get(masterName)
         return {
           name: masterName,
           propsMain: this.$route.meta.data,
-          contentTheme: this.$masters.get(masterName).styleConfig.contentTheme,
-          styleConfig: this.$masters.get(masterName).styleConfig,
+          contentTheme: master.styleConfig.contentTheme,
+          styleConfig: master.styleConfig,
           styleInline: {}
         }
       } else if (this.slideCurrent) {
         return {
           name: this.slideCurrent.master.name,
-          propsMain: this.slideCurrent.renderData.props,
+          propsMain: this.slideCurrent.renderData.propsMain,
           contentTheme: this.slideCurrent.contentTheme,
           styleConfig: this.slideCurrent.master.styleConfig,
           styleInline: this.slideCurrent.style
