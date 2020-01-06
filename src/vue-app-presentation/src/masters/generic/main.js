@@ -227,8 +227,14 @@ function splitHtmlintoChunks (htmlString, charactersOnSlide) {
   let buffer = ''
   const chunks = []
 
-  for (const children of dom.body.children) {
-    buffer += children.outerHTML
+  // childNodes not children!
+  for (const children of dom.body.childNodes) {
+    // If htmlString is a text with inner tags
+    if (children.nodeName === '#text') {
+      buffer += children.textContent
+    } else {
+      buffer += children.outerHTML
+    }
     if (buffer.length > charactersOnSlide) {
       chunks.push(buffer)
       buffer = ''
