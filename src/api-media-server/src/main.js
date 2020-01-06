@@ -637,18 +637,18 @@ class Presentation extends MediaFile {
     }
 
     /**
-     * Title (Subtitle)
-     *
-     * @type {String}
-     */
-    this.titleSubtitle = this.titleSubtitle_()
-
-    /**
      * Value is the same as `meta.title`
      *
      * @type {String}
      */
     this.title = this.meta.title
+
+    /**
+     * Title (Subtitle)
+     *
+     * @type {String}
+     */
+    this.titleSubtitle = this.titleSubtitle_()
 
     /**
      * Value is the same as `meta.id`
