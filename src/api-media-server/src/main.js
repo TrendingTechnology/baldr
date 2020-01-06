@@ -637,6 +637,13 @@ class Presentation extends MediaFile {
     }
 
     /**
+     * Title (Subtitle)
+     *
+     * @type {String}
+     */
+    this.titleSubtitle = this.titleSubtitle_()
+
+    /**
      * Value is the same as `meta.title`
      *
      * @type {String}
@@ -649,6 +656,12 @@ class Presentation extends MediaFile {
      * @type {String}
      */
     this.id = this.meta.id
+  }
+
+  titleSubtitle_ () {
+    let subtitle = ''
+    if (this.meta.subtitle) subtitle = this.meta.subtitle
+    return `${title} (${subtitle})`
   }
 }
 
