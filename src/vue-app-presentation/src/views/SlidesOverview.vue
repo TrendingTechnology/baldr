@@ -8,10 +8,7 @@
       <a href="#" v-if="!viewModeCompact">kompakt</a>
       <a href="#" v-if="viewModeCompact">ausführlich</a>
     </div>
-    <h1>Thema: {{ presentation.title }}</h1>
-    <h2 v-if="presentation.subtitle">{{ presentation.subtitle }}</h2>
-    <p v-if="presentation.grade"><strong>Jahrgangsstufe:</strong> {{ presentation.grade }}</p>
-    <p v-if="presentation.curriculum"><strong>Lehrplanbezug:</strong> {{ presentation.curriculum }}</p>
+    <presentation-title/>
 
     <ol v-if="slides">
       <li
@@ -39,13 +36,16 @@
 
 <script>
 import OpenInterface from '@/components/OpenInterface'
+import PresentationTitle from '@/components/PresentationTitle'
+
 import { createNamespacedHelpers } from 'vuex'
 const { mapGetters } = createNamespacedHelpers('presentation')
 
 export default {
   name: 'SlidesOverview',
   components: {
-    OpenInterface
+    OpenInterface,
+    PresentationTitle
   },
   data () {
     return {

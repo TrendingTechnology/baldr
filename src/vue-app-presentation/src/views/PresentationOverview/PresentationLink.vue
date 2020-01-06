@@ -5,11 +5,10 @@
       class="title link"
       @click="openPresentation(id)"
       :title="`ID: ${id}`"
-    >
-      {{ title }}
-    </span>
-    <span class="title" v-else>{{ title }}</span>
-    <span class="subtitle" v-if="subtitle"> - {{ subtitle }}</span>
+      v-html="title"
+    />
+    <span class="title" v-else v-html="title"/>
+    <span v-if="subtitle"> - <span class="subtitle"  v-html="subtitle"/></span>
   </span>
 </template>
 
