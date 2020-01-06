@@ -9,8 +9,6 @@
       />
     </modal-dialog>
 
-    <video v-show="stream" ref="videoTag" autoplay="true" id="video"></video>
-
     <div v-if="!stream" class="no-stream">
       <plain-icon v-if="!cameraNotFound" name="document-camera"/>
       <plain-icon v-if="cameraNotFound" name="document-camera-off"/>
@@ -34,7 +32,8 @@ export default {
   data () {
     return {
       deviceId: '',
-      stream: null
+      stream: null,
+      globalVideoElement: null
     }
   },
   computed: {
@@ -50,38 +49,40 @@ export default {
       this.$modal.hide('select-video-device')
       const constraints = {
         audio: false,
-        // ELMO
-        // device id: "4V7Fv34BpWsE9EX1Y718KLZVUyifnZrZo7bUTxCz6XU="
         video: { deviceId: { exact: this.deviceId.id } }
-        //video: { deviceId: { exact: '4V7Fv34BpWsE9EX1Y718KLZVUyifnZrZo7bUTxCz6XU=' } }
       }
-      console.log('Method setDeviceId()')
-      console.log(this.deviceId)
       this.$store.commit('camera/setDeviceId', this.deviceId.id)
       this.setVideoStream(constraints)
     },
     showDeviceSelect () {
+      this.$store.dispatch('camera/setMediaDevices')
       this.$modal.toggle('select-video-device')
       this.$dynamicSelect.focus()
     },
+    /**
+     * @param {constraints}
+     *
+     * ```js
+     * {
+     *   audio: false,
+     *   video: { deviceId: { exact: '4V7Fv34Bp...' } }
+     * }
+     * ```
+     */
     setVideoStream (constraints) {
-      console.log('Methods setVideoStream')
       if (!constraints) {
         constraints = { audio: false, video: true }
       }
-      console.log('constraints')
-      console.log(constraints)
-
       // {fdf4c841-b6e0-4754-8074-e1d540ac5018}
       // "4V7Fv34BpWsE9EX1Y718KLZVUyifnZrZo7bUTxCz6XU="
       navigator.mediaDevices.getUserMedia(constraints)
         .then((stream) => {
-          console.log('getUserMedia')
-          console.log(stream)
-          this.$refs.videoTag.srcObject = stream
-          this.stream = stream
-          this.$store.commit('camera/setStream', stream)
-          this.$store.dispatch('camera/setMediaDevices')
+          if (!this.globalVideoElement.srcObject) {
+            this.globalVideoElement.srcObject = stream
+            this.stream = stream
+            this.$store.commit('camera/setStream', stream)
+            this.$store.dispatch('camera/setMediaDevices')
+          }
         })
         .catch((error) => {
           console.log(error)
@@ -94,9 +95,36 @@ export default {
           track.stop()
         })
       }
-    }
+    },
+    /**
+     * Get the global video element. The elements is created if it
+     * does not exist.
+     *
+     * @returns {HtmlElement}
+     */
+    getGlobalVideoElement () {
+      const idGlobalVideoElement = 'camera-master-video'
+      let globalVideoElement = document.querySelector(`#${idGlobalVideoElement}`)
+      // Is null if not created yet.
+      if (!globalVideoElement) {
+        const globalZone = document.querySelector('#global-zone')
+        globalVideoElement = document.createElement('video')
+        globalVideoElement.autoplay = true
+        globalVideoElement.id = idGlobalVideoElement
+        globalZone.appendChild(globalVideoElement)
+      }
+      return globalVideoElement
+    },
+    showGlobalVideoElement () {
+      this.globalVideoElement.style.display = 'block'
+    },
+    hideGlobalVideoElement () {
+      this.globalVideoElement.style.display = 'none'
+    },
   },
-  created () {
+  mounted () {
+    this.globalVideoElement = this.getGlobalVideoElement()
+    this.showGlobalVideoElement()
     this.setVideoStream()
     this.$shortcuts.addMultiple([
       {
@@ -120,6 +148,9 @@ export default {
         description: 'ELMO auswählen',
       }
     ])
+  },
+  destroyed () {
+    this.hideGlobalVideoElement()
   }
 }
 </script>

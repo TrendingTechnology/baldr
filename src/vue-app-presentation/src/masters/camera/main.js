@@ -4,7 +4,7 @@
  * ```
  * sudo apt install v4l2loopback-dkms
  * sudo apt install apt install v4l2loopback-utils
- * sudo modprobe v4l2loopback devices=4
+ * sudo modprobe v4l2loopback devices=2
  * ```
  *
  * # Capture desktop
@@ -30,6 +30,12 @@
  *
  * ```
  * ffmpeg -re -i video.mp4 -f v4l2 /dev/video2
+ * ```
+ *
+ * # For example
+ *
+ * ```
+ * ffmpeg -re -i /var/data/baldr/media/09/10_Romantik/10_Programmmusik/60_Berlioz-Symphonie-fantasique/Hector-Berlioz_Arte-Dokumentation.mp4 -f v4l2 /dev/video1
  * ```
  *
  * https://webrtc.github.io/samples/

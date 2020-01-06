@@ -6,32 +6,53 @@
     @drop.prevent="dropHandler"
     class="vc_main_app"
   >
-    <!-- <notifications group="default"/> -->
+    <!-- vue-notifications -->
     <notifications
       group="default"
       position="top right"
     >
       <template slot="body" slot-scope="props">
-        <div b-ui-theme="default" :class="['vue-notification', props.item.type]" @click="props.close">
+        <div
+          b-ui-theme="default"
+          :class="['vue-notification', props.item.type]"
+          @click="props.close"
+        >
           <div class="title">{{props.item.title}}</div>
           <div class="text" v-html="props.item.text"/>
         </div>
       </template>
     </notifications>
+
+    <!-- Files can by dropped in this zone. -->
     <div ref="dropzone" id="dropzone" b-ui-theme="default">
       <div class="message">
         Medien-Dateien oder eine Präsentation öffnen durch „Drag-and-Drop“ ...
       </div>
     </div>
+
+    <!-- Modal dialog (vue-plugin-modal-dialog) -->
     <modal-dialog name="menu">
       <main-menu/>
     </modal-dialog>
+
+    <!-- Main area managed by the Vue router. -->
     <main>
       <router-view/>
     </main>
     <media-player/>
-    <!-- <play-load-indicator/> -->
-    <app-info package-name="@bldr/vue-app-presentation" :version="version"/>
+    <app-info
+      package-name="@bldr/vue-app-presentation"
+      :version="version"
+    />
+
+    <div id="global-zone">
+      <!--
+        Store elements like the video tag of the document camera or
+        video or image elements launched by shortcuts (v 1, i 1).
+        The elements are created by javascript functions
+        document.createElement('video') and document.appendChild()
+      -->
+    </div>
   </div>
 </template>
 
@@ -352,6 +373,17 @@ export default {
     height: 100%;
     object-fit: contain;
     width: 100%;
+  }
+
+  #global-zone {
+    #camera-master-video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 5;
+      width: 100vw;
+      height: 100vh;
+    }
   }
 </style>
 
