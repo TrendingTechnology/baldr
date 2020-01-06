@@ -108,6 +108,30 @@ function normalizeMetaData (filePath, metaData) {
 }
 
 /**
+ * \stueck*{Nachtmusik} -> <em class="piece">„Nachtmusik“<em>
+ * \stueck{Nachtmusik} -> <em class="piece">Nachtmusik<em>
+ * \person{Mozart} -> <em class="person">Mozart<em>
+ */
+function semanticMarkupTexToHtml (text) {
+  text = text.replace(/\\stueck\*\{([^\}]+?)})/g, )
+  text = text.replace(/\\stueck\{([^\}]+?)})/g, '<em class="piece">$1<em>')
+  text = text.replace(/\\person\{([^\}]+?)})/g, '<em class="person">$1<em>')
+  return text
+}
+
+/**
+ * \stueck*{Nachtmusik} <- <em class="piece">„Nachtmusik“<em>
+ * \stueck{Nachtmusik} <- <em class="piece">Nachtmusik<em>
+ * \person{Mozart} <- <em class="person">Mozart<em>
+ */
+function semanticMarkupHtmlToTex (text) {
+  text = text.replace(/<em class="piece">„([^<>]+?)“<em>/g, '\\stueck*{$1}')
+  text = text.replace(/<em class="piece">([^<>]+?)<em>/g, '\\stueck{$1}')
+  text = text.replace(/<em class="person">([^<>]+?)<em>/g, '\\person{$1}')
+  return text
+}
+
+/**
  * Create and write the meta data YAML to the disk.
  *
  * @param {String} filePath - The file path of the destination yaml file. The yml
@@ -754,6 +778,11 @@ function patchTexFileWithTitles (filePath) {
   setzeTitle.titel = titles.title
   if (titles.subtitle) {
     setzeTitle.untertitel = titles.subtitle
+  }
+
+  // Replace semantic markup
+  for (const key in setzeTitle) {
+    setzeTitle[key] = semanticMarkupHtmlToTex(setzeTitle[key])
   }
 
   const lines = ['\\setzetitel{']
