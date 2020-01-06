@@ -113,7 +113,7 @@ function normalizeMetaData (filePath, metaData) {
  * \person{Mozart} -> <em class="person">Mozart<em>
  */
 function semanticMarkupTexToHtml (text) {
-  text = text.replace(/\\stueck\*\{([^\}]+?)})/g, )
+  text = text.replace(/\\stueck\*\{([^\}]+?)})/g, '<em class="piece">„$1“<em>')
   text = text.replace(/\\stueck\{([^\}]+?)})/g, '<em class="piece">$1<em>')
   text = text.replace(/\\person\{([^\}]+?)})/g, '<em class="person">$1<em>')
   return text
@@ -125,9 +125,9 @@ function semanticMarkupTexToHtml (text) {
  * \person{Mozart} <- <em class="person">Mozart<em>
  */
 function semanticMarkupHtmlToTex (text) {
-  text = text.replace(/<em class="piece">„([^<>]+?)“<em>/g, '\\stueck*{$1}')
-  text = text.replace(/<em class="piece">([^<>]+?)<em>/g, '\\stueck{$1}')
-  text = text.replace(/<em class="person">([^<>]+?)<em>/g, '\\person{$1}')
+  text = text.replace(/<em class="piece">„([^<>]+?)“<\/em>/g, '\\stueck*{$1}')
+  text = text.replace(/<em class="piece">([^<>]+?)<\/em>/g, '\\stueck{$1}')
+  text = text.replace(/<em class="person">([^<>]+?)<\/em>/g, '\\person{$1}')
   return text
 }
 
@@ -765,6 +765,7 @@ commander
  * @param {String} filePath - The path of a TeX file.
  */
 function patchTexFileWithTitles (filePath) {
+  console.log(filePath)
   const titles = new HierarchicalFolderTitles(filePath)
 
   const setzeTitle = {
@@ -801,18 +802,23 @@ function patchTexFileWithTitles (filePath) {
 }
 
 function actionTitleTex (filePath) {
+  let basePath = process.cwd()
   if (filePath) {
-    patchTexFileWithTitles(filePath)
-  } else {
-    walk(process.cwd(), {
-      everyFile (filePath) {
-        const extension = getExtension(filePath)
-        if (extension === 'tex') {
-          patchTexFileWithTitles(filePath)
-        }
-      }
-    })
+    const stat = fs.statSync(filePath)
+    if (!stat.isDirectory()) {
+      patchTexFileWithTitles(filePath)
+      return
+    }
+    basePath = filePath
   }
+  walk(basePath, {
+    everyFile (filePath) {
+      const extension = getExtension(filePath)
+      if (extension === 'tex') {
+        patchTexFileWithTitles(filePath)
+      }
+    }
+  })
 }
 
 commander
