@@ -132,6 +132,41 @@ function semanticMarkupHtmlToTex (text) {
 }
 
 /**
+ * Execute a function on one file or walk trough all files matching a regex
+ * in the current working directory or in the given directory path.
+ *
+ * @param {function} func -
+ * @param {Regex} regex -
+ * @param {String} filePath -
+ */
+function walkDeluxe (func, regex, filePath) {
+  let basePath = process.cwd()
+  if (filePath) {
+    const stat = fs.statSync(filePath)
+    if (!stat.isDirectory()) {
+      func(filePath)
+      return
+    }
+    basePath = filePath
+  }
+  walk(basePath, {
+    everyFile (filePath) {
+      if (filePath.match(regex)) {
+        func(filePath)
+      }
+    }
+  })
+}
+
+function yamlToTxt (data) {
+  const yamlMarkup = [
+    '---',
+    yaml.safeDump(data)
+  ]
+  return yamlMarkup.join('\n')
+}
+
+/**
  * Create and write the meta data YAML to the disk.
  *
  * @param {String} filePath - The file path of the destination yaml file. The yml
@@ -140,11 +175,7 @@ function semanticMarkupHtmlToTex (text) {
  *   the disk.
  */
 function writeMetaDataYamlFile (filePath, metaData) {
-  const yamlMarkup = [
-    '---',
-    yaml.safeDump(metaData)
-  ]
-  const result = yamlMarkup.join('\n')
+  const result = yamlToTxt(metaData)
   console.log(result)
   fs.writeFileSync(filePath, result)
 }
@@ -191,6 +222,14 @@ function renameAsset (oldPath, newPath) {
   }
 }
 
+function readFile (filePath) {
+  return fs.readFileSync(filePath, { encoding: 'utf-8' })
+}
+
+function writeFile (filePath, content) {
+  fs.writeFileSync(filePath, content)
+}
+
 /*******************************************************************************
  * Subcommands
  ******************************************************************************/
@@ -229,7 +268,7 @@ function actionAudacity (filePath) {
       sample['end_time'] = samples[parseInt(index) + 1]['start_time']
     }
   }
-  console.log(yaml.safeDump(samples))
+  console.log(yamlToTxt(samples))
 }
 
 commander
@@ -442,6 +481,59 @@ commander
   .description('Convert media files in the appropriate format. Multiple files, globbing works *.mp3')
   .action(actionConvert)
 
+/** cl / cloze ****************************************************************/
+
+function generateClozeSvg (filePath) {
+  console.log(filePath)
+  const cwd = path.dirname(filePath)
+  let texFileContent = readFile(filePath)
+  if (texFileContent.indexOf('cloze') === -1) return
+
+  // Show cloze texts by patching the TeX file
+  texFileContent = texFileContent.replace(
+    /^.*\n(.*)\n/,
+    '%!TEX program = lualatex\n\\documentclass[loesung]{schule-arbeitsblatt}\n'
+  )
+  writeFile(filePath, texFileContent)
+  childProcess.spawnSync(
+    'lualatex', ['--shell-escape', '--jobname', 'Arbeitsblatt_Loesung', filePath],
+    { cwd }
+  )
+
+  // Convert into SVG
+  childProcess.spawnSync(
+    'pdf2svg',
+    ['Arbeitsblatt_Loesung.pdf', 'Arbeitsblatt_Loesung.svg'],
+    { cwd }
+  )
+
+  // Remove width="" and height="" attributes
+  let svgFilePath = path.join(cwd, 'Arbeitsblatt_Loesung.svg')
+  let svgContent = readFile(svgFilePath)
+  svgContent = svgContent.replace(/(width|height)=".+?" /g, '')
+  writeFile('Arbeitsblatt_Loesung.svg', svgFilePath)
+
+  // Write info yaml
+  const titles = new HierarchicalFolderTitles(filePath)
+  const infoYaml = {
+    id: `${titles.id}_AB_Lueckentext`,
+    title: `Arbeitsblatt „${titles.title}“ (Lückentext)`
+  }
+  writeFile(path.join(cwd, 'Arbeitsblatt_Loesung.svg.yml'), yamlToTxt(infoYaml))
+}
+
+/**
+ * Generate from TeX files with cloze texts SVGs for baldr.
+ */
+function actionCloze (filePath) {
+  walkDeluxe(generateClozeSvg, new RegExp('.*\.tex$'), filePath)
+}
+
+commander
+  .command('cloze [input]').alias('cl')
+  .description('Generate from TeX files with cloze texts SVGs for baldr.')
+  .action(actionCloze)
+
 /** -h / --help ***************************************************************/
 
 function actionHelp () {
@@ -649,13 +741,9 @@ async function presentationFromAssets (filePath) {
       )
     }
   })
-  const yamlMarkup = [
-    '---',
-    yaml.safeDump({
-      slides
-    })
-  ]
-  const result = yamlMarkup.join('\n')
+  const result = yamlToTxt({
+    slides
+  })
   console.log(result)
   fs.writeFileSync(filePath, result)
 }
@@ -802,23 +890,7 @@ function patchTexFileWithTitles (filePath) {
 }
 
 function actionTitleTex (filePath) {
-  let basePath = process.cwd()
-  if (filePath) {
-    const stat = fs.statSync(filePath)
-    if (!stat.isDirectory()) {
-      patchTexFileWithTitles(filePath)
-      return
-    }
-    basePath = filePath
-  }
-  walk(basePath, {
-    everyFile (filePath) {
-      const extension = getExtension(filePath)
-      if (extension === 'tex') {
-        patchTexFileWithTitles(filePath)
-      }
-    }
-  })
+  walkDeluxe(patchTexFileWithTitles, new RegExp('.*\.tex$'), filePath)
 }
 
 commander
