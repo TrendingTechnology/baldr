@@ -661,7 +661,7 @@ class Presentation extends MediaFile {
   titleSubtitle_ () {
     let subtitle = ''
     if (this.meta.subtitle) subtitle = this.meta.subtitle
-    return `${title} (${subtitle})`
+    return `${this.title} (${subtitle})`
   }
 }
 
