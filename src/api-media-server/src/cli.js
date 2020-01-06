@@ -171,7 +171,7 @@ function renameAsset (oldPath, newPath) {
  * Subcommands
  ******************************************************************************/
 
-/*** a / audacity *************************************************************/
+/** a / audacity **************************************************************/
 
 function audacityTextToYaml (filePath) {
   const text = fs.readFileSync(filePath, { encoding: 'utf-8' })
@@ -213,7 +213,7 @@ commander
   .description('Convert audacity text mark file into a yaml file.')
   .action(audacityTextToYaml)
 
-/*** c / convert **************************************************************/
+/** c / convert ***************************************************************/
 
 /**
  * Output from `music-metadata`:
@@ -418,7 +418,7 @@ commander
   .description('Convert media files in the appropriate format. Multiple files, globbing works *.mp3')
   .action(convert)
 
-/*** -h / --help **************************************************************/
+/** -h / --help ***************************************************************/
 
 function help () {
   console.log('Specify a subcommand.')
@@ -426,7 +426,7 @@ function help () {
   process.exit(1)
 }
 
-/*** i / id-to-filename *******************************************************/
+/** i / id-to-filename ********************************************************/
 
 /**
  * Rename a media asset after the `id` in the meta data file.
@@ -434,7 +434,7 @@ function help () {
  * @param {String} filePath - The media asset file path.
  */
 function renameFromIdOneFile (filePath) {
-  result = yaml.safeLoad(fs.readFileSync(`${filePath}.yml`, 'utf8'))
+  const result = yaml.safeLoad(fs.readFileSync(`${filePath}.yml`, 'utf8'))
   if ('id' in result && result.id) {
     let id = result.id
     const oldPath = filePath
@@ -480,7 +480,7 @@ commander
   .description('Rename media assets after the id.')
   .action(renameFromId)
 
-/*** m / mirror ***************************************************************/
+/** m / mirror ****************************************************************/
 
 /**
  * Create and open a relative path in different base paths.
@@ -540,7 +540,7 @@ commander
   .description('Create and open in the file explorer a relative path in different base paths.')
   .action(mirrorRelPath)
 
-/*** n / normalize ************************************************************/
+/** n / normalize *************************************************************/
 
 /**
  * @param {String} filePath - The media asset file path.
@@ -573,7 +573,7 @@ commander
   .description('Normalize the meta data files in the YAML format (Sort, clean up).')
   .action(normalizeMetaDataYaml)
 
-/*** o / open *****************************************************************/
+/** o / open ******************************************************************/
 
 /**
  * Open base path.
@@ -588,7 +588,7 @@ commander
   .description('Open the base directory in a file browser.')
   .action(openBasePath)
 
-/*** p / presentation-template ************************************************/
+/** p / presentation-template *************************************************/
 
 const presentationTemplate = `---
 meta:
@@ -655,7 +655,7 @@ commander
     }
   })
 
-/*** r / rename ***************************************************************/
+/** r / rename ****************************************************************/
 
 /**
  * @param {String} oldPath - The media file path.
@@ -666,7 +666,7 @@ function renameOneFile (oldPath) {
   let newPath = asciify(oldPath)
   const basename = path.basename(newPath)
   // Remove a- and v- prefixes
-  const cleanedBasename = basename.replace(/^[va]-/g,'')
+  const cleanedBasename = basename.replace(/^[va]-/g, '')
   if (cleanedBasename !== basename) {
     newPath = path.join(path.dirname(newPath), cleanedBasename)
   }
@@ -689,7 +689,7 @@ commander
   .description('Rename files, clean file names, remove all whitespaces and special characters.')
   .action(rename)
 
-/*** t / folder-title *********************************************************/
+/** t / folder-title **********************************************************/
 
 async function listHierarchicalFolderTitles (filePath) {
   const tree = new FolderTitleTree()
@@ -722,7 +722,7 @@ commander
   .description('List all hierachical folder titles')
   .action(listHierarchicalFolderTitles)
 
-/*** tt / title-tex ***********************************************************/
+/** tt / title-tex ************************************************************/
 
 /**
  * ```tex
@@ -742,12 +742,11 @@ function patchTexFileWithTitles (filePath) {
   const titles = new HierarchicalFolderTitles(filePath)
 
   const setzeTitle = {
-    jahrgangsstufe: titles.grade,
+    jahrgangsstufe: titles.grade
   }
 
   const ebenen = ['ebenei', 'ebeneii', 'ebeneiii', 'ebeneiv', 'ebenev']
   for (let index = 0; index < titles.curriculumTitlesArray.length; index++) {
-    titles.curriculumTitlesArray[index]
     setzeTitle[ebenen[index]] = titles.curriculumTitlesArray[index]
   }
   setzeTitle.titel = titles.title
@@ -757,10 +756,10 @@ function patchTexFileWithTitles (filePath) {
 
   const lines = ['\\setzetitle{']
   for (const key in setzeTitle) {
-      lines.push(`  ${key} = {${setzeTitle[key]}},`)
+    lines.push(`  ${key} = {${setzeTitle[key]}},`)
   }
   lines.push('}')
-  let texFileString = fs.readFileSync(filePath, { encoding: 'utf-8' })
+  const texFileString = fs.readFileSync(filePath, { encoding: 'utf-8' })
   texFileString.replace(
     /\\setzetitel\{.*,?\n\}\n/s,
     lines.join('\n')
@@ -788,7 +787,7 @@ commander
   .description('Replace title section of the TeX files with metadata retrieved from the title.txt files.')
   .action(actionTitleTex)
 
-/*** v / video-preview ********************************************************/
+/** v / video-preview *********************************************************/
 
 function createVideoPreviewImageOneFile (filePath, second) {
   const assetType = filePathToAssetType(filePath)
@@ -796,7 +795,7 @@ function createVideoPreviewImageOneFile (filePath, second) {
     const output = `${filePath}_preview.jpg`
     const outputFileName = path.basename(output)
     console.log(`Preview image: ${chalk.green(outputFileName)} at second ${chalk.green(second)})`)
-    convert = childProcess.spawnSync('ffmpeg', [
+    childProcess.spawnSync('ffmpeg', [
       '-i', filePath,
       '-ss', second, // Position in seconds
       '-vframes', '1', // only handle one video frame
@@ -807,7 +806,7 @@ function createVideoPreviewImageOneFile (filePath, second) {
   }
 }
 
-function createVideoPreviewImages (filePath, second=10) {
+function createVideoPreviewImages (filePath, second = 10) {
   if (filePath) {
     createVideoPreviewImageOneFile(filePath, second)
   } else {
@@ -824,12 +823,12 @@ commander
   .description('Create video preview images')
   .action(createVideoPreviewImages)
 
-/*** -v / --version ***********************************************************/
+/** -v / --version ************************************************************/
 
 commander
   .version(require('../package.json').version)
 
-/*** y / yaml *****************************************************************/
+/** y / yaml ******************************************************************/
 
 /**
  *
@@ -851,7 +850,7 @@ commander
   .description('Create info files in the YAML format in the current working directory.')
   .action(createMetaDataYaml)
 
-/*** yv / yaml-validate *******************************************************/
+/** yv / yaml-validate ********************************************************/
 
 /**
  * @param {String} filePath - The media file path.
