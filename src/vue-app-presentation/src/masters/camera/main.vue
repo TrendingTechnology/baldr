@@ -5,7 +5,7 @@
         placeholder="Wähle eine Dokumentenkamera aus"
         :options="mediaDevices"
         @input="setDeviceId"
-        v-model="deviceId"
+        v-model="device"
       />
     </modal-dialog>
 
@@ -31,7 +31,7 @@
 export default {
   data () {
     return {
-      deviceId: '',
+      device: '',
       stream: null,
       globalVideoElement: null
     }
@@ -45,19 +45,94 @@ export default {
     }
   },
   methods: {
-    setDeviceId () {
+    /**
+     * Called by the input event of the dynamic select component.
+     */
+    async setDeviceId () {
       this.$modal.hide('select-video-device')
-      const constraints = {
-        audio: false,
-        video: { deviceId: { exact: this.deviceId.id } }
-      }
-      this.$store.commit('camera/setDeviceId', this.deviceId.id)
-      this.setVideoStream(constraints)
+      console.log(this.device)
+      this.$store.commit('camera/setDeviceId', this.device.id)
+      this.setVideoStream(await this.buildConstraints(this.device.id))
     },
+    /**
+     * Show the modal dialog with the dynamic select form element.
+     */
     showDeviceSelect () {
       this.$store.dispatch('camera/setMediaDevices')
       this.$modal.toggle('select-video-device')
       this.$dynamicSelect.focus()
+    },
+    /**
+     * Get the device ID of the document camera. Search for the
+     * name of the camera. The camera name can be specified in the
+     * configuration file `/etc/baldr.json.`
+     *
+     * ```json
+     * {
+     *   "presentation": {
+     *     "camera": "ELMO"
+     *   }
+     * }
+     * ```
+     *
+     * ```json
+     * [
+     *   {
+     *     "deviceId": "21c19a409344f4bee3a71d7b1b14d1bb452dcd86cba8c9c5136a992c33241c08",
+     *     "kind": "videoinput",
+     *     "label": "USB Webcam (0bda:5727)",
+     *     "groupId": ""
+     *   }
+     * ]
+     * ```
+     *
+     * @returns {String} - The device ID
+     */
+    async getDeviceId () {
+      const devices = await navigator.mediaDevices.enumerateDevices()
+      // ELMO
+      const label = config.presentation.camera
+      for (const device of devices) {
+        if (device.kind === 'videoinput' && device.label.indexOf('label') > -1) {
+          return device.Id
+        }
+      }
+    },
+
+    /**
+     * Build the constraints object of the method
+     * `navigator.mediaDevices.getUserMedia(constraints)`.
+     *
+     * @returns {Object}
+     *
+     * If a device ID can be found:
+     *
+     * ```js
+     * {
+     *   audio: false,
+     *   video: { deviceId: { exact: '4V7Fv34Bp...' } }
+     * }
+     * ```
+     *
+     * If no device ID can be found:
+     *
+     * ```js
+     * {
+     *   audio: false,
+     *   video: true
+     * }
+     * ```
+     */
+    async buildConstraints (deviceId) {
+      if (!deviceId) deviceId = await this.getDeviceId()
+      if (deviceId) {
+        return {
+          audio: false,
+          video: { deviceId: { exact: deviceId } }
+        }
+      } else {
+        return { audio: false, video: true }
+      }
     },
     /**
      * @param {constraints}
@@ -69,25 +144,23 @@ export default {
      * }
      * ```
      */
-    setVideoStream (constraints) {
-      if (!constraints) {
-        constraints = { audio: false, video: true }
+    async setVideoStream (constraints) {
+      if (this.globalVideoElement.srcObject) {
+        return true
       }
-      // {fdf4c841-b6e0-4754-8074-e1d540ac5018}
-      // "4V7Fv34BpWsE9EX1Y718KLZVUyifnZrZo7bUTxCz6XU="
-      navigator.mediaDevices.getUserMedia(constraints)
-        .then((stream) => {
-          if (!this.globalVideoElement.srcObject) {
-            this.globalVideoElement.srcObject = stream
-            this.stream = stream
-            this.$store.commit('camera/setStream', stream)
-            this.$store.dispatch('camera/setMediaDevices')
-          }
-        })
-        .catch((error) => {
-          console.log(error)
-          this.$store.commit('camera/setCameraNotFound', true)
-        })
+      if (!constraints) {
+        constraints = await this.buildConstraints()
+      }
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia(constraints)
+        this.globalVideoElement.srcObject = stream
+        this.stream = stream
+        this.$store.commit('camera/setStream', stream)
+        this.$store.dispatch('camera/setMediaDevices')
+      } catch (error) {
+        console.log(error)
+        this.$store.commit('camera/setCameraNotFound', true)
+      }
     },
     stopVideoStream () {
       if (this.stream) {
@@ -122,10 +195,10 @@ export default {
       this.globalVideoElement.style.display = 'none'
     },
   },
-  mounted () {
+  async mounted () {
     this.globalVideoElement = this.getGlobalVideoElement()
+    await this.setVideoStream()
     this.showGlobalVideoElement()
-    this.setVideoStream()
     this.$shortcuts.addMultiple([
       {
         keys: 'c s',
