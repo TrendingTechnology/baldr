@@ -173,7 +173,7 @@ function renameAsset (oldPath, newPath) {
 
 /** a / audacity **************************************************************/
 
-function audacityTextToYaml (filePath) {
+function actionAudacity (filePath) {
   const text = fs.readFileSync(filePath, { encoding: 'utf-8' })
   console.log(text)
 
@@ -211,7 +211,7 @@ function audacityTextToYaml (filePath) {
 commander
   .command('audacity <input>').alias('a')
   .description('Convert audacity text mark file into a yaml file.')
-  .action(audacityTextToYaml)
+  .action(actionAudacity)
 
 /** c / convert ***************************************************************/
 
@@ -398,7 +398,7 @@ async function convertOneFile (inputFile, cmdObj) {
  * @param {Array} inputFiles - An array of input files to convert.
  * @param {Object} cmdObj - The command object from the commander.
  */
-function convert (inputFiles, cmdObj) {
+function actionConvert (inputFiles, cmdObj) {
   if (inputFiles.length === 0) {
     walk(process.cwd(), {
       all (inputFile) {
@@ -416,11 +416,11 @@ commander
   .command('convert [input...]').alias('c')
   .option('-p, --preview-image', 'Convert into preview images (Smaller and different file name)')
   .description('Convert media files in the appropriate format. Multiple files, globbing works *.mp3')
-  .action(convert)
+  .action(actionConvert)
 
 /** -h / --help ***************************************************************/
 
-function help () {
+function actionHelp () {
   console.log('Specify a subcommand.')
   commander.outputHelp()
   process.exit(1)
@@ -461,7 +461,7 @@ function renameFromIdOneFile (filePath) {
  *
  * @param {String} filePath - The media file path.
  */
-function renameFromId (filePath) {
+function actionIdToFilename (filePath) {
   if (filePath) {
     renameFromIdOneFile(filePath)
   } else {
@@ -478,14 +478,14 @@ function renameFromId (filePath) {
 commander
   .command('id-to-filename [input]').alias('i')
   .description('Rename media assets after the id.')
-  .action(renameFromId)
+  .action(actionIdToFilename)
 
 /** m / mirror ****************************************************************/
 
 /**
  * Create and open a relative path in different base paths.
  */
-function mirrorRelPath () {
+function actionMirror () {
   const basePaths = [
     '/var/data/baldr/media/',
     '/home/jf/schule-archiv/'
@@ -538,7 +538,7 @@ function mirrorRelPath () {
 commander
   .command('mirror').alias('m')
   .description('Create and open in the file explorer a relative path in different base paths.')
-  .action(mirrorRelPath)
+  .action(actionMirror)
 
 /** n / normalize *************************************************************/
 
@@ -554,7 +554,7 @@ function normalizeMetaDataYamlOneFile (filePath) {
 /**
  * @param {String} filePath - The media asset file path.
  */
-function normalizeMetaDataYaml (filePath) {
+function actionNormalize (filePath) {
   if (filePath) {
     normalizeMetaDataYamlOneFile(filePath)
   } else {
@@ -571,14 +571,14 @@ function normalizeMetaDataYaml (filePath) {
 commander
   .command('normalize [input]').alias('n')
   .description('Normalize the meta data files in the YAML format (Sort, clean up).')
-  .action(normalizeMetaDataYaml)
+  .action(actionNormalize)
 
 /** o / open ******************************************************************/
 
 /**
  * Open base path.
  */
-function openBasePath () {
+function actionOpen () {
   const process = childProcess.spawn('xdg-open', [config.mediaServer.basePath], { detached: true })
   process.unref()
 }
@@ -586,7 +586,7 @@ function openBasePath () {
 commander
   .command('open').alias('o')
   .description('Open the base directory in a file browser.')
-  .action(openBasePath)
+  .action(actionOpen)
 
 /** p / presentation-template *************************************************/
 
@@ -636,24 +636,26 @@ async function presentationFromAssets (filePath) {
   fs.writeFileSync(filePath, result)
 }
 
+async function actionPresentationTemplate (command) {
+  const filePath = path.join(process.cwd(), 'Praesentation.baldr.yml')
+  if (!fs.existsSync(filePath) || command.force) {
+    if (command.fromAssets) {
+      await presentationFromAssets(filePath)
+    } else {
+      presentationFromTemplate(filePath)
+    }
+    console.log(`Presentation template created at: ${chalk.green(filePath)}`)
+  } else {
+    console.log(`Presentation already exists: ${chalk.red(filePath)}`)
+  }
+}
+
 commander
   .command('presentation-template').alias('p')
   .option('-a, --from-assets', 'Create a presentation from the assets of the current working dir.')
   .option('-f, --force', 'Overwrite existing presentation.')
   .description('Create a presentation template named “Praesentation.baldr.yml”.')
-  .action(async function (command) {
-    const filePath = path.join(process.cwd(), 'Praesentation.baldr.yml')
-    if (!fs.existsSync(filePath) || command.force) {
-      if (command.fromAssets) {
-        await presentationFromAssets(filePath)
-      } else {
-        presentationFromTemplate(filePath)
-      }
-      console.log(`Presentation template created at: ${chalk.green(filePath)}`)
-    } else {
-      console.log(`Presentation already exists: ${chalk.red(filePath)}`)
-    }
-  })
+  .action(actionPresentationTemplate)
 
 /** r / rename ****************************************************************/
 
@@ -676,7 +678,7 @@ function renameOneFile (oldPath) {
 /**
  * Rename all child files in the current working directory.
  */
-function rename () {
+function actionRename () {
   walk(process.cwd(), {
     all (oldPath) {
       renameOneFile(oldPath)
@@ -687,11 +689,11 @@ function rename () {
 commander
   .command('rename').alias('r')
   .description('Rename files, clean file names, remove all whitespaces and special characters.')
-  .action(rename)
+  .action(actionRename)
 
 /** t / folder-title **********************************************************/
 
-async function listHierarchicalFolderTitles (filePath) {
+async function actionFolderTitlesactionFolderTitles (filePath) {
   const tree = new FolderTitleTree()
 
   function read (filePath) {
@@ -720,7 +722,7 @@ async function listHierarchicalFolderTitles (filePath) {
 commander
   .command('folder-title [input]').alias('t')
   .description('List all hierachical folder titles')
-  .action(listHierarchicalFolderTitles)
+  .action(actionFolderTitles)
 
 /** tt / title-tex ************************************************************/
 
@@ -806,7 +808,7 @@ function createVideoPreviewImageOneFile (filePath, second) {
   }
 }
 
-function createVideoPreviewImages (filePath, second = 10) {
+function actionVideoPreview (filePath, second = 10) {
   if (filePath) {
     createVideoPreviewImageOneFile(filePath, second)
   } else {
@@ -821,7 +823,7 @@ function createVideoPreviewImages (filePath, second = 10) {
 commander
   .command('video-preview [input] [second]').alias('v')
   .description('Create video preview images')
-  .action(createVideoPreviewImages)
+  .action(actionVideoPreview)
 
 /** -v / --version ************************************************************/
 
@@ -833,7 +835,7 @@ commander
 /**
  *
  */
-function createMetaDataYaml (filePath) {
+function actionYaml (filePath) {
   if (filePath) {
     writeMetaDataYaml(filePath)
   } else {
@@ -848,7 +850,7 @@ function createMetaDataYaml (filePath) {
 commander
   .command('yaml [input]').alias('y')
   .description('Create info files in the YAML format in the current working directory.')
-  .action(createMetaDataYaml)
+  .action(actionYaml)
 
 /** yv / yaml-validate ********************************************************/
 
@@ -869,7 +871,7 @@ function validateYamlOneFile (filePath) {
 /**
  * @param {String} filePath - The media file path.
  */
-function validateYaml (filePath) {
+function actionYamlValidate (filePath) {
   if (filePath) {
     validateYamlOneFile(filePath)
   } else {
@@ -886,7 +888,7 @@ function validateYaml (filePath) {
 commander
   .command('yaml-validate [input]').alias('yv')
   .description('Validate the yaml files.')
-  .action(validateYaml)
+  .action(actionYamlValidate)
 
 /*******************************************************************************
  * main
@@ -899,5 +901,5 @@ commander.parse(process.argv)
 //  '/home/jf/.npm-packages/bin/baldr-media-server-cli'
 // ]
 if (process.argv.length <= 2) {
-  help()
+  actionHelp()
 }
