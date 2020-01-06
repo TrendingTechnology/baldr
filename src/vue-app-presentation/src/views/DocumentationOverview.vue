@@ -7,18 +7,23 @@
     "
     b-ui-theme="default"
   >
-    <h1>Documentation</h1>
+
+    <!-- Documentation -->
+    <h1>Dokumentation</h1>
 
     <section>
-      <h2>Master slides</h2>
+      <!-- Master slides -->
+      <h2>Master-Folien</h2>
 
       <table>
         <thead>
           <tr>
             <td></td>
-            <td>ID</td>
-            <td>Title</td>
-            <td>Example</td>
+            <td>Master-ID</td>
+            <!-- Title -->
+            <td>Titel</td>
+            <!-- Example -->
+            <td>Beispiel-Präsentation</td>
           </tr>
         </thead>
         <tbody>
@@ -44,10 +49,27 @@
         </tbody>
       </table>
     </section>
+
+    <section v-html="documentation">
+    </section>
   </div>
 </template>
 
 <script>
+import {  markupToHtml } from '@/lib.js'
+
+const documentation = `
+
+# Semantische CSS-Klassen
+
+Können im YAML-Quellcode der Präsentationen eingesetzt werden.
+
+* _.important_ (Sans-Schriftart, fett)
+* _.note_ (kleinere Schriftgröße, linksbündig)
+* _.person_ (Kapitälchen)
+* _.piece_ (kursiv)
+`
+
 export default {
   name: 'DocumentationOverview',
   methods: {
@@ -61,6 +83,11 @@ export default {
     this.$styleConfig.set({
       centerVertically: false
     })
+  },
+  computed: {
+    documentation () {
+      return markupToHtml(documentation)
+    }
   }
 }
 </script>

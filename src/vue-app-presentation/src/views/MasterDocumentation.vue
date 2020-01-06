@@ -11,7 +11,6 @@
           :key="name"
         >
           <code>{{ name }}</code>
-
           <span v-if="spec.description" v-html="': ' + markupToHtml(spec.description) + formatPropSpec(spec)">:</span>
         </li>
       </ul>
