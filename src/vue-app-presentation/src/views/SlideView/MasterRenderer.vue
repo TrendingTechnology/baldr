@@ -14,64 +14,72 @@ export default {
   },
   computed: {
     ...mapGetters(['slideCurrent', 'showBlank']),
-    master () {
-      let name
-      let props
-      let contentTheme
-      let styleConfig
-      let styleInline
-
+    data_ () {
       if ('master' in this.$route.meta) {
-        name = this.$route.meta.master
-        props = this.$route.meta.data
-        contentTheme = this.$masters.get(name).styleConfig.contentTheme
-        styleConfig = this.$masters.get(name).styleConfig
-        styleInline = {}
+        let masterName = this.$route.meta.master
+        return {
+          name: masterName,
+          propsMain: this.$route.meta.data,
+          contentTheme: this.$masters.get(masterName).styleConfig.contentTheme,
+          styleConfig: this.$masters.get(masterName).styleConfig,
+          styleInline: {}
+        }
       } else if (this.slideCurrent) {
-        name = this.slideCurrent.master.name
-        props = this.slideCurrent.renderData.props
-        contentTheme = this.slideCurrent.contentTheme
-        styleConfig = this.slideCurrent.master.styleConfig
-        styleInline = this.slideCurrent.style
+        return {
+          name: this.slideCurrent.master.name,
+          propsMain: this.slideCurrent.renderData.props,
+          contentTheme: this.slideCurrent.contentTheme,
+          styleConfig: this.slideCurrent.master.styleConfig,
+          styleInline: this.slideCurrent.style
+        }
       }
-      return {
-        name,
-        props,
-        styleConfig,
-        contentTheme
-      }
+    },
+    masterName () {
+      return this.data_.name
+    },
+    propsMain () {
+      return this.data_.propsMain
+    },
+    styleConfig () {
+      return this.data_.styleConfig
+    },
+    contentTheme () {
+      return this.data_.contentTheme
+    },
+    styleInline () {
+      return this.data_.styleInline
     }
   },
   methods: {
     setMasterStyle () {
-      if (this.master.styleConfig) {
-        this.$styleConfig.set(this.master.styleConfig)
+      if (this.styleConfig) {
+        this.$styleConfig.set(this.styleConfig)
       } else {
         this.$styleConfig.setDefaults()
       }
     }
   },
   render: function (createElement) {
-    if (this.showBlank && this.master.name) {
+    if (this.showBlank && this.masterName) {
       return createElement('blank-master')
     }
     this.setMasterStyle()
-    if (this.master.name) {
+    if (this.masterName) {
       const masterElement = createElement(
-        `${this.master.name}-master-main`,
+        `${this.masterName}-master-main`,
         {
-          props: this.slideCurrent.renderData.propsMain,
+          props: this.propsMain,
           class: {
             'master-inner': true
           },
-          style: this.master.styleInline
+          style: this.styleInline
         }
       )
       return createElement(
         'div',
         {
           attrs: {
-            'b-content-theme': this.master.contentTheme
+            'b-content-theme': this.contentTheme
           },
           class: {
             'vc_master_renderer': true,
