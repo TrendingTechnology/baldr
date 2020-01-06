@@ -204,6 +204,17 @@ function convertPropertiesToCamelCase (object) {
   return object
 }
 
+/**
+ * Get the extension from a file path.
+ *
+ * @param {String} filePath
+ *
+ * @returns {String}
+ */
+function getExtension (filePath) {
+  return path.extname(filePath).replace('.', '')
+}
+
 /* Media objects **************************************************************/
 
 /**
@@ -237,11 +248,39 @@ class FolderTitle {
 }
 
 /**
- * Hold metadata about a folder in a hierachical folder structur
+ * Hold metadata about a folder in a hierachical folder structure.
+ *
+ * ```js
+ * HierarchicalFolderTitles {
+ *   titles_: [
+ *     FolderTitle {
+ *       path: '06',
+ *       title: '6. Jahrgangsstufe',
+ *       folderName: '06'
+ *     },
+ *     FolderTitle {
+ *       path: '06/20_Mensch-Zeit',
+ *       title: 'Lernbereich 2: Musik - Mensch - Zeit',
+ *       folderName: '20_Mensch-Zeit'
+ *     },
+ *     FolderTitle {
+ *       path: '06/20_Mensch-Zeit/10_Bach',
+ *       title: 'Johann Sebastian Bach: Musik als Bekenntnis',
+ *       folderName: '10_Bach'
+ *     },
+ *     FolderTitle {
+ *       path: '06/20_Mensch-Zeit/10_Bach/40_Bachs-vergebliche-Reise',
+ *       title: 'Johann Sebastian Bachs Reise nach Berlin 1747',
+ *       folderName: '40_Bachs-vergebliche-Reise'
+ *     }
+ *   ]
+ * }
+ * ```
  */
 class HierarchicalFolderTitles {
   /**
-   * @param {String} filePath - The path of the presentation file.
+   * @param {String} filePath - The path of a file in a folder with `title.txt`
+   *   files.
    */
   constructor (filePath) {
     this.titles_ = []
@@ -279,40 +318,112 @@ class HierarchicalFolderTitles {
     }
   }
 
-  get all () {
-    return this.onlyTitles_.join(' / ')
-  }
-
-  get curriculum () {
-    return this.onlyTitles_.slice(0, this.titles_.length - 1).join(' / ')
-  }
-
-  get onlyTitles_() {
+  /**
+   * An array of title strings.
+   *
+   * @type {array}
+   * @private
+   */
+  get titlesArray_() {
     return this.titles_.map(folderTitle => folderTitle.title)
   }
 
-  get lastTitle_ () {
+  /**
+   * @private
+   */
+  get lastFolderTitleObject_ () {
     return this.titles_[this.titles_.length - 1]
   }
 
+  /**
+   * @returns {string}
+   */
+  get all () {
+    return this.titlesArray_.join(' / ')
+  }
+
+  /**
+   * Not the first and last title as a array.
+   *
+   * @type {Array}
+   */
+  get curriculumTitlesArray() {
+    return this.titlesArray_.slice(1, this.titles_.length - 1)
+  }
+
+  /**
+   * Not the title of the first and the last folder.
+   *
+   * ```js
+   * HierarchicalFolderTitles {
+   *   titles_: [
+   *     FolderTitle {
+   *       title: '6. Jahrgangsstufe'
+   *     },
+   *     FolderTitle {
+   *       title: 'Lernbereich 2: Musik - Mensch - Zeit'
+   *     },
+   *     FolderTitle {
+   *       title: 'Johann Sebastian Bach: Musik als Bekenntnis'
+   *     },
+   *     FolderTitle {
+   *       title: 'Johann Sebastian Bachs Reise nach Berlin 1747'
+   *     }
+   *   ]
+   * }
+   * ```
+   *
+   * -> Lernbereich 2: Musik - Mensch - Zeit / Johann Sebastian Bach: Musik als Bekenntnis
+   *
+   */
+  get curriculum () {
+    return this.curriculumTitlesArray.join(' / ')
+  }
+
+  /**
+   * @returns {string}
+   */
   get id () {
-    return this.lastTitle_.folderName.replace(/\d\d_/, '')
+    return this.lastFolderTitleObject_.folderName.replace(/\d\d_/, '')
   }
 
+  /**
+   * The title. It is the first line in the text file `title.txt` in the
+   * same folder as the constructor `filePath` file.
+   *
+   * @returns {string}
+   */
   get title () {
-    return this.lastTitle_.title
+    return this.lastFolderTitleObject_.title
   }
 
+  /**
+   * The subtitle. It is the second line in the text file `title.txt` in the
+   * same folder as the constructor `filePath` file.
+   *
+   * @returns {string}
+   */
   get subtitle () {
-    if (this.lastTitle_.subtitle) {
-      return this.lastTitle_.subtitle
+    if (this.lastFolderTitleObject_.subtitle) {
+      return this.lastFolderTitleObject_.subtitle
     }
   }
 
+  /**
+   * The first folder level in the hierachical folder structure must be named
+   * with numbers.
+   *
+   * @returns {string}
+   */
   get grade () {
     return this.titles_[0].title.replace(/[^\d]+$/, '')
   }
 
+  /**
+   * List all `FolderTitle()` objects.
+   *
+   * @returns {Array}
+   */
   list() {
     return this.titles_
   }
@@ -494,7 +605,7 @@ class MediaFile {
      * The extension of the file.
      * @type {string}
      */
-    this.extension = path.extname(this.absPath_).replace('.', '')
+    this.extension = getExtension(this.absPath_)
 
     /**
      * The basename (filename without extension) of the file.
@@ -1219,6 +1330,7 @@ module.exports = {
   assetTypes,
   deasciify,
   FolderTitleTree,
+  getExtension,
   helpMessages,
   HierarchicalFolderTitles,
   registerRestApi,

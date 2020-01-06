@@ -12,7 +12,16 @@ const yaml = require('js-yaml')
 const musicMetadata = require('music-metadata')
 
 // Project packages
-const { Asset, walk, asciify, deasciify, assetTypes, HierarchicalFolderTitles, FolderTitleTree } = require('./main.js')
+const {
+  asciify,
+  Asset,
+  assetTypes,
+  deasciify,
+  FolderTitleTree,
+  getExtension,
+  HierarchicalFolderTitles,
+  walk
+} = require('./main.js')
 const { bootstrapConfig } = require('@bldr/core-node')
 
 // Project packages.
@@ -712,6 +721,72 @@ commander
   .command('folder-title [input]').alias('t')
   .description('List all hierachical folder titles')
   .action(listHierarchicalFolderTitles)
+
+/*** tt / title-tex ***********************************************************/
+
+/**
+ * ```tex
+ * \setzetitel{
+ *   jahrgangsstufe = {6},
+ *   ebenei = {Musik und ihre Grundlagen},
+ *   ebeneii = {Systeme und Strukturen},
+ *   ebeneiii = {die Tongeschlechter Dur und Moll},
+ *   titel = {Dur- und Moll-Tonleiter},
+ *   untertitel = {Das Lied \emph{„Kol dodi“} in Moll und Dur},
+ * }
+ * ```
+ *
+ * @param {String} filePath - The path of a TeX file.
+ */
+function patchTexFileWithTitles (filePath) {
+  const titles = new HierarchicalFolderTitles(filePath)
+
+  const setzeTitle = {
+    jahrgangsstufe: titles.grade,
+  }
+
+  const ebenen = ['ebenei', 'ebeneii', 'ebeneiii', 'ebeneiv', 'ebenev']
+  for (let index = 0; index < titles.curriculumTitlesArray.length; index++) {
+    titles.curriculumTitlesArray[index]
+    setzeTitle[ebenen[index]] = titles.curriculumTitlesArray[index]
+  }
+  setzeTitle.titel = titles.title
+  if (titles.subtitle) {
+    setzeTitle.untertitel = titles.subtitle
+  }
+
+  const lines = ['\\setzetitle{']
+  for (const key in setzeTitle) {
+      lines.push(`  ${key} = {${setzeTitle[key]}},`)
+  }
+  lines.push('}')
+  let texFileString = fs.readFileSync(filePath, { encoding: 'utf-8' })
+  texFileString.replace(
+    /\\setzetitel\{.*,?\n\}\n/s,
+    lines.join('\n')
+  )
+  fs.writeFileSync(filePath, texFileString)
+}
+
+function actionTitleTex (filePath) {
+  if (filePath) {
+    patchTexFileWithTitles(filePath)
+  } else {
+    walk(process.cwd(), {
+      everyFile (filePath) {
+        const extension = getExtension(filePath)
+        if (extension === 'tex') {
+          patchTexFileWithTitles(filePath)
+        }
+      }
+    })
+  }
+}
+
+commander
+  .command('title-tex [input]').alias('tt')
+  .description('Replace title section of the TeX files with metadata retrieved from the title.txt files.')
+  .action(actionTitleTex)
 
 /*** v / video-preview ********************************************************/
 
