@@ -753,10 +753,19 @@ async function presentationFromAssets (filePath) {
   await walk(process.cwd(), {
     asset (relPath) {
       const asset = makeAsset(relPath)
+      let masterName
+      let prop
+      if (asset.id.indexOf('NB') > -1) {
+        masterName = 'score_sample'
+        prop = 'score'
+      } else {
+        masterName = asset.assetType
+        prop = 'src'
+      }
       slides.push(
         {
-          [asset.assetType]: {
-            src: `id:${asset.id}`
+          [masterName]: {
+            [prop]: `id:${asset.id}`
           }
         }
       )
@@ -770,23 +779,24 @@ async function presentationFromAssets (filePath) {
 }
 
 async function actionPresentationTemplate (command) {
-  const filePath = path.join(process.cwd(), 'Praesentation.baldr.yml')
-  if (!fs.existsSync(filePath) || command.force) {
-    if (command.fromAssets) {
-      await presentationFromAssets(filePath)
-    } else {
-      presentationFromTemplate(filePath)
-    }
+  let filePath = path.join(process.cwd(), 'Praesentation.baldr.yml')
+  if (!fs.existsSync(filePath)) {
     console.log(`Presentation template created at: ${chalk.green(filePath)}`)
   } else {
-    console.log(`Presentation already exists: ${chalk.red(filePath)}`)
+    filePath = filePath.replace('.baldr.yml', '_tmp.baldr.yml')
+    console.log(`Presentation already exists, create tmp file: ${chalk.red(filePath)}`)
+  }
+
+  if (command.fromAssets) {
+    await presentationFromAssets(filePath)
+  } else {
+    presentationFromTemplate(filePath)
   }
 }
 
 commander
   .command('presentation-template').alias('p')
   .option('-a, --from-assets', 'Create a presentation from the assets of the current working dir.')
-  .option('-f, --force', 'Overwrite existing presentation.')
   .description('Create a presentation template named “Praesentation.baldr.yml”.')
   .action(actionPresentationTemplate)
 
