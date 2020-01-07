@@ -484,42 +484,63 @@ commander
 /** cl / cloze ****************************************************************/
 
 function generateClozeSvg (filePath) {
-  console.log(filePath)
   const cwd = path.dirname(filePath)
   let texFileContent = readFile(filePath)
-  if (texFileContent.indexOf('cloze') === -1) return
+  if (texFileContent.indexOf('cloze') === -1) {
+    console.log(`${chalk.red(filePath)} has no cloze texts.` )
+    return
+  }
 
-  // Show cloze texts by patching the TeX file
+  console.log(`Generate SVGs from the file ${chalk.yellow(filePath)}.`)
+  const jobName = 'Arbeitsblatt_Loesung'
+
+  // Show cloze texts by patching the TeX file and generate a PDF file.
   texFileContent = texFileContent.replace(
     /^.*\n(.*)\n/,
     '%!TEX program = lualatex\n\\documentclass[loesung]{schule-arbeitsblatt}\n'
   )
   writeFile(filePath, texFileContent)
   childProcess.spawnSync(
-    'lualatex', ['--shell-escape', '--jobname', 'Arbeitsblatt_Loesung', filePath],
+    'lualatex', ['--shell-escape', '--jobname', jobName, filePath],
     { cwd }
   )
 
-  // Convert into SVG
-  childProcess.spawnSync(
-    'pdf2svg',
-    ['Arbeitsblatt_Loesung.pdf', 'Arbeitsblatt_Loesung.svg'],
-    { cwd }
+  const process = childProcess.spawnSync(
+    'pdfinfo', [`${jobName}.pdf`],
+    { encoding: 'utf-8', cwd }
   )
 
-  // Remove width="" and height="" attributes
-  let svgFilePath = path.join(cwd, 'Arbeitsblatt_Loesung.svg')
-  let svgContent = readFile(svgFilePath)
-  svgContent = svgContent.replace(/(width|height)=".+?" /g, '')
-  writeFile('Arbeitsblatt_Loesung.svg', svgFilePath)
+  const pageCount = parseInt(process.stdout.match(/Pages:\s+(\d+)/)[1])
 
-  // Write info yaml
-  const titles = new HierarchicalFolderTitles(filePath)
-  const infoYaml = {
-    id: `${titles.id}_AB_Lueckentext`,
-    title: `Arbeitsblatt „${titles.title}“ (Lückentext)`
+  for (let index = 1; index <= pageCount; index++) {
+    let counterSuffix = ''
+    if (pageCount > 1) {
+      counterSuffix = `_${index}`
+    }
+    console.log(`Convert page ${chalk.green(index)}`)
+    const svgFileName = `${jobName}${counterSuffix}.svg`
+    let svgFilePath = path.join(cwd, svgFileName)
+
+    // Convert into SVG
+    childProcess.spawnSync(
+      'pdf2svg',
+      [`${jobName}.pdf`, svgFileName, index],
+      { cwd }
+    )
+
+    // Remove width="" and height="" attributes
+    let svgContent = readFile(svgFilePath)
+    svgContent = svgContent.replace(/(width|height)=".+?" /g, '')
+    writeFile(svgFilePath, svgContent)
+
+    // Write info yaml
+    const titles = new HierarchicalFolderTitles(filePath)
+    const infoYaml = {
+      id: `${titles.id}_AB_Lueckentext${counterSuffix}`,
+      title: `Arbeitsblatt „${titles.title}“ (Lückentext Seite ${index} von ${pageCount})`
+    }
+    writeFile(path.join(cwd, `${svgFileName}.yml`), yamlToTxt(infoYaml))
   }
-  writeFile(path.join(cwd, 'Arbeitsblatt_Loesung.svg.yml'), yamlToTxt(infoYaml))
 }
 
 /**
