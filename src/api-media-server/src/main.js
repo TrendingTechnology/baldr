@@ -215,6 +215,17 @@ function getExtension (filePath) {
   return path.extname(filePath).replace('.', '')
 }
 
+/**
+ * Strip HTML tags from a string.
+ *
+ * @param {String} text - A text containing HTML tags.
+ *
+ * @returns {String}
+ */
+function stripTags (text) {
+  return text.replace(/<[^>]+>/g, '');
+}
+
 /* Media objects **************************************************************/
 
 /**
@@ -750,14 +761,14 @@ class Presentation extends MediaFile {
     }
 
     /**
-     * Value is the same as `meta.title`
+     * The plain text version of `this.meta.title`.
      *
      * @type {String}
      */
-    this.title = this.meta.title
+    this.title = stripTags(this.meta.title)
 
     /**
-     * Title (Subtitle)
+     * The plain text version of `this.meta.title (this.meta.subtitle)`
      *
      * @type {String}
      */
@@ -771,9 +782,15 @@ class Presentation extends MediaFile {
     this.id = this.meta.id
   }
 
+  /**
+   * The plain text version of `this.meta.title (this.meta.subtitle)`
+   *
+   * @returns {String}
+   * @private
+   */
   titleSubtitle_ () {
     if (this.meta.subtitle) {
-      return `${this.title} (${this.meta.subtitle})`
+      return `${this.title} (${stripTags(this.meta.subtitle)})`
     } else {
       return this.title
     }
@@ -795,7 +812,7 @@ function isAsset (fileName) {
 }
 
 /**
- * Checi if the given file is a presentation.
+ * Check if the given file is a presentation.
  *
  * @param {String} fileName
  */
