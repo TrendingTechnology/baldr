@@ -24,23 +24,23 @@
 </template>
 
 <script>
-import PresentationTitle from '@/components/PresentationTitle'
-import OpenInterface from '@/components/OpenInterface'
-import GridHierarchical from './GridHierarchical.vue'
 import DisplayController from './DisplayController.vue'
+import GridHierarchical from './GridHierarchical.vue'
 import ListHierarchical from './ListHierarchical.vue'
+import OpenInterface from '@/components/OpenInterface'
+import PresentationTitle from '@/components/PresentationTitle'
 
 import { createNamespacedHelpers } from 'vuex'
-const { mapGetters } = createNamespacedHelpers('presentation')
+const { mapActions, mapGetters } = createNamespacedHelpers('presentation')
 
 export default {
   name: 'SlidesPreview',
   components: {
-    OpenInterface,
-    GridHierarchical,
-    PresentationTitle,
     DisplayController,
-    ListHierarchical
+    GridHierarchical,
+    ListHierarchical,
+    OpenInterface,
+    PresentationTitle
   },
   mounted: function () {
     this.$styleConfig.set({
@@ -50,13 +50,13 @@ export default {
     this.$shortcuts.addMultiple([
       {
         keys: '+',
-        callback: this.increaseFontSize,
+        callback: this.increasePreviewSize,
         description: 'Folien-Vorschauen vergrößern',
         routeNames: ['slides-preview']
       },
       {
         keys: '-',
-        callback: this.decreaseFontSize,
+        callback: this.decreasePreviewSize,
         description: 'Folien-Vorschauen verkleiner',
         routeNames: ['slides-preview']
       }
@@ -73,14 +73,10 @@ export default {
     'previewSize',
     'previewLayoutCurrent'
   ]),
-  methods: {
-    increaseFontSize () {
-      this.fontSize += 0.1
-    },
-    decreaseFontSize () {
-      this.fontSize -= 0.1
-    }
-  }
+    methods: mapActions([
+    'increasePreviewSize',
+    'decreasePreviewSize'
+  ])
 }
 </script>
 

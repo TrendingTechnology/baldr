@@ -42,23 +42,20 @@ export default {
 
 <style lang="scss" scoped>
   .vc_gird_hierarchical {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding-left: 3em;
+    padding-top: 1em;
+    overflow: hidden;
+
     hr {
       width: 80vw;
       opacity: 0;
     }
 
-    ol {
-      display: flex;
-      flex-direction: row;
-      flex-wrap: wrap;
-      padding-left: 3em;
-      padding-top: 1em;
-      overflow: hidden;
-    }
-
     li {
       list-style: none;
-      position: relative;
       margin: 0.3em;
     }
   }

@@ -1,15 +1,17 @@
 <template>
   <section class="vc_presentation_title">
+    <header>
+      <div v-if="presentation.grade">
+        Jahrgangsstufe
+        <span v-html="presentation.grade"/>
+      </div>
+      <div v-if="presentation.curriculum">
+        <span v-html="presentation.curriculum"/>
+      </div>
+    </header>
+
     <h1 v-html="presentation.title"/>
     <h2 v-if="presentation.subtitle" v-html="presentation.subtitle"/>
-    <p v-if="presentation.grade">
-      <strong>Jahrgangsstufe: </strong>
-      <span v-html="presentation.grade"/>
-    </p>
-    <p v-if="presentation.curriculum">
-      <strong>Lehrplanbezug: </strong>
-      <span v-html="presentation.curriculum"/>
-    </p>
   </section>
 </template>
 
@@ -28,6 +30,12 @@ export default {
 <style lang="scss" scoped>
   .vc_presentation_title {
     font-size: 2vw;
+
+    header {
+      display: flex;
+      width: 100%;
+      justify-content: space-between;
+    }
 
     h1, h2 {
       text-align: center;

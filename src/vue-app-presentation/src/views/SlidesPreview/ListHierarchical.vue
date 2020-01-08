@@ -8,15 +8,12 @@
       :class="{ 'current-slide': slideCurrent.no === slide.no }"
       :style="{ paddingLeft: `${(slide.level - 1) * 3}em` }"
     >
-      <div class="master-info">
-        <material-icon
-          :name="slide.master.icon.name"
-          :color="slide.master.icon.color"
-        />
-        <span class="master-title"> {{ slide.master.title }}</span>
+      <slide-preview :slide="slide"/>
+      <div class="slide-info">
+        <span class="master-title"> {{ slide.master.title }}: </span>
+        <span class="slide-title">{{ slide.title }}</span>
+        <div class="plain-text" v-if="!previewDetail">{{ slide.plainText }}</div>
       </div>
-      <div class="slide-title indent">{{ slide.title }}</div>
-      <div class="plain-text indent" v-if="!previewDetail">{{ slide.plainText }}</div>
     </li>
   </ol>
 </template>
@@ -24,19 +21,17 @@
 <script>
 import { createNamespacedHelpers } from 'vuex'
 const { mapGetters } = createNamespacedHelpers('presentation')
+import SlidePreview from './SlidePreview.vue'
 
 export default {
   name: 'ListHierarchical',
+  components: {
+    SlidePreview
+  },
   props: {
     slides: {
-      type: Object
+      type: Array
     }
-  },
-  mounted: function () {
-    this.$styleConfig.set({
-      centerVertically: false,
-      overflow: false
-    })
   },
   computed: mapGetters([
     'presentation',
@@ -44,31 +39,27 @@ export default {
     'slidesCount',
     'previewDetail'
   ]),
+  methods: {
+    gotToSlide (slideNo) {
+      this.$store.dispatch('presentation/setSlideNoCurrent', slideNo)
+      if (this.$route.name !== 'slides') this.$router.push({ name: 'slides' })
+    }
+  }
 }
 </script>
 
 <style lang="scss" scoped>
   .vc_list_hierarchical {
-    font-size: 1.5vw;
-    box-sizing: border-box;
-    height: 100vh;
-
-    .indent {
-      padding-left: 2.5vw;
-    }
-
-    .master-info {
-      font-size: 1.5em;
-    }
-
-    h1 {
-      font-size: 1.4em;
-    }
-
     li {
+      display: flex;
       cursor: pointer;
       list-style-type: none;
-      padding: 0 0.5em;
+      padding: 0.5em;
+
+      .slide-info {
+        font-size: 1.5em;
+        padding-left: 1em;
+      }
 
       &:hover {
         background-color: scale-color($gray, $lightness: 80%);

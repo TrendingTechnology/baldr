@@ -7,7 +7,6 @@
       v-if="slide.master.icon.showOnSlides"
       :name="slide.master.icon.name"
       :color="slide.master.icon.color"
-      outline="circle"
     />
     <slide-preview-renderer :slide="slide"/>
   </div>
@@ -42,14 +41,17 @@ export default {
     color: $white;
     height: 15em;
     margin: 0em;
+    min-height: 15em;
+    min-width: 20em;
     overflow: hidden;
+    position: relative;
     width: 20em;
 
     .baldr-icon {
-      font-size: 2.5em;
-      left: -0.3em;
+      font-size: 3em;
+      left: 0.1em;
       position: absolute;
-      top: -0.3em;
+      top: 0.1em;
     }
   }
 </style>
