@@ -877,9 +877,9 @@ async function walk (dir, on) {
 }
 
 /**
- *
+ * TODO implement somewhere
  */
-async function update () {
+function gitPull () {
   console.log('Run git pull')
   const gitSettings = {
     cwd: basePath,
@@ -892,7 +892,14 @@ async function update () {
   console.log(`git pull stderr: ${gitPull.stderr.replace(/\n$/, '')}`)
   console.log(`git pull stdout: ${gitPull.stdout.replace(/\n$/, '')}`)
   if (gitPull.status !== 0) throw new Error(`git pull exits with an non-zero status code.`)
+}
 
+/**
+ * Update the media server.
+ *
+ * @returns {Object}
+ */
+async function update () {
   const gitRevParse = childProcess.spawnSync('git', ['rev-parse', 'HEAD'], gitSettings)
   const lastCommitId = gitRevParse.stdout.replace(/\n$/, '')
   console.log(`lastCommitId: ${lastCommitId}`)
