@@ -3,7 +3,7 @@
     <menu-item :to="{ name: 'home' }"/>
     <menu-item :to="{ name: 'open' }"/>
     <menu-item :to="{ name: 'slides' }"/>
-    <menu-item :to="{ name: 'slides-overview' }"/>
+    <menu-item :to="{ name: 'slides-preview' }"/>
 
     <li>Ad-Hoc-Folien
       <ul>

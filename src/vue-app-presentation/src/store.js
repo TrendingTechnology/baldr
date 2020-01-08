@@ -11,11 +11,20 @@ Vue.use(Vuex)
 
 const state = {
   folderTitleTree: null,
+  presentation: {},
+  preview: {
+    size: 1,
+    detail: false,
+    layoutNoCurrent: 0,
+    layouts: {
+      'grid-hierarchical': 'Gitter',
+      'list-hierarchical': 'Liste'
+    }
+  },
   showBlank: true,
   slideNoOld: null,
   slideNoCurrent: null,
-  slides: {},
-  presentation: {}
+  slides: {}
 }
 
 const getters = {
@@ -24,6 +33,26 @@ const getters = {
   },
   presentation: state => {
     return state.presentation
+  },
+  previewSize: state => {
+    return state.preview.size
+  },
+  previewDetail: state => {
+    return state.preview.detail
+  },
+  previewLayoutNoCurrent: state => {
+    return state.preview.layoutNoCurrent
+  },
+  previewLayoutCurrent: (state, getters) => {
+    const layoutKeys = Object.keys(getters.previewLayouts)
+    const layoutKey = layoutKeys[state.preview.layoutNoCurrent]
+    return {
+      id: layoutKey,
+      title: getters.previewLayouts[layoutKey]
+    }
+  },
+  previewLayouts: state => {
+    return state.preview.layouts
   },
   slideNoCurrent: state => {
     return state.slideNoCurrent
@@ -173,10 +202,37 @@ const actions = {
       }
     })
     commit('setFolderTitleTree', response.data)
+  },
+  increasePreviewSize ({ commit, getters }) {
+    commit('previewSize', getters.previewSize + 0.1)
+  },
+  decreasePreviewSize ({ commit, getters }) {
+    commit('previewSize', getters.previewSize - 0.1)
+  },
+  switchPreviewDetail ({ commit, getters }) {
+    commit('previewDetail', !getters.previewDetail)
+  },
+  switchPreviewLayout ({ commit, getters }) {
+    const no = getters.previewLayoutNoCurrent
+    const layoutCount = Object.keys(getters.previewLayouts).length
+    if (layoutCount === no + 1) {
+      commit('previewLayoutNoCurrent', 0)
+    } else {
+      commit('previewLayoutNoCurrent', no + 1)
+    }
   }
 }
 
 const mutations = {
+  previewDetail (state, value) {
+    state.preview.detail = value
+  },
+  previewLayoutNoCurrent (state, value) {
+    state.preview.layoutNoCurrent = value
+  },
+  previewSize (state, value) {
+    state.preview.size = value
+  },
   setFolderTitleTree (state, tree) {
     Vue.set(state, 'folderTitleTree', tree)
   },

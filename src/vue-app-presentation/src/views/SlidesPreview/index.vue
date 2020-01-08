@@ -5,18 +5,30 @@
       main-app-fullscreen
     "
     b-content-theme="default"
-    :style="{ fontSize: fontSize + 'vw' }"
+    :style="{ fontSize: previewSize + 'vw' }"
   >
-    <h1>Folien-Vorschau</h1>
-
-    <slide-list v-if="slides" :slides="presentation.slidesTree"/>
+    <display-controller/>
+    <presentation-title/>
+    <div v-if="slides">
+      <grid-hierarchical
+        v-if="previewLayoutCurrent.id === 'grid-hierarchical'"
+        :slides="presentation.slidesTree"
+      />
+      <list-hierarchical
+        v-if="previewLayoutCurrent.id === 'list-hierarchical'"
+        :slides="presentation.slides"
+      />
+    </div>
     <open-interface v-else/>
   </div>
 </template>
 
 <script>
+import PresentationTitle from '@/components/PresentationTitle'
 import OpenInterface from '@/components/OpenInterface'
-import SlideList from './SlideList.vue'
+import GridHierarchical from './GridHierarchical.vue'
+import DisplayController from './DisplayController.vue'
+import ListHierarchical from './ListHierarchical.vue'
 
 import { createNamespacedHelpers } from 'vuex'
 const { mapGetters } = createNamespacedHelpers('presentation')
@@ -25,12 +37,10 @@ export default {
   name: 'SlidesPreview',
   components: {
     OpenInterface,
-    SlideList
-  },
-  data () {
-    return {
-      fontSize: 0.75
-    }
+    GridHierarchical,
+    PresentationTitle,
+    DisplayController,
+    ListHierarchical
   },
   mounted: function () {
     this.$styleConfig.set({
@@ -59,7 +69,9 @@ export default {
     'presentation',
     'slideCurrent',
     'slides',
-    'slidesCount'
+    'slidesCount',
+    'previewSize',
+    'previewLayoutCurrent'
   ]),
   methods: {
     increaseFontSize () {

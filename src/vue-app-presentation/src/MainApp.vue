@@ -248,9 +248,8 @@ export default {
         ['i', 'media-ids'],
         ['m', 'media-overview'],
         // p: is already taken by p f or p s
-        ['l', 'slides-preview'],
+        ['s', 'slides-preview'],
         ['r', 'rest-api'],
-        ['s', 'slides-overview']
       ]),
       {
         keys: 'ctrl+u',
