@@ -61,6 +61,8 @@ export default {
         routeNames: ['slides-preview']
       }
     ])
+    const elCurrentSlide = document.querySelector('.vc_slide_preview.current-slide')
+    elCurrentSlide.scrollIntoView({ block: 'center' })
   },
   destroyed: function () {
     this.$shortcuts.removeMultiple(['+', '-'])
