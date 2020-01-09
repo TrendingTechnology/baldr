@@ -61,8 +61,11 @@ export default {
         routeNames: ['slides-preview']
       }
     ])
+    // Show current slide in the center of the view.
     const elCurrentSlide = document.querySelector('.vc_slide_preview.current-slide')
-    elCurrentSlide.scrollIntoView({ block: 'center' })
+    if (elCurrentSlide) {
+      elCurrentSlide.scrollIntoView({ block: 'center' })
+    }
   },
   destroyed: function () {
     this.$shortcuts.removeMultiple(['+', '-'])
@@ -85,9 +88,5 @@ export default {
 <style lang="scss" scoped>
   .vc_slides_preview {
     padding: 1vw;
-
-    h1 {
-      font-size: 4vw;
-    }
   }
 </style>

@@ -13,7 +13,7 @@ const state = {
   folderTitleTree: null,
   presentation: {},
   preview: {
-    size: 1,
+    size: 0.6,
     detail: false,
     layoutNoCurrent: 0,
     layouts: {
