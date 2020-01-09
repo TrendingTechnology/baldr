@@ -9,7 +9,7 @@
       :title="`Zur Folie Nr. ${slide.no}`"
       :class="{ 'current-slide': slideCurrent.no === slide.no }"
     >
-      <hr v-if="slide.slides.length && previewHierarchical"/>
+      <hr v-if="slide.slides.length && previewHierarchic"/>
       <slide-preview :slide="slide"/>
       <grid-layout
         v-if="slide.slides.length && previewHierarchical"
@@ -51,7 +51,7 @@ export default {
     overflow: hidden;
 
     hr {
-      width: 80vw;
+      width: 100vw;
       opacity: 0;
     }
 
