@@ -93,7 +93,7 @@ export function markupToHtml (input) {
 }
 
 /**
- * Check if the input is a valid URI. Prefix with `id:` if necassary
+ * Check if the input is a valid URI. Prefix with `id:` if necessary.
  *
  * @param {String} uri -  The URI to validate.
  *
@@ -120,7 +120,7 @@ export function validateUri (uri) {
  *   change.
  * @property {Number} oldStepNo - The previous step number
  * @property {Number} stepNo - The current step number.
- * @property {Boolean} full - Performe a full update
+ * @property {Boolean} full - Perform a full update.
  * @property {Boolean} visiblilty - Set the visibility `element.style.visibility`
  *   instead of the the display state.
  *
@@ -182,7 +182,6 @@ export function wrapWords (text) {
   if (Array.isArray(text)) {
     text = text.join(' ')
   }
-  text = text.replace(/\n+/g, '')
   text = text.replace(/\s+/g, ' ')
   const dom = new DOMParser().parseFromString(text, 'text/html')
   // First a simple implementation of recursive descent,
@@ -203,15 +202,33 @@ export function wrapWords (text) {
     }
   })
 
-  // simple utility functions to avoid a lot of typing:
+  /**
+   * Add a HTML element before the other element. Simple utility functions to
+   * avoid a lot of typing.
+   *
+   * @param {HtmlElement} newElement
+   * @param {HtmlElement} element
+   */
   function insertBefore (newElement, element) {
     element.parentNode.insertBefore(newElement, element)
   }
 
+  /**
+   * Remote a HTML element.
+   *
+   * @param {HtmlElement} element
+   */
   function removeElement (element) {
     element.parentNode.removeChild(element)
   }
 
+  /**
+   * Wrap a text string with `<span class="word">…</span>`
+   *
+   * @param {String} txt
+   *
+   * @returns {HTMLElement}
+   */
   function makeSpan (txt) {
     const span = document.createElement('span')
     span.classList.add('word')
@@ -219,6 +236,13 @@ export function wrapWords (text) {
     return span
   }
 
+  /**
+   * Convert a text string into a text node.
+   *
+   * @param {String} txt
+   *
+   * @returns {TextNode}
+   */
   function makeText (txt) {
     return document.createTextNode(txt)
   }
@@ -226,16 +250,19 @@ export function wrapWords (text) {
   for (let i = 0; i < textNodes.length; i++) {
     const node = textNodes[i]
     const txt = node.nodeValue
-    const words = txt.split(' ')
-
-    // Insert span surrounded words:
-    insertBefore(makeSpan(words[0]), node)
-    for (let j = 1; j < words.length; j++) {
-      insertBefore(makeText(' '), node) // join the words with spaces
-      insertBefore(makeSpan(words[j]), node)
+    // A avoid spaces surrounded by <span class="word"></span>
+    if (txt !== ' ') {
+      const words = txt.split(' ')
+      // Insert span surrounded words:
+      insertBefore(makeSpan(words[0]), node)
+      for (let j = 1; j < words.length; j++) {
+        // Join the words with spaces.
+        insertBefore(makeText(' '), node)
+        insertBefore(makeSpan(words[j]), node)
+      }
+      // Now remove the original text node:
+      removeElement(node)
     }
-    // Now remove the original text node:
-    removeElement(node)
   }
   return dom.body.innerHTML
 }

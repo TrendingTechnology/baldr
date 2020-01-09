@@ -9,7 +9,7 @@
       :title="`Zur Folie Nr. ${slide.no}`"
       :class="{ 'current-slide': slideCurrent.no === slide.no }"
     >
-      <hr v-if="slide.slides.length && previewHierarchic"/>
+      <hr v-if="slide.slides.length && previewHierarchical"/>
       <slide-preview :slide="slide"/>
       <grid-layout
         v-if="slide.slides.length && previewHierarchical"
