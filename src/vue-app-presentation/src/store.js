@@ -15,10 +15,11 @@ const state = {
   preview: {
     size: 0.6,
     detail: false,
+    hierarchical: false,
     layoutNoCurrent: 0,
     layouts: {
-      'grid-hierarchical': 'Gitter',
-      'list-hierarchical': 'Liste'
+      'grid': 'Gitter',
+      'list': 'Liste'
     }
   },
   showBlank: true,
@@ -34,11 +35,17 @@ const getters = {
   presentation: state => {
     return state.presentation
   },
+  preview: state => {
+    return state.preview.size
+  },
   previewSize: state => {
     return state.preview.size
   },
   previewDetail: state => {
     return state.preview.detail
+  },
+  previewHierarchical: state => {
+    return state.preview.hierarchical
   },
   previewLayoutNoCurrent: state => {
     return state.preview.layoutNoCurrent
@@ -212,6 +219,9 @@ const actions = {
   switchPreviewDetail ({ commit, getters }) {
     commit('previewDetail', !getters.previewDetail)
   },
+  switchPreviewHierarchical ({ commit, getters }) {
+    commit('previewHierarchical', !getters.previewHierarchical)
+  },
   switchPreviewLayout ({ commit, getters }) {
     const no = getters.previewLayoutNoCurrent
     const layoutCount = Object.keys(getters.previewLayouts).length
@@ -226,6 +236,9 @@ const actions = {
 const mutations = {
   previewDetail (state, value) {
     state.preview.detail = value
+  },
+  previewHierarchical (state, value) {
+    state.preview.hierarchical = value
   },
   previewLayoutNoCurrent (state, value) {
     state.preview.layoutNoCurrent = value

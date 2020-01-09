@@ -6,7 +6,7 @@
       @click="gotToSlide(slide.no)"
       :title="`Zur Folie Nr. ${slide.no}`"
       :class="{ 'current-slide': slideCurrent.no === slide.no }"
-      :style="{ paddingLeft: `${(slide.level - 1) * 3}em` }"
+      :style="style(slide)"
     >
       <slide-preview :slide="slide"/>
       <div class="slide-info">
@@ -24,7 +24,7 @@ const { mapGetters } = createNamespacedHelpers('presentation')
 import SlidePreview from './SlidePreview.vue'
 
 export default {
-  name: 'ListHierarchical',
+  name: 'ListLayout',
   components: {
     SlidePreview
   },
@@ -37,9 +37,16 @@ export default {
     'presentation',
     'slideCurrent',
     'slidesCount',
-    'previewDetail'
+    'previewDetail',
+    'previewHierarchical'
   ]),
   methods: {
+    style (slide) {
+      if (this.previewHierarchical) {
+        const padding = (slide.level - 1) * 3
+        return { paddingLeft: `${padding}em` }
+      }
+    },
     gotToSlide (slideNo) {
       this.$store.dispatch('presentation/setSlideNoCurrent', slideNo)
       if (this.$route.name !== 'slides') this.$router.push({ name: 'slides' })
@@ -57,7 +64,7 @@ export default {
       padding: 0.5em;
 
       .slide-info {
-        font-size: 2em;
+        font-size: 1.5em;
         padding-left: 1em;
       }
 

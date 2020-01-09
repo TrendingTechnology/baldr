@@ -10,12 +10,18 @@
     <display-controller/>
     <presentation-title/>
     <div v-if="slides">
-      <grid-hierarchical
-        v-if="previewLayoutCurrent.id === 'grid-hierarchical'"
-        :slides="presentation.slidesTree"
-      />
-      <list-hierarchical
-        v-if="previewLayoutCurrent.id === 'list-hierarchical'"
+      <span  v-if="previewLayoutCurrent.id === 'grid'">
+        <grid-layout
+          v-if="previewHierarchical"
+          :slides="presentation.slidesTree"
+        />
+        <grid-layout
+          v-if="!previewHierarchical"
+          :slides="presentation.slides"
+        />
+      </span>
+      <list-layout
+        v-if="previewLayoutCurrent.id === 'list'"
         :slides="presentation.slides"
       />
     </div>
@@ -25,8 +31,8 @@
 
 <script>
 import DisplayController from './DisplayController.vue'
-import GridHierarchical from './GridHierarchical.vue'
-import ListHierarchical from './ListHierarchical.vue'
+import GridLayout from './GridLayout.vue'
+import ListLayout from './ListLayout.vue'
 import OpenInterface from '@/components/OpenInterface'
 import PresentationTitle from '@/components/PresentationTitle'
 
@@ -37,8 +43,8 @@ export default {
   name: 'SlidesPreview',
   components: {
     DisplayController,
-    GridHierarchical,
-    ListHierarchical,
+    GridLayout,
+    ListLayout,
     OpenInterface,
     PresentationTitle
   },
@@ -76,7 +82,8 @@ export default {
     'slides',
     'slidesCount',
     'previewSize',
-    'previewLayoutCurrent'
+    'previewLayoutCurrent',
+    'previewHierarchical'
   ]),
     methods: mapActions([
     'increasePreviewSize',

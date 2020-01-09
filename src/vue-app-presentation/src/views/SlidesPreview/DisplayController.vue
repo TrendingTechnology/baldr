@@ -9,6 +9,11 @@
       <span class="link" v-if="!previewDetail">ausführlich </span>
     </span>
 
+    <span @click="switchPreviewHierarchical">
+      <span class="link" v-if="!previewHierarchical">flach </span>
+      <span class="link" v-if="previewHierarchical">hierarchisch </span>
+    </span>
+
     <span class="link" @click="decreasePreviewSize">- </span>
 
     <span class="link" @click="increasePreviewSize">+ </span>
@@ -23,13 +28,15 @@ export default {
   name: 'DisplayController',
   computed: mapGetters([
     'previewLayoutCurrent',
-    'previewDetail'
+    'previewDetail',
+    'previewHierarchical'
   ]),
   methods: mapActions([
     'increasePreviewSize',
     'decreasePreviewSize',
     'switchPreviewDetail',
-    'switchPreviewLayout'
+    'switchPreviewLayout',
+    'switchPreviewHierarchical'
   ])
 }
 </script>
