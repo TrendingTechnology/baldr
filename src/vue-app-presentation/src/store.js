@@ -125,10 +125,16 @@ const actions = {
     const rawYamlString = response.data
     await dispatch('openPresentation', { rawYamlString, mongoDbObject })
   },
+  /**
+   * Relaod the presentation and switch to the current slide (the same slide no)
+   * again.
+   */
   async reloadPresentation ({ dispatch, getters }) {
+    const no = getters.slideCurrent.no
     const pres = getters.presentation
     if ('meta' in pres && 'id' in pres.meta) {
       await dispatch('openPresentationById', pres.meta.id)
+      dispatch('setSlideNoCurrent', no)
     }
   },
   setSlideNext ({ dispatch, getters }) {

@@ -139,7 +139,6 @@ export const stepSupport = {
    * @param {Array}
    */
   limitElements: function (elements, { stepBegin, stepEnd }) {
-    console.log(stepBegin)
     // Elements returned from document.querySelector are no arrays.
     // Convert to arrays.
     elements = [...elements]
