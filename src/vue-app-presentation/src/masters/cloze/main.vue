@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { displayElementByStepNo, warnSvgWidthHeight } from '@/lib.js'
+import { stepSupport, warnSvgWidthHeight } from '@/lib.js'
 import { createNamespacedHelpers } from 'vuex'
 const { mapGetters } = createNamespacedHelpers('presentation')
 
@@ -15,12 +15,7 @@ export default {
       type: String,
       required: true
     },
-    stepBegin: {
-      type: Number
-    },
-    stepEnd: {
-      type: Number
-    }
+    ...stepSupport.props
   },
   data () {
     return {
@@ -38,12 +33,15 @@ export default {
       this.$refs.clozeWrapper.innerHTML = response.data
       warnSvgWidthHeight()
       this.allClozeGroups = this.collectClozeGroups()
-      this.clozeGroups = this.selectClozeGroups(this.allClozeGroups)
+      this.clozeGroups = stepSupport.limitElements(
+        this.allClozeGroups,
+        this.slideCurrent.renderData.propsMain
+      )
       this.slideCurrent.renderData.stepCount = this.clozeGroups.length + 1
       for (const group of this.allClozeGroups) {
         group.style.display = 'none'
       }
-      const newClozeGroup = displayElementByStepNo({
+      const newClozeGroup = stepSupport.displayElementByNo({
         elements: this.clozeGroups,
         stepNo: this.slideCurrent.renderData.stepNoCurrent
       })
@@ -75,17 +73,6 @@ export default {
       }
       return clozeGElements
     },
-    selectClozeGroups (clozeGroups) {
-      let begin = 0
-      if (this.stepBegin && this.stepBegin > 1) {
-        begin = this.stepBegin - 2
-      }
-      let end = clozeGroups.length - 1
-      if (this.stepEnd && this.stepEnd > 1) {
-        end = this.stepEnd - 2
-      }
-      return clozeGroups.splice(begin, end - begin + 1)
-    }
   },
   mounted () {
     this.loadSvg()

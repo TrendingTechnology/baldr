@@ -129,13 +129,25 @@ class Master {
   }
 
   /**
+   * Must called after `this.store` is set.
+   *
+   * @private
+   */
+  registerVuexModule_ () {
+    if (this.store) {
+      this.store.namespaced = true
+      store.registerModule(this.name, this.store)
+    }
+  }
+
+  /**
    * Import non function properties of the master object of the master.vue
    * components.
    *
-   * @param {object} members - The object from the exported `master` property
-   * object of the `master.vue` files.
+   * @param {object} master - The default exported object from the `main.js`
+   * file.
    */
-  importMembers (members) {
+  importMaster (members) {
     /**
      * The object from the exported `master` property object of the `master.vue`
      * files.
@@ -152,16 +164,8 @@ class Master {
         this[member] = members[member]
       }
     }
-  }
 
-  /**
-   * Must called after `this.store` is set.
-   */
-  registerVuexModule () {
-    if (this.store) {
-      this.store.namespaced = true
-      store.registerModule(this.name, this.store)
-    }
+    this.registerVuexModule_()
   }
 
   /**
@@ -553,8 +557,7 @@ function registerMasters () {
     const masterObject = requireMaster(fileName)
     checkExport(fileName, masterObject)
     const master = new Master(masterName)
-    master.importMembers(masterObject.default)
-    master.registerVuexModule()
+    master.importMaster(masterObject.default)
     masters.add(master)
   })
 

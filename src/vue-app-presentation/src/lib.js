@@ -110,63 +110,109 @@ export function validateUri (uri) {
 }
 
 /**
- * Set the display / visiblilty state on elements. Loop through all elements or
- * perform a minimal update On the first step no elements are displayed.
- * The number of steps is: number of elements + 1.
- * Don’t loop through all elements. Update only the next element.
- *
- * @param {config}
- * @property {Array} elements - A list of HTML elements to display on step number
- *   change.
- * @property {Number} oldStepNo - The previous step number
- * @property {Number} stepNo - The current step number.
- * @property {Boolean} full - Perform a full update.
- * @property {Boolean} visiblilty - Set the visibility `element.style.visibility`
- *   instead of the the display state.
- *
- * @returns {Object} The element that is displayed by the new step number.
+ * Functions and configuration data for masters with step support.
  */
-export function displayElementByStepNo ({ elements, stepNo, oldStepNo, full, visibility }) {
+export const stepSupport = {
+  props: {
+    // stepSelector: {
+    //   default: 'g',
+    // },
+    // stepExclude: {
+    //   type: [Array, Number]
+    // },
+    stepBegin: {
+      type: Number,
+      description: 'Blende ab dieser Number die Schritte ein.'
+    },
+    stepEnd: {
+      type: Number,
+      description: 'Blende bis zu dieser Number die Schritte ein.'
+    }
+  },
 
-  function showElement(element, show) {
-    if (visibility) {
-      if (show) {
-        element.style.visibility = 'visible'
+  /**
+   * Return a subset of HTML elements, which are used as steps.
+   *
+   * @param {Array} elements
+   * @param {Object} options
+   *
+   * @param {Array}
+   */
+  limitElements: function (elements, { stepBegin, stepEnd }) {
+    console.log(stepBegin)
+    // Elements returned from document.querySelector are no arrays.
+    // Convert to arrays.
+    elements = [...elements]
+    let begin = 0
+    if (stepBegin && stepBegin > 1) {
+      begin = stepBegin - 2
+    }
+    let end = elements.length - 1
+    if (stepEnd && stepEnd > 1) {
+      end = stepEnd - 2
+    }
+    return elements.splice(begin, end - begin + 1)
+  },
+
+  /**
+   * Set the display / visiblilty state on elements. Loop through all elements or
+   * perform a minimal update On the first step no elements are displayed.
+   * The number of steps is: number of elements + 1.
+   * Don’t loop through all elements. Update only the next element.
+   *
+   * @param {config}
+   * @property {Array} elements - A list of HTML elements to display on step number
+   *   change.
+   * @property {Number} oldStepNo - The previous step number
+   * @property {Number} stepNo - The current step number.
+   * @property {Boolean} full - Perform a full update.
+   * @property {Boolean} visiblilty - Set the visibility `element.style.visibility`
+   *   instead of the the display state.
+   *
+   * @returns {Object} The element that is displayed by the new step number.
+   */
+  displayElementByNo: function ({ elements, stepNo, oldStepNo, full, visibility }) {
+
+    function showElement(element, show) {
+      if (visibility) {
+        if (show) {
+          element.style.visibility = 'visible'
+        } else {
+          element.style.visibility = 'hidden'
+        }
       } else {
-        element.style.visibility = 'hidden'
+        if (show) {
+          element.style.display = 'block'
+        } else {
+          element.style.display = 'none'
+        }
       }
+    }
+
+    if (!oldStepNo || full || stepNo === 1 || (oldStepNo === 1 && stepNo === elements.length + 1)) {
+      let count = 1
+      for (const element of elements) {
+        showElement(element, stepNo > count)
+        count += 1
+      }
+      if (stepNo === 1) {
+        return elements[0]
+      }
+      // First step: No elements are displayed.
+      // The array index begins with 0, steps with 1.
+      return elements[stepNo - 2]
+    }
+    let element
+    if (stepNo > oldStepNo) {
+      // First step: No elements are displayed.
+      // The array index begins with 0, steps with 1.
+      element = elements[stepNo - 2]
     } else {
-      if (show) {
-        element.style.display = 'block'
-      } else {
-        element.style.display = 'none'
-      }
+      element = elements[stepNo - 1]
     }
+    showElement(element, stepNo > oldStepNo)
+    return element
   }
-
-  if (!oldStepNo || full || stepNo === 1 || (oldStepNo === 1 && stepNo === elements.length + 1)) {
-    let count = 1
-    for (const element of elements) {
-      showElement(element, stepNo > count)
-      count += 1
-    }
-    if (stepNo === 1) {
-      return elements[0]
-    }
-    // First step: No elements are displayed.
-    // The array index begins with 0, steps with 1.
-    return elements[stepNo - 2]
-  }
-  let element
-  if (stepNo > oldStepNo) {
-    // First step: No elements are displayed.
-    // The array index begins with 0, steps with 1.
-    element = elements[stepNo - 2]
-  } else {
-    element = elements[stepNo - 1]
-  }
-  showElement(element, stepNo > oldStepNo)
-  return element
 }
 
 /**

@@ -1,4 +1,4 @@
-import {displayElementByStepNo } from '@/lib.js'
+import { stepSupport } from '@/lib.js'
 
 const example = `
 ---
@@ -45,14 +45,7 @@ export default {
       description: 'Den URI zu einer SVG-Datei, die den Lückentext enthält.',
       mediaFileUri: true
     },
-    stepBegin: {
-      type: Number,
-      description: 'Beginne bei dieser Schrittnumber Lückentextwörter einzublenden.'
-    },
-    stepEnd: {
-      type: Number,
-      description: 'Höre bei dieser Schrittnumber auf Lückentextwörter einzublenden.'
-    }
+    ...stepSupport.props
   },
   icon: {
     name: 'cloze',
@@ -73,7 +66,7 @@ export default {
     return [props.src]
   },
   enterStep ({ oldStepNo, newStepNo }) {
-    const newClozeGroup = displayElementByStepNo({
+    const newClozeGroup = stepSupport.displayElementByNo({
       elements: this.clozeGroups,
       oldStepNo,
       stepNo: newStepNo

@@ -1,5 +1,5 @@
 
-import { displayElementByStepNo, warnSvgWidthHeight } from '@/lib.js'
+import { stepSupport, warnSvgWidthHeight } from '@/lib.js'
 
 const example = `
 ---
@@ -79,7 +79,7 @@ export default {
     this.elGroups = svg.querySelectorAll(this.stepSelector)
     this.elGroups = this.removeElementsFromSteps(this.elGroups, this.stepExclude)
     this.slideCurrent.renderData.stepCount = this.elGroups.length + 1
-    displayElementByStepNo({
+    stepSupport.displayElementByNo({
       elements: this.elGroups,
       stepNo: this.slideCurrent.renderData.stepNoCurrent
     })
@@ -89,7 +89,7 @@ export default {
     if ('shortcutsUnregister' in this) this.shortcutsUnregister(this.elGroups)
   },
   enterStep ({ oldStepNo, newStepNo }) {
-    displayElementByStepNo({
+    stepSupport.displayElementByNo({
       elements: this.elGroups,
       oldStepNo,
       stepNo: newStepNo

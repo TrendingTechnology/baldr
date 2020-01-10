@@ -1,5 +1,5 @@
 import { plainText } from '@bldr/core-browser'
-import { markupToHtml, wrapWords, displayElementByStepNo } from '@/lib.js'
+import { markupToHtml, wrapWords, stepSupport } from '@/lib.js'
 
 const CHARACTERS_ON_SLIDE = 400
 
@@ -335,7 +335,7 @@ export default {
     if (this.stepWords) {
       this.steps = document.querySelectorAll('span.word')
       this.slideCurrent.renderData.stepCount = this.steps.length + 1
-      displayElementByStepNo({
+      stepSupport.displayElementByNo({
         elements: this.steps,
         stepNo: this.slideCurrent.renderData.stepNoCurrent,
         full: true,
@@ -345,7 +345,7 @@ export default {
   },
   enterStep ({ oldStepNo, newStepNo }) {
     const stepNo = newStepNo
-    if (this.stepWords) displayElementByStepNo({
+    if (this.stepWords) stepSupport.displayElementByNo({
       elements: this.steps,
       oldStepNo,
       stepNo,

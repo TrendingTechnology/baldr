@@ -1,11 +1,8 @@
 import { plainText } from '@bldr/core-browser'
-import { markupToHtml, wrapWords, displayElementByStepNo } from '@/lib.js'
-import { createNamespacedHelpers } from 'vuex'
-const { mapGetters } = createNamespacedHelpers('presentation')
+import { markupToHtml, wrapWords, stepSupport } from '@/lib.js'
 
 const placeholder = '…'
 const placeholderTag = `<span class="editor-placeholder">${placeholder}</span>`
-const defaultMarkup = `<p contenteditable>${placeholderTag}</p>`
 const example = `
 ---
 slides:
@@ -157,7 +154,8 @@ export default {
       type: Boolean,
       description: 'Wörtern einblenden',
       default: false
-    }
+    },
+    ...stepSupport.props
   },
   icon: {
     name: 'pencil',
@@ -197,9 +195,15 @@ export default {
   enterSlide () {
     this.onSlideChange()
     if (this.stepWords) {
-      this.steps = document.querySelectorAll('span.word')
+       this.steps = stepSupport.limitElements(
+         document.querySelectorAll('span.word'),
+         {
+           stepBegin: this.stepBegin,
+           stepEnd: this.stepEnd
+         }
+      )
       this.slideCurrent.renderData.stepCount = this.steps.length + 1
-      displayElementByStepNo({
+      stepSupport.displayElementByNo({
         elements: this.steps,
         stepNo: this.slideCurrent.renderData.stepNoCurrent,
         full: true,
@@ -213,7 +217,7 @@ export default {
   },
   enterStep ({ oldStepNo, newStepNo }) {
     const stepNo = newStepNo
-    if (this.stepWords) displayElementByStepNo({
+    if (this.stepWords) stepSupport.displayElementByNo({
       elements: this.steps,
       oldStepNo,
       stepNo,
