@@ -63,6 +63,9 @@ export default {
         return this.folderTitle.hasPraesentation
       }
     },
+    hasChilds () {
+      return this.item && Object.keys(this.item).length > 1
+    },
     childs () {
       if (!this.item) return []
       const keys = Object.keys(this.item).filter(key => key !== '_title').sort()
