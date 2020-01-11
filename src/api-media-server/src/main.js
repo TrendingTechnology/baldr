@@ -856,7 +856,7 @@ function isAsset (fileName) {
  * @param {String} fileName
  */
 function isPresentation (fileName) {
-  if (fileName.indexOf('.baldr.yml') > -1) {
+  if (fileName.indexOf('Praesentation.baldr.yml') > -1) {
     return true
   }
   return false

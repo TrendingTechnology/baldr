@@ -2,7 +2,6 @@
   <li class="vc_presentation_item">
     <presentation-link
       :hasPraesentation="hasPraesentation"
-      :hasChilds="hasChilds"
       :id="id"
       :subtitle="subtitle"
       :title="title"
@@ -58,9 +57,6 @@ export default {
       if (this.folderTitle) {
         return this.folderTitle.folderName.substr(3)
       }
-    },
-    hasChilds () {
-      return this.item && Object.keys(this.item).length > 1
     },
     hasPraesentation () {
       if (this.folderTitle) {

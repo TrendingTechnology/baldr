@@ -27,9 +27,6 @@ export default {
     subtitle: {
       type: String
     },
-    hasChilds: {
-      type: Boolean
-    },
     hasPraesentation: {
       type: Boolean
     },
