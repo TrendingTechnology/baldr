@@ -232,7 +232,7 @@ function stripTags (text) {
  * Hold some data about a folder and its title.
  */
 class FolderTitle {
-  constructor({ title, subtitle, folderName, path }) {
+  constructor({ title, subtitle, folderName, path, hasPraesentation }) {
     /**
      * @type {String}
      */
@@ -249,12 +249,22 @@ class FolderTitle {
      * @type {String}
      */
     if (folderName) this.folderName = folderName
+
     /**
-     * for example `12/10_Interpreten/10_Konzertierende-Musiker`
+     * The relative path of the folder inside the base path, for example
+     * `12/10_Interpreten/10_Konzertierende-Musiker`.
      *
      * @type {String}
      */
     if (path) this.path = path
+
+    /**
+     * True if the folder contains a file with the file name
+     * `Praesentation.baldr.yml`
+     *
+     * @type {Booelan}
+     */
+    if (hasPraesentation) this.hasPraesentation = hasPraesentation
   }
 }
 
@@ -299,6 +309,33 @@ class HierarchicalFolderTitles {
   }
 
   /**
+   * Parse the `title.txt` text file. The first line of this file contains
+   * the title, the second lines contains the subtitle.
+   *
+   * @param {String} filePath - The absolute path of a `title.txt` file.
+   *
+   * @private
+   */
+  readTitleTxt_ (filePath) {
+    const titleRaw = fs.readFileSync(filePath, { encoding: 'utf-8' })
+    const titles = titleRaw.split('\n')
+    const folderTitle = new FolderTitle({})
+    if (titles.length > 0) {
+      folderTitle.title = titles[0]
+    }
+    if (titles.length > 1 && titles[1]) {
+      folderTitle.subtitle = titles[1]
+    }
+    if (fs.existsSync(path.join(path.dirname(filePath), 'Praesentation.baldr.yml'))) {
+      folderTitle.hasPraesentation = true
+    }
+    return folderTitle
+  }
+
+  /**
+   * Read all `title.txt` files. Descend to all parent folders which contain
+   * a `title.txt` file.
+   *
    * @param {String} filePath - The path of the presentation file.
    *
    * @private
@@ -306,26 +343,28 @@ class HierarchicalFolderTitles {
   read_ (filePath) {
     // We need absolute paths. The cli gives us relative paths.
     filePath = path.resolve(filePath)
+    // ['', 'var', 'data', 'baldr', 'media', '12', ..., 'Praesentation.baldr.yml']
     const segments = filePath.split(path.sep)
+    // 10, 11
     const depth = segments.length
+    // 5
     const minDepth = basePath.split(path.sep).length
-    // to build the path property of the FolderTitle class.
+    // To build the path property of the FolderTitle class.
     const folderNames = []
     for (let index = minDepth + 1; index < depth; index++) {
       let folderName = segments[index - 1]
       folderNames.push(folderName)
-      const titleTxt = [...segments.slice(0, index), 'title.txt'].join('/')
+      // [ '', 'var', 'data', 'baldr', 'media', '05' ]
+      const pathSegments = segments.slice(0, index)
+      // /var/data/baldr/media/05/title.txt
+      // /var/data/baldr/media/05/20_Mensch-Zeit/title.txt
+      // /var/data/baldr/media/05/20_Mensch-Zeit/10_Mozart/title.txt
+      // /var/data/baldr/media/05/20_Mensch-Zeit/10_Mozart/20_Biographie-Salzburg-Wien/title.txt
+      const titleTxt = [...pathSegments, 'title.txt'].join(path.sep)
       if (fs.existsSync(titleTxt)) {
-        const titleRaw = fs.readFileSync(titleTxt, { encoding: 'utf-8' })
-        const titles = titleRaw.split('\n')
-        const folderTitle = new FolderTitle({ path: folderNames.join(path.sep) })
-        if (titles.length > 0) {
-          folderTitle.title = titles[0]
-          folderTitle.folderName = folderName
-        }
-        if (titles.length > 1 && titles[1]) {
-          folderTitle.subtitle = titles[1]
-        }
+        const folderTitle = this.readTitleTxt_(titleTxt)
+        folderTitle.path = folderNames.join(path.sep)
+        folderTitle.folderName = folderName
         this.titles_.push(folderTitle)
       }
     }

@@ -1,7 +1,7 @@
 <template>
   <span class="vc_presentation_link" :class="`level-${level}`">
     <span
-      v-if="!hasChilds"
+      v-if="hasPraesentation"
       class="title link"
       @click="openPresentation(id)"
       :title="`ID: ${id}`"
@@ -28,6 +28,9 @@ export default {
       type: String
     },
     hasChilds: {
+      type: Boolean
+    },
+    hasPraesentation: {
       type: Boolean
     },
     level: {
