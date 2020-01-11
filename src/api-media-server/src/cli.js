@@ -18,7 +18,6 @@ const {
   assetTypes,
   deasciify,
   FolderTitleTree,
-  getExtension,
   HierarchicalFolderTitles,
   walk
 } = require('./main.js')
