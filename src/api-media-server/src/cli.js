@@ -779,11 +779,23 @@ function presentationFromTemplate (filePath) {
   fs.writeFileSync(filePath, presentationTemplate)
 }
 
+/**
+ * Create a Praesentation.baldr.yml file and insert all media assets in the
+ * presentation.
+ *
+ * @param {String} filePath - The file path of the new created presentation
+ *   template.
+ */
 async function presentationFromAssets (filePath) {
   const slides = []
   await walk(process.cwd(), {
     asset (relPath) {
       const asset = makeAsset(relPath)
+      if (!asset.id) {
+        console.log(`Asset has no ID: ${chalk.red(relPath)}`)
+        return
+      }
+      console.log(asset)
       let masterName
       let prop
       if (asset.id.indexOf('NB') > -1) {
