@@ -1140,6 +1140,10 @@ async function createMediaElement (mediaFile) {
 
     case 'video':
       mediaElement = new Video(mediaFile.httpUrl)
+      mediaElement.controls = true
+      if (mediaFile.previewHttpUrl) {
+        mediaElement.poster = mediaFile.previewHttpUrl
+      }
       break
 
     case 'image':

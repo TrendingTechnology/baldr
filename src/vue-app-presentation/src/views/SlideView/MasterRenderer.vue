@@ -34,6 +34,7 @@ export default {
           styleInline: this.slideCurrent.style
         }
       }
+      return {}
     },
     masterName () {
       return this.data_.name

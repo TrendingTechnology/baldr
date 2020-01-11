@@ -1,10 +1,10 @@
 <template>
   <div class="vc_video_master">
-    <video
+    <!-- <video
       controls
       :src="httpUrl"
       :poster="previewHttpUrl"
-    />
+    /> -->
   </div>
 </template>
 
@@ -22,7 +22,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   .vc_video_master {
     text-align: center;
 

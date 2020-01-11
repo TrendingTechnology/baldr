@@ -46,6 +46,16 @@ export default {
   resolveMediaUris (props) {
     return [props.src]
   },
+  async enterSlide ({ newProps }) {
+    const sample = this.$store.getters['media/sampleByUri'](newProps.src)
+    const videoWrapper = document.querySelector('.vc_video_master')
+    videoWrapper.appendChild(sample.mediaElement)
+
+    this.$media.player.load(newProps.src)
+    if (newProps.autoplay) {
+      await this.$media.player.start()
+    }
+  },
   collectPropsMain (props) {
     const mediaFile = this.$store.getters['media/mediaFileByUri'](props.src)
     return {

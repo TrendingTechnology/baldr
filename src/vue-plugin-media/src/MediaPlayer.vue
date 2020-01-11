@@ -106,9 +106,10 @@ export default {
       }
       if (this.videoElement) this.videoElement.style.display = 'none'
       if (this.mediaFile.type === 'video') {
-        this.mediaElement.style.display = 'block'
-        this.$refs.videoContainer.appendChild(this.mediaElement)
-        this.videoElement = this.mediaElement
+        // Make a canvas clone see https://stackoverflow.com/a/24532111/10193818
+        //this.mediaElement.style.display = 'block'
+        //this.$refs.videoContainer.appendChild(this.mediaElement)
+        //this.videoElement = this.mediaElement
       }
     }
   },
@@ -122,7 +123,7 @@ export default {
   },
   mounted: function () {
     // Show the media player.
-    this.$shortcuts.add('m s', () => { this.toggle() }, 'Zeige den Medien-Abspieler')
+    this.$shortcuts.add('ctrl+alt+m', () => { this.toggle() }, 'Zeige den Medien-Abspieler')
   }
 }
 </script>
