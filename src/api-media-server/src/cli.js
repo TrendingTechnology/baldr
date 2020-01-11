@@ -90,10 +90,22 @@ function normalizeMetaData (filePath, metaData) {
     const idPrefix = `${presentationId}_${assetTypeAbbreviation}`
     return idPrefix
   }
+
   const idPrefix = generateIdPrefix(filePath)
-  console.log(idPrefix)
-  if (idPrefix && normalized.id.indexOf(idPrefix) === -1) {
-    normalized.id = `${idPrefix}_${normalized.id}`
+  if (idPrefix) {
+    if (normalized.id.indexOf(idPrefix) === -1) {
+      normalized.id = `${idPrefix}_${normalized.id}`
+    }
+
+    // Avoid duplicate idPrefixes by changed prefixes:
+    // instead of:
+    // Piazzolla-Nonino_NB_Piazzolla-Adios-Nonino_NB_Adios-Nonino_melancolico
+    // old prefix: Piazzolla-Adios-Nonino_NB
+    // updated prefix: Piazzolla-Nonino_NB
+    // Preferred result: Piazzolla-Nonino_NB_Adios-Nonino_melancolico
+    if (normalized.id.match(/.*_[A-Z]{2,}_.*/)) {
+      normalized.id = normalized.id.replace(/^.*_[A-Z]{2,}/, idPrefix)
+    }
   }
 
   for (const key in metaData) {
