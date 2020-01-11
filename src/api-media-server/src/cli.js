@@ -65,10 +65,19 @@ function normalizeMetaData (filePath, metaData) {
   // HB_Ausstellung_Gnome -> Ausstellung_HB_Gnome
   normalized.id = normalized.id.replace(/^([A-Z]{2,})_([a-zA-Z0-9-]+)_/, '$2_$1_')
 
+  /**
+   * Generate a ID prefix for media assets, like `Presentation-ID_HB` if the
+   * path of the media file is `10_Presentation-id/HB/example.mp3`.
+   *
+   * @param {String} filePath - The media asset file path.
+   */
   function generateIdPrefix (filePath) {
-    const pathSegments = filePath.split('/')
+    // We need the absolute path
+    filePath = path.resolve(filePath)
+    const pathSegments = filePath.split(path.sep)
     // HB
     const parentDir = pathSegments[pathSegments.length - 2]
+    // Match asset type abbreviations, like AB, HB, NB
     if (parentDir.length !== 2 || !parentDir.match(/[A-Z]{2,}/)) {
       return
     }
@@ -82,6 +91,7 @@ function normalizeMetaData (filePath, metaData) {
     return idPrefix
   }
   const idPrefix = generateIdPrefix(filePath)
+  console.log(idPrefix)
   if (idPrefix && normalized.id.indexOf(idPrefix) === -1) {
     normalized.id = `${idPrefix}_${normalized.id}`
   }
