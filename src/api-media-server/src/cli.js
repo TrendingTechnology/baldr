@@ -136,24 +136,31 @@ function semanticMarkupHtmlToTex (text) {
  * Execute a function on one file or walk trough all files matching a regex
  * in the current working directory or in the given directory path.
  *
- * @param {function} func -
- * @param {Regex} regex -
- * @param {String} filePath -
+ * @param {function} func - A function to call on every file path. The file
+ *   path is a absolute file path.
+ * @param {Regex} regex - A regular expression. Each file path must match
+ *   the regular expression to execute the function. If you specify an other
+ *   type than a regex, the function is called on every file.
+ * @param {String} relPath - The path of a directory or the path of a file.
+ * @param {Object} payload - Additional arguments bundled as a object the
+ *   function is called with.
  */
-function walkDeluxe (func, regex, filePath) {
+function walkDeluxe (func, regex, relPath = null, payload = null) {
   let basePath = process.cwd()
-  if (filePath) {
-    const stat = fs.statSync(filePath)
+  if (relPath) {
+    const stat = fs.statSync(relPath)
     if (!stat.isDirectory()) {
-      func(filePath)
+      func(relPath, payload)
       return
     }
-    basePath = filePath
+    basePath = relPath
   }
   walk(basePath, {
-    everyFile (filePath) {
-      if (filePath.match(regex)) {
-        func(filePath)
+    everyFile (relPath) {
+      if (regex instanceof RegExp && relPath.match(regex)) {
+        func(relPath, payload)
+      } else {
+        funct(relPath, payload)
       }
     }
   })
@@ -834,6 +841,33 @@ commander
   .command('rename').alias('r')
   .description('Rename files, clean file names, remove all whitespaces and special characters.')
   .action(actionRename)
+
+/** rr / rename-regex *********************************************************/
+
+/**
+ * @param {String} filePath - The media file path.
+ *
+ * @returns {String}
+ */
+function renameByRegex (filePath, { pattern, replacement }) {
+  newFilePath = filePath.replace(pattern, replacement)
+  if (filePath !== newFilePath) {
+    console.log(`\nRename:\n  old: ${chalk.yellow(filePath)} \n  new: ${chalk.green(newFilePath)}`)
+    fs.renameSync(filePath, newFilePath)
+  }
+}
+
+/**
+ * Rename files by regex.
+ */
+function actionRenameRegex (pattern, replacement, filePath) {
+  walkDeluxe(renameByRegex, new RegExp('.*'), filePath, { pattern, replacement })
+}
+
+commander
+  .command('rename-regex <pattern> <replacement> [path]').alias('rr')
+  .description('Rename files by regex. see String.prototype.replace()')
+  .action(actionRenameRegex)
 
 /** t / folder-title **********************************************************/
 
