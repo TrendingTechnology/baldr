@@ -157,10 +157,12 @@ function walkDeluxe (func, regex, relPath = null, payload = null) {
   }
   walk(basePath, {
     everyFile (relPath) {
-      if (regex instanceof RegExp && relPath.match(regex)) {
-        func(relPath, payload)
+      if (regex instanceof RegExp) {
+        if (relPath.match(regex)) {
+          func(relPath, payload)
+        }
       } else {
-        funct(relPath, payload)
+        func(relPath, payload)
       }
     }
   })
