@@ -238,7 +238,8 @@ class Player {
           () => { this.fadeOut_(sample.fadeOutSec) },
           sample.fadeOutStartTimeMsec
         )
-      // Always fadeout at the end. Maybe the samples are cut without a fade out.
+      // Always fade out at the end. Maybe the samples are cut without a
+      // fade out.
       } else {
         this.setTimeoutId_ = setTimeout(
           () => { this.fadeOut_(defaultFadeOutSec) },
@@ -268,7 +269,7 @@ class Player {
       const id = setInterval(() => {
         actualVolume += steps
         if (actualVolume <= this.globalVolume) {
-          sample.mediaElement.volume = actualVolume.toFixed(2)
+          sample.volume = actualVolume
         } else {
           clearInterval(id)
           resolve()
@@ -289,7 +290,7 @@ class Player {
     if (!sample) return
     await this.fadeOut_(fadeOutSec)
     this.clearTimerCallbacks_()
-    sample.mediaElement.currentTime = sample.startTimeSec
+    sample.stop()
     this.$store.dispatch('media/setSamplePlaying', null)
   }
 
@@ -348,6 +349,7 @@ class Player {
   fadeOut_ (duration = defaultFadeOutSec) {
     return new Promise((resolve, reject) => {
       const sample = this.$store.getters['media/samplePlaying']
+
       if (!sample) {
         reject(new Error('No playing sample found.'))
       }
@@ -361,9 +363,9 @@ class Player {
       const id = setInterval(() => {
         actualVolume -= steps
         if (actualVolume >= 0) {
-          sample.mediaElement.volume = actualVolume.toFixed(2)
+          sample.volume = actualVolume
         } else {
-          sample.mediaElement.pause()
+          sample.pause()
           clearInterval(id)
           resolve()
         }
@@ -923,6 +925,38 @@ class Sample {
       return this.mediaFile.titleSafe
     } else {
       return `${this.title} (${this.mediaFile.titleSafe})`
+    }
+  }
+
+  /**
+   * Set the volume and simultaneously the opacity of a video element, to be
+   * able to fade out or fade in a video and a audio file.
+   */
+  set volume (value) {
+    this.mediaElement.volume = value.toFixed(2)
+    if (this.mediaFile.assetType === 'video') {
+      this.mediaElement.style.opacity = value.toFixed(2)
+    }
+  }
+
+  /**
+   * Pause the media element and set the video element to opacity 0.
+   */
+  pause () {
+    this.mediaElement.pause()
+    if (this.mediaFile.assetType === 'video') {
+      this.mediaElement.style.opacity = 0
+    }
+  }
+
+  /**
+   * Stop a sample. For videos show poster again by triggerin load()
+   */
+  stop () {
+    this.mediaElement.currentTime = this.startTimeSec
+    if (this.mediaFile.assetType === 'video') {
+      this.mediaElement.load()
+      this.mediaElement.style.opacity = 1
     }
   }
 }
