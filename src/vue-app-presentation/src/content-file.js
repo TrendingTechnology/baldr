@@ -239,6 +239,7 @@ export class MetaData {
  * @see {@link https://stackoverflow.com/a/34725742/10193818 Stackoverflow}
  */
 function compileToCSS (sass) {
+  sass = String(sass)
   let output = sass.replace(/;$/, '')
 	return output.replace(/(\$[a-zA-Z0-9\-]+)/g, function($1, $2) {
     return defaultThemeSassVars[$2]
