@@ -248,7 +248,8 @@ export default {
         ['d', 'documentation'],
         ['e', 'editor'],
         ['h', 'home'],
-        ['i', 'media-ids'],
+        // Take by image quick launcher i 1 etc...
+        //['i', 'media-ids'],
         ['m', 'media-overview'],
         // p: is already taken by p f or p s
         ['s', 'slides-preview'],

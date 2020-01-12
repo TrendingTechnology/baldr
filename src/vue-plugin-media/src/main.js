@@ -1085,6 +1085,15 @@ export class MediaFile {
   }
 
   /**
+   * True if the media file is visible, for example an image or a video file.
+   *
+   * @type {Boolean}
+   */
+  get isVisible () {
+    return ['image', 'video'].includes(this.type)
+  }
+
+  /**
    * All plain text collected from the properties except some special properties.
    *
    * @type {string}
@@ -1447,36 +1456,29 @@ class Resolver {
  */
 class Canvas {
   constructor () {
-    this.canvasElement_ = null
+    this.selectorWrapper_ = '.vc_media_canvas'
+    this.selectorMain_ = '#media-canvas-main'
   }
 
-  setUp_ () {
-    if (!this.canvasElement_) {
-      this.canvasElement_ = document.querySelector('.vc_media_canvas')
-      if (!this.canvasElement_) {
-        throw new Error('Media canvas can not be found. A element with the class .vc_media_canvas is required.')
-      }
-    }
-
+  get elementWrapper_ () {
+    return document.querySelector(this.selectorWrapper_)
   }
 
-  show () {
-    this.setUp_()
-    this.canvasElement_.style.display = 'block'
+  get elementMain_ () {
+    return document.querySelector(this.selectorMain_)
   }
 
   hide () {
-    this.setUp_()
-    this.canvasElement_.style.display = 'none'
+    this.elementWrapper_.style.display = 'none'
+    this.elementMain_.innerHTML = ''
   }
 
-  addMedia (mediaElement) {
-    this.setUp_()
-    this.canvasElement_.appendChild(mediaElement)
-  }
-
-  clear () {
-    this.canvasElement_.innerHTML = ''
+  show (mediaElement) {
+    this.elementWrapper_.style.display = 'block'
+    if (mediaElement) {
+      this.elementMain_.innerHTML = ''
+      this.elementMain_.appendChild(mediaElement)
+    }
   }
 }
 
@@ -1531,6 +1533,9 @@ class Media {
      */
     this.httpRequest = httpRequest
 
+    /**
+     * @type {module:@bldr/vue-plugin-media~Canvas}
+     */
     this.canvas = new Canvas()
 
     this.$shortcuts.addMultiple([
@@ -1631,8 +1636,35 @@ class Media {
       this.$store.dispatch('media/addMediaFile', mediaFile)
       output[mediaFile.uri] = mediaFile
     }
+    this.addShortcutForMediaFiles_()
     this.addShortcutForSamples_()
     return output
+  }
+
+  /**
+   * Add shortcuts for media files. At the momenten only for images. Video
+   * and audio are samples and handled separately.
+   */
+  addShortcutForMediaFiles_ () {
+    const mediaFiles = this.$store.getters['media/mediaFiles']
+    let shortcutNo = 1
+    for (const uri in mediaFiles) {
+      const mediaFile = mediaFiles[uri]
+      if (!mediaFile.shortcut && mediaFile.type === 'image') {
+        mediaFile.shortcut = `i ${shortcutNo}`
+        this.$shortcuts.add(
+          mediaFile.shortcut,
+          () => {
+            this.canvas.hide()
+            this.player.stop()
+            this.canvas.show(mediaFile.mediaElement)
+          },
+          // Play
+          `Zeige Bild „${mediaFile.titleSafe}“`
+        )
+        shortcutNo += 1
+      }
+    }
   }
 
   /**
@@ -1667,8 +1699,13 @@ class Media {
             this.$shortcuts.add(
               sample.shortcut,
               () => {
+                // TODO: Start the same video twice behaves very strange.
+                this.canvas.hide()
                 this.player.load(sample.uri)
                 this.player.start()
+                if (sample.mediaFile.isVisible) {
+                  this.canvas.show(sample.mediaElement)
+                }
               },
               // Play
               `Spiele Ausschnitt „${sample.titleFormated}“`
@@ -1696,8 +1733,9 @@ class Media {
       }
     }
     addShortcutsCustom(samples)
-    addShortcutsByType(samples, 'audio')
-    addShortcutsByType(samples, 'video')
+    for (const assetType of ['audio', 'video']) {
+      addShortcutsByType(samples, assetType)
+    }
   }
 }
 

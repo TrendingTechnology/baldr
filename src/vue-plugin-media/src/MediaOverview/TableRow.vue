@@ -16,17 +16,11 @@
       </router-link>
     </td>
     <td class="shortcut">
-      <div v-if="mediaFile.samples">
-        <div v-if="Object.keys(mediaFile.samples).length === 1">
-          <div v-for="sample in mediaFile.samples" :key="sample.id">
-            {{ sample.shortcut }}
-          </div>
-        </div>
-        <div v-if="Object.keys(mediaFile.samples).length > 1">
-          <div v-for="sample in mediaFile.samples" :key="sample.id">
-            {{ sample.shortcut }} <span class="sample-title">({{ sample.title }})</span>
-          </div>
-        </div>
+      <div v-for="shortcut in shortcuts" :key="shortcut.shortcut">
+        {{ shortcut.shortcut }}
+        <span v-if="shortcut.title" class="shortcut-title">
+          ({{ shortcut.title }})
+        </span>
       </div>
     </td>
     <td>{{ dimension }}</td>
@@ -61,6 +55,17 @@ export default {
         dimension = formatDuration(file.mediaElement.duration)
       }
       return dimension
+    },
+    shortcuts () {
+      if (this.mediaFile.shortcut) {
+        return [{ shortcut: this.mediaFile.shortcut }]
+      }
+      const samples = this.mediaFile.samples
+      if (!samples) return []
+      if (Object.keys(samples).length === 1) {
+        return [{ shortcut: Object.values(samples)[0].shortcut }]
+      }
+      return samples
     }
   },
   methods: {
@@ -91,7 +96,7 @@ export default {
       width: 10vw;
     }
 
-    .sample-title {
+    .shortcut-title {
       font-size: 0.7em;
     }
   }
