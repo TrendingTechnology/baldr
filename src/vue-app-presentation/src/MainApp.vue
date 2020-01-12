@@ -39,11 +39,14 @@
     <main>
       <router-view/>
     </main>
-    <media-player/>
+
     <app-info
       package-name="@bldr/vue-app-presentation"
       :version="version"
     />
+
+    <!-- A fullscreen overlay to display videos or images in fullscreen -->
+    <media-canvas/>
 
     <div id="global-zone">
       <!--

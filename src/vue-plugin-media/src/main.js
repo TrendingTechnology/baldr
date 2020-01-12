@@ -13,9 +13,10 @@ import DynamicSelect from '@bldr/vue-plugin-dynamic-select'
 // Vue components
 import ComponentMediaFile from './MediaFile.vue'
 import ComponentMediaOverview from './MediaOverview/index.vue'
-import ComponentMediaPlayer from './MediaPlayer.vue'
-import ComponentPlayButton from './PlayButton.vue'
-import ComponentPlayLoadIndicator from './PlayLoadIndicator.vue'
+// import ComponentMediaPlayer from './MediaPlayer.vue'
+// import ComponentPlayButton from './PlayButton.vue'
+import ComponentMediaCanvas from './MediaCanvas.vue'
+// import ComponentPlayLoadIndicator from './PlayLoadIndicator.vue'
 
 const restEndpoints = getDefaultRestEndpoints()
 export const httpRequestNg = new HttpRequestNg(restEndpoints, '/api/media')
@@ -1440,6 +1441,46 @@ class Resolver {
 }
 
 /**
+ * Manage (hide and show) the media canvas, a fullscreen area to show
+ * videos or images which are launched with the short cuts `v 1`, `v 2` or
+ * `i 1` etc.
+ */
+class Canvas {
+  constructor () {
+    this.canvasElement_ = null
+  }
+
+  setUp_ () {
+    if (!this.canvasElement_) {
+      this.canvasElement_ = document.querySelector('.vc_media_canvas')
+      if (!this.canvasElement_) {
+        throw new Error('Media canvas can not be found. A element with the class .vc_media_canvas is required.')
+      }
+    }
+
+  }
+
+  show () {
+    this.setUp_()
+    this.canvasElement_.style.display = 'block'
+  }
+
+  hide () {
+    this.setUp_()
+    this.canvasElement_.style.display = 'none'
+  }
+
+  addMedia (mediaElement) {
+    this.setUp_()
+    this.canvasElement_.appendChild(mediaElement)
+  }
+
+  clear () {
+    this.canvasElement_.innerHTML = ''
+  }
+}
+
+/**
  * An instance of this class gets exported as a Vue plugin. Access methods
  * and sub classes using the Vue instance property `$media`:
  *
@@ -1489,6 +1530,8 @@ class Media {
      *  @type {module:@bldr/http-request.HttpRequest}
      */
     this.httpRequest = httpRequest
+
+    this.canvas = new Canvas()
 
     this.$shortcuts.addMultiple([
       {
@@ -1677,9 +1720,10 @@ const Plugin = {
      * @type {module:@bldr/vue-plugin-media~Media}
      */
     Vue.prototype.$media = new Media(router, store, shortcuts)
-    Vue.component('media-player', ComponentMediaPlayer)
-    Vue.component('play-button', ComponentPlayButton)
-    Vue.component('play-load-indicator', ComponentPlayLoadIndicator)
+    // Vue.component('media-player', ComponentMediaPlayer)
+    // Vue.component('play-button', ComponentPlayButton)
+    // Vue.component('play-load-indicator', ComponentPlayLoadIndicator)
+    Vue.component('media-canvas', ComponentMediaCanvas)
   }
 }
 
