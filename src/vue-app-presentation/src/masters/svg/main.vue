@@ -19,7 +19,7 @@ export default {
       required: true
     },
     stepSelector: {
-      default: 'g',
+      default: 'g[inkscape\\:groupmode="layer"]'
     },
     stepExclude: {
       type: [Array, Number]

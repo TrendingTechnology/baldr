@@ -38,7 +38,6 @@ export default {
       mediaFileUri: true
     },
     stepSelector: {
-      default: 'g',
       description: 'Selektor, der Elemente auswählt, die als Schritte eingeblendet werden sollen.'
     },
     stepExclude: {
