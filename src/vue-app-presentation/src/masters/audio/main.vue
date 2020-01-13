@@ -23,6 +23,7 @@
       v-if="artist"
       v-html="artist"
     />
+    <play-button :sample="sample"/>
   </div>
 </template>
 
@@ -31,6 +32,9 @@ export default {
   props: {
     previewHttpUrl: {
       type: String
+    },
+    sample: {
+      type: Object
     },
     title: {
       type: String,
@@ -72,6 +76,14 @@ export default {
       height: 30vh;
       width: 30vh;
       object-fit: cover;
+    }
+
+    .vc_play_button {
+      background-color: white;
+      position: absolute;
+      bottom: 0.5em;
+      left: 0.5em;
+      opacity: 0.3;
     }
   }
 </style>

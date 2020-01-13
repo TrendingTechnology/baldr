@@ -58,3 +58,9 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+  .vc_play_button {
+    line-height: 1em;
+  }
+</style>

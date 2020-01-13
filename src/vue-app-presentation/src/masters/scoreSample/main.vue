@@ -2,6 +2,7 @@
   <div class="vc_score_sample_master">
     <h1 v-if="heading" v-html="heading"/>
     <img :src="scoreHttpUrl"/>
+    <play-button v-if="audioSample" :sample="audioSample"/>
   </div>
 </template>
 
@@ -15,8 +16,8 @@ export default {
       type: String,
       required: true
     },
-    audioHttpUrl: {
-      type: String
+    audioSample: {
+      type: Object
     }
   }
 }
@@ -28,12 +29,13 @@ export default {
     background-color: white;
 
     h1 {
+      background: rgba($yellow, 0.2);
       left: 0;
+      padding: 0.3em 0;
       position: absolute;
       text-align: center;
-      top: 1vw;
+      top: 0.3em;
       width: 100%;
-      background: rgba($yellow, 0.6);
     }
 
     img {
@@ -46,8 +48,8 @@ export default {
 
     .vc_play_button {
       position: absolute;
-      bottom: 5vw;
-      left: 1vw;
+      bottom: 0.5em;
+      left: 0.5em;
       z-index: 1;
     }
   }

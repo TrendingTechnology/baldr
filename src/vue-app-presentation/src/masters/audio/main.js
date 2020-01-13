@@ -143,6 +143,7 @@ export default {
       previewHttpUrl = sample.previewHttpUrl
     }
     return {
+      sample,
       previewHttpUrl,
       artist,
       composer,
