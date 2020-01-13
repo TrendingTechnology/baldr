@@ -4,6 +4,7 @@
     slide-preview-fullscreen
   ">
     <img :src="scoreHttpUrl"/>
+    <slide-preview-play-button v-if="hasAudio"/>
   </div>
 </template>
 
@@ -13,6 +14,9 @@ export default {
     scoreHttpUrl: {
       type: String,
       required: true
+    },
+    hasAudio: {
+      type: Boolean
     }
   }
 }

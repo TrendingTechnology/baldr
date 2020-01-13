@@ -122,20 +122,26 @@ export default {
     }
   },
   collectPropsMain (props) {
-    const audioFile = this.$store.getters['media/mediaFileByUri'](props.src)
+    const sample = this.$store.getters['media/sampleByUri'](props.src)
+    const mediaFile = sample.mediaFile
 
-    const grab = new GrabFromObjects(props, audioFile)
+    const grab = new GrabFromObjects(props, mediaFile)
     const artist = grab.property('artist')
     const composer = grab.property('composer')
-    const title = grab.property('title')
+    let title
+    if (props.title) {
+      title = props.title
+    } else {
+      title = sample.titleFormated
+    }
 
     let previewHttpUrl
-      if (props.cover) {
-        const coverFile = this.$store.getters['media/mediaFileByUri'](props.cover)
-        previewHttpUrl = coverFile.httpUrl
-      } else if ('previewHttpUrl' in audioFile) {
-        previewHttpUrl = audioFile.previewHttpUrl
-      }
+    if (props.cover) {
+      const coverFile = this.$store.getters['media/mediaFileByUri'](props.cover)
+      previewHttpUrl = coverFile.httpUrl
+    } else if ('previewHttpUrl' in sample) {
+      previewHttpUrl = sample.previewHttpUrl
+    }
     return {
       previewHttpUrl,
       artist,

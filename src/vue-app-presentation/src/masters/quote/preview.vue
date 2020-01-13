@@ -2,7 +2,7 @@
   <div class="
     vc_quote_master_preview
     slide-preview-fullscreen
-    slide-preview-valign-center
+    slide-preview-valign-top
   ">
     <p class="text">
       <span class="quotation-mark">»</span>

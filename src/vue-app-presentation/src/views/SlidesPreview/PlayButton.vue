@@ -13,11 +13,12 @@ export default {
 <style lang="scss" scoped>
   .vc_slides_preview_play_button {
     .baldr-icon {
-      position: absolute;
-      left: 1.2em;
-      top: 0.6em;
+      background-color: $gray;
       font-size: 6em;
-      opacity: 0.7;
+      left: 1.2em;
+      opacity: 0.2;
+      position: absolute;
+      top: 0.6em;
     }
   }
 </style>

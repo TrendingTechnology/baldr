@@ -1,8 +1,3 @@
-
-import { createNamespacedHelpers } from 'vuex'
-const mapPresentationGetters = createNamespacedHelpers('presentation').mapGetters
-const mapMediaGetters = createNamespacedHelpers('media').mapGetters
-
 const example = `
 ---
 slides:
@@ -72,9 +67,13 @@ export default {
       audioHttpUrl
     }
   },
-  collectPropsPreview ({ propsMain }) {
-    return {
+  collectPropsPreview ({ props, propsMain }) {
+    const propsPreview = {
       scoreHttpUrl: propsMain.scoreHttpUrl
     }
+    if (props.audio) {
+      propsPreview.hasAudio = true
+    }
+    return propsPreview
   }
 }
