@@ -14,7 +14,7 @@ import DynamicSelect from '@bldr/vue-plugin-dynamic-select'
 import ComponentMediaFile from './MediaFile.vue'
 import ComponentMediaOverview from './MediaOverview/index.vue'
 // import ComponentMediaPlayer from './MediaPlayer.vue'
-// import ComponentPlayButton from './PlayButton.vue'
+import ComponentPlayButton from './PlayButton.vue'
 import ComponentMediaCanvas from './MediaCanvas.vue'
 // import ComponentPlayLoadIndicator from './PlayLoadIndicator.vue'
 
@@ -1759,7 +1759,7 @@ const Plugin = {
      */
     Vue.prototype.$media = new Media(router, store, shortcuts)
     // Vue.component('media-player', ComponentMediaPlayer)
-    // Vue.component('play-button', ComponentPlayButton)
+    Vue.component('play-button', ComponentPlayButton)
     // Vue.component('play-load-indicator', ComponentPlayLoadIndicator)
     Vue.component('media-canvas', ComponentMediaCanvas)
   }
