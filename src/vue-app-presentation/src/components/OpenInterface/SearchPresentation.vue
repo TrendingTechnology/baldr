@@ -46,3 +46,11 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+  .vc_search_presentation {
+    .result {
+      font-size: 0.7em;
+    }
+  }
+</style>
