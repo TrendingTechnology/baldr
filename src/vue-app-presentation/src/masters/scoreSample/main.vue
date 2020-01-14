@@ -47,6 +47,7 @@ export default {
     }
 
     .vc_play_button {
+      font-size: 2em;
       position: absolute;
       bottom: 0.5em;
       left: 0.5em;

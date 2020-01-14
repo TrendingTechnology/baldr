@@ -79,11 +79,9 @@ export default {
     }
 
     .vc_play_button {
-      background-color: white;
       position: absolute;
       bottom: 0.5em;
       left: 0.5em;
-      opacity: 0.3;
     }
   }
 </style>

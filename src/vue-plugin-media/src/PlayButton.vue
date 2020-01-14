@@ -1,5 +1,5 @@
 <template>
-  <div class="vc_play_button">
+  <div class="vc_play_button" :class="status" @click="actByStatus">
     <svg viewBox="0 0 250 250" xmlns="http://www.w3.org/2000/svg">
       <g transform="translate(125,125)">
         <circle r="100" class="circle-base"/>
@@ -9,7 +9,6 @@
       </g>
     </svg>
     <div class="icons">
-
       <plain-icon
         v-if="status === 'starting'"
         name="play-speed"
@@ -18,31 +17,16 @@
       <plain-icon
         v-if="status === 'stopped'"
         name="play"
-        @click.native="start"
+      />
+      <plain-icon
+        v-if="status === 'stoppable'"
+        name="pause"
       />
       <plain-icon
         v-if="status === 'playing'"
         name="play"
         class="baldr-icon-spin"
-        @click.native="$media.player.stop()"
       />
-
-
-      <!-- <plain-icon
-        v-if="started"
-        name="play-speed"
-        class="baldr-icon-spin"
-      />
-      <plain-icon
-        v-if="!playing && !started"
-        name="play"
-        @click.native="start"
-      />
-      <plain-icon
-        v-if="playing"
-        name="pause"
-        @click.native="$media.player.stop()"
-      /> -->
     </div>
   </div>
 </template>
@@ -69,6 +53,7 @@ export default {
       // starting
       // playing
       // stopped
+      // stoppable
       status: 'stopped',
       mediaElement: null
     }
@@ -106,6 +91,13 @@ export default {
       // current time: 6s duration: 60s
       // 6 / 60 = 0.1
       return sampleCurrentTimeSec / sampleDurationSec
+    },
+    actByStatus () {
+      if (!this.mediaElement.paused) {
+        this.$media.player.stop()
+      } else if (this.status === 'stopped') {
+        this.start()
+      }
     }
   },
   mounted () {
@@ -114,6 +106,18 @@ export default {
     // Mount a playing media element.
     if (!this.mediaElement.paused) {
       this.status = 'playing'
+    }
+
+    this.$el.onmouseenter = () => {
+      if (this.status === 'playing') {
+        this.status = 'stoppable'
+      }
+    }
+
+    this.$el.onmouseleave = () => {
+        if (!this.mediaElement.paused) {
+        this.status = 'playing'
+      }
     }
 
     this.mediaElement.ontimeupdate = (event) => {
@@ -140,6 +144,7 @@ export default {
     height: 1em;
     position: relative;
     display: inline-block;
+    color: $gray;
 
     .icons {
       width: 1em;
@@ -156,13 +161,25 @@ export default {
       }
     }
 
+    &.stopped:hover {
+      color: $blue;
+    }
+
+    &:active {
+      color: $green;
+    }
+
+    &.playing {
+      color: $blue
+    }
+
     circle {
       stroke-width: 0.6em;
       fill: none;
     }
 
     .circle-base {
-      stroke: $black;
+      stroke: $blue;
     }
 
     .circle-progress {
