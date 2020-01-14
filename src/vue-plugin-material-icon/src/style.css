@@ -17,7 +17,7 @@
 }
 
 .baldr-icon-spin:before {
-  animation: baldr-icon-spin 2s infinite linear;
+  animation: baldr-icon-spin 4s infinite linear;
 }
 
 @keyframes baldr-icon-spin {
