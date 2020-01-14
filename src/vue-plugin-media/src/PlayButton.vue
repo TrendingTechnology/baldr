@@ -140,7 +140,7 @@ export default {
     height: 1em;
     position: relative;
     display: inline-block;
-s
+
     .icons {
       width: 1em;
       height: 1em;
