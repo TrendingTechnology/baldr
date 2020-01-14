@@ -313,6 +313,7 @@ export function wrapWords (text) {
 }
 
 export async function openPresentation (presentationId) {
+  vue.$media.player.stop()
   vue.$store.dispatch('media/clear')
   await vue.$store.dispatch('presentation/openPresentationById', presentationId)
   if (vue.$route.name !== 'slides-preview') {
