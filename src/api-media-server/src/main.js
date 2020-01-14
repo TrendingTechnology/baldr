@@ -388,9 +388,19 @@ class HierarchicalFolderTitles {
   }
 
   /**
+   * All titles concatenated with ` / ` (Include the first and the last title)
+   * without the subtitles.
+   *
+   *
+   * for example:
+   *
+   * 6. Jahrgangsstufe / Lernbereich 2: Musik - Mensch - Zeit /
+   * Johann Sebastian Bach: Musik als Bekenntnis /
+   * Johann Sebastian Bachs Reise nach Berlin 1747
+   *
    * @returns {string}
    */
-  get all () {
+  get allTitles () {
     return this.titlesArray_.join(' / ')
   }
 
@@ -813,6 +823,21 @@ class Presentation extends MediaFile {
      */
     this.titleSubtitle = this.titleSubtitle_()
 
+  /**
+   * The plain text version of `folderTitles.allTitles
+   * (this.meta.subtitle)`
+   *
+   * For example:
+   *
+   * 6. Jahrgangsstufe / Lernbereich 2: Musik - Mensch - Zeit /
+   * Johann Sebastian Bach: Musik als Bekenntnis /
+   * Johann Sebastian Bachs Reise nach Berlin 1747 (Ricercar a 3)
+   *
+   * @returns {String}
+   * @private
+   */
+    this.allTitlesSubtitle = this.allTitlesSubtitle_ (folderTitles)
+
     /**
      * Value is the same as `meta.id`
      *
@@ -822,7 +847,7 @@ class Presentation extends MediaFile {
   }
 
   /**
-   * The plain text version of `this.meta.title (this.meta.subtitle)`
+   * Generate the plain text version of `this.meta.title (this.meta.subtitle)`
    *
    * @returns {String}
    * @private
@@ -833,6 +858,27 @@ class Presentation extends MediaFile {
     } else {
       return this.title
     }
+  }
+
+  /**
+   * Generate the plain text version of `folderTitles.allTitles
+   * (this.meta.subtitle)`
+   *
+   * For example:
+   *
+   * 6. Jahrgangsstufe / Lernbereich 2: Musik - Mensch - Zeit /
+   * Johann Sebastian Bach: Musik als Bekenntnis /
+   * Johann Sebastian Bachs Reise nach Berlin 1747 (Ricercar a 3)
+   *
+   * @returns {String}
+   * @private
+   */
+  allTitlesSubtitle_ (folderTitles) {
+    let all = folderTitles.allTitles
+    if (this.meta.subtitle) {
+      all = `${all} (${this.meta.subtitle})`
+    }
+    return stripTags(all)
   }
 }
 

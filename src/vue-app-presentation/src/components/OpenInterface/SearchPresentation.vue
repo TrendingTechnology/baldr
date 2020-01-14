@@ -32,7 +32,7 @@ export default {
         params: {
           type: 'presentations',
           method: 'substringSearch',
-          field: 'titleSubtitle',
+          field: 'allTitlesSubtitle',
           search: title,
           result: 'dynamicSelect'
         }

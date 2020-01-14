@@ -68,7 +68,7 @@ export default {
     DynamicSelect.event.$on('dynamicselectfocus', this.focus)
   },
   created () {
-    this.searchDebounced = this.debounced(200, this.search)
+    this.searchDebounced = this.debounced(500, this.search)
   },
   computed: {
     results: function () {
@@ -84,6 +84,7 @@ export default {
         list = this.options
       }
       list = list.slice(0, resultListMaxCount)
+      // Auto select the last and single result.
       if (list.length === 1) {
         setTimeout(() => {
           if (this.$refs.resultList && this.$refs.resultList.children.length === 1) {
