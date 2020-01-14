@@ -45,7 +45,7 @@ export default {
   .vc_display_controller {
     display: flex;
     justify-content: flex-end;
-    font-size: 1.5vw;
+    font-size: 0.9vw;
 
     & > span {
       margin: 0 0.2em;

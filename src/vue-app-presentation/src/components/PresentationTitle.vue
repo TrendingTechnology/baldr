@@ -1,13 +1,10 @@
 <template>
   <section class="vc_presentation_title">
     <header>
-      <div v-if="presentation.grade">
-        Jahrgangsstufe
-        <span v-html="presentation.grade"/>
-      </div>
-      <div v-if="presentation.curriculum">
-        <span v-html="presentation.curriculum"/>
-      </div>
+      <span v-if="presentation.grade">
+        <span v-html="presentation.grade"/>. Jahrgangsstufe /
+      </span>
+      <span v-if="presentation.curriculum" v-html="presentation.curriculum"/>
     </header>
 
     <h1 v-html="presentation.title"/>
@@ -32,9 +29,9 @@ export default {
     font-size: 2vw;
 
     header {
-      display: flex;
       width: 100%;
-      justify-content: space-between;
+      font-size: 0.7em;
+      text-align: center;
     }
 
     h1, h2 {
