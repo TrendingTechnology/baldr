@@ -204,6 +204,7 @@ export const stepSupport = {
    *   elements.
    */
   shortcutsUnregister: function (elements) {
+    if (!elements) return
     for (const element of elements) {
       const shortcut = element.getAttribute('baldr-shortcut')
       vue.$shortcuts.remove(`q ${shortcut}`)
