@@ -117,9 +117,10 @@ export const stepSupport = {
     // stepSelector: {
     //   default: 'g',
     // },
-    // stepExclude: {
-    //   type: [Array, Number]
-    // },
+    stepExclude: {
+      type: [Array, Number],
+      description: 'Schritt-Number der Elemente, die nicht als Schritte eingeblendet werden sollen. (z. B. 1, oder [1, 2, 3])'
+    },
     stepBegin: {
       type: Number,
       description: 'Blende ab dieser Number die Schritte ein.'
@@ -133,7 +134,8 @@ export const stepSupport = {
   /**
    * Return a subset of HTML elements, which are used as steps.
    *
-   * @param {Array} elements
+   * @param {Array} elements - An array of HTML elements or a node list of
+   *   elements.
    * @param {Object} options
    *
    * @param {Array}
@@ -151,6 +153,61 @@ export const stepSupport = {
       end = stepEnd - 2
     }
     return elements.splice(begin, end - begin + 1)
+  },
+
+  /**
+   * Remove some element from the step nodelist. The node list is
+   * converted into a array.
+   *
+   * @param {Array} elements - An array of HTML elements or a node list of
+   *   elements.
+   * @param {Array|Number} exclude - An array of element numbers to exclude
+   *   that means delete from the elements array.
+   *
+   * @returns {Array}
+   */
+  excludeElements: function (elements, exclude) {
+    if (!exclude) return elements
+
+    if (typeof exclude === 'number') {
+      exclude = [exclude]
+    }
+
+    // Sort exclude numbers descending
+    elements = [...elements]
+    exclude.sort((a, b) => { b - a })
+    for (const stepNo of exclude) {
+      elements.splice(stepNo - 1, 1)
+    }
+    return elements
+  },
+
+  /**
+   * TODO: Implement vuex support
+   *
+   * @param {Array} elements - An array of HTML elements or a node list of
+   *   elements.
+   */
+  shortcutsRegister: function (elements) {
+    for (const element of elements) {
+      const shortcut = element.getAttribute('baldr-shortcut')
+      const description = element.getAttribute('inkscape:label')
+      vue.$shortcuts.add(`q ${shortcut}`, () => {
+        element.style.display = 'block'
+      }, `${description} (einblenden in SVG: „${this.svgTitle}“)`)
+    }
+  },
+
+  /**
+   *
+   * @param {Array} elements - An array of HTML elements or a node list of
+   *   elements.
+   */
+  shortcutsUnregister: function (elements) {
+    for (const element of elements) {
+      const shortcut = element.getAttribute('baldr-shortcut')
+      vue.$shortcuts.remove(`q ${shortcut}`)
+    }
   },
 
   /**

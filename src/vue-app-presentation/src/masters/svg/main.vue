@@ -30,43 +30,7 @@ export default {
       elGroups: null
     }
   },
-  computed: mapGetters(['slideCurrent']),
-  methods: {
-    /**
-     * Remove some element from the step nodelist. The node list is
-     * converted into a array.
-     *
-     * @param {Array} exclude - An array of element numbers to exclude
-     *   that means delete from the elements array.
-     *
-     * @returns {Array}
-     */
-    removeElementsFromSteps (elements, exclude) {
-      if (!exclude) return elements
-      // Sort exclude numbers descending
-      elements = [...elements]
-      exclude.sort((a, b) => { b - a })
-      for (const stepNo of exclude) {
-        elements.splice(stepNo - 1, 1)
-      }
-      return elements
-    },
-    shortcutsRegister (elements) {
-      for (const element of elements) {
-        const shortcut = element.getAttribute('baldr-shortcut')
-        const description = element.getAttribute('inkscape:label')
-        this.$shortcuts.add(`q ${shortcut}`, () => {
-          element.style.display = 'block'
-        }, `${description} (einblenden in SVG: „${this.svgTitle}“)`)
-      }
-    },
-    shortcutsUnregister (elements) {
-      for (const element of elements) {
-        const shortcut = element.getAttribute('baldr-shortcut')
-        this.$shortcuts.remove(`q ${shortcut}`)
-      }
-    }
-  }
+  computed: mapGetters(['slideCurrent'])
 }
 </script>
 

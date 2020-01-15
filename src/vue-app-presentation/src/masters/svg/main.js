@@ -28,6 +28,8 @@ slides:
     step_selector: .baldr-group
 `
 
+const stepExclude = stepSupport.props.stepExclude
+
 export default {
   title: 'Bild',
   props: {
@@ -40,10 +42,7 @@ export default {
     stepSelector: {
       description: 'Selektor, der Elemente auswählt, die als Schritte eingeblendet werden sollen.'
     },
-    stepExclude: {
-      type: [Array, Number],
-      description: 'Schritt-Number der Elemente, die nicht als Schritte eingeblendet werden sollen. (z. B. 1, oder [1, 2, 3])'
-    }
+    stepExclude
   },
   icon: {
     name: 'image',
@@ -59,9 +58,6 @@ export default {
     if (typeof props === 'string') {
       props = { src: props }
     }
-    if ('stepExclude' in props && typeof props.stepExclude === 'number') {
-      props.stepExclude = [props.stepExclude]
-    }
     return props
   },
   resolveMediaUris (props) {
@@ -76,16 +72,16 @@ export default {
     svg.innerHTML = response.data
     warnSvgWidthHeight(this.svgPath)
     this.elGroups = svg.querySelectorAll(this.stepSelector)
-    this.elGroups = this.removeElementsFromSteps(this.elGroups, this.stepExclude)
+    this.elGroups = stepSupport.excludeElements(this.elGroups, this.stepExclude)
     this.slideCurrent.renderData.stepCount = this.elGroups.length + 1
     stepSupport.displayElementByNo({
       elements: this.elGroups,
       stepNo: this.slideCurrent.renderData.stepNoCurrent
     })
-    this.shortcutsRegister(this.elGroups)
+    stepSupport.shortcutsRegister(this.elGroups)
   },
   leaveSlide () {
-    if ('shortcutsUnregister' in this) this.shortcutsUnregister(this.elGroups)
+    stepSupport.shortcutsUnregister(this.elGroups)
   },
   enterStep ({ oldStepNo, newStepNo }) {
     stepSupport.displayElementByNo({
