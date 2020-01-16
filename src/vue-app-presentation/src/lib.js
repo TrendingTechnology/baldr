@@ -235,10 +235,19 @@ export const stepSupport = {
    */
   selectSentences: function (selector) {
     const parentElement = document.querySelector(selector)
-    console.log(parentElement)
-    for (const element in parentElement.childNodes) {
-      console.log(element)
+    const sentences = []
+    for (const element of parentElement.children) {
+      if (['UL', 'OL'].includes(element.tagName)) {
+        for (const li of element.children) {
+          if (li.tagName === 'LI') {
+            sentences.push(li)
+          }
+        }
+      } else {
+        sentences.push(element)
+      }
     }
+    return sentences
   },
 
   /**

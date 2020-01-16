@@ -26,6 +26,10 @@ export default {
       type: Boolean,
       default: false
     },
+    stepSentences: {
+      type: Boolean,
+      default: false
+    },
     stepBegin: {
       type: Number,
     },

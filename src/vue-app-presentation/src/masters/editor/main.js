@@ -7,6 +7,18 @@ const example = `
 ---
 slides:
 
+- title: Step sentences
+  editor:
+    step_sentences: true
+    markup: |
+      # heading
+
+      * one
+      * two
+      * three
+
+      lorem ipsum
+
 - title: Step words
   editor:
     step_words: true
@@ -195,8 +207,6 @@ export default {
     } else if (this.stepSentences) {
       steps = stepSupport.selectSentences('.vc_editor_master')
     }
-    console.log(this.stepSentences)
-
     if (steps) {
       this.steps = stepSupport.limitElements(
         steps,
@@ -220,7 +230,7 @@ export default {
   },
   enterStep ({ oldStepNo, newStepNo }) {
     const stepNo = newStepNo
-    if (this.stepWords) stepSupport.displayElementByNo({
+    if (this.stepWords || this.stepSentences) stepSupport.displayElementByNo({
       elements: this.steps,
       oldStepNo,
       stepNo,
