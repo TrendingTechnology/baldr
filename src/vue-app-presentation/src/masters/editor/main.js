@@ -150,11 +150,6 @@ export default {
       markup: true,
       description: 'Text im HTML oder Markdown Format oder natürlich als reiner Text.'
     },
-    stepWords: {
-      type: Boolean,
-      description: 'Wörtern einblenden',
-      default: false
-    },
     ...stepSupport.props
   },
   icon: {
@@ -194,21 +189,29 @@ export default {
   },
   enterSlide () {
     this.onSlideChange()
+    let steps
     if (this.stepWords) {
-       this.steps = stepSupport.limitElements(
-         document.querySelectorAll('span.word'),
-         {
-           stepBegin: this.stepBegin,
-           stepEnd: this.stepEnd
-         }
-      )
-      this.slideCurrent.renderData.stepCount = this.steps.length + 1
-      stepSupport.displayElementByNo({
-        elements: this.steps,
-        stepNo: this.slideCurrent.renderData.stepNoCurrent,
-        full: true,
-        visibility: true
-      })
+      steps = document.querySelectorAll('span.word')
+    } else if (this.stepSentences) {
+      steps = stepSupport.selectSentences('.vc_editor_master')
+    }
+    console.log(this.stepSentences)
+
+    if (steps) {
+      this.steps = stepSupport.limitElements(
+        steps,
+        {
+          stepBegin: this.stepBegin,
+          stepEnd: this.stepEnd
+        }
+     )
+     this.slideCurrent.renderData.stepCount = this.steps.length + 1
+     stepSupport.displayElementByNo({
+       elements: this.steps,
+       stepNo: this.slideCurrent.renderData.stepNoCurrent,
+       full: true,
+       visibility: true
+     })
     }
   },
   beforeLeaveSlide ({ oldProps }) {

@@ -118,6 +118,16 @@ export const stepSupport = {
     // stepSelector: {
     //   default: 'g',
     // },
+    stepWords: {
+      type: Boolean,
+      description: 'Text ausblenden und einzelne Wörtern einblenden',
+      default: false
+    },
+    stepSentences:  {
+      type: Boolean,
+      description: 'Text ausblenden und einzelne Sätze (im übertragenem Sinn) einblenden.',
+      default: false
+    },
     stepExclude: {
       type: [Array, Number],
       description: 'Schritt-Number der Elemente, die nicht als Schritte eingeblendet werden sollen. (z. B. 1, oder [1, 2, 3])'
@@ -213,19 +223,39 @@ export const stepSupport = {
   },
 
   /**
-   * Set the display / visiblilty state on elements. Loop through all elements or
-   * perform a minimal update On the first step no elements are displayed.
-   * The number of steps is: number of elements + 1.
-   * Don’t loop through all elements. Update only the next element.
+   * Select more than a word. The meaning  of "sentences" in the function name
+   * should not be understood literally, but symbolic for a longer text unit.
+   * Select a whole paragraph (`<p>`) or a heading `<h1>` or `<li>` items of
+   * ordered or unordered lists, or a table row.
+   *
+   * @param {String} - A selector for `document.querySelector()` of the parent
+   *   Element, which contains child HTML element to use as steps.
+   *
+   * @return {Array} - An array of HTML elements.
+   */
+  selectSentences: function (selector) {
+    const parentElement = document.querySelector(selector)
+    console.log(parentElement)
+    for (const element in parentElement.childNodes) {
+      console.log(element)
+    }
+  },
+
+  /**
+   * Set the display / visiblilty state on HTML elements. Loop through all
+   * elements or perform a minimal update. On the first step no elements are
+   * displayed. The number of steps is: number of elements + 1.
+   * A minimal update doesn’t loop through all elements, only the visibility
+   * state of the next element is changed.
    *
    * @param {config}
    * @property {Array} elements - A list of HTML elements to display on step number
    *   change.
-   * @property {Number} oldStepNo - The previous step number
+   * @property {Number} oldStepNo - The previous step number.
    * @property {Number} stepNo - The current step number.
    * @property {Boolean} full - Perform a full update.
    * @property {Boolean} visiblilty - Set the visibility `element.style.visibility`
-   *   instead of the the display state.
+   *   instead of the display state.
    *
    * @returns {Object} The element that is displayed by the new step number.
    */
