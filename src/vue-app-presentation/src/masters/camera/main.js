@@ -108,7 +108,8 @@ const state = {
   mediaDevices: [],
   deviceId: '',
   stream: null,
-  cameraNotFound: false
+  cameraNotFound: false,
+  videoElement: null
 }
 
 const getters = {
@@ -135,6 +136,12 @@ const getters = {
   },
   cameraNotFound: state => {
     return state.cameraNotFound
+  },
+  videoElement: state => {
+    return state.videoElement
+  },
+  stream: state => {
+    return state.stream
   }
 }
 
@@ -156,6 +163,9 @@ const mutations = {
   },
   setCameraNotFound (state, cameraNotFound) {
     state.cameraNotFound = cameraNotFound
+  },
+  setVideoElement (state, videoElement) {
+    state.videoElement = videoElement
   }
 }
 

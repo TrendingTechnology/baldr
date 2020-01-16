@@ -9,6 +9,8 @@
       />
     </modal-dialog>
 
+    <div id="video-wrapper"/>
+
     <div v-if="!stream" class="no-stream">
       <plain-icon v-if="!cameraNotFound" name="document-camera"/>
       <plain-icon v-if="cameraNotFound" name="document-camera-off"/>
@@ -32,8 +34,7 @@ export default {
   data () {
     return {
       device: '',
-      stream: null,
-      globalVideoElement: null
+      stream: null
     }
   },
   computed: {
@@ -92,7 +93,7 @@ export default {
       // ELMO
       const label = config.presentation.camera
       for (const device of devices) {
-        if (device.kind === 'videoinput' && device.label.indexOf('label') > -1) {
+        if (device.kind === 'videoinput' && device.label.indexOf(label) > -1) {
           return device.Id
         }
       }
@@ -144,17 +145,32 @@ export default {
      * ```
      */
     async setVideoStream (constraints) {
-      if (this.globalVideoElement.srcObject) {
-        return true
+      const wrapperElement = document.querySelector('.vc_camera_master #video-wrapper')
+      if (wrapperElement.firstChild) {
+        return
       }
+
+      let videoElement = this.$store.getters['camera/videoElement']
+
+      if (videoElement) {
+        videoElement.play()
+        wrapperElement.appendChild(videoElement)
+        return
+      } else {
+        videoElement = document.createElement('video')
+        videoElement.autoplay = true
+      }
+
       if (!constraints) {
         constraints = await this.buildConstraints()
       }
       try {
         const stream = await navigator.mediaDevices.getUserMedia(constraints)
-        this.globalVideoElement.srcObject = stream
+        videoElement.srcObject = stream
         this.stream = stream
+        wrapperElement.appendChild(videoElement)
         this.$store.commit('camera/setStream', stream)
+        this.$store.commit('camera/setVideoElement', videoElement)
         this.$store.dispatch('camera/setMediaDevices')
       } catch (error) {
         console.log(error)
@@ -167,37 +183,10 @@ export default {
           track.stop()
         })
       }
-    },
-    /**
-     * Get the global video element. The elements is created if it
-     * does not exist.
-     *
-     * @returns {HtmlElement}
-     */
-    getGlobalVideoElement () {
-      const idGlobalVideoElement = 'camera-master-video'
-      let globalVideoElement = document.querySelector(`#${idGlobalVideoElement}`)
-      // Is null if not created yet.
-      if (!globalVideoElement) {
-        const globalZone = document.querySelector('#global-zone')
-        globalVideoElement = document.createElement('video')
-        globalVideoElement.autoplay = true
-        globalVideoElement.id = idGlobalVideoElement
-        globalZone.appendChild(globalVideoElement)
-      }
-      return globalVideoElement
-    },
-    showGlobalVideoElement () {
-      this.globalVideoElement.style.display = 'block'
-    },
-    hideGlobalVideoElement () {
-      this.globalVideoElement.style.display = 'none'
-    },
+    }
   },
   async mounted () {
-    this.globalVideoElement = this.getGlobalVideoElement()
     await this.setVideoStream()
-    this.showGlobalVideoElement()
     this.$shortcuts.addMultiple([
       {
         keys: 'c s',
@@ -220,9 +209,6 @@ export default {
         description: 'ELMO auswählen',
       }
     ])
-  },
-  destroyed () {
-    this.hideGlobalVideoElement()
   }
 }
 </script>
@@ -248,6 +234,20 @@ export default {
     .baldr-icon_document-camera,
     .baldr-icon_document-camera-off {
       font-size: 30vw;
+    }
+  }
+</style>
+
+<style lang="scss">
+  .vc_camera_master {
+
+    video {
+      height: 100vh;
+      left: 0;
+      object-fit: contain;
+      position: absolute;
+      top: 0;
+      width: 100vw;
     }
   }
 </style>

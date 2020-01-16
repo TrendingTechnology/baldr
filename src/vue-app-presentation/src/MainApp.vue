@@ -47,15 +47,6 @@
 
     <!-- A fullscreen overlay to display videos or images in fullscreen -->
     <media-canvas/>
-
-    <div id="global-zone">
-      <!--
-        Store elements like the video tag of the document camera or
-        video or image elements launched by shortcuts (v 1, i 1).
-        The elements are created by javascript functions
-        document.createElement('video') and document.appendChild()
-      -->
-    </div>
   </div>
 </template>
 
