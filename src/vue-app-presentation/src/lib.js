@@ -222,6 +222,24 @@ export const stepSupport = {
     }
   },
 
+  selectWords: function () {
+    const wordsRaw = document.querySelectorAll('span.word')
+    const words = []
+    for (const word of wordsRaw) {
+      if (!word.previousSibling) {
+        const parent = word.parentElement
+        if (parent.tagName === 'LI' && !parent.previousSibling) {
+          words.push([parent.parentElement, parent, word])
+        } else {
+          words.push([parent, word])
+        }
+      } else {
+        words.push(word)
+      }
+    }
+    return words
+  },
+
   /**
    * Select more than a word. The meaning  of "sentences" in the function name
    * should not be understood literally, but symbolic for a longer text unit.
@@ -270,19 +288,35 @@ export const stepSupport = {
    */
   displayElementByNo: function ({ elements, stepNo, oldStepNo, full, visibility }) {
 
+    /**
+     *
+     * @param {Mixed} element - One HTML element or a array of HTML elements
+     * @param {Boolean} show
+     */
     function showElement(element, show) {
+      const styleValues = [
+        {
+          visibility: 'hidden',
+          display: 'none'
+        },
+        {
+          visibility: 'visible',
+          display: 'block'
+        }
+      ]
+      let stylePropertyName
       if (visibility) {
-        if (show) {
-          element.style.visibility = 'visible'
-        } else {
-          element.style.visibility = 'hidden'
+        stylePropertyName = 'visibility'
+      } else {
+        stylePropertyName = 'display'
+      }
+      const styleValue = styleValues[Number(show)][stylePropertyName]
+      if (Array.isArray(element)) {
+        for (const subElement of element) {
+          subElement.style[stylePropertyName] = styleValue
         }
       } else {
-        if (show) {
-          element.style.display = 'block'
-        } else {
-          element.style.display = 'none'
-        }
+        element.style[stylePropertyName] = styleValue
       }
     }
 

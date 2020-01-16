@@ -7,6 +7,17 @@ const example = `
 ---
 slides:
 
+- title: Step words
+  editor:
+    step_words: true
+    markup: |
+      # heading 1
+
+      * one two three
+      * one two three
+
+      lorem ipsum
+
 - title: Step sentences
   editor:
     step_sentences: true
@@ -203,7 +214,7 @@ export default {
     this.onSlideChange()
     let steps
     if (this.stepWords) {
-      steps = document.querySelectorAll('span.word')
+      steps = stepSupport.selectWords()
     } else if (this.stepSentences) {
       steps = stepSupport.selectSentences('.vc_editor_master')
     }
