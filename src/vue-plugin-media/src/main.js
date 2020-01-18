@@ -125,6 +125,22 @@ class Player {
     this.globalVolume = 1
   }
 
+  get samplePlaying () {
+    return this.$store.getters['media/samplePlaying']
+  }
+
+  set samplePlaying (sample) {
+    this.$store.dispatch('media/setSamplePlaying', sample)
+  }
+
+  get sampleLoaded () {
+    return this.$store.getters['media/sampleLoaded']
+  }
+
+  set sampleLoaded (sample) {
+    this.$store.commit('media/setSampleLoaded', sample)
+  }
+
   /**
    * Load a sample. Only loaded sample can be played.
    *
@@ -140,7 +156,7 @@ class Player {
       sample = this.$store.getters['media/sampleByUri'](uri)
     }
     if (!sample) throw new Error(`The sample “${uriOrSample}” couldn’t be played!`)
-    this.$store.commit('media/setSampleLoaded', sample)
+    this.sampleLoaded = sample
   }
 
   /**
@@ -148,16 +164,12 @@ class Player {
    * currently playing sample.
    */
   async start () {
-    const sample = this.$store.getters['media/sampleLoaded']
-    if (!sample) throw new Error('First load a sample')
-    const samplePlaying = this.$store.getters['media/samplePlaying']
-    // Start should always start from `sample.startTimeSec`
-    // if (samplePlaying && sample.uri === samplePlaying.uri) {
-    //   return
-    // }
-    if (samplePlaying) await samplePlaying.stop()
-    this.$store.dispatch('media/setSamplePlaying', sample)
-    sample.play(this.globalVolume, sample.startTimeSec)
+    const loaded = this.sampleLoaded
+    if (!loaded) throw new Error('First load a sample')
+    const playing = this.samplePlaying
+    if (playing) await playing.stop()
+    this.samplePlaying = loaded
+    loaded.play(this.globalVolume, loaded.startTimeSec)
   }
 
   /**
@@ -167,37 +179,19 @@ class Player {
    * @param {Number} fadeOutSec - Duration in seconds to fade out the sample.
    */
   async stop (fadeOutSec) {
-    const sample = this.$store.getters['media/samplePlaying']
-    if (!sample) return
-    await sample.stop(fadeOutSec)
-    this.$store.dispatch('media/setSamplePlaying', null)
+    const playing = this.samplePlaying
+    if (!playing) return
+    await playing.stop(fadeOutSec)
+    this.samplePlaying = null
   }
 
   /**
    * Pause a sample at the current position.
    */
   async pause () {
-    const sample = this.$store.getters['media/samplePlaying']
-    if (!sample || !sample.mediaElement) return
-    await sample.pause()
-  }
-
-  /**
-   * Jump to a new time position.
-   *
-   * @param {Number} interval - Time interval in seconds.
-   * @param {String} direction - `forward` or `backward`
-   *
-   * @private
-   */
-  jump_ (interval = 10, direction = 'forward') {
-    const sample = this.$store.getters['media/samplePlaying']
-    if (!sample || !sample.mediaElement) return
-    if (direction === 'backward') {
-      sample.mediaElement.currentTime -= interval
-    } else {
-      sample.mediaElement.currentTime += interval
-    }
+    const playing = this.samplePlaying
+    if (!playing || !playing.mediaElement) return
+    await playing.pause()
   }
 
   /**
@@ -206,7 +200,7 @@ class Player {
    * @param {Number} interval - Time interval in seconds.
    */
   forward (interval = 10) {
-    this.jump_(interval, 'forward')
+    this.samplePlaying.forward(interval)
   }
 
   /**
@@ -215,7 +209,7 @@ class Player {
    * @param {Number} interval - Time interval in seconds.
    */
   backward (interval = 10) {
-    this.jump_(interval, 'backward')
+    this.samplePlaying.backward(interval)
   }
 
   /**
@@ -223,20 +217,12 @@ class Player {
    * start this sample.
    */
   toggle () {
-    const samplePlaying = this.$store.getters['media/samplePlaying']
-    const sampleLoaded = this.$store.getters['media/sampleLoaded']
-
-    if ((!samplePlaying || !samplePlaying.mediaElement) && (sampleLoaded && sampleLoaded.mediaElement)) {
+    const playing = this.samplePlaying
+    if (!playing) {
       this.start()
       return
     }
-
-    if (!samplePlaying || !samplePlaying.mediaElement) return
-    if (samplePlaying.mediaElement.paused) {
-      samplePlaying.play()
-    } else {
-      samplePlaying.pause()
-    }
+    playing.toggle(this.globalVolume)
   }
 }
 
@@ -867,6 +853,52 @@ class Sample {
       this.mediaElement.load()
       this.mediaElement.style.opacity = 1
     }
+  }
+
+  /**
+   * Toggle between `sample.pause()` and `sample.play()`. If a sample is loaded
+   * start this sample.
+   */
+  toggle (targetVolume = 1) {
+    if (this.mediaElement.paused) {
+      this.play(targetVolume)
+    } else {
+      this.pause()
+    }
+  }
+
+  /**
+   * Jump to a new time position.
+   *
+   * @param {Number} interval - Time interval in seconds.
+   * @param {String} direction - `forward` or `backward`
+   *
+   * @private
+   */
+  jump_ (interval = 10, direction = 'forward') {
+    if (direction === 'backward') {
+      this.mediaElement.currentTime -= interval
+    } else {
+      this.mediaElement.currentTime += interval
+    }
+  }
+
+  /**
+   * Jump forwards.
+   *
+   * @param {Number} interval - Time interval in seconds.
+   */
+  forward (interval = 10) {
+    this.jump_(interval, 'forward')
+  }
+
+  /**
+   * Jump backwards.
+   *
+   * @param {Number} interval - Time interval in seconds.
+   */
+  backward (interval = 10) {
+    this.jump_(interval, 'backward')
   }
 
   /**
