@@ -62,6 +62,44 @@ export function formatDuration (duration) {
   return `${minutes}:${seconds}`
 }
 
+class Timers {
+  constructor () {
+    this.ids_ = []
+  }
+}
+
+/**
+ * An array of `setTimeout` IDs
+ *
+ * We have to interval_ the timeouts. A not yet finished playbook with a
+ * duration - stopped to early - cases that the next playback gets stopped
+ * to early.
+ */
+class TimeOut extends Timers {
+
+  set (func, delay) {
+    this.ids_.push(setTimeout(func, parseInt(delay)))
+  }
+
+  clear () {
+    for (const id of this.ids_) {
+      clearTimeout(id)
+    }
+  }
+}
+
+class Interval extends Timers {
+  set (func, delay) {
+    this.ids_.push(setInterval(func, parseInt(delay)))
+  }
+
+  clear () {
+    for (const id of this.ids_) {
+      clearInterval(id)
+    }
+  }
+}
+
 /**
  * A deeply with vuex coupled media player. Only one media file can be
  * played a the same time.
@@ -85,92 +123,6 @@ class Player {
      * @type {Number}
      */
     this.globalVolume = 1
-
-    /**
-     * An array of `setTimeout` IDs
-     *
-     * We have to clear the timeouts. A not yet finished playbook with a
-     * duration - stopped to early - cases that the next playback gets stopped
-     * to early.
-     *
-     * @type {Array}
-     *
-     * @private
-     */
-    this.setTimeoutIds_ = []
-
-    /**
-     * An array of `setInterval` IDs.
-     *
-     *  @type {Array}
-     *
-     * @private
-     */
-    this.setIntervalIds_ = []
-  }
-
-  /**
-   * Store the ID returned by `setTimeout`.
-   *
-   * @param {timeoutId}
-   *
-   * @private
-   */
-  set setTimeoutId_ (timeoutId) {
-    this.setTimeoutIds_.push(timeoutId)
-  }
-
-  /**
-   * Store the ID returned by `setInterval`.
-   *
-   * @param {intervalId}
-   *
-   * @private
-   */
-  set setIntervalId_ (intervalId) {
-    this.setIntervalIds_.push(intervalId)
-  }
-
-  /**
-   * Clear all callbacks registered by `setTimeout`.
-   *
-   * We have to clear the timeout. A not yet finished playbook with a duration
-   * - stopped during playback - cases that the next playback gets stopped to
-   * early.
-   *
-   * @private
-   */
-  clearTimeoutCallbacks_ () {
-    for (const timeoutId of this.setTimeoutIds_) {
-      clearTimeout(timeoutId)
-    }
-    this.setTimeoutIds_ = []
-  }
-
-  /**
-   * Clear all callbacks registered by `setInterval`.
-   *
-   * We have to clear the timeout. A not yet finished playbook with a duration
-   * - stopped during playback - cases that the next playback gets stopped to
-   * early.
-   *
-   * @private
-   */
-  clearIntervallCallbacks_ () {
-    for (const intervalId of this.setIntervalIds_) {
-      clearTimeout(intervalId)
-    }
-    this.setIntervalIds_ = []
-  }
-
-  /**
-   * Clear all timeouts and intervall callbacks.
-   *
-   * @private
-   */
-  clearTimerCallbacks_ () {
-    this.clearIntervallCallbacks_()
-    this.clearTimeoutCallbacks_()
   }
 
   /**
@@ -203,81 +155,9 @@ class Player {
     // if (samplePlaying && sample.uri === samplePlaying.uri) {
     //   return
     // }
-    if (samplePlaying) await this.stop()
+    if (samplePlaying) await samplePlaying.stop()
     this.$store.dispatch('media/setSamplePlaying', sample)
-    this.play(sample.startTimeSec)
-  }
-
-  /**
-   * Play a sample at the current position.
-   *
-   * @param {Number} startTimeSec - Position in the sample from where to play
-   *   the sample
-   */
-  play (startTimeSec) {
-    const sample = this.$store.getters['media/samplePlaying']
-    if (!sample || !sample.mediaElement) return
-
-    let fadeInSec
-    if (startTimeSec) {
-      sample.mediaElement.currentTime = startTimeSec
-    } else if (sample.currentTimeSec) {
-      sample.mediaElement.currentTime = sample.currentTimeSec
-    } else {
-      sample.mediaElement.currentTime = sample.startTimeSec
-      fadeInSec = sample.fadeInSec
-    }
-
-    // To prevent AbortError in Firefox, artefacts when switching through the
-    // audio files.
-    this.setTimeoutId = setTimeout(() => {
-      this.fadeIn_(fadeInSec)
-      sample.mediaElement.play()
-
-      if (sample.durationSec) {
-        this.setTimeoutId_ = setTimeout(
-          () => { this.fadeOut_(sample.fadeOutSec) },
-          sample.fadeOutStartTimeMsec
-        )
-      // Always fade out at the end. Maybe the samples are cut without a
-      // fade out.
-      } else {
-        this.setTimeoutId_ = setTimeout(
-          () => { this.fadeOut_(defaultFadeOutSec) },
-          (sample.mediaElement.duration - sample.startTimeSec - defaultFadeOutSec) * 1000
-        )
-      }
-    }, defaultPlayDelayMsec)
-  }
-
-  /**
-   * @param {Number} duration - in seconds
-   * @private
-   */
-  fadeIn_ (duration = defaultFadeInSec) {
-    return new Promise((resolve, reject) => {
-      const sample = this.$store.getters['media/samplePlaying']
-      if (!sample) {
-        reject(new Error('No playing sample found.'))
-      }
-      let actualVolume = 0
-      sample.mediaElement.volume = 0
-      // Normally 0.01 by volume = 1
-      const steps = this.globalVolume / 100
-      // Interval: every X ms reduce volume by step
-      // in milliseconds: duration * 1000 / 100
-      const stepInterval = duration * 10
-      const id = setInterval(() => {
-        actualVolume += steps
-        if (actualVolume <= this.globalVolume) {
-          sample.volume = actualVolume
-        } else {
-          clearInterval(id)
-          resolve()
-        }
-      }, parseInt(stepInterval))
-      this.setIntervalId_ = id
-    })
+    sample.play(this.globalVolume, sample.startTimeSec)
   }
 
   /**
@@ -289,9 +169,7 @@ class Player {
   async stop (fadeOutSec) {
     const sample = this.$store.getters['media/samplePlaying']
     if (!sample) return
-    await this.fadeOut_(fadeOutSec)
-    this.clearTimerCallbacks_()
-    sample.stop()
+    await sample.stop(fadeOutSec)
     this.$store.dispatch('media/setSamplePlaying', null)
   }
 
@@ -301,10 +179,7 @@ class Player {
   async pause () {
     const sample = this.$store.getters['media/samplePlaying']
     if (!sample || !sample.mediaElement) return
-    await this.fadeOut_()
-    this.clearTimerCallbacks_()
-    sample.currentTimeSec = sample.mediaElement.currentTime
-    sample.currentVolume = sample.mediaElement.volume
+    await sample.pause()
   }
 
   /**
@@ -344,40 +219,8 @@ class Player {
   }
 
   /**
-   * @param {Number} duration - in seconds
-   * @private
-   */
-  fadeOut_ (duration = defaultFadeOutSec) {
-    return new Promise((resolve, reject) => {
-      const sample = this.$store.getters['media/samplePlaying']
-
-      if (!sample) {
-        reject(new Error('No playing sample found.'))
-      }
-      // Number from 0 - 1
-      let actualVolume = sample.mediaElement.volume
-      // Normally 0.01 by volume = 1
-      const steps = actualVolume / 100
-      // Interval: every X ms reduce volume by step
-      // in milliseconds: duration * 1000 / 100
-      const stepInterval = duration * 10
-      const id = setInterval(() => {
-        actualVolume -= steps
-        if (actualVolume >= 0) {
-          sample.volume = actualVolume
-        } else {
-          sample.pause()
-          clearInterval(id)
-          resolve()
-        }
-      }, parseInt(stepInterval))
-      this.setIntervalId_ = id
-    })
-  }
-
-  /**
    * Toggle between `Player.pause()` and `Player.play()`. If a sample is loaded
-   * start the this sample.
+   * start this sample.
    */
   toggle () {
     const samplePlaying = this.$store.getters['media/samplePlaying']
@@ -390,9 +233,9 @@ class Player {
 
     if (!samplePlaying || !samplePlaying.mediaElement) return
     if (samplePlaying.mediaElement.paused) {
-      this.play()
+      samplePlaying.play()
     } else {
-      this.pause()
+      samplePlaying.pause()
     }
   }
 }
@@ -893,6 +736,10 @@ class Sample {
      * @type {String}
      */
     this.shortcutCustom = shortcut
+
+    this.interval_ = new Interval()
+
+    this.timeOut_ = new TimeOut()
   }
 
   /**
@@ -913,6 +760,112 @@ class Sample {
         fadeOutSec = this.fadeOutSec
       }
       return (this.durationSec - fadeOutSec) * 1000
+    }
+  }
+
+  /**
+   * @param {Number} duration - in seconds
+   */
+  fadeIn (targetVolume, duration = defaultFadeInSec) {
+    return new Promise((resolve, reject) => {
+
+      let actualVolume = 0
+      this.mediaElement.volume = 0
+      this.mediaElement.play()
+      // Normally 0.01 by volume = 1
+      const steps = targetVolume / 100
+      // Interval: every X ms reduce volume by step
+      // in milliseconds: duration * 1000 / 100
+      const stepInterval = duration * 10
+      this.interval_.set(() => {
+        actualVolume += steps
+        if (actualVolume <= targetVolume) {
+          this.volume = actualVolume
+        } else {
+          this.interval_.clear()
+          resolve()
+        }
+      }, stepInterval)
+    })
+  }
+
+  /**
+   * Play a sample at the current position.
+   *
+   * @param {Number} startTimeSec - Position in the sample from where to play
+   *   the sample
+   */
+  play (targetVolume, startTimeSec) {
+    let fadeInSec
+    if (startTimeSec) {
+      this.mediaElement.currentTime = startTimeSec
+    } else if (this.currentTimeSec) {
+      this.mediaElement.currentTime = this.currentTimeSec
+    } else {
+      this.mediaElement.currentTime = this.startTimeSec
+      fadeInSec = this.fadeInSec
+    }
+
+    // To prevent AbortError in Firefox, artefacts when switching through the
+    // audio files.
+    this.timeOut_.set(() => {
+      this.fadeIn(targetVolume, fadeInSec)
+
+      if (this.durationSec) {
+        this.timeOut_.set(
+          () => { this.fadeOut(this.fadeOutSec) },
+          this.fadeOutStartTimeMsec
+        )
+      // Always fade out at the end. Maybe the samples are cut without a
+      // fade out.
+      } else {
+        this.timeOut_.set(
+          () => { this.fadeOut(defaultFadeOutSec) },
+          (this.mediaElement.duration - this.startTimeSec - defaultFadeOutSec) * 1000
+        )
+      }
+    }, defaultPlayDelayMsec)
+  }
+
+  /**
+   * @param {Number} duration - in seconds
+   */
+  fadeOut (duration = defaultFadeOutSec) {
+    return new Promise((resolve, reject) => {
+      if (this.mediaElement.paused) resolve()
+      // Number from 0 - 1
+      let actualVolume = this.mediaElement.volume
+      // Normally 0.01 by volume = 1
+      const steps = actualVolume / 100
+      // Interval: every X ms reduce volume by step
+      // in milliseconds: duration * 1000 / 100
+      const stepInterval = duration * 10
+      this.interval_.set(() => {
+        actualVolume -= steps
+        if (actualVolume >= 0) {
+          this.volume = actualVolume
+        } else {
+          this.mediaElement.pause()
+          this.interval_.clear()
+          resolve()
+        }
+      }, stepInterval)
+    })
+  }
+
+  /**
+   * Stop a sample. For videos show poster again by triggerin load()
+   *
+   * @param {Number} fadeOutSec - Duration in seconds to fade out the sample.
+   */
+  async stop (fadeOutSec) {
+    if (this.mediaElement.paused) return
+    await this.fadeOut(fadeOutSec)
+    this.mediaElement.currentTime = this.startTimeSec
+    this.timeOut_.clear()
+    if (this.mediaFile.assetType === 'video') {
+      this.mediaElement.load()
+      this.mediaElement.style.opacity = 1
     }
   }
 
@@ -943,22 +896,13 @@ class Sample {
   /**
    * Pause the media element and set the video element to opacity 0.
    */
-  pause () {
-    this.mediaElement.pause()
+  async pause () {
+    await this.fadeOut()
     if (this.mediaFile.assetType === 'video') {
       this.mediaElement.style.opacity = 0
     }
-  }
-
-  /**
-   * Stop a sample. For videos show poster again by triggerin load()
-   */
-  stop () {
-    this.mediaElement.currentTime = this.startTimeSec
-    if (this.mediaFile.assetType === 'video') {
-      this.mediaElement.load()
-      this.mediaElement.style.opacity = 1
-    }
+    this.currentTimeSec = this.mediaElement.currentTime
+    this.currentVolume = this.mediaElement.volume
   }
 }
 
