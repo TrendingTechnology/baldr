@@ -625,16 +625,23 @@ class Sample {
    */
   constructor (mediaFile, { title, id, startTime, fadeIn, duration, fadeOut, endTime, shortcut }) {
     /**
+     * The parent media file object.
+     *
      * @type {module:@bldr/vue-plugin-media.MediaFile}
      */
     this.mediaFile = mediaFile
 
     /**
+     * The corresponding HTML media element, a object of the
+     * corresponding `<audio/>` or `<video/>` element.
+     *
      * @type {HTMLMediaElement}
      */
     this.mediaElement = null
 
     /**
+     * The title of the sample.
+     *
      * @type {String}
      */
     this.title = title
@@ -642,6 +649,10 @@ class Sample {
     if (!id) throw new Error('A sample needs an id.')
 
     /**
+     * The ID of the sample. The ID is used to build the URI of the sample, for
+     * example `uri#id`: `id:Beethoven#complete` or
+     * `filename:beethoven.jpg#Theme_1`.
+     *
      * @type {String}
      */
     this.id = id
@@ -653,6 +664,10 @@ class Sample {
     this.uri = `${this.mediaFile.uri}#${id}`
 
     /**
+     * The start time in seconds. The sample is played from this start time
+     * using the `mediaElement` of the `mediaFile`. It is the “zero” second
+     * for the sample.
+     *
      * @type {Number}
      */
     this.startTimeSec = this.toSec_(startTime)
@@ -672,17 +687,21 @@ class Sample {
       this.durationSec = this.toSec_(endTime) - this.startTimeSec
     }
 
-    /**
-     * @type {Number}
-     */
     if (fadeIn) {
+      /**
+       * Time in seconds to fade in.
+       *
+       * @type {Number}
+       */
       this.fadeInSec = this.toSec_(fadeIn)
     }
 
-    /**
-     * @type {Number}
-     */
     if (fadeOut) {
+      /**
+       * Time in seconds to fade out.
+       *
+       * @type {Number}
+       */
       this.fadeOutSec = this.toSec_(fadeOut)
     }
 
@@ -729,6 +748,8 @@ class Sample {
   }
 
   /**
+   * Convert strings to numbers, so we can use them as seconds.
+   *
    * @param {String|Number} timeIntervaleString
    *
    * @private
@@ -750,11 +771,19 @@ class Sample {
   }
 
   /**
+   * Fade in. Set the volume to 0 and reach after a time intervale, specified
+   * with `duration` the `targetVolume.`
+   *
+   * @param {Number} targetVolume - End volume value of the fade in process. A
+   *   number from 0 - 1.
    * @param {Number} duration - in seconds
+   *
+   * @async
+   *
+   * @returns {Promise}
    */
   fadeIn (targetVolume, duration = defaultFadeInSec) {
     return new Promise((resolve, reject) => {
-
       let actualVolume = 0
       this.mediaElement.volume = 0
       this.mediaElement.play()
@@ -815,6 +844,10 @@ class Sample {
 
   /**
    * @param {Number} duration - in seconds
+   *
+   * @async
+   *
+   * @returns {Promise}
    */
   fadeOut (duration = defaultFadeOutSec) {
     return new Promise((resolve, reject) => {
@@ -840,7 +873,10 @@ class Sample {
   }
 
   /**
-   * Stop a sample. For videos show poster again by triggerin load()
+   * Stop the playback of a sample and reset the current play position to the
+   * beginning of the sample. If the sample is a video, show the poster
+   * (the preview image) again by triggering the `load()` method of the
+   * corresponding media element.
    *
    * @param {Number} fadeOutSec - Duration in seconds to fade out the sample.
    */
