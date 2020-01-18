@@ -169,7 +169,7 @@ class Player {
     const playing = this.samplePlaying
     if (playing) await playing.stop()
     this.samplePlaying = loaded
-    loaded.play(this.globalVolume, loaded.startTimeSec)
+    loaded.start(this.globalVolume)
   }
 
   /**
@@ -784,7 +784,7 @@ class Sample {
    *
    * @returns {Promise}
    */
-  fadeIn (targetVolume, duration = defaultFadeInSec) {
+  fadeIn (targetVolume = 1, duration = defaultFadeInSec) {
     return new Promise((resolve, reject) => {
       this.triggerCustomEvents_('fadeinbegin')
       let actualVolume = 0
@@ -809,14 +809,28 @@ class Sample {
   }
 
   /**
-   * Play a sample at the current position.
+   * Start and play a sample from the beginning.
    *
+   * @param {Number} targetVolume - End volume value of the fade in process. A
+   *   number from 0 - 1.
+   */
+  start (targetVolume) {
+    this.play(targetVolume, this.startTimeSec)
+  }
+
+  /**
+   * Play a sample from `startTimeSec`.
+   *
+   * @param {Number} targetVolume - End volume value of the fade in process. A
+   *   number from 0 - 1.
    * @param {Number} startTimeSec - Position in the sample from where to play
    *   the sample
    */
   play (targetVolume, startTimeSec) {
     let fadeInSec
-    if (startTimeSec) {
+    // The start() triggers play with this.startTimeSec. “complete” samples
+    // have on this.startTimeSec 0.
+    if (startTimeSec || startTimeSec === 0) {
       this.mediaElement.currentTime = startTimeSec
     } else if (this.currentTimeSec) {
       this.mediaElement.currentTime = this.currentTimeSec
