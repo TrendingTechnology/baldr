@@ -15,6 +15,11 @@
         class="baldr-icon-spin"
       />
       <plain-icon
+        v-if="status === 'fadein'"
+        name="fadeout"
+        class="spin-clockwise"
+      />
+      <plain-icon
         v-if="status === 'stopped'"
         name="play"
       />
@@ -26,6 +31,11 @@
         v-if="status === 'playing'"
         name="play"
         class="baldr-icon-spin"
+      />
+      <plain-icon
+        v-if="status === 'fadeout'"
+        name="fadeout"
+        class="spin-counter-clockwise"
       />
     </div>
   </div>
@@ -51,7 +61,9 @@ export default {
   data () {
     return {
       // starting
+      // fadein
       // playing
+      // fadeout
       // stopped
       // stoppable
       status: 'stopped',
@@ -126,13 +138,21 @@ export default {
       this.setProgress(progress)
     }
 
-    this.mediaElement.onplay = (event) => {
+    this.sample.on('fadeinend', () => {
       this.status = 'playing'
+    })
+
+    this.mediaElement.onplay = (event) => {
+      this.status = 'fadein'
     }
 
     this.mediaElement.onpause = (event) => {
       this.status = 'stopped'
     }
+
+    this.sample.on('fadeoutbegin', () => {
+      this.status = 'fadeout'
+    })
   }
 }
 </script>
@@ -185,6 +205,32 @@ export default {
     .circle-progress {
       stroke: $gray;
       stroke-dasharray: 628.3185307179587;
+    }
+
+    .spin-clockwise {
+      animation: spin-clockwise 3s linear infinite;
+    }
+
+    @keyframes spin-clockwise {
+      0% {
+        transform: rotate(-270deg);
+      }
+      100% {
+        transform: rotate(90deg);
+      }
+    }
+
+    .spin-counter-clockwise {
+      animation: spin-counter-clockwise 3s linear infinite;
+    }
+
+    @keyframes spin-counter-clockwise {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(-360deg);
+      }
     }
   }
 </style>
