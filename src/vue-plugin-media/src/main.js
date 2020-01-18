@@ -745,6 +745,8 @@ class Sample {
     this.interval_ = new Interval()
 
     this.timeOut_ = new TimeOut()
+
+    this.customEventCallbacks_ = {}
   }
 
   /**
@@ -784,6 +786,7 @@ class Sample {
    */
   fadeIn (targetVolume, duration = defaultFadeInSec) {
     return new Promise((resolve, reject) => {
+      this.triggerCustomEvents_('fadeinbegin')
       let actualVolume = 0
       this.mediaElement.volume = 0
       this.mediaElement.play()
@@ -798,6 +801,7 @@ class Sample {
           this.volume = actualVolume
         } else {
           this.interval_.clear()
+          this.triggerCustomEvents_('fadeinend')
           resolve()
         }
       }, stepInterval)
@@ -852,6 +856,7 @@ class Sample {
   fadeOut (duration = defaultFadeOutSec) {
     return new Promise((resolve, reject) => {
       if (this.mediaElement.paused) resolve()
+      this.triggerCustomEvents_('fadeoutbegin')
       // Number from 0 - 1
       let actualVolume = this.mediaElement.volume
       // Normally 0.01 by volume = 1
@@ -866,6 +871,7 @@ class Sample {
         } else {
           this.mediaElement.pause()
           this.interval_.clear()
+          this.triggerCustomEvents_('fadeoutend')
           resolve()
         }
       }, stepInterval)
@@ -971,6 +977,38 @@ class Sample {
     }
     this.currentTimeSec = this.mediaElement.currentTime
     this.currentVolume = this.mediaElement.volume
+  }
+
+  /**
+   * Trigger the custom events.
+   *
+   * @param {String} name - The name of the event. Should be in lowercase, for
+   *   example `fadeoutbegin`.
+   *
+   * @private
+   */
+  triggerCustomEvents_ (name) {
+    if (!(name in this.customEventCallbacks_)) {
+      this.customEventCallbacks_[name] = []
+    }
+    for (const callback of this.customEventCallbacks_[name]) {
+      callback()
+    }
+  }
+
+  /**
+   * Register callbacks for sample specific custom events.
+   *
+   * @param {String} name - The name of the event. Should be in lowercase, for
+   *   example `fadeoutbegin`.
+   * @param {Function} callback - A function which gets called when the
+   *   event is triggered.
+   */
+  on (name, callback) {
+    if (!(name in this.customEventCallbacks_)) {
+      this.customEventCallbacks_[name] = []
+    }
+    this.customEventCallbacks_[name].push(callback)
   }
 }
 
