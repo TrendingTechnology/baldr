@@ -750,6 +750,19 @@ class Sample {
   }
 
   /**
+   * If the sample is the complete media file get the title of the media file.
+   *
+   * @returns {String}
+   */
+  get titleFormated () {
+    if (this.id === 'complete') {
+      return this.mediaFile.titleSafe
+    } else {
+      return `${this.title} (${this.mediaFile.titleSafe})`
+    }
+  }
+
+  /**
    * Convert strings to numbers, so we can use them as seconds.
    *
    * @param {String|Number} timeIntervaleString
@@ -760,7 +773,11 @@ class Sample {
     return Number(timeIntervaleString)
   }
 
-  get fadeOutStartTimeMsec () {
+  /**
+   * TODO: make this dynamic, collect with current time in mind.
+   * @private
+   */
+  get fadeOutStartTimeMsec_ () {
     if (this.durationSec) {
       let fadeOutSec
       if (!this.fadeOutSec) {
@@ -769,6 +786,17 @@ class Sample {
         fadeOutSec = this.fadeOutSec
       }
       return (this.durationSec - fadeOutSec) * 1000
+    }
+  }
+
+  /**
+   * Set the volume and simultaneously the opacity of a video element, to be
+   * able to fade out or fade in a video and a audio file.
+   */
+  set volume (value) {
+    this.mediaElement.volume = value.toFixed(2)
+    if (this.mediaFile.assetType === 'video') {
+      this.mediaElement.style.opacity = value.toFixed(2)
     }
   }
 
@@ -847,7 +875,7 @@ class Sample {
       if (this.durationSec) {
         this.timeOut_.set(
           () => { this.fadeOut(this.fadeOutSec) },
-          this.fadeOutStartTimeMsec
+          this.fadeOutStartTimeMsec_
         )
       // Always fade out at the end. Maybe the samples are cut without a
       // fade out.
@@ -955,30 +983,6 @@ class Sample {
    */
   backward (interval = 10) {
     this.jump_(interval, 'backward')
-  }
-
-  /**
-   * If the sample is the complete media file get the title of the media file.
-   *
-   * @returns {String}
-   */
-  get titleFormated () {
-    if (this.id === 'complete') {
-      return this.mediaFile.titleSafe
-    } else {
-      return `${this.title} (${this.mediaFile.titleSafe})`
-    }
-  }
-
-  /**
-   * Set the volume and simultaneously the opacity of a video element, to be
-   * able to fade out or fade in a video and a audio file.
-   */
-  set volume (value) {
-    this.mediaElement.volume = value.toFixed(2)
-    if (this.mediaFile.assetType === 'video') {
-      this.mediaElement.style.opacity = value.toFixed(2)
-    }
   }
 
   /**
