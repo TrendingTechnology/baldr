@@ -1,5 +1,8 @@
 <template>
-  <div class="vc_video_master_preview">
+  <div class="
+    vc_video_master_preview
+    slide-preview-fullscreen
+  ">
     <img
       v-if="previewHttpUrl"
       :src="previewHttpUrl"
