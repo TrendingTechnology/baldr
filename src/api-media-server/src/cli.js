@@ -282,7 +282,7 @@ function actionAudacity (filePath) {
   // Text mark maybe have no description. We use a counter instead
   let counter = 1
   for (const line of lines) {
-    const match = line.match(/([\d\.]+)\t([\d\.]+)\t(.?)/) // eslint-disable-line
+    const match = line.match(/([\d\.]+)\t([\d\.]+)\t(.*)/) // eslint-disable-line
     if (match) {
       const startTime = Number(match[1])
       let endTime = Number(match[2])
@@ -292,6 +292,7 @@ function actionAudacity (filePath) {
       } else {
         title = match[3]
       }
+      title = title.trim()
       const id = title.toLowerCase()
 
       if (startTime === endTime) {
