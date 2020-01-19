@@ -669,7 +669,7 @@ class CustomEvents {
  *                  currentTimeSec
  *                  |
  *  fadeIn          |        fadeOut
- *         /|-------+------|\           <- currentVolume
+ *         /|-------+------|\           <- mediaElementCurrentVolume_
  *      /   |       |      |   \
  *   /      |       |      |     \
  * #|#######|#######|######|#####|#### <- mediaElement
@@ -752,47 +752,53 @@ class Sample {
     }
 
     /**
+     * Use the getter functions `sample.durationSec`.
+     * @private
      * @type {Number}
      */
-    this.durationSec = null
+    this.durationSec_ = null
     duration = this.toSec_(duration)
     if (duration) {
-      this.durationSec = duration
+      this.durationSec_ = duration
     } else if (endTime) {
-      this.durationSec = this.toSec_(endTime) - this.startTimeSec
+      this.durationSec_ = this.toSec_(endTime) - this.startTimeSec
     }
 
     if (fadeIn) {
       /**
-       * Time in seconds to fade in.
-       *
+       * Use the getter function `sample.fadeInSec`
+       * @private
        * @type {Number}
        */
-      this.fadeInSec = this.toSec_(fadeIn)
+      this.fadeInSec_ = this.toSec_(fadeIn)
     }
 
     if (fadeOut) {
       /**
-       * Time in seconds to fade out.
-       *
+       * Use the getter function `sample.fadeOutSec`
+       * @private
        * @type {Number}
        */
-      this.fadeOutSec = this.toSec_(fadeOut)
+      this.fadeOutSec_ = this.toSec_(fadeOut)
     }
 
     /**
-     * The current volume gets stored when the sample is paused.
+     * The current volume of the parent media Element. This value gets stored
+     * when the sample is paused. It is needed to restore the volume.
      *
+     * @private
      * @type {Number}
      */
-    this.currentVolume = null
+    this.mediaElementCurrentVolume_ = null
 
     /**
-     * The current time gets stored when the sample is paused.
+     * The current time of the parent media Element. This value gets stored
+     * when the sample is paused.
      *
+     * @private
      * @type {Number}
      */
-    this.currentTimeSec = null
+    this.mediaElementCurrentTimeSec_ = null
 
     /**
      * The actual shortcut. If `shortcutCustom` is set, it is the same as this
@@ -860,34 +866,71 @@ class Sample {
   }
 
   /**
-   * TODO: make this dynamic, collect with current time in mind.
-   * @private
+   * The current time of the sample. It starts from zero.
+   *
+   * @type {Number}
    */
-  get fadeOutStartTimeMsec_ () {
-    if (this.durationSec) {
-      let fadeOutSec
-      if (!this.fadeOutSec) {
-        fadeOutSec = defaultFadeOutSec
-      } else {
-        fadeOutSec = this.fadeOutSec
-      }
-      return (this.durationSec - fadeOutSec) * 1000
+  get currentTimeSec () {
+    return this.mediaElement.currentTime - this.startTimeSec
+  }
+
+  /**
+   * Time in seconds to fade in.
+   *
+   * @type {Number}
+   */
+  get fadeInSec () {
+    if (!this.fadeInSec_) {
+      return defaultFadeInSec
+    } else {
+      return this.fadeInSec_
     }
   }
 
   /**
-   * The duration of the sample in seconds. If the duration is set on the
-   * sample, it is the same as `sample.durationSec`.
+   * Time in seconds to fade out.
    *
    * @type {Number}
    */
-  get duration () {
-    if (!this.durationSec) {
+  get fadeOutSec () {
+    if (!this.fadeOutSec_) {
+      return defaultFadeOutSec
+    } else {
+      return this.fadeOutSec_
+    }
+  }
+
+  /**
+   * In how many milli seconds we have to start a fade out process.
+   *
+   * @private
+   */
+  get fadeOutStartTimeMsec_ () {
+    return (this.durationRemainingSec - this.fadeOutSec) * 1000
+  }
+
+  /**
+   * The duration of the sample in seconds. If the duration is set on the
+   * sample, it is the same as `sample.durationSec_`.
+   *
+   * @type {Number}
+   */
+  get durationSec () {
+    if (!this.durationSec_) {
       // Samples without duration play until the end fo the media file.
       return this.mediaElement.duration - this.startTimeSec
     } else {
-      return this.durationSec
+      return this.durationSec_
     }
+  }
+
+  /**
+   * The remaining duration of the sample in seconds.
+   *
+   * @type {Number}
+   */
+  get durationRemainingSec () {
+    return this.durationSec - this.currentTimeSec
   }
 
   /**
@@ -897,11 +940,10 @@ class Sample {
    * @type {Number}
    */
   get progress () {
-    const currentTimeSec = this.mediaElement.currentTime - this.startTimeSec
     // for example:
     // current time: 6s duration: 60s
     // 6 / 60 = 0.1
-    return currentTimeSec / this.duration
+    return this.currentTimeSec / this.durationSec
   }
 
   /**
@@ -929,6 +971,9 @@ class Sample {
    */
   fadeIn (targetVolume = 1, duration = defaultFadeInSec) {
     return new Promise((resolve, reject) => {
+      // Fade in can triggered when a fade out process is started and
+      // not yet finished.
+      this.interval_.clear()
       this.events.trigger('fadeinbegin')
       let actualVolume = 0
       this.mediaElement.volume = 0
@@ -970,36 +1015,27 @@ class Sample {
    *   the sample
    */
   play (targetVolume, startTimeSec) {
-    let fadeInSec
     // The start() triggers play with this.startTimeSec. “complete” samples
     // have on this.startTimeSec 0.
     if (startTimeSec || startTimeSec === 0) {
       this.mediaElement.currentTime = startTimeSec
-    } else if (this.currentTimeSec) {
-      this.mediaElement.currentTime = this.currentTimeSec
+    } else if (this.mediaElementCurrentTimeSec_) {
+      this.mediaElement.currentTime = this.mediaElementCurrentTimeSec_
     } else {
       this.mediaElement.currentTime = this.startTimeSec
-      fadeInSec = this.fadeInSec
     }
 
     // To prevent AbortError in Firefox, artefacts when switching through the
     // audio files.
     this.timeOut_.set(() => {
-      this.fadeIn(targetVolume, fadeInSec)
+      this.fadeIn(targetVolume, this.fadeInSec)
 
-      if (this.durationSec) {
-        this.timeOut_.set(
-          () => { this.fadeOut(this.fadeOutSec) },
-          this.fadeOutStartTimeMsec_
-        )
       // Always fade out at the end. Maybe the samples are cut without a
       // fade out.
-      } else {
-        this.timeOut_.set(
-          () => { this.fadeOut(defaultFadeOutSec) },
-          (this.mediaElement.duration - this.startTimeSec - defaultFadeOutSec) * 1000
-        )
-      }
+      this.timeOut_.set(
+        () => { this.fadeOut(this.fadeOutSec) },
+        this.fadeOutStartTimeMsec_
+      )
     }, defaultPlayDelayMsec)
   }
 
@@ -1013,6 +1049,9 @@ class Sample {
   fadeOut (duration = defaultFadeOutSec) {
     return new Promise((resolve, reject) => {
       if (this.mediaElement.paused) resolve()
+      // Fade out can triggered when a fade out process is started and
+      // not yet finished.
+      this.interval_.clear()
       this.events.trigger('fadeoutbegin')
       // Number from 0 - 1
       let actualVolume = this.mediaElement.volume
@@ -1052,6 +1091,22 @@ class Sample {
       this.mediaElement.load()
       this.mediaElement.style.opacity = 1
     }
+  }
+
+  /**
+   * Pause the sample at the current position and set the video element to
+   * opacity 0. The properties `mediaElementCurrentTimeSec_` and
+   * `mediaElementCurrentVolume_` are set or
+   * updated.
+   */
+  async pause () {
+    await this.fadeOut()
+    this.timeOut_.clear()
+    if (this.mediaFile.assetType === 'video') {
+      this.mediaElement.style.opacity = 0
+    }
+    this.mediaElementCurrentTimeSec_ = this.mediaElement.currentTime
+    this.mediaElementCurrentVolume_ = this.mediaElement.volume
   }
 
   /**
@@ -1098,18 +1153,6 @@ class Sample {
    */
   backward (interval = 10) {
     this.jump_(interval, 'backward')
-  }
-
-  /**
-   * Pause the media element and set the video element to opacity 0.
-   */
-  async pause () {
-    await this.fadeOut()
-    if (this.mediaFile.assetType === 'video') {
-      this.mediaElement.style.opacity = 0
-    }
-    this.currentTimeSec = this.mediaElement.currentTime
-    this.currentVolume = this.mediaElement.volume
   }
 }
 
