@@ -84,25 +84,6 @@ export default {
     setProgress (progress = 0.5) {
       this.$refs.progress.style.strokeDashoffset = -(circumference * progress)
     },
-    /**
-     * @param {currentTimeMsec} - The current time of the
-     *   corresponding media file in milliseconds.
-     */
-    calculateSampleProgress (mediaFileCurrentTimeSec) {
-      let sampleDurationSec
-      if (!this.sample.durationSec) {
-        // Samples without duration play until the end fo the media file.
-        sampleDurationSec = this.mediaElement.duration - this.sample.startTimeSec
-      } else {
-        sampleDurationSec = this.sample.durationSec
-      }
-
-      const sampleCurrentTimeSec = mediaFileCurrentTimeSec - this.sample.startTimeSec
-      // for example:
-      // current time: 6s duration: 60s
-      // 6 / 60 = 0.1
-      return sampleCurrentTimeSec / sampleDurationSec
-    },
     actByStatus () {
       if (!this.mediaElement.paused) {
         this.$media.player.stop()
@@ -137,8 +118,7 @@ export default {
 
     this.mediaElement.ontimeupdate = (event) => {
       if (!this.$refs.progress) return
-      const progress = this.calculateSampleProgress(event.target.currentTime)
-      this.setProgress(progress)
+      this.setProgress(this.sample.progress)
     }
 
     this.sample.events.on('fadeinend', () => {

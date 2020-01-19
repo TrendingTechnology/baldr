@@ -876,6 +876,35 @@ class Sample {
   }
 
   /**
+   * The duration of the sample in seconds. If the duration is set on the
+   * sample, it is the same as `sample.durationSec`.
+   *
+   * @type {Number}
+   */
+  get duration () {
+    if (!this.durationSec) {
+      // Samples without duration play until the end fo the media file.
+      return this.mediaElement.duration - this.startTimeSec
+    } else {
+      return this.durationSec
+    }
+  }
+
+  /**
+   * A number between 0 and 1. 0: the sample starts from the beginning. 1:
+   * the sample reaches the end.
+   *
+   * @type {Number}
+   */
+  get progress () {
+    const currentTimeSec = this.mediaElement.currentTime - this.startTimeSec
+    // for example:
+    // current time: 6s duration: 60s
+    // 6 / 60 = 0.1
+    return currentTimeSec / this.duration
+  }
+
+  /**
    * Set the volume and simultaneously the opacity of a video element, to be
    * able to fade out or fade in a video and a audio file.
    */
