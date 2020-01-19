@@ -181,7 +181,7 @@ export default {
     }
 
     circle {
-      stroke-width: 0.6em;
+      stroke-width: 0.45em;
       fill: none;
     }
 
