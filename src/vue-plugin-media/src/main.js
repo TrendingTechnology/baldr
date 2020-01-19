@@ -64,14 +64,17 @@ export function formatDuration (duration) {
 
 class Timers {
   constructor () {
+    /**
+     * An array of `setTimeout` IDs.
+     *
+     * @type {Array}
+     */
     this.ids_ = []
   }
 }
 
 /**
- * An array of `setTimeout` IDs
- *
- * We have to interval_ the timeouts. A not yet finished playbook with a
+ * We have to clear the timeouts. A not yet finished playbook with a
  * duration - stopped to early - cases that the next playback gets stopped
  * to early.
  */
@@ -88,11 +91,28 @@ class TimeOut extends Timers {
   }
 }
 
+/**
+ * Wrapper class around the function `setInterval` to store the `id`s returned
+ * by the function to be able to clear the function.
+ */
 class Interval extends Timers {
+  /**
+   * Repeatedly call a function.
+   *
+   * @param {Function} func - A function to be executed every delay
+   *   milliseconds.
+   * @param {Number} delay - The time, in milliseconds (thousandths of a
+   *   second), the timer should delay in between executions of the specified
+   *   function or code.
+   */
   set (func, delay) {
     this.ids_.push(setInterval(func, parseInt(delay)))
   }
 
+  /**
+   * Cancel a timed, repeating action which was previously established by a
+   * call to set().
+   */
   clear () {
     for (const id of this.ids_) {
       clearInterval(id)
@@ -123,6 +143,11 @@ class Player {
      * @type {Number}
      */
     this.globalVolume = 1
+
+    /**
+     * @type {module:@bldr/vue-plugin-media~CustomEvents}
+     */
+    this.events = new CustomEvents()
   }
 
   get samplePlaying () {
@@ -166,6 +191,7 @@ class Player {
   async start () {
     const loaded = this.sampleLoaded
     if (!loaded) throw new Error('First load a sample')
+    this.events.trigger('start', loaded)
     const playing = this.samplePlaying
     if (playing) await playing.stop()
     this.samplePlaying = loaded
@@ -245,7 +271,7 @@ class PlayList {
     this.$store = store
 
     /**
-     * @type module:@bldr/vue-plugin-media~Player
+     * @type {module:@bldr/vue-plugin-media~Player}
      */
     this.player = player
   }
@@ -585,6 +611,55 @@ class AssetTypes {
 export const assetTypes = new AssetTypes(config)
 
 /**
+ * A simple wrapper class for a custom event system. Used in the classes
+ * `Sample()` and `Player()`.
+ */
+class CustomEvents {
+  constructor () {
+    /**
+     * An object of callback functions
+     *
+     * @type {Object}
+     */
+    this.callbacks_ = {}
+  }
+
+  /**
+   * Trigger a custom event.
+   *
+   * @param {String} name - The name of the event. Should be in lowercase, for
+   *   example `fadeoutbegin`.
+   * @param {Mixed} args - One ore more additonal arguments to pass through
+   *   the callbacks.
+   */
+  trigger (name) {
+    const args = Array.from(arguments)
+    args.shift()
+    if (!(name in this.callbacks_)) {
+      this.callbacks_[name] = []
+    }
+    for (const callback of this.callbacks_[name]) {
+      callback.apply(null, args)
+    }
+  }
+
+  /**
+   * Register callbacks for specific custom event.
+   *
+   * @param {String} name - The name of the event. Should be in lowercase, for
+   *   example `fadeoutbegin`.
+   * @param {Function} callback - A function which gets called when the
+   *   event is triggered.
+   */
+  on (name, callback) {
+    if (!(name in this.callbacks_)) {
+      this.callbacks_[name] = []
+    }
+    this.callbacks_[name].push(callback)
+  }
+}
+
+/**
  * A sample (snippet, sprite) of a media file which can be played. A sample
  * has typically a start time and a duration. If the start time is missing, the
  * media file gets played from the beginning. If the duration is missing, the
@@ -742,11 +817,22 @@ class Sample {
      */
     this.shortcutCustom = shortcut
 
+    /**
+     * @type {module:@bldr/vue-plugin-media~Interval}
+     * @private
+     */
     this.interval_ = new Interval()
 
+    /**
+     * @type {module:@bldr/vue-plugin-media~TimeOut}
+     * @private
+     */
     this.timeOut_ = new TimeOut()
 
-    this.customEventCallbacks_ = {}
+    /**
+     * @type {module:@bldr/vue-plugin-media~CustomEvents}
+     */
+    this.events = new CustomEvents()
   }
 
   /**
@@ -814,7 +900,7 @@ class Sample {
    */
   fadeIn (targetVolume = 1, duration = defaultFadeInSec) {
     return new Promise((resolve, reject) => {
-      this.triggerCustomEvents_('fadeinbegin')
+      this.events.trigger('fadeinbegin')
       let actualVolume = 0
       this.mediaElement.volume = 0
       this.mediaElement.play()
@@ -829,7 +915,7 @@ class Sample {
           this.volume = actualVolume
         } else {
           this.interval_.clear()
-          this.triggerCustomEvents_('fadeinend')
+          this.events.trigger('fadeinend')
           resolve()
         }
       }, stepInterval)
@@ -898,7 +984,7 @@ class Sample {
   fadeOut (duration = defaultFadeOutSec) {
     return new Promise((resolve, reject) => {
       if (this.mediaElement.paused) resolve()
-      this.triggerCustomEvents_('fadeoutbegin')
+      this.events.trigger('fadeoutbegin')
       // Number from 0 - 1
       let actualVolume = this.mediaElement.volume
       // Normally 0.01 by volume = 1
@@ -913,7 +999,7 @@ class Sample {
         } else {
           this.mediaElement.pause()
           this.interval_.clear()
-          this.triggerCustomEvents_('fadeoutend')
+          this.events.trigger('fadeoutend')
           resolve()
         }
       }, stepInterval)
@@ -995,38 +1081,6 @@ class Sample {
     }
     this.currentTimeSec = this.mediaElement.currentTime
     this.currentVolume = this.mediaElement.volume
-  }
-
-  /**
-   * Trigger the custom events.
-   *
-   * @param {String} name - The name of the event. Should be in lowercase, for
-   *   example `fadeoutbegin`.
-   *
-   * @private
-   */
-  triggerCustomEvents_ (name) {
-    if (!(name in this.customEventCallbacks_)) {
-      this.customEventCallbacks_[name] = []
-    }
-    for (const callback of this.customEventCallbacks_[name]) {
-      callback()
-    }
-  }
-
-  /**
-   * Register callbacks for sample specific custom events.
-   *
-   * @param {String} name - The name of the event. Should be in lowercase, for
-   *   example `fadeoutbegin`.
-   * @param {Function} callback - A function which gets called when the
-   *   event is triggered.
-   */
-  on (name, callback) {
-    if (!(name in this.customEventCallbacks_)) {
-      this.customEventCallbacks_[name] = []
-    }
-    this.customEventCallbacks_[name].push(callback)
   }
 }
 
@@ -1627,7 +1681,6 @@ class Media {
       {
         keys: 'ctrl+space',
         callback: async () => {
-          await this.player.stop()
           await this.player.start()
         },
         // Media player: Start loaded sample

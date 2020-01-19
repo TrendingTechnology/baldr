@@ -72,7 +72,6 @@ export default {
   },
   methods: {
     start () {
-      this.status = 'starting'
       this.$media.player.load(this.sample)
       this.$media.player.start()
     },
@@ -120,6 +119,10 @@ export default {
       this.status = 'playing'
     }
 
+    this.$media.player.events.on('start', (loadedSample) => {
+      if (loadedSample.uri === this.sample.uri) this.status = 'starting'
+    })
+
     this.$el.onmouseenter = () => {
       if (this.status === 'playing') {
         this.status = 'stoppable'
@@ -138,7 +141,7 @@ export default {
       this.setProgress(progress)
     }
 
-    this.sample.on('fadeinend', () => {
+    this.sample.events.on('fadeinend', () => {
       this.status = 'playing'
     })
 
@@ -150,7 +153,7 @@ export default {
       this.status = 'stopped'
     }
 
-    this.sample.on('fadeoutbegin', () => {
+    this.sample.events.on('fadeoutbegin', () => {
       this.status = 'fadeout'
     })
   }
