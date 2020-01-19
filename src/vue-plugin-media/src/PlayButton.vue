@@ -112,7 +112,11 @@ export default {
 
     this.$el.onmouseleave = () => {
         if (!this.mediaElement.paused) {
-        this.status = 'playing'
+        if (this.sample.playbackState === 'fadeout') {
+          this.status = 'fadeout'
+        } else {
+          this.status = 'playing'
+        }
       }
     }
 

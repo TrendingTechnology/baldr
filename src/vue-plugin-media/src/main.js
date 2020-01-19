@@ -839,6 +839,17 @@ class Sample {
      * @type {module:@bldr/vue-plugin-media~CustomEvents}
      */
     this.events = new CustomEvents()
+
+    /**
+     * The state of the current playback.
+     *
+     * - started
+     * - fadein
+     * - playing
+     * - fadeout
+     * - stopped
+     */
+    this.playbackState = 'stopped'
   }
 
   /**
@@ -975,6 +986,7 @@ class Sample {
       // not yet finished.
       this.interval_.clear()
       this.events.trigger('fadeinbegin')
+      this.playbackState = 'fadein'
       let actualVolume = 0
       this.mediaElement.volume = 0
       this.mediaElement.play()
@@ -990,6 +1002,7 @@ class Sample {
         } else {
           this.interval_.clear()
           this.events.trigger('fadeinend')
+          this.playbackState = 'playing'
           resolve()
         }
       }, stepInterval)
@@ -1003,6 +1016,7 @@ class Sample {
    *   number from 0 - 1.
    */
   start (targetVolume) {
+    this.playbackState = 'started'
     this.play(targetVolume, this.startTimeSec)
   }
 
@@ -1053,6 +1067,7 @@ class Sample {
       // not yet finished.
       this.interval_.clear()
       this.events.trigger('fadeoutbegin')
+      this.playbackState = 'fadeout'
       // Number from 0 - 1
       let actualVolume = this.mediaElement.volume
       // Normally 0.01 by volume = 1
@@ -1068,6 +1083,7 @@ class Sample {
           this.mediaElement.pause()
           this.interval_.clear()
           this.events.trigger('fadeoutend')
+          this.playbackState = 'stopped'
           resolve()
         }
       }, stepInterval)
