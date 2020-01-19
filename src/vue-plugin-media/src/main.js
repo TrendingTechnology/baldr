@@ -1028,7 +1028,8 @@ class Sample {
    * @param {Number} startTimeSec - Position in the sample from where to play
    *   the sample
    */
-  play (targetVolume, startTimeSec) {
+  play (targetVolume, startTimeSec, fadeInSec) {
+    if (!fadeInSec) fadeInSec = this.fadeInSec
     // The start() triggers play with this.startTimeSec. “complete” samples
     // have on this.startTimeSec 0.
     if (startTimeSec || startTimeSec === 0) {
@@ -1138,19 +1139,33 @@ class Sample {
   }
 
   /**
-   * Jump to a new time position.
+   * Jump to a new time position. TODO Fix, works not reliable
    *
    * @param {Number} interval - Time interval in seconds.
    * @param {String} direction - `forward` or `backward`
    *
    * @private
    */
-  jump_ (interval = 10, direction = 'forward') {
+  async jump_ (interval = 10, direction = 'forward') {
+    let newPlayPosition
+    const cur = this.currentTimeSec
     if (direction === 'backward') {
-      this.mediaElement.currentTime -= interval
+      if (cur - interval > 0) {
+        newPlayPosition = cur - interval
+      } else {
+        newPlayPosition = 0
+      }
     } else {
-      this.mediaElement.currentTime += interval
+      newPlayPosition = this.currentTimeSec + interval
+      if (cur + interval < this.durationSec) {
+        newPlayPosition = cur + interval
+      } else {
+        newPlayPosition = this.durationSec
+      }
     }
+
+    await this.fadeOut(0.01)
+    this.play(1, this.startTimeSec + newPlayPosition, 0.01)
   }
 
   /**
