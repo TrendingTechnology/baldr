@@ -267,18 +267,31 @@ function writeFile (filePath, content) {
 
 /** a / audacity **************************************************************/
 
+/**
+ * Convert a Audacity text mark file into a YAML file.
+ *
+ * @param {String} filePath - The file path of the Audacity’s text track
+ *   file.
+ */
 function actionAudacity (filePath) {
   const text = fs.readFileSync(filePath, { encoding: 'utf-8' })
   console.log(text)
 
   const lines = text.split('\n')
   const samples = []
+  // Text mark maybe have no description. We use a counter instead
+  let counter = 1
   for (const line of lines) {
-    const match = line.match(/([\d\.]+)\t([\d\.]+)\t(.+)/) // eslint-disable-line
+    const match = line.match(/([\d\.]+)\t([\d\.]+)\t(.?)/) // eslint-disable-line
     if (match) {
       const startTime = Number(match[1])
       let endTime = Number(match[2])
-      const title = match[3]
+      let title
+      if (!match[3]) {
+        title = String(counter)
+      } else {
+        title = match[3]
+      }
       const id = title.toLowerCase()
 
       if (startTime === endTime) {
@@ -292,6 +305,7 @@ function actionAudacity (filePath) {
       if (endTime) sample['end_time'] = endTime
       samples.push(sample)
     }
+    counter += 1
   }
   for (const index in samples) {
     const sample = samples[index]
@@ -304,7 +318,7 @@ function actionAudacity (filePath) {
 
 commander
   .command('audacity <input>').alias('a')
-  .description('Convert audacity text mark file into a yaml file.')
+  .description('Convert a Audacity text mark file into a YAML file.')
   .action(actionAudacity)
 
 /** c / convert ***************************************************************/
