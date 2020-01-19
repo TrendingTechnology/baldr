@@ -11,7 +11,7 @@ This repository contains some evaluation and research code.
 
 ## About the name `baldr`
 
-<img src="src/vue/components/material-icon/src/icons/baldr.svg" style="width: 300px;">
+![](https://raw.githubusercontent.com/Josef-Friedrich/baldr/master/logo.png)
 
 [Baldr](https://en.wikipedia.org/wiki/Baldr) is the name of a nordic
 god. He is the of god of light.
