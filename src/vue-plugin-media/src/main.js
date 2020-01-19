@@ -1044,14 +1044,21 @@ class Sample {
     // audio files.
     this.timeOut_.set(() => {
       this.fadeIn(targetVolume, this.fadeInSec)
-
-      // Always fade out at the end. Maybe the samples are cut without a
-      // fade out.
-      this.timeOut_.set(
-        () => { this.fadeOut(this.fadeOutSec) },
-        this.fadeOutStartTimeMsec_
-      )
+      this.scheduleFadeOut_()
     }, defaultPlayDelayMsec)
+  }
+
+  /**
+   * Schedule when the fade out process has to start.
+   * Always fade out at the end. Maybe the samples are cut without a
+   * fade out.
+   * @private
+   */
+   scheduleFadeOut_ () {
+    this.timeOut_.set(
+      () => { this.fadeOut(this.fadeOutSec) },
+      this.fadeOutStartTimeMsec_
+    )
   }
 
   /**
@@ -1081,6 +1088,8 @@ class Sample {
         if (actualVolume >= 0) {
           this.volume = actualVolume
         } else {
+          // The video opacity must be set to zero.
+          this.volume = 0
           this.mediaElement.pause()
           this.interval_.clear()
           this.events.trigger('fadeoutend')
@@ -1139,14 +1148,14 @@ class Sample {
   }
 
   /**
-   * Jump to a new time position. TODO Fix, works not reliable
+   * Jump to a new time position.
    *
    * @param {Number} interval - Time interval in seconds.
    * @param {String} direction - `forward` or `backward`
    *
    * @private
    */
-  async jump_ (interval = 10, direction = 'forward') {
+  jump_ (interval = 10, direction = 'forward') {
     let newPlayPosition
     const cur = this.currentTimeSec
     if (direction === 'backward') {
@@ -1163,9 +1172,9 @@ class Sample {
         newPlayPosition = this.durationSec
       }
     }
-
-    await this.fadeOut(0.01)
-    this.play(1, this.startTimeSec + newPlayPosition, 0.01)
+    this.timeOut_.clear()
+    this.mediaElement.currentTime = this.startTimeSec + newPlayPosition
+    this.scheduleFadeOut_()
   }
 
   /**
