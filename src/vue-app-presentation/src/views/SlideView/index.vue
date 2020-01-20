@@ -3,20 +3,23 @@
     <master-icon/>
     <slide-number/>
     <master-renderer/>
+    <audio-overlay/>
   </div>
 </template>
 
 <script>
+import AudioOverlay from './AudioOverlay.vue'
+import MasterIcon from './MasterIcon.vue'
 import MasterRenderer from './MasterRenderer.vue'
 import SlideNumber from './SlideNumber.vue'
-import MasterIcon from './MasterIcon.vue'
 
 export default {
   name: 'SlideView',
   components: {
+    AudioOverlay,
+    MasterIcon,
     MasterRenderer,
-    SlideNumber,
-    MasterIcon
+    SlideNumber
   }
 }
 </script>

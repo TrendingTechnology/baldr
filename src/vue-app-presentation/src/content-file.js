@@ -261,6 +261,38 @@ function normalizeStyle (style) {
 }
 
 /**
+ * Each slide can be overlayed by play button to play audio files on each slide.
+ */
+class AudioOverlay {
+  constructor (rawData) {
+    let uris
+    if (typeof rawData === 'string') {
+      uris = [rawData]
+    } else if (Array.isArray(rawData)) {
+      uris = rawData
+    }
+    if (!uris) {
+      throw new Error(`AudioOverlay data has to be a string or an array. Got: ${rawData}`)
+    }
+
+    /**
+     * Media URIs as an array.
+     *
+     * @type {Array}
+     */
+    this.mediaUris = uris
+  }
+
+  get samples () {
+    const samples = []
+    for (const uri of this.mediaUris) {
+      samples.push(store.getters['media/sampleByUri'](uri))
+    }
+    return samples
+  }
+}
+
+/**
  * A slide.
  */
 class Slide {
@@ -277,16 +309,18 @@ class Slide {
 
     /**
      * Normalized slide data to render the slide.
+     *
+     * @type {module:@bldr/vue-app-presentation/content-file~RenderData}
      */
     this.renderData = new RenderData(rawSlideObject)
 
     /**
-     *
+     * @type {@bldr/vue-app-presentation/masters~Master}
      */
     this.master = masters.get(this.renderData.masterName)
 
     /**
-     *
+     * @type {module:@bldr/vue-app-presentation/content-file~MetaData}
      */
     this.metaData = new MetaData(rawSlideObject)
 
@@ -328,6 +362,16 @@ class Slide {
      * @type {Number}
      */
     this.level = 1
+
+    /**
+     * @type {module:@bldr/vue-app-presentation/content-file~AudioOverlay}
+     */
+    this.audioOverlay = null
+
+    const audioOverlay = rawSlideObject.cut('audioOverlay')
+    if (audioOverlay) {
+      this.audioOverlay = new AudioOverlay(audioOverlay)
+    }
 
     if (!rawSlideObject.isEmpty()) {
       throw Error(`Unknown slide properties: ${toString(rawSlideObject.raw)}`)
@@ -539,6 +583,11 @@ export class Presentation {
     for (const slide of this.slides) {
       for (const mediaUri of slide.renderData.mediaUris) {
         mediaUris.push(mediaUri)
+      }
+      if (slide.audioOverlay) {
+        for (const mediaUri of slide.audioOverlay.mediaUris) {
+          mediaUris.push(mediaUri)
+        }
       }
     }
     if (mediaUris.length > 0) {
