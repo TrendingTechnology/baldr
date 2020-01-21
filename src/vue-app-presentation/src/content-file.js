@@ -537,6 +537,18 @@ export class Presentation {
           }
         ]
       }
+    } else if (!this.rawYamlObject_.slides) {
+      throw new Error(
+        `No top level slides key found!
+
+---
+slides:
+- generic: etc.
+
+Can not parse this content:
+
+${JSON.stringify(this.rawYamlObject_)}`
+      )
     }
 
     convertPropertiesToCamelCase(this.rawYamlObject_)
