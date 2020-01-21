@@ -454,14 +454,16 @@ export async function openPresentation (presentationId) {
 }
 
 /**
- * Grab / select value from two objects. The first object is preferred.
+ * Grab / select values from two objects. The first object is preferred. The
+ * first object can be for example props and the second a object from the media
+ * server.
  */
 export class GrabFromObjects {
   /**
    * @param {Object} object1
    * @param {Object} object2
-   * @param {Boolean} markup - Apply `markupToHtml()` to the value of the
-   *   second object
+   * @param {Boolean} markup - Apply `markupToHtml()` to the values of the
+   *   second object.
    */
   constructor (object1, object2, markup=true) {
     this.object1 = object1
@@ -475,7 +477,7 @@ export class GrabFromObjects {
    * @param {String} property - The name of property to look for
    * @returns {Mixed}
    */
-  property(property) {
+  property (property) {
     if (this.object1[property]) return this.object1[property]
     if (this.object2[property]) {
       if (this.markup) {
@@ -484,6 +486,22 @@ export class GrabFromObjects {
         return this.object2[property]
       }
     }
+  }
+
+  /**
+   * Grab multiple properties.
+   *
+   * @param {Array} properties - An array of property names.
+   *
+   * @returns {object} - A new object containing the key and value pairs.
+   */
+  multipleProperties (properties) {
+    const result = {}
+    for (const property of properties) {
+      const value = this.property(property)
+      if (value) result[property] = value
+    }
+    return result
   }
 }
 

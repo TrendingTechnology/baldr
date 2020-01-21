@@ -37,11 +37,15 @@ export default {
     },
     birth: {
       type: [String, Number],
-      description: 'Datumsangabe zum Geburtstag'
+      description: 'Datumsangabe zum Geburtstag.'
     },
     death: {
       type: [String, Number],
-      description: 'Datumsangabe zum Todestag'
+      description: 'Datumsangabe zum Todestag.'
+    },
+    shortBiography: {
+      type: String,
+      description: 'Kurzbiographie. Ein, zwei Sätze über die Person.'
     }
   },
   icon: {
@@ -73,19 +77,15 @@ export default {
   },
   collectPropsMain (props) {
     const image = this.$store.getters['media/mediaFileByUri'](props.image)
-    const imageHttpUrl = image.httpUrl
-
     const grab = new GrabFromObjects(props, image, false)
-    const name = grab.property('name')
-    let birth = grab.property('birth')
-    let death = grab.property('death')
-
-    if (birth) birth = `* ${birth}`
-    if (death) death = `† ${death}`
-
-    return {
-      name, birth, death, imageHttpUrl
-    }
+    const result = grab.multipleProperties(
+      ['name', 'birth', 'death', 'shortBiography', 'wikipedia', 'wikidata']
+    )
+    if (result.birth) result.birth = `* ${result.birth}`
+    if (result.death) result.death = `† ${result.death}`
+    if (result.shortBiography) result.shortBiography = `… ${result.shortBiography}`
+    result.imageHttpUrl = image.httpUrl
+    return result
   },
   collectPropsPreview ({ propsMain }) {
     return {

@@ -1,6 +1,7 @@
 <template>
   <div class="vc_person_master">
     <img :src="imageHttpUrl">
+    <p class="short-biography" v-if="shortBiography" v-html="shortBiography">
     <div class="info-box">
       <p
         v-if="birth || death" class="birth-and-death"
@@ -17,7 +18,6 @@ export default {
   props: {
     name: {
       type: String,
-      description: 'Der Name der Person',
       required: true
     },
     imageHttpUrl: {
@@ -28,6 +28,15 @@ export default {
       type: String
     },
     death: {
+      type: String
+    },
+    shortBiography: {
+      type: String
+    },
+    wikipediaHttpUrl: {
+      type: String
+    },
+    wikidataHttpUrl: {
       type: String
     }
   }
@@ -44,6 +53,15 @@ export default {
       position: absolute;
       top: 0;
       width: 100vw;
+    }
+
+    .short-biography {
+      font-style: italic;
+      height: 10em;
+      position: absolute;
+      right: 2em;
+      top: 2em;
+      width: 20em;
     }
 
     .info-box {
