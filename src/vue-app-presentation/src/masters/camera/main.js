@@ -92,9 +92,7 @@
  *
  * Also you can add whiltelist by open chrome://flags and search for unsafely-treat-insecure-origin-as-secure:
  * chrome://flags/#unsafely-treat-insecure-origin-as-secure
- *
  */
-
 const example = `
 ---
 slides:
@@ -106,8 +104,6 @@ slides:
 
 const state = {
   mediaDevices: [],
-  deviceId: '',
-  stream: null,
   cameraNotFound: false,
   videoElement: null
 }
@@ -139,9 +135,6 @@ const getters = {
   },
   videoElement: state => {
     return state.videoElement
-  },
-  stream: state => {
-    return state.stream
   }
 }
 
@@ -154,12 +147,6 @@ const actions = {
 const mutations = {
   setMediaDevices (state, mediaDevices) {
     state.mediaDevices = mediaDevices
-  },
-  setDeviceId (state, deviceId) {
-    state.deviceId = deviceId
-  },
-  setStream (state, stream) {
-    state.stream = stream
   },
   setCameraNotFound (state, cameraNotFound) {
     state.cameraNotFound = cameraNotFound

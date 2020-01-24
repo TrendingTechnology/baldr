@@ -1,12 +1,14 @@
 <template>
   <div class="vc_camera_master">
     <modal-dialog name="select-video-device">
+      Standard-Dokumenten-Kamera: {{ labelDefaultCamera }}
       <dynamic-select
         placeholder="Wähle eine Dokumentenkamera aus"
         :options="mediaDevices"
         @input="setDeviceId"
         v-model="device"
       />
+
     </modal-dialog>
 
     <div id="video-wrapper"/>
@@ -33,8 +35,11 @@
 export default {
   data () {
     return {
+      // for v-model of dynamic select
       device: '',
-      stream: null
+      // if we have a camera but no stream
+      stream: null,
+      labelDefaultCamera: null
     }
   },
   computed: {
@@ -51,6 +56,8 @@ export default {
      */
     async setDeviceId () {
       this.$modal.hide('select-video-device')
+      this.labelDefaultCamera = this.device.name
+      window.localStorage.setItem('labelDefaultCamera', this.device.name);
       this.$store.commit('camera/setDeviceId', this.device.id)
       this.setVideoStream(await this.buildConstraints(this.device.id))
     },
@@ -90,11 +97,9 @@ export default {
      */
     async getDeviceId () {
       const devices = await navigator.mediaDevices.enumerateDevices()
-      // ELMO
-      const label = config.presentation.camera
       for (const device of devices) {
-        if (device.kind === 'videoinput' && device.label.indexOf(label) > -1) {
-          return device.Id
+        if (device.label === this.labelDefaultCamera) {
+          return device.deviceId
         }
       }
     },
@@ -131,7 +136,19 @@ export default {
           video: { deviceId: { exact: deviceId } }
         }
       } else {
-        return { audio: false, video: true }
+        this.$store.commit('camera/setCameraNotFound', true)
+      }
+    },
+    /**
+     * Try multiple times to get a camera stream.
+     */
+    async getStream (constraints) {
+      for (let index = 0; index < 3; index++) {
+        try {
+          return await navigator.mediaDevices.getUserMedia(constraints)
+        } catch (error) {
+          console.log(error)
+        }
       }
     },
     /**
@@ -164,49 +181,30 @@ export default {
       if (!constraints) {
         constraints = await this.buildConstraints()
       }
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia(constraints)
+      const stream = await this.getStream(constraints)
+      if (stream) {
         videoElement.srcObject = stream
         this.stream = stream
         wrapperElement.appendChild(videoElement)
-        this.$store.commit('camera/setStream', stream)
         this.$store.commit('camera/setVideoElement', videoElement)
         this.$store.dispatch('camera/setMediaDevices')
-      } catch (error) {
-        console.log(error)
+      } else {
         this.$store.commit('camera/setCameraNotFound', true)
-      }
-    },
-    stopVideoStream () {
-      if (this.stream) {
-        this.stream.getTracks().forEach(track => {
-          track.stop()
-        })
       }
     }
   },
   async mounted () {
-    await this.setVideoStream()
+    this.labelDefaultCamera = window.localStorage.getItem('labelDefaultCamera')
+    if (!this.labelDefaultCamera) {
+      this.$store.commit('camera/setCameraNotFound', true)
+    } else {
+      await this.setVideoStream()
+    }
     this.$shortcuts.addMultiple([
       {
         keys: 'c s',
         callback: this.showDeviceSelect,
         description: 'Dokumentenkamera auswählen'
-      },
-      {
-        keys: 'c d',
-        callback: this.stopVideoStream,
-        description: 'Video-Ausgabegerät deaktivieren'
-      },
-      {
-        keys: 'c r',
-        callback: this.setVideoStream,
-        description: 'Nach der Dokumentenkamera suchen',
-      },
-      {
-        keys: 'c e',
-        callback: this.setDeviceId,
-        description: 'ELMO auswählen',
       }
     ])
   }
@@ -240,7 +238,6 @@ export default {
 
 <style lang="scss">
   .vc_camera_master {
-
     video {
       height: 100vh;
       left: 0;
