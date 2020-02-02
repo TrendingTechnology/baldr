@@ -240,7 +240,6 @@ export default {
 
 <style lang="scss">
   .vc_camera_master {
-
     video {
       height: 100vh;
       left: 0;
