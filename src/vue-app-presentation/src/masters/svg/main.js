@@ -1,32 +1,4 @@
-
 import { stepSupport, warnSvgWidthHeight } from '@/lib.js'
-
-const example = `
----
-slides:
-
-- title: Shortcuts
-  svg:
-    src: id:Requiem_NB_Confutatis_1-Takt
-    step_exclude: 1
-
-- title: Kurzform
-  svg: id:Notenbeispiel_Freude-schoener-Goetterfunken
-
-- title: Langform
-  svg:
-    src: id:Notenbeispiel_Freude-schoener-Goetterfunken_Anfang
-
-- title: g Element
-  svg:
-    src: id:NB_Dreiklaenge-Nationalhymnen_F-Dur
-    step_exclude: 1
-
-- title: class
-  svg:
-    src: id:Moses_Notationsweisen
-    step_selector: .baldr-group
-`
 
 const stepExclude = stepSupport.props.stepExclude
 
@@ -53,7 +25,6 @@ export default {
     centerVertically: true,
     darkMode: false
   },
-  example,
   normalizeProps (props) {
     if (typeof props === 'string') {
       props = { src: props }

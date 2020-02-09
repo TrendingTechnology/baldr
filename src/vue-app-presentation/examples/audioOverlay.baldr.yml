@@ -1,0 +1,8 @@
+---
+slides:
+- score_sample:
+    heading: Hook-Line
+    score: id:Final-Countdown_NB_The-Final-Countdown
+  audio_overlay:
+    - id:Final-Countdown_HB_The-Final-Countdown#blaeser-intro
+    - id:Final-Countdown_HB_Mere-Rang-Mein-Rangne#blaeser-intro

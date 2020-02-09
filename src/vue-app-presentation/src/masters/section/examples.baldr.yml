@@ -1,0 +1,9 @@
+---
+slides:
+
+- title: Short form
+  section: A section
+
+- title: Long form
+  section:
+    heading: A section

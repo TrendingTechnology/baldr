@@ -1,14 +1,3 @@
-const example = `
----
-slides:
-
-- score_sample: id:Foto-Savoyarden-Musikanten-mit-Murmeltier
-
-- score_sample:
-    score: id:Foto-Savoyarden-Musikanten-mit-Murmeltier
-    audio: id:Fischer-Dieskau_Marmotte
-`
-
 export default {
   title: 'Notenbeispiel',
   props: {
@@ -37,7 +26,6 @@ export default {
     centerVertically: true,
     darkMode: false
   },
-  example,
   resolveMediaUris (props) {
     const uris = []
     uris.push(props.score)

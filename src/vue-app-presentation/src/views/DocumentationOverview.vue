@@ -28,21 +28,20 @@
         </thead>
         <tbody>
           <tr
-            v-for="(master, masterName) in $masters.all"
+            v-for="(rawYaml, masterName) in examples.masters"
             :key="masterName"
           >
-            <td><material-icon :name="master.icon.name" :color="master.icon.color"/></td>
+            <td><material-icon :name="$masters.get(masterName).icon.name" :color="$masters.get(masterName).icon.color"/></td>
             <td>
               <router-link :to="{ name: 'documentation-master', params: { master: masterName } }">
                 {{ masterName }}
               </router-link>
             </td>
-            <td>{{ master.title }}</td>
+            <td>{{ $masters.get(masterName).title }}</td>
             <td>
               <material-icon
-                v-if="master.example"
                 name="presentation"
-                @click.native="openExample(master.example)"
+                @click.native="openExample(rawYaml)"
               />
             </td>
           </tr>
@@ -64,7 +63,7 @@
         </thead>
         <tbody>
           <tr
-            v-for="(example, exampleName) in examples"
+            v-for="(example, exampleName) in examples.common"
             :key="exampleName"
           >
             <td>{{ exampleName }}</td>

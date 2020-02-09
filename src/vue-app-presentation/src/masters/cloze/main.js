@@ -1,41 +1,5 @@
 import { stepSupport } from '@/lib.js'
 
-const example = `
----
-slides:
-
-- title: Begin end
-  cloze:
-    src: id:AB_Bachs-vergebliche-Reise
-    step_begin: 3
-    step_end: 5
-
-- title: end
-  cloze:
-    src: id:AB_Bachs-vergebliche-Reise
-    step_end: 20
-
-- title: Begin
-  cloze:
-    src: id:AB_Bachs-vergebliche-Reise
-    step_begin: 21
-
-- title: Short form
-  cloze: id:AB_Bachs-vergebliche-Reise
-
-- title: Long form
-  cloze:
-    src: id:Bebop_AB
-
-- title: Table 1
-  cloze:
-    src: New-Orleans-Dixieland_AB1
-
-- title: Table 2
-  cloze:
-    src: New-Orleans-Dixieland_AB2
-`
-
 export default {
   title: 'Lückentext',
   props: {
@@ -55,7 +19,6 @@ export default {
     centerVertically: true,
     darkMode: false
   },
-  example,
   normalizeProps (props) {
     if (typeof props === 'string') {
       props = { src: props }

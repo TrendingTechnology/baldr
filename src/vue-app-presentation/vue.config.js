@@ -14,13 +14,23 @@ function stylePath (themeName) {
 }
 
 function readExamples () {
-  const exampleFiles = fs.readdirSync('./examples')
-  const examples = {}
-  for (const exampleFile of exampleFiles) {
+  const examples = {
+    common: {},
+    masters: {}
+  }
+  // common
+  for (const exampleFile of fs.readdirSync('./examples')) {
     const key = exampleFile.replace('.baldr.yml', '')
     const rawYaml = fs.readFileSync(path.join('examples', exampleFile), 'utf8')
-    examples[key] = rawYaml
+    examples.common[key] = rawYaml
   }
+  // masters
+  const mastersBasePath = path.join('src', 'masters')
+  for (const masterName of fs.readdirSync(mastersBasePath)) {
+    const rawYaml = fs.readFileSync(path.join(mastersBasePath, masterName, 'examples.baldr.yml'), 'utf8')
+    examples.masters[masterName] = rawYaml
+  }
+
   return examples
 }
 

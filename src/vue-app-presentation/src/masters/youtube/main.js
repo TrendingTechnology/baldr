@@ -1,15 +1,3 @@
-const example = `
----
-slides:
-
-- title: Short form
-  youtube: 5BBahdS6wu4
-
-- title: Long form
-  youtube:
-    id: xtKavZG1KiM
-`
-
 export default {
   title: 'YouTube',
   props: {
@@ -27,7 +15,6 @@ export default {
     centerVertically: true,
     darkMode: true
   },
-  example,
   normalizeProps (props) {
     if (typeof props === 'string') {
       props = { id: props }

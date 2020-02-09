@@ -1,0 +1,14 @@
+---
+slides:
+
+- title: Short form
+  wikipedia: Franz_Seraph_Reicheneder
+
+- title: Long form
+  wikipedia:
+    language: en
+    title: Ludwig_van_Beethoven
+
+- title: Long form (German Umlaute)
+  wikipedia:
+    title: August_Högn
