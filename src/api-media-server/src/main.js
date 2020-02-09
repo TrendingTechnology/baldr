@@ -5,7 +5,7 @@
  *
  * - presentation (`Presentation()`)
  * - asset (`Asset()`)
- *   - multipart asset
+ *   - multipart asset (`filename.jpg`, `filename_no02.jpg`, `filename_no03.jpg`)
  *
  * # Definition of the objects:
  *
@@ -775,11 +775,8 @@ class Asset extends MediaFile {
 
   addFileInfos () {
     this.addFileInfos_()
-
     const previewImage = `${this.absPath_}_preview.jpg`
-
     this.assetType = assetTypes.extensionToType(this.extension)
-
     if (fs.existsSync(previewImage)) {
       /**
        * The absolute path of the preview image.
@@ -787,7 +784,41 @@ class Asset extends MediaFile {
        */
       this.previewImage = true
     }
+    this.detectMultiparts_()
     return this
+  }
+
+  /**
+   * Search for mutlipart assets. The naming scheme of multipart assets is:
+   * `filename.jpg`, `filename_no02.jpg`, `filename_no03.jpg`
+   */
+  detectMultiparts_ () {
+    const nextAssetFileName = (count) => {
+      let suffix
+      if (count < 10) {
+        suffix = `_no0${count}`
+      } else if (count < 100) {
+        suffix = `_no${count}`
+      } else {
+        throw new Error(`${this.absPath_} multipart asset counts greater than 100 are not supported.`)
+      }
+      const basePath = this.absPath_.replace(`.${this.extension}`, '')
+      const fileName = `${basePath}${suffix}.${this.extension}`
+      return fileName
+    }
+    let count = 2
+    while (fs.existsSync(nextAssetFileName(count))) {
+      count += 1
+    }
+    count -= 1 // The counter is increased before the file system check.
+    if (count > 1) {
+      /**
+       * The count of parts of the a multipart asset.
+       *
+       * @type {Number}
+       */
+      this.multiPartCount = count
+    }
   }
 }
 
@@ -890,7 +921,10 @@ class Presentation extends MediaFile {
  * @param {String} fileName
  */
 function isAsset (fileName) {
-  if (fileName.indexOf('_preview.jpg') > -1) {
+  if (
+    fileName.indexOf('_preview.jpg') > -1 || // Preview image
+    fileName.match(/_no\d\d\./) // Multipart asset
+  ) {
     return false
   }
   return assetTypes.isAsset(fileName)
