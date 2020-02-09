@@ -99,14 +99,6 @@ class Master {
     this.documentation = null
 
     /**
-     * A example presentation file in the YAML format like `*.baldr.yml` files
-     * featuring the master.
-     *
-     * @type {String}
-     */
-    this.example = null
-
-    /**
      * A vuex object containing `state`, `getters`, `actions`, `mutations`
      * properties which buildes a submodule vuex store for each master.
      *
@@ -126,6 +118,16 @@ class Master {
      * @type {Object}
      */
     this.props = null
+  }
+
+  /**
+   * A example presentation file in the YAML format like `*.baldr.yml` files
+   * featuring the master.
+   *
+   * @type {String}
+   */
+  get example () {
+    return rawYamlExamples.masters[this.name]
   }
 
   /**
