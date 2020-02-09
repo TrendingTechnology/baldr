@@ -12,6 +12,7 @@ import RestApiOverview from '@/views/RestApiOverview.vue'
 
 import DocumentationOverview from '@/views/DocumentationOverview.vue'
 import MasterDocumentation from '@/views/MasterDocumentation.vue'
+import CommonExample from '@/views/CommonExample.vue'
 
 import SlideView from '@/views/SlideView'
 import MasterRenderer from '@/views/SlideView/MasterRenderer.vue'
@@ -105,7 +106,15 @@ const routes = [
     }
   },
   {
-    path: '/documentation/:master',
+    path: '/documentation/common/:exampleName',
+    name: 'common-example',
+    component: CommonExample,
+    meta: {
+      title: 'Allgemeines Beispiel'
+    }
+  },
+  {
+    path: '/documentation/master/:master',
     name: 'documentation-master',
     component: MasterDocumentation,
     meta: {

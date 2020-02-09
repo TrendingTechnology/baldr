@@ -50,7 +50,7 @@
     </section>
 
     <section>
-      <h2>Beispiele</h2>
+      <h2>Allgemeine Beispiele</h2>
 
       <table>
         <thead>
@@ -66,7 +66,11 @@
             v-for="(example, exampleName) in examples.common"
             :key="exampleName"
           >
-            <td>{{ exampleName }}</td>
+            <td>{{ exampleName }}
+              <router-link :to="{ name: 'common-example', params: { exampleName } }">
+                {{ exampleName }}
+              </router-link>
+            </td>
             <td>
               <material-icon
                 name="presentation"
@@ -84,7 +88,7 @@
 </template>
 
 <script>
-import {  markupToHtml } from '@/lib.js'
+import { markupToHtml, openPresentationByRawYaml } from '@/lib.js'
 
 const documentation = `
 
@@ -102,9 +106,7 @@ export default {
   name: 'DocumentationOverview',
   methods: {
     openExample (yamlString) {
-      this.$store.dispatch('presentation/openPresentation', { rawYamlString: yamlString }).then(() => {
-        if (this.$route.name !== 'slides') this.$router.push({ name: 'slides' })
-      })
+      openPresentationByRawYaml(yamlString)
     }
   },
   mounted: function () {

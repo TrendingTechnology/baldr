@@ -453,6 +453,15 @@ export async function openPresentation (presentationId) {
   }
 }
 
+export async function openPresentationByRawYaml (rawYamlString) {
+  vue.$media.player.stop()
+  vue.$store.dispatch('media/clear')
+  await vue.$store.dispatch('presentation/openPresentation', { rawYamlString })
+  if (vue.$route.name !== 'slides') {
+    vue.$router.push({ name: 'slides' })
+  }
+}
+
 /**
  * Grab / select values from two objects. The first object is preferred. The
  * first object can be for example props and the second a object from the media

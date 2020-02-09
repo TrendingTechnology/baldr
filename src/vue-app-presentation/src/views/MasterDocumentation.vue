@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import {  markupToHtml } from '@/lib.js'
+import { markupToHtml, openPresentationByRawYaml } from '@/lib.js'
 
 export default {
   name: 'MasterDocumentation',
@@ -51,12 +51,7 @@ export default {
   methods: {
     markupToHtml,
     openExample () {
-      this.$store.dispatch(
-        'presentation/openPresentation',
-        { rawYamlString: this.master.example }
-      ).then(() => {
-        if (this.$route.name !== 'slides') this.$router.push({ name: 'slides' })
-      })
+      openPresentationByRawYaml(this.master.example)
     },
     formatPropSpec (spec) {
       const options = []
