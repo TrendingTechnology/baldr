@@ -1,16 +1,22 @@
 <template>
   <div class="vc_score_sample_master">
     <h1 v-if="heading" v-html="heading"/>
-    <img :src="scoreHttpUrl"/>
+    <img :src="scoreHttpUrlCurrent"/>
     <play-button v-if="audioSample" :sample="audioSample"/>
   </div>
 </template>
 
 <script>
+import { createNamespacedHelpers } from 'vuex'
+const { mapGetters } = createNamespacedHelpers('presentation')
+
 export default {
   props: {
     heading: {
       type: String
+    },
+    score: {
+      type: Object
     },
     scoreHttpUrl: {
       type: String,
@@ -18,6 +24,12 @@ export default {
     },
     audioSample: {
       type: Object
+    }
+  },
+  computed: {
+    ...mapGetters(['slideCurrent']),
+    scoreHttpUrlCurrent () {
+      return this.score.multiPartHttpUrl(this.slideCurrent.renderData.stepNoCurrent)
     }
   }
 }

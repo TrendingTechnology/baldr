@@ -49,10 +49,18 @@ export default {
     if (audio) {
       audioSample = audio
     }
+    const score = this.$store.getters['media/mediaFileByUri'](props.score)
     return {
       heading: props.heading,
-      scoreHttpUrl: this.$store.getters['media/mediaFileByUri'](props.score).httpUrl,
+      score,
+      scoreHttpUrl: score.httpUrl,
       audioSample
+    }
+  },
+  calculateStepCount (props) {
+    const score = this.$store.getters['media/mediaFileByUri'](props.score)
+    if (score.multiPartCount) {
+      return score.multiPartCount
     }
   },
   collectPropsPreview ({ props, propsMain }) {

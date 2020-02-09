@@ -226,12 +226,18 @@ class Master {
   }
 
   /**
-   * @param {module:@bldr/vue-app-presentation~props} props
+   * Calculate from the given props the step count. This hook method is called
+   * after media resolution.
    *
-   * @returns {Number}
+   * @param {module:@bldr/vue-app-presentation~props} props
+   * @param {object} thisArg - The
+   *   {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/call thisArg}
+   *   the master function is called with.
+   *
+   * @returns {Number} - The number of steps.
    */
-  stepCount (props) {
-    return this.callFunction_('stepCount', props)
+  calculateStepCount (props, thisArg) {
+    return this.callFunction_('calculateStepCount', props, thisArg)
   }
 
   /**

@@ -813,7 +813,7 @@ class Asset extends MediaFile {
     count -= 1 // The counter is increased before the file system check.
     if (count > 1) {
       /**
-       * The count of parts of the a multipart asset.
+       * The count of parts of a multipart asset.
        *
        * @type {Number}
        */

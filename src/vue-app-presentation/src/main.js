@@ -66,7 +66,7 @@
  *       }
  *     }
  *   },
- *   stepCount (props) {
+ *   calculateStepCount (props) {
  *     return props.src.length
  *   },
  *   // An array of media URIs to resolve (like [id:beethoven, filename:mozart.mp3])

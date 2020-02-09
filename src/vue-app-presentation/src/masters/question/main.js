@@ -59,7 +59,7 @@ export default {
     }
     return { questions: normalizeQuestions(props) }
   },
-  stepCount (props) {
+  calculateStepCount (props) {
     let count = 0
     for (const question of props.questions) {
       if ('answer' in question && question.answer) count += 1

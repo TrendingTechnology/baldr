@@ -15,7 +15,8 @@
   "main": "src/main.js",
   "dependencies": {
     "@bldr/http-request": "^0.1.8",
-    "@bldr/vue-plugin-dynamic-select": "^0.1.2"
+    "@bldr/vue-plugin-dynamic-select": "^0.1.2",
+    "@bldr/core-browser": "^0.10.4"
   },
   "publishConfig": {
     "access": "public"

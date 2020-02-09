@@ -208,7 +208,7 @@ class RenderData {
      *
      * @type {number}
      */
-    this.stepCount = master.stepCount(this.props)
+    this.stepCount = null
 
     /**
      * The current step number. The first number is 1 not 0.
@@ -609,6 +609,7 @@ ${JSON.stringify(this.rawYamlObject_)}`
       this.media = await vue.$media.resolve(mediaUris)
     }
 
+    // After media resolution.
     for (const slide of this.slides) {
       if (masters.exists(slide.master.name)) {
         const master = masters.get(slide.master.name)
@@ -619,7 +620,8 @@ ${JSON.stringify(this.rawYamlObject_)}`
             propsMain: slide.renderData.propsMain
           },
           vue
-        )
+        ),
+        slide.renderData.stepCount = master.calculateStepCount(slide.renderData.props, vue)
       }
     }
   }

@@ -7,6 +7,8 @@
 /* globals config document Audio Image File */
 
 import { getDefaultServers, HttpRequest, getDefaultRestEndpoints, HttpRequestNg } from '@bldr/http-request'
+import { formatMultiPartAssetFileName } from '@bldr/core-browser'
+
 import Vue from 'vue'
 import DynamicSelect from '@bldr/vue-plugin-dynamic-select'
 
@@ -1276,6 +1278,11 @@ export class MediaFile {
     this.mediaElement = null
   }
 
+  /**
+   * Extract the extension from a string.
+   *
+   * @param {String} string
+   */
   extensionFromString (string) {
     this.extension = string.split('.').pop().toLowerCase()
   }
@@ -1298,6 +1305,19 @@ export class MediaFile {
     for (const property in properties) {
       this[property] = properties[property]
     }
+  }
+
+  /**
+   *
+   * @param {Number} no - The number of the multipart asset.
+   *
+   * @returns {String}
+   */
+  multiPartHttpUrl (no) {
+    if (this.multiPartCount > 1) {
+      return formatMultiPartAssetFileName(this.httpUrl, no)
+    }
+    return this.httpUrl
   }
 
   /**
