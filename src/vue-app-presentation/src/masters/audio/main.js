@@ -1,58 +1,5 @@
 import { GrabFromObjects } from '@/lib.js'
 
-const example = `
----
-slides:
-
-- title: Custom composer
-  audio:
-    src: id:Fischer-Dieskau_Marmotte
-    composer: Ludwig B. (Custom composer)
-    autoplay: true
-
-- title: 'Autoplay: yes'
-  audio:
-    src: id:Du-bist-als-Kind-zu-heiss-gebadet-worden
-    title: Custom title
-    autoplay: true
-
-- title: 'Autoplay: no'
-  audio:
-    src: id:Du-bist-als-Kind-zu-heiss-gebadet-worden
-    title: Custom title
-    autoplay: false
-
-- title: 'Custom title'
-  audio:
-    src: id:Du-bist-als-Kind-zu-heiss-gebadet-worden
-    title: Custom title
-
-- title: 'Custom artist'
-  audio:
-    src: id:Du-bist-als-Kind-zu-heiss-gebadet-worden
-    artist: Custom artist
-
-- title: 'Custom cover'
-  audio:
-    src: id:Du-bist-als-Kind-zu-heiss-gebadet-worden
-    cover: filename:Beethoven_Ludwig-van.jpg
-    title: Custom cover
-
-- title: 'Without media file URI schemes.'
-  audio:
-    src: Du-bist-als-Kind-zu-heiss-gebadet-worden
-    cover: Beethoven
-    title: Custom cover
-
-- title: 'URL: id:'
-  audio:
-    src: id:Du-bist-als-Kind-zu-heiss-gebadet-worden
-
-- title: 'URL: filename:'
-  audio:
-    src: filename:Ich-hab-zu-Haus-ein-Grammophon.m4a
-`
-
 export default {
   title: 'Hörbeispiel',
   props: {
@@ -102,7 +49,6 @@ export default {
     centerVertically: true,
     darkMode: true
   },
-  example,
   normalizeProps (props) {
     if (typeof props === 'string') {
       props = { src: props }

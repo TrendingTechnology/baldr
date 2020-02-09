@@ -1,22 +1,5 @@
 const defaultLanguage = 'de'
 
-const example = `
----
-slides:
-
-- title: Short form
-  wikipedia: Franz_Seraph_Reicheneder
-
-- title: Long form
-  wikipedia:
-    language: en
-    title: Ludwig_van_Beethoven
-
-- title: Long form (German Umlaute)
-  wikipedia:
-    title: August_Högn
-`
-
 export default {
   title: 'Wikipedia',
   props: {
@@ -39,7 +22,6 @@ export default {
     centerVertically: true,
     darkMode: false
   },
-  example,
   normalizeProps (props) {
     if (typeof props === 'string') {
       props = { title: props }

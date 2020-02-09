@@ -93,14 +93,6 @@
  * Also you can add whiltelist by open chrome://flags and search for unsafely-treat-insecure-origin-as-secure:
  * chrome://flags/#unsafely-treat-insecure-origin-as-secure
  */
-const example = `
----
-slides:
-  - title: Camera
-    camera: yes
-
-  - camera
-`
 
 const state = {
   mediaDevices: [],
@@ -166,7 +158,6 @@ export default {
     darkMode: true,
     contentTheme: 'default'
   },
-  example,
   store: {
     state,
     getters,

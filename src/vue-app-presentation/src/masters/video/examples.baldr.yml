@@ -1,0 +1,13 @@
+---
+slides:
+
+- title: Kurzform
+  video: id:Die-Geschichte-des-Jazz_Worksongs
+
+- title: 'URL: id:'
+  video:
+    src: id:Die-Geschichte-des-Jazz_Worksongs
+
+- title: 'URL: filename:'
+  video:
+    src: filename:Die-Geschichte-des-Jazz_Entstehung-aus-soziologischer-Sicht.mp4

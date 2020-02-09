@@ -1,43 +1,5 @@
 import { GrabFromObjects } from '@/lib.js'
 
-const example = `
----
-slides:
-
-- title: no_meta
-  image:
-    src: id:Bach
-    title: A title
-    description: A description
-    no_meta: true
-
-- title: no_meta
-  image:
-    src: id:Bach
-    title: A title
-    description: A description
-    no_meta: false
-
-- title: Kurzform
-  image: id:Bach
-
-- title: 'URL: http:'
-  image:
-    src: http://upload.wikimedia.org/wikipedia/commons/e/e8/Frederic_Chopin_photo.jpeg
-
-- title: 'URL: https:'
-  image:
-    src: https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Johannes_Brahms_LCCN2016872659.jpg/1280px-Johannes_Brahms_LCCN2016872659.jpg
-
-- title: 'URL: id:'
-  image:
-    src: id:Haydn
-
-- title: 'URL: filename:'
-  image:
-    src: filename:Beethoven_Ludwig-van.jpg
-`
-
 export default {
   title: 'Bild',
   props: {
@@ -71,7 +33,6 @@ export default {
     centerVertically: true,
     darkMode: true
   },
-  example,
   normalizeProps (props) {
     if (typeof props === 'string') {
       props = { src: props }

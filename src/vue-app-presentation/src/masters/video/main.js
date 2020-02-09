@@ -1,23 +1,3 @@
-
-import { createNamespacedHelpers } from 'vuex'
-const { mapGetters } = createNamespacedHelpers('presentation')
-
-const example = `
----
-slides:
-
-- title: Kurzform
-  video: id:Die-Geschichte-des-Jazz_Worksongs
-
-- title: 'URL: id:'
-  video:
-    src: id:Die-Geschichte-des-Jazz_Worksongs
-
-- title: 'URL: filename:'
-  video:
-    src: filename:Die-Geschichte-des-Jazz_Entstehung-aus-soziologischer-Sicht.mp4
-`
-
 export default {
   title: 'Video',
   props: {
@@ -36,7 +16,6 @@ export default {
     centerVertically: true,
     darkMode: true
   },
-  example,
   normalizeProps (props) {
     if (typeof props === 'string') {
       props = { src: props }

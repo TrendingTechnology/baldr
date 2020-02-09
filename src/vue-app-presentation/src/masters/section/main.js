@@ -1,17 +1,5 @@
 import { plainText } from '@bldr/core-browser'
 
-const example = `
----
-slides:
-
-- title: Short form
-  section: A section
-
-- title: Long form
-  section:
-    heading: A section
-`
-
 export default {
   title: 'Abschnitt',
   props: {
@@ -30,7 +18,6 @@ export default {
     centerVertically: true,
     darkMode: true
   },
-  example,
   normalizeProps (props) {
     if (typeof props === 'string') {
       props = { heading: props }

@@ -1,85 +1,4 @@
-import { createNamespacedHelpers } from 'vuex'
 import { plainText } from '@bldr/core-browser'
-const { mapGetters } = createNamespacedHelpers('presentation')
-
-const example = `
----
-slides:
-
-- title: Markup support
-  question:
-    heading: 'Markup support: *italic* **bold**'
-    questions:
-      - question: 'Markup support: *italic* **bold**'
-        answer: 'Markup support: *italic* **bold**'
-
-- title: Markup support in short form
-  question:
-    question: 'Markup support: *italic* **bold**'
-    answer: 'Markup support: *italic* **bold**'
-
-- title: Markup support multiline
-  question:
-    question: 'Markup support: *multiline*'
-    answer: |
-      * one
-      * two
-      * three
-
-- title: Heading
-  question:
-    heading: Questions about the text
-    questions:
-      - question: Question one?
-        answer: Answer one
-      - question: Question two?
-        answer: Answer two
-      - question: Question three?
-        answer: Answer three
-
-- title: Without numbers
-  question:
-    heading: Without numbers
-    questions:
-      - question: Question one?
-        answer: Answer one
-      - question: Question two?
-        answer: Answer two
-      - question: Question three?
-        answer: Answer three
-    numbers: false
-
-- question:
-    - question: Question one?
-      answer: Answer one
-    - question: Question two?
-      answer: Answer two
-    - question: Question three?
-      answer: Answer three
-
-- question:
-    - question: This is a question?
-      answer: This is the answer
-
-- question:
-    - Question one?
-    - Question two?
-    - Question three?
-
-- question: One big question?
-
-- question:
-    question: This is a question?
-    answer: This is the answer
-
-- title: Kurzform (nur eine Frage)
-  question: Nur eine Frage?
-
-- title: Kurzform (Frage-Antwort-Paar)
-  question:
-    question: Frage?
-    answer: Antwort
-`
 
 const normalizeQAPair = function (pair) {
   if (typeof pair === 'string') {
@@ -133,7 +52,6 @@ export default {
     centerVertically: true,
     darkMode: true
   },
-  example,
   normalizeProps (props) {
     if (typeof props === 'object' && !Array.isArray(props) && 'questions' in props) {
       props.questions = normalizeQuestions(props.questions)

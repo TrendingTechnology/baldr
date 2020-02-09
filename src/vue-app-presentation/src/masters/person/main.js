@@ -1,26 +1,5 @@
 import { GrabFromObjects } from '@/lib.js'
 
-const example = `
----
-slides:
-
-- title: Not birth and death
-  person:
-     name: Joseph Haydn
-     image: id:Haydn
-
-- title: All properties
-  person:
-     name: Ludwig van Beethoven
-     image: id:Beethoven
-     birth: 1770
-     death: 1827
-
-- title: props from media file
-  person:
-     image: id:Goethe
-`
-
 export default {
   title: 'Porträt',
   props: {
@@ -56,7 +35,6 @@ export default {
     centerVertically: true,
     darkMode: true
   },
-  example,
   normalizeProps (props) {
     if (typeof props === 'string') {
       return {
