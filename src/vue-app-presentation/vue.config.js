@@ -1,4 +1,5 @@
 // Node packages.
+const fs = require('fs')
 const path = require('path')
 
 // Third party packages.
@@ -10,6 +11,17 @@ const { exportSassAsJson } = require('@bldr/themes')
 
 function stylePath (themeName) {
   return path.join(path.dirname(require.resolve('@bldr/themes')), `${themeName}.scss`)
+}
+
+function readExamples () {
+  const exampleFiles = fs.readdirSync('./examples')
+  const examples = {}
+  for (const exampleFile of exampleFiles) {
+    const key = exampleFile.replace('.baldr.yml', '')
+    const rawYaml = fs.readFileSync(path.join('examples', exampleFile), 'utf8')
+    examples[key] = rawYaml
+  }
+  return examples
 }
 
 // https://forum.vuejs.org/t/vue-cli-does-not-work-with-symlinked-node-modules-using-lerna/61700
@@ -27,6 +39,7 @@ module.exports = {
         config: JSON.stringify(core.bootstrapConfig()),
         defaultThemeSassVars: JSON.stringify(exportSassAsJson()),
         gitHead: JSON.stringify(core.gitHead()),
+        rawYamlExamples: JSON.stringify(readExamples())
       })
     ]
   },

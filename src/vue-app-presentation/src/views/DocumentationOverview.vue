@@ -50,6 +50,35 @@
       </table>
     </section>
 
+    <section>
+      <h2>Beispiele</h2>
+
+      <table>
+        <thead>
+          <tr>
+            <!-- Title -->
+            <td>Titel</td>
+            <!-- Example -->
+            <td>Beispiel-Präsentation</td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            v-for="(example, exampleName) in examples"
+            :key="exampleName"
+          >
+            <td>{{ exampleName }}</td>
+            <td>
+              <material-icon
+                name="presentation"
+                @click.native="openExample(example)"
+              />
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
     <section v-html="documentation">
     </section>
   </div>
@@ -87,6 +116,9 @@ export default {
   computed: {
     documentation () {
       return markupToHtml(documentation)
+    },
+    examples () {
+      return rawYamlExamples
     }
   }
 }
