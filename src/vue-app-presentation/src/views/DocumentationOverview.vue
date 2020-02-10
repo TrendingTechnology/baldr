@@ -66,7 +66,7 @@
             v-for="(example, exampleName) in examples.common"
             :key="exampleName"
           >
-            <td>{{ exampleName }}
+            <td>
               <router-link :to="{ name: 'common-example', params: { exampleName } }">
                 {{ exampleName }}
               </router-link>

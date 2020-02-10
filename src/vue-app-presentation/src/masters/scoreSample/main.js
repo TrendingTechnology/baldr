@@ -49,15 +49,35 @@ export default {
     if (audio) {
       audioSample = audio
     }
-    const score = this.$store.getters['media/mediaFileByUri'](props.score)
+    const scoreMediaFile = this.$store.getters['media/mediaFileByUri'](props.score)
+
+    // All parts
+    // id:Strawinsky-Petruschka_NB_Abschnitt-23-29-Systeme
+
+    // Part 1
+    // id:Strawinsky-Petruschka_NB_Abschnitt-23-29-Systeme#1
+
+    // Part 2
+    // id:Strawinsky-Petruschka_NB_Abschnitt-23-29-Systeme#2
+    let scoreHttpUrl = scoreMediaFile.httpUrl
+    let scorePartNo = null
+    if (props.score.indexOf('#') > -1) {
+      const segments = props.score.split('#')
+      scorePartNo = parseInt(segments[1])
+      scoreHttpUrl = scoreMediaFile.multiPartHttpUrl(scorePartNo)
+    }
     return {
       heading: props.heading,
-      score,
-      scoreHttpUrl: score.httpUrl,
+      scoreMediaFile,
+      scoreHttpUrl,
+      scorePartNo,
       audioSample
     }
   },
   calculateStepCount (props) {
+    if (props.score.indexOf('#') > -1) {
+      return
+    }
     const score = this.$store.getters['media/mediaFileByUri'](props.score)
     if (score.multiPartCount) {
       return score.multiPartCount

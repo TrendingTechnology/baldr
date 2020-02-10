@@ -15,12 +15,15 @@ export default {
     heading: {
       type: String
     },
-    score: {
+    scoreMediaFile: {
       type: Object
     },
     scoreHttpUrl: {
       type: String,
       required: true
+    },
+    scorePartNo: {
+      type: Number,
     },
     audioSample: {
       type: Object
@@ -29,7 +32,13 @@ export default {
   computed: {
     ...mapGetters(['slideCurrent']),
     scoreHttpUrlCurrent () {
-      return this.score.multiPartHttpUrl(this.slideCurrent.renderData.stepNoCurrent)
+      let partNo
+      if (this.scorePartNo) {
+        partNo = this.scorePartNo
+      } else {
+        partNo = this.slideCurrent.renderData.stepNoCurrent
+      }
+      return this.scoreMediaFile.multiPartHttpUrl(partNo)
     }
   }
 }
