@@ -10,6 +10,7 @@ const commander = require('commander')
 const chalk = require('chalk')
 const yaml = require('js-yaml')
 const musicMetadata = require('music-metadata')
+const glob = require('glob')
 
 // Project packages
 const {
@@ -722,6 +723,56 @@ commander
   .command('mirror').alias('m')
   .description('Create and open in the file explorer a relative path in different base paths.')
   .action(actionMirror)
+
+/** mp / multipart ************************************************************/
+
+/**
+ * TODO: Use code form package @bldr/core-browser
+ *
+ * Generate from the file name or the url of the first element of a multipart
+ * asset the nth file name or the url.
+ *
+ * @param {String} firstFileName
+ * @param {Number} no
+ *
+ * @returns {String}
+ */
+function formatMultiPartAssetFileName (firstFileName, no) {
+  let suffix
+  if (no === 1) {
+    return firstFileName
+  } else if (no < 10) {
+    suffix = `_no0${no}`
+  } else if (no < 100) {
+    suffix = `_no${no}`
+  } else {
+    throw new Error(`${firstFileName} multipart asset counts greater than 100 are not supported.`)
+  }
+  return firstFileName.replace(/(\.\w+$)/, `${suffix}$1`)
+}
+
+function actionMultipart (globPattern, prefix) {
+  const files = glob.sync(globPattern)
+  if (files.length < 1) {
+    console.log('Glob matches no files.')
+    return
+  }
+  files.sort()
+  console.log(files)
+  let no = 1
+  const extension = files[0].split('.').pop()
+  for (const oldFileName of files) {
+    const newFileName = formatMultiPartAssetFileName(`${prefix}.${extension}`, no)
+    console.log(`${oldFileName} -> ${newFileName}`)
+    fs.renameSync(oldFileName, newFileName)
+    no += 1
+  }
+}
+
+commander
+  .command('multipart <glob> <prefix>').alias('mp')
+  .description('Rename multipart assets.')
+  .action(actionMultipart)
 
 /** n / normalize *************************************************************/
 
