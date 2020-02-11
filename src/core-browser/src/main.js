@@ -140,3 +140,30 @@ export function formatMultiPartAssetFileName (firstFileName, no) {
   }
   return firstFileName.replace(/(\.\w+$)/, `${suffix}$1`)
 }
+
+/**
+ * https://www.wikidata.org/wiki/Q42
+ */
+export function wikidataUrl () {
+  // https://www.wikidata.org/wiki/Q42
+  return `https://www.wikidata.org/wiki/Q${this.metaData.wikidata}`
+}
+
+/**
+ * https://en.wikipedia.org/wiki/A_Article
+ */
+export function wikipediaUrl () {
+  // https://de.wikipedia.org/wiki/Gesch%C3%BCtztes_Leerzeichen
+  // https://en.wikipedia.org/wiki/Non-breaking_space
+  const segments = this.metaData.wikipedia.split(':')
+  const lang = segments[0]
+  const slug = encodeURIComponent(segments[1])
+  return `https://${lang}.wikipedia.org/wiki/${slug}`
+}
+
+/**
+ * https://youtu.be/CQYypFMTQcE
+ */
+export function youtubeUrl (id) {
+  return `https://youtu.be/${id}`
+}
