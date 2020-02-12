@@ -1,4 +1,5 @@
 import { GrabFromObjects } from '@/lib.js'
+import { formatWikipediaUrl, formatWikidataUrl } from '@bldr/core-browser'
 
 export default {
   title: 'Porträt',
@@ -62,6 +63,14 @@ export default {
     if (result.birth) result.birth = `* ${result.birth}`
     if (result.death) result.death = `† ${result.death}`
     if (result.shortBiography) result.shortBiography = `… ${result.shortBiography}`
+    if (result.wikipedia) {
+      result.wikipediaHttpUrl = formatWikipediaUrl(result.wikipedia)
+      delete result.wikipedia
+    }
+    if (result.wikidata) {
+      result.wikidataHttpUrl = formatWikidataUrl(result.wikidata)
+      delete result.wikidata
+    }
     result.imageHttpUrl = image.httpUrl
     return result
   },

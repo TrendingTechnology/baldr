@@ -23,6 +23,7 @@ const {
   walk
 } = require('./main.js')
 const { bootstrapConfig } = require('@bldr/core-node')
+const { formatMultiPartAssetFileName } = require('@bldr/core-browser')
 
 // Project packages.
 const config = bootstrapConfig()
@@ -725,31 +726,6 @@ commander
   .action(actionMirror)
 
 /** mp / multipart ************************************************************/
-
-/**
- * TODO: Use code form package @bldr/core-browser
- *
- * Generate from the file name or the url of the first element of a multipart
- * asset the nth file name or the url.
- *
- * @param {String} firstFileName
- * @param {Number} no
- *
- * @returns {String}
- */
-function formatMultiPartAssetFileName (firstFileName, no) {
-  let suffix
-  if (no === 1) {
-    return firstFileName
-  } else if (no < 10) {
-    suffix = `_no0${no}`
-  } else if (no < 100) {
-    suffix = `_no${no}`
-  } else {
-    throw new Error(`${firstFileName} multipart asset counts greater than 100 are not supported.`)
-  }
-  return firstFileName.replace(/(\.\w+$)/, `${suffix}$1`)
-}
 
 function actionMultipart (globPattern, prefix) {
   const files = glob.sync(globPattern)

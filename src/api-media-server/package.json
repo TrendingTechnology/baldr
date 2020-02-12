@@ -15,6 +15,7 @@
   "main": "src/main.js",
   "dependencies": {
     "@bldr/core-node": "^0.1.4",
+    "@bldr/core-browser": "0.10.4",
     "chalk": "^2.4.2",
     "commander": "^4.0.0",
     "cors": "^2.8.5",

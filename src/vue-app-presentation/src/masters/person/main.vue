@@ -10,6 +10,11 @@
       </p>
       <p class="person important">{{ name }}</p>
     </div>
+
+    <div class="link-icons">
+      <a v-if="wikipediaHttpUrl" :href="wikipediaHttpUrl"><plain-icon name="wikipedia"/></a>
+      <a v-if="wikidataHttpUrl" :href="wikidataHttpUrl"><plain-icon name="wikidata"/></a>
+    </div>
   </div>
 </template>
 
@@ -84,6 +89,16 @@ export default {
         padding-right: 4vw;
         text-align: right;
       }
+    }
+
+    .link-icons {
+      opacity: 0.5;
+      font-size: 1.5em;
+      position: absolute;
+      right: 1em;
+      bottom: 9em;
+      display: flex;
+      flex-direction: column;
     }
   }
 </style>

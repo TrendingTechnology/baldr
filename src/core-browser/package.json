@@ -17,9 +17,22 @@
     "email": "josef@friedrich.rocks",
     "url": "https://josef.friedrich.rocks"
   },
-  "main": "src/main.js",
+  "scripts": {
+    "build": "babel --plugins @babel/plugin-transform-modules-commonjs -o src/main.node.js src/main.js"
+  },
+  "browser": "src/main.js",
+  "main": "src/main.node.js",
   "publishConfig": {
     "access": "public"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.8.4",
+    "@babel/plugin-transform-modules-commonjs": "^7.8.3"
+  },
+  "babel": {
+    "plugins": [
+      "@babel/plugin-transform-modules-commonjs"
+    ]
   },
   "gitHead": "ed4f60e66c8f420711d3eb15185620f7688e6fc9"
 }

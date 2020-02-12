@@ -143,19 +143,28 @@ export function formatMultiPartAssetFileName (firstFileName, no) {
 
 /**
  * https://www.wikidata.org/wiki/Q42
+ *
+ * @returns {String}
  */
-export function wikidataUrl () {
+export function formatWikidataUrl (id) {
+  console.log(id)
+  id = parseInt(id.replace(/^Q/, ''))
   // https://www.wikidata.org/wiki/Q42
-  return `https://www.wikidata.org/wiki/Q${this.metaData.wikidata}`
+  return `https://www.wikidata.org/wiki/Q${id}`
 }
 
 /**
  * https://en.wikipedia.org/wiki/A_Article
+ *
+ * @param {String} nameSpace - The name space of the Wikipedia article (for
+ *   example A_Article or en:A_article)
+ *
+ * @returns {String}
  */
-export function wikipediaUrl () {
+export function formatWikipediaUrl (nameSpace) {
   // https://de.wikipedia.org/wiki/Gesch%C3%BCtztes_Leerzeichen
   // https://en.wikipedia.org/wiki/Non-breaking_space
-  const segments = this.metaData.wikipedia.split(':')
+  const segments = nameSpace.split(':')
   const lang = segments[0]
   const slug = encodeURIComponent(segments[1])
   return `https://${lang}.wikipedia.org/wiki/${slug}`
@@ -163,7 +172,11 @@ export function wikipediaUrl () {
 
 /**
  * https://youtu.be/CQYypFMTQcE
+ *
+ * @param {String} id - The id of a Youtube video (for example CQYypFMTQcE).
+ *
+ * @returns {String}
  */
-export function youtubeUrl (id) {
+export function formatYoutubeUrl (id) {
   return `https://youtu.be/${id}`
 }
