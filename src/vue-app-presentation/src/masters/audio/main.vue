@@ -1,5 +1,12 @@
 <template>
   <div class="vc_audio_master">
+
+    <p
+      class="description"
+      v-if="description"
+      v-html="description"
+    />
+
     <img
       :src="previewHttpUrl"
       class="preview"
@@ -23,6 +30,8 @@
       v-if="artist"
       v-html="artist"
     />
+
+
     <play-button :sample="sample"/>
   </div>
 </template>
@@ -44,6 +53,9 @@ export default {
       type: String
     },
     artist: {
+      type: String
+    },
+    description: {
       type: String
     }
   }
@@ -76,6 +88,11 @@ export default {
       height: 30vh;
       width: 30vh;
       object-fit: cover;
+    }
+
+    .description {
+      font-size: 0.6em;
+      padding-bottom: 2em;
     }
 
     .vc_play_button {

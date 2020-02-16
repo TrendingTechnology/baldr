@@ -1,6 +1,16 @@
 ---
 slides:
 
+- title: With description
+  audio:
+    src: id:Du-bist-als-Kind-zu-heiss-gebadet-worden
+    description: |
+      # Some text
+
+      1. one
+      2. two
+      3. three
+
 - title: Custom composer
   audio:
     src: id:Fischer-Dieskau_Marmotte

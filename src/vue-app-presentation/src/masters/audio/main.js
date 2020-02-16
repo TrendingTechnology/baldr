@@ -30,6 +30,11 @@ export default {
       description: 'Eine Medien-Datei-URI, die als Cover-Bild angezeigt werden soll.',
       mediaFileUri: true
     },
+    description: {
+      type: String,
+      markup: true,
+      description: 'Ein längerer Beschreibungstext.'
+    },
     autoplay: {
       type: Boolean,
       default: false,
@@ -74,6 +79,7 @@ export default {
     const grab = new GrabFromObjects(props, mediaFile)
     const artist = grab.property('artist')
     const composer = grab.property('composer')
+    const description = grab.property('description')
     let title
     if (props.title) {
       title = props.title
@@ -93,7 +99,8 @@ export default {
       previewHttpUrl,
       artist,
       composer,
-      title
+      title,
+      description
     }
   }
 }
