@@ -9,6 +9,7 @@
 // import Vue from 'vue'
 import yaml from 'js-yaml'
 import { shortenText, convertPropertiesToCamelCase } from '@bldr/core-browser'
+import { markupToHtml } from '@/lib'
 import { masters } from '@/masters.js'
 import store from '@/store.js'
 import router from '@/router.js'
@@ -224,29 +225,36 @@ class RenderData {
  */
 export class MetaData {
   /**
-   * @param {*} rawSlideObject
+   * @param {Object} rawSlideObject
    */
   constructor (rawSlideObject) {
+    this.rawSlideObject_ = rawSlideObject
     /**
      * The title of a slide.
      *
      * @type {String}
      */
-    this.title = rawSlideObject.cut('title')
+    this.title = this.grabProperty_('title')
 
     /**
      * Some text that describes the slide.
      *
      * @type {String}
      */
-    this.description = rawSlideObject.cut('description')
+    this.description = this.grabProperty_('description')
 
     /**
      * The source of the slide, for example a HTTP URL.
      *
      * @type {String}
      */
-    this.source = rawSlideObject.cut('source')
+    this.source = this.grabProperty_('source')
+  }
+
+  grabProperty_ (property) {
+    const text = this.rawSlideObject_.cut(property)
+    if (text) return markupToHtml(text)
+    return null
   }
 }
 

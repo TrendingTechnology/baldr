@@ -16,3 +16,13 @@ slides:
   description: This slide has a description.
   source: This slide has a source.
   generic: This slide has all meta data.
+
+- title: This is *starred (italic)*.
+  description: |
+    # Heading 1
+
+    1. one
+    2. two
+    3. three
+  source: This is __bold__.
+  generic: Markdown support

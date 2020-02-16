@@ -25,7 +25,8 @@ const state = {
   showBlank: true,
   slideNoOld: null,
   slideNoCurrent: null,
-  slides: {}
+  slides: {},
+  showMetaDataOverlay: false
 }
 
 const getters = {
@@ -87,6 +88,9 @@ const getters = {
   },
   showBlank: (state) => {
     return state.showBlank
+  },
+  showMetaDataOverlay: (state) => {
+    return state.showMetaDataOverlay
   }
 }
 
@@ -236,6 +240,9 @@ const actions = {
     } else {
       commit('previewLayoutNoCurrent', no + 1)
     }
+  },
+  toggleMetaDataOverlay ({ commit, getters }) {
+    commit('showMetaDataOverlay', !getters.showMetaDataOverlay)
   }
 }
 
@@ -272,6 +279,9 @@ const mutations = {
   },
   setShowBlank (state, showBlank) {
     Vue.set(state, 'showBlank', showBlank)
+  },
+  showMetaDataOverlay (state, showMetaDataOverlay) {
+    Vue.set(state, 'showMetaDataOverlay', showMetaDataOverlay)
   }
 }
 

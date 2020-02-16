@@ -157,6 +157,11 @@ export default {
         description: 'Menü anzeigen'
       },
       {
+        keys: 'ctrl+i',
+        callback: () => { this.$store.dispatch('presentation/toggleMetaDataOverlay') },
+        description: 'Metainformation der Folien ein/ausblenden'
+      },
+      {
         keys: 'ctrl+r',
         callback: () => {
           this.$store.dispatch('presentation/reloadPresentation').then(() => {
