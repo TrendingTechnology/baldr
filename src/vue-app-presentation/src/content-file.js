@@ -220,14 +220,33 @@ class RenderData {
 }
 
 /**
- *
+ * The meta data of a slide. Each slide object owns one meta data object.
  */
 export class MetaData {
   /**
    * @param {*} rawSlideObject
    */
   constructor (rawSlideObject) {
+    /**
+     * The title of a slide.
+     *
+     * @type {String}
+     */
     this.title = rawSlideObject.cut('title')
+
+    /**
+     * Some text that describes the slide.
+     *
+     * @type {String}
+     */
+    this.description = rawSlideObject.cut('description')
+
+    /**
+     * The source of the slide, for example a HTTP URL.
+     *
+     * @type {String}
+     */
+    this.source = rawSlideObject.cut('source')
   }
 }
 

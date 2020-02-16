@@ -1,0 +1,18 @@
+---
+meta:
+  title: Slide meta data
+
+slides:
+- title: This slide has a title.
+  generic: This slide has a title.
+
+- description: This slide has a description.
+  generic: This slide has a description.
+
+- source: This slide has a source.
+  generic: This slide has a source.
+
+- title: This slide has a title.
+  description: This slide has a description.
+  source: This slide has a source.
+  generic: This slide has all meta data.
