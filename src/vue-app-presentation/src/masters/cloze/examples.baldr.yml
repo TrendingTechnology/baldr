@@ -1,6 +1,24 @@
 ---
 slides:
 
+- title: All
+  cloze: 'id:Dukas-Zauberlehrling_AB_Lueckentext'
+
+- title: 'step_subset: 16,35,53'
+  cloze:
+    src: 'id:Dukas-Zauberlehrling_AB_Lueckentext'
+    step_subset: 16,35,53
+
+- title: 'step_subset: 12-15'
+  cloze:
+    src: 'id:Dukas-Zauberlehrling_AB_Lueckentext'
+    step_subset: 12-15
+
+- title: 'step_subset: 2,3,4'
+  cloze:
+    src: id:AB_Bachs-vergebliche-Reise
+    step_subset: 2,3,4
+
 - title: Begin end
   cloze:
     src: id:AB_Bachs-vergebliche-Reise

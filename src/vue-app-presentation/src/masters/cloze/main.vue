@@ -41,11 +41,10 @@ export default {
       })
       this.$refs.clozeWrapper.innerHTML = response.data
       warnSvgWidthHeight()
-      this.domSteps = new DomSteps({ elements: this.collectClozeGroups() })
-      // this.clozeGroups = stepSupport.limitElements(
-      //   this.allClozeGroups,
-      //   this.slideCurrent.renderData.propsMain
-      // )
+      this.domSteps = new DomSteps({
+        elements: this.collectClozeGroups(),
+        subsetSelectors: this.slideCurrent.renderData.props.stepSubset
+      })
       this.slideCurrent.renderData.stepCount = this.domSteps.count
 
       const newClozeGroup = this.domSteps.displayByNo({

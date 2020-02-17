@@ -164,7 +164,7 @@ export class DomSteps {
     const optionsDefault = {
       elements: null,
       cssSelectors: null,
-      elementSelectors: null,
+      subsetSelectors: null,
       useVisibliltyProp: false
     }
     this.opts_ = Object.assign(optionsDefault, options)
@@ -177,12 +177,49 @@ export class DomSteps {
     } else {
       throw new Error(`Specify elements or cssSelectors`)
     }
-    this.elements = []
+    this.elementsAll = []
     for (const element of elements) {
-      this.elements.push(new DomStepElement(element, this.opts_.useVisibliltyProp))
+      this.elementsAll.push(new DomStepElement(element, this.opts_.useVisibliltyProp))
+    }
+
+    if (this.opts_.subsetSelectors) {
+      this.elements = this.selectElementsSubset(this.opts_.subsetSelectors)
+    } else {
+      this.elements = this.elementsAll
     }
 
     this.hideAll()
+  }
+
+  selectElementsSubset (subsetSelectors) {
+    const subset = {}
+    // 2, 3, 5 -> 2,3,5
+    subsetSelectors = subsetSelectors.replace(/\s*/g, '')
+    // 2-3,5-7
+    const ranges = subsetSelectors.split(',')
+
+    for (let range of ranges) {
+      range = range.split('-')
+      if (range.length === 1) {
+        const stepNo = range[0]
+        subset[stepNo] = this.elementsAll[stepNo - 2]
+      } else if (range.length === 2) {
+        const beginNo = range[0]
+        const endNo = range[1]
+        for (let stepNo = beginNo; stepNo <= endNo; stepNo++) {
+          subset[stepNo] = this.elementsAll[stepNo - 2]
+        }
+      }
+    }
+
+    // Sort the step by the step number.
+    const stepNos = Object.keys(subset)
+    stepNos.sort()
+    const result = []
+    for (const stepNo of stepNos) {
+      result.push(subset[stepNo])
+    }
+    return result
   }
 
   get count () {
@@ -190,7 +227,7 @@ export class DomSteps {
   }
 
   hideAll () {
-    for (const element of this.elements) {
+    for (const element of this.elementsAll) {
       element.show(false)
     }
   }
@@ -253,10 +290,14 @@ export const stepSupport = {
       description: 'Text ausblenden und einzelne Wörtern einblenden',
       default: false
     },
-    stepSentences:  {
+    stepSentences: {
       type: Boolean,
       description: 'Text ausblenden und einzelne Sätze (im übertragenem Sinn) einblenden.',
       default: false
+    },
+    stepSubset: {
+      type: String,
+      description: 'Eine Untermenge von Schritten auswählen (z. B. 1,3,5 oder 2-5).',
     },
     stepExclude: {
       type: [Array, Number],

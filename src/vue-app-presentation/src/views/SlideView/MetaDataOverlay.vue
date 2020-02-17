@@ -36,12 +36,13 @@ export default {
   .vc_meta_data_overlay {
     position: absolute;
     top: 0;
-    left: 0;
+    left: 5em;
     padding: 1em;
+    background: none !important;
 
     .transparent-bg {
-      background: rgba(170, 170, 170, 0.3);
-      padding: 0.1em;
+      background: rgba($green, 0.2);
+      padding: 0.2em;
     }
   }
 </style>
