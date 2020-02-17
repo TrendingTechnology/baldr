@@ -111,6 +111,136 @@ export function validateUri (uri) {
 }
 
 /**
+ * A wrapper class for a HTML element.
+ */
+class DomStepElement {
+  /**
+   *
+   * @property {Boolean} useVisibliltyProp - Set the visibility `element.style.visibility`
+   *   instead of the display state.
+   */
+  constructor (element, useVisibliltyProp = false) {
+    this.element = element
+    this.useVisibliltyProp_ = useVisibliltyProp
+
+    if (this.useVisibliltyProp_) {
+      this.stylePropertyName_ = 'visibility'
+    } else {
+      this.stylePropertyName_ = 'display'
+    }
+
+    this.styleValues_ = [
+      {
+        visibility: 'hidden',
+        display: 'none'
+      },
+      {
+        visibility: 'visible',
+        display: 'block'
+      }
+    ]
+  }
+
+  /**
+   * @private
+   */
+  getStyleValue_ (show) {
+    return this.styleValues_[Number(show)][this.stylePropertyName_]
+  }
+
+  /**
+   *
+   */
+  show (isVisible = true) {
+    this.element.style[this.stylePropertyName_] = this.getStyleValue_(isVisible)
+  }
+}
+
+/**
+ * Generate steps by hiding and showing some DOM elements.
+ */
+export class DomSteps {
+  constructor (options) {
+    const optionsDefault = {
+      elements: null,
+      cssSelectors: null,
+      elementSelectors: null,
+      useVisibliltyProp: false
+    }
+    this.opts_ = Object.assign(optionsDefault, options)
+
+    let elements
+    if (this.opts_.elements) {
+      elements = this.opts_.elements
+    } else if (this.opts_.cssSelectors) {
+      elements = document.querySelectorAll(cssSelectors)
+    } else {
+      throw new Error(`Specify elements or cssSelectors`)
+    }
+    this.elements = []
+    for (const element of elements) {
+      this.elements.push(new DomStepElement(element, this.opts_.useVisibliltyProp))
+    }
+
+    this.hideAll()
+  }
+
+  get count () {
+    return this.elements.length + 1
+  }
+
+  hideAll () {
+    for (const element of this.elements) {
+      element.show(false)
+    }
+  }
+
+  /**
+   * Set the display / visiblilty state on HTML elements. Loop through all
+   * elements or perform a minimal update. On the first step no elements are
+   * displayed. The number of steps is: number of elements + 1.
+   * A minimal update doesn’t loop through all elements, only the visibility
+   * state of the next element is changed.
+   *
+   * @param {config}
+   * @property {Array} elements - A list of HTML elements to display on step number
+   *   change.
+   * @property {Number} oldStepNo - The previous step number.
+   * @property {Number} stepNo - The current step number.
+   * @property {Boolean} full - Perform a full update.
+   * @property {Boolean} visiblilty - Set the visibility `element.style.visibility`
+   *   instead of the display state.
+   *
+   * @returns {Object} The element that is displayed by the new step number.
+   */
+  displayByNo ({ stepNo, oldStepNo, full }) {
+    if (!oldStepNo || full || stepNo === 1 || (oldStepNo === 1 && stepNo === this.count)) {
+      let count = 1
+      for (const domStep of this.elements) {
+        domStep.show(stepNo > count)
+        count += 1
+      }
+      if (stepNo === 1) {
+        return this.elements[0].element
+      }
+      // First step: No elements are displayed.
+      // The array index begins with 0, steps with 1.
+      return this.elements[stepNo - 2].element
+    }
+    let domStep
+    if (stepNo > oldStepNo) {
+      // First step: No elements are displayed.
+      // The array index begins with 0, steps with 1.
+      domStep = this.elements[stepNo - 2]
+    } else {
+      domStep = this.elements[stepNo - 1]
+    }
+    domStep.show(stepNo > oldStepNo)
+    return domStep.element
+  }
+}
+
+/**
  * Functions and configuration data for masters with step support.
  */
 export const stepSupport = {

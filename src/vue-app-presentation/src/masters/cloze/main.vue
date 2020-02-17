@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { stepSupport, warnSvgWidthHeight } from '@/lib.js'
+import { DomSteps, stepSupport, warnSvgWidthHeight } from '@/lib.js'
 import { createNamespacedHelpers } from 'vuex'
 const { mapGetters } = createNamespacedHelpers('presentation')
 
@@ -19,12 +19,21 @@ export default {
   },
   data () {
     return {
-      allClozeGroups: null,
-      clozeGroups: []
+      domSteps: null
     }
   },
   computed: mapGetters(['slideCurrent']),
   methods: {
+    collectClozeGroups () {
+      const gElements = document.querySelectorAll('svg g')
+      const clozeGElements = []
+      for (const g of gElements) {
+        if (g.style.fill === 'rgb(0, 0, 255)') {
+          clozeGElements.push(g)
+        }
+      }
+      return clozeGElements
+    },
     async loadSvg () {
       let response = await this.$media.httpRequest.request({
         url: `/media/${this.svgPath}`,
@@ -32,17 +41,14 @@ export default {
       })
       this.$refs.clozeWrapper.innerHTML = response.data
       warnSvgWidthHeight()
-      this.allClozeGroups = this.collectClozeGroups()
-      this.clozeGroups = stepSupport.limitElements(
-        this.allClozeGroups,
-        this.slideCurrent.renderData.propsMain
-      )
-      this.slideCurrent.renderData.stepCount = this.clozeGroups.length + 1
-      for (const group of this.allClozeGroups) {
-        group.style.display = 'none'
-      }
-      const newClozeGroup = stepSupport.displayElementByNo({
-        elements: this.clozeGroups,
+      this.domSteps = new DomSteps({ elements: this.collectClozeGroups() })
+      // this.clozeGroups = stepSupport.limitElements(
+      //   this.allClozeGroups,
+      //   this.slideCurrent.renderData.propsMain
+      // )
+      this.slideCurrent.renderData.stepCount = this.domSteps.count
+
+      const newClozeGroup = this.domSteps.displayByNo({
         stepNo: this.slideCurrent.renderData.stepNoCurrent
       })
       this.scroll(newClozeGroup)
@@ -62,17 +68,7 @@ export default {
       const y = svg.clientHeight / bBox.height * glyph.y.baseVal.value
       const adjustedY = y - 0.8 * window.screen.height
       window.scrollTo({ top: adjustedY, left: 0, behavior: "smooth" });
-    },
-    collectClozeGroups () {
-      const gElements = document.querySelectorAll('svg g')
-      const clozeGElements = []
-      for (const g of gElements) {
-        if (g.style.fill === 'rgb(0, 0, 255)') {
-          clozeGElements.push(g)
-        }
-      }
-      return clozeGElements
-    },
+    }
   },
   mounted () {
     this.loadSvg()
