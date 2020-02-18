@@ -179,10 +179,11 @@ const actions = {
     commit('setSlideNoCurrent', no)
   },
   setStepNext ({ dispatch, getters }) {
-    let stepNoCurrent
     const slideCurrent = getters.slideCurrent
-    const no = slideCurrent.renderData.stepNoCurrent
     const count = slideCurrent.renderData.stepCount
+    if (!count) return
+    let stepNoCurrent
+    const no = slideCurrent.renderData.stepNoCurrent
     if (no === count) {
       stepNoCurrent = 1
     } else {
@@ -191,10 +192,11 @@ const actions = {
     dispatch('setStepNoCurrent', { slideCurrent, stepNoCurrent })
   },
   setStepPrevious ({ dispatch, getters }) {
-    let stepNoCurrent
     const slideCurrent = getters.slideCurrent
-    const no = slideCurrent.renderData.stepNoCurrent
     const count = slideCurrent.renderData.stepCount
+    if (!count) return
+    let stepNoCurrent
+    const no = slideCurrent.renderData.stepNoCurrent
     if (no === 1) {
       stepNoCurrent = count
     } else {
