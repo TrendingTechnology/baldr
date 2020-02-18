@@ -9,7 +9,7 @@
 
 <script>
 import { plainText } from '@bldr/core-browser'
-import { markupToHtml, wrapWords, stepSupport } from '@/lib.js'
+import { markupToHtml, wrapWords, stepSupport, DomSteps } from '@/lib.js'
 import { createNamespacedHelpers } from 'vuex'
 const { mapGetters } = createNamespacedHelpers('presentation')
 
@@ -22,24 +22,12 @@ export default {
     markup: {
       type: String
     },
-    stepWords: {
-      type: Boolean,
-      default: false
-    },
-    stepSentences: {
-      type: Boolean,
-      default: false
-    },
-    stepBegin: {
-      type: Number,
-    },
-    stepEnd: {
-      type: Number,
-    }
+    ...DomSteps.mapProps(['words', 'sentences', 'subset'])
   },
   data () {
     return {
-      fontSize: 3.5
+      fontSize: 3.5,
+      domSteps: null
     }
   },
   computed: {

@@ -149,10 +149,59 @@ class DomStepElement {
   }
 
   /**
-   *
+   * @param {Boolean} isVisible
    */
   show (isVisible = true) {
     this.element.style[this.stylePropertyName_] = this.getStyleValue_(isVisible)
+  }
+}
+
+/**
+ * A group of step elements which are controlled at once.
+ */
+class DomStepElementGroup {
+  /**
+   *
+   * @param {Array} elements
+   */
+  constructor (elements, useVisibliltyProp = false) {
+    this.useVisibliltyProp_ = useVisibliltyProp
+    /**
+     * @type {Array}
+     */
+    this.elements = []
+    if (elements) {
+      this.addMultipleElements_(elements)
+    }
+  }
+
+  /**
+   *
+   * @param {Array} elements
+   *
+   * @private
+   */
+  addMultipleElements_ (elements) {
+    for (const element of elements) {
+      this.addElement(element)
+    }
+  }
+
+  /**
+   *
+   * @param {HTMLElement} element
+   */
+  addElement (element) {
+    this.elements.push(new DomStepElement(element, this.useVisibliltyProp_))
+  }
+
+  /**
+   * @param {Boolean} isVisible
+   */
+  show (isVisible = true) {
+    for (const element of this.elements) {
+      element.show(isVisible)
+    }
   }
 }
 
@@ -164,19 +213,12 @@ export class DomSteps {
     const optionsDefault = {
       elements: null,
       cssSelectors: null,
+      specializedSelector: null,
+      sentencesSelector: null,
       subsetSelectors: null,
       useVisibliltyProp: false
     }
     this.opts_ = Object.assign(optionsDefault, options)
-
-    let elements
-    if (this.opts_.elements) {
-      elements = this.opts_.elements
-    } else if (this.opts_.cssSelectors) {
-      elements = document.querySelectorAll(this.opts_.cssSelectors)
-    } else {
-      throw new Error(`Specify elements or cssSelectors`)
-    }
 
     /**
      * All elements obtained from `document.querySelectorAll()`.
@@ -184,8 +226,28 @@ export class DomSteps {
      * @type {Array}
      */
     this.elementsAll = []
-    for (const element of elements) {
-      this.elementsAll.push(new DomStepElement(element, this.opts_.useVisibliltyProp))
+
+    let elements
+    if (this.opts_.elements) {
+      elements = this.opts_.elements
+    } else if (this.opts_.specializedSelector) {
+      if (this.opts_.specializedSelector === 'words') {
+        this.elementsAll = DomSteps.selectWords()
+      } else if (this.opts_.specializedSelector === 'sentences') {
+        this.elementsAll = DomSteps.selectSentences(this.opts_.sentencesSelector)
+      } else {
+        throw new Error(`Unkown specialized selector: ${this.opts_.specializedSelector}`)
+      }
+    } else if (this.opts_.cssSelectors) {
+      elements = document.querySelectorAll(this.opts_.cssSelectors)
+    } else {
+      throw new Error(`Specify elements or cssSelectors`)
+    }
+
+    if (this.elements) {
+      for (const element of elements) {
+        this.elementsAll.push(new DomStepElement(element, this.opts_.useVisibliltyProp))
+      }
     }
 
     /**
@@ -201,6 +263,59 @@ export class DomSteps {
     }
 
     this.hideAll()
+  }
+
+  /**
+   * Select words which are surrounded by `span.word`.
+   *
+   * @returns {DomStepElementGroup|DomStepElement[]} An array of
+   *   `DomStepElement`s or `DomStepElementGroup`s.
+   */
+  static selectWords () {
+    const wordsRaw = document.querySelectorAll('span.word')
+    const words = []
+    for (const word of wordsRaw) {
+      if (!word.previousSibling) {
+        const parent = word.parentElement
+        if (parent.tagName === 'LI' && !parent.previousSibling) {
+          words.push(new DomStepElementGroup([parent.parentElement, parent, word], true))
+        } else {
+          words.push(new DomStepElementGroup([parent, word], true))
+        }
+      } else {
+        words.push(new DomStepElement(word, true))
+      }
+    }
+    return words
+  }
+
+  /**
+   * Select more than a word. The meaning  of "sentences" in the function name
+   * should not be understood literally, but symbolic for a longer text unit.
+   * Select a whole paragraph (`<p>`) or a heading `<h1>` or `<li>` items of
+   * ordered or unordered lists, or a table row.
+   *
+   * @param {String} - A selector for `document.querySelector()` of the parent
+   *   Element, which contains child HTML element to use as steps.
+   *
+   * @returns {DomStepElement[]} An array of
+   *   `DomStepElement`s.
+   */
+  static selectSentences (selector) {
+    const parentElement = document.querySelector(selector)
+    const sentences = []
+    for (const element of parentElement.children) {
+      if (['UL', 'OL'].includes(element.tagName)) {
+        for (const li of element.children) {
+          if (li.tagName === 'LI') {
+            sentences.push(new DomStepElement(li, true))
+          }
+        }
+      } else {
+        sentences.push(new DomStepElement(element, true))
+      }
+    }
+    return sentences
   }
 
   /**
@@ -236,8 +351,8 @@ export class DomSteps {
       if (props[selector]) {
         result[`step${selector.charAt(0).toUpperCase()}${selector.substr(1).toLowerCase()}`] = props[selector]
       }
-      return result
     }
+    return result
   }
 
   /**
@@ -382,6 +497,8 @@ export const stepSupport = {
   },
 
   /**
+   * TODO: remove
+   *
    * Return a subset of HTML elements, which are used as steps.
    *
    * @param {Array} elements - An array of HTML elements or a node list of
@@ -406,6 +523,8 @@ export const stepSupport = {
   },
 
   /**
+   * TODO: remove
+   *
    * Remove some element from the step nodelist. The node list is
    * converted into a array.
    *

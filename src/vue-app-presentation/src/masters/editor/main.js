@@ -1,5 +1,5 @@
 import { plainText } from '@bldr/core-browser'
-import { markupToHtml, wrapWords, stepSupport } from '@/lib.js'
+import { markupToHtml, wrapWords, DomSteps } from '@/lib.js'
 
 const placeholder = '…'
 const placeholderTag = `<span class="editor-placeholder">${placeholder}</span>`
@@ -12,7 +12,7 @@ export default {
       markup: true,
       description: 'Text im HTML oder Markdown Format oder natürlich als reiner Text.'
     },
-    ...stepSupport.props
+    ...DomSteps.mapProps(['words', 'sentences', 'subset'])
   },
   icon: {
     name: 'pencil',
@@ -50,27 +50,23 @@ export default {
   },
   enterSlide () {
     this.onSlideChange()
-    let steps
+    let specializedSelector
+    let sentencesSelector
     if (this.stepWords) {
-      steps = stepSupport.selectWords()
+      specializedSelector = 'words'
     } else if (this.stepSentences) {
-      steps = stepSupport.selectSentences('.vc_editor_master')
+      specializedSelector = 'sentences'
+      sentencesSelector = '.vc_editor_master'
     }
-    if (steps) {
-      this.steps = stepSupport.limitElements(
-        steps,
-        {
-          stepBegin: this.stepBegin,
-          stepEnd: this.stepEnd
-        }
-      )
-      this.slideCurrent.renderData.stepCount = this.steps.length + 1
-      stepSupport.displayElementByNo({
-        elements: this.steps,
-        stepNo: this.slideCurrent.renderData.stepNoCurrent,
-        full: true,
-        visibility: true
+
+    if (specializedSelector) {
+      this.domSteps = new DomSteps({
+        subsetSelectors: this.stepSubset,
+        specializedSelector,
+        sentencesSelector
       })
+
+      this.slideCurrent.renderData.stepCount = this.domSteps.count
     }
   },
   beforeLeaveSlide ({ oldProps }) {
@@ -80,11 +76,9 @@ export default {
   enterStep ({ oldStepNo, newStepNo }) {
     const stepNo = newStepNo
     if (this.stepWords || this.stepSentences) {
-      stepSupport.displayElementByNo({
-        elements: this.steps,
+      this.domSteps.displayByNo({
         oldStepNo,
-        stepNo,
-        visibility: true
+        stepNo
       })
     }
   }
