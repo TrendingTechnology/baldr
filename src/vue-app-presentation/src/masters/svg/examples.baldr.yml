@@ -4,7 +4,7 @@ slides:
 - title: Shortcuts
   svg:
     src: id:Requiem_NB_Confutatis_1-Takt
-    step_exclude: 1
+    step_subset: 3-
 
 - title: Kurzform
   svg: id:Notenbeispiel_Freude-schoener-Goetterfunken
@@ -16,7 +16,7 @@ slides:
 - title: g Element
   svg:
     src: id:NB_Dreiklaenge-Nationalhymnen_F-Dur
-    step_exclude: 1
+    step_subset: 3-
 
 - title: class
   svg:

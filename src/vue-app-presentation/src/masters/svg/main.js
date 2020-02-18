@@ -1,6 +1,4 @@
-import { stepSupport, warnSvgWidthHeight } from '@/lib.js'
-
-const stepExclude = stepSupport.props.stepExclude
+import { warnSvgWidthHeight, DomSteps } from '@/lib.js'
 
 export default {
   title: 'Bild',
@@ -11,10 +9,7 @@ export default {
       description: 'Den URI zu einer SVG-Datei.',
       mediaFileUri: true
     },
-    stepSelector: {
-      description: 'Selektor, der Elemente auswählt, die als Schritte eingeblendet werden sollen.'
-    },
-    stepExclude
+    ...DomSteps.mapProps(['selector', 'subset'])
   },
   icon: {
     name: 'image',
@@ -42,21 +37,20 @@ export default {
     const svg = this.$refs.svgWrapper
     svg.innerHTML = response.data
     warnSvgWidthHeight(this.svgPath)
-    this.elGroups = svg.querySelectorAll(this.stepSelector)
-    this.elGroups = stepSupport.excludeElements(this.elGroups, this.stepExclude)
-    this.slideCurrent.renderData.stepCount = this.elGroups.length + 1
-    stepSupport.displayElementByNo({
-      elements: this.elGroups,
-      stepNo: this.slideCurrent.renderData.stepNoCurrent
+
+    this.domSteps = new DomSteps({
+      cssSelectors: this.stepSelector,
+      subsetSelectors: this.slideCurrent.renderData.props.stepSubset
     })
-    stepSupport.shortcutsRegister(this.elGroups)
+
+    this.domSteps.setStepCount(this.slideCurrent)
+    this.domSteps.shortcutsRegister()
   },
   leaveSlide () {
-    stepSupport.shortcutsUnregister(this.elGroups)
+    this.domSteps.shortcutsUnregister()
   },
   enterStep ({ oldStepNo, newStepNo }) {
-    stepSupport.displayElementByNo({
-      elements: this.elGroups,
+    this.domSteps.displayByNo({
       oldStepNo,
       stepNo: newStepNo
     })
@@ -68,7 +62,7 @@ export default {
       svgTitle: svgMediaFile.title,
       svgHttpUrl: svgMediaFile.httpUrl,
       stepSelector: props.stepSelector,
-      stepExclude: props.stepExclude
+      stepSubset: props.stepSubset
     }
   },
   collectPropsPreview ({ propsMain }) {

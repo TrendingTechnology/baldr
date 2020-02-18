@@ -245,7 +245,7 @@ export class DomSteps {
       throw new Error(`Specify elements or cssSelectors`)
     }
 
-    if (this.elements) {
+    if (elements) {
       for (const element of elements) {
         this.elementsAll.push(new DomStepElement(element, this.opts_.useVisibliltyProp))
       }
@@ -330,9 +330,10 @@ export class DomSteps {
    */
   static mapProps (selectors) {
     const props = {
-      // stepSelector: {
-      //   default: 'g',
-      // },
+      selector: {
+        description: 'Selektor, der Elemente auswählt, die als Schritte eingeblendet werden sollen.',
+        default: 'g[inkscape\\:groupmode="layer"]'
+      },
       words: {
         type: Boolean,
         description: 'Text ausblenden und einzelne Wörtern einblenden',
@@ -358,12 +359,17 @@ export class DomSteps {
     return result
   }
 
+  setStepCount (slide) {
+    slide.renderData.stepCount = this.count
+  }
+
   /**
    * @param {String} subsetSelectors
    *
    * @private
    */
   selectElementsSubset_ (subsetSelectors) {
+    console.log(subsetSelectors)
     const subset = {}
     // 2, 3, 5 -> 2,3,5
     subsetSelectors = subsetSelectors.replace(/\s*/g, '')
@@ -401,6 +407,7 @@ export class DomSteps {
     for (const stepNo of stepNos) {
       result.push(subset[stepNo])
     }
+    console.log(result)
     return result
   }
 
@@ -456,6 +463,35 @@ export class DomSteps {
     }
     domStep.show(stepNo > oldStepNo)
     return domStep.element
+  }
+
+  /**
+   * TODO: Implement vuex support
+   *
+   * @param {Array} elements - An array of HTML elements or a node list of
+   *   elements.
+   */
+  shortcutsRegister () {
+    for (const element of this.elements) {
+      const shortcut = element.element.getAttribute('baldr-shortcut')
+      const description = element.element.getAttribute('inkscape:label')
+      vue.$shortcuts.add(`q ${shortcut}`, () => {
+        element.show(true)
+      }, `${description} (einblenden in SVG: „${this.svgTitle}“)`)
+    }
+  }
+
+  /**
+   *
+   * @param {Array} elements - An array of HTML elements or a node list of
+   *   elements.
+   */
+  shortcutsUnregister () {
+    if (!this.elements) return
+    for (const element of this.elements) {
+      const shortcut = element.element.getAttribute('baldr-shortcut')
+      vue.$shortcuts.remove(`q ${shortcut}`)
+    }
   }
 }
 
@@ -548,35 +584,6 @@ export const stepSupport = {
       elements.splice(stepNo - 1, 1)
     }
     return elements
-  },
-
-  /**
-   * TODO: Implement vuex support
-   *
-   * @param {Array} elements - An array of HTML elements or a node list of
-   *   elements.
-   */
-  shortcutsRegister: function (elements) {
-    for (const element of elements) {
-      const shortcut = element.getAttribute('baldr-shortcut')
-      const description = element.getAttribute('inkscape:label')
-      vue.$shortcuts.add(`q ${shortcut}`, () => {
-        element.style.display = 'block'
-      }, `${description} (einblenden in SVG: „${this.svgTitle}“)`)
-    }
-  },
-
-  /**
-   *
-   * @param {Array} elements - An array of HTML elements or a node list of
-   *   elements.
-   */
-  shortcutsUnregister: function (elements) {
-    if (!elements) return
-    for (const element of elements) {
-      const shortcut = element.getAttribute('baldr-shortcut')
-      vue.$shortcuts.remove(`q ${shortcut}`)
-    }
   },
 
   selectWords: function () {

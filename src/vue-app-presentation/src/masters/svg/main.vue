@@ -5,6 +5,8 @@
 </template>
 
 <script>
+import { DomSteps } from '@/lib.js'
+
 import { createNamespacedHelpers } from 'vuex'
 const { mapGetters } = createNamespacedHelpers('presentation')
 
@@ -18,16 +20,11 @@ export default {
       type: String,
       required: true
     },
-    stepSelector: {
-      default: 'g[inkscape\\:groupmode="layer"]'
-    },
-    stepExclude: {
-      type: [Array, Number]
-    }
+    ...DomSteps.mapProps(['selector', 'subset'])
   },
   data () {
     return {
-      elGroups: null
+      domSteps: null
     }
   },
   computed: mapGetters(['slideCurrent'])
