@@ -20,7 +20,7 @@ export default {
   },
   icon: {
     name: 'file-audio',
-    color: 'black',
+    color: 'black'
   },
   styleConfig: {
     centerVertically: true,

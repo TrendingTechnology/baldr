@@ -35,7 +35,7 @@ export default {
     return [props.src]
   },
   async enterSlide () {
-    let response = await this.$media.httpRequest.request({
+    const response = await this.$media.httpRequest.request({
       url: `/media/${this.svgPath}`,
       method: 'get'
     })

@@ -63,14 +63,14 @@ export default {
           stepBegin: this.stepBegin,
           stepEnd: this.stepEnd
         }
-     )
-     this.slideCurrent.renderData.stepCount = this.steps.length + 1
-     stepSupport.displayElementByNo({
-       elements: this.steps,
-       stepNo: this.slideCurrent.renderData.stepNoCurrent,
-       full: true,
-       visibility: true
-     })
+      )
+      this.slideCurrent.renderData.stepCount = this.steps.length + 1
+      stepSupport.displayElementByNo({
+        elements: this.steps,
+        stepNo: this.slideCurrent.renderData.stepNoCurrent,
+        full: true,
+        visibility: true
+      })
     }
   },
   beforeLeaveSlide ({ oldProps }) {
@@ -79,11 +79,13 @@ export default {
   },
   enterStep ({ oldStepNo, newStepNo }) {
     const stepNo = newStepNo
-    if (this.stepWords || this.stepSentences) stepSupport.displayElementByNo({
-      elements: this.steps,
-      oldStepNo,
-      stepNo,
-      visibility: true
-    })
+    if (this.stepWords || this.stepSentences) {
+      stepSupport.displayElementByNo({
+        elements: this.steps,
+        oldStepNo,
+        stepNo,
+        visibility: true
+      })
+    }
   }
 }

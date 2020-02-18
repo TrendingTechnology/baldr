@@ -3,6 +3,8 @@ import { markupToHtml, wrapWords, stepSupport } from '@/lib.js'
 
 const CHARACTERS_ON_SLIDE = 400
 
+/* globals DOMParser */
+
 /**
  * Split a HTML text into smaller chunks by looping over the children.
  *
@@ -51,8 +53,8 @@ export default {
       type: [String, Array],
       required: true,
       // It is complicated to convert to prop based markup conversion.
-      //markup: true
-      description:  'Markup im HTML oder Markdown-Format'
+      // markup: true
+      description: 'Markup im HTML oder Markdown-Format'
     },
     charactersOnSlide: {
       type: [Number],
@@ -143,12 +145,14 @@ export default {
   },
   enterStep ({ oldStepNo, newStepNo }) {
     const stepNo = newStepNo
-    if (this.stepWords) stepSupport.displayElementByNo({
-      elements: this.steps,
-      oldStepNo,
-      stepNo,
-      visibility: true
-    })
+    if (this.stepWords) {
+      stepSupport.displayElementByNo({
+        elements: this.steps,
+        oldStepNo,
+        stepNo,
+        visibility: true
+      })
+    }
   },
   collectPropsMain (props) {
     return {

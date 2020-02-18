@@ -25,7 +25,6 @@ export default {
         markup: props
       }
     }
-    props.markup = props.markup
     return props
   },
   plainTextFromProps (props) {
