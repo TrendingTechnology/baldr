@@ -216,7 +216,8 @@ export class DomSteps {
       specializedSelector: null,
       sentencesSelector: null,
       subsetSelectors: null,
-      useVisibliltyProp: false
+      useVisibliltyProp: false,
+      hideAllElementsInitally: true
     }
     this.opts_ = Object.assign(optionsDefault, options)
 
@@ -262,7 +263,9 @@ export class DomSteps {
       this.elements = this.elementsAll
     }
 
-    this.hideAll()
+    if (this.opts_.hideAllElementsInitally) {
+      this.hideAll()
+    }
   }
 
   /**
@@ -423,13 +426,9 @@ export class DomSteps {
    * state of the next element is changed.
    *
    * @param {config}
-   * @property {Array} elements - A list of HTML elements to display on step number
-   *   change.
    * @property {Number} oldStepNo - The previous step number.
    * @property {Number} stepNo - The current step number.
    * @property {Boolean} full - Perform a full update.
-   * @property {Boolean} visiblilty - Set the visibility `element.style.visibility`
-   *   instead of the display state.
    *
    * @returns {Object} The element that is displayed by the new step number.
    */

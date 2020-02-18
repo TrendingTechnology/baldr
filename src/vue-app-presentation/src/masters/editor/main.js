@@ -63,10 +63,11 @@ export default {
       this.domSteps = new DomSteps({
         subsetSelectors: this.stepSubset,
         specializedSelector,
-        sentencesSelector
+        sentencesSelector,
+        hideAllElementsInitally: false
       })
-
       this.slideCurrent.renderData.stepCount = this.domSteps.count
+      this.domSteps.displayByNo({ stepNo: this.slideCurrent.renderData.stepNoCurrent, full: true })
     }
   },
   beforeLeaveSlide ({ oldProps }) {
