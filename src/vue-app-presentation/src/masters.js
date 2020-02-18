@@ -4,6 +4,8 @@
  * @module @bldr/vue-app-presentation/masters
  */
 
+/* globals rawYamlExamples */
+
 import vue, { customStore } from '@/main.js'
 import Vue from 'vue'
 import store from '@/store.js'
@@ -37,21 +39,21 @@ class MasterIcon {
      *
      * @type {String}
      */
-    this.color = color ? color : 'orange'
+    this.color = color || 'orange'
 
     /**
      * Show the icon the on slide view.
      *
      * @type {Boolean}
      */
-    this.showOnSlides = showOnSlides === false ? false : true
+    this.showOnSlides = showOnSlides !== false
 
     /**
      * `small` or `large`
      *
      * @type {String}
      */
-    this.size = size ? size : 'small'
+    this.size = size || 'small'
   }
 }
 
@@ -385,7 +387,7 @@ class Master {
    * @param {module:@bldr/vue-app-presentation~props} props
    */
   validateUris (props) {
-    if (!this.props)  return props
+    if (!this.props) return props
     for (const propName in props) {
       const prop = this.props[propName]
       if ('mediaFileUri' in prop && prop.mediaFileUri) {

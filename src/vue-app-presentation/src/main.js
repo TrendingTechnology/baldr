@@ -135,7 +135,6 @@ Vue.config.productionTip = false
  * Set multiple attributes at the same time
  */
 class MultipleAttributes {
-
   constructor () {
     this.attributeName = ''
   }
@@ -146,12 +145,12 @@ class MultipleAttributes {
       // Preview slide editor has content-theme handwriting, which should
       // be anchangeable.
       if (
-            this.attributeName !== 'b-content-theme' ||
+        this.attributeName !== 'b-content-theme' ||
             (
               this.attributeName === 'b-content-theme' &&
               !element.attributes['b-content-theme-unchangeable']
             )
-          ) {
+      ) {
         element.attributes[this.attributeName].value = value
       }
     }
@@ -303,7 +302,7 @@ Vue.prototype.$styleConfig = new StyleConfig()
 /**
  * $notifySuccess
  */
-Vue.prototype.$notifySuccess = function(text, title) {
+Vue.prototype.$notifySuccess = function (text, title) {
   const notification = {
     group: 'default',
     text,
@@ -317,7 +316,7 @@ Vue.prototype.$notifySuccess = function(text, title) {
 /**
  * $notifyError
  */
-Vue.prototype.$notifyError = function(text, title) {
+Vue.prototype.$notifyError = function (text, title) {
   if (typeof text === 'object') {
     const error = text
     text = error.message

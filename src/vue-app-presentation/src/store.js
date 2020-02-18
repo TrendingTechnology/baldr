@@ -1,11 +1,12 @@
 /**
- * @file vuex store
+ * vuex store
+ *
+ * @module @bldr/vue-app-presentation/store
  */
 import Vue from 'vue'
 import Vuex from 'vuex'
 import { Presentation } from './content-file'
-import vue from '@/main.js'
-import { customStore } from '@/main.js'
+import vue, { customStore } from '@/main.js'
 
 Vue.use(Vuex)
 
@@ -18,8 +19,8 @@ const state = {
     hierarchical: false,
     layoutNoCurrent: 0,
     layouts: {
-      'grid': 'Gitter',
-      'list': 'Liste'
+      grid: 'Gitter',
+      list: 'Liste'
     }
   },
   showBlank: true,
@@ -124,7 +125,7 @@ const actions = {
     // Get yaml content as a string of the presentation.
     response = await vue.$media.httpRequest.request({
       url: `/media/${mongoDbObject.path}`,
-      headers: { 'Cache-Control': 'no-cache' },
+      headers: { 'Cache-Control': 'no-cache' }
     })
     const rawYamlString = response.data
     await dispatch('openPresentation', { rawYamlString, mongoDbObject })
@@ -162,8 +163,8 @@ const actions = {
   setSlideNoCurrent ({ commit, getters }, no) {
     let oldSlide
     let oldProps
-    let newSlide = getters.slideByNo(no)
-    let newProps = newSlide.renderData.props
+    const newSlide = getters.slideByNo(no)
+    const newProps = newSlide.renderData.props
 
     if (getters.slideCurrent) {
       oldSlide = getters.slideCurrent
@@ -202,14 +203,14 @@ const actions = {
     dispatch('setStepNoCurrent', { slideCurrent, stepNoCurrent })
   },
   setStepNoCurrent ({ commit }, { slideCurrent, stepNoCurrent }) {
-    let oldStepNo = slideCurrent.renderData.stepNoCurrent
-    let newStepNo = stepNoCurrent
+    const oldStepNo = slideCurrent.renderData.stepNoCurrent
+    const newStepNo = stepNoCurrent
     const thisArg = customStore.vueMasterInstanceCurrent
     slideCurrent.master.leaveStep({ oldStepNo, newStepNo }, thisArg)
     commit('setStepNoCurrent', { slideCurrent, stepNoCurrent })
     slideCurrent.master.enterStep({ oldStepNo, newStepNo }, thisArg)
   },
-  async updateFolderTitleTree ( { commit } ) {
+  async updateFolderTitleTree ({ commit }) {
     const response = await vue.$media.httpRequest.request({
       url: 'get/folder-title-tree',
       method: 'get',

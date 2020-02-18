@@ -4,7 +4,7 @@
  * @module @bldr/vue-app-presentation/content-file
  */
 
-/* globals defaultThemeSassVars */
+/* globals defaultThemeSassVars FileReader */
 
 // import Vue from 'vue'
 import yaml from 'js-yaml'
@@ -106,7 +106,7 @@ function intersect (array1, array2) {
 class RawSlideObject {
   constructor (rawData) {
     if (getType(rawData) === 'string') {
-      let masterName = rawData
+      const masterName = rawData
       rawData = {}
       rawData[masterName] = true
     }
@@ -267,8 +267,8 @@ export class MetaData {
  */
 function compileToCSS (sass) {
   sass = String(sass)
-  let output = sass.replace(/;$/, '')
-	return output.replace(/(\$[a-zA-Z0-9\-]+)/g, function($1, $2) {
+  const output = sass.replace(/;$/, '')
+  return output.replace(/(\$[a-zA-Z0-9-]+)/g, function ($1, $2) {
     return defaultThemeSassVars[$2]
   })
 }
@@ -500,7 +500,6 @@ function parseSlidesRecursive (slidesRaw, slidesFlat, slidesTree, level = 1) {
  * @property {string} rawYamlObject_
  */
 export class Presentation {
-
   /**
    * Some meta data fields are only available in the mongodb object, for
    * example the path of the presentation. We prefer the object fetched
@@ -647,7 +646,7 @@ ${JSON.stringify(this.rawYamlObject_)}`
             propsMain: slide.renderData.propsMain
           },
           vue
-        ),
+        )
         slide.renderData.stepCount = master.calculateStepCount(slide.renderData.props, vue)
       }
     }
@@ -734,10 +733,10 @@ ${JSON.stringify(this.rawYamlObject_)}`
 function openFile (file) {
   if (file.type === 'application/x-yaml' &&
       file.name.toLowerCase().indexOf('.baldr.yml') > -1) {
-    let reader = new FileReader()
+    const reader = new FileReader()
     reader.readAsText(file, 'utf-8')
     reader.onload = readerEvent => {
-      let content = readerEvent.target.result
+      const content = readerEvent.target.result
       store.dispatch('presentation/openPresentation', content).then(() => {
         if (router.currentRoute.name !== 'slides') router.push({ name: 'slides' })
       })

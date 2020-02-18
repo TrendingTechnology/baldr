@@ -1,6 +1,7 @@
 /**
  * Code which can shared in all parts of the app.
- * @file
+ *
+ * @module @bldr/vue-app-presentation/lib
  */
 
 /* globals DOMParser */
@@ -18,7 +19,6 @@ import vue from '@/main.js'
  * @returns {String}
  */
 export function markupToHtml (input) {
-
   /**
    * @param {String} text - The raw input text coming directly form YAML
    *
@@ -173,7 +173,7 @@ export class DomSteps {
     if (this.opts_.elements) {
       elements = this.opts_.elements
     } else if (this.opts_.cssSelectors) {
-      elements = document.querySelectorAll(cssSelectors)
+      elements = document.querySelectorAll(this.opts_.cssSelectors)
     } else {
       throw new Error(`Specify elements or cssSelectors`)
     }
@@ -227,7 +227,7 @@ export class DomSteps {
       },
       subset: {
         type: String,
-        description: 'Eine Untermenge von Schritten auswählen (z. B. 1,3,5 oder 2-5).',
+        description: 'Eine Untermenge von Schritten auswählen (z. B. 1,3,5 oder 2-5).'
       }
     }
 
@@ -365,7 +365,7 @@ export const stepSupport = {
     },
     stepSubset: {
       type: String,
-      description: 'Eine Untermenge von Schritten auswählen (z. B. 1,3,5 oder 2-5).',
+      description: 'Eine Untermenge von Schritten auswählen (z. B. 1,3,5 oder 2-5).'
     },
     stepExclude: {
       type: [Array, Number],
@@ -425,7 +425,7 @@ export const stepSupport = {
 
     // Sort exclude numbers descending
     elements = [...elements]
-    exclude.sort((a, b) => { b - a })
+    exclude.sort((a, b) => b - a)
     for (const stepNo of exclude) {
       elements.splice(stepNo - 1, 1)
     }
@@ -526,13 +526,12 @@ export const stepSupport = {
    * @returns {Object} The element that is displayed by the new step number.
    */
   displayElementByNo: function ({ elements, stepNo, oldStepNo, full, visibility }) {
-
     /**
      *
      * @param {Mixed} element - One HTML element or a array of HTML elements
      * @param {Boolean} show
      */
-    function showElement(element, show) {
+    function showElement (element, show) {
       const styleValues = [
         {
           visibility: 'hidden',
@@ -713,7 +712,7 @@ export class GrabFromObjects {
    * @param {Boolean} markup - Apply `markupToHtml()` to the values of the
    *   second object.
    */
-  constructor (object1, object2, markup=true) {
+  constructor (object1, object2, markup = true) {
     this.object1 = object1
     this.object2 = object2
     this.markup = markup

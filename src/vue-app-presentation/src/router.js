@@ -1,5 +1,6 @@
 /**
- * @file Setup vue router
+ * Setup vue router
+ * @module @bldr/vue-app-presentation/router
  */
 import Vue from 'vue'
 import Router from 'vue-router'
@@ -46,7 +47,7 @@ const routes = [
     component: OpenInterface,
     name: 'open',
     meta: {
-      title: 'Präsentation/Medien-Dateien öffnen',
+      title: 'Präsentation/Medien-Dateien öffnen'
     }
   },
   {
