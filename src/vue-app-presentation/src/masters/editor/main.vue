@@ -9,7 +9,7 @@
 
 <script>
 import { plainText } from '@bldr/core-browser'
-import { markupToHtml, wrapWords, stepSupport, DomSteps } from '@/lib.js'
+import { markupToHtml, DomSteps } from '@/lib.js'
 import { createNamespacedHelpers } from 'vuex'
 const { mapGetters } = createNamespacedHelpers('presentation')
 

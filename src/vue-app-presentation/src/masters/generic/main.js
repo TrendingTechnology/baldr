@@ -1,5 +1,5 @@
 import { plainText } from '@bldr/core-browser'
-import { markupToHtml, wrapWords, stepSupport } from '@/lib.js'
+import { markupToHtml, DomSteps } from '@/lib.js'
 
 const CHARACTERS_ON_SLIDE = 400
 
@@ -61,11 +61,7 @@ export default {
       description: 'Gibt an wie viele Zeichen auf einer Folie erscheinen sollen.',
       default: CHARACTERS_ON_SLIDE
     },
-    stepWords: {
-      type: [Boolean],
-      description: 'Wörtern einblenden',
-      default: false
-    }
+    ...DomSteps.mapProps(['words', 'sentences', 'subset'])
   },
   icon: {
     name: 'file-presentation-box',
@@ -115,7 +111,7 @@ export default {
     }
 
     if (props.stepWords) {
-      props.markup = [wrapWords(markup.join(' '))]
+      props.markup = [DomSteps.wrapWords(markup.join(' '))]
     } else {
       props.markup = markup
     }
@@ -132,31 +128,32 @@ export default {
     return output.join(' | ')
   },
   enterSlide () {
-    if (this.stepWords) {
-      this.steps = document.querySelectorAll('span.word')
-      this.slideCurrent.renderData.stepCount = this.steps.length + 1
-      stepSupport.displayElementByNo({
-        elements: this.steps,
-        stepNo: this.slideCurrent.renderData.stepNoCurrent,
-        full: true,
-        visibility: true
+    let sentencesSelector
+    if (this.stepSentences) {
+      sentencesSelector = '.vc_generic_master'
+    }
+
+    let specializedSelector = DomSteps.getSpecializedSelectorsFromProps(this)
+
+    if (specializedSelector) {
+      this.domSteps = new DomSteps({
+        subsetSelectors: this.stepSubset,
+        specializedSelector,
+        sentencesSelector,
+        hideAllElementsInitally: false
       })
+      this.domSteps.setStepCount(this.slideCurrent)
+      this.domSteps.displayByNo({ stepNo: this.slideCurrent.renderData.stepNoCurrent, full: true })
     }
   },
   enterStep ({ oldStepNo, newStepNo }) {
     const stepNo = newStepNo
-    if (this.stepWords) {
-      stepSupport.displayElementByNo({
-        elements: this.steps,
+    if (this.stepWords || this.stepSentences) {
+      console.log(stepNo)
+      this.domSteps.displayByNo({
         oldStepNo,
-        stepNo,
-        visibility: true
+        stepNo
       })
-    }
-  },
-  collectPropsMain (props) {
-    return {
-      markup: props.markup
     }
   },
   collectPropsPreview ({ props }) {

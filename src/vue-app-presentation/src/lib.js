@@ -269,6 +269,104 @@ export class DomSteps {
   }
 
   /**
+   * Wrap each word in a string into `<span class="word">…</span>`
+   *
+   * @param {String} text - A string
+   *
+   * @see {@link https://stackoverflow.com/a/26030835}
+   *
+   * @returns {String}
+   */
+  static wrapWords (text) {
+    if (Array.isArray(text)) {
+      text = text.join(' ')
+    }
+    text = text.replace(/\s+/g, ' ')
+    const dom = new DOMParser().parseFromString(text, 'text/html')
+    // First a simple implementation of recursive descent,
+    // visit all nodes in the DOM and process it with a callback:
+    function walkDOM (node, callback) {
+      if (node.nodeName !== 'SCRIPT') { // ignore javascript
+        callback(node)
+        for (let i = 0; i < node.childNodes.length; i++) {
+          walkDOM(node.childNodes[i], callback)
+        }
+      }
+    }
+
+    const textNodes = []
+    walkDOM(dom.body, function (n) {
+      if (n.nodeType === 3) {
+        textNodes.push(n)
+      }
+    })
+
+    /**
+     * Add a HTML element before the other element. Simple utility functions to
+     * avoid a lot of typing.
+     *
+     * @param {HtmlElement} newElement
+     * @param {HtmlElement} element
+     */
+    function insertBefore (newElement, element) {
+      element.parentNode.insertBefore(newElement, element)
+    }
+
+    /**
+     * Remote a HTML element.
+     *
+     * @param {HtmlElement} element
+     */
+    function removeElement (element) {
+      element.parentNode.removeChild(element)
+    }
+
+    /**
+     * Wrap a text string with `<span class="word">…</span>`
+     *
+     * @param {String} txt
+     *
+     * @returns {HTMLElement}
+     */
+    function makeSpan (txt) {
+      const span = document.createElement('span')
+      span.classList.add('word')
+      span.appendChild(makeText(txt))
+      return span
+    }
+
+    /**
+     * Convert a text string into a text node.
+     *
+     * @param {String} txt
+     *
+     * @returns {TextNode}
+     */
+    function makeText (txt) {
+      return document.createTextNode(txt)
+    }
+
+    for (let i = 0; i < textNodes.length; i++) {
+      const node = textNodes[i]
+      const txt = node.nodeValue
+      // A avoid spaces surrounded by <span class="word"></span>
+      if (txt !== ' ') {
+        const words = txt.split(' ')
+        // Insert span surrounded words:
+        insertBefore(makeSpan(words[0]), node)
+        for (let j = 1; j < words.length; j++) {
+          // Join the words with spaces.
+          insertBefore(makeText(' '), node)
+          insertBefore(makeSpan(words[j]), node)
+        }
+        // Now remove the original text node:
+        removeElement(node)
+      }
+    }
+    return dom.body.innerHTML
+  }
+
+  /**
    * Select words which are surrounded by `span.word`.
    *
    * @returns {DomStepElementGroup|DomStepElement[]} An array of
@@ -319,6 +417,20 @@ export class DomSteps {
       }
     }
     return sentences
+  }
+
+  /**
+   * @param {Objects} props - An object to search for the properties `stepWords`
+   *   or `stepSentences`.
+   *
+   * @returns {String} - `words` or `sentences`
+   */
+  static getSpecializedSelectorsFromProps (props) {
+    if (props.stepWords) {
+      return 'words'
+    } else if (props.stepSentences) {
+      return 'sentences'
+    }
   }
 
   /**
@@ -493,318 +605,6 @@ export class DomSteps {
       vue.$shortcuts.remove(`q ${shortcut}`)
     }
   }
-}
-
-/**
- * Functions and configuration data for masters with step support.
- */
-export const stepSupport = {
-  props: {
-    // stepSelector: {
-    //   default: 'g',
-    // },
-    stepWords: {
-      type: Boolean,
-      description: 'Text ausblenden und einzelne Wörtern einblenden',
-      default: false
-    },
-    stepSentences: {
-      type: Boolean,
-      description: 'Text ausblenden und einzelne Sätze (im übertragenem Sinn) einblenden.',
-      default: false
-    },
-    stepSubset: {
-      type: String,
-      description: 'Eine Untermenge von Schritten auswählen (z. B. 1,3,5 oder 2-5).'
-    },
-    stepExclude: {
-      type: [Array, Number],
-      description: 'Schritt-Number der Elemente, die nicht als Schritte eingeblendet werden sollen. (z. B. 1, oder [1, 2, 3])'
-    },
-    stepBegin: {
-      type: Number,
-      description: 'Blende ab dieser Number die Schritte ein.'
-    },
-    stepEnd: {
-      type: Number,
-      description: 'Blende bis zu dieser Number die Schritte ein.'
-    }
-  },
-
-  /**
-   * TODO: remove
-   *
-   * Return a subset of HTML elements, which are used as steps.
-   *
-   * @param {Array} elements - An array of HTML elements or a node list of
-   *   elements.
-   * @param {Object} options
-   *
-   * @param {Array}
-   */
-  limitElements: function (elements, { stepBegin, stepEnd }) {
-    // Elements returned from document.querySelector are no arrays.
-    // Convert to arrays.
-    elements = [...elements]
-    let begin = 0
-    if (stepBegin && stepBegin > 1) {
-      begin = stepBegin - 2
-    }
-    let end = elements.length - 1
-    if (stepEnd && stepEnd > 1) {
-      end = stepEnd - 2
-    }
-    return elements.splice(begin, end - begin + 1)
-  },
-
-  /**
-   * TODO: remove
-   *
-   * Remove some element from the step nodelist. The node list is
-   * converted into a array.
-   *
-   * @param {Array} elements - An array of HTML elements or a node list of
-   *   elements.
-   * @param {Array|Number} exclude - An array of element numbers to exclude
-   *   that means delete from the elements array.
-   *
-   * @returns {Array}
-   */
-  excludeElements: function (elements, exclude) {
-    if (!exclude) return elements
-
-    if (typeof exclude === 'number') {
-      exclude = [exclude]
-    }
-
-    // Sort exclude numbers descending
-    elements = [...elements]
-    exclude.sort((a, b) => b - a)
-    for (const stepNo of exclude) {
-      elements.splice(stepNo - 1, 1)
-    }
-    return elements
-  },
-
-  selectWords: function () {
-    const wordsRaw = document.querySelectorAll('span.word')
-    const words = []
-    for (const word of wordsRaw) {
-      if (!word.previousSibling) {
-        const parent = word.parentElement
-        if (parent.tagName === 'LI' && !parent.previousSibling) {
-          words.push([parent.parentElement, parent, word])
-        } else {
-          words.push([parent, word])
-        }
-      } else {
-        words.push(word)
-      }
-    }
-    return words
-  },
-
-  /**
-   * Select more than a word. The meaning  of "sentences" in the function name
-   * should not be understood literally, but symbolic for a longer text unit.
-   * Select a whole paragraph (`<p>`) or a heading `<h1>` or `<li>` items of
-   * ordered or unordered lists, or a table row.
-   *
-   * @param {String} - A selector for `document.querySelector()` of the parent
-   *   Element, which contains child HTML element to use as steps.
-   *
-   * @return {Array} - An array of HTML elements.
-   */
-  selectSentences: function (selector) {
-    const parentElement = document.querySelector(selector)
-    const sentences = []
-    for (const element of parentElement.children) {
-      if (['UL', 'OL'].includes(element.tagName)) {
-        for (const li of element.children) {
-          if (li.tagName === 'LI') {
-            sentences.push(li)
-          }
-        }
-      } else {
-        sentences.push(element)
-      }
-    }
-    return sentences
-  },
-
-  /**
-   * Set the display / visiblilty state on HTML elements. Loop through all
-   * elements or perform a minimal update. On the first step no elements are
-   * displayed. The number of steps is: number of elements + 1.
-   * A minimal update doesn’t loop through all elements, only the visibility
-   * state of the next element is changed.
-   *
-   * @param {config}
-   * @property {Array} elements - A list of HTML elements to display on step number
-   *   change.
-   * @property {Number} oldStepNo - The previous step number.
-   * @property {Number} stepNo - The current step number.
-   * @property {Boolean} full - Perform a full update.
-   * @property {Boolean} visiblilty - Set the visibility `element.style.visibility`
-   *   instead of the display state.
-   *
-   * @returns {Object} The element that is displayed by the new step number.
-   */
-  displayElementByNo: function ({ elements, stepNo, oldStepNo, full, visibility }) {
-    /**
-     *
-     * @param {Mixed} element - One HTML element or a array of HTML elements
-     * @param {Boolean} show
-     */
-    function showElement (element, show) {
-      const styleValues = [
-        {
-          visibility: 'hidden',
-          display: 'none'
-        },
-        {
-          visibility: 'visible',
-          display: 'block'
-        }
-      ]
-      let stylePropertyName
-      if (visibility) {
-        stylePropertyName = 'visibility'
-      } else {
-        stylePropertyName = 'display'
-      }
-      const styleValue = styleValues[Number(show)][stylePropertyName]
-      if (Array.isArray(element)) {
-        for (const subElement of element) {
-          subElement.style[stylePropertyName] = styleValue
-        }
-      } else {
-        element.style[stylePropertyName] = styleValue
-      }
-    }
-
-    if (!oldStepNo || full || stepNo === 1 || (oldStepNo === 1 && stepNo === elements.length + 1)) {
-      let count = 1
-      for (const element of elements) {
-        showElement(element, stepNo > count)
-        count += 1
-      }
-      if (stepNo === 1) {
-        return elements[0]
-      }
-      // First step: No elements are displayed.
-      // The array index begins with 0, steps with 1.
-      return elements[stepNo - 2]
-    }
-    let element
-    if (stepNo > oldStepNo) {
-      // First step: No elements are displayed.
-      // The array index begins with 0, steps with 1.
-      element = elements[stepNo - 2]
-    } else {
-      element = elements[stepNo - 1]
-    }
-    showElement(element, stepNo > oldStepNo)
-    return element
-  }
-}
-
-/**
- * Wrap each word in a string into `<span class="word">…</span>`
- *
- * @param {String} text - A string
- *
- * @see {@link https://stackoverflow.com/a/26030835}
- *
- * @returns {String}
- */
-export function wrapWords (text) {
-  if (Array.isArray(text)) {
-    text = text.join(' ')
-  }
-  text = text.replace(/\s+/g, ' ')
-  const dom = new DOMParser().parseFromString(text, 'text/html')
-  // First a simple implementation of recursive descent,
-  // visit all nodes in the DOM and process it with a callback:
-  function walkDOM (node, callback) {
-    if (node.nodeName !== 'SCRIPT') { // ignore javascript
-      callback(node)
-      for (let i = 0; i < node.childNodes.length; i++) {
-        walkDOM(node.childNodes[i], callback)
-      }
-    }
-  }
-
-  const textNodes = []
-  walkDOM(dom.body, function (n) {
-    if (n.nodeType === 3) {
-      textNodes.push(n)
-    }
-  })
-
-  /**
-   * Add a HTML element before the other element. Simple utility functions to
-   * avoid a lot of typing.
-   *
-   * @param {HtmlElement} newElement
-   * @param {HtmlElement} element
-   */
-  function insertBefore (newElement, element) {
-    element.parentNode.insertBefore(newElement, element)
-  }
-
-  /**
-   * Remote a HTML element.
-   *
-   * @param {HtmlElement} element
-   */
-  function removeElement (element) {
-    element.parentNode.removeChild(element)
-  }
-
-  /**
-   * Wrap a text string with `<span class="word">…</span>`
-   *
-   * @param {String} txt
-   *
-   * @returns {HTMLElement}
-   */
-  function makeSpan (txt) {
-    const span = document.createElement('span')
-    span.classList.add('word')
-    span.appendChild(makeText(txt))
-    return span
-  }
-
-  /**
-   * Convert a text string into a text node.
-   *
-   * @param {String} txt
-   *
-   * @returns {TextNode}
-   */
-  function makeText (txt) {
-    return document.createTextNode(txt)
-  }
-
-  for (let i = 0; i < textNodes.length; i++) {
-    const node = textNodes[i]
-    const txt = node.nodeValue
-    // A avoid spaces surrounded by <span class="word"></span>
-    if (txt !== ' ') {
-      const words = txt.split(' ')
-      // Insert span surrounded words:
-      insertBefore(makeSpan(words[0]), node)
-      for (let j = 1; j < words.length; j++) {
-        // Join the words with spaces.
-        insertBefore(makeText(' '), node)
-        insertBefore(makeSpan(words[j]), node)
-      }
-      // Now remove the original text node:
-      removeElement(node)
-    }
-  }
-  return dom.body.innerHTML
 }
 
 export async function openPresentation (presentationId) {

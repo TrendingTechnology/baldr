@@ -1,9 +1,22 @@
 ---
 slides:
 
-- title: Test word wrap
+- title: Test step words
   generic:
     step_words: true
+    markup: |
+      # Heading 1
+
+      Lorem ipsum [dolor sit amet](https://google.de), consectetur:
+
+      ## Adipisici elit, sed eiusmod
+
+      * Tempor incidunt ut labore.
+      * Veniam, quis nostrud.
+
+- title: Test step sentences
+  generic:
+    step_sentences: true
     markup: |
       # Heading 1
 

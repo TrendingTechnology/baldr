@@ -6,6 +6,7 @@
 </template>
 
 <script>
+import { DomSteps } from '@/lib.js'
 import { createNamespacedHelpers } from 'vuex'
 const { mapGetters } = createNamespacedHelpers('presentation')
 
@@ -25,15 +26,12 @@ export default {
       description: 'Gibt an wie viele Zeichen auf einer Folie erscheinen sollen.',
       default: CHARACTERS_ON_SLIDE
     },
-    stepWords: {
-      type: [Boolean],
-      description: 'Wörtern einblenden',
-      default: false
-    }
+    ...DomSteps.mapProps(['words', 'sentences', 'subset'])
   },
   data () {
     return {
-      steps: null
+      steps: null,
+      domSteps: null
     }
   },
   computed: {
@@ -42,7 +40,7 @@ export default {
       return this.slideCurrent.renderData.stepNoCurrent
     },
     markupCurrent () {
-      if (this.stepWords) {
+      if (this.stepWords || this.stepSentences) {
         return this.markup[0]
       }
       return this.markup[this.stepNoCurrent - 1]

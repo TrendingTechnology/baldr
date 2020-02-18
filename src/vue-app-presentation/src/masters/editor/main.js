@@ -1,5 +1,5 @@
 import { plainText } from '@bldr/core-browser'
-import { markupToHtml, wrapWords, DomSteps } from '@/lib.js'
+import { markupToHtml, DomSteps } from '@/lib.js'
 
 const placeholder = '…'
 const placeholderTag = `<span class="editor-placeholder">${placeholder}</span>`
@@ -41,7 +41,7 @@ export default {
     )
 
     if (props.stepWords) {
-      props.markup = wrapWords(props.markup)
+      props.markup = DomSteps.wrapWords(props.markup)
     }
     return props
   },
@@ -50,14 +50,12 @@ export default {
   },
   enterSlide () {
     this.onSlideChange()
-    let specializedSelector
     let sentencesSelector
-    if (this.stepWords) {
-      specializedSelector = 'words'
-    } else if (this.stepSentences) {
-      specializedSelector = 'sentences'
+    if (this.stepSentences) {
       sentencesSelector = '.vc_editor_master'
     }
+
+    let specializedSelector = DomSteps.getSpecializedSelectorsFromProps(this)
 
     if (specializedSelector) {
       this.domSteps = new DomSteps({
@@ -66,7 +64,7 @@ export default {
         sentencesSelector,
         hideAllElementsInitally: false
       })
-      this.slideCurrent.renderData.stepCount = this.domSteps.count
+      this.domSteps.setStepCount(this.slideCurrent)
       this.domSteps.displayByNo({ stepNo: this.slideCurrent.renderData.stepNoCurrent, full: true })
     }
   },

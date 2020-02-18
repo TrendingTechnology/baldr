@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { DomSteps, stepSupport, warnSvgWidthHeight } from '@/lib.js'
+import { DomSteps, warnSvgWidthHeight } from '@/lib.js'
 import { createNamespacedHelpers } from 'vuex'
 const { mapGetters } = createNamespacedHelpers('presentation')
 
@@ -45,7 +45,7 @@ export default {
         elements: this.collectClozeGroups(),
         subsetSelectors: this.slideCurrent.renderData.props.stepSubset
       })
-      this.slideCurrent.renderData.stepCount = this.domSteps.count
+      this.domSteps.setStepCount(this.slideCurrent)
 
       const newClozeGroup = this.domSteps.displayByNo({
         stepNo: this.slideCurrent.renderData.stepNoCurrent
