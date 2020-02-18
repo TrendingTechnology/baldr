@@ -195,7 +195,7 @@ export class DomSteps {
      */
     this.elements = null
     if (this.opts_.subsetSelectors) {
-      this.elements = this.selectElementsSubset(this.opts_.subsetSelectors)
+      this.elements = this.selectElementsSubset_(this.opts_.subsetSelectors)
     } else {
       this.elements = this.elementsAll
     }
@@ -203,7 +203,49 @@ export class DomSteps {
     this.hideAll()
   }
 
-  selectElementsSubset (subsetSelectors) {
+  /**
+   * Map step support related props for the use as Vuejs props.
+   *
+   * @param {Array} selector
+   *
+   * @returns {Object}
+   */
+  static mapProps (selectors) {
+    const props = {
+      // stepSelector: {
+      //   default: 'g',
+      // },
+      words: {
+        type: Boolean,
+        description: 'Text ausblenden und einzelne Wörtern einblenden',
+        default: false
+      },
+      sentences: {
+        type: Boolean,
+        description: 'Text ausblenden und einzelne Sätze (im übertragenem Sinn) einblenden.',
+        default: false
+      },
+      subset: {
+        type: String,
+        description: 'Eine Untermenge von Schritten auswählen (z. B. 1,3,5 oder 2-5).',
+      }
+    }
+
+    const result = {}
+    for (const selector of selectors) {
+      if (props[selector]) {
+        result[`step${selector.charAt(0).toUpperCase()}${selector.substr(1).toLowerCase()}`] = props[selector]
+      }
+      return result
+    }
+  }
+
+  /**
+   * @param {String} subsetSelectors
+   *
+   * @private
+   */
+  selectElementsSubset_ (subsetSelectors) {
     const subset = {}
     // 2, 3, 5 -> 2,3,5
     subsetSelectors = subsetSelectors.replace(/\s*/g, '')

@@ -1,4 +1,4 @@
-import { stepSupport } from '@/lib.js'
+import { DomSteps } from '@/lib.js'
 
 export default {
   title: 'Lückentext',
@@ -9,7 +9,7 @@ export default {
       description: 'Den URI zu einer SVG-Datei, die den Lückentext enthält.',
       mediaFileUri: true
     },
-    ...stepSupport.props
+    ...DomSteps.mapProps(['subset'])
   },
   icon: {
     name: 'cloze',

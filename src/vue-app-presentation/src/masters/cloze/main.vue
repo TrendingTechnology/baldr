@@ -15,7 +15,7 @@ export default {
       type: String,
       required: true
     },
-    ...stepSupport.props
+    ...DomSteps.mapProps(['subset'])
   },
   data () {
     return {
