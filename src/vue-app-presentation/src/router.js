@@ -1,5 +1,6 @@
 /**
  * Setup vue router
+ *
  * @module @bldr/vue-app-presentation/router
  */
 import Vue from 'vue'
