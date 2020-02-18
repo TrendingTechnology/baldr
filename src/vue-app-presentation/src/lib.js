@@ -177,11 +177,23 @@ export class DomSteps {
     } else {
       throw new Error(`Specify elements or cssSelectors`)
     }
+
+    /**
+     * All elements obtained from `document.querySelectorAll()`.
+     *
+     * @type {Array}
+     */
     this.elementsAll = []
     for (const element of elements) {
       this.elementsAll.push(new DomStepElement(element, this.opts_.useVisibliltyProp))
     }
 
+    /**
+     * All elements or a subset of elements, if `subsetSelectors` is specified.
+     *
+     * @type {Array}
+     */
+    this.elements = null
     if (this.opts_.subsetSelectors) {
       this.elements = this.selectElementsSubset(this.opts_.subsetSelectors)
     } else {
@@ -199,22 +211,32 @@ export class DomSteps {
     const ranges = subsetSelectors.split(',')
 
     for (let range of ranges) {
+      // -7 -> 2-7
+      if (range.match(/^-/)) {
+        range = `2${range}`
+      }
+
+      // 7- -> 7-23
+      if (range.match(/-$/)) {
+        range = `${range}${this.countAll}`
+      }
+
       range = range.split('-')
       if (range.length === 1) {
         const stepNo = range[0]
         subset[stepNo] = this.elementsAll[stepNo - 2]
       } else if (range.length === 2) {
-        const beginNo = range[0]
-        const endNo = range[1]
+        const beginNo = parseInt(range[0])
+        const endNo = parseInt(range[1])
         for (let stepNo = beginNo; stepNo <= endNo; stepNo++) {
           subset[stepNo] = this.elementsAll[stepNo - 2]
         }
       }
     }
 
-    // Sort the step by the step number.
+    // Sort the steps by the step number.
     const stepNos = Object.keys(subset)
-    stepNos.sort()
+    stepNos.sort((a, b) => a - b) // For ascending sort
     const result = []
     for (const stepNo of stepNos) {
       result.push(subset[stepNo])
@@ -224,6 +246,10 @@ export class DomSteps {
 
   get count () {
     return this.elements.length + 1
+  }
+
+  get countAll () {
+    return this.elementsAll.length + 1
   }
 
   hideAll () {

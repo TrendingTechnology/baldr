@@ -4,6 +4,16 @@ slides:
 - title: All
   cloze: 'id:Dukas-Zauberlehrling_AB_Lueckentext'
 
+- title: 'step_subset: 53-'
+  cloze:
+    src: 'id:Dukas-Zauberlehrling_AB_Lueckentext'
+    step_subset: 53-
+
+- title: 'step_subset: -11'
+  cloze:
+    src: 'id:Dukas-Zauberlehrling_AB_Lueckentext'
+    step_subset: '-11'
+
 - title: 'step_subset: 16,35,53'
   cloze:
     src: 'id:Dukas-Zauberlehrling_AB_Lueckentext'
