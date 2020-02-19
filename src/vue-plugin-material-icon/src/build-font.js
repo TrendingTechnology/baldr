@@ -157,7 +157,7 @@ if (require.main === module) {
         music: '',
         notebook: '',
         wikipedia: '',
-        worker: '',
+        'account-hard-hat': 'worker',
         youtube: '',
         play: '',
         pause: '',
@@ -175,7 +175,8 @@ if (require.main === module) {
         'comment-question': '', // imaster-icon: question
         'update': '', // Update icon for the REST API overview.
         'play-speed': '', // Start play
-        'file-tree': '' // Master slide section
+        'file-tree': '', // Master slide section
+        'trumpet': '' // Master slide “instrument”
       }
     },
     {

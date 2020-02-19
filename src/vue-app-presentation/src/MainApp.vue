@@ -296,6 +296,13 @@ export default {
     text-align: left;
   }
 
+  // For text overlays
+  .transparent-background {
+    background: rgba($gray, 0.5);
+    margin: 0;
+    box-sizing: border-box;
+  }
+
   /*********************************************************************
    * Master main components
    ********************************************************************/

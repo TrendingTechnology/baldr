@@ -100,6 +100,7 @@ Können im YAML-Quellcode der Präsentationen eingesetzt werden.
 * _.note_ (kleinere Schriftgröße, linksbündig)
 * _.person_ (Kapitälchen)
 * _.piece_ (kursiv)
+* _.transparent-background_ (grauer Hintergrund der transparent ist)
 `
 
 export default {

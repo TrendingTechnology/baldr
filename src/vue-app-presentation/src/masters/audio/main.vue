@@ -31,7 +31,6 @@
       v-html="artist"
     />
 
-
     <play-button :sample="sample"/>
   </div>
 </template>
