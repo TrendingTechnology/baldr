@@ -4,6 +4,13 @@ import { markupToHtml, DomSteps } from '@/lib.js'
 const placeholder = '…'
 const placeholderTag = `<span class="editor-placeholder">${placeholder}</span>`
 
+function scroll(element) {
+  if (!element) return
+  const y = element.getBoundingClientRect().top + window.scrollY
+  const adjustedY = y - 0.8 * window.screen.height
+  window.scrollTo({ top: adjustedY, left: 0, behavior: 'smooth' });
+}
+
 export default {
   title: 'Hefteintrag',
   props: {
@@ -72,13 +79,15 @@ export default {
     const element = document.querySelector('.vc_editor_master')
     if (element) oldProps.markup = element.innerHTML
   },
+
   enterStep ({ oldStepNo, newStepNo }) {
     const stepNo = newStepNo
     if (this.stepWords || this.stepSentences) {
-      this.domSteps.displayByNo({
+      const element = this.domSteps.displayByNo({
         oldStepNo,
         stepNo
       })
+      scroll(element)
     }
   }
 }

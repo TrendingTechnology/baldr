@@ -172,7 +172,6 @@ function formatMultiPartAssetFileName(firstFileName, no) {
 
 
 function formatWikidataUrl(id) {
-  console.log(id);
   id = parseInt(id.replace(/^Q/, '')); // https://www.wikidata.org/wiki/Q42
 
   return `https://www.wikidata.org/wiki/Q${id}`;

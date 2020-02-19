@@ -176,6 +176,13 @@ class DomStepElementGroup {
   }
 
   /**
+   * For the scroll function: to get every time a HTML element.
+   */
+  get element () {
+    return this.elements[0].element
+  }
+
+  /**
    *
    * @param {Array} elements
    *
@@ -481,7 +488,6 @@ export class DomSteps {
    * @private
    */
   selectElementsSubset_ (subsetSelectors) {
-    console.log(subsetSelectors)
     const subset = {}
     // 2, 3, 5 -> 2,3,5
     subsetSelectors = subsetSelectors.replace(/\s*/g, '')
@@ -519,7 +525,6 @@ export class DomSteps {
     for (const stepNo of stepNos) {
       result.push(subset[stepNo])
     }
-    console.log(result)
     return result
   }
 
