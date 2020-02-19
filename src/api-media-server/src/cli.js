@@ -619,7 +619,15 @@ function actionHelp () {
  * @param {String} filePath - The media asset file path.
  */
 function renameFromIdOneFile (filePath) {
-  const result = yaml.safeLoad(fs.readFileSync(`${filePath}.yml`, 'utf8'))
+  let result
+  try {
+    result = yaml.safeLoad(fs.readFileSync(`${filePath}.yml`, 'utf8'))
+  } catch (error) {
+    console.log(filePath)
+    console.log(error)
+    return
+  }
+
   if ('id' in result && result.id) {
     let id = result.id
     const oldPath = filePath
@@ -900,7 +908,7 @@ function renameOneFile (oldPath) {
   if (cleanedBasename !== basename) {
     newPath = path.join(path.dirname(newPath), cleanedBasename)
   }
-  renameAsset(newPath, oldPath)
+  renameAsset(oldPath, newPath)
 }
 
 /**
