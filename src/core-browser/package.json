@@ -10,7 +10,6 @@
     "type": "git",
     "url": "git+https://github.com/Josef-Friedrich/baldr.git"
   },
-  "type": "module",
   "license": "MIT",
   "author": {
     "name": "Josef Friedrich",
