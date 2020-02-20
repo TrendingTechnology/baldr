@@ -18,6 +18,7 @@ const chalk = require('chalk')
 const pckg = require('../package.json')
 const core = require('@bldr/core-node')
 const {
+  buildVueApp,
   checkExecutables,
   IntermediateLibrary,
   PianoScore
@@ -196,6 +197,7 @@ const main = function () {
       )
       core.log('Create JSON file: %s', chalk.yellow(projectorPath))
     }
+    buildVueApp()
   }
 }
 

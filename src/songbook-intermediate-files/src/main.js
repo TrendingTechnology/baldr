@@ -25,6 +25,8 @@ const yaml = require('js-yaml')
 const { AlphabeticalSongsTree, SongMetaDataCombined, CoreLibrary } = require('@bldr/songbook-core')
 const core = require('@bldr/core-node')
 
+const config = core.bootstrapConfig()
+
 /**
  * An array of song objects.
  * @typedef {module:@bldr/songbook-intermediate-files~Song[]} songs
@@ -1690,6 +1692,21 @@ class IntermediateLibrary extends Library {
   }
 }
 
+/**
+ * Build the Vue app. All image files must be copied into the Vue working
+ * directory.
+ */
+function buildVueApp () {
+  const process = childProcess.spawnSync('npm', ['run', 'build'], {
+    cwd: config.songbook.vueAppPath,
+    encoding: 'utf-8',
+    shell: true
+  })
+  console.log(process.stdout)
+  console.log(process.stderr)
+}
+
+exports.buildVueApp = buildVueApp
 exports.checkExecutables = checkExecutables
 exports.IntermediateLibrary = IntermediateLibrary
 exports.PianoScore = PianoScore
