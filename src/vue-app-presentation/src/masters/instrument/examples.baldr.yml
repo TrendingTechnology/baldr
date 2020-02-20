@@ -3,16 +3,20 @@ slides:
 
 - title: Long form
   instrument:
-     image: id:Floete_BD
-     audio: id:Floete_HB
-     name: Flöte
+     image: id:Fagott_BD
+     audio: id:Fagott_HB
+     name: Fagott
 
 - title: Short form
   instrument: Floete
 
-- instrument: Fagott
-- instrument: Floete
 - instrument: Klarinette
+
 - instrument: Oboe
+
 - instrument: Saxophon
+
 - instrument: Trompete
+
+- instrument:
+    image: id:Zink_BD
