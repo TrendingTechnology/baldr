@@ -76,7 +76,7 @@ class AlphabeticalSongsTree {
 }
 
 /**
- * Combine transform some song metadata properties.
+ * Combine and transform some song metadata properties.
  *
  * Mapping
  *
@@ -133,7 +133,7 @@ class SongMetaDataCombined {
   }
 
   /**
-   * composer, artist, genre
+   * Format: `composer, artist, genre`
    */
   get composer () {
     let properties
@@ -149,7 +149,10 @@ class SongMetaDataCombined {
   }
 
   /**
-   * lyricist
+   * Return the lyricist only if it is not the same as in the fields
+   * `artist` and `composer`.
+   *
+   * Format: `lyricist`
    */
   get lyricist () {
     if (
@@ -159,13 +162,11 @@ class SongMetaDataCombined {
       this.metaData.lyricist !== this.metaData.composer
     ) {
       return this.metaData.lyricist
-    } else {
-      return ''
     }
   }
 
   /**
-   * https://musescore.com/score/1234
+   * For example: `https://musescore.com/score/1234`
    */
   get musescoreUrl () {
     if ('musescore' in this.metaData) {
@@ -174,7 +175,7 @@ class SongMetaDataCombined {
   }
 
   /**
-   * subtitle - alias - country
+   * Format: `subtitle - alias - country`
    */
   get subtitle () {
     return SongMetaDataCombined.collectProperties_(
@@ -201,7 +202,7 @@ class SongMetaDataCombined {
   }
 
   /**
-   * https://www.wikidata.org/wiki/Q42
+   * For example: `https://www.wikidata.org/wiki/Q42`
    */
   get wikidataUrl () {
     if ('wikidata' in this.metaData) {
@@ -211,7 +212,7 @@ class SongMetaDataCombined {
   }
 
   /**
-   * https://en.wikipedia.org/wiki/A_Article
+   * For example: `https://en.wikipedia.org/wiki/A_Article`
    */
   get wikipediaUrl () {
     if (this.metaData.wikipedia) {
@@ -225,9 +226,9 @@ class SongMetaDataCombined {
   }
 
   /**
-   * https://youtu.be/CQYypFMTQcE
+   * For example: `https://youtu.be/CQYypFMTQcE`
    */
-  get youtubeURL () {
+  get youtubeUrl () {
     if ('youtube' in this.metaData) {
       return `https://youtu.be/${this.metaData.youtube}`
     }

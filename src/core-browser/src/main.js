@@ -68,6 +68,21 @@ export function shortenText (text, options = {}) {
 }
 
 /**
+ * Convert `camelCase` into `snake_case` strings.
+ *
+ * @param {String} str - A camel cased string.
+ *
+ * @returns {String}
+ *
+ * @see {@link https://vladimir-ivanov.net/camelcase-to-snake_case-and-vice-versa-with-javascript/}
+ */
+export function camelToSnake(str) {
+  return str.replace(/[\w]([A-Z])/g, function(m) {
+    return m[0] + '_' + m[1];
+  }).toLowerCase()
+}
+
+/**
  * Convert `snake_case` or `kebab-case` strings into `camelCase` strings.
  *
  * @param {String} str - A snake or kebab cased string

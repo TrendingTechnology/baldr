@@ -24,7 +24,7 @@ const yaml = require('js-yaml')
 // Project packages.
 const { AlphabeticalSongsTree, SongMetaDataCombined, CoreLibrary } = require('@bldr/songbook-core')
 const core = require('@bldr/core-node')
-const { formatMultiPartAssetFileName } = require('@bldr/core-browser')
+const { formatMultiPartAssetFileName, camelToSnake } = require('@bldr/core-browser')
 
 /**
  * See `/etc/baldr.json`.
@@ -1030,6 +1030,7 @@ class PianoScore {
   }
 
   static sanitize (markup) {
+    if (!markup) return ''
     return markup.replace('&', '\\&')
   }
 
@@ -1742,10 +1743,21 @@ function exportToMediaServer (library) {
     const rawYaml = song.metaData.rawYaml_
     rawYaml.id = `Lied_${song.songId}_NB`
     rawYaml.title = `Lied „${song.metaData.title}“`
-    // rawYaml.titleCombined = song.metaDataCombined.title
-    // rawYaml.subtitleCombined = song.metaDataCombined.subtitle
-    // rawYaml.composerCombined = song.metaDataCombined.composer
-    // rawYaml.wikipediaUrl = song.metaDataCombined.wikipediaUrl
+
+    for (const property of [
+      'composer',
+      'lyricist',
+      'musescoreUrl',
+      'subtitle',
+      'title',
+      'wikidataUrl',
+      'wikipediaUrl',
+      'youtubeUrl'
+    ]) {
+      if (song.metaDataCombined[property]) {
+        rawYaml[`${camelToSnake(property)}_`] = song.metaDataCombined[property]
+      }
+    }
 
     const yamlMarkup = ['---', yaml.safeDump(rawYaml)]
     fs.writeFileSync(`${firstFileName}.yml`, yamlMarkup.join('\n'))

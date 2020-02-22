@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.toLocaleDateTimeString = toLocaleDateTimeString;
 exports.plainText = plainText;
 exports.shortenText = shortenText;
+exports.camelToSnake = camelToSnake;
 exports.convertPropertiesToCamelCase = convertPropertiesToCamelCase;
 exports.formatMultiPartAssetFileName = formatMultiPartAssetFileName;
 exports.formatWikidataUrl = formatWikidataUrl;
@@ -88,6 +89,22 @@ function shortenText(text, options = {}) {
   return `${text} …`;
 }
 /**
+ * Convert `camelCase` into `snake_case` strings.
+ *
+ * @param {String} str - A camel cased string.
+ *
+ * @returns {String}
+ *
+ * @see {@link https://vladimir-ivanov.net/camelcase-to-snake_case-and-vice-versa-with-javascript/}
+ */
+
+
+function camelToSnake(str) {
+  return str.replace(/[\w]([A-Z])/g, function (m) {
+    return m[0] + '_' + m[1];
+  }).toLowerCase();
+}
+/**
  * Convert `snake_case` or `kebab-case` strings into `camelCase` strings.
  *
  * @param {String} str - A snake or kebab cased string
@@ -140,10 +157,18 @@ function convertPropertiesToCamelCase(object) {
 }
 /**
  * Generate from the file name or the url of the first element of a multipart
- * asset the nth file name or the url.
+ * asset the nth file name or the url. The parameter `firstFileName` must
+ * have a extension (for example `.jpg`). The parameter `no` must be smaller
+ * then 100. Only two digit or smaller integers are allowed.
  *
- * @param {String} firstFileName
- * @param {Number} no
+ * 1. `multipart-asset.jpg`
+ * 2. `multipart-asset_no02.jpg`
+ * 3. `multipart-asset_no03.jpg`
+ * 4. ...
+ *
+ * @param {String} firstFileName - A file name, a path or a URL.
+ * @param {Number} no - The number in the multipart asset list. The first
+ *   element has the number 1.
  *
  * @returns {String}
  */

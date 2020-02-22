@@ -12,7 +12,7 @@
       v-for="externalSite in externalSites"
       :key="externalSite"
     >
-      <icon-link :icon="externalSite" :link="meta[externalSite + 'URL']"/>
+      <icon-link :icon="externalSite" :link="meta[externalSite + 'Url']"/>
     </td>
   </tr>
 </template>
