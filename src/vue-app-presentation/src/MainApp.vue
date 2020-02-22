@@ -298,9 +298,25 @@ export default {
 
   // For text overlays
   .transparent-background {
-    background: rgba($gray, 0.5);
+    background: rgba($gray, 0.2);
     margin: 0;
     box-sizing: border-box;
+  }
+
+  // Fix white text over white image areas
+  .font-shadow {
+    text-shadow: 0 0 0.2em $black;
+  }
+
+  // For master slides: person, instrument
+  .img-contain {
+    height: 100%;
+    left: 0;
+    object-fit: contain;
+    object-position: left bottom;
+    position: absolute;
+    top: 0;
+    width: 100%;
   }
 
   /*********************************************************************

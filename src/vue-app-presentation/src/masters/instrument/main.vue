@@ -1,6 +1,6 @@
 <template>
   <div class="vc_instrument_master">
-    <img :src="imageHttpUrl">
+    <img class="img-contain" :src="imageHttpUrl">
     <p class="name transparent-background important">{{ name }}</p>
     <play-button v-if="sample" :sample="sample"/>
   </div>
@@ -27,13 +27,7 @@ export default {
 <style lang="scss" scoped>
   .vc_instrument_master {
     img {
-      height: 100vh;
-      right: 0;
-      object-fit: contain;
       object-position: right bottom;
-      position: absolute;
-      top: 0;
-      width: 100vw;
     }
 
     .name {

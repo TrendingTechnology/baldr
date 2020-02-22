@@ -3,7 +3,7 @@
     vc_instrument_master_preview
     slide-preview-fullscreen
   ">
-    <img :src="imageHttpUrl">
+    <img class="img-contain" :src="imageHttpUrl">
     <p class="transparent-background important">{{ name }}</p>
   </div>
 </template>
@@ -26,10 +26,6 @@ export default {
 <style lang="scss" scoped>
   .vc_instrument_master_preview {
     img {
-      height: 100%;
-      width: 100%;
-      right: 0;
-      object-fit: contain;
       object-position: right bottom;
     }
 
