@@ -17,10 +17,10 @@
     "url": "https://josef.friedrich.rocks"
   },
   "scripts": {
-    "build": "babel --plugins @babel/plugin-transform-modules-commonjs -o src/main.node.js src/main.js"
+    "build": "babel --plugins @babel/plugin-transform-modules-commonjs -o dist/main.node.js src/main.js"
   },
   "browser": "src/main.js",
-  "main": "src/main.node.js",
+  "main": "dist/main.node.js",
   "publishConfig": {
     "access": "public"
   },
