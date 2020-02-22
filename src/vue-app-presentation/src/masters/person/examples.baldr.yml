@@ -4,15 +4,17 @@ slides:
 - title: Not birth and death
   person:
      name: Joseph Haydn
-     image: id:Haydn
+     image: id:Haydn_Joseph
 
 - title: All properties
   person:
      name: Ludwig van Beethoven
-     image: id:Beethoven
+     image: id:Beethoven_Ludwig-van
      birth: 1770
      death: 1827
 
 - title: props from media file
   person:
-     image: id:Goethe
+     image: id:Goethe_Johann-Wolfgang-von
+
+- person: Adorno_Theodor
