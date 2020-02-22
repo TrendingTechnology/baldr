@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Class: Masters</title>
+    <title>Class: GrabFromObjects</title>
     
     
     
@@ -3826,7 +3826,7 @@
 </div>
 
     <div class="main">
-        <h1 class="page-title" data-filename="module-@bldr_vue-app-presentation_masters-Masters.html">Class: Masters</h1>
+        <h1 class="page-title" data-filename="module-@bldr_vue-app-presentation_lib.GrabFromObjects.html">Class: GrabFromObjects</h1>
         
 
 
@@ -3835,10 +3835,12 @@
     
 <header>
     <div class="header content-size">
-        <h2><span class="ancestors"><a href="module-@bldr_vue-app-presentation_masters.html">@bldr/vue-app-presentation/masters</a>~</span>Masters
+        <h2><span class="ancestors"><a href="module-@bldr_vue-app-presentation_lib.html">@bldr/vue-app-presentation/lib</a>.</span>GrabFromObjects
         </h2>
         
-            <div class="class-description"><p>Container for all registered master slides.</p></div>
+            <div class="class-description"><p>Grab / select values from two objects. The first object is preferred. The
+first object can be for example props and the second a object from the media
+server.</p></div>
         
     </div>
 </header>  
@@ -3852,12 +3854,12 @@
             
 <dt>
     <div class="nameContainer">
-        <h4 class="name" id="Masters">
-            <a class="share-icon" href="#Masters"><span class="glyphicon glyphicon-link"></span></a>
+        <h4 class="name" id="GrabFromObjects">
+            <a class="share-icon" href="#GrabFromObjects"><span class="glyphicon glyphicon-link"></span></a>
             <span class="">
-                new Masters
+                new module:@bldr/vue-app-presentation/lib.GrabFromObjects
             </span>
-            <span class="signature">()</span>
+            <span class="signature">(object1, object2, markup)</span>
             
             
             
@@ -3877,6 +3879,114 @@
     
     
     
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		<th>Default</th>
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>object1</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+            
+            
+                <td class="default">
+                
+                </td>
+            
+            
+            <td class="description last">
+                
+                </td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>object2</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+            
+            
+                <td class="default">
+                
+                </td>
+            
+            
+            <td class="description last">
+                
+                </td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>markup</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+            
+            
+                <td class="default">
+                
+                    true
+                
+                </td>
+            
+            
+            <td class="description last">
+                
+                <p>Apply <code>markupToHtml()</code> to the values of the
+second object.</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
     
     
     
@@ -3933,112 +4043,6 @@
     
     
     
-        <h3 class="subsection-title">Members</h3>
-        
-        <dl class="list-members">
-            
-<dt>
-    <div class="nameContainer">
-        <h4 class="name" id="all">
-            <a class="share-icon" href="#all"><span class="glyphicon glyphicon-link"></span></a>
-            <span class="">all</span>
-            
-            
-            
-            
-            
-        </h4>
-    </div>
-    
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        <p>Get all master objects as an object with the master name as properties.</p>
-    </div>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <div class="nameContainer">
-        <h4 class="name" id="allNames">
-            <a class="share-icon" href="#allNames"><span class="glyphicon glyphicon-link"></span></a>
-            <span class="">allNames</span>
-            
-            
-            
-            
-            
-        </h4>
-    </div>
-    
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        <p>Get all master names as an array.</p>
-    </div>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-</dd>
-
-        </dl>
-    
     
     
         <h3 class="subsection-title">Methods</h3>
@@ -4047,12 +4051,12 @@
             
 <dt>
     <div class="nameContainer">
-        <h4 class="name" id="add">
-            <a class="share-icon" href="#add"><span class="glyphicon glyphicon-link"></span></a>
+        <h4 class="name" id="multipleProperties">
+            <a class="share-icon" href="#multipleProperties"><span class="glyphicon glyphicon-link"></span></a>
             <span class="">
-                add
+                multipleProperties
             </span>
-            <span class="signature">(master)</span>
+            <span class="signature">(properties)</span><span class="type-signature">object</span>
             
             
             
@@ -4068,7 +4072,7 @@
     
     
     <div class="description">
-        <p>Add a master to the masters container.</p>
+        <p>Grab multiple properties.</p>
     </div>
     
 
@@ -4099,13 +4103,13 @@
 	
         <tr>
             
-                <td class="name"><code>master</code></td>
+                <td class="name"><code>properties</code></td>
             
             
             <td class="type">
             
                 
-<span class="param-type"><a href="module-@bldr_vue-app-presentation_masters-Master.html">module:@bldr/vue-app-presentation/masters~Master</a></span>
+<span class="param-type">Array</span>
 
 
             
@@ -4115,124 +4119,7 @@
             
             <td class="description last">
                 
-                </td>
-        </tr>
-	
-	
-	</tbody>
-</table>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <div class="nameContainer">
-        <h4 class="name" id="exists">
-            <a class="share-icon" href="#exists"><span class="glyphicon glyphicon-link"></span></a>
-            <span class="">
-                exists
-            </span>
-            <span class="signature">(name)</span><span class="type-signature">Boolean</span>
-            
-            
-            
-            
-        </h4>
-    
-        
-    </div>
-
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>Check if a master exist.</p>
-    </div>
-    
-
-    
-    
-    
-    
-    
-        
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>name</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-            
-            
-            
-            <td class="description last">
-                
-                <p>The name of the master slide.</p></td>
+                <p>An array of property names.</p></td>
         </tr>
 	
 	
@@ -4291,11 +4178,13 @@
             
             <td class="type">
             
-                        Boolean
+                        object
                         
                     
             </td>
-            <td class="description last"></td>
+            <td class="description last"><ul>
+<li>A new object containing the key and value pairs.</li>
+</ul></td>
         </tr>
     
     </tbody>
@@ -4310,12 +4199,12 @@
             
 <dt>
     <div class="nameContainer">
-        <h4 class="name" id="get">
-            <a class="share-icon" href="#get"><span class="glyphicon glyphicon-link"></span></a>
+        <h4 class="name" id="property">
+            <a class="share-icon" href="#property"><span class="glyphicon glyphicon-link"></span></a>
             <span class="">
-                get
+                property
             </span>
-            <span class="signature">(name)</span><span class="type-signature"><a href="module-@bldr_vue-app-presentation_masters-Master.html">module:@bldr/vue-app-presentation/masters~Master</a></span>
+            <span class="signature">(property)</span><span class="type-signature">Mixed</span>
             
             
             
@@ -4331,7 +4220,7 @@
     
     
     <div class="description">
-        <p>Get a master object by the master name.</p>
+        <p>Grab a value from two objects.</p>
     </div>
     
 
@@ -4362,13 +4251,13 @@
 	
         <tr>
             
-                <td class="name"><code>name</code></td>
+                <td class="name"><code>property</code></td>
             
             
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">String</span>
 
 
             
@@ -4378,7 +4267,7 @@
             
             <td class="description last">
                 
-                <p>The name of the master slide.</p></td>
+                <p>The name of property to look for</p></td>
         </tr>
 	
 	
@@ -4437,7 +4326,7 @@
             
             <td class="type">
             
-                        <a href="module-@bldr_vue-app-presentation_masters-Master.html">module:@bldr/vue-app-presentation/masters~Master</a>
+                        Mixed
                         
                     
             </td>

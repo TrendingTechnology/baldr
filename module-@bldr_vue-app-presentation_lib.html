@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Class: Masters</title>
+    <title>Module: @bldr/vue-app-presentation/lib</title>
     
     
     
@@ -3826,7 +3826,7 @@
 </div>
 
     <div class="main">
-        <h1 class="page-title" data-filename="module-@bldr_vue-app-presentation_masters-Masters.html">Class: Masters</h1>
+        <h1 class="page-title" data-filename="module-@bldr_vue-app-presentation_lib.html">Module: @bldr/vue-app-presentation/lib</h1>
         
 
 
@@ -3835,10 +3835,8 @@
     
 <header>
     <div class="header content-size">
-        <h2><span class="ancestors"><a href="module-@bldr_vue-app-presentation_masters.html">@bldr/vue-app-presentation/masters</a>~</span>Masters
+        <h2>@bldr/vue-app-presentation/lib
         </h2>
-        
-            <div class="class-description"><p>Container for all registered master slides.</p></div>
         
     </div>
 </header>  
@@ -3850,36 +3848,10 @@
 
         
             
-<dt>
-    <div class="nameContainer">
-        <h4 class="name" id="Masters">
-            <a class="share-icon" href="#Masters"><span class="glyphicon glyphicon-link"></span></a>
-            <span class="">
-                new Masters
-            </span>
-            <span class="signature">()</span>
+                <div class="description"><p>Code which can shared in all parts of the app.</p></div>
             
-            
-            
-            
-        </h4>
-    
-        
-    </div>
 
-    
-</dt>
-<dd>
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
+            
 <dl class="details">
     
         
@@ -3902,20 +3874,8 @@
     
 </dl>
 
-    
-    
 
-    
-
-    
-    
-    
-    
-    
-    
-    
-</dd>
-
+            
         
         </div>
     
@@ -3929,115 +3889,25 @@
     
     
     
-    
-    
-    
-    
-        <h3 class="subsection-title">Members</h3>
+        <h3 class="subsection-title">Classes</h3>
         
-        <dl class="list-members">
+        <dl class="clearfix summary-list list-classes">
+            <dt class=""><a href="module-@bldr_vue-app-presentation_lib.DomSteps.html">DomSteps</a></dt>
             
-<dt>
-    <div class="nameContainer">
-        <h4 class="name" id="all">
-            <a class="share-icon" href="#all"><span class="glyphicon glyphicon-link"></span></a>
-            <span class="">all</span>
-            
-            
-            
-            
-            
-        </h4>
-    </div>
-    
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        <p>Get all master objects as an object with the master name as properties.</p>
-    </div>
-    
-    
-    
-<dl class="details">
-    
         
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-</dd>
-
+            <dt class=""><a href="module-@bldr_vue-app-presentation_lib.GrabFromObjects.html">GrabFromObjects</a></dt>
+            
         
+            <dt class=""><a href="module-@bldr_vue-app-presentation_lib-DomStepElement.html">DomStepElement</a></dt>
             
-<dt>
-    <div class="nameContainer">
-        <h4 class="name" id="allNames">
-            <a class="share-icon" href="#allNames"><span class="glyphicon glyphicon-link"></span></a>
-            <span class="">allNames</span>
-            
-            
-            
-            
-            
-        </h4>
-    </div>
-    
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        <p>Get all master names as an array.</p>
-    </div>
-    
-    
-    
-<dl class="details">
-    
         
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-</dd>
-
+            <dt class=""><a href="module-@bldr_vue-app-presentation_lib-DomStepElementGroup.html">DomStepElementGroup</a></dt>
+            
         </dl>
+    
+    
+    
+    
     
     
     
@@ -4047,14 +3917,14 @@
             
 <dt>
     <div class="nameContainer">
-        <h4 class="name" id="add">
-            <a class="share-icon" href="#add"><span class="glyphicon glyphicon-link"></span></a>
+        <h4 class="name" id=".markupToHtml">
+            <a class="share-icon" href="#.markupToHtml"><span class="glyphicon glyphicon-link"></span></a>
             <span class="">
-                add
+                module:@bldr/vue-app-presentation/lib.markupToHtml
             </span>
-            <span class="signature">(master)</span>
+            <span class="signature">(input)</span><span class="type-signature">String</span>
             
-            
+            <span class="access-signature">static</span>
             
             
         </h4>
@@ -4068,7 +3938,9 @@
     
     
     <div class="description">
-        <p>Add a master to the masters container.</p>
+        <p>Convert the specifed text to HTML. At the moment Markdown and HTML formats
+are supported. The conversion is done in a recursive fashion, that means
+nested strings are also converted.</p>
     </div>
     
 
@@ -4099,13 +3971,19 @@
 	
         <tr>
             
-                <td class="name"><code>master</code></td>
+                <td class="name"><code>input</code></td>
             
             
             <td class="type">
             
                 
-<span class="param-type"><a href="module-@bldr_vue-app-presentation_masters-Master.html">module:@bldr/vue-app-presentation/masters~Master</a></span>
+<span class="param-type">String</span>
+|
+
+<span class="param-type">Array</span>
+|
+
+<span class="param-type">Object</span>
 
 
             
@@ -4115,124 +3993,7 @@
             
             <td class="description last">
                 
-                </td>
-        </tr>
-	
-	
-	</tbody>
-</table>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <div class="nameContainer">
-        <h4 class="name" id="exists">
-            <a class="share-icon" href="#exists"><span class="glyphicon glyphicon-link"></span></a>
-            <span class="">
-                exists
-            </span>
-            <span class="signature">(name)</span><span class="type-signature">Boolean</span>
-            
-            
-            
-            
-        </h4>
-    
-        
-    </div>
-
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>Check if a master exist.</p>
-    </div>
-    
-
-    
-    
-    
-    
-    
-        
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>name</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-            
-            
-            
-            <td class="description last">
-                
-                <p>The name of the master slide.</p></td>
+                <p>Convert the specifed input.</p></td>
         </tr>
 	
 	
@@ -4291,7 +4052,7 @@
             
             <td class="type">
             
-                        Boolean
+                        String
                         
                     
             </td>
@@ -4310,14 +4071,14 @@
             
 <dt>
     <div class="nameContainer">
-        <h4 class="name" id="get">
-            <a class="share-icon" href="#get"><span class="glyphicon glyphicon-link"></span></a>
+        <h4 class="name" id=".validateUri">
+            <a class="share-icon" href="#.validateUri"><span class="glyphicon glyphicon-link"></span></a>
             <span class="">
-                get
+                module:@bldr/vue-app-presentation/lib.validateUri
             </span>
-            <span class="signature">(name)</span><span class="type-signature"><a href="module-@bldr_vue-app-presentation_masters-Master.html">module:@bldr/vue-app-presentation/masters~Master</a></span>
+            <span class="signature">(uri)</span><span class="type-signature">ExecFileSyncOptionsWithStringEncoding</span>
             
-            
+            <span class="access-signature">static</span>
             
             
         </h4>
@@ -4331,7 +4092,7 @@
     
     
     <div class="description">
-        <p>Get a master object by the master name.</p>
+        <p>Check if the input is a valid URI. Prefix with <code>id:</code> if necessary.</p>
     </div>
     
 
@@ -4362,13 +4123,13 @@
 	
         <tr>
             
-                <td class="name"><code>name</code></td>
+                <td class="name"><code>uri</code></td>
             
             
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">String</span>
 
 
             
@@ -4378,7 +4139,7 @@
             
             <td class="description last">
                 
-                <p>The name of the master slide.</p></td>
+                <p>The URI to validate.</p></td>
         </tr>
 	
 	
@@ -4437,7 +4198,7 @@
             
             <td class="type">
             
-                        <a href="module-@bldr_vue-app-presentation_masters-Master.html">module:@bldr/vue-app-presentation/masters~Master</a>
+                        ExecFileSyncOptionsWithStringEncoding
                         
                     
             </td>
@@ -4447,6 +4208,127 @@
     </tbody>
 </table>
 
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id=".warnSvgWidthHeight">
+            <a class="share-icon" href="#.warnSvgWidthHeight"><span class="glyphicon glyphicon-link"></span></a>
+            <span class="">
+                module:@bldr/vue-app-presentation/lib.warnSvgWidthHeight
+            </span>
+            <span class="signature">(filePath)</span>
+            
+            <span class="access-signature">static</span>
+            
+            
+        </h4>
+    
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Search for SVG files in the HTML tree and warn if there are width and
+height attributes set. With width and height attributes SVGs could
+not resized easily in IMG tags. The slide preview depends on resizeable
+SVGs.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>filePath</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                <p>Path of the SVG. Only need for better error
+messages.</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
     
     
     

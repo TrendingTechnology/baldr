@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Class: Masters</title>
+    <title>Class: DomStepElementGroup</title>
     
     
     
@@ -3826,7 +3826,7 @@
 </div>
 
     <div class="main">
-        <h1 class="page-title" data-filename="module-@bldr_vue-app-presentation_masters-Masters.html">Class: Masters</h1>
+        <h1 class="page-title" data-filename="module-@bldr_vue-app-presentation_lib-DomStepElementGroup.html">Class: DomStepElementGroup</h1>
         
 
 
@@ -3835,10 +3835,10 @@
     
 <header>
     <div class="header content-size">
-        <h2><span class="ancestors"><a href="module-@bldr_vue-app-presentation_masters.html">@bldr/vue-app-presentation/masters</a>~</span>Masters
+        <h2><span class="ancestors"><a href="module-@bldr_vue-app-presentation_lib.html">@bldr/vue-app-presentation/lib</a>~</span>DomStepElementGroup
         </h2>
         
-            <div class="class-description"><p>Container for all registered master slides.</p></div>
+            <div class="class-description"><p>A group of step elements which are controlled at once.</p></div>
         
     </div>
 </header>  
@@ -3852,12 +3852,12 @@
             
 <dt>
     <div class="nameContainer">
-        <h4 class="name" id="Masters">
-            <a class="share-icon" href="#Masters"><span class="glyphicon glyphicon-link"></span></a>
+        <h4 class="name" id="DomStepElementGroup">
+            <a class="share-icon" href="#DomStepElementGroup"><span class="glyphicon glyphicon-link"></span></a>
             <span class="">
-                new Masters
+                new DomStepElementGroup
             </span>
-            <span class="signature">()</span>
+            <span class="signature">(elements)</span>
             
             
             
@@ -3877,6 +3877,51 @@
     
     
     
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>elements</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Array</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                </td>
+        </tr>
+	
+	
+	</tbody>
+</table>
     
     
     
@@ -3939,9 +3984,9 @@
             
 <dt>
     <div class="nameContainer">
-        <h4 class="name" id="all">
-            <a class="share-icon" href="#all"><span class="glyphicon glyphicon-link"></span></a>
-            <span class="">all</span>
+        <h4 class="name" id="element">
+            <a class="share-icon" href="#element"><span class="glyphicon glyphicon-link"></span></a>
+            <span class="">element</span>
             
             
             
@@ -3955,7 +4000,7 @@
 <dd>
     
     <div class="description">
-        <p>Get all master objects as an object with the master name as properties.</p>
+        <p>For the scroll function: to get every time a HTML element.</p>
     </div>
     
     
@@ -3990,10 +4035,10 @@
             
 <dt>
     <div class="nameContainer">
-        <h4 class="name" id="allNames">
-            <a class="share-icon" href="#allNames"><span class="glyphicon glyphicon-link"></span></a>
-            <span class="">allNames</span>
-            
+        <h4 class="name" id="elements">
+            <a class="share-icon" href="#elements"><span class="glyphicon glyphicon-link"></span></a>
+            <span class="">elements</span>
+            <span class="type-signature type">Array</span>
             
             
             
@@ -4004,10 +4049,6 @@
     
 </dt>
 <dd>
-    
-    <div class="description">
-        <p>Get all master names as an array.</p>
-    </div>
     
     
     
@@ -4047,12 +4088,12 @@
             
 <dt>
     <div class="nameContainer">
-        <h4 class="name" id="add">
-            <a class="share-icon" href="#add"><span class="glyphicon glyphicon-link"></span></a>
+        <h4 class="name" id="addElement">
+            <a class="share-icon" href="#addElement"><span class="glyphicon glyphicon-link"></span></a>
             <span class="">
-                add
+                addElement
             </span>
-            <span class="signature">(master)</span>
+            <span class="signature">(element)</span>
             
             
             
@@ -4066,10 +4107,6 @@
 </dt>
 <dd>
     
-    
-    <div class="description">
-        <p>Add a master to the masters container.</p>
-    </div>
     
 
     
@@ -4099,13 +4136,13 @@
 	
         <tr>
             
-                <td class="name"><code>master</code></td>
+                <td class="name"><code>element</code></td>
             
             
             <td class="type">
             
                 
-<span class="param-type"><a href="module-@bldr_vue-app-presentation_masters-Master.html">module:@bldr/vue-app-presentation/masters~Master</a></span>
+<span class="param-type">HTMLElement</span>
 
 
             
@@ -4164,14 +4201,14 @@
             
 <dt>
     <div class="nameContainer">
-        <h4 class="name" id="exists">
-            <a class="share-icon" href="#exists"><span class="glyphicon glyphicon-link"></span></a>
+        <h4 class="name" id="addMultipleElements_">
+            <a class="share-icon" href="#addMultipleElements_"><span class="glyphicon glyphicon-link"></span></a>
             <span class="">
-                exists
+                addMultipleElements_
             </span>
-            <span class="signature">(name)</span><span class="type-signature">Boolean</span>
+            <span class="signature">(elements)</span>
             
-            
+            <span class="access-signature">private</span>
             
             
         </h4>
@@ -4183,10 +4220,6 @@
 </dt>
 <dd>
     
-    
-    <div class="description">
-        <p>Check if a master exist.</p>
-    </div>
     
 
     
@@ -4216,13 +4249,13 @@
 	
         <tr>
             
-                <td class="name"><code>name</code></td>
+                <td class="name"><code>elements</code></td>
             
             
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">Array</span>
 
 
             
@@ -4232,7 +4265,7 @@
             
             <td class="description last">
                 
-                <p>The name of the master slide.</p></td>
+                </td>
         </tr>
 	
 	
@@ -4272,35 +4305,6 @@
     
     
     
-    
-    <h5>Returns:</h5>
-    
-
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Type</th>
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-    <tbody>
-    
-        <tr>
-            
-            <td class="type">
-            
-                        Boolean
-                        
-                    
-            </td>
-            <td class="description last"></td>
-        </tr>
-    
-    </tbody>
-</table>
-
     
     
     
@@ -4310,12 +4314,12 @@
             
 <dt>
     <div class="nameContainer">
-        <h4 class="name" id="get">
-            <a class="share-icon" href="#get"><span class="glyphicon glyphicon-link"></span></a>
+        <h4 class="name" id="show">
+            <a class="share-icon" href="#show"><span class="glyphicon glyphicon-link"></span></a>
             <span class="">
-                get
+                show
             </span>
-            <span class="signature">(name)</span><span class="type-signature"><a href="module-@bldr_vue-app-presentation_masters-Master.html">module:@bldr/vue-app-presentation/masters~Master</a></span>
+            <span class="signature">(isVisible)</span>
             
             
             
@@ -4329,10 +4333,6 @@
 </dt>
 <dd>
     
-    
-    <div class="description">
-        <p>Get a master object by the master name.</p>
-    </div>
     
 
     
@@ -4352,6 +4352,8 @@
 		<th>Type</th>
 		
 		
+		<th>Default</th>
+		
 		
 		<th class="last">Description</th>
 	</tr>
@@ -4362,23 +4364,29 @@
 	
         <tr>
             
-                <td class="name"><code>name</code></td>
+                <td class="name"><code>isVisible</code></td>
             
             
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">Boolean</span>
 
 
             
             </td>
             
             
+                <td class="default">
+                
+                    true
+                
+                </td>
+            
             
             <td class="description last">
                 
-                <p>The name of the master slide.</p></td>
+                </td>
         </tr>
 	
 	
@@ -4418,35 +4426,6 @@
     
     
     
-    
-    <h5>Returns:</h5>
-    
-
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Type</th>
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-    <tbody>
-    
-        <tr>
-            
-            <td class="type">
-            
-                        <a href="module-@bldr_vue-app-presentation_masters-Master.html">module:@bldr/vue-app-presentation/masters~Master</a>
-                        
-                    
-            </td>
-            <td class="description last"></td>
-        </tr>
-    
-    </tbody>
-</table>
-
     
     
     
