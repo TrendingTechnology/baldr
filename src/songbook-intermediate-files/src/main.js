@@ -24,7 +24,11 @@ const yaml = require('js-yaml')
 // Project packages.
 const { AlphabeticalSongsTree, SongMetaDataCombined, CoreLibrary } = require('@bldr/songbook-core')
 const core = require('@bldr/core-node')
+const { formatMultiPartAssetFileName } = require('@bldr/core-browser')
 
+/**
+ * See `/etc/baldr.json`.
+ */
 const config = core.bootstrapConfig()
 
 /**
@@ -412,13 +416,20 @@ class SongMetaData {
     if (!fs.existsSync(ymlFile)) {
       throw new Error(util.format('YAML file could not be found: %s', ymlFile))
     }
-    const raw = yaml.safeLoad(fs.readFileSync(ymlFile, 'utf8'))
 
-    for (const key in raw) {
+    /**
+     * A Javascript object representation of the `info.yml` file.
+     *
+     * @type {Object}
+     * @private
+     */
+    this.rawYaml_ = yaml.safeLoad(fs.readFileSync(ymlFile, 'utf8'))
+
+    for (const key in this.rawYaml_) {
       if (!this.allowedProperties.includes(key)) {
         throw new Error(util.format('Unsupported key: %s', key))
       }
-      this[key] = raw[key]
+      this[key] = this.rawYaml_[key]
     }
 
     if (this.wikidata) {
@@ -460,8 +471,10 @@ class Song {
    *   the piano score (*.eps).
    */
   constructor (songPath, projectorPath, pianoPath) {
+
     /**
-     * The directory containing the song files.
+     * The directory containing the song files. For example
+     * `/home/jf/songs/w/Wir-sind-des-Geyers-schwarze-Haufen`.
      *
      * @type {string}
      */
@@ -478,7 +491,7 @@ class Song {
     /**
      * The songID is the name of the directory which contains all song
      * files. It is used to sort the songs. It must be unique along all
-     * songs.
+     * songs. For example: `Wir-sind-des-Geyers-schwarze-Haufen`.
      *
      * @type {string}
      */
@@ -562,7 +575,8 @@ class Song {
     this.pianoFiles = listFiles(this.folderPiano.get(), '.eps')
 
     /**
-     * An array of slides file in the SVG format.
+     * An array of slides file in the SVG format. For example:
+     * `[ '01.svg', '02.svg' ]`
      *
      * @type {array}
      */
@@ -1207,6 +1221,9 @@ class PianoScore {
   }
 }
 
+/**
+ * Extended version of the Song class to build intermediate files.
+ */
 class IntermediateSong extends Song {
   /**
    * @param {string} songPath - The path of the directory containing the song
@@ -1392,7 +1409,10 @@ class IntermediateSong extends Song {
         (force || status.changed.slides || !this.slidesFiles.length)) {
       status.generated.projector = this.generatePDF_('projector')
       status.generated.slides = this.generateSlides_()
+      this.exportToMediaServer_()
     }
+
+    this.exportToMediaServer_()
 
     status.changed.piano = this.fileMonitor.isModified(this.mscxPiano)
 
@@ -1401,6 +1421,7 @@ class IntermediateSong extends Song {
         (force || status.changed.piano || !this.pianoFiles.length)) {
       status.generated.piano = this.generatePiano_()
     }
+
     return status
   }
 
@@ -1418,6 +1439,40 @@ class IntermediateSong extends Song {
         fs.removeSync(path.join(this.folder, file))
       }
     )
+  }
+
+  /**
+   * Export the intermediate SVG files to the media server. Adjust the
+   * `info.yml` and copy it to the destination folder of the media server.
+   *
+   * @private
+   */
+  exportToMediaServer_ () {
+    // NB = Notenbeispiele -> SVG
+    // /var/data/baldr/media/Lieder/NB
+    // There exists a folder for the audio files: HB (Hörbeispiele)
+    const mediaServerSongsFolder = path.join(config.mediaServer.basePath, 'Lieder', 'NB')
+
+    // /var/data/baldr/media/Lieder/NB/a
+    const abcFolder = path.join(mediaServerSongsFolder, this.abc)
+    fs.ensureDirSync(abcFolder)
+
+    const firstFileName = path.join(abcFolder, `${this.songID}.svg`)
+
+    // this.slidesFiles: ['01.svg', '02.svg']
+    for (let index = 0; index < this.slidesFiles.length; index++) {
+      fs.copySync(
+        path.join(this.folderSlides.get(), this.slidesFiles[index]),
+        formatMultiPartAssetFileName(firstFileName, index + 1)
+      )
+    }
+
+    const rawYaml = this.metaData.rawYaml_
+    rawYaml.id = `Lied_${this.songID}_NB`
+    rawYaml.title = `Lied „${this.metaData.title}“`
+
+    const yamlMarkup = ['---', yaml.safeDump(rawYaml)]
+    fs.writeFileSync(`${firstFileName}.yml`, yamlMarkup.join('\n'))
   }
 }
 

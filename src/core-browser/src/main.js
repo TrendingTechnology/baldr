@@ -120,10 +120,18 @@ export function convertPropertiesToCamelCase (object) {
 
 /**
  * Generate from the file name or the url of the first element of a multipart
- * asset the nth file name or the url.
+ * asset the nth file name or the url. The parameter `firstFileName` must
+ * have a extension (for example `.jpg`). The parameter `no` must be smaller
+ * then 100. Only two digit or smaller integers are allowed.
  *
- * @param {String} firstFileName
- * @param {Number} no
+ * 1. `multipart-asset.jpg`
+ * 2. `multipart-asset_no02.jpg`
+ * 3. `multipart-asset_no03.jpg`
+ * 4. ...
+ *
+ * @param {String} firstFileName - A file name, a path or a URL.
+ * @param {Number} no - The number in the multipart asset list. The first
+ *   element has the number 1.
  *
  * @returns {String}
  */

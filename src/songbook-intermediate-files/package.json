@@ -16,6 +16,7 @@
     "main": "src/main.js",
     "dependencies": {
         "@bldr/core-node": "^0.1.4",
+        "@bldr/core-browser": "^0.10.4",
         "@bldr/songbook-core": "^0.1.8",
         "better-sqlite3": "^5.4.3",
         "chalk": "^2.4.2",
