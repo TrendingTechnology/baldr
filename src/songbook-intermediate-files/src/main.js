@@ -1744,16 +1744,7 @@ function exportToMediaServer (library) {
     rawYaml.id = `Lied_${song.songId}_NB`
     rawYaml.title = `Lied „${song.metaData.title}“`
 
-    for (const property of [
-      'composer',
-      'lyricist',
-      'musescoreUrl',
-      'subtitle',
-      'title',
-      'wikidataUrl',
-      'wikipediaUrl',
-      'youtubeUrl'
-    ]) {
+    for (const property of song.metaDataCombined.allProperties) {
       if (song.metaDataCombined[property]) {
         rawYaml[`${camelToSnake(property)}_combined`] = song.metaDataCombined[property]
       }

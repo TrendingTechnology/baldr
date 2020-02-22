@@ -92,6 +92,22 @@ class SongMetaDataCombined {
      * @private
      */
     this.metaData_ = songMetaData
+
+    /**
+     * All property names of all getters as an array.
+     *
+     * @type {Array}
+     */
+    this.allProperties = [
+      'composer',
+      'lyricist',
+      'musescoreUrl',
+      'subtitle',
+      'title',
+      'wikidataUrl',
+      'wikipediaUrl',
+      'youtubeUrl'
+    ]
   }
 
   /**
@@ -201,7 +217,6 @@ class SongMetaDataCombined {
    */
   get wikidataUrl () {
     if (this.metaData_.wikidata) {
-      // https://www.wikidata.org/wiki/Q42
       return formatWikidataUrl(this.metaData_.wikidata)
     }
   }
