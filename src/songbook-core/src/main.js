@@ -205,7 +205,7 @@ class SongMetaDataCombined {
    * For example: `https://www.wikidata.org/wiki/Q42`
    */
   get wikidataUrl () {
-    if ('wikidata' in this.metaData) {
+    if (this.metaData.wikidata) {
       // https://www.wikidata.org/wiki/Q42
       return `https://www.wikidata.org/wiki/Q${this.metaData.wikidata}`
     }
@@ -229,7 +229,7 @@ class SongMetaDataCombined {
    * For example: `https://youtu.be/CQYypFMTQcE`
    */
   get youtubeUrl () {
-    if ('youtube' in this.metaData) {
+    if (this.metaData.youtube) {
       return `https://youtu.be/${this.metaData.youtube}`
     }
   }
