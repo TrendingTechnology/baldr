@@ -55,29 +55,8 @@ function gitHead () {
   }
 }
 
-/**
- * Convert `snake_case` or `kebab-case` strings into `camelCase` strings.
- *
- * TODO: Use the function in @bldr/core-browser
- *
- * @param {String} str - A snake or kebab cased string
- *
- * @returns {String}
- *
- * @see {@link https://catalin.me/javascript-snake-to-camel/}
- */
-function snakeToCamel (str) {
-  return str.replace(
-    /([-_][a-z])/g,
-    (group) => group.toUpperCase()
-      .replace('-', '')
-      .replace('_', '')
-  )
-}
-
 module.exports = {
   bootstrapConfig,
   gitHead,
-  log,
-  snakeToCamel
+  log
 }

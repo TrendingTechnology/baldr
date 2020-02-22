@@ -7,7 +7,7 @@
 /* globals config document Audio Image File */
 
 import { getDefaultServers, HttpRequest, getDefaultRestEndpoints, HttpRequestNg } from '@bldr/http-request'
-import { formatMultiPartAssetFileName } from '@bldr/core-browser'
+import { formatMultiPartAssetFileName, AssetTypes } from '@bldr/core-browser'
 
 import Vue from 'vue'
 import DynamicSelect from '@bldr/vue-plugin-dynamic-select'
@@ -516,98 +516,6 @@ const storeModule = {
   getters,
   actions,
   mutations
-}
-
-/**
- * Categories some asset file formats in three asset types: `audio`, `image`,
- * `video`.
- *
- * TODO: Code which can be imported by ES modules and node modules.
- * The same code is in the module @bldr/api-media-server/src/main.js and
- * @bldr/vue-plugin-media/src/main.js
- */
-class AssetTypes {
-  constructor (config) {
-    /**
-     * @type {object}
-     * @private
-     */
-    this.config_ = config.mediaServer.assetTypes
-
-    /**
-     * @type {object}
-     * @private
-     */
-    this.allowedExtensions_ = this.spreadExtensions_()
-  }
-
-  /**
-   * @private
-   */
-  spreadExtensions_ () {
-    const out = {}
-    for (const type in this.config_) {
-      for (const extension of this.config_[type].allowedExtensions) {
-        out[extension] = type
-      }
-    }
-    return out
-  }
-
-  /**
-   * Get the media type from the extension.
-   *
-   * @param {String} extension
-   *
-   * @returns {String}
-   */
-  extensionToType (extension) {
-    extension = extension.toLowerCase()
-    if (extension in this.allowedExtensions_) {
-      return this.allowedExtensions_[extension]
-    }
-    throw new Error(`Unkown extension “${extension}”`)
-  }
-
-  /**
-   * Get the color of the media type.
-   *
-   * @param {String} type - The asset type: for example `audio`, `image`,
-   *   `video`.
-   *
-   * @returns {String}
-   */
-  typeToColor (type) {
-    return this.config_[type].color
-  }
-
-  /**
-   * Determine the target extension (for a conversion job) by a given
-   * asset type.
-   *
-   * @param {String} type - The asset type: for example `audio`, `image`,
-   *   `video`.
-   *
-   * @returns {String}
-   */
-  typeToTargetExtension (type) {
-    return this.config_[type].targetExtension
-  }
-
-  /**
-   * Check if file is an supported asset format.
-   *
-   * @param {String} filename
-   *
-   * @returns {Boolean}
-   */
-  isAsset (filename) {
-    const extension = filename.split('.').pop().toLowerCase()
-    if (extension in this.allowedExtensions_) {
-      return true
-    }
-    return false
-  }
 }
 
 export const assetTypes = new AssetTypes(config)

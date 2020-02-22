@@ -29,6 +29,7 @@
     "@babel/plugin-transform-modules-commonjs": "^7.8.3"
   },
   "babel": {
+    "comments": false,
     "plugins": [
       "@babel/plugin-transform-modules-commonjs"
     ]
