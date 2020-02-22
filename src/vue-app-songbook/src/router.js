@@ -17,7 +17,7 @@ export default new Router({
       component: StartPage
     },
     {
-      path: '/song/:songID',
+      path: '/song/:songId',
       name: 'song',
       component: SongView
     },

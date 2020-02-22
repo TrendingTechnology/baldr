@@ -182,7 +182,7 @@ const main = function () {
     library.updateSongBySongId(options.songId, mode)
   } else {
     exportToMediaServer(library)
-    throw new Error('lol')
+    //throw new Error('lol')
 
     library.update(mode, options.force)
 

@@ -55,8 +55,8 @@ const actions = {
     }
   },
   importSongs ({ commit }, songs) {
-    for (const songID in songs) {
-      const song = songs[songID]
+    for (const songId in songs) {
+      const song = songs[songId]
       song.metaDataCombined = new SongMetaDataCombined(song.metaData)
     }
     commit('importSongs', songs)
@@ -79,23 +79,23 @@ const actions = {
       commit('setSlideNoCurrent', no - 1)
     }
   },
-  setSongCurrent ({ commit, getters }, songID) {
-    const song = getters.songs[songID]
-    commit('updateCurrentSongIndex', songID)
+  setSongCurrent ({ commit, getters }, songId) {
+    const song = getters.songs[songId]
+    commit('updateCurrentSongIndex', songId)
     commit('setSongCurrent', song)
     commit('setSlideNoCurrent', 1)
   },
   setSongNext ({ dispatch, getters }) {
     const song = getters.library.getNextSong()
-    dispatch('setSongCurrent', song.songID)
+    dispatch('setSongCurrent', song.songId)
   },
   setSongPrevious ({ dispatch, getters }) {
     const song = getters.library.getPreviousSong()
-    dispatch('setSongCurrent', song.songID)
+    dispatch('setSongCurrent', song.songId)
   },
   setSongRandom ({ dispatch, getters }) {
     const song = getters.library.getRandomSong()
-    dispatch('setSongCurrent', song.songID)
+    dispatch('setSongCurrent', song.songId)
   }
 }
 
@@ -109,8 +109,8 @@ const mutations = {
   setSongCurrent (state, song) {
     state.songCurrent = song
   },
-  updateCurrentSongIndex (state, songID) {
-    state.library.updateCurrentSongIndex(songID)
+  updateCurrentSongIndex (state, songId) {
+    state.library.updateCurrentSongIndex(songId)
   }
 }
 

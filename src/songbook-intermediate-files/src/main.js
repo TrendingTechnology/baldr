@@ -42,7 +42,7 @@ const config = core.bootstrapConfig()
 
 function parseSongIDList (listPath) {
   const content = fs.readFileSync(listPath, { encoding: 'utf-8' })
-  return content.split(/\s+/).filter(songID => songID)
+  return content.split(/\s+/).filter(songId => songId)
 }
 
 /**
@@ -489,13 +489,13 @@ class Song {
     this.abc = this.recognizeABCFolder_(this.folder)
 
     /**
-     * The songID is the name of the directory which contains all song
+     * The songId is the name of the directory which contains all song
      * files. It is used to sort the songs. It must be unique along all
      * songs. For example: `Wir-sind-des-Geyers-schwarze-Haufen`.
      *
      * @type {string}
      */
-    this.songID = path.basename(this.folder)
+    this.songId = path.basename(this.folder)
 
     /**
      * An instance of the class SongMetaData().
@@ -647,7 +647,7 @@ class Song {
       abc: this.abc,
       folder: this.folder,
       metaData: this.metaData,
-      songID: this.songID,
+      songId: this.songId,
       slidesCount: this.slidesFiles.length
     }
   }
@@ -665,12 +665,12 @@ function collectSongs (basePath) {
   const songs = {}
   for (const songPath of songsPaths) {
     const song = new Song(path.join(basePath, songPath))
-    if (song.songID in songs) {
+    if (song.songId in songs) {
       throw new Error(
-        util.format('A song with the same songID already exists: %s',
-          song.songID))
+        util.format('A song with the same songId already exists: %s',
+          song.songId))
     }
-    songs[song.songID] = song
+    songs[song.songId] = song
   }
   return songs
 }
@@ -712,13 +712,13 @@ class Library extends CoreLibrary {
    * @returns {pbject}
    */
   loadSongList (listFile) {
-    const songIDs = parseSongIDList(listFile)
+    const songIds = parseSongIDList(listFile)
     const songs = {}
-    for (const songID of songIDs) {
-      if ({}.hasOwnProperty.call(this.songs, songID)) {
-        songs[songID] = this.songs[songID]
+    for (const songId of songIds) {
+      if ({}.hasOwnProperty.call(this.songs, songId)) {
+        songs[songId] = this.songs[songId]
       } else {
-        throw new Error(util.format('There is no song with song ID “%s”', songID))
+        throw new Error(util.format('There is no song with song ID “%s”', songId))
       }
     }
     this.songs = songs
@@ -1258,9 +1258,9 @@ class IntermediateSong extends Song {
   formatPianoTeXEpsFile_ (index) {
     let subFolder
     if (!this.pianoPath) {
-      subFolder = path.join(this.abc, this.songID, 'piano', this.pianoFiles[index])
+      subFolder = path.join(this.abc, this.songId, 'piano', this.pianoFiles[index])
     } else {
-      subFolder = path.join(this.abc, this.songID, this.pianoFiles[index])
+      subFolder = path.join(this.abc, this.songId, this.pianoFiles[index])
     }
     return PianoScore.texCmd(
       'image',
@@ -1607,12 +1607,12 @@ class IntermediateLibrary extends Library {
         pianoPath,
         this.fileMonitor
       )
-      if (song.songID in songs) {
+      if (song.songId in songs) {
         throw new Error(
-          util.format('A song with the same songID already exists: %s',
-            song.songID))
+          util.format('A song with the same songId already exists: %s',
+            song.songId))
       }
-      songs[song.songID] = song
+      songs[song.songId] = song
     }
     return songs
   }
@@ -1636,8 +1636,8 @@ class IntermediateLibrary extends Library {
    * Clean all intermediate media files.
    */
   cleanIntermediateFiles () {
-    for (const songID in this.songs) {
-      this.songs[songID].cleanIntermediateFiles()
+    for (const songId in this.songs) {
+      this.songs[songId].cleanIntermediateFiles()
     }
     this.deleteFiles_([
       'songs.tex',
@@ -1653,8 +1653,8 @@ class IntermediateLibrary extends Library {
    * @param {boolean} force - Force the regeneration of intermediate files.
    */
   generateIntermediateFiles (mode = 'all', force = false) {
-    for (const songID in this.songs) {
-      const song = this.songs[songID]
+    for (const songId in this.songs) {
+      const song = this.songs[songId]
       const status = song.generateIntermediateFiles(mode, force)
       message.songFolder(status, song)
     }
@@ -1678,16 +1678,16 @@ class IntermediateLibrary extends Library {
   /**
    * Generate all intermediate media files for one song.
    *
-   * @param {string} songID - The ID of the song (the name of the parent song folder)
+   * @param {string} songId - The ID of the song (the name of the parent song folder)
    * @param {string} mode - Generate all intermediate media files or only slide
    *   and piano files. Possible values: “all”, “slides” or “piano”
    */
-  updateSongBySongId (songID, mode = 'all') {
+  updateSongBySongId (songId, mode = 'all') {
     let song
-    if ({}.hasOwnProperty.call(this.songs, songID)) {
-      song = this.songs[songID]
+    if ({}.hasOwnProperty.call(this.songs, songId)) {
+      song = this.songs[songId]
     } else {
-      throw new Error(util.format('The song with the song ID “%s” is unkown.', songID))
+      throw new Error(util.format('The song with the song ID “%s” is unkown.', songId))
     }
     const status = song.generateIntermediateFiles(mode, true)
     message.songFolder(status, song)
@@ -1729,7 +1729,7 @@ function exportToMediaServer (library) {
     const dirAbc = path.join(dirBase, song.abc)
     fs.ensureDirSync(dirAbc)
 
-    const firstFileName = path.join(dirAbc, `${song.songID}.svg`)
+    const firstFileName = path.join(dirAbc, `${song.songId}.svg`)
 
     // song.slidesFiles: ['01.svg', '02.svg']
     for (let index = 0; index < song.slidesFiles.length; index++) {
@@ -1740,12 +1740,12 @@ function exportToMediaServer (library) {
     }
 
     const rawYaml = song.metaData.rawYaml_
-    rawYaml.id = `Lied_${song.songID}_NB`
+    rawYaml.id = `Lied_${song.songId}_NB`
     rawYaml.title = `Lied „${song.metaData.title}“`
-    rawYaml.titleCombined = song.metaDataCombined.title
-    rawYaml.subtitleCombined = song.metaDataCombined.subtitle
-    rawYaml.composerCombined = song.metaDataCombined.composer
-    rawYaml.wikipediaUrl = song.metaDataCombined.wikipediaURL
+    // rawYaml.titleCombined = song.metaDataCombined.title
+    // rawYaml.subtitleCombined = song.metaDataCombined.subtitle
+    // rawYaml.composerCombined = song.metaDataCombined.composer
+    // rawYaml.wikipediaUrl = song.metaDataCombined.wikipediaUrl
 
     const yamlMarkup = ['---', yaml.safeDump(rawYaml)]
     fs.writeFileSync(`${firstFileName}.yml`, yamlMarkup.join('\n'))

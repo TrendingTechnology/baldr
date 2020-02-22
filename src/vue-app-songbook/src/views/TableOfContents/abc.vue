@@ -4,7 +4,7 @@
     <table>
       <toc-song
         v-for="song in songs"
-        :key="song.songID"
+        :key="song.songId"
         :song="song"
       />
     </table>

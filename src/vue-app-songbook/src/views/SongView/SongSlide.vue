@@ -22,8 +22,8 @@ export default {
     abc () {
       return this.songCurrent.abc
     },
-    songID () {
-      return this.songCurrent.songID
+    songId () {
+      return this.songCurrent.songId
     },
     slideNo () {
       if (this.slideNoCurrent <= 9) {
@@ -32,7 +32,7 @@ export default {
       return this.slideNoCurrent
     },
     imageSrc () {
-      return `./songs/${this.abc}/${this.songID}/${this.slideNo}.svg`
+      return `./songs/${this.abc}/${this.songId}/${this.slideNo}.svg`
     }
   }
 }

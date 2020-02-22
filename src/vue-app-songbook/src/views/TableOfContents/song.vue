@@ -1,7 +1,7 @@
 <template>
   <tr class="vc_toc_song">
     <td class="main-column">
-      <router-link :to="{ name: 'song', params: { songID: song.songID }}">
+      <router-link :to="{ name: 'song', params: { songId: song.songId }}">
         <span class="title" v-if="meta.title">{{ meta.title }} </span>
         <span class="subtitle" v-if="meta.subtitle">{{ meta.subtitle }} </span>
         <span class="composer" v-if="meta.composer">{{ meta.composer }} </span>

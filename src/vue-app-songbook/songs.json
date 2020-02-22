@@ -10,7 +10,7 @@
       "wikipedia": "de:Auf_der_Mauer,_auf_der_Lauer",
       "year": 1890
     },
-    "songID": "Auf-der-Mauer_auf-der-Lauer",
+    "songId": "Auf-der-Mauer_auf-der-Lauer",
     "slidesCount": 4
   },
   "Stille-Nacht": {
@@ -25,7 +25,7 @@
       "wikidata": 172152,
       "wikipedia": "de:Stille_Nacht,_heilige_Nacht"
     },
-    "songID": "Stille-Nacht",
+    "songId": "Stille-Nacht",
     "slidesCount": 2
   },
   "Swing-low": {
@@ -39,7 +39,7 @@
       "wikipedia": "en:Swing_Low,_Sweet_Chariot",
       "year": "vor 1862"
     },
-    "songID": "Swing-low",
+    "songId": "Swing-low",
     "slidesCount": 5
   },
   "Zum-Tanze-da-geht-ein-Maedel": {
@@ -53,7 +53,7 @@
       "wikipedia": "sv:Och_flickan_hon_går_i_dansen",
       "year": 1908
     },
-    "songID": "Zum-Tanze-da-geht-ein-Maedel",
+    "songId": "Zum-Tanze-da-geht-ein-Maedel",
     "slidesCount": 2
   }
 }

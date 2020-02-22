@@ -20,7 +20,7 @@
  *     "year": 1965,
  *     "youtube": "wXTJBr9tt8Q"
  *   },
- *   "songID": "Yesterday",
+ *   "songId": "Yesterday",
  *   "slidesCount": 2
  * }
  * ```
@@ -70,7 +70,7 @@ class AlphabeticalSongsTree {
       this[song.abc].push(song)
     }
     for (const abc in this) {
-      this[abc].sort(sortObjectsByProperty('songID'))
+      this[abc].sort(sortObjectsByProperty('songId'))
     }
   }
 }
@@ -167,7 +167,7 @@ class SongMetaDataCombined {
   /**
    * https://musescore.com/score/1234
    */
-  get musescoreURL () {
+  get musescoreUrl () {
     if ('musescore' in this.metaData) {
       return `https://musescore.com/score/${this.metaData.musescore}`
     }
@@ -196,15 +196,14 @@ class SongMetaDataCombined {
 
     if ('year' in this.metaData && this.metaData.year) {
       return `${out} (${this.metaData.year})`
-    } else {
-      return out
     }
+    return out
   }
 
   /**
    * https://www.wikidata.org/wiki/Q42
    */
-  get wikidataURL () {
+  get wikidataUrl () {
     if ('wikidata' in this.metaData) {
       // https://www.wikidata.org/wiki/Q42
       return `https://www.wikidata.org/wiki/Q${this.metaData.wikidata}`
@@ -214,8 +213,8 @@ class SongMetaDataCombined {
   /**
    * https://en.wikipedia.org/wiki/A_Article
    */
-  get wikipediaURL () {
-    if ('wikipedia' in this.metaData) {
+  get wikipediaUrl () {
+    if (this.metaData.wikipedia) {
       // https://de.wikipedia.org/wiki/Gesch%C3%BCtztes_Leerzeichen
       // https://en.wikipedia.org/wiki/Non-breaking_space
       const segments = this.metaData.wikipedia.split(':')
@@ -264,10 +263,10 @@ class CoreLibrary {
      *
      * @type {array}
      */
-    this.songIDs = Object.keys(this.songs).sort()
+    this.songIds = Object.keys(this.songs).sort()
 
     /**
-     * The current index of the array this.songIDs. Used for the methods
+     * The current index of the array this.songIds. Used for the methods
      * getNextSong and getPreviousSong
      *
      * @type {integer}
@@ -287,9 +286,9 @@ class CoreLibrary {
    */
   toDynamicSelect () {
     const result = []
-    for (const songID of this.songIDs) {
-      const song = this.getSongById(songID)
-      result.push({ id: song.songID, name: song.metaData.title })
+    for (const songId of this.songIds) {
+      const song = this.getSongById(songId)
+      result.push({ id: song.songId, name: song.metaData.title })
     }
     return result
   }
@@ -300,19 +299,19 @@ class CoreLibrary {
    * @return {number}
    */
   countSongs () {
-    return this.songIDs.length
+    return this.songIds.length
   }
 
   /**
    * Update the index of the song IDs array. If a song is opened via the search
    * form, it is possible to go to the next or previous song of the opened song.
    *
-   * @param {string} songID
+   * @param {string} songId
    *
-   * @returns {integer} The index in the songIDs array.
+   * @returns {integer} The index in the songIds array.
    */
-  updateCurrentSongIndex (songID) {
-    this.currentSongIndex = this.songIDs.indexOf(songID)
+  updateCurrentSongIndex (songId) {
+    this.currentSongIndex = this.songIds.indexOf(songId)
     return this.currentSongIndex
   }
 
@@ -333,15 +332,15 @@ class CoreLibrary {
   /**
    * Get the song object from the song ID.
    *
-   * @param {string} songID - The ID of the song. (The parent song folder)
+   * @param {string} songId - The ID of the song. (The parent song folder)
    *
    * @return {module:@bldr/songbook-core~Song}
    */
-  getSongById (songID) {
-    if (songID in this.songs && this.songs[songID]) {
-      return this.songs[songID]
+  getSongById (songId) {
+    if (songId in this.songs && this.songs[songId]) {
+      return this.songs[songId]
     } else {
-      throw new Error(`There is no song with the songID: ${songID}`)
+      throw new Error(`There is no song with the songId: ${songId}`)
     }
   }
 
@@ -356,7 +355,7 @@ class CoreLibrary {
     } else {
       this.currentSongIndex -= 1
     }
-    return this.getSongById(this.songIDs[this.currentSongIndex])
+    return this.getSongById(this.songIds[this.currentSongIndex])
   }
 
   /**
@@ -370,7 +369,7 @@ class CoreLibrary {
     } else {
       this.currentSongIndex += 1
     }
-    return this.getSongById(this.songIDs[this.currentSongIndex])
+    return this.getSongById(this.songIds[this.currentSongIndex])
   }
 
   /**
@@ -379,9 +378,9 @@ class CoreLibrary {
    * @return {module:@bldr/songbook-core~Song}
    */
   getRandomSong () {
-    const randomIndex = Math.floor(Math.random() * this.songIDs.length)
+    const randomIndex = Math.floor(Math.random() * this.songIds.length)
     if (this.currentSongIndex !== randomIndex) {
-      return this.getSongById(this.songIDs[randomIndex])
+      return this.getSongById(this.songIds[randomIndex])
     } else {
       return this.getNextSong()
     }

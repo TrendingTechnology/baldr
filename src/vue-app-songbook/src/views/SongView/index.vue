@@ -81,8 +81,8 @@ export default {
     abc () {
       return this.songCurrent.abc
     },
-    songID () {
-      return this.songCurrent.songID
+    songId () {
+      return this.songCurrent.songId
     },
     slideNo () {
       if (this.slideNoCurrent <= 9) {
@@ -91,7 +91,7 @@ export default {
       return this.slideNoCurrent
     },
     imageSrc () {
-      return `/songs/${this.abc}/${this.songID}/${this.slideNo}.svg`
+      return `/songs/${this.abc}/${this.songId}/${this.slideNo}.svg`
     }
   },
   methods: {
@@ -106,17 +106,17 @@ export default {
       this.setSong(this.selectedSong.id)
       this.$shortcuts.unpause()
     },
-    setSong (songID) {
-      this.$router.push({ name: 'song', params: { songID: songID } })
+    setSong (songId) {
+      this.$router.push({ name: 'song', params: { songId: songId } })
     },
     setSongNext () {
-      this.setSong(this.library.getNextSong().songID)
+      this.setSong(this.library.getNextSong().songId)
     },
     setSongPrevious () {
-      this.setSong(this.library.getPreviousSong().songID)
+      this.setSong(this.library.getPreviousSong().songId)
     },
     setSongRandom () {
-      this.setSong(this.library.getRandomSong().songID)
+      this.setSong(this.library.getRandomSong().songId)
     },
     showSearch () {
       const visibility = this.$modal.toggle('search')
@@ -137,10 +137,10 @@ export default {
     }
   },
   created: function () {
-    this.$store.dispatch('setSongCurrent', this.$route.params.songID)
+    this.$store.dispatch('setSongCurrent', this.$route.params.songId)
   },
   beforeRouteUpdate (to, from, next) {
-    this.$store.dispatch('setSongCurrent', to.params.songID)
+    this.$store.dispatch('setSongCurrent', to.params.songId)
     this.resolveAudio()
     this.$modal.hide('table-of-contents')
     next()
