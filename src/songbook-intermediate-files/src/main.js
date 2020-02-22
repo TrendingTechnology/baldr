@@ -1755,7 +1755,7 @@ function exportToMediaServer (library) {
       'youtubeUrl'
     ]) {
       if (song.metaDataCombined[property]) {
-        rawYaml[`${camelToSnake(property)}_`] = song.metaDataCombined[property]
+        rawYaml[`${camelToSnake(property)}_combined`] = song.metaDataCombined[property]
       }
     }
 

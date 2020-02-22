@@ -80,10 +80,10 @@ class AlphabeticalSongsTree {
  *
  * Mapping
  *
- * * title: title (year)
- * * subtitle: subtitle - alias - country
- * * composer: composer, artist, genre
- * * lyricist: lyricist
+ * - title: title (year)
+ * - subtitle: subtitle - alias - country
+ * - composer: composer, artist, genre
+ * - lyricist: lyricist
  */
 class SongMetaDataCombined {
   /**
@@ -94,8 +94,9 @@ class SongMetaDataCombined {
     /**
      * The raw metadata object originating from the info.yml file.
      * @type {object}
+     * @private
      */
-    this.metaData = songMetaData
+    this.metaData_ = songMetaData
   }
 
   /**
@@ -137,14 +138,14 @@ class SongMetaDataCombined {
    */
   get composer () {
     let properties
-    if (this.metaData.composer === this.metaData.artist) {
+    if (this.metaData_.composer === this.metaData_.artist) {
       properties = ['composer', 'genre']
     } else {
       properties = ['composer', 'artist', 'genre']
     }
     return SongMetaDataCombined.collectProperties_(
       properties,
-      this.metaData
+      this.metaData_
     ).join(', ')
   }
 
@@ -156,12 +157,11 @@ class SongMetaDataCombined {
    */
   get lyricist () {
     if (
-      'lyricist' in this.metaData &&
-      this.metaData.lyricist &&
-      this.metaData.lyricist !== this.metaData.artist &&
-      this.metaData.lyricist !== this.metaData.composer
+      this.metaData_.lyricist &&
+      this.metaData_.lyricist !== this.metaData_.artist &&
+      this.metaData_.lyricist !== this.metaData_.composer
     ) {
-      return this.metaData.lyricist
+      return this.metaData_.lyricist
     }
   }
 
@@ -169,8 +169,8 @@ class SongMetaDataCombined {
    * For example: `https://musescore.com/score/1234`
    */
   get musescoreUrl () {
-    if ('musescore' in this.metaData) {
-      return `https://musescore.com/score/${this.metaData.musescore}`
+    if (this.metaData_.musescore) {
+      return `https://musescore.com/score/${this.metaData_.musescore}`
     }
   }
 
@@ -180,7 +180,7 @@ class SongMetaDataCombined {
   get subtitle () {
     return SongMetaDataCombined.collectProperties_(
       ['subtitle', 'alias', 'country'],
-      this.metaData
+      this.metaData_
     ).join(' - ')
   }
 
@@ -189,14 +189,14 @@ class SongMetaDataCombined {
    */
   get title () {
     let out
-    if ('title' in this.metaData) {
-      out = this.metaData.title
+    if (this.metaData_.title) {
+      out = this.metaData_.title
     } else {
       out = ''
     }
 
-    if ('year' in this.metaData && this.metaData.year) {
-      return `${out} (${this.metaData.year})`
+    if (this.metaData_.year) {
+      return `${out} (${this.metaData_.year})`
     }
     return out
   }
@@ -205,9 +205,9 @@ class SongMetaDataCombined {
    * For example: `https://www.wikidata.org/wiki/Q42`
    */
   get wikidataUrl () {
-    if (this.metaData.wikidata) {
+    if (this.metaData_.wikidata) {
       // https://www.wikidata.org/wiki/Q42
-      return `https://www.wikidata.org/wiki/Q${this.metaData.wikidata}`
+      return `https://www.wikidata.org/wiki/Q${this.metaData_.wikidata}`
     }
   }
 
@@ -215,10 +215,10 @@ class SongMetaDataCombined {
    * For example: `https://en.wikipedia.org/wiki/A_Article`
    */
   get wikipediaUrl () {
-    if (this.metaData.wikipedia) {
+    if (this.metaData_.wikipedia) {
       // https://de.wikipedia.org/wiki/Gesch%C3%BCtztes_Leerzeichen
       // https://en.wikipedia.org/wiki/Non-breaking_space
-      const segments = this.metaData.wikipedia.split(':')
+      const segments = this.metaData_.wikipedia.split(':')
       const lang = segments[0]
       const slug = encodeURIComponent(segments[1])
       return `https://${lang}.wikipedia.org/wiki/${slug}`
@@ -229,8 +229,8 @@ class SongMetaDataCombined {
    * For example: `https://youtu.be/CQYypFMTQcE`
    */
   get youtubeUrl () {
-    if (this.metaData.youtube) {
-      return `https://youtu.be/${this.metaData.youtube}`
+    if (this.metaData_.youtube) {
+      return `https://youtu.be/${this.metaData_.youtube}`
     }
   }
 
