@@ -1409,10 +1409,7 @@ class IntermediateSong extends Song {
         (force || status.changed.slides || !this.slidesFiles.length)) {
       status.generated.projector = this.generatePDF_('projector')
       status.generated.slides = this.generateSlides_()
-      this.exportToMediaServer_()
     }
-
-    this.exportToMediaServer_()
 
     status.changed.piano = this.fileMonitor.isModified(this.mscxPiano)
 
@@ -1439,40 +1436,6 @@ class IntermediateSong extends Song {
         fs.removeSync(path.join(this.folder, file))
       }
     )
-  }
-
-  /**
-   * Export the intermediate SVG files to the media server. Adjust the
-   * `info.yml` and copy it to the destination folder of the media server.
-   *
-   * @private
-   */
-  exportToMediaServer_ () {
-    // NB = Notenbeispiele -> SVG
-    // /var/data/baldr/media/Lieder/NB
-    // There exists a folder for the audio files: HB (Hörbeispiele)
-    const mediaServerSongsFolder = path.join(config.mediaServer.basePath, 'Lieder', 'NB')
-
-    // /var/data/baldr/media/Lieder/NB/a
-    const abcFolder = path.join(mediaServerSongsFolder, this.abc)
-    fs.ensureDirSync(abcFolder)
-
-    const firstFileName = path.join(abcFolder, `${this.songID}.svg`)
-
-    // this.slidesFiles: ['01.svg', '02.svg']
-    for (let index = 0; index < this.slidesFiles.length; index++) {
-      fs.copySync(
-        path.join(this.folderSlides.get(), this.slidesFiles[index]),
-        formatMultiPartAssetFileName(firstFileName, index + 1)
-      )
-    }
-
-    const rawYaml = this.metaData.rawYaml_
-    rawYaml.id = `Lied_${this.songID}_NB`
-    rawYaml.title = `Lied „${this.metaData.title}“`
-
-    const yamlMarkup = ['---', yaml.safeDump(rawYaml)]
-    fs.writeFileSync(`${firstFileName}.yml`, yamlMarkup.join('\n'))
   }
 }
 
@@ -1748,6 +1711,52 @@ class IntermediateLibrary extends Library {
 }
 
 /**
+ * Export the intermediate SVG files to the media server. Adjust the
+ * `info.yml` and copy it to the destination folder of the media server.
+ */
+function exportToMediaServer (library) {
+  // NB = Notenbeispiele -> SVG
+  // /var/data/baldr/media/Lieder/NB
+  // There exists a folder for the audio files: HB (Hörbeispiele)
+  const dirBase = path.join(config.mediaServer.basePath, 'Lieder', 'NB')
+  try {
+    fs.rmdirSync(dirBase)
+  } catch (error) {}
+  fs.ensureDirSync(dirBase)
+
+  function exportSong (song) {
+    // /var/data/baldr/media/Lieder/NB/a
+    const dirAbc = path.join(dirBase, song.abc)
+    fs.ensureDirSync(dirAbc)
+
+    const firstFileName = path.join(dirAbc, `${song.songID}.svg`)
+
+    // song.slidesFiles: ['01.svg', '02.svg']
+    for (let index = 0; index < song.slidesFiles.length; index++) {
+      const src = path.join(song.folderSlides.get(), song.slidesFiles[index])
+      const dest = formatMultiPartAssetFileName(firstFileName, index + 1)
+      fs.copySync(src, dest)
+      console.log(`Copy ${chalk.yellow(src)} to ${chalk.green(dest)}.`)
+    }
+
+    const rawYaml = song.metaData.rawYaml_
+    rawYaml.id = `Lied_${song.songID}_NB`
+    rawYaml.title = `Lied „${song.metaData.title}“`
+    rawYaml.titleCombined = song.metaDataCombined.title
+    rawYaml.subtitleCombined = song.metaDataCombined.subtitle
+    rawYaml.composerCombined = song.metaDataCombined.composer
+    rawYaml.wikipediaUrl = song.metaDataCombined.wikipediaURL
+
+    const yamlMarkup = ['---', yaml.safeDump(rawYaml)]
+    fs.writeFileSync(`${firstFileName}.yml`, yamlMarkup.join('\n'))
+  }
+
+  for (const song of library.toArray()) {
+    exportSong(song)
+  }
+}
+
+/**
  * Build the Vue app. All image files must be copied into the Vue working
  * directory.
  */
@@ -1763,5 +1772,6 @@ function buildVueApp () {
 
 exports.buildVueApp = buildVueApp
 exports.checkExecutables = checkExecutables
+exports.exportToMediaServer = exportToMediaServer
 exports.IntermediateLibrary = IntermediateLibrary
 exports.PianoScore = PianoScore

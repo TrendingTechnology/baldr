@@ -20,6 +20,7 @@ const core = require('@bldr/core-node')
 const {
   buildVueApp,
   checkExecutables,
+  exportToMediaServer,
   IntermediateLibrary,
   PianoScore
 } = require('@bldr/songbook-intermediate-files')
@@ -180,7 +181,11 @@ const main = function () {
   } else if (options.songId) {
     library.updateSongBySongId(options.songId, mode)
   } else {
+    exportToMediaServer(library)
+    throw new Error('lol')
+
     library.update(mode, options.force)
+
     if (mode === 'piano' || mode === 'all') {
       const pianoScore = new PianoScore(
         library,
