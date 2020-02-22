@@ -10,6 +10,18 @@
 /* globals DOMParser */
 
 /**
+ * Sort alphabetically an array of objects by some specific properties.
+ *
+ * @param {String} property - Key of the object to sort.
+ * @see {@link https://ourcodeworld.com/articles/read/764/how-to-sort-alphabetically-an-array-of-objects-by-key-in-javascript Tutorial}
+ */
+export function sortObjectsByProperty (property) {
+  return function (a, b) {
+    return a[property].localeCompare(b[property])
+  }
+}
+
+/**
  *
  * @param {Number} timeStampMsec
  * @returns {String}
@@ -174,6 +186,7 @@ export function formatMultiPartAssetFileName (firstFileName, no) {
  * @returns {String}
  */
 export function formatWikidataUrl (id) {
+  id = String(id)
   id = parseInt(id.replace(/^Q/, ''))
   // https://www.wikidata.org/wiki/Q42
   return `https://www.wikidata.org/wiki/Q${id}`

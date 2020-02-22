@@ -3,6 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.sortObjectsByProperty = sortObjectsByProperty;
 exports.toLocaleDateTimeString = toLocaleDateTimeString;
 exports.plainText = plainText;
 exports.shortenText = shortenText;
@@ -13,6 +14,12 @@ exports.formatWikidataUrl = formatWikidataUrl;
 exports.formatWikipediaUrl = formatWikipediaUrl;
 exports.formatYoutubeUrl = formatYoutubeUrl;
 exports.AssetTypes = void 0;
+
+function sortObjectsByProperty(property) {
+  return function (a, b) {
+    return a[property].localeCompare(b[property]);
+  };
+}
 
 function toLocaleDateTimeString(timeStampMsec) {
   const date = new Date(Number(timeStampMsec));
@@ -113,6 +120,7 @@ function formatMultiPartAssetFileName(firstFileName, no) {
 }
 
 function formatWikidataUrl(id) {
+  id = String(id);
   id = parseInt(id.replace(/^Q/, ''));
   return `https://www.wikidata.org/wiki/Q${id}`;
 }

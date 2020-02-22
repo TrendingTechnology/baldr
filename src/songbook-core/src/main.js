@@ -3,6 +3,13 @@
  * @module @bldr/songbook-core
  */
 
+const {
+  sortObjectsByProperty,
+  formatWikidataUrl,
+  formatWikipediaUrl,
+  formatYoutubeUrl
+} = require('@bldr/core-browser')
+
 /**
  * A JSON version of the Song class (obtained from `Song.toJSON()`
  * and `JSON.stringify()`) or a instance of the class `Song()`
@@ -35,18 +42,6 @@
  *
  * @typedef {module:@bldr/songbook-core~Song[]} songs
  */
-
-/**
- * Sort alphabetically an array of objects by some specific property.
- *
- * @param {String} property Key of the object to sort.
- * @see {@link https://ourcodeworld.com/articles/read/764/how-to-sort-alphabetically-an-array-of-objects-by-key-in-javascript Tutorial}
- */
-function sortObjectsByProperty (property) {
-  return function (a, b) {
-    return a[property].localeCompare(b[property])
-  }
-}
 
 /**
  * A tree of songs where the song arrays are placed in alphabetical properties.
@@ -207,7 +202,7 @@ class SongMetaDataCombined {
   get wikidataUrl () {
     if (this.metaData_.wikidata) {
       // https://www.wikidata.org/wiki/Q42
-      return `https://www.wikidata.org/wiki/Q${this.metaData_.wikidata}`
+      return formatWikidataUrl(this.metaData_.wikidata)
     }
   }
 
@@ -216,12 +211,7 @@ class SongMetaDataCombined {
    */
   get wikipediaUrl () {
     if (this.metaData_.wikipedia) {
-      // https://de.wikipedia.org/wiki/Gesch%C3%BCtztes_Leerzeichen
-      // https://en.wikipedia.org/wiki/Non-breaking_space
-      const segments = this.metaData_.wikipedia.split(':')
-      const lang = segments[0]
-      const slug = encodeURIComponent(segments[1])
-      return `https://${lang}.wikipedia.org/wiki/${slug}`
+      return formatWikipediaUrl(this.metaData_.wikipedia)
     }
   }
 
@@ -230,7 +220,7 @@ class SongMetaDataCombined {
    */
   get youtubeUrl () {
     if (this.metaData_.youtube) {
-      return `https://youtu.be/${this.metaData_.youtube}`
+      return formatYoutubeUrl(this.metaData_.youtube)
     }
   }
 
