@@ -107,7 +107,7 @@ export function camelToSnake(str) {
  *
  * @see {@link https://catalin.me/javascript-snake-to-camel/}
  */
-function snakeToCamel (str) {
+export function snakeToCamel (str) {
   return str.replace(
     /([-_][a-z])/g,
     (group) => group.toUpperCase()

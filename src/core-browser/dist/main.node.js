@@ -8,6 +8,7 @@ exports.toLocaleDateTimeString = toLocaleDateTimeString;
 exports.plainText = plainText;
 exports.shortenText = shortenText;
 exports.camelToSnake = camelToSnake;
+exports.snakeToCamel = snakeToCamel;
 exports.convertPropertiesToCamelCase = convertPropertiesToCamelCase;
 exports.formatMultiPartAssetFileName = formatMultiPartAssetFileName;
 exports.formatWikidataUrl = formatWikidataUrl;
