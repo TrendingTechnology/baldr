@@ -342,7 +342,7 @@ class Slide {
     this.renderData = new RenderData(rawSlideObject)
 
     /**
-     * @type {@bldr/vue-app-presentation/masters~Master}
+     * @type {module:@bldr/vue-app-presentation/masters~Master}
      */
     this.master = masters.get(this.renderData.masterName)
 
