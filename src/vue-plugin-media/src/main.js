@@ -1322,20 +1322,30 @@ export class MediaFile {
 }
 
 /**
+ * If a media asset has a property with the name `multiPartCount` set, it is
+ * a multi part asset.
+ *
  * Differences to MediaFile: `this.httpUrl` is a getter function. The
  * HTTP URL is generated dynamically using the property `this.no_`. A
  * multi part asset can be restricted to one part only by a URI fragment
  * (for example `#2`). The URI `id:Score#2` resolves always to the
- * HTTP URL `http:/example/media/Score_no02.png`
+ * HTTP URL `http:/example/media/Score_no02.png`.
  */
 class MultiPartMediaAssetClient extends MediaFile {
 
   constructor (mediaData) {
     super(mediaData)
+
+    /**
+     * The URI with a fragment
+     *
+     * @type {String}
+     */
     this.uriRaw_ = mediaData.uri
 
     /**
-     * The HTTP ULR of the first element.
+     * A multi part media asset can be restricted to only one element by
+     * a fragment in the URI (for example `id:Score#2`).
      *
      * @type {String}
      * @private
@@ -1375,6 +1385,17 @@ class MultiPartMediaAssetClient extends MediaFile {
   }
 
   /**
+   * The actual multi part asset count. If the multi part asset is restricted
+   * the method returns 1, else the count of all the parts.
+   *
+   * @returns {Number}
+   */
+  get multiPartCountActual () {
+    if (this.restrictedTo_) return 1
+    return this.multiPartCount
+  }
+
+  /**
    * @returns {String}
    */
   get httpUrl () {
@@ -1384,6 +1405,38 @@ class MultiPartMediaAssetClient extends MediaFile {
         no = this.restrictedTo_
       } else {
         no = this.no_
+      }
+      return formatMultiPartAssetFileName(this.httpUrlFirst_, no)
+    }
+  }
+
+  /**
+   * Retrieve the HTTP URL of the multi part asset by the part number.
+   *
+   * @param {Number} The part number starts with 1.
+   *
+   * @returns {String}
+   */
+  httpUrlByNo (no) {
+    if (this.httpUrlFirst_) {
+      if (this.restrictedTo_) {
+        no = this.restrictedTo_
+      }
+      return formatMultiPartAssetFileName(this.httpUrlFirst_, no)
+    }
+  }
+
+  /**
+   * The HTTP URL of the first part or if the multi part asset is restricted
+   * the restricted one.
+   *
+   * @returns {String}
+   */
+  get httpUrlFirst () {
+    if (this.httpUrlFirst_) {
+      let no = 1
+      if (this.restrictedTo_) {
+        no = this.restrictedTo_
       }
       return formatMultiPartAssetFileName(this.httpUrlFirst_, no)
     }

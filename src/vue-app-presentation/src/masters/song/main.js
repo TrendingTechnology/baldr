@@ -5,9 +5,9 @@ export default {
       type: String,
       description: 'Die ID des Liedes',
     },
-    image: {
+    multiPartImageUri: {
       type: String,
-      description: 'URI zu einer mehrteiligen speziellen Bild-Datein mit Lied-Informationen.'
+      description: 'URI zu einer mehrteiligen speziellen Bild-Datei mit Lied-Informationen.'
     }
   },
   icon: {
@@ -19,7 +19,7 @@ export default {
     darkMode: false
   },
   resolveMediaUris (props) {
-    return [props.image]
+    return [props.multiPartImageUri]
   },
   normalizeProps (props) {
     const propsNormalized = {}
@@ -28,17 +28,19 @@ export default {
     } else {
       propsNormalized = props
     }
-    if (!propsNormalized.image) {
-      propsNormalized.image = `id:Lied_${propsNormalized.songId}_NB`
+    if (!propsNormalized.multiPartImageUri) {
+      propsNormalized.multiPartImageUri = `id:Lied_${propsNormalized.songId}_NB`
     }
     return propsNormalized
   },
+  calculateStepCount (props) {
+    const multiPartImage = this.$store.getters['media/mediaFileByUri'](props.multiPartImageUri)
+    return multiPartImage.multiPartCountActual
+  },
   collectPropsMain (props) {
-    console.log(props)
-    const imageMediaFile = this.$store.getters['media/mediaFileByUri'](props.image)
-    let imageHttpUrl = imageMediaFile.httpUrl
+    const multiPartImage = this.$store.getters['media/mediaFileByUri'](props.multiPartImageUri)
     return {
-      imageHttpUrl
+      multiPartImage
     }
   }
 }

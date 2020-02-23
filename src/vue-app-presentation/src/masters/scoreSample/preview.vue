@@ -3,7 +3,7 @@
     vc_score_sample_master_preview
     slide-preview-fullscreen
   ">
-    <img :src="scoreHttpUrl"/>
+    <img :src="multiPartImage.httpUrlFirst"/>
     <slide-preview-play-button v-if="hasAudio"/>
   </div>
 </template>
@@ -11,8 +11,8 @@
 <script>
 export default {
   props: {
-    scoreHttpUrl: {
-      type: String,
+    multiPartImage: {
+      type: Object,
       required: true
     },
     hasAudio: {
