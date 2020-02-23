@@ -1,7 +1,7 @@
 <template>
   <div class="vc_score_sample_master">
     <h1 v-if="heading" v-html="heading"/>
-    <img :src="scoreHttpUrlCurrent"/>
+    <img :src="scoreMediaFile.getMultiPartHttpUrlByNo(stepNoCurrent)"/>
     <play-button v-if="audioSample" :sample="audioSample"/>
   </div>
 </template>
@@ -18,29 +18,11 @@ export default {
     scoreMediaFile: {
       type: Object
     },
-    scoreHttpUrl: {
-      type: String,
-      required: true
-    },
-    scorePartNo: {
-      type: Number,
-    },
     audioSample: {
       type: Object
     }
   },
-  computed: {
-    ...mapGetters(['slideCurrent']),
-    scoreHttpUrlCurrent () {
-      let partNo
-      if (this.scorePartNo) {
-        partNo = this.scorePartNo
-      } else {
-        partNo = this.slideCurrent.renderData.stepNoCurrent
-      }
-      return this.scoreMediaFile.multiPartHttpUrl(partNo)
-    }
-  }
+  computed: mapGetters(['stepNoCurrent'])
 }
 </script>
 

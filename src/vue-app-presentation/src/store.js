@@ -92,6 +92,9 @@ const getters = {
   },
   showMetaDataOverlay: (state) => {
     return state.showMetaDataOverlay
+  },
+  stepNoCurrent: (state, getters) => {
+    return getters.slideCurrent.renderData.stepNoCurrent
   }
 }
 

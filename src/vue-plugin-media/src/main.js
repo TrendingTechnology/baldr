@@ -1109,9 +1109,13 @@ class Sample {
 /**
  * Hold various data of a media file as class properties.
  *
- * @property {string} uri - Uniform Resource Identifier, for example
- *   `id:Haydn`, `filename:Haydn_Joseph.jpg` or
- *   `http://example.com/Haydn_Joseph.jpg`.
+ * If a media file has a property with the name `multiPartCount` set, it is a
+ * multi part asset. A multi part asset can be restricted to one part only by a
+ * URI fragment (for example `#2`). The URI `id:Score#2` resolves always to the
+ * HTTP URL `http:/example/media/Score_no02.png`.
+ *
+ * @property {string} uri - Uniform Resource Identifier, for example `id:Haydn`,
+ *   `filename:Haydn_Joseph.jpg` or `http://example.com/Haydn_Joseph.jpg`.
  * @property {string} uriScheme - for example: `http`, `https`, `blob`
  * @property {string} uriAuthority - for example:
  *   `//example.com/Haydn_Joseph.jpg`.
@@ -1124,10 +1128,12 @@ class Sample {
  * @property {string} id - An identifier, for example `Haydn_Joseph`.
  * @property {string} type - The media type, for example `image`, `audio` or
  *   `video`.
- * @property {string} previewHttpUrl - Each media file can have a preview
- *   image. On the path is `_preview.jpg` appended.
+ * @property {string} previewHttpUrl - Each media file can have a preview image.
+ *   On the path is `_preview.jpg` appended.
  * @property {string} shortcut - The keyboard shortcut to play the media.
  * @property {Object} samples - An object of Sample instances.
+ * @property {Number} multiPartCount - The of count of parts if the media file
+ *   is a multi part asset.
  */
 export class MediaFile {
   /**
@@ -1139,6 +1145,27 @@ export class MediaFile {
     }
     if (!('uri' in this)) {
       throw new Error('Media file needs a uri property.')
+    }
+
+    /**
+     * The raw URI unformatted, possible with a fragment (`#2`) to restrict
+     * multi part assets.
+     *
+     * @type {String}
+     */
+    this.uriRaw = this.uri
+
+    /**
+     * A multi part media asset can be restricted to only one element by
+     * a fragment in the URI (for example `id:Score#2`).
+     *
+     * @type {String}
+     * @private
+     */
+    this.restrictedTo = null
+    if (this.uriRaw.indexOf('#') > -1) {
+      let segments = this.uriRaw.split('#')
+      this.restrictedTo = parseInt(segments[1])
     }
 
     /**
@@ -1216,16 +1243,31 @@ export class MediaFile {
   }
 
   /**
+   * The actual multi part asset count. If the multi part asset is restricted
+   * the method returns 1, else the count of all the parts.
    *
-   * @param {Number} no - The number of the multipart asset.
+   * @returns {Number}
+   */
+  get multiPartCountActual () {
+    if (this.restrictedTo || !this.multiPartCount) return 1
+    return this.multiPartCount
+  }
+
+  /**
+   * Retrieve the HTTP URL of the multi part asset by the part number.
+   *
+   * @param {Number} The part number starts with 1.
    *
    * @returns {String}
    */
-  multiPartHttpUrl (no) {
-    if (this.multiPartCount > 1) {
+  getMultiPartHttpUrlByNo (no) {
+    if (!this.multiPartCount) return this.httpUrl
+    if (this.httpUrl) {
+      if (this.restrictedTo) {
+        no = this.restrictedTo
+      }
       return formatMultiPartAssetFileName(this.httpUrl, no)
     }
-    return this.httpUrl
   }
 
   /**
@@ -1318,128 +1360,6 @@ export class MediaFile {
       properties = moveOnFirstPosition(properties, property)
     }
     return properties
-  }
-}
-
-/**
- * If a media asset has a property with the name `multiPartCount` set, it is
- * a multi part asset.
- *
- * Differences to MediaFile: `this.httpUrl` is a getter function. The
- * HTTP URL is generated dynamically using the property `this.no_`. A
- * multi part asset can be restricted to one part only by a URI fragment
- * (for example `#2`). The URI `id:Score#2` resolves always to the
- * HTTP URL `http:/example/media/Score_no02.png`.
- */
-class MultiPartMediaAssetClient extends MediaFile {
-
-  constructor (mediaData) {
-    super(mediaData)
-
-    /**
-     * The URI with a fragment
-     *
-     * @type {String}
-     */
-    this.uriRaw_ = mediaData.uri
-
-    /**
-     * A multi part media asset can be restricted to only one element by
-     * a fragment in the URI (for example `id:Score#2`).
-     *
-     * @type {String}
-     * @private
-     */
-    this.restrictedTo_ = null
-    if (this.uriRaw_.indexOf('#') > -1) {
-      let segments = this.uriRaw_.split('#')
-      this.restrictedTo_ = parseInt(segments[1])
-    }
-
-    /**
-     * @private
-     */
-    this.no_ = 1
-
-    /**
-     * The HTTP ULR of the first element.
-     *
-     * @type {String}
-     * @private
-     */
-    this.httpUrlFirst_ = null
-  }
-
-  /**
-   * @param {Number} no
-   */
-  set no (currentNumber) {
-    this.no_ = currentNumber
-  }
-
-  /**
-   * @param {String} url
-   */
-  set httpUrl (url) {
-    this.httpUrlFirst_ = url
-  }
-
-  /**
-   * The actual multi part asset count. If the multi part asset is restricted
-   * the method returns 1, else the count of all the parts.
-   *
-   * @returns {Number}
-   */
-  get multiPartCountActual () {
-    if (this.restrictedTo_) return 1
-    return this.multiPartCount
-  }
-
-  /**
-   * @returns {String}
-   */
-  get httpUrl () {
-    if (this.httpUrlFirst_) {
-      let no
-      if (this.restrictedTo_) {
-        no = this.restrictedTo_
-      } else {
-        no = this.no_
-      }
-      return formatMultiPartAssetFileName(this.httpUrlFirst_, no)
-    }
-  }
-
-  /**
-   * Retrieve the HTTP URL of the multi part asset by the part number.
-   *
-   * @param {Number} The part number starts with 1.
-   *
-   * @returns {String}
-   */
-  httpUrlByNo (no) {
-    if (this.httpUrlFirst_) {
-      if (this.restrictedTo_) {
-        no = this.restrictedTo_
-      }
-      return formatMultiPartAssetFileName(this.httpUrlFirst_, no)
-    }
-  }
-
-  /**
-   * The HTTP URL of the first part or if the multi part asset is restricted
-   * the restricted one.
-   *
-   * @returns {String}
-   */
-  get httpUrlFirst () {
-    if (this.httpUrlFirst_) {
-      let no = 1
-      if (this.restrictedTo_) {
-        no = this.restrictedTo_
-      }
-      return formatMultiPartAssetFileName(this.httpUrlFirst_, no)
-    }
   }
 }
 
@@ -1666,10 +1586,6 @@ class Resolver {
         // Resolve HTTP URL
       } else if (mediaFile.uriScheme === 'id' || mediaFile.uriScheme === 'filename') {
         const response = await this.queryMediaServer_(mediaFile.uriScheme, mediaFile.uriAuthority)
-        // MultiPartMediaAsset
-        if (response.data.multiPartCount) {
-          mediaFile = new MultiPartMediaAssetClient({ uri: mediaFileSpec })
-        }
         mediaFile.addProperties(response.data)
         mediaFile.httpUrl = await this.resolveHttpUrl_(mediaFile)
         if ('previewImage' in mediaFile) {

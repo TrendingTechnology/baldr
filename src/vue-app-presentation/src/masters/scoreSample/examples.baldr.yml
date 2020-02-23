@@ -1,8 +1,28 @@
 ---
 slides:
 
-- score_sample: id:Foto-Savoyarden-Musikanten-mit-Murmeltier
+- title: Short form
+  score_sample: id:Marmotte_NB_La-Marmotte
 
-- score_sample:
-    score: id:Foto-Savoyarden-Musikanten-mit-Murmeltier
-    audio: id:Fischer-Dieskau_Marmotte
+- title: Long form
+  score_sample:
+    score: id:Marmotte_NB_La-Marmotte
+
+- title: With audio
+  score_sample:
+    score: id:Marmotte_NB_La-Marmotte
+    audio: id:Marmotte_HB_Fischer-Dieskau_Marmotte
+
+- title: Multi part score file
+  score_sample:
+    score: 'id:Schuetz-Freue_NB_Freue-IMSLP-Systeme'
+    audio: 'id:Schuetz-Freue_HB_Freue-dich'
+
+- title: Multi part score file restricted to no 1
+  score_sample: 'id:Schuetz-Freue_NB_Freue-IMSLP-Systeme#1'
+
+- title: Multi part score file restricted to no 2
+  score_sample: 'id:Schuetz-Freue_NB_Freue-IMSLP-Systeme#2'
+
+- title: Multi part score file restricted to no 3
+  score_sample: 'id:Schuetz-Freue_NB_Freue-IMSLP-Systeme#3'

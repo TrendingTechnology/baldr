@@ -1,6 +1,6 @@
 <template>
   <div class="vc_song_master">
-    <img :src="multiPartImage.httpUrlByNo(stepNo)"/>
+    <img :src="image.getMultiPartHttpUrlByNo(stepNo)"/>
   </div>
 </template>
 
@@ -10,15 +10,12 @@ const { mapGetters } = createNamespacedHelpers('presentation')
 
 export default {
   props: {
-    multiPartImage: {
+  image: {
       type: Object
     }
   },
   computed: {
-    slide: mapGetters(['slideCurrent']).slideCurrent,
-    stepNo() {
-      return this.slide.renderData.stepNoCurrent
-    }
+    stepNo: mapGetters(['stepNoCurrent']).stepNoCurrent
   }
 }
 </script>

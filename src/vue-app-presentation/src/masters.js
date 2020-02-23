@@ -251,15 +251,18 @@ class Master {
   resolveMediaUris (props) {
     // To allow undefined uris
     const uris = this.callFunction_('resolveMediaUris', props)
-    if (uris && Array.isArray(uris)) {
-      const result = []
+    if (!uris) return
+    const result = []
+    if (typeof uris === 'string') {
+      result.push(uris)
+    } else if (Array.isArray(uris)) {
       for (const uri of uris) {
         if (uri) {
           result.push(uri)
         }
       }
-      return result
     }
+    if (result.length) return result
   }
 
   /**
