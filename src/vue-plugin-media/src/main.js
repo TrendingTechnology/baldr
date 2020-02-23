@@ -1301,8 +1301,8 @@ export class MediaFile {
   }
 
   /**
-   * Sort properties alphabetically a move some important ones to the beginnen
-   * of the array
+   * Sort properties alphabetically aand move some important ones to the
+   * begining of the array.
    *
    * @return {Array}
    */
@@ -1318,6 +1318,75 @@ export class MediaFile {
       properties = moveOnFirstPosition(properties, property)
     }
     return properties
+  }
+}
+
+/**
+ * Differences to MediaFile: `this.httpUrl` is a getter function. The
+ * HTTP URL is generated dynamically using the property `this.no_`. A
+ * multi part asset can be restricted to one part only by a URI fragment
+ * (for example `#2`). The URI `id:Score#2` resolves always to the
+ * HTTP URL `http:/example/media/Score_no02.png`
+ */
+class MultiPartMediaAssetClient extends MediaFile {
+
+  constructor (mediaData) {
+    super(mediaData)
+    this.uriRaw_ = mediaData.uri
+
+    /**
+     * The HTTP ULR of the first element.
+     *
+     * @type {String}
+     * @private
+     */
+    this.restrictedTo_ = null
+    if (this.uriRaw_.indexOf('#') > -1) {
+      let segments = this.uriRaw_.split('#')
+      this.restrictedTo_ = parseInt(segments[1])
+    }
+
+    /**
+     * @private
+     */
+    this.no_ = 1
+
+    /**
+     * The HTTP ULR of the first element.
+     *
+     * @type {String}
+     * @private
+     */
+    this.httpUrlFirst_ = null
+  }
+
+  /**
+   * @param {Number} no
+   */
+  set no (currentNumber) {
+    this.no_ = currentNumber
+  }
+
+  /**
+   * @param {String} url
+   */
+  set httpUrl (url) {
+    this.httpUrlFirst_ = url
+  }
+
+  /**
+   * @returns {String}
+   */
+  get httpUrl () {
+    if (this.httpUrlFirst_) {
+      let no
+      if (this.restrictedTo_) {
+        no = this.restrictedTo_
+      } else {
+        no = this.no_
+      }
+      return formatMultiPartAssetFileName(this.httpUrlFirst_, no)
+    }
   }
 }
 
@@ -1437,8 +1506,8 @@ class Resolver {
    * @returns {String} - A HTTP URL.
    */
   async resolveHttpUrl_ (mediaFile) {
-    if ('httpUrl' in mediaFile) return mediaFile.httpUrl
-    if ('path' in mediaFile) {
+    if (mediaFile.httpUrl) return mediaFile.httpUrl
+    if (mediaFile.path) {
       const baseURL = await httpRequest.getFirstBaseUrl()
       return `${baseURL}/media/${mediaFile.path}`
     }
@@ -1544,11 +1613,16 @@ class Resolver {
         // Resolve HTTP URL
       } else if (mediaFile.uriScheme === 'id' || mediaFile.uriScheme === 'filename') {
         const response = await this.queryMediaServer_(mediaFile.uriScheme, mediaFile.uriAuthority)
+        // MultiPartMediaAsset
+        if (response.data.multiPartCount) {
+          mediaFile = new MultiPartMediaAssetClient({ uri: mediaFileSpec })
+        }
         mediaFile.addProperties(response.data)
         mediaFile.httpUrl = await this.resolveHttpUrl_(mediaFile)
         if ('previewImage' in mediaFile) {
           mediaFile.previewHttpUrl = `${mediaFile.httpUrl}_preview.jpg`
         }
+
         if ('cover' in mediaFile) {
           const cover = new MediaFile({ uri: mediaFile.cover })
           const response = await this.queryMediaServer_(cover.uriScheme, cover.uriAuthority)
