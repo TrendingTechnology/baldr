@@ -3,21 +3,14 @@ import { GrabFromObjects } from '@/lib.js'
 export default {
   title: 'Instrument',
   props: {
-    name: {
+    instrumentId: {
       type: String,
-      description: 'Der Name des Instruments'
+      description: 'Die ID des Instruments. Gleichlautend wie der Ordner in dem alle Medieninhalte liegen (z. B. Floete)'
     },
-    image: {
+    mainImageUri: {
       type: String,
-      required: true,
-      mediaFileUri: true,
-      description: 'Eine URI zu einer Bild-Datei.'
-    },
-    audio: {
-      type: String,
-      mediaFileUri: true,
-      description: 'Eine URI zu einer Audio-Datei.'
-    },
+      description: 'URI des Hauptbildes.'
+    }
   },
   icon: {
     name: 'trumpet',
@@ -28,33 +21,35 @@ export default {
     darkMode: true
   },
   normalizeProps (props) {
+    let normalized
     if (typeof props === 'string') {
-      return {
-        image: `id:${props}_BD`,
-        audio: `id:${props}_HB`
+      normalized = {
+        instrumentId: props
       }
+    } else {
+      normalized = props
     }
-    return props
+    normalized.mainImageUri = `id:${normalized.instrumentId}_BD`
+    return normalized
   },
   resolveMediaUris (props) {
-    return [props.image, props.audio]
+    return props.mainImageUri
   },
   titleFromProps (props) {
-    if (props.name) {
-      return props.name
-    } else {
-      return props.image
-    }
+    return props.instrumentId
   },
   collectPropsMain (props) {
-    const image = this.$store.getters['media/mediaFileByUri'](props.image)
-    const grab = new GrabFromObjects(props, image, false)
-    const result = grab.multipleProperties(['name'])
-    result.imageHttpUrl = image.httpUrl
-    if (props.audio) {
-      result.sample = this.$store.getters['media/sampleByUri'](props.audio)
+    const mainImage = this.$store.getters['media/mediaFileByUri'](props.mainImageUri)
+    const grab = new GrabFromObjects(props, mainImage, false)
+    const propsMain = grab.multipleProperties(['name'])
+    propsMain.imageHttpUrl = mainImage.httpUrl
+    propsMain.audioSamples = []
+    if (mainImage.audioSamples) {
+      for (const uri of mainImage.audioSamples) {
+        propsMain.audioSamples.push(this.$store.getters['media/sampleByUri'](uri))
+      }
     }
-    return result
+    return propsMain
   },
   collectPropsPreview ({ propsMain }) {
     return {
@@ -63,6 +58,8 @@ export default {
     }
   },
   async enterSlide ({ newProps }) {
-    this.$media.player.load(newProps.audio)
+    if (newProps.audioSamples && newProps.audioSamples.length) {
+      this.$media.player.load(newProps.audioSamples[0])
+    }
   },
 }

@@ -2,7 +2,7 @@
   <div class="vc_instrument_master">
     <img class="img-contain" :src="imageHttpUrl">
     <p class="name transparent-background important">{{ name }}</p>
-    <play-button v-if="sample" :sample="sample"/>
+    <play-button v-if="audioSamples.length" :sample="audioSamples[0]"/>
   </div>
 </template>
 
@@ -17,8 +17,8 @@ export default {
       type: String,
       required: true
     },
-    sample: {
-      type: Object
+    audioSamples: {
+      type: Array
     }
   }
 }

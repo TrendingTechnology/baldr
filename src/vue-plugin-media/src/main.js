@@ -89,7 +89,7 @@ function extractMediaUrisRecursive (object, urisStore) {
   if (Array.isArray(object)) {
     for (const value of object) {
       if (typeof object === 'object') {
-        extractMediaUrisRecursive(value)
+        extractMediaUrisRecursive(value, urisStore)
       } else {
         collectMediaUri(value, urisStore)
       }
@@ -98,7 +98,7 @@ function extractMediaUrisRecursive (object, urisStore) {
   } else if (typeof object === 'object') {
     for (const property in object) {
       if (typeof object[property] === 'object') {
-        extractMediaUrisRecursive(object[property])
+        extractMediaUrisRecursive(object[property], urisStore)
       } else {
         collectMediaUri(object[property], urisStore)
       }

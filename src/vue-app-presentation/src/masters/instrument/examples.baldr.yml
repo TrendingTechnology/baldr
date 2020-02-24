@@ -3,15 +3,10 @@ slides:
 
 - title: Long form
   instrument:
-     image: id:Fagott_BD
-     audio: id:Fagott_HB
-     name: Fagott
+     instrument_id: Fagott
 
 - title: Short form
   instrument: Floete
-
-- instrument:
-    image: id:Zink_BD
 
 - instrument: Fagott
 - instrument: Floete
