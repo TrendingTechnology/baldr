@@ -1448,27 +1448,41 @@ async function createMediaElement (mediaFile) {
  * for playable media files.
  */
 class Resolver {
+
+  constructor () {
+    /**
+     * Asset with linked assets have to be cached. For example many
+     * audio assets can have the same cover ID.
+     *
+     * @type {Object}
+     * @private
+     */
+    this.cache_ = {}
+  }
   /**
-   * @param {string} key
-   * @param {string|json} value
+   * @param {string} field - For example `id` or `filename`
+   * @param {string|json} search - For example `Fuer-Elise_HB`
    *
    * @private
    */
-  async queryMediaServer_ (key, value) {
+  async queryMediaServer_ (field, search) {
+    const cacheKey = `${field}:${search}`
+    if (this.cache_[cacheKey]) return this.cache_[cacheKey]
     const response = await httpRequest.request({
       url: 'query',
       method: 'get',
       params: {
         type: 'assets',
         method: 'exactMatch',
-        field: key,
-        search: value
+        field: field,
+        search: search
       }
     })
-    if (response && 'data' in response && response.data && 'path' in response.data) {
+    if (response && response.data  && response.data.path) {
+      this.cache_[cacheKey] = response
       return response
     }
-    throw new Error(`Media with the ${key} ”${value}” couldn’t be resolved.`)
+    throw new Error(`Media with the ${field} ”${search}” couldn’t be resolved.`)
   }
 
   /**
