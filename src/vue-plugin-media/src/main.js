@@ -46,6 +46,86 @@ const defaultFadeOutSec = 1
 const defaultPlayDelayMsec = 10
 
 /**
+ * Extract media URIs from an object to allow linked media assets inside
+ * from media assets itself.
+ *
+ * ```yml
+ * ---
+ * title: Für Elise
+ * id: HB_Fuer-Elise
+ * cover: id:BD_Feuer-Elise
+ * ```
+ *
+ * @param {Object} object - For example from the YAML files.
+ * @param {Array} uris - The target array to collect all found media URIs.
+ *
+ * @returns {Array}
+ */
+function extractMediaUrisRecursive (object, urisStore) {
+  /**
+   *
+   * @param {String} uri - A string to test if it is a media URI (`id:Sample1_HB`)
+   *
+   * @returns {Boolean}
+   */
+  function isMediaUri (uri) {
+    if (uri && typeof uri === 'string' && uri.match(/^(id|filename):[a-zA-Z0-9_-]+$/)) {
+      return true
+    }
+    return false
+  }
+
+  /**
+   * @param {Mixed} value - A mixed type value to test if it is a media URI.
+   * @param {Array} urisStore - Target array to store the media URIs.
+   */
+  function collectMediaUri(value, urisStore) {
+    if (isMediaUri(value) && !urisStore.includes(value)) {
+      urisStore.push(value)
+    }
+  }
+
+  // Array
+  if (Array.isArray(object)) {
+    for (const value of object) {
+      if (typeof object === 'object') {
+        extractMediaUrisRecursive(value)
+      } else {
+        collectMediaUri(value, urisStore)
+      }
+    }
+  // Object
+  } else if (typeof object === 'object') {
+    for (const property in object) {
+      if (typeof object[property] === 'object') {
+        extractMediaUrisRecursive(object[property])
+      } else {
+        collectMediaUri(object[property], urisStore)
+      }
+    }
+  } else {
+    collectMediaUri(object, urisStore)
+  }
+}
+
+/**
+ * Remove duplicates from an array. A new array is created an returns
+ *
+ * @param {Array} input - An array with possible duplicate entries.
+ *
+ * @returns {Array} - The new array with no duplicates.
+ */
+function removeDuplicatesFromArray (input) {
+  const output = []
+  for (const value of input) {
+    if (!output.includes(value)) {
+      output.push(value)
+    }
+  }
+  return output
+}
+
+/**
  * @param {String} duration - in seconds
  *
  * @return {String}
@@ -1458,6 +1538,15 @@ class Resolver {
      * @private
      */
     this.cache_ = {}
+
+    /**
+     * Store for linked URIs (URIs inside media assets). They are collected
+     * and resolved in a second step after the resolution of the main
+     * media assets.
+     *
+     * @type {Array}
+     */
+    this.linkedUris = []
   }
   /**
    * @param {string} field - For example `id` or `filename`
@@ -1600,18 +1689,11 @@ class Resolver {
         // Resolve HTTP URL
       } else if (mediaFile.uriScheme === 'id' || mediaFile.uriScheme === 'filename') {
         const response = await this.queryMediaServer_(mediaFile.uriScheme, mediaFile.uriAuthority)
+        extractMediaUrisRecursive(response.data, this.linkedUris)
         mediaFile.addProperties(response.data)
         mediaFile.httpUrl = await this.resolveHttpUrl_(mediaFile)
-        if ('previewImage' in mediaFile) {
+        if (mediaFile.previewImage) {
           mediaFile.previewHttpUrl = `${mediaFile.httpUrl}_preview.jpg`
-        }
-
-        if ('cover' in mediaFile) {
-          const cover = new MediaFile({ uri: mediaFile.cover })
-          const response = await this.queryMediaServer_(cover.uriScheme, cover.uriAuthority)
-          cover.addProperties(response.data)
-          cover.httpUrl = await this.resolveHttpUrl_(cover)
-          mediaFile.previewHttpUrl = cover.httpUrl
         }
       }
     // Local: File object from drag and drop or open dialog
@@ -1647,24 +1729,34 @@ class Resolver {
    * Resolve one or more remote media files by URIs, HTTP URLs or
    * local media files by their file objects.
    *
+   * Linked media URIs are resolve in a second step (not recursive). Linked
+   * media assets are not allowed to have linked media URIs.
+   *
    * @param {module:@bldr/vue-plugin-media~mediaFileSpecs} mediaFileSpecs
    */
-  resolve (mediaFileSpecs) {
+  async resolve (mediaFileSpecs) {
     if (typeof mediaFileSpecs === 'string' || mediaFileSpecs instanceof File) {
       mediaFileSpecs = [mediaFileSpecs]
     }
 
-    const uniqueSpecs = []
-    for (const uri of mediaFileSpecs) {
-      if (!uniqueSpecs.includes(uri)) {
-        uniqueSpecs.push(uri)
-      }
-    }
-    const promises = []
+    const uniqueSpecs = removeDuplicatesFromArray(mediaFileSpecs)
+
+    // Resolve the main media URIs
+    let promises = []
     for (const mediaFileSpec of uniqueSpecs) {
       promises.push(this.resolveSingle_(mediaFileSpec))
     }
-    return Promise.all(promises)
+    const mainMediaFiles = await Promise.all(promises)
+    let linkMediaFiles = []
+    // Resolve the linked media URIs.
+    if (this.linkedUris.length) {
+      promises = []
+      for (const mediaUri of this.linkedUris) {
+        promises.push(this.resolveSingle_(mediaUri))
+      }
+      linkMediaFiles = await Promise.all(promises)
+    }
+    return mainMediaFiles.concat(linkMediaFiles)
   }
 }
 
