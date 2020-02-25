@@ -1,9 +1,7 @@
 <template>
   <div class="vc_audio_overlay" b-ui-theme="default" v-if="slideCurrent.audioOverlay">
-    <play-button
-      :sample="sample"
-      v-for="sample in slideCurrent.audioOverlay.samples"
-      :key="sample.uri"
+    <horizontal-play-buttons
+      :samples="slideCurrent.audioOverlay.samples"
     />
   </div>
 </template>
