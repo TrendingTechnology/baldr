@@ -6,7 +6,7 @@
       <play-button
         :sample="wrapped.sample"
       />
-      <span v-if="showTitleNormalized">{{ wrapped.title }}</span>
+      <span v-if="showTitlesNormalized">{{ wrapped.title }}</span>
     </span>
   </div>
 </template>
@@ -30,7 +30,7 @@ export default {
     wrappedSamples: {
       type: Object
     },
-    showTitle: {
+    showTitles: {
       type: Boolean,
       default: false
     }
@@ -43,9 +43,9 @@ export default {
       if (this.wrappedSamples) return this.wrappedSamples
       return new WrappedSamples(this.samples)
     },
-    showTitleNormalized () {
+    showTitlesNormalized () {
       if (this.wrappedSamplesNormalized.isTitleSet) return true
-      return this.showTitle
+      return this.showTitles
     }
   }
 }

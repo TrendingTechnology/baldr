@@ -1237,18 +1237,33 @@ class WrappedSample {
     this.isTitleSet = false
 
     /**
+     * The manually set title.
+     *
      * @type {String}
+     * @private
      */
-    this.title = null
+    this.title_ = null
     if (spec.title) {
       this.isTitleSet = true
-      this.title = spec.title
-    } else if (this.sample_ && this.sample_.title) {
-      this.title = this.sample_.title
+      this.title_ = spec.title
     }
   }
 
   /**
+   * We have to use a getter, because the sample may not be resolved at
+   * the constructor time.
+   *
+   * @returns {String}
+   */
+  get title () {
+    if (this.title_) return this.title_
+    if (this.sample && this.sample.title) return this.sample.title
+  }
+
+  /**
+   * We have to use a getter, because the sample may not be resolved at
+   * the constructor time.
+   *
    * @returns {module:@bldr/vue-plugin-media~Sample}
    */
   get sample () {

@@ -289,19 +289,32 @@ function normalizeStyle (style) {
 }
 
 /**
- * Each slide can be overlayed by play button to play audio files on each slide.
+ * Each slide can be overlayed by a play button to play audio files on each
+ * slide.
+ *
+ * See component `AudioOverlay.vue`
  */
 class AudioOverlay {
+  /**
+   * @param {Object|String|Array} rawData - Raw data from the yaml key
+   *   `audio_overlay: `
+   */
   constructor (rawData) {
-    this.wrappedSamples = new WrappedSamples(rawData)
-    let uris
-    if (typeof rawData === 'string') {
-      uris = [rawData]
-    } else if (Array.isArray(rawData)) {
-      uris = rawData
-    }
-    if (!uris) {
-      throw new Error(`AudioOverlay data has to be a string or an array. Got: ${rawData}`)
+
+    /**
+     * @type {boolean}
+     */
+    this.showTitles = false
+
+    /**
+     * @type {module:@bldr/vue-plugin-media.WrappedSamples}
+     */
+    this.wrappedSamples = null
+    if (typeof rawData === 'object' && rawData.samples && rawData.showTitles) {
+      this.wrappedSamples = new WrappedSamples(rawData.samples)
+      this.showTitles = rawData.showTitles
+    } else {
+      this.wrappedSamples = new WrappedSamples(rawData)
     }
 
     /**
@@ -312,6 +325,9 @@ class AudioOverlay {
     this.mediaUris = this.wrappedSamples.uris
   }
 
+  /**
+   * @returns {Array}
+   */
   get samples () {
     const samples = []
     for (const uri of this.mediaUris) {

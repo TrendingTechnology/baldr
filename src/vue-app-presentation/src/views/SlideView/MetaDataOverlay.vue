@@ -39,6 +39,7 @@ export default {
     left: 5em;
     padding: 1em;
     background: none !important;
+    z-index: 2;
 
     .transparent-bg {
       background: rgba($green, 0.2);

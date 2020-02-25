@@ -1,7 +1,8 @@
 <template>
-  <div class="vc_audio_overlay" b-ui-theme="default" v-if="slideCurrent.audioOverlay">
+  <div class="vc_audio_overlay" b-ui-theme="default" v-if="audioOverlay">
     <horizontal-play-buttons
-      :wrapped-samples="slideCurrent.audioOverlay.wrappedSamples"
+      :wrapped-samples="audioOverlay.wrappedSamples"
+      :show-titles="audioOverlay.showTitles"
     />
   </div>
 </template>
@@ -14,6 +15,11 @@ export default {
   name: 'AudioOverlay',
   computed: {
     ...mapGetters(['slideCurrent']),
+    audioOverlay () {
+      if (this.slideCurrent && this.slideCurrent.audioOverlay) {
+        return this.slideCurrent.audioOverlay
+      }
+    }
   }
 }
 </script>
@@ -23,6 +29,8 @@ export default {
     position: absolute;
     bottom: 0;
     left: 0;
+    background: none !important;
+
     .vc_play_button {
       font-size: 2em;
     }
