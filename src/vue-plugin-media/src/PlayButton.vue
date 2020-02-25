@@ -1,5 +1,10 @@
 <template>
-  <div class="vc_play_button" :class="status" @click="actByStatus">
+  <div
+    class="vc_play_button"
+    :class="status"
+    @click="actByStatus"
+    :title="`${sample.titleFormated} [${sample.shortcut}]`"
+  >
     <svg viewBox="0 0 250 250" xmlns="http://www.w3.org/2000/svg">
       <g transform="translate(125,125)">
         <circle r="100" class="circle-base"/>

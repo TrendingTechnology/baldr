@@ -710,7 +710,7 @@ class Sample {
     this.mediaElement = null
 
     /**
-     * The title of the sample.
+     * The title of the sample. For example `komplett`, `Hook-Line`.
      *
      * @type {String}
      */
@@ -728,7 +728,10 @@ class Sample {
     this.id = id
 
     /**
-     * `uri#id` for example `id:Beethoven#complete` `filename:beethoven.jpg#Theme_1`.
+     * The URI of the sample in the format `uri#id`: for example
+     * `id:Beethoven#complete`,
+     * `filename:beethoven.jpg#Theme_1`.
+     *
      * @type {String}
      */
     this.uri = `${this.mediaFile.uri}#${id}`
@@ -849,8 +852,9 @@ class Sample {
 
   /**
    * If the sample is the complete media file get the title of the media file.
+   * For example `Glocken (Das große Tor von Kiew)`
    *
-   * @returns {String}
+   * @type {String}
    */
   get titleFormated () {
     if (this.id === 'complete') {
@@ -907,7 +911,7 @@ class Sample {
   }
 
   /**
-   * In how many milli seconds we have to start a fade out process.
+   * In how many milliseconds we have to start a fade out process.
    *
    * @private
    */
