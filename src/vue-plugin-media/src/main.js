@@ -46,6 +46,11 @@ const defaultFadeOutSec = 1
 const defaultPlayDelayMsec = 10
 
 /**
+ * An instance of the vuex store.
+ */
+export let store
+
+/**
  * Extract media URIs from an object to allow linked media assets inside
  * from media assets itself.
  *
@@ -1187,6 +1192,128 @@ class Sample {
 }
 
 /**
+ * Wrap a sample with some meta data (mostly a custom title). Allow different
+ * input specifications
+ */
+class WrappedSample {
+  /**
+   * @param {Object|String} spec - Different input specifications are
+   *   possible:
+   *
+   *   1. The sample URI as a string (for example: `Fuer-Elise_HB`).
+   *   2. An object with the mandatory property `uri` (for example:
+   *      `{ uri: 'Fuer-Elise_HB'}`).
+   *   3. An instance of the class `Sample`.
+   */
+  constructor (spec) {
+
+    /**
+     * @type {module:@bldr/vue-plugin-media~Sample}
+     * @private
+     */
+    this.sample_ = null
+
+    /**
+     * @type {String}
+     */
+    this.uri = null
+    if (typeof spec === 'string') {
+      this.uri = spec
+    } else if (spec.uri && !spec.sample) {
+      this.uri = spec.uri
+    } else if (spec.constructor.name === 'Sample') {
+      this.uri = spec.uri
+      this.sample_ = spec
+    }
+
+    /**
+     * True if the title is set manually.
+     *
+     * This specification sets the property to `true`.
+     * `{ title: 'My Title', uri: 'id:Fuer-Elise' }`
+     *
+     * @type {Boolean}
+     */
+    this.isTitleSet = false
+
+    /**
+     * @type {String}
+     */
+    this.title = null
+    if (spec.title) {
+      this.isTitleSet = true
+      this.title = spec.title
+    } else if (this.sample_ && this.sample_.title) {
+      this.title = this.sample_.title
+    }
+  }
+
+  /**
+   * @returns {module:@bldr/vue-plugin-media~Sample}
+   */
+  get sample () {
+    if (this.sample_) return this.sample_
+    return store.getters['media/sampleByUri'](this.uri)
+  }
+}
+
+/**
+ * Wrap some samples with metadata. Allow fuzzy specification of the samples.
+ * Normalize the input.
+ */
+export class WrappedSamples {
+  /**
+   * @param {Object|String|Array} spec - Different input specifications are
+   *   possible:
+   *
+   *   1. The sample URI as a string (for example: `id:Fuer-Elise_HB`).
+   *   2. An object with the mandatory property `uri` (for example:
+   *      `{ uri: 'id:Fuer-Elise_HB'}`).
+   *   3. An instance of the class `Sample`.
+   *   4. An array
+   */
+  constructor (spec) {
+    // Make sure we have an array.
+    let specArray
+    if (!Array.isArray(spec)) {
+      specArray= [spec]
+    } else {
+      specArray = spec
+    }
+
+    /**
+     * An array of instances of the class `WrappedSample`
+     * @type {Array}
+     */
+    this.samples = []
+    for (const sampleSpec of specArray) {
+      this.samples.push(new WrappedSample(sampleSpec))
+    }
+
+    /**
+     * True if the title of the first sample is set manually.
+     *
+     * This specification sets the property to `true`.
+     * `{ title: 'My Title', uri: 'id:Fuer-Elise' }`
+     *
+     * @type {Boolean}
+     */
+    this.isTitleSet = false
+    if (this.samples[0].isTitleSet) {
+      this.isTitleSet = true
+    }
+  }
+
+  get uris () {
+    const uris = []
+    for (const wrappedSample of this.samples) {
+      uris.push(wrappedSample.uri)
+    }
+    return uris
+  }
+}
+
+/**
  * Hold various data of a media file as class properties.
  *
  * If a media file has a property with the name `multiPartCount` set, it is a
@@ -2052,14 +2179,16 @@ class Media {
 // https://stackoverflow.com/a/56501461
 // Vue.use(media, router, store, shortcuts)
 const Plugin = {
-  install (Vue, router, store, shortcuts) {
+  install (Vue, router, storeInstance, shortcuts) {
     if (!router) throw new Error('Pass in an instance of “VueRouter”.')
-    if (!store) throw new Error('Pass in an instance of “Store”.')
+    if (!storeInstance) throw new Error('Pass in an instance of “Store”.')
     if (!shortcuts) throw new Error('Pass in an instance of “Shortcuts“.')
 
     Vue.use(DynamicSelect)
 
-    if (store) store.registerModule('media', storeModule)
+    if (storeInstance) storeInstance.registerModule('media', storeModule)
+    // Make the store instance global for the media plugin.
+    store = storeInstance
 
     Vue.filter('duration', formatDuration)
     /**
@@ -2067,7 +2196,7 @@ const Plugin = {
      * @memberof module:@bldr/vue-app-presentation~Vue
      * @type {module:@bldr/vue-plugin-media~Media}
      */
-    Vue.prototype.$media = new Media(router, store, shortcuts)
+    Vue.prototype.$media = new Media(router, storeInstance, shortcuts)
     // Vue.component('media-player', ComponentMediaPlayer)
     Vue.component('horizontal-play-buttons', ComponentHorizontalPlayButtons)
     Vue.component('play-button', ComponentPlayButton)

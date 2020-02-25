@@ -9,6 +9,7 @@
 // import Vue from 'vue'
 import yaml from 'js-yaml'
 import { shortenText, convertPropertiesToCamelCase } from '@bldr/core-browser'
+import { WrappedSamples } from '@bldr/vue-plugin-media'
 import { markupToHtml } from '@/lib'
 import { masters } from '@/masters.js'
 import store from '@/store.js'
@@ -292,6 +293,7 @@ function normalizeStyle (style) {
  */
 class AudioOverlay {
   constructor (rawData) {
+    this.wrappedSamples = new WrappedSamples(rawData)
     let uris
     if (typeof rawData === 'string') {
       uris = [rawData]
@@ -307,7 +309,7 @@ class AudioOverlay {
      *
      * @type {Array}
      */
-    this.mediaUris = uris
+    this.mediaUris = this.wrappedSamples.uris
   }
 
   get samples () {
