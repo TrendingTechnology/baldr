@@ -1,4 +1,5 @@
 import { GrabFromObjects } from '@/lib.js'
+import { WrappedSamples } from '@bldr/vue-plugin-media'
 
 export default {
   title: 'Instrument',
@@ -43,11 +44,8 @@ export default {
     const grab = new GrabFromObjects(props, mainImage, false)
     const propsMain = grab.multipleProperties(['name'])
     propsMain.imageHttpUrl = mainImage.httpUrl
-    propsMain.audioSamples = []
     if (mainImage.audioSamples) {
-      for (const uri of mainImage.audioSamples) {
-        propsMain.audioSamples.push(this.$store.getters['media/sampleByUri'](uri))
-      }
+      propsMain.wrappedSamples = new WrappedSamples(mainImage.audioSamples)
     }
     return propsMain
   },

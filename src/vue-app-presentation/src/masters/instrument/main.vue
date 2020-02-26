@@ -2,8 +2,9 @@
   <div class="vc_instrument_master">
     <img class="img-contain" :src="imageHttpUrl">
     <p class="name transparent-background important">{{ name }}</p>
-    <play-button v-if="audioSamples.length" :sample="audioSamples[0]"/>
-  </div>
+    <horizontal-play-buttons
+      :wrapped-samples="wrappedSamples"
+    />  </div>
 </template>
 
 <script>
@@ -17,8 +18,8 @@ export default {
       type: String,
       required: true
     },
-    audioSamples: {
-      type: Array
+    wrappedSamples: {
+      type: Object
     }
   }
 }
@@ -39,7 +40,7 @@ export default {
       color: $black;
     }
 
-    .vc_play_button {
+    .vc_horizontal_play_buttons {
       position: absolute;
       bottom: 0.5em;
       left: 0.5em;
