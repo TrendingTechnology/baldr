@@ -196,6 +196,12 @@ function walkDeluxe (func, regex, relPath = null, payload = null) {
   })
 }
 
+/**
+ * Convert a Javascript object into a text string, ready to be written into
+ * a text file.
+ *
+ * @param {Object} data - Some data to convert to YAML.
+ */
 function yamlToTxt (data) {
   const yamlMarkup = [
     '---',
@@ -221,7 +227,8 @@ function writeMetaDataYamlFile (filePath, metaData) {
 /**
  * Write the metadata YAML file.
  *
- * @param {String} inputFile
+ * @param {String} filePath - The filePath gets asciified and a yml extension
+ *   is appended.
  * @param {Object} metaData
  */
 function writeMetaDataYaml (filePath, metaData) {
@@ -1134,9 +1141,7 @@ commander
 /**
  *
  */
-function actionWikidata (itemId) {
-  const url = wikibase.getEntities(itemId, ['en', 'de'])
-
+async function actionWikidata (itemId) {
   function getWikipediaTitle (sitelinks) {
     let key
     if (sitelinks.dewiki) {
@@ -1146,6 +1151,7 @@ function actionWikidata (itemId) {
     }
     // https://de.wikipedia.org/wiki/Ludwig_van_Beethoven
     const siteLink = wikibase.getSitelinkUrl({ site: key, title: sitelinks[key] })
+    if (!siteLink) return
     // {
     //   lang: 'de',
     //   project: 'wikipedia',
@@ -1157,28 +1163,79 @@ function actionWikidata (itemId) {
     return `${linkData.lang}:${linkData.title}`
   }
 
-  console.log(url)
+  async function getItem (itemId) {
+    const url = wikibase.getEntities(itemId, ['en', 'de'])
+    const response = await fetch(url)
+    const json = await response.json()
+    const entites = await wikibase.parse.wd.entities(json)
+    return entites[itemId]
+  }
 
-  fetch(url)
-    .then(response => response.json())
-    .then(wikibase.parse.wd.entities)
-    .then(entities => {
-      console.log(entities)
+  function formatDate (date) {
+    // [ '1770-12-16T00:00:00.000Z' ]
+    if (!date) return
+    return date.replace(/T.+$/, '')
+  }
 
-      const entity = entities[itemId]
+  function getClaim (claim) {
+    let result
+    if (claims[claim]) {
+      result = claims[claim]
+    }
+    if (!result) return
+    if (Array.isArray(result)) {
+      return result[0]
+    }
+    return result
+  }
 
-      const claims = entity.claims
-      // for (const claimId in claims) {
-      //   console.log(claims[claimId])
-      // }
+  function getDate (claim) {
+    return formatDate(getClaim(claim))
+  }
 
-      console.log(`P18 (Bild): ${claims.P18}`)
-      console.log(`P569 (Geburtstag): ${claims.P569}`)
-      console.log(`P570 (Sterbedatum): ${claims.P570}`)
-      console.log(`P735 (Vorname): ${claims.P735}`)
-      console.log(`P734 (Familienname): ${claims.P734}`)
-      console.log(getWikipediaTitle(entity.sitelinks))
-    })
+  async function getName(claim) {
+    //  Name in Amts- oder Originalsprache (P1705)  ?
+    const itemId = claims[claim]
+    const entity = await getItem(itemId)
+    return entity.labels.de
+  }
+
+  async function downloadFile(url, dest) {
+    const response = await fetch(url)
+    fs.writeFileSync(dest, Buffer.from(await response.arrayBuffer()))
+  }
+
+  async function getWikicommonsFile (filename, dest) {
+    const url = wikibase.getImageUrl(filename)
+    await downloadFile(url, dest)
+  }
+
+  const entity = await getItem(itemId)
+  const claims = entity.claims
+
+  // Name in Muttersprache (P1559)
+  const name = getClaim('P1559')
+  const firstname = await getName('P735')
+  const lastname = await getName('P734')
+  const id = `${lastname}_${firstname}`
+
+  const birth = getDate('P569')
+  const death = getDate('P570')
+  const wikipedia = getWikipediaTitle(entity.sitelinks)
+  const wikicommons = getClaim('P18')
+  const dest = `${id}.jpg`
+  if (wikicommons) {
+    await getWikicommonsFile(wikicommons, dest)
+  }
+
+  const result = { id, firstname, lastname, name, birth, death, wikipedia, wikicommons }
+
+  for (const key in result) {
+    if (!result[key]) {
+      delete result[key];
+    }
+  }
+  writeMetaDataYaml(dest, result)
 }
 
 commander
