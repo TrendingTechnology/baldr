@@ -46,9 +46,24 @@ const defaultFadeOutSec = 1
 const defaultPlayDelayMsec = 10
 
 /**
- * An instance of the vuex store.
+ * The {@link https://vuex.vuejs.org/ vuex} store instance.
+ * @type {Object}
  */
 export let store
+
+/**
+ * A {@link https://router.vuejs.org/ vue router instance.}
+ *
+ * @type {Object}
+ */
+export let router
+
+/**
+ * A instance of the class `Shortcuts()`.
+ *
+ * @type {module:@bldr/vue-plugin-shortcuts~Shortcuts}
+ */
+export let shortcuts
 
 /**
  * Extract media URIs from an object to allow linked media assets inside
@@ -212,17 +227,7 @@ class Interval extends Timers {
  * played a the same time.
  */
 class Player {
-  /**
-   * @param {object} store - The {@link https://vuex.vuejs.org/ vuex} store
-   * instance.
-   */
-  constructor (store) {
-    /**
-     * The {@link https://vuex.vuejs.org/ vuex} store instance.
-     *
-     * @type {Object}
-     */
-    this.$store = store
+  constructor () {
 
     /**
      * Global volume: from 0 - 1
@@ -238,19 +243,19 @@ class Player {
   }
 
   get samplePlaying () {
-    return this.$store.getters['media/samplePlaying']
+    return store.getters['media/samplePlaying']
   }
 
   set samplePlaying (sample) {
-    this.$store.dispatch('media/setSamplePlaying', sample)
+    store.dispatch('media/setSamplePlaying', sample)
   }
 
   get sampleLoaded () {
-    return this.$store.getters['media/sampleLoaded']
+    return store.getters['media/sampleLoaded']
   }
 
   set sampleLoaded (sample) {
-    this.$store.commit('media/setSampleLoaded', sample)
+    store.commit('media/setSampleLoaded', sample)
   }
 
   /**
@@ -265,7 +270,7 @@ class Player {
     } else {
       let uri = uriOrSample
       if (uri.indexOf('#') === -1) uri = `${uri}#complete`
-      sample = this.$store.getters['media/sampleByUri'](uri)
+      sample = store.getters['media/sampleByUri'](uri)
     }
     if (!sample) throw new Error(`The sample “${uriOrSample}” couldn’t be played!`)
     this.sampleLoaded = sample
@@ -350,13 +355,7 @@ class PlayList {
    *
    * @param {module:@bldr/vue-plugin-media~Player} player
    */
-  constructor (store, player) {
-    /**
-     * The {@link https://vuex.vuejs.org/ vuex} store instance.
-     * @type {Object}
-     */
-    this.$store = store
-
+  constructor (player) {
     /**
      * @type {module:@bldr/vue-plugin-media~Player}
      */
@@ -367,7 +366,7 @@ class PlayList {
    * @private
    */
   start_ () {
-    const sample = this.$store.getters['media/samplePlayListCurrent']
+    const sample = store.getters['media/samplePlayListCurrent']
     this.player.load(sample)
     this.player.start()
   }
@@ -376,7 +375,7 @@ class PlayList {
    * Start the previous sample in the playlist.
    */
   startPrevious () {
-    this.$store.dispatch('media/setPlayListSamplePrevious')
+    store.dispatch('media/setPlayListSamplePrevious')
     this.start_()
   }
 
@@ -384,7 +383,7 @@ class PlayList {
    * Start the next sample in the playlist.
    */
   startNext () {
-    this.$store.dispatch('media/setPlayListSampleNext')
+    store.dispatch('media/setPlayListSampleNext')
     this.start_()
   }
 }
@@ -1950,37 +1949,17 @@ class Canvas {
  * ```
  */
 class Media {
-  /**
-   * @param {object} router
-   * @param {object} store
-   * @param {object} shortcuts
-   */
-  constructor (router, store, shortcuts) {
-
-    /**
-     * A {@link https://router.vuejs.org/ vue router instance.}
-     *
-     * @type {Object}
-     */
-    this.$router = router
-
-    /**
-     * A {@link https://vuex.vuejs.org/ vuex store instance.}
-     *
-     * @type {Object}
-     */
-    this.$store = store
-    this.$shortcuts = shortcuts
+  constructor () {
 
     /**
      * @type {module:@bldr/vue-plugin-media~Player}
      */
-    this.player = new Player(store)
+    this.player = new Player()
 
     /**
      * @type {module:@bldr/vue-plugin-media~PlayList}
      */
-    this.playList = new PlayList(store, this.player)
+    this.playList = new PlayList(this.player)
 
     /**
      *  @type {module:@bldr/vue-plugin-media~Resolver}
@@ -1997,7 +1976,7 @@ class Media {
      */
     this.canvas = new Canvas()
 
-    this.$shortcuts.addMultiple([
+    shortcuts.addMultiple([
       {
         keys: 'space',
         callback: () => { this.player.toggle() },
@@ -2045,7 +2024,7 @@ class Media {
       }
     ])
 
-    if (this.$router) {
+    if (router) {
       const style = {
         darkMode: false,
         centerVertically: false
@@ -2071,8 +2050,8 @@ class Media {
           component: ComponentMediaFile
         }
       ]
-      this.$router.addRoutes(routes)
-      this.$shortcuts.fromRoute(routes[0])
+      router.addRoutes(routes)
+      shortcuts.fromRoute(routes[0])
     }
   }
 
@@ -2088,10 +2067,10 @@ class Media {
     for (const mediaFile of mediaFiles) {
       if (mediaFile.samples) {
         for (const sampleUri in mediaFile.samples) {
-          this.$store.commit('media/addSample', mediaFile.samples[sampleUri])
+          store.commit('media/addSample', mediaFile.samples[sampleUri])
         }
       }
-      this.$store.dispatch('media/addMediaFile', mediaFile)
+      store.dispatch('media/addMediaFile', mediaFile)
       output[mediaFile.uri] = mediaFile
     }
     this.addShortcutForMediaFiles_()
@@ -2128,13 +2107,13 @@ class Media {
    * @private
    */
   addShortcutForMediaFiles_ () {
-    const mediaFiles = this.$store.getters['media/mediaFiles']
+    const mediaFiles = store.getters['media/mediaFiles']
     let shortcutNo = 1
     for (const uri in mediaFiles) {
       const mediaFile = mediaFiles[uri]
       if (!mediaFile.shortcut && mediaFile.type === 'image') {
         mediaFile.shortcut = `i ${shortcutNo}`
-        this.$shortcuts.add(
+        shortcuts.add(
           mediaFile.shortcut,
           () => {
             this.canvas.hide()
@@ -2157,7 +2136,7 @@ class Media {
    */
   addShortcutForSamples_ () {
     // We have to loop through all samples to get the latest shortcut number.
-    const samples = this.$store.getters['media/samples']
+    const samples = store.getters['media/samples']
 
     let firstTriggerKeyByType = (type) => {
       if (type === 'audio') {
@@ -2178,7 +2157,7 @@ class Media {
             lastShortcutNo += 1
             sample.shortcutNo = lastShortcutNo
             sample.shortcut = `${firstTriggerKeyByType(sample.mediaFile.type)} ${sample.shortcutNo}`
-            this.$shortcuts.add(
+            shortcuts.add(
               sample.shortcut,
               () => {
                 // TODO: Start the same video twice behaves very strange.
@@ -2202,7 +2181,7 @@ class Media {
         const sample = samples[sampleUri]
         if (sample.shortcutCustom && !sample.shortcut) {
           sample.shortcut = sample.shortcutCustom
-          this.$shortcuts.add(
+          shortcuts.add(
             sample.shortcut,
             () => {
               this.player.load(sample.uri)
@@ -2224,16 +2203,18 @@ class Media {
 // https://stackoverflow.com/a/56501461
 // Vue.use(media, router, store, shortcuts)
 const Plugin = {
-  install (Vue, router, storeInstance, shortcuts) {
-    if (!router) throw new Error('Pass in an instance of “VueRouter”.')
-    if (!storeInstance) throw new Error('Pass in an instance of “Store”.')
-    if (!shortcuts) throw new Error('Pass in an instance of “Shortcuts“.')
+  install (Vue, routerInstance, storeInstance, shortcutsInstance) {
+    if (!routerInstance) throw new Error('Pass in an instance of “VueRouter”.')
+    router = routerInstance
+
+    if (!storeInstance) throw new Error('Pass in an instance of “Vuex Store”.')
+    store = storeInstance
+    store.registerModule('media', storeModule)
+
+    if (!shortcutsInstance) throw new Error('Pass in an instance of “Shortcuts“.')
+    shortcuts = shortcutsInstance
 
     Vue.use(DynamicSelect)
-
-    if (storeInstance) storeInstance.registerModule('media', storeModule)
-    // Make the store instance global for the media plugin.
-    store = storeInstance
 
     Vue.filter('duration', formatDuration)
     /**
@@ -2241,7 +2222,7 @@ const Plugin = {
      * @memberof module:@bldr/vue-app-presentation~Vue
      * @type {module:@bldr/vue-plugin-media~Media}
      */
-    Vue.prototype.$media = new Media(router, storeInstance, shortcuts)
+    Vue.prototype.$media = new Media()
     // Vue.component('media-player', ComponentMediaPlayer)
     Vue.component('horizontal-play-buttons', ComponentHorizontalPlayButtons)
     Vue.component('play-button', ComponentPlayButton)
