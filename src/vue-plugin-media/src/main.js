@@ -25,27 +25,6 @@ export const httpRequestNg = new HttpRequestNg(restEndpoints, '/api/media')
 export const httpRequest = new HttpRequest(getDefaultServers(), '/api/media')
 
 /**
- * We fade in very short and smoothly to avoid audio artefacts.
- *
- * @type {Number}
- */
-const defaultFadeInSec = 0.3
-
-/**
- * We never stop. Instead we fade out very short and smoothly.
- *
- * @type {Number}
- */
-const defaultFadeOutSec = 1
-
-/**
- * Number of milliseconds to wait before the media file is played.
- *
- * @type {Number}
- */
-const defaultPlayDelayMsec = 10
-
-/**
  * The {@link https://vuex.vuejs.org/ vuex} store instance.
  * @type {Object}
  */
@@ -691,6 +670,28 @@ class Sample {
    * @property {String} specs.shortcut - A custom shortcut
    */
   constructor (mediaFile, { title, id, startTime, fadeIn, duration, fadeOut, endTime, shortcut }) {
+
+    /**
+     * We fade in very short and smoothly to avoid audio artefacts.
+     *
+     * @type {Number}
+     */
+    this.defaultFadeInSec = 0.3
+
+    /**
+     * We never stop. Instead we fade out very short and smoothly.
+     *
+     * @type {Number}
+     */
+    this.defaultFadeOutSec = 1
+
+    /**
+     * Number of milliseconds to wait before the media file is played.
+     *
+     * @type {Number}
+     */
+    this.defaultPlayDelayMsec = 10
+
     /**
      * The parent media file object.
      *
@@ -888,7 +889,7 @@ class Sample {
    */
   get fadeInSec () {
     if (!this.fadeInSec_) {
-      return defaultFadeInSec
+      return this.router
     } else {
       return this.fadeInSec_
     }
@@ -901,7 +902,7 @@ class Sample {
    */
   get fadeOutSec () {
     if (!this.fadeOutSec_) {
-      return defaultFadeOutSec
+      return this.defaultFadeOutSec
     } else {
       return this.fadeOutSec_
     }
@@ -976,7 +977,9 @@ class Sample {
    *
    * @returns {Promise}
    */
-  fadeIn (targetVolume = 1, duration = defaultFadeInSec) {
+  fadeIn (targetVolume = 1, duration) {
+    if (!targetVolume) targetVolume = 1
+    if (!duration) duration = this.defaultFadeInSec
     return new Promise((resolve, reject) => {
       // Fade in can triggered when a fade out process is started and
       // not yet finished.
@@ -1041,7 +1044,7 @@ class Sample {
     this.timeOut_.set(() => {
       this.fadeIn(targetVolume, this.fadeInSec)
       this.scheduleFadeOut_()
-    }, defaultPlayDelayMsec)
+    }, this.defaultPlayDelayMsec)
   }
 
   /**
@@ -1064,7 +1067,8 @@ class Sample {
    *
    * @returns {Promise}
    */
-  fadeOut (duration = defaultFadeOutSec) {
+  fadeOut (duration) {
+    if (!duration) duration = this.defaultFadeOutSec
     return new Promise((resolve, reject) => {
       if (this.mediaElement.paused) resolve()
       // Fade out can triggered when a fade out process is started and
