@@ -230,10 +230,15 @@ function writeMetaDataYamlFile (filePath, metaData) {
  * @param {String} filePath - The filePath gets asciified and a yml extension
  *   is appended.
  * @param {Object} metaData
+ * @param {Boolean} force - Always create the yaml file. Overwrite the old one.
  */
-function writeMetaDataYaml (filePath, metaData) {
+function writeMetaDataYaml (filePath, metaData, force) {
+  if (fs.lstatSync(filePath).isDirectory()) return
   const yamlFile = `${asciify(filePath)}.yml`
-  if (!fs.lstatSync(filePath).isDirectory() && !fs.existsSync(yamlFile)) {
+  if (
+    force ||
+    !fs.existsSync(yamlFile)
+  ) {
     if (!metaData) metaData = {}
     const asset = new Asset(filePath).addFileInfos()
     if (!metaData.id) {
@@ -1142,6 +1147,9 @@ commander
  *
  */
 async function actionWikidata (itemId) {
+  if (!wikibase.isItemId(itemId)) {
+    throw new Error(`No item id: ${itemId}`)
+  }
   function getWikipediaTitle (sitelinks) {
     let key
     if (sitelinks.dewiki) {
@@ -1195,9 +1203,14 @@ async function actionWikidata (itemId) {
 
   async function getName(claim) {
     //  Name in Amts- oder Originalsprache (P1705)  ?
-    const itemId = claims[claim]
+    const itemId = getClaim(claim)
+    if (!itemId) return
     const entity = await getItem(itemId)
-    return entity.labels.de
+    if (entity.labels.de) {
+      return entity.labels.de
+    } else {
+      return entity.labels.en
+    }
   }
 
   async function downloadFile(url, dest) {
@@ -1211,16 +1224,25 @@ async function actionWikidata (itemId) {
   }
 
   const entity = await getItem(itemId)
+  console.log(entity)
   const claims = entity.claims
 
   // Name in Muttersprache (P1559)
-  const name = getClaim('P1559')
+  let name = getClaim('P1559')
   const firstname = await getName('P735')
   const lastname = await getName('P734')
+  if (!name) name = `${firstname} ${lastname}`
   const id = `${lastname}_${firstname}`
+  const title = `Portrait-Bild von „${name}“`
+
+  let short_biography
+  const desc = entity.descriptions
+  if (desc.de) { short_biography = desc.de }
+  else if (desc.en) { short_biography = desc.en }
 
   const birth = getDate('P569')
   const death = getDate('P570')
+  const wikidata = itemId
   const wikipedia = getWikipediaTitle(entity.sitelinks)
   const wikicommons = getClaim('P18')
   const dest = `${id}.jpg`
@@ -1228,14 +1250,14 @@ async function actionWikidata (itemId) {
     await getWikicommonsFile(wikicommons, dest)
   }
 
-  const result = { id, firstname, lastname, name, birth, death, wikipedia, wikicommons }
+  const result = { id, title, firstname, lastname, name, short_biography, birth, death, wikidata, wikipedia, wikicommons }
 
   for (const key in result) {
     if (!result[key]) {
       delete result[key];
     }
   }
-  writeMetaDataYaml(dest, result)
+  writeMetaDataYaml(dest, result, true)
 }
 
 commander
