@@ -2112,6 +2112,8 @@ class Media {
     const mediaFiles = store.getters['media/mediaFiles']
     let shortcutNo = 1
     for (const uri in mediaFiles) {
+      // i 10 does not work.
+      if (shortcutNo > 9) return
       const mediaFile = mediaFiles[uri]
       if (!mediaFile.shortcut && mediaFile.type === 'image') {
         mediaFile.shortcut = `i ${shortcutNo}`
@@ -2157,6 +2159,8 @@ class Media {
             lastShortcutNo = sample.shortcutNo
           } else {
             lastShortcutNo += 1
+            // a 10 does not work.
+            if (lastShortcutNo > 9) return
             sample.shortcutNo = lastShortcutNo
             sample.shortcut = `${firstTriggerKeyByType(sample.mediaFile.type)} ${sample.shortcutNo}`
             shortcuts.add(
