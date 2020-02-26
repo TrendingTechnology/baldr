@@ -4,7 +4,8 @@
     <p class="name transparent-background important">{{ name }}</p>
     <horizontal-play-buttons
       :wrapped-samples="wrappedSamples"
-    />  </div>
+    />
+  </div>
 </template>
 
 <script>

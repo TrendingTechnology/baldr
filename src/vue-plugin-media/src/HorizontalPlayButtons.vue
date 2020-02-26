@@ -1,8 +1,12 @@
 <template>
-  <div class="vc_horizontal_play_buttons">
+  <div
+    class="vc_horizontal_play_buttons"
+    v-if="wrappedSamplesNormalized"
+  >
     <span
-        v-for="wrapped in samplesNormalized"
-        :key="wrapped.sample.uri">
+      v-for="wrapped in samplesNormalized"
+      :key="wrapped.sample.uri"
+    >
       <play-button
         :sample="wrapped.sample"
       />
@@ -14,7 +18,6 @@
 <script>
 import PlayButton from './PlayButton.vue'
 import { store, WrappedSamples } from './main.js'
-
 
 export default {
   name: 'HorizontalPlayButtons',
@@ -41,7 +44,7 @@ export default {
     },
     wrappedSamplesNormalized () {
       if (this.wrappedSamples) return this.wrappedSamples
-      return new WrappedSamples(this.samples)
+      if (this.samples) return new WrappedSamples(this.samples)
     },
     showTitlesNormalized () {
       if (this.wrappedSamplesNormalized.isTitleSet) return true
@@ -53,6 +56,6 @@ export default {
 
 <style lang="scss" scoped>
   .vc_horizontal_play_buttons {
-
+    font-size: 2.5vw;
   }
 </style>
