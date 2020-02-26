@@ -11,6 +11,11 @@ const chalk = require('chalk')
 const yaml = require('js-yaml')
 const musicMetadata = require('music-metadata')
 const glob = require('glob')
+const wikibase = require('wikibase-sdk')({
+  instance: 'https://www.wikidata.org',
+  sparqlEndpoint: 'https://query.wikidata.org/sparql'
+})
+const fetch = require('node-fetch')
 
 // Project packages
 const {
@@ -1123,6 +1128,63 @@ commander
 
 commander
   .version(require('../package.json').version)
+
+/** w / wikidata **************************************************************/
+
+/**
+ *
+ */
+function actionWikidata (itemId) {
+  const url = wikibase.getEntities(itemId, ['en', 'de'])
+
+  function getWikipediaTitle (sitelinks) {
+    let key
+    if (sitelinks.dewiki) {
+      key = 'dewiki'
+    } else {
+      key = 'enwiki'
+    }
+    // https://de.wikipedia.org/wiki/Ludwig_van_Beethoven
+    const siteLink = wikibase.getSitelinkUrl({ site: key, title: sitelinks[key] })
+    // {
+    //   lang: 'de',
+    //   project: 'wikipedia',
+    //   key: 'dewiki',
+    //   title: 'Ludwig_van_Beethoven',
+    //   url: 'https://de.wikipedia.org/wiki/Ludwig_van_Beethoven'
+    // }
+    const linkData = wikibase.getSitelinkData(siteLink)
+    return `${linkData.lang}:${linkData.title}`
+  }
+
+  console.log(url)
+
+  fetch(url)
+    .then(response => response.json())
+    .then(wikibase.parse.wd.entities)
+    .then(entities => {
+      console.log(entities)
+
+      const entity = entities[itemId]
+
+      const claims = entity.claims
+      // for (const claimId in claims) {
+      //   console.log(claims[claimId])
+      // }
+
+      console.log(`P18 (Bild): ${claims.P18}`)
+      console.log(`P569 (Geburtstag): ${claims.P569}`)
+      console.log(`P570 (Sterbedatum): ${claims.P570}`)
+      console.log(`P735 (Vorname): ${claims.P735}`)
+      console.log(`P734 (Familienname): ${claims.P734}`)
+      console.log(getWikipediaTitle(entity.sitelinks))
+    })
+}
+
+commander
+  .command('wikidata <item-id>').alias('w')
+  .description('Query wikidata.')
+  .action(actionWikidata)
 
 /** y / yaml ******************************************************************/
 
