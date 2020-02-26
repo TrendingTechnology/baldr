@@ -1360,6 +1360,8 @@ export class WrappedSamples {
  * @property {Object} samples - An object of Sample instances.
  * @property {Number} multiPartCount - The of count of parts if the media file
  *   is a multi part asset.
+ * @property {String} cover - An media URI of a image to use a preview image
+ *   for mainly audio files. Video files are also supported.
  */
 export class MediaFile {
   /**
@@ -2093,13 +2095,37 @@ class Media {
       output[mediaFile.uri] = mediaFile
     }
     this.addShortcutForMediaFiles_()
+    this.setPreviewImagesFromCoverProp_()
     this.addShortcutForSamples_()
     return output
   }
 
   /**
+   * Audio or video files with a property `cover` set get the HTTP URL of this
+   * cover image as a preview image. The URIs are automatically resolved when
+   * creating the MediaFile objects.
+   *
+   * @private
+   */
+  setPreviewImagesFromCoverProp_ () {
+    const mediaFiles = store.getters['media/mediaFiles']
+    for (const uri in mediaFiles) {
+      const mediaFile = mediaFiles[uri]
+      if (mediaFile.isPlayable && mediaFile.cover) {
+        const cover = store.getters['media/mediaFileByUri'](mediaFile.cover)
+        if (!cover) {
+          throw new Error(`Unable to resolve the preview cover: ${mediaFile.cover}`)
+        }
+        mediaFile.previewHttpUrl = cover.httpUrl
+      }
+    }
+  }
+
+  /**
    * Add shortcuts for media files. At the momenten only for images. Video
    * and audio are samples and handled separately.
+   *
+   * @private
    */
   addShortcutForMediaFiles_ () {
     const mediaFiles = this.$store.getters['media/mediaFiles']
