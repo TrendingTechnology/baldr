@@ -244,7 +244,8 @@ function writeMetaDataYamlFile (filePath, metaData) {
 }
 
 /**
- * Write the metadata YAML file.
+ * Write the metadata YAML file for a corresponding media file specified by
+ * `filePath`.
  *
  * @param {String} filePath - The filePath gets asciified and a yml extension
  *   is appended.
@@ -1269,10 +1270,11 @@ async function actionWikidata (itemId) {
     await downloadWikicommonsFile(wikicommons, dest)
   }
 
-  const stat = fs.statSync(dest)
-
-  if (stat.size > 500000) {
-    runImagemagick(dest, dest)
+  if (fs.existsSync(dest)) {
+    const stat = fs.statSync(dest)
+    if (stat.size > 500000) {
+      runImagemagick(dest, dest)
+    }
   }
 
   const result = { id, title, firstname, lastname, name, short_biography, birth, death, wikidata, wikipedia, wikicommons }
@@ -1282,7 +1284,7 @@ async function actionWikidata (itemId) {
       delete result[key];
     }
   }
-  writeMetaDataYaml(dest, result, true)
+  writeMetaDataYamlFile(`${dest}.yml`, result)
 }
 
 commander
