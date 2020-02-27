@@ -272,7 +272,8 @@ function writeMetaDataYaml (filePath, metaData, force) {
 }
 
 /**
- * Rename a media asset and it’s corresponding meta data file (`*.yml`)
+ * Rename a media asset and it’s corresponding meta data file (`*.yml`) and
+ * preview file (`_preview.jpg`).
  *
  * @param {String} oldPath - The old path of a media asset.
  * @param {String} newPath - The new path of a media asset.
@@ -286,6 +287,10 @@ function renameAsset (oldPath, newPath) {
     if (fs.existsSync(`${oldPath}.yml`)) {
       fs.renameSync(`${oldPath}.yml`, `${newPath}.yml`)
       console.log(`new: ${chalk.cyan(newRelPath + '.yml')}`)
+    }
+    if (fs.existsSync(`${oldPath}_preview.jpg`)) {
+      fs.renameSync(`${oldPath}_preview.jpg`, `${newPath}_preview.jpg`)
+      console.log(`new: ${chalk.cyan(newRelPath + '_preview.jpg')}`)
     }
     fs.renameSync(oldPath, newPath)
     return newPath
