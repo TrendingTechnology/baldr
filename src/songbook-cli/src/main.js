@@ -19,7 +19,6 @@ const pckg = require('../package.json')
 const core = require('@bldr/core-node')
 const {
   buildVueApp,
-  checkExecutables,
   exportToMediaServer,
   IntermediateLibrary,
   PianoScore
@@ -99,7 +98,7 @@ const main = function () {
     options.force = true
   }
 
-  const { status, unavailable } = checkExecutables([
+  core.checkExecutables([
     'mscore-to-vector.sh',
     'pdf2svg',
     'pdfcrop',
@@ -107,16 +106,6 @@ const main = function () {
     'pdftops',
     'mscore'
   ])
-
-  if (!status) {
-    const e = new Error(
-      'Some dependencies are not installed: “' +
-      unavailable.join('”, “') +
-      '”'
-    )
-    e.name = 'UnavailableCommandsError'
-    throw e
-  }
 
   const config = core.bootstrapConfig().songbook
 

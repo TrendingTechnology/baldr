@@ -744,38 +744,6 @@ class Library extends CoreLibrary {
 }
 
 /**
- * Check if executable is installed.
- *
- * @param {string} executable - Name of the executable.
- */
-function checkExecutable (executable) {
-  const exec = childProcess.spawnSync(executable, ['--help'])
-  if (exec.status === null) {
-    return false
-  } else {
-    return true
-  }
-}
-
-/**
- * Check if executables are installed.
- *
- * @param {array} executables - Name of the executables.
- */
-function checkExecutables (executables = []) {
-  let status = true
-  const unavailable = []
-  executables.forEach((exec) => {
-    const check = checkExecutable(exec)
-    if (!check) {
-      status = false
-      unavailable.push(exec)
-    }
-  })
-  return { status: status, unavailable: unavailable }
-}
-
-/**
  * A text file.
  */
 class TextFile {
@@ -1774,7 +1742,6 @@ function buildVueApp () {
 }
 
 exports.buildVueApp = buildVueApp
-exports.checkExecutables = checkExecutables
 exports.exportToMediaServer = exportToMediaServer
 exports.IntermediateLibrary = IntermediateLibrary
 exports.PianoScore = PianoScore

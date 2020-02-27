@@ -27,8 +27,10 @@ const {
   HierarchicalFolderTitles,
   walk
 } = require('./main.js')
-const { bootstrapConfig } = require('@bldr/core-node')
+const { bootstrapConfig, checkExecutables } = require('@bldr/core-node')
 const { formatMultiPartAssetFileName } = require('@bldr/core-browser')
+
+checkExecutables(['magick', 'ffmpeg', 'lualatex', 'xdg-open', 'pdf2svg', 'pdfinfo'])
 
 // Project packages.
 const config = bootstrapConfig()
@@ -45,6 +47,23 @@ function filePathToAssetType (filePath) {
   const asset = makeAsset(filePath)
   const inputExtension = asset.extension.toLowerCase()
   return assetTypes.extensionToType(inputExtension)
+}
+
+/**
+ * TODO: replace code inside actionConvert() with this function.
+ *
+ * @param {String} inputFile
+ * @param {String} outputFile
+ * @param {String} size - see http://www.imagemagick.org/Usage/resize
+ */
+function runImagemagick (inputFile, outputFile, size = '2000x2000>') {
+  childProcess.spawnSync('magick', [
+    'convert',
+    inputFile,
+    '-resize', size, // http://www.imagemagick.org/Usage/resize/#shrink
+    '-quality', '60', // https://imagemagick.org/script/command-line-options.php#quality
+    outputFile
+  ])
 }
 
 /**
@@ -1218,7 +1237,7 @@ async function actionWikidata (itemId) {
     fs.writeFileSync(dest, Buffer.from(await response.arrayBuffer()))
   }
 
-  async function getWikicommonsFile (filename, dest) {
+  async function downloadWikicommonsFile (filename, dest) {
     const url = wikibase.getImageUrl(filename)
     await downloadFile(url, dest)
   }
@@ -1247,7 +1266,13 @@ async function actionWikidata (itemId) {
   const wikicommons = getClaim('P18')
   const dest = `${id}.jpg`
   if (wikicommons) {
-    await getWikicommonsFile(wikicommons, dest)
+    await downloadWikicommonsFile(wikicommons, dest)
+  }
+
+  const stat = fs.statSync(dest)
+
+  if (stat.size > 500000) {
+    runImagemagick(dest, dest)
   }
 
   const result = { id, title, firstname, lastname, name, short_biography, birth, death, wikidata, wikipedia, wikicommons }
