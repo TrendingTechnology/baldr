@@ -66,6 +66,15 @@ export default {
   },
   mounted () {
     DynamicSelect.event.$on('dynamicselectfocus', this.focus)
+    // Activate a keyboard listener for the enter key only if
+    // the text search field is focues.
+    const searchInput = this.$refs.search
+    searchInput.addEventListener('focus', () => {
+      searchInput.addEventListener('keydown', this.selectFirstItemOnReturn)
+    })
+   searchInput.addEventListener('blur', () => {
+      searchInput.removeEventListener('keydown', this.selectFirstItemOnReturn)
+    })
   },
   created () {
     this.searchDebounced = this.debounced(500, this.search)
@@ -84,14 +93,6 @@ export default {
         list = this.options
       }
       list = list.slice(0, resultListMaxCount)
-      // Auto select the last and single result.
-      if (list.length === 1) {
-        setTimeout(() => {
-          if (this.$refs.resultList && this.$refs.resultList.children.length === 1) {
-            this.$refs.resultList.children[0].focus()
-          }
-        }, 10)
-      }
       return list
     },
     showPlaceholder: function () {
@@ -103,6 +104,7 @@ export default {
   },
   watch: {
     hasFocus: function (hasFocus) {
+      console.log('hasFocus')
       // Clear the search box when component loses focus
       window.removeEventListener('keydown', this.preventDefaultCursorKeys)
       if (hasFocus) {
@@ -195,6 +197,16 @@ export default {
     preventDefaultCursorKeys: function (event) {
       if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
         event.preventDefault()
+      }
+    },
+    /**
+     * This callback is only active when the text search field has focus.
+     * It selects the first item in the search list. Auto select of
+     * the last shown item was buggy.
+     */
+    selectFirstItemOnReturn: function (event) {
+      if (event.key === 'Enter') {
+        this.$refs.resultList.children[0].focus()
       }
     }
   }
