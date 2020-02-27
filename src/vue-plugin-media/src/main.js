@@ -50,6 +50,7 @@ export let shortcuts
 const storeModule = {
   namespaced: true,
   state: {
+    multiPartAssets: {},
     mediaFiles: {},
     playList: [],
     playListNoCurrent: null,
@@ -1593,6 +1594,62 @@ export class MediaFile {
 }
 
 /**
+ * A multi part asset can be restricted in different ways. This class holds the
+ * data of the restriction (for example all parts, only a single part, a
+ * subset of parts)
+ */
+class MultiPartAsset {
+  /**
+   *
+   * @param {*} mediaFile
+   */
+  constructor (mediaFile) {
+
+    this.mediaFile = mediaFile
+    /**
+     * A multi part media asset can be restricted to only one element by
+     * a fragment in the URI (for example `id:Score#2`).
+     *
+     * @type {String}
+     * @private
+     */
+    this.restrictedTo = null
+    if (this.uriRaw.indexOf('#') > -1) {
+      let segments = this.uriRaw.split('#')
+      this.restrictedTo = parseInt(segments[1])
+    }
+  }
+
+  /**
+   * The actual multi part asset count. If the multi part asset is restricted
+   * the method returns 1, else the count of all the parts.
+   *
+   * @returns {Number}
+   */
+  get multiPartCountActual () {
+    if (this.restrictedTo || !this.multiPartCount) return 1
+    return this.multiPartCount
+  }
+
+  /**
+   * Retrieve the HTTP URL of the multi part asset by the part number.
+   *
+   * @param {Number} The part number starts with 1.
+   *
+   * @returns {String}
+   */
+  getMultiPartHttpUrlByNo (no) {
+    if (!this.multiPartCount) return this.httpUrl
+    if (this.mediaFile.httpUrl) {
+      if (this.restrictedTo) {
+        no = this.restrictedTo
+      }
+      return formatMultiPartAssetFileName(this.mediaFile.httpUrl, no)
+    }
+  }
+}
+
+/**
  * @param {MediaFile} mediaFile
  */
 async function createMediaElement (mediaFile) {
@@ -1826,7 +1883,6 @@ class Resolver {
    */
   async resolveSingle_ (mediaFileSpec) {
     let mediaFile
-
     // Remote uri to resolve
     if (typeof mediaFileSpec === 'string') {
       mediaFile = new MediaFile({ uri: mediaFileSpec })
@@ -2141,7 +2197,6 @@ class Media {
   addShortcutForSamples_ () {
     // We have to loop through all samples to get the latest shortcut number.
     const samples = store.getters['media/samples']
-
     let firstTriggerKeyByType = (type) => {
       if (type === 'audio') {
         return 'a'
