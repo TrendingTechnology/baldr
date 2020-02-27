@@ -32,7 +32,7 @@
           <td>{{ server.version }}</td>
           <td>{{ server.count.assets }}</td>
           <td>{{ server.count.presentations }}</td>
-          <td>{{ toLocaleDateTimeString(server.update) }}</td>
+          <td>{{ formatToLocalDateTime(server.update) }}</td>
           <td>{{ server.commitId.substring(0, 8) }}</td>
           <td
             @click="updateMediaServer(server.name, $event)"
@@ -54,7 +54,7 @@ import { getDefaultRestEndpoints, HttpRequestNg } from '@bldr/http-request'
 const restEndpoints = getDefaultRestEndpoints()
 const httpRequestNg = new HttpRequestNg(restEndpoints, '/api/media')
 
-import { toLocaleDateTimeString } from '@bldr/core-browser'
+import { formatToLocalDateTime } from '@bldr/core-browser'
 import { createNamespacedHelpers } from 'vuex'
 const { mapGetters } = createNamespacedHelpers('media')
 
@@ -65,7 +65,7 @@ export default {
     this.$store.dispatch('media/setRestApiServers')
   },
   methods: {
-    toLocaleDateTimeString,
+    formatToLocalDateTime,
     updateMediaServer (endpointName, event) {
       event.target.classList.add('baldr-icon-spin')
       httpRequestNg.request('mgmt/update', endpointName).then((result) => {

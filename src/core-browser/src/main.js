@@ -22,11 +22,32 @@ export function sortObjectsByProperty (property) {
 }
 
 /**
+ * Format a date specification string into a local date string, for example
+ * `28. August 1749`
  *
- * @param {Number} timeStampMsec
+ * @param {String} dateSpec - A valid input for the `Date()` class. If the
+ *   input is invalid the raw `dateSpec` is returned.
+ *
  * @returns {String}
  */
-export function toLocaleDateTimeString (timeStampMsec) {
+export function formatToLocalDate (dateSpec) {
+  const date = new Date(dateSpec)
+  // Invalid date
+  if (isNaN(date.getDay())) return dateSpec
+  const months = [
+    'Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'
+  ]
+  return `${date.getDay()}. ${months[date.getMonth()]} ${date.getFullYear()}`
+}
+
+/**
+ * Format a timestamp into a string like this example: `Mo 17.2.2020 07:57:53`
+ *
+ * @param {Number} timeStampMsec - The timestamp in milliseconds.
+ *
+ * @returns {String}
+ */
+export function formatToLocalDateTime (timeStampMsec) {
   const date = new Date(Number(timeStampMsec))
   const dayNumber = date.getDay()
   let dayString

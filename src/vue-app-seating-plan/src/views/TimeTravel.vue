@@ -9,7 +9,7 @@
         >
           <td>
             <a href="#" @click.prevent="importFromExternalByTime(timeStampMsec)">
-              {{ toLocaleDateTimeString(timeStampMsec) }}
+              {{ formatToLocalDateTime(timeStampMsec) }}
             </a>
           </td>
           <td>
@@ -31,7 +31,7 @@
         >
           <td>
             <a href="#" @click.prevent="importFromLocalByTime(timeStampMsec)">
-              {{ toLocaleDateTimeString(timeStampMsec) }}
+              {{ formatToLocalDateTime(timeStampMsec) }}
             </a>
           </td>
           <td>
@@ -48,7 +48,7 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import { toLocaleDateTimeString } from '../lib.js'
+import { formatToLocalDateTime } from '../lib.js'
 
 export default {
   name: 'TimeTravel',
@@ -67,7 +67,7 @@ export default {
       'importFromExternalByTime',
       'importFromLocalByTime'
     ]),
-    toLocaleDateTimeString
+    formatToLocalDateTime
   }
 }
 </script>

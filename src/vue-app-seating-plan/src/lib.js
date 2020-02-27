@@ -1,4 +1,4 @@
-export function toLocaleDateTimeString (timeStampMsec) {
+export function formatToLocalDateTime (timeStampMsec) {
   const date = new Date(Number(timeStampMsec))
   const dayNumber = date.getDay()
   let dayString

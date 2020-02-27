@@ -1,7 +1,7 @@
 // eslint-disable-next-line
 /* globals localStorage config */
 
-import { toLocaleDateTimeString } from '../../lib.js'
+import { formatToLocalDateTime } from '../../lib.js'
 import { getDefaultServers, HttpRequest } from '@bldr/http-request'
 
 const defaultServers = getDefaultServers()
@@ -58,7 +58,7 @@ const getters = {
   },
   stateDateCurrent: (state) => {
     if (state.timeStampMsec) {
-      return toLocaleDateTimeString(state.timeStampMsec)
+      return formatToLocalDateTime(state.timeStampMsec)
     }
     return ''
   },

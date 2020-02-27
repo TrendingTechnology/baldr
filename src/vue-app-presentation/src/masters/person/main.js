@@ -1,5 +1,5 @@
 import { GrabFromObjects } from '@/lib.js'
-import { formatWikipediaUrl, formatWikidataUrl } from '@bldr/core-browser'
+import { formatWikipediaUrl, formatWikidataUrl, formatToLocalDate } from '@bldr/core-browser'
 
 export default {
   title: 'Porträt',
@@ -60,8 +60,8 @@ export default {
     const result = grab.multipleProperties(
       ['name', 'birth', 'death', 'shortBiography', 'wikipedia', 'wikidata']
     )
-    if (result.birth) result.birth = `* ${result.birth}`
-    if (result.death) result.death = `† ${result.death}`
+    if (result.birth) result.birth = `* ${formatToLocalDate(result.birth)}`
+    if (result.death) result.death = `† ${formatToLocalDate(result.death)}`
     if (result.shortBiography) result.shortBiography = `… ${result.shortBiography}`
     if (result.wikipedia) {
       result.wikipediaHttpUrl = formatWikipediaUrl(result.wikipedia)
