@@ -149,7 +149,6 @@ export default {
   enterStep ({ oldStepNo, newStepNo }) {
     const stepNo = newStepNo
     if (this.stepWords || this.stepSentences) {
-      console.log(stepNo)
       this.domSteps.displayByNo({
         oldStepNo,
         stepNo
