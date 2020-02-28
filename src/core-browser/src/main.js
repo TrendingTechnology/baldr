@@ -328,3 +328,54 @@ export class AssetTypes {
     return false
   }
 }
+
+/**
+ *
+ * - `1`
+ * - `1,3,5`
+ * - `1-3,5-7`
+ * - `-7`
+ * - `7-`
+ *
+ * @param {Array} elements
+ * @param {String} subsetSelector
+ */
+export function selectSubset (elements, subsetSelector) {
+  const subset = []
+  // 1, 3, 5 -> 1,3,5
+  subsetSelector = subsetSelector.replace(/\s*/g, '')
+  // 1-3,5-7
+  const ranges = subsetSelector.split(',')
+
+  for (let range of ranges) {
+    // -7 -> 1-7
+    if (range.match(/^-/)) {
+      range = `1${range}`
+    }
+
+    // 7- -> 7-23
+    if (range.match(/-$/)) {
+      range = `${range}${elements.length}`
+    }
+
+    range = range.split('-')
+    // 1
+    if (range.length === 1) {
+      const stepNo = range[0]
+      subset[stepNo] = elements[stepNo - 2]
+    // 1-3
+    } else if (range.length === 2) {
+      const beginNo = parseInt(range[0])
+      const endNo = parseInt(range[1])
+      for (let i = beginNo; i <= endNo; i++) {
+        if (!subset.includes(elements[i])) {
+          subset.push[elements[i]]
+        }
+      }
+    }
+  }
+
+  // Sort the steps by the step number.
+  subset.sort((a, b) => a - b) // For ascending sort
+  return subset
+}

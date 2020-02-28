@@ -7,7 +7,7 @@
 /* globals config document Audio Image File */
 
 import { getDefaultServers, HttpRequest, getDefaultRestEndpoints, HttpRequestNg } from '@bldr/http-request'
-import { formatMultiPartAssetFileName, AssetTypes } from '@bldr/core-browser'
+import { formatMultiPartAssetFileName, AssetTypes, selectSubset } from '@bldr/core-browser'
 
 import Vue from 'vue'
 import DynamicSelect from '@bldr/vue-plugin-dynamic-select'
@@ -1367,7 +1367,7 @@ export class WrappedSamples {
  */
 export class MediaFile {
   /**
-   * @param {object} mediaData - Mandatory properties are: `uri`
+   * @param {object} mediaData - A mandatory property is: `uri`
    */
   constructor (mediaData) {
     for (const property in mediaData) {
@@ -1384,19 +1384,6 @@ export class MediaFile {
      * @type {String}
      */
     this.uriRaw = this.uri
-
-    /**
-     * A multi part media asset can be restricted to only one element by
-     * a fragment in the URI (for example `id:Score#2`).
-     *
-     * @type {String}
-     * @private
-     */
-    this.restrictedTo = null
-    if (this.uriRaw.indexOf('#') > -1) {
-      let segments = this.uriRaw.split('#')
-      this.restrictedTo = parseInt(segments[1])
-    }
 
     /**
      * Uniform Resource Identifier, for example  `id:Haydn`,
@@ -1469,34 +1456,6 @@ export class MediaFile {
   addProperties (properties) {
     for (const property in properties) {
       this[property] = properties[property]
-    }
-  }
-
-  /**
-   * The actual multi part asset count. If the multi part asset is restricted
-   * the method returns 1, else the count of all the parts.
-   *
-   * @returns {Number}
-   */
-  get multiPartCountActual () {
-    if (this.restrictedTo || !this.multiPartCount) return 1
-    return this.multiPartCount
-  }
-
-  /**
-   * Retrieve the HTTP URL of the multi part asset by the part number.
-   *
-   * @param {Number} The part number starts with 1.
-   *
-   * @returns {String}
-   */
-  getMultiPartHttpUrlByNo (no) {
-    if (!this.multiPartCount) return this.httpUrl
-    if (this.httpUrl) {
-      if (this.restrictedTo) {
-        no = this.restrictedTo
-      }
-      return formatMultiPartAssetFileName(this.httpUrl, no)
     }
   }
 
@@ -1594,30 +1553,18 @@ export class MediaFile {
 }
 
 /**
- * A multi part asset can be restricted in different ways. This class holds the
- * data of the restriction (for example all parts, only a single part, a
- * subset of parts)
+ * If a media file has a property with the name `multiPartCount` set, it is a
+ * multi part asset.
+ *
+ *  * @property {Number} multiPartCount - The of count of parts if the media file
+ *   is a multi part asset.
  */
-class MultiPartAsset {
+class MultiPartAsset extends MediaFile {
   /**
-   *
-   * @param {*} mediaFile
+   * @param {object} mediaData - A mandatory property is: `uri`
    */
-  constructor (mediaFile) {
-
-    this.mediaFile = mediaFile
-    /**
-     * A multi part media asset can be restricted to only one element by
-     * a fragment in the URI (for example `id:Score#2`).
-     *
-     * @type {String}
-     * @private
-     */
-    this.restrictedTo = null
-    if (this.uriRaw.indexOf('#') > -1) {
-      let segments = this.uriRaw.split('#')
-      this.restrictedTo = parseInt(segments[1])
-    }
+  constructor (mediaData) {
+    super(mediaData)
   }
 
   /**
@@ -1627,7 +1574,6 @@ class MultiPartAsset {
    * @returns {Number}
    */
   get multiPartCountActual () {
-    if (this.restrictedTo || !this.multiPartCount) return 1
     return this.multiPartCount
   }
 
@@ -1640,12 +1586,49 @@ class MultiPartAsset {
    */
   getMultiPartHttpUrlByNo (no) {
     if (!this.multiPartCount) return this.httpUrl
-    if (this.mediaFile.httpUrl) {
-      if (this.restrictedTo) {
-        no = this.restrictedTo
-      }
-      return formatMultiPartAssetFileName(this.mediaFile.httpUrl, no)
+    if (this.httpUrl) {
+      return formatMultiPartAssetFileName(this.httpUrl, no)
     }
+  }
+}
+
+/**
+ * A multi part asset can be restricted in different ways. This class holds the
+ * data of the restriction (for example all parts, only a single part, a
+ * subset of parts). A multi part asset can be restricted to one part only by a
+ * URI fragment (for example `#2`). The URI `id:Score#2` resolves always to the
+ * HTTP URL `http:/example/media/Score_no02.png`.
+ */
+class MultiPartAssetSelection {
+  /**
+   * @param {module:@bldr/vue-app-media~MultiPartAsset} multiPartAsset
+   * @param {selectionSpec}
+   */
+  constructor (multiPartAsset, selectionSpec) {
+    /**
+     * @type {module:@bldr/vue-app-media~MultiPartAsset}
+     */
+    this.asset = multiPartAsset
+    const allPartNos = []
+    for (let i = 1; i <= this.asset.multiPartCount; i++) {
+      allPartNos.push(i)
+    }
+
+    /**
+     * @type {Array}
+     */
+    this.partNos = selectSubset(allPartNos, selectionSpec)
+  }
+
+  /**
+   * Retrieve the HTTP URL of the multi part asset by the part number.
+   *
+   * @param {Number} The part number starts with 1.
+   *
+   * @returns {String}
+   */
+  getMultiPartHttpUrlByNo (no) {
+    return this.asset.getMultiPartHttpUrlByNo(this.partNos[no - 1])
   }
 }
 
@@ -1737,13 +1720,21 @@ class Resolver {
 
   constructor () {
     /**
-     * Asset with linked assets have to be cached. For example many
+     * Assets with linked assets have to be cached. For example: many
      * audio assets can have the same cover ID.
      *
      * @type {Object}
      * @private
      */
     this.cache_ = {}
+
+    /**
+     * Some URIs are suffixed with a multi part asset selection (#3-5). The
+     * raw URIs are here stored, to be able to create `multiPartAssetSelections()`
+     *
+     * @type {Array}
+     */
+    this.multiPartAssetSelectionUris_ = []
 
     /**
      * Store for linked URIs (URIs inside media assets). They are collected
@@ -1894,6 +1885,12 @@ class Resolver {
         // Resolve HTTP URL
       } else if (mediaFile.uriScheme === 'id' || mediaFile.uriScheme === 'filename') {
         const response = await this.queryMediaServer_(mediaFile.uriScheme, mediaFile.uriAuthority)
+        if (response.data.multiPartCount) {
+          mediaFile = new MultiPartAsset({ uri: mediaFile.uriRaw })
+          if (!this.multiPartAssetSelectionUris_.includes(mediaFile.uriRaw)) {
+            this.multiPartAssetSelectionUris_.push(mediaFile.uriRaw)
+          }
+        }
         extractMediaUrisRecursive(response.data, this.linkedUris)
         mediaFile.addProperties(response.data)
         mediaFile.httpUrl = await this.resolveHttpUrl_(mediaFile)
