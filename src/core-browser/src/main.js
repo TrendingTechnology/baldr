@@ -341,6 +341,8 @@ export class AssetTypes {
  * @param {String} subsetSelector
  */
 export function selectSubset (elements, subsetSelector) {
+  console.log(elements)
+  console.log(subsetSelector)
   const subset = []
   // 1, 3, 5 -> 1,3,5
   subsetSelector = subsetSelector.replace(/\s*/g, '')
@@ -368,8 +370,8 @@ export function selectSubset (elements, subsetSelector) {
       const beginNo = parseInt(range[0])
       const endNo = parseInt(range[1])
       for (let i = beginNo; i <= endNo; i++) {
-        if (!subset.includes(elements[i])) {
-          subset.push[elements[i]]
+        if (!subset.includes(elements[i-1])) {
+          subset.push[elements[i-1]]
         }
       }
     }
@@ -377,5 +379,6 @@ export function selectSubset (elements, subsetSelector) {
 
   // Sort the steps by the step number.
   subset.sort((a, b) => a - b) // For ascending sort
+  console.log(subset)
   return subset
 }

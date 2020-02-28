@@ -50,7 +50,7 @@ export let shortcuts
 const storeModule = {
   namespaced: true,
   state: {
-    multiPartAssets: {},
+    multiPartSelections: {},
     mediaFiles: {},
     playList: [],
     playListNoCurrent: null,
@@ -95,6 +95,9 @@ const storeModule = {
     },
     mediaFilesByType: state => type => {
       return state.assetTypes[type]
+    },
+    multiPartSelectionByUri: state => uri => {
+      return state.multiPartSelections[uri]
     },
     playList: state => {
       return state.playList
@@ -230,6 +233,9 @@ const storeModule = {
     },
     removeSample (state, sample) {
       Vue.delete(state.samples, sample.uri)
+    },
+    addMultiPartSelection (state, selection) {
+      Vue.set(state.multiPartSelections, selection.uri, selection)
     },
     removeSampleFromPlayList (state, sample) {
       while (state.playList.indexOf(sample.uri) > -1) {
@@ -1550,6 +1556,15 @@ export class MediaFile {
     }
     return properties
   }
+
+  /**
+   * Dummy method. Has to be overwritten by the subclass `MultiPartAsset()`.
+   * Returns `this.httpUrl`.
+   * @returns {String}
+   */
+  getMultiPartHttpUrlByNo () {
+    return this.httpUrl
+  }
 }
 
 /**
@@ -1599,12 +1614,14 @@ class MultiPartAsset extends MediaFile {
  * URI fragment (for example `#2`). The URI `id:Score#2` resolves always to the
  * HTTP URL `http:/example/media/Score_no02.png`.
  */
-class MultiPartAssetSelection {
+class MultiPartSelection {
   /**
    * @param {module:@bldr/vue-app-media~MultiPartAsset} multiPartAsset
-   * @param {selectionSpec}
+   * @param {String} selectionSpec - Can be a uri, everthing after `#`, for
+   * example `id:Song-2#2-5` -> `2-5`
    */
   constructor (multiPartAsset, selectionSpec) {
+    selectionSpec = selectionSpec.replace(/^.*#/, '')
     /**
      * @type {module:@bldr/vue-app-media~MultiPartAsset}
      */
@@ -1614,10 +1631,23 @@ class MultiPartAssetSelection {
       allPartNos.push(i)
     }
 
+    this.uri = `${this.asset.uri}#${selectionSpec}`
+
     /**
      * @type {Array}
      */
     this.partNos = selectSubset(allPartNos, selectionSpec)
+  }
+
+  get partCount () {
+    return this.partNos.length
+  }
+
+  /**
+   * Used for the preview to fake the this class is a normal asset.
+   */
+  get httpUrl () {
+    return this.getMultiPartHttpUrlByNo(1)
   }
 
   /**
@@ -1730,11 +1760,11 @@ class Resolver {
 
     /**
      * Some URIs are suffixed with a multi part asset selection (#3-5). The
-     * raw URIs are here stored, to be able to create `multiPartAssetSelections()`
+     * raw URIs are here stored, to be able to create `multiPartSelections()`
      *
      * @type {Array}
      */
-    this.multiPartAssetSelectionUris_ = []
+    this.multiPartUris = []
 
     /**
      * Store for linked URIs (URIs inside media assets). They are collected
@@ -1887,8 +1917,8 @@ class Resolver {
         const response = await this.queryMediaServer_(mediaFile.uriScheme, mediaFile.uriAuthority)
         if (response.data.multiPartCount) {
           mediaFile = new MultiPartAsset({ uri: mediaFile.uriRaw })
-          if (!this.multiPartAssetSelectionUris_.includes(mediaFile.uriRaw)) {
-            this.multiPartAssetSelectionUris_.push(mediaFile.uriRaw)
+          if (!this.multiPartUris.includes(mediaFile.uriRaw)) {
+            this.multiPartUris.push(mediaFile.uriRaw)
           }
         }
         extractMediaUrisRecursive(response.data, this.linkedUris)
@@ -2127,6 +2157,11 @@ class Media {
       }
       store.dispatch('media/addMediaFile', mediaFile)
       output[mediaFile.uri] = mediaFile
+    }
+    for (const uri of this.resolver.multiPartUris) {
+      const asset = store.getters['media/mediaFileByUri'](uri)
+      const multiPartSelection = new MultiPartSelection(asset, uri)
+      store.commit('media/addMultiPartSelection', multiPartSelection)
     }
     this.addShortcutForMediaFiles_()
     this.setPreviewImagesFromCoverProp_()

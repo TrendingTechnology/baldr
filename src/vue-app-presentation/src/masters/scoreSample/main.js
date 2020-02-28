@@ -49,7 +49,14 @@ export default {
     if (audio) {
       audioSample = audio
     }
-    const scoreMediaFile = this.$store.getters['media/mediaFileByUri'](props.score)
+    let scoreMediaFile
+    const muliPartSelection = this.$store.getters['media/multiPartSelectionByUri'](props.score)
+    if (muliPartSelection) {
+      scoreMediaFile = muliPartSelection
+    } else {
+      scoreMediaFile = this.$store.getters['media/mediaFileByUri'](props.score)
+    }
+
     return {
       heading: props.heading,
       scoreMediaFile,
@@ -66,7 +73,9 @@ export default {
     return propsPreview
   },
   calculateStepCount (props) {
-    const score = this.$store.getters['media/mediaFileByUri'](props.score)
-    return score.multiPartCountActual
+    const muliPartSelection = this.$store.getters['media/multiPartSelectionByUri'](props.score)
+    if (muliPartSelection) {
+      return muliPartSelection.partCount
+    }
   }
 }
