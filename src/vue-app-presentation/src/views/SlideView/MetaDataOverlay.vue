@@ -15,6 +15,8 @@
       class="transparent-bg"
       v-html="metaData.description"
     />
+
+    <pre v-if="slide.yamlMarkup"><code v-html="slide.yamlMarkup"/></pre>
   </div>
 </template>
 
@@ -22,8 +24,11 @@
 export default {
   name: 'MetaDataOverlay',
   computed: {
+    slide () {
+      return this.$store.getters['presentation/slideCurrent']
+    },
     metaData: function () {
-      return this.$store.getters['presentation/slideCurrent'].metaData
+      return this.slide.metaData
     },
     isVisible: function () {
       return this.$store.getters['presentation/showMetaDataOverlay']

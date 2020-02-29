@@ -107,6 +107,7 @@ export default {
   name: 'DocumentationOverview',
   methods: {
     openExample (yamlString) {
+      this.$store.commit('presentation/showMetaDataOverlay', true)
       openPresentationByRawYaml(yamlString)
     }
   },

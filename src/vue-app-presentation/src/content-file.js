@@ -342,9 +342,16 @@ class AudioOverlay {
  */
 class Slide {
   /**
-   *
+   * @param {Object} rawSlideData - The raw slide data from the YAML file.
    */
   constructor (rawSlideData) {
+    /**
+     * A copy of the raw slide data.
+     *
+     * @type {Object}
+     */
+    this.rawData = Object.assign({}, rawSlideData)
+
     const rawSlideObject = new RawSlideObject(rawSlideData)
     /**
      * The slide number
@@ -476,6 +483,15 @@ class Slide {
     } else {
       return 'default'
     }
+  }
+
+  /**
+   * The property `rawData` converted back into yaml.
+   *
+   * @type {String}
+   */
+  get yamlMarkup () {
+    return yaml.safeDump(this.rawData, { noArrayIndent: true, lineWidth: 72 })
   }
 }
 
