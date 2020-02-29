@@ -104,7 +104,6 @@ export default {
   },
   watch: {
     hasFocus: function (hasFocus) {
-      console.log('hasFocus')
       // Clear the search box when component loses focus
       window.removeEventListener('keydown', this.preventDefaultCursorKeys)
       if (hasFocus) {

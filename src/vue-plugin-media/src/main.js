@@ -1621,22 +1621,43 @@ class MultiPartSelection {
    * example `id:Song-2#2-5` -> `2-5`
    */
   constructor (multiPartAsset, selectionSpec) {
-    selectionSpec = selectionSpec.replace(/^.*#/, '')
+    if (selectionSpec.indexOf('#') === -1 || !selectionSpec) {
+      selectionSpec = ''
+    } else if (typeof selectionSpec === 'string') {
+      selectionSpec = selectionSpec.replace(/^.*#/, '')
+    }
+
+    /**
+     * @type {String}
+     */
+    this.selectionSpec = selectionSpec
+
     /**
      * @type {module:@bldr/vue-app-media~MultiPartAsset}
      */
     this.asset = multiPartAsset
-    const allPartNos = []
-    for (let i = 1; i <= this.asset.multiPartCount; i++) {
-      allPartNos.push(i)
-    }
 
-    this.uri = `${this.asset.uri}#${selectionSpec}`
+    /**
+     * The URI of the media asset suffixed with the selection specification.
+     * `id:Beethoven-9th#2,3,4,6-8`. A URI without a selection specification
+     * means all parts.
+     *
+     * @type {String}
+     */
+    let uri
+    if (!this.selectionSpec) {
+      uri = this.asset.uri
+    } else {
+      uri = `${this.asset.uri}#${selectionSpec}`
+    }
+    this.uri = uri
 
     /**
      * @type {Array}
      */
-    this.partNos = selectSubset(allPartNos, selectionSpec)
+    this.partNos = selectSubset(selectionSpec,
+      { elementsCount: this.asset.multiPartCount, firstElementNo: 1 }
+    )
   }
 
   get partCount () {

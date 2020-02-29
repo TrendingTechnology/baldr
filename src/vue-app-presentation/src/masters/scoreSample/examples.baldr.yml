@@ -6,7 +6,7 @@ slides:
 
 - title: Long form
   score_sample:
-    score: id:Marmotte_NB_La-Marmotte
+    score: id:Dukas-Zauberlehrling_NB_Besen-Thema
 
 - title: With audio
   score_sample:
@@ -18,11 +18,20 @@ slides:
     score: 'id:Schuetz-Freue_NB_Freue-IMSLP-Systeme'
     audio: 'id:Schuetz-Freue_HB_Freue-dich'
 
-- title: Multi part score file restricted to no 1
+- title: 'Multi part score file (selection #7-9,10-11)'
+  score_sample: id:Borodin-Steppenskizzen_PA_Partitur#7-9,10-11
+
+- title: 'Multi part score file (selection #1)'
   score_sample: 'id:Schuetz-Freue_NB_Freue-IMSLP-Systeme#1'
 
-- title: Multi part score file restricted to no 2
+- title: 'Multi part score file (selection #10-)'
+  score_sample: id:Borodin-Steppenskizzen_PA_Partitur#10-
+
+- title: 'Multi part score file (selection #2-3)'
   score_sample: 'id:Schuetz-Freue_NB_Freue-IMSLP-Systeme#2-3'
 
-- title: Multi part score file restricted to no 3
+- title: 'Multi part score file (selection #1,3,5,7)'
+  score_sample: id:Borodin-Steppenskizzen_PA_Partitur#1,3,5,7
+
+- title: 'Multi part score file (selection #-4)'
   score_sample: 'id:Schuetz-Freue_NB_Freue-IMSLP-Systeme#-4'

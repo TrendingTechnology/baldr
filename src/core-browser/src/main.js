@@ -188,6 +188,9 @@ export function convertPropertiesToCamelCase (object) {
  * @returns {String}
  */
 export function formatMultiPartAssetFileName (firstFileName, no) {
+  if (!Number.isInteger(no)) {
+    throw new Error(`${firstFileName}: The specifed number “${no}” is no integer.`)
+  }
   let suffix
   if (no === 1) {
     return firstFileName
@@ -330,20 +333,40 @@ export class AssetTypes {
 }
 
 /**
- *
- * - `1`
+ * - `` (emtpy string or a falsy value): All elements
+ * - `1`: The first element
  * - `1,3,5`
  * - `1-3,5-7`
  * - `-7`
  * - `7-`
  *
- * @param {Array} elements
- * @param {String} subsetSelector
+ * @param {String} subsetSelector - See above.
+ * @param {object} options
+ * @returns {Array}
  */
-export function selectSubset (elements, subsetSelector) {
-  console.log(elements)
-  console.log(subsetSelector)
+export function selectSubset (subsetSelector, { sort, elements, elementsCount, firstElementNo }) {
   const subset = []
+
+  function addElement (element) {
+    if (!subset.includes(element)) {
+      subset.push(element)
+    }
+  }
+  if (!elements && elementsCount)
+  elements = []
+  let firstNo
+  if  (firstElementNo) {
+    firstNo = firstElementNo
+  } else {
+    firstNo = 0
+  }
+  let endNo = firstNo + elementsCount
+  for (let i = firstNo; i < endNo; i++) {
+    elements.push(i)
+  }
+
+  if (!subsetSelector) return elements
+
   // 1, 3, 5 -> 1,3,5
   subsetSelector = subsetSelector.replace(/\s*/g, '')
   // 1-3,5-7
@@ -363,22 +386,26 @@ export function selectSubset (elements, subsetSelector) {
     range = range.split('-')
     // 1
     if (range.length === 1) {
-      const stepNo = range[0]
-      subset[stepNo] = elements[stepNo - 2]
+      const i = range[0]
+      addElement(elements[i - 1])
     // 1-3
     } else if (range.length === 2) {
       const beginNo = parseInt(range[0])
       const endNo = parseInt(range[1])
+      if (endNo <= beginNo) {
+        throw new Error(`Invalid range: ${beginNo}-${endNo}`)
+      }
       for (let i = beginNo; i <= endNo; i++) {
-        if (!subset.includes(elements[i-1])) {
-          subset.push[elements[i-1]]
-        }
+        addElement(elements[i - 1])
       }
     }
   }
 
-  // Sort the steps by the step number.
-  subset.sort((a, b) => a - b) // For ascending sort
-  console.log(subset)
+  if (sort === 'numeric') {
+    subset.sort((a, b) => a - b) // For ascending sort
+  } else if (sort) {
+    subset.sort()
+  }
+
   return subset
 }
