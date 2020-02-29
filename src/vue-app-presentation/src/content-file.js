@@ -8,7 +8,7 @@
 
 // import Vue from 'vue'
 import yaml from 'js-yaml'
-import { shortenText, convertPropertiesToCamelCase } from '@bldr/core-browser'
+import { shortenText, convertPropertiesToCamelCase, escapeHtml, deepCopy } from '@bldr/core-browser'
 import { WrappedSamples } from '@bldr/vue-plugin-media'
 import { markupToHtml } from '@/lib'
 import { masters } from '@/masters.js'
@@ -344,13 +344,13 @@ class Slide {
   /**
    * @param {Object} rawSlideData - The raw slide data from the YAML file.
    */
-  constructor (rawSlideData) {
+  constructor (rawSlideData, unprocessedRawSlideData) {
     /**
-     * A copy of the raw slide data.
+     * A deep copy of the raw slide data.
      *
      * @type {Object}
      */
-    this.rawData = Object.assign({}, rawSlideData)
+    this.rawData = unprocessedRawSlideData
 
     const rawSlideObject = new RawSlideObject(rawSlideData)
     /**
@@ -491,27 +491,30 @@ class Slide {
    * @type {String}
    */
   get yamlMarkup () {
-    return yaml.safeDump(this.rawData, { noArrayIndent: true, lineWidth: 72 })
+    const markup = yaml.safeDump(this.rawData, { noArrayIndent: true, lineWidth: 72 })
+    return escapeHtml(markup)
   }
 }
 
 /**
- * Parse the slide objects in a recursive fashion. Child slides can be
- * specified under the `slides` property.
+ * Parse the slide objects in a recursive fashion. Child slides can be specified
+ * under the `slides` property.
  *
  * @param {Array} slidesRaw - The raw slide array from the YAML presentation
  *  file, the slides property.
  * @param {Array} slidesFlat - A array which is filled with every slide object.
  * @param {Array} slidesTree - A array which is filled with only top level slide
  *   objects.
- * @param {Number} level - The level in the hierachial tree the slide lies in
- *   1: Main level, 2: First child level ...
+ * @param {Number} level - The level in the hierachial tree the slide lies in 1:
+ *   Main level, 2: First child level ...
  */
 function parseSlidesRecursive (slidesRaw, slidesFlat, slidesTree, level = 1) {
   for (const slideRaw of slidesRaw) {
     const childSlides = slideRaw.slides
     delete slideRaw.slides
-    const slide = new Slide(slideRaw)
+    const slideRawDeepCopy = deepCopy(slideRaw)
+    convertPropertiesToCamelCase(slideRaw)
+    const slide = new Slide(slideRaw, slideRawDeepCopy)
     slidesFlat.push(slide)
     slidesTree.push(slide)
     slide.no = slidesFlat.length
@@ -611,6 +614,26 @@ ${JSON.stringify(this.rawYamlObject_)}`
       )
     }
 
+    /**
+     * A flat list of slide objects. All child slides are included in this
+     * array.
+     *
+     * @type {Array}
+     */
+    this.slides = []
+
+    /**
+     * Only the top level slide objects are included in this array. Child slides
+     * can be accessed under the `slides` property.
+     *
+     * @type {Array}
+     */
+    this.slidesTree = []
+
+    // In this function call the `Slide()` objects are created.
+    parseSlidesRecursive(this.rawYamlObject_.slides, this.slides, this.slidesTree)
+
+    // This function is also called inside the function `parseSlidesRecursive()`
     convertPropertiesToCamelCase(this.rawYamlObject_)
 
     /**
@@ -633,22 +656,6 @@ ${JSON.stringify(this.rawYamlObject_)}`
      * @property {String} curriculum_url - URL of the curriculum web page.
      */
     this.meta = this.rawYamlObject_.meta
-
-    /**
-     * A flat list of slide objects. All child slides are included in this
-     * array.
-     *
-     * @type {Array}
-     */
-    this.slides = []
-
-    /**
-     * Only the top level slide objects are included in this array. Child slides
-     * can be accessed under the `slides` property.
-     */
-    this.slidesTree = []
-
-    parseSlidesRecursive(this.rawYamlObject_.slides, this.slides, this.slidesTree)
 
     // Resolve all media files.
     const mediaUris = []

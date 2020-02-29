@@ -113,9 +113,9 @@ export function shortenText (text, options = {}) {
  *
  * @see {@link https://vladimir-ivanov.net/camelcase-to-snake_case-and-vice-versa-with-javascript/}
  */
-export function camelToSnake(str) {
-  return str.replace(/[\w]([A-Z])/g, function(m) {
-    return m[0] + '_' + m[1];
+export function camelToSnake (str) {
+  return str.replace(/[\w]([A-Z])/g, function (m) {
+    return m[0] + '_' + m[1]
   }).toLowerCase()
 }
 
@@ -352,15 +352,14 @@ export function selectSubset (subsetSelector, { sort, elements, elementsCount, f
       subset.push(element)
     }
   }
-  if (!elements && elementsCount)
-  elements = []
+  if (!elements && elementsCount) { elements = [] }
   let firstNo
-  if  (firstElementNo) {
+  if (firstElementNo) {
     firstNo = firstElementNo
   } else {
     firstNo = 0
   }
-  let endNo = firstNo + elementsCount
+  const endNo = firstNo + elementsCount
   for (let i = firstNo; i < endNo; i++) {
     elements.push(i)
   }
@@ -408,4 +407,34 @@ export function selectSubset (subsetSelector, { sort, elements, elementsCount, f
   }
 
   return subset
+}
+
+/**
+ * @see {@link https://coderwall.com/p/ostduq/escape-html-with-javascript}
+ */
+export function escapeHtml (htmlString) {
+  // List of HTML entities for escaping.
+  const htmlEscapes = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#x27;',
+    '/': '&#x2F;'
+  }
+
+  // Regex containing the keys listed immediately above.
+  const htmlEscaper = /[&<>"'\/]/g
+
+  // Escape a string for HTML interpolation.
+  return ('' + htmlString).replace(htmlEscaper, function (match) {
+    return htmlEscapes[match]
+  })
+}
+
+/**
+ *
+ */
+export function deepCopy (data) {
+  return JSON.parse(JSON.stringify(data))
 }

@@ -274,5 +274,9 @@ $link-color: scale-color($gray, $lightness: -40%);
         color: $white;
       }
     }
+
+    code {
+      color: $black;
+    }
   }
 }
