@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Module: @bldr/vue-app-songbook</title>
+    <title>Class: MultiPartAsset</title>
     
     
     
@@ -3894,7 +3894,7 @@
 </div>
 
     <div class="main">
-        <h1 class="page-title" data-filename="module-@bldr_vue-app-songbook.html">Module: @bldr/vue-app-songbook</h1>
+        <h1 class="page-title" data-filename="module-@bldr_vue-plugin-media-MultiPartAsset.html">Class: MultiPartAsset</h1>
         
 
 
@@ -3903,8 +3903,15 @@
     
 <header>
     <div class="header content-size">
-        <h2>@bldr/vue-app-songbook
+        <h2><span class="ancestors"><a href="module-@bldr_vue-plugin-media.html">@bldr/vue-plugin-media</a>~</span>MultiPartAsset
         </h2>
+        
+            <div class="class-description"><p>If a media file has a property with the name <code>multiPartCount</code> set, it is a
+multi part asset.</p>
+<ul>
+<li>@property {Number} multiPartCount - The of count of parts if the media file
+is a multi part asset.</li>
+</ul></div>
         
     </div>
 </header>  
@@ -3916,10 +3923,81 @@
 
         
             
-                <div class="description"><p>Vue app of the baldr songbook.</p></div>
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="MultiPartAsset">
+            <a class="share-icon" href="#MultiPartAsset"><span class="glyphicon glyphicon-link"></span></a>
+            <span class="">
+                new MultiPartAsset
+            </span>
+            <span class="signature">(mediaData)</span>
             
+            
+            
+            
+        </h4>
+    
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>mediaData</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
 
             
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                <p>A mandatory property is: <code>uri</code></p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
 <dl class="details">
     
         
@@ -3942,8 +4020,20 @@
     
 </dl>
 
+    
+    
 
-            
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
         
         </div>
     
@@ -3961,7 +4051,213 @@
     
     
     
+        <h3 class="subsection-title">Members</h3>
+        
+        <dl class="list-members">
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="multiPartCountActual">
+            <a class="share-icon" href="#multiPartCountActual"><span class="glyphicon glyphicon-link"></span></a>
+            <span class="">multiPartCountActual</span>
+            
+            
+            
+            
+            
+        </h4>
+    </div>
     
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>The actual multi part asset count. If the multi part asset is restricted
+the method returns 1, else the count of all the parts.</p>
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        </dl>
+    
+    
+    
+        <h3 class="subsection-title">Methods</h3>
+        
+        <dl class="list-methods">
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="getMultiPartHttpUrlByNo">
+            <a class="share-icon" href="#getMultiPartHttpUrlByNo"><span class="glyphicon glyphicon-link"></span></a>
+            <span class="">
+                getMultiPartHttpUrlByNo
+            </span>
+            <span class="signature">(The)</span><span class="type-signature">String</span>
+            
+            
+            
+            
+        </h4>
+    
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Retrieve the HTTP URL of the multi part asset by the part number.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>The</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                <p>part number starts with 1.</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    
+        <tr>
+            
+            <td class="type">
+            
+                        String
+                        
+                    
+            </td>
+            <td class="description last"></td>
+        </tr>
+    
+    </tbody>
+</table>
+
+    
+    
+    
+</dd>
+
+        </dl>
     
     
     
