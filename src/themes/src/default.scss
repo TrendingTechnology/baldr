@@ -174,13 +174,13 @@ $link-color: scale-color($gray, $lightness: -40%);
 
   @each $name, $value in $colors {
     .#{$name}-light {
-      background-color: scale-color($value, $lightness: 30%) !important;
+      background-color: scale-color($value, $lightness: 15%) !important;
     }
   }
 
   @each $name, $value in $colors {
     .#{$name}-dark {
-      background-color: scale-color($value, $lightness: -30%) !important;
+      background-color: scale-color($value, $lightness: -15%) !important;
     }
   }
 
