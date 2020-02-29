@@ -85,6 +85,7 @@ const getters = {
     }
   },
   slidesCount: (state, getters) => {
+    if (!getters.slides) return
     return getters.slides.length
   },
   showBlank: (state) => {
@@ -183,6 +184,7 @@ const actions = {
   },
   setStepNext ({ dispatch, getters }) {
     const slideCurrent = getters.slideCurrent
+    if (!slideCurrent) return
     const count = slideCurrent.renderData.stepCount
     if (!count) return
     let stepNoCurrent
@@ -196,6 +198,7 @@ const actions = {
   },
   setStepPrevious ({ dispatch, getters }) {
     const slideCurrent = getters.slideCurrent
+    if (!slideCurrent) return
     const count = slideCurrent.renderData.stepCount
     if (!count) return
     let stepNoCurrent
