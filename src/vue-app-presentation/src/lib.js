@@ -8,6 +8,7 @@
 
 import marked from 'marked'
 import vue from '@/main.js'
+import { selectSubset } from '@bldr/core-browser'
 
 /**
  * Convert the specifed text to HTML. At the moment Markdown and HTML formats
@@ -265,7 +266,9 @@ export class DomSteps {
      */
     this.elements = null
     if (this.opts_.subsetSelectors) {
-      this.elements = this.selectElementsSubset_(this.opts_.subsetSelectors)
+      this.elements = selectSubset(this.opts_.subsetSelectors,
+        { elements: this.elementsAll, shiftSelector: -1 }
+      )
     } else {
       this.elements = this.elementsAll
     }
@@ -480,52 +483,6 @@ export class DomSteps {
 
   setStepCount (slide) {
     slide.renderData.stepCount = this.count
-  }
-
-  /**
-   * @param {String} subsetSelectors
-   *
-   * @private
-   */
-  selectElementsSubset_ (subsetSelectors) {
-    const subset = {}
-    // 2, 3, 5 -> 2,3,5
-    subsetSelectors = subsetSelectors.replace(/\s*/g, '')
-    // 2-3,5-7
-    const ranges = subsetSelectors.split(',')
-
-    for (let range of ranges) {
-      // -7 -> 2-7
-      if (range.match(/^-/)) {
-        range = `2${range}`
-      }
-
-      // 7- -> 7-23
-      if (range.match(/-$/)) {
-        range = `${range}${this.countAll}`
-      }
-
-      range = range.split('-')
-      if (range.length === 1) {
-        const stepNo = range[0]
-        subset[stepNo] = this.elementsAll[stepNo - 2]
-      } else if (range.length === 2) {
-        const beginNo = parseInt(range[0])
-        const endNo = parseInt(range[1])
-        for (let stepNo = beginNo; stepNo <= endNo; stepNo++) {
-          subset[stepNo] = this.elementsAll[stepNo - 2]
-        }
-      }
-    }
-
-    // Sort the steps by the step number.
-    const stepNos = Object.keys(subset)
-    stepNos.sort((a, b) => a - b) // For ascending sort
-    const result = []
-    for (const stepNo of stepNos) {
-      result.push(subset[stepNo])
-    }
-    return result
   }
 
   get count () {

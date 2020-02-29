@@ -333,35 +333,55 @@ export class AssetTypes {
 }
 
 /**
+ * Select a subset of elements by a string (`subsetSelector`). `1` is the first
+ * element of the `elements` array.
+ *
  * - `` (emtpy string or a falsy value): All elements
  * - `1`: The first element
- * - `1,3,5`
+ * - `1,3,5`:
  * - `1-3,5-7`
- * - `-7`
+ * - `-7`:
  * - `7-`
  *
  * @param {String} subsetSelector - See above.
  * @param {object} options
+ * @property {String|boolean} options.sort - `numeric`, or a truety value.
+ * @property {Array} options.elements - An array of elements to build a subset
+ *   from.
+ * @property {Number} options.elementsCount - If `elements` is undefined, an
+ *   array with integers is created und used as `elements`.
+ * @property {Number} options.firstElementNo
+ * @property {Number} options.shiftSelector - Shift all selector numbers by
+ *   this number: For example `-1`: `2-5` is internally treated as `1-4`
+ *
  * @returns {Array}
  */
-export function selectSubset (subsetSelector, { sort, elements, elementsCount, firstElementNo }) {
+export function selectSubset (subsetSelector, { sort, elements, elementsCount, firstElementNo, shiftSelector }) {
   const subset = []
 
+  if (!shiftSelector) shiftSelector = 0
+
   function addElement (element) {
+    // Because of the shiftSelector, the first element can be undefined.
+    if (!element) return
     if (!subset.includes(element)) {
       subset.push(element)
     }
   }
-  if (!elements && elementsCount) { elements = [] }
-  let firstNo
-  if (firstElementNo) {
-    firstNo = firstElementNo
-  } else {
-    firstNo = 0
-  }
-  const endNo = firstNo + elementsCount
-  for (let i = firstNo; i < endNo; i++) {
-    elements.push(i)
+
+  // Create elements
+  if (!elements && elementsCount) {
+    elements = []
+    let firstNo
+    if (firstElementNo) {
+      firstNo = firstElementNo
+    } else {
+      firstNo = 0
+    }
+    const endNo = firstNo + elementsCount
+    for (let i = firstNo; i < endNo; i++) {
+      elements.push(i)
+    }
   }
 
   if (!subsetSelector) return elements
@@ -374,28 +394,31 @@ export function selectSubset (subsetSelector, { sort, elements, elementsCount, f
   for (let range of ranges) {
     // -7 -> 1-7
     if (range.match(/^-/)) {
-      range = `1${range}`
+      const end = parseInt(range.replace('-', ''))
+      range = `1-${end}`
     }
 
     // 7- -> 7-23
     if (range.match(/-$/)) {
-      range = `${range}${elements.length}`
+      const begin = parseInt(range.replace('-', ''))
+      range = `${begin}-${elements.length}`
     }
 
     range = range.split('-')
     // 1
     if (range.length === 1) {
       const i = range[0]
-      addElement(elements[i - 1])
+      addElement(elements[i - 1 + shiftSelector])
     // 1-3
     } else if (range.length === 2) {
-      const beginNo = parseInt(range[0])
-      const endNo = parseInt(range[1])
+      const beginNo = parseInt(range[0]) + shiftSelector
+      const endNo = parseInt(range[1]) + shiftSelector
       if (endNo <= beginNo) {
         throw new Error(`Invalid range: ${beginNo}-${endNo}`)
       }
-      for (let i = beginNo; i <= endNo; i++) {
-        addElement(elements[i - 1])
+      for (let no = beginNo; no <= endNo; no++) {
+        const index = no - 1
+        addElement(elements[index])
       }
     }
   }
