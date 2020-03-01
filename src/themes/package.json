@@ -1,6 +1,6 @@
 {
   "name": "@bldr/themes",
-  "version": "0.1.3",
+  "version": "0.2.0",
   "description": "Some SCSS/CSS themes for the baldr project.",
   "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
   "bugs": {
@@ -22,13 +22,13 @@
   "main": "src/main.js",
   "style": "src/default.scss",
   "dependencies": {
+    "sass-export": "^1.0.6",
     "typeface-alegreya": "^0.0.69",
     "typeface-alegreya-sans": "^0.0.72",
     "typeface-alegreya-sans-sc": "^0.0.75",
     "typeface-alegreya-sc": "^0.0.72",
     "typeface-anonymous-pro": "0.0.72",
-    "typeface-kalam": "^0.0.72",
-    "sass-export": "^1.0.6"
+    "typeface-kalam": "^0.0.72"
   },
   "publishConfig": {
     "access": "public"
