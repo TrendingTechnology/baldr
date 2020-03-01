@@ -1,44 +1,10 @@
 <template>
-  <main>
-
-    <h1>As a link</h1>
-    <material-icon href="https://de.wikipedia.org/wiki/Cloud_Computing" size="8vw" name="cloud"/>
-
-    <h1>Outlines</h1>
-    <p>
-      <code>icon</code>:
-      <material-icon outline="icon" size="8vw" name="cloud"/>
-    </p>
-
-    <p>
-    <code>circle</code>:
-    <material-icon outline="circle" size="8vw" name="cloud"/>
-    </p>
-
-    <p>
-    <code>square</code>:
-    <material-icon outline="square" size="8vw" name="cloud"/>
-    </p>
-
-    <h1>Display</h1>
-
-    <p>
-    <code>normal</code>:
-    <material-icon display="normal" size="8vw" name="cloud"/>
-    </p>
-
-    <p>
-    <code>disabled</code>:
-    <material-icon display="disabled" size="8vw" name="cloud"/>
-    </p>
-
-    <p>
-    <code>show-on-hover</code>:
-    <material-icon display="show-on-hover" size="8vw" name="cloud"/>
-    </p>
+  <main class="vc_material_icon_view">
+    <h1>Icons</h1>
 
     <section class="available-icons">
-      <h1>Available icons</h1>
+      <!-- Available icons -->
+      <h2>Alle Icons</h2>
 
       <div class="columns">
         <p
@@ -52,7 +18,43 @@
       </div>
     </section>
 
-    <h1>Warning</h1>
+    <h2>As a link</h2>
+    <material-icon href="https://de.wikipedia.org/wiki/Cloud_Computing" :size="size" name="cloud"/>
+
+    <h2>Outlines</h2>
+    <p>
+      <code>icon</code>:
+      <material-icon outline="icon" :size="size" name="cloud"/>
+    </p>
+
+    <p>
+      <code>circle</code>:
+      <material-icon outline="circle" :size="size" name="cloud"/>
+    </p>
+
+    <p>
+      <code>square</code>:
+      <material-icon outline="square" :size="size" name="cloud"/>
+    </p>
+
+    <h2>Display</h2>
+
+    <p>
+      <code>normal</code>:
+      <material-icon display="normal" :size="size" name="cloud"/>
+    </p>
+
+    <p>
+      <code>disabled</code>:
+      <material-icon display="disabled" :size="size" name="cloud"/>
+    </p>
+
+    <p>
+      <code>show-on-hover</code>:
+      <material-icon display="show-on-hover" :size="size" name="cloud"/>
+    </p>
+
+    <h2>Warning</h2>
     <material-icon class="red" :size="size" name="xxx"/>
   </main>
 </template>
@@ -76,18 +78,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .available-icons {
-    .columns {
-      columns: 3;
-    }
+  .vc_material_icon_view {
+    .available-icons {
+      .columns {
+        columns: 3;
+      }
 
-    .description {
-      margin-left: 1vw;
-    }
+      .description {
+        margin-left: 1vw;
+      }
 
-    .baldr-icons {
-      transform: translate(0, 0.5vw)
+      .baldr-icons {
+        transform: translate(0, 0.5vw)
+      }
     }
   }
-
 </style>

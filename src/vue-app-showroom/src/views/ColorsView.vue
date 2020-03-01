@@ -1,13 +1,14 @@
 <template>
-  <main>
+  <main class="vc_colors_view">
+    <h1>Farben</h1>
     <div
       v-for="color in colors"
       :key="color"
     >
-      <div class="color-wrapper">
-        <div :class="`color ${color}-light`">.{{ color }}-light</div>
-        <div :class="`color ${color}`">.{{ color }}</div>
-        <div :class="`color ${color}-dark`">.{{ color }}-dark</div>
+      <div class="color-row">
+        <div :class="`color-box ${color}-light`">.{{ color }}-light</div>
+        <div :class="`color-box ${color}`">.{{ color }}</div>
+        <div :class="`color-box ${color}-dark`">.{{ color }}-dark</div>
       </div>
     </div>
   </main>
@@ -36,16 +37,29 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .color-wrapper {
-    height: 4vw;
-    display: flex;
-    margin: 1vw 0;
-  }
+  .vc_colors_view {
+    .color-row {
+      display: flex;
+      height: 2em;
+      margin: 1em 0;
+    }
 
-  .color {
-    width: 100%;
-    height: 100%;
-    text-align: center;
-    line-height: 4vw;
+    .color-box {
+      border: 1px solid $gray;
+      height: 100%;
+      line-height: 1.7em;
+      margin-left: 1em;
+      padding-left: 1em;
+      text-align: left;
+      width: 100%;
+    }
+
+    .color-box:first-child {
+      margin-left: 0;
+    }
+
+    .black-light, .black, .black-dark {
+      color: $white;
+    }
   }
 </style>

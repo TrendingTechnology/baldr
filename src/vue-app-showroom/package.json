@@ -9,7 +9,7 @@
   },
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "build": "vue-cli-service build; rsync -av --delete dist/ serverway:/var/www/baldr/showroom/",
     "lint": "vue-cli-service lint",
     "upload": "rsync -av --delete dist/ serverway:/var/www/baldr/showroom/"
   },
