@@ -1,7 +1,7 @@
 {
   "name": "@bldr/vue-plugin-components-collection",
   "description": "This package provides some SFC vue components to be used by various BALDR Vue apps.",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
@@ -9,7 +9,7 @@
   },
   "main": "src/main.js",
   "dependencies": {
-    "@bldr/vue-plugin-material-icon": "^0.2.0",
+    "@bldr/vue-plugin-material-icon": "^0.2.1",
     "core-js": "^3.6.4",
     "vue": "^2.6.11"
   },
