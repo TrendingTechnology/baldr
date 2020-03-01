@@ -27,7 +27,8 @@
     "node-fetch": "^2.6.0",
     "saslprep": "^1.0.3",
     "transliteration": "^2.1.8",
-    "wikibase-sdk": "^7.2.1"
+    "wikibase-sdk": "^7.2.1",
+    "color": "^3.1.2"
   },
   "bin": {
     "baldr_media-server-cli.js": "./src/cli.js"
