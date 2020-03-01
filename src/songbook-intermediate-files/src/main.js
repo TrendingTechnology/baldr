@@ -24,7 +24,7 @@ const yaml = require('js-yaml')
 // Project packages.
 const { AlphabeticalSongsTree, SongMetaDataCombined, CoreLibrary } = require('@bldr/songbook-core')
 const core = require('@bldr/core-node')
-const { formatMultiPartAssetFileName, camelToSnake } = require('@bldr/core-browser')
+const { formatMultiPartAssetFileName, camelToSnake, jsYamlConfig } = require('@bldr/core-browser')
 
 /**
  * See `/etc/baldr.json`.
@@ -1718,7 +1718,7 @@ function exportToMediaServer (library) {
       }
     }
 
-    const yamlMarkup = ['---', yaml.safeDump(rawYaml)]
+    const yamlMarkup = ['---', yaml.safeDump(rawYaml, jsYamlConfig)]
     fs.writeFileSync(`${firstFileName}.yml`, yamlMarkup.join('\n'))
   }
 

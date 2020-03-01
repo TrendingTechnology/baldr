@@ -8,7 +8,7 @@
 
 // import Vue from 'vue'
 import yaml from 'js-yaml'
-import { shortenText, convertPropertiesToCamelCase, escapeHtml, deepCopy } from '@bldr/core-browser'
+import { shortenText, convertPropertiesToCamelCase, escapeHtml, deepCopy, jsYamlConfig } from '@bldr/core-browser'
 import { WrappedSamples } from '@bldr/vue-plugin-media'
 import { markupToHtml } from '@/lib'
 import { masters } from '@/masters.js'
@@ -491,7 +491,7 @@ class Slide {
    * @type {String}
    */
   get yamlMarkup () {
-    const markup = yaml.safeDump(this.rawData, { noArrayIndent: true, lineWidth: 72 })
+    const markup = yaml.safeDump(this.rawData, jsYamlConfig)
     return escapeHtml(markup)
   }
 }

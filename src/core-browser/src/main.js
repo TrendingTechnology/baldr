@@ -461,3 +461,12 @@ export function escapeHtml (htmlString) {
 export function deepCopy (data) {
   return JSON.parse(JSON.stringify(data))
 }
+
+/**
+ * @link {@see https://www.npmjs.com/package/js-yaml}
+ */
+export const jsYamlConfig = {
+  noArrayIndent: true,
+  lineWidth: 72,
+  noCompatMode: true
+}

@@ -4,7 +4,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.sortObjectsByProperty = sortObjectsByProperty;
-exports.toLocaleDateTimeString = toLocaleDateTimeString;
+exports.formatToLocalDate = formatToLocalDate;
+exports.formatToLocalDateTime = formatToLocalDateTime;
 exports.plainText = plainText;
 exports.shortenText = shortenText;
 exports.camelToSnake = camelToSnake;
@@ -14,7 +15,10 @@ exports.formatMultiPartAssetFileName = formatMultiPartAssetFileName;
 exports.formatWikidataUrl = formatWikidataUrl;
 exports.formatWikipediaUrl = formatWikipediaUrl;
 exports.formatYoutubeUrl = formatYoutubeUrl;
-exports.AssetTypes = void 0;
+exports.selectSubset = selectSubset;
+exports.escapeHtml = escapeHtml;
+exports.deepCopy = deepCopy;
+exports.jsYamlConfig = exports.AssetTypes = void 0;
 
 function sortObjectsByProperty(property) {
   return function (a, b) {
@@ -22,7 +26,14 @@ function sortObjectsByProperty(property) {
   };
 }
 
-function toLocaleDateTimeString(timeStampMsec) {
+function formatToLocalDate(dateSpec) {
+  const date = new Date(dateSpec);
+  if (isNaN(date.getDay())) return dateSpec;
+  const months = ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'];
+  return `${date.getDay()}. ${months[date.getMonth()]} ${date.getFullYear()}`;
+}
+
+function formatToLocalDateTime(timeStampMsec) {
   const date = new Date(Number(timeStampMsec));
   const dayNumber = date.getDay();
   let dayString;
@@ -105,6 +116,10 @@ function convertPropertiesToCamelCase(object) {
 }
 
 function formatMultiPartAssetFileName(firstFileName, no) {
+  if (!Number.isInteger(no)) {
+    throw new Error(`${firstFileName}: The specifed number “${no}” is no integer.`);
+  }
+
   let suffix;
 
   if (no === 1) {
@@ -186,3 +201,108 @@ class AssetTypes {
 }
 
 exports.AssetTypes = AssetTypes;
+
+function selectSubset(subsetSelector, {
+  sort,
+  elements,
+  elementsCount,
+  firstElementNo,
+  shiftSelector
+}) {
+  const subset = [];
+  if (!shiftSelector) shiftSelector = 0;
+
+  function addElement(element) {
+    if (!element) return;
+
+    if (!subset.includes(element)) {
+      subset.push(element);
+    }
+  }
+
+  if (!elements && elementsCount) {
+    elements = [];
+    let firstNo;
+
+    if (firstElementNo) {
+      firstNo = firstElementNo;
+    } else {
+      firstNo = 0;
+    }
+
+    const endNo = firstNo + elementsCount;
+
+    for (let i = firstNo; i < endNo; i++) {
+      elements.push(i);
+    }
+  }
+
+  if (!subsetSelector) return elements;
+  subsetSelector = subsetSelector.replace(/\s*/g, '');
+  const ranges = subsetSelector.split(',');
+
+  for (let range of ranges) {
+    if (range.match(/^-/)) {
+      const end = parseInt(range.replace('-', ''));
+      range = `1-${end}`;
+    }
+
+    if (range.match(/-$/)) {
+      const begin = parseInt(range.replace('-', ''));
+      range = `${begin}-${elements.length}`;
+    }
+
+    range = range.split('-');
+
+    if (range.length === 1) {
+      const i = range[0];
+      addElement(elements[i - 1 + shiftSelector]);
+    } else if (range.length === 2) {
+      const beginNo = parseInt(range[0]) + shiftSelector;
+      const endNo = parseInt(range[1]) + shiftSelector;
+
+      if (endNo <= beginNo) {
+        throw new Error(`Invalid range: ${beginNo}-${endNo}`);
+      }
+
+      for (let no = beginNo; no <= endNo; no++) {
+        const index = no - 1;
+        addElement(elements[index]);
+      }
+    }
+  }
+
+  if (sort === 'numeric') {
+    subset.sort((a, b) => a - b);
+  } else if (sort) {
+    subset.sort();
+  }
+
+  return subset;
+}
+
+function escapeHtml(htmlString) {
+  const htmlEscapes = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#x27;',
+    '/': '&#x2F;'
+  };
+  const htmlEscaper = /[&<>"'\/]/g;
+  return ('' + htmlString).replace(htmlEscaper, function (match) {
+    return htmlEscapes[match];
+  });
+}
+
+function deepCopy(data) {
+  return JSON.parse(JSON.stringify(data));
+}
+
+const jsYamlConfig = {
+  noArrayIndent: true,
+  lineWidth: 72,
+  noCompatMode: true
+};
+exports.jsYamlConfig = jsYamlConfig;

@@ -29,7 +29,7 @@ const {
   walk
 } = require('./main.js')
 const { bootstrapConfig, checkExecutables } = require('@bldr/core-node')
-const { formatMultiPartAssetFileName } = require('@bldr/core-browser')
+const { formatMultiPartAssetFileName, jsYamlConfig } = require('@bldr/core-browser')
 
 checkExecutables(['magick', 'ffmpeg', 'lualatex', 'xdg-open', 'pdf2svg', 'pdfinfo'])
 
@@ -225,7 +225,7 @@ function walkDeluxe (func, regex, relPath = null, payload = null) {
 function yamlToTxt (data) {
   const yamlMarkup = [
     '---',
-    yaml.safeDump(data)
+    yaml.safeDump(data, jsYamlConfig)
   ]
   return yamlMarkup.join('\n')
 }
