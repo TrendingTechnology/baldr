@@ -37,7 +37,8 @@ export function formatToLocalDate (dateSpec) {
   const months = [
     'Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'
   ]
-  return `${date.getDay()}. ${months[date.getMonth()]} ${date.getFullYear()}`
+  // Not getDay()
+  return `${date.getDate()}. ${months[date.getMonth()]} ${date.getFullYear()}`
 }
 
 /**
