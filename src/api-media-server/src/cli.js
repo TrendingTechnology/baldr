@@ -980,19 +980,14 @@ async function presentationFromAssets (filePath) {
       }
       console.log(asset)
       let masterName
-      let prop
       if (asset.id.indexOf('NB') > -1) {
         masterName = 'score_sample'
-        prop = 'score'
       } else {
         masterName = asset.assetType
-        prop = 'src'
       }
       slides.push(
         {
-          [masterName]: {
-            [prop]: `id:${asset.id}`
-          }
+          [masterName]: `id:${asset.id}`
         }
       )
     }
