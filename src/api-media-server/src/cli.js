@@ -1343,7 +1343,7 @@ async function actionWikidata (itemId) {
   const firstname = await getName('P735')
   const lastname = await getName('P734')
   if (!name) name = `${firstname} ${lastname}`
-  const id = `${lastname}_${firstname}`
+  const id = asciify(`${lastname}_${firstname}`)
   const title = `Portrait-Bild von „${name}“`
 
   let short_biography
