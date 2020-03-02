@@ -22,13 +22,7 @@
   "main": "src/main.js",
   "style": "src/default.scss",
   "dependencies": {
-    "sass-export": "^1.0.6",
-    "typeface-alegreya": "^0.0.69",
-    "typeface-alegreya-sans": "^0.0.72",
-    "typeface-alegreya-sans-sc": "^0.0.75",
-    "typeface-alegreya-sc": "^0.0.72",
-    "typeface-anonymous-pro": "0.0.72",
-    "typeface-kalam": "^0.0.72"
+    "sass-export": "^1.0.6"
   },
   "publishConfig": {
     "access": "public"
