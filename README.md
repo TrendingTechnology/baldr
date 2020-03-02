@@ -69,6 +69,9 @@ const jquery = require('jquery')
 
 // Project packages.
 const { bootstrapConfig, Library, AlphabeticalSongsTree } = require('@bldr/songbook-base')
+
+// Globals.
+const config = bootstrapConfig()
 ```
 
 #### Vue imports

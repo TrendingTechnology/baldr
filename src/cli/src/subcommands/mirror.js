@@ -1,8 +1,12 @@
+// Node packages.
 const fs = require('fs')
 const childProcess = require('child_process')
 const path = require('path')
 
+// Third party packages.
 const chalk = require('chalk')
+
+const { config } = require('../main.js')
 
 /**
  * Create and open a relative path in different base paths.
@@ -17,7 +21,7 @@ function action () {
   }
 
   const basePaths = [
-    '/var/data/baldr/media/',
+    config.mediaServer.basePath,
     '/home/jf/schule-archiv/'
   ]
 
@@ -61,6 +65,7 @@ function action () {
 module.exports = {
   commandName: 'mirror',
   alias: 'm',
+  checkExecutable: 'xdg-open',
   description: 'Create and open in the file explorer a relative path in different base paths.',
   action
 }
