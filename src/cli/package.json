@@ -1,0 +1,30 @@
+{
+  "name": "@bldr/cli",
+  "version": "0.1.0",
+  "description": "THE command line interface for the BALDR project.",
+  "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
+  "bugs": {
+    "url": "https://github.com/Josef-Friedrich/baldr/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Josef-Friedrich/baldr.git"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Josef Friedrich",
+    "email": "josef@friedrich.rocks",
+    "url": "https://josef.friedrich.rocks"
+  },
+  "main": "src/main.js",
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "chalk": "^3.0.0",
+    "commander": "^4.1.1"
+  },
+  "bin": {
+    "baldr_cli.js": "./src/main.js"
+  }
+}
