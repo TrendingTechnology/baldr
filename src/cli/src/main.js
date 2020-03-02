@@ -13,6 +13,7 @@ const { bootstrapConfig, checkExecutables } = require('@bldr/core-node')
 // Globals.
 const subcommandsPath = path.join(__dirname, 'subcommands')
 const config = bootstrapConfig()
+const cwd = process.cwd()
 
 function loadCommands (commander) {
   for (const fileName of fs.readdirSync(subcommandsPath)) {
@@ -54,7 +55,7 @@ function main () {
 }
 
 module.exports = {
-  config
+  cwd, config
 }
 
 if (require.main === module) {
