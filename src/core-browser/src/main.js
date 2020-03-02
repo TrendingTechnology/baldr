@@ -392,17 +392,22 @@ export function selectSubset (subsetSelector, { sort, elements, elementsCount, f
   // 1-3,5-7
   const ranges = subsetSelector.split(',')
 
+  // for cloze steps: shiftSelector = -1
+  // shiftSelectorAdjust = 1
+  const shiftSelectorAdjust = -1 * shiftSelector;
   for (let range of ranges) {
     // -7 -> 1-7
     if (range.match(/^-/)) {
       const end = parseInt(range.replace('-', ''))
-      range = `1-${end}`
+      range = `${1 + shiftSelectorAdjust}-${end}`
     }
 
     // 7- -> 7-23
     if (range.match(/-$/)) {
       const begin = parseInt(range.replace('-', ''))
-      range = `${begin}-${elements.length}`
+      // for cloze steps (shiftSelector: -1): 7- -> 7-23 -> elements.length
+      // as 22 elements because 7-23 translates to 6-22.
+      range = `${begin}-${elements.length + shiftSelectorAdjust}`
     }
 
     range = range.split('-')
