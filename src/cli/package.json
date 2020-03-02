@@ -21,9 +21,14 @@
     "access": "public"
   },
   "dependencies": {
+    "@bldr/api-media-server": "^0.2.3",
+    "@bldr/core-browser": "^0.11.3",
     "@bldr/core-node": "^0.2.2",
     "chalk": "^3.0.0",
-    "commander": "^4.1.1"
+    "commander": "^4.1.1",
+    "js-yaml": "^3.13.1",
+    "node-fetch": "^2.6.0",
+    "wikibase-sdk": "^7.2.1"
   },
   "bin": {
     "baldr_cli.js": "./src/main.js"
