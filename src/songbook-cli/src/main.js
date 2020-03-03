@@ -170,10 +170,8 @@ const main = function () {
   } else if (options.songId) {
     library.updateSongBySongId(options.songId, mode)
   } else {
-    exportToMediaServer(library)
-    //throw new Error('lol')
-
     library.update(mode, options.force)
+    exportToMediaServer(library)
 
     if (mode === 'piano' || mode === 'all') {
       const pianoScore = new PianoScore(
