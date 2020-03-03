@@ -32,6 +32,5 @@ export default {
         margin-left: 0 !important;
       }
     }
-
   }
 </style>

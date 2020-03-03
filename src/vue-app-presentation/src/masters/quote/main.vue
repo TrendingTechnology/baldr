@@ -33,7 +33,7 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
   .vc_quote_master {
     padding-left: 10%;
     padding-right: 10%;

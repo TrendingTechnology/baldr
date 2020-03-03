@@ -21,7 +21,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   .vc_generic_master_preview {
     background-color: $white;
     color: $black;

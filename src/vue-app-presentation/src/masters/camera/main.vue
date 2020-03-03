@@ -211,7 +211,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   .vc_camera_master {
     font-size: 1.5vw;
 
@@ -232,19 +232,6 @@ export default {
     .baldr-icon_document-camera,
     .baldr-icon_document-camera-off {
       font-size: 30vw;
-    }
-  }
-</style>
-
-<style lang="scss">
-  .vc_camera_master {
-    video {
-      height: 100vh;
-      left: 0;
-      object-fit: contain;
-      position: absolute;
-      top: 0;
-      width: 100vw;
     }
   }
 </style>

@@ -26,7 +26,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   .vc_score_sample_master {
     padding: 4vh 4vw;
     background-color: white;

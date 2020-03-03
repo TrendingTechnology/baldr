@@ -49,7 +49,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   .vc_generic_master {
     font-size: 3vw;
     padding: 2vw 10vw;

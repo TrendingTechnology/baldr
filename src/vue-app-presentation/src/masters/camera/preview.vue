@@ -13,7 +13,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   .vc_camera_master_preview {
     .baldr-icon {
       font-size: 10em;

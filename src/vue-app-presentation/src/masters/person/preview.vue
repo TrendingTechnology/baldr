@@ -25,7 +25,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   .vc_person_master_preview {
     .info-box {
       bottom: 1em;

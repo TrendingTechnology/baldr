@@ -19,7 +19,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   .vc_section_master_preview {
     font-family: $font-family-sans-small-caps;
     font-size: 1.5em;

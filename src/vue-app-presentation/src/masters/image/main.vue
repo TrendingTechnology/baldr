@@ -38,7 +38,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .vc_image_master {
   font-size: 4vw;
   height: 100vh;

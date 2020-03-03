@@ -19,7 +19,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   .vc_svg_master_preview {
     background-color: $white;
     padding: 1em;

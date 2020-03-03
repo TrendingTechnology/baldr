@@ -29,7 +29,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   .vc_wikipedia_master {
     .title {
       margin-left: 10vw;

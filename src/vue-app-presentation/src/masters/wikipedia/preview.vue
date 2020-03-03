@@ -22,7 +22,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   .vc_wikipedia_master_preview {
     background-color: scale-color($gray, $lightness: 30%) !important;
     color: $black !important;

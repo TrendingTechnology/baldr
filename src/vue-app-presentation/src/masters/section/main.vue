@@ -13,7 +13,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   .vc_section_master {
     font-family: $font-family-sans-small-caps;
     font-size: 5vw;

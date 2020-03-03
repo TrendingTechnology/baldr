@@ -20,7 +20,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   .vc_song_master {
     padding: 4vh 4vw;
     background-color: white;

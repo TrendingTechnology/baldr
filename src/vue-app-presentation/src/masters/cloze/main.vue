@@ -75,15 +75,11 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   .vc_cloze_master {
     padding: 0;
     background-color: white;
-  }
-</style>
 
-<style lang="scss">
-  .vc_cloze_master {
     svg {
       width: 100vw;
       height: auto
