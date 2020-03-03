@@ -29,6 +29,8 @@ export default {
     return [props.src]
   },
   enterStep ({ oldStepNo, newStepNo }) {
+    // setSlideOrStepPrevious / Next has no this.domSteps
+    if (!this.domSteps) return
     const newClozeGroup = this.domSteps.displayByNo({
       oldStepNo,
       stepNo: newStepNo

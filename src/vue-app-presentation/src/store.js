@@ -164,6 +164,52 @@ const actions = {
       dispatch('setSlideNoCurrent', no - 1)
     }
   },
+  setSlideOrStepPrevious ({ dispatch, getters }) {
+    const slideCurrent = getters.slideCurrent
+    const slideNo = getters.slideNoCurrent
+    const slideCount = getters.slidesCount
+    const stepCount = slideCurrent.renderData.stepCount
+    const stepNo = slideCurrent.renderData.stepNoCurrent
+    if (stepCount > 1 && stepNo !== 1) {
+      dispatch('setStepNoCurrent', { slideCurrent, stepNoCurrent: stepNo - 1 })
+    } else {
+      if (slideNo === 1) {
+        dispatch('setSlideNoCurrent', slideCount)
+      } else {
+        dispatch('setSlideNoCurrent', slideNo - 1)
+      }
+      // Set on the previous slide the current step number to the step count
+      // only if the slide has steps.
+      // Cloze sets stepCount async. If you enter a newer before visited cloze
+      // slide backwards, strange things happens.
+      if (getters.slideCurrent.renderData.stepCount) {
+        dispatch('setStepNoCurrent', {
+          slideCurrent: getters.slideCurrent,
+          stepNoCurrent: getters.slideCurrent.renderData.stepCount
+        })
+      }
+    }
+  },
+  setSlideOrStepNext ({ dispatch, getters }) {
+    const slideCurrent = getters.slideCurrent
+    const slideNo = getters.slideNoCurrent
+    const slideCount = getters.slidesCount
+    const stepCount = slideCurrent.renderData.stepCount
+    const stepNo = slideCurrent.renderData.stepNoCurrent
+    if (stepCount > 1 && stepNo !== stepCount) {
+      dispatch('setStepNoCurrent', { slideCurrent, stepNoCurrent: stepNo + 1 })
+    } else {
+      if (slideNo === slideCount) {
+        dispatch('setSlideNoCurrent', 1)
+      } else {
+        dispatch('setSlideNoCurrent', slideNo + 1)
+      }
+      // Only set the step number on slides with step support.
+      if (getters.slideCurrent.renderData.stepCount) {
+        dispatch('setStepNoCurrent', { slideCurrent: getters.slideCurrent, stepNoCurrent: 1 })
+      }
+    }
+  },
   setSlideNoCurrent ({ commit, getters }, no) {
     let oldSlide
     let oldProps

@@ -70,7 +70,14 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['setSlidePrevious', 'setSlideNext', 'setStepPrevious', 'setStepNext']),
+    ...mapActions([
+      'setSlidePrevious',
+      'setSlideNext',
+      'setStepPrevious',
+      'setStepNext',
+      'setSlideOrStepPrevious',
+      'setSlideOrStepNext',
+    ]),
     dropHandler (event) {
       openFiles(event.dataTransfer.files)
       this.hideDragzone()
@@ -140,14 +147,26 @@ export default {
         keys: 'up',
         callback: this.setStepPrevious,
         // Previous step
-        description: 'zur vorhergehenden Unterfolie',
+        description: 'zum vorhergehenden Schritt',
         routeNames: ['slides']
       },
       {
         keys: 'down',
         callback: this.setStepNext,
         // Next step
-        description: 'zur nächsten Unterfolie',
+        description: 'zum nächsten Schritt',
+        routeNames: ['slides']
+      },
+      {
+        keys: 'ctrl+alt+left',
+        callback: this.setSlideOrStepPrevious,
+        description: 'zur/m vorhergehenden Folie oder Schritt',
+        routeNames: ['slides']
+      },
+      {
+        keys: 'ctrl+alt+right',
+        callback: this.setSlideOrStepNext,
+        description: 'zur/m nächsten Folie oder Schritt',
         routeNames: ['slides']
       },
       {
