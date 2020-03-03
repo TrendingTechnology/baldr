@@ -72,6 +72,23 @@ function writeMetaDataYaml (filePath, metaData, force) {
 }
 
 /**
+ *
+ * @param {String} filePath
+ */
+function readFile (filePath) {
+  return fs.readFileSync(filePath, { encoding: 'utf-8' })
+}
+
+/**
+ *
+ * @param {String} filePath
+ * @param {String} content
+ */
+function writeFile (filePath, content) {
+  fs.writeFileSync(filePath, content)
+}
+
+/**
  * Sort the keys and clean up some entires.
  *
  * @param {String} filePath - The media asset file path.
@@ -203,7 +220,10 @@ function renameAsset (oldPath, newPath) {
 }
 
 module.exports = {
+  yamlToTxt,
   renameAsset,
   runImagemagick,
-  writeMetaDataYamlFile
+  writeMetaDataYamlFile,
+  readFile,
+  writeFile
 }
