@@ -142,7 +142,7 @@ async function action (itemId) {
 }
 
 module.exports = {
-  commandName: 'wikidata <item-id>',
+  command: 'wikidata <item-id>',
   alias: 'w',
   description: 'Query wikidata.org (currently only support for the master slide person).',
   action

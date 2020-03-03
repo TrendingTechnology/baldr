@@ -63,7 +63,7 @@ function action () {
 }
 
 module.exports = {
-  commandName: 'mirror',
+  command: 'mirror',
   alias: 'm',
   checkExecutable: 'xdg-open',
   description: 'Create a relative path in different base paths. Open this relative paths in the file manager.',

@@ -5,6 +5,7 @@ const path = require('path')
 
 // Third party packages.
 const yaml = require('js-yaml')
+const chalk = require('chalk')
 
 // Project packages.
 const {
@@ -175,7 +176,34 @@ function runImagemagick (inputFile, outputFile, size = '2000x2000>') {
   ])
 }
 
+/**
+ * Rename a media asset and it’s corresponding meta data file (`*.yml`) and
+ * preview file (`_preview.jpg`).
+ *
+ * @param {String} oldPath - The old path of a media asset.
+ * @param {String} newPath - The new path of a media asset.
+ */
+function renameAsset (oldPath, newPath) {
+  const oldRelPath = oldPath.replace(process.cwd(), '')
+  console.log(`old: ${chalk.yellow(oldRelPath)}`)
+  if (newPath && oldPath !== newPath) {
+    const newRelPath = newPath.replace(process.cwd(), '')
+    console.log(`new: ${chalk.green(newRelPath)}`)
+    if (fs.existsSync(`${oldPath}.yml`)) {
+      fs.renameSync(`${oldPath}.yml`, `${newPath}.yml`)
+      console.log(`new: ${chalk.cyan(newRelPath + '.yml')}`)
+    }
+    if (fs.existsSync(`${oldPath}_preview.jpg`)) {
+      fs.renameSync(`${oldPath}_preview.jpg`, `${newPath}_preview.jpg`)
+      console.log(`new: ${chalk.cyan(newRelPath + '_preview.jpg')}`)
+    }
+    fs.renameSync(oldPath, newPath)
+    return newPath
+  }
+}
+
 module.exports = {
+  renameAsset,
   runImagemagick,
   writeMetaDataYamlFile
 }

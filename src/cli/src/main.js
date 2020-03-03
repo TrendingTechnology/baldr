@@ -11,17 +11,17 @@ let commander = require('commander')
 const { bootstrapConfig, checkExecutables } = require('@bldr/core-node')
 
 // Globals.
-const subcommandsPath = path.join(__dirname, 'subcommands')
+const commandsPath = path.join(__dirname, 'commands')
 const config = bootstrapConfig()
 const cwd = process.cwd()
 
 function loadCommands (commander) {
-  for (const fileName of fs.readdirSync(subcommandsPath)) {
-    const conf = require(path.join(subcommandsPath, fileName))
+  for (const fileName of fs.readdirSync(commandsPath)) {
+    const conf = require(path.join(commandsPath, fileName))
     if (conf.checkExecutable) {
       checkExecutables(conf.checkExecutable)
     }
-    const c = commander.command(conf.commandName)
+    const c = commander.command(conf.command)
     if (conf.alias) {
       c.alias(conf.alias)
     }

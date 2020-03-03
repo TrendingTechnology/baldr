@@ -905,6 +905,42 @@ async function walk (dir, on) {
 }
 
 /**
+ * Execute a function on one file or walk trough all files matching a regex
+ * in the current working directory or in the given directory path.
+ *
+ * @param {function} func - A function to call on every file path. The file
+ *   path is a absolute file path.
+ * @param {Regex} regex - A regular expression. Each file path must match
+ *   the regular expression to execute the function. If you specify an other
+ *   type than a regex, the function is called on every file.
+ * @param {String} relPath - The path of a directory or the path of a file.
+ * @param {Object} payload - Additional arguments bundled as a object the
+ *   function is called with.
+ */
+function walkDeluxe (func, regex, relPath = null, payload = null) {
+  let basePath = process.cwd()
+  if (relPath) {
+    const stat = fs.statSync(relPath)
+    if (!stat.isDirectory()) {
+      func(relPath, payload)
+      return
+    }
+    basePath = relPath
+  }
+  walk(basePath, {
+    everyFile (relPath) {
+      if (regex instanceof RegExp) {
+        if (relPath.match(regex)) {
+          func(relPath, payload)
+        }
+      } else {
+        func(relPath, payload)
+      }
+    }
+  })
+}
+
+/**
  * Update the media server.
  *
  * @returns {Object}
@@ -1389,5 +1425,6 @@ module.exports = {
   helpMessages,
   HierarchicalFolderTitles,
   registerRestApi,
-  walk
+  walk,
+  walkDeluxe
 }

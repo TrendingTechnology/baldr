@@ -6,15 +6,36 @@
 
 THE command line interface for the BALDR project.
 
+## Module exports for the (sub)commands
+
+### Full skeleton
+
 ```js
 module.exports = {
-  commandName: 'mirror <folder>',
+  command: 'mirror <required> [optional]', // see https://github.com/tj/commander.js#commands
   alias: 'm',
-  options: [['-help', 'A help message']]
-  checkExecutable: 'xdg-open',
+  options: [
+    ['-l, --lorem', 'Print lorem'],
+    ['-i, --ipsum', 'Print ipsum']
+  ],
+  checkExecutable: 'xdg-open', // or ['xdg-open', 'git']
   description: 'Create and open in the file explorer a relative path in different base paths.',
-  action: function (folder, options) {
-
+  action: function (required, optional, cmdObj) { // see https://github.com/tj/commander.js#action-handler-subcommands
+    console.log(required)
+    console.log(optional)
+    console.log(cmdObj.lorem)
+    console.log(cmdObj.ipsum)
   }
+}
+```
+
+### Minimal skeleton
+
+```js
+module.exports = {
+  command: '',
+  alias: '',
+  description: '',
+  action
 }
 ```
