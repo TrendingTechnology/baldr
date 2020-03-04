@@ -1,18 +1,21 @@
 // Node packages.
 const fs = require('fs')
+const path = require('path')
 
 // Third party packages.
+const chalk = require('chalk')
+const fetch = require('node-fetch')
 const wikibase = require('wikibase-sdk')({
   instance: 'https://www.wikidata.org',
   sparqlEndpoint: 'https://query.wikidata.org/sparql'
 })
-const fetch = require('node-fetch')
 
 // Project packages.
-const {
-  asciify
-} = require('@bldr/api-media-server')
-const { runImagemagick, writeYamlFile } = require('../lib.js')
+const mediaServer = require('@bldr/api-media-server')
+const lib = require('../lib.js')
+
+// Globals.
+const { config } = require('../main.js')
 
 function getWikipediaTitle (sitelinks) {
   let key
@@ -107,43 +110,71 @@ async function action (itemId) {
   const firstname = await claims.getName('P735')
   const lastname = await claims.getName('P734')
   if (!name) name = `${firstname} ${lastname}`
-  const id = asciify(`${lastname}_${firstname}`)
+  const id = mediaServer.asciify(`${lastname}_${firstname}`)
   const title = `Portrait-Bild von „${name}“`
 
   let short_biography
   const desc = entity.descriptions
-  if (desc.de) { short_biography = desc.de } else if (desc.en) { short_biography = desc.en }
+  if (desc.de) {
+    short_biography = desc.de
+  } else if (desc.en) {
+    short_biography = desc.en
+  }
 
   const birth = claims.getDate('P569')
   const death = claims.getDate('P570')
   const wikidata = itemId
   const wikipedia = getWikipediaTitle(entity.sitelinks)
   const wikicommons = claims.getClaim('P18')
-  const dest = `${id}.jpg`
+
+  const parentDir = path.join(
+    config.mediaServer.basePath,
+    'Personen',
+    id.substr(0, 1).toLowerCase() // for example: a, b
+  )
+  fs.mkdirSync(parentDir, { recursive: true })
+  const dest = path.join(parentDir, `${id}.jpg`)
   if (wikicommons) {
     await downloadWikicommonsFile(wikicommons, dest)
+    console.log(`Image downloaded to: ${chalk.green(dest)}`)
   }
 
   if (fs.existsSync(dest)) {
     const stat = fs.statSync(dest)
     if (stat.size > 500000) {
-      runImagemagick(dest, dest)
+      lib.runImagemagick(dest, dest)
     }
+  } else {
+    console.log(chalk.red(`No image downloaded.`))
   }
 
-  const result = { id, title, firstname, lastname, name, short_biography, birth, death, wikidata, wikipedia, wikicommons }
+  const result = {
+    id,
+    title,
+    firstname,
+    lastname,
+    name,
+    short_biography,
+    birth,
+    death,
+    wikidata,
+    wikipedia,
+    wikicommons
+  }
 
   for (const key in result) {
     if (!result[key]) {
       delete result[key]
     }
   }
-  writeYamlFile(`${dest}.yml`, result)
+  const yamlFile = `${dest}.yml`
+  console.log(`Write YAML file: ${chalk.green(yamlFile)}`)
+  lib.writeYamlFile(yamlFile, result)
 }
 
 module.exports = {
   command: 'wikidata <item-id>',
   alias: 'w',
-  description: 'Query wikidata.org (currently only support for the master slide person).',
+  description: 'Query wikidata.org (currently there is only support for the master slide “person”).',
   action
 }
