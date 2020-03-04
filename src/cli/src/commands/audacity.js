@@ -1,16 +1,40 @@
-// Node packages.
-const fs = require('fs')
+// Project packages.
+const mediaServer = require('@bldr/api-media-server')
+const lib = require('../lib.js')
 
-const { yamlToTxt } = require('../lib.js')
+// Third party packages.
+const chalk = require('chalk')
 
 /**
  * Convert a Audacity text mark file into a YAML file.
  *
- * @param {String} filePath - The file path of the Audacity’s text track
+ * ```txt
+ * 1.488171	1.488171	Sample 1
+ * 11.635583	12.940996	Sample 2 (begin + end)
+ * 13.846082	13.846082	Sample 3
+ * ```
+ *
+ * ```yaml
+ * ---
+ * - id: sample 1
+ *   title: Sample 1
+ *   start_time: 1.488171
+ *   end_time: 11.635583
+ * - id: sample 2 (begin + end)
+ *   title: Sample 2 (begin + end)
+ *   start_time: 11.635583
+ *   end_time: 12.940996
+ * - id: '3'
+ *   title: '3'
+ *   start_time: 13.846082
+ * ```
+ *
+ * @param {String} filePath - The file path of the Audacity’s text mark
  *   file.
  */
 function action (filePath) {
-  const text = fs.readFileSync(filePath, { encoding: 'utf-8' })
+  const text = lib.readFile(filePath)
+  console.log(`The content of the source file “${chalk.yellow(filePath)}”:\n`)
   console.log(text)
 
   const lines = text.split('\n')
@@ -20,16 +44,19 @@ function action (filePath) {
   for (const line of lines) {
     const match = line.match(/([\d\.]+)\t([\d\.]+)\t(.*)/) // eslint-disable-line
     if (match) {
+      //  for example: 1.488171
       const startTime = Number(match[1])
+      //  for example: 1.488171
       let endTime = Number(match[2])
       let title
       if (!match[3]) {
         title = String(counter)
       } else {
+        // for example: Sample 1
         title = match[3]
       }
       title = title.trim()
-      const id = title.toLowerCase()
+      const id = mediaServer.asciify(title.toLowerCase())
 
       if (startTime === endTime) {
         endTime = null
@@ -50,12 +77,18 @@ function action (filePath) {
       sample['end_time'] = samples[parseInt(index) + 1]['start_time']
     }
   }
-  console.log(yamlToTxt(samples))
+  const dest = `${filePath}.yml`
+  console.log(`The content of the destination file “${chalk.green(dest)}”:\n`)
+  lib.writeYamlFile(dest, samples)
 }
 
 module.exports = {
-  command: 'audacity <input>',
+  command: 'audacity <text-mark-file>',
   alias: 'a',
-  description: 'Convert a Audacity text mark file into a YAML file.',
+  description: [
+    'Convert a Audacity text mark file into a YAML file.',
+    'Use the keyboard shortcuts ctrl+b or ctrl+m to create text marks in the software Audacity.',
+    'Go to the text mark manager (Edit > text marks) to export the marks.'
+  ].join(' '),
   action
 }

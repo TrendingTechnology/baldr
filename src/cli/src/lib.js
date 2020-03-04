@@ -69,15 +69,16 @@ function yamlToTxt (data) {
 }
 
 /**
- * Create and write the meta data YAML to the disk.
+ * Convert some data (usually Javascript objets) into the YAML format and write
+ * the string into a text file.
  *
- * @param {String} filePath - The file path of the destination yaml file. The yml
- *   extension has to be included.
- * @param {Object} metaData - The object to convert into yaml and write to
- *   the disk.
+ * @param {String} filePath - The file path of the destination yaml file. The
+ *   yml extension has to be included.
+ * @param {Object} data - Some data to convert into yaml and write into a text
+ *   file.
  */
-function writeMetaDataYamlFile (filePath, metaData) {
-  const result = yamlToTxt(metaData)
+function writeYamlFile (filePath, data) {
+  const result = yamlToTxt(data)
   console.log(result)
   fs.writeFileSync(filePath, result)
 }
@@ -106,7 +107,7 @@ function writeMetaDataYaml (filePath, metaData, force) {
     if (!metaData.title) {
       metaData.title = mediaServer.deasciify(asset.basename_)
     }
-    writeMetaDataYamlFile(yamlFile, normalizeMetaData(filePath, metaData))
+    writeYamlFile(yamlFile, normalizeMetaData(filePath, metaData))
   }
 }
 
@@ -261,12 +262,14 @@ function renameAsset (oldPath, newPath) {
 module.exports = {
   filePathToAssetType,
   makeAsset,
+  normalizeMetaData,
   readFile,
   renameAsset,
   runImagemagick,
   semanticMarkupHtmlToTex,
+  semanticMarkupTexToHtml,
   writeFile,
   writeMetaDataYaml,
-  writeMetaDataYamlFile,
+  writeYamlFile,
   yamlToTxt
 }

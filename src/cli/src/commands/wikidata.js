@@ -12,7 +12,7 @@ const fetch = require('node-fetch')
 const {
   asciify
 } = require('@bldr/api-media-server')
-const { runImagemagick, writeMetaDataYamlFile } = require('../lib.js')
+const { runImagemagick, writeYamlFile } = require('../lib.js')
 
 function getWikipediaTitle (sitelinks) {
   let key
@@ -138,7 +138,7 @@ async function action (itemId) {
       delete result[key]
     }
   }
-  writeMetaDataYamlFile(`${dest}.yml`, result)
+  writeYamlFile(`${dest}.yml`, result)
 }
 
 module.exports = {
