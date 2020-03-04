@@ -8,12 +8,51 @@ const yaml = require('js-yaml')
 const chalk = require('chalk')
 
 // Project packages.
-const {
-  asciify,
-  Asset,
-  deasciify
-} = require('@bldr/api-media-server')
+const mediaServer = require('@bldr/api-media-server')
 const { jsYamlConfig } = require('@bldr/core-browser')
+
+/**
+ *
+ * @param {String} mediaFile
+ */
+function makeAsset (mediaFile) {
+  return new mediaServer.Asset(mediaFile).addFileInfos()
+}
+
+/**
+ *
+ * @param {String} filePath
+ */
+function filePathToAssetType (filePath) {
+  const asset = makeAsset(filePath)
+  const inputExtension = asset.extension.toLowerCase()
+  return assetTypes.extensionToType(inputExtension)
+}
+
+/**
+ * \stueck*{Nachtmusik} -> <em class="piece">„Nachtmusik“<em>
+ * \stueck{Nachtmusik} -> <em class="piece">Nachtmusik<em>
+ * \person{Mozart} -> <em class="person">Mozart<em>
+ */
+function semanticMarkupTexToHtml (text) {
+  console.log(text)
+  text = text.replace(/\\stueck\*\{([^\}]+?)\}/g, '<em class="piece">„$1“</em>')
+  text = text.replace(/\\stueck\{([^\}]+?)\}/g, '<em class="piece">$1</em>')
+  text = text.replace(/\\person\{([^\}]+?)\}/g, '<em class="person">$1</em>')
+  return text
+}
+
+/**
+ * \stueck*{Nachtmusik} <- <em class="piece">„Nachtmusik“<em>
+ * \stueck{Nachtmusik} <- <em class="piece">Nachtmusik<em>
+ * \person{Mozart} <- <em class="person">Mozart<em>
+ */
+function semanticMarkupHtmlToTex (text) {
+  text = text.replace(/<em class="piece">„([^<>]+?)“<\/em>/g, '\\stueck*{$1}')
+  text = text.replace(/<em class="piece">([^<>]+?)<\/em>/g, '\\stueck{$1}')
+  text = text.replace(/<em class="person">([^<>]+?)<\/em>/g, '\\person{$1}')
+  return text
+}
 
 /**
  * Convert a Javascript object into a text string, ready to be written into
@@ -54,18 +93,18 @@ function writeMetaDataYamlFile (filePath, metaData) {
  */
 function writeMetaDataYaml (filePath, metaData, force) {
   if (fs.lstatSync(filePath).isDirectory()) return
-  const yamlFile = `${asciify(filePath)}.yml`
+  const yamlFile = `${mediaServer.asciify(filePath)}.yml`
   if (
     force ||
     !fs.existsSync(yamlFile)
   ) {
     if (!metaData) metaData = {}
-    const asset = new Asset(filePath).addFileInfos()
+    const asset = new mediaServer.Asset(filePath).addFileInfos()
     if (!metaData.id) {
       metaData.id = asset.basename_
     }
     if (!metaData.title) {
-      metaData.title = deasciify(asset.basename_)
+      metaData.title = mediaServer.deasciify(asset.basename_)
     }
     writeMetaDataYamlFile(yamlFile, normalizeMetaData(filePath, metaData))
   }
@@ -220,10 +259,13 @@ function renameAsset (oldPath, newPath) {
 }
 
 module.exports = {
-  yamlToTxt,
+  filePathToAssetType,
+  makeAsset,
+  readFile,
   renameAsset,
   runImagemagick,
+  writeFile,
+  writeMetaDataYaml,
   writeMetaDataYamlFile,
-  readFile,
-  writeFile
+  yamlToTxt
 }

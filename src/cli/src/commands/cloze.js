@@ -6,19 +6,12 @@ const path = require('path')
 const chalk = require('chalk')
 
 // Project packages.
-const {
-  HierarchicalFolderTitles,
-  walkDeluxe
-} = require('@bldr/api-media-server')
-const {
-  readFile,
-  writeFile,
-  yamlToTxt
-} = require('../lib.js')
+const mediaServer = require('@bldr/api-media-server')
+const lib = require('../lib.js')
 
 function generateClozeSvg (filePath) {
   const cwd = path.dirname(filePath)
-  let texFileContent = readFile(filePath)
+  let texFileContent = lib.readFile(filePath)
   if (texFileContent.indexOf('cloze') === -1) {
     console.log(`${chalk.red(filePath)} has no cloze texts.`)
     return
@@ -32,7 +25,7 @@ function generateClozeSvg (filePath) {
     /^.*\n(.*)\n/,
     '%!TEX program = lualatex\n\\documentclass[loesung]{schule-arbeitsblatt}\n'
   )
-  writeFile(filePath, texFileContent)
+  lib.writeFile(filePath, texFileContent)
   childProcess.spawnSync(
     'lualatex', ['--shell-escape', '--jobname', jobName, filePath],
     { cwd }
@@ -62,17 +55,17 @@ function generateClozeSvg (filePath) {
     )
 
     // Remove width="" and height="" attributes
-    let svgContent = readFile(svgFilePath)
+    let svgContent = lib.readFile(svgFilePath)
     svgContent = svgContent.replace(/(width|height)=".+?" /g, '')
-    writeFile(svgFilePath, svgContent)
+    lib.writeFile(svgFilePath, svgContent)
 
     // Write info yaml
-    const titles = new HierarchicalFolderTitles(filePath)
+    const titles = new mediaServer.HierarchicalFolderTitles(filePath)
     const infoYaml = {
       id: `${titles.id}_AB_Lueckentext${counterSuffix}`,
       title: `Arbeitsblatt „${titles.title}“ (Lückentext Seite ${index} von ${pageCount})`
     }
-    writeFile(path.join(cwd, `${svgFileName}.yml`), yamlToTxt(infoYaml))
+    lib.writeFile(path.join(cwd, `${svgFileName}.yml`), lib.yamlToTxt(infoYaml))
   }
 }
 
@@ -80,7 +73,7 @@ function generateClozeSvg (filePath) {
  * Generate from TeX files with cloze texts SVGs for baldr.
  */
 function action (filePath) {
-  walkDeluxe(generateClozeSvg, new RegExp('.*\.tex$'), filePath)
+  mediaServer.walkDeluxe(generateClozeSvg, new RegExp('.*\.tex$'), filePath)
 }
 
 module.exports = {
