@@ -164,49 +164,46 @@ const actions = {
       dispatch('setSlideNoCurrent', no - 1)
     }
   },
-  setSlideOrStepPrevious ({ dispatch, getters }) {
+  /**
+   * @param {Object} vuex
+   * @param {Number} direction `1`: next, `-1`: previous
+   */
+  setSlideOrStepNextOrPrevious ({ dispatch, getters }, direction) {
     const slideCurrent = getters.slideCurrent
     const slideNo = getters.slideNoCurrent
     const slideCount = getters.slidesCount
     const stepCount = slideCurrent.renderData.stepCount
     const stepNo = slideCurrent.renderData.stepNoCurrent
-    if (stepCount > 1 && stepNo !== 1) {
-      dispatch('setStepNoCurrent', { slideCurrent, stepNoCurrent: stepNo - 1 })
+
+    let turningPointsSteps, turningPointsSlides
+    if (direction === -1) {
+      turningPointsSteps = { begin: stepCount, end: 1 }
+      turningPointsSlides = { begin: slideCount, end: 1 }
+    } else if (direction === 1) {
+      turningPointsSteps = { begin: 1, end: stepCount }
+      turningPointsSlides = { begin: 1, end: slideCount }
+    }
+    if (stepCount > 1 && stepNo !== turningPointsSteps.end) {
+      dispatch('setStepNoCurrent', { slideCurrent, stepNoCurrent: stepNo + direction })
     } else {
-      if (slideNo === 1) {
-        dispatch('setSlideNoCurrent', slideCount)
+      if (slideNo === turningPointsSlides.end) {
+        dispatch('setSlideNoCurrent', turningPointsSlides.begin)
       } else {
-        dispatch('setSlideNoCurrent', slideNo - 1)
+        dispatch('setSlideNoCurrent', slideNo + direction)
       }
-      // Set on the previous slide the current step number to the step count
-      // only if the slide has steps.
-      // Cloze sets stepCount async. If you enter a newer before visited cloze
-      // slide backwards, strange things happens.
+      // We need a new current slide.
+      // Only set the step number on slides with step support. The master slide
+      // cloze sets the variable stepCount async. If you enter a newer before
+      // visited cloze slide backwards, strange things happens.
       if (getters.slideCurrent.renderData.stepCount) {
+        let stepNoCurrent = 1
+        if (direction === -1) {
+          stepNoCurrent = getters.slideCurrent.renderData.stepCount
+        }
         dispatch('setStepNoCurrent', {
           slideCurrent: getters.slideCurrent,
-          stepNoCurrent: getters.slideCurrent.renderData.stepCount
+          stepNoCurrent
         })
-      }
-    }
-  },
-  setSlideOrStepNext ({ dispatch, getters }) {
-    const slideCurrent = getters.slideCurrent
-    const slideNo = getters.slideNoCurrent
-    const slideCount = getters.slidesCount
-    const stepCount = slideCurrent.renderData.stepCount
-    const stepNo = slideCurrent.renderData.stepNoCurrent
-    if (stepCount > 1 && stepNo !== stepCount) {
-      dispatch('setStepNoCurrent', { slideCurrent, stepNoCurrent: stepNo + 1 })
-    } else {
-      if (slideNo === slideCount) {
-        dispatch('setSlideNoCurrent', 1)
-      } else {
-        dispatch('setSlideNoCurrent', slideNo + 1)
-      }
-      // Only set the step number on slides with step support.
-      if (getters.slideCurrent.renderData.stepCount) {
-        dispatch('setStepNoCurrent', { slideCurrent: getters.slideCurrent, stepNoCurrent: 1 })
       }
     }
   },

@@ -75,8 +75,7 @@ export default {
       'setSlideNext',
       'setStepPrevious',
       'setStepNext',
-      'setSlideOrStepPrevious',
-      'setSlideOrStepNext',
+      'setSlideOrStepNextOrPrevious',
     ]),
     dropHandler (event) {
       openFiles(event.dataTransfer.files)
@@ -130,42 +129,42 @@ export default {
     this.$styleConfig.set({ overflow: true })
     this.$shortcuts.addMultiple([
       {
-        keys: 'left',
+        keys: 'ctrl+left',
         callback: this.setSlidePrevious,
         // Previous slide
         description: 'zur vorhergehenden Folie',
         routeNames: ['slides']
       },
       {
-        keys: 'right',
+        keys: 'ctrl+right',
         callback: this.setSlideNext,
         // Next slide
         description: 'zur nächsten Folie',
         routeNames: ['slides']
       },
       {
-        keys: 'up',
+        keys: 'ctrl+up',
         callback: this.setStepPrevious,
         // Previous step
         description: 'zum vorhergehenden Schritt',
         routeNames: ['slides']
       },
       {
-        keys: 'down',
+        keys: 'ctrl+down',
         callback: this.setStepNext,
         // Next step
         description: 'zum nächsten Schritt',
         routeNames: ['slides']
       },
       {
-        keys: 'ctrl+alt+left',
-        callback: this.setSlideOrStepPrevious,
+        keys: 'left',
+        callback: () => this.setSlideOrStepNextOrPrevious(-1),
         description: 'zur/m vorhergehenden Folie oder Schritt',
         routeNames: ['slides']
       },
       {
-        keys: 'ctrl+alt+right',
-        callback: this.setSlideOrStepNext,
+        keys: 'right',
+        callback: () => this.setSlideOrStepNextOrPrevious(1),
         description: 'zur/m nächsten Folie oder Schritt',
         routeNames: ['slides']
       },
