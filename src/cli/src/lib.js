@@ -26,7 +26,7 @@ function makeAsset (mediaFile) {
 function filePathToAssetType (filePath) {
   const asset = makeAsset(filePath)
   const inputExtension = asset.extension.toLowerCase()
-  return assetTypes.extensionToType(inputExtension)
+  return mediaServer.assetTypes.extensionToType(inputExtension)
 }
 
 /**

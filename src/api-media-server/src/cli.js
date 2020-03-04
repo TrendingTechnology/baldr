@@ -258,68 +258,6 @@ function actionHelp () {
   process.exit(1)
 }
 
-/** i / id-to-filename ********************************************************/
-
-/**
- * Rename a media asset after the `id` in the meta data file.
- *
- * @param {String} filePath - The media asset file path.
- */
-function renameFromIdOneFile (filePath) {
-  let result
-  try {
-    result = yaml.safeLoad(fs.readFileSync(`${filePath}.yml`, 'utf8'))
-  } catch (error) {
-    console.log(filePath)
-    console.log(error)
-    return
-  }
-
-  if ('id' in result && result.id) {
-    let id = result.id
-    const oldPath = filePath
-
-    // .mp4
-    const extension = path.extname(oldPath)
-    const oldBaseName = path.basename(oldPath, extension)
-    let newPath = null
-    // Gregorianik_HB_Alleluia-Ostermesse -> Alleluia-Ostermesse
-    id = id.replace(/.*_[A-Z]{2,}_/, '')
-    console.log(id)
-    if (id !== oldBaseName) {
-      newPath = path.join(path.dirname(oldPath), `${id}${extension}`)
-    } else {
-      return
-    }
-    renameAsset(oldPath, newPath)
-  }
-}
-
-/**
- * Rename a media asset or all child asset of the parent working directory
- * after the `id` in the meta data file.
- *
- * @param {String} filePath - The media file path.
- */
-function actionIdToFilename (filePath) {
-  if (filePath) {
-    renameFromIdOneFile(filePath)
-  } else {
-    walk(process.cwd(), {
-      asset (relPath) {
-        if (fs.existsSync(`${relPath}.yml`)) {
-          renameFromIdOneFile(relPath)
-        }
-      }
-    })
-  }
-}
-
-commander
-  .command('id-to-filename [input]').alias('i')
-  .description('Rename media assets after the id.')
-  .action(actionIdToFilename)
-
 /** mp / multipart ************************************************************/
 
 function actionMultipart (globPattern, prefix) {
@@ -511,66 +449,6 @@ commander
 
 commander
   .version(require('../package.json').version)
-
-/** y / yaml ******************************************************************/
-
-/**
- *
- */
-function actionYaml (filePath) {
-  if (filePath) {
-    writeMetaDataYaml(filePath)
-  } else {
-    walk(process.cwd(), {
-      asset (relPath) {
-        writeMetaDataYaml(relPath)
-      }
-    })
-  }
-}
-
-commander
-  .command('yaml [input]').alias('y')
-  .description('Create info files in the YAML format in the current working directory.')
-  .action(actionYaml)
-
-/** yv / yaml-validate ********************************************************/
-
-/**
- * @param {String} filePath - The media file path.
- */
-function validateYamlOneFile (filePath) {
-  console.log(`Validate: ${chalk.yellow(filePath)}`)
-  try {
-    const result = yaml.safeLoad(fs.readFileSync(filePath, 'utf8'))
-    console.log(chalk.green('ok!'))
-    console.log(result)
-  } catch (error) {
-    console.log(`${chalk.red(error.name)}: ${error.message}`)
-  }
-}
-
-/**
- * @param {String} filePath - The media file path.
- */
-function actionYamlValidate (filePath) {
-  if (filePath) {
-    validateYamlOneFile(filePath)
-  } else {
-    walk(process.cwd(), {
-      everyFile (relPath) {
-        if (relPath.toLowerCase().indexOf('.yml') > -1) {
-          validateYamlOneFile(relPath)
-        }
-      }
-    })
-  }
-}
-
-commander
-  .command('yaml-validate [input]').alias('yv')
-  .description('Validate the yaml files.')
-  .action(actionYamlValidate)
 
 /*******************************************************************************
  * main
