@@ -165,46 +165,47 @@ const actions = {
     }
   },
   /**
+   * If the direction is next (1) set the step number to 1. If the direction
+   * is previous (-1), set the step number to the last step = step count.
+   *
+   * @param {Object} vuex - see Vuex documentation
+   * @param {Number} direction - `1`: next, `-1`: previous
+   */
+  setStepLastOrFirstByDirection ({ dispatch, getters }, direction) {
+    // We need a new current slide.
+    // Only set the step number on slides with step support. The master slide
+    // cloze sets the variable stepCount async. If you enter a newer before
+    // visited cloze slide backwards, strange things happens.
+    if (getters.slideCurrent.renderData.stepCount) {
+      let stepNoCurrent = 1
+      if (direction === -1) {
+        stepNoCurrent = getters.slideCurrent.renderData.stepCount
+      }
+      dispatch('setStepNoCurrent', {
+        slideCurrent: getters.slideCurrent,
+        stepNoCurrent
+      })
+    }
+  },
+  /**
    * @param {Object} vuex - see Vuex documentation
    * @param {Number} direction - `1`: next, `-1`: previous
    */
   setSlideOrStepNextOrPrevious ({ dispatch, getters }, direction) {
-    const slideCurrent = getters.slideCurrent
-    const slideNo = getters.slideNoCurrent
-    const slideCount = getters.slidesCount
-    const stepCount = slideCurrent.renderData.stepCount
-    const stepNo = slideCurrent.renderData.stepNoCurrent
-
-    let turningPointsSteps, turningPointsSlides
-    if (direction === -1) {
-      turningPointsSteps = { begin: stepCount, end: 1 }
-      turningPointsSlides = { begin: slideCount, end: 1 }
-    } else if (direction === 1) {
-      turningPointsSteps = { begin: 1, end: stepCount }
-      turningPointsSlides = { begin: 1, end: slideCount }
-    }
-    if (stepCount > 1 && stepNo !== turningPointsSteps.end) {
-      dispatch('setStepNoCurrent', { slideCurrent, stepNoCurrent: stepNo + direction })
+    const renderData = getters.slideCurrent.renderData
+    // Change only steps
+    if (
+      renderData.stepCount > 1 &&
+      (
+        (direction === 1 && renderData.stepNoCurrent !== renderData.stepCount) || // Next
+        (direction === -1 && renderData.stepNoCurrent !== 1) // Previous
+      )
+    ) {
+      dispatch('setStepNextOrPrevious', direction)
+    // Change slide and steps
     } else {
-      if (slideNo === turningPointsSlides.end) {
-        dispatch('setSlideNoCurrent', turningPointsSlides.begin)
-      } else {
-        dispatch('setSlideNoCurrent', slideNo + direction)
-      }
-      // We need a new current slide.
-      // Only set the step number on slides with step support. The master slide
-      // cloze sets the variable stepCount async. If you enter a newer before
-      // visited cloze slide backwards, strange things happens.
-      if (getters.slideCurrent.renderData.stepCount) {
-        let stepNoCurrent = 1
-        if (direction === -1) {
-          stepNoCurrent = getters.slideCurrent.renderData.stepCount
-        }
-        dispatch('setStepNoCurrent', {
-          slideCurrent: getters.slideCurrent,
-          stepNoCurrent
-        })
-      }
+      dispatch('setSlideNextOrPrevious', direction)
+      dispatch('setStepLastOrFirstByDirection', direction)
     }
   },
   setSlideNoCurrent ({ commit, getters }, no) {
