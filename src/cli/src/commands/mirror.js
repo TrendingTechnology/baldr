@@ -30,7 +30,8 @@ function openFolder (folderPath) {
 function action () {
   const basePaths = [
     config.mediaServer.basePath,
-    '/home/jf/schule-archiv/'
+    '/home/jf/schule-archiv/',
+    '/mnt/xpsschulearchiv/'
   ]
 
   const currentBasePaths = []
