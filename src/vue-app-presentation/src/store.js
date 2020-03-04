@@ -146,27 +146,27 @@ const actions = {
       dispatch('setSlideNoCurrent', no)
     }
   },
-  setSlideNext ({ dispatch, getters }) {
+  /**
+   * @param {Object} vuex - see Vuex documentation
+   * @param {Number} direction - `1`: next, `-1`: previous
+   */
+  setSlideNextOrPrevious ({ dispatch, getters }, direction) {
     const no = getters.slideNoCurrent
     const count = getters.slidesCount
-    if (no === count) {
+    // next
+    if (direction === 1 && no === count) {
       dispatch('setSlideNoCurrent', 1)
-    } else {
-      dispatch('setSlideNoCurrent', no + 1)
     }
-  },
-  setSlidePrevious ({ dispatch, getters }) {
-    const no = getters.slideNoCurrent
-    const count = getters.slidesCount
-    if (no === 1) {
+    // previous
+    else if (direction === -1 && no === 1) {
       dispatch('setSlideNoCurrent', count)
     } else {
-      dispatch('setSlideNoCurrent', no - 1)
+      dispatch('setSlideNoCurrent', no + direction)
     }
   },
   /**
-   * @param {Object} vuex
-   * @param {Number} direction `1`: next, `-1`: previous
+   * @param {Object} vuex - see Vuex documentation
+   * @param {Number} direction - `1`: next, `-1`: previous
    */
   setSlideOrStepNextOrPrevious ({ dispatch, getters }, direction) {
     const slideCurrent = getters.slideCurrent
@@ -225,31 +225,25 @@ const actions = {
     commit('setShowBlank', true)
     commit('setSlideNoCurrent', no)
   },
-  setStepNext ({ dispatch, getters }) {
+  /**
+   * @param {Object} vuex - see Vuex documentation
+   * @param {Number} direction - `1`: next, `-1`: previous
+   */
+  setStepNextOrPrevious ({ dispatch, getters }, direction) {
     const slideCurrent = getters.slideCurrent
     if (!slideCurrent) return
     const count = slideCurrent.renderData.stepCount
     if (!count) return
     let stepNoCurrent
     const no = slideCurrent.renderData.stepNoCurrent
-    if (no === count) {
+    // Next
+    if (direction === 1 && no === count) {
       stepNoCurrent = 1
-    } else {
-      stepNoCurrent = no + 1
-    }
-    dispatch('setStepNoCurrent', { slideCurrent, stepNoCurrent })
-  },
-  setStepPrevious ({ dispatch, getters }) {
-    const slideCurrent = getters.slideCurrent
-    if (!slideCurrent) return
-    const count = slideCurrent.renderData.stepCount
-    if (!count) return
-    let stepNoCurrent
-    const no = slideCurrent.renderData.stepNoCurrent
-    if (no === 1) {
+    // Previous
+    } else if (direction === -1 && no === 1) {
       stepNoCurrent = count
     } else {
-      stepNoCurrent = no - 1
+      stepNoCurrent = no + direction
     }
     dispatch('setStepNoCurrent', { slideCurrent, stepNoCurrent })
   },

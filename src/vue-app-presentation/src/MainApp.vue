@@ -71,10 +71,8 @@ export default {
   },
   methods: {
     ...mapActions([
-      'setSlidePrevious',
-      'setSlideNext',
-      'setStepPrevious',
-      'setStepNext',
+      'setSlideNextOrPrevious',
+      'setStepNextOrPrevious',
       'setSlideOrStepNextOrPrevious',
     ]),
     dropHandler (event) {
@@ -130,28 +128,28 @@ export default {
     this.$shortcuts.addMultiple([
       {
         keys: 'ctrl+left',
-        callback: this.setSlidePrevious,
+        callback: () => this.setSlideNextOrPrevious(-1),
         // Previous slide
         description: 'zur vorhergehenden Folie',
         routeNames: ['slides']
       },
       {
         keys: 'ctrl+right',
-        callback: this.setSlideNext,
+        callback: () => this.setSlideNextOrPrevious(1),
         // Next slide
         description: 'zur nächsten Folie',
         routeNames: ['slides']
       },
       {
         keys: 'ctrl+up',
-        callback: this.setStepPrevious,
+        callback: () => this.setStepNextOrPrevious(-1),
         // Previous step
         description: 'zum vorhergehenden Schritt',
         routeNames: ['slides']
       },
       {
         keys: 'ctrl+down',
-        callback: this.setStepNext,
+        callback: () => this.setStepNextOrPrevious(1),
         // Next step
         description: 'zum nächsten Schritt',
         routeNames: ['slides']
