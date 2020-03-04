@@ -51,9 +51,10 @@ async function presentationFromAssets (filePath) {
         console.log(`Asset has no ID: ${chalk.red(relPath)}`)
         return
       }
-      console.log(asset)
       let masterName
-      if (asset.id.indexOf('NB') > -1) {
+      if (asset.id.indexOf('Lueckentext') > -1) {
+        masterName = 'cloze'
+      } else if (asset.id.indexOf('NB') > -1) {
         masterName = 'score_sample'
       } else {
         masterName = asset.assetType

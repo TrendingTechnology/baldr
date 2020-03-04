@@ -975,7 +975,10 @@ async function update (full = false) {
   await db.collection('updates').insertOne({ begin: begin, end: 0 })
   await walk(basePath, {
     everyFile: (filePath) => {
-      if (filePath.match(/\.(aux|out|log|synctex\.gz|mscx,)$/)) {
+      if (
+        filePath.match(/\.(aux|out|log|synctex\.gz|mscx,)$/) ||
+        filePath.indexOf('Praesentation_tmp.baldr.yml') > -1
+      ) {
         console.log(`Delete temporary file ${filePath}`)
         fs.unlinkSync(filePath)
       }
