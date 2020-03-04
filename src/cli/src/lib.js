@@ -264,6 +264,7 @@ module.exports = {
   readFile,
   renameAsset,
   runImagemagick,
+  semanticMarkupHtmlToTex,
   writeFile,
   writeMetaDataYaml,
   writeMetaDataYamlFile,
