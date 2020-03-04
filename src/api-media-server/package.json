@@ -1,7 +1,7 @@
 {
   "name": "@bldr/api-media-server",
   "version": "0.2.3",
-  "description": "The REST API and command line interface of the BALDR media server.",
+  "description": "The REST API of the BALDR media server.",
   "author": {
     "name": "Josef Friedrich",
     "email": "josef@friedrich.rocks",
@@ -16,22 +16,12 @@
   "dependencies": {
     "@bldr/core-browser": "^0.11.3",
     "@bldr/core-node": "^0.2.2",
-    "chalk": "^3.0.0",
-    "color": "^3.1.2",
-    "commander": "^4.1.1",
     "cors": "^2.8.5",
     "express": "^4.17.1",
-    "glob": "7.1.6",
     "js-yaml": "^3.13.1",
     "mongodb": "^3.5.4",
-    "music-metadata": "6.3.4",
-    "node-fetch": "^2.6.0",
     "saslprep": "^1.0.3",
-    "transliteration": "^2.1.8",
-    "wikibase-sdk": "^7.2.1"
-  },
-  "bin": {
-    "baldr_media-server-cli.js": "./src/cli.js"
+    "transliteration": "^2.1.8"
   },
   "publishConfig": {
     "access": "public"
