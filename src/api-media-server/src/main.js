@@ -1217,6 +1217,7 @@ async function openEditor (id, mediaType) {
 async function openParentFolder (id, mediaType) {
   const absPath = await getAbsPathFromId(id, mediaType)
   const parentFolder = path.dirname(absPath)
+  // Mär 06 18:24:40 xps dbus-daemon[3821]: [session uid=1001 pid=3819] AppArmor D-Bus mediation is enabled
   childProcess.spawn('xdg-open', [parentFolder], {
     env: {
       // Not needed
