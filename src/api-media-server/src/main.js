@@ -1223,7 +1223,10 @@ async function openParentFolder (id, mediaType) {
       // Not needed
       //XAUTHORITY: '/run/user/1000/gdm/Xauthority',
       DISPLAY: ':0'
-    }
+    },
+    uid: 1001,
+    gid: 1001,
+    shell: true
   })
   return {
     parentFolder
