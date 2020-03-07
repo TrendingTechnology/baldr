@@ -1176,6 +1176,8 @@ async function getAbsPathFromId (id, mediaType = 'presentations') {
 }
 
 /**
+ * Open a file path with an executable.
+ *
  * To launch apps via the REST API the systemd unit file must run as
  * the user you login in in your desktop environment. You also have to set
  * to environment variables: `DISPLAY=:0` and
@@ -1440,6 +1442,7 @@ module.exports = {
   getExtension,
   helpMessages,
   HierarchicalFolderTitles,
+  openWith,
   registerRestApi,
   walk,
   walkDeluxe
