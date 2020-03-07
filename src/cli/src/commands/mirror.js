@@ -72,8 +72,8 @@ function getBaseAndArchivePaths () {
  *
  * @param {String} folderPath
  * @param {Object} options
- * @property {Boolean} options.createDirs - Create missing parent directories
- *   in a recursive fashion.
+ * @property {Boolean} options.createDirs - Create the directory structure of
+ *   the given `folderPath` in a recursive manner.
  * @property {Boolean} options.verbose - Print out some messages.
  */
 function openFolder (folderPath, { createDirs, verbose }) {
