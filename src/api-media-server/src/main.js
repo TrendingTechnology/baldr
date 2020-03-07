@@ -1246,12 +1246,16 @@ function getBaseAndArchivePaths () {
  *   the given `currentPath` in a recursive manner.
  */
 function openFolder (currentPath, create) {
+  result = {}
   if (create && !fs.existsSync(currentPath)) {
     fs.mkdirSync(currentPath, { recursive: true })
+    result.create = true
   }
   if (fs.existsSync(currentPath)) {
     openWith('xdg-open', currentPath)
+    result.open = true
   }
+  return result
 }
 
 /**
@@ -1266,15 +1270,18 @@ function openFolder (currentPath, create) {
  *   the given `currentPath` in a recursive manner.
  */
 function openFolderWithArchives (currentPath, create) {
+  const result = {}
   const basePaths = getBaseAndArchivePaths()
   const relPath = getRelPath(basePaths, currentPath)
   for (const basePath of basePaths) {
     if (relPath) {
-      openFolder(path.join(basePath, relPath), create)
+      const currentPath = path.join(basePath, relPath)
+      result[currentPath] = openFolder(currentPath, create)
     } else {
-      openFolder(basePath, create)
+      result[basePath] = openFolder(basePath, create)
     }
   }
+  return result
 }
 
 /**
@@ -1347,17 +1354,19 @@ async function openParentFolder (id, mediaType, archives, create) {
   const absPath = await getAbsPathFromId(id, mediaType)
   const parentFolder = path.dirname(absPath)
 
+  let result
   if (archives) {
-    openFolderWithArchives(parentFolder, create)
+    result = openFolderWithArchives(parentFolder, create)
   } else {
-    openFolder(parentFolder, create)
+    result = openFolder(parentFolder, create)
   }
   return {
     id,
     parentFolder,
     mediaType,
     archives,
-    create
+    create,
+    result
   }
 }
 
@@ -1561,6 +1570,7 @@ module.exports = {
   getExtension,
   helpMessages,
   HierarchicalFolderTitles,
+  openFolderWithArchives,
   openWith,
   registerRestApi,
   walk,
