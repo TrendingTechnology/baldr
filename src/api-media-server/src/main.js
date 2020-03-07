@@ -66,7 +66,6 @@ const yaml = require('js-yaml')
 const express = require('express')
 const MongoClient = require('mongodb').MongoClient
 const { transliterate } = require('transliteration')
-const open = require('open')
 
 // Project packages.
 const { bootstrapConfig } = require('@bldr/core-node')
@@ -1177,6 +1176,31 @@ async function getAbsPathFromId (id, mediaType = 'presentations') {
 }
 
 /**
+ * To launch apps via the REST API the systemd unit file must run as
+ * the user you login in in your desktop environment. You also have to set
+ * to environment variables: `DISPLAY=:0` and
+ * `DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$UID/bus`
+ *
+ * ```
+ * Environment=DISPLAY=:0
+ * Environment=DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus
+ * User=1000
+ * Group=1000
+ * ```
+ *
+ * @see node module on npmjs.org “open”
+ * @see {@link https://unix.stackexchange.com/a/537848}
+ */
+function openWith (executable, filePath) {
+  // See node module on npmjs.org “open”
+  const subprocess = childProcess.spawn(executable, [filePath], {
+    stdio: 'ignore',
+    detached: true
+  })
+  subprocess.unref()
+}
+
+/**
  * Open a media file specified by an ID with an editor specified in
  *   `config.mediaServer.editor` (`/etc/baldr.json`).
  *
@@ -1193,13 +1217,7 @@ async function openEditor (id, mediaType) {
       error: `Editor “${editor}” can’t be found.`
     }
   }
-  childProcess.spawn(editor, [absPath], {
-    env: {
-      // Not needed
-      //XAUTHORITY: '/run/user/1000/gdm/Xauthority',
-      DISPLAY: ':0'
-    }
-  })
+  openWith(editor, absPath)
   return {
     absPath,
     editor
@@ -1218,18 +1236,7 @@ async function openEditor (id, mediaType) {
 async function openParentFolder (id, mediaType) {
   const absPath = await getAbsPathFromId(id, mediaType)
   const parentFolder = path.dirname(absPath)
-  // Use dedicated package for opening files. To avoid problems as listed
-  // below.
-  await open(parentFolder)
-  // Mär 06 18:24:40 xps dbus-daemon[3821]: [session uid=1001 pid=3819] AppArmor D-Bus mediation is enabled
-  // childProcess.spawn('xdg-open', [parentFolder], {
-  //   env: {
-  //     // Not needed
-  //     //XAUTHORITY: '/run/user/1000/gdm/Xauthority',
-  //     DISPLAY: ':0'
-  //   },
-  //   detached: true
-  // })
+  openWith('xdg-open', parentFolder)
   return {
     parentFolder
   }
