@@ -73,7 +73,7 @@ const { transliterate } = require('transliteration')
 
 // Project packages.
 const { bootstrapConfig } = require('@bldr/core-node')
-const { AssetTypes, snakeToCamel } = require('@bldr/core-browser')
+const { AssetTypes, convertPropertiesToCamelCase } = require('@bldr/core-browser')
 
 const packageJson = require('../package.json')
 
@@ -174,39 +174,6 @@ function deasciify (input) {
     .replace(/oe/g, 'ö')
     .replace(/Ue/g, 'Ü')
     .replace(/ue/g, 'ü')
-}
-
-/**
- * Convert all properties in an object to camelCase in a recursive fashion.
- *
- * TODO: Use the function in @bldr/core-browser
- *
- * @param {Object} object
- *
- * @returns {Object}
- */
-function convertPropertiesToCamelCase (object) {
-  // Array
-  if (Array.isArray(object)) {
-    for (const item of object) {
-      if (typeof object === 'object') {
-        convertPropertiesToCamelCase(item)
-      }
-    }
-  // Object
-  } else if (typeof object === 'object') {
-    for (const snakeCase in object) {
-      const camelCase = snakeToCamel(snakeCase)
-      if (camelCase !== snakeCase) {
-        const value = object[snakeCase]
-        object[camelCase] = value
-        delete object[snakeCase]
-      }
-      // Object or array
-      if (typeof object[camelCase] === 'object') convertPropertiesToCamelCase(object[camelCase])
-    }
-  }
-  return object
 }
 
 /**
