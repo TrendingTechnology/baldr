@@ -118,6 +118,26 @@ export default {
         shortcutObjects.push(this.getToggleShortcutObject(...spec))
       }
       return shortcutObjects
+    },
+    callOpenRestApi (openWith, archive, create) {
+      const presentation = this.$store.getters['presentation/presentation']
+      if (Object.keys(presentation).length === 0) {
+        this.$notifyError(
+          'Es ist keine Präsentation geladen.',
+          'Der übergeordnete Ordner konnte nicht geöffnet werden.'
+        )
+        return
+      }
+      this.$media.httpRequest.request({
+        url: 'mgmt/open',
+        params: {
+          with: openWith,
+          type: 'presentations',
+          id: presentation.meta.id,
+          archive,
+          create
+        }
+      })
     }
   },
   mounted: function () {
@@ -189,47 +209,18 @@ export default {
       },
       {
         keys: 'ctrl+e',
-        callback: () => {
-          const presentation = this.$store.getters['presentation/presentation']
-          if (Object.keys(presentation).length === 0) {
-            this.$notifyError(
-              'Es ist keine Präsentation geladen.',
-              'Editor konnte nicht geöffnet werden.'
-            )
-            return
-          }
-          this.$media.httpRequest.request({
-            url: 'mgmt/open',
-            params: {
-              with: 'editor',
-              type: 'presentations',
-              id: presentation.meta.id
-            }
-          })
-        },
+        callback: () => { this.callOpenRestApi('editor') },
         description: 'Die aktuelle Präsentation im Editor öffnen'
       },
       {
         keys: 'ctrl+alt+e',
-        callback: () => {
-          const presentation = this.$store.getters['presentation/presentation']
-          if (Object.keys(presentation).length === 0) {
-            this.$notifyError(
-              'Es ist keine Präsentation geladen.',
-              'Der übergeordnete Ordner konnte nicht geöffnet werden.'
-            )
-            return
-          }
-          this.$media.httpRequest.request({
-            url: 'mgmt/open',
-            params: {
-              with: 'folder',
-              type: 'presentations',
-              id: presentation.meta.id
-            }
-          })
-        },
+        callback: () => { this.callOpenRestApi('folder') },
         description: 'Den übergeordneten Ordner der Präsentation öffnen'
+      },
+      {
+        keys: 'ctrl+shift+alt+e',
+        callback: () => { this.callOpenRestApi('folder', true) },
+        description: 'Den übergeordneten Ordner der Präsentation sowie den dazugehörenden Archivordner öffnen'
       },
       {
         keys: 'ctrl+alt+d',
