@@ -21,16 +21,6 @@ const { bootstrapConfig } = require('@bldr/core-node')
 const config = bootstrapConfig()
 
 /**
- * Default TCP port the server listens on.
- */
-const DEFAULT_PORT = config.api.port
-
-/**
- * TCP Port on which the express js server listens on.
- */
-let port
-
-/**
  * Express js server instance. Returned by app.listen()
  */
 let server
@@ -63,6 +53,28 @@ app.get('/version', (req, res) => {
   res.json(helpMessages.version)
 })
 
+/**
+ * Run the REST API. Listen to a TCP port.
+ *
+ * @param {Number} port - A TCP port.
+ */
+const run = function (port) {
+  if (!port) {
+    port = config.api.port
+  }
+  server = app.listen(port, () => {
+    console.log(`The BALDR REST API is running on port ${port}.`)
+  })
+  return app
+}
+
+/**
+ * Stop the REST API.
+ */
+const stop = function () {
+  server.close()
+}
+
 const main = function () {
   // To get a clean commander. Otherwise we get options from mocha in the tests.
   // https://github.com/tj/commander.js/issues/438#issuecomment-274285003
@@ -72,26 +84,12 @@ const main = function () {
     .option('-p, --port <port>', 'Port to listen to.')
     .parse(process.argv)
 
-  if (options.port) {
-    port = options.port
-  } else {
-    port = DEFAULT_PORT
-  }
-
-  server = app.listen(port, () => {
-    console.log(`The BALDR REST API is running on port ${port}.`)
-  })
-
-  return app
-}
-
-const stop = function () {
-  server.close()
+  return run(options.port)
 }
 
 if (require.main === module) {
   main()
 } else {
-  module.exports = main()
+  module.exports.run = run
   module.exports.stop = stop
 }

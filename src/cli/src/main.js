@@ -15,6 +15,18 @@ const commandsPath = path.join(__dirname, 'commands')
 const config = bootstrapConfig()
 const cwd = process.cwd()
 
+/**
+ * To avoid duplicate aliases. The `commander` doesn’t complain about duplicates.
+ *
+ * @param {Array} aliases
+ */
+const aliases = []
+
+/**
+ * Load all (sub)commands in the subfolder `commands`
+ *
+ * @param {Object} commander - An instance of the package “commander”.
+ */
 function loadCommands (commander) {
   for (const fileName of fs.readdirSync(commandsPath)) {
     const conf = require(path.join(commandsPath, fileName))
@@ -23,7 +35,13 @@ function loadCommands (commander) {
     }
     const c = commander.command(conf.command)
     if (conf.alias) {
-      c.alias(conf.alias)
+      if (!aliases.includes(conf.alias)) {
+        c.alias(conf.alias)
+        aliases.push(conf.alias)
+      }
+      else {
+        throw new Error(`Duplicate alias “${conf.alias}” used for the (sub)command “${conf.command}”.`)
+      }
     }
     c.description(conf.description)
     if (conf.options) {

@@ -66,6 +66,7 @@ const yaml = require('js-yaml')
 const express = require('express')
 const MongoClient = require('mongodb').MongoClient
 const { transliterate } = require('transliteration')
+const open = require('open')
 
 // Project packages.
 const { bootstrapConfig } = require('@bldr/core-node')
@@ -1098,11 +1099,11 @@ const helpMessages = {
       open: {
         '#description': 'Open a media file specified by an ID.',
         '#examples': [
-          'mgmt/open?id=Beethoven_Egmont',
-          'mgmt/open?with=editor&id=Beethoven_Egmont',
-          'mgmt/open?with=editor&type=presentations&id=Beethoven_Egmont',
-          'mgmt/open?with=editor&type=assets&id=Beethoven',
-          'mgmt/open?with=folder&type=assets&id=Beethoven'
+          'media/mgmt/open?id=Egmont',
+          'media/mgmt/open?with=editor&id=Egmont',
+          'media/mgmt/open?with=editor&type=presentations&id=Egmont',
+          'media/mgmt/open?with=editor&type=assets&id=Beethoven_Ludwig-van',
+          'media/mgmt/open?with=folder&type=assets&id=Beethoven_Ludwig-van'
         ],
         '#parameters': {
           id: 'The ID of the media file (required).',
@@ -1217,17 +1218,18 @@ async function openEditor (id, mediaType) {
 async function openParentFolder (id, mediaType) {
   const absPath = await getAbsPathFromId(id, mediaType)
   const parentFolder = path.dirname(absPath)
+  // Use dedicated package for opening files. To avoid problems as listed
+  // below.
+  await open(parentFolder)
   // Mär 06 18:24:40 xps dbus-daemon[3821]: [session uid=1001 pid=3819] AppArmor D-Bus mediation is enabled
-  childProcess.spawn('xdg-open', [parentFolder], {
-    env: {
-      // Not needed
-      //XAUTHORITY: '/run/user/1000/gdm/Xauthority',
-      DISPLAY: ':0'
-    },
-    uid: 1001,
-    gid: 1001,
-    shell: true
-  })
+  // childProcess.spawn('xdg-open', [parentFolder], {
+  //   env: {
+  //     // Not needed
+  //     //XAUTHORITY: '/run/user/1000/gdm/Xauthority',
+  //     DISPLAY: ':0'
+  //   },
+  //   detached: true
+  // })
   return {
     parentFolder
   }
