@@ -33,7 +33,10 @@
  *       - `with`: `editor` specified in `config.mediaServer.editor`
  *         (`/etc/baldr.json`) or `folder` to open the parent folder of the
  *         given media file. The default value is `editor`
- *
+ *       - `archives`: Omit or set 0 for false. Open the file or the folder in
+ *         the corresponding archive folder structure.
+ *       - `create`: Omit or set 0 for false. Create the possibly non existing
+ *         directory structure in a recursive manner.
  *   - `re-init`: Re-Initialize the MongoDB database (Drop all collections and
  *     initialize)
  *   - `update`: Update the media server database (Flush and insert).
@@ -60,6 +63,7 @@
 const childProcess = require('child_process')
 const fs = require('fs')
 const path = require('path')
+const os = require('os')
 
 // Third party packages.
 const yaml = require('js-yaml')
@@ -136,7 +140,7 @@ async function connectDb () {
  * @returns {String}
  */
 function asciify (input) {
-  let output = input
+  const output = input
     .replace(/[\(\)';]/g, '')
     .replace(/[,.] /g, '_')
     .replace(/ +- +/g, '_')
@@ -224,7 +228,7 @@ function getExtension (filePath) {
  * @returns {String}
  */
 function stripTags (text) {
-  return text.replace(/<[^>]+>/g, '');
+  return text.replace(/<[^>]+>/g, '')
 }
 
 /* Media objects **************************************************************/
@@ -233,7 +237,7 @@ function stripTags (text) {
  * Hold some data about a folder and its title.
  */
 class FolderTitle {
-  constructor({ title, subtitle, folderName, path, hasPraesentation }) {
+  constructor ({ title, subtitle, folderName, path, hasPraesentation }) {
     /**
      * @type {String}
      */
@@ -353,7 +357,7 @@ class HierarchicalFolderTitles {
     // To build the path property of the FolderTitle class.
     const folderNames = []
     for (let index = minDepth + 1; index < depth; index++) {
-      let folderName = segments[index - 1]
+      const folderName = segments[index - 1]
       folderNames.push(folderName)
       // [ '', 'var', 'data', 'baldr', 'media', '05' ]
       const pathSegments = segments.slice(0, index)
@@ -377,7 +381,7 @@ class HierarchicalFolderTitles {
    * @type {array}
    * @private
    */
-  get titlesArray_() {
+  get titlesArray_ () {
     return this.titles_.map(folderTitle => folderTitle.title)
   }
 
@@ -410,7 +414,7 @@ class HierarchicalFolderTitles {
    *
    * @type {Array}
    */
-  get curriculumTitlesArray() {
+  get curriculumTitlesArray () {
     return this.titlesArray_.slice(1, this.titles_.length - 1)
   }
 
@@ -487,7 +491,7 @@ class HierarchicalFolderTitles {
    *
    * @returns {Array}
    */
-  list() {
+  list () {
     return this.titles_
   }
 }
@@ -763,7 +767,7 @@ class Presentation extends MediaFile {
      */
     this.titleSubtitle = this.titleSubtitle_()
 
-  /**
+    /**
    * The plain text version of `folderTitles.allTitles
    * (this.meta.subtitle)`
    *
@@ -776,7 +780,7 @@ class Presentation extends MediaFile {
    * @returns {String}
    * @private
    */
-    this.allTitlesSubtitle = this.allTitlesSubtitle_ (folderTitles)
+    this.allTitlesSubtitle = this.allTitlesSubtitle_(folderTitles)
 
     /**
      * Value is the same as `meta.id`
@@ -1098,16 +1102,20 @@ const helpMessages = {
       open: {
         '#description': 'Open a media file specified by an ID.',
         '#examples': [
-          'media/mgmt/open?id=Egmont',
-          'media/mgmt/open?with=editor&id=Egmont',
-          'media/mgmt/open?with=editor&type=presentations&id=Egmont',
-          'media/mgmt/open?with=editor&type=assets&id=Beethoven_Ludwig-van',
-          'media/mgmt/open?with=folder&type=assets&id=Beethoven_Ludwig-van'
+          '/media/mgmt/open?id=Egmont',
+          '/media/mgmt/open?with=editor&id=Egmont',
+          '/media/mgmt/open?with=editor&type=presentations&id=Egmont',
+          '/media/mgmt/open?with=folder&type=presentations&id=Egmont&archives=true',
+          '/media/mgmt/open?with=folder&type=presentations&id=Egmont&archives=true&create=true',
+          '/media/mgmt/open?with=editor&type=assets&id=Beethoven_Ludwig-van',
+          '/media/mgmt/open?with=folder&type=assets&id=Beethoven_Ludwig-van'
         ],
         '#parameters': {
           id: 'The ID of the media file (required).',
           type: '`presentations`, `assets`. The default value is `presentations.`',
-          with: '`editor` specified in `config.mediaServer.editor` (`/etc/baldr.json`) or `folder` to open the parent folder of the given media file. The default value is `editor`.'
+          with: '`editor` specified in `config.mediaServer.editor` (`/etc/baldr.json`) or `folder` to open the parent folder of the given media file. The default value is `editor`.',
+          archives: 'Omit or set 0 for false. Open the file or the folder in the corresponding archive folder structure.',
+          create: 'Omit or set 0 for false. Create the possibly non existing directory structure in a recursive manner.'
         }
       },
       're-init': 'Re-Initialize the MongoDB database (Drop all collections and initialize).',
@@ -1176,6 +1184,100 @@ async function getAbsPathFromId (id, mediaType = 'presentations') {
 }
 
 /**
+ * Get the path relative to one of the base paths and `currentPath`.
+ *
+ * @param {Array} basePaths
+ * @param {string} currentPath
+ *
+ * @returns {String}
+ */
+function getRelPath (basePaths, currentPath) {
+  let relPath
+  for (const basePath of basePaths) {
+    if (currentPath.indexOf(basePath) === 0) {
+      relPath = currentPath.replace(basePath, '')
+      break
+    }
+  }
+  return relPath.replace(new RegExp(`^${path.sep}`), '')
+}
+
+/**
+ *
+ * @param {String} filePath
+ *
+ * @see {@link https://stackoverflow.com/a/36221905/10193818}
+ */
+function untildify (filePath) {
+  if (filePath[0] === '~') {
+    return path.join(os.homedir(), filePath.slice(1))
+  }
+  return filePath
+}
+
+/**
+ * Merge the configurations entries of `config.mediaServer.basePath` and
+ * `config.mediaServer.archivePaths`. Retrieve only the accessible ones.
+ *
+ * @returns An array of directory paths in this order: First the main
+ *   base path of the media server, then one ore more archive directory
+ *   paths. The paths are checked for existence and resolved (untildified).
+ */
+function getBaseAndArchivePaths () {
+  const basePaths = [
+    config.mediaServer.basePath,
+    ...config.mediaServer.archivePaths
+  ]
+  const result = []
+  for (let i = 0; i < basePaths.length; i++) {
+    basePaths[i] = path.resolve(untildify(basePaths[i]))
+    if (fs.existsSync(basePaths[i])) {
+      result.push(basePaths[i])
+    }
+  }
+  return result
+}
+
+/**
+ * Open a file path using the linux command `xdg-open`.
+ *
+ * @param {String} currentPath
+ * @param {Boolean} create - Create the directory structure of
+ *   the given `currentPath` in a recursive manner.
+ */
+function openFolder (currentPath, create) {
+  if (create && !fs.existsSync(currentPath)) {
+    fs.mkdirSync(currentPath, { recursive: true })
+  }
+  if (fs.existsSync(currentPath)) {
+    openWith('xdg-open', currentPath)
+  }
+}
+
+/**
+ * Open the current path multiple times.
+ *
+ * 1. In the main media server directory
+ * 2. In a archive directory structure.
+ * 3. In a second archive directory structure ... and so on.
+ *
+ * @param {String} currentPath
+ * @param {Boolean} create - Create the directory structure of
+ *   the given `currentPath` in a recursive manner.
+ */
+function openFolderWithArchives (currentPath, create) {
+  const basePaths = getBaseAndArchivePaths()
+  const relPath = getRelPath(basePaths, currentPath)
+  for (const basePath of basePaths) {
+    if (relPath) {
+      openFolder(path.join(basePath, relPath), create)
+    } else {
+      openFolder(basePath, create)
+    }
+  }
+}
+
+/**
  * Open a file path with an executable.
  *
  * To launch apps via the REST API the systemd unit file must run as
@@ -1221,6 +1323,8 @@ async function openEditor (id, mediaType) {
   }
   openWith(editor, absPath)
   return {
+    id,
+    mediaType,
     absPath,
     editor
   }
@@ -1232,15 +1336,28 @@ async function openEditor (id, mediaType) {
  *
  * @param {String} id - The id of the media type.
  * @param {String} mediaType - At the moment `assets` and `presentation`
+ * @param {Boolean} archives - Addtionaly open the corresponding archive
+ *   folder.
+ * @param {Boolean} create - Create the directory structure of
+ *   the relative path in the archives in a recursive manner.
  *
  * @return {Object}
  */
-async function openParentFolder (id, mediaType) {
+async function openParentFolder (id, mediaType, archives, create) {
   const absPath = await getAbsPathFromId(id, mediaType)
   const parentFolder = path.dirname(absPath)
-  openWith('xdg-open', parentFolder)
+
+  if (archives) {
+    openFolderWithArchives(parentFolder, create)
+  } else {
+    openFolder(parentFolder, create)
+  }
   return {
-    parentFolder
+    id,
+    parentFolder,
+    mediaType,
+    archives,
+    create
   }
 }
 
@@ -1376,10 +1493,12 @@ function registerRestApi () {
       if (!query.id) throw new Error('You have to specify an ID (?id=myfile).')
       if (!query.with) query.with = 'editor'
       if (!query.type) query.type = 'presentations'
+      query.create = Boolean(query.create)
+      query.archives = Boolean(query.archives)
       if (query.with === 'editor') {
         res.json(await openEditor(query.id, query.type))
       } else if (query.with === 'folder') {
-        res.json(await openParentFolder(query.id, query.type))
+        res.json(await openParentFolder(query.id, query.type, query.archives, query.create))
       }
     } catch (error) {
       next(error)
