@@ -67,13 +67,22 @@ function getBaseAndArchivePaths () {
   return result
 }
 
-function openFolder (folderPath, createDirs) {
+/**
+ * Open a file path with `xdg-open`.
+ *
+ * @param {String} folderPath
+ * @param {Object} options
+ * @property {Boolean} options.createDirs - Create missing parent directories
+ *   in a recursive fashion.
+ * @property {Boolean} options.verbose - Print out some messages.
+ */
+function openFolder (folderPath, { createDirs, verbose }) {
   if (createDirs && !fs.existsSync(folderPath)) {
-    console.log(`Create directory: ${chalk.yellow(folderPath)}`)
+    if (verbose) console.log(`Create directory: ${chalk.yellow(folderPath)}`)
     fs.mkdirSync(folderPath, { recursive: true })
   }
   if (fs.existsSync(folderPath)) {
-    console.log(`Open directory: ${chalk.green(folderPath)}`)
+    if (verbose) console.log(`Open directory: ${chalk.green(folderPath)}`)
     openWith('xdg-open', folderPath)
   }
 }
@@ -94,11 +103,12 @@ function action (cmdObj) {
     console.log(`The relative path is: ${chalk.yellow(relPath)}`)
   }
 
+  const options = { createDirs: cmdObj.createDirs, verbose: true }
   for (const basePath of currentBasePaths) {
     if (relPath) {
-      openFolder(path.join(basePath, relPath), cmdObj.createDirs)
+      openFolder(path.join(basePath, relPath), options)
     } else {
-      openFolder(basePath, cmdObj.createDirs)
+      openFolder(basePath, options)
     }
   }
 }
