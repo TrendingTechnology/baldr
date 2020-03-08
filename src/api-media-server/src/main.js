@@ -592,7 +592,8 @@ class MediaFile {
   }
 
   /**
-   *
+   * Delete the temporary properties of the object. Temporary properties end
+   * with `_`.
    */
   cleanTmpProperties () {
     for (const property in this) {
@@ -604,16 +605,17 @@ class MediaFile {
   }
 
   /**
-   * Merge an object into the class object. Property can be in the `snake_case`
-   * or `kebab-case` form. They are converted in to `camelCase` in recursive fashin.
+   * Merge an object into the class object. Properties can be in the
+   * `snake_case` or `kebab-case` form. They are converted into `camelCase` in a
+   * recursive fashion.
    *
    * @param {object} properties - Add an object to the class properties.
    */
-  mergeObject (object) {
-    if (typeof object === 'object') {
-      convertPropertiesToCamelCase(object)
-      for (const property in object) {
-        this[property] = object[property]
+  importProperties (properties) {
+    if (typeof properties === 'object') {
+      convertPropertiesToCamelCase(properties)
+      for (const property in properties) {
+        this[property] = properties[property]
       }
     }
   }
@@ -650,9 +652,12 @@ class Asset extends MediaFile {
     this.infoFile_ = `${this.absPath_}.yml`
 
     const data = this.readYaml_(this.infoFile_)
-    this.mergeObject(data)
+    this.importProperties(data)
   }
 
+  /**
+   *
+   */
   addFileInfos () {
     this.addFileInfos_()
     const previewImage = `${this.absPath_}_preview.jpg`
@@ -710,7 +715,7 @@ class Presentation extends MediaFile {
   constructor (filePath) {
     super(filePath)
     const data = this.readYaml_(filePath)
-    if (data) this.mergeObject(data)
+    if (data) this.importProperties(data)
 
     const folderTitles = new HierarchicalFolderTitles(filePath)
     folderTitleTree.add(folderTitles)
