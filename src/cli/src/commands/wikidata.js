@@ -86,17 +86,60 @@ class Claims {
   }
 }
 
+/**
+ *
+ * @param {String} url
+ * @param {String} dest
+ */
 async function downloadFile (url, dest) {
   const response = await fetch(url)
   fs.writeFileSync(dest, Buffer.from(await response.arrayBuffer()))
 }
 
+/**
+ *
+ * @param {String} filename
+ * @param {String} dest
+ */
 async function downloadWikicommonsFile (filename, dest) {
   const url = wikibase.getImageUrl(filename)
   await downloadFile(url, dest)
 }
 
-async function action (itemId) {
+/**
+ * ```js
+ * {
+ * id: 'Q312609',
+ * type: 'item',
+ * modified: '2020-03-01T19:08:47Z',
+ * labels: { de: 'Cheb Khaled', en: 'Khaled' },
+ * }
+ * ```
+ *
+ * @param {Object} entity
+ *
+ * @returns {Array}
+ */
+function getLabel (entity) {
+  let label
+  if (entity.labels.de) {
+    label = entity.labels.de
+  } else if (entity.labels.en) {
+    label = entity.labels.en
+  }
+
+  if (label) {
+    return label.split(' ')
+  }
+}
+
+/**
+ *
+ * @param {String} itemId - For example `Q123`
+ * @param {String} firstname
+ * @param {String} lastname
+ */
+async function action (itemId, firstname, lastname) {
   if (!wikibase.isItemId(itemId)) {
     throw new Error(`No item id: ${itemId}`)
   }
@@ -107,8 +150,12 @@ async function action (itemId) {
 
   // Name in Muttersprache (P1559)
   let name = claims.getClaim('P1559')
-  const firstname = await claims.getName('P735')
-  const lastname = await claims.getName('P734')
+  const label = getLabel(entity)
+  if (!firstname) firstname = await claims.getName('P735')
+  if (!firstname) firstname = label[0]
+  if (!lastname) lastname = await claims.getName('P734')
+  if (!lastname) lastname = label[1]
+
   if (!name) name = `${firstname} ${lastname}`
   const id = mediaServer.asciify(`${lastname}_${firstname}`)
   const title = `Portrait-Bild von „${name}“`
@@ -173,7 +220,7 @@ async function action (itemId) {
 }
 
 module.exports = {
-  command: 'wikidata <item-id>',
+  command: 'wikidata <item-id> [firstname] [lastname]',
   alias: 'w',
   description: 'Query wikidata.org (currently there is only support for the master slide “person”).',
   action

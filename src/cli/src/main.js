@@ -59,10 +59,19 @@ function actionHelp () {
   process.exit(1)
 }
 
-function main () {
+async function main () {
   commander.version(require('../package.json').version)
   loadCommands(commander)
-  commander.parse(process.argv)
+  commander.exitOverride()
+
+  try {
+    await commander.parseAsync(process.argv)
+    // custom processing...
+  } catch (error) {
+    console.log(error)
+    process.exit()
+  }
+
   // [
   //  '/usr/local/bin/node',
   //  '/home/jf/.npm-packages/bin/baldr-media-server-cli'
@@ -70,6 +79,8 @@ function main () {
   if (process.argv.length <= 2) {
     actionHelp()
   }
+  // TODO: Somehow the commander hangs. Fix this.
+  process.exit()
 }
 
 module.exports = {
