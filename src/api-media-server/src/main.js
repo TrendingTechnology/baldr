@@ -33,10 +33,10 @@
  *       - `with`: `editor` specified in `config.mediaServer.editor`
  *         (`/etc/baldr.json`) or `folder` to open the parent folder of the
  *         given media file. The default value is `editor`
- *       - `archives`: Omit or set 0 for false. Open the file or the folder in
- *         the corresponding archive folder structure.
- *       - `create`: Omit or set 0 for false. Create the possibly non existing
- *         directory structure in a recursive manner.
+ *       - `archive`: True if present, false by default. Open the file or the
+           folder in the corresponding archive folder structure.
+ *       - `create`: True if present, false by default. Create the possibly non
+            existing directory structure in a recursive manner.
  *   - `re-init`: Re-Initialize the MongoDB database (Drop all collections and
  *     initialize)
  *   - `update`: Update the media server database (Flush and insert).
@@ -1072,8 +1072,8 @@ const helpMessages = {
           '/media/mgmt/open?id=Egmont',
           '/media/mgmt/open?with=editor&id=Egmont',
           '/media/mgmt/open?with=editor&type=presentations&id=Egmont',
-          '/media/mgmt/open?with=folder&type=presentations&id=Egmont&archives=true',
-          '/media/mgmt/open?with=folder&type=presentations&id=Egmont&archives=true&create=true',
+          '/media/mgmt/open?with=folder&type=presentations&id=Egmont&archive=true',
+          '/media/mgmt/open?with=folder&type=presentations&id=Egmont&archive=true&create=true',
           '/media/mgmt/open?with=editor&type=assets&id=Beethoven_Ludwig-van',
           '/media/mgmt/open?with=folder&type=assets&id=Beethoven_Ludwig-van'
         ],
@@ -1081,8 +1081,8 @@ const helpMessages = {
           id: 'The ID of the media file (required).',
           type: '`presentations`, `assets`. The default value is `presentations.`',
           with: '`editor` specified in `config.mediaServer.editor` (`/etc/baldr.json`) or `folder` to open the parent folder of the given media file. The default value is `editor`.',
-          archives: 'Omit or set 0 for false. Open the file or the folder in the corresponding archive folder structure.',
-          create: 'Omit or set 0 for false. Create the possibly non existing directory structure in a recursive manner.'
+          archive: 'True if present, false by default. Open the file or the folder in the corresponding archive folder structure.',
+          create: 'True if present, false by default. Create the possibly non existing directory structure in a recursive manner.'
         }
       },
       're-init': 'Re-Initialize the MongoDB database (Drop all collections and initialize).',
@@ -1310,19 +1310,19 @@ async function openEditor (id, mediaType) {
  *
  * @param {String} id - The id of the media type.
  * @param {String} mediaType - At the moment `assets` and `presentation`
- * @param {Boolean} archives - Addtionaly open the corresponding archive
+ * @param {Boolean} archive - Addtionaly open the corresponding archive
  *   folder.
  * @param {Boolean} create - Create the directory structure of
- *   the relative path in the archives in a recursive manner.
+ *   the relative path in the archive in a recursive manner.
  *
  * @return {Object}
  */
-async function openParentFolder (id, mediaType, archives, create) {
+async function openParentFolder (id, mediaType, archive, create) {
   const absPath = await getAbsPathFromId(id, mediaType)
   const parentFolder = path.dirname(absPath)
 
   let result
-  if (archives) {
+  if (archive) {
     result = openFolderWithArchives(parentFolder, create)
   } else {
     result = openFolder(parentFolder, create)
@@ -1331,7 +1331,7 @@ async function openParentFolder (id, mediaType, archives, create) {
     id,
     parentFolder,
     mediaType,
-    archives,
+    archive,
     create,
     result
   }
@@ -1469,12 +1469,12 @@ function registerRestApi () {
       if (!query.id) throw new Error('You have to specify an ID (?id=myfile).')
       if (!query.with) query.with = 'editor'
       if (!query.type) query.type = 'presentations'
-      query.create = Boolean(query.create)
-      query.archives = Boolean(query.archives)
+      query.archive = ('archive' in query) ? true : false
+      query.create = ('create' in query) ? true : false
       if (query.with === 'editor') {
         res.json(await openEditor(query.id, query.type))
       } else if (query.with === 'folder') {
-        res.json(await openParentFolder(query.id, query.type, query.archives, query.create))
+        res.json(await openParentFolder(query.id, query.type, query.archive, query.create))
       }
     } catch (error) {
       next(error)
