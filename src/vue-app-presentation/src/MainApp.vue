@@ -220,7 +220,15 @@ export default {
       {
         keys: 'ctrl+shift+alt+e',
         callback: () => { this.callOpenRestApi('folder', true) },
-        description: 'Den übergeordneten Ordner der Präsentation sowie den dazugehörenden Archivordner öffnen'
+        description: 'Den übergeordneten Ordner der Präsentation, sowie den dazugehörenden Archivordner öffnen'
+      },
+      {
+        keys: 'ctrl+alt+r',
+        callback: () => {
+          this.callOpenRestApi('folder', true, true)
+          this.callOpenRestApi('editor')
+        },
+        description: 'Vollständiger Editiermodus: Den übergeordneten Ordner der Präsentation, sowie den dazugehörenden Archivordner, als auch den Editor öffnen'
       },
       {
         keys: 'ctrl+alt+d',
