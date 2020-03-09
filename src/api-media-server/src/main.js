@@ -1206,7 +1206,7 @@ function getRelPath (basePaths, currentPath) {
       break
     }
   }
-  return relPath.replace(new RegExp(`^${path.sep}`), '')
+  if (relPath) return relPath.replace(new RegExp(`^${path.sep}`), '')
 }
 
 /**
