@@ -798,6 +798,41 @@ class Presentation extends MediaFile {
   }
 }
 
+/**
+ * Defintion of some metadata types.
+ */
+const metadataTypes = {
+  person: {
+    id: {
+      derived: function () {
+        return `${this.lastname}_${this.firstname}`
+      }
+    },
+    title: {
+      derived: function () {
+        return `Portrait-Bild von „${this.firstname} ${this.lastname}“`
+      }
+    },
+    firstname: {
+      required: true
+    },
+    lastname: {
+      required: true
+    },
+    name: {
+      derived: function () {
+        return `${this.firstname} ${this.lastname}`
+      }
+    },
+    short_biography: {},
+    birth: {
+      validate: function (value) {
+        return value.match(/\d{4,}-\d{2,}-\d{2,}/)
+      }
+    }
+  }
+}
+
 /* Checks *********************************************************************/
 
 /**
