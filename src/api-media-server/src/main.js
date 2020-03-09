@@ -1329,17 +1329,19 @@ function openWith (executable, filePath) {
  */
 async function openEditor (id, mediaType) {
   const absPath = await getAbsPathFromId(id, mediaType)
+  const parentFolder = path.dirname(absPath)
   const editor = config.mediaServer.editor
   if (!fs.existsSync(editor)) {
     return {
       error: `Editor “${editor}” can’t be found.`
     }
   }
-  openWith(editor, absPath)
+  openWith(config.mediaServer.editor, parentFolder)
   return {
     id,
     mediaType,
     absPath,
+    parentFolder,
     editor
   }
 }
