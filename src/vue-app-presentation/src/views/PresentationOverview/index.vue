@@ -24,12 +24,21 @@ export default {
   components: {
     PresentationItem
   },
-  computed: mapGetters(['folderTitleTree']),
+  methods: {
+    async loadTitleTree () {
+      await this.$store.dispatch('presentation/updateFolderTitleTree')
+      if (this.presentation) {
+        const elmentLink = document.getElementById(`PID_${this.presentation.id}`)
+        elmentLink.scrollIntoView({ block: 'center' })
+      }
+    }
+  },
+  computed: mapGetters(['folderTitleTree', 'presentation']),
   mounted () {
-    this.$store.dispatch('presentation/updateFolderTitleTree')
+    this.loadTitleTree()
   },
   update () {
-    this.$store.dispatch('presentation/updateFolderTitleTree')
+    this.loadTitleTree()
   }
 }
 </script>
