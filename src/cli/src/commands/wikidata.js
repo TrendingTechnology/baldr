@@ -148,14 +148,24 @@ async function action (itemId, firstname, lastname) {
   console.log(entity)
   const claims = new Claims(entity.claims)
 
+  const label = getLabel(entity)
+  const firstnameFromLabel = label.shift()
+  const lastnameFromLabel = label.pop()
+
+  // Vornamen der Person (P735)
+  if (!firstname) firstname = await claims.getName('P735')
+  if (!firstname) firstname = firstnameFromLabel
+  // Familienname einer Person (P734)
+  if (!lastname) lastname = await claims.getName('P734')
+  if (!lastname) lastname = lastnameFromLabel
+
+  // Use the label by artist names.
+  // for example „Joan Baez“ and not „Joan Chandos“
+  if (firstnameFromLabel && firstname !== firstnameFromLabel) firstname = firstnameFromLabel
+  if (lastnameFromLabel && lastname !== lastnameFromLabel) lastname = lastnameFromLabel
+
   // Name in Muttersprache (P1559)
   let name = claims.getClaim('P1559')
-  const label = getLabel(entity)
-  if (!firstname) firstname = await claims.getName('P735')
-  if (!firstname) firstname = label[0]
-  if (!lastname) lastname = await claims.getName('P734')
-  if (!lastname) lastname = label[1]
-
   if (!name) name = `${firstname} ${lastname}`
   const id = mediaServer.asciify(`${lastname}_${firstname}`)
   const title = `Portrait-Bild von „${name}“`
