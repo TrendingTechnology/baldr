@@ -25,40 +25,40 @@ const config = bootstrapConfig()
  */
 let server
 
-const app = express()
-
-app.use(cors())
-app.use(express.json())
-
-app.use('/seating-plan', registerSeatingPlan())
-app.use('/media', registerMediaServer())
-
-const helpMessages = {
-  version: {
-    name: packageJson.name,
-    version: packageJson.version
-  }
-}
-
-app.get('/', (req, res) => {
-  res.json({
-    version: helpMessages.version,
-    navigation: {
-      media: helpMessagesMediaServer.navigation
-    }
-  })
-})
-
-app.get('/version', (req, res) => {
-  res.json(helpMessages.version)
-})
-
 /**
  * Run the REST API. Listen to a TCP port.
  *
  * @param {Number} port - A TCP port.
  */
 const run = function (port) {
+  const app = express()
+
+  app.use(cors())
+  app.use(express.json())
+
+  app.use('/seating-plan', registerSeatingPlan())
+  app.use('/media', registerMediaServer())
+
+  const helpMessages = {
+    version: {
+      name: packageJson.name,
+      version: packageJson.version
+    }
+  }
+
+  app.get('/', (req, res) => {
+    res.json({
+      version: helpMessages.version,
+      navigation: {
+        media: helpMessagesMediaServer.navigation
+      }
+    })
+  })
+
+  app.get('/version', (req, res) => {
+    res.json(helpMessages.version)
+  })
+
   if (!port) {
     port = config.api.port
   }

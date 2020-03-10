@@ -1,15 +1,12 @@
 const { run } = require('@bldr/api')
 
-function action (cmdObj) {
-  run(cmdObj.port)
+function action (port) {
+  return run(port)
 }
 
 module.exports = {
-  command: 'api',
+  command: 'api [port]',
   alias: 'a',
-  options: [
-    ['-p, --port <port>', 'Port to listen to.']
-  ],
-  description: 'Launch The REST API server.',
+  description: 'Launch the REST API server. Specifiy a port to listen to if you what a different one than the default one.',
   action
 }
