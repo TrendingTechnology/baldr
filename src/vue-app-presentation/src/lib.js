@@ -217,6 +217,16 @@ class DomStepElementGroup {
  * Generate steps by hiding and showing some DOM elements.
  */
 export class DomSteps {
+  /**
+   *
+   * @param {Object} options
+   * @property {Array} options.elements - An array of HTML elements to use
+   *   as steps.
+   * @property {String} options.cssSelectors - String to feed
+   *   `document.querySelectorAll()`
+   * @property {String} options.specializedSelector - At the moment: `words`
+   *   or `sentences`.
+   */
   constructor (options) {
     const optionsDefault = {
       elements: null,
