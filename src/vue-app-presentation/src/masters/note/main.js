@@ -35,12 +35,17 @@ export default {
 
     let markup = markupToHtml(props.markup)
 
+    // hr tag
     if (markup.indexOf('<hr>') > -1) {
       const segments = markup.split('<hr>')
       const prolog = segments.shift()
       let body = segments.join('<hr>')
       body = DomSteps.wrapWords(body)
       markup = [prolog, body].join('')
+    // No hr tag provided
+    // Step through all words
+    } else {
+      markup = DomSteps.wrapWords(markup)
     }
 
     props.markup = markup
