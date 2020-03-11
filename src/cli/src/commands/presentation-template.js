@@ -54,7 +54,11 @@ async function presentationFromAssets (filePath) {
   if (fs.existsSync(notePath)) {
     const process = childProcess.spawnSync('detex', [notePath], { encoding: 'utf-8' })
     let note = process.stdout
-    note = note.replace(/\n\n\n+/g, '')
+    note = note.replace(/\n\n+/g, '')
+    // Left over from \stueck*{}
+    note = note.replace(/\*/g, '')
+    // left over from tables
+    note = note.replace(/&/g, '')
     slides.push({ note })
   }
 
@@ -65,7 +69,7 @@ async function presentationFromAssets (filePath) {
   fs.writeFileSync(filePath, result)
 }
 
-async function action (command) {
+async function action () {
   let filePath = path.join(cwd, 'Praesentation.baldr.yml')
   if (!fs.existsSync(filePath)) {
     console.log(`Presentation template created at: ${chalk.green(filePath)}`)
@@ -80,6 +84,7 @@ async function action (command) {
 module.exports = {
   command: 'presentation',
   alias: 'p',
+  checkExecutable: ['detex'],
   description: 'Create a presentation template from the assets of the current working directory named “Praesentation.baldr.yml”.',
   action
 }
