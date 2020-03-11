@@ -1,4 +1,5 @@
 // Node packages.
+const childProcess = require('child_process')
 const fs = require('fs')
 const path = require('path')
 
@@ -14,26 +15,8 @@ const {
   yamlToTxt
 } = require('../lib.js')
 
-const presentationTemplate = `---
-meta:
-  title:
-  subtitle:
-  id:
-  grade:
-  curriculum:
-  curriculum_url:
-
-slides:
-
-- generic: Hello world
-`
-
-/**
- * Create a presentation template named “Praesentation.baldr.yml”.
- */
-function presentationFromTemplate (filePath) {
-  fs.writeFileSync(filePath, presentationTemplate)
-}
+// Globals.
+const { cwd } = require('../main.js')
 
 /**
  * Create a Praesentation.baldr.yml file and insert all media assets in the
@@ -44,7 +27,7 @@ function presentationFromTemplate (filePath) {
  */
 async function presentationFromAssets (filePath) {
   const slides = []
-  await walk(process.cwd(), {
+  await walk(cwd, {
     asset (relPath) {
       const asset = makeAsset(relPath)
       if (!asset.id) {
@@ -66,6 +49,15 @@ async function presentationFromAssets (filePath) {
       )
     }
   })
+
+  const notePath = path.join(cwd, 'Hefteintrag.tex')
+  if (fs.existsSync(notePath)) {
+    const process = childProcess.spawnSync('detex', [notePath], { encoding: 'utf-8' })
+    let note = process.stdout
+    note = note.replace(/\n\n\n+/g, '')
+    slides.push({ note })
+  }
+
   const result = yamlToTxt({
     slides
   })
@@ -74,7 +66,7 @@ async function presentationFromAssets (filePath) {
 }
 
 async function action (command) {
-  let filePath = path.join(process.cwd(), 'Praesentation.baldr.yml')
+  let filePath = path.join(cwd, 'Praesentation.baldr.yml')
   if (!fs.existsSync(filePath)) {
     console.log(`Presentation template created at: ${chalk.green(filePath)}`)
   } else {
@@ -82,19 +74,12 @@ async function action (command) {
     console.log(`Presentation already exists, create tmp file: ${chalk.red(filePath)}`)
   }
 
-  if (command.fromAssets) {
-    await presentationFromAssets(filePath)
-  } else {
-    presentationFromTemplate(filePath)
-  }
+  await presentationFromAssets(filePath)
 }
 
 module.exports = {
   command: 'presentation',
   alias: 'p',
-  options: [
-    ['-a, --from-assets', 'Create a presentation from the assets of the current working dir.']
-  ],
-  description: 'Create a presentation template named “Praesentation.baldr.yml”.',
+  description: 'Create a presentation template from the assets of the current working directory named “Praesentation.baldr.yml”.',
   action
 }
