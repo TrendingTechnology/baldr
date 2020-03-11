@@ -19,6 +19,16 @@ export default {
       type: String,
       markup: true,
       description: 'Die Quelle des Zitats'
+    },
+    prolog: {
+      type: String,
+      markup: true,
+      description: 'Längerer Text, der vor dem Zitat erscheint.'
+    },
+    epilog: {
+      type: String,
+      markup: true,
+      description: 'Kürzerer Text, der vor dem Zitat erscheint.'
     }
   },
   icon: {
@@ -31,11 +41,7 @@ export default {
     darkMode: true
   },
   plainTextFromProps (props) {
-    const output = []
-    if ('text' in props) output.push(props.text)
-    if ('author' in props) output.push(props.author)
-    if ('date' in props) output.push(props.date)
-    return output.join(' | ')
+    return Object.values(props).join(' | ')
   },
   normalizeProps (props) {
     if (typeof props === 'string') {

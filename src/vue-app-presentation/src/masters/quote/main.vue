@@ -1,5 +1,7 @@
 <template>
   <div class="vc_quote_master">
+    <p class="prolog" v-if="prolog" v-html="prolog"/>
+
     <p class="text">
       <span class="quotation-mark">»</span>
       <span v-html="text"/>
@@ -11,6 +13,8 @@
       <span class="date" v-if="date">{{ date }}</span>
       <span class="source" v-if="source" v-html="` - aus: ${this.source}`"/>
     </p>
+
+    <p class="epilog" v-if="epilog" v-html="epilog"/>
   </div>
 </template>
 
@@ -29,15 +33,21 @@ export default {
     },
     source: {
       type: String
+    },
+    prolog: {
+      type: String
+    },
+    epilog: {
+      type: String
     }
   }
 }
 </script>
 <style lang="scss">
   .vc_quote_master {
+    font-size: 3vw;
     padding-left: 10%;
     padding-right: 10%;
-    font-size: 3vw;
 
     .text {
       font-style: italic;
@@ -55,6 +65,11 @@ export default {
 
     .author {
       font-family: $font-family-small-caps;
+    }
+
+    .prolog, .epilog {
+      font-size: 0.8em;
+      opacity: 0.5;
     }
   }
 </style>
