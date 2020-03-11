@@ -46,7 +46,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   .vc_slide_number {
     font-family: $font-family-sans;
     font-size: 2vw;

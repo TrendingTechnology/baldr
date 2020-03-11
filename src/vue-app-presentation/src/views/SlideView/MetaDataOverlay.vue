@@ -1,5 +1,9 @@
 <template>
-  <div v-if="isVisible" class="vc_meta_data_overlay" b-ui-theme="default">
+  <div
+    v-if="isVisible"
+    class="vc_meta_data_overlay"
+    b-ui-theme="default"
+  >
     <h1
       v-if="metaData.title"
       class="transparent-bg"
@@ -37,7 +41,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   .vc_meta_data_overlay {
     position: absolute;
     top: 0;

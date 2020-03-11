@@ -127,7 +127,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   .vc_documentation_overview {
     font-size: 2vw;
     width: 100vw;

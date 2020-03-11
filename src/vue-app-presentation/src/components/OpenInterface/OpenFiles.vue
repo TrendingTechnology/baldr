@@ -18,14 +18,14 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   .vc_open_files {
     font-size: 4vw;
     width: 5vw;
     padding-left: 1vw;
 
     input {
-      display: none;
+      display: none !important;
     }
   }
 </style>

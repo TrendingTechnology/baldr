@@ -72,7 +72,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   .vc_media_ids_parent_dir {
     font-size: 1vw !important;
 

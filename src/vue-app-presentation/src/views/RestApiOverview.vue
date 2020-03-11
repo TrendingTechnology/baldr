@@ -83,7 +83,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   .vc_rest_api_overview {
     box-sizing: border-box;
     font-size: 1.6vw;
