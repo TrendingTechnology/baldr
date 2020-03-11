@@ -8,7 +8,7 @@
 
 // import Vue from 'vue'
 import yaml from 'js-yaml'
-import { shortenText, convertPropertiesToCamelCase, escapeHtml, deepCopy, jsYamlConfig } from '@bldr/core-browser'
+import { shortenText, convertPropertiesToCamelCase, escapeHtml, deepCopy, jsYamlConfig, RawDataObject } from '@bldr/core-browser'
 import { WrappedSamples } from '@bldr/vue-plugin-media'
 import { markupToHtml } from '@/lib'
 import { masters } from '@/masters.js'
@@ -104,7 +104,7 @@ function intersect (array1, array2) {
  *
  * @param {object|string} rawData
  */
-class RawSlideObject {
+class RawSlideObject extends RawDataObject {
   constructor (rawData) {
     if (getType(rawData) === 'string') {
       const masterName = rawData
@@ -114,26 +114,7 @@ class RawSlideObject {
     if (getType(rawData) !== 'object') {
       throw Error(`Unsupported input type “${getType(rawData)}” on input data: ${toString(rawData)}`)
     }
-    this.raw = rawData
-  }
-
-  /**
-   * Cut properties from the raw object: delete the property
-   *
-   * @returns {mixed} The data stored in the property
-   */
-  cut (property) {
-    if ({}.hasOwnProperty.call(this.raw, property)) {
-      const out = this.raw[property]
-      delete this.raw[property]
-      return out
-    }
-    return false
-  }
-
-  isEmpty () {
-    if (Object.keys(this.raw).length === 0) return true
-    return false
+    super(rawData)
   }
 }
 

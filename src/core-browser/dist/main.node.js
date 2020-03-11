@@ -18,7 +18,7 @@ exports.formatYoutubeUrl = formatYoutubeUrl;
 exports.selectSubset = selectSubset;
 exports.escapeHtml = escapeHtml;
 exports.deepCopy = deepCopy;
-exports.jsYamlConfig = exports.AssetTypes = void 0;
+exports.RawDataObject = exports.jsYamlConfig = exports.AssetTypes = void 0;
 
 function sortObjectsByProperty(property) {
   return function (a, b) {
@@ -30,7 +30,7 @@ function formatToLocalDate(dateSpec) {
   const date = new Date(dateSpec);
   if (isNaN(date.getDay())) return dateSpec;
   const months = ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'];
-  return `${date.getDay()}. ${months[date.getMonth()]} ${date.getFullYear()}`;
+  return `${date.getDate()}. ${months[date.getMonth()]} ${date.getFullYear()}`;
 }
 
 function formatToLocalDateTime(timeStampMsec) {
@@ -240,16 +240,17 @@ function selectSubset(subsetSelector, {
   if (!subsetSelector) return elements;
   subsetSelector = subsetSelector.replace(/\s*/g, '');
   const ranges = subsetSelector.split(',');
+  const shiftSelectorAdjust = -1 * shiftSelector;
 
   for (let range of ranges) {
     if (range.match(/^-/)) {
       const end = parseInt(range.replace('-', ''));
-      range = `1-${end}`;
+      range = `${1 + shiftSelectorAdjust}-${end}`;
     }
 
     if (range.match(/-$/)) {
       const begin = parseInt(range.replace('-', ''));
-      range = `${begin}-${elements.length}`;
+      range = `${begin}-${elements.length + shiftSelectorAdjust}`;
     }
 
     range = range.split('-');
@@ -306,3 +307,27 @@ const jsYamlConfig = {
   noCompatMode: true
 };
 exports.jsYamlConfig = jsYamlConfig;
+
+class RawDataObject {
+  constructor(rawData) {
+    this.raw = deepCopy(rawData);
+  }
+
+  cut(property) {
+    if ({}.hasOwnProperty.call(this.raw, property)) {
+      const out = this.raw[property];
+      delete this.raw[property];
+      return out;
+    }
+
+    return false;
+  }
+
+  isEmpty() {
+    if (Object.keys(this.raw).length === 0) return true;
+    return false;
+  }
+
+}
+
+exports.RawDataObject = RawDataObject;

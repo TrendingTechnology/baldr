@@ -6,6 +6,8 @@ const yaml = require('js-yaml')
 
 // Project packages.
 const mediaServer = require('@bldr/api-media-server')
+const { RawDataObject } = require('@bldr/core-browser')
+
 const lib = require('../lib.js')
 
 // Globals.
@@ -19,20 +21,28 @@ function normalizeOneFile (filePath) {
   const metaData = yaml.safeLoad(lib.readFile(yamlFile))
   lib.writeYamlFile(yamlFile, lib.normalizeMetaData(filePath, metaData))
 
-  //const person = new Person(metaData)
-  //console.log(person.export())
-  //console.log(person.title)
-  //console.log(person.birth)
+  // const person = new Person(metaData)
+  // console.log(person.export())
+  // console.log(person.title)
+  // console.log(person.birth)
 }
 
 class MetaDataType {
   constructor (metaData, specification) {
+    /**
+     * @type {Object}
+     * @private
+     */
     this.data_ = metaData
+    /**
+     * @type {Object}
+     * @private
+     */
     this.specs_ = specification
 
     return new Proxy(this, {
       get: function(obj, prop) {
-        if (obj.specs_[prop] && obj.specs_[prop].derived && typeof obj.specs_[prop].derived === 'function') {
+        if (MetaDataType.isPropertyDerived_(obj.specs_, prop)) {
           return obj.specs_[prop].derived.call(obj.data_)
         }
         if (prop in obj.data_) return obj.data_[prop]
@@ -41,8 +51,51 @@ class MetaDataType {
     })
   }
 
+  /**
+   * @param {Object} specs
+   * @param {String} prop
+   *
+   * @private
+   */
+  static isPropertyDerived_ (specs, prop) {
+    if (
+      specs[prop] &&
+      specs[prop].derived &&
+      typeof specs[prop].derived === 'function'
+    ) return true
+    return false
+  }
+
+  /**
+   *
+   * @param {String} prop
+   */
+  isPropertyDerived (prop) {
+    return MetaDataType.isPropertyDerived_(this.specs_, prop)
+  }
+
+  /**
+   * @returns {Object}
+   */
   export () {
-    return this.data_
+    const output = {}
+    const rawData = new RawDataObject(this.data_)
+    for (const prop in this.specs_) {
+      if (this.isPropertyDerived(prop)) {
+        output[prop] = this[prop]
+        // Throw away the value of this property. We prefer the derived
+        // version.
+        rawData.cut(prop)
+      } else {
+        output[prop] = rawData.cut(prop)
+      }
+    }
+
+    // Add additional properties not in the specs.
+    for (const prop in rawData.raw) {
+      output[prop] = rawData.cut(prop)
+    }
+    return output
   }
 }
 

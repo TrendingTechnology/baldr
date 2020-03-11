@@ -476,3 +476,46 @@ export const jsYamlConfig = {
   lineWidth: 72,
   noCompatMode: true
 }
+
+/**
+ * Create a deep copy of and object.
+ *
+ * @param {Object} rawData
+ */
+export class RawDataObject {
+  constructor (rawData) {
+    /**
+     * The raw data object.
+     *
+     * @type {Object}
+     */
+    this.raw = deepCopy(rawData)
+  }
+
+  /**
+   * Cut a property from the raw object, that means delete the property and
+   * return the value.
+   *
+   * @param {Object} property - The property of the object.
+   *
+   * @returns {mixed} The data stored in the property
+   */
+  cut (property) {
+    if ({}.hasOwnProperty.call(this.raw, property)) {
+      const out = this.raw[property]
+      delete this.raw[property]
+      return out
+    }
+    return false
+  }
+
+  /**
+   * Assert if the raw data object is empty.
+   *
+   * @type {Boolean}
+   */
+  isEmpty () {
+    if (Object.keys(this.raw).length === 0) return true
+    return false
+  }
+}
