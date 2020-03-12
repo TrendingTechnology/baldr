@@ -75,7 +75,7 @@ export default {
       width: 100%;
 
       .birth-and-death {
-        font-size: 2em;
+        font-size: 1em;
         margin: 0;
         padding-right: 2em;
         text-align: right;
@@ -83,7 +83,7 @@ export default {
       }
 
       .person {
-        font-size: 4em;
+        font-size: 2em;
         padding-right: 2em;
         text-align: right;
       }
@@ -93,8 +93,8 @@ export default {
       opacity: 0.5;
       font-size: 1.5em;
       position: absolute;
-      right: 1em;
-      bottom: 9em;
+      right: 0.4em;
+      bottom: 7em;
       display: flex;
       flex-direction: column;
     }
