@@ -55,7 +55,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   .vc_list_hierarchical {
     li {
       display: flex;

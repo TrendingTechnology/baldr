@@ -78,26 +78,28 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-  td {
-    padding: 0.3em;
-    padding-bottom: 0em;
+<style lang="scss">
+  .vc_table_row {
+    td {
+      padding: 0.3em;
+      padding-bottom: 0em;
 
-    &:first-child {
-      width: 5vw;
-    }
+      &:first-child {
+        width: 5vw;
+      }
 
-    &.shortcut {
-      width: 12vw;
-    }
+      &.shortcut {
+        width: 12vw;
+      }
 
-    &:last-child {
-      text-align: right;
-      width: 10vw;
-    }
+      &:last-child {
+        text-align: right;
+        width: 10vw;
+      }
 
-    .shortcut-title {
-      font-size: 0.7em;
+      .shortcut-title {
+        font-size: 0.7em;
+      }
     }
   }
 </style>

@@ -53,7 +53,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   .vc_shortcuts_overview {
     box-sizing: border-box;
     font-size: 1.8vw;
@@ -73,11 +73,7 @@ export default {
     td {
       padding: 0 0.3em;
     }
-  }
-</style>
 
-<style lang="scss">
-  .vc_shortcuts_overview {
     .key {
       background-color: $gray;
       border-radius: 0.1em;

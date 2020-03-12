@@ -41,7 +41,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   .vc_gird_hierarchical {
     display: flex;
     flex-direction: row;

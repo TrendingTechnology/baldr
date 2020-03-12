@@ -64,7 +64,7 @@ export default {
 <style lang="scss">
   .vc_audio_master {
     text-align: center;
-    font-size: 3vw;
+    font-size: 2em;
 
     p {
       margin: 0;
@@ -95,7 +95,7 @@ export default {
     }
 
     .vc_play_button {
-      position: absolute;
+      position: fixed;
       bottom: 0.5em;
       left: 0.5em;
     }

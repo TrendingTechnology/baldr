@@ -82,7 +82,7 @@ export default {
   }
 </style>
 
-<style lang="scss" scoped>
+<style lang="scss">
   .vc_modal_dialog {
     align-items: center;
     display: flex;

@@ -79,19 +79,21 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-  ul li:before {
-    content: '' !important;
-  }
-  ul {
-    padding-left: 2em !important;
-  }
+<style lang="scss">
+  .vc_presentation_item {
+    ul li:before {
+      content: '' !important;
+    }
+    ul {
+      padding-left: 2em !important;
+    }
 
-  ul.ul-level-1 {
-    margin-bottom: 2em;
-  }
+    ul.ul-level-1 {
+      margin-bottom: 2em;
+    }
 
-  .ul-level-1 > li {
-    margin-top: 1em;
+    .ul-level-1 > li {
+      margin-top: 1em;
+    }
   }
 </style>

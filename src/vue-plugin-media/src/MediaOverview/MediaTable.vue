@@ -49,8 +49,10 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-  table {
-    width: 100%;
+<style lang="scss">
+  .vc_media_table {
+    table {
+      width: 100%;
+    }
   }
 </style>

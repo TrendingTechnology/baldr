@@ -41,7 +41,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   .vc_slide_preview {
     background-color: $black;
     border: 1px solid $gray;

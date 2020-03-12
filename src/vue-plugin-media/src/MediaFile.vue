@@ -89,7 +89,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   .vc_media_file {
     font-size: 1vw;
     height: 100vh;
@@ -98,6 +98,12 @@ export default {
 
     .table-and-preview {
       display: flex;
+    }
+
+    .media-file-element {
+      img {
+        width: 30vw;
+      }
     }
 
     .media-file-element, .key-value-table {
@@ -116,16 +122,6 @@ export default {
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-    }
-  }
-</style>
-
-<style lang="scss">
-  .vc_media_file {
-    .media-file-element {
-      img {
-        width: 30vw;
-      }
     }
   }
 </style>

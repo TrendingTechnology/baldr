@@ -159,25 +159,25 @@ export default {
 
 <style lang="scss">
   .vc_play_button {
-    line-height: 1em;
-    width: 1em;
-    height: 1em;
-    position: relative;
-    display: inline-block;
     color: $gray;
+    display: inline-block;
+    height: 1em;
+    line-height: 1em;
+    position: relative;
+    width: 1em;
 
     .icons {
-      width: 1em;
+      align-items: center;
+      display: flex;
       height: 1em;
+      justify-content: center;
       left: 0;
       position: absolute;
       top: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      width: 1em;
 
       .baldr-icon {
-        font-size: 0.8em;
+        font-size: 0.6em;
       }
     }
 
@@ -193,9 +193,10 @@ export default {
       color: $blue
     }
 
+
     circle {
-      stroke-width: 0.45em;
       fill: none;
+      stroke-width: 0.3em;
     }
 
     .circle-base {

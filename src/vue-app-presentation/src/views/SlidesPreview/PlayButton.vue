@@ -10,7 +10,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   .vc_slides_preview_play_button {
     .baldr-icon {
       background-color: $gray;

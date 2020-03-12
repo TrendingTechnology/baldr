@@ -13,17 +13,13 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   .vc_task_master {
     font-size: 4vw;
     margin: 3vw;
     padding: 4vw;
     text-align: center;
-  }
-</style>
 
-<style lang="scss">
-  .vc_task_master {
     ol, ul {
       text-align: left !important;
       font-size: 3vw;

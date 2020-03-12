@@ -99,7 +99,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   .vc_master_renderer {
     box-sizing: border-box;
     display: table;
@@ -116,15 +116,14 @@ export default {
     vertical-align: middle;
     width: 100vw;
   }
-</style>
 
-<style lang="scss">
   .vc_open_interface {
     // Input is to small
     input.search {
       font-size: 2vw !important;
     }
   }
+
   [b-center-vertically="true"] {
     .master-inner {
       display: table-cell;

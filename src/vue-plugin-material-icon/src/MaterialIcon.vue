@@ -112,13 +112,11 @@ export default {
 </script>
 
 <style lang="scss">
+  @import './style.css';
+
   a .baldr-icons {
     color: $black;
   }
-</style>
-
-<style lang="scss" scoped>
-  @import './style.css';
 
   $outline-padding: 0.25em;
 

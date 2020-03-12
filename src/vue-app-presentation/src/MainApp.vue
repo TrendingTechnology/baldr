@@ -433,64 +433,64 @@ export default {
       height: 100vh;
     }
   }
-</style>
 
-<style lang="scss" scoped>
-  #dropzone {
-    background: $blue;
-    border: 1vw dashed scale-color($blue, $lightness: -40%);
-    box-sizing: border-box;
-    display: none;
-    height: 100vh;
-    left: 0;
-    opacity: 0.7;
-    position: fixed;
-    top: 0;
-    width: 100vw;
-    z-index: 99999;
+  .vc_main_app {
+    #dropzone {
+      background: $blue;
+      border: 1vw dashed scale-color($blue, $lightness: -40%);
+      box-sizing: border-box;
+      display: none;
+      height: 100vh;
+      left: 0;
+      opacity: 0.7;
+      position: fixed;
+      top: 0;
+      width: 100vw;
+      z-index: 99999;
 
-    .message {
-      display: table-cell;
-      font-family: $font-family-sans;
-      font-size: 8vw;
-      font-weight: bold;
-      opacity: 1;
-      text-align: center;
-      vertical-align: middle;
-    }
-  }
-
-  .vue-notification {
-    background: #44A4FC;
-    border-left: 0.5em solid #187FE7;
-    color: #ffffff;
-    font-size: 12pt;
-    margin: 0 1em 1em;
-    padding: 1em;
-
-    .text {
-      font-size: 0.8em;
+      .message {
+        display: table-cell;
+        font-family: $font-family-sans;
+        font-size: 8vw;
+        font-weight: bold;
+        opacity: 1;
+        text-align: center;
+        vertical-align: middle;
+      }
     }
 
-    &.warn {
-      background: scale-color($orange, $lightness: 40%);
-      border-left-color: $orange;
+    .vue-notification {
+      background: #44A4FC;
+      border-left: 0.5em solid #187FE7;
+      color: #ffffff;
+      font-size: 12pt;
+      margin: 0 1em 1em;
+      padding: 1em;
+
+      .text {
+        font-size: 0.8em;
+      }
+
+      &.warn {
+        background: scale-color($orange, $lightness: 40%);
+        border-left-color: $orange;
+      }
+
+      &.error {
+        background: scale-color($red, $lightness: 40%);
+        border-left-color: $red;
+      }
+
+      &.success {
+        background: scale-color($green, $lightness: 40%);
+        border-left-color: $green;
+      }
     }
 
-    &.error {
-      background: scale-color($red, $lightness: 40%);
-      border-left-color: $red;
+    .vc_play_load_indicator {
+      position: fixed;
+      bottom: 1vw;
+      left: 1vw;
     }
-
-    &.success {
-      background: scale-color($green, $lightness: 40%);
-      border-left-color: $green;
-    }
-  }
-
-  .vc_play_load_indicator {
-    position: fixed;
-    bottom: 1vw;
-    left: 1vw;
   }
 </style>
