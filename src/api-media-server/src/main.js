@@ -983,12 +983,12 @@ function walkDeluxe (func, regex, relPath = null, payload = null) {
  * in the current working directory or in the given directory path.
  *
  * @param {function} func - A function to call on every file path. The file
- *   path is a absolute file path.
- * @param {Regex} regex - A regular expression. Each file path must match
+ *   path is an absolute file path.
+ * @param {String|Regex} regex - A regular expression. Each file path must match
  *   the regular expression to execute the function. If you specified a
- *   string. This is string is converted into this regexp `*.ext`
+ *   string. This is string is converted into this regexp `*.ext`.
  * @param {String} relPath - The path of a directory or the path of a file.
- * @param {Object} payload - Additional arguments bundled as a object the
+ * @param {Object} payload - Additional arguments bundled as an object the
  *   function is called with.
  */
 function walkDeluxeSync (func, regex, relPath = null, payload = null) {

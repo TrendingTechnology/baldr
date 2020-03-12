@@ -27,7 +27,6 @@
     "@bldr/api-media-server": "^0.2.3",
     "@bldr/api-seating-plan": "^0.2.2",
     "@bldr/core-node": "^0.2.2",
-    "commander": "^4.1.1",
     "cors": "^2.8.5",
     "express": "^4.17.1"
   }

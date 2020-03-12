@@ -7,7 +7,6 @@
  */
 
 // Third party packages.
-const { Command } = require('commander')
 const cors = require('cors')
 const express = require('express')
 const registerSeatingPlan = require('@bldr/api-seating-plan').registerRestApi
@@ -76,15 +75,9 @@ const stop = function () {
 }
 
 const main = function () {
-  // To get a clean commander. Otherwise we get options from mocha in the tests.
-  // https://github.com/tj/commander.js/issues/438#issuecomment-274285003
-  const commander = new Command()
-  const options = commander
-    .version(packageJson.version)
-    .option('-p, --port <port>', 'Port to listen to.')
-    .parse(process.argv)
-
-  return run(options.port)
+  let port
+  if (process.argv.length === 3) port = process.argv[2]
+  return run(port)
 }
 
 if (require.main === module) {
