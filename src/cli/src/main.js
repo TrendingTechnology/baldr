@@ -23,33 +23,69 @@ const cwd = process.cwd()
 const aliases = []
 
 /**
- * Load all (sub)commands in the subfolder `commands`
+ * (Sub)command defintions.
+ *
+ * @type {Object}
+ */
+const subCommands = {
+  convert: {
+    command: 'convert [input...]',
+    alias: 'c',
+    options: [
+      ['-p, --preview-image', 'Convert into preview images (Smaller and different file name)']
+    ],
+    description: 'Convert media files in the appropriate format. Multiple files, globbing works *.mp3',
+    checkExecutable: ['ffmpeg', 'magick']
+  },
+  'title-tex': {
+    command: 'title-tex [input]',
+    alias: 'tt',
+    description: 'Replace the title section of the TeX files with metadata retrieved from the title.txt files.',
+  }
+}
+
+/**
+ * We use a closure to be able te require the subcommands ad hoc on invocation.
+ * To avoid long loading times by many subcommands.
+ *
+ * @param {String} fileName
+ */
+function actionHandler (commandName) {
+  return function (cmdObj) {
+    const { action } = require(path.join(commandsPath, `${commandName}.js`))
+    return action(cmdObj)
+  }
+}
+
+/**
+ * Load all (sub)commands.
  *
  * @param {Object} commander - An instance of the package “commander”.
  */
 function loadCommands (commander) {
-  for (const fileName of fs.readdirSync(commandsPath)) {
-    const conf = require(path.join(commandsPath, fileName))
+  for (const commandName in subCommands) {
+
+    const conf = subCommands[commandName]
     if (conf.checkExecutable) {
       checkExecutables(conf.checkExecutable)
     }
-    const c = commander.command(conf.command)
+    const programm = commander.command(conf.command)
     if (conf.alias) {
       if (!aliases.includes(conf.alias)) {
-        c.alias(conf.alias)
+        programm.alias(conf.alias)
         aliases.push(conf.alias)
       }
       else {
         throw new Error(`Duplicate alias “${conf.alias}” used for the (sub)command “${conf.command}”.`)
       }
     }
-    c.description(conf.description)
+    programm.description(conf.description)
     if (conf.options) {
       for (const option of conf.options) {
-        c.option(option[0], option[1])
+        programm.option(option[0], option[1])
       }
     }
-    c.action(conf.action)
+    programm.action(actionHandler(commandName))
   }
 }
 
@@ -62,7 +98,7 @@ function actionHelp () {
 async function main () {
   commander.version(require('../package.json').version)
   loadCommands(commander)
-  commander.exitOverride()
+  //commander.exitOverride()
   //commander.parse(process.argv)
 
   try {
@@ -70,7 +106,7 @@ async function main () {
     // custom processing...
   } catch (error) {
     console.log(error)
-    process.exit()
+    //process.exit()
   }
 
   // [
