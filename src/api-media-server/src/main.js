@@ -985,13 +985,17 @@ function walkDeluxe (func, regex, relPath = null, payload = null) {
  * @param {function} func - A function to call on every file path. The file
  *   path is a absolute file path.
  * @param {Regex} regex - A regular expression. Each file path must match
- *   the regular expression to execute the function. If you specify an other
- *   type than a regex, the function is called on every file.
+ *   the regular expression to execute the function. If you specified a
+ *   string. This is string is converted into this regexp `*.ext`
  * @param {String} relPath - The path of a directory or the path of a file.
  * @param {Object} payload - Additional arguments bundled as a object the
  *   function is called with.
  */
 function walkDeluxeSync (func, regex, relPath = null, payload = null) {
+  // If regex is a string it is treated as a extension.
+  if (typeof regex === 'string') {
+    regex = new RegExp('.*\.' + regex +  '$')
+  }
   let basePath = process.cwd()
   if (relPath) {
     const stat = fs.statSync(relPath)

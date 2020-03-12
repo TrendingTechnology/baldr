@@ -74,7 +74,7 @@ function patchTexFileWithTitles (filePath) {
  * @param {String} filePath
  */
 function action (filePath) {
-  mediaServer.walkDeluxeSync(patchTexFileWithTitles, new RegExp('.*\.tex$'), filePath)
+  mediaServer.walkDeluxeSync(patchTexFileWithTitles, 'tex', filePath)
 }
 
 module.exports = {

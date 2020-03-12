@@ -114,7 +114,7 @@ async function convertOneFile (inputFile, cmdObj) {
   const outputExtension = mediaServer.assetTypes.typeToTargetExtension(assetType)
   let outputFile = `${mediaServer.asciify(asset.basename_)}.${outputExtension}`
 
-  let convert
+  let process
 
   // audio
   // https://trac.ffmpeg.org/wiki/Encode/AAC
@@ -129,7 +129,7 @@ async function convertOneFile (inputFile, cmdObj) {
   // '-c:a', 'libfdk_aac', '-profile:a', 'aac_he_v2'
 
   if (assetType === 'audio') {
-    convert = childProcess.spawn('ffmpeg', [
+    process = childProcess.spawnSync('ffmpeg', [
       '-i', inputFile,
       // '-c:a', 'aac', '-b:a', '128k',
       // '-c:a', 'libfdk_aac', '-profile:a', 'aac_he', '-b:a', '64k',
@@ -147,7 +147,7 @@ async function convertOneFile (inputFile, cmdObj) {
       outputFile = inputFile.replace(`.${asset.extension}`, '_preview.jpg')
       size = '1000x1000>'
     }
-    convert = childProcess.spawn('magick', [
+    process = childProcess.spawnSync('magick', [
       'convert',
       inputFile,
       '-resize', size, // http://www.imagemagick.org/Usage/resize/#shrink
@@ -157,7 +157,7 @@ async function convertOneFile (inputFile, cmdObj) {
 
   // videos
   } else if (assetType === 'video') {
-    convert = childProcess.spawn('ffmpeg', [
+    process = childProcess.spawnSync('ffmpeg', [
       '-i', inputFile,
       '-vcodec', 'libx264',
       '-profile:v', 'baseline',
@@ -166,23 +166,14 @@ async function convertOneFile (inputFile, cmdObj) {
     ])
   }
 
-  if (convert) {
-    convert.stdout.on('data', (data) => {
-      console.log(chalk.green(data))
-    })
-
-    convert.stderr.on('data', (data) => {
-      console.log(chalk.red(data))
-    })
-
-    convert.on('close', async (code) => {
-      if (assetType === 'audio') {
-        const metaData = await collectMusicMetaData(inputFile)
-        if (metaData) {
-          lib.writeMetaDataYaml(outputFile, metaData)
-        }
+  if (process) {
+    console.log(process)
+    if (assetType === 'audio') {
+      const metaData = await collectMusicMetaData(inputFile)
+      if (metaData) {
+        lib.writeMetaDataYaml(outputFile, metaData)
       }
-    })
+    }
   }
 }
 
@@ -192,16 +183,16 @@ async function convertOneFile (inputFile, cmdObj) {
  * @param {Array} inputFiles - An array of input files to convert.
  * @param {Object} cmdObj - The command object from the commander.
  */
-function action (inputFiles, cmdObj) {
+async function action (inputFiles, cmdObj) {
   if (inputFiles.length === 0) {
-    mediaServer.walk(process.cwd(), {
-      all (inputFile) {
-        convertOneFile(inputFile, cmdObj)
+    await mediaServer.walk(process.cwd(), {
+      async all (inputFile) {
+        await convertOneFile(inputFile, cmdObj)
       }
     })
   } else {
     for (const inputFile of inputFiles) {
-      convertOneFile(inputFile, cmdObj)
+      await convertOneFile(inputFile, cmdObj)
     }
   }
 }
