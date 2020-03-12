@@ -24,15 +24,15 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   .vc_audio_overlay {
-    position: absolute;
+    position: fixed;
     bottom: 0;
     left: 0;
     background: none !important;
 
     .vc_play_button {
-      font-size: 2em;
+      font-size: 1.5em;
     }
   }
 </style>

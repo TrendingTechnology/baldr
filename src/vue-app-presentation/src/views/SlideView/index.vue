@@ -27,7 +27,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   .vc_slide_view {
     overflow-x: hidden;
   }

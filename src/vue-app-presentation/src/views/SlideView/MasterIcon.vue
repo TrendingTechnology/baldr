@@ -31,7 +31,7 @@ export default {
   .vc_master_icon {
     background: none !important;
     left: 1vw;
-    position: absolute;
+    position: fixed;
     top: 0.5vw;
     z-index: 2;
 

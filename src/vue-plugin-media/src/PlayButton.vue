@@ -3,7 +3,7 @@
     class="vc_play_button"
     :class="status"
     @click="actByStatus"
-    :title="`${sample.titleFormated} [${sample.shortcut}]`"
+    :title="htmlTitle"
   >
     <svg viewBox="0 0 250 250" xmlns="http://www.w3.org/2000/svg">
       <g transform="translate(125,125)">
@@ -73,6 +73,14 @@ export default {
       // stoppable
       status: 'stopped',
       mediaElement: null
+    }
+  },
+  computed: {
+    htmlTitle () {
+      if (this.sample.shortcut) {
+        return `${this.sample.titleFormated} [${this.sample.shortcut}]`
+      }
+      return this.sample.titleFormated
     }
   },
   methods: {
@@ -149,7 +157,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   .vc_play_button {
     line-height: 1em;
     width: 1em;
@@ -169,7 +177,7 @@ export default {
       justify-content: center;
 
       .baldr-icon {
-        font-size: 0.7em;
+        font-size: 0.8em;
       }
     }
 
