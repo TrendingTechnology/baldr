@@ -63,6 +63,7 @@ async function main () {
   commander.version(require('../package.json').version)
   loadCommands(commander)
   commander.exitOverride()
+  //commander.parse(process.argv)
 
   try {
     await commander.parseAsync(process.argv)

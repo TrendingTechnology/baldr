@@ -1,9 +1,10 @@
-// Node packages.
-const fs = require('fs')
+// Third party packages.
+const chalk = require('chalk')
 
 // Project packages.
 const mediaServer = require('@bldr/api-media-server')
 const lib = require('../lib.js')
+
 /**
  * ```tex
  * \setzetitel{
@@ -19,7 +20,7 @@ const lib = require('../lib.js')
  * @param {String} filePath - The path of a TeX file.
  */
 function patchTexFileWithTitles (filePath) {
-  console.log(filePath)
+  console.log(`\nReplace titles in TeX file “${chalk.yellow(filePath)}”\n`)
   const titles = new mediaServer.HierarchicalFolderTitles(filePath)
 
   const setzeTitle = {
@@ -45,21 +46,35 @@ function patchTexFileWithTitles (filePath) {
     lines.push(`  ${key} = {${setzeTitle[key]}},`)
   }
   lines.push('}')
-  lines.push('') // to get a empty line
+  lines.push('') // to get an empty line
 
-  let texFileString = fs.readFileSync(filePath, { encoding: 'utf-8' })
-  texFileString = texFileString.replace(
-    /\\setzetitel\{.+?,?\n\}\n/s, // /s s (dotall) modifier, +? one or more (non-greedy)
-    lines.join('\n')
-  )
-  fs.writeFileSync(filePath, texFileString)
+  const patchedTitles = lines.join('\n')
+
+  let texFileString = lib.readFile(filePath)
+  // /s s (dotall) modifier, +? one or more (non-greedy)
+  const regexp = new RegExp(/\\setzetitel\{.+?,?\n\}\n/, 's')
+
+  const match = texFileString.match(regexp)
+  if (match) {
+    const unpatchedTitles = match[0]
+    if (unpatchedTitles !== patchedTitles) {
+      console.log(chalk.yellow(unpatchedTitles))
+      texFileString = texFileString.replace(regexp, patchedTitles)
+      lib.writeFile(filePath, texFileString)
+    }
+
+    console.log(chalk.green(patchedTitles))
+    if (unpatchedTitles === patchedTitles) {
+      console.log('No changes!')
+    }
+  }
 }
 /**
  *
  * @param {String} filePath
  */
 function action (filePath) {
-  mediaServer.walkDeluxe(patchTexFileWithTitles, new RegExp('.*\.tex$'), filePath)
+  mediaServer.walkDeluxeSync(patchTexFileWithTitles, new RegExp('.*\.tex$'), filePath)
 }
 
 module.exports = {

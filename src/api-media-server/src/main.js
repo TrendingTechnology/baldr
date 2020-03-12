@@ -916,6 +916,33 @@ async function walk (dir, on) {
 }
 
 /**
+ * @param {string} dir
+ * @param {object} on - An object with callbacks. Properties: `presentation`,
+ *   `asset`, `all` (`presentation`, `asset`), `everyFile`.
+ */
+function walkSync (dir, on) {
+  const files = fs.readdirSync(dir)
+  for (const fileName of files) {
+    const relPath = path.join(dir, fileName)
+    // Exclude .git/
+    if (fs.existsSync(relPath) && fileName.substr(0, 4) !== '.git') {
+      if (fs.statSync(relPath).isDirectory()) {
+        walk(relPath, on)
+      } else {
+        if ('everyFile' in on) on.everyFile(relPath)
+        if (isPresentation(fileName)) {
+          if ('presentation' in on) on.presentation(relPath)
+          if ('all' in on) on.all(relPath)
+        } else if (isAsset(fileName)) {
+          if ('asset' in on) on.asset(relPath)
+          if ('all' in on) on.all(relPath)
+        }
+      }
+    }
+  }
+}
+
+/**
  * Execute a function on one file or walk trough all files matching a regex
  * in the current working directory or in the given directory path.
  *
@@ -939,6 +966,42 @@ function walkDeluxe (func, regex, relPath = null, payload = null) {
     basePath = relPath
   }
   walk(basePath, {
+    everyFile (relPath) {
+      if (regex instanceof RegExp) {
+        if (relPath.match(regex)) {
+          func(relPath, payload)
+        }
+      } else {
+        func(relPath, payload)
+      }
+    }
+  })
+}
+
+/**
+ * Execute a function on one file or walk trough all files matching a regex
+ * in the current working directory or in the given directory path.
+ *
+ * @param {function} func - A function to call on every file path. The file
+ *   path is a absolute file path.
+ * @param {Regex} regex - A regular expression. Each file path must match
+ *   the regular expression to execute the function. If you specify an other
+ *   type than a regex, the function is called on every file.
+ * @param {String} relPath - The path of a directory or the path of a file.
+ * @param {Object} payload - Additional arguments bundled as a object the
+ *   function is called with.
+ */
+function walkDeluxeSync (func, regex, relPath = null, payload = null) {
+  let basePath = process.cwd()
+  if (relPath) {
+    const stat = fs.statSync(relPath)
+    if (!stat.isDirectory()) {
+      func(relPath, payload)
+      return
+    }
+    basePath = relPath
+  }
+  walkSync(basePath, {
     everyFile (relPath) {
       if (regex instanceof RegExp) {
         if (relPath.match(regex)) {
@@ -1583,5 +1646,6 @@ module.exports = {
   openWith,
   registerRestApi,
   walk,
-  walkDeluxe
+  walkDeluxe,
+  walkDeluxeSync
 }
