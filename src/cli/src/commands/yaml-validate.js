@@ -39,9 +39,4 @@ function action (filePath) {
   }
 }
 
-module.exports = {
-  command: 'yaml-validate [input]',
-  alias: 'yv',
-  description: 'Validate the yaml files.',
-  action
-}
+module.exports = action

@@ -81,10 +81,4 @@ async function action () {
   await presentationFromAssets(filePath)
 }
 
-module.exports = {
-  command: 'presentation',
-  alias: 'p',
-  checkExecutable: ['detex'],
-  description: 'Create a presentation template from the assets of the current working directory named “Praesentation.baldr.yml”.',
-  action
-}
+module.exports = action

@@ -35,9 +35,4 @@ function action (filePath) {
   mediaServer.walkDeluxe(convertTexToFolderTitles, new RegExp('.*\.tex$'), filePath)
 }
 
-module.exports = {
-  command: 'tex-folder-title [input]',
-  alias: 'tf',
-  description: 'TeX files to folder titles title.txt',
-  action
-}
+module.exports = action

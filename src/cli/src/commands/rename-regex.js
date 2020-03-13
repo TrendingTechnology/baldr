@@ -24,9 +24,4 @@ function action (pattern, replacement, filePath) {
   walkDeluxe(renameByRegex, new RegExp('.*'), filePath, { pattern, replacement })
 }
 
-module.exports = {
-  command: 'rename-regex <pattern> <replacement> [path]',
-  alias: 'rr',
-  description: 'Rename files by regex. see String.prototype.replace()',
-  action
-}
+module.exports = action

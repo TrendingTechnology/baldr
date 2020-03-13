@@ -21,9 +21,4 @@ function action (filePath) {
   }
 }
 
-module.exports = {
-  command: 'yaml [input]',
-  alias: 'y',
-  description: 'Create info files in the YAML format in the current working directory.',
-  action
-}
+module.exports = action

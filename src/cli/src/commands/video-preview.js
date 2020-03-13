@@ -38,9 +38,4 @@ function action (filePath, second = 10) {
   }
 }
 
-module.exports = {
-  command: 'video-preview [input] [second]',
-  alias: 'v',
-  description: 'Create video preview images',
-  action
-}
+module.exports = action

@@ -78,20 +78,123 @@ const subCommands = {
     checkExecutable: 'xdg-open',
     description: 'Create a relative path in different base paths. Open this relative paths in the file manager.',
   },
+  'rename-regex': {
+    command: 'rename-regex <pattern> <replacement> [path]',
+    alias: 'rr',
+    description: 'Rename files by regex. see String.prototype.replace()'
+  },
+  rename: {
+    command: 'rename',
+    alias: 'r',
+    description: [
+      'Rename and clean file names, remove all whitespaces and special characters.',
+      'For example:',
+      '“Heimat Games - Titelmusik.mp3” -> “Heimat-Games_Titelmusik.mp3”',
+      '“Götterdämmerung.mp3” -> “Goetterdaemmerung.mp3”'
+    ].join(' ')
+  },
+  songbook: {
+    command: 'songbook',
+    alias: 's',
+    cmdObj: [
+      [
+        '-a, --group-alphabetically',
+        'List the songs in an alphabetical tree.'
+      ],
+      [
+        '-b, --base-path <base-path>',
+        'Base path of a song collection.'
+      ],
+      [
+        '-B, --projector-path <projector-path>',
+        'Directory to store intermediate files for the projector app (*.svg, *.json],. Special value: “none”.'
+      ],
+      [
+        '-P, --piano-path <piano-path>',
+        'Directory to store intermediate files for the piano score (*.eps],. Special value: “none”.'
+      ],
+      [
+        '-c, --clean',
+        'Clean up (delete all generated files],'
+      ],
+      [
+        '-F, --folder <folder>',
+        'Process only the given song folder'
+      ],
+      [
+        '-f, --force',
+        'Rebuild all images'
+      ],
+      [
+        '-i, --song-id <song-id>',
+        'Process only the song with the given song ID (The parent song folder],.'
+      ],
+      [
+        '-l, --list <song-id-list>',
+        'Use a list of song IDs in a text file to specify which songs should be updated.'
+      ],
+      [
+        '-p, --piano',
+        'Generate the piano files only.'
+      ],
+      [
+        '-s, --slides',
+        'Generate the slides only.'
+      ],
+      [
+        '-t, --page-turn-optimized',
+        'Generate a page turn friendly piano score version.'
+      ]
+    ],
+    description: 'Update the songbook library.',
+    checkExecutable: [
+      'mscore-to-vector.sh',
+      'pdf2svg',
+      'pdfcrop',
+      'pdfinfo',
+      'pdftops',
+      'mscore'
+    ]
+  },
   'tex-to-markdown': {
     command: 'tex-to-markdown [input]',
     alias: 'tm',
     description: 'Convert TeX files to markdown.',
   },
-  'title-tex': {
-    command: 'title-tex [input]',
-    alias: 'tt',
-    description: 'Replace the title section of the TeX files with metadata retrieved from the title.txt files.'
+  'titles-from-tex': {
+    command: 'titles-from-tex [input]',
+    alias: 'tf',
+    description: 'TeX files to folder titles title.txt'
   },
   'titles-list': {
     command: 'titles-list [input]',
     alias: 't',
     description: 'List all hierarchical folder titles.',
+  },
+  'titles-to-tex': {
+    command: 'titles-to-tex [input]',
+    alias: 'tt',
+    description: 'Replace the title section of the TeX files with metadata retrieved from the title.txt files.'
+  },
+  'video-preview': {
+    command: 'video-preview [input] [second]',
+    alias: 'v',
+    description: 'Create video preview images',
+  },
+  wikidata: {
+    command: 'wikidata <item-id> [firstname] [lastname]',
+    alias: 'w',
+    description: 'Query wikidata.org (currently there is only support for the master slide “person”).',
+  },
+  'yaml-validate': {
+    command: 'yaml-validate [input]',
+    alias: 'yv',
+    description: 'Validate the yaml files.',
+  },
+  yaml: {
+    command: 'yaml [input]',
+    alias: 'y',
+    description: 'Create info files in the YAML format in the current working directory.',
   }
 }
 
@@ -110,7 +213,10 @@ program.on('command:*', function () {
 function actionHandler (commandName) {
   return function (cmdObj) {
     const action = require(path.join(commandsPath, `${commandName}.js`))
-    return action(cmdObj)
+    // To be able to export some functions other than
+    // the action function from the subcommands.
+    if (typeof action === 'function') return action(cmdObj)
+    return action.action(cmdObj)
   }
 }
 
