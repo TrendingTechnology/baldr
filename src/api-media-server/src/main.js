@@ -1272,63 +1272,67 @@ function untildify (filePath) {
 
 /**
  * Merge the configurations entries of `config.mediaServer.basePath` and
- * `config.mediaServer.archivePaths`. Retrieve only the accessible ones.
- *
- * @returns An array of directory paths in this order: First the main
- *   base path of the media server, then one ore more archive directory
- *   paths. The paths are checked for existence and resolved (untildified).
+ * `config.mediaServer.archivePaths`. Store only the accessible ones.
  */
-function getBaseAndArchivePaths () {
-  const basePaths = [
-    config.mediaServer.basePath,
-    ...config.mediaServer.archivePaths
-  ]
-  const result = []
-  for (let i = 0; i < basePaths.length; i++) {
-    basePaths[i] = path.resolve(untildify(basePaths[i]))
-    if (fs.existsSync(basePaths[i])) {
-      result.push(basePaths[i])
+class BasePaths {
+  constructor () {
+    const basePaths = [
+      config.mediaServer.basePath,
+      ...config.mediaServer.archivePaths
+    ]
+    this.paths_ = []
+    for (let i = 0; i < basePaths.length; i++) {
+      basePaths[i] = path.resolve(untildify(basePaths[i]))
+      if (fs.existsSync(basePaths[i])) {
+        this.paths_.push(basePaths[i])
+      }
     }
   }
-  return result
-}
 
-/**
- * Get the path relative to one of the base paths and `currentPath`.
- *
- * @param {Array} basePaths
- * @param {string} currentPath
- *
- * @returns {String}
- */
-function getRelPath (basePaths, currentPath) {
-  let relPath
-  for (const basePath of basePaths) {
-    if (currentPath.indexOf(basePath) === 0) {
-      relPath = currentPath.replace(basePath, '')
-      break
-    }
+  /**
+   * @returns {Array} - An array of directory paths in this order: First the
+   *   main base path of the media server, then one ore more archive directory
+   *   paths. The paths are checked for existence and resolved (untildified).
+   */
+  get() {
+    return this.paths_
   }
-  if (relPath) return relPath.replace(new RegExp(`^${path.sep}`), '')
-}
 
-/**
- * Get the path relative to one of the base paths and `currentPath`.
- *
- * @param {Array} basePaths
- * @param {string} currentPath
- *
- * @returns {String}
- */
-function getBasePath (basePaths, currentPath) {
-  let basePath
-  for (const bPath of basePaths) {
-    if (currentPath.indexOf(bPath) === 0) {
-      basePath = bPath
-      break
+  /**
+   * Get the path relative to one of the base paths and `currentPath`.
+   * @param {string} currentPath
+   *
+   * @returns {String}
+   */
+  getRelPath (currentPath) {
+    let relPath
+    for (const basePath of this.paths_) {
+      if (currentPath.indexOf(basePath) === 0) {
+        relPath = currentPath.replace(basePath, '')
+        break
+      }
     }
+    if (relPath) return relPath.replace(new RegExp(`^${path.sep}`), '')
   }
-  if (basePath) return basePath.replace(new RegExp(`${path.sep}$`), '')
+
+  /**
+   * Get the path relative to one of the base paths and `currentPath`.
+   *
+   * @param {Array} basePaths
+   * @param {string} currentPath
+   *
+   * @returns {String}
+   */
+  getBasePath (currentPath) {
+    let basePath
+    for (const bPath of this.paths_) {
+      if (currentPath.indexOf(bPath) === 0) {
+        basePath = bPath
+        break
+      }
+    }
+    if (basePath) return basePath.replace(new RegExp(`${path.sep}$`), '')
+  }
 }
 
 /**
@@ -1364,9 +1368,9 @@ function openFolder (currentPath, create) {
  */
 function openFolderWithArchives (currentPath, create) {
   const result = {}
-  const basePaths = getBaseAndArchivePaths()
-  const relPath = getRelPath(basePaths, currentPath)
-  for (const basePath of basePaths) {
+  const basePaths = new BasePaths()
+  const relPath = basePaths.getRelPath(currentPath)
+  for (const basePath of basePaths.get()) {
     if (relPath) {
       const currentPath = path.join(basePath, relPath)
       result[currentPath] = openFolder(currentPath, create)
@@ -1401,12 +1405,12 @@ function mirrorFolderStructure (currentPath) {
     return filelist
   }
 
-  const basePaths = getBaseAndArchivePaths()
+  const basePaths = new BasePaths()
 
-  const currentBasePath = getBasePath(basePaths, currentPath)
+  const currentBasePath = basePaths.getBasePath(currentPath)
 
   let mirrorBasePath
-  for (const basePath of basePaths) {
+  for (const basePath of basePaths.get()) {
     if (basePath !== currentBasePath) {
       mirrorBasePath = basePath
       break
@@ -1415,16 +1419,33 @@ function mirrorFolderStructure (currentPath) {
 
   const relPaths = walkSync(currentPath)
   for (let index = 0; index < relPaths.length; index++) {
-    relPaths[index] = getRelPath(basePaths, relPaths[index])
+    relPaths[index] = basePaths.getRelPath(relPaths[index])
   }
 
+  const created = []
+  const existing = []
   for (const relPath of relPaths) {
-    fs.mkdirSync(path.join(mirrorBasePath, relPath), { recursive: true })
+    const newPath = path.join(mirrorBasePath, relPath)
+    if (!fs.existsSync(newPath)) {
+      try {
+        fs.mkdirSync(newPath, { recursive: true })
+      } catch (error) {
+        return {
+          error
+        }
+      }
+      created.push(relPath)
+    } else {
+      existing.push(relPath)
+    }
   }
   return {
-    currentBasePath,
-    mirrorBasePath,
-    relPaths
+    ok: {
+      currentBasePath,
+      mirrorBasePath,
+      created,
+      existing
+    }
   }
 }
 

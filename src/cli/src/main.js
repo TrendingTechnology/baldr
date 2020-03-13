@@ -64,9 +64,9 @@ const subCommands = {
       'Only folders with two prefixed numbers followed by an underscore (for example “10_”) are mirrored.'
     ].join(' ')
   },
-  mirror: {
-    command: 'mirror',
-    alias: 'm',
+  'open-with-archives': {
+    command: 'open-with-archives',
+    alias: 'owa',
     options: [
       ['-c, --create-dirs', 'Create missings directories of the relative path, if they are not existent.']
     ],
