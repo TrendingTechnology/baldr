@@ -41,11 +41,16 @@ const subCommands = {
       'Go to the text mark manager (Edit > text marks) to export the marks.'
     ].join(' ')
   },
-  cloze:  {
+  cloze: {
     command: 'cloze [input]',
     alias: 'cl',
     checkExecutable: ['pdfinfo', 'pdf2svg', 'lualatex'],
     description: 'Generate from TeX files with cloze texts SVGs for baldr.',
+  },
+  color: {
+    command: 'color',
+    alias: 'co',
+    description: 'Generate a GIMP color palette for Inkscape or GIMP.',
   },
   convert: {
     command: 'convert [input...]',
@@ -77,6 +82,11 @@ const subCommands = {
     command: 'title-tex [input]',
     alias: 'tt',
     description: 'Replace the title section of the TeX files with metadata retrieved from the title.txt files.'
+  },
+  'titles-list': {
+    command: 'titles-list [input]',
+    alias: 't',
+    description: 'List all hierarchical folder titles.',
   }
 }
 

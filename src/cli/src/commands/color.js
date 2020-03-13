@@ -80,12 +80,4 @@ function createGimpPalette () {
   console.log(lines.join('\n'))
 }
 
-function action() {
-  createGimpPalette()
-}
-
-module.exports = {
-  command: 'color',
-  description: 'Generate a GIMP color palette for Inkscape or GIMP.',
-  action
-}
+module.exports = createGimpPalette

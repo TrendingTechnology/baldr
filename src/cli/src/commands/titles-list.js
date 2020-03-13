@@ -10,7 +10,6 @@ async function action (filePath) {
   function read (filePath) {
     const titles = new mediaServer.HierarchicalFolderTitles(filePath)
     tree.add(titles)
-    console.log(titles.all)
     console.log(`  id: ${chalk.cyan(titles.id)}`)
     console.log(`  title: ${chalk.yellow(titles.title)}`)
     if (titles.subtitle) console.log(`  subtitle: ${chalk.green(titles.subtitle)}`)
@@ -30,9 +29,4 @@ async function action (filePath) {
   console.log(JSON.stringify(tree.tree_, null, 2))
 }
 
-module.exports = {
-  command: 'folder-title [input]',
-  alias: 't',
-  description: 'List all hierarchical folder titles.',
-  action
-}
+module.exports = action
