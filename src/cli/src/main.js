@@ -78,6 +78,11 @@ const subCommands = {
     checkExecutable: 'xdg-open',
     description: 'Create a relative path in different base paths. Open this relative paths in the file manager.',
   },
+  'tex-to-markdown': {
+    command: 'tex-to-markdown [input]',
+    alias: 'tm',
+    description: 'Convert TeX files to markdown.',
+  },
   'title-tex': {
     command: 'title-tex [input]',
     alias: 'tt',
