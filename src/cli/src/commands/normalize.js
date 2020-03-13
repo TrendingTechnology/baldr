@@ -153,9 +153,4 @@ function action (filePath) {
   }
 }
 
-module.exports = {
-  command: 'normalize [media-asset]',
-  alias: 'n',
-  description: 'Normalize the meta data files in the YAML format (sort, clean up).',
-  action
-}
+module.exports = action

@@ -64,9 +64,4 @@ function action (filePath) {
   }
 }
 
-module.exports = {
-  command: 'id-to-filename [input]',
-  alias: 'i',
-  description: 'Rename media assets after the id.',
-  action
-}
+module.exports = action

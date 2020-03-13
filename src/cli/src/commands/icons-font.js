@@ -198,9 +198,4 @@ function action () {
   ])
 }
 
-module.exports = {
-  command: 'icons-fonts',
-  alias: 'if',
-  description: 'Download some material icons and build font files from this SVGs.',
-  action
-}
+module.exports = action

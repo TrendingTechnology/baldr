@@ -61,6 +61,16 @@ const subCommands = {
     description: 'Convert media files in the appropriate format. Multiple files, globbing works *.mp3',
     checkExecutable: ['ffmpeg', 'magick']
   },
+  'icon-font': {
+    command: 'icon-font',
+    alias: 'if',
+    description: 'Download some material icons and build font files from this SVGs.'
+  },
+  'id-to-filename': {
+    command: 'id-to-filename [input]',
+    alias: 'i',
+    description: 'Rename media assets after the id.',
+  },
   'mirror-folder-structure': {
     command: 'mirror-folder-structure',
     alias: 'mfs',
@@ -68,6 +78,22 @@ const subCommands = {
       'Mirror the folder structure of the media folder into the archive folder or vice versa.',
       'Only folders with two prefixed numbers followed by an underscore (for example “10_”) are mirrored.'
     ].join(' ')
+  },
+  multipart: {
+    command: 'multipart <glob> <prefix>',
+    alias: 'mp',
+    description: 'Rename multipart assets.',
+  },
+  normalize: {
+    command: 'normalize [media-asset]',
+    alias: 'n',
+    description: 'Normalize the meta data files in the YAML format (sort, clean up).'
+  },
+  'open-media': {
+    command: 'open-media',
+    alias: 'o',
+    checkExecutable: 'xdg-open',
+    description: 'Open the base directory of the media server in the file manager.'
   },
   'open-with-archives': {
     command: 'open-with-archives',
@@ -77,6 +103,12 @@ const subCommands = {
     ],
     checkExecutable: 'xdg-open',
     description: 'Create a relative path in different base paths. Open this relative paths in the file manager.',
+  },
+  'presentation-template': {
+    command: 'presentation',
+    alias: 'p',
+    checkExecutable: ['detex'],
+    description: 'Create a presentation template from the assets of the current working directory named “Praesentation.baldr.yml”.'
   },
   'rename-regex': {
     command: 'rename-regex <pattern> <replacement> [path]',

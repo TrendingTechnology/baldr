@@ -12,10 +12,4 @@ function action () {
   process.unref()
 }
 
-module.exports = {
-  command: 'open',
-  alias: 'o',
-  checkExecutable: 'xdg-open',
-  description: 'Open the base directory of the media server in the file manager.',
-  action
-}
+module.exports = action
