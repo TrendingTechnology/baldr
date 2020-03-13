@@ -76,10 +76,4 @@ function action (filePath) {
   mediaServer.walkDeluxe(generateClozeSvg, new RegExp('.*\.tex$'), filePath)
 }
 
-module.exports = {
-  command: 'cloze [input]',
-  alias: 'cl',
-  checkExecutable: ['pdfinfo', 'pdf2svg', 'lualatex'],
-  description: 'Generate from TeX files with cloze texts SVGs for baldr.',
-  action
-}
+module.exports = action

@@ -1258,25 +1258,6 @@ async function getAbsPathFromId (id, mediaType = 'presentations') {
 }
 
 /**
- * Get the path relative to one of the base paths and `currentPath`.
- *
- * @param {Array} basePaths
- * @param {string} currentPath
- *
- * @returns {String}
- */
-function getRelPath (basePaths, currentPath) {
-  let relPath
-  for (const basePath of basePaths) {
-    if (currentPath.indexOf(basePath) === 0) {
-      relPath = currentPath.replace(basePath, '')
-      break
-    }
-  }
-  if (relPath) return relPath.replace(new RegExp(`^${path.sep}`), '')
-}
-
-/**
  *
  * @param {String} filePath
  *
@@ -1310,6 +1291,44 @@ function getBaseAndArchivePaths () {
     }
   }
   return result
+}
+
+/**
+ * Get the path relative to one of the base paths and `currentPath`.
+ *
+ * @param {Array} basePaths
+ * @param {string} currentPath
+ *
+ * @returns {String}
+ */
+function getRelPath (basePaths, currentPath) {
+  let relPath
+  for (const basePath of basePaths) {
+    if (currentPath.indexOf(basePath) === 0) {
+      relPath = currentPath.replace(basePath, '')
+      break
+    }
+  }
+  if (relPath) return relPath.replace(new RegExp(`^${path.sep}`), '')
+}
+
+/**
+ * Get the path relative to one of the base paths and `currentPath`.
+ *
+ * @param {Array} basePaths
+ * @param {string} currentPath
+ *
+ * @returns {String}
+ */
+function getBasePath (basePaths, currentPath) {
+  let basePath
+  for (const bPath of basePaths) {
+    if (currentPath.indexOf(bPath) === 0) {
+      basePath = bPath
+      break
+    }
+  }
+  if (basePath) return basePath.replace(new RegExp(`${path.sep}$`), '')
 }
 
 /**
@@ -1356,6 +1375,57 @@ function openFolderWithArchives (currentPath, create) {
     }
   }
   return result
+}
+
+/**
+ * Mirror the folder structure of the media folder into the archive folder or
+ * vice versa. Only folders with two prefixed numbers followed by an
+ * underscore (for example “10_”) are mirrored.
+ *
+ * @param {String} currentPath - Must be a relative path within one of the
+ *   folder structures.
+ *
+ * @returns {Object} - Status informations of the action.
+ */
+function mirrorFolderStructure (currentPath) {
+  function walkSync (dir, filelist) {
+    const files = fs.readdirSync(dir)
+    filelist = filelist || []
+    files.forEach(function (file) {
+      const filePath = path.join(dir, file)
+      if (fs.statSync(filePath).isDirectory() && file.match(/^\d\d_/)) {
+        filelist.push(filePath)
+        walkSync(filePath, filelist)
+      }
+    })
+    return filelist
+  }
+
+  const basePaths = getBaseAndArchivePaths()
+
+  const currentBasePath = getBasePath(basePaths, currentPath)
+
+  let mirrorBasePath
+  for (const basePath of basePaths) {
+    if (basePath !== currentBasePath) {
+      mirrorBasePath = basePath
+      break
+    }
+  }
+
+  const relPaths = walkSync(currentPath)
+  for (let index = 0; index < relPaths.length; index++) {
+    relPaths[index] = getRelPath(basePaths, relPaths[index])
+  }
+
+  for (const relPath of relPaths) {
+    fs.mkdirSync(path.join(mirrorBasePath, relPath), { recursive: true })
+  }
+  return {
+    currentBasePath,
+    mirrorBasePath,
+    relPaths
+  }
 }
 
 /**
@@ -1646,6 +1716,7 @@ module.exports = {
   getExtension,
   helpMessages,
   HierarchicalFolderTitles,
+  mirrorFolderStructure,
   openFolderWithArchives,
   openWith,
   registerRestApi,

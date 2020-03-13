@@ -16,13 +16,4 @@ function action (cmdObj) {
   console.log(openFolderWithArchives(cwd, cmdObj.createDirs))
 }
 
-module.exports = {
-  command: 'mirror',
-  alias: 'm',
-  options: [
-    ['-c, --create-dirs', 'Create missings directories of the relative path, if they are not existent.']
-  ],
-  checkExecutable: 'xdg-open',
-  description: 'Create a relative path in different base paths. Open this relative paths in the file manager.',
-  action
-}
+module.exports = action

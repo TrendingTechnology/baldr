@@ -77,9 +77,4 @@ function action (filePath) {
   mediaServer.walkDeluxeSync(patchTexFileWithTitles, 'tex', filePath)
 }
 
-module.exports = {
-  command: 'title-tex [input]',
-  alias: 'tt',
-  description: 'Replace the title section of the TeX files with metadata retrieved from the title.txt files.',
-  action
-}
+module.exports = action
