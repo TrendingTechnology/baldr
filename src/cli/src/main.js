@@ -53,7 +53,7 @@ const subCommands = {
     description: 'Generate a GIMP color palette for Inkscape or GIMP.',
   },
   convert: {
-    command: 'convert [input...]',
+    command: 'convert [files...]',
     alias: 'c',
     options: [
       ['-p, --preview-image', 'Convert into preview images (Smaller and different file name)']
@@ -219,12 +219,12 @@ const subCommands = {
     description: 'Query wikidata.org (currently there is only support for the master slide “person”).',
   },
   'yaml-validate': {
-    command: 'yaml-validate [input...]',
+    command: 'yaml-validate [files...]',
     alias: 'yv',
     description: 'Validate the YAML files.',
   },
   yaml: {
-    command: 'yaml [input]',
+    command: 'yaml [files...]',
     alias: 'y',
     description: 'Create info files in the YAML format in the current working directory.',
   }

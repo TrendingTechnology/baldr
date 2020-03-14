@@ -10,6 +10,23 @@ const mediaServer = require('@bldr/api-media-server')
 const lib = require('../lib.js')
 
 /**
+ * A set of output file paths. To avoid duplicate rendering by a second
+ * run of the script.
+ *
+ * First run: `01 Hintergrund.MP3` -> `01-Hintergrund.m4a`
+ *
+ * Second run:
+ * - not:
+ *   1. `01 Hintergrund.MP3` -> `01-Hintergrund.m4a`
+ *   2. `01-Hintergrund.m4a` -> `01-Hintergrund.m4a` (bad)
+ * - but:
+ *   1. `01 Hintergrund.MP3` -> `01-Hintergrund.m4a`
+ *
+ * @type {Set}
+ */
+const converted = new Set()
+
+/**
  * Output from `music-metadata`:
  *
  * ```js
@@ -101,7 +118,6 @@ async function collectMusicMetaData (inputFile) {
  */
 async function convertOneFile (inputFile, cmdObj) {
   const asset = lib.makeAsset(inputFile)
-  console.log(asset)
 
   const inputExtension = asset.extension.toLowerCase()
   let assetType
@@ -113,6 +129,7 @@ async function convertOneFile (inputFile, cmdObj) {
   }
   const outputExtension = mediaServer.assetTypes.typeToTargetExtension(assetType)
   let outputFile = `${mediaServer.asciify(asset.basename_)}.${outputExtension}`
+  if (converted.has(outputFile)) return
 
   let process
 
@@ -167,12 +184,19 @@ async function convertOneFile (inputFile, cmdObj) {
   }
 
   if (process) {
-    console.log(process)
-    if (assetType === 'audio') {
-      const metaData = await collectMusicMetaData(inputFile)
-      if (metaData) {
-        lib.writeMetaDataYaml(outputFile, metaData)
+    if (process.status === 0) {
+      if (assetType === 'audio') {
+        const metaData = await collectMusicMetaData(inputFile)
+        if (metaData) {
+          lib.writeMetaDataYaml(outputFile, metaData)
+        }
       }
+      console.log(`${chalk.green('ok')}: ${chalk.yellow(inputFile)} -> ${chalk.green(outputFile)}`)
+      converted.add(outputFile)
+    } else {
+      console.log(process.stdout)
+      console.log(process.stderr)
+      throw new Error(`error: ${inputFile} -> ${outputFile}`)
     }
   }
 }
@@ -183,18 +207,14 @@ async function convertOneFile (inputFile, cmdObj) {
  * @param {Array} inputFiles - An array of input files to convert.
  * @param {Object} cmdObj - The command object from the commander.
  */
-async function action (inputFiles, cmdObj) {
-  if (inputFiles.length === 0) {
-    await mediaServer.walk(process.cwd(), {
-      async all (inputFile) {
-        await convertOneFile(inputFile, cmdObj)
-      }
-    })
-  } else {
-    for (const inputFile of inputFiles) {
-      await convertOneFile(inputFile, cmdObj)
-    }
-  }
+function action (filePaths, cmdObj) {
+  mediaServer.walkNg({
+    pathList: filePaths,
+    func: {
+      all: convertOneFile
+    },
+    payload: cmdObj
+  })
 }
 
 module.exports = action

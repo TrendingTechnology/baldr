@@ -1018,6 +1018,12 @@ function walkDeluxeSync (func, regex, relPath = null, payload = null) {
   })
 }
 
+/**
+ * @param {Object} options
+ * @property {String} options.singlePath
+ * @property {Object|Function} options.func - An object with callbacks. Properties: `presentation`,
+ *   `asset`, `all` (`presentation`, `asset`), `everyFile`.
+ */
 async function execOnOneFile ({ singlePath, func, payload, regex }) {
   // Exclude hidden files and directories like '.git'
   if (path.basename(singlePath).charAt(0) === '.') return
@@ -1041,7 +1047,7 @@ async function execOnOneFile ({ singlePath, func, payload, regex }) {
   }
   const isPres = isPresentation(singlePath)
   const isAss = isAsset(singlePath)
-  if (isPres && isAss && func.all) {
+  if ((isPres || isAss) && func.all) {
     await func.all(singlePath, payload)
   }
   if (isPres && func.presentation) {
@@ -1065,6 +1071,13 @@ async function execOnOneFile ({ singlePath, func, payload, regex }) {
  *   function is called with.
  */
 async function walkNg ({ pathList, func, payload, regex }) {
+  if (!func) {
+    throw new Error('Missing property: `func`.')
+  }
+
+  if (typeof func === 'object' && regex) {
+    throw new Error('Use a single function and a regex or a object containing functions without a regex.')
+  }
   // commander [filepath...] -> without arguments is an empty array.
   if (!pathList || (Array.isArray(pathList) && pathList.length === 0)) pathList = process.cwd()
   // A list of file paths.
