@@ -79,6 +79,15 @@ const subCommands = {
       'Only folders with two prefixed numbers followed by an underscore (for example “10_”) are mirrored.'
     ].join(' ')
   },
+  move: {
+    command: 'move [files...]',
+    alias: 'mv',
+    options: [
+      ['-c, --copy', 'Copy instead of move.'],
+      ['-e, --extension <extension>', 'Move only file with the specified extension.']
+    ],
+    description: 'Move / copy files from the main media directory to the archive folder or vice versa.',
+  },
   multipart: {
     command: 'multipart <glob> <prefix>',
     alias: 'mp',

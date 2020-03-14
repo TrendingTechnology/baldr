@@ -242,21 +242,28 @@ function runImagemagick (inputFile, outputFile, size = '2000x2000>') {
  * @param {String} oldPath - The old path of a media asset.
  * @param {String} newPath - The new path of a media asset.
  */
-function renameAsset (oldPath, newPath) {
-  const oldRelPath = oldPath.replace(process.cwd(), '')
+function renameAsset (oldPath, newPath, copy) {
+  function move(oldPath, newPath, copy) {
+    if (copy) {
+      fs.copyFileSync(oldPath, newPath)
+    } else {
+      fs.renameSync(oldPath, newPath)
+    }
+  }
+  const cwd = process.cwd()
+  const oldRelPath = oldPath.replace(cwd, '')
   console.log(`old: ${chalk.yellow(oldRelPath)}`)
   if (newPath && oldPath !== newPath) {
-    const newRelPath = newPath.replace(process.cwd(), '')
+    fs.mkdirSync(path.dirname(newPath), { recursive: true })
+    const newRelPath = newPath.replace(cwd, '')
     console.log(`new: ${chalk.green(newRelPath)}`)
-    if (fs.existsSync(`${oldPath}.yml`)) {
-      fs.renameSync(`${oldPath}.yml`, `${newPath}.yml`)
-      console.log(`new: ${chalk.cyan(newRelPath + '.yml')}`)
+    for (const suffix of ['.yml', '_preview.jpg']) {
+      if (fs.existsSync(`${oldPath}${suffix}`)) {
+        move(`${oldPath}${suffix}`, `${newPath}${suffix}`, copy)
+        console.log(`new: ${chalk.cyan(newRelPath + suffix)}`)
+      }
     }
-    if (fs.existsSync(`${oldPath}_preview.jpg`)) {
-      fs.renameSync(`${oldPath}_preview.jpg`, `${newPath}_preview.jpg`)
-      console.log(`new: ${chalk.cyan(newRelPath + '_preview.jpg')}`)
-    }
-    fs.renameSync(oldPath, newPath)
+    move(oldPath, newPath, copy)
     return newPath
   }
 }

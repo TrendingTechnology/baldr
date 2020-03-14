@@ -1229,7 +1229,9 @@ class BasePaths {
 
   /**
    * Get the path relative to one of the base paths and `currentPath`.
-   * @param {string} currentPath
+   *
+   * @param {String} currentPath - The path of a file or a directory inside
+   *   a media server folder structure or inside its archive folders.
    *
    * @returns {String}
    */
@@ -1247,8 +1249,8 @@ class BasePaths {
   /**
    * Get the path relative to one of the base paths and `currentPath`.
    *
-   * @param {Array} basePaths
-   * @param {string} currentPath
+   * @param {String} currentPath - The path of a file or a directory inside
+   *   a media server folder structure or inside its archive folders.
    *
    * @returns {String}
    */
@@ -1262,7 +1264,29 @@ class BasePaths {
     }
     if (basePath) return basePath.replace(new RegExp(`${path.sep}$`), '')
   }
+
+  /**
+   *
+   * @param {String} currentPath - The path of a file or a directory inside
+   *   a media server folder structure or inside its archive folders.
+   *
+   * @returns {String}
+   */
+  getMirroredPath (currentPath) {
+    const basePath = this.getBasePath(currentPath)
+    const relPath = this.getRelPath(currentPath)
+    let mirrorBasePath
+    for (const bPath of this.paths_) {
+      if (basePath !== bPath) {
+        mirrorBasePath = bPath
+        break
+      }
+    }
+    return path.join(mirrorBasePath, relPath)
+  }
 }
+
+const basePaths = new BasePaths()
 
 /**
  * Open a file path using the linux command `xdg-open`.
@@ -1661,6 +1685,7 @@ module.exports = {
   asciify,
   Asset,
   assetTypes,
+  basePaths,
   BasePaths,
   deasciify,
   FolderTitleTree,
