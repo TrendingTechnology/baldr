@@ -889,140 +889,18 @@ async function insertObjectIntoDb (filePath, mediaType) {
 }
 
 /**
- * @param {string} dir
- * @param {object} on - An object with callbacks. Properties: `presentation`,
- *   `asset`, `all` (`presentation`, `asset`), `everyFile`.
- */
-async function walk (dir, on) {
-  const files = fs.readdirSync(dir)
-  for (const fileName of files) {
-    const relPath = path.join(dir, fileName)
-    // Exclude .git/
-    if (fs.existsSync(relPath) && fileName.substr(0, 4) !== '.git') {
-      if (fs.statSync(relPath).isDirectory()) {
-        await walk(relPath, on)
-      } else {
-        if ('everyFile' in on) await on.everyFile(relPath)
-        if (isPresentation(fileName)) {
-          if ('presentation' in on) await on.presentation(relPath)
-          if ('all' in on) await on.all(relPath)
-        } else if (isAsset(fileName)) {
-          if ('asset' in on) await on.asset(relPath)
-          if ('all' in on) await on.all(relPath)
-        }
-      }
-    }
-  }
-}
-
-/**
- * @param {string} dir
- * @param {object} on - An object with callbacks. Properties: `presentation`,
- *   `asset`, `all` (`presentation`, `asset`), `everyFile`.
- */
-function walkSync (dir, on) {
-  const files = fs.readdirSync(dir)
-  for (const fileName of files) {
-    const relPath = path.join(dir, fileName)
-    // Exclude .git/
-    if (fs.existsSync(relPath) && fileName.substr(0, 4) !== '.git') {
-      if (fs.statSync(relPath).isDirectory()) {
-        walk(relPath, on)
-      } else {
-        if ('everyFile' in on) on.everyFile(relPath)
-        if (isPresentation(fileName)) {
-          if ('presentation' in on) on.presentation(relPath)
-          if ('all' in on) on.all(relPath)
-        } else if (isAsset(fileName)) {
-          if ('asset' in on) on.asset(relPath)
-          if ('all' in on) on.all(relPath)
-        }
-      }
-    }
-  }
-}
-
-/**
- * Execute a function on one file or walk trough all files matching a regex
- * in the current working directory or in the given directory path.
- *
- * @param {function} func - A function to call on every file path. The file
- *   path is a absolute file path.
- * @param {Regex} regex - A regular expression. Each file path must match
- *   the regular expression to execute the function. If you specify an other
- *   type than a regex, the function is called on every file.
- * @param {String} relPath - The path of a directory or the path of a file.
- * @param {Object} payload - Additional arguments bundled as a object the
- *   function is called with.
- */
-function walkDeluxe (func, regex, relPath = null, payload = null) {
-  let basePath = process.cwd()
-  if (relPath) {
-    const stat = fs.statSync(relPath)
-    if (!stat.isDirectory()) {
-      func(relPath, payload)
-      return
-    }
-    basePath = relPath
-  }
-  walk(basePath, {
-    everyFile (relPath) {
-      if (regex instanceof RegExp) {
-        if (relPath.match(regex)) {
-          func(relPath, payload)
-        }
-      } else {
-        func(relPath, payload)
-      }
-    }
-  })
-}
-
-/**
- * Execute a function on one file or walk trough all files matching a regex
- * in the current working directory or in the given directory path.
- *
- * @param {function} func - A function to call on every file path. The file
- *   path is an absolute file path.
- * @param {String|Regex} regex - A regular expression. Each file path must match
- *   the regular expression to execute the function. If you specified a
- *   string. This is string is converted into this regexp `*.ext`.
- * @param {String} relPath - The path of a directory or the path of a file.
- * @param {Object} payload - Additional arguments bundled as an object the
- *   function is called with.
- */
-function walkDeluxeSync (func, regex, relPath = null, payload = null) {
-  // If regex is a string it is treated as a extension.
-  if (typeof regex === 'string') {
-    regex = new RegExp('.*\.' + regex +  '$')
-  }
-  let basePath = process.cwd()
-  if (relPath) {
-    const stat = fs.statSync(relPath)
-    if (!stat.isDirectory()) {
-      func(relPath, payload)
-      return
-    }
-    basePath = relPath
-  }
-  walkSync(basePath, {
-    everyFile (relPath) {
-      if (regex instanceof RegExp) {
-        if (relPath.match(regex)) {
-          func(relPath, payload)
-        }
-      } else {
-        func(relPath, payload)
-      }
-    }
-  })
-}
-
-/**
  * @param {Object} options
  * @property {String} options.singlePath
- * @property {Object|Function} options.func - An object with callbacks. Properties: `presentation`,
- *   `asset`, `all` (`presentation`, `asset`), `everyFile`.
+ * @property {Object|Function} options.func - A function or an object
+ *   containing functions.
+ *   Properties:
+ *   - `presentation`,
+ *   - `asset`,
+ *   - `all` (`presentation`, `asset`),
+ *   - `everyFile`.
+ * @property {Object} options.payload - The function/s is/are called with
+ *   with this object. Multiple arguments have to be bundled as a single
+ *   object.
  */
 async function execOnOneFile ({ singlePath, func, payload, regex }) {
   // Exclude hidden files and directories like '.git'
@@ -1052,25 +930,33 @@ async function execOnOneFile ({ singlePath, func, payload, regex }) {
   }
   if (isPres && func.presentation) {
     await func.presentation(singlePath, payload)
-  } else if (isPres && func.asset) {
+  } else if (isAss && func.asset) {
     await func.asset(singlePath, payload)
   }
 }
 
 /**
- * Execute a function on one file or walk trough all files matching a regex
- * in the current working directory or in the given directory path.
+ * Execute a function on one file or walk trough all files matching a regex in
+ * the current working directory or in the given directory path.
  *
- * @param {function} func - A function to call on every file path. The file
- *   path is an absolute file path.
- * @param {String|Regex} regex - A regular expression. Each file path must match
- *   the regular expression to execute the function. If you specified a
- *   string. This is string is converted into this regexp `*.ext`.
- * @param {String} relPath - The path of a directory or the path of a file.
- * @param {Object} payload - Additional arguments bundled as an object the
- *   function is called with.
+ * @param {Object} options
+ * @property {Array|String} options.pathList - An array of paths of a directory
+ *   or paths of a file. A single path of a directory or a single path of a
+ *   file. If this property is unset, the current working directory is used.
+ * @property {Function|Object} options.func - A function or an object containing
+ *   functions. Properties:
+ *   - `presentation`,
+ *   - `asset`,
+ *   - `all` (`presentation`, `asset`),
+ *   - `everyFile`.
+ * @property {String|Regex} options.regex - If this property is set,
+ *   `options.func` have to be an single function. Each resolved file path must
+ *   match the regular expression to execute the function. If you specified a
+ *   string, this string is converted into the regexp `*.ext`.
+ * @property {Object} options.payload - The function/s is/are called with with
+ *   this object. Multiple arguments have to be bundled as a single object.
  */
-async function walkNg ({ pathList, func, payload, regex }) {
+async function walk ({ pathList, func, payload, regex }) {
   if (!func) {
     throw new Error('Missing property: `func`.')
   }
@@ -1083,7 +969,7 @@ async function walkNg ({ pathList, func, payload, regex }) {
   // A list of file paths.
   if (Array.isArray(pathList)) {
     for (const relPath of pathList) {
-      await walkNg({ pathList: relPath, func, payload, regex })
+      await walk({ pathList: relPath, func, payload, regex })
     }
     return
   }
@@ -1094,7 +980,7 @@ async function walkNg ({ pathList, func, payload, regex }) {
       // Exclude hidden files and directories like '.git'
       if (fileName.charAt(0) !== '.') {
         const relPath = path.join(pathList, fileName)
-        await walkNg({ pathList: relPath, func, payload, regex })
+        await walk({ pathList: relPath, func, payload, regex })
       }
     }
     return
@@ -1138,18 +1024,21 @@ async function update (full = false) {
   await flushMediaFiles()
   const begin = new Date().getTime()
   await db.collection('updates').insertOne({ begin: begin, end: 0 })
-  await walk(basePath, {
-    everyFile: (filePath) => {
-      if (
-        filePath.match(/\.(aux|out|log|synctex\.gz|mscx,)$/) ||
-        filePath.indexOf('Praesentation_tmp.baldr.yml') > -1
-      ) {
-        console.log(`Delete temporary file ${filePath}`)
-        fs.unlinkSync(filePath)
-      }
-    },
-    presentation: async (filePath) => { await insertObjectIntoDb(filePath, 'presentations') },
-    asset: async (filePath) => { await insertObjectIntoDb(filePath, 'assets') }
+  await walk({
+    pathList: basePath,
+    func: {
+      everyFile: (filePath) => {
+        if (
+          filePath.match(/\.(aux|out|log|synctex\.gz|mscx,)$/) ||
+          filePath.indexOf('Praesentation_tmp.baldr.yml') > -1
+        ) {
+          console.log(`Delete temporary file ${filePath}`)
+          fs.unlinkSync(filePath)
+        }
+      },
+      presentation: async (filePath) => { await insertObjectIntoDb(filePath, 'presentations') },
+      asset: async (filePath) => { await insertObjectIntoDb(filePath, 'assets') }
+    }
   })
 
   // .replaceOne and upsert: Problems with merge objects?
@@ -1828,8 +1717,5 @@ module.exports = {
   openFolderWithArchives,
   openWith,
   registerRestApi,
-  walk,
-  walkDeluxe,
-  walkDeluxeSync,
-  walkNg
+  walk
 }

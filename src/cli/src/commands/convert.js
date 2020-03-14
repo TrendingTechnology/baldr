@@ -208,7 +208,7 @@ async function convertOneFile (inputFile, cmdObj) {
  * @param {Object} cmdObj - The command object from the commander.
  */
 function action (filePaths, cmdObj) {
-  mediaServer.walkNg({
+  mediaServer.walk({
     pathList: filePaths,
     func: {
       all: convertOneFile
