@@ -9,9 +9,11 @@ const lib = require('../lib.js')
 const { cwd } = require('../main.js')
 
 /**
+ * Rename one file.
+ *
  * @param {String} oldPath - The media file path.
  *
- * @returns {String}
+ * @returns {String} - The new file name.
  */
 function renameOneFile (oldPath) {
   let newPath = mediaServer.asciify(oldPath)

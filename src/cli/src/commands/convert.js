@@ -204,14 +204,14 @@ async function convertOneFile (inputFile, cmdObj) {
 /**
  * Convert multiple files.
  *
- * @param {Array} inputFiles - An array of input files to convert.
+ * @param {Array} files - An array of input files to convert.
  * @param {Object} cmdObj - The command object from the commander.
  */
-function action (filePaths, cmdObj) {
+function action (files, cmdObj) {
   mediaServer.walk({
     all: convertOneFile
   }, {
-    path: filePaths,
+    path: files,
     payload: cmdObj
   })
 }

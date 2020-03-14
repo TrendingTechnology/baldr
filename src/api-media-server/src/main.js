@@ -141,7 +141,7 @@ async function connectDb () {
  */
 function asciify (input) {
   const output = input
-    .replace(/[\(\)';]/g, '')
+    .replace(/[\(\)';]/g, '') // eslint-disable-line
     .replace(/[,.] /g, '_')
     .replace(/ +- +/g, '_')
     .replace(/\s+/g, '-')
@@ -798,41 +798,6 @@ class Presentation extends MediaFile {
   }
 }
 
-/**
- * Defintion of some metadata types.
- */
-const metadataTypes = {
-  person: {
-    id: {
-      derived: function () {
-        return `${this.lastname}_${this.firstname}`
-      }
-    },
-    title: {
-      derived: function () {
-        return `Portrait-Bild von „${this.firstname} ${this.lastname}“`
-      }
-    },
-    firstname: {
-      required: true
-    },
-    lastname: {
-      required: true
-    },
-    name: {
-      derived: function () {
-        return `${this.firstname} ${this.lastname}`
-      }
-    },
-    short_biography: {},
-    birth: {
-      validate: function (value) {
-        return value.match(/\d{4,}-\d{2,}-\d{2,}/)
-      }
-    }
-  }
-}
-
 /* Checks *********************************************************************/
 
 /**
@@ -892,12 +857,13 @@ async function insertObjectIntoDb (filePath, mediaType) {
  * Execute a function on one file or walk trough all files matching a regex in
  * the current working directory or in the given directory path.
  *
- * @param {Function|Object} func - A function or an object containing
+ * @param {Function|Object} func - A single function or an object containing
  *   functions. Properties:
- *   - `presentation`,
- *   - `asset`,
- *   - `all` (`presentation`, `asset`),
- *   - `everyFile`.
+ *   - `presentation`: This function is called on each presentation.
+ *   - `asset`: This function is called on each asset.
+ *   - `all` (`presentation`, `asset`):  This function is called on all media
+ *      types, at the moment on presentations and assets.
+ *   - `everyFile`This function is called on every file.
  * @param {Object} opt
  * @property {Object} opt.payload - The function/s is/are called with with
  *   this object. Multiple arguments have to be bundled as a single object.
@@ -905,8 +871,8 @@ async function insertObjectIntoDb (filePath, mediaType) {
  *   or paths of a file. A single path of a directory or a single path of a
  *   file. If this property is not set, the current working directory is used.
  * @property {String|Regex} opt.regex - If this property is set,
- *   `options.func` have to be an single function. Each resolved file path must
- *   match the regular expression to execute the function. If you specified a
+ *   `func` have to be an single function. Each resolved file path must
+ *   match this regular expression to execute the function. If you specified a
  *   string, this string is converted into the regexp `*.ext`.
  */
 async function walk (func, opt) {
@@ -942,7 +908,6 @@ async function walk (func, opt) {
         await walk(func, { path: relPath, payload: opt.payload, regex: opt.regex })
       }
     }
-    return
 
   // A single file.
   } else {
@@ -952,7 +917,7 @@ async function walk (func, opt) {
     if (opt.regex) {
       // If regex is a string it is treated as an extension.
       if (typeof opt.regex === 'string') {
-        opt.regex = new RegExp('.*\.' + opt.regex +  '$')
+        opt.regex = new RegExp('.*\.' + opt.regex + '$') // eslint-disable-line
       }
       if (!opt.path.match(opt.regex)) {
         return
@@ -976,7 +941,6 @@ async function walk (func, opt) {
     } else if (isAss && func.asset) {
       await func.asset(opt.path, opt.payload)
     }
-    return
   }
 }
 
@@ -1014,20 +978,20 @@ async function update (full = false) {
   const begin = new Date().getTime()
   await db.collection('updates').insertOne({ begin: begin, end: 0 })
   await walk({
-    pathList: basePath,
-    func: {
-      everyFile: (filePath) => {
-        if (
-          filePath.match(/\.(aux|out|log|synctex\.gz|mscx,)$/) ||
-          filePath.indexOf('Praesentation_tmp.baldr.yml') > -1
-        ) {
-          console.log(`Delete temporary file ${filePath}`)
-          fs.unlinkSync(filePath)
-        }
-      },
-      presentation: async (filePath) => { await insertObjectIntoDb(filePath, 'presentations') },
-      asset: async (filePath) => { await insertObjectIntoDb(filePath, 'assets') }
-    }
+    everyFile: (filePath) => {
+      if (
+        filePath.match(/\.(aux|out|log|synctex\.gz|mscx,)$/) ||
+        filePath.indexOf('Praesentation_tmp.baldr.yml') > -1
+      ) {
+        console.log(`Delete temporary file ${filePath}`)
+        fs.unlinkSync(filePath)
+      }
+    },
+    presentation: async (filePath) => { await insertObjectIntoDb(filePath, 'presentations') },
+    asset: async (filePath) => { await insertObjectIntoDb(filePath, 'assets') }
+  },
+  {
+    path: basePath
   })
 
   // .replaceOne and upsert: Problems with merge objects?
@@ -1259,7 +1223,7 @@ class BasePaths {
    *   main base path of the media server, then one ore more archive directory
    *   paths. The paths are checked for existence and resolved (untildified).
    */
-  get() {
+  get () {
     return this.paths_
   }
 
@@ -1308,7 +1272,7 @@ class BasePaths {
  *   the given `currentPath` in a recursive manner.
  */
 function openFolder (currentPath, create) {
-  result = {}
+  const result = {}
   if (create && !fs.existsSync(currentPath)) {
     fs.mkdirSync(currentPath, { recursive: true })
     result.create = true
@@ -1634,8 +1598,8 @@ function registerRestApi () {
       if (!query.id) throw new Error('You have to specify an ID (?id=myfile).')
       if (!query.with) query.with = 'editor'
       if (!query.type) query.type = 'presentations'
-      query.archive = ('archive' in query) ? true : false
-      query.create = ('create' in query) ? true : false
+      query.archive = ('archive' in query)
+      query.create = ('create' in query)
       if (query.with === 'editor') {
         res.json(await openEditor(query.id, query.type))
       } else if (query.with === 'folder') {

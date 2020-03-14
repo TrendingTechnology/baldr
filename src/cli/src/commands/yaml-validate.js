@@ -22,12 +22,13 @@ function validateYamlOneFile (filePath) {
 }
 
 /**
- * @param {String} filePath - The media file path.
+ * Validate YAML files.
+ *
+ * @param {String} files - The media file path.
  */
-function action (filePaths) {
-  mediaServer.walkNg({
-    pathList: filePaths,
-    func: validateYamlOneFile,
+function action (files) {
+  mediaServer.walk(validateYamlOneFile, {
+    path: files,
     regex: 'yml'
   })
 }
