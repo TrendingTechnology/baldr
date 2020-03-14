@@ -76,11 +76,13 @@ function yamlToTxt (data) {
  *   yml extension has to be included.
  * @param {Object} data - Some data to convert into yaml and write into a text
  *   file.
+ *
+ * @returns {String} - The data converted to YAML as a string.
  */
 function writeYamlFile (filePath, data) {
-  const result = yamlToTxt(data)
-  console.log(result)
-  fs.writeFileSync(filePath, result)
+  const yaml = yamlToTxt(data)
+  fs.writeFileSync(filePath, yaml)
+  return yaml
 }
 
 /**

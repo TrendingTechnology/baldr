@@ -191,18 +191,23 @@ async function action (itemId, firstname, lastname) {
   )
   fs.mkdirSync(parentDir, { recursive: true })
   const dest = path.join(parentDir, `${id}.jpg`)
-  if (wikicommons) {
-    await downloadWikicommonsFile(wikicommons, dest)
-    console.log(`Image downloaded to: ${chalk.green(dest)}`)
-  }
 
   if (fs.existsSync(dest)) {
-    const stat = fs.statSync(dest)
-    if (stat.size > 500000) {
-      lib.runImagemagick(dest, dest)
-    }
+    console.log(`The image already exists: ${chalk.red(dest)}`)
   } else {
-    console.log(chalk.red(`No image downloaded.`))
+    if (wikicommons) {
+      await downloadWikicommonsFile(wikicommons, dest)
+      console.log(`Image downloaded to: ${chalk.green(dest)}`)
+    }
+
+    if (fs.existsSync(dest)) {
+      const stat = fs.statSync(dest)
+      if (stat.size > 500000) {
+        lib.runImagemagick(dest, dest)
+      }
+    } else {
+      console.log(chalk.red(`No image downloaded.`))
+    }
   }
 
   const result = {
@@ -225,8 +230,12 @@ async function action (itemId, firstname, lastname) {
     }
   }
   const yamlFile = `${dest}.yml`
-  console.log(`Write YAML file: ${chalk.green(yamlFile)}`)
-  lib.writeYamlFile(yamlFile, result)
+  if (!fs.existsSync(yamlFile)) {
+    console.log(`Write YAML file: ${chalk.green(yamlFile)}`)
+    lib.writeYamlFile(yamlFile, result)
+  } else {
+    console.log(`The YAML file already exists: ${chalk.red(yamlFile)}`)
+  }
 }
 
 module.exports = action

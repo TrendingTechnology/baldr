@@ -128,7 +128,7 @@ const subCommands = {
   songbook: {
     command: 'songbook',
     alias: 's',
-    cmdObj: [
+    options: [
       [
         '-a, --group-alphabetically',
         'List the songs in an alphabetical tree.'
@@ -209,9 +209,12 @@ const subCommands = {
     description: 'Replace the title section of the TeX files with metadata retrieved from the title.txt files.'
   },
   'video-preview': {
-    command: 'video-preview [input] [second]',
+    command: 'video-preview [files...]',
     alias: 'v',
-    description: 'Create video preview images',
+    options: [
+      ['-s, --seconds <seconds>', 'Take a video frame at second X from the beginning.']
+    ],
+    description: 'Create video preview images.',
   },
   wikidata: {
     command: 'wikidata <item-id> [firstname] [lastname]',
@@ -240,15 +243,15 @@ program.on('command:*', function () {
  * We use a closure to be able te require the subcommands ad hoc on invocation.
  * To avoid long loading times by many subcommands.
  *
- * @param {String} fileName
+ * @param {String} commandName - The name of the command.
  */
 function actionHandler (commandName) {
-  return function (cmdObj) {
+  return function () {
     const action = require(path.join(commandsPath, `${commandName}.js`))
     // To be able to export some functions other than
     // the action function from the subcommands.
-    if (typeof action === 'function') return action(cmdObj)
-    return action.action(cmdObj)
+    if (typeof action === 'function') return action(...arguments)
+    return action.action(...arguments)
   }
 }
 
