@@ -31,8 +31,16 @@ function convertTexToFolderTitles (filePath) {
   }
 }
 
-function action (filePath) {
-  mediaServer.walkDeluxe(convertTexToFolderTitles, new RegExp('.*\.tex$'), filePath)
+/**
+ *
+ * @param {Array} files - An array of input files, comes from the commanders’
+ *   variadic parameter `[files...]`.
+ */
+function action (files) {
+  mediaServer.walk(convertTexToFolderTitles, {
+    path: files,
+    regex: 'tex'
+  })
 }
 
 module.exports = action

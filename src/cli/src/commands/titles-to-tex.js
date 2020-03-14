@@ -69,12 +69,16 @@ function patchTexFileWithTitles (filePath) {
     }
   }
 }
+
 /**
- *
- * @param {String} filePath
+ * @param {Array} files - An array of input files, comes from the commanders’
+ *   variadic parameter `[files...]`.
  */
-function action (filePath) {
-  mediaServer.walkDeluxeSync(patchTexFileWithTitles, 'tex', filePath)
+function action (files) {
+  mediaServer.walk(patchTexFileWithTitles, {
+    path: files,
+    regex: 'tex'
+  })
 }
 
 module.exports = action

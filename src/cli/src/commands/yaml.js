@@ -6,7 +6,8 @@ const { renameOneFile } = require('./rename.js')
 /**
  * Write the metadata YAML file.
  *
- * @param {Array} files - An array of input files to convert.
+ * @param {Array} files - An array of input files, comes from the commanders’
+ *   variadic parameter `[files...]`.
  */
 function action (files) {
   mediaServer.walk({

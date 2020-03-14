@@ -194,18 +194,18 @@ const subCommands = {
     description: 'Convert TeX files to markdown.',
   },
   'titles-from-tex': {
-    command: 'titles-from-tex [input]',
+    command: 'titles-from-tex [files...]',
     alias: 'tf',
     description: 'TeX files to folder titles title.txt'
   },
   'titles-list': {
-    command: 'titles-list [input]',
-    alias: 't',
+    command: 'titles-list [files...]',
+    alias: 'tl',
     description: 'List all hierarchical folder titles.',
   },
   'titles-to-tex': {
-    command: 'titles-to-tex [input]',
-    alias: 'tt',
+    command: 'titles-to-tex [files...]',
+    alias: 't',
     description: 'Replace the title section of the TeX files with metadata retrieved from the title.txt files.'
   },
   'video-preview': {
