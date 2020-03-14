@@ -18,6 +18,7 @@ exports.formatYoutubeUrl = formatYoutubeUrl;
 exports.selectSubset = selectSubset;
 exports.escapeHtml = escapeHtml;
 exports.deepCopy = deepCopy;
+exports.getExtension = getExtension;
 exports.RawDataObject = exports.jsYamlConfig = exports.AssetTypes = void 0;
 
 function sortObjectsByProperty(property) {
@@ -331,3 +332,7 @@ class RawDataObject {
 }
 
 exports.RawDataObject = RawDataObject;
+
+function getExtension(filePath) {
+  return filePath.split('.').pop().toLowerCase();
+}

@@ -114,7 +114,7 @@ const subCommands = {
     description: 'Create a relative path in different base paths. Open this relative paths in the file manager.',
   },
   'presentation-template': {
-    command: 'presentation',
+    command: 'presentation-template',
     alias: 'p',
     checkExecutable: ['detex'],
     description: 'Create a presentation template from the assets of the current working directory named “Praesentation.baldr.yml”.'

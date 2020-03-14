@@ -519,3 +519,14 @@ export class RawDataObject {
     return false
   }
 }
+
+/**
+ * Get the extension from a file path.
+ *
+ * @param {String} filePath
+ *
+ * @returns {String} - The extension in lower case charcters.
+ */
+export function getExtension (filePath) {
+  return filePath.split('.').pop().toLowerCase()
+}

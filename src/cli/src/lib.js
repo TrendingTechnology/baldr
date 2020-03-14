@@ -114,8 +114,13 @@ function writeMetaDataYaml (filePath, metaData, force) {
 }
 
 /**
+ * Read the content of a file in the `utf-8` format.
+ *
+ * A wrapper around `fs.readFileSync()`
  *
  * @param {String} filePath
+ *
+ * @returns {String} - The content of the file in the `utf-8` format.
  */
 function readFile (filePath) {
   return fs.readFileSync(filePath, { encoding: 'utf-8' })
