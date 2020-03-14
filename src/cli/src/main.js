@@ -219,9 +219,9 @@ const subCommands = {
     description: 'Query wikidata.org (currently there is only support for the master slide “person”).',
   },
   'yaml-validate': {
-    command: 'yaml-validate [input]',
+    command: 'yaml-validate [input...]',
     alias: 'yv',
-    description: 'Validate the yaml files.',
+    description: 'Validate the YAML files.',
   },
   yaml: {
     command: 'yaml [input]',

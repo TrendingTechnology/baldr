@@ -1018,6 +1018,80 @@ function walkDeluxeSync (func, regex, relPath = null, payload = null) {
   })
 }
 
+async function execOnOneFile ({ singlePath, func, payload, regex }) {
+  // Exclude hidden files and directories like '.git'
+  if (path.basename(singlePath).charAt(0) === '.') return
+  if (!fs.existsSync(singlePath)) return
+  if (regex) {
+    // If regex is a string it is treated as an extension.
+    if (typeof regex === 'string') {
+      regex = new RegExp('.*\.' + regex +  '$')
+    }
+    if (!singlePath.match(regex)) {
+      return
+    }
+  }
+
+  if (typeof func === 'function') {
+    await func(singlePath, payload)
+    return
+  }
+  if (func.everyFile) {
+    await func.everyFile(singlePath, payload)
+  }
+  const isPres = isPresentation(singlePath)
+  const isAss = isAsset(singlePath)
+  if (isPres && isAss && func.all) {
+    await func.all(singlePath, payload)
+  }
+  if (isPres && func.presentation) {
+    await func.presentation(singlePath, payload)
+  } else if (isPres && func.asset) {
+    await func.asset(singlePath, payload)
+  }
+}
+
+/**
+ * Execute a function on one file or walk trough all files matching a regex
+ * in the current working directory or in the given directory path.
+ *
+ * @param {function} func - A function to call on every file path. The file
+ *   path is an absolute file path.
+ * @param {String|Regex} regex - A regular expression. Each file path must match
+ *   the regular expression to execute the function. If you specified a
+ *   string. This is string is converted into this regexp `*.ext`.
+ * @param {String} relPath - The path of a directory or the path of a file.
+ * @param {Object} payload - Additional arguments bundled as an object the
+ *   function is called with.
+ */
+async function walkNg ({ pathList, func, payload, regex }) {
+  // commander [filepath...] -> without arguments is an empty array.
+  if (!pathList || (Array.isArray(pathList) && pathList.length === 0)) pathList = process.cwd()
+  // A list of file paths.
+  if (Array.isArray(pathList)) {
+    for (const relPath of pathList) {
+      await walkNg({ pathList: relPath, func, payload, regex })
+    }
+    return
+  }
+  // A directory.
+  if (fs.statSync(pathList).isDirectory()) {
+    const files = fs.readdirSync(pathList)
+    for (const fileName of files) {
+      // Exclude hidden files and directories like '.git'
+      if (fileName.charAt(0) !== '.') {
+        const relPath = path.join(pathList, fileName)
+        await walkNg({ pathList: relPath, func, payload, regex })
+      }
+    }
+    return
+  // A single file.
+  } else {
+    await execOnOneFile({ singlePath: pathList, func, payload, regex })
+    return
+  }
+}
+
 /**
  * Update the media server.
  *
@@ -1743,5 +1817,6 @@ module.exports = {
   registerRestApi,
   walk,
   walkDeluxe,
-  walkDeluxeSync
+  walkDeluxeSync,
+  walkNg
 }

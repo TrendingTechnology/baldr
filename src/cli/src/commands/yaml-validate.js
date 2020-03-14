@@ -12,31 +12,24 @@ const mediaServer = require('@bldr/api-media-server')
  * @param {String} filePath - The media file path.
  */
 function validateYamlOneFile (filePath) {
-  console.log(`Validate: ${chalk.yellow(filePath)}`)
   try {
-    const result = yaml.safeLoad(fs.readFileSync(filePath, 'utf8'))
-    console.log(chalk.green('ok!'))
-    console.log(result)
+    yaml.safeLoad(fs.readFileSync(filePath, 'utf8'))
+    console.log(`${chalk.green('ok')}: ${chalk.yellow(filePath)}`)
   } catch (error) {
-    console.log(`${chalk.red(error.name)}: ${error.message}`)
+    console.log(`${chalk.red('error')}: ${chalk.red(error.name)}: ${error.message}`)
+    throw new Error(error.name)
   }
 }
 
 /**
  * @param {String} filePath - The media file path.
  */
-function action (filePath) {
-  if (filePath) {
-    validateYamlOneFile(filePath)
-  } else {
-    mediaServer.walk(process.cwd(), {
-      everyFile (relPath) {
-        if (relPath.toLowerCase().indexOf('.yml') > -1) {
-          validateYamlOneFile(relPath)
-        }
-      }
-    })
-  }
+function action (filePaths) {
+  mediaServer.walkNg({
+    pathList: filePaths,
+    func: validateYamlOneFile,
+    regex: 'yml'
+  })
 }
 
 module.exports = action
