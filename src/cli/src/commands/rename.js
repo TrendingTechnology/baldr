@@ -5,9 +5,6 @@ const path = require('path')
 const mediaServer = require('@bldr/api-media-server')
 const lib = require('../lib.js')
 
-// Globals.
-const { cwd } = require('../main.js')
-
 /**
  * Rename one file.
  *
@@ -28,13 +25,18 @@ function renameOneFile (oldPath) {
 }
 
 /**
- * Rename all child files in the current working directory.
+ * Rename files.
+ *
+ * @param {Array} files - An array of input files, comes from the commanders’
+ *   variadic parameter `[files...]`.
  */
-function action () {
-  mediaServer.walk(cwd, {
+function action (files) {
+  mediaServer.walk({
     all (oldPath) {
       renameOneFile(oldPath)
     }
+  }, {
+    path: files
   })
 }
 

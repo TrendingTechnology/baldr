@@ -67,7 +67,7 @@ const subCommands = {
     description: 'Download some material icons and build font files from this SVGs.'
   },
   'id-to-filename': {
-    command: 'id-to-filename [input]',
+    command: 'id-to-filename [files...]',
     alias: 'i',
     description: 'Rename media assets after the id.',
   },
@@ -85,7 +85,7 @@ const subCommands = {
     description: 'Rename multipart assets.',
   },
   normalize: {
-    command: 'normalize [media-asset]',
+    command: 'normalize [files...]',
     alias: 'n',
     description: 'Normalize the meta data files in the YAML format (sort, clean up).'
   },
@@ -116,7 +116,7 @@ const subCommands = {
     description: 'Rename files by regex. see String.prototype.replace()'
   },
   rename: {
-    command: 'rename',
+    command: 'rename [files...]',
     alias: 'r',
     description: [
       'Rename and clean file names, remove all whitespaces and special characters.',
@@ -189,7 +189,7 @@ const subCommands = {
     ]
   },
   'tex-to-markdown': {
-    command: 'tex-to-markdown [input]',
+    command: 'tex-to-markdown [files...]',
     alias: 'tm',
     description: 'Convert TeX files to markdown.',
   },

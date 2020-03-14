@@ -48,20 +48,19 @@ function renameFromIdOneFile (filePath) {
  * Rename a media asset or all child asset of the parent working directory
  * after the `id` in the meta data file.
  *
- * @param {String} filePath - The media file path.
+ * @param {Array} files - An array of input files, comes from the commanders’
+ *   variadic parameter `[files...]`.
  */
-function action (filePath) {
-  if (filePath) {
-    renameFromIdOneFile(filePath)
-  } else {
-    mediaServer.walk(process.cwd(), {
-      asset (relPath) {
-        if (fs.existsSync(`${relPath}.yml`)) {
-          renameFromIdOneFile(relPath)
-        }
+function action (files) {
+  mediaServer.walk({
+    asset (relPath) {
+      if (fs.existsSync(`${relPath}.yml`)) {
+        renameFromIdOneFile(relPath)
       }
-    })
-  }
+    }
+  }, {
+    path: files
+  })
 }
 
 module.exports = action

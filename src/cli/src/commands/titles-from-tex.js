@@ -32,7 +32,6 @@ function convertTexToFolderTitles (filePath) {
 }
 
 /**
- *
  * @param {Array} files - An array of input files, comes from the commanders’
  *   variadic parameter `[files...]`.
  */

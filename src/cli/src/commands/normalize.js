@@ -137,20 +137,19 @@ class Person extends MetaDataType {
 }
 
 /**
- * @param {String} filePath - The media asset file path.
+ * @param {Array} files - An array of input files, comes from the commanders’
+ *   variadic parameter `[files...]`.
  */
-function action (filePath) {
-  if (filePath) {
-    normalizeOneFile(filePath)
-  } else {
-    mediaServer.walk(cwd, {
-      asset (relPath) {
-        if (fs.existsSync(`${relPath}.yml`)) {
-          normalizeOneFile(relPath)
-        }
+function action (files) {
+  mediaServer.walk({
+    asset (relPath) {
+      if (fs.existsSync(`${relPath}.yml`)) {
+        normalizeOneFile(relPath)
       }
-    })
-  }
+    }
+  }, {
+    path: files
+  })
 }
 
 module.exports = action

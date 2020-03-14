@@ -5,7 +5,7 @@ const fs = require('fs')
 const chalk = require('chalk')
 
 // Project packages.
-const { walkDeluxe } = require('@bldr/api-media-server')
+const mediaServer = require('@bldr/api-media-server')
 
 /**
  * @param {String} filePath - The media file path.
@@ -21,7 +21,11 @@ function renameByRegex (filePath, { pattern, replacement }) {
 }
 
 function action (pattern, replacement, filePath) {
-  walkDeluxe(renameByRegex, new RegExp('.*'), filePath, { pattern, replacement })
+  mediaServer.walk(renameByRegex, {
+    regex: new RegExp('.*'),
+    path: filePath,
+    payload: { pattern, replacement }
+  })
 }
 
 module.exports = action

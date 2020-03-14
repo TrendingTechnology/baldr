@@ -1661,6 +1661,7 @@ module.exports = {
   asciify,
   Asset,
   assetTypes,
+  BasePaths,
   deasciify,
   FolderTitleTree,
   getExtension,
