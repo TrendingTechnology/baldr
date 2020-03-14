@@ -209,10 +209,9 @@ async function convertOneFile (inputFile, cmdObj) {
  */
 function action (filePaths, cmdObj) {
   mediaServer.walk({
-    pathList: filePaths,
-    func: {
-      all: convertOneFile
-    },
+    all: convertOneFile
+  }, {
+    path: filePaths,
     payload: cmdObj
   })
 }

@@ -889,104 +889,93 @@ async function insertObjectIntoDb (filePath, mediaType) {
 }
 
 /**
- * @param {Object} options
- * @property {String} options.singlePath
- * @property {Object|Function} options.func - A function or an object
- *   containing functions.
- *   Properties:
- *   - `presentation`,
- *   - `asset`,
- *   - `all` (`presentation`, `asset`),
- *   - `everyFile`.
- * @property {Object} options.payload - The function/s is/are called with
- *   with this object. Multiple arguments have to be bundled as a single
- *   object.
- */
-async function execOnOneFile ({ singlePath, func, payload, regex }) {
-  // Exclude hidden files and directories like '.git'
-  if (path.basename(singlePath).charAt(0) === '.') return
-  if (!fs.existsSync(singlePath)) return
-  if (regex) {
-    // If regex is a string it is treated as an extension.
-    if (typeof regex === 'string') {
-      regex = new RegExp('.*\.' + regex +  '$')
-    }
-    if (!singlePath.match(regex)) {
-      return
-    }
-  }
-
-  if (typeof func === 'function') {
-    await func(singlePath, payload)
-    return
-  }
-  if (func.everyFile) {
-    await func.everyFile(singlePath, payload)
-  }
-  const isPres = isPresentation(singlePath)
-  const isAss = isAsset(singlePath)
-  if ((isPres || isAss) && func.all) {
-    await func.all(singlePath, payload)
-  }
-  if (isPres && func.presentation) {
-    await func.presentation(singlePath, payload)
-  } else if (isAss && func.asset) {
-    await func.asset(singlePath, payload)
-  }
-}
-
-/**
  * Execute a function on one file or walk trough all files matching a regex in
  * the current working directory or in the given directory path.
  *
- * @param {Object} options
- * @property {Array|String} options.pathList - An array of paths of a directory
- *   or paths of a file. A single path of a directory or a single path of a
- *   file. If this property is unset, the current working directory is used.
- * @property {Function|Object} options.func - A function or an object containing
+ * @param {Function|Object} func - A function or an object containing
  *   functions. Properties:
  *   - `presentation`,
  *   - `asset`,
  *   - `all` (`presentation`, `asset`),
  *   - `everyFile`.
- * @property {String|Regex} options.regex - If this property is set,
+ * @param {Object} opt
+ * @property {Object} opt.payload - The function/s is/are called with with
+ *   this object. Multiple arguments have to be bundled as a single object.
+ * @property {Array|String} opt.path - An array of paths of a directory
+ *   or paths of a file. A single path of a directory or a single path of a
+ *   file. If this property is not set, the current working directory is used.
+ * @property {String|Regex} opt.regex - If this property is set,
  *   `options.func` have to be an single function. Each resolved file path must
  *   match the regular expression to execute the function. If you specified a
  *   string, this string is converted into the regexp `*.ext`.
- * @property {Object} options.payload - The function/s is/are called with with
- *   this object. Multiple arguments have to be bundled as a single object.
  */
-async function walk ({ pathList, func, payload, regex }) {
+async function walk (func, opt) {
+  // Some checks to exit early.
   if (!func) {
     throw new Error('Missing property: `func`.')
   }
-
-  if (typeof func === 'object' && regex) {
-    throw new Error('Use a single function and a regex or a object containing functions without a regex.')
+  if (typeof opt !== 'object') opt = {}
+  if (typeof func === 'object' && opt.regex) {
+    throw new Error('Use a single function and a regex or an object containing functions without a regex.')
   }
+
   // commander [filepath...] -> without arguments is an empty array.
-  if (!pathList || (Array.isArray(pathList) && pathList.length === 0)) pathList = process.cwd()
+  if (!opt.path || (Array.isArray(opt.path) && opt.path.length === 0)) {
+    opt.path = process.cwd()
+  }
+
   // A list of file paths.
-  if (Array.isArray(pathList)) {
-    for (const relPath of pathList) {
-      await walk({ pathList: relPath, func, payload, regex })
+  if (Array.isArray(opt.path)) {
+    for (const relPath of opt.path) {
+      await walk(func, { path: relPath, payload: opt.payload, regex: opt.regex })
     }
     return
   }
+
   // A directory.
-  if (fs.statSync(pathList).isDirectory()) {
-    const files = fs.readdirSync(pathList)
+  if (fs.statSync(opt.path).isDirectory()) {
+    const files = fs.readdirSync(opt.path)
     for (const fileName of files) {
       // Exclude hidden files and directories like '.git'
       if (fileName.charAt(0) !== '.') {
-        const relPath = path.join(pathList, fileName)
-        await walk({ pathList: relPath, func, payload, regex })
+        const relPath = path.join(opt.path, fileName)
+        await walk(func, { path: relPath, payload: opt.payload, regex: opt.regex })
       }
     }
     return
+
   // A single file.
   } else {
-    await execOnOneFile({ singlePath: pathList, func, payload, regex })
+    // Exclude hidden files and directories like '.git'
+    if (path.basename(opt.path).charAt(0) === '.') return
+    if (!fs.existsSync(opt.path)) return
+    if (opt.regex) {
+      // If regex is a string it is treated as an extension.
+      if (typeof opt.regex === 'string') {
+        opt.regex = new RegExp('.*\.' + opt.regex +  '$')
+      }
+      if (!opt.path.match(opt.regex)) {
+        return
+      }
+    }
+
+    if (typeof func === 'function') {
+      await func(opt.path, opt.payload)
+      return
+    }
+    if (func.everyFile) {
+      await func.everyFile(opt.path, opt.payload)
+    }
+    const isPres = isPresentation(opt.path)
+    const isAss = isAsset(opt.path)
+    if ((isPres || isAss) && func.all) {
+      await func.all(opt.path, opt.payload)
+    }
+    if (isPres && func.presentation) {
+      await func.presentation(opt.path, opt.payload)
+    } else if (isAss && func.asset) {
+      await func.asset(opt.path, opt.payload)
+    }
     return
   }
 }
