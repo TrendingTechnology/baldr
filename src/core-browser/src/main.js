@@ -7,6 +7,11 @@
  * @module @bldr/core-browser
  */
 
+import convertTex from './convert-tex.js'
+
+export const convertTexToMd = convertTex.convertTexToMd
+export const convertMdToTex = convertTex.convertMdToTex
+
 /* globals DOMParser */
 
 /**

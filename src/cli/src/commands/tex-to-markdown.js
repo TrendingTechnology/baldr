@@ -7,6 +7,8 @@ const chalk = require('chalk')
 
 // Project packages.
 const mediaServer = require('@bldr/api-media-server')
+const { convertTexToMd } = require('@bldr/core-browser')
+
 const lib = require('../lib.js')
 
 const basePaths = new mediaServer.BasePaths()
@@ -23,26 +25,10 @@ function convertTexToMarkdown (input) {
     content = lib.readFile(input)
   }
 
-  // Remove TeX header and footer
-  content = content.replace(/.*\\begin\{document\}/s, '')
-  content = content.replace(/\\end\{document\}.*/s, '')
-  // convert \pfeil{}
-  content = content.replace(/\\pfeil\{?\}?/g, '->')
-  content = content.replace(
-    /\\begin\{(compactitem|itemize)\}(.+?)\\end\{(compactitem|itemize)\}/gs,
-    function (match, p1, p2) {
-      let content = p2
-      // \item Lorem -> - Lorem
-      content = content.replace(/\\item\s*/g, '- ')
-      // No empty lines
-      content = content.replace(/\n\n/g, '\n')
-      content = content.replace(/\n(\w|-> )/g, '\n  $1')
-      console.log(content)
-      return content
-    }
-  )
-
-  content = lib.semanticMarkupTexToHtml(content)
+  console.log(chalk.yellow('Original:'))
+  console.log(content)
+  content = convertTexToMd(content)
+  console.log(chalk.green('Converted:'))
   console.log(content)
   return content
 }
@@ -57,7 +43,7 @@ function action (filesOrText) {
     convertTexToMarkdown(filesOrText[0])
   } else {
     mediaServer.walk(convertTexToMarkdown, {
-      path: filesOrText (),
+      path: filesOrText,
       regex: 'tex'
     })
   }

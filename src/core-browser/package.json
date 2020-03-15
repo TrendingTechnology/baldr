@@ -17,7 +17,7 @@
     "url": "https://josef.friedrich.rocks"
   },
   "scripts": {
-    "build": "babel --plugins @babel/plugin-transform-modules-commonjs -o dist/main.node.js src/main.js"
+    "build": "babel --plugins @babel/plugin-transform-modules-commonjs -o dist/main.node.js src/main.js; babel --plugins @babel/plugin-transform-modules-commonjs -o dist/convert-tex.js src/convert-tex.js"
   },
   "browser": "src/main.js",
   "main": "dist/main.node.js",

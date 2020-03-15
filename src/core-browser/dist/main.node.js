@@ -19,7 +19,16 @@ exports.selectSubset = selectSubset;
 exports.escapeHtml = escapeHtml;
 exports.deepCopy = deepCopy;
 exports.getExtension = getExtension;
-exports.RawDataObject = exports.jsYamlConfig = exports.AssetTypes = void 0;
+exports.RawDataObject = exports.jsYamlConfig = exports.AssetTypes = exports.convertMdToTex = exports.convertTexToMd = void 0;
+
+var _convertTex = _interopRequireDefault(require("./convert-tex.js"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+const convertTexToMd = _convertTex.default.convertTexToMd;
+exports.convertTexToMd = convertTexToMd;
+const convertMdToTex = _convertTex.default.convertMdToTex;
+exports.convertMdToTex = convertMdToTex;
 
 function sortObjectsByProperty(property) {
   return function (a, b) {
