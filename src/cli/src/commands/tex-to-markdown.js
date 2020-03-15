@@ -24,8 +24,7 @@ function convertTexToMarkdown (input) {
     console.log(chalk.green(basePaths.getRelPath(input)))
     content = lib.readFile(input)
   }
-
-  console.log(chalk.yellow('Original:'))
+  console.log('\n' + chalk.yellow('Original:') + '\n')
   console.log(content)
   content = convertTexToMd(content)
   console.log(chalk.green('Converted:'))

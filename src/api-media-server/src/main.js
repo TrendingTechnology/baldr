@@ -1237,6 +1237,7 @@ class BasePaths {
    * @returns {String}
    */
   getRelPath (currentPath) {
+    currentPath = path.resolve(currentPath)
     let relPath
     for (const basePath of this.paths_) {
       if (currentPath.indexOf(basePath) === 0) {
@@ -1256,6 +1257,7 @@ class BasePaths {
    * @returns {String}
    */
   getBasePath (currentPath) {
+    currentPath = path.resolve(currentPath)
     let basePath
     for (const bPath of this.paths_) {
       if (currentPath.indexOf(bPath) === 0) {
