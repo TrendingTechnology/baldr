@@ -38,6 +38,27 @@ function filePathToAssetType (filePath) {
  * \emph{Mozart} -> <em>Mozart<em>
  */
 function semanticMarkupTexToHtml (text) {
+
+  function texReg (commandName) {
+    return new RegExp('\\\\' + commandName + '\\{([^\\}]+?)\\}', 'gs')
+  }
+
+  /*
+    { tex: '', html: '' },
+    {
+      tex: { reg: , rep:  },
+      html: { reg: , rep:  }
+    },
+  */
+  const spec = [
+    { tex: '---', html: '—' }, // U+2014 EM DASH
+    { tex: '--', html: '–' }, // U+2013 EN DASH
+    {
+      tex: { reg: /\\stueck\*\{([^\}]+?)\}/g, rep: '<em class="piece">„$1“</em>' },
+      html: { reg: /<em class="piece">„([^<>]+?)“<\/em>/g, rep: '\\stueck*{$1}' }
+    },
+
+  ]
   // U+2014 EM DASH
   text = text.replace(/---/g, '—')
   // U+2013 EN DASH
@@ -45,7 +66,7 @@ function semanticMarkupTexToHtml (text) {
   text = text.replace(/\\stueck\*\{([^\}]+?)\}/g, '<em class="piece">„$1“</em>')
   text = text.replace(/\\stueck\{([^\}]+?)\}/g, '<em class="piece">$1</em>')
   text = text.replace(/\\person\{([^\}]+?)\}/g, '<em class="person">$1</em>')
-  text = text.replace(/\\emph\{([^\}]+?)\}/g, '<em>$1</em>')
+  text = text.replace(texRegex('emph'), '<em>$1</em>')
   return text
 }
 
