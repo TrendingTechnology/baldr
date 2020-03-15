@@ -27,6 +27,9 @@ function normalizeOneFile (filePath) {
   // console.log(person.birth)
 }
 
+/**
+ *
+ */
 class MetaDataType {
   constructor (metaData, specification) {
     /**
@@ -99,6 +102,9 @@ class MetaDataType {
   }
 }
 
+/**
+ *
+ */
 class Person extends MetaDataType {
   constructor (metaData) {
     super(
@@ -125,8 +131,15 @@ class Person extends MetaDataType {
             return `${this.firstname} ${this.lastname}`
           }
         },
-        short_biography: {},
+        short_biography: {
+          required
+        },
         birth: {
+          validate: function (value) {
+            return value.match(/\d{4,}-\d{2,}-\d{2,}/)
+          }
+        },
+        death: {
           validate: function (value) {
             return value.match(/\d{4,}-\d{2,}-\d{2,}/)
           }

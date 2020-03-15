@@ -20,7 +20,7 @@ function renameOneFile (oldPath) {
   if (cleanedBasename !== basename) {
     newPath = path.join(path.dirname(newPath), cleanedBasename)
   }
-  lib.renameAsset(oldPath, newPath)
+  lib.moveAsset(oldPath, newPath)
   return newPath
 }
 

@@ -241,34 +241,37 @@ function runImagemagick (inputFile, outputFile, size = '2000x2000>') {
 }
 
 /**
- * Rename a media asset and it’s corresponding meta data file (`*.yml`) and
- * preview file (`_preview.jpg`).
+ * Move (rename) or copy a media asset and it’s corresponding meta data file
+ * (`*.yml`) and preview file (`_preview.jpg`).
  *
  * @param {String} oldPath - The old path of a media asset.
  * @param {String} newPath - The new path of a media asset.
+ * @param {Object} opts - Some options
+ * @property {Boolean} opts.copy
+ * @property {Boolean} opts.dryRun
  */
-function renameAsset (oldPath, newPath, copy) {
-  function move(oldPath, newPath, copy) {
+function moveAsset (oldPath, newPath, opts) {
+  if (!opts) opts = {}
+  function move(oldPath, newPath, { copy, dryRun }) {
+    let action
+    const dryRunMsg = dryRun ? '[dry run] ' : ''
     if (copy) {
-      fs.copyFileSync(oldPath, newPath)
+      if (!dryRun) fs.copyFileSync(oldPath, newPath)
+      action = 'copy'
     } else {
-      fs.renameSync(oldPath, newPath)
+      if (!dryRun) fs.renameSync(oldPath, newPath)
+      action = 'move'
     }
+    console.log(`  ${dryRunMsg}${action}: ${chalk.yellow(oldPath)} -> ${chalk.green(newPath)}`)
   }
-  const cwd = process.cwd()
-  const oldRelPath = oldPath.replace(cwd, '')
-  console.log(`old: ${chalk.yellow(oldRelPath)}`)
   if (newPath && oldPath !== newPath) {
     fs.mkdirSync(path.dirname(newPath), { recursive: true })
-    const newRelPath = newPath.replace(cwd, '')
-    console.log(`new: ${chalk.green(newRelPath)}`)
     for (const suffix of ['.yml', '_preview.jpg']) {
       if (fs.existsSync(`${oldPath}${suffix}`)) {
-        move(`${oldPath}${suffix}`, `${newPath}${suffix}`, copy)
-        console.log(`new: ${chalk.cyan(newRelPath + suffix)}`)
+        move(`${oldPath}${suffix}`, `${newPath}${suffix}`, opts)
       }
     }
-    move(oldPath, newPath, copy)
+    move(oldPath, newPath, opts)
     return newPath
   }
 }
@@ -278,7 +281,7 @@ module.exports = {
   makeAsset,
   normalizeMetaData,
   readFile,
-  renameAsset,
+  moveAsset,
   runImagemagick,
   semanticMarkupHtmlToTex,
   semanticMarkupTexToHtml,

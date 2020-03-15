@@ -40,7 +40,7 @@ function renameFromIdOneFile (filePath) {
     } else {
       return
     }
-    lib.renameAsset(oldPath, newPath)
+    lib.moveAsset(oldPath, newPath)
   }
 }
 
