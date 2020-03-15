@@ -30,12 +30,18 @@ function filePathToAssetType (filePath) {
 }
 
 /**
+ * --- -> —
+ * -- -> –
  * \stueck*{Nachtmusik} -> <em class="piece">„Nachtmusik“<em>
  * \stueck{Nachtmusik} -> <em class="piece">Nachtmusik<em>
  * \person{Mozart} -> <em class="person">Mozart<em>
  * \emph{Mozart} -> <em>Mozart<em>
  */
 function semanticMarkupTexToHtml (text) {
+  // U+2014 EM DASH
+  text = text.replace(/---/g, '—')
+  // U+2013 EN DASH
+  text = text.replace(/--/g, '–')
   text = text.replace(/\\stueck\*\{([^\}]+?)\}/g, '<em class="piece">„$1“</em>')
   text = text.replace(/\\stueck\{([^\}]+?)\}/g, '<em class="piece">$1</em>')
   text = text.replace(/\\person\{([^\}]+?)\}/g, '<em class="person">$1</em>')
@@ -44,12 +50,18 @@ function semanticMarkupTexToHtml (text) {
 }
 
 /**
+ * --- <- —
+ * -- <- –
  * \stueck*{Nachtmusik} <- <em class="piece">„Nachtmusik“<em>
  * \stueck{Nachtmusik} <- <em class="piece">Nachtmusik<em>
  * \person{Mozart} <- <em class="person">Mozart<em>
  * \emph{Mozart} <- <em>Mozart<em>
  */
 function semanticMarkupHtmlToTex (text) {
+  // U+2014 EM DASH
+  text = text.replace(/—/g, '---')
+  // U+2013 EN DASH
+  text = text.replace(/–/g, '--')
   text = text.replace(/<em class="piece">„([^<>]+?)“<\/em>/g, '\\stueck*{$1}')
   text = text.replace(/<em class="piece">([^<>]+?)<\/em>/g, '\\stueck{$1}')
   text = text.replace(/<em class="person">([^<>]+?)<\/em>/g, '\\person{$1}')

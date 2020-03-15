@@ -1,5 +1,6 @@
 // Node packages.
 const path = require('path')
+const fs = require('fs')
 
 // Third party packages.
 const chalk = require('chalk')
@@ -10,9 +11,17 @@ const lib = require('../lib.js')
 
 const basePaths = new mediaServer.BasePaths()
 
-function convertTexToMarkdown (filePath) {
-  console.log(chalk.green(basePaths.getRelPath(filePath)))
-  let content = lib.readFile(filePath)
+/**
+ * @param {String} input - A file path or a text string to convert.
+ */
+function convertTexToMarkdown (input) {
+  let content
+  if (!fs.existsSync(input)) {
+    content = input
+  } else {
+    console.log(chalk.green(basePaths.getRelPath(input)))
+    content = lib.readFile(input)
+  }
 
   // Remove TeX header and footer
   content = content.replace(/.*\\begin\{document\}/s, '')
@@ -32,17 +41,26 @@ function convertTexToMarkdown (filePath) {
       return content
     }
   )
+
+  content = lib.semanticMarkupTexToHtml(content)
+  console.log(content)
+  return content
 }
 
 /**
- * @param {Array} files - An array of input files, comes from the commanders’
- *   variadic parameter `[files...]`.
+ * @param {Array} filesOrText - An array of input files, comes from the commanders’
+ *   variadic parameter `[files...]` or a text block in the first element
+ *   of the array.
  */
-function action (files) {
-  mediaServer.walk(convertTexToMarkdown, {
-    path: files,
-    regex: 'tex'
-  })
+function action (filesOrText) {
+  if (Array.isArray(filesOrText) && filesOrText.length > 0 && !fs.existsSync(filesOrText[0])) {
+    convertTexToMarkdown(filesOrText[0])
+  } else {
+    mediaServer.walk(convertTexToMarkdown, {
+      path: filesOrText (),
+      regex: 'tex'
+    })
+  }
 }
 
 module.exports = action

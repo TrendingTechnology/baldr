@@ -199,13 +199,16 @@ const subCommands = {
     ]
   },
   'tex-to-markdown': {
-    command: 'tex-to-markdown [files...]',
+    command: 'tex-to-markdown [files-or-text...]',
     alias: 'tm',
-    description: 'Convert TeX files to markdown.',
+    description: 'Convert TeX to markdown.',
   },
   'titles-from-tex': {
     command: 'titles-from-tex [files...]',
     alias: 'tf',
+    options: [
+      ['-f, --force', 'Overwrite existing `title.txt` files.']
+    ],
     description: 'TeX files to folder titles title.txt'
   },
   'titles-list': {

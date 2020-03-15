@@ -16,7 +16,7 @@ function clean (text) {
   return text
 }
 
-function convertTexToFolderTitles (filePath) {
+function convertTexToFolderTitles (filePath, cmdObj) {
   const content = lib.readFile(filePath)
   let title = content.match(/  titel = \{(.+?)\}[,\n]/s)
   const output = []
@@ -35,10 +35,14 @@ function convertTexToFolderTitles (filePath) {
     const destBasePath = path.dirname(filePath)
     let dest
     const destFinal = path.join(destBasePath, 'title.txt')
-    if (!fs.existsSync(destFinal)) {
+    if (!fs.existsSync(destFinal) || cmdObj.force) {
       dest = destFinal
     } else {
       dest = path.join(destBasePath, 'title_tmp.txt')
+    }
+    const presFile = path.join(destBasePath, 'Praesentation.baldr.yml')
+    if (!fs.existsSync(presFile) || cmdObj.force) {
+      lib.writeFile(presFile, '---\n')
     }
     console.log(chalk.green(dest))
     console.log(`  title: ${chalk.blue(title)}`)
@@ -51,10 +55,11 @@ function convertTexToFolderTitles (filePath) {
  * @param {Array} files - An array of input files, comes from the commanders’
  *   variadic parameter `[files...]`.
  */
-function action (files) {
+function action (files, cmdObj) {
   mediaServer.walk(convertTexToFolderTitles, {
     path: files,
-    regex: 'tex'
+    regex: 'tex',
+    payload: cmdObj
   })
 }
 

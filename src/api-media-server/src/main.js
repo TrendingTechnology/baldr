@@ -981,7 +981,8 @@ async function update (full = false) {
     everyFile: (filePath) => {
       if (
         filePath.match(/\.(aux|out|log|synctex\.gz|mscx,)$/) ||
-        filePath.indexOf('Praesentation_tmp.baldr.yml') > -1
+        filePath.indexOf('Praesentation_tmp.baldr.yml') > -1 ||
+        filePath.indexOf('title_tmp.txt') > -1
       ) {
         console.log(`Delete temporary file ${filePath}`)
         fs.unlinkSync(filePath)
