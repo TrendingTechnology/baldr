@@ -23,6 +23,12 @@ function log (format) {
 }
 
 /**
+ * Object to cache the configuration. To avoid reading the configuration
+ * file multiple times.
+ */
+let configJson
+
+/**
  * By default this module reads the configuration file `/etc/baldr.json` to
  * generate its configuration object.
  *
@@ -31,11 +37,12 @@ function log (format) {
  * @return {object}
  */
 function bootstrapConfig (configDefault) {
-  const configFile = path.join(path.sep, 'etc', 'baldr.json')
+  if (!configJson) {
+    const configFile = path.join(path.sep, 'etc', 'baldr.json')
 
-  let configJson
-  if (fs.existsSync(configFile)) {
-    configJson = require(configFile)
+    if (fs.existsSync(configFile)) {
+      configJson = require(configFile)
+    }
   }
 
   if (!configJson) throw new Error(`No configuration file found: ${configFile}`)
