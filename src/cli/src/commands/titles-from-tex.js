@@ -1,5 +1,9 @@
 // Node packages.
 const path = require('path')
+const fs = require('fs')
+
+// Third party packages.
+const chalk = require('chalk')
 
 // Project packages.
 const mediaServer = require('@bldr/api-media-server')
@@ -13,21 +17,33 @@ function clean (text) {
 }
 
 function convertTexToFolderTitles (filePath) {
-  console.log(filePath)
   const content = lib.readFile(filePath)
-  const title = content.match(/  titel = \{(.+?)\}[,\n]/s)
+  let title = content.match(/  titel = \{(.+?)\}[,\n]/s)
   const output = []
   if (title) {
-    output.push(clean(title[1]))
+    title = clean(title[1])
+    output.push(title)
   }
 
-  const untertitel = content.match(/  untertitel = \{(.+?)\}[,\n]/s)
-  if (untertitel) {
-    output.push(clean(untertitel[1]))
+  let subtitle = content.match(/  untertitel = \{(.+?)\}[,\n]/s)
+  if (subtitle) {
+    subtitle = clean(subtitle[1])
+    output.push(subtitle)
   }
-  console.log(output)
+  //console.log(output)
   if (output.length > 0) {
-    lib.writeFile(path.join(path.dirname(filePath), 'title_tmp.txt'), output.join('\n') + '\n')
+    const destBasePath = path.dirname(filePath)
+    let dest
+    const destFinal = path.join(destBasePath, 'title.txt')
+    if (!fs.existsSync(destFinal)) {
+      dest = destFinal
+    } else {
+      dest = path.join(destBasePath, 'title_tmp.txt')
+    }
+    console.log(chalk.green(dest))
+    console.log(`  title: ${chalk.blue(title)}`)
+    console.log(`  subtitle: ${chalk.cyan(subtitle)}\n`)
+    lib.writeFile(dest, output.join('\n') + '\n')
   }
 }
 

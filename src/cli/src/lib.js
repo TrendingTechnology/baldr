@@ -33,12 +33,13 @@ function filePathToAssetType (filePath) {
  * \stueck*{Nachtmusik} -> <em class="piece">„Nachtmusik“<em>
  * \stueck{Nachtmusik} -> <em class="piece">Nachtmusik<em>
  * \person{Mozart} -> <em class="person">Mozart<em>
+ * \emph{Mozart} -> <em>Mozart<em>
  */
 function semanticMarkupTexToHtml (text) {
-  console.log(text)
   text = text.replace(/\\stueck\*\{([^\}]+?)\}/g, '<em class="piece">„$1“</em>')
   text = text.replace(/\\stueck\{([^\}]+?)\}/g, '<em class="piece">$1</em>')
   text = text.replace(/\\person\{([^\}]+?)\}/g, '<em class="person">$1</em>')
+  text = text.replace(/\\emph\{([^\}]+?)\}/g, '<em>$1</em>')
   return text
 }
 
@@ -46,11 +47,13 @@ function semanticMarkupTexToHtml (text) {
  * \stueck*{Nachtmusik} <- <em class="piece">„Nachtmusik“<em>
  * \stueck{Nachtmusik} <- <em class="piece">Nachtmusik<em>
  * \person{Mozart} <- <em class="person">Mozart<em>
+ * \emph{Mozart} <- <em>Mozart<em>
  */
 function semanticMarkupHtmlToTex (text) {
   text = text.replace(/<em class="piece">„([^<>]+?)“<\/em>/g, '\\stueck*{$1}')
   text = text.replace(/<em class="piece">([^<>]+?)<\/em>/g, '\\stueck{$1}')
   text = text.replace(/<em class="person">([^<>]+?)<\/em>/g, '\\person{$1}')
+  text = text.replace(/<em>([^<>]+?)<\/em>/g, '\\emph{$1}')
   return text
 }
 
@@ -259,7 +262,17 @@ function moveAsset (oldPath, newPath, opts) {
       if (!dryRun) fs.copyFileSync(oldPath, newPath)
       action = 'copy'
     } else {
-      if (!dryRun) fs.renameSync(oldPath, newPath)
+      if (!dryRun) {
+        //  Error: EXDEV: cross-device link not permitted,
+        try {
+          fs.renameSync(oldPath, newPath)
+        } catch (error) {
+          if (error.code === 'EXDEV') {
+            fs.copyFileSync(oldPath, newPath)
+            fs.unlinkSync(oldPath)
+          }
+        }
+      }
       action = 'move'
     }
     console.log(`  ${dryRunMsg}${action}: ${chalk.yellow(oldPath)} -> ${chalk.green(newPath)}`)

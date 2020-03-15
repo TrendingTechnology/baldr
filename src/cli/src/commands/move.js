@@ -40,6 +40,20 @@ function getPresParentDir (filePath) {
 }
 
 /**
+ * true:
+ *
+ * `/archive/10/10_Jazz/30_Stile/10_New-Orleans-Dixieland/Material/Texte.tex`
+ * `/archive/10/10_Jazz/History-of-Jazz/Inhalt.tex`
+ *
+ * false:
+ *
+ * `/archive/10/10_Jazz/20_Vorformen/10_Worksongs-Spirtuals/Arbeitsblatt.tex`
+ */
+function isInArchivedDir (filePath) {
+  return !filePath.match(new RegExp('^.*/[0-9]{2,}_[^/]*/[^/]*$'))
+}
+
+/**
  * @param {String} oldPathTex - for example:
  *   `/media/10/10_Jazz/30_Stile/50_Modern-Jazz/Arbeitsblatt.tex`
  * @param {String} baseName - for example: `My-little-Annie-so-sweet`
@@ -86,6 +100,7 @@ function moveTexImage (oldPathTex, baseName, cmdObj) {
  * @param {Object} cmdObj - See commander docs.
  */
 function moveTex (oldPath, newPath, cmdObj) {
+  if (isInArchivedDir(oldPath)) return
   const content = lib.readFile(oldPath)
   // \begin{grafikumlauf}{Inserat}
   // \grafik[0.8\linewidth]{Freight-Train-Blues}
