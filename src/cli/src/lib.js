@@ -9,7 +9,7 @@ const chalk = require('chalk')
 
 // Project packages.
 const mediaServer = require('@bldr/api-media-server')
-const { jsYamlConfig } = require('@bldr/core-browser')
+const { jsYamlConfig, getExtension } = require('@bldr/core-browser')
 
 /**
  *
@@ -310,8 +310,28 @@ function moveAsset (oldPath, newPath, opts) {
     }
     console.log(`  ${dryRunMsg}${action}: ${chalk.yellow(oldPath)} -> ${chalk.green(newPath)}`)
   }
+
+  function moveCorrespondingFile (oldPath, newPath, search, replace, opts) {
+    oldPath = oldPath.replace(search, replace)
+    if (fs.existsSync(oldPath)) {
+      newPath = newPath.replace(search, replace)
+      move(oldPath, newPath, opts)
+    }
+  }
+
   if (newPath && oldPath !== newPath) {
-    fs.mkdirSync(path.dirname(newPath), { recursive: true })
+    if (!opts.dryRun) fs.mkdirSync(path.dirname(newPath), { recursive: true })
+
+    const extension = getExtension(oldPath)
+    if (extension === 'eps') {
+      // Dippermouth-Blues.eps
+      // Dippermouth-Blues.mscx
+      moveCorrespondingFile(oldPath, newPath, /\.eps$/, '.mscx', opts)
+      // Dippermouth-Blues-eps-converted-to.pdf
+      moveCorrespondingFile(oldPath, newPath, /\.eps$/, '-eps-converted-to.pdf', opts)
+    }
+
+    // Beethoven.mp4 Beethoven.mp4.yml Beethoven.mp4_preview.jpg
     for (const suffix of ['.yml', '_preview.jpg']) {
       if (fs.existsSync(`${oldPath}${suffix}`)) {
         move(`${oldPath}${suffix}`, `${newPath}${suffix}`, opts)
