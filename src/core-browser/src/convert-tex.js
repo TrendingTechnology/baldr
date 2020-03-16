@@ -1,7 +1,21 @@
+/**
+ * A naive implementation of a TeX to Markdown and vice versa converter.
+ *
+ * Attention: Firefox doesn’t support the `dotAll` flag `s`!
+ */
+
+/**
+ * @param {String} commandName - A simple LaTeX macro / command name
+ *   from example: `emph` `\emph{.*}`
+ */
 function texReg (commandName) {
-  return new RegExp('\\\\' + commandName + '\\{([^\\}]+?)\\}', 'gs')
+  return new RegExp('\\\\' + commandName + '\\{([^\\}]+?)\\}', 'g')
 }
 
+/**
+ * @param {String} commandName - A simple LaTeX macro / command name
+ *   from example: `emph` `\emph{.*}`
+ */
 function texRep (commandName) {
   return `\\${commandName}{$1}`
 }
@@ -11,7 +25,7 @@ function mdReg (tagName, className) {
   if (className) {
     classMarkup = ` class="${className}"`
   }
-  return new RegExp('<' + tagName + classMarkup + '>([^<>]+?)<\/' + tagName + '>', 'gs')
+  return new RegExp('<' + tagName + classMarkup + '>([^<>]+?)<\/' + tagName + '>', 'g')
 }
 
 function mdRep (tagName, className) {
@@ -59,14 +73,14 @@ const specification = [
 
 function removeTexHeaderFooter (content) {
   // Remove TeX header and footer
-  content = content.replace(/.*\\begin\{document\}/s, '')
-  content = content.replace(/\\end\{document\}.*/s, '')
+  content = content.replace(/[^]*\\begin\{document\}/, '')
+  content = content.replace(/\\end\{document\}[^]*/, '')
   return content
 }
 
 function convertTexItemize (content) {
   return content.replace(
-    /\\begin\{(compactitem|itemize)\}(.+?)\\end\{(compactitem|itemize)\}/gs,
+    /\\begin\{(compactitem|itemize)\}([^]+?)\\end\{(compactitem|itemize)\}/g,
     function (match, p1, p2) {
       let content = p2
       // \item Lorem -> - Lorem
@@ -82,8 +96,8 @@ function convertTexItemize (content) {
 
 function cleanUpTex (content) {
   // Delete comments
-  content = content.replace(/\n%.*?\n/gs, '\n')
-  content = content.replace(/\n%.*?\n/gs, '\n')
+  content = content.replace(/\n%.*?\n/g, '\n')
+  content = content.replace(/\n%.*?\n/g, '\n')
   // Delete \-
   content = content.replace(/\\-/g, '')
   // Left TeX commands
@@ -92,7 +106,7 @@ function cleanUpTex (content) {
 }
 
 function cleanUp (content) {
-  content = content.replace(/\n\n\n+/gs, '\n\n')
+  content = content.replace(/\n\n\n+/g, '\n\n')
   return content
 }
 

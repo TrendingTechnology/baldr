@@ -3,6 +3,8 @@ const chalk = require('chalk')
 
 // Project packages.
 const mediaServer = require('@bldr/api-media-server')
+const { convertMdToTex } = require('@bldr/core-browser')
+
 const lib = require('../lib.js')
 
 /**
@@ -38,7 +40,7 @@ function patchTexFileWithTitles (filePath) {
 
   // Replace semantic markup
   for (const key in setzeTitle) {
-    setzeTitle[key] = lib.semanticMarkupHtmlToTex(setzeTitle[key])
+    setzeTitle[key] = convertMdToTex(setzeTitle[key])
   }
 
   const lines = ['\\setzetitel{']

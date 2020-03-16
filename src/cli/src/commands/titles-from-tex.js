@@ -7,12 +7,14 @@ const chalk = require('chalk')
 
 // Project packages.
 const mediaServer = require('@bldr/api-media-server')
+const { convertTexToMd } = require('@bldr/core-browser')
+
 const lib = require('../lib.js')
 
 function clean (text) {
   text = text.replace(/\n/g, ' ')
   text = text.replace(/\s+/g, ' ')
-  text = lib.semanticMarkupTexToHtml(text)
+  text = convertTexToMd(text)
   return text
 }
 
