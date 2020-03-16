@@ -54,12 +54,22 @@ function isInArchivedDir (filePath) {
 }
 
 /**
+ * For images in the TeX file which appear multiple times in one file.
+ */
+const resolvedTexImages = {}
+
+/**
+ * Move images which are linked in a Tex file.
+ *
  * @param {String} oldPathTex - for example:
  *   `/media/10/10_Jazz/30_Stile/50_Modern-Jazz/Arbeitsblatt.tex`
  * @param {String} baseName - for example: `My-little-Annie-so-sweet`
  * @param {Object} cmdObj - See commander docs.
+ *
+ * @returns {String} - for example: BD/John-Coltrane.jpg
  */
 function moveTexImage (oldPathTex, baseName, cmdObj) {
+  if (resolvedTexImages[baseName]) return resolvedTexImages[baseName]
   // /archive/10/10_Jazz/30_Stile/50_Modern-Jazz/Material
   const imageFolder = path.join(path.dirname(oldPathTex), 'Material')
   let ext
@@ -90,9 +100,11 @@ function moveTexImage (oldPathTex, baseName, cmdObj) {
     // /baldr/media/10/10_Jazz/30_Stile/50_Modern-Jazz/BD/John-Coltrane.jpg
     const newPath = path.join(presParentDirMirrored, newRelPath)
     lib.moveAsset(oldPath, newPath, cmdObj)
+    resolvedTexImages[baseName] = newRelPath
     return newRelPath
   }
 }
+
 /**
  *
  * @param {String} oldPath - for example:
