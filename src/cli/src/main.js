@@ -61,6 +61,12 @@ const subCommands = {
     description: 'Convert media files in the appropriate format. Multiple files, globbing works *.mp3',
     checkExecutable: ['ffmpeg', 'magick']
   },
+  goto: {
+    command: 'goto',
+    alias: 'g',
+    description: 'Change the directory in the terminal (a new terminal session is openend). Change from the main media directory structure to the corresponding archive folder and vice versa.',
+    checkExecutable: ['zsh']
+  },
   'icon-font': {
     command: 'icon-font',
     alias: 'if',
