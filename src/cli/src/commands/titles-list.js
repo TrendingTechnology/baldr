@@ -4,17 +4,14 @@ const chalk = require('chalk')
 // Project packages.
 const mediaServer = require('@bldr/api-media-server')
 
-const tree = new mediaServer.FolderTitleTree()
-
 function read (filePath) {
   console.log(filePath)
   const titles = new mediaServer.HierarchicalFolderTitles(filePath)
-  tree.add(titles)
   console.log(`  id: ${chalk.cyan(titles.id)}`)
   console.log(`  title: ${chalk.yellow(titles.title)}`)
   if (titles.subtitle) console.log(`  subtitle: ${chalk.green(titles.subtitle)}`)
-  console.log(`  curriculum: ${chalk.red(titles.curriculum)}`)
-  console.log(`  grade: ${chalk.red(titles.grade)}\n`)
+  console.log(`  grade: ${chalk.blue(titles.grade)}`)
+  console.log(`  curriculum: ${chalk.red(titles.curriculum)}\n`)
 }
 
 /**
@@ -30,7 +27,6 @@ async function action (files) {
   }, {
     path: files
   })
-  console.log(JSON.stringify(tree.tree_, null, 2))
 }
 
 module.exports = action

@@ -73,9 +73,6 @@ export default {
       font-size: 1.2em;
     }
 
-    .subtitle {
-      font-style: italic;
-    }
     &.active {
       background-color: rgba($yellow, 0.2) !important;
     }
