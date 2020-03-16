@@ -100,6 +100,8 @@ Können im YAML-Quellcode der Präsentationen eingesetzt werden.
 * _.note_ (kleinere Schriftgröße, linksbündig)
 * _.person_ (Kapitälchen)
 * _.piece_ (kursiv)
+* _.genre_ (Monospace Schrift)
+* _.term_ (fett, Sans-Schriftart)
 * _.transparent-background_ (grauer Hintergrund der transparent ist)
 `
 

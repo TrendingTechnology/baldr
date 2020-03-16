@@ -106,21 +106,18 @@ export default {
     font-size: 4vw;
     height: 100vh;
     width: 100vw;
-  }
 
-  .vc_open_interface {
-    box-sizing: border-box;
-    display: table-cell;
-    height: 100vh;
-    padding: 4vw;
-    vertical-align: middle;
-    width: 100vw;
-  }
-
-  .vc_open_interface {
-    // Input is to small
-    input.search {
-      font-size: 2vw !important;
+    .vc_open_interface {
+      box-sizing: border-box;
+      display: table-cell;
+      height: 100vh;
+      padding: 4vw;
+      vertical-align: middle;
+      width: 100vw;
+      // Input is to small
+      input.search {
+        font-size: 2vw !important;
+      }
     }
   }
 

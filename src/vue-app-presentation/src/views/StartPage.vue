@@ -74,6 +74,7 @@ export default {
         font-size: 6vw;
         transform: translate(0, 1.3vw);
       }
+
       a {
         padding-right: 1vw;
       }
