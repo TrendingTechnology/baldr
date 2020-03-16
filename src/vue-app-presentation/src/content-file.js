@@ -475,6 +475,19 @@ class Slide {
     const markup = yaml.safeDump(this.rawData, jsYamlConfig)
     return escapeHtml(markup)
   }
+
+  /**
+   * The URI of the first media file. To be able to edit single media files
+   * in a presentation (open parent folder or edit the info yml file in
+   * the editor.)
+   *
+   * @type {String}
+   */
+  get firstMediaUri () {
+    if (Array.isArray(this.renderData.mediaUris) && this.renderData.mediaUris.length > 0) {
+      return this.renderData.mediaUris[0]
+    }
+  }
 }
 
 /**

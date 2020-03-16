@@ -56,7 +56,7 @@ import { AppInfo } from '@bldr/vue-plugin-components-collection'
 import MainMenu from '@/components/MainMenu'
 import { openFiles } from '@/content-file.js'
 import { createNamespacedHelpers } from 'vuex'
-const { mapActions } = createNamespacedHelpers('presentation')
+const { mapActions, mapGetters } = createNamespacedHelpers('presentation')
 
 export default {
   name: 'MainApp',
@@ -67,7 +67,8 @@ export default {
   computed: {
     version () {
       return packageJson.version
-    }
+    },
+    ...mapGetters(['slideCurrent'])
   },
   methods: {
     ...mapActions([
@@ -199,10 +200,13 @@ export default {
       },
       {
         keys: 'ctrl+r',
-        callback: () => {
-          this.$store.dispatch('presentation/reloadPresentation').then(() => {
+        callback: async () => {
+          try {
+            await this.$store.dispatch('presentation/reloadPresentation')
             this.$notifySuccess('Die Präsentation wurde neu geladen.')
-          })
+          } catch (error) {
+            this.$notifyError(error)
+          }
         },
         // Reload presentation
         description: 'Präsentation neu laden'
@@ -211,6 +215,26 @@ export default {
         keys: 'ctrl+e',
         callback: () => { this.callOpenRestApi('editor') },
         description: 'Die aktuelle Präsentation im Editor öffnen'
+      },
+      {
+        keys: 'ctrl+a',
+        callback: () => {
+          if (this.slideCurrent && this.slideCurrent.firstMediaUri) {
+            console.log(this.slideCurrent.firstMediaUri)
+            const uri = this.slideCurrent.firstMediaUri.split(':')[1]
+            this.$media.httpRequest.request({
+              url: 'mgmt/open',
+              params: {
+                with: 'editor',
+                type: 'assets',
+                id: uri
+              }
+            })
+          } else {
+            this.$notifyError('Die aktuelle Folie hat keine Mediendatei zum Öffnen.')
+          }
+        },
+        description: 'Die erste Mediendatei der aktuellen Folien im Editor öffnen.'
       },
       {
         keys: 'ctrl+alt+e',
