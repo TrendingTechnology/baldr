@@ -288,8 +288,6 @@ module.exports = {
   readFile,
   moveAsset,
   runImagemagick,
-  semanticMarkupHtmlToTex,
-  semanticMarkupTexToHtml,
   writeFile,
   writeMetaDataYaml,
   writeYamlFile,

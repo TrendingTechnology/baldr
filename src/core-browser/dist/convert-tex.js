@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = void 0;
 
 function texReg(commandName) {
-  return new RegExp('\\\\' + commandName + '\\{([^\\}]+?)\\}', 'gs');
+  return new RegExp('\\\\' + commandName + '\\{([^\\}]+?)\\}', 'g');
 }
 
 function texRep(commandName) {
@@ -20,7 +20,7 @@ function mdReg(tagName, className) {
     classMarkup = ` class="${className}"`;
   }
 
-  return new RegExp('<' + tagName + classMarkup + '>([^<>]+?)<\/' + tagName + '>', 'gs');
+  return new RegExp('<' + tagName + classMarkup + '>([^<>]+?)<\/' + tagName + '>', 'g');
 }
 
 function mdRep(tagName, className) {
@@ -88,13 +88,13 @@ const specification = [{
 }];
 
 function removeTexHeaderFooter(content) {
-  content = content.replace(/.*\\begin\{document\}/s, '');
-  content = content.replace(/\\end\{document\}.*/s, '');
+  content = content.replace(/[^]*\\begin\{document\}/, '');
+  content = content.replace(/\\end\{document\}[^]*/, '');
   return content;
 }
 
 function convertTexItemize(content) {
-  return content.replace(/\\begin\{(compactitem|itemize)\}(.+?)\\end\{(compactitem|itemize)\}/gs, function (match, p1, p2) {
+  return content.replace(/\\begin\{(compactitem|itemize)\}([^]+?)\\end\{(compactitem|itemize)\}/g, function (match, p1, p2) {
     let content = p2;
     content = content.replace(/\\item\s*/g, '- ');
     content = content.replace(/\n\n/g, '\n');
@@ -105,15 +105,15 @@ function convertTexItemize(content) {
 }
 
 function cleanUpTex(content) {
-  content = content.replace(/\n%.*?\n/gs, '\n');
-  content = content.replace(/\n%.*?\n/gs, '\n');
+  content = content.replace(/\n%.*?\n/g, '\n');
+  content = content.replace(/\n%.*?\n/g, '\n');
   content = content.replace(/\\-/g, '');
   content = content.replace(/\\\w+\{?.*\}?/g, '');
   return content;
 }
 
 function cleanUp(content) {
-  content = content.replace(/\n\n\n+/gs, '\n\n');
+  content = content.replace(/\n\n\n+/g, '\n\n');
   return content;
 }
 
