@@ -7,16 +7,53 @@ const path = require('path')
 const chalk = require('chalk')
 
 // Project packages.
-const {
-  walk
-} = require('@bldr/api-media-server')
-const {
-  makeAsset,
-  yamlToTxt
-} = require('../lib.js')
+const mediaServer = require('@bldr/api-media-server')
+const { convertTexToMd } = require('@bldr/core-browser')
+
+const lib = require('../lib.js')
 
 // Globals.
 const { cwd } = require('../main.js')
+
+function convert (content) {
+  content = content.replace(/\n/g, ' ')
+  content = content.replace(/\s\s+/g, ' ')
+  content = content.trim()
+  // [\\person{Erasmus von Rotterdam}
+  content = content.replace(/^\[/, '')
+  content = content.replace(/\]$/, '')
+  return convertTexToMd(content)
+}
+
+function slidifyTexZitat (content) {
+  const begin = '\\\\begin\\{zitat\\}\\*?(.*])?'
+  const end = '\\\\end\\{zitat\\}'
+  const regexp = new RegExp(begin + '([^]+?)' + end, 'g')
+  const matches = content.matchAll(regexp)
+  const slides = []
+  for (const match of matches) {
+    const optional = match[1]
+    const text = convert(match[2])
+    const slide = {
+      quote: {
+        text
+      }
+    }
+    if (optional) {
+      // [\person{Bischof Bernardino Cirillo}][1549]
+      // [\person{Martin Luther}]
+      const segments = optional.split('][')
+      if (segments.length > 1) {
+        slide.quote.author = convert(segments[0])
+        slide.quote.date = convert(segments[1])
+      } else {
+        slide.quote.author = convert(segments[0])
+      }
+    }
+    slides.push(slide)
+  }
+  return slides
+}
 
 /**
  * Create a Praesentation.baldr.yml file and insert all media assets in the
@@ -26,10 +63,10 @@ const { cwd } = require('../main.js')
  *   template.
  */
 async function presentationFromAssets (filePath) {
-  const slides = []
-  await walk(cwd, {
+  let slides = []
+  await mediaServer.walk(cwd, {
     asset (relPath) {
-      const asset = makeAsset(relPath)
+      const asset = lib.makeAsset(relPath)
       if (!asset.id) {
         console.log(`Asset has no ID: ${chalk.red(relPath)}`)
         return
@@ -62,7 +99,16 @@ async function presentationFromAssets (filePath) {
     slides.push({ note })
   }
 
-  const result = yamlToTxt({
+  const worksheetPath = path.join(cwd, 'Arbeitsblatt.tex')
+  if (fs.existsSync(worksheetPath)) {
+    const worksheetContent = lib.readFile(worksheetPath)
+    const quotes = slidifyTexZitat(worksheetContent)
+    if (quotes.length > 0) {
+      slides = slides.concat(quotes)
+    }
+  }
+
+  const result = lib.yamlToTxt({
     slides
   })
   console.log(result)
