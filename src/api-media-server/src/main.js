@@ -1278,14 +1278,14 @@ class BasePaths {
   getMirroredPath (currentPath) {
     const basePath = this.getBasePath(currentPath)
     const relPath = this.getRelPath(currentPath)
-    let mirrorBasePath
+    let mirroredBasePath
     for (const bPath of this.paths_) {
       if (basePath !== bPath) {
-        mirrorBasePath = bPath
+        mirroredBasePath = bPath
         break
       }
     }
-    return path.join(mirrorBasePath, relPath)
+    if (mirroredBasePath && relPath) return path.join(mirroredBasePath, relPath)
   }
 }
 

@@ -5,11 +5,13 @@ const childProcess = require('child_process')
 const mediaServer = require('@bldr/api-media-server')
 
 // Globals.
-const { cwd } = require('../main.js')
+const { cwd, config } = require('../main.js')
 
 function action () {
+  let mirroredPath = mediaServer.basePaths.getMirroredPath(cwd)
+  if (!mirroredPath) mirroredPath = config.mediaServer.basePath
   childProcess.spawn('zsh', ['-i'], {
-    cwd: mediaServer.basePaths.getMirroredPath(cwd),
+    cwd: mirroredPath,
     stdio: 'inherit'
   })
 }
