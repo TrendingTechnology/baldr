@@ -1305,7 +1305,8 @@ function openFolder (currentPath, create) {
     result.create = true
   }
   if (fs.existsSync(currentPath)) {
-    openWith('xdg-open', currentPath)
+    // xdg-open opens a mounted root folder in vs code.
+    openWith(config.mediaServer.fileManager, currentPath)
     result.open = true
   }
   return result
