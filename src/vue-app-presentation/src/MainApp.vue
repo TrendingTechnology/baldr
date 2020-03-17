@@ -1,11 +1,8 @@
 <template>
   <div
-    @dragend="hideDragzone"
-    @dragleave="hideDragzone"
-    @dragover.prevent="showDragzone"
-    @drop.prevent="dropHandler"
     class="vc_main_app"
   >
+
     <!-- vue-notifications -->
     <notifications
       group="default"
@@ -22,13 +19,6 @@
         </div>
       </template>
     </notifications>
-
-    <!-- Files can by dropped in this zone. -->
-    <div ref="dropzone" id="dropzone" b-ui-theme="default">
-      <div class="message">
-        Medien-Dateien oder eine Präsentation öffnen durch „Drag-and-Drop“ ...
-      </div>
-    </div>
 
     <!-- Modal dialog (vue-plugin-modal-dialog) -->
     <modal-dialog name="menu">
@@ -53,8 +43,8 @@
 <script>
 import packageJson from '@/../package.json'
 import { AppInfo } from '@bldr/vue-plugin-components-collection'
+
 import MainMenu from '@/components/MainMenu'
-import { openFiles } from '@/content-file.js'
 import { createNamespacedHelpers } from 'vuex'
 const { mapActions, mapGetters } = createNamespacedHelpers('presentation')
 
@@ -76,16 +66,6 @@ export default {
       'setStepNextOrPrevious',
       'setSlideOrStepNextOrPrevious',
     ]),
-    dropHandler (event) {
-      openFiles(event.dataTransfer.files)
-      this.hideDragzone()
-    },
-    showDragzone (event) {
-      this.$refs.dropzone.style.display = 'table'
-    },
-    hideDragzone (event) {
-      this.$refs.dropzone.style.display = 'none'
-    },
     /**
      * Toggle between to routes:
      *
@@ -459,30 +439,6 @@ export default {
   }
 
   .vc_main_app {
-    #dropzone {
-      background: $blue;
-      border: 1vw dashed scale-color($blue, $lightness: -40%);
-      box-sizing: border-box;
-      display: none;
-      height: 100vh;
-      left: 0;
-      opacity: 0.7;
-      position: fixed;
-      top: 0;
-      width: 100vw;
-      z-index: 99999;
-
-      .message {
-        display: table-cell;
-        font-family: $font-family-sans;
-        font-size: 8vw;
-        font-weight: bold;
-        opacity: 1;
-        text-align: center;
-        vertical-align: middle;
-      }
-    }
-
     .vue-notification {
       background: #44A4FC;
       border-left: 0.5em solid #187FE7;
