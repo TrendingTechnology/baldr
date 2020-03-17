@@ -84,7 +84,17 @@ function writeMetaDataYaml (filePath, metaData, force) {
     if (!metaData.title) {
       metaData.title = mediaServer.deasciify(asset.basename_)
     }
-    writeYamlFile(yamlFile, normalizeMetaData(filePath, metaData))
+    metaData = normalizeMetaData(filePath, metaData)
+    writeYamlFile(yamlFile, metaData)
+    return {
+      filePath,
+      yamlFile,
+      metaData
+    }
+  }
+  return {
+    filePath,
+    msg: 'No action.'
   }
 }
 

@@ -152,7 +152,10 @@ function removeComments (text) {
   // Lorem ip-%
   // sum
   text = text.replace(/%\n\s*/g, '')
-  return text.replace(/(?<!\\)%.*/g, '')
+  // Lookbehinds not working in Firefox
+  // text = text.replace(/(?<!\\)%.*/g, '')
+  text = text.replace(/%.*/g, '')
+  return text
 }
 
 function removeTexHeaderFooter (text) {

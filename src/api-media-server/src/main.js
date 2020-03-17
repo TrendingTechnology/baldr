@@ -898,6 +898,11 @@ async function walk (func, opt) {
     return
   }
 
+  // Rename action: Rename during walk, opt.path can change
+  if (!fs.existsSync(opt.path)) {
+    return
+  }
+
   // A directory.
   if (fs.statSync(opt.path).isDirectory()) {
     const files = fs.readdirSync(opt.path)
