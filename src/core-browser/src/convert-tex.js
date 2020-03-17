@@ -4,6 +4,75 @@
  * Attention: Firefox doesn’t support the `dotAll` flag `s`!
  */
 
+class RegExpBuilder {
+  constructor () {
+    this.dotAll =  '[^]+?'
+    this.captDotAll = this.capt(this.dotAll)
+    this.whiteNewline = '[\\s\n]*?'
+  }
+
+  capt (regex) {
+    return `(${regex})`
+  }
+
+  cmd (macroName, regex) {
+    return `\\\\${macroName}\\{${regex}\\}`
+  }
+
+  env (envName, regex) {
+    if (!regex) regex = this.captDotAll
+    return this.cmd('begin', envName) + regex + this.cmd('end', envName)
+  }
+}
+
+const regBuilder = new RegExpBuilder()
+
+/**
+ *
+ * @param {*} match
+ * @param {Array} excludeCaptureGroups - An array of capture group strings
+ *   to exclude in the result matches for example regex:
+ *   `(itemize|compactitem|sub)` -> `['itemize', 'compactitem', 'sub']`
+ */
+function cleanMatch (match, excludeCaptureGroups) {
+  const exclude = excludeCaptureGroups
+  // Convert to Array
+  match = [...match]
+  // Remove first (the complete match)
+  match.shift()
+
+  const result = []
+  for (const group of match) {
+    if ((!exclude && group) || (exclude && group && !exclude.includes(group))) {
+      result.push(group)
+    }
+  }
+  return result
+}
+
+/**
+ * @param {String} text - Text to search for matches
+ * @param {String} regexp - Regular expressed gets compiled
+ * @param {Array} matches - Array gets filled with cleaned matches.
+ * @param {Array} excludeCaptureGroups - An array of capture group strings
+ *   to exclude in the result matches for example regex:
+ *   `(itemize|compactitem|sub)` -> `['itemize', 'compactitem', 'sub']`
+ *
+ * @returns {String}
+ */
+function extractMatchAll (text, regexp, matches, excludeCaptureGroups) {
+  regexp = new RegExp(regexp, 'g')
+  if (text.match(regexp)) {
+    const rawMatches = text.matchAll(regexp)
+    for (let match of rawMatches) {
+      text = text.replace(match[0], '')
+      matches.push(cleanMatch(match, excludeCaptureGroups))
+    }
+    return text
+  }
+  return text
+}
+
 /**
  * @param {String} commandName - A simple LaTeX macro / command name
  *   from example: `emph` `\emph{.*}`
@@ -173,5 +242,8 @@ export default {
   },
   convertMdToTex (content) {
     return convert(content, true)
-  }
+  },
+  regBuilder,
+  cleanMatch,
+  extractMatchAll
 }

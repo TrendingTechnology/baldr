@@ -8,7 +8,7 @@ const chalk = require('chalk')
 
 // Project packages.
 const mediaServer = require('@bldr/api-media-server')
-const { convertTexToMd } = require('@bldr/core-browser')
+const { convertTexToMd, tex } = require('@bldr/core-browser')
 
 const lib = require('../lib.js')
 
@@ -49,7 +49,8 @@ function slidify (masterName, data) {
 }
 
 function objectifyTexZitat (content) {
-  const regexp = new RegExp(regTex.env('zitat', '\\*?' + regTex.captDotAll), 'g')
+  const reg = tex.regBuilder
+  const regexp = new RegExp(reg.env('zitat', '\\*?' + reg.captDotAll), 'g')
   const matches = content.matchAll(regexp)
   const data = []
   for (const match of matches) {
@@ -80,87 +81,19 @@ function objectifyTexZitat (content) {
   return data
 }
 
-/**
- *
- * @param {*} match
- * @param {Array} excludeCaptureGroups - An array of capture group strings
- *   to exclude in the result matches for example regex:
- *   `(itemize|compactitem|sub)` -> `['itemize', 'compactitem', 'sub']`
- */
-function cleanMatch (match, excludeCaptureGroups) {
-  const exclude = excludeCaptureGroups
-  // Convert to Array
-  match = [...match]
-  // Remove first (the complete match)
-  match.shift()
-
-  result = []
-  for (const group of match) {
-    if ((!exclude && group) || (exclude && group && !exclude.includes(group))) {
-      result.push(group)
-    }
-  }
-  return result
-}
-
-class RegTex {
-  constructor () {
-    this.dotAll =  '[^]+?'
-    this.captDotAll = this.capt(this.dotAll)
-    this.whiteNewline = '[\\s\n]*?'
-  }
-
-  capt (regex) {
-    return `(${regex})`
-  }
-
-  cmd (macroName, regex) {
-    return `\\\\${macroName}\\{${regex}\\}`
-  }
-
-  env (envName, regex) {
-    if (!regex) regex = this.captDotAll
-    return this.cmd('begin', envName) + regex + this.cmd('end', envName)
-  }
-}
-
-const regTex = new RegTex()
-
-/**
- * @param {String} text - Text to search for matches
- * @param {String} regexp - Regular expressed gets compiled
- * @param {Array} matches - Array gets filled with cleaned matches.
- * @param {Array} excludeCaptureGroups - An array of capture group strings
- *   to exclude in the result matches for example regex:
- *   `(itemize|compactitem|sub)` -> `['itemize', 'compactitem', 'sub']`
- *
- * @returns {String}
- */
-function extractMatchAll (text, regexp, matches, excludeCaptureGroups) {
-  regexp = new RegExp(regexp, 'g')
-  if (text.match(regexp)) {
-    const rawMatches = text.matchAll(regexp)
-    for (let match of rawMatches) {
-      text = text.replace(match[0], '')
-      matches.push(cleanMatch(match, excludeCaptureGroups))
-    }
-    return text
-  }
-  return text
-}
-
 function objectifyTexItemize (content) {
-  const regSection = regTex.cmd('(sub)?(sub)?section', '([^\\}]*?)')
-  const regItemize = regTex.env('(compactitem|itemize)')
+  const reg = tex.regBuilder
+  const regSection = reg.cmd('(sub)?(sub)?section', '([^\\}]*?)')
+  const regItemize = reg.env('(compactitem|itemize)')
 
   const matches = []
   const exclude = ['itemize', 'compactitem', 'sub']
   for (const regex of [
-    regSection + regTex.whiteNewline + regSection + regTex.whiteNewline + regItemize,
-    regSection + regTex.whiteNewline + regItemize,
+    regSection + reg.whiteNewline + regSection + reg.whiteNewline + regItemize,
+    regSection + reg.whiteNewline + regItemize,
     regItemize
   ]) {
-    content = extractMatchAll(content, regex, matches, exclude)
+    content = tex.extractMatchAll(content, regex, matches, exclude)
   }
 
   data = []

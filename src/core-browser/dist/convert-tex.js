@@ -5,6 +5,62 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
+class RegExpBuilder {
+  constructor() {
+    this.dotAll = '[^]+?';
+    this.captDotAll = this.capt(this.dotAll);
+    this.whiteNewline = '[\\s\n]*?';
+  }
+
+  capt(regex) {
+    return `(${regex})`;
+  }
+
+  cmd(macroName, regex) {
+    return `\\\\${macroName}\\{${regex}\\}`;
+  }
+
+  env(envName, regex) {
+    if (!regex) regex = this.captDotAll;
+    return this.cmd('begin', envName) + regex + this.cmd('end', envName);
+  }
+
+}
+
+const regBuilder = new RegExpBuilder();
+
+function cleanMatch(match, excludeCaptureGroups) {
+  const exclude = excludeCaptureGroups;
+  match = [...match];
+  match.shift();
+  const result = [];
+
+  for (const group of match) {
+    if (!exclude && group || exclude && group && !exclude.includes(group)) {
+      result.push(group);
+    }
+  }
+
+  return result;
+}
+
+function extractMatchAll(text, regexp, matches, excludeCaptureGroups) {
+  regexp = new RegExp(regexp, 'g');
+
+  if (text.match(regexp)) {
+    const rawMatches = text.matchAll(regexp);
+
+    for (let match of rawMatches) {
+      text = text.replace(match[0], '');
+      matches.push(cleanMatch(match, excludeCaptureGroups));
+    }
+
+    return text;
+  }
+
+  return text;
+}
+
 function texReg(commandName) {
   return new RegExp('\\\\' + commandName + '\\{([^\\}]+?)\\}', 'g');
 }
@@ -168,79 +224,6 @@ function convert(content, toTex) {
   return content;
 }
 
-function test() {
-  const exampleTex = `
-\\section{Ludwig van Beethoven}
-
-\\person{Ludwig van Beethoven} (/ˈlʊdvɪɡ væn ˈbeɪt(h)oʊvən/  German:
-[ˈluːtvɪç fan ˈbeːthoːfn̩]; baptised 17 December 1770[1] --- 26 March
-1827) was a \\textbf{German composer} and \\textit{pianist}. He was a
-crucial figure in the transition between the \\stil{classical} and
-\\stil{romantic} eras in classical music and is considered to be one of
-the \\emph{greatest composers} of all time.
-
-\\person{Beethoven} was born in Bonn, the capital of the Electorate of
-Cologne, which was part of the Holy Roman Empire. His musical talent was
-obvious at an early age, and he was harshly and intensively taught by
-his father \\person{Johann van Beethoven}, who thought this would enable
-him to become a child prodigy like \\person{Mozart}. He was later taught
-by the composer and conductor \\person{Christian Gottlob Neefe}. At age
-21, he moved to Vienna and studied composition with \\person{Joseph
-Haydn}. \\person{Beethoven} then gained a reputation as a virtuoso
-pianist, and he was soon courted by \\person{Karl Alois, Prince
-Lichnowsky} for compositions, which resulted in \\stueck{Opus 1} in 1795.
-
-stueck*: \\stueck*{Für Elise}
-stueck: \\stueck{Für Elise}
-person: \\person{Ludwig van Beethoven}
-stil: \\stil{Klassik}
-fachbegriff: \\fachbegriff{Sonatenhauptsatzform}
-em dash: ---
-en dash: --
-pfeil: \\pfeil{}
-pfeil ohne klammern: \\pfeil{}
-emph: \\emph{Lorem ipsum}
-textbf: \\textbf{Lorem ipsum}
-textit: \\textit{Lorem ipsum}
-`;
-  console.log(convert(exampleTex));
-  const exampleMd = `
-\\section{Ludwig van Beethoven}
-
-<em class="person">Ludwig van Beethoven</em> (/ˈlʊdvɪɡ væn ˈbeɪt(h)oʊvən/  German:
-[ˈluːtvɪç fan ˈbeːthoːfn̩]; baptised 17 December 1770[1] — 26 March
-1827) was a <strong>German composer</strong> and <i>pianist</i>. He was a
-crucial figure in the transition between the <em class="genre">classical</em> and
-<em class="genre">romantic</em> eras in classical music and is considered to be one of
-the <em>greatest composers</em> of all time.
-
-<em class="person">Beethoven</em> was born in Bonn, the capital of the Electorate of
-Cologne, which was part of the Holy Roman Empire. His musical talent was
-obvious at an early age, and he was harshly and intensively taught by
-his father <em class="person">Johann van Beethoven</em>, who thought this would enable
-him to become a child prodigy like <em class="person">Mozart</em>. He was later taught
-by the composer and conductor <em class="person">Christian Gottlob Neefe</em>. At age
-21, he moved to Vienna and studied composition with <em class="person">Joseph
-Haydn</em>. <em class="person">Beethoven</em> then gained a reputation as a virtuoso
-pianist, and he was soon courted by <em class="person">Karl Alois, Prince
-Lichnowsky</em> for compositions, which resulted in <em class="piece">Opus 1</em> in 1795.
-
-stueck*: <em class="piece">„Für Elise“</em>
-stueck: <em class="piece">Für Elise</em>
-person: <em class="person">Ludwig van Beethoven</em>
-stil: <em class="genre">Klassik</em>
-fachbegriff: <em class="term">Sonatenhauptsatzform</em>
-em dash: —
-en dash: –
-pfeil: ->
-pfeil ohne klammern: ->
-emph: <em>Lorem ipsum</em>
-textbf: <strong>Lorem ipsum</strong>
-textit: <i>Lorem ipsum</i>
-`;
-  console.log(convert(exampleMd, true));
-}
-
 var _default = {
   convertTexToMd(content) {
     content = removeTexHeaderFooter(content);
@@ -253,7 +236,10 @@ var _default = {
 
   convertMdToTex(content) {
     return convert(content, true);
-  }
+  },
 
+  regBuilder,
+  cleanMatch,
+  extractMatchAll
 };
 exports.default = _default;

@@ -524,6 +524,9 @@ export class DomSteps {
    * @returns {Object} The element that is displayed by the new step number.
    */
   displayByNo ({ stepNo, oldStepNo, full }) {
+    // console.log(`${this.count} ${stepNo} ${oldStepNo} ${full} `)
+    // Loop through all elements. Set visibility state on all elements
+    // Full update
     if (!oldStepNo || full || stepNo === 1 || (oldStepNo === 1 && stepNo === this.count)) {
       let count = 1
       for (const domStep of this.elements) {
