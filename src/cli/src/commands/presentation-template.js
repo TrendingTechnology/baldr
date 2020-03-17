@@ -16,6 +16,7 @@ const lib = require('../lib.js')
 const { cwd } = require('../main.js')
 
 function convertToOneLineMd (content) {
+  content = tex.removeComments(content)
   content = content.replace(/\n/g, ' ')
   content = content.replace(/\s\s+/g, ' ')
   content = content.trim()

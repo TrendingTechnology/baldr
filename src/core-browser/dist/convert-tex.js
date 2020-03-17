@@ -12,17 +12,18 @@ class RegExpBuilder {
     this.whiteNewline = '[\\s\n]*?';
   }
 
-  capt(regex) {
-    return `(${regex})`;
+  capt(regexp) {
+    return `(${regexp})`;
   }
 
-  cmd(macroName, regex) {
-    return `\\\\${macroName}\\{${regex}\\}`;
+  cmd(macroName, regexp) {
+    if (!regexp) regexp = '([^\\}]+?)';
+    return `\\\\${macroName}\\{${regexp}\\}`;
   }
 
-  env(envName, regex) {
-    if (!regex) regex = this.captDotAll;
-    return this.cmd('begin', envName) + regex + this.cmd('end', envName);
+  env(envName, regexp) {
+    if (!regexp) regexp = this.captDotAll;
+    return this.cmd('begin', envName) + regexp + this.cmd('end', envName);
   }
 
 }
@@ -62,7 +63,7 @@ function extractMatchAll(text, regexp, matches, excludeCaptureGroups) {
 }
 
 function texReg(commandName) {
-  return new RegExp('\\\\' + commandName + '\\{([^\\}]+?)\\}', 'g');
+  return new RegExp(regBuilder.cmd(commandName), 'g');
 }
 
 function texRep(commandName) {
@@ -143,37 +144,42 @@ const specification = [{
   }
 }];
 
-function removeTexHeaderFooter(content) {
-  content = content.replace(/[^]*\\begin\{document\}/, '');
-  content = content.replace(/\\end\{document\}[^]*/, '');
-  return content;
+function removeComments(text) {
+  text = text.replace(/%\n\s*/g, '');
+  return text.replace(/(?<!\\)%.*/g, '');
 }
 
-function convertTexItemize(content) {
-  return content.replace(/\\begin\{(compactitem|itemize)\}([^]+?)\\end\{(compactitem|itemize)\}/g, function (match, p1, p2) {
-    let content = p2;
-    content = content.replace(/\\item\s*/g, '- ');
-    content = content.replace(/\n\n/g, '\n');
-    content = content.replace(/\n(\w|-> )/g, '\n  $1');
-    console.log(content);
-    return content;
+function removeTexHeaderFooter(text) {
+  text = text.replace(/[^]*\\begin\{document\}/, '');
+  text = text.replace(/\\end\{document\}[^]*/, '');
+  return text;
+}
+
+function convertTexItemize(text) {
+  return text.replace(/\\begin\{(compactitem|itemize)\}([^]+?)\\end\{(compactitem|itemize)\}/g, function (match, p1, p2) {
+    let text = p2;
+    text = text.replace(/\\item\s*/g, '- ');
+    text = text.replace(/\n\n/g, '\n');
+    text = text.replace(/\n(\w|-> )/g, '\n  $1');
+    console.log(text);
+    return text;
   });
 }
 
-function cleanUpTex(content) {
-  content = content.replace(/\n%.*?\n/g, '\n');
-  content = content.replace(/\n%.*?\n/g, '\n');
-  content = content.replace(/\\-/g, '');
-  content = content.replace(/\\\w+\{?.*\}?/g, '');
-  return content;
+function cleanUpTex(text) {
+  text = text.replace(/\n%.*?\n/g, '\n');
+  text = text.replace(/\n%.*?\n/g, '\n');
+  text = text.replace(/\\-/g, '');
+  text = text.replace(/\\\w+\{?.*\}?/g, '');
+  return text;
 }
 
-function cleanUp(content) {
-  content = content.replace(/\n\n\n+/g, '\n\n');
-  return content;
+function cleanUp(text) {
+  text = text.replace(/\n\n\n+/g, '\n\n');
+  return text;
 }
 
-function convert(content, toTex) {
+function convert(text, toTex) {
   const specsReq = [];
   const specsRep = [];
 
@@ -217,29 +223,30 @@ function convert(content, toTex) {
     }
 
     if (reg && rep) {
-      content = content.replace(reg, rep);
+      text = text.replace(reg, rep);
     }
   }
 
-  return content;
+  return text;
 }
 
 var _default = {
-  convertTexToMd(content) {
-    content = removeTexHeaderFooter(content);
-    content = convertTexItemize(content);
-    content = convert(content, false);
-    content = cleanUpTex(content);
-    content = cleanUp(content);
-    return content;
+  convertTexToMd(text) {
+    text = removeTexHeaderFooter(text);
+    text = convertTexItemize(text);
+    text = convert(text, false);
+    text = cleanUpTex(text);
+    text = cleanUp(text);
+    return text;
   },
 
-  convertMdToTex(content) {
-    return convert(content, true);
+  convertMdToTex(text) {
+    return convert(text, true);
   },
 
   regBuilder,
   cleanMatch,
-  extractMatchAll
+  extractMatchAll,
+  removeComments
 };
 exports.default = _default;
