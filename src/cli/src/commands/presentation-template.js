@@ -49,14 +49,18 @@ function slidify (masterName, data) {
 }
 
 function objectifyTexZitat (content) {
-  const begin = '\\\\begin\\{zitat\\}\\*?(.*])?'
-  const end = '\\\\end\\{zitat\\}'
-  const regexp = new RegExp(begin + '([^]+?)' + end, 'g')
+  const regexp = new RegExp(regTex.env('zitat', '\\*?' + regTex.captDotAll), 'g')
   const matches = content.matchAll(regexp)
   const data = []
   for (const match of matches) {
-    const optional = match[1]
-    const text = convertToOneLineMd(match[2])
+    let text = match[1]
+    const regOpt = /^[^]+\]/
+    let optional = text.match(regOpt)
+    if (optional) {
+      optional = optional[0]
+      text = text.replace(regOpt, '')
+    }
+    text = convertToOneLineMd(text)
     const item = {
       text
     }
@@ -99,6 +103,29 @@ function cleanMatch (match, excludeCaptureGroups) {
   return result
 }
 
+class RegTex {
+  constructor () {
+    this.dotAll =  '[^]+?'
+    this.captDotAll = this.capt(this.dotAll)
+    this.whiteNewline = '[\\s\n]*?'
+  }
+
+  capt (regex) {
+    return `(${regex})`
+  }
+
+  cmd (macroName, regex) {
+    return `\\\\${macroName}\\{${regex}\\}`
+  }
+
+  env (envName, regex) {
+    if (!regex) regex = this.captDotAll
+    return this.cmd('begin', envName) + regex + this.cmd('end', envName)
+  }
+}
+
+const regTex = new RegTex()
+
 /**
  * @param {String} text - Text to search for matches
  * @param {String} regexp - Regular expressed gets compiled
@@ -123,22 +150,14 @@ function extractMatchAll (text, regexp, matches, excludeCaptureGroups) {
 }
 
 function objectifyTexItemize (content) {
-  function regTexCmd (macroName, content) {
-    return `\\\\${macroName}\\{${content}\\}`
-  }
-
-  const regDotall = '[^]+?'
-  const regWhiteNewline = '[\\s\n]*?'
-  const regCapture = '(' + regDotall + ')'
-  const regSection = regTexCmd('(sub)?(sub)?section', '([^\\}]*?)')
-  const regEnvNames = '(compactitem|itemize)'
-  const regItemize = regTexCmd('begin', regEnvNames) + regCapture + regTexCmd('end', regEnvNames)
+  const regSection = regTex.cmd('(sub)?(sub)?section', '([^\\}]*?)')
+  const regItemize = regTex.env('(compactitem|itemize)')
 
   const matches = []
   const exclude = ['itemize', 'compactitem', 'sub']
   for (const regex of [
-    regSection + regWhiteNewline + regSection + regWhiteNewline + regItemize,
-    regSection + regWhiteNewline + regItemize,
+    regSection + regTex.whiteNewline + regSection + regTex.whiteNewline + regItemize,
+    regSection + regTex.whiteNewline + regItemize,
     regItemize
   ]) {
     content = extractMatchAll(content, regex, matches, exclude)
@@ -155,7 +174,7 @@ function objectifyTexItemize (content) {
       if (oneLine) items.push(oneLine)
     }
 
-    item.sections = sections
+    if (sections.length) item.sections = sections
     item.items = items
     data.push(item)
   }

@@ -15,6 +15,12 @@ export default {
       type: String,
       markup: true,
       description: 'Text im HTML- oder Markdown-Format oder als reiner Text.'
+    },
+    items: {
+      type: Array
+    },
+    sections: {
+      type: Array
     }
   },
   icon: {
@@ -33,22 +39,51 @@ export default {
       }
     }
 
-    let markup = markupToHtml(props.markup)
+    let markupItems = ''
+    let markupSections = ''
+
+    if (!props.markup) {
+      props.markup = ''
+    }
+
+    if (props.sections) {
+      const h = []
+      let level = 2
+      for (const section of props.sections) {
+        h.push(`<h${level}>${section}</h${level}>`)
+        level++
+      }
+      markupSections = h.join('')
+    }
+
+    if (props.items) {
+      const li = []
+      for (const item of props.items) {
+        li.push(`<li>${item}</li>`)
+      }
+      markupItems = `<ul>${li.join('')}</ul>`
+    }
+
+    let hr = ''
+    if (markupSections && markupItems) {
+      hr = '<hr>'
+    }
+    props.markup = markupSections + hr + markupItems + props.markup
+
+    props.markup = markupToHtml(props.markup)
 
     // hr tag
-    if (markup.indexOf('<hr>') > -1) {
-      const segments = markup.split('<hr>')
+    if (props.markup.indexOf('<hr>') > -1) {
+      const segments = props.markup.split('<hr>')
       const prolog = segments.shift()
       let body = segments.join('<hr>')
       body = DomSteps.wrapWords(body)
-      markup = [prolog, body].join('')
+      props.markup = [prolog, body].join('')
     // No hr tag provided
     // Step through all words
     } else {
-      markup = DomSteps.wrapWords(markup)
+      props.markup = DomSteps.wrapWords(props.markup)
     }
-
-    props.markup = markup
     return props
   },
   plainTextFromProps (props) {
