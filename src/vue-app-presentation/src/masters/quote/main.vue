@@ -8,7 +8,7 @@
       <span class="quotation-mark">«</span>
     </p>
     <p class="attribution" v-if="author || date">
-      <span class="author" v-if="author">{{ author }}</span>
+      <span class="author" v-if="author" v-html="author"/>
       <span v-if="author && date">, </span>
       <span class="date" v-if="date">{{ date }}</span>
       <span class="source" v-if="source" v-html="` - aus: ${this.source}`"/>

@@ -26,14 +26,14 @@ function convertToOneLineMd (content) {
 }
 
 /**
- * @param {Array} slides
  * @param {String} masterName
  * @param {Array|Object} data
  */
-function slidify (masterName, data) {
+function slidify (masterName, data, topLevelData) {
   function slidifySingle (masterName, data) {
     const slide = {}
     slide[masterName] = data
+    if (topLevelData) Object.assign(slide, topLevelData)
     return slide
   }
 
@@ -150,13 +150,13 @@ async function presentationFromAssets (filePath) {
   const notePath = path.join(basePath, 'Hefteintrag.tex')
   if (fs.existsSync(notePath)) {
     const noteContent = lib.readFile(notePath)
-    slides = slides.concat(slidify('note', objectifyTexItemize(noteContent)))
+    slides = slides.concat(slidify('note', objectifyTexItemize(noteContent), { source: 'Hefteintrag.tex' }))
   }
 
   const worksheetPath = path.join(basePath, 'Arbeitsblatt.tex')
   if (fs.existsSync(worksheetPath)) {
     const worksheetContent = lib.readFile(worksheetPath)
-    slides = slides.concat(slidify('quote', objectifyTexZitat(worksheetContent)))
+    slides = slides.concat(slidify('quote', objectifyTexZitat(worksheetContent), { source: 'Arbeitsblatt.tex' }))
   }
 
   const result = lib.yamlToTxt({
