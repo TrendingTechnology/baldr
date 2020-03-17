@@ -15,7 +15,7 @@ const lib = require('../lib.js')
 // Globals.
 const { cwd } = require('../main.js')
 
-function convert (content) {
+function convertToOneLineMd (content) {
   content = content.replace(/\n/g, ' ')
   content = content.replace(/\s\s+/g, ' ')
   content = content.trim()
@@ -25,34 +25,141 @@ function convert (content) {
   return convertTexToMd(content)
 }
 
-function slidifyTexZitat (content) {
+/**
+ * @param {Array} slides
+ * @param {String} masterName
+ * @param {Array|Object} data
+ */
+function slidify (masterName, data) {
+  function slidifySingle (masterName, data) {
+    const slide = {}
+    slide[masterName] = data
+    return slide
+  }
+
+  if (Array.isArray(data)) {
+    const result = []
+    for (const item of data) {
+      result.push(slidifySingle(masterName, item))
+    }
+    return result
+  } else if (typeof data === 'object') {
+    return [slidifySingle(masterName, data)]
+  }
+}
+
+function objectifyTexZitat (content) {
   const begin = '\\\\begin\\{zitat\\}\\*?(.*])?'
   const end = '\\\\end\\{zitat\\}'
   const regexp = new RegExp(begin + '([^]+?)' + end, 'g')
   const matches = content.matchAll(regexp)
-  const slides = []
+  const data = []
   for (const match of matches) {
     const optional = match[1]
-    const text = convert(match[2])
-    const slide = {
-      quote: {
-        text
-      }
+    const text = convertToOneLineMd(match[2])
+    const item = {
+      text
     }
     if (optional) {
       // [\person{Bischof Bernardino Cirillo}][1549]
       // [\person{Martin Luther}]
       const segments = optional.split('][')
       if (segments.length > 1) {
-        slide.quote.author = convert(segments[0])
-        slide.quote.date = convert(segments[1])
+        item.author = convertToOneLineMd(segments[0])
+        item.date = convertToOneLineMd(segments[1])
       } else {
-        slide.quote.author = convert(segments[0])
+        item.author = convertToOneLineMd(segments[0])
       }
     }
-    slides.push(slide)
+    data.push(item)
   }
-  return slides
+  return data
+}
+
+/**
+ *
+ * @param {*} match
+ * @param {Array} excludeCaptureGroups - An array of capture group strings
+ *   to exclude in the result matches for example regex:
+ *   `(itemize|compactitem|sub)` -> `['itemize', 'compactitem', 'sub']`
+ */
+function cleanMatch (match, excludeCaptureGroups) {
+  const exclude = excludeCaptureGroups
+  // Convert to Array
+  match = [...match]
+  // Remove first (the complete match)
+  match.shift()
+
+  result = []
+  for (const group of match) {
+    if ((!exclude && group) || (exclude && group && !exclude.includes(group))) {
+      result.push(group)
+    }
+  }
+  return result
+}
+
+/**
+ * @param {String} text - Text to search for matches
+ * @param {String} regexp - Regular expressed gets compiled
+ * @param {Array} matches - Array gets filled with cleaned matches.
+ * @param {Array} excludeCaptureGroups - An array of capture group strings
+ *   to exclude in the result matches for example regex:
+ *   `(itemize|compactitem|sub)` -> `['itemize', 'compactitem', 'sub']`
+ *
+ * @returns {String}
+ */
+function extractMatchAll (text, regexp, matches, excludeCaptureGroups) {
+  regexp = new RegExp(regexp, 'g')
+  if (text.match(regexp)) {
+    const rawMatches = text.matchAll(regexp)
+    for (let match of rawMatches) {
+      text = text.replace(match[0], '')
+      matches.push(cleanMatch(match, excludeCaptureGroups))
+    }
+    return text
+  }
+  return text
+}
+
+function objectifyTexItemize (content) {
+  function regTexCmd (macroName, content) {
+    return `\\\\${macroName}\\{${content}\\}`
+  }
+
+  const regDotall = '[^]+?'
+  const regWhiteNewline = '[\\s\n]*?'
+  const regCapture = '(' + regDotall + ')'
+  const regSection = regTexCmd('(sub)?(sub)?section', '([^\\}]*?)')
+  const regEnvNames = '(compactitem|itemize)'
+  const regItemize = regTexCmd('begin', regEnvNames) + regCapture + regTexCmd('end', regEnvNames)
+
+  const matches = []
+  const exclude = ['itemize', 'compactitem', 'sub']
+  for (const regex of [
+    regSection + regWhiteNewline + regSection + regWhiteNewline + regItemize,
+    regSection + regWhiteNewline + regItemize,
+    regItemize
+  ]) {
+    content = extractMatchAll(content, regex, matches, exclude)
+  }
+
+  data = []
+  for (const match of matches) {
+    const itemsText = match.pop()
+    const sections = match
+    const item = {}
+    const items = []
+    for (const itemText of itemsText.split('\\item')) {
+      const oneLine = convertToOneLineMd(itemText)
+      if (oneLine) items.push(oneLine)
+    }
+
+    item.sections = sections
+    item.items = items
+    data.push(item)
+  }
+  return data
 }
 
 /**
@@ -63,8 +170,9 @@ function slidifyTexZitat (content) {
  *   template.
  */
 async function presentationFromAssets (filePath) {
+  const basePath = path.dirname(filePath)
   let slides = []
-  await mediaServer.walk(cwd, {
+  await mediaServer.walk({
     asset (relPath) {
       const asset = lib.makeAsset(relPath)
       if (!asset.id) {
@@ -85,27 +193,18 @@ async function presentationFromAssets (filePath) {
         }
       )
     }
-  })
+  }, { path: basePath })
 
-  const notePath = path.join(cwd, 'Hefteintrag.tex')
+  const notePath = path.join(basePath, 'Hefteintrag.tex')
   if (fs.existsSync(notePath)) {
-    const process = childProcess.spawnSync('detex', [notePath], { encoding: 'utf-8' })
-    let note = process.stdout
-    note = note.replace(/\n\n+/g, '')
-    // Left over from \stueck*{}
-    note = note.replace(/\*/g, '')
-    // left over from tables
-    note = note.replace(/&/g, '')
-    slides.push({ note })
+    const noteContent = lib.readFile(notePath)
+    slides = slides.concat(slidify('note', objectifyTexItemize(noteContent)))
   }
 
-  const worksheetPath = path.join(cwd, 'Arbeitsblatt.tex')
+  const worksheetPath = path.join(basePath, 'Arbeitsblatt.tex')
   if (fs.existsSync(worksheetPath)) {
     const worksheetContent = lib.readFile(worksheetPath)
-    const quotes = slidifyTexZitat(worksheetContent)
-    if (quotes.length > 0) {
-      slides = slides.concat(quotes)
-    }
+    slides = slides.concat(slidify('quote', objectifyTexZitat(worksheetContent)))
   }
 
   const result = lib.yamlToTxt({
@@ -115,8 +214,17 @@ async function presentationFromAssets (filePath) {
   fs.writeFileSync(filePath, result)
 }
 
-async function action () {
-  let filePath = path.join(cwd, 'Praesentation.baldr.yml')
+async function action (filePath) {
+  if (!filePath) {
+    filePath = cwd
+  } else {
+    const stat = fs.statSync(filePath)
+    if (!stat.isDirectory()) {
+      filePath = path.dirname(filePath)
+    }
+  }
+  filePath = path.resolve(path.join(filePath, 'Praesentation.baldr.yml'))
+  console.log(filePath)
   if (!fs.existsSync(filePath)) {
     console.log(`Presentation template created at: ${chalk.green(filePath)}`)
   } else {
