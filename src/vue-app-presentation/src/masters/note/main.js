@@ -98,11 +98,14 @@ export default {
     this.domSteps.displayByNo({ stepNo: this.slideCurrent.renderData.stepNoCurrent, full: true })
   },
   enterStep ({ oldStepNo, newStepNo }) {
-    const stepNo = newStepNo
-    const element = this.domSteps.displayByNo({
-      oldStepNo,
-      stepNo
-    })
-    scroll(element)
+    // If you come from a different master, domSteps is not set up yet.
+    if (this.domSteps) {
+      const stepNo = newStepNo
+      const element = this.domSteps.displayByNo({
+        oldStepNo,
+        stepNo
+      })
+      scroll(element)
+    }
   }
 }

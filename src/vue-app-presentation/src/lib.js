@@ -524,7 +524,6 @@ export class DomSteps {
    * @returns {Object} The element that is displayed by the new step number.
    */
   displayByNo ({ stepNo, oldStepNo, full }) {
-    // console.log(`${this.count} ${stepNo} ${oldStepNo} ${full} `)
     // Loop through all elements. Set visibility state on all elements
     // Full update
     if (!oldStepNo || full || stepNo === 1 || (oldStepNo === 1 && stepNo === this.count)) {
@@ -548,8 +547,14 @@ export class DomSteps {
     } else {
       domStep = this.elements[stepNo - 1]
     }
-    domStep.show(stepNo > oldStepNo)
-    return domStep.element
+    // Todo: displayByNo is called twice, Fix this.
+    if (domStep) {
+      domStep.show(stepNo > oldStepNo)
+      return domStep.element
+    } else {
+      // setStepLastOrFirstByDirection
+      console.log(`TODO remove this call: count ${this.count} stepNo ${stepNo} oldStepNo ${oldStepNo} full ${full}`)
+    }
   }
 
   /**

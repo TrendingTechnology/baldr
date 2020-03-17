@@ -174,7 +174,7 @@ const actions = {
   setStepLastOrFirstByDirection ({ dispatch, getters }, direction) {
     // We need a new current slide.
     // Only set the step number on slides with step support. The master slide
-    // cloze sets the variable stepCount async. If you enter a newer before
+    // cloze sets the variable stepCount async. If you enter a never before
     // visited cloze slide backwards, strange things happens.
     if (getters.slideCurrent.renderData.stepCount) {
       let stepNoCurrent = 1
@@ -188,17 +188,19 @@ const actions = {
     }
   },
   /**
+   * Know issues. previous to a not yet visited note master with steps: the
+   * first step is shown instead of the last.
+   *
    * @param {Object} vuex - see Vuex documentation
    * @param {Number} direction - `1`: next, `-1`: previous
    */
   setSlideOrStepNextOrPrevious ({ dispatch, getters }, direction) {
-    const renderData = getters.slideCurrent.renderData
     // Change only steps
     if (
-      renderData.stepCount > 1 &&
+      getters.slideCurrent.renderData.stepCount > 1 &&
       (
-        (direction === 1 && renderData.stepNoCurrent !== renderData.stepCount) || // Next
-        (direction === -1 && renderData.stepNoCurrent !== 1) // Previous
+        (direction === 1 && getters.slideCurrent.renderData.stepNoCurrent !== getters.slideCurrent.renderData.stepCount) || // Next
+        (direction === -1 && getters.slideCurrent.renderData.stepNoCurrent !== 1) // Previous
       )
     ) {
       dispatch('setStepNextOrPrevious', direction)
