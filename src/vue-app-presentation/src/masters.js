@@ -47,6 +47,30 @@ class InlineMarkup {
 }
 
 /**
+ * @param {@bldr/vue-app-presentation/masters~InlineMarkup} inlineMarkup
+ */
+function renderInlineMedia (inlineMarkup) {
+  const mediaFile = store.getters['media/mediaFileByUri'](inlineMarkup.id)
+
+  let controls
+  let htmlTag
+  if (mediaFile.type === 'image') {
+    htmlTag = 'img'
+  } else if (mediaFile.type === 'audio') {
+    htmlTag = 'audio'
+    controls = 'controls'
+  } else if (mediaFile.type === 'video') {
+    htmlTag = 'video'
+    controls = 'controls'
+  }
+  const mediaTag = `<${htmlTag} src="${mediaFile.httpUrl}" ${controls}/>`
+
+  const caption = `<figcaption></figcaption>`
+
+  return `<figure class="inline-media">${mediaTag}</figure>`
+}
+
+/**
  * The icon of a master slide. This icon is shown in the documentation or
  * on the left corner of a slide.
  */
@@ -334,8 +358,7 @@ class Master {
     function renderOneMediaUri (text) {
       return text.replace(new RegExp(inlineMediaRegExp, 'g'), function (match) {
         const inlineMarkup = new InlineMarkup(match)
-        const mediaFile = store.getters['media/mediaFileByUri'](inlineMarkup.id)
-        return `<div class="inline-media"><img src="${mediaFile.httpUrl}" /></div>`
+        return renderInlineMedia(inlineMarkup)
       })
     }
 

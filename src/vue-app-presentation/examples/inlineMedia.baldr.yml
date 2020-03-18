@@ -3,6 +3,32 @@ meta:
   title: Inline media
 
 slides:
+
+- title: image
+  generic: |
+    [id:Haydn_Joseph align="left"]
+
+    Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper
+    suscipit lobortis nisl ut aliquip ex ea commodo consequat.
+- title: audio
+  generic: |
+    # Audio
+
+    [id:Nachtmusik_HB_1_Allegro]
+
+    Vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan
+    et iusto odio dignissim qui blandit praesent luptatum zzril delenit
+    augue duis dolore te feugait nulla facilisi.
+
+- title: video
+  generic: |
+    # Video
+
+    [id:Biographie-Salzburg-Wien_VD_Mozart-komponiert-und-spielt-Billard]
+
+    Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper
+    suscipit lobortis nisl ut aliquip
+
 - title: The same image multiple times
   generic: |
     # Beethoven 1
