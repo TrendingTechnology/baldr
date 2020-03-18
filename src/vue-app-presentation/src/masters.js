@@ -64,13 +64,17 @@ class MasterIcon {
  * implements a specific hook.
  */
 class Master {
-  constructor (name) {
+  /**
+   * @param {Object} specs - The default exported object from the `main.js`
+   * file.
+   */
+  constructor (specs) {
     /**
      * It is the same as the basename of the Vue component, for example
      * `audio.vue`. The name is `audio`.
      * @type {string}
      */
-    this.name = name
+    this.name = null
 
     /**
      * The human readable title of the master slide.
@@ -115,6 +119,30 @@ class Master {
      * @type {@bldr/vue-app-presentation~propsDef}
      */
     this.propsDef = null
+
+    /**
+     * All imported methods. They are not called directly, but through
+     * public methods, which add additional functionality.
+     *
+     * @type {object}
+     *
+     * @private
+     */
+    this.methods_ = {}
+    for (const spec in specs) {
+      if (spec === 'icon') {
+        this.icon = new MasterIcon(specs.icon)
+      } else if (spec === 'props') {
+        // to avoid confusion between real world props with real world value
+        // and props defintions.
+        this.propsDef = specs.props
+      } else if (typeof specs[spec] === 'function') {
+        this.methods_[spec] = specs[spec]
+      } else {
+        this[spec] = specs[spec]
+      }
+    }
+    this.registerVuexModule_()
   }
 
   /**
@@ -137,38 +165,6 @@ class Master {
       this.store.namespaced = true
       store.registerModule(this.name, this.store)
     }
-  }
-
-  /**
-   * Import non function properties of the master object of the master.vue
-   * components.
-   *
-   * @param {object} master - The default exported object from the `main.js`
-   * file.
-   */
-  importMaster (members) {
-    /**
-     * The object from the exported `master` property object of the `master.vue`
-     * files.
-     *
-     * @type {object}
-     *
-     * @private
-     */
-    this.members_ = members
-    for (const member in members) {
-      if (member === 'icon') {
-        this.icon = new MasterIcon(members.icon)
-      } else if (member === 'props') {
-        // to avoid confusion between real world props with real world value
-        // and props defintions.
-        this.propsDef = members.props
-      } else if (typeof members[member] !== 'function') {
-        this[member] = members[member]
-      }
-    }
-
-    this.registerVuexModule_()
   }
 
   /**
@@ -207,11 +203,11 @@ class Master {
    * @private
    */
   callFunction_ (functionName, payload, thisArg) {
-    if (functionName in this.members_ && typeof this.members_[functionName] === 'function') {
+    if (functionName in this.methods_ && typeof this.methods_[functionName] === 'function') {
       if (thisArg) {
-        return this.members_[functionName].call(thisArg, payload)
+        return this.methods_[functionName].call(thisArg, payload)
       }
-      return this.members_[functionName](payload)
+      return this.methods_[functionName](payload)
     }
   }
 
@@ -664,10 +660,11 @@ function registerMasters () {
   requireMaster.keys().forEach((fileName) => {
     // ./masterName/main.js
     const masterName = findMasterName(fileName)
-    const masterObject = requireMaster(fileName)
-    checkExport(fileName, masterObject)
-    const master = new Master(masterName)
-    master.importMaster(masterObject.default)
+    const masterObj = requireMaster(fileName)
+    const masterSpec = masterObj.default
+    masterSpec.name = masterName
+    checkExport(fileName, masterObj)
+    const master = new Master(masterSpec)
     masters.add(master)
   })
 
