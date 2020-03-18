@@ -296,10 +296,33 @@ class Master {
    * HTML. This function must be called after the media resolution.
    *
    * @param {module:@bldr/vue-app-presentation~props}
-   *
-   * @returns {Set}
    */
-  renderInlineMediaUris (props) {}
+  renderInlineMedia (props) {
+    /**
+     * @param {String} text
+     */
+    function renderOneMediaUri (text) {
+      return text.replace(/\[(id:[a-zA-Z0-9-_]+)\]/g, function (match, p1) {
+        const mediaFile = store.getters['media/mediaFileByUri'](p1)
+        return `<div class="inline-media"><img src="${mediaFile.httpUrl}" /></div>`
+      })
+    }
+
+    for (const propName of this.propNamesInlineMedia) {
+
+      const prop = props[propName]
+      if (prop) {
+        if (typeof prop === 'string') {
+          props[propName] = renderOneMediaUri(prop)
+        // `markup` in `generic` is an array.
+        } else if (Array.isArray(prop)) {
+          for (let i = 0; i < prop.length; i++) {
+            props[propName][i] = renderOneMediaUri(prop[i])
+          }
+        }
+      }
+    }
+  }
 
   /**
    * Retrieve the media URIs which have to be resolved.

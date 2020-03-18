@@ -674,6 +674,7 @@ ${JSON.stringify(this.rawYamlObject_)}`
     for (const slide of this.slides) {
       if (masters.exists(slide.master.name)) {
         const master = masters.get(slide.master.name)
+        master.renderInlineMedia(slide.renderData.props)
         slide.renderData.propsMain = master.collectPropsMain(slide.renderData.props, vue)
         slide.renderData.propsPreview = master.collectPropsPreview(
           {
