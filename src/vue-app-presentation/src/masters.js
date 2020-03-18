@@ -52,7 +52,7 @@ class InlineMarkup {
 function renderInlineMedia (inlineMarkup) {
   const mediaFile = store.getters['media/mediaFileByUri'](inlineMarkup.id)
 
-  let controls
+  let controls = ''
   let htmlTag
   if (mediaFile.type === 'image') {
     htmlTag = 'img'
@@ -65,9 +65,17 @@ function renderInlineMedia (inlineMarkup) {
   }
   const mediaTag = `<${htmlTag} src="${mediaFile.httpUrl}" ${controls}/>`
 
-  const caption = `<figcaption></figcaption>`
+  let caption = ''
+  if (inlineMarkup.caption && typeof inlineMarkup.caption === 'string') {
+    caption = `<figcaption>${inlineMarkup.caption}</figcaption>`
+  }
 
-  return `<figure class="inline-media">${mediaTag}</figure>`
+  let align = ''
+  if (inlineMarkup.align && typeof inlineMarkup.align === 'string') {
+    align = `inline-${inlineMarkup.align}`
+  }
+
+  return `<figure class="inline-media ${align}">${mediaTag}${caption}</figure>`
 }
 
 /**

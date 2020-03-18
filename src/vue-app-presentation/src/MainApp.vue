@@ -444,9 +444,47 @@ export default {
  **********************************************************************/
 
   .inline-media {
+    display: table;
+    margin: 0;
+
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+
+
     img {
       width: 100%;
     }
+  }
+
+  .inline-media > * {
+    display: block;
+    max-width: 100%;
+  }
+
+  .inline-media > figcaption {
+    caption-side: bottom;
+    display: table-caption;
+    font-size: 0.6em;
+    margin-top: 0.5em;
+    max-width: none;
+    text-align: center;
+  }
+
+  .inline-left, .inline-right {
+    width: 40%;
+  }
+
+  .inline-left {
+    float: left;
+    margin-left: 0;
+    margin-right: 1em;
+  }
+
+  .inline-right {
+    float: right;
+    margin-left: 1em;
+    margin-right: 0;
   }
 
 /***********************************************************************
