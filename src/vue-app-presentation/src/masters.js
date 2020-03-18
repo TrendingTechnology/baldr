@@ -242,6 +242,21 @@ class Master {
   }
 
   /**
+   * The name of the props which are supporting inline media (for example
+   * `markup`)
+   */
+  get propNamesInlineMedia () {
+    const inlineMediaProps = []
+    for (const propName in this.propsDef) {
+      const propDef = this.propsDef[propName]
+      if (propDef.inlineMedia) {
+        inlineMediaProps.push(propName)
+      }
+    }
+    return inlineMediaProps
+  }
+
+  /**
    * Filter the master props for props which are supporting inline media.
    *
    * @param {module:@bldr/vue-app-presentation~props}
@@ -259,14 +274,8 @@ class Master {
         uris.add(match[1])
       }
     }
-    const inlineMediaProps = []
-    for (const propName in this.propsDef) {
-      const propDef = this.propsDef[propName]
-      if (propDef.inlineMedia) {
-        inlineMediaProps.push(propName)
-      }
-    }
-    for (const propName of inlineMediaProps) {
+
+    for (const propName of this.propNamesInlineMedia) {
       const prop = props[propName]
       if (prop) {
         if (typeof prop === 'string') {
@@ -281,6 +290,16 @@ class Master {
     }
     return uris
   }
+
+  /**
+   * Replace the inline media tags `[id:Beethoven]` in certain props with
+   * HTML. This function must be called after the media resolution.
+   *
+   * @param {module:@bldr/vue-app-presentation~props}
+   *
+   * @returns {Set}
+   */
+  renderInlineMediaUris (props) {}
 
   /**
    * Retrieve the media URIs which have to be resolved.
