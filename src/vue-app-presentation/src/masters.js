@@ -12,6 +12,40 @@ import store from '@/store.js'
 import { markupToHtml, validateUri } from '@/lib.js'
 import SlidePreviewPlayButton from '@/views/SlidesPreview/PlayButton.vue'
 
+const mediaUriRegExp = '(id:[a-zA-Z0-9-_]+)'
+const inlineMediaRegExp = '\\[' + mediaUriRegExp + '([^\\]]*)?' + '\\]'
+
+/**
+ *
+ */
+class InlineMarkup {
+  /**
+   * @param {String} markup - for example
+   *   `[id:Fuer-Elise caption="Für Elise"]` or
+   *   `[id:Beethoven class="left large"]` or
+   *   `[id:Mozart center]`
+   */
+  constructor (markup) {
+    const match = markup.match(new RegExp(inlineMediaRegExp))
+    if (!match) {
+      throw new Error(`Invalid inline markup: ${markup}`)
+    }
+    this.id = match[1]
+
+    if (match[2]) {
+      const attrs = match[2]
+      const matches = attrs.matchAll(/([a-z]+)(="([^"]*)")/g)
+      for (const match of matches) {
+        if (match[3]) {
+          this[match[1]] = match[3]
+        } else {
+          this[match[1]] = true
+        }
+      }
+    }
+  }
+}
+
 /**
  * The icon of a master slide. This icon is shown in the documentation or
  * on the left corner of a slide.
@@ -265,7 +299,7 @@ class Master {
      * @param {String} text
      */
     function extractUrisInText (text) {
-      const matches = text.matchAll(/\[(id:[a-zA-Z0-9-_]+)\]/g)
+      const matches = text.matchAll(new RegExp(inlineMediaRegExp, 'g'))
       for (const match of matches) {
         uris.add(match[1])
       }
@@ -298,8 +332,9 @@ class Master {
      * @param {String} text
      */
     function renderOneMediaUri (text) {
-      return text.replace(/\[(id:[a-zA-Z0-9-_]+)\]/g, function (match, p1) {
-        const mediaFile = store.getters['media/mediaFileByUri'](p1)
+      return text.replace(new RegExp(inlineMediaRegExp, 'g'), function (match) {
+        const inlineMarkup = new InlineMarkup(match)
+        const mediaFile = store.getters['media/mediaFileByUri'](inlineMarkup.id)
         return `<div class="inline-media"><img src="${mediaFile.httpUrl}" /></div>`
       })
     }
