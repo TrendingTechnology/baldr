@@ -118,12 +118,12 @@ Vue.use(ModalDialog)
 Vue.use(MaterialIcon)
 Vue.config.productionTip = false
 
+/** props definition **********************************************************/
+
 /**
- * An extended version of the Vue `prop`.
+ * An extended version of the Vue `prop` definition.
  *
- * TODO: rename to propDef
- *
- * @typedef prop
+ * @typedef propDef
  * @property {Mixed} prop.default - A default value.
  * @property {String} prop.description - A descriptive text shown in the
  *   documentation.
@@ -139,9 +139,7 @@ Vue.config.productionTip = false
  */
 
 /**
- * An extended version of the Vue `props`.
- *
- * TODO: rename to propDefs / split?
+ * An extended version of the Vue `props` defintion.
  *
  * ```js
  *  const props = {
@@ -157,11 +155,65 @@ Vue.config.productionTip = false
  *  }
  * ```
  *
- * This object gets processed and converted into Vue specific props
+ * @typedef propsDef
+ * @type {{Object.<propName, module:@bldr/vue-app-presentation~propDef>}}
+ *
+ * @see {@bldr/vue-app-presentation~propDef}
+ */
+
+/** props (with real world value) *********************************************/
+
+/**
+ * The value of the `props`.
+ *
+ * @typedef prop
+ * @type {(String|Array|Boolean|Number)}
+ */
+
+/**
+ * This `props` object gets processed and converted into Vue specific `props`
  * (`propsMain`, `propsPreview`).
  *
- * ```js
- * createElement('example-master', { props: propsMain })
+ * Master `task`:
+ *
+ * ```json
+ * {
+ *   "markup": "Warum klingen die Takte 23-26 schärfer als die Takte 1-4?"
+ * }
+ * ```
+ *
+ * Master `generic`:
+ *
+ * ```json
+ * {
+ *   "markup": [
+ *     "<p>Ein aufheulendes Auto</p>\n<p>Die Ideen des Futurismus ..."
+ *   ],
+ *   "charactersOnSlide": 2000
+ * }
+ * ```
+ *
+ * Master `scoreSample`:
+ *
+ * ```json
+ * {
+ *   "score": "id:Milhauds-Corcovado_NB_Corcovado_Ausschnitt",
+ *   "audio": "id:Milhauds-Corcovado_HB_Corcovado"
+ * }
+ * ```
+ *
+ * Master `camera`:
+ *
+ * ```json
+ * true
+ * ```
+ *
+ * Master `image`:
+ *
+ * ```json
+ * {
+ *   "src": "id:Milhauds-Corcovado_BD_Darius-Milhaud"
+ * }
  * ```
  *
  * @typedef props

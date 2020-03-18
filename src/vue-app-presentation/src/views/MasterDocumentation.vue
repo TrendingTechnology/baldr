@@ -39,7 +39,7 @@ export default {
       return this.$masters.get(this.masterName)
     },
     props () {
-      return this.master.props
+      return this.master.propsDef
     },
     documentation () {
       if ('documentation' in this.master) {

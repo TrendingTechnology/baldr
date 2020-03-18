@@ -109,18 +109,12 @@ class Master {
     this.store = null
 
     /**
-     * TODO: should be renamed to `propsDef`
-     * A formal description of the properties of a master slide.
+     * The definition of the slide properties (`props`) (aka `props` of a
+     * `master`).
      *
-     * Properties:
-     * description: 'Eine URI zu einer Bild-Datei.'
-     * type: String, TODO Implement
-     * required: TODO Implement
-     * mediaFileUri: true,
-     * markup:
-     * @type {Object}
+     * @type {@bldr/vue-app-presentation~propsDef}
      */
-    this.props = null
+    this.propsDef = null
   }
 
   /**
@@ -262,8 +256,8 @@ class Master {
       }
     }
     const inlineMediaProps = []
-    for (const propName in this.props) {
-      const propDef = this.props[propName]
+    for (const propName in this.propsDef) {
+      const propDef = this.propsDef[propName]
       if (propDef.inlineMedia) {
         inlineMediaProps.push(propName)
       }
@@ -417,9 +411,9 @@ class Master {
    * @returns {object}
    */
   markupToHtml (props) {
-    if (!this.props) return props
+    if (!this.propsDef) return props
     for (const propName in props) {
-      const prop = this.props[propName]
+      const prop = this.propsDef[propName]
       if ('markup' in prop && prop.markup) {
         props[propName] = markupToHtml(props[propName])
       }
@@ -435,7 +429,7 @@ class Master {
    */
   detectUnkownProps (props) {
     for (const propName in props) {
-      if (this.props && !(propName in this.props)) {
+      if (this.propsDef && !(propName in this.propsDef)) {
         throw new Error(`The master slide “${this.name}” has no property named “${propName}”.`)
       }
     }
@@ -447,9 +441,9 @@ class Master {
    * @param {module:@bldr/vue-app-presentation~props} props
    */
   validateUris (props) {
-    if (!this.props) return props
+    if (!this.propsDef) return props
     for (const propName in props) {
-      const prop = this.props[propName]
+      const prop = this.propsDef[propName]
       if ('mediaFileUri' in prop && prop.mediaFileUri) {
         props[propName] = validateUri(props[propName])
       }
