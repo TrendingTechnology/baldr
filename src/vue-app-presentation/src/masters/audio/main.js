@@ -61,8 +61,8 @@ export default {
     return props
   },
   resolveMediaUris (props) {
-    const uris = [props.src]
-    if (props.cover) uris.push(props.cover)
+    const uris = new Set([props.src])
+    if (props.cover) uris.add(props.cover)
     return uris
   },
   async enterSlide ({ newProps }) {

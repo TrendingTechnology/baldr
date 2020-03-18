@@ -27,9 +27,8 @@ export default {
     darkMode: false
   },
   resolveMediaUris (props) {
-    const uris = []
-    uris.push(props.score)
-    if ('audio' in props) uris.push(props.audio)
+    const uris = new Set([props.score])
+    if ('audio' in props) uris.add(props.audio)
     return uris
   },
   enterSlide ({ newProps }) {

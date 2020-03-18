@@ -26,7 +26,7 @@ export default {
     return props
   },
   resolveMediaUris (props) {
-    return [props.src]
+    return props.src
   },
   enterStep ({ oldStepNo, newStepNo }) {
     // setSlideOrStepPrevious / Next has no this.domSteps

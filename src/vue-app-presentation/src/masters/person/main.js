@@ -45,7 +45,7 @@ export default {
     return props
   },
   resolveMediaUris (props) {
-    return [props.image]
+    return props.image
   },
   titleFromProps (props) {
     if ('name' in props) {

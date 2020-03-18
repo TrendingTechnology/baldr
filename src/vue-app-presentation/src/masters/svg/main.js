@@ -27,7 +27,7 @@ export default {
     return props
   },
   resolveMediaUris (props) {
-    return [props.src]
+    return props.src
   },
   async enterSlide () {
     const response = await this.$media.httpRequest.request({

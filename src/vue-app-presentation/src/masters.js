@@ -159,6 +159,10 @@ class Master {
     for (const member in members) {
       if (member === 'icon') {
         this.icon = new MasterIcon(members.icon)
+      } else if (member === 'props') {
+        // to avoid confusion between real world props with real world value
+        // and props defintions.
+        this.propsDef = members.props
       } else if (typeof members[member] !== 'function') {
         this[member] = members[member]
       }
@@ -279,31 +283,31 @@ class Master {
   }
 
   /**
-   * An array of media URIs to resolve (like [id:beethoven, filename:mozart.mp3])
+   * Retrieve the media URIs which have to be resolved.
+   *
+   * Call the master funtion `resolveMediaUris` and collect the media URIs.
+   * (like [id:beethoven, filename:mozart.mp3]). Extract media URIs from
+   * the text props.
    *
    * @param {module:@bldr/vue-app-presentation~props} props
    *
-   * @returns {Array}
+   * @returns {Set}
    */
   resolveMediaUris (props) {
+    let uris = this.callFunction_('resolveMediaUris', props)
+
+    // To allow undefined return values of the hooks.
+    if (!uris) {
+      uris = new Set()
+    } else if (typeof uris === 'string') {
+      uris = new Set([uris])
+    }
+
     const inlineUris = this.extractInlineMediaUris(props)
-    const uris = this.callFunction_('resolveMediaUris', props)
-    // To allow undefined URIs
-    if (!uris && !inlineUris.size) return
-    const result = []
-    if (typeof uris === 'string') {
-      result.push(uris)
-    } else if (Array.isArray(uris)) {
-      for (const uri of uris) {
-        if (uri) {
-          result.push(uri)
-        }
-      }
-    }
     for (const uri of inlineUris) {
-      result.push(uri)
+      uris.add(uri)
     }
-    if (result.length) return result
+    if (uris.size) return uris
   }
 
   /**

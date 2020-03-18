@@ -484,8 +484,8 @@ class Slide {
    * @type {String}
    */
   get firstMediaUri () {
-    if (Array.isArray(this.renderData.mediaUris) && this.renderData.mediaUris.length > 0) {
-      return this.renderData.mediaUris[0]
+    if (this.renderData.mediaUris && this.renderData.mediaUris.size) {
+      return this.renderData.mediaUris.values().next().value
     }
   }
 }

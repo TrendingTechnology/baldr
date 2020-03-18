@@ -40,7 +40,7 @@ export default {
     return props
   },
   resolveMediaUris (props) {
-    return [props.src]
+    return props.src
   },
   collectPropsMain (props) {
     const mediaFile = this.$store.getters['media/mediaFileByUri'](props.src)

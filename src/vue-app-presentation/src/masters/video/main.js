@@ -23,7 +23,7 @@ export default {
     return props
   },
   resolveMediaUris (props) {
-    return [props.src]
+    return props.src
   },
   async enterSlide ({ newProps }) {
     const sample = this.$store.getters['media/sampleByUri'](newProps.src)
