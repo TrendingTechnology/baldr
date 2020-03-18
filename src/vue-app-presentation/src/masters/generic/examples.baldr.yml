@@ -12,6 +12,11 @@ slides:
     veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex
     ea commodi consequat.
 
+    [id:Beethoven_Ludwig-van]
+
+    [id:Haydn_Joseph]
+    [id:Mozart_Wolfgang-Amadeus]
+
 - title: Test step words
   generic:
     step_words: true

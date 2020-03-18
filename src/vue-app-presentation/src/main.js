@@ -121,6 +121,8 @@ Vue.config.productionTip = false
 /**
  * An extended version of the Vue `prop`.
  *
+ * TODO: rename to propDef
+ *
  * @typedef prop
  * @property {Mixed} prop.default - A default value.
  * @property {String} prop.description - A descriptive text shown in the
@@ -138,6 +140,8 @@ Vue.config.productionTip = false
 
 /**
  * An extended version of the Vue `props`.
+ *
+ * TODO: rename to propDefs / split?
  *
  * ```js
  *  const props = {

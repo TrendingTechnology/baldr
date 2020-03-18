@@ -3,20 +3,20 @@ slides:
 
 - title: no_meta
   image:
-    src: id:Bach
+    src: id:Bach_Johann-Sebastian
     title: A title
     description: A description
     no_meta: true
 
 - title: no_meta
   image:
-    src: id:Bach
+    src: id:Bach_Johann-Sebastian
     title: A title
     description: A description
     no_meta: false
 
 - title: Kurzform
-  image: id:Bach
+  image: id:Bach_Johann-Sebastian
 
 - title: 'URL: http:'
   image:
@@ -28,7 +28,7 @@ slides:
 
 - title: 'URL: id:'
   image:
-    src: id:Haydn
+    src: id:Haydn_Joseph
 
 - title: 'URL: filename:'
   image:

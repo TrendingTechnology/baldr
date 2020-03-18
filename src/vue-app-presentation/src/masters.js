@@ -13,24 +13,6 @@ import { markupToHtml, validateUri } from '@/lib.js'
 import SlidePreviewPlayButton from '@/views/SlidesPreview/PlayButton.vue'
 
 /**
- * Filter the master props for props which are supporting inline media.
- *
- * @param {module:@bldr/vue-app-presentation~props}
- *
- * @returns {Array}
- */
-function getInlineMediaProps (props) {
-  const inlineMediaProps = []
-  for (const propName in props) {
-    const prop = props[propName]
-    if (prop.inlineMedia) {
-      inlineMediaProps.push(propName)
-    }
-  }
-  return inlineMediaProps
-}
-
-/**
  * The icon of a master slide. This icon is shown in the documentation or
  * on the left corner of a slide.
  */
@@ -127,7 +109,8 @@ class Master {
     this.store = null
 
     /**
-     * Formal description of a property of a master slide.
+     * TODO: should be renamed to `propsDef`
+     * A formal description of the properties of a master slide.
      *
      * Properties:
      * description: 'Eine URI zu einer Bild-Datei.'
@@ -261,6 +244,47 @@ class Master {
   }
 
   /**
+   * Filter the master props for props which are supporting inline media.
+   *
+   * @param {module:@bldr/vue-app-presentation~props}
+   *
+   * @returns {Set}
+   */
+  extractInlineMediaUris (props) {
+    const uris = new Set()
+    /**
+     * @param {String} text
+     */
+    function extractUrisInText (text) {
+      const matches = text.matchAll(/\[(id:[a-zA-Z0-9-_]+)\]/g)
+      for (const match of matches) {
+        uris.add(match[1])
+      }
+    }
+    const inlineMediaProps = []
+    for (const propName in this.props) {
+      const propDef = this.props[propName]
+      if (propDef.inlineMedia) {
+        inlineMediaProps.push(propName)
+      }
+    }
+    for (const propName of inlineMediaProps) {
+      const prop = props[propName]
+      if (prop) {
+        if (typeof prop === 'string') {
+          extractUrisInText(prop)
+        // `markup` in `generic` is an array.
+        } else if (Array.isArray(prop)) {
+          for (const item of prop) {
+            extractUrisInText(item)
+          }
+        }
+      }
+    }
+    return uris
+  }
+
+  /**
    * An array of media URIs to resolve (like [id:beethoven, filename:mozart.mp3])
    *
    * @param {module:@bldr/vue-app-presentation~props} props
@@ -268,9 +292,10 @@ class Master {
    * @returns {Array}
    */
   resolveMediaUris (props) {
-    // To allow undefined uris
+    const inlineUris = this.extractInlineMediaUris(props)
     const uris = this.callFunction_('resolveMediaUris', props)
-    if (!uris) return
+    // To allow undefined URIs
+    if (!uris && !inlineUris.size) return
     const result = []
     if (typeof uris === 'string') {
       result.push(uris)
@@ -280,6 +305,9 @@ class Master {
           result.push(uri)
         }
       }
+    }
+    for (const uri of inlineUris) {
+      result.push(uri)
     }
     if (result.length) return result
   }

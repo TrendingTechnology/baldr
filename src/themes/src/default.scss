@@ -1,5 +1,6 @@
 @import './default-vars.scss';
-@import './fonts.scss';
+// Fonts is very slow because of the base64 encoded font files.
+//@import './fonts.scss';
 
 @mixin important {
   font-family: 'Alegreya Sans';

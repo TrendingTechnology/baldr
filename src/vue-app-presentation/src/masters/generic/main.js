@@ -54,7 +54,7 @@ export default {
       required: true,
       // It is complicated to convert to prop based markup conversion.
       // markup: true
-      inlineMedia: ['markup'],
+      inlineMedia: true,
       description: 'Markup im HTML oder Markdown-Format'
     },
     charactersOnSlide: {
