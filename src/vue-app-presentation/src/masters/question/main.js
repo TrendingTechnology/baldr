@@ -1,4 +1,42 @@
 import { plainText } from '@bldr/core-browser'
+import { markupToHtml } from '@/lib.js'
+class Question {
+  constructor (spec) {
+    this.heading = null
+    this.body = null
+    this.answer = null
+    this.subQuestions = null
+
+    if (typeof spec === 'string') {
+      this.body = spec
+    } else if (typeof spec === 'object') {
+      for (const prop of ['heading', 'body', 'answer']) {
+        if (spec[prop]) {
+          if (typeof spec[prop] === 'string') {
+            this[prop] = markupToHtml(spec[prop])
+          } else {
+            throw new Error(`Unsupported type for questions ${prop} ${spec[prop]}`)
+          }
+        }
+      }
+      if (spec.subQuestions) {
+        this.subQuestions = []
+        Question.parseRecursively(spec.subQuestions, this.subQuestions)
+      }
+    }
+  }
+
+  static parseRecursively (specs, processed = []) {
+    if (Array.isArray(specs)) {
+      const out = []
+      for (const spec of specs) {
+        return processed.push(new Questions(spec))
+      }
+    }
+    processed.push(new Questions(specs))
+    return processed
+  }
+}
 
 const normalizeQAPair = function (pair) {
   if (typeof pair === 'string') {

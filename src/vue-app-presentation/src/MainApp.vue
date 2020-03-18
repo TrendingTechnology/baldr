@@ -446,11 +446,9 @@ export default {
   .inline-media {
     display: table;
     margin: 0;
-
     margin-left: auto;
     margin-right: auto;
     text-align: center;
-
 
     img {
       width: 100%;
