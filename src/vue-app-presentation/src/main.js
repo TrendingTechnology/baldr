@@ -155,10 +155,10 @@ Vue.config.productionTip = false
  *  }
  * ```
  *
+ * @see {@link @bldr/vue-app-presentation~propDef}
+ *
  * @typedef propsDef
  * @type {{Object.<propName, module:@bldr/vue-app-presentation~propDef>}}
- *
- * @see {@bldr/vue-app-presentation~propDef}
  */
 
 /** props (with real world value) *********************************************/
