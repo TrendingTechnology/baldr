@@ -13,6 +13,25 @@ import { markupToHtml, validateUri } from '@/lib.js'
 import SlidePreviewPlayButton from '@/views/SlidesPreview/PlayButton.vue'
 
 /**
+ * Filter the master props for props which are supporting inline media.
+ *
+ * @param {module:@bldr/vue-app-presentation~props}
+ *
+ * @returns {Array}
+ */
+function getInlineMediaProps (props) {
+  for (const propName in props) {
+    const prop = props[propName]
+    if (prop.inlineMedia) {
+      if (!Array.isArray(prop.inlineMedia)) {
+        throw new Error('The master prop `inlineMedia` has to be an array.')
+      }
+
+    }
+  }
+}
+
+/**
  * The icon of a master slide. This icon is shown in the documentation or
  * on the left corner of a slide.
  */
@@ -244,6 +263,7 @@ class Master {
 
   /**
    * An array of media URIs to resolve (like [id:beethoven, filename:mozart.mp3])
+   *
    * @param {module:@bldr/vue-app-presentation~props} props
    *
    * @returns {Array}

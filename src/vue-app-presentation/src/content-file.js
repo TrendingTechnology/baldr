@@ -570,7 +570,7 @@ export class Presentation {
   }
 
   /**
-   * Convert a YAML string into a javascript object. Normalize properties.
+   * Convert a YAML string into a Javascript object. Normalize properties.
    * Parse slides recursive. Add a placeholder slide if the presentation is
    * empty.
    *
