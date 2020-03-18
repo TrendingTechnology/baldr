@@ -122,23 +122,39 @@ Vue.config.productionTip = false
  * An extended version of the Vue `prop`.
  *
  * @typedef prop
- * @property {Object|Array} prop.type - Same as Vue `type`.
- * @property {Boolean} prop.required - In the `prop` must specifed.
- * @property {Array} prop.inlineMedia - An array of `prop` names (for example
- *   `markup`) to extract inline media URIs like `[id:Beethoven_Ludwig-van]`.
+ * @property {Mixed} prop.default - A default value.
  * @property {String} prop.description - A descriptive text shown in the
  *   documentation.
- * @property {Mixed} prop.default - A default value.
- * @property {Boolean} prop.mediaFileUri - Indicates that this `prop` contains
- *   a media file URI.
+ * @property {Boolean} prop.inlineMedia - Indicates that this `prop` is text for
+ *   extracting inline media URIs like `[id:Beethoven_Ludwig-van]`.
  * @property {Boolean} prop.markup - If true this property is converted into
  *   HTML.
+ * @property {Boolean} prop.mediaFileUri - Indicates that this `prop` contains
+ *   a media file URI.
+ * @property {Boolean} prop.required - In the `prop` must specifed.
+ * @property {Object|Array} prop.type - Same as Vue `type`.
  * @type {Object}
  */
 
 /**
- * An extended version of the Vue `props`. This object gets processed and
- * converted into Vue specific props (`propsMain`, `propsPreview`).
+ * An extended version of the Vue `props`.
+ *
+ * ```js
+ *  const props = {
+ *    src: {
+ *      default: 'id:Fuer-Elise'
+ *      description: 'Den URI zu einer Video-Datei.',
+ *      inlineMedia: false
+ *      markup: false
+ *      mediaFileUri: true,
+ *      required: true,
+ *      type: String,
+ *    }
+ *  }
+ * ```
+ *
+ * This object gets processed and converted into Vue specific props
+ * (`propsMain`, `propsPreview`).
  *
  * ```js
  * createElement('example-master', { props: propsMain })

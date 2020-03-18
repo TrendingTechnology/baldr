@@ -20,15 +20,14 @@ import SlidePreviewPlayButton from '@/views/SlidesPreview/PlayButton.vue'
  * @returns {Array}
  */
 function getInlineMediaProps (props) {
+  const inlineMediaProps = []
   for (const propName in props) {
     const prop = props[propName]
     if (prop.inlineMedia) {
-      if (!Array.isArray(prop.inlineMedia)) {
-        throw new Error('The master prop `inlineMedia` has to be an array.')
-      }
-
+      inlineMediaProps.push(propName)
     }
   }
+  return inlineMediaProps
 }
 
 /**
