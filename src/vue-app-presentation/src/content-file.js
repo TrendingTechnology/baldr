@@ -107,9 +107,15 @@ function intersect (array1, array2) {
 class RawSlideObject extends RawDataObject {
   constructor (rawData) {
     if (getType(rawData) === 'string') {
-      const masterName = rawData
-      rawData = {}
-      rawData[masterName] = true
+      const raw = {}
+      if (masters.exists(rawData)) {
+        raw[rawData] = true
+      } else {
+        raw.generic = {
+          markup: rawData
+        }
+      }
+      rawData = raw
     }
     if (getType(rawData) !== 'object') {
       throw Error(`Unsupported input type “${getType(rawData)}” on input data: ${toString(rawData)}`)
