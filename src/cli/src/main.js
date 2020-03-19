@@ -226,6 +226,11 @@ const subCommands = {
     alias: 't',
     description: 'Replace the title section of the TeX files with metadata retrieved from the title.txt files.'
   },
+  'typography': {
+    command: 'typography [files...]',
+    alias: 'ty',
+    description: 'Fix some typographic issues, for example quotes “…” -> „…“'
+  },
   'video-preview': {
     command: 'video-preview [files...]',
     alias: 'v',
