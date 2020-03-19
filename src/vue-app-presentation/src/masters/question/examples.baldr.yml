@@ -1,49 +1,6 @@
 ---
 slides:
 
-- title: Markup support
-  question:
-    heading: 'Markup support: *italic* **bold**'
-    questions:
-      - question: 'Markup support: *italic* **bold**'
-        answer: 'Markup support: *italic* **bold**'
-
-- title: Markup support in short form
-  question:
-    question: 'Markup support: *italic* **bold**'
-    answer: 'Markup support: *italic* **bold**'
-
-- title: Markup support multiline
-  question:
-    question: 'Markup support: *multiline*'
-    answer: |
-      * one
-      * two
-      * three
-
-- title: Heading
-  question:
-    heading: Questions about the text
-    questions:
-      - question: Question one?
-        answer: Answer one
-      - question: Question two?
-        answer: Answer two
-      - question: Question three?
-        answer: Answer three
-
-- title: Without numbers
-  question:
-    heading: Without numbers
-    questions:
-      - question: Question one?
-        answer: Answer one
-      - question: Question two?
-        answer: Answer two
-      - question: Question three?
-        answer: Answer three
-    numbers: false
-
 - question:
     - question: Question one?
       answer: Answer one
@@ -52,25 +9,76 @@ slides:
     - question: Question three?
       answer: Answer three
 
-- question:
-    - question: This is a question?
-      answer: This is the answer
-
-- question:
-    - Question one?
-    - Question two?
-    - Question three?
-
-- question: One big question?
-
-- question:
-    question: This is a question?
-    answer: This is the answer
-
-- title: Kurzform (nur eine Frage)
-  question: Nur eine Frage?
-
-- title: Kurzform (Frage-Antwort-Paar)
+- title: Markup support
   question:
-    question: Frage?
-    answer: Antwort
+    heading: 'Markup support: *italic* **bold**'
+    sub_questions:
+      - question: 'Markup support: *italic* **bold**'
+        answer: 'Markup support: *italic* **bold**'
+
+# - title: Markup support in short form
+#   question:
+#     question: 'Markup support: *italic* **bold**'
+#     answer: 'Markup support: *italic* **bold**'
+
+# - title: Markup support multiline
+#   question:
+#     question: 'Markup support: *multiline*'
+#     answer: |
+#       * one
+#       * two
+#       * three
+
+# - title: Heading
+#   question:
+#     heading: Questions about the text
+#     questions:
+#       - question: Question one?
+#         answer: Answer one
+#       - question: Question two?
+#         answer: Answer two
+#       - question: Question three?
+#         answer: Answer three
+
+# - title: Without numbers
+#   question:
+#     heading: Without numbers
+#     questions:
+#       - question: Question one?
+#         answer: Answer one
+#       - question: Question two?
+#         answer: Answer two
+#       - question: Question three?
+#         answer: Answer three
+#     numbers: false
+
+# - question:
+#     - question: Question one?
+#       answer: Answer one
+#     - question: Question two?
+#       answer: Answer two
+#     - question: Question three?
+#       answer: Answer three
+
+# - question:
+#     - question: This is a question?
+#       answer: This is the answer
+
+# - question:
+#     - Question one?
+#     - Question two?
+#     - Question three?
+
+# - question: One big question?
+
+# - question:
+#     question: This is a question?
+#     answer: This is the answer
+
+# - title: Kurzform (nur eine Frage)
+#   question: Nur eine Frage?
+
+# - title: Kurzform (Frage-Antwort-Paar)
+#   question:
+#     question: Frage?
+#     answer: Antwort

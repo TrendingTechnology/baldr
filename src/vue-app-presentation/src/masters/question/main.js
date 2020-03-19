@@ -1,16 +1,18 @@
 import { plainText } from '@bldr/core-browser'
 import { markupToHtml } from '@/lib.js'
+
 class Question {
-  constructor (spec) {
+  constructor (spec, level) {
+    this.level = level
     this.heading = null
-    this.body = null
+    this.question = null
     this.answer = null
     this.subQuestions = null
 
     if (typeof spec === 'string') {
-      this.body = spec
+      this.question = spec
     } else if (typeof spec === 'object') {
-      for (const prop of ['heading', 'body', 'answer']) {
+      for (const prop of ['heading', 'question', 'answer']) {
         if (spec[prop]) {
           if (typeof spec[prop] === 'string') {
             this[prop] = markupToHtml(spec[prop])
@@ -21,19 +23,19 @@ class Question {
       }
       if (spec.subQuestions) {
         this.subQuestions = []
-        Question.parseRecursively(spec.subQuestions, this.subQuestions)
+        Question.parseRecursively(spec.subQuestions, this.subQuestions, level + 1)
       }
     }
   }
 
-  static parseRecursively (specs, processed = []) {
+  static parseRecursively (specs, processed = [], level = 1) {
     if (Array.isArray(specs)) {
-      const out = []
       for (const spec of specs) {
-        return processed.push(new Questions(spec))
+        processed.push(new Question(spec, level))
       }
+      return processed
     }
-    processed.push(new Questions(specs))
+    processed.push(new Question(specs, level))
     return processed
   }
 }
@@ -91,26 +93,31 @@ export default {
     darkMode: true
   },
   normalizeProps (props) {
-    if (typeof props === 'object' && !Array.isArray(props) && 'questions' in props) {
-      props.questions = normalizeQuestions(props.questions)
-      return props
-    }
-    return { questions: normalizeQuestions(props) }
+    //console.log(props)
+    const questions = Question.parseRecursively(props)
+    console.log(questions)
+    // if (typeof props === 'object' && !Array.isArray(props) && 'questions' in props) {
+    //   props.questions = normalizeQuestions(props.questions)
+    //   return props
+    // }
+    // return { questions: normalizeQuestions(props) }
+    return { questions: 'Dummy question' }
+
   },
   calculateStepCount (props) {
-    let count = 0
-    for (const question of props.questions) {
-      if ('answer' in question && question.answer) count += 1
-    }
-    return count + 1
+    // let count = 0
+    // for (const question of props.questions) {
+    //   if ('answer' in question && question.answer) count += 1
+    // }
+    // return count + 1
   },
   plainTextFromProps (props) {
-    const output = []
-    if ('heading' in props && props.heading) output.push(plainText(props.heading))
-    for (const question of props.questions) {
-      output.push(plainText(question.question))
-      if ('answer' in question && question.answer) output.push(plainText(question.answer))
-    }
-    return output.join(' | ')
+    // const output = []
+    // if ('heading' in props && props.heading) output.push(plainText(props.heading))
+    // for (const question of props.questions) {
+    //   output.push(plainText(question.question))
+    //   if ('answer' in question && question.answer) output.push(plainText(question.answer))
+    // }
+    // return output.join(' | ')
   }
 }
