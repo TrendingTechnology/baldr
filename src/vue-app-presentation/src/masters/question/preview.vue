@@ -5,43 +5,21 @@
     slide-preview-valign-center
     slide-preview-fullscreen
   ">
-    <h1 v-if="heading" v-html="heading"/>
-    <ol :class="{ numbers: showNumbers }">
-      <li
-        v-for="pair in questions"
-        :key="pair.question"
-      >
-        <p class="question" v-html="pair.question"/>
-      </li>
-    </ol>
   </div>
 </template>
 
 <script>
-import { createNamespacedHelpers } from 'vuex'
-const { mapGetters } = createNamespacedHelpers('presentation')
+import Question from './Question.vue'
 
 export default {
   props: {
-    heading: {
-      type: String
-    },
     questions: {
       type: Array,
       required: true
-    },
-    numbers: {
-      type: Boolean,
-      default: true
     }
   },
-  computed: {
-    showNumbers () {
-      if (this.numbers && this.questions.length > 1) {
-        return true
-      }
-      return false
-    }
+  components: {
+    Question
   }
 }
 </script>

@@ -1,61 +1,40 @@
 <template>
   <div class="vc_question_master">
-    <h1 v-if="heading" v-html="heading"/>
-    <ol :class="{ numbers: showNumbers }">
+    <question v-if="question" :question="question"/>
+    <ol v-if="subQuestions">
       <li
-        v-for="(pair, index) in questions"
-        :key="pair.question"
+        v-for="question in subQuestions"
+        :key="question.question"
       >
-        <p class="question" v-html="pair.question"/>
-        <p v-if="pair.answer">
-          …
-          <span
-            :class="getClassHidden(index + 1)"
-            class="answer"
-            v-html="pair.answer"
-          />
-        </p>
+        <question :question="question"/>
       </li>
     </ol>
   </div>
 </template>
 
 <script>
-import { createNamespacedHelpers } from 'vuex'
-const { mapGetters } = createNamespacedHelpers('presentation')
+import Question from './Question.vue'
 
 export default {
   props: {
-    heading: {
-      type: String
-    },
     questions: {
       type: Array,
       required: true
-    },
-    numbers: {
-      type: Boolean,
-      default: true
     }
+  },
+  components: {
+    Question
   },
   computed: {
-    ...mapGetters(['slideCurrent']),
-    stepNoCurrent () {
-      return this.slideCurrent.renderData.stepNoCurrent
+    subQuestions () {
+      if (this.questions.length > 1) {
+        return this.questions
+      }
     },
-    showNumbers () {
-      if (this.numbers && this.questions.length > 1) {
-        return true
+    question () {
+      if (this.questions.length === 1) {
+        return this.questions[0]
       }
-      return false
-    }
-  },
-  methods: {
-    getClassHidden (answerNo) {
-      if (this.stepNoCurrent <= answerNo) {
-        return 'hidden'
-      }
-      return ''
     }
   }
 }
@@ -63,34 +42,20 @@ export default {
 
 <style lang="scss">
   .vc_question_master {
-    font-size: 3vw;
-    padding: 2vw 14vw;
+    font-size: 2em;
+    padding: 2em;
 
     p {
       margin: 0;
     }
 
-    li {
-      margin-top: 2vw;
-      margin-bottom: 2vw;
-      list-style-type: none;
-    }
-
-    ol {
-      padding-left: 3vw;
-    }
-
-    ol.numbers li {
-      list-style-type: decimal;
-    }
+    .level-0 ol { list-style-type: decimal; }
+    .level-1 ol { list-style-type: lower-alpha; }
+    .level-2 ol { list-style-type: lower-roman; }
 
     .answer {
       font-style: italic;
       font-size: 0.8em
-    }
-
-    .hidden {
-      visibility: hidden;
     }
   }
 </style>
