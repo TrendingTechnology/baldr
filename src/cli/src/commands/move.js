@@ -112,6 +112,8 @@ function moveTexImage (oldPathTex, baseName, cmdObj) {
  * @param {Object} cmdObj - See commander docs.
  */
 function moveTex (oldPath, newPath, cmdObj) {
+  // /archive/10/10_Jazz/30_Stile/10_New-Orleans-Dixieland/Material/Texte.tex
+  // /archive/10/10_Jazz/History-of-Jazz/Inhalt.tex
   if (isInArchivedDir(oldPath)) return
   const content = lib.readFile(oldPath)
   // \begin{grafikumlauf}{Inserat}
@@ -134,11 +136,19 @@ function moveTex (oldPath, newPath, cmdObj) {
     // BD/Count-Basie.jpg
     // NB/Sing-Sing-Sing_Partitur.png
     const newRelPath = moveTexImage(oldPath, oldRelPath, cmdObj)
-    // \grafik[0.8\linewidth]{BD/Freight-Train-Blues.eps}
-    const newMarkup = oldMarkup.replace(oldRelPath, newRelPath)
+    // TeX files are now in the TX subfolder
+    // \grafik[0.8\linewidth]{../BD/Freight-Train-Blues.eps}
+    const newMarkup = oldMarkup.replace(oldRelPath, `../${newRelPath}`)
     replacements.push([oldMarkup, newMarkup])
   }
 
+  // /var/data/baldr/media/10/10_Jazz/30_Stile/50_Modern-Jazz/TX/Arbeitsblatt.tex
+  newPath = path.join(
+    path.dirname(newPath),
+    'TX',
+    path.basename(newPath)
+  )
+  console.log(newPath)
   lib.moveAsset(oldPath, newPath, cmdObj)
   // Maybe --dry-run is specified
   if (fs.existsSync(newPath)) {
@@ -156,6 +166,8 @@ function moveTex (oldPath, newPath, cmdObj) {
  * @param {Object} cmdObj - See commander docs.
  */
 function move(oldPath, cmdObj) {
+  // Had to be an absolute path (to check if its an inactive/archived folder)
+  oldPath = path.resolve(oldPath)
   const newPath = basePaths.getMirroredPath(oldPath)
   console.log(`${chalk.yellow(oldPath)} -> ${chalk.green(newPath)}`)
   const extension = coreBrowser.getExtension(oldPath)
