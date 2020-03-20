@@ -10,48 +10,7 @@ const mediaServer = require('@bldr/api-media-server')
 const coreBrowser = require('@bldr/core-browser')
 const lib = require('../../lib.js')
 
-const basePaths = mediaServer.basePaths
-
-/**
- * `/baldr/media/10/10_Jazz/30_Stile/20_Swing/Material/Duke-Ellington.jpg` ->
- * `/baldr/media/10/10_Jazz/30_Stile/20_Swing`
- *
- * @param {String} filePath
- */
-function getPresParentDir (filePath) {
-  // /Duke-Ellington.jpg
-  // /Material
-  const regexp = new RegExp(path.sep +'([^' + path.sep + ']+)$')
-  let match
-  do {
-    let isPrefixed
-    match = filePath.match(regexp)
-    if (match && match.length > 1) {
-      // 20_Swing -> true
-      // Material -> false
-      isPrefixed = match[1].match(/\d\d_.*/g)
-      if (!isPrefixed) {
-        filePath = filePath.replace(regexp, '')
-      }
-    }
-    if (isPrefixed) match = false
-  } while (match)
-  return filePath
-}
-
-/**
- * true:
- *
- * `/archive/10/10_Jazz/30_Stile/10_New-Orleans-Dixieland/Material/Texte.tex`
- * `/archive/10/10_Jazz/History-of-Jazz/Inhalt.tex`
- *
- * false:
- *
- * `/archive/10/10_Jazz/20_Vorformen/10_Worksongs-Spirtuals/Arbeitsblatt.tex`
- */
-function isInArchivedDir (filePath) {
-  return !filePath.match(new RegExp('^.*/[0-9]{2,}_[^/]*/[^/]*$'))
-}
+const locationIndicator = mediaServer.locationIndicator
 
 /**
  * For images in the TeX file which appear multiple times in one file.
@@ -86,9 +45,9 @@ function moveTexImage (oldPathTex, baseName, cmdObj) {
   // /archive/10/10_Jazz/30_Stile/50_Modern-Jazz/Material/John-Coltrane.jpg
   if (oldPath) {
     // /archive/10/10_Jazz/30_Stile/50_Modern-Jazz
-    const presParentDir = getPresParentDir(oldPath)
+    const presParentDir = locationIndicator.getPresParentDir(oldPath)
     // /baldr/media/10/10_Jazz/30_Stile/50_Modern-Jazz
-    const presParentDirMirrored = basePaths.getMirroredPath(presParentDir)
+    const presParentDirMirrored = locationIndicator.getMirroredPath(presParentDir)
     let imgParentDir
     if (ext === 'png' || ext === 'eps') {
       imgParentDir = 'NB'
@@ -114,7 +73,7 @@ function moveTexImage (oldPathTex, baseName, cmdObj) {
 function moveTex (oldPath, newPath, cmdObj) {
   // /archive/10/10_Jazz/30_Stile/10_New-Orleans-Dixieland/Material/Texte.tex
   // /archive/10/10_Jazz/History-of-Jazz/Inhalt.tex
-  if (isInArchivedDir(oldPath)) return
+  if (locationIndicator.isInDeactivatedDir(oldPath)) return
   const content = lib.readFile(oldPath)
   // \begin{grafikumlauf}{Inserat}
   // \grafik[0.8\linewidth]{Freight-Train-Blues}
@@ -161,6 +120,45 @@ function moveTex (oldPath, newPath, cmdObj) {
 }
 
 /**
+ * Relocate a media asset inside the main media folder. Move some
+ * media assets into two letter folders.
+ *
+ * @param {String} oldPath
+ * @param {String} extension
+ */
+function relocate (oldPath, extension, cmdObj) {
+  if (oldPath.match(new RegExp('^.*/[A-Z]{2,}/[^/]*$'))) {
+    console.log(`The file ${chalk.green(oldPath)} is in the right place. Do nothing.`)
+    return
+  }
+  let twoLetterFolder = ''
+  if (extension === 'jpg') {
+    twoLetterFolder = 'BD'
+  } else if (extension === 'mp4') {
+    twoLetterFolder = 'VD'
+  } else if (extension === 'png') {
+    twoLetterFolder = 'NB'
+  } else if (extension === 'm4a') {
+    twoLetterFolder = 'HB'
+  } else if (extension === 'tex') {
+    twoLetterFolder = 'TX'
+  }
+  const parentDir = locationIndicator.getPresParentDir(oldPath)
+  const newPath = path.join(parentDir, twoLetterFolder, path.basename(oldPath))
+  if (oldPath !== newPath) {
+    if (extension === 'tex') {
+      const oldContent = lib.readFile(oldPath)
+      // \grafik{HB/Beethoven.jpg} -> \grafik{../HB/Beethoven.jpg}
+      const newContent = oldContent.replace(/\{([A-Z]{2,})\//g, '{../$1/')
+      if (oldContent !== newContent) {
+        lib.writeFile(oldPath, newContent)
+      }
+    }
+    lib.moveAsset(oldPath, newPath, cmdObj)
+  }
+}
+
+/**
  * @param {String} oldPath - for example:
  *   `/archive/10/10_Jazz/30_Stile/50_Modern-Jazz/Arbeitsblatt.tex`
  * @param {Object} cmdObj - See commander docs.
@@ -168,18 +166,18 @@ function moveTex (oldPath, newPath, cmdObj) {
 function move(oldPath, cmdObj) {
   // Had to be an absolute path (to check if its an inactive/archived folder)
   oldPath = path.resolve(oldPath)
-  if (!basePaths.isArchive(oldPath)) {
-    console.log('File / Files are already located in the main media folder.')
-    process.exit()
-
-  }
-  const newPath = basePaths.getMirroredPath(oldPath)
-  console.log(`${chalk.yellow(oldPath)} -> ${chalk.green(newPath)}`)
   const extension = coreBrowser.getExtension(oldPath)
-  if (extension === 'tex') {
-    moveTex(oldPath, newPath, cmdObj)
+  if (!locationIndicator.isInArchive(oldPath)) {
+    console.log('The specified file/files is/are already located in the main media folder. Try to relocate ...')
+    relocate(oldPath, extension, cmdObj)
   } else {
-    lib.moveAsset(oldPath, newPath, cmdObj)
+    const newPath = locationIndicator.getMirroredPath(oldPath)
+    console.log(`${chalk.yellow(oldPath)} -> ${chalk.green(newPath)}`)
+    if (extension === 'tex') {
+      moveTex(oldPath, newPath, cmdObj)
+    } else {
+      lib.moveAsset(oldPath, newPath, cmdObj)
+    }
   }
 }
 

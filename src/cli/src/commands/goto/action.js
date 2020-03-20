@@ -8,7 +8,7 @@ const mediaServer = require('@bldr/api-media-server')
 const { cwd, config } = require('../../main.js')
 
 function action () {
-  let mirroredPath = mediaServer.basePaths.getMirroredPath(cwd)
+  let mirroredPath = mediaServer.locationIndicator.getMirroredPath(cwd)
   if (!mirroredPath) mirroredPath = config.mediaServer.basePath
   childProcess.spawn('zsh', ['-i'], {
     cwd: mirroredPath,

@@ -11,7 +11,7 @@ const { convertTexToMd } = require('@bldr/core-browser')
 
 const lib = require('../../lib.js')
 
-const basePaths = new mediaServer.BasePaths()
+const locationIndicator = new mediaServer.LocationIndicator()
 
 /**
  * @param {String} input - A file path or a text string to convert.
@@ -21,7 +21,7 @@ function convertTexToMarkdown (input) {
   if (!fs.existsSync(input)) {
     content = input
   } else {
-    console.log(chalk.green(basePaths.getRelPath(input)))
+    console.log(chalk.green(locationIndicator.getRelPath(input)))
     content = lib.readFile(input)
   }
   console.log('\n' + chalk.yellow('Original:') + '\n')

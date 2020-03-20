@@ -1206,10 +1206,12 @@ function untildify (filePath) {
 }
 
 /**
+ * Indicate where a file is located in the media folder structure.
+ *
  * Merge the configurations entries of `config.mediaServer.basePath` and
  * `config.mediaServer.archivePaths`. Store only the accessible ones.
  */
-class BasePaths {
+class LocationIndicator {
   constructor () {
     /**
      *
@@ -1239,11 +1241,61 @@ class BasePaths {
    *
    * @returns {Boolean}
    */
-  isArchive (currentPath) {
+  isInArchive (currentPath) {
     if (path.resolve(currentPath).indexOf(this.main) > -1) {
       return false
     }
     return true
+  }
+
+  /**
+   * Get the directory where a presentation file (Praesentation.baldr.yml) is
+   * located in (The first folder with a prefix like `10_`)
+   *
+   * `/baldr/media/10/10_Jazz/30_Stile/20_Swing/Material/Duke-Ellington.jpg` ->
+   * `/baldr/media/10/10_Jazz/30_Stile/20_Swing`
+   *
+   * @param {String} currentPath
+   *
+   * @returns {String}
+   */
+  getPresParentDir (currentPath) {
+    // /Duke-Ellington.jpg
+    // /Material
+    const regexp = new RegExp(path.sep +'([^' + path.sep + ']+)$')
+    let match
+    do {
+      let isPrefixed
+      match = currentPath.match(regexp)
+      if (match && match.length > 1) {
+        // 20_Swing -> true
+        // Material -> false
+        isPrefixed = match[1].match(/\d\d_.*/g)
+        if (!isPrefixed) {
+          currentPath = currentPath.replace(regexp, '')
+        }
+      }
+      if (isPrefixed) match = false
+    } while (match)
+    return currentPath
+  }
+
+  /**
+   * A deactivaed directory is a directory which has no direct counter part in
+   * the main media folder, which is not mirrored. It is a real archived folder
+   * in the archive folder. Activated folders have a prefix like `10_`
+   *
+   * true:
+   *
+   * `/archive/10/10_Jazz/30_Stile/10_New-Orleans-Dixieland/Material/Texte.tex`
+   * `/archive/10/10_Jazz/History-of-Jazz/Inhalt.tex`
+   *
+   * false:
+   *
+   * `/archive/10/10_Jazz/20_Vorformen/10_Worksongs-Spirtuals/Arbeitsblatt.tex`
+   */
+  isInDeactivatedDir (currentPath) {
+    return !currentPath.match(new RegExp('^.*/[0-9]{2,}_[^/]*/[^/]*$'))
   }
 
   /**
@@ -1316,7 +1368,7 @@ class BasePaths {
   }
 }
 
-const basePaths = new BasePaths()
+const locationIndicator = new LocationIndicator()
 
 /**
  * Open a file path using the linux command `xdg-open`.
@@ -1352,7 +1404,7 @@ function openFolder (currentPath, create) {
  */
 function openFolderWithArchives (currentPath, create) {
   const result = {}
-  const basePaths = new BasePaths()
+  const basePaths = new LocationIndicator()
   const relPath = basePaths.getRelPath(currentPath)
   for (const basePath of basePaths.get()) {
     if (relPath) {
@@ -1389,7 +1441,7 @@ function mirrorFolderStructure (currentPath) {
     return filelist
   }
 
-  const basePaths = new BasePaths()
+  const basePaths = new LocationIndicator()
 
   const currentBasePath = basePaths.getBasePath(currentPath)
 
@@ -1716,8 +1768,8 @@ module.exports = {
   asciify,
   Asset,
   assetTypes,
-  basePaths,
-  BasePaths,
+  locationIndicator,
+  LocationIndicator,
   deasciify,
   FolderTitleTree,
   getExtension,
