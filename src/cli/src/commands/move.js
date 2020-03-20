@@ -188,7 +188,7 @@ function action (files, cmdObj) {
     mediaServer.walk(move, opts)
   } else {
     mediaServer.walk({
-      all (relPath) {
+      everyFile (relPath) {
         move(relPath)
       }}, opts
     )
