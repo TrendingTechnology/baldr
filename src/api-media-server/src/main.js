@@ -1211,10 +1211,17 @@ function untildify (filePath) {
  */
 class BasePaths {
   constructor () {
+    /**
+     *
+     */
+    this.main = config.mediaServer.basePath
     const basePaths = [
       config.mediaServer.basePath,
       ...config.mediaServer.archivePaths
     ]
+    /**
+     *
+     */
     this.paths_ = []
     for (let i = 0; i < basePaths.length; i++) {
       basePaths[i] = path.resolve(untildify(basePaths[i]))
@@ -1222,6 +1229,21 @@ class BasePaths {
         this.paths_.push(basePaths[i])
       }
     }
+  }
+
+  /**
+   * Check if the `currentPath` is inside a archive folder structure and
+   * not in den main media folder.
+   *
+   * @param {String} currentPath
+   *
+   * @returns {Boolean}
+   */
+  isArchive (currentPath) {
+    if (path.resolve(currentPath).indexOf(this.main) > -1) {
+      return false
+    }
+    return true
   }
 
   /**

@@ -168,6 +168,11 @@ function moveTex (oldPath, newPath, cmdObj) {
 function move(oldPath, cmdObj) {
   // Had to be an absolute path (to check if its an inactive/archived folder)
   oldPath = path.resolve(oldPath)
+  if (!basePaths.isArchive(oldPath)) {
+    console.log('File / Files are already located in the main media folder.')
+    process.exit()
+
+  }
   const newPath = basePaths.getMirroredPath(oldPath)
   console.log(`${chalk.yellow(oldPath)} -> ${chalk.green(newPath)}`)
   const extension = coreBrowser.getExtension(oldPath)
