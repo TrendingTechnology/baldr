@@ -1268,15 +1268,25 @@ class LocationIndicator {
       let isPrefixed
       match = currentPath.match(regexp)
       if (match && match.length > 1) {
-        // 20_Swing -> true
-        // Material -> false
-        isPrefixed = match[1].match(/\d\d_.*/g)
+        // Return only directories not files like
+        //...HB/Orchester/05_Promenade.mp3
+        if (
+          // 20_Swing -> true
+          // Material -> false
+          match[1].match(/\d\d_.*/g) &&
+          fs.statSync(currentPath).isDirectory()
+        ) {
+          isPrefixed = true
+        }
         if (!isPrefixed) {
           currentPath = currentPath.replace(regexp, '')
         }
       }
-      if (isPrefixed) match = false
+      if (isPrefixed) {
+        match = false
+      }
     } while (match)
+
     return currentPath
   }
 
