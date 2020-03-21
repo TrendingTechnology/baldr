@@ -905,12 +905,15 @@ async function walk (func, opt) {
 
   // A directory.
   if (fs.statSync(opt.path).isDirectory()) {
-    const files = fs.readdirSync(opt.path)
-    for (const fileName of files) {
-      // Exclude hidden files and directories like '.git'
-      if (fileName.charAt(0) !== '.') {
-        const relPath = path.join(opt.path, fileName)
-        await walk(func, { path: relPath, payload: opt.payload, regex: opt.regex })
+    if (func.directory) await func.directory(opt.path, opt.payload)
+    if (fs.existsSync(opt.path)) {
+      const files = fs.readdirSync(opt.path)
+      for (const fileName of files) {
+        // Exclude hidden files and directories like '.git'
+        if (fileName.charAt(0) !== '.') {
+          const relPath = path.join(opt.path, fileName)
+          await walk(func, { path: relPath, payload: opt.payload, regex: opt.regex })
+        }
       }
     }
 
@@ -984,6 +987,7 @@ async function update (full = false) {
   await db.collection('updates').insertOne({ begin: begin, end: 0 })
   await walk({
     everyFile: (filePath) => {
+      // Delete temporary files.
       if (
         filePath.match(/\.(aux|out|log|synctex\.gz|mscx,)$/) ||
         filePath.indexOf('Praesentation_tmp.baldr.yml') > -1 ||
@@ -991,6 +995,16 @@ async function update (full = false) {
       ) {
         console.log(`Delete temporary file ${filePath}`)
         fs.unlinkSync(filePath)
+      }
+    },
+    directory: (filePath) => {
+      // Delete empty directories.
+      if (fs.existsSync(filePath) && fs.statSync(filePath).isDirectory()) {
+        const files = fs.readdirSync(filePath)
+        if (files.length === 0) {
+          console.log(`Delete empty directory ${filePath}`)
+          fs.rmdirSync(filePath)
+        }
       }
     },
     presentation: async (filePath) => { await insertObjectIntoDb(filePath, 'presentations') },
