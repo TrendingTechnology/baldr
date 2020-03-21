@@ -32,9 +32,9 @@ function convertTexToFolderTitles (filePath, cmdObj) {
     subtitle = clean(subtitle[1])
     output.push(subtitle)
   }
-  //console.log(output)
+
   if (output.length > 0) {
-    const destBasePath = path.dirname(filePath)
+    const destBasePath = path.resolve(path.dirname(filePath), '..')
     let dest
     const destFinal = path.join(destBasePath, 'title.txt')
     if (!fs.existsSync(destFinal) || cmdObj.force) {
