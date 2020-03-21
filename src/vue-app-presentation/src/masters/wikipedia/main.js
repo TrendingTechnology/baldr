@@ -1,7 +1,10 @@
 const defaultLanguage = 'de'
 
+// https://www.mediawiki.org/wiki/API:Get_the_contents_of_a_page
+// https://www.mediawiki.org/wiki/API:Parsing_wikitext
 export default {
   title: 'Wikipedia',
+
   props: {
     title: {
       type: String,
