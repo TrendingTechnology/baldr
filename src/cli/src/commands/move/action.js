@@ -137,7 +137,7 @@ function relocate (oldPath, extension, cmdObj) {
     twoLetterFolder = 'BD'
   } else if (extension === 'mp4') {
     twoLetterFolder = 'VD'
-  } else if (extension === 'png' || extension === 'eps' || extension === 'svg') {
+  } else if (['svg', 'eps', 'png', 'mscx'].includes(extension)) {
     twoLetterFolder = 'NB'
   } else if (extension === 'm4a') {
     twoLetterFolder = 'HB'
