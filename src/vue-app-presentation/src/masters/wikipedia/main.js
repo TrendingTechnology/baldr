@@ -38,6 +38,7 @@ export default {
   collectPropsMain (props) {
     return {
       title: props.title,
+      language: props.language,
       httpUrl: `https://${props.language}.wikipedia.org/wiki/${props.title}`,
       iframeHttpUrl: `https://${props.language}.wikipedia.org/w/index.php?title=${props.title}&printable=yes`
     }

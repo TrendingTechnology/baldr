@@ -323,7 +323,6 @@ async function person (itemId, firstname, lastname) {
 async function resolveBySpecs (itemId, specs) {
   const entity = await getItem(itemId)
   const claims = new Claims(entity.claims)
-  const label = getLabel(entity)
 
   const result = {}
   for (const property in specs) {

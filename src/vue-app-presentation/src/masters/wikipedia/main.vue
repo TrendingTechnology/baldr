@@ -1,21 +1,21 @@
 <template>
-  <div class="vc_wikipedia_master">
+  <div class="vc_wikipedia_master main-app-padding">
     <p class="title">Wikipedia-Artikel: {{ title }} ({{ httpUrl }})</p>
-    <div class="iframe-wrapper">
-      <iframe
-        :src="iframeHttpUrl"
-        frameborder="0"
-      />
-    </div>
+    <div v-html="body"/>
   </div>
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   props: {
     title: {
       type: String,
       required: true,
+    },
+    language: {
+      type: String,
     },
     httpUrl: {
       type: String,
@@ -25,6 +25,31 @@ export default {
       type: String,
       required: true,
     }
+  },
+  data () {
+    return {
+      body: null
+    }
+  },
+  mounted() {
+    // https://en.wikipedia.org/w/api.php?action=parse&page=Pet_door&prop=text&formatversion=2&format=json
+    axios.get(`https://${this.language}.wikipedia.org/w/api.php`, {
+      params: {
+        action: 'parse',
+        page: this.title,
+        prop: 'text',
+        formatversoin: 2,
+        format: 'json',
+        origin: '*',
+        disableeditsection: true,
+        disabletoc: true
+      }
+    })
+    .then(response => {
+      if (response.status === 200) {
+        this.body = response.data.parse.text['*']
+      }
+    })
   }
 }
 </script>
