@@ -128,15 +128,16 @@ function moveTex (oldPath, newPath, cmdObj) {
  */
 function relocate (oldPath, extension, cmdObj) {
   if (oldPath.match(new RegExp('^.*/[A-Z]{2,}/[^/]*$'))) {
-    console.log(`The file ${chalk.green(oldPath)} is in the right place. Do nothing.`)
     return
   }
   let twoLetterFolder = ''
-  if (extension === 'jpg') {
+  if (oldPath.match(/.*Arbeitsblatt_Loesung.*/)) {
+    twoLetterFolder = 'TX'
+  } else if (extension === 'jpg') {
     twoLetterFolder = 'BD'
   } else if (extension === 'mp4') {
     twoLetterFolder = 'VD'
-  } else if (extension === 'png' || extension === 'eps') {
+  } else if (extension === 'png' || extension === 'eps' || extension === 'svg') {
     twoLetterFolder = 'NB'
   } else if (extension === 'm4a') {
     twoLetterFolder = 'HB'
@@ -168,7 +169,6 @@ function move(oldPath, cmdObj) {
   oldPath = path.resolve(oldPath)
   const extension = coreBrowser.getExtension(oldPath)
   if (!locationIndicator.isInArchive(oldPath)) {
-    console.log('The specified file/files is/are already located in the main media folder. Try to relocate ...')
     relocate(oldPath, extension, cmdObj)
   } else {
     const newPath = locationIndicator.getMirroredPath(oldPath)
