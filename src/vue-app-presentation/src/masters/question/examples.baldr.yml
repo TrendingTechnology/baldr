@@ -1,6 +1,13 @@
 ---
 slides:
 
+- title: Aliases
+  question:
+    h: 'h'
+    s:
+    - q: 'q'
+      a: 'a'
+
 - question:
     - question: Question one?
       answer: Answer one
