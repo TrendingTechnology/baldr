@@ -38,11 +38,15 @@ function getWikipediaTitle (sitelinks) {
   return `${linkData.lang}:${linkData.title}`
 }
 
-async function getItem (itemId) {
-  const url = wikibase.getEntities(itemId, ['en', 'de'])
+async function getItems (itemIds) {
+  const url = wikibase.getEntities(itemIds, ['en', 'de'])
   const response = await fetch(url)
   const json = await response.json()
-  const entites = await wikibase.parse.wd.entities(json)
+  return await wikibase.parse.wd.entities(json)
+}
+
+async function getItem (itemId) {
+  const entites = await getItems(itemId)
   return entites[itemId]
 }
 
@@ -52,6 +56,14 @@ function formatDate (date) {
   return date.replace(/T.+$/, '')
 }
 
+/**
+ * ```js
+ * claims: {
+ *   P1477: [ 'Elvis Aaron Presley' ],
+ *   P735: [ 'Q1174817' ]
+ * }
+ * ```
+ */
 class Claims {
   constructor (claims) {
     this.claims = claims
@@ -67,6 +79,12 @@ class Claims {
       return result[0]
     }
     return result
+  }
+
+  getMultipleClaims (claim) {
+    if (this.claims[claim]) {
+      return this.claims[claim]
+    }
   }
 
   getDate (claim) {
@@ -133,17 +151,41 @@ function getLabel (entity) {
   }
 }
 
+async function queryNames (itemIds) {
+  const entities = await getItems(itemIds)
+  console.log(entities)
+}
+
+const specs = {
+  group: {
+    name: {
+      claim: 'P1448'
+    },
+    // Gründung, Erstellung bzw. Entstehung
+    startData: {
+      claim: 'P571',
+      format: formatDate
+    },
+    // Auflösungsdatum
+    endData: {
+      claim: 'P576',
+      format: formatDate
+    },
+    members: {
+      claim: 'P527',
+      multiple: true,
+      secondQuery: queryNames
+    }
+  }
+}
+
 /**
  *
  * @param {String} itemId - For example `Q123`
  * @param {String} firstname
  * @param {String} lastname
  */
-async function action (itemId, firstname, lastname) {
-  if (!wikibase.isItemId(itemId)) {
-    throw new Error(`No item id: ${itemId}`)
-  }
-
+async function person (itemId, firstname, lastname) {
   const entity = await getItem(itemId)
   console.log(entity)
   const claims = new Claims(entity.claims)
@@ -235,6 +277,44 @@ async function action (itemId, firstname, lastname) {
     lib.writeYamlFile(yamlFile, result)
   } else {
     console.log(`The YAML file already exists: ${chalk.red(yamlFile)}`)
+  }
+}
+
+async function resolveBySpecs (itemId, specs) {
+  const entity = await getItem(itemId)
+  const claims = new Claims(entity.claims)
+  const label = getLabel(entity)
+
+  const result = {}
+  for (const property in specs) {
+    const spec = specs[property]
+    let value
+    if (spec.multiple) {
+      value = claims.getMultipleClaims(spec.claim)
+    } else {
+      value = claims.getClaim(spec.claim)
+    }
+    if (spec.secondQuery) value = await spec.secondQuery(value)
+    if (spec.format) value = spec.format(value)
+    result[property] = value
+  }
+  console.log(result)
+}
+
+/**
+ *
+ * @param {String} itemId - For example `Q123`
+ * @param {String} arg1
+ * @param {String} arg2
+ */
+async function action (itemId, arg1, arg2, cmdObj) {
+  if (!wikibase.isItemId(itemId)) {
+    throw new Error(`No item id: ${itemId}`)
+  }
+  if (cmdObj.group) {
+    await resolveBySpecs(itemId, specs.group)
+  } else {
+    await person(itemId, arg1, arg2)
   }
 }
 
