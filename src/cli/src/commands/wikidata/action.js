@@ -38,8 +38,8 @@ function getWikipediaTitle (sitelinks) {
   return `${linkData.lang}:${linkData.title}`
 }
 
-async function getItems (itemIds) {
-  const url = wikibase.getEntities(itemIds, ['en', 'de'])
+async function getItems (itemIds, props) {
+  const url = wikibase.getEntities(itemIds, ['en', 'de'], props)
   const response = await fetch(url)
   const json = await response.json()
   return await wikibase.parse.wd.entities(json)
@@ -127,18 +127,18 @@ async function downloadWikicommonsFile (filename, dest) {
 /**
  * ```js
  * {
- * id: 'Q312609',
- * type: 'item',
- * modified: '2020-03-01T19:08:47Z',
- * labels: { de: 'Cheb Khaled', en: 'Khaled' },
+ *   id: 'Q312609',
+ *   type: 'item',
+ *   modified: '2020-03-01T19:08:47Z',
+ *   labels: { de: 'Cheb Khaled', en: 'Khaled' },
  * }
  * ```
  *
  * @param {Object} entity
  *
- * @returns {Array}
+ * @returns {Array|String}
  */
-function getLabel (entity) {
+function getLabel (entity, asArray = true) {
   let label
   if (entity.labels.de) {
     label = entity.labels.de
@@ -147,17 +147,33 @@ function getLabel (entity) {
   }
 
   if (label) {
-    return label.split(' ')
+    if (asArray) {
+      return label.split(' ')
+    }
+    return label
   }
 }
 
-async function queryNames (itemIds) {
-  const entities = await getItems(itemIds)
-  console.log(entities)
+async function queryLabels (itemIds) {
+  const result = []
+  const entities = await getItems(itemIds, ['labels'])
+  for (const itemId in entities) {
+    const entity = entities[itemId]
+    result.push(getLabel(entity, false))
+  }
+  return result
+}
+
+async function queryLabel (itemId) {
+  const result = await queryLabels(itemId)
+  if (result && result.length > 0) {
+    return result[0]
+  }
 }
 
 const specs = {
   group: {
+    // offizieller Name
     name: {
       claim: 'P1448'
     },
@@ -171,10 +187,34 @@ const specs = {
       claim: 'P576',
       format: formatDate
     },
+    // besteht aus
     members: {
       claim: 'P527',
       multiple: true,
-      secondQuery: queryNames
+      secondQuery: queryLabels
+    }
+  },
+  person: {
+    // Vornamen der Person
+    firstname: {
+      claim: 'P735',
+      secondQuery: queryLabel
+    },
+    // Familienname einer Person
+    lastname: {
+      claim: 'P734',
+      secondQuery: queryLabel
+    },
+    birth: {
+      claim: 'P569',
+      format: formatDate
+    },
+    death: {
+      claim: 'P570',
+      format: formatDate
+    },
+    wikipedia: {
+      wikipediaTitle: true
     }
   }
 }
@@ -289,11 +329,16 @@ async function resolveBySpecs (itemId, specs) {
   for (const property in specs) {
     const spec = specs[property]
     let value
-    if (spec.multiple) {
-      value = claims.getMultipleClaims(spec.claim)
-    } else {
-      value = claims.getClaim(spec.claim)
+    if (spec.claim) {
+      if (spec.multiple) {
+        value = claims.getMultipleClaims(spec.claim)
+      } else {
+        value = claims.getClaim(spec.claim)
+      }
+    } else if (spec.wikipediaTitle) {
+      value = getWikipediaTitle(entity.sitelinks)
     }
+
     if (spec.secondQuery) value = await spec.secondQuery(value)
     if (spec.format) value = spec.format(value)
     result[property] = value
@@ -313,6 +358,8 @@ async function action (itemId, arg1, arg2, cmdObj) {
   }
   if (cmdObj.group) {
     await resolveBySpecs(itemId, specs.group)
+  } else if (cmdObj.person) {
+    await resolveBySpecs(itemId, specs.person)
   } else {
     await person(itemId, arg1, arg2)
   }
