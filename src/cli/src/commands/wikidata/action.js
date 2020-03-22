@@ -187,20 +187,14 @@ function getDescription (entity) {
  *
  * @returns {Array|String}
  */
-function getLabel (entity, asArray = true) {
+function getLabel (entity) {
   let label
   if (entity.labels.de) {
     label = entity.labels.de
   } else if (entity.labels.en) {
     label = entity.labels.en
   }
-
-  if (label) {
-    if (asArray) {
-      return label.split(' ')
-    }
-    return label
-  }
+  return unpackArray(label)
 }
 
 /*******************************************************************************
@@ -273,8 +267,7 @@ const specs = {
     // besteht aus
     members: {
       source: {
-        fromClaim: 'P527',
-        multiple: true
+        fromClaim: 'P527'
       },
       secondQuery: queryLabels
     },
@@ -285,6 +278,23 @@ const specs = {
     }
   },
   instrument: {
+    name: {
+      source: {
+        fromEntity: getLabel
+      }
+    },
+    // Bild
+    mainImage: {
+      source: {
+        fromClaim: 'P18'
+      }
+    },
+    // Bild des Tonumfang
+    playingRangeImage: {
+      source: {
+        fromClaim: 'P2343'
+      }
+    },
     wikipedia: {
       source: {
         fromEntity: getWikipediaTitle
@@ -306,12 +316,14 @@ const specs = {
       },
       secondQuery: queryLabels
     },
+    // Geburtsdatum
     birth: {
       source: {
         fromClaim: 'P569'
       },
       format: formatDate
     },
+    // Sterbedatum
     death: {
       source: {
         fromClaim: 'P570'
@@ -372,6 +384,7 @@ async function resolveBySpecs (itemId, specs) {
   entity = await getEntities(itemId)
 
   const result = {}
+  result.wikidata = itemId
   for (const property in specs) {
     const spec = specs[property]
     let value
