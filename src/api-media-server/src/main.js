@@ -75,6 +75,8 @@ const { transliterate } = require('transliteration')
 const { bootstrapConfig } = require('@bldr/core-node')
 const { AssetTypes, convertPropertiesToCamelCase } = require('@bldr/core-browser')
 
+const metadataTypes = require('./metadata-types.js')
+
 const packageJson = require('../package.json')
 
 /**
@@ -1801,13 +1803,14 @@ module.exports = {
   asciify,
   Asset,
   assetTypes,
-  locationIndicator,
-  LocationIndicator,
   deasciify,
   FolderTitleTree,
   getExtension,
   helpMessages,
   HierarchicalFolderTitles,
+  locationIndicator,
+  LocationIndicator,
+  metadataTypes,
   mirrorFolderStructure,
   openFolderWithArchives,
   openWith,
