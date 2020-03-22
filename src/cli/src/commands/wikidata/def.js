@@ -1,9 +1,14 @@
 module.exports = {
-  command: 'wikidata <item-id> [firstname] [lastname]',
-  options: [
-    ['-p, --person', 'A person'],
-    ['-g, --group', 'A group']
-  ],
+  command: 'wikidata <metadata-type> <item-id> [arg1] [arg2]',
   alias: 'w',
-  description: 'Query wikidata.org (currently there is only support for the master slide “person”).',
+  description: [
+    'Query wikidata.org.',
+    'Metadata types: group, instrument, person, song',
+    'Examples:',
+    'group (The Beatles): baldr wikidata group Q1299',
+    'instrument (Englischhorn): baldr wikidata instrument Q185041',
+    'person (Ludwig van Beethoven): baldr wikidata person Q255',
+    'song (Jamaica Farewell): baldr wikidata song Q6127294',
+    'song (Yesterday): baldr wikidata song Q202698'
+  ].join(' ')
 }

@@ -17,27 +17,6 @@ const lib = require('../../lib.js')
 // Globals.
 const { config } = require('../../main.js')
 
-function getWikipediaTitle (sitelinks) {
-  let key
-  if (sitelinks.dewiki) {
-    key = 'dewiki'
-  } else {
-    key = 'enwiki'
-  }
-  // https://de.wikipedia.org/wiki/Ludwig_van_Beethoven
-  const siteLink = wikibase.getSitelinkUrl({ site: key, title: sitelinks[key] })
-  if (!siteLink) return
-  // {
-  //   lang: 'de',
-  //   project: 'wikipedia',
-  //   key: 'dewiki',
-  //   title: 'Ludwig_van_Beethoven',
-  //   url: 'https://de.wikipedia.org/wiki/Ludwig_van_Beethoven'
-  // }
-  const linkData = wikibase.getSitelinkData(siteLink)
-  return `${linkData.lang}:${linkData.title}`
-}
-
 async function getItems (itemIds, props) {
   const url = wikibase.getEntities(itemIds, ['en', 'de'], props)
   const response = await fetch(url)
@@ -48,12 +27,6 @@ async function getItems (itemIds, props) {
 async function getItem (itemId) {
   const entites = await getItems(itemId)
   return entites[itemId]
-}
-
-function formatDate (date) {
-  // [ '1770-12-16T00:00:00.000Z' ]
-  if (!date) return
-  return date.replace(/T.+$/, '')
 }
 
 /**
@@ -124,9 +97,90 @@ async function downloadWikicommonsFile (filename, dest) {
   await downloadFile(url, dest)
 }
 
+/*******************************************************************************
+ * second query
+ ******************************************************************************/
+
+async function queryLabels (itemIds) {
+  const result = []
+  const entities = await getItems(itemIds, ['labels'])
+  for (const itemId in entities) {
+    const entity = entities[itemId]
+    result.push(getLabel(entity, false))
+  }
+  return result
+}
+
+async function queryLabel (itemId) {
+  const result = await queryLabels(itemId)
+  if (result && result.length > 0) {
+    return result[0]
+  }
+}
+
+/*******************************************************************************
+ * get from entity
+ ******************************************************************************/
+
+/**
+ *
+ * ```js
+ * entity = {
+ *   sitelinks: {
+ *     afwiki: 'The Beatles',
+ *     akwiki: 'The Beatles',
+ *   }
+ * }
+ * ```
+ *
+ * @param {Object} entity
+ */
+function getWikipediaTitle (entity) {
+  const sitelinks = entity.sitelinks
+  let key
+  if (sitelinks.dewiki) {
+    key = 'dewiki'
+  } else {
+    key = 'enwiki'
+  }
+  // https://de.wikipedia.org/wiki/Ludwig_van_Beethoven
+  const siteLink = wikibase.getSitelinkUrl({ site: key, title: sitelinks[key] })
+  if (!siteLink) return
+  // {
+  //   lang: 'de',
+  //   project: 'wikipedia',
+  //   key: 'dewiki',
+  //   title: 'Ludwig_van_Beethoven',
+  //   url: 'https://de.wikipedia.org/wiki/Ludwig_van_Beethoven'
+  // }
+  const linkData = wikibase.getSitelinkData(siteLink)
+  return `${linkData.lang}:${linkData.title}`
+}
+
 /**
  * ```js
- * {
+ * const entity = {
+ *   id: 'Q1299',
+ *   type: 'item',
+ *   modified: '2020-03-15T20:18:33Z',
+ *   descriptions: { en: 'English pop-rock band', de: 'Rockband aus Liverpool' }
+ * }
+ * ```
+ *
+ * @param {Object} entity
+ */
+function getDescription (entity) {
+  const desc = entity.descriptions
+  if (desc.de) {
+    return desc.de
+  } else if (desc.en) {
+    return desc.en
+  }
+}
+
+/**
+ * ```js
+ * const entity = {
  *   id: 'Q312609',
  *   type: 'item',
  *   modified: '2020-03-01T19:08:47Z',
@@ -154,67 +208,143 @@ function getLabel (entity, asArray = true) {
   }
 }
 
-async function queryLabels (itemIds) {
-  const result = []
-  const entities = await getItems(itemIds, ['labels'])
-  for (const itemId in entities) {
-    const entity = entities[itemId]
-    result.push(getLabel(entity, false))
-  }
-  return result
+/*******************************************************************************
+ * format
+ ******************************************************************************/
+
+function formatDate (date) {
+  // [ '1770-12-16T00:00:00.000Z' ]
+  if (!date) return
+  return date.replace(/T.+$/, '')
 }
 
-async function queryLabel (itemId) {
-  const result = await queryLabels(itemId)
-  if (result && result.length > 0) {
-    return result[0]
-  }
-}
+/*******************************************************************************
+ * specs
+ ******************************************************************************/
 
 const specs = {
   group: {
     // offizieller Name
     name: {
-      claim: 'P1448'
+      source: {
+        fromClaim: 'P1448'
+      }
+    },
+    shortHistory: {
+      source: {
+        fromEntity: getDescription
+      }
     },
     // Gründung, Erstellung bzw. Entstehung
     startData: {
-      claim: 'P571',
+      source: {
+        fromClaim: 'P571'
+      },
       format: formatDate
     },
     // Auflösungsdatum
     endData: {
-      claim: 'P576',
+      source: {
+        fromClaim: 'P576'
+      },
       format: formatDate
     },
     // besteht aus
     members: {
-      claim: 'P527',
-      multiple: true,
+      source: {
+        fromClaim: 'P527',
+        multiple: true
+      },
       secondQuery: queryLabels
+    },
+    wikipedia: {
+      source: {
+        fromEntity: getWikipediaTitle
+      }
+    }
+  },
+  instrument: {
+    wikipedia: {
+      source: {
+        fromEntity: getWikipediaTitle
+      }
     }
   },
   person: {
     // Vornamen der Person
     firstname: {
-      claim: 'P735',
+      source: {
+        fromClaim: 'P735'
+      },
       secondQuery: queryLabel
     },
     // Familienname einer Person
     lastname: {
-      claim: 'P734',
+      source: {
+        fromClaim: 'P734'
+      },
       secondQuery: queryLabel
     },
     birth: {
-      claim: 'P569',
+      source: {
+        fromClaim: 'P569'
+      },
       format: formatDate
     },
     death: {
-      claim: 'P570',
+      source: {
+        fromClaim: 'P570'
+      },
       format: formatDate
     },
     wikipedia: {
-      wikipediaTitle: true
+      source: {
+        fromEntity: getWikipediaTitle
+      }
+    }
+  },
+  song: {
+    // Veröffentlichungsdatum
+    publicationDate: {
+      source: {
+        fromClaim: 'P577'
+      },
+      format: formatDate
+    },
+    // Sprache des Werks, Namens oder Begriffes
+    language: {
+      source: {
+        fromClaim: 'P407'
+      },
+      secondQuery: queryLabel
+    },
+    // Interpret
+    artist: {
+      source: {
+        fromClaim: 'P175',
+        multiple: true
+      },
+      secondQuery: queryLabels
+    },
+    // Text von (P676)
+    lyricist: {
+      source: {
+        fromClaim: 'P676',
+        multiple: true
+      },
+      secondQuery: queryLabels
+    },
+    // Genre
+    genre: {
+      source: {
+        fromClaim: 'P136'
+      },
+      secondQuery: queryLabel
+    },
+    wikipedia: {
+      source: {
+        fromEntity: getWikipediaTitle
+      }
     }
   }
 }
@@ -328,40 +458,54 @@ async function resolveBySpecs (itemId, specs) {
   for (const property in specs) {
     const spec = specs[property]
     let value
-    if (spec.claim) {
-      if (spec.multiple) {
-        value = claims.getMultipleClaims(spec.claim)
+
+    // source
+    if (!spec.source) {
+      throw new Error(`Spec must have a source: ${JSON.stringify(spec)}`)
+    }
+    if (spec.source.fromClaim) {
+      if (spec.source.multiple) {
+        value = claims.getMultipleClaims(spec.source.fromClaim)
       } else {
-        value = claims.getClaim(spec.claim)
+        value = claims.getClaim(spec.source.fromClaim)
       }
-    } else if (spec.wikipediaTitle) {
-      value = getWikipediaTitle(entity.sitelinks)
+    } else if (spec.source.fromEntity) {
+      value = spec.source.fromEntity(entity)
     }
 
-    if (spec.secondQuery) value = await spec.secondQuery(value)
-    if (spec.format) value = spec.format(value)
-    result[property] = value
+    // second query
+    if (value && spec.secondQuery) value = await spec.secondQuery(value)
+
+    // format
+    if (value && spec.format) value = spec.format(value)
+    if (value) result[property] = value
   }
   console.log(result)
 }
 
 /**
- *
+ * @param {String} metadataType - For example `group,instrument,person,song`
  * @param {String} itemId - For example `Q123`
  * @param {String} arg1
  * @param {String} arg2
  */
-async function action (itemId, arg1, arg2, cmdObj) {
+async function action (metadataType, itemId, arg1, arg2) {
+  if (!specs[metadataType]) {
+    throw new Error(`No metadata type given: Use ${Object.keys(specs)}`)
+  }
+
   if (!wikibase.isItemId(itemId)) {
     throw new Error(`No item id: ${itemId}`)
   }
-  if (cmdObj.group) {
-    await resolveBySpecs(itemId, specs.group)
-  } else if (cmdObj.person) {
-    await resolveBySpecs(itemId, specs.person)
-  } else {
-    await person(itemId, arg1, arg2)
-  }
+
+  await resolveBySpecs(itemId, specs[metadataType])
+  // if (cmdObj.group) {
+
+  // } else if (cmdObj.person) {
+  //   await resolveBySpecs(itemId, specs.person)
+  // } else {
+  //   await person(itemId, arg1, arg2)
+  // }
 }
 
 module.exports = action
