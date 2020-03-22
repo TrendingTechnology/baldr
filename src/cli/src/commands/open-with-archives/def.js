@@ -1,5 +1,5 @@
 module.exports = {
-  command: 'open-with-archives',
+  command: 'open-with-archives [path]',
   alias: 'owa',
   options: [
     ['-c, --create-dirs', 'Create missings directories of the relative path, if they are not existent.']
