@@ -159,6 +159,17 @@ function relocate (oldPath, extension, cmdObj) {
   }
 }
 
+function moveFromArchive (oldPath, extension, cmdObj) {
+  if (locationIndicator.isInDeactivatedDir(oldPath)) return
+  const newPath = locationIndicator.getMirroredPath(oldPath)
+  console.log(`${chalk.yellow(oldPath)} -> ${chalk.green(newPath)}`)
+  if (extension === 'tex') {
+    moveTex(oldPath, newPath, cmdObj)
+  } else {
+    lib.moveAsset(oldPath, newPath, cmdObj)
+  }
+}
+
 /**
  * @param {String} oldPath - for example:
  *   `/archive/10/10_Jazz/30_Stile/50_Modern-Jazz/Arbeitsblatt.tex`
@@ -171,13 +182,7 @@ function move(oldPath, cmdObj) {
   if (!locationIndicator.isInArchive(oldPath)) {
     relocate(oldPath, extension, cmdObj)
   } else {
-    const newPath = locationIndicator.getMirroredPath(oldPath)
-    console.log(`${chalk.yellow(oldPath)} -> ${chalk.green(newPath)}`)
-    if (extension === 'tex') {
-      moveTex(oldPath, newPath, cmdObj)
-    } else {
-      lib.moveAsset(oldPath, newPath, cmdObj)
-    }
+    moveFromArchive(oldPath, extension, cmdObj)
   }
 }
 

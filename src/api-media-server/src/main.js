@@ -1311,15 +1311,24 @@ class LocationIndicator {
    *
    * true:
    *
-   * `/archive/10/10_Jazz/30_Stile/10_New-Orleans-Dixieland/Material/Texte.tex`
-   * `/archive/10/10_Jazz/History-of-Jazz/Inhalt.tex`
+   * - `/archive/10/10_Jazz/30_Stile/10_New-Orleans-Dixieland/Material/Texte.tex`
+   * - `/archive/10/10_Jazz/History-of-Jazz/Inhalt.tex`
+   * - `/archive/12/20_Tradition/30_Volksmusik/Bartok/10_Tanzsuite/Gliederung.tex`
    *
    * false:
    *
    * `/archive/10/10_Jazz/20_Vorformen/10_Worksongs-Spirtuals/Arbeitsblatt.tex`
    */
   isInDeactivatedDir (currentPath) {
-    return !currentPath.match(new RegExp('^.*/[0-9]{2,}_[^/]*/[^/]*$'))
+    currentPath = path.dirname(currentPath)
+    const relPath = this.getRelPath(currentPath)
+    const segments = relPath.split(path.sep)
+    for (const segment of segments) {
+      if (!segment.match(/^\d\d/)) {
+        return true
+      }
+    }
+    return false
   }
 
   /**
