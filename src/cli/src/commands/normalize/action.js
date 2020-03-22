@@ -13,9 +13,12 @@ const lib = require('../../lib.js')
  * @param {String} filePath - The media asset file path.
  */
 function normalizeOneFile (filePath) {
+  const metaTypes = mediaServer.metadataTypes
+  const typeName = metaTypes.detectTypeByPath(filePath)
   const yamlFile = `${filePath}.yml`
   const metaData = yaml.safeLoad(lib.readFile(yamlFile))
-  console.log(mediaServer.metadataTypes.process(metaData, 'person'))
+  //metaData.metadataType = typeName
+  //console.log(mediaServer.metadataTypes.process(metaData, 'person'))
   lib.writeYamlFile(yamlFile, lib.normalizeMetaData(filePath, metaData))
 }
 

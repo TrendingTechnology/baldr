@@ -75,30 +75,52 @@ function detectTypeByPath (filePath) {
   }
 }
 
-function validate () {
+function validate (metadata) {
+  if (!metadata.metadataType) {
+    throw new Error('Can not validate without a property “metadataType”')
+  }
+  const props = metadataTypes[metadata.metadataType].props
+  for (const prop in props) {
+    const spec = props[prop]
 
+    // required
+    if (spec.required && !(metadata[prop] || typeof metadata[prop] === 'boolean')) {
+      throw new Error(`Missing property ${prop}`)
+    }
+
+    // validate
+    if (spec.validate && typeof spec.validate === 'function' && (metadata[prop] || typeof metadata[prop] === 'boolean')) {
+      const value = metadata[prop]
+      const result = spec.validate(value)
+      if (!result) {
+        throw new Error(`Validation failed for propery “${prop}” and value “${value}”`)
+      }
+    }
+  }
 }
 
 /**
  *
- * @param {Object} rawMetaData
- * @param {String} metaDataType
+ * @param {Object} metadata
  *
  * @returns {Object}
  */
-function process (rawMetaData, metaDataType) {
+function process (metadata) {
   const result = {}
-  const rawData = new RawDataObject(rawMetaData)
-  const props = metadataTypes[metaDataType].props
-  for (const prop in props) {
-    const spec = props[prop]
-    if (isPropertyDerived(spec)) {
-      result[prop] = spec.derived.call(rawMetaData)
-      // Throw away the value of this property. We prefer the derived
-      // version.
-      rawData.cut(prop)
-    } else {
-      result[prop] = rawData.cut(prop)
+  const rawData = new RawDataObject(metadata)
+
+  if (metadata.metadataType) {
+    const props = metadataTypes[metadata.metadataType].props
+    for (const prop in props) {
+      const spec = props[prop]
+      if (isPropertyDerived(spec)) {
+        result[prop] = spec.derived.call(metadata)
+        // Throw away the value of this property. We prefer the derived
+        // version.
+        rawData.cut(prop)
+      } else {
+        result[prop] = rawData.cut(prop)
+      }
     }
   }
 
@@ -106,6 +128,7 @@ function process (rawMetaData, metaDataType) {
   for (const prop in rawData.raw) {
     result[prop] = rawData.cut(prop)
   }
+  validate(result)
   return result
 }
 
