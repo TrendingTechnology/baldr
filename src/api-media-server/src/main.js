@@ -1437,9 +1437,9 @@ function openFolder (currentPath, create) {
  */
 function openFolderWithArchives (currentPath, create) {
   const result = {}
-  const basePaths = new LocationIndicator()
-  const relPath = basePaths.getRelPath(currentPath)
-  for (const basePath of basePaths.get()) {
+  const locationIndicator = new LocationIndicator()
+  const relPath = locationIndicator.getRelPath(currentPath)
+  for (const basePath of locationIndicator.get()) {
     if (relPath) {
       const currentPath = path.join(basePath, relPath)
       result[currentPath] = openFolder(currentPath, create)
@@ -1474,12 +1474,12 @@ function mirrorFolderStructure (currentPath) {
     return filelist
   }
 
-  const basePaths = new LocationIndicator()
+  const locationIndicator = new LocationIndicator()
 
-  const currentBasePath = basePaths.getBasePath(currentPath)
+  const currentBasePath = locationIndicator.getBasePath(currentPath)
 
   let mirrorBasePath
-  for (const basePath of basePaths.get()) {
+  for (const basePath of locationIndicator.get()) {
     if (basePath !== currentBasePath) {
       mirrorBasePath = basePath
       break
@@ -1488,7 +1488,7 @@ function mirrorFolderStructure (currentPath) {
 
   const relPaths = walkSync(currentPath)
   for (let index = 0; index < relPaths.length; index++) {
-    relPaths[index] = basePaths.getRelPath(relPaths[index])
+    relPaths[index] = locationIndicator.getRelPath(relPaths[index])
   }
 
   const created = []

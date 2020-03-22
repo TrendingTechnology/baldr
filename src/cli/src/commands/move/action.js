@@ -13,6 +13,46 @@ const lib = require('../../lib.js')
 const locationIndicator = mediaServer.locationIndicator
 
 /**
+ * Relocate a media asset inside the main media folder. Move some
+ * media assets into two letter folders.
+ *
+ * @param {String} oldPath
+ * @param {String} extension
+ */
+function relocate (oldPath, extension, cmdObj) {
+  if (oldPath.match(new RegExp('^.*/[A-Z]{2,}/[^/]*$'))) {
+    return
+  }
+  let twoLetterFolder = ''
+  if (oldPath.match(/.*Arbeitsblatt_Loesung.*/)) {
+    twoLetterFolder = 'TX'
+  } else if (extension === 'jpg') {
+    twoLetterFolder = 'BD'
+  } else if (extension === 'mp4') {
+    twoLetterFolder = 'VD'
+  } else if (['svg', 'eps', 'png', 'mscx'].includes(extension)) {
+    twoLetterFolder = 'NB'
+  } else if (extension === 'm4a') {
+    twoLetterFolder = 'HB'
+  } else if (extension === 'tex') {
+    twoLetterFolder = 'TX'
+  }
+  const parentDir = locationIndicator.getPresParentDir(oldPath)
+  const newPath = path.join(parentDir, twoLetterFolder, path.basename(oldPath))
+  if (oldPath !== newPath) {
+    if (extension === 'tex') {
+      const oldContent = lib.readFile(oldPath)
+      // \grafik{HB/Beethoven.jpg} -> \grafik{../HB/Beethoven.jpg}
+      const newContent = oldContent.replace(/\{([A-Z]{2,})\//g, '{../$1/')
+      if (oldContent !== newContent) {
+        lib.writeFile(oldPath, newContent)
+      }
+    }
+    lib.moveAsset(oldPath, newPath, cmdObj)
+  }
+}
+
+/**
  * For images in the TeX file which appear multiple times in one file.
  */
 const resolvedTexImages = {}
@@ -107,7 +147,6 @@ function moveTex (oldPath, newPath, cmdObj) {
     'TX',
     path.basename(newPath)
   )
-  console.log(newPath)
   lib.moveAsset(oldPath, newPath, cmdObj)
   // Maybe --dry-run is specified
   if (fs.existsSync(newPath)) {
@@ -116,46 +155,6 @@ function moveTex (oldPath, newPath, cmdObj) {
       newContent = newContent.replace(replacement[0], replacement[1])
     }
     lib.writeFile(newPath, newContent)
-  }
-}
-
-/**
- * Relocate a media asset inside the main media folder. Move some
- * media assets into two letter folders.
- *
- * @param {String} oldPath
- * @param {String} extension
- */
-function relocate (oldPath, extension, cmdObj) {
-  if (oldPath.match(new RegExp('^.*/[A-Z]{2,}/[^/]*$'))) {
-    return
-  }
-  let twoLetterFolder = ''
-  if (oldPath.match(/.*Arbeitsblatt_Loesung.*/)) {
-    twoLetterFolder = 'TX'
-  } else if (extension === 'jpg') {
-    twoLetterFolder = 'BD'
-  } else if (extension === 'mp4') {
-    twoLetterFolder = 'VD'
-  } else if (['svg', 'eps', 'png', 'mscx'].includes(extension)) {
-    twoLetterFolder = 'NB'
-  } else if (extension === 'm4a') {
-    twoLetterFolder = 'HB'
-  } else if (extension === 'tex') {
-    twoLetterFolder = 'TX'
-  }
-  const parentDir = locationIndicator.getPresParentDir(oldPath)
-  const newPath = path.join(parentDir, twoLetterFolder, path.basename(oldPath))
-  if (oldPath !== newPath) {
-    if (extension === 'tex') {
-      const oldContent = lib.readFile(oldPath)
-      // \grafik{HB/Beethoven.jpg} -> \grafik{../HB/Beethoven.jpg}
-      const newContent = oldContent.replace(/\{([A-Z]{2,})\//g, '{../$1/')
-      if (oldContent !== newContent) {
-        lib.writeFile(oldPath, newContent)
-      }
-    }
-    lib.moveAsset(oldPath, newPath, cmdObj)
   }
 }
 

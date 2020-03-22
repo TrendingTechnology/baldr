@@ -237,7 +237,11 @@ function runImagemagick (inputFile, outputFile, size = '2000x2000>') {
  */
 function moveAsset (oldPath, newPath, opts) {
   if (!opts) opts = {}
+
   function move(oldPath, newPath, { copy, dryRun }) {
+    if (fs.existsSync(newPath)) {
+      console.log(`Exists: ${chalk.red(newPath)}`)
+    }
     let action
     const dryRunMsg = dryRun ? '[dry run] ' : ''
     if (copy) {
@@ -257,7 +261,7 @@ function moveAsset (oldPath, newPath, opts) {
       }
       action = 'move'
     }
-    console.log(`  ${dryRunMsg}${action}: ${chalk.yellow(oldPath)} -> ${chalk.green(newPath)}`)
+    console.log(`${dryRunMsg}${action}: ${chalk.yellow(oldPath)} -> ${chalk.green(newPath)}`)
   }
 
   function moveCorrespondingFile (oldPath, newPath, search, replace, opts) {
