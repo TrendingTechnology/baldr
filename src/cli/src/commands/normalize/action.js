@@ -17,9 +17,9 @@ function normalizeOneFile (filePath) {
   const typeName = metaTypes.detectTypeByPath(filePath)
   const yamlFile = `${filePath}.yml`
   const metaData = yaml.safeLoad(lib.readFile(yamlFile))
-  //metaData.metadataType = typeName
-  //console.log(mediaServer.metadataTypes.process(metaData, 'person'))
-  lib.writeYamlFile(yamlFile, lib.normalizeMetaData(filePath, metaData))
+  metaData.type = typeName
+  console.log(mediaServer.metadataTypes.process(metaData))
+  //lib.writeYamlFile(yamlFile, lib.normalizeMetaData(filePath, metaData))
 }
 
 /**

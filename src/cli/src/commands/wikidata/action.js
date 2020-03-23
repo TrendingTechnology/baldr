@@ -321,19 +321,22 @@ const specs = {
       source: {
         fromClaim: 'P569'
       },
-      format: formatDate
+      format: formatDate,
+      alwaysUpdate: true
     },
     // Sterbedatum
     death: {
       source: {
         fromClaim: 'P570'
       },
-      format: formatDate
+      format: formatDate,
+      alwaysUpdate: true
     },
     wikipedia: {
       source: {
         fromEntity: getWikipediaTitle
-      }
+      },
+      alwaysUpdate: true
     }
   },
   song: {
