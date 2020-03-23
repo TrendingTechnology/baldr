@@ -10,7 +10,7 @@ const { transliterate } = require('transliteration')
 function asciify (input) {
   const output = input
     .replace(/[\(\)';]/g, '') // eslint-disable-line
-    .replace(/[,.] /g, '_')
+    .replace(/[,\.] /g, '_')
     .replace(/ +- +/g, '_')
     .replace(/\s+/g, '-')
     .replace(/-+/g, '-')
@@ -22,9 +22,30 @@ function asciify (input) {
     .replace(/Ü/g, 'Ue')
     .replace(/ü/g, 'ue')
     .replace(/ß/g, 'ss')
+    .replace(/\./g, '')
   return transliterate(output)
 }
 
+/**
+ * This function can be used to generate a title from an ID string.
+ *
+ * @param {String} input
+ *
+ * @returns {String}
+ */
+function deasciify (input) {
+  return input
+    .replace(/_/g, ', ')
+    .replace(/-/g, ' ')
+    .replace(/Ae/g, 'Ä')
+    .replace(/ae/g, 'ä')
+    .replace(/Oe/g, 'Ö')
+    .replace(/oe/g, 'ö')
+    .replace(/Ue/g, 'Ü')
+    .replace(/ue/g, 'ü')
+}
+
 module.exports = {
-  asciify
+  asciify,
+  deasciify
 }

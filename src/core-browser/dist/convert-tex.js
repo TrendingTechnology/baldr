@@ -146,7 +146,8 @@ const specification = [{
 
 function removeComments(text) {
   text = text.replace(/%\n\s*/g, '');
-  return text.replace(/(?<!\\)%.*/g, '');
+  text = text.replace(/%.*/g, '');
+  return text;
 }
 
 function removeTexHeaderFooter(text) {

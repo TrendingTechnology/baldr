@@ -3,7 +3,7 @@ const path = require('path')
 
 // Project packages.
 const { bootstrapConfig } = require('@bldr/core-node')
-const { RawDataObject  } = require('@bldr/core-browser')
+const { RawDataObject } = require('@bldr/core-browser')
 
 const { asciify } = require('./helper.js')
 
@@ -20,7 +20,14 @@ const typeSpecs = {
           return value.match(/^[a-zA-Z0-9-_]+$/)
         },
         format: function (value) {
-          return asciify(value)
+          value = asciify(value)
+
+          // a-Strawinsky-Petruschka-Abschnitt-0_22
+          value = value.replace(/^[va]-/, '')
+
+          // HB_Ausstellung_Gnome -> Ausstellung_HB_Gnome
+          value = value.replace(/^([A-Z]{2,})_([a-zA-Z0-9-]+)_/, '$2_$1_')
+          return value
         },
         required: true
       },
@@ -29,12 +36,12 @@ const typeSpecs = {
       },
       type: {
         validate: function (value) {
-          return value.match(/^[a-z]+$/)
+          return String(value).match(/^[a-zA-Z]+$/)
         }
       },
       wikidata: {
         validate: function (value) {
-          return value.match(/^Q\d+$/)
+          return String(value).match(/^Q\d+$/)
         }
       },
       wikipedia: {
@@ -43,6 +50,29 @@ const typeSpecs = {
         },
         format: function (value) {
           return decodeURI(value)
+        }
+      }
+    }
+  },
+  audioSample: {
+    detectType: {
+      byPath: new RegExp('^.*/HB/.*$')
+    },
+    props: {
+      title: {
+        format: function (value) {
+          // 'Tonart CD 4: Spur 29'
+          if (!value.match(/.+CD.+Spur/)) {
+            return value
+          }
+        }
+      },
+      composer: {
+        format: function (value) {
+          // Helbling-Verlag
+          if (value.indexOf('Verlag') === -1) {
+            return value
+          }
         }
       }
     }
@@ -99,10 +129,10 @@ const typeSpecs = {
 function mergeTypeProps (typeName) {
   const globalType = typeSpecs.global_.props
   const specifcType = typeSpecs[typeName].props
-  result = {}
+  const result = {}
   for (const prop in globalType) {
     if (specifcType[prop]) {
-      result[prop] = Object.assign(globalType[prop], specifcType[prop])
+      result[prop] = Object.assign({}, globalType[prop], specifcType[prop])
       delete specifcType[prop]
     } else {
       result[prop] = globalType[prop]
@@ -177,26 +207,32 @@ function isValue (value) {
   return false
 }
 
+/**
+ * If `metadata` has a property `type` apply the global specs, else the
+ * specifiy specs.
+ *
+ * @param {Object} metadata
+ * @param {Function} func - A function with the arguments `spec` (property specification), `value`, `propName`
+ * @param {Boolean} replaceValues - Replace the values in the metadata object.
+ */
 function applyTypeSpecs (metadata, func, replaceValues = true) {
+  function applyOneTypeSpec (props, propName, metadata, func, replaceValues) {
+    const spec = props[propName]
+    const value = func(spec, metadata[propName], propName)
+    if (replaceValues && isValue(value)) {
+      metadata[propName] = value
+    }
+  }
+
   if (metadata.type) {
     const props = typeProps[metadata.type]
-    for (const prop in props) {
-      const spec = props[prop]
-      if (replaceValues) {
-        metadata[prop] = func(spec, metadata[prop])
-      } else {
-        func(spec, metadata[prop])
-      }
+    for (const propName in props) {
+      applyOneTypeSpec(props, propName, metadata, func, replaceValues)
     }
   } else {
     const props = typeSpecs.global_.props
-    for (const prop in props) {
-      const spec = props[prop]
-      if (replaceValues) {
-        metadata[prop] = func(spec, metadata[prop])
-      } else {
-        func(spec, metadata[prop])
-      }
+    for (const propName in props) {
+      applyOneTypeSpec(props, propName, metadata, func, replaceValues)
     }
   }
   return metadata
@@ -224,7 +260,7 @@ function format (metadata) {
  * @param {Object} metadata
  */
 function validate (metadata) {
-  function validateOneProp(spec, value) {
+  function validateOneProp (spec, value, prop) {
     // required
     if (spec.required && !isValue(value)) {
       throw new Error(`Missing property ${prop}`)
@@ -247,24 +283,29 @@ function validate (metadata) {
 function sortAndDerive (metadata) {
   const rawData = new RawDataObject(metadata)
 
+  function addValue (data, propName, value) {
+    if (isValue(value)) data[propName] = value
+  }
+
+  const result = {}
   if (metadata.type) {
     const props = typeProps[metadata.type]
-    for (const prop in props) {
-      const spec = props[prop]
+    for (const propName in props) {
+      const spec = props[propName]
       if (isPropertyDerived(spec)) {
-        result[prop] = spec.derived.call(metadata)
+        addValue(result, propName, spec.derived.call(metadata))
         // Throw away the value of this property. We prefer the derived
         // version.
-        rawData.cut(prop)
+        rawData.cut(propName)
       } else {
-        result[prop] = rawData.cut(prop)
+        addValue(result, propName, rawData.cut(propName))
       }
     }
   }
 
   // Add additional properties not in the specs.
-  for (const prop in rawData.raw) {
-    result[prop] = rawData.cut(prop)
+  for (const propName in rawData.raw) {
+    addValue(result, propName, rawData.cut(propName))
   }
   return result
 }
@@ -277,7 +318,7 @@ function sortAndDerive (metadata) {
  */
 function process (metadata) {
   metadata = sortAndDerive(metadata)
-  format(metadata)
+  metadata = format(metadata)
   validate(metadata)
   return metadata
 }

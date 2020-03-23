@@ -512,7 +512,6 @@ export class RawDataObject {
       delete this.raw[property]
       return out
     }
-    return false
   }
 
   /**

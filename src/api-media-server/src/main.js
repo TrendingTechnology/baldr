@@ -69,13 +69,14 @@ const os = require('os')
 const yaml = require('js-yaml')
 const express = require('express')
 const MongoClient = require('mongodb').MongoClient
-const { transliterate } = require('transliteration')
 
 // Project packages.
 const { bootstrapConfig } = require('@bldr/core-node')
 const { AssetTypes, convertPropertiesToCamelCase } = require('@bldr/core-browser')
 
+// Submodules.
 const metadataTypes = require('./metadata-types.js')
+const { asciify, deasciify } = require('./helper.js')
 
 const packageJson = require('../package.json')
 
@@ -133,50 +134,6 @@ async function connectDb () {
 }
 
 /* Helper functions ***********************************************************/
-
-/**
- * This function can be used to generate ids from different file names.
- *
- * @param {String} input
- *
- * @returns {String}
- */
-function asciify (input) {
-  const output = input
-    .replace(/[\(\)';]/g, '') // eslint-disable-line
-    .replace(/[,.] /g, '_')
-    .replace(/ +- +/g, '_')
-    .replace(/\s+/g, '-')
-    .replace(/-+/g, '-')
-    .replace(/-*_-*/g, '_')
-    .replace(/Ä/g, 'Ae')
-    .replace(/ä/g, 'ae')
-    .replace(/Ö/g, 'Oe')
-    .replace(/ö/g, 'oe')
-    .replace(/Ü/g, 'Ue')
-    .replace(/ü/g, 'ue')
-    .replace(/ß/g, 'ss')
-  return transliterate(output)
-}
-
-/**
- * This function can be used to generate a title from an ID string.
- *
- * @param {String} input
- *
- * @returns {String}
- */
-function deasciify (input) {
-  return input
-    .replace(/_/g, ', ')
-    .replace(/-/g, ' ')
-    .replace(/Ae/g, 'Ä')
-    .replace(/ae/g, 'ä')
-    .replace(/Oe/g, 'Ö')
-    .replace(/oe/g, 'ö')
-    .replace(/Ue/g, 'Ü')
-    .replace(/ue/g, 'ü')
-}
 
 /**
  * Get the extension from a file path.

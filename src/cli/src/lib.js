@@ -130,8 +130,6 @@ function writeFile (filePath, content) {
 function normalizeMetaData (filePath, metaData) {
   const normalized = {}
 
-  // a-Strawinsky-Petruschka-Abschnitt-0_22
-  if (metaData.id) metaData.id = metaData.id.replace(/^[va]-/, '')
   // a Strawinsky Petruschka Abschnitt 0_22
   if (metaData.title) metaData.title = metaData.title.replace(/^[va] /, '')
 
@@ -141,9 +139,6 @@ function normalizeMetaData (filePath, metaData) {
       delete metaData[key]
     }
   }
-
-  // HB_Ausstellung_Gnome -> Ausstellung_HB_Gnome
-  normalized.id = normalized.id.replace(/^([A-Z]{2,})_([a-zA-Z0-9-]+)_/, '$2_$1_')
 
   /**
    * Generate a ID prefix for media assets, like `Presentation-ID_HB` if the
@@ -193,16 +188,6 @@ function normalizeMetaData (filePath, metaData) {
       normalized[key] = metaData[key]
       delete metaData[key]
     }
-  }
-
-  // title: 'Tonart CD 4: Spur 29'
-  if ('title' in normalized && normalized.title.match(/.+CD.+Spur/)) {
-    delete normalized.title
-  }
-
-  // composer: Helbling-Verlag
-  if ('composer' in normalized && normalized.composer.indexOf('Verlag') > -1) {
-    delete normalized.composer
   }
 
   return normalized
