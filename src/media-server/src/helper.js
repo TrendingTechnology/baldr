@@ -26,7 +26,7 @@ function asciify (input) {
     .replace(/Ü/g, 'Ue')
     .replace(/ü/g, 'ue')
     .replace(/ß/g, 'ss')
-    .replace(/\./g, '')
+    .replace(/[\.!]/g, '')
   return transliterate(output)
 }
 

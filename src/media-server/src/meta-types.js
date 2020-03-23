@@ -9,7 +9,7 @@ const path = require('path')
 const { bootstrapConfig } = require('@bldr/core-node')
 const { RawDataObject } = require('@bldr/core-browser')
 
-const { asciify } = require('./helper.js')
+const { asciify, deasciify } = require('./helper.js')
 
 /**
  * The configuration object from `/etc/baldr.json`
@@ -21,7 +21,9 @@ const config = bootstrapConfig()
  *
  * @typedef {Object} propSpec
  * @param {Boolean} required
- * @param {Function} derived
+ * @param {Function} derive
+ * @param {Boolean} useDerivedIfEmpty - Only use the value obtained from
+ *   the `derive` function if the original value is empty.
  * @param {Function} format
  * @param {Function} validate
  */
@@ -64,7 +66,11 @@ const typeSpecs = {
         required: true
       },
       title: {
-        required: true
+        required: true,
+        useDerivedIfEmpty: true,
+        derive: function () {
+          return deasciify(this.id)
+        }
       },
       type: {
         validate: function (value) {
@@ -116,12 +122,12 @@ const typeSpecs = {
     },
     props: {
       id: {
-        derived: function () {
+        derive: function () {
           return `${this.lastname}_${this.firstname}`
         }
       },
       title: {
-        derived: function () {
+        derive: function () {
           return `Portrait-Bild von „${this.firstname} ${this.lastname}“`
         }
       },
@@ -132,7 +138,7 @@ const typeSpecs = {
         required: true
       },
       name: {
-        derived: function () {
+        derive: function () {
           return `${this.firstname} ${this.lastname}`
         }
       },
@@ -193,14 +199,14 @@ function buildTypeProps () {
  * ```
  * {
  *   person: {
- *     id: { validate: [Function: validate], derived: [Function: derived] },
- *     title: { validate: [Function: validate], derived: [Function: derived] },
+ *     id: { validate: [Function: validate], derive: [Function: derive] },
+ *     title: { validate: [Function: validate], derive: [Function: derive] },
  *     metadataType: { validate: [Function: validate] },
  *     wikidata: { validate: [Function: validate] },
  *     wikipedia: { validate: [Function: validate] },
  *     firstname: { required: true },
  *     lastname: { required: true },
- *     name: { derived: [Function: derived] },
+ *     name: { derive: [Function: derive] },
  *     short_biography: { required: true },
  *     birth: { validate: [Function: validate] },
  *     death: { validate: [Function: validate] }
@@ -209,18 +215,6 @@ function buildTypeProps () {
  * ```
  */
 const typeProps = buildTypeProps()
-
-/**
- * @param {Object} spec - The specification of one property
- * @param {String} prop
- *
- * @private
- */
-function isPropertyDerived (spec) {
-  if (spec && spec.derived && typeof spec.derived === 'function'
-  ) return true
-  return false
-}
 
 function detectTypeByPath (filePath) {
   filePath = path.resolve(filePath)
@@ -310,34 +304,55 @@ function validate (metadata) {
 }
 
 /**
+ * @param {@bldr/media-server/meta-type~propSpec} propSpec - The specification of one property
+ *
+ * @private
+ */
+function isPropertyDerived (propSpec) {
+  if (propSpec && propSpec.derive && typeof propSpec.derive === 'function') {
+    return true
+  }
+  return false
+}
+
+/**
  * @param {Object} metadata
  */
 function sortAndDerive (metadata) {
   const rawData = new RawDataObject(metadata)
 
-  function addValue (data, propName, value) {
-    if (isValue(value)) data[propName] = value
+  function addValue (metadata, propSpec, propName, derivedValue) {
+    const origValue = metadata[propName]
+    if (
+      (propSpec.useDerivedIfEmpty && !isValue(origValue) && isValue(derivedValue)) ||
+      (!propSpec.useDerivedIfEmpty && isValue(derivedValue))
+    ) {
+      metadata[propName] = derivedValue
+    }
   }
 
   const result = {}
   if (metadata.type) {
-    const props = typeProps[metadata.type]
-    for (const propName in props) {
-      const spec = props[propName]
-      if (isPropertyDerived(spec)) {
-        addValue(result, propName, spec.derived.call(metadata))
+    const propSpecs = typeProps[metadata.type]
+    for (const propName in propSpecs) {
+      const propSpec = propSpecs[propName]
+      if (isPropertyDerived(propSpec)) {
+        addValue(result, propSpec, propName, propSpec.derive.call(metadata))
         // Throw away the value of this property. We prefer the derived
         // version.
         rawData.cut(propName)
       } else {
-        addValue(result, propName, rawData.cut(propName))
+        addValue(result, propSpec, propName, rawData.cut(propName))
       }
     }
   }
 
   // Add additional properties not in the specs.
   for (const propName in rawData.raw) {
-    addValue(result, propName, rawData.cut(propName))
+    const value = rawData.cut(propName)
+    if (isValue(value)) {
+      result[propName] = value
+    }
   }
   return result
 }
