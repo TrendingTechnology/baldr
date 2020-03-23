@@ -5,7 +5,7 @@ const fs = require('fs')
 const chalk = require('chalk')
 
 // Project packages.
-const mediaServer = require('@bldr/api-media-server')
+const mediaServer = require('@bldr/media-server')
 
 /**
  * @param {String} filePath - The media file path.

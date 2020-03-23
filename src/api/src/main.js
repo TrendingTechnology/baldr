@@ -10,8 +10,8 @@
 const cors = require('cors')
 const express = require('express')
 const registerSeatingPlan = require('@bldr/api-seating-plan').registerRestApi
-const registerMediaServer = require('@bldr/api-media-server').registerRestApi
-const helpMessagesMediaServer = require('@bldr/api-media-server').helpMessages
+const registerMediaServer = require('@bldr/media-server').registerRestApi
+const helpMessagesMediaServer = require('@bldr/media-server').helpMessages
 
 // Project packages.
 const packageJson = require('../package.json')

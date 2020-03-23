@@ -2,8 +2,6 @@
 [![Build Status](https://travis-ci.org/Josef-Friedrich/baldr.svg?branch=master)](https://travis-ci.org/Josef-Friedrich/baldr)
 [![GitHub repo size](https://img.shields.io/github/repo-size/Josef-Friedrich/baldr.svg)](https://github.com/Josef-Friedrich/baldr)
 
-# @bldr/api-media-server
+# @bldr/media-server
 
 The REST API and command line interface of the BALDR media server.
-
-

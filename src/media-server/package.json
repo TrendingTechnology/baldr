@@ -1,5 +1,5 @@
 {
-  "name": "@bldr/api-media-server",
+  "name": "@bldr/media-server",
   "version": "0.2.3",
   "description": "The REST API of the BALDR media server.",
   "author": {

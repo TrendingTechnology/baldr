@@ -6,7 +6,7 @@ const fs = require('fs')
 const chalk = require('chalk')
 
 // Project packages:
-const { mirrorFolderStructure } = require('@bldr/api-media-server')
+const { mirrorFolderStructure } = require('@bldr/media-server')
 
 // Globals.
 const { cwd } = require('../../main.js')

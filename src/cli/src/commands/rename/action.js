@@ -2,7 +2,7 @@
 const path = require('path')
 
 // Project packages.
-const mediaServer = require('@bldr/api-media-server')
+const mediaServer = require('@bldr/media-server')
 const lib = require('../../lib.js')
 
 /**

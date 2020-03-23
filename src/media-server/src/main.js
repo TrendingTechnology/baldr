@@ -56,7 +56,7 @@
  *     database.
  *   - `updates`: Journal of the update processes with timestamps.
  *
- * @module @bldr/api-media-server
+ * @module @bldr/media-server
  */
 
 // Node packages.
@@ -75,7 +75,7 @@ const { bootstrapConfig } = require('@bldr/core-node')
 const { AssetTypes, convertPropertiesToCamelCase } = require('@bldr/core-browser')
 
 // Submodules.
-const metadataTypes = require('./metadata-types.js')
+const metaTypes = require('./meta-types.js')
 const { asciify, deasciify } = require('./helper.js')
 
 const packageJson = require('../package.json')
@@ -1767,7 +1767,7 @@ module.exports = {
   HierarchicalFolderTitles,
   locationIndicator,
   LocationIndicator,
-  metadataTypes,
+  metaTypes,
   mirrorFolderStructure,
   openFolderWithArchives,
   openWith,

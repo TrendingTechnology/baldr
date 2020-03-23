@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "@bldr/api": "^0.2.3",
-    "@bldr/api-media-server": "^0.2.3",
+    "@bldr/media-server": "^0.2.3",
     "@bldr/core-browser": "^0.11.3",
     "@bldr/core-node": "^0.2.2",
     "@bldr/songbook-intermediate-files": "^0.2.3",

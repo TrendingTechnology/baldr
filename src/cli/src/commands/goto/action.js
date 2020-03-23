@@ -2,7 +2,7 @@
 const childProcess = require('child_process')
 
 // Project packages.
-const mediaServer = require('@bldr/api-media-server')
+const mediaServer = require('@bldr/media-server')
 
 // Globals.
 const { cwd, config } = require('../../main.js')

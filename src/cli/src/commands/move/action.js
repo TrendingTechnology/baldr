@@ -6,7 +6,7 @@ const path = require('path')
 const chalk = require('chalk')
 
 // Project packages.
-const mediaServer = require('@bldr/api-media-server')
+const mediaServer = require('@bldr/media-server')
 const coreBrowser = require('@bldr/core-browser')
 const lib = require('../../lib.js')
 

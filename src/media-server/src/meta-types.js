@@ -1,3 +1,7 @@
+/**
+ * @module @bldr/media-server/meta-types
+ */
+
 // Node packages.
 const path = require('path')
 
@@ -11,6 +15,34 @@ const { asciify } = require('./helper.js')
  * The configuration object from `/etc/baldr.json`
  */
 const config = bootstrapConfig()
+
+/**
+ * The specification of a property.
+ *
+ * @typedef {Object} propSpec
+ * @param {Boolean} required
+ * @param {Function} derived
+ * @param {Function} format
+ * @param {Function} validate
+ */
+
+/**
+ * The specification of all properties.
+ *
+ * @typedef {Object} propSpecs
+ */
+
+/**
+ * The specification of one meta type.
+ *
+ * @typedef {Object} typeSpec
+ */
+
+/**
+ * The specification of all meta types
+ *
+ * @typedef {Object} typeSpecs
+ */
 
 const typeSpecs = {
   global_: {

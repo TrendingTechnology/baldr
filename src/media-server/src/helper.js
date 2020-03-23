@@ -1,3 +1,7 @@
+/**
+ * @module @bldr/media-server/helper
+ */
+
 const { transliterate } = require('transliteration')
 
 /**

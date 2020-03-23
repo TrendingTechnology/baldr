@@ -5,7 +5,7 @@ const path = require('path')
 const chalk = require('chalk')
 
 // Project packages:
-const { openFolderWithArchives, locationIndicator } = require('@bldr/api-media-server')
+const { openFolderWithArchives, locationIndicator } = require('@bldr/media-server')
 
 // Globals.
 const { cwd } = require('../../main.js')

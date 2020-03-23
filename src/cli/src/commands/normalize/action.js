@@ -5,7 +5,7 @@ const fs = require('fs')
 const yaml = require('js-yaml')
 
 // Project packages.
-const mediaServer = require('@bldr/api-media-server')
+const mediaServer = require('@bldr/media-server')
 
 const lib = require('../../lib.js')
 
@@ -14,12 +14,12 @@ const lib = require('../../lib.js')
  */
 function normalizeOneFile (filePath) {
   try {
-    const metaTypes = mediaServer.metadataTypes
+    const metaTypes = mediaServer.metaTypes
     const typeName = metaTypes.detectTypeByPath(filePath)
     const yamlFile = `${filePath}.yml`
     let metaData = yaml.safeLoad(lib.readFile(yamlFile))
     metaData.type = typeName
-    metaData = mediaServer.metadataTypes.process(metaData)
+    metaData = mediaServer.metaTypes.process(metaData)
     console.log(metaData)
     metaData = lib.normalizeMetaData(filePath, metaData)
     //lib.writeYamlFile(yamlFile, metaData)

@@ -6,7 +6,7 @@ const childProcess = require('child_process')
 const chalk = require('chalk')
 
 // Project packages.
-const mediaServer = require('@bldr/api-media-server')
+const mediaServer = require('@bldr/media-server')
 
 function buildOneFile (filePath) {
   let process = childProcess.spawnSync(
