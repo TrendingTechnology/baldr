@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Class: Overflow</title>
+    <title>Module: @bldr/media-server</title>
     
     
     
@@ -4192,7 +4192,7 @@
 </div>
 
     <div class="main">
-        <h1 class="page-title" data-filename="module-@bldr_vue-app-presentation-Overflow.html">Class: Overflow</h1>
+        <h1 class="page-title" data-filename="module-@bldr_media-server.html">Module: @bldr/media-server</h1>
         
 
 
@@ -4201,7 +4201,7 @@
     
 <header>
     <div class="header content-size">
-        <h2><span class="ancestors"><a href="module-@bldr_vue-app-presentation.html">@bldr/vue-app-presentation</a>~</span>Overflow
+        <h2>@bldr/media-server
         </h2>
         
     </div>
@@ -4214,16 +4214,2622 @@
 
         
             
+                <div class="description"><p>The REST API and command line interface of the BALDR media server.</p>
+<h1>Media types:</h1>
+<ul>
+<li>presentation (<code>Presentation()</code>)</li>
+<li>asset (<code>Asset()</code>)
+<ul>
+<li>multipart asset (<code>filename.jpg</code>, <code>filename_no02.jpg</code>, <code>filename_no03.jpg</code>)</li>
+</ul>
+</li>
+</ul>
+<h1>Definition of the objects:</h1>
+<p>A <em>presentation</em> is a YAML file for the BALDR presentation app. It must have
+the file name scheme <code>*.baldr.yml</code>. The media server stores the whole YAML
+file in the MongoDB database.</p>
+<p>A <em>asset</em> is a media file which has a meta data file in the YAML format.
+The file name scheme for this meta data file is <code>media-file.jpg.yml</code>. The
+suffix <code>.yml</code> has to be appended. Only the content of the meta data file
+is stored into the database.</p>
+<h1>REST API</h1>
+<ul>
+<li><code>get</code>
+<ul>
+<li><code>folder-title-tree</code>: Get the folder title tree as a hierarchical json
+object.</li>
+</ul>
+</li>
+<li><code>mgmt</code>
+<ul>
+<li><code>flush</code>: Delete all media files (assets, presentations) from the database.</li>
+<li><code>init</code>: Initialize the MongoDB database</li>
+<li><code>open</code>: Open a media file specified by an ID. This query parameters are
+available:
+<ul>
+<li><code>id</code>: The ID of the media file (required).</li>
+<li><code>type</code>: <code>presentations</code>, <code>assets</code>. The default value is
+<code>presentations.</code></li>
+<li><code>with</code>: <code>editor</code> specified in <code>config.mediaServer.editor</code>
+(<code>/etc/baldr.json</code>) or <code>folder</code> to open the parent folder of the
+given media file. The default value is <code>editor</code></li>
+<li><code>archive</code>: True if present, false by default. Open the file or the
+folder in the corresponding archive folder structure.</li>
+<li><code>create</code>: True if present, false by default. Create the possibly non
+existing directory structure in a recursive manner.</li>
+</ul>
+</li>
+<li><code>re-init</code>: Re-Initialize the MongoDB database (Drop all collections and
+initialize)</li>
+<li><code>update</code>: Update the media server database (Flush and insert).</li>
+<li><code>query</code>: Getting results by using query parameters. This query parameters
+are available:
+<ul>
+<li><code>type</code>: <code>assets</code> (default), <code>presentations</code> (what)</li>
+<li><code>method</code>: <code>exactMatch</code>, <code>substringSearch</code> (default) (how).
+<ul>
+<li><code>exactMatch</code>: The query parameter <code>search</code> must be a perfect match
+to a top level database field to get a result.</li>
+<li><code>substringSearch</code>: The query parameter <code>search</code> is only a
+substring of the string to search in.</li>
+</ul>
+</li>
+<li><code>field</code>: <code>id</code> (default), <code>title</code>, etc ... (where).</li>
+<li><code>search</code>: Some text to search for (search for).</li>
+<li><code>result</code>: <code>fullObjects</code> (default), <code>dynamicSelect</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>stats</code>:
+<ul>
+<li><code>count</code>: Count / sum of the media files (assets, presentations) in the
+database.</li>
+<li><code>updates</code>: Journal of the update processes with timestamps.</li>
+</ul>
+</li>
+</ul></div>
+            
+
+            
+<dl class="details">
+    
+        
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+
+            
+        
+        </div>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+        <h3 class="subsection-title">Classes</h3>
+        
+        <dl class="clearfix summary-list list-classes">
+            <dt class=""><a href="module-@bldr_media-server-Asset.html">Asset</a></dt>
+            
+        
+            <dt class=""><a href="module-@bldr_media-server-FolderTitle.html">FolderTitle</a></dt>
+            
+        
+            <dt class=""><a href="module-@bldr_media-server-FolderTitleTree.html">FolderTitleTree</a></dt>
+            
+        
+            <dt class=""><a href="module-@bldr_media-server-HierarchicalFolderTitles.html">HierarchicalFolderTitles</a></dt>
+            
+        
+            <dt class=""><a href="module-@bldr_media-server-LocationIndicator.html">LocationIndicator</a></dt>
+            
+        
+            <dt class=""><a href="module-@bldr_media-server-MediaFile.html">MediaFile</a></dt>
+            
+        
+            <dt class=""><a href="module-@bldr_media-server-Presentation.html">Presentation</a></dt>
+            
+        </dl>
+    
+    
+    
+    
+    
+        <h3 class="subsection-title">Members</h3>
+        
+        <dl class="list-members">
+            
 <dt>
     <div class="nameContainer">
-        <h4 class="name" id="Overflow">
-            <a class="share-icon" href="#Overflow"><span class="glyphicon glyphicon-link"></span></a>
+        <h4 class="name" id="~basePath">
+            <a class="share-icon" href="#~basePath"><span class="glyphicon glyphicon-link"></span></a>
+            <span class="">basePath</span>
+            
+            
+            <span class="access-signature">inner</span><span class="access-signature">constant</span>
+            
+            
+        </h4>
+    </div>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>Base path of the media server file store.</p>
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="~config">
+            <a class="share-icon" href="#~config"><span class="glyphicon glyphicon-link"></span></a>
+            <span class="">config</span>
+            
+            
+            <span class="access-signature">inner</span><span class="access-signature">constant</span>
+            
+            
+        </h4>
+    </div>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>The configuration object from <code>/etc/baldr.json</code></p>
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="~db">
+            <a class="share-icon" href="#~db"><span class="glyphicon glyphicon-link"></span></a>
+            <span class="">db</span>
+            <span class="type-signature type">mongodb~Db</span>
+            
+            <span class="access-signature">inner</span>
+            
+            
+        </h4>
+    </div>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>The MongoDB Db instance</p>
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="~errors">
+            <a class="share-icon" href="#~errors"><span class="glyphicon glyphicon-link"></span></a>
+            <span class="">errors</span>
+            
+            
+            <span class="access-signature">inner</span>
+            
+            
+        </h4>
+    </div>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>A container array for all error messages send out via the REST API.</p>
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="~helpMessages">
+            <a class="share-icon" href="#~helpMessages"><span class="glyphicon glyphicon-link"></span></a>
+            <span class="">helpMessages</span>
+            <span class="type-signature type">Object</span>
+            
+            <span class="access-signature">inner</span><span class="access-signature">constant</span>
+            
+            
+        </h4>
+    </div>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>This object hold jsons for displaying help messages in the browser on
+some entry point urls.</p>
+<p>Update docs on the top of this file in the JSDoc block.</p>
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="~mongoClient">
+            <a class="share-icon" href="#~mongoClient"><span class="glyphicon glyphicon-link"></span></a>
+            <span class="">mongoClient</span>
+            
+            
+            <span class="access-signature">inner</span><span class="access-signature">constant</span>
+            
+            
+        </h4>
+    </div>
+    
+    
+</dt>
+<dd>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        </dl>
+    
+    
+    
+        <h3 class="subsection-title">Methods</h3>
+        
+        <dl class="list-methods">
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="~connectDb">
+            <a class="share-icon" href="#~connectDb"><span class="glyphicon glyphicon-link"></span></a>
             <span class="">
-                new Overflow
+                connectDb
+            </span>
+            <span class="signature">()</span><span class="type-signature">Promise</span>
+            
+            <span class="access-signature">async</span><span class="access-signature">inner</span>
+            
+            
+        </h4>
+    
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    
+        <tr>
+            
+            <td class="type">
+            
+                        Promise
+                        
+                    
+            </td>
+            <td class="description last"></td>
+        </tr>
+    
+    </tbody>
+</table>
+
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="~dropDb">
+            <a class="share-icon" href="#~dropDb"><span class="glyphicon glyphicon-link"></span></a>
+            <span class="">
+                dropDb
+            </span>
+            <span class="signature">()</span><span class="type-signature">Promise</span>
+            
+            <span class="access-signature">async</span><span class="access-signature">inner</span>
+            
+            
+        </h4>
+    
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    
+        <tr>
+            
+            <td class="type">
+            
+                        Promise
+                        
+                    
+            </td>
+            <td class="description last"></td>
+        </tr>
+    
+    </tbody>
+</table>
+
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="~flushMediaFiles">
+            <a class="share-icon" href="#~flushMediaFiles"><span class="glyphicon glyphicon-link"></span></a>
+            <span class="">
+                flushMediaFiles
+            </span>
+            <span class="signature">()</span><span class="type-signature">Promise</span>
+            
+            <span class="access-signature">async</span><span class="access-signature">inner</span>
+            
+            
+        </h4>
+    
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    
+        <tr>
+            
+            <td class="type">
+            
+                        Promise
+                        
+                    
+            </td>
+            <td class="description last"></td>
+        </tr>
+    
+    </tbody>
+</table>
+
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="~getAbsPathFromId">
+            <a class="share-icon" href="#~getAbsPathFromId"><span class="glyphicon glyphicon-link"></span></a>
+            <span class="">
+                getAbsPathFromId
+            </span>
+            <span class="signature">(id, mediaType)</span><span class="type-signature">String</span>
+            
+            <span class="access-signature">async</span><span class="access-signature">inner</span>
+            
+            
+        </h4>
+    
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Resolve a ID from a given media type (<code>assets</code>, <code>presentations</code>) to a
+absolute path.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		<th>Default</th>
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+            
+            
+                <td class="default">
+                
+                </td>
+            
+            
+            <td class="description last">
+                
+                <p>The id of the media type.</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>mediaType</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+            
+            
+                <td class="default">
+                
+                    presentations
+                
+                </td>
+            
+            
+            <td class="description last">
+                
+                <p>At the moment <code>assets</code> and <code>presentation</code></p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    
+        <tr>
+            
+            <td class="type">
+            
+                        String
+                        
+                    
+            </td>
+            <td class="description last"></td>
+        </tr>
+    
+    </tbody>
+</table>
+
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="~getExtension">
+            <a class="share-icon" href="#~getExtension"><span class="glyphicon glyphicon-link"></span></a>
+            <span class="">
+                getExtension
+            </span>
+            <span class="signature">(filePath)</span><span class="type-signature">String</span>
+            
+            <span class="access-signature">inner</span>
+            
+            
+        </h4>
+    
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Get the extension from a file path.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>filePath</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                </td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    
+        <tr>
+            
+            <td class="type">
+            
+                        String
+                        
+                    
+            </td>
+            <td class="description last"></td>
+        </tr>
+    
+    </tbody>
+</table>
+
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="~initializeDb">
+            <a class="share-icon" href="#~initializeDb"><span class="glyphicon glyphicon-link"></span></a>
+            <span class="">
+                initializeDb
+            </span>
+            <span class="signature">()</span><span class="type-signature">Promise</span>
+            
+            <span class="access-signature">async</span><span class="access-signature">inner</span>
+            
+            
+        </h4>
+    
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    
+        <tr>
+            
+            <td class="type">
+            
+                        Promise
+                        
+                    
+            </td>
+            <td class="description last"></td>
+        </tr>
+    
+    </tbody>
+</table>
+
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="~insertObjectIntoDb">
+            <a class="share-icon" href="#~insertObjectIntoDb"><span class="glyphicon glyphicon-link"></span></a>
+            <span class="">
+                insertObjectIntoDb
+            </span>
+            <span class="signature">(filePath)</span>
+            
+            <span class="access-signature">async</span><span class="access-signature">inner</span>
+            
+            
+        </h4>
+    
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>filePath</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                </td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="~isAsset">
+            <a class="share-icon" href="#~isAsset"><span class="glyphicon glyphicon-link"></span></a>
+            <span class="">
+                isAsset
+            </span>
+            <span class="signature">(fileName)</span>
+            
+            <span class="access-signature">inner</span>
+            
+            
+        </h4>
+    
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Check if the given file is a media asset.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>fileName</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                </td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="~isPresentation">
+            <a class="share-icon" href="#~isPresentation"><span class="glyphicon glyphicon-link"></span></a>
+            <span class="">
+                isPresentation
+            </span>
+            <span class="signature">(fileName)</span>
+            
+            <span class="access-signature">inner</span>
+            
+            
+        </h4>
+    
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Check if the given file is a presentation.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>fileName</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                </td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="~mirrorFolderStructure">
+            <a class="share-icon" href="#~mirrorFolderStructure"><span class="glyphicon glyphicon-link"></span></a>
+            <span class="">
+                mirrorFolderStructure
+            </span>
+            <span class="signature">(currentPath)</span><span class="type-signature">Object</span>
+            
+            <span class="access-signature">inner</span>
+            
+            
+        </h4>
+    
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Mirror the folder structure of the media folder into the archive folder or
+vice versa. Only folders with two prefixed numbers followed by an
+underscore (for example “10_”) are mirrored.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>currentPath</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                <p>Must be a relative path within one of the
+folder structures.</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    
+        <tr>
+            
+            <td class="type">
+            
+                        Object
+                        
+                    
+            </td>
+            <td class="description last"><ul>
+<li>Status informations of the action.</li>
+</ul></td>
+        </tr>
+    
+    </tbody>
+</table>
+
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="~openEditor">
+            <a class="share-icon" href="#~openEditor"><span class="glyphicon glyphicon-link"></span></a>
+            <span class="">
+                openEditor
+            </span>
+            <span class="signature">(id, mediaType)</span><span class="type-signature">Object</span>
+            
+            <span class="access-signature">async</span><span class="access-signature">inner</span>
+            
+            
+        </h4>
+    
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Open a media file specified by an ID with an editor specified in
+<code>config.mediaServer.editor</code> (<code>/etc/baldr.json</code>).</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                <p>The id of the media type.</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>mediaType</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                <p>At the moment <code>assets</code> and <code>presentation</code></p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    
+        <tr>
+            
+            <td class="type">
+            
+                        Object
+                        
+                    
+            </td>
+            <td class="description last"></td>
+        </tr>
+    
+    </tbody>
+</table>
+
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="~openFolder">
+            <a class="share-icon" href="#~openFolder"><span class="glyphicon glyphicon-link"></span></a>
+            <span class="">
+                openFolder
+            </span>
+            <span class="signature">(currentPath, create)</span>
+            
+            <span class="access-signature">inner</span>
+            
+            
+        </h4>
+    
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Open a file path using the linux command <code>xdg-open</code>.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>currentPath</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                </td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>create</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                <p>Create the directory structure of
+the given <code>currentPath</code> in a recursive manner.</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="~openFolderWithArchives">
+            <a class="share-icon" href="#~openFolderWithArchives"><span class="glyphicon glyphicon-link"></span></a>
+            <span class="">
+                openFolderWithArchives
+            </span>
+            <span class="signature">(currentPath, create)</span>
+            
+            <span class="access-signature">inner</span>
+            
+            
+        </h4>
+    
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Open the current path multiple times.</p>
+<ol>
+<li>In the main media server directory</li>
+<li>In a archive directory structure.</li>
+<li>In a second archive directory structure ... and so on.</li>
+</ol>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>currentPath</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                </td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>create</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                <p>Create the directory structure of
+the given <code>currentPath</code> in a recursive manner.</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="~openParentFolder">
+            <a class="share-icon" href="#~openParentFolder"><span class="glyphicon glyphicon-link"></span></a>
+            <span class="">
+                openParentFolder
+            </span>
+            <span class="signature">(id, mediaType, archive, create)</span><span class="type-signature">Object</span>
+            
+            <span class="access-signature">async</span><span class="access-signature">inner</span>
+            
+            
+        </h4>
+    
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Open the parent folder of a presentation, a media asset in a file explorer
+GUI application.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                <p>The id of the media type.</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>mediaType</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                <p>At the moment <code>assets</code> and <code>presentation</code></p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>archive</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                <p>Addtionaly open the corresponding archive
+folder.</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>create</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                <p>Create the directory structure of
+the relative path in the archive in a recursive manner.</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    
+        <tr>
+            
+            <td class="type">
+            
+                        Object
+                        
+                    
+            </td>
+            <td class="description last"></td>
+        </tr>
+    
+    </tbody>
+</table>
+
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="~openWith">
+            <a class="share-icon" href="#~openWith"><span class="glyphicon glyphicon-link"></span></a>
+            <span class="">
+                openWith
             </span>
             <span class="signature">()</span>
             
+            <span class="access-signature">inner</span>
             
+            
+        </h4>
+    
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Open a file path with an executable.</p>
+<p>To launch apps via the REST API the systemd unit file must run as
+the user you login in in your desktop environment. You also have to set
+to environment variables: <code>DISPLAY=:0</code> and
+<code>DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$UID/bus</code></p>
+<pre class="prettyprint source"><code>Environment=DISPLAY=:0
+Environment=DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus
+User=1000
+Group=1000
+</code></pre>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>node module on npmjs.org “open”</li>
+        
+            <li><a target="_blank" href="https://unix.stackexchange.com/a/537848">https://unix.stackexchange.com/a/537848</a></li>
+        </ul>
+    </dd>
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="~registerRestApi">
+            <a class="share-icon" href="#~registerRestApi"><span class="glyphicon glyphicon-link"></span></a>
+            <span class="">
+                registerRestApi
+            </span>
+            <span class="signature">()</span>
+            
+            <span class="access-signature">inner</span>
+            
+            
+        </h4>
+    
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Register the express js rest api in a giant function.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="~reInitializeDb">
+            <a class="share-icon" href="#~reInitializeDb"><span class="glyphicon glyphicon-link"></span></a>
+            <span class="">
+                reInitializeDb
+            </span>
+            <span class="signature">()</span><span class="type-signature">Promise</span>
+            
+            <span class="access-signature">async</span><span class="access-signature">inner</span>
+            
+            
+        </h4>
+    
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    
+        <tr>
+            
+            <td class="type">
+            
+                        Promise
+                        
+                    
+            </td>
+            <td class="description last"></td>
+        </tr>
+    
+    </tbody>
+</table>
+
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="~setupMongoUrl">
+            <a class="share-icon" href="#~setupMongoUrl"><span class="glyphicon glyphicon-link"></span></a>
+            <span class="">
+                setupMongoUrl
+            </span>
+            <span class="signature">()</span>
+            
+            <span class="access-signature">inner</span>
             
             
         </h4>
@@ -4281,7 +6887,89 @@
 </dd>
 
         
-        </div>
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="~stripTags">
+            <a class="share-icon" href="#~stripTags"><span class="glyphicon glyphicon-link"></span></a>
+            <span class="">
+                stripTags
+            </span>
+            <span class="signature">(text)</span><span class="type-signature">String</span>
+            
+            <span class="access-signature">inner</span>
+            
+            
+        </h4>
+    
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Strip HTML tags from a string.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>text</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                <p>A text containing HTML tags.</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
     
     
     
@@ -4298,6 +6986,681 @@
     
     
     
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    
+        <tr>
+            
+            <td class="type">
+            
+                        String
+                        
+                    
+            </td>
+            <td class="description last"></td>
+        </tr>
+    
+    </tbody>
+</table>
+
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="~untildify">
+            <a class="share-icon" href="#~untildify"><span class="glyphicon glyphicon-link"></span></a>
+            <span class="">
+                untildify
+            </span>
+            <span class="signature">(filePath)</span>
+            
+            <span class="access-signature">inner</span>
+            
+            
+        </h4>
+    
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>filePath</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                </td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a target="_blank" href="https://stackoverflow.com/a/36221905/10193818">https://stackoverflow.com/a/36221905/10193818</a></li>
+        </ul>
+    </dd>
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="~update">
+            <a class="share-icon" href="#~update"><span class="glyphicon glyphicon-link"></span></a>
+            <span class="">
+                update
+            </span>
+            <span class="signature">()</span><span class="type-signature">Object</span>
+            
+            <span class="access-signature">async</span><span class="access-signature">inner</span>
+            
+            
+        </h4>
+    
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Update the media server.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    
+        <tr>
+            
+            <td class="type">
+            
+                        Object
+                        
+                    
+            </td>
+            <td class="description last"></td>
+        </tr>
+    
+    </tbody>
+</table>
+
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="~validateMediaType">
+            <a class="share-icon" href="#~validateMediaType"><span class="glyphicon glyphicon-link"></span></a>
+            <span class="">
+                validateMediaType
+            </span>
+            <span class="signature">(mediaType)</span><span class="type-signature">String</span>
+            
+            <span class="access-signature">inner</span>
+            
+            
+        </h4>
+    
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Throw an error if the media type is unkown. Provide a default value.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>mediaType</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                <p>At the moment <code>assets</code> and <code>presentation</code></p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    
+        <tr>
+            
+            <td class="type">
+            
+                        String
+                        
+                    
+            </td>
+            <td class="description last"></td>
+        </tr>
+    
+    </tbody>
+</table>
+
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="~walk">
+            <a class="share-icon" href="#~walk"><span class="glyphicon glyphicon-link"></span></a>
+            <span class="">
+                walk
+            </span>
+            <span class="signature">(func, opt)</span>
+            
+            <span class="access-signature">async</span><span class="access-signature">inner</span>
+            
+            
+        </h4>
+    
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Execute a function on one file or walk trough all files matching a regex in
+the current working directory or in the given directory path.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>func</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+|
+
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                <p>A single function or an object containing
+functions. Properties:</p>
+<ul>
+<li><code>presentation</code>: This function is called on each presentation.</li>
+<li><code>asset</code>: This function is called on each asset.</li>
+<li><code>all</code> (<code>presentation</code>, <code>asset</code>):  This function is called on all media
+types, at the moment on presentations and assets.</li>
+<li><code>everyFile</code>This function is called on every file.</li>
+</ul></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>opt</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                </td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+        <h5 class="subsection-title">Properties:</h5>
+        
+        <dl>
+
+<table class="props">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>opt.payload</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"><p>The function/s is/are called with with
+this object. Multiple arguments have to be bundled as a single object.</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>opt.path</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Array</span>
+|
+
+<span class="param-type">String</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"><p>An array of paths of a directory
+or paths of a file. A single path of a directory or a single path of a
+file. If this property is not set, the current working directory is used.</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>opt.regex</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+|
+
+<span class="param-type">Regex</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"><p>If this property is set,
+<code>func</code> have to be an single function. Each resolved file path must
+match this regular expression to execute the function. If you specified a
+string, this string is converted into the regexp <code>*.ext</code>.</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table></dl>
+        
+    
+        
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        </dl>
     
     
     
@@ -4317,7 +7680,7 @@
 
         <footer class="content-size">
             <div class="footer">
-                Documentation generated by <a target="_blank" href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Mon Mar 23 2020 17:01:58 GMT+0100 (GMT+01:00)
+                Documentation generated by <a target="_blank" href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Mon Mar 23 2020 17:01:57 GMT+0100 (GMT+01:00)
             </div>
         </footer>
     </div>
