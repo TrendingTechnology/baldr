@@ -22,17 +22,16 @@
   },
   "dependencies": {
     "@bldr/api": "^0.2.3",
-    "@bldr/media-server": "^0.2.3",
     "@bldr/core-browser": "^0.11.3",
     "@bldr/core-node": "^0.2.2",
+    "@bldr/media-server": "^0.2.3",
     "@bldr/songbook-intermediate-files": "^0.2.3",
+    "@bldr/wikidata": "^0.1.0",
     "chalk": "^3.0.0",
     "color": "^3.1.2",
     "commander": "^4.1.1",
     "js-yaml": "^3.13.1",
-    "node-fetch": "^2.6.0",
-    "webfont": "^9.0.0",
-    "wikibase-sdk": "^7.2.1"
+    "webfont": "^9.0.0"
   },
   "bin": {
     "baldr_cli.js": "./src/main.js"

@@ -6,13 +6,14 @@ const yaml = require('js-yaml')
 
 // Project packages.
 const mediaServer = require('@bldr/media-server')
+const queryWikidata = require('@bldr/wikidata')
 
 const lib = require('../../lib.js')
 
 /**
  * @param {String} filePath - The media asset file path.
  */
-function normalizeOneFile (filePath) {
+async function normalizeOneFile (filePath) {
   try {
     const metaTypes = mediaServer.metaTypes
     const typeName = metaTypes.detectTypeByPath(filePath)
@@ -21,6 +22,10 @@ function normalizeOneFile (filePath) {
     metaData.type = typeName
     metaData = mediaServer.metaTypes.process(metaData)
     console.log(metaData)
+    if (metaData.wikidata && metaData.type) {
+      const wikidata = await queryWikidata(metaData.wikidata, metaData.type)
+      console.log(wikidata)
+    }
     metaData = lib.normalizeMetaData(filePath, metaData)
     //lib.writeYamlFile(yamlFile, metaData)
   } catch (error) {
@@ -36,9 +41,9 @@ function normalizeOneFile (filePath) {
  */
 function action (files) {
   mediaServer.walk({
-    asset (relPath) {
+    async asset (relPath) {
       if (fs.existsSync(`${relPath}.yml`)) {
-        normalizeOneFile(relPath)
+        await normalizeOneFile(relPath)
       }
     }
   }, {

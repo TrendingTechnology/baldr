@@ -1,0 +1,23 @@
+{
+  "name": "@bldr/wikidata",
+  "version": "0.1.0",
+  "description": "Query the wikidata API to enrich the metadata of the BALDR media server.",
+  "author": {
+    "name": "Josef Friedrich",
+    "email": "josef@friedrich.rocks",
+    "url": "https://josef.friedrich.rocks"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Josef-Friedrich/baldr.git"
+  },
+  "main": "main.js",
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "node-fetch": "^2.6.0",
+    "wikibase-sdk": "^7.2.1"
+  }
+}
