@@ -124,17 +124,17 @@ Vue.config.productionTip = false
  * An extended version of the Vue `prop` definition.
  *
  * @typedef propDef
- * @property {Mixed} prop.default - A default value.
- * @property {String} prop.description - A descriptive text shown in the
+ * @property {Mixed} default - A default value.
+ * @property {String} description - A descriptive text shown in the
  *   documentation.
- * @property {Boolean} prop.inlineMedia - Indicates that this `prop` is text for
+ * @property {Boolean} inlineMedia - Indicates that this `prop` is text for
  *   extracting inline media URIs like `[id:Beethoven_Ludwig-van]`.
- * @property {Boolean} prop.markup - If true this property is converted into
+ * @property {Boolean} markup - If true this property is converted into
  *   HTML.
- * @property {Boolean} prop.mediaFileUri - Indicates that this `prop` contains
+ * @property {Boolean} mediaFileUri - Indicates that this `prop` contains
  *   a media file URI.
- * @property {Boolean} prop.required - In the `prop` must specifed.
- * @property {Object|Array} prop.type - Same as Vue `type`.
+ * @property {Boolean} required - In the `prop` must specifed.
+ * @property {Object|Array} type - The same as Vue `type`.
  * @type {Object}
  */
 

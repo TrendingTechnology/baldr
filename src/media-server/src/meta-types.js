@@ -20,12 +20,12 @@ const config = bootstrapConfig()
  * The specification of a property.
  *
  * @typedef {Object} propSpec
- * @param {Boolean} required
- * @param {Function} derive
- * @param {Boolean} useDerivedIfEmpty - Only use the value obtained from
+ * @property {Boolean} required
+ * @property {Function} derive
+ * @property {Boolean} useDerivedIfEmpty - Only use the value obtained from
  *   the `derive` function if the original value is empty.
- * @param {Function} format
- * @param {Function} validate
+ * @property {Function} format
+ * @property {Function} validate
  */
 
 /**
@@ -304,7 +304,7 @@ function validate (metadata) {
 }
 
 /**
- * @param {@bldr/media-server/meta-type~propSpec} propSpec - The specification of one property
+ * @param {module:@bldr/media-server/meta-type~propSpec} propSpec - The specification of one property
  *
  * @private
  */
