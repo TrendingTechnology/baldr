@@ -23,8 +23,7 @@ async function normalizeOneFile (filePath) {
 
     if (metaData.wikidata && metaData.type) {
       const dataWiki = await wikidata.query(metaData.wikidata, metaData.type)
-      metadata = wikidata.mergeData(metaData, dataWiki)
-      console.log(metadata)
+      metaData = wikidata.mergeData(metaData, dataWiki)
     }
     metaData = mediaServer.metaTypes.process(metaData)
     // TODO: remove. outsource all code into the typeSpecs

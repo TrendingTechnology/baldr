@@ -396,7 +396,8 @@ const typeSpecs = {
 function mergeData (data, dataWiki) {
   // Ẃe delete properties from this object -> make a flat copy.
   const dataOrig = Object.assign({}, data)
-  const metaTypeName = dataWiki.type
+  let metaTypeName = dataOrig.type
+  if (!metaTypeName) metaTypeName = dataWiki.type
   if (!metaTypeName) {
     return Object.assign({}, dataOrig, dataWiki)
   }
@@ -407,9 +408,11 @@ function mergeData (data, dataWiki) {
 
   for (const propName in dataWiki) {
     const propSpec = propSpecs[propName]
-    if ((dataOrig[propName] && propSpec.alwaysUpdate) || !dataOrig[propName]) {
+    if (propSpec && (dataOrig[propName] && propSpec.alwaysUpdate) || !dataOrig[propName]) {
       result[propName] = dataWiki[propName]
       delete dataOrig[propName]
+    } else {
+      result[propName] = dataWiki[propName]
     }
   }
 
