@@ -304,9 +304,8 @@ function validate (metadata) {
 }
 
 /**
- * @param {module:@bldr/media-server/meta-type~propSpec} propSpec - The specification of one property
- *
- * @private
+ * @param {module:@bldr/media-server/meta-types~propSpec} propSpec - The
+ *   specification of one property
  */
 function isPropertyDerived (propSpec) {
   if (propSpec && propSpec.derive && typeof propSpec.derive === 'function') {
