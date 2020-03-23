@@ -29,15 +29,26 @@ const config = bootstrapConfig()
  */
 
 /**
- * The specification of all properties.
+ * The specification of all properties. The single `propSpec`s are indexed
+ * by the `propName`.
+ *
+ * ```js
+ * const propSpecs = {
+ *   id: propSpec
+ *   title: propSpec
+ * }
+ * ```
  *
  * @typedef {Object} propSpecs
  */
 
 /**
- * The specification of one meta type.
+ * The specification of one metadata type.
  *
  * @typedef {Object} typeSpec
+ * @property {String} basePath
+ * @property {Object} detectType
+ * @property {module:@bldr/media-server/meta-types~propSpecs} props
  */
 
 /**
