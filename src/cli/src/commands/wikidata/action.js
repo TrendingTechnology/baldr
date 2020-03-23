@@ -1,5 +1,5 @@
 // Third party packages.
-const queryWikidata = require('@bldr/wikidata')
+const wikidata = require('@bldr/wikidata')
 
 /**
  * @param {String} metadataType - For example `group,instrument,person,song`
@@ -8,7 +8,7 @@ const queryWikidata = require('@bldr/wikidata')
  * @param {String} arg2
  */
 async function action (metadataType, itemId, arg1, arg2) {
-  const result = await queryWikidata(itemId, metadataType)
+  const result = await wikidata.query(itemId, metadataType)
   console.log(result)
 }
 

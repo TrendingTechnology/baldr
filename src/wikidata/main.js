@@ -327,6 +327,11 @@ const typeSpecs = {
       format: formatDate,
       alwaysUpdate: true
     },
+    short_biography: {
+      source: {
+        fromEntity: getDescription
+      }
+    },
     wikipedia: {
       source: {
         fromEntity: getWikipediaTitle
@@ -378,6 +383,49 @@ const typeSpecs = {
   }
 }
 
+/**
+ * Merge two objects containing metadata: a original metadata object and a
+ * object obtained from wikidata. Override a property in original only if
+ * `alwaysUpdate` is set on the property specification.
+ *
+ * @param {Object} dataOrig
+ * @param {Object} dataWiki
+ *
+ * @returns {Object}
+ */
+function mergeData (data, dataWiki) {
+  // Ẃe delete properties from this object -> make a flat copy.
+  const dataOrig = Object.assign({}, data)
+  const metaTypeName = dataWiki.type
+  if (!metaTypeName) {
+    return Object.assign({}, dataOrig, dataWiki)
+  }
+
+  const propSpecs = typeSpecs[metaTypeName]
+
+  result = {}
+
+  for (const propName in dataWiki) {
+    const propSpec = propSpecs[propName]
+    if ((dataOrig[propName] && propSpec.alwaysUpdate) || !dataOrig[propName]) {
+      result[propName] = dataWiki[propName]
+      delete dataOrig[propName]
+    }
+  }
+
+  for (const propName in dataOrig) {
+    result[propName] = dataOrig[propName]
+  }
+  return result
+}
+
+/**
+ *
+ * @param {String} itemId
+ * @param {String} metaTypeName
+ *
+ * @returns {Object}
+ */
 async function query (itemId, metaTypeName) {
   if (!wikibase.isItemId(itemId)) {
     throw new Error(`No item id: ${itemId}`)
@@ -414,4 +462,7 @@ async function query (itemId, metaTypeName) {
   return result
 }
 
-module.exports = query
+module.exports = {
+  mergeData,
+  query
+}

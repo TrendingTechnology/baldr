@@ -6,7 +6,7 @@ const yaml = require('js-yaml')
 
 // Project packages.
 const mediaServer = require('@bldr/media-server')
-const queryWikidata = require('@bldr/wikidata')
+const wikidata = require('@bldr/wikidata')
 
 const lib = require('../../lib.js')
 
@@ -20,14 +20,17 @@ async function normalizeOneFile (filePath) {
     const yamlFile = `${filePath}.yml`
     let metaData = yaml.safeLoad(lib.readFile(yamlFile))
     metaData.type = typeName
-    metaData = mediaServer.metaTypes.process(metaData)
-    console.log(metaData)
+
     if (metaData.wikidata && metaData.type) {
-      const wikidata = await queryWikidata(metaData.wikidata, metaData.type)
-      console.log(wikidata)
+      const dataWiki = await wikidata.query(metaData.wikidata, metaData.type)
+      metadata = wikidata.mergeData(metaData, dataWiki)
+      console.log(metadata)
     }
+    metaData = mediaServer.metaTypes.process(metaData)
+    // TODO: remove. outsource all code into the typeSpecs
     metaData = lib.normalizeMetaData(filePath, metaData)
-    //lib.writeYamlFile(yamlFile, metaData)
+    console.log(metaData)
+    lib.writeYamlFile(yamlFile, metaData)
   } catch (error) {
     console.log(filePath)
     console.log(error)
