@@ -84,6 +84,10 @@ const typeSpecs = {
         format: function (value) {
           value = asciify(value)
 
+          // Deletion of dots can not be in asciify, because asciify is
+          // use in some rename operations.
+          value = value.replace(/\./g, '')
+
           // a-Strawinsky-Petruschka-Abschnitt-0_22
           value = value.replace(/^[va]-/, '')
 
@@ -101,6 +105,11 @@ const typeSpecs = {
       title: {
         required: true,
         overwriteByDerived: false,
+        format: function (value) {
+          // a Strawinsky Petruschka Abschnitt 0_22
+          value = value.replace(/^[va] /, '')
+          return value
+        },
         derive: function () {
           return deasciify(this.id)
         }

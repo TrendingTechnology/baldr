@@ -12,7 +12,10 @@ const { renameOneFile } = require('../rename/action.js')
 function action (files) {
   mediaServer.walk({
     asset (relPath) {
-      const result = lib.writeMetaDataYaml(renameOneFile(relPath))
+      const newPath = renameOneFile(relPath)
+      console.log(newPath)
+
+      const result = lib.writeMetaDataYaml(newPath)
       console.log(result)
     }
   }, {

@@ -26,7 +26,9 @@ function asciify (input) {
     .replace(/Ü/g, 'Ue')
     .replace(/ü/g, 'ue')
     .replace(/ß/g, 'ss')
-    .replace(/[\.!]/g, '')
+    .replace(/!/g, '')
+    // asciify is used by rename. We can not remove dots because of the exentions
+    //.replace(/\./g, '')
   return transliterate(output)
 }
 

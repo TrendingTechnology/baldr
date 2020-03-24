@@ -128,11 +128,6 @@ function writeFile (filePath, content) {
  *   file.
  */
 function normalizeMetaData (filePath, metaData) {
-  const normalized = {}
-
-  // a Strawinsky Petruschka Abschnitt 0_22
-  if (metaData.title) metaData.title = metaData.title.replace(/^[va] /, '')
-
   /**
    * Generate a ID prefix for media assets, like `Presentation-ID_HB` if the
    * path of the media file is `10_Presentation-id/HB/example.mp3`.
@@ -161,8 +156,8 @@ function normalizeMetaData (filePath, metaData) {
 
   const idPrefix = generateIdPrefix(filePath)
   if (idPrefix) {
-    if (normalized.id.indexOf(idPrefix) === -1) {
-      normalized.id = `${idPrefix}_${normalized.id}`
+    if (metaData.id.indexOf(idPrefix) === -1) {
+      metaData.id = `${idPrefix}_${metaData.id}`
     }
 
     // Avoid duplicate idPrefixes by changed prefixes:
@@ -171,19 +166,12 @@ function normalizeMetaData (filePath, metaData) {
     // old prefix: Piazzolla-Adios-Nonino_NB
     // updated prefix: Piazzolla-Nonino_NB
     // Preferred result: Piazzolla-Nonino_NB_Adios-Nonino_melancolico
-    if (normalized.id.match(/.*_[A-Z]{2,}_.*/)) {
-      normalized.id = normalized.id.replace(/^.*_[A-Z]{2,}/, idPrefix)
+    if (metaData.id.match(/.*_[A-Z]{2,}_.*/)) {
+      metaData.id = metaData.id.replace(/^.*_[A-Z]{2,}/, idPrefix)
     }
   }
 
-  for (const key in metaData) {
-    if (metaData.hasOwnProperty(key)) {
-      normalized[key] = metaData[key]
-      delete metaData[key]
-    }
-  }
-
-  return normalized
+  return metaData
 }
 
 /**
