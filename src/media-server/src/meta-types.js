@@ -71,6 +71,14 @@ const config = bootstrapConfig()
  * @typedef {String} typeName
  */
 
+function validateDate (value) {
+  return value.match(/\d{4,}-\d{2,}-\d{2,}/)
+}
+
+function validateUuid (value) {
+  return value.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89AB][0-9a-f]{3}-[0-9a-f]{12}$/i)
+}
+
  /**
   * @type {module:@bldr/media-server/meta-types~typeSpecs}
   */
@@ -129,7 +137,7 @@ const typeSpecs = {
       }
     }
   },
-  audioSample: {
+  musicalWork: {
     detectType: {
       byPath: new RegExp('^.*/HB/.*$')
     },
@@ -149,6 +157,15 @@ const typeSpecs = {
             return value
           }
         }
+      },
+      artist: {
+
+      },
+      musicbrainzWorkId: {
+        validate: validateUuid
+      },
+      musicbrainzRecordingId: {
+        validate: validateUuid
       }
     }
   },
@@ -181,15 +198,14 @@ const typeSpecs = {
       name: {
         required: true
       },
+      shortHistory: {
+
+      },
       startDate: {
-        validate: function (value) {
-          return value.match(/\d{4,}-\d{2,}-\d{2,}/)
-        }
+        validate: validateDate
       },
       endDate: {
-        validate: function (value) {
-          return value.match(/\d{4,}-\d{2,}-\d{2,}/)
-        }
+        validate: validateDate
       }
     }
   },
@@ -227,16 +243,12 @@ const typeSpecs = {
         overwriteByDerived: false
       },
       birth: {
-        validate: function (value) {
-          return value.match(/\d{4,}-\d{2,}-\d{2,}/)
-        }
+        validate: validateDate
       },
       death: {
-        validate: function (value) {
-          return value.match(/\d{4,}-\d{2,}-\d{2,}/)
-        }
+        validate: validateDate
       },
-      short_biography: {
+      shortBiography: {
         required: true
       }
     }
