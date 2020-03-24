@@ -169,6 +169,9 @@ const typeSpecs = {
         },
         overwriteByDerived: true
       },
+      name: {
+        required: true
+      },
       startDate: {
         validate: function (value) {
           return value.match(/\d{4,}-\d{2,}-\d{2,}/)

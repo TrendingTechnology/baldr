@@ -271,6 +271,12 @@ const typeSpecs = {
         fromClaim: 'P1448'
       }
     },
+    // Logo
+    logo: {
+      source: {
+        fromClaim: 'P154'
+      }
+    },
     shortHistory: {
       source: {
         fromEntity: getDescription
