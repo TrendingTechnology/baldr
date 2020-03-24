@@ -133,13 +133,6 @@ function normalizeMetaData (filePath, metaData) {
   // a Strawinsky Petruschka Abschnitt 0_22
   if (metaData.title) metaData.title = metaData.title.replace(/^[va] /, '')
 
-  for (const key of ['id', 'title', 'description', 'composer']) {
-    if (key in metaData) {
-      normalized[key] = metaData[key]
-      delete metaData[key]
-    }
-  }
-
   /**
    * Generate a ID prefix for media assets, like `Presentation-ID_HB` if the
    * path of the media file is `10_Presentation-id/HB/example.mp3`.

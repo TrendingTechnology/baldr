@@ -89,16 +89,16 @@ const typeSpecs = {
         },
         required: true
       },
+      metaType: {
+        validate: function (value) {
+          return String(value).match(/^[a-zA-Z]+$/)
+        }
+      },
       title: {
         required: true,
         overwriteByDerived: false,
         derive: function () {
           return deasciify(this.id)
-        }
-      },
-      type: {
-        validate: function (value) {
-          return String(value).match(/^[a-zA-Z]+$/)
         }
       },
       wikidata: {
@@ -169,9 +169,6 @@ const typeSpecs = {
         },
         overwriteByDerived: false
       },
-      short_biography: {
-        required: true
-      },
       birth: {
         validate: function (value) {
           return value.match(/\d{4,}-\d{2,}-\d{2,}/)
@@ -181,6 +178,9 @@ const typeSpecs = {
         validate: function (value) {
           return value.match(/\d{4,}-\d{2,}-\d{2,}/)
         }
+      },
+      short_biography: {
+        required: true
       }
     }
   }

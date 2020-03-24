@@ -5,6 +5,7 @@ const assert = require('assert')
 // Third party packages.
 const yaml = require('js-yaml')
 const chalk = require('chalk')
+const sleep = require('sleep')
 
 // Project packages.
 const mediaServer = require('@bldr/media-server')
@@ -17,6 +18,7 @@ const lib = require('../../lib.js')
  * @param {String} filePath - The media asset file path.
  */
 async function normalizeOneFile (filePath, cmdObj) {
+
   try {
     const metaTypes = mediaServer.metaTypes
     const typeName = metaTypes.detectTypeByPath(filePath)
@@ -49,12 +51,20 @@ async function normalizeOneFile (filePath, cmdObj) {
       console.log(metaData)
 
       lib.writeYamlFile(yamlFile, metaData)
+
     }
   } catch (error) {
     console.log(filePath)
     console.log(error)
     process.exit()
   }
+  // To avoid blocking
+  // url: 'https://www.wikidata.org/w/api.php?action=wbgetentities&ids=Q16276296&format=json&languages=en%7Cde&props=labels',
+  // status: 429,
+  // statusText: 'Scripted requests from your IP have been blocked, please
+  // contact noc@wikimedia.org, and see also https://meta.wikimedia.org/wiki/User-Agent_policy',
+  sleep.msleep(3000)
+  return
 }
 
 /**

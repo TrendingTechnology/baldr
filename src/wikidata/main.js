@@ -48,11 +48,14 @@ let entity = null
  * If the array has only one item, return only this item, else return
  * the original array.
  *
- * @param {Array} values
+ * @param {(Array|String)} values
+ * @param {Boolean} onlyOne - Return only the first item of an array if there
+ *   more
+ * @param {Boolean} throwError - If there are more than values in an array.
  *
  * @returns {(Array|String)}
  */
-function unpackArray (values, throwError) {
+function unpackArray (values, onlyOne, throwError) {
   if (!values) return
   if (Array.isArray(values)) {
     if (values.length === 1) {
@@ -60,6 +63,9 @@ function unpackArray (values, throwError) {
     } else if (throwError) {
       throw new Error(`Array has more than one item: ${values}`)
     }
+  }
+  if (Array.isArray(values) && values.length > 1 && onlyOne) {
+    return values[0]
   }
   return values
 }
@@ -227,7 +233,9 @@ async function queryLabels (itemIds) {
   * @returns {String}
   */
 function formatDate (date) {
-  date = unpackArray(date, true)
+  // Frederic Chopin has two birth dates.
+  // throw no error
+  date = unpackArray(date, true, false)
   if (!date) return
   return date.replace(/T.+$/, '')
 }
@@ -436,6 +444,7 @@ async function query (itemId, metaTypeName) {
   if (!wikibase.isItemId(itemId)) {
     throw new Error(`No item id: ${itemId}`)
   }
+  console.log(itemId)
   entity = await getEntities(itemId)
 
   if (!typeSpecs[metaTypeName]) return
