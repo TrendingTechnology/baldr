@@ -468,7 +468,12 @@ export function escapeHtml (htmlString) {
 }
 
 /**
+ * Create a deep copy of an object. This functions uses the two methods
+ * `JSON.parse()` and `JSON.stringify()` to accomplish its task.
  *
+ * @param {Object} data
+ *
+ * @returns {Object}
  */
 export function deepCopy (data) {
   return JSON.parse(JSON.stringify(data))

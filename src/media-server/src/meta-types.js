@@ -7,7 +7,7 @@ const path = require('path')
 
 // Project packages.
 const { bootstrapConfig } = require('@bldr/core-node')
-const { RawDataObject } = require('@bldr/core-browser')
+const { deepCopy } = require('@bldr/core-browser')
 
 const { asciify, deasciify } = require('./helper.js')
 
@@ -17,13 +17,19 @@ const { asciify, deasciify } = require('./helper.js')
 const config = bootstrapConfig()
 
 /**
+ * The name of a property.
+ *
+ * @typedef {String} propName
+ */
+
+/**
  * The specification of a property.
  *
  * @typedef {Object} propSpec
  * @property {Boolean} required
  * @property {Function} derive
- * @property {Boolean} useDerivedIfEmpty - Only use the value obtained from
- *   the `derive` function if the original value is empty.
+ * @property {Boolean} overwriteByDerived - Overwrite the original value by the
+ *   the value obtained from the `derive` function.
  * @property {Function} format
  * @property {Function} validate
  */
@@ -34,8 +40,9 @@ const config = bootstrapConfig()
  *
  * ```js
  * const propSpecs = {
- *   id: propSpec
- *   title: propSpec
+ *   propName: propSpec,
+ *   propName: propSpec
+ *   ...
  * }
  * ```
  *
@@ -55,6 +62,12 @@ const config = bootstrapConfig()
  * The specification of all meta types
  *
  * @typedef {Object} typeSpecs
+ */
+
+ /**
+ * The name of a meta type.
+ *
+ * @typedef {String} typeName
  */
 
 const typeSpecs = {
@@ -78,7 +91,7 @@ const typeSpecs = {
       },
       title: {
         required: true,
-        useDerivedIfEmpty: true,
+        overwriteByDerived: false,
         derive: function () {
           return deasciify(this.id)
         }
@@ -135,12 +148,14 @@ const typeSpecs = {
       id: {
         derive: function () {
           return `${this.lastname}_${this.firstname}`
-        }
+        },
+        overwriteByDerived: false
       },
       title: {
         derive: function () {
           return `Portrait-Bild von „${this.firstname} ${this.lastname}“`
-        }
+        },
+        overwriteByDerived: true
       },
       firstname: {
         required: true
@@ -151,7 +166,8 @@ const typeSpecs = {
       name: {
         derive: function () {
           return `${this.firstname} ${this.lastname}`
-        }
+        },
+        overwriteByDerived: false
       },
       short_biography: {
         required: true
@@ -261,8 +277,8 @@ function applyTypeSpecs (metadata, func, replaceValues = true) {
     }
   }
 
-  if (metadata.type) {
-    const props = typeProps[metadata.type]
+  if (metadata.metaType) {
+    const props = typeProps[metadata.metaType]
     for (const propName in props) {
       applyOneTypeSpec(props, propName, metadata, func, replaceValues)
     }
@@ -326,40 +342,52 @@ function isPropertyDerived (propSpec) {
 }
 
 /**
- * @param {Object} metadata
+ * Sort the given object according the type specification. Not specifed
+ * propertiers are attached on the end of the object. Fill the object
+ * with derived values.
+ *
+ * @param {Object} data
+ *
+ * @returns {Object}
  */
-function sortAndDerive (metadata) {
-  const rawData = new RawDataObject(metadata)
-
-  function addValue (metadata, propSpec, propName, derivedValue) {
-    const origValue = metadata[propName]
-    if (
-      (propSpec.useDerivedIfEmpty && !isValue(origValue) && isValue(derivedValue)) ||
-      (!propSpec.useDerivedIfEmpty && isValue(derivedValue))
-    ) {
-      metadata[propName] = derivedValue
-    }
-  }
-
+function sortAndDerive (data) {
+  origData = deepCopy(data)
   const result = {}
-  if (metadata.type) {
-    const propSpecs = typeProps[metadata.type]
+
+  // Loop over the propSpecs to get a sorted object
+  if (origData.metaType) {
+    const propSpecs = typeProps[origData.metaType]
     for (const propName in propSpecs) {
       const propSpec = propSpecs[propName]
+      const origValue = origData[propName]
+      let derivedValue
       if (isPropertyDerived(propSpec)) {
-        addValue(result, propSpec, propName, propSpec.derive.call(metadata))
-        // Throw away the value of this property. We prefer the derived
-        // version.
-        rawData.cut(propName)
-      } else {
-        addValue(result, propSpec, propName, rawData.cut(propName))
+        derivedValue = propSpec.derive.call(data)
       }
+
+      // Use the derived value
+      if (
+        isValue(derivedValue) &&
+        (
+          (!propSpec.overwriteByDerived && !isValue(origValue)) ||
+          propSpec.overwriteByDerived
+        )
+      ) {
+        result[propName] = derivedValue
+
+      // Use orig value
+      } else if (isValue(origValue)) {
+        result[propName] = origValue
+      }
+      // Throw away the value of this property. We prefer the derived
+      // version.
+      delete origData[propName]
     }
   }
 
-  // Add additional properties not in the specs.
-  for (const propName in rawData.raw) {
-    const value = rawData.cut(propName)
+  // Add additional properties not in the propSpecs.
+  for (const propName in origData) {
+    const value = origData[propName]
     if (isValue(value)) {
       result[propName] = value
     }

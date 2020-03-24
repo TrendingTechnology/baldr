@@ -197,7 +197,11 @@ function getLabel (entity) {
  ******************************************************************************/
 
 /**
-  * @param {Array} itemIds - for example `['Q123', 'Q234']`
+ * Query the wikidata API for the given items and return only the label.
+ *
+  * @param {(Array|String)} itemIds - for example `['Q123', 'Q234']`
+  *
+  * @returns {String}
   */
 async function queryLabels (itemIds) {
   itemIds = unpackArray(itemIds)
@@ -210,7 +214,7 @@ async function queryLabels (itemIds) {
     const entity = entities[itemId]
     result.push(getLabel(entity, false))
   }
-  return result
+  return result.join(' ')
 }
 
 /*******************************************************************************
@@ -396,8 +400,7 @@ const typeSpecs = {
 function mergeData (data, dataWiki) {
   // Ẃe delete properties from this object -> make a flat copy.
   const dataOrig = Object.assign({}, data)
-  let metaTypeName = dataOrig.type
-  if (!metaTypeName) metaTypeName = dataWiki.type
+  let metaTypeName = dataOrig.metaType
   if (!metaTypeName) {
     return Object.assign({}, dataOrig, dataWiki)
   }
