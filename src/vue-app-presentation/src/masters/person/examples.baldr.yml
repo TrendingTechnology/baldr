@@ -17,18 +17,18 @@ slides:
   person:
      image: id:Goethe_Johann-Wolfgang-von
 
-- person: Adorno_Theodor
-- person: Bach_Carl-Philipp-Emanuel
-- person: Bach_Johann-Sebastian
-- person: Bach_Wilhelm-Friedemann
-- person: Beethoven_Ludwig-van
-- person: Berg_Alban
-- person: Berlioz_Hector
-- person: Biedermann_Karl
-- person: Chagall_Marc
-- person: Colloredo_Hieronymus-von
-- person: Coltrane_John
-- person: Davis_Miles
-- person: Desprez_Josquin
-- person: Dukas_Paul
-- person: Haydn_Joseph
+- person: id:Adorno_Theodor
+- person: id:Bach_Carl-Philipp-Emanuel
+- person: id:Bach_Johann-Sebastian
+- person: id:Bach_Wilhelm-Friedemann
+- person: id:Beethoven_Ludwig-van
+- person: id:Berg_Alban
+- person: id:Berlioz_Hector
+- person: id:Biedermann_Karl
+- person: id:Chagall_Marc
+- person: id:Colloredo_Hieronymus-von
+- person: id:Coltrane_John
+- person: id:Davis_Miles
+- person: id:Desprez_Josquin
+- person: id:Dukas_Paul
+- person: id:Haydn_Joseph
