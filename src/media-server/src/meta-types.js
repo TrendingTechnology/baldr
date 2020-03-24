@@ -53,7 +53,8 @@ const config = bootstrapConfig()
  * The specification of one metadata type.
  *
  * @typedef {Object} typeSpec
- * @property {String} basePath
+ * @property {String} basePath - The base path where all meta typs stored in.
+ * @property {Function} relPath - The relative path (relative to `basePath`)
  * @property {Object} detectType
  * @property {module:@bldr/media-server/meta-types~propSpecs} props
  */
@@ -70,6 +71,9 @@ const config = bootstrapConfig()
  * @typedef {String} typeName
  */
 
+ /**
+  * @type {module:@bldr/media-server/meta-types~typeSpecs}
+  */
 const typeSpecs = {
   global_: {
     props: {
@@ -139,8 +143,49 @@ const typeSpecs = {
       }
     }
   },
+  group: {
+    basePath: path.join(config.mediaServer.basePath, 'Gruppen'),
+    relPath: function () {
+      return path.join(this.id.substr(0, 1).toLowerCase(), this.id, 'main.jpg')
+    },
+    detectType: {
+      byPath: new RegExp('^' + path.join(config.mediaServer.basePath, 'Gruppen') + '/.*')
+    },
+    props: {
+      id: {
+        derive: function () {
+          return this.name
+        },
+        format: function (value) {
+          value = value.replace(/^(The)[ -](.*)$/, '$2_$1')
+          value = asciify(value)
+          return value
+        },
+        overwriteByDerived: false
+      },
+      title: {
+        derive: function () {
+          return `Portrait-Bild der Gruppe „${this.name}“`
+        },
+        overwriteByDerived: true
+      },
+      startDate: {
+        validate: function (value) {
+          return value.match(/\d{4,}-\d{2,}-\d{2,}/)
+        }
+      },
+      endDate: {
+        validate: function (value) {
+          return value.match(/\d{4,}-\d{2,}-\d{2,}/)
+        }
+      }
+    }
+  },
   person: {
     basePath: path.join(config.mediaServer.basePath, 'Personen'),
+    relPath: function () {
+      return path.join(this.id.substr(0, 1).toLowerCase(), this.id, `main-image.${this.extension}`)
+    },
     detectType: {
       byPath: new RegExp('^' + path.join(config.mediaServer.basePath, 'Personen') + '/.*')
     },
@@ -240,6 +285,8 @@ function buildTypeProps () {
  *   }
  * }
  * ```
+ *
+ * @type {Object}
  */
 const typeProps = buildTypeProps()
 
@@ -409,6 +456,7 @@ function process (metadata) {
 }
 
 module.exports = {
+  typeSpecs,
   detectTypeByPath,
   process
 }

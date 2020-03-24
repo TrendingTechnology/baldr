@@ -1,15 +1,43 @@
+// Node packages.
+const path = require('path')
+const fs = require('fs')
+
 // Third party packages.
 const wikidata = require('@bldr/wikidata')
+const chalk = require('chalk')
+
+// Project packages.
+const { getExtension } = require('@bldr/core-browser')
+const metaTypes = require('@bldr/media-server').metaTypes
+const lib = require('../../lib.js')
 
 /**
- * @param {String} metadataType - For example `group,instrument,person,song`
+ * @param {String} metaType - For example `group,instrument,person,song`
  * @param {String} itemId - For example `Q123`
  * @param {String} arg1
  * @param {String} arg2
  */
-async function action (metadataType, itemId, arg1, arg2) {
-  const result = await wikidata.query(itemId, metadataType)
-  console.log(result)
+async function action (metaType, itemId, arg1, arg2) {
+  let data = await wikidata.query(itemId, metaType)
+  data.metaType = metaType
+  data = metaTypes.process(data)
+  console.log(data)
+
+  if (data.mainImage) {
+    const typeSpec = metaTypes.typeSpecs[metaType]
+    // The relPath function needs this.extension.
+    data.extension = getExtension(data.mainImage)
+    const relPath = typeSpec.relPath.call(data)
+    const dest = path.join(typeSpec.basePath, relPath)
+    await wikidata.fetchCommonsFile(data.mainImage, dest)
+    const yamlFile = `${dest}.yml`
+    if (!fs.existsSync(yamlFile)) {
+      console.log(`Write YAML file: ${chalk.green(yamlFile)}`)
+      lib.writeYamlFile(yamlFile, data)
+    } else {
+      console.log(`The YAML file already exists: ${chalk.red(yamlFile)}`)
+    }
+  }
 }
 
 module.exports = action
@@ -69,23 +97,23 @@ module.exports = action
 //   fs.mkdirSync(parentDir, { recursive: true })
 //   const dest = path.join(parentDir, `${id}.jpg`)
 
-//   if (fs.existsSync(dest)) {
-//     console.log(`The image already exists: ${chalk.red(dest)}`)
-//   } else {
-//     if (wikicommons) {
-//       await downloadWikicommonsFile(wikicommons, dest)
-//       console.log(`Image downloaded to: ${chalk.green(dest)}`)
-//     }
+  // if (fs.existsSync(dest)) {
+  //   console.log(`The image already exists: ${chalk.red(dest)}`)
+  // } else {
+  //   if (wikicommons) {
+  //     await downloadWikicommonsFile(wikicommons, dest)
+  //     console.log(`Image downloaded to: ${chalk.green(dest)}`)
+  //   }
 
-//     if (fs.existsSync(dest)) {
-//       const stat = fs.statSync(dest)
-//       if (stat.size > 500000) {
-//         lib.runImagemagick(dest, dest)
-//       }
-//     } else {
-//       console.log(chalk.red(`No image downloaded.`))
-//     }
-//   }
+  //   if (fs.existsSync(dest)) {
+  //     const stat = fs.statSync(dest)
+  //     if (stat.size > 500000) {
+  //       lib.runImagemagick(dest, dest)
+  //     }
+  //   } else {
+  //     console.log(chalk.red(`No image downloaded.`))
+  //   }
+  // }
 
 //   const result = {
 //     id,

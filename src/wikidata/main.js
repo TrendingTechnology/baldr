@@ -4,6 +4,8 @@
 
 // Node packages.
 const fs = require('fs')
+const childProcess = require('child_process')
+const path = require('path')
 
 // Third party packages.
 const fetch = require('node-fetch')
@@ -91,19 +93,36 @@ async function getEntities (itemIds, props) {
  * @param {String} url
  * @param {String} dest
  */
-async function downloadFile (url, dest) {
+async function fetchFile (url, dest) {
   const response = await fetch(url)
+  fs.mkdirSync(path.dirname(dest), { recursive: true })
   fs.writeFileSync(dest, Buffer.from(await response.arrayBuffer()))
+  if (fs.existsSync(dest)) {
+    const stat = fs.statSync(dest)
+    if (stat.size > 500000) {
+      const process = childProcess.spawnSync('magick', [
+        'convert',
+        dest,
+        '-resize', '2000x2000>', // http://www.imagemagick.org/Usage/resize/#shrink
+        '-quality', '60', // https://imagemagick.org/script/command-line-options.php#quality
+        dest
+      ])
+      if (process.status !== 0) {
+        throw new Error(`Error resizing image ${dest}`)
+      }
+    }
+  }
 }
 
 /**
+ * Download a file from wiki commonds.
  *
- * @param {String} filename
- * @param {String} dest
+ * @param {String} filename - The file name from wiki commonds.
+ * @param {String} dest - A file path where to store the file locally.
  */
-async function downloadWikicommonsFile (filename, dest) {
+async function fetchCommonsFile (filename, dest) {
   const url = wikibase.getImageUrl(filename)
-  await downloadFile(url, dest)
+  await fetchFile(url, dest)
 }
 
 /*******************************************************************************
@@ -207,7 +226,7 @@ function getLabel (entity) {
  *
   * @param {(Array|String)} itemIds - for example `['Q123', 'Q234']`
   *
-  * @returns {String}
+  * @returns {(Array|String)}
   */
 async function queryLabels (itemIds) {
   itemIds = unpackArray(itemIds)
@@ -220,7 +239,7 @@ async function queryLabels (itemIds) {
     const entity = entities[itemId]
     result.push(getLabel(entity, false))
   }
-  return result.join(' ')
+  return result
 }
 
 /*******************************************************************************
@@ -282,6 +301,12 @@ const typeSpecs = {
       source: {
         fromEntity: getWikipediaTitle
       }
+    },
+    // Bild
+    mainImage: {
+      source: {
+        fromClaim: 'P18'
+      }
     }
   },
   instrument: {
@@ -314,14 +339,26 @@ const typeSpecs = {
       source: {
         fromClaim: 'P735'
       },
-      secondQuery: queryLabels
+      secondQuery: queryLabels,
+      format: function (value) {
+        if (Array.isArray(value)) {
+          return value.join(' ')
+        }
+        return value
+      }
     },
     // Familienname einer Person
     lastname: {
       source: {
         fromClaim: 'P734'
       },
-      secondQuery: queryLabels
+      secondQuery: queryLabels,
+      format: function (value) {
+        if (Array.isArray(value)) {
+          return value.join(' ')
+        }
+        return value
+      }
     },
     // Geburtsdatum
     birth: {
@@ -408,18 +445,18 @@ const typeSpecs = {
 function mergeData (data, dataWiki) {
   // Ẃe delete properties from this object -> make a flat copy.
   const dataOrig = Object.assign({}, data)
-  let metaTypeName = dataOrig.metaType
+  const metaTypeName = dataOrig.metaType
   if (!metaTypeName) {
     return Object.assign({}, dataOrig, dataWiki)
   }
 
   const propSpecs = typeSpecs[metaTypeName]
 
-  result = {}
+  const result = {}
 
   for (const propName in dataWiki) {
     const propSpec = propSpecs[propName]
-    if (propSpec && (dataOrig[propName] && propSpec.alwaysUpdate) || !dataOrig[propName]) {
+    if (propSpec && ((dataOrig[propName] && propSpec.alwaysUpdate) || !dataOrig[propName])) {
       result[propName] = dataWiki[propName]
       delete dataOrig[propName]
     } else {
@@ -459,7 +496,7 @@ async function query (itemId, metaTypeName) {
 
     // source
     if (!propSpec.source) {
-      throw new Error(`Spec must have a source: ${JSON.stringify(spec)}`)
+      throw new Error(`Spec must have a source: ${JSON.stringify(propSpec)}`)
     }
     if (propSpec.source.fromClaim) {
       value = getClaims(entity, propSpec.source.fromClaim)
@@ -478,6 +515,7 @@ async function query (itemId, metaTypeName) {
 }
 
 module.exports = {
+  fetchCommonsFile,
   mergeData,
   query
 }
