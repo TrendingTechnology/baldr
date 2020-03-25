@@ -259,6 +259,11 @@ function formatDate (date) {
   return date.replace(/T.+$/, '')
 }
 
+function formatWikicommons (value) {
+  value = value.replace(/ /g, '_')
+  return `wikicommons:${value}`
+}
+
 /*******************************************************************************
  * typeSpecs
  ******************************************************************************/
@@ -275,7 +280,8 @@ const typeSpecs = {
     logo: {
       source: {
         fromClaim: 'P154'
-      }
+      },
+      format: formatWikicommons
     },
     shortHistory: {
       source: {
