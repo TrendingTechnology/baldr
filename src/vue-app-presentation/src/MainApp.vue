@@ -304,6 +304,10 @@ export default {
     margin: 0;
   }
 
+  .active {
+    background-color: rgba($yellow, 0.2) !important;
+  }
+
   /*********************************************************************
    * Used in the Presentation.baldr.yml files
    ********************************************************************/

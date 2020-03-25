@@ -112,8 +112,20 @@ class Question {
     }
   }
 
+  /**
+   * `['q1', 'a1', 'q2', 'q3']`
+   *
+   * @type {Array}
+   */
+  get sequence () {
+    return this.counts.sequence
+  }
+
+  /**
+   * @type {Number}
+   */
   get stepCount () {
-    return this.counts.sequence.length
+    return this.sequence.length
   }
 
   static parseRecursively (specs, processed, counts, level) {
@@ -149,6 +161,10 @@ export default {
       description: 'Eine Liste mit Objekten mit den Schlüsseln `question` and `answer`.',
       required: true,
       markup: true
+    },
+    sequence: {
+      description: `Wird automatisch erzeugt, z. B.: ['q1', 'a1', 'q2', 'q3'] .`,
+      type: Array
     }
   },
   icon: {
@@ -163,10 +179,20 @@ export default {
   normalizeProps (props) {
     const counts = Question.initCounts()
     const questions = Question.parseRecursively(props, [], counts, 0)
-    return { questions }
+    return {
+      questions,
+      sequence: questions[0].sequence
+    }
   },
   calculateStepCount ({ props }) {
     const firstQuestion = props.questions[0]
     return firstQuestion.stepCount
+  },
+  enterSlide ({ oldSlide, oldProps, newSlide, newProps }) {
+    const slide = newSlide
+    this.setQuestionsBySetNo(slide.renderData.stepNoCurrent)
+  },
+  enterStep ({ newStepNo }) {
+    this.setQuestionsBySetNo(newStepNo)
   }
 }

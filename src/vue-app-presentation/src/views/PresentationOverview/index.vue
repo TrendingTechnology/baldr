@@ -28,8 +28,8 @@ export default {
     async loadTitleTree () {
       await this.$store.dispatch('presentation/updateFolderTitleTree')
       if (this.presentation) {
-        const elmentLink = document.getElementById(`PID_${this.presentation.id}`)
-        elmentLink.scrollIntoView({ block: 'center' })
+        const elementLink = document.getElementById(`PID_${this.presentation.id}`)
+        elementLink.scrollIntoView({ block: 'center' })
       }
     }
   },

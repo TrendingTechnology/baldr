@@ -80,13 +80,14 @@
  *   },
  *   // Called when leaving a slide.
  *   leaveSlide ({ oldSlide, oldProps, newSlide, newProps }) {
- *   }
- *   // Called when entering a step.
- *   enterStep ({ oldStepNo, newStepNo }) {
  *   },
  *   // Called when leaving a step.
  *   leaveStep ({ oldStepNo, newStepNo }) {
+ *   },
+ *   // Called when entering a step.
+ *   enterStep ({ oldStepNo, newStepNo }) {
  *   }
+
  * }
  * ```
  *
@@ -106,16 +107,22 @@
  *
  * ## Slide change:
  *
- * 1. beforeLeaveSlide()
- * 2. leaveSlide()
- * 3. enterSlide()
- *
+ * 1. `beforeLeaveSlide({ oldSlide, oldProps, newSlide, newProps })`:  `this` is
+ *    the Vue instance of the current main master component.
+ * 2. `leaveSlide({ oldSlide, oldProps, newSlide, newProps })`:  `this` is
+ *    the Vue instance of the current main master component. (see `masterMixin`
+ *    in `masters.js`)
+ * 3. `enterSlide({ oldSlide, oldProps, newSlide, newProps })`:  `this` is
+ *    the Vue instance of the current main master component. (see `masterMixin`
+ *    in `masters.js`)
  *
  * ## Step change:
  *
- * 1. leaveStep()
- * 2. enterStep()
-
+ * 1. `leaveStep({ oldStepNo, newStepNo })`: `this` is the Vue instance of the
+ *    current main master component.
+ * 2. `enterStep({ oldStepNo, newStepNo })`: `this` is the Vue instance of the
+ *    current main master component.
+ *
  *
  * @module @bldr/vue-app-presentation
  */
@@ -477,6 +484,13 @@ store.subscribe((mutation, state) => {
 Vue.config.errorHandler = function (error, vm, info) {
   vm.$notifyError(error)
   console.log(error)
+}
+
+/**
+ * Shortcut for `this.$store.getters['presentation/getterName']`
+ */
+Vue.prototype.$get = function (getterName) {
+  return store.getters[`presentation/${getterName}`]
 }
 
 /**

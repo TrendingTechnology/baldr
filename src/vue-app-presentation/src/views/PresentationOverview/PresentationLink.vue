@@ -72,9 +72,5 @@ export default {
       font-family: $font-family-sans;
       font-size: 1.2em;
     }
-
-    &.active {
-      background-color: rgba($yellow, 0.2) !important;
-    }
   }
 </style>

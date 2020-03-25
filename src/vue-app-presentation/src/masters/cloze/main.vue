@@ -66,7 +66,7 @@ export default {
       // e. g.: 125.11000061035156
       const y = svg.clientHeight / bBox.height * glyph.y.baseVal.value
       const adjustedY = y - 0.8 * window.screen.height
-      window.scrollTo({ top: adjustedY, left: 0, behavior: "smooth" });
+      window.scrollTo({ top: adjustedY, left: 0, behavior: 'smooth' });
     }
   },
   mounted () {

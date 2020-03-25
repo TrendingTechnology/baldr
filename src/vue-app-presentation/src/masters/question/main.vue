@@ -36,6 +36,30 @@ export default {
         return this.questions[0]
       }
     }
+  },
+  methods: {
+    setQuestionsBySetNo (newStepNo) {
+      const slide = this.$get('slideCurrent')
+      const sequence = slide.renderData.props.sequence
+
+      const curId = sequence[newStepNo - 1]
+
+      for (const id of sequence) {
+        document.getElementById(id).classList.remove('active')
+      }
+
+      const isAnswer = curId.match(/^a/)
+      const element = document.getElementById(curId)
+      element.classList.add('active')
+      if (isAnswer) {
+        element.style.display = 'block'
+      }
+      if (newStepNo === 1) {
+        window.scrollTo(0, 0)
+      } else {
+        element.scrollIntoView({ block: 'center', behavior: 'smooth' })
+      }
+    }
   }
 }
 </script>
@@ -47,6 +71,7 @@ export default {
 
     p {
       margin: 0;
+      padding: 0.1em 0.3em;
     }
 
     .level-0 ol { list-style-type: decimal; }
