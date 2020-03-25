@@ -33,7 +33,7 @@ export default {
     }
     return propsNormalized
   },
-  calculateStepCount (props) {
+  calculateStepCount ({ props }) {
     const image = this.$store.getters['media/mediaFileByUri'](props.imageUri)
     return image.multiPartCountActual
   },

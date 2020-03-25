@@ -71,7 +71,7 @@ export default {
     }
     return propsPreview
   },
-  calculateStepCount (props) {
+  calculateStepCount ({ props }) {
     const muliPartSelection = this.$store.getters['media/multiPartSelectionByUri'](props.score)
     if (muliPartSelection) {
       return muliPartSelection.partCount

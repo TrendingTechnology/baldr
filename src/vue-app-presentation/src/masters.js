@@ -293,14 +293,20 @@ class Master {
    * after media resolution.
    *
    * @param {module:@bldr/vue-app-presentation~props} props
+   *
+   * @param {Object} payload
+   * @property {Object} payload.props - The props of the master slide.
+   * @property {Object} payload.propsMain - The props of the main Vue component.
+   * @property {Object} payload.propsPreview - The props of the preview Vue component.
+   * @property {Object} payload.slide - The slide object.
    * @param {object} thisArg - The
    *   {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/call thisArg}
    *   the master function is called with.
    *
    * @returns {Number} - The number of steps.
    */
-  calculateStepCount (props, thisArg) {
-    return this.callFunction_('calculateStepCount', props, thisArg)
+  calculateStepCount (payload, thisArg) {
+    return this.callFunction_('calculateStepCount', payload, thisArg)
   }
 
   /**
@@ -578,10 +584,9 @@ class Master {
   /**
    * Collect the props (properties) for the preview Vue component.
    *
-   * @param {object} payload
-   * @property {object} payload
-   * @property {number} payload.props - The props of the master slide.
-   * @property {number} payload.propsMain - The props of the main Vue component.
+   * @param {Object} payload
+   * @property {Object} payload.props - The props of the master slide.
+   * @property {Object} payload.propsMain - The props of the main Vue component.
    *
    * @param {object} thisArg - The
    *   {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/call thisArg}

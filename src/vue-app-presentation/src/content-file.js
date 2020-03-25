@@ -685,11 +685,17 @@ ${JSON.stringify(this.rawYamlObject_)}`
         slide.renderData.propsPreview = master.collectPropsPreview(
           {
             props: slide.renderData.props,
-            propsMain: slide.renderData.propsMain
+            propsMain: slide.renderData.propsMain,
+            slide
           },
           vue
         )
-        slide.renderData.stepCount = master.calculateStepCount(slide.renderData.props, vue)
+        slide.renderData.stepCount = master.calculateStepCount({
+          props: slide.renderData.props,
+          propsMain: slide.renderData.propsMain,
+          propsPreview: slide.renderData.propsPreview,
+          slide
+        }, vue)
       }
     }
   }

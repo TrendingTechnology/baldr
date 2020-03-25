@@ -259,6 +259,12 @@ function formatDate (date) {
   return date.replace(/T.+$/, '')
 }
 
+/**
+ *
+ * @param {String} value
+ *
+ * @returns {String}
+ */
 function formatWikicommons (value) {
   value = value.replace(/ /g, '_')
   return `wikicommons:${value}`

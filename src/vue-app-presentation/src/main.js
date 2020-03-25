@@ -66,12 +66,12 @@
  *       }
  *     }
  *   },
- *   calculateStepCount (props) {
- *     return props.src.length
- *   },
  *   // An array of media URIs to resolve (like [id:beethoven, filename:mozart.mp3])
  *   resolveMediaUris (props) {
  *     return props.src
+ *   },
+ *   calculateStepCount ({ props, propsMain, propsPreview, slide }) {
+ *     return props.src.length
  *   },
  *   plainTextFromProps (props) {
  *   },
@@ -89,6 +89,33 @@
  *   }
  * }
  * ```
+ *
+ * # Hooks / exported master methods call order:
+ *
+ * ## Parsing the yaml file:
+ *
+ * 1. `normalizeProps(props)`
+ * 2. `resolveMediaUris(props)`
+ * 3. `collectPropsMain(props)`: `this` is the main Vue instance.
+ * 4. `collectPropsPreview({ props, propsMain, slide })`: `this` is the main Vue instance.
+ * 5. `calculateStepCount({ props, propsMain, propsPreview, slide })`: `this` is the main Vue instance.
+ *
+ * ## Getter on the slide object:
+ *
+ * - plainTextFromProps()
+ *
+ * ## Slide change:
+ *
+ * 1. beforeLeaveSlide()
+ * 2. leaveSlide()
+ * 3. enterSlide()
+ *
+ *
+ * ## Step change:
+ *
+ * 1. leaveStep()
+ * 2. enterStep()
+
  *
  * @module @bldr/vue-app-presentation
  */
@@ -466,6 +493,6 @@ const vue = new Vue({
 
 export default vue
 
-// To be able to store Vue compoment instances. If we store a vue component
-// instance in a vuex store there are many errors raised.
+// To be able to store Vue component instances. If we store a vue component
+// instance in a vuex store there were many errors raised.
 export const customStore = {}

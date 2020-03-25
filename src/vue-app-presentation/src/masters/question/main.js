@@ -1,15 +1,64 @@
 import { markupToHtml } from '@/lib.js'
 
+/**
+ * We want no lists `<ol>` etc in the HTML output for the question and the
+ * heading. `1. act` is convert my `marked` into those lists. This is a
+ * quick and dirty hack. Disable some renderer
+ * https://marked.js.org/#/USING_PRO.md may be better.
+ */
+function markupToHtmlNoLists (text) {
+  text = markupToHtml(text)
+  // <ol start="2">
+  text = text.replace(/<\/?(ul|ol|li)[^>]*?>/g, '')
+  return text.trim()
+}
+
+/**
+ * A questions with sub questions.
+ */
 class Question {
 
-  constructor (spec, counts) {
-    this.level = counts.level
+  constructor (spec, counts, level) {
+
+    /**
+     * @type {Number}
+     */
+    this.level = level + 1
+
+    /**
+     * @type {String}
+     */
     this.heading = null
+
+    /**
+     * @type {String}
+     */
     this.question = null
+
+    /**
+     * @type {Number}
+     */
     this.questionNo = null
+
+    /**
+     * @type {String}
+     */
     this.answer = null
+
+    /**
+     * @type {Number}
+     */
     this.answerNo = null
+
+    /**
+     * @type {Array}
+     */
     this.subQuestions = null
+
+    /**
+     * @type {Object}
+     */
+    this.counts = counts
 
     const aliases = {
       q: 'question',
@@ -34,7 +83,13 @@ class Question {
       for (const prop of ['heading', 'question', 'answer']) {
         if (spec[prop]) {
           if (typeof spec[prop] === 'string') {
-            this[prop] = markupToHtml(spec[prop])
+            // list are allowed
+            if (spec[prop] === 'answer') {
+              this[prop] = markupToHtml(spec[prop])
+            // no lists are allowed
+            } else {
+              this[prop] = markupToHtmlNoLists(spec[prop])
+            }
           } else {
             throw new Error(`Unsupported type for questions ${prop} ${spec[prop]}`)
           }
@@ -52,20 +107,23 @@ class Question {
       }
       if (spec.subQuestions) {
         this.subQuestions = []
-        counts.level++
-        Question.parseRecursively(spec.subQuestions, this.subQuestions, counts)
+        Question.parseRecursively(spec.subQuestions, this.subQuestions, counts, this.level)
       }
     }
   }
 
-  static parseRecursively (specs, processed = [], counts) {
+  get stepCount () {
+    return this.counts.sequence.length
+  }
+
+  static parseRecursively (specs, processed, counts, level) {
     if (Array.isArray(specs)) {
       for (const spec of specs) {
-        processed.push(new Question(spec, counts))
+        processed.push(new Question(spec, counts, level))
       }
       return processed
     }
-    processed.push(new Question(specs, counts))
+    processed.push(new Question(specs, counts, level))
     return processed
   }
 
@@ -79,7 +137,6 @@ class Question {
       sequence: [],
       question: 0,
       answer: 0,
-      level: 0
     }
   }
 }
@@ -105,7 +162,11 @@ export default {
   },
   normalizeProps (props) {
     const counts = Question.initCounts()
-    const questions = Question.parseRecursively(props, [], counts)
+    const questions = Question.parseRecursively(props, [], counts, 0)
     return { questions }
+  },
+  calculateStepCount ({ props }) {
+    const firstQuestion = props.questions[0]
+    return firstQuestion.stepCount
   }
 }
