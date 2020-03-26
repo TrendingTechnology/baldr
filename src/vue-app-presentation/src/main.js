@@ -57,48 +57,18 @@
  *     getters,
  *     actions,
  *     mutations
- *   },
- *   // result must fit to props
- *   normalizeProps (props) {
- *     if (typeof props === 'string') {
- *       return {
- *         markup: props
- *       }
- *     }
- *   },
- *   // An array of media URIs to resolve (like [id:beethoven, filename:mozart.mp3])
- *   resolveMediaUris (props) {
- *     return props.src
- *   },
- *   calculateStepCount ({ props, propsMain, propsPreview, slide }) {
- *     return props.src.length
- *   },
- *   plainTextFromProps (props) {
- *   },
- *   // Called when entering a slide.
- *   enterSlide ({ oldSlide, oldProps, newSlide, newProps }) {
- *   },
- *   // Called when leaving a slide.
- *   leaveSlide ({ oldSlide, oldProps, newSlide, newProps }) {
- *   },
- *   // Called when leaving a step.
- *   leaveStep ({ oldStepNo, newStepNo }) {
- *   },
- *   // Called when entering a step.
- *   enterStep ({ oldStepNo, newStepNo }) {
  *   }
-
  * }
  * ```
  *
  * # Hooks / exported master methods call order:
  *
- * ## Parsing the yaml file:
+ * ## Called during the parsing the YAML file (`Praesentation.baldr.yml`):
  *
  * ### 1. `normalizeProps(props)`
  *
  * ```js
- * export const master = {
+ * export const default = {
  *   // result must fit to props
  *   normalizeProps (props) {
  *     if (typeof props === 'string') {
@@ -110,36 +80,118 @@
  * }
  * ```
  *
+ * ### 2. `resolveMediaUris(props)`
  *
- * 2. `resolveMediaUris(props)`
- * 3. `collectPropsMain(props)`: `this` is the main Vue instance.
- * 4. `collectPropsPreview({ props, propsMain, slide })`: `this` is the main Vue
- *    instance.
- * 5. `calculateStepCount({ props, propsMain, propsPreview, slide })`: `this`
- *    is the main Vue instance.
+ * ```js
+ * export const default = {
+ *   // An array of media URIs to resolve (like [id:beethoven, filename:mozart.mp3])
+ *   resolveMediaUris (props) {
+ *     return props.src
+ *   }
+ * }
+ * ```
+ *
+ * ### 3. `collectPropsMain(props)`
+ *
+ * - `this`: is the main Vue instance.
+ *
+ * ```js
+ * export const default = {
+ * }
+ * ```
+ *
+ * ### 4. `collectPropsPreview({ props, propsMain, slide })`
+ *
+ * - `this`: is the main Vue instance.
+ *
+ * ```js
+ * export const default = {
+ * }
+ * ```
+ *
+ * ### 5. `calculateStepCount({ props, propsMain, propsPreview, slide })`
+ *
+ * - `this`: is the main Vue instance.
+ *
+ * ```js
+ * export const default = {
+ *   calculateStepCount ({ props, propsMain, propsPreview, slide }) {
+ *     return props.src.length
+ *   },
+ * }
+ * ```
  *
  * ## Getter on the slide object:
  *
  * - plainTextFromProps()
  *
+ * ```js
+ * export const default = {
+ * }
+ * ```
+ *
  * ## Slide change:
  *
- * 1. `beforeLeaveSlide({ oldSlide, oldProps, newSlide, newProps })`:  `this` is
- *    the Vue instance of the current main master component.
- * 2. `leaveSlide({ oldSlide, oldProps, newSlide, newProps })`:  `this` is
- *    the Vue instance of the current main master component. (see `masterMixin`
- *    in `masters.js`)
- * 3. `enterSlide({ oldSlide, oldProps, newSlide, newProps })`:  `this` is
- *    the Vue instance of the current main master component. (see `masterMixin`
- *    in `masters.js`)
+ * ### 1. `beforeLeaveSlide({ oldSlide, oldProps, newSlide, newProps })`
+ *
+ * - `this`: is the Vue instance of the current main master component.
+ *
+ * ```js
+ * export const default = {
+ * }
+ * ```
+ *
+ * ### 2. `leaveSlide({ oldSlide, oldProps, newSlide, newProps })`
+ *
+ * - `this`: is the Vue instance of the current main master component.
+ * - called from  `masterMixin` in `masters.js`
+ *
+ * ```js
+ * export const default = {
+ *   // Called when leaving a slide.
+ *   leaveSlide ({ oldSlide, oldProps, newSlide, newProps }) {
+ *   }
+ * }
+ * ```
+ *
+ * ### 3. `enterSlide({ oldSlide, oldProps, newSlide, newProps })`
+ *
+ * - `this`: is the Vue instance of the current main master component.
+ * - called from  `masterMixin` in `masters.js`
+ *
+ * ```js
+ * export const default = {
+ *   // Called when entering a slide.
+ *   enterSlide ({ oldSlide, oldProps, newSlide, newProps }) {
+ *   }
+ * }
+ * ```
  *
  * ## Step change:
  *
- * 1. `leaveStep({ oldStepNo, newStepNo })`: `this` is the Vue instance of the
- *    current main master component.
- * 2. `enterStep({ oldStepNo, newStepNo })`: `this` is the Vue instance of the
- *    current main master component.
+ * ### 1. `leaveStep({ oldStepNo, newStepNo })`
  *
+ * - `this`: is the Vue instance of the current main master component.
+ *
+ * ```js
+ * export const default = {
+ *   // Called when leaving a step.
+ *   leaveStep ({ oldStepNo, newStepNo }) {
+ *   }
+ * }
+ *
+ * ```
+ * ### 2. `enterStep({ oldStepNo, newStepNo })`
+ *
+ * - `this`: is the Vue instance of the current main master component.
+ *
+ * ```js
+ * export const default = {
+ *   // Called when entering a step.
+ *   enterStep ({ oldStepNo, newStepNo }) {
+ *   }
+ * }
+ * ```
  *
  * @module @bldr/vue-app-presentation
  */
