@@ -95,11 +95,28 @@
  *
  * ## Parsing the yaml file:
  *
- * 1. `normalizeProps(props)`
+ * ### 1. `normalizeProps(props)`
+ *
+ * ```js
+ * export const master = {
+ *   // result must fit to props
+ *   normalizeProps (props) {
+ *     if (typeof props === 'string') {
+ *       return {
+ *         markup: props
+ *       }
+ *     }
+ *   }
+ * }
+ * ```
+ *
+ *
  * 2. `resolveMediaUris(props)`
  * 3. `collectPropsMain(props)`: `this` is the main Vue instance.
- * 4. `collectPropsPreview({ props, propsMain, slide })`: `this` is the main Vue instance.
- * 5. `calculateStepCount({ props, propsMain, propsPreview, slide })`: `this` is the main Vue instance.
+ * 4. `collectPropsPreview({ props, propsMain, slide })`: `this` is the main Vue
+ *    instance.
+ * 5. `calculateStepCount({ props, propsMain, propsPreview, slide })`: `this`
+ *    is the main Vue instance.
  *
  * ## Getter on the slide object:
  *

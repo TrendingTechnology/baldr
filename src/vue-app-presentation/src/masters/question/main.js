@@ -153,6 +153,29 @@ class Question {
   }
 }
 
+function setQuestionsBySetNo (newStepNo) {
+  const slide = this.$get('slideCurrent')
+  const sequence = slide.renderData.props.sequence
+
+  const curId = sequence[newStepNo - 1]
+
+  for (const id of sequence) {
+    document.getElementById(id).classList.remove('active')
+  }
+
+  const isAnswer = curId.match(/^a/)
+  const element = document.getElementById(curId)
+  element.classList.add('active')
+  if (isAnswer) {
+    element.style.display = 'block'
+  }
+  if (newStepNo === 1) {
+    window.scrollTo(0, 0)
+  } else {
+    element.scrollIntoView({ block: 'center', behavior: 'smooth' })
+  }
+}
+
 export default {
   title: 'Frage',
   props: {
@@ -188,11 +211,11 @@ export default {
     const firstQuestion = props.questions[0]
     return firstQuestion.stepCount
   },
-  enterSlide ({ oldSlide, oldProps, newSlide, newProps }) {
+  enterSlide ({ newSlide }) {
     const slide = newSlide
-    this.setQuestionsBySetNo(slide.renderData.stepNoCurrent)
+    setQuestionsBySetNo.call(this, slide.renderData.stepNoCurrent)
   },
   enterStep ({ newStepNo }) {
-    this.setQuestionsBySetNo(newStepNo)
+    setQuestionsBySetNo.call(this, newStepNo)
   }
 }
