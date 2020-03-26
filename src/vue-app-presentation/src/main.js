@@ -1,11 +1,29 @@
 /**
  * The main app of the BALDR project: a presentation app using YAML files.
  *
+ * # Additional “dollar” properties (public instance properties) in the Vue
+ *   instances.
+ *
+ * - `this.$dynamicSelect`
+ * - `this.$fullscreen()`: Set presentation app to fullscreen.
+ * - `this.$get(getterName)`: Shortcut for `this.$store.getters['presentation/getterName']`
+ * - `this.$masters`
+ * - `this.$media`
+ * - `this.$modal`
+ * - `this.$notify()`: An instance of the package `vue-notifications`.
+ * - `this.$notifyError`
+ * - `this.$notifySuccess`
+ * - `this.$route`
+ * - `this.$router`
+ * - `this.$shortcuts`
+ * - `this.$store`
+ * - `this.$styleConfig`
+ *
  * ```js
  * function mounted () {
- *  this.$styleConfig.setDefault()
+ *   this.$styleConfig.setDefault()
  *
- *  // Set presentation app to fullscreen:
+ *   // Set presentation app to fullscreen:
  *   this.$fullscreen()
  *
  *   // vue-notifications
@@ -20,8 +38,12 @@
  *
  * # Structure of a master slide
  *
- * A master slide is a extended Vuejs component. You have to export a additional
- * object called `master`.
+ * ## Files
+ *
+ * - `main.js`
+ * - `main.vue`
+ * - `preview.vue`
+ * - `examples.baldr.yml`
  *
  * File name: `name.vue`
  *
@@ -35,7 +57,7 @@
  *    `type` has to be `String`.
  *
  * ```js
- * export const master = {
+ * export const default = {
  *   title: 'Bild',
  *   icon: 'file-image',
  *   color: 'green',
@@ -47,12 +69,6 @@
  *     uiTheme: 'default'
  *   },
  *   documentation = `# Markdown`,
- *   example: `
- * slides:
- * - title: 'URL: id:'
- *   image:
- *     src: id:Haydn
- * `,
  *   store: {
  *     getters,
  *     actions,
@@ -61,7 +77,7 @@
  * }
  * ```
  *
- * # Hooks / exported master methods call order:
+ * # Hooks (exported master methods) call order:
  *
  * ## Called during the parsing the YAML file (`Praesentation.baldr.yml`):
  *
@@ -71,11 +87,13 @@
  *
  * ```js
  * export const default = {
- *   // result must fit to props
- *   normalizeProps (props) {
- *     if (typeof props === 'string') {
- *       return {
- *         markup: props
+ *   hooks: {
+ *     // result must fit to props
+ *     normalizeProps (props) {
+ *       if (typeof props === 'string') {
+ *         return {
+ *           markup: props
+ *         }
  *       }
  *     }
  *   }
@@ -88,9 +106,11 @@
  *
  * ```js
  * export const default = {
- *   // An array of media URIs to resolve (like [id:beethoven, filename:mozart.mp3])
- *   resolveMediaUris (props) {
- *     return props.src
+ *   hooks: {
+ *     // An array of media URIs to resolve (like [id:beethoven, filename:mozart.mp3])
+ *     resolveMediaUris (props) {
+ *       return props.src
+ *     }
  *   }
  * }
  * ```
@@ -122,9 +142,11 @@
  *
  * ```js
  * export const default = {
- *   calculateStepCount ({ props, propsMain, propsPreview, slide }) {
- *     return props.src.length
- *   },
+ *   hooks: {
+ *     calculateStepCount ({ props, propsMain, propsPreview, slide }) {
+ *       return props.src.length
+ *     }
+ *   }
  * }
  * ```
  *
@@ -168,8 +190,10 @@
  *
  * ```js
  * export const default = {
- *   // Called when leaving a slide.
- *   leaveSlide ({ oldSlide, oldProps, newSlide, newProps }) {
+ *   hooks: {
+ *     // Called when leaving a slide.
+ *     leaveSlide ({ oldSlide, oldProps, newSlide, newProps }) {
+ *     }
  *   }
  * }
  * ```
@@ -182,8 +206,10 @@
  *
  * ```js
  * export const default = {
- *   // Called when entering a slide.
- *   enterSlide ({ oldSlide, oldProps, newSlide, newProps }) {
+ *   hooks: {
+ *     // Called when entering a slide.
+ *     enterSlide ({ oldSlide, oldProps, newSlide, newProps }) {
+ *     }
  *   }
  * }
  * ```
@@ -197,8 +223,10 @@
  *
  * ```js
  * export const default = {
- *   // Called when leaving a step.
- *   leaveStep ({ oldStepNo, newStepNo }) {
+ *   hooks: {
+ *     // Called when leaving a step.
+ *     leaveStep ({ oldStepNo, newStepNo }) {
+ *     }
  *   }
  * }
  *
@@ -210,8 +238,10 @@
  *
  * ```js
  * export const default = {
- *   // Called when entering a step.
- *   enterStep ({ oldStepNo, newStepNo }) {
+ *   hooks: {
+ *     // Called when entering a step.
+ *     enterStep ({ oldStepNo, newStepNo }) {
+ *     }
  *   }
  * }
  * ```
