@@ -26,55 +26,57 @@ export default {
     centerVertically: true,
     darkMode: false
   },
-  normalizeProps (props) {
-    if (typeof props === 'string') {
-      return {
-        score: props
+  hooks: {
+    normalizeProps (props) {
+      if (typeof props === 'string') {
+        return {
+          score: props
+        }
       }
-    }
-    return props
-  },
-  resolveMediaUris (props) {
-    const uris = new Set([props.score])
-    if ('audio' in props) uris.add(props.audio)
-    return uris
-  },
-  collectPropsMain (props) {
-    let audioSample
-    const audio = this.$store.getters['media/sampleByUri'](props.audio)
-    if (audio) {
-      audioSample = audio
-    }
-    let scoreMediaFile
-    const muliPartSelection = this.$store.getters['media/multiPartSelectionByUri'](props.score)
-    if (muliPartSelection) {
-      scoreMediaFile = muliPartSelection
-    } else {
-      scoreMediaFile = this.$store.getters['media/mediaFileByUri'](props.score)
-    }
+      return props
+    },
+    resolveMediaUris (props) {
+      const uris = new Set([props.score])
+      if ('audio' in props) uris.add(props.audio)
+      return uris
+    },
+    collectPropsMain (props) {
+      let audioSample
+      const audio = this.$store.getters['media/sampleByUri'](props.audio)
+      if (audio) {
+        audioSample = audio
+      }
+      let scoreMediaFile
+      const muliPartSelection = this.$store.getters['media/multiPartSelectionByUri'](props.score)
+      if (muliPartSelection) {
+        scoreMediaFile = muliPartSelection
+      } else {
+        scoreMediaFile = this.$store.getters['media/mediaFileByUri'](props.score)
+      }
 
-    return {
-      heading: props.heading,
-      scoreMediaFile,
-      audioSample
+      return {
+        heading: props.heading,
+        scoreMediaFile,
+        audioSample
+      }
+    },
+    collectPropsPreview ({ props, propsMain }) {
+      const propsPreview = {
+        scoreHttpUrl: propsMain.scoreMediaFile.httpUrl
+      }
+      if (props.audio) {
+        propsPreview.hasAudio = true
+      }
+      return propsPreview
+    },
+    calculateStepCount ({ props }) {
+      const muliPartSelection = this.$store.getters['media/multiPartSelectionByUri'](props.score)
+      if (muliPartSelection) {
+        return muliPartSelection.partCount
+      }
+    },
+    enterSlide ({ newProps }) {
+      if ('audio' in newProps) this.$media.player.load(newProps.audio)
     }
-  },
-  collectPropsPreview ({ props, propsMain }) {
-    const propsPreview = {
-      scoreHttpUrl: propsMain.scoreMediaFile.httpUrl
-    }
-    if (props.audio) {
-      propsPreview.hasAudio = true
-    }
-    return propsPreview
-  },
-  calculateStepCount ({ props }) {
-    const muliPartSelection = this.$store.getters['media/multiPartSelectionByUri'](props.score)
-    if (muliPartSelection) {
-      return muliPartSelection.partCount
-    }
-  },
-  enterSlide ({ newProps }) {
-    if ('audio' in newProps) this.$media.player.load(newProps.audio)
   }
 }

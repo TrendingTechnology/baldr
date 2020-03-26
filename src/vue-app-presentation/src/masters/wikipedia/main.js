@@ -25,27 +25,29 @@ export default {
     centerVertically: true,
     darkMode: false
   },
-  normalizeProps (props) {
-    if (typeof props === 'string') {
-      props = { title: props }
+  hooks: {
+    normalizeProps (props) {
+      if (typeof props === 'string') {
+        props = { title: props }
+      }
+      if (!props.language) props.language = defaultLanguage
+      return props
+    },
+    collectPropsMain (props) {
+      return {
+        title: props.title,
+        language: props.language,
+        httpUrl: `https://${props.language}.wikipedia.org/wiki/${props.title}`,
+        iframeHttpUrl: `https://${props.language}.wikipedia.org/w/index.php?title=${props.title}&printable=yes`
+      }
+    },
+    collectPropsPreview ({ propsMain }) {
+      return {
+        title: propsMain.title
+      }
+    },
+    plainTextFromProps (props) {
+      return `${props.title} (${props.language})`
     }
-    if (!props.language) props.language = defaultLanguage
-    return props
-  },
-  collectPropsMain (props) {
-    return {
-      title: props.title,
-      language: props.language,
-      httpUrl: `https://${props.language}.wikipedia.org/wiki/${props.title}`,
-      iframeHttpUrl: `https://${props.language}.wikipedia.org/w/index.php?title=${props.title}&printable=yes`
-    }
-  },
-  collectPropsPreview ({ propsMain }) {
-    return {
-      title: propsMain.title
-    }
-  },
-  plainTextFromProps (props) {
-    return `${props.title} (${props.language})`
   }
 }

@@ -73,92 +73,94 @@ export default {
     centerVertically: true,
     darkMode: false
   },
-  normalizeProps (props) {
-    if (typeof props === 'string' || Array.isArray(props)) {
-      props = {
-        markup: props
-      }
-    }
-    if (typeof props.markup === 'string') {
-      props.markup = [props.markup]
-    }
-
-    // Convert into HTML
-    const converted = []
-    for (const markup of props.markup) {
-      converted.push(markupToHtml(markup))
-    }
-
-    // Split by <hr>
-    const steps = []
-    for (const html of converted) {
-      if (html.indexOf('<hr>') > -1) {
-        const chunks = html.split('<hr>')
-        for (const chunk of chunks) {
-          steps.push(chunk)
+  hooks: {
+    normalizeProps (props) {
+      if (typeof props === 'string' || Array.isArray(props)) {
+        props = {
+          markup: props
         }
+      }
+      if (typeof props.markup === 'string') {
+        props.markup = [props.markup]
+      }
+
+      // Convert into HTML
+      const converted = []
+      for (const markup of props.markup) {
+        converted.push(markupToHtml(markup))
+      }
+
+      // Split by <hr>
+      const steps = []
+      for (const html of converted) {
+        if (html.indexOf('<hr>') > -1) {
+          const chunks = html.split('<hr>')
+          for (const chunk of chunks) {
+            steps.push(chunk)
+          }
+        } else {
+          steps.push(html)
+        }
+      }
+
+      // Split large texts into smaller chunks
+      const markup = []
+      for (const html of steps) {
+        const chunks = splitHtmlintoChunks(html, props.charactersOnSlide)
+        for (const chunk of chunks) {
+          markup.push(chunk)
+        }
+      }
+
+      if (props.stepWords) {
+        props.markup = [DomSteps.wrapWords(markup.join(' '))]
       } else {
-        steps.push(html)
+        props.markup = markup
       }
-    }
-
-    // Split large texts into smaller chunks
-    const markup = []
-    for (const html of steps) {
-      const chunks = splitHtmlintoChunks(html, props.charactersOnSlide)
-      for (const chunk of chunks) {
-        markup.push(chunk)
+      return props
+    },
+    collectPropsPreview ({ props }) {
+      return {
+        markup: props.markup[0]
       }
-    }
+    },
+    calculateStepCount ({ props }) {
+      return props.markup.length
+    },
+    plainTextFromProps (props) {
+      const output = []
+      for (const markup of props.markup) {
+        output.push(plainText(markup))
+      }
+      return output.join(' | ')
+    },
+    enterSlide () {
+      let sentencesSelector
+      if (this.stepSentences) {
+        sentencesSelector = '.vc_generic_master'
+      }
 
-    if (props.stepWords) {
-      props.markup = [DomSteps.wrapWords(markup.join(' '))]
-    } else {
-      props.markup = markup
-    }
-    return props
-  },
-  collectPropsPreview ({ props }) {
-    return {
-      markup: props.markup[0]
-    }
-  },
-  calculateStepCount ({ props }) {
-    return props.markup.length
-  },
-  plainTextFromProps (props) {
-    const output = []
-    for (const markup of props.markup) {
-      output.push(plainText(markup))
-    }
-    return output.join(' | ')
-  },
-  enterSlide () {
-    let sentencesSelector
-    if (this.stepSentences) {
-      sentencesSelector = '.vc_generic_master'
-    }
+      let specializedSelector = DomSteps.getSpecializedSelectorsFromProps(this)
 
-    let specializedSelector = DomSteps.getSpecializedSelectorsFromProps(this)
-
-    if (specializedSelector) {
-      this.domSteps = new DomSteps({
-        subsetSelectors: this.stepSubset,
-        specializedSelector,
-        sentencesSelector,
-        hideAllElementsInitally: false
-      })
-      this.domSteps.setStepCount(this.slideCurrent)
-      this.domSteps.displayByNo({ stepNo: this.slideCurrent.renderData.stepNoCurrent, full: true })
-    }
-  },
-  enterStep ({ oldStepNo, newStepNo }) {
-    const stepNo = newStepNo
-    if (this.stepWords || this.stepSentences) {
-      this.domSteps.displayByNo({
-        oldStepNo,
-        stepNo
-      })
+      if (specializedSelector) {
+        this.domSteps = new DomSteps({
+          subsetSelectors: this.stepSubset,
+          specializedSelector,
+          sentencesSelector,
+          hideAllElementsInitally: false
+        })
+        this.domSteps.setStepCount(this.slideCurrent)
+        this.domSteps.displayByNo({ stepNo: this.slideCurrent.renderData.stepNoCurrent, full: true })
+      }
+    },
+    enterStep ({ oldStepNo, newStepNo }) {
+      const stepNo = newStepNo
+      if (this.stepWords || this.stepSentences) {
+        this.domSteps.displayByNo({
+          oldStepNo,
+          stepNo
+        })
+      }
     }
   }
 }

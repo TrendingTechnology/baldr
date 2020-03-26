@@ -221,23 +221,25 @@ export default {
     centerVertically: true,
     darkMode: false
   },
-  normalizeProps (props) {
-    const counts = Question.initCounts()
-    const questions = Question.parseRecursively(props, [], counts, 0)
-    return {
-      questions,
-      sequence: questions[0].sequence
+  hooks: {
+    normalizeProps (props) {
+      const counts = Question.initCounts()
+      const questions = Question.parseRecursively(props, [], counts, 0)
+      return {
+        questions,
+        sequence: questions[0].sequence
+      }
+    },
+    calculateStepCount ({ props }) {
+      const firstQuestion = props.questions[0]
+      return firstQuestion.stepCount
+    },
+    enterSlide ({ newSlide }) {
+      const slide = newSlide
+      setQuestionsBySetNo.call(this, slide.renderData.stepNoCurrent)
+    },
+    enterStep ({ newStepNo }) {
+      setQuestionsBySetNo.call(this, newStepNo)
     }
-  },
-  calculateStepCount ({ props }) {
-    const firstQuestion = props.questions[0]
-    return firstQuestion.stepCount
-  },
-  enterSlide ({ newSlide }) {
-    const slide = newSlide
-    setQuestionsBySetNo.call(this, slide.renderData.stepNoCurrent)
-  },
-  enterStep ({ newStepNo }) {
-    setQuestionsBySetNo.call(this, newStepNo)
   }
 }

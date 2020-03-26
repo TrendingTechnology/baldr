@@ -19,36 +19,38 @@ export default {
     centerVertically: true,
     darkMode: false
   },
-  normalizeProps (props) {
-    if (typeof props === 'string') {
-      props = { src: props }
+  hooks: {
+    normalizeProps (props) {
+      if (typeof props === 'string') {
+        props = { src: props }
+      }
+      return props
+    },
+    resolveMediaUris (props) {
+      return props.src
+    },
+    collectPropsMain (props) {
+      const svgMediaFile = this.$store.getters['media/mediaFileByUri'](props.src)
+      return {
+        svgPath: svgMediaFile.path,
+        svgHttpUrl: svgMediaFile.httpUrl,
+        stepBegin: props.stepBegin,
+        stepEnd: props.stepEnd
+      }
+    },
+    collectPropsPreview ({ propsMain }) {
+      return {
+        svgHttpUrl: propsMain.svgHttpUrl
+      }
+    },
+    enterStep ({ oldStepNo, newStepNo }) {
+      // setSlideOrStepPrevious / Next has no this.domSteps
+      if (!this.domSteps) return
+      const newClozeGroup = this.domSteps.displayByNo({
+        oldStepNo,
+        stepNo: newStepNo
+      })
+      this.scroll(newClozeGroup)
     }
-    return props
-  },
-  resolveMediaUris (props) {
-    return props.src
-  },
-  collectPropsMain (props) {
-    const svgMediaFile = this.$store.getters['media/mediaFileByUri'](props.src)
-    return {
-      svgPath: svgMediaFile.path,
-      svgHttpUrl: svgMediaFile.httpUrl,
-      stepBegin: props.stepBegin,
-      stepEnd: props.stepEnd
-    }
-  },
-  collectPropsPreview ({ propsMain }) {
-    return {
-      svgHttpUrl: propsMain.svgHttpUrl
-    }
-  },
-  enterStep ({ oldStepNo, newStepNo }) {
-    // setSlideOrStepPrevious / Next has no this.domSteps
-    if (!this.domSteps) return
-    const newClozeGroup = this.domSteps.displayByNo({
-      oldStepNo,
-      stepNo: newStepNo
-    })
-    this.scroll(newClozeGroup)
   }
 }

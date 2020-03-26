@@ -15,13 +15,15 @@ export default {
     centerVertically: true,
     darkMode: true
   },
-  normalizeProps (props) {
-    if (typeof props === 'string') {
-      props = { id: props }
+  hooks: {
+    normalizeProps (props) {
+      if (typeof props === 'string') {
+        props = { id: props }
+      }
+      return props
+    },
+    plainTextFromProps (props) {
+      return props.id
     }
-    return props
-  },
-  plainTextFromProps (props) {
-    return props.id
   }
 }

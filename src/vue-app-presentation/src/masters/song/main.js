@@ -18,34 +18,36 @@ export default {
     centerVertically: true,
     darkMode: false
   },
-  normalizeProps (props) {
-    const propsNormalized = {}
-    if (typeof props === 'string') {
-      propsNormalized.songId = props
-    } else {
-      propsNormalized = props
-    }
-    if (!propsNormalized.imageUri) {
-      propsNormalized.imageUri = `id:Lied_${propsNormalized.songId}_NB`
-    }
-    return propsNormalized
-  },
-  resolveMediaUris (props) {
-    return props.imageUri
-  },
-  calculateStepCount ({ props }) {
-    const image = this.$store.getters['media/mediaFileByUri'](props.imageUri)
-    return image.multiPartCountActual
-  },
-  collectPropsMain (props) {
-    const image = this.$store.getters['media/mediaFileByUri'](props.imageUri)
-    return {
-      image
-    }
-  },
-  collectPropsPreview ({ propsMain }) {
-    return {
-      imageHttpUrl: propsMain.image.httpUrl
+  hooks: {
+    normalizeProps (props) {
+      const propsNormalized = {}
+      if (typeof props === 'string') {
+        propsNormalized.songId = props
+      } else {
+        propsNormalized = props
+      }
+      if (!propsNormalized.imageUri) {
+        propsNormalized.imageUri = `id:Lied_${propsNormalized.songId}_NB`
+      }
+      return propsNormalized
+    },
+    resolveMediaUris (props) {
+      return props.imageUri
+    },
+    calculateStepCount ({ props }) {
+      const image = this.$store.getters['media/mediaFileByUri'](props.imageUri)
+      return image.multiPartCountActual
+    },
+    collectPropsMain (props) {
+      const image = this.$store.getters['media/mediaFileByUri'](props.imageUri)
+      return {
+        image
+      }
+    },
+    collectPropsPreview ({ propsMain }) {
+      return {
+        imageHttpUrl: propsMain.image.httpUrl
+      }
     }
   }
 }

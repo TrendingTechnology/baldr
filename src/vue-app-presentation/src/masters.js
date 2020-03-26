@@ -188,13 +188,13 @@ class Master {
 
     /**
      * All imported methods. They are not called directly, but through
-     * public methods, which add additional functionality.
+     * public methods, which adds additional functionality.
      *
      * @type {object}
      *
      * @private
      */
-    this.methods_ = {}
+    this.hooks_ = {}
     for (const spec in specs) {
       if (spec === 'icon') {
         this.icon = new MasterIcon(specs.icon)
@@ -202,8 +202,10 @@ class Master {
         // to avoid confusion between real world props with real world value
         // and props defintions.
         this.propsDef = specs.props
-      } else if (typeof specs[spec] === 'function') {
-        this.methods_[spec] = specs[spec]
+      } else if (spec === 'hooks') {
+        // Make hooks private. Hooks should called from the public wrapper
+        // methods.
+        this.hooks_ = specs[spec]
       } else {
         this[spec] = specs[spec]
       }
@@ -258,8 +260,9 @@ class Master {
    * }
    * ```
    *
-   * @param {String} functionName - The name of the master function.
-   * @param {mixed} payload - The argument the master function is called with.
+   * @param {String} hookName - The name of the master hook / function.
+   * @param {mixed} payload - The argument the master hook / function is called
+   *   with.
    * @param {object} thisArg - The
    *   {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/call thisArg}
    *   the master function is called with.
@@ -268,12 +271,12 @@ class Master {
    *
    * @private
    */
-  callFunction_ (functionName, payload, thisArg) {
-    if (functionName in this.methods_ && typeof this.methods_[functionName] === 'function') {
+  callHook_ (hookName, payload, thisArg) {
+    if (this.hooks_[hookName] && typeof this.hooks_[hookName] === 'function') {
       if (thisArg) {
-        return this.methods_[functionName].call(thisArg, payload)
+        return this.hooks_[hookName].call(thisArg, payload)
       }
-      return this.methods_[functionName](payload)
+      return this.hooks_[hookName](payload)
     }
   }
 
@@ -285,7 +288,7 @@ class Master {
    * @returns {object}
    */
   normalizeProps (props) {
-    return this.callFunction_('normalizeProps', props)
+    return this.callHook_('normalizeProps', props)
   }
 
   /**
@@ -306,7 +309,7 @@ class Master {
    * @returns {Number} - The number of steps.
    */
   calculateStepCount (payload, thisArg) {
-    return this.callFunction_('calculateStepCount', payload, thisArg)
+    return this.callHook_('calculateStepCount', payload, thisArg)
   }
 
   /**
@@ -404,7 +407,7 @@ class Master {
    * @returns {Set}
    */
   resolveMediaUris (props) {
-    let uris = this.callFunction_('resolveMediaUris', props)
+    let uris = this.callHook_('resolveMediaUris', props)
 
     // To allow undefined return values of the hooks.
     if (!uris) {
@@ -426,7 +429,7 @@ class Master {
    * @returns {String}
    */
   plainTextFromProps (props) {
-    return this.callFunction_('plainTextFromProps', props)
+    return this.callHook_('plainTextFromProps', props)
   }
 
   /**
@@ -444,7 +447,7 @@ class Master {
    *   the master function is called with.
    */
   enterSlide (payload, thisArg) {
-    this.callFunction_('enterSlide', payload, thisArg)
+    this.callHook_('enterSlide', payload, thisArg)
   }
 
   /**
@@ -463,7 +466,7 @@ class Master {
    *   the master function is called with.
    */
   beforeLeaveSlide (payload, thisArg) {
-    this.callFunction_('beforeLeaveSlide', payload, thisArg)
+    this.callHook_('beforeLeaveSlide', payload, thisArg)
   }
 
   /**
@@ -482,7 +485,7 @@ class Master {
    *   the master function is called with.
    */
   leaveSlide (payload, thisArg) {
-    this.callFunction_('leaveSlide', payload, thisArg)
+    this.callHook_('leaveSlide', payload, thisArg)
   }
 
   /**
@@ -498,7 +501,7 @@ class Master {
    *   the master function is called with.
    */
   enterStep (payload, thisArg) {
-    return this.callFunction_('enterStep', payload, thisArg)
+    return this.callHook_('enterStep', payload, thisArg)
   }
 
   /**
@@ -514,7 +517,7 @@ class Master {
    *   the master function is called with.
    */
   leaveStep (payload, thisArg) {
-    return this.callFunction_('leaveStep', payload, thisArg)
+    return this.callHook_('leaveStep', payload, thisArg)
   }
 
   /**
@@ -576,7 +579,7 @@ class Master {
    * @returns {Object} - The props for the main component as a object.
    */
   collectPropsMain (props, thisArg) {
-    const propsMain = this.callFunction_('collectPropsMain', props, thisArg)
+    const propsMain = this.callHook_('collectPropsMain', props, thisArg)
     if (propsMain) return propsMain
     if (props) return props
   }
@@ -595,7 +598,7 @@ class Master {
    * @returns {Object} - The props for the preview component as a object.
    */
   collectPropsPreview (payload, thisArg) {
-    const propsPreview = this.callFunction_('collectPropsPreview', payload, thisArg)
+    const propsPreview = this.callHook_('collectPropsPreview', payload, thisArg)
     if (propsPreview) return propsPreview
     if (payload.propsMain) return payload.propsMain
     if (payload.props) return payload.props

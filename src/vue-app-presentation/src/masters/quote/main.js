@@ -40,15 +40,17 @@ export default {
     centerVertically: true,
     darkMode: true
   },
-  normalizeProps (props) {
-    if (typeof props === 'string') {
-      return {
-        text: props
+  hooks: {
+    normalizeProps (props) {
+      if (typeof props === 'string') {
+        return {
+          text: props
+        }
       }
+      return props
+    },
+    plainTextFromProps (props) {
+      return Object.values(props).join(' | ')
     }
-    return props
-  },
-  plainTextFromProps (props) {
-    return Object.values(props).join(' | ')
   }
 }

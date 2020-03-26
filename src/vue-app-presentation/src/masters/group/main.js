@@ -16,20 +16,22 @@ export default {
     centerVertically: true,
     darkMode: true
   },
-  normalizeProps (props) {
-    if (typeof props === 'string') {
-      return {
-        mainImage: props
+  hooks: {
+    normalizeProps (props) {
+      if (typeof props === 'string') {
+        return {
+          mainImage: props
+        }
       }
-    }
-    return props
-  },
-  resolveMediaUris (props) {
-    return props.mainImage
-  },
-  titleFromProps (props) {
-    if (props.mainImage) {
+      return props
+    },
+    resolveMediaUris (props) {
       return props.mainImage
+    },
+    titleFromProps (props) {
+      if (props.mainImage) {
+        return props.mainImage
+      }
     }
   }
 }

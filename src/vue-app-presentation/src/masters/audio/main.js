@@ -54,53 +54,55 @@ export default {
     centerVertically: true,
     darkMode: true
   },
-  normalizeProps (props) {
-    if (typeof props === 'string') {
-      props = { src: props }
-    }
-    return props
-  },
-  resolveMediaUris (props) {
-    const uris = new Set([props.src])
-    if (props.cover) uris.add(props.cover)
-    return uris
-  },
-  collectPropsMain (props) {
-    const sample = this.$store.getters['media/sampleByUri'](props.src)
-    const mediaFile = sample.mediaFile
+  hooks: {
+    normalizeProps (props) {
+      if (typeof props === 'string') {
+        props = { src: props }
+      }
+      return props
+    },
+    resolveMediaUris (props) {
+      const uris = new Set([props.src])
+      if (props.cover) uris.add(props.cover)
+      return uris
+    },
+    collectPropsMain (props) {
+      const sample = this.$store.getters['media/sampleByUri'](props.src)
+      const mediaFile = sample.mediaFile
 
-    const grab = new GrabFromObjects(props, mediaFile)
-    const artist = grab.property('artist')
-    const composer = grab.property('composer')
-    const description = grab.property('description')
-    let title
-    if (props.title) {
-      title = props.title
-    } else {
-      title = sample.titleFormated
-    }
+      const grab = new GrabFromObjects(props, mediaFile)
+      const artist = grab.property('artist')
+      const composer = grab.property('composer')
+      const description = grab.property('description')
+      let title
+      if (props.title) {
+        title = props.title
+      } else {
+        title = sample.titleFormated
+      }
 
-    let previewHttpUrl
-    if (props.cover) {
-      const coverFile = this.$store.getters['media/mediaFileByUri'](props.cover)
-      previewHttpUrl = coverFile.httpUrl
-    } else if ('previewHttpUrl' in mediaFile) {
-      previewHttpUrl = mediaFile.previewHttpUrl
+      let previewHttpUrl
+      if (props.cover) {
+        const coverFile = this.$store.getters['media/mediaFileByUri'](props.cover)
+        previewHttpUrl = coverFile.httpUrl
+      } else if ('previewHttpUrl' in mediaFile) {
+        previewHttpUrl = mediaFile.previewHttpUrl
+      }
+      return {
+        sample,
+        previewHttpUrl,
+        artist,
+        composer,
+        title,
+        description
+      }
+    },
+    async enterSlide ({ newProps }) {
+      const props = newProps
+      this.$media.player.load(props.src)
+      if (newProps.autoplay) {
+        await this.$media.player.start()
+      }
     }
-    return {
-      sample,
-      previewHttpUrl,
-      artist,
-      composer,
-      title,
-      description
-    }
-  },
-  async enterSlide ({ newProps }) {
-    const props = newProps
-    this.$media.player.load(props.src)
-    if (newProps.autoplay) {
-      await this.$media.player.start()
-    }
-  },
+  }
 }

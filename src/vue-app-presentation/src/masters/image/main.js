@@ -33,33 +33,35 @@ export default {
     centerVertically: true,
     darkMode: true
   },
-  normalizeProps (props) {
-    if (typeof props === 'string') {
-      props = { src: props }
-    }
-    return props
-  },
-  resolveMediaUris (props) {
-    return props.src
-  },
-  collectPropsMain (props) {
-    const mediaFile = this.$store.getters['media/mediaFileByUri'](props.src)
+  hooks: {
+    normalizeProps (props) {
+      if (typeof props === 'string') {
+        props = { src: props }
+      }
+      return props
+    },
+    resolveMediaUris (props) {
+      return props.src
+    },
+    collectPropsMain (props) {
+      const mediaFile = this.$store.getters['media/mediaFileByUri'](props.src)
 
-    const grab = new GrabFromObjects(props, mediaFile)
+      const grab = new GrabFromObjects(props, mediaFile)
 
-    const title = grab.property('title')
-    const description = grab.property('description')
+      const title = grab.property('title')
+      const description = grab.property('description')
 
-    return {
-      title,
-      description,
-      imageHttpUrl: mediaFile.httpUrl,
-      noMeta: props.noMeta
-    }
-  },
-  collectPropsPreview ({ propsMain }) {
-    return {
-      imageHttpUrl: propsMain.imageHttpUrl
+      return {
+        title,
+        description,
+        imageHttpUrl: mediaFile.httpUrl,
+        noMeta: props.noMeta
+      }
+    },
+    collectPropsPreview ({ propsMain }) {
+      return {
+        imageHttpUrl: propsMain.imageHttpUrl
+      }
     }
   }
 }

@@ -18,13 +18,15 @@ export default {
     centerVertically: true,
     darkMode: true
   },
-  normalizeProps (props) {
-    if (typeof props === 'string') {
-      props = { heading: props }
+  hooks: {
+    normalizeProps (props) {
+      if (typeof props === 'string') {
+        props = { heading: props }
+      }
+      return props
+    },
+    plainTextFromProps (props) {
+      return plainText(props.heading)
     }
-    return props
-  },
-  plainTextFromProps (props) {
-    return plainText(props.heading)
   }
 }
