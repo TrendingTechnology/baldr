@@ -1,5 +1,5 @@
 /**
- * @module @baldr/vue-app-presentation/masters/question
+ * @module @bldr/vue-app-presentation/masters/question
  */
 
 import { markupToHtml } from '@/lib.js'
