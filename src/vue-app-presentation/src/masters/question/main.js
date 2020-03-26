@@ -23,11 +23,10 @@ function markupToHtmlNoLists (text) {
 class Question {
 
   constructor (spec, counts, level) {
-
     /**
      * @type {Number}
      */
-    this.level = level + 1
+    this.level = null
 
     /**
      * @type {String}
@@ -113,6 +112,13 @@ class Question {
         this.subQuestions = []
         Question.parseRecursively(spec.subQuestions, this.subQuestions, counts, this.level)
       }
+    }
+
+    if (this.question) {
+      this.level = level + 1
+    } else {
+      // Qustion object without a question. Only a heading
+      this.level = level
     }
   }
 
