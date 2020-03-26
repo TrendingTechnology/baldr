@@ -1,6 +1,19 @@
 ---
 slides:
 
+- title: Alias for sub_questions
+  question:
+    heading: 'Alias for `sub_questions`'
+    questions:
+    - question: 'Questions Level 1'
+      answer: 'Answer Level 1'
+      questions:
+      - question: 'Questions Level 2'
+        answer: 'Answer Level 2'
+        questions:
+        - question: 'Questions Level 3'
+          answer: 'Answer Level 3'
+
 - title: Aliases
   question:
     h: 'h'
@@ -16,7 +29,7 @@ slides:
     - question: Question three?
       answer: Answer three
 
-- title: Markup support
+- title: Recursive structure
   question:
     heading: 'Heading'
     sub_questions:

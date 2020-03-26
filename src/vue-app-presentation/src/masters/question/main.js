@@ -108,17 +108,20 @@ class Question {
         counts.sequence.push(`a${counts.answer}`)
         this.answerNo = counts.answer
       }
+      if (this.question) {
+        this.level = level + 1
+      } else {
+        // Question object without a question. Only a heading
+        this.level = level
+      }
+      if (spec.questions) {
+        spec.subQuestions = spec.questions
+        delete spec.questions
+      }
       if (spec.subQuestions) {
         this.subQuestions = []
         Question.parseRecursively(spec.subQuestions, this.subQuestions, counts, this.level)
       }
-    }
-
-    if (this.question) {
-      this.level = level + 1
-    } else {
-      // Qustion object without a question. Only a heading
-      this.level = level
     }
   }
 
