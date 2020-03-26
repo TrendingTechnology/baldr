@@ -561,9 +561,9 @@ class SlideNavigator {
    * @returns {Number}
    */
   idToNo (slideId) {
-
+    if (this.ids_[slideId]) return this.ids_[slideId]
+    throw new Error(`Unkown slide ID ${slideId}`)
   }
-
 }
 
 /**
@@ -585,6 +585,17 @@ export class Presentation {
      */
     this.navigator = new SlideNavigator()
   }
+
+  /**
+   * Go to a certain slide by ID.
+   *
+   * @param {Number} slideId - The ID of a slide.
+   */
+  goto (slideId) {
+    const slideNo = this.navigator.idToNo(slideId)
+    vue.$store.dispatch('presentation/setSlideNoCurrent', slideNo)
+  }
+
   /**
    * Some meta data fields are only available in the mongodb object, for
    * example the path of the presentation. We prefer the object fetched

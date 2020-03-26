@@ -11,6 +11,7 @@ import Vue from 'vue'
 import store from '@/store.js'
 import { markupToHtml, validateUri } from '@/lib.js'
 import SlidePreviewPlayButton from '@/views/SlidesPreview/PlayButton.vue'
+import { makeInlineReactive } from '@/inline-markup.js'
 
 const mediaUriRegExp = '(id:[a-zA-Z0-9-_]+)'
 const inlineMediaRegExp = '\\[' + mediaUriRegExp + '([^\\]]*)?' + '\\]'
@@ -688,6 +689,7 @@ const masterMixin = {
       newSlide.master.enterSlide({ oldSlide, oldProps, newSlide, newProps }, this)
     }
     customStore.vueMasterInstanceCurrent = this
+    makeInlineReactive()
   },
   beforeDestroy () {
     const oldSlide = vue.$store.getters['presentation/slideOld']
