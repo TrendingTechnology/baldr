@@ -40,9 +40,6 @@ export default {
     centerVertically: true,
     darkMode: true
   },
-  plainTextFromProps (props) {
-    return Object.values(props).join(' | ')
-  },
   normalizeProps (props) {
     if (typeof props === 'string') {
       return {
@@ -50,5 +47,8 @@ export default {
       }
     }
     return props
+  },
+  plainTextFromProps (props) {
+    return Object.values(props).join(' | ')
   }
 }

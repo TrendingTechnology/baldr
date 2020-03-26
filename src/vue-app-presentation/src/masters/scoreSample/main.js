@@ -26,14 +26,6 @@ export default {
     centerVertically: true,
     darkMode: false
   },
-  resolveMediaUris (props) {
-    const uris = new Set([props.score])
-    if ('audio' in props) uris.add(props.audio)
-    return uris
-  },
-  enterSlide ({ newProps }) {
-    if ('audio' in newProps) this.$media.player.load(newProps.audio)
-  },
   normalizeProps (props) {
     if (typeof props === 'string') {
       return {
@@ -41,6 +33,11 @@ export default {
       }
     }
     return props
+  },
+  resolveMediaUris (props) {
+    const uris = new Set([props.score])
+    if ('audio' in props) uris.add(props.audio)
+    return uris
   },
   collectPropsMain (props) {
     let audioSample
@@ -76,5 +73,8 @@ export default {
     if (muliPartSelection) {
       return muliPartSelection.partCount
     }
+  },
+  enterSlide ({ newProps }) {
+    if ('audio' in newProps) this.$media.player.load(newProps.audio)
   }
 }

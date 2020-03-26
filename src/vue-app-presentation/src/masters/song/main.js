@@ -18,9 +18,6 @@ export default {
     centerVertically: true,
     darkMode: false
   },
-  resolveMediaUris (props) {
-    return props.imageUri
-  },
   normalizeProps (props) {
     const propsNormalized = {}
     if (typeof props === 'string') {
@@ -32,6 +29,9 @@ export default {
       propsNormalized.imageUri = `id:Lied_${propsNormalized.songId}_NB`
     }
     return propsNormalized
+  },
+  resolveMediaUris (props) {
+    return props.imageUri
   },
   calculateStepCount ({ props }) {
     const image = this.$store.getters['media/mediaFileByUri'](props.imageUri)

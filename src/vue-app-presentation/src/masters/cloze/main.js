@@ -28,15 +28,6 @@ export default {
   resolveMediaUris (props) {
     return props.src
   },
-  enterStep ({ oldStepNo, newStepNo }) {
-    // setSlideOrStepPrevious / Next has no this.domSteps
-    if (!this.domSteps) return
-    const newClozeGroup = this.domSteps.displayByNo({
-      oldStepNo,
-      stepNo: newStepNo
-    })
-    this.scroll(newClozeGroup)
-  },
   collectPropsMain (props) {
     const svgMediaFile = this.$store.getters['media/mediaFileByUri'](props.src)
     return {
@@ -50,5 +41,14 @@ export default {
     return {
       svgHttpUrl: propsMain.svgHttpUrl
     }
+  },
+  enterStep ({ oldStepNo, newStepNo }) {
+    // setSlideOrStepPrevious / Next has no this.domSteps
+    if (!this.domSteps) return
+    const newClozeGroup = this.domSteps.displayByNo({
+      oldStepNo,
+      stepNo: newStepNo
+    })
+    this.scroll(newClozeGroup)
   }
 }

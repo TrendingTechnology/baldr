@@ -36,9 +36,6 @@ export default {
   resolveMediaUris (props) {
     return props.mainImageUri
   },
-  titleFromProps (props) {
-    return props.instrumentId
-  },
   collectPropsMain (props) {
     const mainImage = this.$store.getters['media/mediaFileByUri'](props.mainImageUri)
     const grab = new GrabFromObjects(props, mainImage, false)
@@ -54,6 +51,9 @@ export default {
       imageHttpUrl: propsMain.imageHttpUrl,
       name: propsMain.name
     }
+  },
+  titleFromProps (props) {
+    return props.instrumentId
   },
   async enterSlide ({ newProps }) {
     if (newProps.audioSamples && newProps.audioSamples.length) {

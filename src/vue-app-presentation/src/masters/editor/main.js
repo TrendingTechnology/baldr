@@ -55,6 +55,10 @@ export default {
   plainTextFromProps (props) {
     return plainText(props.markup)
   },
+  beforeLeaveSlide ({ oldProps }) {
+    const element = document.querySelector('.vc_editor_master')
+    if (element) oldProps.markup = element.innerHTML
+  },
   enterSlide () {
     this.onSlideChange()
     let sentencesSelector
@@ -75,11 +79,6 @@ export default {
       this.domSteps.displayByNo({ stepNo: this.slideCurrent.renderData.stepNoCurrent, full: true })
     }
   },
-  beforeLeaveSlide ({ oldProps }) {
-    const element = document.querySelector('.vc_editor_master')
-    if (element) oldProps.markup = element.innerHTML
-  },
-
   enterStep ({ oldStepNo, newStepNo }) {
     const stepNo = newStepNo
     if (this.stepWords || this.stepSentences) {

@@ -29,6 +29,24 @@ export default {
   resolveMediaUris (props) {
     return props.src
   },
+  collectPropsMain (props) {
+    const svgMediaFile = this.$store.getters['media/mediaFileByUri'](props.src)
+    return {
+      svgPath: svgMediaFile.path,
+      svgTitle: svgMediaFile.title,
+      svgHttpUrl: svgMediaFile.httpUrl,
+      stepSelector: props.stepSelector,
+      stepSubset: props.stepSubset
+    }
+  },
+  collectPropsPreview ({ propsMain }) {
+    return {
+      svgHttpUrl: propsMain.svgHttpUrl
+    }
+  },
+  leaveSlide () {
+    this.domSteps.shortcutsUnregister()
+  },
   async enterSlide () {
     const response = await this.$media.httpRequest.request({
       url: `/media/${this.svgPath}`,
@@ -51,28 +69,10 @@ export default {
     this.domSteps.setStepCount(this.slideCurrent)
     this.domSteps.shortcutsRegister()
   },
-  leaveSlide () {
-    this.domSteps.shortcutsUnregister()
-  },
   enterStep ({ oldStepNo, newStepNo }) {
     this.domSteps.displayByNo({
       oldStepNo,
       stepNo: newStepNo
     })
-  },
-  collectPropsMain (props) {
-    const svgMediaFile = this.$store.getters['media/mediaFileByUri'](props.src)
-    return {
-      svgPath: svgMediaFile.path,
-      svgTitle: svgMediaFile.title,
-      svgHttpUrl: svgMediaFile.httpUrl,
-      stepSelector: props.stepSelector,
-      stepSubset: props.stepSubset
-    }
-  },
-  collectPropsPreview ({ propsMain }) {
-    return {
-      svgHttpUrl: propsMain.svgHttpUrl
-    }
   }
 }

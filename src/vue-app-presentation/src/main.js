@@ -130,6 +130,15 @@
  *
  * ## Getter on the slide object:
  *
+ * ### `titleFromProps(props)` ??? not implemented any more?
+ *
+ * - `return`: a string
+ *
+ * ```js
+ * export const default = {
+  * }
+  * ```
+ *
  * ### `plainTextFromProps(props)`
  *
  * - `return`: a string

@@ -32,9 +32,6 @@ export default {
     if (!props.language) props.language = defaultLanguage
     return props
   },
-  plainTextFromProps (props) {
-    return `${props.title} (${props.language})`
-  },
   collectPropsMain (props) {
     return {
       title: props.title,
@@ -47,5 +44,8 @@ export default {
     return {
       title: propsMain.title
     }
+  },
+  plainTextFromProps (props) {
+    return `${props.title} (${props.language})`
   }
 }

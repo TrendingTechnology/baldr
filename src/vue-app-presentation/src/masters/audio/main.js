@@ -65,13 +65,6 @@ export default {
     if (props.cover) uris.add(props.cover)
     return uris
   },
-  async enterSlide ({ newProps }) {
-    const props = newProps
-    this.$media.player.load(props.src)
-    if (newProps.autoplay) {
-      await this.$media.player.start()
-    }
-  },
   collectPropsMain (props) {
     const sample = this.$store.getters['media/sampleByUri'](props.src)
     const mediaFile = sample.mediaFile
@@ -102,5 +95,12 @@ export default {
       title,
       description
     }
-  }
+  },
+  async enterSlide ({ newProps }) {
+    const props = newProps
+    this.$media.player.load(props.src)
+    if (newProps.autoplay) {
+      await this.$media.player.start()
+    }
+  },
 }

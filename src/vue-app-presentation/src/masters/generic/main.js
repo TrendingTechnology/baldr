@@ -118,6 +118,11 @@ export default {
     }
     return props
   },
+  collectPropsPreview ({ props }) {
+    return {
+      markup: props.markup[0]
+    }
+  },
   calculateStepCount ({ props }) {
     return props.markup.length
   },
@@ -154,11 +159,6 @@ export default {
         oldStepNo,
         stepNo
       })
-    }
-  },
-  collectPropsPreview ({ props }) {
-    return {
-      markup: props.markup[0]
     }
   }
 }
