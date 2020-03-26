@@ -67,6 +67,8 @@
  *
  * ### 1. `normalizeProps(props)`
  *
+ * - `return`: an object.
+ *
  * ```js
  * export const default = {
  *   // result must fit to props
@@ -82,6 +84,8 @@
  *
  * ### 2. `resolveMediaUris(props)`
  *
+ * - `return`: an array or a string.
+ *
  * ```js
  * export const default = {
  *   // An array of media URIs to resolve (like [id:beethoven, filename:mozart.mp3])
@@ -94,6 +98,7 @@
  * ### 3. `collectPropsMain(props)`
  *
  * - `this`: is the main Vue instance.
+ * - `return`: an object.
  *
  * ```js
  * export const default = {
@@ -103,6 +108,7 @@
  * ### 4. `collectPropsPreview({ props, propsMain, slide })`
  *
  * - `this`: is the main Vue instance.
+ * - `return`: an object.
  *
  * ```js
  * export const default = {
@@ -112,6 +118,7 @@
  * ### 5. `calculateStepCount({ props, propsMain, propsPreview, slide })`
  *
  * - `this`: is the main Vue instance.
+ * - `return`: a number.
  *
  * ```js
  * export const default = {
@@ -123,7 +130,9 @@
  *
  * ## Getter on the slide object:
  *
- * - plainTextFromProps()
+ * ### `plainTextFromProps(props)`
+ *
+ * - `return`: a string
  *
  * ```js
  * export const default = {
@@ -135,6 +144,7 @@
  * ### 1. `beforeLeaveSlide({ oldSlide, oldProps, newSlide, newProps })`
  *
  * - `this`: is the Vue instance of the current main master component.
+ * - `return`: void
  *
  * ```js
  * export const default = {
@@ -145,6 +155,7 @@
  *
  * - `this`: is the Vue instance of the current main master component.
  * - called from  `masterMixin` in `masters.js`
+ * - `return`: void
  *
  * ```js
  * export const default = {
@@ -158,6 +169,7 @@
  *
  * - `this`: is the Vue instance of the current main master component.
  * - called from  `masterMixin` in `masters.js`
+ * - `return`: void
  *
  * ```js
  * export const default = {
@@ -172,6 +184,7 @@
  * ### 1. `leaveStep({ oldStepNo, newStepNo })`
  *
  * - `this`: is the Vue instance of the current main master component.
+ * - `return`: void
  *
  * ```js
  * export const default = {
@@ -184,6 +197,7 @@
  * ### 2. `enterStep({ oldStepNo, newStepNo })`
  *
  * - `this`: is the Vue instance of the current main master component.
+ * - `return`: void
  *
  * ```js
  * export const default = {
