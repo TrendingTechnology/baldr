@@ -3,6 +3,9 @@ meta:
   title: Slide meta data
 
 slides:
+- id: slide_first
+  generic: This slide has an ID.
+
 - title: This slide has a title.
   generic: This slide has a title.
 

@@ -217,6 +217,12 @@ export class MetaData {
    */
   constructor (rawSlideObject) {
     this.rawSlideObject_ = rawSlideObject
+
+    /**
+     * The ID of a slide (Used for links)
+     */
+    this.id = this.grabProperty_('id')
+
     /**
      * The title of a slide.
      *
@@ -359,7 +365,7 @@ class Slide {
     this.master = masters.get(this.renderData.masterName)
 
     /**
-     * @type {module:@bldr/vue-app-presentation/content-file~MetaData}
+     * @type {module:@bldr/vue-app-presentation/content-file.MetaData}
      */
     this.metaData = new MetaData(rawSlideObject)
 
@@ -420,7 +426,7 @@ class Slide {
   /**
    * The title of this slide.
    *
-   * @returns {String}
+   * @type {String}
    */
   get title () {
     if (this.metaData.title) {
@@ -434,7 +440,7 @@ class Slide {
   /**
    * Collect all plain text of the slide.
    *
-   * @returns {String}
+   * @type {String}
    */
   get plainText () {
     const output = []
@@ -449,7 +455,7 @@ class Slide {
   /**
    * The media files of this slide as an array.
    *
-   * @returns {Array}
+   * @type {Array}
    */
   get mediaFiles () {
     const mediaFiles = []
@@ -462,7 +468,7 @@ class Slide {
   /**
    * The name of the content theme of this slide.
    *
-   * @returns {String}
+   * @type {String}
    */
   get contentTheme () {
     if (this.master.styleConfig.contentTheme) {
