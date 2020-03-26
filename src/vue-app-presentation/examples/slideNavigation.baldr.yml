@@ -1,0 +1,36 @@
+---
+meta:
+  title: Slide navigation
+
+slides:
+- generic: |
+    Slide overview
+
+    1. [slide:one text="Slide 1"]
+    2. [slide:two text="Slide 2"]
+    3. [slide:three text="Slide 3"]
+
+- generic: |
+    Slide overview (HTML)
+
+    1. <span b-inline-type="slide-link" b-inline-slideid="one">Slide 1</span>
+    2. <span b-inline-type="slide-link" b-inline-slideid="two">Slide 2</span>
+    3. <span b-inline-type="slide-link" b-inline-slideid="three">Slide 3</span>
+
+- id: one
+  generic: |
+    This is slide one.
+
+    Go to slide [slide:one text="two"]
+
+- id: two
+  generic: |
+    This is slide two.
+
+    Go to slide [slide:three text="tree"]
+
+- id: three
+  generic: |
+    This is slide three.
+
+    Go to slide [slide:three text="three"]

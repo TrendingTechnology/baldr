@@ -16,7 +16,11 @@ const mediaUriRegExp = '(id:[a-zA-Z0-9-_]+)'
 const inlineMediaRegExp = '\\[' + mediaUriRegExp + '([^\\]]*)?' + '\\]'
 
 /**
- *
+ * ```js
+ * const inline = new InlineMarkup('[id:Fuer-Elise caption="Für Elise"]')
+ * console.log(inline.id) // Fuer-Elise
+ * console.log(inline.caption) // Für Elise
+ * ```
  */
 class InlineMarkup {
   /**

@@ -531,6 +531,42 @@ function parseSlidesRecursive (slidesRaw, slidesFlat, slidesTree, level = 1) {
 }
 
 /**
+ * Each slide can be labeled with an ID. Resolve this ID to get the slide
+ * number. Store all slide IDs in the instantiated objects
+ */
+class SlideNavigator {
+
+  constructor () {
+    /**
+     * @type {Object}
+     * @private
+     */
+    this.ids_ = {}
+  }
+
+  /**
+   * @param {String} slideId
+   * @param {Number} slideNo
+   */
+  addId (slideId, slideNo) {
+    if (this.ids_[slideId]) {
+      throw new Error(`A slide with the id “${slideId}” already exists.`)
+    }
+    this.ids_[slideId] = slideNo
+  }
+
+  /**
+   * @param {String} slideId
+   *
+   * @returns {Number}
+   */
+  idToNo (slideId) {
+
+  }
+
+}
+
+/**
  * A presentation
  *
  * @property {String} path
@@ -542,6 +578,13 @@ function parseSlidesRecursive (slidesRaw, slidesFlat, slidesTree, level = 1) {
  * @property {string} rawYamlObject_
  */
 export class Presentation {
+  constructor () {
+
+    /**
+     * @type {module:@bldr/vue-app-presentation/content-file~SlideNavigator}
+     */
+    this.navigator = new SlideNavigator()
+  }
   /**
    * Some meta data fields are only available in the mongodb object, for
    * example the path of the presentation. We prefer the object fetched
@@ -701,6 +744,10 @@ ${JSON.stringify(this.rawYamlObject_)}`
           propsPreview: slide.renderData.propsPreview,
           slide
         }, vue)
+      }
+
+      if (slide.metaData.id) {
+        this.navigator.addId(slide.metaData.id, slide.no)
       }
     }
   }
