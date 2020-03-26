@@ -21,7 +21,6 @@ function markupToHtmlNoLists (text) {
  * A questions with sub questions.
  */
 class Question {
-
   constructor (spec, counts, level) {
     /**
      * @type {Number}
@@ -78,7 +77,7 @@ class Question {
     } else if (typeof spec === 'object') {
       // aliases
       for (const alias in aliases) {
-        if (spec.hasOwnProperty(alias)) {
+        if (spec[alias]) {
           spec[aliases[alias]] = spec[alias]
           delete spec[alias]
         }
@@ -161,7 +160,7 @@ class Question {
     return {
       sequence: [],
       question: 0,
-      answer: 0,
+      answer: 0
     }
   }
 }

@@ -156,9 +156,8 @@ const actions = {
     // next
     if (direction === 1 && no === count) {
       dispatch('setSlideNoCurrent', 1)
-    }
     // previous
-    else if (direction === -1 && no === 1) {
+    } else if (direction === -1 && no === 1) {
       dispatch('setSlideNoCurrent', count)
     } else {
       dispatch('setSlideNoCurrent', no + direction)

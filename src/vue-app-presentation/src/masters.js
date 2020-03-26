@@ -380,7 +380,6 @@ class Master {
     }
 
     for (const propName of this.propNamesInlineMedia) {
-
       const prop = props[propName]
       if (prop) {
         if (typeof prop === 'string') {

@@ -140,7 +140,7 @@ export default {
         sentencesSelector = '.vc_generic_master'
       }
 
-      let specializedSelector = DomSteps.getSpecializedSelectorsFromProps(this)
+      const specializedSelector = DomSteps.getSpecializedSelectorsFromProps(this)
 
       if (specializedSelector) {
         this.domSteps = new DomSteps({

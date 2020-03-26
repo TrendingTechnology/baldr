@@ -3,7 +3,7 @@ export default {
   props: {
     songId: {
       type: String,
-      description: 'Die ID des Liedes',
+      description: 'Die ID des Liedes'
     },
     imageUri: {
       type: String,
@@ -20,7 +20,7 @@ export default {
   },
   hooks: {
     normalizeProps (props) {
-      const propsNormalized = {}
+      let propsNormalized = {}
       if (typeof props === 'string') {
         propsNormalized.songId = props
       } else {

@@ -4,11 +4,11 @@ import { markupToHtml, DomSteps } from '@/lib.js'
 const placeholder = '…'
 const placeholderTag = `<span class="editor-placeholder">${placeholder}</span>`
 
-function scroll(element) {
+function scroll (element) {
   if (!element) return
   const y = element.getBoundingClientRect().top + window.scrollY
   const adjustedY = y - 0.8 * window.screen.height
-  window.scrollTo({ top: adjustedY, left: 0, behavior: 'smooth' });
+  window.scrollTo({ top: adjustedY, left: 0, behavior: 'smooth' })
 }
 
 export default {
@@ -67,7 +67,7 @@ export default {
         sentencesSelector = '.vc_editor_master'
       }
 
-      let specializedSelector = DomSteps.getSpecializedSelectorsFromProps(this)
+      const specializedSelector = DomSteps.getSpecializedSelectorsFromProps(this)
 
       if (specializedSelector) {
         this.domSteps = new DomSteps({

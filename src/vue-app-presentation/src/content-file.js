@@ -293,7 +293,6 @@ class AudioOverlay {
    *   `audio_overlay: `
    */
   constructor (rawData) {
-
     /**
      * @type {boolean}
      */

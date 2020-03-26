@@ -1,11 +1,11 @@
 import { plainText } from '@bldr/core-browser'
 import { markupToHtml, DomSteps } from '@/lib.js'
 
-function scroll(element) {
+function scroll (element) {
   if (!element) return
   const y = element.getBoundingClientRect().top + window.scrollY
   const adjustedY = y - 0.8 * window.screen.height
-  window.scrollTo({ top: adjustedY, left: 0, behavior: 'smooth' });
+  window.scrollTo({ top: adjustedY, left: 0, behavior: 'smooth' })
 }
 
 export default {
