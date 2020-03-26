@@ -1,3 +1,7 @@
+/**
+ * @module @baldr/vue-app-presentation/masters/question
+ */
+
 import { markupToHtml } from '@/lib.js'
 
 /**
@@ -153,18 +157,27 @@ class Question {
   }
 }
 
+/**
+ * @param {Number} newStepNo
+ */
 function setQuestionsBySetNo (newStepNo) {
   const slide = this.$get('slideCurrent')
   const sequence = slide.renderData.props.sequence
+  console.log(sequence)
+
+  // Question with a question or answer. Only the heading.
+  if (!sequence.length) return
 
   const curId = sequence[newStepNo - 1]
 
   for (const id of sequence) {
-    document.getElementById(id).classList.remove('active')
+    const element = document.getElementById(id)
+    if (element) element.classList.remove('active')
   }
 
   const isAnswer = curId.match(/^a/)
   const element = document.getElementById(curId)
+  if (!element) return
   element.classList.add('active')
   if (isAnswer) {
     element.style.display = 'block'
