@@ -13,9 +13,9 @@ slides:
 - generic: |
     Slide overview (HTML)
 
-    1. <span b-inline-type="slide-link" b-inline-slideid="one" class="link">Slide 1</span>
-    2. <span b-inline-type="slide-link" b-inline-slideid="two" class="link">Slide 2</span>
-    3. <span b-inline-type="slide-link" b-inline-slideid="three" class="link">Slide 3</span>
+    1. <span b-inline-type="slide-link" b-inline-slide="one" class="link">Slide 1</span>
+    2. <span b-inline-type="slide-link" b-inline-slide="two" class="link">Slide 2</span>
+    3. <span b-inline-type="slide-link" b-inline-slide="three" class="link">Slide 3</span>
 
 - id: one
   generic: |

@@ -283,7 +283,7 @@ Vue.config.productionTip = false
  * @property {Mixed} default - A default value.
  * @property {String} description - A descriptive text shown in the
  *   documentation.
- * @property {Boolean} inlineMedia - Indicates that this `prop` is text for
+ * @property {Boolean} inlineMarkup - Indicates that this `prop` is text for
  *   extracting inline media URIs like `[id:Beethoven_Ludwig-van]`.
  * @property {Boolean} markup - If true this property is converted into
  *   HTML.
@@ -302,7 +302,7 @@ Vue.config.productionTip = false
  *    src: {
  *      default: 'id:Fuer-Elise'
  *      description: 'Den URI zu einer Video-Datei.',
- *      inlineMedia: false
+ *      inlineMarkup: false
  *      markup: false
  *      mediaFileUri: true,
  *      required: true,
