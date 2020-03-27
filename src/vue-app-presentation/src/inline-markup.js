@@ -85,7 +85,13 @@ export class Item {
 export function render (item) {
   if (item.slide) {
     const slide = item.slide.replace(/^[a-z]+:/, '')
-    return `<span b-inline-type="slide-link" b-inline-slide="${slide}" class="link">${item.text}</span>`
+    let text
+    if (!item.text) {
+      text = '[>]'
+    } else {
+      text = item.text
+    }
+    return `<span b-inline-type="slide-link" b-inline-slide="${slide}" class="link">${text}</span>`
   } else if (item.id) {
     const mediaFile = vue.$store.getters['media/mediaFileByUri'](item.id)
 
