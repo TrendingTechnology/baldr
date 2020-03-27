@@ -200,7 +200,6 @@ export default {
         keys: 'ctrl+a',
         callback: () => {
           if (this.slideCurrent && this.slideCurrent.firstMediaUri) {
-            console.log(this.slideCurrent.firstMediaUri)
             const uri = this.slideCurrent.firstMediaUri.split(':')[1]
             this.$media.httpRequest.request({
               url: 'mgmt/open',
@@ -288,6 +287,13 @@ export default {
           }
         },
         description: 'Lokalen Medienserver aktualisieren.'
+      },
+      {
+        keys: 'ctrl+y',
+        callback: () => {
+            this.$store.dispatch('presentation/setSlideNoToOld')
+        },
+        description: 'Zwischen zwei Folien hin- und herschalten.'
       }
     ])
     this.$router.afterEach((to, from) => {

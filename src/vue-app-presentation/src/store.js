@@ -71,9 +71,12 @@ const getters = {
       return getters.slideByNo(state.slideNoCurrent)
     }
   },
+  slideNoOld: (state) => {
+    return state.slideNoOld
+  },
   slideOld: (state, getters) => {
-    if (state.slideNoOld) {
-      return getters.slideByNo(state.slideNoOld)
+    if (getters.slideNoOld) {
+      return getters.slideByNo(getters.slideNoOld)
     }
   },
   slideByNo: state => no => {
@@ -208,6 +211,10 @@ const actions = {
       dispatch('setSlideNextOrPrevious', direction)
       dispatch('setStepLastOrFirstByDirection', direction)
     }
+  },
+  setSlideNoToOld ({ dispatch, getters }) {
+    const slideNoOld = getters.slideNoOld
+    if (slideNoOld) dispatch('setSlideNoCurrent', slideNoOld)
   },
   setSlideNoCurrent ({ commit, getters }, no) {
     let oldSlide
