@@ -577,6 +577,15 @@ class Master {
     if (payload.propsMain) return payload.propsMain
     if (payload.props) return payload.props
   }
+
+  /**
+   * Async hook after loading. To load resources in the background.
+   *
+   * @param {Object} thisArg
+   */
+  afterLoading (props, thisArg) {
+    this.callHook_('afterLoading', { props, master: this }, thisArg)
+  }
 }
 
 /**

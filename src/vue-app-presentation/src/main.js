@@ -1,6 +1,15 @@
 /**
  * The main app of the BALDR project: a presentation app using YAML files.
  *
+ * # Structure of a master slide
+ *
+ * ## Files
+ *
+ * - `main.js`
+ * - `main.vue`
+ * - `preview.vue`
+ * - `examples.baldr.yml`
+ *
  * # Additional “dollar” properties (public instance properties) in the Vue
  *   instances.
  *
@@ -36,18 +45,11 @@
  * }
  * ```
  *
- * # Structure of a master slide
+ * # Additional properties in the main master components:
  *
- * ## Files
+ * - `masterName`
+ * - `master`
  *
- * - `main.js`
- * - `main.vue`
- * - `preview.vue`
- * - `examples.baldr.yml`
- *
- * File name: `name.vue`
- *
- * The master name is: `name`
  *
  * ## Additional `props` keys:
  *
@@ -117,7 +119,23 @@
  * }
  * ```
  *
- * ### 3. `collectPropsMain(props)`
+ * ### 3. `afterLoading({ props, master })`
+ *
+ * - `this`: is the main Vue instance.
+ * - `return`: void.
+ *
+ * ```js
+ * export const default = {
+ *   hooks {
+ *     async afterLoading ({ props, master }) {
+ *       const body = await getHtmlBody(props.title, props.language)
+ *       master.$commit('addBody', { id: formatId(props.language, props.title), body: body })
+ *     }
+ *   }
+ * }
+ *
+ * ```
+ * ### 4. `collectPropsMain(props)`
  *
  * - `this`: is the main Vue instance.
  * - `return`: an object.
@@ -127,7 +145,7 @@
  * }
  * ```
  *
- * ### 4. `collectPropsPreview({ props, propsMain, slide })`
+ * ### 5. `collectPropsPreview({ props, propsMain, slide })`
  *
  * - `this`: is the main Vue instance.
  * - `return`: an object.
@@ -137,7 +155,7 @@
  * }
  * ```
  *
- * ### 5. `calculateStepCount({ props, propsMain, propsPreview, slide })`
+ * ### 6. `calculateStepCount({ props, propsMain, propsPreview, slide })`
  *
  * - `this`: is the main Vue instance.
  * - `return`: a number.

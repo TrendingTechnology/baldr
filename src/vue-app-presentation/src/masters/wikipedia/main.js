@@ -100,6 +100,10 @@ export async function getHtmlBody(title, language = 'de') {
   return response.parse.text['*']
 }
 
+export function formatId (language, title) {
+  return `${language}:${title}`
+}
+
 const state = {
   thumbnailUrls: {},
   bodies: {}
@@ -168,6 +172,11 @@ export default {
       }
       if (!props.language) props.language = defaultLanguage
       return props
+    },
+    async afterLoading ({ props, master }) {
+      const body = await getHtmlBody(props.title, props.language)
+      console.log(props.title)
+      master.$commit('addBody', { id: formatId(props.language, props.title), body: body })
     },
     collectPropsMain(props) {
       return {

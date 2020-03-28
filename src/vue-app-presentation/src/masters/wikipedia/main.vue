@@ -7,7 +7,7 @@
 
 <script>
 import axios from 'axios'
-import { getHtmlBody, getFirstImage } from './main.js'
+import { getHtmlBody, getFirstImage, formatId } from './main.js'
 
 export default {
   props: {
@@ -30,7 +30,7 @@ export default {
   },
   mounted: async function () {
     const master = this.$masters.get(this.masterName)
-    const id = `${this.language}:${this.title}`
+    const id = formatId(this.language, this.title)
     let body = master.$get('bodyById', id)
     if (body) {
       this.body = body

@@ -695,6 +695,11 @@ ${JSON.stringify(this.rawYamlObject_)}`
     // This function is also called inside the function `parseSlidesRecursive()`
     convertPropertiesToCamelCase(this.rawYamlObject_)
 
+    // Async hooks to load resources in the background.
+    for (const slide of this.slides) {
+      slide.master.afterLoading(slide.renderData.props, vue)
+    }
+
     /**
      * The meta object.
      *
