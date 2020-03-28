@@ -72,8 +72,8 @@ class Master {
    */
   constructor (specs) {
     /**
-     * It is the same as the basename of the Vue component, for example
-     * `audio.vue`. The name is `audio`.
+     * It is the same as the parent folder where all master files are located,
+     * for example `masters/audio/main.js`. The master name is `audio`.
      * @type {string}
      */
     this.name = null
@@ -150,6 +150,43 @@ class Master {
   }
 
   /**
+   * Generate the name of the Vuex module, e. g. `presMasterCamera`.
+   *
+   * @returns {String}
+   * @private
+   */
+  vueModuleName_ () {
+    return `presMaster${toTitleCase(this.name)}`
+  }
+
+  /**
+   * Shortcut function to access the masters Vuex module geeter function.
+
+   *
+   * @param {String} getterName
+   * @param {Mixed} arg
+   */
+  $get (getterName, arg) {
+    getterName = this.vueModuleName_() + '/' + getterName
+    if (arg) {
+      return store.getters[getterName](arg)
+    } else {
+      return store.getters[getterName]
+    }
+  }
+
+  /**
+   * Shortcut function to access the masters Vuex module commit function.
+   *
+   * @param {String} mutationName
+   * @param {Mixed} payload
+   */
+  $commit (mutationName, payload) {
+    mutationName = this.vueModuleName_() + '/' + mutationName
+    store.commit(mutationName, payload)
+  }
+
+  /**
    * A example presentation file in the YAML format like `*.baldr.yml` files
    * featuring the master.
    *
@@ -167,7 +204,7 @@ class Master {
   registerVuexModule_ () {
     if (this.store) {
       this.store.namespaced = true
-      store.registerModule(`presMaster${toTitleCase(this.name)}`, this.store)
+      store.registerModule(this.vueModuleName_(), this.store)
     }
   }
 
@@ -693,7 +730,10 @@ function registerMasters () {
     const componentMain = requireComponentMain(fileName)
     const dataMixin = {
       data () {
-        return { masterName }
+        return {
+          masterName,
+          master // I tried '$master' with no success. Maybe $ Dollar prefixed properties are not allowed?
+        }
       }
     }
     componentMain.default.mixins = [masterMixin, dataMixin]

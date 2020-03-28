@@ -28,17 +28,15 @@ export default {
       body: null
     }
   },
-  async mounted() {
+  mounted: async function () {
+    const master = this.$masters.get(this.masterName)
     const id = `${this.language}:${this.title}`
-    let body = this.$store.getters['presMasterWikipedia/bodyById'](id)
+    let body = master.$get('bodyById', id)
     if (body) {
       this.body = body
-    } {
+    } else {
       this.body = await getHtmlBody(this.title, this.language)
-      this.$store.commit(
-        'presMasterWikipedia/addBody',
-        { id, body: this.body }
-      )
+      master.$commit('addBody', { id, body: this.body })
     }
   }
 }
