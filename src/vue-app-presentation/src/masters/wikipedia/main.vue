@@ -53,23 +53,40 @@ export default {
   }
 }
 </script>
-
 <style lang="scss">
+  // https://de.wikipedia.org/wiki/Wikipedia:Technik/Skin/CSS/Selektoren_unter_MediaWiki
+  // https://de.wikipedia.org/wiki/Wikipedia:Technik/Skin/MediaWiki#wmfCSS
   .vc_wikipedia_master {
     .title {
       margin-left: 10vw;
     }
 
-    .iframe-wrapper {
-      text-align: center;
-
-      iframe {
-        background-color: white;
-        border: 1px solid scale-color($gray, $lightness: 30%);
-        height: 95vh;
-        padding: 1vw;
-        width: 70vw;
-      }
+    // Belege fehlen
+    .noprint,
+    // Personendaten
+    .metadata,
+    // "Beethoven" redirects here. For other uses, see Beethoven (disambiguation).
+    .hatnote,
+    // Citations
+    .reflist,
+    // First Viennese School
+    // - Joseph Haydn
+    // - Wolfgang Amadeus Mozart
+    // - Ludwig van Beethoven
+    // - Franz Schubert
+    .navbox {
+      display: none;
     }
+
+    .tleft {
+      clear: left; // To avoid stacked floats
+      float: left;
+    }
+
+    .tright, .infobox {
+      clear: right; // To avoid stacked floats
+      float: right;
+    }
+
   }
 </style>
