@@ -113,7 +113,7 @@ const getters = {
   bodyById: state => id => {
     if (state.bodies[id]) return state.bodies[id]
   },
-  thumbnailUrlByid: state => id => {
+  thumbnailUrlById: state => id => {
     if (state.thumbnailUrls[id]) return state.thumbnailUrls[id]
   }
 }
@@ -122,7 +122,7 @@ const mutations = {
   addBody (state, { id, body }) {
     Vue.set(state.bodies, id, body)
   },
-  addThumbnail (state, { id, thumbnailUrl }) {
+  addThumbnailUrl (state, { id, thumbnailUrl }) {
     Vue.set(state.thumbnailUrls, id, thumbnailUrl)
   }
 }
@@ -174,9 +174,11 @@ export default {
       return props
     },
     async afterLoading ({ props, master }) {
+      const id = formatId(props.language, props.title)
       const body = await getHtmlBody(props.title, props.language)
-      console.log(props.title)
-      master.$commit('addBody', { id: formatId(props.language, props.title), body: body })
+      master.$commit('addBody', { id, body })
+      const thumbnailUrl = await getFirstImage(props.title, props.language)
+      master.$commit('addThumbnailUrl', { id, thumbnailUrl })
     },
     collectPropsMain(props) {
       return {
@@ -187,7 +189,8 @@ export default {
     },
     collectPropsPreview({ propsMain }) {
       return {
-        title: propsMain.title
+        title: propsMain.title,
+        id: formatId(propsMain.language, propsMain.title)
       }
     },
     plainTextFromProps(props) {
