@@ -7,7 +7,7 @@
 
 <script>
 import axios from 'axios'
-import { getHtmlBody } from './main.js'
+import { getHtmlBody, getFirstImage } from './main.js'
 
 export default {
   props: {
@@ -29,6 +29,7 @@ export default {
     }
   },
   async mounted() {
+    getFirstImage(this.title, this.language)
     this.body = await getHtmlBody(this.title, this.language)
   }
 }
