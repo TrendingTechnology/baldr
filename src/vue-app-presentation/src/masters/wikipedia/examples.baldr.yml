@@ -12,3 +12,12 @@ slides:
 - title: Long form (German Umlaute)
   wikipedia:
     title: August_Högn
+
+- title: Short form with language prefix
+  wikipedia: de:Wolfgang_Amadeus_Mozart
+
+- title: Short form with language prefix
+  wikipedia: en:Wolfgang_Amadeus_Mozart
+
+- title: Without underscores
+  wikipedia: Kadenz (Harmonielehre)

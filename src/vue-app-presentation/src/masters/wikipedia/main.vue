@@ -7,6 +7,7 @@
 
 <script>
 import axios from 'axios'
+import { getHtmlBody } from './main.js'
 
 export default {
   props: {
@@ -19,11 +20,7 @@ export default {
     },
     httpUrl: {
       type: String,
-      required: true,
-    },
-    iframeHttpUrl: {
-      type: String,
-      required: true,
+      required: true
     }
   },
   data () {
@@ -31,25 +28,8 @@ export default {
       body: null
     }
   },
-  mounted() {
-    // https://en.wikipedia.org/w/api.php?action=parse&page=Pet_door&prop=text&formatversion=2&format=json
-    axios.get(`https://${this.language}.wikipedia.org/w/api.php`, {
-      params: {
-        action: 'parse',
-        page: this.title,
-        prop: 'text',
-        formatversoin: 2,
-        format: 'json',
-        origin: '*',
-        disableeditsection: true,
-        disabletoc: true
-      }
-    })
-    .then(response => {
-      if (response.status === 200) {
-        this.body = response.data.parse.text['*']
-      }
-    })
+  async mounted() {
+    this.body = await getHtmlBody(this.title, this.language)
   }
 }
 </script>
