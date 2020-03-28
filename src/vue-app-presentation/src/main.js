@@ -77,7 +77,9 @@
  * }
  * ```
  *
- * # Hooks (exported master methods) call order:
+ * # Hooks (exported master methods)
+ *
+ * The hooks are listed in call order:
  *
  * ## Called during the parsing the YAML file (`Praesentation.baldr.yml`):
  *
@@ -242,6 +244,22 @@
  *     // Called when entering a step.
  *     enterStep ({ oldStepNo, newStepNo }) {
  *     }
+ *   }
+ * }
+ * ```
+ *
+ * # Store
+ *
+ * Each master slide can get its own Vuex store module. The module is
+ * name like `presMaster${masterName}`, e. g. `presMasterGeneric`.
+ *
+ * ```js
+ * export const default = {
+ *   store: {
+ *     state,
+ *     getters,
+ *     actions,
+ *     mutations
  *   }
  * }
  * ```

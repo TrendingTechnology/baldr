@@ -44,10 +44,10 @@ export default {
   },
   computed: {
     mediaDevices () {
-      return this.$store.getters['camera/forDynamicSelect']
+      return this.$store.getters['presMasterCamera/forDynamicSelect']
     },
     cameraNotFound () {
-      return this.$store.getters['camera/cameraNotFound']
+      return this.$store.getters['presMasterCamera/cameraNotFound']
     }
   },
   methods: {
@@ -58,14 +58,14 @@ export default {
       this.$modal.hide('select-video-device')
       this.labelDefaultCamera = this.device.name
       window.localStorage.setItem('labelDefaultCamera', this.device.name);
-      this.$store.commit('camera/setDeviceId', this.device.id)
+      this.$store.commit('presMasterCamera/setDeviceId', this.device.id)
       this.setVideoStream(await this.buildConstraints(this.device.id))
     },
     /**
      * Show the modal dialog with the dynamic select form element.
      */
     showDeviceSelect () {
-      this.$store.dispatch('camera/setMediaDevices')
+      this.$store.dispatch('presMasterCamera/setMediaDevices')
       this.$modal.toggle('select-video-device')
       this.$dynamicSelect.focus()
     },
@@ -136,7 +136,7 @@ export default {
           video: { deviceId: { exact: deviceId } }
         }
       } else {
-        this.$store.commit('camera/setCameraNotFound', true)
+        this.$store.commit('presMasterCamera/setCameraNotFound', true)
       }
     },
     /**
@@ -167,7 +167,7 @@ export default {
         return
       }
 
-      let videoElement = this.$store.getters['camera/videoElement']
+      let videoElement = this.$store.getters['presMasterCamera/videoElement']
 
       if (videoElement) {
         videoElement.play()
@@ -186,17 +186,17 @@ export default {
         videoElement.srcObject = stream
         this.stream = stream
         wrapperElement.appendChild(videoElement)
-        this.$store.commit('camera/setVideoElement', videoElement)
-        this.$store.dispatch('camera/setMediaDevices')
+        this.$store.commit('presMasterCamera/setVideoElement', videoElement)
+        this.$store.dispatch('presMasterCamera/setMediaDevices')
       } else {
-        this.$store.commit('camera/setCameraNotFound', true)
+        this.$store.commit('presMasterCamera/setCameraNotFound', true)
       }
     }
   },
   async mounted () {
     this.labelDefaultCamera = window.localStorage.getItem('labelDefaultCamera')
     if (!this.labelDefaultCamera) {
-      this.$store.commit('camera/setCameraNotFound', true)
+      this.$store.commit('presMasterCamera/setCameraNotFound', true)
     } else {
       await this.setVideoStream()
     }

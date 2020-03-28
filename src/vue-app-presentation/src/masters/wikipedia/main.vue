@@ -29,8 +29,17 @@ export default {
     }
   },
   async mounted() {
-    getFirstImage(this.title, this.language)
-    this.body = await getHtmlBody(this.title, this.language)
+    const id = `${this.language}:${this.title}`
+    let body = this.$store.getters['presMasterWikipedia/bodyById'](id)
+    if (body) {
+      this.body = body
+    } {
+      this.body = await getHtmlBody(this.title, this.language)
+      this.$store.commit(
+        'presMasterWikipedia/addBody',
+        { id, body: this.body }
+      )
+    }
   }
 }
 </script>

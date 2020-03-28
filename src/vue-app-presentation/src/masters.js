@@ -12,6 +12,7 @@ import store from '@/store.js'
 import { markupToHtml, validateUri } from '@/lib.js'
 import SlidePreviewPlayButton from '@/views/SlidesPreview/PlayButton.vue'
 import inlineMarkup from '@/inline-markup.js'
+import { toTitleCase } from '@bldr/core-browser'
 
 /**
  * The icon of a master slide. This icon is shown in the documentation or
@@ -166,7 +167,7 @@ class Master {
   registerVuexModule_ () {
     if (this.store) {
       this.store.namespaced = true
-      store.registerModule(this.name, this.store)
+      store.registerModule(`presMaster${toTitleCase(this.name)}`, this.store)
     }
   }
 
@@ -546,7 +547,12 @@ class Master {
  */
 class Masters {
   constructor () {
-    this.store_ = {}
+    /**
+     * A container object for all master objects.
+     *
+     * @type {Object}
+     */
+    this.masters_ = {}
   }
 
   /**
@@ -555,7 +561,7 @@ class Masters {
    * @param {module:@bldr/vue-app-presentation/masters~Master} master
    */
   add (master) {
-    this.store_[master.name] = master
+    this.masters_[master.name] = master
   }
 
   /**
@@ -566,10 +572,10 @@ class Masters {
    * @returns {module:@bldr/vue-app-presentation/masters~Master}
    */
   get (name) {
-    if (!(name in this.store_)) {
+    if (!(name in this.masters_)) {
       throw new Error(`Class Masters.get(): No master named “${name}”`)
     }
-    return this.store_[name]
+    return this.masters_[name]
   }
 
   /**
@@ -578,7 +584,7 @@ class Masters {
    * @returns {object}
    */
   get all () {
-    return this.store_
+    return this.masters_
   }
 
   /**
@@ -587,7 +593,7 @@ class Masters {
    * @returns {Array}
    */
   get allNames () {
-    return Object.keys(this.store_)
+    return Object.keys(this.masters_)
   }
 
   /**
@@ -598,7 +604,7 @@ class Masters {
    * @returns {Boolean}
    */
   exists (name) {
-    if (name in this.store_) return true
+    if (name in this.masters_) return true
     return false
   }
 }

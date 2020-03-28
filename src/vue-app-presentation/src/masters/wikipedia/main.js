@@ -1,8 +1,11 @@
 /**
+ * `id`: `language:title` for example `de:Wolfgang_Amadeus_Mozart`
+ *
  * @module @bldr/pres/masters/wikipedia
  */
 
 import axios from 'axios'
+import Vue from 'vue'
 
 const defaultLanguage = 'de'
 
@@ -97,6 +100,29 @@ export async function getHtmlBody(title, language = 'de') {
   return response.parse.text['*']
 }
 
+const state = {
+  thumbnailUrls: {},
+  bodies: {}
+}
+
+const getters = {
+  bodyById: state => id => {
+    if (state.bodies[id]) return state.bodies[id]
+  },
+  thumbnailUrlByid: state => id => {
+    if (state.thumbnailUrls[id]) return state.thumbnailUrls[id]
+  }
+}
+
+const mutations = {
+  addBody (state, { id, body }) {
+    Vue.set(state.bodies, id, body)
+  },
+  addThumbnail (state, { id, thumbnailUrl }) {
+    Vue.set(state.thumbnailUrls, id, thumbnailUrl)
+  }
+}
+
 export default {
   title: 'Wikipedia',
   props: {
@@ -118,6 +144,11 @@ export default {
   styleConfig: {
     centerVertically: true,
     darkMode: false
+  },
+  store: {
+    state,
+    getters,
+    mutations
   },
   hooks: {
     normalizeProps(props) {
@@ -142,8 +173,7 @@ export default {
       return {
         title: props.title,
         language: props.language,
-        httpUrl: `https://${props.language}.wikipedia.org/wiki/${props.title}`,
-        iframeHttpUrl: `https://${props.language}.wikipedia.org/w/index.php?title=${props.title}&printable=yes`
+        httpUrl: `https://${props.language}.wikipedia.org/wiki/${props.title}`
       }
     },
     collectPropsPreview({ propsMain }) {

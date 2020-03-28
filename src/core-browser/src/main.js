@@ -79,6 +79,18 @@ export function formatToLocalDateTime (timeStampMsec) {
 }
 
 /**
+ * Convert a single word into title case, for example `word` gets `Word`.
+ *
+ * @param {String} text
+ *
+ * @returns {String}
+ */
+export function toTitleCase (text) {
+
+	return text.charAt(0).toUpperCase() + text.slice(1)
+}
+
+/**
  *
  * @param {String} html
  *
