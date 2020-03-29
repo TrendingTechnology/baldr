@@ -5,6 +5,15 @@
     slide-preview-valign-center
     slide-preview-fullscreen
   ">
+    <question v-if="question" :question="question" no-answer/>
+    <ol v-if="subQuestions">
+      <li
+        v-for="question in subQuestions"
+        :key="question.question"
+      >
+        <question :question="question" no-answer/>
+      </li>
+    </ol>
   </div>
 </template>
 
@@ -20,6 +29,18 @@ export default {
   },
   components: {
     Question
+  },
+  computed: {
+    subQuestions () {
+      if (this.questions.length > 1) {
+        return this.questions
+      }
+    },
+    question () {
+      if (this.questions.length === 1) {
+        return this.questions[0]
+      }
+    }
   }
 }
 </script>

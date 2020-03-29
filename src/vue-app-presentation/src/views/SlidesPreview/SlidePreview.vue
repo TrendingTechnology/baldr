@@ -3,6 +3,7 @@
     class="vc_slide_preview"
     @click="gotToSlide(slide.no)"
     :class="{ 'current-slide': slideCurrent.no === slide.no }"
+    :b-dark-mode="slide.master.styleConfig.darkMode"
   >
     <material-icon
       v-if="slide.master.icon.showOnSlides"
@@ -43,9 +44,7 @@ export default {
 
 <style lang="scss">
   .vc_slide_preview {
-    background-color: $black;
     border: 1px solid $gray;
-    color: $white;
     cursor: pointer;
     height: 15em;
     margin: 0em;
@@ -54,6 +53,16 @@ export default {
     overflow: hidden;
     position: relative;
     width: 20em;
+
+    &[b-dark-mode="true"] {
+      background-color: $black;
+      color: $white;
+    }
+
+    &[b-dark-mode="false"] {
+      background-color: $white;
+      color: $black;
+    }
 
     &::before {
       content: "";
