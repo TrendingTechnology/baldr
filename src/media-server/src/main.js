@@ -1492,6 +1492,9 @@ function mirrorFolderStructure (currentPath) {
  * Group=1000
  * ```
  *
+ * @param {String} - Name or path of an executable.
+ * @param {String} - The path of a file or a folder.
+ *
  * @see node module on npmjs.org “open”
  * @see {@link https://unix.stackexchange.com/a/537848}
  */
