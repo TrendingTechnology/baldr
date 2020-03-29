@@ -17,6 +17,12 @@ const metaTypes = require('@bldr/media-server').metaTypes
  */
 async function action (metaType, itemId, arg1, arg2, cmdObj) {
   let data = await wikidata.query(itemId, metaType)
+  if (arg1) {
+    if (metaType === 'person') {
+      data.firstname = arg1
+      data.lastname = arg2
+    }
+  }
   data.metaType = metaType
   data = metaTypes.process(data)
   console.log(data)
