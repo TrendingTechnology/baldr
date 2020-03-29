@@ -36,7 +36,7 @@
     "vue": "^2.6.11",
     "vue-headful": "^2.1.0",
     "vue-router": "^3.1.6",
-    "vuex": "^3.1.2"
+    "vuex": "^3.1.3"
   },
   "publishConfig": {
     "access": "public"
@@ -50,7 +50,7 @@
     "babel-eslint": "^10.1.0",
     "chai": "^4.2.0",
     "eslint": "^6.8.0",
-    "eslint-plugin-vue": "^6.2.1",
+    "eslint-plugin-vue": "^6.2.2",
     "node-sass": "^4.13.1",
     "resize-observer-polyfill": "^1.5.1",
     "sass-loader": "^8.0.2",

@@ -29,7 +29,7 @@
     "@bldr/wikidata": "^0.1.0",
     "chalk": "^3.0.0",
     "color": "^3.1.2",
-    "commander": "^4.1.1",
+    "commander": "^5.0.0",
     "js-yaml": "^3.13.1",
     "webfont": "^9.0.0"
   },
