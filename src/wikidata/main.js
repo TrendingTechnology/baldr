@@ -15,6 +15,60 @@ const wikibase = require('wikibase-sdk')({
 })
 
 /**
+ * The name of a property.
+ *
+ * @typedef {String} propName
+ */
+
+/**
+ * The specification of a property.
+ *
+ * @typedef {Object} propSpec
+ * @property {Object} source
+ * @property {String} source.fromClaim
+ * @property {Function} source.fromEntity
+ * @property {Function} secondQuery
+ * @property {Boolean} alwaysUpdate
+ * @property {Function} format
+ * @property
+ */
+
+/**
+ * The specification of all properties. The single `propSpec`s are indexed
+ * by the `propName`.
+ *
+ * ```js
+ * const propSpecs = {
+  *   propName1: propSpec1,
+  *   propName2: propSpec2
+  *   ...
+  * }
+  * ```
+  *
+  * @typedef {Object} propSpecs
+  */
+
+ /**
+  * The specification of one metadata type.
+  *
+  * @typedef {Object} typeSpec
+  * @property {module:@bldr/wikidata~propSpecs} props
+  * @property {Function} normalize
+  */
+
+ /**
+  * The specification of all meta types
+  *
+  * @typedef {Object} typeSpecs
+  */
+
+ /**
+  * The name of a meta type.
+  *
+  * @typedef {String} typeName
+  */
+
+/**
  * ```js
  * let entity = {
  *   id: 'Q202698',
@@ -280,182 +334,207 @@ function formatWikicommons (value) {
 
 const typeSpecs = {
   group: {
-    // offizieller Name
-    name: {
-      source: {
-        fromClaim: 'P1448'
-      }
-    },
-    // Logo
-    logo: {
-      source: {
-        fromClaim: 'P154'
+    props: {
+      // offizieller Name
+      name: {
+        source: {
+          fromClaim: 'P1448'
+        }
       },
-      format: formatWikicommons
-    },
-    shortHistory: {
-      source: {
-        fromEntity: getDescription
-      }
-    },
-    // Gründung, Erstellung bzw. Entstehung
-    startData: {
-      source: {
-        fromClaim: 'P571'
+      // Logo
+      logo: {
+        source: {
+          fromClaim: 'P154'
+        },
+        format: formatWikicommons
       },
-      format: formatDate
-    },
-    // Auflösungsdatum
-    endData: {
-      source: {
-        fromClaim: 'P576'
+      shortHistory: {
+        source: {
+          fromEntity: getDescription
+        }
       },
-      format: formatDate
-    },
-    // besteht aus
-    members: {
-      source: {
-        fromClaim: 'P527'
+      // Gründung, Erstellung bzw. Entstehung
+      startData: {
+        source: {
+          fromClaim: 'P571'
+        },
+        format: formatDate
       },
-      secondQuery: queryLabels
-    },
-    wikipedia: {
-      source: {
-        fromEntity: getWikipediaTitle
-      }
-    },
-    // Bild
-    mainImage: {
-      source: {
-        fromClaim: 'P18'
+      // Auflösungsdatum
+      endData: {
+        source: {
+          fromClaim: 'P576'
+        },
+        format: formatDate
+      },
+      // besteht aus
+      members: {
+        source: {
+          fromClaim: 'P527'
+        },
+        secondQuery: queryLabels
+      },
+      wikipedia: {
+        source: {
+          fromEntity: getWikipediaTitle
+        }
+      },
+      // Bild
+      mainImage: {
+        source: {
+          fromClaim: 'P18'
+        }
       }
     }
   },
   instrument: {
-    name: {
-      source: {
-        fromEntity: getLabel
-      }
-    },
-    // Bild
-    mainImage: {
-      source: {
-        fromClaim: 'P18'
-      }
-    },
-    // Bild des Tonumfang
-    playingRangeImage: {
-      source: {
-        fromClaim: 'P2343'
-      }
-    },
-    wikipedia: {
-      source: {
-        fromEntity: getWikipediaTitle
+    props: {
+      name: {
+        source: {
+          fromEntity: getLabel
+        }
+      },
+      // Bild
+      mainImage: {
+        source: {
+          fromClaim: 'P18'
+        }
+      },
+      // Bild des Tonumfang
+      playingRangeImage: {
+        source: {
+          fromClaim: 'P2343'
+        }
+      },
+      wikipedia: {
+        source: {
+          fromEntity: getWikipediaTitle
+        }
       }
     }
   },
   person: {
-    // Vornamen der Person
-    firstname: {
-      source: {
-        fromClaim: 'P735'
-      },
-      secondQuery: queryLabels,
-      format: function (value) {
-        if (Array.isArray(value)) {
-          return value.join(' ')
+    props: {
+      // Vornamen der Person
+      firstname: {
+        source: {
+          fromClaim: 'P735'
+        },
+        secondQuery: queryLabels,
+        format: function (value) {
+          if (Array.isArray(value)) {
+            return value.join(' ')
+          }
+          return value
         }
-        return value
-      }
-    },
-    // Familienname einer Person
-    lastname: {
-      source: {
-        fromClaim: 'P734'
       },
-      secondQuery: queryLabels,
-      format: function (value) {
-        if (Array.isArray(value)) {
-          return value.join(' ')
+      // Familienname einer Person
+      lastname: {
+        source: {
+          fromClaim: 'P734'
+        },
+        secondQuery: queryLabels,
+        format: function (value) {
+          if (Array.isArray(value)) {
+            return value.join(' ')
+          }
+          return value
         }
-        return value
+      },
+      // Geburtsdatum
+      birth: {
+        source: {
+          fromClaim: 'P569'
+        },
+        format: formatDate,
+        alwaysUpdate: true
+      },
+      // Sterbedatum
+      death: {
+        source: {
+          fromClaim: 'P570'
+        },
+        format: formatDate,
+        alwaysUpdate: true
+      },
+      shortBiography: {
+        source: {
+          fromEntity: getDescription
+        }
+      },
+      wikipedia: {
+        source: {
+          fromEntity: getWikipediaTitle
+        },
+        alwaysUpdate: true
+      },
+      // Bild
+      mainImage: {
+        source: {
+          fromClaim: 'P18'
+        },
+        format: formatWikicommons
       }
     },
-    // Geburtsdatum
-    birth: {
-      source: {
-        fromClaim: 'P569'
-      },
-      format: formatDate,
-      alwaysUpdate: true
-    },
-    // Sterbedatum
-    death: {
-      source: {
-        fromClaim: 'P570'
-      },
-      format: formatDate,
-      alwaysUpdate: true
-    },
-    shortBiography: {
-      source: {
-        fromEntity: getDescription
+    normalize: function (props, entity) {
+      const label = getLabel(entity)
+      const segments = label.split(' ')
+      const firstnameFromLabel = segments.shift()
+      const lastnameFromLabel = segments.pop()
+      // Use the label by artist names.
+      // for example „Joan Baez“ and not „Joan Chandos“
+      if (
+        firstnameFromLabel && lastnameFromLabel &&
+        (props.firstname !== firstnameFromLabel || props.lastname !== lastnameFromLabel)
+      ) {
+        props.firstname = firstnameFromLabel
+        props.lastname = lastnameFromLabel
+        props.name = label
       }
-    },
-    wikipedia: {
-      source: {
-        fromEntity: getWikipediaTitle
-      },
-      alwaysUpdate: true
-    },
-    // Bild
-    mainImage: {
-      source: {
-        fromClaim: 'P18'
-      },
-      format: formatWikicommons
+      return props
     }
   },
   song: {
-    // Veröffentlichungsdatum
-    publicationDate: {
-      source: {
-        fromClaim: 'P577'
+    props: {
+      // Veröffentlichungsdatum
+      publicationDate: {
+        source: {
+          fromClaim: 'P577'
+        },
+        format: formatDate
       },
-      format: formatDate
-    },
-    // Sprache des Werks, Namens oder Begriffes
-    language: {
-      source: {
-        fromClaim: 'P407'
+      // Sprache des Werks, Namens oder Begriffes
+      language: {
+        source: {
+          fromClaim: 'P407'
+        },
+        secondQuery: queryLabels
       },
-      secondQuery: queryLabels
-    },
-    // Interpret
-    artist: {
-      source: {
-        fromClaim: 'P175'
+      // Interpret
+      artist: {
+        source: {
+          fromClaim: 'P175'
+        },
+        secondQuery: queryLabels
       },
-      secondQuery: queryLabels
-    },
-    // Text von
-    lyricist: {
-      source: {
-        fromClaim: 'P676'
+      // Text von
+      lyricist: {
+        source: {
+          fromClaim: 'P676'
+        },
+        secondQuery: queryLabels
       },
-      secondQuery: queryLabels
-    },
-    // Genre
-    genre: {
-      source: {
-        fromClaim: 'P136'
+      // Genre
+      genre: {
+        source: {
+          fromClaim: 'P136'
+        },
+        secondQuery: queryLabels
       },
-      secondQuery: queryLabels
-    },
-    wikipedia: {
-      source: {
-        fromEntity: getWikipediaTitle
+      wikipedia: {
+        source: {
+          fromEntity: getWikipediaTitle
+        }
       }
     }
   }
@@ -515,12 +594,12 @@ async function query (itemId, metaTypeName) {
 
   if (!typeSpecs[metaTypeName]) return
 
-  const propSpecs = typeSpecs[metaTypeName]
+  const typeSpec = typeSpecs[metaTypeName]
 
   const result = {}
   result.wikidata = itemId
-  for (const propName in propSpecs) {
-    const propSpec = propSpecs[propName]
+  for (const propName in typeSpec.props) {
+    const propSpec = typeSpec.props[propName]
     let value
 
     // source
@@ -540,6 +619,7 @@ async function query (itemId, metaTypeName) {
     if (value && propSpec.format) value = propSpec.format(value)
     if (value) result[propName] = value
   }
+  if (typeSpec.normalize) typeSpec.normalize(result, entity)
   return result
 }
 

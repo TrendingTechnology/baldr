@@ -25,12 +25,14 @@ const config = bootstrapConfig()
  * The specification of a property.
  *
  * @typedef {Object} propSpec
- * @property {Boolean} required
- * @property {Function} derive
+ * @property {Boolean} required - True if the property is required.
+ * @property {Function} derive - A function to derive this property from
+ *   other values. Use `this.otherProp` in the function to access different
+ *   values.
  * @property {Boolean} overwriteByDerived - Overwrite the original value by the
  *   the value obtained from the `derive` function.
- * @property {Function} format
- * @property {Function} validate
+ * @property {Function} format - Format the property using this function.
+ * @property {Function} validate - Validate the property using this function.
  */
 
 /**
@@ -39,8 +41,8 @@ const config = bootstrapConfig()
  *
  * ```js
  * const propSpecs = {
- *   propName: propSpec,
- *   propName: propSpec
+ *   propName1: propSpec1,
+ *   propName2: propSpec2
  *   ...
  * }
  * ```
