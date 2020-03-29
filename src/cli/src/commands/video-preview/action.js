@@ -7,7 +7,7 @@ const chalk = require('chalk')
 
 // Project packages.
 const mediaServer = require('@bldr/media-server')
-const lib = require('../lib.js')
+const lib = require('../../lib.js')
 
 function createVideoPreviewImageOneFile (filePath, second) {
   if (!second) second = 10
