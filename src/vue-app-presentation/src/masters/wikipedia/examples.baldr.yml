@@ -1,6 +1,16 @@
 ---
 slides:
 
+- title: Oldid
+  wikipedia:
+    language: en
+    title: Topical Song
+    oldid: 801926609
+
+- title: Only oldid (Kool DJ Herc)
+  wikipedia:
+    oldid: 188985
+
 - title: Short form
   wikipedia: Franz_Seraph_Reicheneder
 

@@ -88,15 +88,21 @@ export async function getFirstImage (title, language = 'de') {
  * @see {@link https://www.mediawiki.org/wiki/API:Get_the_contents_of_a_page}
  * @see {@link https://www.mediawiki.org/wiki/API:Parsing_wikitext}
  */
-export async function getHtmlBody(title, language = 'de') {
-  const response = await queryWiki(language, {
+export async function getHtmlBody(title, language = 'de', oldid) {
+  const params = {
     action: 'parse',
     page: title,
     prop: 'text',
     disablelimitreport: true, // disablelimitreport
     disableeditsection: true, // Omit edit section links from the parser output.
     disabletoc: true // Omit table of contents in output.
-  })
+  }
+
+  if (oldid) {
+    params.oldid = oldid
+    delete params.page
+  }
+  const response = await queryWiki(language, params)
   return response.parse.text['*']
 }
 
@@ -139,6 +145,10 @@ export default {
       type: String,
       description: 'Der Sprachen-Code des gewünschten Wikipedia-Artikels (z. B. „de“, „en“).',
       default: defaultLanguage
+    },
+    oldid: {
+      type: Number,
+      description: 'Eine alte Version verwenden.'
     }
   },
   icon: {
@@ -175,7 +185,8 @@ export default {
     },
     async afterLoading ({ props, master }) {
       const id = formatId(props.language, props.title)
-      const body = await getHtmlBody(props.title, props.language)
+      console.log(props.oldid)
+      const body = await getHtmlBody(props.title, props.language, props.oldid)
       master.$commit('addBody', { id, body })
       const thumbnailUrl = await getFirstImage(props.title, props.language)
       master.$commit('addThumbnailUrl', { id, thumbnailUrl })

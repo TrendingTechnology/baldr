@@ -18,6 +18,9 @@ export default {
     language: {
       type: String,
     },
+    oldid: {
+      type: Number,
+    },
     httpUrl: {
       type: String,
       required: true
@@ -30,7 +33,7 @@ export default {
   },
   mounted: async function () {
     const master = this.$masters.get(this.masterName)
-    const id = formatId(this.language, this.title)
+    const id = formatId(this.language, this.title, this.oldid)
     let body = master.$get('bodyById', id)
     if (body) {
       this.body = body
