@@ -20,10 +20,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss">
-  .vc_generic_master_preview {
-    background-color: $white;
-    color: $black;
-  }
-</style>

@@ -20,8 +20,6 @@ export default {
 
 <style lang="scss">
   .vc_song_master_preview {
-    background-color: $white !important;
-
     img {
       width: 90%;
       height: 90%;

@@ -7,11 +7,11 @@ slides:
     step_subset: 3-
 
 - title: Kurzform
-  svg: id:Notenbeispiel_Freude-schoener-Goetterfunken
+  svg: id:9-Symphonie_NB_Freude-schoener-Goetterfunken
 
 - title: Langform
   svg:
-    src: id:Notenbeispiel_Freude-schoener-Goetterfunken_Anfang
+    src: id:9-Symphonie_NB_Freude-schoener-Goetterfunken_Anfang
 
 - title: g Element
   svg:
