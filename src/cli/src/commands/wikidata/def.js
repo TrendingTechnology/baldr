@@ -1,6 +1,9 @@
 module.exports = {
   command: 'wikidata <metadata-type> <item-id> [arg1] [arg2]',
   alias: 'w',
+  options: [
+    ['-d, --dry-run', 'Create not YAML files. Download no images.']
+  ],
   description: [
     'Query wikidata.org.',
     'Metadata types: group, instrument, person, song',

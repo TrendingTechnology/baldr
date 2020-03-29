@@ -6,10 +6,9 @@
 const path = require('path')
 
 // Project packages.
-const { bootstrapConfig } = require('@bldr/core-node')
-const { deepCopy } = require('@bldr/core-browser')
-
 const { asciify, deasciify } = require('./helper.js')
+const { bootstrapConfig } = require('@bldr/core-node')
+const { deepCopy, getExtension } = require('@bldr/core-browser')
 
 /**
  * The configuration object from `/etc/baldr.json`
@@ -65,21 +64,32 @@ const config = bootstrapConfig()
  * @typedef {Object} typeSpecs
  */
 
- /**
+/**
  * The name of a meta type.
  *
  * @typedef {String} typeName
  */
 
+/**
+ * @param {String} value
+ *
+ * @returns {Boolean}
+ */
 function validateDate (value) {
   return value.match(/\d{4,}-\d{2,}-\d{2,}/)
 }
 
+/**
+ *
+ * @param {String} value
+ *
+ * @returns {Boolean}
+ */
 function validateUuid (value) {
   return value.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89AB][0-9a-f]{3}-[0-9a-f]{12}$/i)
 }
 
- /**
+/**
   * @type {module:@bldr/media-server/meta-types~typeSpecs}
   */
 const typeSpecs = {
@@ -280,6 +290,9 @@ function mergeTypeProps (typeName) {
   return result
 }
 
+/**
+ * @returns {Object}
+ */
 function buildTypeProps () {
   const result = {}
   for (const typeName in typeSpecs) {
@@ -314,6 +327,11 @@ function buildTypeProps () {
  */
 const typeProps = buildTypeProps()
 
+/**
+ * @param {String} filePath
+ *
+ * @returns {String} - The type name for example `person`, `group`
+ */
 function detectTypeByPath (filePath) {
   filePath = path.resolve(filePath)
   for (const typeName in typeSpecs) {
@@ -324,6 +342,32 @@ function detectTypeByPath (filePath) {
   }
 }
 
+/**
+ * @param {Object} data - The mandatory properties are “metaTye” and “mainImage”
+ *
+ * @returns {String} - A absolute path
+ */
+function formatFilePath (data) {
+  if (!data.metaType) throw new Error(`Your data needs a property named “metaType”.`)
+  const typeSpec = typeSpecs[data.metaType]
+  if (!typeSpec) throw new Error(`Unkown meta type “${data.metaType}”.`)
+  // The relPath function needs this.extension.
+  if (!data.mainImage) throw new Error(`Your data needs a property named “mainImage”.`)
+  data.extension = getExtension(data.mainImage)
+  // b/Bush_George-Walker/main.jpeg
+  if (data.extension === 'jpeg') data.extension = 'jpg'
+  // b/Bush_George-Walker/main.jpeg
+  const relPath = typeSpec.relPath.call(data)
+  // To avoid confusion with class MediaFile in the module @bldr/vue-plugin-media
+  delete data.extension
+  return path.join(typeSpec.basePath, relPath)
+}
+
+/**
+ * @param {Mixed} value
+ *
+ * @returns {Boolean}
+ */
 function isValue (value) {
   if (value || typeof value === 'boolean') {
     return true
@@ -376,7 +420,6 @@ function format (metadata) {
     }
     return value
   }
-
   return applyTypeSpecs(metadata, formatOneProp)
 }
 
@@ -397,7 +440,6 @@ function validate (metadata) {
       }
     }
   }
-
   applyTypeSpecs(metadata, validateOneProp, false)
 }
 
@@ -422,7 +464,7 @@ function isPropertyDerived (propSpec) {
  * @returns {Object}
  */
 function sortAndDerive (data) {
-  origData = deepCopy(data)
+  const origData = deepCopy(data)
   const result = {}
 
   // Loop over the propSpecs to get a sorted object
@@ -467,6 +509,7 @@ function sortAndDerive (data) {
 }
 
 /**
+ * Bundle three operations: Sort and derive, format, validate.
  *
  * @param {Object} metadata
  *
@@ -480,7 +523,8 @@ function process (metadata) {
 }
 
 module.exports = {
-  typeSpecs,
   detectTypeByPath,
-  process
+  formatFilePath,
+  process,
+  typeSpecs
 }

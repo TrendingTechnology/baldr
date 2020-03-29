@@ -1235,14 +1235,14 @@ class LocationIndicator {
   getPresParentDir (currentPath) {
     // /Duke-Ellington.jpg
     // /Material
-    const regexp = new RegExp(path.sep +'([^' + path.sep + ']+)$')
+    const regexp = new RegExp(path.sep + '([^' + path.sep + ']+)$')
     let match
     do {
       let isPrefixed
       match = currentPath.match(regexp)
       if (match && match.length > 1) {
         // Return only directories not files like
-        //...HB/Orchester/05_Promenade.mp3
+        // ...HB/Orchester/05_Promenade.mp3
         if (
           // 20_Swing -> true
           // Material -> false

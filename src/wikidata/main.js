@@ -262,12 +262,14 @@ function formatDate (date) {
 }
 
 /**
+ * Replace all white spaces with an underscore and prefix “wikicommons:”.
  *
  * @param {String} value
  *
  * @returns {String}
  */
 function formatWikicommons (value) {
+  value = unpackArray(value, true, false)
   value = value.replace(/ /g, '_')
   return `wikicommons:${value}`
 }
