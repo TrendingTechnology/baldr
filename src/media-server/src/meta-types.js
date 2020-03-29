@@ -172,7 +172,7 @@ const typeSpecs = {
   group: {
     basePath: path.join(config.mediaServer.basePath, 'Gruppen'),
     relPath: function () {
-      return path.join(this.id.substr(0, 1).toLowerCase(), this.id, 'main.jpg')
+      return path.join(this.id.substr(0, 1).toLowerCase(), this.id, `main.${this.extension}`)
     },
     detectType: {
       byPath: new RegExp('^' + path.join(config.mediaServer.basePath, 'Gruppen') + '/.*')
@@ -212,7 +212,7 @@ const typeSpecs = {
   person: {
     basePath: path.join(config.mediaServer.basePath, 'Personen'),
     relPath: function () {
-      return path.join(this.id.substr(0, 1).toLowerCase(), this.id, `main-image.${this.extension}`)
+      return path.join(this.id.substr(0, 1).toLowerCase(), this.id, `main.${this.extension}`)
     },
     detectType: {
       byPath: new RegExp('^' + path.join(config.mediaServer.basePath, 'Personen') + '/.*')

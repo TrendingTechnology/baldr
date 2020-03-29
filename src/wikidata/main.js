@@ -117,11 +117,13 @@ async function fetchFile (url, dest) {
 /**
  * Download a file from wiki commonds.
  *
- * @param {String} filename - The file name from wiki commonds.
+ * @param {String} fileName - The file name from wiki commonds.
  * @param {String} dest - A file path where to store the file locally.
  */
-async function fetchCommonsFile (filename, dest) {
-  const url = wikibase.getImageUrl(filename)
+async function fetchCommonsFile (fileName, dest) {
+  // wikicommons:George-W-Bush.jpeg
+  fileName = fileName.replace('wikicommons:', '')
+  const url = wikibase.getImageUrl(fileName)
   await fetchFile(url, dest)
 }
 
@@ -404,6 +406,13 @@ const typeSpecs = {
         fromEntity: getWikipediaTitle
       },
       alwaysUpdate: true
+    },
+    // Bild
+    mainImage: {
+      source: {
+        fromClaim: 'P18'
+      },
+      format: formatWikicommons
     }
   },
   song: {

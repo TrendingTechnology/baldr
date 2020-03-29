@@ -27,12 +27,17 @@ async function action (metaType, itemId, arg1, arg2) {
     const typeSpec = metaTypes.typeSpecs[metaType]
     // The relPath function needs this.extension.
     data.extension = getExtension(data.mainImage)
+        // b/Bush_George-Walker/main.jpeg
+    if (data.extension === 'jpeg') data.extension = 'jpg'
+    // b/Bush_George-Walker/main.jpeg
     const relPath = typeSpec.relPath.call(data)
     const dest = path.join(typeSpec.basePath, relPath)
     await wikidata.fetchCommonsFile(data.mainImage, dest)
     const yamlFile = `${dest}.yml`
     if (!fs.existsSync(yamlFile)) {
       console.log(`Write YAML file: ${chalk.green(yamlFile)}`)
+      // To avoid confusion with class MediaFile in the module @bldr/vue-plugin-media
+      delete data.extension
       lib.writeYamlFile(yamlFile, data)
     } else {
       console.log(`The YAML file already exists: ${chalk.red(yamlFile)}`)
