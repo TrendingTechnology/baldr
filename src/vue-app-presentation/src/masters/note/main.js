@@ -43,6 +43,8 @@ export default {
       let markupItems = ''
       let markupSections = ''
 
+      if (!props) props = {}
+
       if (!props.markup) {
         props.markup = ''
       }

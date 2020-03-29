@@ -394,7 +394,7 @@ const typeSpecs = {
       format: formatDate,
       alwaysUpdate: true
     },
-    short_biography: {
+    shortBiography: {
       source: {
         fromEntity: getDescription
       }
