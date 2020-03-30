@@ -8,7 +8,7 @@ const path = require('path')
 // Project packages.
 const { asciify, deasciify } = require('./helper.js')
 const { bootstrapConfig } = require('@bldr/core-node')
-const { deepCopy, getExtension } = require('@bldr/core-browser')
+const { deepCopy, getExtension, convertPropertiesCase } = require('@bldr/core-browser')
 
 /**
  * The configuration object from `/etc/baldr.json`
@@ -517,15 +517,19 @@ function sortAndDerive (data) {
 /**
  * Bundle three operations: Sort and derive, format, validate.
  *
- * @param {Object} metadata
+ * @param {Object} data - An object containing some meta data.
  *
  * @returns {Object}
  */
-function process (metadata) {
-  metadata = sortAndDerive(metadata)
-  metadata = format(metadata)
-  validate(metadata)
-  return metadata
+function process (data) {
+  // The meta type specification is in camel case. The meta data is
+  // stored in the YAML format in snake case
+  convertPropertiesCase(data, 'snake-to-camel')
+  data = sortAndDerive(data)
+  data = format(data)
+  validate(data)
+  convertPropertiesCase(data, 'camel-to-snake')
+  return data
 }
 
 module.exports = {
