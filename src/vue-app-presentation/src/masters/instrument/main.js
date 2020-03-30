@@ -31,7 +31,7 @@ export default {
       } else {
         normalized = props
       }
-      normalized.mainImageUri = `id:${normalized.instrumentId}_BD`
+      normalized.mainImageUri = `id:IN_${normalized.instrumentId}`
       return normalized
     },
     resolveMediaUris (props) {
