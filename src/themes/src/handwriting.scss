@@ -8,6 +8,7 @@ $handwriting-font-family: 'Kalam';
   background-color: $handwriting-gray;
   color: $handwriting-blue;
   font-family: $handwriting-font-family;
+  line-height: 1.2em;
 
   [contenteditable] {
     background-color: $handwriting-white;

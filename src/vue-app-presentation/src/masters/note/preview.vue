@@ -27,6 +27,7 @@ export default {
   .vc_note_master_preview {
     ul li {
       text-indent: 0 !important;
+      margin: 0.05em 0;
 
       &::before {
         margin-left: 0 !important;
