@@ -46,7 +46,7 @@ const global_ = {
         value = value.replace(/^[va] /, '')
         return value
       },
-      derive: function () {
+      derive: function (typeData, typeSpec) {
         return deasciify(this.id)
       }
     },
@@ -100,8 +100,9 @@ const musicalWork = {
 }
 
 const group = {
+  abbreviation: 'GR',
   basePath: path.join(config.mediaServer.basePath, 'Gruppen'),
-  relPath: function () {
+  relPath: function (typeData, typeSpec) {
     return path.join(this.id.substr(0, 1).toLowerCase(), this.id, `main.${this.extension}`)
   },
   detectType: {
@@ -109,7 +110,7 @@ const group = {
   },
   props: {
     id: {
-      derive: function () {
+      derive: function (typeData, typeSpec) {
         return this.name
       },
       format: function (value) {
@@ -120,7 +121,7 @@ const group = {
       overwriteByDerived: false
     },
     title: {
-      derive: function () {
+      derive: function (typeData, typeSpec) {
         return `Portrait-Bild der Gruppe „${this.name}“`
       },
       overwriteByDerived: true
@@ -141,16 +142,17 @@ const group = {
 }
 
 const instrument = {
+  abbreviation: 'IN',
   basePath: path.join(config.mediaServer.basePath, 'Instrumente'),
-  relPath: function () {
-    const id = this.id.replace(/^IT_/, '')
+  relPath: function (typeData, typeSpec) {
+    const id = this.id.replace(/^IN_/, '')
     return path.join(id.substr(0, 1).toLowerCase(), id, `main.${this.extension}`)
   },
   props: {
     id: {
-      derive: function () {
+      derive: function (typeData, typeSpec) {
         // IS: Instrument
-        return `IT_${this.name}`
+        return `${typeSpec.abbreviation}_${typeData.name}`
       },
       format: function (value) {
         value = asciify(value)
@@ -160,7 +162,7 @@ const instrument = {
       overwriteByDerived: true
     },
     title: {
-      derive: function () {
+      derive: function (typeData, typeSpec) {
         return `Foto des Instruments „${this.name}“`
       },
       overwriteByDerived: true
@@ -172,6 +174,7 @@ const instrument = {
 }
 
 const person = {
+  abbreviation: 'PR',
   basePath: path.join(config.mediaServer.basePath, 'Personen'),
   relPath: function () {
     return path.join(this.id.substr(0, 1).toLowerCase(), this.id, `main.${this.extension}`)
@@ -181,7 +184,7 @@ const person = {
   },
   props: {
     id: {
-      derive: function () {
+      derive: function (typeData, typeSpec) {
         return `${this.lastname}_${this.firstname}`
       },
       overwriteByDerived: false
@@ -199,7 +202,7 @@ const person = {
       required: true
     },
     name: {
-      derive: function () {
+      derive: function (typeData, typeSpec) {
         return `${this.firstname} ${this.lastname}`
       },
       overwriteByDerived: false

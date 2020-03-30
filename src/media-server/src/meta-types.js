@@ -25,7 +25,8 @@ const { deepCopy, getExtension, convertPropertiesCase } = require('@bldr/core-br
  * @typedef {Object} propSpec
  * @property {Boolean} required - True if the property is required.
  * @property {Function} derive - A function to derive this property from
- *   other values. Use `this.otherProp` in the function to access different
+ *   other values. The function is called with `function (typeData, typeSpec)`.
+ *   Or `this.otherProp` in the function to access different
  *   values.
  * @property {Boolean} overwriteByDerived - Overwrite the original value by the
  *   the value obtained from the `derive` function.
@@ -52,9 +53,15 @@ const { deepCopy, getExtension, convertPropertiesCase } = require('@bldr/core-br
  * The specification of one metadata type.
  *
  * @typedef {Object} typeSpec
+ * @property {String} abbreviation - A two letter abbreviation. Used in
+ *   the IDs.
  * @property {String} basePath - The base path where all meta typs stored in.
- * @property {Function} relPath - The relative path (relative to `basePath`)
- * @property {Object} detectType
+ * @property {Function} relPath - A function which must return the
+ *   relative path (relative to `basePath`). The function is called with
+ *   `function (typeData, typeSpec)`.
+ * @property {Object} detectType - An object with at the moment one property:
+ * @property {RegExp} detectType.byPath - An regular expression that is
+ *   matched against file paths.
  * @property {module:@bldr/media-server/meta-types~propSpecs} props
  */
 
@@ -68,6 +75,12 @@ const { deepCopy, getExtension, convertPropertiesCase } = require('@bldr/core-br
  * The name of a meta type.
  *
  * @typedef {String} typeName
+ */
+
+/**
+ * Some actual data which can be assigned to a meta type.
+ *
+ * @typedef {Object} typeData
  */
 
 /**
@@ -185,7 +198,7 @@ function formatFilePath (data) {
   }
   if (data.extension === 'jpeg') data.extension = 'jpg'
   // b/Bush_George-Walker/main.jpeg
-  const relPath = typeSpec.relPath.call(data)
+  const relPath = typeSpec.relPath.call(data, data, typeSpecs[data.metaType])
   // To avoid confusion with class MediaFile in the module @bldr/vue-plugin-media
   delete data.extension
   return path.join(typeSpec.basePath, relPath)
@@ -295,15 +308,17 @@ function sortAndDerive (data) {
   const origData = deepCopy(data)
   const result = {}
 
+  const metaType = origData.metaType
+
   // Loop over the propSpecs to get a sorted object
-  if (origData.metaType) {
-    const propSpecs = typeProps[origData.metaType]
+  if (metaType) {
+    const propSpecs = typeProps[metaType]
     for (const propName in propSpecs) {
       const propSpec = propSpecs[propName]
       const origValue = origData[propName]
       let derivedValue
       if (isPropertyDerived(propSpec)) {
-        derivedValue = propSpec.derive.call(data)
+        derivedValue = propSpec.derive.call(data, data, typeSpecs[metaType])
       }
 
       // Use the derived value
