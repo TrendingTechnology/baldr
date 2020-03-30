@@ -193,86 +193,6 @@ function getClaims (entity, claim) {
   return unpackArray(result)
 }
 
-/**
- *
- * ```js
- * entity = {
- *   sitelinks: {
- *     afwiki: 'The Beatles',
- *     akwiki: 'The Beatles',
- *   }
- * }
- * ```
- *
- * @param {Object} entity
- */
-function getWikipediaTitle (entity) {
-  const sitelinks = entity.sitelinks
-  let key
-  if (sitelinks.dewiki) {
-    key = 'dewiki'
-  } else {
-    key = 'enwiki'
-  }
-  // https://de.wikipedia.org/wiki/Ludwig_van_Beethoven
-  const siteLink = wikibase.getSitelinkUrl({ site: key, title: sitelinks[key] })
-  if (!siteLink) return
-  // {
-  //   lang: 'de',
-  //   project: 'wikipedia',
-  //   key: 'dewiki',
-  //   title: 'Ludwig_van_Beethoven',
-  //   url: 'https://de.wikipedia.org/wiki/Ludwig_van_Beethoven'
-  // }
-  const linkData = wikibase.getSitelinkData(siteLink)
-  return `${linkData.lang}:${linkData.title}`
-}
-
-/**
- * ```js
- * const entity = {
- *   id: 'Q1299',
- *   type: 'item',
- *   modified: '2020-03-15T20:18:33Z',
- *   descriptions: { en: 'English pop-rock band', de: 'Rockband aus Liverpool' }
- * }
- * ```
- *
- * @param {Object} entity
- */
-function getDescription (entity) {
-  const desc = entity.descriptions
-  if (desc.de) {
-    return desc.de
-  } else if (desc.en) {
-    return desc.en
-  }
-}
-
-/**
- * ```js
- * const entity = {
- *   id: 'Q312609',
- *   type: 'item',
- *   modified: '2020-03-01T19:08:47Z',
- *   labels: { de: 'Cheb Khaled', en: 'Khaled' },
- * }
- * ```
- *
- * @param {Object} entity
- *
- * @returns {Array|String}
- */
-function getLabel (entity) {
-  let label
-  if (entity.labels.de) {
-    label = entity.labels.de
-  } else if (entity.labels.en) {
-    label = entity.labels.en
-  }
-  return unpackArray(label)
-}
-
 /*******************************************************************************
  * second query
  ******************************************************************************/
@@ -302,30 +222,116 @@ async function queryLabels (itemIds) {
  * format
  ******************************************************************************/
 
-/**
-  * @param {(Array|String)} date - for example `[ '1770-12-16T00:00:00.000Z' ]`
-  *
-  * @returns {String}
-  */
-function formatDate (date) {
-  // Frederic Chopin has two birth dates.
-  // throw no error
-  date = unpackArray(date, true, false)
-  if (!date) return
-  return date.replace(/T.+$/, '')
-}
+const functions = {
+  fromEntity: {
+    /**
+     * ```js
+     * const entity = {
+      *   id: 'Q1299',
+      *   type: 'item',
+      *   modified: '2020-03-15T20:18:33Z',
+      *   descriptions: { en: 'English pop-rock band', de: 'Rockband aus Liverpool' }
+      * }
+      * ```
+      *
+      * @param {Object} entity
+      */
+    description: function (entity) {
+      const desc = entity.descriptions
+      if (desc.de) {
+        return desc.de
+      } else if (desc.en) {
+        return desc.en
+      }
+    },
 
-/**
- * Replace all white spaces with an underscore and prefix “wikicommons:”.
- *
- * @param {String} value
- *
- * @returns {String}
- */
-function formatWikicommons (value) {
-  value = unpackArray(value, true, false)
-  value = value.replace(/ /g, '_')
-  return `wikicommons:${value}`
+    /**
+     * ```js
+     * const entity = {
+     *   id: 'Q312609',
+     *   type: 'item',
+     *   modified: '2020-03-01T19:08:47Z',
+     *   labels: { de: 'Cheb Khaled', en: 'Khaled' },
+     * }
+     * ```
+     *
+     * @param {Object} entity
+     *
+     * @returns {Array|String}
+     */
+    label: function (entity) {
+      let label
+      if (entity.labels.de) {
+        label = entity.labels.de
+      } else if (entity.labels.en) {
+        label = entity.labels.en
+      }
+      return unpackArray(label)
+    },
+
+    /**
+     *
+     * ```js
+     * entity = {
+     *   sitelinks: {
+     *     afwiki: 'The Beatles',
+     *     akwiki: 'The Beatles',
+     *   }
+     * }
+     * ```
+     *
+     * @param {Object} entity
+     */
+    wikipediaTitle: function (entity) {
+      const sitelinks = entity.sitelinks
+      let key
+      if (sitelinks.dewiki) {
+        key = 'dewiki'
+      } else {
+        key = 'enwiki'
+      }
+      // https://de.wikipedia.org/wiki/Ludwig_van_Beethoven
+      const siteLink = wikibase.getSitelinkUrl({ site: key, title: sitelinks[key] })
+      if (!siteLink) return
+      // {
+      //   lang: 'de',
+      //   project: 'wikipedia',
+      //   key: 'dewiki',
+      //   title: 'Ludwig_van_Beethoven',
+      //   url: 'https://de.wikipedia.org/wiki/Ludwig_van_Beethoven'
+      // }
+      const linkData = wikibase.getSitelinkData(siteLink)
+      return `${linkData.lang}:${linkData.title}`
+    }
+  },
+  format: {
+
+    /**
+      * @param {(Array|String)} date - for example `[ '1770-12-16T00:00:00.000Z' ]`
+      *
+      * @returns {String}
+      */
+    date: function (date) {
+      // Frederic Chopin has two birth dates.
+      // throw no error
+      date = unpackArray(date, true, false)
+      if (!date) return
+      return date.replace(/T.+$/, '')
+    },
+
+    /**
+     * Replace all white spaces with an underscore and prefix “wikicommons:”.
+     *
+     * @param {String} value
+     *
+     * @returns {String}
+     */
+    wikicommons: function (value) {
+      value = unpackArray(value, true, false)
+      value = value.replace(/ /g, '_')
+      return `wikicommons:${value}`
+    }
+  }
 }
 
 /*******************************************************************************
@@ -346,11 +352,11 @@ const typeSpecs = {
         source: {
           fromClaim: 'P154'
         },
-        format: formatWikicommons
+        format: 'wikicommons'
       },
       shortHistory: {
         source: {
-          fromEntity: getDescription
+          fromEntity: 'description'
         }
       },
       // Gründung, Erstellung bzw. Entstehung
@@ -358,14 +364,14 @@ const typeSpecs = {
         source: {
           fromClaim: 'P571'
         },
-        format: formatDate
+        format: 'date'
       },
       // Auflösungsdatum
       endData: {
         source: {
           fromClaim: 'P576'
         },
-        format: formatDate
+        format: 'date'
       },
       // besteht aus
       members: {
@@ -376,7 +382,7 @@ const typeSpecs = {
       },
       wikipedia: {
         source: {
-          fromEntity: getWikipediaTitle
+          fromEntity: 'wikipediaTitle'
         }
       },
       // Bild
@@ -391,12 +397,12 @@ const typeSpecs = {
     props: {
       name: {
         source: {
-          fromEntity: getLabel
+          fromEntity: 'label'
         }
       },
       description: {
         source: {
-          fromEntity: getDescription
+          fromEntity: 'description'
         }
       },
       // Bild
@@ -413,7 +419,7 @@ const typeSpecs = {
       },
       wikipedia: {
         source: {
-          fromEntity: getWikipediaTitle
+          fromEntity: 'wikipediaTitle'
         }
       }
     }
@@ -451,7 +457,7 @@ const typeSpecs = {
         source: {
           fromClaim: 'P569'
         },
-        format: formatDate,
+        format: 'date',
         alwaysUpdate: true
       },
       // Sterbedatum
@@ -459,17 +465,17 @@ const typeSpecs = {
         source: {
           fromClaim: 'P570'
         },
-        format: formatDate,
+        format: 'date',
         alwaysUpdate: true
       },
       shortBiography: {
         source: {
-          fromEntity: getDescription
+          fromEntity: 'description'
         }
       },
       wikipedia: {
         source: {
-          fromEntity: getWikipediaTitle
+          fromEntity: 'wikipediaTitle'
         },
         alwaysUpdate: true
       },
@@ -478,7 +484,7 @@ const typeSpecs = {
         source: {
           fromClaim: 'P18'
         },
-        format: formatWikicommons
+        format: 'wikicommons'
       }
     },
     normalize: function (props, entity) {
@@ -506,7 +512,7 @@ const typeSpecs = {
         source: {
           fromClaim: 'P577'
         },
-        format: formatDate
+        format: 'date'
       },
       // Sprache des Werks, Namens oder Begriffes
       language: {
@@ -538,7 +544,7 @@ const typeSpecs = {
       },
       wikipedia: {
         source: {
-          fromEntity: getWikipediaTitle
+          fromEntity: 'wikipediaTitle'
         }
       }
     }
@@ -614,14 +620,26 @@ async function query (itemId, metaTypeName) {
     if (propSpec.source.fromClaim) {
       value = getClaims(entity, propSpec.source.fromClaim)
     } else if (propSpec.source.fromEntity) {
-      value = propSpec.source.fromEntity(entity)
+      const func = functions.fromEntity[propSpec.source.fromEntity]
+      if (typeof func !== 'function') {
+        throw new Error(`Unkown from entity source “${propSpec.source.fromEntity}”`)
+      }
+      value = func(entity)
     }
 
     // second query
     if (value && propSpec.secondQuery) value = await propSpec.secondQuery(value)
 
     // format
-    if (value && propSpec.format) value = propSpec.format(value)
+    if (value && propSpec.format) {
+      if (typeof propSpec.format === 'function') {
+        value = propSpec.format(value, typeSpec)
+      } else {
+        const func = functions.format[propSpec.format]
+        value = func(value, typeSpec)
+      }
+    }
+
     if (value) result[propName] = value
   }
   if (typeSpec.normalize) typeSpec.normalize(result, entity)
