@@ -41,6 +41,8 @@ async function queryWiki (language, params) {
  *   `Wolfgang Amadeus Mozart` or `Ludwig_van_Beethoven`).
  * @param {String} language - A Wikipedia language code (for example `de`, `en`)
  *   {@link https://en.wikipedia.org/wiki/List_of_Wikipedias}.
+ *
+ * @see {@link https://www.mediawiki.org/wiki/Extension:PageImages}
  */
 export async function getFirstImage (title, language = 'de') {
   const response = await queryWiki(language, {
@@ -103,11 +105,30 @@ export async function getHtmlBody(title, language = 'de', oldid) {
     delete params.page
   }
   const response = await queryWiki(language, params)
-  return response.parse.text['*']
+  if (response.parse) return response.parse.text['*']
 }
 
+/**
+ * Used for the Vuex store as a key.
+ *
+ * @param {String} language
+ * @param {String} title
+ */
 export function formatId (language, title) {
   return `${language}:${title}`
+}
+
+/**
+ *
+ * @param {Object} props
+ *
+ * @returns {String}
+ */
+function formatUrl (props) {
+  let oldid = ''
+  if (props.oldid) oldid = `&oldid=${props.oldid}`
+  const title = props.title.replace(/ /g, '_')
+  return `https://${props.language}.wikipedia.org/w/index.php?title=${title}&redirect=no${oldid}`
 }
 
 const state = {
@@ -185,17 +206,17 @@ export default {
     },
     async afterLoading ({ props, master }) {
       const id = formatId(props.language, props.title)
-      console.log(props.oldid)
       const body = await getHtmlBody(props.title, props.language, props.oldid)
-      master.$commit('addBody', { id, body })
+      if (body) master.$commit('addBody', { id, body })
       const thumbnailUrl = await getFirstImage(props.title, props.language)
-      master.$commit('addThumbnailUrl', { id, thumbnailUrl })
+      if (thumbnailUrl) master.$commit('addThumbnailUrl', { id, thumbnailUrl })
     },
     collectPropsMain(props) {
       return {
         title: props.title,
         language: props.language,
-        httpUrl: `https://${props.language}.wikipedia.org/wiki/${props.title}`
+        oldid: props.oldid,
+        httpUrl: formatUrl(props)
       }
     },
     collectPropsPreview({ propsMain }) {

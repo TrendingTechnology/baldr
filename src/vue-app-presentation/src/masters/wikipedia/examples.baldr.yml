@@ -1,14 +1,18 @@
 ---
 slides:
 
+- title: Infobox
+  wikipedia: Irakkrieg
+
 - title: Oldid
   wikipedia:
     language: en
     title: Topical Song
     oldid: 801926609
 
-- title: Only oldid (Kool DJ Herc)
+- title: Oldid (Kool DJ Herc)
   wikipedia:
+    title: Kool DJ Herc
     oldid: 188985
 
 - title: Short form
