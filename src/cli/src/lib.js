@@ -9,19 +9,21 @@ const chalk = require('chalk')
 
 // Project packages.
 const mediaServer = require('@bldr/media-server')
-const { jsYamlConfig, getExtension } = require('@bldr/core-browser')
+const { jsYamlConfig, getExtension, convertPropertiesCase } = require('@bldr/core-browser')
 
 /**
- *
  * @param {String} mediaFile
+ *
+ * @returns {module:@bldr/media-server~Asset}
  */
 function makeAsset (mediaFile) {
   return new mediaServer.Asset(mediaFile).addFileInfos()
 }
 
 /**
- *
  * @param {String} filePath
+ *
+ * @returns {String}
  */
 function filePathToAssetType (filePath) {
   const asset = makeAsset(filePath)
@@ -30,12 +32,28 @@ function filePathToAssetType (filePath) {
 }
 
 /**
+ * Read the corresponding YAML file of a media asset.
+ *
+ * @param {String} filePath - The path of the media asset.
+ *
+ * @returns {Object}
+ */
+function readAssetYaml (filePath) {
+  const extension = getExtension(filePath)
+  if (extension !== 'yml') filePath = `${filePath}.yml`
+  if (fs.existsSync(filePath)) return yaml.safeLoad(readFile(filePath))
+}
+
+/**
  * Convert a Javascript object into a text string, ready to be written into
  * a text file.
  *
  * @param {Object} data - Some data to convert to YAML.
+ *
+ * @returns {String}
  */
 function yamlToTxt (data) {
+  convertPropertiesCase(data, 'camel-to-snake')
   const yamlMarkup = [
     '---',
     yaml.safeDump(data, jsYamlConfig)
@@ -265,8 +283,9 @@ module.exports = {
   filePathToAssetType,
   makeAsset,
   normalizeMetaData,
-  readFile,
   moveAsset,
+  readAssetYaml,
+  readFile,
   runImagemagick,
   writeFile,
   writeMetaDataYaml,

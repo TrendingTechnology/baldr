@@ -157,32 +157,41 @@ export function snakeToCamel (str) {
 }
 
 /**
- * Convert all properties in an object to camelCase in a recursive fashion.
+ * Convert all properties in an object from `snake_case` to `camelCase` or vice
+ * versa in a recursive fashion.
  *
  * @param {Object} object
  *
  * @returns {Object}
  */
-export function convertPropertiesToCamelCase (object) {
+export function convertPropertiesCase (object, direction = 'snake-to-camel') {
+  if (!['snake-to-camel', 'camel-to-snake'].includes(direction)) {
+    throw new Error(`convertPropertiesCase: argument direction must be “snake-to-camel” or “camel-to-snake”, got ${direction}`)
+  }
   // Array
   if (Array.isArray(object)) {
     for (const item of object) {
       if (typeof object === 'object') {
-        convertPropertiesToCamelCase(item)
+        convertPropertiesCase(item, direction)
       }
     }
   // Object
   } else if (typeof object === 'object') {
-    for (const snakeCase in object) {
-      const camelCase = snakeToCamel(snakeCase)
-      if (camelCase !== snakeCase) {
-        const value = object[snakeCase]
-        object[camelCase] = value
-        delete object[snakeCase]
+    for (const oldProp in object) {
+      let newProp
+      if (direction === 'camel-to-snake') {
+        newProp = camelToSnake(oldProp)
+      } else if (direction === 'snake-to-camel') {
+        newProp = snakeToCamel(oldProp)
+      }
+      if (newProp !== oldProp) {
+        const value = object[oldProp]
+        object[newProp] = value
+        delete object[oldProp]
       }
       // Object or array
-      if (typeof object[camelCase] === 'object') {
-        convertPropertiesToCamelCase(object[camelCase])
+      if (typeof object[newProp] === 'object') {
+        convertPropertiesCase(object[newProp], direction)
       }
     }
   }

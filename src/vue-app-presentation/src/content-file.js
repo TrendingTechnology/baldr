@@ -8,7 +8,7 @@
 
 // import Vue from 'vue'
 import yaml from 'js-yaml'
-import { shortenText, convertPropertiesToCamelCase, escapeHtml, deepCopy, jsYamlConfig, RawDataObject } from '@bldr/core-browser'
+import { shortenText, convertPropertiesCase, escapeHtml, deepCopy, jsYamlConfig, RawDataObject } from '@bldr/core-browser'
 import { WrappedSamples } from '@bldr/vue-plugin-media'
 import { markupToHtml } from '@/lib'
 import { masters } from '@/masters.js'
@@ -518,7 +518,7 @@ function parseSlidesRecursive (slidesRaw, slidesFlat, slidesTree, level = 1) {
     const childSlides = slideRaw.slides
     delete slideRaw.slides
     const slideRawDeepCopy = deepCopy(slideRaw)
-    convertPropertiesToCamelCase(slideRaw)
+    convertPropertiesCase(slideRaw)
     const slide = new Slide(slideRaw, slideRawDeepCopy)
     slidesFlat.push(slide)
     slidesTree.push(slide)
@@ -693,7 +693,7 @@ ${JSON.stringify(this.rawYamlObject_)}`
     parseSlidesRecursive(this.rawYamlObject_.slides, this.slides, this.slidesTree)
 
     // This function is also called inside the function `parseSlidesRecursive()`
-    convertPropertiesToCamelCase(this.rawYamlObject_)
+    convertPropertiesCase(this.rawYamlObject_)
 
     // Async hooks to load resources in the background.
     for (const slide of this.slides) {

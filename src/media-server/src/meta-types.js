@@ -345,7 +345,9 @@ function detectTypeByPath (filePath) {
 }
 
 /**
- * @param {Object} data - The mandatory properties are “metaTye” and “mainImage”
+ * @param {Object} data - The mandatory property is “metaTye” and “extension”.
+ *   One can omit the property “extension”, but than you have to specify the
+ *   property “mainImage”.
  *
  * @returns {String} - A absolute path
  */
@@ -354,9 +356,11 @@ function formatFilePath (data) {
   const typeSpec = typeSpecs[data.metaType]
   if (!typeSpec) throw new Error(`Unkown meta type “${data.metaType}”.`)
   // The relPath function needs this.extension.
-  if (!data.mainImage) throw new Error(`Your data needs a property named “mainImage”.`)
-  data.extension = getExtension(data.mainImage)
-  // b/Bush_George-Walker/main.jpeg
+  if (!data.extension) {
+    if (!data.mainImage) throw new Error(`Your data needs a property named “mainImage”.`)
+    data.extension = getExtension(data.mainImage)
+    // b/Bush_George-Walker/main.jpeg
+  }
   if (data.extension === 'jpeg') data.extension = 'jpg'
   // b/Bush_George-Walker/main.jpeg
   const relPath = typeSpec.relPath.call(data)

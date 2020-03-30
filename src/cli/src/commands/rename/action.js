@@ -4,6 +4,7 @@ const path = require('path')
 // Project packages.
 const mediaServer = require('@bldr/media-server')
 const lib = require('../../lib.js')
+const { getExtension } = require('@bldr/core-browser')
 
 /**
  * Rename one file.
@@ -13,7 +14,14 @@ const lib = require('../../lib.js')
  * @returns {String} - The new file name.
  */
 function renameOneFile (oldPath) {
-  let newPath = mediaServer.asciify(oldPath)
+  const metaData = lib.readAssetYaml(oldPath)
+  let newPath
+  if (metaData && metaData.metaType) {
+    metaData.extension = getExtension(oldPath)
+    newPath = mediaServer.metaTypes.formatFilePath(metaData)
+  }
+
+  if (!newPath) newPath = mediaServer.asciify(oldPath)
   const basename = path.basename(newPath)
   // Remove a- and v- prefixes
   const cleanedBasename = basename.replace(/^[va]-/g, '')

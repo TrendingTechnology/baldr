@@ -6,11 +6,12 @@ Object.defineProperty(exports, "__esModule", {
 exports.sortObjectsByProperty = sortObjectsByProperty;
 exports.formatToLocalDate = formatToLocalDate;
 exports.formatToLocalDateTime = formatToLocalDateTime;
+exports.toTitleCase = toTitleCase;
 exports.plainText = plainText;
 exports.shortenText = shortenText;
 exports.camelToSnake = camelToSnake;
 exports.snakeToCamel = snakeToCamel;
-exports.convertPropertiesToCamelCase = convertPropertiesToCamelCase;
+exports.convertPropertiesCase = convertPropertiesCase;
 exports.formatMultiPartAssetFileName = formatMultiPartAssetFileName;
 exports.formatWikidataUrl = formatWikidataUrl;
 exports.formatWikipediaUrl = formatWikipediaUrl;
@@ -71,6 +72,10 @@ function formatToLocalDateTime(timeStampMsec) {
   return `${dayString} ${dateString} ${timeString}`;
 }
 
+function toTitleCase(text) {
+  return text.charAt(0).toUpperCase() + text.slice(1);
+}
+
 function plainText(html) {
   html = html.replace(/></g, '> <');
   const markup = new DOMParser().parseFromString(html, 'text/html');
@@ -101,25 +106,35 @@ function snakeToCamel(str) {
   return str.replace(/([-_][a-z])/g, group => group.toUpperCase().replace('-', '').replace('_', ''));
 }
 
-function convertPropertiesToCamelCase(object) {
+function convertPropertiesCase(object, direction = 'snake-to-camel') {
+  if (!['snake-to-camel', 'camel-to-snake'].includes(direction)) {
+    throw new Error(`convertPropertiesCase: argument direction must be “snake-to-camel” or “camel-to-snake”, got ${direction}`);
+  }
+
   if (Array.isArray(object)) {
     for (const item of object) {
       if (typeof object === 'object') {
-        convertPropertiesToCamelCase(item);
+        convertPropertiesCase(item, direction);
       }
     }
   } else if (typeof object === 'object') {
-    for (const snakeCase in object) {
-      const camelCase = snakeToCamel(snakeCase);
+    for (const oldProp in object) {
+      let newProp;
 
-      if (camelCase !== snakeCase) {
-        const value = object[snakeCase];
-        object[camelCase] = value;
-        delete object[snakeCase];
+      if (direction === 'camel-to-snake') {
+        newProp = camelToSnake(oldProp);
+      } else if (direction === 'snake-to-camel') {
+        newProp = snakeToCamel(oldProp);
       }
 
-      if (typeof object[camelCase] === 'object') {
-        convertPropertiesToCamelCase(object[camelCase]);
+      if (newProp !== oldProp) {
+        const value = object[oldProp];
+        object[newProp] = value;
+        delete object[oldProp];
+      }
+
+      if (typeof object[newProp] === 'object') {
+        convertPropertiesCase(object[newProp], direction);
       }
     }
   }
@@ -343,5 +358,7 @@ class RawDataObject {
 exports.RawDataObject = RawDataObject;
 
 function getExtension(filePath) {
-  return filePath.split('.').pop().toLowerCase();
+  if (filePath) {
+    return String(filePath).split('.').pop().toLowerCase();
+  }
 }

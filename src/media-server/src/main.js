@@ -72,7 +72,7 @@ const MongoClient = require('mongodb').MongoClient
 
 // Project packages.
 const { bootstrapConfig } = require('@bldr/core-node')
-const { AssetTypes, convertPropertiesToCamelCase } = require('@bldr/core-browser')
+const { AssetTypes, convertPropertiesCase } = require('@bldr/core-browser')
 
 // Submodules.
 const metaTypes = require('./meta-types.js')
@@ -572,7 +572,7 @@ class MediaFile {
    */
   importProperties (properties) {
     if (typeof properties === 'object') {
-      convertPropertiesToCamelCase(properties)
+      convertPropertiesCase(properties)
       for (const property in properties) {
         this[property] = properties[property]
       }
