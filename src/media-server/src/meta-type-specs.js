@@ -143,19 +143,21 @@ const group = {
 const instrument = {
   basePath: path.join(config.mediaServer.basePath, 'Instrumente'),
   relPath: function () {
-    const id = this.id.replace('Instrument_', '')
+    const id = this.id.replace(/^IT_/, '')
     return path.join(id.substr(0, 1).toLowerCase(), id, `main.${this.extension}`)
   },
   props: {
     id: {
       derive: function () {
-        return `Instrument_${this.name}`
+        // IS: Instrument
+        return `IT_${this.name}`
       },
       format: function (value) {
         value = asciify(value)
+        value = value.replace(/_BD$/, '')
         return value
       },
-      overwriteByDerived: false
+      overwriteByDerived: true
     },
     title: {
       derive: function () {

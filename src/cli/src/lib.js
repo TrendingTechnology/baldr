@@ -41,7 +41,11 @@ function filePathToAssetType (filePath) {
 function readAssetYaml (filePath) {
   const extension = getExtension(filePath)
   if (extension !== 'yml') filePath = `${filePath}.yml`
-  if (fs.existsSync(filePath)) return yaml.safeLoad(readFile(filePath))
+  if (fs.existsSync(filePath)) {
+    const data = yaml.safeLoad(readFile(filePath))
+    convertPropertiesCase(data, 'snake-to-camel')
+    return data
+  }
 }
 
 /**
