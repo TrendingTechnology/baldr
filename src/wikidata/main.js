@@ -394,6 +394,11 @@ const typeSpecs = {
           fromEntity: getLabel
         }
       },
+      description: {
+        source: {
+          fromEntity: getDescription
+        }
+      },
       // Bild
       mainImage: {
         source: {

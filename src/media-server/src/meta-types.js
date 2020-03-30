@@ -221,6 +221,34 @@ const typeSpecs = {
       }
     }
   },
+  instrument: {
+    basePath: path.join(config.mediaServer.basePath, 'Instrumente'),
+    relPath: function () {
+      const id = this.id.replace('Instrument_', '')
+      return path.join(id.substr(0, 1).toLowerCase(), id, `main.${this.extension}`)
+    },
+    props: {
+      id: {
+        derive: function () {
+          return `Instrument_${this.name}`
+        },
+        format: function (value) {
+          value = asciify(value)
+          return value
+        },
+        overwriteByDerived: false
+      },
+      title: {
+        derive: function () {
+          return `Foto des Instruments „${this.name}“`
+        },
+        overwriteByDerived: true
+      },
+      name: {
+        required: true
+      }
+    }
+  },
   person: {
     basePath: path.join(config.mediaServer.basePath, 'Personen'),
     relPath: function () {
@@ -528,7 +556,9 @@ function process (data) {
   data = sortAndDerive(data)
   data = format(data)
   validate(data)
-  convertPropertiesCase(data, 'camel-to-snake')
+  // Do not convert back. This conversion should be the last step, before
+  // object is converted to YAML.
+  // convertPropertiesCase(data, 'camel-to-snake')
   return data
 }
 
