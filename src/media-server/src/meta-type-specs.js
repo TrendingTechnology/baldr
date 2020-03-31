@@ -312,6 +312,12 @@ const person = {
       },
       overwriteByDerived: false
     },
+    shortBiography: {
+      required: true,
+      wikidata: {
+        fromEntity: 'getDescription'
+      }
+    },
     birth: {
       validate: validateDate,
       wikidata: {
@@ -328,12 +334,6 @@ const person = {
         fromClaim: 'P570',
         format: 'formatDate',
         alwaysUpdate: true
-      }
-    },
-    shortBiography: {
-      required: true,
-      wikidata: {
-        fromEntity: 'getDescription'
       }
     },
     wikipedia: {

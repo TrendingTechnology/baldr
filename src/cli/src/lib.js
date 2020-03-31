@@ -42,8 +42,8 @@ function readAssetYaml (filePath) {
   const extension = getExtension(filePath)
   if (extension !== 'yml') filePath = `${filePath}.yml`
   if (fs.existsSync(filePath)) {
-    const data = yaml.safeLoad(readFile(filePath))
-    convertPropertiesCase(data, 'snake-to-camel')
+    let data = yaml.safeLoad(readFile(filePath))
+    data = convertPropertiesCase(data, 'snake-to-camel')
     return data
   }
 }
@@ -57,7 +57,7 @@ function readAssetYaml (filePath) {
  * @returns {String}
  */
 function yamlToTxt (data) {
-  convertPropertiesCase(data, 'camel-to-snake')
+  data = convertPropertiesCase(data, 'camel-to-snake')
   const yamlMarkup = [
     '---',
     yaml.safeDump(data, jsYamlConfig)

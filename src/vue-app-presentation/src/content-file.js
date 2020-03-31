@@ -514,11 +514,11 @@ class Slide {
  *   Main level, 2: First child level ...
  */
 function parseSlidesRecursive (slidesRaw, slidesFlat, slidesTree, level = 1) {
-  for (const slideRaw of slidesRaw) {
+  for (let slideRaw of slidesRaw) {
     const childSlides = slideRaw.slides
     delete slideRaw.slides
     const slideRawDeepCopy = deepCopy(slideRaw)
-    convertPropertiesCase(slideRaw)
+    slideRaw = convertPropertiesCase(slideRaw, 'snake-to-camel')
     const slide = new Slide(slideRaw, slideRawDeepCopy)
     slidesFlat.push(slide)
     slidesTree.push(slide)
@@ -693,7 +693,7 @@ ${JSON.stringify(this.rawYamlObject_)}`
     parseSlidesRecursive(this.rawYamlObject_.slides, this.slides, this.slidesTree)
 
     // This function is also called inside the function `parseSlidesRecursive()`
-    convertPropertiesCase(this.rawYamlObject_)
+    this.rawYamlObject_ = convertPropertiesCase(this.rawYamlObject_, 'snake-to-camel')
 
     // Async hooks to load resources in the background.
     for (const slide of this.slides) {

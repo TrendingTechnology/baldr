@@ -106,19 +106,23 @@ function snakeToCamel(str) {
   return str.replace(/([-_][a-z])/g, group => group.toUpperCase().replace('-', '').replace('_', ''));
 }
 
-function convertPropertiesCase(object, direction = 'snake-to-camel') {
+function convertPropertiesCase(data, direction = 'snake-to-camel') {
+  let newObject;
+
   if (!['snake-to-camel', 'camel-to-snake'].includes(direction)) {
     throw new Error(`convertPropertiesCase: argument direction must be “snake-to-camel” or “camel-to-snake”, got ${direction}`);
   }
 
-  if (Array.isArray(object)) {
-    for (const item of object) {
-      if (typeof object === 'object') {
+  if (Array.isArray(data)) {
+    for (const item of data) {
+      if (typeof item === 'object') {
         convertPropertiesCase(item, direction);
       }
     }
-  } else if (typeof object === 'object') {
-    for (const oldProp in object) {
+  } else if (typeof data === 'object') {
+    newObject = {};
+
+    for (const oldProp in data) {
       let newProp;
 
       if (direction === 'camel-to-snake') {
@@ -127,19 +131,16 @@ function convertPropertiesCase(object, direction = 'snake-to-camel') {
         newProp = snakeToCamel(oldProp);
       }
 
-      if (newProp !== oldProp) {
-        const value = object[oldProp];
-        object[newProp] = value;
-        delete object[oldProp];
-      }
+      newObject[newProp] = data[oldProp];
 
-      if (typeof object[newProp] === 'object') {
-        convertPropertiesCase(object[newProp], direction);
+      if (typeof newObject[newProp] === 'object') {
+        convertPropertiesCase(newObject[newProp], direction);
       }
     }
   }
 
-  return object;
+  if (newObject) return newObject;
+  return data;
 }
 
 function formatMultiPartAssetFileName(firstFileName, no) {

@@ -349,7 +349,7 @@ function process (data) {
   console.log(data)
   // The meta type specification is in camel case. The meta data is
   // stored in the YAML format in snake case
-  convertPropertiesCase(data, 'snake-to-camel')
+  data = convertPropertiesCase(data, 'snake-to-camel')
   data = sortAndDerive(data)
   data = format(data)
   validate(data)

@@ -160,42 +160,45 @@ export function snakeToCamel (str) {
  * Convert all properties in an object from `snake_case` to `camelCase` or vice
  * versa in a recursive fashion.
  *
- * @param {Object} object
+ * @param {(Object|Array|String|Number)} data - Some data in various formats.
+ * @param {String} direction - `snake-to-camel` or `camel-to-snake`
  *
- * @returns {Object}
+ * @returns {Object} Possibly an new object is returned. One should always
+ *   use this returned object.
  */
-export function convertPropertiesCase (object, direction = 'snake-to-camel') {
+export function convertPropertiesCase (data, direction = 'snake-to-camel') {
+  // To perserve the order of the props.
+  let newObject
   if (!['snake-to-camel', 'camel-to-snake'].includes(direction)) {
     throw new Error(`convertPropertiesCase: argument direction must be “snake-to-camel” or “camel-to-snake”, got ${direction}`)
   }
   // Array
-  if (Array.isArray(object)) {
-    for (const item of object) {
-      if (typeof object === 'object') {
-        convertPropertiesCase(item, direction)
+  if (Array.isArray(data)) {
+    for (let i; i < data.length; i++) {
+      const item = data[i]
+      if (typeof item === 'object') {
+        data[i] = convertPropertiesCase(item, direction)
       }
     }
   // Object
-  } else if (typeof object === 'object') {
-    for (const oldProp in object) {
+  } else if (typeof data === 'object') {
+    newObject = {}
+    for (const oldProp in data) {
       let newProp
       if (direction === 'camel-to-snake') {
         newProp = camelToSnake(oldProp)
       } else if (direction === 'snake-to-camel') {
         newProp = snakeToCamel(oldProp)
       }
-      if (newProp !== oldProp) {
-        const value = object[oldProp]
-        object[newProp] = value
-        delete object[oldProp]
-      }
+      newObject[newProp] = data[oldProp]
       // Object or array
-      if (typeof object[newProp] === 'object') {
-        convertPropertiesCase(object[newProp], direction)
+      if (typeof newObject[newProp] === 'object') {
+        newObject[newProp] = convertPropertiesCase(newObject[newProp], direction)
       }
     }
   }
-  return object
+  if (newObject) return newObject
+  return data
 }
 
 /**

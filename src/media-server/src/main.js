@@ -572,7 +572,7 @@ class MediaFile {
    */
   importProperties (properties) {
     if (typeof properties === 'object') {
-      convertPropertiesCase(properties)
+      properties = convertPropertiesCase(properties, 'snake-to-camel')
       for (const property in properties) {
         this[property] = properties[property]
       }
