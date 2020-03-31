@@ -127,7 +127,7 @@ class Master {
      * public methods, which adds additional functionality.
      *
      * @private
-     * @type {object}
+     * @type {Object}
      */
     this.hooks_ = {}
     for (const spec in specs) {
