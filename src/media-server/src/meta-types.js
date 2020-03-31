@@ -61,9 +61,9 @@ const typeSpecs = mergeTypeSpecs(rawTypeSpecs)
  * @property {Function} relPath - A function which must return the
  *   relative path (relative to `basePath`). The function is called with
  *   `function (typeData, typeSpec)`.
- * @property {Object} detectType - An object with at the moment one property:
- * @property {RegExp} detectType.byPath - An regular expression that is
- *   matched against file paths.
+ * @property {RegExp} detectTypebyPath - A regular expression that is
+ *   matched against file paths or a function which is called with `typeSpec`
+ *   that returns a regexp.
  * @property {module:@bldr/media-server/meta-types~propSpecs} props
  */
 
@@ -152,16 +152,25 @@ function mergeTypeSpecs (typeSpecs) {
 }
 
 /**
+ * Check a file path against regepx to get a type name.
+ *
  * @param {String} filePath
  *
- * @returns {String} - The type name for example `person`, `group`
+ * @returns {module:@bldr/media-server/meta-types~typeName} - The type name
+ *   for example `person`, `group`
  */
 function detectTypeByPath (filePath) {
   filePath = path.resolve(filePath)
   for (const typeName in typeSpecs) {
     const typeSpec = typeSpecs[typeName]
-    if (typeSpec.detectType && typeSpec.detectType.byPath && typeSpec.detectType.byPath instanceof RegExp) {
-      if (filePath.match(typeSpec.detectType.byPath)) return typeName
+    if (typeSpec.detectTypeByPath) {
+      let regexp
+      if (typeof typeSpec.detectTypeByPath === 'function') {
+        regexp = typeSpec.detectTypeByPath(typeSpec)
+      } else {
+        regexp = typeSpec.detectTypeByPath
+      }
+      if (filePath.match(regexp)) return typeName
     }
   }
 }

@@ -67,9 +67,7 @@ const global_ = {
 }
 
 const musicalWork = {
-  detectType: {
-    byPath: new RegExp('^.*/HB/.*$')
-  },
+  detectTypeByPath: new RegExp('^.*/HB/.*$'),
   props: {
     title: {
       format: function (value) {
@@ -105,8 +103,8 @@ const group = {
   relPath: function (typeData, typeSpec) {
     return path.join(this.id.substr(0, 1).toLowerCase(), this.id, `main.${this.extension}`)
   },
-  detectType: {
-    byPath: new RegExp('^' + path.join(config.mediaServer.basePath, 'Gruppen') + '/.*')
+  detectTypeByPath: function (typeSpec) {
+    return new RegExp('^' + typeSpec.basePath + '/.*')
   },
   props: {
     id: {
@@ -189,6 +187,9 @@ const instrument = {
     const id = this.id.replace(/^IN_/, '')
     return path.join(id.substr(0, 1).toLowerCase(), id, `main.${this.extension}`)
   },
+  detectTypeByPath: function (typeSpec) {
+    return new RegExp('^' + typeSpec.basePath + '/.*')
+  },
   props: {
     id: {
       derive: function (typeData, typeSpec) {
@@ -245,8 +246,8 @@ const person = {
   relPath: function () {
     return path.join(this.id.substr(0, 1).toLowerCase(), this.id, `main.${this.extension}`)
   },
-  detectType: {
-    byPath: new RegExp('^' + path.join(config.mediaServer.basePath, 'Personen') + '/.*')
+  detectTypeByPath: function (typeSpec) {
+    return new RegExp('^' + typeSpec.basePath + '/.*')
   },
   normalizeWikidata: function ({ typeData, entity, functions }) {
     const label = functions.getLabel(entity)
@@ -354,7 +355,6 @@ const person = {
 
 const song = {
   props: {
-
     publicationDate: {
       wikidata: {
         // Veröffentlichungsdatum
