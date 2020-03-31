@@ -248,7 +248,7 @@ const person = {
   detectType: {
     byPath: new RegExp('^' + path.join(config.mediaServer.basePath, 'Personen') + '/.*')
   },
-  normalizeWikidata: function ({ props, entity, functions }) {
+  normalizeWikidata: function ({ result, entity, functions }) {
     const label = functions.getLabel(entity)
     const segments = label.split(' ')
     const firstnameFromLabel = segments.shift()
@@ -257,13 +257,13 @@ const person = {
     // for example „Joan Baez“ and not „Joan Chandos“
     if (
       firstnameFromLabel && lastnameFromLabel &&
-      (props.firstname !== firstnameFromLabel || props.lastname !== lastnameFromLabel)
+      (result.firstname !== firstnameFromLabel || result.lastname !== lastnameFromLabel)
     ) {
-      props.firstname = firstnameFromLabel
-      props.lastname = lastnameFromLabel
-      props.name = label
+      result.firstname = firstnameFromLabel
+      result.lastname = lastnameFromLabel
+      result.name = label
     }
-    return props
+    return result
   },
   props: {
     id: {
@@ -391,7 +391,7 @@ const song = {
       }
     },
     wikipedia: {
-      source: {
+      wikidata: {
         fromEntity: 'getWikipediaTitle'
       }
     }

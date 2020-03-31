@@ -82,7 +82,7 @@ const typeSpecs = mergeTypeSpecs(rawTypeSpecs)
  */
 
 /**
- * The name of a meta type.
+ * The name of a meta type, for example `person`, `group`.
  *
  * @typedef {String} typeName
  */

@@ -18,19 +18,20 @@ const wikibase = require('wikibase-sdk')({
  * The specification of a property.
  *
  * @typedef {Object} propSpec
- * @property {String} fromClaim - for example `P123`
- * @property {Function} fromEntity - `getDescription`, `getLabel`, `getWikipediaTitle`
- * @property {Function} secondQuery - `queryLabels`
- * @property {Boolean} alwaysUpdate
- * @property {Function} format - A function or `formatDate`, `formatWikicommons`
+ * @property {String} wikidata.fromClaim - for example `P123`
+ * @property {Function} wikidata.fromEntity - `getDescription`, `getLabel`, `getWikipediaTitle`
+ * @property {Function} wikidata.secondQuery - `queryLabels`
+ * @property {Boolean} wikidata.alwaysUpdate
+ * @property {Function} wikidata.format - A function or `formatDate`, `formatWikicommons`
  */
 
 /**
- * The specification of one metadata type.
+ * Additional properties in the specification of one metadata type.
  *
  * @typedef {Object} typeSpec
- * @property {module:@bldr/wikidata~propSpecs} props
- * @property {Function} normalize
+ * @property {Function} normalizeWikidata - This functions is called after
+ *   properties are present. The function is called with
+ *   `function ({ result, entity, functions })`
  */
 
 /**
@@ -310,12 +311,12 @@ const functions = {
 function mergeData (data, dataWiki, typeSpecs) {
   // Ẃe delete properties from this object -> make a flat copy.
   const dataOrig = Object.assign({}, data)
-  const metaTypeName = dataOrig.metaType
-  if (!metaTypeName) {
+  const typeName = dataOrig.metaType
+  if (!typeName) {
     return Object.assign({}, dataOrig, dataWiki)
   }
 
-  const propSpecs = typeSpecs[metaTypeName]
+  const propSpecs = typeSpecs[typeName]
 
   const result = {}
 
@@ -336,22 +337,24 @@ function mergeData (data, dataWiki, typeSpecs) {
 }
 
 /**
+ * Query wikidata.
  *
- * @param {String} itemId
- * @param {String} metaTypeName
- * @param {module:@bldr/media-server/meta-types~typeSpecs}
+ * @param {String} itemId - for example `Q123`
+ * @param {module:@bldr/media-server/meta-types~typeSpecs} typeName
+ * @param {module:@bldr/media-server/meta-types~typeSpecs} typeSpecs
+ *
  * @returns {Object}
  */
-async function query (itemId, metaTypeName, typeSpecs) {
+async function query (itemId, typeName, typeSpecs) {
   if (!wikibase.isItemId(itemId)) {
     throw new Error(`No item id: ${itemId}`)
   }
   console.log(itemId)
   entity = await getEntities(itemId)
 
-  if (!typeSpecs[metaTypeName]) return
+  if (!typeSpecs[typeName]) return
 
-  const typeSpec = typeSpecs[metaTypeName]
+  const typeSpec = typeSpecs[typeName]
 
   const result = {}
   result.wikidata = itemId
@@ -391,7 +394,9 @@ async function query (itemId, metaTypeName, typeSpecs) {
     }
 
   }
-  if (typeSpec.normalize) typeSpec.normalize(result, entity)
+  if (typeSpec.normalizeWikidata) {
+    typeSpec.normalizeWikidata({ result, entity, functions })
+  }
   return result
 }
 
