@@ -1,6 +1,7 @@
 // Third party packages.
 const fs = require('fs')
 const path = require('path')
+const childProcess = require('child_process')
 
 // Third party packages.
 const chalk = require('chalk')
@@ -158,12 +159,29 @@ function moveTex (oldPath, newPath, cmdObj) {
   }
 }
 
+function moveMp3 (oldPath, newPath, cmdObj) {
+  const process = childProcess.spawnSync(
+    '/usr/local/bin/musicbrainz-acoustid.py', [oldPath], { encoding: 'utf-8' }
+  )
+
+  if (process.stdout) {
+    // There are mulitple recording ids:
+    // 0585ec4a-487d-4944-bf59-dd9ecc325c66\n
+    // 065bda42-e077-4cf0-b458-4c0e455f09fe\n
+    const musicbrainzRecordingId = process.stdout.replace(/\n.*$/s, '')
+    console.log(chalk.red(musicbrainzRecordingId))
+  }
+
+}
+
 function moveFromArchive (oldPath, extension, cmdObj) {
   if (locationIndicator.isInDeactivatedDir(oldPath)) return
   const newPath = locationIndicator.getMirroredPath(oldPath)
   console.log(`${chalk.yellow(oldPath)} -> ${chalk.green(newPath)}`)
   if (extension === 'tex') {
     moveTex(oldPath, newPath, cmdObj)
+  } else if (extension === 'mp3') {
+    moveMp3(oldPath, newPath, cmdObj)
   } else {
     lib.moveAsset(oldPath, newPath, cmdObj)
   }
