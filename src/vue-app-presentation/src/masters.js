@@ -126,9 +126,8 @@ class Master {
      * All imported methods. They are not called directly, but through
      * public methods, which adds additional functionality.
      *
-     * @type {object}
-     *
      * @private
+     * @type {object}
      */
     this.hooks_ = {}
     for (const spec in specs) {
