@@ -9,9 +9,11 @@ const path = require('path')
 const { deepCopy, getExtension, convertPropertiesCase } = require('@bldr/core-browser')
 
 /**
-  * @type {module:@bldr/media-server/meta-types~typeSpecs}
-  */
- const typeSpecs = require('./meta-type-specs.js')
+ * @type {module:@bldr/media-server/meta-types~typeSpecs}
+ */
+const rawTypeSpecs = require('./meta-type-specs.js')
+
+const typeSpecs = mergeTypeSpecs(rawTypeSpecs)
 
 /**
  * The name of a property.
@@ -68,6 +70,14 @@ const { deepCopy, getExtension, convertPropertiesCase } = require('@bldr/core-br
 /**
  * The specification of all meta types
  *
+ * ```js
+ * const typeSpecs = {
+  *   typeName1: typeSpec1,
+  *   typeName2: typeSpec2
+  *   ...
+  * }
+  * ```
+ *
  * @typedef {Object} typeSpecs
  */
 
@@ -103,66 +113,45 @@ function validateUuid (value) {
 }
 
 /**
- * Merge the global metadata type specification with a specific type.
- *
- * @param {String} typeName - The name of the metadata type (for example `person`)
- */
-function mergeTypeProps (typeName) {
-  const globalType = typeSpecs.global_.props
-  const specifcType = typeSpecs[typeName].props
-  const result = {}
-  for (const prop in globalType) {
-    if (specifcType[prop]) {
-      result[prop] = Object.assign({}, globalType[prop], specifcType[prop])
-      delete specifcType[prop]
-    } else {
-      result[prop] = globalType[prop]
-    }
-  }
-
-  for (const prop in specifcType) {
-    result[prop] = specifcType[prop]
-  }
-
-  return result
-}
-
-/**
  * @returns {Object}
  */
-function buildTypeProps () {
+function mergeTypeSpecs (typeSpecs) {
+  /**
+   * Merge the global metadata type specification with a specific type.
+   *
+   * @param {String} typeName - The name of the metadata type (for example `person`)
+   */
+  function mergeTypeProps (typeName, typeSpecs) {
+    const globalType = typeSpecs.global_.props
+    const specifcType = typeSpecs[typeName].props
+    const result = {}
+    for (const prop in globalType) {
+      if (specifcType[prop]) {
+        result[prop] = Object.assign({}, globalType[prop], specifcType[prop])
+        delete specifcType[prop]
+      } else {
+        result[prop] = globalType[prop]
+      }
+    }
+
+    for (const prop in specifcType) {
+      result[prop] = specifcType[prop]
+    }
+
+    return result
+  }
+
   const result = {}
   for (const typeName in typeSpecs) {
+    if (!result[typeName]) result[typeName] = {}
     // Exclude “global_”
     if (!typeName.match(/^.+_$/)) {
-      result[typeName] = mergeTypeProps(typeName)
+      if (!result[typeName].props) result[typeName].props = {}
+      result[typeName].props = mergeTypeProps(typeName, typeSpecs)
     }
   }
   return result
 }
-
-/**
- * ```
- * {
- *   person: {
- *     id: { validate: [Function: validate], derive: [Function: derive] },
- *     title: { validate: [Function: validate], derive: [Function: derive] },
- *     metadataType: { validate: [Function: validate] },
- *     wikidata: { validate: [Function: validate] },
- *     wikipedia: { validate: [Function: validate] },
- *     firstname: { required: true },
- *     lastname: { required: true },
- *     name: { derive: [Function: derive] },
- *     short_biography: { required: true },
- *     birth: { validate: [Function: validate] },
- *     death: { validate: [Function: validate] }
- *   }
- * }
- * ```
- *
- * @type {Object}
- */
-const typeProps = buildTypeProps()
 
 /**
  * @param {String} filePath
@@ -234,7 +223,7 @@ function applyTypeSpecs (metadata, func, replaceValues = true) {
   }
 
   if (metadata.metaType) {
-    const props = typeProps[metadata.metaType]
+    const props = typeSpecs[metadata.metaType].props
     for (const propName in props) {
       applyOneTypeSpec(props, propName, metadata, func, replaceValues)
     }

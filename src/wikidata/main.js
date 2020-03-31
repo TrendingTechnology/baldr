@@ -15,58 +15,23 @@ const wikibase = require('wikibase-sdk')({
 })
 
 /**
- * The name of a property.
- *
- * @typedef {String} propName
- */
-
-/**
  * The specification of a property.
  *
  * @typedef {Object} propSpec
- * @property {Object} source
- * @property {String} source.fromClaim
- * @property {Function} source.fromEntity
- * @property {Function} secondQuery
+ * @property {String} fromClaim - for example `P123`
+ * @property {Function} fromEntity - `getDescription`, `getLabel`, `getWikipediaTitle`
+ * @property {Function} secondQuery - `queryLabels`
  * @property {Boolean} alwaysUpdate
- * @property {Function} format
- * @property
+ * @property {Function} format - A function or `formatDate`, `formatWikicommons`
  */
 
 /**
- * The specification of all properties. The single `propSpec`s are indexed
- * by the `propName`.
+ * The specification of one metadata type.
  *
- * ```js
- * const propSpecs = {
-  *   propName1: propSpec1,
-  *   propName2: propSpec2
-  *   ...
-  * }
-  * ```
-  *
-  * @typedef {Object} propSpecs
-  */
-
- /**
-  * The specification of one metadata type.
-  *
-  * @typedef {Object} typeSpec
-  * @property {module:@bldr/wikidata~propSpecs} props
-  * @property {Function} normalize
-  */
-
- /**
-  * The specification of all meta types
-  *
-  * @typedef {Object} typeSpecs
-  */
-
- /**
-  * The name of a meta type.
-  *
-  * @typedef {String} typeName
-  */
+ * @typedef {Object} typeSpec
+ * @property {module:@bldr/wikidata~propSpecs} props
+ * @property {Function} normalize
+ */
 
 /**
  * ```js
@@ -181,10 +146,6 @@ async function fetchCommonsFile (fileName, dest) {
   await fetchFile(url, dest)
 }
 
-/*******************************************************************************
- * get from entity
- ******************************************************************************/
-
 function getClaims (entity, claim) {
   let result
   if (entity.claims[claim]) {
@@ -193,361 +154,145 @@ function getClaims (entity, claim) {
   return unpackArray(result)
 }
 
+const functions = {
+
+/*******************************************************************************
+ * get from entity
+ ******************************************************************************/
+
+  /**
+   * ```js
+   * const entity = {
+    *   id: 'Q1299',
+    *   type: 'item',
+    *   modified: '2020-03-15T20:18:33Z',
+    *   descriptions: { en: 'English pop-rock band', de: 'Rockband aus Liverpool' }
+    * }
+    * ```
+    *
+    * @param {Object} entity
+    */
+  getDescription: function (entity) {
+    const desc = entity.descriptions
+    if (desc.de) {
+      return desc.de
+    } else if (desc.en) {
+      return desc.en
+    }
+  },
+
+  /**
+   * ```js
+   * const entity = {
+   *   id: 'Q312609',
+   *   type: 'item',
+   *   modified: '2020-03-01T19:08:47Z',
+   *   labels: { de: 'Cheb Khaled', en: 'Khaled' },
+   * }
+   * ```
+   *
+   * @param {Object} entity
+   *
+   * @returns {Array|String}
+   */
+  getLabel: function (entity) {
+    let label
+    if (entity.labels.de) {
+      label = entity.labels.de
+    } else if (entity.labels.en) {
+      label = entity.labels.en
+    }
+    return unpackArray(label)
+  },
+
+  /**
+   *
+   * ```js
+   * entity = {
+   *   sitelinks: {
+   *     afwiki: 'The Beatles',
+   *     akwiki: 'The Beatles',
+   *   }
+   * }
+   * ```
+   *
+   * @param {Object} entity
+   */
+  getWikipediaTitle: function (entity) {
+    const sitelinks = entity.sitelinks
+    let key
+    if (sitelinks.dewiki) {
+      key = 'dewiki'
+    } else {
+      key = 'enwiki'
+    }
+    // https://de.wikipedia.org/wiki/Ludwig_van_Beethoven
+    const siteLink = wikibase.getSitelinkUrl({ site: key, title: sitelinks[key] })
+    if (!siteLink) return
+    // {
+    //   lang: 'de',
+    //   project: 'wikipedia',
+    //   key: 'dewiki',
+    //   title: 'Ludwig_van_Beethoven',
+    //   url: 'https://de.wikipedia.org/wiki/Ludwig_van_Beethoven'
+    // }
+    const linkData = wikibase.getSitelinkData(siteLink)
+    return `${linkData.lang}:${linkData.title}`
+  },
+
 /*******************************************************************************
  * second query
  ******************************************************************************/
 
-/**
- * Query the wikidata API for the given items and return only the label.
- *
-  * @param {(Array|String)} itemIds - for example `['Q123', 'Q234']`
-  *
-  * @returns {(Array|String)}
-  */
-async function queryLabels (itemIds) {
-  itemIds = unpackArray(itemIds)
-  const entities = await getEntities(itemIds, ['labels'])
-  if (entities.id) {
-    return getLabel(entities, false)
-  }
-  const result = []
-  for (const itemId in entities) {
-    const entity = entities[itemId]
-    result.push(getLabel(entity, false))
-  }
-  return result
-}
+  /**
+   * Query the wikidata API for the given items and return only the label.
+   *
+   * @param {(Array|String)} itemIds - for example `['Q123', 'Q234']`
+   *
+   * @returns {(Array|String)}
+   */
+  queryLabels: async function  (itemIds) {
+    itemIds = unpackArray(itemIds)
+    const entities = await getEntities(itemIds, ['labels'])
+    if (entities.id) {
+      return getLabel(entities, false)
+    }
+    const result = []
+    for (const itemId in entities) {
+      const entity = entities[itemId]
+      result.push(getLabel(entity, false))
+    }
+    return result
+  },
 
 /*******************************************************************************
  * format
  ******************************************************************************/
 
-const functions = {
-  fromEntity: {
-    /**
-     * ```js
-     * const entity = {
-      *   id: 'Q1299',
-      *   type: 'item',
-      *   modified: '2020-03-15T20:18:33Z',
-      *   descriptions: { en: 'English pop-rock band', de: 'Rockband aus Liverpool' }
-      * }
-      * ```
-      *
-      * @param {Object} entity
-      */
-    description: function (entity) {
-      const desc = entity.descriptions
-      if (desc.de) {
-        return desc.de
-      } else if (desc.en) {
-        return desc.en
-      }
-    },
-
-    /**
-     * ```js
-     * const entity = {
-     *   id: 'Q312609',
-     *   type: 'item',
-     *   modified: '2020-03-01T19:08:47Z',
-     *   labels: { de: 'Cheb Khaled', en: 'Khaled' },
-     * }
-     * ```
-     *
-     * @param {Object} entity
-     *
-     * @returns {Array|String}
-     */
-    label: function (entity) {
-      let label
-      if (entity.labels.de) {
-        label = entity.labels.de
-      } else if (entity.labels.en) {
-        label = entity.labels.en
-      }
-      return unpackArray(label)
-    },
-
-    /**
-     *
-     * ```js
-     * entity = {
-     *   sitelinks: {
-     *     afwiki: 'The Beatles',
-     *     akwiki: 'The Beatles',
-     *   }
-     * }
-     * ```
-     *
-     * @param {Object} entity
-     */
-    wikipediaTitle: function (entity) {
-      const sitelinks = entity.sitelinks
-      let key
-      if (sitelinks.dewiki) {
-        key = 'dewiki'
-      } else {
-        key = 'enwiki'
-      }
-      // https://de.wikipedia.org/wiki/Ludwig_van_Beethoven
-      const siteLink = wikibase.getSitelinkUrl({ site: key, title: sitelinks[key] })
-      if (!siteLink) return
-      // {
-      //   lang: 'de',
-      //   project: 'wikipedia',
-      //   key: 'dewiki',
-      //   title: 'Ludwig_van_Beethoven',
-      //   url: 'https://de.wikipedia.org/wiki/Ludwig_van_Beethoven'
-      // }
-      const linkData = wikibase.getSitelinkData(siteLink)
-      return `${linkData.lang}:${linkData.title}`
-    }
+  /**
+    * @param {(Array|String)} date - for example `[ '1770-12-16T00:00:00.000Z' ]`
+    *
+    * @returns {String}
+    */
+  formatDate: function (date) {
+    // Frederic Chopin has two birth dates.
+    // throw no error
+    date = unpackArray(date, true, false)
+    if (!date) return
+    return date.replace(/T.+$/, '')
   },
-  format: {
 
-    /**
-      * @param {(Array|String)} date - for example `[ '1770-12-16T00:00:00.000Z' ]`
-      *
-      * @returns {String}
-      */
-    date: function (date) {
-      // Frederic Chopin has two birth dates.
-      // throw no error
-      date = unpackArray(date, true, false)
-      if (!date) return
-      return date.replace(/T.+$/, '')
-    },
-
-    /**
-     * Replace all white spaces with an underscore and prefix “wikicommons:”.
-     *
-     * @param {String} value
-     *
-     * @returns {String}
-     */
-    wikicommons: function (value) {
-      value = unpackArray(value, true, false)
-      value = value.replace(/ /g, '_')
-      return `wikicommons:${value}`
-    }
-  }
-}
-
-/*******************************************************************************
- * typeSpecs
- ******************************************************************************/
-
-const typeSpecs = {
-  group: {
-    props: {
-      // offizieller Name
-      name: {
-        source: {
-          fromClaim: 'P1448'
-        }
-      },
-      // Logo
-      logo: {
-        source: {
-          fromClaim: 'P154'
-        },
-        format: 'wikicommons'
-      },
-      shortHistory: {
-        source: {
-          fromEntity: 'description'
-        }
-      },
-      // Gründung, Erstellung bzw. Entstehung
-      startData: {
-        source: {
-          fromClaim: 'P571'
-        },
-        format: 'date'
-      },
-      // Auflösungsdatum
-      endData: {
-        source: {
-          fromClaim: 'P576'
-        },
-        format: 'date'
-      },
-      // besteht aus
-      members: {
-        source: {
-          fromClaim: 'P527'
-        },
-        secondQuery: queryLabels
-      },
-      wikipedia: {
-        source: {
-          fromEntity: 'wikipediaTitle'
-        }
-      },
-      // Bild
-      mainImage: {
-        source: {
-          fromClaim: 'P18'
-        }
-      }
-    }
-  },
-  instrument: {
-    props: {
-      name: {
-        source: {
-          fromEntity: 'label'
-        }
-      },
-      description: {
-        source: {
-          fromEntity: 'description'
-        }
-      },
-      // Bild
-      mainImage: {
-        source: {
-          fromClaim: 'P18'
-        }
-      },
-      // Bild des Tonumfang
-      playingRangeImage: {
-        source: {
-          fromClaim: 'P2343'
-        }
-      },
-      wikipedia: {
-        source: {
-          fromEntity: 'wikipediaTitle'
-        }
-      }
-    }
-  },
-  person: {
-    props: {
-      // Vornamen der Person
-      firstname: {
-        source: {
-          fromClaim: 'P735'
-        },
-        secondQuery: queryLabels,
-        format: function (value) {
-          if (Array.isArray(value)) {
-            return value.join(' ')
-          }
-          return value
-        }
-      },
-      // Familienname einer Person
-      lastname: {
-        source: {
-          fromClaim: 'P734'
-        },
-        secondQuery: queryLabels,
-        format: function (value) {
-          if (Array.isArray(value)) {
-            return value.join(' ')
-          }
-          return value
-        }
-      },
-      // Geburtsdatum
-      birth: {
-        source: {
-          fromClaim: 'P569'
-        },
-        format: 'date',
-        alwaysUpdate: true
-      },
-      // Sterbedatum
-      death: {
-        source: {
-          fromClaim: 'P570'
-        },
-        format: 'date',
-        alwaysUpdate: true
-      },
-      shortBiography: {
-        source: {
-          fromEntity: 'description'
-        }
-      },
-      wikipedia: {
-        source: {
-          fromEntity: 'wikipediaTitle'
-        },
-        alwaysUpdate: true
-      },
-      // Bild
-      mainImage: {
-        source: {
-          fromClaim: 'P18'
-        },
-        format: 'wikicommons'
-      }
-    },
-    normalize: function (props, entity) {
-      const label = getLabel(entity)
-      const segments = label.split(' ')
-      const firstnameFromLabel = segments.shift()
-      const lastnameFromLabel = segments.pop()
-      // Use the label by artist names.
-      // for example „Joan Baez“ and not „Joan Chandos“
-      if (
-        firstnameFromLabel && lastnameFromLabel &&
-        (props.firstname !== firstnameFromLabel || props.lastname !== lastnameFromLabel)
-      ) {
-        props.firstname = firstnameFromLabel
-        props.lastname = lastnameFromLabel
-        props.name = label
-      }
-      return props
-    }
-  },
-  song: {
-    props: {
-      // Veröffentlichungsdatum
-      publicationDate: {
-        source: {
-          fromClaim: 'P577'
-        },
-        format: 'date'
-      },
-      // Sprache des Werks, Namens oder Begriffes
-      language: {
-        source: {
-          fromClaim: 'P407'
-        },
-        secondQuery: queryLabels
-      },
-      // Interpret
-      artist: {
-        source: {
-          fromClaim: 'P175'
-        },
-        secondQuery: queryLabels
-      },
-      // Text von
-      lyricist: {
-        source: {
-          fromClaim: 'P676'
-        },
-        secondQuery: queryLabels
-      },
-      // Genre
-      genre: {
-        source: {
-          fromClaim: 'P136'
-        },
-        secondQuery: queryLabels
-      },
-      wikipedia: {
-        source: {
-          fromEntity: 'wikipediaTitle'
-        }
-      }
-    }
+  /**
+   * Replace all white spaces with an underscore and prefix “wikicommons:”.
+   *
+   * @param {String} value
+   *
+   * @returns {String}
+   */
+  formatWikicommons: function (value) {
+    value = unpackArray(value, true, false)
+    value = value.replace(/ /g, '_')
+    return `wikicommons:${value}`
   }
 }
 
@@ -561,7 +306,7 @@ const typeSpecs = {
  *
  * @returns {Object}
  */
-function mergeData (data, dataWiki) {
+function mergeData (data, dataWiki, typeSpecs) {
   // Ẃe delete properties from this object -> make a flat copy.
   const dataOrig = Object.assign({}, data)
   const metaTypeName = dataOrig.metaType
@@ -574,7 +319,7 @@ function mergeData (data, dataWiki) {
   const result = {}
 
   for (const propName in dataWiki) {
-    const propSpec = propSpecs[propName]
+    const propSpec = propSpecs[propName].wikidata
     if (propSpec && ((dataOrig[propName] && propSpec.alwaysUpdate) || !dataOrig[propName])) {
       result[propName] = dataWiki[propName]
       delete dataOrig[propName]
@@ -596,7 +341,7 @@ function mergeData (data, dataWiki) {
  *
  * @returns {Object}
  */
-async function query (itemId, metaTypeName) {
+async function query (itemId, metaTypeName, typeSpecs) {
   if (!wikibase.isItemId(itemId)) {
     throw new Error(`No item id: ${itemId}`)
   }
@@ -610,37 +355,40 @@ async function query (itemId, metaTypeName) {
   const result = {}
   result.wikidata = itemId
   for (const propName in typeSpec.props) {
-    const propSpec = typeSpec.props[propName]
-    let value
+    if (typeSpec.props[propName].wikidata) {
+      const propSpec = typeSpec.props[propName].wikidata
+      let value
 
-    // source
-    if (!propSpec.source) {
-      throw new Error(`Spec must have a source: ${JSON.stringify(propSpec)}`)
-    }
-    if (propSpec.source.fromClaim) {
-      value = getClaims(entity, propSpec.source.fromClaim)
-    } else if (propSpec.source.fromEntity) {
-      const func = functions.fromEntity[propSpec.source.fromEntity]
-      if (typeof func !== 'function') {
-        throw new Error(`Unkown from entity source “${propSpec.source.fromEntity}”`)
+      // source
+      if (!propSpec.fromClaim && !propSpec.fromEntity ) {
+        throw new Error(`Spec must have a source property (“fromClaim” or “fromEntity”): ${JSON.stringify(propSpec)}`)
       }
-      value = func(entity)
-    }
-
-    // second query
-    if (value && propSpec.secondQuery) value = await propSpec.secondQuery(value)
-
-    // format
-    if (value && propSpec.format) {
-      if (typeof propSpec.format === 'function') {
-        value = propSpec.format(value, typeSpec)
-      } else {
-        const func = functions.format[propSpec.format]
-        value = func(value, typeSpec)
+      if (propSpec.fromClaim) {
+        value = getClaims(entity, propSpec.fromClaim)
+      } else if (propSpec.fromEntity) {
+        const func = functions[propSpec.fromEntity]
+        if (typeof func !== 'function') {
+          throw new Error(`Unkown from entity source “${propSpec.fromEntity}”`)
+        }
+        value = func(entity)
       }
+
+      // second query
+      if (value && propSpec.secondQuery) value = await functions[propSpec.secondQuery](value)
+
+      // format
+      if (value && propSpec.format) {
+        if (typeof propSpec.format === 'function') {
+          value = propSpec.format(value, typeSpec)
+        } else {
+          const func = functions[propSpec.format]
+          value = func(value, typeSpec)
+        }
+      }
+
+      if (value) result[propName] = value
     }
 
-    if (value) result[propName] = value
   }
   if (typeSpec.normalize) typeSpec.normalize(result, entity)
   return result

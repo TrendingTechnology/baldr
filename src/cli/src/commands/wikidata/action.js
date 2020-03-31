@@ -16,7 +16,7 @@ const metaTypes = require('@bldr/media-server').metaTypes
  * @param {String} arg2
  */
 async function action (metaType, itemId, arg1, arg2, cmdObj) {
-  let data = await wikidata.query(itemId, metaType)
+  let data = await wikidata.query(itemId, metaType, metaTypes.typeSpecs)
   if (arg1) {
     if (metaType === 'person') {
       data.firstname = arg1

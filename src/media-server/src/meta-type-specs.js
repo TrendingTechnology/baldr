@@ -127,16 +127,57 @@ const group = {
       overwriteByDerived: true
     },
     name: {
-      required: true
+      required: true,
+      wikidata: {
+        // offizieller Name
+        fromClaim: 'P1448'
+      }
+    },
+    logo: {
+      wikidata: {
+        // Logo
+        fromClaim: 'P154',
+        format: 'formatWikicommons'
+      }
     },
     shortHistory: {
-
+      wikidata: {
+        fromEntity: 'getDescription'
+      }
     },
     startDate: {
+      wikidata: {
+        // Gründung, Erstellung bzw. Entstehung
+        fromClaim: 'P571',
+        format: 'date'
+      },
       validate: validateDate
     },
     endDate: {
+      wikidata: {
+        // Auflösungsdatum
+        fromClaim: 'P576',
+        format: 'date'
+      },
       validate: validateDate
+    },
+    members: {
+      wikidata: {
+        // besteht aus
+        fromClaim: 'P527',
+        secondQuery: 'queryLabels'
+      }
+    },
+    wikipedia: {
+      wikidata: {
+        fromEntity: 'getWikipediaTitle'
+      }
+    },
+    mainImage: {
+      wikidata: {
+        // Bild
+        fromClaim: 'P18'
+      }
     }
   }
 }
@@ -168,7 +209,32 @@ const instrument = {
       overwriteByDerived: true
     },
     name: {
+      wikidata: {
+        fromEntity: 'getLabel'
+      },
       required: true
+    },
+    description: {
+      wikidata: {
+        fromEntity: 'getDescription'
+      }
+    },
+    mainImage: {
+      wikidata: {
+        // Bild
+        fromClaim: 'P18'
+      }
+    },
+    playingRangeImage: {
+      wikidata: {
+        // Bild des Tonumfang
+        fromClaim: 'P2343'
+      }
+    },
+    wikipedia: {
+      wikidata: {
+        fromEntity: 'getWikipediaTitle'
+      }
     }
   }
 }
@@ -181,6 +247,23 @@ const person = {
   },
   detectType: {
     byPath: new RegExp('^' + path.join(config.mediaServer.basePath, 'Personen') + '/.*')
+  },
+  normalizeWikidata: function ({ props, entity, functions }) {
+    const label = functions.getLabel(entity)
+    const segments = label.split(' ')
+    const firstnameFromLabel = segments.shift()
+    const lastnameFromLabel = segments.pop()
+    // Use the label by artist names.
+    // for example „Joan Baez“ and not „Joan Chandos“
+    if (
+      firstnameFromLabel && lastnameFromLabel &&
+      (props.firstname !== firstnameFromLabel || props.lastname !== lastnameFromLabel)
+    ) {
+      props.firstname = firstnameFromLabel
+      props.lastname = lastnameFromLabel
+      props.name = label
+    }
+    return props
   },
   props: {
     id: {
@@ -196,10 +279,32 @@ const person = {
       overwriteByDerived: true
     },
     firstname: {
-      required: true
+      required: true,
+      wikidata: {
+        // Vornamen der Person
+        fromClaim: 'P735',
+        secondQuery: 'queryLabels',
+        format: function (value) {
+          if (Array.isArray(value)) {
+            return value.join(' ')
+          }
+          return value
+        }
+      }
     },
     lastname: {
-      required: true
+      required: true,
+      wikidata: {
+        // Familienname einer Person
+        fromClaim: 'P734',
+        secondQuery: 'queryLabels',
+        format: function (value) {
+          if (Array.isArray(value)) {
+            return value.join(' ')
+          }
+          return value
+        }
+      }
     },
     name: {
       derive: function (typeData, typeSpec) {
@@ -208,13 +313,87 @@ const person = {
       overwriteByDerived: false
     },
     birth: {
-      validate: validateDate
+      validate: validateDate,
+      wikidata: {
+        // Geburtsdatum
+        fromClaim: 'P569',
+        format: 'formatDate',
+        alwaysUpdate: true
+      }
     },
     death: {
-      validate: validateDate
+      validate: validateDate,
+      wikidata: {
+        // Sterbedatum
+        fromClaim: 'P570',
+        format: 'formatDate',
+        alwaysUpdate: true
+      }
     },
     shortBiography: {
-      required: true
+      required: true,
+      wikidata: {
+        fromEntity: 'getDescription'
+      }
+    },
+    wikipedia: {
+      wikidata: {
+        fromEntity: 'getWikipediaTitle',
+        alwaysUpdate: true
+      }
+    },
+    mainImage: {
+      wikidata: {
+        // Bild
+        fromClaim: 'P18',
+        format: 'formatWikicommons'
+      }
+    }
+  }
+}
+
+const song = {
+  props: {
+
+    publicationDate: {
+      wikidata: {
+        // Veröffentlichungsdatum
+        fromClaim: 'P577'
+      },
+      format: 'date'
+    },
+    language: {
+      wikidata: {
+        // Sprache des Werks, Namens oder Begriffes
+        fromClaim: 'P407',
+        secondQuery: 'queryLabels'
+      }
+    },
+    artist: {
+      wikidata: {
+        // Interpret
+        fromClaim: 'P175',
+        secondQuery: 'queryLabels'
+      }
+    },
+    lyricist: {
+      wikidata: {
+        // Text von
+        fromClaim: 'P676',
+        secondQuery: 'queryLabels'
+      }
+    },
+    genre: {
+      wikidata: {
+        // Genre
+        fromClaim: 'P136',
+        secondQuery: 'queryLabels'
+      }
+    },
+    wikipedia: {
+      source: {
+        fromEntity: 'getWikipediaTitle'
+      }
     }
   }
 }
@@ -224,5 +403,6 @@ module.exports = {
   musicalWork,
   group,
   instrument,
-  person
+  person,
+  song
 }
