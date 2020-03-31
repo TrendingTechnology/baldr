@@ -10,6 +10,7 @@ const chalk = require('chalk')
 const mediaServer = require('@bldr/media-server')
 const coreBrowser = require('@bldr/core-browser')
 const lib = require('../../lib.js')
+const commandConvert = require('../convert/action.js')
 
 const locationIndicator = mediaServer.locationIndicator
 
@@ -143,11 +144,7 @@ function moveTex (oldPath, newPath, cmdObj) {
   }
 
   // /var/data/baldr/media/10/10_Jazz/30_Stile/50_Modern-Jazz/TX/Arbeitsblatt.tex
-  newPath = path.join(
-    path.dirname(newPath),
-    'TX',
-    path.basename(newPath)
-  )
+  newPath = locationIndicator.moveIntoSubdir(newPath, 'TX')
   lib.moveAsset(oldPath, newPath, cmdObj)
   // Maybe --dry-run is specified
   if (fs.existsSync(newPath)) {
@@ -159,9 +156,9 @@ function moveTex (oldPath, newPath, cmdObj) {
   }
 }
 
-function moveMp3 (oldPath, newPath, cmdObj) {
+function getMbrainzRecordingId (filePath) {
   const process = childProcess.spawnSync(
-    '/usr/local/bin/musicbrainz-acoustid.py', [oldPath], { encoding: 'utf-8' }
+    '/usr/local/bin/musicbrainz-acoustid.py', [filePath], { encoding: 'utf-8' }
   )
 
   if (process.stdout) {
@@ -170,8 +167,36 @@ function moveMp3 (oldPath, newPath, cmdObj) {
     // 065bda42-e077-4cf0-b458-4c0e455f09fe\n
     const musicbrainzRecordingId = process.stdout.replace(/\n.*$/s, '')
     console.log(chalk.red(musicbrainzRecordingId))
+    return musicbrainzRecordingId
   }
+}
 
+async function moveMp3 (oldPath, newPath, cmdObj) {
+  newPath = locationIndicator.moveIntoSubdir(newPath, 'HB')
+  newPath = mediaServer.asciify(newPath)
+  let fileName = path.basename(newPath)
+  fileName = mediaServer.asciify(fileName)
+  // a-Fletcher-Henderson_Aint-she-sweet.mp3
+  fileName = fileName.replace(/^a-/, '')
+
+  let tmpMp3Path = path.join(path.dirname(newPath), fileName)
+  lib.moveAsset(oldPath, tmpMp3Path, { copy: true })
+
+  // /var/data/baldr/media/10/10_Kontext/40_Jazz/10_Entstehung/HB/Nbu-Klagelied.m4a
+  newPath = tmpMp3Path.replace(/\.mp3$/gi, '.m4a')
+
+  await commandConvert.convert(tmpMp3Path)
+
+  const metaData = lib.readAssetYaml(newPath)
+  metaData.source = oldPath
+
+  let musicbrainzRecordingId = getMbrainzRecordingId(tmpMp3Path)
+  if (musicbrainzRecordingId) metaData.musicbrainzRecordingId = musicbrainzRecordingId
+
+  console.log(metaData)
+
+  lib.writeYamlFile(`${newPath}.yml`, metaData)
+  fs.unlinkSync(tmpMp3Path)
 }
 
 function moveFromArchive (oldPath, extension, cmdObj) {

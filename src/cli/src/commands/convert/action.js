@@ -1,5 +1,6 @@
 // Node packages.
 const childProcess = require('child_process')
+const path = require('path')
 
 // Third party packages.
 const chalk = require('chalk')
@@ -113,10 +114,10 @@ async function collectMusicMetaData (inputFile) {
 /**
  * Convert one input file.
  *
- * @param {String} inputFile - Path of the input file.
+ * @param {String} inputFile - The path of the input file.
  * @param {Object} cmdObj - The command object from the commander.
  */
-async function convertOneFile (inputFile, cmdObj) {
+async function convert (inputFile, cmdObj) {
   const asset = lib.makeAsset(inputFile)
 
   const inputExtension = asset.extension.toLowerCase()
@@ -128,7 +129,8 @@ async function convertOneFile (inputFile, cmdObj) {
     return
   }
   const outputExtension = mediaServer.assetTypes.typeToTargetExtension(assetType)
-  let outputFile = `${mediaServer.asciify(asset.basename_)}.${outputExtension}`
+  let outputFileName = `${mediaServer.asciify(asset.basename_)}.${outputExtension}`
+  let outputFile = path.join(path.dirname(inputFile), outputFileName)
   if (converted.has(outputFile)) return
 
   let process
@@ -209,11 +211,14 @@ async function convertOneFile (inputFile, cmdObj) {
  */
 function action (files, cmdObj) {
   mediaServer.walk({
-    all: convertOneFile
+    all: convert
   }, {
     path: files,
     payload: cmdObj
   })
 }
 
-module.exports = action
+module.exports = {
+  action,
+  convert
+}

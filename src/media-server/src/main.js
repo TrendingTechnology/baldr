@@ -1195,7 +1195,7 @@ class LocationIndicator {
       ...config.mediaServer.archivePaths
     ]
     /**
-     *
+     * @private
      */
     this.paths_ = []
     for (let i = 0; i < basePaths.length; i++) {
@@ -1261,6 +1261,24 @@ class LocationIndicator {
     } while (match)
 
     return currentPath
+  }
+
+  /**
+   * Move a file path into a directory relative to the current
+   * presentation directory.
+   *
+   * `/baldr/media/10/10_Jazz/30_Stile/20_Swing/NB/Duke-Ellington.jpg` `BD` ->
+   * `/baldr/media/10/10_Jazz/30_Stile/20_Swing/BD/Duke-Ellington.jpg`
+   *
+   * @param {String} currentPath - The current path.
+   * @param {String} subDir - A relative path.
+   *
+   * @returns {String}
+   */
+  moveIntoSubdir (currentPath, subDir) {
+    const fileName = path.basename(currentPath)
+    const presPath = this.getPresParentDir(currentPath)
+    return path.join(presPath, subDir, fileName)
   }
 
   /**
