@@ -255,12 +255,12 @@ const functions = {
     itemIds = unpackArray(itemIds)
     const entities = await getEntities(itemIds, ['labels'])
     if (entities.id) {
-      return getLabel(entities, false)
+      return functions.getLabel(entities, false)
     }
     const result = []
     for (const itemId in entities) {
       const entity = entities[itemId]
-      result.push(getLabel(entity, false))
+      result.push(functions.getLabel(entity, false))
     }
     return result
   },
@@ -303,6 +303,7 @@ const functions = {
  *
  * @param {Object} dataOrig
  * @param {Object} dataWiki
+ * @param {module:@bldr/media-server/meta-types~typeSpecs}
  *
  * @returns {Object}
  */
@@ -338,7 +339,7 @@ function mergeData (data, dataWiki, typeSpecs) {
  *
  * @param {String} itemId
  * @param {String} metaTypeName
- *
+ * @param {module:@bldr/media-server/meta-types~typeSpecs}
  * @returns {Object}
  */
 async function query (itemId, metaTypeName, typeSpecs) {

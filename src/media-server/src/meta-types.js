@@ -141,16 +141,14 @@ function mergeTypeSpecs (typeSpecs) {
     return result
   }
 
-  const result = {}
   for (const typeName in typeSpecs) {
-    if (!result[typeName]) result[typeName] = {}
     // Exclude “global_”
     if (!typeName.match(/^.+_$/)) {
-      if (!result[typeName].props) result[typeName].props = {}
-      result[typeName].props = mergeTypeProps(typeName, typeSpecs)
+      typeSpecs[typeName].props = mergeTypeProps(typeName, typeSpecs)
     }
   }
-  return result
+  delete typeSpecs.global_
+  return typeSpecs
 }
 
 /**
@@ -301,7 +299,7 @@ function sortAndDerive (data) {
 
   // Loop over the propSpecs to get a sorted object
   if (metaType) {
-    const propSpecs = typeProps[metaType]
+    const propSpecs = typeSpecs[metaType].props
     for (const propName in propSpecs) {
       const propSpec = propSpecs[propName]
       const origValue = origData[propName]
