@@ -31,7 +31,7 @@ const wikibase = require('wikibase-sdk')({
  * @typedef {Object} typeSpec
  * @property {Function} normalizeWikidata - This functions is called after
  *   properties are present. The function is called with
- *   `function ({ result, entity, functions })`
+ *   `function ({ typeData, entity, functions })`
  */
 
 /**
@@ -148,13 +148,18 @@ async function fetchCommonsFile (fileName, dest) {
 }
 
 function getClaims (entity, claim) {
-  let result
+  let typeData
   if (entity.claims[claim]) {
-    result = entity.claims[claim]
+    typeData = entity.claims[claim]
   }
-  return unpackArray(result)
+  return unpackArray(typeData)
 }
 
+/**
+ * A collection of functions
+ *
+ * @type {Object}
+ */
 const functions = {
 
 /*******************************************************************************
@@ -302,6 +307,8 @@ const functions = {
  * object obtained from wikidata. Override a property in original only if
  * `alwaysUpdate` is set on the property specification.
  *
+ * @public
+ *
  * @param {Object} dataOrig
  * @param {Object} dataWiki
  * @param {module:@bldr/media-server/meta-types~typeSpecs}
@@ -318,29 +325,31 @@ function mergeData (data, dataWiki, typeSpecs) {
 
   const propSpecs = typeSpecs[typeName]
 
-  const result = {}
+  const typeData = {}
 
   for (const propName in dataWiki) {
     const propSpec = propSpecs[propName].wikidata
     if (propSpec && ((dataOrig[propName] && propSpec.alwaysUpdate) || !dataOrig[propName])) {
-      result[propName] = dataWiki[propName]
+      typeData[propName] = dataWiki[propName]
       delete dataOrig[propName]
     } else {
-      result[propName] = dataWiki[propName]
+      typeData[propName] = dataWiki[propName]
     }
   }
 
   for (const propName in dataOrig) {
-    result[propName] = dataOrig[propName]
+    typeData[propName] = dataOrig[propName]
   }
-  return result
+  return typeData
 }
 
 /**
  * Query wikidata.
  *
+ * @public
+ *
  * @param {String} itemId - for example `Q123`
- * @param {module:@bldr/media-server/meta-types~typeSpecs} typeName
+ * @param {module:@bldr/media-server/meta-types~typeName} typeName
  * @param {module:@bldr/media-server/meta-types~typeSpecs} typeSpecs
  *
  * @returns {Object}
@@ -356,8 +365,8 @@ async function query (itemId, typeName, typeSpecs) {
 
   const typeSpec = typeSpecs[typeName]
 
-  const result = {}
-  result.wikidata = itemId
+  const typeData = {}
+  typeData.wikidata = itemId
   for (const propName in typeSpec.props) {
     if (typeSpec.props[propName].wikidata) {
       const propSpec = typeSpec.props[propName].wikidata
@@ -390,14 +399,14 @@ async function query (itemId, typeName, typeSpecs) {
         }
       }
 
-      if (value) result[propName] = value
+      if (value) typeData[propName] = value
     }
 
   }
   if (typeSpec.normalizeWikidata) {
-    typeSpec.normalizeWikidata({ result, entity, functions })
+    typeSpec.normalizeWikidata({ typeData, entity, functions })
   }
-  return result
+  return typeData
 }
 
 module.exports = {
