@@ -4,7 +4,7 @@
 
 Part of the [baldr project](https://github.com/Josef-Friedrich/baldr).
 
-# @bldr/vue-app-presentation
+# @bldr/lamp
 
 The main app of the BALDR project: a presentation app using YAML files.
 

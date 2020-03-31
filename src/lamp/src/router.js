@@ -1,7 +1,7 @@
 /**
  * Setup vue router
  *
- * @module @bldr/vue-app-presentation/router
+ * @module @bldr/lamp/router
  */
 import Vue from 'vue'
 import Router from 'vue-router'

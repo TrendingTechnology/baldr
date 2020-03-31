@@ -1,7 +1,7 @@
 /**
  * Gather informations about all masters.
  *
- * @module @bldr/vue-app-presentation/masters
+ * @module @bldr/lamp/masters
  */
 
 /* globals rawYamlExamples */
@@ -88,14 +88,14 @@ class Master {
     /**
      * A instance of `MasterIcon` which holds information about the master icon.
      *
-     * @type {module:@bldr/vue-app-presentation/masters~MasterIcon}
+     * @type {module:@bldr/lamp/masters~MasterIcon}
      */
     this.icon = null
 
     /**
      * A style configuration object.
      *
-     * @type {module:@bldr/vue-app-presentation~styleConfig}
+     * @type {module:@bldr/lamp~styleConfig}
      */
     this.styleConfig = null
 
@@ -118,7 +118,7 @@ class Master {
      * The definition of the slide properties (`props`) (aka `props` of a
      * `master`).
      *
-     * @type {@bldr/vue-app-presentation~propsDef}
+     * @type {@bldr/lamp~propsDef}
      */
     this.propsDef = null
 
@@ -255,7 +255,7 @@ class Master {
   /**
    * result must fit to props
    *
-   * @param {module:@bldr/vue-app-presentation~props} props
+   * @param {module:@bldr/lamp~props} props
    *
    * @returns {object}
    */
@@ -267,7 +267,7 @@ class Master {
    * Calculate from the given props the step count. This hook method is called
    * after media resolution.
    *
-   * @param {module:@bldr/vue-app-presentation~props} props
+   * @param {module:@bldr/lamp~props} props
    *
    * @param {Object} payload
    * @property {Object} payload.props - The props of the master slide.
@@ -302,7 +302,7 @@ class Master {
   /**
    * Filter the master props for props which are supporting inline media.
    *
-   * @param {module:@bldr/vue-app-presentation~props}
+   * @param {module:@bldr/lamp~props}
    *
    * @returns {Set}
    */
@@ -340,7 +340,7 @@ class Master {
    * Replace the inline media tags `[id:Beethoven]` in certain props with
    * HTML. This function must be called after the media resolution.
    *
-   * @param {module:@bldr/vue-app-presentation~props}
+   * @param {module:@bldr/lamp~props}
    */
   renderInlineMedia (props) {
     /**
@@ -375,7 +375,7 @@ class Master {
    * (like [id:beethoven, filename:mozart.mp3]). Extract media URIs from
    * the text props.
    *
-   * @param {module:@bldr/vue-app-presentation~props} props
+   * @param {module:@bldr/lamp~props} props
    *
    * @returns {Set}
    */
@@ -397,7 +397,7 @@ class Master {
   }
 
   /**
-   * @param {module:@bldr/vue-app-presentation~props} props
+   * @param {module:@bldr/lamp~props} props
    *
    * @returns {String}
    */
@@ -410,10 +410,10 @@ class Master {
    *
    * @param {object} payload
    * @property {object} payload
-   * @property {module:@bldr/vue-app-presentation/content-file~Slide} payload.oldSlide
-   * @property {module:@bldr/vue-app-presentation~props} payload.oldProps
-   * @property {module:@bldr/vue-app-presentation/content-file~Slide} payload.newSlide
-   * @property {module:@bldr/vue-app-presentation~props} payload.newProps
+   * @property {module:@bldr/lamp/content-file~Slide} payload.oldSlide
+   * @property {module:@bldr/lamp~props} payload.oldProps
+   * @property {module:@bldr/lamp/content-file~Slide} payload.newSlide
+   * @property {module:@bldr/lamp~props} payload.newProps
    *
    * @param {object} thisArg - The
    *   {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/call thisArg}
@@ -429,10 +429,10 @@ class Master {
    *
    * @param {object} payload
    * @property {object} payload
-   * @property {module:@bldr/vue-app-presentation/content-file~Slide} payload.oldSlide
-   * @property {module:@bldr/vue-app-presentation~props} payload.oldProps
-   * @property {module:@bldr/vue-app-presentation/content-file~Slide} payload.newSlide
-   * @property {module:@bldr/vue-app-presentation~props} payload.newProps
+   * @property {module:@bldr/lamp/content-file~Slide} payload.oldSlide
+   * @property {module:@bldr/lamp~props} payload.oldProps
+   * @property {module:@bldr/lamp/content-file~Slide} payload.newSlide
+   * @property {module:@bldr/lamp~props} payload.newProps
    *
    * @param {object} thisArg - The
    *   {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/call thisArg}
@@ -448,10 +448,10 @@ class Master {
    *
    * @param {object} payload
    * @property {object} payload
-   * @property {module:@bldr/vue-app-presentation/content-file~Slide} payload.oldSlide
-   * @property {module:@bldr/vue-app-presentation~props} payload.oldProps
-   * @property {module:@bldr/vue-app-presentation/content-file~Slide} payload.newSlide
-   * @property {module:@bldr/vue-app-presentation~props} payload.newProps
+   * @property {module:@bldr/lamp/content-file~Slide} payload.oldSlide
+   * @property {module:@bldr/lamp~props} payload.oldProps
+   * @property {module:@bldr/lamp/content-file~Slide} payload.newSlide
+   * @property {module:@bldr/lamp~props} payload.newProps
    *
    * @param {object} thisArg - The
    *   {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/call thisArg}
@@ -496,7 +496,7 @@ class Master {
   /**
    * Convert in the props certain strings containing markup to HTML.
    *
-   * @param {module:@bldr/vue-app-presentation~props} props
+   * @param {module:@bldr/lamp~props} props
    *
    * @returns {object}
    */
@@ -515,7 +515,7 @@ class Master {
    * Raise an error if there is an unkown prop - a not in the `props` section
    * defined prop.
    *
-   * @param {module:@bldr/vue-app-presentation~props} props
+   * @param {module:@bldr/lamp~props} props
    */
   detectUnkownProps (props) {
     for (const propName in props) {
@@ -528,7 +528,7 @@ class Master {
   /**
    * Validate all media file URIs in the props of a certain slide.
    *
-   * @param {module:@bldr/vue-app-presentation~props} props
+   * @param {module:@bldr/lamp~props} props
    */
   validateUris (props) {
     if (!this.propsDef) return props
@@ -603,7 +603,7 @@ class Masters {
   /**
    * Add a master to the masters container.
    *
-   * @param {module:@bldr/vue-app-presentation/masters~Master} master
+   * @param {module:@bldr/lamp/masters~Master} master
    */
   add (master) {
     this.masters_[master.name] = master
@@ -614,7 +614,7 @@ class Masters {
    *
    * @param {string} name - The name of the master slide.
    *
-   * @returns {module:@bldr/vue-app-presentation/masters~Master}
+   * @returns {module:@bldr/lamp/masters~Master}
    */
   get (name) {
     if (!(name in this.masters_)) {
@@ -697,7 +697,7 @@ const masterMixin = {
  * @see {@link https://github.com/chrisvfritz/vue-enterprise-boilerplate/blob/master/src/components/_globals.js}
  * @see {@link https://webpack.js.org/guides/dependency-management/#require-context}
  *
- * @returns {module:@bldr/vue-app-presentation/masters~Masters}
+ * @returns {module:@bldr/lamp/masters~Masters}
  */
 function registerMasters () {
   function findMasterName (fileName) {
@@ -764,7 +764,7 @@ function registerMasters () {
 /**
  * An instance of the class `Masters()`
  *
- * @type {module:@bldr/vue-app-presentation/masters~Master}
+ * @type {module:@bldr/lamp/masters~Master}
  */
 export const masters = registerMasters()
 

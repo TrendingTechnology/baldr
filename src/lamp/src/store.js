@@ -1,7 +1,7 @@
 /**
  * vuex store
  *
- * @module @bldr/vue-app-presentation/store
+ * @module @bldr/lamp/store
  */
 import Vue from 'vue'
 import Vuex from 'vuex'

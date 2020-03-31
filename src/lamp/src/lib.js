@@ -1,7 +1,7 @@
 /**
  * Code which can shared in all parts of the app.
  *
- * @module @bldr/vue-app-presentation/lib
+ * @module @bldr/lamp/lib
  */
 
 /* globals DOMParser */

@@ -282,7 +282,7 @@
  * }
  * ```
  *
- * @module @bldr/vue-app-presentation
+ * @module @bldr/lamp
  */
 
 import Vue from 'vue'
@@ -347,10 +347,10 @@ Vue.config.productionTip = false
  *  }
  * ```
  *
- * @see {@link @bldr/vue-app-presentation~propDef}
+ * @see {@link @bldr/lamp~propDef}
  *
  * @typedef propsDef
- * @type {{Object.<propName, module:@bldr/vue-app-presentation~propDef>}}
+ * @type {{Object.<propName, module:@bldr/lamp~propDef>}}
  */
 
 /** props (with real world value) *********************************************/
@@ -409,7 +409,7 @@ Vue.config.productionTip = false
  * ```
  *
  * @typedef props
- * @type {{Object.<propName, module:@bldr/vue-app-presentation~prop>}}
+ * @type {{Object.<propName, module:@bldr/lamp~prop>}}
  */
 
 /******************************************************************************/
@@ -568,7 +568,7 @@ class StyleConfig {
   }
 
   /**
-   * @param {module:@bldr/vue-app-presentation~styleConfig} styleConfig
+   * @param {module:@bldr/lamp~styleConfig} styleConfig
    */
   set (styleConfig) {
     if (!styleConfig) styleConfig = {}
@@ -578,7 +578,7 @@ class StyleConfig {
 
 /**
  * $styleConfig
- * @type {module:@bldr/vue-app-presentation~StyleConfig}
+ * @type {module:@bldr/lamp~StyleConfig}
  */
 Vue.prototype.$styleConfig = new StyleConfig()
 

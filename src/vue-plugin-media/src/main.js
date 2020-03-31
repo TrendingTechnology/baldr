@@ -2333,7 +2333,7 @@ const Plugin = {
     Vue.filter('duration', formatDuration)
     /**
      * $media
-     * @memberof module:@bldr/vue-app-presentation~Vue
+     * @memberof module:@bldr/lamp~Vue
      * @type {module:@bldr/vue-plugin-media~Media}
      */
     Vue.prototype.$media = new Media()

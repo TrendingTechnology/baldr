@@ -1,7 +1,7 @@
 /**
  * Parse, process and validate the presentation content file (YAML).
  *
- * @module @bldr/vue-app-presentation/content-file
+ * @module @bldr/lamp/content-file
  */
 
 /* globals defaultThemeSassVars FileReader */
@@ -354,17 +354,17 @@ class Slide {
     /**
      * Normalized slide data to render the slide.
      *
-     * @type {module:@bldr/vue-app-presentation/content-file~RenderData}
+     * @type {module:@bldr/lamp/content-file~RenderData}
      */
     this.renderData = new RenderData(rawSlideObject)
 
     /**
-     * @type {module:@bldr/vue-app-presentation/masters~Master}
+     * @type {module:@bldr/lamp/masters~Master}
      */
     this.master = masters.get(this.renderData.masterName)
 
     /**
-     * @type {module:@bldr/vue-app-presentation/content-file.MetaData}
+     * @type {module:@bldr/lamp/content-file.MetaData}
      */
     this.metaData = new MetaData(rawSlideObject)
 
@@ -408,7 +408,7 @@ class Slide {
     this.level = 1
 
     /**
-     * @type {module:@bldr/vue-app-presentation/content-file~AudioOverlay}
+     * @type {module:@bldr/lamp/content-file~AudioOverlay}
      */
     this.audioOverlay = null
 
@@ -581,7 +581,7 @@ export class Presentation {
   constructor () {
 
     /**
-     * @type {module:@bldr/vue-app-presentation/content-file~SlideNavigator}
+     * @type {module:@bldr/lamp/content-file~SlideNavigator}
      */
     this.navigator = new SlideNavigator()
   }

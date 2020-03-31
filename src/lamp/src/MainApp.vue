@@ -31,7 +31,7 @@
     </main>
 
     <app-info
-      package-name="@bldr/vue-app-presentation"
+      package-name="@bldr/lamp"
       :version="version"
     />
 

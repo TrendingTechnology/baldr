@@ -251,7 +251,7 @@ const Plugin = {
     if (store) store.registerModule('shortcuts', storeModule)
     /**
      * $shortcuts
-     * @memberof module:@bldr/vue-app-presentation~Vue
+     * @memberof module:@bldr/lamp~Vue
      * @type {module:@bldr/vue-plugin-shortcuts~Shortcuts}
      */
     Vue.prototype.$shortcuts = new Shortcuts(router, store)

@@ -28,7 +28,7 @@ import vue from '@/main.js'
  *
  * `<span b-inline-type="slide-link" b-inline-slideid="one" class="link">Slide 1</span>`
  *
- * @module @bldr/vue-app-presentation/inline-markup
+ * @module @bldr/lamp/inline-markup
  */
 
 const mediaUriRegExp = '(([a-z]+):([a-zA-Z0-9-_]+))'
@@ -80,7 +80,7 @@ export class Item {
 /**
  * Convert the inline markup into HTML.
  *
- * @param {@bldr/vue-app-presentation/inline-markup~Item} item
+ * @param {@bldr/lamp/inline-markup~Item} item
  */
 export function render (item) {
   if (item.slide) {
