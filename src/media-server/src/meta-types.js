@@ -23,17 +23,28 @@ const typeSpecs = require('./meta-type-specs.js')
  * The specification of a property.
  *
  * @typedef {Object} propSpec
+ *
  * @property {Boolean} required - True if the property is required.
+ *
  * @property {Function} derive - A function to derive this property from
  *   other values. The function is called with `function (typeData, typeSpec)`.
  *   Or `this.otherProp` in the function to access different
  *   values.
+ *
  * @property {Boolean} overwriteByDerived - Overwrite the original value by the
  *   the value obtained from the `derive` function.
+ *
  * @property {Function} format - Format the value of the property using this
  *   function. The function has this arguments:
  *   `function (value, { typeData, typeSpec })`
+ *
+ * @property {RegExp} removeByRegexp - If the value matches the specified
+ *   regular expression, remove the property.
+ *
  * @property {Function} validate - Validate the property using this function.
+ *
+ * @property {module:@bldr/wikidata~propSpec} wikidata - See package
+ *   `@bldr/wikidata`.
  */
 
 /**
@@ -55,17 +66,23 @@ const typeSpecs = require('./meta-type-specs.js')
  * The specification of one metadata type.
  *
  * @typedef {Object} typeSpec
+ *
  * @property {String} abbreviation - A two letter abbreviation. Used in
  *   the IDs.
+ *
  * @property {String} basePath - The base path where all meta typs stored in.
+ *
  * @property {Function} relPath - A function which must return the
  *   relative path (relative to `basePath`). The function is called with
  *   `function (typeData, typeSpec)`.
+ *
  * @property {RegExp} detectTypebyPath - A regular expression that is
  *   matched against file paths or a function which is called with `typeSpec`
  *   that returns a regexp.
+ *
  * @property {Function} finalize - A function which is called after all
- *   processing steps: arguments: `data`, `typeSpec`
+ *   processing steps: arguments: `typeData`, `typeSpec`
+ *
  * @property {module:@bldr/media-server/meta-types~propSpecs} props
  */
 
@@ -306,6 +323,8 @@ function validateProps (data, typeSpec) {
 }
 
 /**
+ * Delete properties from the data.
+ *
  * @param {Object} data - An object containing some meta data.
  * @param {module:@bldr/media-server/meta-types~typeSpec} - The specification
  *   of one meta type.
@@ -313,8 +332,12 @@ function validateProps (data, typeSpec) {
 function removeProps (data, typeSpec) {
   for (const propName in typeSpec.props) {
     if (data[propName]) {
+      const value = data[propName]
       const propSpec = typeSpec.props[propName]
-      if (propSpec.state && propSpec.state === 'absent') {
+      if (
+        (propSpec.state && propSpec.state === 'absent') ||
+        (propSpec.removeByRegexp && propSpec.removeByRegexp instanceof RegExp && value.match(propSpec.removeByRegexp))
+      ) {
         delete data[propName]
       }
     }
@@ -339,8 +362,10 @@ function processByType (data, typeName) {
     throw new Error(`The meta type “${typeName}” has no props.`)
   }
   data = sortAndDeriveProps(data, typeSpec)
-  data = removeProps(data, typeSpec)
   data = formatProps(data, typeSpec)
+  // We need filePath in format. Must be after formatProps
+  data = removeProps(data, typeSpec)
+
   validateProps(data, typeSpec)
 
   if (typeSpec.finalize && typeof typeSpec.finalize === 'function') {

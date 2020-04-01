@@ -129,7 +129,7 @@ async function convert (inputFile, cmdObj) {
     return
   }
   const outputExtension = mediaServer.assetTypes.typeToTargetExtension(assetType)
-  let outputFileName = `${mediaServer.asciify(asset.basename_)}.${outputExtension}`
+  let outputFileName = `${mediaServer.helper.idify(asset.basename_)}.${outputExtension}`
   let outputFile = path.join(path.dirname(inputFile), outputFileName)
   if (converted.has(outputFile)) return
 
@@ -193,12 +193,12 @@ async function convert (inputFile, cmdObj) {
           lib.writeMetaDataYaml(outputFile, metaData)
         }
       }
-      console.log(`${chalk.green('ok')}: ${chalk.yellow(inputFile)} -> ${chalk.green(outputFile)}`)
+      console.log(`${chalk.green('convert ok')}: ${chalk.yellow(inputFile)} -> ${chalk.green(outputFile)}`)
       converted.add(outputFile)
     } else {
-      console.log(process.stdout)
-      console.log(process.stderr)
-      throw new Error(`error: ${inputFile} -> ${outputFile}`)
+      console.log(process.stdout.toString('utf-8'))
+      console.log(process.stderr.toString('utf-8'))
+      throw new Error(`ConvertError: ${inputFile} -> ${outputFile}`)
     }
   }
 }

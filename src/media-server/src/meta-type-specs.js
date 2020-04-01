@@ -2,7 +2,7 @@
 const path = require('path')
 
 // Project packages.
-const { asciify, deasciify } = require('./helper.js')
+const { deasciify, idify } = require('./helper.js')
 const { bootstrapConfig } = require('@bldr/core-node')
 const { validateDate, validateUuid } = require('./meta-types.js')
 
@@ -44,11 +44,7 @@ const general = {
         return value.match(/^[a-zA-Z0-9-_]+$/)
       },
       format: function (value, { typeData, typeSpec }) {
-        value = asciify(value)
-
-        // Remove dots. This can not be done in asciify, because asciify is
-        // used in some rename operations.
-        value = value.replace(/\./g, '')
+        value = idify(value)
 
         // a-Strawinsky-Petruschka-Abschnitt-0_22
         value = value.replace(/^[va]-/, '')
@@ -73,7 +69,7 @@ const general = {
         }
 
         // HB_Ausstellung_Gnome -> Ausstellung_HB_Gnome
-        //value = value.replace(/^([A-Z]{2,})_([a-zA-Z0-9-]+)_/, '$2_$1_')
+        value = value.replace(/^([A-Z]{2,})_([a-zA-Z0-9-]+)_/, '$2_$1_')
         return value
       },
       required: true
@@ -116,35 +112,42 @@ const general = {
     extension: {
       state: 'absent'
     }
+  },
+  finalize: function (typeData, typeSpec) {
+    for (const propName in typeData) {
+      const value = typeData[propName]
+      if (typeof value === 'string') {
+        typeData[propName] = value.trim()
+      }
+    }
+    return typeData
   }
 }
 
-const musicalWork = {
+const recording = {
   detectTypeByPath: new RegExp('^.*/HB/.*$'),
   props: {
-    title: {
-      format: function (value) {
-        // 'Tonart CD 4: Spur 29'
-        if (!value.match(/.+CD.+Spur/)) {
-          return value
-        }
-      }
-    },
-    composer: {
-      format: function (value) {
-        // Helbling-Verlag
-        if (value.indexOf('Verlag') === -1) {
-          return value
-        }
-      }
-    },
     artist: {
 
     },
-    musicbrainzWorkId: {
-      validate: validateUuid
-    },
     musicbrainzRecordingId: {
+      validate: validateUuid
+    }
+  }
+}
+
+const composition = {
+  detectTypeByPath: new RegExp('^.*/HB/.*$'),
+  props: {
+    title: {
+      // 'Tonart CD 4: Spur 29'
+      removeByRegexp: /^.*CD.*Spur.*$/i
+    },
+    composer: {
+      // Helbling-Verlag
+      removeByRegexp: /^.*Verlag.*$/i
+    },
+    musicbrainzWorkId: {
       validate: validateUuid
     }
   }
@@ -166,7 +169,7 @@ const group = {
       },
       format: function (value, { typeData, typeSpec }) {
         value = value.replace(/^(The)[ -](.*)$/, '$2_$1')
-        value = asciify(value)
+        value = idify(value)
         return value
       },
       overwriteByDerived: false
@@ -250,7 +253,6 @@ const instrument = {
         return `${typeSpec.abbreviation}_${typeData.name}`
       },
       format: function (value, { typeData, typeSpec }) {
-        value = asciify(value)
         value = value.replace(/_BD$/, '')
         return value
       },
@@ -453,7 +455,8 @@ const song = {
 
 module.exports = {
   general,
-  musicalWork,
+  //recording,
+  composition,
   group,
   instrument,
   person,

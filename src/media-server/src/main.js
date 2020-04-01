@@ -76,7 +76,8 @@ const { AssetTypes, convertPropertiesCase } = require('@bldr/core-browser')
 
 // Submodules.
 const metaTypes = require('./meta-types.js')
-const { asciify, deasciify } = require('./helper.js')
+const helper = require('./helper.js')
+const { asciify, deasciify } = helper
 
 const packageJson = require('../package.json')
 
@@ -1784,6 +1785,7 @@ module.exports = {
   deasciify,
   FolderTitleTree,
   getExtension,
+  helper,
   helpMessages,
   HierarchicalFolderTitles,
   locationIndicator,

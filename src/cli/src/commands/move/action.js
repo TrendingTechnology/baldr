@@ -172,30 +172,37 @@ function getMbrainzRecordingId (filePath) {
 }
 
 async function moveMp3 (oldPath, newPath, cmdObj) {
+  // Format dest file path.
   newPath = locationIndicator.moveIntoSubdir(newPath, 'HB')
   newPath = mediaServer.asciify(newPath)
   let fileName = path.basename(newPath)
   fileName = mediaServer.asciify(fileName)
   // a-Fletcher-Henderson_Aint-she-sweet.mp3
   fileName = fileName.replace(/^a-/, '')
-
   let tmpMp3Path = path.join(path.dirname(newPath), fileName)
+
+  // Move mp3 into media.
   lib.moveAsset(oldPath, tmpMp3Path, { copy: true })
+
+  // Convert into m4a.
+  await commandConvert.convert(tmpMp3Path)
 
   // /var/data/baldr/media/10/10_Kontext/40_Jazz/10_Entstehung/HB/Nbu-Klagelied.m4a
   newPath = tmpMp3Path.replace(/\.mp3$/gi, '.m4a')
+  let metaData = lib.readAssetYaml(newPath)
+  console.log(metaData)
 
-  await commandConvert.convert(tmpMp3Path)
-
-  const metaData = lib.readAssetYaml(newPath)
-  metaData.source = oldPath
-
+  // Try to get the MusicBrainz recording ID.
   let musicbrainzRecordingId = getMbrainzRecordingId(tmpMp3Path)
   if (musicbrainzRecordingId) metaData.musicbrainzRecordingId = musicbrainzRecordingId
 
-  console.log(metaData)
-
+  metaData.source = oldPath
+  // To get ID prefix
+  metaData.filePath = newPath
+  metaData = mediaServer.metaTypes.process(metaData)
   lib.writeYamlFile(`${newPath}.yml`, metaData)
+
+  // Delete MP3.
   fs.unlinkSync(tmpMp3Path)
 }
 

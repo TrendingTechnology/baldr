@@ -5,14 +5,14 @@
 const { transliterate } = require('transliteration')
 
 /**
- * This function can be used to generate ids from different file names.
+ * Convert some unicode strings into the ASCII format.
  *
  * @param {String} input
  *
  * @returns {String}
  */
 function asciify (input) {
-  const output = input
+  let output = input
     .replace(/[\(\)';]/g, '') // eslint-disable-line
     .replace(/[,\.] /g, '_')
     .replace(/ +- +/g, '_')
@@ -27,9 +27,25 @@ function asciify (input) {
     .replace(/ü/g, 'ue')
     .replace(/ß/g, 'ss')
     .replace(/!/g, '')
-    // asciify is used by rename. We can not remove dots because of the exentions
-    //.replace(/\./g, '')
   return transliterate(output)
+}
+
+/**
+ * This function can be used to generate ids from different file names.
+ *
+ * Some addictional replace which can not be done in asciify (asciffy is
+ * sometimes applied to paths.)
+ */
+function idify (input) {
+  let output = asciify(input)
+
+  // asciify is used by rename. We can not remove dots because of the exentions
+  output = output.replace(/\./g, '')
+
+  //  “'See God's ark' ” -> See-Gods-ark-
+  output = output.replace(/^[^A-Za-z0-9]*/, '')
+  output = output.replace(/[^A-Za-z0-9]*$/, '')
+  return output
 }
 
 /**
@@ -53,5 +69,6 @@ function deasciify (input) {
 
 module.exports = {
   asciify,
+  idify,
   deasciify
 }
