@@ -185,12 +185,10 @@ async function moveMp3 (oldPath, newPath, cmdObj) {
   lib.moveAsset(oldPath, tmpMp3Path, { copy: true })
 
   // Convert into m4a.
-  await commandConvert.convert(tmpMp3Path)
+  newPath = await commandConvert.convert(tmpMp3Path)
 
-  // /var/data/baldr/media/10/10_Kontext/40_Jazz/10_Entstehung/HB/Nbu-Klagelied.m4a
-  newPath = tmpMp3Path.replace(/\.mp3$/gi, '.m4a')
   let metaData = lib.readAssetYaml(newPath)
-  console.log(metaData)
+  metaData.metaType = 'composition'
 
   // Try to get the MusicBrainz recording ID.
   let musicbrainzRecordingId = getMbrainzRecordingId(tmpMp3Path)

@@ -116,6 +116,8 @@ async function collectMusicMetaData (inputFile) {
  *
  * @param {String} inputFile - The path of the input file.
  * @param {Object} cmdObj - The command object from the commander.
+ *
+ * @returns {String} The output file path.
  */
 async function convert (inputFile, cmdObj) {
   const asset = lib.makeAsset(inputFile)
@@ -201,6 +203,7 @@ async function convert (inputFile, cmdObj) {
       throw new Error(`ConvertError: ${inputFile} -> ${outputFile}`)
     }
   }
+  return outputFile
 }
 
 /**
