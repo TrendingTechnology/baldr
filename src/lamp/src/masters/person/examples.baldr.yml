@@ -1,6 +1,9 @@
 ---
 slides:
 
+- title: All external sites
+  person: id:Lennon_John
+
 - title: Not birth and death
   person:
      name: Joseph Haydn

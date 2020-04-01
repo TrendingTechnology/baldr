@@ -276,6 +276,19 @@ export function formatWikipediaUrl (nameSpace) {
 }
 
 /**
+ * Format a Musicbrainz recording URL.
+ *
+ * `https://musicbrainz.org/recording/${RecordingId}`
+ *
+ * @param {String} recordingId
+ *
+ * @returns {String}
+ */
+export function formatBrainzRecUrl (recordingId) {
+  return `https://musicbrainz.org/recording/${recordingId}`
+}
+
+/**
  * https://youtu.be/CQYypFMTQcE
  *
  * @param {String} id - The id of a Youtube video (for example CQYypFMTQcE).
@@ -576,4 +589,11 @@ export function getExtension (filePath) {
   if (filePath) {
     return String(filePath).split('.').pop().toLowerCase()
   }
+}
+
+export default {
+  formatBrainzRecUrl,
+  formatWikidataUrl,
+  formatWikipediaUrl,
+  formatYoutubeUrl
 }

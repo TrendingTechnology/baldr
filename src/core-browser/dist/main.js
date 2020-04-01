@@ -5,6 +5,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.sortObjectsByProperty = sortObjectsByProperty;
 exports.formatToLocalDate = formatToLocalDate;
+exports.formatToYear = formatToYear;
 exports.formatToLocalDateTime = formatToLocalDateTime;
 exports.toTitleCase = toTitleCase;
 exports.plainText = plainText;
@@ -15,12 +16,13 @@ exports.convertPropertiesCase = convertPropertiesCase;
 exports.formatMultiPartAssetFileName = formatMultiPartAssetFileName;
 exports.formatWikidataUrl = formatWikidataUrl;
 exports.formatWikipediaUrl = formatWikipediaUrl;
+exports.formatBrainzRecUrl = formatBrainzRecUrl;
 exports.formatYoutubeUrl = formatYoutubeUrl;
 exports.selectSubset = selectSubset;
 exports.escapeHtml = escapeHtml;
 exports.deepCopy = deepCopy;
 exports.getExtension = getExtension;
-exports.RawDataObject = exports.jsYamlConfig = exports.AssetTypes = exports.convertMdToTex = exports.convertTexToMd = exports.tex = void 0;
+exports.default = exports.RawDataObject = exports.jsYamlConfig = exports.AssetTypes = exports.convertMdToTex = exports.convertTexToMd = exports.tex = void 0;
 
 var _convertTex = _interopRequireDefault(require("./convert-tex.js"));
 
@@ -44,6 +46,10 @@ function formatToLocalDate(dateSpec) {
   if (isNaN(date.getDay())) return dateSpec;
   const months = ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'];
   return `${date.getDate()}. ${months[date.getMonth()]} ${date.getFullYear()}`;
+}
+
+function formatToYear(dateSpec) {
+  return dateSpec.substr(0, 4);
 }
 
 function formatToLocalDateTime(timeStampMsec) {
@@ -114,9 +120,11 @@ function convertPropertiesCase(data, direction = 'snake-to-camel') {
   }
 
   if (Array.isArray(data)) {
-    for (const item of data) {
+    for (let i; i < data.length; i++) {
+      const item = data[i];
+
       if (typeof item === 'object') {
-        convertPropertiesCase(item, direction);
+        data[i] = convertPropertiesCase(item, direction);
       }
     }
   } else if (typeof data === 'object') {
@@ -134,7 +142,7 @@ function convertPropertiesCase(data, direction = 'snake-to-camel') {
       newObject[newProp] = data[oldProp];
 
       if (typeof newObject[newProp] === 'object') {
-        convertPropertiesCase(newObject[newProp], direction);
+        newObject[newProp] = convertPropertiesCase(newObject[newProp], direction);
       }
     }
   }
@@ -174,6 +182,10 @@ function formatWikipediaUrl(nameSpace) {
   const lang = segments[0];
   const slug = encodeURIComponent(segments[1]);
   return `https://${lang}.wikipedia.org/wiki/${slug}`;
+}
+
+function formatBrainzRecUrl(recordingId) {
+  return `https://musicbrainz.org/recording/${recordingId}`;
 }
 
 function formatYoutubeUrl(id) {
@@ -363,3 +375,11 @@ function getExtension(filePath) {
     return String(filePath).split('.').pop().toLowerCase();
   }
 }
+
+var _default = {
+  formatBrainzRecUrl,
+  formatWikidataUrl,
+  formatWikipediaUrl,
+  formatYoutubeUrl
+};
+exports.default = _default;

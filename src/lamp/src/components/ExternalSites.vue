@@ -6,11 +6,17 @@
     <a v-if="wikidata" :href="wikidata">
       <plain-icon name="wikidata"/>
     </a>
+    <a v-if="musicbrainz" :href="musicbrainz">
+      <plain-icon name="musicbrainz"/>
+    </a>
+    <a v-if="youtube" :href="youtube">
+      <plain-icon name="youtube"/>
+    </a>
   </div>
 </template>
 
 <script>
-import { formatWikipediaUrl, formatWikidataUrl } from '@bldr/core-browser'
+import core from '@bldr/core-browser'
 
 export default {
   name: 'ExternalSites',
@@ -22,12 +28,22 @@ export default {
   computed: {
     wikipedia () {
       if (this.asset.wikipedia) {
-        return formatWikipediaUrl(this.asset.wikipedia)
+        return core.formatWikipediaUrl(this.asset.wikipedia)
       }
     },
     wikidata () {
       if (this.asset.wikidata) {
-        return formatWikidataUrl(this.asset.wikidata)
+        return core.formatWikidataUrl(this.asset.wikidata)
+      }
+    },
+    musicbrainz () {
+      if (this.asset.musicbrainzRecordingId) {
+        return core.formatBrainzRecUrl(this.asset.musicbrainzRecordingId)
+      }
+    },
+    youtube () {
+      if (this.asset.youtube) {
+        return core.formatYoutubeUrl(this.asset.youtube)
       }
     }
   }

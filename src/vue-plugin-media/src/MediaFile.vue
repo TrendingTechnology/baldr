@@ -38,11 +38,11 @@
         <li @click="openEditor"><span class="link">Im Text-Editor öffnen</span></li>
 
         <li v-if="mediaFile.youtube">
-          <a :href="`https://youtu.be/${mediaFile.youtube}`">YouTube</a>
+          <a :href="formatYoutubeUrl(mediaFile.youtube)">YouTube</a>
         </li>
 
         <li v-if="mediaFile.musicbrainzRecordingId">
-          <a :href="`https://musicbrainz.org/recording/${mediaFile.musicbrainzRecordingId}`">MusicBrainz</a>
+          <a :href="formatBrainzRecUrl(mediaFile.musicbrainzRecordingId)">MusicBrainz</a>
         </li>
       </ul>
 
@@ -52,6 +52,7 @@
 
 <script>
 import PlayButton from './PlayButton.vue'
+import { formatBrainzRecUrl, formatYoutubeUrl } from '@bldr/core-browser'
 
 export default {
   name: 'MediaFile',
