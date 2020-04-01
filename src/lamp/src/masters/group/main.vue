@@ -15,16 +15,19 @@
       </ul>
     </p>
     <div class="info-box">
+      <div class="period font-shadow">
+        <span v-if="startDate" class="start-date">Gründung: {{ startDate }}</span>
+        <span v-if="endDate" class="end-date">Auflösung: {{ endDate }}</span>
+      </div>
       <p class="name important transparent-background font-shadow">{{ group.name }}</p>
-      <p v-if="startDate" class="start-date">Gründung: {{ startDate }}</p>
-      <p v-if="endDate" class="end-date">Auflösung: {{ endDate }}</p>
     </div>
+    <external-sites :asset="group"/>
   </div>
 </template>
 
 <script>
 import { formatToYear } from '@bldr/core-browser'
-
+import ExternalSites from '@/components/ExternalSites.vue'
 export default {
   props: {
     mainImage: {
@@ -32,9 +35,11 @@ export default {
       required: true
     }
   },
+  components: {
+    ExternalSites
+  },
   computed: {
     group () {
-      console.log(this.$store.getters['media/mediaFileByUri'](this.mainImage))
       return this.$store.getters['media/mediaFileByUri'](this.mainImage)
     },
     startDate () {
@@ -60,8 +65,8 @@ export default {
 
     .members {
       position: absolute;
-      top: 3em;
-      left: 2em;
+      top: 5em;
+      left: 3em;
     }
 
     .info-box {
@@ -74,6 +79,16 @@ export default {
         font-size: 4em;
         padding-right: 1em;
         text-align: right;
+      }
+
+      .period {
+        font-size: 1.5em;
+        text-align: right;
+        padding-right: 5em;
+
+        .end-date {
+          padding-left: 1em;
+        }
       }
     }
   }

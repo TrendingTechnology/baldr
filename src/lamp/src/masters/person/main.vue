@@ -16,18 +16,13 @@
       <p class="person important transparent-background font-shadow">{{ name }}</p>
     </div>
 
-    <div class="link-icons">
-      <a v-if="wikipediaHttpUrl" :href="wikipediaHttpUrl">
-        <plain-icon name="wikipedia"/>
-      </a>
-      <a v-if="wikidataHttpUrl" :href="wikidataHttpUrl">
-        <plain-icon name="wikidata"/>
-      </a>
-    </div>
+    <external-sites :asset="person"/>
   </div>
 </template>
 
 <script>
+import ExternalSites from '@/components/ExternalSites.vue'
+
 export default {
   props: {
     name: {
@@ -52,7 +47,13 @@ export default {
     },
     wikidataHttpUrl: {
       type: String
+    },
+    person: {
+      type: Object
     }
+  },
+  components: {
+    ExternalSites
   }
 }
 </script>
@@ -87,16 +88,6 @@ export default {
         padding-right: 1em;
         text-align: right;
       }
-    }
-
-    .link-icons {
-      opacity: 0.5;
-      font-size: 1.5em;
-      position: absolute;
-      right: 0.4em;
-      bottom: 8em;
-      display: flex;
-      flex-direction: column;
     }
   }
 </style>

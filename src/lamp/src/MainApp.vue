@@ -334,7 +334,7 @@ export default {
 
   // Fix white text over white image areas
   .font-shadow {
-    text-shadow: 0 0 0.2em $black;
+    text-shadow: 0 0 0.1em $black;
   }
 
   // For master slides: person, instrument
