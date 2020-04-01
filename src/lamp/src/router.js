@@ -61,6 +61,29 @@ const routes = [
     }
   },
   {
+    path: '/pres-id/:presId',
+    name: 'slides',
+    component: SlideView,
+    name: 'open-by-pres',
+    meta: {
+      title: 'Folien'
+    },
+    children: [
+      {
+        path: 'slide-no/:slideNo',
+        component: SlideView,
+        name: 'open-by-pres-slide',
+        children: [
+          {
+            path: 'step-no/:stepNo',
+            name: 'open-by-pres-slide-step',
+            component: SlideView
+          }
+        ]
+      }
+    ]
+  },
+  {
     path: '/slides/preview',
     component: SlidesPreview,
     name: 'slides-preview',

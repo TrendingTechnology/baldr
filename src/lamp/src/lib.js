@@ -587,10 +587,28 @@ export class DomSteps {
   }
 }
 
-export async function openPresentation (presentationId) {
+/**
+ * Open a presentation and redirect to the desired view, stop the player and
+ * clear the media cache.
+ *
+ * @param {String} presentationId
+ * @param {Number} slideNo
+ * @param {Number} stepNo
+ */
+export async function openPresentation (presentationId, slideNo, stepNo) {
   vue.$media.player.stop()
   vue.$store.dispatch('media/clear')
   await vue.$store.dispatch('presentation/openPresentationById', presentationId)
+  if (slideNo) {
+    vue.$store.dispatch('presentation/setSlideNoCurrent', slideNo)
+  }
+  if (stepNo) {
+    const slideCurrent = vue.$store.getters['presentation/slideCurrent']
+    vue.$store.dispatch('presentation/setStepNoCurrent', {
+      slideCurrent,
+      stepNoCurrent: stepNo
+    })
+  }
   if (vue.$route.name !== 'slides-preview') {
     vue.$router.push({ name: 'slides-preview' })
   }
