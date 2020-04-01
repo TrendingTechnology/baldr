@@ -106,7 +106,8 @@ function writeMetaDataYaml (filePath, metaData, force) {
     if (!metaData.title) {
       metaData.title = mediaServer.deasciify(asset.basename_)
     }
-    metaData = normalizeMetaData(filePath, metaData)
+
+    metaData = mediaServer.metaTypes.process(metaData)
     writeYamlFile(yamlFile, metaData)
     return {
       filePath,
@@ -140,60 +141,6 @@ function readFile (filePath) {
  */
 function writeFile (filePath, content) {
   fs.writeFileSync(filePath, content)
-}
-
-/**
- * Sort the keys and clean up some entires.
- *
- * @param {String} filePath - The media asset file path.
- * @param {Object} metaData - The object representation of the yaml meta data
- *   file.
- */
-function normalizeMetaData (filePath, metaData) {
-  /**
-   * Generate a ID prefix for media assets, like `Presentation-ID_HB` if the
-   * path of the media file is `10_Presentation-id/HB/example.mp3`.
-   *
-   * @param {String} filePath - The media asset file path.
-   */
-  function generateIdPrefix (filePath) {
-    // We need the absolute path
-    filePath = path.resolve(filePath)
-    const pathSegments = filePath.split(path.sep)
-    // HB
-    const parentDir = pathSegments[pathSegments.length - 2]
-    // Match asset type abbreviations, like AB, HB, NB
-    if (parentDir.length !== 2 || !parentDir.match(/[A-Z]{2,}/)) {
-      return
-    }
-    const assetTypeAbbreviation = parentDir
-    // 20_Strawinsky-Petruschka
-    const subParentDir = pathSegments[pathSegments.length - 3]
-    // Strawinsky-Petruschka
-    const presentationId = subParentDir.replace(/^[0-9]{2,}_/, '')
-    // Strawinsky-Petruschka_HB
-    const idPrefix = `${presentationId}_${assetTypeAbbreviation}`
-    return idPrefix
-  }
-
-  const idPrefix = generateIdPrefix(filePath)
-  if (idPrefix) {
-    if (metaData.id.indexOf(idPrefix) === -1) {
-      metaData.id = `${idPrefix}_${metaData.id}`
-    }
-
-    // Avoid duplicate idPrefixes by changed prefixes:
-    // instead of:
-    // Piazzolla-Nonino_NB_Piazzolla-Adios-Nonino_NB_Adios-Nonino_melancolico
-    // old prefix: Piazzolla-Adios-Nonino_NB
-    // updated prefix: Piazzolla-Nonino_NB
-    // Preferred result: Piazzolla-Nonino_NB_Adios-Nonino_melancolico
-    if (metaData.id.match(/.*_[A-Z]{2,}_.*/)) {
-      metaData.id = metaData.id.replace(/^.*_[A-Z]{2,}/, idPrefix)
-    }
-  }
-
-  return metaData
 }
 
 /**
@@ -286,7 +233,6 @@ function moveAsset (oldPath, newPath, opts) {
 module.exports = {
   filePathToAssetType,
   makeAsset,
-  normalizeMetaData,
   moveAsset,
   readAssetYaml,
   readFile,

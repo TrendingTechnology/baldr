@@ -11,9 +11,7 @@ const { deepCopy, getExtension, convertPropertiesCase } = require('@bldr/core-br
 /**
  * @type {module:@bldr/media-server/meta-types~typeSpecs}
  */
-const rawTypeSpecs = require('./meta-type-specs.js')
-
-const typeSpecs = mergeTypeSpecs(rawTypeSpecs)
+const typeSpecs = require('./meta-type-specs.js')
 
 /**
  * The name of a property.
@@ -32,7 +30,9 @@ const typeSpecs = mergeTypeSpecs(rawTypeSpecs)
  *   values.
  * @property {Boolean} overwriteByDerived - Overwrite the original value by the
  *   the value obtained from the `derive` function.
- * @property {Function} format - Format the property using this function.
+ * @property {Function} format - Format the value of the property using this
+ *   function. The function has this arguments:
+ *   `function (value, { typeData, typeSpec })`
  * @property {Function} validate - Validate the property using this function.
  */
 
@@ -64,6 +64,8 @@ const typeSpecs = mergeTypeSpecs(rawTypeSpecs)
  * @property {RegExp} detectTypebyPath - A regular expression that is
  *   matched against file paths or a function which is called with `typeSpec`
  *   that returns a regexp.
+ * @property {Function} finalize - A function which is called after all
+ *   processing steps: arguments: `data`, `typeSpec`
  * @property {module:@bldr/media-server/meta-types~propSpecs} props
  */
 
@@ -110,45 +112,6 @@ function validateDate (value) {
  */
 function validateUuid (value) {
   return value.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89AB][0-9a-f]{3}-[0-9a-f]{12}$/i)
-}
-
-/**
- * @returns {Object}
- */
-function mergeTypeSpecs (typeSpecs) {
-  /**
-   * Merge the global metadata type specification with a specific type.
-   *
-   * @param {String} typeName - The name of the metadata type (for example `person`)
-   */
-  function mergeTypeProps (typeName, typeSpecs) {
-    const globalType = typeSpecs.global_.props
-    const specifcType = typeSpecs[typeName].props
-    const result = {}
-    for (const prop in globalType) {
-      if (specifcType[prop]) {
-        result[prop] = Object.assign({}, globalType[prop], specifcType[prop])
-        delete specifcType[prop]
-      } else {
-        result[prop] = globalType[prop]
-      }
-    }
-
-    for (const prop in specifcType) {
-      result[prop] = specifcType[prop]
-    }
-
-    return result
-  }
-
-  for (const typeName in typeSpecs) {
-    // Exclude “global_”
-    if (!typeName.match(/^.+_$/)) {
-      typeSpecs[typeName].props = mergeTypeProps(typeName, typeSpecs)
-    }
-  }
-  delete typeSpecs.global_
-  return typeSpecs
 }
 
 /**
@@ -213,71 +176,28 @@ function isValue (value) {
 }
 
 /**
- * If `metadata` has a property `type` apply the global specs, else the
- * specifiy specs.
+ * Apply the meta type specifications to all props
  *
- * @param {Object} metadata
- * @param {Function} func - A function with the arguments `spec` (property specification), `value`, `propName`
+ * @param {Object} data - An object containing some meta data.
+ * @param {Function} func - A function with the arguments `spec`
+ *   (property specification), `value`, `propName`
+ * @param {module:@bldr/media-server/meta-types~typeSpec} - The specification
+ *   of one meta type.
  * @param {Boolean} replaceValues - Replace the values in the metadata object.
  */
-function applyTypeSpecs (metadata, func, replaceValues = true) {
-  function applyOneTypeSpec (props, propName, metadata, func, replaceValues) {
-    const spec = props[propName]
-    const value = func(spec, metadata[propName], propName)
+function applySpecToProps (data, func, typeSpec, replaceValues = true) {
+  function applyOneTypeSpec (props, propName, data, func, replaceValues) {
+    const propSpec = props[propName]
+    const value = func(propSpec, data[propName], propName)
     if (replaceValues && isValue(value)) {
-      metadata[propName] = value
+      data[propName] = value
     }
   }
-
-  if (metadata.metaType) {
-    const props = typeSpecs[metadata.metaType].props
-    for (const propName in props) {
-      applyOneTypeSpec(props, propName, metadata, func, replaceValues)
-    }
-  } else {
-    const props = typeSpecs.global_.props
-    for (const propName in props) {
-      applyOneTypeSpec(props, propName, metadata, func, replaceValues)
-    }
+  const propSpecs = typeSpec.props
+  for (const propName in propSpecs) {
+    applyOneTypeSpec(propSpecs, propName, data, func, replaceValues)
   }
-  return metadata
-}
-
-/**
- * @param {Object} metadata
- */
-function format (metadata) {
-  function formatOneProp (spec, value) {
-    if (
-      isValue(value) &&
-      spec.format &&
-      typeof spec.format === 'function'
-    ) {
-      return spec.format(value)
-    }
-    return value
-  }
-  return applyTypeSpecs(metadata, formatOneProp)
-}
-
-/**
- * @param {Object} metadata
- */
-function validate (metadata) {
-  function validateOneProp (spec, value, prop) {
-    // required
-    if (spec.required && !isValue(value)) {
-      throw new Error(`Missing property ${prop}`)
-    }
-    // validate
-    if (spec.validate && typeof spec.validate === 'function' && isValue(value)) {
-      const result = spec.validate(value)
-      if (!result) {
-        throw new Error(`Validation failed for property “${prop}” and value “${value}”`)
-      }
-    }
-  }
-  applyTypeSpecs(metadata, validateOneProp, false)
+  return data
 }
 
 /**
@@ -296,45 +216,43 @@ function isPropertyDerived (propSpec) {
  * propertiers are attached on the end of the object. Fill the object
  * with derived values.
  *
- * @param {Object} data
+ * @param {Object} data - An object containing some meta data.
+ * @param {module:@bldr/media-server/meta-types~typeSpec} - The specification
+ *   of one meta type.
  *
  * @returns {Object}
  */
-function sortAndDerive (data) {
+function sortAndDeriveProps (data, typeSpec) {
   const origData = deepCopy(data)
   const result = {}
 
-  const metaType = origData.metaType
-
   // Loop over the propSpecs to get a sorted object
-  if (metaType) {
-    const propSpecs = typeSpecs[metaType].props
-    for (const propName in propSpecs) {
-      const propSpec = propSpecs[propName]
-      const origValue = origData[propName]
-      let derivedValue
-      if (isPropertyDerived(propSpec)) {
-        derivedValue = propSpec.derive.call(data, data, typeSpecs[metaType])
-      }
-
-      // Use the derived value
-      if (
-        isValue(derivedValue) &&
-        (
-          (!propSpec.overwriteByDerived && !isValue(origValue)) ||
-          propSpec.overwriteByDerived
-        )
-      ) {
-        result[propName] = derivedValue
-
-      // Use orig value
-      } else if (isValue(origValue)) {
-        result[propName] = origValue
-      }
-      // Throw away the value of this property. We prefer the derived
-      // version.
-      delete origData[propName]
+  const propSpecs = typeSpec.props
+  for (const propName in propSpecs) {
+    const propSpec = propSpecs[propName]
+    const origValue = origData[propName]
+    let derivedValue
+    if (isPropertyDerived(propSpec)) {
+      derivedValue = propSpec.derive.call(data, data, typeSpec)
     }
+
+    // Use the derived value
+    if (
+      isValue(derivedValue) &&
+      (
+        (!propSpec.overwriteByDerived && !isValue(origValue)) ||
+        propSpec.overwriteByDerived
+      )
+    ) {
+      result[propName] = derivedValue
+
+    // Use orig value
+    } else if (isValue(origValue)) {
+      result[propName] = origValue
+    }
+    // Throw away the value of this property. We prefer the derived
+    // version.
+    delete origData[propName]
   }
 
   // Add additional properties not in the propSpecs.
@@ -348,6 +266,90 @@ function sortAndDerive (data) {
 }
 
 /**
+ * @param {Object} data - An object containing some meta data.
+ * @param {module:@bldr/media-server/meta-types~typeName} - The type name
+ */
+function formatProps (data, typeSpec) {
+  function formatOneProp (spec, value) {
+    if (
+      isValue(value) &&
+      spec.format &&
+      typeof spec.format === 'function'
+    ) {
+      return spec.format(value, { typeData: data, typeSpec })
+    }
+    return value
+  }
+  return applySpecToProps(data, formatOneProp, typeSpec)
+}
+
+/**
+ * @param {Object} data - An object containing some meta data.
+ * @param {module:@bldr/media-server/meta-types~typeSpec} - The specification
+ *   of one meta type.
+ */
+function validateProps (data, typeSpec) {
+  function validateOneProp (spec, value, prop) {
+    // required
+    if (spec.required && !isValue(value)) {
+      throw new Error(`Missing property ${prop}`)
+    }
+    // validate
+    if (spec.validate && typeof spec.validate === 'function' && isValue(value)) {
+      const result = spec.validate(value)
+      if (!result) {
+        throw new Error(`Validation failed for property “${prop}” and value “${value}”`)
+      }
+    }
+  }
+  applySpecToProps(data, validateOneProp, typeSpec, false)
+}
+
+/**
+ * @param {Object} data - An object containing some meta data.
+ * @param {module:@bldr/media-server/meta-types~typeSpec} - The specification
+ *   of one meta type.
+ */
+function removeProps (data, typeSpec) {
+  for (const propName in typeSpec.props) {
+    if (data[propName]) {
+      const propSpec = typeSpec.props[propName]
+      if (propSpec.state && propSpec.state === 'absent') {
+        delete data[propName]
+      }
+    }
+  }
+  return data
+}
+
+/**
+ * Bundle three operations: Sort and derive, format, validate.
+ *
+ * @param {Object} data - An object containing some meta data.
+ * @param {module:@bldr/media-server/meta-types~typeName} - The type name
+
+ * @returns {Object}
+ */
+function processByType (data, typeName) {
+  if (!typeSpecs[typeName]) {
+    throw new Error(`Unkown meta type name: “${typeName}”`)
+  }
+  const typeSpec = typeSpecs[typeName]
+  if (!typeSpec.props) {
+    throw new Error(`The meta type “${typeName}” has no props.`)
+  }
+  data = sortAndDeriveProps(data, typeSpec)
+  data = removeProps(data, typeSpec)
+  data = formatProps(data, typeSpec)
+  validateProps(data, typeSpec)
+
+  if (typeSpec.finalize && typeof typeSpec.finalize === 'function') {
+    data = typeSpec.finalize(data, typeSpec)
+  }
+  return data
+}
+
+/**
  * Bundle three operations: Sort and derive, format, validate.
  *
  * @param {Object} data - An object containing some meta data.
@@ -355,13 +357,13 @@ function sortAndDerive (data) {
  * @returns {Object}
  */
 function process (data) {
-  console.log(data)
   // The meta type specification is in camel case. The meta data is
   // stored in the YAML format in snake case
   data = convertPropertiesCase(data, 'snake-to-camel')
-  data = sortAndDerive(data)
-  data = format(data)
-  validate(data)
+  if (data.metaType) {
+    data = processByType(data, data.metaType)
+  }
+  data = processByType(data, 'general')
   // Do not convert back. This conversion should be the last step, before
   // object is converted to YAML.
   // convertPropertiesCase(data, 'camel-to-snake')

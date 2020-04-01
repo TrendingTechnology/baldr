@@ -24,6 +24,7 @@ async function normalizeOneFile (filePath, cmdObj) {
     const typeName = metaTypes.detectTypeByPath(filePath)
     const yamlFile = `${filePath}.yml`
     let metaData = yaml.safeLoad(lib.readFile(yamlFile))
+    metaData.filePath = filePath
     const origData = deepCopy(metaData)
     metaData.metaType = typeName
 
@@ -42,8 +43,6 @@ async function normalizeOneFile (filePath, cmdObj) {
       }
     }
     metaData = metaTypes.process(metaData)
-    // TODO: remove. outsource all code into the typeSpecs
-    metaData = lib.normalizeMetaData(filePath, metaData)
 
     try {
       assert.deepStrictEqual(origData, metaData)

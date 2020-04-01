@@ -7,28 +7,73 @@ const { bootstrapConfig } = require('@bldr/core-node')
 const { validateDate, validateUuid } = require('./meta-types.js')
 
 /**
+ * Generate a ID prefix for media assets, like `Presentation-ID_HB` if the
+ * path of the media file is `10_Presentation-id/HB/example.mp3`.
+ *
+ * @param {String} filePath - The media asset file path.
+ */
+function generateIdPrefix (filePath) {
+  // We need the absolute path
+  filePath = path.resolve(filePath)
+  const pathSegments = filePath.split(path.sep)
+  // HB
+  const parentDir = pathSegments[pathSegments.length - 2]
+  // Match asset type abbreviations, like AB, HB, NB
+  if (parentDir.length !== 2 || !parentDir.match(/[A-Z]{2,}/)) {
+    return
+  }
+  const assetTypeAbbreviation = parentDir
+  // 20_Strawinsky-Petruschka
+  const subParentDir = pathSegments[pathSegments.length - 3]
+  // Strawinsky-Petruschka
+  const presentationId = subParentDir.replace(/^[0-9]{2,}_/, '')
+  // Strawinsky-Petruschka_HB
+  const idPrefix = `${presentationId}_${assetTypeAbbreviation}`
+  return idPrefix
+}
+
+/**
  * The configuration object from `/etc/baldr.json`
  */
 const config = bootstrapConfig()
 
-const global_ = {
+const general = {
   props: {
     id: {
       validate: function (value) {
         return value.match(/^[a-zA-Z0-9-_]+$/)
       },
-      format: function (value) {
+      format: function (value, { typeData, typeSpec }) {
         value = asciify(value)
 
-        // Deletion of dots can not be in asciify, because asciify is
-        // use in some rename operations.
+        // Remove dots. This can not be done in asciify, because asciify is
+        // used in some rename operations.
         value = value.replace(/\./g, '')
 
         // a-Strawinsky-Petruschka-Abschnitt-0_22
         value = value.replace(/^[va]-/, '')
 
+        if (typeData.filePath) {
+          const idPrefix = generateIdPrefix(typeData.filePath)
+          if (idPrefix) {
+            if (value.indexOf(idPrefix) === -1) {
+              value = `${idPrefix}_${value}`
+            }
+
+            // Avoid duplicate idPrefixes by changed prefixes:
+            // instead of:
+            // Piazzolla-Nonino_NB_Piazzolla-Adios-Nonino_NB_Adios-Nonino_melancolico
+            // old prefix: Piazzolla-Adios-Nonino_NB
+            // updated prefix: Piazzolla-Nonino_NB
+            // Preferred result: Piazzolla-Nonino_NB_Adios-Nonino_melancolico
+            if (value.match(/.*_[A-Z]{2,}_.*/)) {
+              value = value.replace(/^.*_[A-Z]{2,}/, idPrefix)
+            }
+          }
+        }
+
         // HB_Ausstellung_Gnome -> Ausstellung_HB_Gnome
-        value = value.replace(/^([A-Z]{2,})_([a-zA-Z0-9-]+)_/, '$2_$1_')
+        //value = value.replace(/^([A-Z]{2,})_([a-zA-Z0-9-]+)_/, '$2_$1_')
         return value
       },
       required: true
@@ -41,7 +86,7 @@ const global_ = {
     title: {
       required: true,
       overwriteByDerived: false,
-      format: function (value) {
+      format: function (value, { typeData, typeSpec }) {
         // a Strawinsky Petruschka Abschnitt 0_22
         value = value.replace(/^[va] /, '')
         return value
@@ -59,9 +104,17 @@ const global_ = {
       validate: function (value) {
         return value.match(/^.+:.+$/)
       },
-      format: function (value) {
+      format: function (value, { typeData, typeSpec }) {
         return decodeURI(value)
       }
+    },
+    // tmp property needed to generate id prefix
+    filePath: {
+      state: 'absent'
+    },
+    // tmp propert: needed for wiki commons files.
+    extension: {
+      state: 'absent'
     }
   }
 }
@@ -111,7 +164,7 @@ const group = {
       derive: function (typeData, typeSpec) {
         return this.name
       },
-      format: function (value) {
+      format: function (value, { typeData, typeSpec }) {
         value = value.replace(/^(The)[ -](.*)$/, '$2_$1')
         value = asciify(value)
         return value
@@ -196,7 +249,7 @@ const instrument = {
         // IS: Instrument
         return `${typeSpec.abbreviation}_${typeData.name}`
       },
-      format: function (value) {
+      format: function (value, { typeData, typeSpec }) {
         value = asciify(value)
         value = value.replace(/_BD$/, '')
         return value
@@ -285,7 +338,7 @@ const person = {
         // Vornamen der Person
         fromClaim: 'P735',
         secondQuery: 'queryLabels',
-        format: function (value) {
+        format: function (value, { typeData, typeSpec }) {
           if (Array.isArray(value)) {
             return value.join(' ')
           }
@@ -299,7 +352,7 @@ const person = {
         // Familienname einer Person
         fromClaim: 'P734',
         secondQuery: 'queryLabels',
-        format: function (value) {
+        format: function (value, { typeData, typeSpec }) {
           if (Array.isArray(value)) {
             return value.join(' ')
           }
@@ -399,7 +452,7 @@ const song = {
 }
 
 module.exports = {
-  global_,
+  general,
   musicalWork,
   group,
   instrument,
