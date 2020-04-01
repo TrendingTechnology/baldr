@@ -48,6 +48,17 @@ export function formatToLocalDate (dateSpec) {
 }
 
 /**
+ * Extract the 4 digit year from a date string
+ *
+ * @param {String} dateSpec - `1968-01-01`
+ *
+ * @returns {String}
+ */
+export function formatToYear (dateSpec) {
+  return dateSpec.substr(0, 4)
+}
+
+/**
  * Format a timestamp into a string like this example: `Mo 17.2.2020 07:57:53`
  *
  * @param {Number} timeStampMsec - The timestamp in milliseconds.
