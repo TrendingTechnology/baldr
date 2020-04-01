@@ -609,7 +609,10 @@ export async function openPresentation (presentationId, slideNo, stepNo) {
       stepNoCurrent: stepNo
     })
   }
-  if (vue.$route.name !== 'slides-preview') {
+
+  if (slideNo && slideNo > 1 && vue.$route.name !== 'slides') {
+    vue.$router.push({ name: 'slides' })
+  } else if (vue.$route.name !== 'slides-preview') {
     vue.$router.push({ name: 'slides-preview' })
   }
 }

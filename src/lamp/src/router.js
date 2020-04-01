@@ -64,7 +64,7 @@ const routes = [
     path: '/pres-id/:presId',
     name: 'slides',
     component: SlideView,
-    name: 'open-by-pres',
+    name: 'open-by',
     meta: {
       title: 'Folien'
     },
@@ -72,11 +72,11 @@ const routes = [
       {
         path: 'slide-no/:slideNo',
         component: SlideView,
-        name: 'open-by-pres-slide',
+        name: 'open-by',
         children: [
           {
             path: 'step-no/:stepNo',
-            name: 'open-by-pres-slide-step',
+            name: 'open-by',
             component: SlideView
           }
         ]

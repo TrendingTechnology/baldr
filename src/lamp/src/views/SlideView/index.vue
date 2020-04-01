@@ -25,16 +25,19 @@ export default {
     MetaDataOverlay,
     SlideNumber
   },
-  async mounted () {
-    if (this.$route.name === 'open-by-pres') {
-      //openPresentation(this.$route.params.presId)
-      //await this.$store.dispatch('presentation/openPresentationById', this.$route.params.presId)
-    } else if (this.$route.name === 'open-by-pres-slide') {
-      openPresentation(this.$route.params.presId, this.$route.params.slideNo)
-    } else if (this.$route.name === 'open-by-pres-slide-step') {
-      openPresentation(this.$route.params.presId, this.$route.params.slideNo, this.$route.params.stepNo)
-    }
+  beforeRouteEnter (to, from, next) {
+    // called before the route that renders this component is confirmed.
+    // does NOT have access to `this` component instance,
+    // because it has not been created yet when this guard is called!
+    next(vm => {
+      if (to.name === 'open-by') {
+        if (to.params.presId) vm.$openPresentation(to.params.presId, to.params.slideNo, to.params.stepNo)
+      }
+    })
   }
+  // beforeRouteUpdate (to, from, next) {
+  //   console.log(to)
+  // }
 }
 </script>
 

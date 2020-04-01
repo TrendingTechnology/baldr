@@ -22,6 +22,7 @@
  * - `this.$notify()`: An instance of the package `vue-notifications`.
  * - `this.$notifyError`
  * - `this.$notifySuccess`
+ * - `this.$openPresentation`
  * - `this.$route`
  * - `this.$router`
  * - `this.$shortcuts`
@@ -297,6 +298,7 @@ import MaterialIcon from '@bldr/icons'
 import ModalDialog from '@bldr/vue-plugin-modal-dialog'
 import DynamicSelect from '@bldr/vue-plugin-dynamic-select'
 import media from '@bldr/vue-plugin-media'
+import { openPresentation } from '@/lib.js'
 
 // Vue components.
 import MainApp from '@/MainApp.vue'
@@ -650,6 +652,8 @@ Vue.config.errorHandler = function (error, vm, info) {
 Vue.prototype.$get = function (getterName) {
   return store.getters[`presentation/${getterName}`]
 }
+
+Vue.prototype.$openPresentation = openPresentation
 
 /**
  * The main vue instance
