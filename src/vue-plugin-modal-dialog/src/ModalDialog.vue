@@ -19,7 +19,7 @@ import ModalDialog from './main.js'
 import { dialogsWatcher } from './main.js'
 
 // Components
-import { MaterialIcon } from '@bldr/vue-plugin-material-icon'
+import { MaterialIcon } from '@bldr/icons'
 
 export default {
   name: 'ModalDialog',

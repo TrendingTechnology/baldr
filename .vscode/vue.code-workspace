@@ -21,7 +21,7 @@
       "path": "../src/vue/components/dynamic-select/src"
     },
     {
-      "name": "@bldr/vue-plugin-material-icon",
+      "name": "@bldr/icons",
       "path": "../src/vue/components/material-icon/src"
     },
     {

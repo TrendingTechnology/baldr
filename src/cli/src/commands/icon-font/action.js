@@ -18,7 +18,7 @@ const { config } = require('../../main.js')
 let tmpDir
 
 function basePath () {
-  return path.join(config.localRepo, 'src', 'vue-plugin-material-icon', 'src', ...arguments)
+  return path.join(config.localRepo, 'src', 'icons', 'src', ...arguments)
 }
 
 function downloadIcon (url, name, newName) {

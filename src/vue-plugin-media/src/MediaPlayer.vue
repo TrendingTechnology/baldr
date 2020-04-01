@@ -58,7 +58,7 @@
 
 <script>
 /* globals compilationTime gitHead */
-import { MaterialIcon } from '@bldr/vue-plugin-material-icon'
+import { MaterialIcon } from '@bldr/icons'
 import { formatDuration } from './main.js'
 
 export default {

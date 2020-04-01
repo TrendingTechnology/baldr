@@ -32,7 +32,7 @@
 
 <script>
 /* globals compilationTime gitHead */
-import { MaterialIcon } from '@bldr/vue-plugin-material-icon'
+import { MaterialIcon } from '@bldr/icons'
 
 export default {
   name: 'AppInfo',

@@ -1,5 +1,5 @@
 {
-  "name": "@bldr/vue-plugin-material-icon",
+  "name": "@bldr/icons",
   "version": "0.2.2",
   "description": "A selection of material design icons (https://materialdesignicons.com) extended with some custom icons.",
   "author": {

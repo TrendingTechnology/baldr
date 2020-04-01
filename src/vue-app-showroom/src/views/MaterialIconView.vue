@@ -60,7 +60,7 @@
 </template>
 
 <script>
-import { icons } from '@bldr/vue-plugin-material-icon'
+import { icons } from '@bldr/icons'
 
 export default {
   name: 'MaterialIconView',

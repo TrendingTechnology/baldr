@@ -29,7 +29,7 @@ class MasterIcon {
     }
     /**
      * For allowed icon names the materical icon font. The nasizeme of an icon
-     * of the {@link module:@bldr/vue-plugin-material-icon baldr icon font}
+     * of the {@link module:@bldr/icons baldr icon font}
      *
      * @type {String}
      */

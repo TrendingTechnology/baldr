@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import { MaterialIcon } from '@bldr/vue-plugin-material-icon'
+import { MaterialIcon } from '@bldr/icons'
 
 const circleRadius = 100;
 // 100%: 628.3185307179587

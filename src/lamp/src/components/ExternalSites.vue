@@ -1,15 +1,15 @@
 <template>
   <div class="vc_external_sites">
-    <a v-if="wikipedia" :href="wikipedia">
+    <a v-if="wikipedia" :href="wikipedia" title="Wikipedia">
       <plain-icon name="wikipedia"/>
     </a>
-    <a v-if="wikidata" :href="wikidata">
+    <a v-if="wikidata" :href="wikidata" title="Wikidata">
       <plain-icon name="wikidata"/>
     </a>
-    <a v-if="musicbrainz" :href="musicbrainz">
+    <a v-if="musicbrainz" :href="musicbrainz" title="Musicbrainz">
       <plain-icon name="musicbrainz"/>
     </a>
-    <a v-if="youtube" :href="youtube">
+    <a v-if="youtube" :href="youtube" title="Youtube">
       <plain-icon name="youtube"/>
     </a>
   </div>
