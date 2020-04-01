@@ -5,7 +5,7 @@
   ">
     <img class="img-contain" :src="group.httpUrl">
     <div class="info-box">
-      <p class="group important transparent-background">{{ group.name }}</p>
+      <p class="group important transparent-background font-shadow">{{ group.name }}</p>
     </div>
   </div>
 </template>
@@ -37,7 +37,7 @@ export default {
       .group {
         font-size: 2em;
         margin: 0;
-        padding-right: 1em;
+        padding-right: 0.5em;
         text-align: right;
       }
     }

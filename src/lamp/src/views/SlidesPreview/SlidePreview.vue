@@ -94,6 +94,7 @@ export default {
       left: 0.1em;
       position: absolute;
       top: 0.1em;
+      z-index: 1;
     }
   }
 </style>

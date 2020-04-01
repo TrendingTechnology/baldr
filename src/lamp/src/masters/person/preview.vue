@@ -5,7 +5,7 @@
   ">
     <img class="img-contain" :src="imageHttpUrl">
     <div class="info-box">
-      <p class="person important transparent-background">{{ name }}</p>
+      <p class="person important transparent-background font-shadow">{{ name }}</p>
     </div>
   </div>
 </template>
