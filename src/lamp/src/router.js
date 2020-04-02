@@ -61,7 +61,7 @@ const routes = [
     }
   },
   {
-    path: '/pres-id/:presId',
+    path: '/presentation/:presId',
     name: 'slides',
     component: SlideView,
     name: 'open-by-pres',
@@ -70,12 +70,17 @@ const routes = [
     },
     children: [
       {
-        path: 'slide-no/:slideNo',
+        path: 'preview',
+        component: SlidesPreview,
+        name: 'slides-preview-ng'
+      },
+      {
+        path: 'slide/:slideNo',
         component: SlideView,
         name: 'open-by-slide',
         children: [
           {
-            path: 'step-no/:stepNo',
+            path: 'step/:stepNo',
             name: 'open-by-step',
             component: SlideView
           }

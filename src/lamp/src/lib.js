@@ -220,12 +220,18 @@ export class DomSteps {
   /**
    *
    * @param {Object} options
-   * @property {Array} options.elements - An array of HTML elements to use
-   *   as steps.
-   * @property {String} options.cssSelectors - String to feed
+   * @property {Array} elements - An array of HTML elements to use as steps.
+   * @property {String} cssSelectors - String to feed
    *   `document.querySelectorAll()`
-   * @property {String} options.specializedSelector - At the moment: `words`
-   *   or `sentences`.
+   * @property {String} specializedSelector - Which specialized selector should
+   *   be used. At the moment there are two: `words` or `sentences`.
+   * @property {String} sentencesSelector - A CSS selector which is passed
+   *   through to the static method `DomSteps.selectSentences`, which uses
+   *   `document.querySelector()` to find the parent HTML element, which
+   *   contains child HTML element to use as steps.
+   * @property {String} subsetSelectors
+   * @property {String} useVisibliltyProp - default `false`
+   * @property {Boolean} hideAllElementsInitally - default `true`
    */
   constructor (options) {
     const optionsDefault = {
@@ -416,11 +422,10 @@ export class DomSteps {
    * Select a whole paragraph (`<p>`) or a heading `<h1>` or `<li>` items of
    * ordered or unordered lists, or a table row.
    *
-   * @param {String} - A selector for `document.querySelector()` of the parent
-   *   Element, which contains child HTML element to use as steps.
+   * @param {String} - A selector for `document.querySelector()` to find the
+   *   parent HTML element, which contains child HTML element to use as steps.
    *
-   * @returns {DomStepElement[]} An array of
-   *   `DomStepElement`s.
+   * @returns {DomStepElement[]} An array of `DomStepElement`s.
    */
   static selectSentences (selector) {
     const parentElement = document.querySelector(selector)
