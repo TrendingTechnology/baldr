@@ -170,7 +170,7 @@ class Question {
  */
 function setQuestionsBySetNo (newStepNo) {
   const slide = this.$get('slideCurrent')
-  const sequence = slide.renderData.props.sequence
+  const sequence = slide.props.sequence
 
   // Question with a question or answer. Only the heading.
   if (!sequence.length) return
@@ -234,7 +234,7 @@ export default {
     },
     enterSlide ({ newSlide }) {
       const slide = newSlide
-      setQuestionsBySetNo.call(this, slide.renderData.stepNoCurrent)
+      setQuestionsBySetNo.call(this, slide.stepNoCurrent)
     },
     enterStep ({ newStepNo }) {
       setQuestionsBySetNo.call(this, newStepNo)

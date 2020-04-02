@@ -37,7 +37,7 @@ export default {
   computed: {
     ...mapGetters(['slideCurrent']),
     stepNoCurrent () {
-      return this.slideCurrent.renderData.stepNoCurrent
+      return this.slideCurrent.stepNoCurrent
     },
     markupCurrent () {
       if (this.stepWords || this.stepSentences) {

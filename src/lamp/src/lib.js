@@ -492,7 +492,7 @@ export class DomSteps {
   }
 
   setStepCount (slide) {
-    slide.renderData.stepCount = this.count
+    slide.stepCount = this.count
   }
 
   get count () {

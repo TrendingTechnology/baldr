@@ -59,12 +59,12 @@ export default {
 
       this.domSteps = new DomSteps({
         cssSelectors: this.stepSelector,
-        subsetSelectors: this.slideCurrent.renderData.props.stepSubset,
+        subsetSelectors: this.slideCurrent.props.stepSubset,
         hideAllElementsInitally: false
       })
 
       this.domSteps.displayByNo({
-        stepNo: this.slideCurrent.renderData.stepNoCurrent
+        stepNo: this.slideCurrent.stepNoCurrent
       })
 
       this.domSteps.setStepCount(this.slideCurrent)

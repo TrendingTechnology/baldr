@@ -77,7 +77,7 @@ export default {
           hideAllElementsInitally: false
         })
         this.domSteps.setStepCount(this.slideCurrent)
-        this.domSteps.displayByNo({ stepNo: this.slideCurrent.renderData.stepNoCurrent, full: true })
+        this.domSteps.displayByNo({ stepNo: this.slideCurrent.stepNoCurrent, full: true })
       }
     },
     enterStep ({ oldStepNo, newStepNo }) {

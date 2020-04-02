@@ -8,11 +8,11 @@ export default {
   },
   render: function (createElement) {
     if (this.slide) {
-      if (this.slide.renderData.propsPreview) {
+      if (this.slide.propsPreview) {
         return createElement(
           `${this.slide.master.name}-master-preview`,
           {
-            props: this.slide.renderData.propsPreview,
+            props: this.slide.propsPreview,
           }
         )
       } else {

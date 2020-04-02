@@ -125,90 +125,6 @@ class RawSlideObject extends RawDataObject {
 }
 
 /**
- * Provide data to render a slide.
- *
- * Normalize the slide data to allow different input formats from the yaml
- * file.
- *
- * @param {module:@bldr/core/slides~rawSlideData} rawSlideData
- *   Various types of data to render a slide.
- */
-class RenderData {
-  constructor (rawSlideObject) {
-    const intersection = intersect(
-      masters.allNames,
-      Object.keys(rawSlideObject.raw)
-    )
-
-    if (intersection.length === 0) {
-      throw Error(`No master slide found: ${toString(rawSlideObject.raw)}`)
-    }
-
-    if (intersection.length > 1) {
-      throw Error(`Each slide must have only one master slide: ${toString(rawSlideObject.raw)}`)
-    }
-
-    /**
-     * The name of the master slide.
-     *
-     * @type {string}
-     */
-    this.masterName = intersection[0]
-
-    /**
-     * Data in various types to pass to a master slide.
-     * Normalized master data. This data gets passed through the master slides,
-     * to the props of the Vue components.
-     * @type {module:@bldr/core/masters~rawMasterData}
-     */
-    this.props = rawSlideObject.cut(this.masterName)
-
-    /**
-     * Props (properties) to send to the main Vue master component.
-     */
-    this.propsMain = null
-
-    /**
-     * Props (properties) to send to the preview Vue master component.
-     */
-    this.propsPreview = null
-
-    /**
-     * A list of media URIs.
-     *
-     * @type {array}
-     */
-    this.mediaUris = []
-
-    const master = masters.get(this.masterName)
-    const normalizedProps = master.normalizeProps(this.props)
-    if (normalizedProps) {
-      this.props = normalizedProps
-    }
-    master.detectUnkownProps(this.props)
-    master.markupToHtml(this.props)
-    master.validateUris(this.props)
-
-    const mediaUris = master.resolveMediaUris(this.props)
-    if (mediaUris) this.mediaUris = mediaUris
-
-    /**
-     * How many steps the slide provides.
-     *
-     * @type {number}
-     */
-    this.stepCount = null
-
-    /**
-     * The current step number. The first number is 1 not 0.
-     *
-     * @type {number}
-     */
-    this.stepNoCurrent = 1
-  }
-}
-
-/**
  * The meta data of a slide. Each slide object owns one meta data object.
  */
 export class MetaData {
@@ -356,12 +272,81 @@ class Slide {
      *
      * @type {module:@bldr/lamp/content-file~RenderData}
      */
-    this.renderData = new RenderData(rawSlideObject)
+    //this = new RenderData(rawSlideObject)
+    const intersection = intersect(
+      masters.allNames,
+      Object.keys(rawSlideObject.raw)
+    )
+
+    if (intersection.length === 0) {
+      throw Error(`No master slide found: ${toString(rawSlideObject.raw)}`)
+    }
+
+    if (intersection.length > 1) {
+      throw Error(`Each slide must have only one master slide: ${toString(rawSlideObject.raw)}`)
+    }
+
+    /**
+     * The name of the master slide.
+     *
+     * @type {string}
+     */
+    this.masterName = intersection[0]
 
     /**
      * @type {module:@bldr/lamp/masters~Master}
      */
-    this.master = masters.get(this.renderData.masterName)
+    this.master = masters.get(this.masterName)
+
+    /**
+     * Data in various types to pass to a master slide.
+     * Normalized master data. This data gets passed through the master slides,
+     * to the props of the Vue components.
+     * @type {module:@bldr/core/masters~rawMasterData}
+     */
+    this.props = rawSlideObject.cut(this.masterName)
+
+    /**
+     * Props (properties) to send to the main Vue master component.
+     */
+    this.propsMain = null
+
+    /**
+     * Props (properties) to send to the preview Vue master component.
+     */
+    this.propsPreview = null
+
+    /**
+     * A list of media URIs.
+     *
+     * @type {array}
+     */
+    this.mediaUris = []
+
+    const normalizedProps = this.master.normalizeProps(this.props)
+    if (normalizedProps) {
+      this.props = normalizedProps
+    }
+    this.master.detectUnkownProps(this.props)
+    this.master.markupToHtml(this.props)
+    this.master.validateUris(this.props)
+
+    const mediaUris = this.master.resolveMediaUris(this.props)
+    if (mediaUris) this.mediaUris = mediaUris
+
+    /**
+     * How many steps the slide provides.
+     *
+     * @type {number}
+     */
+    this.stepCount = null
+
+    /**
+     * The current step number. The first number is 1 not 0.
+     *
+     * @type {number}
+     */
+    this.stepNoCurrent = 1
 
     /**
      * @type {module:@bldr/lamp/content-file.MetaData}
@@ -443,7 +428,7 @@ class Slide {
    */
   get plainText () {
     const output = []
-    const fromProps = this.master.plainTextFromProps(this.renderData.props)
+    const fromProps = this.master.plainTextFromProps(this.props)
     if (fromProps) output.push(fromProps)
     for (const mediaFile of this.mediaFiles) {
       output.push(mediaFile.plainText)
@@ -458,7 +443,7 @@ class Slide {
    */
   get mediaFiles () {
     const mediaFiles = []
-    for (const mediaUri of this.renderData.mediaUris) {
+    for (const mediaUri of this.mediaUris) {
       mediaFiles.push(store.getters['media/mediaFileByUri'](mediaUri))
     }
     return mediaFiles
@@ -495,8 +480,8 @@ class Slide {
    * @type {String}
    */
   get firstMediaUri () {
-    if (this.renderData.mediaUris && this.renderData.mediaUris.size) {
-      return this.renderData.mediaUris.values().next().value
+    if (this.mediaUris && this.mediaUris.size) {
+      return this.mediaUris.values().next().value
     }
   }
 }
@@ -697,7 +682,7 @@ ${JSON.stringify(this.rawYamlObject_)}`
 
     // Async hooks to load resources in the background.
     for (const slide of this.slides) {
-      slide.master.afterLoading(slide.renderData.props, vue)
+      slide.master.afterLoading(slide.props, vue)
     }
 
     /**
@@ -724,7 +709,7 @@ ${JSON.stringify(this.rawYamlObject_)}`
     // Resolve all media files.
     const mediaUris = []
     for (const slide of this.slides) {
-      for (const mediaUri of slide.renderData.mediaUris) {
+      for (const mediaUri of slide.mediaUris) {
         mediaUris.push(mediaUri)
       }
       if (slide.audioOverlay) {
@@ -744,20 +729,20 @@ ${JSON.stringify(this.rawYamlObject_)}`
     for (const slide of this.slides) {
       if (masters.exists(slide.master.name)) {
         const master = masters.get(slide.master.name)
-        master.renderInlineMedia(slide.renderData.props)
-        slide.renderData.propsMain = master.collectPropsMain(slide.renderData.props, vue)
-        slide.renderData.propsPreview = master.collectPropsPreview(
+        master.renderInlineMedia(slide.props)
+        slide.propsMain = master.collectPropsMain(slide.props, vue)
+        slide.propsPreview = master.collectPropsPreview(
           {
-            props: slide.renderData.props,
-            propsMain: slide.renderData.propsMain,
+            props: slide.props,
+            propsMain: slide.propsMain,
             slide
           },
           vue
         )
-        slide.renderData.stepCount = master.calculateStepCount({
-          props: slide.renderData.props,
-          propsMain: slide.renderData.propsMain,
-          propsPreview: slide.renderData.propsPreview,
+        slide.stepCount = master.calculateStepCount({
+          props: slide.props,
+          propsMain: slide.propsMain,
+          propsPreview: slide.propsPreview,
           slide
         }, vue)
       }

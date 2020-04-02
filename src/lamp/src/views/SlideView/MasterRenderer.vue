@@ -28,7 +28,7 @@ export default {
       } else if (this.slideCurrent) {
         return {
           name: this.slideCurrent.master.name,
-          propsMain: this.slideCurrent.renderData.propsMain,
+          propsMain: this.slideCurrent.propsMain,
           contentTheme: this.slideCurrent.contentTheme,
           styleConfig: this.slideCurrent.master.styleConfig,
           styleInline: this.slideCurrent.style
