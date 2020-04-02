@@ -725,13 +725,30 @@ ${JSON.stringify(this.rawYamlObject_)}`
       this.media = await vue.$media.resolve(mediaUris)
     }
 
+    /**
+     * To simplfy the navigation through all slides and steps.
+     *
+     * ```json
+     * [
+     *   { "slideNo": 1 },
+     *   { "slideNo": 2 },
+     *   { "slideNo": 3 },
+     *   { "slideNo": 4, "stepNo": 1 },
+     *   { "slideNo": 4, "stepNo": 2 },
+     *   { "slideNo": 4, "stepNo": 3 },
+     *   { "slideNo": 5 }
+     * ]
+     * ```
+     *
+     * @type {Array}
+     */
+    this.navigationList = []
+
     // After media resolution.
     for (const slide of this.slides) {
-      if (masters.exists(slide.master.name)) {
-        const master = masters.get(slide.master.name)
-        master.renderInlineMedia(slide.props)
-        slide.propsMain = master.collectPropsMain(slide.props, vue)
-        slide.propsPreview = master.collectPropsPreview(
+        slide.master.renderInlineMedia(slide.props)
+        slide.propsMain = slide.master.collectPropsMain(slide.props, vue)
+        slide.propsPreview = slide.master.collectPropsPreview(
           {
             props: slide.props,
             propsMain: slide.propsMain,
@@ -739,16 +756,24 @@ ${JSON.stringify(this.rawYamlObject_)}`
           },
           vue
         )
-        slide.stepCount = master.calculateStepCount({
+        slide.stepCount = slide.master.calculateStepCount({
           props: slide.props,
           propsMain: slide.propsMain,
           propsPreview: slide.propsPreview,
           slide
         }, vue)
-      }
 
       if (slide.metaData.id) {
         this.navigator.addId(slide.metaData.id, slide.no)
+      }
+
+      // Generate the navigation list
+      if (slide.stepCount && slide.stepCount > 1) {
+        for (let index = 1; index <= slide.stepCount; index++) {
+          this.navigationList.push({ slideNo: slide.no, stepNo: index })
+        }
+      } else {
+        this.navigationList.push({ slideNo: slide.no })
       }
     }
   }
