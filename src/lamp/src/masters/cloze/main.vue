@@ -35,6 +35,7 @@ export default {
       return clozeGElements
     },
     async loadSvg () {
+      if (!this.$refs.clozeWrapper) return
       let response = await this.$media.httpRequest.request({
         url: `/media/${this.svgPath}`,
         method: 'get'
