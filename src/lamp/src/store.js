@@ -264,6 +264,12 @@ const actions = {
     commit('setStepNoCurrent', { slide, stepNo })
     slide.master.enterStep({ oldStepNo, newStepNo }, thisArg)
   },
+  setSlideAndStepNoCurrent ({ dispatch, getters }, { slideNo, stepNo }) {
+    if (slideNo) dispatch('setSlideNoCurrent', slideNo)
+    if (stepNo) {
+      dispatch('setStepNoCurrent', { slide: getters.slide, stepNo })
+    }
+  },
   async updateFolderTitleTree ({ commit }) {
     const response = await vue.$media.httpRequest.request({
       url: 'get/folder-title-tree',

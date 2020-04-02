@@ -58,7 +58,7 @@ export default {
     version () {
       return packageJson.version
     },
-    ...mapGetters(['slide'])
+    ...mapGetters(['slide', 'presentation'])
   },
   methods: {
     ...mapActions([
@@ -166,6 +166,20 @@ export default {
         callback: () => this.setSlideOrStepNextOrPrevious(1),
         description: 'zur/m nächsten Folie oder Schritt',
         routeNames: ['slides']
+      },
+      {
+        keys: 'alt+left',
+        callback: () => {
+          this.presentation.navigate(-1)
+        },
+        description: 'zur/m vorhergehenden Folie oder Schritt (mit Router-Update)'
+      },
+      {
+        keys: 'alt+right',
+        callback: () => {
+          this.presentation.navigate(1)
+        },
+        description: 'zur/m nächsten Folie oder Schritt (mit Router-Update)'
       },
       {
         keys: 'ctrl+m',

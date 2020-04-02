@@ -603,16 +603,7 @@ export async function openPresentation (args) {
   vue.$media.player.stop()
   vue.$store.dispatch('media/clear')
   await vue.$store.dispatch('presentation/openPresentationById', args.presId)
-  if (args.slideNo) {
-    vue.$store.dispatch('presentation/setSlideNoCurrent', args.slideNo)
-  }
-  if (args.stepNo) {
-    const slide = vue.$store.getters['presentation/slide']
-    vue.$store.dispatch('presentation/setStepNoCurrent', {
-      slide,
-      stepNo: args.stepNo
-    })
-  }
+  vue.$store.dispatch('presentation/setSlideAndStepNoCurrent', args)
 
   if (args.noRouting) return
   if (args.route) {

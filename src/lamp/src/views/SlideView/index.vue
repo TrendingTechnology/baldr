@@ -16,6 +16,10 @@ import MetaDataOverlay from './MetaDataOverlay.vue'
 import SlideNumber from './SlideNumber.vue'
 import { openPresentation } from '@/lib.js'
 
+import store from '@/store.js'
+
+const routeNames = ['open-by-pres', 'open-by-slide', 'open-by-step']
+
 export default {
   name: 'SlideView',
   components: {
@@ -30,7 +34,7 @@ export default {
     // does NOT have access to `this` component instance,
     // because it has not been created yet when this guard is called!
     next(vm => {
-      if (to.name === 'open-by' && to.params.presId) {
+      if (routeNames.includes(to.name) && to.params.presId) {
         vm.$openPresentation({
           presId: to.params.presId,
           slideNo: to.params.slideNo,
@@ -41,13 +45,19 @@ export default {
     })
   },
   beforeRouteUpdate (to, from, next) {
-    if (to.name === 'open-by' && to.params.presId) {
-      this.$openPresentation({
-        presId: to.params.presId,
-        slideNo: to.params.slideNo,
-        stepNo: to.params.stepNo,
-        noRouting: true
-      })
+    if (routeNames.includes(to.name) && to.params.presId) {
+      const presentation = store.getters['presentation/presentation']
+      if (presentation.id) {
+        store.dispatch('presentation/setSlideAndStepNoCurrent', to.params)
+        next()
+      } else {
+        this.$openPresentation({
+          presId: to.params.presId,
+          slideNo: to.params.slideNo,
+          stepNo: to.params.stepNo,
+          noRouting: true
+        })
+      }
     }
   }
 }

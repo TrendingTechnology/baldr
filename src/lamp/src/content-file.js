@@ -742,7 +742,12 @@ ${JSON.stringify(this.rawYamlObject_)}`
      *
      * @type {Array}
      */
-    this.navigationList = []
+    this.navList = []
+
+    /**
+     * `1` is the first number, not zero.
+     */
+    this.navListNo = 1
 
     // After media resolution.
     for (const slide of this.slides) {
@@ -770,10 +775,10 @@ ${JSON.stringify(this.rawYamlObject_)}`
       // Generate the navigation list
       if (slide.stepCount && slide.stepCount > 1) {
         for (let index = 1; index <= slide.stepCount; index++) {
-          this.navigationList.push({ slideNo: slide.no, stepNo: index })
+          this.navList.push({ slideNo: slide.no, stepNo: index })
         }
       } else {
-        this.navigationList.push({ slideNo: slide.no })
+        this.navList.push({ slideNo: slide.no })
       }
     }
   }
@@ -846,6 +851,35 @@ ${JSON.stringify(this.rawYamlObject_)}`
    */
   get curriculum () {
     if (this.meta && this.meta.curriculum) return this.meta.curriculum
+  }
+
+  /**
+   * Navigate throught the presentation by updating the route.
+   *
+   * @param {Number} direction - `1`: next, `-1`: previous
+   */
+  navigate (direction) {
+    const count = this.navList.length
+    // Next
+    if (direction === 1 && this.navListNo === count) {
+      this.navListNo = 1
+    // Previous
+    } else if (direction === -1 && this.navListNo === 1) {
+      this.navListNo = count
+    } else {
+      this.navListNo = this.navListNo + direction
+    }
+
+    const params = Object.assign({}, this.navList[this.navListNo - 1])
+    params.presId = this.id
+
+    let name
+    if (params.stepNo) {
+      name = 'open-by-step'
+    } else {
+      name = 'open-by-slide'
+    }
+    router.push({ name, params })
   }
 }
 
