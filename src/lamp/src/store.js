@@ -25,7 +25,7 @@ const state = {
   },
   showBlank: true,
   slideNoOld: null,
-  slideNoCurrent: null,
+  slideNo: null,
   slides: {},
   showMetaDataOverlay: false
 }
@@ -63,12 +63,12 @@ const getters = {
   previewLayouts: state => {
     return state.preview.layouts
   },
-  slideNoCurrent: state => {
-    return state.slideNoCurrent
+  slideNo: state => {
+    return state.slideNo
   },
   slideCurrent: (state, getters) => {
-    if (state.slideNoCurrent) {
-      return getters.slideByNo(state.slideNoCurrent)
+    if (state.slideNo) {
+      return getters.slideByNo(state.slideNo)
     }
   },
   slideNoOld: (state) => {
@@ -154,7 +154,7 @@ const actions = {
    * @param {Number} direction - `1`: next, `-1`: previous
    */
   setSlideNextOrPrevious ({ dispatch, getters }, direction) {
-    const no = getters.slideNoCurrent
+    const no = getters.slideNo
     const count = getters.slidesCount
     // next
     if (direction === 1 && no === count) {
@@ -323,8 +323,8 @@ const mutations = {
   setSlideNoOld (state, slideNoOld) {
     state.slideNoOld = parseInt(slideNoOld)
   },
-  setSlideNoCurrent (state, slideNoCurrent) {
-    state.slideNoCurrent = parseInt(slideNoCurrent)
+  setSlideNoCurrent (state, slideNo) {
+    state.slideNo = parseInt(slideNo)
   },
   setStepNoCurrent (state, { slideCurrent, stepNo }) {
     slideCurrent.stepNo = stepNo

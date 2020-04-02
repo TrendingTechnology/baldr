@@ -1,5 +1,5 @@
 <template>
-  <div v-if="slideNoCurrent === 1" class="vc_meta_data">
+  <div v-if="slideNo === 1" class="vc_meta_data">
     <h1>{{ title }}</h1>
     <h2 v-if="subtitle">{{ subtitle }}</h2>
     <audio v-if="audio" controls :src="audio"></audio>
@@ -33,7 +33,7 @@ export default {
   computed: {
     ...mapGetters([
       'externalSites',
-      'slideNoCurrent',
+      'slideNo',
       'songCurrent'
     ]),
     metadata () {

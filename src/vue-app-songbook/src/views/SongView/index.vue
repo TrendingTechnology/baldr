@@ -77,7 +77,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['songCurrent', 'slideNoCurrent', 'library']),
+    ...mapGetters(['songCurrent', 'slideNo', 'library']),
     abc () {
       return this.songCurrent.abc
     },
@@ -85,10 +85,10 @@ export default {
       return this.songCurrent.songId
     },
     slideNo () {
-      if (this.slideNoCurrent <= 9) {
-        return `0${this.slideNoCurrent}`
+      if (this.slideNo <= 9) {
+        return `0${this.slideNo}`
       }
-      return this.slideNoCurrent
+      return this.slideNo
     },
     imageSrc () {
       return `/songs/${this.abc}/${this.songId}/${this.slideNo}.svg`

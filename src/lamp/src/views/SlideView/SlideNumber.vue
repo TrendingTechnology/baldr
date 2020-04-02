@@ -7,9 +7,9 @@
       <span class="count"> / {{ stepCount }}</span>
     </span>
 
-    <span v-if="slideNoCurrent">
+    <span v-if="slideNo">
       <plain-icon color="white" name="slides"/>
-      <span class="number">{{ slideNoCurrent }}</span>
+      <span class="number">{{ slideNo }}</span>
       <span class="count"> / {{ slidesCount }}</span>
     </span>
   </div>
@@ -22,7 +22,7 @@ const { mapGetters } = createNamespacedHelpers('presentation')
 export default {
   name: 'SlideNumber',
   computed: {
-    ...mapGetters(['slideNoCurrent', 'slidesCount']),
+    ...mapGetters(['slideNo', 'slidesCount']),
     slideCurrent () {
       const slide = this.$store.getters['presentation/slideCurrent']
       if (slide) {

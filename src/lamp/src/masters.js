@@ -425,7 +425,7 @@ class Master {
 
   /**
    * Called before leaving a slide. This hook is triggered before the new
-   * slide number `slideNoCurrent` is set in the vuex store.
+   * slide number `slideNo` is set in the vuex store.
    *
    * @param {object} payload
    * @property {object} payload

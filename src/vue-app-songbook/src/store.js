@@ -9,7 +9,7 @@ import {
 Vue.use(Vuex)
 
 const state = {
-  slideNoCurrent: 0,
+  slideNo: 0,
   songCurrent: {},
   library: {}
 }
@@ -24,8 +24,8 @@ const getters = {
   library: (state) => {
     return state.library
   },
-  slideNoCurrent: (state) => {
-    return state.slideNoCurrent
+  slideNo: (state) => {
+    return state.slideNo
   },
   songCurrent: (state) => {
     return state.songCurrent
@@ -37,7 +37,7 @@ const getters = {
 
 const actions = {
   browseAllSlidesNext ({ commit, getters, dispatch }) {
-    const no = getters.slideNoCurrent
+    const no = getters.slideNo
     const count = getters.songCurrent.slidesCount
     if (no === count) {
       dispatch('setSongNext')
@@ -46,7 +46,7 @@ const actions = {
     }
   },
   browseAllSlidesPrevious ({ commit, getters, dispatch }) {
-    const no = getters.slideNoCurrent
+    const no = getters.slideNo
     if (no === 1) {
       dispatch('setSongPrevious')
       commit('setSlideNoCurrent', getters.songCurrent.slidesCount)
@@ -62,7 +62,7 @@ const actions = {
     commit('importSongs', songs)
   },
   setSlideNext ({ commit, getters }) {
-    const no = getters.slideNoCurrent
+    const no = getters.slideNo
     const count = getters.songCurrent.slidesCount
     if (no === count) {
       commit('setSlideNoCurrent', 1)
@@ -71,7 +71,7 @@ const actions = {
     }
   },
   setSlidePrevious ({ commit, getters }) {
-    const no = getters.slideNoCurrent
+    const no = getters.slideNo
     const count = getters.songCurrent.slidesCount
     if (no === 1) {
       commit('setSlideNoCurrent', count)
@@ -103,8 +103,8 @@ const mutations = {
   importSongs (state, songs) {
     state.library = new CoreLibrary(songs)
   },
-  setSlideNoCurrent (state, slideNoCurrent) {
-    state.slideNoCurrent = parseInt(slideNoCurrent)
+  setSlideNoCurrent (state, slideNo) {
+    state.slideNo = parseInt(slideNo)
   },
   setSongCurrent (state, song) {
     state.songCurrent = song
