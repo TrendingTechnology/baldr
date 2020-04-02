@@ -607,9 +607,9 @@ export async function openPresentation (args) {
     vue.$store.dispatch('presentation/setSlideNoCurrent', args.slideNo)
   }
   if (args.stepNo) {
-    const slideCurrent = vue.$store.getters['presentation/slideCurrent']
+    const slide = vue.$store.getters['presentation/slide']
     vue.$store.dispatch('presentation/setStepNoCurrent', {
-      slideCurrent,
+      slide,
       stepNo: args.stepNo
     })
   }

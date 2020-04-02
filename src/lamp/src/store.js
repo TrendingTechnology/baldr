@@ -66,7 +66,7 @@ const getters = {
   slideNo: state => {
     return state.slideNo
   },
-  slideCurrent: (state, getters) => {
+  slide: (state, getters) => {
     if (state.slideNo) {
       return getters.slideByNo(state.slideNo)
     }
@@ -98,7 +98,7 @@ const getters = {
     return state.showMetaDataOverlay
   },
   stepNo: (state, getters) => {
-    return getters.slideCurrent.stepNo
+    return getters.slide.stepNo
   }
 }
 
@@ -142,7 +142,7 @@ const actions = {
    * again.
    */
   async reloadPresentation ({ dispatch, getters }) {
-    const no = getters.slideCurrent.no
+    const no = getters.slide.no
     const pres = getters.presentation
     if ('meta' in pres && 'id' in pres.meta) {
       await dispatch('openPresentationById', pres.meta.id)
@@ -178,13 +178,13 @@ const actions = {
     // Only set the step number on slides with step support. The master slide
     // cloze sets the variable stepCount async. If you enter a never before
     // visited cloze slide backwards, strange things happens.
-    if (getters.slideCurrent.stepCount) {
+    if (getters.slide.stepCount) {
       let stepNo = 1
       if (direction === -1) {
-        stepNo = getters.slideCurrent.stepCount
+        stepNo = getters.slide.stepCount
       }
       dispatch('setStepNoCurrent', {
-        slideCurrent: getters.slideCurrent,
+        slide: getters.slide,
         stepNo
       })
     }
@@ -199,10 +199,10 @@ const actions = {
   setSlideOrStepNextOrPrevious ({ dispatch, getters }, direction) {
     // Change only steps
     if (
-      getters.slideCurrent.stepCount > 1 &&
+      getters.slide.stepCount > 1 &&
       (
-        (direction === 1 && getters.slideCurrent.stepNo !== getters.slideCurrent.stepCount) || // Next
-        (direction === -1 && getters.slideCurrent.stepNo !== 1) // Previous
+        (direction === 1 && getters.slide.stepNo !== getters.slide.stepCount) || // Next
+        (direction === -1 && getters.slide.stepNo !== 1) // Previous
       )
     ) {
       dispatch('setStepNextOrPrevious', direction)
@@ -222,11 +222,11 @@ const actions = {
     const newSlide = getters.slideByNo(no)
     const newProps = newSlide.props
 
-    if (getters.slideCurrent) {
-      oldSlide = getters.slideCurrent
+    if (getters.slide) {
+      oldSlide = getters.slide
       commit('setSlideNoOld', oldSlide.no)
       oldProps = oldSlide.props
-      getters.slideCurrent.master.beforeLeaveSlide(
+      getters.slide.master.beforeLeaveSlide(
         { oldSlide, oldProps, newSlide, newProps },
         customStore.vueMasterInstanceCurrent
       )
@@ -239,12 +239,12 @@ const actions = {
    * @param {Number} direction - `1`: next, `-1`: previous
    */
   setStepNextOrPrevious ({ dispatch, getters }, direction) {
-    const slideCurrent = getters.slideCurrent
-    if (!slideCurrent) return
-    const count = slideCurrent.stepCount
+    const slide = getters.slide
+    if (!slide) return
+    const count = slide.stepCount
     if (!count) return
     let stepNo
-    const no = slideCurrent.stepNo
+    const no = slide.stepNo
     // Next
     if (direction === 1 && no === count) {
       stepNo = 1
@@ -254,15 +254,15 @@ const actions = {
     } else {
       stepNo = no + direction
     }
-    dispatch('setStepNoCurrent', { slideCurrent, stepNo })
+    dispatch('setStepNoCurrent', { slide, stepNo })
   },
-  setStepNoCurrent ({ commit }, { slideCurrent, stepNo }) {
-    const oldStepNo = slideCurrent.stepNo
+  setStepNoCurrent ({ commit }, { slide, stepNo }) {
+    const oldStepNo = slide.stepNo
     const newStepNo = stepNo
     const thisArg = customStore.vueMasterInstanceCurrent
-    slideCurrent.master.leaveStep({ oldStepNo, newStepNo }, thisArg)
-    commit('setStepNoCurrent', { slideCurrent, stepNo })
-    slideCurrent.master.enterStep({ oldStepNo, newStepNo }, thisArg)
+    slide.master.leaveStep({ oldStepNo, newStepNo }, thisArg)
+    commit('setStepNoCurrent', { slide, stepNo })
+    slide.master.enterStep({ oldStepNo, newStepNo }, thisArg)
   },
   async updateFolderTitleTree ({ commit }) {
     const response = await vue.$media.httpRequest.request({
@@ -326,8 +326,8 @@ const mutations = {
   setSlideNoCurrent (state, slideNo) {
     state.slideNo = parseInt(slideNo)
   },
-  setStepNoCurrent (state, { slideCurrent, stepNo }) {
-    slideCurrent.stepNo = stepNo
+  setStepNoCurrent (state, { slide, stepNo }) {
+    slide.stepNo = stepNo
   },
   setPresentation (state, presentation) {
     Vue.set(state, 'presentation', presentation)

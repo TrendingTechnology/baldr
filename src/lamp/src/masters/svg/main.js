@@ -59,15 +59,15 @@ export default {
 
       this.domSteps = new DomSteps({
         cssSelectors: this.stepSelector,
-        subsetSelectors: this.slideCurrent.props.stepSubset,
+        subsetSelectors: this.slide.props.stepSubset,
         hideAllElementsInitally: false
       })
 
       this.domSteps.displayByNo({
-        stepNo: this.slideCurrent.stepNo
+        stepNo: this.slide.stepNo
       })
 
-      this.domSteps.setStepCount(this.slideCurrent)
+      this.domSteps.setStepCount(this.slide)
       this.domSteps.shortcutsRegister()
     },
     enterStep ({ oldStepNo, newStepNo }) {

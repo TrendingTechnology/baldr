@@ -23,22 +23,22 @@ export default {
   name: 'SlideNumber',
   computed: {
     ...mapGetters(['slideNo', 'slidesCount']),
-    slideCurrent () {
-      const slide = this.$store.getters['presentation/slideCurrent']
+    slide () {
+      const slide = this.$store.getters['presentation/slide']
       if (slide) {
         return slide
       }
       return null
     },
     stepNo () {
-      if (this.slideCurrent) {
-        return this.slideCurrent.stepNo
+      if (this.slide) {
+        return this.slide.stepNo
       }
       return 1
     },
     stepCount () {
-      if (this.slideCurrent) {
-        return this.slideCurrent.stepCount
+      if (this.slide) {
+        return this.slide.stepCount
       }
       return 1
     }

@@ -13,7 +13,7 @@ export default {
     OpenInterface
   },
   computed: {
-    ...mapGetters(['slideCurrent', 'showBlank']),
+    ...mapGetters(['slide', 'showBlank']),
     data_ () {
       if ('master' in this.$route.meta) {
         const masterName = this.$route.meta.master
@@ -25,13 +25,13 @@ export default {
           styleConfig: master.styleConfig,
           styleInline: {}
         }
-      } else if (this.slideCurrent) {
+      } else if (this.slide) {
         return {
-          name: this.slideCurrent.master.name,
-          propsMain: this.slideCurrent.propsMain,
-          contentTheme: this.slideCurrent.contentTheme,
-          styleConfig: this.slideCurrent.master.styleConfig,
-          styleInline: this.slideCurrent.style
+          name: this.slide.master.name,
+          propsMain: this.slide.propsMain,
+          contentTheme: this.slide.contentTheme,
+          styleConfig: this.slide.master.styleConfig,
+          styleInline: this.slide.style
         }
       }
       return {}

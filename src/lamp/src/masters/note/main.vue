@@ -21,7 +21,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['slideCurrent']),
+    ...mapGetters(['slide']),
   }
 }
 </script>

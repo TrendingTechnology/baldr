@@ -7,7 +7,7 @@
       v-for="slide in slides"
       :key="slide.no"
       :title="`Zur Folie Nr. ${slide.no}`"
-      :class="{ 'current-slide': slideCurrent.no === slide.no }"
+      :class="{ 'current-slide': slide.no === slideCurrent.no }"
     >
       <hr v-if="slide.slides.length && previewHierarchical"/>
       <slide-preview :slide="slide"/>
@@ -34,10 +34,14 @@ export default {
   components: {
     SlidePreview
   },
-  computed: mapGetters([
-    'slideCurrent',
-    'previewHierarchical'
-  ])
+  computed: {
+    slideCurrent () {
+      return this.$store.getters['presentation/slide']
+    },
+    ...mapGetters([
+      'previewHierarchical'
+    ])
+  }
 }
 </script>
 

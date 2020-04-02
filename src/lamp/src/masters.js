@@ -665,7 +665,7 @@ const masterMixin = {
       oldProps = oldSlide.props
     }
     // On instant slides like camera or editor there is no newSlide
-    const newSlide = vue.$store.getters['presentation/slideCurrent']
+    const newSlide = vue.$store.getters['presentation/slide']
     let newProps
     if (newSlide) {
       newProps = newSlide.props
@@ -681,7 +681,7 @@ const masterMixin = {
       oldProps = oldSlide.props
     }
     // On instant slides like camera or editor there is no newSlide
-    const newSlide = vue.$store.getters['presentation/slideCurrent']
+    const newSlide = vue.$store.getters['presentation/slide']
     if (newSlide) {
       const newProps = newSlide.props
       newSlide.master.leaveSlide({ oldSlide, oldProps, newSlide, newProps }, this)

@@ -76,8 +76,8 @@ export default {
           sentencesSelector,
           hideAllElementsInitally: false
         })
-        this.domSteps.setStepCount(this.slideCurrent)
-        this.domSteps.displayByNo({ stepNo: this.slideCurrent.stepNo, full: true })
+        this.domSteps.setStepCount(this.slide)
+        this.domSteps.displayByNo({ stepNo: this.slide.stepNo, full: true })
       }
     },
     enterStep ({ oldStepNo, newStepNo }) {

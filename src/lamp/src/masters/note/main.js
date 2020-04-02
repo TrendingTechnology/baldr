@@ -97,8 +97,8 @@ export default {
         specializedSelector: 'words',
         hideAllElementsInitally: false
       })
-      this.domSteps.setStepCount(this.slideCurrent)
-      this.domSteps.displayByNo({ stepNo: this.slideCurrent.stepNo, full: true })
+      this.domSteps.setStepCount(this.slide)
+      this.domSteps.displayByNo({ stepNo: this.slide.stepNo, full: true })
     },
     enterStep ({ oldStepNo, newStepNo }) {
       // If you come from a different master, domSteps is not set up yet.

@@ -5,7 +5,7 @@
       :key="slide.no"
       @click="gotToSlide(slide.no)"
       :title="`Zur Folie Nr. ${slide.no}`"
-      :class="{ 'current-slide': slideCurrent.no === slide.no }"
+      :class="{ 'current-slide': slide.no === slide.no }"
       :style="style(slide)"
     >
       <slide-preview :slide="slide"/>
@@ -35,7 +35,7 @@ export default {
   },
   computed: mapGetters([
     'presentation',
-    'slideCurrent',
+    'slide',
     'slidesCount',
     'previewDetail',
     'previewHierarchical'

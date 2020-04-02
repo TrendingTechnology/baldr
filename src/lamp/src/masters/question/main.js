@@ -169,7 +169,7 @@ class Question {
  * @param {Number} newStepNo
  */
 function setQuestionsBySetNo (newStepNo) {
-  const slide = this.$get('slideCurrent')
+  const slide = this.$get('slide')
   const sequence = slide.props.sequence
 
   // Question with a question or answer. Only the heading.

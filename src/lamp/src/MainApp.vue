@@ -58,7 +58,7 @@ export default {
     version () {
       return packageJson.version
     },
-    ...mapGetters(['slideCurrent'])
+    ...mapGetters(['slide'])
   },
   methods: {
     ...mapActions([
@@ -199,8 +199,8 @@ export default {
       {
         keys: 'ctrl+a',
         callback: () => {
-          if (this.slideCurrent && this.slideCurrent.firstMediaUri) {
-            const uri = this.slideCurrent.firstMediaUri.split(':')[1]
+          if (this.slide && this.slide.firstMediaUri) {
+            const uri = this.slide.firstMediaUri.split(':')[1]
             this.$media.httpRequest.request({
               url: 'mgmt/open',
               params: {

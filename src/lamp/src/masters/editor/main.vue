@@ -31,7 +31,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['slideCurrent']),
+    ...mapGetters(['slide']),
     markupSafe () {
       if (this.markup) {
         return this.markup

@@ -35,9 +35,9 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['slideCurrent']),
+    ...mapGetters(['slide']),
     stepNo () {
-      return this.slideCurrent.stepNo
+      return this.slide.stepNo
     },
     markupCurrent () {
       if (this.stepWords || this.stepSentences) {

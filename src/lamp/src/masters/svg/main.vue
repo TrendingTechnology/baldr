@@ -27,7 +27,7 @@ export default {
       domSteps: null
     }
   },
-  computed: mapGetters(['slideCurrent'])
+  computed: mapGetters(['slide'])
 }
 </script>
 

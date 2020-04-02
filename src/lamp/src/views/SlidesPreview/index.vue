@@ -78,7 +78,7 @@ export default {
   },
   computed: mapGetters([
     'presentation',
-    'slideCurrent',
+    'slide',
     'slides',
     'slidesCount',
     'previewSize',

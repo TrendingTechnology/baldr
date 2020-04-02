@@ -14,10 +14,10 @@ const { mapGetters } = createNamespacedHelpers('presentation')
 export default {
   name: 'AudioOverlay',
   computed: {
-    ...mapGetters(['slideCurrent']),
+    ...mapGetters(['slide']),
     audioOverlay () {
-      if (this.slideCurrent && this.slideCurrent.audioOverlay) {
-        return this.slideCurrent.audioOverlay
+      if (this.slide && this.slide.audioOverlay) {
+        return this.slide.audioOverlay
       }
     }
   }

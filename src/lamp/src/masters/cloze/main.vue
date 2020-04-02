@@ -22,7 +22,7 @@ export default {
       domSteps: null
     }
   },
-  computed: mapGetters(['slideCurrent']),
+  computed: mapGetters(['slide']),
   methods: {
     collectClozeGroups () {
       const gElements = document.querySelectorAll('svg g')
@@ -44,12 +44,12 @@ export default {
       warnSvgWidthHeight()
       this.domSteps = new DomSteps({
         elements: this.collectClozeGroups(),
-        subsetSelectors: this.slideCurrent.props.stepSubset
+        subsetSelectors: this.slide.props.stepSubset
       })
-      this.domSteps.setStepCount(this.slideCurrent)
+      this.domSteps.setStepCount(this.slide)
 
       const newClozeGroup = this.domSteps.displayByNo({
-        stepNo: this.slideCurrent.stepNo
+        stepNo: this.slide.stepNo
       })
       this.scroll(newClozeGroup)
     },

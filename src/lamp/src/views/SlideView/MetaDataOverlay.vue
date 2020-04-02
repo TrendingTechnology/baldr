@@ -29,7 +29,7 @@ export default {
   name: 'MetaDataOverlay',
   computed: {
     slide () {
-      return this.$store.getters['presentation/slideCurrent']
+      return this.$store.getters['presentation/slide']
     },
     metaData: function () {
       return this.slide.metaData

@@ -15,9 +15,6 @@
 </template>
 
 <script>
-import { createNamespacedHelpers } from 'vuex'
-const { mapGetters } = createNamespacedHelpers('presentation')
-
 import SlidePreviewRenderer from './SlidePreviewRenderer.vue'
 
 export default {
@@ -30,9 +27,11 @@ export default {
   components: {
     SlidePreviewRenderer
   },
-  computed: mapGetters([
-    'slideCurrent'
-  ]),
+  computed: {
+    slideCurrent () {
+      return this.$store.getters['presentation/slide']
+    }
+  },
   methods: {
     gotToSlide (slideNo) {
       this.$store.dispatch('presentation/setSlideNoCurrent', slideNo)
