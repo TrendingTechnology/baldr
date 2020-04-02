@@ -591,26 +591,33 @@ export class DomSteps {
  * Open a presentation and redirect to the desired view, stop the player and
  * clear the media cache.
  *
- * @param {String} presentationId
+ * @param {String} presId
  * @param {Number} slideNo
  * @param {Number} stepNo
  */
-export async function openPresentation (presentationId, slideNo, stepNo) {
+export async function openPresentation (args) {
+  if (typeof args === 'string') {
+    args = { presId: args }
+  }
+
   vue.$media.player.stop()
   vue.$store.dispatch('media/clear')
-  await vue.$store.dispatch('presentation/openPresentationById', presentationId)
-  if (slideNo) {
-    vue.$store.dispatch('presentation/setSlideNoCurrent', slideNo)
+  await vue.$store.dispatch('presentation/openPresentationById', args.presId)
+  if (args.slideNo) {
+    vue.$store.dispatch('presentation/setSlideNoCurrent', args.slideNo)
   }
-  if (stepNo) {
+  if (args.stepNo) {
     const slideCurrent = vue.$store.getters['presentation/slideCurrent']
     vue.$store.dispatch('presentation/setStepNoCurrent', {
       slideCurrent,
-      stepNoCurrent: stepNo
+      stepNoCurrent: args.stepNo
     })
   }
 
-  if (slideNo && slideNo > 1 && vue.$route.name !== 'slides') {
+  if (args.noRouting) return
+  if (args.route) {
+    vue.$router.push(args.route)
+  } else if (args.slideNo && args.slideNo > 1 && vue.$route.name !== 'slides') {
     vue.$router.push({ name: 'slides' })
   } else if (vue.$route.name !== 'slides-preview') {
     vue.$router.push({ name: 'slides-preview' })

@@ -171,7 +171,6 @@ class Question {
 function setQuestionsBySetNo (newStepNo) {
   const slide = this.$get('slideCurrent')
   const sequence = slide.renderData.props.sequence
-  console.log(sequence)
 
   // Question with a question or answer. Only the heading.
   if (!sequence.length) return

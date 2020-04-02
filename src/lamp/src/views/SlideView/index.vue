@@ -30,14 +30,26 @@ export default {
     // does NOT have access to `this` component instance,
     // because it has not been created yet when this guard is called!
     next(vm => {
-      if (to.name === 'open-by') {
-        if (to.params.presId) vm.$openPresentation(to.params.presId, to.params.slideNo, to.params.stepNo)
+      if (to.name === 'open-by' && to.params.presId) {
+        vm.$openPresentation({
+          presId: to.params.presId,
+          slideNo: to.params.slideNo,
+          stepNo: to.params.stepNo,
+          noRouting: true
+        })
       }
     })
+  },
+  beforeRouteUpdate (to, from, next) {
+    if (to.name === 'open-by' && to.params.presId) {
+      this.$openPresentation({
+        presId: to.params.presId,
+        slideNo: to.params.slideNo,
+        stepNo: to.params.stepNo,
+        noRouting: true
+      })
+    }
   }
-  // beforeRouteUpdate (to, from, next) {
-  //   console.log(to)
-  // }
 }
 </script>
 
