@@ -16,7 +16,7 @@ export default {
     }
   },
   computed: {
-    stepNo: mapGetters(['stepNoCurrent']).stepNoCurrent
+    stepNo: mapGetters(['stepNo']).stepNo
   }
 }
 </script>

@@ -36,14 +36,14 @@ export default {
   },
   computed: {
     ...mapGetters(['slideCurrent']),
-    stepNoCurrent () {
-      return this.slideCurrent.stepNoCurrent
+    stepNo () {
+      return this.slideCurrent.stepNo
     },
     markupCurrent () {
       if (this.stepWords || this.stepSentences) {
         return this.markup[0]
       }
-      return this.markup[this.stepNoCurrent - 1]
+      return this.markup[this.stepNo - 1]
     }
   }
 }

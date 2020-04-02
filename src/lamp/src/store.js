@@ -97,8 +97,8 @@ const getters = {
   showMetaDataOverlay: (state) => {
     return state.showMetaDataOverlay
   },
-  stepNoCurrent: (state, getters) => {
-    return getters.slideCurrent.stepNoCurrent
+  stepNo: (state, getters) => {
+    return getters.slideCurrent.stepNo
   }
 }
 
@@ -179,13 +179,13 @@ const actions = {
     // cloze sets the variable stepCount async. If you enter a never before
     // visited cloze slide backwards, strange things happens.
     if (getters.slideCurrent.stepCount) {
-      let stepNoCurrent = 1
+      let stepNo = 1
       if (direction === -1) {
-        stepNoCurrent = getters.slideCurrent.stepCount
+        stepNo = getters.slideCurrent.stepCount
       }
       dispatch('setStepNoCurrent', {
         slideCurrent: getters.slideCurrent,
-        stepNoCurrent
+        stepNo
       })
     }
   },
@@ -201,8 +201,8 @@ const actions = {
     if (
       getters.slideCurrent.stepCount > 1 &&
       (
-        (direction === 1 && getters.slideCurrent.stepNoCurrent !== getters.slideCurrent.stepCount) || // Next
-        (direction === -1 && getters.slideCurrent.stepNoCurrent !== 1) // Previous
+        (direction === 1 && getters.slideCurrent.stepNo !== getters.slideCurrent.stepCount) || // Next
+        (direction === -1 && getters.slideCurrent.stepNo !== 1) // Previous
       )
     ) {
       dispatch('setStepNextOrPrevious', direction)
@@ -243,25 +243,25 @@ const actions = {
     if (!slideCurrent) return
     const count = slideCurrent.stepCount
     if (!count) return
-    let stepNoCurrent
-    const no = slideCurrent.stepNoCurrent
+    let stepNo
+    const no = slideCurrent.stepNo
     // Next
     if (direction === 1 && no === count) {
-      stepNoCurrent = 1
+      stepNo = 1
     // Previous
     } else if (direction === -1 && no === 1) {
-      stepNoCurrent = count
+      stepNo = count
     } else {
-      stepNoCurrent = no + direction
+      stepNo = no + direction
     }
-    dispatch('setStepNoCurrent', { slideCurrent, stepNoCurrent })
+    dispatch('setStepNoCurrent', { slideCurrent, stepNo })
   },
-  setStepNoCurrent ({ commit }, { slideCurrent, stepNoCurrent }) {
-    const oldStepNo = slideCurrent.stepNoCurrent
-    const newStepNo = stepNoCurrent
+  setStepNoCurrent ({ commit }, { slideCurrent, stepNo }) {
+    const oldStepNo = slideCurrent.stepNo
+    const newStepNo = stepNo
     const thisArg = customStore.vueMasterInstanceCurrent
     slideCurrent.master.leaveStep({ oldStepNo, newStepNo }, thisArg)
-    commit('setStepNoCurrent', { slideCurrent, stepNoCurrent })
+    commit('setStepNoCurrent', { slideCurrent, stepNo })
     slideCurrent.master.enterStep({ oldStepNo, newStepNo }, thisArg)
   },
   async updateFolderTitleTree ({ commit }) {
@@ -326,8 +326,8 @@ const mutations = {
   setSlideNoCurrent (state, slideNoCurrent) {
     state.slideNoCurrent = parseInt(slideNoCurrent)
   },
-  setStepNoCurrent (state, { slideCurrent, stepNoCurrent }) {
-    slideCurrent.stepNoCurrent = stepNoCurrent
+  setStepNoCurrent (state, { slideCurrent, stepNo }) {
+    slideCurrent.stepNo = stepNo
   },
   setPresentation (state, presentation) {
     Vue.set(state, 'presentation', presentation)

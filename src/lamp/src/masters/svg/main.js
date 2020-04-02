@@ -64,7 +64,7 @@ export default {
       })
 
       this.domSteps.displayByNo({
-        stepNo: this.slideCurrent.stepNoCurrent
+        stepNo: this.slideCurrent.stepNo
       })
 
       this.domSteps.setStepCount(this.slideCurrent)

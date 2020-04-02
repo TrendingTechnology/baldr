@@ -32,7 +32,7 @@ export default {
     },
     stepNo () {
       if (this.slideCurrent) {
-        return this.slideCurrent.stepNoCurrent
+        return this.slideCurrent.stepNo
       }
       return 1
     },

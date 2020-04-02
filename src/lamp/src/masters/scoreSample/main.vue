@@ -1,7 +1,7 @@
 <template>
   <div class="vc_score_sample_master">
     <h1 v-if="heading" v-html="heading"/>
-    <img :src="scoreMediaFile.getMultiPartHttpUrlByNo(stepNoCurrent)"/>
+    <img :src="scoreMediaFile.getMultiPartHttpUrlByNo(stepNo)"/>
     <play-button v-if="audioSample" :sample="audioSample"/>
   </div>
 </template>
@@ -22,7 +22,7 @@ export default {
       type: Object
     }
   },
-  computed: mapGetters(['stepNoCurrent'])
+  computed: mapGetters(['stepNo'])
 }
 </script>
 

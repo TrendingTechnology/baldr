@@ -234,7 +234,7 @@ export default {
     },
     enterSlide ({ newSlide }) {
       const slide = newSlide
-      setQuestionsBySetNo.call(this, slide.stepNoCurrent)
+      setQuestionsBySetNo.call(this, slide.stepNo)
     },
     enterStep ({ newStepNo }) {
       setQuestionsBySetNo.call(this, newStepNo)

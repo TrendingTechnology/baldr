@@ -48,7 +48,7 @@ export default {
       this.domSteps.setStepCount(this.slideCurrent)
 
       const newClozeGroup = this.domSteps.displayByNo({
-        stepNo: this.slideCurrent.stepNoCurrent
+        stepNo: this.slideCurrent.stepNo
       })
       this.scroll(newClozeGroup)
     },
