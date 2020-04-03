@@ -613,17 +613,48 @@ export class DomSteps {
 }
 
 /**
+ *
+ * @param {Object} vm - Vue component instance.
+ * @param {String} presId - Presentation ID.
+ */
+async function loadPresentationById (vm, presId) {
+  vm.$media.player.stop()
+  vm.$store.dispatch('media/clear')
+
+  // EP: Example
+  if (presId.match(/^EP_.*$/)) {
+    // master example
+    const masterMatch = presId.match(/^EP_master_(.*)$/)
+    if (masterMatch) {
+      const masterName = masterMatch[1]
+      const master = vm.$masters.get(masterName)
+      await vue.$store.dispatch('presentation/openPresentation', { rawYamlString: master.example })
+      return
+    }
+
+    // common example
+    const commonMatch = presId.match(/^EP_common_(.*)$/)
+    if (commonMatch) {
+      const commonName = commonMatch[1]
+      await vue.$store.dispatch('presentation/openPresentation', { rawYamlString: rawYamlExamples[commonName] })
+      return
+    }
+  }
+
+  await vm.$store.dispatch('presentation/openPresentationById', presId)
+}
+
+/**
  * Open a presentation by a its ID.
  *
+ * @param {Object} vm - Vue component instance.
  * @param {String} presId
  */
 export async function loadPresentationByRoute (vm, params) {
   if (params.presId) {
     const presentation = vm.$store.getters['presentation/presentation']
     if (!presentation || (presentation && presentation.id !== params.presId)) {
-      vm.$media.player.stop()
-      vm.$store.dispatch('media/clear')
-      await vm.$store.dispatch('presentation/openPresentationById', params.presId)
+      await loadPresentationById(vm, params.presId)
     }
     if (params.slideNo) {
       vm.$store.dispatch('presentation/setSlideAndStepNoCurrent', params)

@@ -186,13 +186,20 @@ class Master {
   }
 
   /**
-   * A example presentation file in the YAML format like `*.baldr.yml` files
-   * featuring the master.
+   * A example presentation file in the raw YAML format (unparsed). The string
+   * is structured like the contents of the `*.baldr.yml` files.
    *
    * @type {String}
    */
   get example () {
-    return rawYamlExamples.masters[this.name]
+    const rawYaml = rawYamlExamples.masters[this.name]
+    const prefix =
+      '---\n' +
+      'meta:\n' +
+      `  id: EP_master_${this.name}\n` +
+      `  title: Beispiel-Präsentation für die Master-Folie „${this.name}“\n` +
+      '\n'
+    return rawYaml.replace('---\n', prefix)
   }
 
   /**

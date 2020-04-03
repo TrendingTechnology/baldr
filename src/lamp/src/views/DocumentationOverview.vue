@@ -39,10 +39,9 @@
             </td>
             <td>{{ $masters.get(masterName).title }}</td>
             <td>
-              <material-icon
-                name="presentation"
-                @click.native="openExample(rawYaml)"
-              />
+              <router-link :to="{ name: 'slides-preview', params: { presId: `EP_master_${masterName}` } }">
+                <material-icon name="presentation"/>
+              </router-link>
             </td>
           </tr>
         </tbody>
