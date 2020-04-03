@@ -14,11 +14,9 @@ import MasterIcon from './MasterIcon.vue'
 import MasterRenderer from './MasterRenderer.vue'
 import MetaDataOverlay from './MetaDataOverlay.vue'
 import SlideNumber from './SlideNumber.vue'
-import { openPresentation } from '@/lib.js'
+import { routerGuards } from '@/lib.js'
 
 import store from '@/store.js'
-
-const routeNames = ['open-by-pres', 'open-by-slide', 'open-by-step']
 
 export default {
   name: 'SlideView',
@@ -28,7 +26,8 @@ export default {
     MasterRenderer,
     MetaDataOverlay,
     SlideNumber
-  }
+  },
+  ...routerGuards
 }
 </script>
 

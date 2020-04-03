@@ -617,10 +617,37 @@ export class DomSteps {
  *
  * @param {String} presId
  */
-export async function openPresentationById (presId) {
-  vue.$media.player.stop()
-  vue.$store.dispatch('media/clear')
-  await vue.$store.dispatch('presentation/openPresentationById', presId)
+export async function loadPresentationByRoute (vm, params) {
+  if (params.presId) {
+    const presentation = vm.$store.getters['presentation/presentation']
+    if (!presentation || (presentation && presentation.id !== params.presId)) {
+      vm.$media.player.stop()
+      vm.$store.dispatch('media/clear')
+      await vm.$store.dispatch('presentation/openPresentationById', params.presId)
+    }
+    if (params.slideNo) {
+      vm.$store.dispatch('presentation/setSlideAndStepNoCurrent', params)
+    }
+  }
+}
+
+/**
+ * Router guards for some components which can be accessed by router links.
+ */
+export const routerGuards = {
+  // To be able to enter a persentation per http link on a certain slide
+  // Without this hook there are webpack errors
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      loadPresentationByRoute(vm, to.params)
+    })
+  },
+  // To be able to navigate throught the slide (only the params) are changing.
+  beforeRouteUpdate (to, from, next) {
+    loadPresentationByRoute(this, to.params)
+    // To update the URL in the browser URL textbox.
+    next()
+  }
 }
 
 /**

@@ -484,6 +484,26 @@ class Slide {
       return this.mediaUris.values().next().value
     }
   }
+
+  /**
+   * Get an object that can be submitted to `router.push()` to view the current
+   * slide.
+   *
+   * @returns {Object}
+   */
+  get routerLocation () {
+    const presentation = store.getters['presentation/presentation']
+    let name
+    const params = { presId: presentation.id }
+    if (this.stepCount) {
+      name = 'slide-step-no'
+      params.stepNo = this.stepNo
+    } else {
+      name = 'slide'
+    }
+    params.slideNo = this.no
+    return { name, params }
+  }
 }
 
 /**
@@ -875,9 +895,9 @@ ${JSON.stringify(this.rawYamlObject_)}`
 
     let name
     if (params.stepNo) {
-      name = 'open-by-step'
+      name = 'slide-step-no'
     } else {
-      name = 'open-by-slide'
+      name = 'slide'
     }
     router.push({ name, params })
   }

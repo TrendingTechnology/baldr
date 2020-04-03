@@ -1,7 +1,7 @@
 <template>
   <div
     class="vc_slide_preview"
-    @click="gotToSlide(slide.no)"
+    @click="gotToSlide(slide)"
     :class="{ 'current-slide': slideCurrent.no === slide.no }"
     :b-dark-mode="slide.master.styleConfig.darkMode"
   >
@@ -33,8 +33,9 @@ export default {
     }
   },
   methods: {
-    gotToSlide (slideNo) {
-      this.$router.push({ name: 'open-by-slide', params: { slideNo } })
+    gotToSlide (slide) {
+      const location = slide.routerLocation
+      this.$router.push(location)
     }
   }
 }

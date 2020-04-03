@@ -10,7 +10,6 @@
 </template>
 
 <script>
-import { openPresentationById } from '@/lib.js'
 import router from '@/router.js'
 
 export default {
@@ -23,7 +22,6 @@ export default {
   },
   methods: {
     async onInput () {
-      await openPresentationById(this.presentation.id)
       router.push({ name: 'slides-preview', params: { presId: this.presentation.id } })
     },
     search (title) {

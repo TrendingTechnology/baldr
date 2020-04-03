@@ -25,7 +25,6 @@ import PresentationOverview from '@/views/PresentationOverview/index.vue'
 import MediaIdsParentDir from '@/views/MediaIdsParentDir'
 
 import store from '@/store.js'
-import { openPresentationById } from '@/lib.js'
 
 // Failed to load chunks in the subfolder presentation
 // const Documentation = () => import(/* webpackChunkName: "documentation" */ '@/views/Documentation.vue')
@@ -64,26 +63,18 @@ const routes = [
     }
   },
   {
-    path: '/presentation/:presId',
-    name: 'slides',
+    path: '/presentation/:presId/slide/:slideNo',
+    name: 'slide',
     component: SlideView,
-    name: 'open-by-pres',
     meta: {
       shortcut: 's',
       title: 'Folien'
     },
     children: [
       {
-        path: 'slide/:slideNo',
-        component: SlideView,
-        name: 'open-by-slide',
-        children: [
-          {
-            path: 'step/:stepNo',
-            name: 'open-by-step',
-            component: SlideView
-          }
-        ]
+        path: 'step/:stepNo',
+        name: 'slide-step-no',
+        component: SlideView
       }
     ]
   },
@@ -163,19 +154,6 @@ const routes = [
 
 const router = new Router({
   routes
-})
-
-router.beforeEach(async (to, from, next) => {
-  if (to.params.presId) {
-    const presentation = store.getters['presentation/presentation']
-    if (!presentation || (presentation && presentation.id !== to.params.presId)) {
-      await openPresentationById(to.params.presId)
-    }
-    if (to.params.slideNo) {
-      store.dispatch('presentation/setSlideAndStepNoCurrent', to.params)
-    }
-  }
-  next()
 })
 
 export default router

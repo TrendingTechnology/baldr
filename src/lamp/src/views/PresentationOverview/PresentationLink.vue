@@ -14,7 +14,6 @@
 </template>
 
 <script>
-import { openPresentationById } from '@/lib.js'
 import { createNamespacedHelpers } from 'vuex'
 const { mapGetters } = createNamespacedHelpers('presentation')
 

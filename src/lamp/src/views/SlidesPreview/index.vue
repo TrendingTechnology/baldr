@@ -35,6 +35,7 @@ import GridLayout from './GridLayout.vue'
 import ListLayout from './ListLayout.vue'
 import OpenInterface from '@/components/OpenInterface'
 import PresentationTitle from '@/components/PresentationTitle'
+import { routerGuards } from '@/lib.js'
 
 import { createNamespacedHelpers } from 'vuex'
 const { mapActions, mapGetters } = createNamespacedHelpers('presentation')
@@ -88,19 +89,8 @@ export default {
     methods: mapActions([
     'increasePreviewSize',
     'decreasePreviewSize'
-  ])
-  // beforeRouteEnter (to, from, next) {
-  //   console.log('to')
-  //   next(vm => {
-  //     console.log(to)
-  //     // if (to.name === 'slides-preview-ng') {
-  //     //   vm.$openPresentationById(to.params.presId)
-  //     // }
-  //   })
-  // },
-  // beforeRouteUpdate (to, from, next) {
-  //   console.log(to)
-  // }
+  ]),
+  ...routerGuards
 }
 </script>
 

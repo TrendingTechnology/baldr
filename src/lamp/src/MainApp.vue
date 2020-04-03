@@ -69,7 +69,7 @@ export default {
     /**
      * Toggle between to routes:
      *
-     * 1. The route with the name `sides` and
+     * 1. The route with the name `slides` and
      * 2. the route with the name specified with the argument
      *    `routeNameTo`.
      *
@@ -83,7 +83,7 @@ export default {
       if (this.$route.name !== routeNameTo) {
         this.$router.push({ name: routeNameTo })
       } else {
-        this.$router.push({ name: 'slides' })
+        this.$router.push(this.slide.routerLocation)
       }
     },
     getToggleShortcutObject (keys, routeNameTo) {
