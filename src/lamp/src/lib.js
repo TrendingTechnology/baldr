@@ -416,6 +416,10 @@ export class DomSteps {
     return words
   }
 
+  static countWords (dom) {
+    return dom.querySelectorAll('span.word').length
+  }
+
   /**
    * Select more than a word. The meaning  of "sentences" in the function name
    * should not be understood literally, but symbolic for a longer text unit.
@@ -442,6 +446,22 @@ export class DomSteps {
       }
     }
     return sentences
+  }
+
+  static countSentences (parentElement) {
+    let count = 0
+    for (const element of parentElement.children) {
+      if (['UL', 'OL'].includes(element.tagName)) {
+        for (const li of element.children) {
+          if (li.tagName === 'LI') {
+            count++
+          }
+        }
+      } else {
+        count++
+      }
+    }
+    return count
   }
 
   /**
@@ -590,6 +610,17 @@ export class DomSteps {
       vue.$shortcuts.remove(`q ${shortcut}`)
     }
   }
+}
+
+/**
+ * Open a presentation by a its ID.
+ *
+ * @param {String} presId
+ */
+export async function openPresentationById (presId) {
+  vue.$media.player.stop()
+  vue.$store.dispatch('media/clear')
+  await vue.$store.dispatch('presentation/openPresentationById', presId)
 }
 
 /**

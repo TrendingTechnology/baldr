@@ -24,6 +24,9 @@ import PresentationOverview from '@/views/PresentationOverview/index.vue'
 
 import MediaIdsParentDir from '@/views/MediaIdsParentDir'
 
+import store from '@/store.js'
+import { openPresentationById } from '@/lib.js'
+
 // Failed to load chunks in the subfolder presentation
 // const Documentation = () => import(/* webpackChunkName: "documentation" */ '@/views/Documentation.vue')
 // const MasterDocumentation = () => import(/* webpackChunkName: "documentation" */ '@/views/MasterDocumentation.vue')
@@ -52,12 +55,12 @@ const routes = [
     }
   },
   {
-    path: '/slides',
-    name: 'slides',
-    component: SlideView,
+    path: '/presentation/:presId/preview',
+    component: SlidesPreview,
+    name: 'slides-preview',
     meta: {
-      shortcut: 's',
-      title: 'Folien'
+      shortcut: 'o',
+      title: 'Überblick über alle Folien'
     }
   },
   {
@@ -66,14 +69,10 @@ const routes = [
     component: SlideView,
     name: 'open-by-pres',
     meta: {
+      shortcut: 's',
       title: 'Folien'
     },
     children: [
-      {
-        path: 'preview',
-        component: SlidesPreview,
-        name: 'slides-preview-ng'
-      },
       {
         path: 'slide/:slideNo',
         component: SlideView,
@@ -87,15 +86,6 @@ const routes = [
         ]
       }
     ]
-  },
-  {
-    path: '/slides/preview',
-    component: SlidesPreview,
-    name: 'slides-preview',
-    meta: {
-      shortcut: 'o',
-      title: 'Überblick über alle Folien'
-    }
   },
   {
     path: '/presentation-overview',
@@ -171,6 +161,21 @@ const routes = [
   }
 ]
 
-export default new Router({
+const router = new Router({
   routes
 })
+
+router.beforeEach(async (to, from, next) => {
+  if (to.params.presId) {
+    const presentation = store.getters['presentation/presentation']
+    if (!presentation || (presentation && presentation.id !== to.params.presId)) {
+      await openPresentationById(to.params.presId)
+    }
+    if (to.params.slideNo) {
+      store.dispatch('presentation/setSlideAndStepNoCurrent', to.params)
+    }
+  }
+  next()
+})
+
+export default router

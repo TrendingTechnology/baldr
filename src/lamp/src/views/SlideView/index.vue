@@ -28,37 +28,6 @@ export default {
     MasterRenderer,
     MetaDataOverlay,
     SlideNumber
-  },
-  beforeRouteEnter (to, from, next) {
-    // called before the route that renders this component is confirmed.
-    // does NOT have access to `this` component instance,
-    // because it has not been created yet when this guard is called!
-    next(vm => {
-      if (routeNames.includes(to.name) && to.params.presId) {
-        vm.$openPresentation({
-          presId: to.params.presId,
-          slideNo: to.params.slideNo,
-          stepNo: to.params.stepNo,
-          noRouting: true
-        })
-      }
-    })
-  },
-  beforeRouteUpdate (to, from, next) {
-    if (routeNames.includes(to.name) && to.params.presId) {
-      const presentation = store.getters['presentation/presentation']
-      if (presentation.id) {
-        store.dispatch('presentation/setSlideAndStepNoCurrent', to.params)
-        next()
-      } else {
-        this.$openPresentation({
-          presId: to.params.presId,
-          slideNo: to.params.slideNo,
-          stepNo: to.params.stepNo,
-          noRouting: true
-        })
-      }
-    }
   }
 }
 </script>

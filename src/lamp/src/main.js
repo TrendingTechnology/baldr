@@ -298,7 +298,7 @@ import MaterialIcon from '@bldr/icons'
 import ModalDialog from '@bldr/vue-plugin-modal-dialog'
 import DynamicSelect from '@bldr/vue-plugin-dynamic-select'
 import media from '@bldr/vue-plugin-media'
-import { openPresentation } from '@/lib.js'
+import { openPresentation, openPresentationById } from '@/lib.js'
 
 // Vue components.
 import MainApp from '@/MainApp.vue'
@@ -654,6 +654,7 @@ Vue.prototype.$get = function (getterName) {
 }
 
 Vue.prototype.$openPresentation = openPresentation
+Vue.prototype.$openPresentationById = openPresentationById
 
 /**
  * The main vue instance

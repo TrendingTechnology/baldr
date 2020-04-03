@@ -155,31 +155,31 @@ export default {
         description: 'zum nächsten Schritt',
         routeNames: ['slides']
       },
+      // {
+      //   keys: 'left',
+      //   callback: () => this.setSlideOrStepNextOrPrevious(-1),
+      //   description: 'zur/m vorhergehenden Folie oder Schritt',
+      //   routeNames: ['slides']
+      // },
+      // {
+      //   keys: 'right',
+      //   callback: () => this.setSlideOrStepNextOrPrevious(1),
+      //   description: 'zur/m nächsten Folie oder Schritt',
+      //   routeNames: ['slides']
+      // },
       {
         keys: 'left',
-        callback: () => this.setSlideOrStepNextOrPrevious(-1),
-        description: 'zur/m vorhergehenden Folie oder Schritt',
-        routeNames: ['slides']
-      },
-      {
-        keys: 'right',
-        callback: () => this.setSlideOrStepNextOrPrevious(1),
-        description: 'zur/m nächsten Folie oder Schritt',
-        routeNames: ['slides']
-      },
-      {
-        keys: 'alt+left',
         callback: () => {
           this.presentation.navigate(-1)
         },
-        description: 'zur/m vorhergehenden Folie oder Schritt (mit Router-Update)'
+        description: 'zur/m vorhergehenden Folie oder Schritt'
       },
       {
-        keys: 'alt+right',
+        keys: 'right',
         callback: () => {
           this.presentation.navigate(1)
         },
-        description: 'zur/m nächsten Folie oder Schritt (mit Router-Update)'
+        description: 'zur/m nächsten Folie oder Schritt'
       },
       {
         keys: 'ctrl+m',

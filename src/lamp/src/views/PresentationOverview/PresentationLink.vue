@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import { openPresentation } from '@/lib.js'
+import { openPresentationById } from '@/lib.js'
 import { createNamespacedHelpers } from 'vuex'
 const { mapGetters } = createNamespacedHelpers('presentation')
 
@@ -38,7 +38,9 @@ export default {
     }
   },
   methods: {
-    openPresentation
+    async openPresentation (presId) {
+      this.$router.push({ name: 'slides-preview', params: { presId: presId } })
+    }
   },
   computed: {
     ...mapGetters(['presentation']),

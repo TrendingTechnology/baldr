@@ -34,8 +34,7 @@ export default {
   },
   methods: {
     gotToSlide (slideNo) {
-      this.$store.dispatch('presentation/setSlideNoCurrent', slideNo)
-      if (this.$route.name !== 'slides') this.$router.push({ name: 'slides' })
+      this.$router.push({ name: 'open-by-slide', params: { slideNo } })
     }
   }
 }

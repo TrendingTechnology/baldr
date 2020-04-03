@@ -1,5 +1,5 @@
 <template>
-  <section class="vc_presentation_title">
+  <section class="vc_presentation_title" v-if="presentation">
     <header>
       <span v-if="presentation.grade">
         <span v-html="presentation.grade"/>. Jahrgangsstufe /

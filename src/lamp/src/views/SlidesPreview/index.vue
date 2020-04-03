@@ -89,6 +89,18 @@ export default {
     'increasePreviewSize',
     'decreasePreviewSize'
   ])
+  // beforeRouteEnter (to, from, next) {
+  //   console.log('to')
+  //   next(vm => {
+  //     console.log(to)
+  //     // if (to.name === 'slides-preview-ng') {
+  //     //   vm.$openPresentationById(to.params.presId)
+  //     // }
+  //   })
+  // },
+  // beforeRouteUpdate (to, from, next) {
+  //   console.log(to)
+  // }
 }
 </script>
 

@@ -35,7 +35,7 @@ const getters = {
     return state.folderTitleTree
   },
   presentation: state => {
-    return state.presentation
+    if (state.presentation.slides) return state.presentation
   },
   preview: state => {
     return state.preview.size
