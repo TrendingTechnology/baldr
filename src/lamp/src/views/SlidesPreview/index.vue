@@ -86,7 +86,7 @@ export default {
     'previewLayoutCurrent',
     'previewHierarchical'
   ]),
-    methods: mapActions([
+  methods: mapActions([
     'increasePreviewSize',
     'decreasePreviewSize'
   ]),

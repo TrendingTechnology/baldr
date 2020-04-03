@@ -7,21 +7,19 @@ export default {
     }
   },
   render: function (createElement) {
-    if (this.slide) {
-      if (this.slide.propsPreview) {
-        return createElement(
-          `${this.slide.master.name}-master-preview`,
-          {
-            props: this.slide.propsPreview,
-          }
-        )
-      } else {
-        return createElement('div', {
-          domProps: {
-            innerHTML: this.slide.plainText
-          },
-        })
-      }
+    if (this.slide && this.slide.propsPreview) {
+      return createElement(
+        `${this.slide.master.name}-master-preview`,
+        {
+          props: this.slide.propsPreview
+        }
+      )
+    } else {
+      return createElement('div', {
+        domProps: {
+          innerHTML: this.slide.plainText
+        }
+      })
     }
   }
 }
