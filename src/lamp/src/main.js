@@ -112,7 +112,7 @@
  * ```js
  * export const default = {
  *   hooks: {
- *     // An array of media URIs to resolve (like [id:beethoven, filename:mozart.mp3])
+ *     // An array of media URIs to resolve (like [id:beethoven, id:mozart.mp3])
  *     resolveMediaUris (props) {
  *       return props.src
  *     }

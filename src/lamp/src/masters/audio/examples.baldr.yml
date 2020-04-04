@@ -42,7 +42,7 @@ slides:
 - title: 'Custom cover'
   audio:
     src: id:Du-bist-als-Kind-zu-heiss-gebadet-worden
-    cover: filename:Beethoven_Ludwig-van.jpg
+    cover: id:Beethoven_Ludwig-van
     title: Custom cover
 
 - title: 'Without media file URI schemes.'
@@ -55,6 +55,5 @@ slides:
   audio:
     src: id:Du-bist-als-Kind-zu-heiss-gebadet-worden
 
-- title: 'URL: filename:'
-  audio:
-    src: filename:Ich-hab-zu-Haus-ein-Grammophon.m4a
+- audio:
+    src: id:Ich-hab-zu-Haus-ein-Grammophon

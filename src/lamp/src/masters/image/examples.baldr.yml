@@ -30,6 +30,5 @@ slides:
   image:
     src: id:Haydn_Joseph
 
-- title: 'URL: filename:'
-  image:
-    src: filename:Beethoven_Ludwig-van.jpg
+- image:
+    src: id:Beethoven_Ludwig-van

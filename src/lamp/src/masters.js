@@ -379,7 +379,7 @@ class Master {
    * Retrieve the media URIs which have to be resolved.
    *
    * Call the master funtion `resolveMediaUris` and collect the media URIs.
-   * (like [id:beethoven, filename:mozart.mp3]). Extract media URIs from
+   * (like [id:beethoven, id:mozart]). Extract media URIs from
    * the text props.
    *
    * @param {module:@bldr/lamp~props} props

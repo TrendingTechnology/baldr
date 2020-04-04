@@ -725,8 +725,7 @@ class Sample {
 
     /**
      * The ID of the sample. The ID is used to build the URI of the sample, for
-     * example `uri#id`: `id:Beethoven#complete` or
-     * `filename:beethoven.jpg#Theme_1`.
+     * example `uri#id`: `id:Beethoven#complete`
      *
      * @type {String}
      */
@@ -734,8 +733,7 @@ class Sample {
 
     /**
      * The URI of the sample in the format `uri#id`: for example
-     * `id:Beethoven#complete`,
-     * `filename:beethoven.jpg#Theme_1`.
+     * `id:Beethoven#complete`
      *
      * @type {String}
      */
@@ -1349,7 +1347,7 @@ export class WrappedSamples {
  * HTTP URL `http:/example/media/Score_no02.png`.
  *
  * @property {string} uri - Uniform Resource Identifier, for example `id:Haydn`,
- *   `filename:Haydn_Joseph.jpg` or `http://example.com/Haydn_Joseph.jpg`.
+ *   or `http://example.com/Haydn_Joseph.jpg`.
  * @property {string} uriScheme - for example: `http`, `https`, `blob`
  * @property {string} uriAuthority - for example:
  *   `//example.com/Haydn_Joseph.jpg`.
@@ -1392,9 +1390,10 @@ export class MediaFile {
     this.uriRaw = this.uri
 
     /**
-     * Uniform Resource Identifier, for example  `id:Haydn`,
-     * `filename:Haydn_Joseph.jpg` or `http://example.com/Haydn_Joseph.jpg`.
-     * The sample addition (`#complete`) is removed.
+     * Uniform Resource Identifier, for example  `id:Haydn`, or
+     * `http://example.com/Haydn_Joseph.jpg`. The sample addition (`#complete`)
+     * is removed.
+     *
      * @type {string}
      */
     this.uri = decodeURI(this.uri.replace(/#.*$/, ''))
@@ -1745,7 +1744,7 @@ async function createMediaElement (mediaFile) {
  * A `mediaFileSpec` can be:
  *
  * 1. A remote URI (Uniform Resource Identifier) as a string, for example
- *    `id:Joseph_haydn` or `filename:beethoven.jpg` which has to be resolved.
+ *    `id:Joseph_haydn` which has to be resolved.
  * 2. A already resolved HTTP URL, for example
  *    `https://example.com/Josef_Haydn.jg`
  * 3. A file object {@link https://developer.mozilla.org/de/docs/Web/API/File}
