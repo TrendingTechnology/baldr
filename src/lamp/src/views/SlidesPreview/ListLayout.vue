@@ -49,7 +49,7 @@ export default {
     },
     gotToSlide (slideNo) {
       this.$store.dispatch('presentation/setSlideNoCurrent', slideNo)
-      if (this.$route.name !== 'slides') this.$router.push({ name: 'slides' })
+      if (this.$route.name !== 'slide') this.$router.push({ name: 'slide' })
     }
   }
 }

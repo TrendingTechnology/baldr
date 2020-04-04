@@ -132,40 +132,40 @@ export default {
         callback: () => this.setSlideNextOrPrevious(-1),
         // Previous slide
         description: 'zur vorhergehenden Folie',
-        routeNames: ['slides']
+        routeNames: ['slide']
       },
       {
         keys: 'ctrl+right',
         callback: () => this.setSlideNextOrPrevious(1),
         // Next slide
         description: 'zur nächsten Folie',
-        routeNames: ['slides']
+        routeNames: ['slide']
       },
       {
         keys: 'ctrl+up',
         callback: () => this.setStepNextOrPrevious(-1),
         // Previous step
         description: 'zum vorhergehenden Schritt',
-        routeNames: ['slides']
+        routeNames: ['slide']
       },
       {
         keys: 'ctrl+down',
         callback: () => this.setStepNextOrPrevious(1),
         // Next step
         description: 'zum nächsten Schritt',
-        routeNames: ['slides']
+        routeNames: ['slide']
       },
       // {
       //   keys: 'left',
       //   callback: () => this.setSlideOrStepNextOrPrevious(-1),
       //   description: 'zur/m vorhergehenden Folie oder Schritt',
-      //   routeNames: ['slides']
+      //   routeNames: ['slide']
       // },
       // {
       //   keys: 'right',
       //   callback: () => this.setSlideOrStepNextOrPrevious(1),
       //   description: 'zur/m nächsten Folie oder Schritt',
-      //   routeNames: ['slides']
+      //   routeNames: ['slide']
       // },
       {
         keys: 'left',

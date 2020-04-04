@@ -910,7 +910,7 @@ function openFile (file) {
     reader.onload = readerEvent => {
       const content = readerEvent.target.result
       store.dispatch('presentation/openPresentation', content).then(() => {
-        if (router.currentRoute.name !== 'slides') router.push({ name: 'slides' })
+        if (router.currentRoute.name !== 'slide') router.push({ name: 'slide' })
       })
     }
   } else {

@@ -702,8 +702,8 @@ export async function openPresentation (args) {
   if (args.noRouting) return
   if (args.route) {
     vue.$router.push(args.route)
-  } else if (args.slideNo && args.slideNo > 1 && vue.$route.name !== 'slides') {
-    vue.$router.push({ name: 'slides' })
+  } else if (args.slideNo && args.slideNo > 1 && vue.$route.name !== 'slide') {
+    vue.$router.push({ name: 'slide' })
   } else if (vue.$route.name !== 'slides-preview') {
     vue.$router.push({ name: 'slides-preview' })
   }
@@ -713,8 +713,8 @@ export async function openPresentationByRawYaml (rawYamlString) {
   vue.$media.player.stop()
   vue.$store.dispatch('media/clear')
   await vue.$store.dispatch('presentation/openPresentation', { rawYamlString })
-  if (vue.$route.name !== 'slides') {
-    vue.$router.push({ name: 'slides' })
+  if (vue.$route.name !== 'slide') {
+    vue.$router.push({ name: 'slide' })
   }
 }
 
