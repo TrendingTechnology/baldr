@@ -654,14 +654,18 @@ async function loadPresentationById (vm, presId) {
  * @param {String} presId
  */
 export async function loadPresentationByRoute (vm, params) {
-  if (params.presId) {
-    const presentation = vm.$store.getters['lamp/presentation']
-    if (!presentation || (presentation && presentation.id !== params.presId)) {
-      await loadPresentationById(vm, params.presId)
+  try {
+    if (params.presId) {
+      const presentation = vm.$store.getters['lamp/presentation']
+      if (!presentation || (presentation && presentation.id !== params.presId)) {
+        await loadPresentationById(vm, params.presId)
+      }
+      if (params.slideNo) {
+        vm.$store.dispatch('lamp/setSlideAndStepNoCurrent', params)
+      }
     }
-    if (params.slideNo) {
-      vm.$store.dispatch('lamp/setSlideAndStepNoCurrent', params)
-    }
+  } catch (error) {
+    vm.$notifyError(error)
   }
 }
 
