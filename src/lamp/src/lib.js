@@ -576,10 +576,9 @@ export class DomSteps {
     if (domStep) {
       domStep.show(stepNo > oldStepNo)
       return domStep.element
-    } else {
-      // setStepLastOrFirstByDirection
-      console.log(`TODO remove this call: count ${this.count} stepNo ${stepNo} oldStepNo ${oldStepNo} full ${full}`)
     }
+    // setStepLastOrFirstByDirection
+    // console.log(`TODO remove this call: count ${this.count} stepNo ${stepNo} oldStepNo ${oldStepNo} full ${full}`)
   }
 
   /**

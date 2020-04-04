@@ -43,7 +43,7 @@
         }
 
         .spinner::before{
-          animation: progress 3s linear infinite;
+          animation: progress 0.5s linear infinite;
           background-color: rgba(0, 0, 0, 0.5);
           content: '';
           height: 100%;
@@ -54,12 +54,12 @@
 
         @keyframes progress{
           0%{
-            left: -130%;
             background-color: rgba(0, 0, 0, 0.5);
+            left: -130%;
           }
           50%{
-            left: 130%;
             background-color: rgba(0, 0, 0, 0.5);
+            left: 130%;
           }
           51%{
             background-color: rgba(255, 255, 255, 0.5);

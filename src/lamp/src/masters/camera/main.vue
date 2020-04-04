@@ -147,7 +147,7 @@ export default {
         try {
           return await navigator.mediaDevices.getUserMedia(constraints)
         } catch (error) {
-          console.log(error)
+          // console.log(error)
         }
       }
     },

@@ -643,7 +643,6 @@ store.subscribe((mutation, state) => {
 
 Vue.config.errorHandler = function (error, vm, info) {
   vm.$notifyError(error)
-  console.log(error)
 }
 
 /**
