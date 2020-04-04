@@ -149,13 +149,13 @@ class Master {
   }
 
   /**
-   * Generate the name of the Vuex module, e. g. `presMasterCamera`.
+   * Generate the name of the Vuex module, e. g. `lampMasterCamera`.
    *
    * @returns {String}
    * @private
    */
   vueModuleName_ () {
-    return `presMaster${toTitleCase(this.name)}`
+    return `lampMaster${toTitleCase(this.name)}`
   }
 
   /**

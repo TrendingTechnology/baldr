@@ -35,7 +35,7 @@ export default {
     }
   },
   mounted: async function () {
-    this.thumbnailUrl = this.$store.getters['presMasterWikipedia/thumbnailUrlById'](this.id)
+    this.thumbnailUrl = this.$store.getters['lampMasterWikipedia/thumbnailUrlById'](this.id)
   }
 }
 </script>
