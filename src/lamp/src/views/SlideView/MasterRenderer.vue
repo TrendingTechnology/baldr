@@ -1,5 +1,5 @@
 <script>
-import OpenInterface from '@/components/OpenInterface'
+import LoadingIcon from '@/components/LoadingIcon'
 import BlankMaster from '@/components/BlankMaster'
 
 import { createNamespacedHelpers } from 'vuex'
@@ -9,7 +9,7 @@ export default {
   name: 'MasterRenderer',
   components: {
     BlankMaster,
-    OpenInterface
+    LoadingIcon
   },
   computed: {
     ...mapGetters(['slide', 'showBlank']),
@@ -89,11 +89,7 @@ export default {
         [masterElement]
       )
     }
-    return createElement('open-interface', {
-      attrs: {
-        'b-content-theme': 'default'
-      }
-    })
+    return createElement('loading-icon')
   }
 }
 </script>
@@ -105,19 +101,6 @@ export default {
     font-size: 4vw;
     height: 100vh;
     width: 100vw;
-
-    .vc_open_interface {
-      box-sizing: border-box;
-      display: table-cell;
-      height: 100vh;
-      padding: 4vw;
-      vertical-align: middle;
-      width: 100vw;
-      // Input is to small
-      input.search {
-        font-size: 2vw !important;
-      }
-    }
   }
 
   [b-center-vertically="true"] {
