@@ -2,6 +2,7 @@
 module.exports = {
   AB: 'Arbeitsblatt',
   BD: 'Bild',
+  EP: 'Example',
   GN: 'Graphische Notation',
   GR: 'Gruppe',
   HB: 'Hörbeispiel',

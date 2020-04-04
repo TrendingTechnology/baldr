@@ -71,10 +71,9 @@
               </router-link>
             </td>
             <td>
-              <material-icon
-                name="presentation"
-                @click.native="openExample(example)"
-              />
+              <router-link :to="{ name: 'slides-preview', params: { presId: `EP_common_${exampleName}` } }">
+                <material-icon name="presentation"/>
+              </router-link>
             </td>
           </tr>
         </tbody>

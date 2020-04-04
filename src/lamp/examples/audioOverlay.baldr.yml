@@ -1,4 +1,7 @@
 ---
+meta:
+  id: EP_common_audioOverlay
+
 slides:
 - title: 'Without titles'
   score_sample:

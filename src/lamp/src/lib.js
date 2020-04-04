@@ -4,7 +4,7 @@
  * @module @bldr/lamp/lib
  */
 
-/* globals DOMParser rawYamlExamples */
+/* globals DOMParser */
 
 import marked from 'marked'
 import vue from '@/main.js'
@@ -636,7 +636,9 @@ async function loadPresentationById (vm, presId) {
     const commonMatch = presId.match(/^EP_common_(.*)$/)
     if (commonMatch) {
       const commonName = commonMatch[1]
-      await vue.$store.dispatch('presentation/openPresentation', { rawYamlString: rawYamlExamples[commonName] })
+      await vue.$store.dispatch('presentation/openPresentation', {
+        rawYamlString: vue.$store.getters['presentation/rawYamlExamples'].common[commonName]
+      })
       return
     }
   }

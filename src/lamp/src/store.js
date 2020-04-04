@@ -3,6 +3,9 @@
  *
  * @module @bldr/lamp/store
  */
+
+/* globals rawYamlExamples */
+
 import Vue from 'vue'
 import Vuex from 'vuex'
 import { Presentation } from './content-file'
@@ -99,6 +102,9 @@ const getters = {
   },
   stepNo: (state, getters) => {
     return getters.slide.stepNo
+  },
+  rawYamlExamples: () => {
+    return rawYamlExamples
   }
 }
 

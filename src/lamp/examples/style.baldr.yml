@@ -1,4 +1,7 @@
 ---
+meta:
+  id: EP_common_style
+
 slides:
 - generic: fontSize 8em
   style:
