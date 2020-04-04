@@ -15,7 +15,7 @@ Vue.use(Vuex)
 
 const state = {
   folderTitleTree: null,
-  presentation: {},
+  presentation: null,
   preview: {
     size: 0.6,
     detail: false,
@@ -38,7 +38,7 @@ const getters = {
     return state.folderTitleTree
   },
   presentation: state => {
-    if (state.presentation.slides) return state.presentation
+    if (state.presentation && state.presentation.slides) return state.presentation
   },
   preview: state => {
     return state.preview.size

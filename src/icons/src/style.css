@@ -165,118 +165,122 @@
   content: "\ea22";
 }
 
-.baldr-icon_magnify::before {
+.baldr-icon_loading::before {
   content: "\ea23";
 }
 
-.baldr-icon_musescore::before {
+.baldr-icon_magnify::before {
   content: "\ea24";
 }
 
-.baldr-icon_music::before {
+.baldr-icon_musescore::before {
   content: "\ea25";
 }
 
-.baldr-icon_musicbrainz::before {
+.baldr-icon_music::before {
   content: "\ea26";
 }
 
-.baldr-icon_notebook::before {
+.baldr-icon_musicbrainz::before {
   content: "\ea27";
 }
 
-.baldr-icon_open-in-new::before {
+.baldr-icon_notebook::before {
   content: "\ea28";
 }
 
-.baldr-icon_pause::before {
+.baldr-icon_open-in-new::before {
   content: "\ea29";
 }
 
-.baldr-icon_pencil::before {
+.baldr-icon_pause::before {
   content: "\ea2a";
 }
 
-.baldr-icon_play::before {
+.baldr-icon_pencil::before {
   content: "\ea2b";
 }
 
-.baldr-icon_play-speed::before {
+.baldr-icon_play::before {
   content: "\ea2c";
 }
 
-.baldr-icon_presentation::before {
+.baldr-icon_play-speed::before {
   content: "\ea2d";
 }
 
-.baldr-icon_save::before {
+.baldr-icon_presentation::before {
   content: "\ea2e";
 }
 
-.baldr-icon_seat-outline::before {
+.baldr-icon_save::before {
   content: "\ea2f";
 }
 
-.baldr-icon_skip-next::before {
+.baldr-icon_seat-outline::before {
   content: "\ea30";
 }
 
-.baldr-icon_skip-previous::before {
+.baldr-icon_skip-next::before {
   content: "\ea31";
 }
 
-.baldr-icon_slides::before {
+.baldr-icon_skip-previous::before {
   content: "\ea32";
 }
 
-.baldr-icon_steps::before {
+.baldr-icon_slides::before {
   content: "\ea33";
 }
 
-.baldr-icon_table-of-contents::before {
+.baldr-icon_steps::before {
   content: "\ea34";
 }
 
-.baldr-icon_test-tube::before {
+.baldr-icon_table-of-contents::before {
   content: "\ea35";
 }
 
-.baldr-icon_timeline-text::before {
+.baldr-icon_test-tube::before {
   content: "\ea36";
 }
 
-.baldr-icon_trumpet::before {
+.baldr-icon_timeline-text::before {
   content: "\ea37";
 }
 
-.baldr-icon_update::before {
+.baldr-icon_trumpet::before {
   content: "\ea38";
 }
 
-.baldr-icon_video-switch::before {
+.baldr-icon_update::before {
   content: "\ea39";
 }
 
-.baldr-icon_video-vintage::before {
+.baldr-icon_video-switch::before {
   content: "\ea3a";
 }
 
-.baldr-icon_wikidata::before {
+.baldr-icon_video-vintage::before {
   content: "\ea3b";
 }
 
-.baldr-icon_wikipedia::before {
+.baldr-icon_wikidata::before {
   content: "\ea3c";
 }
 
-.baldr-icon_window-open::before {
+.baldr-icon_wikipedia::before {
   content: "\ea3d";
 }
 
-.baldr-icon_worker::before {
+.baldr-icon_window-open::before {
   content: "\ea3e";
 }
 
-.baldr-icon_youtube::before {
+.baldr-icon_worker::before {
   content: "\ea3f";
+}
+
+.baldr-icon_youtube::before {
+  content: "\ea40";
 }

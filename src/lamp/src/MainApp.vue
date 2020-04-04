@@ -363,7 +363,7 @@ export default {
   }
 
   /*********************************************************************
-   * Master main components
+   * Main components
    ********************************************************************/
 
   .main-app-padding {
@@ -376,6 +376,15 @@ export default {
     height: 100vh;
     width: 100vw;
     overflow-x: hidden;
+  }
+
+  .valign-wrapper {
+    display: table;
+  }
+
+  .valign-center {
+    display: table-cell;
+    vertical-align: middle;
   }
 
   /*********************************************************************
@@ -539,12 +548,6 @@ export default {
         background: scale-color($green, $lightness: 40%);
         border-left-color: $green;
       }
-    }
-
-    .vc_play_load_indicator {
-      position: fixed;
-      bottom: 1vw;
-      left: 1vw;
     }
   }
 </style>

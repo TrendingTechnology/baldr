@@ -52,6 +52,14 @@ const routes = [
     }
   },
   {
+    path: '/presentation/:presId',
+    component: SlidesPreview,
+    name: 'slides-preview-short',
+    meta: {
+      title: 'Überblick über alle Folien'
+    }
+  },
+  {
     path: '/presentation/:presId/preview',
     component: SlidesPreview,
     name: 'slides-preview',

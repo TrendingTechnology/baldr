@@ -620,6 +620,7 @@ export class DomSteps {
 async function loadPresentationById (vm, presId) {
   vm.$media.player.stop()
   vm.$store.dispatch('media/clear')
+  vm.$store.commit('lamp/setPresentation', null)
 
   // EP: Example
   if (presId.match(/^EP_.*$/)) {

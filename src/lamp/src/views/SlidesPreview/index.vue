@@ -7,25 +7,27 @@
     b-content-theme="default"
     :style="{ fontSize: previewSize + 'vw' }"
   >
-    <display-controller/>
-    <presentation-title/>
-    <div v-if="slides">
-      <span  v-if="previewLayoutCurrent.id === 'grid'">
-        <grid-layout
-          v-if="previewHierarchical"
-          :slides="presentation.slidesTree"
-        />
-        <grid-layout
-          v-if="!previewHierarchical"
+    <div v-if="presentation">
+      <display-controller/>
+      <presentation-title/>
+      <div v-if="slides">
+        <span  v-if="previewLayoutCurrent.id === 'grid'">
+          <grid-layout
+            v-if="previewHierarchical"
+            :slides="presentation.slidesTree"
+          />
+          <grid-layout
+            v-if="!previewHierarchical"
+            :slides="presentation.slides"
+          />
+        </span>
+        <list-layout
+          v-if="previewLayoutCurrent.id === 'list'"
           :slides="presentation.slides"
         />
-      </span>
-      <list-layout
-        v-if="previewLayoutCurrent.id === 'list'"
-        :slides="presentation.slides"
-      />
+      </div>
     </div>
-    <open-interface v-else/>
+    <loading-icon v-else/>
   </div>
 </template>
 
@@ -33,8 +35,9 @@
 import DisplayController from './DisplayController.vue'
 import GridLayout from './GridLayout.vue'
 import ListLayout from './ListLayout.vue'
-import OpenInterface from '@/components/OpenInterface'
 import PresentationTitle from '@/components/PresentationTitle'
+import LoadingIcon from '@/components/LoadingIcon'
+
 import { routerGuards } from '@/lib.js'
 
 import { createNamespacedHelpers } from 'vuex'
@@ -46,8 +49,8 @@ export default {
     DisplayController,
     GridLayout,
     ListLayout,
-    OpenInterface,
-    PresentationTitle
+    PresentationTitle,
+    LoadingIcon
   },
   mounted: function () {
     this.$styleConfig.set({
