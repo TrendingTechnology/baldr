@@ -127,7 +127,6 @@ export function render (item) {
  * markup.
  */
 export function makeReactive () {
-  const presentation = vue.$get('presentation')
   const elements = document.querySelectorAll('[b-inline-type]')
 
   for (const element of elements) {
@@ -136,6 +135,7 @@ export function makeReactive () {
     if (type === 'slide-link') {
       const slideId = element.getAttribute('b-inline-slide')
       element.addEventListener('click', () => {
+        const presentation = vue.$get('presentation')
         presentation.goto(slideId)
       })
     }

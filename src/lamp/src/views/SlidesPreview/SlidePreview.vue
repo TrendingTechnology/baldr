@@ -35,6 +35,7 @@ export default {
   methods: {
     gotToSlide (slide) {
       const location = slide.routerLocation
+      console.log(location)
       this.$router.push(location)
     }
   }

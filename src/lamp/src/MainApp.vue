@@ -170,14 +170,14 @@ export default {
       {
         keys: 'left',
         callback: () => {
-          this.presentation.navigate(-1)
+          this.presentation.nextSlideOrStep(-1)
         },
         description: 'zur/m vorhergehenden Folie oder Schritt'
       },
       {
         keys: 'right',
         callback: () => {
-          this.presentation.navigate(1)
+          this.presentation.nextSlideOrStep(1)
         },
         description: 'zur/m nächsten Folie oder Schritt'
       },

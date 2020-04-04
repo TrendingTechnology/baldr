@@ -650,7 +650,7 @@ async function loadPresentationById (vm, presId) {
  * Open a presentation by a its ID.
  *
  * @param {Object} vm - Vue component instance.
- * @param {String} presId
+ * @param {String} params
  */
 export async function loadPresentationByRoute (vm, params) {
   try {
@@ -660,11 +660,15 @@ export async function loadPresentationByRoute (vm, params) {
         await loadPresentationById(vm, params.presId)
       }
       if (params.slideNo) {
-        vm.$store.dispatch('lamp/setSlideAndStepNoCurrent', params)
+        const presentation = vm.$store.getters['lamp/presentation']
+        presentation.navigator.setNavListNo(params)
+        const normalizedParams = presentation.navigator.routeParamsToSlideStepNo(params)
+        vm.$store.dispatch('lamp/setSlideAndStepNoCurrent', normalizedParams)
       }
     }
   } catch (error) {
     vm.$notifyError(error)
+    console.log(error)
   }
 }
 

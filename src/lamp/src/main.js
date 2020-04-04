@@ -649,7 +649,7 @@ Vue.config.errorHandler = function (error, vm, info) {
  * Shortcut for `this.$store.getters['lamp/getterName']`
  */
 Vue.prototype.$get = function (getterName) {
-  return store.getters[`presentation/${getterName}`]
+  return store.getters[`lamp/${getterName}`]
 }
 
 Vue.prototype.$openPresentation = openPresentation
