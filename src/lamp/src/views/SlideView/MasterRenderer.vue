@@ -1,7 +1,6 @@
 <script>
 import OpenInterface from '@/components/OpenInterface'
 import BlankMaster from '@/components/BlankMaster'
-import vue from '@/main.js'
 
 import { createNamespacedHelpers } from 'vuex'
 const { mapGetters } = createNamespacedHelpers('presentation')
@@ -84,7 +83,7 @@ export default {
             'b-content-theme': this.contentTheme
           },
           class: {
-            'vc_master_renderer': true,
+            vc_master_renderer: true
           }
         },
         [masterElement]

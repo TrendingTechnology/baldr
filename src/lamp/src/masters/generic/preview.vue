@@ -15,7 +15,7 @@ export default {
   props: {
     markup: {
       type: String,
-      required: true,
+      required: true
     }
   }
 }

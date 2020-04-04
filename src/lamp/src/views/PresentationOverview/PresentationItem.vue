@@ -35,6 +35,7 @@ export default {
       if (this.item && '_title' in this.item) {
         return this.item._title
       }
+      return ''
     },
     title () {
       if (this.folderTitle) {
@@ -47,21 +48,25 @@ export default {
       if (this.folderTitle && this.folderTitle.subtitle) {
         return this.folderTitle.subtitle
       }
+      return ''
     },
     level () {
       if (this.folderTitle && this.folderTitle.level) {
         return this.folderTitle.level
       }
+      return ''
     },
     id () {
       if (this.folderTitle) {
         return this.folderTitle.folderName.substr(3)
       }
+      return ''
     },
     hasPraesentation () {
       if (this.folderTitle) {
         return this.folderTitle.hasPraesentation
       }
+      return ''
     },
     hasChilds () {
       return this.item && Object.keys(this.item).length > 1
@@ -69,7 +74,7 @@ export default {
     childs () {
       if (!this.item) return []
       const keys = Object.keys(this.item).filter(key => key !== '_title').sort()
-      let item = []
+      const item = []
       for (const key of keys) {
         item.push(this.item[key])
       }

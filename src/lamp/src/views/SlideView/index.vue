@@ -16,8 +16,6 @@ import MetaDataOverlay from './MetaDataOverlay.vue'
 import SlideNumber from './SlideNumber.vue'
 import { routerGuards } from '@/lib.js'
 
-import store from '@/store.js'
-
 export default {
   name: 'SlideView',
   components: {

@@ -44,9 +44,11 @@ export default {
     },
     startDate () {
       if (this.group.startDate) return formatToYear(this.group.startDate)
+      return ''
     },
     endDate () {
       if (this.group.endDate) return formatToYear(this.group.endDate)
+      return ''
     }
   }
 }

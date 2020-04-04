@@ -11,7 +11,7 @@ const { mapGetters } = createNamespacedHelpers('presentation')
 
 export default {
   props: {
-  image: {
+    image: {
       type: Object
     }
   },

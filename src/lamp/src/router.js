@@ -24,8 +24,6 @@ import PresentationOverview from '@/views/PresentationOverview/index.vue'
 
 import MediaIdsParentDir from '@/views/MediaIdsParentDir'
 
-import store from '@/store.js'
-
 // Failed to load chunks in the subfolder presentation
 // const Documentation = () => import(/* webpackChunkName: "documentation" */ '@/views/Documentation.vue')
 // const MasterDocumentation = () => import(/* webpackChunkName: "documentation" */ '@/views/MasterDocumentation.vue')

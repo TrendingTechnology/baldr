@@ -53,7 +53,7 @@ export default {
       }
       return props
     },
-    calculateStepCount({ props, propsMain, propsPreview, slide }) {
+    calculateStepCount ({ props, propsMain, propsPreview, slide }) {
       const dom = new DOMParser().parseFromString(props.markup, 'text/html')
       const specializedSelector = DomSteps.getSpecializedSelectorsFromProps(props)
 
@@ -69,7 +69,8 @@ export default {
       if (props.stepSubset) {
         const elements = selectSubset(props.stepSubset, {
           elementsCount: allElementsCount,
-          shiftSelector: -1 }
+          shiftSelector: -1
+        }
         )
         return elements.length
       } else {

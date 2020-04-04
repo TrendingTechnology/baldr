@@ -9,20 +9,19 @@
 </template>
 
 <script>
-import axios from 'axios'
-import { getHtmlBody, getFirstImage, formatId } from './main.js'
+import { getHtmlBody, formatId } from './main.js'
 
 export default {
   props: {
     title: {
       type: String,
-      required: true,
+      required: true
     },
     language: {
-      type: String,
+      type: String
     },
     oldid: {
-      type: Number,
+      type: Number
     },
     httpUrl: {
       type: String,
@@ -48,7 +47,7 @@ export default {
   mounted: async function () {
     const master = this.$masters.get(this.masterName)
     const id = formatId(this.language, this.title)
-    let body = master.$get('bodyById', id)
+    const body = master.$get('bodyById', id)
     if (body) {
       this.body = body
     } else {

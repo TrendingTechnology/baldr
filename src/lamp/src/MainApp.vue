@@ -64,7 +64,7 @@ export default {
     ...mapActions([
       'setSlideNextOrPrevious',
       'setStepNextOrPrevious',
-      'setSlideOrStepNextOrPrevious',
+      'setSlideOrStepNextOrPrevious'
     ]),
     /**
      * Toggle between to routes:
@@ -277,11 +277,11 @@ export default {
         ['e', 'editor'],
         ['h', 'home'],
         // Take by image quick launcher i 1 etc...
-        //['i', 'media-ids'],
+        // ['i', 'media-ids'],
         ['m', 'media-overview'],
         // p: is already taken by p f or p s
         ['s', 'slides-preview'],
-        ['r', 'rest-api'],
+        ['r', 'rest-api']
       ]),
       {
         keys: 'ctrl+u',
@@ -305,7 +305,7 @@ export default {
       {
         keys: 'ctrl+y',
         callback: () => {
-            this.$store.dispatch('presentation/setSlideNoToOld')
+          this.$store.dispatch('presentation/setSlideNoToOld')
         },
         description: 'Zwischen zwei Folien hin- und herschalten.'
       }
@@ -461,7 +461,6 @@ export default {
       height: 100vh;
     }
   }
-
 
 /***********************************************************************
  * Inline media

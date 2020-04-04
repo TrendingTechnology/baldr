@@ -30,11 +30,13 @@ export default {
       if (this.questions.length > 1) {
         return this.questions
       }
+      return ''
     },
     question () {
       if (this.questions.length === 1) {
         return this.questions[0]
       }
+      return ''
     }
   }
 }

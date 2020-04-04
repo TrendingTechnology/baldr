@@ -4,7 +4,7 @@
  * @module @bldr/lamp/lib
  */
 
-/* globals DOMParser */
+/* globals DOMParser rawYamlExamples */
 
 import marked from 'marked'
 import vue from '@/main.js'
@@ -266,7 +266,7 @@ export class DomSteps {
     } else if (this.opts_.cssSelectors) {
       elements = document.querySelectorAll(this.opts_.cssSelectors)
     } else {
-      throw new Error(`Specify elements or cssSelectors`)
+      throw new Error('Specify elements or cssSelectors')
     }
 
     if (elements) {

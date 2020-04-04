@@ -11,7 +11,9 @@
 </template>
 
 <script>
-import {  markupToHtml, openPresentationByRawYaml } from '@/lib.js'
+import { openPresentationByRawYaml } from '@/lib.js'
+
+/* globals rawYamlExamples */
 
 export default {
   name: 'CommonExample',

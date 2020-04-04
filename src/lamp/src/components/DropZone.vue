@@ -37,7 +37,7 @@ export default {
     },
     hideDragzone (event) {
       this.$refs.dropzone.style.display = 'none'
-    },
+    }
   }
 }
 </script>

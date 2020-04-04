@@ -22,6 +22,7 @@ export default {
       } else if (slide) {
         return slide.master
       }
+      return ''
     }
   }
 }

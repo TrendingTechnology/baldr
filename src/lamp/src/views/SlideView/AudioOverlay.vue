@@ -19,6 +19,7 @@ export default {
       if (this.slide && this.slide.audioOverlay) {
         return this.slide.audioOverlay
       }
+      return ''
     }
   }
 }

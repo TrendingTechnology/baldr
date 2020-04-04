@@ -8,8 +8,7 @@
 </template>
 
 <script>
-import { plainText } from '@bldr/core-browser'
-import { markupToHtml, DomSteps } from '@/lib.js'
+import { DomSteps } from '@/lib.js'
 import { createNamespacedHelpers } from 'vuex'
 const { mapGetters } = createNamespacedHelpers('presentation')
 
@@ -44,18 +43,19 @@ export default {
     onSlideChange () {
       for (const element of document.querySelectorAll('.vc_editor_master [contenteditable]')) {
         element.addEventListener('focus', (event) => {
-        const element = event.target
-        if (element.innerHTML === placeholderTag) {
-          element.innerHTML = ''
-        }
-      })
+          const element = event.target
+          if (element.innerHTML === placeholderTag) {
+            element.innerHTML = ''
+          }
+        })
       }
       for (const element of document.querySelectorAll('.vc_editor_master ul[contenteditable] li')) {
         element.addEventListener('click', (event) => {
           const element = event.target
           element.innerHTML = ''
         }
-      )}
+        )
+      }
     },
     /**
      * @private
@@ -68,7 +68,7 @@ export default {
         range.surroundContents(element)
       }
     },
-    insertHtml(html) {
+    insertHtml (html) {
       const range = document.getSelection().getRangeAt(0)
       const fragment = document.createRange().createContextualFragment(html)
       range.insertNode(fragment)

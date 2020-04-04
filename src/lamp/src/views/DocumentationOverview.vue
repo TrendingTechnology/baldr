@@ -89,6 +89,8 @@
 <script>
 import { markupToHtml, openPresentationByRawYaml } from '@/lib.js'
 
+/* globals rawYamlExamples */
+
 const documentation = `
 
 # Semantische CSS-Klassen

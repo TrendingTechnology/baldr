@@ -13,7 +13,7 @@ export default {
   props: {
     markup: {
       type: String
-    },
+    }
   },
   data () {
     return {
@@ -21,7 +21,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['slide']),
+    ...mapGetters(['slide'])
   }
 }
 </script>

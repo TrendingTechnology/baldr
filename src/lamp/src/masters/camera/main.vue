@@ -57,7 +57,7 @@ export default {
     async setDeviceId () {
       this.$modal.hide('select-video-device')
       this.labelDefaultCamera = this.device.name
-      window.localStorage.setItem('labelDefaultCamera', this.device.name);
+      window.localStorage.setItem('labelDefaultCamera', this.device.name)
       this.$store.commit('presMasterCamera/setDeviceId', this.device.id)
       this.setVideoStream(await this.buildConstraints(this.device.id))
     },

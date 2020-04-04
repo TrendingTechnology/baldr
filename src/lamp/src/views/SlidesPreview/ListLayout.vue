@@ -20,8 +20,8 @@
 
 <script>
 import { createNamespacedHelpers } from 'vuex'
-const { mapGetters } = createNamespacedHelpers('presentation')
 import SlidePreview from './SlidePreview.vue'
+const { mapGetters } = createNamespacedHelpers('presentation')
 
 export default {
   name: 'ListLayout',

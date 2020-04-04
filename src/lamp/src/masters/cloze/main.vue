@@ -36,7 +36,7 @@ export default {
     },
     async loadSvg () {
       if (!this.$refs.clozeWrapper) return
-      let response = await this.$media.httpRequest.request({
+      const response = await this.$media.httpRequest.request({
         url: `/media/${this.svgPath}`,
         method: 'get'
       })
@@ -56,7 +56,7 @@ export default {
     /**
      *
      */
-    scroll(newClozeGroup) {
+    scroll (newClozeGroup) {
       // e. g.: 1892
       // svg.clientHeight
       const svg = document.querySelector('svg')
@@ -67,7 +67,7 @@ export default {
       // e. g.: 125.11000061035156
       const y = svg.clientHeight / bBox.height * glyph.y.baseVal.value
       const adjustedY = y - 0.8 * window.screen.height
-      window.scrollTo({ top: adjustedY, left: 0, behavior: 'smooth' });
+      window.scrollTo({ top: adjustedY, left: 0, behavior: 'smooth' })
     }
   },
   mounted () {

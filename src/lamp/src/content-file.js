@@ -267,12 +267,6 @@ class Slide {
      */
     this.no = null
 
-    /**
-     * Normalized slide data to render the slide.
-     *
-     * @type {module:@bldr/lamp/content-file~RenderData}
-     */
-    //this = new RenderData(rawSlideObject)
     const intersection = intersect(
       masters.allNames,
       Object.keys(rawSlideObject.raw)
@@ -540,7 +534,6 @@ function parseSlidesRecursive (slidesRaw, slidesFlat, slidesTree, level = 1) {
  * number. Store all slide IDs in the instantiated objects
  */
 class SlideNavigator {
-
   constructor () {
     /**
      * @type {Object}
@@ -584,7 +577,6 @@ class SlideNavigator {
  */
 export class Presentation {
   constructor () {
-
     /**
      * @type {module:@bldr/lamp/content-file~SlideNavigator}
      */
@@ -771,22 +763,22 @@ ${JSON.stringify(this.rawYamlObject_)}`
 
     // After media resolution.
     for (const slide of this.slides) {
-        slide.master.renderInlineMedia(slide.props)
-        slide.propsMain = slide.master.collectPropsMain(slide.props, vue)
-        slide.propsPreview = slide.master.collectPropsPreview(
-          {
-            props: slide.props,
-            propsMain: slide.propsMain,
-            slide
-          },
-          vue
-        )
-        slide.stepCount = slide.master.calculateStepCount({
+      slide.master.renderInlineMedia(slide.props)
+      slide.propsMain = slide.master.collectPropsMain(slide.props, vue)
+      slide.propsPreview = slide.master.collectPropsPreview(
+        {
           props: slide.props,
           propsMain: slide.propsMain,
-          propsPreview: slide.propsPreview,
           slide
-        }, vue)
+        },
+        vue
+      )
+      slide.stepCount = slide.master.calculateStepCount({
+        props: slide.props,
+        propsMain: slide.propsMain,
+        propsPreview: slide.propsPreview,
+        slide
+      }, vue)
 
       if (slide.metaData.id) {
         this.navigator.addId(slide.metaData.id, slide.no)

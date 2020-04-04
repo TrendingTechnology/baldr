@@ -90,7 +90,7 @@ export async function getFirstImage (title, language = 'de') {
  * @see {@link https://www.mediawiki.org/wiki/API:Get_the_contents_of_a_page}
  * @see {@link https://www.mediawiki.org/wiki/API:Parsing_wikitext}
  */
-export async function getHtmlBody(title, language = 'de', oldid) {
+export async function getHtmlBody (title, language = 'de', oldid) {
   const params = {
     action: 'parse',
     page: title,
@@ -186,7 +186,7 @@ export default {
     mutations
   },
   hooks: {
-    normalizeProps(props) {
+    normalizeProps (props) {
       if (typeof props === 'string') {
         // de:Wolfgang_Amadeus_Mozart
         const regExp = new RegExp(/^([a-z]+):(.+)$/)
@@ -211,7 +211,7 @@ export default {
       const thumbnailUrl = await getFirstImage(props.title, props.language)
       if (thumbnailUrl) master.$commit('addThumbnailUrl', { id, thumbnailUrl })
     },
-    collectPropsMain(props) {
+    collectPropsMain (props) {
       return {
         title: props.title,
         language: props.language,
@@ -219,13 +219,13 @@ export default {
         httpUrl: formatUrl(props)
       }
     },
-    collectPropsPreview({ propsMain }) {
+    collectPropsPreview ({ propsMain }) {
       return {
         title: propsMain.title,
         id: formatId(propsMain.language, propsMain.title)
       }
     },
-    plainTextFromProps(props) {
+    plainTextFromProps (props) {
       return `${props.title} (${props.language})`
     }
   }

@@ -206,7 +206,7 @@ export default {
       markup: true
     },
     sequence: {
-      description: `Wird automatisch erzeugt, z. B.: ['q1', 'a1', 'q2', 'q3'] .`,
+      description: 'Wird automatisch erzeugt, z. B.: [\'q1\', \'a1\', \'q2\', \'q3\'] .',
       type: Array
     }
   },

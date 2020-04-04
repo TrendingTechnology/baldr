@@ -18,8 +18,8 @@ export default {
       type: [String, Array],
       required: true,
       // It is complicated to convert to prop based markup conversion.
-      //markup: true
-      description:  'Markup im HTML oder Markdown-Format'
+      // markup: true
+      description: 'Markup im HTML oder Markdown-Format'
     },
     charactersOnSlide: {
       type: [Number],

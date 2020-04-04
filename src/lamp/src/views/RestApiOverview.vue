@@ -51,11 +51,11 @@
 
 <script>
 import { getDefaultRestEndpoints, HttpRequestNg } from '@bldr/http-request'
-const restEndpoints = getDefaultRestEndpoints()
-const httpRequestNg = new HttpRequestNg(restEndpoints, '/api/media')
 
 import { formatToLocalDateTime } from '@bldr/core-browser'
 import { createNamespacedHelpers } from 'vuex'
+const restEndpoints = getDefaultRestEndpoints()
+const httpRequestNg = new HttpRequestNg(restEndpoints, '/api/media')
 const { mapGetters } = createNamespacedHelpers('media')
 
 export default {

@@ -30,21 +30,25 @@ export default {
       if (this.asset.wikipedia) {
         return core.formatWikipediaUrl(this.asset.wikipedia)
       }
+      return ''
     },
     wikidata () {
       if (this.asset.wikidata) {
         return core.formatWikidataUrl(this.asset.wikidata)
       }
+      return ''
     },
     musicbrainz () {
       if (this.asset.musicbrainzRecordingId) {
         return core.formatBrainzRecUrl(this.asset.musicbrainzRecordingId)
       }
+      return ''
     },
     youtube () {
       if (this.asset.youtube) {
         return core.formatYoutubeUrl(this.asset.youtube)
       }
+      return ''
     }
   }
 }
