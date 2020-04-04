@@ -5,13 +5,89 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="icon" type="image/svg+xml" sizes="any" href="<%= BASE_URL %>favicon.svg">
-    <title>presentation</title>
+    <title>Baldr: Lamp</title>
   </head>
   <body>
     <noscript>
       <strong>We're sorry but presentation doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>
-    <div id="app"></div>
+    <div id="app">
+
+      <!-- Plain CSS and HTML version of components/LoadingIcon.vue -->
+      <!-- https://github.com/nguyenvanduocit/vue-loading-spinner/blob/master/src/components/Stretch.vue -->
+      <style>
+        .spinner-wrapper {
+          box-sizing: border-box;
+          display: table;
+          font-size: 10em;
+          height: 100vh;
+          left: 0;
+          overflow: hidden;
+          position: absolute;
+          text-align: center;
+          top: 0;
+          width: 100vw;
+        }
+
+        .spinner {
+          display: table-cell;
+          font-size: 1em;
+          height: 1em;
+          text-align: center;
+          vertical-align: middle;
+          width: 1em;
+        }
+
+        .spinner * {
+          line-height: 0;
+          box-sizing: border-box;
+        }
+
+        .rect {
+          margin-left: 0.1em;
+          background-color: #bab0ac;
+          animation-duration: 1.2s;
+          animation: sk-stretchdelay 1.2s ease-in-out infinite;
+        }
+
+        .spinner > div {
+          height: 100%;
+          width: 0.1em;
+          display: inline-block;
+        }
+
+        .spinner .rect-2 {
+          animation-delay: -1.1s;
+        }
+
+        .spinner .rect-3 {
+          animation-delay: -1.0s;
+        }
+
+        .spinner .rect-4 {
+          animation-delay: -0.9s;
+        }
+
+        .spinner .rect-5 {
+          animation-delay: -0.8s;
+        }
+
+        @keyframes sk-stretchdelay {
+          0%, 40%, 100% {
+            transform: scaleY(0.4);
+          }
+          20% {
+            transform: scaleY(1.0);
+          }
+        }
+      </style>
+
+      <div class="spinner-wrapper">
+        <div class="spinner">
+          <div class="rect rect-1"></div><div class="rect rect-2"></div><div class="rect rect-3"></div><div class="rect rect-4"></div><div class="rect rect-5"></div>
+        </div>
+      </div>
+    </div>
     <!-- built files will be auto injected -->
   </body>
 </html>
