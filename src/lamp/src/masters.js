@@ -666,13 +666,13 @@ class Masters {
  */
 const masterMixin = {
   mounted () {
-    const oldSlide = vue.$store.getters['presentation/slideOld']
+    const oldSlide = vue.$store.getters['lamp/slideOld']
     let oldProps
     if (oldSlide) {
       oldProps = oldSlide.props
     }
     // On instant slides like camera or editor there is no newSlide
-    const newSlide = vue.$store.getters['presentation/slide']
+    const newSlide = vue.$store.getters['lamp/slide']
     let newProps
     if (newSlide) {
       newProps = newSlide.props
@@ -682,13 +682,13 @@ const masterMixin = {
     inlineMarkup.makeReactive()
   },
   beforeDestroy () {
-    const oldSlide = vue.$store.getters['presentation/slideOld']
+    const oldSlide = vue.$store.getters['lamp/slideOld']
     let oldProps
     if (oldSlide) {
       oldProps = oldSlide.props
     }
     // On instant slides like camera or editor there is no newSlide
-    const newSlide = vue.$store.getters['presentation/slide']
+    const newSlide = vue.$store.getters['lamp/slide']
     if (newSlide) {
       const newProps = newSlide.props
       newSlide.master.leaveSlide({ oldSlide, oldProps, newSlide, newProps }, this)

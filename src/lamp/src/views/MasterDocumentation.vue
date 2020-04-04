@@ -51,7 +51,7 @@ export default {
   methods: {
     markupToHtml,
     openExample () {
-      this.$store.commit('presentation/showMetaDataOverlay', true)
+      this.$store.commit('lamp/showMetaDataOverlay', true)
       openPresentationByRawYaml(this.master.example)
     },
     formatPropSpec (spec) {

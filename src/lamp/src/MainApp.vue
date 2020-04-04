@@ -46,7 +46,7 @@ import { AppInfo } from '@bldr/vue-plugin-components-collection'
 
 import MainMenu from '@/components/MainMenu'
 import { createNamespacedHelpers } from 'vuex'
-const { mapActions, mapGetters } = createNamespacedHelpers('presentation')
+const { mapActions, mapGetters } = createNamespacedHelpers('lamp')
 
 export default {
   name: 'MainApp',
@@ -101,7 +101,7 @@ export default {
       return shortcutObjects
     },
     callOpenRestApi (openWith, archive, create) {
-      const presentation = this.$store.getters['presentation/presentation']
+      const presentation = this.$store.getters['lamp/presentation']
       if (Object.keys(presentation).length === 0) {
         this.$notifyError(
           'Es ist keine Präsentation geladen.',
@@ -189,14 +189,14 @@ export default {
       },
       {
         keys: 'ctrl+i',
-        callback: () => { this.$store.dispatch('presentation/toggleMetaDataOverlay') },
+        callback: () => { this.$store.dispatch('lamp/toggleMetaDataOverlay') },
         description: 'Metainformation der Folien ein/ausblenden'
       },
       {
         keys: 'ctrl+r',
         callback: async () => {
           try {
-            await this.$store.dispatch('presentation/reloadPresentation')
+            await this.$store.dispatch('lamp/reloadPresentation')
             this.$notifySuccess('Die Präsentation wurde neu geladen.')
           } catch (error) {
             this.$notifyError(error)
@@ -288,7 +288,7 @@ export default {
         callback: async () => {
           try {
             const result = await this.$media.httpRequest.request('mgmt/update')
-            this.$store.dispatch('presentation/updateFolderTitleTree')
+            this.$store.dispatch('lamp/updateFolderTitleTree')
             if (result.data.errors.length) {
               for (const errorMsg of result.data.errors) {
                 this.$notifyError(errorMsg)
@@ -305,7 +305,7 @@ export default {
       {
         keys: 'ctrl+y',
         callback: () => {
-          this.$store.dispatch('presentation/setSlideNoToOld')
+          this.$store.dispatch('lamp/setSlideNoToOld')
         },
         description: 'Zwischen zwei Folien hin- und herschalten.'
       }

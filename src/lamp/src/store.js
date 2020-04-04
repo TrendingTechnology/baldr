@@ -354,7 +354,7 @@ const mutations = {
 
 export default new Vuex.Store({
   modules: {
-    presentation: {
+    lamp: {
       namespaced: true,
       state,
       getters,

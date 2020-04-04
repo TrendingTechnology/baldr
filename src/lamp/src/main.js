@@ -15,7 +15,7 @@
  *
  * - `this.$dynamicSelect`
  * - `this.$fullscreen()`: Set presentation app to fullscreen.
- * - `this.$get(getterName)`: Shortcut for `this.$store.getters['presentation/getterName']`
+ * - `this.$get(getterName)`: Shortcut for `this.$store.getters['lamp/getterName']`
  * - `this.$masters`
  * - `this.$media`
  * - `this.$modal`
@@ -647,7 +647,7 @@ Vue.config.errorHandler = function (error, vm, info) {
 }
 
 /**
- * Shortcut for `this.$store.getters['presentation/getterName']`
+ * Shortcut for `this.$store.getters['lamp/getterName']`
  */
 Vue.prototype.$get = function (getterName) {
   return store.getters[`presentation/${getterName}`]

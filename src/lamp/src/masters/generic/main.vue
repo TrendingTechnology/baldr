@@ -8,7 +8,7 @@
 <script>
 import { DomSteps } from '@/lib.js'
 import { createNamespacedHelpers } from 'vuex'
-const { mapGetters } = createNamespacedHelpers('presentation')
+const { mapGetters } = createNamespacedHelpers('lamp')
 
 const CHARACTERS_ON_SLIDE = 400
 

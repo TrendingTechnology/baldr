@@ -486,7 +486,7 @@ class Slide {
    * @returns {Object}
    */
   get routerLocation () {
-    const presentation = store.getters['presentation/presentation']
+    const presentation = store.getters['lamp/presentation']
     let name
     const params = { presId: presentation.id }
     if (this.stepCount) {
@@ -590,7 +590,7 @@ export class Presentation {
    */
   goto (slideId) {
     const slideNo = this.navigator.idToNo(slideId)
-    vue.$store.dispatch('presentation/setSlideNoCurrent', slideNo)
+    vue.$store.dispatch('lamp/setSlideNoCurrent', slideNo)
   }
 
   /**
@@ -909,7 +909,7 @@ function openFile (file) {
     reader.readAsText(file, 'utf-8')
     reader.onload = readerEvent => {
       const content = readerEvent.target.result
-      store.dispatch('presentation/openPresentation', content).then(() => {
+      store.dispatch('lamp/openPresentation', content).then(() => {
         if (router.currentRoute.name !== 'slide') router.push({ name: 'slide' })
       })
     }

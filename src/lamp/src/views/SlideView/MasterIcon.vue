@@ -16,7 +16,7 @@ export default {
   name: 'MasterIcon',
   computed: {
     master () {
-      const slide = this.$store.getters['presentation/slide']
+      const slide = this.$store.getters['lamp/slide']
       if ('master' in this.$route.meta) {
         return this.$masters.get(this.$route.meta.master)
       } else if (slide) {

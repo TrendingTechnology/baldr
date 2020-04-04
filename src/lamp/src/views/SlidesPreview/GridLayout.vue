@@ -22,7 +22,7 @@
 <script>
 import SlidePreview from './SlidePreview.vue'
 import { createNamespacedHelpers } from 'vuex'
-const { mapGetters } = createNamespacedHelpers('presentation')
+const { mapGetters } = createNamespacedHelpers('lamp')
 
 export default {
   name: 'GridLayout',
@@ -36,7 +36,7 @@ export default {
   },
   computed: {
     slideCurrent () {
-      return this.$store.getters['presentation/slide']
+      return this.$store.getters['lamp/slide']
     },
     ...mapGetters([
       'previewHierarchical'

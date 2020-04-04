@@ -17,7 +17,7 @@
 <script>
 import PresentationItem from './PresentationItem.vue'
 import { createNamespacedHelpers } from 'vuex'
-const { mapGetters } = createNamespacedHelpers('presentation')
+const { mapGetters } = createNamespacedHelpers('lamp')
 
 export default {
   name: 'PresentationOverview',
@@ -26,7 +26,7 @@ export default {
   },
   methods: {
     async loadTitleTree () {
-      await this.$store.dispatch('presentation/updateFolderTitleTree')
+      await this.$store.dispatch('lamp/updateFolderTitleTree')
       if (this.presentation) {
         const elementLink = document.getElementById(`PID_${this.presentation.id}`)
         elementLink.scrollIntoView({ block: 'center' })

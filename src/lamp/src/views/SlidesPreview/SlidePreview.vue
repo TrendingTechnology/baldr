@@ -29,7 +29,7 @@ export default {
   },
   computed: {
     slideCurrent () {
-      return this.$store.getters['presentation/slide']
+      return this.$store.getters['lamp/slide']
     }
   },
   methods: {

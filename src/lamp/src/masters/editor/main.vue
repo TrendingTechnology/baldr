@@ -10,7 +10,7 @@
 <script>
 import { DomSteps } from '@/lib.js'
 import { createNamespacedHelpers } from 'vuex'
-const { mapGetters } = createNamespacedHelpers('presentation')
+const { mapGetters } = createNamespacedHelpers('lamp')
 
 const placeholder = '…'
 const placeholderTag = `<span class="editor-placeholder">${placeholder}</span>`

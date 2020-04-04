@@ -38,7 +38,7 @@ import PresentationTitle from '@/components/PresentationTitle'
 import { routerGuards } from '@/lib.js'
 
 import { createNamespacedHelpers } from 'vuex'
-const { mapActions, mapGetters } = createNamespacedHelpers('presentation')
+const { mapActions, mapGetters } = createNamespacedHelpers('lamp')
 
 export default {
   name: 'SlidesPreview',

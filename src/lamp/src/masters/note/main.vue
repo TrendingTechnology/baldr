@@ -7,7 +7,7 @@
 
 <script>
 import { createNamespacedHelpers } from 'vuex'
-const { mapGetters } = createNamespacedHelpers('presentation')
+const { mapGetters } = createNamespacedHelpers('lamp')
 
 export default {
   props: {

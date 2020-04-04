@@ -17,14 +17,14 @@
 
 <script>
 import { createNamespacedHelpers } from 'vuex'
-const { mapGetters } = createNamespacedHelpers('presentation')
+const { mapGetters } = createNamespacedHelpers('lamp')
 
 export default {
   name: 'SlideNumber',
   computed: {
     ...mapGetters(['slideNo', 'slidesCount']),
     slide () {
-      const slide = this.$store.getters['presentation/slide']
+      const slide = this.$store.getters['lamp/slide']
       if (slide) {
         return slide
       }

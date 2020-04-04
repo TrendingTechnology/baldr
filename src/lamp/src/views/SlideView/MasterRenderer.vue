@@ -3,7 +3,7 @@ import OpenInterface from '@/components/OpenInterface'
 import BlankMaster from '@/components/BlankMaster'
 
 import { createNamespacedHelpers } from 'vuex'
-const { mapGetters } = createNamespacedHelpers('presentation')
+const { mapGetters } = createNamespacedHelpers('lamp')
 
 export default {
   name: 'MasterRenderer',

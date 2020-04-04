@@ -29,13 +29,13 @@ export default {
   name: 'MetaDataOverlay',
   computed: {
     slide () {
-      return this.$store.getters['presentation/slide']
+      return this.$store.getters['lamp/slide']
     },
     metaData: function () {
       return this.slide.metaData
     },
     isVisible: function () {
-      return this.$store.getters['presentation/showMetaDataOverlay']
+      return this.$store.getters['lamp/showMetaDataOverlay']
     }
   }
 }

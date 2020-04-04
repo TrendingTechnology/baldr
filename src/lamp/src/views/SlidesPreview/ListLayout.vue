@@ -21,7 +21,7 @@
 <script>
 import { createNamespacedHelpers } from 'vuex'
 import SlidePreview from './SlidePreview.vue'
-const { mapGetters } = createNamespacedHelpers('presentation')
+const { mapGetters } = createNamespacedHelpers('lamp')
 
 export default {
   name: 'ListLayout',
@@ -48,7 +48,7 @@ export default {
       }
     },
     gotToSlide (slideNo) {
-      this.$store.dispatch('presentation/setSlideNoCurrent', slideNo)
+      this.$store.dispatch('lamp/setSlideNoCurrent', slideNo)
       if (this.$route.name !== 'slide') this.$router.push({ name: 'slide' })
     }
   }

@@ -22,7 +22,7 @@
 
 <script>
 import { createNamespacedHelpers } from 'vuex'
-const { mapActions, mapGetters } = createNamespacedHelpers('presentation')
+const { mapActions, mapGetters } = createNamespacedHelpers('lamp')
 
 export default {
   name: 'DisplayController',

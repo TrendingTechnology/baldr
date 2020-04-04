@@ -628,7 +628,7 @@ async function loadPresentationById (vm, presId) {
     if (masterMatch) {
       const masterName = masterMatch[1]
       const master = vm.$masters.get(masterName)
-      await vue.$store.dispatch('presentation/openPresentation', { rawYamlString: master.example })
+      await vue.$store.dispatch('lamp/openPresentation', { rawYamlString: master.example })
       return
     }
 
@@ -636,14 +636,14 @@ async function loadPresentationById (vm, presId) {
     const commonMatch = presId.match(/^EP_common_(.*)$/)
     if (commonMatch) {
       const commonName = commonMatch[1]
-      await vue.$store.dispatch('presentation/openPresentation', {
-        rawYamlString: vue.$store.getters['presentation/rawYamlExamples'].common[commonName]
+      await vue.$store.dispatch('lamp/openPresentation', {
+        rawYamlString: vue.$store.getters['lamp/rawYamlExamples'].common[commonName]
       })
       return
     }
   }
 
-  await vm.$store.dispatch('presentation/openPresentationById', presId)
+  await vm.$store.dispatch('lamp/openPresentationById', presId)
 }
 
 /**
@@ -654,12 +654,12 @@ async function loadPresentationById (vm, presId) {
  */
 export async function loadPresentationByRoute (vm, params) {
   if (params.presId) {
-    const presentation = vm.$store.getters['presentation/presentation']
+    const presentation = vm.$store.getters['lamp/presentation']
     if (!presentation || (presentation && presentation.id !== params.presId)) {
       await loadPresentationById(vm, params.presId)
     }
     if (params.slideNo) {
-      vm.$store.dispatch('presentation/setSlideAndStepNoCurrent', params)
+      vm.$store.dispatch('lamp/setSlideAndStepNoCurrent', params)
     }
   }
 }
@@ -698,8 +698,8 @@ export async function openPresentation (args) {
 
   vue.$media.player.stop()
   vue.$store.dispatch('media/clear')
-  await vue.$store.dispatch('presentation/openPresentationById', args.presId)
-  vue.$store.dispatch('presentation/setSlideAndStepNoCurrent', args)
+  await vue.$store.dispatch('lamp/openPresentationById', args.presId)
+  vue.$store.dispatch('lamp/setSlideAndStepNoCurrent', args)
 
   if (args.noRouting) return
   if (args.route) {
@@ -714,7 +714,7 @@ export async function openPresentation (args) {
 export async function openPresentationByRawYaml (rawYamlString) {
   vue.$media.player.stop()
   vue.$store.dispatch('media/clear')
-  await vue.$store.dispatch('presentation/openPresentation', { rawYamlString })
+  await vue.$store.dispatch('lamp/openPresentation', { rawYamlString })
   if (vue.$route.name !== 'slide') {
     vue.$router.push({ name: 'slide' })
   }
