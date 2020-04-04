@@ -668,7 +668,6 @@ export async function loadPresentationByRoute (vm, params) {
     }
   } catch (error) {
     vm.$notifyError(error)
-    console.log(error)
   }
 }
 

@@ -600,12 +600,15 @@ Vue.prototype.$notifySuccess = function (text, title) {
 
 /**
  * $notifyError
+ *
+ * @params {(Object|String)} - An error object or a text for the notification.
  */
 Vue.prototype.$notifyError = function (text, title) {
   if (typeof text === 'object') {
     const error = text
     text = error.message
     title = error.name
+    console.log(error) // eslint-disable-line
   }
   const notification = {
     group: 'default',
