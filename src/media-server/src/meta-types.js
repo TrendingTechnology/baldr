@@ -1,4 +1,9 @@
 /**
+ * Code to manage and process the meta data types of the media server.
+ *
+ * The meta data types are specified in the module
+ * {@link module:@bldr/media-server/meta-type-specs meta-type-specs}
+ *
  * @module @bldr/media-server/meta-types
  */
 

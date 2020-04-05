@@ -1,3 +1,12 @@
+/**
+ * This module contains the specification of the meta data types.
+ *
+ * The corresponding module is
+ * {@link module:@bldr/media-server/meta-types}
+ *
+ * @module @bldr/media-server/meta-type-specs
+ */
+
 // Node packages.
 const path = require('path')
 
