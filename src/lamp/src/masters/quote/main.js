@@ -47,10 +47,14 @@ export default {
   hooks: {
     normalizeProps (props) {
       if (typeof props === 'string') {
-        return {
+        props = {
           text: props
         }
       }
+      // Inject quotations marks after the first befor the last word character
+      // <p><span class="quotation-mark">»</span>Quote
+      props.text = props.text.replace(/^(\s*<.+>)?/, '$1<span class="quotation-mark">»</span> ')
+      props.text = props.text.replace(/(<.+>\s*)?$/, ' <span class="quotation-mark">«</span>$1')
       return props
     },
     plainTextFromProps (props) {

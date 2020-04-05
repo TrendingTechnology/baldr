@@ -2,11 +2,8 @@
   <div class="vc_quote_master">
     <p class="prolog" v-if="prolog" v-html="prolog"/>
 
-    <p class="text">
-      <span class="quotation-mark">»</span>
-      <span v-html="text"/>
-      <span class="quotation-mark">«</span>
-    </p>
+    <p class="text" v-html="text"/>
+
     <p class="attribution" v-if="author || date">
       <span class="author" v-if="author" v-html="author"/>
       <span v-if="author && date">, </span>

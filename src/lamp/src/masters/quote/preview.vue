@@ -1,14 +1,6 @@
 <template>
-  <div class="
-    vc_quote_master_preview
-    slide-preview-fullscreen
-    slide-preview-valign-top
-  ">
-    <p class="text">
-      <span class="quotation-mark">»</span>
-      <span v-html="text"/>
-      <span class="quotation-mark">«</span>
-    </p>
+  <div :class="classes">
+    <p class="text" v-html="text"/>
     <p class="attribution" v-if="author || date">
       <span class="author" v-if="author" v-html="author"/>
       <span v-if="author && date">, </span>
@@ -33,6 +25,21 @@ export default {
     },
     source: {
       type: String
+    }
+  },
+  computed: {
+    classes () {
+      const classes = [
+        'vc_quote_master_preview',
+        'slide-preview-fullscreen'
+      ]
+
+      if (this.text.length > 400) {
+        classes.push('slide-preview-valign-top')
+      } else {
+        classes.push('slide-preview-valign-center')
+      }
+      return classes
     }
   }
 }
