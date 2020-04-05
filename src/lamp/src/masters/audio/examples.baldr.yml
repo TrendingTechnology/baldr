@@ -13,7 +13,7 @@ slides:
 
 - title: Custom composer
   audio:
-    src: id:Fischer-Dieskau_Marmotte
+    src: id:Marmotte_HB_Fischer-Dieskau_Marmotte
     composer: Ludwig B. (Custom composer)
     autoplay: true
 
@@ -43,12 +43,6 @@ slides:
   audio:
     src: id:Du-bist-als-Kind-zu-heiss-gebadet-worden
     cover: id:Beethoven_Ludwig-van
-    title: Custom cover
-
-- title: 'Without media file URI schemes.'
-  audio:
-    src: Du-bist-als-Kind-zu-heiss-gebadet-worden
-    cover: Beethoven
     title: Custom cover
 
 - title: 'URL: id:'
