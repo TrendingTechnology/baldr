@@ -27,15 +27,10 @@ export default {
   computed: {
     titleNoUnderscores () {
       return this.title.replace(/_/g, ' ')
+    },
+    thumbnailUrl () {
+      return this.$store.getters['lampMasterWikipedia/thumbnailUrlById'](this.id)
     }
-  },
-  data () {
-    return {
-      thumbnailUrl: null
-    }
-  },
-  mounted: async function () {
-    this.thumbnailUrl = this.$store.getters['lampMasterWikipedia/thumbnailUrlById'](this.id)
   }
 }
 </script>
@@ -47,13 +42,13 @@ export default {
     font-size: 3em;
 
     .text-overlay {
-      text-align: center;
-      position: absolute;
       bottom: 0;
       left: 0;
+      line-height: 1em;
+      position: absolute;
+      text-align: center;
       text-shadow: 0 0 0.1em $white;
       width: 100%;
-      line-height: 1em;
     }
   }
 </style>
