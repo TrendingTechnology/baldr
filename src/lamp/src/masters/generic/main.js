@@ -18,6 +18,19 @@ const CHARACTERS_ON_SLIDE = 400
  * @returns {Array}
  */
 function splitHtmlintoChunks (htmlString, charactersOnSlide) {
+  /**
+   * Add text to the chunks array. Add only text with real letters not with
+   * whitespaces.
+   *
+   * @param {Array} chunks
+   * @param {String} text
+   */
+  function addText (chunks, text) {
+    if (text && !text.match(/^\s*$/)) {
+      chunks.push(text)
+    }
+  }
+
   if (!charactersOnSlide) charactersOnSlide = CHARACTERS_ON_SLIDE
   if (htmlString.length < charactersOnSlide) return [htmlString]
 
@@ -29,24 +42,24 @@ function splitHtmlintoChunks (htmlString, charactersOnSlide) {
     dom = domParser.parseFromString(`<p>${htmlString}</p>`, 'text/html')
   }
 
-  let buffer = ''
+  let text = ''
   const chunks = []
 
   // childNodes not children!
   for (const children of dom.body.childNodes) {
     // If htmlString is a text with inner tags
     if (children.nodeName === '#text') {
-      buffer += children.textContent
+      text += children.textContent
     } else {
-      buffer += children.outerHTML
+      text += children.outerHTML
     }
-    if (buffer.length > charactersOnSlide) {
-      chunks.push(buffer)
-      buffer = ''
+    if (text.length > charactersOnSlide) {
+      addText(chunks, text)
+      text = ''
     }
   }
-  // Add last not full buffer
-  if (buffer) chunks.push(buffer)
+  // Add last not full text
+  addText(chunks, text)
   return chunks
 }
 
