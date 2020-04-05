@@ -1,6 +1,10 @@
 /**
  * Code to manage and process the meta data types of the media server.
  *
+ * A media asset can be attached to multiple meta data types (for example:
+ * `meta_types: recording,composition`). All meta data types belong to the type
+ * `general`.
+ *
  * The meta data types are specified in the module
  * {@link module:@bldr/media-server/meta-type-specs meta-type-specs}
  *
@@ -122,7 +126,7 @@ const typeSpecs = require('./meta-type-specs.js')
  */
 
 /**
- * Check a file path against regepx to get a type name.
+ * Check a file path against a regular expression to get the type name.
  *
  * @param {String} filePath
  *
@@ -131,6 +135,7 @@ const typeSpecs = require('./meta-type-specs.js')
  */
 function detectTypeByPath (filePath) {
   filePath = path.resolve(filePath)
+  const typeNames = new Set()
   for (const typeName in typeSpecs) {
     const typeSpec = typeSpecs[typeName]
     if (typeSpec.detectTypeByPath) {
@@ -140,9 +145,10 @@ function detectTypeByPath (filePath) {
       } else {
         regexp = typeSpec.detectTypeByPath
       }
-      if (filePath.match(regexp)) return typeName
+      if (filePath.match(regexp)) typeNames.add(typeName)
     }
   }
+  if (typeNames.size) return [...typeNames].join(',')
 }
 
 /**
@@ -375,8 +381,10 @@ function process (data) {
   // The meta type specification is in camel case. The meta data is
   // stored in the YAML format in snake case
   data = convertPropertiesCase(data, 'snake-to-camel')
-  if (data.metaType) {
-    data = processByType(data, data.metaType)
+  if (data.metaTypes) {
+    for (const typeName of data.metaTypes.split(',')) {
+      data = processByType(data, typeName)
+    }
   }
   data = processByType(data, 'general')
   // Do not convert back. This conversion should be the last step, before

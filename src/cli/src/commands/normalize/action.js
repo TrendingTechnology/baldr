@@ -21,23 +21,25 @@ async function normalizeOneFile (filePath, cmdObj) {
 
   try {
     const metaTypes = mediaServer.metaTypes
-    const typeName = metaTypes.detectTypeByPath(filePath)
+    const typeNames = metaTypes.detectTypeByPath(filePath)
     const yamlFile = `${filePath}.yml`
     let metaData = yaml.safeLoad(lib.readFile(yamlFile))
     metaData.filePath = filePath
     const origData = deepCopy(metaData)
-    metaData.metaType = typeName
+    metaData.metaTypes = typeNames
 
     if (cmdObj.wikidata) {
-      if (metaData.wikidata && metaData.metaType) {
-        const dataWiki = await wikidata.query(metaData.wikidata, metaData.metaType, metaTypes.typeSpecs)
-        metaData = wikidata.mergeData(metaData, dataWiki)
-        // To avoid blocking
-        // url: 'https://www.wikidata.org/w/api.php?action=wbgetentities&ids=Q16276296&format=json&languages=en%7Cde&props=labels',
-        // status: 429,
-        // statusText: 'Scripted requests from your IP have been blocked, please
-        // contact noc@wikimedia.org, and see also https://meta.wikimedia.org/wiki/User-Agent_policy',
-        sleep.msleep(3000)
+      if (metaData.wikidata && metaData.metaTypes) {
+        for (const typeName of metaData.metaTypes.split(',')) {
+          const dataWiki = await wikidata.query(metaData.wikidata, typeName, metaTypes.typeSpecs)
+          metaData = wikidata.mergeData(metaData, dataWiki)
+          // To avoid blocking
+          // url: 'https://www.wikidata.org/w/api.php?action=wbgetentities&ids=Q16276296&format=json&languages=en%7Cde&props=labels',
+          // status: 429,
+          // statusText: 'Scripted requests from your IP have been blocked, please
+          // contact noc@wikimedia.org, and see also https://meta.wikimedia.org/wiki/User-Agent_policy',
+          sleep.msleep(3000)
+        }
       } else {
         console.log(chalk.red(`To enrich the metadata using wikidata a property named “wikidata” is needed.`))
       }

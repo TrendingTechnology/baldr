@@ -1,8 +1,15 @@
 /**
  * This module contains the specification of the meta data types.
  *
- * The corresponding module is
+ * A media asset can be attached to multiple meta data types (for example:
+ * `meta_types: recording,composition`). All meta data types belong to the type
+ * `general`.
+ *
+ * The corresponding module is called
  * {@link module:@bldr/media-server/meta-types}
+ *
+ * Some meta data type properties can be enriched by using
+ * {@link module:@bldr/wikidata wikidata}.
  *
  * @module @bldr/media-server/meta-type-specs
  */
@@ -127,8 +134,12 @@ const general = {
       title: 'Metadaten-Typen',
       description: 'Zum Beispiel: “person” oder “composition,recording”',
       validate: function (value) {
-        return String(value).match(/^[a-zA-Z]+$/)
+        return String(value).match(/^[a-zA-Z,]+$/)
       }
+    },
+    metaType: {
+      description: 'Heißt jetzt “metaTypes”',
+      state: 'absent'
     },
     title: {
       required: true,
@@ -155,6 +166,14 @@ const general = {
         return decodeURI(value)
       }
     },
+    youtube: {
+      title: 'Youtube-Video-ID',
+      description: 'Die Youtube-Video-ID',
+      validate: function (value) {
+        // https://webapps.stackexchange.com/a/101153
+        return value.match(/^[0-9A-Za-z_-]{10}[048AEIMQUYcgkosw]$/)
+      }
+    },
     // tmp property needed to generate id prefix
     filePath: {
       state: 'absent'
@@ -176,12 +195,28 @@ const general = {
 }
 
 /**
+ * The meta data type specification “cover”.
+ *
+ * @type {module:@bldr/media-server/meta-types~type-spec}
+ */
+const cover = {
+  detectTypeByPath: new RegExp('^.*/HB/.*(png|jpg)$'),
+  props: {
+    title: {
+      format: function (value) {
+        return value.replace(/^(Cover-Bild: )?/, 'Cover-Bild: ')
+      }
+    }
+  }
+}
+
+/**
  * The meta data type specification “recording”.
  *
  * @type {module:@bldr/media-server/meta-types~type-spec}
  */
 const recording = {
-  detectTypeByPath: new RegExp('^.*/HB/.*$'),
+  detectTypeByPath: new RegExp('^.*/HB/.*m4a$'),
   props: {
     artist: {
       description: 'Der/die Interpret/in eines Musikstücks.'
@@ -201,7 +236,7 @@ const recording = {
  * @type {module:@bldr/media-server/meta-types~type-spec}
  */
 const composition = {
-  detectTypeByPath: new RegExp('^.*/HB/.*$'),
+  detectTypeByPath: new RegExp('^.*/HB/.*m4a$'),
   props: {
     title: {
       // 'Tonart CD 4: Spur 29'
@@ -538,11 +573,12 @@ const song = {
 }
 
 module.exports = {
-  general,
-  recording,
   composition,
+  cover,
+  general,
   group,
   instrument,
   person,
+  recording,
   song
 }
