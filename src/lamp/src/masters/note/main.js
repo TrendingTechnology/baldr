@@ -93,6 +93,9 @@ export default {
       }
       return props
     },
+    calculateStepCount ({ props }) {
+      return DomSteps.preCalculateStepCount(props.markup, { stepWords: true })
+    },
     plainTextFromProps (props) {
       return plainText(props.markup)
     },

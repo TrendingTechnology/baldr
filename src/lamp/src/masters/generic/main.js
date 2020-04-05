@@ -142,7 +142,12 @@ export default {
       }
     },
     calculateStepCount ({ props }) {
-      return props.markup.length
+      const selector = DomSteps.getSpecializedSelectorsFromProps(props)
+      if (selector) {
+        return DomSteps.preCalculateStepCount(props.markup, props)
+      } else {
+        return props.markup.length
+      }
     },
     plainTextFromProps (props) {
       const output = []

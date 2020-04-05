@@ -2,7 +2,7 @@
  * @module @bldr/lamp/masters/editor
  */
 
-import { plainText, selectSubset } from '@bldr/core-browser'
+import { plainText } from '@bldr/core-browser'
 import { markupToHtml, DomSteps } from '@/lib.js'
 
 const placeholder = '…'
@@ -57,29 +57,8 @@ export default {
       }
       return props
     },
-    calculateStepCount ({ props, propsMain, propsPreview, slide }) {
-      const dom = new DOMParser().parseFromString(props.markup, 'text/html')
-      const specializedSelector = DomSteps.getSpecializedSelectorsFromProps(props)
-
-      let allElementsCount
-      if (specializedSelector === 'words') {
-        allElementsCount = DomSteps.countWords(dom)
-      } else if (specializedSelector === 'sentences') {
-        allElementsCount = DomSteps.countSentences(dom)
-      }
-
-      allElementsCount++
-
-      if (props.stepSubset) {
-        const elements = selectSubset(props.stepSubset, {
-          elementsCount: allElementsCount,
-          shiftSelector: -1
-        }
-        )
-        return elements.length
-      } else {
-        return allElementsCount
-      }
+    calculateStepCount ({ props }) {
+      return DomSteps.preCalculateStepCount(props.markup, props)
     },
     plainTextFromProps (props) {
       return plainText(props.markup)

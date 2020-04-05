@@ -467,6 +467,8 @@ export class DomSteps {
   /**
    * @param {Objects} props - An object to search for the properties `stepWords`
    *   or `stepSentences`.
+   * @property {Boolean} stepWords
+   * @property {Boolean} stepSentences
    *
    * @returns {String} - `words` or `sentences`
    */
@@ -516,6 +518,44 @@ export class DomSteps {
     return result
   }
 
+  /**
+   * Pre calculate the step count of a text.
+   *
+   * @param {String} text
+   * @param {Object} props
+   * @property {Boolean} stepWords
+   * @property {Boolean} stepSentences
+   * @property {String} stepSubset
+   *
+   * @returns {Number}
+   */
+  static preCalculateStepCount (text, props) {
+    const dom = new DOMParser().parseFromString(text, 'text/html')
+    const specializedSelector = DomSteps.getSpecializedSelectorsFromProps(props)
+
+    let allElementsCount
+    if (specializedSelector === 'words') {
+      allElementsCount = DomSteps.countWords(dom)
+    } else if (specializedSelector === 'sentences') {
+      allElementsCount = DomSteps.countSentences(dom)
+    }
+
+    allElementsCount++
+
+    if (props.stepSubset) {
+      const elements = selectSubset(props.stepSubset, {
+        elementsCount: allElementsCount,
+        shiftSelector: -1
+      })
+      return elements.length
+    } else {
+      return allElementsCount
+    }
+  }
+
+  /**
+   * @param {@bldr/lamp/content-file~Slide } slide
+   */
   setStepCount (slide) {
     slide.stepCount = this.count
   }
