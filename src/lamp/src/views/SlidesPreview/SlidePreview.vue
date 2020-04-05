@@ -6,6 +6,7 @@
     :b-dark-mode="slide.master.styleConfig.darkMode"
   >
     <material-icon
+      class="preview-master-icon"
       v-if="slide.master.icon.showOnSlides"
       :name="slide.master.icon.name"
       :color="slide.master.icon.color"
@@ -88,7 +89,7 @@ export default {
       opacity: 0.3;
     }
 
-    .baldr-icon {
+    .preview-master-icon {
       font-size: 3em;
       left: 0.1em;
       position: absolute;
