@@ -24,6 +24,8 @@ const typeSpecs = require('./meta-type-specs.js')
  *
  * @typedef {Object} propSpec
  *
+ * @property {String} description - A text which describes the property.
+ *
  * @property {Boolean} required - True if the property is required.
  *
  * @property {Function} derive - A function to derive this property from
@@ -111,25 +113,6 @@ const typeSpecs = require('./meta-type-specs.js')
  *
  * @typedef {Object} typeData
  */
-
-/**
- * @param {String} value
- *
- * @returns {Boolean}
- */
-function validateDate (value) {
-  return value.match(/\d{4,}-\d{2,}-\d{2,}/)
-}
-
-/**
- *
- * @param {String} value
- *
- * @returns {Boolean}
- */
-function validateUuid (value) {
-  return value.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89AB][0-9a-f]{3}-[0-9a-f]{12}$/i)
-}
 
 /**
  * Check a file path against regepx to get a type name.
@@ -399,7 +382,5 @@ module.exports = {
   detectTypeByPath,
   formatFilePath,
   process,
-  typeSpecs,
-  validateDate,
-  validateUuid
+  typeSpecs
 }

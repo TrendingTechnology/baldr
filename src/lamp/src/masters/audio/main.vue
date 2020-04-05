@@ -32,16 +32,22 @@
     />
 
     <play-button :sample="sample"/>
+    <external-sites :asset="mediaAsset"/>
   </div>
 </template>
 
 <script>
+import ExternalSites from '@/components/ExternalSites.vue'
+
 export default {
   props: {
     previewHttpUrl: {
       type: String
     },
     sample: {
+      type: Object
+    },
+    mediaAsset: {
       type: Object
     },
     title: {
@@ -57,6 +63,9 @@ export default {
     description: {
       type: String
     }
+  },
+  components: {
+    ExternalSites
   }
 }
 </script>

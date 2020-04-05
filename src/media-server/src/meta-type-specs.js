@@ -4,7 +4,39 @@ const path = require('path')
 // Project packages.
 const { deasciify, idify } = require('./helper.js')
 const { bootstrapConfig } = require('@bldr/core-node')
-const { validateDate, validateUuid } = require('./meta-types.js')
+
+/**
+ * Validate a date string in the format `yyyy-mm-dd`.
+ *
+ * @param {String} value
+ *
+ * @returns {Boolean}
+ */
+function validateDate (value) {
+  return value.match(/\d{4,}-\d{2,}-\d{2,}/)
+}
+
+/**
+ * Validate a ID string of the Baldr media server.
+ *
+ * @param {String} value
+ *
+ * @returns {Boolean}
+ */
+function validateMediaId (value) {
+  return value.match(/^id:.+$/i)
+}
+
+/**
+ * Validate UUID string (for the Musicbrainz references).
+ *
+ * @param {String} value
+ *
+ * @returns {Boolean}
+ */
+function validateUuid (value) {
+  return value.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89AB][0-9a-f]{3}-[0-9a-f]{12}$/i)
+}
 
 /**
  * Generate a ID prefix for media assets, like `Presentation-ID_HB` if the
@@ -128,10 +160,13 @@ const recording = {
   detectTypeByPath: new RegExp('^.*/HB/.*$'),
   props: {
     artist: {
-
+      description: 'Der/die Interpret/in eines Musikstücks.'
     },
     musicbrainzRecordingId: {
       validate: validateUuid
+    },
+    cover: {
+      validate: validateMediaId
     }
   }
 }
@@ -455,7 +490,7 @@ const song = {
 
 module.exports = {
   general,
-  //recording,
+  recording,
   composition,
   group,
   instrument,

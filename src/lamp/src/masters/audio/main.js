@@ -98,7 +98,8 @@ export default {
         artist,
         composer,
         title,
-        description
+        description,
+        mediaAsset: mediaFile
       }
     },
     async enterSlide ({ newProps }) {
