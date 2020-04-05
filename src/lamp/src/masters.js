@@ -159,8 +159,7 @@ class Master {
   }
 
   /**
-   * Shortcut function to access the masters Vuex module geeter function.
-
+   * Shortcut function to access the masters Vuex module getter function.
    *
    * @param {String} getterName
    * @param {Mixed} arg

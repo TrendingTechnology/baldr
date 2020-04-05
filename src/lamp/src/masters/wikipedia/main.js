@@ -215,6 +215,7 @@ export default {
       return {
         title: props.title,
         language: props.language,
+        id: formatId(props.language, props.title),
         oldid: props.oldid,
         httpUrl: formatUrl(props)
       }
@@ -222,7 +223,7 @@ export default {
     collectPropsPreview ({ propsMain }) {
       return {
         title: propsMain.title,
-        id: formatId(propsMain.language, propsMain.title)
+        id: propsMain.id
       }
     },
     plainTextFromProps (props) {

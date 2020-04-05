@@ -9,10 +9,14 @@
 </template>
 
 <script>
-import { getHtmlBody, formatId } from './main.js'
+import { getHtmlBody } from './main.js'
 
 export default {
   props: {
+    id: {
+      type: String,
+      required: true
+    },
     title: {
       type: String,
       required: true
@@ -37,22 +41,18 @@ export default {
       if (this.oldid) oldid = ` (Version ${this.oldid})`
       const title = this.title.replace(/ /g, '_')
       return `${this.language}:${title}${oldid}`
-    }
-  },
-  data () {
-    return {
-      body: null
+    },
+    body () {
+      const master = this.$masters.get(this.masterName)
+      return master.$get('bodyById', this.id)
     }
   },
   mounted: async function () {
     const master = this.$masters.get(this.masterName)
-    const id = formatId(this.language, this.title)
-    const body = master.$get('bodyById', id)
-    if (body) {
-      this.body = body
-    } else {
-      this.body = await getHtmlBody(this.title, this.language)
-      master.$commit('addBody', { id, body: this.body })
+    const body = master.$get('bodyById', this.id)
+    if (!body) {
+      const body = await getHtmlBody(this.title, this.language)
+      master.$commit('addBody', { id: this.id, body })
     }
   }
 }
