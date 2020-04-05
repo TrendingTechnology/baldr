@@ -315,7 +315,7 @@ export default {
       }
     ])
     this.$router.afterEach((to, from) => {
-      if ('style' in to.meta) {
+      if (to.meta.style) {
         this.$styleConfig.set(to.meta.style)
       }
     })
