@@ -29,6 +29,8 @@ const typeSpecs = require('./meta-type-specs.js')
  *
  * @typedef {Object} propSpec
  *
+ * @property {String} title - A title of the property.
+ *
  * @property {String} description - A text which describes the property.
  *
  * @property {Boolean} required - True if the property is required.

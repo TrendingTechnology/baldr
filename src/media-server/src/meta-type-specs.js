@@ -123,7 +123,9 @@ const general = {
       },
       required: true
     },
-    metaType: {
+    metaTypes: {
+      title: 'Metadaten-Typen',
+      description: 'Zum Beispiel: “person” oder “composition,recording”',
       validate: function (value) {
         return String(value).match(/^[a-zA-Z]+$/)
       }
