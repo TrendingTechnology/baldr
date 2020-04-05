@@ -117,7 +117,7 @@ export class DomSteps {
    * @property {Array} elements - An array of HTML elements to use as steps.
    * @property {String} cssSelectors - String to feed
    *   `document.querySelectorAll()`
-   * @property {String} specializedSelector - Which specialized selector should
+   * @property {String} mode - Which specialized selector should
    *   be used. At the moment there are two: `words` or `sentences`.
    * @property {String} sentencesSelector - A CSS selector which is passed
    *   through to the static method `DomSteps.selectSentences`, which uses
@@ -131,7 +131,7 @@ export class DomSteps {
     const optionsDefault = {
       elements: null,
       cssSelectors: null,
-      specializedSelector: null,
+      mode: null,
       sentencesSelector: null,
       subsetSelectors: null,
       useVisibliltyProp: false,
@@ -149,13 +149,13 @@ export class DomSteps {
     let elements
     if (this.opts_.elements) {
       elements = this.opts_.elements
-    } else if (this.opts_.specializedSelector) {
-      if (this.opts_.specializedSelector === 'words') {
+    } else if (this.opts_.mode) {
+      if (this.opts_.mode === 'words') {
         this.elementsAll = DomSteps.selectWords()
-      } else if (this.opts_.specializedSelector === 'sentences') {
+      } else if (this.opts_.mode === 'sentences') {
         this.elementsAll = DomSteps.selectSentences(this.opts_.sentencesSelector)
       } else {
-        throw new Error(`Unkown specialized selector: ${this.opts_.specializedSelector}`)
+        throw new Error(`Unkown specialized selector: ${this.opts_.mode}`)
       }
     } else if (this.opts_.cssSelectors) {
       elements = document.querySelectorAll(this.opts_.cssSelectors)
@@ -359,25 +359,9 @@ export class DomSteps {
   }
 
   /**
-   * @param {Objects} props - An object to search for the properties `stepWords`
-   *   or `stepSentences`.
-   * @property {Boolean} stepWords
-   * @property {Boolean} stepSentences
-   *
-   * @returns {String} - `words` or `sentences`
-   */
-  static getSpecializedSelectorsFromProps (props) {
-    if (props.stepWords) {
-      return 'words'
-    } else if (props.stepSentences) {
-      return 'sentences'
-    }
-  }
-
-  /**
    * Map step support related props for the use as Vuejs props.
    *
-   * @param {Array} selector
+   * @param {Array} selectors - At the moment: “selector”, “mode” and “subset”.
    *
    * @returns {Object}
    */
@@ -387,15 +371,9 @@ export class DomSteps {
         description: 'Selektor, der Elemente auswählt, die als Schritte eingeblendet werden sollen.',
         default: 'g[inkscape\\:groupmode="layer"]'
       },
-      words: {
-        type: Boolean,
-        description: 'Text ausblenden und einzelne Wörtern einblenden',
-        default: false
-      },
-      sentences: {
-        type: Boolean,
-        description: 'Text ausblenden und einzelne Sätze (im übertragenem Sinn) einblenden.',
-        default: false
+      mode: {
+        type: String,
+        description: '„words“ oder „sentences“'
       },
       subset: {
         type: String,
@@ -417,20 +395,18 @@ export class DomSteps {
    *
    * @param {String} text
    * @param {Object} props
-   * @property {Boolean} stepWords
-   * @property {Boolean} stepSentences
+   * @property {String} stepMode
    * @property {String} stepSubset
    *
    * @returns {Number}
    */
   static preCalculateStepCount (text, props) {
     const dom = new DOMParser().parseFromString(text, 'text/html')
-    const specializedSelector = DomSteps.getSpecializedSelectorsFromProps(props)
 
     let allElementsCount
-    if (specializedSelector === 'words') {
+    if (props.stepMode === 'words') {
       allElementsCount = DomSteps.countWords(dom)
-    } else if (specializedSelector === 'sentences') {
+    } else if (props.stepMode === 'sentences') {
       allElementsCount = DomSteps.countSentences(dom)
     }
 

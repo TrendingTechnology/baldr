@@ -19,7 +19,7 @@ slides:
 
 - title: Test step words
   generic:
-    step_words: true
+    step_mode: 'words'
     markup: |
       # Heading 1
 
@@ -32,7 +32,7 @@ slides:
 
 - title: Test step sentences
   generic:
-    step_sentences: true
+    step_mode: 'sentences'
     markup: |
       # Heading 1
 

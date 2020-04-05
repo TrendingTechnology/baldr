@@ -3,7 +3,7 @@ slides:
 
 - title: Step words
   editor:
-    step_words: true
+    step_mode: 'words'
     markup: |
       # heading 1
 
@@ -14,7 +14,7 @@ slides:
 
 - title: Step sentences
   editor:
-    step_sentences: true
+    step_mode: 'sentences'
     markup: |
       # heading
 
@@ -26,7 +26,7 @@ slides:
 
 - title: Step words
   editor:
-    step_words: true
+    step_mode: 'words'
     markup: |
       # heading
 

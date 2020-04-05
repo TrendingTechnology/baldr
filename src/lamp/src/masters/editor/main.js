@@ -24,7 +24,7 @@ export default {
       markup: true,
       description: 'Text im HTML oder Markdown Format oder natürlich als reiner Text.'
     },
-    ...DomSteps.mapProps(['words', 'sentences', 'subset'])
+    ...DomSteps.mapProps(['mode', 'subset'])
   },
   icon: {
     name: 'pencil',
@@ -53,7 +53,7 @@ export default {
         ` contenteditable>${placeholderTag}<`
       )
 
-      if (props.stepWords) {
+      if (props.stepMode && props.stepMode === 'words') {
         props.markup = DomSteps.wrapWords(props.markup)
       }
       return props
@@ -71,16 +71,14 @@ export default {
     enterSlide () {
       this.onSlideChange()
       let sentencesSelector
-      if (this.stepSentences) {
+      if (this.stepMode === 'sentences') {
         sentencesSelector = '.vc_editor_master'
       }
 
-      const specializedSelector = DomSteps.getSpecializedSelectorsFromProps(this)
-
-      if (specializedSelector) {
+      if (this.stepMode) {
         this.domSteps = new DomSteps({
           subsetSelectors: this.stepSubset,
-          specializedSelector,
+          mode: this.stepMode,
           sentencesSelector,
           hideAllElementsInitally: false
         })
@@ -90,7 +88,7 @@ export default {
     },
     enterStep ({ oldStepNo, newStepNo }) {
       const stepNo = newStepNo
-      if (this.stepWords || this.stepSentences) {
+      if (this.stepMode) {
         const element = this.domSteps.displayByNo({
           oldStepNo,
           stepNo

@@ -26,7 +26,7 @@ export default {
       description: 'Gibt an wie viele Zeichen auf einer Folie erscheinen sollen.',
       default: CHARACTERS_ON_SLIDE
     },
-    ...DomSteps.mapProps(['words', 'sentences', 'subset'])
+    ...DomSteps.mapProps(['mode', 'subset'])
   },
   data () {
     return {
@@ -40,7 +40,7 @@ export default {
       return this.slide.stepNo
     },
     markupCurrent () {
-      if (this.stepWords || this.stepSentences) {
+      if (this.stepMode) {
         return this.markup[0]
       }
       return this.markup[this.stepNo - 1]

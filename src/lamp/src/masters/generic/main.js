@@ -80,7 +80,7 @@ export default {
       description: 'Gibt an wie viele Zeichen auf einer Folie erscheinen sollen.',
       default: CHARACTERS_ON_SLIDE
     },
-    ...DomSteps.mapProps(['words', 'sentences', 'subset'])
+    ...DomSteps.mapProps(['mode', 'subset'])
   },
   icon: {
     name: 'file-presentation-box',
@@ -130,7 +130,7 @@ export default {
         }
       }
 
-      if (props.stepWords) {
+      if (props.stepMode && props.stepMode === 'words') {
         props.markup = [DomSteps.wrapWords(markup.join(' '))]
       } else {
         props.markup = markup
@@ -143,8 +143,7 @@ export default {
       }
     },
     calculateStepCount ({ props }) {
-      const selector = DomSteps.getSpecializedSelectorsFromProps(props)
-      if (selector) {
+      if (props.stepMode) {
         return DomSteps.preCalculateStepCount(props.markup, props)
       } else {
         return props.markup.length
@@ -159,16 +158,14 @@ export default {
     },
     enterSlide () {
       let sentencesSelector
-      if (this.stepSentences) {
+      if (this.stepMode === 'sentences') {
         sentencesSelector = '.vc_generic_master'
       }
 
-      const specializedSelector = DomSteps.getSpecializedSelectorsFromProps(this)
-
-      if (specializedSelector) {
+      if (this.stepMode) {
         this.domSteps = new DomSteps({
           subsetSelectors: this.stepSubset,
-          specializedSelector,
+          mode: this.stepMode,
           sentencesSelector,
           hideAllElementsInitally: false
         })
@@ -178,7 +175,7 @@ export default {
     },
     enterStep ({ oldStepNo, newStepNo }) {
       const stepNo = newStepNo
-      if (this.stepWords || this.stepSentences) {
+      if (this.stepMode) {
         this.domSteps.displayByNo({
           oldStepNo,
           stepNo

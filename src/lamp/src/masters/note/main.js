@@ -95,14 +95,14 @@ export default {
       return props
     },
     calculateStepCount ({ props }) {
-      return DomSteps.preCalculateStepCount(props.markup, { stepWords: true })
+      return DomSteps.preCalculateStepCount(props.markup, { stepMode: 'words' })
     },
     plainTextFromProps (props) {
       return plainText(props.markup)
     },
     enterSlide () {
       this.domSteps = new DomSteps({
-        specializedSelector: 'words',
+        mode: 'words',
         hideAllElementsInitally: false
       })
       this.domSteps.setStepCount(this.slide)

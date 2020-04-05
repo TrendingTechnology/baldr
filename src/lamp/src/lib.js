@@ -189,34 +189,6 @@ export const routerGuards = {
   }
 }
 
-/**
- * Open a presentation and redirect to the desired view, stop the player and
- * clear the media cache.
- *
- * @param {String} presId
- * @param {Number} slideNo
- * @param {Number} stepNo
- */
-export async function openPresentation (args) {
-  if (typeof args === 'string') {
-    args = { presId: args }
-  }
-
-  vue.$media.player.stop()
-  vue.$store.dispatch('media/clear')
-  await vue.$store.dispatch('lamp/openPresentationById', args.presId)
-  vue.$store.dispatch('lamp/setSlideAndStepNoCurrent', args)
-
-  if (args.noRouting) return
-  if (args.route) {
-    vue.$router.push(args.route)
-  } else if (args.slideNo && args.slideNo > 1 && vue.$route.name !== 'slide') {
-    vue.$router.push({ name: 'slide' })
-  } else if (vue.$route.name !== 'slides-preview') {
-    vue.$router.push({ name: 'slides-preview' })
-  }
-}
-
 export async function openPresentationByRawYaml (rawYamlString) {
   vue.$media.player.stop()
   vue.$store.dispatch('media/clear')

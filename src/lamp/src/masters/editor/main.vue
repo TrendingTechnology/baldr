@@ -21,7 +21,7 @@ export default {
     markup: {
       type: String
     },
-    ...DomSteps.mapProps(['words', 'sentences', 'subset'])
+    ...DomSteps.mapProps(['mode', 'subset'])
   },
   data () {
     return {

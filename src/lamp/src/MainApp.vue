@@ -80,9 +80,13 @@ export default {
      *   from.
      */
     toggleSlidesRouteTo (routeNameTo) {
+      if (
+        (routeNameTo === 'slide' && !this.slides) ||
+        (routeNameTo === 'slides-preview' && !this.presentation)
+      ) return
       if (this.$route.name !== routeNameTo) {
         this.$router.push({ name: routeNameTo })
-      } else {
+      } else if (this.slide) {
         this.$router.push(this.slide.routerLocation)
       }
     },
