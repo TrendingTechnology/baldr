@@ -52,6 +52,8 @@ function validateUuid (value) {
  * path of the media file is `10_Presentation-id/HB/example.mp3`.
  *
  * @param {String} filePath - The media asset file path.
+ *
+ * @returns {String} the ID prefix.
  */
 function generateIdPrefix (filePath) {
   // We need the absolute path
@@ -78,6 +80,12 @@ function generateIdPrefix (filePath) {
  */
 const config = bootstrapConfig()
 
+/**
+ * General meta data type specification. Applied after all other meta data
+ * types.
+ *
+ * @type {module:@bldr/media-server/meta-types~type-spec}
+ */
 const general = {
   props: {
     id: {
@@ -165,6 +173,11 @@ const general = {
   }
 }
 
+/**
+ * The meta data type specification “recording”.
+ *
+ * @type {module:@bldr/media-server/meta-types~type-spec}
+ */
 const recording = {
   detectTypeByPath: new RegExp('^.*/HB/.*$'),
   props: {
@@ -180,6 +193,11 @@ const recording = {
   }
 }
 
+/**
+ * The meta data type specification “composition”.
+ *
+ * @type {module:@bldr/media-server/meta-types~type-spec}
+ */
 const composition = {
   detectTypeByPath: new RegExp('^.*/HB/.*$'),
   props: {
@@ -197,6 +215,11 @@ const composition = {
   }
 }
 
+/**
+ * The meta data type specification “group”.
+ *
+ * @type {module:@bldr/media-server/meta-types~type-spec}
+ */
 const group = {
   abbreviation: 'GR',
   basePath: path.join(config.mediaServer.basePath, 'Gruppen'),
@@ -280,6 +303,11 @@ const group = {
   }
 }
 
+/**
+ * The meta data type specification “instrument”.
+ *
+ * @type {module:@bldr/media-server/meta-types~type-spec}
+ */
 const instrument = {
   abbreviation: 'IN',
   basePath: path.join(config.mediaServer.basePath, 'Instrumente'),
@@ -339,6 +367,11 @@ const instrument = {
   }
 }
 
+/**
+ * The meta data type specification “person”.
+ *
+ * @type {module:@bldr/media-server/meta-types~type-spec}
+ */
 const person = {
   abbreviation: 'PR',
   basePath: path.join(config.mediaServer.basePath, 'Personen'),
@@ -452,6 +485,11 @@ const person = {
   }
 }
 
+/**
+ * The meta data type specification “song”.
+ *
+ * @type {module:@bldr/media-server/meta-types~type-spec}
+ */
 const song = {
   props: {
     publicationDate: {
