@@ -1,3 +1,7 @@
+/**
+ * @module @bldr/lamp/masters/scoreSample
+ */
+
 export default {
   title: 'Notenbeispiel',
   props: {

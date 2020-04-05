@@ -1,3 +1,7 @@
+/**
+ * @module @bldr/lamp/masters/cloze
+ */
+
 import { DomSteps } from '@/lib.js'
 
 export default {

@@ -1,3 +1,7 @@
+/**
+ * @module @bldr/lamp/masters/editor
+ */
+
 import { plainText, selectSubset } from '@bldr/core-browser'
 import { markupToHtml, DomSteps } from '@/lib.js'
 

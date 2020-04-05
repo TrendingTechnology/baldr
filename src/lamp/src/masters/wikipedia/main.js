@@ -1,7 +1,7 @@
 /**
  * `id`: `language:title` for example `de:Wolfgang_Amadeus_Mozart`
  *
- * @module @bldr/pres/masters/wikipedia
+ * @module @bldr/lamp/masters/wikipedia
  */
 
 import axios from 'axios'

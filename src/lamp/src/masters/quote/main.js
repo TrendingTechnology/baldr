@@ -1,3 +1,7 @@
+/**
+ * @module @bldr/lamp/masters/quote
+ */
+
 export default {
   title: 'Zitat',
   props: {

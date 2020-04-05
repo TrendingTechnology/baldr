@@ -1,3 +1,7 @@
+/**
+ * @module @bldr/lamp/masters/task
+ */
+
 import { plainText } from '@bldr/core-browser'
 
 export default {

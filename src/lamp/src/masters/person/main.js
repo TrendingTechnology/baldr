@@ -1,3 +1,7 @@
+/**
+ * @module @bldr/lamp/masters/person
+ */
+
 import { GrabFromObjects } from '@/lib.js'
 import { formatToLocalDate } from '@bldr/core-browser'
 

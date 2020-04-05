@@ -1,3 +1,7 @@
+/**
+ * @module @bldr/lamp/masters/audio
+ */
+
 import { GrabFromObjects } from '@/lib.js'
 
 export default {

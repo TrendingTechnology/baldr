@@ -1,3 +1,7 @@
+/**
+ * @module @bldr/lamp/masters/youtube
+ */
+
 export default {
   title: 'YouTube',
   props: {

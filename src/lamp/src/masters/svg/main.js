@@ -1,3 +1,7 @@
+/**
+ * @module @bldr/lamp/masters/svg
+ */
+
 import { warnSvgWidthHeight, DomSteps } from '@/lib.js'
 
 export default {

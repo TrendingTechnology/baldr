@@ -1,3 +1,7 @@
+/**
+ * @module @bldr/lamp/masters/song
+ */
+
 export default {
   title: 'Lied',
   props: {

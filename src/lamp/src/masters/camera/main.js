@@ -92,6 +92,8 @@
  *
  * Also you can add whiltelist by open chrome://flags and search for unsafely-treat-insecure-origin-as-secure:
  * chrome://flags/#unsafely-treat-insecure-origin-as-secure
+ *
+ * @module @bldr/lamp/masters/camera
  */
 
 const state = {

@@ -1,3 +1,7 @@
+/**
+ * @module @bldr/lamp/masters/video
+ */
+
 export default {
   title: 'Video',
   props: {

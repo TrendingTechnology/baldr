@@ -1,3 +1,7 @@
+/**
+ * @module @bldr/lamp/masters/instrument
+ */
+
 import { GrabFromObjects } from '@/lib.js'
 import { WrappedSamples } from '@bldr/vue-plugin-media'
 

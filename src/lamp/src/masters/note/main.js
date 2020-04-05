@@ -1,3 +1,7 @@
+/**
+ * @module @bldr/lamp/masters/note
+ */
+
 import { plainText } from '@bldr/core-browser'
 import { markupToHtml, DomSteps } from '@/lib.js'
 

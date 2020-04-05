@@ -1,3 +1,7 @@
+/**
+ * @module @bldr/lamp/masters/section
+ */
+
 import { plainText } from '@bldr/core-browser'
 
 export default {

@@ -1,3 +1,7 @@
+/**
+ * @module @bldr/lamp/masters/group
+ */
+
 export default {
   title: 'Gruppe',
   props: {
