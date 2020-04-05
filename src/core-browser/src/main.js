@@ -289,6 +289,19 @@ export function formatBrainzRecUrl (recordingId) {
 }
 
 /**
+ * Format a Musicbrainz work URL.
+ *
+ * `https://musicbrainz.org/work/${WorkId}`
+ *
+ * @param {String} workId
+ *
+ * @returns {String}
+ */
+export function formatBrainzWorkUrl (workId) {
+  return `https://musicbrainz.org/work/${workId}`
+}
+
+/**
  * https://youtu.be/CQYypFMTQcE
  *
  * @param {String} id - The id of a Youtube video (for example CQYypFMTQcE).
@@ -593,6 +606,7 @@ export function getExtension (filePath) {
 
 export default {
   formatBrainzRecUrl,
+  formatBrainzWorkUrl,
   formatWikidataUrl,
   formatWikipediaUrl,
   formatYoutubeUrl

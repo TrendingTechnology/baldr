@@ -17,6 +17,7 @@ exports.formatMultiPartAssetFileName = formatMultiPartAssetFileName;
 exports.formatWikidataUrl = formatWikidataUrl;
 exports.formatWikipediaUrl = formatWikipediaUrl;
 exports.formatBrainzRecUrl = formatBrainzRecUrl;
+exports.formatBrainzWorkUrl = formatBrainzWorkUrl;
 exports.formatYoutubeUrl = formatYoutubeUrl;
 exports.selectSubset = selectSubset;
 exports.escapeHtml = escapeHtml;
@@ -186,6 +187,10 @@ function formatWikipediaUrl(nameSpace) {
 
 function formatBrainzRecUrl(recordingId) {
   return `https://musicbrainz.org/recording/${recordingId}`;
+}
+
+function formatBrainzWorkUrl(workId) {
+  return `https://musicbrainz.org/work/${workId}`;
 }
 
 function formatYoutubeUrl(id) {
@@ -378,6 +383,7 @@ function getExtension(filePath) {
 
 var _default = {
   formatBrainzRecUrl,
+  formatBrainzWorkUrl,
   formatWikidataUrl,
   formatWikipediaUrl,
   formatYoutubeUrl

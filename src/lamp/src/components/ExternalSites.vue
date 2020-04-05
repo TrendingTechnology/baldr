@@ -6,7 +6,10 @@
     <a v-if="wikidata" :href="wikidata" title="Wikidata">
       <plain-icon name="wikidata"/>
     </a>
-    <a v-if="musicbrainz" :href="musicbrainz" title="Musicbrainz">
+    <a v-if="musicbrainzRecordingId" :href="musicbrainzRecordingId" title="MusicBrainz (Recording)">
+      <plain-icon name="musicbrainz"/>
+    </a>
+    <a v-if="musicbrainzWorkId" :href="musicbrainzWorkId" title="MusicBrainz (Work)">
       <plain-icon name="musicbrainz"/>
     </a>
     <a v-if="youtube" :href="youtube" title="Youtube">
@@ -38,9 +41,15 @@ export default {
       }
       return ''
     },
-    musicbrainz () {
+    musicbrainzRecordingId () {
       if (this.asset.musicbrainzRecordingId) {
         return core.formatBrainzRecUrl(this.asset.musicbrainzRecordingId)
+      }
+      return ''
+    },
+    musicbrainzWorkId () {
+      if (this.asset.musicbrainzWorkId) {
+        return core.formatBrainzWorkUrl(this.asset.musicbrainzWorkId)
       }
       return ''
     },
