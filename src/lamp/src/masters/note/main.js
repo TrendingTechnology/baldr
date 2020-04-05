@@ -3,7 +3,8 @@
  */
 
 import { plainText } from '@bldr/core-browser'
-import { markupToHtml, DomSteps } from '@/lib.js'
+import { markupToHtml } from '@/lib.js'
+import { DomSteps } from '@/steps.js'
 
 function scroll (element) {
   if (!element) return

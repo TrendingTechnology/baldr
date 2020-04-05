@@ -5,7 +5,8 @@
 </template>
 
 <script>
-import { DomSteps, warnSvgWidthHeight } from '@/lib.js'
+import { warnSvgWidthHeight } from '@/lib.js'
+import { DomSteps } from '@/steps.js'
 import { createNamespacedHelpers } from 'vuex'
 const { mapGetters } = createNamespacedHelpers('lamp')
 

@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import { DomSteps } from '@/lib.js'
+import { DomSteps } from '@/steps.js'
 import { createNamespacedHelpers } from 'vuex'
 const { mapGetters } = createNamespacedHelpers('lamp')
 

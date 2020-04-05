@@ -2,7 +2,7 @@
  * @module @bldr/lamp/masters/cloze
  */
 
-import { DomSteps } from '@/lib.js'
+import { DomSteps } from '@/steps.js'
 
 export default {
   title: 'Lückentext',

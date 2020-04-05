@@ -2,7 +2,8 @@
  * @module @bldr/lamp/masters/svg
  */
 
-import { warnSvgWidthHeight, DomSteps } from '@/lib.js'
+import { warnSvgWidthHeight } from '@/lib.js'
+import { DomSteps } from '@/steps.js'
 
 export default {
   title: 'Bild',

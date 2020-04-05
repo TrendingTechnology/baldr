@@ -16,6 +16,111 @@ export const convertMdToTex = convertTex.convertMdToTex
 /* globals DOMParser */
 
 /**
+ * Select a subset of elements by a string (`subsetSelector`). `1` is the first
+ * element of the `elements` array.
+ *
+ * - `` (emtpy string or a falsy value): All elements
+ * - `1`: The first element
+ * - `1,3,5`:
+ * - `1-3,5-7`
+ * - `-7`:
+ * - `7-`
+ *
+ * @param {String} subsetSelector - See above.
+ * @param {object} options
+ * @property {String|boolean} options.sort - `numeric`, or a truety value.
+ * @property {Array} options.elements - An array of elements to build a subset
+ *   from.
+ * @property {Number} options.elementsCount - If `elements` is undefined, an
+ *   array with integers is created und used as `elements`.
+ * @property {Number} options.firstElementNo
+ * @property {Number} options.shiftSelector - Shift all selector numbers by
+ *   this number: For example `-1`: `2-5` is internally treated as `1-4`
+ *
+ * @returns {Array}
+ */
+export function selectSubset (subsetSelector, { sort, elements, elementsCount, firstElementNo, shiftSelector }) {
+  const subset = []
+
+  if (!shiftSelector) shiftSelector = 0
+
+  function addElement (element) {
+    // Because of the shiftSelector, the first element can be undefined.
+    if (!element) return
+    if (!subset.includes(element)) {
+      subset.push(element)
+    }
+  }
+
+  // Create elements
+  if (!elements && elementsCount) {
+    elements = []
+    let firstNo
+    if (firstElementNo) {
+      firstNo = firstElementNo
+    } else {
+      firstNo = 0
+    }
+    const endNo = firstNo + elementsCount
+    for (let i = firstNo; i < endNo; i++) {
+      elements.push(i)
+    }
+  }
+
+  if (!subsetSelector) return elements
+
+  // 1, 3, 5 -> 1,3,5
+  subsetSelector = subsetSelector.replace(/\s*/g, '')
+  // 1-3,5-7
+  const ranges = subsetSelector.split(',')
+
+  // for cloze steps: shiftSelector = -1
+  // shiftSelectorAdjust = 1
+  const shiftSelectorAdjust = -1 * shiftSelector
+  for (let range of ranges) {
+    // -7 -> 1-7
+    if (range.match(/^-/)) {
+      const end = parseInt(range.replace('-', ''))
+      range = `${1 + shiftSelectorAdjust}-${end}`
+    }
+
+    // 7- -> 7-23
+    if (range.match(/-$/)) {
+      const begin = parseInt(range.replace('-', ''))
+      // for cloze steps (shiftSelector: -1): 7- -> 7-23 -> elements.length
+      // as 22 elements because 7-23 translates to 6-22.
+      range = `${begin}-${elements.length + shiftSelectorAdjust}`
+    }
+
+    range = range.split('-')
+    // 1
+    if (range.length === 1) {
+      const i = range[0]
+      addElement(elements[i - 1 + shiftSelector])
+    // 1-3
+    } else if (range.length === 2) {
+      const beginNo = parseInt(range[0]) + shiftSelector
+      const endNo = parseInt(range[1]) + shiftSelector
+      if (endNo <= beginNo) {
+        throw new Error(`Invalid range: ${beginNo}-${endNo}`)
+      }
+      for (let no = beginNo; no <= endNo; no++) {
+        const index = no - 1
+        addElement(elements[index])
+      }
+    }
+  }
+
+  if (sort === 'numeric') {
+    subset.sort((a, b) => a - b) // For ascending sort
+  } else if (sort) {
+    subset.sort()
+  }
+
+  return subset
+}
+
+/**
  * Sort alphabetically an array of objects by some specific properties.
  *
  * @param {String} property - Key of the object to sort.
@@ -398,111 +503,6 @@ export class AssetTypes {
     }
     return false
   }
-}
-
-/**
- * Select a subset of elements by a string (`subsetSelector`). `1` is the first
- * element of the `elements` array.
- *
- * - `` (emtpy string or a falsy value): All elements
- * - `1`: The first element
- * - `1,3,5`:
- * - `1-3,5-7`
- * - `-7`:
- * - `7-`
- *
- * @param {String} subsetSelector - See above.
- * @param {object} options
- * @property {String|boolean} options.sort - `numeric`, or a truety value.
- * @property {Array} options.elements - An array of elements to build a subset
- *   from.
- * @property {Number} options.elementsCount - If `elements` is undefined, an
- *   array with integers is created und used as `elements`.
- * @property {Number} options.firstElementNo
- * @property {Number} options.shiftSelector - Shift all selector numbers by
- *   this number: For example `-1`: `2-5` is internally treated as `1-4`
- *
- * @returns {Array}
- */
-export function selectSubset (subsetSelector, { sort, elements, elementsCount, firstElementNo, shiftSelector }) {
-  const subset = []
-
-  if (!shiftSelector) shiftSelector = 0
-
-  function addElement (element) {
-    // Because of the shiftSelector, the first element can be undefined.
-    if (!element) return
-    if (!subset.includes(element)) {
-      subset.push(element)
-    }
-  }
-
-  // Create elements
-  if (!elements && elementsCount) {
-    elements = []
-    let firstNo
-    if (firstElementNo) {
-      firstNo = firstElementNo
-    } else {
-      firstNo = 0
-    }
-    const endNo = firstNo + elementsCount
-    for (let i = firstNo; i < endNo; i++) {
-      elements.push(i)
-    }
-  }
-
-  if (!subsetSelector) return elements
-
-  // 1, 3, 5 -> 1,3,5
-  subsetSelector = subsetSelector.replace(/\s*/g, '')
-  // 1-3,5-7
-  const ranges = subsetSelector.split(',')
-
-  // for cloze steps: shiftSelector = -1
-  // shiftSelectorAdjust = 1
-  const shiftSelectorAdjust = -1 * shiftSelector;
-  for (let range of ranges) {
-    // -7 -> 1-7
-    if (range.match(/^-/)) {
-      const end = parseInt(range.replace('-', ''))
-      range = `${1 + shiftSelectorAdjust}-${end}`
-    }
-
-    // 7- -> 7-23
-    if (range.match(/-$/)) {
-      const begin = parseInt(range.replace('-', ''))
-      // for cloze steps (shiftSelector: -1): 7- -> 7-23 -> elements.length
-      // as 22 elements because 7-23 translates to 6-22.
-      range = `${begin}-${elements.length + shiftSelectorAdjust}`
-    }
-
-    range = range.split('-')
-    // 1
-    if (range.length === 1) {
-      const i = range[0]
-      addElement(elements[i - 1 + shiftSelector])
-    // 1-3
-    } else if (range.length === 2) {
-      const beginNo = parseInt(range[0]) + shiftSelector
-      const endNo = parseInt(range[1]) + shiftSelector
-      if (endNo <= beginNo) {
-        throw new Error(`Invalid range: ${beginNo}-${endNo}`)
-      }
-      for (let no = beginNo; no <= endNo; no++) {
-        const index = no - 1
-        addElement(elements[index])
-      }
-    }
-  }
-
-  if (sort === 'numeric') {
-    subset.sort((a, b) => a - b) // For ascending sort
-  } else if (sort) {
-    subset.sort()
-  }
-
-  return subset
 }
 
 /**
