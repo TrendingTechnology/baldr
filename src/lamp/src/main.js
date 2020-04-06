@@ -173,7 +173,7 @@
  * }
  * ```
  *
- * ### 7. `calculateStepCount({ props, propsMain, propsPreview, slide })`
+ * ### 7. `calculateStepCount({ props, propsMain, propsPreview, slide, master })`
  *
  * - `this`: is the main Vue instance.
  * - `return`: a number.

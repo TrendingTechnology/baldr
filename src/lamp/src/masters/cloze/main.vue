@@ -1,6 +1,6 @@
 <template>
   <div class="vc_cloze_master">
-    <div ref="clozeWrapper" id="cloze-wrapper"/>
+    <div ref="clozeWrapper" id="cloze-wrapper" v-html="svgMarkup"/>
   </div>
 </template>
 
@@ -8,11 +8,12 @@
 import { warnSvgWidthHeight } from '@/lib.js'
 import { DomSteps } from '@/steps.js'
 import { createNamespacedHelpers } from 'vuex'
+import { collectClozeGroups } from './main.js'
 const { mapGetters } = createNamespacedHelpers('lamp')
 
 export default {
   props: {
-    svgPath: {
+    src: {
       type: String,
       required: true
     },
@@ -23,31 +24,21 @@ export default {
       domSteps: null
     }
   },
-  computed: mapGetters(['slide']),
+  computed: {
+    ...mapGetters(['slide']),
+    svgMarkup () {
+      return this.$store.getters['lampMasterCloze/svgByUri'](this.src)
+    }
+  },
   methods: {
-    collectClozeGroups () {
-      const gElements = document.querySelectorAll('svg g')
-      const clozeGElements = []
-      for (const g of gElements) {
-        if (g.style.fill === 'rgb(0, 0, 255)') {
-          clozeGElements.push(g)
-        }
-      }
-      return clozeGElements
-    },
     async loadSvg () {
       if (!this.$refs.clozeWrapper) return
-      const response = await this.$media.httpRequest.request({
-        url: `/media/${this.svgPath}`,
-        method: 'get'
-      })
-      this.$refs.clozeWrapper.innerHTML = response.data
+
       warnSvgWidthHeight()
       this.domSteps = new DomSteps({
-        elements: this.collectClozeGroups(),
+        elements: collectClozeGroups(document),
         subsetSelectors: this.slide.props.stepSubset
       })
-      this.domSteps.setStepCount(this.slide)
 
       const newClozeGroup = this.domSteps.displayByNo({
         stepNo: this.slide.stepNo

@@ -919,7 +919,8 @@ ${JSON.stringify(this.rawYamlObject_)}`
         props: slide.props,
         propsMain: slide.propsMain,
         propsPreview: slide.propsPreview,
-        slide
+        slide,
+        master: slide.master
       }, vue)
     }
 

@@ -4,6 +4,18 @@
 
 import { DomSteps } from '@/steps.js'
 import Vue from 'vue'
+import { selectSubset } from '@bldr/core-browser'
+
+export function collectClozeGroups (dom) {
+  const groups = dom.querySelectorAll('svg g')
+  const clozeGElements = []
+  for (const group of groups) {
+    if (group.style.fill === 'rgb(0, 0, 255)') {
+      clozeGElements.push(group)
+    }
+  }
+  return clozeGElements
+}
 
 export default {
   title: 'Lückentext',
@@ -61,6 +73,7 @@ export default {
     collectPropsMain (props) {
       const svgMediaFile = this.$store.getters['media/mediaFileByUri'](props.src)
       return {
+        src: props.src,
         svgPath: svgMediaFile.path,
         svgHttpUrl: svgMediaFile.httpUrl
       }
@@ -68,6 +81,22 @@ export default {
     collectPropsPreview ({ propsMain }) {
       return {
         svgHttpUrl: propsMain.svgHttpUrl
+      }
+    },
+    calculateStepCount ({ props, master }) {
+      const svgString = master.$get('svgByUri')(props.src)
+      const svgDom = new DOMParser().parseFromString(svgString, 'image/svg+xml')
+      const groups = collectClozeGroups(svgDom)
+
+      const count = groups.length
+      if (props.stepSubset) {
+        const elements = selectSubset(props.stepSubset, {
+          elementsCount: count,
+          shiftSelector: -1
+        })
+        return elements.length + 1
+      } else {
+        return count + 1
       }
     },
     enterStep ({ oldStepNo, newStepNo }) {
