@@ -12,6 +12,9 @@ const { mapGetters } = createNamespacedHelpers('lamp')
 
 export default {
   props: {
+    src: {
+      type: String
+    },
     svgPath: {
       type: String,
       required: true
@@ -27,7 +30,12 @@ export default {
       domSteps: null
     }
   },
-  computed: mapGetters(['slide'])
+  computed: {
+    ...mapGetters(['slide']),
+    svgMarkup () {
+      return this.$store.getters['lampMasterSvg/svgByUri'](this.src)
+    }
+  }
 }
 </script>
 
