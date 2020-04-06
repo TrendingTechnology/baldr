@@ -2,21 +2,21 @@
 const mediaServer = require('@bldr/media-server')
 const lib = require('../../lib.js')
 const { renameOneFile } = require('../rename/action.js')
+const { normalizeOneFile } = require('../normalize/action.js')
 
 /**
- * Write the metadata YAML file.
+ * Create the metadata YAML files.
  *
  * @param {Array} files - An array of input files, comes from the commanders’
  *   variadic parameter `[files...]`.
  */
 function action (files) {
   mediaServer.walk({
-    asset (relPath) {
+    async asset (relPath) {
       const newPath = renameOneFile(relPath)
       console.log(newPath)
-
-      const result = lib.writeMetaDataYaml(newPath)
-      console.log(result)
+      lib.writeMetaDataYaml(newPath)
+      await normalizeOneFile(newPath, { wikidata: false })
     }
   }, {
     path: files

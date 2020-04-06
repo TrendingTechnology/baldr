@@ -82,4 +82,7 @@ function action (files, cmdObj) {
   })
 }
 
-module.exports = action
+module.exports = {
+  action,
+  normalizeOneFile
+}

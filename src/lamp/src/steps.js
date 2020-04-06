@@ -195,14 +195,23 @@ export class DomSteps {
     slide.stepCount = this.count
   }
 
+  /**
+   * `elements` + 1
+   */
   get count () {
     return this.elements.length + 1
   }
 
+  /**
+   * `elementsAll` + 1
+   */
   get countAll () {
     return this.elementsAll.length + 1
   }
 
+  /**
+   * Hide all elements.
+   */
   hideAll () {
     for (const element of this.elementsAll) {
       element.show(false)
