@@ -53,8 +53,8 @@ slides:
 
 - title: Table 1
   cloze:
-    src: New-Orleans-Dixieland_AB1
+    src: id:New-Orleans-Dixieland_AB1
 
 - title: Table 2
   cloze:
-    src: New-Orleans-Dixieland_AB2
+    src: id:New-Orleans-Dixieland_AB2

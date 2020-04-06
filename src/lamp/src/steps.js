@@ -533,8 +533,7 @@ export class DomSteps {
 export function calculateStepCount (props, elements) {
   if (props.stepSubset) {
     const elementsSubset = selectSubset(props.stepSubset, {
-      elementsCount: elements.length,
-      shiftSelector: -1
+      elementsCount: elements.length
     })
     return elementsSubset.length + 1
   } else {

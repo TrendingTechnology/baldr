@@ -109,7 +109,8 @@ export default {
       const svgString = master.$get('svgByUri')(props.src)
       const svgDom = new DOMParser().parseFromString(svgString, 'image/svg+xml')
       const groups = collectClozeGroups(svgDom)
-      return calculateStepCount(props, groups)
+      const count = calculateStepCount(props, groups)
+      return count
     },
     enterStep ({ oldStepNo, newStepNo }) {
       // setSlideOrStepPrevious / Next has no this.domSteps
