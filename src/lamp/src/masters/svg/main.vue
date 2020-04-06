@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { DomSteps } from '@/steps.js'
+import steps from '@/steps.js'
 
 import { createNamespacedHelpers } from 'vuex'
 const { mapGetters } = createNamespacedHelpers('lamp')
@@ -20,7 +20,7 @@ export default {
       type: String,
       required: true
     },
-    ...DomSteps.mapProps(['selector', 'subset'])
+    ...steps.mapProps(['selector', 'subset'])
   },
   data () {
     return {

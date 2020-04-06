@@ -3,7 +3,7 @@
  */
 
 import { warnSvgWidthHeight } from '@/lib.js'
-import { DomSteps } from '@/steps.js'
+import steps from '@/steps.js'
 
 export default {
   title: 'Bild',
@@ -14,7 +14,7 @@ export default {
       description: 'Den URI zu einer SVG-Datei.',
       mediaFileUri: true
     },
-    ...DomSteps.mapProps(['selector', 'subset'])
+    ...steps.mapProps(['selector', 'subset'])
   },
   icon: {
     name: 'image',
@@ -62,7 +62,7 @@ export default {
       svg.innerHTML = response.data
       warnSvgWidthHeight(this.svgPath)
 
-      this.domSteps = new DomSteps({
+      this.domSteps = new steps.DomSteps({
         cssSelectors: this.stepSelector,
         subsetSelectors: this.slide.props.stepSubset,
         hideAllElementsInitally: false

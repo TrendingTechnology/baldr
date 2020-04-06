@@ -6,7 +6,7 @@
 
 <script>
 import { warnSvgWidthHeight } from '@/lib.js'
-import { DomSteps } from '@/steps.js'
+import steps from '@/steps.js'
 import { createNamespacedHelpers } from 'vuex'
 import { collectClozeGroups, scrollToClozeGroup } from './main.js'
 const { mapGetters } = createNamespacedHelpers('lamp')
@@ -17,7 +17,7 @@ export default {
       type: String,
       required: true
     },
-    ...DomSteps.mapProps(['subset'])
+    ...steps.mapProps(['subset'])
   },
   data () {
     return {
@@ -32,7 +32,7 @@ export default {
   },
   mounted () {
     warnSvgWidthHeight()
-    this.domSteps = new DomSteps({
+    this.domSteps = new steps.DomSteps({
       elements: collectClozeGroups(document),
       subsetSelectors: this.slide.props.stepSubset
     })

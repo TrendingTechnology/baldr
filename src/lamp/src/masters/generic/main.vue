@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import { DomSteps } from '@/steps.js'
+import steps from '@/steps.js'
 import { createNamespacedHelpers } from 'vuex'
 const { mapGetters } = createNamespacedHelpers('lamp')
 
@@ -26,7 +26,7 @@ export default {
       description: 'Gibt an wie viele Zeichen auf einer Folie erscheinen sollen.',
       default: CHARACTERS_ON_SLIDE
     },
-    ...DomSteps.mapProps(['mode', 'subset'])
+    ...steps.mapProps(['mode', 'subset'])
   },
   data () {
     return {

@@ -4,7 +4,7 @@
 
 import { plainText } from '@bldr/core-browser'
 import { markupToHtml } from '@/lib.js'
-import { DomSteps } from '@/steps.js'
+import steps from '@/steps.js'
 
 function scroll (element) {
   if (!element) return
@@ -85,23 +85,23 @@ export default {
         const segments = props.markup.split('<hr>')
         const prolog = segments.shift()
         let body = segments.join('<hr>')
-        body = DomSteps.wrapWords(body)
+        body = steps.wrapWords(body)
         props.markup = [prolog, body].join('')
       // No hr tag provided
       // Step through all words
       } else {
-        props.markup = DomSteps.wrapWords(props.markup)
+        props.markup = steps.wrapWords(props.markup)
       }
       return props
     },
     calculateStepCount ({ props }) {
-      return DomSteps.preCalculateStepCount(props.markup, { stepMode: 'words' })
+      return steps.calculateStepCountText(props.markup, { stepMode: 'words' })
     },
     plainTextFromProps (props) {
       return plainText(props.markup)
     },
     enterSlide () {
-      this.domSteps = new DomSteps({
+      this.domSteps = new steps.DomSteps({
         mode: 'words',
         hideAllElementsInitally: false
       })

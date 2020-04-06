@@ -120,7 +120,7 @@ export class DomSteps {
    * @property {String} mode - Which specialized selector should
    *   be used. At the moment there are two: `words` or `sentences`.
    * @property {String} sentencesSelector - A CSS selector which is passed
-   *   through to the static method `DomSteps.selectSentences`, which uses
+   *   through to the function `selectSentences`, which uses
    *   `document.querySelector()` to find the parent HTML element, which
    *   contains child HTML element to use as steps.
    * @property {String} subsetSelectors
@@ -151,9 +151,9 @@ export class DomSteps {
       elements = this.opts_.elements
     } else if (this.opts_.mode) {
       if (this.opts_.mode === 'words') {
-        this.elementsAll = DomSteps.selectWords()
+        this.elementsAll = selectWords()
       } else if (this.opts_.mode === 'sentences') {
-        this.elementsAll = DomSteps.selectSentences(this.opts_.sentencesSelector)
+        this.elementsAll = selectSentences(this.opts_.sentencesSelector)
       } else {
         throw new Error(`Unkown specialized selector: ${this.opts_.mode}`)
       }
@@ -185,241 +185,6 @@ export class DomSteps {
 
     if (this.opts_.hideAllElementsInitally) {
       this.hideAll()
-    }
-  }
-
-  /**
-   * Wrap each word in a string into `<span class="word">…</span>`
-   *
-   * @param {String} text - A string
-   *
-   * @see {@link https://stackoverflow.com/a/26030835}
-   *
-   * @returns {String}
-   */
-  static wrapWords (text) {
-    if (Array.isArray(text)) {
-      text = text.join(' ')
-    }
-    text = text.replace(/\s+/g, ' ')
-    const dom = new DOMParser().parseFromString(text, 'text/html')
-    // First a simple implementation of recursive descent,
-    // visit all nodes in the DOM and process it with a callback:
-    function walkDOM (node, callback) {
-      if (node.nodeName !== 'SCRIPT') { // ignore javascript
-        callback(node)
-        for (let i = 0; i < node.childNodes.length; i++) {
-          walkDOM(node.childNodes[i], callback)
-        }
-      }
-    }
-
-    const textNodes = []
-    walkDOM(dom.body, function (n) {
-      if (n.nodeType === 3) {
-        textNodes.push(n)
-      }
-    })
-
-    /**
-     * Add a HTML element before the other element. Simple utility functions to
-     * avoid a lot of typing.
-     *
-     * @param {HtmlElement} newElement
-     * @param {HtmlElement} element
-     */
-    function insertBefore (newElement, element) {
-      element.parentNode.insertBefore(newElement, element)
-    }
-
-    /**
-     * Remote a HTML element.
-     *
-     * @param {HtmlElement} element
-     */
-    function removeElement (element) {
-      element.parentNode.removeChild(element)
-    }
-
-    /**
-     * Wrap a text string with `<span class="word">…</span>`
-     *
-     * @param {String} txt
-     *
-     * @returns {HTMLElement}
-     */
-    function makeSpan (txt) {
-      const span = document.createElement('span')
-      span.classList.add('word')
-      span.appendChild(makeText(txt))
-      return span
-    }
-
-    /**
-     * Convert a text string into a text node.
-     *
-     * @param {String} txt
-     *
-     * @returns {TextNode}
-     */
-    function makeText (txt) {
-      return document.createTextNode(txt)
-    }
-
-    for (let i = 0; i < textNodes.length; i++) {
-      const node = textNodes[i]
-      const txt = node.nodeValue
-      // A avoid spaces surrounded by <span class="word"></span>
-      if (txt !== ' ') {
-        const words = txt.split(' ')
-        // Insert span surrounded words:
-        insertBefore(makeSpan(words[0]), node)
-        for (let j = 1; j < words.length; j++) {
-          // Join the words with spaces.
-          insertBefore(makeText(' '), node)
-          insertBefore(makeSpan(words[j]), node)
-        }
-        // Now remove the original text node:
-        removeElement(node)
-      }
-    }
-    return dom.body.innerHTML
-  }
-
-  /**
-   * Select words which are surrounded by `span.word`.
-   *
-   * @returns {DomStepElementGroup|DomStepElement[]} An array of
-   *   `DomStepElement`s or `DomStepElementGroup`s.
-   */
-  static selectWords () {
-    const wordsRaw = document.querySelectorAll('span.word')
-    const words = []
-    for (const word of wordsRaw) {
-      if (!word.previousSibling) {
-        const parent = word.parentElement
-        if (parent.tagName === 'LI' && !parent.previousSibling) {
-          words.push(new DomStepElementGroup([parent.parentElement, parent, word], true))
-        } else {
-          words.push(new DomStepElementGroup([parent, word], true))
-        }
-      } else {
-        words.push(new DomStepElement(word, true))
-      }
-    }
-    return words
-  }
-
-  static countWords (dom) {
-    return dom.querySelectorAll('span.word').length
-  }
-
-  /**
-   * Select more than a word. The meaning  of "sentences" in the function name
-   * should not be understood literally, but symbolic for a longer text unit.
-   * Select a whole paragraph (`<p>`) or a heading `<h1>` or `<li>` items of
-   * ordered or unordered lists, or a table row.
-   *
-   * @param {String} - A selector for `document.querySelector()` to find the
-   *   parent HTML element, which contains child HTML element to use as steps.
-   *
-   * @returns {DomStepElement[]} An array of `DomStepElement`s.
-   */
-  static selectSentences (selector) {
-    const parentElement = document.querySelector(selector)
-    const sentences = []
-    for (const element of parentElement.children) {
-      if (['UL', 'OL'].includes(element.tagName)) {
-        for (const li of element.children) {
-          if (li.tagName === 'LI') {
-            sentences.push(new DomStepElement(li, true))
-          }
-        }
-      } else {
-        sentences.push(new DomStepElement(element, true))
-      }
-    }
-    return sentences
-  }
-
-  static countSentences (parentElement) {
-    let count = 0
-    for (const element of parentElement.children) {
-      if (['UL', 'OL'].includes(element.tagName)) {
-        for (const li of element.children) {
-          if (li.tagName === 'LI') {
-            count++
-          }
-        }
-      } else {
-        count++
-      }
-    }
-    return count
-  }
-
-  /**
-   * Map step support related props for the use as Vuejs props.
-   *
-   * @param {Array} selectors - At the moment: “selector”, “mode” and “subset”.
-   *
-   * @returns {Object}
-   */
-  static mapProps (selectors) {
-    const props = {
-      selector: {
-        description: 'Selektor, der Elemente auswählt, die als Schritte eingeblendet werden sollen.',
-        default: 'g[inkscape\\:groupmode="layer"]'
-      },
-      mode: {
-        type: String,
-        description: '„words“ oder „sentences“'
-      },
-      subset: {
-        type: String,
-        description: 'Eine Untermenge von Schritten auswählen (z. B. 1,3,5 oder 2-5).'
-      }
-    }
-
-    const result = {}
-    for (const selector of selectors) {
-      if (props[selector]) {
-        result[`step${selector.charAt(0).toUpperCase()}${selector.substr(1).toLowerCase()}`] = props[selector]
-      }
-    }
-    return result
-  }
-
-  /**
-   * Pre calculate the step count of a text.
-   *
-   * @param {String} text
-   * @param {Object} props
-   * @property {String} stepMode
-   * @property {String} stepSubset
-   *
-   * @returns {Number}
-   */
-  static preCalculateStepCount (text, props) {
-    const dom = new DOMParser().parseFromString(text, 'text/html')
-
-    let allElementsCount
-    if (props.stepMode === 'words') {
-      allElementsCount = DomSteps.countWords(dom)
-    } else if (props.stepMode === 'sentences') {
-      allElementsCount = DomSteps.countSentences(dom)
-    }
-
-    allElementsCount++
-
-    if (props.stepSubset) {
-      const elements = selectSubset(props.stepSubset, {
-        elementsCount: allElementsCount,
-        shiftSelector: -1
-      })
-      return elements.length
-    } else {
-      return allElementsCount
     }
   }
 
@@ -522,21 +287,271 @@ export class DomSteps {
 }
 
 /**
- * Assumes that all elements are hidden for the first step.
+ * Wrap each word in a string into `<span class="word">…</span>`
  *
- * @param {Object} props
- * @property {String} stepSubset
- * @param {Array} elements
+ * @param {String} text - A string
+ *
+ * @see {@link https://stackoverflow.com/a/26030835}
+ *
+ * @returns {String}
+ */
+export function wrapWords (text) {
+  if (Array.isArray(text)) {
+    text = text.join(' ')
+  }
+  text = text.replace(/\s+/g, ' ')
+  const dom = new DOMParser().parseFromString(text, 'text/html')
+  // First a simple implementation of recursive descent,
+  // visit all nodes in the DOM and process it with a callback:
+  function walkDOM (node, callback) {
+    if (node.nodeName !== 'SCRIPT') { // ignore javascript
+      callback(node)
+      for (let i = 0; i < node.childNodes.length; i++) {
+        walkDOM(node.childNodes[i], callback)
+      }
+    }
+  }
+
+  const textNodes = []
+  walkDOM(dom.body, function (n) {
+    if (n.nodeType === 3) {
+      textNodes.push(n)
+    }
+  })
+
+  /**
+   * Add a HTML element before the other element. Simple utility functions to
+   * avoid a lot of typing.
+   *
+   * @param {HtmlElement} newElement
+   * @param {HtmlElement} element
+   */
+  function insertBefore (newElement, element) {
+    element.parentNode.insertBefore(newElement, element)
+  }
+
+  /**
+   * Remote a HTML element.
+   *
+   * @param {HtmlElement} element
+   */
+  function removeElement (element) {
+    element.parentNode.removeChild(element)
+  }
+
+  /**
+   * Wrap a text string with `<span class="word">…</span>`
+   *
+   * @param {String} txt
+   *
+   * @returns {HTMLElement}
+   */
+  function makeSpan (txt) {
+    const span = document.createElement('span')
+    span.classList.add('word')
+    span.appendChild(makeText(txt))
+    return span
+  }
+
+  /**
+   * Convert a text string into a text node.
+   *
+   * @param {String} txt
+   *
+   * @returns {TextNode}
+   */
+  function makeText (txt) {
+    return document.createTextNode(txt)
+  }
+
+  for (let i = 0; i < textNodes.length; i++) {
+    const node = textNodes[i]
+    const txt = node.nodeValue
+    // A avoid spaces surrounded by <span class="word"></span>
+    if (txt !== ' ') {
+      const words = txt.split(' ')
+      // Insert span surrounded words:
+      insertBefore(makeSpan(words[0]), node)
+      for (let j = 1; j < words.length; j++) {
+        // Join the words with spaces.
+        insertBefore(makeText(' '), node)
+        insertBefore(makeSpan(words[j]), node)
+      }
+      // Now remove the original text node:
+      removeElement(node)
+    }
+  }
+  return dom.body.innerHTML
+}
+
+/**
+ * Select words which are surrounded by `span.word`.
+ *
+ * @returns {DomStepElementGroup|DomStepElement[]} An array of
+ *   `DomStepElement`s or `DomStepElementGroup`s.
+ */
+function selectWords () {
+  const wordsRaw = document.querySelectorAll('span.word')
+  const words = []
+  for (const word of wordsRaw) {
+    if (!word.previousSibling) {
+      const parent = word.parentElement
+      if (parent.tagName === 'LI' && !parent.previousSibling) {
+        words.push(new DomStepElementGroup([parent.parentElement, parent, word], true))
+      } else {
+        words.push(new DomStepElementGroup([parent, word], true))
+      }
+    } else {
+      words.push(new DomStepElement(word, true))
+    }
+  }
+  return words
+}
+
+/**
+ *
+ * @param {*} dom
+ */
+function countWords (dom) {
+  return dom.querySelectorAll('span.word').length
+}
+
+/**
+ * Select more than a word. The meaning  of "sentences" in the function name
+ * should not be understood literally, but symbolic for a longer text unit.
+ * Select a whole paragraph (`<p>`) or a heading `<h1>` or `<li>` items of
+ * ordered or unordered lists, or a table row.
+ *
+ * @param {String} - A selector for `document.querySelector()` to find the
+ *   parent HTML element, which contains child HTML element to use as steps.
+ *
+ * @returns {DomStepElement[]} An array of `DomStepElement`s.
+ */
+function selectSentences (selector) {
+  const parentElement = document.querySelector(selector)
+  const sentences = []
+  for (const element of parentElement.children) {
+    if (['UL', 'OL'].includes(element.tagName)) {
+      for (const li of element.children) {
+        if (li.tagName === 'LI') {
+          sentences.push(new DomStepElement(li, true))
+        }
+      }
+    } else {
+      sentences.push(new DomStepElement(element, true))
+    }
+  }
+  return sentences
+}
+
+/**
+ *
+ * @param {*} parentElement
  *
  * @returns {Number}
  */
-export function calculateStepCount (props, elements) {
+function countSentences (parentElement) {
+  let count = 0
+  for (const element of parentElement.children) {
+    if (['UL', 'OL'].includes(element.tagName)) {
+      for (const li of element.children) {
+        if (li.tagName === 'LI') {
+          count++
+        }
+      }
+    } else {
+      count++
+    }
+  }
+  return count
+}
+
+/**
+ * Assumes that all elements are hidden for the first step.
+ *
+ * @param {(Array|Number)} elements - An array of elements or the count of
+ *   the elements.
+ * @param {Object} props
+ * @property {String} stepSubset
+ *
+ * @returns {Number}
+ */
+export function calculateStepCount (elements, props) {
+  let count
+  if (Array.isArray(elements)) {
+    count = elements.length
+  } else {
+    count = elements
+  }
   if (props.stepSubset) {
     const elementsSubset = selectSubset(props.stepSubset, {
-      elementsCount: elements.length
+      elementsCount: count
     })
     return elementsSubset.length + 1
   } else {
-    return elements.length + 1
+    return count + 1
   }
+}
+
+/**
+ * Pre calculate the step count of a text.
+ *
+ * @param {String} text
+ * @param {Object} props
+ * @property {String} stepMode
+ * @property {String} stepSubset
+ *
+ * @returns {Number}
+ */
+export function calculateStepCountText (text, props) {
+  const dom = new DOMParser().parseFromString(text, 'text/html')
+
+  let allElementsCount
+  if (props.stepMode === 'words') {
+    allElementsCount = countWords(dom)
+  } else if (props.stepMode === 'sentences') {
+    allElementsCount = countSentences(dom)
+  }
+
+  return calculateStepCount(allElementsCount, props)
+}
+
+/**
+ * Map step support related props for the use as Vuejs props.
+ *
+ * @param {Array} selectors - At the moment: “selector”, “mode” and “subset”.
+ *
+ * @returns {Object}
+ */
+export function mapProps (selectors) {
+  const props = {
+    selector: {
+      description: 'Selektor, der Elemente auswählt, die als Schritte eingeblendet werden sollen.',
+      default: 'g[inkscape\\:groupmode="layer"]'
+    },
+    mode: {
+      type: String,
+      description: '„words“ oder „sentences“'
+    },
+    subset: {
+      type: String,
+      description: 'Eine Untermenge von Schritten auswählen (z. B. 1,3,5 oder 2-5).'
+    }
+  }
+
+  const result = {}
+  for (const selector of selectors) {
+    if (props[selector]) {
+      result[`step${selector.charAt(0).toUpperCase()}${selector.substr(1).toLowerCase()}`] = props[selector]
+    }
+  }
+  return result
+}
+
+export default {
+  calculateStepCount,
+  calculateStepCountText,
+  DomSteps,
+  mapProps,
+  wrapWords
 }

@@ -2,7 +2,7 @@
  * @module @bldr/lamp/masters/cloze
  */
 
-import { DomSteps, calculateStepCount } from '@/steps.js'
+import steps from '@/steps.js'
 import Vue from 'vue'
 
 /**
@@ -48,7 +48,7 @@ export default {
       description: 'Den URI zu einer SVG-Datei, die den Lückentext enthält.',
       mediaFileUri: true
     },
-    ...DomSteps.mapProps(['subset'])
+    ...steps.mapProps(['subset'])
   },
   icon: {
     name: 'cloze',
@@ -109,7 +109,7 @@ export default {
       const svgString = master.$get('svgByUri')(props.src)
       const svgDom = new DOMParser().parseFromString(svgString, 'image/svg+xml')
       const groups = collectClozeGroups(svgDom)
-      const count = calculateStepCount(props, groups)
+      const count = steps.calculateStepCount(groups, props)
       return count
     },
     enterStep ({ oldStepNo, newStepNo }) {

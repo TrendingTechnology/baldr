@@ -4,7 +4,7 @@
 
 import { plainText } from '@bldr/core-browser'
 import { markupToHtml } from '@/lib.js'
-import { DomSteps } from '@/steps.js'
+import steps from '@/steps.js'
 
 const CHARACTERS_ON_SLIDE = 400
 
@@ -80,7 +80,7 @@ export default {
       description: 'Gibt an wie viele Zeichen auf einer Folie erscheinen sollen.',
       default: CHARACTERS_ON_SLIDE
     },
-    ...DomSteps.mapProps(['mode', 'subset'])
+    ...steps.mapProps(['mode', 'subset'])
   },
   icon: {
     name: 'file-presentation-box',
@@ -131,7 +131,7 @@ export default {
       }
 
       if (props.stepMode && props.stepMode === 'words') {
-        props.markup = [DomSteps.wrapWords(markup.join(' '))]
+        props.markup = [steps.wrapWords(markup.join(' '))]
       } else {
         props.markup = markup
       }
@@ -144,7 +144,7 @@ export default {
     },
     calculateStepCount ({ props }) {
       if (props.stepMode) {
-        return DomSteps.preCalculateStepCount(props.markup, props)
+        return steps.calculateStepCountText(props.markup, props)
       } else {
         return props.markup.length
       }
@@ -163,7 +163,7 @@ export default {
       }
 
       if (this.stepMode) {
-        this.domSteps = new DomSteps({
+        this.domSteps = new steps.DomSteps({
           subsetSelectors: this.stepSubset,
           mode: this.stepMode,
           sentencesSelector,

@@ -4,7 +4,7 @@
 
 import { plainText } from '@bldr/core-browser'
 import { markupToHtml } from '@/lib.js'
-import { DomSteps } from '@/steps.js'
+import steps from '@/steps.js'
 
 const placeholder = '…'
 const placeholderTag = `<span class="editor-placeholder">${placeholder}</span>`
@@ -24,7 +24,7 @@ export default {
       markup: true,
       description: 'Text im HTML oder Markdown Format oder natürlich als reiner Text.'
     },
-    ...DomSteps.mapProps(['mode', 'subset'])
+    ...steps.mapProps(['mode', 'subset'])
   },
   icon: {
     name: 'pencil',
@@ -54,12 +54,12 @@ export default {
       )
 
       if (props.stepMode && props.stepMode === 'words') {
-        props.markup = DomSteps.wrapWords(props.markup)
+        props.markup = steps.wrapWords(props.markup)
       }
       return props
     },
     calculateStepCount ({ props }) {
-      return DomSteps.preCalculateStepCount(props.markup, props)
+      return steps.calculateStepCountText(props.markup, props)
     },
     plainTextFromProps (props) {
       return plainText(props.markup)
@@ -76,7 +76,7 @@ export default {
       }
 
       if (this.stepMode) {
-        this.domSteps = new DomSteps({
+        this.domSteps = new steps.DomSteps({
           subsetSelectors: this.stepSubset,
           mode: this.stepMode,
           sentencesSelector,
