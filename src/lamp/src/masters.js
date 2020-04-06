@@ -227,16 +227,8 @@ class Master {
   }
 
   /**
-   * Call a master function. Master functions are definied in the `master.vue`
-   * files. They are members of the exported object called `master`.
-   *
-   * ```js
-   * export const master = {
-   *   normalizeProps (props) {
-   *     return props
-   *   }
-   * }
-   * ```
+   * Call a master hook. Master hooks are definied in the `main.js`
+   * files.
    *
    * @param {String} hookName - The name of the master hook / function.
    * @param {mixed} payload - The argument the master hook / function is called
@@ -255,6 +247,30 @@ class Master {
         return this.hooks_[hookName].call(thisArg, payload)
       }
       return this.hooks_[hookName](payload)
+    }
+  }
+
+  /**
+   * Asynchronous version. Call a master hook. Master hooks are definied in the
+   * `main.js` files.
+   *
+   * @param {String} hookName - The name of the master hook / function.
+   * @param {mixed} payload - The argument the master hook / function is called
+   *   with.
+   * @param {object} thisArg - The
+   *   {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/call thisArg}
+   *   the master function is called with.
+   *
+   * @returns {mixed}
+   *
+   * @private
+   */
+  async callHookAsync_ (hookName, payload, thisArg) {
+    if (this.hooks_[hookName] && typeof this.hooks_[hookName] === 'function') {
+      if (thisArg) {
+        return await this.hooks_[hookName].call(thisArg, payload)
+      }
+      return await this.hooks_[hookName](payload)
     }
   }
 
@@ -584,12 +600,24 @@ class Master {
   }
 
   /**
-   * Async hook after loading. To load resources in the background.
+   * Hook after loading. To load resources in the background.
    *
+   * @param {Object} props - The properties of the slide.
    * @param {Object} thisArg
    */
   afterLoading (props, thisArg) {
     this.callHook_('afterLoading', { props, master: this }, thisArg)
+  }
+
+  /**
+   * This hook gets executed after the media resolution. Wait for this hook to
+   * finish. Go not in the background.
+   *
+   * @param {Object} props - The properties of the slide.
+   * @param {Object} thisArg
+   */
+  async afterMediaResolution (props, thisArg) {
+    await this.callHookAsync_('afterMediaResolution', { props, master: this }, thisArg)
   }
 }
 

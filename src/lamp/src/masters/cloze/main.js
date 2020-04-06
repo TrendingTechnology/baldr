@@ -3,6 +3,7 @@
  */
 
 import { DomSteps } from '@/steps.js'
+import Vue from 'vue'
 
 export default {
   title: 'Lückentext',
@@ -23,6 +24,19 @@ export default {
     centerVertically: true,
     darkMode: false
   },
+  store: {
+    state: {},
+    getters: {
+      svgByUri: state => uri => {
+        if (state[uri]) return state[uri]
+      }
+    },
+    mutations: {
+      addSvg (state, { uri, markup }) {
+        Vue.set(state, uri, markup)
+      }
+    }
+  },
   hooks: {
     normalizeProps (props) {
       if (typeof props === 'string') {
@@ -33,13 +47,22 @@ export default {
     resolveMediaUris (props) {
       return props.src
     },
+    async afterMediaResolution ({ props, master }) {
+      const svg = master.$get('svgByUri')(props.src)
+      if (!svg) {
+        const mediaAsset = this.$store.getters['media/mediaFileByUri'](props.src)
+        const response = await this.$media.httpRequest.request({
+          url: `/media/${mediaAsset.path}`,
+          method: 'get'
+        })
+        if (response.data) master.$commit('addSvg', { uri: props.src, markup: response.data })
+      }
+    },
     collectPropsMain (props) {
       const svgMediaFile = this.$store.getters['media/mediaFileByUri'](props.src)
       return {
         svgPath: svgMediaFile.path,
-        svgHttpUrl: svgMediaFile.httpUrl,
-        stepBegin: props.stepBegin,
-        stepEnd: props.stepEnd
+        svgHttpUrl: svgMediaFile.httpUrl
       }
     },
     collectPropsPreview ({ propsMain }) {

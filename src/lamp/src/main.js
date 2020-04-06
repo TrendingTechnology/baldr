@@ -22,7 +22,6 @@
  * - `this.$notify()`: An instance of the package `vue-notifications`.
  * - `this.$notifyError`
  * - `this.$notifySuccess`
- * - `this.$openPresentation`
  * - `this.$route`
  * - `this.$router`
  * - `this.$shortcuts`
@@ -122,6 +121,8 @@
  *
  * ### 3. `afterLoading({ props, master })`
  *
+ * Goes into the background.
+ *
  * - `this`: is the main Vue instance.
  * - `return`: void.
  *
@@ -134,9 +135,25 @@
  *     }
  *   }
  * }
- *
  * ```
- * ### 4. `collectPropsMain(props)`
+ *
+ * ### 4. `afterMediaResolution({ props, master })`
+ *
+ * Blocks.
+ *
+ * - `this`: is the main Vue instance.
+ * - `return`: void.
+ *
+ * ```js
+ * export const default = {
+ *   hooks {
+ *     async afterMediaResolution ({ props, master }) {
+ *     }
+ *   }
+ * }
+ * ```
+ *
+ * ### 5. `collectPropsMain(props)`
  *
  * - `this`: is the main Vue instance.
  * - `return`: an object.
@@ -146,7 +163,7 @@
  * }
  * ```
  *
- * ### 5. `collectPropsPreview({ props, propsMain, slide })`
+ * ### 6. `collectPropsPreview({ props, propsMain, slide })`
  *
  * - `this`: is the main Vue instance.
  * - `return`: an object.
@@ -156,7 +173,7 @@
  * }
  * ```
  *
- * ### 6. `calculateStepCount({ props, propsMain, propsPreview, slide })`
+ * ### 7. `calculateStepCount({ props, propsMain, propsPreview, slide })`
  *
  * - `this`: is the main Vue instance.
  * - `return`: a number.

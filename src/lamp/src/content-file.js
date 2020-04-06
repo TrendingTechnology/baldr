@@ -901,6 +901,10 @@ ${JSON.stringify(this.rawYamlObject_)}`
 
     // After media resolution.
     for (const slide of this.slides) {
+      await slide.master.afterMediaResolution(slide.props, vue)
+    }
+
+    for (const slide of this.slides) {
       slide.master.renderInlineMedia(slide.props)
       slide.propsMain = slide.master.collectPropsMain(slide.props, vue)
       slide.propsPreview = slide.master.collectPropsPreview(
