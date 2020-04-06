@@ -65,11 +65,11 @@ export default {
 
 <style lang="scss">
   .vc_external_sites {
-    bottom: 8em;
+    bottom: 40%;
     display: flex;
     flex-direction: column;
-    font-size: 1.5em;
-    opacity: 0.5;
+    font-size: 1em;
+    opacity: 0.1;
     position: absolute;
     right: 0.4em;
   }
