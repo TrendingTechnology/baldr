@@ -2,10 +2,14 @@
  * @module @bldr/lamp/masters/cloze
  */
 
-import { DomSteps } from '@/steps.js'
+import { DomSteps, calculateStepCount } from '@/steps.js'
 import Vue from 'vue'
-import { selectSubset } from '@bldr/core-browser'
 
+/**
+ *
+ * @param {Object} dom - The global `document` object or a object
+ * created by `DOMParser()`.
+ */
 export function collectClozeGroups (dom) {
   const groups = dom.querySelectorAll('svg g')
   const clozeGElements = []
@@ -15,6 +19,24 @@ export function collectClozeGroups (dom) {
     }
   }
   return clozeGElements
+}
+
+/**
+ * @param {Object} clozeGroup
+ */
+export function scrollToClozeGroup (clozeGroup) {
+  if (!clozeGroup) return
+  // e. g.: 1892
+  // svg.clientHeight
+  const svg = document.querySelector('svg')
+  // e. g.: 794.4473876953125
+  // bBox.height
+  const bBox = svg.getBBox()
+  const glyph = clozeGroup.children[0]
+  // e. g.: 125.11000061035156
+  const y = svg.clientHeight / bBox.height * glyph.y.baseVal.value
+  const adjustedY = y - 0.8 * window.screen.height
+  window.scrollTo({ top: adjustedY, left: 0, behavior: 'smooth' })
 }
 
 export default {
@@ -87,17 +109,7 @@ export default {
       const svgString = master.$get('svgByUri')(props.src)
       const svgDom = new DOMParser().parseFromString(svgString, 'image/svg+xml')
       const groups = collectClozeGroups(svgDom)
-
-      const count = groups.length
-      if (props.stepSubset) {
-        const elements = selectSubset(props.stepSubset, {
-          elementsCount: count,
-          shiftSelector: -1
-        })
-        return elements.length + 1
-      } else {
-        return count + 1
-      }
+      return calculateStepCount(props, groups)
     },
     enterStep ({ oldStepNo, newStepNo }) {
       // setSlideOrStepPrevious / Next has no this.domSteps
@@ -106,7 +118,7 @@ export default {
         oldStepNo,
         stepNo: newStepNo
       })
-      this.scroll(newClozeGroup)
+      scrollToClozeGroup(newClozeGroup)
     }
   }
 }

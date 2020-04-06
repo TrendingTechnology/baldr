@@ -520,3 +520,24 @@ export class DomSteps {
     }
   }
 }
+
+/**
+ * Assumes that all elements are hidden for the first step.
+ *
+ * @param {Object} props
+ * @property {String} stepSubset
+ * @param {Array} elements
+ *
+ * @returns {Number}
+ */
+export function calculateStepCount (props, elements) {
+  if (props.stepSubset) {
+    const elementsSubset = selectSubset(props.stepSubset, {
+      elementsCount: elements.length,
+      shiftSelector: -1
+    })
+    return elementsSubset.length + 1
+  } else {
+    return elements.length + 1
+  }
+}
