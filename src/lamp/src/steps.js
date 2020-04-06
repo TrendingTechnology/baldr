@@ -189,7 +189,7 @@ export class DomSteps {
   }
 
   /**
-   * @param {@bldr/lamp/content-file~Slide } slide
+   * @param {@bldr/lamp/content-file~Slide} slide
    */
   setStepCount (slide) {
     slide.stepCount = this.count
