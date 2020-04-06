@@ -83,10 +83,22 @@ export default {
     calculateStepCount ({ props, master }) {
       const svgString = master.$get('svgByUri')(props.src)
       const svgDom = new DOMParser().parseFromString(svgString, 'image/svg+xml')
-      const groups = svgDom.querySelectorAll(props.stepSelector)
-      console.log(groups)
-      const count = steps.calculateStepCount(groups, props)
-      return count
+
+      // Dirty hack: Somehove querySelectorAll is not working with DOMParser
+      let groups
+      if (props.stepSelector === 'g[inkscape\\:groupmode="layer"]') {
+        groups = svgDom.querySelectorAll('g')
+        const elements = []
+        for (const group of groups) {
+          if (group.attributes['inkscape:groupmode']) {
+            elements.push(group)
+          }
+        }
+        groups = elements
+      } else {
+        groups = svgDom.querySelectorAll(props.stepSelector)
+      }
+      return steps.calculateStepCount(groups, props)
     },
     leaveSlide () {
       this.domSteps.shortcutsUnregister()

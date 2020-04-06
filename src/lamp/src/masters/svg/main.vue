@@ -1,6 +1,6 @@
 <template>
   <div class="vc_svg_master">
-    <div ref="svgWrapper" id="svg-wrapper"/>
+    <div ref="svgWrapper" id="svg-wrapper" v-html="svgMarkup"/>
   </div>
 </template>
 
