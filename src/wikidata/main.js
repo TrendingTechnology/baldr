@@ -367,63 +367,70 @@ function mergeData (data, dataWiki, typeSpecs) {
  * @public
  *
  * @param {String} itemId - for example `Q123`
- * @param {module:@bldr/media-server/meta-types~typeName} typeName
+ * @param {module:@bldr/media-server/meta-types~typeNames} typeNames
  * @param {module:@bldr/media-server/meta-types~typeSpecs} typeSpecs
  *
  * @returns {Object}
  */
-async function query (itemId, typeName, typeSpecs) {
+async function query (itemId, typeNames, typeSpecs) {
   if (!wikibase.isItemId(itemId)) {
     throw new Error(`No item id: ${itemId}`)
   }
   entity = await getEntities(itemId)
 
-  if (!typeSpecs[typeName]) return
+  if (typeNames.indexOf('general') === -1) typeNames = `general,${typeNames}`
 
-  const typeSpec = typeSpecs[typeName]
-
-  const typeData = {}
-  typeData.wikidata = itemId
-  for (const propName in typeSpec.props) {
-    if (typeSpec.props[propName].wikidata) {
-      const propSpec = typeSpec.props[propName].wikidata
-      let value
-
-      // source
-      if (!propSpec.fromClaim && !propSpec.fromEntity ) {
-        throw new Error(`Spec must have a source property (“fromClaim” or “fromEntity”): ${JSON.stringify(propSpec)}`)
-      }
-      if (propSpec.fromClaim) {
-        value = getClaims(entity, propSpec.fromClaim)
-      } else if (propSpec.fromEntity) {
-        const func = functions[propSpec.fromEntity]
-        if (typeof func !== 'function') {
-          throw new Error(`Unkown from entity source “${propSpec.fromEntity}”`)
-        }
-        value = func(entity)
-      }
-
-      // second query
-      if (value && propSpec.secondQuery) value = await functions[propSpec.secondQuery](value)
-
-      // format
-      if (value && propSpec.format) {
-        if (typeof propSpec.format === 'function') {
-          value = propSpec.format(value, typeSpec)
-        } else {
-          const func = functions[propSpec.format]
-          value = func(value, typeSpec)
-        }
-      }
-
-      if (value) typeData[propName] = value
+  const data = {}
+  data.wikidata = itemId
+  for (const typeName of typeNames.split(',')) {
+    if (!typeSpecs[typeName]) {
+      throw new Error(`Unkown type name: “${typeName}”`)
     }
 
+    const typeSpec = typeSpecs[typeName]
+
+    for (const propName in typeSpec.props) {
+      if (typeSpec.props[propName].wikidata) {
+        const propSpec = typeSpec.props[propName].wikidata
+        let value
+
+        // source
+        if (!propSpec.fromClaim && !propSpec.fromEntity ) {
+          throw new Error(`Spec must have a source property (“fromClaim” or “fromEntity”): ${JSON.stringify(propSpec)}`)
+        }
+        if (propSpec.fromClaim) {
+          value = getClaims(entity, propSpec.fromClaim)
+        } else if (propSpec.fromEntity) {
+          const func = functions[propSpec.fromEntity]
+          if (typeof func !== 'function') {
+            throw new Error(`Unkown from entity source “${propSpec.fromEntity}”`)
+          }
+          value = func(entity)
+        }
+
+        // second query
+        if (value && propSpec.secondQuery) value = await functions[propSpec.secondQuery](value)
+
+        // format
+        if (value && propSpec.format) {
+          if (typeof propSpec.format === 'function') {
+            value = propSpec.format(value, typeSpec)
+          } else {
+            const func = functions[propSpec.format]
+            value = func(value, typeSpec)
+          }
+        }
+
+        if (value) data[propName] = value
+      }
+
+    }
+    if (typeSpec.normalizeWikidata) {
+      typeSpec.normalizeWikidata({ data, entity, functions })
+    }
   }
-  if (typeSpec.normalizeWikidata) {
-    typeSpec.normalizeWikidata({ typeData, entity, functions })
-  }
-  return typeData
+
+  return data
 }
 
 module.exports = {

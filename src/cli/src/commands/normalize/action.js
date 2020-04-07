@@ -14,9 +14,9 @@ const { deepCopy } = require('@bldr/core-browser')
 
 const lib = require('../../lib.js')
 
-async function queryWikidata (metaData, typeName, typeSpecs) {
-  console.log(`Query wikidata item “${chalk.yellow(metaData.wikidata)}” for meta data type “${chalk.yellow(typeName)}”`)
-  const dataWiki = await wikidata.query(metaData.wikidata, typeName, typeSpecs)
+async function queryWikidata (metaData, typeNames, typeSpecs) {
+  console.log(`Query wikidata item “${chalk.yellow(metaData.wikidata)}” for meta data types “${chalk.yellow('general,' + typeNames)}”`)
+  const dataWiki = await wikidata.query(metaData.wikidata, typeNames, typeSpecs)
   console.log(dataWiki)
   metaData = wikidata.mergeData(metaData, dataWiki)
   // To avoid blocking
@@ -44,13 +44,10 @@ async function normalizeOneFile (filePath, cmdObj) {
 
     if (cmdObj.wikidata) {
       if (metaData.wikidata && metaData.metaTypes) {
-        for (const typeName of metaData.metaTypes.split(',')) {
-          metaData = await queryWikidata(metaData, typeName, metaTypes.typeSpecs)
-        }
+        metaData = await queryWikidata(metaData, metaData.metaTypes, metaTypes.typeSpecs)
       } else {
         console.log(chalk.red(`To enrich the metadata using wikidata a property named “wikidata” is needed.`))
       }
-      metaData = await queryWikidata(metaData, 'general', metaTypes.typeSpecs)
     }
     metaData = metaTypes.process(metaData)
 

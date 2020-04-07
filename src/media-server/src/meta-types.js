@@ -120,6 +120,13 @@ const typeSpecs = require('./meta-type-specs.js')
  */
 
 /**
+ * Multiple meta data type names, separated by commas, for example
+ * `person,group`.
+ *
+ * @typedef {String} typeNames
+ */
+
+/**
  * Some actual data which can be assigned to a meta type.
  *
  * @typedef {Object} typeData
