@@ -5,6 +5,7 @@
     <meta-data-overlay/>
     <master-renderer/>
     <audio-overlay/>
+    <cursor-arrows/>
   </div>
 </template>
 
@@ -14,6 +15,7 @@ import MasterIcon from './MasterIcon.vue'
 import MasterRenderer from './MasterRenderer.vue'
 import MetaDataOverlay from './MetaDataOverlay.vue'
 import SlideNumber from './SlideNumber.vue'
+import CursorArrows from './CursorArrows.vue'
 import { routerGuards } from '@/lib.js'
 
 export default {
@@ -23,7 +25,8 @@ export default {
     MasterIcon,
     MasterRenderer,
     MetaDataOverlay,
-    SlideNumber
+    SlideNumber,
+    CursorArrows
   },
   ...routerGuards
 }
