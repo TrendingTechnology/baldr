@@ -8,9 +8,8 @@
     b-content-theme="default"
   >
     <h1>Überblick über alle Präsentationen</h1>
-    <ul>
-      <presentation-item :item="folderTitleTree"/>
-    </ul>
+
+    <presentation-item :item="folderTitleTree"/>
   </div>
 </template>
 

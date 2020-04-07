@@ -1,5 +1,5 @@
 <template>
-  <li class="vc_presentation_item">
+  <div class="vc_presentation_item">
     <presentation-link
       :hasPraesentation="hasPraesentation"
       :id="id"
@@ -8,13 +8,14 @@
       :level="level"
     />
     <ul :class="`ul-level-${level}`" v-if="hasChilds">
-      <presentation-item
-        :item="item"
+      <li
         v-for="item in childs"
         :key="item._title.path"
-      />
+      >
+        <presentation-item :item="item"/>
+      </li>
     </ul>
-  </li>
+  </div>
 </template>
 
 <script>
@@ -41,7 +42,7 @@ export default {
       if (this.folderTitle) {
         return this.folderTitle.title
       } else {
-        return '…'
+        return ''
       }
     },
     subtitle () {
@@ -54,7 +55,7 @@ export default {
       if (this.folderTitle && this.folderTitle.level) {
         return this.folderTitle.level
       }
-      return ''
+      return 0
     },
     id () {
       if (this.folderTitle) {
@@ -89,6 +90,7 @@ export default {
     ul li:before {
       content: '' !important;
     }
+
     ul {
       padding-left: 2em !important;
     }
