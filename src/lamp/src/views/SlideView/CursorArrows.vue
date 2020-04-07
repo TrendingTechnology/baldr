@@ -30,45 +30,71 @@ const { mapGetters } = createNamespacedHelpers('lamp')
 export default {
   name: 'CursorArrows',
   computed: mapGetters(['slide', 'slidesCount', 'slideNo']),
+  data () {
+    return {
+      state: {
+        up: {
+          triggered: false
+        },
+        right: {
+          triggered: false
+        },
+        down: {
+          triggered: false
+        },
+        left: {
+          triggered: false
+        }
+      }
+    }
+  },
   methods: {
+    highlightArrow (name) {
+      this.state[name].triggered = true
+      setTimeout(() => { this.state[name].triggered = false }, 200)
+    },
     up () {
-      console.log('up')
+      this.highlightArrow('up')
     },
     right () {
-      console.log('right')
+      this.highlightArrow('right')
     },
     down () {
-      console.log('down')
+      this.highlightArrow('down')
     },
     left () {
-      console.log('left')
+      this.highlightArrow('left')
     },
     upClasses () {
       return {
         up: true,
-        activated: this.isUpActive()
+        activated: this.isUpActive(),
+        triggered: this.state.up.triggered
       }
     },
     rightClasses () {
       return {
         right: true,
-        activated: this.isRightActive()
+        activated: this.isRightActive(),
+        triggered: this.state.right.triggered
       }
     },
     downClasses () {
       return {
         down: true,
-        activated: this.isDownActive()
+        activated: this.isDownActive(),
+        triggered: this.state.down.triggered
       }
     },
     leftClasses () {
       return {
         left: true,
-        activated: this.isLeftActive()
+        activated: this.isLeftActive(),
+        triggered: this.state.left.triggered
       }
     },
     isUpActive () {
-      if (this.slide.stepCount > 1 && this.slide.stepNo !== 1) {
+      if (this.slide && this.slide.stepCount > 1 && this.slide.stepNo !== 1) {
         return true
       }
       return false
@@ -80,7 +106,7 @@ export default {
       return false
     },
     isDownActive () {
-      if (this.slide.stepCount > 1 && this.slide.stepNo !== this.slide.stepCount) {
+      if (this.slide && this.slide.stepCount > 1 && this.slide.stepNo !== this.slide.stepCount) {
         return true
       }
       return false
@@ -100,23 +126,36 @@ export default {
     //border: 3px solid $blue;
     bottom: 0.5vw;
     box-sizing: border-box;
-    color: $gray;
     font-size: 15vw;
     height: 2.1em;
-    opacity: 0.2;
     position: fixed;
     right: 0.5vw;
     width: 2.1em;
-
-    .activated {
-      color: $blue;
-      opacity: 0.9;
-    }
 
     .baldr-icon {
       position: absolute;
       box-sizing: border-box;
       //border: 1px solid $yellow
+      opacity: 0.1;
+      color: $gray;
+      transition-property: color, opacity;
+      transition-duration: 0.2s;
+    }
+
+    s.baldr-icon.activated:hover {
+      opacity: 0.6
+    }
+
+    .baldr-icon.activated {
+      color: $blue;
+      opacity: 0.4;
+    }
+
+    .baldr-icon.triggered {
+      color: $orange;
+      opacity: 1;
+      transition-property: color, opacity;
+      transition-duration: 0.2s;
     }
 
     .up {
