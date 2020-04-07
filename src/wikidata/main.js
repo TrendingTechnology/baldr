@@ -24,7 +24,7 @@ const wikibase = require('wikibase-sdk')({
  * @property {String} wikidata.secondQuery - `queryLabels`
  * @property {Boolean} wikidata.alwaysUpdate
  * @property {(Function|String)} wikidata.format - A function or `formatDate`,
- *   `formatYear`, `formatWikicommons`.
+ *   `formatYear`, `formatWikicommons`, `formatList`.
  */
 
 /**
@@ -229,7 +229,7 @@ const functions = {
   getWikipediaTitle: function (entity) {
     const sitelinks = entity.sitelinks
     const keys = Object.keys(sitelinks)
-    if (!keys.lenghts) return
+    if (!keys.length) return
     let key
     if (sitelinks.dewiki) {
       key = 'dewiki'
@@ -293,6 +293,18 @@ const functions = {
     date = unpackArray(date, true, false)
     if (!date) return
     return date.replace(/T.+$/, '')
+  },
+
+  /**
+   * @param {(Array|String)} list
+   *
+   * @returns {String}
+   */
+  formatList: function (list) {
+    if (Array.isArray(list)) {
+      return list.join(', ')
+    }
+    return list
   },
 
   /**

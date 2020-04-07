@@ -166,7 +166,8 @@ const general = {
         return decodeURI(value)
       },
       wikidata: {
-        fromEntity: 'getWikipediaTitle'
+        fromEntity: 'getWikipediaTitle',
+        alwaysUpdate: true
       }
     },
     youtube: {
@@ -175,6 +176,10 @@ const general = {
       validate: function (value) {
         // https://webapps.stackexchange.com/a/101153
         return value.match(/^[0-9A-Za-z_-]{10}[048AEIMQUYcgkosw]$/)
+      },
+      wikidata: {
+        // YouTube-Video-Kennung
+        fromClaim: 'P1651'
       }
     },
     // tmp property needed to generate id prefix
@@ -226,7 +231,8 @@ const recording = {
       wikidata: {
         // Interpret | Interpretin | Interpretinnen | Darsteller
         fromClaim: 'P175',
-        secondQuery: 'queryLabels'
+        secondQuery: 'queryLabels',
+        format: 'formatList'
       }
     },
     musicbrainzRecordingId: {
@@ -268,14 +274,16 @@ const composition = {
       wikidata: {
         // Komponist
         fromClaim: 'P86',
-        secondQuery: 'queryLabels'
+        secondQuery: 'queryLabels',
+        format: 'formatList'
       }
     },
     lyricist: {
       wikidata: {
         // Text von | Autor des Liedtexts | Texter | Autor (Liedtext) | geschrieben von
         fromClaim: 'P676',
-        secondQuery: 'queryLabels'
+        secondQuery: 'queryLabels',
+        format: 'formatList'
       }
     },
     musicbrainzWorkId: {
@@ -362,11 +370,6 @@ const group = {
         secondQuery: 'queryLabels'
       }
     },
-    wikipedia: {
-      wikidata: {
-        fromEntity: 'getWikipediaTitle'
-      }
-    },
     mainImage: {
       wikidata: {
         // Bild
@@ -430,11 +433,6 @@ const instrument = {
       wikidata: {
         // Bild des Tonumfang
         fromClaim: 'P2343'
-      }
-    },
-    wikipedia: {
-      wikidata: {
-        fromEntity: 'getWikipediaTitle'
       }
     }
   }
@@ -542,12 +540,6 @@ const person = {
         alwaysUpdate: true
       }
     },
-    wikipedia: {
-      wikidata: {
-        fromEntity: 'getWikipediaTitle',
-        alwaysUpdate: true
-      }
-    },
     mainImage: {
       wikidata: {
         // Bild
@@ -598,11 +590,6 @@ const song = {
         // Genre
         fromClaim: 'P136',
         secondQuery: 'queryLabels'
-      }
-    },
-    wikipedia: {
-      wikidata: {
-        fromEntity: 'getWikipediaTitle'
       }
     }
   }
