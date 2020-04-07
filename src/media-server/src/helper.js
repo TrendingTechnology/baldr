@@ -45,6 +45,8 @@ function idify (input) {
   //  “'See God's ark' ” -> See-Gods-ark-
   output = output.replace(/^[^A-Za-z0-9]*/, '')
   output = output.replace(/[^A-Za-z0-9]*$/, '')
+  // Finally remove all non ID characters.
+  output = output.replace(/[^A-Za-z0-9-_]+/g, '')
   return output
 }
 
