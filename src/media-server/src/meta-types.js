@@ -331,8 +331,14 @@ function removeProps (data, typeSpec) {
       const value = data[propName]
       const propSpec = typeSpec.props[propName]
       if (
+        !isValue(value) ||
         (propSpec.state && propSpec.state === 'absent') ||
-        (propSpec.removeByRegexp && propSpec.removeByRegexp instanceof RegExp && value.match(propSpec.removeByRegexp))
+        (
+          propSpec.removeByRegexp &&
+          propSpec.removeByRegexp instanceof RegExp &&
+          typeof value === 'string' &&
+          value.match(propSpec.removeByRegexp)
+        )
       ) {
         delete data[propName]
       }

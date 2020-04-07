@@ -19,10 +19,12 @@ const wikibase = require('wikibase-sdk')({
  *
  * @typedef {Object} propSpec
  * @property {String} wikidata.fromClaim - for example `P123`
- * @property {Function} wikidata.fromEntity - `getDescription`, `getLabel`, `getWikipediaTitle`
- * @property {Function} wikidata.secondQuery - `queryLabels`
+ * @property {String} wikidata.fromEntity - `getDescription`, `getLabel`,
+ *   `getWikipediaTitle`.
+ * @property {String} wikidata.secondQuery - `queryLabels`
  * @property {Boolean} wikidata.alwaysUpdate
- * @property {Function} wikidata.format - A function or `formatDate`, `formatWikicommons`
+ * @property {(Function|String)} wikidata.format - A function or `formatDate`,
+ *   `formatYear`, `formatWikicommons`.
  */
 
 /**
@@ -226,12 +228,17 @@ const functions = {
    */
   getWikipediaTitle: function (entity) {
     const sitelinks = entity.sitelinks
+    const keys = Object.keys(sitelinks)
+    if (!keys.lenghts) return
     let key
     if (sitelinks.dewiki) {
       key = 'dewiki'
-    } else {
+    } else if (sitelinks.enwiki) {
       key = 'enwiki'
+    } else {
+      key = keys.shift()
     }
+    if (!key) return
     // https://de.wikipedia.org/wiki/Ludwig_van_Beethoven
     const siteLink = wikibase.getSitelinkUrl({ site: key, title: sitelinks[key] })
     if (!siteLink) return
@@ -286,6 +293,17 @@ const functions = {
     date = unpackArray(date, true, false)
     if (!date) return
     return date.replace(/T.+$/, '')
+  },
+
+  /**
+   * Extract the 4 digit year from a date string
+   *
+   * @param {String} dateSpec - For example `1968-01-01`
+   *
+   * @returns {String} for example `1968`
+   */
+  formatYear: function (dateSpec) {
+    return dateSpec.substr(0, 4)
   },
 
   /**
@@ -358,7 +376,6 @@ async function query (itemId, typeName, typeSpecs) {
   if (!wikibase.isItemId(itemId)) {
     throw new Error(`No item id: ${itemId}`)
   }
-  console.log(itemId)
   entity = await getEntities(itemId)
 
   if (!typeSpecs[typeName]) return

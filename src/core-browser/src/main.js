@@ -155,9 +155,9 @@ export function formatToLocalDate (dateSpec) {
 /**
  * Extract the 4 digit year from a date string
  *
- * @param {String} dateSpec - `1968-01-01`
+ * @param {String} dateSpec - For example `1968-01-01`
  *
- * @returns {String}
+ * @returns {String} for example `1968`
  */
 export function formatToYear (dateSpec) {
   return dateSpec.substr(0, 4)

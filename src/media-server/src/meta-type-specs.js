@@ -164,6 +164,9 @@ const general = {
       },
       format: function (value, { typeData, typeSpec }) {
         return decodeURI(value)
+      },
+      wikidata: {
+        fromEntity: 'getWikipediaTitle'
       }
     },
     youtube: {
@@ -219,10 +222,27 @@ const recording = {
   detectTypeByPath: new RegExp('^.*/HB/.*m4a$'),
   props: {
     artist: {
-      description: 'Der/die Interpret/in eines Musikstücks.'
+      description: 'Der/die Interpret/in eines Musikstücks.',
+      wikidata: {
+        // Interpret | Interpretin | Interpretinnen | Darsteller
+        fromClaim: 'P175',
+        secondQuery: 'queryLabels'
+      }
     },
     musicbrainzRecordingId: {
-      validate: validateUuid
+      validate: validateUuid,
+      wikidata: {
+        // MusicBrainz-Aufnahme-ID
+        fromClaim: 'P4404',
+        secondQuery: 'queryLabels'
+      }
+    },
+    year: {
+      wikidata: {
+        // Veröffentlichungsdatum
+        fromClaim: 'P577',
+        format: 'formatYear'
+      }
     },
     cover: {
       validate: validateMediaId
@@ -244,10 +264,26 @@ const composition = {
     },
     composer: {
       // Helbling-Verlag
-      removeByRegexp: /^.*Verlag.*$/i
+      removeByRegexp: /^.*Verlag.*$/i,
+      wikidata: {
+        // Komponist
+        fromClaim: 'P86',
+        secondQuery: 'queryLabels'
+      }
+    },
+    lyricist: {
+      wikidata: {
+        // Text von | Autor des Liedtexts | Texter | Autor (Liedtext) | geschrieben von
+        fromClaim: 'P676',
+        secondQuery: 'queryLabels'
+      }
     },
     musicbrainzWorkId: {
-      validate: validateUuid
+      validate: validateUuid,
+      wikidata: {
+        // MusicBrainz-Werk-ID
+        fromClaim: 'P435'
+      }
     }
   }
 }

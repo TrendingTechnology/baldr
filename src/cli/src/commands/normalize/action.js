@@ -14,6 +14,20 @@ const { deepCopy } = require('@bldr/core-browser')
 
 const lib = require('../../lib.js')
 
+async function queryWikidata (metaData, typeName, typeSpecs) {
+  console.log(`Query wikidata item “${chalk.yellow(metaData.wikidata)}” for meta data type “${chalk.yellow(typeName)}”`)
+  const dataWiki = await wikidata.query(metaData.wikidata, typeName, typeSpecs)
+  console.log(dataWiki)
+  metaData = wikidata.mergeData(metaData, dataWiki)
+  // To avoid blocking
+  // url: 'https://www.wikidata.org/w/api.php?action=wbgetentities&ids=Q16276296&format=json&languages=en%7Cde&props=labels',
+  // status: 429,
+  // statusText: 'Scripted requests from your IP have been blocked, please
+  // contact noc@wikimedia.org, and see also https://meta.wikimedia.org/wiki/User-Agent_policy',
+  sleep.msleep(3000)
+  return metaData
+}
+
 /**
  * @param {String} filePath - The media asset file path.
  */
@@ -31,18 +45,12 @@ async function normalizeOneFile (filePath, cmdObj) {
     if (cmdObj.wikidata) {
       if (metaData.wikidata && metaData.metaTypes) {
         for (const typeName of metaData.metaTypes.split(',')) {
-          const dataWiki = await wikidata.query(metaData.wikidata, typeName, metaTypes.typeSpecs)
-          metaData = wikidata.mergeData(metaData, dataWiki)
-          // To avoid blocking
-          // url: 'https://www.wikidata.org/w/api.php?action=wbgetentities&ids=Q16276296&format=json&languages=en%7Cde&props=labels',
-          // status: 429,
-          // statusText: 'Scripted requests from your IP have been blocked, please
-          // contact noc@wikimedia.org, and see also https://meta.wikimedia.org/wiki/User-Agent_policy',
-          sleep.msleep(3000)
+          metaData = await queryWikidata(metaData, typeName, metaTypes.typeSpecs)
         }
       } else {
         console.log(chalk.red(`To enrich the metadata using wikidata a property named “wikidata” is needed.`))
       }
+      metaData = await queryWikidata(metaData, 'general', metaTypes.typeSpecs)
     }
     metaData = metaTypes.process(metaData)
 
