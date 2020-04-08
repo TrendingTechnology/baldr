@@ -24,7 +24,7 @@ const wikibase = require('wikibase-sdk')({
  * @property {String} wikidata.secondQuery - `queryLabels`
  * @property {Boolean} wikidata.alwaysUpdate
  * @property {(Function|String)} wikidata.format - A function or `formatDate`,
- *   `formatYear`, `formatWikicommons`, `formatList`.
+ *   `formatYear`, `formatWikicommons`, `formatList`, `formatSingleValue`.
  */
 
 /**
@@ -329,6 +329,18 @@ const functions = {
     value = unpackArray(value, true, false)
     value = value.replace(/ /g, '_')
     return `wikicommons:${value}`
+  },
+
+  /**
+   * Only return one value, not an array of values.
+   *
+   * @param {(Array|String)} value
+   *
+   * @returns {String}
+   */
+  formatSingleValue: function (value) {
+    if (Array.isArray(value)) return value[0]
+    return value
   }
 }
 

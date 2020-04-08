@@ -286,11 +286,26 @@ const composition = {
         format: 'formatList'
       }
     },
+    publicationDate: {
+      wikidata: {
+        // Veröffentlichungsdatum
+        fromClaim: 'P577',
+        format: 'formatDate'
+      }
+    },
+    firstPerformance: {
+      wikidata: {
+        // Datum der Erst- oder Uraufführung
+        fromClaim: 'P1191',
+        format: 'formatDate'
+      }
+    },
     musicbrainzWorkId: {
       validate: validateUuid,
       wikidata: {
         // MusicBrainz-Werk-ID
-        fromClaim: 'P435'
+        fromClaim: 'P435',
+        format: 'formatSingleValue'
       }
     }
   }
