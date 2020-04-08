@@ -1001,6 +1001,49 @@ ${JSON.stringify(this.rawYamlObject_)}`
   }
 
   /**
+   * Navigate through the slides (skiping the steps) by updating the route.
+   *
+   * @param {Number} direction - `1`: next, `-1`: previous
+   */
+  nextSlide (direction) {
+    const slide = store.getters['lamp/slide']
+    const slides = store.getters['lamp/slides']
+    const slidesCount = store.getters['lamp/slidesCount']
+
+    const params = { presId: this.id }
+
+    // next
+    if (direction === 1 && slide.no === slidesCount) {
+      params.slideNo = 1
+    // previous
+    } else if (direction === -1 && slide.no === 1) {
+      params.slideNo = slidesCount
+    } else {
+      params.slideNo = slide.no + direction
+    }
+
+    // next
+    if (direction === 1) {
+      store.dispatch('lamp/highlightCursorArrow', 'right')
+    // previous
+    } else if (direction === -1) {
+      store.dispatch('lamp/highlightCursorArrow', 'left')
+    }
+
+    const slideNext = slides[params.slideNo - 1]
+
+    let name
+    if (slideNext.stepCount > 1) {
+      name = 'slide-step-no'
+      params.stepNo = 1
+    } else {
+      name = 'slide'
+    }
+
+    router.push({ name, params })
+  }
+
+  /**
    * Navigate through the presentation by updating the route.
    *
    * @param {Number} direction - `1`: next, `-1`: previous

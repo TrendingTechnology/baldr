@@ -41,20 +41,26 @@ const { mapGetters, mapActions } = createNamespacedHelpers('lamp')
 
 export default {
   name: 'CursorArrows',
-  computed: mapGetters(['cursorArrowsTriggerStates', 'slide', 'slidesCount', 'slideNo']),
+  computed: mapGetters([
+    'presentation',
+    'cursorArrowsTriggerStates',
+    'slide',
+    'slideNo',
+    'slidesCount'
+  ]),
   methods: {
     ...mapActions(['highlightCursorArrow']),
     up () {
       this.highlightCursorArrow('up')
     },
     right () {
-      this.highlightCursorArrow('right')
+      this.presentation.nextSlide(1)
     },
     down () {
       this.highlightCursorArrow('down')
     },
     left () {
-      this.highlightCursorArrow('left')
+      this.presentation.nextSlide(-1)
     },
     upClasses () {
       return {

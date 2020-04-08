@@ -133,17 +133,21 @@ export default {
     this.$shortcuts.addMultiple([
       {
         keys: 'ctrl+left',
-        callback: () => this.setSlideNextOrPrevious(-1),
+        callback: () => {
+          if (this.presentation) this.presentation.nextSlide(-1)
+        },
         // Previous slide
         description: 'zur vorhergehenden Folie',
-        routeNames: ['slide']
+        routeNames: ['slide', 'slide-step-no']
       },
       {
         keys: 'ctrl+right',
-        callback: () => this.setSlideNextOrPrevious(1),
+        callback: () => {
+          if (this.presentation) this.presentation.nextSlide(1)
+        },
         // Next slide
         description: 'zur nächsten Folie',
-        routeNames: ['slide']
+        routeNames: ['slide', 'slide-step-no']
       },
       {
         keys: 'ctrl+up',
@@ -159,18 +163,6 @@ export default {
         description: 'zum nächsten Schritt',
         routeNames: ['slide']
       },
-      // {
-      //   keys: 'left',
-      //   callback: () => this.setSlideOrStepNextOrPrevious(-1),
-      //   description: 'zur/m vorhergehenden Folie oder Schritt',
-      //   routeNames: ['slide']
-      // },
-      // {
-      //   keys: 'right',
-      //   callback: () => this.setSlideOrStepNextOrPrevious(1),
-      //   description: 'zur/m nächsten Folie oder Schritt',
-      //   routeNames: ['slide']
-      // },
       {
         keys: 'left',
         callback: () => {
