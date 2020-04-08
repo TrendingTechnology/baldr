@@ -1,7 +1,6 @@
 <template>
   <div class="vc_slide_view">
     <master-icon/>
-    <slide-number/>
     <meta-data-overlay/>
     <master-renderer/>
     <audio-overlay/>
@@ -14,7 +13,6 @@ import AudioOverlay from './AudioOverlay.vue'
 import MasterIcon from './MasterIcon.vue'
 import MasterRenderer from './MasterRenderer.vue'
 import MetaDataOverlay from './MetaDataOverlay.vue'
-import SlideNumber from './SlideNumber.vue'
 import CursorArrows from './CursorArrows.vue'
 import { routerGuards } from '@/lib.js'
 
@@ -25,7 +23,6 @@ export default {
     MasterIcon,
     MasterRenderer,
     MetaDataOverlay,
-    SlideNumber,
     CursorArrows
   },
   ...routerGuards
