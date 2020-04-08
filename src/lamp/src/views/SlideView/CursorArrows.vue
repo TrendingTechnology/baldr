@@ -1,25 +1,37 @@
 <template>
   <div class="vc_cursor_arrows">
-    <plain-icon
-      name="chevron-up"
+    <svg
       :class="upClasses()"
-      @click.native="up"
-    />
-    <plain-icon
-      name="chevron-right"
+      @click="up"
+      viewBox="0 0 100 100"
+    >
+      <path d="M 0,0 0,100 100,100 100,75 25,75 25,0 Z"/>
+    </svg>
+
+    <svg
       :class="rightClasses()"
-      @click.native="right"
-    />
-    <plain-icon
-      name="chevron-down"
+      @click="right"
+      viewBox="0 0 100 100"
+    >
+      <path d="M 0,0 0,100 100,100 100,75 25,75 25,0 Z"/>
+    </svg>
+
+    <svg
       :class="downClasses()"
-      @click.native="down"
-    />
-    <plain-icon
-      name="chevron-left"
+      @click="down"
+      viewBox="0 0 100 100"
+    >
+      <path d="M 0,0 0,100 100,100 100,75 25,75 25,0 Z"/>
+    </svg>
+
+    <svg
       :class="leftClasses()"
-      @click.native="left"
-    />
+      @click="left"
+      viewBox="0 0 100 100"
+    >
+      <path d="M 0,0 0,100 100,100 100,75 25,75 25,0 Z"/>
+    </svg>
+
   </div>
 </template>
 
@@ -102,59 +114,65 @@ export default {
 
 <style lang="scss">
   .vc_cursor_arrows {
-    //border: 3px solid $blue;
+    //border: 1px solid $blue;
     bottom: 0.5vw;
     box-sizing: border-box;
-    font-size: 15vw;
+    font-size: 3vw;
     height: 2.1em;
     position: fixed;
-    right: 0.5vw;
+    left: 93vw;
     width: 2.1em;
 
-    .baldr-icon {
+    svg {
       position: absolute;
       box-sizing: border-box;
       //border: 1px solid $yellow
       opacity: 0.1;
-      color: $gray;
-      transition-property: color, opacity;
-      transition-duration: 0.2s;
+      fill: $gray;
+      transition-property: fill, opacity;
+      transition-duration: 0.05s;
+      width: 0.7em;
+      height: 0.7em;
     }
 
-    s.baldr-icon.activated:hover {
+    svg.activated:hover {
       opacity: 0.6
     }
 
-    .baldr-icon.activated {
-      color: $blue;
+    svg.activated {
+      fill: $blue;
       opacity: 0.4;
     }
 
-    .baldr-icon.triggered {
-      color: $orange;
+    svg.triggered {
+      fill: $orange;
       opacity: 1;
-      transition-property: color, opacity;
-      transition-duration: 0.2s;
+      transition-property: fill, opacity;
+      transition-duration: 0.05s;
     }
 
     .up {
-      top: 0em;
-      left: 0.5em;
+      top: 0.2em;
+      left: 0.7em;
+      transform: rotate(135deg);
     }
 
     .right {
-      top: 0.5em;
-      left: 1em;
+      top: 0.7em;
+      left: 1.2em;
+      transform: rotate(225deg);
     }
 
     .down {
-      top: 1em;
-      left: 0.5em;
+      top: 1.2em;
+      left: 0.7em;
+      transform: rotate(315deg);
     }
 
     .left {
-      top: 0.5em;
-      left: 0em;
+      top: 0.7em;
+      left: 0.2em;
+      transform: rotate(405deg);
     }
   }
 </style>

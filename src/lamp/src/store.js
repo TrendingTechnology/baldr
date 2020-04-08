@@ -322,7 +322,7 @@ const actions = {
   toggleMetaDataOverlay ({ commit, getters }) {
     commit('showMetaDataOverlay', !getters.showMetaDataOverlay)
   },
-  highlightCursorArrow ({ commit }, name) {
+  highlightCursorArrow ({ commit, getters }, name) {
     commit('setCursorArrowTriggerState', { name, triggered: true })
     setTimeout(() => { commit('setCursorArrowTriggerState', { name, triggered: false }) }, 200)
   }
