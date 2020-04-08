@@ -1,34 +1,38 @@
 <template>
   <div class="vc_cursor_arrows">
     <svg
-      :class="upClasses()"
+      :class="cssClassesUp()"
       @click="up"
       viewBox="0 0 100 100"
     >
+      <title>{{ htmlTitlesUp }}</title>
       <path d="M 0,0 0,100 100,100 100,75 25,75 25,0 Z"/>
     </svg>
 
     <svg
-      :class="rightClasses()"
+      :class="cssClassesRight()"
       @click="right"
       viewBox="0 0 100 100"
     >
+      <title>{{ htmlTitlesRight }}</title>
       <path d="M 0,0 0,100 100,100 100,75 25,75 25,0 Z"/>
     </svg>
 
     <svg
-      :class="downClasses()"
+      :class="cssClassesDown()"
       @click="down"
       viewBox="0 0 100 100"
     >
+      <title>{{ htmlTitlesDown }}</title>
       <path d="M 0,0 0,100 100,100 100,75 25,75 25,0 Z"/>
     </svg>
 
     <svg
-      :class="leftClasses()"
+      :class="cssClassesLeft()"
       @click="left"
       viewBox="0 0 100 100"
     >
+      <title>{{ htmlTitlesLeft }}</title>
       <path d="M 0,0 0,100 100,100 100,75 25,75 25,0 Z"/>
     </svg>
 
@@ -41,49 +45,75 @@ const { mapGetters, mapActions } = createNamespacedHelpers('lamp')
 
 export default {
   name: 'CursorArrows',
-  computed: mapGetters([
-    'presentation',
-    'cursorArrowsTriggerStates',
-    'slide',
-    'slideNo',
-    'slidesCount'
-  ]),
+  computed: {
+    ...mapGetters([
+      'presentation',
+      'cursorArrowsTriggerStates',
+      'slide',
+      'slideNo',
+      'slidesCount'
+    ]),
+    /**
+     * HTML titles
+     */
+    htmlTitlesUp () {
+      if (!this.slide.stepCount || this.slide.stepCount < 2) return ''
+      const no = this.slide.stepNo !== 1 ? this.slide.stepNo - 1 : this.slide.stepCount
+      return `zum vorhergehenden Schritt (Nr. ${no} von ${this.slide.stepCount})`
+    },
+    htmlTitlesRight () {
+      const no = this.slideNo !== this.slidesCount ? this.slideNo + 1 : 1
+      return `zur nächsten Folien (Nr. ${no} von ${this.slidesCount})`
+    },
+    htmlTitlesDown () {
+      if (!this.slide.stepCount || this.slide.stepCount < 2) return ''
+      const no = this.slide.stepNo !== this.slide.stepCount ? this.slide.stepNo + 1 : 2
+      return `zum nächsten Schritt (Nr. ${no} von ${this.slide.stepCount})`
+    },
+    htmlTitlesLeft () {
+      const no = this.slideNo !== 1 ? this.slideNo - 1 : this.slidesCount
+      return `zur vorhergehenden Folien (Nr. ${no} von ${this.slidesCount})`
+    }
+  },
   methods: {
     ...mapActions(['highlightCursorArrow']),
     up () {
-      this.highlightCursorArrow('up')
+      this.presentation.nextStep(-1)
     },
     right () {
       this.presentation.nextSlide(1)
     },
     down () {
-      this.highlightCursorArrow('down')
+      this.presentation.nextStep(1)
     },
     left () {
       this.presentation.nextSlide(-1)
     },
-    upClasses () {
+    /**
+     * CSS classes
+     */
+    cssClassesUp () {
       return {
         up: true,
         activated: this.isUpActive(),
         triggered: this.cursorArrowsTriggerStates.up
       }
     },
-    rightClasses () {
+    cssClassesRight () {
       return {
         right: true,
         activated: this.isRightActive(),
         triggered: this.cursorArrowsTriggerStates.right
       }
     },
-    downClasses () {
+    cssClassesDown () {
       return {
         down: true,
         activated: this.isDownActive(),
         triggered: this.cursorArrowsTriggerStates.down
       }
     },
-    leftClasses () {
+    cssClassesLeft () {
       return {
         left: true,
         activated: this.isLeftActive(),

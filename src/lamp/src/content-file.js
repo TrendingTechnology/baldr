@@ -1044,6 +1044,42 @@ ${JSON.stringify(this.rawYamlObject_)}`
   }
 
   /**
+   * Navigate through the steps of a slide by updating the route.
+   *
+   * @param {Number} direction - `1`: next, `-1`: previous
+   */
+  nextStep (direction) {
+    const slide = store.getters['lamp/slide']
+
+    if (!slide.stepCount || slide.stepCount < 2) return
+
+    const params = {
+      presId: this.id,
+      slideNo: slide.no
+    }
+
+    // next
+    if (direction === 1 && slide.stepNo === slide.stepCount) {
+      params.stepNo = 1
+    // previous
+    } else if (direction === -1 && slide.stepNo === 1) {
+      params.stepNo = slide.stepCount
+    } else {
+      params.stepNo = slide.stepNo + direction
+    }
+
+    // next
+    if (direction === 1) {
+      store.dispatch('lamp/highlightCursorArrow', 'down')
+    // previous
+    } else if (direction === -1) {
+      store.dispatch('lamp/highlightCursorArrow', 'up')
+    }
+
+    router.push({ name: 'slide-step-no', params })
+  }
+
+  /**
    * Navigate through the presentation by updating the route.
    *
    * @param {Number} direction - `1`: next, `-1`: previous

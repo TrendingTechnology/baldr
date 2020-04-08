@@ -151,17 +151,21 @@ export default {
       },
       {
         keys: 'ctrl+up',
-        callback: () => this.setStepNextOrPrevious(-1),
+        callback: () => {
+          if (this.presentation) this.presentation.nextStep(-1)
+        },
         // Previous step
         description: 'zum vorhergehenden Schritt',
-        routeNames: ['slide']
+        routeNames: ['slide-step-no']
       },
       {
         keys: 'ctrl+down',
-        callback: () => this.setStepNextOrPrevious(1),
+        callback: () => {
+          if (this.presentation) this.presentation.nextStep(1)
+        },
         // Next step
         description: 'zum nächsten Schritt',
-        routeNames: ['slide']
+        routeNames: ['slide-step-no']
       },
       {
         keys: 'left',
