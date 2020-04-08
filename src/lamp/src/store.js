@@ -14,6 +14,14 @@ import vue, { customStore } from '@/main.js'
 Vue.use(Vuex)
 
 const state = {
+  // Highlight the cursor arrows when the presentation is navigated through
+  // keyboard shortcuts
+  cursorArrows: {
+    up: false,
+    right: false,
+    down: false,
+    left: false
+  },
   folderTitleTree: null,
   presentation: null,
   preview: {
@@ -34,6 +42,9 @@ const state = {
 }
 
 const getters = {
+  cursorArrowsTriggerStates: state => {
+    return state.cursorArrows
+  },
   folderTitleTree: state => {
     return state.folderTitleTree
   },
@@ -310,6 +321,10 @@ const actions = {
   },
   toggleMetaDataOverlay ({ commit, getters }) {
     commit('showMetaDataOverlay', !getters.showMetaDataOverlay)
+  },
+  highlightCursorArrow ({ commit }, name) {
+    commit('setCursorArrowTriggerState', { name, triggered: true })
+    setTimeout(() => { commit('setCursorArrowTriggerState', { name, triggered: false }) }, 200)
   }
 }
 
@@ -349,6 +364,9 @@ const mutations = {
   },
   showMetaDataOverlay (state, showMetaDataOverlay) {
     Vue.set(state, 'showMetaDataOverlay', showMetaDataOverlay)
+  },
+  setCursorArrowTriggerState (state, { name, triggered }) {
+    state.cursorArrows[name] = triggered
   }
 }
 

@@ -1016,6 +1016,23 @@ ${JSON.stringify(this.rawYamlObject_)}`
     } else {
       name = 'slide'
     }
+
+    // next
+    if (direction === 1) {
+      if (params.stepNo && params.stepNo !== 1) {
+        store.dispatch('lamp/highlightCursorArrow', 'down')
+      } else {
+        store.dispatch('lamp/highlightCursorArrow', 'right')
+      }
+    // previous
+    } else if (direction === -1) {
+      if (params.stepNo && params.stepNo !== store.getters['lamp/slide'].stepCount) {
+        store.dispatch('lamp/highlightCursorArrow', 'up')
+      } else {
+        store.dispatch('lamp/highlightCursorArrow', 'left')
+      }
+    }
+
     router.push({ name, params })
   }
 }

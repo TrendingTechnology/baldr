@@ -25,72 +25,51 @@
 
 <script>
 import { createNamespacedHelpers } from 'vuex'
-const { mapGetters } = createNamespacedHelpers('lamp')
+const { mapGetters, mapActions } = createNamespacedHelpers('lamp')
 
 export default {
   name: 'CursorArrows',
-  computed: mapGetters(['slide', 'slidesCount', 'slideNo']),
-  data () {
-    return {
-      state: {
-        up: {
-          triggered: false
-        },
-        right: {
-          triggered: false
-        },
-        down: {
-          triggered: false
-        },
-        left: {
-          triggered: false
-        }
-      }
-    }
-  },
+  computed: mapGetters(['cursorArrowsTriggerStates', 'slide', 'slidesCount', 'slideNo']),
   methods: {
-    highlightArrow (name) {
-      this.state[name].triggered = true
-      setTimeout(() => { this.state[name].triggered = false }, 200)
-    },
+    ...mapActions(['highlightCursorArrow']),
     up () {
-      this.highlightArrow('up')
+      this.highlightCursorArrow('up')
     },
     right () {
-      this.highlightArrow('right')
+      this.highlightCursorArrow('right')
     },
     down () {
-      this.highlightArrow('down')
+      this.highlightCursorArrow('down')
     },
     left () {
-      this.highlightArrow('left')
+      this.highlightCursorArrow('left')
     },
     upClasses () {
       return {
         up: true,
         activated: this.isUpActive(),
-        triggered: this.state.up.triggered
+        triggered: this.cursorArrowsTriggerStates.up
       }
     },
     rightClasses () {
       return {
         right: true,
         activated: this.isRightActive(),
-        triggered: this.state.right.triggered
+        triggered: this.cursorArrowsTriggerStates.right
       }
     },
     downClasses () {
       return {
         down: true,
         activated: this.isDownActive(),
-        triggered: this.state.down.triggered
+        triggered: this.cursorArrowsTriggerStates.down
       }
     },
     leftClasses () {
       return {
         left: true,
         activated: this.isLeftActive(),
-        triggered: this.state.left.triggered
+        triggered: this.cursorArrowsTriggerStates.left
       }
     },
     isUpActive () {
