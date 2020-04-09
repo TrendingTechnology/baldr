@@ -48,7 +48,7 @@ export default {
   computed: {
     ...mapGetters([
       'presentation',
-      'cursorArrowsTriggerStates',
+      'cursorArrowsStates',
       'slide',
       'slideNo',
       'slidesCount'
@@ -57,7 +57,7 @@ export default {
      * HTML titles
      */
     htmlTitlesUp () {
-      if (!this.slide.stepCount || this.slide.stepCount < 2) return ''
+      if (!this.slide || !this.slide.stepCount || this.slide.stepCount < 2) return ''
       const no = this.slide.stepNo !== 1 ? this.slide.stepNo - 1 : this.slide.stepCount
       return `zum vorhergehenden Schritt (Nr. ${no} von ${this.slide.stepCount})`
     },
@@ -66,8 +66,8 @@ export default {
       return `zur nächsten Folien (Nr. ${no} von ${this.slidesCount})`
     },
     htmlTitlesDown () {
-      if (!this.slide.stepCount || this.slide.stepCount < 2) return ''
-      const no = this.slide.stepNo !== this.slide.stepCount ? this.slide.stepNo + 1 : 2
+      if (!this.slide || !this.slide.stepCount || this.slide.stepCount < 2) return ''
+      const no = this.slide.stepNo !== this.slide.stepCount ? this.slide.stepNo + 1 : 1
       return `zum nächsten Schritt (Nr. ${no} von ${this.slide.stepCount})`
     },
     htmlTitlesLeft () {
@@ -96,28 +96,28 @@ export default {
       return {
         up: true,
         activated: this.isUpActive(),
-        triggered: this.cursorArrowsTriggerStates.up
+        triggered: this.cursorArrowsStates.up.triggered
       }
     },
     cssClassesRight () {
       return {
         right: true,
         activated: this.isRightActive(),
-        triggered: this.cursorArrowsTriggerStates.right
+        triggered: this.cursorArrowsStates.right.triggered
       }
     },
     cssClassesDown () {
       return {
         down: true,
         activated: this.isDownActive(),
-        triggered: this.cursorArrowsTriggerStates.down
+        triggered: this.cursorArrowsStates.down.triggered
       }
     },
     cssClassesLeft () {
       return {
         left: true,
         activated: this.isLeftActive(),
-        triggered: this.cursorArrowsTriggerStates.left
+        triggered: this.cursorArrowsStates.left.triggered
       }
     },
     isUpActive () {

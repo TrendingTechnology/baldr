@@ -17,10 +17,22 @@ const state = {
   // Highlight the cursor arrows when the presentation is navigated through
   // keyboard shortcuts
   cursorArrows: {
-    up: false,
-    right: false,
-    down: false,
-    left: false
+    up: {
+      triggered: false,
+      timeoutId: null
+    },
+    right: {
+      triggered: false,
+      timeoutId: null
+    },
+    down: {
+      triggered: false,
+      timeoutId: null
+    },
+    left: {
+      triggered: false,
+      timeoutId: null
+    }
   },
   folderTitleTree: null,
   presentation: null,
@@ -42,7 +54,7 @@ const state = {
 }
 
 const getters = {
-  cursorArrowsTriggerStates: state => {
+  cursorArrowsStates: state => {
     return state.cursorArrows
   },
   folderTitleTree: state => {
@@ -238,8 +250,15 @@ const actions = {
     commit('showMetaDataOverlay', !getters.showMetaDataOverlay)
   },
   highlightCursorArrow ({ commit, getters }, name) {
+    const state = getters.cursorArrowsStates[name]
+    if (state.triggered) return
+    if (state.timeoutId) clearTimeout(state.timeoutId)
     commit('setCursorArrowTriggerState', { name, triggered: true })
-    setTimeout(() => { commit('setCursorArrowTriggerState', { name, triggered: false }) }, 200)
+    const timeoutId = setTimeout(() => {
+      commit('setCursorArrowTriggerState', { name, triggered: false })
+      commit('setCursorArrowTimeoutId', { name, timeoutId: null })
+    }, 200)
+    commit('setCursorArrowTimeoutId', { name, timeoutId })
   }
 }
 
@@ -281,7 +300,10 @@ const mutations = {
     Vue.set(state, 'showMetaDataOverlay', showMetaDataOverlay)
   },
   setCursorArrowTriggerState (state, { name, triggered }) {
-    state.cursorArrows[name] = triggered
+    state.cursorArrows[name].triggered = triggered
+  },
+  setCursorArrowTimeoutId (state, { name, timeoutId }) {
+    state.cursorArrows[name].timeoutId = timeoutId
   }
 }
 
