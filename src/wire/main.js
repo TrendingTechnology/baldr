@@ -1,5 +1,11 @@
 #! /usr/bin/env node
 
+/**
+ * A websocket server to connect multiple baldr lamp sessions.
+ *
+ * @module @bldr/wire
+ */
+
 const WebSocket = require('ws')
 
 function main () {
