@@ -18,7 +18,9 @@ const wikibase = require('wikibase-sdk')({
  * The specification of a property.
  *
  * @typedef {Object} propSpec
- * @property {String} wikidata.fromClaim - for example `P123`
+ * @property {(String|Array)} wikidata.fromClaim - for example `P123` or
+ *   `['P123', 'P234']`. If `fromClaim` is an array, the first existing claim
+ *   an a certain item is taken.
  * @property {String} wikidata.fromEntity - `getDescription`, `getLabel`,
  *   `getWikipediaTitle`.
  * @property {String} wikidata.secondQuery - `queryLabels`
@@ -149,12 +151,37 @@ async function fetchCommonsFile (fileName, dest) {
   await fetchFile(url, dest)
 }
 
-function getClaims (entity, claim) {
-  let typeData
-  if (entity.claims[claim]) {
-    typeData = entity.claims[claim]
+/**
+ * Get data from one claim. Try multiple claims to get the first existing
+ * claim.
+ *
+ * @param {Object} entity
+ * @param {(String|Array)} claims
+ *
+ * @returns {Mixed}
+ */
+function getClaim (entity, claims) {
+  /**
+   * @param {Object} entity
+   * @param {String} claim
+   */
+  function getSingleClaim (entity, claim) {
+    if (entity.claims[claim]) {
+      const typeData = entity.claims[claim]
+      return unpackArray(typeData)
+    }
   }
-  return unpackArray(typeData)
+
+  if (Array.isArray(claims)) {
+    console.log(claims)
+
+    for (const claim of claims) {
+      const typeData = getSingleClaim(entity, claim)
+      if (typeData) return typeData
+    }
+  } else {
+    return getSingleClaim(entity, claims)
+  }
 }
 
 /**
@@ -423,7 +450,7 @@ async function query (itemId, typeNames, typeSpecs) {
           throw new Error(`Spec must have a source property (“fromClaim” or “fromEntity”): ${JSON.stringify(propSpec)}`)
         }
         if (propSpec.fromClaim) {
-          value = getClaims(entity, propSpec.fromClaim)
+          value = getClaim(entity, propSpec.fromClaim)
         } else if (propSpec.fromEntity) {
           const func = functions[propSpec.fromEntity]
           if (typeof func !== 'function') {

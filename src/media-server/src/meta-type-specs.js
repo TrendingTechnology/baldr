@@ -286,7 +286,17 @@ const composition = {
         format: 'formatList'
       }
     },
+    creationDate: {
+      wikidata: {
+        // Gründung, Erstellung bzw. Entstehung (P571)
+        // Veröffentlichungsdatum (P577)
+        // Datum der Erst- oder Uraufführung (P1191)
+        fromClaim: ['P571', 'P577', 'P1191'],
+        format: 'formatYear'
+      }
+    },
     publicationDate: {
+      state: 'absent',
       wikidata: {
         // Veröffentlichungsdatum
         fromClaim: 'P577',
@@ -294,10 +304,17 @@ const composition = {
       }
     },
     firstPerformance: {
+      state: 'absent',
       wikidata: {
         // Datum der Erst- oder Uraufführung
         fromClaim: 'P1191',
         format: 'formatDate'
+      }
+    },
+    imslp: {
+      wikidata: {
+        // IMSLP-ID
+        fromClaim: 'P839'
       }
     },
     musicbrainzWorkId: {
