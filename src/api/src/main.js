@@ -82,7 +82,4 @@ const main = function () {
 
 if (require.main === module) {
   main()
-} else {
-  module.exports.run = run
-  module.exports.stop = stop
 }

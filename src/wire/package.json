@@ -1,0 +1,25 @@
+{
+  "name": "@bldr/wire",
+  "version": "0.1.0",
+  "description": "Websocket server to connect multiple baldr lamp sessions.",
+  "author": {
+    "name": "Josef Friedrich",
+    "email": "josef@friedrich.rocks",
+    "url": "https://josef.friedrich.rocks"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Josef-Friedrich/baldr.git"
+  },
+  "main": "main.js",
+  "publishConfig": {
+    "access": "public"
+  },
+  "bin": {
+    "baldr_wire.js": "./main.js"
+  },
+  "dependencies": {
+    "ws": "^7.2.3"
+  }
+}
