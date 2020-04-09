@@ -25,6 +25,8 @@ import PresentationOverview from '@/views/PresentationOverview/index.vue'
 import MediaIdsParentDir from '@/views/MediaIdsParentDir'
 import RemoteControl from '@/views/RemoteControl.vue'
 
+import store from '@/store.js'
+
 // Failed to load chunks in the subfolder presentation
 // const Documentation = () => import(/* webpackChunkName: "documentation" */ '@/views/Documentation.vue')
 // const MasterDocumentation = () => import(/* webpackChunkName: "documentation" */ '@/views/MasterDocumentation.vue')
@@ -166,6 +168,16 @@ const routes = [
 
 const router = new Router({
   routes
+})
+
+router.afterEach((to, from) => {
+  const slide = store.getters['lamp/slide']
+  if (slide) console.log(slide.title)
+  if (to.meta && to.meta.title) {
+    document.title = to.meta.title
+  } else {
+    document.title = 'Lamp'
+  }
 })
 
 export default router
