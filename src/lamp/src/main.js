@@ -315,6 +315,7 @@ import MaterialIcon from '@bldr/icons'
 import ModalDialog from '@bldr/vue-plugin-modal-dialog'
 import DynamicSelect from '@bldr/vue-plugin-dynamic-select'
 import media from '@bldr/vue-plugin-media'
+import Websocket from 'vue-native-websocket'
 
 // Vue components.
 import MainApp from '@/MainApp.vue'
@@ -326,6 +327,11 @@ Vue.use(notifications)
 Vue.use(DynamicSelect)
 Vue.use(ModalDialog)
 Vue.use(MaterialIcon)
+Vue.use(Websocket, 'ws://localhost:62453', {
+  reconnection: true, // (Boolean) whether to reconnect automatically (false)
+  reconnectionAttempts: 5, // (Number) number of reconnection attempts before giving up (Infinity),
+  reconnectionDelay: 3000 // (Number) how long to initially wait before attempting a new (1000)
+})
 Vue.config.productionTip = false
 
 /** props definition **********************************************************/

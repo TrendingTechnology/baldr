@@ -23,6 +23,7 @@ import SlidesPreview from '@/views/SlidesPreview/index.vue'
 import PresentationOverview from '@/views/PresentationOverview/index.vue'
 
 import MediaIdsParentDir from '@/views/MediaIdsParentDir'
+import RemoteControl from '@/views/RemoteControl.vue'
 
 // Failed to load chunks in the subfolder presentation
 // const Documentation = () => import(/* webpackChunkName: "documentation" */ '@/views/Documentation.vue')
@@ -155,6 +156,11 @@ const routes = [
       shortcut: 'i',
       title: 'Medien-IDs im übergeordneten Ordner'
     }
+  },
+  {
+    path: '/remote-control',
+    name: 'remote-control',
+    component: RemoteControl
   }
 ]
 
