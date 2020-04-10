@@ -8,8 +8,12 @@
 
 const WebSocket = require('ws')
 
+const core = require('@bldr/core-node')
+
+const config = core.bootstrapConfig()
+
 function main () {
-  const wss = new WebSocket.Server({ port: 62453 })
+  const wss = new WebSocket.Server({ port: config.wire.port })
 
   wss.on('connection', function connection (ws) {
     ws.on('message', function incoming (message) {
