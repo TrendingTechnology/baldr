@@ -172,8 +172,11 @@ const router = new Router({
 
 router.afterEach((to, from) => {
   const slide = store.getters['lamp/slide']
-  if (slide) console.log(slide.title)
-  if (to.meta && to.meta.title) {
+  const presentation = store.getters['lamp/presentation']
+
+  if (slide && slide.title && (to.name === 'slide' || to.name === 'slide-step-no')) {
+    document.title = `${presentation.title}: Folie Nr. ${slide.no} ${slide.title}`
+  } else if (to.meta && to.meta.title) {
     document.title = to.meta.title
   } else {
     document.title = 'Lamp'

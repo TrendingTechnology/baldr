@@ -3,6 +3,7 @@
  */
 
 import { markupToHtml } from '@/lib.js'
+import { plainText } from '@bldr/core-browser'
 
 /**
  * We want no lists `<ol>` etc in the HTML output for the question and the
@@ -238,6 +239,9 @@ export default {
     },
     enterStep ({ newStepNo }) {
       setQuestionsBySetNo.call(this, newStepNo)
+    },
+    plainTextFromProps (props) {
+      return plainText(props.questions[0].question)
     }
   }
 }
