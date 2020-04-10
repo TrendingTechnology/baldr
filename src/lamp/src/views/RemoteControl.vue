@@ -18,7 +18,6 @@ export default {
   },
   methods: {
     sendMessage () {
-      console.log('message')
       this.$socket.send('some data')
     }
   }
