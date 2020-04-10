@@ -303,6 +303,8 @@
  * @module @bldr/lamp
  */
 
+/* globals config */
+
 import Vue from 'vue'
 import { registerMasterComponents, masters } from '@/masters.js'
 
@@ -327,7 +329,7 @@ Vue.use(notifications)
 Vue.use(DynamicSelect)
 Vue.use(ModalDialog)
 Vue.use(MaterialIcon)
-Vue.use(Websocket, 'ws://localhost:62453', {
+Vue.use(Websocket, config.wire.localUri, {
   reconnection: true, // (Boolean) whether to reconnect automatically (false)
   reconnectionAttempts: 5, // (Number) number of reconnection attempts before giving up (Infinity),
   reconnectionDelay: 3000 // (Number) how long to initially wait before attempting a new (1000)
