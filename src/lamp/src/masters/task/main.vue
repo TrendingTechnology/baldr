@@ -15,14 +15,14 @@ export default {
 
 <style lang="scss">
   .vc_task_master {
-    font-size: 4vw;
-    margin: 3vw;
-    padding: 4vw;
+    font-size: 3em;
+    margin: 2em;
+    padding: 3em;
     text-align: center;
 
     ol, ul {
       text-align: left !important;
-      font-size: 3vw;
+      font-size: 3em;
       margin: 0em 3em;
     }
   }

@@ -29,7 +29,7 @@ export default {
 <style lang="scss">
   .vc_note_master {
     // left right padding more because of ul ol etc ...
-    padding: 2vw 5vw;
+    padding: 1em 2.5em;
 
     table {
       table-layout: fixed;

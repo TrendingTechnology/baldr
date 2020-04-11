@@ -43,5 +43,6 @@ export default {
 <style lang="scss">
   .vc_slide_main {
     overflow-x: hidden;
+    position: relative;
   }
 </style>

@@ -41,28 +41,15 @@ export default {
 
 <style lang="scss">
   .vc_svg_master {
-    padding: 4vh 4vw;
+    padding: 3em 3em;
     background-color: white;
 
     svg {
       bottom: 0;
+      height: 90%;
       left: 0;
       object-fit: contain;
-      width: 92vw;
-      height: 90vh;
-    }
-
-  }
-</style>
-
-<style lang="scss">
-  .vc_svg_master {
-    svg {
-      bottom: 0;
-      left: 0;
-      object-fit: contain;
-      width: 92vw;
-      height: 90vh;
+      width: 92%;
     }
   }
 </style>

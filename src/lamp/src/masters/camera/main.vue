@@ -213,15 +213,15 @@ export default {
 
 <style lang="scss">
   .vc_camera_master {
-    font-size: 1.5vw;
+    font-size: 1em;
 
     video {
-      height: 100vh;
+      height: 100%;
       left: 0;
       object-fit: contain;
       position: absolute;
       top: 0;
-      width: 100vw;
+      width: 100%;
     }
 
     .no-stream {
@@ -231,7 +231,7 @@ export default {
 
     .baldr-icon_document-camera,
     .baldr-icon_document-camera-off {
-      font-size: 30vw;
+      font-size: 25em;
     }
   }
 </style>

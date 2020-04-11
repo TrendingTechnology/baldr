@@ -51,7 +51,7 @@ export default {
     background-color: white;
 
     svg {
-      width: 100vw;
+      width: 100%;
       height: auto
     }
   }

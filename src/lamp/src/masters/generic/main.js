@@ -109,21 +109,21 @@ export default {
       }
 
       // Split by <hr>
-      const steps = []
+      const splittedByHr = []
       for (const html of converted) {
         if (html.indexOf('<hr>') > -1) {
           const chunks = html.split('<hr>')
           for (const chunk of chunks) {
-            steps.push(chunk)
+            splittedByHr.push(chunk)
           }
         } else {
-          steps.push(html)
+          splittedByHr.push(html)
         }
       }
 
       // Split large texts into smaller chunks
       const markup = []
-      for (const html of steps) {
+      for (const html of splittedByHr) {
         const chunks = splitHtmlintoChunks(html, props.charactersOnSlide)
         for (const chunk of chunks) {
           markup.push(chunk)

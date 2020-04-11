@@ -18,15 +18,16 @@ export default {
 
 <style lang="scss">
   .vc_song_master {
-    padding: 4vh 4vw;
+    padding: 3em 3em;
     background-color: white;
+    text-align: center;
 
     img {
       bottom: 0;
       left: 0;
       object-fit: contain;
-      width: 92vw;
-      height: 90vh;
+      width: 92%;
+      height: 90%;
     }
 
     h1 {

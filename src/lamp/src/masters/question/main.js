@@ -167,16 +167,16 @@ class Question {
 }
 
 /**
- * @param {Number} newStepNo
+ * @param {Number} stepNo
  */
-function setQuestionsByStepNo (newStepNo) {
+function setQuestionsByStepNo (stepNo) {
   const slide = this.$get('slide')
   const sequence = slide.props.sequence
 
   // Question with a question or answer. Only the heading.
   if (!sequence.length) return
 
-  const curId = sequence[newStepNo - 1]
+  const curId = sequence[stepNo - 1]
 
   for (const id of sequence) {
     const element = document.getElementById(id)
@@ -190,7 +190,7 @@ function setQuestionsByStepNo (newStepNo) {
   if (isAnswer) {
     element.style.display = 'block'
   }
-  if (newStepNo === 1) {
+  if (stepNo === 1) {
     window.scrollTo(0, 0)
   } else {
     element.scrollIntoView({ block: 'center', behavior: 'smooth' })

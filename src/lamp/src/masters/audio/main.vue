@@ -88,13 +88,13 @@ export default {
     }
 
     .artist {
-      margin-top: 5vw;
+      margin-top: 4em;
       font-size: 0.7em;
     }
 
     img.preview {
-      height: 30vh;
-      width: 30vh;
+      height: 10em;
+      width: 10em;
       object-fit: cover;
     }
 

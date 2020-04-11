@@ -114,7 +114,7 @@ export default {
 <style lang="scss">
   .vc_editor_master {
     // left right padding more because of ul ol etc ...
-    padding: 2vw 5vw;
+    padding: 1.5em 4em;
     // Font size is set by a data property.
     // font-size: 3.5vw;
 

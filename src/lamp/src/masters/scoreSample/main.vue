@@ -25,8 +25,9 @@ export default {
 
 <style lang="scss">
   .vc_score_sample_master {
-    padding: 4vh 4vw;
+    padding: 3em 3em;
     background-color: white;
+    text-align: center;
 
     h1 {
       background: rgba($yellow, 0.2);
@@ -42,8 +43,8 @@ export default {
       bottom: 0;
       left: 0;
       object-fit: contain;
-      width: 92vw;
-      height: 90vh;
+      width: 92%;
+      height: 90%;
     }
 
     .vc_play_button {

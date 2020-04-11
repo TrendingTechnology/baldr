@@ -34,5 +34,7 @@ export default {
 <style lang="scss">
   .vc_slide_view {
     overflow-x: hidden;
+    padding: 3vw;
+    background: $gray;
   }
 </style>

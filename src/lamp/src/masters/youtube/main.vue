@@ -25,8 +25,8 @@ export default {
     text-align: center;
 
     iframe {
-      width: 75vw;
-      height: 75vh;
+      width: 75%;
+      height: 75%;
     }
   }
 </style>

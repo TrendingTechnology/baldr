@@ -42,7 +42,7 @@ export default {
 </script>
 <style lang="scss">
   .vc_quote_master {
-    font-size: 3vw;
+    font-size: 2em;
     padding-left: 10%;
     padding-right: 10%;
 

@@ -28,11 +28,11 @@ export default {
 
     video {
       bottom: 0;
-      height: 100vh;
+      height: 100%;
       left: 0;
       object-fit: contain;
       position: absolute;
-      width: 100vw;
+      width: 100%;
     }
   }
 </style>

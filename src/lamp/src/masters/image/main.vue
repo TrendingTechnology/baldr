@@ -40,16 +40,16 @@ export default {
 
 <style lang="scss">
 .vc_image_master {
-  font-size: 4vw;
-  height: 100vh;
+  font-size: 3em;
+  height: 100%;
   position: relative;
-  width: 100vw;
+  width: 100%;
 
   img {
     bottom: 0;
     left: 0;
-    height: 100vh;
-    width: 100vw;
+    height: 100%;
+    width: 100%;
     object-fit: contain;
     position: absolute;
   }
