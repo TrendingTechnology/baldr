@@ -17,7 +17,8 @@ import MasterDocumentation from '@/views/MasterDocumentation.vue'
 import CommonExample from '@/views/CommonExample.vue'
 
 import SlideView from '@/views/SlideView'
-import MasterRenderer from '@/views/SlideView/MasterRenderer.vue'
+import AdHocCamera from '@/views/AdHocCamera.vue'
+import AdHocEditor from '@/views/AdHocEditor.vue'
 import SlidesPreview from '@/views/SlidesPreview/index.vue'
 
 import PresentationOverview from '@/views/PresentationOverview/index.vue'
@@ -99,20 +100,18 @@ const routes = [
   {
     path: '/ad-hoc/camera',
     name: 'camera',
-    component: MasterRenderer,
+    component: AdHocCamera,
     meta: {
       title: 'Dokumentenkamera',
-      master: 'camera',
       shortcut: 'c'
     }
   },
   {
     path: '/ad-hoc/editor',
     name: 'editor',
-    component: MasterRenderer,
+    component: AdHocEditor,
     meta: {
       title: 'Hefteintrag',
-      master: 'editor',
       shortcut: 'e'
     }
   },
