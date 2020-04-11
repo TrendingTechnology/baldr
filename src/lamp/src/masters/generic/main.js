@@ -173,12 +173,11 @@ export default {
         this.domSteps.displayByNo({ stepNo: this.slide.stepNo, full: true })
       }
     },
-    enterStep ({ oldStepNo, newStepNo }) {
-      const stepNo = newStepNo
+    enterStep ({ oldStepNo }) {
       if (this.stepMode) {
         this.domSteps.displayByNo({
           oldStepNo,
-          stepNo
+          stepNo: this.stepNo
         })
       }
     }

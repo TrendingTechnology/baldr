@@ -7,8 +7,6 @@
 </template>
 
 <script>
-import { createNamespacedHelpers } from 'vuex'
-const { mapGetters } = createNamespacedHelpers('lamp')
 
 export default {
   props: {
@@ -21,8 +19,7 @@ export default {
     audioSample: {
       type: Object
     }
-  },
-  computed: mapGetters(['stepNo'])
+  }
 }
 </script>
 

@@ -15,6 +15,11 @@ export default {
     slide: {
       type: Object,
       required: true
+    },
+    // All main master components have a prop named `stepNo`. This
+    // prop is mixed in `masters.js`
+    stepNo: {
+      type: Number
     }
   },
   computed: {
@@ -38,7 +43,10 @@ export default {
       const masterElement = createElement(
         `${this.slide.masterName}-master-main`,
         {
-          props: this.slide.propsMain,
+          props: {
+            ...this.slide.propsMain,
+            stepNo: this.stepNo
+          },
           class: {
             'master-inner': true
           },

@@ -146,7 +146,7 @@ async function loadPresentationById (vm, presId) {
 }
 
 /**
- * Open a presentation by a its ID.
+ * Open a presentation by its ID.
  *
  * @param {Object} vm - Vue component instance.
  * @param {String} params
@@ -159,6 +159,7 @@ export async function loadPresentationByRoute (vm, params) {
         await loadPresentationById(vm, params.presId)
       }
       if (params.slideNo) {
+        if (params.stepNo) params.stepNo = parseInt(params.stepNo)
         const presentation = vm.$store.getters['lamp/presentation']
         presentation.navigator.setNavListNo(params)
         const normalizedParams = presentation.navigator.routeParamsToSlideStepNo(params)

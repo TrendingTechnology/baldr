@@ -5,7 +5,7 @@
   <div v-if="slide" class="vc_slide_main">
     <master-icon :slide="slide"/>
     <meta-data-overlay :slide="slide"/>
-    <master-renderer :slide="slide"/>
+    <master-renderer :slide="slide" :step-no="stepNo"/>
     <audio-overlay :slide="slide"/>
   </div>
 </template>
@@ -19,9 +19,16 @@ import MetaDataOverlay from './MetaDataOverlay.vue'
 export default {
   name: 'SlideMain',
   props: {
+    // To be able to show two slide views side by side, for the preview
+    // of the next slide / step, we don’t use Vuex getters. We hand down
+    // the object `slide` and the number `stepNo` to the main master
+    // components.
     slide: {
       type: Object,
       required: true
+    },
+    stepNo: {
+      type: Number
     }
   },
   components: {

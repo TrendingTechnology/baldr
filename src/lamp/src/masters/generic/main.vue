@@ -36,9 +36,6 @@ export default {
   },
   computed: {
     ...mapGetters(['slide']),
-    stepNo () {
-      return this.slide.stepNo
-    },
     markupCurrent () {
       if (this.stepMode) {
         return this.markup[0]

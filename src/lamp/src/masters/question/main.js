@@ -169,7 +169,7 @@ class Question {
 /**
  * @param {Number} newStepNo
  */
-function setQuestionsBySetNo (newStepNo) {
+function setQuestionsByStepNo (newStepNo) {
   const slide = this.$get('slide')
   const sequence = slide.props.sequence
 
@@ -233,12 +233,11 @@ export default {
       const firstQuestion = props.questions[0]
       return firstQuestion.stepCount
     },
-    enterSlide ({ newSlide }) {
-      const slide = newSlide
-      setQuestionsBySetNo.call(this, slide.stepNo)
+    enterSlide () {
+      setQuestionsByStepNo.call(this, this.stepNo)
     },
-    enterStep ({ newStepNo }) {
-      setQuestionsBySetNo.call(this, newStepNo)
+    enterStep () {
+      setQuestionsByStepNo.call(this, this.stepNo)
     },
     plainTextFromProps (props) {
       return plainText(props.questions[0].question)

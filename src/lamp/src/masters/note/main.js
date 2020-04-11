@@ -111,10 +111,9 @@ export default {
     enterStep ({ oldStepNo, newStepNo }) {
       // If you come from a different master, domSteps is not set up yet.
       if (this.domSteps) {
-        const stepNo = newStepNo
         const element = this.domSteps.displayByNo({
           oldStepNo,
-          stepNo
+          stepNo: this.stepNo
         })
         scroll(element)
       }

@@ -112,12 +112,12 @@ export default {
       const count = steps.calculateStepCount(groups, props)
       return count
     },
-    enterStep ({ oldStepNo, newStepNo }) {
+    enterStep ({ oldStepNo }) {
       // setSlideOrStepPrevious / Next has no this.domSteps
       if (!this.domSteps) return
       const newClozeGroup = this.domSteps.displayByNo({
         oldStepNo,
-        stepNo: newStepNo
+        stepNo: this.stepNo
       })
       scrollToClozeGroup(newClozeGroup)
     }

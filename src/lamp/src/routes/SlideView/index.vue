@@ -1,7 +1,7 @@
 <template>
   <!-- We must a slide object. Else error messages when entering  -->
   <div v-if="slide" class="vc_slide_view">
-    <slide-main :slide="slide"/>
+    <slide-main :slide="slide" :step-no="stepNo"/>
     <cursor-arrows/>
   </div>
 </template>
@@ -16,7 +16,13 @@ const { mapGetters } = createNamespacedHelpers('lamp')
 
 export default {
   name: 'SlideView',
-  computed: mapGetters(['slide']),
+  computed: {
+    ...mapGetters(['slide']),
+    stepNo () {
+      if (this.slide.stepNo) return this.slide.stepNo
+      return 0
+    }
+  },
   components: {
     SlideMain,
     CursorArrows

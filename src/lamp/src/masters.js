@@ -692,6 +692,11 @@ class Masters {
  * This object is mixed in into each master component.
  */
 const masterMixin = {
+  props: {
+    stepNo: {
+      type: Number
+    }
+  },
   mounted () {
     const oldSlide = vue.$store.getters['lamp/slideOld']
     let oldProps

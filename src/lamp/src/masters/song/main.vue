@@ -6,17 +6,12 @@
 </template>
 
 <script>
-import { createNamespacedHelpers } from 'vuex'
-const { mapGetters } = createNamespacedHelpers('lamp')
 
 export default {
   props: {
     image: {
       type: Object
     }
-  },
-  computed: {
-    stepNo: mapGetters(['stepNo']).stepNo
   }
 }
 </script>

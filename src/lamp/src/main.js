@@ -258,6 +258,7 @@
  *
  * - `this`: is the Vue instance of the current main master component.
  * - `return`: void
+ * - called from the Vuex action `setStepNoCurrent` in the file `store.js`.
  *
  * ```js
  * export const default = {
@@ -273,12 +274,19 @@
  *
  * - `this`: is the Vue instance of the current main master component.
  * - `return`: void
+ * - called from the Vuex action `setStepNoCurrent` in the file `store.js`.
  *
  * ```js
  * export const default = {
  *   hooks: {
  *     // Called when entering a step.
  *     enterStep ({ oldStepNo, newStepNo }) {
+ *       if (this.stepMode) {
+ *         this.domSteps.displayByNo({
+ *           oldStepNo,
+ *           stepNo: this.stepNo
+ *         })
+ *       }
  *     }
  *   }
  * }

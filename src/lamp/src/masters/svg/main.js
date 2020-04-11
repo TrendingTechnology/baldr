@@ -117,12 +117,12 @@ export default {
 
       this.domSteps.shortcutsRegister()
     },
-    enterStep ({ oldStepNo, newStepNo }) {
+    enterStep ({ oldStepNo }) {
       // setSlideOrStepPrevious / Next has no this.domSteps
       if (!this.domSteps) return
       this.domSteps.displayByNo({
         oldStepNo,
-        stepNo: newStepNo
+        stepNo: this.stepNo
       })
     }
   }
