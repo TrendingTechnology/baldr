@@ -681,6 +681,41 @@ Vue.prototype.$get = function (getterName) {
 }
 
 /**
+ * Go to one of the three presentation related routes: `slides-preview`, `slide`
+ * or `slide-stop-no`
+ *
+ * @param {Object} params
+ * @property {String} presId
+ * @property {Number} slideNo
+ * @property {Number} stepNo
+ */
+Vue.prototype.$gotToPresRoute = function (params) {
+  const route = router.currentRoute
+  if (!params.presId) throw new Error('Params must have a property “presId”')
+
+  // To avoid pushing to the same route.
+  let areParamsEqual = true
+  for (const prop in params) {
+    if (params[prop] !== route.params[prop]) {
+      areParamsEqual = false
+      break
+    }
+  }
+
+  let name
+  if (params.stepNo) {
+    name = 'slide-step-no'
+  } else if (params.slideNo) {
+    name = 'slide'
+  } else {
+    name = 'slides-preview'
+  }
+
+  if (name === route.name && areParamsEqual) return
+  router.push({ name, params })
+}
+
+/**
  * The main vue instance
  * @namespace Vue
  *

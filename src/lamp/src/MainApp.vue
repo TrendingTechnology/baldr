@@ -43,7 +43,6 @@
 <script>
 import packageJson from '@/../package.json'
 import { AppInfo } from '@bldr/vue-plugin-components-collection'
-import { loadPresentationByRoute } from '@/lib.js'
 
 import MainMenu from '@/components/MainMenu'
 import { createNamespacedHelpers } from 'vuex'
@@ -127,7 +126,7 @@ export default {
     },
     async receiveRemoteControls (message) {
       const params = JSON.parse(message.data)
-      await loadPresentationByRoute(this, params)
+      this.$gotToPresRoute(params)
     }
   },
   mounted: function () {
