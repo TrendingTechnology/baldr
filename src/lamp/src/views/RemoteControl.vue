@@ -18,7 +18,7 @@ export default {
   },
   methods: {
     sendMessage () {
-      this.$socket.send('some data')
+      this.$socket.sendObj({ presId: 'Futurismus' })
     }
   }
 }
