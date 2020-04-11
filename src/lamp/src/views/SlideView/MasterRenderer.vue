@@ -11,76 +11,45 @@ export default {
     BlankMaster,
     LoadingIcon
   },
-  computed: {
-    ...mapGetters(['slide', 'showBlank']),
-    data_ () {
-      if ('master' in this.$route.meta) {
-        const masterName = this.$route.meta.master
-        const master = this.$masters.get(masterName)
-        return {
-          name: masterName,
-          propsMain: this.$route.meta.data,
-          contentTheme: master.styleConfig.contentTheme,
-          styleConfig: master.styleConfig,
-          styleInline: {}
-        }
-      } else if (this.slide) {
-        return {
-          name: this.slide.master.name,
-          propsMain: this.slide.propsMain,
-          contentTheme: this.slide.contentTheme,
-          styleConfig: this.slide.master.styleConfig,
-          styleInline: this.slide.style
-        }
-      }
-      return {}
-    },
-    masterName () {
-      return this.data_.name
-    },
-    propsMain () {
-      return this.data_.propsMain
-    },
-    styleConfig () {
-      return this.data_.styleConfig
-    },
-    contentTheme () {
-      return this.data_.contentTheme
-    },
-    styleInline () {
-      return this.data_.styleInline
+  props: {
+    slide: {
+      type: Object,
+      required: true
     }
+  },
+  computed: {
+    ...mapGetters(['showBlank'])
   },
   methods: {
     setMasterStyle () {
-      if (this.styleConfig) {
-        this.$styleConfig.set(this.styleConfig)
+      if (this.slide.master.styleConfig) {
+        this.$styleConfig.set(this.slide.master.styleConfig)
       } else {
         this.$styleConfig.setDefaults()
       }
     }
   },
   render: function (createElement) {
-    if (this.showBlank && this.masterName) {
+    if (this.showBlank && this.slide.masterName) {
       return createElement('blank-master')
     }
     this.setMasterStyle()
-    if (this.masterName) {
+    if (this.slide.masterName) {
       const masterElement = createElement(
-        `${this.masterName}-master-main`,
+        `${this.slide.masterName}-master-main`,
         {
-          props: this.propsMain,
+          props: this.slide.propsMain,
           class: {
             'master-inner': true
           },
-          style: this.styleInline
+          style: this.slide.style
         }
       )
       return createElement(
         'div',
         {
           attrs: {
-            'b-content-theme': this.contentTheme
+            'b-content-theme': this.slide.contentTheme
           },
           class: {
             vc_master_renderer: true

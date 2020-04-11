@@ -14,15 +14,15 @@
 <script>
 export default {
   name: 'MasterIcon',
+  props: {
+    slide: {
+      type: Object,
+      required: true
+    }
+  },
   computed: {
     master () {
-      const slide = this.$store.getters['lamp/slide']
-      if ('master' in this.$route.meta) {
-        return this.$masters.get(this.$route.meta.master)
-      } else if (slide) {
-        return slide.master
-      }
-      return ''
+      return this.slide.master
     }
   }
 }

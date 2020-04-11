@@ -174,8 +174,8 @@ export async function loadPresentationByRoute (vm, params) {
  * Router guards for some components which can be accessed by router links.
  */
 export const routerGuards = {
-  // To be able to enter a persentation per http link on a certain slide
-  // Without this hook there are webpack errors
+  // To be able to enter a presentation per HTTP link on a certain slide.
+  // Without this hook there are webpack errors.
   beforeRouteEnter (to, from, next) {
     next(vm => {
       loadPresentationByRoute(vm, to.params)

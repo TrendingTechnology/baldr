@@ -8,13 +8,15 @@
 </template>
 
 <script>
-import { createNamespacedHelpers } from 'vuex'
-const { mapGetters } = createNamespacedHelpers('lamp')
-
 export default {
   name: 'AudioOverlay',
+  props: {
+    slide: {
+      type: Object,
+      required: true
+    }
+  },
   computed: {
-    ...mapGetters(['slide']),
     audioOverlay () {
       if (this.slide && this.slide.audioOverlay) {
         return this.slide.audioOverlay

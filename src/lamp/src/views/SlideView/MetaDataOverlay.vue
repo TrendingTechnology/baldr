@@ -27,10 +27,13 @@
 <script>
 export default {
   name: 'MetaDataOverlay',
+  props: {
+    slide: {
+      type: Object,
+      required: true
+    }
+  },
   computed: {
-    slide () {
-      return this.$store.getters['lamp/slide']
-    },
     metaData: function () {
       return this.slide.metaData
     },

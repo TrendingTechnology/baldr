@@ -1,9 +1,12 @@
 <template>
-  <div class="vc_slide_view">
-    <master-icon/>
-    <meta-data-overlay/>
-    <master-renderer/>
-    <audio-overlay/>
+  <!-- We must a slide object. Else error messages when entering
+
+   -->
+  <div v-if="slide" class="vc_slide_view">
+    <master-icon :slide="slide"/>
+    <meta-data-overlay :slide="slide"/>
+    <master-renderer :slide="slide"/>
+    <audio-overlay :slide="slide"/>
     <cursor-arrows/>
   </div>
 </template>
@@ -15,6 +18,9 @@ import MasterRenderer from './MasterRenderer.vue'
 import MetaDataOverlay from './MetaDataOverlay.vue'
 import CursorArrows from './CursorArrows.vue'
 import { routerGuards } from '@/lib.js'
+import { createNamespacedHelpers } from 'vuex'
+
+const { mapGetters } = createNamespacedHelpers('lamp')
 
 export default {
   name: 'SlideView',
@@ -25,6 +31,7 @@ export default {
     MetaDataOverlay,
     CursorArrows
   },
+  computed: mapGetters(['slide']),
   ...routerGuards
 }
 </script>
