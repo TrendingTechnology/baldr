@@ -3,37 +3,32 @@
  *
  * @module @bldr/lamp/router
  */
-import Vue from 'vue'
+
 import Router from 'vue-router'
+import store from '@/store.js'
+import Vue from 'vue'
 
 // Components.
-import StartPage from './views/StartPage.vue'
-
+import AdHocCamera from '@/routes/AdHocCamera.vue'
+import AdHocEditor from '@/routes/AdHocEditor.vue'
+import CommonExample from '@/routes/CommonExample.vue'
+import DocumentationOverview from '@/routes/DocumentationOverview.vue'
+import MasterDocumentation from '@/routes/MasterDocumentation.vue'
+import MediaIdsParentDir from '@/routes/MediaIdsParentDir'
 import OpenInterface from '@/components/OpenInterface'
-import RestApiOverview from '@/views/RestApiOverview.vue'
-
-import DocumentationOverview from '@/views/DocumentationOverview.vue'
-import MasterDocumentation from '@/views/MasterDocumentation.vue'
-import CommonExample from '@/views/CommonExample.vue'
-
-import SlideView from '@/views/SlideView'
-import AdHocCamera from '@/views/AdHocCamera.vue'
-import AdHocEditor from '@/views/AdHocEditor.vue'
-import SlidesPreview from '@/views/SlidesPreview/index.vue'
-
-import PresentationOverview from '@/views/PresentationOverview/index.vue'
-
-import MediaIdsParentDir from '@/views/MediaIdsParentDir'
-import RemoteControl from '@/views/RemoteControl.vue'
-
-import store from '@/store.js'
+import PresentationOverview from '@/routes/PresentationOverview/index.vue'
+import RemoteControl from '@/routes/RemoteControl.vue'
+import RestApiOverview from '@/routes/RestApiOverview.vue'
+import SlidesPreview from '@/routes/SlidesPreview/index.vue'
+import SlideView from '@/routes/SlideView'
+import StartPage from '@/routes/StartPage.vue'
 
 // Failed to load chunks in the subfolder presentation
-// const Documentation = () => import(/* webpackChunkName: "documentation" */ '@/views/Documentation.vue')
-// const MasterDocumentation = () => import(/* webpackChunkName: "documentation" */ '@/views/MasterDocumentation.vue')
+// const Documentation = () => import(/* webpackChunkName: "documentation" */ '@/routes/Documentation.vue')
+// const MasterDocumentation = () => import(/* webpackChunkName: "documentation" */ '@/routes/MasterDocumentation.vue')
 
-// const SlideView = () => import(/* webpackChunkName: "slides" */ '@/views/SlideView')
-// const MasterRenderer = () => import(/* webpackChunkName: "slides" */ '@/views/SlideView/MasterRenderer.vue')
+// const SlideView = () => import(/* webpackChunkName: "slides" */ '@/routes/SlideView')
+// const MasterRenderer = () => import(/* webpackChunkName: "slides" */ '@/routes/SlideView/MasterRenderer.vue')
 
 Vue.use(Router)
 
