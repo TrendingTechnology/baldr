@@ -44,5 +44,6 @@ export default {
   .vc_slide_main {
     overflow-x: hidden;
     position: relative;
+    min-height: 100%;
   }
 </style>

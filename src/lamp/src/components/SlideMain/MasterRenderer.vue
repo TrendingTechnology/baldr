@@ -76,7 +76,6 @@ export default {
     box-sizing: border-box;
     display: table;
     font-size: 3em;
-    height: 60vh;
     width: 100%;
   }
 
