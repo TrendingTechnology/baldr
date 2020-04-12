@@ -1,6 +1,6 @@
 <template>
   <div class="vc_remote_control" b-ui-theme="default">
-    <h1>Fernsteuerung (über Websockets)</h1>
+    <h1>Referentenansicht</h1>
 
     <div class="slide-panel">
       <slide-main :slide="slide"/>
@@ -16,7 +16,7 @@ import { createNamespacedHelpers } from 'vuex'
 const { mapGetters } = createNamespacedHelpers('lamp')
 
 export default {
-  name: 'RemoteControl',
+  name: 'SpeakerView',
   components: {
     SlideMain
   },

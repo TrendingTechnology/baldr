@@ -17,7 +17,7 @@ import MasterDocumentation from '@/routes/MasterDocumentation.vue'
 import MediaIdsParentDir from '@/routes/MediaIdsParentDir'
 import OpenInterface from '@/components/OpenInterface'
 import PresentationOverview from '@/routes/PresentationOverview/index.vue'
-import RemoteControl from '@/routes/RemoteControl.vue'
+import SpeakerView from '@/routes/SpeakerView.vue'
 import RestApiOverview from '@/routes/RestApiOverview.vue'
 import SlidesPreview from '@/routes/SlidesPreview/index.vue'
 import SlideView from '@/routes/SlideView'
@@ -154,9 +154,19 @@ const routes = [
     }
   },
   {
-    path: '/remote-control',
-    name: 'remote-control',
-    component: RemoteControl
+    path: '/speaker-view/:presId/slide/:slideNo',
+    name: 'slide',
+    component: SpeakerView,
+    meta: {
+      title: 'Referentenansicht'
+    },
+    children: [
+      {
+        path: 'step/:stepNo',
+        name: 'slide-step-no',
+        component: SpeakerView
+      }
+    ]
   }
 ]
 
