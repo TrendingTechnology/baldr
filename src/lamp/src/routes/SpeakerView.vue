@@ -12,6 +12,7 @@
 <script>
 import SlideMain from '@/components/SlideMain/index.vue'
 import { createNamespacedHelpers } from 'vuex'
+import { routerGuards } from '@/lib.js'
 
 const { mapGetters } = createNamespacedHelpers('lamp')
 
@@ -21,16 +22,12 @@ export default {
     SlideMain
   },
   computed: mapGetters(['slide']),
-  data () {
-    return {
-      socket: null
-    }
-  },
   methods: {
     sendMessage () {
       this.$socket.sendObj({ presId: 'Futurismus' })
     }
-  }
+  },
+  ...routerGuards
 }
 </script>
 

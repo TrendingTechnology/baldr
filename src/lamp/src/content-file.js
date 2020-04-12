@@ -1090,10 +1090,18 @@ ${JSON.stringify(this.rawYamlObject_)}`
     params.presId = this.id
 
     let name
-    if (params.stepNo) {
-      name = 'slide-step-no'
+    if (router.currentRoute.name === 'speaker-view' || router.currentRoute.name === 'speaker-view-step-no') {
+      if (params.stepNo) {
+        name = 'speaker-view-step-no'
+      } else {
+        name = 'speaker-view'
+      }
     } else {
-      name = 'slide'
+      if (params.stepNo) {
+        name = 'slide-step-no'
+      } else {
+        name = 'slide'
+      }
     }
 
     // next
@@ -1113,6 +1121,28 @@ ${JSON.stringify(this.rawYamlObject_)}`
     }
 
     router.push({ name, params })
+  }
+
+  toggleSpeakerView () {
+    const route = router.currentRoute
+    let name
+    const params = route.params
+    if (route.name === 'slide') {
+      name = 'speaker-view'
+    } else if (route.name === 'slide-step-no') {
+      name = 'speaker-view-step-no'
+    } else if (route.name === 'slides-preview') {
+      name = 'speaker-view'
+      if (!params.slideNo) {
+        params.slideNo = 1
+        delete params.stepNo
+      }
+    } else if (route.name === 'speaker-view') {
+      name = 'slide'
+    } else if (route.name === 'speaker-view-step-no') {
+      name = 'slide-step-no'
+    }
+    if (name) router.push({ name, params: route.params })
   }
 }
 

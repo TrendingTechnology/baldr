@@ -312,6 +312,13 @@ export default {
           this.$store.dispatch('lamp/setSlideNoToOld')
         },
         description: 'Zwischen zwei Folien hin- und herschalten.'
+      },
+      {
+        keys: 'ctrl+l',
+        callback: () => {
+          if (this.presentation) this.presentation.toggleSpeakerView()
+        },
+        description: 'Zwischen Präsentations- und Referentenansicht hin- und herschalten.'
       }
     ])
     this.$router.afterEach((to, from) => {

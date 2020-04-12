@@ -50,7 +50,8 @@ const state = {
   slideNoOld: null,
   slideNo: null,
   slides: {},
-  showMetaDataOverlay: false
+  showMetaDataOverlay: false,
+  isSpeakerView: false
 }
 
 const getters = {
@@ -59,6 +60,9 @@ const getters = {
   },
   folderTitleTree: state => {
     return state.folderTitleTree
+  },
+  isSpeakerView: state => {
+    return state.isSpeakerView
   },
   presentation: state => {
     if (state.presentation && state.presentation.slides) return state.presentation
@@ -304,6 +308,9 @@ const mutations = {
   },
   setCursorArrowTimeoutId (state, { name, timeoutId }) {
     state.cursorArrows[name].timeoutId = timeoutId
+  },
+  setSpeakerView (state, isSpeakerView) {
+    state.isSpeakerView = isSpeakerView
   }
 }
 

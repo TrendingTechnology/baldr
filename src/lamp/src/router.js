@@ -84,6 +84,21 @@ const routes = [
     ]
   },
   {
+    path: '/speaker-view/:presId/slide/:slideNo',
+    name: 'speaker-view',
+    component: SpeakerView,
+    meta: {
+      title: 'Referentenansicht'
+    },
+    children: [
+      {
+        path: 'step/:stepNo',
+        name: 'speaker-view-step-no',
+        component: SpeakerView
+      }
+    ]
+  },
+  {
     path: '/presentation-overview',
     component: PresentationOverview,
     name: 'presentation-overview',
@@ -152,21 +167,6 @@ const routes = [
       shortcut: 'i',
       title: 'Medien-IDs im übergeordneten Ordner'
     }
-  },
-  {
-    path: '/speaker-view/:presId/slide/:slideNo',
-    name: 'slide',
-    component: SpeakerView,
-    meta: {
-      title: 'Referentenansicht'
-    },
-    children: [
-      {
-        path: 'step/:stepNo',
-        name: 'slide-step-no',
-        component: SpeakerView
-      }
-    ]
   }
 ]
 
