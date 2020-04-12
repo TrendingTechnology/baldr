@@ -1,8 +1,8 @@
 <script>
 import LoadingIcon from '@/components/LoadingIcon'
 import BlankMaster from '@/components/BlankMaster'
-
 import { createNamespacedHelpers } from 'vuex'
+
 const { mapGetters } = createNamespacedHelpers('lamp')
 
 export default {
