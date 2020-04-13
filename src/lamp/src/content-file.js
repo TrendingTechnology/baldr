@@ -735,7 +735,7 @@ class PresentationNavigator {
    *
    * @param {Number} direction - `1`: next, `-1`: previous
    *
-   * @returns {@bldr/lamp/content-file~routerParams}
+   * @returns {module:@bldr/lamp/content-file~routerParams}
    */
   getNextRouterParams (direction) {
     return this.navListNoToRouterParams(this.nextNavListNo(direction))
