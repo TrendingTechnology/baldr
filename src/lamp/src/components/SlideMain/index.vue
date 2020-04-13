@@ -1,7 +1,13 @@
 <template>
   <!-- v-if: We must have a slide object, else error messages when
        entering are appearing. -->
-  <div v-if="slide" class="vc_slide_main" :b-dark-mode="darkMode" :b-content-theme="contentTheme">
+  <div
+    :b-center-vertically="styleConfig.centerVertically"
+    :b-content-theme="styleConfig.contentTheme"
+    :b-dark-mode="styleConfig.darkMode"
+    class="vc_slide_main"
+    v-if="slide"
+  >
     <master-icon :slide="slide"/>
     <meta-data-overlay :slide="slide"/>
     <master-renderer :slide="slide" :step-no="stepNo"/>
@@ -31,11 +37,8 @@ export default {
     }
   },
   computed: {
-    contentTheme () {
-      return this.slide.master.styleConfig.contentTheme
-    },
-    darkMode () {
-      return this.slide.master.styleConfig.darkMode
+    styleConfig () {
+      return this.slide.master.styleConfig
     }
   },
   components: {

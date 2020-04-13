@@ -1,5 +1,5 @@
 <template>
-  <div class="vc_speaker_view main-app-fullscreen main-app-padding" b-ui-theme="default">
+  <div class="vc_speaker_view main-app-fullscreen" b-ui-theme="default">
     <h1>Referentenansicht</h1>
 
     <div class="slide-panel" v-if="presentation">
@@ -47,11 +47,13 @@ export default {
 
 <style lang="scss">
   .vc_speaker_view {
+    padding: 1em;
+
     .slide-panel {
       display: flex;
       font-size: 0.2vw;
       justify-content: space-between;
-      padding: 4em;
+      padding: 1em;
     }
 
     #current-slide {
@@ -64,7 +66,11 @@ export default {
 
     .vc_slide_main {
       border: solid $black 1px;
+      height: 30em;
       width: 40em;
+    }
+
+    .vc_master_renderer {
       height: 30em;
     }
   }
