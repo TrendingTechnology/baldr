@@ -1107,8 +1107,7 @@ ${JSON.stringify(this.rawYamlObject_)}`
    * @param {Number} direction - `1`: next, `-1`: previous
    */
   nextSlideOrStep (direction) {
-    const no = this.navigator.nextNavListNo(direction)
-    const params = this.navigator.navListNoToRouterParams(no)
+    const params = this.navigator.getNextRouterParams(direction)
     params.presId = this.id
 
     let name

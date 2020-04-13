@@ -4,7 +4,7 @@
 
     <div class="slide-panel">
       <slide-main :slide="slide"/>
-      <slide-main :slide="slide"/>
+      <slide-main :slide="nextSlide" :step-no="nextStepNo"/>
     </div>
   </div>
 </template>
@@ -22,7 +22,19 @@ export default {
     SlideMain
   },
   computed: {
-    ...mapGetters(['slide'])
+    ...mapGetters(['slide', 'presentation', 'slides']),
+    nextRouterParams () {
+      return this.presentation.navigator.getNextRouterParams(1)
+    },
+    nextSlide () {
+      const params = this.nextRouterParams
+      return this.slides[params.slideNo - 1]
+    },
+    nextStepNo () {
+      const stepNo = this.nextRouterParams.stepNo
+      if (stepNo && stepNo > 1) return stepNo
+      return 0
+    }
   },
   methods: {
     sendMessage () {
