@@ -3,7 +3,7 @@
     <h1>Referentenansicht</h1>
 
     <div class="slide-panel" v-if="presentation">
-      <slide-main id="current-slide" :slide="slide"/>
+      <slide-main id="current-slide" :slide="slide" :step-no="currentStepNo"/>
       <slide-main id="next-slide" :slide="nextSlide" :step-no="nextStepNo"/>
     </div>
   </div>
@@ -29,6 +29,10 @@ export default {
     nextSlide () {
       const params = this.nextRouterParams
       return this.slides[params.slideNo - 1]
+    },
+    currentStepNo () {
+      if (this.slide.stepNo) return this.slide.stepNo
+      return 0
     },
     nextStepNo () {
       const stepNo = this.nextRouterParams.stepNo

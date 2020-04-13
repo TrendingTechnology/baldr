@@ -109,6 +109,7 @@ export default {
       this.domSteps.displayByNo({ stepNo: this.slide.stepNo, full: true })
     },
     enterStep ({ oldStepNo, newStepNo }) {
+      console.log(this.stepNo)
       // If you come from a different master, domSteps is not set up yet.
       if (this.domSteps) {
         const element = this.domSteps.displayByNo({
