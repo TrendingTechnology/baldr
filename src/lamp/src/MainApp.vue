@@ -317,12 +317,20 @@ export default {
         keys: 'ctrl+1',
         callback: () => {
           const slide = this.$store.getters['lamp/slide']
+          slide.scaleFactor = 1
+        },
+        description: 'Die aktuelle auf der Skalierungsfaktor 1 (zurück)setzen.'
+      },
+      {
+        keys: 'ctrl+2',
+        callback: () => {
+          const slide = this.$store.getters['lamp/slide']
           slide.scaleFactor = slide.scaleFactor + 0.05
         },
         description: 'Die aktuelle Folie vergrößern.'
       },
       {
-        keys: 'ctrl+2',
+        keys: 'ctrl+3',
         callback: () => {
           const slide = this.$store.getters['lamp/slide']
           if (slide.scaleFactor > 0.1) slide.scaleFactor = slide.scaleFactor - 0.05

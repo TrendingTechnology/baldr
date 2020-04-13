@@ -75,7 +75,6 @@ export default {
   .vc_master_renderer {
     box-sizing: border-box;
     display: table;
-    font-size: 3em;
     width: 100%;
   }
 

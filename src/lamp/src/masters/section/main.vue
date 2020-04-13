@@ -16,7 +16,6 @@ export default {
 <style lang="scss">
   .vc_section_master {
     font-family: $font-family-sans-small-caps;
-    font-size: 4em;
     font-weight: bold;
     text-align: center;
   }

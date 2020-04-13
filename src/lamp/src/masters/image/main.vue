@@ -40,7 +40,6 @@ export default {
 
 <style lang="scss">
 .vc_image_master {
-  font-size: 3em;
   height: 100%;
   position: relative;
   width: 100%;

@@ -213,8 +213,6 @@ export default {
 
 <style lang="scss">
   .vc_camera_master {
-    font-size: 1em;
-
     video {
       height: 100%;
       left: 0;

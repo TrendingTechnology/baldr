@@ -46,13 +46,5 @@ export default {
       width: 92%;
       height: 90%;
     }
-
-    .vc_play_button {
-      font-size: 2em;
-      position: absolute;
-      bottom: 0.5em;
-      left: 0.5em;
-      z-index: 1;
-    }
   }
 </style>

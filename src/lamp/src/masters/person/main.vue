@@ -64,19 +64,18 @@ export default {
       font-style: italic;
       height: 10em;
       position: absolute;
-      right: 2em;
-      top: 2em;
+      right: 1em;
+      top: 1em;
       width: 20em;
     }
 
     .info-box {
-      bottom: 3em;
+      bottom: 2em;
       position: absolute;
       right: 0;
       width: 100%;
 
       .birth-and-death {
-        font-size: 2em;
         margin: 0;
         padding-right: 2em;
         text-align: right;
@@ -84,7 +83,7 @@ export default {
       }
 
       .person {
-        font-size: 4em;
+        font-size: 3em;
         padding-right: 1em;
         text-align: right;
       }

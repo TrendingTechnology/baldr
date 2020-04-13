@@ -1,0 +1,30 @@
+---
+meta:
+  id: EP_common_allMasters
+
+slides:
+
+- audio: id:HB_Ausstellung_Klavier_Gnom_Samples
+- camera
+- cloze: 'id:Dukas-Zauberlehrling_AB_Lueckentext'
+- editor:
+    step_mode: 'words'
+    markup: |
+      # heading 1
+
+      * one two three
+      * one two three
+
+      lorem ipsum
+- generic:
+    step_mode: 'words'
+    markup: |
+      # Heading 1
+
+      Lorem ipsum [dolor sit amet](https://google.de), consectetur:
+
+      ## Adipisici elit, sed eiusmod
+
+      * Tempor incidunt ut labore.
+      * Veniam, quis nostrud.
+- group: id:Rolling-Stones_The

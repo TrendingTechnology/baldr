@@ -37,10 +37,10 @@ export default {
     z-index: 2;
 
     &.small {
-      font-size: 4em !important;
+      //font-size: 4em !important;
     }
     &.large {
-      font-size: 8em !important;
+      //font-size: 8em !important;
     }
   }
 </style>

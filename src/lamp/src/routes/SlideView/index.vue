@@ -43,5 +43,26 @@ export default {
     .vc_master_renderer {
       height: 100vh;
     }
+
+    .vc_play_button {
+      position: fixed;
+      font-size: 2vmin;
+      z-index: 1;
+      left: 1vmin;
+      bottom: 1vmin;
+    }
+
+    .vc_master_icon {
+      left: 0.2vmin;
+      top: 0.1vmin;
+
+      &.small {
+        font-size: 4vmin;
+      }
+
+      &.large {
+        font-size: 8vmin;
+      }
+    }
   }
 </style>

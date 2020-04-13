@@ -73,7 +73,6 @@ export default {
 <style lang="scss">
   .vc_audio_master {
     text-align: center;
-    font-size: 2em;
 
     p {
       margin: 0;

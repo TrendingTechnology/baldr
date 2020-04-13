@@ -48,7 +48,6 @@ export default {
 
 <style lang="scss">
   .vc_generic_master {
-    font-size: 2em;
     padding: 0.5em 2em;
   }
 </style>
