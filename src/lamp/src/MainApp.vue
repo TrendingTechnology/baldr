@@ -20,11 +20,6 @@
       </template>
     </notifications>
 
-    <!-- Modal dialog (vue-plugin-modal-dialog) -->
-    <modal-dialog name="menu">
-      <main-menu/>
-    </modal-dialog>
-
     <!-- Main area managed by the Vue router. -->
     <main>
       <router-view/>
@@ -44,15 +39,13 @@
 import packageJson from '@/../package.json'
 import { AppInfo } from '@bldr/vue-plugin-components-collection'
 
-import MainMenu from '@/components/MainMenu'
 import { createNamespacedHelpers } from 'vuex'
 const { mapActions, mapGetters } = createNamespacedHelpers('lamp')
 
 export default {
   name: 'MainApp',
   components: {
-    AppInfo,
-    MainMenu
+    AppInfo
   },
   computed: {
     version () {
@@ -319,6 +312,22 @@ export default {
           if (this.presentation) this.presentation.toggleSpeakerView()
         },
         description: 'Zwischen Präsentations- und Referentenansicht hin- und herschalten.'
+      },
+      {
+        keys: 'ctrl+1',
+        callback: () => {
+          const slide = this.$store.getters['lamp/slide']
+          slide.scaleFactor = slide.scaleFactor + 0.05
+        },
+        description: 'Die aktuelle Folie vergrößern.'
+      },
+      {
+        keys: 'ctrl+2',
+        callback: () => {
+          const slide = this.$store.getters['lamp/slide']
+          if (slide.scaleFactor > 0.1) slide.scaleFactor = slide.scaleFactor - 0.05
+        },
+        description: 'Die aktuelle Folie verkleinern.'
       }
     ])
     this.$router.afterEach((to, from) => {

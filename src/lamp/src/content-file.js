@@ -402,6 +402,11 @@ class Slide {
      */
     this.audioOverlay = null
 
+    /**
+     * @type {Number}
+     */
+    this.scaleFactor = 1
+
     const audioOverlay = rawSlideObject.cut('audioOverlay')
     if (audioOverlay) {
       this.audioOverlay = new AudioOverlay(audioOverlay)

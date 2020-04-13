@@ -1,8 +1,8 @@
 <template>
-  <div class="vc_remote_control" b-ui-theme="default">
+  <div class="vc_speaker_view main-app-fullscreen" b-ui-theme="default">
     <h1>Referentenansicht</h1>
 
-    <div class="slide-panel">
+    <div class="slide-panel" v-if="presentation">
       <slide-main :slide="slide"/>
       <slide-main :slide="nextSlide" :step-no="nextStepNo"/>
     </div>
@@ -46,10 +46,16 @@ export default {
 </script>
 
 <style lang="scss">
-  .vc_remote_control {
+  .vc_speaker_view {
     .slide-panel {
       display: flex;
       font-size: 0.2vw;
+      justify-content: space-between;
+      padding: 4em;
+    }
+
+    .vc_slide_main {
+      border: solid $black 1px;
     }
   }
 </style>
