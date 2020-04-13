@@ -117,6 +117,8 @@ export class DomSteps {
    * @property {Array} elements - An array of HTML elements to use as steps.
    * @property {String} cssSelectors - String to feed
    *   `document.querySelectorAll()`
+   * @property {HTMLElement} rootElement - A HTML element to run
+   *   `querySelectorAll()` against.
    * @property {String} mode - Which specialized selector should
    *   be used. At the moment there are two: `words` or `sentences`.
    * @property {String} sentencesSelector - A CSS selector which is passed
@@ -131,6 +133,7 @@ export class DomSteps {
     const optionsDefault = {
       elements: null,
       cssSelectors: null,
+      rootElement: null,
       mode: null,
       sentencesSelector: null,
       subsetSelectors: null,
@@ -151,7 +154,7 @@ export class DomSteps {
       elements = this.opts_.elements
     } else if (this.opts_.mode) {
       if (this.opts_.mode === 'words') {
-        this.elementsAll = selectWords()
+        this.elementsAll = selectWords(this.opts_.rootElement)
       } else if (this.opts_.mode === 'sentences') {
         this.elementsAll = selectSentences(this.opts_.sentencesSelector)
       } else {
@@ -233,6 +236,8 @@ export class DomSteps {
    * @returns {Object} The element that is displayed by the new step number.
    */
   displayByNo ({ stepNo, oldStepNo, full }) {
+    console.log(stepNo)
+    console.log(this.elements)
     if (!this.elements || !this.elements.length) return
     // Loop through all elements. Set visibility state on all elements
     // Full update
@@ -260,6 +265,7 @@ export class DomSteps {
     // Todo: displayByNo is called twice, Fix this.
     if (domStep) {
       domStep.show(stepNo > oldStepNo)
+      console.log('show')
       return domStep.element
     }
     // setStepLastOrFirstByDirection
@@ -400,8 +406,11 @@ export function wrapWords (text) {
  * @returns {DomStepElementGroup|DomStepElement[]} An array of
  *   `DomStepElement`s or `DomStepElementGroup`s.
  */
-function selectWords () {
-  const wordsRaw = document.querySelectorAll('span.word')
+function selectWords (rootElement) {
+  if (!rootElement) {
+    rootElement = document
+  }
+  const wordsRaw = rootElement.querySelectorAll('span.word')
   const words = []
   for (const word of wordsRaw) {
     if (!word.previousSibling) {

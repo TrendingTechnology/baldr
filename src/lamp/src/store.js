@@ -46,7 +46,6 @@ const state = {
       list: 'Liste'
     }
   },
-  showBlank: true,
   slideNoOld: null,
   slideNo: null,
   slides: {},
@@ -120,9 +119,6 @@ const getters = {
   slidesCount: (state, getters) => {
     if (!getters.slides) return
     return getters.slides.length
-  },
-  showBlank: (state) => {
-    return state.showBlank
   },
   showMetaDataOverlay: (state) => {
     return state.showMetaDataOverlay
@@ -201,7 +197,6 @@ const actions = {
         customStore.vueMasterInstanceCurrent
       )
     }
-    commit('setShowBlank', true)
     commit('setSlideNoCurrent', no)
   },
   setStepNoCurrent ({ commit }, { slide, stepNo }) {
@@ -296,9 +291,6 @@ const mutations = {
   },
   setPresentation (state, presentation) {
     Vue.set(state, 'presentation', presentation)
-  },
-  setShowBlank (state, showBlank) {
-    Vue.set(state, 'showBlank', showBlank)
   },
   showMetaDataOverlay (state, showMetaDataOverlay) {
     Vue.set(state, 'showMetaDataOverlay', showMetaDataOverlay)

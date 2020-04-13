@@ -1,14 +1,9 @@
 <script>
 import LoadingIcon from '@/components/LoadingIcon'
-import BlankMaster from '@/components/BlankMaster'
-import { createNamespacedHelpers } from 'vuex'
-
-const { mapGetters } = createNamespacedHelpers('lamp')
 
 export default {
   name: 'MasterRenderer',
   components: {
-    BlankMaster,
     LoadingIcon
   },
   props: {
@@ -22,30 +17,16 @@ export default {
       type: Number
     }
   },
-  computed: {
-    ...mapGetters(['showBlank'])
-  },
-  methods: {
-    // setMasterStyle () {
-    //   if (this.slide.master.styleConfig) {
-    //     this.$styleConfig.set(this.slide.master.styleConfig)
-    //   } else {
-    //     this.$styleConfig.setDefaults()
-    //   }
-    // }
-  },
   render: function (createElement) {
-    if (this.showBlank && this.slide.masterName) {
-      return createElement('blank-master')
-    }
-    // this.setMasterStyle()
     if (this.slide.masterName) {
       const masterElement = createElement(
         `${this.slide.masterName}-master-main`,
         {
           props: {
             ...this.slide.propsMain,
-            stepNo: this.stepNo
+            stepNo: this.stepNo,
+            slideNo: this.slide.no,
+            slideAndStepNo: { stepNo: this.stepNo, slideNo: this.slide.no }
           },
           class: {
             'master-inner': true

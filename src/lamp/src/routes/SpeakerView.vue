@@ -31,8 +31,7 @@ export default {
       return this.slides[params.slideNo - 1]
     },
     currentStepNo () {
-      if (this.slide.stepNo) return this.slide.stepNo
-      return 0
+      return this.slide.stepNo
     },
     nextStepNo () {
       const stepNo = this.nextRouterParams.stepNo

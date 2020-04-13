@@ -445,6 +445,10 @@ class Master {
     this.callHook_('enterSlide', payload, thisArg)
   }
 
+  renderSlide (payload, thisArg) {
+    this.callHook_('renderSlide', payload, thisArg)
+  }
+
   /**
    * Called before leaving a slide. This hook is triggered before the new
    * slide number `slideNo` is set in the vuex store.
@@ -481,6 +485,10 @@ class Master {
    */
   leaveSlide (payload, thisArg) {
     this.callHook_('leaveSlide', payload, thisArg)
+  }
+
+  renderStep (payload, thisArg) {
+    return this.callHook_('renderStep', payload, thisArg)
   }
 
   /**
@@ -695,6 +703,29 @@ const masterMixin = {
   props: {
     stepNo: {
       type: Number
+    },
+    slideNo: {
+      type: [String, Number]
+    },
+    slideAndStepNo: {
+      type: Object
+    }
+  },
+  watch: {
+    stepNo (value, oldValue) {
+      // console.log(`watch.stepNo ${this._uid} value: ${value} oldValue: ${oldValue}`)
+      // this.master.renderStep({ stepNo: value }, this)
+    },
+    slideNo (value) {
+      // console.log(`watch.slideNo ${this._uid} value: ${value}`)
+    },
+    slideAndStepNo (newValue, oldValue) {
+      if (newValue.slideNo !== oldValue.slideNo) {
+        this.master.renderSlide(null, this)
+      }
+      if (newValue.stepNo !== oldValue.stepNo) {
+        this.master.renderStep({ oldStepNo: oldValue.stepNo, newStepNo: newValue.stepNo }, this)
+      }
     }
   },
   mounted () {

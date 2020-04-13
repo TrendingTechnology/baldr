@@ -100,21 +100,39 @@ export default {
     plainTextFromProps (props) {
       return plainText(props.markup)
     },
-    enterSlide () {
+    // enterSlide () {
+    //   this.domSteps = new steps.DomSteps({
+    //     mode: 'words',
+    //     hideAllElementsInitally: false
+    //   })
+    //   this.domSteps.setStepCount(this.slide)
+    //   this.domSteps.displayByNo({ stepNo: this.slide.stepNo, full: true })
+    // },
+    renderSlide () {
       this.domSteps = new steps.DomSteps({
+        rootElement: this.$el,
         mode: 'words',
         hideAllElementsInitally: false
       })
       this.domSteps.setStepCount(this.slide)
-      this.domSteps.displayByNo({ stepNo: this.slide.stepNo, full: true })
+      this.domSteps.displayByNo({ stepNo: 1, full: true })
     },
-    enterStep ({ oldStepNo, newStepNo }) {
-      console.log(this.stepNo)
+    // enterStep ({ oldStepNo, newStepNo }) {
+    //   // If you come from a different master, domSteps is not set up yet.
+    //   if (this.domSteps) {
+    //     const element = this.domSteps.displayByNo({
+    //       oldStepNo,
+    //       stepNo: this.stepNo
+    //     })
+    //     scroll(element)
+    //   }
+    // },
+    renderStep ({ newStepNo, oldStepNo }) {
       // If you come from a different master, domSteps is not set up yet.
       if (this.domSteps) {
         const element = this.domSteps.displayByNo({
           oldStepNo,
-          stepNo: this.stepNo
+          stepNo: newStepNo
         })
         scroll(element)
       }
