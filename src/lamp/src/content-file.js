@@ -49,6 +49,17 @@ import vue from '@/main.js'
  */
 
 /**
+ * Router paramters that indicate a specific slide with an step number
+ * in a specific presentation.
+ *
+ * @typedef {Object} routerParams
+ * @property {String} presId - The ID of the presentation, for example
+ *   `Tradition_Futurismus`
+ * @property {Number} slideNo - The slide number starting from 1.
+ * @property {Number} stepNo  - The step number starting from 1.
+ */
+
+/**
  * Convert various data to a string. Meant for error messages.
  *
  * @param {mixed} data - various data
@@ -717,6 +728,16 @@ class PresentationNavigator {
       paramsNormalized.slideNo = this.slideIds[params.slideNo]
     }
     return paramsNormalized
+  }
+
+  /**
+   *
+   * @param {Number} direction - `1`: next, `-1`: previous
+   *
+   * @returns {Object}
+   */
+  getNextRouterParams (direction) {
+    return this.navListNoToRouterParams(this.nextNavListNo(direction))
   }
 
   /**

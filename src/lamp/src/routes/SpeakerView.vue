@@ -21,7 +21,9 @@ export default {
   components: {
     SlideMain
   },
-  computed: mapGetters(['slide']),
+  computed: {
+    ...mapGetters(['slide'])
+  },
   methods: {
     sendMessage () {
       this.$socket.sendObj({ presId: 'Futurismus' })
