@@ -692,10 +692,7 @@ Vue.prototype.$get = function (getterName) {
  * Go to one of the three presentation related routes: `slides-preview`, `slide`
  * or `slide-stop-no`
  *
- * @param {Object} params
- * @property {String} presId
- * @property {Number} slideNo
- * @property {Number} stepNo
+ * @param {@bldr/lamp/content-file~routerParams} params
  */
 Vue.prototype.$gotToPresRoute = function (params) {
   const route = router.currentRoute

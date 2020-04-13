@@ -731,10 +731,11 @@ class PresentationNavigator {
   }
 
   /**
+   * Get the router parameters for the next (or previous) slide.
    *
    * @param {Number} direction - `1`: next, `-1`: previous
    *
-   * @returns {Object}
+   * @returns {@bldr/lamp/content-file~routerParams}
    */
   getNextRouterParams (direction) {
     return this.navListNoToRouterParams(this.nextNavListNo(direction))
