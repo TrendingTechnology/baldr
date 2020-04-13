@@ -1,9 +1,13 @@
 <template>
-  <div class="vc_common_example main-app-padding" b-ui-theme="default">
+  <div class="vc_common_example main-app-padding main-app-fullscreen" b-ui-theme="default">
     <h1>Allgemeines Beispiel “{{ exampleName }}”</h1>
 
     <section>
-      <h2>Example <material-icon name="presentation" @click.native="openExample"/></h2>
+      <h2>Example
+        <router-link :to="{ name: 'slides-preview', params: { presId: `EP_common_${exampleName}` } }">
+          <material-icon name="presentation"/>
+        </router-link>
+      </h2>
 
       <pre><code>{{ rawYaml }}</code></pre>
     </section>
@@ -11,8 +15,6 @@
 </template>
 
 <script>
-import { openPresentationByRawYaml } from '@/lib.js'
-
 /* globals rawYamlExamples */
 
 export default {
@@ -23,11 +25,6 @@ export default {
     },
     rawYaml () {
       return rawYamlExamples.common[this.exampleName]
-    }
-  },
-  methods: {
-    openExample () {
-      openPresentationByRawYaml(this.rawYaml)
     }
   }
 }

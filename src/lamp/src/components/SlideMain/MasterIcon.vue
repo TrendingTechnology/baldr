@@ -31,16 +31,7 @@ export default {
 <style lang="scss">
   .vc_master_icon {
     background: none !important;
-    left: 0.2em;
     position: absolute;
-    top: 0.1em;
     z-index: 2;
-
-    &.small {
-      //font-size: 4em !important;
-    }
-    &.large {
-      //font-size: 8em !important;
-    }
   }
 </style>

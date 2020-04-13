@@ -134,8 +134,8 @@ class Master {
       if (spec === 'icon') {
         this.icon = new MasterIcon(specs.icon)
       } else if (spec === 'props') {
-        // to avoid confusion between real world props with real world value
-        // and props defintions.
+        // To avoid confusion between real world prop with real world values
+        // and props defintions we choose a different name.
         this.propsDef = specs.props
       } else if (spec === 'hooks') {
         // Make hooks private. Hooks should called from the public wrapper

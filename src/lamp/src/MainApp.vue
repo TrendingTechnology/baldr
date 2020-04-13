@@ -351,6 +351,7 @@ export default {
 
 <style lang="scss">
   body {
+    font-size: 2vmin;
     margin: 0;
   }
 

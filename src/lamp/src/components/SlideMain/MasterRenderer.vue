@@ -26,19 +26,19 @@ export default {
     ...mapGetters(['showBlank'])
   },
   methods: {
-    setMasterStyle () {
-      if (this.slide.master.styleConfig) {
-        this.$styleConfig.set(this.slide.master.styleConfig)
-      } else {
-        this.$styleConfig.setDefaults()
-      }
-    }
+    // setMasterStyle () {
+    //   if (this.slide.master.styleConfig) {
+    //     this.$styleConfig.set(this.slide.master.styleConfig)
+    //   } else {
+    //     this.$styleConfig.setDefaults()
+    //   }
+    // }
   },
   render: function (createElement) {
     if (this.showBlank && this.slide.masterName) {
       return createElement('blank-master')
     }
-    this.setMasterStyle()
+    // this.setMasterStyle()
     if (this.slide.masterName) {
       const masterElement = createElement(
         `${this.slide.masterName}-master-main`,
