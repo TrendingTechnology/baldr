@@ -10,11 +10,15 @@ import { selectSubset } from '@bldr/core-browser'
  */
 class DomStepElement {
   /**
-   *
-   * @property {Boolean} useVisibliltyProp - Set the visibility `element.style.visibility`
-   *   instead of the display state.
+   * @property {Boolean} useVisibliltyProp - Set the visibility
+   *   `element.style.visibility` instead of the display state.
    */
   constructor (element, useVisibliltyProp = false) {
+    /**
+     * A HTML element.
+     *
+     * @type {Object}
+     */
     this.element = element
     this.useVisibliltyProp_ = useVisibliltyProp
 
@@ -34,6 +38,14 @@ class DomStepElement {
         display: 'block'
       }
     ]
+  }
+
+  /**
+   * To get an unified interface in comparison with the class
+   * `DomStepElementGroup`.
+   */
+  get htmlElements () {
+    return [this.element]
   }
 
   /**
@@ -75,6 +87,14 @@ class DomStepElementGroup {
    */
   get element () {
     return this.elements[0].element
+  }
+
+  get htmlElements () {
+    const htmlElements = []
+    for (const domStepElement of this.elements) {
+      htmlElements.push(domStepElement.element)
+    }
+    return htmlElements
   }
 
   /**
@@ -411,10 +431,16 @@ function selectWords (rootElement) {
   for (const word of wordsRaw) {
     if (!word.previousSibling) {
       const parent = word.parentElement
-      if (parent.tagName === 'LI' && !parent.previousSibling) {
-        words.push(new DomStepElementGroup([parent.parentElement, parent, word], true))
+      if (parent.tagName === 'LI') {
+        if (!parent.previousSibling) {
+          // <ul><li><span class="word">lol</span><li></ul>
+          words.push(new DomStepElementGroup([parent.parentElement, parent, word], true))
+        } else {
+          // Avoid to get divs. Parent has to be LI
+          words.push(new DomStepElementGroup([parent, word], true))
+        }
       } else {
-        words.push(new DomStepElementGroup([parent, word], true))
+        words.push(new DomStepElement(word, true))
       }
     } else {
       words.push(new DomStepElement(word, true))

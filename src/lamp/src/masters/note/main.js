@@ -85,7 +85,7 @@ export default {
         const segments = props.markup.split('<hr>')
         const prolog = segments.shift()
         let body = segments.join('<hr>')
-        body = steps.wrapWords(body)
+        body = '<span class="word-area">' + steps.wrapWords(body) + '</span>'
         props.markup = [prolog, body].join('')
       // No hr tag provided
       // Step through all words
