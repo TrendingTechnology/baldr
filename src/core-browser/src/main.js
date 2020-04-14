@@ -16,14 +16,14 @@ export const convertMdToTex = convertTex.convertMdToTex
 /* globals DOMParser */
 
 /**
- * Select a subset of elements.
+ * Select a subset of elements. Examples
  *
- * - `` (emtpy string or value which evalutes to false): All elements
- * - `1`: The first element
+ * - `` (emtpy string or value which evalutes to false): All elements.
+ * - `1`: The first element.
  * - `1,3,5`: The first, the third and the fifth element.
- * - `1-3,5-7`
- * - `-7`: `1-7`
- * - `7-`: `7-end`
+ * - `1-3,5-7`: `1,2,3,5,6,7`
+ * - `-7`: All elements from the beginning up to `7` (`1-7`).
+ * - `7-`: All elements starting from `7` (`7-end`).
  *
  * @typedef {String} subsetSelector
  */

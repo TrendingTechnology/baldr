@@ -101,7 +101,6 @@ export default {
       return plainText(props.markup)
     },
     enterSlide () {
-      console.log('enterSlide')
       this.domSteps = new steps.DomSteps({
         mode: 'words',
         rootElement: this.$el,

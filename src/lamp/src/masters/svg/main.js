@@ -107,7 +107,7 @@ export default {
       warnSvgWidthHeight(this.svgPath)
       this.domSteps = new steps.DomSteps({
         cssSelectors: this.stepSelector,
-        subsetSelectors: this.slide.props.stepSubset,
+        subsetSelector: this.slide.props.stepSubset,
         hideAllElementsInitally: false
       })
 

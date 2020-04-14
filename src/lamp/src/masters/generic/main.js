@@ -164,7 +164,7 @@ export default {
 
       if (this.stepMode) {
         this.domSteps = new steps.DomSteps({
-          subsetSelectors: this.stepSubset,
+          subsetSelector: this.stepSubset,
           mode: this.stepMode,
           sentencesSelector,
           hideAllElementsInitally: false

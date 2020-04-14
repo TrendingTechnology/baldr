@@ -34,7 +34,7 @@ export default {
     warnSvgWidthHeight()
     this.domSteps = new steps.DomSteps({
       elements: collectClozeGroups(document),
-      subsetSelectors: this.slide.props.stepSubset
+      subsetSelector: this.slide.props.stepSubset
     })
 
     const newClozeGroup = this.domSteps.displayByNo({

@@ -125,7 +125,7 @@ export class DomSteps {
    *   through to the function `selectSentences`, which uses
    *   `document.querySelector()` to find the parent HTML element, which
    *   contains child HTML element to use as steps.
-   * @property {String} subsetSelectors
+   * @property {module:@bldr/core-browser~subsetSelector} subsetSelector
    * @property {String} useVisibliltyProp - default `false`
    * @property {Boolean} hideAllElementsInitally - default `true`
    */
@@ -136,7 +136,7 @@ export class DomSteps {
       rootElement: null,
       mode: null,
       sentencesSelector: null,
-      subsetSelectors: null,
+      subsetSelector: null,
       useVisibliltyProp: false,
       hideAllElementsInitally: true
     }
@@ -173,13 +173,13 @@ export class DomSteps {
     }
 
     /**
-     * All elements or a subset of elements, if `subsetSelectors` is specified.
+     * All elements or a subset of elements, if `subsetSelector` is specified.
      *
      * @type {Array}
      */
     this.elements = null
-    if (this.opts_.subsetSelectors) {
-      this.elements = selectSubset(this.opts_.subsetSelectors,
+    if (this.opts_.subsetSelector) {
+      this.elements = selectSubset(this.opts_.subsetSelector,
         { elements: this.elementsAll, shiftSelector: -1 }
       )
     } else {
