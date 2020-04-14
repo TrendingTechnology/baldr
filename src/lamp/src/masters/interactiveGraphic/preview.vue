@@ -1,6 +1,6 @@
 <template>
   <div class="
-    vc_svg_master_preview
+    vc_interactive_graphic_master_preview
     slide-preview-fullscreen
     slide-preview-valign-center
   ">
@@ -20,7 +20,7 @@ export default {
 </script>
 
 <style lang="scss">
-  .vc_svg_master_preview {
+  .vc_interactive_graphic_master_preview {
     padding: 1em;
   }
 </style>

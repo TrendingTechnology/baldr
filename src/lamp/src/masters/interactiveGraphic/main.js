@@ -103,27 +103,25 @@ export default {
     leaveSlide () {
       this.domSteps.shortcutsUnregister()
     },
-    async enterSlide () {
+    afterSlideNoChangeOnComponent ({ newSlideNo }) {
+      const slide = this.$store.getters['lamp/slideByNo'](newSlideNo)
       warnSvgWidthHeight(this.svgPath)
       this.domSteps = new steps.DomSteps({
         cssSelectors: this.stepSelector,
-        subsetSelector: this.slide.props.stepSubset,
+        rootElement: this.$el,
+        subsetSelector: slide.props.stepSubset,
         hideAllElementsInitally: false
       })
-
-      this.domSteps.displayByNo({
-        stepNo: this.slide.stepNo
-      })
-
       this.domSteps.shortcutsRegister()
     },
-    enterStep ({ oldStepNo }) {
-      // setSlideOrStepPrevious / Next has no this.domSteps
-      if (!this.domSteps) return
-      this.domSteps.displayByNo({
-        oldStepNo,
-        stepNo: this.stepNo
-      })
+    afterStepNoChangeOnComponent ({ newStepNo, oldStepNo, slideNoChange }) {
+      const options = { stepNo: newStepNo }
+      if (slideNoChange) {
+        options.full = true
+      } else {
+        options.oldStepNo = oldStepNo
+      }
+      this.domSteps.displayByNo(options)
     }
   }
 }

@@ -2,23 +2,23 @@
 slides:
 
 - title: Shortcuts
-  svg:
+  interactive_graphic:
     src: id:Requiem_NB_Confutatis_1-Takt
     step_subset: 3-
 
 - title: Kurzform (Ohne Ebenen, nichts zum Einblenden)
-  svg: id:9-Symphonie_NB_Freude-schoener-Goetterfunken
+  interactive_graphic: id:9-Symphonie_NB_Freude-schoener-Goetterfunken
 
 - title: Langform
-  svg:
+  interactive_graphic:
     src: id:9-Symphonie_NB_Freude-schoener-Goetterfunken_Anfang
 
 - title: g Element
-  svg:
+  interactive_graphic:
     src: id:NB_Dreiklaenge-Nationalhymnen_F-Dur
     step_subset: 3-
 
 - title: class
-  svg:
+  interactive_graphic:
     src: id:Moses_Notationsweisen
     step_selector: .baldr-group

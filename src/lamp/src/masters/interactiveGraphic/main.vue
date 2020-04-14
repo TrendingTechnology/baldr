@@ -1,5 +1,5 @@
 <template>
-  <div class="vc_svg_master">
+  <div class="vc_interactive_graphic_master">
     <div ref="svgWrapper" id="svg-wrapper" v-html="svgMarkup"/>
   </div>
 </template>
@@ -33,14 +33,14 @@ export default {
   computed: {
     ...mapGetters(['slide']),
     svgMarkup () {
-      return this.$store.getters['lampMasterSvg/svgByUri'](this.src)
+      return this.$store.getters['lampMasterInteractiveGraphic/svgByUri'](this.src)
     }
   }
 }
 </script>
 
 <style lang="scss">
-  .vc_svg_master {
+  .vc_interactive_graphic_master {
     padding: 3em 3em;
     background-color: white;
 
