@@ -156,30 +156,27 @@ export default {
       }
       return output.join(' | ')
     },
-    enterSlide () {
-      let sentencesSelector
-      if (this.stepMode === 'sentences') {
-        sentencesSelector = '.vc_generic_master'
-      }
-
+    afterSlideNoChangeOnComponent ({ newSlideNo }) {
+      const slide = this.$store.getters['lamp/slideByNo'](newSlideNo)
       if (this.stepMode) {
         this.domSteps = new steps.DomSteps({
           subsetSelector: this.stepSubset,
           mode: this.stepMode,
-          sentencesSelector,
+          rootElement: this.$el,
           hideAllElementsInitally: false
         })
-        this.domSteps.setStepCount(this.slide)
-        this.domSteps.displayByNo({ stepNo: this.slide.stepNo, full: true })
+        this.domSteps.setStepCount(slide)
       }
     },
-    enterStep ({ oldStepNo }) {
-      if (this.stepMode) {
-        this.domSteps.displayByNo({
-          oldStepNo,
-          stepNo: this.stepNo
-        })
+    afterStepNoChangeOnComponent ({ newStepNo, oldStepNo, slideNoChange }) {
+      if (!this.domSteps) return
+      const options = { stepNo: newStepNo }
+      if (slideNoChange) {
+        options.full = true
+      } else {
+        options.oldStepNo = oldStepNo
       }
+      this.domSteps.displayByNo(options)
     }
   }
 }

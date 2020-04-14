@@ -109,17 +109,14 @@ export default {
       this.domSteps.setStepCount(this.slide)
     },
     afterStepNoChangeOnComponent ({ newStepNo, oldStepNo, slideNoChange }) {
-      // If you come from a different master, domSteps is not set up yet.
-      if (this.domSteps) {
-        const options = { stepNo: newStepNo }
-        if (slideNoChange) {
-          options.full = true
-        } else {
-          options.oldStepNo = oldStepNo
-        }
-        const element = this.domSteps.displayByNo(options)
-        scroll(element)
+      const options = { stepNo: newStepNo }
+      if (slideNoChange) {
+        options.full = true
+      } else {
+        options.oldStepNo = oldStepNo
       }
+      const element = this.domSteps.displayByNo(options)
+      scroll(element)
     }
   }
 }

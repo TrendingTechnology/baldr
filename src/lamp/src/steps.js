@@ -121,10 +121,6 @@ export class DomSteps {
    *   `querySelectorAll()` against.
    * @property {String} mode - Which specialized selector should
    *   be used. At the moment there are two: `words` or `sentences`.
-   * @property {String} sentencesSelector - A CSS selector which is passed
-   *   through to the function `selectSentences`, which uses
-   *   `document.querySelector()` to find the parent HTML element, which
-   *   contains child HTML element to use as steps.
    * @property {module:@bldr/core-browser~subsetSelector} subsetSelector
    * @property {String} useVisibliltyProp - default `false`
    * @property {Boolean} hideAllElementsInitally - default `true`
@@ -156,7 +152,7 @@ export class DomSteps {
       if (this.opts_.mode === 'words') {
         this.elementsAll = selectWords(this.opts_.rootElement)
       } else if (this.opts_.mode === 'sentences') {
-        this.elementsAll = selectSentences(this.opts_.sentencesSelector)
+        this.elementsAll = selectSentences(this.opts_.rootElement)
       } else {
         throw new Error(`Unkown specialized selector: ${this.opts_.mode}`)
       }
@@ -445,10 +441,9 @@ function countWords (dom) {
  *
  * @returns {DomStepElement[]} An array of `DomStepElement`s.
  */
-function selectSentences (selector) {
-  const parentElement = document.querySelector(selector)
+function selectSentences (rootElement) {
   const sentences = []
-  for (const element of parentElement.children) {
+  for (const element of rootElement.children) {
     if (['UL', 'OL'].includes(element.tagName)) {
       for (const li of element.children) {
         if (li.tagName === 'LI') {

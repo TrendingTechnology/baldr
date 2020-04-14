@@ -40,7 +40,7 @@ export default {
       if (this.stepMode) {
         return this.markup[0]
       }
-      return this.markup[this.stepNo - 1]
+      return this.markup[this.navNos.stepNo - 1]
     }
   }
 }
