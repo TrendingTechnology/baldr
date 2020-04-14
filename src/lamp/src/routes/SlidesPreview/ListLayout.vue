@@ -5,7 +5,7 @@
       :key="slide.no"
       @click="gotToSlide(slide.no)"
       :title="`Zur Folie Nr. ${slide.no}`"
-      :class="{ 'current-slide': slide.no === slide.no }"
+      :class="{ 'current-slide': slideCurrent && slide.no === slideCurrent.no }"
       :style="style(slide)"
     >
       <slide-preview :slide="slide"/>
@@ -33,13 +33,17 @@ export default {
       type: Array
     }
   },
-  computed: mapGetters([
-    'presentation',
-    'slide',
-    'slidesCount',
-    'previewDetail',
-    'previewHierarchical'
-  ]),
+  computed: {
+    ...mapGetters([
+      'presentation',
+      'slidesCount',
+      'previewDetail',
+      'previewHierarchical'
+    ]),
+    slideCurrent () {
+      return this.$store.getters['lamp/slide']
+    }
+  },
   methods: {
     style (slide) {
       if (this.previewHierarchical) {
