@@ -115,7 +115,6 @@ export default {
         hideAllElementsInitally: false
       })
       this.domSteps.setStepCount(this.slide)
-      this.domSteps.displayByNo({ stepNo: 1, full: true })
     },
     // enterStep ({ oldStepNo, newStepNo }) {
     //   // If you come from a different master, domSteps is not set up yet.
@@ -127,13 +126,22 @@ export default {
     //     scroll(element)
     //   }
     // },
-    renderStep ({ newStepNo, oldStepNo }) {
+    renderStep ({ newStepNo, oldStepNo, slideNoChange }) {
       // If you come from a different master, domSteps is not set up yet.
       if (this.domSteps) {
-        const element = this.domSteps.displayByNo({
-          oldStepNo,
-          stepNo: newStepNo
-        })
+        let opts
+        if (slideNoChange) {
+          opts = {
+            full: true,
+            stepNo: newStepNo
+          }
+        } else {
+          opts = {
+            oldStepNo,
+            stepNo: newStepNo
+          }
+        }
+        const element = this.domSteps.displayByNo(opts)
         scroll(element)
       }
     }

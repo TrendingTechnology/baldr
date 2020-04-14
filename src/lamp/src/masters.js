@@ -720,12 +720,16 @@ const masterMixin = {
       // console.log(`watch.slideNo ${this._uid} value: ${value}`)
     },
     slideAndStepNo (newValue, oldValue) {
-      if (newValue.slideNo !== oldValue.slideNo) {
-        this.master.renderSlide(null, this)
-      }
-      if (newValue.stepNo !== oldValue.stepNo) {
-        this.master.renderStep({ oldStepNo: oldValue.stepNo, newStepNo: newValue.stepNo }, this)
-      }
+      this.$nextTick(() => {
+        let slideNoChange = false
+        if (newValue.slideNo !== oldValue.slideNo) {
+          this.master.renderSlide(null, this)
+          slideNoChange = true
+        }
+        if (newValue.stepNo !== oldValue.stepNo) {
+          this.master.renderStep({ oldStepNo: oldValue.stepNo, newStepNo: newValue.stepNo, slideNoChange }, this)
+        }
+      })
     }
   },
   mounted () {
