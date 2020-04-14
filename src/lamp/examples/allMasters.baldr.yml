@@ -5,8 +5,11 @@ meta:
 slides:
 
 - audio: id:HB_Ausstellung_Klavier_Gnom_Samples
+
 - camera
+
 - cloze: 'id:Dukas-Zauberlehrling_AB_Lueckentext'
+
 - editor:
     step_mode: 'words'
     markup: |
@@ -16,6 +19,7 @@ slides:
       * one two three
 
       lorem ipsum
+
 - generic:
     step_mode: 'words'
     markup: |
@@ -27,5 +31,15 @@ slides:
 
       * Tempor incidunt ut labore.
       * Veniam, quis nostrud.
+
 - group: id:Rolling-Stones_The
+
+- task: <em>“Do this!”</em> __subito__!
+
 - song: Last-Christmas
+
+- video: id:Entstehung_VD_Die-Geschichte-des-Jazz_Entstehung-aus-soziologischer-Sicht
+
+- wikipedia: Sequenz_(Musik)
+
+- youtube: -irE1AEH8Qg
