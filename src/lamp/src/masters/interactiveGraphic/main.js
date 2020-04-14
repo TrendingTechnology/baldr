@@ -101,7 +101,7 @@ export default {
       return steps.calculateStepCount(groups, props)
     },
     leaveSlide () {
-      this.domSteps.shortcutsUnregister()
+      // this.domSteps.shortcutsUnregister()
     },
     afterSlideNoChangeOnComponent ({ newSlideNo }) {
       const slide = this.$store.getters['lamp/slideByNo'](newSlideNo)
@@ -112,7 +112,7 @@ export default {
         subsetSelector: slide.props.stepSubset,
         hideAllElementsInitally: false
       })
-      this.domSteps.shortcutsRegister()
+      // this.domSteps.shortcutsRegister()
     },
     afterStepNoChangeOnComponent ({ newStepNo, oldStepNo, slideNoChange }) {
       const options = { stepNo: newStepNo }

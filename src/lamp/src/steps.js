@@ -157,7 +157,11 @@ export class DomSteps {
         throw new Error(`Unkown specialized selector: ${this.opts_.mode}`)
       }
     } else if (this.opts_.cssSelectors) {
-      elements = document.querySelectorAll(this.opts_.cssSelectors)
+      if (this.opts_.rootElement) {
+        elements = this.opts_.rootElement.querySelectorAll(this.opts_.cssSelectors)
+      } else {
+        elements = document.querySelectorAll(this.opts_.cssSelectors)
+      }
     } else {
       throw new Error('Specify elements or cssSelectors')
     }
@@ -232,6 +236,7 @@ export class DomSteps {
    * @returns {Object} The element that is displayed by the new step number.
    */
   displayByNo ({ stepNo, oldStepNo, full }) {
+    console.log(this.elements)
     if (!this.elements || !this.elements.length) return
     // Loop through all elements. Set visibility state on all elements
     // Full update
@@ -499,7 +504,7 @@ export function calculateStepCount (elements, props) {
     const elementsSubset = selectSubset(props.stepSubset, {
       elementsCount: count
     })
-    return elementsSubset.length + 1
+    return elementsSubset.length + 2
   } else {
     return count + 1
   }
