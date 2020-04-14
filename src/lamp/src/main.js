@@ -236,7 +236,13 @@
  * }
  * ```
  *
- * ### 3. `enterSlide({ oldSlide, oldProps, newSlide, newProps })`
+ * ### 3. `afterSlideNoChangeOnComponent({ oldSlideNo, newSlideNo })`
+ *
+ * - `this`: is the Vue instance of the current main master component.
+ * - called from the master component mixin in the file `masters.js`.
+ * - `return`: void
+ *
+ * ### 4. `enterSlide({ oldSlide, oldProps, newSlide, newProps })`
  *
  * - `this`: is the Vue instance of the current main master component.
  * - called from  `masterMixin` in `masters.js`
@@ -268,9 +274,15 @@
  *     }
  *   }
  * }
- *
  * ```
- * ### 2. `enterStep({ oldStepNo, newStepNo })`
+ *
+ * ### 2. `afterStepNoChangeOnComponent({ oldStepNo, newStepNo, slideNoChange })`
+ *
+ * - `this`: is the Vue instance of the current main master component.
+ * - called from the master component mixin in the file `masters.js`.
+ * - `return`: void
+ *
+ * ### 3. `enterStep({ oldStepNo, newStepNo })`
  *
  * - `this`: is the Vue instance of the current main master component.
  * - `return`: void

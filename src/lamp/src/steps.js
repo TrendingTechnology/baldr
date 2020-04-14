@@ -228,7 +228,7 @@ export class DomSteps {
    * A minimal update doesn’t loop through all elements, only the visibility
    * state of the next element is changed.
    *
-   * @param {config}
+   * @param {options}
    * @property {Number} oldStepNo - The previous step number.
    * @property {Number} stepNo - The current step number.
    * @property {Boolean} full - Perform a full update.

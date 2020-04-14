@@ -158,7 +158,8 @@ export default {
   },
   styleConfig: {
     darkMode: true,
-    contentTheme: 'default'
+    contentTheme: 'default',
+    centerVertically: true
   },
   store: {
     state,

@@ -4,6 +4,7 @@
 
 import steps from '@/steps.js'
 import Vue from 'vue'
+import { warnSvgWidthHeight } from '@/lib.js'
 
 /**
  *
@@ -112,13 +113,22 @@ export default {
       const count = steps.calculateStepCount(groups, props)
       return count
     },
-    enterStep ({ oldStepNo }) {
-      // setSlideOrStepPrevious / Next has no this.domSteps
-      if (!this.domSteps) return
-      const newClozeGroup = this.domSteps.displayByNo({
-        oldStepNo,
-        stepNo: this.stepNo
+    afterSlideNoChangeOnComponent ({ newSlideNo }) {
+      const slide = this.$store.getters['lamp/slideByNo'](newSlideNo)
+      warnSvgWidthHeight()
+      this.domSteps = new steps.DomSteps({
+        elements: collectClozeGroups(this.$el),
+        subsetSelector: slide.props.stepSubset
       })
+    },
+    afterStepNoChangeOnComponent ({ oldStepNo, newStepNo, slideNoChange }) {
+      const options = { stepNo: newStepNo }
+      if (slideNoChange) {
+        options.full = true
+      } else {
+        options.oldStepNo = oldStepNo
+      }
+      const newClozeGroup = this.domSteps.displayByNo(options)
       scrollToClozeGroup(newClozeGroup)
     }
   }

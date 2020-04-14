@@ -111,20 +111,13 @@ export default {
     afterStepNoChangeOnComponent ({ newStepNo, oldStepNo, slideNoChange }) {
       // If you come from a different master, domSteps is not set up yet.
       if (this.domSteps) {
-        // console.log(this.domSteps)
-        let opts
+        const options = { stepNo: newStepNo }
         if (slideNoChange) {
-          opts = {
-            full: true,
-            stepNo: newStepNo
-          }
+          options.full = true
         } else {
-          opts = {
-            oldStepNo,
-            stepNo: newStepNo
-          }
+          options.oldStepNo = oldStepNo
         }
-        const element = this.domSteps.displayByNo(opts)
+        const element = this.domSteps.displayByNo(options)
         scroll(element)
       }
     }

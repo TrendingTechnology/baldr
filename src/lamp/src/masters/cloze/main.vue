@@ -5,11 +5,7 @@
 </template>
 
 <script>
-import { warnSvgWidthHeight } from '@/lib.js'
 import steps from '@/steps.js'
-import { createNamespacedHelpers } from 'vuex'
-import { collectClozeGroups, scrollToClozeGroup } from './main.js'
-const { mapGetters } = createNamespacedHelpers('lamp')
 
 export default {
   props: {
@@ -25,22 +21,9 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['slide']),
     svgMarkup () {
       return this.$store.getters['lampMasterCloze/svgByUri'](this.src)
     }
-  },
-  mounted () {
-    warnSvgWidthHeight()
-    this.domSteps = new steps.DomSteps({
-      elements: collectClozeGroups(document),
-      subsetSelector: this.slide.props.stepSubset
-    })
-
-    const newClozeGroup = this.domSteps.displayByNo({
-      stepNo: this.slide.stepNo
-    })
-    scrollToClozeGroup(newClozeGroup)
   }
 }
 </script>
