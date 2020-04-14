@@ -34,9 +34,7 @@ export default {
       return this.slide.stepNo
     },
     nextStepNo () {
-      const stepNo = this.nextRouterParams.stepNo
-      if (stepNo && stepNo > 1) return stepNo
-      return 0
+      return this.nextRouterParams.stepNo
     }
   },
   methods: {

@@ -100,14 +100,16 @@ export default {
     plainTextFromProps (props) {
       return plainText(props.markup)
     },
-    // enterSlide () {
-    //   this.domSteps = new steps.DomSteps({
-    //     mode: 'words',
-    //     hideAllElementsInitally: false
-    //   })
-    //   this.domSteps.setStepCount(this.slide)
-    //   this.domSteps.displayByNo({ stepNo: this.slide.stepNo, full: true })
-    // },
+    enterSlide () {
+      console.log('enterSlide')
+      this.domSteps = new steps.DomSteps({
+        mode: 'words',
+        rootElement: this.$el,
+        hideAllElementsInitally: false
+      })
+      this.domSteps.setStepCount(this.slide)
+      this.domSteps.displayByNo({ stepNo: this.slide.stepNo, full: true })
+    },
     renderSlide () {
       this.domSteps = new steps.DomSteps({
         rootElement: this.$el,
