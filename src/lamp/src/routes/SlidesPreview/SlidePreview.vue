@@ -2,7 +2,7 @@
   <div
     class="vc_slide_preview"
     @click="gotToSlide(slide)"
-    :class="{ 'current-slide': slideCurrent.no === slide.no }"
+    :class="{ 'current-slide': slideCurrent && slideCurrent.no === slide.no }"
     :b-dark-mode="slide.master.styleConfig.darkMode"
   >
     <material-icon

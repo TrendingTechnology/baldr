@@ -7,7 +7,7 @@
       v-for="slide in slides"
       :key="slide.no"
       :title="`Zur Folie Nr. ${slide.no}`"
-      :class="{ 'current-slide': slide.no === slideCurrent.no }"
+      :class="{ 'current-slide': slideCurrent && slide.no === slideCurrent.no }"
     >
       <hr v-if="slide.slides.length && previewHierarchical"/>
       <slide-preview :slide="slide"/>
