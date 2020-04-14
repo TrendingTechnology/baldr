@@ -1,5 +1,5 @@
 <template>
-  <div class="vc_question_master">
+  <div class="vc_question_master main-app-padding">
     <question v-if="question" :question="question"/>
     <ol v-if="subQuestions">
       <li
@@ -44,9 +44,6 @@ export default {
 
 <style lang="scss">
   .vc_question_master {
-    font-size: 2em;
-    padding: 2em;
-
     p {
       margin: 0;
       padding: 0.1em 0.3em;

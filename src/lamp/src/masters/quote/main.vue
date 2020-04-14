@@ -1,5 +1,5 @@
 <template>
-  <div class="vc_quote_master">
+  <div class="vc_quote_master bigger">
     <p class="prolog" v-if="prolog" v-html="prolog"/>
 
     <p class="text" v-html="text"/>
@@ -42,7 +42,6 @@ export default {
 </script>
 <style lang="scss">
   .vc_quote_master {
-    font-size: 2em;
     padding-left: 10%;
     padding-right: 10%;
 

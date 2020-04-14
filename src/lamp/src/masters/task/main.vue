@@ -1,5 +1,5 @@
 <template>
-  <div class="vc_task_master" v-html="markup"/>
+  <div class="vc_task_master bigger" v-html="markup"/>
 </template>
 
 <script>

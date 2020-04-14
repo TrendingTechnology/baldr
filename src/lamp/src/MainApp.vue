@@ -386,6 +386,10 @@ export default {
     font-size: 0.7em
   }
 
+  .bigger {
+    font-size: 1.3em
+  }
+
   // For master slides: person, instrument
   .img-contain {
     height: 100%;

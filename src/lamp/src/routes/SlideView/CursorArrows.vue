@@ -153,10 +153,10 @@ export default {
     //border: 1px solid $blue;
     bottom: 0.5vw;
     box-sizing: border-box;
-    font-size: 3vw;
+    font-size: 1.5vw;
     height: 2.1em;
     position: fixed;
-    left: 93vw;
+    left: 96.3vw;
     width: 2.1em;
 
     svg {
