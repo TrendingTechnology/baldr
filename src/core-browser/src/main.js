@@ -16,17 +16,23 @@ export const convertMdToTex = convertTex.convertMdToTex
 /* globals DOMParser */
 
 /**
+ * Select a subset of elements.
+ *
+ * - `` (emtpy string or value which evalutes to false): All elements
+ * - `1`: The first element
+ * - `1,3,5`: The first, the third and the fifth element.
+ * - `1-3,5-7`
+ * - `-7`: `1-7`
+ * - `7-`: `7-end`
+ *
+ * @typedef {String} subsetSelector
+ */
+
+/**
  * Select a subset of elements by a string (`subsetSelector`). `1` is the first
  * element of the `elements` array.
  *
- * - `` (emtpy string or a falsy value): All elements
- * - `1`: The first element
- * - `1,3,5`:
- * - `1-3,5-7`
- * - `-7`:
- * - `7-`
- *
- * @param {String} subsetSelector - See above.
+ * @param {module:@bldr/core-browser~subsetSelector} subsetSelector - See above.
  * @param {object} options
  * @property {String|boolean} options.sort - `numeric`, or a truety value.
  * @property {Array} options.elements - An array of elements to build a subset
