@@ -2,7 +2,7 @@
   <div class="vc_person_master">
     <img class="img-contain" :src="imageHttpUrl">
     <p
-      class="short-biography font-shadow"
+      class="short-biography font-shadow smaller"
       v-if="shortBiography"
       v-html="shortBiography"
     />

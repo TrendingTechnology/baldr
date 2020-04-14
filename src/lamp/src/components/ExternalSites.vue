@@ -68,9 +68,10 @@ export default {
     bottom: 40%;
     display: flex;
     flex-direction: column;
-    font-size: 1em;
-    opacity: 0.1;
+    font-size: 2vmin;
+    opacity: 0.4;
     position: absolute;
     right: 0.4em;
+    z-index: 1;
   }
 </style>

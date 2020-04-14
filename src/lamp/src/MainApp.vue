@@ -382,6 +382,10 @@ export default {
     text-shadow: 0 0 0.2em $black, 0 0 0.05em $green;
   }
 
+  .smaller {
+    font-size: 0.7em
+  }
+
   // For master slides: person, instrument
   .img-contain {
     height: 100%;
