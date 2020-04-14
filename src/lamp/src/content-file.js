@@ -351,7 +351,7 @@ class Slide {
      *
      * @type {number}
      */
-    this.stepNo = 1
+    this.stepNo = null
 
     /**
      * @type {module:@bldr/lamp/content-file.MetaData}

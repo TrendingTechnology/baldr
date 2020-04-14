@@ -716,7 +716,12 @@ const masterMixin = {
           }, this)
           slideNoChange = true
         }
-        if (newValue.stepNo && newValue.stepNo !== oldValue.stepNo) {
+        // Previous slide has only one step number
+        // oldSlideNo 2 oldStepNo 1 newSlideNo 3 oldStepNo 1
+        if (
+          newValue.stepNo &&
+          `${newValue.slideNo}:${newValue.stepNo}` !== `${oldValue.slideNo}:${oldValue.stepNo}`
+        ) {
           this.master.afterStepNoChangeOnComponent({
             oldStepNo: oldValue.stepNo,
             newStepNo: newValue.stepNo,

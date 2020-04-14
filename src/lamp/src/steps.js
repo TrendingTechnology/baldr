@@ -239,7 +239,6 @@ export class DomSteps {
       let count = 1
       for (const domStep of this.elements) {
         const showElement = stepNo > count
-        // console.log(showElement)
         domStep.show(showElement)
         count += 1
       }

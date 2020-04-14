@@ -107,7 +107,7 @@ export default {
       const slide = this.$store.getters['lamp/slideByNo'](newSlideNo)
       warnSvgWidthHeight(this.svgPath)
       this.domSteps = new steps.DomSteps({
-        cssSelectors: this.stepSelector,
+        cssSelectors: slide.props.stepSelector,
         rootElement: this.$el,
         subsetSelector: slide.props.stepSubset,
         hideAllElementsInitally: false

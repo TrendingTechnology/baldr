@@ -34,6 +34,10 @@ slides:
 
 - group: id:Rolling-Stones_The
 
+- interactive_graphic:
+    src: id:Requiem_NB_Confutatis_1-Takt
+    step_subset: 3-
+
 - task: <em>“Do this!”</em> __subito__!
 
 - song: Last-Christmas

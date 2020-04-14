@@ -2,6 +2,7 @@
 slides:
 
 - title: Shortcuts
+  description: selector inkscape:groupmode="layer"
   interactive_graphic:
     src: id:Requiem_NB_Confutatis_1-Takt
     step_subset: 3-
@@ -14,11 +15,13 @@ slides:
     src: id:9-Symphonie_NB_Freude-schoener-Goetterfunken_Anfang
 
 - title: g Element
+  description: selector inkscape:groupmode="layer"
   interactive_graphic:
     src: id:NB_Dreiklaenge-Nationalhymnen_F-Dur
     step_subset: 3-
 
 - title: class
+  description: .baldr-group
   interactive_graphic:
     src: id:Moses_Notationsweisen
     step_selector: .baldr-group

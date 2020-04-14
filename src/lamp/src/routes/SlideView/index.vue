@@ -1,7 +1,7 @@
 <template>
   <!-- We must a slide object. Else error messages when entering  -->
   <div v-if="slide" class="vc_slide_view" :style="style">
-    <slide-main :slide="slide" :step-no="stepNo"/>
+    <slide-main :slide="slide" :step-no="slide.stepNo"/>
     <cursor-arrows/>
   </div>
 </template>
@@ -18,10 +18,6 @@ export default {
   name: 'SlideView',
   computed: {
     ...mapGetters(['slide']),
-    stepNo () {
-      if (this.slide.stepNo) return this.slide.stepNo
-      return 0
-    },
     style () {
       return {
         fontSize: `${this.slide.scaleFactor * 2}vw`
