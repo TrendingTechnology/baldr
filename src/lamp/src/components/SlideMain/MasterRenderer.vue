@@ -24,9 +24,7 @@ export default {
         {
           props: {
             ...this.slide.propsMain,
-            stepNo: this.stepNo,
-            slideNo: this.slide.no,
-            slideAndStepNo: { stepNo: this.stepNo, slideNo: this.slide.no }
+            navNos: { stepNo: this.stepNo, slideNo: this.slide.no }
           },
           class: {
             'master-inner': true

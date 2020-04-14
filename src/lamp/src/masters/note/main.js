@@ -100,43 +100,15 @@ export default {
     plainTextFromProps (props) {
       return plainText(props.markup)
     },
-    // mountSlide
-    enterSlide () {
-      console.log('mountSlide')
-      console.log(this.hookCallProtocol)
-      // console.log(this.$el)
-      // console.log(this.stepNo)
+    afterSlideNoChangeOnComponent () {
       this.domSteps = new steps.DomSteps({
         mode: 'words',
         rootElement: this.$el,
         hideAllElementsInitally: true
       })
       this.domSteps.setStepCount(this.slide)
-      this.domSteps.displayByNo({ stepNo: this.stepNo, full: true })
     },
-    // afterSlideNoChange
-    renderSlide () {
-      console.log('afterSlideNoChange')
-      this.domSteps = new steps.DomSteps({
-        rootElement: this.$el,
-        mode: 'words',
-        hideAllElementsInitally: false
-      })
-      this.domSteps.setStepCount(this.slide)
-    },
-    // enterStep ({ oldStepNo, newStepNo }) {
-    //   // If you come from a different master, domSteps is not set up yet.
-    //   if (this.domSteps) {
-    //     const element = this.domSteps.displayByNo({
-    //       oldStepNo,
-    //       stepNo: this.stepNo
-    //     })
-    //     scroll(element)
-    //   }
-    // },
-    renderStep ({ newStepNo, oldStepNo, slideNoChange }) {
-      console.log('afterStepNoChange')
-
+    afterStepNoChangeOnComponent ({ newStepNo, oldStepNo, slideNoChange }) {
       // If you come from a different master, domSteps is not set up yet.
       if (this.domSteps) {
         // console.log(this.domSteps)

@@ -445,10 +445,6 @@ class Master {
     this.callHook_('enterSlide', payload, thisArg)
   }
 
-  renderSlide (payload, thisArg) {
-    this.callHook_('renderSlide', payload, thisArg)
-  }
-
   /**
    * Called before leaving a slide. This hook is triggered before the new
    * slide number `slideNo` is set in the vuex store.
@@ -485,10 +481,6 @@ class Master {
    */
   leaveSlide (payload, thisArg) {
     this.callHook_('leaveSlide', payload, thisArg)
-  }
-
-  renderStep (payload, thisArg) {
-    return this.callHook_('renderStep', payload, thisArg)
   }
 
   /**
@@ -627,6 +619,14 @@ class Master {
   async afterMediaResolution (props, thisArg) {
     await this.callHookAsync_('afterMediaResolution', { props, master: this }, thisArg)
   }
+
+  afterSlideNoChangeOnComponent (payload, thisArg) {
+    this.callHook_('afterSlideNoChangeOnComponent', payload, thisArg)
+  }
+
+  afterStepNoChangeOnComponent (payload, thisArg) {
+    this.callHook_('afterStepNoChangeOnComponent', payload, thisArg)
+  }
 }
 
 /**
@@ -701,51 +701,52 @@ class Masters {
  */
 const masterMixin = {
   props: {
-    stepNo: {
-      type: Number
-    },
-    slideNo: {
-      type: [String, Number]
-    },
-    slideAndStepNo: {
+    navNos: {
       type: Object
     }
   },
   watch: {
-    stepNo (value, oldValue) {
-      // console.log(`watch.stepNo ${this._uid} value: ${value} oldValue: ${oldValue}`)
-      // this.master.renderStep({ stepNo: value }, this)
-    },
-    slideNo (value) {
-      // console.log(`watch.slideNo ${this._uid} value: ${value}`)
-    },
-    slideAndStepNo (newValue, oldValue) {
+    navNos (newValue, oldValue) {
       this.$nextTick(() => {
         let slideNoChange = false
         if (newValue.slideNo !== oldValue.slideNo) {
-          this.master.renderSlide(null, this)
+          this.master.afterSlideNoChangeOnComponent({
+            oldSlideNo: oldValue.slideNo,
+            newSlideNo: newValue.slideNo
+          }, this)
           slideNoChange = true
         }
-        if (newValue.stepNo !== oldValue.stepNo) {
-          this.master.renderStep({ oldStepNo: oldValue.stepNo, newStepNo: newValue.stepNo, slideNoChange }, this)
+        if (newValue.stepNo && newValue.stepNo !== oldValue.stepNo) {
+          this.master.afterStepNoChangeOnComponent({
+            oldStepNo: oldValue.stepNo,
+            newStepNo: newValue.stepNo,
+            slideNoChange
+          }, this)
         }
       })
     }
   },
   mounted () {
+    this.master.afterSlideNoChangeOnComponent({
+      newSlideNo: this.navNos.slideNo
+    }, this)
+    if (this.navNos.stepNo) {
+      this.master.afterStepNoChangeOnComponent({
+        newStepNo: this.navNos.stepNo,
+        slideNoChange: true
+      }, this)
+    }
+
     const oldSlide = vue.$store.getters['lamp/slideOld']
     let oldProps
     if (oldSlide) {
       oldProps = oldSlide.props
     }
-    this.hookCallProtocol = {}
-
     // On instant slides like camera or editor there is no newSlide
     const newSlide = vue.$store.getters['lamp/slide']
     let newProps
     if (newSlide) {
       newProps = newSlide.props
-      this.hookCallProtocol.enterSlide = true
       newSlide.master.enterSlide({ oldSlide, oldProps, newSlide, newProps }, this)
     }
     customStore.vueMasterInstanceCurrent = this
