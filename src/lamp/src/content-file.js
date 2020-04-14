@@ -518,7 +518,11 @@ class Slide {
     const params = { presId: presentation.id }
     if (this.stepCount && this.stepCount > 1) {
       name = 'slide-step-no'
-      params.stepNo = this.stepNo
+      if (this.stepNo) {
+        params.stepNo = this.stepNo
+      } else {
+        params.stepNo = 1
+      }
     } else {
       name = 'slide'
     }
