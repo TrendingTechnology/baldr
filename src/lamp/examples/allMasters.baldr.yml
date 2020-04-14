@@ -38,9 +38,37 @@ slides:
     src: id:Requiem_NB_Confutatis_1-Takt
     step_subset: 3-
 
-- task: <em>“Do this!”</em> __subito__!
+- person: id:Ibrahim_Abdullah
+
+- quote:
+    text: >-
+      Der Mann begann zu tippen. Ich flippte fast aus! Er schlug
+      fantastische Rhythmen, indem er zwischen den Wörtern mit den
+      kleinen Fingern auf den Großschreibungstasten Akzente klopfte.
+      Und selbst wenn er auf die schlechten Kopien schaute, um den
+      nächsten Satz zu finden, spielte er weiter seinen Rhythmus auf
+      den beiden Umschalttasten. Jede Seite beendete er mit einer
+      glänzenden Passage über Ort und Datum des Eingangsstempels. -
+      Ich dankte ihm für seine Darbietung. Ich wusste: Dies war genau
+      das richtige Land, um Trommeln zu lernen.
+    author: Jahn Miller Chernaff
+    date: 1994
+    epilog: >-
+      So berichtet der amerikanische Schlagzeuger und Musikethnologe
+      <em class="person">John Miller Chernoff</em> über ein Erlebnis
+      bei seiner Einreise auf dem Flughafen von Accra, der Haupstadt
+      des westafrikanischen Staates Ghana.
+
+- score_sample:
+    score: 'id:Schuetz-Freue_NB_Freue-IMSLP-Systeme'
+    audio: 'id:Schuetz-Freue_HB_Freue-dich'
+
+- section: >-
+    <em class="person">John Cage</em>: <em class="piece">Imaginary Landscape No. 4</em>
 
 - song: Last-Christmas
+
+- task: <em>“Do this!”</em> __subito__!
 
 - video: id:Entstehung_VD_Die-Geschichte-des-Jazz_Entstehung-aus-soziologischer-Sicht
 
