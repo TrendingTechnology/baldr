@@ -1,5 +1,5 @@
 /**
- * @module @bldr/lamp/masters/svg
+ * @module @bldr/lamp/masters/interactiveGraphic
  */
 
 import { warnSvgWidthHeight } from '@/lib.js'
