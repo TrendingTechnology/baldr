@@ -71,6 +71,9 @@ export default {
       if (props.audio) {
         propsPreview.hasAudio = true
       }
+      if (propsMain.scoreMediaFile.partCount > 1) {
+        propsPreview.isMultiPart = true
+      }
       return propsPreview
     },
     calculateStepCount ({ props }) {

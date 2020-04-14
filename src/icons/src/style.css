@@ -165,11 +165,11 @@
   content: "\ea22";
 }
 
-.baldr-icon_loading::before {
+.baldr-icon_magnify::before {
   content: "\ea23";
 }
 
-.baldr-icon_magnify::before {
+.baldr-icon_multi-part::before {
   content: "\ea24";
 }
 

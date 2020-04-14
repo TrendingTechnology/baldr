@@ -5,6 +5,7 @@
   ">
     <img :src="scoreHttpUrl"/>
     <slide-preview-play-button v-if="hasAudio"/>
+    <plain-icon class="transparent-background" v-if="isMultiPart" name="multi-part"/>
   </div>
 </template>
 
@@ -17,6 +18,9 @@ export default {
     },
     hasAudio: {
       type: Boolean
+    },
+    isMultiPart: {
+      type: Boolean
     }
   }
 }
@@ -25,10 +29,18 @@ export default {
 <style lang="scss">
   .vc_score_sample_master_preview {
     img {
-      width: 90%;
       height: 90%;
-      object-fit: contain;
       margin: 5%;
+      object-fit: contain;
+      width: 90%;
+    }
+
+    .baldr-icon_multi-part {
+      bottom: 0;
+      color: $orange;
+      padding: 0.5em;
+      position: absolute;
+      right: 0;
     }
   }
 </style>

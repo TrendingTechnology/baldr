@@ -181,7 +181,7 @@ function action () {
         'play-speed': '', // Start play
         'file-tree': '', // Master slide section
         'trumpet': '', // Master slide “instrument”
-        'loading': '' // Loading spining ... used when the presentation is loading
+        'text-box-multiple-outline': 'multi-part' // multipart assets
       }
     },
     {
