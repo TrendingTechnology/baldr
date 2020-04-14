@@ -342,7 +342,8 @@ export function convertPropertiesCase (data, direction = 'snake-to-camel') {
  */
 export function formatMultiPartAssetFileName (firstFileName, no) {
   if (!Number.isInteger(no)) {
-    throw new Error(`${firstFileName}: The specifed number “${no}” is no integer.`)
+    // throw new Error(`${firstFileName}: The specifed number “${no}” is no integer.`)
+    no = 1
   }
   let suffix
   if (no === 1) {

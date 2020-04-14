@@ -1,7 +1,7 @@
 <template>
   <div class="vc_score_sample_master">
     <h1 v-if="heading" v-html="heading"/>
-    <img :src="scoreMediaFile.getMultiPartHttpUrlByNo(stepNo)"/>
+    <img :src="scoreMediaFile.getMultiPartHttpUrlByNo(navNos.stepNo)"/>
     <play-button v-if="audioSample" :sample="audioSample"/>
   </div>
 </template>
