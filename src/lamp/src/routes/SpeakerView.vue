@@ -2,7 +2,7 @@
   <div class="vc_speaker_view main-app-fullscreen" b-ui-theme="default">
     <h1>Referentenansicht</h1>
 
-    <div class="slide-panel" v-if="presentation">
+    <div class="slide-panel" v-if="presentation && slide">
       <slide-main id="current-slide" :slide="slide" :step-no="currentStepNo"/>
       <slide-main id="next-slide" :slide="nextSlide" :step-no="nextStepNo"/>
     </div>

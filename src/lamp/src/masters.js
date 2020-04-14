@@ -738,11 +738,14 @@ const masterMixin = {
     if (oldSlide) {
       oldProps = oldSlide.props
     }
+    this.hookCallProtocol = {}
+
     // On instant slides like camera or editor there is no newSlide
     const newSlide = vue.$store.getters['lamp/slide']
     let newProps
     if (newSlide) {
       newProps = newSlide.props
+      this.hookCallProtocol.enterSlide = true
       newSlide.master.enterSlide({ oldSlide, oldProps, newSlide, newProps }, this)
     }
     customStore.vueMasterInstanceCurrent = this

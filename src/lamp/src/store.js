@@ -140,7 +140,9 @@ const actions = {
     }
     commit('setPresentation', presentation)
     commit('setSlides', presentation.slides)
-    dispatch('setSlideNoCurrent', 1)
+    // The presentation can now be entered on each slide not only the first.
+    // This is possible by the routes.
+    // dispatch('setSlideNoCurrent', 1)
   },
   async openPresentationById ({ dispatch }, id) {
     // Get the path

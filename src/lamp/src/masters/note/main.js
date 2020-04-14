@@ -100,16 +100,23 @@ export default {
     plainTextFromProps (props) {
       return plainText(props.markup)
     },
+    // mountSlide
     enterSlide () {
+      console.log('mountSlide')
+      console.log(this.hookCallProtocol)
+      // console.log(this.$el)
+      // console.log(this.stepNo)
       this.domSteps = new steps.DomSteps({
         mode: 'words',
         rootElement: this.$el,
-        hideAllElementsInitally: false
+        hideAllElementsInitally: true
       })
       this.domSteps.setStepCount(this.slide)
-      this.domSteps.displayByNo({ stepNo: this.slide.stepNo, full: true })
+      this.domSteps.displayByNo({ stepNo: this.stepNo, full: true })
     },
+    // afterSlideNoChange
     renderSlide () {
+      console.log('afterSlideNoChange')
       this.domSteps = new steps.DomSteps({
         rootElement: this.$el,
         mode: 'words',
@@ -128,8 +135,11 @@ export default {
     //   }
     // },
     renderStep ({ newStepNo, oldStepNo, slideNoChange }) {
+      console.log('afterStepNoChange')
+
       // If you come from a different master, domSteps is not set up yet.
       if (this.domSteps) {
+        // console.log(this.domSteps)
         let opts
         if (slideNoChange) {
           opts = {

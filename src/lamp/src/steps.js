@@ -242,7 +242,9 @@ export class DomSteps {
     if (!oldStepNo || full || stepNo === 1 || (oldStepNo === 1 && stepNo === this.count)) {
       let count = 1
       for (const domStep of this.elements) {
-        domStep.show(stepNo > count)
+        const showElement = stepNo > count
+        // console.log(showElement)
+        domStep.show(showElement)
         count += 1
       }
       if (stepNo === 1) {
