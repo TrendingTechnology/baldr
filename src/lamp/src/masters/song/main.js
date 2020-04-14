@@ -50,7 +50,8 @@ export default {
     },
     collectPropsPreview ({ propsMain }) {
       return {
-        imageHttpUrl: propsMain.image.httpUrl
+        imageHttpUrl: propsMain.image.httpUrl,
+        title: propsMain.image.titleCombined
       }
     }
   }

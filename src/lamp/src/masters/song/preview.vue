@@ -3,6 +3,7 @@
     vc_song_master_preview
     slide-preview-fullscreen
   ">
+    <h2>{{ title }}</h2>
     <img :src="imageHttpUrl"/>
   </div>
 </template>
@@ -13,6 +14,9 @@ export default {
     imageHttpUrl: {
       type: String,
       required: true
+    },
+    title: {
+      type: String
     }
   }
 }
@@ -20,11 +24,16 @@ export default {
 
 <style lang="scss">
   .vc_song_master_preview {
+    h2 {
+      position: absolute;
+      text-align: center;
+      width: 100%;
+    }
     img {
-      width: 90%;
       height: 90%;
-      object-fit: contain;
       margin: 5%;
+      object-fit: contain;
+      width: 90%;
     }
   }
 </style>

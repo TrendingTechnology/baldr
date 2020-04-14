@@ -1,7 +1,7 @@
 <template>
   <div class="vc_song_master">
-    <h1 v-if="stepNo === 1">{{ image.titleCombined }}</h1>
-    <img :src="image.getMultiPartHttpUrlByNo(stepNo)"/>
+    <h1 v-if="navNos.stepNo === 1">{{ image.titleCombined }}</h1>
+    <img :src="image.getMultiPartHttpUrlByNo(navNos.stepNo)"/>
   </div>
 </template>
 
