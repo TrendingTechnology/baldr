@@ -118,7 +118,7 @@ class Master {
      * The definition of the slide properties (`props`) (aka `props` of a
      * `master`).
      *
-     * @type {@bldr/lamp~propsDef}
+     * @type {module:@bldr/lamp~propsDef}
      */
     this.propsDef = null
 
