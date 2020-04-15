@@ -62,9 +62,22 @@ slides:
 
 - group: id:Rolling-Stones_The
 
+- image: 'id:Marmotte_BD_Foto-Savoyarden-Musikanten-mit-Murmeltier'
+
+- instrument: Kontrabass
+
 - interactive_graphic:
     src: id:Requiem_NB_Confutatis_1-Takt
     step_subset: 3-
+
+- note: |
+    # Heading
+
+    ---
+
+    1. one
+    2. two
+    3. three
 
 - person: id:Ibrahim_Abdullah
 
