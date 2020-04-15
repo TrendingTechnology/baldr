@@ -8,7 +8,7 @@
 
 <script>
 import SlideMain from '@/components/SlideMain/index.vue'
-import CursorArrows from './CursorArrows.vue'
+import CursorArrows from '@/components/CursorArrows.vue'
 import { routerGuards } from '@/lib.js'
 import { createNamespacedHelpers } from 'vuex'
 

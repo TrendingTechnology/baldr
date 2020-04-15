@@ -6,11 +6,14 @@
       <slide-main id="current-slide" :slide="slide" :step-no="currentStepNo"/>
       <slide-main id="next-slide" :slide="nextSlide" :step-no="nextStepNo"/>
     </div>
+
+    <cursor-arrows/>
   </div>
 </template>
 
 <script>
 import SlideMain from '@/components/SlideMain/index.vue'
+import CursorArrows from '@/components/CursorArrows.vue'
 import { createNamespacedHelpers } from 'vuex'
 import { routerGuards } from '@/lib.js'
 
@@ -19,7 +22,8 @@ const { mapGetters } = createNamespacedHelpers('lamp')
 export default {
   name: 'SpeakerView',
   components: {
-    SlideMain
+    SlideMain,
+    CursorArrows
   },
   computed: {
     ...mapGetters(['slide', 'presentation', 'slides']),
