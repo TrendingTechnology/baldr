@@ -150,7 +150,6 @@ export default {
 
 <style lang="scss">
   .vc_cursor_arrows {
-    //border: 1px solid $blue;
     bottom: 0.5vw;
     box-sizing: border-box;
     font-size: 1.5vw;
@@ -160,15 +159,14 @@ export default {
     width: 2.1em;
 
     svg {
-      position: absolute;
       box-sizing: border-box;
-      //border: 1px solid $yellow
-      opacity: 0.1;
       fill: $gray;
-      transition-property: fill, opacity;
-      transition-duration: 0.05s;
-      width: 0.7em;
       height: 0.7em;
+      opacity: 0.1;
+      position: absolute;
+      transition-duration: 0.05s;
+      transition-property: fill, opacity;
+      width: 0.7em;
     }
 
     svg.activated:hover {
@@ -188,26 +186,26 @@ export default {
     }
 
     .up {
-      top: 0.2em;
       left: 0.7em;
+      top: 0.2em;
       transform: rotate(135deg);
     }
 
     .right {
-      top: 0.7em;
       left: 1.2em;
+      top: 0.7em;
       transform: rotate(225deg);
     }
 
     .down {
-      top: 1.2em;
       left: 0.7em;
+      top: 1.2em;
       transform: rotate(315deg);
     }
 
     .left {
-      top: 0.7em;
       left: 0.2em;
+      top: 0.7em;
       transform: rotate(405deg);
     }
   }
