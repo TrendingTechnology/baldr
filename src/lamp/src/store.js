@@ -189,6 +189,7 @@ const actions = {
     let oldProps
     const newSlide = getters.slideByNo(no)
     const newProps = newSlide.props
+
     if (getters.slide) {
       oldSlide = getters.slide
       commit('setSlideNoOld', oldSlide.no)
@@ -209,6 +210,7 @@ const actions = {
     slide.master.enterStep({ oldStepNo, newStepNo }, thisArg)
   },
   setSlideAndStepNoCurrent ({ dispatch, getters }, { slideNo, stepNo }) {
+    // TODO: FIX
     if (slideNo !== getters.slideNoOld) dispatch('setSlideNoCurrent', slideNo)
     if (stepNo !== getters.slide.stepNo) {
       dispatch('setStepNoCurrent', { slide: getters.slide, stepNo })
