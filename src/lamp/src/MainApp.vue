@@ -135,7 +135,7 @@ export default {
         },
         // Previous slide
         description: 'zur vorhergehenden Folie',
-        routeNames: ['slide', 'slide-step-no']
+        routeNames: ['slide', 'slide-step-no', 'speaker-view', 'speaker-view-step-no']
       },
       {
         keys: 'ctrl+right',
@@ -144,7 +144,7 @@ export default {
         },
         // Next slide
         description: 'zur nächsten Folie',
-        routeNames: ['slide', 'slide-step-no']
+        routeNames: ['slide', 'slide-step-no', 'speaker-view', 'speaker-view-step-no']
       },
       {
         keys: 'ctrl+up',
@@ -153,7 +153,7 @@ export default {
         },
         // Previous step
         description: 'zum vorhergehenden Schritt',
-        routeNames: ['slide-step-no']
+        routeNames: ['slide-step-no', 'speaker-view-step-no']
       },
       {
         keys: 'ctrl+down',
@@ -162,21 +162,23 @@ export default {
         },
         // Next step
         description: 'zum nächsten Schritt',
-        routeNames: ['slide-step-no']
+        routeNames: ['slide-step-no', 'speaker-view-step-no']
       },
       {
         keys: 'left',
         callback: () => {
           if (this.presentation) this.presentation.nextSlideOrStep(-1)
         },
-        description: 'zur/m vorhergehenden Folie oder Schritt'
+        description: 'zur/m vorhergehenden Folie oder Schritt',
+        routeNames: ['slide', 'slide-step-no', 'speaker-view', 'speaker-view-step-no']
       },
       {
         keys: 'right',
         callback: () => {
           if (this.presentation) this.presentation.nextSlideOrStep(1)
         },
-        description: 'zur/m nächsten Folie oder Schritt'
+        description: 'zur/m nächsten Folie oder Schritt',
+        routeNames: ['slide', 'slide-step-no', 'speaker-view', 'speaker-view-step-no']
       },
       {
         keys: 'ctrl+m',

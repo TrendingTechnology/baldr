@@ -59,6 +59,22 @@ import vue from '@/main.js'
  * @property {Number} stepNo  - The step number starting from 1.
  */
 
+function getNavRouteNameFromRoute (to, from) {
+  if (from.name === 'speaker-view' || from.name === 'speaker-view-step-no') {
+    if (to.stepNo) {
+      return 'speaker-view-step-no'
+    } else {
+      return 'speaker-view'
+    }
+  } else {
+    if (to.stepNo) {
+      return 'slide-step-no'
+    } else {
+      return 'slide'
+    }
+  }
+}
+
 /**
  * Convert various data to a string. Meant for error messages.
  *
@@ -1063,13 +1079,11 @@ ${JSON.stringify(this.rawYamlObject_)}`
 
     const slideNext = slides[params.slideNo - 1]
 
-    let name
     if (slideNext.stepCount > 1) {
-      name = 'slide-step-no'
       params.stepNo = 1
-    } else {
-      name = 'slide'
     }
+
+    const name = getNavRouteNameFromRoute(params, router.currentRoute)
 
     router.push({ name, params })
   }
@@ -1119,20 +1133,7 @@ ${JSON.stringify(this.rawYamlObject_)}`
     const params = this.navigator.getNextRouterParams(direction)
     params.presId = this.id
 
-    let name
-    if (router.currentRoute.name === 'speaker-view' || router.currentRoute.name === 'speaker-view-step-no') {
-      if (params.stepNo) {
-        name = 'speaker-view-step-no'
-      } else {
-        name = 'speaker-view'
-      }
-    } else {
-      if (params.stepNo) {
-        name = 'slide-step-no'
-      } else {
-        name = 'slide'
-      }
-    }
+    const name = getNavRouteNameFromRoute(params, router.currentRoute)
 
     // next
     if (direction === 1) {
