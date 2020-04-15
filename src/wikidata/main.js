@@ -173,7 +173,6 @@ function getClaim (entity, claims) {
   }
 
   if (Array.isArray(claims)) {
-    console.log(claims)
 
     for (const claim of claims) {
       const typeData = getSingleClaim(entity, claim)
