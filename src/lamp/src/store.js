@@ -210,8 +210,9 @@ const actions = {
     slide.master.enterStep({ oldStepNo, newStepNo }, thisArg)
   },
   setSlideAndStepNoCurrent ({ dispatch, getters }, { slideNo, stepNo }) {
-    // TODO: FIX
-    if (slideNo !== getters.slideNoOld) dispatch('setSlideNoCurrent', slideNo)
+    if (!getters.slide || slideNo !== getters.slide.no) {
+      dispatch('setSlideNoCurrent', slideNo)
+    }
     if (stepNo !== getters.slide.stepNo) {
       dispatch('setStepNoCurrent', { slide: getters.slide, stepNo })
     }
