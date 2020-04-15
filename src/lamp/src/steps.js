@@ -42,7 +42,9 @@ class DomStepElement {
 
   /**
    * To get an unified interface in comparison with the class
-   * `DomStepElementGroup`.
+   * `DomStepElementGroup`. For debugging purposes.
+   *
+   * @returns {Array}
    */
   get htmlElements () {
     return [this.element]
@@ -89,6 +91,12 @@ class DomStepElementGroup {
     return this.elements[0].element
   }
 
+  /**
+   * To get an unified interface in comparison with the class
+   * `DomStepElement`. For debugging purposes.
+   *
+   * @returns {Array}
+   */
   get htmlElements () {
     const htmlElements = []
     for (const domStepElement of this.elements) {
@@ -220,6 +228,8 @@ export class DomSteps {
 
   /**
    * `elements` + 1
+   *
+   * @returns Number
    */
   get count () {
     return this.elements.length + 1
@@ -227,9 +237,29 @@ export class DomSteps {
 
   /**
    * `elementsAll` + 1
+   *
+   * @returns Number
    */
   get countAll () {
     return this.elementsAll.length + 1
+  }
+
+  /**
+   * For debugging purposes.
+   *
+   * @returns {Array}
+   */
+  get htmlElements () {
+    const htmlElements = []
+    for (const domStep of this.elements) {
+      const elements = domStep.htmlElements
+      if (elements.length === 1) {
+        htmlElements.push(elements[0])
+      } else {
+        htmlElements.push(elements)
+      }
+    }
+    return htmlElements
   }
 
   /**

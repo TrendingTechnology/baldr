@@ -10,15 +10,43 @@ slides:
 
 - cloze: 'id:Dukas-Zauberlehrling_AB_Lueckentext'
 
-- editor:
-    step_mode: 'words'
-    markup: |
-      # heading 1
-
-      * one two three
-      * one two three
-
-      lorem ipsum
+- editor: |
+    <table>
+      <thead>
+        <tr>
+          <th></th>
+          <td>Thema 1 (Spanier)</td>
+          <td>Thema 2 (Niederländer)</td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th>Dynamik</th>
+          <td>…</td>
+          <td>…</td>
+        </tr>
+        <tr>
+          <th>Rhythmik</th>
+          <td>…</td>
+          <td>…</td>
+        </tr>
+        <tr>
+          <th>Satztechnik</th>
+          <td>…</td>
+          <td>…</td>
+        </tr>
+        <tr>
+          <th>Artikulation</th>
+          <td>…</td>
+          <td>…</td>
+        </tr>
+        <tr>
+          <th>Tonlage</th>
+          <td>…</td>
+          <td>…</td>
+        </tr>
+      </tbody>
+    </table>
 
 - generic:
     step_mode: 'words'

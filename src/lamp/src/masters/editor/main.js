@@ -68,32 +68,29 @@ export default {
       const element = document.querySelector('.vc_editor_master')
       if (element) oldProps.markup = element.innerHTML
     },
-    enterSlide () {
+    afterSlideNoChangeOnComponent ({ newSlideNo }) {
       this.onSlideChange()
-      let sentencesSelector
-      if (this.stepMode === 'sentences') {
-        sentencesSelector = '.vc_editor_master'
-      }
-
+      const slide = this.$store.getters['lamp/slideByNo'](newSlideNo)
       if (this.stepMode) {
         this.domSteps = new steps.DomSteps({
           subsetSelector: this.stepSubset,
           mode: this.stepMode,
-          sentencesSelector,
+          rootElement: this.$el,
           hideAllElementsInitally: false
         })
-        this.domSteps.setStepCount(this.slide)
-        this.domSteps.displayByNo({ stepNo: this.slide.stepNo, full: true })
+        this.domSteps.setStepCount(slide)
       }
     },
-    enterStep ({ oldStepNo }) {
-      if (this.stepMode) {
-        const element = this.domSteps.displayByNo({
-          oldStepNo,
-          stepNo: this.stepNo
-        })
-        scroll(element)
+    afterStepNoChangeOnComponent ({ newStepNo, oldStepNo, slideNoChange }) {
+      if (!this.domSteps || !this.stepMode) return
+      const options = { stepNo: newStepNo }
+      if (slideNoChange) {
+        options.full = true
+      } else {
+        options.oldStepNo = oldStepNo
       }
+      const element = this.domSteps.displayByNo(options)
+      scroll(element)
     }
   }
 }
