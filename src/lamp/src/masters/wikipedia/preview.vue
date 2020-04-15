@@ -6,8 +6,8 @@
   ">
     <img v-if="thumbnailUrl" :src="thumbnailUrl" class="image-contain"/>
 
-    <div class="text-overlay transparent-background">
-      <p class="title">{{ titleNoUnderscores }}</p>
+    <div class="text-overlay">
+      {{ titleNoUnderscores }}
     </div>
   </div>
 </template>
@@ -42,12 +42,17 @@ export default {
     font-size: 3em;
 
     .text-overlay {
+      background-color: rgba($white, 0.8);
       bottom: 0;
       left: 0;
-      line-height: 1em;
+      overflow: hidden;
+      padding: 0 0 0.2em 0.2em;
       position: absolute;
-      text-align: center;
+      text-align: left;
+      text-decoration: underline;
+      text-overflow: ellipsis;
       text-shadow: 0 0 0.1em $white;
+      white-space: nowrap;
       width: 100%;
     }
   }

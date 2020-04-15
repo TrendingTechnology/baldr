@@ -113,11 +113,6 @@ export default {
       openPresentationByRawYaml(yamlString)
     }
   },
-  mounted: function () {
-    this.$styleConfig.set({
-      centerVertically: false
-    })
-  },
   computed: {
     documentation () {
       return markupToHtml(documentation)
