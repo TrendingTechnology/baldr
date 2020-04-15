@@ -105,7 +105,11 @@ export async function getHtmlBody (title, language = 'de', oldid) {
     delete params.page
   }
   const response = await queryWiki(language, params)
-  if (response.parse) return response.parse.text['*']
+  if (response.parse) {
+    const body = response.parse.text['*']
+    // Fix links
+    return body.replace(/href="\/wiki\//g, `href="https://${language}.wikipedia.org/wiki/`)
+  }
 }
 
 /**
