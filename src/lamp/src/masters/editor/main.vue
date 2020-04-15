@@ -3,7 +3,7 @@
     class="vc_editor_master"
     spellcheck="false"
     v-html="markupSafe"
-    :style="{ fontSize: fontSize + 'vw' }">
+  >
   </div>
 </template>
 
@@ -25,7 +25,6 @@ export default {
   },
   data () {
     return {
-      fontSize: 3.5,
       domSteps: null
     }
   },
@@ -72,12 +71,6 @@ export default {
       const range = document.getSelection().getRangeAt(0)
       const fragment = document.createRange().createContextualFragment(html)
       range.insertNode(fragment)
-    },
-    increaseFontSize () {
-      this.fontSize += 0.25
-    },
-    decreaseFontSize () {
-      this.fontSize -= 0.25
     }
   },
   created () {
@@ -99,12 +92,6 @@ export default {
       } else if (event.ctrlKey && event.key === '2') {
         event.preventDefault()
         this.surround_('h2')
-      } else if (event.ctrlKey && event.key === '+') {
-        event.preventDefault()
-        this.increaseFontSize()
-      } else if (event.ctrlKey && event.key === '-') {
-        event.preventDefault()
-        this.decreaseFontSize()
       }
     })
   }
@@ -115,8 +102,6 @@ export default {
   .vc_editor_master {
     // left right padding more because of ul ol etc ...
     padding: 1.5em 4em;
-    // Font size is set by a data property.
-    // font-size: 3.5vw;
 
     .editor-placeholder {
       font-size: 0.5em;
