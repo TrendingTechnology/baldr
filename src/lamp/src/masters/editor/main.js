@@ -70,7 +70,6 @@ export default {
     },
     afterSlideNoChangeOnComponent ({ newSlideNo }) {
       this.onSlideChange()
-      const slide = this.$store.getters['lamp/slideByNo'](newSlideNo)
       if (this.stepMode) {
         this.domSteps = new steps.DomSteps({
           subsetSelector: this.stepSubset,
@@ -78,7 +77,6 @@ export default {
           rootElement: this.$el,
           hideAllElementsInitally: false
         })
-        this.domSteps.setStepCount(slide)
       }
     },
     afterStepNoChangeOnComponent ({ newStepNo, oldStepNo, slideNoChange }) {

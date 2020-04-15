@@ -106,7 +106,6 @@ export default {
         rootElement: this.$el,
         hideAllElementsInitally: true
       })
-      this.domSteps.setStepCount(this.slide)
     },
     afterStepNoChangeOnComponent ({ newStepNo, oldStepNo, slideNoChange }) {
       const options = { stepNo: newStepNo }
