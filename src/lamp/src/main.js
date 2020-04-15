@@ -213,7 +213,7 @@
  *
  * ### 1. `leaveSlide ({ oldSlide, oldProps, newSlide, newProps })`
  *
- * This hook is only called on the main master component (the one that is
+ * This hook is only called on the public master component (the one that is
  * visible for the audience), not on further secondary master components (for
  * example the ad hoc slides or the future slide view in the speakers view.)
  *
@@ -234,7 +234,7 @@
  *
  * ### 2. `enterSlide ({ oldSlide, oldProps, newSlide, newProps })`
  *
- * This hook is only called on the main master component (the one that is
+ * This hook is only called on the public master component (the one that is
  * visible for the audience), not on further secondary master components (for
  * example the ad hoc slides or the future slide view in the speakers view.)
  *
@@ -252,7 +252,7 @@
  * }
  * ```
  *
- * ### 2. `afterSlideNoChangeOnComponent ({ oldSlideNo, newSlideNo })`
+ * ### 3. `afterSlideNoChangeOnComponent ({ oldSlideNo, newSlideNo })`
  *
  * - `this`: is the Vue instance of the current main master component.
  * - called from the master component mixin in the file `masters.js`.
@@ -262,6 +262,9 @@
  *
  * ### 1. `leaveStep ({ oldStepNo, newStepNo })`
  *
+ * This hook is only called on the public master component (the one that is
+ * visible for the audience), not on further secondary master components (for
+ * example the ad hoc slides or the future slide view in the speakers view.)
  *
  * - `this`: is the Vue instance of the current main master component.
  * - `return`: void
@@ -277,7 +280,11 @@
  * }
  * ```
  *
- * ### 2. `enterStep({ oldStepNo, newStepNo })`
+ * ### 2. `enterStep ({ oldStepNo, newStepNo })`
+ *
+ * This hook is only called on the public master component (the one that is
+ * visible for the audience), not on further secondary master components (for
+ * example the ad hoc slides or the future slide view in the speakers view.)
  *
  * - `this`: is the Vue instance of the current main master component.
  * - `return`: void
