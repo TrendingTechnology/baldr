@@ -189,17 +189,22 @@ const actions = {
     let oldProps
     const newSlide = getters.slideByNo(no)
     const newProps = newSlide.props
-
     if (getters.slide) {
       oldSlide = getters.slide
       commit('setSlideNoOld', oldSlide.no)
       oldProps = oldSlide.props
-      getters.slide.master.beforeLeaveSlide(
+      getters.slide.master.leaveSlide(
         { oldSlide, oldProps, newSlide, newProps },
         customStore.vueMasterInstanceCurrent
       )
     }
+
     commit('setSlideNoCurrent', no)
+
+    newSlide.master.enterSlide(
+      { oldSlide, oldProps, newSlide, newProps },
+      customStore.vueMasterInstanceCurrent
+    )
   },
   setStepNoCurrent ({ commit }, { slide, stepNo }) {
     const oldStepNo = slide.stepNo

@@ -6,4 +6,6 @@ slides:
 
 - title: Long form
   section:
-    heading: A section
+    heading: Another section
+
+- section: '*Lorem* __ipsum__'

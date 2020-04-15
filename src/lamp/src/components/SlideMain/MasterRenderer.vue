@@ -15,6 +15,10 @@ export default {
     // prop is mixed in `masters.js`
     stepNo: {
       type: Number
+    },
+    usedInPublic: {
+      type: Boolean,
+      default: true
     }
   },
   render: function (createElement) {
@@ -24,7 +28,8 @@ export default {
         {
           props: {
             ...this.slide.propsMain,
-            navNos: { stepNo: this.stepNo, slideNo: this.slide.no }
+            navNos: { stepNo: this.stepNo, slideNo: this.slide.no },
+            usedInPublic: this.usedInPublic
           },
           class: {
             'master-inner': true

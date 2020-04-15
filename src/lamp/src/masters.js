@@ -6,7 +6,7 @@
 
 /* globals rawYamlExamples */
 
-import vue, { customStore } from '@/main.js'
+import { customStore } from '@/main.js'
 import Vue from 'vue'
 import store from '@/store.js'
 import { markupToHtml, validateUri } from '@/lib.js'
@@ -446,25 +446,6 @@ class Master {
   }
 
   /**
-   * Called before leaving a slide. This hook is triggered before the new
-   * slide number `slideNo` is set in the vuex store.
-   *
-   * @param {object} payload
-   * @property {object} payload
-   * @property {module:@bldr/lamp/content-file~Slide} payload.oldSlide
-   * @property {module:@bldr/lamp~props} payload.oldProps
-   * @property {module:@bldr/lamp/content-file~Slide} payload.newSlide
-   * @property {module:@bldr/lamp~props} payload.newProps
-   *
-   * @param {object} thisArg - The
-   *   {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/call thisArg}
-   *   the master function is called with.
-   */
-  beforeLeaveSlide (payload, thisArg) {
-    this.callHook_('beforeLeaveSlide', payload, thisArg)
-  }
-
-  /**
    * Called when leaving a slide. This hook is triggered by the Vue lifecycle
    * hook `beforeDestroy`.
    *
@@ -701,8 +682,19 @@ class Masters {
  */
 const masterMixin = {
   props: {
+    // navNos (navigation numbers): this.navNos = { slideNo: 1, stepNo: 1 }
+    // The properties `slideNo` and `stepNo` had to be bundle into one object,
+    // to get a watcher that can execute the two hooks
+    // `afterSlideNoChangeOnComponent` and `afterStepNoChangeOnComponent`
+    // on demand.
     navNos: {
       type: Object
+    },
+    // By default all master components are marked as main components.
+    // Main master components register their `this` in the `customStore`
+    usedInPublic: {
+      type: Boolean,
+      default: true
     }
   },
   watch: {
@@ -741,35 +733,11 @@ const masterMixin = {
         slideNoChange: true
       }, this)
     }
-
-    const oldSlide = vue.$store.getters['lamp/slideOld']
-    let oldProps
-    if (oldSlide) {
-      oldProps = oldSlide.props
-    }
-    // On instant slides like camera or editor there is no newSlide
-    const newSlide = vue.$store.getters['lamp/slide']
-    let newProps
-    if (newSlide) {
-      newProps = newSlide.props
-      newSlide.master.enterSlide({ oldSlide, oldProps, newSlide, newProps }, this)
-    }
-    customStore.vueMasterInstanceCurrent = this
+    if (this.usedInPublic) customStore.vueMasterInstanceCurrent = this
     inlineMarkup.makeReactive()
   },
   beforeDestroy () {
-    const oldSlide = vue.$store.getters['lamp/slideOld']
-    let oldProps
-    if (oldSlide) {
-      oldProps = oldSlide.props
-    }
-    // On instant slides like camera or editor there is no newSlide
-    const newSlide = vue.$store.getters['lamp/slide']
-    if (newSlide) {
-      const newProps = newSlide.props
-      newSlide.master.leaveSlide({ oldSlide, oldProps, newSlide, newProps }, this)
-    }
-    customStore.vueMasterInstanceCurrent = null
+    if (this.usedInPublic) customStore.vueMasterInstanceCurrent = null
   }
 }
 

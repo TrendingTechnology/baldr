@@ -15,7 +15,8 @@
  *
  * - `this.$dynamicSelect`
  * - `this.$fullscreen()`: Set presentation app to fullscreen.
- * - `this.$get(getterName)`: Shortcut for `this.$store.getters['lamp/getterName']`
+ * - `this.$get(getterName)`: Shortcut for
+ *   `this.$store.getters['lamp/getterName']`
  * - `this.$masters`
  * - `this.$media`
  * - `this.$modal`
@@ -196,8 +197,8 @@
  *
  * ```js
  * export const default = {
-  * }
-  * ```
+ *  }
+ *  ```
  *
  * ### `plainTextFromProps(props)`
  *
@@ -210,20 +211,14 @@
  *
  * ## Slide change:
  *
- * ### 1. `beforeLeaveSlide({ oldSlide, oldProps, newSlide, newProps })`
+ * ### 1. `leaveSlide ({ oldSlide, oldProps, newSlide, newProps })`
+ *
+ * This hook is only called on the main master component (the one that is
+ * visible for the audience), not on further secondary master components (for
+ * example the ad hoc slides or the future slide view in the speakers view.)
  *
  * - `this`: is the Vue instance of the current main master component.
- * - `return`: void
- *
- * ```js
- * export const default = {
- * }
- * ```
- *
- * ### 2. `leaveSlide({ oldSlide, oldProps, newSlide, newProps })`
- *
- * - `this`: is the Vue instance of the current main master component.
- * - called from  `masterMixin` in `masters.js`
+ * - called from within the Vuex store in the file  `store.js`.
  * - `return`: void
  *
  * ```js
@@ -234,18 +229,17 @@
  *     }
  *   }
  * }
+ *
  * ```
  *
- * ### 3. `afterSlideNoChangeOnComponent({ oldSlideNo, newSlideNo })`
+ * ### 2. `enterSlide ({ oldSlide, oldProps, newSlide, newProps })`
+ *
+ * This hook is only called on the main master component (the one that is
+ * visible for the audience), not on further secondary master components (for
+ * example the ad hoc slides or the future slide view in the speakers view.)
  *
  * - `this`: is the Vue instance of the current main master component.
- * - called from the master component mixin in the file `masters.js`.
- * - `return`: void
- *
- * ### 4. `enterSlide({ oldSlide, oldProps, newSlide, newProps })`
- *
- * - `this`: is the Vue instance of the current main master component.
- * - called from  `masterMixin` in `masters.js`
+ * - called from within the Vuex store in the file  `store.js`.
  * - `return`: void
  *
  * ```js
@@ -258,9 +252,16 @@
  * }
  * ```
  *
+ * ### 2. `afterSlideNoChangeOnComponent ({ oldSlideNo, newSlideNo })`
+ *
+ * - `this`: is the Vue instance of the current main master component.
+ * - called from the master component mixin in the file `masters.js`.
+ * - `return`: void
+ *
  * ## Step change:
  *
- * ### 1. `leaveStep({ oldStepNo, newStepNo })`
+ * ### 1. `leaveStep ({ oldStepNo, newStepNo })`
+ *
  *
  * - `this`: is the Vue instance of the current main master component.
  * - `return`: void
@@ -276,13 +277,7 @@
  * }
  * ```
  *
- * ### 2. `afterStepNoChangeOnComponent({ oldStepNo, newStepNo, slideNoChange })`
- *
- * - `this`: is the Vue instance of the current main master component.
- * - called from the master component mixin in the file `masters.js`.
- * - `return`: void
- *
- * ### 3. `enterStep({ oldStepNo, newStepNo })`
+ * ### 2. `enterStep({ oldStepNo, newStepNo })`
  *
  * - `this`: is the Vue instance of the current main master component.
  * - `return`: void
@@ -304,10 +299,16 @@
  * }
  * ```
  *
+ * ### 3. `afterStepNoChangeOnComponent ({ oldStepNo, newStepNo, slideNoChange })`
+ *
+ * - `this`: is the Vue instance of the current main master component.
+ * - called from the master component mixin in the file `masters.js`.
+ * - `return`: void
+ *
  * # Store
  *
- * Each master slide can get its own Vuex store module. The module is
- * name like `lampMaster${masterName}`, e. g. `lampMasterGeneric`.
+ * Each master slide can get its own Vuex store module. The module is name like
+ * `lampMaster${masterName}`, e. g. `lampMasterGeneric`.
  *
  * ```js
  * export const default = {
