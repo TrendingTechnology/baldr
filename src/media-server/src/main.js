@@ -885,7 +885,7 @@ async function walk (func, opt) {
     if (opt.regex) {
       // If regex is a string it is treated as an extension.
       if (typeof opt.regex === 'string') {
-        opt.regex = new RegExp('.*\.' + opt.regex + '$') // eslint-disable-line
+        opt.regex = new RegExp('.*\.' + opt.regex + '$', 'i') // eslint-disable-line
       }
       if (!opt.path.match(opt.regex)) {
         return
