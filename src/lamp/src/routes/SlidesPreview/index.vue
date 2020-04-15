@@ -53,10 +53,6 @@ export default {
     LoadingIcon
   },
   mounted: function () {
-    this.$styleConfig.set({
-      centerVertically: false,
-      overflow: false
-    })
     this.$shortcuts.addMultiple([
       {
         keys: '+',

@@ -76,9 +76,6 @@ export default {
         this.$store.dispatch('media/setRestApiServers')
       })
     }
-  },
-  mounted () {
-    this.$styleConfig.set({ centerVertically: false })
   }
 }
 </script>

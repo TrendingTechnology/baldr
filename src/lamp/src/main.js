@@ -518,33 +518,11 @@ class BodyAttributes {
 /**
  *
  */
-class CenterVertically extends BodyAttributes {
-  constructor () {
-    super()
-    this.attributeName = 'b-center-vertically'
-    this.state = true
-  }
-}
-
-/**
- *
- */
 class DarkMode extends BodyAttributes {
   constructor () {
     super()
     this.attributeName = 'b-dark-mode'
     this.state = false
-  }
-}
-
-/**
- *
- */
-class Overflow extends BodyAttributes {
-  constructor () {
-    super()
-    this.attributeName = 'b-overflow'
-    this.state = true
   }
 }
 
@@ -571,9 +549,7 @@ class UiTheme extends MultipleAttributes {
 /**
  * @typedef styleConfig
  * @type {object}
- * @property {styleConfig.centerVertically}
  * @property {styleConfig.darkMode}
- * @property {styleConfig.overflow}
  * @property {styleConfig.contentTheme}
  * @property {styleConfig.uiTheme}
  */
@@ -584,9 +560,7 @@ class UiTheme extends MultipleAttributes {
 class StyleConfig {
   constructor () {
     this.configObjects = {
-      centerVertically: new CenterVertically(),
       darkMode: new DarkMode(),
-      overflow: new Overflow(),
       contentTheme: new ContentTheme(),
       uiTheme: new UiTheme()
     }
@@ -597,9 +571,7 @@ class StyleConfig {
    */
   defaults_ () {
     return {
-      centerVertically: true,
       darkMode: false,
-      overflow: false,
       contentTheme: 'default',
       uiTheme: 'default'
     }

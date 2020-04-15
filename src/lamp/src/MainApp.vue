@@ -126,7 +126,6 @@ export default {
     window.addEventListener('error', (event) => {
       this.$notifyError(event.error)
     })
-    this.$styleConfig.set({ overflow: true })
     this.$shortcuts.addMultiple([
       {
         keys: 'ctrl+left',
@@ -251,12 +250,6 @@ export default {
         callback: () => { this.$styleConfig.configObjects.darkMode.toggle() },
         // Dark mode
         description: 'Dark mode'
-      },
-      {
-        keys: 'ctrl+alt+v',
-        callback: () => { this.$styleConfig.configObjects.centerVertically.toggle() },
-        // center vertically
-        description: 'Vertikal zentrieren'
       },
       {
         keys: 'ctrl+alt+s',

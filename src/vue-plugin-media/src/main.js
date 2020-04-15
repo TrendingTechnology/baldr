@@ -2131,8 +2131,7 @@ class Media {
 
     if (router) {
       const style = {
-        darkMode: false,
-        centerVertically: false
+        darkMode: false
       }
       const routes = [
         {
