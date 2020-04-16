@@ -81,6 +81,18 @@ slides:
 
 - person: id:Ibrahim_Abdullah
 
+- question:
+    heading: 'Alias for `sub_questions`'
+    questions:
+    - question: 'Questions Level 1'
+      answer: 'Answer Level 1'
+      questions:
+      - question: 'Questions Level 2'
+        answer: 'Answer Level 2'
+        questions:
+        - question: 'Questions Level 3'
+          answer: 'Answer Level 3'
+
 - quote:
     text: >-
       Der Mann begann zu tippen. Ich flippte fast aus! Er schlug

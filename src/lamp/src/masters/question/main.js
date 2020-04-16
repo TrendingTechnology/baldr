@@ -4,6 +4,7 @@
 
 import { markupToHtml } from '@/lib.js'
 import { plainText } from '@bldr/core-browser'
+import steps from '@/steps.js'
 
 /**
  * We want no lists `<ol>` etc in the HTML output for the question and the
@@ -170,12 +171,15 @@ class Question {
  * @param {Number} stepNo
  */
 function setQuestionsByStepNo (stepNo) {
-  const slide = this.$get('slide')
+  const slides = this.$get('slides')
+  const slide = slides[this.navNos.slideNo - 1]
+  // ['q1', 'a1', 'q2', 'q3']
   const sequence = slide.props.sequence
 
   // Question with a question or answer. Only the heading.
   if (!sequence.length) return
 
+  // q1 or a1
   const curId = sequence[stepNo - 1]
 
   for (const id of sequence) {
@@ -188,7 +192,8 @@ function setQuestionsByStepNo (stepNo) {
   if (!element) return
   element.classList.add('active')
   if (isAnswer) {
-    element.style.display = 'block'
+    const answerNo = parseInt(curId.substr(1))
+    this.domSteps.displayByNo({ stepNo: answerNo + 1, full: true })
   }
   if (stepNo === 1) {
     window.scrollTo(0, 0)
@@ -233,11 +238,14 @@ export default {
       const firstQuestion = props.questions[0]
       return firstQuestion.stepCount
     },
-    enterSlide () {
-      setQuestionsByStepNo.call(this, this.stepNo)
+    afterSlideNoChangeOnComponent () {
+      this.domSteps = new steps.DomSteps({
+        cssSelectors: '.answer',
+        rootElement: this.$el
+      })
     },
-    enterStep () {
-      setQuestionsByStepNo.call(this, this.stepNo)
+    afterStepNoChangeOnComponent ({ newStepNo }) {
+      setQuestionsByStepNo.call(this, newStepNo)
     },
     plainTextFromProps (props) {
       return plainText(props.questions[0].question)

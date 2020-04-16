@@ -38,6 +38,11 @@ export default {
       }
       return ''
     }
+  },
+  data () {
+    return {
+      domSteps: null
+    }
   }
 }
 </script>
