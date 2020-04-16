@@ -69,12 +69,28 @@ export default {
       }
     },
     afterSlideNoChangeOnComponent ({ oldSlideNo, newSlideNo }) {
-      const slide = this.$get('slideByNo')(newSlideNo)
-      const asset = slide.propsMain.mediaAsset
-      if (asset) {
-        const img = asset.mediaElement
-        console.log(img.width, img.height, img.width / img.height)
-        console.log(this.$el.clientWidth, this.$el.clientHeight, this.$el.clientWidth / this.$el.clientHeight)
+      if (this.$refs.image) {
+        const img = this.$refs.image
+
+        // aspectRatio > 1 = 'landscape'
+        // aspectRatio < 1 = 'protrait'
+        const imgAspectRatio = img.naturalWidth / img.naturalHeight
+        const frameAspectRatio = this.$el.clientWidth / this.$el.clientHeight
+
+        // vertical // left / right free space > 1
+        // horicontal // top / bottom free space < 1
+        const freeSpaceRatio = frameAspectRatio / imgAspectRatio
+
+        let metadataPosition
+        const overlayZone = 0.3
+        if (freeSpaceRatio > 1 + overlayZone) {
+          metadataPosition = 'vertical'
+        } else if (freeSpaceRatio < 1 - overlayZone) {
+          metadataPosition = 'horizontal'
+        } else {
+          metadataPosition = 'overlay'
+        }
+        this.$el.setAttribute('b-metadata-position', metadataPosition)
       }
     }
   }

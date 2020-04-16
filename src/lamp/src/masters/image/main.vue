@@ -1,6 +1,6 @@
 <template>
   <div class="vc_image_master">
-    <img :src="imageHttpUrl"/>
+    <img class="img-contain" ref="image" :src="imageHttpUrl"/>
     <div
       v-if="!noMeta && (title || description)"
       class="metadata"
@@ -45,29 +45,53 @@ export default {
   width: 100%;
 
   img {
-    bottom: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    object-fit: contain;
-    position: absolute;
+    object-position: left top;
   }
 
   .metadata {
-    bottom: 0;
     position: absolute;
-    right: 0;
-    width: 100%;
-    background: rgba(170, 170, 170, 0.3);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
 
     .title {
-      font-size: 0.5em;
       text-align: center;
     }
 
     .description {
-      font-size: 0.3em;
-      padding: 1em;
+      padding: 0 1em;
+    }
+  }
+
+  &[b-metadata-position="vertical"] {
+    .metadata {
+      right: 0;
+      bottom: 0;
+      height: 100%;
+      width: 40%;
+      justify-content: flex-start;
+    }
+  }
+
+  &[b-metadata-position="horizontal"] {
+    .metadata {
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 40%;
+    }
+  }
+
+  &[b-metadata-position="overlay"] {
+    .metadata {
+      right: 0;
+      bottom: 0;
+      height: 40%;
+      width: 100%;
+
+      .title, .description {
+        background: rgba(170, 170, 170, 0.3);
+      }
     }
   }
 }
