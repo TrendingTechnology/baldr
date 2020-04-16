@@ -183,12 +183,12 @@ function setQuestionsByStepNo (stepNo) {
   const curId = sequence[stepNo - 1]
 
   for (const id of sequence) {
-    const element = document.getElementById(id)
+    const element = this.$el.querySelector(`#${id}`)
     if (element) element.classList.remove('active')
   }
 
   const isAnswer = curId.match(/^a/)
-  const element = document.getElementById(curId)
+  const element = this.$el.querySelector(`#${curId}`)
   if (!element) return
   element.classList.add('active')
   if (isAnswer) {
@@ -240,7 +240,7 @@ export default {
     },
     afterSlideNoChangeOnComponent () {
       this.domSteps = new steps.DomSteps({
-        cssSelectors: '.answer',
+        elements: this.$el.querySelectorAll('.answer'),
         rootElement: this.$el
       })
     },
