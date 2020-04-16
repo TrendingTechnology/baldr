@@ -8,6 +8,15 @@ slides:
     description: A description
     no_meta: true
 
+- image: id:vergebliche-Reise_BD_Adolph-Menzel_Floetenkonzert-Friedrichs
+
+- image: id:vergebliche-Reise_BD_Sanssouci
+
+- image: id:Ibrahim-Mannenberg_BD_Manenberg-1
+
+- image:
+    src: 'id:Marmotte_BD_Foto-Savoyarden-Musikanten-mit-Murmeltier'
+
 - title: no_meta
   image:
     src: id:Bach_Johann-Sebastian

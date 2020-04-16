@@ -59,12 +59,22 @@ export default {
         title,
         description,
         imageHttpUrl: mediaFile.httpUrl,
-        noMeta: props.noMeta
+        noMeta: props.noMeta,
+        mediaAsset: mediaFile
       }
     },
     collectPropsPreview ({ propsMain }) {
       return {
         imageHttpUrl: propsMain.imageHttpUrl
+      }
+    },
+    afterSlideNoChangeOnComponent ({ oldSlideNo, newSlideNo }) {
+      const slide = this.$get('slideByNo')(newSlideNo)
+      const asset = slide.propsMain.mediaAsset
+      if (asset) {
+        const img = asset.mediaElement
+        console.log(img.width, img.height, img.width / img.height)
+        console.log(this.$el.clientWidth, this.$el.clientHeight, this.$el.clientWidth / this.$el.clientHeight)
       }
     }
   }
