@@ -2,7 +2,7 @@
   <div class="vc_image_master">
     <img class="img-contain" ref="image" :src="imageHttpUrl"/>
     <div
-      v-if="!noMeta && (title || description)"
+      ref="metadata"
       class="metadata"
     >
       <h1
@@ -52,7 +52,7 @@ export default {
     position: absolute;
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
+    justify-content: flex-start;
 
     .title {
       text-align: center;
@@ -68,8 +68,6 @@ export default {
       right: 0;
       bottom: 0;
       height: 100%;
-      width: 40%;
-      justify-content: flex-start;
     }
   }
 
@@ -78,7 +76,6 @@ export default {
       bottom: 0;
       left: 0;
       width: 100%;
-      height: 40%;
     }
   }
 
@@ -88,6 +85,7 @@ export default {
       bottom: 0;
       height: 40%;
       width: 100%;
+      justify-content: flex-end;
 
       .title, .description {
         background: rgba(170, 170, 170, 0.3);

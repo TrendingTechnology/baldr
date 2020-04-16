@@ -69,6 +69,12 @@ export default {
       }
     },
     afterSlideNoChangeOnComponent ({ oldSlideNo, newSlideNo }) {
+      function resetMetadataStyle (metaStyle) {
+        metaStyle.width = null
+        metaStyle.fontSize = null
+        metaStyle.height = null
+      }
+
       if (this.$refs.image) {
         const img = this.$refs.image
 
@@ -76,21 +82,36 @@ export default {
         // aspectRatio < 1 = 'protrait'
         const imgAspectRatio = img.naturalWidth / img.naturalHeight
         const frameAspectRatio = this.$el.clientWidth / this.$el.clientHeight
-
         // vertical // left / right free space > 1
         // horicontal // top / bottom free space < 1
         const freeSpaceRatio = frameAspectRatio / imgAspectRatio
 
-        let metadataPosition
+        var scale = Math.min(
+          this.$el.clientWidth / img.naturalWidth,
+          this.$el.clientHeight / img.naturalHeight
+        )
+
+        const metaStyle = this.$refs.metadata.style
+
         const overlayZone = 0.3
         if (freeSpaceRatio > 1 + overlayZone) {
-          metadataPosition = 'vertical'
+          this.$el.setAttribute('b-metadata-position', 'vertical')
+          const width = this.$el.clientWidth - img.naturalWidth * scale
+          resetMetadataStyle(metaStyle)
+          metaStyle.width = `${width}px`
         } else if (freeSpaceRatio < 1 - overlayZone) {
-          metadataPosition = 'horizontal'
+          this.$el.setAttribute('b-metadata-position', 'horizontal')
+          const height = this.$el.clientHeight - img.naturalHeight * scale
+          resetMetadataStyle(metaStyle)
+          metaStyle.height = `${height}px`
         } else {
-          metadataPosition = 'overlay'
+          resetMetadataStyle(metaStyle)
+          this.$el.setAttribute('b-metadata-position', 'overlay')
+          // Metadata box which extends to more than 40 percent of the screen.
+          if (this.$refs.metadata.clientHeight / this.$el.clientHeight > 0.3) {
+            metaStyle.fontSize = '0.5em'
+          }
         }
-        this.$el.setAttribute('b-metadata-position', metadataPosition)
       }
     }
   }
