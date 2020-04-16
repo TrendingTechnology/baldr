@@ -39,13 +39,7 @@ import vue from '@/main.js'
  *     - camera
  *
  * @typedef rawSlideData
- * @type {(object|string)}
- */
-
-/**
- * Various types of data to render a slide.
- * @typedef rawSlideData
- * @type {(boolean|number|string|array|object)}
+ * @type {Object}
  */
 
 /**
@@ -275,17 +269,20 @@ class AudioOverlay {
 /**
  * A slide.
  */
-class Slide {
+export class Slide {
   /**
-   * @param {Object} rawSlideData - The raw slide data from the YAML file.
+   * @param {module:@bldr/lamp/content-file~rawSlideData} rawSlideData - The
+   *   raw slide data from the YAML file as an object.
    */
-  constructor (rawSlideData, unprocessedRawSlideData) {
+  constructor (rawSlideData) {
+    rawSlideData = convertPropertiesCase(rawSlideData, 'snake-to-camel')
+
     /**
      * A deep copy of the raw slide data.
      *
      * @type {Object}
      */
-    this.rawData = unprocessedRawSlideData
+    this.rawData = deepCopy(rawSlideData)
 
     const rawSlideObject = new RawSlideObject(rawSlideData)
     /**
@@ -564,12 +561,10 @@ class Slide {
  *   Main level, 2: First child level ...
  */
 function parseSlidesRecursive (slidesRaw, slidesFlat, slidesTree, level = 1) {
-  for (let slideRaw of slidesRaw) {
+  for (const slideRaw of slidesRaw) {
     const childSlides = slideRaw.slides
     delete slideRaw.slides
-    const slideRawDeepCopy = deepCopy(slideRaw)
-    slideRaw = convertPropertiesCase(slideRaw, 'snake-to-camel')
-    const slide = new Slide(slideRaw, slideRawDeepCopy)
+    const slide = new Slide(slideRaw)
     slidesFlat.push(slide)
     slidesTree.push(slide)
     slide.no = slidesFlat.length
