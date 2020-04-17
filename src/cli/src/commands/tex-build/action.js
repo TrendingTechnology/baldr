@@ -9,7 +9,7 @@ const chalk = require('chalk')
 const mediaServer = require('@bldr/media-server')
 
 function buildOneFile (filePath) {
-  let process = childProcess.spawnSync(
+  const process = childProcess.spawnSync(
     'lualatex', ['--halt-on-error', '--shell-escape', filePath],
     { cwd: path.dirname(filePath) }
   )

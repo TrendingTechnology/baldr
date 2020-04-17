@@ -299,7 +299,7 @@ function extractMediaUrisRecursive (object, urisStore) {
    * @param {Mixed} value - A mixed type value to test if it is a media URI.
    * @param {Array} urisStore - Target array to store the media URIs.
    */
-  function collectMediaUri(value, urisStore) {
+  function collectMediaUri (value, urisStore) {
     if (isMediaUri(value) && !urisStore.includes(value)) {
       urisStore.push(value)
     }
@@ -381,7 +381,6 @@ class Timers {
  * to early.
  */
 class TimeOut extends Timers {
-
   set (func, delay) {
     this.ids_.push(setTimeout(func, parseInt(delay)))
   }
@@ -428,7 +427,6 @@ class Interval extends Timers {
  */
 class Player {
   constructor () {
-
     /**
      * Global volume: from 0 - 1
      *
@@ -677,7 +675,6 @@ class Sample {
    * @property {String} specs.shortcut - A custom shortcut
    */
   constructor (mediaFile, { title, id, startTime, fadeIn, duration, fadeOut, endTime, shortcut }) {
-
     /**
      * We fade in very short and smoothly to avoid audio artefacts.
      *
@@ -1058,7 +1055,7 @@ class Sample {
    * fade out.
    * @private
    */
-   scheduleFadeOut_ () {
+  scheduleFadeOut_ () {
     this.timeOut_.set(
       () => { this.fadeOut(this.fadeOutSec) },
       this.fadeOutStartTimeMsec_
@@ -1216,7 +1213,6 @@ class WrappedSample {
    *   3. An instance of the class `Sample`.
    */
   constructor (spec) {
-
     /**
      * @type {module:@bldr/vue-plugin-media~Sample}
      * @private
@@ -1301,7 +1297,7 @@ export class WrappedSamples {
     // Make sure we have an array.
     let specArray
     if (!Array.isArray(spec)) {
-      specArray= [spec]
+      specArray = [spec]
     } else {
       specArray = spec
     }
@@ -1397,7 +1393,7 @@ export class MediaFile {
      * @type {string}
      */
     this.uri = decodeURI(this.uri.replace(/#.*$/, ''))
-    let segments = this.uri.split(':')
+    const segments = this.uri.split(':')
 
     /**
      * for example: `http`, `https`, `blob`
@@ -1767,7 +1763,6 @@ async function createMediaElement (mediaFile) {
  * for playable media files.
  */
 class Resolver {
-
   constructor () {
     /**
      * Assets with linked assets have to be cached. For example: many
@@ -1795,6 +1790,7 @@ class Resolver {
      */
     this.linkedUris = []
   }
+
   /**
    * @param {string} field - For example `id` or `filename`
    * @param {string|json} search - For example `Fuer-Elise_HB`
@@ -1814,7 +1810,7 @@ class Resolver {
         search: search
       }
     })
-    if (response && response.data  && response.data.path) {
+    if (response && response.data && response.data.path) {
       this.cache_[cacheKey] = response
       return response
     }
@@ -2055,7 +2051,6 @@ class Canvas {
  */
 class Media {
   constructor () {
-
     /**
      * @type {module:@bldr/vue-plugin-media~Player}
      */
@@ -2248,7 +2243,7 @@ class Media {
   addShortcutForSamples_ () {
     // We have to loop through all samples to get the latest shortcut number.
     const samples = store.getters['media/samples']
-    let firstTriggerKeyByType = (type) => {
+    const firstTriggerKeyByType = (type) => {
       if (type === 'audio') {
         return 'a'
       } else if (type === 'video') {
@@ -2256,7 +2251,7 @@ class Media {
       }
     }
 
-    let addShortcutsByType = (samples, type) => {
+    const addShortcutsByType = (samples, type) => {
       let lastShortcutNo = 0
       for (const sampleUri in samples) {
         const sample = samples[sampleUri]
@@ -2288,7 +2283,7 @@ class Media {
       }
     }
 
-    let addShortcutsCustom = (samples) => {
+    const addShortcutsCustom = (samples) => {
       for (const sampleUri in samples) {
         const sample = samples[sampleUri]
         if (sample.shortcutCustom && !sample.shortcut) {

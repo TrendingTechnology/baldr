@@ -131,7 +131,7 @@ async function convert (inputFile, cmdObj) {
     return
   }
   const outputExtension = mediaServer.assetTypes.typeToTargetExtension(assetType)
-  let outputFileName = `${mediaServer.helper.idify(asset.basename_)}.${outputExtension}`
+  const outputFileName = `${mediaServer.helper.idify(asset.basename_)}.${outputExtension}`
   let outputFile = path.join(path.dirname(inputFile), outputFileName)
   if (converted.has(outputFile)) return
 

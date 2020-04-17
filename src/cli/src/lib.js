@@ -173,7 +173,7 @@ function runImagemagick (inputFile, outputFile, size = '2000x2000>') {
 function moveAsset (oldPath, newPath, opts) {
   if (!opts) opts = {}
 
-  function move(oldPath, newPath, { copy, dryRun }) {
+  function move (oldPath, newPath, { copy, dryRun }) {
     if (fs.existsSync(newPath)) {
       console.log(`Exists: ${chalk.red(newPath)}`)
     }

@@ -179,7 +179,7 @@ async function moveMp3 (oldPath, newPath, cmdObj) {
   fileName = mediaServer.asciify(fileName)
   // a-Fletcher-Henderson_Aint-she-sweet.mp3
   fileName = fileName.replace(/^a-/, '')
-  let tmpMp3Path = path.join(path.dirname(newPath), fileName)
+  const tmpMp3Path = path.join(path.dirname(newPath), fileName)
 
   // Move mp3 into media.
   lib.moveAsset(oldPath, tmpMp3Path, { copy: true })
@@ -191,7 +191,7 @@ async function moveMp3 (oldPath, newPath, cmdObj) {
   metaData.metaType = 'composition'
 
   // Try to get the MusicBrainz recording ID.
-  let musicbrainzRecordingId = getMbrainzRecordingId(tmpMp3Path)
+  const musicbrainzRecordingId = getMbrainzRecordingId(tmpMp3Path)
   if (musicbrainzRecordingId) metaData.musicbrainzRecordingId = musicbrainzRecordingId
 
   metaData.source = oldPath
@@ -222,7 +222,7 @@ function moveFromArchive (oldPath, extension, cmdObj) {
  *   `/archive/10/10_Jazz/30_Stile/50_Modern-Jazz/Arbeitsblatt.tex`
  * @param {Object} cmdObj - See commander docs.
  */
-function move(oldPath, cmdObj) {
+function move (oldPath, cmdObj) {
   // Had to be an absolute path (to check if its an inactive/archived folder)
   oldPath = path.resolve(oldPath)
   const extension = coreBrowser.getExtension(oldPath)
@@ -245,7 +245,7 @@ function action (files, cmdObj) {
     mediaServer.walk({
       everyFile (relPath) {
         move(relPath)
-      }}, opts
+      } }, opts
     )
   }
 }

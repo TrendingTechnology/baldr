@@ -4,5 +4,5 @@ module.exports = {
   options: [
     ['-s, --seconds <seconds>', 'Take a video frame at second X from the beginning.']
   ],
-  description: 'Create video preview images.',
+  description: 'Create video preview images.'
 }

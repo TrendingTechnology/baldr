@@ -32,7 +32,6 @@ async function queryWikidata (metaData, typeNames, typeSpecs) {
  * @param {String} filePath - The media asset file path.
  */
 async function normalizeOneFile (filePath, cmdObj) {
-
   try {
     const metaTypes = mediaServer.metaTypes
     const typeNames = metaTypes.detectTypeByPath(filePath)
@@ -56,7 +55,7 @@ async function normalizeOneFile (filePath, cmdObj) {
       console.log(chalk.green('\nNo changes:\n'))
       console.log(metaData)
     } catch (error) {
-      //console.log(error.message)
+      // console.log(error.message)
       console.log(chalk.yellow('\nOriginal data:\n'))
       console.log(origData)
       console.log(chalk.green('\nResult data:\n'))
@@ -68,7 +67,6 @@ async function normalizeOneFile (filePath, cmdObj) {
     console.log(error)
     process.exit()
   }
-  return
 }
 
 /**

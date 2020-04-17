@@ -6,7 +6,7 @@
 
 class RegExpBuilder {
   constructor () {
-    this.dotAll =  '[^]+?'
+    this.dotAll = '[^]+?'
     this.captDotAll = this.capt(this.dotAll)
     this.whiteNewline = '[\\s\n]*?'
   }
@@ -65,7 +65,7 @@ function extractMatchAll (text, regexp, matches, excludeCaptureGroups) {
   regexp = new RegExp(regexp, 'g')
   if (text.match(regexp)) {
     const rawMatches = text.matchAll(regexp)
-    for (let match of rawMatches) {
+    for (const match of rawMatches) {
       text = text.replace(match[0], '')
       matches.push(cleanMatch(match, excludeCaptureGroups))
     }
@@ -131,14 +131,14 @@ const specification = [
   ...semanticSpec('fachbegriff', 'em', 'term'),
   { tex: '---', md: '—' }, // U+2014 EM DASH
   { tex: '--', md: '–' }, // U+2013 EN DASH
-  { tex: { reg: /\\pfeil\{?\}?/g, rep: '\\pfeil{}'}, md: '->' },
+  { tex: { reg: /\\pfeil\{?\}?/g, rep: '\\pfeil{}' }, md: '->' },
   { tex: '"emph"', md: '"em"' },
   { tex: '"textbf"', md: '"strong"' },
   { tex: '"textit"', md: '"i"' },
   {
     tex: { reg: texReg('section'), rep: texRep('section') },
-    md: { reg: /# (.*)\n/g, rep: '# $1'}
-  },
+    md: { reg: /# (.*)\n/g, rep: '# $1' }
+  }
 ]
 
 /**
@@ -204,7 +204,6 @@ function convert (text, toTex) {
     if (!toTex) {
       specsReq.push(spec.tex)
       specsRep.push(spec.md)
-
     } else {
       specsReq.push(spec.md)
       specsRep.push(spec.tex)
