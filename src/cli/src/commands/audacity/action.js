@@ -9,9 +9,9 @@ const chalk = require('chalk')
  * Convert a Audacity text mark file into a YAML file.
  *
  * ```txt
- * 1.488171	1.488171	Sample 1
- * 11.635583	12.940996	Sample 2 (begin + end)
- * 13.846082	13.846082	Sample 3
+ * 1.488171\t1.488171\tSample 1
+ * 11.635583\t12.940996\tSample 2 (begin + end)
+ * 13.846082\t13.846082\tSample 3
  * ```
  *
  * ```yaml

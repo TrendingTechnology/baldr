@@ -1,10 +1,3 @@
-// Node packages.
-const path = require('path')
-const fs = require('fs')
-
-// Third party packages.
-const chalk = require('chalk')
-
 // Project packages:
 const { mirrorFolderStructure } = require('@bldr/media-server')
 

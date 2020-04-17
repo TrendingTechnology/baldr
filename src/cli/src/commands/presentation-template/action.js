@@ -1,5 +1,4 @@
 // Node packages.
-const childProcess = require('child_process')
 const fs = require('fs')
 const path = require('path')
 
@@ -97,7 +96,7 @@ function objectifyTexItemize (content) {
     content = tex.extractMatchAll(content, regex, matches, exclude)
   }
 
-  data = []
+  const data = []
   for (const match of matches) {
     const itemsText = match.pop()
     const sections = match

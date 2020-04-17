@@ -43,9 +43,8 @@ function bootstrapConfig (configDefault) {
     if (fs.existsSync(configFile)) {
       configJson = require(configFile)
     }
+    if (!configJson) throw new Error(`No configuration file found: ${configFile}`)
   }
-
-  if (!configJson) throw new Error(`No configuration file found: ${configFile}`)
 
   if (configDefault) {
     return Object.assign(configDefault, configJson)

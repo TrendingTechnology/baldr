@@ -527,7 +527,7 @@ export function escapeHtml (htmlString) {
   }
 
   // Regex containing the keys listed immediately above.
-  const htmlEscaper = /[&<>"'\/]/g
+  const htmlEscaper = /[&<>"'/]/g
 
   // Escape a string for HTML interpolation.
   return ('' + htmlString).replace(htmlEscaper, function (match) {

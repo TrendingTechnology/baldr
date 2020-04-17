@@ -1,5 +1,4 @@
 // Node packages.
-const path = require('path')
 const fs = require('fs')
 
 // Third party packages.

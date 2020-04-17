@@ -95,7 +95,7 @@ function mdReg (tagName, className) {
   if (className) {
     classMarkup = ` class="${className}"`
   }
-  return new RegExp('<' + tagName + classMarkup + '>([^<>]+?)<\/' + tagName + '>', 'g')
+  return new RegExp('<' + tagName + classMarkup + '>([^<>]+?)</' + tagName + '>', 'g')
 }
 
 function mdRep (tagName, className) {
@@ -122,7 +122,7 @@ function semanticSpec (texCommandName, htmlTagName, htmlClassName) {
 */
 const specification = [
   {
-    tex: { reg: /\\stueck\*\{([^\}]+?)\}/g, rep: '\\stueck*{$1}' },
+    tex: { reg: /\\stueck\*\{([^\}]+?)\}/g, rep: '\\stueck*{$1}' }, // eslint-disable-line
     md: { reg: /<em class="piece">„([^<>]+?)“<\/em>/g, rep: '<em class="piece">„$1“</em>' }
   },
   ...semanticSpec('stueck', 'em', 'piece'),

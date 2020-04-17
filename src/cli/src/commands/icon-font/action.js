@@ -158,7 +158,6 @@ function action () {
         export: '',
         import: '',
         'magnify': '', // Search icon
-        music: '',
         notebook: '',
         wikipedia: '',
         'account-hard-hat': 'worker',
@@ -173,7 +172,7 @@ function action () {
         'clipboard-account': '',
         'file-presentation-box': '',
         'image': '', // imaster-icon: image
-        'music': '', // imaster-icon: audio
+        music: '', // imaster-icon: audio
         'folder-open': '',
         'comment-alert': '', // imaster-icon: task
         'comment-question': '', // imaster-icon: question

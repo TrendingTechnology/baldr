@@ -67,13 +67,6 @@ const run = function (port) {
   return app
 }
 
-/**
- * Stop the REST API.
- */
-const stop = function () {
-  server.close()
-}
-
 const main = function () {
   let port
   if (process.argv.length === 3) port = process.argv[2]
