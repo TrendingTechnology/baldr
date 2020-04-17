@@ -15,26 +15,43 @@ const { bootstrapConfig } = require('@bldr/core-node')
 const config = bootstrapConfig()
 
 /**
- * Hold some data about a folder and its title.
+ * Hold some meta data about a folder and its title.
  */
 class FolderTitle {
+  /**
+   * @param {Object} data - Some meta data about the folder.
+   * @property {String} title - The title. It is the first line in the file
+   *   `titles.txt`.
+   * @property {String} subtitle - The subtitle. It is the second line in the
+   *   file `titles.txt`.
+   * @property {String} folderName - The name of the parent folder, for
+   *   example `10_Konzertierende-Musiker`
+   * @property {String} path - The relative path of the folder inside the
+   *   base path, for example `12/10_Interpreten/10_Konzertierende-Musiker`.
+   * @property {Boolean} hasPraesentation - True if the folder contains a file
+   *   with the file name `Praesentation.baldr.yml`
+   */
   constructor ({ title, subtitle, folderName, path, hasPraesentation }) {
     /**
-     * @type {String}
-     */
-    if (title) this.title = title
-
-    /**
-     * @type {String}
-     */
-    if (subtitle) this.subtitle = subtitle
-
-    /**
-     * for example `10_Konzertierende-Musiker`
+     * The title. It is the first line in the file `titles.txt`.
      *
      * @type {String}
      */
-    if (folderName) this.folderName = folderName
+    this.title = title
+
+    /**
+     * The subtitle. It is the second line in the file `titles.txt`.
+     *
+     * @type {String}
+     */
+    this.subtitle = subtitle
+
+    /**
+     * The name of the parent folder, for example `10_Konzertierende-Musiker`
+     *
+     * @type {String}
+     */
+    this.folderName = folderName
 
     /**
      * The relative path of the folder inside the base path, for example
@@ -42,7 +59,7 @@ class FolderTitle {
      *
      * @type {String}
      */
-    if (path) this.path = path
+    this.path = path
 
     /**
      * True if the folder contains a file with the file name
@@ -50,12 +67,13 @@ class FolderTitle {
      *
      * @type {Booelan}
      */
-    if (hasPraesentation) this.hasPraesentation = hasPraesentation
+    this.hasPraesentation = hasPraesentation
   }
 }
 
 /**
- * Hold metadata about a folder in a hierachical folder structure.
+ * Hold metadata about a folder and its titles in a hierarchical folder
+ * structure.
  *
  * ```js
  * HierarchicalFolderTitles {
