@@ -157,12 +157,7 @@ function action () {
         delete: '',
         export: '',
         import: '',
-<<<<<<< HEAD
         'magnify': '', // Search icon
-=======
-        magnify: '', // Search icon
-        music: '',
->>>>>>> aa12e74afa2d7e0b22fcf0392c46ab9f5efd6cf0
         notebook: '',
         wikipedia: '',
         'account-hard-hat': 'worker',
@@ -176,11 +171,7 @@ function action () {
         'comment-quote': '', // master-icon: quote
         'clipboard-account': '',
         'file-presentation-box': '',
-<<<<<<< HEAD
         'image': '', // imaster-icon: image
-=======
-        image: '', // imaster-icon: image
->>>>>>> aa12e74afa2d7e0b22fcf0392c46ab9f5efd6cf0
         music: '', // imaster-icon: audio
         'folder-open': '',
         'comment-alert': '', // imaster-icon: task

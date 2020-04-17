@@ -2,6 +2,8 @@
  * @module @bldr/lamp/steps
  */
 
+/* globals DOMParser */
+
 import vue from '@/main.js'
 import { selectSubset } from '@bldr/core-browser'
 

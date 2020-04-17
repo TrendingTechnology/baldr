@@ -1570,12 +1570,6 @@ export class MediaFile {
  *   is a multi part asset.
  */
 class MultiPartAsset extends MediaFile {
-  /**
-   * @param {object} mediaData - A mandatory property is: `uri`
-   */
-  constructor (mediaData) {
-    super(mediaData)
-  }
 
   /**
    * The actual multi part asset count. If the multi part asset is restricted

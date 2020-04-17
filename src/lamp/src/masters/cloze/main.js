@@ -2,6 +2,8 @@
  * @module @bldr/lamp/masters/cloze
  */
 
+/* globals DOMParser */
+
 import steps from '@/steps.js'
 import Vue from 'vue'
 import { warnSvgWidthHeight } from '@/lib.js'

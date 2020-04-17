@@ -268,9 +268,9 @@ class Master {
   async callHookAsync_ (hookName, payload, thisArg) {
     if (this.hooks_[hookName] && typeof this.hooks_[hookName] === 'function') {
       if (thisArg) {
-        return await this.hooks_[hookName].call(thisArg, payload)
+        return this.hooks_[hookName].call(thisArg, payload)
       }
-      return await this.hooks_[hookName](payload)
+      return this.hooks_[hookName](payload)
     }
   }
 

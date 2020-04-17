@@ -20,11 +20,6 @@ const { bootstrapConfig } = require('@bldr/core-node')
 const config = bootstrapConfig()
 
 /**
- * Express js server instance. Returned by app.listen()
- */
-let server
-
-/**
  * Run the REST API. Listen to a TCP port.
  *
  * @param {Number} port - A TCP port.
@@ -61,7 +56,7 @@ const run = function (port) {
   if (!port) {
     port = config.api.port
   }
-  server = app.listen(port, () => {
+  app.listen(port, () => {
     console.log(`The BALDR REST API is running on port ${port}.`)
   })
   return app

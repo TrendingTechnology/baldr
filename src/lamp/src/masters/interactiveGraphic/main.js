@@ -2,6 +2,8 @@
  * @module @bldr/lamp/masters/interactiveGraphic
  */
 
+/* globals DOMParser */
+
 import { warnSvgWidthHeight } from '@/lib.js'
 import steps from '@/steps.js'
 import Vue from 'vue'
