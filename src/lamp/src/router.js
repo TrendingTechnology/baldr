@@ -99,7 +99,7 @@ const routes = [
     ]
   },
   {
-    path: '/presentation-overview',
+    path: '/presentation-overview/:ids*',
     component: PresentationOverview,
     name: 'presentation-overview',
     meta: {
