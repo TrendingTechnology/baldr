@@ -20,7 +20,7 @@
 
 <script>
 import { createNamespacedHelpers } from 'vuex'
-import SlidePreview from './SlidePreview.vue'
+import SlidePreview from '@/components/SlidesPreview/SlidePreview.vue'
 const { mapGetters } = createNamespacedHelpers('lamp')
 
 export default {

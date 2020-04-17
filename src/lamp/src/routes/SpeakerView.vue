@@ -1,29 +1,35 @@
 <template>
   <div class="vc_speaker_view main-app-fullscreen" b-ui-theme="default">
-    <h1>Referentenansicht</h1>
+    <presentation-title/>
 
     <div class="slide-panel" v-if="presentation && slide">
       <slide-main id="current-slide" :slide="slide" :step-no="currentStepNo"/>
       <slide-main id="next-slide" :slide="nextSlide" :step-no="nextStepNo" :used-in-public="false"/>
     </div>
 
+    <grid-layout :slides="presentation.slides"/>
+
     <cursor-arrows/>
   </div>
 </template>
 
 <script>
-import SlideMain from '@/components/SlideMain/index.vue'
-import CursorArrows from '@/components/CursorArrows.vue'
 import { createNamespacedHelpers } from 'vuex'
 import { routerGuards } from '@/lib.js'
+import CursorArrows from '@/components/CursorArrows.vue'
+import PresentationTitle from '@/components/PresentationTitle'
+import SlideMain from '@/components/SlideMain/index.vue'
+import GridLayout from '@/components/SlidesPreview/GridLayout.vue'
 
 const { mapGetters } = createNamespacedHelpers('lamp')
 
 export default {
   name: 'SpeakerView',
   components: {
-    SlideMain,
-    CursorArrows
+    CursorArrows,
+    GridLayout,
+    PresentationTitle,
+    SlideMain
   },
   computed: {
     ...mapGetters(['slide', 'presentation', 'slides']),
@@ -77,6 +83,10 @@ export default {
 
     .vc_master_renderer {
       height: 30em;
+    }
+
+    .vc_slide_preview {
+      font-size: 0.3em;
     }
   }
 </style>

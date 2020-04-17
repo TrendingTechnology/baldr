@@ -17,6 +17,7 @@
 
 <script>
 import SlidePreviewRenderer from './SlidePreviewRenderer.vue'
+import { getViewFromRoute } from '@/router.js'
 
 export default {
   name: 'SlidePreview',
@@ -35,7 +36,7 @@ export default {
   },
   methods: {
     gotToSlide (slide) {
-      const location = slide.routerLocation
+      const location = slide.routerLocation(getViewFromRoute())
       this.$router.push(location)
     }
   }

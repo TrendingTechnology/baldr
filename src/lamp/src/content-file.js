@@ -13,7 +13,7 @@ import { WrappedSamples } from '@bldr/vue-plugin-media'
 import { markupToHtml } from '@/lib'
 import { masters } from '@/masters.js'
 import store from '@/store.js'
-import router from '@/router.js'
+import router, { views } from '@/router.js'
 import vue from '@/main.js'
 
 /**
@@ -523,21 +523,24 @@ export class Slide {
    * Get an object that can be submitted to `router.push()` to view the current
    * slide.
    *
+   * @params {String} - `public` or `speaker`
+   *
    * @returns {Object}
    */
-  get routerLocation () {
+  routerLocation (view = 'public') {
+    const routeNames = views[view]
     const presentation = store.getters['lamp/presentation']
     let name
     const params = { presId: presentation.id }
     if (this.stepCount && this.stepCount > 1) {
-      name = 'slide-step-no'
+      name = routeNames.stepNo
       if (this.stepNo) {
         params.stepNo = this.stepNo
       } else {
         params.stepNo = 1
       }
     } else {
-      name = 'slide'
+      name = routeNames.slideNo
     }
     if (this.id) {
       params.slideNo = this.id

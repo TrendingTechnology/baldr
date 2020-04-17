@@ -187,4 +187,29 @@ router.afterEach((to, from) => {
   }
 })
 
+/**
+ * `public` or `speaker`
+ *
+ * @typedef {string} view
+ */
+
+export const views = {
+  public: {
+    slideNo: 'slide',
+    stepNo: 'slide-step-no'
+  },
+  speaker: {
+    slideNo: 'speaker-view',
+    stepNo: 'speaker-view-step-no'
+  }
+}
+
+export function getViewFromRoute () {
+  const name = router.currentRoute.name
+  if (name === 'speaker-view' || name === 'speaker-view-step-no') {
+    return 'speaker'
+  }
+  return 'public'
+}
+
 export default router

@@ -7,12 +7,12 @@
 /* globals rawYamlExamples */
 
 import { customStore } from '@/main.js'
-import Vue from 'vue'
-import store from '@/store.js'
 import { markupToHtml, validateUri } from '@/lib.js'
-import SlidePreviewPlayButton from '@/routes/SlidesPreview/PlayButton.vue'
-import inlineMarkup from '@/inline-markup.js'
 import { toTitleCase } from '@bldr/core-browser'
+import inlineMarkup from '@/inline-markup.js'
+import SlidePreviewPlayButton from '@/components/SlidesPreview/PlayButton.vue'
+import store from '@/store.js'
+import Vue from 'vue'
 
 /**
  * The icon of a master slide. This icon is shown in the documentation or

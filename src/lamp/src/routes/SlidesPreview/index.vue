@@ -33,7 +33,7 @@
 
 <script>
 import DisplayController from './DisplayController.vue'
-import GridLayout from './GridLayout.vue'
+import GridLayout from '@/components/SlidesPreview/GridLayout.vue'
 import ListLayout from './ListLayout.vue'
 import PresentationTitle from '@/components/PresentationTitle'
 import LoadingIcon from '@/components/LoadingIcon'
