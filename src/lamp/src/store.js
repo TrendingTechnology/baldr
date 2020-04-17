@@ -222,6 +222,14 @@ const actions = {
       dispatch('setStepNoCurrent', { slide: getters.slide, stepNo })
     }
   },
+  async loadFolderTitleTree ({ commit, getters }) {
+    if (!getters.folderTitleTree) {
+      const response = await vue.$media.httpRequest.request({
+        url: 'get/folder-title-tree'
+      })
+      commit('setFolderTitleTree', response.data)
+    }
+  },
   async updateFolderTitleTree ({ commit }) {
     const response = await vue.$media.httpRequest.request({
       url: 'get/folder-title-tree',

@@ -9,20 +9,33 @@
   >
     <h1>Überblick über alle Präsentationen</h1>
 
-    <presentation-item v-if="subFolderTitleTree" :item="subFolderTitleTree"/>
+    <loading-icon v-if="!folderTitleTree"/>
+    <presentation-item v-else-if="subFolderTitleTree" :item="subFolderTitleTree"/>
     <presentation-item v-else :item="folderTitleTree"/>
   </div>
 </template>
 
 <script>
 import PresentationItem from './PresentationItem.vue'
+import LoadingIcon from '@/components/LoadingIcon.vue'
 import { createNamespacedHelpers } from 'vuex'
 const { mapGetters } = createNamespacedHelpers('lamp')
+
+async function enterRoute (vm, to) {
+  await vm.$store.dispatch('lamp/loadFolderTitleTree')
+  vm.setSubFolderTitleTreeByIds(to.params.ids)
+  const presentation = vm.$store.getters['lamp/presentation']
+  if (presentation) {
+    const elementLink = document.getElementById(`PID_${presentation.id}`)
+    elementLink.scrollIntoView({ block: 'center' })
+  }
+}
 
 export default {
   name: 'PresentationOverview',
   components: {
-    PresentationItem
+    PresentationItem,
+    LoadingIcon
   },
   data () {
     return {
@@ -30,14 +43,8 @@ export default {
     }
   },
   methods: {
-    async loadTitleTree () {
-      await this.$store.dispatch('lamp/updateFolderTitleTree')
-      if (this.presentation) {
-        const elementLink = document.getElementById(`PID_${this.presentation.id}`)
-        elementLink.scrollIntoView({ block: 'center' })
-      }
-    },
     setSubFolderTitleTreeByIds (ids) {
+      if (!ids) return
       ids = ids.split('/')
       let tree = this.folderTitleTree
       for (const id of ids) {
@@ -46,23 +53,14 @@ export default {
       this.subFolderTitleTree = tree
     }
   },
-  computed: mapGetters(['folderTitleTree', 'presentation']),
-  mounted () {
-    console.log(this.$route)
-    this.loadTitleTree()
-    this.$styleConfig.set()
-  },
-  update () {
-    this.loadTitleTree()
-  },
+  computed: mapGetters(['folderTitleTree']),
   beforeRouteEnter (to, from, next) {
-    console.log('beforeRouteEnter', to)
     next(vm => {
+      enterRoute(vm, to)
     })
   },
   beforeRouteUpdate (to, from, next) {
-    console.log('beforeRouteUpdate', to)
-    this.setSubFolderTitleTreeByIds(to.params.ids)
+    enterRoute(this, to)
     next()
   }
 }
