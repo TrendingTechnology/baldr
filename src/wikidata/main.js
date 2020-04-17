@@ -173,7 +173,6 @@ function getClaim (entity, claims) {
   }
 
   if (Array.isArray(claims)) {
-
     for (const claim of claims) {
       const typeData = getSingleClaim(entity, claim)
       if (typeData) return typeData
@@ -190,7 +189,7 @@ function getClaim (entity, claims) {
  */
 const functions = {
 
-/*******************************************************************************
+  /*******************************************************************************
  * get from entity
  ******************************************************************************/
 
@@ -279,7 +278,7 @@ const functions = {
     return `${linkData.lang}:${linkData.title}`
   },
 
-/*******************************************************************************
+  /*******************************************************************************
  * second query
  ******************************************************************************/
 
@@ -290,7 +289,7 @@ const functions = {
    *
    * @returns {(Array|String)}
    */
-  queryLabels: async function  (itemIds) {
+  queryLabels: async function (itemIds) {
     itemIds = unpackArray(itemIds)
     const entities = await getEntities(itemIds, ['labels'])
     if (entities.id) {
@@ -304,7 +303,7 @@ const functions = {
     return result
   },
 
-/*******************************************************************************
+  /*******************************************************************************
  * format
  ******************************************************************************/
 
@@ -445,7 +444,7 @@ async function query (itemId, typeNames, typeSpecs) {
         let value
 
         // source
-        if (!propSpec.fromClaim && !propSpec.fromEntity ) {
+        if (!propSpec.fromClaim && !propSpec.fromEntity) {
           throw new Error(`Spec must have a source property (“fromClaim” or “fromEntity”): ${JSON.stringify(propSpec)}`)
         }
         if (propSpec.fromClaim) {
@@ -473,7 +472,6 @@ async function query (itemId, typeNames, typeSpecs) {
 
         if (value) data[propName] = value
       }
-
     }
     if (typeSpec.normalizeWikidata) {
       typeSpec.normalizeWikidata({ data, entity, functions })

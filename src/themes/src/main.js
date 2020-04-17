@@ -10,7 +10,7 @@ const sassExport = require('sass-export')
 
 function exportSassAsJson () {
   const struct = sassExport.exporter({
-    inputFiles: [path.join(path.resolve(__dirname),  'default-vars.scss')]
+    inputFiles: [path.join(path.resolve(__dirname), 'default-vars.scss')]
   }).getStructured()
 
   const vars = {}

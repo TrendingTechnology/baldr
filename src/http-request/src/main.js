@@ -129,7 +129,7 @@ class RestEndpoints {
     }
     if (Object.keys(results).length === 1) {
       for (const endpointName in results) {
-          return results[endpointName]
+        return results[endpointName]
       }
     } else {
       return results
@@ -198,7 +198,7 @@ export class HttpRequestNg {
   }
 }
 
-/*** Old Code *****************************************************************/
+/** * Old Code *****************************************************************/
 
 const defaultServers = {
   local: {

@@ -157,7 +157,12 @@ function action () {
         delete: '',
         export: '',
         import: '',
+<<<<<<< HEAD
         'magnify': '', // Search icon
+=======
+        magnify: '', // Search icon
+        music: '',
+>>>>>>> aa12e74afa2d7e0b22fcf0392c46ab9f5efd6cf0
         notebook: '',
         wikipedia: '',
         'account-hard-hat': 'worker',
@@ -166,20 +171,24 @@ function action () {
         pause: '',
         'skip-next': '',
         'skip-previous': '',
-        'pencil': '', // master-icon: editor
-        'video-vintage' : '', // master-icon: video
+        pencil: '', // master-icon: editor
+        'video-vintage': '', // master-icon: video
         'comment-quote': '', // master-icon: quote
         'clipboard-account': '',
         'file-presentation-box': '',
+<<<<<<< HEAD
         'image': '', // imaster-icon: image
+=======
+        image: '', // imaster-icon: image
+>>>>>>> aa12e74afa2d7e0b22fcf0392c46ab9f5efd6cf0
         music: '', // imaster-icon: audio
         'folder-open': '',
         'comment-alert': '', // imaster-icon: task
         'comment-question': '', // imaster-icon: question
-        'update': '', // Update icon for the REST API overview.
+        update: '', // Update icon for the REST API overview.
         'play-speed': '', // Start play
         'file-tree': '', // Master slide section
-        'trumpet': '', // Master slide “instrument”
+        trumpet: '', // Master slide “instrument”
         'text-box-multiple-outline': 'multi-part' // multipart assets
       }
     },
@@ -192,7 +201,7 @@ function action () {
         wikidata: '',
         'document-camera': '',
         // Google icon „overscan“, not downloadable via github?
-        fullscreen: '',
+        fullscreen: ''
       }
     }
   ])

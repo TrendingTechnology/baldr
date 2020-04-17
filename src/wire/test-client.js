@@ -1,6 +1,5 @@
 
-
-const exampleSocket = new WebSocket("ws://localhost:62453", "protocolOne")
+const exampleSocket = new WebSocket('ws://localhost:62453', 'protocolOne')
 
 console.log(exampleSocket)
 

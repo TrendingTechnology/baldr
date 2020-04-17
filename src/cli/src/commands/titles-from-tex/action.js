@@ -20,14 +20,14 @@ function clean (text) {
 
 function convertTexToFolderTitles (filePath, cmdObj) {
   const content = lib.readFile(filePath)
-  let title = content.match(/  titel = \{(.+?)\}[,\n]/s)
+  let title = content.match(/ {2}titel = \{(.+?)\}[,\n]/s)
   const output = []
   if (title) {
     title = clean(title[1])
     output.push(title)
   }
 
-  let subtitle = content.match(/  untertitel = \{(.+?)\}[,\n]/s)
+  let subtitle = content.match(/ {2}untertitel = \{(.+?)\}[,\n]/s)
   if (subtitle) {
     subtitle = clean(subtitle[1])
     output.push(subtitle)

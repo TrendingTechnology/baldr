@@ -471,7 +471,6 @@ class Song {
    *   the piano score (*.eps).
    */
   constructor (songPath, projectorPath, pianoPath) {
-
     /**
      * The directory containing the song files. For example
      * `/home/jf/songs/w/Wir-sind-des-Geyers-schwarze-Haufen`.

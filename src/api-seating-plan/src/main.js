@@ -16,7 +16,7 @@ const express = require('express')
 const packageJson = require('../package.json')
 const { bootstrapConfig } = require('@bldr/core-node')
 
-let config = bootstrapConfig()
+const config = bootstrapConfig()
 
 /**
  * Directory where to store the json state objects.
