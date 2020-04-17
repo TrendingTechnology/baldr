@@ -1,18 +1,18 @@
 <template>
   <div class="vc_external_sites">
-    <a v-if="wikipedia" :href="wikipedia" title="Wikipedia">
+    <a v-if="wikipedia" :href="wikipedia" title="Wikipedia" target="_blank">
       <plain-icon name="wikipedia"/>
     </a>
-    <a v-if="wikidata" :href="wikidata" title="Wikidata">
+    <a v-if="wikidata" :href="wikidata" title="Wikidata" target="_blank">
       <plain-icon name="wikidata"/>
     </a>
-    <a v-if="musicbrainzRecordingId" :href="musicbrainzRecordingId" title="MusicBrainz (Recording)">
+    <a v-if="musicbrainzRecordingId" :href="musicbrainzRecordingId" title="MusicBrainz (Recording)" target="_blank">
       <plain-icon name="musicbrainz"/>
     </a>
-    <a v-if="musicbrainzWorkId" :href="musicbrainzWorkId" title="MusicBrainz (Work)">
+    <a v-if="musicbrainzWorkId" :href="musicbrainzWorkId" title="MusicBrainz (Work)" target="_blank">
       <plain-icon name="musicbrainz"/>
     </a>
-    <a v-if="youtube" :href="youtube" title="Youtube">
+    <a v-if="youtube" :href="youtube" title="Youtube" target="_blank">
       <plain-icon name="youtube"/>
     </a>
   </div>

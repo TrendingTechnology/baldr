@@ -3,10 +3,12 @@
     <h1 v-if="heading" v-html="heading"/>
     <img :src="scoreMediaFile.getMultiPartHttpUrlByNo(navNos.stepNo)"/>
     <play-button v-if="audioSample" :sample="audioSample"/>
+    <external-sites :asset="scoreMediaFile"/>
   </div>
 </template>
 
 <script>
+import ExternalSites from '@/components/ExternalSites.vue'
 
 export default {
   props: {
@@ -19,6 +21,9 @@ export default {
     audioSample: {
       type: Object
     }
+  },
+  components: {
+    ExternalSites
   }
 }
 </script>
