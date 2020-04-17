@@ -12,9 +12,9 @@ const { transliterate } = require('transliteration')
  * @returns {String}
  */
 function asciify (input) {
-  let output = String(input)
+  const output = String(input)
     .replace(/[\(\)';]/g, '') // eslint-disable-line
-    .replace(/[,\.] /g, '_')
+    .replace(/[,\.] /g, '_') // eslint-disable-line
     .replace(/ +- +/g, '_')
     .replace(/\s+/g, '-')
     .replace(/-+/g, '-')
