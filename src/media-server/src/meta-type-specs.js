@@ -135,7 +135,8 @@ const general = {
       description: 'Zum Beispiel: “person” oder “composition,recording”',
       validate: function (value) {
         return String(value).match(/^[a-zA-Z,]+$/)
-      }
+      },
+      removeByRegexp: new RegExp('^general$')
     },
     metaType: {
       description: 'Heißt jetzt “metaTypes”',

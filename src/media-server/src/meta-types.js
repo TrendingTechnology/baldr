@@ -137,12 +137,13 @@ const typeSpecs = require('./meta-type-specs.js')
  *
  * @param {String} filePath
  *
- * @returns {module:@bldr/media-server/meta-types~typeName} - The type name
- *   for example `person`, `group`
+ * @returns {module:@bldr/media-server/meta-types~typeNames} - The type names
+ *   for example `general,person,group`
  */
 function detectTypeByPath (filePath) {
   filePath = path.resolve(filePath)
   const typeNames = new Set()
+  typeNames.add('general')
   for (const typeName in typeSpecs) {
     const typeSpec = typeSpecs[typeName]
     if (typeSpec.detectTypeByPath) {

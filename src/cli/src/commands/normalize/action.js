@@ -15,7 +15,7 @@ const { deepCopy } = require('@bldr/core-browser')
 const lib = require('../../lib.js')
 
 async function queryWikidata (metaData, typeNames, typeSpecs) {
-  console.log(`Query wikidata item “${chalk.yellow(metaData.wikidata)}” for meta data types “${chalk.yellow('general,' + typeNames)}”`)
+  console.log(`Query wikidata item “${chalk.yellow(metaData.wikidata)}” for meta data types “${chalk.yellow(typeNames)}”`)
   const dataWiki = await wikidata.query(metaData.wikidata, typeNames, typeSpecs)
   console.log(dataWiki)
   metaData = wikidata.mergeData(metaData, dataWiki)
