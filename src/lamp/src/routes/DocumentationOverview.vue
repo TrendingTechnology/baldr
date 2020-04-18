@@ -86,7 +86,7 @@
 </template>
 
 <script>
-import { markupToHtml, openPresentationByRawYaml } from '@/lib.js'
+import { markupToHtml } from '@/lib.js'
 
 /* globals rawYamlExamples */
 
@@ -107,12 +107,6 @@ Können im YAML-Quellcode der Präsentationen eingesetzt werden.
 
 export default {
   name: 'DocumentationOverview',
-  methods: {
-    openExample (yamlString) {
-      this.$store.commit('lamp/showMetaDataOverlay', true)
-      openPresentationByRawYaml(yamlString)
-    }
-  },
   computed: {
     documentation () {
       return markupToHtml(documentation)

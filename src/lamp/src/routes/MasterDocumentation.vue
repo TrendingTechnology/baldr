@@ -17,7 +17,12 @@
     </section>
 
     <section v-if="master.example">
-      <h2>Example <material-icon name="presentation" @click.native="openExample"/></h2>
+      <h2>
+        Example
+        <router-link :to="{ name: 'slides-preview', params: { presId: `EP_master_${masterName}` } }">
+          <material-icon name="presentation"/>
+        </router-link>
+      </h2>
 
       <pre><code>{{ master.exampleClean }}</code></pre>
     </section>
@@ -27,7 +32,7 @@
 </template>
 
 <script>
-import { markupToHtml, openPresentationByRawYaml } from '@/lib.js'
+import { markupToHtml } from '@/lib.js'
 
 export default {
   name: 'MasterDocumentation',
@@ -50,10 +55,6 @@ export default {
   },
   methods: {
     markupToHtml,
-    openExample () {
-      this.$store.commit('lamp/showMetaDataOverlay', true)
-      openPresentationByRawYaml(this.master.example)
-    },
     formatPropSpec (spec) {
       const options = []
       if (spec.required) options.push('required')

@@ -1,6 +1,6 @@
 <template>
   <section class="vc_presentation_title" v-if="presentation">
-    <nav>
+    <nav v-if="presentation.parentDir && presentation.curriculum">
       <ul>
         <li v-for="(link, index) in curriculumLinks" :key="link.path">
           <router-link :to="`/${link.path}`" v-html="link.text"/>
