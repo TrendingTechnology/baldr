@@ -121,7 +121,9 @@ const typeSpecs = require('./meta-type-specs.js')
 
 /**
  * Multiple meta data type names, separated by commas, for example
- * `person,group`.
+ * `work,recording`. `work,recording` is equivalent to `general,work,recording`.
+ *
+ *
  *
  * @typedef {String} typeNames
  */
@@ -160,15 +162,19 @@ function detectTypeByPath (filePath) {
 }
 
 /**
- * @param {Object} data - The mandatory property is “metaTye” and “extension”.
+ * Generate the file path of the last specifed meta type.
+ *
+ * @param {Object} data - The mandatory property is “metaTypes” and “extension”.
  *   One can omit the property “extension”, but than you have to specify the
  *   property “mainImage”.
  *
  * @returns {String} - A absolute path
  */
 function formatFilePath (data) {
-  if (!data.metaType) throw new Error(`Your data needs a property named “metaType”.`)
-  const typeSpec = typeSpecs[data.metaType]
+  if (!data.metaTypes) throw new Error(`Your data needs a property named “metaTypes”.`)
+  // general,person -> person
+  const metaType = data.metaTypes.replace(/^.*,/, '')
+  const typeSpec = typeSpecs[metaType]
   if (!typeSpec) throw new Error(`Unkown meta type “${data.metaType}”.`)
   // The relPath function needs this.extension.
   if (!data.extension) {
@@ -178,7 +184,7 @@ function formatFilePath (data) {
   }
   if (data.extension === 'jpeg') data.extension = 'jpg'
   // b/Bush_George-Walker/main.jpeg
-  const relPath = typeSpec.relPath.call(data, data, typeSpecs[data.metaType])
+  const relPath = typeSpec.relPath.call(data, data, typeSpecs[metaType])
   // To avoid confusion with class MediaFile in the module @bldr/vue-plugin-media
   delete data.extension
   return path.join(typeSpec.basePath, relPath)
@@ -397,6 +403,7 @@ function process (data) {
   data = convertPropertiesCase(data, 'snake-to-camel')
   if (data.metaTypes) {
     for (const typeName of data.metaTypes.split(',')) {
+      console.log(typeName)
       data = processByType(data, typeName)
     }
   }

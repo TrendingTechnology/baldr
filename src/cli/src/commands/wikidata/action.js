@@ -10,7 +10,8 @@ const lib = require('../../lib.js')
 const metaTypes = require('@bldr/media-server').metaTypes
 
 /**
- * @param {String} metaType - For example `group,instrument,person,song`
+ * @param {String} metaType - For example `group`, `instrument`, `person`,
+ *   `song`
  * @param {String} itemId - For example `Q123`
  * @param {String} arg1
  * @param {String} arg2
@@ -23,7 +24,7 @@ async function action (metaType, itemId, arg1, arg2, cmdObj) {
       data.lastname = arg2
     }
   }
-  data.metaType = metaType
+  data.metaTypes = metaType
   data = metaTypes.process(data)
   console.log(data)
 

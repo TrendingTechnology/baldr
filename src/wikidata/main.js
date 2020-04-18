@@ -474,7 +474,7 @@ async function query (itemId, typeNames, typeSpecs) {
       }
     }
     if (typeSpec.normalizeWikidata) {
-      typeSpec.normalizeWikidata({ data, entity, functions })
+      typeSpec.normalizeWikidata({ typeData: data, entity, functions })
     }
   }
 
