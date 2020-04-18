@@ -7,7 +7,7 @@
     "
     b-content-theme="default"
   >
-    <h1>Überblick über alle Präsentationen</h1>
+    <h1>Themen</h1>
 
     <loading-icon v-if="!folderTitleTree"/>
     <presentation-item v-else-if="subFolderTitleTree" :item="subFolderTitleTree"/>
@@ -45,6 +45,7 @@ export default {
   methods: {
     setSubFolderTitleTreeByIds (ids) {
       if (!ids) return
+      if (ids === 'Musik') return this.folderTitleTree
       ids = ids.split('/')
       let tree = this.folderTitleTree
       for (const id of ids) {
