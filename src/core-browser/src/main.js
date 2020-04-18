@@ -212,12 +212,14 @@ export function toTitleCase (text) {
 }
 
 /**
+ * Get the plain text version of a HTML string.
  *
- * @param {String} html
+ * @param {String} html - A HTML formated string.
  *
- * @returns {String}
+ * @returns {String} The plain text version.
  */
 export function plainText (html) {
+  if (!html) return ''
   // To get spaces between heading and paragraphs
   html = html.replace(/></g, '> <')
   const markup = new DOMParser().parseFromString(html, 'text/html')
