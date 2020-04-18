@@ -42,29 +42,6 @@ export default {
 
 <style lang="scss">
   .vc_presentation_title {
-    font-size: 2vw;
-
-    header {
-      width: 100%;
-      font-size: 0.7em;
-      text-align: center;
-    }
-
-    h1, h2 {
-      text-align: center;
-      margin-bottom: 0;
-    }
-
-    h1 {
-      font-size: 1.6em;
-    }
-
-    h2 {
-      font-weight: normal;
-      margin-top: 0;
-      font-size: 1.4em;
-    }
-
     nav ul {
       li {
         display: inline;

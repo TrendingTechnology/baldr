@@ -88,5 +88,24 @@ export default {
     .vc_slide_preview {
       font-size: 0.3em;
     }
+
+    .vc_presentation_title {
+      ul, h1, h2, nav {
+        display: inline;
+        font-size: 0.8em;
+        margin: 0;
+        padding: 0;
+      }
+
+      h1, h2 {
+        &:before {
+          content: ' / '
+        }
+      }
+
+      h2 {
+        font-size: 0.6em;
+      }
+    }
   }
 </style>

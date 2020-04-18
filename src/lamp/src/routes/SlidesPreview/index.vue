@@ -95,6 +95,32 @@ export default {
 
 <style lang="scss">
   .vc_slides_preview {
+    font-size: 1.5vmin;
     padding: 1vw;
+
+    .vc_presentation_title {
+      font-size: 2em;
+
+      header {
+        font-size: 0.7em;
+        text-align: center;
+        width: 100%;
+      }
+
+      h1, h2 {
+        margin-bottom: 0;
+        text-align: center;
+      }
+
+      h1 {
+        font-size: 1.6em;
+      }
+
+      h2 {
+        font-size: 1.4em;
+        font-weight: normal;
+        margin-top: 0;
+      }
+    }
   }
 </style>
