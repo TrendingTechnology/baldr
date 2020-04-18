@@ -136,6 +136,9 @@ const general = {
       validate: function (value) {
         return String(value).match(/^[a-zA-Z,]+$/)
       },
+      format: function (value) {
+        return value.replace(/,?general,?/, '')
+      },
       removeByRegexp: new RegExp('^general$')
     },
     metaType: {
