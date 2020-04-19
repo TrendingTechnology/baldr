@@ -16,7 +16,7 @@ import DocumentationOverview from '@/routes/DocumentationOverview.vue'
 import MasterDocumentation from '@/routes/MasterDocumentation.vue'
 import MediaIdsParentDir from '@/routes/MediaIdsParentDir'
 import OpenInterface from '@/components/OpenInterface'
-import PresentationOverview from '@/routes/PresentationOverview/index.vue'
+import TopicsTree from '@/routes/TopicsTree/index.vue'
 import SpeakerView from '@/routes/SpeakerView.vue'
 import RestApiOverview from '@/routes/RestApiOverview.vue'
 import SlidesPreview from '@/routes/SlidesPreview/index.vue'
@@ -99,12 +99,12 @@ const routes = [
     ]
   },
   {
-    path: '/presentation-overview/:ids*',
-    component: PresentationOverview,
-    name: 'presentation-overview',
+    path: '/topics/:ids*',
+    component: TopicsTree,
+    name: 'topics',
     meta: {
       shortcut: 'p',
-      title: 'Überblick über alle Presentation'
+      title: 'Themen'
     }
   },
   {

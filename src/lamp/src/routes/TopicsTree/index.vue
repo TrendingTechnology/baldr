@@ -32,7 +32,7 @@ async function enterRoute (vm, to) {
 }
 
 export default {
-  name: 'PresentationOverview',
+  name: 'TopicsTree',
   components: {
     PresentationItem,
     LoadingIcon

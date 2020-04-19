@@ -27,10 +27,10 @@ export default {
       const titles = titlesText.split(' / ')
       const ids = this.presentation.parentDir.split('/')
       const links = []
-      links.push({ path: 'presentation-overview/Musik', text: 'Fach Musik' })
+      links.push({ path: 'topics/Musik', text: 'Fach Musik' })
       for (let index = 0; index < titles.length; index++) {
         links.push({
-          path: ['presentation-overview', ...ids.slice(0, index + 1)].join('/'),
+          path: ['topics', ...ids.slice(0, index + 1)].join('/'),
           text: titles[index]
         })
       }
