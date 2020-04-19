@@ -84,6 +84,54 @@ export default {
     }
   },
   methods: {
+    registerEvents () {
+      this.mediaElement = this.sample.mediaElement
+      // Mount a playing media element.
+      if (!this.mediaElement.paused) {
+        this.status = 'playing'
+      }
+
+      this.$media.player.events.on('start', (loadedSample) => {
+        if (loadedSample.uri === this.sample.uri) this.status = 'starting'
+      })
+
+      this.$el.onmouseenter = () => {
+        if (this.status === 'playing') {
+          this.status = 'stoppable'
+        }
+      }
+
+      this.$el.onmouseleave = () => {
+          if (!this.mediaElement.paused) {
+          if (this.sample.playbackState === 'fadeout') {
+            this.status = 'fadeout'
+          } else {
+            this.status = 'playing'
+          }
+        }
+      }
+
+      this.mediaElement.ontimeupdate = (event) => {
+        if (!this.$refs.progress) return
+        this.setProgress(this.sample.progress)
+      }
+
+      this.sample.events.on('fadeinend', () => {
+        this.status = 'playing'
+      })
+
+      this.mediaElement.onplay = (event) => {
+        this.status = 'fadein'
+      }
+
+      this.mediaElement.onpause = (event) => {
+        this.status = 'stopped'
+      }
+
+      this.sample.events.on('fadeoutbegin', () => {
+        this.status = 'fadeout'
+      })
+    },
     start () {
       this.$media.player.load(this.sample)
       this.$media.player.start()
@@ -105,54 +153,13 @@ export default {
       }
     }
   },
+  watch: {
+    sample () {
+      this.registerEvents()
+    }
+  },
   mounted () {
-    this.mediaElement = this.sample.mediaElement
-
-    // Mount a playing media element.
-    if (!this.mediaElement.paused) {
-      this.status = 'playing'
-    }
-
-    this.$media.player.events.on('start', (loadedSample) => {
-      if (loadedSample.uri === this.sample.uri) this.status = 'starting'
-    })
-
-    this.$el.onmouseenter = () => {
-      if (this.status === 'playing') {
-        this.status = 'stoppable'
-      }
-    }
-
-    this.$el.onmouseleave = () => {
-        if (!this.mediaElement.paused) {
-        if (this.sample.playbackState === 'fadeout') {
-          this.status = 'fadeout'
-        } else {
-          this.status = 'playing'
-        }
-      }
-    }
-
-    this.mediaElement.ontimeupdate = (event) => {
-      if (!this.$refs.progress) return
-      this.setProgress(this.sample.progress)
-    }
-
-    this.sample.events.on('fadeinend', () => {
-      this.status = 'playing'
-    })
-
-    this.mediaElement.onplay = (event) => {
-      this.status = 'fadein'
-    }
-
-    this.mediaElement.onpause = (event) => {
-      this.status = 'stopped'
-    }
-
-    this.sample.events.on('fadeoutbegin', () => {
-      this.status = 'fadeout'
-    })
+    this.registerEvents()
   }
 }
 </script>
