@@ -1,5 +1,6 @@
 // Node packages.
 const fs = require('fs')
+const path = require('path')
 
 // Third party packages.
 const chalk = require('chalk')
@@ -28,22 +29,37 @@ async function action (metaType, itemId, arg1, arg2, cmdObj) {
   data = metaTypes.process(data)
   console.log(data)
 
-  if (data.mainImage) {
-    const dest = metaTypes.formatFilePath(data)
+  let downloadWikicommons = true
+  if (!data.mainImage) {
+    data.mainImage = 'blank.jpg'
+    downloadWikicommons = false
+  }
+
+  const dest = metaTypes.formatFilePath(data)
+  if (downloadWikicommons) {
     if (!cmdObj.dryRun) {
       await wikidata.fetchCommonsFile(data.mainImage, dest)
     } else {
       console.log(`Dry run! Destination: ${chalk.green(dest)}`)
     }
-    const yamlFile = `${dest}.yml`
-    if (!fs.existsSync(yamlFile)) {
-      if (!cmdObj.dryRun) {
-        console.log(`Write YAML file: ${chalk.green(yamlFile)}`)
-        lib.writeYamlFile(yamlFile, data)
-      }
-    } else {
-      console.log(`The YAML file already exists: ${chalk.red(yamlFile)}`)
+  }
+
+  if (!cmdObj.dryRun && !fs.existsSync(dest)) {
+    const src = path.join(__dirname, '..', '..', 'blank.jpg')
+    console.log(src)
+    fs.mkdirSync(path.dirname(dest), { recursive: true })
+    fs.copyFileSync(src, dest)
+    console.log(`No Wikicommons file. Use temporary blank file instead.`)
+  }
+
+  const yamlFile = `${dest}.yml`
+  if (!fs.existsSync(yamlFile)) {
+    if (!cmdObj.dryRun) {
+      console.log(`Write YAML file: ${chalk.green(yamlFile)}`)
+      lib.writeYamlFile(yamlFile, data)
     }
+  } else {
+    console.log(`The YAML file already exists: ${chalk.red(yamlFile)}`)
   }
 }
 
