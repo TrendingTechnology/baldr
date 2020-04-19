@@ -89,6 +89,8 @@ export default {
       // Mount a playing media element.
       if (!this.mediaElement.paused) {
         this.status = 'playing'
+      } else {
+        this.status = 'stopped'
       }
 
       this.$media.player.events.on('start', (loadedSample) => {
