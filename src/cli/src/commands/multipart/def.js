@@ -1,5 +1,8 @@
 module.exports = {
   command: 'multipart <glob> <prefix>',
   alias: 'mp',
-  description: 'Rename multipart assets.'
+  options: [
+    ['-d, --dry-run', 'Test first']
+  ],
+  description: 'Rename multipart assets. Example “b mp "*.jpg" Systeme”'
 }
