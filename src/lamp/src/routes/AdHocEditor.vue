@@ -1,6 +1,6 @@
 <template>
   <div class="vc_ad_hoc_editor main-app-fullscreen" b-ui-theme="default">
-    <slide-main :slide="slide" :used-in-public="false"/>
+    <slide-main :slide="slide" :is-public="false"/>
   </div>
 </template>
 

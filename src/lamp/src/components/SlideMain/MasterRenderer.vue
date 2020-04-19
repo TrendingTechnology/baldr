@@ -16,7 +16,7 @@ export default {
     stepNo: {
       type: Number
     },
-    usedInPublic: {
+    isPublic: {
       type: Boolean,
       default: true
     }
@@ -29,7 +29,7 @@ export default {
           props: {
             ...this.slide.propsMain,
             navNos: { stepNo: this.stepNo, slideNo: this.slide.no },
-            usedInPublic: this.usedInPublic
+            isPublic: this.isPublic
           },
           class: {
             'master-inner': true

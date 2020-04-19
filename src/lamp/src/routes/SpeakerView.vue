@@ -4,7 +4,7 @@
 
     <div class="slide-panel" v-if="presentation && slide">
       <slide-main id="current-slide" :slide="slide" :step-no="currentStepNo"/>
-      <slide-main id="next-slide" :slide="nextSlide" :step-no="nextStepNo" :used-in-public="false"/>
+      <slide-main id="next-slide" :slide="nextSlide" :step-no="nextStepNo" :is-public="false"/>
     </div>
 
     <grid-layout :slides="presentation.slides"/>

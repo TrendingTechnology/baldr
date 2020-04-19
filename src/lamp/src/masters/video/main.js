@@ -42,13 +42,16 @@ export default {
         previewHttpUrl: propsMain.previewHttpUrl
       }
     },
-    async enterSlide ({ newProps }) {
-      const sample = this.$store.getters['media/sampleByUri'](newProps.src)
+    // no enterSlide hook: $media is not ready yet.
+    async afterSlideNoChangeOnComponent () {
+      if (!this.isPublic) return
+      const slide = this.$get('slide')
+      const sample = this.$store.getters['media/sampleByUri'](slide.props.src)
       const videoWrapper = document.querySelector('.vc_video_master')
+      videoWrapper.innerHTML = ''
       videoWrapper.appendChild(sample.mediaElement)
-
-      this.$media.player.load(newProps.src)
-      if (newProps.autoplay) {
+      this.$media.player.load(slide.props.src)
+      if (slide.props.autoplay) {
         await this.$media.player.start()
       }
     }

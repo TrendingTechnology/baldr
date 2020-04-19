@@ -82,8 +82,12 @@ export default {
         return muliPartSelection.partCount
       }
     },
-    enterSlide ({ newProps }) {
-      if ('audio' in newProps) this.$media.player.load(newProps.audio)
+    // no enterSlide hook: $media is not ready yet.
+    async afterSlideNoChangeOnComponent () {
+      if (!this.isPublic) return
+      const slide = this.$get('slide')
+      if (!slide.props.audio) return
+      this.$media.player.load(slide.props.audio)
     }
   }
 }

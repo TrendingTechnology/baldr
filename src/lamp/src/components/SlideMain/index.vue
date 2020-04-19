@@ -10,7 +10,7 @@
   >
     <master-icon :slide="slide"/>
     <meta-data-overlay :slide="slide"/>
-    <master-renderer :slide="slide" :step-no="stepNo" :used-in-public="usedInPublic"/>
+    <master-renderer :slide="slide" :step-no="stepNo" :is-public="isPublic"/>
     <audio-overlay :slide="slide"/>
   </div>
 </template>
@@ -37,7 +37,7 @@ export default {
     },
     // Used in the public sequence of slides, not as a secondary
     // view or a future view.
-    usedInPublic: {
+    isPublic: {
       type: Boolean,
       default: true
     }

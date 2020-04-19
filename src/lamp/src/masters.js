@@ -692,7 +692,7 @@ const masterMixin = {
     },
     // By default all master components are marked as main components.
     // Main master components register their `this` in the `customStore`
-    usedInPublic: {
+    isPublic: {
       type: Boolean,
       default: true
     }
@@ -733,11 +733,11 @@ const masterMixin = {
         slideNoChange: true
       }, this)
     }
-    if (this.usedInPublic) customStore.vueMasterInstanceCurrent = this
+    if (this.isPublic) customStore.vueMasterInstanceCurrent = this
     inlineMarkup.makeReactive()
   },
   beforeDestroy () {
-    if (this.usedInPublic) customStore.vueMasterInstanceCurrent = null
+    if (this.isPublic) customStore.vueMasterInstanceCurrent = null
   }
 }
 
