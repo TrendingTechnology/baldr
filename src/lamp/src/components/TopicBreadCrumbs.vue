@@ -1,5 +1,7 @@
 <template>
   <ul class="vc_topic_bread_crumbs" v-if="folderTitleTree">
+    <li><span class="separator">/</span></li>
+
     <li v-for="(segment, index) in segments" :key="segment.path">
       <router-link :to="`/${segment.path}`" v-html="segment.text"/>
       <span v-if="index < segments.length - 1" class="separator">/</span>
@@ -16,13 +18,23 @@ export default {
   props: {
     path: {
       type: String
+    },
+    notLast: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
     ...mapGetters(['presentation', 'folderTitleTree']),
     segments () {
       // 12/20_Tradition/30_Volksmusik
-      const segments = this.path.split('/')
+      let path
+      if (this.notLast) {
+        path = this.path.replace(new RegExp('/[^/]+/?$'), '')
+      } else {
+        path = this.path
+      }
+      const segments = path.split('/')
       const links = []
       links.push({ path: 'topics/Musik', text: 'Fach Musik' })
       let titles = this.folderTitleTree
