@@ -9,6 +9,8 @@
   >
     <h1>Themen</h1>
 
+    <topic-bread-crumbs v-if="path" :path="path"/>
+
     <loading-icon v-if="!folderTitleTree"/>
     <presentation-item v-else-if="subFolderTitleTree" :item="subFolderTitleTree"/>
     <presentation-item v-else :item="folderTitleTree"/>
@@ -18,7 +20,9 @@
 <script>
 import PresentationItem from './PresentationItem.vue'
 import LoadingIcon from '@/components/LoadingIcon.vue'
+import TopicBreadCrumbs from '@/components/TopicBreadCrumbs.vue'
 import { createNamespacedHelpers } from 'vuex'
+
 const { mapGetters } = createNamespacedHelpers('lamp')
 
 async function enterRoute (vm, to) {
@@ -34,12 +38,14 @@ async function enterRoute (vm, to) {
 export default {
   name: 'TopicsTree',
   components: {
+    LoadingIcon,
     PresentationItem,
-    LoadingIcon
+    TopicBreadCrumbs
   },
   data () {
     return {
-      subFolderTitleTree: null
+      subFolderTitleTree: null,
+      path: null
     }
   },
   methods: {
@@ -54,6 +60,9 @@ export default {
       this.subFolderTitleTree = tree
     }
   },
+  mounted () {
+    this.path = this.$route.params.ids
+  },
   computed: mapGetters(['folderTitleTree']),
   beforeRouteEnter (to, from, next) {
     next(vm => {
@@ -62,6 +71,7 @@ export default {
   },
   beforeRouteUpdate (to, from, next) {
     enterRoute(this, to)
+    this.path = to.params.ids
     next()
   }
 }
