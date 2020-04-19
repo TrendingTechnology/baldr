@@ -6,6 +6,7 @@
 const fs = require('fs')
 const childProcess = require('child_process')
 const path = require('path')
+const URL = require('url').URL
 
 // Third party packages.
 const fetch = require('node-fetch')
@@ -22,7 +23,8 @@ const wikibase = require('wikibase-sdk')({
  *   `['P123', 'P234']`. If `fromClaim` is an array, the first existing claim
  *   an a certain item is taken.
  * @property {String} wikidata.fromEntity - `getDescription`, `getLabel`,
- *   `getWikipediaTitle`.
+ *   `getWikipediaTitle`. If `fromClaim` is specifed and the item has
+ *   a value on this claim, `fromEntity` is omitted.
  * @property {String} wikidata.secondQuery - `queryLabels`
  * @property {Boolean} wikidata.alwaysUpdate
  * @property {(Function|String)} wikidata.format - A function or `formatDate`,
@@ -118,7 +120,7 @@ async function getEntities (itemIds, props) {
  * @param {String} dest
  */
 async function fetchFile (url, dest) {
-  const response = await fetch(url)
+  const response = await fetch(new URL(url))
   fs.mkdirSync(path.dirname(dest), { recursive: true })
   fs.writeFileSync(dest, Buffer.from(await response.arrayBuffer()))
   if (fs.existsSync(dest)) {
@@ -449,7 +451,9 @@ async function query (itemId, typeNames, typeSpecs) {
         }
         if (propSpec.fromClaim) {
           value = getClaim(entity, propSpec.fromClaim)
-        } else if (propSpec.fromEntity) {
+        }
+
+        if (!value && propSpec.fromEntity) {
           const func = functions[propSpec.fromEntity]
           if (typeof func !== 'function') {
             throw new Error(`Unkown from entity source “${propSpec.fromEntity}”`)
@@ -466,6 +470,12 @@ async function query (itemId, typeNames, typeSpecs) {
             value = propSpec.format(value, typeSpec)
           } else {
             const func = functions[propSpec.format]
+            if (typeof func !== 'function') {
+              let formatFunctions = Object.keys(functions)
+              formatFunctions = formatFunctions.filter((value) => value.match(/^format.*/))
+              formatFunctions = formatFunctions.join()
+              throw new Error(`Unkown format function “${propSpec.format}”. Use one of: ${formatFunctions}`)
+            }
             value = func(value, typeSpec)
           }
         }

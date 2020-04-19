@@ -368,7 +368,8 @@ const group = {
       required: true,
       wikidata: {
         // offizieller Name
-        fromClaim: 'P1448'
+        fromClaim: 'P1448',
+        fromEntity: 'getLabel'
       }
     },
     logo: {
@@ -387,7 +388,7 @@ const group = {
       wikidata: {
         // Gründung, Erstellung bzw. Entstehung
         fromClaim: 'P571',
-        format: 'date'
+        format: 'formatDate'
       },
       validate: validateDate
     },
@@ -395,7 +396,7 @@ const group = {
       wikidata: {
         // Auflösungsdatum
         fromClaim: 'P576',
-        format: 'date'
+        format: 'formatDate'
       },
       validate: validateDate
     },
@@ -409,7 +410,8 @@ const group = {
     mainImage: {
       wikidata: {
         // Bild
-        fromClaim: 'P18'
+        fromClaim: 'P18',
+        format: 'formatWikicommons'
       }
     }
   }
@@ -462,13 +464,15 @@ const instrument = {
     mainImage: {
       wikidata: {
         // Bild
-        fromClaim: 'P18'
+        fromClaim: 'P18',
+        format: 'formatWikicommons'
       }
     },
     playingRangeImage: {
       wikidata: {
         // Bild des Tonumfang
-        fromClaim: 'P2343'
+        fromClaim: 'P2343',
+        format: 'formatWikicommons'
       }
     }
   }
@@ -598,7 +602,7 @@ const song = {
         // Veröffentlichungsdatum
         fromClaim: 'P577'
       },
-      format: 'date'
+      format: 'formatDate'
     },
     language: {
       wikidata: {
