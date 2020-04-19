@@ -21,7 +21,7 @@ export default {
 
 <style lang="scss">
   .vc_loading_icon {
-    font-size: 10em;
+    font-size: 6vmin;
     text-align: center;
     position: absolute;
     top: 0;
