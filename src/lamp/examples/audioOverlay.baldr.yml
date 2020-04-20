@@ -42,3 +42,10 @@ slides:
   image:
     src: Ausstellung_Bild_10_Grosses-Tor-von-Kiew
   audio_overlay: id:Ausstellung_Klavier_10_Grosses-Tor-von-Kiew
+
+- title: URI and title in one string
+  task: URI and title in one string
+  audio_overlay:
+  - id:Beatles-Strawberry_HB_Demoversion
+  - id:Beatles-Strawberry_HB_Studioversion-von-1966 ersten Studioversion vom 24. November 1966
+  - id:Beatles-Strawberry_HB_Plattenfassung fertige Produktion

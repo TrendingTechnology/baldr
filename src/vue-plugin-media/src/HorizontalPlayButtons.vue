@@ -4,13 +4,13 @@
     v-if="wrappedSamplesNormalized"
   >
     <span
-      v-for="wrapped in samplesNormalized"
-      :key="wrapped.sample.uri"
+      v-for="wrappedSample in samplesNormalized"
+      :key="wrappedSample.sample.uri"
     >
       <play-button
-        :sample="wrapped.sample"
+        :sample="wrappedSample.sample"
       />
-      <span v-if="showTitlesNormalized">{{ wrapped.title }}</span>
+      <span class="manual-title" v-if="showTitlesNormalized || wrappedSample.isTitleSetManually">{{ wrappedSample.title }}</span>
     </span>
   </div>
 </template>
@@ -47,15 +47,19 @@ export default {
       if (this.samples) return new WrappedSamples(this.samples)
     },
     showTitlesNormalized () {
-      if (this.wrappedSamplesNormalized.isTitleSet) return true
+      if (this.wrappedSamplesNormalized.isTitleSetManually) return true
       return this.showTitles
     }
   }
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   .vc_horizontal_play_buttons {
-    font-size: 2.5vw;
+    .manual-title {
+      padding: 0 0.5em;
+      transform: translateY(-0.4em);
+      display: inline-block;
+    }
   }
 </style>

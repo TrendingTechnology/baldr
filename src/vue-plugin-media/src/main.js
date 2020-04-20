@@ -9,7 +9,6 @@
 import { getDefaultServers, HttpRequest, getDefaultRestEndpoints, HttpRequestNg } from '@bldr/http-request'
 import { formatMultiPartAssetFileName, AssetTypes, selectSubset } from '@bldr/core-browser'
 
-import Vue from 'vue'
 import DynamicSelect from '@bldr/vue-plugin-dynamic-select'
 
 // Vue components
@@ -985,17 +984,21 @@ class Sample {
 
 /**
  * Wrap a sample with some meta data (mostly a custom title). Allow different
- * input specifications
+ * input specifications.
+ *
+ * @see {@link module:@bldr/vue-plugin-media~WrappedSamples}
  */
 class WrappedSample {
   /**
    * @param {Object|String} spec - Different input specifications are
    *   possible:
    *
-   *   1. The sample URI as a string (for example: `Fuer-Elise_HB`).
-   *   2. An object with the mandatory property `uri` (for example:
-   *      `{ uri: 'Fuer-Elise_HB'}`).
-   *   3. An instance of the class `Sample`.
+   *   1. The sample URI as a string (for example: `id:Fuer-Elise_HB`).
+   *   2. The sample URI inside the title text. (for example
+   *      `id:Fuer-Elise_HB Für Elise` or `Für Elise id:Fuer-Elise_HB`)
+   *   3. An object with the mandatory property `uri` (for example:
+   *      `{ uri: 'id:Fuer-Elise_HB'}`).
+   *   4. An instance of the class `Sample`.
    */
   constructor (spec) {
     /**
@@ -1005,17 +1008,12 @@ class WrappedSample {
     this.sample_ = null
 
     /**
+     * The manually set title.
+     *
      * @type {String}
+     * @private
      */
-    this.uri = null
-    if (typeof spec === 'string') {
-      this.uri = spec
-    } else if (spec.uri && !spec.sample) {
-      this.uri = spec.uri
-    } else if (spec.constructor.name === 'Sample') {
-      this.uri = spec.uri
-      this.sample_ = spec
-    }
+    this.title_ = null
 
     /**
      * True if the title is set manually.
@@ -1025,17 +1023,36 @@ class WrappedSample {
      *
      * @type {Boolean}
      */
-    this.isTitleSet = false
+    this.isTitleSetManually = false
 
     /**
-     * The manually set title.
+     * The URI of a samples.
      *
      * @type {String}
-     * @private
      */
-    this.title_ = null
+    this.uri = null
+    if (typeof spec === 'string') {
+      const regexp = new RegExp('id:[a-zA-Z0-9_-]+')
+      if (spec.match(regexp))  {
+        this.uri = spec.match(regexp)[0]
+        let title = spec.replace(regexp, '')
+        if (title) {
+          title = title.trim()
+          this.title_ = title
+          this.isTitleSetManually = true
+        }
+      } else {
+        throw new Error(`No media URI found in “${spec}”!`)
+      }
+    } else if (spec.uri && !spec.sample) {
+      this.uri = spec.uri
+    } else if (spec.constructor.name === 'Sample') {
+      this.uri = spec.uri
+      this.sample_ = spec
+    }
+
     if (spec.title) {
-      this.isTitleSet = true
+      this.isTitleSetManually = true
       this.title_ = spec.title
     }
   }
@@ -1104,12 +1121,17 @@ export class WrappedSamples {
      *
      * @type {Boolean}
      */
-    this.isTitleSet = false
-    if (this.samples[0].isTitleSet) {
-      this.isTitleSet = true
+    this.isTitleSetManually = false
+    if (this.samples[0].isTitleSetManually) {
+      this.isTitleSetManually = true
     }
   }
 
+  /**
+   * Get the URI of all wrapped samples.
+   *
+   * @returns {Array}
+   */
   get uris () {
     const uris = []
     for (const wrappedSample of this.samples) {
