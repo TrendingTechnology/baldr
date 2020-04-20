@@ -17,6 +17,9 @@
 // Node packages.
 const path = require('path')
 
+// Third party packages.
+const { v4: uuidv4 } = require('uuid');
+
 // Project packages.
 const { deasciify, idify } = require('./helper.js')
 const { bootstrapConfig } = require('@bldr/core-node')
@@ -129,6 +132,14 @@ const general = {
         return value
       },
       required: true
+    },
+    uuid: {
+      title: 'UUID',
+      description: 'UUID version 4.',
+      derive () {
+        return uuidv4()
+      },
+      overwriteByDerived: false
     },
     metaTypes: {
       title: 'Metadaten-Typen',
