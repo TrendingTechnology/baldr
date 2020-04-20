@@ -709,6 +709,7 @@ async function initializeDb () {
   const assets = await db.createCollection('assets')
   await assets.createIndex({ path: 1 }, { unique: true })
   await assets.createIndex({ id: 1 }, { unique: true })
+  await assets.createIndex({ uuid: 1 })
 
   const presentations = await db.createCollection('presentations')
   await presentations.createIndex({ id: 1 }, { unique: true })
