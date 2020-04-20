@@ -258,12 +258,14 @@ const recording = {
         secondQuery: 'queryLabels'
       }
     },
+    // see composition creationDate
     year: {
-      wikidata: {
-        // Veröffentlichungsdatum
-        fromClaim: 'P577',
-        format: 'formatYear'
-      }
+      state: 'absent'
+      // wikidata: {
+      //   // Veröffentlichungsdatum
+      //   fromClaim: 'P577',
+      //   format: 'formatYear'
+      // }
     },
     cover: {
       validate: validateMediaId
@@ -310,21 +312,13 @@ const composition = {
         format: 'formatYear'
       }
     },
+    // now combined in creationDate
     publicationDate: {
-      state: 'absent',
-      wikidata: {
-        // Veröffentlichungsdatum
-        fromClaim: 'P577',
-        format: 'formatDate'
-      }
+      state: 'absent'
     },
+    // now combined in creationDate
     firstPerformance: {
-      state: 'absent',
-      wikidata: {
-        // Datum der Erst- oder Uraufführung
-        fromClaim: 'P1191',
-        format: 'formatDate'
-      }
+      state: 'absent'
     },
     imslp: {
       wikidata: {
