@@ -19,6 +19,7 @@ import ComponentMediaOverview from './MediaOverview/index.vue'
 import ComponentHorizontalPlayButtons from './HorizontalPlayButtons.vue'
 import ComponentMediaCanvas from './MediaCanvas.vue'
 import ComponentPlayButton from './PlayButton.vue'
+import storeModule from './store.js'
 
 const restEndpoints = getDefaultRestEndpoints()
 export const httpRequestNg = new HttpRequestNg(restEndpoints, '/api/media')
@@ -43,222 +44,6 @@ export let router
  * @type {module:@bldr/vue-plugin-shortcuts~Shortcuts}
  */
 export let shortcuts
-
-/**
- *
- */
-const storeModule = {
-  namespaced: true,
-  state: {
-    multiPartSelections: {},
-    mediaFiles: {},
-    playList: [],
-    playListNoCurrent: null,
-    assetTypes: {
-      audio: {},
-      video: {},
-      image: {}
-    },
-    restApiServers: [],
-    samples: {},
-    // To realize a playthrough and stop option on the audio and video master
-    // slides, we must track the currently playing sample and the in the future
-    // to be played sample (loaded).
-    sampleLoaded: null,
-    samplePlaying: null
-  },
-  getters: {
-    samplePlayListCurrent: (state, getters) => {
-      return getters.samples[getters.playList[getters.playListNoCurrent - 1]]
-    },
-    httpUrlByUri: (state, getters) => uri => {
-      const media = getters.mediaFiles
-      if (uri in media) {
-        return media[uri].httpUrl
-      }
-      return null
-    },
-    isMedia: (state, getters) => {
-      return Object.keys(getters.mediaFiles).length > 0
-    },
-    mediaFileByUri: (state, getters) => uri => {
-      // mediaFile URI is specifed as a sample
-      if (uri.indexOf('#') > -1) uri = uri.replace(/#.*$/, '')
-      const media = getters.mediaFiles
-      if (uri in media) {
-        return media[uri]
-      }
-      return null
-    },
-    mediaFiles: state => {
-      return state.mediaFiles
-    },
-    mediaFilesByType: state => type => {
-      return state.assetTypes[type]
-    },
-    multiPartSelectionByUri: state => uri => {
-      return state.multiPartSelections[uri]
-    },
-    playList: state => {
-      return state.playList
-    },
-    playListNoCurrent: state => {
-      return state.playListNoCurrent
-    },
-    restApiServers: state => {
-      return state.restApiServers
-    },
-    sampleLoaded: state => {
-      return state.sampleLoaded
-    },
-    samples: state => {
-      return state.samples
-    },
-    samplePlaying: state => {
-      return state.samplePlaying
-    },
-    sampleByUri: (state, getters) => uri => {
-      if (!uri) return
-      const samples = getters.samples
-      if (uri.indexOf('#') === -1) uri = `${uri}#complete`
-      if (uri in samples) {
-        return samples[uri]
-      }
-    },
-    typeCount: state => type => {
-      return Object.keys(state.assetTypes[type]).length
-    }
-  },
-  actions: {
-    addMediaFile ({ commit, dispatch }, mediaFile) {
-      commit('addMediaFile', mediaFile)
-      commit('addMediaFileToTypes', mediaFile)
-      for (const sampleUri in mediaFile.samples) {
-        dispatch('addSampleToPlayList', mediaFile.samples[sampleUri])
-      }
-    },
-    addSampleToPlayList ({ commit, getters }, sample) {
-      const list = getters.playList
-      if (!list.includes(sample.uri) && sample.mediaFile.type !== 'image') {
-        commit('addSampleToPlayList', sample)
-      }
-    },
-    clear ({ dispatch, commit }) {
-      dispatch('removeMediaFilesAll')
-      commit('setSampleLoaded', null)
-      commit('setSamplePlaying', null)
-      commit('setPlayListNoCurrent', null)
-    },
-    removeMediaFile ({ commit, getters }, mediaFile) {
-      for (const sampleUri in mediaFile.samples) {
-        const sample = mediaFile.samples[sampleUri]
-        commit('removeSample', sample)
-        commit('removeSampleFromPlayList', sample)
-      }
-      commit('removeMediaFileFromTypes', mediaFile)
-      commit('removeMediaFile', mediaFile)
-    },
-    removeMediaFilesAll ({ dispatch, getters }) {
-      for (const mediaFileUri in getters.mediaFiles) {
-        dispatch('removeMediaFile', getters.mediaFiles[mediaFileUri])
-      }
-    },
-    setPlayListSampleCurrent ({ commit, getters }, sample) {
-      let no = null
-      if (sample) {
-        no = getters.playList.indexOf(sample.uri) + 1
-      }
-      commit('setPlayListNoCurrent', no)
-    },
-    setPlayListSampleNext ({ commit, getters }) {
-      const no = getters.playListNoCurrent
-      const count = getters.playList.length
-      if (no === count) {
-        commit('setPlayListNoCurrent', 1)
-      } else {
-        commit('setPlayListNoCurrent', no + 1)
-      }
-    },
-    setPlayListSamplePrevious ({ commit, getters }) {
-      const no = getters.playListNoCurrent
-      const count = getters.playList.length
-      if (no === 1) {
-        commit('setPlayListNoCurrent', count)
-      } else {
-        commit('setPlayListNoCurrent', no - 1)
-      }
-    },
-    async setRestApiServers ({ commit }) {
-      const servers = await httpRequestNg.restEndpoints.getReachable()
-      const versions = await httpRequestNg.request('version', 'all')
-      const counts = await httpRequestNg.request('stats/count', 'all')
-      const updates = await httpRequestNg.request('stats/updates', 'all')
-
-      const result = []
-      for (const endpointName in servers) {
-        result.push({
-          name: servers[endpointName].name,
-          baseUrl: servers[endpointName].baseUrl,
-          version: versions[endpointName].data.version,
-          count: counts[endpointName].data,
-          update: updates[endpointName].data[0].begin,
-          commitId: updates[endpointName].data[0].lastCommitId
-        })
-      }
-      commit('setRestApiServers', result)
-    },
-    setSamplePlaying ({ commit, dispatch }, sample) {
-      commit('setSamplePlaying', sample)
-      if (sample) dispatch('setPlayListSampleCurrent', sample)
-    }
-  },
-  mutations: {
-    addMediaFile (state, mediaFile) {
-      Vue.set(state.mediaFiles, mediaFile.uri, mediaFile)
-    },
-    addMediaFileToTypes (state, mediaFile) {
-      Vue.set(state.assetTypes[mediaFile.type], mediaFile.uri, mediaFile)
-    },
-    addSample (state, sample) {
-      Vue.set(state.samples, sample.uri, sample)
-    },
-    addSampleToPlayList (state, sample) {
-      state.playList.push(sample.uri)
-    },
-    removeMediaFile (state, mediaFile) {
-      Vue.delete(state.mediaFiles, mediaFile.uri)
-    },
-    removeMediaFileFromTypes (state, mediaFile) {
-      Vue.delete(state.assetTypes[mediaFile.type], mediaFile.uri)
-    },
-    removeSample (state, sample) {
-      Vue.delete(state.samples, sample.uri)
-    },
-    addMultiPartSelection (state, selection) {
-      Vue.set(state.multiPartSelections, selection.uri, selection)
-    },
-    removeSampleFromPlayList (state, sample) {
-      while (state.playList.indexOf(sample.uri) > -1) {
-        const index = state.playList.indexOf(sample.uri)
-        if (index > -1) {
-          state.playList.splice(index, 1)
-        }
-      }
-    },
-    setPlayListNoCurrent (state, no) {
-      state.playListNoCurrent = no
-    },
-    setRestApiServers (state, restApiServers) {
-      Vue.set(state, 'restApiServers', restApiServers)
-    },
-    setSampleLoaded (state, sample) {
-      state.sampleLoaded = sample
-    },
-    setSamplePlaying (state, sample) {
-      state.samplePlaying = sample
-    }
-  }
-}
 
 /**
  *
@@ -1768,14 +1553,6 @@ class Resolver {
     this.cache_ = {}
 
     /**
-     * Some URIs are suffixed with a multi part asset selection (#3-5). The
-     * raw URIs are here stored, to be able to create `multiPartSelections()`
-     *
-     * @type {Array}
-     */
-    this.multiPartUris = []
-
-    /**
      * Store for linked URIs (URIs inside media assets). They are collected
      * and resolved in a second step after the resolution of the main
      * media assets.
@@ -1927,9 +1704,7 @@ class Resolver {
         const response = await this.queryMediaServer_(mediaFile.uriScheme, mediaFile.uriAuthority)
         if (response.data.multiPartCount) {
           mediaFile = new MultiPartAsset({ uri: mediaFile.uriRaw })
-          if (!this.multiPartUris.includes(mediaFile.uriRaw)) {
-            this.multiPartUris.push(mediaFile.uriRaw)
-          }
+          store.commit('media/addMultiPartUri', mediaFile.uriRaw)
         }
         extractMediaUrisRecursive(response.data, this.linkedUris)
         mediaFile.addProperties(response.data)
@@ -2166,7 +1941,7 @@ class Media {
       store.dispatch('media/addMediaFile', mediaFile)
       output[mediaFile.uri] = mediaFile
     }
-    for (const uri of this.resolver.multiPartUris) {
+    for (const uri of store.getters['media/multiPartUris']) {
       const asset = store.getters['media/mediaFileByUri'](uri)
       const multiPartSelection = new MultiPartSelection(asset, uri)
       store.commit('media/addMultiPartSelection', multiPartSelection)
