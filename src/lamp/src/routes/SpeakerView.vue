@@ -107,5 +107,13 @@ export default {
         font-size: 0.6em;
       }
     }
+
+    .vc_play_button {
+      bottom: 0.5em;
+      font-size: 2em;
+      left: 0.5em;
+      position: absolute;
+      z-index: 1;
+    }
   }
 </style>

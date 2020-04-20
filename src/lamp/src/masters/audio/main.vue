@@ -101,11 +101,5 @@ export default {
       font-size: 0.6em;
       padding-bottom: 2em;
     }
-
-    .vc_play_button {
-      position: fixed;
-      bottom: 0.5em;
-      left: 0.5em;
-    }
   }
 </style>
