@@ -2,7 +2,7 @@
   <div class="vc_score_sample_master">
     <h1 v-if="heading" v-html="heading"/>
     <img :src="scoreMediaFile.getMultiPartHttpUrlByNo(navNos.stepNo)"/>
-    <play-button v-if="audioSample" :sample="audioSample"/>
+    <play-button class="left-bottom-corner" v-if="audioSample" :sample="audioSample"/>
     <external-sites :asset="scoreMediaFile"/>
   </div>
 </template>

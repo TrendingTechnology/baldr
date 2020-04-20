@@ -31,7 +31,7 @@
       v-html="artist"
     />
 
-    <play-button :sample="sample"/>
+    <play-button class="left-bottom-corner" :sample="sample"/>
     <external-sites :asset="mediaAsset"/>
   </div>
 </template>

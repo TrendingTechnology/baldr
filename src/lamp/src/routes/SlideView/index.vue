@@ -40,12 +40,15 @@ export default {
       height: 100vh;
     }
 
-    .vc_play_button {
+    .left-bottom-corner, .vc_audio_overlay {
       position: fixed;
-      font-size: 3vmin;
       z-index: 1;
       left: 1vmin;
       bottom: 1vmin;
+    }
+
+    .vc_play_button {
+      font-size: 3vmin;
     }
 
     .vc_master_icon {

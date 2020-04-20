@@ -108,12 +108,15 @@ export default {
       }
     }
 
-    .vc_play_button {
+    .left-bottom-corner, .vc_audio_overlay {
       bottom: 0.5em;
-      font-size: 2em;
       left: 0.5em;
       position: absolute;
       z-index: 1;
+    }
+
+    .vc_play_button {
+      font-size: 1em;
     }
   }
 </style>
