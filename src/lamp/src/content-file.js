@@ -650,6 +650,8 @@ class PresentationNavigator {
           throw new Error(`A slide with the id “${slide.id}” already exists.`)
         }
         this.slideIds[slide.id] = slide.no
+        // TODO: Use store only
+        store.commit('lamp/nav/addSlideId', { slideId: slide.id, no: slide.no })
         slideNo = slide.id
       } else {
         slideNo = slide.no
@@ -657,16 +659,26 @@ class PresentationNavigator {
       // Generate the navigation list
       if (slide.stepCount && slide.stepCount > 1) {
         for (let index = 1; index <= slide.stepCount; index++) {
-          this.navList.push({ slideNo, stepNo: index })
+          const item = { slideNo, stepNo: index }
+          // TODO: Use store only
+          this.navList.push(item)
+          store.commit('lamp/nav/addNavListItem', item)
         }
       } else {
-        this.navList.push({ slideNo })
+        const item = { slideNo }
+        // TODO: Use store only
+        this.navList.push(item)
+        store.commit('lamp/nav/addNavListItem', item)
       }
     }
 
-    for (let index = 0; index < this.navList.length; index++) {
-      const params = this.navList[index]
-      this.navListIndex[PresentationNavigator.routeParamsToIndex_(params)] = index + 1
+    for (let i = 0; i < this.navList.length; i++) {
+      const params = this.navList[i]
+      const index = PresentationNavigator.routeParamsToIndex_(params)
+      const navListNo = i + 1
+      // TODO: Use store only
+      store.commit('lamp/nav/addNavListIndex', { index, navListNo })
+      this.navListIndex[index] = navListNo
     }
   }
 
@@ -694,7 +706,9 @@ class PresentationNavigator {
    * @property {Number} stepNo - The step number (can be unset).
    */
   setNavListNo (params) {
-    this.navListNo = this.routeParamsToNavListNo(params)
+    const no = this.routeParamsToNavListNo(params)
+    store.commit('lamp/nav/setNavListNo', no)
+    this.navListNo = no
   }
 
   /**

@@ -13,6 +13,47 @@ import vue, { customStore } from '@/main.js'
 
 Vue.use(Vuex)
 
+/**
+ * Navigation module
+ */
+const nav = {
+  namespaced: true,
+  state: {
+    navListNo: 1,
+    navList: [],
+    slideIds: {},
+    navListIndex: {}
+  },
+  getters: {
+    navList: state => {
+      return state.navList
+    },
+    navListIndex: state => {
+      return state.navListIndex
+    },
+    slideIds: state => {
+      return state.slideIds
+    }
+  },
+  mutations: {
+    addNavListItem (state, item) {
+      state.navList.push(item)
+    },
+    addNavListIndex (state, { index, navListNo }) {
+      state.navListIndex[index] = navListNo
+    },
+    addSlideId (state, { slideId, no }) {
+      if (state.slideIds[slideId]) {
+        throw new Error(`A slide with the id “${slideId}” already exists.`)
+      }
+      state.slideIds[slideId] = no
+    },
+    setNavListNo (state, no) {
+      state.navListNo = no
+    }
+  }
+}
+
 const state = {
   // Highlight the cursor arrows when the presentation is navigated through
   // keyboard shortcuts
@@ -330,7 +371,10 @@ export default new Vuex.Store({
       state,
       getters,
       actions,
-      mutations
+      mutations,
+      modules: {
+        nav
+      }
     }
   }
 })
