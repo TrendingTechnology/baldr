@@ -987,7 +987,7 @@ class Sample {
  * input specifications.
  *
  * @see {@link module:@bldr/vue-plugin-media.WrappedSamples}
- * @see {@link @bldr/lamp/content-file~AudioOverlay}
+ * @see {@link module:@bldr/lamp/content-file~AudioOverlay}
  */
 class WrappedSample {
   /**
@@ -1086,7 +1086,7 @@ class WrappedSample {
  * Normalize the input.
  *
  * @see {@link module:@bldr/vue-plugin-media~WrappedSample}
- * @see {@link @bldr/lamp/content-file~AudioOverlay}
+ * @see {@link module:@bldr/lamp/content-file~AudioOverlay}
  */
 export class WrappedSamples {
   /**

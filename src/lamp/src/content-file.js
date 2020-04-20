@@ -223,6 +223,10 @@ function normalizeStyle (style) {
  * slide.
  *
  * See component `AudioOverlay.vue`
+ *
+ * @see {@link module:@bldr/vue-plugin-media~WrappedSample}
+ * @see {@link module:@bldr/vue-plugin-media.WrappedSamples}
+ * @see {@link module:@bldr/lamp/content-file~AudioOverlay}
  */
 class AudioOverlay {
   /**
