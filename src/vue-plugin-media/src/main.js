@@ -986,7 +986,8 @@ class Sample {
  * Wrap a sample with some meta data (mostly a custom title). Allow different
  * input specifications.
  *
- * @see {@link module:@bldr/vue-plugin-media~WrappedSamples}
+ * @see {@link module:@bldr/vue-plugin-media.WrappedSamples}
+ * @see {@link @bldr/lamp/content-file~AudioOverlay}
  */
 class WrappedSample {
   /**
@@ -1083,6 +1084,9 @@ class WrappedSample {
 /**
  * Wrap some samples with metadata. Allow fuzzy specification of the samples.
  * Normalize the input.
+ *
+ * @see {@link module:@bldr/vue-plugin-media~WrappedSample}
+ * @see {@link @bldr/lamp/content-file~AudioOverlay}
  */
 export class WrappedSamples {
   /**
