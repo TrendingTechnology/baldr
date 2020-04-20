@@ -24,24 +24,24 @@ slides:
 - title: 'Object: only uri, long form, show titles'
   score_sample:
     heading: Der Gnome
-    score: id:Ausstellung_Notenbeispiel_01_Gnom
+    score: uuid:949c3b21-b0c5-4730-bf04-15a4d5dff7fd
   audio_overlay:
     show_titles: true
     samples:
-    - uri: id:Ausstellung_Klavier_01_Gnom
-    - uri: id:Ausstellung_Orchester_01_Gnom
+    - uri: uuid:337010d0-732b-400f-a516-6f0bec91ed7b
+    - uri: uuid:2dbdb1c0-0882-40fa-b0a6-7552effa2d32
 
 - title: 'Only one sample'
   score_sample:
     heading: Das große Tor von Kiew
-    score: id:Ausstellung_Notenbeispiel_10_Grosses-Tor-von-Kiew
+    score: uuid:910699a5-d682-4053-8c96-64961596d242
   audio_overlay:
-    - uri: id:Ausstellung_Klavier_10_Grosses-Tor-von-Kiew
+    - uri: uuid:c64047d2-983d-4009-a35f-02c95534cb53
 
 - title: 'Over image. Input string'
   image:
-    src: Ausstellung_Bild_10_Grosses-Tor-von-Kiew
-  audio_overlay: id:Ausstellung_Klavier_10_Grosses-Tor-von-Kiew
+    src: uuid:910699a5-d682-4053-8c96-64961596d242
+  audio_overlay: uuid:c64047d2-983d-4009-a35f-02c95534cb53
 
 - title: URI and title in one string
   task: URI and title in one string

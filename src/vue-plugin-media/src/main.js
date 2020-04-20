@@ -73,7 +73,7 @@ function extractMediaUrisRecursive (object, urisStore) {
    * @returns {Boolean}
    */
   function isMediaUri (uri) {
-    if (uri && typeof uri === 'string' && uri.match(/^(id|filename):[a-zA-Z0-9_-]+$/)) {
+    if (uri && typeof uri === 'string' && uri.match(/^(id|uuid):[a-zA-Z0-9_-]+$/)) {
       return true
     }
     return false
@@ -1033,7 +1033,7 @@ class WrappedSample {
      */
     this.uri = null
     if (typeof spec === 'string') {
-      const regexp = new RegExp('id:[a-zA-Z0-9_-]+')
+      const regexp = new RegExp('(id|uuid):[a-zA-Z0-9_-]+')
       if (spec.match(regexp))  {
         this.uri = spec.match(regexp)[0]
         let title = spec.replace(regexp, '')
@@ -1726,7 +1726,7 @@ class Resolver {
         mediaFile.filenameFromHTTPUrl(mediaFile.uri)
         mediaFile.extensionFromString(mediaFile.uri)
         // Resolve HTTP URL
-      } else if (mediaFile.uriScheme === 'id' || mediaFile.uriScheme === 'filename') {
+      } else if (mediaFile.uriScheme === 'id' || mediaFile.uriScheme === 'uuid') {
         const response = await this.queryMediaServer_(mediaFile.uriScheme, mediaFile.uriAuthority)
         if (response.data.multiPartCount) {
           mediaFile = new MultiPartAsset({ uri: mediaFile.uriRaw })
@@ -1738,6 +1738,8 @@ class Resolver {
         if (mediaFile.previewImage) {
           mediaFile.previewHttpUrl = `${mediaFile.httpUrl}_preview.jpg`
         }
+      } else {
+        throw new Error(`Unkown media asset URI: “${mediaFileSpec}”: Supported URI schemes: http,https,id,uuid`)
       }
     // Local: File object from drag and drop or open dialog
     } else if (mediaFileSpec instanceof File) {

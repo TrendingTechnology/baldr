@@ -814,10 +814,11 @@ const helpMessages = {
     query: {
       '#description': 'Get results by using query parameters',
       '#examples': [
-        'query?type=assets&field=id&method=exactMatch&search=Egmont-Ouverture',
-        'query?type=presentations&field=id&method=exactMatch&search=Beethoven_Marmotte',
-        'query?type=assets&field=path&method=substringSearch&search=35_Bilder-Ausstellung_Ueberblick&result=fullObjects',
-        'query?type=assets&field=path&method=substringSearch&search=35_Bilder-Ausstellung_Ueberblick&result=dynamicSelect'
+        '/media/query?type=assets&field=id&method=exactMatch&search=Egmont-Ouverture',
+        '/media/query?type=assets&field=uuid&method=exactMatch&search=c64047d2-983d-4009-a35f-02c95534cb53',
+        '/media/query?type=presentations&field=id&method=exactMatch&search=Beethoven_Marmotte',
+        '/media/query?type=assets&field=path&method=substringSearch&search=35_Bilder-Ausstellung_Ueberblick&result=fullObjects',
+        '/media/query?type=assets&field=path&method=substringSearch&search=35_Bilder-Ausstellung_Ueberblick&result=dynamicSelect'
       ],
       '#parameters': {
         type: '`assets` (default), `presentations` (what)',
