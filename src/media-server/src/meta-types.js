@@ -3,7 +3,7 @@
  *
  * A media asset can be attached to multiple meta data types (for example:
  * `meta_types: recording,composition`). All meta data types belong to the type
- * `general`.
+ * `general`. The meta type `general` is applied at the end.
  *
  * The meta data types are specified in the module
  * {@link module:@bldr/media-server/meta-type-specs meta-type-specs}
@@ -41,9 +41,8 @@ const { HierarchicalFolderTitles } = require('./titles.js')
  * @property {Boolean} required - True if the property is required.
  *
  * @property {Function} derive - A function to derive this property from
- *   other values. The function is called with `function (typeData, typeSpec)`.
- *   Or `this.otherProp` in the function to access different
- *   values.
+ *   other values. The function is called with
+ *   `function ({ typeData, typeSpec, folderTitles, filePath })`.
  *
  * @property {Boolean} overwriteByDerived - Overwrite the original value by the
  *   the value obtained from the `derive` function.
@@ -254,9 +253,11 @@ function sortAndDeriveProps (data, typeSpec) {
   const origData = deepCopy(data)
   const result = {}
 
-  let titles
+  let folderTitles
+  let filePath
   if (data.filePath) {
-    titles = new HierarchicalFolderTitles(data.filePath)
+    filePath = data.filePath
+    folderTitles = new HierarchicalFolderTitles(data.filePath)
   }
 
   // Loop over the propSpecs to get a sorted object
@@ -266,7 +267,7 @@ function sortAndDeriveProps (data, typeSpec) {
     const origValue = origData[propName]
     let derivedValue
     if (isPropertyDerived(propSpec)) {
-      derivedValue = propSpec.derive.call(data, data, typeSpec, titles)
+      derivedValue = propSpec.derive({ typeData: data, typeSpec, folderTitles, filePath })
     }
 
     // Use the derived value

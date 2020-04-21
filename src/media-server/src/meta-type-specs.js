@@ -164,8 +164,8 @@ const general = {
         value = value.replace(/^[va] /, '')
         return value
       },
-      derive: function (typeData, typeSpec) {
-        return deasciify(this.id)
+      derive: function ({ typeData }) {
+        return deasciify(typeData.id)
       }
     },
     wikidata: {
@@ -366,8 +366,8 @@ const group = {
   },
   props: {
     id: {
-      derive: function (typeData, typeSpec) {
-        return this.name
+      derive: function ({ typeData }) {
+        return typeData.name
       },
       format: function (value, { typeData, typeSpec }) {
         value = value.replace(/^(The)[ -](.*)$/, '$2_$1')
@@ -377,8 +377,8 @@ const group = {
       overwriteByDerived: false
     },
     title: {
-      derive: function (typeData, typeSpec) {
-        return `Portrait-Bild der Gruppe „${this.name}“`
+      derive: function ({ typeData }) {
+        return `Portrait-Bild der Gruppe „${typeData.name}“`
       },
       overwriteByDerived: true
     },
@@ -452,7 +452,7 @@ const instrument = {
   },
   props: {
     id: {
-      derive: function (typeData, typeSpec) {
+      derive: function ({ typeData, typeSpec }) {
         // IS: Instrument
         return `${typeSpec.abbreviation}_${typeData.name}`
       },
@@ -463,8 +463,8 @@ const instrument = {
       overwriteByDerived: true
     },
     title: {
-      derive: function (typeData, typeSpec) {
-        return `Foto des Instruments „${this.name}“`
+      derive: function ({ typeData }) {
+        return `Foto des Instruments „${typeData.name}“`
       },
       overwriteByDerived: true
     },
@@ -529,14 +529,14 @@ const person = {
   },
   props: {
     id: {
-      derive: function (typeData, typeSpec) {
-        return `${this.lastname}_${this.firstname}`
+      derive: function ({ typeData }) {
+        return `${typeData.lastname}_${typeData.firstname}`
       },
       overwriteByDerived: false
     },
     title: {
-      derive: function () {
-        return `Portrait-Bild von „${this.firstname} ${this.lastname}“`
+      derive: function ({ typeData }) {
+        return `Portrait-Bild von „${typeData.firstname} ${typeData.lastname}“`
       },
       overwriteByDerived: true
     },
@@ -569,8 +569,8 @@ const person = {
       }
     },
     name: {
-      derive: function (typeData, typeSpec) {
-        return `${this.firstname} ${this.lastname}`
+      derive: function ({ typeData }) {
+        return `${typeData.firstname} ${typeData.lastname}`
       },
       overwriteByDerived: false
     },
@@ -665,8 +665,10 @@ const worksheet = {
   },
   props: {
     title: {
-      derive: function (typeData, typeSpec, titles) {
-        return `Arbeitsblatt zum Thema „${titles.title}“`
+      derive: function ({ folderTitles, filePath }) {
+        const match = filePath.match(new RegExp(path.sep + '([^' + path.sep + ']+)\.pdf'))
+        const baseName = match[1]
+        return `${baseName} zum Thema „${folderTitles.title}“`
       },
       overwriteByDerived: true
     }
