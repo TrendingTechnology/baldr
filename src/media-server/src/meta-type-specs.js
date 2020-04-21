@@ -229,6 +229,11 @@ const cover = {
       format: function (value) {
         return value.replace(/^(Cover-Bild: )?/, 'Cover-Bild: ')
       }
+    },
+    source: {
+      validate (value) {
+        return value.match(/^https?.*$/)
+      }
     }
   }
 }
@@ -275,7 +280,7 @@ const recording = {
       title: 'Cover-Quelle',
       description: 'HTTP-URL des Vorschau-Bildes.',
       validate (value) {
-        return value.match(/^https?.*!/)
+        return value.match(/^https?.*$/)
       }
     }
   }
