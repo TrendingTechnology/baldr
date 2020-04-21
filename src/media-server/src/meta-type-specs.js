@@ -268,7 +268,15 @@ const recording = {
       // }
     },
     cover: {
+      title: 'Vorschau-Bild',
       validate: validateMediaId
+    },
+    coverSource: {
+      title: 'Cover-Quelle',
+      description: 'HTTP-URL des Vorschau-Bildes.',
+      validate (value) {
+        return value.match(/^https?.*!/)
+      }
     }
   }
 }
