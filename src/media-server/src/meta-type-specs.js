@@ -43,7 +43,7 @@ function validateDate (value) {
  * @returns {Boolean}
  */
 function validateMediaId (value) {
-  return value.match(/^id:.+$/i)
+  return value.match(/^(id|uuid):.+$/i)
 }
 
 /**
@@ -448,7 +448,7 @@ const instrument = {
     return path.join(id.substr(0, 1).toLowerCase(), id, `main.${this.extension}`)
   },
   detectTypeByPath: function (typeSpec) {
-    return new RegExp('^' + typeSpec.basePath + '/.*')
+    return new RegExp('^' + typeSpec.basePath + '/.*main\.jpg^')
   },
   props: {
     id: {
