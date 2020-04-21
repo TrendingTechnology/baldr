@@ -7,7 +7,7 @@
 /* globals config document Audio Image File */
 
 import { getDefaultServers, HttpRequest, getDefaultRestEndpoints, HttpRequestNg } from '@bldr/http-request'
-import { formatMultiPartAssetFileName, AssetTypes, selectSubset } from '@bldr/core-browser'
+import { formatMultiPartAssetFileName, AssetTypes, selectSubset, mediaUriRegExp } from '@bldr/core-browser'
 
 import DynamicSelect from '@bldr/vue-plugin-dynamic-select'
 
@@ -73,7 +73,7 @@ function extractMediaUrisRecursive (object, urisStore) {
    * @returns {Boolean}
    */
   function isMediaUri (uri) {
-    if (uri && typeof uri === 'string' && uri.match(/^(id|uuid):[a-zA-Z0-9_-]+$/)) {
+    if (uri && typeof uri === 'string' && uri.match(mediaUriRegExp)) {
       return true
     }
     return false
@@ -1033,10 +1033,9 @@ class WrappedSample {
      */
     this.uri = null
     if (typeof spec === 'string') {
-      const regexp = new RegExp('(id|uuid):[a-zA-Z0-9_-]+')
-      if (spec.match(regexp))  {
-        this.uri = spec.match(regexp)[0]
-        let title = spec.replace(regexp, '')
+      if (spec.match(mediaUriRegExp))  {
+        this.uri = spec.match(mediaUriRegExp)[0]
+        let title = spec.replace(mediaUriRegExp, '')
         if (title) {
           title = title.trim()
           this.title_ = title

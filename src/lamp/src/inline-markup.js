@@ -1,5 +1,7 @@
 import vue from '@/main.js'
 
+import { mediaUriRegExp } from '@bldr/core-browser'
+
 /**
  * Unfortunatley it is not possible to write a Vue js component tag inline
  * in a presentation file.
@@ -31,8 +33,9 @@ import vue from '@/main.js'
  * @module @bldr/lamp/inline-markup
  */
 
-const mediaUriRegExp = '(([a-z]+):([a-zA-Z0-9-_]+))'
-export const regExp = '\\[' + mediaUriRegExp + ' ?([^\\]]*)?' + '\\]'
+const mediaUri = mediaUriRegExp.source
+// const mediaUri = '(([a-z]+):([a-zA-Z0-9-_]+))'
+export const regExp = '\\[' + mediaUri + ' ?([^\\]]*)?' + '\\]'
 
 /**
  * A object representation of one inline markup string.
@@ -55,12 +58,13 @@ export class Item {
     if (!match) {
       throw new Error(`Invalid inline markup: ${markup}`)
     }
-    //  12    3            4
+    //  1                  7
     // [((id):(Fuer-Elise))( caption="Für Elise")]
+    // this.id = 'id:Haydn_Joseph'
     this[match[2]] = match[1]
 
-    if (match[4]) {
-      const attrs = match[4]
+    if (match[7]) {
+      const attrs = match[7]
       // 1
       // (center)
       // 1         2 3

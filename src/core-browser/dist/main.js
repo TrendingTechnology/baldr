@@ -3,6 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.selectSubset = selectSubset;
 exports.sortObjectsByProperty = sortObjectsByProperty;
 exports.formatToLocalDate = formatToLocalDate;
 exports.formatToYear = formatToYear;
@@ -19,11 +20,10 @@ exports.formatWikipediaUrl = formatWikipediaUrl;
 exports.formatBrainzRecUrl = formatBrainzRecUrl;
 exports.formatBrainzWorkUrl = formatBrainzWorkUrl;
 exports.formatYoutubeUrl = formatYoutubeUrl;
-exports.selectSubset = selectSubset;
 exports.escapeHtml = escapeHtml;
 exports.deepCopy = deepCopy;
 exports.getExtension = getExtension;
-exports.default = exports.RawDataObject = exports.jsYamlConfig = exports.AssetTypes = exports.convertMdToTex = exports.convertTexToMd = exports.tex = void 0;
+exports.default = exports.mediaUriRegExp = exports.RawDataObject = exports.jsYamlConfig = exports.AssetTypes = exports.convertMdToTex = exports.convertTexToMd = exports.tex = void 0;
 
 var _convertTex = _interopRequireDefault(require("./convert-tex.js"));
 
@@ -35,6 +35,86 @@ const convertTexToMd = _convertTex.default.convertTexToMd;
 exports.convertTexToMd = convertTexToMd;
 const convertMdToTex = _convertTex.default.convertMdToTex;
 exports.convertMdToTex = convertMdToTex;
+
+function selectSubset(subsetSelector, {
+  sort,
+  elements,
+  elementsCount,
+  firstElementNo,
+  shiftSelector
+}) {
+  const subset = [];
+  if (!shiftSelector) shiftSelector = 0;
+
+  function addElement(element) {
+    if (!element) return;
+
+    if (!subset.includes(element)) {
+      subset.push(element);
+    }
+  }
+
+  if (!elements && elementsCount) {
+    elements = [];
+    let firstNo;
+
+    if (firstElementNo) {
+      firstNo = firstElementNo;
+    } else {
+      firstNo = 0;
+    }
+
+    const endNo = firstNo + elementsCount;
+
+    for (let i = firstNo; i < endNo; i++) {
+      elements.push(i);
+    }
+  }
+
+  if (!subsetSelector) return elements;
+  subsetSelector = subsetSelector.replace(/\s*/g, '');
+  const ranges = subsetSelector.split(',');
+  const shiftSelectorAdjust = -1 * shiftSelector;
+
+  for (let range of ranges) {
+    if (range.match(/^-/)) {
+      const end = parseInt(range.replace('-', ''));
+      range = `${1 + shiftSelectorAdjust}-${end}`;
+    }
+
+    if (range.match(/-$/)) {
+      const begin = parseInt(range.replace('-', ''));
+      range = `${begin}-${elements.length + shiftSelectorAdjust}`;
+    }
+
+    range = range.split('-');
+
+    if (range.length === 1) {
+      const i = range[0];
+      addElement(elements[i - 1 + shiftSelector]);
+    } else if (range.length === 2) {
+      const beginNo = parseInt(range[0]) + shiftSelector;
+      const endNo = parseInt(range[1]) + shiftSelector;
+
+      if (endNo <= beginNo) {
+        throw new Error(`Invalid range: ${beginNo}-${endNo}`);
+      }
+
+      for (let no = beginNo; no <= endNo; no++) {
+        const index = no - 1;
+        addElement(elements[index]);
+      }
+    }
+  }
+
+  if (sort === 'numeric') {
+    subset.sort((a, b) => a - b);
+  } else if (sort) {
+    subset.sort();
+  }
+
+  return subset;
+}
 
 function sortObjectsByProperty(property) {
   return function (a, b) {
@@ -84,6 +164,7 @@ function toTitleCase(text) {
 }
 
 function plainText(html) {
+  if (!html) return '';
   html = html.replace(/></g, '> <');
   const markup = new DOMParser().parseFromString(html, 'text/html');
   return markup.body.textContent || '';
@@ -154,7 +235,7 @@ function convertPropertiesCase(data, direction = 'snake-to-camel') {
 
 function formatMultiPartAssetFileName(firstFileName, no) {
   if (!Number.isInteger(no)) {
-    throw new Error(`${firstFileName}: The specifed number “${no}” is no integer.`);
+    no = 1;
   }
 
   let suffix;
@@ -247,86 +328,6 @@ class AssetTypes {
 
 exports.AssetTypes = AssetTypes;
 
-function selectSubset(subsetSelector, {
-  sort,
-  elements,
-  elementsCount,
-  firstElementNo,
-  shiftSelector
-}) {
-  const subset = [];
-  if (!shiftSelector) shiftSelector = 0;
-
-  function addElement(element) {
-    if (!element) return;
-
-    if (!subset.includes(element)) {
-      subset.push(element);
-    }
-  }
-
-  if (!elements && elementsCount) {
-    elements = [];
-    let firstNo;
-
-    if (firstElementNo) {
-      firstNo = firstElementNo;
-    } else {
-      firstNo = 0;
-    }
-
-    const endNo = firstNo + elementsCount;
-
-    for (let i = firstNo; i < endNo; i++) {
-      elements.push(i);
-    }
-  }
-
-  if (!subsetSelector) return elements;
-  subsetSelector = subsetSelector.replace(/\s*/g, '');
-  const ranges = subsetSelector.split(',');
-  const shiftSelectorAdjust = -1 * shiftSelector;
-
-  for (let range of ranges) {
-    if (range.match(/^-/)) {
-      const end = parseInt(range.replace('-', ''));
-      range = `${1 + shiftSelectorAdjust}-${end}`;
-    }
-
-    if (range.match(/-$/)) {
-      const begin = parseInt(range.replace('-', ''));
-      range = `${begin}-${elements.length + shiftSelectorAdjust}`;
-    }
-
-    range = range.split('-');
-
-    if (range.length === 1) {
-      const i = range[0];
-      addElement(elements[i - 1 + shiftSelector]);
-    } else if (range.length === 2) {
-      const beginNo = parseInt(range[0]) + shiftSelector;
-      const endNo = parseInt(range[1]) + shiftSelector;
-
-      if (endNo <= beginNo) {
-        throw new Error(`Invalid range: ${beginNo}-${endNo}`);
-      }
-
-      for (let no = beginNo; no <= endNo; no++) {
-        const index = no - 1;
-        addElement(elements[index]);
-      }
-    }
-  }
-
-  if (sort === 'numeric') {
-    subset.sort((a, b) => a - b);
-  } else if (sort) {
-    subset.sort();
-  }
-
-  return subset;
-}
-
 function escapeHtml(htmlString) {
   const htmlEscapes = {
     '&': '&amp;',
@@ -336,7 +337,7 @@ function escapeHtml(htmlString) {
     "'": '&#x27;',
     '/': '&#x2F;'
   };
-  const htmlEscaper = /[&<>"'\/]/g;
+  const htmlEscaper = /[&<>"'/]/g;
   return ('' + htmlString).replace(htmlEscaper, function (match) {
     return htmlEscapes[match];
   });
@@ -381,11 +382,14 @@ function getExtension(filePath) {
   }
 }
 
+const mediaUriRegExp = new RegExp('((id|uuid):(([a-zA-Z0-9-_]+)(#([a-zA-Z0-9-_]+))?))');
+exports.mediaUriRegExp = mediaUriRegExp;
 var _default = {
   formatBrainzRecUrl,
   formatBrainzWorkUrl,
   formatWikidataUrl,
   formatWikipediaUrl,
-  formatYoutubeUrl
+  formatYoutubeUrl,
+  mediaUriRegExp
 };
 exports.default = _default;

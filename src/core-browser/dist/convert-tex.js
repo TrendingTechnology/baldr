@@ -51,7 +51,7 @@ function extractMatchAll(text, regexp, matches, excludeCaptureGroups) {
   if (text.match(regexp)) {
     const rawMatches = text.matchAll(regexp);
 
-    for (let match of rawMatches) {
+    for (const match of rawMatches) {
       text = text.replace(match[0], '');
       matches.push(cleanMatch(match, excludeCaptureGroups));
     }
@@ -77,7 +77,7 @@ function mdReg(tagName, className) {
     classMarkup = ` class="${className}"`;
   }
 
-  return new RegExp('<' + tagName + classMarkup + '>([^<>]+?)<\/' + tagName + '>', 'g');
+  return new RegExp('<' + tagName + classMarkup + '>([^<>]+?)</' + tagName + '>', 'g');
 }
 
 function mdRep(tagName, className) {

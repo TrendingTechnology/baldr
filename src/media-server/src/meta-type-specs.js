@@ -23,6 +23,7 @@ const { v4: uuidv4 } = require('uuid');
 // Project packages.
 const { deasciify, idify } = require('./helper.js')
 const { bootstrapConfig } = require('@bldr/core-node')
+const { mediaUriRegExp } = require('@bldr/core-browser')
 
 /**
  * Validate a date string in the format `yyyy-mm-dd`.
@@ -43,7 +44,7 @@ function validateDate (value) {
  * @returns {Boolean}
  */
 function validateMediaId (value) {
-  return value.match(/^(id|uuid):.+$/i)
+  return value.match(mediaUriRegExp)
 }
 
 /**
