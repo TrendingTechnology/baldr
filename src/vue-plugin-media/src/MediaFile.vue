@@ -1,5 +1,5 @@
 <template>
-  <div class="vc_media_file" b-ui-theme="default">
+  <div class="vc_media_file" b-ui-theme="default" v-if="mediaFile">
     <section class="table-and-preview">
 
       <table class="key-value-table">
@@ -78,7 +78,9 @@ export default {
           id: this.mediaFile.id
         }
       })
-    }
+    },
+    formatYoutubeUrl,
+    formatBrainzRecUrl
   },
   async mounted () {
     if (!this.mediaFile) await this.$media.resolve(this.uri)
