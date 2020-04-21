@@ -664,7 +664,12 @@ const worksheet = {
     return new RegExp('^.*/TX/.*.pdf$')
   },
   props: {
-
+    title: {
+      derive: function (typeData, typeSpec, titles) {
+        return `Arbeitsblatt zum Thema „${titles.title}“`
+      },
+      overwriteByDerived: true
+    }
   }
 }
 

@@ -21,6 +21,7 @@ const { deepCopy, getExtension, convertPropertiesCase } = require('@bldr/core-br
  * @type {module:@bldr/media-server/meta-types~typeSpecs}
  */
 const typeSpecs = require('./meta-type-specs.js')
+const { HierarchicalFolderTitles } = require('./titles.js')
 
 /**
  * The name of a property.
@@ -140,12 +141,11 @@ const typeSpecs = require('./meta-type-specs.js')
  * @param {String} filePath
  *
  * @returns {module:@bldr/media-server/meta-types~typeNames} - The type names
- *   for example `general,person,group`
+ *   for example `person,group,general`
  */
 function detectTypeByPath (filePath) {
   filePath = path.resolve(filePath)
   const typeNames = new Set()
-  typeNames.add('general')
   for (const typeName in typeSpecs) {
     const typeSpec = typeSpecs[typeName]
     if (typeSpec.detectTypeByPath) {
@@ -158,6 +158,7 @@ function detectTypeByPath (filePath) {
       if (filePath.match(regexp)) typeNames.add(typeName)
     }
   }
+  typeNames.add('general')
   if (typeNames.size) return [...typeNames].join(',')
 }
 
@@ -253,6 +254,11 @@ function sortAndDeriveProps (data, typeSpec) {
   const origData = deepCopy(data)
   const result = {}
 
+  let titles
+  if (data.filePath) {
+    titles = new HierarchicalFolderTitles(data.filePath)
+  }
+
   // Loop over the propSpecs to get a sorted object
   const propSpecs = typeSpec.props
   for (const propName in propSpecs) {
@@ -260,7 +266,7 @@ function sortAndDeriveProps (data, typeSpec) {
     const origValue = origData[propName]
     let derivedValue
     if (isPropertyDerived(propSpec)) {
-      derivedValue = propSpec.derive.call(data, data, typeSpec)
+      derivedValue = propSpec.derive.call(data, data, typeSpec, titles)
     }
 
     // Use the derived value
@@ -401,13 +407,16 @@ function process (data) {
   // The meta type specification is in camel case. The meta data is
   // stored in the YAML format in snake case
   data = convertPropertiesCase(data, 'snake-to-camel')
+  if (!data.metaTypes) {
+    data.metaTypes = 'general'
+  } else if (data.metaTypes.indexOf('general') === -1) {
+    data.metaTypes = '${data.metaTypes},general'
+  }
   if (data.metaTypes) {
     for (const typeName of data.metaTypes.split(',')) {
-      console.log(typeName)
       data = processByType(data, typeName)
     }
   }
-  data = processByType(data, 'general')
   // Do not convert back. This conversion should be the last step, before
   // object is converted to YAML.
   // convertPropertiesCase(data, 'camel-to-snake')
