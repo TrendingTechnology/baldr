@@ -94,7 +94,7 @@ const config = bootstrapConfig()
  * General meta data type specification. Applied after all other meta data
  * types.
  *
- * @type {module:@bldr/media-server/meta-types~type-spec}
+ * @type {module:@bldr/media-server/meta-types~typeSpec}
  */
 const general = {
   props: {
@@ -220,7 +220,7 @@ const general = {
 /**
  * The meta data type specification “cover”.
  *
- * @type {module:@bldr/media-server/meta-types~type-spec}
+ * @type {module:@bldr/media-server/meta-types~typeSpec}
  */
 const cover = {
   detectTypeByPath: new RegExp('^.*/HB/.*(png|jpg)$'),
@@ -236,7 +236,7 @@ const cover = {
 /**
  * The meta data type specification “recording”.
  *
- * @type {module:@bldr/media-server/meta-types~type-spec}
+ * @type {module:@bldr/media-server/meta-types~typeSpec}
  */
 const recording = {
   detectTypeByPath: new RegExp('^.*/HB/.*m4a$'),
@@ -276,7 +276,7 @@ const recording = {
 /**
  * The meta data type specification “composition”.
  *
- * @type {module:@bldr/media-server/meta-types~type-spec}
+ * @type {module:@bldr/media-server/meta-types~typeSpec}
  */
 const composition = {
   detectTypeByPath: new RegExp('^.*/HB/.*m4a$'),
@@ -340,7 +340,7 @@ const composition = {
 /**
  * The meta data type specification “group”.
  *
- * @type {module:@bldr/media-server/meta-types~type-spec}
+ * @type {module:@bldr/media-server/meta-types~typeSpec}
  */
 const group = {
   abbreviation: 'GR',
@@ -425,7 +425,7 @@ const group = {
 /**
  * The meta data type specification “instrument”.
  *
- * @type {module:@bldr/media-server/meta-types~type-spec}
+ * @type {module:@bldr/media-server/meta-types~typeSpec}
  */
 const instrument = {
   abbreviation: 'IN',
@@ -486,7 +486,7 @@ const instrument = {
 /**
  * The meta data type specification “person”.
  *
- * @type {module:@bldr/media-server/meta-types~type-spec}
+ * @type {module:@bldr/media-server/meta-types~typeSpec}
  */
 const person = {
   abbreviation: 'PR',
@@ -598,7 +598,7 @@ const person = {
 /**
  * The meta data type specification “song”.
  *
- * @type {module:@bldr/media-server/meta-types~type-spec}
+ * @type {module:@bldr/media-server/meta-types~typeSpec}
  */
 const song = {
   props: {
@@ -640,6 +640,21 @@ const song = {
   }
 }
 
+/**
+ * The meta data type specification “worksheet”.
+ *
+ * @type {module:@bldr/media-server/meta-types~typeSpec}
+ */
+const worksheet = {
+  abbreviation: 'TX',
+  detectTypeByPath: function () {
+    return new RegExp('^.*/TX/.*.pdf$')
+  },
+  props: {
+
+  }
+}
+
 module.exports = {
   composition,
   cover,
@@ -648,5 +663,6 @@ module.exports = {
   instrument,
   person,
   recording,
-  song
+  song,
+  worksheet
 }

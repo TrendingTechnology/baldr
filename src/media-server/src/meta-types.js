@@ -89,7 +89,7 @@ const typeSpecs = require('./meta-type-specs.js')
  *   relative path (relative to `basePath`). The function is called with
  *   `function (typeData, typeSpec)`.
  *
- * @property {RegExp} detectTypebyPath - A regular expression that is
+ * @property {(RegExp|Function)} detectTypeByPath - A regular expression that is
  *   matched against file paths or a function which is called with `typeSpec`
  *   that returns a regexp.
  *

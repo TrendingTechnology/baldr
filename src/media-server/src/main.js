@@ -469,25 +469,30 @@ class Presentation extends MediaFile {
 /**
  * Check if the given file is a media asset.
  *
- * @param {String} fileName
+ * @param {String} filePath - The path of the file to check.
+ *
+ * @returns {Boolean}
  */
-function isAsset (fileName) {
+function isAsset (filePath) {
   if (
-    fileName.indexOf('_preview.jpg') > -1 || // Preview image
-    fileName.match(/_no\d\d\./) // Multipart asset
+    filePath.indexOf('_preview.jpg') > -1 || // Preview image
+    filePath.match(/_no\d\d\./) // Multipart asset
   ) {
     return false
   }
-  return assetTypes.isAsset(fileName)
+  if (filePath.match(new RegExp('^.*/TX/.*.pdf$'))) return true
+  return assetTypes.isAsset(filePath)
 }
 
 /**
  * Check if the given file is a presentation.
  *
- * @param {String} fileName
+ * @param {String} filePath - The path of the file to check.
+ *
+ * @returns {Boolean}
  */
-function isPresentation (fileName) {
-  if (fileName.indexOf('Praesentation.baldr.yml') > -1) {
+function isPresentation (filePath) {
+  if (filePath.indexOf('Praesentation.baldr.yml') > -1) {
     return true
   }
   return false
