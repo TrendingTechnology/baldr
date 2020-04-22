@@ -261,7 +261,7 @@ const recording = {
       wikidata: {
         // MusicBrainz-Aufnahme-ID
         fromClaim: 'P4404',
-        secondQuery: 'queryLabels'
+        format: 'formatSingleValue'
       }
     },
     // see composition creationDate
