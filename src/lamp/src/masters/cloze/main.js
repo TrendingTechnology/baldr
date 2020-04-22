@@ -9,12 +9,10 @@ import Vue from 'vue'
 import { warnSvgWidthHeight } from '@/lib.js'
 
 /**
- *
- * @param {Object} dom - The global `document` object or a object
- * created by `DOMParser()`.
+ * @param {HTMLElement} parentElement
  */
-export function collectClozeGroups (dom) {
-  const groups = dom.querySelectorAll('svg g')
+export function collectClozeGroups (parentElement) {
+  const groups = parentElement.querySelectorAll('svg g')
   const clozeGElements = []
   for (const group of groups) {
     if (group.style.fill === 'rgb(0, 0, 255)') {
@@ -25,21 +23,24 @@ export function collectClozeGroups (dom) {
 }
 
 /**
+ * @param {HTMLElement} parentElement
  * @param {Object} clozeGroup
  */
-export function scrollToClozeGroup (clozeGroup) {
+export function scrollToClozeGroup (parentElement, clozeGroup) {
   if (!clozeGroup) return
   // e. g.: 1892
   // svg.clientHeight
-  const svg = document.querySelector('svg')
+  const svg = parentElement.querySelector('svg')
+  console.log(parentElement)
   // e. g.: 794.4473876953125
   // bBox.height
   const bBox = svg.getBBox()
   const glyph = clozeGroup.children[0]
   // e. g.: 125.11000061035156
   const y = svg.clientHeight / bBox.height * glyph.y.baseVal.value
-  const adjustedY = y - 0.8 * window.screen.height
-  window.scrollTo({ top: adjustedY, left: 0, behavior: 'smooth' })
+  const adjustedY = y - 0.8 * parentElement.clientHeight
+  console.log(adjustedY)
+  parentElement.scrollTo({ top: 200, left: 0, behavior: 'smooth' })
 }
 
 export default {
@@ -131,7 +132,7 @@ export default {
         options.oldStepNo = oldStepNo
       }
       const newClozeGroup = this.domSteps.displayByNo(options)
-      scrollToClozeGroup(newClozeGroup)
+      scrollToClozeGroup(this.$el, newClozeGroup)
     }
   }
 }

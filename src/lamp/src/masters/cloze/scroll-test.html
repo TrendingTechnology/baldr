@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scroll test</title>
+</head>
+<body>
+  <style>
+    body {
+      margin: 0;
+      padding: 0 100px;
+    }
+    #container {
+      height: 200px;
+      width: 100px;
+      overflow: auto;
+    }
+
+    p {
+      background: gray;
+      border-top: 0;
+      height: 50px;
+      margin: 0;
+      text-align: center;
+    }
+
+    p:nth-child(even) {
+      background-color: lightgray;
+    }
+
+    #target {
+      background: red;
+    }
+  </style>
+
+  <script>
+    function scrollToElementD() {
+      var target = document.getElementById('target');
+      const container = document.getElementById('container')
+      // container.clientHeight = 200
+      // container.scrollTopMax = 300
+      // container.scrollHeight = 500 // 10 * 50
+
+      // container.scrollTopMax = container.scrollHeight - container.clientHeight
+      // container.offsetTop = 150
+      // target.offsetTop = 300
+      const top = target.offsetTop - container.offsetTop
+      container.scrollTo({ top, left: 0, behavior: 'smooth' })
+    }
+  </script>
+
+  <p>spacer 1</p>
+  <p>spacer 2</p>
+  <p>spacer 3</p>
+
+  <div id="container">
+    <p>A</p>
+    <p>B</p>
+    <p>C</p>
+    <p id="target">D</p>
+    <p>E</p>
+    <p>F</p>
+    <p>G</p>
+    <p>H</p>
+    <p>I</p>
+    <p>J</p>
+  </div>
+<button onclick="scrollToElementD()">SCROLL TO D</button>
+</body>
+</html>
