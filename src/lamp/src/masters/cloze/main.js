@@ -9,10 +9,11 @@ import Vue from 'vue'
 import { warnSvgWidthHeight } from '@/lib.js'
 
 /**
- * @param {HTMLElement} parentElement
+ * @param {HTMLElement} componentElement - The parent component element.
+ *   `<div class="vc_cloze_master master-inner">`
  */
-export function collectClozeGroups (parentElement) {
-  const groups = parentElement.querySelectorAll('svg g')
+export function collectClozeGroups (componentElement) {
+  const groups = componentElement.querySelectorAll('svg g')
   const clozeGElements = []
   for (const group of groups) {
     if (group.style.fill === 'rgb(0, 0, 255)') {
@@ -23,24 +24,25 @@ export function collectClozeGroups (parentElement) {
 }
 
 /**
- * @param {HTMLElement} parentElement
+ * @param {HTMLElement} componentElement - The parent component element.
+ *   `<div class="vc_cloze_master master-inner">`
+ * @param {HTMLElement} scrollContainer
  * @param {Object} clozeGroup
  */
-export function scrollToClozeGroup (parentElement, clozeGroup) {
+export function scrollToClozeGroup (componentElement, scrollContainer, clozeGroup) {
   if (!clozeGroup) return
+
   // e. g.: 1892
   // svg.clientHeight
-  const svg = parentElement.querySelector('svg')
-  console.log(parentElement)
+  const svg = componentElement.querySelector('svg')
   // e. g.: 794.4473876953125
   // bBox.height
   const bBox = svg.getBBox()
   const glyph = clozeGroup.children[0]
   // e. g.: 125.11000061035156
-  const y = svg.clientHeight / bBox.height * glyph.y.baseVal.value
-  const adjustedY = y - 0.8 * parentElement.clientHeight
-  console.log(adjustedY)
-  parentElement.scrollTo({ top: 200, left: 0, behavior: 'smooth' })
+  const glyphOffsetTopSvg = svg.clientHeight / bBox.height * glyph.y.baseVal.value
+  const scrollToTop = glyphOffsetTopSvg - 0.8 * scrollContainer.clientHeight
+  scrollContainer.scrollTo({ top: scrollToTop, left: 0, behavior: 'smooth' })
 }
 
 export default {
@@ -132,7 +134,12 @@ export default {
         options.oldStepNo = oldStepNo
       }
       const newClozeGroup = this.domSteps.displayByNo(options)
-      scrollToClozeGroup(this.$el, newClozeGroup)
+
+      // <div class="vc_slide_main">
+      //   <div class="vc_master_renderer">
+      //     <div class="vc_cloze_master master-inner">
+      const scrollContainer = this.$el.parentElement.parentElement
+      scrollToClozeGroup(this.$el, scrollContainer, newClozeGroup)
     }
   }
 }

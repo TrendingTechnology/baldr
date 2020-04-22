@@ -36,6 +36,11 @@ export default {
   .vc_slide_view {
     overflow-x: hidden;
 
+    // To get scroll bars on this element, similar to speakers view
+    .vc_slide_main {
+      height: 100vh;
+    }
+
     .vc_master_renderer {
       height: 100vh;
     }
