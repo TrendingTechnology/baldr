@@ -7,20 +7,24 @@
     "
     b-content-theme="default"
   >
-    <h1>Themen</h1>
-
-    <topic-bread-crumbs v-if="path" :path="path"/>
-
     <loading-icon v-if="!folderTitleTree"/>
-    <presentation-item v-else-if="subFolderTitleTree" :item="subFolderTitleTree"/>
-    <presentation-item v-else :item="folderTitleTree"/>
+    <div v-else>
+      <top-level-jumpers :path="path"/>
+      <h1>Themen</h1>
+      <topic-bread-crumbs v-if="path" :path="path"/>
+      <presentation-item v-if="subFolderTitleTree" :item="subFolderTitleTree"/>
+      <presentation-item v-else :item="folderTitleTree"/>
+    </div>
+
   </div>
 </template>
 
 <script>
-import PresentationItem from './PresentationItem.vue'
 import LoadingIcon from '@/components/LoadingIcon.vue'
+import PresentationItem from './PresentationItem.vue'
 import TopicBreadCrumbs from '@/components/TopicBreadCrumbs.vue'
+import TopLevelJumpers from './TopLevelJumpers.vue'
+
 import { createNamespacedHelpers } from 'vuex'
 
 const { mapGetters } = createNamespacedHelpers('lamp')
@@ -40,6 +44,7 @@ export default {
   components: {
     LoadingIcon,
     PresentationItem,
+    TopLevelJumpers,
     TopicBreadCrumbs
   },
   data () {
