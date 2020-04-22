@@ -342,7 +342,9 @@ const functions = {
    * @returns {String} for example `1968`
    */
   formatYear: function (dateSpec) {
-    return dateSpec.substr(0, 4)
+    // Janis Joplin Cry Baby has two dates as an array.
+    value = unpackArray(dateSpec, true, false)
+    return value.substr(0, 4)
   },
 
   /**
