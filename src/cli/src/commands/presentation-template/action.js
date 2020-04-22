@@ -175,6 +175,8 @@ async function action (filePath, cmdObj) {
       filePath = path.dirname(filePath)
     }
   }
+  filePath = mediaServer.locationIndicator.getPresParentDir(filePath)
+
   filePath = path.resolve(path.join(filePath, 'Praesentation.baldr.yml'))
   console.log(filePath)
   if (!fs.existsSync(filePath) || cmdObj.force) {
