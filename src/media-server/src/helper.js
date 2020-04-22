@@ -17,6 +17,7 @@ function asciify (input) {
     .replace(/[,\.] /g, '_') // eslint-disable-line
     .replace(/ +- +/g, '_')
     .replace(/\s+/g, '-')
+    .replace(/&/g, '-')
     .replace(/-+/g, '-')
     .replace(/-*_-*/g, '_')
     .replace(/Ä/g, 'Ae')

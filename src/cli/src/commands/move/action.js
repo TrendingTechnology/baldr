@@ -175,6 +175,7 @@ async function moveMp3 (oldPath, newPath, cmdObj) {
   // Format dest file path.
   newPath = locationIndicator.moveIntoSubdir(newPath, 'HB')
   newPath = mediaServer.asciify(newPath)
+  // a Earth, Wind & Fire - Shining Star.mp3
   let fileName = path.basename(newPath)
   fileName = mediaServer.asciify(fileName)
   // a-Fletcher-Henderson_Aint-she-sweet.mp3
