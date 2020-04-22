@@ -1,21 +1,21 @@
 <template>
   <div
     class="
-      vc_presentation_overview
-      main-app-padding
+      vc_topics_tree
       main-app-fullscreen
     "
     b-content-theme="default"
   >
     <loading-icon v-if="!folderTitleTree"/>
     <div v-else>
-      <top-level-jumpers :path="path"/>
-      <h1>Themen</h1>
       <topic-bread-crumbs v-if="path" :path="path"/>
-      <presentation-item v-if="subFolderTitleTree" :item="subFolderTitleTree"/>
-      <presentation-item v-else :item="folderTitleTree"/>
+      <top-level-jumpers :path="path"/>
+      <section class="topics">
+        <h1>Themen</h1>
+        <presentation-item v-if="subFolderTitleTree" :item="subFolderTitleTree"/>
+        <presentation-item v-else :item="folderTitleTree"/>
+      </section>
     </div>
-
   </div>
 </template>
 
@@ -35,7 +35,7 @@ async function enterRoute (vm, to) {
   const presentation = vm.$store.getters['lamp/presentation']
   if (presentation) {
     const elementLink = document.getElementById(`PID_${presentation.id}`)
-    elementLink.scrollIntoView({ block: 'center' })
+    if (elementLink) elementLink.scrollIntoView({ block: 'center' })
   }
 }
 
@@ -56,7 +56,10 @@ export default {
   methods: {
     setSubFolderTitleTreeByIds (ids) {
       if (!ids) return
-      if (ids === 'Musik') return this.folderTitleTree
+      if (ids === 'Musik') {
+        this.subFolderTitleTree = null
+        return this.folderTitleTree
+      }
       ids = ids.split('/')
       let tree = this.folderTitleTree
       for (const id of ids) {
@@ -81,3 +84,20 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+  .vc_topics_tree {
+    .topics {
+      padding: 0 5em;
+    }
+
+    .vc_top_level_jumpers {
+      padding-left: 2em;
+    }
+
+    .vc_topic_bread_crumbs {
+      margin: 0.3em;
+      font-size: 0.8em;
+    }
+  }
+</style>

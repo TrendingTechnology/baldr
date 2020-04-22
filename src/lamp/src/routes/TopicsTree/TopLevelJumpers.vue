@@ -1,10 +1,8 @@
 <template>
-  <div class="vc_top_level_jumpers">
-    <span class="separator">~</span>
+  <div class="vc_top_level_jumpers" v-if="topTopics">
+    <span class="separator">→</span>
     <span  v-for="topic in topTopics" :key="topic.path">
-      <router-link :to="topic.path">
-        {{ topic.title }}
-      </router-link>
+      <router-link :to="topic.path" v-html="topic.title"/>
       <span class="separator">~</span>
     </span>
   </div>
@@ -29,10 +27,11 @@ export default {
       if (this.path && this.path !== 'Musik') {
         const segments = this.path.split('/')
         for (const folderName of segments) {
-          tree = tree[folderName]
+          if (tree) tree = tree[folderName]
         }
       }
       const topics = []
+      if (!tree) return
       for (const folderName of Object.keys(tree).sort()) {
         const topic = tree[folderName]._title
         if (topic) {
@@ -42,6 +41,7 @@ export default {
           })
         }
       }
+      if (!topics.length) return
       return topics
     }
   }
