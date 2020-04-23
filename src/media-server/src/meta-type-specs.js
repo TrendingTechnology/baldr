@@ -692,7 +692,7 @@ const cloze = {
   title: 'Lückentext',
   abbreviation: 'LT',
   detectTypeByPath: function () {
-    return new RegExp('^.*/TX/.*.svg$')
+    return new RegExp('^.*/LT/.*.svg$')
   },
   initialize ({ typeData }) {
     if (typeData.filePath && !typeData.clozePageNo) {
@@ -709,9 +709,26 @@ const cloze = {
     return path.join(oldRelDir, `Lueckentext${pageNo}.svg`)
   },
   props: {
+    id: {
+      derive: function ({ typeData, folderTitles, filePath }) {
+        let counterSuffix = ''
+        if (typeData.clozePageNo) {
+          counterSuffix = `_${typeData.clozePageNo}`
+        }
+        return `${folderTitles.id}_LT${counterSuffix}`
+      },
+      overwriteByDerived: true
+    },
     title: {
-      derive: function ({ folderTitles, filePath }) {
-        return `Lückentext zum Thema „${folderTitles.title}“`
+      derive: function ({ typeData, folderTitles, filePath }) {
+        let suffix = ''
+        if (typeData.clozePageNo && typeData.clozePageCount) {
+          suffix = ` (Seite ${typeData.clozePageNo} von ${typeData.clozePageCount})`
+        } else if (typeData.clozePageNo && !typeData.clozePageCount) {
+          suffix = ` (Seite ${typeData.clozePageNo})`
+        }
+        console.log(suffix)
+        return `Lückentext zum Thema „${folderTitles.title}“${suffix}`
       },
       overwriteByDerived: true
     },

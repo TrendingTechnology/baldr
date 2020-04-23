@@ -8,6 +8,7 @@ module.exports = {
   HB: 'Hörbeispiel',
   IN: 'Instrument',
   LD: 'Song / Lied',
+  LT: 'Lückentext',
   NB: 'Notenbeispiel',
   PA: 'Partitur',
   PR: 'Person',

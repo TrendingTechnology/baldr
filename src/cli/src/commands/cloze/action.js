@@ -62,8 +62,11 @@ function generateClozeSvg (filePath) {
     // Write info yaml
     const titles = new mediaServer.HierarchicalFolderTitles(filePath)
     const infoYaml = {
-      id: `${titles.id}_AB_Lueckentext${counterSuffix}`,
-      title: `Arbeitsblatt „${titles.title}“ (Lückentext Seite ${index} von ${pageCount})`
+      id: `${titles.id}_LT${counterSuffix}`,
+      title: `Lückentext zum Thema „${titles.title}“ (Seite ${index} von ${pageCount})`,
+      meta_types: 'cloze',
+      cloze_page_no: index,
+      cloze_page_count: pageCount
     }
     lib.writeFile(path.join(cwd, `${svgFileName}.yml`), lib.yamlToTxt(infoYaml))
   }

@@ -247,6 +247,9 @@ class HierarchicalFolderTitles {
   }
 
   /**
+   * The parent directory name with the numeric prefix: For example
+   * `Bachs-vergebliche-Reise`.
+   *
    * @returns {string}
    */
   get id () {
