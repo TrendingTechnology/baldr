@@ -583,183 +583,6 @@ function parseSlidesRecursive (slidesRaw, slidesFlat, slidesTree, level = 1) {
 }
 
 /**
- * Navigate through all slides and steps of an presentation. Slide numbers can
- * be labeled with an ID. To simplfy the navigation through all slides and
- * steps, we build a list of all slide and steps
- */
-class PresentationNavigator {
-  constructor (slides) {
-    /**
-     * Each slide can be labeled with an ID. Resolve this ID to get the slide
-     * number. Store all slide IDs in the instantiated objects.
-     *
-     * ```json
-     * {
-     *   "one": 1,
-     *   "two": 2
-     * }
-     * ```
-     *
-     * @type {Object}
-     */
-    this.slideIds = {}
-
-    /**
-     * ```json
-     * {
-     *   "slide/1": 1,
-     *   "slide/two": 2,
-     *   "slide/16/step/1": 16,
-     *   "slide/16/step/2": 17
-     * }
-     * ```
-     *
-     * @tpye {Object}
-     */
-    this.navListIndex = {}
-
-    // After media resolution.
-    for (const slide of slides) {
-      let slideNo
-      if (slide.id) {
-        if (this.slideIds[slide.id]) {
-          throw new Error(`A slide with the id “${slide.id}” already exists.`)
-        }
-        this.slideIds[slide.id] = slide.no
-        // TODO: Use store only
-        store.commit('lamp/nav/addSlideId', { slideId: slide.id, no: slide.no })
-        slideNo = slide.id
-      } else {
-        slideNo = slide.no
-      }
-      // Generate the navigation list
-      if (slide.stepCount && slide.stepCount > 1) {
-        for (let index = 1; index <= slide.stepCount; index++) {
-          const item = { slideNo, stepNo: index }
-          store.commit('lamp/nav/addNavListItem', item)
-        }
-      } else {
-        const item = { slideNo }
-        store.commit('lamp/nav/addNavListItem', item)
-      }
-    }
-
-    const navList = store.getters['lamp/nav/navList']
-    for (let i = 0; i < navList.length; i++) {
-      const params = navList[i]
-      const index = PresentationNavigator.routeParamsToIndex_(params)
-      const navListNo = i + 1
-      store.commit('lamp/nav/addNavListIndex', { index, navListNo })
-    }
-  }
-
-  /**
-   *
-   * @param {Object} params
-   * @property {(String|Number)} slideNo - The slide number or the slide ID.
-   * @property {Number} stepNo - The step number (can be unset).
-   *
-   * @private
-   */
-  static routeParamsToIndex_ (params) {
-    if (params.stepNo) {
-      return `slide/${params.slideNo}/step/${params.stepNo}`
-    } else {
-      return `slide/${params.slideNo}`
-    }
-  }
-
-  /**
-   * Set the current cav
-   *
-   * @param {Object} params -
-   * @property {(String|Number)} slideNo - The slide number or the slide ID.
-   * @property {Number} stepNo - The step number (can be unset).
-   */
-  setNavListNo (params) {
-    const no = this.routeParamsToNavListNo(params)
-    store.commit('lamp/nav/setNavListNo', no)
-  }
-
-  /**
-   *
-   * @param {Object} params
-   * @property {(String|Number)} slideNo - The slide number or the slide ID.
-   * @property {Number} stepNo - The step number (can be unset).
-   *
-   * @returns {Number}
-   */
-  routeParamsToNavListNo (params) {
-    const index = PresentationNavigator.routeParamsToIndex_(params)
-    return this.navListIndex[index]
-  }
-
-  /**
-   *
-   * @param {Number} direction - `1`: next, `-1`: previous
-   *
-   * @returns {Number}
-   */
-  nextNavListNo (direction) {
-    const count = store.getters['lamp/nav/navListCount']
-    const navListNo = store.getters['lamp/nav/navListNo']
-    let no
-    // Next
-    if (direction === 1 && navListNo === count) {
-      no = 1
-    // Previous
-    } else if (direction === -1 && navListNo === 1) {
-      no = count
-    } else {
-      no = navListNo + direction
-    }
-    return no
-  }
-
-  /**
-   * `slideNo` can be an ID. Replace this string IDs with the numeric slide
-   * numbers for the Vuex store.
-   *
-   * @param {Object} params
-   * @property {(String|Number)} slideNo - The slide number or the slide ID.
-   * @property {Number} stepNo - The step number (can be unset).
-   *
-   * @returns {Object} paramsNormalized
-   */
-  routeParamsToSlideStepNo (params) {
-    const paramsNormalized = Object.assign({}, params)
-    if (this.slideIds[params.slideNo]) {
-      paramsNormalized.slideNo = this.slideIds[params.slideNo]
-    }
-    return paramsNormalized
-  }
-
-  /**
-   * Get the router parameters for the next (or previous) slide.
-   *
-   * @param {Number} direction - `1`: next, `-1`: previous
-   *
-   * @returns {module:@bldr/lamp/content-file~routerParams}
-   */
-  getNextRouterParams (direction) {
-    const no = this.nextNavListNo(direction)
-    return store.getters['lamp/nav/routerParamsFromNavListNo']()
-  }
-
-  /**
-   * @param {String} slideId
-   *
-   * @returns {Number}
-   */
-  slideIdToNo (slideId) {
-    if (!this.slideIds[slideId]) {
-      throw new Error(`Unkown slide ID “${slideId}”.`)
-    }
-    return this.slideIds[slideId]
-  }
-}
-
-/**
  * A presentation
  *
  * @property {String} path
@@ -777,7 +600,7 @@ export class Presentation {
    * @param {Number} slideId - The ID of a slide.
    */
   goto (slideId) {
-    const slideNo = this.navigator.slideIdToNo(slideId)
+    const slideNo = this.store.getters['lamp/nav/slideNoById'](slideId)
     const slide = this.slides[slideNo - 1]
     router.push(slide.routerLocation)
   }
@@ -951,10 +774,7 @@ ${JSON.stringify(this.rawYamlObject_)}`
       }, vue)
     }
 
-    /**
-     * @type {module:@bldr/lamp/content-file~PresentationNavigator}
-     */
-    this.navigator = new PresentationNavigator(this.slides)
+    store.dispatch('lamp/nav/initNavList', this.slides)
   }
 
   /**
@@ -1110,7 +930,7 @@ ${JSON.stringify(this.rawYamlObject_)}`
    * @param {Number} direction - `1`: next, `-1`: previous
    */
   nextSlideOrStep (direction) {
-    const params = this.navigator.getNextRouterParams(direction)
+    const params = store.getters['lamp/nav/nextRouterParams'](direction)
     params.presId = this.id
 
     const name = getNavRouteNameFromRoute(params, router.currentRoute)

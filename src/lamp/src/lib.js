@@ -160,9 +160,8 @@ export async function loadPresentationByRoute (vm, params) {
       }
       if (params.slideNo) {
         if (params.stepNo) params.stepNo = parseInt(params.stepNo)
-        const presentation = vm.$store.getters['lamp/presentation']
-        presentation.navigator.setNavListNo(params)
-        const normalizedParams = presentation.navigator.routeParamsToSlideStepNo(params)
+        vm.$store.dispatch('lamp/nav/setNavListNoByRouterParams', params)
+        const normalizedParams = vm.$store.getters['lamp/nav/slideStepNoByRouterParams'](params)
         vm.$store.dispatch('lamp/setSlideAndStepNoCurrent', normalizedParams)
       }
     }
