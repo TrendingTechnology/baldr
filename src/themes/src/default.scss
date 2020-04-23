@@ -194,6 +194,17 @@ $link-color: scale-color($gray, $lightness: -40%);
     }
   }
 
+  /* Highlight text with different colors hl = HighLight */
+  @each $name, $value in $colors {
+    .hl-#{$name} {
+      background-color: rgba($value, 0.7) !important;
+      border-radius: 0.1em;
+      display: inline-block;
+      font-style: inherit;
+      padding: 0 0.2em;
+    }
+  }
+
   /* Text color */
 
   @each $name, $value in $colors {

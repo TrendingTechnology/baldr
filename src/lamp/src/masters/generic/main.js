@@ -76,9 +76,14 @@ export default {
       description: 'Markup im HTML oder Markdown-Format'
     },
     charactersOnSlide: {
-      type: [Number],
+      type: Number,
       description: 'Gibt an wie viele Zeichen auf einer Folie erscheinen sollen.',
       default: CHARACTERS_ON_SLIDE
+    },
+    onOne: {
+      description: 'Der ganze Text erscheint auf einer Folien. Keine automatischen Folienumbrüche.',
+      type: Boolean,
+      default: false
     },
     ...steps.mapProps(['mode', 'subset'])
   },
@@ -122,12 +127,16 @@ export default {
       }
 
       // Split large texts into smaller chunks
-      const markup = []
+      let markup = []
       for (const html of splittedByHr) {
         const chunks = splitHtmlintoChunks(html, props.charactersOnSlide)
         for (const chunk of chunks) {
           markup.push(chunk)
         }
+      }
+
+      if (props.onOne) {
+        markup = [markup.join(' ')]
       }
 
       if (props.stepMode && props.stepMode === 'words') {
