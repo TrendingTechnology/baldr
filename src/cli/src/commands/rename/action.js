@@ -16,9 +16,9 @@ const { getExtension } = require('@bldr/core-browser')
 function renameOneFile (oldPath) {
   const metaData = lib.readAssetYaml(oldPath)
   let newPath
-  if (metaData && metaData.metaType) {
+  if (metaData && metaData.metaTypes) {
     metaData.extension = getExtension(oldPath)
-    newPath = mediaServer.metaTypes.formatFilePath(metaData)
+    newPath = mediaServer.metaTypes.formatFilePath(metaData, oldPath)
   }
 
   if (!newPath) newPath = mediaServer.asciify(oldPath)

@@ -16,6 +16,9 @@ const path = require('path')
 
 // Project packages.
 const { deepCopy, getExtension, convertPropertiesCase } = require('@bldr/core-browser')
+const { bootstrapConfig } = require('@bldr/core-node')
+
+const config = bootstrapConfig()
 
 /**
  * @type {module:@bldr/media-server/meta-types~typeSpecs}
@@ -43,14 +46,17 @@ const { HierarchicalFolderTitles } = require('./titles.js')
  *
  * @property {Function} relPath - A function which must return the
  *   relative path (relative to `basePath`). The function is called with
- *   `function (typeData, typeSpec)`.
+ *   `relPath ({ typeData, typeSpec, oldRelPath })`.
  *
  * @property {(RegExp|Function)} detectTypeByPath - A regular expression that is
  *   matched against file paths or a function which is called with `typeSpec`
  *   that returns a regexp.
  *
+ * @property {Function} initialize - A function which is called before all
+ *   processing steps: `initialize ({ typeData, typeSpec })`
+ *
  * @property {Function} finalize - A function which is called after all
- *   processing steps: arguments: `typeData`, `typeSpec`
+ *   processing steps: arguments: `finalize ({ typeData, typeSpec })`
  *
  * @property {module:@bldr/media-server/meta-types~propSpecs} props
  */
@@ -103,14 +109,14 @@ const { HierarchicalFolderTitles } = require('./titles.js')
  *
  * @property {Function} derive - A function to derive this property from
  *   other values. The function is called with
- *   `function ({ typeData, typeSpec, folderTitles, filePath })`.
+ *   `derive ({ typeData, typeSpec, folderTitles, filePath })`.
  *
  * @property {Boolean} overwriteByDerived - Overwrite the original value by the
  *   the value obtained from the `derive` function.
  *
  * @property {Function} format - Format the value of the property using this
  *   function. The function has this arguments:
- *   `function (value, { typeData, typeSpec })`
+ *   `format (value, { typeData, typeSpec })`
  *
  * @property {RegExp} removeByRegexp - If the value matches the specified
  *   regular expression, remove the property.
@@ -164,20 +170,27 @@ function detectTypeByPath (filePath) {
 }
 
 /**
- * Generate the file path of the last specifed meta type.
+ * Generate the file path of the first specifed meta type.
  *
  * @param {Object} data - The mandatory property is “metaTypes” and “extension”.
  *   One can omit the property “extension”, but than you have to specify the
  *   property “mainImage”.
+ * @param {String} oldPath - The old file path.
  *
  * @returns {String} - A absolute path
  */
-function formatFilePath (data) {
+function formatFilePath (data, oldPath) {
   if (!data.metaTypes) throw new Error(`Your data needs a property named “metaTypes”.`)
-  // general,person -> person
-  const metaType = data.metaTypes.replace(/^.*,/, '')
-  const typeSpec = typeSpecs[metaType]
-  if (!typeSpec) throw new Error(`Unkown meta type “${data.metaType}”.`)
+  // TODO: support multiple types
+  // person,general -> person
+  const typeName = data.metaTypes.replace(/,.*$/, '')
+  const typeSpec = typeSpecs[typeName]
+  if (!typeSpec) throw new Error(`Unkown meta type “${typeName}”.`)
+
+  if (!typeSpec.relPath || typeof typeSpec.relPath !== 'function') {
+    return
+  }
+
   // The relPath function needs this.extension.
   if (!data.extension) {
     if (!data.mainImage) throw new Error(`Your data needs a property named “mainImage”.`)
@@ -185,11 +198,20 @@ function formatFilePath (data) {
     // b/Bush_George-Walker/main.jpeg
   }
   if (data.extension === 'jpeg') data.extension = 'jpg'
+  let oldRelPath
+  if (oldPath) {
+    oldRelPath = path.resolve(oldPath)
+    oldRelPath = oldRelPath.replace(config.mediaServer.basePath, '')
+    oldRelPath = oldRelPath.replace(/^\//, '')
+  }
+
   // b/Bush_George-Walker/main.jpeg
-  const relPath = typeSpec.relPath.call(data, data, typeSpecs[metaType])
+  const relPath = typeSpec.relPath({ typeData: data, typeSpec, oldRelPath })
+  if (!relPath) throw new Error(`The relPath() function has to return a string for meta type “${typeName}”`)
   // To avoid confusion with class MediaFile in the module @bldr/vue-plugin-media
   delete data.extension
-  return path.join(typeSpec.basePath, relPath)
+  let basePath = typeSpec.basePath ? typeSpec.basePath : config.mediaServer.basePath
+  return path.join(basePath, relPath)
 }
 
 /**
@@ -386,6 +408,11 @@ function processByType (data, typeName) {
   if (!typeSpec.props) {
     throw new Error(`The meta type “${typeName}” has no props.`)
   }
+
+  if (typeSpec.initialize && typeof typeSpec.initialize === 'function') {
+    data = typeSpec.initialize({ typeData: data, typeSpec })
+  }
+
   data = sortAndDeriveProps(data, typeSpec)
   data = formatProps(data, typeSpec)
   // We need filePath in format. Must be after formatProps
@@ -394,7 +421,7 @@ function processByType (data, typeName) {
   validateProps(data, typeSpec)
 
   if (typeSpec.finalize && typeof typeSpec.finalize === 'function') {
-    data = typeSpec.finalize(data, typeSpec)
+    data = typeSpec.finalize({ typeData: data, typeSpec })
   }
   return data
 }

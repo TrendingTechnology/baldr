@@ -207,7 +207,7 @@ const general = {
       state: 'absent'
     }
   },
-  finalize: function (typeData, typeSpec) {
+  finalize: function ({ typeData, typeSpec }) {
     for (const propName in typeData) {
       const value = typeData[propName]
       if (typeof value === 'string') {
@@ -362,8 +362,8 @@ const group = {
   title: 'Gruppe',
   abbreviation: 'GR',
   basePath: path.join(config.mediaServer.basePath, 'Gruppen'),
-  relPath: function (typeData, typeSpec) {
-    return path.join(this.id.substr(0, 1).toLowerCase(), this.id, `main.${this.extension}`)
+  relPath: function ({ typeData, typeSpec }) {
+    return path.join(this.id.substr(0, 1).toLowerCase(), this.id, `main.${typeData.extension}`)
   },
   detectTypeByPath: function (typeSpec) {
     return new RegExp('^' + typeSpec.basePath + '/.*')
@@ -448,9 +448,9 @@ const instrument = {
   title: 'Instrument',
   abbreviation: 'IN',
   basePath: path.join(config.mediaServer.basePath, 'Instrumente'),
-  relPath: function (typeData, typeSpec) {
+  relPath: function ({ typeData, typeSpec }) {
     const id = this.id.replace(/^IN_/, '')
-    return path.join(id.substr(0, 1).toLowerCase(), id, `main.${this.extension}`)
+    return path.join(id.substr(0, 1).toLowerCase(), id, `main.${typeData.extension}`)
   },
   detectTypeByPath: function (typeSpec) {
     return new RegExp('^' + typeSpec.basePath + '/.*main\.jpg^')
@@ -510,8 +510,8 @@ const person = {
   title: 'Person',
   abbreviation: 'PR',
   basePath: path.join(config.mediaServer.basePath, 'Personen'),
-  relPath: function () {
-    return path.join(this.id.substr(0, 1).toLowerCase(), this.id, `main.${this.extension}`)
+  relPath: function ({ typeData, typeSpec }) {
+    return path.join(this.id.substr(0, 1).toLowerCase(), this.id, `main.${typeData.extension}`)
   },
   detectTypeByPath: function (typeSpec) {
     return new RegExp('^' + typeSpec.basePath + '/.*')
@@ -694,12 +694,36 @@ const cloze = {
   detectTypeByPath: function () {
     return new RegExp('^.*/TX/.*.svg$')
   },
+  initialize ({ typeData }) {
+    if (typeData.filePath && !typeData.clozePageNo) {
+      const match = typeData.filePath.match(/(\d+)\.svg/)
+      if (match) typeData.clozePageNo = parseInt(match[1])
+    }
+    return typeData
+  },
+  relPath ({ typeData, typeSpec, oldRelPath }) {
+    console.log('lol')
+    const oldRelDir = path.dirname(oldRelPath)
+    let pageNo = ''
+    if (typeData.clozePageNo) pageNo = `_${typeData.clozePageNo}`
+    return path.join(oldRelDir, `Lueckentext${pageNo}.svg`)
+  },
   props: {
     title: {
-      derive: function ({ folderTitles }) {
+      derive: function ({ folderTitles, filePath }) {
         return `Lückentext zum Thema „${folderTitles.title}“`
       },
       overwriteByDerived: true
+    },
+    clozePageNo: {
+      validate (value) {
+        return Number.isInteger(value)
+      }
+    },
+    clozePageCount: {
+      validate (value) {
+        return Number.isInteger(value)
+      }
     }
   }
 }
