@@ -5,7 +5,7 @@
  */
 
 import Router from 'vue-router'
-import store from '@/store.js'
+import store from '@/store/index.js'
 import Vue from 'vue'
 
 // Components.

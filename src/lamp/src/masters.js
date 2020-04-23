@@ -11,7 +11,7 @@ import { markupToHtml, validateUri } from '@/lib.js'
 import { toTitleCase } from '@bldr/core-browser'
 import inlineMarkup from '@/inline-markup.js'
 import SlidePreviewPlayButton from '@/components/SlidesPreview/PlayButton.vue'
-import store from '@/store.js'
+import store from '@/store/index.js'
 import Vue from 'vue'
 
 /**

@@ -338,7 +338,7 @@ import { registerMasterComponents, masters } from '@/masters.js'
 
 // Vue plugins.
 import router from '@/router.js'
-import store from '@/store.js'
+import store from '@/store/index.js'
 import notifications from 'vue-notification'
 import shortcuts from '@bldr/vue-plugin-shortcuts'
 import MaterialIcon from '@bldr/icons'
