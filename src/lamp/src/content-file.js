@@ -609,11 +609,6 @@ class PresentationNavigator {
     this.navList = []
 
     /**
-     * The current navigation list number. This number starts with 1.
-     */
-    this.navListNo = 1
-
-    /**
      * Each slide can be labeled with an ID. Resolve this ID to get the slide
      * number. Store all slide IDs in the instantiated objects.
      *
@@ -708,7 +703,6 @@ class PresentationNavigator {
   setNavListNo (params) {
     const no = this.routeParamsToNavListNo(params)
     store.commit('lamp/nav/setNavListNo', no)
-    this.navListNo = no
   }
 
   /**
@@ -740,15 +734,16 @@ class PresentationNavigator {
    */
   nextNavListNo (direction) {
     const count = this.navList.length
+    const navListNo = store.getters['lamp/nav/navListNo']
     let no
     // Next
-    if (direction === 1 && this.navListNo === count) {
+    if (direction === 1 && navListNo === count) {
       no = 1
     // Previous
-    } else if (direction === -1 && this.navListNo === 1) {
+    } else if (direction === -1 && navListNo === 1) {
       no = count
     } else {
-      no = this.navListNo + direction
+      no = navListNo + direction
     }
     return no
   }

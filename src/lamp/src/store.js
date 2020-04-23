@@ -19,12 +19,18 @@ Vue.use(Vuex)
 const nav = {
   namespaced: true,
   state: {
+    /**
+     * The current navigation list number. This number starts with 1.
+     */
     navListNo: 1,
     navList: [],
     slideIds: {},
     navListIndex: {}
   },
   getters: {
+    navListNo: state => {
+      return state.navListNo
+    },
     navList: state => {
       return state.navList
     },
