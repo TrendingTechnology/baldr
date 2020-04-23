@@ -24,6 +24,67 @@ const typeSpecs = require('./meta-type-specs.js')
 const { HierarchicalFolderTitles } = require('./titles.js')
 
 /**
+ * The name of a meta type, for example `person`, `group`.
+ *
+ * @typedef {String} typeName
+ */
+
+/**
+ * The specification of one metadata type.
+ *
+ * @typedef {Object} typeSpec
+ *
+ * @property {String} title - A title for the metadata type.
+ *
+ * @property {String} abbreviation - A two letter abbreviation. Used in
+ *   the IDs.
+ *
+ * @property {String} basePath - The base path where all meta typs stored in.
+ *
+ * @property {Function} relPath - A function which must return the
+ *   relative path (relative to `basePath`). The function is called with
+ *   `function (typeData, typeSpec)`.
+ *
+ * @property {(RegExp|Function)} detectTypeByPath - A regular expression that is
+ *   matched against file paths or a function which is called with `typeSpec`
+ *   that returns a regexp.
+ *
+ * @property {Function} finalize - A function which is called after all
+ *   processing steps: arguments: `typeData`, `typeSpec`
+ *
+ * @property {module:@bldr/media-server/meta-types~propSpecs} props
+ */
+
+/**
+ * The specification of all meta types
+ *
+ * ```js
+ * const typeSpecs = {
+ *   typeName1: typeSpec1,
+ *   typeName2: typeSpec2
+ *   ...
+ * }
+ * ```
+ *
+ * @typedef {Object} typeSpecs
+ */
+
+/**
+ * Multiple meta data type names, separated by commas, for example
+ * `work,recording`. `work,recording` is equivalent to `general,work,recording`.
+ *
+ *
+ *
+ * @typedef {String} typeNames
+ */
+
+/**
+ * Some actual data which can be assigned to a meta type.
+ *
+ * @typedef {Object} typeData
+ */
+
+/**
  * The name of a property.
  *
  * @typedef {String} propName
@@ -73,65 +134,6 @@ const { HierarchicalFolderTitles } = require('./titles.js')
  * ```
  *
  * @typedef {Object} propSpecs
- */
-
-/**
- * The specification of one metadata type.
- *
- * @typedef {Object} typeSpec
- *
- * @property {String} abbreviation - A two letter abbreviation. Used in
- *   the IDs.
- *
- * @property {String} basePath - The base path where all meta typs stored in.
- *
- * @property {Function} relPath - A function which must return the
- *   relative path (relative to `basePath`). The function is called with
- *   `function (typeData, typeSpec)`.
- *
- * @property {(RegExp|Function)} detectTypeByPath - A regular expression that is
- *   matched against file paths or a function which is called with `typeSpec`
- *   that returns a regexp.
- *
- * @property {Function} finalize - A function which is called after all
- *   processing steps: arguments: `typeData`, `typeSpec`
- *
- * @property {module:@bldr/media-server/meta-types~propSpecs} props
- */
-
-/**
- * The specification of all meta types
- *
- * ```js
- * const typeSpecs = {
-  *   typeName1: typeSpec1,
-  *   typeName2: typeSpec2
-  *   ...
-  * }
-  * ```
- *
- * @typedef {Object} typeSpecs
- */
-
-/**
- * The name of a meta type, for example `person`, `group`.
- *
- * @typedef {String} typeName
- */
-
-/**
- * Multiple meta data type names, separated by commas, for example
- * `work,recording`. `work,recording` is equivalent to `general,work,recording`.
- *
- *
- *
- * @typedef {String} typeNames
- */
-
-/**
- * Some actual data which can be assigned to a meta type.
- *
- * @typedef {Object} typeData
  */
 
 /**

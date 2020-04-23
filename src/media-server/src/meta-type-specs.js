@@ -245,6 +245,7 @@ const cover = {
  * @type {module:@bldr/media-server/meta-types~typeSpec}
  */
 const recording = {
+  title: 'Aufnahme',
   detectTypeByPath: new RegExp('^.*/HB/.*m4a$'),
   props: {
     artist: {
@@ -293,6 +294,7 @@ const recording = {
  * @type {module:@bldr/media-server/meta-types~typeSpec}
  */
 const composition = {
+  title: 'Komposition',
   detectTypeByPath: new RegExp('^.*/HB/.*m4a$'),
   props: {
     title: {
@@ -357,6 +359,7 @@ const composition = {
  * @type {module:@bldr/media-server/meta-types~typeSpec}
  */
 const group = {
+  title: 'Gruppe',
   abbreviation: 'GR',
   basePath: path.join(config.mediaServer.basePath, 'Gruppen'),
   relPath: function (typeData, typeSpec) {
@@ -442,6 +445,7 @@ const group = {
  * @type {module:@bldr/media-server/meta-types~typeSpec}
  */
 const instrument = {
+  title: 'Instrument',
   abbreviation: 'IN',
   basePath: path.join(config.mediaServer.basePath, 'Instrumente'),
   relPath: function (typeData, typeSpec) {
@@ -503,6 +507,7 @@ const instrument = {
  * @type {module:@bldr/media-server/meta-types~typeSpec}
  */
 const person = {
+  title: 'Person',
   abbreviation: 'PR',
   basePath: path.join(config.mediaServer.basePath, 'Personen'),
   relPath: function () {
@@ -615,6 +620,7 @@ const person = {
  * @type {module:@bldr/media-server/meta-types~typeSpec}
  */
 const song = {
+  title: 'Lied',
   props: {
     publicationDate: {
       wikidata: {
@@ -660,6 +666,7 @@ const song = {
  * @type {module:@bldr/media-server/meta-types~typeSpec}
  */
 const worksheet = {
+  title: 'Arbeitsblatt',
   abbreviation: 'TX',
   detectTypeByPath: function () {
     return new RegExp('^.*/TX/.*.pdf$')
@@ -676,8 +683,30 @@ const worksheet = {
   }
 }
 
+/**
+ * The meta data type specification “cloze”.
+ *
+ * @type {module:@bldr/media-server/meta-types~typeSpec}
+ */
+const cloze = {
+  title: 'Lückentext',
+  abbreviation: 'LT',
+  detectTypeByPath: function () {
+    return new RegExp('^.*/TX/.*.svg$')
+  },
+  props: {
+    title: {
+      derive: function ({ folderTitles }) {
+        return `Lückentext zum Thema „${folderTitles.title}“`
+      },
+      overwriteByDerived: true
+    }
+  }
+}
+
 module.exports = {
   composition,
+  cloze,
   cover,
   general,
   group,
