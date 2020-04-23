@@ -590,25 +590,6 @@ function parseSlidesRecursive (slidesRaw, slidesFlat, slidesTree, level = 1) {
 class PresentationNavigator {
   constructor (slides) {
     /**
-     *
-     *
-     * ```json
-     * [
-     *   { "slideNo": 1 },
-     *   { "slideNo": "two" },
-     *   { "slideNo": 3 },
-     *   { "slideNo": 4, "stepNo": 1 },
-     *   { "slideNo": 4, "stepNo": 2 },
-     *   { "slideNo": 4, "stepNo": 3 },
-     *   { "slideNo": 5 }
-     * ]
-     * ```
-     *
-     * @type {Array}
-     */
-    this.navList = []
-
-    /**
      * Each slide can be labeled with an ID. Resolve this ID to get the slide
      * number. Store all slide IDs in the instantiated objects.
      *
@@ -655,25 +636,20 @@ class PresentationNavigator {
       if (slide.stepCount && slide.stepCount > 1) {
         for (let index = 1; index <= slide.stepCount; index++) {
           const item = { slideNo, stepNo: index }
-          // TODO: Use store only
-          this.navList.push(item)
           store.commit('lamp/nav/addNavListItem', item)
         }
       } else {
         const item = { slideNo }
-        // TODO: Use store only
-        this.navList.push(item)
         store.commit('lamp/nav/addNavListItem', item)
       }
     }
 
-    for (let i = 0; i < this.navList.length; i++) {
-      const params = this.navList[i]
+    const navList = store.getters['lamp/nav/navList']
+    for (let i = 0; i < navList.length; i++) {
+      const params = navList[i]
       const index = PresentationNavigator.routeParamsToIndex_(params)
       const navListNo = i + 1
-      // TODO: Use store only
       store.commit('lamp/nav/addNavListIndex', { index, navListNo })
-      this.navListIndex[index] = navListNo
     }
   }
 
@@ -720,20 +696,12 @@ class PresentationNavigator {
 
   /**
    *
-   * @param {*} no
-   */
-  navListNoToRouterParams (no) {
-    return this.navList[no - 1]
-  }
-
-  /**
-   *
    * @param {Number} direction - `1`: next, `-1`: previous
    *
    * @returns {Number}
    */
   nextNavListNo (direction) {
-    const count = this.navList.length
+    const count = store.getters['lamp/nav/navListCount']
     const navListNo = store.getters['lamp/nav/navListNo']
     let no
     // Next
@@ -774,7 +742,8 @@ class PresentationNavigator {
    * @returns {module:@bldr/lamp/content-file~routerParams}
    */
   getNextRouterParams (direction) {
-    return this.navListNoToRouterParams(this.nextNavListNo(direction))
+    const no = this.nextNavListNo(direction)
+    return store.getters['lamp/nav/routerParamsFromNavListNo']()
   }
 
   /**

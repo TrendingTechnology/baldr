@@ -23,11 +23,29 @@ const nav = {
      * The current navigation list number. This number starts with 1.
      */
     navListNo: 1,
+    /**
+     * ```json
+     * [
+     *   { "slideNo": 1 },
+     *   { "slideNo": "two" },
+     *   { "slideNo": 3 },
+     *   { "slideNo": 4, "stepNo": 1 },
+     *   { "slideNo": 4, "stepNo": 2 },
+     *   { "slideNo": 4, "stepNo": 3 },
+     *   { "slideNo": 5 }
+     * ]
+     * ```
+     *
+     * @type {Array}
+     */
     navList: [],
     slideIds: {},
     navListIndex: {}
   },
   getters: {
+    navListCount: state => {
+      return state.navList.length
+    },
     navListNo: state => {
       return state.navListNo
     },
@@ -39,6 +57,9 @@ const nav = {
     },
     slideIds: state => {
       return state.slideIds
+    },
+    routerParamsFromNavListNo: state => no => {
+      return state.navList[no - 1]
     }
   },
   mutations: {
