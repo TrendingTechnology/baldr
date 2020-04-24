@@ -9,10 +9,10 @@
       :title="`Zur Folie Nr. ${slide.no}`"
       :class="{ 'current-slide': slideCurrent && slide.no === slideCurrent.no }"
     >
-      <hr v-if="slide.slides.length && previewHierarchical"/>
+      <hr v-if="slide.slides.length && hierarchical"/>
       <slide-preview :slide="slide"/>
       <grid-layout
-        v-if="slide.slides.length && previewHierarchical"
+        v-if="slide.slides.length && hierarchical"
         :slides="slide.slides"
       />
     </li>
@@ -22,7 +22,7 @@
 <script>
 import SlidePreview from './SlidePreview.vue'
 import { createNamespacedHelpers } from 'vuex'
-const { mapGetters } = createNamespacedHelpers('lamp')
+const { mapGetters } = createNamespacedHelpers('lamp/preview')
 
 export default {
   name: 'GridLayout',
@@ -39,7 +39,7 @@ export default {
       return this.$store.getters['lamp/slide']
     },
     ...mapGetters([
-      'previewHierarchical'
+      'hierarchical'
     ])
   }
 }

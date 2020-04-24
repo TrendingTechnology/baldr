@@ -12,7 +12,7 @@
       <div class="slide-info">
         <span class="master-title"> {{ slide.master.title }}: </span>
         <span class="slide-title">{{ slide.title }}</span>
-        <div class="plain-text" v-if="!previewDetail">{{ slide.plainText }}</div>
+        <div class="plain-text" v-if="!detail">{{ slide.plainText }}</div>
       </div>
     </li>
   </ol>
@@ -21,7 +21,9 @@
 <script>
 import { createNamespacedHelpers } from 'vuex'
 import SlidePreview from '@/components/SlidesPreview/SlidePreview.vue'
-const { mapGetters } = createNamespacedHelpers('lamp')
+const { mapGetters } = createNamespacedHelpers('lamp/preview')
+const storePreview = createNamespacedHelpers('lamp/preview')
+const mapGettersPreview = storePreview.mapGetters
 
 export default {
   name: 'ListLayout',
@@ -36,9 +38,11 @@ export default {
   computed: {
     ...mapGetters([
       'presentation',
-      'slidesCount',
-      'previewDetail',
-      'previewHierarchical'
+      'slidesCount'
+    ]),
+    ...mapGettersPreview([
+      'detail',
+      'hierarchical'
     ]),
     slideCurrent () {
       return this.$store.getters['lamp/slide']

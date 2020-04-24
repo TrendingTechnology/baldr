@@ -10,70 +10,67 @@ const state = {
 }
 
 const getters = {
-  preview: state => {
-    return state.preview.size
+  size: state => {
+    return state.size
   },
-  previewSize: state => {
-    return state.preview.size
+  detail: state => {
+    return state.detail
   },
-  previewDetail: state => {
-    return state.preview.detail
+  hierarchical: state => {
+    return state.hierarchical
   },
-  previewHierarchical: state => {
-    return state.preview.hierarchical
+  layoutNoCurrent: state => {
+    return state.layoutNoCurrent
   },
-  previewLayoutNoCurrent: state => {
-    return state.preview.layoutNoCurrent
-  },
-  previewLayoutCurrent: (state, getters) => {
-    const layoutKeys = Object.keys(getters.previewLayouts)
-    const layoutKey = layoutKeys[state.preview.layoutNoCurrent]
+  layoutCurrent: (state, getters) => {
+    const layoutKeys = Object.keys(getters.layouts)
+    const layoutKey = layoutKeys[getters.layoutNoCurrent]
     return {
       id: layoutKey,
-      title: getters.previewLayouts[layoutKey]
+      title: getters.layouts[layoutKey]
     }
   },
-  previewLayouts: state => {
-    return state.preview.layouts
+  layouts: state => {
+    return state.layouts
   }
 }
 
 const actions = {
-  increasePreviewSize ({ commit, getters }) {
-    commit('previewSize', getters.previewSize + 0.1)
+  increaseSize ({ commit, getters }) {
+    commit('size', getters.size + 0.1)
   },
-  decreasePreviewSize ({ commit, getters }) {
-    commit('previewSize', getters.previewSize - 0.1)
+  decreaseSize ({ commit, getters }) {
+    commit('size', getters.size - 0.1)
   },
-  switchPreviewDetail ({ commit, getters }) {
-    commit('previewDetail', !getters.previewDetail)
+  switchDetail ({ commit, getters }) {
+    commit('detail', !getters.detail)
   },
-  switchPreviewHierarchical ({ commit, getters }) {
-    commit('previewHierarchical', !getters.previewHierarchical)
+  switchHierarchical ({ commit, getters }) {
+    commit('hierarchical', !getters.hierarchical)
   },
-  switchPreviewLayout ({ commit, getters }) {
-    const no = getters.previewLayoutNoCurrent
-    const layoutCount = Object.keys(getters.previewLayouts).length
+  switchLayout ({ commit, getters }) {
+    const no = getters.layoutNoCurrent
+    const layoutCount = Object.keys(getters.layouts).length
     if (layoutCount === no + 1) {
-      commit('previewLayoutNoCurrent', 0)
+      commit('layoutNoCurrent', 0)
     } else {
-      commit('previewLayoutNoCurrent', no + 1)
+      commit('layoutNoCurrent', no + 1)
     }
   }
 }
 
 const mutations = {
-  previewDetail (state, value) {
-    state.preview.detail = value
+  detail (state, value) {
+    state.detail = value
   },
-  previewHierarchical (state, value) {
-    state.preview.hierarchical = value
+  hierarchical (state, value) {
+    state.hierarchical = value
   },
-  previewLayoutNoCurrent (state, value) {
-    state.preview.layoutNoCurrent = value
+  layoutNoCurrent (state, value) {
+    state.layoutNoCurrent = value
   },
-  previewSize (state, value) {
-    state.preview.size = value
+  size (state, value) {
+    state.size = value
   }
 }
 

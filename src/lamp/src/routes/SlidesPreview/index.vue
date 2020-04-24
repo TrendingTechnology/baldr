@@ -5,24 +5,24 @@
       main-app-fullscreen
     "
     b-content-theme="default"
-    :style="{ fontSize: previewSize + 'vw' }"
+    :style="{ fontSize: size + 'vw' }"
   >
     <div v-if="presentation">
       <display-controller/>
       <presentation-title/>
       <div v-if="slides">
-        <span  v-if="previewLayoutCurrent.id === 'grid'">
+        <span v-if="layoutCurrent.id === 'grid'">
           <grid-layout
-            v-if="previewHierarchical"
+            v-if="hierarchical"
             :slides="presentation.slidesTree"
           />
           <grid-layout
-            v-if="!previewHierarchical"
+            v-if="!hierarchical"
             :slides="presentation.slides"
           />
         </span>
         <list-layout
-          v-if="previewLayoutCurrent.id === 'list'"
+          v-if="layoutCurrent.id === 'list'"
           :slides="presentation.slides"
         />
       </div>
@@ -41,7 +41,10 @@ import LoadingIcon from '@/components/LoadingIcon'
 import { routerGuards } from '@/lib.js'
 
 import { createNamespacedHelpers } from 'vuex'
-const { mapActions, mapGetters } = createNamespacedHelpers('lamp')
+const { mapGetters } = createNamespacedHelpers('lamp')
+const storePreview = createNamespacedHelpers('lamp/preview')
+const mapActionsPreview = storePreview.mapActions
+const mapGettersPreview = storePreview.mapGetters
 
 export default {
   name: 'SlidesPreview',
@@ -56,13 +59,13 @@ export default {
     this.$shortcuts.addMultiple([
       {
         keys: '+',
-        callback: this.increasePreviewSize,
+        callback: this.increaseSize,
         description: 'Folien-Vorschauen vergrößern',
         routeNames: ['slides-preview']
       },
       {
         keys: '-',
-        callback: this.decreasePreviewSize,
+        callback: this.decreaseSize,
         description: 'Folien-Vorschauen verkleiner',
         routeNames: ['slides-preview']
       }
@@ -76,18 +79,22 @@ export default {
   destroyed: function () {
     this.$shortcuts.removeMultiple(['+', '-'])
   },
-  computed: mapGetters([
-    'presentation',
-    'slide',
-    'slides',
-    'slidesCount',
-    'previewSize',
-    'previewLayoutCurrent',
-    'previewHierarchical'
-  ]),
-  methods: mapActions([
-    'increasePreviewSize',
-    'decreasePreviewSize'
+  computed: {
+    ...mapGetters([
+      'presentation',
+      'slide',
+      'slides',
+      'slidesCount'
+    ]),
+    ...mapGettersPreview([
+      'size',
+      'layoutCurrent',
+      'hierarchical'
+    ])
+  },
+  methods: mapActionsPreview([
+    'increaseSize',
+    'decreaseSize'
   ]),
   ...routerGuards
 }

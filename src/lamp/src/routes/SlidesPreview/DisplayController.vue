@@ -1,42 +1,42 @@
 <template>
   <div class="vc_display_controller">
-    <span class="link" @click="switchPreviewLayout">
-      {{ previewLayoutCurrent.title }}
+    <span class="link" @click="switchLayout">
+      {{ layoutCurrent.title }}
     </span>
 
-    <span @click="switchPreviewDetail">
-      <span class="link" v-if="previewDetail">kompakt </span>
-      <span class="link" v-if="!previewDetail">ausführlich </span>
+    <span @click="switchDetail">
+      <span class="link" v-if="detail">kompakt </span>
+      <span class="link" v-if="!detail">ausführlich </span>
     </span>
 
-    <span @click="switchPreviewHierarchical">
-      <span class="link" v-if="!previewHierarchical">flach </span>
-      <span class="link" v-if="previewHierarchical">hierarchisch </span>
+    <span @click="switchHierarchical">
+      <span class="link" v-if="!hierarchical">flach </span>
+      <span class="link" v-if="hierarchical">hierarchisch </span>
     </span>
 
-    <span class="link" @click="decreasePreviewSize">- </span>
+    <span class="link" @click="decreaseSize">- </span>
 
-    <span class="link" @click="increasePreviewSize">+ </span>
+    <span class="link" @click="increaseSize">+ </span>
   </div>
 </template>
 
 <script>
 import { createNamespacedHelpers } from 'vuex'
-const { mapActions, mapGetters } = createNamespacedHelpers('lamp')
+const { mapActions, mapGetters } = createNamespacedHelpers('lamp/preview')
 
 export default {
   name: 'DisplayController',
   computed: mapGetters([
-    'previewLayoutCurrent',
-    'previewDetail',
-    'previewHierarchical'
+    'layoutCurrent',
+    'detail',
+    'hierarchical'
   ]),
   methods: mapActions([
-    'increasePreviewSize',
-    'decreasePreviewSize',
-    'switchPreviewDetail',
-    'switchPreviewLayout',
-    'switchPreviewHierarchical'
+    'increaseSize',
+    'decreaseSize',
+    'switchDetail',
+    'switchLayout',
+    'switchHierarchical'
   ])
 }
 </script>
