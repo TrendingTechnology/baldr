@@ -445,7 +445,7 @@ export function wrapWords (text) {
 /**
  * Select words which are surrounded by `span.word`.
  *
- * @returns {(module:@bldr/lamp/steps~DomStepElementGroup|module:@bldr/lamp/steps~DomStepElement)[]} An array of
+ * @returns {(module:@bldr/lamp/steps~DomStepElementGroup[]|module:@bldr/lamp/steps~DomStepElement[])} An array of
  *   `DomStepElement`s or `DomStepElementGroup`s.
  */
 function selectWords (rootElement) {
