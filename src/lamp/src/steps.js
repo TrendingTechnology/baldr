@@ -511,7 +511,7 @@ function selectSentences (rootElement) {
 
 /**
  *
- * @param {*} parentElement
+ * @param {HTMLElement} parentElement
  *
  * @returns {Number}
  */

@@ -271,6 +271,36 @@ class AudioOverlay {
 }
 
 /**
+ * Hold some meta data about a step of a slide. This class should not
+ * be confused with `DomStepElement` and `DomStepElementGroup` which
+ * are acting on the component level.
+ */
+class SlideStep {
+  constructor ({ no, title, shortcut }) {
+    /**
+     * A number starting with 1.
+     *
+     * @type {Number}
+     */
+    this.no = no
+
+    /**
+     * Thie title of the step
+     *
+     * @type {String}
+     */
+    this.title = title
+
+    /**
+     * The shortcut to display the step.
+     *
+     * @type {String}
+     */
+    this.shortcut = shortcut
+  }
+}
+
+/**
  * A slide.
  */
 export class Slide {
@@ -369,6 +399,13 @@ export class Slide {
      * @type {number}
      */
     this.stepNo = null
+
+    /**
+     * The slide steps.
+     *
+     * @type {module:@bldr/lamp/content-file~SlideStep[]}
+     */
+    this.steps = null
 
     /**
      * @type {module:@bldr/lamp/content-file.MetaData}
@@ -765,13 +802,22 @@ ${JSON.stringify(this.rawYamlObject_)}`
         },
         vue
       )
-      slide.stepCount = slide.master.calculateStepCount({
+      const steps = slide.master.calculateStepCount({
         props: slide.props,
         propsMain: slide.propsMain,
         propsPreview: slide.propsPreview,
         slide,
         master: slide.master
       }, vue)
+      if (Number.isInteger(steps)) {
+        slide.stepCount = steps
+      } else if (Array.isArray(steps)) {
+        slide.stepCount = steps.length
+        slide.steps = []
+        for (const step of steps) {
+          slide.steps.push(new SlideStep(step))
+        }
+      }
     }
 
     store.dispatch('lamp/nav/initNavList', this.slides)
