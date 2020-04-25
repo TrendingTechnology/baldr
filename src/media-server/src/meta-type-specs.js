@@ -745,15 +745,50 @@ const cloze = {
   }
 }
 
+/**
+ * The meta data type specification “photo”.
+ *
+ * @type {module:@bldr/media-server/meta-types~typeSpec}
+ */
+const photo = {
+  title: 'Foto',
+  abbreviation: 'FT',
+  detectTypeByPath: function () {
+    return new RegExp('^.*/FT/.*.jpg$')
+  },
+  props: {
+    photographer: {
+      title: 'Fotograph*in'
+    }
+  }
+}
+
+/**
+ * The meta data type specification “radio”.
+ *
+ * @type {module:@bldr/media-server/meta-types~typeSpec}
+ */
+const radio = {
+  title: 'Schulfunk',
+  abbreviation: 'SF',
+  props: {
+    author: {
+      title: 'Autor*in'
+    }
+  }
+}
+
 module.exports = {
-  composition,
   cloze,
+  composition,
   cover,
   general,
   group,
   instrument,
   person,
+  photo,
   recording,
   song,
+  radio,
   worksheet
 }

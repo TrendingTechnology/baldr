@@ -3,6 +3,7 @@ module.exports = {
   AB: 'Arbeitsblatt',
   BD: 'Bild',
   EP: 'Example',
+  FT: 'Foto',
   GN: 'Graphische Notation',
   GR: 'Gruppe',
   HB: 'Hörbeispiel',
