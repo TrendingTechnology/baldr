@@ -6,6 +6,7 @@
 
 import vue from '@/main.js'
 import { selectSubset } from '@bldr/core-browser'
+import store from '@/store/index.js'
 
 /**
  * Hold some meta data about a step of a slide. This class should not be
@@ -270,7 +271,7 @@ export class DomSteps {
     if (!this.elements || !this.elements.length) return
     // Loop through all elements. Set visibility state on all elements
     // Full update
-    if (!oldStepNo || full || stepNo === 1 || (oldStepNo === 1 && stepNo === this.count)) {
+    if (!oldStepNo || full || store.getters['lamp/nav/fullStepUpdate'] || stepNo === 1 || (oldStepNo === 1 && stepNo === this.count)) {
       let count = 1
       for (const domStep of this.elements) {
         const showElement = stepNo > count
@@ -278,11 +279,11 @@ export class DomSteps {
         count += 1
       }
       if (stepNo === 1) {
-        return this.elements[0].element
+        return this.elements[0].htmlElement
       }
       // First step: No elements are displayed.
       // The array index begins with 0, steps with 1.
-      return this.elements[stepNo - 2].element
+      return this.elements[stepNo - 2].htmlElement
     }
     let domStep
     if (stepNo > oldStepNo) {
@@ -584,7 +585,7 @@ export function generateSlideStepsFromText (text, props) {
   const slideSteps = []
   for (let i = 0; i < domSteps.elements.length; i++) {
     const domStep = domSteps.elements[i]
-    slideSteps.push(new SlideStep({ no: i + 1, title: domStep.text }))
+    slideSteps.push(new SlideStep({ no: i + 2, title: domStep.text }))
   }
   return slideSteps
 }

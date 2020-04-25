@@ -467,6 +467,14 @@ Vue.config.productionTip = false
  * @type {{Object.<propName, module:@bldr/lamp~prop>}}
  */
 
+/**
+ * The route object of the Vue Router package.
+ *
+ * @see {@link https://router.vuejs.org/api/#the-route-object Vue Router Api documentation}
+ *
+ * @typedef route
+ */
+
 /******************************************************************************/
 
 /**

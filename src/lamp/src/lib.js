@@ -149,20 +149,18 @@ async function loadPresentationById (vm, presId) {
  * Open a presentation by its ID.
  *
  * @param {Object} vm - Vue component instance.
- * @param {String} params
+ * @param {module:@bldr/lamp/route} route
  */
-export async function loadPresentationByRoute (vm, params) {
+export async function loadPresentationByRoute (vm, route) {
   try {
-    if (params.presId) {
+    if (route.params.presId) {
       const presentation = vm.$store.getters['lamp/presentation']
-      if (!presentation || (presentation && presentation.id !== params.presId)) {
-        await loadPresentationById(vm, params.presId)
+      if (!presentation || (presentation && presentation.id !== route.params.presId)) {
+        await loadPresentationById(vm, route.params.presId)
       }
-      if (params.slideNo) {
-        if (params.stepNo) params.stepNo = parseInt(params.stepNo)
-        vm.$store.dispatch('lamp/nav/setNavListNoByRouterParams', params)
-        const normalizedParams = vm.$store.getters['lamp/nav/slideStepNoByRouterParams'](params)
-        vm.$store.dispatch('lamp/setSlideAndStepNoCurrent', normalizedParams)
+      if (route.params.slideNo) {
+        if (route.params.stepNo) route.params.stepNo = parseInt(route.params.stepNo)
+        vm.$store.dispatch('lamp/nav/setNavListNosByRoute', route)
       }
     }
   } catch (error) {
@@ -178,12 +176,12 @@ export const routerGuards = {
   // Without this hook there are webpack errors.
   beforeRouteEnter (to, from, next) {
     next(vm => {
-      loadPresentationByRoute(vm, to.params)
+      loadPresentationByRoute(vm, to)
     })
   },
   // To be able to navigate throught the slide (only the params) are changing.
   beforeRouteUpdate (to, from, next) {
-    loadPresentationByRoute(this, to.params)
+    loadPresentationByRoute(this, to)
     // To update the URL in the browser URL textbox.
     next()
   }

@@ -1,7 +1,7 @@
 <template>
   <div class="vc_slide_steps" v-if="steps">
     <span v-for="step in steps" :key="step.no">
-      <router-link :to="{ name: 'speaker-view-step-no', params: { slideNo: slide.no, stepNo: step.no } }" v-html="step.title"/> -
+      <router-link :to="{ name: 'speaker-view-step-no', params: { slideNo: slide.no, stepNo: step.no }, query: { full: true } }" v-html="step.title"/> -
     </span>
   </div>
 </template>

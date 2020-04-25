@@ -53,10 +53,14 @@ const state = {
    *
    * @tpye {Object}
    */
-  navListIndex: {}
+  navListIndex: {},
+  fullStepUpdate: false
 }
 
 const getters = {
+  fullStepUpdate: state => {
+    return state.fullStepUpdate
+  },
   /**
    *
    * @param {Object} params
@@ -92,8 +96,8 @@ const getters = {
    *
    * @returns {Number}
    */
-  navListNoByRouterParams: (state, getters) => params => {
-    const index = getters.indexByRouterParams(params)
+  navListNoByRoute: (state, getters) => route => {
+    const index = getters.indexByRouterParams(route.params)
     return state.navListIndex[index]
   },
   /**
@@ -150,10 +154,10 @@ const getters = {
    *
    * @returns {Object} paramsNormalized
    */
-  slideStepNoByRouterParams: (state, getters) => params => {
-    const paramsNormalized = Object.assign({}, params)
-    if (state.slideIds[params.slideNo]) {
-      paramsNormalized.slideNo = state.slideIds[params.slideNo]
+  slideStepNoByRoute: (state, getters) => route => {
+    const paramsNormalized = Object.assign({}, route.params)
+    if (state.slideIds[route.params.slideNo]) {
+      paramsNormalized.slideNo = state.slideIds[route.params.slideNo]
     }
     return paramsNormalized
   }
@@ -199,9 +203,16 @@ const actions = {
    * @property {(String|Number)} slideNo - The slide number or the slide ID.
    * @property {Number} stepNo - The step number (can be unset).
    */
-  setNavListNoByRouterParams ({ commit, getters }, params) {
-    const no = getters.navListNoByRouterParams(params)
+  setNavListNosByRoute ({ commit, getters, dispatch }, route) {
+    const no = getters.navListNoByRoute(route)
+    if (route.query.full) {
+      commit('setFullStepUpdate', true)
+    } else {
+      commit('setFullStepUpdate', false)
+    }
     commit('setNavListNo', no)
+    const slideAndStepNos = getters.slideStepNoByRoute(route)
+    dispatch('lamp/setSlideAndStepNoCurrent', slideAndStepNos, { root: true })
   }
 }
 
@@ -220,6 +231,9 @@ const mutations = {
   },
   setNavListNo (state, no) {
     state.navListNo = no
+  },
+  setFullStepUpdate (state, value) {
+    state.fullStepUpdate = value
   }
 }
 
