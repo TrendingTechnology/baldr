@@ -475,6 +475,7 @@ class Presentation extends MediaFile {
  */
 function isAsset (filePath) {
   if (
+    filePath.indexOf('eps-converted-to.pdf') > -1 || // eps converted into pdf by TeX
     filePath.indexOf('_preview.jpg') > -1 || // Preview image
     filePath.match(/_no\d\d\./) // Multipart asset
   ) {
