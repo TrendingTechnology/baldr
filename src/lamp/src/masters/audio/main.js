@@ -1,4 +1,9 @@
 /**
+ *
+ * Waveform visualizers
+ *
+ * - {@link https://css-tricks.com/making-an-audio-waveform-visualizer-with-vanilla-javascript/}
+ * - {@link https://waveform.prototyping.bbc.co.uk/}
  * @module @bldr/lamp/masters/audio
  */
 
