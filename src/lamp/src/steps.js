@@ -166,7 +166,7 @@ export class DomSteps {
       useVisibliltyProp: false,
       hideAllElementsInitally: true
     }
-    this.opts_ = Object.assign(optionsDefault, options)
+    const opts = Object.assign(optionsDefault, options)
 
     /**
      * All elements obtained from `document.querySelectorAll()`.
@@ -176,29 +176,30 @@ export class DomSteps {
     this.elementsAll = []
 
     let elements
-    if (this.opts_.elements) {
-      elements = this.opts_.elements
-    } else if (this.opts_.mode) {
-      if (this.opts_.mode === 'words') {
-        this.elementsAll = selectWords(this.opts_.rootElement)
-      } else if (this.opts_.mode === 'sentences') {
-        this.elementsAll = selectSentences(this.opts_.rootElement)
+
+    if (!opts.rootElement) {
+      opts.rootElement = document
+    }
+
+    if (opts.elements) {
+      elements = opts.elements
+    } else if (opts.mode) {
+      if (opts.mode === 'words') {
+        this.elementsAll = selectWords(opts.rootElement)
+      } else if (opts.mode === 'sentences') {
+        this.elementsAll = selectSentences(opts.rootElement)
       } else {
-        throw new Error(`Unkown specialized selector: ${this.opts_.mode}`)
+        throw new Error(`Unkown specialized selector: ${opts.mode}`)
       }
-    } else if (this.opts_.cssSelectors) {
-      if (this.opts_.rootElement) {
-        elements = this.opts_.rootElement.querySelectorAll(this.opts_.cssSelectors)
-      } else {
-        elements = document.querySelectorAll(this.opts_.cssSelectors)
-      }
+    } else if (opts.cssSelectors) {
+      elements = opts.rootElement.querySelectorAll(opts.cssSelectors)
     } else {
       throw new Error('Specify elements or cssSelectors')
     }
 
     if (elements) {
       for (const element of elements) {
-        this.elementsAll.push(new DomStepElement(element, this.opts_.useVisibliltyProp))
+        this.elementsAll.push(new DomStepElement(element, opts.useVisibliltyProp))
       }
     }
 
@@ -208,15 +209,15 @@ export class DomSteps {
      * @type {Array}
      */
     this.elements = null
-    if (this.opts_.subsetSelector) {
-      this.elements = selectSubset(this.opts_.subsetSelector,
+    if (opts.subsetSelector) {
+      this.elements = selectSubset(opts.subsetSelector,
         { elements: this.elementsAll, shiftSelector: -1 }
       )
     } else {
       this.elements = this.elementsAll
     }
 
-    if (this.opts_.hideAllElementsInitally) {
+    if (opts.hideAllElementsInitally) {
       this.hideAll()
     }
   }
@@ -444,7 +445,7 @@ export function wrapWords (text) {
 /**
  * Select words which are surrounded by `span.word`.
  *
- * @returns {DomStepElementGroup|DomStepElement[]} An array of
+ * @returns {(module:@bldr/lamp/steps~DomStepElementGroup|module:@bldr/lamp/steps~DomStepElement)[]} An array of
  *   `DomStepElement`s or `DomStepElementGroup`s.
  */
 function selectWords (rootElement) {
@@ -579,6 +580,22 @@ export function calculateStepCountText (text, props) {
   }
 
   return calculateStepCount(allElementsCount, props)
+}
+
+export function generateSlideStepsFromText (text, props) {
+  const dom = new DOMParser().parseFromString(text, 'text/html')
+  const options = {
+    rootElement: dom
+  }
+
+  if (props.stepMode) {
+    options.mode = props.stepMode
+  }
+
+  if (props.stepSubset) {
+    options.subsetSelector = props.stepSubset
+  }
+  const domSteps = new DomSteps(options)
 }
 
 /**
