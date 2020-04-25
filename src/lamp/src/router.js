@@ -17,7 +17,7 @@ import MasterDocumentation from '@/routes/MasterDocumentation.vue'
 import MediaIdsParentDir from '@/routes/MediaIdsParentDir'
 import OpenInterface from '@/components/OpenInterface'
 import TopicsTree from '@/routes/TopicsTree/index.vue'
-import SpeakerView from '@/routes/SpeakerView.vue'
+import SpeakerView from '@/routes/SpeakerView/index.vue'
 import RestApiOverview from '@/routes/RestApiOverview.vue'
 import SlidesPreview from '@/routes/SlidesPreview/index.vue'
 import SlideView from '@/routes/SlideView'
@@ -188,11 +188,16 @@ router.afterEach((to, from) => {
 })
 
 /**
- * `public` or `speaker`
+ * Routes can be divided into two categories: A public route (visible for
+ * the audience) and speaker router (visible only for the speaker). Possible
+ * values: `public` or `speaker`.
  *
  * @typedef {string} view
  */
 
+/**
+ *
+ */
 export const views = {
   public: {
     slideNo: 'slide',
@@ -204,6 +209,9 @@ export const views = {
   }
 }
 
+/**
+ * @returns {module:@bldr/lamp/router~view}
+ */
 export function getViewFromRoute () {
   const name = router.currentRoute.name
   if (name === 'speaker-view' || name === 'speaker-view-step-no') {

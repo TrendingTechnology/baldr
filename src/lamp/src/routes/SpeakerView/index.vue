@@ -1,10 +1,13 @@
 <template>
-  <div class="vc_speaker_view main-app-fullscreen" b-ui-theme="default">
+  <div class="vc_speaker_view main-app-fullscreen" b-ui-theme="default" v-if="presentation">
     <presentation-title/>
 
-    <div class="slide-panel" v-if="presentation && slide">
+    <div class="slide-panel" v-if="slide">
       <slide-main id="current-slide" :slide="slide" :step-no="currentStepNo"/>
-      <slide-main id="next-slide" :slide="nextSlide" :step-no="nextStepNo" :is-public="false"/>
+      <div>
+        <slide-main id="next-slide" :slide="nextSlide" :step-no="nextStepNo" :is-public="false"/>
+        <slide-steps/>
+      </div>
     </div>
 
     <grid-layout :slides="presentation.slides"/>
@@ -17,11 +20,13 @@
 import { createNamespacedHelpers } from 'vuex'
 import { routerGuards } from '@/lib.js'
 import CursorArrows from '@/components/CursorArrows.vue'
+import GridLayout from '@/components/SlidesPreview/GridLayout.vue'
 import PresentationTitle from '@/components/PresentationTitle'
 import SlideMain from '@/components/SlideMain/index.vue'
-import GridLayout from '@/components/SlidesPreview/GridLayout.vue'
+import SlideSteps from './SlideSteps.vue'
 
 const { mapGetters } = createNamespacedHelpers('lamp')
+const mapGettersNav = createNamespacedHelpers('lamp/nav').mapGetters
 
 export default {
   name: 'SpeakerView',
@@ -29,22 +34,24 @@ export default {
     CursorArrows,
     GridLayout,
     PresentationTitle,
-    SlideMain
+    SlideMain,
+    SlideSteps
   },
   computed: {
     ...mapGetters(['slide', 'presentation', 'slides']),
-    nextRouterParams () {
-      return this.presentation.navigator.getNextRouterParams(1)
+    ...mapGettersNav(['nextRouterParams']),
+    nextSlideRouterParams () {
+      return this.nextRouterParams(1)
     },
     nextSlide () {
-      const params = this.nextRouterParams
+      const params = this.nextSlideRouterParams
       return this.slides[params.slideNo - 1]
     },
     currentStepNo () {
       return this.slide.stepNo
     },
     nextStepNo () {
-      return this.nextRouterParams.stepNo
+      return this.nextSlideRouterParams.stepNo
     }
   },
   methods: {
@@ -78,6 +85,10 @@ export default {
     .vc_slide_main {
       border: solid $black 1px;
       height: 30em;
+      width: 40em;
+    }
+
+    .vc_slide_steps {
       width: 40em;
     }
 

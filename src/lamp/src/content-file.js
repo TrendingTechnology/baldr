@@ -442,7 +442,8 @@ export class Slide {
   }
 
   /**
-   * The ID of this slide.
+   * A value to identify a slide. The ID (from `slide.metaData.id`) of this
+   * slide or the number (the same as `slide.no`) of this slide.
    *
    * @type {String}
    */
@@ -450,6 +451,9 @@ export class Slide {
     if (this.metaData.id) {
       return this.metaData.id
     }
+    // else if (this.no) {
+    //   return this.no
+    // }
   }
 
   /**

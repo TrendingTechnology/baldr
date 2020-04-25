@@ -656,7 +656,6 @@ export function generateSlideStepsFromText (text, props) {
     const domStep = domSteps.elements[i]
     slideSteps.push(new SlideStep({ no: i + 1, title: domStep.text }))
   }
-  console.log(slideSteps)
   return slideSteps
 }
 
