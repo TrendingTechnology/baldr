@@ -95,7 +95,7 @@ export default {
       return props
     },
     calculateStepCount ({ props }) {
-      return steps.calculateStepCountText(props.markup, { stepMode: 'words' })
+      return steps.generateSlideStepsFromText(props.markup, { stepMode: 'words' })
     },
     plainTextFromProps (props) {
       return plainText(props.markup)

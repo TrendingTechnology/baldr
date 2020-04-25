@@ -8,6 +8,36 @@ import vue from '@/main.js'
 import { selectSubset } from '@bldr/core-browser'
 
 /**
+ * Hold some meta data about a step of a slide. This class should not
+ * be confused with `DomStepElement` and `DomStepElementGroup` which
+ * are acting on the component level.
+ */
+class SlideStep {
+  constructor ({ no, title, shortcut }) {
+    /**
+     * A number starting with 1.
+     *
+     * @type {Number}
+     */
+    this.no = no
+
+    /**
+     * Thie title of the step
+     *
+     * @type {String}
+     */
+    this.title = title
+
+    /**
+     * The shortcut to display the step.
+     *
+     * @type {String}
+     */
+    this.shortcut = shortcut
+  }
+}
+
+/**
  * A wrapper class for a HTML element.
  */
 class DomStepElement {
@@ -17,6 +47,8 @@ class DomStepElement {
    */
   constructor (element, useVisibliltyProp = false) {
     /**
+     * TODO: Rename into htmlElement
+     *
      * A HTML element.
      *
      * @type {Object}
@@ -53,6 +85,15 @@ class DomStepElement {
   }
 
   /**
+   * The text of HTML element.
+   *
+   * @returns {String}
+   */
+  get text () {
+    return this.element.textContent
+  }
+
+  /**
    * @private
    */
   getStyleValue_ (show) {
@@ -78,6 +119,8 @@ class DomStepElementGroup {
   constructor (elements, useVisibliltyProp = false) {
     this.useVisibliltyProp_ = useVisibliltyProp
     /**
+     * TODO: Rename into this.domStepElements
+     *
      * @type {Array}
      */
     this.elements = []
@@ -87,6 +130,8 @@ class DomStepElementGroup {
   }
 
   /**
+   * TODO: Rename into this.htmlElement
+   *
    * For the scroll function: to get every time a HTML element.
    */
   get element () {
@@ -105,6 +150,16 @@ class DomStepElementGroup {
       htmlElements.push(domStepElement.element)
     }
     return htmlElements
+  }
+
+  /**
+   * The text of last HTML element.
+   *
+   * @returns {String}
+   */
+  get text () {
+    const lastDomStep = this.elements[this.elements.length - 1]
+    return lastDomStep.text
   }
 
   /**
@@ -171,7 +226,7 @@ export class DomSteps {
     /**
      * All elements obtained from `document.querySelectorAll()`.
      *
-     * @type {Array}
+     * @type {(module:@bldr/lamp/steps~DomStepElementGroup[]|module:@bldr/lamp/steps~DomStepElement[])}
      */
     this.elementsAll = []
 
@@ -206,7 +261,7 @@ export class DomSteps {
     /**
      * All elements or a subset of elements, if `subsetSelector` is specified.
      *
-     * @type {Array}
+     * @type {(module:@bldr/lamp/steps~DomStepElementGroup[]|module:@bldr/lamp/steps~DomStepElement[])}
      */
     this.elements = null
     if (opts.subsetSelector) {
@@ -596,6 +651,13 @@ export function generateSlideStepsFromText (text, props) {
     options.subsetSelector = props.stepSubset
   }
   const domSteps = new DomSteps(options)
+  const slideSteps = []
+  for (let i = 0; i < domSteps.elements.length; i++) {
+    const domStep = domSteps.elements[i]
+    slideSteps.push(new SlideStep({ no: i + 1, title: domStep.text }))
+  }
+  console.log(slideSteps)
+  return slideSteps
 }
 
 /**
@@ -634,6 +696,7 @@ export default {
   calculateStepCount,
   calculateStepCountText,
   DomSteps,
+  generateSlideStepsFromText,
   mapProps,
   wrapWords
 }
