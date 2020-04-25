@@ -205,9 +205,9 @@ const actions = {
    */
   setNavListNosByRoute ({ commit, getters, dispatch }, route) {
     const no = getters.navListNoByRoute(route)
-    if (route.query.full) {
+    if (route.query.full && !getters.fullStepUpdate) {
       commit('setFullStepUpdate', true)
-    } else {
+    } else if (!route.query.full && getters.fullStepUpdate) {
       commit('setFullStepUpdate', false)
     }
     commit('setNavListNo', no)
