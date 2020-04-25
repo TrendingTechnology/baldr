@@ -8,9 +8,8 @@ import vue from '@/main.js'
 import { selectSubset } from '@bldr/core-browser'
 
 /**
- * Hold some meta data about a step of a slide. This class should not
- * be confused with `DomStepElement` and `DomStepElementGroup` which
- * are acting on the component level.
+ * Hold some meta data about a step of a slide. This class should not be
+ * confused with the class `DomStepElement` which acts on the component level.
  */
 class SlideStep {
   constructor ({ no, title, shortcut }) {
@@ -38,22 +37,32 @@ class SlideStep {
 }
 
 /**
- * A wrapper class for a HTML element.
+ * A wrapper class for a HTML element to be able to hide and show easily some
+ * HTML elements.
  */
 class DomStepElement {
   /**
+   * @property {(Array|Object)} - Multiple HTML elements as an array or a
+   *   single HTML element.
    * @property {Boolean} useVisibliltyProp - Set the visibility
    *   `element.style.visibility` instead of the display state.
    */
-  constructor (element, useVisibliltyProp = false) {
+  constructor (elements, useVisibliltyProp = false) {
     /**
-     * TODO: Rename into htmlElement
-     *
      * A HTML element.
      *
-     * @type {Object}
+     * @type {Array}
      */
-    this.element = element
+    this.htmlElements = null
+    if (Array.isArray(elements)) {
+      this.htmlElements = elements
+    } else {
+      this.htmlElements = [elements]
+    }
+
+    /**
+     * @private
+     */
     this.useVisibliltyProp_ = useVisibliltyProp
 
     if (this.useVisibliltyProp_) {
@@ -62,6 +71,9 @@ class DomStepElement {
       this.stylePropertyName_ = 'display'
     }
 
+    /**
+     * @private
+     */
     this.styleValues_ = [
       {
         visibility: 'hidden',
@@ -75,22 +87,22 @@ class DomStepElement {
   }
 
   /**
-   * To get an unified interface in comparison with the class
-   * `DomStepElementGroup`. For debugging purposes.
+   * The last HTML element.
    *
-   * @returns {Array}
+   * @returns {String}
    */
-  get htmlElements () {
-    return [this.element]
+  get htmlElement () {
+    return this.htmlElements[this.htmlElements.length - 1]
   }
 
   /**
-   * The text of HTML element.
+   * The text of last HTML element.
    *
    * @returns {String}
    */
   get text () {
-    return this.element.textContent
+    const lastElement = this.htmlElements[this.htmlElements.length - 1]
+    return lastElement.textContent
   }
 
   /**
@@ -104,90 +116,8 @@ class DomStepElement {
    * @param {Boolean} isVisible
    */
   show (isVisible = true) {
-    this.element.style[this.stylePropertyName_] = this.getStyleValue_(isVisible)
-  }
-}
-
-/**
- * A group of step elements which are controlled at once.
- */
-class DomStepElementGroup {
-  /**
-   *
-   * @param {Array} elements
-   */
-  constructor (elements, useVisibliltyProp = false) {
-    this.useVisibliltyProp_ = useVisibliltyProp
-    /**
-     * TODO: Rename into this.domStepElements
-     *
-     * @type {Array}
-     */
-    this.elements = []
-    if (elements) {
-      this.addMultipleElements_(elements)
-    }
-  }
-
-  /**
-   * TODO: Rename into this.htmlElement
-   *
-   * For the scroll function: to get every time a HTML element.
-   */
-  get element () {
-    return this.elements[0].element
-  }
-
-  /**
-   * To get an unified interface in comparison with the class
-   * `DomStepElement`. For debugging purposes.
-   *
-   * @returns {Array}
-   */
-  get htmlElements () {
-    const htmlElements = []
-    for (const domStepElement of this.elements) {
-      htmlElements.push(domStepElement.element)
-    }
-    return htmlElements
-  }
-
-  /**
-   * The text of last HTML element.
-   *
-   * @returns {String}
-   */
-  get text () {
-    const lastDomStep = this.elements[this.elements.length - 1]
-    return lastDomStep.text
-  }
-
-  /**
-   *
-   * @param {Array} elements
-   *
-   * @private
-   */
-  addMultipleElements_ (elements) {
-    for (const element of elements) {
-      this.addElement(element)
-    }
-  }
-
-  /**
-   *
-   * @param {HTMLElement} element
-   */
-  addElement (element) {
-    this.elements.push(new DomStepElement(element, this.useVisibliltyProp_))
-  }
-
-  /**
-   * @param {Boolean} isVisible
-   */
-  show (isVisible = true) {
-    for (const element of this.elements) {
-      element.show(isVisible)
+    for (const element of this.htmlElements) {
+      element.style[this.stylePropertyName_] = this.getStyleValue_(isVisible)
     }
   }
 }
@@ -226,7 +156,7 @@ export class DomSteps {
     /**
      * All elements obtained from `document.querySelectorAll()`.
      *
-     * @type {(module:@bldr/lamp/steps~DomStepElementGroup[]|module:@bldr/lamp/steps~DomStepElement[])}
+     * @type {module:@bldr/lamp/steps~DomStepElement[]}
      */
     this.elementsAll = []
 
@@ -261,7 +191,7 @@ export class DomSteps {
     /**
      * All elements or a subset of elements, if `subsetSelector` is specified.
      *
-     * @type {(module:@bldr/lamp/steps~DomStepElementGroup[]|module:@bldr/lamp/steps~DomStepElement[])}
+     * @type {module:@bldr/lamp/steps~DomStepElement[]}
      */
     this.elements = null
     if (opts.subsetSelector) {
@@ -365,7 +295,7 @@ export class DomSteps {
     // Todo: displayByNo is called twice, Fix this.
     if (domStep) {
       domStep.show(stepNo > oldStepNo)
-      return domStep.element
+      return domStep.htmlElement
     }
   }
 
@@ -500,8 +430,8 @@ export function wrapWords (text) {
 /**
  * Select words which are surrounded by `span.word`.
  *
- * @returns {(module:@bldr/lamp/steps~DomStepElementGroup[]|module:@bldr/lamp/steps~DomStepElement[])} An array of
- *   `DomStepElement`s or `DomStepElementGroup`s.
+ * @returns {module:@bldr/lamp/steps~DomStepElement[]} An array of
+ *   `DomStepElement`s.
  */
 function selectWords (rootElement) {
   if (!rootElement) {
@@ -515,10 +445,10 @@ function selectWords (rootElement) {
       if (parent.tagName === 'LI') {
         if (!parent.previousSibling) {
           // <ul><li><span class="word">lol</span><li></ul>
-          words.push(new DomStepElementGroup([parent.parentElement, parent, word], true))
+          words.push(new DomStepElement([parent.parentElement, parent, word], true))
         } else {
           // Avoid to get divs. Parent has to be LI
-          words.push(new DomStepElementGroup([parent, word], true))
+          words.push(new DomStepElement([parent, word], true))
         }
       } else {
         words.push(new DomStepElement(word, true))
