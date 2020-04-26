@@ -61,7 +61,7 @@ function setDocumentTitleByRoute (route) {
 }
 
 /**
- * @param {module:@bldr/lamp/routing~router} router
+ * @param {module:@bldr/lamp/routing~route} router
  */
 export function installDocumentTitleUpdater (router) {
   router.afterEach((to, from) => {
