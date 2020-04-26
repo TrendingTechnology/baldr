@@ -466,6 +466,14 @@ export class Slide {
     if (this.metaData.title) {
       return this.metaData.title
     }
+    const titleFromProps = this.master.titleFromProps({
+      props: this.props,
+      propsMain: this.propsMain,
+      propsPreview: this.propsPreview
+    })
+
+    if (titleFromProps) return titleFromProps
+
     let plain = this.plainText
     plain = plain.replace(/\|/g, '')
     return shortenText(plain)

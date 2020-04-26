@@ -428,10 +428,21 @@ class Master {
   }
 
   /**
+   * @param {object} payload
+   * @property {module:@bldr/lamp~props} payload.props
+   * @property {module:@bldr/lamp~props} payload.propsMain
+   * @property {module:@bldr/lamp~props} payload.propPreview
+   *
+   * @returns {String}
+   */
+  titleFromProps (payload) {
+    return this.callHook_('titleFromProps', payload)
+  }
+
+  /**
    * Called when entering a slide.
    *
    * @param {object} payload
-   * @property {object} payload
    * @property {module:@bldr/lamp/content-file~Slide} payload.oldSlide
    * @property {module:@bldr/lamp~props} payload.oldProps
    * @property {module:@bldr/lamp/content-file~Slide} payload.newSlide

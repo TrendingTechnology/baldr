@@ -68,6 +68,11 @@ export default {
         imageHttpUrl: propsMain.imageHttpUrl
       }
     },
+    titleFromProps ({ props, propsMain }) {
+      if (props.title) return props.title
+      const asset = propsMain.mediaAsset
+      if (asset.title) return asset.title
+    },
     afterSlideNoChangeOnComponent ({ oldSlideNo, newSlideNo }) {
       function resetMetadataStyle (metaStyle) {
         metaStyle.width = null

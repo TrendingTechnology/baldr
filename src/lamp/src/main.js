@@ -191,13 +191,20 @@
  *
  * ## Getter on the slide object:
  *
- * ### `titleFromProps(props)` ??? not implemented any more?
+ * ### `titleFromProps({ props, propsMain, propsPreview })`
  *
  * - `return`: a string
  *
  * ```js
  * export const default = {
- *  }
+ *   hooks: {
+ *     titleFromProps ({ props, propsMain }) {
+ *       if (props.title) return props.title
+ *       const asset = propsMain.mediaAsset
+ *       if (asset.title) return asset.title
+ *     }
+ *   }
+ * }
  *  ```
  *
  * ### `plainTextFromProps(props)`
@@ -206,6 +213,15 @@
  *
  * ```js
  * export const default = {
+ *   hooks: {
+ *     plainTextFromProps (props) {
+ *       const output = []
+ *       for (const markup of props.markup) {
+ *         output.push(plainText(markup))
+ *       }
+ *       return output.join(' | ')
+ *     }
+ *   }
  * }
  * ```
  *

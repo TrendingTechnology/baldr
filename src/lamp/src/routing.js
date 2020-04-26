@@ -40,10 +40,9 @@
  * @typedef {string} view
  */
 
-// import { deepCopy } from '@bldr/core-browser'
-
-import store from '@/store/index.js'
 import { router } from '@/routes.js'
+import { shortenText } from '@bldr/core-browser'
+import store from '@/store/index.js'
 
 /* globals document */
 
@@ -54,13 +53,16 @@ function setDocumentTitleByRoute (route) {
   const slide = store.getters['lamp/slide']
   const presentation = store.getters['lamp/presentation']
 
+  let title
   if (slide && slide.title && (route.name === 'slide' || route.name === 'slide-step-no')) {
-    document.title = `${presentation.title}: Folie Nr. ${slide.no} ${slide.title}`
+    title = `Nr. ${slide.no} [${slide.master.title}]: ${slide.title} (${presentation.title})`
   } else if (route.meta && route.meta.title) {
-    document.title = route.meta.title
+    title = route.meta.title
   } else {
-    document.title = 'Lamp'
+    title = 'Lamp'
   }
+
+  document.title = shortenText(title, { stripTags: true, maxLength: 125 })
 }
 
 /**

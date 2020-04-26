@@ -227,8 +227,13 @@ export function plainText (html) {
 }
 
 /**
+ * Shorten a text string. By default the string is shortend to the maximal
+ * length 80.
+ *
  * @param {String} text
  * @param {Object} options
+ * @property {Boolean} stripTags
+ * @property {Number} maxLength
  *
  * @returns {String}
  */
