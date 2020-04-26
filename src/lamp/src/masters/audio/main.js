@@ -107,6 +107,11 @@ export default {
         mediaAsset: mediaFile
       }
     },
+    titleFromProps ({ props, propsMain }) {
+      if (props.title) return props.title
+      const asset = propsMain.mediaAsset
+      if (asset.title) return asset.title
+    },
     // no enterSlide hook: $media is not ready yet.
     async afterSlideNoChangeOnComponent () {
       if (!this.isPublic) return
