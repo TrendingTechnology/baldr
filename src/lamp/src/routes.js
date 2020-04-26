@@ -1,7 +1,7 @@
 /**
  * Setup vue router and define the routes.
  *
- * @module @bldr/lamp/routes-mapping
+ * @module @bldr/lamp/routes
  */
 
 import Router from 'vue-router'
