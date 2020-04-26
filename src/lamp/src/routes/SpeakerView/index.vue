@@ -12,13 +12,22 @@
 
     <grid-layout :slides="presentation.slides"/>
 
+    <router-link
+      class="open-public-view"
+      :to="publicViewRoute"
+      target="_blank"
+      title="zusätzliche Präsentations-Ansicht öffnen"
+    >
+      <plain-icon name="presentation"/>
+    </router-link>
+
     <cursor-arrows/>
   </div>
 </template>
 
 <script>
 import { createNamespacedHelpers } from 'vuex'
-import { routerGuards } from '@/routing.js'
+import { routerGuards, switchRouterView } from '@/routing.js'
 import CursorArrows from '@/components/CursorArrows.vue'
 import GridLayout from '@/components/SlidesPreview/GridLayout.vue'
 import PresentationTitle from '@/components/PresentationTitle'
@@ -52,6 +61,9 @@ export default {
     },
     nextStepNo () {
       return this.nextSlideRouterParams.stepNo
+    },
+    publicViewRoute () {
+      return switchRouterView(this.$route)
     }
   },
   methods: {
@@ -103,7 +115,7 @@ export default {
     .vc_presentation_title {
       ul, h1, h2, nav {
         display: inline;
-        font-size: 0.8em;
+        font-size: 0.7em;
         margin: 0;
         padding: 0;
       }
@@ -128,6 +140,12 @@ export default {
 
     .vc_play_button {
       font-size: 1em;
+    }
+
+    .open-public-view {
+      bottom: 0.3em;
+      left: 0.3em;
+      position: fixed;
     }
   }
 </style>

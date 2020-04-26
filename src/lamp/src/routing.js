@@ -2,6 +2,7 @@
  * This module bundles all routing related code.
  *
  * - Set the document title by the current route.
+ * - Provide router guard for some components.
  *
  * @module @bldr/lamp/routing
  */
@@ -116,11 +117,13 @@ function isSpeakerRoute (route) {
 }
 
 /**
+ * If the route is `public` turn it into `speaker` and vice versa.
+ *
  * @param {module:@bldr/lamp/routing~route} route
  *
  * @returns {Object} A deep copy of the route object.
  */
-function switchRouterView (route) {
+export function switchRouterView (route) {
   const newRoute = {}
   newRoute.name = counterParts[route.name]
   newRoute.params = Object.assign({}, route.params)

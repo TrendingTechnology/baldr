@@ -23,13 +23,14 @@ const config = core.bootstrapConfig()
  * Launch the web socket server.
  */
 function main () {
-  const wss = new WebSocket.Server({ port: config.wire.port })
+  const webSocketServer = new WebSocket.Server({ port: config.wire.port })
 
-  wss.on('connection', function connection (ws) {
-    ws.on('message', function incoming (message) {
+  webSocketServer.on('connection', function connection (webSocket) {
+    webSocket.on('message', function incoming (message) {
       console.log('received: %s', message)
-      wss.clients.forEach(function each (client) {
-        if (client !== ws && client.readyState === WebSocket.OPEN) {
+      // https://github.com/websockets/ws#server-broadcast
+      webSocketServer.clients.forEach(function each (client) {
+        if (client !== webSocket && client.readyState === WebSocket.OPEN) {
           client.send(message)
         }
       })
