@@ -149,7 +149,7 @@ async function loadPresentationById (vm, presId) {
  * Open a presentation by its ID.
  *
  * @param {Object} vm - Vue component instance.
- * @param {module:@bldr/lamp/route} route
+ * @param {module:@bldr/lamp/routing/route} route
  */
 export async function loadPresentationByRoute (vm, route) {
   try {

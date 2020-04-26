@@ -177,14 +177,6 @@ export const router = new Router({
 installDocumentTitleUpdater(router)
 
 /**
- * Routes can be divided into two categories: A public route (visible for
- * the audience) and speaker router (visible only for the speaker). Possible
- * values: `public` or `speaker`.
- *
- * @typedef {string} view
- */
-
-/**
  *
  */
 export const views = {
@@ -199,7 +191,7 @@ export const views = {
 }
 
 /**
- * @returns {module:@bldr/lamp/routes~view}
+ * @returns {module:@bldr/lamp/routing~view}
  */
 export function getViewFromRoute () {
   const name = router.currentRoute.name

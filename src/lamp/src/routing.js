@@ -6,10 +6,36 @@
  * @module @bldr/lamp/routing
  */
 
+/**
+ * The route object of the Vue Router package.
+ *
+ * @see {@link https://router.vuejs.org/api/#the-route-object Vue Router Api documentation}
+ *
+ * @typedef route
+ */
+
+/**
+ * An instance of the Vue Router.
+ *
+ * @see {@link https://router.vuejs.org/api/#router-construction-options Vue Router Api documentation}
+ *
+ * @typedef router
+ */
+
+/**
+ * Routes can be divided into two categories: A public route (visible for
+ * the audience) and speaker router (visible only for the speaker). Possible
+ * values: `public` or `speaker`.
+ *
+ * @typedef {string} view
+ */
+
 import store from '@/store/index.js'
 
+/**
+ * @param {module:@bldr/lamp/routing/route} route
+ */
 function setDocumentTitleByRoute (route) {
-  console.log(route)
   const slide = store.getters['lamp/slide']
   const presentation = store.getters['lamp/presentation']
 
@@ -22,6 +48,9 @@ function setDocumentTitleByRoute (route) {
   }
 }
 
+/**
+ * @param {module:@bldr/lamp/routing/route} router
+ */
 export function installDocumentTitleUpdater (router) {
   router.afterEach((to, from) => {
     setDocumentTitleByRoute(to)
