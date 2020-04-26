@@ -13,7 +13,8 @@ import { WrappedSamples } from '@bldr/vue-plugin-media'
 import { markupToHtml } from '@/lib'
 import { masters } from '@/masters.js'
 import store from '@/store/index.js'
-import { router, views } from '@/routes.js'
+import { router } from '@/routes.js'
+import { routerViews } from '@/routing.js'
 import vue from '@/main.js'
 
 /**
@@ -543,7 +544,7 @@ export class Slide {
    * @returns {Object}
    */
   routerLocation (view = 'public') {
-    const routeNames = views[view]
+    const routeNames = routerViews[view]
     const presentation = store.getters['lamp/presentation']
     let name
     const params = { presId: presentation.id }

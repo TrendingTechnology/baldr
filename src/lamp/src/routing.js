@@ -31,6 +31,7 @@
  */
 
 import store from '@/store/index.js'
+import { router } from '@/routes.js'
 
 /* globals document */
 
@@ -57,4 +58,29 @@ export function installDocumentTitleUpdater (router) {
   router.afterEach((to, from) => {
     setDocumentTitleByRoute(to)
   })
+}
+
+/**
+ * @type {Object}
+ */
+export const routerViews = {
+  public: {
+    slideNo: 'slide',
+    stepNo: 'slide-step-no'
+  },
+  speaker: {
+    slideNo: 'speaker-view',
+    stepNo: 'speaker-view-step-no'
+  }
+}
+
+/**
+ * @returns {module:@bldr/lamp/routing~view}
+ */
+export function getViewFromRoute () {
+  const name = router.currentRoute.name
+  if (name === 'speaker-view' || name === 'speaker-view-step-no') {
+    return 'speaker'
+  }
+  return 'public'
 }
