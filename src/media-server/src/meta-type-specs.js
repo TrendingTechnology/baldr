@@ -195,7 +195,8 @@ const general = {
       },
       wikidata: {
         // YouTube-Video-Kennung
-        fromClaim: 'P1651'
+        fromClaim: 'P1651',
+        format: 'formatSingleValue'
       }
     },
     // tmp property needed to generate id prefix
