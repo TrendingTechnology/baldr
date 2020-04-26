@@ -13,7 +13,7 @@ import { WrappedSamples } from '@bldr/vue-plugin-media'
 import { markupToHtml } from '@/lib'
 import { masters } from '@/masters.js'
 import store from '@/store/index.js'
-import router, { views } from '@/router.js'
+import { router, views } from '@/routes.js'
 import vue from '@/main.js'
 
 /**

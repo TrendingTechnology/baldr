@@ -1,7 +1,7 @@
 /**
- * Setup vue router
+ * Setup vue router and define the routes.
  *
- * @module @bldr/lamp/router
+ * @module @bldr/lamp/routes
  */
 
 import Router from 'vue-router'
@@ -170,7 +170,7 @@ const routes = [
   }
 ]
 
-const router = new Router({
+export const router = new Router({
   routes
 })
 
@@ -210,7 +210,7 @@ export const views = {
 }
 
 /**
- * @returns {module:@bldr/lamp/router~view}
+ * @returns {module:@bldr/lamp/routes~view}
  */
 export function getViewFromRoute () {
   const name = router.currentRoute.name
