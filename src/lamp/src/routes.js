@@ -5,8 +5,8 @@
  */
 
 import Router from 'vue-router'
-import store from '@/store/index.js'
 import Vue from 'vue'
+import { installDocumentTitleUpdater } from '@/routing.js'
 
 // Components.
 import AdHocCamera from '@/routes/AdHocCamera.vue'
@@ -174,18 +174,7 @@ export const router = new Router({
   routes
 })
 
-router.afterEach((to, from) => {
-  const slide = store.getters['lamp/slide']
-  const presentation = store.getters['lamp/presentation']
-
-  if (slide && slide.title && (to.name === 'slide' || to.name === 'slide-step-no')) {
-    document.title = `${presentation.title}: Folie Nr. ${slide.no} ${slide.title}`
-  } else if (to.meta && to.meta.title) {
-    document.title = to.meta.title
-  } else {
-    document.title = 'Lamp'
-  }
-})
+installDocumentTitleUpdater(router)
 
 /**
  * Routes can be divided into two categories: A public route (visible for
