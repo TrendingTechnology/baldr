@@ -32,6 +32,8 @@
 
 import store from '@/store/index.js'
 
+/* globals document */
+
 /**
  * @param {module:@bldr/lamp/routing/route} route
  */
