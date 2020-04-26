@@ -32,13 +32,12 @@
 </template>
 
 <script>
+import { routerGuards } from '@/routing.js'
 import DisplayController from './DisplayController.vue'
 import GridLayout from '@/components/SlidesPreview/GridLayout.vue'
 import ListLayout from './ListLayout.vue'
-import PresentationTitle from '@/components/PresentationTitle'
 import LoadingIcon from '@/components/LoadingIcon'
-
-import { routerGuards } from '@/lib.js'
+import PresentationTitle from '@/components/PresentationTitle'
 
 import { createNamespacedHelpers } from 'vuex'
 const { mapGetters } = createNamespacedHelpers('lamp')

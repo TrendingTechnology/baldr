@@ -18,7 +18,7 @@
 
 <script>
 import { createNamespacedHelpers } from 'vuex'
-import { routerGuards } from '@/lib.js'
+import { routerGuards } from '@/routing.js'
 import CursorArrows from '@/components/CursorArrows.vue'
 import GridLayout from '@/components/SlidesPreview/GridLayout.vue'
 import PresentationTitle from '@/components/PresentationTitle'
