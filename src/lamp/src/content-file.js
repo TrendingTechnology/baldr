@@ -580,15 +580,17 @@ export class Slide {
  */
 function parseSlidesRecursive (slidesRaw, slidesFlat, slidesTree, level = 1) {
   for (const slideRaw of slidesRaw) {
-    const childSlides = slideRaw.slides
-    delete slideRaw.slides
-    const slide = new Slide(slideRaw)
-    slidesFlat.push(slide)
-    slidesTree.push(slide)
-    slide.no = slidesFlat.length
-    slide.level = level
-    if (childSlides && Array.isArray(childSlides)) {
-      parseSlidesRecursive(childSlides, slidesFlat, slide.slides, level + 1)
+    if (slideRaw.state !== 'absent') {
+      const childSlides = slideRaw.slides
+      delete slideRaw.slides
+      const slide = new Slide(slideRaw)
+      slidesFlat.push(slide)
+      slidesTree.push(slide)
+      slide.no = slidesFlat.length
+      slide.level = level
+      if (childSlides && Array.isArray(childSlides)) {
+        parseSlidesRecursive(childSlides, slidesFlat, slide.slides, level + 1)
+      }
     }
   }
 }
