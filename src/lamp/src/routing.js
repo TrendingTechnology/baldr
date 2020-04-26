@@ -39,6 +39,8 @@
  * @typedef {string} view
  */
 
+// import { deepCopy } from '@bldr/core-browser'
+
 import store from '@/store/index.js'
 import { router } from '@/routes.js'
 
@@ -81,6 +83,49 @@ export const routerViews = {
     slideNo: 'speaker-view',
     stepNo: 'speaker-view-step-no'
   }
+}
+
+/**
+ *
+ * @param {module:@bldr/lamp/routing.routerViews} routerViews
+ */
+function generateCounterParts (routerViews) {
+  const counterParts = {}
+  for (const viewName in routerViews) {
+    if (viewName === 'public') {
+      counterParts[routerViews[viewName].slideNo] = routerViews.speaker.slideNo
+      counterParts[routerViews[viewName].stepNo] = routerViews.speaker.stepNo
+    } else {
+      counterParts[routerViews[viewName].slideNo] = routerViews.public.slideNo
+      counterParts[routerViews[viewName].stepNo] = routerViews.public.stepNo
+    }
+  }
+  return counterParts
+}
+
+// const publicRouteNames = Object.values(routerViews.public)
+const speakerRouteNames = Object.values(routerViews.speaker)
+
+const counterParts = generateCounterParts(routerViews)
+
+/**
+ * @param {module:@bldr/lamp/routing~route} route
+ */
+function isSpeakerRoute (route) {
+  return speakerRouteNames.includes(route.name)
+}
+
+/**
+ * @param {module:@bldr/lamp/routing~route} route
+ *
+ * @returns {Object} A deep copy of the route object.
+ */
+function switchRouterView (route) {
+  const newRoute = {}
+  newRoute.name = counterParts[route.name]
+  newRoute.params = Object.assign({}, route.params)
+  newRoute.query = Object.assign({}, route.query)
+  return newRoute
 }
 
 /**
@@ -129,7 +174,7 @@ async function loadPresentationById (vm, presId) {
 }
 
 /**
- * Open a presentation by its ID.
+ * Load presentation and set navigation list numbers.
  *
  * @param {module:@bldr/lamp/routing~vm} vm
  * @param {module:@bldr/lamp/routing~route} route
@@ -152,9 +197,20 @@ async function loadPresentationByRoute (vm, route) {
 }
 
 /**
+ * @param {module:@bldr/lamp/routing~vm} vm
+ * @param {module:@bldr/lamp/routing~route} route
+ */
+async function actOnRouteChange (vm, route) {
+  await loadPresentationByRoute(vm, route)
+  if (isSpeakerRoute(route)) {
+    const publicRoute = switchRouterView(route)
+    vm.$socket.sendObj({ route: publicRoute })
+  }
+}
+
+/**
  * Router guards for some components which can be accessed by router links.
- *
- * Components which use this router guards:
+ * This components use the router guards:
  *
  * - `SlidePreview`
  * - `SlideView`
@@ -165,12 +221,12 @@ export const routerGuards = {
   // Without this hook there are webpack errors.
   beforeRouteEnter (to, from, next) {
     next(vm => {
-      loadPresentationByRoute(vm, to)
+      actOnRouteChange(vm, to)
     })
   },
   // To be able to navigate throught the slide (only the params) are changing.
   beforeRouteUpdate (to, from, next) {
-    loadPresentationByRoute(this, to)
+    actOnRouteChange(this, to)
     // To update the URL in the browser URL textbox.
     next()
   }

@@ -18,3 +18,15 @@
  *
  * @module @bldr/lamp/remote-control
  */
+
+import { router } from '@/routes.js'
+
+/**
+ * @param {Object} message
+ */
+export function receiveSocketMessage (message) {
+  const msg = JSON.parse(message.data)
+  if (msg.route) {
+    router.push(msg.route)
+  }
+}

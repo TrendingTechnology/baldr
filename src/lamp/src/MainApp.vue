@@ -38,6 +38,7 @@
 <script>
 import packageJson from '@/../package.json'
 import { AppInfo } from '@bldr/vue-plugin-components-collection'
+import { receiveSocketMessage } from '@/remote-control.js'
 
 import { createNamespacedHelpers } from 'vuex'
 const { mapActions, mapGetters } = createNamespacedHelpers('lamp')
@@ -116,10 +117,6 @@ export default {
           create
         }
       })
-    },
-    async receiveRemoteControls (message) {
-      const params = JSON.parse(message.data)
-      this.$gotToPresRoute(params)
     }
   },
   mounted: function () {
@@ -339,7 +336,7 @@ export default {
       }
     })
 
-    this.$options.sockets.onmessage = this.receiveRemoteControls
+    this.$options.sockets.onmessage = receiveSocketMessage
   }
 }
 </script>
