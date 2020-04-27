@@ -228,11 +228,13 @@ const cover = {
   detectTypeByPath: new RegExp('^.*/HB/.*(png|jpg)$'),
   props: {
     title: {
+      title: 'Titel',
       format: function (value) {
         return value.replace(/^(Cover-Bild: )?/, 'Cover-Bild: ')
       }
     },
     source: {
+      title: 'Quelle (HTTP-URL)',
       validate (value) {
         return value.match(/^https?.*$/)
       }
