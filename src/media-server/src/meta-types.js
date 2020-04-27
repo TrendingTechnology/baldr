@@ -401,6 +401,7 @@ function removeProps (data, typeSpec) {
  * @returns {Object}
  */
 function processByType (data, typeName) {
+  console.log(typeName)
   if (!typeSpecs[typeName]) {
     throw new Error(`Unkown meta type name: “${typeName}”`)
   }
@@ -440,7 +441,7 @@ function process (data) {
   if (!data.metaTypes) {
     data.metaTypes = 'general'
   } else if (data.metaTypes.indexOf('general') === -1) {
-    data.metaTypes = '${data.metaTypes},general'
+    data.metaTypes = `${data.metaTypes},general`
   }
   if (data.metaTypes) {
     for (const typeName of data.metaTypes.split(',')) {

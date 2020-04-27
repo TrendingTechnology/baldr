@@ -364,7 +364,7 @@ const group = {
   abbreviation: 'GR',
   basePath: path.join(config.mediaServer.basePath, 'Gruppen'),
   relPath: function ({ typeData, typeSpec }) {
-    return path.join(this.id.substr(0, 1).toLowerCase(), this.id, `main.${typeData.extension}`)
+    return path.join(typeData.id.substr(0, 1).toLowerCase(), typeData.id, `main.${typeData.extension}`)
   },
   detectTypeByPath: function (typeSpec) {
     return new RegExp('^' + typeSpec.basePath + '/.*')
@@ -450,7 +450,7 @@ const instrument = {
   abbreviation: 'IN',
   basePath: path.join(config.mediaServer.basePath, 'Instrumente'),
   relPath: function ({ typeData, typeSpec }) {
-    const id = this.id.replace(/^IN_/, '')
+    const id = typeData.id.replace(/^IN_/, '')
     return path.join(id.substr(0, 1).toLowerCase(), id, `main.${typeData.extension}`)
   },
   detectTypeByPath: function (typeSpec) {
@@ -512,7 +512,7 @@ const person = {
   abbreviation: 'PR',
   basePath: path.join(config.mediaServer.basePath, 'Personen'),
   relPath: function ({ typeData, typeSpec }) {
-    return path.join(this.id.substr(0, 1).toLowerCase(), this.id, `main.${typeData.extension}`)
+    return path.join(typeData.id.substr(0, 1).toLowerCase(), typeData.id, `main.${typeData.extension}`)
   },
   detectTypeByPath: function (typeSpec) {
     return new RegExp('^' + typeSpec.basePath + '/.*')
