@@ -402,7 +402,7 @@ export function formatWikipediaUrl (nameSpace) {
  *
  * @returns {String}
  */
-export function formatBrainzRecUrl (recordingId) {
+export function formatMusicbrainzRecordingUrl (recordingId) {
   return `https://musicbrainz.org/recording/${recordingId}`
 }
 
@@ -415,12 +415,12 @@ export function formatBrainzRecUrl (recordingId) {
  *
  * @returns {String}
  */
-export function formatBrainzWorkUrl (workId) {
+export function formatMusicbrainzWorkUrl (workId) {
   return `https://musicbrainz.org/work/${workId}`
 }
 
 /**
- * https://youtu.be/CQYypFMTQcE
+ * `https://youtu.be/CQYypFMTQcE`
  *
  * @param {String} id - The id of a Youtube video (for example CQYypFMTQcE).
  *
@@ -428,6 +428,30 @@ export function formatBrainzWorkUrl (workId) {
  */
 export function formatYoutubeUrl (id) {
   return `https://youtu.be/${id}`
+}
+
+/**
+ * `https://imslp.org/wiki/La_clemenza_di_Tito_(Wagenseil,_Georg_Christoph)`
+ *
+ * @param {String} id - For example
+ *   `La_clemenza_di_Tito_(Wagenseil,_Georg_Christoph)`
+ *
+ * @returns {String}
+ */
+export function formatImslpUrl (id) {
+  return `https://imslp.org/wiki/${id}`
+}
+
+/**
+ * `https://commons.wikimedia.org/wiki/File:Cheetah_(Acinonyx_jubatus)_cub.jpg`
+ *
+ * @param {String} fileName - For example
+ *   `Cheetah_(Acinonyx_jubatus)_cub.jpg`
+ *
+ * @returns {String}
+ */
+export function formatWikicommonsUrl (fileName) {
+  return `https://commons.wikimedia.org/wiki/File:${fileName}`
 }
 
 /**
@@ -626,8 +650,10 @@ export function getExtension (filePath) {
 export const mediaUriRegExp = new RegExp('((id|uuid):(([a-zA-Z0-9-_]+)(#([a-zA-Z0-9-_]+))?))')
 
 export default {
-  formatBrainzRecUrl,
-  formatBrainzWorkUrl,
+  formatImslpUrl,
+  formatMusicbrainzRecordingUrl,
+  formatMusicbrainzWorkUrl,
+  formatWikicommonsUrl,
   formatWikidataUrl,
   formatWikipediaUrl,
   formatYoutubeUrl,

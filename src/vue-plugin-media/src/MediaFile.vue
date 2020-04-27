@@ -42,7 +42,7 @@
         </li>
 
         <li v-if="mediaFile.musicbrainzRecordingId">
-          <a :href="formatBrainzRecUrl(mediaFile.musicbrainzRecordingId)">MusicBrainz</a>
+          <a :href="formatMusicbrainzRecordingUrl(mediaFile.musicbrainzRecordingId)">MusicBrainz</a>
         </li>
       </ul>
 
@@ -52,7 +52,7 @@
 
 <script>
 import PlayButton from './PlayButton.vue'
-import { formatBrainzRecUrl, formatYoutubeUrl } from '@bldr/core-browser'
+import { formatMusicbrainzRecordingUrl, formatYoutubeUrl } from '@bldr/core-browser'
 
 export default {
   name: 'MediaFile',
@@ -80,7 +80,7 @@ export default {
       })
     },
     formatYoutubeUrl,
-    formatBrainzRecUrl
+    formatMusicbrainzRecordingUrl
   },
   async mounted () {
     if (!this.mediaFile) await this.$media.resolve(this.uri)

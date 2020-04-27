@@ -1,16 +1,22 @@
 <template>
   <div class="vc_external_sites">
-    <a v-if="wikipedia" :href="wikipedia" title="Wikipedia" target="_blank">
-      <plain-icon name="wikipedia"/>
+    <a v-if="imslp" :href="imslp" title="IMSLP (Petrucci Music Library)" target="_blank">
+      <plain-icon name="imslp"/>
+    </a>
+    <a v-if="musicbrainzRecordingId" :href="musicbrainzRecordingId" title="MusicBrainz (Recording)" target="_blank">
+      <plain-icon name="musicbrainz-recording"/>
+    </a>
+    <a v-if="musicbrainzWorkId" :href="musicbrainzWorkId" title="MusicBrainz (Work)" target="_blank">
+      <plain-icon name="musicbrainz-work"/>
+    </a>
+    <a v-if="wikicommons" :href="wikicommons" title="Wikicommons" target="_blank">
+      <plain-icon name="wikicommons"/>
     </a>
     <a v-if="wikidata" :href="wikidata" title="Wikidata" target="_blank">
       <plain-icon name="wikidata"/>
     </a>
-    <a v-if="musicbrainzRecordingId" :href="musicbrainzRecordingId" title="MusicBrainz (Recording)" target="_blank">
-      <plain-icon name="musicbrainz"/>
-    </a>
-    <a v-if="musicbrainzWorkId" :href="musicbrainzWorkId" title="MusicBrainz (Work)" target="_blank">
-      <plain-icon name="musicbrainz"/>
+    <a v-if="wikipedia" :href="wikipedia" title="Wikipedia" target="_blank">
+      <plain-icon name="wikipedia"/>
     </a>
     <a v-if="youtube" :href="youtube" title="Youtube" target="_blank">
       <plain-icon name="youtube"/>
@@ -29,9 +35,33 @@ export default {
     }
   },
   computed: {
-    wikipedia () {
-      if (this.asset.wikipedia) {
-        return core.formatWikipediaUrl(this.asset.wikipedia)
+    imlsp () {
+      if (this.asset.imslp) {
+        return core.formatImslpUrl(this.asset.imslp)
+      }
+      return ''
+    },
+    musicbrainzRecordingId () {
+      if (this.asset.musicbrainzRecordingId) {
+        return core.formatMusicbrainzRecordingUrl(this.asset.musicbrainzRecordingId)
+      }
+      return ''
+    },
+    musicbrainzWorkId () {
+      if (this.asset.musicbrainzWorkId) {
+        return core.formatMusicbrainzWorkUrl(this.asset.musicbrainzWorkId)
+      }
+      return ''
+    },
+    wikicommons () {
+      if (this.asset.wikicommons) {
+        return core.formatWikicommonsUrl(this.asset.wikicommons)
+      }
+      for (const prop in this.asset) {
+        const value = this.asset[prop]
+        if (value && typeof value === 'string' && value.match(/^wikicommons:/)) {
+          return core.formatWikicommonsUrl(value.replace(/^wikicommons:/, ''))
+        }
       }
       return ''
     },
@@ -41,15 +71,9 @@ export default {
       }
       return ''
     },
-    musicbrainzRecordingId () {
-      if (this.asset.musicbrainzRecordingId) {
-        return core.formatBrainzRecUrl(this.asset.musicbrainzRecordingId)
-      }
-      return ''
-    },
-    musicbrainzWorkId () {
-      if (this.asset.musicbrainzWorkId) {
-        return core.formatBrainzWorkUrl(this.asset.musicbrainzWorkId)
+    wikipedia () {
+      if (this.asset.wikipedia) {
+        return core.formatWikipediaUrl(this.asset.wikipedia)
       }
       return ''
     },
