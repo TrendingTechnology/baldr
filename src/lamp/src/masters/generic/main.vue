@@ -1,14 +1,27 @@
 <template>
-  <div
-    class="vc_generic_master"
-    v-html="markupCurrent"
-  />
+  <div class="vc_generic_master">
+    <span
+      ref="contentWrapper"
+      class="content-wrapper"
+      v-html="markupCurrent"
+    />
+  </div>
 </template>
 
 <script>
 import steps from '@/steps.js'
 import { createNamespacedHelpers } from 'vuex'
 const { mapGetters } = createNamespacedHelpers('lamp')
+
+
+function adjustSlideSize (rootElement, rootContentRect, wrapperElement) {
+  const rootWidth = rootContentRect.width
+  const rootHeight = rootContentRect.height
+
+  const wrapperRect = wrapperElement.getBoundingClientRect()
+  const wrapperWidth = wrapperRect.width
+  const wrapperHeight = wrapperRect.height
+}
 
 const CHARACTERS_ON_SLIDE = 400
 
@@ -45,6 +58,17 @@ export default {
       }
       return this.markup[0]
     }
+  },
+  mounted () {
+    const ro = new ResizeObserver(entries => {
+      console.log(entries)
+      // const entry = entries[0]
+      // console.log(entry)
+      // adjustSlideSize(this.$el, entry.contentRect, this.$refs.contentWrapper)
+    })
+    ro.observe(this.$el)
+    console.log(this.$refs.contentWrapper)
+    ro.observe(this.$refs.contentWrapper)
   }
 }
 </script>
