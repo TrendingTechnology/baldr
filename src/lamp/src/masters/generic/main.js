@@ -64,6 +64,24 @@ function splitHtmlintoChunks (htmlString, charactersOnSlide) {
   return chunks
 }
 
+// function adjustSlideSize (rootElement, wrapperElement) {
+//   let size = 1
+
+//   const rootWidth = rootElement.clientWidth
+//   const rootHeight = rootElement.clientHeight
+
+//   let wrapperRect, wrapperWidth, wrapperHeight
+
+//   do {
+//     wrapperRect = wrapperElement.getBoundingClientRect()
+//     wrapperWidth = wrapperRect.width
+//     wrapperHeight = wrapperRect.height
+//     rootElement.style.fontSize = `${size}em`
+//     size += 0.2
+//   } while (rootWidth > wrapperWidth * 1.5 && rootHeight > wrapperHeight * 1.5)
+//   rootElement.style.fontSize = `${size - 0.2}em`
+// }
+
 export default {
   title: 'Folie',
   props: {
@@ -166,6 +184,7 @@ export default {
       return output.join(' | ')
     },
     afterSlideNoChangeOnComponent ({ newSlideNo }) {
+      // adjustSlideSize(this.$el, this.$refs.contentWrapper)
       if (this.stepMode) {
         this.domSteps = new steps.DomSteps({
           subsetSelector: this.stepSubset,
