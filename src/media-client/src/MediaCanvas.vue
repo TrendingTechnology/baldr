@@ -8,7 +8,7 @@
 <script>
 
 export default {
-  name: 'MediaCanvas',
+  name: 'MediaAsset',
   methods: {
     close () {
       this.$media.canvas.hide()

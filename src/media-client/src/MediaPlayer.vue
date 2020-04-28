@@ -5,20 +5,20 @@
       <div class="preview-container">
         <img
           class="preview-image"
-          v-if="mediaFile && mediaFile.previewHttpUrl"
-          :src="mediaFile.previewHttpUrl"
+          v-if="asset && asset.previewHttpUrl"
+          :src="asset.previewHttpUrl"
         />
         <div
           :class="{ fullscreen: videoFullscreen }"
-          v-show="mediaFile && mediaFile.type === 'video'"
+          v-show="asset && asset.type === 'video'"
           class="video-container"
           ref="videoContainer"
           @click="videoToggleFullscreen"
         />
       </div>
 
-      <div class="meta-data" v-if="mediaFile">
-        {{ no }}. {{ samplePlaying.title }} ({{ mediaFile.titleSafe }})
+      <div class="meta-data" v-if="asset">
+        {{ no }}. {{ samplePlaying.title }} ({{ asset.titleSafe }})
         {{ currentTime }} /
         {{ duration }}
         <br/>
@@ -80,8 +80,8 @@ export default {
     samplePlaying () {
       return this.$store.getters['media/samplePlayListCurrent']
     },
-    mediaFile () {
-      if (this.samplePlaying) return this.samplePlaying.mediaFile
+    asset () {
+      if (this.samplePlaying) return this.samplePlaying.asset
     },
     mediaElement () {
       if (this.samplePlaying) return this.samplePlaying.mediaElement
@@ -105,7 +105,7 @@ export default {
         this.paused = true
       }
       if (this.videoElement) this.videoElement.style.display = 'none'
-      if (this.mediaFile.type === 'video') {
+      if (this.asset.type === 'video') {
         // Make a canvas clone see https://stackoverflow.com/a/24532111/10193818
         //this.mediaElement.style.display = 'block'
         //this.$refs.videoContainer.appendChild(this.mediaElement)

@@ -92,7 +92,7 @@ export default {
 
       let previewHttpUrl
       if (props.cover) {
-        const coverFile = this.$store.getters['media/mediaFileByUri'](props.cover)
+        const coverFile = this.$store.getters['media/assetByUri'](props.cover)
         previewHttpUrl = coverFile.httpUrl
       } else if ('previewHttpUrl' in mediaFile) {
         previewHttpUrl = mediaFile.previewHttpUrl

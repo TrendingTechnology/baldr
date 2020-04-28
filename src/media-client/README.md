@@ -17,5 +17,5 @@ On every Vue instance:
 ```js
 this.$media.resolve('id:Haydn')
 
-const mediaFile = this.$store.getters['media/mediaFileByUri']('id:Haydn')
+const asset = this.$store.getters['media/assetByUri']('id:Haydn')
 ```

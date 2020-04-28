@@ -55,7 +55,7 @@ export default {
       if (muliPartSelection) {
         scoreMediaFile = muliPartSelection
       } else {
-        scoreMediaFile = this.$store.getters['media/mediaFileByUri'](props.score)
+        scoreMediaFile = this.$store.getters['media/assetByUri'](props.score)
       }
 
       return {

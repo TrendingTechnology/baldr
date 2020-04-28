@@ -39,11 +39,11 @@ export default {
       return props.imageUri
     },
     calculateStepCount ({ props }) {
-      const image = this.$store.getters['media/mediaFileByUri'](props.imageUri)
+      const image = this.$store.getters['media/assetByUri'](props.imageUri)
       return image.multiPartCountActual
     },
     collectPropsMain (props) {
-      const image = this.$store.getters['media/mediaFileByUri'](props.imageUri)
+      const image = this.$store.getters['media/assetByUri'](props.imageUri)
       return {
         image
       }

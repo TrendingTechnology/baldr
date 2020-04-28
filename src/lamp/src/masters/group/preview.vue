@@ -20,7 +20,7 @@ export default {
   },
   computed: {
     group () {
-      return this.$store.getters['media/mediaFileByUri'](this.mainImage)
+      return this.$store.getters['media/assetByUri'](this.mainImage)
     }
   }
 }

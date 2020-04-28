@@ -48,7 +48,7 @@ export default {
       return props.src
     },
     collectPropsMain (props) {
-      const mediaFile = this.$store.getters['media/mediaFileByUri'](props.src)
+      const mediaFile = this.$store.getters['media/assetByUri'](props.src)
 
       const grab = new GrabFromObjects(props, mediaFile)
 

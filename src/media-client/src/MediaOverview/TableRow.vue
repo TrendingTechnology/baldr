@@ -1,18 +1,18 @@
 <template>
   <tr class="vc_table_row">
-    <td><preview-image @click.native="play(mediaFile.uri)" :media-file="mediaFile"/></td>
+    <td><preview-image @click.native="play(asset.uri)" :media-file="asset"/></td>
     <td>
       <router-link
         title="Medien-Datei-Überblick öffnen"
         :to="{
           name: 'media-file',
           params: {
-            uriScheme: mediaFile.uriScheme,
-            uriAuthority: mediaFile.uriAuthority
+            uriScheme: asset.uriScheme,
+            uriAuthority: asset.uriAuthority
           }
         }"
       >
-        {{ mediaFile.titleSafe }}
+        {{ asset.titleSafe }}
       </router-link>
     </td>
     <td class="shortcut">
@@ -27,7 +27,7 @@
     <td>
       <material-icon
         name="close"
-        @click.native="removeMediaFile(mediaFile)"
+        @click.native="removeAsset(asset)"
       />
     </td>
   </tr>
@@ -44,12 +44,12 @@ export default {
   components: {
     PreviewImage
   },
-  props: ['mediaFile'],
+  props: ['asset'],
   computed: {
     dimension () {
-      const file = this.mediaFile
+      const file = this.asset
       let dimension
-      if (this.mediaFile.type === 'image') {
+      if (this.asset.type === 'image') {
         dimension = `${file.mediaElement.width} x ${file.mediaElement.height}`
       } else {
         dimension = formatDuration(file.mediaElement.duration)
@@ -57,10 +57,10 @@ export default {
       return dimension
     },
     shortcuts () {
-      if (this.mediaFile.shortcut) {
-        return [{ shortcut: this.mediaFile.shortcut }]
+      if (this.asset.shortcut) {
+        return [{ shortcut: this.asset.shortcut }]
       }
-      const samples = this.mediaFile.samples
+      const samples = this.asset.samples
       if (!samples) return []
       if (Object.keys(samples).length === 1) {
         return [{ shortcut: Object.values(samples)[0].shortcut }]
@@ -73,7 +73,7 @@ export default {
       this.$media.player.load(uri)
       this.$media.player.start()
     },
-    ...mapActions(['removeMediaFile'])
+    ...mapActions(['removeAsset'])
   }
 }
 </script>

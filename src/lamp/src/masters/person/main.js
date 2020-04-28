@@ -60,7 +60,7 @@ export default {
       }
     },
     collectPropsMain (props) {
-      const image = this.$store.getters['media/mediaFileByUri'](props.image)
+      const image = this.$store.getters['media/assetByUri'](props.image)
       const grab = new GrabFromObjects(props, image, false)
       const result = grab.multipleProperties(
         ['firstname', 'lastname', 'name', 'birth', 'death', 'shortBiography', 'wikipedia', 'wikidata']

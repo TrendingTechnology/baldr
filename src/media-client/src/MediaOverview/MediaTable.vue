@@ -19,9 +19,9 @@
       </thead>
       <tbody>
         <table-row
-          v-for="mediaFile in mediaFilesByType(type)"
-          :key="mediaFile.uri"
-          :media-file="mediaFile"
+          v-for="asset in assetsByType(type)"
+          :key="asset.uri"
+          :media-file="asset"
         />
       </tbody>
     </table>
@@ -39,8 +39,8 @@ export default {
   components: {
     TableRow
   },
-  props: ['mediaFiles', 'type'],
-  computed: mapGetters(['mediaFilesByType', 'typeCount']),
+  props: ['assets', 'type'],
+  computed: mapGetters(['assetsByType', 'typeCount']),
   methods: {
     typeToColor (type) {
       return assetTypes.typeToColor(type)

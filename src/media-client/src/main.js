@@ -12,7 +12,7 @@ import { formatMultiPartAssetFileName, AssetTypes, selectSubset, mediaUriRegExp 
 import DynamicSelect from '@bldr/vue-plugin-dynamic-select'
 
 // Vue components
-import ComponentMediaFile from './MediaFile.vue'
+import ComponentClientMediaAsset from './MediaAsset.vue'
 import ComponentMediaOverview from './MediaOverview/index.vue'
 // import ComponentMediaPlayer from './MediaPlayer.vue'
 import ComponentHorizontalPlayButtons from './HorizontalPlayButtons.vue'
@@ -442,7 +442,7 @@ class CustomEvents {
  */
 class Sample {
   /**
-   * @param {MediaFile} mediaFile
+   * @param {ClientMediaAsset} asset
    * @param {object} specs
    * @property {String} specs.title
    * @property {String|Number} specs.id
@@ -456,7 +456,7 @@ class Sample {
    * @property {String|Number} specs.endTime - The end time in seconds.
    * @property {String} specs.shortcut - A custom shortcut
    */
-  constructor (mediaFile, { title, id, startTime, fadeIn, duration, fadeOut, endTime, shortcut }) {
+  constructor (asset, { title, id, startTime, fadeIn, duration, fadeOut, endTime, shortcut }) {
     /**
      * We fade in very short and smoothly to avoid audio artefacts.
      *
@@ -481,9 +481,9 @@ class Sample {
     /**
      * The parent media file object.
      *
-     * @type {module:@bldr/media-client.MediaFile}
+     * @type {module:@bldr/media-client.ClientMediaAsset}
      */
-    this.mediaFile = mediaFile
+    this.asset = asset
 
     /**
      * The corresponding HTML media element, a object of the
@@ -516,11 +516,11 @@ class Sample {
      *
      * @type {String}
      */
-    this.uri = `${this.mediaFile.uri}#${id}`
+    this.uri = `${this.asset.uri}#${id}`
 
     /**
      * The start time in seconds. The sample is played from this start time
-     * using the `mediaElement` of the `mediaFile`. It is the “zero” second
+     * using the `mediaElement` of the `asset`. It is the “zero” second
      * for the sample.
      *
      * @type {Number}
@@ -640,9 +640,9 @@ class Sample {
    */
   get titleFormated () {
     if (this.id === 'complete') {
-      return this.mediaFile.titleSafe
+      return this.asset.titleSafe
     } else {
-      return `${this.title} (${this.mediaFile.titleSafe})`
+      return `${this.title} (${this.asset.titleSafe})`
     }
   }
 
@@ -744,7 +744,7 @@ class Sample {
    */
   set volume (value) {
     this.mediaElement.volume = value.toFixed(2)
-    if (this.mediaFile.assetType === 'video') {
+    if (this.asset.assetType === 'video') {
       this.mediaElement.style.opacity = value.toFixed(2)
     }
   }
@@ -897,7 +897,7 @@ class Sample {
     await this.fadeOut(fadeOutSec)
     this.mediaElement.currentTime = this.startTimeSec
     this.timeOut_.clear()
-    if (this.mediaFile.assetType === 'video') {
+    if (this.asset.assetType === 'video') {
       this.mediaElement.load()
       this.mediaElement.style.opacity = 1
     }
@@ -912,7 +912,7 @@ class Sample {
   async pause () {
     await this.fadeOut()
     this.timeOut_.clear()
-    if (this.mediaFile.assetType === 'video') {
+    if (this.asset.assetType === 'video') {
       this.mediaElement.style.opacity = 0
     }
     this.mediaElementCurrentTimeSec_ = this.mediaElement.currentTime
@@ -1173,7 +1173,7 @@ export class WrappedSamples {
  * @property {String} cover - An media URI of a image to use a preview image
  *   for mainly audio files. Video files are also supported.
  */
-export class MediaFile {
+export class ClientMediaAsset {
   /**
    * @param {object} mediaData - A mandatory property is: `uri`
    */
@@ -1329,7 +1329,7 @@ export class MediaFile {
   }
 
   /**
-   * The vue router link of the component `MediaFile.vue`.
+   * The vue router link of the component `MediaAsset.vue`.
    *
    * Examples:
    * * `#/media/localfile/013b3960-af60-4184-9d87-7c3e723550b8`
@@ -1377,7 +1377,7 @@ export class MediaFile {
  *  * @property {Number} multiPartCount - The of count of parts if the media file
  *   is a multi part asset.
  */
-class MultiPartAsset extends MediaFile {
+class MultiPartAsset extends ClientMediaAsset {
 
   /**
    * The actual multi part asset count. If the multi part asset is restricted
@@ -1481,9 +1481,9 @@ class MultiPartSelection {
 }
 
 /**
- * @param {MediaFile} mediaFile
+ * @param {ClientMediaAsset} asset
  */
-async function createMediaElement (mediaFile) {
+async function createMediaElement (asset) {
   /**
    * Create a video element like `new Audio() does.`
    *
@@ -1496,32 +1496,32 @@ async function createMediaElement (mediaFile) {
   }
 
   let mediaElement
-  if (!('type' in mediaFile)) throw new Error(`mediaFile “${mediaFile}” has no type.`)
+  if (!('type' in asset)) throw new Error(`asset “${asset}” has no type.`)
 
-  switch (mediaFile.type) {
+  switch (asset.type) {
     case 'audio':
-      mediaElement = new Audio(mediaFile.httpUrl)
+      mediaElement = new Audio(asset.httpUrl)
       break
 
     case 'video':
-      mediaElement = new Video(mediaFile.httpUrl)
+      mediaElement = new Video(asset.httpUrl)
       mediaElement.controls = true
-      if (mediaFile.previewHttpUrl) {
-        mediaElement.poster = mediaFile.previewHttpUrl
+      if (asset.previewHttpUrl) {
+        mediaElement.poster = asset.previewHttpUrl
       }
       break
 
     case 'image':
       mediaElement = new Image()
-      mediaElement.src = mediaFile.httpUrl
+      mediaElement.src = asset.httpUrl
       break
 
     default:
-      throw new Error(`Not supported mediaFile type “${mediaFile.type}”.`)
+      throw new Error(`Not supported asset type “${asset.type}”.`)
   }
 
   return new Promise((resolve, reject) => {
-    if (mediaFile.isPlayable) {
+    if (asset.isPlayable) {
       mediaElement.onloadedmetadata = () => {
         resolve(mediaElement)
       }
@@ -1533,13 +1533,13 @@ async function createMediaElement (mediaFile) {
 
     mediaElement.onerror = (error) => {
       console.log(error)
-      reject(Error(`Could not create the MediaElement for the MediaFile with the ID “${mediaFile.id}”.`))
+      reject(Error(`Could not create the MediaElement for the ClientMediaAsset with the ID “${asset.id}”.`))
     }
   })
 }
 
 /**
- * A `mediaFileSpec` can be:
+ * A `assetSpec` can be:
  *
  * 1. A remote URI (Uniform Resource Identifier) as a string, for example
  *    `id:Joseph_haydn` which has to be resolved.
@@ -1547,15 +1547,15 @@ async function createMediaElement (mediaFile) {
  *    `https://example.com/Josef_Haydn.jg`
  * 3. A file object {@link https://developer.mozilla.org/de/docs/Web/API/File}
  *
- * @typedef mediaFileSpec
+ * @typedef assetSpec
  * @type {(String|File)}
  */
 
 /**
- * An array of `mediaFileSpec` or a single `mediaFileSpec`
+ * An array of `assetSpec` or a single `assetSpec`
  *
- * @typedef mediaFileSpecs
- * @type {(mediaFileSpec[]|mediaFileSpec)}
+ * @typedef assetSpecs
+ * @type {(assetSpec[]|assetSpec)}
  */
 
 /**
@@ -1613,16 +1613,16 @@ class Resolver {
 
   /**
    * @private
-   * @param {module:@bldr/media-client.MediaFile} mediaFile - The
-   *   `mediaFile` object, a client side representation of a media asset.
+   * @param {module:@bldr/media-client.ClientMediaAsset} asset - The
+   *   `asset` object, a client side representation of a media asset.
    *
    * @returns {String} - A HTTP URL.
    */
-  async resolveHttpUrl_ (mediaFile) {
-    if (mediaFile.httpUrl) return mediaFile.httpUrl
-    if (mediaFile.path) {
+  async resolveHttpUrl_ (asset) {
+    if (asset.httpUrl) return asset.httpUrl
+    if (asset.path) {
       const baseUrl = await httpRequest.baseUrl
-      return `${baseUrl}/media/${mediaFile.path}`
+      return `${baseUrl}/media/${asset.path}`
     }
     throw new Error(`Can not generate HTTP URL.`)
   }
@@ -1631,13 +1631,13 @@ class Resolver {
    * Create samples for each playable media file. By default each media file
    * has one sample called “complete”.
    *
-   * @param {module:@bldr/media-client.MediaFile} mediaFile - The
-   *   `mediaFile` object, a client side representation of a media asset.
+   * @param {module:@bldr/media-client.ClientMediaAsset} asset - The
+   *   `asset` object, a client side representation of a media asset.
    *
    * @returns {module:@bldr/media-client~Sample[]}
    */
-  async createSamples_ (mediaFile) {
-    if (mediaFile.isPlayable) {
+  async createSamples_ (asset) {
+    if (asset.isPlayable) {
       // First sample of each playable media file is the “complete” track.
       const completeSampleSpec = {
         title: 'komplett',
@@ -1645,18 +1645,18 @@ class Resolver {
         startTime: 0
       }
       for (const prop of ['startTime', 'duration', 'endTime', 'fadeOut', 'fadeIn', 'shortcut']) {
-        if (mediaFile[prop]) {
-          completeSampleSpec[prop] = mediaFile[prop]
-          delete mediaFile[prop]
+        if (asset[prop]) {
+          completeSampleSpec[prop] = asset[prop]
+          delete asset[prop]
         }
       }
 
       // Store all sample specs in a object to check if there is already a
       // sample with the id “complete”.
       let sampleSpecs = null
-      if (mediaFile.samples) {
+      if (asset.samples) {
         sampleSpecs = {}
-        for (const sampleSpec of mediaFile.samples) {
+        for (const sampleSpec of asset.samples) {
           sampleSpecs[sampleSpec.id] = sampleSpec
         }
       }
@@ -1665,7 +1665,7 @@ class Resolver {
       let sample
       const samples = {}
       if (!sampleSpecs || (sampleSpecs && !('complete' in sampleSpecs))) {
-        sample = new Sample(mediaFile, completeSampleSpec)
+        sample = new Sample(asset, completeSampleSpec)
         samples[sample.uri] = sample
       }
 
@@ -1673,13 +1673,13 @@ class Resolver {
       if (sampleSpecs) {
         for (const sampleId in sampleSpecs) {
           const sampleSpec = sampleSpecs[sampleId]
-          sample = new Sample(mediaFile, sampleSpec)
+          sample = new Sample(asset, sampleSpec)
           samples[sample.uri] = sample
         }
       }
 
       for (const sampleUri in samples) {
-        samples[sampleUri].mediaElement = await createMediaElement(mediaFile)
+        samples[sampleUri].mediaElement = await createMediaElement(asset)
       }
       return samples
     }
@@ -1693,7 +1693,7 @@ class Resolver {
    *
    * Order of async resolution calls / tasks:
    *
-   * 1. mediaFile
+   * 1. asset
    * 2. httpUrl
    * 3. mediaElement
    *
@@ -1707,40 +1707,40 @@ class Resolver {
    * 1. mediaElement
    *
    * @private
-   * @param {module:@bldr/media-client~mediaFileSpec} mediaFileSpec - URI
+   * @param {module:@bldr/media-client~assetSpec} assetSpec - URI
    *   or File object
    *
-   * @returns {module:@bldr/media-client.MediaFile}
+   * @returns {module:@bldr/media-client.ClientMediaAsset}
    */
-  async resolveSingle_ (mediaFileSpec) {
-    let mediaFile
+  async resolveSingle_ (assetSpec) {
+    let asset
     // Remote uri to resolve
-    if (typeof mediaFileSpec === 'string') {
-      mediaFile = new MediaFile({ uri: mediaFileSpec })
+    if (typeof assetSpec === 'string') {
+      asset = new ClientMediaAsset({ uri: assetSpec })
       // Already resolved (URL from the internet for example)
-      if (mediaFile.uriScheme === 'http' || mediaFile.uriScheme === 'https') {
-        mediaFile.httpUrl = mediaFile.uri
-        mediaFile.filenameFromHTTPUrl(mediaFile.uri)
-        mediaFile.extensionFromString(mediaFile.uri)
+      if (asset.uriScheme === 'http' || asset.uriScheme === 'https') {
+        asset.httpUrl = asset.uri
+        asset.filenameFromHTTPUrl(asset.uri)
+        asset.extensionFromString(asset.uri)
         // Resolve HTTP URL
-      } else if (mediaFile.uriScheme === 'id' || mediaFile.uriScheme === 'uuid') {
-        const response = await this.queryMediaServer_(mediaFile.uriScheme, mediaFile.uriAuthority)
+      } else if (asset.uriScheme === 'id' || asset.uriScheme === 'uuid') {
+        const response = await this.queryMediaServer_(asset.uriScheme, asset.uriAuthority)
         if (response.data.multiPartCount) {
-          mediaFile = new MultiPartAsset({ uri: mediaFile.uriRaw })
-          store.commit('media/addMultiPartUri', mediaFile.uriRaw)
+          asset = new MultiPartAsset({ uri: asset.uriRaw })
+          store.commit('media/addMultiPartUri', asset.uriRaw)
         }
         extractMediaUrisRecursive(response.data, this.linkedUris)
-        mediaFile.addProperties(response.data)
-        mediaFile.httpUrl = await this.resolveHttpUrl_(mediaFile)
-        if (mediaFile.previewImage) {
-          mediaFile.previewHttpUrl = `${mediaFile.httpUrl}_preview.jpg`
+        asset.addProperties(response.data)
+        asset.httpUrl = await this.resolveHttpUrl_(asset)
+        if (asset.previewImage) {
+          asset.previewHttpUrl = `${asset.httpUrl}_preview.jpg`
         }
       } else {
-        throw new Error(`Unkown media asset URI: “${mediaFileSpec}”: Supported URI schemes: http,https,id,uuid`)
+        throw new Error(`Unkown media asset URI: “${assetSpec}”: Supported URI schemes: http,https,id,uuid`)
       }
     // Local: File object from drag and drop or open dialog
-    } else if (mediaFileSpec instanceof File) {
-      const file = mediaFileSpec
+    } else if (assetSpec instanceof File) {
+      const file = assetSpec
       if (assetTypes.isAsset(file.name)) {
         // blob:http:/localhost:8080/8c00d9e3-6ff1-4982-a624-55f125b5c0c0
         const httpUrl = URL.createObjectURL(file)
@@ -1749,7 +1749,7 @@ class Resolver {
         // We use the uuid instead of the file name. The file name can contain
         // whitespaces and special characters. A uuid is  more reliable.
         const uri = `localfile:${uuid}`
-        mediaFile = new MediaFile({
+        asset = new ClientMediaAsset({
           uri: uri,
           httpUrl: httpUrl,
           filename: file.name
@@ -1757,14 +1757,14 @@ class Resolver {
       }
     }
 
-    mediaFile.type = assetTypes.extensionToType(mediaFile.extension)
+    asset.type = assetTypes.extensionToType(asset.extension)
     // After type
-    mediaFile.mediaElement = await createMediaElement(mediaFile)
-    const samples = await this.createSamples_(mediaFile)
+    asset.mediaElement = await createMediaElement(asset)
+    const samples = await this.createSamples_(asset)
     if (samples) {
-      mediaFile.samples = samples
+      asset.samples = samples
     }
-    return mediaFile
+    return asset
   }
 
   /**
@@ -1774,31 +1774,31 @@ class Resolver {
    * Linked media URIs are resolve in a second step (not recursive). Linked
    * media assets are not allowed to have linked media URIs.
    *
-   * @param {module:@bldr/media-client~mediaFileSpecs} mediaFileSpecs
+   * @param {module:@bldr/media-client~assetSpecs} assetSpecs
    */
-  async resolve (mediaFileSpecs) {
-    if (typeof mediaFileSpecs === 'string' || mediaFileSpecs instanceof File) {
-      mediaFileSpecs = [mediaFileSpecs]
+  async resolve (assetSpecs) {
+    if (typeof assetSpecs === 'string' || assetSpecs instanceof File) {
+      assetSpecs = [assetSpecs]
     }
 
-    const uniqueSpecs = removeDuplicatesFromArray(mediaFileSpecs)
+    const uniqueSpecs = removeDuplicatesFromArray(assetSpecs)
 
     // Resolve the main media URIs
     let promises = []
-    for (const mediaFileSpec of uniqueSpecs) {
-      promises.push(this.resolveSingle_(mediaFileSpec))
+    for (const assetSpec of uniqueSpecs) {
+      promises.push(this.resolveSingle_(assetSpec))
     }
-    const mainMediaFiles = await Promise.all(promises)
-    let linkMediaFiles = []
+    const mainAssets = await Promise.all(promises)
+    let linkAssets = []
     // Resolve the linked media URIs.
     if (this.linkedUris.length) {
       promises = []
       for (const mediaUri of this.linkedUris) {
         promises.push(this.resolveSingle_(mediaUri))
       }
-      linkMediaFiles = await Promise.all(promises)
+      linkAssets = await Promise.all(promises)
     }
-    return mainMediaFiles.concat(linkMediaFiles)
+    return mainAssets.concat(linkAssets)
   }
 }
 
@@ -1940,7 +1940,7 @@ class Media {
             title: 'Media file',
             style
           },
-          component: ComponentMediaFile
+          component: ComponentClientMediaAsset
         }
       ]
       router.addRoutes(routes)
@@ -1950,28 +1950,28 @@ class Media {
 
   /**
    * Resolve media files by URIs. The media file gets stored in the vuex
-   * store module `media`. Use getters to access the `mediaFile` objects.
+   * store module `media`. Use getters to access the `asset` objects.
    *
-   * @param {module:@bldr/media-client~mediaFileSpecs} mediaFileSpecs
+   * @param {module:@bldr/media-client~assetSpecs} assetSpecs
    */
-  async resolve (mediaFileSpecs) {
+  async resolve (assetSpecs) {
     const output = {}
-    const mediaFiles = await this.resolver.resolve(mediaFileSpecs)
-    for (const mediaFile of mediaFiles) {
-      if (mediaFile.samples) {
-        for (const sampleUri in mediaFile.samples) {
-          store.commit('media/addSample', mediaFile.samples[sampleUri])
+    const assets = await this.resolver.resolve(assetSpecs)
+    for (const asset of assets) {
+      if (asset.samples) {
+        for (const sampleUri in asset.samples) {
+          store.commit('media/addSample', asset.samples[sampleUri])
         }
       }
-      store.dispatch('media/addMediaFile', mediaFile)
-      output[mediaFile.uri] = mediaFile
+      store.dispatch('media/addAsset', asset)
+      output[asset.uri] = asset
     }
     for (const uri of store.getters['media/multiPartUris']) {
-      const asset = store.getters['media/mediaFileByUri'](uri)
+      const asset = store.getters['media/assetByUri'](uri)
       const multiPartSelection = new MultiPartSelection(asset, uri)
       store.commit('media/addMultiPartSelection', multiPartSelection)
     }
-    this.addShortcutForMediaFiles_()
+    this.addShortcutForAssets_()
     this.setPreviewImagesFromCoverProp_()
     this.addShortcutForSamples_()
     return output
@@ -1980,20 +1980,20 @@ class Media {
   /**
    * Audio or video files with a property `cover` set get the HTTP URL of this
    * cover image as a preview image. The URIs are automatically resolved when
-   * creating the MediaFile objects.
+   * creating the ClientMediaAsset objects.
    *
    * @private
    */
   setPreviewImagesFromCoverProp_ () {
-    const mediaFiles = store.getters['media/mediaFiles']
-    for (const uri in mediaFiles) {
-      const mediaFile = mediaFiles[uri]
-      if (mediaFile.isPlayable && mediaFile.cover) {
-        const cover = store.getters['media/mediaFileByUri'](mediaFile.cover)
+    const assets = store.getters['media/assets']
+    for (const uri in assets) {
+      const asset = assets[uri]
+      if (asset.isPlayable && asset.cover) {
+        const cover = store.getters['media/assetByUri'](asset.cover)
         if (!cover) {
-          throw new Error(`Unable to resolve the preview cover: ${mediaFile.cover}`)
+          throw new Error(`Unable to resolve the preview cover: ${asset.cover}`)
         }
-        mediaFile.previewHttpUrl = cover.httpUrl
+        asset.previewHttpUrl = cover.httpUrl
       }
     }
   }
@@ -2004,24 +2004,24 @@ class Media {
    *
    * @private
    */
-  addShortcutForMediaFiles_ () {
-    const mediaFiles = store.getters['media/mediaFiles']
+  addShortcutForAssets_ () {
+    const assets = store.getters['media/assets']
     let shortcutNo = 1
-    for (const uri in mediaFiles) {
+    for (const uri in assets) {
       // i 10 does not work.
       if (shortcutNo > 9) return
-      const mediaFile = mediaFiles[uri]
-      if (!mediaFile.shortcut && mediaFile.type === 'image') {
-        mediaFile.shortcut = `i ${shortcutNo}`
+      const asset = assets[uri]
+      if (!asset.shortcut && asset.type === 'image') {
+        asset.shortcut = `i ${shortcutNo}`
         shortcuts.add(
-          mediaFile.shortcut,
+          asset.shortcut,
           () => {
             this.canvas.hide()
             this.player.stop()
-            this.canvas.show(mediaFile.mediaElement)
+            this.canvas.show(asset.mediaElement)
           },
           // Play
-          `Zeige Bild „${mediaFile.titleSafe}“`
+          `Zeige Bild „${asset.titleSafe}“`
         )
         shortcutNo += 1
       }
@@ -2049,7 +2049,7 @@ class Media {
       let lastShortcutNo = 0
       for (const sampleUri in samples) {
         const sample = samples[sampleUri]
-        if (!sample.shortcutCustom && sample.mediaFile.type === type) {
+        if (!sample.shortcutCustom && sample.asset.type === type) {
           if (sample.shortcutNo) {
             lastShortcutNo = sample.shortcutNo
           } else {
@@ -2057,7 +2057,7 @@ class Media {
             // a 10 does not work.
             if (lastShortcutNo > 9) return
             sample.shortcutNo = lastShortcutNo
-            sample.shortcut = `${firstTriggerKeyByType(sample.mediaFile.type)} ${sample.shortcutNo}`
+            sample.shortcut = `${firstTriggerKeyByType(sample.asset.type)} ${sample.shortcutNo}`
             shortcuts.add(
               sample.shortcut,
               () => {
@@ -2065,7 +2065,7 @@ class Media {
                 this.canvas.hide()
                 this.player.load(sample.uri)
                 this.player.start()
-                if (sample.mediaFile.isVisible) {
+                if (sample.asset.isVisible) {
                   this.canvas.show(sample.mediaElement)
                 }
               },

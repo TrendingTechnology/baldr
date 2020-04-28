@@ -1,5 +1,5 @@
 <template>
-  <div class="vc_media_file" b-ui-theme="default" v-if="mediaFile">
+  <div class="vc_media_file" b-ui-theme="default" v-if="asset">
     <section class="table-and-preview">
 
       <table class="key-value-table">
@@ -11,19 +11,19 @@
         </thead>
         <tbody>
           <tr
-            v-for="key in mediaFile.propertiesSorted"
+            v-for="key in asset.propertiesSorted"
             :key="key"
           >
-            <th class="key" v-if="typeof mediaFile[key] !== 'object'">{{ key }}</th>
-            <td class="value" v-if="typeof mediaFile[key] !== 'object'">{{ mediaFile[key] }}</td>
+            <th class="key" v-if="typeof asset[key] !== 'object'">{{ key }}</th>
+            <td class="value" v-if="typeof asset[key] !== 'object'">{{ asset[key] }}</td>
           </tr>
         </tbody>
       </table>
 
       <div ref="mediaElementContainer" class="media-file-element">
-        <img v-if="mediaFile.previewImage" :src="mediaFile.previewHttpUrl"/>
+        <img v-if="asset.previewImage" :src="asset.previewHttpUrl"/>
         <ol class="samples" >
-          <li v-for="sample in mediaFile.samples" :key="sample.uri">
+          <li v-for="sample in asset.samples" :key="sample.uri">
             <play-button :sample="sample"/> {{ sample.title }} [#{{ sample.id }}]
           </li>
         </ol>
@@ -37,12 +37,12 @@
       <ul>
         <li @click="openEditor"><span class="link">Im Text-Editor öffnen</span></li>
 
-        <li v-if="mediaFile.youtube">
-          <a :href="formatYoutubeUrl(mediaFile.youtube)">YouTube</a>
+        <li v-if="asset.youtube">
+          <a :href="formatYoutubeUrl(asset.youtube)">YouTube</a>
         </li>
 
-        <li v-if="mediaFile.musicbrainzRecordingId">
-          <a :href="formatMusicbrainzRecordingUrl(mediaFile.musicbrainzRecordingId)">MusicBrainz</a>
+        <li v-if="asset.musicbrainzRecordingId">
+          <a :href="formatMusicbrainzRecordingUrl(asset.musicbrainzRecordingId)">MusicBrainz</a>
         </li>
       </ul>
 
@@ -55,7 +55,7 @@ import PlayButton from './PlayButton.vue'
 import { formatMusicbrainzRecordingUrl, formatYoutubeUrl } from '@bldr/core-browser'
 
 export default {
-  name: 'MediaFile',
+  name: 'ClientMediaAsset',
   components: {
     PlayButton
   },
@@ -64,8 +64,8 @@ export default {
       const params = this.$route.params
       return `${params.uriScheme}:${params.uriAuthority}`
     },
-    mediaFile () {
-      return this.$store.getters['media/mediaFileByUri'](this.uri)
+    asset () {
+      return this.$store.getters['media/assetByUri'](this.uri)
     }
   },
   methods: {
@@ -75,7 +75,7 @@ export default {
         params: {
           with: 'editor',
           type: 'assets',
-          id: this.mediaFile.id
+          id: this.asset.id
         }
       })
     },
@@ -83,11 +83,11 @@ export default {
     formatMusicbrainzRecordingUrl
   },
   async mounted () {
-    if (!this.mediaFile) await this.$media.resolve(this.uri)
-    if (this.mediaFile.isPlayable) {
-      this.mediaFile.mediaElement.controls = true
+    if (!this.asset) await this.$media.resolve(this.uri)
+    if (this.asset.isPlayable) {
+      this.asset.mediaElement.controls = true
     }
-    this.$refs.mediaElementContainer.appendChild(this.mediaFile.mediaElement)
+    this.$refs.mediaElementContainer.appendChild(this.asset.mediaElement)
   }
 }
 </script>

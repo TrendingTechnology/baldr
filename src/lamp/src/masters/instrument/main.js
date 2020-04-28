@@ -42,7 +42,7 @@ export default {
       return props.mainImageUri
     },
     collectPropsMain (props) {
-      const mainImage = this.$store.getters['media/mediaFileByUri'](props.mainImageUri)
+      const mainImage = this.$store.getters['media/assetByUri'](props.mainImageUri)
       const grab = new GrabFromObjects(props, mainImage, false)
       const propsMain = grab.multipleProperties(['name'])
       propsMain.imageHttpUrl = mainImage.httpUrl

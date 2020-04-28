@@ -58,7 +58,7 @@ export default {
     async afterMediaResolution ({ props, master }) {
       const svg = master.$get('svgByUri')(props.src)
       if (!svg) {
-        const mediaAsset = this.$store.getters['media/mediaFileByUri'](props.src)
+        const mediaAsset = this.$store.getters['media/assetByUri'](props.src)
         const response = await this.$media.httpRequest.request({
           url: `/media/${mediaAsset.path}`,
           method: 'get'
@@ -67,7 +67,7 @@ export default {
       }
     },
     collectPropsMain (props) {
-      const svgMediaFile = this.$store.getters['media/mediaFileByUri'](props.src)
+      const svgMediaFile = this.$store.getters['media/assetByUri'](props.src)
       return {
         src: props.src,
         svgPath: svgMediaFile.path,

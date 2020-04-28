@@ -502,7 +502,7 @@ export class Slide {
   get mediaFiles () {
     const mediaFiles = []
     for (const mediaUri of this.mediaUris) {
-      mediaFiles.push(store.getters['media/mediaFileByUri'](mediaUri))
+      mediaFiles.push(store.getters['media/assetByUri'](mediaUri))
     }
     return mediaFiles
   }

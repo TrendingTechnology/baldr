@@ -10,7 +10,7 @@ const httpRequest = new HttpRequest('/api/media')
 const state = {
   multiPartUris: new Set(),
   multiPartSelections: {},
-  mediaFiles: {},
+  assets: {},
   playList: [],
   playListNoCurrent: null,
   assetTypes: {
@@ -32,28 +32,28 @@ const getters = {
     return getters.samples[getters.playList[getters.playListNoCurrent - 1]]
   },
   httpUrlByUri: (state, getters) => uri => {
-    const media = getters.mediaFiles
+    const media = getters.assets
     if (uri in media) {
       return media[uri].httpUrl
     }
     return null
   },
   isMedia: (state, getters) => {
-    return Object.keys(getters.mediaFiles).length > 0
+    return Object.keys(getters.assets).length > 0
   },
-  mediaFileByUri: (state, getters) => uri => {
-    // mediaFile URI is specifed as a sample
+  assetByUri: (state, getters) => uri => {
+    // asset URI is specifed as a sample
     if (uri.indexOf('#') > -1) uri = uri.replace(/#.*$/, '')
-    const media = getters.mediaFiles
+    const media = getters.assets
     if (uri in media) {
       return media[uri]
     }
     return null
   },
-  mediaFiles: state => {
-    return state.mediaFiles
+  assets: state => {
+    return state.assets
   },
-  mediaFilesByType: state => type => {
+  assetsByType: state => type => {
     return state.assetTypes[type]
   },
   multiPartSelectionByUri: state => uri => {
@@ -94,38 +94,38 @@ const getters = {
 }
 
 const actions = {
-  addMediaFile ({ commit, dispatch }, mediaFile) {
-    commit('addMediaFile', mediaFile)
-    commit('addMediaFileToTypes', mediaFile)
-    for (const sampleUri in mediaFile.samples) {
-      dispatch('addSampleToPlayList', mediaFile.samples[sampleUri])
+  addAsset ({ commit, dispatch }, asset) {
+    commit('addAsset', asset)
+    commit('addAssetToTypes', asset)
+    for (const sampleUri in asset.samples) {
+      dispatch('addSampleToPlayList', asset.samples[sampleUri])
     }
   },
   addSampleToPlayList ({ commit, getters }, sample) {
     const list = getters.playList
-    if (!list.includes(sample.uri) && sample.mediaFile.type !== 'image') {
+    if (!list.includes(sample.uri) && sample.asset.type !== 'image') {
       commit('addSampleToPlayList', sample)
     }
   },
   clear ({ dispatch, commit }) {
-    dispatch('removeMediaFilesAll')
+    dispatch('removeAssetsAll')
     commit('clearMultiPartUris')
     commit('setSampleLoaded', null)
     commit('setSamplePlaying', null)
     commit('setPlayListNoCurrent', null)
   },
-  removeMediaFile ({ commit, getters }, mediaFile) {
-    for (const sampleUri in mediaFile.samples) {
-      const sample = mediaFile.samples[sampleUri]
+  removeAsset ({ commit, getters }, asset) {
+    for (const sampleUri in asset.samples) {
+      const sample = asset.samples[sampleUri]
       commit('removeSample', sample)
       commit('removeSampleFromPlayList', sample)
     }
-    commit('removeMediaFileFromTypes', mediaFile)
-    commit('removeMediaFile', mediaFile)
+    commit('removeAssetFromTypes', asset)
+    commit('removeAsset', asset)
   },
-  removeMediaFilesAll ({ dispatch, getters }) {
-    for (const mediaFileUri in getters.mediaFiles) {
-      dispatch('removeMediaFile', getters.mediaFiles[mediaFileUri])
+  removeAssetsAll ({ dispatch, getters }) {
+    for (const assetUri in getters.assets) {
+      dispatch('removeAsset', getters.assets[assetUri])
     }
   },
   setPlayListSampleCurrent ({ commit, getters }, sample) {
@@ -184,11 +184,11 @@ const mutations = {
   clearMultiPartUris (state) {
     state.multiPartUris.clear()
   },
-  addMediaFile (state, mediaFile) {
-    Vue.set(state.mediaFiles, mediaFile.uri, mediaFile)
+  addAsset (state, asset) {
+    Vue.set(state.assets, asset.uri, asset)
   },
-  addMediaFileToTypes (state, mediaFile) {
-    Vue.set(state.assetTypes[mediaFile.type], mediaFile.uri, mediaFile)
+  addAssetToTypes (state, asset) {
+    Vue.set(state.assetTypes[asset.type], asset.uri, asset)
   },
   addSample (state, sample) {
     Vue.set(state.samples, sample.uri, sample)
@@ -196,11 +196,11 @@ const mutations = {
   addSampleToPlayList (state, sample) {
     state.playList.push(sample.uri)
   },
-  removeMediaFile (state, mediaFile) {
-    Vue.delete(state.mediaFiles, mediaFile.uri)
+  removeAsset (state, asset) {
+    Vue.delete(state.assets, asset.uri)
   },
-  removeMediaFileFromTypes (state, mediaFile) {
-    Vue.delete(state.assetTypes[mediaFile.type], mediaFile.uri)
+  removeAssetFromTypes (state, asset) {
+    Vue.delete(state.assetTypes[asset.type], asset.uri)
   },
   removeSample (state, sample) {
     Vue.delete(state.samples, sample.uri)

@@ -62,7 +62,7 @@ export default {
   },
   methods: {
     mediaFileByUri (uri) {
-      return this.$store.getters['media/mediaFileByUri'](uri)
+      return this.$store.getters['media/assetByUri'](uri)
     }
   }
 }

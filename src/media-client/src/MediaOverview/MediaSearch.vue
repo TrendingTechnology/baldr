@@ -12,7 +12,7 @@
     <dynamic-select
       :options="options"
       @input="onInput"
-      v-model="mediaFile"
+      v-model="asset"
       @search="search"
       placeholder="Suche nach Medien-Dateien"
     />
@@ -29,7 +29,7 @@ export default {
   },
   data: function () {
     return {
-      mediaFile: {},
+      asset: {},
       options: [],
       searchFields: ['id', 'title', 'path'],
       currentSearchField: 'title'
@@ -40,7 +40,7 @@ export default {
       this.currentSearchField = searchField
     },
     onInput () {
-      const uri = `id:${this.mediaFile.id}`
+      const uri = `id:${this.asset.id}`
       this.$media.resolve(uri)
     },
     search (text) {

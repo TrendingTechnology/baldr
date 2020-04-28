@@ -2,9 +2,9 @@
 <script>
 export default {
   name: 'PreviewImage',
-  props: ['mediaFile'],
+  props: ['asset'],
   render: function (createElement) {
-    const file = this.mediaFile
+    const file = this.asset
 
     if (file.type === 'image') {
       return createElement('img', { attrs: { src: file.httpUrl } })
