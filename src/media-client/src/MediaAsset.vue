@@ -20,7 +20,7 @@
         </tbody>
       </table>
 
-      <div ref="mediaElementContainer" class="media-file-element">
+      <div ref="mediaElementContainer" class="asset-element">
         <img v-if="asset.previewImage" :src="asset.previewHttpUrl"/>
         <ol class="samples" >
           <li v-for="sample in asset.samples" :key="sample.uri">
@@ -103,13 +103,13 @@ export default {
       display: flex;
     }
 
-    .media-file-element {
+    .asset-element {
       img {
         width: 30vw;
       }
     }
 
-    .media-file-element, .key-value-table {
+    .asset-element, .key-value-table {
       padding: 1vw;
       width: 50vw;
     }

@@ -59,7 +59,7 @@ export default {
       const options = []
       if (spec.required) options.push('required')
       if (spec.markup) options.push('markup')
-      if (spec.mediaFileUri) options.push('mediaFileUri')
+      if (spec.assetUri) options.push('assetUri')
       if (spec.default) options.push(`default=${spec.default}`)
       if (spec.type) {
         if (spec.type.name) {

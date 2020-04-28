@@ -11,7 +11,7 @@ export default {
       type: String,
       required: true,
       description: 'Den URI zu einer Bild-Datei.',
-      mediaFileUri: true
+      assetUri: true
     },
     title: {
       type: String,
@@ -48,9 +48,9 @@ export default {
       return props.src
     },
     collectPropsMain (props) {
-      const mediaFile = this.$store.getters['media/assetByUri'](props.src)
+      const asset = this.$store.getters['media/assetByUri'](props.src)
 
-      const grab = new GrabFromObjects(props, mediaFile)
+      const grab = new GrabFromObjects(props, asset)
 
       const title = grab.property('title')
       const description = grab.property('description')
@@ -58,9 +58,9 @@ export default {
       return {
         title,
         description,
-        imageHttpUrl: mediaFile.httpUrl,
+        imageHttpUrl: asset.httpUrl,
         noMeta: props.noMeta,
-        mediaAsset: mediaFile
+        mediaAsset: asset
       }
     },
     collectPropsPreview ({ propsMain }) {

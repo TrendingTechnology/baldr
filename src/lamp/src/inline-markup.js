@@ -97,20 +97,20 @@ export function render (item) {
     }
     return `<span b-inline-type="slide-link" b-inline-slide="${slide}" class="link">${text}</span>`
   } else if (item.id) {
-    const mediaFile = vue.$store.getters['media/assetByUri'](item.id)
+    const asset = vue.$store.getters['media/assetByUri'](item.id)
 
     let controls = ''
     let htmlTag
-    if (mediaFile.type === 'image') {
+    if (asset.type === 'image') {
       htmlTag = 'img'
-    } else if (mediaFile.type === 'audio') {
+    } else if (asset.type === 'audio') {
       htmlTag = 'audio'
       controls = 'controls'
-    } else if (mediaFile.type === 'video') {
+    } else if (asset.type === 'video') {
       htmlTag = 'video'
       controls = 'controls'
     }
-    const mediaTag = `<${htmlTag} src="${mediaFile.httpUrl}" ${controls}/>`
+    const mediaTag = `<${htmlTag} src="${asset.httpUrl}" ${controls}/>`
 
     let caption = ''
     if (item.caption && typeof item.caption === 'string') {

@@ -52,7 +52,7 @@ export default {
       type: String,
       required: true,
       description: 'Den URI zu einer SVG-Datei, die den Lückentext enthält.',
-      mediaFileUri: true
+      assetUri: true
     },
     ...steps.mapProps(['subset'])
   },
@@ -99,11 +99,11 @@ export default {
       }
     },
     collectPropsMain (props) {
-      const svgMediaFile = this.$store.getters['media/assetByUri'](props.src)
+      const asset = this.$store.getters['media/assetByUri'](props.src)
       return {
         src: props.src,
-        svgPath: svgMediaFile.path,
-        svgHttpUrl: svgMediaFile.httpUrl
+        svgPath: asset.path,
+        svgHttpUrl: asset.httpUrl
       }
     },
     collectPropsPreview ({ propsMain }) {

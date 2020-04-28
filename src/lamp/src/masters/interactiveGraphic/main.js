@@ -15,7 +15,7 @@ export default {
       type: String,
       required: true,
       description: 'Den URI zu einer SVG-Datei.',
-      mediaFileUri: true
+      assetUri: true
     },
     ...steps.mapProps(['selector', 'subset'])
   },
@@ -67,12 +67,12 @@ export default {
       }
     },
     collectPropsMain (props) {
-      const svgMediaFile = this.$store.getters['media/assetByUri'](props.src)
+      const asset = this.$store.getters['media/assetByUri'](props.src)
       return {
         src: props.src,
-        svgPath: svgMediaFile.path,
-        svgTitle: svgMediaFile.title,
-        svgHttpUrl: svgMediaFile.httpUrl,
+        svgPath: asset.path,
+        svgTitle: asset.title,
+        svgHttpUrl: asset.httpUrl,
         stepSelector: props.stepSelector,
         stepSubset: props.stepSubset
       }

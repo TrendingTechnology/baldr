@@ -21,7 +21,7 @@
         <table-row
           v-for="asset in assetsByType(type)"
           :key="asset.uri"
-          :media-file="asset"
+          :asset="asset"
         />
       </tbody>
     </table>

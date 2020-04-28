@@ -394,7 +394,7 @@ Vue.config.productionTip = false
  *   extracting inline media URIs like `[id:Beethoven_Ludwig-van]`.
  * @property {Boolean} markup - If true this property is converted into
  *   HTML.
- * @property {Boolean} mediaFileUri - Indicates that this `prop` contains
+ * @property {Boolean} assetUri - Indicates that this `prop` contains
  *   a media file URI.
  * @property {Boolean} required - In the `prop` must specifed.
  * @property {Object|Array} type - The same as Vue `type`.
@@ -411,7 +411,7 @@ Vue.config.productionTip = false
  *      description: 'Den URI zu einer Video-Datei.',
  *      inlineMarkup: false
  *      markup: false
- *      mediaFileUri: true,
+ *      assetUri: true,
  *      required: true,
  *      type: String,
  *    }
@@ -677,10 +677,10 @@ Vue.prototype.$fullscreen = function () {
 registerMasterComponents()
 
 store.subscribe((mutation, state) => {
-  if (mutation.type === 'media/addMediaFile') {
-    const mediaFile = mutation.payload
-    if (mediaFile.uriScheme === 'localfile') {
-      Vue.prototype.$notifySuccess(`hinzugefügt: <a href="${mediaFile.routerLink}">${mediaFile.filename}</a>.`)
+  if (mutation.type === 'media/addAsset') {
+    const asset = mutation.payload
+    if (asset.uriScheme === 'localfile') {
+      Vue.prototype.$notifySuccess(`hinzugefügt: <a href="${asset.routerLink}">${asset.filename}</a>.`)
     }
   }
 })

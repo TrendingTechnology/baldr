@@ -488,8 +488,8 @@ export class Slide {
     const output = []
     const fromProps = this.master.plainTextFromProps(this.props)
     if (fromProps) output.push(fromProps)
-    for (const mediaFile of this.mediaFiles) {
-      output.push(mediaFile.plainText)
+    for (const asset of this.assets) {
+      output.push(asset.plainText)
     }
     return output.join(' | ')
   }
@@ -499,12 +499,12 @@ export class Slide {
    *
    * @type {Array}
    */
-  get mediaFiles () {
-    const mediaFiles = []
+  get assets () {
+    const assets = []
     for (const mediaUri of this.mediaUris) {
-      mediaFiles.push(store.getters['media/assetByUri'](mediaUri))
+      assets.push(store.getters['media/assetByUri'](mediaUri))
     }
-    return mediaFiles
+    return assets
   }
 
   /**

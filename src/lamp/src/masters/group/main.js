@@ -8,7 +8,7 @@ export default {
     mainImage: {
       type: String,
       required: true,
-      mediaFileUri: true,
+      assetUri: true,
       description: 'Eine URI zu der Haupt-Bild-Datei.'
     }
   },

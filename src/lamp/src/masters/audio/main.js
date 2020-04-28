@@ -16,7 +16,7 @@ export default {
       type: [String, Array],
       required: true,
       description: 'Eine Medien-Datei-URI, z. B. `id:Fuer-Elise` oder eine Sample-URI (`id:Fuer-Elise#complete`).',
-      mediaFileUri: true
+      assetUri: true
     },
     title: {
       type: String,
@@ -37,7 +37,7 @@ export default {
     cover: {
       type: String,
       description: 'Eine Medien-Datei-URI, die als Cover-Bild angezeigt werden soll.',
-      mediaFileUri: true
+      assetUri: true
     },
     description: {
       type: String,
@@ -77,9 +77,9 @@ export default {
     },
     collectPropsMain (props) {
       const sample = this.$store.getters['media/sampleByUri'](props.src)
-      const mediaFile = sample.mediaFile
+      const asset = sample.asset
 
-      const grab = new GrabFromObjects(props, mediaFile)
+      const grab = new GrabFromObjects(props, asset)
       const artist = grab.property('artist')
       const composer = grab.property('composer')
       const description = grab.property('description')
@@ -94,8 +94,8 @@ export default {
       if (props.cover) {
         const coverFile = this.$store.getters['media/assetByUri'](props.cover)
         previewHttpUrl = coverFile.httpUrl
-      } else if ('previewHttpUrl' in mediaFile) {
-        previewHttpUrl = mediaFile.previewHttpUrl
+      } else if ('previewHttpUrl' in asset) {
+        previewHttpUrl = asset.previewHttpUrl
       }
       return {
         sample,
@@ -104,7 +104,7 @@ export default {
         composer,
         title,
         description,
-        mediaAsset: mediaFile
+        mediaAsset: asset
       }
     },
     titleFromProps ({ props, propsMain }) {

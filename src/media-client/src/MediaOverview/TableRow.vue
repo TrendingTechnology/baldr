@@ -1,11 +1,11 @@
 <template>
   <tr class="vc_table_row">
-    <td><preview-image @click.native="play(asset.uri)" :media-file="asset"/></td>
+    <td><preview-image @click.native="play(asset.uri)" :asset="asset"/></td>
     <td>
       <router-link
         title="Medien-Datei-Überblick öffnen"
         :to="{
-          name: 'media-file',
+          name: 'asset',
           params: {
             uriScheme: asset.uriScheme,
             uriAuthority: asset.uriAuthority

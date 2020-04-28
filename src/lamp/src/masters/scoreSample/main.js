@@ -13,13 +13,13 @@ export default {
     score: {
       type: String,
       description: 'URI zu einer Bild-Datei, dem Notenbeispiel.',
-      mediaFileUri: true,
+      assetUri: true,
       required: true
     },
     audio: {
       type: String,
       description: 'URI der entsprechenden Audio-Datei oder des Samples.',
-      mediaFileUri: true
+      assetUri: true
     }
   },
   icon: {
@@ -50,28 +50,28 @@ export default {
       if (audio) {
         audioSample = audio
       }
-      let scoreMediaFile
+      let asset
       const muliPartSelection = this.$store.getters['media/multiPartSelectionByUri'](props.score)
       if (muliPartSelection) {
-        scoreMediaFile = muliPartSelection
+        asset = muliPartSelection
       } else {
-        scoreMediaFile = this.$store.getters['media/assetByUri'](props.score)
+        asset = this.$store.getters['media/assetByUri'](props.score)
       }
 
       return {
         heading: props.heading,
-        scoreMediaFile,
+        asset,
         audioSample
       }
     },
     collectPropsPreview ({ props, propsMain }) {
       const propsPreview = {
-        scoreHttpUrl: propsMain.scoreMediaFile.httpUrl
+        scoreHttpUrl: propsMain.asset.httpUrl
       }
       if (props.audio) {
         propsPreview.hasAudio = true
       }
-      if (propsMain.scoreMediaFile.partCount > 1) {
+      if (propsMain.asset.partCount > 1) {
         propsPreview.isMultiPart = true
       }
       return propsPreview

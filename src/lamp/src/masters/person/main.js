@@ -16,7 +16,7 @@ export default {
     image: {
       type: String,
       required: true,
-      mediaFileUri: true,
+      assetUri: true,
       description: 'Eine URI zu einer Bild-Datei.'
     },
     birth: {

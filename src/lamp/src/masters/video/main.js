@@ -9,7 +9,7 @@ export default {
       type: String,
       required: true,
       description: 'Den URI zu einer Video-Datei.',
-      mediaFileUri: true
+      assetUri: true
     }
   },
   icon: {
@@ -31,10 +31,10 @@ export default {
       return props.src
     },
     collectPropsMain (props) {
-      const mediaFile = this.$store.getters['media/assetByUri'](props.src)
+      const asset = this.$store.getters['media/assetByUri'](props.src)
       return {
-        httpUrl: mediaFile.httpUrl,
-        previewHttpUrl: mediaFile.previewHttpUrl
+        httpUrl: asset.httpUrl,
+        previewHttpUrl: asset.previewHttpUrl
       }
     },
     collectPropsPreview ({ propsMain }) {

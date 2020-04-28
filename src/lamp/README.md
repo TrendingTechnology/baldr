@@ -16,7 +16,7 @@ The main app of the BALDR project: a presentation app using YAML files.
       * `steps`: A ordered list of display states
         * `step`: A display state of a slide
   * `master`: Each `slide` and `view` is derived from a `master`
-  * `mediaFile`: All kind of media files (audio, video, image)
+  * `asset`: All kind of media files (audio, video, image)
 
 ## Structure of the `*.baldr.yml` YAML file format
 

@@ -43,11 +43,11 @@
       "",
       "- title: Langform",
       "  audio:",
-      "    src: Eine Medien-Datei-URI, z. B. id:Fuer-Elise oder eine Sample-URI (id:Fuer-Elise#complete). (required, mediaFileUri, types=String,Array)",
+      "    src: Eine Medien-Datei-URI, z. B. id:Fuer-Elise oder eine Sample-URI (id:Fuer-Elise#complete). (required, assetUri, types=String,Array)",
       "    title: Der Titel des Audio-Ausschnitts. (markup, type=String)",
       "    composer: Der/Die KomponistIn des Audio-Ausschnitts. (markup, type=String)",
       "    artist: Der/Die InterpretIn des Audio-Ausschnitts. (markup, type=String)",
-      "    cover: Eine Medien-Datei-URI, die als Cover-Bild angezeigt werden soll. (mediaFileUri, type=String)",
+      "    cover: Eine Medien-Datei-URI, die als Cover-Bild angezeigt werden soll. (assetUri, type=String)",
       "    autoplay: Den Audio-Ausschnitt automatisch abspielen. (type=Boolean)",
       "    playthrough: Über die Folien hinwegspielen. Nicht stoppen beim Folienwechsel. (type=Boolean)"
     ],
@@ -73,7 +73,7 @@
       "",
       "- title: Langform",
       "  cloze:",
-      "    src: Den URI zu einer SVG-Datei, die den Lückentext enthält. (required, mediaFileUri, type=String)",
+      "    src: Den URI zu einer SVG-Datei, die den Lückentext enthält. (required, assetUri, type=String)",
       "    step_begin: Beginne bei dieser Schrittnumber Lückentextwörter einzublenden. (type=Number)",
       "    step_end: Höre bei dieser Schrittnumber auf Lückentextwörter einzublenden. (type=Number)"
     ],
@@ -138,7 +138,7 @@
       "",
       "- title: Langform",
       "  image:",
-      "    src: Den URI zu einer Bild-Datei. (required, mediaFileUri, type=String)",
+      "    src: Den URI zu einer Bild-Datei. (required, assetUri, type=String)",
       "    title: Ein Titel, der angezeigt wird. (markup, type=String)",
       "    description: Eine Beschreibung, die angezeigt wird. (markup, type=String)"
     ],
@@ -154,7 +154,7 @@
       "- title: Langform",
       "  person:",
       "    name: Der Name der Person (type=String)",
-      "    image: Eine URI zu einer Bild-Datei. (required, mediaFileUri, type=String)",
+      "    image: Eine URI zu einer Bild-Datei. (required, assetUri, type=String)",
       "    birth: Datumsangabe zum Geburtstag (types=String,Number)",
       "    death: Datumsangabe zum Todestag (types=String,Number)"
     ],
@@ -206,8 +206,8 @@
       "- title: Langform",
       "  score_sample:",
       "    heading: Eine Überschrift (markup, type=String)",
-      "    score: URI zu einer Bild-Datei, dem Notenbeispiel. (mediaFileUri, type=String)",
-      "    audio: URI der entsprechenden Audio-Datei oder des Samples. (mediaFileUri, type=String)"
+      "    score: URI zu einer Bild-Datei, dem Notenbeispiel. (assetUri, type=String)",
+      "    audio: URI der entsprechenden Audio-Datei oder des Samples. (assetUri, type=String)"
     ],
     "description": "Baldr master: score_sample",
     "scope": "yaml"
@@ -237,7 +237,7 @@
       "",
       "- title: Langform",
       "  svg:",
-      "    src: Den URI zu einer SVG-Datei. (required, mediaFileUri, type=String)",
+      "    src: Den URI zu einer SVG-Datei. (required, assetUri, type=String)",
       "    step_selector: Selektor, der Elemente auswählt, die als Schritte eingeblendet werden sollen. (default=g)",
       "    step_exclude: Schritt-Number der Elemente, die nicht als Schritte eingeblendet werden sollen. (z. B. 1, oder [1, 2, 3]) (types=Array,Number)"
     ],
@@ -265,7 +265,7 @@
       "",
       "- title: Langform",
       "  video:",
-      "    src: Den URI zu einer Video-Datei. (required, mediaFileUri, type=String)"
+      "    src: Den URI zu einer Video-Datei. (required, assetUri, type=String)"
     ],
     "description": "Baldr master: video",
     "scope": "yaml"

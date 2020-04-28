@@ -1935,7 +1935,7 @@ class Media {
         },
         {
           path: '/media/:uriScheme/:uriAuthority',
-          name: 'media-file',
+          name: 'asset',
           meta: {
             title: 'Media file',
             style

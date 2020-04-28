@@ -547,7 +547,7 @@ class Master {
     if (!this.propsDef) return props
     for (const propName in props) {
       const prop = this.propsDef[propName]
-      if ('mediaFileUri' in prop && prop.mediaFileUri) {
+      if ('assetUri' in prop && prop.assetUri) {
         props[propName] = validateUri(props[propName])
       }
     }
