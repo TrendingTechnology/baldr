@@ -50,12 +50,11 @@
 </template>
 
 <script>
-import { getDefaultRestEndpoints, HttpRequestNg } from '@bldr/http-request'
+import { getDefaultServers, HttpRequest } from '@bldr/http-request'
 
 import { formatToLocalDateTime } from '@bldr/core-browser'
 import { createNamespacedHelpers } from 'vuex'
-const restEndpoints = getDefaultRestEndpoints()
-const httpRequestNg = new HttpRequestNg(restEndpoints, '/api/media')
+const httpRequest = new HttpRequest(getDefaultServers(), '/api/media')
 const { mapGetters } = createNamespacedHelpers('media')
 
 export default {
@@ -68,7 +67,7 @@ export default {
     formatToLocalDateTime,
     updateMediaServer (endpointName, event) {
       event.target.classList.add('baldr-icon-spin')
-      httpRequestNg.request('mgmt/update', endpointName).then((result) => {
+      httpRequest.request('mgmt/update', endpointName).then((result) => {
         for (const errorMsg of result.data.errors) {
           this.$notifyError(errorMsg)
         }

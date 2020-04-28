@@ -6,7 +6,7 @@
 
 /* globals config document Audio Image File */
 
-import { getDefaultServers, HttpRequest, getDefaultRestEndpoints, HttpRequestNg } from '@bldr/http-request'
+import { getDefaultServers, HttpRequest } from '@bldr/http-request'
 import { formatMultiPartAssetFileName, AssetTypes, selectSubset, mediaUriRegExp } from '@bldr/core-browser'
 
 import DynamicSelect from '@bldr/vue-plugin-dynamic-select'
@@ -20,8 +20,6 @@ import ComponentMediaCanvas from './MediaCanvas.vue'
 import ComponentPlayButton from './PlayButton.vue'
 import storeModule from './store.js'
 
-const restEndpoints = getDefaultRestEndpoints()
-export const httpRequestNg = new HttpRequestNg(restEndpoints, '/api/media')
 export const httpRequest = new HttpRequest(getDefaultServers(), '/api/media')
 
 /**

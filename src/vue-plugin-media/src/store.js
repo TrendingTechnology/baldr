@@ -4,6 +4,9 @@
 
 import Vue from 'vue'
 
+import { getDefaultServers, HttpRequest } from '@bldr/http-request'
+const httpRequest = new HttpRequest(getDefaultServers(), '/api/media')
+
 const state = {
   multiPartUris: new Set(),
   multiPartSelections: {},
@@ -151,10 +154,9 @@ const actions = {
     }
   },
   async setRestApiServers ({ commit }) {
-    const servers = await httpRequestNg.restEndpoints.getReachable()
-    const versions = await httpRequestNg.request('version', 'all')
-    const counts = await httpRequestNg.request('stats/count', 'all')
-    const updates = await httpRequestNg.request('stats/updates', 'all')
+    const versions = await httpRequest.request('version', 'all')
+    const counts = await httpRequest.request('stats/count', 'all')
+    const updates = await httpRequest.request('stats/updates', 'all')
 
     const result = []
     for (const endpointName in servers) {
