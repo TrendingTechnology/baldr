@@ -1,11 +1,11 @@
 <template>
   <div class="vc_document_master">
-    <pdf :src="asset.httpUrl"/>
+    <pdf-viewer :src="asset.httpUrl" :page="navNos.stepNo"/>
   </div>
 </template>
 
 <script>
-import Pdf from 'vue-pdf'
+import PdfViewer from 'vue-pdf'
 
 export default {
   props: {
@@ -14,13 +14,7 @@ export default {
     }
   },
   components: {
-    Pdf
+    PdfViewer
   }
 }
 </script>
-
-<style lang="scss">
-  .vc_document_master {
-
-  }
-</style>

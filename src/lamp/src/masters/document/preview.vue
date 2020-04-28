@@ -2,25 +2,24 @@
   <div
     class="
       vc_document_master_preview
-      slide-preview-valign-top
       slide-preview-fullscreen
     "
   >
+    <pdf-viewer :src="asset.httpUrl"/>
   </div>
 </template>
 
 <script>
+import PdfViewer from 'vue-pdf'
+
 export default {
   props: {
     asset: {
       type: Object
     }
+  },
+  components: {
+    PdfViewer
   }
 }
 </script>
-
-<style lang="scss">
-  .vc_document_master_preview {
-
-  }
-</style>

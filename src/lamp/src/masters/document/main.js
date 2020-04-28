@@ -34,6 +34,12 @@ export default {
     collectPropsMain (props) {
       const asset = this.$store.getters['media/assetByUri'](props.src)
       return { asset }
+    },
+    calculateStepCount ({ propsMain }) {
+      const asset = propsMain.asset
+      if (asset.pageCount && asset.pageCount > 1) {
+        return asset.pageCount
+      }
     }
   }
 }
