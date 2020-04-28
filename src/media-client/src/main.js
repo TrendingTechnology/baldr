@@ -1759,7 +1759,9 @@ class Resolver {
 
     asset.type = assetTypes.extensionToType(asset.extension)
     // After type
-    asset.mediaElement = await createMediaElement(asset)
+    if (asset.type !== 'document') {
+      asset.mediaElement = await createMediaElement(asset)
+    }
     const samples = await this.createSamples_(asset)
     if (samples) {
       asset.samples = samples

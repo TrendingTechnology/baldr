@@ -16,7 +16,8 @@ const state = {
   assetTypes: {
     audio: {},
     video: {},
-    image: {}
+    image: {},
+    document: {}
   },
   restApiServers: [],
   samples: {},

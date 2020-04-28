@@ -812,7 +812,7 @@ const reference = {
     forTeacher: {
       title: 'Lehrerband'
     },
-    isbn13: {
+    isbn: {
       title: 'ISBN-Nummer (13 Stellen)'
     }
   }
