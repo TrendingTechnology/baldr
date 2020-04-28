@@ -12,6 +12,7 @@ import { Presentation } from '@/content-file.js'
 import vue, { customStore } from '@/main.js'
 import nav from './nav.js'
 import preview from './preview.js'
+import masters from './masters.js'
 
 Vue.use(Vuex)
 
@@ -266,7 +267,8 @@ export default new Vuex.Store({
       mutations,
       modules: {
         nav,
-        preview
+        preview,
+        masters
       }
     }
   }

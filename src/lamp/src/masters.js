@@ -8,7 +8,6 @@
 
 import { customStore } from '@/main.js'
 import { markupToHtml, validateUri } from '@/lib.js'
-import { toTitleCase } from '@bldr/core-browser'
 import inlineMarkup from '@/inline-markup.js'
 import SlidePreviewPlayButton from '@/components/SlidesPreview/PlayButton.vue'
 import store from '@/store/index.js'
@@ -149,13 +148,13 @@ class Master {
   }
 
   /**
-   * Generate the name of the Vuex module, e. g. `lampMasterCamera`.
+   * Generate the name of the Vuex module, e. g. `lamp/masters/camera`.
    *
    * @returns {String}
    * @private
    */
-  vueModuleName_ () {
-    return `lampMaster${toTitleCase(this.name)}`
+  vuexModuleName_ () {
+    return `lamp/masters/${this.name}`
   }
 
   /**
@@ -165,7 +164,7 @@ class Master {
    * @param {Mixed} arg
    */
   $get (getterName, arg) {
-    getterName = this.vueModuleName_() + '/' + getterName
+    getterName = this.vuexModuleName_() + '/' + getterName
     if (arg) {
       return store.getters[getterName](arg)
     } else {
@@ -180,7 +179,7 @@ class Master {
    * @param {Mixed} payload
    */
   $commit (mutationName, payload) {
-    mutationName = this.vueModuleName_() + '/' + mutationName
+    mutationName = this.vuexModuleName_() + '/' + mutationName
     store.commit(mutationName, payload)
   }
 
@@ -209,7 +208,7 @@ class Master {
   registerVuexModule_ () {
     if (this.store) {
       this.store.namespaced = true
-      store.registerModule(this.vueModuleName_(), this.store)
+      store.registerModule(['lamp', 'masters', this.name], this.store)
     }
   }
 

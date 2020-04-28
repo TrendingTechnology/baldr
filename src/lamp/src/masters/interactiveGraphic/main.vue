@@ -33,7 +33,7 @@ export default {
   computed: {
     ...mapGetters(['slide']),
     svgMarkup () {
-      return this.$store.getters['lampMasterInteractiveGraphic/svgByUri'](this.src)
+      return this.$store.getters['lamp/masters/interactiveGraphic/svgByUri'](this.src)
     }
   }
 }

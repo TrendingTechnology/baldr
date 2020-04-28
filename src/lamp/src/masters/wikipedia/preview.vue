@@ -29,7 +29,7 @@ export default {
       return this.title.replace(/_/g, ' ')
     },
     thumbnailUrl () {
-      return this.$store.getters['lampMasterWikipedia/thumbnailUrlById'](this.id)
+      return this.$store.getters['lamp/masters/wikipedia/thumbnailUrlById'](this.id)
     }
   }
 }

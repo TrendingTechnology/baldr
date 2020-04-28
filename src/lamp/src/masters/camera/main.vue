@@ -44,10 +44,10 @@ export default {
   },
   computed: {
     mediaDevices () {
-      return this.$store.getters['lampMasterCamera/forDynamicSelect']
+      return this.$store.getters['lamp/masters/camera/forDynamicSelect']
     },
     cameraNotFound () {
-      return this.$store.getters['lampMasterCamera/cameraNotFound']
+      return this.$store.getters['lamp/masters/camera/cameraNotFound']
     }
   },
   methods: {
@@ -58,14 +58,14 @@ export default {
       this.$modal.hide('select-video-device')
       this.labelDefaultCamera = this.device.name
       window.localStorage.setItem('labelDefaultCamera', this.device.name)
-      this.$store.commit('lampMasterCamera/setDeviceId', this.device.id)
+      this.$store.commit('lamp/masters/camera/setDeviceId', this.device.id)
       this.setVideoStream(await this.buildConstraints(this.device.id))
     },
     /**
      * Show the modal dialog with the dynamic select form element.
      */
     showDeviceSelect () {
-      this.$store.dispatch('lampMasterCamera/setMediaDevices')
+      this.$store.dispatch('lamp/masters/camera/setMediaDevices')
       this.$modal.toggle('select-video-device')
       this.$dynamicSelect.focus()
     },
@@ -136,7 +136,7 @@ export default {
           video: { deviceId: { exact: deviceId } }
         }
       } else {
-        this.$store.commit('lampMasterCamera/setCameraNotFound', true)
+        this.$store.commit('lamp/masters/camera/setCameraNotFound', true)
       }
     },
     /**
@@ -167,7 +167,7 @@ export default {
         return
       }
 
-      let videoElement = this.$store.getters['lampMasterCamera/videoElement']
+      let videoElement = this.$store.getters['lamp/masters/camera/videoElement']
 
       if (videoElement) {
         videoElement.play()
@@ -186,17 +186,17 @@ export default {
         videoElement.srcObject = stream
         this.stream = stream
         wrapperElement.appendChild(videoElement)
-        this.$store.commit('lampMasterCamera/setVideoElement', videoElement)
-        this.$store.dispatch('lampMasterCamera/setMediaDevices')
+        this.$store.commit('lamp/masters/camera/setVideoElement', videoElement)
+        this.$store.dispatch('lamp/masters/camera/setMediaDevices')
       } else {
-        this.$store.commit('lampMasterCamera/setCameraNotFound', true)
+        this.$store.commit('lamp/masters/camera/setCameraNotFound', true)
       }
     }
   },
   async mounted () {
     this.labelDefaultCamera = window.localStorage.getItem('labelDefaultCamera')
     if (!this.labelDefaultCamera) {
-      this.$store.commit('lampMasterCamera/setCameraNotFound', true)
+      this.$store.commit('lamp/masters/camera/setCameraNotFound', true)
     } else {
       await this.setVideoStream()
     }

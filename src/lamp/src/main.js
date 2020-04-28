@@ -331,7 +331,7 @@
  * # Store
  *
  * Each master slide can get its own Vuex store module. The module is name like
- * `lampMaster${masterName}`, e. g. `lampMasterGeneric`.
+ * `lamp/masters/${masterName}`, e. g. `lamp/masters/generic`.
  *
  * ```js
  * export const default = {

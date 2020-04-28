@@ -22,7 +22,7 @@ export default {
   },
   computed: {
     svgMarkup () {
-      return this.$store.getters['lampMasterCloze/svgByUri'](this.src)
+      return this.$store.getters['lamp/masters/cloze/svgByUri'](this.src)
     }
   }
 }
