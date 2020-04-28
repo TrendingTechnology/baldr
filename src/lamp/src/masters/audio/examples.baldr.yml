@@ -3,7 +3,7 @@ slides:
 
 - title: With description
   audio:
-    src: id:Du-bist-als-Kind-zu-heiss-gebadet-worden
+    src: uuid:4f6c6b03-e5d1-4fc8-8bb9-ab3ffea8fb64
     description: |
       # Some text
 
@@ -13,41 +13,44 @@ slides:
 
 - title: Custom composer
   audio:
-    src: id:Marmotte_HB_Fischer-Dieskau_Marmotte
+    src: uuid:88ad5df3-d7f9-4e9e-9522-e205f51eedb3
     composer: Ludwig B. (Custom composer)
     autoplay: true
 
 - title: 'Autoplay: yes'
   audio:
-    src: id:Du-bist-als-Kind-zu-heiss-gebadet-worden
+    src: uuid:4f6c6b03-e5d1-4fc8-8bb9-ab3ffea8fb64
     title: Custom title
     autoplay: true
 
 - title: 'Autoplay: no'
   audio:
-    src: id:Du-bist-als-Kind-zu-heiss-gebadet-worden
+    src: uuid:4f6c6b03-e5d1-4fc8-8bb9-ab3ffea8fb64
     title: Custom title
     autoplay: false
 
 - title: 'Custom title'
   audio:
-    src: id:Du-bist-als-Kind-zu-heiss-gebadet-worden
+    src: uuid:4f6c6b03-e5d1-4fc8-8bb9-ab3ffea8fb64
     title: Custom title
 
 - title: 'Custom artist'
   audio:
-    src: id:Du-bist-als-Kind-zu-heiss-gebadet-worden
+    src: uuid:4f6c6b03-e5d1-4fc8-8bb9-ab3ffea8fb64
     artist: Custom artist
 
 - title: 'Custom cover'
   audio:
-    src: id:Du-bist-als-Kind-zu-heiss-gebadet-worden
+    src: uuid:4f6c6b03-e5d1-4fc8-8bb9-ab3ffea8fb64
     cover: id:Beethoven_Ludwig-van
     title: Custom cover
 
 - title: 'URL: id:'
   audio:
-    src: id:Du-bist-als-Kind-zu-heiss-gebadet-worden
+    src: uuid:4f6c6b03-e5d1-4fc8-8bb9-ab3ffea8fb64
 
 - audio:
-    src: id:Ich-hab-zu-Haus-ein-Grammophon
+    src: uuid:3e7d9633-6713-4f21-8c3d-f75ccc4ed38a
+
+- title: 'Lady Gaga: Yoü and I'
+  audio: uuid:96626fdb-4ece-47a5-9870-d89356e0f439
