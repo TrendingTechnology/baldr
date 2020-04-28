@@ -58,7 +58,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 
-import { CursorCross } from '@bldr/vue-plugin-components-collection'
+import { CursorCross } from '@bldr/components-collection'
 
 import SongSlide from './SongSlide'
 import TableOfContents from '@/views/TableOfContents'

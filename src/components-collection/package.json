@@ -1,5 +1,5 @@
 {
-  "name": "@bldr/vue-plugin-components-collection",
+  "name": "@bldr/components-collection",
   "description": "This package provides some SFC vue components to be used by various BALDR Vue apps.",
   "version": "0.2.2",
   "scripts": {

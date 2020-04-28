@@ -16,10 +16,10 @@
   "dependencies": {
     "@bldr/core-node": "^0.2.2",
     "@bldr/themes": "^0.2.3",
-    "@bldr/vue-plugin-components-collection": "^0.2.2",
+    "@bldr/components-collection": "^0.2.2",
     "@bldr/dynamic-select": "^0.2.2",
     "@bldr/icons": "^0.2.2",
-    "@bldr/vue-plugin-modal-dialog": "^0.2.2",
+    "@bldr/modal-dialog": "^0.2.2",
     "@bldr/shortcuts": "^0.2.2",
     "core-js": "^3.6.5",
     "vue": "^2.6.11",

@@ -15,7 +15,7 @@
 <script>
 import packageJson from '@/../package.json'
 import { mapGetters } from 'vuex'
-import { AppInfo } from '@bldr/vue-plugin-components-collection'
+import { AppInfo } from '@bldr/components-collection'
 
 export default {
   name: 'AppFooter',

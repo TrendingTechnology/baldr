@@ -2,7 +2,7 @@
  * This package provides some SFC vue components to be used by various BALDR
  * Vue apps.
  *
- * @module @bldr/vue-plugin-components-collection
+ * @module @bldr/components-collection
  */
 
 import SFCCursorCross from './components/CursorCross.vue'

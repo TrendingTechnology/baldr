@@ -8,7 +8,7 @@
 <script>
 /* globals songsJson */
 import { mapActions } from 'vuex'
-import { AppInfo } from '@bldr/vue-plugin-components-collection'
+import { AppInfo } from '@bldr/components-collection'
 
 import packageJson from '../package.json'
 

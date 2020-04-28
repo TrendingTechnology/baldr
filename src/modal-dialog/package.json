@@ -1,5 +1,5 @@
 {
-  "name": "@bldr/vue-plugin-modal-dialog",
+  "name": "@bldr/modal-dialog",
   "version": "0.2.2",
   "description": "A simple modal dialog component implementation in Vue.",
   "author": {

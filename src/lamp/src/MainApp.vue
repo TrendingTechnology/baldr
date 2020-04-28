@@ -37,7 +37,7 @@
 
 <script>
 import packageJson from '@/../package.json'
-import { AppInfo } from '@bldr/vue-plugin-components-collection'
+import { AppInfo } from '@bldr/components-collection'
 import { receiveSocketMessage } from '@/remote-control.js'
 
 import { createNamespacedHelpers } from 'vuex'
