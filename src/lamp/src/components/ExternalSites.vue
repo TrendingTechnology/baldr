@@ -35,7 +35,7 @@ export default {
     }
   },
   computed: {
-    imlsp () {
+    imslp () {
       if (this.asset.imslp) {
         return core.formatImslpUrl(this.asset.imslp)
       }
