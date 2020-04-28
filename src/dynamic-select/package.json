@@ -1,5 +1,5 @@
 {
-  "name": "@bldr/vue-plugin-dynamic-select",
+  "name": "@bldr/dynamic-select",
   "version": "0.2.2",
   "description": "A dynamic select form component made with Vue.",
   "author": {

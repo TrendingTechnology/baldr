@@ -10,7 +10,7 @@ import router from './router'
 import Vuex from 'vuex'
 
 import ModalDialog from '@bldr/vue-plugin-modal-dialog'
-import DynamicSelect from '@bldr/vue-plugin-dynamic-select'
+import DynamicSelect from '@bldr/dynamic-select'
 import MaterialIcon from '@bldr/icons'
 import shortcuts from '@bldr/shortcuts'
 

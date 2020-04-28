@@ -9,7 +9,7 @@
 import { HttpRequest } from '@bldr/http-request'
 import { formatMultiPartAssetFileName, AssetTypes, selectSubset, mediaUriRegExp } from '@bldr/core-browser'
 
-import DynamicSelect from '@bldr/vue-plugin-dynamic-select'
+import DynamicSelect from '@bldr/dynamic-select'
 
 // Vue components
 import ComponentClientMediaAsset from './MediaAsset.vue'

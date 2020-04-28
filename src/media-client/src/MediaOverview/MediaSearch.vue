@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import { DynamicSelect } from '@bldr/vue-plugin-dynamic-select'
+import { DynamicSelect } from '@bldr/dynamic-select'
 
 export default {
   name: 'MediaSearch',

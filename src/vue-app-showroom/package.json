@@ -17,7 +17,7 @@
     "@bldr/core-node": "^0.2.2",
     "@bldr/themes": "^0.2.3",
     "@bldr/vue-plugin-components-collection": "^0.2.2",
-    "@bldr/vue-plugin-dynamic-select": "^0.2.2",
+    "@bldr/dynamic-select": "^0.2.2",
     "@bldr/icons": "^0.2.2",
     "@bldr/vue-plugin-modal-dialog": "^0.2.2",
     "@bldr/shortcuts": "^0.2.2",
