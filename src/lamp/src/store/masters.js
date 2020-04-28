@@ -1,27 +1,20 @@
 /**
  * A Vuex store parent module for all masters.
  *
- * @see {@link module:@bldr/lamp/masters~Master#store Store property}
+ * @see {@link module:@bldr/lamp/masters~Master#store The store property of the master object}
  *
  * @module @bldr/lamp/store/masters
  */
 
-const state = {
-}
+import { masters } from '@/masters.js'
 
 const getters = {
-}
-
-const actions = {
-}
-
-const mutations = {
+  masterByName: state => masterName => {
+    return masters.get(masterName)
+  }
 }
 
 export default {
   namespaced: true,
-  state,
-  getters,
-  actions,
-  mutations
+  getters
 }
