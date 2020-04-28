@@ -1,7 +1,7 @@
 /**
  * Resolve media files. Counter part of the BALDR media server.
  *
- * @module @bldr/vue-plugin-media
+ * @module @bldr/media-client
  */
 
 /* globals config document Audio Image File */
@@ -217,7 +217,7 @@ class Player {
     this.globalVolume = 1
 
     /**
-     * @type {module:@bldr/vue-plugin-media~CustomEvents}
+     * @type {module:@bldr/media-client~CustomEvents}
      */
     this.events = new CustomEvents()
   }
@@ -333,11 +333,11 @@ class PlayList {
    * @param {object} store - The {@link https://vuex.vuejs.org/ vuex} store
    *   instance.
    *
-   * @param {module:@bldr/vue-plugin-media~Player} player
+   * @param {module:@bldr/media-client~Player} player
    */
   constructor (player) {
     /**
-     * @type {module:@bldr/vue-plugin-media~Player}
+     * @type {module:@bldr/media-client~Player}
      */
     this.player = player
   }
@@ -481,7 +481,7 @@ class Sample {
     /**
      * The parent media file object.
      *
-     * @type {module:@bldr/vue-plugin-media.MediaFile}
+     * @type {module:@bldr/media-client.MediaFile}
      */
     this.mediaFile = mediaFile
 
@@ -604,19 +604,19 @@ class Sample {
     this.shortcutCustom = shortcut
 
     /**
-     * @type {module:@bldr/vue-plugin-media~Interval}
+     * @type {module:@bldr/media-client~Interval}
      * @private
      */
     this.interval_ = new Interval()
 
     /**
-     * @type {module:@bldr/vue-plugin-media~TimeOut}
+     * @type {module:@bldr/media-client~TimeOut}
      * @private
      */
     this.timeOut_ = new TimeOut()
 
     /**
-     * @type {module:@bldr/vue-plugin-media~CustomEvents}
+     * @type {module:@bldr/media-client~CustomEvents}
      */
     this.events = new CustomEvents()
 
@@ -984,7 +984,7 @@ class Sample {
  * Wrap a sample with some meta data (mostly a custom title). Allow different
  * input specifications.
  *
- * @see {@link module:@bldr/vue-plugin-media.WrappedSamples}
+ * @see {@link module:@bldr/media-client.WrappedSamples}
  * @see {@link module:@bldr/lamp/content-file~AudioOverlay}
  */
 class WrappedSample {
@@ -1001,7 +1001,7 @@ class WrappedSample {
    */
   constructor (spec) {
     /**
-     * @type {module:@bldr/vue-plugin-media~Sample}
+     * @type {module:@bldr/media-client~Sample}
      * @private
      */
     this.sample_ = null
@@ -1070,7 +1070,7 @@ class WrappedSample {
    * We have to use a getter, because the sample may not be resolved at
    * the constructor time.
    *
-   * @returns {module:@bldr/vue-plugin-media~Sample}
+   * @returns {module:@bldr/media-client~Sample}
    */
   get sample () {
     if (this.sample_) return this.sample_
@@ -1082,7 +1082,7 @@ class WrappedSample {
  * Wrap some samples with metadata. Allow fuzzy specification of the samples.
  * Normalize the input.
  *
- * @see {@link module:@bldr/vue-plugin-media~WrappedSample}
+ * @see {@link module:@bldr/media-client~WrappedSample}
  * @see {@link module:@bldr/lamp/content-file~AudioOverlay}
  */
 export class WrappedSamples {
@@ -1613,7 +1613,7 @@ class Resolver {
 
   /**
    * @private
-   * @param {module:@bldr/vue-plugin-media.MediaFile} mediaFile - The
+   * @param {module:@bldr/media-client.MediaFile} mediaFile - The
    *   `mediaFile` object, a client side representation of a media asset.
    *
    * @returns {String} - A HTTP URL.
@@ -1631,10 +1631,10 @@ class Resolver {
    * Create samples for each playable media file. By default each media file
    * has one sample called “complete”.
    *
-   * @param {module:@bldr/vue-plugin-media.MediaFile} mediaFile - The
+   * @param {module:@bldr/media-client.MediaFile} mediaFile - The
    *   `mediaFile` object, a client side representation of a media asset.
    *
-   * @returns {module:@bldr/vue-plugin-media~Sample[]}
+   * @returns {module:@bldr/media-client~Sample[]}
    */
   async createSamples_ (mediaFile) {
     if (mediaFile.isPlayable) {
@@ -1707,10 +1707,10 @@ class Resolver {
    * 1. mediaElement
    *
    * @private
-   * @param {module:@bldr/vue-plugin-media~mediaFileSpec} mediaFileSpec - URI
+   * @param {module:@bldr/media-client~mediaFileSpec} mediaFileSpec - URI
    *   or File object
    *
-   * @returns {module:@bldr/vue-plugin-media.MediaFile}
+   * @returns {module:@bldr/media-client.MediaFile}
    */
   async resolveSingle_ (mediaFileSpec) {
     let mediaFile
@@ -1774,7 +1774,7 @@ class Resolver {
    * Linked media URIs are resolve in a second step (not recursive). Linked
    * media assets are not allowed to have linked media URIs.
    *
-   * @param {module:@bldr/vue-plugin-media~mediaFileSpecs} mediaFileSpecs
+   * @param {module:@bldr/media-client~mediaFileSpecs} mediaFileSpecs
    */
   async resolve (mediaFileSpecs) {
     if (typeof mediaFileSpecs === 'string' || mediaFileSpecs instanceof File) {
@@ -1846,17 +1846,17 @@ class Canvas {
 class Media {
   constructor () {
     /**
-     * @type {module:@bldr/vue-plugin-media~Player}
+     * @type {module:@bldr/media-client~Player}
      */
     this.player = new Player()
 
     /**
-     * @type {module:@bldr/vue-plugin-media~PlayList}
+     * @type {module:@bldr/media-client~PlayList}
      */
     this.playList = new PlayList(this.player)
 
     /**
-     *  @type {module:@bldr/vue-plugin-media~Resolver}
+     *  @type {module:@bldr/media-client~Resolver}
      */
     this.resolver = new Resolver()
 
@@ -1866,7 +1866,7 @@ class Media {
     this.httpRequest = httpRequest
 
     /**
-     * @type {module:@bldr/vue-plugin-media~Canvas}
+     * @type {module:@bldr/media-client~Canvas}
      */
     this.canvas = new Canvas()
 
@@ -1952,7 +1952,7 @@ class Media {
    * Resolve media files by URIs. The media file gets stored in the vuex
    * store module `media`. Use getters to access the `mediaFile` objects.
    *
-   * @param {module:@bldr/vue-plugin-media~mediaFileSpecs} mediaFileSpecs
+   * @param {module:@bldr/media-client~mediaFileSpecs} mediaFileSpecs
    */
   async resolve (mediaFileSpecs) {
     const output = {}
@@ -2121,7 +2121,7 @@ const Plugin = {
     /**
      * $media
      * @memberof module:@bldr/lamp~Vue
-     * @type {module:@bldr/vue-plugin-media~Media}
+     * @type {module:@bldr/media-client~Media}
      */
     Vue.prototype.$media = new Media()
     // Vue.component('media-player', ComponentMediaPlayer)

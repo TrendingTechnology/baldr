@@ -2,12 +2,12 @@
 [![Build Status](https://travis-ci.org/Josef-Friedrich/baldr.svg?branch=master)](https://travis-ci.org/Josef-Friedrich/baldr)
 [![GitHub repo size](https://img.shields.io/github/repo-size/Josef-Friedrich/baldr.svg)](https://github.com/Josef-Friedrich/baldr)
 
-# @bldr/vue-plugin-media
+# @bldr/media-client
 
 Resolve media files. Counter part of the BALDR media server.
 
 ```js
-import media from '@bldr/vue-plugin-media'
+import media from '@bldr/media-client'
 
 Vue.use(media, router, store)
 ```

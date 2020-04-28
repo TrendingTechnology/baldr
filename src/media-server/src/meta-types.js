@@ -208,7 +208,7 @@ function formatFilePath (data, oldPath) {
   // b/Bush_George-Walker/main.jpeg
   const relPath = typeSpec.relPath({ typeData: data, typeSpec, oldRelPath })
   if (!relPath) throw new Error(`The relPath() function has to return a string for meta type “${typeName}”`)
-  // To avoid confusion with class MediaFile in the module @bldr/vue-plugin-media
+  // To avoid confusion with class MediaFile in the module @bldr/media-client
   delete data.extension
   let basePath = typeSpec.basePath ? typeSpec.basePath : config.mediaServer.basePath
   return path.join(basePath, relPath)

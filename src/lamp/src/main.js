@@ -360,7 +360,7 @@ import shortcuts from '@bldr/shortcuts'
 import MaterialIcon from '@bldr/icons'
 import ModalDialog from '@bldr/vue-plugin-modal-dialog'
 import DynamicSelect from '@bldr/vue-plugin-dynamic-select'
-import media from '@bldr/vue-plugin-media'
+import media from '@bldr/media-client'
 import Websocket from 'vue-native-websocket'
 
 // Vue components.

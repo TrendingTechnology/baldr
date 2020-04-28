@@ -3,7 +3,7 @@
  */
 
 import { GrabFromObjects } from '@/lib.js'
-import { WrappedSamples } from '@bldr/vue-plugin-media'
+import { WrappedSamples } from '@bldr/media-client'
 
 export default {
   title: 'Instrument',

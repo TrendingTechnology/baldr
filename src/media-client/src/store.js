@@ -1,5 +1,5 @@
 /**
- * @module @bldr/vue-plugin-media/store
+ * @module @bldr/media-client/store
  */
 
 import Vue from 'vue'
