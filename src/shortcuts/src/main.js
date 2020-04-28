@@ -4,6 +4,7 @@
  * A instance of the class
  * {@link module:@bldr/shortcuts~Shortcuts Shortcuts} is mounted
  * under `this.$shortcuts` in the Vue apps.
+ *
  * @module @bldr/shortcuts
  */
 
@@ -210,7 +211,7 @@ class Shortcuts {
           // To avoid uncaught exception object when navigation to a already
           // loaded route.
           if (this.$router.currentRoute.path !== route.path) {
-            this.$router.push(route.path)
+            this.$router.push(route)
           }
         },
         // `Go to route: ${routeTitle}`
