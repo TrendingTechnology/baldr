@@ -20,7 +20,7 @@
     "@bldr/vue-plugin-dynamic-select": "^0.2.2",
     "@bldr/icons": "^0.2.2",
     "@bldr/vue-plugin-modal-dialog": "^0.2.2",
-    "@bldr/vue-plugin-shortcuts": "^0.2.2",
+    "@bldr/shortcuts": "^0.2.2",
     "core-js": "^3.6.4",
     "vue": "^2.6.11",
     "vue-router": "^3.1.6",

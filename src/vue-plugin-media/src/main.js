@@ -38,7 +38,7 @@ export let router
 /**
  * A instance of the class `Shortcuts()`.
  *
- * @type {module:@bldr/vue-plugin-shortcuts~Shortcuts}
+ * @type {module:@bldr/shortcuts~Shortcuts}
  */
 export let shortcuts
 

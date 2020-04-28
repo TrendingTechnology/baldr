@@ -2,9 +2,9 @@
  * Wrapper functions around {@link https://craig.is/killing/mice mousetrap}.
  *
  * A instance of the class
- * {@link module:@bldr/vue-plugin-shortcuts~Shortcuts Shortcuts} is mounted
+ * {@link module:@bldr/shortcuts~Shortcuts Shortcuts} is mounted
  * under `this.$shortcuts` in the Vue apps.
- * @module @bldr/vue-plugin-shortcuts
+ * @module @bldr/shortcuts
  */
 
 import Mousetrap from 'mousetrap'
@@ -141,7 +141,7 @@ class Shortcuts {
    * A multiple shortcuts
    *
    * @param {array} shortcutSpecs - An array of
-   *   {@link module:@bldr/vue-plugin-shortcuts~shortcutSpec shortcutSpec}.
+   *   {@link module:@bldr/shortcuts~shortcutSpec shortcutSpec}.
    */
   addMultiple (shortcutSpecs) {
     for (const shortcut of shortcutSpecs) {
@@ -252,7 +252,7 @@ const Plugin = {
     /**
      * $shortcuts
      * @memberof module:@bldr/lamp~Vue
-     * @type {module:@bldr/vue-plugin-shortcuts~Shortcuts}
+     * @type {module:@bldr/shortcuts~Shortcuts}
      */
     Vue.prototype.$shortcuts = new Shortcuts(router, store)
   }

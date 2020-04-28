@@ -12,7 +12,7 @@ import Vuex from 'vuex'
 import ModalDialog from '@bldr/vue-plugin-modal-dialog'
 import DynamicSelect from '@bldr/vue-plugin-dynamic-select'
 import MaterialIcon from '@bldr/icons'
-import shortcuts from '@bldr/vue-plugin-shortcuts'
+import shortcuts from '@bldr/shortcuts'
 
 Vue.config.productionTip = false
 
