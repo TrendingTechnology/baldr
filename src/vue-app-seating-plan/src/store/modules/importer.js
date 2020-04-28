@@ -2,16 +2,9 @@
 /* globals localStorage config */
 
 import { formatToLocalDateTime } from '../../lib.js'
-import { getDefaultServers, HttpRequest } from '@bldr/http-request'
+import { HttpRequest } from '@bldr/http-request'
 
-const defaultServers = getDefaultServers()
-// remote first
-const servers = {
-  remote: defaultServers.remote,
-  local: defaultServers.local
-}
-
-const httpRequest = new HttpRequest(servers, '/api/seating-plan')
+const httpRequest = new HttpRequest('/api/seating-plan')
 
 class InitState {
   constructor () {

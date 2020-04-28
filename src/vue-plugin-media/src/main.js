@@ -6,7 +6,7 @@
 
 /* globals config document Audio Image File */
 
-import { getDefaultServers, HttpRequest } from '@bldr/http-request'
+import { HttpRequest } from '@bldr/http-request'
 import { formatMultiPartAssetFileName, AssetTypes, selectSubset, mediaUriRegExp } from '@bldr/core-browser'
 
 import DynamicSelect from '@bldr/vue-plugin-dynamic-select'
@@ -20,7 +20,7 @@ import ComponentMediaCanvas from './MediaCanvas.vue'
 import ComponentPlayButton from './PlayButton.vue'
 import storeModule from './store.js'
 
-export const httpRequest = new HttpRequest(getDefaultServers(), '/api/media')
+export const httpRequest = new HttpRequest('/api/media')
 
 /**
  * The {@link https://vuex.vuejs.org/ vuex} store instance.
@@ -1621,8 +1621,8 @@ class Resolver {
   async resolveHttpUrl_ (mediaFile) {
     if (mediaFile.httpUrl) return mediaFile.httpUrl
     if (mediaFile.path) {
-      const baseURL = await httpRequest.getFirstBaseUrl()
-      return `${baseURL}/media/${mediaFile.path}`
+      const baseUrl = await httpRequest.baseUrl
+      return `${baseUrl}/media/${mediaFile.path}`
     }
     throw new Error(`Can not generate HTTP URL.`)
   }

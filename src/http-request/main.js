@@ -9,16 +9,12 @@
 
 import axios from 'axios'
 
-const defaultServers = {
+const restEndPoints = {
   local: {
-    baseURL: config.http.domainLocal,
-    https: false,
-    checkUrl: 'version'
+    domain: config.http.domainLocal
   },
   remote: {
-    baseURL: config.http.domainRemote,
-    https: true,
-    checkUrl: 'version',
+    domain: config.http.domainRemote,
     auth: {
       username: config.http.username,
       password: config.http.password
@@ -26,118 +22,60 @@ const defaultServers = {
   }
 }
 
-function deepClone (object) {
-  // We change the object so we need a deep clone.
-  return JSON.parse(JSON.stringify(object))
-}
-
-export function getDefaultServers () {
-  return deepClone(defaultServers)
-}
-
 /**
- * @param {object} servers - A object represention multiple servers.
- * @param {string} urlFillIn - A string which gets filled between the base URL
- *   and the last part of the URL.
+ * @param {string} urlFillIn - A URL segment that is inserted between the base
+ *   URL and the last part of the URL. For example `baseURL`: `localhost`
+ *   `urlFillIn`: `/api/media`.
  */
 export class HttpRequest {
-  constructor (servers, urlFillIn) {
+  constructor (urlFillIn) {
+    /**
+     * A URL segment that is inserted between the base URL and the last part of
+     * the URL. For example `baseURL`: `localhost` `urlFillIn`: `/api/media`.
+     *
+     * @type {String}
+     */
     this.urlFillIn = urlFillIn
-    this.defaultConfig = {
+
+    /**
+     * The base URL of the REST endpoint.
+     *
+     * @type {String}
+     */
+    this.baseUrl = null
+
+    if (location.hostname === 'localhost') {
+      this.baseUrl = `${location.protocol}//${restEndPoints.local.domain}`
+    } else {
+      this.baseUrl = `${location.protocol}//${restEndPoints.remote.domain}`
+    }
+
+    const axiosConfig = {
+      baseURL: this.baseUrl,
       timeout: 10000,
       crossDomain: true
     }
 
-    this.servers = {}
-    for (const name in servers) {
-      if (location.protocol === 'http:' || (location.protocol === 'https:' && servers[name].https)) {
-        this.servers[name] = Object.assign(servers[name], this.defaultConfig)
-
-        let httpString
-        if (this.servers[name].https) {
-          httpString = 'https://'
-        } else {
-          httpString = 'http://'
-        }
-        delete this.servers[name].https
-        this.servers[name].baseURL = `${httpString}${this.servers[name].baseURL}`
-      }
-    }
-
     /**
-     * An array of Axios instances
-     * @type {array}
+     * An Axios instance.
+     *
+     * @see {@link https://github.com/axios/axios#axioscreateconfig}
+     *
+     * @type {Object}
      */
-    this.axiosInstances_ = []
-
-    this.serverList_ = []
+    this.axiosInstance_ = axios.create(axiosConfig)
   }
 
   /**
-   * Reset the Axios instance to get a new instance. To check different
-   * URL.
+   * @param {String} url
    *
-   * @private
+   * @returns {String}
    */
-  resetAxiosInstances_ () {
-    this.axiosInstances_ = []
-    this.serverList_ = []
-  }
-
   formatUrl (url) {
     if (this.urlFillIn && url.substr(0, 1) !== '/') {
       return `${this.urlFillIn}/${url}`
     }
     return url
-  }
-
-  initalised () {
-    return this.axiosInstances_.length > 0
-  }
-
-  /**
-   * @private
-   */
-  async createAxiosInstances_ () {
-    if (this.initalised()) {
-      return
-    }
-    for (const name in this.servers) {
-      const conn = this.servers[name]
-      try {
-        const axiosInstance = axios.create(conn)
-        await axiosInstance.get(this.formatUrl(conn.checkUrl))
-        this.axiosInstances_.push(axiosInstance)
-        this.serverList_.push(name)
-      } catch (error) {}
-    }
-  }
-
-  async getFirstBaseUrl () {
-    await this.createAxiosInstances_()
-    if (this.initalised()) return this.axiosInstances_[0].defaults.baseURL
-  }
-
-  async getServers () {
-    await this.createAxiosInstances_()
-    const servers = []
-    for (const axiosInstance of this.axiosInstances_) {
-      servers.push(axiosInstance.defaults)
-    }
-    return servers
-  }
-
-  async axiosRequest (config, requestAllServer = false) {
-    config.url = this.formatUrl(config.url)
-    if (requestAllServer) {
-      const results = []
-      for (const instance of this.axiosInstances_) {
-        results.push(await instance.request(config))
-      }
-      return results
-    } else {
-      return this.axiosInstances_[0].request(config)
-    }
   }
 
   /**
@@ -152,22 +90,14 @@ export class HttpRequest {
    *
    * @param {object} config
    */
-  async request (config, requestAllServer = false) {
+  request (config) {
     if (typeof config === 'string') {
       config = { method: 'get', url: config }
     }
     if (!('method' in config)) {
       config.method = 'get'
     }
-    try {
-      if (!this.initalised()) await this.createAxiosInstances_()
-      return this.axiosRequest(config, requestAllServer)
-    } catch (error) {
-      this.resetAxiosInstances_()
-      await this.createAxiosInstances_()
-      return this.axiosRequest(config, requestAllServer)
-    }
+    config.url = this.formatUrl(config.url)
+    return this.axiosInstance_.request(config)
   }
 }
-
-export default new HttpRequest(getDefaultServers())

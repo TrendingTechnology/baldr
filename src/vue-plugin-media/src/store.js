@@ -4,8 +4,8 @@
 
 import Vue from 'vue'
 
-import { getDefaultServers, HttpRequest } from '@bldr/http-request'
-const httpRequest = new HttpRequest(getDefaultServers(), '/api/media')
+import { HttpRequest } from '@bldr/http-request'
+const httpRequest = new HttpRequest('/api/media')
 
 const state = {
   multiPartUris: new Set(),
