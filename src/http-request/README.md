@@ -4,5 +4,4 @@
 
 # @bldr/http-request
 
-Make HTTP requests on multiple servers, for example on a local and a
-remote HTTP server.
+A wrapper around Axios.

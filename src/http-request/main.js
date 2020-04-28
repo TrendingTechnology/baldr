@@ -1,6 +1,7 @@
 /**
- * A wrapper around Axios. Bundles configuration, selects the right
- * configuration according `location`. Simplify request api from axios.
+ * A wrapper around Axios. This module bundles the configuration and selects the
+ * right configuration according to the Browsers global `location` object.
+ * It tries to simplify the request API of Axios.
  *
  * @see {@link https://github.com/axios/axios}
  *
@@ -25,15 +26,28 @@ const restEndPoints = {
 }
 
 /**
+ * A wrapper around Axios.
+ *
  * @param {string} urlFillIn - A URL segment that is inserted between the base
- *   URL and the last part of the URL. For example `baseURL`: `localhost`
- *   `urlFillIn`: `/api/media`.
+ * URL and the last part of  the URL. For example
+ *
+ * - `baseUrl`: `localhost`
+ * - `urlFillIn`: `/api/media`
+ * - `url`: `query`
+ *
+ * results in the URL `http://localhost/api/media/query`.
  */
 export class HttpRequest {
   constructor (urlFillIn) {
     /**
      * A URL segment that is inserted between the base URL and the last part of
-     * the URL. For example `baseURL`: `localhost` `urlFillIn`: `/api/media`.
+     * the URL. For example
+     *
+     * - `baseUrl`: `localhost`
+     * - `urlFillIn`: `/api/media`
+     * - `url`: `query`
+     *
+     * results in the URL `http://localhost/api/media/query`.
      *
      * @type {String}
      */
@@ -97,9 +111,9 @@ export class HttpRequest {
    *
    * @param {Object} config - An Axios Request Config
    *   (see {@link https://github.com/axios/axios#request-config})
-   * @property {String} method
-   * @property {String} url - A path relative to REST endpoints base URL. if
-   *   `url` starts with `/` the `urlFillin` is not used.
+   * @property {String} method - For example `get`.
+   * @property {String} url - A path relative to the REST endpoints’ base URL.
+   *   If `url` starts with `/` the `urlFillin` is not used.
    */
   request (config) {
     if (typeof config === 'string') {
