@@ -3,7 +3,7 @@
  *
  * @see {@link module:@bldr/lamp/masters~Master#store Store property}
  *
- * @module @bldr/store/masters
+ * @module @bldr/lamp/store/masters
  */
 
 const state = {
