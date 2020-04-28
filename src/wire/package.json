@@ -20,7 +20,7 @@
     "baldr_wire.js": "./main.js"
   },
   "dependencies": {
-    "ws": "^7.2.3",
+    "ws": "^7.2.5",
     "@bldr/core-node": "^0.2.2"
   }
 }

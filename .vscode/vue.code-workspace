@@ -1,15 +1,15 @@
 {
   "folders": [
     {
-      "name": "@bldr/vue-app-seating-plan",
+      "name": "@bldr/seating-plan",
       "path": "../src/vue/apps/seating-plan/src"
     },
     {
-      "name": "@bldr/vue-app-showroom",
+      "name": "@bldr/showroom",
       "path": "../src/vue/apps/showroom/src"
     },
     {
-      "name": "@bldr/vue-app-songbook",
+      "name": "@bldr/songbook",
       "path": "../src/vue/apps/songbook/src"
     },
     {
