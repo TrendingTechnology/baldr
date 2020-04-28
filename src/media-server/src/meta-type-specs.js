@@ -730,7 +730,6 @@ const cloze = {
         } else if (typeData.clozePageNo && !typeData.clozePageCount) {
           suffix = ` (Seite ${typeData.clozePageNo})`
         }
-        console.log(suffix)
         return `Lückentext zum Thema „${folderTitles.title}“${suffix}`
       },
       overwriteByDerived: true
@@ -781,6 +780,44 @@ const radio = {
   }
 }
 
+/**
+ * The meta data type specification “reference”.
+ *
+ * @type {module:@bldr/media-server/meta-types~typeSpec}
+ */
+const reference = {
+  title: 'Quelle',
+  description: 'Quelle, auf der eine Unterrichtsstunde aufbaut, z. B. Auszüge aus Schulbüchern.',
+  detectTypeByPath: function () {
+    return new RegExp('^.*/QL/.*.pdf$')
+  },
+  abbreviation: 'QL',
+  props: {
+    title: {
+      derive: function ({ typeData, folderTitles, filePath }) {
+        let suffix = ''
+        if (typeData.forTeacher) {
+          suffix = ` (Lehrerband)`
+        }
+        return `Quelle zum Thema „${folderTitles.title}“${suffix}`
+      },
+      overwriteByDerived: true
+    },
+    publisher: {
+      title: 'Verlag'
+    },
+    pageNos: {
+      title: 'Seitenzahlen'
+    },
+    forTeacher: {
+      title: 'Lehrerband'
+    },
+    isbn13: {
+      title: 'ISBN-Nummer (13 Stellen)'
+    }
+  }
+}
+
 module.exports = {
   cloze,
   composition,
@@ -790,8 +827,9 @@ module.exports = {
   instrument,
   person,
   photo,
-  recording,
-  song,
   radio,
+  recording,
+  reference,
+  song,
   worksheet
 }

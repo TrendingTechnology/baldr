@@ -39,6 +39,8 @@ const { HierarchicalFolderTitles } = require('./titles.js')
  *
  * @property {String} title - A title for the metadata type.
  *
+ * @property {String} description - A text to describe a metadata type.
+ *
  * @property {String} abbreviation - A two letter abbreviation. Used in
  *   the IDs.
  *

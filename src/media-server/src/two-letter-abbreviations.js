@@ -13,6 +13,7 @@ module.exports = {
   NB: 'Notenbeispiel',
   PA: 'Partitur',
   PR: 'Person',
+  QL: 'Quelle',
   SF: 'Schulfunk',
   TX: 'TeX-Dateien',
   VD: 'Video-Datei'
