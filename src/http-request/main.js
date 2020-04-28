@@ -1,6 +1,8 @@
 /**
- * A wrapper around axios. Bundles configuration, selects the right
- * configuration according `window.location`. Simplfy request api.
+ * A wrapper around Axios. Bundles configuration, selects the right
+ * configuration according `location`. Simplify request api from axios.
+ *
+ * @see {@link https://github.com/axios/axios}
  *
  * @module @bldr/http-request
  */
@@ -67,11 +69,14 @@ export class HttpRequest {
   }
 
   /**
-   * @param {String} url
+   * @property {String} url - A path relative to REST endpoints base URL. if
+   *   `url` starts with `/` the `urlFillin` is not used.
+   *
+   * @private
    *
    * @returns {String}
    */
-  formatUrl (url) {
+  formatUrl_ (url) {
     if (this.urlFillIn && url.substr(0, 1) !== '/') {
       return `${this.urlFillIn}/${url}`
     }
@@ -79,7 +84,9 @@ export class HttpRequest {
   }
 
   /**
-   * Wrapper around axios.request. See axios.request
+   * Wrapper around `axios.request(config)`.
+   *
+   * @see {@link https://github.com/axios/axios#axiosrequestconfig}
    *
    * <pre><code>
    * {
@@ -88,7 +95,11 @@ export class HttpRequest {
    * }
    * </code></pre>
    *
-   * @param {object} config
+   * @param {Object} config - An Axios Request Config
+   *   (see {@link https://github.com/axios/axios#request-config})
+   * @property {String} method
+   * @property {String} url - A path relative to REST endpoints base URL. if
+   *   `url` starts with `/` the `urlFillin` is not used.
    */
   request (config) {
     if (typeof config === 'string') {
@@ -97,7 +108,7 @@ export class HttpRequest {
     if (!('method' in config)) {
       config.method = 'get'
     }
-    config.url = this.formatUrl(config.url)
+    config.url = this.formatUrl_(config.url)
     return this.axiosInstance_.request(config)
   }
 }
