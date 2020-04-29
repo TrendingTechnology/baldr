@@ -510,6 +510,8 @@ async function insertObjectIntoDb (filePath, mediaType) {
     if (mediaType === 'presentations') {
       object = new Presentation(filePath)
     } else if (mediaType === 'assets') {
+      // Now only with meta data yml. Fix problems with PDF lying around.
+      if (!fs.existsSync(`${filePath}.yml`)) return
       object = new Asset(filePath)
     }
     object = object.prepareForInsert()
