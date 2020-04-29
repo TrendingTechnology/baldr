@@ -807,7 +807,8 @@ const reference = {
       title: 'Verlag'
     },
     pageNos: {
-      title: 'Seitenzahlen'
+      title: 'Seitenzahlen',
+      description: 'Auf welchen Seiten aus der Quelle dieser Auszug zu finden war. Nicht zu verwechseln mit der Seitenanzahl des PDFs.'
     },
     forTeacher: {
       title: 'Lehrerband'
@@ -816,6 +817,8 @@ const reference = {
       title: 'ISBN-Nummer (13 Stellen)'
     },
     pageCount: {
+      title: 'Seitenanzahl des PDFs',
+      description: 'Die Seitenanzahl dieses PDFs',
       derive ({ filePath }) {
         return getPdfPageCount(filePath)
       },
