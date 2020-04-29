@@ -4,7 +4,7 @@
     slide-preview-fullscreen
   ">
     <img class="img-contain" :src="imageHttpUrl">
-    <p class="transparent-background important">{{ name }}</p>
+    <p class="important">{{ name }}</p>
   </div>
 </template>
 
@@ -30,13 +30,13 @@ export default {
     }
 
     p {
-      position: absolute;
-      top: 2em;
-      width: 100%;
-      color: $black;
+      color: $orange;
       font-size: 2em;
       margin: 0;
       padding-left: 1em;
+      position: absolute;
+      top: 2em;
+      width: 100%;
     }
   }
 </style>

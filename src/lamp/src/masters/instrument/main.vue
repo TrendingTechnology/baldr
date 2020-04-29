@@ -1,19 +1,26 @@
 <template>
   <div class="vc_instrument_master">
     <img class="img-contain" :src="imageHttpUrl">
-    <p class="name transparent-background important">{{ name }}</p>
+    <p class="name important">{{ name }}</p>
+    <p class="info-box font-shadow smaller" v-if="asset.description" v-html="asset.description"></p>
     <horizontal-play-buttons
       :wrapped-samples="wrappedSamples"
     />
+    <external-sites :asset="asset"/>
   </div>
 </template>
 
 <script>
+import ExternalSites from '@/components/ExternalSites.vue'
+
 export default {
   props: {
     name: {
       type: String,
       required: true
+    },
+    asset: {
+      type: Object
     },
     imageHttpUrl: {
       type: String,
@@ -22,6 +29,9 @@ export default {
     wrappedSamples: {
       type: Object
     }
+  },
+  components: {
+    ExternalSites
   }
 }
 </script>
@@ -33,12 +43,18 @@ export default {
     }
 
     .name {
+      margin: 0em;
       position: absolute;
       font-size: 4em;
-      top: 2em;
+      top: 0.5em;
       width: 100%;
-      padding-left: 2em;
-      color: $black;
+      padding-left: 1em;
+      color: $orange;
+    }
+
+    .info-box {
+      left: 3em;
+      top: 30vh;
     }
 
     .vc_horizontal_play_buttons {

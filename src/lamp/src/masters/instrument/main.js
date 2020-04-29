@@ -45,6 +45,7 @@ export default {
       const mainImage = this.$store.getters['media/assetByUri'](props.mainImageUri)
       const grab = new GrabFromObjects(props, mainImage, false)
       const propsMain = grab.multipleProperties(['name'])
+      propsMain.asset = mainImage
       propsMain.imageHttpUrl = mainImage.httpUrl
       if (mainImage.audioSamples) {
         propsMain.wrappedSamples = new WrappedSamples(mainImage.audioSamples)

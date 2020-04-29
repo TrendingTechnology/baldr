@@ -393,6 +393,15 @@ export default {
     width: 100%;
   }
 
+  .info-box {
+    font-style: italic;
+    height: 10em;
+    position: absolute;
+    right: 1em;
+    top: 1em;
+    width: 20em;
+  }
+
   /*********************************************************************
    * Main components
    ********************************************************************/
