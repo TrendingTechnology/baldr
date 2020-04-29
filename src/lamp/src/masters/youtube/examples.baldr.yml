@@ -7,3 +7,14 @@ slides:
 - title: Long form
   youtube:
     id: xtKavZG1KiM
+
+- title: Heading
+  youtube:
+    id: lTDrUzUUglA
+    heading: <em class="person">Chet Baker</em> Live
+
+- title: Heading and info
+  youtube:
+    id: OqQWVrfjatA
+    heading: <em class="person">Chet Baker</em> Live
+    info: <em class="person">Stan Getz</em> & <em class="person">Chet Baker</em> in Stockholm 1983

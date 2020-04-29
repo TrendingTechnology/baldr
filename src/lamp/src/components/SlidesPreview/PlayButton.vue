@@ -1,6 +1,6 @@
 <template>
-  <div class="vc_slides_preview_play_button">
-    <plain-icon name="play"/>
+  <div class="vc_slides_preview_play_button valign-wrapper">
+    <plain-icon class="valign-center font-shadow" name="play"/>
   </div>
 </template>
 
@@ -12,13 +12,16 @@ export default {
 
 <style lang="scss">
   .vc_slides_preview_play_button {
+    height: 100%;
+    left: 0;
+    position: absolute;
+    text-align: center;
+    top: 0;
+    width: 100%;
+
     .baldr-icon {
-      background-color: $gray;
       font-size: 6em;
-      left: 1.2em;
-      opacity: 0.2;
-      position: absolute;
-      top: 0.6em;
+      opacity: 0.4;
     }
   }
 </style>

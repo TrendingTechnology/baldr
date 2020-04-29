@@ -9,6 +9,16 @@ export default {
       type: String,
       required: true,
       description: 'Die Youtube-ID (z. B. xtKavZG1KiM).'
+    },
+    heading: {
+      type: String,
+      description: 'Eigene Überschrift',
+      markup: true
+    },
+    info: {
+      type: String,
+      description: 'längerer Informations-Text',
+      markup: true
     }
   },
   icon: {

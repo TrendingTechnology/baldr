@@ -371,7 +371,7 @@ export default {
 
   // Fix white text over white image areas
   .font-shadow {
-    text-shadow: 0 0 0.2em $black, 0 0 0.05em $green;
+    text-shadow: 0 0 0.2em $black, 0 0 0.05em $black;
   }
 
   .smaller {
