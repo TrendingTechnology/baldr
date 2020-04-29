@@ -6,7 +6,7 @@
       v-if="shortBiography"
       v-html="shortBiography"
     />
-    <div class="info-box">
+    <div class="title-box">
       <p
         class="birth-and-death font-shadow"
         v-if="birth || death"
@@ -69,7 +69,7 @@ export default {
       width: 20em;
     }
 
-    .info-box {
+    .title-box {
       bottom: 2em;
       position: absolute;
       right: 0;

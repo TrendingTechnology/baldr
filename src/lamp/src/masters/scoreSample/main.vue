@@ -30,7 +30,7 @@ export default {
 
 <style lang="scss">
   .vc_score_sample_master {
-    padding: 3em 3em;
+    padding: 0.4em;
     background-color: white;
     text-align: center;
 
@@ -48,8 +48,8 @@ export default {
       bottom: 0;
       left: 0;
       object-fit: contain;
-      width: 92%;
-      height: 90%;
+      width: 80%;
+      height: 70%;
     }
   }
 </style>
