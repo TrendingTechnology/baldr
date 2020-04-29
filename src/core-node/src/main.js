@@ -6,10 +6,10 @@
  */
 
 // Node packages.
+const childProcess = require('child_process')
 const fs = require('fs')
 const path = require('path')
 const util = require('util')
-const childProcess = require('child_process')
 
 // Third party packages
 const git = require('git-rev-sync')
@@ -79,9 +79,29 @@ function checkExecutables (executables) {
   }
 }
 
+/**
+ * Get the page count of an PDF file. You have to install the command
+ * line utility `pdfinfo` from the Poppler PDF suite.
+ *
+ * @see {@link https://poppler.freedesktop.org}
+ *
+ * @param {String} filePath - The path on an PDF file.
+ *
+ * @returns {Number}
+ */
+function getPdfPageCount (filePath) {
+  checkExecutables('pdfinfo')
+  const proc = childProcess.spawnSync(
+    'pdfinfo', [filePath],
+    { encoding: 'utf-8', cwd: process.cwd() }
+  )
+  return parseInt(proc.stdout.match(/Pages:\s+(\d+)/)[1])
+}
+
 module.exports = {
   bootstrapConfig,
+  checkExecutables,
+  getPdfPageCount,
   gitHead,
-  log,
-  checkExecutables
+  log
 }

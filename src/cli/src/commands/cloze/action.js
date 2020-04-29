@@ -8,6 +8,7 @@ const chalk = require('chalk')
 // Project packages.
 const mediaServer = require('@bldr/media-server')
 const lib = require('../../lib.js')
+const { getPdfPageCount } = require('@bldr/core-node')
 
 function generateClozeSvg (filePath) {
   const cwd = path.dirname(filePath)
@@ -31,12 +32,7 @@ function generateClozeSvg (filePath) {
     { cwd }
   )
 
-  const process = childProcess.spawnSync(
-    'pdfinfo', [`${jobName}.pdf`],
-    { encoding: 'utf-8', cwd }
-  )
-
-  const pageCount = parseInt(process.stdout.match(/Pages:\s+(\d+)/)[1])
+  const pageCount = getPdfPageCount(`${jobName}.pdf`)
 
   for (let index = 1; index <= pageCount; index++) {
     let counterSuffix = ''

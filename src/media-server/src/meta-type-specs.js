@@ -22,7 +22,7 @@ const { v4: uuidv4 } = require('uuid');
 
 // Project packages.
 const { deasciify, idify } = require('./helper.js')
-const { bootstrapConfig } = require('@bldr/core-node')
+const { bootstrapConfig, getPdfPageCount } = require('@bldr/core-node')
 const { mediaUriRegExp } = require('@bldr/core-browser')
 
 /**
@@ -814,6 +814,12 @@ const reference = {
     },
     isbn: {
       title: 'ISBN-Nummer (13 Stellen)'
+    },
+    pageCount: {
+      derive ({ filePath }) {
+        return getPdfPageCount(filePath)
+      },
+      overwriteByDerived: true
     }
   }
 }
