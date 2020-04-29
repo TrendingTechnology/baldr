@@ -250,7 +250,7 @@ class HierarchicalFolderTitles {
    * The parent directory name with the numeric prefix: For example
    * `Bachs-vergebliche-Reise`.
    *
-   * @returns {string}
+   * @returns {String}
    */
   get id () {
     return this.lastFolderTitleObject_.folderName.replace(/\d\d_/, '')
@@ -260,7 +260,7 @@ class HierarchicalFolderTitles {
    * The title. It is the first line in the text file `title.txt` in the
    * same folder as the constructor `filePath` file.
    *
-   * @returns {string}
+   * @returns {String}
    */
   get title () {
     return this.lastFolderTitleObject_.title
@@ -270,12 +270,22 @@ class HierarchicalFolderTitles {
    * The subtitle. It is the second line in the text file `title.txt` in the
    * same folder as the constructor `filePath` file.
    *
-   * @returns {string}
+   * @returns {String}
    */
   get subtitle () {
     if (this.lastFolderTitleObject_.subtitle) {
       return this.lastFolderTitleObject_.subtitle
     }
+  }
+
+  /**
+   * Combine the title and the subtitle (`Title - Subtitle`).
+   *
+   * @returns {String}
+   */
+  get titleAndSubtitle () {
+    if (this.subtitle) return `${this.title} - ${this.subtitle}`
+    return this.title
   }
 
   /**

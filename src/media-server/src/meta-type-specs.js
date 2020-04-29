@@ -679,7 +679,15 @@ const worksheet = {
       derive: function ({ folderTitles, filePath }) {
         const match = filePath.match(new RegExp(path.sep + '([^' + path.sep + ']+)\.pdf'))
         const baseName = match[1]
-        return `${baseName} zum Thema „${folderTitles.title}“`
+        return `${baseName} zum Thema „${folderTitles.titleAndSubtitle}“`
+      },
+      overwriteByDerived: true
+    },
+    pageCount: {
+      title: 'Seitenanzahl des PDFs',
+      description: 'Die Seitenanzahl dieses PDFs',
+      derive ({ filePath }) {
+        return getPdfPageCount(filePath)
       },
       overwriteByDerived: true
     }
@@ -799,7 +807,7 @@ const reference = {
         if (typeData.forTeacher) {
           suffix = ` (Lehrerband)`
         }
-        return `Quelle zum Thema „${folderTitles.title}“${suffix}`
+        return `Quelle zum Thema „${folderTitles.titleAndSubtitle}“${suffix}`
       },
       overwriteByDerived: true
     },
