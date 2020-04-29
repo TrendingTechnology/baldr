@@ -5,6 +5,7 @@
     slide-preview-fullscreen
   ">
     <img v-if="thumbnailUrl" :src="thumbnailUrl" class="image-contain"/>
+    <img v-else src="./wikipedia.png" class="image-contain"/>
 
     <div class="text-overlay">
       {{ titleNoUnderscores }}

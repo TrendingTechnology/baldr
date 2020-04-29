@@ -2,9 +2,8 @@
   <div class="vc_start_page main-app-padding main-app-fullscreen" b-ui-theme="default">
 
     <nav>
-      <router-link :to="{ name: 'documentation' }">Dokumentation </router-link>
       <router-link :to="{ name: 'topics' }">Themen </router-link>
-
+      <router-link :to="{ name: 'documentation' }">Dokumentation </router-link>
       <router-link :to="{ name: 'editor' }">Hefteintrag </router-link>
       <router-link :to="{ name: 'camera' }">Dokumentenkamera </router-link>
     </nav>
