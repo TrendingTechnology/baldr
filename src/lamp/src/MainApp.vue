@@ -61,9 +61,9 @@ export default {
       'setSlideOrStepNextOrPrevious'
     ]),
     /**
-     * Toggle between to routes:
+     * Toggle between two routes:
      *
-     * 1. The route with the name `slides` and
+     * 1. The routes named `slide` or `slide-step-no` and
      * 2. the route with the name specified with the argument
      *    `routeNameTo`.
      *
@@ -81,7 +81,7 @@ export default {
       if (this.$route.name !== routeNameTo) {
         this.$router.push({ name: routeNameTo })
       } else if (this.slide) {
-        this.$router.push(this.slide.routerLocation)
+        this.$router.push(this.slide.routerLocation())
       }
     },
     getToggleShortcutObject (keys, routeNameTo) {
