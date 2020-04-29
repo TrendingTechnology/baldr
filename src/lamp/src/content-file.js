@@ -797,7 +797,7 @@ ${JSON.stringify(this.rawYamlObject_)}`
       if (Number.isInteger(steps)) {
         slide.stepCount = steps
       } else if (Array.isArray(steps)) {
-        slide.stepCount = steps.length
+        slide.stepCount = steps.length + 1
         slide.steps = steps
       }
     }
