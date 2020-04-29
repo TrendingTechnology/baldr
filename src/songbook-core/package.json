@@ -13,7 +13,7 @@
     "email": "josef@friedrich.rocks",
     "url": "https://josef.friedrich.rocks"
   },
-  "main": "src/main.js",
+  "main": "main.js",
   "publishConfig": {
     "access": "public"
   },
