@@ -169,7 +169,7 @@ const actions = {
     for (const slide of slides) {
       let slideNo
       if (slide.id) {
-        if (this.slideIds[slide.id]) {
+        if (getters.slideIds[slide.id]) {
           throw new Error(`A slide with the id “${slide.id}” already exists.`)
         }
         commit('addSlideId', { slideId: slide.id, no: slide.no })
