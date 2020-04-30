@@ -11,6 +11,7 @@ const mediaServer = require('@bldr/media-server')
 const coreBrowser = require('@bldr/core-browser')
 const lib = require('../../lib.js')
 const commandConvert = require('../convert/action.js')
+const { createYamlOneFile } = require('../yaml/action.js')
 
 const locationIndicator = mediaServer.locationIndicator
 
@@ -207,9 +208,29 @@ async function moveMp3 (oldPath, newPath, cmdObj) {
   fs.unlinkSync(tmpMp3Path)
 }
 
-function moveFromArchive (oldPath, extension, cmdObj) {
+async function moveReference (oldPath, cmdObj) {
+  let newPath = locationIndicator.getMirroredPath(oldPath)
+  newPath = locationIndicator.moveIntoSubdir(newPath, 'QL')
+  lib.moveAsset(oldPath, newPath, cmdObj)
+  if (cmdObj.dryRun) return
+  await createYamlOneFile(newPath)
+  const metaData = lib.readAssetYaml(newPath)
+  metaData.reference_title = 'Tonart: Musik erleben - reflektieren - interpretieren; Lehrwerk für die Oberstufe.'
+  metaData.author = 'Wieland Schmid'
+  metaData.publisher = 'Helbling'
+  metaData.release_data = 2009
+  metaData.edition = 1
+  metaData.isbn = '978-3-85061-460-3'
+  lib.writeYamlFile(`${newPath}.yml`, metaData)
+}
+
+async function moveFromArchive (oldPath, extension, cmdObj) {
+  if (oldPath.indexOf('Tonart.pdf') > -1) {
+    await moveReference(oldPath, cmdObj)
+    return
+  }
   if (locationIndicator.isInDeactivatedDir(oldPath)) return
-  const newPath = locationIndicator.getMirroredPath(oldPath)
+  let newPath = locationIndicator.getMirroredPath(oldPath)
   console.log(`${chalk.yellow(oldPath)} -> ${chalk.green(newPath)}`)
   if (extension === 'tex') {
     moveTex(oldPath, newPath, cmdObj)
@@ -225,14 +246,14 @@ function moveFromArchive (oldPath, extension, cmdObj) {
  *   `/archive/10/10_Jazz/30_Stile/50_Modern-Jazz/Arbeitsblatt.tex`
  * @param {Object} cmdObj - See commander docs.
  */
-function move (oldPath, cmdObj) {
+async function move (oldPath, cmdObj) {
   // Had to be an absolute path (to check if its an inactive/archived folder)
   oldPath = path.resolve(oldPath)
   const extension = coreBrowser.getExtension(oldPath)
   if (!locationIndicator.isInArchive(oldPath)) {
     relocate(oldPath, extension, cmdObj)
   } else {
-    moveFromArchive(oldPath, extension, cmdObj)
+    await moveFromArchive(oldPath, extension, cmdObj)
   }
 }
 
@@ -244,12 +265,15 @@ function action (files, cmdObj) {
   if (cmdObj.extension) {
     opts.regex = cmdObj.extension
     mediaServer.walk(move, opts)
+  } else if (cmdObj.regexp) {
+    opts.regex = new RegExp(cmdObj.regexp)
+    mediaServer.walk(move, opts)
   } else {
     mediaServer.walk({
       everyFile (relPath) {
         move(relPath)
-      } }, opts
-    )
+      }
+    }, opts)
   }
 }
 

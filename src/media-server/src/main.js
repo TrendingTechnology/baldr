@@ -539,15 +539,15 @@ async function insertObjectIntoDb (filePath, mediaType) {
  *      types, at the moment on presentations and assets.
  *   - `everyFile`This function is called on every file.
  * @param {Object} opt
- * @property {Object} opt.payload - The function/s is/are called with with
- *   this object. Multiple arguments have to be bundled as a single object.
- * @property {Array|String} opt.path - An array of paths of a directory
- *   or paths of a file. A single path of a directory or a single path of a
- *   file. If this property is not set, the current working directory is used.
- * @property {String|Regex} opt.regex - If this property is set,
- *   `func` have to be an single function. Each resolved file path must
- *   match this regular expression to execute the function. If you specified a
- *   string, this string is converted into the regexp `*.ext`.
+ * @property {Object} opt.payload - The function/s is/are called with with this
+ *   object. Multiple arguments have to be bundled as a single object.
+ * @property {(Array|String)} opt.path - An array of directory or file paths or
+ *   a single path. If this property is not set, the current working directory
+ *   is used.
+ * @property {(String|Regex)} opt.regex - If this property is set, `func` have
+ *   to be a single function. Each resolved file path must match this regular
+ *   expression to execute the function. If you have specified a string, this
+ *   string is converted into the regular expression `*.ext`.
  */
 async function walk (func, opt) {
   // Some checks to exit early.

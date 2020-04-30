@@ -811,8 +811,21 @@ const reference = {
       },
       overwriteByDerived: true
     },
+    referenceTitle: {
+      title: 'Title der (übergeordneten Quelle)'
+    },
+    author: {
+      title: 'Autor'
+    },
     publisher: {
       title: 'Verlag'
+    },
+    releaseData: {
+      title: 'Erscheinungsdatum'
+    },
+    edition: {
+      title: 'Auflage',
+      description: 'z. B. 1. Auflage des Buchs'
     },
     pageNos: {
       title: 'Seitenzahlen',

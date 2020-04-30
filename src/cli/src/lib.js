@@ -1,3 +1,7 @@
+/**
+ * @module @bldr/cli/lib
+ */
+
 // Node packages.
 const childProcess = require('child_process')
 const fs = require('fs')
@@ -34,7 +38,8 @@ function filePathToAssetType (filePath) {
 /**
  * Read the corresponding YAML file of a media asset.
  *
- * @param {String} filePath - The path of the media asset.
+ * @param {String} filePath - The path of the media asset (without the
+ *   extension `.yml`).
  *
  * @returns {Object}
  */
