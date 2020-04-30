@@ -403,7 +403,6 @@ function removeProps (data, typeSpec) {
  * @returns {Object}
  */
 function processByType (data, typeName) {
-  console.log(typeName)
   if (!typeSpecs[typeName]) {
     throw new Error(`Unkown meta type name: “${typeName}”`)
   }
