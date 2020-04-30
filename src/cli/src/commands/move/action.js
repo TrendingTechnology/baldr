@@ -177,7 +177,9 @@ async function moveMp3 (oldPath, newPath, cmdObj) {
   newPath = mediaServer.asciify(newPath)
   // a Earth, Wind & Fire - Shining Star.mp3
   let fileName = path.basename(newPath)
-  fileName = mediaServer.asciify(fileName)
+  fileName = fileName.replace(/\.mp3$/i, '')
+  fileName = mediaServer.helper.idify(fileName)
+  fileName = `${fileName}.mp3`
   // a-Fletcher-Henderson_Aint-she-sweet.mp3
   fileName = fileName.replace(/^a-/, '')
   const tmpMp3Path = path.join(path.dirname(newPath), fileName)

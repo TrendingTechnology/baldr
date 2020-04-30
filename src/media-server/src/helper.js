@@ -32,10 +32,14 @@ function asciify (input) {
 }
 
 /**
- * This function can be used to generate ids from different file names.
+ * This function can be used to generate IDs from different file names.
  *
- * Some addictional replace which can not be done in asciify (asciffy is
- * sometimes applied to paths.)
+ * It performes some addictional replacements which can not be done in `asciify`
+ * (`asciffy` is sometimes applied to paths.)
+ *
+ * @param {String} input
+ *
+ * @return {String}
  */
 function idify (input) {
   let output = asciify(input)

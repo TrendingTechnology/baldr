@@ -188,6 +188,20 @@ async function convert (inputFile, cmdObj) {
   }
 
   if (process) {
+
+    if (process.status !== 0 && assetType === 'audio') {
+      // A second attempt for mono audio: HEv2 only makes sense with stereo.
+      // see http://www.ffmpeg-archive.org/stereo-downmix-error-aac-HEv2-td4664367.html
+      process = childProcess.spawnSync('ffmpeg', [
+        '-i', inputFile,
+        '-c:a', 'libfdk_aac', '-profile:a', 'aac_he', '-b:a', '64k',
+        '-vn', // Disable video recording
+        '-map_metadata', '-1', // remove metadata
+        '-y', // Overwrite output files without asking
+        outputFile
+      ])
+    }
+
     if (process.status === 0) {
       if (assetType === 'audio') {
         const metaData = await collectMusicMetaData(inputFile)
