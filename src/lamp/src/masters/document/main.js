@@ -40,6 +40,9 @@ export default {
       if (asset.pageCount && asset.pageCount > 1) {
         return asset.pageCount
       }
+    },
+    titleFromProps ({ propsMain }) {
+      if (propsMain.asset.title) return propsMain.asset.title
     }
   }
 }

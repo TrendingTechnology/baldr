@@ -101,6 +101,7 @@ export default {
     collectPropsMain (props) {
       const asset = this.$store.getters['media/assetByUri'](props.src)
       return {
+        asset,
         src: props.src,
         svgPath: asset.path,
         svgHttpUrl: asset.httpUrl
@@ -117,6 +118,9 @@ export default {
       const groups = collectClozeGroups(svgDom)
       const count = steps.calculateStepCount(groups, props)
       return count
+    },
+    titleFromProps ({ propsMain }) {
+      if (propsMain.asset.title) return propsMain.asset.title
     },
     afterSlideNoChangeOnComponent ({ newSlideNo }) {
       const slide = this.$store.getters['lamp/slideByNo'](newSlideNo)

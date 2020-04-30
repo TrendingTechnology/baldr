@@ -11,7 +11,7 @@
       <slide-preview :slide="slide"/>
       <div class="slide-info">
         <span class="master-title"> {{ slide.master.title }}: </span>
-        <span class="slide-title">{{ slide.title }}</span>
+        <span class="slide-title" v-html="slide.title"/>
         <div class="plain-text" v-if="!detail">{{ slide.plainText }}</div>
       </div>
     </li>

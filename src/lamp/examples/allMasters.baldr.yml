@@ -4,11 +4,16 @@ meta:
 
 slides:
 
-- audio: id:HB_Ausstellung_Klavier_Gnom_Samples
+- audio: uuid:7cf3ebba-932e-4445-9207-ae7342abd65e
+  description: 'Bilder einer Ausstellung (Klavier): 1. Der Gnom (mit vielen Samples)'
 
 - camera
 
-- cloze: 'id:Dukas-Zauberlehrling_AB_Lueckentext'
+- cloze: uuid:e1873e1f-57c1-422f-9ecb-5cf895e69521
+  description: Arbeitsblatt „Die Sinfonische Dichtung“ (Lückentext Seite 1 von 1)
+
+- document: uuid:d4b8d565-4a98-4b28-9ffb-4fa3f04857e1
+  description: Arbeitsblatt zum Thema „<em class="person">Ludwig van Beethoven</em>“
 
 - editor: |
     <table>
