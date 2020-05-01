@@ -422,7 +422,7 @@ const person = {
   abbreviation: 'PR',
   basePath: path.join(config.mediaServer.basePath, 'Personen'),
   relPath: function ({ typeData, typeSpec }) {
-    return path.join(typeData.id.substr(0, 1).toLowerCase(), typeData.id, `main.${typeData.extension}`)
+    return path.join(typeData.personId.substr(0, 1).toLowerCase(), typeData.id, `main.${typeData.extension}`)
   },
   detectTypeByPath: function (typeSpec) {
     return new RegExp('^' + typeSpec.basePath + '/.*')
@@ -445,11 +445,18 @@ const person = {
     return typeData
   },
   props: {
-    id: {
+    personId: {
+      title: 'Personen-ID',
       derive: function ({ typeData }) {
-        return `${typeData.lastname}_${typeData.firstname}`
+        return `${idify(typeData.lastname)}_${idify(typeData.firstname)}`
       },
-      overwriteByDerived: false
+      overwriteByDerived: true
+    },
+    id: {
+      derive: function ({ typeData, typeSpec }) {
+        return `${typeSpec.abbreviation}_${idify(typeData.lastname)}_${idify(typeData.firstname)}`
+      },
+      overwriteByDerived: true
     },
     title: {
       derive: function ({ typeData }) {
@@ -521,6 +528,9 @@ const person = {
         fromClaim: 'P18',
         format: 'formatWikicommons'
       }
+    },
+    wikicommons: {
+      state: 'absent'
     }
   }
 }
