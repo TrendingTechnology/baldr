@@ -128,8 +128,9 @@ const general = {
           }
         }
 
+        // Disabled for example GR_Beatles_The != Beatles_GR_The
         // HB_Ausstellung_Gnome -> Ausstellung_HB_Gnome
-        value = value.replace(/^([A-Z]{2,})_([a-zA-Z0-9-]+)_/, '$2_$1_')
+        // value = value.replace(/^([A-Z]{2,})_([a-zA-Z0-9-]+)_/, '$2_$1_')
         return value
       },
       required: true
@@ -372,7 +373,8 @@ const group = {
     return new RegExp('^' + typeSpec.basePath + '/.*')
   },
   props: {
-    id: {
+    groupId: {
+      title: 'Gruppen-ID',
       derive: function ({ typeData }) {
         return typeData.name
       },
@@ -381,15 +383,29 @@ const group = {
         value = idify(value)
         return value
       },
-      overwriteByDerived: false
+      overwriteByDerived: true
+    },
+    id: {
+      title: 'ID zur Referenzierung (Präfix „GR_“)',
+      derive: function ({ typeData }) {
+        return typeData.name
+      },
+      format: function (value, { typeData, typeSpec }) {
+        value = value.replace(/^(The)[ -](.*)$/, '$2_$1')
+        value = idify(value)
+        return `GR_${value}`
+      },
+      overwriteByDerived: true
     },
     title: {
+      title: 'Titel der Gruppe',
       derive: function ({ typeData }) {
         return `Portrait-Bild der Gruppe „${typeData.name}“`
       },
       overwriteByDerived: true
     },
     name: {
+      title: 'Name der Gruppe',
       required: true,
       wikidata: {
         // offizieller Name

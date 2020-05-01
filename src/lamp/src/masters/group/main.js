@@ -2,14 +2,17 @@
  * @module @bldr/lamp/masters/group
  */
 
+function convertGroupIdToMediaId (groupId) {
+  return `id:GR_${groupId}`
+}
+
 export default {
   title: 'Gruppe',
   props: {
-    mainImage: {
+    groupId: {
       type: String,
       required: true,
-      assetUri: true,
-      description: 'Eine URI zu der Haupt-Bild-Datei.'
+      description: 'Die ID der Gruppe (z. B. „Beatles_The“).'
     }
   },
   icon: {
@@ -24,17 +27,21 @@ export default {
     normalizeProps (props) {
       if (typeof props === 'string') {
         return {
-          mainImage: props
+          groupId: props
         }
       }
       return props
     },
     resolveMediaUris (props) {
-      return props.mainImage
+      return convertGroupIdToMediaId(props.groupId)
     },
-    titleFromProps (props) {
-      if (props.mainImage) {
-        return props.mainImage
+    collectPropsMain (props) {
+      const asset = this.$store.getters['media/assetByUri'](convertGroupIdToMediaId(props.groupId))
+      return { asset }
+    },
+    titleFromProps ({ propsMain }) {
+      if (propsMain.asset.name) {
+        return propsMain.asset.name
       }
     }
   }

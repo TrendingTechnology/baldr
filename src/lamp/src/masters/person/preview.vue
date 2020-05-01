@@ -4,7 +4,7 @@
     slide-preview-fullscreen
   ">
     <img class="img-contain" :src="imageHttpUrl">
-    <div class="info-box">
+    <div class="title-box">
       <p class="person important transparent-background font-shadow">{{ name }}</p>
     </div>
   </div>
@@ -27,7 +27,7 @@ export default {
 
 <style lang="scss">
   .vc_person_master_preview {
-    .info-box {
+    .title-box {
       bottom: 1em;
       position: absolute;
       right: 0;

@@ -3,9 +3,9 @@
     vc_group_master_preview
     slide-preview-fullscreen
   ">
-    <img class="img-contain" :src="group.httpUrl">
-    <div class="info-box">
-      <p class="group important transparent-background font-shadow">{{ group.name }}</p>
+    <img class="img-contain" :src="asset.httpUrl">
+    <div class="title-box">
+      <p class="group important transparent-background font-shadow">{{ asset.name }}</p>
     </div>
   </div>
 </template>
@@ -13,14 +13,9 @@
 <script>
 export default {
   props: {
-    mainImage: {
-      type: String,
+    asset: {
+      type: Object,
       required: true
-    }
-  },
-  computed: {
-    group () {
-      return this.$store.getters['media/assetByUri'](this.mainImage)
     }
   }
 }
@@ -28,7 +23,7 @@ export default {
 
 <style lang="scss">
   .vc_group_master_preview {
-    .info-box {
+    .title-box {
       bottom: 1em;
       position: absolute;
       right: 0;

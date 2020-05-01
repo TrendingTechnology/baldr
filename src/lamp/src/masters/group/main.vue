@@ -1,27 +1,27 @@
 <template>
   <div class="vc_group_master">
-    <img class="img-contain" :src="group.httpUrl">
+    <img class="img-contain" :src="asset.httpUrl">
     <p
       class="short-history font-shadow"
-      v-if="group.shortHistory"
-      v-html="group.shortHistory"
+      v-if="asset.shortHistory"
+      v-html="asset.shortHistory"
     />
     <p class="members">
       <span class="important">Mitglieder: </span>
       <ul>
-        <li class="person" v-for="member in group.members" :key="member">
+        <li class="person" v-for="member in asset.members" :key="member">
           {{ member }}
         </li>
       </ul>
     </p>
-    <div class="info-box">
+    <div class="title-box">
       <div class="period font-shadow">
         <span v-if="startDate" class="start-date">Gründung: {{ startDate }}</span>
         <span v-if="endDate" class="end-date">Auflösung: {{ endDate }}</span>
       </div>
-      <p class="name important transparent-background font-shadow">{{ group.name }}</p>
+      <p class="name important transparent-background font-shadow">{{ asset.name }}</p>
     </div>
-    <external-sites :asset="group"/>
+    <external-sites :asset="asset"/>
   </div>
 </template>
 
@@ -30,8 +30,8 @@ import { formatToYear } from '@bldr/core-browser'
 import ExternalSites from '@/components/ExternalSites.vue'
 export default {
   props: {
-    mainImage: {
-      type: String,
+    asset: {
+      type: Object,
       required: true
     }
   },
@@ -39,15 +39,12 @@ export default {
     ExternalSites
   },
   computed: {
-    group () {
-      return this.$store.getters['media/assetByUri'](this.mainImage)
-    },
     startDate () {
-      if (this.group.startDate) return formatToYear(this.group.startDate)
+      if (this.asset.startDate) return formatToYear(this.asset.startDate)
       return ''
     },
     endDate () {
-      if (this.group.endDate) return formatToYear(this.group.endDate)
+      if (this.asset.endDate) return formatToYear(this.asset.endDate)
       return ''
     }
   }
@@ -71,7 +68,7 @@ export default {
       left: 3em;
     }
 
-    .info-box {
+    .title-box {
       bottom: 3em;
       position: absolute;
       right: 0;
