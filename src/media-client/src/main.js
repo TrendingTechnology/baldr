@@ -7,7 +7,7 @@
 /* globals config document Audio Image File */
 
 import { HttpRequest } from '@bldr/http-request'
-import { formatMultiPartAssetFileName, AssetTypes, selectSubset, mediaUriRegExp } from '@bldr/core-browser'
+import { formatMultiPartAssetFileName, AssetTypes, selectSubset, mediaUriRegExp, plainText } from '@bldr/core-browser'
 
 import DynamicSelect from '@bldr/dynamic-select'
 
@@ -1303,29 +1303,39 @@ export class ClientMediaAsset {
   get plainText () {
     const output = []
     const excludedProperties = [
+      'assetType',
       'extension',
       'filename',
       'httpUrl',
       'id',
       'mediaElement',
+      'metaTypes',
+      'musicbrainzRecordingId',
+      'musicbrainzWorkId',
       'path',
       'previewHttpUrl',
       'previewImage',
       'samples',
+      'mainImage',
       'shortcut',
       'size',
+      'source',
       'timeModified',
       'type',
       'uri',
       'uriAuthority',
-      'uriScheme'
+      'uriRaw',
+      'uriScheme',
+      'uuid',
+      'wikidata',
+      'youtube'
     ]
     for (const property in this) {
-      if (property in this && this[property] && !excludedProperties.includes(property)) {
+      if (this[property] && !excludedProperties.includes(property)) {
         output.push(this[property])
       }
     }
-    return output.join(' | ')
+    return plainText(output.join(' | '))
   }
 
   /**

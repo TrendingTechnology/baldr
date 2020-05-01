@@ -1,6 +1,7 @@
 /**
  * @module @bldr/lamp/masters/quote
  */
+import { plainText } from '@bldr/core-browser'
 
 export default {
   title: 'Zitat',
@@ -58,7 +59,7 @@ export default {
       return props
     },
     plainTextFromProps (props) {
-      return Object.values(props).join(' | ')
+      return plainText(Object.values(props).join(' | '))
     }
   }
 }

@@ -72,7 +72,7 @@ export default {
       padding: 0.5em;
 
       .slide-info {
-        font-size: 1.5em;
+        font-size: 2em;
         padding-left: 1em;
       }
 
@@ -94,7 +94,6 @@ export default {
       }
 
       .plain-text {
-        font-size: 0.9em;
         color: $gray;
       }
     }
