@@ -92,201 +92,61 @@ function generateIdPrefix (filePath) {
 const config = bootstrapConfig()
 
 /**
- * General meta data type specification. Applied after all other meta data
- * types.
+ * The meta data type specification “cloze”.
  *
  * @type {module:@bldr/media-server/meta-types~typeSpec}
  */
-const general = {
-  props: {
-    id: {
-      validate: function (value) {
-        return value.match(/^[a-zA-Z0-9-_]+$/)
-      },
-      format: function (value, { typeData, typeSpec }) {
-        value = idify(value)
-
-        // a-Strawinsky-Petruschka-Abschnitt-0_22
-        value = value.replace(/^[va]-/, '')
-
-        if (typeData.filePath) {
-          const idPrefix = generateIdPrefix(typeData.filePath)
-          if (idPrefix) {
-            if (value.indexOf(idPrefix) === -1) {
-              value = `${idPrefix}_${value}`
-            }
-
-            // Avoid duplicate idPrefixes by changed prefixes:
-            // instead of:
-            // Piazzolla-Nonino_NB_Piazzolla-Adios-Nonino_NB_Adios-Nonino_melancolico
-            // old prefix: Piazzolla-Adios-Nonino_NB
-            // updated prefix: Piazzolla-Nonino_NB
-            // Preferred result: Piazzolla-Nonino_NB_Adios-Nonino_melancolico
-            if (value.match(/.*_[A-Z]{2,}_.*/)) {
-              value = value.replace(/^.*_[A-Z]{2,}/, idPrefix)
-            }
-          }
-        }
-
-        // Disabled for example GR_Beatles_The != Beatles_GR_The
-        // HB_Ausstellung_Gnome -> Ausstellung_HB_Gnome
-        // value = value.replace(/^([A-Z]{2,})_([a-zA-Z0-9-]+)_/, '$2_$1_')
-        return value
-      },
-      required: true
-    },
-    uuid: {
-      title: 'UUID',
-      description: 'UUID version 4.',
-      derive () {
-        return uuidv4()
-      },
-      overwriteByDerived: false
-    },
-    metaTypes: {
-      title: 'Metadaten-Typen',
-      description: 'Zum Beispiel: “person” oder “composition,recording”',
-      validate: function (value) {
-        return String(value).match(/^[a-zA-Z,]+$/)
-      },
-      format: function (value) {
-        return value.replace(/,?general,?/, '')
-      },
-      removeByRegexp: new RegExp('^general$')
-    },
-    metaType: {
-      description: 'Heißt jetzt “metaTypes”',
-      state: 'absent'
-    },
-    title: {
-      required: true,
-      overwriteByDerived: false,
-      format: function (value, { typeData, typeSpec }) {
-        // a Strawinsky Petruschka Abschnitt 0_22
-        value = value.replace(/^[va] /, '')
-        return value
-      },
-      derive: function ({ typeData }) {
-        return deasciify(typeData.id)
-      }
-    },
-    wikidata: {
-      validate: function (value) {
-        return String(value).match(/^Q\d+$/)
-      }
-    },
-    wikipedia: {
-      validate: function (value) {
-        return value.match(/^.+:.+$/)
-      },
-      format: function (value, { typeData, typeSpec }) {
-        return decodeURI(value)
-      },
-      wikidata: {
-        fromEntity: 'getWikipediaTitle',
-        alwaysUpdate: true
-      }
-    },
-    youtube: {
-      title: 'Youtube-Video-ID',
-      description: 'Die Youtube-Video-ID',
-      validate: function (value) {
-        // https://webapps.stackexchange.com/a/101153
-        return value.match(/^[0-9A-Za-z_-]{10}[048AEIMQUYcgkosw]$/)
-      },
-      wikidata: {
-        // YouTube-Video-Kennung
-        fromClaim: 'P1651',
-        format: 'formatSingleValue'
-      }
-    },
-    // tmp property needed to generate id prefix
-    filePath: {
-      state: 'absent'
-    },
-    // tmp propert: needed for wiki commons files.
-    extension: {
-      state: 'absent'
-    }
+const cloze = {
+  title: 'Lückentext',
+  abbreviation: 'LT',
+  detectTypeByPath: function () {
+    return new RegExp('^.*/LT/.*.svg$')
   },
-  finalize: function ({ typeData, typeSpec }) {
-    for (const propName in typeData) {
-      const value = typeData[propName]
-      if (typeof value === 'string') {
-        typeData[propName] = value.trim()
-      }
+  initialize ({ typeData }) {
+    if (typeData.filePath && !typeData.clozePageNo) {
+      const match = typeData.filePath.match(/(\d+)\.svg/)
+      if (match) typeData.clozePageNo = parseInt(match[1])
     }
     return typeData
-  }
-}
-
-/**
- * The meta data type specification “cover”.
- *
- * @type {module:@bldr/media-server/meta-types~typeSpec}
- */
-const cover = {
-  detectTypeByPath: new RegExp('^.*/HB/.*(png|jpg)$'),
+  },
+  relPath ({ typeData, typeSpec, oldRelPath }) {
+    console.log('lol')
+    const oldRelDir = path.dirname(oldRelPath)
+    let pageNo = ''
+    if (typeData.clozePageNo) pageNo = `_${typeData.clozePageNo}`
+    return path.join(oldRelDir, `Lueckentext${pageNo}.svg`)
+  },
   props: {
+    id: {
+      derive: function ({ typeData, folderTitles, filePath }) {
+        let counterSuffix = ''
+        if (typeData.clozePageNo) {
+          counterSuffix = `_${typeData.clozePageNo}`
+        }
+        return `${folderTitles.id}_LT${counterSuffix}`
+      },
+      overwriteByDerived: true
+    },
     title: {
-      title: 'Titel',
-      format: function (value) {
-        return value.replace(/^(Cover-Bild: )?/, 'Cover-Bild: ')
-      }
+      derive: function ({ typeData, folderTitles, filePath }) {
+        let suffix = ''
+        if (typeData.clozePageNo && typeData.clozePageCount) {
+          suffix = ` (Seite ${typeData.clozePageNo} von ${typeData.clozePageCount})`
+        } else if (typeData.clozePageNo && !typeData.clozePageCount) {
+          suffix = ` (Seite ${typeData.clozePageNo})`
+        }
+        return `Lückentext zum Thema „${folderTitles.title}“${suffix}`
+      },
+      overwriteByDerived: true
     },
-    source: {
-      title: 'Quelle (HTTP-URL)',
+    clozePageNo: {
       validate (value) {
-        return value.match(/^https?.*$/)
-      }
-    }
-  }
-}
-
-/**
- * The meta data type specification “recording”.
- *
- * @type {module:@bldr/media-server/meta-types~typeSpec}
- */
-const recording = {
-  title: 'Aufnahme',
-  detectTypeByPath: new RegExp('^.*/HB/.*m4a$'),
-  props: {
-    artist: {
-      description: 'Der/die Interpret/in eines Musikstücks.',
-      wikidata: {
-        // Interpret | Interpretin | Interpretinnen | Darsteller
-        fromClaim: 'P175',
-        secondQuery: 'queryLabels',
-        format: 'formatList'
+        return Number.isInteger(value)
       }
     },
-    musicbrainzRecordingId: {
-      validate: validateUuid,
-      wikidata: {
-        // MusicBrainz-Aufnahme-ID
-        fromClaim: 'P4404',
-        format: 'formatSingleValue'
-      }
-    },
-    // see composition creationDate
-    year: {
-      state: 'absent'
-      // wikidata: {
-      //   // Veröffentlichungsdatum
-      //   fromClaim: 'P577',
-      //   format: 'formatYear'
-      // }
-    },
-    cover: {
-      title: 'Vorschau-Bild',
-      validate: validateMediaId
-    },
-    coverSource: {
-      title: 'Cover-Quelle',
-      description: 'HTTP-URL des Vorschau-Bildes.',
+    clozePageCount: {
       validate (value) {
-        return value.match(/^https?.*$/)
+        return Number.isInteger(value)
       }
     }
   }
@@ -352,6 +212,29 @@ const composition = {
         // MusicBrainz-Werk-ID
         fromClaim: 'P435',
         format: 'formatSingleValue'
+      }
+    }
+  }
+}
+
+/**
+ * The meta data type specification “cover”.
+ *
+ * @type {module:@bldr/media-server/meta-types~typeSpec}
+ */
+const cover = {
+  detectTypeByPath: new RegExp('^.*/HB/.*(png|jpg)$'),
+  props: {
+    title: {
+      title: 'Titel',
+      format: function (value) {
+        return value.replace(/^(Cover-Bild: )?/, 'Cover-Bild: ')
+      }
+    },
+    source: {
+      title: 'Quelle (HTTP-URL)',
+      validate (value) {
+        return value.match(/^https?.*$/)
       }
     }
   }
@@ -634,6 +517,148 @@ const person = {
 }
 
 /**
+ * The meta data type specification “photo”.
+ *
+ * @type {module:@bldr/media-server/meta-types~typeSpec}
+ */
+const photo = {
+  title: 'Foto',
+  abbreviation: 'FT',
+  detectTypeByPath: function () {
+    return new RegExp('^.*/FT/.*.jpg$')
+  },
+  props: {
+    photographer: {
+      title: 'Fotograph*in'
+    }
+  }
+}
+
+/**
+ * The meta data type specification “radio”.
+ *
+ * @type {module:@bldr/media-server/meta-types~typeSpec}
+ */
+const radio = {
+  title: 'Schulfunk',
+  abbreviation: 'SF',
+  props: {
+    author: {
+      title: 'Autor*in'
+    }
+  }
+}
+
+/**
+ * The meta data type specification “recording”.
+ *
+ * @type {module:@bldr/media-server/meta-types~typeSpec}
+ */
+const recording = {
+  title: 'Aufnahme',
+  detectTypeByPath: new RegExp('^.*/HB/.*m4a$'),
+  props: {
+    artist: {
+      description: 'Der/die Interpret/in eines Musikstücks.',
+      wikidata: {
+        // Interpret | Interpretin | Interpretinnen | Darsteller
+        fromClaim: 'P175',
+        secondQuery: 'queryLabels',
+        format: 'formatList'
+      }
+    },
+    musicbrainzRecordingId: {
+      validate: validateUuid,
+      wikidata: {
+        // MusicBrainz-Aufnahme-ID
+        fromClaim: 'P4404',
+        format: 'formatSingleValue'
+      }
+    },
+    // see composition creationDate
+    year: {
+      state: 'absent'
+      // wikidata: {
+      //   // Veröffentlichungsdatum
+      //   fromClaim: 'P577',
+      //   format: 'formatYear'
+      // }
+    },
+    cover: {
+      title: 'Vorschau-Bild',
+      validate: validateMediaId
+    },
+    coverSource: {
+      title: 'Cover-Quelle',
+      description: 'HTTP-URL des Vorschau-Bildes.',
+      validate (value) {
+        return value.match(/^https?.*$/)
+      }
+    }
+  }
+}
+
+/**
+ * The meta data type specification “reference”.
+ *
+ * @type {module:@bldr/media-server/meta-types~typeSpec}
+ */
+const reference = {
+  title: 'Quelle',
+  description: 'Quelle, auf der eine Unterrichtsstunde aufbaut, z. B. Auszüge aus Schulbüchern.',
+  detectTypeByPath: function () {
+    return new RegExp('^.*/QL/.*.pdf$')
+  },
+  abbreviation: 'QL',
+  props: {
+    title: {
+      derive: function ({ typeData, folderTitles, filePath }) {
+        let suffix = ''
+        if (typeData.forTeacher) {
+          suffix = ` (Lehrerband)`
+        }
+        return `Quelle zum Thema „${folderTitles.titleAndSubtitle}“${suffix}`
+      },
+      overwriteByDerived: true
+    },
+    referenceTitle: {
+      title: 'Title der (übergeordneten Quelle)'
+    },
+    author: {
+      title: 'Autor'
+    },
+    publisher: {
+      title: 'Verlag'
+    },
+    releaseData: {
+      title: 'Erscheinungsdatum'
+    },
+    edition: {
+      title: 'Auflage',
+      description: 'z. B. 1. Auflage des Buchs'
+    },
+    pageNos: {
+      title: 'Seitenzahlen',
+      description: 'Auf welchen Seiten aus der Quelle dieser Auszug zu finden war. Nicht zu verwechseln mit der Seitenanzahl des PDFs.'
+    },
+    forTeacher: {
+      title: 'Lehrerband'
+    },
+    isbn: {
+      title: 'ISBN-Nummer (13 Stellen)'
+    },
+    pageCount: {
+      title: 'Seitenanzahl des PDFs',
+      description: 'Die Seitenanzahl dieses PDFs',
+      derive ({ filePath }) {
+        return getPdfPageCount(filePath)
+      },
+      overwriteByDerived: true
+    }
+  }
+}
+
+/**
  * The meta data type specification “song”.
  *
  * @type {module:@bldr/media-server/meta-types~typeSpec}
@@ -711,156 +736,131 @@ const worksheet = {
 }
 
 /**
- * The meta data type specification “cloze”.
+ * General meta data type specification. Applied after all other meta data
+ * types.
  *
  * @type {module:@bldr/media-server/meta-types~typeSpec}
  */
-const cloze = {
-  title: 'Lückentext',
-  abbreviation: 'LT',
-  detectTypeByPath: function () {
-    return new RegExp('^.*/LT/.*.svg$')
-  },
-  initialize ({ typeData }) {
-    if (typeData.filePath && !typeData.clozePageNo) {
-      const match = typeData.filePath.match(/(\d+)\.svg/)
-      if (match) typeData.clozePageNo = parseInt(match[1])
-    }
-    return typeData
-  },
-  relPath ({ typeData, typeSpec, oldRelPath }) {
-    console.log('lol')
-    const oldRelDir = path.dirname(oldRelPath)
-    let pageNo = ''
-    if (typeData.clozePageNo) pageNo = `_${typeData.clozePageNo}`
-    return path.join(oldRelDir, `Lueckentext${pageNo}.svg`)
-  },
+const general = {
   props: {
     id: {
-      derive: function ({ typeData, folderTitles, filePath }) {
-        let counterSuffix = ''
-        if (typeData.clozePageNo) {
-          counterSuffix = `_${typeData.clozePageNo}`
-        }
-        return `${folderTitles.id}_LT${counterSuffix}`
+      validate: function (value) {
+        return value.match(/^[a-zA-Z0-9-_]+$/)
       },
-      overwriteByDerived: true
+      format: function (value, { typeData, typeSpec }) {
+        value = idify(value)
+
+        // a-Strawinsky-Petruschka-Abschnitt-0_22
+        value = value.replace(/^[va]-/, '')
+
+        if (typeData.filePath) {
+          const idPrefix = generateIdPrefix(typeData.filePath)
+          if (idPrefix) {
+            if (value.indexOf(idPrefix) === -1) {
+              value = `${idPrefix}_${value}`
+            }
+
+            // Avoid duplicate idPrefixes by changed prefixes:
+            // instead of:
+            // Piazzolla-Nonino_NB_Piazzolla-Adios-Nonino_NB_Adios-Nonino_melancolico
+            // old prefix: Piazzolla-Adios-Nonino_NB
+            // updated prefix: Piazzolla-Nonino_NB
+            // Preferred result: Piazzolla-Nonino_NB_Adios-Nonino_melancolico
+            if (value.match(/.*_[A-Z]{2,}_.*/)) {
+              value = value.replace(/^.*_[A-Z]{2,}/, idPrefix)
+            }
+          }
+        }
+
+        // Disabled for example GR_Beatles_The != Beatles_GR_The
+        // HB_Ausstellung_Gnome -> Ausstellung_HB_Gnome
+        // value = value.replace(/^([A-Z]{2,})_([a-zA-Z0-9-]+)_/, '$2_$1_')
+        return value
+      },
+      required: true
+    },
+    uuid: {
+      title: 'UUID',
+      description: 'UUID version 4.',
+      derive () {
+        return uuidv4()
+      },
+      overwriteByDerived: false
+    },
+    metaTypes: {
+      title: 'Metadaten-Typen',
+      description: 'Zum Beispiel: “person” oder “composition,recording”',
+      validate: function (value) {
+        return String(value).match(/^[a-zA-Z,]+$/)
+      },
+      format: function (value) {
+        return value.replace(/,?general,?/, '')
+      },
+      removeByRegexp: new RegExp('^general$')
+    },
+    metaType: {
+      description: 'Heißt jetzt “metaTypes”',
+      state: 'absent'
     },
     title: {
-      derive: function ({ typeData, folderTitles, filePath }) {
-        let suffix = ''
-        if (typeData.clozePageNo && typeData.clozePageCount) {
-          suffix = ` (Seite ${typeData.clozePageNo} von ${typeData.clozePageCount})`
-        } else if (typeData.clozePageNo && !typeData.clozePageCount) {
-          suffix = ` (Seite ${typeData.clozePageNo})`
-        }
-        return `Lückentext zum Thema „${folderTitles.title}“${suffix}`
+      required: true,
+      overwriteByDerived: false,
+      format: function (value, { typeData, typeSpec }) {
+        // a Strawinsky Petruschka Abschnitt 0_22
+        value = value.replace(/^[va] /, '')
+        return value
       },
-      overwriteByDerived: true
-    },
-    clozePageNo: {
-      validate (value) {
-        return Number.isInteger(value)
+      derive: function ({ typeData }) {
+        return deasciify(typeData.id)
       }
     },
-    clozePageCount: {
-      validate (value) {
-        return Number.isInteger(value)
+    wikidata: {
+      validate: function (value) {
+        return String(value).match(/^Q\d+$/)
+      }
+    },
+    wikipedia: {
+      validate: function (value) {
+        return value.match(/^.+:.+$/)
+      },
+      format: function (value, { typeData, typeSpec }) {
+        return decodeURI(value)
+      },
+      wikidata: {
+        fromEntity: 'getWikipediaTitle',
+        alwaysUpdate: true
+      }
+    },
+    youtube: {
+      title: 'Youtube-Video-ID',
+      description: 'Die Youtube-Video-ID',
+      validate: function (value) {
+        // https://webapps.stackexchange.com/a/101153
+        return value.match(/^[0-9A-Za-z_-]{10}[048AEIMQUYcgkosw]$/)
+      },
+      wikidata: {
+        // YouTube-Video-Kennung
+        fromClaim: 'P1651',
+        format: 'formatSingleValue'
+      }
+    },
+    // tmp property needed to generate id prefix
+    filePath: {
+      state: 'absent'
+    },
+    // tmp propert: needed for wiki commons files.
+    extension: {
+      state: 'absent'
+    }
+  },
+  finalize: function ({ typeData, typeSpec }) {
+    for (const propName in typeData) {
+      const value = typeData[propName]
+      if (typeof value === 'string') {
+        typeData[propName] = value.trim()
       }
     }
-  }
-}
-
-/**
- * The meta data type specification “photo”.
- *
- * @type {module:@bldr/media-server/meta-types~typeSpec}
- */
-const photo = {
-  title: 'Foto',
-  abbreviation: 'FT',
-  detectTypeByPath: function () {
-    return new RegExp('^.*/FT/.*.jpg$')
-  },
-  props: {
-    photographer: {
-      title: 'Fotograph*in'
-    }
-  }
-}
-
-/**
- * The meta data type specification “radio”.
- *
- * @type {module:@bldr/media-server/meta-types~typeSpec}
- */
-const radio = {
-  title: 'Schulfunk',
-  abbreviation: 'SF',
-  props: {
-    author: {
-      title: 'Autor*in'
-    }
-  }
-}
-
-/**
- * The meta data type specification “reference”.
- *
- * @type {module:@bldr/media-server/meta-types~typeSpec}
- */
-const reference = {
-  title: 'Quelle',
-  description: 'Quelle, auf der eine Unterrichtsstunde aufbaut, z. B. Auszüge aus Schulbüchern.',
-  detectTypeByPath: function () {
-    return new RegExp('^.*/QL/.*.pdf$')
-  },
-  abbreviation: 'QL',
-  props: {
-    title: {
-      derive: function ({ typeData, folderTitles, filePath }) {
-        let suffix = ''
-        if (typeData.forTeacher) {
-          suffix = ` (Lehrerband)`
-        }
-        return `Quelle zum Thema „${folderTitles.titleAndSubtitle}“${suffix}`
-      },
-      overwriteByDerived: true
-    },
-    referenceTitle: {
-      title: 'Title der (übergeordneten Quelle)'
-    },
-    author: {
-      title: 'Autor'
-    },
-    publisher: {
-      title: 'Verlag'
-    },
-    releaseData: {
-      title: 'Erscheinungsdatum'
-    },
-    edition: {
-      title: 'Auflage',
-      description: 'z. B. 1. Auflage des Buchs'
-    },
-    pageNos: {
-      title: 'Seitenzahlen',
-      description: 'Auf welchen Seiten aus der Quelle dieser Auszug zu finden war. Nicht zu verwechseln mit der Seitenanzahl des PDFs.'
-    },
-    forTeacher: {
-      title: 'Lehrerband'
-    },
-    isbn: {
-      title: 'ISBN-Nummer (13 Stellen)'
-    },
-    pageCount: {
-      title: 'Seitenanzahl des PDFs',
-      description: 'Die Seitenanzahl dieses PDFs',
-      derive ({ filePath }) {
-        return getPdfPageCount(filePath)
-      },
-      overwriteByDerived: true
-    }
+    return typeData
   }
 }
 
@@ -868,7 +868,6 @@ module.exports = {
   cloze,
   composition,
   cover,
-  general,
   group,
   instrument,
   person,
@@ -877,5 +876,7 @@ module.exports = {
   recording,
   reference,
   song,
-  worksheet
+  worksheet,
+  // Applied to all
+  general
 }
