@@ -401,7 +401,6 @@ function mergeData (data, dataWiki, typeSpecs) {
     for (const propName in dataWiki) {
       if (propSpecs[propName] && propSpecs[propName].wikidata) {
         const propSpec = propSpecs[propName].wikidata
-        console.log(propSpec)
         if (propSpec && ((dataOrig[propName] && propSpec.alwaysUpdate) || !dataOrig[propName])) {
           typeData[propName] = dataWiki[propName]
           delete dataOrig[propName]
