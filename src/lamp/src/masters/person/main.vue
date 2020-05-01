@@ -1,10 +1,10 @@
 <template>
   <div class="vc_person_master">
-    <img class="img-contain" :src="imageHttpUrl">
+    <img class="img-contain" :src="asset.httpUrl">
     <p
       class="short-biography font-shadow smaller"
-      v-if="shortBiography"
-      v-html="shortBiography"
+      v-if="asset.shortBiography"
+      v-html="asset.shortBiography"
     />
     <div class="title-box">
       <p
@@ -13,47 +13,36 @@
       >
         {{ birth }} {{ death }}
       </p>
-      <p class="person important transparent-background font-shadow">{{ name }}</p>
+      <p class="person important transparent-background font-shadow">{{ asset.name }}</p>
     </div>
 
-    <external-sites :asset="person"/>
+    <external-sites :asset="asset"/>
   </div>
 </template>
 
 <script>
 import ExternalSites from '@/components/ExternalSites.vue'
+import { formatToLocalDate } from '@bldr/core-browser'
 
 export default {
   props: {
-    name: {
-      type: String,
+    asset: {
+      type: Object,
       required: true
-    },
-    imageHttpUrl: {
-      type: String,
-      required: true
-    },
-    birth: {
-      type: String
-    },
-    death: {
-      type: String
-    },
-    shortBiography: {
-      type: String
-    },
-    wikipediaHttpUrl: {
-      type: String
-    },
-    wikidataHttpUrl: {
-      type: String
-    },
-    person: {
-      type: Object
     }
   },
   components: {
     ExternalSites
+  },
+  computed: {
+    birth () {
+      if (this.asset.birth) return `* ${formatToLocalDate(this.asset.birth)}`
+      return ''
+    },
+    death () {
+      if (this.asset.death) return `† ${formatToLocalDate(this.asset.death)}`
+      return ''
+    }
   }
 }
 </script>

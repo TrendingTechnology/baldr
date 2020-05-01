@@ -100,6 +100,7 @@ export default {
 
     a {
       color: $gray !important;
+      text-shadow: 0 0 0.1em rgba($black, 0.21);
     }
   }
 </style>

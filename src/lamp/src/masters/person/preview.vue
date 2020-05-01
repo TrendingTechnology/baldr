@@ -3,9 +3,9 @@
     vc_person_master_preview
     slide-preview-fullscreen
   ">
-    <img class="img-contain" :src="imageHttpUrl">
+    <img class="img-contain" :src="asset.httpUrl">
     <div class="title-box">
-      <p class="person important transparent-background font-shadow">{{ name }}</p>
+      <p class="person important transparent-background font-shadow">{{ asset.name }}</p>
     </div>
   </div>
 </template>
@@ -13,12 +13,8 @@
 <script>
 export default {
   props: {
-    name: {
-      type: String,
-      required: true
-    },
-    imageHttpUrl: {
-      type: String,
+    asset: {
+      type: Object,
       required: true
     }
   }
