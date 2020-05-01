@@ -18,7 +18,7 @@ async function queryWikidata (metaData, typeNames, typeSpecs) {
   console.log(`Query wikidata item “${chalk.yellow(metaData.wikidata)}” for meta data types “${chalk.yellow(typeNames)}”`)
   const dataWiki = await wikidata.query(metaData.wikidata, typeNames, typeSpecs)
   console.log(dataWiki)
-  metaData = wikidata.mergeData(metaData, dataWiki)
+  metaData = wikidata.mergeData(metaData, dataWiki, typeSpecs)
   // To avoid blocking
   // url: 'https://www.wikidata.org/w/api.php?action=wbgetentities&ids=Q16276296&format=json&languages=en%7Cde&props=labels',
   // status: 429,

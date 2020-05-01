@@ -355,27 +355,32 @@ const instrument = {
     return path.join(id.substr(0, 1).toLowerCase(), id, `main.${typeData.extension}`)
   },
   detectTypeByPath: function (typeSpec) {
-    return new RegExp('^' + typeSpec.basePath + '/.*main\.jpg^')
+    return new RegExp('^' + typeSpec.basePath + '.*/main\.jpg$')
   },
   props: {
+    instrumentId: {
+      title: 'Instrumenten-ID',
+      derive: function ({ typeData }) {
+        return idify(typeData.name)
+      },
+    },
     id: {
+      title: 'ID zur Referenzierung (Präfix „IN_“)',
       derive: function ({ typeData, typeSpec }) {
         // IS: Instrument
-        return `${typeSpec.abbreviation}_${typeData.name}`
-      },
-      format: function (value, { typeData, typeSpec }) {
-        value = value.replace(/_BD$/, '')
-        return value
+        return `${typeSpec.abbreviation}_${idify(typeData.name)}`
       },
       overwriteByDerived: true
     },
     title: {
+      title: 'Titel des Instruments',
       derive: function ({ typeData }) {
         return `Foto des Instruments „${typeData.name}“`
       },
       overwriteByDerived: true
     },
     name: {
+      title: 'Name des Instruments',
       wikidata: {
         fromEntity: 'getLabel'
       },
@@ -383,7 +388,8 @@ const instrument = {
     },
     description: {
       wikidata: {
-        fromEntity: 'getDescription'
+        fromEntity: 'getDescription',
+        alwaysUpdate: false
       }
     },
     mainImage: {
@@ -399,6 +405,9 @@ const instrument = {
         fromClaim: 'P2343',
         format: 'formatWikicommons'
       }
+    },
+    audioSamples: {
+      title: 'Hörproben des Instruments'
     }
   }
 }

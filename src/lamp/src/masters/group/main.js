@@ -40,9 +40,7 @@ export default {
       return { asset }
     },
     titleFromProps ({ propsMain }) {
-      if (propsMain.asset.name) {
-        return propsMain.asset.name
-      }
+      return propsMain.asset.name
     }
   }
 }

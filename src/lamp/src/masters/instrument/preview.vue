@@ -3,21 +3,16 @@
     vc_instrument_master_preview
     slide-preview-fullscreen
   ">
-    <img class="img-contain" :src="imageHttpUrl">
-    <p class="important">{{ name }}</p>
+    <img class="img-contain" :src="asset.httpUrl">
+    <p class="important">{{ asset.name }}</p>
   </div>
 </template>
 
 <script>
 export default {
   props: {
-    name: {
-      type: String,
-      required: true
-    },
-    imageHttpUrl: {
-      type: String,
-      required: true
+    asset: {
+      type: Object
     }
   }
 }

@@ -92,10 +92,14 @@ export default {
     bottom: 40%;
     display: flex;
     flex-direction: column;
-    font-size: 2vmin;
-    opacity: 0.4;
+    font-size: 3vmin;
+    opacity: 0.8;
     position: absolute;
     right: 0.4em;
     z-index: 1;
+
+    a {
+      color: $gray !important;
+    }
   }
 </style>

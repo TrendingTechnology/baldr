@@ -2,8 +2,11 @@
  * @module @bldr/lamp/masters/instrument
  */
 
-import { GrabFromObjects } from '@/lib.js'
 import { WrappedSamples } from '@bldr/media-client'
+
+function convertInstrumentIdToMediaId (instrumentId) {
+  return `id:IN_${instrumentId}`
+}
 
 export default {
   title: 'Instrument',
@@ -11,10 +14,6 @@ export default {
     instrumentId: {
       type: String,
       description: 'Die ID des Instruments. Gleichlautend wie der Ordner in dem alle Medieninhalte liegen (z. B. Floete)'
-    },
-    mainImageUri: {
-      type: String,
-      description: 'URI des Hauptbildes.'
     }
   },
   icon: {
@@ -27,43 +26,32 @@ export default {
   },
   hooks: {
     normalizeProps (props) {
-      let normalized
       if (typeof props === 'string') {
-        normalized = {
+        props = {
           instrumentId: props
         }
-      } else {
-        normalized = props
       }
-      normalized.mainImageUri = `id:IN_${normalized.instrumentId}`
-      return normalized
+      return props
     },
     resolveMediaUris (props) {
-      return props.mainImageUri
+      return convertInstrumentIdToMediaId(props.instrumentId)
     },
     collectPropsMain (props) {
-      const mainImage = this.$store.getters['media/assetByUri'](props.mainImageUri)
-      const grab = new GrabFromObjects(props, mainImage, false)
-      const propsMain = grab.multipleProperties(['name'])
-      propsMain.asset = mainImage
-      propsMain.imageHttpUrl = mainImage.httpUrl
-      if (mainImage.audioSamples) {
-        propsMain.wrappedSamples = new WrappedSamples(mainImage.audioSamples)
+      const asset = this.$store.getters['media/assetByUri'](convertInstrumentIdToMediaId(props.instrumentId))
+      const propsMain = { asset }
+      if (asset.audioSamples) {
+        propsMain.wrappedSamples = new WrappedSamples(asset.audioSamples)
       }
       return propsMain
     },
-    collectPropsPreview ({ propsMain }) {
-      return {
-        imageHttpUrl: propsMain.imageHttpUrl,
-        name: propsMain.name
-      }
+    titleFromProps ({ propsMain }) {
+      return propsMain.asset.name
     },
-    titleFromProps (props) {
-      return props.instrumentId
-    },
-    async enterSlide ({ newProps }) {
-      if (newProps.audioSamples && newProps.audioSamples.length) {
-        this.$media.player.load(newProps.audioSamples[0])
+    async afterSlideNoChangeOnComponent () {
+      if (!this.isPublic) return
+      const slide = this.$get('slide')
+      if (slide.propsMain.wrappedSamples) {
+        this.$media.player.load(slide.propsMain.wrappedSamples.samples[0].sample)
       }
     }
   }

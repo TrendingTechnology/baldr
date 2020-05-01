@@ -389,28 +389,33 @@ const functions = {
 function mergeData (data, dataWiki, typeSpecs) {
   // Ẃe delete properties from this object -> make a flat copy.
   const dataOrig = Object.assign({}, data)
-  const typeName = dataOrig.metaType
-  if (!typeName) {
+
+  if (!dataOrig.metaTypes) {
     return Object.assign({}, dataOrig, dataWiki)
   }
 
-  const propSpecs = typeSpecs[typeName]
-
   const typeData = {}
 
-  for (const propName in dataWiki) {
-    const propSpec = propSpecs[propName].wikidata
-    if (propSpec && ((dataOrig[propName] && propSpec.alwaysUpdate) || !dataOrig[propName])) {
-      typeData[propName] = dataWiki[propName]
-      delete dataOrig[propName]
-    } else {
-      typeData[propName] = dataWiki[propName]
+  for (const typeName of dataOrig.metaTypes.split(',')) {
+    const propSpecs = typeSpecs[typeName].props
+    for (const propName in dataWiki) {
+      if (propSpecs[propName] && propSpecs[propName].wikidata) {
+        const propSpec = propSpecs[propName].wikidata
+        console.log(propSpec)
+        if (propSpec && ((dataOrig[propName] && propSpec.alwaysUpdate) || !dataOrig[propName])) {
+          typeData[propName] = dataWiki[propName]
+          delete dataOrig[propName]
+        } else {
+          typeData[propName] = dataWiki[propName]
+        }
+      }
     }
   }
 
   for (const propName in dataOrig) {
     typeData[propName] = dataOrig[propName]
   }
+
   return typeData
 }
 

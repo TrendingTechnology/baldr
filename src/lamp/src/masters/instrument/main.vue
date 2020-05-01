@@ -1,7 +1,7 @@
 <template>
   <div class="vc_instrument_master">
-    <img class="img-contain" :src="imageHttpUrl">
-    <p class="name important">{{ name }}</p>
+    <img class="img-contain" :src="asset.httpUrl">
+    <p class="name important">{{ asset.name }}</p>
     <p class="info-box font-shadow smaller" v-if="asset.description" v-html="asset.description"></p>
     <horizontal-play-buttons
       :wrapped-samples="wrappedSamples"
@@ -15,16 +15,8 @@ import ExternalSites from '@/components/ExternalSites.vue'
 
 export default {
   props: {
-    name: {
-      type: String,
-      required: true
-    },
     asset: {
       type: Object
-    },
-    imageHttpUrl: {
-      type: String,
-      required: true
     },
     wrappedSamples: {
       type: Object
