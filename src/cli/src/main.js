@@ -35,8 +35,11 @@ program.on('command:*', function () {
  *
  * @param {String} commandName - The name of the command.
  */
-function actionHandler (commandName) {
+function actionHandler (commandName, def) {
   return function () {
+    if (def.checkExecutable) {
+      checkExecutables(def.checkExecutable)
+    }
     const action = require(path.join(commandsPath, commandName, 'action.js'))
     // To be able to export some functions other than
     // the action function from the subcommands.
@@ -48,31 +51,28 @@ function actionHandler (commandName) {
 /**
  * Load all (sub)commands.
  *
- * @param {Object} program - An instance of the package “program”.
+ * @param {Object} program - An instance of the package “commander”.
  */
 function loadCommands (program) {
   const subcommandDirs = fs.readdirSync(commandsPath)
   for (const commandName of subcommandDirs) {
-    const conf = require(path.join(commandsPath, commandName, 'def.js'))
-    if (conf.checkExecutable) {
-      checkExecutables(conf.checkExecutable)
-    }
-    const subProgramm = program.command(conf.command)
-    if (conf.alias) {
-      if (!aliases.includes(conf.alias)) {
-        subProgramm.alias(conf.alias)
-        aliases.push(conf.alias)
+    const def = require(path.join(commandsPath, commandName, 'def.js'))
+    const subProgramm = program.command(def.command)
+    if (def.alias) {
+      if (!aliases.includes(def.alias)) {
+        subProgramm.alias(def.alias)
+        aliases.push(def.alias)
       } else {
-        throw new Error(`Duplicate alias “${conf.alias}” used for the (sub)command “${conf.command}”.`)
+        throw new Error(`Duplicate alias “${def.alias}” used for the (sub)command “${def.command}”.`)
       }
     }
-    subProgramm.description(conf.description)
-    if (conf.options) {
-      for (const option of conf.options) {
+    subProgramm.description(def.description)
+    if (def.options) {
+      for (const option of def.options) {
         subProgramm.option(option[0], option[1])
       }
     }
-    subProgramm.action(actionHandler(commandName))
+    subProgramm.action(actionHandler(commandName, def))
   }
 }
 

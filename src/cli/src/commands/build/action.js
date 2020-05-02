@@ -26,10 +26,32 @@ function buildApp (appName) {
     throw new Error(`App path doesn’t exist for app “${appName}”.`)
   }
   console.log(`Start building app: ${chalk.green(appName)}.`)
-  const result = childProcess.spawnSync('npm', ['run', 'build'], {
-    cwd: appPath
+  let result = childProcess.spawnSync('npm', ['run', 'build'], {
+    cwd: appPath,
+    encoding: 'utf-8'
   })
   if (result.status !== 0) {
+    console.log(result.stderr)
+    throw new Error(`Error building Vue app “${appName}”.`)
+  }
+
+  let destinationDir
+  if (appName === 'lamp') {
+    destinationDir = 'presentation'
+  } else {
+    destinationDir = appName
+  }
+
+  result = childProcess.spawnSync('rsync', [
+    '-av',
+    '--delete',
+    '--usermap', `jf:${config.http.webServerUser}`,
+    '--groupmap', `jf:${config.http.webServerGroup}`,
+    `${appPath}/dist/`,
+    `${config.mediaServer.sshAliasRemote}:${config.http.webRoot}/${destinationDir}/`
+  ], { encoding: 'utf-8' })
+  if (result.status !== 0) {
+    console.log(result.stderr)
     throw new Error(`Error building Vue app “${appName}”.`)
   }
 }
