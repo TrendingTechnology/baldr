@@ -105,6 +105,9 @@ function getPdfPageCount (filePath) {
  * @param {String} args - One or more arguments.
  * @param {Object} options - See `childProcess.spawnSync()`
  *   [options](https://nodejs.org/api/child_process.html#child_process_child_process_spawnsync_command_args_options).
+ *
+ * @returns {Object}
+ *   [see on nodejs.org](https://nodejs.org/api/child_process.html#child_process_child_process_spawnsync_command_args_options).
  */
 function execute () {
   let args = Array.from(arguments)
@@ -120,8 +123,9 @@ function execute () {
     result = childProcess.spawnSync(args[0], args.slice(1), options)
   }
   if (result.status !== 0) {
-    throw new Error(`Command exits with a non zero exit code: ${args.join(' ')}`)
+    throw new Error(`Command exits with a non zero exit code: ${args.join(' ')}, Options: ${options}`)
   }
+  return result
 }
 
 module.exports = {

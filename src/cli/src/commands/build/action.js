@@ -6,6 +6,9 @@ const path = require('path')
 // Third party packages.
 const chalk = require('chalk')
 
+// Project packages:
+const { execute } = require('@bldr/core-node')
+
 // Globals.
 const { config } = require('../../main.js')
 
@@ -26,14 +29,7 @@ function buildApp (appName) {
     throw new Error(`App path doesn’t exist for app “${appName}”.`)
   }
   console.log(`Start building app: ${chalk.green(appName)}.`)
-  let result = childProcess.spawnSync('npm', ['run', 'build'], {
-    cwd: appPath,
-    encoding: 'utf-8'
-  })
-  if (result.status !== 0) {
-    console.log(result.stderr)
-    throw new Error(`Error building Vue app “${appName}”.`)
-  }
+  execute('npm', 'run', 'build', { cwd: appPath })
 
   let destinationDir
   if (appName === 'lamp') {
@@ -42,18 +38,15 @@ function buildApp (appName) {
     destinationDir = appName
   }
 
-  result = childProcess.spawnSync('rsync', [
+  execute(
+    'rsync',
     '-av',
     '--delete',
     '--usermap', `jf:${config.http.webServerUser}`,
     '--groupmap', `jf:${config.http.webServerGroup}`,
     `${appPath}/dist/`,
     `${config.mediaServer.sshAliasRemote}:${config.http.webRoot}/${destinationDir}/`
-  ], { encoding: 'utf-8' })
-  if (result.status !== 0) {
-    console.log(result.stderr)
-    throw new Error(`Error building Vue app “${appName}”.`)
-  }
+  )
 }
 
 /**
