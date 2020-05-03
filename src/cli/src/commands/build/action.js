@@ -25,7 +25,7 @@ async function buildApp (cmd, appName) {
     throw new Error(`App path doesn’t exist for app “${appName}”.`)
   }
   cmd.log(`${appName}: build the Vue app.`)
-  await cmd.exec('npmxxx', 'run', 'build', { cwd: appPath })
+  await cmd.exec('npm', 'run', 'build', { cwd: appPath })
 
   let destinationDir
   if (appName === 'lamp') {
@@ -44,6 +44,7 @@ async function buildApp (cmd, appName) {
     `${appPath}/dist/`,
     `${config.mediaServer.sshAliasRemote}:${config.http.webRoot}/${destinationDir}/`
   )
+  cmd.stopSpin()
 }
 
 /**

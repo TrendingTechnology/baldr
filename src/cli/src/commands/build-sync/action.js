@@ -1,5 +1,8 @@
 // Node packages.
-const childProcess = require('child_process')
+const os = require('os')
+
+// Project packages.
+const { CommandRunner } = require('@bldr/cli-utils')
 
 // Globals.
 const { config } = require('../../main.js')
@@ -7,31 +10,33 @@ const { config } = require('../../main.js')
 /**
  *
  */
-function action () {
-  let result = childProcess.spawnSync('rsync', [
+async function action () {
+  const user = os.userInfo()
+  if (user.username !== 'root') {
+    console.error(`You need to be root: sudo /usr/local/bin/baldr bs`)
+    process.exit()
+  }
+  const cmd = new CommandRunner()
+  cmd.startSpin()
+
+  cmd.log('rsync')
+  await cmd.exec(
+    'rsync',
     '-av',
     '--delete',
     '--exclude', 'logs',
     `${config.mediaServer.sshAliasRemote}:${config.http.webRoot}/`,
     `${config.http.webRoot}/`
-  ], { encoding: 'utf-8' })
+  )
 
-  if (result.status !== 0) {
-    console.log(result.stderr)
-    throw new Error('Build sync failed.')
-  }
-
-  result = childProcess.spawnSync('chown', [
+  cmd.log('chown')
+  await cmd.exec(
+    'chown',
     '-R',
     `${config.http.webServerUser}:${config.http.webServerUser}`,
     config.http.webRoot
-  ], { encoding: 'utf-8' })
-
-  if (result.status !== 0) {
-    console.log(result.stderr)
-    throw new Error('Chown failed.')
-  }
-
+  )
+  cmd.stopSpin()
 }
 
 module.exports = action

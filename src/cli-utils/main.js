@@ -117,7 +117,7 @@ class CommandRunner {
   }
 
   catch (error) {
-    this.stop()
+    this.stopSpin()
     console.log(error)
     process.exit()
   }
