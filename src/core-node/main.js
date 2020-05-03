@@ -100,10 +100,11 @@ function getPdfPageCount (filePath) {
 
 /**
  * Execute a command on the command line. This function is a wrapper around
- * `childProcess.spawnSync()`.
+ * [`childProcess.spawnSync()`](https://nodejs.org/api/child_process.html#child_process_child_process_spawnsync_command_args_options).
  *
  * @param {String} args - One or more arguments.
- * @param {Object} options - See `childProcess.spawnSync()` options.
+ * @param {Object} options - See `childProcess.spawnSync()`
+ *   [options](https://nodejs.org/api/child_process.html#child_process_child_process_spawnsync_command_args_options).
  */
 function execute () {
   let args = Array.from(arguments)
