@@ -1,10 +1,10 @@
 // Node packages.
-const childProcess = require('child_process')
 const fs = require('fs')
 const path = require('path')
 
 // Third party packages.
 const chalk = require('chalk')
+const ora = require('ora')
 
 // Project packages:
 const { execute } = require('@bldr/core-node')
@@ -19,6 +19,8 @@ const appNames = [
   'songbook'
 ]
 
+let spinner
+
 /**
  * @param {String} appName - The name of the name. The must be the same
  *   as the parent directory.
@@ -28,7 +30,7 @@ function buildApp (appName) {
   if (!fs.existsSync(appPath)) {
     throw new Error(`App path doesn’t exist for app “${appName}”.`)
   }
-  console.log(`Start building app: ${chalk.green(appName)}.`)
+  spinner.text = `Build Vue app “${appName}”`
   execute('npm', 'run', 'build', { cwd: appPath })
 
   let destinationDir
@@ -38,6 +40,7 @@ function buildApp (appName) {
     destinationDir = appName
   }
 
+  spinner.text = `“${appName}”: Push build to the remote HTTP server`
   execute(
     'rsync',
     '-av',
@@ -54,6 +57,7 @@ function buildApp (appName) {
  *   as the parent directory.
  */
 function action (appName) {
+  spinner = ora('Build some Vue apps.').start()
   if (!appName) {
     for (let appName of appNames) {
       buildApp(appName)
