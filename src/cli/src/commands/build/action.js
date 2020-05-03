@@ -7,7 +7,7 @@ const chalk = require('chalk')
 const ora = require('ora')
 
 // Project packages:
-const { execute } = require('@bldr/core-node')
+const { executeAsync } = require('@bldr/core-node')
 
 // Globals.
 const { config } = require('../../main.js')
@@ -25,13 +25,13 @@ let spinner
  * @param {String} appName - The name of the name. The must be the same
  *   as the parent directory.
  */
-function buildApp (appName) {
+async function buildApp (appName) {
   const appPath = path.join(config.localRepo, 'src', appName)
   if (!fs.existsSync(appPath)) {
     throw new Error(`App path doesn’t exist for app “${appName}”.`)
   }
-  spinner.text = `Build Vue app “${appName}”`
-  execute('npm', 'run', 'build', { cwd: appPath })
+  spinner.text = `${appName}: build the Vue app.`
+  await executeAsync('npm', 'run', 'build', { cwd: appPath })
 
   let destinationDir
   if (appName === 'lamp') {
@@ -40,8 +40,8 @@ function buildApp (appName) {
     destinationDir = appName
   }
 
-  spinner.text = `“${appName}”: Push build to the remote HTTP server`
-  execute(
+  spinner.text = `${appName}: push the build to the remote HTTP server.`
+  await executeAsync(
     'rsync',
     '-av',
     '--delete',
@@ -56,14 +56,21 @@ function buildApp (appName) {
  * @param {String} appName - The name of the name. The must be the same
  *   as the parent directory.
  */
-function action (appName) {
-  spinner = ora('Build some Vue apps.').start()
-  if (!appName) {
-    for (let appName of appNames) {
-      buildApp(appName)
+async function action (appName) {
+  spinner = ora({ text: 'Build some Vue apps.', spinner: 'line' }).start()
+  try {
+    if (!appName) {
+      for (let appName of appNames) {
+        await buildApp(appName)
+      }
+    } else {
+      await buildApp(appName)
     }
-  } else {
-    buildApp(appName)
+    spinner.stop()
+  } catch (error) {
+    spinner.stop()
+    console.log(error)
+    process.exit()
   }
 }
 
