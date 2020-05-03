@@ -1,6 +1,6 @@
 module.exports = {
-  command: 'docs',
+  command: 'docs [action]',
   alias: 'd',
-  description: 'Open the project documentation',
+  description: '[generate|open]: Generate / open the project documentation',
   checkExecutable: ['xdg-open']
 }

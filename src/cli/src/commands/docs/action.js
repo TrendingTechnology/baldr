@@ -1,22 +1,31 @@
-// Project packages.
-const { openWith } = require('@bldr/media-server')
-const childProcess = require('child_process')
-const glob = require('glob')
+// Node packages.
 const path = require('path')
 
+// Third party packages.
 const chalk = require('chalk')
 const fs = require('fs-extra')
+const glob = require('glob')
 const jsdoc = require('jsdoc-api')
 
+// Project packages.
+const { openWith } = require('@bldr/media-server')
+const { execute } = require('@bldr/core-node')
+
+// Globals.
+const { config } = require('../../main.js')
+
+function open () {
+  openWith('xdg-open', path.join(config.doc.dest, 'index.html'))
+}
+
 function generateDocs () {
-  const source = '/home/jf/git-repositories/github/Josef-Friedrich/baldr'
-  console.log(`Source: ${chalk.yellow(source)}`)
+  execute('git', 'pull', { cwd: config.doc.src })
+  console.log(`Source: ${chalk.yellow(config.doc.src)}`)
 
-  const destination = '/var/data/baldr/gh-pages'
-  console.log(`Destination: ${chalk.green(destination)}`)
-  fs.removeSync(destination)
+  console.log(`Destination: ${chalk.green(config.doc.dest)}`)
+  fs.removeSync(config.doc.dest)
 
-  const docFiles = glob.sync(`${source}/**/*.@(js|vue)`, {
+  const docFiles = glob.sync(`${config.doc.src}/**/*.@(js|vue)`, {
     ignore: [
       '**/node_modules/**',
       '**/test/**',
@@ -27,14 +36,23 @@ function generateDocs () {
 
   jsdoc.renderSync({
     files: docFiles,
-    pedantic: true,
-    configure: path.join(__dirname, 'jsdoc-config.json'),
-    destination
+    pedantic: true, // Treat errors as fatal errors, and treat warnings as errors. Default: false.
+    readme: path.join(config.doc.src, 'README.md'),
+    configure: config.doc.configFile,
+    destination: config.doc.dest
   })
+
+  open()
 }
 
-function action () {
-  openWith('xdg-open', '/var/data/baldr/gh-pages/index.html')
+function action (action) {
+  if (action === 'open' || action === 'o') {
+    open()
+  } else if (action === 'generate' || action === 'g') {
+    generateDocs()
+  } else {
+    console.log('Subcommands: open|o, generate|g')
+  }
 }
 
 module.exports = action

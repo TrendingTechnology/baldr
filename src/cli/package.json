@@ -31,7 +31,9 @@
     "chalk": "^4.0.0",
     "color": "^3.1.2",
     "commander": "^5.1.0",
+    "fs-extra": "^9.0.0",
     "js-yaml": "^3.13.1",
+    "jsdoc-api": "^5.0.4",
     "node-fetch": "^2.6.0",
     "webfont": "^9.0.0"
   },

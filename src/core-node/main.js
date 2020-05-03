@@ -98,9 +98,35 @@ function getPdfPageCount (filePath) {
   return parseInt(proc.stdout.match(/Pages:\s+(\d+)/)[1])
 }
 
+/**
+ * Execute a command on the command line. This function is a wrapper around
+ * `childProcess.spawnSync()`.
+ *
+ * @params {String} args - One or more arguments.
+ * @params {Object} options - See `childProcess.spawnSync()` options.
+ */
+function execute () {
+  let args = Array.from(arguments)
+  let options = {}
+  if (args.length > 1 && typeof args[args.length - 1] === 'object') {
+    options = args.pop()
+  }
+  options.encoding = 'utf-8'
+  let result
+  if (args.length === 1) {
+    result = childProcess.spawnSync(args[0], options)
+  } else {
+    result = childProcess.spawnSync(args[0], args.slice(1), options)
+  }
+  if (result.status !== 0) {
+    throw new Error(`Command exits with a non zero exit code: ${args.join(' ')}`)
+  }
+}
+
 module.exports = {
   bootstrapConfig,
   checkExecutables,
+  execute,
   getPdfPageCount,
   gitHead,
   log
