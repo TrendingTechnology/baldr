@@ -21,6 +21,7 @@
     "access": "public"
   },
   "dependencies": {
-    "ora": "4.0.4"
+    "ora": "4.0.4",
+    "gauge": "3.0.0"
   }
 }

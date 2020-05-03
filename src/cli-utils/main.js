@@ -9,6 +9,7 @@
 const childProcess = require('child_process')
 
 const ora = require('ora')
+const Gauge = require('gauge')
 
 /**
  * Execute a command on the command line. This function is a wrapper around
@@ -101,10 +102,21 @@ function executeAsync () {
 class CommandRunner {
   constructor () {
     this.spinner = ora({ spinner: 'line' })
+    this.gauge = new Gauge()
   }
 
   startSpin () {
     this.spinner.start()
+  }
+
+  startProgress () {
+    this.gauge.show('default', 0)
+  }
+
+  updateProgress (completed) {
+    console.log(completed)
+    this.gauge.pulse()
+    this.gauge.show('default', completed)
   }
 
   exec () {
@@ -120,6 +132,10 @@ class CommandRunner {
     this.stopSpin()
     console.log(error)
     process.exit()
+  }
+
+  stopProgress () {
+    this.gauge.hide()
   }
 
   stopSpin () {

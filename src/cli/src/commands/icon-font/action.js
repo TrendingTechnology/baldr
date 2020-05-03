@@ -12,6 +12,11 @@ const os = require('os')
 const chalk = require('chalk')
 const webfont = require('webfont').default
 
+// Project packages.
+const { CommandRunner } = require('@bldr/cli-utils')
+
+const cmd = new CommandRunner()
+
 // Globals
 const { config } = require('../../main.js')
 
@@ -35,6 +40,9 @@ function downloadIcon (url, name, newName) {
 
 function downloadIcons (iconMapping, urlTemplate) {
   console.log(`New download task using this template: ${chalk.red(urlTemplate)}`)
+  cmd.startProgress()
+  const iconsCount = Object.keys(iconMapping).length
+  let count = 0
   for (const icon in iconMapping) {
     const url = urlTemplate.replace('{icon}', icon)
     console.log(`Download icon “${chalk.blue(icon)}” from “${chalk.yellow(url)}”`)
@@ -43,6 +51,8 @@ function downloadIcons (iconMapping, urlTemplate) {
       newName = iconMapping[icon]
     }
     downloadIcon(url, icon, newName)
+    cmd.updateProgress(count / iconsCount)
+    count++
   }
 }
 
