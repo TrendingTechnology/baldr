@@ -5,7 +5,6 @@
 // Node packages.
 const fs = require('fs')
 const path = require('path')
-const childProcess = require('child_process')
 const os = require('os')
 
 // Third party packages.
@@ -26,7 +25,7 @@ function basePath () {
   return path.join(config.localRepo, 'src', 'icons', 'src', ...arguments)
 }
 
-function downloadIcon (url, name, newName) {
+async function downloadIcon (url, name, newName) {
   let destName
   if (newName) {
     destName = newName
@@ -34,26 +33,27 @@ function downloadIcon (url, name, newName) {
     destName = name
   }
   const destination = path.join(tmpDir, `${destName}.svg`)
-  childProcess.spawnSync('wget', ['-O', destination, url])
-  console.log(`Download destination: ${chalk.green(destination)}`)
+  await cmd.exec('wget', '-O', destination, url)
+  // console.log(`Download destination: ${chalk.green(destination)}`)
 }
 
-function downloadIcons (iconMapping, urlTemplate) {
-  console.log(`New download task using this template: ${chalk.red(urlTemplate)}`)
+async function downloadIcons (iconMapping, urlTemplate) {
   cmd.startProgress()
+  //console.log(`New download task using this template: ${chalk.red(urlTemplate)}`)
   const iconsCount = Object.keys(iconMapping).length
   let count = 0
   for (const icon in iconMapping) {
     const url = urlTemplate.replace('{icon}', icon)
-    console.log(`Download icon “${chalk.blue(icon)}” from “${chalk.yellow(url)}”`)
+    //console.log(`Download icon “${chalk.blue(icon)}” from “${chalk.yellow(url)}”`)
     let newName
     if (iconMapping[icon]) {
       newName = iconMapping[icon]
     }
-    downloadIcon(url, icon, newName)
-    cmd.updateProgress(count / iconsCount)
+    await downloadIcon(url, icon, newName)
     count++
+    cmd.updateProgress(count / iconsCount, `download icon “${chalk.blue(icon)}”`)
   }
+  cmd.stopProgress()
 }
 
 function copyIcons (srcFolder, destFolder) {
@@ -110,10 +110,10 @@ function convertIntoFontFiles (config) {
     })
 }
 
-function buildFont (options) {
+async function buildFont (options) {
   for (const task of options) {
     if ('urlTemplate' in task) {
-      downloadIcons(task.iconMapping, task.urlTemplate)
+      await downloadIcons(task.iconMapping, task.urlTemplate)
     } else if ('folder' in task) {
       copyIcons(task.folder, tmpDir)
     }

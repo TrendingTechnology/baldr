@@ -103,6 +103,7 @@ class CommandRunner {
   constructor () {
     this.spinner = ora({ spinner: 'line' })
     this.gauge = new Gauge()
+    this.gauge.setTheme('ASCII')
   }
 
   startSpin () {
@@ -113,10 +114,9 @@ class CommandRunner {
     this.gauge.show('default', 0)
   }
 
-  updateProgress (completed) {
-    console.log(completed)
+  updateProgress (completed, text) {
     this.gauge.pulse()
-    this.gauge.show('default', completed)
+    this.gauge.show(text, completed)
   }
 
   exec () {
