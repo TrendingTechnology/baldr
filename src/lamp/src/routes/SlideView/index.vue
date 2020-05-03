@@ -56,6 +56,10 @@ export default {
       font-size: 3vmin;
     }
 
+    .vc_horizontal_play_buttons {
+      height: 3vmin;
+    }
+
     .vc_master_icon {
       left: 0.2vmin;
       top: 0.1vmin;
