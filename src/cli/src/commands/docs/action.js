@@ -9,7 +9,7 @@ const jsdoc = require('jsdoc-api')
 
 // Project packages.
 const { openWith } = require('@bldr/media-server')
-const { execute } = require('@bldr/core-node')
+const { CommandRunner } = require('@bldr/cli-utils')
 
 // Globals.
 const { config } = require('../../main.js')
@@ -18,12 +18,15 @@ function open () {
   openWith('xdg-open', path.join(config.doc.dest, 'index.html'))
 }
 
-function generateDocs () {
-  execute('git', 'pull', { cwd: config.doc.src })
-  console.log(`Source: ${chalk.yellow(config.doc.src)}`)
+async function generateDocs () {
+  const cmd = new CommandRunner()
+  cmd.startSpin()
 
-  console.log(`Destination: ${chalk.green(config.doc.dest)}`)
-  fs.removeSync(config.doc.dest)
+  cmd.log(`Update source: ${chalk.yellow(config.doc.src)}`)
+  await cmd.exec('git', 'pull', { cwd: config.doc.src })
+
+  cmd.log(`Clean destination: ${chalk.green(config.doc.dest)}`)
+  await fs.remove(config.doc.dest)
 
   const docFiles = glob.sync(`${config.doc.src}/**/*.@(js|vue)`, {
     ignore: [
@@ -32,7 +35,7 @@ function generateDocs () {
       '**/tests/**'
     ]
   })
-  console.log(docFiles.length)
+  cmd.log(`Generate documentation of ${docFiles.length} files.`)
 
   jsdoc.renderSync({
     files: docFiles,
@@ -43,6 +46,7 @@ function generateDocs () {
   })
 
   open()
+  cmd.stopSpin()
 }
 
 function action (action) {
