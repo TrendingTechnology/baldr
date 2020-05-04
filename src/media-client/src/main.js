@@ -1513,7 +1513,7 @@ class MultiPartSelection {
 /**
  * @param {ClientMediaAsset} asset
  */
-async function createMediaElement (asset) {
+function createMediaElement (asset) {
   /**
    * Create a video element like `new Audio() does.`
    *
@@ -1549,23 +1549,7 @@ async function createMediaElement (asset) {
     default:
       throw new Error(`Not supported asset type “${asset.type}”.`)
   }
-
-  return new Promise((resolve, reject) => {
-    if (asset.isPlayable) {
-      mediaElement.onloadedmetadata = () => {
-        resolve(mediaElement)
-      }
-    } else {
-      mediaElement.onload = () => {
-        resolve(mediaElement)
-      }
-    }
-
-    mediaElement.onerror = (error) => {
-      console.log(error)
-      reject(Error(`Could not create the MediaElement for the ClientMediaAsset with the ID “${asset.id}”.`))
-    }
-  })
+  return mediaElement
 }
 
 /**
@@ -1647,7 +1631,7 @@ class Resolver {
    *
    * @returns {module:@bldr/media-client~Sample[]}
    */
-  async createSamples_ (asset) {
+  createSamples_ (asset) {
     if (asset.isPlayable) {
       // First sample of each playable media file is the “complete” track.
       const completeSampleSpec = {
@@ -1690,7 +1674,7 @@ class Resolver {
       }
 
       for (const sampleUri in samples) {
-        samples[sampleUri].mediaElement = await createMediaElement(asset)
+        samples[sampleUri].mediaElement = createMediaElement(asset)
       }
       return samples
     }
@@ -1811,9 +1795,9 @@ class Resolver {
     asset.type = assetTypes.extensionToType(asset.extension)
     // After type
     if (asset.type !== 'document') {
-      asset.mediaElement = await createMediaElement(asset)
+      asset.mediaElement = createMediaElement(asset)
     }
-    const samples = await this.createSamples_(asset)
+    const samples = this.createSamples_(asset)
     if (samples) {
       asset.samples = samples
     }
