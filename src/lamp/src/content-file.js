@@ -760,6 +760,9 @@ export class Presentation {
    * done asynchronously, therefore it can’t be accomplished in the constructor.
    */
   async resolveMedia () {
+    if (this.parentDir) {
+      await vm.$media.resolveByParentDir(this.parentDir)
+    }
     if (this.mediaUris.length > 0) {
       /**
        * @type {Object}

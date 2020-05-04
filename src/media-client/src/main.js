@@ -1842,16 +1842,16 @@ class Resolver {
       promises.push(this.resolveSingle_(assetSpec))
     }
     const mainAssets = await Promise.all(promises)
-    let linkAssets = []
+    let linkedAssets = []
     // Resolve the linked media URIs.
     if (this.linkedUris.length) {
       promises = []
       for (const mediaUri of this.linkedUris) {
         promises.push(this.resolveSingle_(mediaUri))
       }
-      linkAssets = await Promise.all(promises)
+      linkedAssets = await Promise.all(promises)
     }
-    return mainAssets.concat(linkAssets)
+    return mainAssets.concat(linkedAssets)
   }
 }
 
@@ -1999,6 +1999,22 @@ class Media {
       router.addRoutes(routes)
       shortcuts.fromRoute(routes[0])
     }
+  }
+
+  /**
+   * @param {String} parentDir
+   */
+  async resolveByParentDir (parentDir) {
+    const response = await httpRequest.request({
+      url: 'query',
+      method: 'get',
+      params: {
+        type: 'assets',
+        method: 'substringSearch',
+        field: 'path',
+        search: parentDir
+      }
+    })
   }
 
   /**
