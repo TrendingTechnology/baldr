@@ -681,11 +681,18 @@ export class Presentation {
 
     if (rawObject.path) {
       /**
+       * The relative path of the presentation, for example
+       * `12/20_Tradition/10_Umgang-Tradition/10_Futurismus/Praesentation.baldr.yml`.
+       *
        * @type {String}
        */
       this.path = rawObject.path
       const fileName = rawObject.path.split('/').pop()
+
       /**
+       * The relative path of parent directory, for example
+       * `12/20_Tradition/10_Umgang-Tradition/10_Futurismus`.
+       *
        * @type {String}
        */
       this.parentDir = rawObject.path.replace(`/${fileName}`, '')
@@ -742,6 +749,8 @@ export class Presentation {
     }
 
     /**
+     * All collected media URIs of the presentation.
+     *
      * @type {Array}
      */
     this.mediaUris = mediaUris
