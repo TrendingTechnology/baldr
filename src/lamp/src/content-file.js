@@ -6,7 +6,6 @@
 
 /* globals defaultThemeSassVars FileReader */
 
-// import Vue from 'vue'
 import yaml from 'js-yaml'
 import { shortenText, convertPropertiesCase, escapeHtml, deepCopy, jsYamlConfig, RawDataObject } from '@bldr/core-browser'
 import { WrappedSamples } from '@bldr/media-client'
@@ -15,7 +14,7 @@ import { masters } from '@/masters.js'
 import store from '@/store/index.js'
 import { router } from '@/routes.js'
 import { routerViews } from '@/routing.js'
-import vue from '@/main.js'
+import vm from '@/main.js'
 
 /**
  * A raw slide object or a raw slide string.
@@ -732,7 +731,7 @@ export class Presentation {
 
     // Async hooks to load resources in the background.
     for (const slide of this.slides) {
-      slide.master.afterLoading(slide.props, vue)
+      slide.master.afterLoading(slide.props, vm)
     }
 
     // Resolve all media files.
@@ -765,24 +764,24 @@ export class Presentation {
       /**
        * @type {Object}
        */
-      this.media = await vue.$media.resolve(this.mediaUris)
+      this.media = await vm.$media.resolve(this.mediaUris)
     }
 
     // After media resolution.
     for (const slide of this.slides) {
-      await slide.master.afterMediaResolution(slide.props, vue)
+      await slide.master.afterMediaResolution(slide.props, vm)
     }
 
     for (const slide of this.slides) {
       slide.master.renderInlineMedia(slide.props)
-      slide.propsMain = slide.master.collectPropsMain(slide.props, vue)
+      slide.propsMain = slide.master.collectPropsMain(slide.props, vm)
       slide.propsPreview = slide.master.collectPropsPreview(
         {
           props: slide.props,
           propsMain: slide.propsMain,
           slide
         },
-        vue
+        vm
       )
       const steps = slide.master.calculateStepCount({
         props: slide.props,
@@ -790,7 +789,7 @@ export class Presentation {
         propsPreview: slide.propsPreview,
         slide,
         master: slide.master
-      }, vue)
+      }, vm)
       if (Number.isInteger(steps)) {
         slide.stepCount = steps
       } else if (Array.isArray(steps)) {
@@ -1032,7 +1031,7 @@ function openFile (file) {
       })
     }
   } else {
-    vue.$media.resolve(file)
+    vm.$media.resolve(file)
   }
 }
 
