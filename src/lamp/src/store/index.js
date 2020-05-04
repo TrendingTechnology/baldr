@@ -100,11 +100,9 @@ const getters = {
 
 const actions = {
   async openPresentation ({ commit, dispatch }, { rawYamlString, mongoDbObject }) {
-    const presentation = new Presentation()
-    await presentation.parseYamlFile(rawYamlString)
-    if (mongoDbObject) {
-      presentation.mergeFromMongo(mongoDbObject)
-    }
+    const presentation = new Presentation({ rawYamlString, rawObject: mongoDbObject })
+    await presentation.resolveMedia()
+
     commit('setPresentation', presentation)
     commit('setSlides', presentation.slides)
     // The presentation can now be entered on each slide not only the first.

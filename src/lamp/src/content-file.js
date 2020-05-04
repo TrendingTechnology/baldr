@@ -607,33 +607,21 @@ function parseSlidesRecursive (slidesRaw, slidesFlat, slidesTree, level = 1) {
 /**
  * A presentation
  *
- * @property {String} path
- * @property {String} parentDir
- * @property {object} meta
- * @property {object} slides
- * @property {object} media
- * @property {string} rawYamlString_
- * @property {string} rawYamlObject_
+ * Normalize properties. Parse slides recursive. Add a placeholder slide if the
+ * presentation is empty.
  */
 export class Presentation {
   /**
-   * Go to a certain slide by ID.
+   * @param {Object} presData
    *
-   * @param {Number} slideId - The ID of a slide.
-   */
-  goto (slideId) {
-    const slideNo = this.store.getters['lamp/nav/slideNoById'](slideId)
-    const slide = this.slides[slideNo - 1]
-    router.push(slide.routerLocation)
-  }
-
-  /**
-   * Some meta data fields are only available in the mongodb object, for
-   * example the path of the presentation. We prefer the object fetched
-   * over axios from the HTTP media server to be able to update the
-   * presentations without updating the whole mongo db. This fields are
+   * @property {String} rawYamlString - The YAML string is converted into a
+   * Javascript object.
+   *
+   * @property {Object} rawObject - Some meta data fields are only available in
+   * the mongodb object, for example the path of the presentation. We prefer the
+   * object fetched over axios from the HTTP media server to be able to update
+   * the presentations without updating the whole mongo db. This fields are
    * merged from the mongodb object:
-   *
    *
    * ```js
    * this.path
@@ -644,91 +632,30 @@ export class Presentation {
    * this.meta.grade
    * this.meta.curriculum
    * ```
-   *
-   * @param {Object} presentationMongo
    */
-  mergeFromMongo (presentation) {
-    if ('path' in presentation) {
-      this.path = presentation.path
-      const fileName = presentation.path.split('/').pop()
-      this.parentDir = presentation.path.replace(`/${fileName}`, '')
-    }
+  constructor ({ rawYamlString, rawObject }) {
+    // Load the YAML string. Convert the YAML string into a object.
+    let rawYamlObject
+    if (rawYamlString) {
+      try {
+        rawYamlObject = yaml.safeLoad(rawYamlString)
+      } catch (error) {
+        throw new Error(`${error.name}: ${error.message}`)
+      }
 
-    if ('meta' in presentation) {
-      const meta = presentation.meta
-      if (!this.meta) this.meta = {}
-      for (const key of ['id', 'title', 'subtitle', 'curriculum', 'grade']) {
-        if (!this.meta[key] && meta[key]) {
-          this.meta[key] = meta[key]
+      if (!rawYamlObject) {
+        rawYamlObject = {
+          meta: null,
+          slides: [
+            {
+              title: 'Die Präsentation hat noch keine Folien',
+              generic: 'Die Präsentation hat noch keine Folien'
+            }
+          ]
         }
+      } else if (!rawYamlObject.slides) {
+        throw new Error(`No top level slides key found!\n\n---\nslides:\n- generic: etc.\n\nCan not parse this content:\n\n${JSON.stringify(rawYamlObject)}`)
       }
-    }
-  }
-
-  /**
-   * Convert a YAML string into a Javascript object. Normalize properties.
-   * Parse slides recursive. Add a placeholder slide if the presentation is
-   * empty.
-   *
-   * @param {String} rawYamlString
-   */
-  async parseYamlFile (rawYamlString) {
-    this.rawYamlString_ = rawYamlString
-    try {
-      this.rawYamlObject_ = yaml.safeLoad(rawYamlString)
-    } catch (error) {
-      throw new Error(`${error.name}: ${error.message}`)
-    }
-
-    if (!this.rawYamlObject_) {
-      this.rawYamlObject_ = {
-        meta: null,
-        slides: [
-          {
-            title: 'Die Präsentation hat noch keine Folien',
-            generic: 'Die Präsentation hat noch keine Folien'
-          }
-        ]
-      }
-    } else if (!this.rawYamlObject_.slides) {
-      throw new Error(
-        `No top level slides key found!
-
----
-slides:
-- generic: etc.
-
-Can not parse this content:
-
-${JSON.stringify(this.rawYamlObject_)}`
-      )
-    }
-
-    /**
-     * A flat list of slide objects. All child slides are included in this
-     * array.
-     *
-     * @type {Array}
-     */
-    this.slides = []
-
-    /**
-     * Only the top level slide objects are included in this array. Child slides
-     * can be accessed under the `slides` property.
-     *
-     * @type {Array}
-     */
-    this.slidesTree = []
-
-    // In this function call the `Slide()` objects are created.
-    parseSlidesRecursive(this.rawYamlObject_.slides, this.slides, this.slidesTree)
-
-    // This function is also called inside the function `parseSlidesRecursive()`
-    this.rawYamlObject_ = convertPropertiesCase(this.rawYamlObject_, 'snake-to-camel')
-
-    // Async hooks to load resources in the background.
-    for (const slide of this.slides) {
-      slide.master.afterLoading(slide.props, vue)
     }
 
     /**
@@ -750,7 +677,56 @@ ${JSON.stringify(this.rawYamlObject_)}`
      * @property {String} curriculum - Relation to the curriculum.
      * @property {String} curriculum_url - URL of the curriculum web page.
      */
-    this.meta = this.rawYamlObject_.meta
+    this.meta = rawYamlObject.meta
+
+    if (rawObject.path) {
+      /**
+       * @type {String}
+       */
+      this.path = rawObject.path
+      const fileName = rawObject.path.split('/').pop()
+      /**
+       * @type {String}
+       */
+      this.parentDir = rawObject.path.replace(`/${fileName}`, '')
+    }
+
+    if (rawObject.meta) {
+      const meta = rawObject.meta
+      if (!this.meta) this.meta = {}
+      for (const key of ['id', 'title', 'subtitle', 'curriculum', 'grade']) {
+        if (!this.meta[key] && meta[key]) {
+          this.meta[key] = meta[key]
+        }
+      }
+    }
+
+    /**
+     * A flat list of slide objects. All child slides are included in this
+     * array.
+     *
+     * @type {Array}
+     */
+    this.slides = []
+
+    /**
+     * Only the top level slide objects are included in this array. Child slides
+     * can be accessed under the `slides` property.
+     *
+     * @type {Array}
+     */
+    this.slidesTree = []
+
+    // In this function call the `Slide()` objects are created.
+    parseSlidesRecursive(rawYamlObject.slides, this.slides, this.slidesTree)
+
+    // This function is also called inside the function `parseSlidesRecursive()`
+    rawYamlObject = convertPropertiesCase(rawYamlObject, 'snake-to-camel')
+
+    // Async hooks to load resources in the background.
+    for (const slide of this.slides) {
+      slide.master.afterLoading(slide.props, vue)
+    }
 
     // Resolve all media files.
     const mediaUris = []
@@ -764,11 +740,23 @@ ${JSON.stringify(this.rawYamlObject_)}`
         }
       }
     }
-    if (mediaUris.length > 0) {
+
+    /**
+     * @type {Array}
+     */
+    this.mediaUris = mediaUris
+  }
+
+  /**
+   * Resolve the media assets associated with the presentation. This have to be
+   * done asynchronously, therefore it can’t be accomplished in the constructor.
+   */
+  async resolveMedia () {
+    if (this.mediaUris.length > 0) {
       /**
        * @type {Object}
        */
-      this.media = await vue.$media.resolve(mediaUris)
+      this.media = await vue.$media.resolve(this.mediaUris)
     }
 
     // After media resolution.
@@ -803,6 +791,17 @@ ${JSON.stringify(this.rawYamlObject_)}`
     }
 
     store.dispatch('lamp/nav/initNavList', this.slides)
+  }
+
+  /**
+   * Go to a certain slide by ID.
+   *
+   * @param {Number} slideId - The ID of a slide.
+   */
+  goto (slideId) {
+    const slideNo = this.store.getters['lamp/nav/slideNoById'](slideId)
+    const slide = this.slides[slideNo - 1]
+    router.push(slide.routerLocation)
   }
 
   /**
