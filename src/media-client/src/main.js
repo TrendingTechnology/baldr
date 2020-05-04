@@ -4,6 +4,26 @@
  * @module @bldr/media-client
  */
 
+/**
+ * A `assetSpec` can be:
+ *
+ * 1. A remote URI (Uniform Resource Identifier) as a string, for example
+ *    `id:Joseph_haydn` which has to be resolved.
+ * 2. A already resolved HTTP URL, for example
+ *    `https://example.com/Josef_Haydn.jg`
+ * 3. A file object {@link https://developer.mozilla.org/de/docs/Web/API/File}
+ *
+ * @typedef assetSpec
+ * @type {(String|File)}
+ */
+
+/**
+ * An array of `assetSpec` or a single `assetSpec`
+ *
+ * @typedef assetSpecs
+ * @type {(assetSpec[]|assetSpec)}
+ */
+
 /* globals config document Audio Image File */
 
 import { HttpRequest } from '@bldr/http-request'
@@ -1549,26 +1569,6 @@ async function createMediaElement (asset) {
 }
 
 /**
- * A `assetSpec` can be:
- *
- * 1. A remote URI (Uniform Resource Identifier) as a string, for example
- *    `id:Joseph_haydn` which has to be resolved.
- * 2. A already resolved HTTP URL, for example
- *    `https://example.com/Josef_Haydn.jg`
- * 3. A file object {@link https://developer.mozilla.org/de/docs/Web/API/File}
- *
- * @typedef assetSpec
- * @type {(String|File)}
- */
-
-/**
- * An array of `assetSpec` or a single `assetSpec`
- *
- * @typedef assetSpecs
- * @type {(assetSpec[]|assetSpec)}
- */
-
-/**
  * Resolve (get the HTTP URL and some meta informations) of a remote media
  * file by its URI. Resolve a local file. The local files have to dropped
  * in the application. Create media elements for each media file. Create samples
@@ -1625,16 +1625,17 @@ class Resolver {
    * @private
    * @param {module:@bldr/media-client.ClientMediaAsset} asset - The
    *   `asset` object, a client side representation of a media asset.
+   * @property {String} httpUrl
+   * @property {String} path
    *
    * @returns {String} - A HTTP URL.
    */
-  async resolveHttpUrl_ (asset) {
+  resolveHttpUrl_ (asset) {
     if (asset.httpUrl) return asset.httpUrl
     if (asset.path) {
-      const baseUrl = await httpRequest.baseUrl
-      return `${baseUrl}/media/${asset.path}`
+      return `${httpRequest.baseUrl}/media/${asset.path}`
     }
-    throw new Error(`Can not generate HTTP URL.`)
+    throw new Error(`Can not resolve HTTP URL. The asset object needs the property “path” or “httpUrl”.`)
   }
 
   /**
@@ -1696,6 +1697,71 @@ class Resolver {
   }
 
   /**
+   * @private
+   *
+   * @param {String} uri - For example `uuid:... id:...`
+   * @param {Object} data - Object from the REST API.
+   *
+   * @returns {module:@bldr/media-client.ClientMediaAsset}
+   */
+  createAssetFromRestData_ (uri, data) {
+    let asset
+    if (data.multiPartCount) {
+      asset = new MultiPartAsset({ uri })
+      store.commit('media/addMultiPartUri', asset.uriRaw)
+    } else {
+      asset = new ClientMediaAsset({ uri })
+    }
+    extractMediaUrisRecursive(data, this.linkedUris)
+    asset.addProperties(data)
+    asset.httpUrl = this.resolveHttpUrl_(asset)
+    if (asset.previewImage) {
+      asset.previewHttpUrl = `${asset.httpUrl}_preview.jpg`
+    }
+    return asset
+  }
+
+  /**
+   * @private
+   *
+   * @param {String} httpUrl
+   *
+   * @returns {module:@bldr/media-client.ClientMediaAsset}
+   */
+  createAssetFromHttpUrl_ (httpUrl) {
+    const asset = new ClientMediaAsset({ uri: httpUrl })
+    asset.httpUrl = asset.uri
+    asset.filenameFromHTTPUrl(asset.uri)
+    asset.extensionFromString(asset.uri)
+    return asset
+  }
+
+  /**
+   * @private
+   *
+   * @param {Object} file - A file object, see
+   *  {@link https://developer.mozilla.org/de/docs/Web/API/File}
+   *
+   * @returns {module:@bldr/media-client.ClientMediaAsset}
+   */
+  createAssetFromFileObject_ (file) {
+    if (assetTypes.isAsset(file.name)) {
+      // blob:http:/localhost:8080/8c00d9e3-6ff1-4982-a624-55f125b5c0c0
+      const httpUrl = URL.createObjectURL(file)
+      // 8c00d9e3-6ff1-4982-a624-55f125b5c0c0
+      const uuid = httpUrl.substr(httpUrl.length - 36)
+      // We use the uuid instead of the file name. The file name can contain
+      // whitespaces and special characters. A uuid is  more reliable.
+      const uri = `localfile:${uuid}`
+      return ClientMediaAsset({
+        uri: uri,
+        httpUrl: httpUrl,
+        filename: file.name
+      })
+    }
+  }
+
+  /**
    * # Remote
    *
    * Resolve (get the HTTP URL and some meta informations) of a remote media
@@ -1726,45 +1792,20 @@ class Resolver {
     let asset
     // Remote uri to resolve
     if (typeof assetSpec === 'string') {
-      asset = new ClientMediaAsset({ uri: assetSpec })
-      // Already resolved (URL from the internet for example)
-      if (asset.uriScheme === 'http' || asset.uriScheme === 'https') {
-        asset.httpUrl = asset.uri
-        asset.filenameFromHTTPUrl(asset.uri)
-        asset.extensionFromString(asset.uri)
+      // For example a already resolved URL from the internet.
+      if (assetSpec.match(/^https?:/)) {
+        asset = this.createAssetFromHttpUrl_(assetSpec)
         // Resolve HTTP URL
-      } else if (asset.uriScheme === 'id' || asset.uriScheme === 'uuid') {
-        const response = await this.queryMediaServer_(asset.uriScheme, asset.uriAuthority)
-        if (response.data.multiPartCount) {
-          asset = new MultiPartAsset({ uri: asset.uriRaw })
-          store.commit('media/addMultiPartUri', asset.uriRaw)
-        }
-        extractMediaUrisRecursive(response.data, this.linkedUris)
-        asset.addProperties(response.data)
-        asset.httpUrl = await this.resolveHttpUrl_(asset)
-        if (asset.previewImage) {
-          asset.previewHttpUrl = `${asset.httpUrl}_preview.jpg`
-        }
+      } else if (assetSpec.match(mediaUriRegExp)) {
+        const uri = assetSpec.split(':')
+        const response = await this.queryMediaServer_(uri[0], uri[1])
+        asset = this.createAssetFromRestData_(assetSpec, response.data)
       } else {
         throw new Error(`Unkown media asset URI: “${assetSpec}”: Supported URI schemes: http,https,id,uuid`)
       }
     // Local: File object from drag and drop or open dialog
     } else if (assetSpec instanceof File) {
-      const file = assetSpec
-      if (assetTypes.isAsset(file.name)) {
-        // blob:http:/localhost:8080/8c00d9e3-6ff1-4982-a624-55f125b5c0c0
-        const httpUrl = URL.createObjectURL(file)
-        // 8c00d9e3-6ff1-4982-a624-55f125b5c0c0
-        const uuid = httpUrl.substr(httpUrl.length - 36)
-        // We use the uuid instead of the file name. The file name can contain
-        // whitespaces and special characters. A uuid is  more reliable.
-        const uri = `localfile:${uuid}`
-        asset = new ClientMediaAsset({
-          uri: uri,
-          httpUrl: httpUrl,
-          filename: file.name
-        })
-      }
+      asset = this.createAssetFromFileObject_(assetSpec)
     }
 
     asset.type = assetTypes.extensionToType(asset.extension)
