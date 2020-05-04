@@ -1675,6 +1675,7 @@ class Resolver {
 
       for (const sampleUri in samples) {
         samples[sampleUri].mediaElement = createMediaElement(asset)
+        store.commit('media/addSample', samples[sampleUri])
       }
       return samples
     }
@@ -1745,6 +1746,18 @@ class Resolver {
     }
   }
 
+  addMediaElementToAsset (asset) {
+    asset.type = assetTypes.extensionToType(asset.extension)
+    // After type
+    if (asset.type !== 'document') {
+      asset.mediaElement = createMediaElement(asset)
+    }
+    const samples = this.createSamples_(asset)
+    if (samples) {
+      asset.samples = samples
+    }
+  }
+
   /**
    * # Remote
    *
@@ -1776,6 +1789,10 @@ class Resolver {
     let asset
     // Remote uri to resolve
     if (typeof assetSpec === 'string') {
+      const storedAsset = store.getters['media/assetByUri'](assetSpec)
+      if (storedAsset) {
+        return storedAsset
+      }
       // For example a already resolved URL from the internet.
       if (assetSpec.match(/^https?:/)) {
         asset = this.createAssetFromHttpUrl_(assetSpec)
@@ -1791,16 +1808,8 @@ class Resolver {
     } else if (assetSpec instanceof File) {
       asset = this.createAssetFromFileObject_(assetSpec)
     }
-
-    asset.type = assetTypes.extensionToType(asset.extension)
-    // After type
-    if (asset.type !== 'document') {
-      asset.mediaElement = createMediaElement(asset)
-    }
-    const samples = this.createSamples_(asset)
-    if (samples) {
-      asset.samples = samples
-    }
+    this.addMediaElementToAsset(asset)
+    store.dispatch('media/addAsset', asset)
     return asset
   }
 
@@ -1999,6 +2008,12 @@ class Media {
         search: parentDir
       }
     })
+
+    for (const data of response.data) {
+      const asset = this.resolver.createAssetFromRestData_(`uuid:${data.uuid}`, data)
+      this.resolver.addMediaElementToAsset(asset)
+      store.dispatch('media/addAsset', asset)
+    }
   }
 
   /**
@@ -2011,12 +2026,6 @@ class Media {
     const output = {}
     const assets = await this.resolver.resolve(assetSpecs)
     for (const asset of assets) {
-      if (asset.samples) {
-        for (const sampleUri in asset.samples) {
-          store.commit('media/addSample', asset.samples[sampleUri])
-        }
-      }
-      store.dispatch('media/addAsset', asset)
       output[asset.uri] = asset
     }
     for (const uri of store.getters['media/multiPartUris']) {

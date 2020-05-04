@@ -193,7 +193,8 @@ const mutations = {
     Vue.set(state.assetTypes[asset.type], asset.uri, asset)
   },
   addSample (state, sample) {
-    Vue.set(state.samples, sample.uri, sample)
+    Vue.set(state.samples, `id:${sample.asset.id}#${sample.id}`, sample)
+    Vue.set(state.samples, `uuid:${sample.asset.uuid}#${sample.id}`, sample)
   },
   addSampleToPlayList (state, sample) {
     state.playList.push(sample.uri)
