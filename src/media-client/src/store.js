@@ -186,7 +186,8 @@ const mutations = {
     state.multiPartUris.clear()
   },
   addAsset (state, asset) {
-    Vue.set(state.assets, asset.uri, asset)
+    Vue.set(state.assets, `id:${asset.id}`, asset)
+    Vue.set(state.assets, `uuid:${asset.uuid}`, asset)
   },
   addAssetToTypes (state, asset) {
     Vue.set(state.assetTypes[asset.type], asset.uri, asset)
