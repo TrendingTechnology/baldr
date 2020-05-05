@@ -34,7 +34,7 @@ import DynamicSelect from '@bldr/dynamic-select'
 // Vue components
 import ComponentClientMediaAsset from './MediaAsset.vue'
 import ComponentMediaOverview from './MediaOverview/index.vue'
-// import ComponentMediaPlayer from './MediaPlayer.vue'
+import ComponentMediaPlayer from './MediaPlayer.vue'
 import ComponentHorizontalPlayButtons from './HorizontalPlayButtons.vue'
 import ComponentMediaCanvas from './MediaCanvas.vue'
 import ComponentPlayButton from './PlayButton.vue'
@@ -2186,7 +2186,7 @@ const Plugin = {
      * @type {module:@bldr/media-client~Media}
      */
     Vue.prototype.$media = new Media()
-    // Vue.component('media-player', ComponentMediaPlayer)
+    Vue.component('media-player', ComponentMediaPlayer)
     Vue.component('horizontal-play-buttons', ComponentHorizontalPlayButtons)
     Vue.component('play-button', ComponentPlayButton)
     Vue.component('media-canvas', ComponentMediaCanvas)

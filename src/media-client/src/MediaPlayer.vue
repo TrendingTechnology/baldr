@@ -19,8 +19,13 @@
 
       <div class="meta-data" v-if="asset">
         {{ no }}. {{ samplePlaying.title }} ({{ asset.titleSafe }})
-        {{ currentTime }} /
-        {{ duration }}
+        <div
+          :class="{ 'current-time': true, 'enlarged': isCurTimeEnlarged }"
+          @click="toggleCurTimeSize"
+        >
+          {{ currentTime }}
+        </div>
+        <div class="duration">{{ duration }}</div>
         <br/>
         <material-icon
           name="skip-previous"
@@ -29,7 +34,7 @@
         <material-icon
           v-if="paused"
           name="play"
-          @click.native="$media.player.play()"
+          @click.native="$media.player.start()"
         />
         <material-icon
           v-if="!paused"
@@ -73,7 +78,8 @@ export default {
       duration: 0,
       paused: true,
       videoElement: null,
-      videoFullscreen: false
+      videoFullscreen: false,
+      isCurTimeEnlarged: false
     }
   },
   computed: {
@@ -119,6 +125,9 @@ export default {
     },
     videoToggleFullscreen: function () {
       this.videoFullscreen = !this.videoFullscreen
+    },
+    toggleCurTimeSize: function () {
+      this.isCurTimeEnlarged = !this.isCurTimeEnlarged
     }
   },
   mounted: function () {
@@ -132,7 +141,7 @@ export default {
   $preview-size: 8vw;
 
   .vc_media_player {
-    background-color: scale-color(rgba($gray, 0.7), $alpha: 10%);
+    background-color: $gray;
     bottom: 0;
     color: $black;
     left: 0;
@@ -140,6 +149,15 @@ export default {
     position: fixed;
     text-align: left;
     width: 100%;
+    z-index: 1;
+
+    .duration, .current-time {
+      font-family: sans;
+    }
+
+    .current-time.enlarged {
+      font-size: 3em;
+    }
 
     .player-container {
       display: flex;

@@ -32,6 +32,7 @@
 
     <!-- A fullscreen overlay to display videos or images in fullscreen -->
     <media-canvas/>
+    <media-player/>
   </div>
 </template>
 
