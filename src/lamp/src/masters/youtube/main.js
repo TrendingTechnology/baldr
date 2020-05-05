@@ -1,4 +1,8 @@
 /**
+ * Download videos in the mp4 container
+ *
+ *    youtube-dl -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/mp4' 3XzGNabztj8
+ *
  * @module @bldr/lamp/masters/youtube
  */
 
