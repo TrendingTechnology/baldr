@@ -142,6 +142,24 @@ class Question {
     return this.sequence.length
   }
 
+  /**
+   * heading + question without answer.
+   *
+   * @returns {String}
+   */
+  get questionText () {
+    let output = ''
+    if (this.heading) output = output + this.heading
+    if (this.question) output = output + this.question
+    return output
+  }
+
+  /**
+   * @param {*} specs
+   * @param {*} processed
+   * @param {*} counts
+   * @param {Number} level
+   */
   static parseRecursively (specs, processed, counts, level) {
     if (Array.isArray(specs)) {
       for (const spec of specs) {
@@ -202,6 +220,25 @@ function setQuestionsByStepNo (stepNo) {
   }
 }
 
+/**
+ * Collection all question text (without answers) to build the plain
+ * text version.
+ *
+ * @param {String} text
+ * @param {module:@bldr/lamp/masters/question[]} questions
+ *
+ * @returns {String}
+ */
+function collectText (text, questions) {
+  for (const question of questions) {
+    text = text + question.questionText + ' | '
+    if (question.subQuestions) {
+      text = collectText(text, question.subQuestions)
+    }
+  }
+  return text
+}
+
 export default {
   title: 'Frage',
   props: {
@@ -248,7 +285,7 @@ export default {
       setQuestionsByStepNo.call(this, newStepNo)
     },
     plainTextFromProps (props) {
-      return plainText(props.questions[0].question)
+      return plainText(collectText('', props.questions))
     }
   }
 }
