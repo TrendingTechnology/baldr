@@ -678,7 +678,7 @@ export class Presentation {
      */
     this.meta = rawYamlObject.meta
 
-    if (rawObject.path) {
+    if (rawObject && rawObject.path) {
       /**
        * The relative path of the presentation, for example
        * `12/20_Tradition/10_Umgang-Tradition/10_Futurismus/Praesentation.baldr.yml`.
@@ -697,7 +697,7 @@ export class Presentation {
       this.parentDir = rawObject.path.replace(`/${fileName}`, '')
     }
 
-    if (rawObject.meta) {
+    if (rawObject && rawObject.meta) {
       const meta = rawObject.meta
       if (!this.meta) this.meta = {}
       for (const key of ['id', 'title', 'subtitle', 'curriculum', 'grade']) {
