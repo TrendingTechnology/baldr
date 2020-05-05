@@ -17,40 +17,58 @@
         />
       </div>
 
-      <div class="meta-data" v-if="asset">
-        {{ no }}. {{ samplePlaying.title }} ({{ asset.titleSafe }})
-        <div
-          :class="{ 'current-time': true, 'enlarged': isCurTimeEnlarged }"
-          @click="toggleCurTimeSize"
-        >
-          {{ currentTime }}
+      <div class="main-area" v-if="asset">
+        <!-- controls -->
+
+        <div class="progress-area">
+          <div class="progress-bar"><div ref="elapsed" class="elapsed"/></div>
+          <div class="times">
+            <div
+              :class="{ 'current-time': true, 'enlarged': isCurTimeEnlarged }"
+              @click="toggleCurTimeSize"
+            >
+              {{ currentTime }}
+            </div>
+            <!-- controls -->
+
+            <div class="controls">
+              <material-icon
+                name="skip-previous"
+                @click.native="$media.playList.startPrevious()"
+              />
+              <material-icon
+                v-if="paused"
+                name="play"
+                @click.native="$media.player.start()"
+              />
+              <material-icon
+                v-if="!paused"
+                name="pause"
+                @click.native="$media.player.pause()"
+              />
+              <material-icon
+                name="skip-next"
+                @click.native="$media.playList.startNext()"
+              />
+              <material-icon
+                name="fullscreen"
+                @click.native="videoToggleFullscreen"
+              />
+            </div>
+
+            <div class="duration">{{ duration }}</div>
+          </div>
         </div>
-        <div class="duration">{{ duration }}</div>
-        <br/>
-        <material-icon
-          name="skip-previous"
-          @click.native="$media.playList.startPrevious()"
-        />
-        <material-icon
-          v-if="paused"
-          name="play"
-          @click.native="$media.player.start()"
-        />
-        <material-icon
-          v-if="!paused"
-          name="pause"
-          @click.native="$media.player.pause()"
-        />
-        <material-icon
-          name="skip-next"
-          @click.native="$media.playList.startNext()"
-        />
-        <material-icon
-          name="fullscreen"
-          @click.native="videoToggleFullscreen"
-        />
+
+        <!-- meta-data -->
+
+        <div class="meta-data">
+          {{ no }}. {{ samplePlaying.title }} ({{ asset.titleSafe }})
+        </div>
+
       </div>
-      <p v-else>No media file loaded</p>
+      <p v-else>Es ist keine Medien-Datei geladen.</p>
+      <div class="placeholder"></div>
     </div>
 
     <material-icon
@@ -75,7 +93,9 @@ export default {
     return {
       show: false,
       currentTime: 0,
+      currentTimeSec: 0,
       duration: 0,
+      durationSec: 0,
       paused: true,
       videoElement: null,
       videoFullscreen: false,
@@ -99,9 +119,11 @@ export default {
   watch: {
     mediaElement () {
       this.mediaElement.ontimeupdate = (event) => {
+        this.currentTimeSec = event.target.currentTime
         this.currentTime = formatDuration(event.target.currentTime)
       }
       this.mediaElement.oncanplaythrough = (event) => {
+        this.durationSec = event.target.duration
         this.duration = formatDuration(event.target.duration)
       }
       this.mediaElement.onplay = (event) => {
@@ -116,6 +138,14 @@ export default {
         //this.mediaElement.style.display = 'block'
         //this.$refs.videoContainer.appendChild(this.mediaElement)
         //this.videoElement = this.mediaElement
+      }
+    },
+    currentTimeSec (value) {
+      const progress = (this.currentTimeSec / this.durationSec) * 100
+      if (progress) {
+        this.$refs.elapsed.style.width = `${progress}%`
+      } else {
+        this.$refs.elapsed.style.width = '0%'
       }
     }
   },
@@ -137,8 +167,9 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   $preview-size: 8vw;
+  $padding: 0.4vw;
 
   .vc_media_player {
     background-color: $gray;
@@ -164,7 +195,38 @@ export default {
     }
 
     .meta-data {
-      padding: 1em;
+    }
+
+    .main-area {
+      width: 100%;
+      margin-left: $padding;
+    }
+
+
+
+    .progress-bar {
+      width: 100%;
+      background-color: $black;
+      height: 1vh;
+    }
+
+    .elapsed {
+      background: $orange;
+      width: 0%;
+      height: 100%;
+    }
+
+    .times {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .placeholder {
+      width: 6vw;
+    }
+
+    .preview-container {
+      height: $preview-size;
     }
 
     .preview-image {
@@ -173,28 +235,14 @@ export default {
       width: $preview-size;
     }
 
-    .video-container {
-      height: $preview-size;
-      width: $preview-size;
-    }
-
     .preview-image, .video-container {
       background-color: $black;
     }
 
-    .close {
-      position: absolute;
-      right: 1em;
-      top: 0.5em;
-    }
-  }
-</style>
-
-<style lang="scss">
-  $preview-size: 8vw;
-
-  .vc_media_player {
     .video-container {
+      height: $preview-size;
+      width: $preview-size;
+
       video {
         height: $preview-size;
         object-fit: contain;
@@ -214,6 +262,12 @@ export default {
           width: 100%;
         }
       }
+    }
+
+    .close {
+      position: absolute;
+      right: 1em;
+      top: 0.5em;
     }
   }
 </style>
