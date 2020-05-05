@@ -225,7 +225,7 @@ function setQuestionsByStepNo (stepNo) {
  * text version.
  *
  * @param {String} text
- * @param {module:@bldr/lamp/masters/question[]} questions
+ * @param {module:@bldr/lamp/masters/question~Question[]} questions
  *
  * @returns {String}
  */
