@@ -1,3 +1,7 @@
-const { run } = require('@bldr/api')
+const run = require('@bldr/api')
 
-module.exports = run
+function action (port) {
+  run(port)
+}
+
+module.exports = action

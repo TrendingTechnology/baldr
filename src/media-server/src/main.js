@@ -515,7 +515,6 @@ async function insertObjectIntoDb (filePath, mediaType) {
       object = new Asset(filePath)
     }
     object = object.prepareForInsert()
-    console.log(object.path)
     await db.collection(mediaType).insertOne(object)
   } catch (error) {
     console.log(error)
@@ -641,19 +640,15 @@ async function update (full = false) {
    * Run git pull on the `basePath`
    */
   function gitPull () {
-    console.log('Run git pull')
     const gitPull = childProcess.spawnSync(
       'git', ['pull'],
       gitSettings
     )
-    console.log(`git pull stderr: ${gitPull.stderr.replace(/\n$/, '')}`)
-    console.log(`git pull stdout: ${gitPull.stdout.replace(/\n$/, '')}`)
     if (gitPull.status !== 0) throw new Error(`git pull exits with an non-zero status code.`)
   }
   if (full) gitPull()
   const gitRevParse = childProcess.spawnSync('git', ['rev-parse', 'HEAD'], gitSettings)
   const lastCommitId = gitRevParse.stdout.replace(/\n$/, '')
-  console.log(`lastCommitId: ${lastCommitId}`)
   await connectDb()
   await initializeDb()
   await flushMediaFiles()
@@ -667,7 +662,6 @@ async function update (full = false) {
         filePath.indexOf('Praesentation_tmp.baldr.yml') > -1 ||
         filePath.indexOf('title_tmp.txt') > -1
       ) {
-        console.log(`Delete temporary file ${filePath}`)
         fs.unlinkSync(filePath)
       }
     },
@@ -676,7 +670,6 @@ async function update (full = false) {
       if (fs.existsSync(filePath) && fs.statSync(filePath).isDirectory()) {
         const files = fs.readdirSync(filePath)
         if (files.length === 0) {
-          console.log(`Delete empty directory ${filePath}`)
           fs.rmdirSync(filePath)
         }
       }

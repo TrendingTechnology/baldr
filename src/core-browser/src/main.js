@@ -304,7 +304,7 @@ export function convertPropertiesCase (data, direction = 'snake-to-camel') {
   }
   // Array
   if (Array.isArray(data)) {
-    for (let i; i < data.length; i++) {
+    for (let i = 0; i < data.length; i++) {
       const item = data[i]
       if (typeof item === 'object') {
         data[i] = convertPropertiesCase(item, direction)

@@ -17,9 +17,6 @@
     "url": "https://josef.friedrich.rocks"
   },
   "main": "src/main.js",
-  "bin": {
-    "baldr_api.js": "./src/main.js"
-  },
   "publishConfig": {
     "access": "public"
   },

@@ -71,3 +71,5 @@ const main = function () {
 if (require.main === module) {
   main()
 }
+
+module.exports = run

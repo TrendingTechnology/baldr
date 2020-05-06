@@ -17,9 +17,11 @@ exports.convertPropertiesCase = convertPropertiesCase;
 exports.formatMultiPartAssetFileName = formatMultiPartAssetFileName;
 exports.formatWikidataUrl = formatWikidataUrl;
 exports.formatWikipediaUrl = formatWikipediaUrl;
-exports.formatBrainzRecUrl = formatBrainzRecUrl;
-exports.formatBrainzWorkUrl = formatBrainzWorkUrl;
+exports.formatMusicbrainzRecordingUrl = formatMusicbrainzRecordingUrl;
+exports.formatMusicbrainzWorkUrl = formatMusicbrainzWorkUrl;
 exports.formatYoutubeUrl = formatYoutubeUrl;
+exports.formatImslpUrl = formatImslpUrl;
+exports.formatWikicommonsUrl = formatWikicommonsUrl;
 exports.escapeHtml = escapeHtml;
 exports.deepCopy = deepCopy;
 exports.getExtension = getExtension;
@@ -202,7 +204,7 @@ function convertPropertiesCase(data, direction = 'snake-to-camel') {
   }
 
   if (Array.isArray(data)) {
-    for (let i; i < data.length; i++) {
+    for (let i = 0; i < data.length; i++) {
       const item = data[i];
 
       if (typeof item === 'object') {
@@ -266,16 +268,24 @@ function formatWikipediaUrl(nameSpace) {
   return `https://${lang}.wikipedia.org/wiki/${slug}`;
 }
 
-function formatBrainzRecUrl(recordingId) {
+function formatMusicbrainzRecordingUrl(recordingId) {
   return `https://musicbrainz.org/recording/${recordingId}`;
 }
 
-function formatBrainzWorkUrl(workId) {
+function formatMusicbrainzWorkUrl(workId) {
   return `https://musicbrainz.org/work/${workId}`;
 }
 
 function formatYoutubeUrl(id) {
   return `https://youtu.be/${id}`;
+}
+
+function formatImslpUrl(id) {
+  return `https://imslp.org/wiki/${id}`;
+}
+
+function formatWikicommonsUrl(fileName) {
+  return `https://commons.wikimedia.org/wiki/File:${fileName}`;
 }
 
 class AssetTypes {
@@ -385,8 +395,10 @@ function getExtension(filePath) {
 const mediaUriRegExp = new RegExp('((id|uuid):(([a-zA-Z0-9-_]+)(#([a-zA-Z0-9-_]+))?))');
 exports.mediaUriRegExp = mediaUriRegExp;
 var _default = {
-  formatBrainzRecUrl,
-  formatBrainzWorkUrl,
+  formatImslpUrl,
+  formatMusicbrainzRecordingUrl,
+  formatMusicbrainzWorkUrl,
+  formatWikicommonsUrl,
   formatWikidataUrl,
   formatWikipediaUrl,
   formatYoutubeUrl,
