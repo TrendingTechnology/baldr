@@ -9,6 +9,8 @@
 const childProcess = require('child_process')
 
 const ora = require('ora')
+// TODO remove dependency object-assign
+// Error: Cannot find module 'object-assign'
 const Gauge = require('gauge')
 
 /**

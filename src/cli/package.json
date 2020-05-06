@@ -22,9 +22,9 @@
   },
   "dependencies": {
     "@bldr/api": "^0.2.3",
+    "@bldr/cli-utils": "^0.1.0",
     "@bldr/core-browser": "^0.11.3",
     "@bldr/core-node": "^0.2.2",
-    "@bldr/cli-utils": "^0.1.0",
     "@bldr/icons": "^0.2.2",
     "@bldr/media-server": "^0.2.3",
     "@bldr/songbook-intermediate-files": "^0.2.3",
