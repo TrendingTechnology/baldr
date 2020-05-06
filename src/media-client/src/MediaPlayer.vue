@@ -18,25 +18,25 @@
           </div>
           <div class="times">
             <div
+              v-if="currentTime"
               :class="{ 'current-time': true, 'enlarged': isCurTimeEnlarged }"
               @click="toggleCurTimeSize"
             >{{ currentTime }}</div>
-
             <div class="controls">
               <material-icon name="skip-previous" @click.native="$media.playList.startPrevious()" />
               <material-icon v-if="paused" name="play" @click.native="$media.player.start()" />
               <material-icon v-if="!paused" name="pause" @click.native="$media.player.pause()" />
               <material-icon name="skip-next" @click.native="$media.playList.startNext()" />
-              <material-icon name="fullscreen" @click.native="videoToggleFullscreen" />
+              <!-- <material-icon name="fullscreen" @click.native="videoToggleFullscreen" /> -->
             </div>
-
-            <div class="duration">{{ duration }}</div>
+            <div v-if="aheadTime" class="ahead-time">{{ aheadTime }}</div>
           </div>
         </div>
-
-        <!-- meta-data -->
-
-        <div class="meta-data">{{ no }}. {{ samplePlaying.title }} ({{ asset.titleSafe }})</div>
+        <div class="meta-data">
+          <div v-if="sample.asset.artist" class="artist-safe" v-html="sample.artistSafe + ': '"/>
+          <div class="title-safe" v-html="sample.titleSafe"/>
+          <div v-if="sample.yearSafe" class="year-safe">({{ sample.yearSafe }})</div>
+        </div>
       </div>
       <p v-else>Es ist keine Medien-Datei geladen.</p>
       <div class="placeholder"></div>
@@ -57,9 +57,11 @@ export default {
   },
   data() {
     return {
-      currentTime: 0,
+      aheadTimeSec: 0,
+      aheadTime: null,
+      currentTime: null,
       currentTimeSec: 0,
-      duration: 0,
+      duration: null,
       durationSec: 0,
       isCurTimeEnlarged: false,
       paused: true,
@@ -69,14 +71,14 @@ export default {
     };
   },
   computed: {
-    samplePlaying() {
+    sample() {
       return this.$store.getters["media/samplePlayListCurrent"];
     },
     asset() {
-      if (this.samplePlaying) return this.samplePlaying.asset;
+      if (this.sample) return this.sample.asset;
     },
     mediaElement() {
-      if (this.samplePlaying) return this.samplePlaying.mediaElement;
+      if (this.sample) return this.sample.mediaElement;
     },
     no() {
       return this.$store.getters["media/playListNoCurrent"];
@@ -86,6 +88,8 @@ export default {
     mediaElement() {
       this.mediaElement.ontimeupdate = event => {
         this.currentTimeSec = event.target.currentTime;
+        this.aheadTimeSec = this.durationSec - this.currentTimeSec
+        this.aheadTime = '-' + formatDuration(this.aheadTimeSec)
         this.currentTime = formatDuration(event.target.currentTime);
       };
       this.mediaElement.oncanplaythrough = event => {
@@ -144,10 +148,10 @@ $preview-size: 4em;
 $padding: 0.2em;
 
 .vc_media_player {
-  font-size: 3vmin;
   background-color: $gray;
   bottom: 0;
   color: $black;
+  font-size: 3vmin;
   left: 0;
   padding: $padding;
   position: fixed;
@@ -185,14 +189,14 @@ $padding: 0.2em;
     }
 
     .main-area {
-      width: 100%;
       margin-left: $padding;
+      width: 100%;
 
       .progress-area {
         .progress-bar {
-          width: 100%;
           background-color: $black;
           height: 0.2em;
+          width: 100%;
 
           .elapsed {
             background: $orange;
@@ -205,10 +209,10 @@ $padding: 0.2em;
           display: flex;
           justify-content: space-between;
 
-          .duration,
+          .ahead-time,
           .current-time {
             font-family: sans;
-            font-size: 0.7em;
+            font-size: 0.5em;
           }
 
           .current-time.enlarged {
@@ -218,6 +222,12 @@ $padding: 0.2em;
       }
 
       .meta-data {
+        font-size: 0.7em;
+        font-family: $font-family-sans;
+        div {
+          display: inline-block;
+          padding: 0 0.1em;
+        }
       }
     }
     .placeholder {

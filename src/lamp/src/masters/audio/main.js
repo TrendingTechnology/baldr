@@ -87,7 +87,7 @@ export default {
       if (props.title) {
         title = props.title
       } else {
-        title = sample.titleFormated
+        title = sample.titleSafe
       }
 
       let previewHttpUrl

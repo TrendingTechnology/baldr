@@ -658,11 +658,49 @@ class Sample {
    *
    * @type {String}
    */
-  get titleFormated () {
+  get titleSafe () {
     if (this.id === 'complete') {
       return this.asset.titleSafe
     } else {
       return `${this.title} (${this.asset.titleSafe})`
+    }
+  }
+
+  /**
+   * Combined value build from `this.asset.artist` and `this.asset.composer`.
+   *
+   * @returns {String}
+   */
+  get artistSafe () {
+    let artist, composer
+    if (this.asset.artist) {
+      artist = `<em class="person">${this.asset.artist}</em>`
+    }
+    if (this.asset.composer) {
+      composer = `<em class="person">${this.asset.composer}</em>`
+    }
+    if (artist === composer) {
+      return artist
+    } else if (artist && composer) {
+      return `${composer} (${artist})`
+    } else if (artist && !composer) {
+      return artist
+    } else if (!artist && composer) {
+      return composer
+    }
+  }
+
+  /**
+   * Combined value build from `this.asset.creationDate` and `this.asset.year`.
+   *
+   * @returns {String}
+   */
+  get yearSafe() {
+    const a = this.asset
+    if (a.creationDate) {
+      return a.creationDate
+    } else if (a.year) {
+      return a.year
     }
   }
 
@@ -2132,7 +2170,7 @@ class Media {
                 }
               },
               // Play
-              `Spiele Ausschnitt „${sample.titleFormated}“`
+              `Spiele Ausschnitt „${sample.titleSafe}“`
             )
           }
         }
@@ -2151,7 +2189,7 @@ class Media {
               this.player.start()
             },
             // Play
-            `Spiele Ausschnitt „${sample.titleFormated}“`
+            `Spiele Ausschnitt „${sample.titleSafe}“`
           )
         }
       }

@@ -78,9 +78,9 @@ export default {
   computed: {
     htmlTitle () {
       if (this.sample.shortcut) {
-        return `${this.sample.titleFormated} [${this.sample.shortcut}]`
+        return `${this.sample.titleSafe} [${this.sample.shortcut}]`
       }
-      return this.sample.titleFormated
+      return this.sample.titleSafe
     }
   },
   methods: {
