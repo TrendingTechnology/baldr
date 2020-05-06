@@ -19,10 +19,16 @@ async function action () {
   }
 
   cmd.startSpin()
+
   cmd.log('git pull')
   await cmd.exec('git', 'pull', { cwd: config.localRepo })
+
   cmd.log('lerna bootstrap')
   await cmd.exec('npx', 'lerna', 'bootstrap', { cwd: config.localRepo })
+
+  cmd.log('Restart systemd service “baldr_api.service”')
+  await cmd.exec('systemctl', 'restart', 'baldr_api.service')
+
   cmd.stopSpin()
 }
 
