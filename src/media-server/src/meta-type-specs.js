@@ -421,8 +421,8 @@ const person = {
   title: 'Person',
   abbreviation: 'PR',
   basePath: path.join(config.mediaServer.basePath, 'Personen'),
-  relPath: function ({ typeData, typeSpec }) {
-    return path.join(typeData.personId.substr(0, 1).toLowerCase(), typeData.id, `main.${typeData.extension}`)
+  relPath: function ({ typeData }) {
+    return path.join(typeData.personId.substr(0, 1).toLowerCase(), typeData.personId, `main.${typeData.extension}`)
   },
   detectTypeByPath: function (typeSpec) {
     return new RegExp('^' + typeSpec.basePath + '/.*')
