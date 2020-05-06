@@ -23,13 +23,13 @@ async function action () {
   cmd.startSpin()
 
   cmd.log('Updating the remote BALDR repository.')
-  await cmd.exec('ssh', config.mediaServer.sshAliasRemote, `cd ${config.localRepo}; git pull`)
+  await cmd.exec('ssh', config.mediaServer.sshAliasRemote, `\"cd ${config.localRepo}; git pull\"`)
 
   cmd.log('Installing missing node packages in the remote BALDR repository.')
-  await cmd.exec('ssh', config.mediaServer.sshAliasRemote, `cd ${config.localRepo}; npx lerna bootstrap`)
+  await cmd.exec('ssh', config.mediaServer.sshAliasRemote, `\"cd ${config.localRepo}; npx lerna bootstrap\"`)
 
   cmd.log('Restarting the systemd service named “baldr_api.service” remotely.')
-  await cmd.exec('ssh', config.mediaServer.sshAliasRemote, 'systemctl restart baldr_api.service')
+  await cmd.exec('ssh', config.mediaServer.sshAliasRemote, '\"systemctl restart baldr_api.service\"')
 
   cmd.log('Updating the local BALDR repository.')
   await cmd.exec('git', 'pull', { cwd: config.localRepo })
@@ -59,7 +59,7 @@ async function action () {
   await cmd.exec('git', 'push', { cwd: config.mediaServer.basePath })
 
   cmd.log('Pull remote changes from the git server into the remote media repository.')
-  await cmd.exec('ssh', config.mediaServer.sshAliasRemote, `cd ${config.mediaServer.basePath}; git add -Av; git reset --hard HEAD; git pull`)
+  await cmd.exec('ssh', config.mediaServer.sshAliasRemote, `\"cd ${config.mediaServer.basePath}; git add -Av; git reset --hard HEAD; git pull\"`)
 
   cmd.stopSpin()
 }
