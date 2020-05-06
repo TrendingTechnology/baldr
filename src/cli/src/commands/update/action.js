@@ -22,7 +22,7 @@ async function action () {
   cmd.log('git pull')
   await cmd.exec('git', 'pull', { cwd: config.localRepo })
   cmd.log('lerna bootstrap')
-  await cmd.exec('lerna', 'bootstrap', { cwd: config.localRepo })
+  await cmd.exec('npx', 'lerna', 'bootstrap', { cwd: config.localRepo })
   cmd.stopSpin()
 }
 
