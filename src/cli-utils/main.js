@@ -73,10 +73,11 @@ function executeAsync () {
       commandString = `${args[0]} ${args.slice(1).join(' ')}`
     }
 
-    let stderr = `stderr from “${commandString}”:\n`
+    let stdout = ''
+    let stderr = ''
 
     command.stdout.on('data', (data) => {
-      // console.log(`stdout: ${data}`)
+      stdout = stdout + data
     })
 
     // somehow songbook build stays open without this event.
@@ -90,7 +91,7 @@ function executeAsync () {
 
     command.on('exit', (code) => {
       if (code === 0) {
-        resolve()
+        resolve({ stdout, stderr })
       } else {
         reject(new Error(stderr))
       }
