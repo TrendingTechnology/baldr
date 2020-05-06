@@ -2,6 +2,8 @@
 const { CommandRunner } = require('@bldr/cli-utils')
 
 const { config } = require('../../main.js')
+const syncBuilds = require('../build-sync/action.js')
+const buildVueApp = require('../build/action.js')
 
 /**
  *
@@ -20,14 +22,44 @@ async function action () {
 
   cmd.startSpin()
 
-  cmd.log('git pull')
+  cmd.log('Updating the remote BALDR repository.')
+  await cmd.exec('ssh', config.mediaServer.sshAliasRemote, `cd ${config.localRepo}; git pull`)
+
+  cmd.log('Installing missing node packages in the remote BALDR repository.')
+  await cmd.exec('ssh', config.mediaServer.sshAliasRemote, `cd ${config.localRepo}; npx lerna bootstrap`)
+
+  cmd.log('Restarting the systemd service named “baldr_api.service” remotely.')
+  await cmd.exec('ssh', config.mediaServer.sshAliasRemote, 'systemctl restart baldr_api.service')
+
+  cmd.log('Updating the local BALDR repository.')
   await cmd.exec('git', 'pull', { cwd: config.localRepo })
 
-  cmd.log('lerna bootstrap')
+  cmd.log('Installing missing node packages in the local BALDR repository.')
   await cmd.exec('npx', 'lerna', 'bootstrap', { cwd: config.localRepo })
 
-  cmd.log('Restart systemd service “baldr_api.service”')
+  cmd.log('Restarting the systemd service named “baldr_api.service” locally.')
   await cmd.exec('systemctl', 'restart', 'baldr_api.service')
+
+  cmd.stopSpin()
+
+  await buildVueApp('lamp')
+  await syncBuilds()
+
+  cmd.startSpin()
+  cmd.log('Commiting local changes in the media repository.')
+  await cmd.exec('git', 'add', '-Av', { cwd: config.mediaServer.basePath })
+  try {
+    await cmd.exec('git', 'commit', '-m', 'Auto-commit', { cwd: config.mediaServer.basePath })
+  } catch (error) {}
+
+  cmd.log('Pull remote changes into the local media repository.')
+  await cmd.exec('git', 'pull', { cwd: config.mediaServer.basePath })
+
+  cmd.log('Push local changes into the remote media repository.')
+  await cmd.exec('git', 'push', { cwd: config.mediaServer.basePath })
+
+  cmd.log('Pull remote changes from the git server into the remote media repository.')
+  await cmd.exec('ssh', config.mediaServer.sshAliasRemote, `cd ${config.mediaServer.basePath}; git add -Av; git reset --hard HEAD; git pull`)
 
   cmd.stopSpin()
 }
