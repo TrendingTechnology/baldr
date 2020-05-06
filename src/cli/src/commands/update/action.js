@@ -8,6 +8,7 @@ const { config } = require('../../main.js')
  */
 async function action () {
   const cmd = new CommandRunner()
+  cmd.checkRoot()
   const result = await cmd.exec('git', 'status', '--porcelain', { cwd: config.localRepo })
   // For example:
   //  M src/cli-utils/main.js\n M src/cli/src/commands/update/action.js\n
@@ -20,6 +21,7 @@ async function action () {
   cmd.startSpin()
   cmd.log('git pull')
   await cmd.exec('git', 'pull', { cwd: config.localRepo })
+  cmd.log('lerna bootstrap')
   await cmd.exec('lerna', 'bootstrap', { cwd: config.localRepo })
   cmd.stopSpin()
 }

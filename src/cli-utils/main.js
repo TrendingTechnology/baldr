@@ -7,6 +7,7 @@
 
 // Node packages.
 const childProcess = require('child_process')
+const os = require('os')
 
 const ora = require('ora')
 // TODO remove dependency object-assign
@@ -55,7 +56,6 @@ function executeSync () {
  *   [see on nodejs.org](https://nodejs.org/api/child_process.html#child_process_child_process_spawnsync_command_args_options).
  */
 function executeAsync () {
-  let commandString
   let args = Array.from(arguments)
   let options = {}
   if (args.length > 1 && typeof args[args.length - 1] === 'object') {
@@ -67,10 +67,8 @@ function executeAsync () {
     let command
     if (args.length === 1) {
       command = childProcess.spawn(args[0], options)
-      commandString = args[0]
     } else {
       command = childProcess.spawn(args[0], args.slice(1), options)
-      commandString = `${args[0]} ${args.slice(1).join(' ')}`
     }
 
     let stdout = ''
@@ -107,6 +105,14 @@ class CommandRunner {
     this.spinner = ora({ spinner: 'line' })
     this.gauge = new Gauge()
     this.gauge.setTheme('ASCII')
+  }
+
+  checkRoot () {
+    const user = os.userInfo()
+    if (user.username !== 'root') {
+      console.error(`You need to be root: sudo /usr/local/bin/baldr …`)
+      process.exit()
+    }
   }
 
   startSpin () {

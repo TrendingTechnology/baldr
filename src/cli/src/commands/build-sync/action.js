@@ -11,12 +11,8 @@ const { config } = require('../../main.js')
  *
  */
 async function action () {
-  const user = os.userInfo()
-  if (user.username !== 'root') {
-    console.error(`You need to be root: sudo /usr/local/bin/baldr bs`)
-    process.exit()
-  }
   const cmd = new CommandRunner()
+  cmd.checkRoot()
   cmd.startSpin()
 
   cmd.log('rsync')
