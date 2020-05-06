@@ -258,6 +258,7 @@ export function shortenText (text, options = {}) {
  *
  * @returns {String}
  *
+ * @see {@link module:@bldr/core-browser.convertPropertiesCase}
  * @see {@link https://vladimir-ivanov.net/camelcase-to-snake_case-and-vice-versa-with-javascript/}
  */
 export function camelToSnake (str) {
@@ -273,6 +274,7 @@ export function camelToSnake (str) {
  *
  * @returns {String}
  *
+ * @see {@link module:@bldr/core-browser.convertPropertiesCase}
  * @see {@link https://catalin.me/javascript-snake-to-camel/}
  */
 export function snakeToCamel (str) {
