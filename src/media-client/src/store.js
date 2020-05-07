@@ -186,15 +186,15 @@ const mutations = {
     state.multiPartUris.clear()
   },
   addAsset (state, asset) {
-    Vue.set(state.assets, `id:${asset.id}`, asset)
-    Vue.set(state.assets, `uuid:${asset.uuid}`, asset)
+    Vue.set(state.assets, asset.uri, asset)
+    Vue.set(state.assets, asset.uriSecond, asset)
   },
   addAssetToTypes (state, asset) {
     Vue.set(state.assetTypes[asset.type], asset.uri, asset)
   },
   addSample (state, sample) {
-    Vue.set(state.samples, `id:${sample.asset.id}#${sample.id}`, sample)
-    Vue.set(state.samples, `uuid:${sample.asset.uuid}#${sample.id}`, sample)
+    Vue.set(state.samples, sample.uri, sample)
+    Vue.set(state.samples, sample.uriSecond, sample)
   },
   addSampleToPlayList (state, sample) {
     state.playList.push(sample.uri)
@@ -210,6 +210,7 @@ const mutations = {
   },
   addMultiPartSelection (state, selection) {
     Vue.set(state.multiPartSelections, selection.uri, selection)
+    Vue.set(state.multiPartSelections, selection.uriSecond, selection)
   },
   removeSampleFromPlayList (state, sample) {
     while (state.playList.indexOf(sample.uri) > -1) {

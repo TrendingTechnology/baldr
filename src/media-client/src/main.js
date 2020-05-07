@@ -653,6 +653,20 @@ class Sample {
   }
 
   /**
+   * There are to URI schemes: `id` and `uuid`. Use the URI scheme that
+   * is not used in the property `this.uri`.
+   *
+   * @returns {String}
+   */
+  get uriSecond () {
+    if (this.asset.uriScheme === 'id') {
+      return this.uri.replace(/^id:/, 'uuid:')
+    } else {
+      return this.uri.replace(/^uuid:/, 'id:')
+    }
+  }
+
+  /**
    * If the sample is the complete media file get the title of the media file.
    * For example `Glocken (Das große Tor von Kiew)`
    *
@@ -1262,7 +1276,7 @@ export class ClientMediaAsset {
     const segments = this.uri.split(':')
 
     /**
-     * for example: `http`, `https`, `blob`
+     * for example: `id`, `uuid`, `http`, `https`, `blob`
      * @type {string}
      */
     this.uriScheme = segments[0]
@@ -1295,6 +1309,20 @@ export class ClientMediaAsset {
      * @type {object}
      */
     this.mediaElement = null
+  }
+
+  /**
+   * There are to URI schemes: `id` and `uuid`. Use the URI scheme that
+   * is not used in the property `this.uri`.
+   *
+   * @returns {String}
+   */
+  get uriSecond () {
+    if (this.uriScheme === 'id') {
+      return `uuid:${this.uriAuthority}`
+    } else {
+      return `id:${this.uriAuthority}`
+    }
   }
 
   /**
@@ -1525,6 +1553,23 @@ class MultiPartSelection {
     )
   }
 
+  /**
+   * There are to URI schemes: `id` and `uuid`. Use the URI scheme that
+   * is not used in the property `this.uri`.
+   *
+   * @returns {String}
+   */
+  get uriSecond () {
+    if (this.asset.uriScheme === 'id') {
+      return this.uri.replace(/^id:/, 'uuid:')
+    } else {
+      return this.uri.replace(/^uuid:/, 'id:')
+    }
+  }
+
+  /**
+   * @returns {Number}
+   */
   get partCount () {
     return this.partNos.length
   }
