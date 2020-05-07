@@ -18,10 +18,10 @@
           </div>
           <div class="times">
             <div
-              v-if="currentTime"
+              v-if="currentTimeSec"
               :class="{ 'current-time': true, 'enlarged': isCurTimeEnlarged }"
               @click="toggleCurTimeSize"
-            >{{ currentTime }}</div>
+            >{{ formatDuration(sample.currentTimeSec) }}</div>
             <div class="controls">
               <material-icon name="skip-previous" @click.native="$media.playList.startPrevious()" />
               <material-icon v-if="paused" name="play" @click.native="$media.player.start()" />
@@ -29,7 +29,7 @@
               <material-icon name="skip-next" @click.native="$media.playList.startNext()" />
               <!-- <material-icon name="fullscreen" @click.native="videoToggleFullscreen" /> -->
             </div>
-            <div v-if="aheadTime" class="ahead-time">{{ aheadTime }}</div>
+            <div v-if="durationSec" class="ahead-time">-{{ formatDuration(sample.durationRemainingSec) }}</div>
           </div>
         </div>
         <div class="meta-data">
@@ -57,11 +57,7 @@ export default {
   },
   data() {
     return {
-      aheadTimeSec: 0,
-      aheadTime: null,
-      currentTime: null,
       currentTimeSec: 0,
-      duration: null,
       durationSec: 0,
       isCurTimeEnlarged: false,
       paused: true,
@@ -88,13 +84,9 @@ export default {
     mediaElement() {
       this.mediaElement.ontimeupdate = event => {
         this.currentTimeSec = event.target.currentTime;
-        this.aheadTimeSec = this.durationSec - this.currentTimeSec
-        this.aheadTime = '-' + formatDuration(this.aheadTimeSec)
-        this.currentTime = formatDuration(event.target.currentTime);
       };
       this.mediaElement.oncanplaythrough = event => {
         this.durationSec = event.target.duration;
-        this.duration = formatDuration(event.target.duration);
       };
       this.mediaElement.onplay = event => {
         this.paused = false;
@@ -110,13 +102,8 @@ export default {
         //this.videoElement = this.mediaElement
       }
     },
-    currentTimeSec(value) {
-      const progress = (this.currentTimeSec / this.durationSec) * 100;
-      if (progress) {
-        this.$refs.elapsed.style.width = `${progress}%`;
-      } else {
-        this.$refs.elapsed.style.width = "0%";
-      }
+    currentTimeSec() {
+      this.$refs.elapsed.style.width = `${this.sample.progress * 100}%`;
     }
   },
   methods: {
@@ -128,6 +115,9 @@ export default {
     },
     toggleCurTimeSize: function() {
       this.isCurTimeEnlarged = !this.isCurTimeEnlarged;
+    },
+    formatDuration: function (sec) {
+      return formatDuration(sec)
     }
   },
   mounted: function() {

@@ -153,7 +153,7 @@ function removeDuplicatesFromArray (input) {
  * @return {String}
  */
 export function formatDuration (duration) {
-  if (!duration) return '00:00'
+  if (!duration || duration <= 0) return '00:00'
   duration = parseInt(duration)
   let seconds = duration % 60
   if (seconds < 10) {
