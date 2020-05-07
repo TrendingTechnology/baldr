@@ -15,7 +15,7 @@ async function action () {
   cmd.checkRoot()
   cmd.startSpin()
 
-  cmd.log('rsync')
+  cmd.log('Pull the Vue builds from the remote web server.')
   await cmd.exec(
     'rsync',
     '-av',
@@ -25,7 +25,7 @@ async function action () {
     `${config.http.webRoot}/`
   )
 
-  cmd.log('chown')
+  cmd.log('Fixing the ownership of the Vue builds.')
   await cmd.exec(
     'chown',
     '-R',

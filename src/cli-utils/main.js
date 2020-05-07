@@ -71,6 +71,11 @@ function executeAsync () {
       command = childProcess.spawn(args[0], args.slice(1), options)
     }
 
+    if (options.detached) {
+      command.unref()
+      resolve()
+    }
+
     let stdout = ''
     let stderr = ''
 

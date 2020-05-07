@@ -1,5 +1,9 @@
 module.exports = {
-  command: 'update',
+  command: 'update [what]',
   alias: 'u',
-  description: 'Update the remote and the local instances of BALDR.'
+  options: [
+    ['-r, --only-remote', 'Only remote'],
+    ['-l, --only-local', 'Only local']
+  ],
+  description: 'Update the remote and the local instances of BALDR. What: vue, api, media; without all'
 }
