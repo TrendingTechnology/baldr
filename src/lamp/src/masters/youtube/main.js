@@ -6,6 +6,10 @@
  * @module @bldr/lamp/masters/youtube
  */
 
+function youtubeIdToUri (youtubeId) {
+  return `id:YT_${youtubeId}`
+}
+
 export default {
   title: 'YouTube',
   props: {
@@ -40,8 +44,32 @@ export default {
       }
       return props
     },
+    resolveMediaUris (props) {
+      return youtubeIdToUri(props.id)
+    },
+    collectPropsMain (props) {
+      const asset = this.$store.getters['media/assetByUri'](youtubeIdToUri(props.id))
+      const propsMain = Object.assign({}, props)
+      propsMain.asset = asset
+      return propsMain
+    },
     plainTextFromProps (props) {
       return props.id
+    },
+    // no enterSlide hook: $media is not ready yet.
+    async afterSlideNoChangeOnComponent () {
+      if (!this.isPublic) return
+      const slide = this.$get('slide')
+      if (slide.propsMain.asset) {
+        const sample = this.$store.getters['media/sampleByUri'](youtubeIdToUri(slide.props.id))
+        const videoWrapper = document.querySelector('#youtube-offline-video')
+        videoWrapper.innerHTML = ''
+        videoWrapper.appendChild(sample.mediaElement)
+        this.$media.player.load(slide.props.src)
+        if (slide.props.autoplay) {
+          await this.$media.player.start()
+        }
+      }
     }
   }
 }

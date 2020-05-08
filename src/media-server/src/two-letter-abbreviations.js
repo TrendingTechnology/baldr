@@ -16,5 +16,6 @@ module.exports = {
   QL: 'Quelle',
   SF: 'Schulfunk',
   TX: 'TeX-Dateien',
-  VD: 'Video-Datei'
+  VD: 'Video-Datei',
+  YT: 'YouTube-Video'
 }

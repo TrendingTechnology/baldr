@@ -2,13 +2,21 @@
   <div class="vc_youtube_master">
     <h1 v-if="heading" v-html="heading"/>
 
-    <p><span class="important">Quelle:</span> <a :href="`https://www.youtube.com/watch?v=${id}`" target="_blank">www.youtube.com/watch?v={{ id }}</a></p>
+    <p>
+      <span class="important">Quelle:</span>
+      <a :href="`https://www.youtube.com/watch?v=${id}`" target="_blank">
+        www.youtube.com/watch?v={{ id }}
+      </a>
+    </p>
+
     <iframe
       :src="`https://www.youtube.com/embed/${id}`"
-      frameborder="0"
       allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
       allowfullscreen
+      frameborder="0"
+      v-if="!asset"
     />
+    <div id="youtube-offline-video"/>
     <p v-if="info" v-html="info"/>
   </div>
 </template>
@@ -16,6 +24,9 @@
 <script>
 export default {
   props: {
+    asset: {
+      type: Object
+    },
     id: {
       type: String,
       required: true

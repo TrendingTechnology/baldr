@@ -59,6 +59,16 @@ function validateUuid (value) {
 }
 
 /**
+ * Validate a YouTube ID.
+ *
+ * @param {String} value
+ */
+function validateYoutubeId (value) {
+  // https://webapps.stackexchange.com/a/101153
+  return value.match(/^[0-9A-Za-z_-]{10}[048AEIMQUYcgkosw]$/)
+}
+
+/**
  * Generate a ID prefix for media assets, like `Presentation-ID_HB` if the
  * path of the media file is `10_Presentation-id/HB/example.mp3`.
  *
@@ -110,7 +120,6 @@ const cloze = {
     return typeData
   },
   relPath ({ typeData, typeSpec, oldRelPath }) {
-    console.log('lol')
     const oldRelDir = path.dirname(oldRelPath)
     let pageNo = ''
     if (typeData.clozePageNo) pageNo = `_${typeData.clozePageNo}`
@@ -755,6 +764,47 @@ const worksheet = {
 }
 
 /**
+ * The meta data type specification “youtube”.
+ *
+ * @type {module:@bldr/media-server/meta-types~typeSpec}
+ */
+const youtube = {
+  title: 'YouTube-Video',
+  abbreviation: 'YT',
+  detectTypeByPath: function () {
+    return new RegExp('^.*/YT/.*.mp4$')
+  },
+  relPath ({ typeData, typeSpec, oldRelPath }) {
+    const oldRelDir = path.dirname(oldRelPath)
+    return path.join(oldRelDir, `${typeData.youtubeId}.mp4`)
+  },
+  props: {
+    id: {
+      derive: function ({ typeData, typeSpec }) {
+        return `${typeSpec.abbreviation}_${typeData.youtubeId}`
+      },
+      overwriteByDerived: true
+    },
+    youtubeId: {
+      title: 'Die ID eines YouTube-Videos (z. B. gZ_kez7WVUU)',
+      validate: validateYoutubeId
+    },
+    heading: {
+      title: 'Eigene Überschrift'
+    },
+    info: {
+      title: 'Eigener längerer Informationstext'
+    },
+    original_heading: {
+      title: 'Die orignale Überschrift des YouTube-Videos'
+    },
+    original_info: {
+      title: 'Der orignale Informationstext des YouTube-Videos'
+    }
+  }
+}
+
+/**
  * General meta data type specification. Applied after all other meta data
  * types.
  *
@@ -772,7 +822,7 @@ const general = {
         // a-Strawinsky-Petruschka-Abschnitt-0_22
         value = value.replace(/^[va]-/, '')
 
-        if (typeData.filePath) {
+        if (typeData.filePath && typeData.metaTypes.indexOf('youtube') === -1) {
           const idPrefix = generateIdPrefix(typeData.filePath)
           if (idPrefix) {
             if (value.indexOf(idPrefix) === -1) {
@@ -853,10 +903,7 @@ const general = {
     youtube: {
       title: 'Youtube-Video-ID',
       description: 'Die Youtube-Video-ID',
-      validate: function (value) {
-        // https://webapps.stackexchange.com/a/101153
-        return value.match(/^[0-9A-Za-z_-]{10}[048AEIMQUYcgkosw]$/)
-      },
+      validate: validateYoutubeId,
       wikidata: {
         // YouTube-Video-Kennung
         fromClaim: 'P1651',
@@ -896,6 +943,7 @@ module.exports = {
   reference,
   song,
   worksheet,
+  youtube,
   // Applied to all
   general
 }
