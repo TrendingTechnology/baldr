@@ -418,6 +418,28 @@ class Master {
   }
 
   /**
+   * Check if the handed over media URIs can be resolved. Throw no errors if the
+   * media assets are not present. This is used in the YouTube master slide.
+   * This master slide uses the online version if no offline video could be
+   * resolve.
+   *
+   * @param {module:@bldr/lamp~props} props
+   *
+   * @returns {Set}
+   */
+  resolveOptionalMediaUris (props) {
+    let uris = this.callHook_('resolveOptionalMediaUris', props)
+
+    // To allow undefined return values of the hooks.
+    if (!uris) {
+      uris = new Set()
+    } else if (typeof uris === 'string') {
+      uris = new Set([uris])
+    }
+    if (uris.size) return uris
+  }
+
+  /**
    * @param {module:@bldr/lamp~props} props
    *
    * @returns {String}

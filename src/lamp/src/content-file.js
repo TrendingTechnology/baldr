@@ -357,6 +357,15 @@ export class Slide {
     if (mediaUris) this.mediaUris = mediaUris
 
     /**
+     * Media URIs that do not have to exist.
+     *
+     * @type {Array}
+     */
+    this.optionalMediaUris = []
+    const optionalMediaUris = this.master.resolveOptionalMediaUris(this.props)
+    if (optionalMediaUris) this.optionalMediaUris = optionalMediaUris
+
+    /**
      * How many steps the slide provides.
      *
      * @type {number}
@@ -736,9 +745,13 @@ export class Presentation {
 
     // Resolve all media files.
     const mediaUris = []
+    const optionalMediaUris = []
     for (const slide of this.slides) {
       for (const mediaUri of slide.mediaUris) {
         mediaUris.push(mediaUri)
+      }
+      for (const mediaUri of slide.optionalMediaUris) {
+        optionalMediaUris.push(mediaUri)
       }
       if (slide.audioOverlay) {
         for (const mediaUri of slide.audioOverlay.mediaUris) {
@@ -753,6 +766,13 @@ export class Presentation {
      * @type {Array}
      */
     this.mediaUris = mediaUris
+
+    /**
+     * Media URIs that do not have to exist.
+     *
+     * @type {Array}
+     */
+    this.optionalMediaUris = optionalMediaUris
   }
 
   /**
@@ -767,7 +787,11 @@ export class Presentation {
       /**
        * @type {Object}
        */
-      this.media = await vm.$media.resolve(this.mediaUris)
+      this.media = await vm.$media.resolve(this.mediaUris, true) // throw exceptions.
+    }
+
+    if (this.optionalMediaUris.length > 0) {
+      await vm.$media.resolve(this.optionalMediaUris, false) // throw no exceptions.
     }
 
     // After media resolution.
@@ -992,6 +1016,9 @@ export class Presentation {
     router.push({ name, params })
   }
 
+  /**
+   * Toggle the speaker view.
+   */
   toggleSpeakerView () {
     const route = router.currentRoute
     let name

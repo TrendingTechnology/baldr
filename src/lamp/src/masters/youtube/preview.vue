@@ -12,6 +12,9 @@
 <script>
 export default {
   props: {
+    asset: {
+      type: Object
+    },
     id: {
       type: String,
       required: true
@@ -40,7 +43,11 @@ export default {
      * http://img.youtube.com/vi/[video-id]/maxresdefault.jpg
      */
     httpUrl () {
-      return `http://img.youtube.com/vi/${this.id}/hqdefault.jpg`
+      if (!this.asset) {
+        return `http://img.youtube.com/vi/${this.id}/hqdefault.jpg`
+      } else {
+        return this.asset.previewHttpUrl
+      }
     }
   }
 }

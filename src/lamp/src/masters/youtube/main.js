@@ -44,13 +44,17 @@ export default {
       }
       return props
     },
-    resolveMediaUris (props) {
+    resolveOptionalMediaUris (props) {
       return youtubeIdToUri(props.id)
     },
     collectPropsMain (props) {
       const asset = this.$store.getters['media/assetByUri'](youtubeIdToUri(props.id))
       const propsMain = Object.assign({}, props)
       propsMain.asset = asset
+      if (asset) {
+        if (!props.heading && asset.heading) propsMain.heading = asset.heading
+        if (!props.info && asset.info) propsMain.info = asset.info
+      }
       return propsMain
     },
     plainTextFromProps (props) {
@@ -61,14 +65,12 @@ export default {
       if (!this.isPublic) return
       const slide = this.$get('slide')
       if (slide.propsMain.asset) {
-        const sample = this.$store.getters['media/sampleByUri'](youtubeIdToUri(slide.props.id))
+        const uri = youtubeIdToUri(slide.props.id)
+        const sample = this.$store.getters['media/sampleByUri'](uri)
         const videoWrapper = document.querySelector('#youtube-offline-video')
         videoWrapper.innerHTML = ''
         videoWrapper.appendChild(sample.mediaElement)
-        this.$media.player.load(slide.props.src)
-        if (slide.props.autoplay) {
-          await this.$media.player.start()
-        }
+        this.$media.player.load(uri)
       }
     }
   }

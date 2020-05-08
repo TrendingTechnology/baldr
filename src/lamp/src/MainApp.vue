@@ -375,8 +375,12 @@ export default {
     text-shadow: 0 0 0.2em $black, 0 0 0.05em $black;
   }
 
+  .small {
+    font-size: 0.8em
+  }
+
   .smaller {
-    font-size: 0.7em
+    font-size: 0.6em
   }
 
   .bigger {

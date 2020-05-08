@@ -1,13 +1,13 @@
 <template>
   <div class="vc_youtube_master">
-    <h1 v-if="heading" v-html="heading"/>
-
-    <p>
+    <div class="source smaller">
       <span class="important">Quelle:</span>
       <a :href="`https://www.youtube.com/watch?v=${id}`" target="_blank">
         www.youtube.com/watch?v={{ id }}
       </a>
-    </p>
+    </div>
+
+    <h1 v-if="heading" v-html="heading"/>
 
     <iframe
       :src="`https://www.youtube.com/embed/${id}`"
@@ -48,6 +48,12 @@ export default {
     iframe {
       width: 75%;
       height: 75%;
+    }
+
+    .source {
+      position: absolute;
+      top: 0.8em;
+      left: 4em;
     }
   }
 </style>

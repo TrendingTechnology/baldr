@@ -120,7 +120,22 @@
  * }
  * ```
  *
- * ### 3. `afterLoading({ props, master })`
+ * ### 3. `resolveOptionalMediaUris(props)`
+ *
+ * - `return`: an array or a string.
+ *
+ * ```js
+ * export const default = {
+  *   hooks: {
+  *     // An array of media URIs to resolve (like [id:beethoven, id:mozart.mp3])
+  *     resolveOptionalMediaUris (props) {
+  *       return props.src
+  *     }
+  *   }
+  * }
+  * ```
+ *
+ * ### 4. `afterLoading({ props, master })`
  *
  * Goes into the background.
  *
@@ -138,7 +153,7 @@
  * }
  * ```
  *
- * ### 4. `afterMediaResolution({ props, master })`
+ * ### 5. `afterMediaResolution({ props, master })`
  *
  * Blocks.
  *
@@ -154,7 +169,7 @@
  * }
  * ```
  *
- * ### 5. `collectPropsMain(props)`
+ * ### 6. `collectPropsMain(props)`
  *
  * - `this`: is the main Vue instance.
  * - `return`: an object.
@@ -164,7 +179,7 @@
  * }
  * ```
  *
- * ### 6. `collectPropsPreview({ props, propsMain, slide })`
+ * ### 7. `collectPropsPreview({ props, propsMain, slide })`
  *
  * - `this`: is the main Vue instance.
  * - `return`: an object.
@@ -174,7 +189,7 @@
  * }
  * ```
  *
- * ### 7. `calculateStepCount({ props, propsMain, propsPreview, slide, master })`
+ * ### 8. `calculateStepCount({ props, propsMain, propsPreview, slide, master })`
  *
  * - `this`: is the main Vue instance.
  * - `return`: a number or an array of slide steps.

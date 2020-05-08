@@ -1663,12 +1663,15 @@ class Resolver {
   }
 
   /**
-   * @param {string} field - For example `id` or `filename`
-   * @param {string|json} search - For example `Fuer-Elise_HB`
-   *
    * @private
+   * @param {string} field - For example `id` or `uuid`
+   * @param {string|json} search - For example `Fuer-Elise_HB`
+   * @param {Boolean} throwException - Throw an exception if the media URI
+   *  cannot be resolved (default: `true`).
+   *
+   * @returns {Object} - See {@link https://github.com/axios/axios#response-schema}
    */
-  async queryMediaServer_ (field, search) {
+  async queryMediaServer_ (field, search, throwException = true) {
     const cacheKey = `${field}:${search}`
     if (this.cache_[cacheKey]) return this.cache_[cacheKey]
     const response = await httpRequest.request({
@@ -1681,11 +1684,11 @@ class Resolver {
         search: search
       }
     })
-    if (response && response.data && response.data.path) {
+    if (response && response.status === 200 && response.data && response.data.path) {
       this.cache_[cacheKey] = response
       return response
     }
-    throw new Error(`Media with the ${field} ”${search}” couldn’t be resolved.`)
+    if (throwException) throw new Error(`Media with the ${field} ”${search}” couldn’t be resolved.`)
   }
 
   /**
@@ -1694,15 +1697,17 @@ class Resolver {
    *   `asset` object, a client side representation of a media asset.
    * @property {String} httpUrl
    * @property {String} path
+   * @param {Boolean} throwException - Throw an exception if the media URI
+   *  cannot be resolved (default: `true`).
    *
    * @returns {String} - A HTTP URL.
    */
-  resolveHttpUrl_ (asset) {
+  resolveHttpUrl_ (asset, throwException) {
     if (asset.httpUrl) return asset.httpUrl
     if (asset.path) {
       return `${httpRequest.baseUrl}/media/${asset.path}`
     }
-    throw new Error(`Can not resolve HTTP URL. The asset object needs the property “path” or “httpUrl”.`)
+    if (throwException) throw new Error(`Can not resolve HTTP URL. The asset object needs the property “path” or “httpUrl”.`)
   }
 
   /**
@@ -1829,6 +1834,9 @@ class Resolver {
     }
   }
 
+  /**
+   * @param {module:@bldr/media-client.ClientMediaAsset} asset
+   */
   addMediaElementToAsset (asset) {
     asset.type = assetTypes.extensionToType(asset.extension)
     // After type
@@ -1865,10 +1873,12 @@ class Resolver {
    * @private
    * @param {module:@bldr/media-client~assetSpec} assetSpec - URI
    *   or File object
+   * @param {Boolean} throwException - Throw an exception if the media URI
+   *  cannot be resolved (default: `true`).
    *
    * @returns {module:@bldr/media-client.ClientMediaAsset}
    */
-  async resolveSingle_ (assetSpec) {
+  async resolveSingle_ (assetSpec, throwException) {
     let asset
     // Remote uri to resolve
     if (typeof assetSpec === 'string') {
@@ -1882,18 +1892,20 @@ class Resolver {
         // Resolve HTTP URL
       } else if (assetSpec.match(mediaUriRegExp)) {
         const uri = assetSpec.split(':')
-        const response = await this.queryMediaServer_(uri[0], uri[1])
-        asset = this.createAssetFromRestData_(assetSpec, response.data)
-      } else {
+        const response = await this.queryMediaServer_(uri[0], uri[1], throwException)
+        if (response) asset = this.createAssetFromRestData_(assetSpec, response.data)
+      } else if (throwException) {
         throw new Error(`Unkown media asset URI: “${assetSpec}”: Supported URI schemes: http,https,id,uuid`)
       }
     // Local: File object from drag and drop or open dialog
     } else if (assetSpec instanceof File) {
       asset = this.createAssetFromFileObject_(assetSpec)
     }
-    this.addMediaElementToAsset(asset)
-    store.dispatch('media/addAsset', asset)
-    return asset
+    if (asset) {
+      this.addMediaElementToAsset(asset)
+      store.dispatch('media/addAsset', asset)
+      return asset
+    }
   }
 
   /**
@@ -1904,8 +1916,12 @@ class Resolver {
    * media assets are not allowed to have linked media URIs.
    *
    * @param {module:@bldr/media-client~assetSpecs} assetSpecs
+   * @param {Boolean} throwException - Throw an exception if the media URI
+   *  cannot be resolved (default: `true`).
+   *
+   * @returns {module:@bldr/media-client.ClientMediaAsset[]}
    */
-  async resolve (assetSpecs) {
+  async resolve (assetSpecs, throwException = true) {
     if (typeof assetSpecs === 'string' || assetSpecs instanceof File) {
       assetSpecs = [assetSpecs]
     }
@@ -1915,7 +1931,7 @@ class Resolver {
     // Resolve the main media URIs
     let promises = []
     for (const assetSpec of uniqueSpecs) {
-      promises.push(this.resolveSingle_(assetSpec))
+      promises.push(this.resolveSingle_(assetSpec, throwException))
     }
     const mainAssets = await Promise.all(promises)
     let linkedAssets = []
@@ -1923,11 +1939,12 @@ class Resolver {
     if (this.linkedUris.length) {
       promises = []
       for (const mediaUri of this.linkedUris) {
-        promises.push(this.resolveSingle_(mediaUri))
+        promises.push(this.resolveSingle_(mediaUri, throwException))
       }
       linkedAssets = await Promise.all(promises)
     }
-    return mainAssets.concat(linkedAssets)
+    const assets = mainAssets.concat(linkedAssets)
+    if (assets) return assets
   }
 }
 
@@ -2104,21 +2121,27 @@ class Media {
    * store module `media`. Use getters to access the `asset` objects.
    *
    * @param {module:@bldr/media-client~assetSpecs} assetSpecs
+   * @param {Boolean} throwException - Throw an exception if the media URI
+   *  cannot be resolved (default: `true`).
+   *
+   * @returns {Object}
    */
-  async resolve (assetSpecs) {
+  async resolve (assetSpecs, throwException = true) {
     const output = {}
-    const assets = await this.resolver.resolve(assetSpecs)
-    for (const asset of assets) {
-      output[asset.uri] = asset
+    const assets = await this.resolver.resolve(assetSpecs, throwException)
+    if (assets) {
+      for (const asset of assets) {
+        if (asset) output[asset.uri] = asset
+      }
+      for (const uri of store.getters['media/multiPartUris']) {
+        const asset = store.getters['media/assetByUri'](uri)
+        const multiPartSelection = new MultiPartSelection(asset, uri)
+        store.commit('media/addMultiPartSelection', multiPartSelection)
+      }
+      this.addShortcutForAssets_()
+      this.setPreviewImagesFromCoverProp_()
+      this.addShortcutForSamples_()
     }
-    for (const uri of store.getters['media/multiPartUris']) {
-      const asset = store.getters['media/assetByUri'](uri)
-      const multiPartSelection = new MultiPartSelection(asset, uri)
-      store.commit('media/addMultiPartSelection', multiPartSelection)
-    }
-    this.addShortcutForAssets_()
-    this.setPreviewImagesFromCoverProp_()
-    this.addShortcutForSamples_()
     return output
   }
 
