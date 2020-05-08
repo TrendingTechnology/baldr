@@ -98,6 +98,26 @@ export default {
       border: solid $black 1px;
       height: 30em;
       width: 40em;
+
+      // See styling:
+      // - components/SlideMain/MasterIcon.vue (Basic styling)
+      // - routes/SpeakerView/index.vue (Adjustments for the speaker view)
+      // - routes/SlideView/index.vue (Adjustments for the main slide view)
+      .vc_master_icon {
+        font-size: 3em;
+        height: 1em;
+        line-height: 1em;
+        left: 0.2em;
+        top: 0.2em;
+
+        &.small {
+          font-size: 2em;
+        }
+
+        &.large {
+          font-size: 4em;
+        }
+      }
     }
 
     .vc_slide_steps {

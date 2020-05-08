@@ -52,8 +52,8 @@ export default {
 
     .source {
       position: absolute;
-      top: 0.8em;
-      left: 4em;
+      top: 1.4vmin;
+      left: 8vmin;
     }
   }
 </style>

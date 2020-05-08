@@ -60,9 +60,15 @@ export default {
       height: 3vmin;
     }
 
+    // See styling:
+    // - components/SlideMain/MasterIcon.vue (Basic styling)
+    // - routes/SpeakerView/index.vue (Adjustments for the speaker view)
+    // - routes/SlideView/index.vue (Adjustments for the main slide view)
     .vc_master_icon {
-      left: 0.2vmin;
-      top: 0.1vmin;
+      height: 1em;
+      left: 1vmin;
+      line-height: 1em;
+      top: 1vmin;
 
       &.small {
         font-size: 4vmin;
