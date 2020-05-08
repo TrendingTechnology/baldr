@@ -785,6 +785,20 @@ const youtube = {
       },
       overwriteByDerived: true
     },
+    title: {
+      derive: function ({ typeData }) {
+        let title
+        if (typeData.heading) {
+          title = typeData.heading
+        } else if (typeData.originalHeading) {
+          title = typeData.originalHeading
+        } else {
+          title = typeData.youtubeId
+        }
+        return `YouTube-Video „${title}“`
+      },
+      overwriteByDerived: true
+    },
     youtubeId: {
       title: 'Die ID eines YouTube-Videos (z. B. gZ_kez7WVUU)',
       validate: validateYoutubeId

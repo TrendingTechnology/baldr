@@ -4,9 +4,13 @@ const lib = require('../../lib.js')
 const { renameOneFile } = require('../rename/action.js')
 const { normalizeOneFile } = require('../normalize/action.js')
 
-async function createYamlOneFile (filePath) {
+/**
+ * @param {String} filePath
+ * @param {Object} metaData
+ */
+async function createYamlOneFile (filePath, metaData) {
   const newPath = renameOneFile(filePath)
-  lib.writeMetaDataYaml(newPath)
+  lib.writeMetaDataYaml(newPath, metaData)
   await normalizeOneFile(newPath, { wikidata: false })
 }
 
