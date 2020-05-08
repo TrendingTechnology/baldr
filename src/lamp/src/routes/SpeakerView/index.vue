@@ -118,6 +118,9 @@ export default {
           font-size: 4em;
         }
       }
+      .vc_external_sites {
+        font-size: 1em;
+      }
     }
 
     .vc_slide_steps {

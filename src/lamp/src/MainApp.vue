@@ -383,8 +383,12 @@ export default {
     font-size: 0.6em
   }
 
-  .bigger {
-    font-size: 1.3em
+  .big {
+    font-size: 1.2em
+  }
+
+    .bigger {
+    font-size: 1.4em
   }
 
   // For master slides: person, instrument
