@@ -190,7 +190,8 @@ function action () {
         'play-speed': '', // Start play
         'file-tree': '', // Master slide section
         trumpet: '', // Master slide “instrument”
-        'text-box-multiple-outline': 'multi-part' // multipart assets
+        'text-box-multiple-outline': 'multi-part', // multipart assets
+        'cloud-download': '' // Master slide youtube for download (cached) video file with an asset.
       }
     },
     {

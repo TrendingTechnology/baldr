@@ -5,7 +5,7 @@
   ">
     <img :src="scoreHttpUrl"/>
     <slide-preview-play-button v-if="hasAudio"/>
-    <plain-icon class="transparent-background" v-if="isMultiPart" name="multi-part"/>
+    <plain-icon class="transparent-background slide-preview-indicator-icon" v-if="isMultiPart" name="multi-part"/>
   </div>
 </template>
 
@@ -33,14 +33,6 @@ export default {
       margin: 5%;
       object-fit: contain;
       width: 90%;
-    }
-
-    .baldr-icon_multi-part {
-      bottom: 0;
-      color: $orange;
-      padding: 0.5em;
-      position: absolute;
-      right: 0;
     }
   }
 </style>

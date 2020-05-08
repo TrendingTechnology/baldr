@@ -494,6 +494,14 @@ export default {
     }
   }
 
+  .slide-preview-indicator-icon {
+    bottom: 0;
+    color: $orange;
+    padding: 0.5em;
+    position: absolute;
+    right: 0;
+  }
+
   /**
    * Applied to <img>
    */

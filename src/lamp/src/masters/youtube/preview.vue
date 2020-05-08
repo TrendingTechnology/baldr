@@ -1,11 +1,20 @@
 <template>
-  <div class="vc_youtube_master_preview">
-    <div class="info-box">
+  <div class="
+    slide-preview-fullscreen
+    slide-preview-valign-center
+    vc_youtube_master_preview
+  ">
+    <div class="meta-box">
       <p class="heading font-shadow" v-if="heading" v-html="heading"/>
       <p class="info font-shadow" v-if="info" v-html="info"/>
     </div>
     <img :src="httpUrl" class="image-contain"/>
     <slide-preview-play-button/>
+    <plain-icon
+      class="slide-preview-indicator-icon"
+      v-if="asset"
+      name="cloud-download"
+    />
   </div>
 </template>
 
@@ -57,7 +66,7 @@ export default {
   .vc_youtube_master_preview {
     font-size: 1.5em;
 
-    .info-box {
+    .meta-box {
       bottom: 0;
       box-sizing: border-box;
       padding: 0.2em;

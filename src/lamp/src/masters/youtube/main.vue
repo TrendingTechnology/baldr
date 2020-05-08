@@ -16,7 +16,7 @@
       frameborder="0"
       v-if="!asset"
     />
-    <div id="youtube-offline-video"/>
+    <div v-if="asset" id="youtube-offline-video"/>
     <p v-if="info" v-html="info"/>
   </div>
 </template>
