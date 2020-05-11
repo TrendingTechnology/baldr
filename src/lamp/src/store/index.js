@@ -43,7 +43,8 @@ const state = {
   slideNo: null,
   slides: {},
   showMetaDataOverlay: false,
-  isSpeakerView: false
+  isSpeakerView: false,
+  recentPresentations: null
 }
 
 const getters = {
@@ -95,12 +96,16 @@ const getters = {
   },
   rawYamlExamples: () => {
     return rawYamlExamples
+  },
+  recentPresentations: (state) => {
+    return state.recentPresentations
   }
 }
 
 const actions = {
   async openPresentation ({ commit, dispatch }, { rawYamlString, mongoDbObject }) {
     const presentation = new Presentation({ rawYamlString, rawObject: mongoDbObject })
+    dispatch('addRecentPresentation', { presId: presentation.id, title: presentation.title })
     await presentation.resolveMedia()
     commit('setPresentation', presentation)
     commit('setSlides', presentation.slides)
@@ -218,6 +223,32 @@ const actions = {
       commit('setCursorArrowTimeoutId', { name, timeoutId: null })
     }, 200)
     commit('setCursorArrowTimeoutId', { name, timeoutId })
+  },
+  readRecentPresentationsFromLocalStorage ({ commit }) {
+    commit('writeRecentPresentations', JSON.parse(localStorage.getItem('recentPresentations')))
+  },
+  addRecentPresentation ({ commit, getters }, { presId, title }) {
+    let recentPresentations
+    if (getters.recentPresentations) {
+      recentPresentations = [...getters.recentPresentations]
+    } else {
+      recentPresentations = []
+    }
+    let latestPres
+    if (recentPresentations.length) latestPres = recentPresentations[0]
+    if (!latestPres || (presId !== latestPres.presId)) {
+      const presInfo = {
+        presId
+      }
+      if (!title) {
+        presInfo.title = presId
+      } else {
+        presInfo.title = title
+      }
+      recentPresentations.unshift(presInfo)
+      if (recentPresentations.length > 10) recentPresentations.pop()
+      commit('writeRecentPresentations', recentPresentations)
+    }
   }
 }
 
@@ -251,6 +282,10 @@ const mutations = {
   },
   setSpeakerView (state, isSpeakerView) {
     state.isSpeakerView = isSpeakerView
+  },
+  writeRecentPresentations (state, recentPresentations) {
+    localStorage.setItem('recentPresentations', JSON.stringify(recentPresentations))
+    state.recentPresentations = recentPresentations
   }
 }
 

@@ -15,6 +15,8 @@
 
     <open-interface/>
 
+    <recent-presentations/>
+
     <section class="sub-projects">
       <a href="/" class="baldr">
         <material-icon color="red" name="baldr"/>
@@ -41,10 +43,13 @@
 
 <script>
 import OpenInterface from '@/components/OpenInterface'
+import RecentPresentations from '@/components/RecentPresentations'
+
 export default {
   name: 'StartPage',
   components: {
-    OpenInterface
+    OpenInterface,
+    RecentPresentations
   },
   mounted: function () {
     this.$styleConfig.set()
