@@ -4,6 +4,8 @@
  * Navigate through all slides and steps of an presentation. Slide numbers can
  * be labeled with an ID. To simplfy the navigation through all slides and
  * steps, we build a list of all slide and steps
+ *
+ * @bldr/lamp/store/nav
  */
 
 const state = {

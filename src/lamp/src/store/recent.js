@@ -1,0 +1,66 @@
+/**
+ * @module @bldr/lamp/store/recent
+ */
+
+/**
+ * @typedef {Object} presInfo
+ * @property {String} presId
+ * @property {String} title
+ */
+
+const state = []
+
+const getters = {
+  recent: (state) => {
+    return state
+  }
+}
+
+const actions = {
+  readFromLocalStorage ({ commit }) {
+    commit('write', JSON.parse(localStorage.getItem('recentPresentations')))
+  },
+  add ({ commit, getters }, { presId, title }) {
+    let recent
+    if (getters.recent) {
+      recent = [...getters.recent]
+    } else {
+      recent = []
+    }
+    let latestPres
+    if (recent.length) latestPres = recent[0]
+    if (!latestPres || (presId !== latestPres.presId)) {
+      const presInfo = {
+        presId
+      }
+      if (!title) {
+        presInfo.title = presId
+      } else {
+        presInfo.title = title
+      }
+      recent.unshift(presInfo)
+      if (recent.length > 10) recent.pop()
+      commit('write', recent)
+    }
+  }
+}
+
+const mutations = {
+  write (state, recent) {
+    localStorage.setItem('recentPresentations', JSON.stringify(recent))
+    while (state.length > 0) {
+      state.pop()
+    }
+    for (const presInfo of recent) {
+      state.push(presInfo)
+    }
+  }
+}
+
+export default {
+  namespaced: true,
+  state,
+  getters,
+  actions,
+  mutations
+}
