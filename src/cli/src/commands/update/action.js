@@ -29,13 +29,12 @@ async function action (what, cmdObj) {
     opts.vue = false
   } else if (what === 'config') {
     opts.api = false
-    opts.media = true
+    opts.media = false
     opts.vue = false
   } else if (what === 'media') {
     opts.api = false
     opts.config = false
     opts.vue = false
-
   } else if (what === 'vue') {
     opts.api = false
     opts.config = false
@@ -53,12 +52,12 @@ async function action (what, cmdObj) {
   // config
   if (opts.local && opts.config) {
     cmd.log('Updating the configuration locally using ansible.')
-    await cmd.exec('/usr/local/bin/ansible-playbook-localhost.sh', 'b/baldr-config')
+    await cmd.exec('/usr/local/bin/ansible-playbook-localhost.sh', 'b/baldr')
   }
 
   if (opts.remote && opts.config) {
     cmd.log('Updating the configuration remotely using ansible.')
-    await cmd.exec('ssh', config.mediaServer.sshAliasRemote, `\"/usr/local/bin/ansible-playbook-localhost.sh b/baldr-config\"`)
+    await cmd.exec('ssh', config.mediaServer.sshAliasRemote, `\"/usr/local/bin/ansible-playbook-localhost.sh b/baldr\"`)
   }
 
   // api
