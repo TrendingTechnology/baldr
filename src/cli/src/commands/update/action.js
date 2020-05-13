@@ -18,19 +18,28 @@ async function action (what, cmdObj) {
     remote: true,
     local: true,
     api: true,
+    config: true,
     media: true,
     vue: true
   }
 
   if (what === 'api') {
+    opts.config = false
     opts.media = false
+    opts.vue = false
+  } else if (what === 'config') {
+    opts.api = false
+    opts.media = true
     opts.vue = false
   } else if (what === 'media') {
     opts.api = false
+    opts.config = false
     opts.vue = false
+
   } else if (what === 'vue') {
-    opts.media = false
     opts.api = false
+    opts.config = false
+    opts.media = false
   }
 
   if (cmdObj.onlyRemote) {
@@ -41,6 +50,18 @@ async function action (what, cmdObj) {
     opts.remote = false
   }
 
+  // config
+  if (opts.local && opts.config) {
+    cmd.log('Updating the configuration locally using ansible.')
+    await cmd.exec('/usr/local/bin/ansible-playbook-localhost.sh', 'b/baldr-config')
+  }
+
+  if (opts.remote && opts.config) {
+    cmd.log('Updating the configuration remotely using ansible.')
+    await cmd.exec('ssh', config.mediaServer.sshAliasRemote, `\"/usr/local/bin/ansible-playbook-localhost.sh b/baldr-config\"`)
+  }
+
+  // api
   if (opts.local && opts.api) {
     const result = await cmd.exec('git', 'status', '--porcelain', { cwd: config.localRepo })
     // For example:
@@ -71,6 +92,7 @@ async function action (what, cmdObj) {
     await cmd.exec('ssh', config.mediaServer.sshAliasRemote, '\"systemctl restart baldr_api.service\"')
   }
 
+  // vue
   if (opts.vue) {
     cmd.stopSpin()
     await buildVueApp('lamp')
@@ -78,6 +100,7 @@ async function action (what, cmdObj) {
     cmd.startSpin()
   }
 
+  // media
   if (opts.local && opts.media) {
     cmd.log('Commiting local changes in the media repository.')
     await cmd.exec('git', 'add', '-Av', { cwd: config.mediaServer.basePath })
