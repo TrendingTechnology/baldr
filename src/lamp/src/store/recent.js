@@ -18,7 +18,10 @@ const getters = {
 
 const actions = {
   readFromLocalStorage ({ commit }) {
-    commit('write', JSON.parse(localStorage.getItem('recentPresentations')))
+    const recent = localStorage.getItem('recentPresentations')
+    if (recent && Array.isArray(recent)) {
+      commit('write', JSON.parse(recent))
+    }
   },
   add ({ commit, getters }, { presId, title }) {
     let recent
