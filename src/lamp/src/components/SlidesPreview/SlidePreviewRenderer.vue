@@ -11,7 +11,8 @@ export default {
       return createElement(
         `${this.slide.master.name}-master-preview`,
         {
-          props: this.slide.propsPreview
+          props: this.slide.propsPreview,
+          style: this.slide.style
         }
       )
     } else {
