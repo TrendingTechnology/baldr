@@ -48,16 +48,24 @@ export default {
     .left-bottom-corner, .vc_audio_overlay {
       position: fixed;
       z-index: 1;
-      left: 1vmin;
-      bottom: 1vmin;
+      left: 1vw;
+      bottom: 1vw;
     }
 
+    // src/media-client/src/PlayButton.vue
     .vc_play_button {
-      font-size: 3vmin;
+      font-size: 2vw;
     }
 
+    // src/media-client/src/HorizontalPlayButtons.vue
     .vc_horizontal_play_buttons {
-      height: 3vmin;
+      height: 2vw;
+
+      .manual-title {
+        font-size: 1.5vw;
+        padding: 0 0.5vw;
+        transform: translateY(-0.5vw);
+      }
     }
 
     // See styling:

@@ -10,7 +10,10 @@
       <play-button
         :sample="wrappedSample.sample"
       />
-      <span class="manual-title" v-if="showTitlesNormalized || wrappedSample.isTitleSetManually">{{ wrappedSample.title }}</span>
+      <span
+        class="manual-title sans"
+        v-if="showTitlesNormalized || wrappedSample.isTitleSetManually"
+      >{{ wrappedSample.title }}</span>
     </span>
   </div>
 </template>
@@ -58,7 +61,7 @@ export default {
   .vc_horizontal_play_buttons {
     .manual-title {
       padding: 0 0.5em;
-      transform: translateY(-0.4em);
+      transform: translateY(-0.2em);
       display: inline-block;
     }
   }

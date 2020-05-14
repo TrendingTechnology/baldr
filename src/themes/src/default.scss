@@ -110,6 +110,10 @@ $link-color: scale-color($gray, $lightness: -40%);
     font-weight: bold;
   }
 
+  .sans {
+    font-family: $font-family-sans;
+  }
+
   /**
    * Tables
    */
