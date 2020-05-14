@@ -52,8 +52,16 @@ export default {
       const propsMain = Object.assign({}, props)
       propsMain.asset = asset
       if (asset) {
-        if (!props.heading && asset.heading) propsMain.heading = asset.heading
-        if (!props.info && asset.info) propsMain.info = asset.info
+        if (!props.heading && asset.heading) {
+          propsMain.heading = asset.heading
+        } else if (!props.heading && asset.originalHeading) {
+          propsMain.heading = asset.originalHeading
+        }
+        if (!props.info && asset.info) {
+          propsMain.info = asset.info
+        } else if (!props.info && asset.originalInfo) {
+          propsMain.info = asset.originalInfo
+        }
       }
       return propsMain
     },

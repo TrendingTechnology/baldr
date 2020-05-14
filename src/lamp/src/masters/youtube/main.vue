@@ -50,6 +50,13 @@ export default {
       height: 75%;
     }
 
+    #youtube-offline-video {
+      video {
+        height: 10em;
+        width: 10em;
+      }
+    }
+
     .source {
       position: absolute;
       top: 1.4vmin;
