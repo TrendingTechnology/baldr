@@ -177,6 +177,8 @@ export class DomSteps {
       } else {
         throw new Error(`Unkown specialized selector: ${opts.mode}`)
       }
+    } else if (opts.cssSelectors === 'none') {
+      elements = []
     } else if (opts.cssSelectors) {
       elements = opts.rootElement.querySelectorAll(opts.cssSelectors)
     } else {
@@ -600,7 +602,7 @@ export function generateSlideStepsFromText (text, props) {
 export function mapProps (selectors) {
   const props = {
     selector: {
-      description: 'Selektor, der Elemente auswählt, die als Schritte eingeblendet werden sollen.',
+      description: 'Selektor, der Elemente auswählt, die als Schritte eingeblendet werden sollen. „none“ deaktiviert die Unterstützung für Schritte.',
       default: 'g[inkscape\\:groupmode="layer"]'
     },
     mode: {
