@@ -1,4 +1,7 @@
 /**
+ *
+ * @see {@link https://github.com/FranckFreiburger/vue-pdf}
+ *
  * @module @bldr/lamp/masters/document
  */
 
@@ -43,6 +46,18 @@ export default {
     },
     titleFromProps ({ propsMain }) {
       if (propsMain.asset.title) return propsMain.asset.title
+    },
+    afterStepNoChangeOnComponent () {
+      if (this.$refs.pdfViewer) {
+        const pdf = this.$refs.pdfViewer.$el
+        const parentHeight = this.$parent.$parent.$el.clientHeight
+        this.$nextTick(() => {
+          const width = pdf.clientWidth / pdf.clientHeight * parentHeight
+          if (width <= this.$el.clientWidth) {
+            pdf.style.width = `${width}px`
+          }
+        })
+      }
     }
   }
 }

@@ -1,6 +1,10 @@
 <template>
   <div class="vc_document_master">
-    <pdf-viewer :src="asset.httpUrl" :page="navNos.stepNo"/>
+    <pdf-viewer
+      :page="navNos.stepNo"
+      :src="asset.httpUrl"
+      ref="pdfViewer"
+    />
   </div>
 </template>
 
