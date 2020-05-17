@@ -17,6 +17,11 @@
     </div>
 
     <external-sites :asset="asset"/>
+    <horizontal-play-buttons
+      :samples="asset.famousPieces"
+      class="left-bottom-corner"
+      v-if="asset.famousPieces"
+    />
   </div>
 </template>
 

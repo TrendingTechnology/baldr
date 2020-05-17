@@ -474,6 +474,7 @@ const person = {
       overwriteByDerived: true
     },
     firstname: {
+      title: 'Vorname',
       required: true,
       wikidata: {
         // Vornamen der Person
@@ -488,6 +489,7 @@ const person = {
       }
     },
     lastname: {
+      title: 'Familienname',
       required: true,
       wikidata: {
         // Familienname einer Person
@@ -502,18 +504,21 @@ const person = {
       }
     },
     name: {
+      title: 'Name (Vor- und Familienname)',
       derive: function ({ typeData }) {
         return `${typeData.firstname} ${typeData.lastname}`
       },
       overwriteByDerived: false
     },
     shortBiography: {
+      title: 'Kurzbiographie',
       required: true,
       wikidata: {
         fromEntity: 'getDescription'
       }
     },
     birth: {
+      title: 'Geburtstag',
       validate: validateDate,
       wikidata: {
         // Geburtsdatum
@@ -523,6 +528,7 @@ const person = {
       }
     },
     death: {
+      title: 'Todestag',
       validate: validateDate,
       wikidata: {
         // Sterbedatum
@@ -532,10 +538,17 @@ const person = {
       }
     },
     mainImage: {
+      title: 'Hauptbild',
       wikidata: {
         // Bild
         fromClaim: 'P18',
         format: 'formatWikicommons'
+      }
+    },
+    famousPieces: {
+      title: 'Bekannte Stücke',
+      validate: function (value) {
+        return Array.isArray(value)
       }
     },
     wikicommons: {
