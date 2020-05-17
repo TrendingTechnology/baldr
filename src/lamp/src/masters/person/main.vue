@@ -21,6 +21,7 @@
       :samples="asset.famousPieces"
       class="left-bottom-corner"
       v-if="asset.famousPieces"
+      :show-titles="false"
     />
   </div>
 </template>
@@ -81,6 +82,10 @@ export default {
         padding-right: 1em;
         text-align: right;
       }
+    }
+
+    .manual-title {
+      display: none;
     }
   }
 </style>
