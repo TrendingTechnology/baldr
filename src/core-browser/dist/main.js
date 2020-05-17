@@ -25,6 +25,7 @@ exports.formatWikicommonsUrl = formatWikicommonsUrl;
 exports.escapeHtml = escapeHtml;
 exports.deepCopy = deepCopy;
 exports.getExtension = getExtension;
+exports.msleep = msleep;
 exports.default = exports.mediaUriRegExp = exports.RawDataObject = exports.jsYamlConfig = exports.AssetTypes = exports.convertMdToTex = exports.convertTexToMd = exports.tex = void 0;
 
 var _convertTex = _interopRequireDefault(require("./convert-tex.js"));
@@ -394,6 +395,11 @@ function getExtension(filePath) {
 
 const mediaUriRegExp = new RegExp('((id|uuid):(([a-zA-Z0-9-_]+)(#([a-zA-Z0-9-_]+))?))');
 exports.mediaUriRegExp = mediaUriRegExp;
+
+function msleep(milliSeconds) {
+  Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, milliSeconds);
+}
+
 var _default = {
   formatImslpUrl,
   formatMusicbrainzRecordingUrl,

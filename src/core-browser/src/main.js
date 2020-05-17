@@ -651,6 +651,16 @@ export function getExtension (filePath) {
  */
 export const mediaUriRegExp = new RegExp('((id|uuid):(([a-zA-Z0-9-_]+)(#([a-zA-Z0-9-_]+))?))')
 
+/**
+ *
+ * @see {@link https://github.com/erikdubbelboer/node-sleep}
+ *
+ * @param {Number} milliSeconds
+ */
+export function msleep(milliSeconds) {
+  Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, milliSeconds)
+}
+
 export default {
   formatImslpUrl,
   formatMusicbrainzRecordingUrl,

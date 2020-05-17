@@ -5,12 +5,11 @@ const assert = require('assert')
 // Third party packages.
 const yaml = require('js-yaml')
 const chalk = require('chalk')
-const sleep = require('sleep')
 
 // Project packages.
 const mediaServer = require('@bldr/media-server')
 const wikidata = require('@bldr/wikidata')
-const { deepCopy } = require('@bldr/core-browser')
+const { deepCopy, msleep } = require('@bldr/core-browser')
 
 const lib = require('../../lib.js')
 
@@ -24,7 +23,7 @@ async function queryWikidata (metaData, typeNames, typeSpecs) {
   // status: 429,
   // statusText: 'Scripted requests from your IP have been blocked, please
   // contact noc@wikimedia.org, and see also https://meta.wikimedia.org/wiki/User-Agent_policy',
-  sleep.msleep(3000)
+  msleep(3000)
   return metaData
 }
 
