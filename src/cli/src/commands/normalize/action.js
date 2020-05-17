@@ -28,17 +28,35 @@ async function queryWikidata (metaData, typeNames, typeSpecs) {
 }
 
 /**
+ * @returns {String}
+ */
+function mergeMetaTypeNames () {
+  const types = new Set()
+  for (i = 0; i < arguments.length; i++) {
+    const typeNames = arguments[i]
+    if (typeNames) {
+      for (const typeName of typeNames.split(',')) {
+        types.add(typeName)
+      }
+    }
+  }
+  return [...types].join(',')
+}
+
+/**
  * @param {String} filePath - The media asset file path.
  */
 async function normalizeOneFile (filePath, cmdObj) {
   try {
     const metaTypes = mediaServer.metaTypes
+    // Always: general
     const typeNames = metaTypes.detectTypeByPath(filePath)
     const yamlFile = `${filePath}.yml`
-    let metaData = yaml.safeLoad(lib.readFile(yamlFile))
+    let metaData = lib.readAssetYaml(filePath)
     metaData.filePath = filePath
     const origData = deepCopy(metaData)
-    metaData.metaTypes = typeNames
+
+    metaData.metaTypes = mergeMetaTypeNames(metaData.metaTypes, typeNames)
 
     if (cmdObj.wikidata) {
       if (metaData.wikidata && metaData.metaTypes) {
@@ -50,6 +68,7 @@ async function normalizeOneFile (filePath, cmdObj) {
     metaData = metaTypes.process(metaData)
 
     try {
+      delete origData.filePath
       assert.deepStrictEqual(origData, metaData)
       console.log(chalk.green('\nNo changes:\n'))
       console.log(metaData)

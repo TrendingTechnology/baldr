@@ -434,7 +434,7 @@ const person = {
     return path.join(typeData.personId.substr(0, 1).toLowerCase(), typeData.personId, `main.${typeData.extension}`)
   },
   detectTypeByPath: function (typeSpec) {
-    return new RegExp('^' + typeSpec.basePath + '/.*')
+    return new RegExp('^' + typeSpec.basePath + '/.*(jpg|png)')
   },
   normalizeWikidata: function ({ typeData, entity, functions }) {
     const label = functions.getLabel(entity)
