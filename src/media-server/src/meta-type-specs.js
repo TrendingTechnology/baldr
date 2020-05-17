@@ -652,13 +652,16 @@ const reference = {
     referenceTitle: {
       title: 'Title der (übergeordneten Quelle)'
     },
+    referenceSubtitle: {
+      title: 'Untertitel der (übergeordneten Quelle)'
+    },
     author: {
       title: 'Autor'
     },
     publisher: {
       title: 'Verlag'
     },
-    releaseData: {
+    releaseDate: {
       title: 'Erscheinungsdatum'
     },
     edition: {
