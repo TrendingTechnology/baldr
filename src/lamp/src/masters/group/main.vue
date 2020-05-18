@@ -22,6 +22,11 @@
       <p class="name important transparent-background font-shadow">{{ asset.name }}</p>
     </div>
     <external-sites :asset="asset"/>
+    <horizontal-play-buttons
+      :samples="asset.famousPieces"
+      class="left-bottom-corner"
+      v-if="asset.famousPieces"
+    />
   </div>
 </template>
 
@@ -89,6 +94,10 @@ export default {
           padding-left: 1em;
         }
       }
+    }
+
+    .vc_horizontal_play_buttons .manual-title {
+      display: none;
     }
   }
 </style>

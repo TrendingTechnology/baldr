@@ -306,6 +306,7 @@ const group = {
       }
     },
     logo: {
+      title: 'Logo der Band (Wikicommons-Datei)',
       wikidata: {
         // Logo
         fromClaim: 'P154',
@@ -313,11 +314,13 @@ const group = {
       }
     },
     shortHistory: {
+      title: 'kurze Bandgeschichte',
       wikidata: {
         fromEntity: 'getDescription'
       }
     },
     startDate: {
+      title: 'Gründung',
       wikidata: {
         // Gründung, Erstellung bzw. Entstehung
         fromClaim: 'P571',
@@ -326,6 +329,7 @@ const group = {
       validate: validateDate
     },
     endDate: {
+      title: 'Auflösung',
       wikidata: {
         // Auflösungsdatum
         fromClaim: 'P576',
@@ -334,6 +338,7 @@ const group = {
       validate: validateDate
     },
     members: {
+      title: 'Mitglieder',
       wikidata: {
         // besteht aus
         fromClaim: 'P527',
@@ -341,10 +346,17 @@ const group = {
       }
     },
     mainImage: {
+      title: 'Haupt-Bild',
       wikidata: {
         // Bild
         fromClaim: 'P18',
         format: 'formatWikicommons'
+      }
+    },
+    famousPieces: {
+      title: 'Bekannte Stücke',
+      validate: function (value) {
+        return Array.isArray(value)
       }
     }
   }

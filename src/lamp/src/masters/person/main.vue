@@ -21,7 +21,6 @@
       :samples="asset.famousPieces"
       class="left-bottom-corner"
       v-if="asset.famousPieces"
-      :show-titles="false"
     />
   </div>
 </template>
@@ -84,7 +83,7 @@ export default {
       }
     }
 
-    .manual-title {
+    .vc_horizontal_play_buttons .manual-title {
       display: none;
     }
   }
