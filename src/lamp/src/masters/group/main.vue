@@ -6,10 +6,10 @@
       v-if="asset.shortHistory"
       v-html="asset.shortHistory"
     />
-    <p class="members">
-      <span class="important">Mitglieder: </span>
+    <p class="members transparent-box font-shadow">
+      <span class="important big">Mitglieder: </span>
       <ul>
-        <li class="person" v-for="member in asset.members" :key="member">
+        <li class="person" v-for="member in members" :key="member">
           {{ member }}
         </li>
       </ul>
@@ -51,6 +51,14 @@ export default {
     endDate () {
       if (this.asset.endDate) return formatToYear(this.asset.endDate)
       return ''
+    },
+    members () {
+      if (Array.isArray(this.asset.members)) {
+        return this.asset.members
+      } else if (typeof this.asset.members === 'string') {
+        return [this.asset.members]
+      }
+      return []
     }
   }
 }
@@ -68,25 +76,26 @@ export default {
     }
 
     .members {
+      font-size: 0.8em;
       position: absolute;
-      top: 5em;
-      left: 3em;
+      top: 2em;
+      left: 1em;
     }
 
     .title-box {
-      bottom: 3em;
+      bottom: 2em;
       position: absolute;
       right: 0;
       width: 100%;
 
       .name {
-        font-size: 4em;
+        font-size: 2em;
         padding-right: 1em;
         text-align: right;
       }
 
       .period {
-        font-size: 1.5em;
+        font-size: 1em;
         text-align: right;
         padding-right: 5em;
 

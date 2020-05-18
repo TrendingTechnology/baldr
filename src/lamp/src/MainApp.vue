@@ -411,6 +411,11 @@ export default {
     width: 20em;
   }
 
+  .transparent-box {
+    background-color:rgba($yellow, 0.6);
+    padding: 0.7em;
+  }
+
   /*********************************************************************
    * Main components
    ********************************************************************/
