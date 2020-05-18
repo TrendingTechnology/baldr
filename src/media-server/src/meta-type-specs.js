@@ -144,7 +144,7 @@ const cloze = {
         } else if (typeData.clozePageNo && !typeData.clozePageCount) {
           suffix = ` (Seite ${typeData.clozePageNo})`
         }
-        return `Lückentext zum Thema „${folderTitles.title}“${suffix}`
+        return `Lückentext zum Thema „${folderTitles.titleAndSubtitle}“${suffix}`
       },
       overwriteByDerived: true
     },
