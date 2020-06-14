@@ -72,7 +72,7 @@ function generateClozeSvg (filePath) {
  * Generate from TeX files with cloze texts SVGs for baldr.
  */
 function action (filePath) {
-  mediaServer.walkDeluxe(generateClozeSvg, new RegExp('.*\.tex$'), filePath) // eslint-disable-line
+  mediaServer.walk(generateClozeSvg, new RegExp('.*\.tex$'), filePath) // eslint-disable-line
 }
 
 module.exports = action
