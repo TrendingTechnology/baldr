@@ -1672,6 +1672,8 @@ class Resolver {
    * @returns {Object} - See {@link https://github.com/axios/axios#response-schema}
    */
   async queryMediaServer_ (field, search, throwException = true) {
+    // Do search for samples.
+    search = search.replace(/#.*$/g, '')
     const cacheKey = `${field}:${search}`
     if (this.cache_[cacheKey]) return this.cache_[cacheKey]
     const response = await httpRequest.request({
