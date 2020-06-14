@@ -18,11 +18,11 @@
     "@bldr/core-node": "^0.2.2",
     "cors": "^2.8.5",
     "express": "^4.17.1",
-    "js-yaml": "^3.13.1",
-    "mongodb": "^3.5.6",
+    "js-yaml": "^3.14.0",
+    "mongodb": "^3.5.9",
     "saslprep": "^1.0.3",
-    "transliteration": "^2.1.8",
-    "uuid": "^7.0.3"
+    "transliteration": "^2.1.11",
+    "uuid": "^8.1.0"
   },
   "publishConfig": {
     "access": "public"
