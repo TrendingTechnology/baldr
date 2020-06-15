@@ -11,6 +11,7 @@ const lib = require('../../lib.js')
 const { getPdfPageCount } = require('@bldr/core-node')
 
 function generateClozeSvg (filePath) {
+
   console.log(filePath)
   const cwd = path.dirname(filePath)
   let texFileContent = lib.readFile(filePath)
@@ -20,7 +21,7 @@ function generateClozeSvg (filePath) {
   }
 
   console.log(`Generate SVGs from the file ${chalk.yellow(filePath)}.`)
-  const jobName = 'Arbeitsblatt_Loesung'
+  const jobName = path.basename(filePath).replace('.tex', '_Loesung')
 
   // Show cloze texts by patching the TeX file and generate a PDF file.
   texFileContent = texFileContent.replace(
@@ -41,7 +42,7 @@ function generateClozeSvg (filePath) {
       counterSuffix = `_${index}`
     }
     console.log(`Convert page ${chalk.green(index)}`)
-    const svgFileName = `${jobName}${counterSuffix}.svg`
+    const svgFileName = `Lueckentext${counterSuffix}.svg`
     const svgFilePath = path.join(cwd, svgFileName)
 
     // Convert into SVG
@@ -66,6 +67,10 @@ function generateClozeSvg (filePath) {
       cloze_page_count: pageCount
     }
     lib.writeFile(path.join(cwd, `${svgFileName}.yml`), lib.yamlToTxt(infoYaml))
+
+    // Move to LT (Lückentext) subdir.
+    const newPath = mediaServer.locationIndicator.moveIntoSubdir(path.resolve(svgFileName), 'LT')
+    lib.moveAsset(svgFileName, newPath)
   }
 }
 
