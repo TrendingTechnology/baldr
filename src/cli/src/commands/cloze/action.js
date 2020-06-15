@@ -11,6 +11,7 @@ const lib = require('../../lib.js')
 const { getPdfPageCount } = require('@bldr/core-node')
 
 function generateClozeSvg (filePath) {
+  console.log(filePath)
   const cwd = path.dirname(filePath)
   let texFileContent = lib.readFile(filePath)
   if (texFileContent.indexOf('cloze') === -1) {
@@ -72,7 +73,10 @@ function generateClozeSvg (filePath) {
  * Generate from TeX files with cloze texts SVGs for baldr.
  */
 function action (filePath) {
-  mediaServer.walk(generateClozeSvg, new RegExp('.*\.tex$'), filePath) // eslint-disable-line
+  mediaServer.walk(
+    generateClozeSvg,
+    { regex: new RegExp('.*\.tex$'), path: filePath }
+  ) // eslint-disable-line
 }
 
 module.exports = action
