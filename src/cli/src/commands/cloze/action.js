@@ -1,6 +1,7 @@
 // Node packages.
 const childProcess = require('child_process')
 const path = require('path')
+const fs = require('fs')
 
 // Third party packages.
 const chalk = require('chalk')
@@ -11,7 +12,7 @@ const lib = require('../../lib.js')
 const { getPdfPageCount } = require('@bldr/core-node')
 
 function generateClozeSvg (filePath) {
-
+  filePath = path.resolve(filePath)
   console.log(filePath)
   const cwd = path.dirname(filePath)
   let texFileContent = lib.readFile(filePath)
@@ -29,12 +30,19 @@ function generateClozeSvg (filePath) {
     '%!TEX program = lualatex\n\\documentclass[loesung]{schule-arbeitsblatt}\n'
   )
   lib.writeFile(filePath, texFileContent)
-  childProcess.spawnSync(
+  const result = childProcess.spawnSync(
     'lualatex', ['--shell-escape', '--jobname', jobName, filePath],
-    { cwd }
+    { cwd, encoding: 'utf-8' }
   )
 
-  const pageCount = getPdfPageCount(`${jobName}.pdf`)
+  if (result.status !== 0) {
+    console.log(result.stdout)
+    console.log(result.stderr)
+    throw new Error('lualatex compilation failed.')
+  }
+
+  const tmpPdfFile = path.join(cwd, `${jobName}.pdf`)
+  const pageCount = getPdfPageCount(tmpPdfFile)
 
   for (let index = 1; index <= pageCount; index++) {
     let counterSuffix = ''
@@ -48,7 +56,7 @@ function generateClozeSvg (filePath) {
     // Convert into SVG
     childProcess.spawnSync(
       'pdf2svg',
-      [`${jobName}.pdf`, svgFileName, index],
+      [tmpPdfFile, svgFileName, index],
       { cwd }
     )
 
@@ -70,8 +78,10 @@ function generateClozeSvg (filePath) {
 
     // Move to LT (Lückentext) subdir.
     const newPath = mediaServer.locationIndicator.moveIntoSubdir(path.resolve(svgFileName), 'LT')
-    lib.moveAsset(svgFileName, newPath)
+    lib.moveAsset(svgFilePath, newPath)
   }
+
+  fs.unlinkSync(tmpPdfFile)
 }
 
 /**

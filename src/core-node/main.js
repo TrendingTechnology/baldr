@@ -91,6 +91,7 @@ function checkExecutables (executables) {
  */
 function getPdfPageCount (filePath) {
   checkExecutables('pdfinfo')
+  if (!fs.existsSync(filePath)) throw new Error(`PDF file doesn’t exist: ${filePath}.`)
   const proc = childProcess.spawnSync(
     'pdfinfo', [filePath],
     { encoding: 'utf-8', cwd: process.cwd() }
