@@ -67,17 +67,41 @@ function generateClozeSvg (filePath) {
     return
   }
 
+  const tmpTexFile = path.basename(filePath).replace('.tex', '_Loesung.tex')
+
   console.log(`Generate SVGs from the file ${chalk.yellow(filePath)}.`)
   const jobName = path.basename(filePath).replace('.tex', '_Loesung')
-
   // Show cloze texts by patching the TeX file and generate a PDF file.
+  // \documentclass[angabe,querformat]{schule-arbeitsblatt}
   texFileContent = texFileContent.replace(
-    /^.*\n(.*)\n/,
-    '%!TEX program = lualatex\n\\documentclass[loesung]{schule-arbeitsblatt}\n'
+    /\\documentclass(\[(.*)\])?\{schule-arbeitsblatt\}/,
+    function (match, p1, p2) {
+      // match \documentclass[angabe,querformat]{schule-arbeitsblatt}
+      // p1: [angabe,querformat]
+      // p2: angabe,querformat
+      let args = []
+      let isSolutionSet = false
+      if (p2) {
+        args = p2.split(',')
+        for (let index = 0; index < args.length; index++) {
+          if (args[index] === 'angabe') {
+            args[index] = 'loesung'
+            isSolutionSet = true
+          }
+        }
+        if (args.includes('loesung')) {
+          isSolutionSet = true
+        }
+      }
+      if (!isSolutionSet) {
+        args.push('loesung')
+      }
+      return `\\documentclass[${args.join(',')}]{schule-arbeitsblatt}`
+    }
   )
-  lib.writeFile(filePath, texFileContent)
+  lib.writeFile(tmpTexFile, texFileContent)
   const result = childProcess.spawnSync(
-    'lualatex', ['--shell-escape', '--jobname', jobName, filePath],
+    'lualatex', ['--shell-escape', tmpTexFile],
     { cwd, encoding: 'utf-8' }
   )
 
@@ -93,7 +117,7 @@ function generateClozeSvg (filePath) {
   for (let index = 1; index <= pageCount; index++) {
     generateOneClozeSvg(tmpPdfFile, pageCount, index)
   }
-
+  fs.unlinkSync(tmpTexFile)
   fs.unlinkSync(tmpPdfFile)
 }
 
