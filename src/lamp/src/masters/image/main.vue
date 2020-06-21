@@ -6,12 +6,12 @@
       class="metadata"
     >
       <h1
-        v-if="title"
+        v-if="title && !noMeta"
         class="title"
         v-html="title"
       />
       <p
-        v-if="description"
+        v-if="description && !noMeta"
         class="description"
         v-html="description"
       />
