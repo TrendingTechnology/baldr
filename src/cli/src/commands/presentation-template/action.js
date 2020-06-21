@@ -132,7 +132,7 @@ async function presentationFromAssets (filePath) {
         return
       }
       let masterName
-      if (asset.id.indexOf('Lueckentext') > -1) {
+      if (asset.id.indexOf('_LT') > -1) {
         masterName = 'cloze'
       } else if (asset.id.indexOf('NB') > -1) {
         masterName = 'score_sample'
