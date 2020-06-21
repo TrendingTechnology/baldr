@@ -67,10 +67,10 @@ function generateClozeSvg (filePath) {
     return
   }
 
-  const tmpTexFile = path.basename(filePath).replace('.tex', '_Loesung.tex')
+  const tmpTexFile = filePath.replace('.tex', '_Loesung.tex')
 
   console.log(`Generate SVGs from the file ${chalk.yellow(filePath)}.`)
-  const jobName = path.basename(filePath).replace('.tex', '_Loesung')
+  const jobName = path.basename(tmpTexFile).replace('.tex', '')
   // Show cloze texts by patching the TeX file and generate a PDF file.
   // \documentclass[angabe,querformat]{schule-arbeitsblatt}
   texFileContent = texFileContent.replace(
