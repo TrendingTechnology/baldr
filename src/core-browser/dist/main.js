@@ -49,14 +49,6 @@ function selectSubset(subsetSelector, {
   const subset = [];
   if (!shiftSelector) shiftSelector = 0;
 
-  function addElement(element) {
-    if (!element) return;
-
-    if (!subset.includes(element)) {
-      subset.push(element);
-    }
-  }
-
   if (!elements && elementsCount) {
     elements = [];
     let firstNo;
@@ -94,7 +86,7 @@ function selectSubset(subsetSelector, {
 
     if (range.length === 1) {
       const i = range[0];
-      addElement(elements[i - 1 + shiftSelector]);
+      subset.push(elements[i - 1 + shiftSelector]);
     } else if (range.length === 2) {
       const beginNo = parseInt(range[0]) + shiftSelector;
       const endNo = parseInt(range[1]) + shiftSelector;
@@ -105,7 +97,7 @@ function selectSubset(subsetSelector, {
 
       for (let no = beginNo; no <= endNo; no++) {
         const index = no - 1;
-        addElement(elements[index]);
+        subset.push(elements[index]);
       }
     }
   }

@@ -49,14 +49,6 @@ export function selectSubset (subsetSelector, { sort, elements, elementsCount, f
   const subset = []
   if (!shiftSelector) shiftSelector = 0
 
-  function addElement (element) {
-    // Because of the shiftSelector, the first element can be undefined.
-    if (!element) return
-    if (!subset.includes(element)) {
-      subset.push(element)
-    }
-  }
-
   // Create elements
   if (!elements && elementsCount) {
     elements = []
@@ -101,7 +93,7 @@ export function selectSubset (subsetSelector, { sort, elements, elementsCount, f
     // 1
     if (range.length === 1) {
       const i = range[0]
-      addElement(elements[i - 1 + shiftSelector])
+      subset.push(elements[i - 1 + shiftSelector])
     // 1-3
     } else if (range.length === 2) {
       const beginNo = parseInt(range[0]) + shiftSelector
@@ -111,7 +103,7 @@ export function selectSubset (subsetSelector, { sort, elements, elementsCount, f
       }
       for (let no = beginNo; no <= endNo; no++) {
         const index = no - 1
-        addElement(elements[index])
+        subset.push(elements[index])
       }
     }
   }

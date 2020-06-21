@@ -76,6 +76,23 @@ describe('function selectSubset()', function () {
     assert.deepEqual(elements, [2, 3, 4])
   })
 
+  it('shiftSelector: -1 (-4)', function () {
+    const elements = selectSubset('-4', {
+      elementsCount: 5,
+      firstElementNo: 1,
+      shiftSelector: -1
+    })
+    assert.deepEqual(elements, [1, 2, 3])
+  })
+
+  it('shiftSelector: -1 (-4)', function () {
+    const elements = selectSubset('-4', {
+      elementsCount: 5,
+      shiftSelector: -1
+    })
+    assert.deepEqual(elements, [0, 1, 2])
+  })
+
   it('shiftSelector: -2', function () {
     const elements = selectSubset('3-', {
       elementsCount: 5,

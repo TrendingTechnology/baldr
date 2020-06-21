@@ -2,11 +2,7 @@
 
 const assert = require('assert');
 
-var pathToModule = require.resolve('@bldr/core-browser');
-
-console.log(pathToModule);
-
-const selectSubset = require('@bldr/core-browser').selectSubset;
+const selectSubset = require('../dist/main.js').selectSubset;
 
 describe('function selectSubset()', function () {
   it('3-', function () {
@@ -64,6 +60,29 @@ describe('function selectSubset()', function () {
       shiftSelector: -1
     });
     assert.deepEqual(elements, [2, 3, 4, 5]);
+  });
+  it('shiftSelector: -1 (3-5)', function () {
+    const elements = selectSubset('3-5', {
+      elementsCount: 5,
+      firstElementNo: 1,
+      shiftSelector: -1
+    });
+    assert.deepEqual(elements, [2, 3, 4]);
+  });
+  it('shiftSelector: -1 (-4)', function () {
+    const elements = selectSubset('-4', {
+      elementsCount: 5,
+      firstElementNo: 1,
+      shiftSelector: -1
+    });
+    assert.deepEqual(elements, [1, 2, 3]);
+  });
+  it('shiftSelector: -1 (-4)', function () {
+    const elements = selectSubset('-4', {
+      elementsCount: 5,
+      shiftSelector: -1
+    });
+    assert.deepEqual(elements, [0, 1, 2]);
   });
   it('shiftSelector: -2', function () {
     const elements = selectSubset('3-', {
