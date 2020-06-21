@@ -1,8 +1,7 @@
 /**
- * Low level classes and functions used by the node packages. Some helper
- * functions etc.
+ * Some utilities for the subcommands of the package @bldr/cli.
  *
- * @module @bldr/core-node
+ * @module @bldr/cli-utils
  */
 
 // Node packages.

@@ -4,4 +4,4 @@
 
 # @bldr/cli-utils
 
-THE command line interface for the BALDR project.
+Some utilities for the subcommands of the package @bldr/cli.
