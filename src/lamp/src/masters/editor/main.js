@@ -59,7 +59,7 @@ export default {
       return props
     },
     calculateStepCount ({ props }) {
-      return steps.calculateStepCountText(props.markup, props)
+      return steps.calculateStepCountText(props.markup, props, -1)
     },
     plainTextFromProps (props) {
       return plainText(props.markup)

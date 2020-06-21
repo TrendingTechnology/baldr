@@ -47,7 +47,6 @@ export const convertMdToTex = convertTex.convertMdToTex
  */
 export function selectSubset (subsetSelector, { sort, elements, elementsCount, firstElementNo, shiftSelector }) {
   const subset = []
-
   if (!shiftSelector) shiftSelector = 0
 
   function addElement (element) {

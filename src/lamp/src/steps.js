@@ -530,7 +530,7 @@ function countSentences (parentElement) {
  *
  * @returns {Number}
  */
-export function calculateStepCount (elements, props) {
+export function calculateStepCount (elements, props, shiftSelector = 0) {
   let count
   if (elements instanceof NodeList || Array.isArray(elements)) {
     count = elements.length
@@ -539,9 +539,10 @@ export function calculateStepCount (elements, props) {
   }
   if (props.stepSubset) {
     const elementsSubset = selectSubset(props.stepSubset, {
-      elementsCount: count
+      elementsCount: count,
+      shiftSelector
     })
-    return elementsSubset.length + 2
+    return elementsSubset.length + 1
   } else {
     return count + 1
   }
@@ -557,7 +558,7 @@ export function calculateStepCount (elements, props) {
  *
  * @returns {Number}
  */
-export function calculateStepCountText (text, props) {
+export function calculateStepCountText (text, props, shiftSelector = 0) {
   const dom = new DOMParser().parseFromString(text, 'text/html')
 
   let allElementsCount
@@ -567,7 +568,7 @@ export function calculateStepCountText (text, props) {
     allElementsCount = countSentences(dom)
   }
 
-  return calculateStepCount(allElementsCount, props)
+  return calculateStepCount(allElementsCount, props, shiftSelector)
 }
 
 export function generateSlideStepsFromText (text, props) {

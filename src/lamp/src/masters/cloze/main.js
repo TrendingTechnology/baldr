@@ -116,7 +116,7 @@ export default {
       const svgString = master.$get('svgByUri')(props.src)
       const svgDom = new DOMParser().parseFromString(svgString, 'image/svg+xml')
       const groups = collectClozeGroups(svgDom)
-      const count = steps.calculateStepCount(groups, props)
+      const count = steps.calculateStepCount(groups, props, -1)
       return count
     },
     titleFromProps ({ propsMain }) {
