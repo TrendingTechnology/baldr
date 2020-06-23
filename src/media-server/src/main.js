@@ -360,8 +360,27 @@ class Asset extends MediaFile {
       const fileName = `${basePath}${suffix}.${this.extension}`
       return fileName
     }
+
+    /**
+     * For old two digit numbering
+     *
+     * @todo remove
+     * @param {Number} count
+     */
+    const nextAssetFileNameOld = (count) => {
+      let suffix
+      if (count < 10) {
+      } else if (no < 10) {
+        suffix = `_no0${no}`
+      } else if (no < 100) {
+        suffix = `_no${no}`
+      }
+      const basePath = this.absPath_.replace(`.${this.extension}`, '')
+      const fileName = `${basePath}${suffix}.${this.extension}`
+      return fileName
+    }
     let count = 2
-    while (fs.existsSync(nextAssetFileName(count))) {
+    while (fs.existsSync(nextAssetFileName(count)) || fs.existsSync(nextAssetFileNameOld(count))) {
       count += 1
     }
     count -= 1 // The counter is increased before the file system check.
