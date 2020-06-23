@@ -347,12 +347,11 @@ class Asset extends MediaFile {
     const nextAssetFileName = (count) => {
       let suffix
       if (count < 10) {
-      } else if (no < 10) {
-        suffix = `_no00${no}`
-      } else if (no < 100) {
-        suffix = `_no0${no}`
-      } else if (no < 1000) {
-        suffix = `_no${no}`
+        suffix = `_no00${count}`
+      } else if (count < 100) {
+        suffix = `_no0${count}`
+      } else if (count < 1000) {
+        suffix = `_no${count}`
       } else {
         throw new Error(`${this.absPath_} multipart asset counts greater than 100 are not supported.`)
       }
@@ -370,10 +369,9 @@ class Asset extends MediaFile {
     const nextAssetFileNameOld = (count) => {
       let suffix
       if (count < 10) {
-      } else if (no < 10) {
-        suffix = `_no0${no}`
-      } else if (no < 100) {
-        suffix = `_no${no}`
+        suffix = `_no0${count}`
+      } else if (count < 100) {
+        suffix = `_no${count}`
       }
       const basePath = this.absPath_.replace(`.${this.extension}`, '')
       const fileName = `${basePath}${suffix}.${this.extension}`
