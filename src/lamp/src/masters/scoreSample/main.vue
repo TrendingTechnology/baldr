@@ -33,6 +33,7 @@ export default {
     padding: 0.4em;
     background-color: white;
     text-align: center;
+    height: 100%;
 
     h1 {
       background: rgba($yellow, 0.2);
@@ -48,8 +49,10 @@ export default {
       bottom: 0;
       left: 0;
       object-fit: contain;
-      width: 80%;
-      height: 70%;
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      object-position: 50% 50%;
     }
   }
 </style>
