@@ -5,7 +5,7 @@
  *
  * - presentation (`Presentation()`)
  * - asset (`Asset()`)
- *   - multipart asset (`filename.jpg`, `filename_no02.jpg`, `filename_no03.jpg`)
+ *   - multipart asset (`filename.jpg`, `filename_no002.jpg`, `filename_no003.jpg`)
  *
  * # Definition of the objects:
  *
@@ -341,15 +341,18 @@ class Asset extends MediaFile {
 
   /**
    * Search for mutlipart assets. The naming scheme of multipart assets is:
-   * `filename.jpg`, `filename_no02.jpg`, `filename_no03.jpg`
+   * `filename.jpg`, `filename_no002.jpg`, `filename_no003.jpg`
    */
   detectMultiparts_ () {
     const nextAssetFileName = (count) => {
       let suffix
       if (count < 10) {
-        suffix = `_no0${count}`
-      } else if (count < 100) {
-        suffix = `_no${count}`
+      } else if (no < 10) {
+        suffix = `_no00${no}`
+      } else if (no < 100) {
+        suffix = `_no0${no}`
+      } else if (no < 1000) {
+        suffix = `_no${no}`
       } else {
         throw new Error(`${this.absPath_} multipart asset counts greater than 100 are not supported.`)
       }
@@ -477,7 +480,7 @@ function isAsset (filePath) {
   if (
     filePath.indexOf('eps-converted-to.pdf') > -1 || // eps converted into pdf by TeX
     filePath.indexOf('_preview.jpg') > -1 || // Preview image
-    filePath.match(/_no\d\d\./) // Multipart asset
+    filePath.match(/_no\d+\./) // Multipart asset
   ) {
     return false
   }

@@ -238,8 +238,10 @@ function formatMultiPartAssetFileName(firstFileName, no) {
   if (no === 1) {
     return firstFileName;
   } else if (no < 10) {
-    suffix = `_no0${no}`;
+    suffix = `_no00${no}`;
   } else if (no < 100) {
+    suffix = `_no0${no}`;
+  } else if (no < 1000) {
     suffix = `_no${no}`;
   } else {
     throw new Error(`${firstFileName} multipart asset counts greater than 100 are not supported.`);
