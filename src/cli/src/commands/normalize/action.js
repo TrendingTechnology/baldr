@@ -45,8 +45,9 @@ function mergeMetaTypeNames () {
 
 /**
  * @param {String} filePath - The media asset file path.
+ * @param {Object} cmdObj - From commander.
  */
-async function normalizeOneFile (filePath, cmdObj) {
+async function normalizeOneFile (filePath, cmdObj = { wikidata: false }) {
   try {
     const metaTypes = mediaServer.metaTypes
     // Always: general

@@ -1,14 +1,24 @@
 // Node packages.
 const fs = require('fs')
+const path = require('path')
 
 // Project packages.
 const { CommandRunner } = require('@bldr/cli-utils')
 const { createYamlOneFile } = require('../yaml/action.js')
+const { cwd } = require('../../main.js')
+const { LocationIndicator } = require('@bldr/media-server')
+const { normalizeOneFile } = require('../normalize/action.js')
 
 /**
  *
  */
 async function action (youtubeId) {
+  const location = new LocationIndicator()
+  const parentDir = location.getPresParentDir(cwd)
+  const ytDir = path.join(parentDir, 'YT')
+  if (!fs.existsSync(ytDir)) {
+    fs.mkdirSync(ytDir)
+  }
   const cmd = new CommandRunner()
   cmd.startSpin()
   cmd.log('Updating youtube-dl using pip3.')
@@ -20,14 +30,21 @@ async function action (youtubeId) {
     '--format', 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/mp4',
     '--output', youtubeId,
     '--write-thumbnail',
-    youtubeId
+    youtubeId,
+    { cwd: ytDir }
   )
 
-  cmd.log('Creating the metadata file in the YAML format.')
-  await createYamlOneFile(`${youtubeId}.mp4`, { youtube_id: youtubeId })
+  const ytFile = path.resolve(ytDir, `${youtubeId}.mp4`)
 
-  if (fs.existsSync(`${youtubeId}.jpg`)) {
-    fs.renameSync(`${youtubeId}.jpg`, `${youtubeId}.mp4_preview.jpg`)
+  cmd.log('Creating the metadata file in the YAML format.')
+  await createYamlOneFile(ytFile, { youtube_id: youtubeId })
+  cmd.log('Normalizing the metadata file.')
+  await normalizeOneFile(ytFile)
+
+  const ytPreviewImage = ytFile.replace(/\.mp4$/, '.jpg')
+
+  if (fs.existsSync(ytPreviewImage)) {
+    fs.renameSync(ytPreviewImage, ytFile.replace(/\.mp4$/, '.mp4_preview.jpg'))
   }
   cmd.stopSpin()
 }

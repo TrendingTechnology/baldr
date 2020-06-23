@@ -25,7 +25,7 @@ const Gauge = require('gauge')
  *   [see on nodejs.org](https://nodejs.org/api/child_process.html#child_process_child_process_spawnsync_command_args_options).
  */
 function executeSync () {
-  let args = Array.from(arguments)
+  const args = Array.from(arguments)
   let options = {}
   if (args.length > 1 && typeof args[args.length - 1] === 'object') {
     options = args.pop()
@@ -55,7 +55,7 @@ function executeSync () {
  *   [see on nodejs.org](https://nodejs.org/api/child_process.html#child_process_child_process_spawnsync_command_args_options).
  */
 function executeAsync () {
-  let args = Array.from(arguments)
+  const args = Array.from(arguments)
   let options = {}
   if (args.length > 1 && typeof args[args.length - 1] === 'object') {
     options = args.pop()
@@ -102,7 +102,7 @@ function executeAsync () {
 }
 
 /**
- * Run commands on the command line in a nice a secure fashion.
+ * Run commands on the command line in a nice and secure fashion.
  */
 class CommandRunner {
   constructor () {
@@ -111,6 +111,9 @@ class CommandRunner {
     this.gauge.setTheme('ASCII')
   }
 
+  /**
+   *
+   */
   checkRoot () {
     const user = os.userInfo()
     if (user.username !== 'root') {
@@ -119,38 +122,62 @@ class CommandRunner {
     }
   }
 
+  /**
+   *
+   */
   startSpin () {
     this.spinner.start()
   }
 
+  /**
+   *
+   */
   startProgress () {
     this.gauge.show('default', 0)
   }
 
+  /**
+   *
+   */
   updateProgress (completed, text) {
     this.gauge.pulse()
     this.gauge.show(text, completed)
   }
 
+  /**
+   * For example `cmd.exec('youtube-dl', youtubeId, { cwd: ytDir })`
+   */
   exec () {
-    // We have to run the commands asynchronous because of spinner.
-    return executeAsync (...arguments)
+    // We have to run the commands asynchronous because of the spinner.
+    return executeAsync(...arguments)
   }
 
+  /**
+   *
+   */
   log (msg) {
     this.spinner.text = msg
   }
 
+  /**
+   *
+   */
   catch (error) {
     this.stopSpin()
     console.log(error)
     process.exit()
   }
 
+  /**
+   *
+   */
   stopProgress () {
     this.gauge.hide()
   }
 
+  /**
+   *
+   */
   stopSpin () {
     this.spinner.stop()
   }
