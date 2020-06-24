@@ -23,10 +23,13 @@ function action (globPattern, prefix, cmdObj) {
   const extension = files[0].split('.').pop()
   const firstNewFileName = `${prefix}.${extension}`
   for (const oldFileName of files) {
-    const newFileName = coreBrowser.formatMultiPartAssetFileName(`${prefix}.${extension}`, no)
-    console.log(`${chalk.yellow(oldFileName)} -> ${chalk.green(newFileName)}`)
-    if (!cmdObj.dryRun) fs.renameSync(oldFileName, newFileName)
-    no += 1
+    // Omit already existent info file by the renaming.
+    if (!oldFileName.match(/yml$/i)) {
+      const newFileName = coreBrowser.formatMultiPartAssetFileName(`${prefix}.${extension}`, no)
+      console.log(`${chalk.yellow(oldFileName)} -> ${chalk.green(newFileName)}`)
+      if (!cmdObj.dryRun) fs.renameSync(oldFileName, newFileName)
+      no += 1
+    }
   }
 
   if (fs.existsSync(firstNewFileName) && !cmdObj.dryRun) {
