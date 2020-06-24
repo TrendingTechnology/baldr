@@ -715,6 +715,31 @@ const reference = {
 }
 
 /**
+ * The meta data type specification “score”.
+ *
+ * @type {module:@bldr/media-server/meta-types~typeSpec}
+ */
+const score = {
+  title: 'Partitur',
+  abbreviation: 'PT',
+  detectTypeByPath: function () {
+    return new RegExp('^.*/PT/.*.pdf$')
+  },
+  props: {
+    imslpWorkId: {
+      title: 'IMSLP-Werk-ID',
+      description: 'Z. B.: The_Firebird_(Stravinsky,_Igor)'
+    },
+    imslpScoreId: {
+      title: 'IMSLP Partitur-ID: z. B. PMLP179424-PMLUS00570-Complete_Score_1.pdf'
+    },
+    publisher: {
+      title: 'Verlag'
+    }
+  }
+}
+
+/**
  * The meta data type specification “song”.
  *
  * @type {module:@bldr/media-server/meta-types~typeSpec}
@@ -983,6 +1008,7 @@ module.exports = {
   radio,
   recording,
   reference,
+  score,
   song,
   worksheet,
   youtube,

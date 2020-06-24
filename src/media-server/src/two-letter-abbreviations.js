@@ -11,7 +11,7 @@ module.exports = {
   LD: 'Song / Lied',
   LT: 'Lückentext',
   NB: 'Notenbeispiel',
-  PA: 'Partitur',
+  PT: 'Partitur',
   PR: 'Person',
   QL: 'Quelle',
   SF: 'Schulfunk',
