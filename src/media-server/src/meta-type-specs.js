@@ -902,9 +902,9 @@ const general = {
             // old prefix: Piazzolla-Adios-Nonino_NB
             // updated prefix: Piazzolla-Nonino_NB
             // Preferred result: Piazzolla-Nonino_NB_Adios-Nonino_melancolico
-            if (value.match(/.*_[A-Z]{2,}_.*/)) {
-              value = value.replace(/^.*_[A-Z]{2,}/, idPrefix)
-            }
+            // if (value.match(/.*_[A-Z]{2,}_.*/)) {
+            //   value = value.replace(/^.*_[A-Z]{2,}/, idPrefix)
+            // }
           }
         }
 
