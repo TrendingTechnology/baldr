@@ -6,6 +6,8 @@
  * @module @bldr/lamp/masters/youtube
  */
 
+import { markupToHtml } from '@/lib'
+
 function youtubeIdToUri (youtubeId) {
   return `id:YT_${youtubeId}`
 }
@@ -53,14 +55,14 @@ export default {
       propsMain.asset = asset
       if (asset) {
         if (!props.heading && asset.heading) {
-          propsMain.heading = asset.heading
+          propsMain.heading = markupToHtml(asset.heading)
         } else if (!props.heading && asset.originalHeading) {
-          propsMain.heading = asset.originalHeading
+          propsMain.heading = markupToHtml(asset.originalHeading)
         }
         if (!props.info && asset.info) {
-          propsMain.info = asset.info
+          propsMain.info = markupToHtml(asset.info)
         } else if (!props.info && asset.originalInfo) {
-          propsMain.info = asset.originalInfo
+          propsMain.info = markupToHtml(asset.originalInfo)
         }
       }
       return propsMain

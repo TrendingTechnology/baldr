@@ -1,5 +1,5 @@
 <template>
-  <div class="vc_youtube_master">
+  <div class="vc_youtube_master main-app-padding">
     <div class="source smaller">
       <span class="important">Quelle:</span>
       <a :href="`https://www.youtube.com/watch?v=${id}`" target="_blank">
@@ -7,7 +7,7 @@
       </a>
     </div>
 
-    <h1 v-if="heading" v-html="heading"/>
+    <h1 class="heading" v-if="heading" v-html="heading"/>
 
     <iframe
       :src="`https://www.youtube.com/embed/${id}`"
@@ -17,7 +17,7 @@
       v-if="!asset"
     />
     <div v-if="asset" id="youtube-offline-video"/>
-    <p v-if="info" v-html="info"/>
+    <p class="small" v-if="info" v-html="info"/>
   </div>
 </template>
 
@@ -43,7 +43,10 @@ export default {
 
 <style lang="scss">
   .vc_youtube_master {
-    text-align: center;
+
+    .heading, #youtube-offline-video {
+      text-align: center;
+    }
 
     iframe {
       width: 75%;
