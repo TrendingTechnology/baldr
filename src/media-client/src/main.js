@@ -1937,6 +1937,8 @@ class Resolver {
     }
     const mainAssets = await Promise.all(promises)
     let linkedAssets = []
+    // @todo make this recursive: For example master person -> main image
+    // famous pieces -> audio -> cover
     // Resolve the linked media URIs.
     if (this.linkedUris.length) {
       promises = []
