@@ -27,7 +27,14 @@
 /* globals config document Audio Image File */
 
 import { HttpRequest } from '@bldr/http-request'
-import { formatMultiPartAssetFileName, AssetTypes, selectSubset, mediaUriRegExp, plainText } from '@bldr/core-browser'
+import {
+  AssetTypes,
+  convertDurationToSeconds,
+  formatMultiPartAssetFileName,
+  mediaUriRegExp,
+  plainText,
+  selectSubset
+} from '@bldr/core-browser'
 
 import DynamicSelect from '@bldr/dynamic-select'
 
@@ -726,7 +733,7 @@ class Sample {
    * @private
    */
   toSec_ (timeIntervaleString) {
-    return Number(timeIntervaleString)
+    return convertDurationToSeconds(timeIntervaleString)
   }
 
   /**

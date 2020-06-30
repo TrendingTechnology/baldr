@@ -8,6 +8,7 @@ exports.sortObjectsByProperty = sortObjectsByProperty;
 exports.formatToLocalDate = formatToLocalDate;
 exports.formatToYear = formatToYear;
 exports.formatToLocalDateTime = formatToLocalDateTime;
+exports.convertDurationToSeconds = convertDurationToSeconds;
 exports.toTitleCase = toTitleCase;
 exports.plainText = plainText;
 exports.shortenText = shortenText;
@@ -152,6 +153,20 @@ function formatToLocalDateTime(timeStampMsec) {
   const dateString = date.toLocaleDateString();
   const timeString = date.toLocaleTimeString();
   return `${dayString} ${dateString} ${timeString}`;
+}
+
+function convertDurationToSeconds(duration) {
+  if (typeof duration === 'string' && duration.match(/:/)) {
+    const segments = duration.split(':');
+
+    if (segments.length === 3) {
+      return parseInt(segments[0]) * 3600 + parseInt(segments[1]) * 60 + parseInt(segments[2]);
+    } else if (segments.length === 2) {
+      return parseInt(segments[0]) * 60 + parseInt(segments[1]);
+    }
+  }
+
+  return Number.parseFloat(duration);
 }
 
 function toTitleCase(text) {
@@ -395,6 +410,7 @@ function msleep(milliSeconds) {
 }
 
 var _default = {
+  convertDurationToSeconds,
   formatImslpUrl,
   formatMusicbrainzRecordingUrl,
   formatMusicbrainzWorkUrl,

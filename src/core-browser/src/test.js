@@ -1,6 +1,7 @@
 const assert = require('assert')
 
 const selectSubset = require('../dist/main.js').selectSubset
+const convertDurationToSeconds = require('../dist/main.js').convertDurationToSeconds
 
 describe('function selectSubset()', function () {
   it('3-', function () {
@@ -101,5 +102,16 @@ describe('function selectSubset()', function () {
     })
 
     assert.deepEqual(elements, [1, 2, 3, 4, 5])
+  })
+})
+
+describe('function convertDurationToSeconds()', function () {
+  it('Input integer', function () {
+    let convert = convertDurationToSeconds
+    assert.deepEqual(convert(1), 1)
+    assert.deepEqual(convert('1'), 1)
+    assert.deepEqual(convert('1:01'), 61)
+    assert.deepEqual(convert('01:00'), 60)
+    assert.deepEqual(convert('1:00:00'), 3600)
   })
 })
