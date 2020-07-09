@@ -34,6 +34,11 @@ export default {
       markup: true,
       description: 'Der/Die InterpretIn des Audio-Ausschnitts.'
     },
+    partOf: {
+      type: String,
+      markup: true,
+      description: 'Teil eines übergeordneten Werks.'
+    },
     cover: {
       type: String,
       description: 'Eine Medien-Datei-URI, die als Cover-Bild angezeigt werden soll.',
@@ -83,6 +88,8 @@ export default {
       const artist = grab.property('artist')
       const composer = grab.property('composer')
       const description = grab.property('description')
+      const partOf = grab.property('partOf')
+
       let title
       if (props.title) {
         title = props.title
@@ -103,6 +110,7 @@ export default {
         artist,
         composer,
         title,
+        partOf,
         description,
         mediaAsset: asset
       }

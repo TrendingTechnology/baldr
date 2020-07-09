@@ -205,6 +205,9 @@ const composition = {
     publicationDate: {
       state: 'absent'
     },
+    partOf: {
+      title: 'Teil eines übergeordneten Werks'
+    },
     // now combined in creationDate
     firstPerformance: {
       state: 'absent'

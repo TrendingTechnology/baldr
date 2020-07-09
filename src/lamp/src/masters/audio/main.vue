@@ -21,6 +21,12 @@
 
     <p
       class="title piece"
+      v-if="partOf"
+      v-html="partOf"
+    />
+
+    <p
+      class="title piece"
       v-if="title"
       v-html="title"
     />
@@ -58,6 +64,9 @@ export default {
       type: String
     },
     artist: {
+      type: String
+    },
+    partOf: {
       type: String
     },
     description: {
