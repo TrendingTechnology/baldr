@@ -11,7 +11,12 @@ const mediaServer = require('@bldr/media-server')
 const { cwd, config } = require('../../main.js')
 
 function action () {
-  let mirroredPath = mediaServer.locationIndicator.getMirroredPath(cwd)
+  // In the archive folder are no two letter folders like 'YT'.
+  // We try to detect the parent folder where the presentation lies in.
+  let presDir = mediaServer.locationIndicator.getPresParentDir(cwd)
+  let mirroredPath = mediaServer.locationIndicator.getMirroredPath(presDir)
+  // If no mirrored path could be detected we show the base path of the
+  // media server.
   if (!mirroredPath) mirroredPath = config.mediaServer.basePath
   console.log(`Go to: ${chalk.green(mirroredPath)}`)
   childProcess.spawn('zsh', ['-i'], {
