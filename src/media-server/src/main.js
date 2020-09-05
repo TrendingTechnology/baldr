@@ -1,3 +1,5 @@
+#! /usr/bin/env node
+
 /**
  * The REST API and command line interface of the BALDR media server.
  *
@@ -1556,7 +1558,7 @@ const runRestApi = function (port) {
 const main = function () {
   let port
   if (process.argv.length === 3) port = process.argv[2]
-  return run(port)
+  return runRestApi(port)
 }
 
 if (require.main === module) {
