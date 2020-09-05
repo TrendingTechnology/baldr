@@ -17,7 +17,7 @@
     "access": "public"
   },
   "dependencies": {
-    "node-fetch": "^2.6.0",
-    "wikibase-sdk": "^7.6.1"
+    "node-fetch": "^2.6.1",
+    "wikibase-sdk": "^7.7.0"
   }
 }

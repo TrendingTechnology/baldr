@@ -31,13 +31,13 @@
     "@bldr/wikidata": "^0.1.0",
     "chalk": "^4.1.0",
     "color": "^3.1.2",
-    "commander": "^5.1.0",
+    "commander": "^6.1.0",
     "fs-extra": "^9.0.1",
     "js-yaml": "^3.14.0",
     "jsdoc-api": "^6.0.0",
-    "music-metadata": "6.4.0",
-    "node-fetch": "^2.6.0",
-    "ora": "4.0.4",
+    "music-metadata": "7.0.2",
+    "node-fetch": "^2.6.1",
+    "ora": "5.0.0",
     "webfont": "^9.0.0"
   },
   "bin": {
