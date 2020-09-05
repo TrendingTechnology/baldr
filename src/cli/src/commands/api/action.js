@@ -1,7 +1,7 @@
-const run = require('@bldr/api')
+const runRestApi = require('@bldr/media-server').runRestApi
 
 function action (port) {
-  run(port)
+  runRestApi(port)
 }
 
 module.exports = action

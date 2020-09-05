@@ -66,13 +66,16 @@ const path = require('path')
 const os = require('os')
 
 // Third party packages.
-const yaml = require('js-yaml')
+const cors = require('cors')
 const express = require('express')
 const MongoClient = require('mongodb').MongoClient
+const yaml = require('js-yaml')
 
 // Project packages.
 const { bootstrapConfig } = require('@bldr/core-node')
 const { AssetTypes, convertPropertiesCase } = require('@bldr/core-browser')
+
+const registerSeatingPlan = require('@bldr/api-seating-plan').registerRestApi
 
 // Submodules.
 const metaTypes = require('./meta-types.js')
@@ -1507,6 +1510,59 @@ function registerRestApi () {
   return app
 }
 
+/**
+ * Run the REST API. Listen to a TCP port.
+ *
+ * @param {Number} port - A TCP port.
+ */
+const runRestApi = function (port) {
+  const app = express()
+
+  app.use(cors())
+  app.use(express.json())
+
+  app.use('/seating-plan', registerSeatingPlan())
+  app.use('/media', registerRestApi())
+
+  const helpMessages = {
+    version: {
+      name: packageJson.name,
+      version: packageJson.version
+    }
+  }
+
+  app.get('/', (req, res) => {
+    res.json({
+      version: packageJson.version,
+      navigation: {
+        media: helpMessages.navigation
+      }
+    })
+  })
+
+  app.get('/version', (req, res) => {
+    res.json(helpMessages.version)
+  })
+
+  if (!port) {
+    port = config.api.port
+  }
+  app.listen(port, () => {
+    console.log(`The BALDR REST API is running on port ${port}.`)
+  })
+  return app
+}
+
+const main = function () {
+  let port
+  if (process.argv.length === 3) port = process.argv[2]
+  return run(port)
+}
+
+if (require.main === module) {
+  main()
+}
+
 module.exports = {
   asciify,
   Asset,
@@ -1524,5 +1580,6 @@ module.exports = {
   openFolderWithArchives,
   openWith,
   registerRestApi,
-  walk
+  walk,
+  runRestApi
 }
