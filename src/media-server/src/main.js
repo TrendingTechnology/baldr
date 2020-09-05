@@ -732,23 +732,32 @@ async function update (full = false) {
  * @returns {Promise}
  */
 async function initializeDb () {
-  const assets = await db.createCollection('assets')
-  await assets.createIndex({ path: 1 }, { unique: true })
-  await assets.createIndex({ id: 1 }, { unique: true })
-  await assets.createIndex({ uuid: 1 }, { unique: true })
+  let collections = await db.listCollections().toArray()
+  if (collections.includes('assets')) {
+    const assets = await db.createCollection('assets')
+    await assets.createIndex({ path: 1 }, { unique: true })
+    await assets.createIndex({ id: 1 }, { unique: true })
+    await assets.createIndex({ uuid: 1 }, { unique: true })
+  }
 
-  const presentations = await db.createCollection('presentations')
-  await presentations.createIndex({ id: 1 }, { unique: true })
+  if (collections.includes('presentations')) {
+    const presentations = await db.createCollection('presentations')
+    await presentations.createIndex({ id: 1 }, { unique: true })
+  }
 
-  const updates = await db.createCollection('updates')
-  await updates.createIndex({ begin: 1 })
+  if (collections.includes('updates')) {
+    const updates = await db.createCollection('updates')
+    await updates.createIndex({ begin: 1 })
+  }
 
-  // https://stackoverflow.com/a/35868933
-  const folderTitleTree = await db.createCollection('folderTitleTree')
-  await folderTitleTree.createIndex({ id: 1 }, { unique: true })
+  if (collections.includes('folderTitleTree')) {
+    // https://stackoverflow.com/a/35868933
+    const folderTitleTree = await db.createCollection('folderTitleTree')
+    await folderTitleTree.createIndex({ id: 1 }, { unique: true })
+  }
 
   const result = {}
-  const collections = await db.listCollections().toArray()
+  collections = await db.listCollections().toArray()
   for (const collection of collections) {
     const indexes = await db.collection(collection.name).listIndexes().toArray()
     result[collection.name] = {
