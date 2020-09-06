@@ -1,0 +1,35 @@
+{
+  "grades": {
+    "1a": {
+      "Mustermann, Max": {
+        "seatNo": 22
+      }
+    },
+    "1b": {
+      "Musterfrau, Maria": {}
+    }
+  },
+  "jobs": {
+    "Schaltwart": {
+      "icon": "video-switch"
+    },
+    "Austeilwart": {
+      "icon": "file-outline"
+    },
+    "Klassenbuchführer": {
+      "icon": "notebook"
+    },
+    "Klassensprecher": {
+      "icon": "account-star"
+    },
+    "Lüftwart": {
+      "icon": "window-open"
+    }
+  },
+  "meta": {
+    "location": "Pirckheimer-Gymnasium, Nürnberg",
+    "teacher": "OStR Josef Friedrich",
+    "year": "2019/20"
+  },
+  "timeStampMsec": 1568274632805
+}

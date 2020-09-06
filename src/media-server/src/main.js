@@ -77,7 +77,7 @@ const yaml = require('js-yaml')
 const { bootstrapConfig } = require('@bldr/core-node')
 const { AssetTypes, convertPropertiesCase } = require('@bldr/core-browser')
 
-const registerSeatingPlan = require('@bldr/api-seating-plan').registerRestApi
+const registerSeatingPlan = require('./seating-plan.js').registerRestApi
 
 // Submodules.
 const metaTypes = require('./meta-types.js')
@@ -729,31 +729,50 @@ async function update (full = false) {
 /* MongoDb Management *********************************************************/
 
 /**
+ * List all collection names in an array.
+ *
+ * @returns An array of collection names.
+ */
+async function listCollectionNames() {
+  let collections = await db.listCollections().toArray()
+  const names = []
+  for (const collection of collections) {
+    names.push(collection.name)
+  }
+  return names
+}
+
+/**
  * @returns {Promise}
  */
 async function initializeDb () {
-  let collections = await db.listCollections().toArray()
-  if (collections.includes('assets')) {
+  let collections = await listCollectionNames()
+  if (!collections.includes('assets')) {
     const assets = await db.createCollection('assets')
     await assets.createIndex({ path: 1 }, { unique: true })
     await assets.createIndex({ id: 1 }, { unique: true })
     await assets.createIndex({ uuid: 1 }, { unique: true })
   }
 
-  if (collections.includes('presentations')) {
+  if (!collections.includes('presentations')) {
     const presentations = await db.createCollection('presentations')
     await presentations.createIndex({ id: 1 }, { unique: true })
   }
 
-  if (collections.includes('updates')) {
+  if (!collections.includes('updates')) {
     const updates = await db.createCollection('updates')
     await updates.createIndex({ begin: 1 })
   }
 
-  if (collections.includes('folderTitleTree')) {
+  if (!collections.includes('folderTitleTree')) {
     // https://stackoverflow.com/a/35868933
     const folderTitleTree = await db.createCollection('folderTitleTree')
     await folderTitleTree.createIndex({ id: 1 }, { unique: true })
+  }
+
+  if (!collections.includes('seatingPlan')) {
+    const seatingPlan = await db.createCollection('seatingPlan')
+    await seatingPlan.createIndex({ timeStampMsec: 1 }, { unique: true })
   }
 
   const result = {}
@@ -1532,7 +1551,7 @@ const runRestApi = function (port) {
   app.use(cors())
   app.use(express.json())
 
-  app.use('/seating-plan', registerSeatingPlan())
+  app.use('/seating-plan', registerSeatingPlan(db))
   app.use('/media', registerRestApi())
 
   const helpMessages = {
