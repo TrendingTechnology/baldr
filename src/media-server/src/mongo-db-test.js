@@ -9,7 +9,10 @@ async function main() {
 
   await mongoClient.connect()
   let db = mongoClient.db('baldr')
-  result = await db.collection("seatingPlan").aggregate([{ $match: {}}, {$project: { timeStampMsec: 1, _id: 0 }}]).toArray()
+  //result = await db.collection("seatingPlan").aggregate([{ $match: {}}, {$project: { timeStampMsec: 1, _id: 0 }}]).toArray()
+
+  let result = await db.collection("seatingPlan").find( { timeStampMsec: 1599417947161 } ).toArray()
+
   console.log(result)
 }
 
