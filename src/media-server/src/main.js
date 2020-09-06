@@ -137,6 +137,7 @@ async function connectDb () {
   if (!db) {
     await mongoClient.connect()
     db = mongoClient.db(config.databases.mongodb.dbName)
+    return db
   }
 }
 
@@ -1360,11 +1361,6 @@ function registerRestApi () {
 
   const app = express()
 
-  app.on('mount', async () => {
-    await connectDb()
-    await initializeDb()
-  })
-
   app.get('/', (req, res) => {
     res.json(helpMessages.navigation)
   })
@@ -1545,8 +1541,11 @@ function registerRestApi () {
  *
  * @param {Number} port - A TCP port.
  */
-const runRestApi = function (port) {
+ async function runRestApi (port) {
   const app = express()
+
+  db = await connectDb()
+  await initializeDb()
 
   app.use(cors())
   app.use(express.json())

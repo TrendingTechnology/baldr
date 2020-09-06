@@ -23,7 +23,7 @@ function registerRestApi (db) {
     })
   })
 
-  app.post('/', (req, res) => {
+  app.post('/save-state', (req, res) => {
     const body = req.body
 
     if (!{}.hasOwnProperty.call(body, 'timeStampMsec')) {
@@ -40,16 +40,23 @@ function registerRestApi (db) {
     console.log(responseMessage)
   })
 
-  app.get('/', (req, res) => {
-    const states = []
-
-    res.status(200).send(states)
+  app.get('/get-states', (req, res) => {
+    db.collection("seatingPlan").aggregate([{ $match: {}}, {$project: { timeStampMsec: 1, _id: 0 }}]).toArray((error, result) => {
+      if (error) {
+        return response.status(500).send(error);
+      }
+      let states = []
+      for (const state of result) {
+        states.push(state.timeStampMsec)
+      }
+      res.status(200).send(states)
+    })
   })
 
   app.get('/latest', (req, res) => {
   })
 
-  app.get('/by-time/:timeStampMsec', (req, res) => {
+  app.get('/get-state-by-time/:timeStampMsec', (req, res) => {
     const timeStampMsec = req.params.timeStampMsec
     const state = getStateByTimeStampMsec(timeStampMsec)
     if (state) {
@@ -59,7 +66,7 @@ function registerRestApi (db) {
     }
   })
 
-  app.delete('/by-time/:timeStampMsec', (req, res) => {
+  app.delete('/delete-state-by-time/:timeStampMsec', (req, res) => {
     const timeStampMsec = req.params.timeStampMsec
     const storePath = timeStampMsecToPath(timeStampMsec)
   })

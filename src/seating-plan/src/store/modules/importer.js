@@ -76,7 +76,7 @@ const actions = {
     })
   },
   deleteFromExternalByTime ({ dispatch }, timeStampMsec) {
-    return httpRequest.request({ method: 'delete', url: `by-time/${timeStampMsec}` }).then(() => {
+    return httpRequest.request({ method: 'delete', url: `delete-state-by-time/${timeStampMsec}` }).then(() => {
       dispatch('fetchExternalStateDates')
     }).catch(() => true)
   },
@@ -85,7 +85,7 @@ const actions = {
     dispatch('fetchLocalStateDates')
   },
   fetchExternalStateDates ({ commit }) {
-    return httpRequest.request({ method: 'get', url: '' }).then((response) => {
+    return httpRequest.request({ method: 'get', url: 'get-states' }).then((response) => {
       const dates = response.data.sort().reverse()
       commit('fetchExternalStateDates', dates)
     }).catch(() => true)
@@ -103,7 +103,7 @@ const actions = {
     commit('fetchLocalStateDates', dates)
   },
   importFromExternalByTime ({ dispatch }, timeStampMsec) {
-    return httpRequest.request({ method: 'get', url: `by-time/${timeStampMsec}` }).then((response) => {
+    return httpRequest.request({ method: 'get', url: `get-state-by-time/${timeStampMsec}` }).then((response) => {
       dispatch('importState', response.data)
     }).catch(() => true)
   },
@@ -179,7 +179,7 @@ const actions = {
     }
   },
   saveToExternalStorage ({ getters }) {
-    return httpRequest.request({ method: 'post', url: '', data: getters.exportStateObject }).catch(() => true)
+    return httpRequest.request({ method: 'post', url: 'save-state', data: getters.exportStateObject }).catch(() => true)
   },
   saveToLocalStorage: ({ commit, getters }) => {
     const state = getters.exportStateObject
