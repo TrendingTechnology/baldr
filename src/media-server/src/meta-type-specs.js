@@ -379,14 +379,14 @@ const instrument = {
     return path.join(id.substr(0, 1).toLowerCase(), id, `main.${typeData.extension}`)
   },
   detectTypeByPath: function (typeSpec) {
-    return new RegExp('^' + typeSpec.basePath + '.*/main\.jpg$')
+    return new RegExp(`^${typeSpec.basePath}.*/main\\.jpg$`)
   },
   props: {
     instrumentId: {
       title: 'Instrumenten-ID',
       derive: function ({ typeData }) {
         return idify(typeData.name)
-      },
+      }
     },
     id: {
       title: 'ID zur Referenzierung (Präfix „IN_“)',
@@ -802,7 +802,7 @@ const worksheet = {
   props: {
     title: {
       derive: function ({ folderTitles, filePath }) {
-        const match = filePath.match(new RegExp(path.sep + '([^' + path.sep + ']+)\.pdf'))
+        const match = filePath.match(new RegExp(`${path.sep}([^${path.sep}]+)\\.pdf`))
         const baseName = match[1]
         return `${baseName} zum Thema „${folderTitles.titleAndSubtitle}“`
       },
