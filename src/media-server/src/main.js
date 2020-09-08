@@ -126,7 +126,7 @@ const mongoClient = new MongoClient(
 
 /**
  * The MongoDB Db instance
- * @type {mongodb~Db}
+ * @type {Object}
  */
 let db
 
@@ -179,7 +179,7 @@ class MediaFile {
     /**
      * Absolute path ot the file.
      * @type {string}
-     * @private
+     * @access protected
      */
     this.absPath_ = path.resolve(filePath)
 
@@ -197,7 +197,7 @@ class MediaFile {
   }
 
   /**
-   * @private
+   * @access protected
    */
   addFileInfos_ () {
     const stats = fs.statSync(this.absPath_)
@@ -211,7 +211,7 @@ class MediaFile {
     /**
      * The timestamp indicating the last time this file was modified
      * expressed in milliseconds since the POSIX Epoch.
-     * @type {float}
+     * @type {Number}
      */
     this.timeModified = stats.mtimeMs
 
@@ -247,7 +247,7 @@ class MediaFile {
    *
    * @returns {object}
    *
-   * @private
+   * @access protected
    */
   readYaml_ (filePath) {
     if (fs.existsSync(filePath)) {
@@ -339,7 +339,7 @@ class Asset extends MediaFile {
        * The absolute path of the preview image.
        * @type {string}
        */
-      this.previewImage = true
+      this.previewImage = ''
     }
     this.detectMultiparts_()
     return this
@@ -654,7 +654,7 @@ async function walk (func, opt) {
 /**
  * Update the media server.
  *
- * @returns {Object}
+ * @returns {Promise.<Object>}
  */
 async function update (full = false) {
   const gitSettings = {
@@ -734,8 +734,8 @@ async function update (full = false) {
  *
  * @returns An array of collection names.
  */
-async function listCollectionNames() {
-  let collections = await db.listCollections().toArray()
+async function listCollectionNames () {
+  const collections = await db.listCollections().toArray()
   const names = []
   for (const collection of collections) {
     names.push(collection.name)
@@ -914,7 +914,7 @@ function validateMediaType (mediaType) {
  * @param {String} id - The id of the media type.
  * @param {String} mediaType - At the moment `assets` and `presentation`
  *
- * @return {String}
+ * @return {Promise.<String>}
  */
 async function getAbsPathFromId (id, mediaType = 'presentations') {
   mediaType = validateMediaType(mediaType)
@@ -1295,8 +1295,6 @@ function openWith (executable, filePath) {
  *
  * @param {String} id - The id of the media type.
  * @param {String} mediaType - At the moment `assets` and `presentation`
- *
- * @return {Object}
  */
 async function openEditor (id, mediaType) {
   const absPath = await getAbsPathFromId(id, mediaType)
@@ -1327,8 +1325,6 @@ async function openEditor (id, mediaType) {
  *   folder.
  * @param {Boolean} create - Create the directory structure of
  *   the relative path in the archive in a recursive manner.
- *
- * @return {Object}
  */
 async function openParentFolder (id, mediaType, archive, create) {
   const absPath = await getAbsPathFromId(id, mediaType)
@@ -1584,7 +1580,7 @@ function registerRestApi () {
 
 const main = function () {
   let port
-  if (process.argv.length === 3) port = process.argv[2]
+  if (process.argv.length === 3) port = parseInt(process.argv[2])
   return runRestApi(port)
 }
 

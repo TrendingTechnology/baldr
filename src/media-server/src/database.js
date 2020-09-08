@@ -1,5 +1,3 @@
-
-
 const MongoClient = require('mongodb').MongoClient
 
 // Project packages.
@@ -52,8 +50,8 @@ async function connectDb () {
  *
  * @returns An array of collection names.
  */
-async function listCollectionNames() {
-  let collections = await db.listCollections().toArray()
+async function listCollectionNames () {
+  const collections = await db.listCollections().toArray()
   const names = []
   for (const collection of collections) {
     names.push(collection.name)

@@ -327,7 +327,7 @@ function sortAndDeriveProps (data, typeSpec) {
 
 /**
  * @param {Object} data - An object containing some meta data.
- * @param {module:@bldr/media-server/meta-types~typeName} - The type name
+ * @param {module:@bldr/media-server/meta-types~typeName} typeSpec - The type name
  */
 function formatProps (data, typeSpec) {
   function formatOneProp (spec, value) {
@@ -398,7 +398,7 @@ function removeProps (data, typeSpec) {
  * Bundle three operations: Sort and derive, format, validate.
  *
  * @param {Object} data - An object containing some meta data.
- * @param {module:@bldr/media-server/meta-types~typeName} - The type name
+ * @param {module:@bldr/media-server/meta-types~typeName} typeName - The type name
 
  * @returns {Object}
  */
