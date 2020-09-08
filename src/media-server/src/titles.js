@@ -65,7 +65,7 @@ class FolderTitle {
      * True if the folder contains a file with the file name
      * `Praesentation.baldr.yml`
      *
-     * @type {Booelan}
+     * @type {Boolean}
      */
     this.hasPraesentation = hasPraesentation
   }

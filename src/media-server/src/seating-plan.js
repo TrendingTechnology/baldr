@@ -13,7 +13,7 @@ const packageJson = require('../package.json')
 /**
  *
  */
-function registerRestApi (db) {
+function registerRestApi(db) {
   const app = express()
 
   app.get('/version', (req, res) => {
@@ -41,7 +41,7 @@ function registerRestApi (db) {
   })
 
   app.get('/get-states', (req, res) => {
-    db.collection("seatingPlan").aggregate([{ $match: {}}, {$project: { timeStampMsec: 1, _id: 0 }}]).toArray((error, result) => {
+    db.collection("seatingPlan").aggregate([{ $match: {} }, { $project: { timeStampMsec: 1, _id: 0 } }]).toArray((error, result) => {
       if (error) {
         return res.status(500).send(error);
       }
@@ -56,7 +56,7 @@ function registerRestApi (db) {
   app.get('/latest', (req, res) => {
     db.collection("seatingPlan").find().sort({ timeStampMsec: -1 }).limit(1).toArray((error, result) => {
       if (error) {
-        return res.status(500).send(error);
+        return res.status(500).send(error)
       }
       if (result.length > 0) {
         res.status(200).send(result[0])
@@ -67,9 +67,9 @@ function registerRestApi (db) {
   })
 
   app.get('/get-state-by-time/:timeStampMsec', (req, res) => {
-    db.collection("seatingPlan").find( { timeStampMsec: parseInt(req.params.timeStampMsec) } ).toArray((error, result) => {
+    db.collection("seatingPlan").find({ timeStampMsec: parseInt(req.params.timeStampMsec) }).toArray((error, result) => {
       if (error) {
-        return res.status(500).send(error);
+        return res.status(500).send(error)
       }
       res.status(200).send(result)
     })
