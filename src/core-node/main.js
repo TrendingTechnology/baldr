@@ -36,7 +36,7 @@ let configJson
  *
  * @return {object}
  */
-function bootstrapConfig (configDefault) {
+function bootstrapConfig (configDefault = false) {
   if (!configJson) {
     const configFile = path.join(path.sep, 'etc', 'baldr.json')
 

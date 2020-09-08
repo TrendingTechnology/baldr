@@ -43,7 +43,7 @@ function registerRestApi (db) {
   app.get('/get-states', (req, res) => {
     db.collection("seatingPlan").aggregate([{ $match: {}}, {$project: { timeStampMsec: 1, _id: 0 }}]).toArray((error, result) => {
       if (error) {
-        return response.status(500).send(error);
+        return res.status(500).send(error);
       }
       let states = []
       for (const state of result) {
@@ -56,7 +56,7 @@ function registerRestApi (db) {
   app.get('/latest', (req, res) => {
     db.collection("seatingPlan").find().sort({ timeStampMsec: -1 }).limit(1).toArray((error, result) => {
       if (error) {
-        return response.status(500).send(error);
+        return res.status(500).send(error);
       }
       if (result.length > 0) {
         res.status(200).send(result[0])
@@ -69,7 +69,7 @@ function registerRestApi (db) {
   app.get('/get-state-by-time/:timeStampMsec', (req, res) => {
     db.collection("seatingPlan").find( { timeStampMsec: parseInt(req.params.timeStampMsec) } ).toArray((error, result) => {
       if (error) {
-        return response.status(500).send(error);
+        return res.status(500).send(error);
       }
       res.status(200).send(result)
     })
@@ -77,7 +77,6 @@ function registerRestApi (db) {
 
   app.delete('/delete-state-by-time/:timeStampMsec', (req, res) => {
     const timeStampMsec = req.params.timeStampMsec
-    const storePath = timeStampMsecToPath(timeStampMsec)
   })
 
   return app
