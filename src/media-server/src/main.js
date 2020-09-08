@@ -627,23 +627,24 @@ async function walk (func, opt) {
  * @returns {Promise.<Object>}
  */
 async function update (full = false) {
-  const gitSettings = {
-    cwd: basePath,
-    encoding: 'utf-8'
-  }
-
   /**
    * Run git pull on the `basePath`
    */
   function gitPull () {
     const gitPull = childProcess.spawnSync(
       'git', ['pull'],
-      gitSettings
+      {
+        cwd: basePath,
+        encoding: 'utf-8'
+      }
     )
     if (gitPull.status !== 0) throw new Error(`git pull exits with an non-zero status code.`)
   }
   if (full) gitPull()
-  const gitRevParse = childProcess.spawnSync('git', ['rev-parse', 'HEAD'], gitSettings)
+  const gitRevParse = childProcess.spawnSync('git', ['rev-parse', 'HEAD'], {
+    cwd: basePath,
+    encoding: 'utf-8'
+  })
   const lastCommitId = gitRevParse.stdout.replace(/\n$/, '')
   await database.connect()
   await database.initialize()
@@ -1255,7 +1256,7 @@ function registerMediaRestApi () {
         return
       }
       // type
-      query.type = validateMediaType(query.type)
+      query.type = validateMediaType(query.type.toString())
 
       // method
       const methods = ['exactMatch', 'substringSearch']
@@ -1345,12 +1346,12 @@ function registerMediaRestApi () {
       if (!query.id) throw new Error('You have to specify an ID (?id=myfile).')
       if (!query.with) query.with = 'editor'
       if (!query.type) query.type = 'presentations'
-      query.archive = ('archive' in query)
-      query.create = ('create' in query)
+      const archive = ('archive' in query)
+      const create = ('create' in query)
       if (query.with === 'editor') {
-        res.json(await openEditor(query.id, query.type))
+        res.json(await openEditor(query.id.toString(), query.type.toString()))
       } else if (query.with === 'folder') {
-        res.json(await openParentFolder(query.id, query.type, query.archive, query.create))
+        res.json(await openParentFolder(query.id.toString(), query.type.toString(), archive, create))
       }
     } catch (error) {
       next(error)
@@ -1457,6 +1458,7 @@ const main = function () {
   return runRestApi(port)
 }
 
+// @ts-ignore
 if (require.main === module) {
   main()
 }
