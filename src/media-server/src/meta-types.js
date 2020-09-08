@@ -212,12 +212,12 @@ function formatFilePath (data, oldPath) {
   if (!relPath) throw new Error(`The relPath() function has to return a string for meta type “${typeName}”`)
   // To avoid confusion with class MediaFile in the module @bldr/media-client
   delete data.extension
-  let basePath = typeSpec.basePath ? typeSpec.basePath : config.mediaServer.basePath
+  const basePath = typeSpec.basePath ? typeSpec.basePath : config.mediaServer.basePath
   return path.join(basePath, relPath)
 }
 
 /**
- * @param {Mixed} value
+ * @param {(String|Boolean|Number)} value
  *
  * @returns {Boolean}
  */
@@ -234,7 +234,7 @@ function isValue (value) {
  * @param {Object} data - An object containing some meta data.
  * @param {Function} func - A function with the arguments `spec`
  *   (property specification), `value`, `propName`
- * @param {module:@bldr/media-server/meta-types~typeSpec} - The specification
+ * @param {module:@bldr/media-server/meta-types~typeSpec} typeSpec - The specification
  *   of one meta type.
  * @param {Boolean} replaceValues - Replace the values in the metadata object.
  */
@@ -270,7 +270,7 @@ function isPropertyDerived (propSpec) {
  * with derived values.
  *
  * @param {Object} data - An object containing some meta data.
- * @param {module:@bldr/media-server/meta-types~typeSpec} - The specification
+ * @param {module:@bldr/media-server/meta-types~typeSpec} typeSpec - The specification
  *   of one meta type.
  *
  * @returns {Object}
@@ -345,7 +345,7 @@ function formatProps (data, typeSpec) {
 
 /**
  * @param {Object} data - An object containing some meta data.
- * @param {module:@bldr/media-server/meta-types~typeSpec} - The specification
+ * @param {module:@bldr/media-server/meta-types~typeSpec} typeSpec - The specification
  *   of one meta type.
  */
 function validateProps (data, typeSpec) {
@@ -369,7 +369,7 @@ function validateProps (data, typeSpec) {
  * Delete properties from the data.
  *
  * @param {Object} data - An object containing some meta data.
- * @param {module:@bldr/media-server/meta-types~typeSpec} - The specification
+ * @param {module:@bldr/media-server/meta-types~typeSpec} typeSpec - The specification
  *   of one meta type.
  */
 function removeProps (data, typeSpec) {

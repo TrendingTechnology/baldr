@@ -18,7 +18,7 @@
 const path = require('path')
 
 // Third party packages.
-const { v4: uuidv4 } = require('uuid');
+const { v4: uuidv4 } = require('uuid')
 
 // Project packages.
 const { deasciify, idify } = require('./helper.js')
@@ -30,7 +30,7 @@ const { mediaUriRegExp } = require('@bldr/core-browser')
  *
  * @param {String} value
  *
- * @returns {Boolean}
+ * @returns {RegExpMatchArray}
  */
 function validateDate (value) {
   return value.match(/\d{4,}-\d{2,}-\d{2,}/)
@@ -41,7 +41,7 @@ function validateDate (value) {
  *
  * @param {String} value
  *
- * @returns {Boolean}
+ * @returns {RegExpMatchArray}
  */
 function validateMediaId (value) {
   return value.match(mediaUriRegExp)
@@ -52,7 +52,7 @@ function validateMediaId (value) {
  *
  * @param {String} value
  *
- * @returns {Boolean}
+ * @returns {RegExpMatchArray}
  */
 function validateUuid (value) {
   return value.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89AB][0-9a-f]{3}-[0-9a-f]{12}$/i)

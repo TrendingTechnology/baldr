@@ -70,7 +70,6 @@ const os = require('os')
 // Third party packages.
 const cors = require('cors')
 const express = require('express')
-const MongoClient = require('mongodb').MongoClient
 const yaml = require('js-yaml')
 
 // Project packages.
@@ -83,6 +82,8 @@ const registerSeatingPlan = require('./seating-plan.js').registerRestApi
 const metaTypes = require('./meta-types.js')
 const helper = require('./helper.js')
 const { HierarchicalFolderTitles, FolderTitleTree } = require('./titles.js')
+const { Database } = require('./database.js')
+
 const { asciify, deasciify } = helper
 
 const packageJson = require('../package.json')
@@ -102,44 +103,10 @@ const basePath = config.mediaServer.basePath
  */
 let errors = []
 
-/* MongoDb setup **************************************************************/
-
 /**
- *
+ * @type {module:@bldr/media-server/database.Database}
  */
-function setupMongoUrl () {
-  const conf = config.databases.mongodb
-  const user = encodeURIComponent(conf.user)
-  const password = encodeURIComponent(conf.password)
-  const authMechanism = 'DEFAULT'
-  const url = `mongodb://${user}:${password}@${conf.url}/${conf.dbName}?authMechanism=${authMechanism}`
-  return url
-}
-
-/**
- *
- */
-const mongoClient = new MongoClient(
-  setupMongoUrl(),
-  { useNewUrlParser: true, useUnifiedTopology: true }
-)
-
-/**
- * The MongoDB Db instance
- * @type {Object}
- */
-let db
-
-/**
- * @return {Promise}
- */
-async function connectDb () {
-  if (!db) {
-    await mongoClient.connect()
-    db = mongoClient.db(config.databases.mongodb.dbName)
-    return db
-  }
-}
+let database
 
 /* Helper functions ***********************************************************/
 
@@ -529,6 +496,7 @@ function isPresentation (filePath) {
 
 /**
  * @param {String} filePath
+ * @param {String} mediaType
  */
 async function insertObjectIntoDb (filePath, mediaType) {
   let object
@@ -541,7 +509,7 @@ async function insertObjectIntoDb (filePath, mediaType) {
       object = new Asset(filePath)
     }
     object = object.prepareForInsert()
-    await db.collection(mediaType).insertOne(object)
+    await database.db.collection(mediaType).insertOne(object)
   } catch (error) {
     console.log(error)
     let relPath = filePath.replace(config.mediaServer.basePath, '')
@@ -654,6 +622,8 @@ async function walk (func, opt) {
 /**
  * Update the media server.
  *
+ * @param {Boolean} full - Update with git pull.
+ *
  * @returns {Promise.<Object>}
  */
 async function update (full = false) {
@@ -675,11 +645,11 @@ async function update (full = false) {
   if (full) gitPull()
   const gitRevParse = childProcess.spawnSync('git', ['rev-parse', 'HEAD'], gitSettings)
   const lastCommitId = gitRevParse.stdout.replace(/\n$/, '')
-  await connectDb()
-  await initializeDb()
-  await flushMediaFiles()
+  await database.connect()
+  await database.initialize()
+  await database.flushMediaFiles()
   const begin = new Date().getTime()
-  await db.collection('updates').insertOne({ begin: begin, end: 0 })
+  await database.db.collection('updates').insertOne({ begin: begin, end: 0 })
   await walk({
     everyFile: (filePath) => {
       // Delete temporary files.
@@ -708,15 +678,15 @@ async function update (full = false) {
   })
 
   // .replaceOne and upsert: Problems with merge objects?
-  await db.collection('folderTitleTree').deleteOne({ id: 'root' })
-  await db.collection('folderTitleTree').insertOne(
+  await database.db.collection('folderTitleTree').deleteOne({ id: 'root' })
+  await database.db.collection('folderTitleTree').insertOne(
     {
       id: 'root',
       tree: folderTitleTree.get()
     }
   )
   const end = new Date().getTime()
-  await db.collection('updates').updateOne({ begin: begin }, { $set: { end: end, lastCommitId } })
+  await database.db.collection('updates').updateOne({ begin: begin }, { $set: { end: end, lastCommitId } })
   return {
     finished: true,
     begin,
@@ -725,105 +695,6 @@ async function update (full = false) {
     lastCommitId,
     errors
   }
-}
-
-/* MongoDb Management *********************************************************/
-
-/**
- * List all collection names in an array.
- *
- * @returns An array of collection names.
- */
-async function listCollectionNames () {
-  const collections = await db.listCollections().toArray()
-  const names = []
-  for (const collection of collections) {
-    names.push(collection.name)
-  }
-  return names
-}
-
-/**
- * @returns {Promise}
- */
-async function initializeDb () {
-  let collections = await listCollectionNames()
-  if (!collections.includes('assets')) {
-    const assets = await db.createCollection('assets')
-    await assets.createIndex({ path: 1 }, { unique: true })
-    await assets.createIndex({ id: 1 }, { unique: true })
-    await assets.createIndex({ uuid: 1 }, { unique: true })
-  }
-
-  if (!collections.includes('presentations')) {
-    const presentations = await db.createCollection('presentations')
-    await presentations.createIndex({ id: 1 }, { unique: true })
-  }
-
-  if (!collections.includes('updates')) {
-    const updates = await db.createCollection('updates')
-    await updates.createIndex({ begin: 1 })
-  }
-
-  if (!collections.includes('folderTitleTree')) {
-    // https://stackoverflow.com/a/35868933
-    const folderTitleTree = await db.createCollection('folderTitleTree')
-    await folderTitleTree.createIndex({ id: 1 }, { unique: true })
-  }
-
-  if (!collections.includes('seatingPlan')) {
-    const seatingPlan = await db.createCollection('seatingPlan')
-    await seatingPlan.createIndex({ timeStampMsec: 1 }, { unique: true })
-  }
-
-  const result = {}
-  collections = await db.listCollections().toArray()
-  for (const collection of collections) {
-    const indexes = await db.collection(collection.name).listIndexes().toArray()
-    result[collection.name] = {
-      name: collection.name,
-      indexes: {}
-    }
-    for (const index of indexes) {
-      result[collection.name].indexes[index.name] = index.unique
-    }
-  }
-  return result
-}
-
-/**
- * @returns {Promise}
- */
-async function dropDb () {
-  const collections = await db.listCollections().toArray()
-  const droppedCollections = []
-  for (const collection of collections) {
-    await db.dropCollection(collection.name)
-    droppedCollections.push(collection.name)
-  }
-  return {
-    droppedCollections
-  }
-}
-
-/**
- * @returns {Promise}
- */
-async function reInitializeDb () {
-  const resultdropDb = await dropDb()
-  const resultInitializeDb = await initializeDb()
-  return {
-    resultdropDb,
-    resultInitializeDb
-  }
-}
-
-/**
- * @returns {Promise}
- */
-async function flushMediaFiles () {
-  await db.collection('assets').deleteMany({})
-  await db.collection('presentations').deleteMany({})
 }
 
 /* Express Rest API ***********************************************************/
@@ -918,7 +789,7 @@ function validateMediaType (mediaType) {
  */
 async function getAbsPathFromId (id, mediaType = 'presentations') {
   mediaType = validateMediaType(mediaType)
-  const result = await db.collection(mediaType).find({ id: id }).next()
+  const result = await database.db.collection(mediaType).find({ id: id }).next()
   if (!result) throw new Error(`Can not find media file with the type “${mediaType}” and the id “${id}”.`)
   let relPath
   if (mediaType === 'assets') {
@@ -1274,8 +1145,8 @@ function mirrorFolderStructure (currentPath) {
  * Group=1000
  * ```
  *
- * @param {String} - Name or path of an executable.
- * @param {String} - The path of a file or a folder.
+ * @param {String} executable - Name or path of an executable.
+ * @param {String} filePath - The path of a file or a folder.
  *
  * @see node module on npmjs.org “open”
  * @see {@link https://unix.stackexchange.com/a/537848}
@@ -1349,7 +1220,8 @@ async function openParentFolder (id, mediaType, archive, create) {
 /**
  * Register the express js rest api in a giant function.
  */
-function registerRestApi () {
+function registerMediaRestApi () {
+  const db = database.db
   // https://stackoverflow.com/a/38427476/10193818
   function escapeRegex (text) {
     return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&')
@@ -1388,7 +1260,7 @@ function registerRestApi () {
       // method
       const methods = ['exactMatch', 'substringSearch']
       if (!('method' in query)) query.method = 'substringSearch'
-      if (!methods.includes(query.method)) {
+      if (!methods.includes(query.method.toString())) {
         throw new Error(`Unkown method “${query.method}”! Allowed methods: ${methods}`)
       }
 
@@ -1398,7 +1270,7 @@ function registerRestApi () {
       // result
       if (!('result' in query)) query.result = 'fullObjects'
 
-      await connectDb()
+      await database.connect()
       const collection = db.collection(query.type)
 
       // find
@@ -1452,7 +1324,7 @@ function registerRestApi () {
 
   app.get('/mgmt/flush', async (req, res, next) => {
     try {
-      await flushMediaFiles()
+      await database.flushMediaFiles()
       res.json({ status: 'ok' })
     } catch (error) {
       next(error)
@@ -1461,7 +1333,7 @@ function registerRestApi () {
 
   app.get('/mgmt/init', async (req, res, next) => {
     try {
-      res.json(await initializeDb())
+      res.json(await database.initialize())
     } catch (error) {
       next(error)
     }
@@ -1487,7 +1359,7 @@ function registerRestApi () {
 
   app.get('/mgmt/re-init', async (req, res, next) => {
     try {
-      res.json(await reInitializeDb())
+      res.json(await database.reInitialize())
     } catch (error) {
       next(error)
     }
@@ -1495,7 +1367,7 @@ function registerRestApi () {
 
   app.get('/mgmt/update', async (req, res, next) => {
     try {
-      res.json(await update())
+      res.json(await update(database))
       // Clear error message store.
       errors = []
     } catch (error) {
@@ -1537,17 +1409,18 @@ function registerRestApi () {
  *
  * @param {Number} port - A TCP port.
  */
- async function runRestApi (port) {
+async function runRestApi (port) {
   const app = express()
 
-  db = await connectDb()
-  await initializeDb()
+  database = new Database()
+  await database.connect()
+  await database.initialize()
 
   app.use(cors())
   app.use(express.json())
 
-  app.use('/seating-plan', registerSeatingPlan(db))
-  app.use('/media', registerRestApi())
+  app.use('/seating-plan', registerSeatingPlan(database))
+  app.use('/media', registerMediaRestApi())
 
   const helpMessages = {
     version: {
@@ -1604,7 +1477,7 @@ module.exports = {
   mirrorFolderStructure,
   openFolderWithArchives,
   openWith,
-  registerRestApi,
+  registerMediaRestApi,
   walk,
   runRestApi
 }

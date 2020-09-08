@@ -11,9 +11,10 @@ const express = require('express')
 const packageJson = require('../package.json')
 
 /**
- *
+ * @param {module:@bldr/media-server/database.Database} database
  */
-function registerRestApi(db) {
+function registerRestApi (database) {
+  const db = database.db
   const app = express()
 
   app.get('/version', (req, res) => {
@@ -30,7 +31,7 @@ function registerRestApi(db) {
       res.sendStatus(404)
     }
 
-    db.collection("seatingPlan").insertOne(body)
+    db.collection('seatingPlan').insertOne(body)
 
     const responseMessage = {
       success: body.timeStampMsec,
@@ -41,11 +42,11 @@ function registerRestApi(db) {
   })
 
   app.get('/get-states', (req, res) => {
-    db.collection("seatingPlan").aggregate([{ $match: {} }, { $project: { timeStampMsec: 1, _id: 0 } }]).toArray((error, result) => {
+    db.collection('seatingPlan').aggregate([{ $match: {} }, { $project: { timeStampMsec: 1, _id: 0 } }]).toArray((error, result) => {
       if (error) {
-        return res.status(500).send(error);
+        return res.status(500).send(error)
       }
-      let states = []
+      const states = []
       for (const state of result) {
         states.push(state.timeStampMsec)
       }
@@ -54,7 +55,7 @@ function registerRestApi(db) {
   })
 
   app.get('/latest', (req, res) => {
-    db.collection("seatingPlan").find().sort({ timeStampMsec: -1 }).limit(1).toArray((error, result) => {
+    db.collection('seatingPlan').find().sort({ timeStampMsec: -1 }).limit(1).toArray((error, result) => {
       if (error) {
         return res.status(500).send(error)
       }
@@ -67,7 +68,7 @@ function registerRestApi(db) {
   })
 
   app.get('/get-state-by-time/:timeStampMsec', (req, res) => {
-    db.collection("seatingPlan").find({ timeStampMsec: parseInt(req.params.timeStampMsec) }).toArray((error, result) => {
+    db.collection('seatingPlan').find({ timeStampMsec: parseInt(req.params.timeStampMsec) }).toArray((error, result) => {
       if (error) {
         return res.status(500).send(error)
       }
@@ -76,7 +77,7 @@ function registerRestApi(db) {
   })
 
   app.delete('/delete-state-by-time/:timeStampMsec', (req, res) => {
-    const timeStampMsec = req.params.timeStampMsec
+    // const timeStampMsec = req.params.timeStampMsec
   })
 
   return app
