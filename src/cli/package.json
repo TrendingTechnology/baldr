@@ -37,7 +37,8 @@
     "music-metadata": "7.0.2",
     "node-fetch": "^2.6.1",
     "ora": "5.0.0",
-    "webfont": "^9.0.0"
+    "webfont": "^9.0.0",
+    "csv-parser": "2.3.3"
   },
   "bin": {
     "baldr_cli.js": "./src/main.js"

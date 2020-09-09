@@ -140,6 +140,7 @@ function readFile (filePath) {
 }
 
 /**
+ * Write some content to a file.
  *
  * @param {String} filePath
  * @param {String} content
