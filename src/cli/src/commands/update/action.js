@@ -14,7 +14,7 @@ async function action (what, cmdObj) {
 
   cmd.startSpin()
 
-  opts = {
+  const opts = {
     remote: true,
     local: true,
     api: true,
