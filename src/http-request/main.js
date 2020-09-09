@@ -27,18 +27,21 @@ const restEndPoints = {
 
 /**
  * A wrapper around Axios.
- *
- * @param {string} urlFillIn - A URL segment that is inserted between the base
- * URL and the last part of  the URL. For example
- *
- * - `baseUrl`: `localhost`
- * - `urlFillIn`: `/api/media`
- * - `url`: `query`
- *
- * results in the URL `http://localhost/api/media/query`.
  */
 export class HttpRequest {
-  constructor (urlFillIn) {
+  /**
+   * @param {String} urlFillIn - A URL segment that is inserted between the base
+   * URL and the last part of  the URL. For example
+   *
+   * - `baseUrl`: `localhost`
+   * - `urlFillIn`: `/api/media`
+   * - `url`: `query`
+   *
+   * results in the URL `http://localhost/api/media/query`.
+   *
+   * @param {Boolean} remote - Connect to a remote REST endpoint.
+   */
+  constructor (urlFillIn, remote = false) {
     /**
      * A URL segment that is inserted between the base URL and the last part of
      * the URL. For example
@@ -60,7 +63,7 @@ export class HttpRequest {
      */
     this.baseUrl = null
 
-    if (location.hostname === 'localhost') {
+    if (location.hostname === 'localhost' && !remote) {
       this.baseUrl = `${location.protocol}//${restEndPoints.local.domain}`
     } else {
       this.baseUrl = `${location.protocol}//${restEndPoints.remote.domain}`
@@ -70,6 +73,10 @@ export class HttpRequest {
       baseURL: this.baseUrl,
       timeout: 10000,
       crossDomain: true
+    }
+
+    if (remote) {
+      axiosConfig.auth = restEndPoints.remote.auth
     }
 
     /**

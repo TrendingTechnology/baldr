@@ -5,6 +5,7 @@ import { formatToLocalDateTime } from '../../lib.js'
 import { HttpRequest } from '@bldr/http-request'
 
 const httpRequest = new HttpRequest('/api/seating-plan')
+const httpRequestRemote = new HttpRequest('/api/seating-plan', true)
 
 class InitState {
   constructor () {
@@ -179,13 +180,14 @@ const actions = {
     }
   },
   saveToExternalStorage ({ getters }) {
-    return httpRequest.request({ method: 'post', url: 'save-state', data: getters.exportStateObject }).catch(() => true)
+    return httpRequestRemote.request({ method: 'post', url: 'save-state', data: getters.exportStateObject }).catch(() => true)
   },
-  saveToLocalStorage: ({ commit, getters }) => {
+  saveToLocalStorage: async ({ commit, getters }) => {
     const state = getters.exportStateObject
     const stateString = JSON.stringify(state)
     localStorage.setItem('latest', state.timeStampMsec)
     localStorage.setItem(`state_${state.timeStampMsec}`, stateString)
+    await httpRequest.request({ method: 'post', url: 'save-state', data: getters.exportStateObject }).catch(() => true)
     commit('setStateChanged', false)
   }
 }
