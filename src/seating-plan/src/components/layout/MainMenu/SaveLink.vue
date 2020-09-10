@@ -1,6 +1,6 @@
 <template>
   <material-icon
-    :disabled="!stateChanged"
+    :display="!stateChanged ? 'disabled' : 'normal'"
     name="save"
     @click.native="save"
     title="speichern"

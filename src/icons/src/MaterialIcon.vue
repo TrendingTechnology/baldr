@@ -73,7 +73,6 @@ export default {
     classes () {
       let classes = ['baldr-icon', 'vc_material_icon']
       classes.push(`baldr-icon_outline_${this.outline}`)
-      classes.push(`baldr-icon_display_${this.display}`)
       classes.push(`baldr-icon_${this.name}`)
       if (this.outline !== 'icon') {
         classes.push(`${this.color}`)
@@ -81,6 +80,7 @@ export default {
       } else {
         classes.push(`text-${this.color}`)
       }
+      classes.push(`baldr-icon_display_${this.display}`)
       return classes
     },
     warningText () {
@@ -89,15 +89,22 @@ export default {
         console.warn(message)
         return message
       }
+    },
+    styleObject () {
+      const style = {
+        fontSize: this.size
+      }
+      if (this.display === 'disabled') {
+        style.opacity = 0.3
+      }
+      return style
     }
   },
   render: function (createElement) {
     let elementName = 'div'
     const attributes = {
       class: this.classes,
-      style: {
-        fontSize: this.size
-      }
+      style: this.styleObject,
     }
     if (this.href) {
       elementName = 'a'
