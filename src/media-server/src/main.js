@@ -292,6 +292,11 @@ class Asset extends MediaFile {
 
     const data = this.readYaml_(this.infoFile_)
     this.importProperties(data)
+    /**
+     * Indicates if the asset has a preview image.
+     * @type {Boolean}
+     */
+    this.previewImage = false
   }
 
   /**
@@ -302,11 +307,7 @@ class Asset extends MediaFile {
     const previewImage = `${this.absPath_}_preview.jpg`
     this.assetType = assetTypes.extensionToType(this.extension)
     if (fs.existsSync(previewImage)) {
-      /**
-       * The absolute path of the preview image.
-       * @type {string}
-       */
-      this.previewImage = ''
+      this.previewImage = true
     }
     this.detectMultiparts_()
     return this
