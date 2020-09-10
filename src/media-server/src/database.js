@@ -24,6 +24,35 @@ class Database {
     const url = `mongodb://${user}:${password}@${conf.url}/${conf.dbName}?authMechanism=${authMechanism}`
 
     /**
+     * @type {Object}
+     */
+    this.schema = {
+      assets: {
+        indexes: [
+          { field: 'path', unique: true },
+          { field: 'id', unique: true },
+          { field: 'uuid', unique: true }
+        ]
+      },
+      presentations: {
+        indexes: [
+          { field: 'id', unique: true }
+        ]
+      },
+      updates: {
+        indexes: [
+          { field: 'begin', unique: false }
+        ]
+      },
+      seatingPlan: {
+        indexes: [
+          { timeStampMsec: 'path', unique: true }
+        ]
+      }
+    }
+
+    /**
+     * @type {mongodb.MongoClient}
      * @private
      */
     this.mongoClient_ = new mongodb.MongoClient(
@@ -32,7 +61,7 @@ class Database {
     )
 
     /**
-     * @type{mongodb.Db}
+     * @type {mongodb.Db}
      */
     this.db = null
   }
@@ -50,7 +79,7 @@ class Database {
   /**
    * List all collection names in an array.
    *
-   * @returns An array of collection names.
+   * @returns {Promise.<Array>} An array of collection names.
    */
   async listCollectionNames () {
     const collections = await this.db.listCollections().toArray()
@@ -62,36 +91,22 @@ class Database {
   }
 
   /**
-   * @returns {Promise}
+   * Create the collections with indexes.
+   *
+   * @returns {Promise.<Object>}
    */
   async initialize () {
     let collections = await this.listCollectionNames()
-    if (!collections.includes('assets')) {
-      const assets = await this.db.createCollection('assets')
-      await assets.createIndex({ path: 1 }, { unique: true })
-      await assets.createIndex({ id: 1 }, { unique: true })
-      await assets.createIndex({ uuid: 1 }, { unique: true })
-    }
 
-    if (!collections.includes('presentations')) {
-      const presentations = await this.db.createCollection('presentations')
-      await presentations.createIndex({ id: 1 }, { unique: true })
-    }
-
-    if (!collections.includes('updates')) {
-      const updates = await this.db.createCollection('updates')
-      await updates.createIndex({ begin: 1 })
-    }
-
-    if (!collections.includes('folderTitleTree')) {
-      // https://stackoverflow.com/a/35868933
-      const folderTitleTree = await this.db.createCollection('folderTitleTree')
-      await folderTitleTree.createIndex({ id: 1 }, { unique: true })
-    }
-
-    if (!collections.includes('seatingPlan')) {
-      const seatingPlan = await this.db.createCollection('seatingPlan')
-      await seatingPlan.createIndex({ timeStampMsec: 1 }, { unique: true })
+    // https://stackoverflow.com/a/35868933
+    for (const collectionName in this.schema) {
+      if (!collections.includes(collectionName)) {
+        const collection = await this.db.createCollection(collectionName)
+        for (const schema of this.schema[collectionName]) {
+          const index = schema.index
+          await collection.createIndex({ [index.field]: 1 }, { unique: index.unique })
+        }
+      }
     }
 
     const result = {}
@@ -110,7 +125,9 @@ class Database {
   }
 
   /**
-   * @returns {Promise}
+   * Drop all collections.
+   *
+   * @returns {Promise.<Object>}
    */
   async drop () {
     const collections = await this.db.listCollections().toArray()
@@ -125,7 +142,9 @@ class Database {
   }
 
   /**
-   * @returns {Promise}
+   * Re-Initialize the MongoDB database (Drop all collections and initialize).
+   *
+   * @returns {Promise.<Object>}
    */
   async reInitialize () {
     const resultdropDb = await this.drop()
@@ -137,11 +156,38 @@ class Database {
   }
 
   /**
-   * @returns {Promise}
+   * Delete all media files (assets, presentations) from the database.
+   *
+   * @returns {Promise.<Object>}
    */
   async flushMediaFiles () {
+    const countAssets = await this.assets.countDocuments()
+    const countPresentations = await this.presentations.countDocuments()
     await this.db.collection('assets').deleteMany({})
     await this.db.collection('presentations').deleteMany({})
+    return {
+      countAssets, countPresentations
+    }
+  }
+
+  get assets () {
+    return this.db.collection('assets')
+  }
+
+  get presentations () {
+    return this.db.collection('presentations')
+  }
+
+  get updates () {
+    return this.db.collection('updates')
+  }
+
+  get folderTitleTree () {
+    return this.db.collection('folderTitleTree')
+  }
+
+  get seatingPlan () {
+    return this.db.collection('seatingPlan')
   }
 }
 

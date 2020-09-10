@@ -14,7 +14,6 @@ const packageJson = require('../package.json')
  * @param {module:@bldr/media-server/database.Database} database
  */
 function registerRestApi (database) {
-  const db = database.db
   const app = express()
 
   app.get('/version', (req, res) => {
@@ -31,7 +30,7 @@ function registerRestApi (database) {
       res.sendStatus(404)
     }
 
-    db.collection('seatingPlan').insertOne(body)
+    database.seatingPlan.insertOne(body)
 
     const responseMessage = {
       success: body.timeStampMsec,
@@ -42,7 +41,7 @@ function registerRestApi (database) {
   })
 
   app.get('/get-states', (req, res) => {
-    db.collection('seatingPlan').aggregate([{ $match: {} }, { $project: { timeStampMsec: 1, _id: 0 } }]).toArray((error, result) => {
+    database.seatingPlan.aggregate([{ $match: {} }, { $project: { timeStampMsec: 1, _id: 0 } }]).toArray((error, result) => {
       if (error) {
         return res.status(500).send(error)
       }
@@ -55,7 +54,7 @@ function registerRestApi (database) {
   })
 
   app.get('/latest', (req, res) => {
-    db.collection('seatingPlan').find().sort({ timeStampMsec: -1 }).limit(1).toArray((error, result) => {
+    database.seatingPlan.find().sort({ timeStampMsec: -1 }).limit(1).toArray((error, result) => {
       if (error) {
         return res.status(500).send(error)
       }
@@ -68,7 +67,7 @@ function registerRestApi (database) {
   })
 
   app.get('/get-state-by-time/:timeStampMsec', (req, res) => {
-    db.collection('seatingPlan').find({ timeStampMsec: parseInt(req.params.timeStampMsec) }).toArray((error, result) => {
+    database.seatingPlan.find({ timeStampMsec: parseInt(req.params.timeStampMsec) }).toArray((error, result) => {
       if (error) {
         return res.status(500).send(error)
       }
@@ -77,7 +76,20 @@ function registerRestApi (database) {
   })
 
   app.delete('/delete-state-by-time/:timeStampMsec', (req, res) => {
-    // const timeStampMsec = req.params.timeStampMsec
+    database.seatingPlan.deleteOne({ timeStampMsec: parseInt(req.params.timeStampMsec) }, {}, (error, result) => {
+      if (error) {
+        return res.status(500).send(error)
+      }
+      const message = {
+        deletedCount: result.deletedCount,
+        timeStampMsec: parseInt(req.params.timeStampMsec)
+      }
+      if (result.deletedCount === 1) {
+        return res.status(200).send(message)
+      } else {
+        return res.status(500).send(message)
+      }
+    })
   })
 
   return app

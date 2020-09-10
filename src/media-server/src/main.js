@@ -1325,8 +1325,7 @@ function registerMediaRestApi () {
 
   app.get('/mgmt/flush', async (req, res, next) => {
     try {
-      await database.flushMediaFiles()
-      res.json({ status: 'ok' })
+      res.json(await database.flushMediaFiles())
     } catch (error) {
       next(error)
     }
