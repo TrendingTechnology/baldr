@@ -1,0 +1,32 @@
+{
+  "name": "baldr-electron-app",
+  "version": "0.1.0",
+  "description": "A electron wrapper for the LAMP Vue app.",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder"
+  },
+  "author": {
+    "name": "Josef Friedrich",
+    "email": "josef@friedrich.rocks",
+    "url": "https://josef.friedrich.rocks"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
+  "devDependencies": {
+    "electron": "^10.1.1",
+    "@electron-forge/maker-deb": "6.0.0-beta.53"
+  },
+  "build": {
+    "appId": "rocks.friedrich.baldr",
+    "productName": "baldr",
+    "asar": false,
+    "linux": {
+      "target": "deb",
+      "category": "Education",
+      "executableName": "baldr-lamp",
+      "icon": "../../logo.png"
+    }
+  }
+}
