@@ -27,7 +27,7 @@
       <div class="management-icons">
         <material-icon
           class="add"
-          v-if="gradeIsNotPlaced"
+          v-if="gradeIsNotPlaced && !person"
           name="account-plus"
           title="SchülerIn auf diesen Sitz platzieren"
           @click.native="openModalPersonSelect"

@@ -36,7 +36,7 @@ export default {
     this.$store.dispatch('checkApi')
   },
   mounted: function () {
-    this.$shortcuts.add('f f', () => { this.$fullscreen() }, 'Fullscreen')
+    this.$shortcuts.add('ctrl+f', () => { this.$fullscreen() }, 'Fullscreen')
     this.$shortcuts.add('ctrl+s', () => { this.$store.dispatch('save') }, 'save')
   }
 }
