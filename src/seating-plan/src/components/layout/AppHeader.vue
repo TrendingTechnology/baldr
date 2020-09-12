@@ -46,9 +46,7 @@ export default {
     }
 
     @media print {
-      header {
-        display: none;
-      }
+      display: none;
     }
   }
 </style>

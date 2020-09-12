@@ -119,7 +119,7 @@ export default {
     border: 1px solid $black;
     position: absolute;
 
-    [draggable="true"] {
+    &[draggable="true"] {
       cursor: grab;
     }
 
@@ -169,5 +169,4 @@ export default {
       z-index: -1;
     }
   }
-
 </style>

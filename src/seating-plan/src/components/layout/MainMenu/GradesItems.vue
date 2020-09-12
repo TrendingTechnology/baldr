@@ -23,19 +23,22 @@ export default {
 }
 </script>
 
-<style scoped>
-  .placed {
-    text-decoration: line-through;
-    color: grey;
-  }
-  ul {
-    list-style-type: none;
-    margin: 0;
-    padding-left: 0;
-    overflow: hidden;
-  }
-  ul li {
-    float: left;
-    padding: 0 0.3em;
+<style lang="scss">
+  .vc_grades_items {
+    .placed {
+      text-decoration: line-through;
+      color: grey;
+    }
+    ul {
+      list-style-type: none;
+      margin: 0;
+      padding-left: 0;
+      overflow: hidden;
+
+      li {
+        float: left;
+        padding: 0 0.3em;
+      }
+    }
   }
 </style>

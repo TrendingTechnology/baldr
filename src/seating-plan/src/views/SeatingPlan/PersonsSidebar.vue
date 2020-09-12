@@ -42,9 +42,7 @@ export default {
     white-space: nowrap;
 
     @media print {
-      #persons-sidebar {
-        display: none;
-      }
+      display: none;
     }
   }
 </style>

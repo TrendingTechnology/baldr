@@ -1,5 +1,5 @@
 <template>
-  <form @submit="createPerson" class="vc_form_add_person">
+  <form @submit.prevent="createPerson" class="vc_form_add_person">
     <input
       v-model="lastName"
       type="text"

@@ -1,5 +1,5 @@
 <template>
-  <div class="vc_seating_plan">
+  <div class="vc_plan_seats">
     <one-seat
       v-for="seat in seatPositions"
       :seat="seat"
@@ -16,7 +16,6 @@ import { mapGetters } from 'vuex'
 import OneSeat from './OneSeat.vue'
 
 const resizeObserver = new ResizeObserver(entries => {
-  console.log(entries)
   const elHeader = document.querySelector('#app > header')
   // Startpage has no footer
   const elFooter = document.querySelector('#app > footer')
@@ -61,14 +60,14 @@ export default {
 </script>
 
 <style lang="scss">
-  .vc_seating_plan {
+  .vc_plan_seats {
     width: 100%;
     position: relative;
     box-sizing: border-box;
     margin: 0 auto;
 
     @media print {
-      .seating-plan {
+      .vc_plan_seats {
         width: 100% !important;
         // Firefox
         height: 35em !important;

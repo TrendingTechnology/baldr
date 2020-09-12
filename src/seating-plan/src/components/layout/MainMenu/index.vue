@@ -88,7 +88,7 @@ export default {
     }
 
     @media print {
-      .main-menu {
+      .vc_main_menu {
         display: none
       }
     }

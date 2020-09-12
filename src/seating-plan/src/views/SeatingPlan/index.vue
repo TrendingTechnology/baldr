@@ -21,9 +21,9 @@ import { mapGetters } from 'vuex'
 // Components
 import PersonSelect from '@/components/PersonSelect.vue'
 import PersonsSidebar from './PersonsSidebar.vue'
-import PlanFooter from './Footer.vue'
-import PlanHeader from './Header.vue'
-import PlanSeats from './Seats.vue'
+import PlanFooter from './PlanFooter.vue'
+import PlanHeader from './PlanHeader.vue'
+import PlanSeats from './PlanSeats.vue'
 
 export default {
   name: 'SeatingPlanView',
@@ -67,7 +67,7 @@ export default {
       width: 100%;
     }
 
-    .people-list {
+    .vc_person_select {
       flex-basis: content;
     }
   }

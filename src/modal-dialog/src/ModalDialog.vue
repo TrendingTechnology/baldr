@@ -4,10 +4,10 @@
     class="vc_modal_dialog"
     v-show="isVisible"
   >
-    <div class="overlay" @click="hide(name)"/>
-    <div class="container" role="dialog">
-      <material-icon class="close" name="close" @click.native="hide(name)"/>
-      <div class="body">
+    <div class="dialog-overlay" @click="hide(name)"/>
+    <div class="dialog-container" role="dialog">
+      <material-icon class="dialog-close" name="close" @click.native="hide(name)"/>
+      <div class="dialog-body">
         <slot></slot>
       </div>
     </div>
@@ -94,7 +94,7 @@ export default {
     width: 100%;
     color: $black !important;
 
-    .container {
+    .dialog-container {
       box-sizing: border-box;
       height: 85%;
       position: fixed;
@@ -102,7 +102,7 @@ export default {
       z-index: 9999;
     }
 
-    .body {
+    .dialog-body {
       background-color: scale-color($white, $lightness: 30%);
       box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
       height: 95%;
@@ -112,7 +112,7 @@ export default {
       overflow-y: auto;
     }
 
-    .overlay {
+    .dialog-overlay {
       background-color: rgba(0, 0, 0, 0.5);
       height: 100%;
       left: 0;
@@ -122,7 +122,7 @@ export default {
       z-index: 9990;
     }
 
-    .close {
+    .dialog-close {
       position: absolute;
       top: 2vw;
       right: 2vw;

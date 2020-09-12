@@ -36,15 +36,15 @@ export default {
 
 <style lang="scss">
   .vc_persons_list_item {
-    [draggable="true"] {
+    &[draggable="true"] {
       cursor: grab;
     }
 
-    [draggable="true"]:hover {
+    &[draggable="true"]:hover {
       color: $red;
     }
 
-    [draggable="false"] {
+    &[draggable="false"] {
       text-decoration: line-through;
       color: $gray;
     }

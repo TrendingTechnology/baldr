@@ -14,8 +14,8 @@
 
 <script>
 // Components
-import GradesOverview from './GradesOverview'
-import MetaTable from './MetaTable'
+import GradesOverview from './GradesOverview.vue'
+import MetaTable from './MetaTable.vue'
 
 export default {
   name: 'StartPage',

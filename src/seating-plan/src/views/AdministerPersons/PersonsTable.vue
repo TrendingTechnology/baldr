@@ -1,5 +1,5 @@
 <template>
-  <table>
+  <table class="vc_persons_table">
     <persons-table-row
       v-for="(person, index) in persons()"
       :person="person"

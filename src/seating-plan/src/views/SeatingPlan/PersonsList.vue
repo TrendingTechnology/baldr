@@ -28,6 +28,8 @@ export default {
 
 <style lang="scss">
   .vc_persons_list {
-    font-size: 1.8vh;
+    font-size: 1.2vw;
+    padding-left: 3vw;
+    padding-right: 1vw;
   }
 </style>
