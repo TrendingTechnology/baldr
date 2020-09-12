@@ -5,6 +5,7 @@
     @dragstart="dragStart"
     :draggable="draggable"
     :class="{ placed: person.seatNo }"
+    class="vc_persons_list_item"
   >
     {{ person.lastName }}, {{ person.firstName }}
   </li>
@@ -33,17 +34,19 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-  [draggable="true"] {
-    cursor: grab;
-  }
+<style lang="scss">
+  .vc_persons_list_item {
+    [draggable="true"] {
+      cursor: grab;
+    }
 
-  [draggable="true"]:hover {
-    color: $red;
-  }
+    [draggable="true"]:hover {
+      color: $red;
+    }
 
-  [draggable="false"] {
-    text-decoration: line-through;
-    color: $gray;
+    [draggable="false"] {
+      text-decoration: line-through;
+      color: $gray;
+    }
   }
 </style>

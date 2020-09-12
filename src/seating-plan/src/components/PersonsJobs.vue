@@ -1,5 +1,5 @@
 <template>
-  <div class="persons-jobs">
+  <div class="vc_persons_jobs">
     <span v-for="job in jobsAsArray" :key="job.name">
       <material-icon
         v-if="hasPersonJob(person.id, job.name)"
@@ -33,8 +33,8 @@ export default {
 }
 </script>
 
-<style scoped>
-  .persons-jobs {
+<style lang="scss">
+  .vc_persons_jobs {
     display: inline-block;
   }
 </style>

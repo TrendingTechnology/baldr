@@ -1,5 +1,5 @@
 <template>
-  <ul class="main-menu">
+  <ul class="vc_main_menu">
 
     <li><grades-items inline/></li>
 
@@ -74,23 +74,23 @@ export default {
 }
 </script>
 
-<style scoped>
-  ul {
-    font-size: 0.8em;
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-  }
+<style lang="scss">
+  .vc_main_menu {
+      font-size: 0.8em;
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
 
-  li {
-    float: left;
-    padding: 0.3em;
-  }
+    li {
+      float: left;
+      padding: 0.3em;
+    }
 
-  @media print {
-    .main-menu {
-      display: none
+    @media print {
+      .main-menu {
+        display: none
+      }
     }
   }
 </style>

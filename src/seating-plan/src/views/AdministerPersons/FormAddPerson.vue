@@ -1,5 +1,5 @@
 <template>
-  <form @submit="createPerson">
+  <form @submit="createPerson" class="vc_form_add_person">
     <input
       v-model="lastName"
       type="text"
@@ -46,12 +46,12 @@ export default {
 }
 </script>
 
-<style scoped>
-  form {
+<style lang="scss">
+  .vc_form_add_person {
     padding-left: 1em;
-  }
 
-  input {
-    max-width: 5em;
+    input {
+      max-width: 5em;
+    }
   }
 </style>

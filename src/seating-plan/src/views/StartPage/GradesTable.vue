@@ -1,5 +1,5 @@
 <template>
-  <table>
+  <table class="vc_grades_table">
     <tr v-for="gradeName in gradeNames" :key="gradeName">
       <td
         contenteditable
@@ -65,9 +65,11 @@ export default {
 }
 </script>
 
-<style scoped>
-  .placed {
-    text-decoration: line-through;
-    color: grey;
+<style lang="scss">
+  .vc_grades_table {
+    .placed {
+      text-decoration: line-through;
+      color: grey;
+    }
   }
 </style>

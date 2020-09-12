@@ -1,5 +1,5 @@
 <template>
-  <header>
+  <header class="vc_app_header">
     <vue-headful :title="title"/>
     <router-link v-if="isNotHome" to='/' class="back-link" title="zurück">
       <material-icon name="arrow-left"/>
@@ -35,20 +35,20 @@ export default {
 }
 </script>
 
-<style scoped>
-  header {
+<style lang="scss">
+  .vc_app_header {
     display: inline-flex;
     width: 100%;
     justify-content: space-between;
-  }
 
-  header h1 {
-    padding-left: 2em;
-  }
+    h1 {
+      padding-left: 2em;
+    }
 
-  @media print {
-    header {
-      display: none;
+    @media print {
+      header {
+        display: none;
+      }
     }
   }
 </style>

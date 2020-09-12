@@ -13,7 +13,7 @@
 import { mapGetters } from 'vuex'
 
 // Components
-import PersonsTableRow from './PersonsTableRow'
+import PersonsTableRow from './PersonsTableRow.vue'
 
 export default {
   name: 'PersonsTable',

@@ -1,5 +1,5 @@
 <template>
-  <ol class="persons-list">
+  <ol class="vc_persons_list">
     <persons-list-item
       v-for="(person, index) in personsByGradeAsListSortedCurrent"
       :person="person"
@@ -13,7 +13,7 @@
 import { mapGetters } from 'vuex'
 
 // Components
-import PersonsListItem from './PersonsListItem'
+import PersonsListItem from './PersonsListItem.vue'
 
 export default {
   name: 'PersonsTable',
@@ -26,8 +26,8 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-  .persons-list {
+<style lang="scss">
+  .vc_persons_list {
     font-size: 1.8vh;
   }
 </style>

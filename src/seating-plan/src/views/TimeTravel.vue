@@ -1,5 +1,5 @@
 <template>
-  <main>
+  <main class="vc_time_travel">
     <section class="external">
       <h1>Extern</h1>
       <table>
@@ -72,12 +72,12 @@ export default {
 }
 </script>
 
-<style scoped>
-  main {
+<style lang="scss">
+  .vc_time_travel {
     display: flex;
-  }
 
-  section {
-    width: 100%;
+    section {
+      width: 100%;
+    }
   }
 </style>

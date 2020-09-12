@@ -4,6 +4,7 @@
     name="save"
     @click.native="save"
     title="speichern"
+    class="vc_save_link"
   />
 </template>
 

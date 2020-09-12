@@ -1,6 +1,6 @@
 <template>
   <div
-    class="seat"
+    class="vc_one_seat"
     :id=seat.no
     :style="style"
     :title="person.id"
@@ -114,59 +114,60 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-  .seat {
+<style lang="scss">
+  .vc_one_seat {
     border: 1px solid $black;
     position: absolute;
-  }
 
-  [draggable="true"] {
-    cursor: grab;
-  }
+    [draggable="true"] {
+      cursor: grab;
+    }
 
-  .first-name {
-    font-weight: bold;
-    text-align: center;
-  }
+    .first-name {
+      font-weight: bold;
+      text-align: center;
+    }
 
-  .last-name {
-    font-style: italic;
-    text-align: center;
-  }
+    .last-name {
+      font-style: italic;
+      text-align: center;
+    }
 
-  .jobs-of-person {
-    text-align: center;
-  }
+    .jobs-of-person {
+      text-align: center;
+    }
 
-  .dragover {
-    background-color: $red;
-  }
+    .dragover {
+      background-color: $red;
+    }
 
-  .icons {
-    width: 100%;
-    text-align: center;
-    position: absolute;
-    bottom: 0;
-    right: 0;
+    .icons {
+      width: 100%;
+      text-align: center;
+      position: absolute;
+      bottom: 0;
+      right: 0;
 
-    .jobs {
-      font-size: 0.8em;
+      .jobs {
+        font-size: 0.8em;
+      }
+    }
+
+    .icons {
+      display: none;
+    }
+
+    &:hover .icons {
+      display: block;
+      cursor: pointer;
+    }
+
+    .person-select-area {
+      cursor: pointer;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
     }
   }
 
-  .seat .icons {
-    display: none;
-  }
-
-  .seat:hover .icons {
-    display: block;
-    cursor: pointer;
-  }
-
-  .person-select-area {
-    cursor: pointer;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
-  }
 </style>

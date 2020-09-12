@@ -2,6 +2,7 @@
   <tr
     :title="person.id"
     :key="person.id"
+    class="vc_persons_table_row"
   >
     <td>
       {{ no }}.
@@ -39,7 +40,7 @@
 import { mapActions } from 'vuex'
 
 // Components
-import PersonsJobs from '@/components/PersonsJobs'
+import PersonsJobs from '@/components/PersonsJobs.vue'
 
 export default {
   name: 'PersonsTableRow',

@@ -1,5 +1,5 @@
 <template>
-  <main class="start-page">
+  <main class="vc_start_page">
     <section>
       <h2>Sitzpläne</h2>
       <grades-overview/>
@@ -26,8 +26,8 @@ export default {
 }
 </script>
 
-<style scoped>
-  main {
+<style lang="scss">
+  .vc_start_page {
     display: flex;
     justify-content: space-around;
   }

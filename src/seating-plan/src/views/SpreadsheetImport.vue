@@ -1,5 +1,5 @@
 <template>
-  <main class="import-persons">
+  <main class="vc_spreadsheet_import">
     <pre>Familienname\tVorname\tKlasse
 Insgesamt:
 Mustermann\tMax\t\t05a</pre>

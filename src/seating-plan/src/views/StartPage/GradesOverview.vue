@@ -1,5 +1,5 @@
 <template>
-  <div class="grades-list">
+  <div class="vc_grades_overview">
     <grades-table/>
     <form @submit="createGrade">
       <input
@@ -16,7 +16,7 @@
 
 <script>
 // Components
-import GradesTable from './GradesTable'
+import GradesTable from './GradesTable.vue'
 
 export default {
   name: 'GradesOverview',

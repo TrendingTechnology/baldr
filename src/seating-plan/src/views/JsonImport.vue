@@ -1,5 +1,5 @@
 <template>
-  <main>
+  <main class="vc_json_import">
     <input type="file" @change="readTextFile"/>
   </main>
 </template>

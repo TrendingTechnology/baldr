@@ -1,5 +1,5 @@
 <template>
-  <table>
+  <table class="vc_meta_table">
     <tr>
       <td><span class="important">Schule</span></td>
       <td contenteditable @blur="setMeta('location', $event)">

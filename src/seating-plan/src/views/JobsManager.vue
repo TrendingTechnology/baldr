@@ -1,5 +1,5 @@
 <template>
-  <main>
+  <main class="vc_jobs_manager">
     <ul>
       <li v-for="job in jobsAsArray" :key="job.name">
         <material-icon disabled :name="job.icon"/>

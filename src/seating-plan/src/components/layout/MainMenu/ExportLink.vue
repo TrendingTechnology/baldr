@@ -3,6 +3,7 @@
     :href="stateAsUriComponent"
     :download="`seating-plan_${dateTime}.json`"
     title="Daten exportieren (als JSON)"
+    class="vc_export_link"
   >
     <material-icon name="export" />
   </a>

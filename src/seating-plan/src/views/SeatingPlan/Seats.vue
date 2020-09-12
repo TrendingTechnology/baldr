@@ -1,5 +1,5 @@
 <template>
-  <div class="seating-plan">
+  <div class="vc_seating_plan">
     <one-seat
       v-for="seat in seatPositions"
       :seat="seat"
@@ -13,7 +13,7 @@ import ResizeObserver from 'resize-observer-polyfill'
 import { mapGetters } from 'vuex'
 
 // Components
-import OneSeat from './OneSeat'
+import OneSeat from './OneSeat.vue'
 
 const resizeObserver = new ResizeObserver(entries => {
   console.log(entries)
@@ -60,19 +60,19 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-  .seating-plan {
+<style lang="scss">
+  .vc_seating_plan {
     width: 100%;
     position: relative;
     box-sizing: border-box;
     margin: 0 auto;
-  }
 
-  @media print {
-    .seating-plan {
-      width: 100% !important;
-      // Firefox
-      height: 35em !important;
+    @media print {
+      .seating-plan {
+        width: 100% !important;
+        // Firefox
+        height: 35em !important;
+      }
     }
   }
 </style>

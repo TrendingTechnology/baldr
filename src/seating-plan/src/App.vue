@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" class="vc_app">
     <app-header :title="title"/>
     <router-view></router-view>
     <app-footer/>
@@ -8,8 +8,8 @@
 
 <script>
 // Components
-import AppHeader from '@/components/layout/AppHeader'
-import AppFooter from '@/components/layout/AppFooter'
+import AppHeader from '@/components/layout/AppHeader.vue'
+import AppFooter from '@/components/layout/AppFooter.vue'
 
 export default {
   name: 'app',

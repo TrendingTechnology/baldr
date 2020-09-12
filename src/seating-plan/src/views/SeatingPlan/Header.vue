@@ -1,5 +1,5 @@
 <template>
-  <header>
+  <header class="vc_plan_header">
     <h1>
       {{ title }}
     </h1>
@@ -29,25 +29,24 @@ export default {
 }
 </script>
 
-<style scoped>
-  header {
+<style lang="scss">
+  .vc_plan_header {
     width: 100%;
-  }
+    h1 {
+      text-align: center;
+      margin: 0;
+    }
 
-  h1 {
-    text-align: center;
-    margin: 0;
-  }
+    .meta {
+      display: flex;
+    }
 
-  .meta {
-    display: flex;
-  }
+    .meta .left {
+      flex-grow: 1;
+    }
 
-  .meta .left {
-    flex-grow: 1;
-  }
-
-  .meta .right {
-    text-align: right;
+    .meta .right {
+      text-align: right;
+    }
   }
 </style>

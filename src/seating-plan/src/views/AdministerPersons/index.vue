@@ -1,5 +1,5 @@
 <template>
-  <main>
+  <main class="vc_administer_persons">
     <section>
       <h1>Klassenliste der Klasse „{{ gradeNameCurrent }}“ verwalten</h1>
       <div class="list">
@@ -13,8 +13,8 @@
 </template>
 
 <script>
-import FormAddPerson from './form'
-import PersonsTable from './PersonsTable'
+import FormAddPerson from './FormAddPerson.vue'
+import PersonsTable from './PersonsTable.vue'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -51,12 +51,12 @@ export default {
 }
 </script>
 
-<style scoped>
-  main {
+<style lang="scss">
+  .vc_administer_persons {
     padding: 0 3vw;
-  }
 
-  .list {
-    column-count: 3;
+    .list {
+      column-count: 3;
+    }
   }
 </style>

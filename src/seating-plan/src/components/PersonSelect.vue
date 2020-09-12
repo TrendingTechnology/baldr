@@ -4,6 +4,7 @@
     @input="placePerson"
     v-model="selectedPerson"
     placeholder="Suche eine/n SchülerIn"
+    class="vc_person_select"
   />
 </template>
 

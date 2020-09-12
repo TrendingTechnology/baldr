@@ -1,5 +1,5 @@
 <template>
-  <main>
+  <main class="vc_seating_plan">
     <modal-dialog name="person-select">
       <person-select/>
     </modal-dialog>
@@ -19,11 +19,11 @@
 import { mapGetters } from 'vuex'
 
 // Components
-import PersonSelect from '@/components/PersonSelect'
-import PersonsSidebar from './PersonsSidebar'
-import PlanFooter from './Footer'
-import PlanHeader from './Header'
-import PlanSeats from './Seats'
+import PersonSelect from '@/components/PersonSelect.vue'
+import PersonsSidebar from './PersonsSidebar.vue'
+import PlanFooter from './Footer.vue'
+import PlanHeader from './Header.vue'
+import PlanSeats from './Seats.vue'
 
 export default {
   name: 'SeatingPlanView',
@@ -54,19 +54,21 @@ export default {
 }
 </script>
 
-<style scoped>
-  .container {
-    display: flex;
-    align-items: stretch;
-    position: relative;
-    width: 100%;
-  }
+<style lang="scss">
+  .vc_seating_plan {
+    .container {
+      display: flex;
+      align-items: stretch;
+      position: relative;
+      width: 100%;
+    }
 
-  .container > section {
-    width: 100%;
-  }
+    .container > section {
+      width: 100%;
+    }
 
-  .people-list {
-    flex-basis: content;
+    .people-list {
+      flex-basis: content;
+    }
   }
 </style>

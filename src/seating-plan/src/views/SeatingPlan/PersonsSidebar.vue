@@ -1,5 +1,5 @@
 <template>
-  <aside id="persons-sidebar">
+  <aside class="vc_persons_sidebar">
     <router-link
       :to="{
         name: 'administer-persons',
@@ -16,7 +16,7 @@
 import { mapGetters } from 'vuex'
 
 // Components
-import PersonsList from './PersonsList'
+import PersonsList from './PersonsList.vue'
 
 export default {
   name: 'PersonsSidebar',
@@ -36,15 +36,15 @@ export default {
 }
 </script>
 
-<style scoped>
-  #persons-sidebar {
+<style lang="scss">
+  .vc_persons_sidebar {
     display: block;
     white-space: nowrap;
-  }
 
-  @media print {
-    #persons-sidebar {
-      display: none;
+    @media print {
+      #persons-sidebar {
+        display: none;
+      }
     }
   }
 </style>

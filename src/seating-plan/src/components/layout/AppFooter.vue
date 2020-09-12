@@ -1,5 +1,5 @@
 <template>
-  <footer>
+  <footer class="vc_app_footer">
     <app-info package-name="@bldr/seating-plan" :version="version"/>
 
     <span v-if="apiVersion">
@@ -38,23 +38,19 @@ export default {
 </script>
 
 <style lang="scss">
-
-</style>
-
-<style lang="scss" scoped>
-  footer {
+  .vc_app_footer {
     width: 100%;
     text-align: right;
     font-size: 0.7em;
-  }
 
-  .baldr-icons-cloud {
-    color: $green;
-  }
+    .baldr-icons-cloud {
+      color: $green;
+    }
 
-  @media print {
-    footer {
-      display: none;
+    @media print {
+      footer {
+        display: none;
+      }
     }
   }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <ul>
+  <ul class="vc_grades_items">
     <li v-for="gradeName in gradeNames" :key="gradeName">
       <router-link
         :class="{placed: isGradePlaced(gradeName)}"

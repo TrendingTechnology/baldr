@@ -1,5 +1,5 @@
 <template>
-  <footer>
+  <footer class="vc_plan_footer">
     <div class="count">
     Schülerzahl: {{ personsCountCurrent }}
     </div>
@@ -39,26 +39,26 @@ export default {
 }
 </script>
 
-<style scoped>
-  footer {
+<style lang="scss">
+  .vc_plan_footer {
     display: flex;
-  }
 
-  .count {
-    padding-right: 3em;
-    flex-grow: 1;
-  }
+    .count {
+      padding-right: 3em;
+      flex-grow: 1;
+    }
 
-  .jobs {
-    text-align: right;
-  }
+    .jobs {
+      text-align: right;
+    }
 
-  .job {
-    padding-left: 1em;
-    font-size: 0.9em
-  }
+    .job {
+      padding-left: 1em;
+      font-size: 0.9em
+    }
 
-  .mdi {
-    font-size: 0.8em;
+    .mdi {
+      font-size: 0.8em;
+    }
   }
 </style>
