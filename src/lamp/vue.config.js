@@ -61,6 +61,22 @@ module.exports = {
         stylePath('default'),
         stylePath('handwriting')
       ]
+    },
+    electronBuilder: {
+      builderOptions: {
+        appId: 'rocks.friedrich.baldr',
+        productName: 'baldr-lamp',
+        asar: false,
+        linux: {
+          target: 'deb',
+          category: 'Education',
+          executableName: 'baldr-lamp',
+          icon: '../../logo.png'
+        },
+        extraMetadata: {
+          name: 'baldr-lamp'
+        }
+      }
     }
   }
 }
