@@ -6,10 +6,12 @@
 const childProcess = require('child_process')
 const fs = require('fs')
 const path = require('path')
+const URL = require('url').URL
 
 // Third party packages.
 const yaml = require('js-yaml')
 const chalk = require('chalk')
+const fetch = require('node-fetch').default
 
 // Project packages.
 const mediaServer = require('@bldr/media-server')
@@ -236,13 +238,42 @@ function moveAsset (oldPath, newPath, opts) {
   }
 }
 
+/**
+ * Download a URL to a destination.
+ *
+ * @param {String} url - The URL.
+ * @param {String} dest - The destination. Missing parent directories are automatically created.
+ */
+async function fetchFile (url, dest) {
+  const response = await fetch(new URL(url))
+  fs.mkdirSync(path.dirname(dest), { recursive: true })
+  fs.writeFileSync(dest, Buffer.from(await response.arrayBuffer()))
+}
+
+/**
+ * Load a YAML file. Only return objects to save vscode type checks.
+ *
+ * @param {String} filePath
+ *
+ * @returns {Object}
+ */
+function loadYaml (filePath) {
+  const result = yaml.safeLoad(readFile(filePath))
+  if (typeof result !== 'object') {
+    return { result }
+  }
+  return result
+}
+
 module.exports = {
+  fetchFile,
   filePathToAssetType,
   makeAsset,
   moveAsset,
   readAssetYaml,
   readFile,
   runImagemagick,
+  loadYaml,
   writeFile,
   writeMetaDataYaml,
   writeYamlFile,

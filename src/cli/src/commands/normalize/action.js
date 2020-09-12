@@ -32,7 +32,7 @@ async function queryWikidata (metaData, typeNames, typeSpecs) {
  */
 function mergeMetaTypeNames () {
   const types = new Set()
-  for (i = 0; i < arguments.length; i++) {
+  for (let i = 0; i < arguments.length; i++) {
     const typeNames = arguments[i]
     if (typeNames) {
       for (const typeName of typeNames.split(',')) {
@@ -63,7 +63,7 @@ async function normalizeOneFile (filePath, cmdObj = { wikidata: false }) {
       if (metaData.wikidata && metaData.metaTypes) {
         metaData = await queryWikidata(metaData, metaData.metaTypes, metaTypes.typeSpecs)
       } else {
-        console.log(chalk.red(`To enrich the metadata using wikidata a property named “wikidata” is needed.`))
+        console.log(chalk.red('To enrich the metadata using wikidata a property named “wikidata” is needed.'))
       }
     }
     metaData = metaTypes.process(metaData)
