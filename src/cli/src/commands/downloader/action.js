@@ -7,9 +7,9 @@ const { createYamlOneFile } = require('../yaml/action.js')
  * @param {String} id
  * @param {String} extension
  */
-function action (url, id, extension) {
+async function action (url, id, extension) {
   const destFile = `${id}.${extension}`
-  lib.fetchFile(url, `${id}.${extension}`)
+  await lib.fetchFile(url, `${id}.${extension}`)
   createYamlOneFile(destFile, { source: url })
 }
 
