@@ -137,8 +137,9 @@ export default {
       text-align: center;
     }
 
-    .dragover {
+    &.dragover {
       background-color: $red;
+      opacity: 0.4;
     }
 
     .icons {

@@ -7,7 +7,7 @@
         <material-icon name="delete" @click.native="deleteJob(job.name)"/>
       </li>
     </ul>
-    <form @submit="createJob">
+    <form @submit.prevent="createJob">
       <label>
         Name:
         <input ref="name" type="text" v-model="newName" @keyup.enter="createJob"/>

@@ -1,7 +1,7 @@
 <template>
   <div class="vc_grades_overview">
     <grades-table/>
-    <form @submit="createGrade">
+    <form @submit.prevent="createGrade">
       <input
         @keyup.enter="createGrade"
         placeholder="Klasse"

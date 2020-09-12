@@ -36,8 +36,6 @@ const resizeObserver = new ResizeObserver(entries => {
       const height = aspectRatio.height / aspectRatio.width * entry.contentRect.width
       if (height > maxHeight) {
         entry.target.style.height = `${maxHeight}px`
-        // let maxWidth = aspectRatio.width / aspectRatio.height * maxHeight
-        // entry.target.style.width = `${maxWidth}px`
       } else {
         entry.target.style.height = `${height}px`
       }
@@ -61,10 +59,10 @@ export default {
 
 <style lang="scss">
   .vc_plan_seats {
-    width: 100%;
-    position: relative;
     box-sizing: border-box;
     margin: 0 auto;
+    position: relative;
+    width: 100%;
 
     @media print {
       .vc_plan_seats {
