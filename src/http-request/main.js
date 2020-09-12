@@ -63,10 +63,12 @@ export class HttpRequest {
      */
     this.baseUrl = null
 
-    if (location.hostname === 'localhost' && !remote) {
-      this.baseUrl = `${location.protocol}//${restEndPoints.local.domain}`
+    // Electron (build version): location.hostname: '.'
+    if ((location.hostname === 'localhost' || location.hostname === '.') && !remote) {
+      // Electron (build version): location.protocol: 'app'
+      this.baseUrl = `http://${restEndPoints.local.domain}`
     } else {
-      this.baseUrl = `${location.protocol}//${restEndPoints.remote.domain}`
+      this.baseUrl = `https://${restEndPoints.remote.domain}`
     }
 
     const axiosConfig = {
