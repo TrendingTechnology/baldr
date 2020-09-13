@@ -65,11 +65,9 @@ export default {
     width: 100%;
 
     @media print {
-      .vc_plan_seats {
-        width: 100% !important;
-        // Firefox
-        height: 35em !important;
-      }
+      width: 100% !important;
+      // Firefox
+      height: 50em !important;
     }
   }
 </style>

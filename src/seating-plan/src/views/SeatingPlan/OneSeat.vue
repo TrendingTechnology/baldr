@@ -118,6 +118,7 @@ export default {
   .vc_one_seat {
     border: 1px solid $black;
     position: absolute;
+    box-sizing: border-box;
 
     &[draggable="true"] {
       cursor: grab;
