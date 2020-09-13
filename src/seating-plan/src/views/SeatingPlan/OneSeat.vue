@@ -48,8 +48,8 @@
 import { mapGetters } from 'vuex'
 
 // Components
-import AddJobIcons from '@/components/AddJobIcons'
-import PersonsJobs from '@/components/PersonsJobs'
+import AddJobIcons from '@/components/AddJobIcons.vue'
+import PersonsJobs from '@/components/PersonsJobs.vue'
 
 export default {
   name: 'OneSeat',
