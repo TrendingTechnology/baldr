@@ -32,22 +32,30 @@ class Database {
           { field: 'path', unique: true },
           { field: 'id', unique: true },
           { field: 'uuid', unique: true }
-        ]
+        ],
+        drop: true
       },
       presentations: {
         indexes: [
           { field: 'id', unique: true }
-        ]
+        ],
+        drop: true
       },
       updates: {
         indexes: [
           { field: 'begin', unique: false }
-        ]
+        ],
+        drop: true
+      },
+      folderTitleTree: {
+        indexes: [],
+        drop: true
       },
       seatingPlan: {
         indexes: [
           { timeStampMsec: 'path', unique: true }
-        ]
+        ],
+        drop: false
       }
     }
 
@@ -96,45 +104,46 @@ class Database {
    * @returns {Promise.<Object>}
    */
   async initialize () {
-    let collections = await this.listCollectionNames()
+    const collectionNames = await this.listCollectionNames()
 
     // https://stackoverflow.com/a/35868933
     for (const collectionName in this.schema) {
-      if (!collections.includes(collectionName)) {
+      if (!collectionNames.includes(collectionName)) {
         const collection = await this.db.createCollection(collectionName)
-        for (const schema of this.schema[collectionName]) {
-          const index = schema.index
+        for (const index of this.schema[collectionName].indexes) {
           await collection.createIndex({ [index.field]: 1 }, { unique: index.unique })
         }
       }
     }
 
     const result = {}
-    collections = await this.db.listCollections().toArray()
-    for (const collection of collections) {
-      const indexes = await this.db.collection(collection.name).listIndexes().toArray()
-      result[collection.name] = {
-        name: collection.name,
+    for (const collectionName in this.schema) {
+      const indexes = await this.db.collection(collectionName).listIndexes().toArray()
+      result[collectionName] = {
+        name: collectionName,
         indexes: {}
       }
       for (const index of indexes) {
-        result[collection.name].indexes[index.name] = index.unique
+        const unique = index.unique ? 'true' : 'false'
+        result[collectionName].indexes[index.name] = `unique: ${unique}`
       }
     }
     return result
   }
 
   /**
-   * Drop all collections.
+   * Drop all collections except collection which defined drop: false in
+   * this.schema
    *
    * @returns {Promise.<Object>}
    */
   async drop () {
-    const collections = await this.db.listCollections().toArray()
     const droppedCollections = []
-    for (const collection of collections) {
-      await this.db.dropCollection(collection.name)
-      droppedCollections.push(collection.name)
+    for (const collectionName in this.schema) {
+      if (this.schema[collectionName].drop === true) {
+        await this.db.dropCollection(collectionName)
+        droppedCollections.push(collectionName)
+      }
     }
     return {
       droppedCollections
@@ -142,7 +151,7 @@ class Database {
   }
 
   /**
-   * Re-Initialize the MongoDB database (Drop all collections and initialize).
+   * Reinitialize the MongoDB database (Drop all collections and initialize).
    *
    * @returns {Promise.<Object>}
    */
@@ -161,12 +170,12 @@ class Database {
    * @returns {Promise.<Object>}
    */
   async flushMediaFiles () {
-    const countAssets = await this.assets.countDocuments()
-    const countPresentations = await this.presentations.countDocuments()
-    await this.db.collection('assets').deleteMany({})
-    await this.db.collection('presentations').deleteMany({})
+    const countDroppedAssets = await this.assets.countDocuments()
+    const countDroppedPresentations = await this.presentations.countDocuments()
+    await this.assets.deleteMany({})
+    await this.presentations.deleteMany({})
     return {
-      countAssets, countPresentations
+      countDroppedAssets, countDroppedPresentations
     }
   }
 
