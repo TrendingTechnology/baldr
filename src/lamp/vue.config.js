@@ -66,12 +66,12 @@ module.exports = {
       builderOptions: {
         appId: 'rocks.friedrich.baldr',
         productName: 'baldr-lamp',
-        asar: false,
+        asar: true,
         linux: {
           target: 'deb',
           category: 'Education',
           executableName: 'baldr-lamp',
-          icon: '../../logo.png'
+          icon: './icon.svg'
         },
         extraMetadata: {
           name: 'baldr-lamp'
