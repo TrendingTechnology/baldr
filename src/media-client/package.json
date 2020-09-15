@@ -16,7 +16,8 @@
   "dependencies": {
     "@bldr/core-browser": "^0.11.3",
     "@bldr/http-request": "^0.2.2",
-    "@bldr/dynamic-select": "^0.2.2"
+    "@bldr/dynamic-select": "^0.2.2",
+    "vuex": "^3.5.1"
   },
   "publishConfig": {
     "access": "public"

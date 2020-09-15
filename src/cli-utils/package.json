@@ -23,6 +23,6 @@
   "dependencies": {
     "gauge": "3.0.0",
     "object-assign": "^4.1.1",
-    "ora": "5.0.0"
+    "ora": "5.1.0"
   }
 }

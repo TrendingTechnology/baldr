@@ -34,9 +34,9 @@
     "fs-extra": "^9.0.1",
     "js-yaml": "^3.14.0",
     "jsdoc-api": "^6.0.0",
-    "music-metadata": "7.0.2",
+    "music-metadata": "7.2.0",
     "node-fetch": "^2.6.1",
-    "ora": "5.0.0",
+    "ora": "5.1.0",
     "webfont": "^9.0.0",
     "csv-parser": "2.3.3"
   },
