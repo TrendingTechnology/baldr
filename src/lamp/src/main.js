@@ -711,6 +711,12 @@ Vue.prototype.$get = function (getterName) {
   return store.getters[`lamp/${getterName}`]
 }
 
+// On Firefox: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:80.0) Gecko/20100101 Firefox/80.0
+// On Electron: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) @bldr/lamp/0.2.4 Chrome/85.0.4183.98 Electron/10.1.2 Safari/537.36
+const userAgent = navigator.userAgent.toLowerCase()
+
+Vue.prototype.$isElectron = userAgent.indexOf('electron') > -1
+
 /**
  * The main vue instance
  * @namespace Vue
