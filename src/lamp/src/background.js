@@ -1,8 +1,9 @@
 'use strict'
 
-import { app, protocol, BrowserWindow } from 'electron'
+import { app, protocol, BrowserWindow, Menu } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
+
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -89,3 +90,86 @@ if (isDevelopment) {
     })
   }
 }
+
+function navigate (routeName) {
+  if (win.webContents) {
+    win.webContents.send('navigate', { name: routeName })
+  }
+}
+
+function menuRouteEntry (label, routeName) {
+  return {
+    label,
+    click: () => navigate(routeName)
+  }
+}
+
+const template = [
+
+  // { role: 'fileMenu' }
+  {
+    label: 'File',
+    submenu: [
+      { role: 'quit' }
+    ]
+  },
+  // { role: 'editMenu' }
+  {
+    label: 'Edit',
+    submenu: [
+      { role: 'undo' },
+      { role: 'redo' },
+      { type: 'separator' },
+      { role: 'cut' },
+      { role: 'copy' },
+      { role: 'paste' },
+      { role: 'delete' },
+      { type: 'separator' },
+      { role: 'selectAll' }
+    ]
+  },
+  // { role: 'viewMenu' }
+  {
+    label: 'View',
+    submenu: [
+      { role: 'reload' },
+      { role: 'forcereload' },
+      { role: 'toggledevtools' },
+      { type: 'separator' },
+      { role: 'resetzoom' },
+      { role: 'zoomin' },
+      { role: 'zoomout' },
+      { type: 'separator' },
+      { role: 'togglefullscreen' }
+    ]
+  },
+  // { role: 'windowMenu' }
+  {
+    label: 'Window',
+    submenu: [
+      { role: 'minimize' },
+      { role: 'zoom' },
+      { role: 'close' }
+    ]
+  },
+  {
+    label: 'Hilfe',
+    submenu: [
+      {
+        label: 'Master Dokumentation',
+        click: () => navigate('documentation')
+      },
+      menuRouteEntry('Themen', 'topics'),
+      {
+        label: 'API Dokumentation',
+        click: async () => {
+          const { shell } = require('electron')
+          await shell.openExternal('https://josef-friedrich.github.io/baldr/')
+        }
+      }
+    ]
+  }
+]
+
+const menu = Menu.buildFromTemplate(template)
+Menu.setApplicationMenu(menu)

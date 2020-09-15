@@ -63,6 +63,7 @@ module.exports = {
       ]
     },
     electronBuilder: {
+      nodeIntegration: true,
       builderOptions: {
         appId: 'rocks.friedrich.baldr',
         productName: 'baldr-lamp',

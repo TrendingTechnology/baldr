@@ -40,6 +40,7 @@
 import packageJson from '@/../package.json'
 import { AppInfo } from '@bldr/components-collection'
 import { receiveSocketMessage } from '@/remote-control.js'
+import { ipcRenderer } from 'electron'
 
 import { createNamespacedHelpers } from 'vuex'
 const { mapActions, mapGetters } = createNamespacedHelpers('lamp')
@@ -121,6 +122,10 @@ export default {
     }
   },
   mounted: function () {
+    // https://github.com/SimulatedGREG/electron-vue/issues/394#issuecomment-329989627
+    ipcRenderer.on('navigate', (e, route) => {
+      this.$router.push(route)
+    })
     window.addEventListener('error', (event) => {
       this.$notifyError(event.error)
     })
