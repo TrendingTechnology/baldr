@@ -157,9 +157,13 @@ const template = [
   {
     label: 'Hilfe',
     submenu: [
+      menuRouteEntry('Master Dokumentation', 'documentation'),
       {
-        label: 'Master Dokumentation',
-        click: () => navigate('documentation')
+        label: 'Ad-Hoc-Folien',
+        submenu: [
+          menuRouteEntry('Hefteintrag', 'editor'),
+          menuRouteEntry('Dokumentenkamera', 'camera')
+        ]
       },
       menuRouteEntry('Themen', 'topics'),
       {

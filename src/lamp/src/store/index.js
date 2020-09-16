@@ -220,6 +220,27 @@ const actions = {
       commit('setCursorArrowTimeoutId', { name, timeoutId: null })
     }, 200)
     commit('setCursorArrowTimeoutId', { name, timeoutId })
+  },
+  increaseSlideScaleFactor ({ commit, getters }) {
+    const slide = getters.slide
+    if (slide) {
+      const scaleFactor = slide.scaleFactor + 0.05
+      commit('setSlideScaleFactor', { slide, scaleFactor })
+    }
+  },
+  decreaseSlideScaleFactor ({ commit, getters }) {
+    const slide = getters.slide
+    if (slide) {
+      let scaleFactor = slide.scaleFactor
+      if (scaleFactor > 0.1) scaleFactor = scaleFactor - 0.05
+      commit('setSlideScaleFactor', { slide, scaleFactor })
+    }
+  },
+  resetSlideScaleFactor ({ commit, getters }) {
+    const slide = getters.slide
+    if (slide) {
+      commit('setSlideScaleFactor', { slide, scaleFactor: 1 })
+    }
   }
 }
 
@@ -253,6 +274,9 @@ const mutations = {
   },
   setSpeakerView (state, isSpeakerView) {
     state.isSpeakerView = isSpeakerView
+  },
+  setSlideScaleFactor (state, { slide, scaleFactor }) {
+    slide.scaleFactor = scaleFactor
   }
 }
 
