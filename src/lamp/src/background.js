@@ -1,9 +1,16 @@
+/**
+ * Create the main Electron process.
+ *
+ * @module @bldr/lamp/background
+ */
+
 'use strict'
 
-import { app, protocol, BrowserWindow, Menu } from 'electron'
+import { app, protocol, BrowserWindow, Menu, shell } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 import path from 'path'
+import menuTemplate from './menu.js'
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
@@ -94,121 +101,64 @@ if (isDevelopment) {
 }
 
 /**
- * Send a IPC message to the renderer process to push a route name to the
- * Vue router.
- *
- * @param {String} routeName
+ * @param {Object} raw
+ * @property label - A short label of the menu entry.
+ * @property action - For example “pushRoute”, “openExternalUrl”, “execute”
+ * @property arguments - Arguments for the action function.
  */
-function sendIpcNavigationMessage (routeName) {
-  if (win.webContents) {
-    win.webContents.send('navigate', { name: routeName })
+function convertMenuItem (raw) {
+  const result = {}
+  if (!raw.label) throw new Error(`Raw menu entry needs a key named label: ${raw}`)
+  result.label = raw.label
+  if (!raw.action) throw new Error(`Raw menu entry needs a key named action: ${raw}`)
+  let click
+  if (raw.action === 'openExternalUrl') {
+    click = async () => {
+      await shell.openExternal(raw.arguments)
+    }
+  } else if (raw.action === 'pushRouter') {
+    click = () => {
+      win.webContents.send('navigate', { name: raw.arguments })
+    }
+  } else if (raw.action === 'execute') {
+    click = () => {
+      win.webContents.send('action', raw.arguments)
+    }
+  } else {
+    throw new Error(`Unkown action for raw menu entry: ${raw}`)
   }
+  result.click = click
+  return result
 }
 
 /**
- *
- * @param {String} label
- * @param {String} routeName
+ * @param {Array} input
+ * @param {Array} output
  */
-function routeMenuEntry (label, routeName) {
-  return {
-    label,
-    click: () => sendIpcNavigationMessage(routeName)
-  }
-}
-
-/**
- * Send a IPC message to the renderer process to push a route name to the
- * Vue router.
- *
- * @param {String} actionName
- */
-function sendIpcActionMessage (actionName) {
-  if (win.webContents) {
-    win.webContents.send('action', actionName)
-  }
-}
-
-/**
- *
- * @param {String} label
- * @param {String} actionName
- */
-function actionMenuEntry (label, actionName) {
-  return {
-    label,
-    click: () => sendIpcActionMessage(actionName)
-  }
-}
-const template = [
-
-  // { role: 'fileMenu' }
-  {
-    label: 'File',
-    submenu: [
-      { role: 'quit' }
-    ]
-  },
-  // { role: 'editMenu' }
-  {
-    label: 'Edit',
-    submenu: [
-      { role: 'undo' },
-      { role: 'redo' },
-      { type: 'separator' },
-      { role: 'cut' },
-      { role: 'copy' },
-      { role: 'paste' },
-      { role: 'delete' },
-      { type: 'separator' },
-      { role: 'selectAll' }
-    ]
-  },
-  // { role: 'viewMenu' }
-  {
-    label: 'Ansicht',
-    submenu: [
-      actionMenuEntry('Schriftgröße verkleinern', 'decreaseSlideScaleFactor'),
-      actionMenuEntry('Schriftgröße vergrößern', 'increaseSlideScaleFactor'),
-      actionMenuEntry('Schriftgröße zurücksetzten', 'resetSlideScaleFactor'),
-      { role: 'reload' },
-      { role: 'forcereload' },
-      { role: 'toggledevtools' },
-      { type: 'separator' },
-      { role: 'togglefullscreen' }
-    ]
-  },
-  // { role: 'windowMenu' }
-  {
-    label: 'Window',
-    submenu: [
-      { role: 'minimize' },
-      { role: 'zoom' },
-      { role: 'close' }
-    ]
-  },
-  {
-    label: 'Hilfe',
-    submenu: [
-      routeMenuEntry('Master Dokumentation', 'documentation'),
-      {
-        label: 'Ad-Hoc-Folien',
-        submenu: [
-          routeMenuEntry('Hefteintrag', 'editor'),
-          routeMenuEntry('Dokumentenkamera', 'camera')
-        ]
-      },
-      routeMenuEntry('Themen', 'topics'),
-      {
-        label: 'API Dokumentation',
-        click: async () => {
-          const { shell } = require('electron')
-          await shell.openExternal('https://josef-friedrich.github.io/baldr/')
-        }
+function convertMenuItemList (input, output) {
+  for (const rawMenuItem of input) {
+    let result
+    if (rawMenuItem.submenu) {
+      result = {
+        label: rawMenuItem.label,
+        submenu: convertMenuItemList(rawMenuItem.submenu, [])
       }
-    ]
+    } else {
+      result = convertMenuItem(rawMenuItem)
+    }
+    output.push(result)
   }
-]
+  return output
+}
 
-const menu = Menu.buildFromTemplate(template)
+/**
+ * @param {Array} input
+ */
+function convertMenu (input) {
+  const newMenu = []
+  convertMenuItemList(input, newMenu)
+  return newMenu
+}
+
+const menu = Menu.buildFromTemplate(convertMenu(menuTemplate))
 Menu.setApplicationMenu(menu)
