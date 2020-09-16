@@ -93,19 +93,53 @@ if (isDevelopment) {
   }
 }
 
-function navigate (routeName) {
+/**
+ * Send a IPC message to the renderer process to push a route name to the
+ * Vue router.
+ *
+ * @param {String} routeName
+ */
+function sendIpcNavigationMessage (routeName) {
   if (win.webContents) {
     win.webContents.send('navigate', { name: routeName })
   }
 }
 
-function menuRouteEntry (label, routeName) {
+/**
+ *
+ * @param {String} label
+ * @param {String} routeName
+ */
+function routeMenuEntry (label, routeName) {
   return {
     label,
-    click: () => navigate(routeName)
+    click: () => sendIpcNavigationMessage(routeName)
   }
 }
 
+/**
+ * Send a IPC message to the renderer process to push a route name to the
+ * Vue router.
+ *
+ * @param {String} actionName
+ */
+function sendIpcActionMessage (actionName) {
+  if (win.webContents) {
+    win.webContents.send('action', actionName)
+  }
+}
+
+/**
+ *
+ * @param {String} label
+ * @param {String} actionName
+ */
+function actionMenuEntry (label, actionName) {
+  return {
+    label,
+    click: () => sendIpcActionMessage(actionName)
+  }
+}
 const template = [
 
   // { role: 'fileMenu' }
@@ -132,15 +166,14 @@ const template = [
   },
   // { role: 'viewMenu' }
   {
-    label: 'View',
+    label: 'Ansicht',
     submenu: [
+      actionMenuEntry('Schriftgröße verkleinern', 'decreaseSlideScaleFactor'),
+      actionMenuEntry('Schriftgröße vergrößern', 'increaseSlideScaleFactor'),
+      actionMenuEntry('Schriftgröße zurücksetzten', 'resetSlideScaleFactor'),
       { role: 'reload' },
       { role: 'forcereload' },
       { role: 'toggledevtools' },
-      { type: 'separator' },
-      { role: 'resetzoom' },
-      { role: 'zoomin' },
-      { role: 'zoomout' },
       { type: 'separator' },
       { role: 'togglefullscreen' }
     ]
@@ -157,15 +190,15 @@ const template = [
   {
     label: 'Hilfe',
     submenu: [
-      menuRouteEntry('Master Dokumentation', 'documentation'),
+      routeMenuEntry('Master Dokumentation', 'documentation'),
       {
         label: 'Ad-Hoc-Folien',
         submenu: [
-          menuRouteEntry('Hefteintrag', 'editor'),
-          menuRouteEntry('Dokumentenkamera', 'camera')
+          routeMenuEntry('Hefteintrag', 'editor'),
+          routeMenuEntry('Dokumentenkamera', 'camera')
         ]
       },
-      menuRouteEntry('Themen', 'topics'),
+      routeMenuEntry('Themen', 'topics'),
       {
         label: 'API Dokumentation',
         click: async () => {

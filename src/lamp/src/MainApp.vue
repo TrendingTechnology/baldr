@@ -40,6 +40,7 @@
 import packageJson from '@/../package.json'
 import { AppInfo } from '@bldr/components-collection'
 import { receiveSocketMessage } from '@/remote-control.js'
+import actions from './actions.js'
 
 import { createNamespacedHelpers } from 'vuex'
 const { mapActions, mapGetters } = createNamespacedHelpers('lamp')
@@ -126,6 +127,14 @@ export default {
     if (window.ipcRenderer) {
       window.ipcRenderer.on('navigate', (e, route) => {
         this.$router.push(route)
+      })
+
+      window.ipcRenderer.on('action', (e, name) => {
+        if (actions[name] && typeof actions[name] === 'function') {
+          actions[name]()
+        } else {
+          throw new Error(`Unkown action name ${name}`)
+        }
       })
     }
     window.addEventListener('error', (event) => {
@@ -315,17 +324,17 @@ export default {
       },
       {
         keys: 'ctrl+1',
-        callback: () => this.$store.dispatch('lamp/resetSlideScaleFactor'),
+        callback: actions.resetSlideScaleFactor,
         description: 'Die aktuelle Folie auf den Skalierungsfaktor 1 (zurück)setzen.'
       },
       {
         keys: 'ctrl+2',
-        callback: () => this.$store.dispatch('lamp/increaseSlideScaleFactor'),
+        callback: actions.increaseSlideScaleFactor,
         description: 'Die aktuelle Folie vergrößern.'
       },
       {
         keys: 'ctrl+3',
-        callback: () => this.$store.dispatch('lamp/decreaseSlideScaleFactor'),
+        callback: actions.decreaseSlideScaleFactor,
         description: 'Die aktuelle Folie verkleinern.'
       }
     ])
