@@ -84,7 +84,7 @@ const converted = new Set()
  *
  * @param {String} inputFile
  *
- * @returns {object}
+ * @returns {Promise.<Object>}
  */
 async function collectMusicMetaData (inputFile) {
   const metaData = await musicMetadata.parseFile(inputFile)
@@ -236,6 +236,7 @@ function action (files, cmdObj) {
 }
 
 module.exports = {
+  collectMusicMetaData,
   action,
   convert
 }
