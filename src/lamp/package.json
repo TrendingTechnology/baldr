@@ -8,14 +8,14 @@
     "url": "https://josef.friedrich.rocks"
   },
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "build:electron": "vue-cli-service electron:build",
+    "build:webapp": "vue-cli-service build",
+    "install:deb": "sudo apt remove baldr-lamp; sudo dpkg -i dist_electron/baldr-lamp_${npm_package_version}_amd64.deb",
     "lint": "vue-cli-service lint",
-    "electron:build": "vue-cli-service electron:build",
-    "electron:serve": "vue-cli-service electron:serve",
     "postinstall": "electron-builder install-app-deps",
     "postuninstall": "electron-builder install-app-deps",
-    "debinstall": "sudo apt remove baldr-lamp; sudo dpkg -i dist_electron/baldr-lamp_${npm_package_version}_amd64.deb"
+    "serve:electron": "vue-cli-service electron:serve",
+    "serve:webapp": "vue-cli-service serve"
   },
   "main": "background.js",
   "dependencies": {
