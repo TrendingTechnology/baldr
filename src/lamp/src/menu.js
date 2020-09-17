@@ -12,6 +12,7 @@
  * @property action - For example “pushRoute”, “openExternalUrl”, “execute”
  * @property arguments - Arguments for the action function.
  * @property submenu - A array of menu entries to build a sub menu from.
+ * @property accelerator
  */
 
 const menuTemplate = [
@@ -26,7 +27,8 @@ const menuTemplate = [
       {
         label: 'Master Dokumentation',
         action: 'pushRouter',
-        arguments: 'documentation'
+        arguments: 'documentation',
+        accelerator: 'd'
       },
       {
         label: 'Ad-Hoc-Folien',
@@ -34,12 +36,14 @@ const menuTemplate = [
           {
             label: 'Hefteintrag',
             action: 'pushRouter',
-            arguments: 'editor'
+            arguments: 'editor',
+            accelerator: 'e'
           },
           {
             label: 'Dokumentenkamera',
             action: 'pushRouter',
-            arguments: 'camera'
+            arguments: 'camera',
+            accelerator: 'c'
           }
         ]
       },
@@ -47,6 +51,18 @@ const menuTemplate = [
         label: 'API Dokumentation',
         action: 'openExternalUrl',
         arguments: 'https://josef-friedrich.github.io/baldr/'
+      },
+      {
+        label: 'Medien-Überblick',
+        action: 'execute',
+        arguments: 'toggleMediaOverview',
+        accelerator: 'm'
+      },
+      {
+        label: 'Startseite',
+        action: 'execute',
+        arguments: 'toggleHome',
+        accelerator: 's'
       }
     ]
   },
@@ -57,7 +73,15 @@ const menuTemplate = [
         label: 'Aktualsieren',
         description: 'Lokalen Medienserver aktualisieren.',
         action: 'execute',
-        arguments: 'update'
+        arguments: 'update',
+        accelerator: 'CmdOrCtrl + u'
+      },
+      {
+        label: 'Neu laden',
+        description: 'Präsentation neu laden.',
+        action: 'execute',
+        arguments: 'reloadPresentation',
+        accelerator: 'CmdOrCtrl + r'
       },
       {
         label: 'Öffnen ...',
@@ -67,35 +91,35 @@ const menuTemplate = [
             desciption: 'Die aktuelle Präsentation im Editor öffnen',
             action: 'execute',
             arguments: 'openEditor',
-            accelerator: 'CmdOrCtrl+e'
+            accelerator: 'CmdOrCtrl + e'
           },
           {
             label: 'Mediendatei (Editor)',
             desciption: 'Die erste Mediendatei der aktuellen Folien im Editor öffnen.',
             action: 'execute',
             arguments: 'openMedia',
-            accelerator: 'CmdOrCtrl+a'
+            accelerator: 'CmdOrCtrl + a'
           },
           {
             label: 'Übergeordneter Ordner',
             desciption: 'Den übergeordneten Ordner der Präsentation öffnen',
             action: 'execute',
             arguments: 'openParent',
-            accelerator: 'CmdOrCtrl+Alt+e'
+            accelerator: 'CmdOrCtrl + Alt + e'
           },
           {
             label: 'Übergeordneter Ordner und Archivorder',
             desciption: 'Den übergeordneten Ordner der Präsentation, sowie den dazugehörenden Archivordner öffnen',
             action: 'execute',
             arguments: 'openParentArchive',
-            accelerator: 'CmdOrCtrl+Shift+Alt+e'
+            accelerator: 'CmdOrCtrl + Shift + Alt + e'
           },
           {
             label: 'Präsentation (Editor), übergeordneter Ordner und Archivorder',
             desciption: 'Vollständiger Editiermodus: Den übergeordneten Ordner der Präsentation, sowie den dazugehörenden Archivordner, als auch den Editor öffnen',
             action: 'execute',
             arguments: 'openEditorParentArchive',
-            accelerator: 'CmdOrCtrl+Alt+r'
+            accelerator: 'CmdOrCtrl + Alt + r'
           }
         ]
       }
@@ -109,27 +133,41 @@ const menuTemplate = [
         description: 'Die aktuelle Folie auf den Skalierungsfaktor 1 (zurück)setzen.',
         action: 'execute',
         arguments: 'resetSlideScaleFactor',
-        accelerator: 'CmdOrCtrl+1'
+        accelerator: 'CmdOrCtrl + 1'
       },
       {
         label: 'Schriftgröße vergrößern',
         description: 'Die aktuelle Folie vergrößern.',
         action: 'execute',
         arguments: 'increaseSlideScaleFactor',
-        accelerator: 'CmdOrCtrl+2'
+        accelerator: 'CmdOrCtrl + 2'
       },
       {
         label: 'Schriftgröße verkleinern',
         description: 'Die aktuelle Folie verkleinern.',
         action: 'execute',
         arguments: 'decreaseSlideScaleFactor',
-        accelerator: 'CmdOrCtrl+3'
+        accelerator: 'CmdOrCtrl + 3'
       },
       {
         label: 'Zwischen zwei Folien hin- und herschalten.',
         action: 'execute',
         arguments: 'toggleSlides',
-        accelerator: 'CmdOrCtrl+y'
+        accelerator: 'CmdOrCtrl + y'
+      },
+      {
+        label: 'Metainformation',
+        description: 'Metainformation der Folien ein/ausblenden',
+        action: 'execute',
+        arguments: 'toggleMetaDataOverlay',
+        accelerator: 'CmdOrCtrl + i'
+      },
+      {
+        label: 'Referentenansicht',
+        description: 'Zwischen Präsentations- und Referentenansicht hin- und herschalten.',
+        action: 'execute',
+        arguments: 'toggleSpeakerView',
+        accelerator: 'CmdOrCtrl + l'
       }
     ]
   }

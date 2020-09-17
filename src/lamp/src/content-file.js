@@ -1015,31 +1015,6 @@ export class Presentation {
 
     router.push({ name, params })
   }
-
-  /**
-   * Toggle the speaker view.
-   */
-  toggleSpeakerView () {
-    const route = router.currentRoute
-    let name
-    const params = route.params
-    if (route.name === 'slide') {
-      name = 'speaker-view'
-    } else if (route.name === 'slide-step-no') {
-      name = 'speaker-view-step-no'
-    } else if (route.name === 'slides-preview') {
-      name = 'speaker-view'
-      if (!params.slideNo) {
-        params.slideNo = 1
-        delete params.stepNo
-      }
-    } else if (route.name === 'speaker-view') {
-      name = 'slide'
-    } else if (route.name === 'speaker-view-step-no') {
-      name = 'slide-step-no'
-    }
-    if (name) router.push({ name, params: route.params })
-  }
 }
 
 /**

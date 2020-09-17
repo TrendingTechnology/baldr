@@ -194,55 +194,6 @@ export default {
         routeNames: ['slide', 'slide-step-no', 'speaker-view', 'speaker-view-step-no']
       },
       {
-        keys: 'ctrl+m',
-        callback: () => { this.$modal.toggle('menu') },
-        // Main menu
-        description: 'Menü anzeigen'
-      },
-      {
-        keys: 'ctrl+i',
-        callback: () => { this.$store.dispatch('lamp/toggleMetaDataOverlay') },
-        description: 'Metainformation der Folien ein/ausblenden'
-      },
-      {
-        keys: 'ctrl+r',
-        callback: async () => {
-          try {
-            await this.$store.dispatch('lamp/reloadPresentation')
-            this.$notifySuccess('Die Präsentation wurde neu geladen.')
-          } catch (error) {
-            this.$notifyError(error)
-          }
-        },
-        // Reload presentation
-        description: 'Präsentation neu laden'
-      },
-      {
-        keys: 'ctrl+e',
-        callback: actions.openEditor,
-        description: 'Die aktuelle Präsentation im Editor öffnen'
-      },
-      {
-        keys: 'ctrl+a',
-        callback: actions.openMedia,
-        description: 'Die erste Mediendatei der aktuellen Folien im Editor öffnen.'
-      },
-      {
-        keys: 'ctrl+alt+e',
-        callback: actions.openParent,
-        description: 'Den übergeordneten Ordner der Präsentation öffnen'
-      },
-      {
-        keys: 'ctrl+shift+alt+e',
-        callback: actions.openParentArchive,
-        description: 'Den übergeordneten Ordner der Präsentation, sowie den dazugehörenden Archivordner öffnen'
-      },
-      {
-        keys: 'ctrl+alt+r',
-        callback: actions.openEditorParentArchive,
-        description: 'Vollständiger Editiermodus: Den übergeordneten Ordner der Präsentation, sowie den dazugehörenden Archivordner, als auch den Editor öffnen'
-      },
-      {
         keys: 'ctrl+alt+d',
         callback: () => { this.$styleConfig.configObjects.darkMode.toggle() },
         // Dark mode
@@ -261,49 +212,12 @@ export default {
         description: 'Vollbild'
       },
       ...this.getToggleShortcutObjects([
-        ['c', 'camera'],
-        ['d', 'documentation'],
-        ['e', 'editor'],
-        ['h', 'home'],
         // Take by image quick launcher i 1 etc...
-        // ['i', 'media-ids'],
-        ['m', 'media-overview'],
+        // ['i', 'media-ids'],mm
         // p: is already taken by p f or p s
         ['s', 'slides-preview'],
         ['r', 'rest-api']
-      ]),
-      {
-        keys: 'ctrl+u',
-        callback: actions.update,
-        description: 'Lokalen Medienserver aktualisieren.'
-      },
-      {
-        keys: 'ctrl+y',
-        callback: actions.toggleSlides,
-        description: 'Zwischen zwei Folien hin- und herschalten.'
-      },
-      {
-        keys: 'ctrl+l',
-        callback: () => {
-          if (this.presentation) this.presentation.toggleSpeakerView()
-        },
-        description: 'Zwischen Präsentations- und Referentenansicht hin- und herschalten.'
-      },
-      {
-        keys: 'ctrl+1',
-        callback: actions.resetSlideScaleFactor,
-        description: 'Die aktuelle Folie auf den Skalierungsfaktor 1 (zurück)setzen.'
-      },
-      {
-        keys: 'ctrl+2',
-        callback: actions.increaseSlideScaleFactor,
-        description: 'Die aktuelle Folie vergrößern.'
-      },
-      {
-        keys: 'ctrl+3',
-        callback: actions.decreaseSlideScaleFactor,
-        description: 'Die aktuelle Folie verkleinern.'
-      }
+      ])
     ])
     this.$router.afterEach((to, from) => {
       if (to.meta.style) {

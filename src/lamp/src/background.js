@@ -105,11 +105,14 @@ if (isDevelopment) {
  * @property label - A short label of the menu entry.
  * @property action - For example “pushRoute”, “openExternalUrl”, “execute”
  * @property arguments - Arguments for the action function.
+ * @property accelerator
  */
 function convertMenuItem (raw) {
   const result = {}
+  // label
   if (!raw.label) throw new Error(`Raw menu entry needs a key named label: ${raw}`)
   result.label = raw.label
+  // click
   if (!raw.action) throw new Error(`Raw menu entry needs a key named action: ${raw}`)
   let click
   if (raw.action === 'openExternalUrl') {
@@ -128,6 +131,8 @@ function convertMenuItem (raw) {
     throw new Error(`Unkown action for raw menu entry: ${raw}`)
   }
   result.click = click
+  // accelerator
+  if (raw.accelerator) result.accelerator = raw.accelerator
   return result
 }
 

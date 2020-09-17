@@ -7,6 +7,34 @@
 
 import store from './store/index.js'
 import vm from './main.js'
+import { router } from './routes.js'
+
+/**
+ * Toggle between two routes:
+ *
+ * 1. The routes named `slide` or `slide-step-no` and
+ * 2. the route with the name specified with the argument
+ *    `routeNameTo`.
+ *
+ * If the current route is neither `slides` nor `routeNameTo` move
+ * to `routeNameTo`.
+ *
+ * @param {String} routeNameTo - The route name to move to or move
+ *   from.
+ */
+function toggleSlidesToRoute (routeNameTo) {
+  const slide = store.getters['lamp/slide']
+  const presentation = store.getters['lamp/presentation']
+  if (
+    (routeNameTo === 'slide' && !slide) ||
+    (routeNameTo === 'slides-preview' && !presentation)
+  ) return
+  if (router.currentRoute.name !== routeNameTo) {
+    router.push({ name: routeNameTo })
+  } else if (slide) {
+    router.push(slide.routerLocation())
+  }
+}
 
 /**
  * Call the REST API to open some files.
@@ -96,5 +124,51 @@ export default {
   openEditorParentArchive () {
     callOpenRestApi('editor')
     callOpenRestApi('folder', true, true)
+  },
+  async reloadPresentation () {
+    const presentation = store.getters['lamp/presentation']
+    if (!presentation) {
+      vm.$notifyError('Keine Präsention geladen.')
+      return
+    }
+    try {
+      await store.dispatch('lamp/reloadPresentation')
+      vm.$notifySuccess('Die Präsentation wurde neu geladen.')
+    } catch (error) {
+      vm.$notifyError(error)
+    }
+  },
+  toggleMetaDataOverlay () {
+    store.dispatch('lamp/toggleMetaDataOverlay')
+  },
+  /**
+   * Toggle the speaker view.
+   */
+  toggleSpeakerView () {
+    const route = router.currentRoute
+    let name
+    const params = route.params
+    if (route.name === 'slide') {
+      name = 'speaker-view'
+    } else if (route.name === 'slide-step-no') {
+      name = 'speaker-view-step-no'
+    } else if (route.name === 'slides-preview') {
+      name = 'speaker-view'
+      if (!params.slideNo) {
+        params.slideNo = '1'
+        delete params.stepNo
+      }
+    } else if (route.name === 'speaker-view') {
+      name = 'slide'
+    } else if (route.name === 'speaker-view-step-no') {
+      name = 'slide-step-no'
+    }
+    if (name) router.push({ name, params: route.params })
+  },
+  toggleMediaOverview () {
+    toggleSlidesToRoute('media-overview')
+  },
+  toggleHome () {
+    toggleSlidesToRoute('home')
   }
 }
