@@ -37,7 +37,7 @@
  *         given media file. The default value is `editor`
  *       - `archive`: True if present, false by default. Open the file or the
            folder in the corresponding archive folder structure.
- *       - `create`: True if present, false by default. Create the possibly non
+ *       - `create`: True if present, false by default. Create the possibly none
             existing directory structure in a recursive manner.
  *   - `re-init`: Re-Initialize the MongoDB database (Drop all collections and
  *     initialize)

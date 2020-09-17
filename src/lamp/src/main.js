@@ -723,13 +723,13 @@ Vue.prototype.$isElectron = userAgent.indexOf('electron') > -1
  *
  * @type {object}
  */
-const vue = new Vue({
+const vm = new Vue({
   router,
   store,
   render: h => h(MainApp)
 }).$mount('#app')
 
-export default vue
+export default vm
 
 // To be able to store Vue component instances. If we store a vue component
 // instance in a vuex store there were many errors raised.

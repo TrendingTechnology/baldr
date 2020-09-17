@@ -51,6 +51,57 @@ const menuTemplate = [
     ]
   },
   {
+    label: 'Aktionen',
+    submenu: [
+      {
+        label: 'Aktualsieren',
+        description: 'Lokalen Medienserver aktualisieren.',
+        action: 'execute',
+        arguments: 'update'
+      },
+      {
+        label: 'Öffnen ...',
+        submenu: [
+          {
+            label: 'Präsentation (Editor)',
+            desciption: 'Die aktuelle Präsentation im Editor öffnen',
+            action: 'execute',
+            arguments: 'openEditor',
+            accelerator: 'CmdOrCtrl+e'
+          },
+          {
+            label: 'Mediendatei (Editor)',
+            desciption: 'Die erste Mediendatei der aktuellen Folien im Editor öffnen.',
+            action: 'execute',
+            arguments: 'openMedia',
+            accelerator: 'CmdOrCtrl+a'
+          },
+          {
+            label: 'Übergeordneter Ordner',
+            desciption: 'Den übergeordneten Ordner der Präsentation öffnen',
+            action: 'execute',
+            arguments: 'openParent',
+            accelerator: 'CmdOrCtrl+Alt+e'
+          },
+          {
+            label: 'Übergeordneter Ordner und Archivorder',
+            desciption: 'Den übergeordneten Ordner der Präsentation, sowie den dazugehörenden Archivordner öffnen',
+            action: 'execute',
+            arguments: 'openParentArchive',
+            accelerator: 'CmdOrCtrl+Shift+Alt+e'
+          },
+          {
+            label: 'Präsentation (Editor), übergeordneter Ordner und Archivorder',
+            desciption: 'Vollständiger Editiermodus: Den übergeordneten Ordner der Präsentation, sowie den dazugehörenden Archivordner, als auch den Editor öffnen',
+            action: 'execute',
+            arguments: 'openEditorParentArchive',
+            accelerator: 'CmdOrCtrl+Alt+r'
+          }
+        ]
+      }
+    ]
+  },
+  {
     label: 'Ansicht',
     submenu: [
       {
@@ -73,6 +124,12 @@ const menuTemplate = [
         action: 'execute',
         arguments: 'decreaseSlideScaleFactor',
         accelerator: 'CmdOrCtrl+3'
+      },
+      {
+        label: 'Zwischen zwei Folien hin- und herschalten.',
+        action: 'execute',
+        arguments: 'toggleSlides',
+        accelerator: 'CmdOrCtrl+y'
       }
     ]
   }

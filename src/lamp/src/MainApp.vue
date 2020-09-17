@@ -219,44 +219,27 @@ export default {
       },
       {
         keys: 'ctrl+e',
-        callback: () => { this.callOpenRestApi('editor') },
+        callback: actions.openEditor,
         description: 'Die aktuelle Präsentation im Editor öffnen'
       },
       {
         keys: 'ctrl+a',
-        callback: () => {
-          if (this.slide && this.slide.firstMediaUri) {
-            const uri = this.slide.firstMediaUri.split(':')[1]
-            this.$media.httpRequest.request({
-              url: 'mgmt/open',
-              params: {
-                with: 'editor',
-                type: 'assets',
-                id: uri
-              }
-            })
-          } else {
-            this.$notifyError('Die aktuelle Folie hat keine Mediendatei zum Öffnen.')
-          }
-        },
+        callback: actions.openMedia,
         description: 'Die erste Mediendatei der aktuellen Folien im Editor öffnen.'
       },
       {
         keys: 'ctrl+alt+e',
-        callback: () => { this.callOpenRestApi('folder') },
+        callback: actions.openParent,
         description: 'Den übergeordneten Ordner der Präsentation öffnen'
       },
       {
         keys: 'ctrl+shift+alt+e',
-        callback: () => { this.callOpenRestApi('folder', true) },
+        callback: actions.openParentArchive,
         description: 'Den übergeordneten Ordner der Präsentation, sowie den dazugehörenden Archivordner öffnen'
       },
       {
         keys: 'ctrl+alt+r',
-        callback: () => {
-          this.callOpenRestApi('folder', true, true)
-          this.callOpenRestApi('editor')
-        },
+        callback: actions.openEditorParentArchive,
         description: 'Vollständiger Editiermodus: Den übergeordneten Ordner der Präsentation, sowie den dazugehörenden Archivordner, als auch den Editor öffnen'
       },
       {
@@ -291,28 +274,12 @@ export default {
       ]),
       {
         keys: 'ctrl+u',
-        callback: async () => {
-          try {
-            const result = await this.$media.httpRequest.request('mgmt/update')
-            this.$store.dispatch('lamp/updateFolderTitleTree')
-            if (result.data.errors.length) {
-              for (const errorMsg of result.data.errors) {
-                this.$notifyError(errorMsg)
-              }
-            } else {
-              this.$notifySuccess(`Der lokale Medien-Server wurde erfolgreich aktualisiert. Git-Commit-ID: ${result.data.lastCommitId.substring(0, 8)}`)
-            }
-          } catch (error) {
-            this.$notifyError(error)
-          }
-        },
+        callback: actions.update,
         description: 'Lokalen Medienserver aktualisieren.'
       },
       {
         keys: 'ctrl+y',
-        callback: () => {
-          this.$store.dispatch('lamp/setSlideNoToOld')
-        },
+        callback: actions.toggleSlides,
         description: 'Zwischen zwei Folien hin- und herschalten.'
       },
       {
