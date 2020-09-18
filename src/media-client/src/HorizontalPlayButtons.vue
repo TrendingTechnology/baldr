@@ -1,7 +1,7 @@
 <template>
   <div
     class="vc_horizontal_play_buttons"
-    v-if="wrappedSamplesNormalized"
+    v-if="wrappedSampleListNormalized"
   >
     <span
       v-for="wrappedSample in samplesNormalized"
@@ -20,7 +20,7 @@
 
 <script>
 import PlayButton from './PlayButton.vue'
-import { store, WrappedSamples } from './main.js'
+import { store, WrappedSampleList } from './main.js'
 
 export default {
   name: 'HorizontalPlayButtons',
@@ -32,8 +32,8 @@ export default {
     samples: {
       type: Array
     },
-    // Instance of WrappedSamples
-    wrappedSamples: {
+    // Instance of WrappedSampleList
+    wrappedSampleList: {
       type: Object
     },
     showTitles: {
@@ -43,14 +43,14 @@ export default {
   },
   computed: {
     samplesNormalized () {
-      return this.wrappedSamplesNormalized.samples
+      return this.wrappedSampleListNormalized.samples
     },
-    wrappedSamplesNormalized () {
-      if (this.wrappedSamples) return this.wrappedSamples
-      if (this.samples) return new WrappedSamples(this.samples)
+    wrappedSampleListNormalized () {
+      if (this.wrappedSampleList) return this.wrappedSampleList
+      if (this.samples) return new WrappedSampleList(this.samples)
     },
     showTitlesNormalized () {
-      if (this.wrappedSamplesNormalized.isTitleSetManually) return true
+      if (this.wrappedSampleListNormalized.isTitleSetManually) return true
       return this.showTitles
     }
   }

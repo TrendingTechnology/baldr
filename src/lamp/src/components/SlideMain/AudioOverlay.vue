@@ -1,7 +1,7 @@
 <template>
   <div class="vc_audio_overlay" b-ui-theme="default" v-if="audioOverlay">
     <horizontal-play-buttons
-      :wrapped-samples="audioOverlay.wrappedSamples"
+      :wrapped-samples="audioOverlay.wrappedSampleList"
       :show-titles="audioOverlay.showTitles"
     />
   </div>

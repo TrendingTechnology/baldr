@@ -1063,7 +1063,7 @@ class Sample {
  * Wrap a sample with some meta data (mostly a custom title). Allow different
  * input specifications.
  *
- * @see {@link module:@bldr/media-client.WrappedSamples}
+ * @see {@link module:@bldr/media-client.WrappedSampleList}
  * @see {@link module:@bldr/lamp/content-file~AudioOverlay}
  */
 class WrappedSample {
@@ -1164,7 +1164,7 @@ class WrappedSample {
  * @see {@link module:@bldr/media-client~WrappedSample}
  * @see {@link module:@bldr/lamp/content-file~AudioOverlay}
  */
-export class WrappedSamples {
+export class WrappedSampleList {
   /**
    * @param {Object|String|Array} spec - Different input specifications are
    *   possible:

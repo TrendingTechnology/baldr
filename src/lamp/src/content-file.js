@@ -8,7 +8,7 @@
 
 import yaml from 'js-yaml'
 import { shortenText, convertPropertiesCase, escapeHtml, deepCopy, jsYamlConfig, RawDataObject } from '@bldr/core-browser'
-import { WrappedSamples } from '@bldr/media-client'
+import { WrappedSampleList } from '@bldr/media-client'
 import { markupToHtml } from '@/lib'
 import { masters } from '@/masters.js'
 import store from '@/store/index.js'
@@ -225,7 +225,7 @@ function normalizeStyle (style) {
  * See component `AudioOverlay.vue`
  *
  * @see {@link module:@bldr/media-client~WrappedSample}
- * @see {@link module:@bldr/media-client.WrappedSamples}
+ * @see {@link module:@bldr/media-client.WrappedSampleList}
  * @see {@link module:@bldr/lamp/content-file~AudioOverlay}
  */
 class AudioOverlay {
@@ -240,14 +240,14 @@ class AudioOverlay {
     this.showTitles = false
 
     /**
-     * @type {module:@bldr/media-client.WrappedSamples}
+     * @type {module:@bldr/media-client.WrappedSampleList}
      */
-    this.wrappedSamples = null
+    this.wrappedSampleList = null
     if (typeof rawData === 'object' && rawData.samples && rawData.showTitles) {
-      this.wrappedSamples = new WrappedSamples(rawData.samples)
+      this.wrappedSampleList = new WrappedSampleList(rawData.samples)
       this.showTitles = rawData.showTitles
     } else {
-      this.wrappedSamples = new WrappedSamples(rawData)
+      this.wrappedSampleList = new WrappedSampleList(rawData)
     }
 
     /**
@@ -255,7 +255,7 @@ class AudioOverlay {
      *
      * @type {Array}
      */
-    this.mediaUris = this.wrappedSamples.uris
+    this.mediaUris = this.wrappedSampleList.uris
   }
 
   /**

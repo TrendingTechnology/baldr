@@ -2,7 +2,7 @@
  * @module @bldr/lamp/masters/sampleList
  */
 
-import { WrappedSamples } from '@bldr/media-client'
+import { WrappedSampleList } from '@bldr/media-client'
 
 export default {
   title: 'Audio-Ausschnitte',
@@ -32,7 +32,7 @@ export default {
       if (typeof props === 'string' || Array.isArray(props)) {
         props = { samples: props }
       }
-      props.samples = new WrappedSamples(props.samples)
+      props.samples = new WrappedSampleList(props.samples)
       return props
     },
     resolveMediaUris (props) {

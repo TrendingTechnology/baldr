@@ -4,7 +4,7 @@
     <p class="name important">{{ asset.name }}</p>
     <p class="info-box font-shadow smaller" v-if="asset.description" v-html="asset.description"></p>
     <horizontal-play-buttons
-      :wrapped-samples="wrappedSamples"
+      :wrapped-samples="wrappedSampleList"
     />
     <external-sites :asset="asset"/>
   </div>
@@ -18,7 +18,7 @@ export default {
     asset: {
       type: Object
     },
-    wrappedSamples: {
+    wrappedSampleList: {
       type: Object
     }
   },

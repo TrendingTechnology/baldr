@@ -2,7 +2,7 @@
  * @module @bldr/lamp/masters/instrument
  */
 
-import { WrappedSamples } from '@bldr/media-client'
+import { WrappedSampleList } from '@bldr/media-client'
 
 function convertInstrumentIdToMediaId (instrumentId) {
   return `id:IN_${instrumentId}`
@@ -40,7 +40,7 @@ export default {
       const asset = this.$store.getters['media/assetByUri'](convertInstrumentIdToMediaId(props.instrumentId))
       const propsMain = { asset }
       if (asset.audioSamples) {
-        propsMain.wrappedSamples = new WrappedSamples(asset.audioSamples)
+        propsMain.wrappedSampleList = new WrappedSampleList(asset.audioSamples)
       }
       return propsMain
     },
@@ -50,8 +50,8 @@ export default {
     async afterSlideNoChangeOnComponent () {
       if (!this.isPublic) return
       const slide = this.$get('slide')
-      if (slide.propsMain.wrappedSamples) {
-        this.$media.player.load(slide.propsMain.wrappedSamples.samples[0].sample)
+      if (slide.propsMain.wrappedSampleList) {
+        this.$media.player.load(slide.propsMain.wrappedSampleList.samples[0].sample)
       }
     }
   }
