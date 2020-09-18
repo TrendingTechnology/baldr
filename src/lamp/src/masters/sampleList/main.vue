@@ -30,9 +30,11 @@ export default {
 
 <style lang="scss">
   .vc_sample_list_master {
+    h2 {
+      margin: 4em;
+    }
     ol {
       margin: 6em;
-
       li {
         margin-bottom: 1em;
       }

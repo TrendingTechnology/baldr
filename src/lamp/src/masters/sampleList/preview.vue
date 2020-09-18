@@ -2,22 +2,28 @@
   <div class="
     vc_sample_list_master_preview
     slide-preview-fullscreen
+    slide-preview-fix-typography
   ">
+    <h2 v-if="heading" v-html="heading"/>
+    <ol>
+      <li
+        v-for="wrappedSample in samples.samples"
+        :key="wrappedSample.uri"
+        v-html="wrappedSample.sample.titleSafe"
+      />
+    </ol>
   </div>
 </template>
 
 <script>
 export default {
   props: {
-    previewHttpUrl: {
+    heading: {
       type: String
     },
-    title: {
-      type: String,
+    samples: {
+      type: Object,
       required: true
-    },
-    composer: {
-      type: String
     }
   }
 }
