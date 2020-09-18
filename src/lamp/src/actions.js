@@ -170,5 +170,11 @@ export default {
   },
   toggleHome () {
     toggleSlidesToRoute('home')
+  },
+  toggleSlidesPreview () {
+    toggleSlidesToRoute('slides-preview')
+  },
+  toggleRestApi () {
+    toggleSlidesToRoute('rest-api')
   }
 }

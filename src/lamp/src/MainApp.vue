@@ -61,65 +61,7 @@ export default {
       'setSlideNextOrPrevious',
       'setStepNextOrPrevious',
       'setSlideOrStepNextOrPrevious'
-    ]),
-    /**
-     * Toggle between two routes:
-     *
-     * 1. The routes named `slide` or `slide-step-no` and
-     * 2. the route with the name specified with the argument
-     *    `routeNameTo`.
-     *
-     * If the current route is neither `slides` nor `routeNameTo` move
-     * to `routeNameTo`.
-     *
-     * @params {string} routeNameTo - The route name to move to or move
-     *   from.
-     */
-    toggleSlidesRouteTo (routeNameTo) {
-      if (
-        (routeNameTo === 'slide' && !this.slides) ||
-        (routeNameTo === 'slides-preview' && !this.presentation)
-      ) return
-      if (this.$route.name !== routeNameTo) {
-        this.$router.push({ name: routeNameTo })
-      } else if (this.slide) {
-        this.$router.push(this.slide.routerLocation())
-      }
-    },
-    getToggleShortcutObject (keys, routeNameTo) {
-      return {
-        keys: keys,
-        callback: () => { this.toggleSlidesRouteTo(routeNameTo) },
-        description: `Zwischen “slides” und “${routeNameTo}”  hin- und herschalten`
-      }
-    },
-    getToggleShortcutObjects (toggleRouteSpecs) {
-      const shortcutObjects = []
-      for (const spec of toggleRouteSpecs) {
-        shortcutObjects.push(this.getToggleShortcutObject(...spec))
-      }
-      return shortcutObjects
-    },
-    callOpenRestApi (openWith, archive, create) {
-      const presentation = this.$store.getters['lamp/presentation']
-      if (Object.keys(presentation).length === 0) {
-        this.$notifyError(
-          'Es ist keine Präsentation geladen.',
-          'Der übergeordnete Ordner konnte nicht geöffnet werden.'
-        )
-        return
-      }
-      this.$media.httpRequest.request({
-        url: 'mgmt/open',
-        params: {
-          with: openWith,
-          type: 'presentations',
-          id: presentation.meta.id,
-          archive,
-          create
-        }
-      })
-    }
+    ])
   },
   mounted: function () {
     // https://github.com/SimulatedGREG/electron-vue/issues/394#issuecomment-329989627
@@ -210,14 +152,7 @@ export default {
         callback: this.$fullscreen,
         // Fullscreen
         description: 'Vollbild'
-      },
-      ...this.getToggleShortcutObjects([
-        // Take by image quick launcher i 1 etc...
-        // ['i', 'media-ids'],mm
-        // p: is already taken by p f or p s
-        ['s', 'slides-preview'],
-        ['r', 'rest-api']
-      ])
+      }
     ])
     this.$router.afterEach((to, from) => {
       if (to.meta.style) {
