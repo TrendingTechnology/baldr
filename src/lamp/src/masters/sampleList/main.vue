@@ -1,114 +1,45 @@
 <template>
   <div class="vc_sample_list_master">
-
-    <p
-      class="description"
-      v-if="description"
-      v-html="description"
-    />
-
-    <img
-      :src="previewHttpUrl"
-      class="preview"
-      v-if="previewHttpUrl"
-    />
-
-    <p
-      class="composer person"
-      v-if="composer"
-      v-html="composer"
-    />
-
-    <p
-      class="title piece"
-      v-if="partOf"
-      v-html="partOf"
-    />
-
-    <p
-      class="title piece"
-      v-if="title"
-      v-html="title"
-    />
-
-    <p
-      class="artist person"
-      v-if="artist"
-      v-html="artist"
-    />
-
-    <play-button class="left-bottom-corner" :sample="sample"/>
-    <external-sites :asset="mediaAsset"/>
+    <h2 v-if="heading" v-html="heading"/>
+    <ol>
+      <li
+        v-for="wrappedSample in samples.samples"
+        :key="wrappedSample.uri"
+      >
+        <play-button
+          :sample="wrappedSample.sample"
+        />
+        <span>{{ wrappedSample.sample.titleSafe }}</span>
+      </li>
+    </ol>
   </div>
 </template>
 
 <script>
-import ExternalSites from '@/components/ExternalSites.vue'
-
 export default {
   props: {
-    previewHttpUrl: {
+    heading: {
       type: String
     },
-    sample: {
-      type: Object
-    },
-    mediaAsset: {
-      type: Object
-    },
-    title: {
-      type: String,
-      required: true
-    },
-    composer: {
-      type: String
-    },
-    artist: {
-      type: String
-    },
-    partOf: {
-      type: String
-    },
-    description: {
-      type: String
+    samples: {
+      type: Array
     }
-  },
-  components: {
-    ExternalSites
   }
 }
 </script>
 
 <style lang="scss">
   .vc_sample_list_master {
-    text-align: center;
+    ol {
+      margin: 6em;
 
-    p {
-      margin: 0;
-    }
-
-    .composer {
-      font-size: 1.2em;
-    }
-
-    .title {
-      font-size: 1.1em;
-    }
-
-    .artist {
-      margin-top: 4em;
-      font-size: 0.7em;
-    }
-
-    img.preview {
-      height: 10em;
-      width: 10em;
-      object-fit: cover;
-    }
-
-    .description {
-      font-size: 0.6em;
-      padding-bottom: 2em;
+      li {
+        margin-bottom: 1em;
+      }
+      .vc_play_button {
+        transform: translateY(0.2em);
+        margin: 0 0.2em;
+      }
     }
   }
 </style>

@@ -1110,7 +1110,7 @@ class WrappedSample {
      */
     this.uri = null
     if (typeof spec === 'string') {
-      if (spec.match(mediaUriRegExp))  {
+      if (spec.match(mediaUriRegExp)) {
         this.uri = spec.match(mediaUriRegExp)[0]
         let title = spec.replace(mediaUriRegExp, '')
         if (title) {

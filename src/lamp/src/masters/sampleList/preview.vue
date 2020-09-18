@@ -3,24 +3,6 @@
     vc_sample_list_master_preview
     slide-preview-fullscreen
   ">
-    <img
-      :src="previewHttpUrl"
-      class="image-contain"
-      v-if="previewHttpUrl"
-    />
-    <div class="metadata">
-      <p
-        class="composer person"
-        v-if="composer"
-        v-html="composer"
-      />
-      <p
-        class="title piece"
-        v-if="title"
-        v-html="title"
-      />
-    </div>
-    <slide-preview-play-button/>
   </div>
 </template>
 

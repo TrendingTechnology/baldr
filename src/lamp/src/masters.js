@@ -408,12 +408,15 @@ class Master {
       uris = new Set()
     } else if (typeof uris === 'string') {
       uris = new Set([uris])
+    } else if (Array.isArray(uris)) {
+      uris = new Set(uris)
     }
 
     const inlineUris = this.extractInlineMediaUris(props)
     for (const uri of inlineUris) {
       uris.add(uri)
     }
+
     if (uris.size) return uris
   }
 
