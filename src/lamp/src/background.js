@@ -119,7 +119,7 @@ function convertMenuItem (raw) {
     click = () => {
       win.webContents.send('navigate', { name: raw.arguments })
     }
-  } else if (raw.action === 'execute') {
+  } else if (raw.action === 'executeCallback') {
     click = () => {
       win.webContents.send('action', raw.arguments)
     }
@@ -128,8 +128,8 @@ function convertMenuItem (raw) {
   }
   result.click = click
   // accelerator
-  if (raw.accelerator) {
-    result.accelerator = raw.accelerator
+  if (raw.keyboardShortcut) {
+    result.accelerator = raw.keyboardShortcut
     // We handle the keyboard shortcuts on the render process side with
     // mousetrap.
     result.registerAccelerator = false

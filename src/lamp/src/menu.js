@@ -9,13 +9,40 @@
  * @typedef RawMenuItem
  * @property {String} label - A short label of the menu entry.
  * @property {String} description - A longer description of the menu entry.
- * @property {String} action - For example “pushRoute”, “openExternalUrl”, “execute”
- * @property arguments - Arguments for the action function.
+ * @property {String} action - For example “pushRoute”, “openExternalUrl”,
+ *    “executeCallback”.
+ * @property arguments - Arguments for the action, for example a callback name
+ *   or a route name or a URL.
  * @property {Array} submenu - A array of menu entries to build a sub menu from.
- * @property {String} accelerator - Keyboard shortcuts to pass through mousetrap
+ * @property {String} keyboardShortcut - Keyboard shortcuts to pass through mousetrap
  *   and to pass through the Electron Accelerator.
  * @property {Array} activeOnRoutes
  */
+
+/**
+ * @param {String} keys - A raw keyboard shortcut specification.
+ * @param {String} forClient - For which client the shortcuts have to
+ *   normalized. Possible values are “mousetrap” or “electron” (Accelerator.)
+ */
+export function normalizeKeyboardShortcuts (keys, forClient = 'mousetrap') {
+  if (forClient === 'mousetrap') {
+    // See https://craig.is/killing/mice
+    keys = keys.replace('Ctrl', 'ctrl')
+    keys = keys.replace('Shift', 'shift')
+    keys = keys.replace('Alt', 'alt')
+    keys = keys.replace('Left', 'left')
+    keys = keys.replace('Right', 'right')
+    keys = keys.replace('Up', 'up')
+    keys = keys.replace('Down', 'down')
+    keys = keys.replace('Space', 'space')
+  } else if (forClient === 'electron') {
+    // https://www.electronjs.org/docs/api/accelerator
+    keys = keys.replace('Ctrl', 'CommandOrControl')
+  } else {
+    throw new Error(`The argument “forClient” has to be “mousetrap” or “electron” not “${forClient}”`)
+  }
+  return keys.replace(/\s+\+\s+/g, '+')
+}
 
 /**
  * @param {Array.<RawMenuItem>} input - An array of raw menu items.
@@ -62,13 +89,13 @@ const menuTemplate = [
         label: 'Themen',
         action: 'pushRouter',
         arguments: 'topics',
-        accelerator: 't'
+        keyboardShortcut: 't'
       },
       {
         label: 'Master Dokumentation',
         action: 'pushRouter',
         arguments: 'documentation',
-        accelerator: 'd'
+        keyboardShortcut: 'd'
       },
       {
         label: 'Ad-Hoc-Folien',
@@ -77,13 +104,13 @@ const menuTemplate = [
             label: 'Hefteintrag',
             action: 'pushRouter',
             arguments: 'editor',
-            accelerator: 'e'
+            keyboardShortcut: 'e'
           },
           {
             label: 'Dokumentenkamera',
             action: 'pushRouter',
             arguments: 'camera',
-            accelerator: 'c'
+            keyboardShortcut: 'c'
           }
         ]
       },
@@ -92,44 +119,44 @@ const menuTemplate = [
         submenu: [
           {
             label: 'zur vorhergehenden Folie',
-            action: 'execute',
+            action: 'executeCallback',
             arguments: 'goToPreviousSlide',
-            accelerator: 'Ctrl + Left',
+            keyboardShortcut: 'Ctrl + Left',
             activeOnRoutes: ['slide', 'slide-step-no', 'speaker-view', 'speaker-view-step-no']
           },
           {
             label: 'zur nächsten Folie',
-            action: 'execute',
+            action: 'executeCallback',
             arguments: 'goToNextSlide',
-            accelerator: 'Ctrl + Right',
+            keyboardShortcut: 'Ctrl + Right',
             activeOnRoutes: ['slide', 'slide-step-no', 'speaker-view', 'speaker-view-step-no']
           },
           {
             label: 'zum vorhergehenden Schritt',
-            action: 'execute',
+            action: 'executeCallback',
             arguments: 'goToPreviousStep',
-            accelerator: 'Ctrl + Up',
+            keyboardShortcut: 'Ctrl + Up',
             activeOnRoutes: ['slide-step-no', 'speaker-view-step-no']
           },
           {
             label: 'zum nächsten Schritt',
-            action: 'execute',
+            action: 'executeCallback',
             arguments: 'goToNextStep',
-            accelerator: 'Ctrl + Down',
+            keyboardShortcut: 'Ctrl + Down',
             activeOnRoutes: ['slide-step-no', 'speaker-view-step-no']
           },
           {
             label: 'zur/m vorhergehenden Folie oder Schritt',
-            action: 'execute',
+            action: 'executeCallback',
             arguments: 'goToPreviousSlideOrStep',
-            accelerator: 'Left',
+            keyboardShortcut: 'Left',
             activeOnRoutes: ['slide', 'slide-step-no', 'speaker-view', 'speaker-view-step-no']
           },
           {
             label: 'zur/m nächsten Folie oder Schritt',
-            action: 'execute',
+            action: 'executeCallback',
             arguments: 'goToNextSlideOrStep',
-            accelerator: 'Right',
+            keyboardShortcut: 'Right',
             activeOnRoutes: ['slide', 'slide-step-no', 'speaker-view', 'speaker-view-step-no']
           }
         ]
@@ -141,27 +168,27 @@ const menuTemplate = [
       },
       {
         label: 'Medien-Überblick',
-        action: 'execute',
+        action: 'executeCallback',
         arguments: 'toggleMediaOverview',
-        accelerator: 'm'
+        keyboardShortcut: 'm'
       },
       {
         label: 'Startseite',
-        action: 'execute',
+        action: 'executeCallback',
         arguments: 'toggleHome',
-        accelerator: 'h'
+        keyboardShortcut: 'h'
       },
       {
         label: 'Folien-Vorschau',
-        action: 'execute',
+        action: 'executeCallback',
         arguments: 'toggleSlidesPreview',
-        accelerator: 's'
+        keyboardShortcut: 's'
       },
       {
         label: 'REST-API',
-        action: 'execute',
+        action: 'executeCallback',
         arguments: 'toggleRestApi',
-        accelerator: 'Ctrl + Alt + r'
+        keyboardShortcut: 'Ctrl + Alt + r'
       }
     ]
   },
@@ -171,16 +198,16 @@ const menuTemplate = [
       {
         label: 'Aktualsieren',
         description: 'Lokalen Medienserver aktualisieren.',
-        action: 'execute',
+        action: 'executeCallback',
         arguments: 'update',
-        accelerator: 'Ctrl + u'
+        keyboardShortcut: 'Ctrl + u'
       },
       {
         label: 'Neu laden',
         description: 'Präsentation neu laden.',
-        action: 'execute',
+        action: 'executeCallback',
         arguments: 'reloadPresentation',
-        accelerator: 'Ctrl + r'
+        keyboardShortcut: 'Ctrl + r'
       },
       {
         label: 'Öffnen ...',
@@ -188,37 +215,37 @@ const menuTemplate = [
           {
             label: 'Präsentation (Editor)',
             desciption: 'Die aktuelle Präsentation im Editor öffnen',
-            action: 'execute',
+            action: 'executeCallback',
             arguments: 'openEditor',
-            accelerator: 'Ctrl + e'
+            keyboardShortcut: 'Ctrl + e'
           },
           {
             label: 'Mediendatei (Editor)',
             desciption: 'Die erste Mediendatei der aktuellen Folien im Editor öffnen.',
-            action: 'execute',
+            action: 'executeCallback',
             arguments: 'openMedia',
-            accelerator: 'Ctrl + a'
+            keyboardShortcut: 'Ctrl + a'
           },
           {
             label: 'Übergeordneter Ordner',
             desciption: 'Den übergeordneten Ordner der Präsentation öffnen',
-            action: 'execute',
+            action: 'executeCallback',
             arguments: 'openParent',
-            accelerator: 'Ctrl + Alt + e'
+            keyboardShortcut: 'Ctrl + Alt + e'
           },
           {
             label: 'Übergeordneter Ordner und Archivorder',
             desciption: 'Den übergeordneten Ordner der Präsentation, sowie den dazugehörenden Archivordner öffnen',
-            action: 'execute',
+            action: 'executeCallback',
             arguments: 'openParentArchive',
-            accelerator: 'Ctrl + Shift + Alt + e'
+            keyboardShortcut: 'Ctrl + Shift + Alt + e'
           },
           {
             label: 'Präsentation (Editor), übergeordneter Ordner und Archivorder',
             desciption: 'Vollständiger Editiermodus: Den übergeordneten Ordner der Präsentation, sowie den dazugehörenden Archivordner, als auch den Editor öffnen',
-            action: 'execute',
+            action: 'executeCallback',
             arguments: 'openEditorParentArchive',
-            accelerator: 'Ctrl + Alt + r'
+            keyboardShortcut: 'Ctrl + Alt + r'
           }
         ]
       }
@@ -230,43 +257,43 @@ const menuTemplate = [
       {
         label: 'Schriftgröße zurücksetzen',
         description: 'Die aktuelle Folie auf den Skalierungsfaktor 1 (zurück)setzen.',
-        action: 'execute',
+        action: 'executeCallback',
         arguments: 'resetSlideScaleFactor',
-        accelerator: 'Ctrl + 1'
+        keyboardShortcut: 'Ctrl + 1'
       },
       {
         label: 'Schriftgröße vergrößern',
         description: 'Die aktuelle Folie vergrößern.',
-        action: 'execute',
+        action: 'executeCallback',
         arguments: 'increaseSlideScaleFactor',
-        accelerator: 'Ctrl + 2'
+        keyboardShortcut: 'Ctrl + 2'
       },
       {
         label: 'Schriftgröße verkleinern',
         description: 'Die aktuelle Folie verkleinern.',
-        action: 'execute',
+        action: 'executeCallback',
         arguments: 'decreaseSlideScaleFactor',
-        accelerator: 'Ctrl + 3'
+        keyboardShortcut: 'Ctrl + 3'
       },
       {
         label: 'Zwischen zwei Folien hin- und herschalten.',
-        action: 'execute',
+        action: 'executeCallback',
         arguments: 'toggleSlides',
-        accelerator: 'Ctrl + y'
+        keyboardShortcut: 'Ctrl + y'
       },
       {
         label: 'Metainformation',
         description: 'Metainformation der Folien ein/ausblenden',
-        action: 'execute',
+        action: 'executeCallback',
         arguments: 'toggleMetaDataOverlay',
-        accelerator: 'Ctrl + i'
+        keyboardShortcut: 'Ctrl + i'
       },
       {
         label: 'Referentenansicht',
         description: 'Zwischen Präsentations- und Referentenansicht hin- und herschalten.',
-        action: 'execute',
+        action: 'executeCallback',
         arguments: 'toggleSpeakerView',
-        accelerator: 'Ctrl + l'
+        keyboardShortcut: 'Ctrl + l'
       }
     ]
   }
