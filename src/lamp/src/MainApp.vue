@@ -98,26 +98,6 @@ export default {
 
     traverseMenu(menuTemplate, registerMenuItem)
 
-    this.$shortcuts.addMultiple([
-      {
-        keys: 'ctrl+alt+d',
-        callback: () => { this.$styleConfig.configObjects.darkMode.toggle() },
-        // Dark mode
-        description: 'Dark mode'
-      },
-      {
-        keys: 'ctrl+alt+s',
-        callback: () => { this.$styleConfig.setDefaults() },
-        // set style config defaults'
-        description: 'Standard-Darstellung'
-      },
-      {
-        keys: 'ctrl+f',
-        callback: this.$fullscreen,
-        // Fullscreen
-        description: 'Vollbild'
-      }
-    ])
     this.$router.afterEach((to, from) => {
       if (to.meta.style) {
         this.$styleConfig.set(to.meta.style)

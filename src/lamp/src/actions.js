@@ -339,5 +339,14 @@ export default {
   },
   goToNextSlideOrStep () {
     goToNextSlideOrStep(1)
+  },
+  toggleDarkMode () {
+    vm.$styleConfig.configObjects.darkMode.toggle()
+  },
+  resetStyles () {
+    vm.$styleConfig.setDefaults()
+  },
+  enterFullscreen () {
+    vm.$fullscreen()
   }
 }

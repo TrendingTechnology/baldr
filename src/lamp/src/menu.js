@@ -294,6 +294,24 @@ const menuTemplate = [
         action: 'executeCallback',
         arguments: 'toggleSpeakerView',
         keyboardShortcut: 'Ctrl + l'
+      },
+      {
+        label: 'Dark mode',
+        action: 'executeCallback',
+        arguments: 'toggleDarkMode',
+        keyboardShortcut: 'Ctrl + Alt + d'
+      },
+      {
+        label: 'Standard-Darstellung',
+        action: 'executeCallback',
+        arguments: 'resetStyles',
+        keyboardShortcut: 'Ctrl + Alt + s'
+      },
+      {
+        label: 'Vollbild',
+        action: 'executeCallback',
+        arguments: 'enterFullscreen',
+        keyboardShortcut: 'Ctrl + f'
       }
     ]
   }

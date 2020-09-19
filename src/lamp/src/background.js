@@ -34,7 +34,8 @@ function createWindow () {
       nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
       webSecurity: false,
       allowRunningInsecureContent: true,
-      preload: path.join(__dirname, 'preload.js')
+      preload: path.join(__dirname, 'preload.js'),
+      disableHtmlFullscreenWindowResize: false
     }
   })
 
