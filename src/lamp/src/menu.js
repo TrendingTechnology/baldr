@@ -62,13 +62,13 @@ const menuTemplate = [
         label: 'Themen',
         action: 'pushRouter',
         arguments: 'topics',
-        accelerator: 'Ctrl + t'
+        accelerator: 't'
       },
       {
         label: 'Master Dokumentation',
         action: 'pushRouter',
         arguments: 'documentation',
-        accelerator: 'Ctrl + d'
+        accelerator: 'd'
       },
       {
         label: 'Ad-Hoc-Folien',
@@ -77,13 +77,13 @@ const menuTemplate = [
             label: 'Hefteintrag',
             action: 'pushRouter',
             arguments: 'editor',
-            accelerator: 'Ctrl + Shift + e'
+            accelerator: 'e'
           },
           {
             label: 'Dokumentenkamera',
             action: 'pushRouter',
             arguments: 'camera',
-            accelerator: 'Ctrl + c'
+            accelerator: 'c'
           }
         ]
       },
@@ -143,19 +143,19 @@ const menuTemplate = [
         label: 'Medien-Überblick',
         action: 'execute',
         arguments: 'toggleMediaOverview',
-        accelerator: 'Ctrl + m'
+        accelerator: 'm'
       },
       {
         label: 'Startseite',
         action: 'execute',
         arguments: 'toggleHome',
-        accelerator: 'Ctrl + h'
+        accelerator: 'h'
       },
       {
         label: 'Folien-Vorschau',
         action: 'execute',
         arguments: 'toggleSlidesPreview',
-        accelerator: 'Ctrl + s'
+        accelerator: 's'
       },
       {
         label: 'REST-API',

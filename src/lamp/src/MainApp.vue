@@ -41,6 +41,7 @@ import packageJson from '@/../package.json'
 import { AppInfo } from '@bldr/components-collection'
 import { receiveSocketMessage } from '@/remote-control.js'
 import actions from './actions.js'
+import menuTemplate, { traverseMenu } from './menu.js'
 
 import { createNamespacedHelpers } from 'vuex'
 const { mapActions, mapGetters } = createNamespacedHelpers('lamp')
@@ -82,6 +83,21 @@ export default {
     window.addEventListener('error', (event) => {
       this.$notifyError(event.error)
     })
+
+    const registerMenuItem = (raw) => {
+      if (raw.action === 'execute') {
+        this.$shortcuts.add(raw.accelerator, actions[raw.arguments], raw.label, raw.activeOnRoutes)
+      } else if (raw.action === 'pushRouter') {
+        //
+      } else if (raw.action === 'openExternalUrl') {
+        //
+      } else {
+        throw new Error(`Unkown action for raw menu entry: ${raw.label}`)
+      }
+    }
+
+    traverseMenu(menuTemplate, registerMenuItem)
+
     this.$shortcuts.addMultiple([
       {
         keys: 'ctrl+alt+d',
