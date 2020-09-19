@@ -1,12 +1,7 @@
 <template>
   <div class="vc_start_page main-app-padding main-app-fullscreen" b-ui-theme="default">
 
-    <nav v-if="!$isElectron">
-      <router-link :to="{ name: 'topics' }">Themen </router-link>
-      <router-link :to="{ name: 'documentation' }">Dokumentation </router-link>
-      <router-link :to="{ name: 'editor' }">Hefteintrag </router-link>
-      <router-link :to="{ name: 'camera' }">Dokumentenkamera </router-link>
-    </nav>
+    <drop-down-menu v-if="!$isElectron"/>
 
     <div class="top-icon">
       <div class="logo"><material-icon color="red" name="baldr"/>Baldr</div>
@@ -45,11 +40,14 @@
 import OpenInterface from '@/components/OpenInterface'
 import RecentPresentations from '@/components/RecentPresentations'
 
+import DropDownMenu from '@/components/DropDownMenu'
+
 export default {
   name: 'StartPage',
   components: {
     OpenInterface,
-    RecentPresentations
+    RecentPresentations,
+    DropDownMenu
   },
   mounted: function () {
     this.$styleConfig.set()
@@ -102,7 +100,7 @@ export default {
       }
     }
 
-    nav {
+    .vc_drop_down_menu {
       position: absolute;
       top: 1vw;
       left: 1vw;
