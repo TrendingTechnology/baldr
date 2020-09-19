@@ -6,14 +6,53 @@
  */
 
 /**
- * @typedef menuEntry
- * @property label - A short label of the menu entry.
- * @property description - A longer description of the menu entry.
- * @property action - For example “pushRoute”, “openExternalUrl”, “execute”
+ * @typedef RawMenuItem
+ * @property {String} label - A short label of the menu entry.
+ * @property {String} description - A longer description of the menu entry.
+ * @property {String} action - For example “pushRoute”, “openExternalUrl”, “execute”
  * @property arguments - Arguments for the action function.
- * @property submenu - A array of menu entries to build a sub menu from.
- * @property accelerator
+ * @property {Array} submenu - A array of menu entries to build a sub menu from.
+ * @property {String} accelerator - Keyboard shortcuts to pass through mousetrap
+ *   and to pass through the Electron Accelerator.
+ * @property {Array} activeOnRoutes
  */
+
+/**
+ * @param {Array.<RawMenuItem>} input - An array of raw menu items.
+ * @param {Array} output - An array with processed menu items.
+ * @param {Function} func - A function which is called with the argument
+ *   `rawMenuItem`.
+ *
+ * @returns {Array} A recursive array of processed menu items.
+ */
+function traverseMenuItemList (input, output, func) {
+  for (const rawMenuItem of input) {
+    let result
+    if (rawMenuItem.submenu) {
+      result = {
+        label: rawMenuItem.label,
+        submenu: traverseMenuItemList(rawMenuItem.submenu, [], func)
+      }
+    } else {
+      result = func(rawMenuItem)
+    }
+    output.push(result)
+  }
+  return output
+}
+
+/**
+ * @param {Array} input - An array of raw menu items.
+ * @param {Function} func - A function which is called with the argument
+ *   `rawMenuItem`.
+ *
+ * @returns {Array} A recursive array of processed menu items.
+ */
+export function traverseMenu (input, func) {
+  const newMenu = []
+  traverseMenuItemList(input, newMenu, func)
+  return newMenu
+}
 
 const menuTemplate = [
   {
@@ -23,13 +62,13 @@ const menuTemplate = [
         label: 'Themen',
         action: 'pushRouter',
         arguments: 'topics',
-        accelerator: 'CmdOrCtrl + t'
+        accelerator: 'Ctrl + t'
       },
       {
         label: 'Master Dokumentation',
         action: 'pushRouter',
         arguments: 'documentation',
-        accelerator: 'CmdOrCtrl + d'
+        accelerator: 'Ctrl + d'
       },
       {
         label: 'Ad-Hoc-Folien',
@@ -38,13 +77,60 @@ const menuTemplate = [
             label: 'Hefteintrag',
             action: 'pushRouter',
             arguments: 'editor',
-            accelerator: 'CmdOrCtrl + Shift + e'
+            accelerator: 'Ctrl + Shift + e'
           },
           {
             label: 'Dokumentenkamera',
             action: 'pushRouter',
             arguments: 'camera',
-            accelerator: 'CmdOrCtrl + c'
+            accelerator: 'Ctrl + c'
+          }
+        ]
+      },
+      {
+        label: 'Folien',
+        submenu: [
+          {
+            label: 'zur vorhergehenden Folie',
+            action: 'execute',
+            arguments: 'goToPreviousSlide',
+            accelerator: 'Ctrl + Left',
+            activeOnRoutes: ['slide', 'slide-step-no', 'speaker-view', 'speaker-view-step-no']
+          },
+          {
+            label: 'zur nächsten Folie',
+            action: 'execute',
+            arguments: 'goToNextSlide',
+            accelerator: 'Ctrl + Right',
+            activeOnRoutes: ['slide', 'slide-step-no', 'speaker-view', 'speaker-view-step-no']
+          },
+          {
+            label: 'zum vorhergehenden Schritt',
+            action: 'execute',
+            arguments: 'goToPreviousStep',
+            accelerator: 'Ctrl + Up',
+            activeOnRoutes: ['slide-step-no', 'speaker-view-step-no']
+          },
+          {
+            label: 'zum nächsten Schritt',
+            action: 'execute',
+            arguments: 'goToNextStep',
+            accelerator: 'Ctrl + Down',
+            activeOnRoutes: ['slide-step-no', 'speaker-view-step-no']
+          },
+          {
+            label: 'zur/m vorhergehenden Folie oder Schritt',
+            action: 'execute',
+            arguments: 'goToPreviousSlideOrStep',
+            accelerator: 'Left',
+            activeOnRoutes: ['slide', 'slide-step-no', 'speaker-view', 'speaker-view-step-no']
+          },
+          {
+            label: 'zur/m nächsten Folie oder Schritt',
+            action: 'execute',
+            arguments: 'goToNextSlideOrStep',
+            accelerator: 'Right',
+            activeOnRoutes: ['slide', 'slide-step-no', 'speaker-view', 'speaker-view-step-no']
           }
         ]
       },
@@ -57,25 +143,25 @@ const menuTemplate = [
         label: 'Medien-Überblick',
         action: 'execute',
         arguments: 'toggleMediaOverview',
-        accelerator: 'CmdOrCtrl + m'
+        accelerator: 'Ctrl + m'
       },
       {
         label: 'Startseite',
         action: 'execute',
         arguments: 'toggleHome',
-        accelerator: 'CmdOrCtrl + h'
+        accelerator: 'Ctrl + h'
       },
       {
         label: 'Folien-Vorschau',
         action: 'execute',
         arguments: 'toggleSlidesPreview',
-        accelerator: 'CmdOrCtrl + s'
+        accelerator: 'Ctrl + s'
       },
       {
         label: 'REST-API',
         action: 'execute',
         arguments: 'toggleRestApi',
-        accelerator: 'CmdOrCtrl + Alt + r'
+        accelerator: 'Ctrl + Alt + r'
       }
     ]
   },
@@ -87,14 +173,14 @@ const menuTemplate = [
         description: 'Lokalen Medienserver aktualisieren.',
         action: 'execute',
         arguments: 'update',
-        accelerator: 'CmdOrCtrl + u'
+        accelerator: 'Ctrl + u'
       },
       {
         label: 'Neu laden',
         description: 'Präsentation neu laden.',
         action: 'execute',
         arguments: 'reloadPresentation',
-        accelerator: 'CmdOrCtrl + r'
+        accelerator: 'Ctrl + r'
       },
       {
         label: 'Öffnen ...',
@@ -104,35 +190,35 @@ const menuTemplate = [
             desciption: 'Die aktuelle Präsentation im Editor öffnen',
             action: 'execute',
             arguments: 'openEditor',
-            accelerator: 'CmdOrCtrl + e'
+            accelerator: 'Ctrl + e'
           },
           {
             label: 'Mediendatei (Editor)',
             desciption: 'Die erste Mediendatei der aktuellen Folien im Editor öffnen.',
             action: 'execute',
             arguments: 'openMedia',
-            accelerator: 'CmdOrCtrl + a'
+            accelerator: 'Ctrl + a'
           },
           {
             label: 'Übergeordneter Ordner',
             desciption: 'Den übergeordneten Ordner der Präsentation öffnen',
             action: 'execute',
             arguments: 'openParent',
-            accelerator: 'CmdOrCtrl + Alt + e'
+            accelerator: 'Ctrl + Alt + e'
           },
           {
             label: 'Übergeordneter Ordner und Archivorder',
             desciption: 'Den übergeordneten Ordner der Präsentation, sowie den dazugehörenden Archivordner öffnen',
             action: 'execute',
             arguments: 'openParentArchive',
-            accelerator: 'CmdOrCtrl + Shift + Alt + e'
+            accelerator: 'Ctrl + Shift + Alt + e'
           },
           {
             label: 'Präsentation (Editor), übergeordneter Ordner und Archivorder',
             desciption: 'Vollständiger Editiermodus: Den übergeordneten Ordner der Präsentation, sowie den dazugehörenden Archivordner, als auch den Editor öffnen',
             action: 'execute',
             arguments: 'openEditorParentArchive',
-            accelerator: 'CmdOrCtrl + Alt + r'
+            accelerator: 'Ctrl + Alt + r'
           }
         ]
       }
@@ -146,41 +232,41 @@ const menuTemplate = [
         description: 'Die aktuelle Folie auf den Skalierungsfaktor 1 (zurück)setzen.',
         action: 'execute',
         arguments: 'resetSlideScaleFactor',
-        accelerator: 'CmdOrCtrl + 1'
+        accelerator: 'Ctrl + 1'
       },
       {
         label: 'Schriftgröße vergrößern',
         description: 'Die aktuelle Folie vergrößern.',
         action: 'execute',
         arguments: 'increaseSlideScaleFactor',
-        accelerator: 'CmdOrCtrl + 2'
+        accelerator: 'Ctrl + 2'
       },
       {
         label: 'Schriftgröße verkleinern',
         description: 'Die aktuelle Folie verkleinern.',
         action: 'execute',
         arguments: 'decreaseSlideScaleFactor',
-        accelerator: 'CmdOrCtrl + 3'
+        accelerator: 'Ctrl + 3'
       },
       {
         label: 'Zwischen zwei Folien hin- und herschalten.',
         action: 'execute',
         arguments: 'toggleSlides',
-        accelerator: 'CmdOrCtrl + y'
+        accelerator: 'Ctrl + y'
       },
       {
         label: 'Metainformation',
         description: 'Metainformation der Folien ein/ausblenden',
         action: 'execute',
         arguments: 'toggleMetaDataOverlay',
-        accelerator: 'CmdOrCtrl + i'
+        accelerator: 'Ctrl + i'
       },
       {
         label: 'Referentenansicht',
         description: 'Zwischen Präsentations- und Referentenansicht hin- und herschalten.',
         action: 'execute',
         arguments: 'toggleSpeakerView',
-        accelerator: 'CmdOrCtrl + l'
+        accelerator: 'Ctrl + l'
       }
     ]
   }

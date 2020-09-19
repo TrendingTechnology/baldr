@@ -68,6 +68,151 @@ function callOpenRestApi (openWith, archive = false, create = false) {
   })
 }
 
+/**
+ * Router paramters that indicate a specific slide with an step number
+ * in a specific presentation.
+ *
+ * @typedef {Object} routerParams
+ * @property {String} presId - The ID of the presentation, for example
+ *   `Tradition_Futurismus`
+ * @property {Number} slideNo - The slide number starting from 1.
+ * @property {Number} stepNo  - The step number starting from 1.
+ */
+
+/**
+ *
+ * @param {Object} to
+ * @param {Object} from
+ */
+function getNavRouteNameFromRoute (to, from) {
+  if (from.name === 'speaker-view' || from.name === 'speaker-view-step-no') {
+    if (to.stepNo) {
+      return 'speaker-view-step-no'
+    } else {
+      return 'speaker-view'
+    }
+  } else {
+    if (to.stepNo) {
+      return 'slide-step-no'
+    } else {
+      return 'slide'
+    }
+  }
+}
+
+/**
+ * Navigate through the slides (skiping the steps) by updating the route.
+ *
+ * @param {Number} direction - `1`: next, `-1`: previous
+ */
+function goToNextSlide (direction) {
+  const presentation = store.getters['lamp/presentation']
+  if (!presentation) return
+  const slide = store.getters['lamp/slide']
+  const slides = store.getters['lamp/slides']
+  const slidesCount = store.getters['lamp/slidesCount']
+
+  const params = { presId: presentation.id }
+
+  // next
+  if (direction === 1 && slide.no === slidesCount) {
+    params.slideNo = 1
+  // previous
+  } else if (direction === -1 && slide.no === 1) {
+    params.slideNo = slidesCount
+  } else {
+    params.slideNo = slide.no + direction
+  }
+
+  // next
+  if (direction === 1) {
+    store.dispatch('lamp/highlightCursorArrow', 'right')
+  // previous
+  } else if (direction === -1) {
+    store.dispatch('lamp/highlightCursorArrow', 'left')
+  }
+
+  const slideNext = slides[params.slideNo - 1]
+
+  if (slideNext.stepCount > 1) {
+    params.stepNo = 1
+  }
+
+  const name = getNavRouteNameFromRoute(params, router.currentRoute)
+
+  router.push({ name, params })
+}
+
+/**
+ * Navigate through the steps of a slide by updating the route.
+ *
+ * @param {Number} direction - `1`: next, `-1`: previous
+ */
+function goToNextStep (direction) {
+  const presentation = store.getters['lamp/presentation']
+  if (!presentation) return
+  const slide = store.getters['lamp/slide']
+
+  if (!slide.stepCount || slide.stepCount < 2) return
+
+  const params = {
+    presId: presentation.id,
+    slideNo: slide.no
+  }
+
+  // next
+  if (direction === 1 && slide.stepNo === slide.stepCount) {
+    params.stepNo = 1
+  // previous
+  } else if (direction === -1 && slide.stepNo === 1) {
+    params.stepNo = slide.stepCount
+  } else {
+    params.stepNo = slide.stepNo + direction
+  }
+
+  // next
+  if (direction === 1) {
+    store.dispatch('lamp/highlightCursorArrow', 'down')
+  // previous
+  } else if (direction === -1) {
+    store.dispatch('lamp/highlightCursorArrow', 'up')
+  }
+
+  router.push({ name: 'slide-step-no', params })
+}
+
+/**
+ * Navigate through the presentation by updating the route.
+ *
+ * @param {Number} direction - `1`: next, `-1`: previous
+ */
+function goToNextSlideOrStep (direction) {
+  const presentation = store.getters['lamp/presentation']
+  if (!presentation) return
+  const params = store.getters['lamp/nav/nextRouterParams'](direction)
+  params.presId = presentation.id
+
+  const name = getNavRouteNameFromRoute(params, router.currentRoute)
+
+  // next
+  if (direction === 1) {
+    if (params.stepNo && params.stepNo !== 1) {
+      store.dispatch('lamp/highlightCursorArrow', 'down')
+    } else {
+      store.dispatch('lamp/highlightCursorArrow', 'right')
+    }
+  // previous
+  } else if (direction === -1) {
+    if (params.stepNo && params.stepNo !== store.getters['lamp/slide'].stepCount) {
+      store.dispatch('lamp/highlightCursorArrow', 'up')
+    } else {
+      store.dispatch('lamp/highlightCursorArrow', 'left')
+    }
+  }
+
+  router.push({ name, params })
+}
+
 export default {
   resetSlideScaleFactor () {
     store.dispatch('lamp/resetSlideScaleFactor')
@@ -176,5 +321,23 @@ export default {
   },
   toggleRestApi () {
     toggleSlidesToRoute('rest-api')
+  },
+  goToPreviousSlide () {
+    goToNextSlide(-1)
+  },
+  goToNextSlide () {
+    goToNextSlide(1)
+  },
+  goToPreviousStep () {
+    goToNextStep(-1)
+  },
+  goToNextStep () {
+    goToNextStep(1)
+  },
+  goToPreviousSlideOrStep () {
+    goToNextSlideOrStep(-1)
+  },
+  goToNextSlideOrStep () {
+    goToNextSlideOrStep(1)
   }
 }

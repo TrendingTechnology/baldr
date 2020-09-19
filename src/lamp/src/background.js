@@ -10,7 +10,7 @@ import { app, protocol, BrowserWindow, Menu, shell } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 import path from 'path'
-import menuTemplate from './menu.js'
+import menuTemplate, { traverseMenu } from './menu.js'
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
@@ -101,11 +101,7 @@ if (isDevelopment) {
 }
 
 /**
- * @param {Object} raw
- * @property label - A short label of the menu entry.
- * @property action - For example “pushRoute”, “openExternalUrl”, “execute”
- * @property arguments - Arguments for the action function.
- * @property accelerator
+ * @param {module:@bldr/lamp/menu.RawMenuItem} raw
  */
 function convertMenuItem (raw) {
   const result = {}
@@ -132,38 +128,14 @@ function convertMenuItem (raw) {
   }
   result.click = click
   // accelerator
-  if (raw.accelerator) result.accelerator = raw.accelerator
+  if (raw.accelerator) {
+    result.accelerator = raw.accelerator
+    // We handle the keyboard shortcuts on the render process side with
+    // mousetrap.
+    result.registerAccelerator = false
+  }
   return result
 }
 
-/**
- * @param {Array} input
- * @param {Array} output
- */
-function convertMenuItemList (input, output) {
-  for (const rawMenuItem of input) {
-    let result
-    if (rawMenuItem.submenu) {
-      result = {
-        label: rawMenuItem.label,
-        submenu: convertMenuItemList(rawMenuItem.submenu, [])
-      }
-    } else {
-      result = convertMenuItem(rawMenuItem)
-    }
-    output.push(result)
-  }
-  return output
-}
-
-/**
- * @param {Array} input
- */
-function convertMenu (input) {
-  const newMenu = []
-  convertMenuItemList(input, newMenu)
-  return newMenu
-}
-
-const menu = Menu.buildFromTemplate(convertMenu(menuTemplate))
+const menu = Menu.buildFromTemplate(traverseMenu(menuTemplate, convertMenuItem))
 Menu.setApplicationMenu(menu)

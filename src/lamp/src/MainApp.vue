@@ -84,58 +84,6 @@ export default {
     })
     this.$shortcuts.addMultiple([
       {
-        keys: 'ctrl+left',
-        callback: () => {
-          if (this.presentation) this.presentation.nextSlide(-1)
-        },
-        // Previous slide
-        description: 'zur vorhergehenden Folie',
-        routeNames: ['slide', 'slide-step-no', 'speaker-view', 'speaker-view-step-no']
-      },
-      {
-        keys: 'ctrl+right',
-        callback: () => {
-          if (this.presentation) this.presentation.nextSlide(1)
-        },
-        // Next slide
-        description: 'zur nächsten Folie',
-        routeNames: ['slide', 'slide-step-no', 'speaker-view', 'speaker-view-step-no']
-      },
-      {
-        keys: 'ctrl+up',
-        callback: () => {
-          if (this.presentation) this.presentation.nextStep(-1)
-        },
-        // Previous step
-        description: 'zum vorhergehenden Schritt',
-        routeNames: ['slide-step-no', 'speaker-view-step-no']
-      },
-      {
-        keys: 'ctrl+down',
-        callback: () => {
-          if (this.presentation) this.presentation.nextStep(1)
-        },
-        // Next step
-        description: 'zum nächsten Schritt',
-        routeNames: ['slide-step-no', 'speaker-view-step-no']
-      },
-      {
-        keys: 'left',
-        callback: () => {
-          if (this.presentation) this.presentation.nextSlideOrStep(-1)
-        },
-        description: 'zur/m vorhergehenden Folie oder Schritt',
-        routeNames: ['slide', 'slide-step-no', 'speaker-view', 'speaker-view-step-no']
-      },
-      {
-        keys: 'right',
-        callback: () => {
-          if (this.presentation) this.presentation.nextSlideOrStep(1)
-        },
-        description: 'zur/m nächsten Folie oder Schritt',
-        routeNames: ['slide', 'slide-step-no', 'speaker-view', 'speaker-view-step-no']
-      },
-      {
         keys: 'ctrl+alt+d',
         callback: () => { this.$styleConfig.configObjects.darkMode.toggle() },
         // Dark mode
