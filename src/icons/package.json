@@ -28,7 +28,7 @@
     "chalk": "^4.1.0",
     "eslint": "^7.9.0",
     "eslint-plugin-vue": "^6.2.2",
-    "sass": "^1.26.10",
+    "sass": "^1.26.11",
     "sass-loader": "^10.0.2",
     "vue-template-compiler": "^2.6.12",
     "webfont": "^9.0.0"

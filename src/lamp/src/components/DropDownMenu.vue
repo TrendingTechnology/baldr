@@ -1,11 +1,12 @@
 <template>
   <div class="vc_drop_down_menu">
-    <vue-file-toolbar-menu :content="menu" />
+    <baldr-menu :content="menu" />
   </div>
 </template>
 
 <script>
-import VueFileToolbarMenu from 'vue-file-toolbar-menu'
+// import VueFileToolbarMenu from 'vue-file-toolbar-menu'
+import BaldrMenu from '@bldr/menu'
 import menuTemplate from '@/menu.js'
 import actions from '@/actions.js'
 import router from '@/routes.js'
@@ -69,7 +70,7 @@ function traverseMenu (input) {
 export default {
   name: 'DropDownMenu',
   components: {
-    VueFileToolbarMenu
+    BaldrMenu
   },
   computed: {
     menu () {

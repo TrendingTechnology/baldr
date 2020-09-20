@@ -1,0 +1,61 @@
+{
+  "name": "@bldr/menu",
+  "version": "0.1.0",
+  "description": "UI file/toolbar menus for Vue apps",
+  "author": {
+    "name": "Romain Lamothe",
+    "url": "http://www.motla.fr/"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/motla/vue-file-toolbar-menu.git"
+  },
+  "bugs": {
+    "url": "https://github.com/motla/vue-file-toolbar-menu/issues"
+  },
+  "homepage": "https://github.com/motla/vue-file-toolbar-menu",
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build --dest docs && vue-cli-service build --target lib --name vue-file-toolbar-menu src/Bar/Bar.vue",
+    "lint": "vue-cli-service lint",
+    "preversion": "npm run lint",
+    "version": "npm run build && git add -A"
+  },
+  "main": "src/Bar/Bar.vue",
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "~4.5.6",
+    "@vue/cli-plugin-eslint": "~4.5.6",
+    "@vue/cli-service": "~4.5.6",
+    "babel-eslint": "^10.1.0",
+    "core-js": "^3.6.5",
+    "eslint": "^7.9.0",
+    "eslint-plugin-vue": "^6.2.2",
+    "sass": "^1.26.11",
+    "sass-loader": "^8.0.2",
+    "vue": "^2.6.12",
+    "vue-template-compiler": "^2.6.12"
+  },
+  "peerDependencies": {
+    "sass-loader": ">=10.0.2"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/essential",
+      "eslint:recommended"
+    ],
+    "parserOptions": {
+      "parser": "babel-eslint"
+    },
+    "rules": {}
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
+}

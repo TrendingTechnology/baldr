@@ -20,6 +20,10 @@
     "clean": "lerna clean; rm -rf dist; rm -rf src/electron-app/dist; rm -rf masters/songbook/src/electron-app/dist; rm -rf masters/camera/src/electron-app/dist",
     "code:vue": "code .vscode/vue.code-workspace"
   },
+  "dependencies": {
+    "electron": "10.1.1",
+    "electron-rebuild": "2.0.3"
+  },
   "devDependencies": {
     "lerna": "^3.16.4",
     "@vue/cli-plugin-babel": "^3.12.0",
