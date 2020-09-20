@@ -621,6 +621,20 @@ async function walk (func, opt) {
 }
 
 /**
+ * Run git pull on the `basePath`
+ */
+function gitPull () {
+  const gitPull = childProcess.spawnSync(
+    'git', ['pull'],
+    {
+      cwd: basePath,
+      encoding: 'utf-8'
+    }
+  )
+  if (gitPull.status !== 0) throw new Error(`git pull exits with an non-zero status code.`)
+}
+
+/**
  * Update the media server.
  *
  * @param {Boolean} full - Update with git pull.
@@ -628,19 +642,6 @@ async function walk (func, opt) {
  * @returns {Promise.<Object>}
  */
 async function update (full = false) {
-  /**
-   * Run git pull on the `basePath`
-   */
-  function gitPull () {
-    const gitPull = childProcess.spawnSync(
-      'git', ['pull'],
-      {
-        cwd: basePath,
-        encoding: 'utf-8'
-      }
-    )
-    if (gitPull.status !== 0) throw new Error(`git pull exits with an non-zero status code.`)
-  }
   if (full) gitPull()
   const gitRevParse = childProcess.spawnSync('git', ['rev-parse', 'HEAD'], {
     cwd: basePath,
@@ -1368,7 +1369,7 @@ function registerMediaRestApi () {
 
   app.get('/mgmt/update', async (req, res, next) => {
     try {
-      res.json(await update(database))
+      res.json(await update(false))
       // Clear error message store.
       errors = []
     } catch (error) {
