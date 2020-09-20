@@ -41,6 +41,7 @@
 
 <script>
 import { createNamespacedHelpers } from 'vuex'
+import actions from '../actions.js'
 const { mapGetters, mapActions } = createNamespacedHelpers('lamp')
 
 export default {
@@ -78,16 +79,16 @@ export default {
   methods: {
     ...mapActions(['highlightCursorArrow']),
     up () {
-      this.presentation.nextStep(-1)
+      actions.goToPreviousStep()
     },
     right () {
-      this.presentation.nextSlide(1)
+      actions.goToNextSlide()
     },
     down () {
-      this.presentation.nextStep(1)
+      actions.goToNextStep()
     },
     left () {
-      this.presentation.nextSlide(-1)
+      actions.goToPreviousSlide()
     },
     /**
      * CSS classes
