@@ -83,19 +83,77 @@ export function traverseMenu (input, func) {
 
 const menuTemplate = [
   {
+    label: 'Datei',
+    submenu: [
+      {
+        label: 'Öffnen ...',
+        submenu: [
+          {
+            label: 'Präsentation (Editor)',
+            desciption: 'Die aktuelle Präsentation im Editor öffnen',
+            action: 'executeCallback',
+            arguments: 'openEditor',
+            keyboardShortcut: 'Ctrl + e'
+          },
+          {
+            label: 'Mediendatei (Editor)',
+            desciption: 'Die erste Mediendatei der aktuellen Folien im Editor öffnen.',
+            action: 'executeCallback',
+            arguments: 'openMedia',
+            keyboardShortcut: 'Ctrl + a'
+          },
+          {
+            label: 'Übergeordneter Ordner',
+            desciption: 'Den übergeordneten Ordner der Präsentation öffnen',
+            action: 'executeCallback',
+            arguments: 'openParent',
+            keyboardShortcut: 'Ctrl + Alt + e'
+          },
+          {
+            label: 'Übergeordneter Ordner und Archivorder',
+            desciption: 'Den übergeordneten Ordner der Präsentation, sowie den dazugehörenden Archivordner öffnen',
+            action: 'executeCallback',
+            arguments: 'openParentArchive',
+            keyboardShortcut: 'Ctrl + Shift + Alt + e'
+          },
+          {
+            label: 'Präsentation (Editor), übergeordneter Ordner und Archivorder',
+            desciption: 'Vollständiger Editiermodus: Den übergeordneten Ordner der Präsentation, sowie den dazugehörenden Archivordner, als auch den Editor öffnen',
+            action: 'executeCallback',
+            arguments: 'openEditorParentArchive',
+            keyboardShortcut: 'Ctrl + Alt + r'
+          }
+        ]
+      },
+      { role: 'quit' }
+    ]
+  },
+  {
     label: 'Navigation',
     submenu: [
+      {
+        label: 'Startseite',
+        action: 'executeCallback',
+        arguments: 'toggleHome',
+        keyboardShortcut: 'h'
+      },
+      {
+        label: 'Folien-Vorschau',
+        action: 'executeCallback',
+        arguments: 'toggleSlidesPreview',
+        keyboardShortcut: 's'
+      },
+      {
+        label: 'Medien-Überblick',
+        action: 'executeCallback',
+        arguments: 'toggleMediaOverview',
+        keyboardShortcut: 'm'
+      },
       {
         label: 'Themen',
         action: 'pushRouter',
         arguments: 'topics',
         keyboardShortcut: 't'
-      },
-      {
-        label: 'Master Dokumentation',
-        action: 'pushRouter',
-        arguments: 'documentation',
-        keyboardShortcut: 'd'
       },
       {
         label: 'Ad-Hoc-Folien',
@@ -160,35 +218,6 @@ const menuTemplate = [
             activeOnRoutes: ['slide', 'slide-step-no', 'speaker-view', 'speaker-view-step-no']
           }
         ]
-      },
-      {
-        label: 'API Dokumentation',
-        action: 'openExternalUrl',
-        arguments: 'https://josef-friedrich.github.io/baldr/'
-      },
-      {
-        label: 'Medien-Überblick',
-        action: 'executeCallback',
-        arguments: 'toggleMediaOverview',
-        keyboardShortcut: 'm'
-      },
-      {
-        label: 'Startseite',
-        action: 'executeCallback',
-        arguments: 'toggleHome',
-        keyboardShortcut: 'h'
-      },
-      {
-        label: 'Folien-Vorschau',
-        action: 'executeCallback',
-        arguments: 'toggleSlidesPreview',
-        keyboardShortcut: 's'
-      },
-      {
-        label: 'REST-API',
-        action: 'executeCallback',
-        arguments: 'toggleRestApi',
-        keyboardShortcut: 'Ctrl + Alt + r'
       }
     ]
   },
@@ -208,53 +237,12 @@ const menuTemplate = [
         action: 'executeCallback',
         arguments: 'reloadPresentation',
         keyboardShortcut: 'Ctrl + r'
-      },
-      {
-        label: 'Öffnen ...',
-        submenu: [
-          {
-            label: 'Präsentation (Editor)',
-            desciption: 'Die aktuelle Präsentation im Editor öffnen',
-            action: 'executeCallback',
-            arguments: 'openEditor',
-            keyboardShortcut: 'Ctrl + e'
-          },
-          {
-            label: 'Mediendatei (Editor)',
-            desciption: 'Die erste Mediendatei der aktuellen Folien im Editor öffnen.',
-            action: 'executeCallback',
-            arguments: 'openMedia',
-            keyboardShortcut: 'Ctrl + a'
-          },
-          {
-            label: 'Übergeordneter Ordner',
-            desciption: 'Den übergeordneten Ordner der Präsentation öffnen',
-            action: 'executeCallback',
-            arguments: 'openParent',
-            keyboardShortcut: 'Ctrl + Alt + e'
-          },
-          {
-            label: 'Übergeordneter Ordner und Archivorder',
-            desciption: 'Den übergeordneten Ordner der Präsentation, sowie den dazugehörenden Archivordner öffnen',
-            action: 'executeCallback',
-            arguments: 'openParentArchive',
-            keyboardShortcut: 'Ctrl + Shift + Alt + e'
-          },
-          {
-            label: 'Präsentation (Editor), übergeordneter Ordner und Archivorder',
-            desciption: 'Vollständiger Editiermodus: Den übergeordneten Ordner der Präsentation, sowie den dazugehörenden Archivordner, als auch den Editor öffnen',
-            action: 'executeCallback',
-            arguments: 'openEditorParentArchive',
-            keyboardShortcut: 'Ctrl + Alt + r'
-          }
-        ]
       }
     ]
   },
   {
     label: 'Ansicht',
     submenu: [
-      { role: 'togglefullscreen' },
       {
         label: 'Schriftgröße zurücksetzen',
         description: 'Die aktuelle Folie auf den Skalierungsfaktor 1 (zurück)setzen.',
@@ -308,11 +296,42 @@ const menuTemplate = [
         arguments: 'resetStyles',
         keyboardShortcut: 'Ctrl + Alt + s'
       },
+      // { role: 'togglefullscreen' },
       {
         label: 'Vollbild',
         action: 'executeCallback',
         arguments: 'enterFullscreen',
         keyboardShortcut: 'Ctrl + f'
+      }
+    ]
+  },
+  {
+    label: 'Entwicklung',
+    submenu: [
+      { role: 'reload' },
+      { role: 'forcereload' },
+      { role: 'toggledevtools' },
+      {
+        label: 'REST-API',
+        action: 'executeCallback',
+        arguments: 'toggleRestApi',
+        keyboardShortcut: 'Ctrl + Alt + r'
+      }
+    ]
+  },
+  {
+    label: 'Hilfe',
+    submenu: [
+      {
+        label: 'Master Dokumentation',
+        action: 'pushRouter',
+        arguments: 'documentation',
+        keyboardShortcut: 'd'
+      },
+      {
+        label: 'API Dokumentation',
+        action: 'openExternalUrl',
+        arguments: 'https://josef-friedrich.github.io/baldr/'
       }
     ]
   }
