@@ -35,7 +35,8 @@ function createWindow () {
       webSecurity: false,
       allowRunningInsecureContent: true,
       preload: path.join(__dirname, 'preload.js'),
-      disableHtmlFullscreenWindowResize: false
+      disableHtmlFullscreenWindowResize: false,
+      autoHideMenuBar: true
     }
   })
 
