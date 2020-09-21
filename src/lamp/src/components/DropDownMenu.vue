@@ -13,6 +13,7 @@ import router from '@/routes.js'
 
 function convertMenuItem (raw) {
   const result = {}
+  if (raw.role) return
   // label
   if (!raw.label) throw new Error(`Raw menu entry needs a key named label: ${raw}`)
   result.text = raw.label
@@ -51,7 +52,7 @@ function traverseMenuItemList (input, output) {
     } else {
       result = convertMenuItem(rawMenuItem)
     }
-    output.push(result)
+    if (result) output.push(result)
   }
   return output
 }

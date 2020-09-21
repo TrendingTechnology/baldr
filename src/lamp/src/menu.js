@@ -237,6 +237,65 @@ const menuTemplate = [
         action: 'executeCallback',
         arguments: 'reloadPresentation',
         keyboardShortcut: 'Ctrl + r'
+      },
+      {
+        label: 'Medien ...',
+        submenu: [
+          {
+            label: 'Spiele/Pausiere',
+            action: 'executeCallback',
+            arguments: 'togglePlayer',
+            keyboardShortcut: 'space'
+          },
+          {
+            label: 'Stop',
+            action: 'executeCallback',
+            arguments: 'stopPlayer',
+            keyboardShortcut: 'p s'
+          },
+          {
+            label: 'ausblenden',
+            description: 'Audio/Video-Ausschnitt langsam ausblenden',
+            action: 'executeCallback',
+            arguments: 'fadeOutPlayer',
+            keyboardShortcut: 'p f'
+          },
+          {
+            label: 'Start',
+            description: 'Starte geladenen Audio/Video-Ausschnitt',
+            action: 'executeCallback',
+            arguments: 'startPlayer',
+            keyboardShortcut: 'ctrl+space'
+          },
+          {
+            label: 'Vorhergehender Ausschnitt',
+            description: 'Spiele den vorhergehenden Ausschnitt.',
+            action: 'executeCallback',
+            arguments: 'startPreviousInPlaylist',
+            keyboardShortcut: 'ctrl+left'
+          },
+          {
+            label: 'Nächster Ausschnitt',
+            description: 'Spiele den nächsten Ausschnitt.',
+            action: 'executeCallback',
+            arguments: 'startNextInPlaylist',
+            keyboardShortcut: 'ctrl+right'
+          },
+          {
+            label: 'vorspulen',
+            description: 'Um 10s nach vorne springen.',
+            action: 'executeCallback',
+            arguments: 'forwardPlayer',
+            keyboardShortcut: 'ctrl+shift+right'
+          },
+          {
+            label: 'zurückspulen',
+            description: 'Um 10s nach hinten springen.',
+            action: 'executeCallback',
+            arguments: 'backwardPlayer',
+            keyboardShortcut: 'ctrl+shift+left'
+          }
+        ]
       }
     ]
   },
