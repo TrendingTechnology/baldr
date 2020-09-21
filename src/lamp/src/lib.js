@@ -120,6 +120,33 @@ export async function openPresentationByRawYaml (rawYamlString) {
 }
 
 /**
+ * Hide the mouse after x seconds of inactivity.
+ *
+ * @param {Number} seconds
+ */
+export function hideMouseAfterSec (seconds = 5) {
+  let mouseTimer = null
+  let cursorVisible = true
+
+  function disappearCursor () {
+    mouseTimer = null
+    document.body.style.cursor = 'none'
+    cursorVisible = false
+  }
+
+  document.onmousemove = function () {
+    if (mouseTimer) {
+      window.clearTimeout(mouseTimer)
+    }
+    if (!cursorVisible) {
+      document.body.style.cursor = 'default'
+      cursorVisible = true
+    }
+    mouseTimer = window.setTimeout(disappearCursor, seconds * 1000)
+  }
+}
+
+/**
  * Grab / select values from two objects. The first object is preferred. The
  * first object can be for example props and the second a object from the media
  * server.

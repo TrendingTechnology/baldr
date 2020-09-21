@@ -2027,54 +2027,6 @@ class Media {
      */
     this.canvas = new Canvas()
 
-    shortcuts.addMultiple([
-      {
-        keys: 'space',
-        callback: () => { this.player.toggle() },
-        // Media player: Spiele/Pause
-        description: 'Medien-Abspieler: Spiele/Pausiere'
-      },
-      {
-        keys: 'p s',
-        callback: () => { this.player.stop() },
-        description: 'Medien-Abspieler: Stop'
-      },
-      {
-        keys: 'p f',
-        callback: () => { this.player.stop(4) },
-        // Media player: fade out
-        description: 'Medien-Abspieler: Audio/Video-Ausschnitt langsam ausblenden'
-      },
-      {
-        keys: 'ctrl+space',
-        callback: async () => {
-          await this.player.start()
-        },
-        // Media player: Start loaded sample
-        description: 'Medien-Abspieler: Starte geladenen Audio/Video-Ausschnitt'
-      },
-      // {
-      //   keys: 'ctrl+left',
-      //   callback: () => { this.playList.startPrevious() },
-      //   description: 'Medien-Abspieler: Spiele den vorhergehenden Ausschnitt.'
-      // },
-      // {
-      //   keys: 'ctrl+right',
-      //   callback: () => { this.playList.startNext() },
-      //   description: 'Medien-Abspieler: Spiele den nächsten Ausschnitt.'
-      // },
-      {
-        keys: 'ctrl+shift+right',
-        callback: () => { this.player.forward() },
-        description: 'Medien-Abspieler: Um 10s nach vorne springen.'
-      },
-      {
-        keys: 'ctrl+shift+left',
-        callback: () => { this.player.backward() },
-        description: 'Medien-Abspieler: Um 10s nach hinten springen.'
-      }
-    ])
-
     if (router) {
       const style = {
         darkMode: false

@@ -348,5 +348,29 @@ export default {
   },
   enterFullscreen () {
     vm.$fullscreen()
+  },
+  togglePlayer () {
+    vm.$media.player.toggle()
+  },
+  startPlayer () {
+    vm.$media.player.start()
+  },
+  stopPlayer () {
+    vm.$media.player.stop()
+  },
+  fadeOutPlayer () {
+    vm.$media.player.stop(4)
+  },
+  startPreviousInPlaylist () {
+    vm.$media.playList.startPrevious()
+  },
+  startNextInPlaylist () {
+    vm.$media.playList.startNext()
+  },
+  forwardPlayer () {
+    vm.$media.player.forward()
+  },
+  backwardPlayer () {
+    vm.$media.player.backward()
   }
 }
