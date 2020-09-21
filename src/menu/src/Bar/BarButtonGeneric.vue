@@ -3,12 +3,12 @@
     @mousedown="(e) => e.preventDefault()"
     @click="(e) => item.click ? item.click(e) : e.stopPropagation()">
 
-    <span v-if="item.icon" class="material-icons icon">{{ item.icon }}</span>
+    <span v-if="item.icon" class="baldr-icon baldr-icon_chevron-right">{{ item.icon }}</span>
     <span v-if="item.text" class="label">{{ item.text }}</span>
     <span v-if="item.html" class="label" v-html="item.html"></span>
 
-    <span v-if="item.chevron === true" class="material-icons chevron">expand_more</span>
-    <span v-else-if="item.chevron" class="chevron" v-html="item.chevron"></span>
+    <span v-if="item.chevron === true" class="baldr-icon baldr-icon_chevron-right">expand_more</span>
+    <span v-else-if="item.chevron" class="baldr-icon baldr-icon_chevron-right" v-html="item.chevron"></span>
 
     <component class="menu" v-if="item.menu"
       :is="get_component(item.menu)"
@@ -51,6 +51,12 @@ export default {
         return title;
       }
       else return false;
+    }
+  },
+  methods: {
+    get_component (is) {
+      if(is && !Array.isArray(is) && typeof is == "object") return is;
+      else return "bar-menu";
     }
   }
 }

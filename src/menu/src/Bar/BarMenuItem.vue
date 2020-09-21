@@ -6,13 +6,12 @@
     :title="item.title"
     :style="{ height: item.height+'px' }">
 
-    <span v-if="item.icon" class="material-icons icon">{{ item.icon }}</span>
+    <span v-if="item.icon" class="baldr-icon baldr-icon_chevron-right"></span>
     <span v-if="item.text" class="label">{{ item.text }}</span>
     <span v-if="item.html" class="label" v-html="item.html"></span>
     <span v-if="item.hotkey" class="hotkey">{{ hotkey }}</span>
 
-    <span v-if="item.menu && item.custom_chevron" class="chevron" v-html="item.custom_chevron"></span>
-    <span v-else-if="item.menu" class="material-icons chevron">chevron_right</span>
+    <span v-if="item.menu" class="baldr-icon baldr-icon_chevron-right"></span>
 
     <component class="menu" v-if="item.menu"
       :is="get_component(item.menu)"
@@ -34,6 +33,12 @@ export default {
     item: {
       type: Object,
       required: true
+    }
+  },
+  methods: {
+    get_component (is) {
+      if(is && !Array.isArray(is) && typeof is == "object") return is;
+      else return "bar-menu";
     }
   }
 }

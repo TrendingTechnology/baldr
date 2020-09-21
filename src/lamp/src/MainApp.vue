@@ -83,17 +83,23 @@ export default {
     window.addEventListener('error', (event) => {
       this.$notifyError(event.error)
     })
-
     const registerMenuItem = (raw) => {
+      let action
+      if (!raw.keyboardShortcut) return
       if (raw.action === 'executeCallback') {
-        this.$shortcuts.add(normalizeKeyboardShortcuts(raw.keyboardShortcut), actions[raw.arguments], raw.label, raw.activeOnRoutes)
+        action = actions[raw.arguments]
       } else if (raw.action === 'pushRouter') {
-        //
+        action = () => {
+          this.$router.push({ name: raw.arguments })
+        }
       } else if (raw.action === 'openExternalUrl') {
-        //
+        action = () => {
+          window.open(raw.arguments, '_blank')
+        }
       } else {
         throw new Error(`Unkown action for raw menu entry: ${raw.label}`)
       }
+      this.$shortcuts.add(normalizeKeyboardShortcuts(raw.keyboardShortcut), action, raw.label, raw.activeOnRoutes)
     }
 
     traverseMenu(menuTemplate, registerMenuItem)
