@@ -28,6 +28,7 @@ function createWindow () {
   win = new BrowserWindow({
     width: 800,
     height: 600,
+    autoHideMenuBar: true,
     webPreferences: {
       // Use pluginOptions.nodeIntegration, leave this alone
       // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
@@ -35,7 +36,7 @@ function createWindow () {
       webSecurity: false,
       allowRunningInsecureContent: true,
       preload: path.join(__dirname, 'preload.js'),
-      disableHtmlFullscreenWindowResize: false
+      disableHtmlFullscreenWindowResize: false,
     }
   })
 
@@ -106,6 +107,7 @@ if (isDevelopment) {
  */
 function convertMenuItem (raw) {
   const result = {}
+  if (raw.role) return raw
   // label
   if (!raw.label) throw new Error(`Raw menu entry needs a key named label: ${raw}`)
   result.label = raw.label

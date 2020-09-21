@@ -254,6 +254,7 @@ const menuTemplate = [
   {
     label: 'Ansicht',
     submenu: [
+      { role: 'togglefullscreen' },
       {
         label: 'Schriftgröße zurücksetzen',
         description: 'Die aktuelle Folie auf den Skalierungsfaktor 1 (zurück)setzen.',
