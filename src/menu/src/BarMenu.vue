@@ -2,16 +2,16 @@
   <div class="bar-menu">
     <div class="extended-hover-zone"></div>
     <div class="bar-menu-items" :style="{
-        width: width+'px',
-        minWidth: width+'px',
-        maxHeight: height+'px',
+        width: width + 'px',
+        minWidth: width + 'px',
+        maxHeight: height + 'px',
         overflow: height ? 'auto' : 'visible'
       }">
       <component v-for="(item, index) in submenu"
       :is="get_component(item.is)"
       :item="item"
       :class="item.class"
-      :key="'menu-'+index" />
+      :key="'menu-' + index" />
     </div>
   </div>
 </template>
@@ -36,7 +36,7 @@ export default {
   methods: {
     get_component(is) {
       if(typeof is == "object") return is;
-      else if(typeof is == "string") return 'bar-menu-'+is;
+      else if(typeof is == "string") return 'bar-menu-' + is;
       else return 'bar-menu-item';
     }
   }

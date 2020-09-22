@@ -43,9 +43,9 @@ export default {
       return { open, active, disabled };
     },
     title () {
-      if(this.item.title){
+      if (this.item.title) {
         let title = this.item.title;
-        if(this.hotkey) title += " ("+this.hotkey+")";
+        if (this.keyboardShortcut) title += " (" + this.keyboardShortcut + ")";
         return title;
       }
       else return false;

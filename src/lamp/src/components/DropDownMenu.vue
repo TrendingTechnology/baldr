@@ -32,6 +32,7 @@ function convertMenuItem (raw) {
     throw new Error(`Unkown action for raw menu entry: ${raw}`)
   }
   result.click = click
+  if (raw.keyboardShortcut) result.keyboardShortcut = raw.keyboardShortcut
   return result
 }
 
