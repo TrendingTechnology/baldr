@@ -22,20 +22,17 @@ export default {
     BarSeparator,
     BarSpacer
   },
-
   props: {
     content: {
       type: Array,
       required: true
     }
   },
-
   data () {
     return {
       menu_open: false
     }
   },
-
   methods: {
     clickaway (e) {
       if(!this.$el.contains(e.target)) this.menu_open = false;

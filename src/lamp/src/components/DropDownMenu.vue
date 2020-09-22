@@ -47,7 +47,7 @@ function traverseMenuItemList (input, output) {
     if (rawMenuItem.submenu) {
       result = {
         text: rawMenuItem.label,
-        menu: traverseMenuItemList(rawMenuItem.submenu, [])
+        submenu: traverseMenuItemList(rawMenuItem.submenu, [])
       }
     } else {
       result = convertMenuItem(rawMenuItem)

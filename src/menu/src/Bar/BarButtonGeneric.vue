@@ -10,9 +10,9 @@
     <span v-if="item.chevron === true" class="baldr-icon baldr-icon_chevron-right">expand_more</span>
     <span v-else-if="item.chevron" class="baldr-icon baldr-icon_chevron-right" v-html="item.chevron"></span>
 
-    <component class="menu" v-if="item.menu"
-      :is="get_component(item.menu)"
-      :menu="item.menu"
+    <component class="menu" v-if="item.submenu"
+      :is="get_component(item.submenu)"
+      :submenu="item.submenu"
       :class="item.menu_class"
       :width="item.menu_width"
       :height="item.menu_height" />
@@ -27,7 +27,6 @@ export default {
   components: {
     BarMenu
   },
-
   props: {
     item: {
       type: Object,
@@ -35,9 +34,8 @@ export default {
     },
     is_open: Boolean
   },
-
   computed: {
-    is_menu () { return this.item.menu ? true : false; },
+    is_menu () { return this.item.submenu ? true : false; },
     button_class () {
       const open = this.is_open && this.is_menu;
       const active = this.item.active;

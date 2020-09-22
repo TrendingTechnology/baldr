@@ -11,11 +11,11 @@
     <span v-if="item.html" class="label" v-html="item.html"></span>
     <span v-if="item.hotkey" class="hotkey">{{ hotkey }}</span>
 
-    <span v-if="item.menu" class="baldr-icon baldr-icon_chevron-right"></span>
+    <span v-if="item.submenu" class="baldr-icon baldr-icon_chevron-right"></span>
 
-    <component class="menu" v-if="item.menu"
-      :is="get_component(item.menu)"
-      :menu="item.menu"
+    <component class="menu" v-if="item.submenu"
+      :is="get_component(item.submenu)"
+      :submenu="item.submenu"
       :class="item.menu_class"
       :width="item.menu_width"
       :height="item.menu_height" />
@@ -28,7 +28,6 @@ export default {
   components: {
     BarMenu: () => import('./BarMenu.vue') // recursive component
   },
-
   props: {
     item: {
       type: Object,

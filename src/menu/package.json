@@ -1,20 +1,19 @@
 {
   "name": "@bldr/menu",
   "version": "0.1.0",
-  "description": "UI file/toolbar menus for Vue apps",
-  "author": {
-    "name": "Romain Lamothe",
-    "url": "http://www.motla.fr/"
+  "description": "Dropdown menu",
+  "bugs": {
+    "url": "https://github.com/Josef-Friedrich/baldr/issues"
   },
+  "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/motla/vue-file-toolbar-menu.git"
+    "url": "git+https://github.com/Josef-Friedrich/baldr.git"
   },
-  "bugs": {
-    "url": "https://github.com/motla/vue-file-toolbar-menu/issues"
-  },
-  "homepage": "https://github.com/motla/vue-file-toolbar-menu",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build --dest docs && vue-cli-service build --target lib --name vue-file-toolbar-menu src/Bar/Bar.vue",
