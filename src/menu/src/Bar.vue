@@ -61,5 +61,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import "./imports/bar-default-styles.scss";
+  @import "./bar-default-styles.scss";
 </style>
