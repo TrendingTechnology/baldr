@@ -31,9 +31,13 @@ async function buildElectronApp (cmd, appName) {
 /**
  * @param {String} appName - The name of the app. The app name must be the same
  *   as the parent directory.
+ * @param {Object} cmdObj
+ * @param {Object} globalOpts
  */
-async function action (appName) {
-  const cmd = new CommandRunner()
+async function action (appName, cmdObj, globalOpts) {
+  const cmd = new CommandRunner({
+    verbose: globalOpts.verbose
+  })
   cmd.checkRoot()
   cmd.startSpin()
   try {

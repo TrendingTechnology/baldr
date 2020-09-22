@@ -34,6 +34,7 @@ program.on('command:*', function () {
  * To avoid long loading times by many subcommands.
  *
  * @param {String} commandName - The name of the command.
+ * @param {Object} def
  */
 function actionHandler (commandName, def) {
   return function () {
@@ -41,10 +42,16 @@ function actionHandler (commandName, def) {
       checkExecutables(def.checkExecutable)
     }
     const action = require(path.join(commandsPath, commandName, 'action.js'))
+
+    const args = [
+      ...arguments,
+      // To get the global --verbose options
+      program.opts()
+    ]
     // To be able to export some functions other than
     // the action function from the subcommands.
-    if (typeof action === 'function') return action(...arguments)
-    return action.action(...arguments)
+    if (typeof action === 'function') return action(...args)
+    return action.action(...args)
   }
 }
 
