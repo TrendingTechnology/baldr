@@ -7,7 +7,7 @@
     :style="{ height: item.height+'px' }">
 
     <span v-if="item.icon" class="baldr-icon baldr-icon_chevron-right"></span>
-    <span v-if="item.text" class="label">{{ item.text }}</span>
+    <span v-if="item.label" class="label">{{ item.label }}</span>
     <span v-if="item.html" class="label" v-html="item.html"></span>
     <span v-if="item.keyboardShortcut" class="hotkey">{{ item.keyboardShortcut }}</span>
 

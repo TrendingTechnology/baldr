@@ -16,7 +16,7 @@ function convertMenuItem (raw) {
   if (raw.role) return
   // label
   if (!raw.label) throw new Error(`Raw menu entry needs a key named label: ${raw}`)
-  result.text = raw.label
+  result.label = raw.label
   // click
   if (!raw.action) throw new Error(`Raw menu entry needs a key named action: ${raw}`)
   let click
@@ -47,7 +47,7 @@ function traverseMenuItemList (input, output) {
     let result
     if (rawMenuItem.submenu) {
       result = {
-        text: rawMenuItem.label,
+        label: rawMenuItem.label,
         submenu: traverseMenuItemList(rawMenuItem.submenu, [])
       }
     } else {

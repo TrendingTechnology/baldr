@@ -4,7 +4,7 @@
     @click="(e) => item.click ? item.click(e) : e.stopPropagation()">
 
     <span v-if="item.icon" class="baldr-icon baldr-icon_chevron-right">{{ item.icon }}</span>
-    <span v-if="item.text" class="label">{{ item.text }}</span>
+    <span v-if="item.label" class="label">{{ item.label }}</span>
     <span v-if="item.html" class="label" v-html="item.html"></span>
 
     <span v-if="item.chevron === true" class="baldr-icon baldr-icon_chevron-right">expand_more</span>
