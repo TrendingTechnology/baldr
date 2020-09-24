@@ -26,11 +26,17 @@ module.exports = {
       }
     },
     plugins: [
-      new CopyPlugin([{
-        from: config.songbook.projectorPath,
-        to: 'songs',
-        ignore: ['.git/**']
-      }]),
+      new CopyPlugin({
+        patterns: [
+          {
+            from: config.songbook.projectorPath,
+            to: 'songs',
+            globOptions: {
+              ignore: ['.git/**']
+            }
+          }
+        ]
+      }),
       new DefinePlugin({
         // https://webpack.js.org/plugins/define-plugin/
         // If the value is a string it will be used as a code fragment.

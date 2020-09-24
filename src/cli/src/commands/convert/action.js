@@ -117,9 +117,9 @@ async function collectMusicMetaData (inputFile) {
  * @param {String} inputFile - The path of the input file.
  * @param {Object} cmdObj - The command object from the commander.
  *
- * @returns {String} The output file path.
+ * @returns {Promise.<String>} The output file path.
  */
-async function convert (inputFile, cmdObj) {
+async function convert (inputFile, cmdObj = {}) {
   const asset = lib.makeAsset(inputFile)
 
   const inputExtension = asset.extension.toLowerCase()
@@ -188,7 +188,6 @@ async function convert (inputFile, cmdObj) {
   }
 
   if (process) {
-
     if (process.status !== 0 && assetType === 'audio') {
       // A second attempt for mono audio: HEv2 only makes sense with stereo.
       // see http://www.ffmpeg-archive.org/stereo-downmix-error-aac-HEv2-td4664367.html
