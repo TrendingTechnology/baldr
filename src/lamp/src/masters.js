@@ -6,11 +6,11 @@
 
 /* globals rawYamlExamples */
 
-import { customStore } from '@/main.js'
-import { markupToHtml, validateUri } from '@/lib.js'
-import inlineMarkup from '@/inline-markup.js'
-import SlidePreviewPlayButton from '@/components/SlidesPreview/PlayButton.vue'
-import store from '@/store/index.js'
+import { customStore } from './main.js'
+import { markupToHtml, validateUri } from './lib.js'
+import inlineMarkup from './inline-markup.js'
+import SlidePreviewPlayButton from './components/SlidesPreview/PlayButton.vue'
+import store from './store/index.js'
 import Vue from 'vue'
 
 /**

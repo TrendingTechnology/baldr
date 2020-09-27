@@ -113,7 +113,13 @@ export default {
 
     this.$options.sockets.onmessage = receiveSocketMessage
 
+    // Register Auto hide of the mouse.
     hideMouseAfterSec(3)
+
+    // Update the media server on startup.
+    setTimeout(() => {
+      actions.update()
+    }, 2000)
   }
 }
 </script>
