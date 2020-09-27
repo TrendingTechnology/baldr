@@ -11,6 +11,10 @@ export default {
     src: {
       type: String,
       description: 'URI eines Dokuments.'
+    },
+    page: {
+      type: Number,
+      description: 'Nur eine Seite des PDFs anzeigen'
     }
   },
   icon: {
@@ -36,9 +40,14 @@ export default {
     },
     collectPropsMain (props) {
       const asset = this.$store.getters['media/assetByUri'](props.src)
-      return { asset }
+      const output = {
+        asset
+      }
+      if (props.page) output.page = props.page
+      return output
     },
     calculateStepCount ({ propsMain }) {
+      if (propsMain.page) return 1
       const asset = propsMain.asset
       if (asset.pageCount && asset.pageCount > 1) {
         return asset.pageCount

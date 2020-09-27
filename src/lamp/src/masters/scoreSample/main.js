@@ -51,9 +51,9 @@ export default {
         audioSample = audio
       }
       let asset
-      const muliPartSelection = this.$store.getters['media/multiPartSelectionByUri'](props.score)
-      if (muliPartSelection) {
-        asset = muliPartSelection
+      const multiPartSelection = this.$store.getters['media/multiPartSelectionByUri'](props.score)
+      if (multiPartSelection) {
+        asset = multiPartSelection
       } else {
         asset = this.$store.getters['media/assetByUri'](props.score)
       }

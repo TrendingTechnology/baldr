@@ -5,7 +5,7 @@
       slide-preview-fullscreen
     "
   >
-    <pdf-viewer :src="asset.httpUrl"/>
+    <pdf-viewer :page="pageComputed" :src="asset.httpUrl"/>
   </div>
 </template>
 
@@ -16,10 +16,19 @@ export default {
   props: {
     asset: {
       type: Object
+    },
+    page: {
+      type: Number
     }
   },
   components: {
     PdfViewer
+  },
+  computed: {
+    pageComputed () {
+      if (this.page) return this.page
+      return 1
+    }
   }
 }
 </script>
