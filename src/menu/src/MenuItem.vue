@@ -14,7 +14,7 @@
     <span v-if="item.submenu" class="baldr-icon baldr-icon_chevron-right"></span>
 
     <component class="menu" v-if="item.submenu"
-      :is="get_component(item.submenu)"
+      :is="getComponent(item.submenu)"
       :submenu="item.submenu"
       :class="item.menu_class"
       :width="item.menu_width"
@@ -35,7 +35,7 @@ export default {
     }
   },
   methods: {
-    get_component (is) {
+    getComponent (is) {
       if(is && !Array.isArray(is) && typeof is == "object") return is;
       else return "bar-menu";
     }

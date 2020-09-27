@@ -11,7 +11,7 @@
     <span v-else-if="item.chevron" class="baldr-icon baldr-icon_chevron-right" v-html="item.chevron"></span>
 
     <component class="menu" v-if="item.submenu"
-      :is="get_component(item.submenu)"
+      :is="getComponent(item.submenu)"
       :submenu="item.submenu"
       :class="item.menu_class"
       :width="item.menu_width"
@@ -35,9 +35,9 @@ export default {
     is_open: Boolean
   },
   computed: {
-    is_menu () { return this.item.submenu ? true : false; },
+    isMenu () { return this.item.submenu ? true : false; },
     button_class () {
-      const open = this.is_open && this.is_menu;
+      const open = this.is_open && this.isMenu;
       const active = this.item.active;
       const disabled = this.item.disabled;
       return { open, active, disabled };
@@ -52,7 +52,7 @@ export default {
     }
   },
   methods: {
-    get_component (is) {
+    getComponent (is) {
       if(is && !Array.isArray(is) && typeof is == "object") return is;
       else return "bar-menu";
     }

@@ -8,7 +8,7 @@
         overflow: height ? 'auto' : 'visible'
       }">
       <component v-for="(item, index) in submenu"
-      :is="get_component(item.is)"
+      :is="getComponent(item.is)"
       :item="item"
       :class="item.class"
       :key="'menu-' + index" />
@@ -17,13 +17,13 @@
 </template>
 
 <script>
-import BarMenuItem from './BarMenuItem.vue'
-import BarMenuSeparator from './BarMenuSeparator.vue'
+import MenuItem from './MenuItem.vue'
+import MenuSeparator from './MenuSeparator.vue'
 
 export default {
   components: {
-    BarMenuItem,
-    BarMenuSeparator
+    MenuItem,
+    MenuSeparator
   },
   props: {
     submenu: {
@@ -34,10 +34,10 @@ export default {
     height: Number
   },
   methods: {
-    get_component(is) {
+    getComponent(is) {
       if(typeof is == "object") return is;
-      else if(typeof is == "string") return 'bar-menu-' + is;
-      else return 'bar-menu-item';
+      else if(typeof is == "string") return 'menu-' + is;
+      else return 'menu-item';
     }
   }
 }
