@@ -21,10 +21,18 @@ async function buildElectronApp (cmd, appName) {
   if (!fs.existsSync(appPath)) {
     throw new Error(`App path doesn’t exist for app “${appName}”.`)
   }
+
+  const packageJson = require(path.join(appPath, 'package.json'))
   cmd.log(`${appName}: build the Electron app.`)
   await cmd.exec('npm', 'run', 'build:electron', { cwd: appPath })
+
+  // await cmd.exec('npm', 'run', 'install:deb', { cwd: appPath })
+  cmd.log(`${appName}: remove old .deb package.`)
+  await cmd.exec('apt', '-y', 'remove', `baldr-${appName}`)
+
   cmd.log(`${appName}: install the .deb package.`)
-  await cmd.exec('npm', 'run', 'install:deb', { cwd: appPath })
+  await cmd.exec('dpkg', '-i', path.join(appPath, 'dist_electron', `baldr-${appName}_${packageJson.version}_amd64.deb`))
+
   cmd.stopSpin()
 }
 
