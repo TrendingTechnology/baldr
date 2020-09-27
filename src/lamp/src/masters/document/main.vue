@@ -1,7 +1,7 @@
 <template>
   <div class="vc_document_master">
     <pdf-viewer
-      :page="navNos.stepNo"
+      :page="pageComputed"
       :src="asset.httpUrl"
       ref="pdfViewer"
     />
@@ -15,10 +15,19 @@ export default {
   props: {
     asset: {
       type: Object
+    },
+    page: {
+      type: Number
     }
   },
   components: {
     PdfViewer
+  },
+  computed: {
+    pageComputed () {
+      if (this.page) return this.page
+      return this.navNos.stepNo
+    }
   }
 }
 </script>
