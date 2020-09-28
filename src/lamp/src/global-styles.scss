@@ -30,6 +30,10 @@ body {
   text-shadow: 0 0 0.2em $black, 0 0 0.05em $black;
 }
 
+.smallest {
+  font-size: 0.6em
+}
+
 .small {
   font-size: 0.8em
 }
@@ -42,8 +46,12 @@ body {
   font-size: 1.2em
 }
 
-  .bigger {
+.bigger {
   font-size: 1.4em
+}
+
+.biggest {
+  font-size: 1.6em
 }
 
 // For master slides: person, instrument

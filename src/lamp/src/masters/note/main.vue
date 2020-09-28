@@ -1,6 +1,6 @@
 <template>
   <div
-    class="vc_note_master"
+    class="vc_note_master biggest"
     v-html="markup"
   />
 </template>
@@ -33,6 +33,9 @@ export default {
 
     table {
       table-layout: fixed;
+    }
+    &.biggest {
+      line-height: 1.35em;
     }
   }
 </style>
