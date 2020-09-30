@@ -11,9 +11,8 @@
             uriAuthority: asset.uriAuthority
           }
         }"
-      >
-        {{ asset.titleSafe }}
-      </router-link>
+        v-html="asset.titleSafe"
+      />
     </td>
     <td class="shortcut">
       <div v-for="shortcut in shortcuts" :key="shortcut.shortcut">
