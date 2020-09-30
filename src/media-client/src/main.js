@@ -660,17 +660,21 @@ class Sample {
   }
 
   /**
-   * There are to URI schemes: `id` and `uuid`. Use the URI scheme that
-   * is not used in the property `this.uri`.
+   * The URI using the `id` authority.
    *
    * @returns {String}
    */
-  get uriSecond () {
-    if (this.asset.uriScheme === 'id') {
-      return this.uri.replace(/^id:/, 'uuid:')
-    } else {
-      return this.uri.replace(/^uuid:/, 'id:')
-    }
+  get uriId () {
+    return `${this.asset.uriId}#${this.id}`
+  }
+
+  /**
+   * The URI using the `uuid` authority.
+   *
+   * @returns {String}
+   */
+  get uriUuid () {
+    return `${this.asset.uriUuid}#${this.id}`
   }
 
   /**
@@ -1319,17 +1323,21 @@ export class ClientMediaAsset {
   }
 
   /**
-   * There are to URI schemes: `id` and `uuid`. Use the URI scheme that
-   * is not used in the property `this.uri`.
+   * The URI using the `id` authority.
    *
    * @returns {String}
    */
-  get uriSecond () {
-    if (this.uriScheme === 'id') {
-      return `uuid:${this.uriAuthority}`
-    } else {
-      return `id:${this.uriAuthority}`
-    }
+  get uriId () {
+    return `id:${this.id}`
+  }
+
+  /**
+   * The URI using the `uuid` authority.
+   *
+   * @returns {String}
+   */
+  get uriUuid () {
+    return `uuid:${this.uuid}`
   }
 
   /**
@@ -1561,17 +1569,21 @@ class MultiPartSelection {
   }
 
   /**
-   * There are to URI schemes: `id` and `uuid`. Use the URI scheme that
-   * is not used in the property `this.uri`.
+   * The URI using the `id` authority.
    *
    * @returns {String}
    */
-  get uriSecond () {
-    if (this.asset.uriScheme === 'id') {
-      return this.uri.replace(/^id:/, 'uuid:')
-    } else {
-      return this.uri.replace(/^uuid:/, 'id:')
-    }
+  get uriId () {
+    return `${this.asset.uriId}#${this.selectionSpec}`
+  }
+
+  /**
+   * The URI using the `uuid` authority.
+   *
+   * @returns {String}
+   */
+  get uriUuid () {
+    return `${this.asset.uriUuid}#${this.selectionSpec}`
   }
 
   /**
