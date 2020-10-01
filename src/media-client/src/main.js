@@ -2189,33 +2189,32 @@ class Media {
     }
 
     const addShortcutsByType = (samples, type) => {
-      let lastShortcutNo = 0
+      let counter = store.getters['media/shortcutCounterByType'](type)
+      // a 10 does not work.
+      if (counter > 9) return
       for (const sampleUri in samples) {
         const sample = samples[sampleUri]
         if (!sample.shortcutCustom && sample.asset.type === type) {
-          if (sample.shortcutNo) {
-            lastShortcutNo = sample.shortcutNo
-          } else {
-            lastShortcutNo += 1
-            // a 10 does not work.
-            if (lastShortcutNo > 9) return
-            sample.shortcutNo = lastShortcutNo
-            sample.shortcut = `${firstTriggerKeyByType(sample.asset.type)} ${sample.shortcutNo}`
-            shortcuts.add(
-              sample.shortcut,
-              () => {
-                // TODO: Start the same video twice behaves very strange.
-                this.canvas.hide()
-                this.player.load(sample.uri)
-                this.player.start()
-                if (sample.asset.isVisible) {
-                  this.canvas.show(sample.mediaElement)
-                }
-              },
-              // Play
-              `Spiele Ausschnitt „${sample.titleSafe}“`
-            )
-          }
+          counter = store.getters['media/shortcutCounterByType'](type)
+          // a 10 does not work.
+          if (counter > 9) return
+          sample.shortcutNo = counter
+          store.dispatch('media/incrementShortcutCounterByType', type)
+          sample.shortcut = `${firstTriggerKeyByType(sample.asset.type)} ${sample.shortcutNo}`
+          shortcuts.add(
+            sample.shortcut,
+            () => {
+              // TODO: Start the same video twice behaves very strange.
+              this.canvas.hide()
+              this.player.load(sample.uri)
+              this.player.start()
+              if (sample.asset.isVisible) {
+                this.canvas.show(sample.mediaElement)
+              }
+            },
+            // Play
+            `Spiele Ausschnitt „${sample.titleSafe}“`
+          )
         }
       }
     }
