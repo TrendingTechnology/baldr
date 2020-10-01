@@ -122,6 +122,7 @@ const actions = {
     commit('setSampleLoaded', null)
     commit('setSamplePlaying', null)
     commit('setPlayListNoCurrent', null)
+    commit('resetShortcutCounter')
   },
   incrementShortcutCounterByType ({ commit, getters }, type) {
     const counter = getters.shortcutCounterByType(type) + 1
@@ -194,6 +195,10 @@ const mutations = {
   addMultiPartUri (state, multiPartUri) {
     state.multiPartUris.add(multiPartUri)
   },
+  addMultiPartSelection (state, selection) {
+    Vue.set(state.multiPartSelections, selection.uriId, selection)
+    Vue.set(state.uuidToId, selection.uriUuid, selection.uriId)
+  },
   clearMultiPartUris (state) {
     state.multiPartUris.clear()
   },
@@ -206,25 +211,26 @@ const mutations = {
     Vue.set(state.uuidToId, sample.uriUuid, sample.uriId)
   },
   addSampleToPlayList (state, sample) {
-    state.playList.push(sample.uri)
+    state.playList.push(sample.uriId)
   },
   removeAsset (state, asset) {
-    Vue.delete(state.assets, asset.uri)
+    Vue.delete(state.assets, asset.uriId)
   },
   removeSample (state, sample) {
-    Vue.delete(state.samples, sample.uri)
-  },
-  addMultiPartSelection (state, selection) {
-    Vue.set(state.multiPartSelections, selection.uri, selection)
-    Vue.set(state.uuidToId, selection.uriUuid, selection.uriId)
+    Vue.delete(state.samples, sample.uriId)
   },
   removeSampleFromPlayList (state, sample) {
-    while (state.playList.indexOf(sample.uri) > -1) {
-      const index = state.playList.indexOf(sample.uri)
+    while (state.playList.indexOf(sample.uriId) > -1) {
+      const index = state.playList.indexOf(sample.uriId)
       if (index > -1) {
         state.playList.splice(index, 1)
       }
     }
+  },
+  resetShortcutCounter (state) {
+    state.shortcutCounter.audio = 1
+    state.shortcutCounter.video = 1
+    state.shortcutCounter.image = 1
   },
   setPlayListNoCurrent (state, no) {
     state.playListNoCurrent = no
