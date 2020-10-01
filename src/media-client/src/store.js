@@ -96,26 +96,26 @@ const getters = {
 }
 
 const actions = {
-  addAsset ({ commit, dispatch }, asset) {
+  addAsset({ commit, dispatch }, asset) {
     commit('addAsset', asset)
     for (const sampleUri in asset.samples) {
       dispatch('addSampleToPlayList', asset.samples[sampleUri])
     }
   },
-  addSampleToPlayList ({ commit, getters }, sample) {
+  addSampleToPlayList({ commit, getters }, sample) {
     const list = getters.playList
     if (!list.includes(sample.uri) && sample.asset.type !== 'image') {
       commit('addSampleToPlayList', sample)
     }
   },
-  clear ({ dispatch, commit }) {
+  clear({ dispatch, commit }) {
     dispatch('removeAssetsAll')
     commit('clearMultiPartUris')
     commit('setSampleLoaded', null)
     commit('setSamplePlaying', null)
     commit('setPlayListNoCurrent', null)
   },
-  removeAsset ({ commit, getters }, asset) {
+  removeAsset({ commit, getters }, asset) {
     for (const sampleUri in asset.samples) {
       const sample = asset.samples[sampleUri]
       commit('removeSample', sample)
@@ -123,19 +123,19 @@ const actions = {
     }
     commit('removeAsset', asset)
   },
-  removeAssetsAll ({ dispatch, getters }) {
+  removeAssetsAll({ dispatch, getters }) {
     for (const assetUri in getters.assets) {
       dispatch('removeAsset', getters.assets[assetUri])
     }
   },
-  setPlayListSampleCurrent ({ commit, getters }, sample) {
+  setPlayListSampleCurrent({ commit, getters }, sample) {
     let no = null
     if (sample) {
       no = getters.playList.indexOf(sample.uri) + 1
     }
     commit('setPlayListNoCurrent', no)
   },
-  setPlayListSampleNext ({ commit, getters }) {
+  setPlayListSampleNext({ commit, getters }) {
     const no = getters.playListNoCurrent
     const count = getters.playList.length
     if (no === count) {
@@ -144,7 +144,7 @@ const actions = {
       commit('setPlayListNoCurrent', no + 1)
     }
   },
-  setPlayListSamplePrevious ({ commit, getters }) {
+  setPlayListSamplePrevious({ commit, getters }) {
     const no = getters.playListNoCurrent
     const count = getters.playList.length
     if (no === 1) {
@@ -153,59 +153,58 @@ const actions = {
       commit('setPlayListNoCurrent', no - 1)
     }
   },
-  async setRestApiServers ({ commit }) {
-    const versions = await httpRequest.request('version', 'all')
-    const counts = await httpRequest.request('stats/count', 'all')
-    const updates = await httpRequest.request('stats/updates', 'all')
+  async setRestApiServers({ commit }) {
+    const versions = await httpRequest.request('version')
+    const counts = await httpRequest.request('stats/count')
+    const updates = await httpRequest.request('stats/updates')
 
     const result = []
-    for (const endpointName in servers) {
-      result.push({
-        name: servers[endpointName].name,
-        baseUrl: servers[endpointName].baseUrl,
-        version: versions[endpointName].data.version,
-        count: counts[endpointName].data,
-        update: updates[endpointName].data[0].begin,
-        commitId: updates[endpointName].data[0].lastCommitId
-      })
-    }
+    result.push({
+      name: 'localhost',
+      baseUrl: 'localhost',
+      version: versions.data.version,
+      count: counts.data,
+      update: updates.data[0].begin,
+      commitId: updates.data[0].lastCommitId
+    })
+
     commit('setRestApiServers', result)
   },
-  setSamplePlaying ({ commit, dispatch }, sample) {
+  setSamplePlaying({ commit, dispatch }, sample) {
     commit('setSamplePlaying', sample)
     if (sample) dispatch('setPlayListSampleCurrent', sample)
   }
 }
 
 const mutations = {
-  addMultiPartUri (state, multiPartUri) {
+  addMultiPartUri(state, multiPartUri) {
     state.multiPartUris.add(multiPartUri)
   },
-  clearMultiPartUris (state) {
+  clearMultiPartUris(state) {
     state.multiPartUris.clear()
   },
-  addAsset (state, asset) {
+  addAsset(state, asset) {
     Vue.set(state.assets, asset.uriId, asset)
     Vue.set(state.uuidToId, asset.uriUuid, asset.uriId)
   },
-  addSample (state, sample) {
+  addSample(state, sample) {
     Vue.set(state.samples, sample.uriId, sample)
     Vue.set(state.uuidToId, sample.uriUuid, sample.uriId)
   },
-  addSampleToPlayList (state, sample) {
+  addSampleToPlayList(state, sample) {
     state.playList.push(sample.uri)
   },
-  removeAsset (state, asset) {
+  removeAsset(state, asset) {
     Vue.delete(state.assets, asset.uri)
   },
-  removeSample (state, sample) {
+  removeSample(state, sample) {
     Vue.delete(state.samples, sample.uri)
   },
-  addMultiPartSelection (state, selection) {
+  addMultiPartSelection(state, selection) {
     Vue.set(state.multiPartSelections, selection.uri, selection)
     Vue.set(state.uuidToId, selection.uriUuid, selection.uriId)
   },
-  removeSampleFromPlayList (state, sample) {
+  removeSampleFromPlayList(state, sample) {
     while (state.playList.indexOf(sample.uri) > -1) {
       const index = state.playList.indexOf(sample.uri)
       if (index > -1) {
@@ -213,16 +212,16 @@ const mutations = {
       }
     }
   },
-  setPlayListNoCurrent (state, no) {
+  setPlayListNoCurrent(state, no) {
     state.playListNoCurrent = no
   },
-  setRestApiServers (state, restApiServers) {
+  setRestApiServers(state, restApiServers) {
     Vue.set(state, 'restApiServers', restApiServers)
   },
-  setSampleLoaded (state, sample) {
+  setSampleLoaded(state, sample) {
     state.sampleLoaded = sample
   },
-  setSamplePlaying (state, sample) {
+  setSamplePlaying(state, sample) {
     state.samplePlaying = sample
   }
 }
