@@ -14,12 +14,6 @@ const state = {
   uuidToId: {},
   playList: [],
   playListNoCurrent: null,
-  assetTypes: {
-    audio: {},
-    video: {},
-    image: {},
-    document: {}
-  },
   restApiServers: [],
   samples: {},
   // To realize a playthrough and stop option on the audio and video master
@@ -55,8 +49,14 @@ const getters = {
   assets: state => {
     return state.assets
   },
-  assetsByType: state => type => {
-    return state.assetTypes[type]
+  assetsByType: (state, getters) => type => {
+    const result = {}
+    for (const uri in getters.assets) {
+      if (getters.assets[uri].type === type) {
+        result[uri] = getters.assets[uri]
+      }
+    }
+    return result
   },
   multiPartSelectionByUri: state => uri => {
     if (uri.indexOf('uuid:') === 0) uri = getters.idByUuid(uri)
@@ -90,15 +90,14 @@ const getters = {
     if (uri.indexOf('uuid:') === 0) uri = getters.idByUuid(uri)
     return samples[uri]
   },
-  typeCount: state => type => {
-    return Object.keys(state.assetTypes[type]).length
+  typeCount: (state, getters) => type => {
+    return Object.keys(getters.assetsByType(type)).length
   }
 }
 
 const actions = {
   addAsset ({ commit, dispatch }, asset) {
     commit('addAsset', asset)
-    commit('addAssetToTypes', asset)
     for (const sampleUri in asset.samples) {
       dispatch('addSampleToPlayList', asset.samples[sampleUri])
     }
@@ -122,7 +121,6 @@ const actions = {
       commit('removeSample', sample)
       commit('removeSampleFromPlayList', sample)
     }
-    commit('removeAssetFromTypes', asset)
     commit('removeAsset', asset)
   },
   removeAssetsAll ({ dispatch, getters }) {
@@ -190,9 +188,6 @@ const mutations = {
     Vue.set(state.assets, asset.uriId, asset)
     Vue.set(state.uuidToId, asset.uriUuid, asset.uriId)
   },
-  addAssetToTypes (state, asset) {
-    Vue.set(state.assetTypes[asset.type], asset.uri, asset)
-  },
   addSample (state, sample) {
     Vue.set(state.samples, sample.uriId, sample)
     Vue.set(state.uuidToId, sample.uriUuid, sample.uriId)
@@ -202,9 +197,6 @@ const mutations = {
   },
   removeAsset (state, asset) {
     Vue.delete(state.assets, asset.uri)
-  },
-  removeAssetFromTypes (state, asset) {
-    Vue.delete(state.assetTypes[asset.type], asset.uri)
   },
   removeSample (state, sample) {
     Vue.delete(state.samples, sample.uri)
