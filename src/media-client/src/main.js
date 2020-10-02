@@ -1574,7 +1574,11 @@ class MultiPartSelection {
    * @returns {String}
    */
   get uriId () {
-    return `${this.asset.uriId}#${this.selectionSpec}`
+    if (!this.selectionSpec) {
+      return this.asset.uriId
+    } else {
+      return `${this.asset.uriId}#${this.selectionSpec}`
+    }
   }
 
   /**
@@ -1583,7 +1587,11 @@ class MultiPartSelection {
    * @returns {String}
    */
   get uriUuid () {
-    return `${this.asset.uriUuid}#${this.selectionSpec}`
+    if (!this.selectionSpec) {
+      return this.asset.uriUuid
+    } else {
+      return `${this.asset.uriUuid}#${this.selectionSpec}`
+    }
   }
 
   /**
