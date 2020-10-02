@@ -1,12 +1,14 @@
 /**
  * This package provides some SFC vue components to be used by various BALDR
- * Vue apps.
+ * Vue and Electron apps.
  *
  * @module @bldr/components-collection
  */
 
-import SFCCursorCross from './components/CursorCross.vue'
 import SFCAppInfo from './components/AppInfo.vue'
+import SFCAppInfoSimple from './components/AppInfoSimple.vue'
+import SFCCursorCross from './components/CursorCross.vue'
 
-export const CursorCross = SFCCursorCross
+export const AppInfoSimple = SFCAppInfoSimple
 export const AppInfo = SFCAppInfo
+export const CursorCross = SFCCursorCross

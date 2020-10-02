@@ -9,6 +9,7 @@ import Vue from 'vue'
 import { installDocumentTitleUpdater } from '@/routing.js'
 
 // Components.
+import AboutPage from '@/routes/AboutPage.vue'
 import AdHocCamera from '@/routes/AdHocCamera.vue'
 import AdHocEditor from '@/routes/AdHocEditor.vue'
 import CommonExample from '@/routes/CommonExample.vue'
@@ -16,12 +17,12 @@ import DocumentationOverview from '@/routes/DocumentationOverview.vue'
 import MasterDocumentation from '@/routes/MasterDocumentation.vue'
 import MediaIdsParentDir from '@/routes/MediaIdsParentDir'
 import OpenInterface from '@/components/OpenInterface'
-import TopicsTree from '@/routes/TopicsTree/index.vue'
-import SpeakerView from '@/routes/SpeakerView/index.vue'
 import RestApiOverview from '@/routes/RestApiOverview.vue'
 import SlidesPreview from '@/routes/SlidesPreview/index.vue'
 import SlideView from '@/routes/SlideView'
+import SpeakerView from '@/routes/SpeakerView/index.vue'
 import StartPage from '@/routes/StartPage.vue'
+import TopicsTree from '@/routes/TopicsTree/index.vue'
 
 // Failed to load chunks in the subfolder presentation
 // const Documentation = () => import(/* webpackChunkName: "documentation" */ '@/routes/Documentation.vue')
@@ -166,6 +167,14 @@ const routes = [
     meta: {
       shortcut: 'i',
       title: 'Medien-IDs im übergeordneten Ordner'
+    }
+  },
+  {
+    path: '/about',
+    name: 'about',
+    component: AboutPage,
+    meta: {
+      title: 'Über BALDR Lamp'
     }
   }
 ]

@@ -25,11 +25,6 @@
       <router-view/>
     </main>
 
-    <app-info
-      package-name="@bldr/lamp"
-      :version="version"
-    />
-
     <!-- A fullscreen overlay to display videos or images in fullscreen -->
     <media-canvas/>
     <media-player/>
@@ -37,8 +32,6 @@
 </template>
 
 <script>
-import packageJson from '@/../package.json'
-import { AppInfo } from '@bldr/components-collection'
 import { receiveSocketMessage } from '@/remote-control.js'
 import actions from './actions.js'
 import menuTemplate, { traverseMenu, normalizeKeyboardShortcuts } from './menu.js'
@@ -49,13 +42,7 @@ const { mapActions, mapGetters } = createNamespacedHelpers('lamp')
 
 export default {
   name: 'MainApp',
-  components: {
-    AppInfo
-  },
   computed: {
-    version () {
-      return packageJson.version
-    },
     ...mapGetters(['slide', 'presentation'])
   },
   methods: {

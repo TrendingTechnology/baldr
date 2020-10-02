@@ -8,6 +8,7 @@ const { DefinePlugin } = require('webpack')
 // Project packages
 const core = require('@bldr/core-node')
 const { exportSassAsJson } = require('@bldr/themes')
+const packageJson = require('./package.json')
 
 function stylePath (themeName) {
   return path.join(path.dirname(require.resolve('@bldr/themes')), `${themeName}.scss`)
@@ -49,6 +50,7 @@ module.exports = {
         config: JSON.stringify(core.bootstrapConfig()),
         defaultThemeSassVars: JSON.stringify(exportSassAsJson()),
         gitHead: JSON.stringify(core.gitHead()),
+        lampVersion: JSON.stringify(packageJson.version),
         rawYamlExamples: JSON.stringify(readExamples())
       })
     ]

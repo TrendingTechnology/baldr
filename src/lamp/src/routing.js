@@ -2,7 +2,7 @@
  * This module bundles all routing related code.
  *
  * - Set the document title by the current route.
- * - Provide router guard for some components.
+ * - Provide router guards for some components.
  *
  * @module @bldr/lamp/routing
  */

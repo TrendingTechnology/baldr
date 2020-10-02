@@ -382,6 +382,11 @@ const menuTemplate = [
     label: 'Hilfe',
     submenu: [
       {
+        label: 'Über diese App',
+        action: 'pushRouter',
+        arguments: 'about'
+      },
+      {
         label: 'Master Dokumentation',
         action: 'pushRouter',
         arguments: 'documentation',
