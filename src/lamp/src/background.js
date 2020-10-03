@@ -10,6 +10,8 @@ import { app, protocol, BrowserWindow, Menu, shell } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 import path from 'path'
+import contextMenu from 'electron-context-menu'
+
 import menuTemplate, { traverseMenu } from './menu.js'
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
@@ -22,6 +24,26 @@ let win
 protocol.registerSchemesAsPrivileged([
   { scheme: 'app', privileges: { secure: true, standard: true } }
 ])
+
+contextMenu({
+  prepend: (defaultActions, params, browserWindow) => [
+    {
+      label: 'Rainbow',
+      // Only show it when right-clicking images
+      visible: params.mediaType === 'image'
+    },
+    {
+      label: 'Search Google for “{selection}”',
+      // Only show it when right-clicking text
+      visible: params.selectionText.trim().length > 0,
+      click: () => {
+        shell.openExternal(`https://google.com/search?q=${encodeURIComponent(params.selectionText)}`)
+      }
+    }
+  ]
+})
+
+const disposeContextMenu = contextMenu()
 
 function createWindow () {
   // Create the browser window.
@@ -36,7 +58,7 @@ function createWindow () {
       webSecurity: false,
       allowRunningInsecureContent: true,
       preload: path.join(__dirname, 'preload.js'),
-      disableHtmlFullscreenWindowResize: false,
+      disableHtmlFullscreenWindowResize: false
     }
   })
 
@@ -85,6 +107,7 @@ app.on('ready', async () => {
     }
   }
   createWindow()
+  disposeContextMenu()
 })
 
 // Exit cleanly on request from parent process in development mode.
