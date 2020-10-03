@@ -74,9 +74,22 @@ export default {
       if (asset.title) return asset.title
     },
     afterSlideNoChangeOnComponent ({ oldSlideNo, newSlideNo }) {
+      // overlay
+      const slide = this.$get('slide')
+
+      // This variable indicates if in the prop description is a lot of text.
+      let lotOfText = false
+      if (slide.propsMain.description && slide.propsMain.description.length > 400) {
+        lotOfText = true
+      }
+
       function resetMetadataStyle (metaStyle) {
         metaStyle.width = null
-        metaStyle.fontSize = null
+        if (!lotOfText) {
+          metaStyle.fontSize = null
+        } else {
+          metaStyle.fontSize = '0.8em'
+        }
         metaStyle.height = null
       }
 
@@ -99,22 +112,25 @@ export default {
         const metaStyle = this.$refs.metadata.style
 
         const overlayZone = 0.3
+        // vertical
         if (freeSpaceRatio > 1 + overlayZone) {
           this.$el.setAttribute('b-metadata-position', 'vertical')
           const width = this.$el.clientWidth - img.naturalWidth * scale
           resetMetadataStyle(metaStyle)
           metaStyle.width = `${width}px`
+        // horizontal
         } else if (freeSpaceRatio < 1 - overlayZone) {
           this.$el.setAttribute('b-metadata-position', 'horizontal')
           const height = this.$el.clientHeight - img.naturalHeight * scale
           resetMetadataStyle(metaStyle)
           metaStyle.height = `${height}px`
+        // overlay
         } else {
           resetMetadataStyle(metaStyle)
           this.$el.setAttribute('b-metadata-position', 'overlay')
           // Metadata box which extends to more than 40 percent of the screen.
           if (this.$refs.metadata.clientHeight / this.$el.clientHeight > 0.3) {
-            metaStyle.fontSize = '0.5em'
+            metaStyle.fontSize = '0.7em'
           }
         }
       }

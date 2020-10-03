@@ -7,12 +7,12 @@
     >
       <h1
         v-if="title && !noMeta"
-        class="title"
+        class="title font-shadow"
         v-html="title"
       />
       <p
         v-if="description && !noMeta"
-        class="description"
+        class="description font-shadow"
         v-html="description"
       />
     </div>
@@ -54,12 +54,8 @@ export default {
     flex-direction: column;
     justify-content: flex-start;
 
-    .title {
-      text-align: center;
-    }
-
-    .description {
-      padding: 0 1em;
+    .description, .title {
+      padding: 0 1vw;
     }
   }
 
@@ -89,6 +85,14 @@ export default {
 
       .title, .description {
         background: rgba(170, 170, 170, 0.3);
+      }
+
+      .title {
+        padding-left: 5vw;
+      }
+
+      .description {
+        padding: 1vw 5vw;
       }
     }
   }

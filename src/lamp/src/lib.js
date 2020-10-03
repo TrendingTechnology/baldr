@@ -172,7 +172,7 @@ export class GrabFromObjects {
    */
   property (property) {
     if (this.object1[property]) return this.object1[property]
-    if (this.object2[property]) {
+    if (this.object2 && this.object2[property]) {
       if (this.markup) {
         return markupToHtml(this.object2[property])
       } else {

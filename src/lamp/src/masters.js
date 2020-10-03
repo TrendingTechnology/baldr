@@ -630,16 +630,37 @@ class Master {
    * finish. Go not in the background.
    *
    * @param {Object} props - The properties of the slide.
-   * @param {Object} thisArg
+   * @param {object} thisArg - The
+   *   {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/call thisArg}
+   *   the master function is called with.
    */
   async afterMediaResolution (props, thisArg) {
     await this.callHookAsync_('afterMediaResolution', { props, master: this }, thisArg)
   }
 
+  /**
+   * This hook gets executed after the slide number has changed on the component.
+   * Use `const slide = this.$get('slide')` to get the current slide object.
+   *
+   * @param {Object} payload
+   * @property {number} payload.oldSlideNo - The number of the old slide.
+   * @property {number} payload.newSlideNo - The number of the new slide.
+   * @param {object} thisArg - The
+   *   {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/call thisArg}
+   *   the master function is called with.
+   */
   afterSlideNoChangeOnComponent (payload, thisArg) {
     this.callHook_('afterSlideNoChangeOnComponent', payload, thisArg)
   }
 
+  /**
+   * This hook gets executed after the sdtep number has changed on the component.
+   *
+   * @param {Object} payload
+   * @param {object} thisArg - The
+   *   {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/call thisArg}
+   *   the master function is called with.
+   */
   afterStepNoChangeOnComponent (payload, thisArg) {
     this.callHook_('afterStepNoChangeOnComponent', payload, thisArg)
   }

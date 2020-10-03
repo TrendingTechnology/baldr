@@ -3,7 +3,8 @@ slides:
 
 - title: no_meta
   image:
-    src: id:Bach_Johann-Sebastian
+    # id:Bach-Haendel_BD_Johann-Sebastian-Bach
+    src: uuid:9c26a447-254c-4c96-a61e-e5e551334916
     title: A title
     description: A description
     no_meta: true
@@ -19,25 +20,21 @@ slides:
 
 - title: no_meta
   image:
-    src: id:Bach_Johann-Sebastian
+    # id:Bach-Haendel_BD_Johann-Sebastian-Bach
+    src: uuid:9c26a447-254c-4c96-a61e-e5e551334916
     title: A title
     description: A description
     no_meta: false
 
 - title: Kurzform
-  image: id:Bach_Johann-Sebastian
-
-- title: 'URL: http:'
-  image:
-    src: http://upload.wikimedia.org/wikipedia/commons/e/e8/Frederic_Chopin_photo.jpeg
-
-- title: 'URL: https:'
-  image:
-    src: https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Johannes_Brahms_LCCN2016872659.jpg/1280px-Johannes_Brahms_LCCN2016872659.jpg
+  # id:Bach-Haendel_BD_Johann-Sebastian-Bach
+  image: uuid:9c26a447-254c-4c96-a61e-e5e551334916
 
 - title: 'URL: id:'
   image:
-    src: id:Haydn_Joseph
+    # id:Haydn_Joseph
+    src: uuid:ad7b747f-fe50-49e3-a563-affdfddbdf80
 
 - image:
-    src: id:Beethoven_Ludwig-van
+    # id:Beethoven_Ludwig-van
+    src: uuid:71c537ef-7868-4b74-8e06-6e6bcda2d96d

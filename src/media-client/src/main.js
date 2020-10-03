@@ -1826,21 +1826,6 @@ class Resolver {
   /**
    * @private
    *
-   * @param {String} httpUrl
-   *
-   * @returns {module:@bldr/media-client.ClientMediaAsset}
-   */
-  createAssetFromHttpUrl_ (httpUrl) {
-    const asset = new ClientMediaAsset({ uri: httpUrl })
-    asset.httpUrl = asset.uri
-    asset.filenameFromHTTPUrl(asset.uri)
-    asset.extensionFromString(asset.uri)
-    return asset
-  }
-
-  /**
-   * @private
-   *
    * @param {Object} file - A file object, see
    *  {@link https://developer.mozilla.org/de/docs/Web/API/File}
    *
@@ -1855,7 +1840,7 @@ class Resolver {
       // We use the uuid instead of the file name. The file name can contain
       // whitespaces and special characters. A uuid is  more reliable.
       const uri = `localfile:${uuid}`
-      return ClientMediaAsset({
+      return new ClientMediaAsset({
         uri: uri,
         httpUrl: httpUrl,
         filename: file.name
@@ -1915,11 +1900,7 @@ class Resolver {
       if (storedAsset) {
         return storedAsset
       }
-      // For example a already resolved URL from the internet.
-      if (assetSpec.match(/^https?:/)) {
-        asset = this.createAssetFromHttpUrl_(assetSpec)
-        // Resolve HTTP URL
-      } else if (assetSpec.match(mediaUriRegExp)) {
+      if (assetSpec.match(mediaUriRegExp)) {
         const uri = assetSpec.split(':')
         const response = await this.queryMediaServer_(uri[0], uri[1], throwException)
         if (response) asset = this.createAssetFromRestData_(assetSpec, response.data)
