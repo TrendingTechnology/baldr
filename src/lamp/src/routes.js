@@ -23,6 +23,7 @@ import SlideView from '@/routes/SlideView'
 import SpeakerView from '@/routes/SpeakerView/index.vue'
 import StartPage from '@/routes/StartPage.vue'
 import TopicsTree from '@/routes/TopicsTree/index.vue'
+import TexMarkdownConverter from '@/routes/TexMarkdownConverter.vue'
 
 // Failed to load chunks in the subfolder presentation
 // const Documentation = () => import(/* webpackChunkName: "documentation" */ '@/routes/Documentation.vue')
@@ -175,6 +176,14 @@ const routes = [
     component: AboutPage,
     meta: {
       title: 'Über BALDR Lamp'
+    }
+  },
+  {
+    path: '/tex-markdown-converter',
+    name: 'tex-markdown-converter',
+    component: TexMarkdownConverter,
+    meta: {
+      title: 'TeX-Markdown-Konvertierung'
     }
   }
 ]

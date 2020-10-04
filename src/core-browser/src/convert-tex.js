@@ -2,6 +2,8 @@
  * A naive implementation of a TeX to Markdown and vice versa converter.
  *
  * Attention: Firefox doesn’t support the `dotAll` flag `s`!
+ *
+ * @module @bldr/core-browser/convert-tex
  */
 
 class RegExpBuilder {
@@ -143,11 +145,11 @@ const specification = [
 
 /**
  *
- * @param {String} text
+ * @param {String} text - A input string to convert.
  *
  * @see {@link https://tex.stackexchange.com/a/451849/42311}
  */
-function removeComments (text) {
+function removeTexComments (text) {
   // TeX comment to fix hyphenation
   // Lorem ip-%
   // sum
@@ -158,6 +160,10 @@ function removeComments (text) {
   return text
 }
 
+/**
+ *
+ * @param {String} text - A input string to convert.
+ */
 function removeTexHeaderFooter (text) {
   // Remove TeX header and footer
   text = text.replace(/[^]*\\begin\{document\}/, '')
@@ -165,6 +171,10 @@ function removeTexHeaderFooter (text) {
   return text
 }
 
+/**
+ *
+ * @param {String} text - A input string to convert.
+ */
 function convertTexItemize (text) {
   return text.replace(
     /\\begin\{(compactitem|itemize)\}([^]+?)\\end\{(compactitem|itemize)\}/g,
@@ -181,6 +191,10 @@ function convertTexItemize (text) {
   )
 }
 
+/**
+ *
+ * @param {String} text - A input string to convert.
+ */
 function cleanUpTex (text) {
   // Delete comments
   text = text.replace(/\n%.*?\n/g, '\n')
@@ -192,11 +206,24 @@ function cleanUpTex (text) {
   return text
 }
 
+/**
+ *
+ * @param {String} text - A input string to convert.
+ *
+ * @returns {String} A cleaned up string.
+ */
 function cleanUp (text) {
   text = text.replace(/\n\n\n+/g, '\n\n')
   return text
 }
 
+/**
+ * Convert a text input from TeX to Markdown or from Markdown to TeX.
+ *
+ * @param {String} text - The text input.
+ * @param {Boolean} toTex - True to convert from Markdown to TeX. False to
+ *   convert from TeX to Markdown.
+ */
 function convert (text, toTex) {
   const specsReq = []
   const specsRep = []
@@ -263,5 +290,5 @@ export default {
   regBuilder,
   cleanMatch,
   extractMatchAll,
-  removeComments
+  removeComments: removeTexComments
 }

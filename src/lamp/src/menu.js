@@ -375,6 +375,11 @@ const menuTemplate = [
         action: 'executeCallback',
         arguments: 'toggleRestApi',
         keyboardShortcut: 'Ctrl + Alt + r'
+      },
+      {
+        label: 'TeX-Markdown-Konvertierung',
+        action: 'pushRouter',
+        arguments: 'tex-markdown-converter'
       }
     ]
   },
