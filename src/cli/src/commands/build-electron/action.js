@@ -23,6 +23,10 @@ async function buildElectronApp (cmd, appName) {
   }
 
   const packageJson = require(path.join(appPath, 'package.json'))
+
+  cmd.log(`${appName}: Install npm dependencies.`)
+  await cmd.exec('npx', 'lerna', 'bootstrap', { cwd: config.localRepo })
+
   cmd.log(`${appName}: build the Electron app.`)
   await cmd.exec('npm', 'run', 'build:electron', { cwd: appPath })
 
