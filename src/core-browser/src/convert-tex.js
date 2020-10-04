@@ -6,6 +6,9 @@
  * @module @bldr/core-browser/convert-tex
  */
 
+/**
+ * Build and assemble strings to generate regular expressions from.
+ */
 class RegExpBuilder {
   constructor () {
     this.dotAll = '[^]+?'
@@ -13,18 +16,42 @@ class RegExpBuilder {
     this.whiteNewline = '[\\s\n]*?'
   }
 
-  capt (regexp) {
-    return `(${regexp})`
+  /**
+   * Format a capture group `(regexp)`.
+   *
+   * @param {String} regExp - A string to build a regular expression from.
+   *
+   * @returns {String} A string to build a regular expression from.
+   */
+  capt (regExp) {
+    return `(${regExp})`
   }
 
-  cmd (macroName, regexp) {
-    if (!regexp) regexp = '([^\\}]+?)'
-    return `\\\\${macroName}\\{${regexp}\\}`
+  /**
+   * Assemble a regular expression string to capture a TeX macro / command
+   * `\makroName{}`.
+   *
+   * @param {String} macroName -
+   * @param {String} regExp - A string to build a regular expression from.
+   *
+   * @returns {String} A string to build a regular expression from.
+   */
+  cmd (macroName, regExp = '') {
+    if (!regExp) regExp = '([^\\}]+?)'
+    return `\\\\${macroName}\\{${regExp}\\}`
   }
 
-  env (envName, regexp) {
-    if (!regexp) regexp = this.captDotAll
-    return this.cmd('begin', envName) + regexp + this.cmd('end', envName)
+  /**
+   * Build a regular expression for a TeX environment.
+   *
+   * @param {String} envName - The name of the environment.
+   * @param {String} regExp - A string to build a regular expression from.
+   *
+   * @returns {String} A string to build a regular expression from.
+   */
+  env (envName, regExp) {
+    if (!regExp) regExp = this.captDotAll
+    return this.cmd('begin', envName) + regExp + this.cmd('end', envName)
   }
 }
 
@@ -55,7 +82,7 @@ function cleanMatch (match, excludeCaptureGroups) {
 
 /**
  * @param {String} text - Text to search for matches
- * @param {String} regexp - Regular expressed gets compiled
+ * @param {String} regExp - Regular expressed gets compiled
  * @param {Array} matches - Array gets filled with cleaned matches.
  * @param {Array} excludeCaptureGroups - An array of capture group strings
  *   to exclude in the result matches for example regex:
@@ -63,10 +90,10 @@ function cleanMatch (match, excludeCaptureGroups) {
  *
  * @returns {String}
  */
-function extractMatchAll (text, regexp, matches, excludeCaptureGroups) {
-  regexp = new RegExp(regexp, 'g')
-  if (text.match(regexp)) {
-    const rawMatches = text.matchAll(regexp)
+function extractMatchAll (text, regExp, matches, excludeCaptureGroups) {
+  regExp = new RegExp(regExp, 'g')
+  if (text.match(regExp)) {
+    const rawMatches = text.matchAll(regExp)
     for (const match of rawMatches) {
       text = text.replace(match[0], '')
       matches.push(cleanMatch(match, excludeCaptureGroups))
@@ -92,6 +119,11 @@ function texRep (commandName) {
   return `\\${commandName}{$1}`
 }
 
+/**
+ *
+ * @param {*} tagName
+ * @param {*} className
+ */
 function mdReg (tagName, className) {
   let classMarkup = ''
   if (className) {
@@ -100,6 +132,12 @@ function mdReg (tagName, className) {
   return new RegExp('<' + tagName + classMarkup + '>([^<>]+?)</' + tagName + '>', 'g')
 }
 
+/**
+ * @param {String} tagName
+ * @param {String} className
+ *
+ * @returns {String}
+ */
 function mdRep (tagName, className) {
   let classMarkup = ''
   if (className) {
@@ -108,6 +146,13 @@ function mdRep (tagName, className) {
   return `<${tagName}${classMarkup}>$1</${tagName}>`
 }
 
+/**
+ * @param {String} texCommandName
+ * @param {String} htmlTagName
+ * @param {String} htmlClassName
+ *
+ * @returns {Array}
+ */
 function semanticSpec (texCommandName, htmlTagName, htmlClassName) {
   return [{
     tex: { reg: texReg(texCommandName), rep: texRep(texCommandName) },
@@ -115,13 +160,19 @@ function semanticSpec (texCommandName, htmlTagName, htmlClassName) {
   }]
 }
 
-/*
-
-  {
-    tex: { reg: , rep:  },
-    md: { reg: , rep:  }
-  },
-*/
+/**
+ * `reg`: Regular expression
+ * `rep`: Replacement
+ *
+ * ```js
+ * {
+ *   tex: { reg: , rep:  },
+ *   md: { reg: , rep:  }
+ * }
+ * ```
+ *
+ * @type {Array}
+ */
 const specification = [
   {
     tex: { reg: /\\stueck\*\{([^\}]+?)\}/g, rep: '\\stueck*{$1}' }, // eslint-disable-line
