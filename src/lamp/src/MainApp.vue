@@ -113,4 +113,35 @@ export default {
 
 <style lang="scss">
   @import "./global-styles.scss";
+
+  .vc_main_app {
+    .vue-notification {
+      background: #44A4FC;
+      border-left: 0.5em solid #187FE7;
+      color: #ffffff;
+      font-size: 12pt;
+      margin: 0 1em 1em;
+      padding: 1em;
+
+      .text {
+        font-size: 0.8em;
+      }
+
+      &.warn {
+        background: scale-color($orange, $lightness: 40%);
+        border-left-color: $orange;
+      }
+
+      &.error {
+        background: scale-color($red, $lightness: 40%);
+        border-left-color: $red;
+      }
+
+      &.success {
+        background: scale-color($green, $lightness: 40%);
+        border-left-color: $green;
+      }
+    }
+  }
+
 </style>
