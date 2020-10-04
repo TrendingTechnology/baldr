@@ -1612,8 +1612,8 @@ class MultiPartSelection {
    * Retrieve the HTTP URL of the multi part asset by the part number.
    *
    * @param {Number} The part number starts with 1. We set a default value,
-   * because no is sometime undefined when only one part is selected. The route
-   * then creates no step url (not /slide/1/step/1) but (/slide/1)
+   * because no is sometimes undefined when only one part is selected. The
+   * router then creates no step url (not /slide/1/step/1) but (/slide/1)
    *
    * @returns {String}
    */
@@ -2188,7 +2188,7 @@ class Media {
       if (counter > 9) return
       for (const sampleUri in samples) {
         const sample = samples[sampleUri]
-        if (!sample.shortcutCustom && sample.asset.type === type) {
+        if (!sample.shortcutCustom && !sample.shortcut && sample.asset.type === type) {
           counter = store.getters['media/shortcutCounterByType'](type)
           // a 10 does not work.
           if (counter > 9) return
