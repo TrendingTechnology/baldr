@@ -1611,11 +1611,13 @@ class MultiPartSelection {
   /**
    * Retrieve the HTTP URL of the multi part asset by the part number.
    *
-   * @param {Number} The part number starts with 1.
+   * @param {Number} The part number starts with 1. We set a default value,
+   * because no is sometimes undefined when only one part is selected. The
+   * router then creates no step url (not /slide/1/step/1) but (/slide/1)
    *
    * @returns {String}
    */
-  getMultiPartHttpUrlByNo (no) {
+  getMultiPartHttpUrlByNo (no = 1) {
     return this.asset.getMultiPartHttpUrlByNo(this.partNos[no - 1])
   }
 }
@@ -2059,6 +2061,9 @@ class Media {
   }
 
   /**
+   * Gets called in src/lamp/src/content-file.js
+   * Causes problems with multipart selections
+   *
    * @param {String} parentDir
    */
   async resolveByParentDir (parentDir) {
@@ -2074,7 +2079,7 @@ class Media {
     })
 
     for (const data of response.data) {
-      const asset = this.resolver.createAssetFromRestData_(`uuid:${data.uuid}`, data)
+      const asset = this.resolver.createAssetFromRestData_(`id:${data.id}`, data)
       this.resolver.addMediaElementToAsset(asset)
       store.dispatch('media/addAsset', asset)
     }
@@ -2183,7 +2188,7 @@ class Media {
       if (counter > 9) return
       for (const sampleUri in samples) {
         const sample = samples[sampleUri]
-        if (!sample.shortcutCustom && sample.asset.type === type) {
+        if (!sample.shortcutCustom && !sample.shortcut && sample.asset.type === type) {
           counter = store.getters['media/shortcutCounterByType'](type)
           // a 10 does not work.
           if (counter > 9) return

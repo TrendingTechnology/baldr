@@ -754,7 +754,8 @@ export class Presentation {
    */
   async resolveMedia () {
     if (this.parentDir) {
-      await vm.$media.resolveByParentDir(this.parentDir)
+      // Problems with multipart selections.
+      // await vm.$media.resolveByParentDir(this.parentDir)
     }
     if (this.mediaUris.length > 0) {
       /**
