@@ -13,15 +13,49 @@ const ora = require('ora')
 // Error: Cannot find module 'object-assign'
 const Gauge = require('gauge')
 
+const chalk = require('chalk')
+
 /**
  * Run commands on the command line in a nice and secure fashion.
  */
 class CommandRunner {
+  /**
+   *
+   * @param {Object} options
+   * @property {Boolean} verbose
+   */
   constructor (options) {
+    /**
+     * Print out captured stdout and stderr of the method exec form
+     * childProcess.
+     *
+     * @type {Boolean}
+     */
     this.verbose = (options && options.verbose)
+
+    /**
+     * A instance of the Ora package terminal spinner.
+     *
+     * @see {@link https://www.npmjs.com/package/ora}
+     *
+     * @type {Object}
+     */
     this.spinner = ora({ spinner: 'line' })
+
+    /**
+     *
+     */
     this.gauge = new Gauge()
     this.gauge.setTheme('ASCII')
+
+    /**
+     * The current log message. If you use `this.log(message)`, message is
+     * stored in this attribute. `this.exec(args[])` appends in the verbose mode
+     * stdout and stderr to this message.
+     *
+     * @type {String}
+     */
+    this.message = ''
   }
 
   /**
@@ -30,27 +64,27 @@ class CommandRunner {
   checkRoot () {
     const user = os.userInfo()
     if (user.username !== 'root') {
-      console.error(`You need to be root: sudo /usr/local/bin/baldr …`)
+      console.error('You need to be root: sudo /usr/local/bin/baldr …')
       process.exit()
     }
   }
 
   /**
-   *
+   * Start the Ora terminal spinner.
    */
   startSpin () {
     this.spinner.start()
   }
 
   /**
-   *
+   * Start the Gauge progress bar.
    */
   startProgress () {
     this.gauge.show('default', 0)
   }
 
   /**
-   *
+   * Update the Gauge progress bar.
    */
   updateProgress (completed, text) {
     this.gauge.pulse()
@@ -72,6 +106,8 @@ class CommandRunner {
    *   [see on nodejs.org](https://nodejs.org/api/child_process.html#child_process_child_process_spawnsync_command_args_options).
    */
   exec () {
+    if (this.verbose) this.startSpin()
+
     const args = Array.from(arguments)
     let options = {}
     if (args.length > 1 && typeof args[args.length - 1] === 'object') {
@@ -82,10 +118,17 @@ class CommandRunner {
     options.encoding = 'utf-8'
     return new Promise((resolve, reject) => {
       let command
+      let commandString
       if (args.length === 1) {
         command = childProcess.spawn(args[0], options)
+        commandString = args[0]
       } else {
         command = childProcess.spawn(args[0], args.slice(1), options)
+        commandString = `${args[0]} ${args.slice(1).join(' ')}`
+      }
+
+      if (this.verbose) {
+        this.message = `Exec: ${chalk.yellow(commandString)}`
       }
 
       if (options.detached) {
@@ -97,13 +140,13 @@ class CommandRunner {
       let stderr = ''
 
       command.stdout.on('data', (data) => {
-        if (this.verbose) console.log(data.toString())
+        this.logStdOutErr(data)
         stdout = stdout + data
       })
 
       // somehow songbook build stays open without this event.
       command.stderr.on('data', (data) => {
-        if (this.verbose) console.log(data.toString())
+        this.logStdOutErr(data)
         stderr = stderr + data
       })
 
@@ -123,9 +166,21 @@ class CommandRunner {
 
   /**
    *
+   * @param {Buffer} data - Binary output from childProcess.
    */
-  log (msg) {
-    this.spinner.text = msg
+  logStdOutErr (data) {
+    if (this.verbose) {
+      const cleanedText = data.toString().trim()
+      this.spinner.text = this.message + ' ' + cleanedText
+    }
+  }
+
+  /**
+   * @param {String} message - A message to show after the spinner.
+   */
+  log (message) {
+    this.message = message
+    this.spinner.text = message
   }
 
   /**
