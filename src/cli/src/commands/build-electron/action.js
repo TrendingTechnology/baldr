@@ -44,7 +44,7 @@ async function buildElectronApp (cmd, appName) {
  */
 async function action (appName, cmdObj, globalOpts) {
   const cmd = new CommandRunner({
-    verbose: globalOpts.verbose
+    verbose: true
   })
   cmd.checkRoot()
   cmd.startSpin()
