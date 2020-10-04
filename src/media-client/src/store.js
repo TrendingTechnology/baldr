@@ -225,7 +225,7 @@ const mutations = {
     Vue.delete(state.assets, uri)
   },
   removeMultiPartSelection (state, uri) {
-    Vue.delete(state.multiPartSelection, uri)
+    Vue.delete(state.multiPartSelections, uri)
   },
   removeSample (state, uri) {
     Vue.delete(state.samples, uri)
