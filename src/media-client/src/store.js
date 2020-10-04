@@ -64,6 +64,9 @@ const getters = {
     if (uri.indexOf('uuid:') === 0) uri = getters.idByUuid(uri)
     return state.multiPartSelections[uri]
   },
+  multiPartSelections: state => {
+    return state.multiPartSelections
+  },
   multiPartUris: state => {
     return state.multiPartUris
   },
@@ -118,6 +121,7 @@ const actions = {
   },
   clear ({ dispatch, commit }) {
     dispatch('removeAssetsAll')
+    dispatch('removeMultiPartSelections')
     commit('clearMultiPartUris')
     commit('setSampleLoaded', null)
     commit('setSamplePlaying', null)
@@ -130,17 +134,21 @@ const actions = {
       type, counter
     })
   },
-  removeAsset ({ commit, getters }, asset) {
+  removeAsset ({ commit }, asset) {
     for (const sampleUri in asset.samples) {
-      const sample = asset.samples[sampleUri]
-      commit('removeSample', sample)
-      commit('removeSampleFromPlayList', sample)
+      commit('removeSample', sampleUri)
+      commit('removeSampleFromPlayList', sampleUri)
     }
-    commit('removeAsset', asset)
+    commit('removeAsset', asset.uriId)
   },
   removeAssetsAll ({ dispatch, getters }) {
     for (const assetUri in getters.assets) {
       dispatch('removeAsset', getters.assets[assetUri])
+    }
+  },
+  removeMultiPartSelections ({ commit, getters }) {
+    for (const uri in getters.multiPartSelections) {
+      commit('removeMultiPartSelection', uri)
     }
   },
   setPlayListSampleCurrent ({ commit, getters }, sample) {
@@ -213,15 +221,18 @@ const mutations = {
   addSampleToPlayList (state, sample) {
     state.playList.push(sample.uriId)
   },
-  removeAsset (state, asset) {
-    Vue.delete(state.assets, asset.uriId)
+  removeAsset (state, uri) {
+    Vue.delete(state.assets, uri)
   },
-  removeSample (state, sample) {
-    Vue.delete(state.samples, sample.uriId)
+  removeMultiPartSelection (state, uri) {
+    Vue.delete(state.multiPartSelection, uri)
   },
-  removeSampleFromPlayList (state, sample) {
-    while (state.playList.indexOf(sample.uriId) > -1) {
-      const index = state.playList.indexOf(sample.uriId)
+  removeSample (state, uri) {
+    Vue.delete(state.samples, uri)
+  },
+  removeSampleFromPlayList (state, uri) {
+    while (state.playList.indexOf(uri) > -1) {
+      const index = state.playList.indexOf(uri)
       if (index > -1) {
         state.playList.splice(index, 1)
       }
