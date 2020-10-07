@@ -20,7 +20,6 @@ const chalk = require('chalk')
  */
 class CommandRunner {
   /**
-   *
    * @param {Object} options
    * @property {Boolean} verbose
    */
@@ -165,14 +164,29 @@ class CommandRunner {
   }
 
   /**
+   * Append the buffed data stream from the child process to the spinner text.
    *
-   * @param {Buffer} data - Binary output from childProcess.
+   * @param {Buffer} data - The binary output from childProcess.
    */
   logStdOutErr (data) {
     if (this.verbose) {
-      const cleanedText = data.toString().trim()
-      this.spinner.text = this.message + ' ' + cleanedText
+      let cleanedText = data.toString().trim()
+      cleanedText = cleanedText.replace(/<s> \[webpack\.Progress\]/, '')
+      cleanedText = cleanedText.replace(/\s{2,}/, ' ')
+      this.setSpinnerText_(this.message + ' ' + cleanedText)
     }
+  }
+
+  /**
+   * Set the spinner text and cut the lenght of the text to fit in a terminal
+   * window.
+   *
+   * @param {String} text - The text to set on the spinner.
+   *
+   * @private
+   */
+  setSpinnerText_ (text) {
+    this.spinner.text = text.substring(0, process.stdout.columns - 3)
   }
 
   /**
@@ -180,7 +194,7 @@ class CommandRunner {
    */
   log (message) {
     this.message = message
-    this.spinner.text = message
+    this.setSpinnerText_(message)
   }
 
   /**
