@@ -160,14 +160,14 @@ const menuTemplate = [
         submenu: [
           {
             label: 'Hefteintrag',
-            action: 'pushRouter',
-            arguments: 'editor',
+            action: 'executeCallback',
+            arguments: 'toggleEditor',
             keyboardShortcut: 'e'
           },
           {
             label: 'Dokumentenkamera',
-            action: 'pushRouter',
-            arguments: 'camera',
+            action: 'executeCallback',
+            arguments: 'toggleCamera',
             keyboardShortcut: 'c'
           }
         ]

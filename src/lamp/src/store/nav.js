@@ -56,7 +56,8 @@ const state = {
    * @tpye {Object}
    */
   navListIndex: {},
-  fullStepUpdate: false
+  fullStepUpdate: false,
+  lastRoute: null
 }
 
 const getters = {
@@ -77,6 +78,9 @@ const getters = {
     } else {
       return `slide/${params.slideNo}`
     }
+  },
+  lastRoute: state => {
+    return state.lastRoute
   },
   navList: state => {
     return state.navList
@@ -230,6 +234,9 @@ const mutations = {
       throw new Error(`A slide with the id “${slideId}” already exists.`)
     }
     state.slideIds[slideId] = no
+  },
+  lastRoute (state, route) {
+    state.lastRoute = route
   },
   setNavListNo (state, no) {
     state.navListNo = no

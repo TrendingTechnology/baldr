@@ -202,7 +202,7 @@ export default {
     }
     this.$shortcuts.addMultiple([
       {
-        keys: 'c s',
+        keys: 'ctrl+c+s',
         callback: this.showDeviceSelect,
         description: 'Dokumentenkamera auswählen'
       }

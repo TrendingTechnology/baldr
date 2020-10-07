@@ -10,29 +10,21 @@ import vm from './main.js'
 import { router } from './routes.js'
 
 /**
- * Toggle between two routes:
- *
- * 1. The routes named `slide` or `slide-step-no` and
- * 2. the route with the name specified with the argument
- *    `routeNameTo`.
- *
- * If the current route is neither `slides` nor `routeNameTo` move
- * to `routeNameTo`.
+ * Toggle between the destination and the last route:
  *
  * @param {String} routeNameTo - The route name to move to or move
  *   from.
  */
-function toggleSlidesToRoute (routeNameTo) {
-  const slide = store.getters['lamp/slide']
-  const presentation = store.getters['lamp/presentation']
-  if (
-    (routeNameTo === 'slide' && !slide) ||
-    (routeNameTo === 'slides-preview' && !presentation)
-  ) return
-  if (router.currentRoute.name !== routeNameTo) {
+function toggleLastRoute (routeNameTo) {
+  if (router.currentRoute.name === routeNameTo) {
+    const lastRoute = store.getters['lamp/nav/lastRoute']
+    if (lastRoute) {
+      store.commit('lamp/nav/lastRoute', null)
+      router.push(lastRoute)
+    }
+  } else {
+    store.commit('lamp/nav/lastRoute', router.currentRoute)
     router.push({ name: routeNameTo })
-  } else if (slide) {
-    router.push(slide.routerLocation())
   }
 }
 
@@ -311,16 +303,22 @@ export default {
     if (name) router.push({ name, params: route.params })
   },
   toggleMediaOverview () {
-    toggleSlidesToRoute('media-overview')
+    toggleLastRoute('media-overview')
   },
   toggleHome () {
-    toggleSlidesToRoute('home')
+    toggleLastRoute('home')
   },
   toggleSlidesPreview () {
-    toggleSlidesToRoute('slides-preview')
+    toggleLastRoute('slides-preview')
   },
   toggleRestApi () {
-    toggleSlidesToRoute('rest-api')
+    toggleLastRoute('rest-api')
+  },
+  toggleCamera () {
+    toggleLastRoute('camera')
+  },
+  toggleEditor () {
+    toggleLastRoute('editor')
   },
   goToPreviousSlide () {
     goToNextSlide(-1)
