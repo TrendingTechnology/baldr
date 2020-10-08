@@ -314,14 +314,14 @@ const menuTemplate = [
         description: 'Die aktuelle Folie vergrößern.',
         action: 'executeCallback',
         arguments: 'increaseSlideScaleFactor',
-        keyboardShortcut: 'Ctrl + 2'
+        keyboardShortcut: 'plus'
       },
       {
         label: 'Schriftgröße verkleinern',
         description: 'Die aktuelle Folie verkleinern.',
         action: 'executeCallback',
         arguments: 'decreaseSlideScaleFactor',
-        keyboardShortcut: 'Ctrl + 3'
+        keyboardShortcut: '-'
       },
       {
         label: 'Zwischen zwei Folien hin- und herschalten.',
