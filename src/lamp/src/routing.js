@@ -44,22 +44,35 @@ import { router } from '@/routes.js'
 import { shortenText } from '@bldr/core-browser'
 import store from '@/store/index.js'
 
-/* globals document */
+/* globals document gitHead compilationTime */
 
 /**
+ * Set the document title by the current route.
+ *
  * @param {module:@bldr/lamp/routing/route} route
  */
 function setDocumentTitleByRoute (route) {
   const slide = store.getters['lamp/slide']
   const presentation = store.getters['lamp/presentation']
 
+  const getBuildTimeTitle = function () {
+    const buildTime = new Date(compilationTime).toLocaleString()
+    let lastCommit = gitHead.short
+    if (gitHead.short) {
+      lastCommit = `${lastCommit}-dirty`
+    }
+    return `Baldr Lamp (${buildTime} ${lastCommit})`
+  }
+
   let title
   if (slide && slide.title && (route.name === 'slide' || route.name === 'slide-step-no')) {
     title = `Nr. ${slide.no} [${slide.master.title}]: ${slide.title} (${presentation.title})`
+  } else if (route.name === 'home') {
+    title = getBuildTimeTitle()
   } else if (route.meta && route.meta.title) {
     title = route.meta.title
   } else {
-    title = 'Lamp'
+    title = getBuildTimeTitle()
   }
 
   document.title = shortenText(title, { stripTags: true, maxLength: 125 })
