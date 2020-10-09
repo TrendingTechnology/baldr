@@ -1,0 +1,41 @@
+{
+  "name": "@bldr/tex-markdown-convert",
+  "version": "0.1.0",
+  "description": "A naive implementation of a TeX to Markdown and vice versa converter.",
+  "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
+  "bugs": {
+    "url": "https://github.com/Josef-Friedrich/baldr/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Josef-Friedrich/baldr.git"
+  },
+  "scripts": {
+    "build": "tsc"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Josef Friedrich",
+    "email": "josef@friedrich.rocks",
+    "url": "https://josef.friedrich.rocks"
+  },
+  "main": "src/main.js",
+  "standard.enable": false,
+  "standard.options": {
+    "globals": [
+      "$",
+      "jQuery",
+      "fetch"
+    ],
+    "ignore": [
+      "node_modules/**"
+    ],
+    "plugins": [
+      "html"
+    ],
+    "parser": "babel-eslint",
+    "envs": [
+      "jest"
+    ]
+  }
+}
