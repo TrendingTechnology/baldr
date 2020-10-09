@@ -30,6 +30,7 @@
     "@bldr/shortcuts": "^0.2.2",
     "@bldr/themes": "^0.2.3",
     "@bldr/tex-markdown-converter": "^0.1.0",
+    "@bldr/config": "^0.1.0",
     "axios": "^0.20.0",
     "core-js": "^3.6.5",
     "electron-context-menu": "^2.3.0",

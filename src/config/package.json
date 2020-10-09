@@ -1,0 +1,29 @@
+{
+  "name": "@bldr/config",
+  "version": "0.1.0",
+  "description": "Load the configuration file /etc/baldr.json.",
+  "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
+  "bugs": {
+    "url": "https://github.com/Josef-Friedrich/baldr/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Josef-Friedrich/baldr.git"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Josef Friedrich",
+    "email": "josef@friedrich.rocks",
+    "url": "https://josef.friedrich.rocks"
+  },
+  "scripts": {
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "@types/node": "^14.11.8"
+  },
+  "main": "dist/main.js",
+  "publishConfig": {
+    "access": "public"
+  }
+}

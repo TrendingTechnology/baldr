@@ -9,6 +9,7 @@ const { DefinePlugin } = require('webpack')
 const core = require('@bldr/core-node')
 const { exportSassAsJson } = require('@bldr/themes')
 const packageJson = require('./package.json')
+const { config } = require('@bldr/config')
 
 function stylePath (themeName) {
   return path.join(path.dirname(require.resolve('@bldr/themes')), `${themeName}.scss`)
@@ -47,7 +48,7 @@ module.exports = {
         // https://webpack.js.org/plugins/define-plugin/
         // If the value is a string it will be used as a code fragment.
         compilationTime: new Date().getTime(),
-        config: JSON.stringify(core.bootstrapConfig()),
+        config: JSON.stringify(config),
         defaultThemeSassVars: JSON.stringify(exportSassAsJson()),
         gitHead: JSON.stringify(core.gitHead()),
         lampVersion: JSON.stringify(packageJson.version),
