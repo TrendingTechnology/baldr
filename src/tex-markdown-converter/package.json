@@ -1,5 +1,5 @@
 {
-  "name": "@bldr/tex-markdown-convert",
+  "name": "@bldr/tex-markdown-converter",
   "version": "0.1.0",
   "description": "A naive implementation of a TeX to Markdown and vice versa converter.",
   "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
@@ -19,7 +19,7 @@
     "email": "josef@friedrich.rocks",
     "url": "https://josef.friedrich.rocks"
   },
-  "main": "src/main.js",
+  "main": "dist/main.js",
   "standard.enable": false,
   "standard.options": {
     "globals": [

@@ -1,7 +1,7 @@
 const assert = require('assert')
 
-const selectSubset = require('../dist/main.js').selectSubset
-const convertDurationToSeconds = require('../dist/main.js').convertDurationToSeconds
+const selectSubset = require('./main.js').selectSubset
+const convertDurationToSeconds = require('./main.js').convertDurationToSeconds
 
 describe('function selectSubset()', function () {
   it('3-', function () {

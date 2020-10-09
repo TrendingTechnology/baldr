@@ -4,6 +4,34 @@
  * @module @bldr/tex-markdown-converter
  */
 
+ /**
+  * A replacement using a regular expression.
+  */
+export interface RegExpReplacement {
+  /**
+   * A regular expression.
+   */
+  reg: RegExp
+  /**
+   * A replacement string.
+   */
+  rep: string
+}
+
+/**
+ * A replacement pair: A TeX snippet and a corresponding Markdown snippet.
+ */
+export interface ReplacementPair {
+  /**
+   * The TeX side of the replacement pair.
+   */
+  tex: string | RegExpReplacement
+  /**
+   * The markdown side of the replacement pair.
+   */
+  md: string | RegExpReplacement
+}
+
 /**
  * Build and assemble strings to generate regular expressions from.
  */
@@ -13,7 +41,7 @@ class RegExpBuilder {
   captDotAll: string
   whiteNewline: string
 
-  constructor () {
+  constructor() {
     this.dotAll = '[^]+?'
     this.captDotAll = this.capt(this.dotAll)
     this.whiteNewline = '[\\s\n]*?'
@@ -26,7 +54,7 @@ class RegExpBuilder {
    *
    * @returns A string to build a regular expression from.
    */
-  capt (regExp: string): string {
+  capt(regExp: string): string {
     return `(${regExp})`
   }
 
@@ -39,7 +67,7 @@ class RegExpBuilder {
    *
    * @returns {string} A string to build a regular expression from.
    */
-  cmd (macroName: string, regExp: string = ''): string {
+  cmd(macroName: string, regExp: string = ''): string {
     if (!regExp) regExp = '([^\\}]+?)'
     return `\\\\${macroName}\\{${regExp}\\}`
   }
@@ -52,7 +80,7 @@ class RegExpBuilder {
    *
    * @returns {string} A string to build a regular expression from.
    */
-  env (envName: string, regExp: string) {
+  env(envName: string, regExp: string): string {
     if (!regExp) regExp = this.captDotAll
     return this.cmd('begin', envName) + regExp + this.cmd('end', envName)
   }
@@ -67,7 +95,7 @@ const regBuilder = new RegExpBuilder()
  *   to exclude in the result matches for example regexp:
  *   `(itemize|compactitem|sub)` -> `['itemize', 'compactitem', 'sub']`
  */
-function cleanMatch (match: any[], excludeCaptureGroups: string[]) {
+function cleanMatch(match: string[], excludeCaptureGroups: string[]): string[] {
   const exclude = excludeCaptureGroups
   // Convert to Array
   match = [...match]
@@ -93,7 +121,7 @@ function cleanMatch (match: any[], excludeCaptureGroups: string[]) {
  *
  * @returns {string}
  */
-function extractMatchAll (text: string, regExp: string, matches: string[], excludeCaptureGroups: string[]) {
+function extractMatchAll(text: string, regExp: string, matches: string[][], excludeCaptureGroups: string[]): string {
   const compiledRegExp = new RegExp(regExp, 'g')
   if (text.match(compiledRegExp)) {
     const rawMatches = text.matchAll(compiledRegExp)
@@ -110,7 +138,7 @@ function extractMatchAll (text: string, regExp: string, matches: string[], exclu
  * @param {string} commandName - A simple LaTeX macro / command name
  *   from example: `emph` `\emph{.*}`
  */
-function texReg (commandName: string) {
+function texReg(commandName: string): RegExp {
   return new RegExp(regBuilder.cmd(commandName), 'g')
 }
 
@@ -118,7 +146,7 @@ function texReg (commandName: string) {
  * @param {string} commandName - A simple LaTeX macro / command name
  *   from example: `emph` `\emph{.*}`
  */
-function texRep (commandName: string) {
+function texRep(commandName: string): string {
   return `\\${commandName}{$1}`
 }
 
@@ -127,7 +155,7 @@ function texRep (commandName: string) {
  * @param tagName - The name of the HTML tag (for example “em”).
  * @param className - The name of the CSS class (for example “person”).
  */
-function mdReg (tagName: string, className: string = ''): RegExp {
+function mdReg(tagName: string, className: string = ''): RegExp {
   let classMarkup = ''
   if (className) {
     classMarkup = ` class="${className}"`
@@ -141,7 +169,7 @@ function mdReg (tagName: string, className: string = ''): RegExp {
  *
  * @returns
  */
-function mdRep (tagName: string, className: string = ''): string {
+function mdRep(tagName: string, className: string = ''): string {
   let classMarkup = ''
   if (className) {
     classMarkup = ` class="${className}"`
@@ -150,13 +178,13 @@ function mdRep (tagName: string, className: string = ''): string {
 }
 
 /**
- * @param {string} texCommandName
- * @param {string} htmlTagName
- * @param {string} htmlClassName
+ * @param texCommandName
+ * @param htmlTagName
+ * @param htmlClassName
  *
- * @returns {Array}
+ * @returns
  */
-function semanticSpec (texCommandName: string, htmlTagName: string, htmlClassName: string) {
+function semanticSpec(texCommandName: string, htmlTagName: string, htmlClassName: string): ReplacementPair[] {
   return [{
     tex: { reg: texReg(texCommandName), rep: texRep(texCommandName) },
     md: { reg: mdReg(htmlTagName, htmlClassName), rep: mdRep(htmlTagName, htmlClassName) }
@@ -164,19 +192,9 @@ function semanticSpec (texCommandName: string, htmlTagName: string, htmlClassNam
 }
 
 /**
- * `reg`: Regular expression
- * `rep`: Replacement
- *
- * ```js
- * {
- *   tex: { reg: , rep:  },
- *   md: { reg: , rep:  }
- * }
- * ```
- *
- * @type {Array}
+ * The specification of the replacements.
  */
-const specification = [
+const specification: ReplacementPair[] = [
   {
     tex: { reg: /\\stueck\*\{([^\}]+?)\}/g, rep: '\\stueck*{$1}' }, // eslint-disable-line
     md: { reg: /<em class="piece">„([^<>]+?)“<\/em>/g, rep: '<em class="piece">„$1“</em>' }
@@ -203,7 +221,7 @@ const specification = [
  *
  * @see {@link https://tex.stackexchange.com/a/451849/42311}
  */
-function removeTexComments (text: string) {
+function removeTexComments(text: string): string {
   // TeX comment to fix hyphenation
   // Lorem ip-%
   // sum
@@ -218,7 +236,7 @@ function removeTexComments (text: string) {
  *
  * @param {string} text - A input string to convert.
  */
-function removeTexHeaderFooter (text: string) {
+function removeTexHeaderFooter(text: string): string {
   // Remove TeX header and footer
   text = text.replace(/[^]*\\begin\{document\}/, '')
   text = text.replace(/\\end\{document\}[^]*/, '')
@@ -229,7 +247,7 @@ function removeTexHeaderFooter (text: string) {
  *
  * @param text - A input string to convert.
  */
-function convertTexItemize (text: string): string {
+function convertTexItemize(text: string): string {
   return text.replace(
     /\\begin\{(compactitem|itemize)\}([^]+?)\\end\{(compactitem|itemize)\}/g,
     function (match, p1, p2) {
@@ -248,7 +266,7 @@ function convertTexItemize (text: string): string {
  *
  * @param text - A input string to convert.
  */
-function cleanUpTex (text: string): string {
+function cleanUpTex(text: string): string {
   // Delete comments
   text = text.replace(/\n%.*?\n/g, '\n')
   text = text.replace(/\n%.*?\n/g, '\n')
@@ -265,7 +283,7 @@ function cleanUpTex (text: string): string {
  *
  * @returns A cleaned up string.
  */
-function cleanUp (text: string): string {
+function cleanUp(text: string): string {
   text = text.replace(/\n\n\n+/g, '\n\n')
   return text
 }
@@ -277,7 +295,7 @@ function cleanUp (text: string): string {
  * @param toTex - True to convert from Markdown to TeX. False to
  *   convert from TeX to Markdown.
  */
-function convert (text: string, toTex: boolean): string {
+function convert(text: string, toTex: boolean): string {
   const specsReq = []
   const specsRep = []
   for (const spec of specification) {
@@ -328,18 +346,34 @@ function convert (text: string, toTex: boolean): string {
   return text
 }
 
+/**
+ * Convert an TeX text to a Markdown text.
+ *
+ * @param text An input text in the TeX format.
+ *
+ * @returns A string in the Markdown format.
+ */
+export function convertTexToMd(text: string): string {
+  text = removeTexHeaderFooter(text)
+  text = convertTexItemize(text)
+  text = convert(text, false)
+  text = cleanUpTex(text)
+  text = cleanUp(text)
+  return text
+}
+
+/**
+ * Convert an Markdown text to a TeX text.
+ *
+ * @param text An input text in the Markdown format.
+ *
+ * @returns A string in the TeX format.
+ */
+export function convertMdToTex(text: string): string {
+  return convert(text, true)
+}
+
 export default {
-  convertTexToMd (text: string) {
-    text = removeTexHeaderFooter(text)
-    text = convertTexItemize(text)
-    text = convert(text, false)
-    text = cleanUpTex(text)
-    text = cleanUp(text)
-    return text
-  },
-  convertMdToTex (text: any) {
-    return convert(text, true)
-  },
   regBuilder,
   cleanMatch,
   extractMatchAll,

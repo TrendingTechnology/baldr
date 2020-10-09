@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import { convertTexToMd, convertMdToTex } from '@bldr/core-browser'
+import { convertTexToMd, convertMdToTex } from '@bldr/tex-markdown-converter'
 
 export default {
   name: 'TexMarkdownConverter',
