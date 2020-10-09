@@ -15,7 +15,7 @@ export default {
   },
   data () {
     return {
-      slide: new Slide({ editor: true })
+      slide: new Slide({ editor: { markup: 'Hefteintrag' } })
     }
   }
 }
@@ -23,8 +23,10 @@ export default {
 
 <style lang="scss">
   .vc_ad_hoc_editor {
+
     .vc_master_renderer {
       height: 100vh;
+      font-size: 3.5em;
     }
   }
 </style>

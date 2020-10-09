@@ -101,7 +101,7 @@ export default {
 <style lang="scss">
   .vc_editor_master {
     // left right padding more because of ul ol etc ...
-    padding: 1.5em 4em;
+    padding: 1vw 4vw;
 
     .editor-placeholder {
       font-size: 0.5em;
