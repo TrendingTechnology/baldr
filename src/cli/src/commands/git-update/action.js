@@ -3,10 +3,7 @@ const { CommandRunner } = require('@bldr/cli-utils')
 
 const { config } = require('../../main.js')
 
-/**
- *
- */
-async function action (what, cmdObj) {
+async function action () {
   const cmd = new CommandRunner({ verbose: true })
   cmd.startSpin()
 
