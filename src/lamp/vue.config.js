@@ -9,7 +9,7 @@ const { DefinePlugin } = require('webpack')
 const core = require('@bldr/core-node')
 const { exportSassAsJson } = require('@bldr/themes')
 const packageJson = require('./package.json')
-const { config } = require('@bldr/config')
+const config = require('@bldr/config')
 
 function stylePath (themeName) {
   return path.join(path.dirname(require.resolve('@bldr/themes')), `${themeName}.scss`)
