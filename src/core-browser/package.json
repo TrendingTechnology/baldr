@@ -19,7 +19,8 @@
   "scripts": {
     "build": "tsc"
   },
-  "main": "src/main.js",
+  "browser": "src/main.js",
+  "main": "dist/main.js",
   "publishConfig": {
     "access": "public"
   },
