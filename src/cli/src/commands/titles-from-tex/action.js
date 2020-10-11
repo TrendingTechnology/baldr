@@ -7,7 +7,7 @@ const chalk = require('chalk')
 
 // Project packages.
 const mediaServer = require('@bldr/media-server')
-const { convertTexToMd } = require('@bldr/core-browser')
+const { convertTexToMd } = require('@bldr/tex-markdown-converter')
 
 const lib = require('../../lib.js')
 

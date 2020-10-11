@@ -44,13 +44,13 @@ class RegExpBuilder {
      *
      * @returns {string} A string to build a regular expression from.
      */
-    env(envName, regExp) {
+    env(envName, regExp = '') {
         if (!regExp)
             regExp = this.captDotAll;
         return this.cmd('begin', envName) + regExp + this.cmd('end', envName);
     }
 }
-const regBuilder = new RegExpBuilder();
+export const regBuilder = new RegExpBuilder();
 /**
  *
  * @param {*} match
@@ -82,7 +82,7 @@ function cleanMatch(match, excludeCaptureGroups) {
  *
  * @returns {string}
  */
-function extractMatchAll(text, regExp, matches, excludeCaptureGroups) {
+export function extractMatchAll(text, regExp, matches, excludeCaptureGroups) {
     const compiledRegExp = new RegExp(regExp, 'g');
     if (text.match(compiledRegExp)) {
         const rawMatches = text.matchAll(compiledRegExp);
@@ -175,7 +175,7 @@ const specification = [
  *
  * @see {@link https://tex.stackexchange.com/a/451849/42311}
  */
-function removeTexComments(text) {
+export function removeTexComments(text) {
     // TeX comment to fix hyphenation
     // Lorem ip-%
     // sum

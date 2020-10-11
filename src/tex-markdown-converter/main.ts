@@ -80,13 +80,13 @@ class RegExpBuilder {
    *
    * @returns {string} A string to build a regular expression from.
    */
-  env(envName: string, regExp: string): string {
+  env(envName: string, regExp: string = ''): string {
     if (!regExp) regExp = this.captDotAll
     return this.cmd('begin', envName) + regExp + this.cmd('end', envName)
   }
 }
 
-const regBuilder = new RegExpBuilder()
+export const regBuilder = new RegExpBuilder()
 
 /**
  *
@@ -121,7 +121,7 @@ function cleanMatch(match: string[], excludeCaptureGroups: string[]): string[] {
  *
  * @returns {string}
  */
-function extractMatchAll(text: string, regExp: string, matches: string[][], excludeCaptureGroups: string[]): string {
+export function extractMatchAll(text: string, regExp: string, matches: string[][], excludeCaptureGroups: string[]): string {
   const compiledRegExp = new RegExp(regExp, 'g')
   if (text.match(compiledRegExp)) {
     const rawMatches = text.matchAll(compiledRegExp)
@@ -221,7 +221,7 @@ const specification: ReplacementPair[] = [
  *
  * @see {@link https://tex.stackexchange.com/a/451849/42311}
  */
-function removeTexComments(text: string): string {
+export function removeTexComments(text: string): string {
   // TeX comment to fix hyphenation
   // Lorem ip-%
   // sum

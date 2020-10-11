@@ -7,7 +7,7 @@ const chalk = require('chalk')
 
 // Project packages.
 const mediaServer = require('@bldr/media-server')
-const { convertTexToMd, tex } = require('@bldr/core-browser')
+const { convertTexToMd, removeTexComments, regBuilder, extractMatchAll } = require('@bldr/tex-markdown-converter')
 
 const lib = require('../../lib.js')
 
@@ -15,7 +15,7 @@ const lib = require('../../lib.js')
 const { cwd } = require('../../main.js')
 
 function convertToOneLineMd (content) {
-  content = tex.removeComments(content)
+  content = removeTexComments(content)
   content = content.replace(/\n/g, ' ')
   content = content.replace(/\s\s+/g, ' ')
   content = content.trim()
@@ -49,8 +49,7 @@ function slidify (masterName, data, topLevelData) {
 }
 
 function objectifyTexZitat (content) {
-  const reg = tex.regBuilder
-  const regexp = new RegExp(reg.env('zitat', '\\*?' + reg.captDotAll), 'g')
+  const regexp = new RegExp(regBuilder.env('zitat', '\\*?' + regBuilder.captDotAll), 'g')
   const matches = content.matchAll(regexp)
   const data = []
   for (const match of matches) {
@@ -82,18 +81,17 @@ function objectifyTexZitat (content) {
 }
 
 function objectifyTexItemize (content) {
-  const reg = tex.regBuilder
-  const regSection = reg.cmd('(sub)?(sub)?section', '([^\\}]*?)')
-  const regItemize = reg.env('(compactitem|itemize)')
+  const regSection = regBuilder.cmd('(sub)?(sub)?section', '([^\\}]*?)')
+  const regItemize = regBuilder.env('(compactitem|itemize)')
 
   const matches = []
   const exclude = ['itemize', 'compactitem', 'sub']
   for (const regex of [
-    regSection + reg.whiteNewline + regSection + reg.whiteNewline + regItemize,
-    regSection + reg.whiteNewline + regItemize,
+    regSection + regBuilder.whiteNewline + regSection + regBuilder.whiteNewline + regItemize,
+    regSection + regBuilder.whiteNewline + regItemize,
     regItemize
   ]) {
-    content = tex.extractMatchAll(content, regex, matches, exclude)
+    content = extractMatchAll(content, regex, matches, exclude)
   }
 
   const data = []

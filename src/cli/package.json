@@ -29,6 +29,7 @@
     "@bldr/songbook-intermediate-files": "^0.2.3",
     "@bldr/wikidata": "^0.1.0",
     "@bldr/media-manager": "^0.1.0",
+    "@bldr/tex-markdown-converter": "^0.1.0",
     "chalk": "^4.1.0",
     "color": "^3.1.2",
     "commander": "^6.1.0",

@@ -63,8 +63,9 @@ declare class RegExpBuilder {
      *
      * @returns {string} A string to build a regular expression from.
      */
-    env(envName: string, regExp: string): string;
+    env(envName: string, regExp?: string): string;
 }
+export declare const regBuilder: RegExpBuilder;
 /**
  *
  * @param {*} match
@@ -83,14 +84,14 @@ declare function cleanMatch(match: string[], excludeCaptureGroups: string[]): st
  *
  * @returns {string}
  */
-declare function extractMatchAll(text: string, regExp: string, matches: string[][], excludeCaptureGroups: string[]): string;
+export declare function extractMatchAll(text: string, regExp: string, matches: string[][], excludeCaptureGroups: string[]): string;
 /**
  *
  * @param {string} text - A input string to convert.
  *
  * @see {@link https://tex.stackexchange.com/a/451849/42311}
  */
-declare function removeTexComments(text: string): string;
+export declare function removeTexComments(text: string): string;
 /**
  * Convert an TeX text to a Markdown text.
  *
