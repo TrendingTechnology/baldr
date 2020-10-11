@@ -9,7 +9,7 @@ const { DefinePlugin } = require('webpack')
 // Project packages.
 const core = require('@bldr/core-node')
 
-const config = core.bootstrapConfig()
+const config = require('@bldr/config')
 
 const themePath = path.dirname(require.resolve('@bldr/themes'))
 
@@ -41,7 +41,7 @@ module.exports = {
         // https://webpack.js.org/plugins/define-plugin/
         // If the value is a string it will be used as a code fragment.
         compilationTime: new Date().getTime(),
-        config: JSON.stringify(core.bootstrapConfig()),
+        config: JSON.stringify(config),
         gitHead: JSON.stringify(core.gitHead()),
         songsJson: JSON.stringify(require(path.join(config.songbook.projectorPath, 'songs.json')))
       })

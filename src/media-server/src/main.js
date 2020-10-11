@@ -73,7 +73,7 @@ const express = require('express')
 const yaml = require('js-yaml')
 
 // Project packages.
-const { bootstrapConfig } = require('@bldr/core-node')
+const config = require('@bldr/config')
 const { AssetTypes, convertPropertiesCase } = require('@bldr/core-browser')
 
 const registerSeatingPlan = require('./seating-plan.js').registerRestApi
@@ -87,11 +87,6 @@ const { Database } = require('./database.js')
 const { asciify, deasciify } = helper
 
 const packageJson = require('../package.json')
-
-/**
- * The configuration object from `/etc/baldr.json`
- */
-const config = bootstrapConfig()
 
 /**
  * Base path of the media server file store.

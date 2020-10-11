@@ -6,13 +6,10 @@
 const fs = require('fs')
 const path = require('path')
 
-// Project packages.
-const { bootstrapConfig } = require('@bldr/core-node')
-
 /**
  * The configuration object from `/etc/baldr.json`
  */
-const config = bootstrapConfig()
+const config = require('@bldr/config')
 
 /**
  * Hold some meta data about a folder and its title.

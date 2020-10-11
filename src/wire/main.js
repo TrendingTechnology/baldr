@@ -13,11 +13,8 @@
 // Third party packages.
 const WebSocket = require('ws')
 
-// Project packages.
-const core = require('@bldr/core-node')
-
 // Globals.
-const config = core.bootstrapConfig()
+const config = require('@bldr/config')
 
 /**
  * Launch the web socket server.

@@ -16,9 +16,8 @@ const path = require('path')
 
 // Project packages.
 const { deepCopy, getExtension, convertPropertiesCase } = require('@bldr/core-browser')
-const { bootstrapConfig } = require('@bldr/core-node')
 
-const config = bootstrapConfig()
+const config = require('@bldr/core-node')
 
 /**
  * @type {module:@bldr/media-server/meta-types~typeSpecs}

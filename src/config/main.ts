@@ -50,7 +50,7 @@ interface MediaServerConfiguration {
 }
 
 interface ApiConfiguration {
-  port: string
+  port: number
 }
 
 interface MongoDbConfiguration {
@@ -65,7 +65,7 @@ interface DatabasesConfiguration {
 }
 
 interface WireConfiguration {
-  port: string
+  port: number
   localUri: string
 }
 

@@ -4,13 +4,10 @@
 
 const mongodb = require('mongodb')
 
-// Project packages.
-const { bootstrapConfig } = require('@bldr/core-node')
-
 /**
  * The configuration object from `/etc/baldr.json`
  */
-const config = bootstrapConfig()
+const config = require('@bldr/config')
 
 /**
  * A wrapper around MongoDB.

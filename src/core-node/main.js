@@ -8,7 +8,6 @@
 // Node packages.
 const childProcess = require('child_process')
 const fs = require('fs')
-const path = require('path')
 const util = require('util')
 
 // Third party packages
@@ -20,36 +19,6 @@ const git = require('git-rev-sync')
 function log (format) {
   const args = Array.from(arguments).slice(1)
   console.log(util.format(format, ...args))
-}
-
-/**
- * Object to cache the configuration. To avoid reading the configuration
- * file multiple times.
- */
-let configJson
-
-/**
- * By default this module reads the configuration file `/etc/baldr.json` to
- * generate its configuration object.
- *
- * @param {object} configDefault - Default options which gets merged.
- *
- * @return {object}
- */
-function bootstrapConfig (configDefault = false) {
-  if (!configJson) {
-    const configFile = path.join(path.sep, 'etc', 'baldr.json')
-
-    if (fs.existsSync(configFile)) {
-      configJson = require(configFile)
-    }
-    if (!configJson) throw new Error(`No configuration file found: ${configFile}`)
-  }
-
-  if (configDefault) {
-    return Object.assign(configDefault, configJson)
-  }
-  return configJson
 }
 
 /**
@@ -100,7 +69,6 @@ function getPdfPageCount (filePath) {
 }
 
 module.exports = {
-  bootstrapConfig,
   checkExecutables,
   getPdfPageCount,
   gitHead,

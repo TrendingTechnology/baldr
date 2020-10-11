@@ -40,7 +40,7 @@ interface MediaServerConfiguration {
     assetTypes: AssetTypes;
 }
 interface ApiConfiguration {
-    port: string;
+    port: number;
 }
 interface MongoDbConfiguration {
     url: string;
@@ -52,7 +52,7 @@ interface DatabasesConfiguration {
     mongodb: MongoDbConfiguration;
 }
 interface WireConfiguration {
-    port: string;
+    port: number;
     localUri: string;
 }
 /**

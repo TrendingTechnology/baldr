@@ -8,11 +8,11 @@ const path = require('path')
 const commander = require('commander')
 
 // Project packages.
-const { bootstrapConfig, checkExecutables } = require('@bldr/core-node')
+const { checkExecutables } = require('@bldr/core-node')
 
 // Globals.
 const commandsPath = path.join(__dirname, 'commands')
-const config = bootstrapConfig()
+const config = require('@bldr/config')
 const cwd = process.cwd()
 
 /**

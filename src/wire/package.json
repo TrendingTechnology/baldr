@@ -17,7 +17,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@bldr/core-node": "^0.2.2",
+    "@bldr/config": "^0.1.0",
     "ws": "^7.3.1"
   }
 }

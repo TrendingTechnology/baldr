@@ -29,7 +29,7 @@ const { formatMultiPartAssetFileName, camelToSnake, jsYamlConfig } = require('@b
 /**
  * See `/etc/baldr.json`.
  */
-const config = core.bootstrapConfig()
+const config = require('@bldr/config')
 
 /**
  * An array of song objects.

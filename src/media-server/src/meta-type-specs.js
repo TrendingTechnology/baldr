@@ -22,8 +22,13 @@ const { v4: uuidv4 } = require('uuid')
 
 // Project packages.
 const { deasciify, idify } = require('./helper.js')
-const { bootstrapConfig, getPdfPageCount } = require('@bldr/core-node')
+const { getPdfPageCount } = require('@bldr/core-node')
 const { mediaUriRegExp } = require('@bldr/core-browser')
+
+/**
+ * The configuration object from `/etc/baldr.json`
+ */
+const config = require('@bldr/config')
 
 /**
  * Validate a date string in the format `yyyy-mm-dd`.
@@ -95,11 +100,6 @@ function generateIdPrefix (filePath) {
   const idPrefix = `${presentationId}_${assetTypeAbbreviation}`
   return idPrefix
 }
-
-/**
- * The configuration object from `/etc/baldr.json`
- */
-const config = bootstrapConfig()
 
 /**
  * The meta data type specification “cloze”.
