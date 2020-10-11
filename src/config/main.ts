@@ -36,7 +36,7 @@ interface AssetType {
   color: string
 }
 
-interface AssetTypes {
+export interface AssetTypes {
   [key: string]: AssetType
 }
 

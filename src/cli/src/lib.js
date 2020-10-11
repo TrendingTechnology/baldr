@@ -18,6 +18,8 @@ const mediaServer = require('@bldr/media-server')
 const { jsYamlConfig, getExtension, convertPropertiesCase } = require('@bldr/core-browser')
 
 /**
+ * TODO: Remove and use version in @bldr/media-manager.
+ *
  * @param {String} mediaFile
  *
  * @returns {module:@bldr/media-server~Asset}
@@ -27,6 +29,8 @@ function makeAsset (mediaFile) {
 }
 
 /**
+ * TODO: Remove and use version in @bldr/media-manager.
+ *
  * @param {String} filePath
  *
  * @returns {String}
@@ -38,6 +42,8 @@ function filePathToAssetType (filePath) {
 }
 
 /**
+ * TODO: Remove and use version in @bldr/media-manager.
+ *
  * Read the corresponding YAML file of a media asset.
  *
  * @param {String} filePath - The path of the media asset (without the
@@ -56,6 +62,7 @@ function readAssetYaml (filePath) {
 }
 
 /**
+ * TODO: Remove and use version in @bldr/media-manager.
  * Convert a Javascript object into a text string, ready to be written into
  * a text file.
  *
@@ -90,6 +97,8 @@ function writeYamlFile (filePath, data) {
 }
 
 /**
+ * TODO: Remove and use version in @bldr/media-manager.
+ *
  * Write the metadata YAML file for a corresponding media file specified by
  * `filePath`.
  *
@@ -156,6 +165,7 @@ function writeFile (filePath, content) {
 }
 
 /**
+ * TODO: Remove and use version in @bldr/media-manager.
  * TODO: replace code inside actionConvert() with this function.
  *
  * @param {String} inputFile
@@ -173,6 +183,8 @@ function runImagemagick (inputFile, outputFile, size = '2000x2000>') {
 }
 
 /**
+ * TODO: Remove and use version in @bldr/media-manager.
+ *
  * Move (rename) or copy a media asset and it’s corresponding meta data file
  * (`*.yml`) and preview file (`_preview.jpg`).
  *
@@ -243,6 +255,8 @@ function moveAsset (oldPath, newPath, opts) {
 }
 
 /**
+ * TODO: Remove and use version in @bldr/media-manager.
+ *
  * Download a URL to a destination.
  *
  * @param {String} url - The URL.
@@ -255,6 +269,8 @@ async function fetchFile (url, dest) {
 }
 
 /**
+ * TODO: Remove and use version in @bldr/media-manager.
+ *
  * Load a YAML file. Only return objects to save vscode type checks.
  *
  * @param {String} filePath

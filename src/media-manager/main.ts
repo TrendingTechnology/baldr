@@ -7,7 +7,11 @@
  */
 
 import fs from 'fs'
+import path from 'path'
 import yaml from 'js-yaml'
+import fetch from 'node-fetch'
+import { URL } from 'url'
+import { getExtension } from '@bldr/core-browser'
 
 interface Meta {
   curriculumUrl: string
@@ -43,6 +47,88 @@ function readFile(filePath: string): string {
  */
 function writeFile(filePath: string, content: string) {
   fs.writeFileSync(filePath, content)
+}
+
+interface MoveAssetConfiguration {
+  copy: boolean
+  dryRun: boolean
+}
+
+/**
+ * Move (rename) or copy a media asset and it’s corresponding meta data file
+ * (`*.yml`) and preview file (`_preview.jpg`).
+ *
+ * @param oldPath - The old path of a media asset.
+ * @param newPath - The new path of a media asset.
+ * @param opts - Some options
+ */
+export function moveAsset (oldPath: string, newPath: string, opts: MoveAssetConfiguration) {
+  if (!opts) opts = <MoveAssetConfiguration> {}
+
+  function move (oldPath: string, newPath: string, { copy, dryRun }: MoveAssetConfiguration) {
+    let action
+    const dryRunMsg = dryRun ? '[dry run] ' : ''
+    if (copy) {
+      if (!dryRun) fs.copyFileSync(oldPath, newPath)
+      action = 'copy'
+    } else {
+      if (!dryRun) {
+        //  Error: EXDEV: cross-device link not permitted,
+        try {
+          fs.renameSync(oldPath, newPath)
+        } catch (error) {
+          if (error.code === 'EXDEV') {
+            fs.copyFileSync(oldPath, newPath)
+            fs.unlinkSync(oldPath)
+          }
+        }
+      }
+      action = 'move'
+    }
+  }
+
+  function moveCorrespondingFile (oldPath: string, newPath: string, search: RegExp, replace: string, opts: MoveAssetConfiguration) {
+    oldPath = oldPath.replace(search, replace)
+    if (fs.existsSync(oldPath)) {
+      newPath = newPath.replace(search, replace)
+      move(oldPath, newPath, opts)
+    }
+  }
+
+  if (newPath && oldPath !== newPath) {
+    if (!opts.dryRun) fs.mkdirSync(path.dirname(newPath), { recursive: true })
+
+    const extension = getExtension(oldPath)
+    if (extension === 'eps') {
+      // Dippermouth-Blues.eps
+      // Dippermouth-Blues.mscx
+      moveCorrespondingFile(oldPath, newPath, /\.eps$/, '.mscx', opts)
+      // Dippermouth-Blues-eps-converted-to.pdf
+      moveCorrespondingFile(oldPath, newPath, /\.eps$/, '-eps-converted-to.pdf', opts)
+    }
+
+    // Beethoven.mp4 Beethoven.mp4.yml Beethoven.mp4_preview.jpg
+    for (const suffix of ['.yml', '_preview.jpg']) {
+      if (fs.existsSync(`${oldPath}${suffix}`)) {
+        move(`${oldPath}${suffix}`, `${newPath}${suffix}`, opts)
+      }
+    }
+    move(oldPath, newPath, opts)
+    return newPath
+  }
+}
+
+/**
+ * Download a URL to a destination.
+ *
+ * @param url - The URL.
+ * @param dest - The destination. Missing parent directories are
+ *   automatically created.
+ */
+export async function fetchFile (url: string, dest: string) {
+  const response = await fetch(new URL(url))
+  fs.mkdirSync(path.dirname(dest), { recursive: true })
+  fs.writeFileSync(dest, Buffer.from(await response.arrayBuffer()))
 }
 
 /**

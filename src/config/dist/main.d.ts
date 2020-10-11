@@ -28,7 +28,7 @@ interface AssetType {
     targetExtension: string;
     color: string;
 }
-interface AssetTypes {
+export interface AssetTypes {
     [key: string]: AssetType;
 }
 interface MediaServerConfiguration {
