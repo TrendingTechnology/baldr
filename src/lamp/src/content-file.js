@@ -619,6 +619,9 @@ export class Presentation {
     let rawYamlObject
     if (rawYamlString) {
       try {
+        if (rawObject && rawObject.meta && rawObject.meta.id) {
+          rawYamlString = this.expandMediaUris(rawYamlString, rawObject.meta.id)
+        }
         rawYamlObject = yaml.safeLoad(rawYamlString)
       } catch (error) {
         throw new Error(`${error.name}: ${error.message}`)
@@ -746,6 +749,24 @@ export class Presentation {
      * @type {Array}
      */
     this.optionalMediaUris = optionalMediaUris
+  }
+
+  /**
+   * Media URIs can be shorted with the string `./`. The abbreviationn `./` is
+   * replaced with the presentation ID and a underscore, for example the media
+   * URI `id:Leitmotivtechnik_VD_Verdeutlichung_Duell-Mundharmonika-Frank` can
+   * be shortend with `id:./VD_Verdeutlichung_Duell-Mundharmonika-Frank`. The
+   * abbreviationn `./` is inspired by th UNIX dot notation for the current
+   * directory.
+   *
+   * @param {string} rawYamlString - The raw YAML string of presentations
+   *   content file.
+   * @param {string} presentationId - The ID of the presentation.
+   *
+   * @returns {string} A raw YAML string with fully expanded media URIs.
+   */
+  expandMediaUris (rawYamlString, presentationId) {
+    return rawYamlString.replace(/id:.\//g, `id:${presentationId}_`)
   }
 
   /**
