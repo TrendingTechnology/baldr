@@ -1,0 +1,40 @@
+{
+  "name": "@bldr/media-manager",
+  "version": "0.1.0",
+  "description": "Manage the media files in the media server directory (create, normalize metadata files, rename media files, normalize the presentation content file).",
+  "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
+  "bugs": {
+    "url": "https://github.com/Josef-Friedrich/baldr/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Josef-Friedrich/baldr.git"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Josef Friedrich",
+    "email": "josef@friedrich.rocks",
+    "url": "https://josef.friedrich.rocks"
+  },
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "js-yaml": "^3.14.0"
+  },
+  "devDependencies": {
+    "@types/node": "^14.11.8",
+    "@types/js-yaml": "^3.12.5"
+  },
+  "main": "dist/main.js",
+  "publishConfig": {
+    "access": "public"
+  },
+  "standardx": {
+    "global": [
+      "chrome",
+      "muon",
+      "postMessage"
+    ]
+  }
+}

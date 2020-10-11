@@ -129,6 +129,8 @@ function writeMetaDataYaml (filePath, metaData, force) {
 }
 
 /**
+ * TODO: Remove and use version in @bldr/media-manager.
+ *
  * Read the content of a file in the `utf-8` format.
  *
  * A wrapper around `fs.readFileSync()`
@@ -142,6 +144,8 @@ function readFile (filePath) {
 }
 
 /**
+ * TODO: Remove and use version in @bldr/media-manager.
+ *
  * Write some content to a file.
  *
  * @param {String} filePath
