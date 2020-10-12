@@ -11,7 +11,9 @@
     "url": "git+https://github.com/Josef-Friedrich/baldr.git"
   },
   "scripts": {
-    "build": "tsc"
+    "build": "npm run build:esm && npm run build:cjs",
+    "build:esm": "tsc --module es2015 --outDir dist/esm",
+    "build:cjs": "tsc --module commonjs --outDir dist/cjs"
   },
   "license": "MIT",
   "author": {
@@ -19,7 +21,8 @@
     "email": "josef@friedrich.rocks",
     "url": "https://josef.friedrich.rocks"
   },
-  "main": "dist/main.js",
+  "browser": "dist/esm/main.js",
+  "main": "dist/cjs/main.js",
   "standard.enable": false,
   "standard.options": {
     "globals": [
