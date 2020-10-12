@@ -27,18 +27,7 @@ exports.escapeHtml = escapeHtml;
 exports.deepCopy = deepCopy;
 exports.getExtension = getExtension;
 exports.msleep = msleep;
-exports.default = exports.mediaUriRegExp = exports.RawDataObject = exports.jsYamlConfig = exports.AssetTypes = exports.convertMdToTex = exports.convertTexToMd = exports.tex = void 0;
-
-var _convertTex = _interopRequireDefault(require("./convert-tex.js"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-const tex = _convertTex.default;
-exports.tex = tex;
-const convertTexToMd = _convertTex.default.convertTexToMd;
-exports.convertTexToMd = convertTexToMd;
-const convertMdToTex = _convertTex.default.convertMdToTex;
-exports.convertMdToTex = convertMdToTex;
+exports.default = exports.mediaUriRegExp = exports.RawDataObject = exports.jsYamlConfig = exports.AssetTypes = void 0;
 
 function selectSubset(subsetSelector, {
   sort,

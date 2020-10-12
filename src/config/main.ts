@@ -36,7 +36,7 @@ interface AssetType {
   color: string
 }
 
-export interface AssetTypes {
+interface AssetTypes {
   [key: string]: AssetType
 }
 
@@ -86,10 +86,6 @@ interface Configuration {
 /**
  * By default this module reads the configuration file `/etc/baldr.json` to
  * generate its configuration object.
- *
- * @param {object} configDefault - Default options which gets merged.
- *
- * @return {object}
  */
 function bootstrapConfig (): Configuration {
   let config
