@@ -34,8 +34,6 @@ const documentTemplate = {
   }
 }
 
-
-
 /**
  * @param {String} mdbFile
  */
