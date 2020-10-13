@@ -22,6 +22,7 @@
   "dependencies": {
     "js-yaml": "^3.14.0",
     "@bldr/core-browser-ts": "0.1.0",
+    "@bldr/config": "0.1.0",
     "node-fetch": "^2.6.1"
   },
   "devDependencies": {
