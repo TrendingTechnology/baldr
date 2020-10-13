@@ -7,7 +7,7 @@ const yaml = require('js-yaml')
 
 // Project packages.
 const mediaServer = require('@bldr/media-server')
-const lib = require('../../lib.js')
+const { moveAsset } = require('@bldr/media-manager')
 
 /**
  * Rename a media asset after the `id` in the meta data file.
@@ -40,7 +40,7 @@ function renameFromIdOneFile (filePath) {
     } else {
       return
     }
-    lib.moveAsset(oldPath, newPath)
+    moveAsset(oldPath, newPath)
   }
 }
 

@@ -7,8 +7,7 @@ const chalk = require('chalk')
 // Project packages.
 const mediaServer = require('@bldr/media-server')
 const { convertTexToMd } = require('@bldr/tex-markdown-converter')
-
-const lib = require('../../lib.js')
+const { readFile } = require('@bldr/media-manager')
 
 const locationIndicator = new mediaServer.LocationIndicator()
 
@@ -21,7 +20,7 @@ function convertTexToMarkdown (input) {
     content = input
   } else {
     console.log(chalk.green(locationIndicator.getRelPath(input)))
-    content = lib.readFile(input)
+    content = readFile(input)
   }
   console.log('\n' + chalk.yellow('Original:') + '\n')
   console.log(content)

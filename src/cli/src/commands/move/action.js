@@ -10,6 +10,8 @@ const chalk = require('chalk')
 const mediaServer = require('@bldr/media-server')
 const coreBrowser = require('@bldr/core-browser')
 const lib = require('../../lib.js')
+const { moveAsset, readFile, writeFile } = require('@bldr/media-manager')
+
 const commandConvert = require('../convert/action.js')
 const { createYamlOneFile } = require('../yaml/action.js')
 
@@ -44,14 +46,14 @@ function relocate (oldPath, extension, cmdObj) {
   const newPath = path.join(parentDir, twoLetterFolder, path.basename(oldPath))
   if (oldPath !== newPath) {
     if (extension === 'tex') {
-      const oldContent = lib.readFile(oldPath)
+      const oldContent = readFile(oldPath)
       // \grafik{HB/Beethoven.jpg} -> \grafik{../HB/Beethoven.jpg}
       const newContent = oldContent.replace(/\{([A-Z]{2,})\//g, '{../$1/')
       if (oldContent !== newContent) {
-        lib.writeFile(oldPath, newContent)
+        writeFile(oldPath, newContent)
       }
     }
-    lib.moveAsset(oldPath, newPath, cmdObj)
+    moveAsset(oldPath, newPath, cmdObj)
   }
 }
 
@@ -101,7 +103,7 @@ function moveTexImage (oldPathTex, baseName, cmdObj) {
     const newRelPath = path.join(imgParentDir, path.basename(oldPath))
     // /baldr/media/10/10_Jazz/30_Stile/50_Modern-Jazz/BD/John-Coltrane.jpg
     const newPath = path.join(presParentDirMirrored, newRelPath)
-    lib.moveAsset(oldPath, newPath, cmdObj)
+    moveAsset(oldPath, newPath, cmdObj)
     resolvedTexImages[baseName] = newRelPath
     return newRelPath
   }
@@ -117,7 +119,7 @@ function moveTex (oldPath, newPath, cmdObj) {
   // /archive/10/10_Jazz/30_Stile/10_New-Orleans-Dixieland/Material/Texte.tex
   // /archive/10/10_Jazz/History-of-Jazz/Inhalt.tex
   if (locationIndicator.isInDeactivatedDir(oldPath)) return
-  const content = lib.readFile(oldPath)
+  const content = readFile(oldPath)
   // \begin{grafikumlauf}{Inserat}
   // \grafik[0.8\linewidth]{Freight-Train-Blues}
   const matches = content.matchAll(/(\\grafik|\\begin\{grafikumlauf\}).*?\{(.+?)\}/g)
@@ -146,14 +148,14 @@ function moveTex (oldPath, newPath, cmdObj) {
 
   // /var/data/baldr/media/10/10_Jazz/30_Stile/50_Modern-Jazz/TX/Arbeitsblatt.tex
   newPath = locationIndicator.moveIntoSubdir(newPath, 'TX')
-  lib.moveAsset(oldPath, newPath, cmdObj)
+  moveAsset(oldPath, newPath, cmdObj)
   // Maybe --dry-run is specified
   if (fs.existsSync(newPath)) {
-    let newContent = lib.readFile(newPath)
+    let newContent = readFile(newPath)
     for (const replacement of replacements) {
       newContent = newContent.replace(replacement[0], replacement[1])
     }
-    lib.writeFile(newPath, newContent)
+    writeFile(newPath, newContent)
   }
 }
 
@@ -186,7 +188,7 @@ async function moveMp3 (oldPath, newPath, cmdObj) {
   const tmpMp3Path = path.join(path.dirname(newPath), fileName)
 
   // Move mp3 into media.
-  lib.moveAsset(oldPath, tmpMp3Path, { copy: true })
+  moveAsset(oldPath, tmpMp3Path, { copy: true })
 
   // Convert into m4a.
   newPath = await commandConvert.convert(tmpMp3Path)
@@ -211,7 +213,7 @@ async function moveMp3 (oldPath, newPath, cmdObj) {
 async function moveReference (oldPath, cmdObj) {
   let newPath = locationIndicator.getMirroredPath(oldPath)
   newPath = locationIndicator.moveIntoSubdir(newPath, 'QL')
-  lib.moveAsset(oldPath, newPath, cmdObj)
+  moveAsset(oldPath, newPath, cmdObj)
   if (cmdObj.dryRun) return
   await createYamlOneFile(newPath)
   const metaData = lib.readAssetYaml(newPath)
@@ -237,7 +239,7 @@ async function moveFromArchive (oldPath, extension, cmdObj) {
   } else if (extension === 'mp3') {
     moveMp3(oldPath, newPath, cmdObj)
   } else {
-    lib.moveAsset(oldPath, newPath, cmdObj)
+    moveAsset(oldPath, newPath, cmdObj)
   }
 }
 

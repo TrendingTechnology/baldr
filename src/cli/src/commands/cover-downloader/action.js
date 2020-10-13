@@ -6,20 +6,19 @@ const chalk = require('chalk')
 
 // Project packages.
 const mediaServer = require('@bldr/media-server')
-
-const lib = require('../../lib.js')
+const { loadYaml, fetchFile } = require('@bldr/media-manager')
 
 /**
  * @param {String} filePath - The media asset file path.
  */
 async function downloadCover (filePath, cmdObj) {
   const yamlFile = `${filePath}.yml`
-  const metaData = lib.loadYaml(yamlFile)
+  const metaData = loadYaml(yamlFile)
   console.log(metaData)
 
   if (metaData.cover_source) {
     const previewFile = `${filePath}_preview.jpg`
-    lib.fetchFile(metaData.cover_source, previewFile)
+    fetchFile(metaData.cover_source, previewFile)
   } else {
     console.log(chalk.red('No property “cover_source” found.'))
   }

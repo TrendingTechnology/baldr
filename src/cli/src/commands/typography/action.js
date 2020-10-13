@@ -3,7 +3,7 @@ const chalk = require('chalk')
 
 // Project packages.
 const mediaServer = require('@bldr/media-server')
-const lib = require('../../lib.js')
+const { readFile, writeFile } = require('@bldr/media-manager')
 
 /**
  * @param {Array} files - An array of input files, comes from the commanders’
@@ -13,7 +13,7 @@ function action (files) {
   mediaServer.walk({
     everyFile (filePath) {
       console.log(chalk.green(filePath))
-      let content = lib.readFile(filePath)
+      let content = readFile(filePath)
       const before = content
       content = content.replace(/“([^“”]*)”/g, '„$1“')
       content = content.replace(/"([^"]*)"/g, '„$1“')
@@ -31,7 +31,7 @@ function action (files) {
         console.log('„' + chalk.yellow(before) + '“')
         console.log(chalk.red('after:'))
         console.log('„' + chalk.green(after) + '“')
-        lib.writeFile(filePath, content)
+        writeFile(filePath, content)
       } else {
         console.log('No change')
         console.log('„' + chalk.blue(after) + '“')

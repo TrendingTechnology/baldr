@@ -3,9 +3,8 @@ const chalk = require('chalk')
 
 // Project packages.
 const mediaServer = require('@bldr/media-server')
-const { convertMdToTex } = require('@bldr/core-browser')
-
-const lib = require('../../lib.js')
+const { convertMdToTex } = require('@bldr/tex-markdown-converter')
+const { readFile, writeFile } = require('@bldr/media-manager')
 
 /**
  * ```tex
@@ -52,7 +51,7 @@ function patchTexFileWithTitles (filePath) {
 
   const patchedTitles = lines.join('\n')
 
-  let texFileString = lib.readFile(filePath)
+  let texFileString = readFile(filePath)
   // /s s (dotall) modifier, +? one or more (non-greedy)
   const regexp = new RegExp(/\\setzetitel\{.+?,?\n\}\n/, 's')
 
@@ -62,7 +61,7 @@ function patchTexFileWithTitles (filePath) {
     if (unpatchedTitles !== patchedTitles) {
       console.log(chalk.yellow(unpatchedTitles))
       texFileString = texFileString.replace(regexp, patchedTitles)
-      lib.writeFile(filePath, texFileString)
+      writeFile(filePath, texFileString)
     }
 
     console.log(chalk.green(patchedTitles))

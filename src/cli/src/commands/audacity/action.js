@@ -2,6 +2,8 @@
 const mediaServer = require('@bldr/media-server')
 const lib = require('../../lib.js')
 
+const { readFile } = require('@bldr/media-manager')
+
 // Third party packages.
 const chalk = require('chalk')
 
@@ -33,7 +35,7 @@ const chalk = require('chalk')
  *   file.
  */
 function action (filePath) {
-  const text = lib.readFile(filePath)
+  const text = readFile(filePath)
   console.log(`The content of the source file “${chalk.yellow(filePath)}”:\n`)
   console.log(text)
 

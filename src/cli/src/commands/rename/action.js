@@ -5,6 +5,7 @@ const path = require('path')
 const mediaServer = require('@bldr/media-server')
 const lib = require('../../lib.js')
 const { getExtension } = require('@bldr/core-browser')
+const { moveAsset } = require('@bldr/media-manager')
 
 /**
  * Rename one file.
@@ -28,7 +29,7 @@ function renameOneFile (oldPath) {
   if (cleanedBasename !== basename) {
     newPath = path.join(path.dirname(newPath), cleanedBasename)
   }
-  lib.moveAsset(oldPath, newPath)
+  moveAsset(oldPath, newPath)
   return newPath
 }
 

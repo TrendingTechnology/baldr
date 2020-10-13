@@ -11,7 +11,7 @@ import path from 'path'
 import yaml from 'js-yaml'
 import fetch from 'node-fetch'
 import { URL } from 'url'
-import { getExtension } from '@bldr/core-browser'
+import { getExtension } from '@bldr/core-browser-ts'
 
 interface Meta {
   curriculumUrl: string
@@ -26,6 +26,10 @@ interface Presentation {
   meta: Meta
 }
 
+interface MediaAsset {
+  cover_source: string
+}
+
 /**
  * Read the content of a text file in the `utf-8` format.
  *
@@ -35,7 +39,7 @@ interface Presentation {
  *
  * @returns The content of the file in the `utf-8` format.
  */
-function readFile(filePath: string): string {
+export function readFile(filePath: string): string {
   return fs.readFileSync(filePath, { encoding: 'utf-8' })
 }
 
@@ -45,7 +49,7 @@ function readFile(filePath: string): string {
  * @param filePath - A path of a text file.
  * @param content - Some text to write to a file.
  */
-function writeFile(filePath: string, content: string) {
+export function writeFile(filePath: string, content: string) {
   fs.writeFileSync(filePath, content)
 }
 
@@ -62,15 +66,10 @@ interface MoveAssetConfiguration {
  * @param newPath - The new path of a media asset.
  * @param opts - Some options
  */
-export function moveAsset (oldPath: string, newPath: string, opts: MoveAssetConfiguration) {
-  if (!opts) opts = <MoveAssetConfiguration> {}
-
+export function moveAsset (oldPath: string, newPath: string, opts: MoveAssetConfiguration = <MoveAssetConfiguration> {}) {
   function move (oldPath: string, newPath: string, { copy, dryRun }: MoveAssetConfiguration) {
-    let action
-    const dryRunMsg = dryRun ? '[dry run] ' : ''
     if (copy) {
       if (!dryRun) fs.copyFileSync(oldPath, newPath)
-      action = 'copy'
     } else {
       if (!dryRun) {
         //  Error: EXDEV: cross-device link not permitted,
@@ -83,7 +82,6 @@ export function moveAsset (oldPath: string, newPath: string, opts: MoveAssetConf
           }
         }
       }
-      action = 'move'
     }
   }
 
@@ -138,7 +136,7 @@ export async function fetchFile (url: string, dest: string) {
  *
  * @returns The parse YAML file as a object.
  */
-function loadYaml (filePath: string): Presentation | object {
+export function loadYaml (filePath: string): Presentation | MediaAsset | object {
   const result = yaml.safeLoad(readFile(filePath))
   if (typeof result !== 'object') {
     return { result }

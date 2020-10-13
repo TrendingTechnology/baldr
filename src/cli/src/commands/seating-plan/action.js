@@ -4,6 +4,10 @@ const fs = require('fs')
 // Third party packages.
 const csv = require('csv-parser')
 
+// Project packages.
+const { CommandRunner } = require('@bldr/cli-utils')
+const { writeFile } = require('@bldr/media-manager')
+
 const documentTemplate = {
   grades: {},
   jobs: {
@@ -30,9 +34,7 @@ const documentTemplate = {
   }
 }
 
-// Project packages.
-const { CommandRunner } = require('@bldr/cli-utils')
-const lib = require('../../lib.js')
+
 
 /**
  * @param {String} mdbFile
@@ -40,7 +42,7 @@ const lib = require('../../lib.js')
 async function action (mdbFile) {
   const cmd = new CommandRunner()
   const result = await cmd.exec('mdb-export', mdbFile, 'Schüler')
-  lib.writeFile('tmp.csv', result.stdout)
+  writeFile('tmp.csv', result.stdout)
 
   const grades = {}
 
@@ -56,7 +58,7 @@ async function action (mdbFile) {
     .on('end', () => {
       documentTemplate.grades = grades
       documentTemplate.timeStampMsec = new Date().getTime()
-      lib.writeFile('seating-plan.json', JSON.stringify(documentTemplate, null, '  '))
+      writeFile('seating-plan.json', JSON.stringify(documentTemplate, null, '  '))
     })
 }
 

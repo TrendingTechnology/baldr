@@ -8,8 +8,7 @@ const chalk = require('chalk')
 // Project packages.
 const mediaServer = require('@bldr/media-server')
 const { convertTexToMd } = require('@bldr/tex-markdown-converter')
-
-const lib = require('../../lib.js')
+const { readFile, writeFile } = require('@bldr/media-manager')
 
 function clean (text) {
   text = text.replace(/\n/g, ' ')
@@ -19,7 +18,7 @@ function clean (text) {
 }
 
 function convertTexToFolderTitles (filePath, cmdObj) {
-  const content = lib.readFile(filePath)
+  const content = readFile(filePath)
   let title = content.match(/ {2}titel = \{(.+?)\}[,\n]/s)
   const output = []
   if (title) {
@@ -44,12 +43,12 @@ function convertTexToFolderTitles (filePath, cmdObj) {
     }
     const presFile = path.join(destBasePath, 'Praesentation.baldr.yml')
     if (!fs.existsSync(presFile) || cmdObj.force) {
-      lib.writeFile(presFile, '---\n')
+      writeFile(presFile, '---\n')
     }
     console.log(chalk.green(dest))
     console.log(`  title: ${chalk.blue(title)}`)
     console.log(`  subtitle: ${chalk.cyan(subtitle)}\n`)
-    lib.writeFile(dest, output.join('\n') + '\n')
+    writeFile(dest, output.join('\n') + '\n')
   }
 }
 

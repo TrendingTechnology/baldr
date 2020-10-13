@@ -8,6 +8,7 @@ const chalk = require('chalk')
 // Project packages.
 const mediaServer = require('@bldr/media-server')
 const { convertTexToMd, removeTexComments, regBuilder, extractMatchAll } = require('@bldr/tex-markdown-converter')
+const { readFile } = require('@bldr/media-manager')
 
 const lib = require('../../lib.js')
 
@@ -147,13 +148,13 @@ async function presentationFromAssets (filePath) {
 
   const notePath = path.join(basePath, 'Hefteintrag.tex')
   if (fs.existsSync(notePath)) {
-    const noteContent = lib.readFile(notePath)
+    const noteContent = readFile(notePath)
     slides = slides.concat(slidify('note', objectifyTexItemize(noteContent), { source: 'Hefteintrag.tex' }))
   }
 
   const worksheetPath = path.join(basePath, 'Arbeitsblatt.tex')
   if (fs.existsSync(worksheetPath)) {
-    const worksheetContent = lib.readFile(worksheetPath)
+    const worksheetContent = readFile(worksheetPath)
     slides = slides.concat(slidify('quote', objectifyTexZitat(worksheetContent), { source: 'Arbeitsblatt.tex' }))
   }
 

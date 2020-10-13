@@ -8,6 +8,8 @@ const chalk = require('chalk')
 
 // Project packages.
 const mediaServer = require('@bldr/media-server')
+const { moveAsset, readFile, writeFile } = require('@bldr/media-manager')
+
 const lib = require('../../lib.js')
 const { normalizeOneFile } = require('../normalize/action.js')
 const { getPdfPageCount } = require('@bldr/core-node')
@@ -35,9 +37,9 @@ function generateOneClozeSvg (tmpPdfFile, pageCount, pageNo) {
   )
 
   // Remove width="" and height="" attributes
-  let svgContent = lib.readFile(svgFilePath)
+  let svgContent = readFile(svgFilePath)
   svgContent = svgContent.replace(/(width|height)=".+?" /g, '')
-  lib.writeFile(svgFilePath, svgContent)
+  writeFile(svgFilePath, svgContent)
 
   // Write info yaml
   const titles = new mediaServer.HierarchicalFolderTitles(tmpPdfFile)
@@ -48,11 +50,11 @@ function generateOneClozeSvg (tmpPdfFile, pageCount, pageNo) {
     cloze_page_no: pageNo,
     cloze_page_count: pageCount
   }
-  lib.writeFile(path.join(cwd, `${svgFileName}.yml`), lib.yamlToTxt(infoYaml))
+  writeFile(path.join(cwd, `${svgFileName}.yml`), lib.yamlToTxt(infoYaml))
 
   // Move to LT (Lückentext) subdir.
   const newPath = mediaServer.locationIndicator.moveIntoSubdir(path.resolve(svgFileName), 'LT')
-  lib.moveAsset(svgFilePath, newPath)
+  moveAsset(svgFilePath, newPath)
   normalizeOneFile(newPath, { wikidata: false })
 }
 
@@ -63,7 +65,7 @@ function generateClozeSvg (filePath) {
   filePath = path.resolve(filePath)
   console.log(filePath)
   const cwd = path.dirname(filePath)
-  let texFileContent = lib.readFile(filePath)
+  let texFileContent = readFile(filePath)
   if (texFileContent.indexOf('cloze') === -1) {
     console.log(`${chalk.red(filePath)} has no cloze texts.`)
     return
@@ -101,7 +103,7 @@ function generateClozeSvg (filePath) {
       return `\\documentclass[${args.join(',')}]{schule-arbeitsblatt}`
     }
   )
-  lib.writeFile(tmpTexFile, texFileContent)
+  writeFile(tmpTexFile, texFileContent)
   const result = childProcess.spawnSync(
     'lualatex', ['--shell-escape', tmpTexFile],
     { cwd, encoding: 'utf-8' }

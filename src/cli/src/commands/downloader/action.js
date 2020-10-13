@@ -2,7 +2,7 @@
 const lib = require('../../lib.js')
 const { createYamlOneFile } = require('../yaml/action.js')
 const { convert } = require('../convert/action.js')
-
+const { fetchFile } = require('@bldr/media-manager')
 /**
  * Download a media asset.
  *
@@ -22,7 +22,7 @@ async function action (url, id = null, extension = null) {
 
   let destFile = `${id}.${extension}`
 
-  await lib.fetchFile(url, destFile)
+  await fetchFile(url, destFile)
   // Make images smaller.
   destFile = await convert(destFile)
   createYamlOneFile(destFile, { source: url })
