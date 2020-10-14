@@ -38,6 +38,11 @@ interface FolderTitleSpec {
    * `Praesentation.baldr.yml`
    */
   hasPraesentation: boolean
+
+  /**
+   * The level in a folder title tree, starting with 1. 1 ist the top level.
+   */
+  level: number
 }
 
 /**
@@ -70,25 +75,22 @@ class FolderTitle {
    * `Praesentation.baldr.yml`
    */
   hasPraesentation: boolean
+
+  /**
+   * The level in a folder title tree, starting with 1. 1 ist the top level.
+   */
+  level: number
+
   /**
    * @param {Object} data - Some meta data about the folder.
-   * @property {String} title - The title. It is the first line in the file
-   *   `titles.txt`.
-   * @property {String} subtitle - The subtitle. It is the second line in the
-   *   file `titles.txt`.
-   * @property {String} folderName - The name of the parent folder, for
-   *   example `10_Konzertierende-Musiker`
-   * @property {String} path - The relative path of the folder inside the
-   *   base path, for example `12/10_Interpreten/10_Konzertierende-Musiker`.
-   * @property {Boolean} hasPraesentation - True if the folder contains a file
-   *   with the file name `Praesentation.baldr.yml`
    */
-  constructor ({ title, subtitle, folderName, path, hasPraesentation }: FolderTitleSpec) {
+  constructor ({ title, subtitle, folderName, path, hasPraesentation, level }: FolderTitleSpec) {
     this.title = title
     this.subtitle = subtitle
     this.folderName = folderName
     this.path = path
     this.hasPraesentation = hasPraesentation
+    this.level = level
   }
 }
 
@@ -123,8 +125,15 @@ class FolderTitle {
  * }
  * ```
  */
-export class HierarchicalFolderTitle {
+export class DeepTitle {
+
   private titles: FolderTitle[]
+
+  /**
+   * An array of folder names. This array is used to descent the folder tree.
+   */
+  private folderNames: string[]
+
   /**
    * @param filePath - The path of a file in a folder with `title.txt`
    *   files.
@@ -132,6 +141,14 @@ export class HierarchicalFolderTitle {
   constructor (filePath: string) {
     this.titles = []
     this.read(filePath)
+    this.folderNames = this.titles.map(folderTitle => folderTitle.folderName)
+  }
+
+  /**
+   * Get the first folder name and remove it from the array.
+   */
+  shiftFolderName() {
+    return this.folderNames.shift()
   }
 
   /**
@@ -251,7 +268,6 @@ export class HierarchicalFolderTitle {
    * ```
    *
    * -> Lernbereich 2: Musik - Mensch - Zeit / Johann Sebastian Bach: Musik als Bekenntnis
-   *
    */
   get curriculum (): string {
     return this.curriculumTitlesArray.join(' / ')
@@ -309,6 +325,10 @@ export class HierarchicalFolderTitle {
   }
 }
 
+interface SubTree {
+  [key: string]: FolderTitleTree
+}
+
 /**
  * A tree of folder titles.
  *
@@ -360,39 +380,32 @@ export class HierarchicalFolderTitle {
  * ```
  */
 export class FolderTitleTree {
-  private tree: { [key: string]: object }
-  constructor () {
-    this.tree = {}
+  private subTree: SubTree
+  deepTitle: DeepTitle
+  constructor (folderTitle: DeepTitle) {
+    this.subTree = {}
+    this.deepTitle = folderTitle
   }
 
   /**
    * Add one folder title to the tree.
    *
-   * @param folderTitle
+   * @param deepTitle
    */
-  add (folderTitle: HierarchicalFolderTitle) {
-    let count = 1
-    for (const title of folderTitle.list()) {
-      if (!(title.folderName in this.tree)) {
-        this.tree[title.folderName] = {
-          _title: title
-        }
-        this.tree[title.folderName]._title.level = count
-      }
-      this.tree = this.tree[title.folderName]
-      count += 1
+  add (deepTitle: DeepTitle) {
+    const folderName = deepTitle.shiftFolderName()
+    if (!folderName) return
+    if (!this.subTree[folderName]) {
+      this.subTree[folderName] = new FolderTitleTree(deepTitle)
+    } else {
+      this.subTree[folderName].add(deepTitle)
     }
   }
 
   /**
    * Get the tree.
    */
-  get () {
-    return this.tree
+  get (): SubTree  {
+    return this.subTree
   }
-}
-
-module.exports = {
-  HierarchicalFolderTitles: HierarchicalFolderTitle,
-  FolderTitleTree
 }

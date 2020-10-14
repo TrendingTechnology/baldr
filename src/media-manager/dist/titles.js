@@ -6,6 +6,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.FolderTitleTree = exports.DeepTitle = void 0;
 // Node packages.
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
@@ -19,23 +20,14 @@ const config_1 = __importDefault(require("@bldr/config"));
 class FolderTitle {
     /**
      * @param {Object} data - Some meta data about the folder.
-     * @property {String} title - The title. It is the first line in the file
-     *   `titles.txt`.
-     * @property {String} subtitle - The subtitle. It is the second line in the
-     *   file `titles.txt`.
-     * @property {String} folderName - The name of the parent folder, for
-     *   example `10_Konzertierende-Musiker`
-     * @property {String} path - The relative path of the folder inside the
-     *   base path, for example `12/10_Interpreten/10_Konzertierende-Musiker`.
-     * @property {Boolean} hasPraesentation - True if the folder contains a file
-     *   with the file name `Praesentation.baldr.yml`
      */
-    constructor({ title, subtitle, folderName, path, hasPraesentation }) {
+    constructor({ title, subtitle, folderName, path, hasPraesentation, level }) {
         this.title = title;
         this.subtitle = subtitle;
         this.folderName = folderName;
         this.path = path;
         this.hasPraesentation = hasPraesentation;
+        this.level = level;
     }
 }
 /**
@@ -69,7 +61,7 @@ class FolderTitle {
  * }
  * ```
  */
-class HierarchicalFolderTitle {
+class DeepTitle {
     /**
      * @param filePath - The path of a file in a folder with `title.txt`
      *   files.
@@ -77,6 +69,13 @@ class HierarchicalFolderTitle {
     constructor(filePath) {
         this.titles = [];
         this.read(filePath);
+        this.folderNames = this.titles.map(folderTitle => folderTitle.folderName);
+    }
+    /**
+     * Get the first folder name and remove it from the array.
+     */
+    shiftFolderName() {
+        return this.folderNames.shift();
     }
     /**
      * Parse the `title.txt` text file. The first line of this file contains
@@ -189,7 +188,6 @@ class HierarchicalFolderTitle {
      * ```
      *
      * -> Lernbereich 2: Musik - Mensch - Zeit / Johann Sebastian Bach: Musik als Bekenntnis
-     *
      */
     get curriculum() {
         return this.curriculumTitlesArray.join(' / ');
@@ -241,6 +239,7 @@ class HierarchicalFolderTitle {
         return this.titles;
     }
 }
+exports.DeepTitle = DeepTitle;
 /**
  * A tree of folder titles.
  *
@@ -292,8 +291,9 @@ class HierarchicalFolderTitle {
  * ```
  */
 class FolderTitleTree {
-    constructor() {
-        this.tree = {};
+    constructor(folderTitle) {
+        this.subTree = {};
+        this.deepTitle = folderTitle;
     }
     /**
      * Add one folder title to the tree.
@@ -301,26 +301,21 @@ class FolderTitleTree {
      * @param folderTitle
      */
     add(folderTitle) {
-        let count = 1;
-        for (const title of folderTitle.list()) {
-            if (!(title.folderName in this.tree)) {
-                this.tree[title.folderName] = {
-                    _title: title
-                };
-                this.tree[title.folderName]._title.level = count;
-            }
-            this.tree = this.tree[title.folderName];
-            count += 1;
+        const folderName = folderTitle.shiftFolderName();
+        if (!folderName)
+            return;
+        if (!this.subTree[folderName]) {
+            this.subTree[folderName] = new FolderTitleTree(folderTitle);
+        }
+        else {
+            this.subTree[folderName].add(folderTitle);
         }
     }
     /**
      * Get the tree.
      */
     get() {
-        return this.tree;
+        return this.subTree;
     }
 }
-module.exports = {
-    HierarchicalFolderTitles: HierarchicalFolderTitle,
-    FolderTitleTree
-};
+exports.FolderTitleTree = FolderTitleTree;
