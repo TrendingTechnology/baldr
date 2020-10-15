@@ -1,5 +1,5 @@
 /**
- * @module @bldr/media-server/titles
+ * @module @bldr/media-manager/titles
  */
 interface FolderTitleSpec {
     /**
@@ -205,7 +205,7 @@ export declare class DeepTitle {
     list(): FolderTitle[];
 }
 interface SubTree {
-    [key: string]: FolderTitleTree;
+    [key: string]: TitleTree;
 }
 /**
  * A tree of folder titles.
@@ -257,16 +257,16 @@ interface SubTree {
  * }
  * ```
  */
-export declare class FolderTitleTree {
+export declare class TitleTree {
     private subTree;
     deepTitle: DeepTitle;
     constructor(folderTitle: DeepTitle);
     /**
      * Add one folder title to the tree.
      *
-     * @param folderTitle
+     * @param deepTitle
      */
-    add(folderTitle: DeepTitle): void;
+    add(deepTitle: DeepTitle): void;
     /**
      * Get the tree.
      */

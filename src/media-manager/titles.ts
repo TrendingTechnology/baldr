@@ -1,5 +1,5 @@
 /**
- * @module @bldr/media-server/titles
+ * @module @bldr/media-manager/titles
  */
 
 // Node packages.
@@ -326,7 +326,7 @@ export class DeepTitle {
 }
 
 interface SubTree {
-  [key: string]: FolderTitleTree
+  [key: string]: TitleTree
 }
 
 /**
@@ -379,7 +379,7 @@ interface SubTree {
  * }
  * ```
  */
-export class FolderTitleTree {
+export class TitleTree {
   private subTree: SubTree
   deepTitle: DeepTitle
   constructor (folderTitle: DeepTitle) {
@@ -396,7 +396,7 @@ export class FolderTitleTree {
     const folderName = deepTitle.shiftFolderName()
     if (!folderName) return
     if (!this.subTree[folderName]) {
-      this.subTree[folderName] = new FolderTitleTree(deepTitle)
+      this.subTree[folderName] = new TitleTree(deepTitle)
     } else {
       this.subTree[folderName].add(deepTitle)
     }

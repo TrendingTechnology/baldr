@@ -26,6 +26,7 @@ const js_yaml_1 = __importDefault(require("js-yaml"));
 const node_fetch_1 = __importDefault(require("node-fetch"));
 const url_1 = require("url");
 const core_browser_ts_1 = require("@bldr/core-browser-ts");
+const titles_1 = require("./titles");
 /**
  * Read the content of a text file in the `utf-8` format.
  *
@@ -176,6 +177,8 @@ function shortedMediaUris(rawYamlString, presentationId) {
  * @param filePath - A path of a text file.
  */
 function normalizePresentationFile(filePath) {
+    const title = new titles_1.DeepTitle(filePath);
+    console.log(title);
     let textContent = readFile(filePath);
     const presentation = loadYaml(filePath);
     if (presentation.meta && presentation.meta.id) {
@@ -185,3 +188,7 @@ function normalizePresentationFile(filePath) {
     writeFile(filePath, textContent);
 }
 exports.normalizePresentationFile = normalizePresentationFile;
+exports.default = {
+    DeepTitle: titles_1.DeepTitle,
+    TitleTree: titles_1.TitleTree
+};

@@ -5,6 +5,7 @@
  *
  * @module @bldr/media-manager
  */
+import { DeepTitle, TitleTree } from './titles';
 interface Meta {
     curriculumUrl: string;
     id: string;
@@ -73,4 +74,8 @@ export declare function loadYaml(filePath: string): Presentation | MediaAsset | 
  * @param filePath - A path of a text file.
  */
 export declare function normalizePresentationFile(filePath: string): void;
-export {};
+declare const _default: {
+    DeepTitle: typeof DeepTitle;
+    TitleTree: typeof TitleTree;
+};
+export default _default;

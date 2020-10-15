@@ -2,11 +2,12 @@
 const chalk = require('chalk')
 
 // Project packages.
+const mediaManager = require('@bldr/media-manager')
 const mediaServer = require('@bldr/media-server')
 
 function read (filePath) {
   console.log(filePath)
-  const titles = new mediaServer.HierarchicalFolderTitles(filePath)
+  const titles = new mediaManager.default.DeepTitle(filePath)
   console.log(`  id: ${chalk.cyan(titles.id)}`)
   console.log(`  title: ${chalk.yellow(titles.title)}`)
   if (titles.subtitle) console.log(`  subtitle: ${chalk.green(titles.subtitle)}`)

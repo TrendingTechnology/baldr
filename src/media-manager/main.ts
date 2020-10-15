@@ -13,6 +13,8 @@ import fetch from 'node-fetch'
 import { URL } from 'url'
 import { getExtension } from '@bldr/core-browser-ts'
 
+import { DeepTitle, TitleTree } from './titles'
+
 interface Meta {
   curriculumUrl: string
   id: string
@@ -185,6 +187,8 @@ function shortedMediaUris(rawYamlString: string, presentationId: string): string
  * @param filePath - A path of a text file.
  */
 export function normalizePresentationFile(filePath: string) {
+  const title = new DeepTitle(filePath)
+  console.log(title)
   let textContent = readFile(filePath)
   const presentation = <Presentation> loadYaml(filePath)
   if (presentation.meta && presentation.meta.id) {
@@ -192,4 +196,9 @@ export function normalizePresentationFile(filePath: string) {
   }
   textContent = removeSingleQuotes(textContent)
   writeFile(filePath, textContent)
+}
+
+export default {
+  DeepTitle,
+  TitleTree
 }

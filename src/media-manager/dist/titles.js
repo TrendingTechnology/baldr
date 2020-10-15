@@ -1,12 +1,12 @@
 "use strict";
 /**
- * @module @bldr/media-server/titles
+ * @module @bldr/media-manager/titles
  */
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.FolderTitleTree = exports.DeepTitle = void 0;
+exports.TitleTree = exports.DeepTitle = void 0;
 // Node packages.
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
@@ -290,7 +290,7 @@ exports.DeepTitle = DeepTitle;
  * }
  * ```
  */
-class FolderTitleTree {
+class TitleTree {
     constructor(folderTitle) {
         this.subTree = {};
         this.deepTitle = folderTitle;
@@ -298,17 +298,17 @@ class FolderTitleTree {
     /**
      * Add one folder title to the tree.
      *
-     * @param folderTitle
+     * @param deepTitle
      */
-    add(folderTitle) {
-        const folderName = folderTitle.shiftFolderName();
+    add(deepTitle) {
+        const folderName = deepTitle.shiftFolderName();
         if (!folderName)
             return;
         if (!this.subTree[folderName]) {
-            this.subTree[folderName] = new FolderTitleTree(folderTitle);
+            this.subTree[folderName] = new TitleTree(deepTitle);
         }
         else {
-            this.subTree[folderName].add(folderTitle);
+            this.subTree[folderName].add(deepTitle);
         }
     }
     /**
@@ -318,4 +318,4 @@ class FolderTitleTree {
         return this.subTree;
     }
 }
-exports.FolderTitleTree = FolderTitleTree;
+exports.TitleTree = TitleTree;
