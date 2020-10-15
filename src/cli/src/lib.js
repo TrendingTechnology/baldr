@@ -11,6 +11,7 @@ const yaml = require('js-yaml')
 // Project packages.
 const mediaServer = require('@bldr/media-server')
 const { jsYamlConfig, getExtension, convertPropertiesCase } = require('@bldr/core-browser')
+const { readFile } = require('@bldr/media-manager')
 
 /**
  * TODO: Remove and use version in @bldr/media-manager.
