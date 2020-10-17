@@ -5,3 +5,20 @@ slides:
   - uuid:3e7d9633-6713-4f21-8c3d-f75ccc4ed38a
   - uuid:4f6c6b03-e5d1-4fc8-8bb9-ab3ffea8fb64
   - uuid:88ad5df3-d7f9-4e9e-9522-e205f51eedb3
+
+- sample_list:
+    not_numbered: true
+    heading: Berühmte Pastoralen
+    samples:
+    - >-
+      id:Schubert-Schaefer_HB_Bach_Sinfonia-aus-Weihnachtsoratorium <em
+      class="person">Bach</em>: Weihnachts-Oratorium Teil 2 BWV 248:
+      Sinfonia
+
+    - >-
+      id:Schubert-Schaefer_HB_Handel_Pifa-aus-Messias <em
+      class="person">Händel</em>: Messiah: Pastoral Symphony
+    - >-
+      id:Schubert-Schaefer_HB_Corelli_Largo-Pastorale-ad-libitum <em
+      class="person">Corelli</em>: Concerto grosso „Fatto per la notte
+      di Natale“: Largo (Pastorale ad libitum)

@@ -17,6 +17,10 @@ export default {
       markup: true,
       description: 'Überschrift der Ausschnitte.',
       required: false
+    },
+    notNumbered: {
+      type: Boolean,
+      description: 'Nicht durchnummeriert'
     }
   },
   icon: {

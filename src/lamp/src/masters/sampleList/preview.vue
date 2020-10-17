@@ -21,6 +21,7 @@ export default {
     heading: {
       type: String
     },
+    // WrappedSampleList
     samples: {
       type: Object,
       required: true
@@ -28,8 +29,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss">
-  .vc_sample_list_master_preview {
-  }
-</style>

@@ -1,7 +1,7 @@
 <template>
   <div class="vc_sample_list_master">
     <h2 v-if="heading" v-html="heading"/>
-    <ol>
+    <ol :class="cssClassNotNumbered">
       <li
         v-for="wrappedSample in samples.samples"
         :key="wrappedSample.uri"
@@ -21,8 +21,21 @@ export default {
     heading: {
       type: String
     },
+    // WrappedSampleList
     samples: {
-      type: Array
+      type: Object,
+      required: true
+    },
+    notNumbered: {
+      type: Boolean
+    }
+  },
+  computed: {
+    cssClassNotNumbered () {
+      console.log(this.samples)
+      return {
+        'not-numbered': this.notNumbered
+      }
     }
   }
 }
@@ -33,11 +46,18 @@ export default {
     h2 {
       margin: 4em;
     }
+
     ol {
       margin: 6em;
+
+      &.not-numbered {
+        list-style-type: none;
+      }
+
       li {
         margin-bottom: 1em;
       }
+
       .vc_play_button {
         transform: translateY(0.2em);
         margin: 0 0.2em;
