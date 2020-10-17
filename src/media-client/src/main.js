@@ -1139,6 +1139,8 @@ class WrappedSample {
   }
 
   /**
+   * The manually set title or, if not set, the `title` of the `sample`.
+   *
    * We have to use a getter, because the sample may not be resolved at
    * the constructor time.
    *
@@ -1147,6 +1149,19 @@ class WrappedSample {
   get title () {
     if (this.title_) return this.title_
     if (this.sample && this.sample.title) return this.sample.title
+  }
+
+  /**
+   * The manually set title or, if not set, the `titleSafe` of the `sample`.
+   *
+   * We have to use a getter, because the sample may not be resolved at
+   * the constructor time.
+   *
+   * @returns {String}
+   */
+  get titleSafe () {
+    if (this.title_) return this.title_
+    if (this.sample && this.sample.titleSafe) return this.sample.titleSafe
   }
 
   /**

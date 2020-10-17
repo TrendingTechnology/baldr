@@ -9,7 +9,7 @@
       <li
         v-for="wrappedSample in samples.samples"
         :key="wrappedSample.uri"
-        v-html="wrappedSample.sample.titleSafe"
+        v-html="wrappedSample.titleSafe"
       />
     </ol>
   </div>
