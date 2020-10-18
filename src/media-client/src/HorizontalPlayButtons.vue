@@ -13,7 +13,8 @@
       <span
         class="manual-title sans"
         v-if="showTitlesNormalized || wrappedSample.isTitleSetManually"
-      >{{ wrappedSample.title }}</span>
+        v-html="wrappedSample.title"
+      />
     </span>
   </div>
 </template>
