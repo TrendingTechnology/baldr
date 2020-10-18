@@ -8,7 +8,7 @@
  * @module @bldr/core-browser-ts
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.convertPropertiesCase = exports.snakeToCamel = exports.camelToSnake = exports.getExtension = void 0;
+exports.jsYamlConfig = exports.convertPropertiesCamelToSnake = exports.convertPropertiesSnakeToCamel = exports.convertProperties = exports.snakeToCamel = exports.camelToSnake = exports.getExtension = void 0;
 /**
  * Get the extension from a file path.
  *
@@ -57,6 +57,11 @@ function snakeToCamel(text) {
         .replace('_', ''));
 }
 exports.snakeToCamel = snakeToCamel;
+var PropertyConvertDirection;
+(function (PropertyConvertDirection) {
+    PropertyConvertDirection[PropertyConvertDirection["SNAKE_TO_CAMEL"] = 0] = "SNAKE_TO_CAMEL";
+    PropertyConvertDirection[PropertyConvertDirection["CAMEL_TO_SNAKE"] = 1] = "CAMEL_TO_SNAKE";
+})(PropertyConvertDirection || (PropertyConvertDirection = {}));
 /**
  * Convert all properties in an object from `snake_case` to `camelCase` or vice
  * versa in a recursive fashion.
@@ -67,18 +72,15 @@ exports.snakeToCamel = snakeToCamel;
  * @returns Possibly an new object is returned. One should always
  *   use this returned object.
  */
-function convertPropertiesCase(data, direction = 'snake-to-camel') {
+function convertProperties(data, direction = PropertyConvertDirection.SNAKE_TO_CAMEL) {
     // To perserve the order of the props.
     let newObject = null;
-    if (!['snake-to-camel', 'camel-to-snake'].includes(direction)) {
-        throw new Error(`convertPropertiesCase: argument direction must be “snake-to-camel” or “camel-to-snake”, got ${direction}`);
-    }
     // Array
     if (Array.isArray(data)) {
         for (let i = 0; i < data.length; i++) {
             const item = data[i];
             if (typeof item === 'object') {
-                data[i] = convertPropertiesCase(item, direction);
+                data[i] = convertProperties(item, direction);
             }
         }
         // Object
@@ -87,7 +89,7 @@ function convertPropertiesCase(data, direction = 'snake-to-camel') {
         newObject = {};
         for (const oldProp in data) {
             let newProp;
-            if (direction === 'camel-to-snake') {
+            if (direction === PropertyConvertDirection.CAMEL_TO_SNAKE) {
                 newProp = camelToSnake(oldProp);
             }
             else {
@@ -96,7 +98,7 @@ function convertPropertiesCase(data, direction = 'snake-to-camel') {
             newObject[newProp] = data[oldProp];
             // Object or array
             if (typeof newObject[newProp] === 'object') {
-                newObject[newProp] = convertPropertiesCase(newObject[newProp], direction);
+                newObject[newProp] = convertProperties(newObject[newProp], direction);
             }
         }
     }
@@ -104,4 +106,38 @@ function convertPropertiesCase(data, direction = 'snake-to-camel') {
         return newObject;
     return data;
 }
-exports.convertPropertiesCase = convertPropertiesCase;
+exports.convertProperties = convertProperties;
+/**
+ * Convert all properties in an object from `snake_case` to `camelCase`.
+ *
+ * @param data - Some data in various formats.
+ *
+ * @returns Possibly an new object is returned. One should always use
+ *   this returned object. Do not rely on the by reference passed in
+ *   object `data`.
+ */
+function convertPropertiesSnakeToCamel(data) {
+    return convertProperties(data, PropertyConvertDirection.SNAKE_TO_CAMEL);
+}
+exports.convertPropertiesSnakeToCamel = convertPropertiesSnakeToCamel;
+/**
+ * Convert all properties in an object from `camelCase` to `snake_case`.
+ *
+ * @param data - Some data in various formats.
+ *
+ * @returns Possibly an new object is returned. One should always use
+ *   this returned object. Do not rely on the by reference passed in
+ *   object `data`.
+ */
+function convertPropertiesCamelToSnake(data) {
+    return convertProperties(data, PropertyConvertDirection.CAMEL_TO_SNAKE);
+}
+exports.convertPropertiesCamelToSnake = convertPropertiesCamelToSnake;
+/**
+ * @link {@see https://www.npmjs.com/package/js-yaml}
+ */
+exports.jsYamlConfig = {
+    noArrayIndent: true,
+    lineWidth: 72,
+    noCompatMode: true
+};

@@ -19,7 +19,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.normalizePresentationFile = exports.loadYaml = exports.fetchFile = exports.moveAsset = exports.writeFile = exports.readFile = void 0;
+exports.normalizePresentationFile = exports.loadYaml = exports.fetchFile = exports.moveAsset = exports.yamlToTxt = exports.writeFile = exports.readFile = void 0;
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
 const js_yaml_1 = __importDefault(require("js-yaml"));
@@ -50,6 +50,23 @@ function writeFile(filePath, content) {
     fs_1.default.writeFileSync(filePath, content);
 }
 exports.writeFile = writeFile;
+/**
+ * Convert a Javascript object into a text string, ready to be written into
+ * a text file.
+ *
+ * @param {Object} data - Some data to convert to YAML.
+ *
+ * @returns {String}
+ */
+function yamlToTxt(data) {
+    data = core_browser_ts_1.convertPropertiesCamelToSnake(data);
+    const yamlMarkup = [
+        '---',
+        js_yaml_1.default.safeDump(data, core_browser_ts_1.jsYamlConfig)
+    ];
+    return yamlMarkup.join('\n');
+}
+exports.yamlToTxt = yamlToTxt;
 /**
  * Move (rename) or copy a media asset and it’s corresponding meta data file
  * (`*.yml`) and preview file (`_preview.jpg`).

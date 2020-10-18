@@ -37,6 +37,15 @@ export declare function readFile(filePath: string): string;
  * @param content - Some text to write to a file.
  */
 export declare function writeFile(filePath: string, content: string): void;
+/**
+ * Convert a Javascript object into a text string, ready to be written into
+ * a text file.
+ *
+ * @param {Object} data - Some data to convert to YAML.
+ *
+ * @returns {String}
+ */
+export declare function yamlToTxt(data: any): string;
 interface MoveAssetConfiguration {
     copy: boolean;
     dryRun: boolean;

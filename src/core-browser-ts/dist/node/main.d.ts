@@ -36,6 +36,10 @@ export declare function camelToSnake(text: string): string;
  * @see {@link https://catalin.me/javascript-snake-to-camel/}
  */
 export declare function snakeToCamel(text: string): string;
+declare enum PropertyConvertDirection {
+    SNAKE_TO_CAMEL = 0,
+    CAMEL_TO_SNAKE = 1
+}
 /**
  * Convert all properties in an object from `snake_case` to `camelCase` or vice
  * versa in a recursive fashion.
@@ -46,4 +50,33 @@ export declare function snakeToCamel(text: string): string;
  * @returns Possibly an new object is returned. One should always
  *   use this returned object.
  */
-export declare function convertPropertiesCase(data: any, direction?: string): object;
+export declare function convertProperties(data: any, direction?: PropertyConvertDirection): object;
+/**
+ * Convert all properties in an object from `snake_case` to `camelCase`.
+ *
+ * @param data - Some data in various formats.
+ *
+ * @returns Possibly an new object is returned. One should always use
+ *   this returned object. Do not rely on the by reference passed in
+ *   object `data`.
+ */
+export declare function convertPropertiesSnakeToCamel(data: any): object;
+/**
+ * Convert all properties in an object from `camelCase` to `snake_case`.
+ *
+ * @param data - Some data in various formats.
+ *
+ * @returns Possibly an new object is returned. One should always use
+ *   this returned object. Do not rely on the by reference passed in
+ *   object `data`.
+ */
+export declare function convertPropertiesCamelToSnake(data: any): object;
+/**
+ * @link {@see https://www.npmjs.com/package/js-yaml}
+ */
+export declare const jsYamlConfig: {
+    noArrayIndent: boolean;
+    lineWidth: number;
+    noCompatMode: boolean;
+};
+export {};

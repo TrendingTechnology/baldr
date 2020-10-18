@@ -62,10 +62,10 @@ interface StringObject {
   [key: string]: any;
 }
 
-// enum PropertyFormatConvertDirection {
-//   SNAKE_TO_CAMEL,
-//   CAMEL_TO_SNAKE
-// }
+enum PropertyConvertDirection {
+  SNAKE_TO_CAMEL,
+  CAMEL_TO_SNAKE
+}
 
 /**
  * Convert all properties in an object from `snake_case` to `camelCase` or vice
@@ -77,18 +77,16 @@ interface StringObject {
  * @returns Possibly an new object is returned. One should always
  *   use this returned object.
  */
-export function convertPropertiesCase (data: any, direction = 'snake-to-camel'): object {
+export function convertProperties (data: any, direction: PropertyConvertDirection = PropertyConvertDirection.SNAKE_TO_CAMEL): object {
   // To perserve the order of the props.
   let newObject: StringObject | null = null
-  if (!['snake-to-camel', 'camel-to-snake'].includes(direction)) {
-    throw new Error(`convertPropertiesCase: argument direction must be “snake-to-camel” or “camel-to-snake”, got ${direction}`)
-  }
+
   // Array
   if (Array.isArray(data)) {
     for (let i = 0; i < data.length; i++) {
       const item = data[i]
       if (typeof item === 'object') {
-        data[i] = convertPropertiesCase(item, direction)
+        data[i] = convertProperties(item, direction)
       }
     }
   // Object
@@ -96,7 +94,7 @@ export function convertPropertiesCase (data: any, direction = 'snake-to-camel'):
     newObject = {}
     for (const oldProp in data) {
       let newProp: string
-      if (direction === 'camel-to-snake') {
+      if (direction === PropertyConvertDirection.CAMEL_TO_SNAKE) {
         newProp = camelToSnake(oldProp)
       } else {
         newProp = snakeToCamel(oldProp)
@@ -104,10 +102,45 @@ export function convertPropertiesCase (data: any, direction = 'snake-to-camel'):
       newObject[newProp] = data[oldProp]
       // Object or array
       if (typeof newObject[newProp] === 'object') {
-        newObject[newProp] = convertPropertiesCase(newObject[newProp], direction)
+        newObject[newProp] = convertProperties(newObject[newProp], direction)
       }
     }
   }
   if (newObject) return newObject
   return data
+}
+
+/**
+ * Convert all properties in an object from `snake_case` to `camelCase`.
+ *
+ * @param data - Some data in various formats.
+ *
+ * @returns Possibly an new object is returned. One should always use
+ *   this returned object. Do not rely on the by reference passed in
+ *   object `data`.
+ */
+export function convertPropertiesSnakeToCamel (data: any): object {
+  return convertProperties(data, PropertyConvertDirection.SNAKE_TO_CAMEL)
+}
+
+/**
+ * Convert all properties in an object from `camelCase` to `snake_case`.
+ *
+ * @param data - Some data in various formats.
+ *
+ * @returns Possibly an new object is returned. One should always use
+ *   this returned object. Do not rely on the by reference passed in
+ *   object `data`.
+ */
+export function convertPropertiesCamelToSnake (data: any): object {
+  return convertProperties(data, PropertyConvertDirection.CAMEL_TO_SNAKE)
+}
+
+/**
+ * @link {@see https://www.npmjs.com/package/js-yaml}
+ */
+export const jsYamlConfig = {
+  noArrayIndent: true,
+  lineWidth: 72,
+  noCompatMode: true
 }

@@ -51,6 +51,11 @@ export function snakeToCamel(text) {
         .replace('-', '')
         .replace('_', ''));
 }
+var PropertyConvertDirection;
+(function (PropertyConvertDirection) {
+    PropertyConvertDirection[PropertyConvertDirection["SNAKE_TO_CAMEL"] = 0] = "SNAKE_TO_CAMEL";
+    PropertyConvertDirection[PropertyConvertDirection["CAMEL_TO_SNAKE"] = 1] = "CAMEL_TO_SNAKE";
+})(PropertyConvertDirection || (PropertyConvertDirection = {}));
 /**
  * Convert all properties in an object from `snake_case` to `camelCase` or vice
  * versa in a recursive fashion.
@@ -61,18 +66,15 @@ export function snakeToCamel(text) {
  * @returns Possibly an new object is returned. One should always
  *   use this returned object.
  */
-export function convertPropertiesCase(data, direction = 'snake-to-camel') {
+export function convertProperties(data, direction = PropertyConvertDirection.SNAKE_TO_CAMEL) {
     // To perserve the order of the props.
     let newObject = null;
-    if (!['snake-to-camel', 'camel-to-snake'].includes(direction)) {
-        throw new Error(`convertPropertiesCase: argument direction must be “snake-to-camel” or “camel-to-snake”, got ${direction}`);
-    }
     // Array
     if (Array.isArray(data)) {
         for (let i = 0; i < data.length; i++) {
             const item = data[i];
             if (typeof item === 'object') {
-                data[i] = convertPropertiesCase(item, direction);
+                data[i] = convertProperties(item, direction);
             }
         }
         // Object
@@ -81,7 +83,7 @@ export function convertPropertiesCase(data, direction = 'snake-to-camel') {
         newObject = {};
         for (const oldProp in data) {
             let newProp;
-            if (direction === 'camel-to-snake') {
+            if (direction === PropertyConvertDirection.CAMEL_TO_SNAKE) {
                 newProp = camelToSnake(oldProp);
             }
             else {
@@ -90,7 +92,7 @@ export function convertPropertiesCase(data, direction = 'snake-to-camel') {
             newObject[newProp] = data[oldProp];
             // Object or array
             if (typeof newObject[newProp] === 'object') {
-                newObject[newProp] = convertPropertiesCase(newObject[newProp], direction);
+                newObject[newProp] = convertProperties(newObject[newProp], direction);
             }
         }
     }
@@ -98,3 +100,35 @@ export function convertPropertiesCase(data, direction = 'snake-to-camel') {
         return newObject;
     return data;
 }
+/**
+ * Convert all properties in an object from `snake_case` to `camelCase`.
+ *
+ * @param data - Some data in various formats.
+ *
+ * @returns Possibly an new object is returned. One should always use
+ *   this returned object. Do not rely on the by reference passed in
+ *   object `data`.
+ */
+export function convertPropertiesSnakeToCamel(data) {
+    return convertProperties(data, PropertyConvertDirection.SNAKE_TO_CAMEL);
+}
+/**
+ * Convert all properties in an object from `camelCase` to `snake_case`.
+ *
+ * @param data - Some data in various formats.
+ *
+ * @returns Possibly an new object is returned. One should always use
+ *   this returned object. Do not rely on the by reference passed in
+ *   object `data`.
+ */
+export function convertPropertiesCamelToSnake(data) {
+    return convertProperties(data, PropertyConvertDirection.CAMEL_TO_SNAKE);
+}
+/**
+ * @link {@see https://www.npmjs.com/package/js-yaml}
+ */
+export const jsYamlConfig = {
+    noArrayIndent: true,
+    lineWidth: 72,
+    noCompatMode: true
+};

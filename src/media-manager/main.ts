@@ -11,7 +11,7 @@ import path from 'path'
 import yaml from 'js-yaml'
 import fetch from 'node-fetch'
 import { URL } from 'url'
-import { getExtension } from '@bldr/core-browser-ts'
+import { getExtension, convertPropertiesCamelToSnake, jsYamlConfig } from '@bldr/core-browser-ts'
 
 import { DeepTitle, TitleTree } from './titles'
 
@@ -53,6 +53,23 @@ export function readFile(filePath: string): string {
  */
 export function writeFile(filePath: string, content: string) {
   fs.writeFileSync(filePath, content)
+}
+
+/**
+ * Convert a Javascript object into a text string, ready to be written into
+ * a text file.
+ *
+ * @param {Object} data - Some data to convert to YAML.
+ *
+ * @returns {String}
+ */
+export function yamlToTxt (data: any): string {
+  data = convertPropertiesCamelToSnake(data)
+  const yamlMarkup = [
+    '---',
+    yaml.safeDump(data, jsYamlConfig)
+  ]
+  return yamlMarkup.join('\n')
 }
 
 interface MoveAssetConfiguration {
