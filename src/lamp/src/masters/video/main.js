@@ -10,6 +10,10 @@ export default {
       required: true,
       description: 'Den URI zu einer Video-Datei.',
       assetUri: true
+    },
+    showMeta: {
+      type: Boolean,
+      description: 'Zeige Metainformationen'
     }
   },
   icon: {
@@ -32,10 +36,14 @@ export default {
     },
     collectPropsMain (props) {
       const asset = this.$store.getters['media/assetByUri'](props.src)
-      return {
+      const result = {
         httpUrl: asset.httpUrl,
         previewHttpUrl: asset.previewHttpUrl
       }
+      if (props.showMeta) result.showMeta = true
+      if (asset.title) result.title = asset.title
+      if (asset.description) result.description = asset.description
+      return result
     },
     collectPropsPreview ({ propsMain }) {
       return {
@@ -47,7 +55,7 @@ export default {
       if (!this.isPublic) return
       const slide = this.$get('slide')
       const sample = this.$store.getters['media/sampleByUri'](slide.props.src)
-      const videoWrapper = document.querySelector('.vc_video_master')
+      const videoWrapper = document.querySelector('#video_master-container')
       videoWrapper.innerHTML = ''
       videoWrapper.appendChild(sample.mediaElement)
       this.$media.player.load(slide.props.src)
