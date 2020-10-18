@@ -9,8 +9,41 @@
 /**
  * Get the extension from a file path.
  *
- * @param {String} filePath - A file path or a single file name.
+ * @param filePath - A file path or a single file name.
  *
- * @returns {String} - The extension in lower case characters.
+ * @returns The extension in lower case characters.
  */
 export declare function getExtension(filePath: string): string | undefined;
+/**
+ * Convert `camelCase` into `snake_case` strings.
+ *
+ * @param text - A camel cased string.
+ *
+ * @returns A string formatted in `snake_case`.
+ *
+ * @see {@link module:@bldr/core-browser.convertPropertiesCase}
+ * @see {@link https://vladimir-ivanov.net/camelcase-to-snake_case-and-vice-versa-with-javascript/}
+ */
+export declare function camelToSnake(text: string): string;
+/**
+ * Convert `snake_case` or `kebab-case` strings into `camelCase` strings.
+ *
+ * @param text - A snake or kebab cased string
+ *
+ * @returns A string formatted in `camelCase`.
+ *
+ * @see {@link module:@bldr/core-browser.convertPropertiesCase}
+ * @see {@link https://catalin.me/javascript-snake-to-camel/}
+ */
+export declare function snakeToCamel(text: string): string;
+/**
+ * Convert all properties in an object from `snake_case` to `camelCase` or vice
+ * versa in a recursive fashion.
+ *
+ * @param data - Some data in various formats.
+ * @param direction - `snake-to-camel` or `camel-to-snake`
+ *
+ * @returns Possibly an new object is returned. One should always
+ *   use this returned object.
+ */
+export declare function convertPropertiesCase(data: any, direction?: string): object;
