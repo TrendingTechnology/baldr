@@ -51,12 +51,13 @@ function writeFile(filePath, content) {
 }
 exports.writeFile = writeFile;
 /**
- * Convert a Javascript object into a text string, ready to be written into
- * a text file.
+ * Convert a Javascript object into a text string, ready to be written
+ * into a text file. The property names are converted to `snake_case`.
  *
- * @param {Object} data - Some data to convert to YAML.
+ * @param data - Some data to convert to YAML.
  *
- * @returns {String}
+ * @returns A string in the YAML format ready to be written into a text
+ *   file. The result string begins with `---`.
  */
 function yamlToTxt(data) {
     data = core_browser_ts_1.convertPropertiesCamelToSnake(data);
@@ -145,14 +146,15 @@ exports.fetchFile = fetchFile;
  *
  * @param filePath - The path of a YAML file.
  *
- * @returns The parse YAML file as a object.
+ * @returns The parsed YAML file as a object. The string properties are
+ * in the camleCase format.
  */
 function loadYaml(filePath) {
     const result = js_yaml_1.default.safeLoad(readFile(filePath));
     if (typeof result !== 'object') {
         return { result };
     }
-    return result;
+    return core_browser_ts_1.convertPropertiesSnakeToCamel(result);
 }
 exports.loadYaml = loadYaml;
 /**
@@ -194,13 +196,24 @@ function shortedMediaUris(rawYamlString, presentationId) {
  * @param filePath - A path of a text file.
  */
 function normalizePresentationFile(filePath) {
-    const title = new titles_1.DeepTitle(filePath);
-    console.log(title);
     let textContent = readFile(filePath);
     const presentation = loadYaml(filePath);
+    // Generate meta.
+    const title = new titles_1.DeepTitle(filePath);
+    const meta = title.generatePresetationMeta();
+    if (presentation.meta) {
+        if (presentation.meta.id)
+            meta.id = presentation.meta.id;
+        if (presentation.meta.curriculumUrl)
+            meta.curriculumUrl = presentation.meta.curriculumUrl;
+    }
+    const metaString = yamlToTxt(meta);
+    textContent = textContent.replace(/.*\nslides:/, metaString + '\nslides:');
+    //
     if (presentation.meta && presentation.meta.id) {
         textContent = shortedMediaUris(textContent, presentation.meta.id);
     }
+    // Remove single quotes.
     textContent = removeSingleQuotes(textContent);
     writeFile(filePath, textContent);
 }

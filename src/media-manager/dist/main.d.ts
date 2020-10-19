@@ -6,17 +6,7 @@
  * @module @bldr/media-manager
  */
 import { DeepTitle, TitleTree } from './titles';
-interface Meta {
-    curriculumUrl: string;
-    id: string;
-    title: string;
-    subtitle: string;
-    curriculum: string;
-    grade: number;
-}
-interface Presentation {
-    meta: Meta;
-}
+import { PresentationFileFormat } from '@bldr/type-defintions';
 interface MediaAsset {
     cover_source: string;
 }
@@ -38,12 +28,13 @@ export declare function readFile(filePath: string): string;
  */
 export declare function writeFile(filePath: string, content: string): void;
 /**
- * Convert a Javascript object into a text string, ready to be written into
- * a text file.
+ * Convert a Javascript object into a text string, ready to be written
+ * into a text file. The property names are converted to `snake_case`.
  *
- * @param {Object} data - Some data to convert to YAML.
+ * @param data - Some data to convert to YAML.
  *
- * @returns {String}
+ * @returns A string in the YAML format ready to be written into a text
+ *   file. The result string begins with `---`.
  */
 export declare function yamlToTxt(data: any): string;
 interface MoveAssetConfiguration {
@@ -72,9 +63,10 @@ export declare function fetchFile(url: string, dest: string): Promise<void>;
  *
  * @param filePath - The path of a YAML file.
  *
- * @returns The parse YAML file as a object.
+ * @returns The parsed YAML file as a object. The string properties are
+ * in the camleCase format.
  */
-export declare function loadYaml(filePath: string): Presentation | MediaAsset | object;
+export declare function loadYaml(filePath: string): PresentationFileFormat | MediaAsset | object;
 /**
  * Normalize a presentation file.
  *

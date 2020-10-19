@@ -1,0 +1,26 @@
+{
+  "name": "@bldr/type-defintions",
+  "version": "0.1.0",
+  "description": "Some basic Typescript interfaces and type defintions.",
+  "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
+  "bugs": {
+    "url": "https://github.com/Josef-Friedrich/baldr/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Josef-Friedrich/baldr.git"
+  },
+  "scripts": {
+    "build": "npm run build:esm && npm run build:cjs",
+    "build:esm": "tsc --module es2015 --outDir dist/browser",
+    "build:cjs": "tsc --module commonjs --outDir dist/node"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Josef Friedrich",
+    "email": "josef@friedrich.rocks",
+    "url": "https://josef.friedrich.rocks"
+  },
+  "browser": "dist/browser/main.js",
+  "main": "dist/node/main.js"
+}

@@ -238,6 +238,20 @@ class DeepTitle {
     list() {
         return this.titles;
     }
+    /**
+     * Generate a object containing the meta informations of a presentation.
+     */
+    generatePresetationMeta() {
+        const result = {
+            id: this.id,
+            title: this.title,
+            grade: this.grade,
+            curriculum: this.curriculum
+        };
+        if (this.subtitle)
+            result.subtitle = this.subtitle;
+        return result;
+    }
 }
 exports.DeepTitle = DeepTitle;
 /**

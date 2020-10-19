@@ -11,22 +11,11 @@ import path from 'path'
 import yaml from 'js-yaml'
 import fetch from 'node-fetch'
 import { URL } from 'url'
-import { getExtension, convertPropertiesCamelToSnake, jsYamlConfig } from '@bldr/core-browser-ts'
+import { getExtension, convertPropertiesCamelToSnake, convertPropertiesSnakeToCamel, jsYamlConfig } from '@bldr/core-browser-ts'
 
 import { DeepTitle, TitleTree } from './titles'
 
-interface Meta {
-  curriculumUrl: string
-  id: string
-  title: string
-  subtitle: string
-  curriculum: string
-  grade: number
-}
-
-interface Presentation {
-  meta: Meta
-}
+import { PresentationFileFormat } from '@bldr/type-defintions'
 
 interface MediaAsset {
   cover_source: string
@@ -56,12 +45,13 @@ export function writeFile(filePath: string, content: string) {
 }
 
 /**
- * Convert a Javascript object into a text string, ready to be written into
- * a text file.
+ * Convert a Javascript object into a text string, ready to be written
+ * into a text file. The property names are converted to `snake_case`.
  *
- * @param {Object} data - Some data to convert to YAML.
+ * @param data - Some data to convert to YAML.
  *
- * @returns {String}
+ * @returns A string in the YAML format ready to be written into a text
+ *   file. The result string begins with `---`.
  */
 export function yamlToTxt (data: any): string {
   data = convertPropertiesCamelToSnake(data)
@@ -153,14 +143,15 @@ export async function fetchFile (url: string, dest: string) {
  *
  * @param filePath - The path of a YAML file.
  *
- * @returns The parse YAML file as a object.
+ * @returns The parsed YAML file as a object. The string properties are
+ * in the camleCase format.
  */
-export function loadYaml (filePath: string): Presentation | MediaAsset | object {
+export function loadYaml (filePath: string): PresentationFileFormat | MediaAsset | object {
   const result = yaml.safeLoad(readFile(filePath))
   if (typeof result !== 'object') {
     return { result }
   }
-  return result
+  return convertPropertiesSnakeToCamel(result)
 }
 
 /**
@@ -204,13 +195,25 @@ function shortedMediaUris(rawYamlString: string, presentationId: string): string
  * @param filePath - A path of a text file.
  */
 export function normalizePresentationFile(filePath: string) {
-  const title = new DeepTitle(filePath)
-  console.log(title)
   let textContent = readFile(filePath)
-  const presentation = <Presentation> loadYaml(filePath)
+  const presentation = <PresentationFileFormat> loadYaml(filePath)
+
+  // Generate meta.
+  const title = new DeepTitle(filePath)
+  const meta = title.generatePresetationMeta()
+  if (presentation.meta) {
+    if (presentation.meta.id) meta.id = presentation.meta.id
+    if (presentation.meta.curriculumUrl) meta.curriculumUrl = presentation.meta.curriculumUrl
+  }
+  const metaString = yamlToTxt(meta)
+  textContent = textContent.replace(/.*\nslides:/, metaString + '\nslides:')
+
+  // Shorten media URIs with `./`
   if (presentation.meta && presentation.meta.id) {
     textContent = shortedMediaUris(textContent, presentation.meta.id)
   }
+
+  // Remove single quotes.
   textContent = removeSingleQuotes(textContent)
   writeFile(filePath, textContent)
 }
