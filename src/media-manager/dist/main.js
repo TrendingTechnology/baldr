@@ -208,7 +208,7 @@ function normalizePresentationFile(filePath) {
             meta.curriculumUrl = presentation.meta.curriculumUrl;
     }
     const metaString = yamlToTxt({ meta });
-    textContent = textContent.replace(/.*\n?slides:/s, metaString + '\nslides:');
+    textContent = textContent.replace(/.*\nslides:/s, metaString + '\nslides:');
     // Shorten media URIs with `./`
     if (meta.id) {
         textContent = shortedMediaUris(textContent, meta.id);
