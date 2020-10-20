@@ -197,7 +197,7 @@ export declare class DeepTitle {
      * The first folder level in the hierachical folder structure must be named
      * with numbers.
      */
-    get grade(): string;
+    get grade(): number;
     /**
      * List all `FolderTitle()` objects.
      *

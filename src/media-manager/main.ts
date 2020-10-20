@@ -205,17 +205,19 @@ export function normalizePresentationFile(filePath: string) {
     if (presentation.meta.id) meta.id = presentation.meta.id
     if (presentation.meta.curriculumUrl) meta.curriculumUrl = presentation.meta.curriculumUrl
   }
-  const metaString = yamlToTxt(meta)
-  textContent = textContent.replace(/.*\nslides:/, metaString + '\nslides:')
+  const metaString = yamlToTxt({ meta })
+  textContent = textContent.replace(/.*\n?slides:/s, metaString + '\nslides:')
 
   // Shorten media URIs with `./`
-  if (presentation.meta && presentation.meta.id) {
-    textContent = shortedMediaUris(textContent, presentation.meta.id)
+  if (meta.id) {
+    textContent = shortedMediaUris(textContent, meta.id)
   }
 
   // Remove single quotes.
   textContent = removeSingleQuotes(textContent)
   writeFile(filePath, textContent)
+
+  console.log(textContent)
 }
 
 export default {

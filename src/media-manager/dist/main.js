@@ -207,15 +207,16 @@ function normalizePresentationFile(filePath) {
         if (presentation.meta.curriculumUrl)
             meta.curriculumUrl = presentation.meta.curriculumUrl;
     }
-    const metaString = yamlToTxt(meta);
-    textContent = textContent.replace(/.*\nslides:/, metaString + '\nslides:');
-    //
-    if (presentation.meta && presentation.meta.id) {
-        textContent = shortedMediaUris(textContent, presentation.meta.id);
+    const metaString = yamlToTxt({ meta });
+    textContent = textContent.replace(/.*\n?slides:/s, metaString + '\nslides:');
+    // Shorten media URIs with `./`
+    if (meta.id) {
+        textContent = shortedMediaUris(textContent, meta.id);
     }
     // Remove single quotes.
     textContent = removeSingleQuotes(textContent);
     writeFile(filePath, textContent);
+    console.log(textContent);
 }
 exports.normalizePresentationFile = normalizePresentationFile;
 exports.default = {

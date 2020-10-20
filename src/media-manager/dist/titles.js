@@ -228,7 +228,7 @@ class DeepTitle {
      * with numbers.
      */
     get grade() {
-        return this.titles[0].title.replace(/[^\d]+$/, '');
+        return parseInt(this.titles[0].title.replace(/[^\d]+$/, ''));
     }
     /**
      * List all `FolderTitle()` objects.
@@ -244,12 +244,13 @@ class DeepTitle {
     generatePresetationMeta() {
         const result = {
             id: this.id,
+            subtitle: this.subtitle,
             title: this.title,
             grade: this.grade,
             curriculum: this.curriculum
         };
-        if (this.subtitle)
-            result.subtitle = this.subtitle;
+        if (!result.subtitle)
+            delete result.subtitle;
         return result;
     }
 }

@@ -313,8 +313,8 @@ export class DeepTitle {
    * The first folder level in the hierachical folder structure must be named
    * with numbers.
    */
-  get grade (): string {
-    return this.titles[0].title.replace(/[^\d]+$/, '')
+  get grade (): number {
+    return parseInt(this.titles[0].title.replace(/[^\d]+$/, ''))
   }
 
   /**
@@ -332,11 +332,12 @@ export class DeepTitle {
   generatePresetationMeta (): PresentationMetaFileFormat {
     const result: PresentationMetaFileFormat = {
       id: this.id,
+      subtitle: this.subtitle,
       title: this.title,
       grade: this.grade,
       curriculum: this.curriculum
     }
-    if (this.subtitle) result.subtitle = this.subtitle
+    if (!result.subtitle) delete result.subtitle
     return result
   }
 }

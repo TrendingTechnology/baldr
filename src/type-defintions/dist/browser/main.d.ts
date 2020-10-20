@@ -22,7 +22,7 @@ export interface PresentationMetaFileFormat {
     /**
      * The grade the presentation belongs to.
      */
-    grade: string;
+    grade: number;
     /**
      * Relation to the curriculum.
      */
