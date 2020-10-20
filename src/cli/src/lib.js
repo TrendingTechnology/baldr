@@ -10,8 +10,8 @@ const yaml = require('js-yaml')
 
 // Project packages.
 const mediaServer = require('@bldr/media-server')
-const { jsYamlConfig, getExtension, convertPropertiesCase } = require('@bldr/core-browser')
-const { readFile } = require('@bldr/media-manager')
+const { getExtension, convertPropertiesCase } = require('@bldr/core-browser')
+const { readFile, writeYamlFile } = require('@bldr/media-manager')
 
 /**
  * TODO: Remove and use version in @bldr/media-manager.
@@ -59,41 +59,6 @@ function readAssetYaml (filePath) {
 
 /**
  * TODO: Remove and use version in @bldr/media-manager.
- * Convert a Javascript object into a text string, ready to be written into
- * a text file.
- *
- * @param {Object} data - Some data to convert to YAML.
- *
- * @returns {String}
- */
-function yamlToTxt (data) {
-  data = convertPropertiesCase(data, 'camel-to-snake')
-  const yamlMarkup = [
-    '---',
-    yaml.safeDump(data, jsYamlConfig)
-  ]
-  return yamlMarkup.join('\n')
-}
-
-/**
- * Convert some data (usually Javascript objets) into the YAML format and write
- * the string into a text file.
- *
- * @param {String} filePath - The file path of the destination yaml file. The
- *   yml extension has to be included.
- * @param {Object} data - Some data to convert into yaml and write into a text
- *   file.
- *
- * @returns {String} - The data converted to YAML as a string.
- */
-function writeYamlFile (filePath, data) {
-  const yaml = yamlToTxt(data)
-  fs.writeFileSync(filePath, yaml)
-  return yaml
-}
-
-/**
- * TODO: Remove and use version in @bldr/media-manager.
  *
  * Write the metadata YAML file for a corresponding media file specified by
  * `filePath`.
@@ -137,7 +102,5 @@ module.exports = {
   filePathToAssetType,
   makeAsset,
   readAssetYaml,
-  writeMetaDataYaml,
-  writeYamlFile,
-  yamlToTxt
+  writeMetaDataYaml
 }

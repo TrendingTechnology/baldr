@@ -8,7 +8,7 @@ const chalk = require('chalk')
 // Project packages.
 const mediaServer = require('@bldr/media-server')
 const { convertTexToMd, removeTexComments, regBuilder, extractMatchAll } = require('@bldr/tex-markdown-converter')
-const { readFile } = require('@bldr/media-manager')
+const { readFile, yamlToTxt } = require('@bldr/media-manager')
 
 const lib = require('../../lib.js')
 
@@ -158,7 +158,7 @@ async function presentationFromAssets (filePath) {
     slides = slides.concat(slidify('quote', objectifyTexZitat(worksheetContent), { source: 'Arbeitsblatt.tex' }))
   }
 
-  const result = lib.yamlToTxt({
+  const result = yamlToTxt({
     slides
   })
   console.log(result)

@@ -19,7 +19,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.normalizePresentationFile = exports.loadYaml = exports.fetchFile = exports.moveAsset = exports.yamlToTxt = exports.writeFile = exports.readFile = void 0;
+exports.normalizePresentationFile = exports.loadYaml = exports.fetchFile = exports.moveAsset = exports.writeYamlFile = exports.writeFile = exports.yamlToTxt = exports.readFile = void 0;
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
 const js_yaml_1 = __importDefault(require("js-yaml"));
@@ -41,16 +41,6 @@ function readFile(filePath) {
 }
 exports.readFile = readFile;
 /**
- * Write some text content into a file.
- *
- * @param filePath - A path of a text file.
- * @param content - Some text to write to a file.
- */
-function writeFile(filePath, content) {
-    fs_1.default.writeFileSync(filePath, content);
-}
-exports.writeFile = writeFile;
-/**
  * Convert a Javascript object into a text string, ready to be written
  * into a text file. The property names are converted to `snake_case`.
  *
@@ -68,6 +58,33 @@ function yamlToTxt(data) {
     return yamlMarkup.join('\n');
 }
 exports.yamlToTxt = yamlToTxt;
+/**
+ * Write some text content into a file.
+ *
+ * @param filePath - A path of a text file.
+ * @param content - Some text to write to a file.
+ */
+function writeFile(filePath, content) {
+    fs_1.default.writeFileSync(filePath, content);
+}
+exports.writeFile = writeFile;
+/**
+ * Convert some data (usually Javascript objets) into the YAML format
+ * and write the string into a text file.
+ *
+ * @param filePath - The file path of the destination yaml file. The yml
+ *   extension has to be included.
+ * @param data - Some data to convert into yaml and write into a text
+ *   file.
+ *
+ * @returns The data converted to YAML as a string.
+ */
+function writeYamlFile(filePath, data) {
+    const yaml = yamlToTxt(data);
+    writeFile(filePath, yaml);
+    return yaml;
+}
+exports.writeYamlFile = writeYamlFile;
 /**
  * Move (rename) or copy a media asset and it’s corresponding meta data file
  * (`*.yml`) and preview file (`_preview.jpg`).

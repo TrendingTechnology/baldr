@@ -35,16 +35,6 @@ export function readFile(filePath: string): string {
 }
 
 /**
- * Write some text content into a file.
- *
- * @param filePath - A path of a text file.
- * @param content - Some text to write to a file.
- */
-export function writeFile(filePath: string, content: string) {
-  fs.writeFileSync(filePath, content)
-}
-
-/**
  * Convert a Javascript object into a text string, ready to be written
  * into a text file. The property names are converted to `snake_case`.
  *
@@ -65,6 +55,33 @@ export function yamlToTxt (data: any): string {
 interface MoveAssetConfiguration {
   copy: boolean
   dryRun: boolean
+}
+
+/**
+ * Write some text content into a file.
+ *
+ * @param filePath - A path of a text file.
+ * @param content - Some text to write to a file.
+ */
+export function writeFile(filePath: string, content: string) {
+  fs.writeFileSync(filePath, content)
+}
+
+/**
+ * Convert some data (usually Javascript objets) into the YAML format
+ * and write the string into a text file.
+ *
+ * @param filePath - The file path of the destination yaml file. The yml
+ *   extension has to be included.
+ * @param data - Some data to convert into yaml and write into a text
+ *   file.
+ *
+ * @returns The data converted to YAML as a string.
+ */
+export function writeYamlFile (filePath: string, data: object): string {
+  const yaml = yamlToTxt(data)
+  writeFile(filePath, yaml)
+  return yaml
 }
 
 /**
