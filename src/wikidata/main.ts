@@ -3,12 +3,9 @@
  */
 
 // Node packages.
-
 import * as fs from 'fs'
-import fetch from 'node-fetch'
 import * as childProcess from 'child_process'
-
-import { fetchFile } from '@bldr/media-manager'
+import fetch from 'node-fetch'
 
 // Third party packages.
 import * as wikibaseSdk from 'wikibase-sdk'
@@ -18,21 +15,43 @@ const wikibase = wikibaseSdk({
   sparqlEndpoint: 'https://query.wikidata.org/sparql'
 })
 
+import { fetchFile } from '@bldr/media-manager'
+
+type fromEntityType = 'getDescription' | 'getLabel' | 'getWikipediaTitle'
+
+type predefinedFormatFunction = 'formatDate' | 'formatYear' | 'formatWikicommons' | 'formatList'
+
 /**
  * The specification of a property.
- *
- * @typedef {Object} propSpec
- * @property {(String|Array)} wikidata.fromClaim - for example `P123` or
- *   `['P123', 'P234']`. If `fromClaim` is an array, the first existing claim
- *   an a certain item is taken.
- * @property {String} wikidata.fromEntity - `getDescription`, `getLabel`,
- *   `getWikipediaTitle`. If `fromClaim` is specifed and the item has
- *   a value on this claim, `fromEntity` is omitted.
- * @property {String} wikidata.secondQuery - `queryLabels`
- * @property {Boolean} wikidata.alwaysUpdate
- * @property {(Function|String)} wikidata.format - A function or `formatDate`,
- *   `formatYear`, `formatWikicommons`, `formatList`, `formatSingleValue`.
  */
+interface PropSpec {
+
+  /**
+   * for example `P123` or `['P123', 'P234']`. If `fromClaim` is an
+   * array, the first existing claim an a certain item is taken.
+   */
+  fromClaim: string | string[]
+
+  /**
+   * `getDescription`, `getLabel`, `getWikipediaTitle`. If `fromClaim`
+   * is specifed and the item has a value on this claim, `fromEntity` is
+   * omitted.
+   */
+  fromEntity: fromEntityType
+
+  /**
+   * `queryLabels`
+   */
+  secondQuery: string
+
+  alwaysUpdate: true
+
+  /**
+   * A function or `formatDate`, `formatYear`, `formatWikicommons`,
+   * `formatList`, `formatSingleValue`.
+   */
+  format: Function | predefinedFormatFunction
+}
 
 /**
  * Additional properties in the specification of one metadata type.
@@ -43,45 +62,70 @@ const wikibase = wikibaseSdk({
  *   `function ({ typeData, entity, functions })`
  */
 
-/**
- * ```js
- * let entity = {
- *   id: 'Q202698',
- *   type: 'item',
- *   modified: '2020-03-20T20:27:33Z',
- *   labels: { de: 'Yesterday', en: 'Yesterday' },
- *   descriptions: {
- *     en: 'original song written and composed by Lennon-McCartney',
- *     de: 'Lied von The Beatles'
- *   },
- *   aliases: {},
- *   claims: {
- *     P175: [ 'Q1299' ],
- *     P31: [ 'Q207628', 'Q7366' ],
- *     P435: [ '0c80db24-389e-3620-8e0b-84dc2b7c009a' ],
- *     P646: [ '/m/01227d' ]
- *   },
- *   sitelinks: {
- *     arwiki: 'يسترداي',
- *     cawiki: 'Yesterday',
- *     cswiki: 'Yesterday (píseň)',
- *     dawiki: 'Yesterday',
- *     dewiki: 'Yesterday',
- *     elwiki: 'Yesterday (τραγούδι, The Beatles)',
- *     enwiki: 'Yesterday (Beatles song)'
- *   }
- * }
- * ```
- */
-let entity: object
+
+interface LabelsCollection {
+  de: string
+  en: string
+}
+
+interface DescriptionsCollection {
+  de: string
+  en: string
+}
+
+interface ClaimsCollection {
+  [key: string]: string[]
+}
+
+interface SitelinksCollection {
+  dewiki: string
+  enwiki: string
+}
 
 interface Entity {
   id: string
+  labels: LabelsCollection
+  descriptions: DescriptionsCollection
+  claims: ClaimsCollection
+  sitelinks: SitelinksCollection
 }
 
 interface EntityCollection {
   [key: string]: Entity
 }
+
+
+/**
+ * ```js
+ * let entity = {
+  *   id: 'Q202698',
+  *   type: 'item',
+  *   modified: '2020-03-20T20:27:33Z',
+  *   labels: { de: 'Yesterday', en: 'Yesterday' },
+  *   descriptions: {
+  *     en: 'original song written and composed by Lennon-McCartney',
+  *     de: 'Lied von The Beatles'
+  *   },
+  *   aliases: {},
+  *   claims: {
+  *     P175: [ 'Q1299' ],
+  *     P31: [ 'Q207628', 'Q7366' ],
+  *     P435: [ '0c80db24-389e-3620-8e0b-84dc2b7c009a' ],
+  *     P646: [ '/m/01227d' ]
+  *   },
+  *   sitelinks: {
+  *     arwiki: 'يسترداي',
+  *     cawiki: 'Yesterday',
+  *     cswiki: 'Yesterday (píseň)',
+  *     dawiki: 'Yesterday',
+  *     dewiki: 'Yesterday',
+  *     elwiki: 'Yesterday (τραγούδι, The Beatles)',
+  *     enwiki: 'Yesterday (Beatles song)'
+  *   }
+  * }
+  * ```
+  */
+ let entity: Entity
 
 /**
  * If the array has only one item, return only this item, else return
@@ -108,11 +152,20 @@ function unpackArray (values: string | string[], onlyOne?: boolean, throwError?:
 }
 
 /**
+ * Return the first element of a string array.
+ *
+ * @param values
+ */
+function pickFirst (values: string | string[]): string {
+  return <string> unpackArray(values, true, false)
+}
+
+/**
  *
  * @param itemIds
  * @param props - for example `['labels']`
  */
-async function getEntities (itemIds: string[] | string, props?: string[]): Promise<object> {
+async function getEntities (itemIds: string[] | string, props?: string[]): Promise<Entity | EntityCollection> {
   const url = wikibase.getEntities(itemIds, ['en', 'de'], props)
   const response = await fetch(url)
   const json = await response.json()
@@ -161,17 +214,15 @@ async function fetchCommonsFile (fileName: string, dest: string) {
  * Get data from one claim. Try multiple claims to get the first existing
  * claim.
  *
- * @param {Object} entity
- * @param {(String|Array)} claims
- *
- * @returns {Mixed}
+ * @param entity
+ * @param claims
  */
-function getClaim (entity, claims) {
+function getClaim (entity: Entity, claims: string | string[]) {
   /**
    * @param {Object} entity
    * @param {String} claim
    */
-  function getSingleClaim (entity, claim) {
+  function getSingleClaim (entity: Entity, claim: string) {
     if (entity.claims[claim]) {
       const typeData = entity.claims[claim]
       return unpackArray(typeData)
@@ -209,15 +260,16 @@ const functions = {
     * }
     * ```
     *
-    * @param {Object} entity
+    * @param entity
     */
-  getDescription: function (entity) {
+  getDescription: function (entity: Entity): string {
     const desc = entity.descriptions
     if (desc.de) {
       return desc.de
     } else if (desc.en) {
       return desc.en
     }
+    return ''
   },
 
   /**
@@ -234,14 +286,12 @@ const functions = {
    *
    * @returns {Array|String}
    */
-  getLabel: function (entity) {
-    let label
+  getLabel: function (entity: Entity): string {
     if (entity.labels.de) {
-      label = entity.labels.de
-    } else if (entity.labels.en) {
-      label = entity.labels.en
+      return entity.labels.de
+    } else {
+      return entity.labels.en
     }
-    return unpackArray(label)
   },
 
   /**
@@ -255,12 +305,12 @@ const functions = {
    * }
    * ```
    *
-   * @param {Object} entity
+   * @param entity
    */
-  getWikipediaTitle: function (entity) {
+  getWikipediaTitle: function (entity: Entity): string {
     const sitelinks = entity.sitelinks
     const keys = Object.keys(sitelinks)
-    if (!keys.length) return
+    if (!keys.length) return ''
     let key
     if (sitelinks.dewiki) {
       key = 'dewiki'
@@ -269,10 +319,10 @@ const functions = {
     } else {
       key = keys.shift()
     }
-    if (!key) return
+    if (!key) return ''
     // https://de.wikipedia.org/wiki/Ludwig_van_Beethoven
     const siteLink = wikibase.getSitelinkUrl({ site: key, title: sitelinks[key] })
-    if (!siteLink) return
+    if (!siteLink) return ''
     // {
     //   lang: 'de',
     //   project: 'wikipedia',
@@ -295,9 +345,10 @@ const functions = {
    */
   queryLabels: async function (itemIds: string | string[]): Promise<string | string[]> {
     itemIds = unpackArray(itemIds)
-    const entities = <EntityCollection> await getEntities(itemIds, ['labels'])
+    const entities = await getEntities(itemIds, ['labels'])
     if (entities.id) {
-      return functions.getLabel(entities)
+      const entity = <Entity> entities
+      return functions.getLabel(entity)
     }
     const result: string[] = []
     for (const itemId in entities) {
@@ -312,24 +363,20 @@ const functions = {
  ******************************************************************************/
 
   /**
-    * @param {(Array|String)} date - for example `[ '1770-12-16T00:00:00.000Z' ]`
-    *
-    * @returns {String}
+    * @param date - for example `[ '1770-12-16T00:00:00.000Z' ]`
     */
-  formatDate: function (date) {
+  formatDate: function (date: string | string[]): string {
     // Frederic Chopin has two birth dates.
     // throw no error
-    date = unpackArray(date, true, false)
-    if (!date) return
+    date = pickFirst(date)
+    if (!date) return ''
     return date.replace(/T.+$/, '')
   },
 
   /**
-   * @param {(Array|String)} list
-   *
-   * @returns {String}
+   * @param list
    */
-  formatList: function (list) {
+  formatList: function (list: string | string[]): string {
     if (Array.isArray(list)) {
       return list.join(', ')
     }
@@ -343,23 +390,19 @@ const functions = {
    *
    * @returns {String} for example `1968`
    */
-  formatYear: function (dateSpec) {
+  formatYear: function (dateSpec: string | string[]): string {
     // Janis Joplin Cry Baby has two dates as an array.
-    const value = unpackArray(dateSpec, true, false)
-    if (typeof value === 'string') {
-      return value.substr(0, 4)
-    }
+    const value = pickFirst(dateSpec)
+    return value.substr(0, 4)
   },
 
   /**
    * Replace all white spaces with an underscore and prefix “wikicommons:”.
    *
-   * @param {String} value
-   *
-   * @returns {String}
+   * @param value
    */
-  formatWikicommons: function (value) {
-    value = unpackArray(value, true, false)
+  formatWikicommons: function (value: string | string[]): string {
+    value = pickFirst(value)
     value = value.replace(/ /g, '_')
     return `wikicommons:${value}`
   },
@@ -367,11 +410,9 @@ const functions = {
   /**
    * Only return one value, not an array of values.
    *
-   * @param {(Array|String)} value
-   *
-   * @returns {String}
+   * @param value
    */
-  formatSingleValue: function (value) {
+  formatSingleValue: function (value: string | string[]): string {
     if (Array.isArray(value)) return value[0]
     return value
   }
@@ -433,7 +474,7 @@ async function query (itemId: string, typeNames, typeSpecs): Promise<object> {
   if (!wikibase.isItemId(itemId)) {
     throw new Error(`No item id: ${itemId}`)
   }
-  entity = await getEntities(itemId)
+  entity = <Entity> await getEntities(itemId)
 
   if (typeNames.indexOf('general') === -1) typeNames = `general,${typeNames}`
 
@@ -448,7 +489,7 @@ async function query (itemId: string, typeNames, typeSpecs): Promise<object> {
 
     for (const propName in typeSpec.props) {
       if (typeSpec.props[propName].wikidata) {
-        const propSpec = typeSpec.props[propName].wikidata
+        const propSpec = <PropSpec> typeSpec.props[propName].wikidata
         let value
 
         // source
@@ -481,7 +522,7 @@ async function query (itemId: string, typeNames, typeSpecs): Promise<object> {
               formatFunctions = formatFunctions.filter((value) => value.match(/^format.*/))
               throw new Error(`Unkown format function “${propSpec.format}”. Use one of: ${formatFunctions.join()}`)
             }
-            value = func(value, typeSpec)
+            value = func(value)
           }
         }
 

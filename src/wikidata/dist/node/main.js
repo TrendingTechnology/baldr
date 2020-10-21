@@ -14,68 +14,45 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 // Node packages.
 const fs = require("fs");
-const node_fetch_1 = require("node-fetch");
 const childProcess = require("child_process");
-const media_manager_1 = require("@bldr/media-manager");
+const node_fetch_1 = require("node-fetch");
 // Third party packages.
 const wikibaseSdk = require("wikibase-sdk");
 const wikibase = wikibaseSdk({
     instance: 'https://www.wikidata.org',
     sparqlEndpoint: 'https://query.wikidata.org/sparql'
 });
-/**
- * The specification of a property.
- *
- * @typedef {Object} propSpec
- * @property {(String|Array)} wikidata.fromClaim - for example `P123` or
- *   `['P123', 'P234']`. If `fromClaim` is an array, the first existing claim
- *   an a certain item is taken.
- * @property {String} wikidata.fromEntity - `getDescription`, `getLabel`,
- *   `getWikipediaTitle`. If `fromClaim` is specifed and the item has
- *   a value on this claim, `fromEntity` is omitted.
- * @property {String} wikidata.secondQuery - `queryLabels`
- * @property {Boolean} wikidata.alwaysUpdate
- * @property {(Function|String)} wikidata.format - A function or `formatDate`,
- *   `formatYear`, `formatWikicommons`, `formatList`, `formatSingleValue`.
- */
-/**
- * Additional properties in the specification of one metadata type.
- *
- * @typedef {Object} typeSpec
- * @property {Function} normalizeWikidata - This functions is called after
- *   properties are present. The function is called with
- *   `function ({ typeData, entity, functions })`
- */
+const media_manager_1 = require("@bldr/media-manager");
 /**
  * ```js
  * let entity = {
- *   id: 'Q202698',
- *   type: 'item',
- *   modified: '2020-03-20T20:27:33Z',
- *   labels: { de: 'Yesterday', en: 'Yesterday' },
- *   descriptions: {
- *     en: 'original song written and composed by Lennon-McCartney',
- *     de: 'Lied von The Beatles'
- *   },
- *   aliases: {},
- *   claims: {
- *     P175: [ 'Q1299' ],
- *     P31: [ 'Q207628', 'Q7366' ],
- *     P435: [ '0c80db24-389e-3620-8e0b-84dc2b7c009a' ],
- *     P646: [ '/m/01227d' ]
- *   },
- *   sitelinks: {
- *     arwiki: 'يسترداي',
- *     cawiki: 'Yesterday',
- *     cswiki: 'Yesterday (píseň)',
- *     dawiki: 'Yesterday',
- *     dewiki: 'Yesterday',
- *     elwiki: 'Yesterday (τραγούδι, The Beatles)',
- *     enwiki: 'Yesterday (Beatles song)'
- *   }
- * }
- * ```
- */
+  *   id: 'Q202698',
+  *   type: 'item',
+  *   modified: '2020-03-20T20:27:33Z',
+  *   labels: { de: 'Yesterday', en: 'Yesterday' },
+  *   descriptions: {
+  *     en: 'original song written and composed by Lennon-McCartney',
+  *     de: 'Lied von The Beatles'
+  *   },
+  *   aliases: {},
+  *   claims: {
+  *     P175: [ 'Q1299' ],
+  *     P31: [ 'Q207628', 'Q7366' ],
+  *     P435: [ '0c80db24-389e-3620-8e0b-84dc2b7c009a' ],
+  *     P646: [ '/m/01227d' ]
+  *   },
+  *   sitelinks: {
+  *     arwiki: 'يسترداي',
+  *     cawiki: 'Yesterday',
+  *     cswiki: 'Yesterday (píseň)',
+  *     dawiki: 'Yesterday',
+  *     dewiki: 'Yesterday',
+  *     elwiki: 'Yesterday (τραγούδι, The Beatles)',
+  *     enwiki: 'Yesterday (Beatles song)'
+  *   }
+  * }
+  * ```
+  */
 let entity;
 /**
  * If the array has only one item, return only this item, else return
@@ -101,6 +78,14 @@ function unpackArray(values, onlyOne, throwError) {
         return values[0];
     }
     return values;
+}
+/**
+ * Return the first element of a string array.
+ *
+ * @param values
+ */
+function pickFirst(values) {
+    return unpackArray(values, true, false);
 }
 /**
  *
@@ -160,10 +145,8 @@ function fetchCommonsFile(fileName, dest) {
  * Get data from one claim. Try multiple claims to get the first existing
  * claim.
  *
- * @param {Object} entity
- * @param {(String|Array)} claims
- *
- * @returns {Mixed}
+ * @param entity
+ * @param claims
  */
 function getClaim(entity, claims) {
     /**
@@ -206,7 +189,7 @@ const functions = {
       * }
       * ```
       *
-      * @param {Object} entity
+      * @param entity
       */
     getDescription: function (entity) {
         const desc = entity.descriptions;
@@ -216,6 +199,7 @@ const functions = {
         else if (desc.en) {
             return desc.en;
         }
+        return '';
     },
     /**
      * ```js
@@ -232,14 +216,12 @@ const functions = {
      * @returns {Array|String}
      */
     getLabel: function (entity) {
-        let label;
         if (entity.labels.de) {
-            label = entity.labels.de;
+            return entity.labels.de;
         }
-        else if (entity.labels.en) {
-            label = entity.labels.en;
+        else {
+            return entity.labels.en;
         }
-        return unpackArray(label);
     },
     /**
      *
@@ -252,13 +234,13 @@ const functions = {
      * }
      * ```
      *
-     * @param {Object} entity
+     * @param entity
      */
     getWikipediaTitle: function (entity) {
         const sitelinks = entity.sitelinks;
         const keys = Object.keys(sitelinks);
         if (!keys.length)
-            return;
+            return '';
         let key;
         if (sitelinks.dewiki) {
             key = 'dewiki';
@@ -270,11 +252,11 @@ const functions = {
             key = keys.shift();
         }
         if (!key)
-            return;
+            return '';
         // https://de.wikipedia.org/wiki/Ludwig_van_Beethoven
         const siteLink = wikibase.getSitelinkUrl({ site: key, title: sitelinks[key] });
         if (!siteLink)
-            return;
+            return '';
         // {
         //   lang: 'de',
         //   project: 'wikipedia',
@@ -298,7 +280,8 @@ const functions = {
             itemIds = unpackArray(itemIds);
             const entities = yield getEntities(itemIds, ['labels']);
             if (entities.id) {
-                return functions.getLabel(entities);
+                const entity = entities;
+                return functions.getLabel(entity);
             }
             const result = [];
             for (const itemId in entities) {
@@ -312,22 +295,18 @@ const functions = {
    * format
    ******************************************************************************/
     /**
-      * @param {(Array|String)} date - for example `[ '1770-12-16T00:00:00.000Z' ]`
-      *
-      * @returns {String}
+      * @param date - for example `[ '1770-12-16T00:00:00.000Z' ]`
       */
     formatDate: function (date) {
         // Frederic Chopin has two birth dates.
         // throw no error
-        date = unpackArray(date, true, false);
+        date = pickFirst(date);
         if (!date)
-            return;
+            return '';
         return date.replace(/T.+$/, '');
     },
     /**
-     * @param {(Array|String)} list
-     *
-     * @returns {String}
+     * @param list
      */
     formatList: function (list) {
         if (Array.isArray(list)) {
@@ -344,29 +323,23 @@ const functions = {
      */
     formatYear: function (dateSpec) {
         // Janis Joplin Cry Baby has two dates as an array.
-        const value = unpackArray(dateSpec, true, false);
-        if (typeof value === 'string') {
-            return value.substr(0, 4);
-        }
+        const value = pickFirst(dateSpec);
+        return value.substr(0, 4);
     },
     /**
      * Replace all white spaces with an underscore and prefix “wikicommons:”.
      *
-     * @param {String} value
-     *
-     * @returns {String}
+     * @param value
      */
     formatWikicommons: function (value) {
-        value = unpackArray(value, true, false);
+        value = pickFirst(value);
         value = value.replace(/ /g, '_');
         return `wikicommons:${value}`;
     },
     /**
      * Only return one value, not an array of values.
      *
-     * @param {(Array|String)} value
-     *
-     * @returns {String}
+     * @param value
      */
     formatSingleValue: function (value) {
         if (Array.isArray(value))
@@ -426,7 +399,7 @@ function query(itemId, typeNames, typeSpecs) {
         if (!wikibase.isItemId(itemId)) {
             throw new Error(`No item id: ${itemId}`);
         }
-        entity = yield getEntities(itemId);
+        entity = (yield getEntities(itemId));
         if (typeNames.indexOf('general') === -1)
             typeNames = `general,${typeNames}`;
         const data = {};
@@ -469,7 +442,7 @@ function query(itemId, typeNames, typeSpecs) {
                                 formatFunctions = formatFunctions.filter((value) => value.match(/^format.*/));
                                 throw new Error(`Unkown format function “${propSpec.format}”. Use one of: ${formatFunctions.join()}`);
                             }
-                            value = func(value, typeSpec);
+                            value = func(value);
                         }
                     }
                     if (value)
