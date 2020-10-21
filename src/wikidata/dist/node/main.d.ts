@@ -1,0 +1,4 @@
+/**
+ * @module @bldr/wikidata
+ */
+export {};

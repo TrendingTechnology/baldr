@@ -7,8 +7,8 @@ const chalk = require('chalk')
 const wikidata = require('@bldr/wikidata')
 
 // Project packages.
-const lib = require('../../lib.js')
 const metaTypes = require('@bldr/media-server').metaTypes
+const { writeYamlFile } = require('@bldr/media-manager')
 
 /**
  * @param {String} metaType - For example `group`, `instrument`, `person`,
@@ -56,7 +56,7 @@ async function action (metaType, itemId, arg1, arg2, cmdObj) {
   if (!fs.existsSync(yamlFile)) {
     if (!cmdObj.dryRun) {
       console.log(`Write YAML file: ${chalk.green(yamlFile)}`)
-      lib.writeYamlFile(yamlFile, data)
+      writeYamlFile(yamlFile, data)
     }
   } else {
     console.log(`The YAML file already exists: ${chalk.red(yamlFile)}`)

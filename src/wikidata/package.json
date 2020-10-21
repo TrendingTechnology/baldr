@@ -12,12 +12,21 @@
     "type": "git",
     "url": "git+https://github.com/Josef-Friedrich/baldr.git"
   },
-  "main": "main.js",
+  "main": "dist/node/main.js",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
+    "@bldr/media-manager": "0.1.0",
     "node-fetch": "^2.6.1",
     "wikibase-sdk": "^7.7.1"
+  },
+  "devDependencies": {
+    "@types/node": "^14.11.8",
+    "@types/node-fetch": "^2.5.7"
+  },
+  "scripts": {
+    "build": "npm run build:cjs",
+    "build:cjs": "tsc --module commonjs --outDir dist/node"
   }
 }

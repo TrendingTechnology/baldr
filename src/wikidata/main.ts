@@ -3,14 +3,17 @@
  */
 
 // Node packages.
-const fs = require('fs')
-const childProcess = require('child_process')
-const path = require('path')
-const URL = require('url').URL
+
+import * as fs from 'fs'
+import fetch from 'node-fetch'
+import * as childProcess from 'child_process'
+
+import { fetchFile } from '@bldr/media-manager'
 
 // Third party packages.
-const fetch = require('node-fetch')
-const wikibase = require('wikibase-sdk')({
+import * as wikibaseSdk from 'wikibase-sdk'
+
+const wikibase = wikibaseSdk({
   instance: 'https://www.wikidata.org',
   sparqlEndpoint: 'https://query.wikidata.org/sparql'
 })
@@ -70,21 +73,27 @@ const wikibase = require('wikibase-sdk')({
  * }
  * ```
  */
-let entity = null
+let entity: object
+
+interface Entity {
+  id: string
+}
+
+interface EntityCollection {
+  [key: string]: Entity
+}
 
 /**
  * If the array has only one item, return only this item, else return
  * the original array.
  *
- * @param {(Array|String)} values
- * @param {Boolean} onlyOne - Return only the first item of an array if there
+ * @param values
+ * @param onlyOne - Return only the first item of an array if there
  *   more
- * @param {Boolean} throwError - If there are more than values in an array.
- *
- * @returns {(Array|String)}
+ * @param throwError - If there are more than values in an array.
  */
-function unpackArray (values, onlyOne, throwError) {
-  if (!values) return
+function unpackArray (values: string | string[], onlyOne?: boolean, throwError?: boolean): string | string[] {
+  if (!values) return ''
   if (Array.isArray(values)) {
     if (values.length === 1) {
       return values[0]
@@ -100,12 +109,10 @@ function unpackArray (values, onlyOne, throwError) {
 
 /**
  *
- * @param {Array|String} itemIds
- * @param {Array} props - for example `['labels']`
- *
- * @returns {Object}
+ * @param itemIds
+ * @param props - for example `['labels']`
  */
-async function getEntities (itemIds, props) {
+async function getEntities (itemIds: string[] | string, props?: string[]): Promise<object> {
   const url = wikibase.getEntities(itemIds, ['en', 'de'], props)
   const response = await fetch(url)
   const json = await response.json()
@@ -115,14 +122,11 @@ async function getEntities (itemIds, props) {
 }
 
 /**
- *
- * @param {String} url
- * @param {String} dest
+ * @param url
+ * @param dest
  */
-async function fetchFile (url, dest) {
-  const response = await fetch(new URL(url))
-  fs.mkdirSync(path.dirname(dest), { recursive: true })
-  fs.writeFileSync(dest, Buffer.from(await response.arrayBuffer()))
+async function fetchResizeFile (url: string, dest: string) {
+  await fetchFile(url, dest)
   if (fs.existsSync(dest)) {
     const stat = fs.statSync(dest)
     if (stat.size > 500000) {
@@ -146,11 +150,11 @@ async function fetchFile (url, dest) {
  * @param {String} fileName - The file name from wiki commonds.
  * @param {String} dest - A file path where to store the file locally.
  */
-async function fetchCommonsFile (fileName, dest) {
+async function fetchCommonsFile (fileName: string, dest: string) {
   // wikicommons:George-W-Bush.jpeg
   fileName = fileName.replace('wikicommons:', '')
   const url = wikibase.getImageUrl(fileName)
-  await fetchFile(url, dest)
+  await fetchResizeFile(url, dest)
 }
 
 /**
@@ -287,20 +291,18 @@ const functions = {
   /**
    * Query the wikidata API for the given items and return only the label.
    *
-   * @param {(Array|String)} itemIds - for example `['Q123', 'Q234']`
-   *
-   * @returns {(Array|String)}
+   * @param itemIds - for example `['Q123', 'Q234']`
    */
-  queryLabels: async function (itemIds) {
+  queryLabels: async function (itemIds: string | string[]): Promise<string | string[]> {
     itemIds = unpackArray(itemIds)
-    const entities = await getEntities(itemIds, ['labels'])
+    const entities = <EntityCollection> await getEntities(itemIds, ['labels'])
     if (entities.id) {
-      return functions.getLabel(entities, false)
+      return functions.getLabel(entities)
     }
-    const result = []
+    const result: string[] = []
     for (const itemId in entities) {
       const entity = entities[itemId]
-      result.push(functions.getLabel(entity, false))
+      result.push(<string> functions.getLabel(entity))
     }
     return result
   },
@@ -343,8 +345,10 @@ const functions = {
    */
   formatYear: function (dateSpec) {
     // Janis Joplin Cry Baby has two dates as an array.
-    value = unpackArray(dateSpec, true, false)
-    return value.substr(0, 4)
+    const value = unpackArray(dateSpec, true, false)
+    if (typeof value === 'string') {
+      return value.substr(0, 4)
+    }
   },
 
   /**
@@ -380,13 +384,11 @@ const functions = {
  *
  * @public
  *
- * @param {Object} dataOrig
- * @param {Object} dataWiki
+ * @param dataOrig
+ * @param dataWiki
  * @param {module:@bldr/media-server/meta-types~typeSpecs}
- *
- * @returns {Object}
  */
-function mergeData (data, dataWiki, typeSpecs) {
+function mergeData (data: { [key: string]: any }, dataWiki: { [key: string]: any }, typeSpecs): object {
   // Ẃe delete properties from this object -> make a flat copy.
   const dataOrig = Object.assign({}, data)
 
@@ -426,10 +428,8 @@ function mergeData (data, dataWiki, typeSpecs) {
  * @param {String} itemId - for example `Q123`
  * @param {module:@bldr/media-server/meta-types~typeNames} typeNames
  * @param {module:@bldr/media-server/meta-types~typeSpecs} typeSpecs
- *
- * @returns {Object}
  */
-async function query (itemId, typeNames, typeSpecs) {
+async function query (itemId: string, typeNames, typeSpecs): Promise<object> {
   if (!wikibase.isItemId(itemId)) {
     throw new Error(`No item id: ${itemId}`)
   }
@@ -437,7 +437,7 @@ async function query (itemId, typeNames, typeSpecs) {
 
   if (typeNames.indexOf('general') === -1) typeNames = `general,${typeNames}`
 
-  const data = {}
+  const data: { [key: string]: any } = {}
   data.wikidata = itemId
   for (const typeName of typeNames.split(',')) {
     if (!typeSpecs[typeName]) {
@@ -479,8 +479,7 @@ async function query (itemId, typeNames, typeSpecs) {
             if (typeof func !== 'function') {
               let formatFunctions = Object.keys(functions)
               formatFunctions = formatFunctions.filter((value) => value.match(/^format.*/))
-              formatFunctions = formatFunctions.join()
-              throw new Error(`Unkown format function “${propSpec.format}”. Use one of: ${formatFunctions}`)
+              throw new Error(`Unkown format function “${propSpec.format}”. Use one of: ${formatFunctions.join()}`)
             }
             value = func(value, typeSpec)
           }
