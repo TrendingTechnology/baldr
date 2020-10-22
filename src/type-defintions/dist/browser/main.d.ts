@@ -36,3 +36,11 @@ export interface PresentationFileFormat {
     meta: PresentationMetaFileFormat;
     slides: object;
 }
+export interface MediaAssetFileFormat {
+    id: string;
+    uuid: string;
+    metaTypes?: string;
+    extension?: string;
+    mainImage?: string;
+    filePath?: string;
+}

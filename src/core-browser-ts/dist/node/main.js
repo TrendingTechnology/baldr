@@ -8,7 +8,17 @@
  * @module @bldr/core-browser-ts
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.jsYamlConfig = exports.convertPropertiesCamelToSnake = exports.convertPropertiesSnakeToCamel = exports.convertProperties = exports.snakeToCamel = exports.camelToSnake = exports.getExtension = void 0;
+exports.jsYamlConfig = exports.convertPropertiesCamelToSnake = exports.convertPropertiesSnakeToCamel = exports.convertProperties = exports.snakeToCamel = exports.camelToSnake = exports.getExtension = exports.deepCopy = void 0;
+/**
+ * Create a deep copy of an object. This functions uses the two methods
+ * `JSON.parse()` and `JSON.stringify()` to accomplish its task.
+ *
+ * @param data
+ */
+function deepCopy(data) {
+    return JSON.parse(JSON.stringify(data));
+}
+exports.deepCopy = deepCopy;
 /**
  * Get the extension from a file path.
  *

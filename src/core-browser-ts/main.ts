@@ -8,6 +8,16 @@
  */
 
 /**
+ * Create a deep copy of an object. This functions uses the two methods
+ * `JSON.parse()` and `JSON.stringify()` to accomplish its task.
+ *
+ * @param data
+ */
+export function deepCopy (data: object): object {
+  return JSON.parse(JSON.stringify(data))
+}
+
+/**
  * Get the extension from a file path.
  *
  * @param filePath - A file path or a single file name.
