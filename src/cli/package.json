@@ -22,26 +22,27 @@
   },
   "dependencies": {
     "@bldr/cli-utils": "^0.1.0",
+    "@bldr/config": "^0.1.0",
     "@bldr/core-browser": "^0.11.3",
     "@bldr/core-node": "^0.2.2",
     "@bldr/icons": "^0.2.2",
+    "@bldr/media-manager": "^0.1.0",
     "@bldr/media-server": "^0.2.3",
     "@bldr/songbook-intermediate-files": "^0.2.3",
-    "@bldr/wikidata": "^0.1.0",
-    "@bldr/media-manager": "^0.1.0",
     "@bldr/tex-markdown-converter": "^0.1.0",
-    "@bldr/config": "^0.1.0",
+    "@bldr/wikidata": "^0.1.0",
+    "axios": "^0.20.0",
     "chalk": "^4.1.0",
     "color": "^3.1.2",
     "commander": "^6.1.0",
+    "csv-parser": "2.3.3",
     "fs-extra": "^9.0.1",
     "js-yaml": "^3.14.0",
     "jsdoc-api": "^6.0.0",
     "music-metadata": "7.4.0",
     "node-fetch": "^2.6.1",
     "ora": "5.1.0",
-    "webfont": "^9.0.0",
-    "csv-parser": "2.3.3"
+    "webfont": "^9.0.0"
   },
   "bin": {
     "baldr_cli.js": "./src/main.js"

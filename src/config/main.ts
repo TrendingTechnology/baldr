@@ -69,6 +69,13 @@ interface WireConfiguration {
   localUri: string
 }
 
+interface YoutubeConfiguration {
+  /**
+   * The API key to access the JSON api (use by the youtube downloader)
+   */
+  apiKey: string
+}
+
 /**
  * The main configuration file of the Baldr project.
  */
@@ -81,6 +88,7 @@ interface Configuration {
   api: ApiConfiguration
   databases: DatabasesConfiguration
   wire: WireConfiguration
+  youtube: YoutubeConfiguration
 }
 
 /**

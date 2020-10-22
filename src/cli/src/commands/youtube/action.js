@@ -8,11 +8,34 @@ const { createYamlOneFile } = require('../yaml/action.js')
 const { cwd } = require('../../main.js')
 const { LocationIndicator } = require('@bldr/media-server')
 const { normalizeOneFile } = require('../normalize/action.js')
+const config = require('@bldr/config')
+const axios = require('axios').default
+
+async function requestYoutubeApi(youtubeId) {
+  const result = await axios.get('https://www.googleapis.com/youtube/v3/videos', {
+    params: {
+      part: 'snippet',
+      id: youtubeId,
+      key: config.youtube.apiKey
+    }
+  })
+
+  const snippet = result.data.items[0].snippet
+  return {
+    youtubeId,
+    originalHeading: snippet.title,
+    originalInfo: snippet.description,
+  }
+}
 
 /**
  *
  */
 async function action (youtubeId) {
+
+  const metaData = await requestYoutubeApi(youtubeId)
+  console.log(metaData)
+
   const location = new LocationIndicator()
   const parentDir = location.getPresParentDir(cwd)
   const ytDir = path.join(parentDir, 'YT')
@@ -37,7 +60,7 @@ async function action (youtubeId) {
   const ytFile = path.resolve(ytDir, `${youtubeId}.mp4`)
 
   cmd.log('Creating the metadata file in the YAML format.')
-  await createYamlOneFile(ytFile, { youtube_id: youtubeId })
+  await createYamlOneFile(ytFile, metaData)
   cmd.log('Normalizing the metadata file.')
   await normalizeOneFile(ytFile)
 
