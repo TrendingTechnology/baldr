@@ -19,7 +19,7 @@ async function action (youtubeId) {
   if (!fs.existsSync(ytDir)) {
     fs.mkdirSync(ytDir)
   }
-  const cmd = new CommandRunner()
+  const cmd = new CommandRunner({})
   cmd.startSpin()
   cmd.log('Updating youtube-dl using pip3.')
   await cmd.exec('pip3', 'install', '--upgrade', 'youtube-dl')
@@ -41,10 +41,19 @@ async function action (youtubeId) {
   cmd.log('Normalizing the metadata file.')
   await normalizeOneFile(ytFile)
 
-  const ytPreviewImage = ytFile.replace(/\.mp4$/, '.jpg')
+  const srcPreviewJpg = ytFile.replace(/\.mp4$/, '.jpg')
+  const srcPreviewWebp = ytFile.replace(/\.mp4$/, '.webp')
+  const destPreview = ytFile.replace(/\.mp4$/, '.mp4_preview.jpg')
 
-  if (fs.existsSync(ytPreviewImage)) {
-    fs.renameSync(ytPreviewImage, ytFile.replace(/\.mp4$/, '.mp4_preview.jpg'))
+  if (fs.existsSync(srcPreviewJpg)) {
+    fs.renameSync(srcPreviewJpg, destPreview)
+  } else if (fs.existsSync(srcPreviewWebp)) {
+    await cmd.exec(
+      'magick',
+      'convert', srcPreviewWebp, destPreview,
+      { cwd: ytDir }
+    )
+    fs.unlinkSync(srcPreviewWebp)
   }
   cmd.stopSpin()
 }
