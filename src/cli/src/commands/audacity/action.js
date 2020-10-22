@@ -1,8 +1,7 @@
 // Project packages.
 const mediaServer = require('@bldr/media-server')
-const lib = require('../../lib.js')
 
-const { readFile } = require('@bldr/media-manager')
+const { readFile, writeYamlFile } = require('@bldr/media-manager')
 
 // Third party packages.
 const chalk = require('chalk')
@@ -81,7 +80,7 @@ function action (filePath) {
   }
   const dest = `${filePath}.yml`
   console.log(`The content of the destination file “${chalk.green(dest)}”:\n`)
-  lib.writeYamlFile(dest, samples)
+  writeYamlFile(dest, samples)
 }
 
 module.exports = action

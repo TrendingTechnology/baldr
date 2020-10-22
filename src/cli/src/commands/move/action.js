@@ -10,7 +10,7 @@ const chalk = require('chalk')
 const mediaServer = require('@bldr/media-server')
 const coreBrowser = require('@bldr/core-browser')
 const lib = require('../../lib.js')
-const { moveAsset, readFile, writeFile } = require('@bldr/media-manager')
+const { moveAsset, readFile, writeFile, writeYamlFile } = require('@bldr/media-manager')
 
 const commandConvert = require('../convert/action.js')
 const { createYamlOneFile } = require('../yaml/action.js')
@@ -204,7 +204,7 @@ async function moveMp3 (oldPath, newPath, cmdObj) {
   // To get ID prefix
   metaData.filePath = newPath
   metaData = mediaServer.metaTypes.process(metaData)
-  lib.writeYamlFile(`${newPath}.yml`, metaData)
+  writeYamlFile(`${newPath}.yml`, metaData)
 
   // Delete MP3.
   fs.unlinkSync(tmpMp3Path)
@@ -223,7 +223,7 @@ async function moveReference (oldPath, cmdObj) {
   metaData.release_data = 2009
   metaData.edition = 1
   metaData.isbn = '978-3-85061-460-3'
-  lib.writeYamlFile(`${newPath}.yml`, metaData)
+  writeYamlFile(`${newPath}.yml`, metaData)
 }
 
 async function moveFromArchive (oldPath, extension, cmdObj) {

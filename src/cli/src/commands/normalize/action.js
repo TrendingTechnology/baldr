@@ -10,6 +10,7 @@ const chalk = require('chalk')
 const mediaServer = require('@bldr/media-server')
 const wikidata = require('@bldr/wikidata')
 const { deepCopy, msleep } = require('@bldr/core-browser')
+const { writeYamlFile } = require('@bldr/media-manager')
 
 const lib = require('../../lib.js')
 
@@ -79,7 +80,7 @@ async function normalizeOneFile (filePath, cmdObj = { wikidata: false }) {
       console.log(origData)
       console.log(chalk.green('\nResult data:\n'))
       console.log(metaData)
-      lib.writeYamlFile(yamlFile, metaData)
+      writeYamlFile(yamlFile, metaData)
     }
   } catch (error) {
     console.log(filePath)
