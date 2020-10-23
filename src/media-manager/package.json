@@ -24,7 +24,8 @@
     "@bldr/core-browser-ts": "0.1.0",
     "@bldr/type-defintions": "^0.1.0",
     "@bldr/config": "0.1.0",
-    "node-fetch": "^2.6.1"
+    "node-fetch": "^2.6.1",
+    "transliteration": "^2.1.11"
   },
   "devDependencies": {
     "@types/node": "^14.11.8",
