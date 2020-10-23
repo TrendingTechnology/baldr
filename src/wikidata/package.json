@@ -18,6 +18,7 @@
   },
   "dependencies": {
     "@bldr/media-manager": "0.1.0",
+    "@bldr/type-definitions": "0.1.0",
     "node-fetch": "^2.6.1",
     "wikibase-sdk": "^7.7.1"
   },

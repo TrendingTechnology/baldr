@@ -1,7 +1,7 @@
 /**
  * @module @bldr/media-manager/titles
  */
-import { PresentationMetaFileFormat } from '@bldr/type-defintions';
+import { PresentationMetaFileFormat } from '@bldr/type-definitions';
 interface FolderTitleSpec {
     /**
      * The title. It is the first line in the file `titles.txt`.

@@ -6,7 +6,7 @@
  * @module @bldr/media-manager
  */
 import { DeepTitle, TitleTree } from './titles';
-import { PresentationFileFormat } from '@bldr/type-defintions';
+import { PresentationFileFormat } from '@bldr/type-definitions';
 interface MediaAsset {
     cover_source: string;
 }

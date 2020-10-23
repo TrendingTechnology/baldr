@@ -6,7 +6,7 @@
 import fs from 'fs'
 import path from 'path'
 
-import { PresentationMetaFileFormat } from '@bldr/type-defintions'
+import { PresentationMetaFileFormat } from '@bldr/type-definitions'
 
 /**
  * The configuration object from `/etc/baldr.json`

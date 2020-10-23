@@ -16,52 +16,7 @@ const wikibase = wikibaseSdk({
 })
 
 import { fetchFile } from '@bldr/media-manager'
-
-type FromEntityType = 'getDescription' | 'getLabel' | 'getWikipediaTitle'
-
-type PredefinedFormatFunction = 'formatDate' | 'formatYear' | 'formatWikicommons' | 'formatList'
-
-/**
- * The specification of a property.
- */
-export interface WikidataPropSpec {
-
-  /**
-   * for example `P123` or `['P123', 'P234']`. If `fromClaim` is an
-   * array, the first existing claim an a certain item is taken.
-   */
-  fromClaim: string | string[]
-
-  /**
-   * `getDescription`, `getLabel`, `getWikipediaTitle`. If `fromClaim`
-   * is specifed and the item has a value on this claim, `fromEntity` is
-   * omitted.
-   */
-  fromEntity: FromEntityType
-
-  /**
-   * `queryLabels`
-   */
-  secondQuery: string
-
-  alwaysUpdate: true
-
-  /**
-   * A function or `formatDate`, `formatYear`, `formatWikicommons`,
-   * `formatList`, `formatSingleValue`.
-   */
-  format: Function | PredefinedFormatFunction
-}
-
-/**
- * Additional properties in the specification of one metadata type.
- *
- * @typedef {Object} typeSpec
- * @property {Function} normalizeWikidata - This functions is called after
- *   properties are present. The function is called with
- *   `function ({ typeData, entity, functions })`
- */
-
+import { MediaWikidataPropSpec } from '@bldr/type-definitions'
 
 interface LabelsCollection {
   de: string
@@ -357,7 +312,7 @@ const functions = {
     return result
   },
 
-  /*******************************************************************************
+/*******************************************************************************
  * format
  ******************************************************************************/
 
@@ -488,7 +443,7 @@ async function query (itemId: string, typeNames, typeSpecs): Promise<object> {
 
     for (const propName in typeSpec.props) {
       if (typeSpec.props[propName].wikidata) {
-        const propSpec = <WikidataPropSpec> typeSpec.props[propName].wikidata
+        const propSpec = <MediaWikidataPropSpec> typeSpec.props[propName].wikidata
         let value
 
         // source

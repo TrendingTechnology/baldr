@@ -24,7 +24,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { deasciify, idify } from './helper'
 import { getPdfPageCount } from '@bldr/core-node'
 import { mediaUriRegExp } from '@bldr/core-browser-ts'
-
+import { MediaPropSpec, MediaTypeSpec, MediaTypeDataAndSpec } from '@bldr/type-definitions'
 /**
  * The configuration object from `/etc/baldr.json`
  */
@@ -33,30 +33,30 @@ import config from '@bldr/config'
 /**
  * Validate a date string in the format `yyyy-mm-dd`.
  */
-function validateDate (value: string): RegExpMatchArray | null {
-  return value.match(/\d{4,}-\d{2,}-\d{2,}/)
+function validateDate (value: string): boolean {
+  return value.match(/\d{4,}-\d{2,}-\d{2,}/) ? true : false
 }
 
 /**
  * Validate a ID string of the Baldr media server.
  */
-function validateMediaId (value: string): RegExpMatchArray | null {
-  return value.match(mediaUriRegExp)
+function validateMediaId (value: string): boolean {
+  return value.match(mediaUriRegExp) ? true : false
 }
 
 /**
  * Validate UUID string (for the Musicbrainz references).
  */
-function validateUuid (value: string): RegExpMatchArray | null {
-  return value.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89AB][0-9a-f]{3}-[0-9a-f]{12}$/i)
+function validateUuid (value: string): boolean {
+  return value.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89AB][0-9a-f]{3}-[0-9a-f]{12}$/i) ? true : false
 }
 
 /**
  * Validate a YouTube ID.
  */
-function validateYoutubeId (value: string): RegExpMatchArray | null {
+function validateYoutubeId (value: string): boolean {
   // https://webapps.stackexchange.com/a/101153
-  return value.match(/^[0-9A-Za-z_-]{10}[048AEIMQUYcgkosw]$/)
+  return value.match(/^[0-9A-Za-z_-]{10}[048AEIMQUYcgkosw]$/) ? true : false
 }
 
 /**
@@ -112,7 +112,8 @@ const cloze = {
     return path.join(oldRelDir, `Lueckentext${pageNo}.svg`)
   },
   props: {
-    id: {
+    id: <MediaPropSpec> {
+      title: 'Die ID des Lückentexts',
       derive: function ({ typeData, folderTitles, filePath }) {
         let counterSuffix = ''
         if (typeData.clozePageNo) {
@@ -266,7 +267,7 @@ const group = {
       },
       overwriteByDerived: true
     },
-    id: {
+    id: <MediaPropSpec> {
       title: 'ID zur Referenzierung (Präfix „GR_“)',
       derive: function ({ typeData }) {
         return typeData.name
@@ -278,14 +279,14 @@ const group = {
       },
       overwriteByDerived: true
     },
-    title: {
+    title: <MediaPropSpec> {
       title: 'Titel der Gruppe',
       derive: function ({ typeData }) {
         return `Portrait-Bild der Gruppe „${typeData.name}“`
       },
       overwriteByDerived: true
     },
-    name: {
+    name: <MediaPropSpec> {
       title: 'Name der Gruppe',
       required: true,
       wikidata: {
@@ -294,7 +295,7 @@ const group = {
         fromEntity: 'getLabel'
       }
     },
-    logo: {
+    logo: <MediaPropSpec> {
       title: 'Logo der Band (Wikicommons-Datei)',
       wikidata: {
         // Logo
@@ -302,13 +303,13 @@ const group = {
         format: 'formatWikicommons'
       }
     },
-    shortHistory: {
+    shortHistory: <MediaPropSpec> {
       title: 'kurze Bandgeschichte',
       wikidata: {
         fromEntity: 'getDescription'
       }
     },
-    startDate: {
+    startDate: <MediaPropSpec> {
       title: 'Gründung',
       wikidata: {
         // Gründung, Erstellung bzw. Entstehung
@@ -317,7 +318,7 @@ const group = {
       },
       validate: validateDate
     },
-    endDate: {
+    endDate: <MediaPropSpec> {
       title: 'Auflösung',
       wikidata: {
         // Auflösungsdatum
@@ -326,7 +327,7 @@ const group = {
       },
       validate: validateDate
     },
-    members: {
+    members: <MediaPropSpec> {
       title: 'Mitglieder',
       wikidata: {
         // besteht aus
@@ -334,7 +335,7 @@ const group = {
         secondQuery: 'queryLabels'
       }
     },
-    mainImage: {
+    mainImage: <MediaPropSpec> {
       title: 'Haupt-Bild',
       wikidata: {
         // Bild
@@ -342,7 +343,7 @@ const group = {
         format: 'formatWikicommons'
       }
     },
-    famousPieces: {
+    famousPieces: <MediaPropSpec> {
       title: 'Bekannte Stücke',
       validate: function (value) {
         return Array.isArray(value)
@@ -457,31 +458,31 @@ const person = {
   props: {
     personId: {
       title: 'Personen-ID',
-      derive: function ({ typeData }) {
+      derive: function ({ typeData }: MediaTypeDataAndSpec) {
         return `${idify(typeData.lastname)}_${idify(typeData.firstname)}`
       },
       overwriteByDerived: true
     },
     id: {
-      derive: function ({ typeData, typeSpec }) {
+      derive: function ({ typeData, typeSpec }: MediaTypeDataAndSpec) {
         return `${typeSpec.abbreviation}_${idify(typeData.lastname)}_${idify(typeData.firstname)}`
       },
       overwriteByDerived: true
     },
     title: {
-      derive: function ({ typeData }) {
+      derive: function ({ typeData }: MediaTypeDataAndSpec) {
         return `Portrait-Bild von „${typeData.firstname} ${typeData.lastname}“`
       },
       overwriteByDerived: true
     },
-    firstname: {
+    firstname: <MediaPropSpec> {
       title: 'Vorname',
       required: true,
       wikidata: {
         // Vornamen der Person
         fromClaim: 'P735',
         secondQuery: 'queryLabels',
-        format: function (value, { typeData, typeSpec }) {
+        format: function (value, { typeData, typeSpec }: MediaTypeDataAndSpec) {
           if (Array.isArray(value)) {
             return value.join(' ')
           }
@@ -489,14 +490,14 @@ const person = {
         }
       }
     },
-    lastname: {
+    lastname: <MediaPropSpec> {
       title: 'Familienname',
       required: true,
       wikidata: {
         // Familienname einer Person
         fromClaim: 'P734',
         secondQuery: 'queryLabels',
-        format: function (value, { typeData, typeSpec }) {
+        format: function (value, { typeData, typeSpec }: MediaTypeDataAndSpec) {
           if (Array.isArray(value)) {
             return value.join(' ')
           }
@@ -504,21 +505,21 @@ const person = {
         }
       }
     },
-    name: {
+    name: <MediaPropSpec> {
       title: 'Name (Vor- und Familienname)',
       derive: function ({ typeData }) {
         return `${typeData.firstname} ${typeData.lastname}`
       },
       overwriteByDerived: false
     },
-    shortBiography: {
+    shortBiography: <MediaPropSpec> {
       title: 'Kurzbiographie',
       required: true,
       wikidata: {
         fromEntity: 'getDescription'
       }
     },
-    birth: {
+    birth: <MediaPropSpec> {
       title: 'Geburtstag',
       validate: validateDate,
       wikidata: {
@@ -528,7 +529,7 @@ const person = {
         alwaysUpdate: true
       }
     },
-    death: {
+    death: <MediaPropSpec> {
       title: 'Todestag',
       validate: validateDate,
       wikidata: {
@@ -538,7 +539,7 @@ const person = {
         alwaysUpdate: true
       }
     },
-    mainImage: {
+    mainImage: <MediaPropSpec> {
       title: 'Hauptbild',
       wikidata: {
         // Bild
@@ -546,7 +547,7 @@ const person = {
         format: 'formatWikicommons'
       }
     },
-    famousPieces: {
+    famousPieces: <MediaPropSpec> {
       title: 'Bekannte Stücke',
       validate: function (value) {
         return Array.isArray(value)
@@ -626,11 +627,11 @@ const recording = {
       //   format: 'formatYear'
       // }
     },
-    cover: {
+    cover: <MediaPropSpec> {
       title: 'Vorschau-Bild',
       validate: validateMediaId
     },
-    coverSource: {
+    coverSource: <MediaPropSpec> {
       title: 'Cover-Quelle',
       description: 'HTTP-URL des Vorschau-Bildes.',
       validate (value) {
@@ -645,7 +646,7 @@ const recording = {
  *
  * @type {module:@bldr/media-server/meta-types~typeSpec}
  */
-const reference = {
+const reference = <MediaTypeSpec> {
   title: 'Quelle',
   description: 'Quelle, auf der eine Unterrichtsstunde aufbaut, z. B. Auszüge aus Schulbüchern.',
   detectTypeByPath: function () {
@@ -653,7 +654,7 @@ const reference = {
   },
   abbreviation: 'QL',
   props: {
-    title: {
+    title: <MediaPropSpec> {
       derive: function ({ typeData, folderTitles, filePath }) {
         let suffix = ''
         if (typeData.forTeacher) {
@@ -663,36 +664,36 @@ const reference = {
       },
       overwriteByDerived: true
     },
-    referenceTitle: {
+    referenceTitle: <MediaPropSpec> {
       title: 'Title der (übergeordneten Quelle)'
     },
-    referenceSubtitle: {
+    referenceSubtitle: <MediaPropSpec> {
       title: 'Untertitel der (übergeordneten Quelle)'
     },
-    author: {
+    author: <MediaPropSpec> {
       title: 'Autor'
     },
-    publisher: {
+    publisher: <MediaPropSpec> {
       title: 'Verlag'
     },
-    releaseDate: {
+    releaseDate: <MediaPropSpec> {
       title: 'Erscheinungsdatum'
     },
-    edition: {
+    edition: <MediaPropSpec> {
       title: 'Auflage',
       description: 'z. B. 1. Auflage des Buchs'
     },
-    pageNos: {
+    pageNos: <MediaPropSpec> {
       title: 'Seitenzahlen',
       description: 'Auf welchen Seiten aus der Quelle dieser Auszug zu finden war. Nicht zu verwechseln mit der Seitenanzahl des PDFs.'
     },
-    forTeacher: {
+    forTeacher: <MediaPropSpec> {
       title: 'Lehrerband'
     },
-    isbn: {
+    isbn: <MediaPropSpec> {
       title: 'ISBN-Nummer (13 Stellen)'
     },
-    pageCount: {
+    pageCount: <MediaPropSpec> {
       title: 'Seitenanzahl des PDFs',
       description: 'Die Seitenanzahl dieses PDFs',
       derive ({ filePath }) {
@@ -708,7 +709,7 @@ const reference = {
  *
  * @type {module:@bldr/media-server/meta-types~typeSpec}
  */
-const score = {
+const score = <MediaTypeSpec> {
   title: 'Partitur',
   abbreviation: 'PT',
   detectTypeByPath: function () {
@@ -786,15 +787,19 @@ const worksheet = {
     return new RegExp('^.*/TX/.*.pdf$')
   },
   props: {
-    title: {
+    title: <MediaPropSpec> {
+      title: "Titel",
       derive: function ({ folderTitles, filePath }) {
         const match = filePath.match(new RegExp(`${path.sep}([^${path.sep}]+)\\.pdf`))
-        const baseName = match[1]
+        let baseName: string = 'Arbeitsblatt'
+        if (match) {
+          baseName = match[1]
+        }
         return `${baseName} zum Thema „${folderTitles.titleAndSubtitle}“`
       },
       overwriteByDerived: true
     },
-    pageCount: {
+    pageCount: <MediaPropSpec> {
       title: 'Seitenanzahl des PDFs',
       description: 'Die Seitenanzahl dieses PDFs',
       derive ({ filePath }) {
@@ -810,7 +815,7 @@ const worksheet = {
  *
  * @type {module:@bldr/media-server/meta-types~typeSpec}
  */
-const youtube = {
+const youtube = <MediaTypeSpec> {
   title: 'YouTube-Video',
   abbreviation: 'YT',
   detectTypeByPath: function () {
@@ -821,13 +826,15 @@ const youtube = {
     return path.join(oldRelDir, `${typeData.youtubeId}.mp4`)
   },
   props: {
-    id: {
-      derive: function ({ typeData, typeSpec }) {
+    id: <MediaPropSpec> {
+      title: 'ID eines YouTube-Videos',
+      derive: function ({ typeData, typeSpec }: MediaTypeDataAndSpec) {
         return `${typeSpec.abbreviation}_${typeData.youtubeId}`
       },
       overwriteByDerived: true
     },
-    title: {
+    title: <MediaPropSpec> {
+      title: 'Titel eines YouTube-Videos',
       derive: function ({ typeData }) {
         let title
         if (typeData.heading) {
@@ -841,20 +848,20 @@ const youtube = {
       },
       overwriteByDerived: true
     },
-    youtubeId: {
+    youtubeId: <MediaPropSpec> {
       title: 'Die ID eines YouTube-Videos (z. B. gZ_kez7WVUU)',
       validate: validateYoutubeId
     },
-    heading: {
+    heading: <MediaPropSpec> {
       title: 'Eigene Überschrift'
     },
-    info: {
+    info: <MediaPropSpec> {
       title: 'Eigener längerer Informationstext'
     },
-    original_heading: {
+    original_heading: <MediaPropSpec> {
       title: 'Die orignale Überschrift des YouTube-Videos'
     },
-    original_info: {
+    original_info: <MediaPropSpec> {
       title: 'Der orignale Informationstext des YouTube-Videos'
     }
   }
@@ -868,11 +875,12 @@ const youtube = {
  */
 const general = {
   props: {
-    id: {
+    id: <MediaPropSpec> {
+      title: 'ID',
       validate: function (value) {
         return value.match(/^[a-zA-Z0-9-_]+$/)
       },
-      format: function (value, { typeData, typeSpec }) {
+      format: function (value, { typeData, typeSpec }: MediaTypeDataAndSpec) {
         value = idify(value)
 
         // a-Strawinsky-Petruschka-Abschnitt-0_22
@@ -904,7 +912,7 @@ const general = {
       },
       required: true
     },
-    uuid: {
+    uuid: <MediaPropSpec> {
       title: 'UUID',
       description: 'UUID version 4.',
       derive () {
@@ -912,25 +920,26 @@ const general = {
       },
       overwriteByDerived: false
     },
-    metaTypes: {
+    metaTypes: <MediaPropSpec> {
       title: 'Metadaten-Typen',
       description: 'Zum Beispiel: “person” oder “composition,recording”',
       validate: function (value) {
-        return String(value).match(/^[a-zA-Z,]+$/)
+        return String(value).match(/^[a-zA-Z,]+$/) ? true : false
       },
       format: function (value) {
         return value.replace(/,?general,?/, '')
       },
       removeByRegexp: new RegExp('^general$')
     },
-    metaType: {
+    metaType: <MediaPropSpec> {
       description: 'Heißt jetzt “metaTypes”',
       state: 'absent'
     },
-    title: {
+    title: <MediaPropSpec> {
+      title: 'Titel',
       required: true,
       overwriteByDerived: false,
-      format: function (value, { typeData, typeSpec }) {
+      format: function (value, { typeData, typeSpec }: MediaTypeDataAndSpec) {
         // a Strawinsky Petruschka Abschnitt 0_22
         value = value.replace(/^[va] /, '')
         return value
@@ -939,16 +948,18 @@ const general = {
         return deasciify(typeData.id)
       }
     },
-    wikidata: {
+    wikidata: <MediaPropSpec> {
+      title: 'Wikidata',
       validate: function (value) {
-        return String(value).match(/^Q\d+$/)
+        return String(value).match(/^Q\d+$/) ? true: false
       }
     },
-    wikipedia: {
+    wikipedia: <MediaPropSpec> {
+      title: 'Wikipedia',
       validate: function (value) {
         return value.match(/^.+:.+$/)
       },
-      format: function (value, { typeData, typeSpec }) {
+      format: function (value, { typeData, typeSpec }: MediaTypeDataAndSpec) {
         return decodeURI(value)
       },
       wikidata: {
@@ -956,7 +967,7 @@ const general = {
         alwaysUpdate: true
       }
     },
-    youtube: {
+    youtube: <MediaPropSpec> {
       title: 'Youtube-Video-ID',
       description: 'Die Youtube-Video-ID',
       validate: validateYoutubeId,
@@ -967,15 +978,15 @@ const general = {
       }
     },
     // tmp property needed to generate id prefix
-    filePath: {
+    filePath: <MediaPropSpec> {
       state: 'absent'
     },
     // tmp propert: needed for wiki commons files.
-    extension: {
+    extension: <MediaPropSpec> {
       state: 'absent'
     }
   },
-  finalize: function ({ typeData, typeSpec }) {
+  finalize: function ({ typeData, typeSpec }: MediaTypeDataAndSpec) {
     for (const propName in typeData) {
       const value = typeData[propName]
       if (typeof value === 'string') {
