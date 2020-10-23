@@ -32,7 +32,6 @@ async function requestYoutubeApi(youtubeId) {
  *
  */
 async function action (youtubeId) {
-
   const metaData = await requestYoutubeApi(youtubeId)
   console.log(metaData)
 
