@@ -17,14 +17,14 @@ const wikibase = wikibaseSdk({
 
 import { fetchFile } from '@bldr/media-manager'
 
-type fromEntityType = 'getDescription' | 'getLabel' | 'getWikipediaTitle'
+type FromEntityType = 'getDescription' | 'getLabel' | 'getWikipediaTitle'
 
-type predefinedFormatFunction = 'formatDate' | 'formatYear' | 'formatWikicommons' | 'formatList'
+type PredefinedFormatFunction = 'formatDate' | 'formatYear' | 'formatWikicommons' | 'formatList'
 
 /**
  * The specification of a property.
  */
-interface PropSpec {
+export interface WikidataPropSpec {
 
   /**
    * for example `P123` or `['P123', 'P234']`. If `fromClaim` is an
@@ -37,7 +37,7 @@ interface PropSpec {
    * is specifed and the item has a value on this claim, `fromEntity` is
    * omitted.
    */
-  fromEntity: fromEntityType
+  fromEntity: FromEntityType
 
   /**
    * `queryLabels`
@@ -50,7 +50,7 @@ interface PropSpec {
    * A function or `formatDate`, `formatYear`, `formatWikicommons`,
    * `formatList`, `formatSingleValue`.
    */
-  format: Function | predefinedFormatFunction
+  format: Function | PredefinedFormatFunction
 }
 
 /**
@@ -93,7 +93,6 @@ interface Entity {
 interface EntityCollection {
   [key: string]: Entity
 }
-
 
 /**
  * ```js
@@ -489,7 +488,7 @@ async function query (itemId: string, typeNames, typeSpecs): Promise<object> {
 
     for (const propName in typeSpec.props) {
       if (typeSpec.props[propName].wikidata) {
-        const propSpec = <PropSpec> typeSpec.props[propName].wikidata
+        const propSpec = <WikidataPropSpec> typeSpec.props[propName].wikidata
         let value
 
         // source

@@ -6,6 +6,10 @@
   "bugs": {
     "url": "https://github.com/Josef-Friedrich/baldr/issues"
   },
+  "scripts": {
+    "build": "npm run build:cjs",
+    "build:cjs": "tsc --module commonjs --outDir dist/node"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Josef-Friedrich/baldr.git"
@@ -16,9 +20,12 @@
     "email": "josef@friedrich.rocks",
     "url": "https://josef.friedrich.rocks"
   },
-  "main": "main.js",
+  "main": "dist/node/main.js",
   "dependencies": {
     "git-rev-sync": "3.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "12.12.2"
   },
   "publishConfig": {
     "access": "public"

@@ -8,7 +8,7 @@
  * @module @bldr/core-browser-ts
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.jsYamlConfig = exports.convertPropertiesCamelToSnake = exports.convertPropertiesSnakeToCamel = exports.convertProperties = exports.snakeToCamel = exports.camelToSnake = exports.getExtension = exports.deepCopy = void 0;
+exports.mediaUriRegExp = exports.jsYamlConfig = exports.convertPropertiesCamelToSnake = exports.convertPropertiesSnakeToCamel = exports.convertProperties = exports.snakeToCamel = exports.camelToSnake = exports.getExtension = exports.deepCopy = void 0;
 /**
  * Create a deep copy of an object. This functions uses the two methods
  * `JSON.parse()` and `JSON.stringify()` to accomplish its task.
@@ -151,3 +151,10 @@ exports.jsYamlConfig = {
     lineWidth: 72,
     noCompatMode: true
 };
+/**
+ * Regular expression to detect media URIs.
+ *
+ * Possible URIs are: `id:Rhythm-n-Blues-Rock-n-Roll_BD_Bill-Haley#complete`
+ * `uuid:c262fe9b-c705-43fd-a5d4-4bb38178d9e7`
+ */
+exports.mediaUriRegExp = new RegExp('((id|uuid):(([a-zA-Z0-9-_]+)(#([a-zA-Z0-9-_]+))?))');

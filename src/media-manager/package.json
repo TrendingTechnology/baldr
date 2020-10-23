@@ -23,14 +23,18 @@
     "js-yaml": "^3.14.0",
     "@bldr/core-browser-ts": "0.1.0",
     "@bldr/type-defintions": "^0.1.0",
+    "@bldr/core-node": "0.2.2",
     "@bldr/config": "0.1.0",
+    "@bldr/wikidata": "0.1.0",
     "node-fetch": "^2.6.1",
-    "transliteration": "^2.1.11"
+    "transliteration": "^2.1.11",
+    "uuid": "^8.3.0"
   },
   "devDependencies": {
     "@types/node": "^14.11.8",
     "@types/js-yaml": "^3.12.5",
-    "@types/node-fetch": "^2.5.7"
+    "@types/node-fetch": "^2.5.7",
+    "@types/uuid": "3.4.3"
   },
   "main": "dist/main.js",
   "publishConfig": {

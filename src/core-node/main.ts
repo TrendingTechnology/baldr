@@ -6,17 +6,17 @@
  */
 
 // Node packages.
-const childProcess = require('child_process')
-const fs = require('fs')
-const util = require('util')
+import childProcess from 'child_process'
+import fs from 'fs'
+import util from 'util'
 
 // Third party packages
-const git = require('git-rev-sync')
+import git from 'git-rev-sync'
 
 /**
  * Wrapper around `util.format()` and `console.log()`
  */
-function log (format) {
+export function log (format: string) {
   const args = Array.from(arguments).slice(1)
   console.log(util.format(format, ...args))
 }
@@ -24,7 +24,7 @@ function log (format) {
 /**
  * Generate a revision string in the form version-gitshort(-dirty)
  */
-function gitHead () {
+export function gitHead (): object {
   return {
     short: git.short(),
     long: git.long(),
@@ -35,10 +35,10 @@ function gitHead () {
 /**
  * Check if some executables are installed. Throws an error if not.
  *
- * @param {Array|String} executables - An array of executables names or a
+ * @param executables - An array of executables names or a
  *   a single executable as a string.
  */
-function checkExecutables (executables) {
+export function checkExecutables (executables: string | string[]) {
   if (!Array.isArray(executables)) executables = [executables]
   for (const executable of executables) {
     const process = childProcess.spawnSync('which', [executable], { shell: true })
@@ -54,21 +54,23 @@ function checkExecutables (executables) {
  *
  * @see {@link https://poppler.freedesktop.org}
  *
- * @param {String} filePath - The path on an PDF file.
- *
- * @returns {Number}
+ * @param filePath - The path on an PDF file.
  */
-function getPdfPageCount (filePath) {
+export function getPdfPageCount (filePath: string): number {
   checkExecutables('pdfinfo')
   if (!fs.existsSync(filePath)) throw new Error(`PDF file doesn’t exist: ${filePath}.`)
   const proc = childProcess.spawnSync(
     'pdfinfo', [filePath],
     { encoding: 'utf-8', cwd: process.cwd() }
   )
-  return parseInt(proc.stdout.match(/Pages:\s+(\d+)/)[1])
+  const match = proc.stdout.match(/Pages:\s+(\d+)/)
+  if (match) {
+    return parseInt(match[1])
+  }
+  return 0
 }
 
-module.exports = {
+export default {
   checkExecutables,
   getPdfPageCount,
   gitHead,
