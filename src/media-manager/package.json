@@ -17,7 +17,8 @@
     "url": "https://josef.friedrich.rocks"
   },
   "scripts": {
-    "build": "tsc"
+    "build": "npm run build:node",
+    "build:node": "tsc --module commonjs --outDir dist/node"
   },
   "dependencies": {
     "js-yaml": "^3.14.0",
@@ -35,7 +36,7 @@
     "@types/node-fetch": "^2.5.7",
     "@types/uuid": "3.4.3"
   },
-  "main": "dist/main.js",
+  "main": "dist/node/main.js",
   "publishConfig": {
     "access": "public"
   },

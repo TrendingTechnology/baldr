@@ -478,7 +478,7 @@ const person = {
                 // Vornamen der Person
                 fromClaim: 'P735',
                 secondQuery: 'queryLabels',
-                format: function (value, { typeData, typeSpec }) {
+                format: function (value, typeSpec) {
                     if (Array.isArray(value)) {
                         return value.join(' ');
                     }
@@ -493,7 +493,7 @@ const person = {
                 // Familienname einer Person
                 fromClaim: 'P734',
                 secondQuery: 'queryLabels',
-                format: function (value, { typeData, typeSpec }) {
+                format: function (value, typeSpec) {
                     if (Array.isArray(value)) {
                         return value.join(' ');
                     }
@@ -976,7 +976,7 @@ const general = {
         return typeData;
     }
 };
-module.exports = {
+exports.default = {
     cloze,
     composition,
     cover,

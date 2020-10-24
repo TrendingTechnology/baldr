@@ -17,20 +17,10 @@ import path from 'path'
 // Project packages.
 import { deepCopy, getExtension, convertPropertiesSnakeToCamel }  from '@bldr/core-browser-ts'
 import  config from '@bldr/config'
-
 import { MetaSpec, AssetType, DeepTitleInterface } from '@bldr/type-definitions'
 
 import { DeepTitle } from './titles'
-
-function generateTmpTypeSpecCollection(): MetaSpec.TypeCollection {
-  return <MetaSpec.TypeCollection> {}
-}
-
-/**
- * @type {module:@bldr/media-server/meta-types~typeSpecs}
- */
-//const typeSpecs = require('./meta-type-specs.js')
-const typeSpecs: MetaSpec.TypeCollection = generateTmpTypeSpecCollection()
+import typeSpecs from './meta-type-specs'
 
 /**
  * Check a file path against a regular expression to get the type name.
@@ -330,7 +320,7 @@ function process (data: AssetType.Generic): AssetType.Generic {
   return data
 }
 
-module.exports = {
+export default {
   detectTypeByPath,
   formatFilePath,
   process,

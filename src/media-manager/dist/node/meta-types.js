@@ -21,14 +21,7 @@ const path_1 = __importDefault(require("path"));
 const core_browser_ts_1 = require("@bldr/core-browser-ts");
 const config_1 = __importDefault(require("@bldr/config"));
 const titles_1 = require("./titles");
-function generateTmpTypeSpecCollection() {
-    return {};
-}
-/**
- * @type {module:@bldr/media-server/meta-types~typeSpecs}
- */
-//const typeSpecs = require('./meta-type-specs.js')
-const typeSpecs = generateTmpTypeSpecCollection();
+const meta_type_specs_1 = __importDefault(require("./meta-type-specs"));
 /**
  * Check a file path against a regular expression to get the type name.
  *
@@ -39,8 +32,8 @@ const typeSpecs = generateTmpTypeSpecCollection();
 function detectTypeByPath(filePath) {
     filePath = path_1.default.resolve(filePath);
     const typeNames = new Set();
-    for (const typeName in typeSpecs) {
-        const typeSpec = typeSpecs[typeName];
+    for (const typeName in meta_type_specs_1.default) {
+        const typeSpec = meta_type_specs_1.default[typeName];
         if (typeSpec.detectTypeByPath) {
             let regexp;
             if (typeof typeSpec.detectTypeByPath === 'function') {
@@ -73,7 +66,7 @@ function formatFilePath(data, oldPath) {
     // TODO: support multiple types
     // person,general -> person
     const typeName = data.metaTypes.replace(/,.*$/, '');
-    const typeSpec = typeSpecs[typeName];
+    const typeSpec = meta_type_specs_1.default[typeName];
     if (!typeSpec)
         throw new Error(`Unkown meta type “${typeName}”.`);
     if (!typeSpec.relPath || typeof typeSpec.relPath !== 'function') {
@@ -259,10 +252,10 @@ function removeProps(data, typeSpec) {
  * @param typeName - The type name
  */
 function processByType(data, typeName) {
-    if (!typeSpecs[typeName]) {
+    if (!meta_type_specs_1.default[typeName]) {
         throw new Error(`Unkown meta type name: “${typeName}”`);
     }
-    const typeSpec = typeSpecs[typeName];
+    const typeSpec = meta_type_specs_1.default[typeName];
     if (!typeSpec.props) {
         throw new Error(`The meta type “${typeName}” has no props.`);
     }
@@ -304,9 +297,9 @@ function process(data) {
     // convertProperties(data, 'camel-to-snake')
     return data;
 }
-module.exports = {
+exports.default = {
     detectTypeByPath,
     formatFilePath,
     process,
-    typeSpecs
+    typeSpecs: meta_type_specs_1.default
 };

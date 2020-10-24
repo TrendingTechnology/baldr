@@ -488,7 +488,7 @@ const person = <MetaSpec.Type> {
         // Vornamen der Person
         fromClaim: 'P735',
         secondQuery: 'queryLabels',
-        format: function (value, { typeData, typeSpec }) {
+        format: function (value, typeSpec) {
           if (Array.isArray(value)) {
             return value.join(' ')
           }
@@ -503,7 +503,7 @@ const person = <MetaSpec.Type> {
         // Familienname einer Person
         fromClaim: 'P734',
         secondQuery: 'queryLabels',
-        format: function (value, { typeData, typeSpec }) {
+        format: function (value, typeSpec) {
           if (Array.isArray(value)) {
             return value.join(' ')
           }
@@ -998,7 +998,7 @@ const general = <MetaSpec.Type> {
   }
 }
 
-module.exports = {
+export default {
   cloze,
   composition,
   cover,
