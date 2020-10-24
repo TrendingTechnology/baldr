@@ -19,7 +19,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.normalizePresentationFile = exports.readAssetYaml = exports.loadYaml = exports.fetchFile = exports.moveAsset = exports.writeYamlFile = exports.writeFile = exports.yamlToTxt = exports.readFile = void 0;
+exports.normalizePresentationFile = exports.readAssetYaml = exports.loadYaml = exports.fetchFile = exports.moveAsset = exports.writeMetaDataYaml = exports.writeYamlFile = exports.writeFile = exports.yamlToTxt = exports.readFile = void 0;
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
 const url_1 = require("url");
@@ -27,6 +27,9 @@ const js_yaml_1 = __importDefault(require("js-yaml"));
 const node_fetch_1 = __importDefault(require("node-fetch"));
 const core_browser_ts_1 = require("@bldr/core-browser-ts");
 const titles_1 = require("./titles");
+const helper_1 = require("./helper");
+const media_file_classes_1 = require("./media-file-classes");
+const meta_types_1 = __importDefault(require("./meta-types"));
 /**
  * Read the content of a text file in the `utf-8` format.
  *
@@ -85,6 +88,44 @@ function writeYamlFile(filePath, data) {
     return yaml;
 }
 exports.writeYamlFile = writeYamlFile;
+/**
+ * Write the metadata YAML file for a corresponding media file specified by
+ * `filePath`.
+ *
+ * @param filePath - The filePath gets asciified and a yml extension
+ *   is appended.
+ * @param metaData
+ * @param force - Always create the yaml file. Overwrite the old one.
+ */
+function writeMetaDataYaml(filePath, metaData, force) {
+    if (fs_1.default.lstatSync(filePath).isDirectory())
+        return;
+    const yamlFile = `${helper_1.asciify(filePath)}.yml`;
+    if (force ||
+        !fs_1.default.existsSync(yamlFile)) {
+        if (!metaData)
+            metaData = {};
+        const asset = new media_file_classes_1.Asset(filePath);
+        if (!metaData.id) {
+            metaData.id = asset.basename;
+        }
+        if (!metaData.title) {
+            metaData.title = helper_1.deasciify(asset.basename);
+        }
+        metaData = meta_types_1.default.process(metaData);
+        writeYamlFile(yamlFile, metaData);
+        return {
+            filePath,
+            yamlFile,
+            metaData
+        };
+    }
+    return {
+        filePath,
+        msg: 'No action.'
+    };
+}
+exports.writeMetaDataYaml = writeMetaDataYaml;
 /**
  * Move (rename) or copy a media asset and it’s corresponding meta data file
  * (`*.yml`) and preview file (`_preview.jpg`).

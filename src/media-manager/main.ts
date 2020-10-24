@@ -22,6 +22,9 @@ import {
 import { PresentationType, AssetType } from '@bldr/type-definitions'
 
 import { DeepTitle, TitleTree } from './titles'
+import { asciify, deasciify } from './helper'
+import { Asset } from './media-file-classes'
+import metaTypes from './meta-types'
 
 /**
  * Read the content of a text file in the `utf-8` format.
@@ -84,6 +87,45 @@ export function writeYamlFile (filePath: string, data: object): string {
   const yaml = yamlToTxt(data)
   writeFile(filePath, yaml)
   return yaml
+}
+
+/**
+ * Write the metadata YAML file for a corresponding media file specified by
+ * `filePath`.
+ *
+ * @param filePath - The filePath gets asciified and a yml extension
+ *   is appended.
+ * @param metaData
+ * @param force - Always create the yaml file. Overwrite the old one.
+ */
+export function writeMetaDataYaml (filePath: string, metaData?: AssetType.Generic, force?: boolean): object | undefined {
+  if (fs.lstatSync(filePath).isDirectory()) return
+  const yamlFile = `${asciify(filePath)}.yml`
+  if (
+    force ||
+    !fs.existsSync(yamlFile)
+  ) {
+    if (!metaData) metaData = {}
+    const asset = new Asset(filePath)
+    if (!metaData.id) {
+      metaData.id = asset.basename
+    }
+    if (!metaData.title) {
+      metaData.title = deasciify(asset.basename)
+    }
+
+    metaData = metaTypes.process(metaData)
+    writeYamlFile(yamlFile, metaData)
+    return {
+      filePath,
+      yamlFile,
+      metaData
+    }
+  }
+  return {
+    filePath,
+    msg: 'No action.'
+  }
 }
 
 /**

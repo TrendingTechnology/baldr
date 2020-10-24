@@ -8,6 +8,8 @@ const musicMetadata = require('music-metadata')
 
 // Project packages.
 const mediaServer = require('@bldr/media-server')
+const { writeMetaDataYaml } = require('@bldr/media-manager')
+
 const lib = require('../../lib.js')
 
 /**
@@ -205,7 +207,7 @@ async function convert (inputFile, cmdObj = {}) {
       if (assetType === 'audio') {
         const metaData = await collectMusicMetaData(inputFile)
         if (metaData) {
-          lib.writeMetaDataYaml(outputFile, metaData)
+          writeMetaDataYaml(outputFile, metaData)
         }
       }
       console.log(`${chalk.green('convert ok')}: ${chalk.yellow(inputFile)} -> ${chalk.green(outputFile)}`)

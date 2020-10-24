@@ -51,6 +51,16 @@ export declare function writeFile(filePath: string, content: string): void;
  */
 export declare function writeYamlFile(filePath: string, data: object): string;
 /**
+ * Write the metadata YAML file for a corresponding media file specified by
+ * `filePath`.
+ *
+ * @param filePath - The filePath gets asciified and a yml extension
+ *   is appended.
+ * @param metaData
+ * @param force - Always create the yaml file. Overwrite the old one.
+ */
+export declare function writeMetaDataYaml(filePath: string, metaData?: AssetType.Generic, force?: boolean): object | undefined;
+/**
  * Move (rename) or copy a media asset and it’s corresponding meta data file
  * (`*.yml`) and preview file (`_preview.jpg`).
  *

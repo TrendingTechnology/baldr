@@ -3,6 +3,7 @@ const mediaServer = require('@bldr/media-server')
 const lib = require('../../lib.js')
 const { renameOneFile } = require('../rename/action.js')
 const { normalizeOneFile } = require('../normalize/action.js')
+const { writeMetaDataYaml } = require('@bldr/media-manager')
 
 /**
  * @param {String} filePath
@@ -10,7 +11,7 @@ const { normalizeOneFile } = require('../normalize/action.js')
  */
 async function createYamlOneFile (filePath, metaData) {
   const newPath = renameOneFile(filePath)
-  lib.writeMetaDataYaml(newPath, metaData)
+  writeMetaDataYaml(newPath, metaData)
   await normalizeOneFile(newPath, { wikidata: false })
 }
 
@@ -26,7 +27,7 @@ function action (files) {
       createYamlOneFile(relPath)
       const newPath = renameOneFile(relPath)
       console.log(newPath)
-      lib.writeMetaDataYaml(newPath)
+      writeMetaDataYaml(newPath)
       await normalizeOneFile(newPath, { wikidata: false })
     }
   }, {

@@ -7,8 +7,8 @@ const glob = require('glob')
 
 // Project packages.
 const coreBrowser = require('@bldr/core-browser')
+const { writeMetaDataYaml } = require('@bldr/media-manager')
 
-const lib = require('../../lib.js')
 const { normalizeOneFile } = require('../normalize/action.js')
 
 function action (globPattern, prefix, cmdObj) {
@@ -33,7 +33,7 @@ function action (globPattern, prefix, cmdObj) {
   }
 
   if (fs.existsSync(firstNewFileName) && !cmdObj.dryRun) {
-    lib.writeMetaDataYaml(firstNewFileName)
+    writeMetaDataYaml(firstNewFileName)
     normalizeOneFile(firstNewFileName, { wikidata: false })
   }
 }
