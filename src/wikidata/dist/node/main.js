@@ -172,8 +172,6 @@ function getClaim(entity, claims) {
 }
 /**
  * A collection of functions
- *
- * @type {Object}
  */
 const functions = {
     /*******************************************************************************
@@ -292,8 +290,8 @@ const functions = {
         });
     },
     /*******************************************************************************
-   * format
-   ******************************************************************************/
+     * format
+     ******************************************************************************/
     /**
       * @param date - for example `[ '1770-12-16T00:00:00.000Z' ]`
       */
@@ -352,11 +350,9 @@ const functions = {
  * object obtained from wikidata. Override a property in original only if
  * `alwaysUpdate` is set on the property specification.
  *
- * @public
- *
  * @param dataOrig
  * @param dataWiki
- * @param {module:@bldr/media-server/meta-types~typeSpecs}
+ * @param typeSpecs
  */
 function mergeData(data, dataWiki, typeSpecs) {
     // Ẃe delete properties from this object -> make a flat copy.
@@ -388,11 +384,9 @@ function mergeData(data, dataWiki, typeSpecs) {
 /**
  * Query wikidata.
  *
- * @public
- *
- * @param {String} itemId - for example `Q123`
- * @param {module:@bldr/media-server/meta-types~typeNames} typeNames
- * @param {module:@bldr/media-server/meta-types~typeSpecs} typeSpecs
+ * @param itemId - for example `Q123`
+ * @param typeNames
+ * @param typeSpecs
  */
 function query(itemId, typeNames, typeSpecs) {
     return __awaiter(this, void 0, void 0, function* () {

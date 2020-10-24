@@ -13,6 +13,11 @@ import { AssetType } from './asset'
 export namespace MetaSpec {
 
   /**
+   * Defintion of the function `format()`.
+   */
+  type WikidataFormatFunc = (value: string, arg: Type) => string
+
+  /**
    * The specification of a wikidata media metadata property.
    */
   export interface WikidataProp {
@@ -45,8 +50,6 @@ export namespace MetaSpec {
      */
     format?: WikidataFormatFunc | 'formatDate' | 'formatList' | 'formatYear' | 'formatWikicommons' | 'formatSingleValue'
   }
-
-  type WikidataFormatFunc = (value: string, arg: TypeDataAndSpec) => string
 
   /**
    * The name of a property.
@@ -300,6 +303,11 @@ export namespace MetaSpec {
    * ```
    */
   export type TypeCollection = { [key in TypeName]: Type }
+
+  /**
+   * Generic type for metadata for assets.
+   */
+  export type Data = { [key: string]: any }
 
   /**
    * Used in many functions as an argument.

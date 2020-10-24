@@ -16,7 +16,7 @@ const wikibase = wikibaseSdk({
 })
 
 import { fetchFile } from '@bldr/media-manager'
-import { MediaWikidataPropSpec } from '@bldr/type-definitions'
+import { MetaSpec } from '@bldr/type-definitions'
 
 interface LabelsCollection {
   de: string
@@ -35,6 +35,7 @@ interface ClaimsCollection {
 interface SitelinksCollection {
   dewiki: string
   enwiki: string
+  [key: string]: string
 }
 
 interface Entity {
@@ -195,10 +196,8 @@ function getClaim (entity: Entity, claims: string | string[]) {
 
 /**
  * A collection of functions
- *
- * @type {Object}
  */
-const functions = {
+const functions: {[key: string]: Function } = {
 
   /*******************************************************************************
  * get from entity
@@ -306,7 +305,7 @@ const functions = {
     }
     const result: string[] = []
     for (const itemId in entities) {
-      const entity = entities[itemId]
+      const entity = (entities as EntityCollection)[itemId]
       result.push(<string> functions.getLabel(entity))
     }
     return result
@@ -377,13 +376,11 @@ const functions = {
  * object obtained from wikidata. Override a property in original only if
  * `alwaysUpdate` is set on the property specification.
  *
- * @public
- *
  * @param dataOrig
  * @param dataWiki
- * @param {module:@bldr/media-server/meta-types~typeSpecs}
+ * @param typeSpecs
  */
-function mergeData (data: { [key: string]: any }, dataWiki: { [key: string]: any }, typeSpecs): object {
+function mergeData (data: MetaSpec.Data, dataWiki: MetaSpec.Data, typeSpecs: MetaSpec.TypeCollection): MetaSpec.Data {
   // Ẃe delete properties from this object -> make a flat copy.
   const dataOrig = Object.assign({}, data)
 
@@ -391,10 +388,10 @@ function mergeData (data: { [key: string]: any }, dataWiki: { [key: string]: any
     return Object.assign({}, dataOrig, dataWiki)
   }
 
-  const typeData = {}
+  const typeData: MetaSpec.Data = {}
 
   for (const typeName of dataOrig.metaTypes.split(',')) {
-    const propSpecs = typeSpecs[typeName].props
+    const propSpecs = typeSpecs[<MetaSpec.TypeName> typeName].props
     for (const propName in dataWiki) {
       if (propSpecs[propName] && propSpecs[propName].wikidata) {
         const propSpec = propSpecs[propName].wikidata
@@ -418,13 +415,11 @@ function mergeData (data: { [key: string]: any }, dataWiki: { [key: string]: any
 /**
  * Query wikidata.
  *
- * @public
- *
- * @param {String} itemId - for example `Q123`
- * @param {module:@bldr/media-server/meta-types~typeNames} typeNames
- * @param {module:@bldr/media-server/meta-types~typeSpecs} typeSpecs
+ * @param itemId - for example `Q123`
+ * @param typeNames
+ * @param typeSpecs
  */
-async function query (itemId: string, typeNames, typeSpecs): Promise<object> {
+async function query (itemId: string, typeNames: MetaSpec.TypeNames, typeSpecs: MetaSpec.TypeCollection): Promise<object> {
   if (!wikibase.isItemId(itemId)) {
     throw new Error(`No item id: ${itemId}`)
   }
@@ -435,15 +430,15 @@ async function query (itemId: string, typeNames, typeSpecs): Promise<object> {
   const data: { [key: string]: any } = {}
   data.wikidata = itemId
   for (const typeName of typeNames.split(',')) {
-    if (!typeSpecs[typeName]) {
+    if (!typeSpecs[<MetaSpec.TypeName> typeName]) {
       throw new Error(`Unkown type name: “${typeName}”`)
     }
 
-    const typeSpec = typeSpecs[typeName]
+    const typeSpec = typeSpecs[<MetaSpec.TypeName> typeName]
 
     for (const propName in typeSpec.props) {
       if (typeSpec.props[propName].wikidata) {
-        const propSpec = <MediaWikidataPropSpec> typeSpec.props[propName].wikidata
+        const propSpec = <MetaSpec.WikidataProp> typeSpec.props[propName].wikidata
         let value
 
         // source

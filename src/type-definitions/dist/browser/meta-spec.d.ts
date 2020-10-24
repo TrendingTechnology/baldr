@@ -1,7 +1,7 @@
 /**
  * Some basic Typescript interfaces and type defintions.
  *
- * @module @bldr/type-definitions/meta-type-specs
+ * @module @bldr/type-definitions/meta-spec
  */
 import { DeepTitleInterface } from './titles';
 import { AssetType } from './asset';
@@ -9,6 +9,10 @@ import { AssetType } from './asset';
  * Specification of the metadata types.
  */
 export declare namespace MetaSpec {
+    /**
+     * Defintion of the function `format()`.
+     */
+    type WikidataFormatFunc = (value: string, arg: Type) => string;
     /**
      * The specification of a wikidata media metadata property.
      */
@@ -28,6 +32,9 @@ export declare namespace MetaSpec {
          * `queryLabels`
          */
         secondQuery?: string;
+        /**
+         * Update the wikidata property always.
+         */
         alwaysUpdate?: boolean;
         /**
          * A function or `formatDate`, `formatYear`, `formatWikicommons`,
@@ -35,7 +42,6 @@ export declare namespace MetaSpec {
          */
         format?: WikidataFormatFunc | 'formatDate' | 'formatList' | 'formatYear' | 'formatWikicommons' | 'formatSingleValue';
     }
-    type WikidataFormatFunc = (value: string, arg: TypeDataAndSpec) => string;
     /**
      * The name of a property.
      */
@@ -132,9 +138,8 @@ export declare namespace MetaSpec {
         [key: string]: Prop;
     }
     /**
-     * The name of a meta type, for example `person`, `group`.
+     * Definition of the argument for the function `relPath()`.
      */
-    export type TypeName = 'cloze' | 'composition' | 'cover' | 'group' | 'instrument' | 'person' | 'photo' | 'radio' | 'recording' | 'reference' | 'score' | 'song' | 'worksheet' | 'youtube' | 'general';
     interface RelPathFuncArg {
         typeData: AssetType.Generic;
         typeSpec: Type;
@@ -222,6 +227,15 @@ export declare namespace MetaSpec {
         normalizeWikidata?: NormalizeWikidataFunc;
     }
     /**
+     * The name of a meta type, for example `person`, `group`.
+     */
+    export type TypeName = 'cloze' | 'composition' | 'cover' | 'group' | 'instrument' | 'person' | 'photo' | 'radio' | 'recording' | 'reference' | 'score' | 'song' | 'worksheet' | 'youtube' | 'general';
+    /**
+     * Multiple meta data type names, separated by commas, for example
+     * `work,recording`. `work,recording` is equivalent to `general,work,recording`.
+     */
+    export type TypeNames = string;
+    /**
      * The specification of all meta types
      *
      * ```js
@@ -236,10 +250,11 @@ export declare namespace MetaSpec {
         [key in TypeName]: Type;
     };
     /**
-     * Multiple meta data type names, separated by commas, for example
-     * `work,recording`. `work,recording` is equivalent to `general,work,recording`.
+     * Generic type for metadata for assets.
      */
-    export type TypeNames = string;
+    export type Data = {
+        [key: string]: any;
+    };
     /**
      * Used in many functions as an argument.
      */
