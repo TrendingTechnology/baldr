@@ -27,7 +27,7 @@
     "@types/node-fetch": "^2.5.7"
   },
   "scripts": {
-    "build": "npm run build:cjs",
-    "build:cjs": "tsc --module commonjs --outDir dist/node"
+    "build": "npm run build:node",
+    "build:node": "tsc --module commonjs --outDir dist/node"
   }
 }

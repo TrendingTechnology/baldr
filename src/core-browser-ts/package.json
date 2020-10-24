@@ -17,9 +17,9 @@
     "url": "https://josef.friedrich.rocks"
   },
   "scripts": {
-    "build": "npm run build:esm && npm run build:cjs",
-    "build:esm": "tsc --module es2015 --outDir dist/browser",
-    "build:cjs": "tsc --module commonjs --outDir dist/node"
+    "build": "npm run build:browser && npm run build:node",
+    "build:browser": "tsc --module es2015 --outDir dist/browser",
+    "build:node": "tsc --module commonjs --outDir dist/node"
   },
   "browser": "dist/browser/main.js",
   "main": "dist/node/main.js",
