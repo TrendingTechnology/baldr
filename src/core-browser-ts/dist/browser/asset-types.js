@@ -3,6 +3,11 @@
  * `video`.
  */
 export class AssetTypes {
+    /**
+     * @param config The configuration of the BALDR project. It has to be
+     * specifed as a argument and is not imported via the module
+     * `@bldr/config` to able to use this class in Vue projects.
+     */
     constructor(config) {
         this.config = config.mediaServer.assetTypes;
         this.allowedExtensions = this.spreadExtensions();

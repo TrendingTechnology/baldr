@@ -1,0 +1,2 @@
+transpile:
+	./transpile-typescript.sh

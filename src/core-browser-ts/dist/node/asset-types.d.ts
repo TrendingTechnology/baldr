@@ -6,6 +6,11 @@ import { Configuration } from '@bldr/type-definitions';
 export declare class AssetTypes {
     private config;
     private allowedExtensions;
+    /**
+     * @param config The configuration of the BALDR project. It has to be
+     * specifed as a argument and is not imported via the module
+     * `@bldr/config` to able to use this class in Vue projects.
+     */
     constructor(config: Configuration);
     private spreadExtensions;
     /**
