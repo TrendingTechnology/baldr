@@ -9,6 +9,6 @@
     "noImplicitAny": false,
     "moduleResolution": "node"
   },
-  "include": ["main.ts"],
+  "include": ["*.ts"],
   "exclude": ["node_modules", "**/__tests__/*"]
 }

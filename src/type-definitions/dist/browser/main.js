@@ -3,4 +3,4 @@
  *
  * @module @bldr/type-definitions
  */
-export {};
+export * from './meta-type-specs';

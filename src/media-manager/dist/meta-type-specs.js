@@ -34,26 +34,26 @@ const config_1 = __importDefault(require("@bldr/config"));
  * Validate a date string in the format `yyyy-mm-dd`.
  */
 function validateDate(value) {
-    return value.match(/\d{4,}-\d{2,}-\d{2,}/);
+    return value.match(/\d{4,}-\d{2,}-\d{2,}/) ? true : false;
 }
 /**
  * Validate a ID string of the Baldr media server.
  */
 function validateMediaId(value) {
-    return value.match(core_browser_ts_1.mediaUriRegExp);
+    return value.match(core_browser_ts_1.mediaUriRegExp) ? true : false;
 }
 /**
  * Validate UUID string (for the Musicbrainz references).
  */
 function validateUuid(value) {
-    return value.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89AB][0-9a-f]{3}-[0-9a-f]{12}$/i);
+    return value.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89AB][0-9a-f]{3}-[0-9a-f]{12}$/i) ? true : false;
 }
 /**
  * Validate a YouTube ID.
  */
 function validateYoutubeId(value) {
     // https://webapps.stackexchange.com/a/101153
-    return value.match(/^[0-9A-Za-z_-]{10}[048AEIMQUYcgkosw]$/);
+    return value.match(/^[0-9A-Za-z_-]{10}[048AEIMQUYcgkosw]$/) ? true : false;
 }
 /**
  * Generate a ID prefix for media assets, like `Presentation-ID_HB` if the
@@ -84,8 +84,6 @@ function generateIdPrefix(filePath) {
 }
 /**
  * The meta data type specification “cloze”.
- *
- * @type {module:@bldr/media-server/meta-types~typeSpec}
  */
 const cloze = {
     title: 'Lückentext',
@@ -110,6 +108,7 @@ const cloze = {
     },
     props: {
         id: {
+            title: 'Die ID des Lückentexts',
             derive: function ({ typeData, folderTitles, filePath }) {
                 let counterSuffix = '';
                 if (typeData.clozePageNo) {
@@ -120,6 +119,7 @@ const cloze = {
             overwriteByDerived: true
         },
         title: {
+            title: 'Titel des Lückentextes',
             derive: function ({ typeData, folderTitles, filePath }) {
                 let suffix = '';
                 if (typeData.clozePageNo && typeData.clozePageCount) {
@@ -133,11 +133,13 @@ const cloze = {
             overwriteByDerived: true
         },
         clozePageNo: {
+            title: 'Seitenzahl des Lückentextes',
             validate(value) {
                 return Number.isInteger(value);
             }
         },
         clozePageCount: {
+            title: 'Seitenanzahl des Lückentextes',
             validate(value) {
                 return Number.isInteger(value);
             }
@@ -146,18 +148,18 @@ const cloze = {
 };
 /**
  * The meta data type specification “composition”.
- *
- * @type {module:@bldr/media-server/meta-types~typeSpec}
  */
 const composition = {
     title: 'Komposition',
     detectTypeByPath: new RegExp('^.*/HB/.*m4a$'),
     props: {
         title: {
+            title: 'Titel der Komponist',
             // 'Tonart CD 4: Spur 29'
             removeByRegexp: /^.*CD.*Spur.*$/i
         },
         composer: {
+            title: 'KomponstIn',
             // Helbling-Verlag
             removeByRegexp: /^.*Verlag.*$/i,
             wikidata: {
@@ -168,6 +170,7 @@ const composition = {
             }
         },
         lyricist: {
+            title: 'LiedtexterIn',
             wikidata: {
                 // Text von | Autor des Liedtexts | Texter | Autor (Liedtext) | geschrieben von
                 fromClaim: 'P676',
@@ -176,6 +179,7 @@ const composition = {
             }
         },
         creationDate: {
+            title: 'Entstehungs-Datum',
             wikidata: {
                 // Gründung, Erstellung bzw. Entstehung (P571)
                 // Veröffentlichungsdatum (P577)
@@ -186,6 +190,7 @@ const composition = {
         },
         // now combined in creationDate
         publicationDate: {
+            title: 'Veröffentlichungsdatum',
             state: 'absent'
         },
         partOf: {
@@ -193,15 +198,18 @@ const composition = {
         },
         // now combined in creationDate
         firstPerformance: {
+            title: 'Uraufführung',
             state: 'absent'
         },
         imslp: {
+            title: 'IMSLP-ID',
             wikidata: {
                 // IMSLP-ID
                 fromClaim: 'P839'
             }
         },
         musicbrainzWorkId: {
+            title: 'MusikBrainz-Werk-ID',
             validate: validateUuid,
             wikidata: {
                 // MusicBrainz-Werk-ID
@@ -213,10 +221,9 @@ const composition = {
 };
 /**
  * The meta data type specification “cover”.
- *
- * @type {module:@bldr/media-server/meta-types~typeSpec}
  */
 const cover = {
+    title: 'Vorschau-Bild',
     detectTypeByPath: new RegExp('^.*/HB/.*(png|jpg)$'),
     props: {
         title: {
@@ -235,8 +242,6 @@ const cover = {
 };
 /**
  * The meta data type specification “group”.
- *
- * @type {module:@bldr/media-server/meta-types~typeSpec}
  */
 const group = {
     title: 'Gruppe',
@@ -347,8 +352,6 @@ const group = {
 };
 /**
  * The meta data type specification “instrument”.
- *
- * @type {module:@bldr/media-server/meta-types~typeSpec}
  */
 const instrument = {
     title: 'Instrument',
@@ -391,12 +394,14 @@ const instrument = {
             required: true
         },
         description: {
+            title: 'Titel des Instruments',
             wikidata: {
                 fromEntity: 'getDescription',
                 alwaysUpdate: false
             }
         },
         mainImage: {
+            title: 'Hauptbild',
             wikidata: {
                 // Bild
                 fromClaim: 'P18',
@@ -404,6 +409,7 @@ const instrument = {
             }
         },
         playingRangeImage: {
+            title: 'Bild des Tonumfangs',
             wikidata: {
                 // Bild des Tonumfang
                 fromClaim: 'P2343',
@@ -417,8 +423,6 @@ const instrument = {
 };
 /**
  * The meta data type specification “person”.
- *
- * @type {module:@bldr/media-server/meta-types~typeSpec}
  */
 const person = {
     title: 'Person',
@@ -454,12 +458,14 @@ const person = {
             overwriteByDerived: true
         },
         id: {
+            title: 'ID der Person',
             derive: function ({ typeData, typeSpec }) {
                 return `${typeSpec.abbreviation}_${helper_1.idify(typeData.lastname)}_${helper_1.idify(typeData.firstname)}`;
             },
             overwriteByDerived: true
         },
         title: {
+            title: 'Titel der Person',
             derive: function ({ typeData }) {
                 return `Portrait-Bild von „${typeData.firstname} ${typeData.lastname}“`;
             },
@@ -544,14 +550,13 @@ const person = {
             }
         },
         wikicommons: {
+            title: 'Wikicommons',
             state: 'absent'
         }
     }
 };
 /**
  * The meta data type specification “photo”.
- *
- * @type {module:@bldr/media-server/meta-types~typeSpec}
  */
 const photo = {
     title: 'Foto',
@@ -567,8 +572,6 @@ const photo = {
 };
 /**
  * The meta data type specification “radio”.
- *
- * @type {module:@bldr/media-server/meta-types~typeSpec}
  */
 const radio = {
     title: 'Schulfunk',
@@ -581,14 +584,13 @@ const radio = {
 };
 /**
  * The meta data type specification “recording”.
- *
- * @type {module:@bldr/media-server/meta-types~typeSpec}
  */
 const recording = {
     title: 'Aufnahme',
     detectTypeByPath: new RegExp('^.*/HB/.*m4a$'),
     props: {
         artist: {
+            title: 'Interpret',
             description: 'Der/die Interpret/in eines Musikstücks.',
             wikidata: {
                 // Interpret | Interpretin | Interpretinnen | Darsteller
@@ -598,15 +600,16 @@ const recording = {
             }
         },
         musicbrainzRecordingId: {
+            title: 'MusicBrainz-Aufnahme-ID',
             validate: validateUuid,
             wikidata: {
-                // MusicBrainz-Aufnahme-ID
                 fromClaim: 'P4404',
                 format: 'formatSingleValue'
             }
         },
         // see composition creationDate
         year: {
+            title: 'Jahr',
             state: 'absent'
             // wikidata: {
             //   // Veröffentlichungsdatum
@@ -629,8 +632,6 @@ const recording = {
 };
 /**
  * The meta data type specification “reference”.
- *
- * @type {module:@bldr/media-server/meta-types~typeSpec}
  */
 const reference = {
     title: 'Quelle',
@@ -691,8 +692,6 @@ const reference = {
 };
 /**
  * The meta data type specification “score”.
- *
- * @type {module:@bldr/media-server/meta-types~typeSpec}
  */
 const score = {
     title: 'Partitur',
@@ -715,20 +714,20 @@ const score = {
 };
 /**
  * The meta data type specification “song”.
- *
- * @type {module:@bldr/media-server/meta-types~typeSpec}
  */
 const song = {
     title: 'Lied',
     props: {
         publicationDate: {
+            title: 'Veröffentlichungsdatum',
             wikidata: {
                 // Veröffentlichungsdatum
-                fromClaim: 'P577'
+                fromClaim: 'P577',
+                format: 'formatDate'
             },
-            format: 'formatDate'
         },
         language: {
+            title: 'Sprache',
             wikidata: {
                 // Sprache des Werks, Namens oder Begriffes
                 fromClaim: 'P407',
@@ -736,6 +735,7 @@ const song = {
             }
         },
         artist: {
+            title: 'InterpretIn',
             wikidata: {
                 // Interpret
                 fromClaim: 'P175',
@@ -743,6 +743,7 @@ const song = {
             }
         },
         lyricist: {
+            title: 'LiedtexterIn',
             wikidata: {
                 // Text von
                 fromClaim: 'P676',
@@ -750,6 +751,7 @@ const song = {
             }
         },
         genre: {
+            title: 'Stil',
             wikidata: {
                 // Genre
                 fromClaim: 'P136',
@@ -760,8 +762,6 @@ const song = {
 };
 /**
  * The meta data type specification “worksheet”.
- *
- * @type {module:@bldr/media-server/meta-types~typeSpec}
  */
 const worksheet = {
     title: 'Arbeitsblatt',
@@ -771,9 +771,13 @@ const worksheet = {
     },
     props: {
         title: {
+            title: "Titel",
             derive: function ({ folderTitles, filePath }) {
                 const match = filePath.match(new RegExp(`${path_1.default.sep}([^${path_1.default.sep}]+)\\.pdf`));
-                const baseName = match[1];
+                let baseName = 'Arbeitsblatt';
+                if (match) {
+                    baseName = match[1];
+                }
                 return `${baseName} zum Thema „${folderTitles.titleAndSubtitle}“`;
             },
             overwriteByDerived: true
@@ -790,8 +794,6 @@ const worksheet = {
 };
 /**
  * The meta data type specification “youtube”.
- *
- * @type {module:@bldr/media-server/meta-types~typeSpec}
  */
 const youtube = {
     title: 'YouTube-Video',
@@ -805,12 +807,14 @@ const youtube = {
     },
     props: {
         id: {
+            title: 'ID eines YouTube-Videos',
             derive: function ({ typeData, typeSpec }) {
                 return `${typeSpec.abbreviation}_${typeData.youtubeId}`;
             },
             overwriteByDerived: true
         },
         title: {
+            title: 'Titel eines YouTube-Videos',
             derive: function ({ typeData }) {
                 let title;
                 if (typeData.heading) {
@@ -847,12 +851,12 @@ const youtube = {
 /**
  * General meta data type specification. Applied after all other meta data
  * types.
- *
- * @type {module:@bldr/media-server/meta-types~typeSpec}
  */
 const general = {
+    title: 'Allgemeiner Metadaten-Type',
     props: {
         id: {
+            title: 'ID',
             validate: function (value) {
                 return value.match(/^[a-zA-Z0-9-_]+$/);
             },
@@ -896,7 +900,7 @@ const general = {
             title: 'Metadaten-Typen',
             description: 'Zum Beispiel: “person” oder “composition,recording”',
             validate: function (value) {
-                return String(value).match(/^[a-zA-Z,]+$/);
+                return String(value).match(/^[a-zA-Z,]+$/) ? true : false;
             },
             format: function (value) {
                 return value.replace(/,?general,?/, '');
@@ -908,6 +912,7 @@ const general = {
             state: 'absent'
         },
         title: {
+            title: 'Titel',
             required: true,
             overwriteByDerived: false,
             format: function (value, { typeData, typeSpec }) {
@@ -920,11 +925,13 @@ const general = {
             }
         },
         wikidata: {
+            title: 'Wikidata',
             validate: function (value) {
-                return String(value).match(/^Q\d+$/);
+                return String(value).match(/^Q\d+$/) ? true : false;
             }
         },
         wikipedia: {
+            title: 'Wikipedia',
             validate: function (value) {
                 return value.match(/^.+:.+$/);
             },

@@ -168,7 +168,7 @@ function sortAndDeriveProps(data, typeSpec) {
         const propSpec = propSpecs[propName];
         const origValue = origData[propName];
         let derivedValue;
-        if (isPropertyDerived(propSpec)) {
+        if (isPropertyDerived(propSpec) && propSpec.derive) {
             derivedValue = propSpec.derive({ typeData: data, typeSpec, folderTitles, filePath });
         }
         // Use the derived value

@@ -4,6 +4,8 @@
  * @module @bldr/type-definitions
  */
 
+export * from './meta-type-specs'
+
  /**
   * The meta informations of a presentation file.
   */
@@ -91,14 +93,16 @@ export interface MediaWikidataPropSpec {
    */
   secondQuery?: string
 
-  alwaysUpdate?: true
+  alwaysUpdate?: boolean
 
   /**
    * A function or `formatDate`, `formatYear`, `formatWikicommons`,
    * `formatList`, `formatSingleValue`.
    */
-  format?: Function | 'formatDate' | 'formatList' | 'formatYear' | 'formatWikicommons' | 'formatSingleValue'
+  format?: WikidataFormatFunc | 'formatDate' | 'formatList' | 'formatYear' | 'formatWikicommons' | 'formatSingleValue'
 }
+
+type WikidataFormatFunc = (value: string, arg: MediaTypeDataAndSpec) => string
 
 /**
  * The name of a property.
@@ -239,13 +243,13 @@ export interface MediaTypeSpec {
    * A regular expression that is matched against file paths or a
    * function which is called with `typeSpec` that returns a regexp.
    */
-  detectTypeByPath?: RegExp | Function
+  detectTypeByPath?: RegExp | DetectTypeByPathFunc
 
   /**
    * A function which is called before all processing steps: `initialize
    * ({ typeData, typeSpec })`.
    */
-  initialize?: Function
+  initialize?: InitializeFunc
 
   /**
    * A function which is called after all processing steps: arguments:
@@ -262,8 +266,17 @@ export interface MediaTypeSpec {
    * This functions is called after properties are present. The function
    * is called with `function ({ typeData, entity, functions })`
    */
-  normalizeWikidata?: Function
+  normalizeWikidata?: NormalizeWikidataFunc
 }
+
+type InitializeFunc = (arg: MediaTypeDataAndSpec) => AssetFileFormatGeneric
+
+interface NormalizeWikidataFuncArg {
+  typeData: AssetFileFormatGeneric
+  entity: { [key: string]: any }
+  functions: { [key: string]: Function }
+}
+type NormalizeWikidataFunc = (arg: NormalizeWikidataFuncArg) => AssetFileFormatGeneric
 
 /**
  * The specification of all meta types
@@ -314,6 +327,8 @@ interface RelPathFuncArg {
 }
 export type RelPathFunc = (arg: RelPathFuncArg) => string
 
+
+export type DetectTypeByPathFunc = (arg: MediaTypeSpec) => RegExp
 
 
 interface FolderTitleSpec {

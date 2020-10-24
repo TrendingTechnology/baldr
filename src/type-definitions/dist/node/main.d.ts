@@ -3,6 +3,7 @@
  *
  * @module @bldr/type-definitions
  */
+export * from './meta-type-specs';
 /**
  * The meta informations of a presentation file.
  */
@@ -70,13 +71,14 @@ export interface MediaWikidataPropSpec {
      * `queryLabels`
      */
     secondQuery?: string;
-    alwaysUpdate?: true;
+    alwaysUpdate?: boolean;
     /**
      * A function or `formatDate`, `formatYear`, `formatWikicommons`,
      * `formatList`, `formatSingleValue`.
      */
-    format?: Function | 'formatDate' | 'formatList' | 'formatYear' | 'formatWikicommons' | 'formatSingleValue';
+    format?: WikidataFormatFunc | 'formatDate' | 'formatList' | 'formatYear' | 'formatWikicommons' | 'formatSingleValue';
 }
+declare type WikidataFormatFunc = (value: string, arg: MediaTypeDataAndSpec) => string;
 /**
  * The name of a property.
  */
@@ -182,12 +184,12 @@ export interface MediaTypeSpec {
      * A regular expression that is matched against file paths or a
      * function which is called with `typeSpec` that returns a regexp.
      */
-    detectTypeByPath?: RegExp | Function;
+    detectTypeByPath?: RegExp | DetectTypeByPathFunc;
     /**
      * A function which is called before all processing steps: `initialize
      * ({ typeData, typeSpec })`.
      */
-    initialize?: Function;
+    initialize?: InitializeFunc;
     /**
      * A function which is called after all processing steps: arguments:
      * `finalize ({ typeData, typeSpec })`
@@ -201,8 +203,19 @@ export interface MediaTypeSpec {
      * This functions is called after properties are present. The function
      * is called with `function ({ typeData, entity, functions })`
      */
-    normalizeWikidata?: Function;
+    normalizeWikidata?: NormalizeWikidataFunc;
 }
+declare type InitializeFunc = (arg: MediaTypeDataAndSpec) => AssetFileFormatGeneric;
+interface NormalizeWikidataFuncArg {
+    typeData: AssetFileFormatGeneric;
+    entity: {
+        [key: string]: any;
+    };
+    functions: {
+        [key: string]: Function;
+    };
+}
+declare type NormalizeWikidataFunc = (arg: NormalizeWikidataFuncArg) => AssetFileFormatGeneric;
 /**
  * The specification of all meta types
  *
@@ -246,6 +259,7 @@ interface RelPathFuncArg {
     oldRelPath: string;
 }
 export declare type RelPathFunc = (arg: RelPathFuncArg) => string;
+export declare type DetectTypeByPathFunc = (arg: MediaTypeSpec) => RegExp;
 interface FolderTitleSpec {
     /**
      * The title. It is the first line in the file `titles.txt`.
@@ -453,4 +467,3 @@ export declare class DeepTitle {
      */
     generatePresetationMeta(): PresentationMetaFileFormat;
 }
-export {};
