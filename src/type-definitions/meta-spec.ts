@@ -1,7 +1,7 @@
 /**
  * Some basic Typescript interfaces and type defintions.
  *
- * @module @bldr/type-definitions/meta-type-specs
+ * @module @bldr/type-definitions/meta-spec
  */
 
 import { DeepTitleInterface } from './titles'
@@ -34,6 +34,9 @@ export namespace MetaSpec {
      */
     secondQuery?: string
 
+    /**
+     * Update the wikidata property always.
+     */
     alwaysUpdate?: boolean
 
     /**
@@ -50,7 +53,35 @@ export namespace MetaSpec {
    */
   export type PropName = string
 
-  export type State = 'absent' | 'present'
+  /**
+   * Definition of the argument for the function `derive()`.
+   */
+  interface DeriveFuncArg {
+    typeData: AssetType.Generic
+    typeSpec: Type
+    folderTitles: DeepTitleInterface
+    filePath: string
+  }
+
+  /**
+   * Defintion of the function `derive()`.
+   */
+  type DeriveFunc = (arg: DeriveFuncArg) => any
+
+  /**
+   * Defintion of the function `format()`.
+   */
+  type FormatFunc = (value: any, dataAndSpec: TypeDataAndSpec) => any
+
+  /**
+   * Defintion of the function `validate()`.
+   */
+  type ValidateFunc = (value: any) => boolean
+
+  /**
+   * Defintion of type for the property `state`.
+   */
+  type State = 'absent' | 'present'
 
   /**
    * The specification of a media metadata property.
@@ -130,30 +161,33 @@ export namespace MetaSpec {
   }
 
   /**
-   * The name of a meta type, for example `person`, `group`.
+   * Definition of the argument for the function `relPath()`.
    */
-  export type TypeName =
-    'cloze' |
-    'composition' |
-    'cover' |
-    'group' |
-    'instrument' |
-    'person' |
-    'photo' |
-    'radio' |
-    'recording' |
-    'reference' |
-    'score' |
-    'song' |
-    'worksheet' |
-    'youtube' |
-    'general'
+  interface RelPathFuncArg {
+    typeData: AssetType.Generic
+    typeSpec: Type
+    oldRelPath: string
+  }
 
+  /**
+   * Defintion of the function `relPath()`.
+   */
+  type RelPathFunc = (arg: RelPathFuncArg) => string
+
+  /**
+   * Defintion of the function `detectTypeByPath()`.
+   */
+  type DetectTypeByPathFunc = (arg: Type) => RegExp
 
   /**
    * Defintion of the function `intialize()`.
    */
   type InitializeFunc = (arg: TypeDataAndSpec) => AssetType.Generic
+
+  /**
+   * Defintion of the function `finalize()`.
+   */
+  type FinalizeFunc = (dataAndSpec: TypeDataAndSpec) => AssetType.Generic
 
   /**
    * Defintion of the argument of the function `normalizeWikidata()`.
@@ -165,7 +199,7 @@ export namespace MetaSpec {
   }
 
   /**
-   * Defintion of the argument of the function `normalizeWikidata()`.
+   * Defintion of the function `normalizeWikidata()`.
    */
   type NormalizeWikidataFunc = (arg: NormalizeWikidataFuncArg) => AssetType.Generic
 
@@ -195,8 +229,7 @@ export namespace MetaSpec {
 
     /**
      * A function which must return the relative path (relative to
-     * `basePath`). The function is called with `relPath ({ typeData,
-     * typeSpec, oldRelPath })`.
+     * `basePath`).
      */
     relPath?: RelPathFunc
 
@@ -230,6 +263,32 @@ export namespace MetaSpec {
   }
 
   /**
+   * The name of a meta type, for example `person`, `group`.
+   */
+  export type TypeName =
+    'cloze' |
+    'composition' |
+    'cover' |
+    'group' |
+    'instrument' |
+    'person' |
+    'photo' |
+    'radio' |
+    'recording' |
+    'reference' |
+    'score' |
+    'song' |
+    'worksheet' |
+    'youtube' |
+    'general'
+
+  /**
+   * Multiple meta data type names, separated by commas, for example
+   * `work,recording`. `work,recording` is equivalent to `general,work,recording`.
+   */
+  export type TypeNames = string
+
+  /**
    * The specification of all meta types
    *
    * ```js
@@ -240,44 +299,14 @@ export namespace MetaSpec {
    * }
    * ```
    */
-  export type TypeCollection = {[key in TypeName]: Type}
+  export type TypeCollection = { [key in TypeName]: Type }
 
   /**
-   * Multiple meta data type names, separated by commas, for example
-   * `work,recording`. `work,recording` is equivalent to `general,work,recording`.
+   * Used in many functions as an argument.
    */
-  export type TypeNames = string
-
-  /**
-   * Some actual data which can be assigned to a meta type.
-   */
-  export type Data = object
-
-  export interface TypeDataAndSpec {
+  interface TypeDataAndSpec {
     typeData: AssetType.Generic
     typeSpec: Type
   }
-
-  export type ValidateFunc = (value: any) => boolean
-  export type FinalizeFunc = (dataAndSpec: TypeDataAndSpec) => AssetType.Generic
-
-  export type FormatFunc = (value: any, dataAndSpec: TypeDataAndSpec) => any
-
-  interface DeriveFuncArg {
-    typeData: AssetType.Generic
-    typeSpec: Type
-    folderTitles: DeepTitleInterface
-    filePath: string
-  }
-  export type DeriveFunc = (arg: DeriveFuncArg) => any
-
-  interface RelPathFuncArg {
-    typeData: AssetType.Generic
-    typeSpec: Type
-    oldRelPath: string
-  }
-  export type RelPathFunc = (arg: RelPathFuncArg) => string
-
-  export type DetectTypeByPathFunc = (arg: Type) => RegExp
 
 }
