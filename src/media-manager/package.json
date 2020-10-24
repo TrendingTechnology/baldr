@@ -21,11 +21,11 @@
     "build:node": "tsc --module commonjs --outDir dist/node"
   },
   "dependencies": {
-    "js-yaml": "^3.14.0",
-    "@bldr/core-browser-ts": "0.1.0",
-    "@bldr/type-definitions": "^0.1.0",
-    "@bldr/core-node": "0.2.2",
     "@bldr/config": "0.1.0",
+    "@bldr/core-browser-ts": "0.1.0",
+    "@bldr/core-node": "0.2.2",
+    "@bldr/type-definitions": "^0.1.0",
+    "js-yaml": "^3.14.0",
     "node-fetch": "^2.6.1",
     "transliteration": "^2.1.11",
     "uuid": "^8.3.0"

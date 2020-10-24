@@ -10,122 +10,22 @@ import fs from 'fs'
 import path from 'path'
 import { URL } from 'url'
 
-import yaml from 'js-yaml'
 import fetch from 'node-fetch'
 
 import {
-  convertPropertiesCamelToSnake,
-  convertPropertiesSnakeToCamel,
-  getExtension,
-  jsYamlConfig
+  getExtension
 } from '@bldr/core-browser-ts'
 import { PresentationType, AssetType } from '@bldr/type-definitions'
 
 import { DeepTitle, TitleTree } from './titles'
-import { asciify, deasciify } from './helper'
-import { Asset } from './media-file-classes'
-import metaTypes from './meta-types'
+import { loadYaml, yamlToTxt } from './yaml'
+import { readFile, writeFile } from './file'
 
-/**
- * Read the content of a text file in the `utf-8` format.
- *
- * A wrapper around `fs.readFileSync()`
- *
- * @param filePath - A path of a text file.
- *
- * @returns The content of the file in the `utf-8` format.
- */
-export function readFile(filePath: string): string {
-  return fs.readFileSync(filePath, { encoding: 'utf-8' })
-}
-
-/**
- * Convert a Javascript object into a text string, ready to be written
- * into a text file. The property names are converted to `snake_case`.
- *
- * @param data - Some data to convert to YAML.
- *
- * @returns A string in the YAML format ready to be written into a text
- *   file. The result string begins with `---`.
- */
-export function yamlToTxt (data: any): string {
-  data = convertPropertiesCamelToSnake(data)
-  const yamlMarkup = [
-    '---',
-    yaml.safeDump(data, jsYamlConfig)
-  ]
-  return yamlMarkup.join('\n')
-}
+export * from './yaml'
 
 interface MoveAssetConfiguration {
   copy: boolean
   dryRun: boolean
-}
-
-/**
- * Write some text content into a file.
- *
- * @param filePath - A path of a text file.
- * @param content - Some text to write to a file.
- */
-export function writeFile(filePath: string, content: string) {
-  fs.writeFileSync(filePath, content)
-}
-
-/**
- * Convert some data (usually Javascript objets) into the YAML format
- * and write the string into a text file.
- *
- * @param filePath - The file path of the destination yaml file. The yml
- *   extension has to be included.
- * @param data - Some data to convert into yaml and write into a text
- *   file.
- *
- * @returns The data converted to YAML as a string.
- */
-export function writeYamlFile (filePath: string, data: object): string {
-  const yaml = yamlToTxt(data)
-  writeFile(filePath, yaml)
-  return yaml
-}
-
-/**
- * Write the metadata YAML file for a corresponding media file specified by
- * `filePath`.
- *
- * @param filePath - The filePath gets asciified and a yml extension
- *   is appended.
- * @param metaData
- * @param force - Always create the yaml file. Overwrite the old one.
- */
-export function writeMetaDataYaml (filePath: string, metaData?: AssetType.Generic, force?: boolean): object | undefined {
-  if (fs.lstatSync(filePath).isDirectory()) return
-  const yamlFile = `${asciify(filePath)}.yml`
-  if (
-    force ||
-    !fs.existsSync(yamlFile)
-  ) {
-    if (!metaData) metaData = {}
-    const asset = new Asset(filePath)
-    if (!metaData.id) {
-      metaData.id = asset.basename
-    }
-    if (!metaData.title) {
-      metaData.title = deasciify(asset.basename)
-    }
-
-    metaData = metaTypes.process(metaData)
-    writeYamlFile(yamlFile, metaData)
-    return {
-      filePath,
-      yamlFile,
-      metaData
-    }
-  }
-  return {
-    filePath,
-    msg: 'No action.'
-  }
 }
 
 /**
@@ -197,22 +97,6 @@ export async function fetchFile (url: string, dest: string) {
   const response = await fetch(new URL(url))
   fs.mkdirSync(path.dirname(dest), { recursive: true })
   fs.writeFileSync(dest, Buffer.from(await response.arrayBuffer()))
-}
-
-/**
- * Load a YAML file. Return only objects to save vscode type checks.
- *
- * @param filePath - The path of a YAML file.
- *
- * @returns The parsed YAML file as a object. The string properties are
- * in the camleCase format.
- */
-export function loadYaml (filePath: string): object {
-  const result = yaml.safeLoad(readFile(filePath))
-  if (typeof result !== 'object') {
-    return { result }
-  }
-  return convertPropertiesSnakeToCamel(result)
 }
 
 /**

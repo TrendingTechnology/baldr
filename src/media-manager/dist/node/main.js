@@ -6,6 +6,16 @@
  *
  * @module @bldr/media-manager
  */
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -19,113 +29,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.normalizePresentationFile = exports.readAssetYaml = exports.loadYaml = exports.fetchFile = exports.moveAsset = exports.writeMetaDataYaml = exports.writeYamlFile = exports.writeFile = exports.yamlToTxt = exports.readFile = void 0;
+exports.normalizePresentationFile = exports.readAssetYaml = exports.fetchFile = exports.moveAsset = void 0;
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
 const url_1 = require("url");
-const js_yaml_1 = __importDefault(require("js-yaml"));
 const node_fetch_1 = __importDefault(require("node-fetch"));
 const core_browser_ts_1 = require("@bldr/core-browser-ts");
 const titles_1 = require("./titles");
-const helper_1 = require("./helper");
-const media_file_classes_1 = require("./media-file-classes");
-const meta_types_1 = __importDefault(require("./meta-types"));
-/**
- * Read the content of a text file in the `utf-8` format.
- *
- * A wrapper around `fs.readFileSync()`
- *
- * @param filePath - A path of a text file.
- *
- * @returns The content of the file in the `utf-8` format.
- */
-function readFile(filePath) {
-    return fs_1.default.readFileSync(filePath, { encoding: 'utf-8' });
-}
-exports.readFile = readFile;
-/**
- * Convert a Javascript object into a text string, ready to be written
- * into a text file. The property names are converted to `snake_case`.
- *
- * @param data - Some data to convert to YAML.
- *
- * @returns A string in the YAML format ready to be written into a text
- *   file. The result string begins with `---`.
- */
-function yamlToTxt(data) {
-    data = core_browser_ts_1.convertPropertiesCamelToSnake(data);
-    const yamlMarkup = [
-        '---',
-        js_yaml_1.default.safeDump(data, core_browser_ts_1.jsYamlConfig)
-    ];
-    return yamlMarkup.join('\n');
-}
-exports.yamlToTxt = yamlToTxt;
-/**
- * Write some text content into a file.
- *
- * @param filePath - A path of a text file.
- * @param content - Some text to write to a file.
- */
-function writeFile(filePath, content) {
-    fs_1.default.writeFileSync(filePath, content);
-}
-exports.writeFile = writeFile;
-/**
- * Convert some data (usually Javascript objets) into the YAML format
- * and write the string into a text file.
- *
- * @param filePath - The file path of the destination yaml file. The yml
- *   extension has to be included.
- * @param data - Some data to convert into yaml and write into a text
- *   file.
- *
- * @returns The data converted to YAML as a string.
- */
-function writeYamlFile(filePath, data) {
-    const yaml = yamlToTxt(data);
-    writeFile(filePath, yaml);
-    return yaml;
-}
-exports.writeYamlFile = writeYamlFile;
-/**
- * Write the metadata YAML file for a corresponding media file specified by
- * `filePath`.
- *
- * @param filePath - The filePath gets asciified and a yml extension
- *   is appended.
- * @param metaData
- * @param force - Always create the yaml file. Overwrite the old one.
- */
-function writeMetaDataYaml(filePath, metaData, force) {
-    if (fs_1.default.lstatSync(filePath).isDirectory())
-        return;
-    const yamlFile = `${helper_1.asciify(filePath)}.yml`;
-    if (force ||
-        !fs_1.default.existsSync(yamlFile)) {
-        if (!metaData)
-            metaData = {};
-        const asset = new media_file_classes_1.Asset(filePath);
-        if (!metaData.id) {
-            metaData.id = asset.basename;
-        }
-        if (!metaData.title) {
-            metaData.title = helper_1.deasciify(asset.basename);
-        }
-        metaData = meta_types_1.default.process(metaData);
-        writeYamlFile(yamlFile, metaData);
-        return {
-            filePath,
-            yamlFile,
-            metaData
-        };
-    }
-    return {
-        filePath,
-        msg: 'No action.'
-    };
-}
-exports.writeMetaDataYaml = writeMetaDataYaml;
+const yaml_1 = require("./yaml");
+const file_1 = require("./file");
+__exportStar(require("./yaml"), exports);
 /**
  * Move (rename) or copy a media asset and it’s corresponding meta data file
  * (`*.yml`) and preview file (`_preview.jpg`).
@@ -200,22 +113,6 @@ function fetchFile(url, dest) {
 }
 exports.fetchFile = fetchFile;
 /**
- * Load a YAML file. Return only objects to save vscode type checks.
- *
- * @param filePath - The path of a YAML file.
- *
- * @returns The parsed YAML file as a object. The string properties are
- * in the camleCase format.
- */
-function loadYaml(filePath) {
-    const result = js_yaml_1.default.safeLoad(readFile(filePath));
-    if (typeof result !== 'object') {
-        return { result };
-    }
-    return core_browser_ts_1.convertPropertiesSnakeToCamel(result);
-}
-exports.loadYaml = loadYaml;
-/**
  * Read the corresponding YAML file of a media asset.
  *
  * @param filePath - The path of the media asset (without the
@@ -226,7 +123,7 @@ function readAssetYaml(filePath) {
     if (extension !== 'yml')
         filePath = `${filePath}.yml`;
     if (fs_1.default.existsSync(filePath)) {
-        return loadYaml(filePath);
+        return yaml_1.loadYaml(filePath);
     }
 }
 exports.readAssetYaml = readAssetYaml;
@@ -269,8 +166,8 @@ function shortedMediaUris(rawYamlString, presentationId) {
  * @param filePath - A path of a text file.
  */
 function normalizePresentationFile(filePath) {
-    let textContent = readFile(filePath);
-    const presentation = loadYaml(filePath);
+    let textContent = file_1.readFile(filePath);
+    const presentation = yaml_1.loadYaml(filePath);
     // Generate meta.
     const title = new titles_1.DeepTitle(filePath);
     const meta = title.generatePresetationMeta();
@@ -280,7 +177,7 @@ function normalizePresentationFile(filePath) {
         if (presentation.meta.curriculumUrl)
             meta.curriculumUrl = presentation.meta.curriculumUrl;
     }
-    const metaString = yamlToTxt({ meta });
+    const metaString = yaml_1.yamlToTxt({ meta });
     textContent = textContent.replace(/.*\nslides:/s, metaString + '\nslides:');
     // Shorten media URIs with `./`
     if (meta.id) {
@@ -288,7 +185,7 @@ function normalizePresentationFile(filePath) {
     }
     // Remove single quotes.
     textContent = removeSingleQuotes(textContent);
-    writeFile(filePath, textContent);
+    file_1.writeFile(filePath, textContent);
     console.log(textContent);
 }
 exports.normalizePresentationFile = normalizePresentationFile;
