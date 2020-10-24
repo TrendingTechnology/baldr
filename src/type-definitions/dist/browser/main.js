@@ -3,4 +3,7 @@
  *
  * @module @bldr/type-definitions
  */
-export * from './meta-type-specs';
+export * from './meta-spec';
+export * from './asset';
+export * from './titles';
+export * from './presentation';

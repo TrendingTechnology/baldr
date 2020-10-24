@@ -6,7 +6,7 @@
 import fs from 'fs'
 import path from 'path'
 
-import { PresentationMetaFileFormat } from '@bldr/type-definitions'
+import { PresentationType } from '@bldr/type-definitions'
 
 /**
  * The configuration object from `/etc/baldr.json`
@@ -329,8 +329,8 @@ export class DeepTitle {
   /**
    * Generate a object containing the meta informations of a presentation.
    */
-  generatePresetationMeta (): PresentationMetaFileFormat {
-    const result: PresentationMetaFileFormat = {
+  generatePresetationMeta (): PresentationType.Meta {
+    const result: PresentationType.Meta = {
       id: this.id,
       subtitle: this.subtitle,
       title: this.title,

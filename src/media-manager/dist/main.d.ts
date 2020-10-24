@@ -6,7 +6,7 @@
  * @module @bldr/media-manager
  */
 import { DeepTitle, TitleTree } from './titles';
-import { PresentationFileFormat } from '@bldr/type-definitions';
+import { PresentationType } from '@bldr/type-definitions';
 interface MediaAsset {
     cover_source: string;
 }
@@ -78,7 +78,7 @@ export declare function fetchFile(url: string, dest: string): Promise<void>;
  * @returns The parsed YAML file as a object. The string properties are
  * in the camleCase format.
  */
-export declare function loadYaml(filePath: string): PresentationFileFormat | MediaAsset | object;
+export declare function loadYaml(filePath: string): PresentationType.FileFormat | MediaAsset | object;
 /**
  * Normalize a presentation file.
  *

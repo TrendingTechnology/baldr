@@ -15,7 +15,7 @@ import { getExtension, convertPropertiesCamelToSnake, convertPropertiesSnakeToCa
 
 import { DeepTitle, TitleTree } from './titles'
 
-import { PresentationFileFormat } from '@bldr/type-definitions'
+import { PresentationType } from '@bldr/type-definitions'
 
 interface MediaAsset {
   cover_source: string
@@ -163,7 +163,7 @@ export async function fetchFile (url: string, dest: string) {
  * @returns The parsed YAML file as a object. The string properties are
  * in the camleCase format.
  */
-export function loadYaml (filePath: string): PresentationFileFormat | MediaAsset | object {
+export function loadYaml (filePath: string): PresentationType.FileFormat | MediaAsset | object {
   const result = yaml.safeLoad(readFile(filePath))
   if (typeof result !== 'object') {
     return { result }
@@ -213,7 +213,7 @@ function shortedMediaUris(rawYamlString: string, presentationId: string): string
  */
 export function normalizePresentationFile(filePath: string) {
   let textContent = readFile(filePath)
-  const presentation = <PresentationFileFormat> loadYaml(filePath)
+  const presentation = <PresentationType.FileFormat> loadYaml(filePath)
 
   // Generate meta.
   const title = new DeepTitle(filePath)

@@ -17,30 +17,20 @@ import path from 'path'
 // Project packages.
 import { deepCopy, getExtension, convertPropertiesSnakeToCamel }  from '@bldr/core-browser-ts'
 import  config from '@bldr/config'
-import {
-  AssetFileFormat,
-  AssetFileFormatGeneric,
-  AssetPropName,
-  MediaPropName,
-  MediaPropSpec,
-  MediaPropSpecCollection,
-  MediaTypeName,
-  MediaTypeNames,
-  MediaTypeSpec,
-  MediaTypeSpecCollection
-} from '@bldr/type-definitions'
+
+import { MetaSpec, AssetType, DeepTitleInterface } from '@bldr/type-definitions'
 
 import { DeepTitle } from './titles'
 
-function generateTmpTypeSpecCollection(): MediaTypeSpecCollection {
-  return <MediaTypeSpecCollection> {}
+function generateTmpTypeSpecCollection(): MetaSpec.TypeCollection {
+  return <MetaSpec.TypeCollection> {}
 }
 
 /**
  * @type {module:@bldr/media-server/meta-types~typeSpecs}
  */
 //const typeSpecs = require('./meta-type-specs.js')
-const typeSpecs: MediaTypeSpecCollection = generateTmpTypeSpecCollection()
+const typeSpecs: MetaSpec.TypeCollection = generateTmpTypeSpecCollection()
 
 /**
  * Check a file path against a regular expression to get the type name.
@@ -49,11 +39,11 @@ const typeSpecs: MediaTypeSpecCollection = generateTmpTypeSpecCollection()
  *
  * @returns The type names for example `person,group,general`
  */
-function detectTypeByPath (filePath: string): MediaTypeNames | undefined {
+function detectTypeByPath (filePath: string): MetaSpec.TypeNames | undefined {
   filePath = path.resolve(filePath)
   const typeNames = new Set()
   for (const typeName in typeSpecs) {
-    const typeSpec = typeSpecs[<MediaTypeName> typeName]
+    const typeSpec = typeSpecs[<MetaSpec.TypeName> typeName]
     if (typeSpec.detectTypeByPath) {
       let regexp
       if (typeof typeSpec.detectTypeByPath === 'function') {
@@ -78,11 +68,11 @@ function detectTypeByPath (filePath: string): MediaTypeNames | undefined {
  *
  * @returns A absolute path
  */
-function formatFilePath (data: AssetFileFormat, oldPath: string): string {
+function formatFilePath (data: AssetType.FileFormat, oldPath: string): string {
   if (!data.metaTypes) throw new Error(`Your data needs a property named “metaTypes”.`)
   // TODO: support multiple types
   // person,general -> person
-  const typeName = <MediaTypeName> data.metaTypes.replace(/,.*$/, '')
+  const typeName = <MetaSpec.TypeName> data.metaTypes.replace(/,.*$/, '')
   const typeSpec = typeSpecs[typeName]
   if (!typeSpec) throw new Error(`Unkown meta type “${typeName}”.`)
 
@@ -97,7 +87,7 @@ function formatFilePath (data: AssetFileFormat, oldPath: string): string {
     // b/Bush_George-Walker/main.jpeg
   }
   if (data.extension === 'jpeg') data.extension = 'jpg'
-  let oldRelPath
+  let oldRelPath = ''
   if (oldPath) {
     oldRelPath = path.resolve(oldPath)
     oldRelPath = oldRelPath.replace(config.mediaServer.basePath, '')
@@ -132,8 +122,8 @@ function isValue (value: string | boolean | number): boolean {
  * @param typeSpec - The specification of one meta type.
  * @param replaceValues - Replace the values in the metadata object.
  */
-function applySpecToProps (data: AssetFileFormatGeneric, func: Function, typeSpec: MediaTypeSpec, replaceValues: boolean = true) {
-  function applyOneTypeSpec (props: MediaPropSpecCollection, propName: AssetPropName, data: AssetFileFormatGeneric, func: Function, replaceValues: boolean) {
+function applySpecToProps (data: AssetType.Generic, func: Function, typeSpec: MetaSpec.Type, replaceValues: boolean = true) {
+  function applyOneTypeSpec (props: MetaSpec.PropCollection, propName: AssetType.PropName, data: AssetType.Generic, func: Function, replaceValues: boolean) {
     const propSpec = props[propName]
     const value = func(propSpec, data[propName], propName)
     if (replaceValues && isValue(value)) {
@@ -142,7 +132,7 @@ function applySpecToProps (data: AssetFileFormatGeneric, func: Function, typeSpe
   }
   const propSpecs = typeSpec.props
   for (const propName in propSpecs) {
-    applyOneTypeSpec(propSpecs, <AssetPropName> propName, data, func, replaceValues)
+    applyOneTypeSpec(propSpecs, <AssetType.PropName> propName, data, func, replaceValues)
   }
   return data
 }
@@ -151,7 +141,7 @@ function applySpecToProps (data: AssetFileFormatGeneric, func: Function, typeSpe
  * @param propSpec - The
  *   specification of one property
  */
-function isPropertyDerived (propSpec: MediaPropSpec) {
+function isPropertyDerived (propSpec: MetaSpec.Prop) {
   if (propSpec && propSpec.derive && typeof propSpec.derive === 'function') {
     return true
   }
@@ -166,9 +156,9 @@ function isPropertyDerived (propSpec: MediaPropSpec) {
  * @param data - An object containing some meta data.
  * @param typeSpec - The specification of one meta type.
  */
-function sortAndDeriveProps (data: AssetFileFormatGeneric, typeSpec: MediaTypeSpec): AssetFileFormatGeneric {
-  const origData = <AssetFileFormatGeneric> deepCopy(data)
-  const result = <AssetFileFormatGeneric>{}
+function sortAndDeriveProps (data: AssetType.Generic, typeSpec: MetaSpec.Type): AssetType.Generic {
+  const origData = <AssetType.Generic> deepCopy(data)
+  const result = <AssetType.Generic>{}
 
   let folderTitles
   let filePath
@@ -180,11 +170,11 @@ function sortAndDeriveProps (data: AssetFileFormatGeneric, typeSpec: MediaTypeSp
   // Loop over the propSpecs to get a sorted object
   const propSpecs = typeSpec.props
   for (const propName in propSpecs) {
-    const propSpec = propSpecs[<AssetPropName> propName]
+    const propSpec = propSpecs[<AssetType.PropName> propName]
     const origValue = origData[propName]
     let derivedValue
     if (isPropertyDerived(propSpec) && propSpec.derive) {
-      derivedValue = propSpec.derive({ typeData: data, typeSpec, folderTitles, filePath })
+      derivedValue = propSpec.derive({ typeData: data, typeSpec, folderTitles: <DeepTitleInterface> folderTitles, filePath })
     }
 
     // Use the derived value
@@ -220,8 +210,8 @@ function sortAndDeriveProps (data: AssetFileFormatGeneric, typeSpec: MediaTypeSp
  * @param data - An object containing some meta data.
  * @param typeSpec - The type name
  */
-function formatProps (data: AssetFileFormatGeneric, typeSpec: MediaTypeSpec) {
-  function formatOneProp (spec: MediaPropSpec, value: any) {
+function formatProps (data: AssetType.Generic, typeSpec: MetaSpec.Type) {
+  function formatOneProp (spec: MetaSpec.Prop, value: any) {
     if (
       isValue(value) &&
       spec.format &&
@@ -238,8 +228,8 @@ function formatProps (data: AssetFileFormatGeneric, typeSpec: MediaTypeSpec) {
  * @param data - An object containing some meta data.
  * @param typeSpec - The specification of one meta type.
  */
-function validateProps (data: AssetFileFormatGeneric, typeSpec: MediaTypeSpec) {
-  function validateOneProp (spec: MediaPropSpec, value: any, prop: MediaPropName) {
+function validateProps (data: AssetType.Generic, typeSpec: MetaSpec.Type) {
+  function validateOneProp (spec: MetaSpec.Prop, value: any, prop: MetaSpec.PropName) {
     // required
     if (spec.required && !isValue(value)) {
       throw new Error(`Missing property ${prop}`)
@@ -261,11 +251,11 @@ function validateProps (data: AssetFileFormatGeneric, typeSpec: MediaTypeSpec) {
  * @param data - An object containing some meta data.
  * @param typeSpec - The specification of one meta type.
  */
-function removeProps (data: AssetFileFormatGeneric, typeSpec: MediaTypeSpec): AssetFileFormatGeneric {
+function removeProps (data: AssetType.Generic, typeSpec: MetaSpec.Type): AssetType.Generic {
   for (const propName in typeSpec.props) {
     if (data[propName]) {
       const value = data[propName]
-      const propSpec = typeSpec.props[<AssetPropName> propName]
+      const propSpec = typeSpec.props[<AssetType.PropName> propName]
       if (
         !isValue(value) ||
         (propSpec.state && propSpec.state === 'absent') ||
@@ -289,7 +279,7 @@ function removeProps (data: AssetFileFormatGeneric, typeSpec: MediaTypeSpec): As
  * @param data - An object containing some meta data.
  * @param typeName - The type name
  */
-function processByType (data: AssetFileFormatGeneric, typeName: MediaTypeName): AssetFileFormatGeneric {
+function processByType (data: AssetType.Generic, typeName: MetaSpec.TypeName): AssetType.Generic {
   if (!typeSpecs[typeName]) {
     throw new Error(`Unkown meta type name: “${typeName}”`)
   }
@@ -320,10 +310,10 @@ function processByType (data: AssetFileFormatGeneric, typeName: MediaTypeName): 
  *
  * @param data - An object containing some meta data.
  */
-function process (data: AssetFileFormatGeneric): AssetFileFormatGeneric {
+function process (data: AssetType.Generic): AssetType.Generic {
   // The meta type specification is in camel case. The meta data is
   // stored in the YAML format in snake case
-  data = <AssetFileFormat> convertPropertiesSnakeToCamel(data)
+  data = <AssetType.FileFormat> convertPropertiesSnakeToCamel(data)
   if (!data.metaTypes) {
     data.metaTypes = 'general'
   } else if (data.metaTypes.indexOf('general') === -1) {
@@ -331,7 +321,7 @@ function process (data: AssetFileFormatGeneric): AssetFileFormatGeneric {
   }
   if (data.metaTypes) {
     for (const typeName of data.metaTypes.split(',')) {
-      data = processByType(data, <MediaTypeName> typeName)
+      data = processByType(data, <MetaSpec.TypeName> typeName)
     }
   }
   // Do not convert back. This conversion should be the last step, before

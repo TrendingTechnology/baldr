@@ -88,7 +88,7 @@ function formatFilePath(data, oldPath) {
     }
     if (data.extension === 'jpeg')
         data.extension = 'jpg';
-    let oldRelPath;
+    let oldRelPath = '';
     if (oldPath) {
         oldRelPath = path_1.default.resolve(oldPath);
         oldRelPath = oldRelPath.replace(config_1.default.mediaServer.basePath, '');
@@ -169,7 +169,7 @@ function sortAndDeriveProps(data, typeSpec) {
         const origValue = origData[propName];
         let derivedValue;
         if (isPropertyDerived(propSpec) && propSpec.derive) {
-            derivedValue = propSpec.derive({ typeData: data, typeSpec, folderTitles, filePath });
+            derivedValue = propSpec.derive({ typeData: data, typeSpec, folderTitles: folderTitles, filePath });
         }
         // Use the derived value
         if (isValue(derivedValue) &&

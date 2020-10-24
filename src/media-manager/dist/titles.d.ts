@@ -1,7 +1,7 @@
 /**
  * @module @bldr/media-manager/titles
  */
-import { PresentationMetaFileFormat } from '@bldr/type-definitions';
+import { PresentationType } from '@bldr/type-definitions';
 interface FolderTitleSpec {
     /**
      * The title. It is the first line in the file `titles.txt`.
@@ -207,7 +207,7 @@ export declare class DeepTitle {
     /**
      * Generate a object containing the meta informations of a presentation.
      */
-    generatePresetationMeta(): PresentationMetaFileFormat;
+    generatePresetationMeta(): PresentationType.Meta;
 }
 interface SubTree {
     [key: string]: TitleTree;

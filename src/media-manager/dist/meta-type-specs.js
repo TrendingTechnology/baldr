@@ -642,6 +642,7 @@ const reference = {
     abbreviation: 'QL',
     props: {
         title: {
+            title: 'Titel der Quelle',
             derive: function ({ typeData, folderTitles, filePath }) {
                 let suffix = '';
                 if (typeData.forTeacher) {
@@ -908,6 +909,7 @@ const general = {
             removeByRegexp: new RegExp('^general$')
         },
         metaType: {
+            title: 'Metadaten-Type',
             description: 'Heißt jetzt “metaTypes”',
             state: 'absent'
         },
@@ -955,10 +957,12 @@ const general = {
         },
         // tmp property needed to generate id prefix
         filePath: {
+            title: 'Dateipfad',
             state: 'absent'
         },
         // tmp propert: needed for wiki commons files.
         extension: {
+            title: 'Dateiendung',
             state: 'absent'
         }
     },

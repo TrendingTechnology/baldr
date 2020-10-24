@@ -24,7 +24,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { deasciify, idify } from './helper'
 import { getPdfPageCount } from '@bldr/core-node'
 import { mediaUriRegExp } from '@bldr/core-browser-ts'
-import { MetaTypeSpec } from '@bldr/type-definitions'
+import { MetaSpec } from '@bldr/type-definitions'
 
 /**
  * The configuration object from `/etc/baldr.json`
@@ -91,7 +91,7 @@ function generateIdPrefix (filePath: string): string {
 /**
  * The meta data type specification “cloze”.
  */
-const cloze = <MetaTypeSpec> {
+const cloze = <MetaSpec.Type> {
   title: 'Lückentext',
   abbreviation: 'LT',
   detectTypeByPath: function () {
@@ -153,7 +153,7 @@ const cloze = <MetaTypeSpec> {
 /**
  * The meta data type specification “composition”.
  */
-const composition = <MetaTypeSpec> {
+const composition = <MetaSpec.Type> {
   title: 'Komposition',
   detectTypeByPath: new RegExp('^.*/HB/.*m4a$'),
   props: {
@@ -227,7 +227,7 @@ const composition = <MetaTypeSpec> {
 /**
  * The meta data type specification “cover”.
  */
-const cover = <MetaTypeSpec> {
+const cover = <MetaSpec.Type> {
   title: 'Vorschau-Bild',
   detectTypeByPath: new RegExp('^.*/HB/.*(png|jpg)$'),
   props: {
@@ -249,7 +249,7 @@ const cover = <MetaTypeSpec> {
 /**
  * The meta data type specification “group”.
  */
-const group = <MetaTypeSpec> {
+const group = <MetaSpec.Type> {
   title: 'Gruppe',
   abbreviation: 'GR',
   basePath: path.join(config.mediaServer.basePath, 'Gruppen'),
@@ -360,7 +360,7 @@ const group = <MetaTypeSpec> {
 /**
  * The meta data type specification “instrument”.
  */
-const instrument = <MetaTypeSpec> {
+const instrument = <MetaSpec.Type> {
   title: 'Instrument',
   abbreviation: 'IN',
   basePath: path.join(config.mediaServer.basePath, 'Instrumente'),
@@ -432,7 +432,7 @@ const instrument = <MetaTypeSpec> {
 /**
  * The meta data type specification “person”.
  */
-const person = <MetaTypeSpec> {
+const person = <MetaSpec.Type> {
   title: 'Person',
   abbreviation: 'PR',
   basePath: path.join(config.mediaServer.basePath, 'Personen'),
@@ -569,7 +569,7 @@ const person = <MetaTypeSpec> {
 /**
  * The meta data type specification “photo”.
  */
-const photo = <MetaTypeSpec> {
+const photo = <MetaSpec.Type> {
   title: 'Foto',
   abbreviation: 'FT',
   detectTypeByPath: function () {
@@ -585,7 +585,7 @@ const photo = <MetaTypeSpec> {
 /**
  * The meta data type specification “radio”.
  */
-const radio = <MetaTypeSpec> {
+const radio = <MetaSpec.Type> {
   title: 'Schulfunk',
   abbreviation: 'SF',
   props: {
@@ -598,7 +598,7 @@ const radio = <MetaTypeSpec> {
 /**
  * The meta data type specification “recording”.
  */
-const recording = <MetaTypeSpec> {
+const recording = <MetaSpec.Type> {
   title: 'Aufnahme',
   detectTypeByPath: new RegExp('^.*/HB/.*m4a$'),
   props: {
@@ -647,7 +647,7 @@ const recording = <MetaTypeSpec> {
 /**
  * The meta data type specification “reference”.
  */
-const reference = <MetaTypeSpec> {
+const reference = <MetaSpec.Type> {
   title: 'Quelle',
   description: 'Quelle, auf der eine Unterrichtsstunde aufbaut, z. B. Auszüge aus Schulbüchern.',
   detectTypeByPath: function () {
@@ -709,7 +709,7 @@ const reference = <MetaTypeSpec> {
 /**
  * The meta data type specification “score”.
  */
-const score = <MetaTypeSpec> {
+const score = <MetaSpec.Type> {
   title: 'Partitur',
   abbreviation: 'PT',
   detectTypeByPath: function () {
@@ -732,7 +732,7 @@ const score = <MetaTypeSpec> {
 /**
  * The meta data type specification “song”.
  */
-const song = <MetaTypeSpec> {
+const song = <MetaSpec.Type> {
   title: 'Lied',
   props: {
     publicationDate: {
@@ -781,7 +781,7 @@ const song = <MetaTypeSpec> {
 /**
  * The meta data type specification “worksheet”.
  */
-const worksheet = <MetaTypeSpec> {
+const worksheet = <MetaSpec.Type> {
   title: 'Arbeitsblatt',
   abbreviation: 'TX',
   detectTypeByPath: function () {
@@ -814,7 +814,7 @@ const worksheet = <MetaTypeSpec> {
 /**
  * The meta data type specification “youtube”.
  */
-const youtube = <MetaTypeSpec> {
+const youtube = <MetaSpec.Type> {
   title: 'YouTube-Video',
   abbreviation: 'YT',
   detectTypeByPath: function () {
@@ -870,7 +870,7 @@ const youtube = <MetaTypeSpec> {
  * General meta data type specification. Applied after all other meta data
  * types.
  */
-const general = <MetaTypeSpec> {
+const general = <MetaSpec.Type> {
   title: 'Allgemeiner Metadaten-Type',
   props: {
     id: {
