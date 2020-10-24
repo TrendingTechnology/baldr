@@ -5,11 +5,8 @@
  *
  * @module @bldr/media-manager
  */
+import { AssetType } from '@bldr/type-definitions';
 import { DeepTitle, TitleTree } from './titles';
-import { PresentationType } from '@bldr/type-definitions';
-interface MediaAsset {
-    cover_source: string;
-}
 /**
  * Read the content of a text file in the `utf-8` format.
  *
@@ -78,7 +75,14 @@ export declare function fetchFile(url: string, dest: string): Promise<void>;
  * @returns The parsed YAML file as a object. The string properties are
  * in the camleCase format.
  */
-export declare function loadYaml(filePath: string): PresentationType.FileFormat | MediaAsset | object;
+export declare function loadYaml(filePath: string): object;
+/**
+ * Read the corresponding YAML file of a media asset.
+ *
+ * @param filePath - The path of the media asset (without the
+ *   extension `.yml`).
+ */
+export declare function readAssetYaml(filePath: string): AssetType.Generic | undefined;
 /**
  * Normalize a presentation file.
  *

@@ -19,12 +19,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.normalizePresentationFile = exports.loadYaml = exports.fetchFile = exports.moveAsset = exports.writeYamlFile = exports.writeFile = exports.yamlToTxt = exports.readFile = void 0;
+exports.normalizePresentationFile = exports.readAssetYaml = exports.loadYaml = exports.fetchFile = exports.moveAsset = exports.writeYamlFile = exports.writeFile = exports.yamlToTxt = exports.readFile = void 0;
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
+const url_1 = require("url");
 const js_yaml_1 = __importDefault(require("js-yaml"));
 const node_fetch_1 = __importDefault(require("node-fetch"));
-const url_1 = require("url");
 const core_browser_ts_1 = require("@bldr/core-browser-ts");
 const titles_1 = require("./titles");
 /**
@@ -174,6 +174,21 @@ function loadYaml(filePath) {
     return core_browser_ts_1.convertPropertiesSnakeToCamel(result);
 }
 exports.loadYaml = loadYaml;
+/**
+ * Read the corresponding YAML file of a media asset.
+ *
+ * @param filePath - The path of the media asset (without the
+ *   extension `.yml`).
+ */
+function readAssetYaml(filePath) {
+    const extension = core_browser_ts_1.getExtension(filePath);
+    if (extension !== 'yml')
+        filePath = `${filePath}.yml`;
+    if (fs_1.default.existsSync(filePath)) {
+        return loadYaml(filePath);
+    }
+}
+exports.readAssetYaml = readAssetYaml;
 /**
  * Remove unnecessary single quotes.
  *

@@ -40,26 +40,6 @@ function filePathToAssetType (filePath) {
 /**
  * TODO: Remove and use version in @bldr/media-manager.
  *
- * Read the corresponding YAML file of a media asset.
- *
- * @param {String} filePath - The path of the media asset (without the
- *   extension `.yml`).
- *
- * @returns {Object}
- */
-function readAssetYaml (filePath) {
-  const extension = getExtension(filePath)
-  if (extension !== 'yml') filePath = `${filePath}.yml`
-  if (fs.existsSync(filePath)) {
-    let data = yaml.safeLoad(readFile(filePath))
-    data = convertPropertiesCase(data, 'snake-to-camel')
-    return data
-  }
-}
-
-/**
- * TODO: Remove and use version in @bldr/media-manager.
- *
  * Write the metadata YAML file for a corresponding media file specified by
  * `filePath`.
  *
@@ -101,6 +81,5 @@ function writeMetaDataYaml (filePath, metaData, force) {
 module.exports = {
   filePathToAssetType,
   makeAsset,
-  readAssetYaml,
   writeMetaDataYaml
 }

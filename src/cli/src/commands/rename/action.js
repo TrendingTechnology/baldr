@@ -3,9 +3,8 @@ const path = require('path')
 
 // Project packages.
 const mediaServer = require('@bldr/media-server')
-const lib = require('../../lib.js')
 const { getExtension } = require('@bldr/core-browser')
-const { moveAsset } = require('@bldr/media-manager')
+const { moveAsset, readAssetYaml} = require('@bldr/media-manager')
 
 /**
  * Rename one file.
@@ -15,7 +14,7 @@ const { moveAsset } = require('@bldr/media-manager')
  * @returns {String} - The new file name.
  */
 function renameOneFile (oldPath) {
-  const metaData = lib.readAssetYaml(oldPath)
+  const metaData = readAssetYaml(oldPath)
   let newPath
   if (metaData && metaData.metaTypes) {
     metaData.extension = getExtension(oldPath)

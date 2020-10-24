@@ -3,16 +3,13 @@ const fs = require('fs')
 const assert = require('assert')
 
 // Third party packages.
-const yaml = require('js-yaml')
 const chalk = require('chalk')
 
 // Project packages.
 const mediaServer = require('@bldr/media-server')
 const wikidata = require('@bldr/wikidata')
 const { deepCopy, msleep } = require('@bldr/core-browser')
-const { writeYamlFile } = require('@bldr/media-manager')
-
-const lib = require('../../lib.js')
+const { writeYamlFile, readAssetYaml } = require('@bldr/media-manager')
 
 async function queryWikidata (metaData, typeNames, typeSpecs) {
   console.log(`Query wikidata item “${chalk.yellow(metaData.wikidata)}” for meta data types “${chalk.yellow(typeNames)}”`)
@@ -54,7 +51,7 @@ async function normalizeOneFile (filePath, cmdObj = { wikidata: false }) {
     // Always: general
     const typeNames = metaTypes.detectTypeByPath(filePath)
     const yamlFile = `${filePath}.yml`
-    let metaData = lib.readAssetYaml(filePath)
+    let metaData = readAssetYaml(filePath)
     metaData.filePath = filePath
     const origData = deepCopy(metaData)
 

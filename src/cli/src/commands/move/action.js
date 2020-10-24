@@ -9,8 +9,13 @@ const chalk = require('chalk')
 // Project packages.
 const mediaServer = require('@bldr/media-server')
 const coreBrowser = require('@bldr/core-browser')
-const lib = require('../../lib.js')
-const { moveAsset, readFile, writeFile, writeYamlFile } = require('@bldr/media-manager')
+const {
+  moveAsset,
+  readFile,
+  writeFile,
+  writeYamlFile,
+  readAssetYaml
+} = require('@bldr/media-manager')
 
 const commandConvert = require('../convert/action.js')
 const { createYamlOneFile } = require('../yaml/action.js')
@@ -193,7 +198,7 @@ async function moveMp3 (oldPath, newPath, cmdObj) {
   // Convert into m4a.
   newPath = await commandConvert.convert(tmpMp3Path)
 
-  let metaData = lib.readAssetYaml(newPath)
+  let metaData = readAssetYaml(newPath)
   metaData.metaType = 'composition'
 
   // Try to get the MusicBrainz recording ID.
@@ -216,7 +221,7 @@ async function moveReference (oldPath, cmdObj) {
   moveAsset(oldPath, newPath, cmdObj)
   if (cmdObj.dryRun) return
   await createYamlOneFile(newPath)
-  const metaData = lib.readAssetYaml(newPath)
+  const metaData = readAssetYaml(newPath)
   metaData.reference_title = 'Tonart: Musik erleben - reflektieren - interpretieren; Lehrwerk für die Oberstufe.'
   metaData.author = 'Wieland Schmid'
   metaData.publisher = 'Helbling'

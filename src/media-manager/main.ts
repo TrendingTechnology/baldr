@@ -8,18 +8,20 @@
 
 import fs from 'fs'
 import path from 'path'
+import { URL } from 'url'
+
 import yaml from 'js-yaml'
 import fetch from 'node-fetch'
-import { URL } from 'url'
-import { getExtension, convertPropertiesCamelToSnake, convertPropertiesSnakeToCamel, jsYamlConfig } from '@bldr/core-browser-ts'
+
+import {
+  convertPropertiesCamelToSnake,
+  convertPropertiesSnakeToCamel,
+  getExtension,
+  jsYamlConfig
+} from '@bldr/core-browser-ts'
+import { PresentationType, AssetType } from '@bldr/type-definitions'
 
 import { DeepTitle, TitleTree } from './titles'
-
-import { PresentationType } from '@bldr/type-definitions'
-
-interface MediaAsset {
-  cover_source: string
-}
 
 /**
  * Read the content of a text file in the `utf-8` format.
@@ -163,12 +165,26 @@ export async function fetchFile (url: string, dest: string) {
  * @returns The parsed YAML file as a object. The string properties are
  * in the camleCase format.
  */
-export function loadYaml (filePath: string): PresentationType.FileFormat | MediaAsset | object {
+export function loadYaml (filePath: string): object {
   const result = yaml.safeLoad(readFile(filePath))
   if (typeof result !== 'object') {
     return { result }
   }
   return convertPropertiesSnakeToCamel(result)
+}
+
+/**
+ * Read the corresponding YAML file of a media asset.
+ *
+ * @param filePath - The path of the media asset (without the
+ *   extension `.yml`).
+ */
+export function readAssetYaml (filePath: string): AssetType.Generic | undefined {
+  const extension = getExtension(filePath)
+  if (extension !== 'yml') filePath = `${filePath}.yml`
+  if (fs.existsSync(filePath)) {
+    return loadYaml(filePath)
+  }
 }
 
 /**
