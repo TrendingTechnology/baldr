@@ -7,6 +7,8 @@
  * @module @bldr/core-browser-ts
  */
 
+export * from './asset-types'
+
 /**
  * Create a deep copy of an object. This functions uses the two methods
  * `JSON.parse()` and `JSON.stringify()` to accomplish its task.

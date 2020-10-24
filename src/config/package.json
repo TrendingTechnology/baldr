@@ -20,6 +20,9 @@
     "build": "npm run build:node",
     "build:node": "tsc --module commonjs --outDir dist/node"
   },
+  "dependencies": {
+    "@bldr/type-definitions": "^0.1.0"
+  },
   "devDependencies": {
     "@types/node": "^14.11.8"
   },

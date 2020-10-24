@@ -3,7 +3,8 @@
  *
  * @module @bldr/type-definitions
  */
-export * from './meta-spec';
 export * from './asset';
-export * from './titles';
+export * from './config';
+export * from './meta-spec';
 export * from './presentation';
+export * from './titles';

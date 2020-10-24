@@ -6,6 +6,7 @@
  *
  * @module @bldr/core-browser-ts
  */
+export * from './asset-types';
 /**
  * Create a deep copy of an object. This functions uses the two methods
  * `JSON.parse()` and `JSON.stringify()` to accomplish its task.
@@ -93,4 +94,3 @@ export declare const jsYamlConfig: {
  * `uuid:c262fe9b-c705-43fd-a5d4-4bb38178d9e7`
  */
 export declare const mediaUriRegExp: RegExp;
-export {};

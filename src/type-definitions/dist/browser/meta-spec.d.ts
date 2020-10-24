@@ -250,7 +250,7 @@ export declare namespace MetaSpec {
         [key in TypeName]: Type;
     };
     /**
-     * Generic type for metadata for assets.
+     * Generic type for metadata of assets.
      */
     export type Data = {
         [key: string]: any;
