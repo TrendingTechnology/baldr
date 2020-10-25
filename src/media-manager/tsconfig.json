@@ -8,6 +8,6 @@
     "lib": ["es2020"],
     "esModuleInterop": true
   },
-  "include": ["*.ts"],
+  "include": ["**.ts"],
   "exclude": ["node_modules", "**/__tests__/*"]
 }

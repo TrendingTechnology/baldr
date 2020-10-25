@@ -10,13 +10,14 @@ import fetch from 'node-fetch'
 // Third party packages.
 import * as wikibaseSdk from 'wikibase-sdk'
 
+// Project packages.
+import { fetchFile } from '@bldr/core-node'
+import { MetaSpec } from '@bldr/type-definitions'
+
 const wikibase = wikibaseSdk({
   instance: 'https://www.wikidata.org',
   sparqlEndpoint: 'https://query.wikidata.org/sparql'
 })
-
-import { fetchFile } from '@bldr/media-manager'
-import { MetaSpec } from '@bldr/type-definitions'
 
 interface LabelsCollection {
   de: string
@@ -486,7 +487,7 @@ async function query (itemId: string, typeNames: MetaSpec.TypeNames, typeSpecs: 
   return data
 }
 
-module.exports = {
+export default {
   fetchCommonsFile,
   mergeData,
   query

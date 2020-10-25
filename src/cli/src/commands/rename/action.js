@@ -3,7 +3,7 @@ const path = require('path')
 
 // Project packages.
 const mediaServer = require('@bldr/media-server')
-const { renameMediaAsset } = require('@bldr/media-manager')
+const { operations } = require('@bldr/media-manager')
 
 /**
  * Rename files.
@@ -14,7 +14,7 @@ const { renameMediaAsset } = require('@bldr/media-manager')
 function action (files) {
   mediaServer.walk({
     all (oldPath) {
-      renameMediaAsset(oldPath)
+      operations.renameMediaAsset(oldPath)
     }
   }, {
     path: files

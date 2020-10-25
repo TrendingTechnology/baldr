@@ -296,6 +296,22 @@ function processByType (data: AssetType.Generic, typeName: MetaSpec.TypeName): A
 }
 
 /**
+ * Merge type names to avoid duplicate metadata type names:
+ */
+function mergeTypeNames (...typeName: string[]): string {
+  const types = new Set()
+  for (let i = 0; i < arguments.length; i++) {
+    const typeNames = arguments[i]
+    if (typeNames) {
+      for (const typeName of typeNames.split(',')) {
+        types.add(typeName)
+      }
+    }
+  }
+  return [...types].join(',')
+}
+
+/**
  * Bundle three operations: Sort and derive, format, validate.
  *
  * @param data - An object containing some meta data.
@@ -324,5 +340,6 @@ export default {
   detectTypeByPath,
   formatFilePath,
   process,
-  typeSpecs
+  typeSpecs,
+  mergeTypeNames
 }

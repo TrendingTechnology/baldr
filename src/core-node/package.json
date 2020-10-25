@@ -22,10 +22,12 @@
   },
   "main": "dist/node/main.js",
   "dependencies": {
-    "git-rev-sync": "3.0.1"
+    "git-rev-sync": "3.0.1",
+    "node-fetch": "^2.6.1"
   },
   "devDependencies": {
-    "@types/node": "12.12.2"
+    "@types/node": "12.12.2",
+    "@types/node-fetch": "^2.5.7"
   },
   "publishConfig": {
     "access": "public"

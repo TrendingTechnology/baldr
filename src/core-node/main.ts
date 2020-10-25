@@ -9,9 +9,12 @@
 import childProcess from 'child_process'
 import fs from 'fs'
 import util from 'util'
+import path from 'path'
+import { URL } from 'url'
 
 // Third party packages
 import git from 'git-rev-sync'
+import fetch from 'node-fetch'
 
 /**
  * Wrapper around `util.format()` and `console.log()`
@@ -68,6 +71,19 @@ export function getPdfPageCount (filePath: string): number {
     return parseInt(match[1])
   }
   return 0
+}
+
+/**
+ * Download a URL to a destination.
+ *
+ * @param url - The URL.
+ * @param dest - The destination. Missing parent directories are
+ *   automatically created.
+ */
+export async function fetchFile (url: string, dest: string) {
+  const response = await fetch(new URL(url))
+  fs.mkdirSync(path.dirname(dest), { recursive: true })
+  fs.writeFileSync(dest, Buffer.from(await response.arrayBuffer()))
 }
 
 export default {

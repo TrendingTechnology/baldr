@@ -28,6 +28,14 @@ export declare function checkExecutables(executables: string | string[]): void;
  * @param filePath - The path on an PDF file.
  */
 export declare function getPdfPageCount(filePath: string): number;
+/**
+ * Download a URL to a destination.
+ *
+ * @param url - The URL.
+ * @param dest - The destination. Missing parent directories are
+ *   automatically created.
+ */
+export declare function fetchFile(url: string, dest: string): Promise<void>;
 declare const _default: {
     checkExecutables: typeof checkExecutables;
     getPdfPageCount: typeof getPdfPageCount;

@@ -273,6 +273,21 @@ function processByType(data, typeName) {
     return data;
 }
 /**
+ * Merge type names to avoid duplicate metadata type names:
+ */
+function mergeTypeNames(...typeName) {
+    const types = new Set();
+    for (let i = 0; i < arguments.length; i++) {
+        const typeNames = arguments[i];
+        if (typeNames) {
+            for (const typeName of typeNames.split(',')) {
+                types.add(typeName);
+            }
+        }
+    }
+    return [...types].join(',');
+}
+/**
  * Bundle three operations: Sort and derive, format, validate.
  *
  * @param data - An object containing some meta data.
@@ -301,5 +316,6 @@ exports.default = {
     detectTypeByPath,
     formatFilePath,
     process,
-    typeSpecs: meta_type_specs_1.default
+    typeSpecs: meta_type_specs_1.default,
+    mergeTypeNames
 };

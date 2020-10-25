@@ -18,11 +18,12 @@ const childProcess = require("child_process");
 const node_fetch_1 = require("node-fetch");
 // Third party packages.
 const wikibaseSdk = require("wikibase-sdk");
+// Project packages.
+const core_node_1 = require("@bldr/core-node");
 const wikibase = wikibaseSdk({
     instance: 'https://www.wikidata.org',
     sparqlEndpoint: 'https://query.wikidata.org/sparql'
 });
-const media_manager_1 = require("@bldr/media-manager");
 /**
  * ```js
  * let entity = {
@@ -109,7 +110,7 @@ function getEntities(itemIds, props) {
  */
 function fetchResizeFile(url, dest) {
     return __awaiter(this, void 0, void 0, function* () {
-        yield media_manager_1.fetchFile(url, dest);
+        yield core_node_1.fetchFile(url, dest);
         if (fs.existsSync(dest)) {
             const stat = fs.statSync(dest);
             if (stat.size > 500000) {
@@ -450,7 +451,7 @@ function query(itemId, typeNames, typeSpecs) {
         return data;
     });
 }
-module.exports = {
+exports.default = {
     fetchCommonsFile,
     mergeData,
     query

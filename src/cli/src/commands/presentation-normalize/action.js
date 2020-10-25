@@ -1,8 +1,8 @@
 // Project packages.
-const { normalizePresentationFile } = require('@bldr/media-manager')
+const { operations } = require('@bldr/media-manager')
 
 async function action (filePath) {
-  normalizePresentationFile(filePath)
+  operations.normalizePresentationFile(filePath)
 }
 
 module.exports = action

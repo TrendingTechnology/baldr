@@ -31,6 +31,10 @@ declare function detectTypeByPath(filePath: string): MetaSpec.TypeNames | undefi
  */
 declare function formatFilePath(data: AssetType.FileFormat, oldPath: string): string;
 /**
+ * Merge type names to avoid duplicate metadata type names:
+ */
+declare function mergeTypeNames(...typeName: string[]): string;
+/**
  * Bundle three operations: Sort and derive, format, validate.
  *
  * @param data - An object containing some meta data.
@@ -57,5 +61,6 @@ declare const _default: {
         youtube: MetaSpec.Type;
         general: MetaSpec.Type;
     };
+    mergeTypeNames: typeof mergeTypeNames;
 };
 export default _default;

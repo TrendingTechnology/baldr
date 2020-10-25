@@ -7,6 +7,15 @@
  */
 import { AssetType } from '@bldr/type-definitions';
 import { DeepTitle, TitleTree } from './titles';
+import { renameMediaAsset } from './operations/rename-asset';
+import { normalizePresentationFile } from './operations/normalize-presentation';
+/**
+ * A collection of function to manipulate the media assets and presentation files.
+ */
+export declare const operations: {
+    renameMediaAsset: typeof renameMediaAsset;
+    normalizePresentationFile: typeof normalizePresentationFile;
+};
 export * from './yaml';
 interface MoveAssetConfiguration {
     copy: boolean;
@@ -22,36 +31,12 @@ interface MoveAssetConfiguration {
  */
 export declare function moveAsset(oldPath: string, newPath: string, opts?: MoveAssetConfiguration): string | undefined;
 /**
- * Download a URL to a destination.
- *
- * @param url - The URL.
- * @param dest - The destination. Missing parent directories are
- *   automatically created.
- */
-export declare function fetchFile(url: string, dest: string): Promise<void>;
-/**
  * Read the corresponding YAML file of a media asset.
  *
  * @param filePath - The path of the media asset (without the
  *   extension `.yml`).
  */
 export declare function readAssetYaml(filePath: string): AssetType.Generic | undefined;
-/**
- * Rename a media asset and its meta data files.
- *
- * @param oldPath - The media file path.
- *
- * @returns The new file name.
- */
-export declare function renameMediaAsset(oldPath: string): string;
-/**
- * Normalize a presentation file.
- *
- * Remove unnecessary single quotes around media URIs.
- *
- * @param filePath - A path of a text file.
- */
-export declare function normalizePresentationFile(filePath: string): void;
 declare const _default: {
     DeepTitle: typeof DeepTitle;
     TitleTree: typeof TitleTree;

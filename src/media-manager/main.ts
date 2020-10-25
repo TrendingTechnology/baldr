@@ -8,20 +8,24 @@
 
 import fs from 'fs'
 import path from 'path'
-import { URL } from 'url'
-
-import fetch from 'node-fetch'
 
 import {
   getExtension
 } from '@bldr/core-browser'
-import { PresentationType, AssetType } from '@bldr/type-definitions'
+import { AssetType } from '@bldr/type-definitions'
 
 import { DeepTitle, TitleTree } from './titles'
-import { loadYaml, yamlToTxt } from './yaml'
-import { readFile, writeFile } from './file'
-import metaTypes from './meta-types'
-import { asciify } from './helper'
+import { loadYaml } from './yaml'
+import { renameMediaAsset } from './operations/rename-asset'
+import { normalizePresentationFile } from './operations/normalize-presentation'
+
+/**
+ * A collection of function to manipulate the media assets and presentation files.
+ */
+export const operations = {
+  renameMediaAsset,
+  normalizePresentationFile
+}
 
 export * from './yaml'
 
@@ -89,19 +93,6 @@ export function moveAsset (oldPath: string, newPath: string, opts: MoveAssetConf
 }
 
 /**
- * Download a URL to a destination.
- *
- * @param url - The URL.
- * @param dest - The destination. Missing parent directories are
- *   automatically created.
- */
-export async function fetchFile (url: string, dest: string) {
-  const response = await fetch(new URL(url))
-  fs.mkdirSync(path.dirname(dest), { recursive: true })
-  fs.writeFileSync(dest, Buffer.from(await response.arrayBuffer()))
-}
-
-/**
  * Read the corresponding YAML file of a media asset.
  *
  * @param filePath - The path of the media asset (without the
@@ -113,98 +104,6 @@ export function readAssetYaml (filePath: string): AssetType.Generic | undefined 
   if (fs.existsSync(filePath)) {
     return loadYaml(filePath)
   }
-}
-
-/**
- * Rename a media asset and its meta data files.
- *
- * @param oldPath - The media file path.
- *
- * @returns The new file name.
- */
-export function renameMediaAsset (oldPath: string): string {
-  const metaData = readAssetYaml(oldPath)
-  let newPath
-  if (metaData && metaData.metaTypes) {
-    metaData.extension = getExtension(oldPath)
-    newPath = metaTypes.formatFilePath(<AssetType.FileFormat> metaData, oldPath)
-  }
-
-  if (!newPath) newPath = asciify(oldPath)
-  const basename = path.basename(newPath)
-  // Remove a- and v- prefixes
-  const cleanedBasename = basename.replace(/^[va]-/g, '')
-  if (cleanedBasename !== basename) {
-    newPath = path.join(path.dirname(newPath), cleanedBasename)
-  }
-  moveAsset(oldPath, newPath)
-  return newPath
-}
-
-/**
- * Remove unnecessary single quotes.
- *
- * js-yaml add single quotes arround the media URIs, for example
- * `'id:fuer-elise'`.
- *
- * @param rawYamlString - A raw YAML string (not converted into a
- *   Javascript object).
- *
- * @returns A raw YAML string without single quotes around the media
- *   URIs.
- */
-function removeSingleQuotes(rawYamlString: string): string {
-  return rawYamlString.replace(/ 'id:([^']*)'/g, ' id:$1')
-}
-
-/**
- * Shorten all media URIs in a presentation file.
- *
- * The presentation is not converted into YAML. This function operates
- * by replacing text substrings.
- *
- * @param rawYamlString - A raw YAML string (not converted into a
- *   Javascript object).
- * @param presentationId - The ID of a presentation.
- *
- * @returns A raw YAML string without single quotes around the media
- *   URIs.
- */
-function shortedMediaUris(rawYamlString: string, presentationId: string): string {
-  return rawYamlString.replace(new RegExp(`id:${presentationId}_`, 'g'), 'id:./')
-}
-
-/**
- * Normalize a presentation file.
- *
- * Remove unnecessary single quotes around media URIs.
- *
- * @param filePath - A path of a text file.
- */
-export function normalizePresentationFile(filePath: string) {
-  let textContent = readFile(filePath)
-  const presentation = <PresentationType.FileFormat> loadYaml(filePath)
-
-  // Generate meta.
-  const title = new DeepTitle(filePath)
-  const meta = title.generatePresetationMeta()
-  if (presentation.meta) {
-    if (presentation.meta.id) meta.id = presentation.meta.id
-    if (presentation.meta.curriculumUrl) meta.curriculumUrl = presentation.meta.curriculumUrl
-  }
-  const metaString = yamlToTxt({ meta })
-  textContent = textContent.replace(/.*\nslides:/s, metaString + '\nslides:')
-
-  // Shorten media URIs with `./`
-  if (meta.id) {
-    textContent = shortedMediaUris(textContent, meta.id)
-  }
-
-  // Remove single quotes.
-  textContent = removeSingleQuotes(textContent)
-  writeFile(filePath, textContent)
-
-  console.log(textContent)
 }
 
 export default {
