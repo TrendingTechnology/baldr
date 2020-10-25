@@ -10,7 +10,7 @@
  *
  * @returns A string formatted in `snake_case`.
  *
- * @see {@link module:@bldr/core-browser.convertPropertiesCase}
+ * @see {@link module:@bldr/core-browser.convertProperties}
  * @see {@link https://vladimir-ivanov.net/camelcase-to-snake_case-and-vice-versa-with-javascript/}
  */
 export declare function convertCamelToSnake(text: string): string;
@@ -21,7 +21,7 @@ export declare function convertCamelToSnake(text: string): string;
  *
  * @returns A string formatted in `camelCase`.
  *
- * @see {@link module:@bldr/core-browser.convertPropertiesCase}
+ * @see {@link module:@bldr/core-browser.convertProperties}
  * @see {@link https://catalin.me/javascript-snake-to-camel/}
  */
 export declare function convertSnakeToCamel(text: string): string;
@@ -119,7 +119,7 @@ interface ShortenTextOptions {
  * @param text
  * @param options
  */
-export declare function shortenText(text: string, { maxLength, stripTags }: ShortenTextOptions): string;
+export declare function shortenText(text: string, options?: ShortenTextOptions): string;
 /**
  * Format a date specification string into a local date string, for
  * example `28. August 1749`

@@ -15,7 +15,7 @@
 const path = require('path')
 
 // Project packages.
-const { deepCopy, getExtension, convertPropertiesCase } = require('@bldr/core-browser')
+const { deepCopy, getExtension, convertPropertiesSnakeToCamel } = require('@bldr/core-browser')
 
 const config = require('@bldr/config')
 
@@ -437,7 +437,7 @@ function processByType (data, typeName) {
 function process (data) {
   // The meta type specification is in camel case. The meta data is
   // stored in the YAML format in snake case
-  data = convertPropertiesCase(data, 'snake-to-camel')
+  data = convertPropertiesSnakeToCamel(data)
   if (!data.metaTypes) {
     data.metaTypes = 'general'
   } else if (data.metaTypes.indexOf('general') === -1) {
@@ -450,7 +450,7 @@ function process (data) {
   }
   // Do not convert back. This conversion should be the last step, before
   // object is converted to YAML.
-  // convertPropertiesCase(data, 'camel-to-snake')
+  // convertPropertiesCamelToSnakedata, 'camel-to-snake')
   return data
 }
 

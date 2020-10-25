@@ -11,7 +11,7 @@
  *
  * @returns A string formatted in `snake_case`.
  *
- * @see {@link module:@bldr/core-browser.convertPropertiesCase}
+ * @see {@link module:@bldr/core-browser.convertProperties}
  * @see {@link https://vladimir-ivanov.net/camelcase-to-snake_case-and-vice-versa-with-javascript/}
  */
 export function convertCamelToSnake (text: string): string {
@@ -27,7 +27,7 @@ export function convertCamelToSnake (text: string): string {
  *
  * @returns A string formatted in `camelCase`.
  *
- * @see {@link module:@bldr/core-browser.convertPropertiesCase}
+ * @see {@link module:@bldr/core-browser.convertProperties}
  * @see {@link https://catalin.me/javascript-snake-to-camel/}
  */
 export function convertSnakeToCamel (text: string): string {
@@ -208,14 +208,25 @@ interface ShortenTextOptions {
  * @param text
  * @param options
  */
-export function shortenText (text: string, { maxLength, stripTags }: ShortenTextOptions) {
+export function shortenText (text: string, options?: ShortenTextOptions) {
+  const defaults = {
+    stripTags: false,
+    maxLength: 80
+  }
+  if (!options) {
+    options = defaults
+  } else {
+    options = <ShortenTextOptions> Object.assign(defaults, options)
+  }
+
   if (!text) return ''
-  if (!maxLength) maxLength = 80
-  if (stripTags) text = convertHtmlToPlainText(text)
-  if (text.length < maxLength) return text
+  if (options.stripTags) {
+    text = convertHtmlToPlainText(text)
+  }
+  if (text.length < options.maxLength) return text
   // https://stackoverflow.com/a/5454303
   // trim the string to the maximum length
-  text = text.substr(0, maxLength)
+  text = text.substr(0, options.maxLength)
   // re-trim if we are in the middle of a word
   text = text.substr(0, Math.min(text.length, text.lastIndexOf(' ')))
   return `${text} …`

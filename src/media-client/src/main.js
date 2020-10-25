@@ -32,7 +32,7 @@ import {
   convertDurationToSeconds,
   formatMultiPartAssetFileName,
   mediaUriRegExp,
-  plainText,
+  convertHtmlToPlainText,
   selectSubset
 } from '@bldr/core-browser'
 

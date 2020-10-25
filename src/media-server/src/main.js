@@ -74,7 +74,7 @@ const yaml = require('js-yaml')
 
 // Project packages.
 const config = require('@bldr/config')
-const { MediaCategoriesManager, convertPropertiesCase } = require('@bldr/core-browser')
+const { MediaCategoriesManager, convertPropertiesSnakeToCamel } = require('@bldr/core-browser')
 
 const registerSeatingPlan = require('./seating-plan.js').registerRestApi
 
@@ -247,7 +247,7 @@ class MediaFile {
    */
   importProperties (properties) {
     if (typeof properties === 'object') {
-      properties = convertPropertiesCase(properties, 'snake-to-camel')
+      properties = convertPropertiesSnakeToCamel(properties)
       for (const property in properties) {
         this[property] = properties[property]
       }
