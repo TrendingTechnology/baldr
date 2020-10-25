@@ -5,8 +5,8 @@
  */
 import { Configuration } from '@bldr/type-definitions';
 /**
- * Categories some asset file formats in asset types: For example: `audio`, `image`,
- * `video`, `document`.
+ * Categories some media asset file formats in asset types: For example:
+ * `audio`, `image`, `video`, `document`.
  */
 export declare class MediaCategoriesManager {
     private config;

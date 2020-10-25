@@ -7,6 +7,7 @@ _transpile() {
   if [ ! -d "$1" ]; then
     exit 1
   fi
+  rm -rf dist
   npm run build
   if [ "$?" != 0 ]; then
     exit 1

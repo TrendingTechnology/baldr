@@ -6,7 +6,7 @@
  *
  * @module @bldr/core-browser
  */
-export * from './asset-types';
+export * from './media-categories';
 export * from './object-manipulation';
 export * from './string-format';
 /**

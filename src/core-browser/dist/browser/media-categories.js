@@ -4,8 +4,8 @@
  * @module @bldr/core-browser/asset-types
  */
 /**
- * Categories some asset file formats in asset types: For example: `audio`, `image`,
- * `video`, `document`.
+ * Categories some media asset file formats in asset types: For example:
+ * `audio`, `image`, `video`, `document`.
  */
 export class MediaCategoriesManager {
     /**

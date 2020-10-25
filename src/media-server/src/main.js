@@ -74,7 +74,7 @@ const yaml = require('js-yaml')
 
 // Project packages.
 const config = require('@bldr/config')
-const { AssetTypes, convertPropertiesCase } = require('@bldr/core-browser')
+const { MediaCategoriesManager, convertPropertiesCase } = require('@bldr/core-browser')
 
 const registerSeatingPlan = require('./seating-plan.js').registerRestApi
 
@@ -131,7 +131,7 @@ function stripTags (text) {
 
 const folderTitleTree = new FolderTitleTree()
 
-const assetTypes = new AssetTypes(config)
+const assetTypes = new MediaCategoriesManager(config)
 
 /**
  * Base class to be extended.

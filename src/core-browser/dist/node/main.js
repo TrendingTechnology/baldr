@@ -19,7 +19,7 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.sortObjectsByProperty = exports.selectSubset = exports.msleep = exports.mediaUriRegExp = exports.jsYamlConfig = exports.getExtension = void 0;
-__exportStar(require("./asset-types"), exports);
+__exportStar(require("./media-categories"), exports);
 __exportStar(require("./object-manipulation"), exports);
 __exportStar(require("./string-format"), exports);
 /**

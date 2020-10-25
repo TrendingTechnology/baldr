@@ -1,13 +1,16 @@
+"use strict";
 /**
  * Categories some asset file formats in asset types.
  *
  * @module @bldr/core-browser/asset-types
  */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.MediaCategoriesManager = void 0;
 /**
- * Categories some asset file formats in asset types: For example: `audio`, `image`,
- * `video`, `document`.
+ * Categories some media asset file formats in asset types: For example:
+ * `audio`, `image`, `video`, `document`.
  */
-export class MediaCategoriesManager {
+class MediaCategoriesManager {
     /**
      * @param config The configuration of the BALDR project. It has to be
      * specifed as a argument and is not imported via the module
@@ -70,3 +73,4 @@ export class MediaCategoriesManager {
         return false;
     }
 }
+exports.MediaCategoriesManager = MediaCategoriesManager;

@@ -11,10 +11,10 @@ interface SpreadExtensionCollection {
 }
 
 /**
- * Categories some asset file formats in asset types: For example: `audio`, `image`,
- * `video`, `document`.
+ * Categories some media asset file formats in asset types: For example:
+ * `audio`, `image`, `video`, `document`.
  */
-export class AssetTypes {
+export class MediaCategoriesManager {
   private config
 
   private allowedExtensions: SpreadExtensionCollection

@@ -2,7 +2,8 @@
 import path from 'path'
 
 import { AssetType } from '@bldr/type-definitions'
-import { getExtension } from '@bldr/core-browser'
+import { MediaCategoriesManager, getExtension } from '@bldr/core-browser'
+import config from '@bldr/config'
 
 import { readAssetYaml } from './main'
 
@@ -15,7 +16,7 @@ class MediaFile {
    */
   protected absPath: string
   /**
-   * @param {string} filePath - The file path of the media file.
+   * @param filePath - The file path of the media file.
    */
   constructor (filePath: string) {
     this.absPath = path.resolve(filePath)
@@ -41,7 +42,7 @@ class MediaFile {
 export class Asset extends MediaFile {
   private metaData: AssetType.FileFormat | undefined
   /**
-   * @param {string} filePath - The file path of the media asset.
+   * @param filePath - The file path of the media asset.
    */
   constructor (filePath: string) {
     super(filePath)
@@ -51,4 +52,24 @@ export class Asset extends MediaFile {
     }
 
   }
+}
+
+/**
+ * Make a media asset from a file path.
+ *
+ * @param filePath - The file path of the media asset.
+ */
+export function makeAsset (filePath: string): Asset {
+  return new Asset(filePath)
+}
+
+export const assetTypes = new MediaCategoriesManager(config)
+
+/**
+ * @param filePath - The file path of the media asset.
+ */
+export function filePathToAssetType (filePath: string): string | undefined {
+  const asset = makeAsset(filePath)
+  if (asset.extension)
+  return assetTypes.extensionToType(asset.extension)
 }

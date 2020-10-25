@@ -1,3 +1,4 @@
+import { MediaCategoriesManager } from '@bldr/core-browser';
 /**
  * Base class for the asset and presentation class.
  */
@@ -7,7 +8,7 @@ declare class MediaFile {
      */
     protected absPath: string;
     /**
-     * @param {string} filePath - The file path of the media file.
+     * @param filePath - The file path of the media file.
      */
     constructor(filePath: string);
     /**
@@ -25,8 +26,19 @@ declare class MediaFile {
 export declare class Asset extends MediaFile {
     private metaData;
     /**
-     * @param {string} filePath - The file path of the media asset.
+     * @param filePath - The file path of the media asset.
      */
     constructor(filePath: string);
 }
+/**
+ * Make a media asset from a file path.
+ *
+ * @param filePath - The file path of the media asset.
+ */
+export declare function makeAsset(filePath: string): Asset;
+export declare const assetTypes: MediaCategoriesManager;
+/**
+ * @param filePath - The file path of the media asset.
+ */
+export declare function filePathToAssetType(filePath: string): string | undefined;
 export {};

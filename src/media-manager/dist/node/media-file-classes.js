@@ -3,17 +3,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Asset = void 0;
+exports.filePathToAssetType = exports.assetTypes = exports.makeAsset = exports.Asset = void 0;
 // Node packages.
 const path_1 = __importDefault(require("path"));
 const core_browser_1 = require("@bldr/core-browser");
+const config_1 = __importDefault(require("@bldr/config"));
 const main_1 = require("./main");
 /**
  * Base class for the asset and presentation class.
  */
 class MediaFile {
     /**
-     * @param {string} filePath - The file path of the media file.
+     * @param filePath - The file path of the media file.
      */
     constructor(filePath) {
         this.absPath = path_1.default.resolve(filePath);
@@ -36,7 +37,7 @@ class MediaFile {
  */
 class Asset extends MediaFile {
     /**
-     * @param {string} filePath - The file path of the media asset.
+     * @param filePath - The file path of the media asset.
      */
     constructor(filePath) {
         super(filePath);
@@ -47,3 +48,22 @@ class Asset extends MediaFile {
     }
 }
 exports.Asset = Asset;
+/**
+ * Make a media asset from a file path.
+ *
+ * @param filePath - The file path of the media asset.
+ */
+function makeAsset(filePath) {
+    return new Asset(filePath);
+}
+exports.makeAsset = makeAsset;
+exports.assetTypes = new core_browser_1.MediaCategoriesManager(config_1.default);
+/**
+ * @param filePath - The file path of the media asset.
+ */
+function filePathToAssetType(filePath) {
+    const asset = makeAsset(filePath);
+    if (asset.extension)
+        return exports.assetTypes.extensionToType(asset.extension);
+}
+exports.filePathToAssetType = filePathToAssetType;

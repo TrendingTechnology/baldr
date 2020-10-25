@@ -28,7 +28,7 @@
 
 import { HttpRequest } from '@bldr/http-request'
 import {
-  AssetTypes,
+  MediaCategoriesManager,
   convertDurationToSeconds,
   formatMultiPartAssetFileName,
   mediaUriRegExp,
@@ -72,7 +72,7 @@ export let shortcuts
 /**
  *
  */
-export const assetTypes = new AssetTypes(config)
+export const assetTypes = new MediaCategoriesManager(config)
 
 /**
  * Extract media URIs from an object to allow linked media assets inside
