@@ -3,34 +3,7 @@ const path = require('path')
 
 // Project packages.
 const mediaServer = require('@bldr/media-server')
-const { getExtension } = require('@bldr/core-browser')
-const { moveAsset, readAssetYaml} = require('@bldr/media-manager')
-
-/**
- * Rename one file.
- *
- * @param {String} oldPath - The media file path.
- *
- * @returns {String} - The new file name.
- */
-function renameOneFile (oldPath) {
-  const metaData = readAssetYaml(oldPath)
-  let newPath
-  if (metaData && metaData.metaTypes) {
-    metaData.extension = getExtension(oldPath)
-    newPath = mediaServer.metaTypes.formatFilePath(metaData, oldPath)
-  }
-
-  if (!newPath) newPath = mediaServer.asciify(oldPath)
-  const basename = path.basename(newPath)
-  // Remove a- and v- prefixes
-  const cleanedBasename = basename.replace(/^[va]-/g, '')
-  if (cleanedBasename !== basename) {
-    newPath = path.join(path.dirname(newPath), cleanedBasename)
-  }
-  moveAsset(oldPath, newPath)
-  return newPath
-}
+const { renameMediaAsset } = require('@bldr/media-manager')
 
 /**
  * Rename files.
@@ -41,14 +14,11 @@ function renameOneFile (oldPath) {
 function action (files) {
   mediaServer.walk({
     all (oldPath) {
-      renameOneFile(oldPath)
+      renameMediaAsset(oldPath)
     }
   }, {
     path: files
   })
 }
 
-module.exports = {
-  action,
-  renameOneFile
-}
+module.exports = action

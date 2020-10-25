@@ -7,11 +7,12 @@ const chalk = require('chalk')
 
 // Project packages.
 const mediaServer = require('@bldr/media-server')
-const lib = require('../../lib.js')
+
+const { filePathToAssetType } = require('@bldr/media-manager')
 
 function createVideoPreviewImageOneFile (filePath, second) {
   if (!second) second = 10
-  const assetType = lib.filePathToAssetType(filePath)
+  const assetType = filePathToAssetType(filePath)
   if (assetType === 'video') {
     const output = `${filePath}_preview.jpg`
     const outputFileName = path.basename(output)

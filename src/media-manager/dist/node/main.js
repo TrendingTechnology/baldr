@@ -29,7 +29,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.normalizePresentationFile = exports.readAssetYaml = exports.fetchFile = exports.moveAsset = void 0;
+exports.normalizePresentationFile = exports.renameMediaAsset = exports.readAssetYaml = exports.fetchFile = exports.moveAsset = void 0;
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
 const url_1 = require("url");
@@ -38,6 +38,8 @@ const core_browser_1 = require("@bldr/core-browser");
 const titles_1 = require("./titles");
 const yaml_1 = require("./yaml");
 const file_1 = require("./file");
+const meta_types_1 = __importDefault(require("./meta-types"));
+const helper_1 = require("./helper");
 __exportStar(require("./yaml"), exports);
 /**
  * Move (rename) or copy a media asset and it’s corresponding meta data file
@@ -127,6 +129,32 @@ function readAssetYaml(filePath) {
     }
 }
 exports.readAssetYaml = readAssetYaml;
+/**
+ * Rename a media asset and its meta data files.
+ *
+ * @param oldPath - The media file path.
+ *
+ * @returns The new file name.
+ */
+function renameMediaAsset(oldPath) {
+    const metaData = readAssetYaml(oldPath);
+    let newPath;
+    if (metaData && metaData.metaTypes) {
+        metaData.extension = core_browser_1.getExtension(oldPath);
+        newPath = meta_types_1.default.formatFilePath(metaData, oldPath);
+    }
+    if (!newPath)
+        newPath = helper_1.asciify(oldPath);
+    const basename = path_1.default.basename(newPath);
+    // Remove a- and v- prefixes
+    const cleanedBasename = basename.replace(/^[va]-/g, '');
+    if (cleanedBasename !== basename) {
+        newPath = path_1.default.join(path_1.default.dirname(newPath), cleanedBasename);
+    }
+    moveAsset(oldPath, newPath);
+    return newPath;
+}
+exports.renameMediaAsset = renameMediaAsset;
 /**
  * Remove unnecessary single quotes.
  *

@@ -10,8 +10,6 @@ const musicMetadata = require('music-metadata')
 const mediaServer = require('@bldr/media-server')
 const { writeMetaDataYaml } = require('@bldr/media-manager')
 
-const lib = require('../../lib.js')
-
 /**
  * A set of output file paths. To avoid duplicate rendering by a second
  * run of the script.

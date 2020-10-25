@@ -1,5 +1,3 @@
-
-const lib = require('../../lib.js')
 const { createYamlOneFile } = require('../yaml/action.js')
 const { convert } = require('../convert/action.js')
 const { fetchFile } = require('@bldr/media-manager')

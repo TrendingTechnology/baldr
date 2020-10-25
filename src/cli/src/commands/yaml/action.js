@@ -1,16 +1,14 @@
 // Project packages.
 const mediaServer = require('@bldr/media-server')
-const lib = require('../../lib.js')
-const { renameOneFile } = require('../rename/action.js')
 const { normalizeOneFile } = require('../normalize/action.js')
-const { writeMetaDataYaml } = require('@bldr/media-manager')
+const { writeMetaDataYaml, renameMediaAsset } = require('@bldr/media-manager')
 
 /**
  * @param {String} filePath
  * @param {Object} metaData
  */
 async function createYamlOneFile (filePath, metaData) {
-  const newPath = renameOneFile(filePath)
+  const newPath = renameMediaAsset(filePath)
   writeMetaDataYaml(newPath, metaData)
   await normalizeOneFile(newPath, { wikidata: false })
 }
@@ -25,7 +23,7 @@ function action (files) {
   mediaServer.walk({
     async asset (relPath) {
       createYamlOneFile(relPath)
-      const newPath = renameOneFile(relPath)
+      const newPath = renameMediaAsset(relPath)
       console.log(newPath)
       writeMetaDataYaml(newPath)
       await normalizeOneFile(newPath, { wikidata: false })

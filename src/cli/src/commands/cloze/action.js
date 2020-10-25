@@ -10,7 +10,6 @@ const chalk = require('chalk')
 const mediaServer = require('@bldr/media-server')
 const { moveAsset, readFile, writeFile, yamlToTxt } = require('@bldr/media-manager')
 
-const lib = require('../../lib.js')
 const { normalizeOneFile } = require('../normalize/action.js')
 const { getPdfPageCount } = require('@bldr/core-node')
 

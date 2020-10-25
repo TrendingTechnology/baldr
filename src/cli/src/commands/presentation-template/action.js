@@ -8,9 +8,7 @@ const chalk = require('chalk')
 // Project packages.
 const mediaServer = require('@bldr/media-server')
 const { convertTexToMd, removeTexComments, regBuilder, extractMatchAll } = require('@bldr/tex-markdown-converter')
-const { readFile, yamlToTxt } = require('@bldr/media-manager')
-
-const lib = require('../../lib.js')
+const { readFile, yamlToTxt, makeAsset } = require('@bldr/media-manager')
 
 // Globals.
 const { cwd } = require('../../main.js')
@@ -125,7 +123,7 @@ async function presentationFromAssets (filePath) {
   let slides = []
   await mediaServer.walk({
     asset (relPath) {
-      const asset = lib.makeAsset(relPath)
+      const asset = makeAsset(relPath)
       if (!asset.id) {
         console.log(`Asset has no ID: ${chalk.red(relPath)}`)
         return

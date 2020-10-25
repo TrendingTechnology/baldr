@@ -37,6 +37,14 @@ export declare function fetchFile(url: string, dest: string): Promise<void>;
  */
 export declare function readAssetYaml(filePath: string): AssetType.Generic | undefined;
 /**
+ * Rename a media asset and its meta data files.
+ *
+ * @param oldPath - The media file path.
+ *
+ * @returns The new file name.
+ */
+export declare function renameMediaAsset(oldPath: string): string;
+/**
  * Normalize a presentation file.
  *
  * Remove unnecessary single quotes around media URIs.

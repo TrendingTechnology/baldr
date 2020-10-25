@@ -20,6 +20,8 @@ import { PresentationType, AssetType } from '@bldr/type-definitions'
 import { DeepTitle, TitleTree } from './titles'
 import { loadYaml, yamlToTxt } from './yaml'
 import { readFile, writeFile } from './file'
+import metaTypes from './meta-types'
+import { asciify } from './helper'
 
 export * from './yaml'
 
@@ -111,6 +113,32 @@ export function readAssetYaml (filePath: string): AssetType.Generic | undefined 
   if (fs.existsSync(filePath)) {
     return loadYaml(filePath)
   }
+}
+
+/**
+ * Rename a media asset and its meta data files.
+ *
+ * @param oldPath - The media file path.
+ *
+ * @returns The new file name.
+ */
+export function renameMediaAsset (oldPath: string): string {
+  const metaData = readAssetYaml(oldPath)
+  let newPath
+  if (metaData && metaData.metaTypes) {
+    metaData.extension = getExtension(oldPath)
+    newPath = metaTypes.formatFilePath(<AssetType.FileFormat> metaData, oldPath)
+  }
+
+  if (!newPath) newPath = asciify(oldPath)
+  const basename = path.basename(newPath)
+  // Remove a- and v- prefixes
+  const cleanedBasename = basename.replace(/^[va]-/g, '')
+  if (cleanedBasename !== basename) {
+    newPath = path.join(path.dirname(newPath), cleanedBasename)
+  }
+  moveAsset(oldPath, newPath)
+  return newPath
 }
 
 /**
