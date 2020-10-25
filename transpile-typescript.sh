@@ -17,6 +17,7 @@ _transpile() {
 DIRS="type-definitions
 config
 core-browser
+core-node
 tex-markdown-converter
 wikidata
 media-manager"

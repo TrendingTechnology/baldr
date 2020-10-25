@@ -5,7 +5,7 @@
  * @module @bldr/core-browser/object-manipulation
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.toTitleCase = exports.convertDurationToSeconds = exports.formatToLocalDateTime = exports.formatToYear = exports.formatToLocalDate = exports.shortenText = exports.convertHtmlToPlainText = exports.formatWikicommonsUrl = exports.formatImslpUrl = exports.formatYoutubeUrl = exports.formatMusicbrainzWorkUrl = exports.formatMusicbrainzRecordingUrl = exports.formatWikipediaUrl = exports.formatWikidataUrl = exports.formatMultiPartAssetFileName = exports.escapeHtml = exports.convertSnakeToCamel = exports.convertCamelToSnake = void 0;
+exports.toTitleCase = exports.convertDurationToSeconds = exports.formatToLocalDateTime = exports.formatToYear = exports.formatToLocalDate = exports.shortenText = exports.formatWikicommonsUrl = exports.formatImslpUrl = exports.formatYoutubeUrl = exports.formatMusicbrainzWorkUrl = exports.formatMusicbrainzRecordingUrl = exports.formatWikipediaUrl = exports.formatWikidataUrl = exports.formatMultiPartAssetFileName = exports.convertHtmlToPlainText = exports.escapeHtml = exports.convertSnakeToCamel = exports.convertCamelToSnake = void 0;
 /**
  * Convert `camelCase` into `snake_case` strings.
  *
@@ -61,6 +61,22 @@ function escapeHtml(htmlString) {
     });
 }
 exports.escapeHtml = escapeHtml;
+/**
+ * Get the plain text version of a HTML string.
+ *
+ * @param html - A HTML formated string.
+ *
+ * @returns The plain text version.
+ */
+function convertHtmlToPlainText(html) {
+    if (!html)
+        return '';
+    // To get spaces between heading and paragraphs
+    html = html.replace(/></g, '> <');
+    const markup = new DOMParser().parseFromString(html, 'text/html');
+    return markup.body.textContent || '';
+}
+exports.convertHtmlToPlainText = convertHtmlToPlainText;
 /**
  * Generate from the file name or the url of the first element of a
  * multipart asset the nth file name or the url. The parameter
@@ -182,22 +198,6 @@ function formatWikicommonsUrl(fileName) {
     return `https://commons.wikimedia.org/wiki/File:${fileName}`;
 }
 exports.formatWikicommonsUrl = formatWikicommonsUrl;
-/**
- * Get the plain text version of a HTML string.
- *
- * @param html - A HTML formated string.
- *
- * @returns The plain text version.
- */
-function convertHtmlToPlainText(html) {
-    if (!html)
-        return '';
-    // To get spaces between heading and paragraphs
-    html = html.replace(/></g, '> <');
-    const markup = new DOMParser().parseFromString(html, 'text/html');
-    return markup.body.textContent || '';
-}
-exports.convertHtmlToPlainText = convertHtmlToPlainText;
 /**
  * Shorten a text string. By default the string is shortend to the maximal
  * length 80.

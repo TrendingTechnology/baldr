@@ -32,6 +32,14 @@ export declare function convertSnakeToCamel(text: string): string;
  */
 export declare function escapeHtml(htmlString: string): string;
 /**
+ * Get the plain text version of a HTML string.
+ *
+ * @param html - A HTML formated string.
+ *
+ * @returns The plain text version.
+ */
+export declare function convertHtmlToPlainText(html: string): string;
+/**
  * Generate from the file name or the url of the first element of a
  * multipart asset the nth file name or the url. The parameter
  * `firstFileName` must have a extension (for example `.jpg`). The
@@ -100,14 +108,6 @@ export declare function formatImslpUrl(id: string): string;
  *   `Cheetah_(Acinonyx_jubatus)_cub.jpg`
  */
 export declare function formatWikicommonsUrl(fileName: string): string;
-/**
- * Get the plain text version of a HTML string.
- *
- * @param html - A HTML formated string.
- *
- * @returns The plain text version.
- */
-export declare function convertHtmlToPlainText(html: string): string;
 interface ShortenTextOptions {
     stripTags: boolean;
     maxLength: number;

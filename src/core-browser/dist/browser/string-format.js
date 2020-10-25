@@ -56,6 +56,21 @@ export function escapeHtml(htmlString) {
     });
 }
 /**
+ * Get the plain text version of a HTML string.
+ *
+ * @param html - A HTML formated string.
+ *
+ * @returns The plain text version.
+ */
+export function convertHtmlToPlainText(html) {
+    if (!html)
+        return '';
+    // To get spaces between heading and paragraphs
+    html = html.replace(/></g, '> <');
+    const markup = new DOMParser().parseFromString(html, 'text/html');
+    return markup.body.textContent || '';
+}
+/**
  * Generate from the file name or the url of the first element of a
  * multipart asset the nth file name or the url. The parameter
  * `firstFileName` must have a extension (for example `.jpg`). The
@@ -167,21 +182,6 @@ export function formatImslpUrl(id) {
  */
 export function formatWikicommonsUrl(fileName) {
     return `https://commons.wikimedia.org/wiki/File:${fileName}`;
-}
-/**
- * Get the plain text version of a HTML string.
- *
- * @param html - A HTML formated string.
- *
- * @returns The plain text version.
- */
-export function convertHtmlToPlainText(html) {
-    if (!html)
-        return '';
-    // To get spaces between heading and paragraphs
-    html = html.replace(/></g, '> <');
-    const markup = new DOMParser().parseFromString(html, 'text/html');
-    return markup.body.textContent || '';
 }
 /**
  * Shorten a text string. By default the string is shortend to the maximal
