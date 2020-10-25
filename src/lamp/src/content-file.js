@@ -7,7 +7,7 @@
 /* globals defaultThemeSassVars FileReader */
 
 import yaml from 'js-yaml'
-import { shortenText, convertPropertiesCase, escapeHtml, deepCopy, jsYamlConfig, RawDataObject } from '@bldr/core-browser'
+import { shortenText, convertPropertiesSnakeToCamel, escapeHtml, deepCopy, jsYamlConfig, RawDataObject } from '@bldr/core-browser'
 import { WrappedSampleList } from '@bldr/media-client'
 import { markupToHtml } from '@/lib'
 import { masters } from '@/masters.js'
@@ -252,7 +252,7 @@ export class Slide {
    *   raw slide data from the YAML file as an object.
    */
   constructor (rawSlideData) {
-    rawSlideData = convertPropertiesCase(rawSlideData, 'snake-to-camel')
+    rawSlideData = convertPropertiesSnakeToCamel(rawSlideData)
 
     /**
      * A deep copy of the raw slide data.
@@ -712,7 +712,7 @@ export class Presentation {
     parseSlidesRecursive(rawYamlObject.slides, this.slides, this.slidesTree)
 
     // This function is also called inside the function `parseSlidesRecursive()`
-    rawYamlObject = convertPropertiesCase(rawYamlObject, 'snake-to-camel')
+    rawYamlObject = convertPropertiesSnakeToCamel(rawYamlObject)
 
     // Async hooks to load resources in the background.
     for (const slide of this.slides) {

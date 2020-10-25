@@ -25,7 +25,15 @@
 </template>
 
 <script>
-import core from '@bldr/core-browser'
+import {
+  formatImslpUrl,
+  formatMusicbrainzRecordingUrl,
+  formatMusicbrainzWorkUrl,
+  formatWikicommonsUrl,
+  formatWikidataUrl,
+  formatWikipediaUrl,
+  formatYoutubeUrl
+} from '@bldr/core-browser'
 
 export default {
   name: 'ExternalSites',
@@ -37,49 +45,49 @@ export default {
   computed: {
     imslp () {
       if (this.asset.imslp) {
-        return core.formatImslpUrl(this.asset.imslp)
+        return formatImslpUrl(this.asset.imslp)
       }
       return ''
     },
     musicbrainzRecordingId () {
       if (this.asset.musicbrainzRecordingId) {
-        return core.formatMusicbrainzRecordingUrl(this.asset.musicbrainzRecordingId)
+        return formatMusicbrainzRecordingUrl(this.asset.musicbrainzRecordingId)
       }
       return ''
     },
     musicbrainzWorkId () {
       if (this.asset.musicbrainzWorkId) {
-        return core.formatMusicbrainzWorkUrl(this.asset.musicbrainzWorkId)
+        return formatMusicbrainzWorkUrl(this.asset.musicbrainzWorkId)
       }
       return ''
     },
     wikicommons () {
       if (this.asset.wikicommons) {
-        return core.formatWikicommonsUrl(this.asset.wikicommons)
+        return formatWikicommonsUrl(this.asset.wikicommons)
       }
       for (const prop in this.asset) {
         const value = this.asset[prop]
         if (value && typeof value === 'string' && value.match(/^wikicommons:/)) {
-          return core.formatWikicommonsUrl(value.replace(/^wikicommons:/, ''))
+          return formatWikicommonsUrl(value.replace(/^wikicommons:/, ''))
         }
       }
       return ''
     },
     wikidata () {
       if (this.asset.wikidata) {
-        return core.formatWikidataUrl(this.asset.wikidata)
+        return formatWikidataUrl(this.asset.wikidata)
       }
       return ''
     },
     wikipedia () {
       if (this.asset.wikipedia) {
-        return core.formatWikipediaUrl(this.asset.wikipedia)
+        return formatWikipediaUrl(this.asset.wikipedia)
       }
       return ''
     },
     youtube () {
       if (this.asset.youtube) {
-        return core.formatYoutubeUrl(this.asset.youtube)
+        return formatYoutubeUrl(this.asset.youtube)
       }
       return ''
     }
