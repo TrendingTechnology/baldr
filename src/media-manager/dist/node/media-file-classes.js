@@ -46,6 +46,16 @@ class Asset extends MediaFile {
             this.metaData = data;
         }
     }
+    get id() {
+        if (this.metaData && this.metaData.id) {
+            return this.metaData.id;
+        }
+    }
+    get mediaCategory() {
+        if (this.extension) {
+            return exports.mediaCategoriesManager.extensionToType(this.extension);
+        }
+    }
 }
 exports.Asset = Asset;
 /**

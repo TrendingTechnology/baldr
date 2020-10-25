@@ -44,6 +44,7 @@ exports.operations = {
 };
 __exportStar(require("./yaml"), exports);
 __exportStar(require("./file"), exports);
+__exportStar(require("./media-file-classes"), exports);
 /**
  * Move (rename) or copy a media asset and it’s corresponding meta data file
  * (`*.yml`) and preview file (`_preview.jpg`).

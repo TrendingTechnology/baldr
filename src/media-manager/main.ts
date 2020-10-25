@@ -37,6 +37,7 @@ export const operations = {
 
 export * from './yaml'
 export * from './file'
+export * from './media-file-classes'
 
 interface MoveAssetConfiguration {
   copy?: boolean

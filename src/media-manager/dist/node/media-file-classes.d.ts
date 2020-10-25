@@ -29,6 +29,8 @@ export declare class Asset extends MediaFile {
      * @param filePath - The file path of the media asset.
      */
     constructor(filePath: string);
+    get id(): string | undefined;
+    get mediaCategory(): string | undefined;
 }
 /**
  * Make a media asset from a file path.

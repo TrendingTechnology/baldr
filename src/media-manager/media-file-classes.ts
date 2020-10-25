@@ -50,7 +50,24 @@ export class Asset extends MediaFile {
     if (data) {
       this.metaData = <AssetType.FileFormat> data
     }
+  }
 
+  /**
+   * The id of the media asset. Read from the metadata file.
+   */
+  get id(): string | undefined {
+    if (this.metaData && this.metaData.id) {
+      return this.metaData.id
+    }
+  }
+
+  /**
+   * The media category (`image`, `audio`, `video`, `document`)
+   */
+  get mediaCategory (): string | undefined {
+    if (this.extension) {
+      return mediaCategoriesManager.extensionToType(this.extension)
+    }
   }
 }
 

@@ -134,7 +134,7 @@ async function presentationFromAssets (filePath) {
       } else if (asset.id.indexOf('NB') > -1) {
         masterName = 'score_sample'
       } else {
-        masterName = asset.assetType
+        masterName = asset.mediaCategory
       }
       slides.push(
         {
