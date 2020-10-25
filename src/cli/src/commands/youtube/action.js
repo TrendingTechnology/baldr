@@ -2,14 +2,15 @@
 const fs = require('fs')
 const path = require('path')
 
+const axios = require('axios').default
+
 // Project packages.
 const { CommandRunner } = require('@bldr/cli-utils')
-const { createYamlOneFile } = require('../yaml/action.js')
-const { cwd } = require('../../main.js')
 const { LocationIndicator } = require('@bldr/media-server')
-const { normalizeOneFile } = require('../normalize/action.js')
+const { operations } = require('@bldr/media-manager')
 const config = require('@bldr/config')
-const axios = require('axios').default
+
+const { cwd } = require('../../main.js')
 
 async function requestYoutubeApi(youtubeId) {
   const result = await axios.get('https://www.googleapis.com/youtube/v3/videos', {
@@ -59,9 +60,9 @@ async function action (youtubeId) {
   const ytFile = path.resolve(ytDir, `${youtubeId}.mp4`)
 
   cmd.log('Creating the metadata file in the YAML format.')
-  await createYamlOneFile(ytFile, metaData)
+  await operations.initializeMetaYaml(ytFile, metaData)
   cmd.log('Normalizing the metadata file.')
-  await normalizeOneFile(ytFile)
+  await operations.normalizeMediaAsset(ytFile)
 
   const srcPreviewJpg = ytFile.replace(/\.mp4$/, '.jpg')
   const srcPreviewWebp = ytFile.replace(/\.mp4$/, '.webp')

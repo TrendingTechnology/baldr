@@ -14,11 +14,9 @@ const {
   readFile,
   writeFile,
   writeYamlFile,
-  readAssetYaml
+  readAssetYaml,
+  operations
 } = require('@bldr/media-manager')
-
-const commandConvert = require('../convert/action.js')
-const { createYamlOneFile } = require('../yaml/action.js')
 
 const locationIndicator = mediaServer.locationIndicator
 
@@ -196,7 +194,7 @@ async function moveMp3 (oldPath, newPath, cmdObj) {
   moveAsset(oldPath, tmpMp3Path, { copy: true })
 
   // Convert into m4a.
-  newPath = await commandConvert.convert(tmpMp3Path)
+  newPath = await operations.convertAsset(tmpMp3Path)
 
   let metaData = readAssetYaml(newPath)
   metaData.metaType = 'composition'
@@ -220,7 +218,7 @@ async function moveReference (oldPath, cmdObj) {
   newPath = locationIndicator.moveIntoSubdir(newPath, 'QL')
   moveAsset(oldPath, newPath, cmdObj)
   if (cmdObj.dryRun) return
-  await createYamlOneFile(newPath)
+  await operations.initializeMetaYaml(newPath)
   const metaData = readAssetYaml(newPath)
   metaData.reference_title = 'Tonart: Musik erleben - reflektieren - interpretieren; Lehrwerk für die Oberstufe.'
   metaData.author = 'Wieland Schmid'
@@ -278,7 +276,7 @@ function action (files, cmdObj) {
   } else {
     mediaServer.walk({
       everyFile (relPath) {
-        move(relPath)
+        move(relPath, {})
       }
     }, opts)
   }

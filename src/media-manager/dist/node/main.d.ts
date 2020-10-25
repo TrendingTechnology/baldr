@@ -7,19 +7,26 @@
  */
 import { AssetType } from '@bldr/type-definitions';
 import { DeepTitle, TitleTree } from './titles';
-import { renameMediaAsset } from './operations/rename-asset';
+import { convertAsset } from './operations/convert-asset';
+import { initializeMetaYaml } from './operations/initialize-meta-yaml';
+import { normalizeMediaAsset } from './operations/normalize-asset';
 import { normalizePresentationFile } from './operations/normalize-presentation';
+import { renameMediaAsset } from './operations/rename-asset';
 /**
  * A collection of function to manipulate the media assets and presentation files.
  */
 export declare const operations: {
-    renameMediaAsset: typeof renameMediaAsset;
+    convertAsset: typeof convertAsset;
+    initializeMetaYaml: typeof initializeMetaYaml;
+    normalizeMediaAsset: typeof normalizeMediaAsset;
     normalizePresentationFile: typeof normalizePresentationFile;
+    renameMediaAsset: typeof renameMediaAsset;
 };
 export * from './yaml';
+export * from './file';
 interface MoveAssetConfiguration {
-    copy: boolean;
-    dryRun: boolean;
+    copy?: boolean;
+    dryRun?: boolean;
 }
 /**
  * Move (rename) or copy a media asset and it’s corresponding meta data file

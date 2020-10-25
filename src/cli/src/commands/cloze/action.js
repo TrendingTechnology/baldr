@@ -8,9 +8,8 @@ const chalk = require('chalk')
 
 // Project packages.
 const mediaServer = require('@bldr/media-server')
-const { moveAsset, readFile, writeFile, yamlToTxt } = require('@bldr/media-manager')
+const { moveAsset, readFile, writeFile, yamlToTxt, operations } = require('@bldr/media-manager')
 
-const { normalizeOneFile } = require('../normalize/action.js')
 const { getPdfPageCount } = require('@bldr/core-node')
 
 /**
@@ -54,7 +53,7 @@ function generateOneClozeSvg (tmpPdfFile, pageCount, pageNo) {
   // Move to LT (Lückentext) subdir.
   const newPath = mediaServer.locationIndicator.moveIntoSubdir(path.resolve(svgFileName), 'LT')
   moveAsset(svgFilePath, newPath)
-  normalizeOneFile(newPath, { wikidata: false })
+  operations.normalizeMediaAsset(newPath, { wikidata: false })
 }
 
 /**

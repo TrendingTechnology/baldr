@@ -1,6 +1,6 @@
-const { createYamlOneFile } = require('../yaml/action.js')
-const { convert } = require('../convert/action.js')
-const { fetchFile } = require('@bldr/media-manager')
+const { operations } = require('@bldr/media-manager')
+const { fetchFile } = require('@bldr/core-node')
+
 /**
  * Download a media asset.
  *
@@ -22,8 +22,8 @@ async function action (url, id = null, extension = null) {
 
   await fetchFile(url, destFile)
   // Make images smaller.
-  destFile = await convert(destFile)
-  createYamlOneFile(destFile, { source: url })
+  destFile = await operations.convertAsset(destFile)
+  await operations.initializeMetaYaml(destFile, { source: url })
 }
 
 module.exports = action

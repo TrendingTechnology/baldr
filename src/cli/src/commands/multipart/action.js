@@ -7,11 +7,9 @@ const glob = require('glob')
 
 // Project packages.
 const coreBrowser = require('@bldr/core-browser')
-const { writeMetaDataYaml } = require('@bldr/media-manager')
+const { writeMetaDataYaml, operations } = require('@bldr/media-manager')
 
-const { normalizeOneFile } = require('../normalize/action.js')
-
-function action (globPattern, prefix, cmdObj) {
+async function action (globPattern, prefix, cmdObj) {
   const files = glob.sync(globPattern)
   if (files.length < 1) {
     console.log('Glob matches no files.')
@@ -34,7 +32,7 @@ function action (globPattern, prefix, cmdObj) {
 
   if (fs.existsSync(firstNewFileName) && !cmdObj.dryRun) {
     writeMetaDataYaml(firstNewFileName)
-    normalizeOneFile(firstNewFileName, { wikidata: false })
+    await operations.normalizeMediaAsset(firstNewFileName, { wikidata: false })
   }
 }
 

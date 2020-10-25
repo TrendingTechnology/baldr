@@ -16,22 +16,31 @@ import { AssetType } from '@bldr/type-definitions'
 
 import { DeepTitle, TitleTree } from './titles'
 import { loadYaml } from './yaml'
-import { renameMediaAsset } from './operations/rename-asset'
+
+// Operations
+import { convertAsset } from './operations/convert-asset'
+import { initializeMetaYaml } from './operations/initialize-meta-yaml'
+import { normalizeMediaAsset } from './operations/normalize-asset'
 import { normalizePresentationFile } from './operations/normalize-presentation'
+import { renameMediaAsset } from './operations/rename-asset'
 
 /**
  * A collection of function to manipulate the media assets and presentation files.
  */
 export const operations = {
-  renameMediaAsset,
-  normalizePresentationFile
+  convertAsset,
+  initializeMetaYaml,
+  normalizeMediaAsset,
+  normalizePresentationFile,
+  renameMediaAsset
 }
 
 export * from './yaml'
+export * from './file'
 
 interface MoveAssetConfiguration {
-  copy: boolean
-  dryRun: boolean
+  copy?: boolean
+  dryRun?: boolean
 }
 
 /**

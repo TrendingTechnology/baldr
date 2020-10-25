@@ -27,17 +27,22 @@ interface NormalizeMediaAssetOption {
 /**
  * @param filePath - The media asset file path.
  */
-export async function normalizeMediaAsset (filePath: string, options: NormalizeMediaAssetOption) {
+export async function normalizeMediaAsset (filePath: string, options?: NormalizeMediaAssetOption) {
   try {
-    // Always: general
-    const typeNames = metaTypes.detectTypeByPath(filePath)
     const yamlFile = `${filePath}.yml`
     let metaData = readAssetYaml(filePath)
+    if (!metaData) {
+      return
+    }
     metaData.filePath = filePath
     const origData = <AssetType.Generic> deepCopy(metaData)
 
-    metaData.metaTypes = metaTypes.mergeTypeNames(metaData.metaTypes, typeNames)
-    if (options.wikidata) {
+    // Always: general
+    const typeNames = metaTypes.detectTypeByPath(filePath)
+    if (typeNames) {
+      metaData.metaTypes = metaTypes.mergeTypeNames(metaData.metaTypes, typeNames)
+    }
+    if (options && options.wikidata) {
       if (metaData.wikidata && metaData.metaTypes) {
         metaData = await queryWikidata(metaData, metaData.metaTypes, metaTypes.typeSpecs)
       }

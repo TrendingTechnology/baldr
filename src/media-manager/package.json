@@ -28,6 +28,7 @@
     "@bldr/wikidata": "^0.1.0",
     "js-yaml": "^3.14.0",
     "transliteration": "^2.1.11",
+    "music-metadata": "7.4.0",
     "uuid": "^8.3.0"
   },
   "devDependencies": {

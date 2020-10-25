@@ -26,16 +26,24 @@ const path_1 = __importDefault(require("path"));
 const core_browser_1 = require("@bldr/core-browser");
 const titles_1 = require("./titles");
 const yaml_1 = require("./yaml");
-const rename_asset_1 = require("./operations/rename-asset");
+// Operations
+const convert_asset_1 = require("./operations/convert-asset");
+const initialize_meta_yaml_1 = require("./operations/initialize-meta-yaml");
+const normalize_asset_1 = require("./operations/normalize-asset");
 const normalize_presentation_1 = require("./operations/normalize-presentation");
+const rename_asset_1 = require("./operations/rename-asset");
 /**
  * A collection of function to manipulate the media assets and presentation files.
  */
 exports.operations = {
-    renameMediaAsset: rename_asset_1.renameMediaAsset,
-    normalizePresentationFile: normalize_presentation_1.normalizePresentationFile
+    convertAsset: convert_asset_1.convertAsset,
+    initializeMetaYaml: initialize_meta_yaml_1.initializeMetaYaml,
+    normalizeMediaAsset: normalize_asset_1.normalizeMediaAsset,
+    normalizePresentationFile: normalize_presentation_1.normalizePresentationFile,
+    renameMediaAsset: rename_asset_1.renameMediaAsset
 };
 __exportStar(require("./yaml"), exports);
+__exportStar(require("./file"), exports);
 /**
  * Move (rename) or copy a media asset and it’s corresponding meta data file
  * (`*.yml`) and preview file (`_preview.jpg`).

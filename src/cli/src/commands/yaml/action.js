@@ -1,17 +1,6 @@
 // Project packages.
 const mediaServer = require('@bldr/media-server')
-const { normalizeOneFile } = require('../normalize/action.js')
-const { writeMetaDataYaml, renameMediaAsset } = require('@bldr/media-manager')
-
-/**
- * @param {String} filePath
- * @param {Object} metaData
- */
-async function createYamlOneFile (filePath, metaData) {
-  const newPath = renameMediaAsset(filePath)
-  writeMetaDataYaml(newPath, metaData)
-  await normalizeOneFile(newPath, { wikidata: false })
-}
+const { operations } = require('@bldr/media-manager')
 
 /**
  * Create the metadata YAML files.
@@ -22,18 +11,11 @@ async function createYamlOneFile (filePath, metaData) {
 function action (files) {
   mediaServer.walk({
     async asset (relPath) {
-      createYamlOneFile(relPath)
-      const newPath = renameMediaAsset(relPath)
-      console.log(newPath)
-      writeMetaDataYaml(newPath)
-      await normalizeOneFile(newPath, { wikidata: false })
+      await operations.initializeMetaYaml(relPath)
     }
   }, {
     path: files
   })
 }
 
-module.exports = {
-  createYamlOneFile,
-  action
-}
+module.exports = action
