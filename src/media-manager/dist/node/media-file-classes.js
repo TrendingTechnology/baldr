@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Asset = void 0;
 // Node packages.
 const path_1 = __importDefault(require("path"));
-const core_browser_ts_1 = require("@bldr/core-browser-ts");
+const core_browser_1 = require("@bldr/core-browser");
 const main_1 = require("./main");
 /**
  * Base class for the asset and presentation class.
@@ -22,7 +22,7 @@ class MediaFile {
      * The file extension of the media file.
      */
     get extension() {
-        return core_browser_ts_1.getExtension(this.absPath);
+        return core_browser_1.getExtension(this.absPath);
     }
     /**
      * The basename (filename without extension) of the file.

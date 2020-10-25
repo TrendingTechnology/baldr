@@ -1,4 +1,9 @@
 "use strict";
+/**
+ * Format functions to manipulate strings.
+ *
+ * @module @bldr/core-browser/object-manipulation
+ */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.toTitleCase = exports.convertDurationToSeconds = exports.formatToLocalDateTime = exports.formatToYear = exports.formatToLocalDate = exports.shortenText = exports.plainText = exports.formatWikicommonsUrl = exports.formatImslpUrl = exports.formatYoutubeUrl = exports.formatMusicbrainzWorkUrl = exports.formatMusicbrainzRecordingUrl = exports.formatWikipediaUrl = exports.formatWikidataUrl = exports.formatMultiPartAssetFileName = exports.escapeHtml = void 0;
 /**

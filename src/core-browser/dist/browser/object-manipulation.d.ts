@@ -1,4 +1,9 @@
 /**
+ * Manipulate javascript objects.
+ *
+ * @module @bldr/core-browser/object-manipulation
+ */
+/**
  * Create a deep copy of an object. This functions uses the two methods
  * `JSON.parse()` and `JSON.stringify()` to accomplish its task.
  *

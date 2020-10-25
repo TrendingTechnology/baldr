@@ -2,7 +2,7 @@
 import path from 'path'
 
 import { AssetType } from '@bldr/type-definitions'
-import { getExtension } from '@bldr/core-browser-ts'
+import { getExtension } from '@bldr/core-browser'
 
 import { readAssetYaml } from './main'
 

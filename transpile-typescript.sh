@@ -16,7 +16,7 @@ _transpile() {
 # First low level modules
 DIRS="type-definitions
 config
-core-browser-ts
+core-browser
 tex-markdown-converter
 wikidata
 media-manager"

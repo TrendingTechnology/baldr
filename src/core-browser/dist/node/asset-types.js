@@ -1,9 +1,14 @@
 "use strict";
+/**
+ * Categories some asset file formats in asset types.
+ *
+ * @module @bldr/core-browser/asset-types
+ */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AssetTypes = void 0;
 /**
- * Categories some asset file formats in three asset types: `audio`, `image`,
- * `video`.
+ * Categories some asset file formats in asset types: For example: `audio`, `image`,
+ * `video`, `document`.
  */
 class AssetTypes {
     /**

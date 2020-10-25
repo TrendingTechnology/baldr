@@ -1,3 +1,8 @@
+/**
+ * Format functions to manipulate strings.
+ *
+ * @module @bldr/core-browser/object-manipulation
+ */
 
 /**
  * Escape some characters with HTML entities.

@@ -1,7 +1,7 @@
 {
   "name": "@bldr/core-browser",
-  "version": "0.11.3",
-  "description": "Base core functionality for the code running in the browser without node.",
+  "version": "0.1.0",
+  "description": "Base core functionality for the code running in the browser without node (typescript version).",
   "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
   "bugs": {
     "url": "https://github.com/Josef-Friedrich/baldr/issues"
@@ -17,22 +17,17 @@
     "url": "https://josef.friedrich.rocks"
   },
   "scripts": {
-    "build": "babel --plugins @babel/plugin-transform-modules-commonjs -d dist/ src/"
+    "build": "npm run build:browser && npm run build:node",
+    "build:browser": "tsc --module es2015 --outDir dist/browser",
+    "build:node": "tsc --module commonjs --outDir dist/node"
   },
-  "browser": "src/main.js",
-  "main": "dist/main.js",
+  "browser": "dist/browser/main.js",
+  "main": "dist/node/main.js",
   "publishConfig": {
     "access": "public"
   },
-  "devDependencies": {
-    "@babel/core": "^7.11.6",
-    "@babel/plugin-transform-modules-commonjs": "^7.10.4"
-  },
-  "babel": {
-    "comments": false,
-    "plugins": [
-      "@babel/plugin-transform-modules-commonjs"
-    ]
+  "dependencies": {
+    "@bldr/type-definitions": "^0.1.0"
   },
   "gitHead": "ed4f60e66c8f420711d3eb15185620f7688e6fc9"
 }

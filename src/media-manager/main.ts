@@ -14,7 +14,7 @@ import fetch from 'node-fetch'
 
 import {
   getExtension
-} from '@bldr/core-browser-ts'
+} from '@bldr/core-browser'
 import { PresentationType, AssetType } from '@bldr/type-definitions'
 
 import { DeepTitle, TitleTree } from './titles'

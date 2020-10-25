@@ -6,7 +6,7 @@ import {
   convertPropertiesCamelToSnake,
   convertPropertiesSnakeToCamel,
   jsYamlConfig
-} from '@bldr/core-browser-ts'
+} from '@bldr/core-browser'
 import { AssetType } from '@bldr/type-definitions'
 
 import { readFile, writeFile } from './file'

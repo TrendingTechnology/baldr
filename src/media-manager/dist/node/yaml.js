@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.writeMetaDataYaml = exports.writeYamlFile = exports.loadYaml = exports.yamlToTxt = void 0;
 const fs_1 = __importDefault(require("fs"));
 const js_yaml_1 = __importDefault(require("js-yaml"));
-const core_browser_ts_1 = require("@bldr/core-browser-ts");
+const core_browser_1 = require("@bldr/core-browser");
 const file_1 = require("./file");
 const helper_1 = require("./helper");
 const media_file_classes_1 = require("./media-file-classes");
@@ -21,10 +21,10 @@ const meta_types_1 = __importDefault(require("./meta-types"));
  *   file. The result string begins with `---`.
  */
 function yamlToTxt(data) {
-    data = core_browser_ts_1.convertPropertiesCamelToSnake(data);
+    data = core_browser_1.convertPropertiesCamelToSnake(data);
     const yamlMarkup = [
         '---',
-        js_yaml_1.default.safeDump(data, core_browser_ts_1.jsYamlConfig)
+        js_yaml_1.default.safeDump(data, core_browser_1.jsYamlConfig)
     ];
     return yamlMarkup.join('\n');
 }
@@ -42,7 +42,7 @@ function loadYaml(filePath) {
     if (typeof result !== 'object') {
         return { result };
     }
-    return core_browser_ts_1.convertPropertiesSnakeToCamel(result);
+    return core_browser_1.convertPropertiesSnakeToCamel(result);
 }
 exports.loadYaml = loadYaml;
 /**

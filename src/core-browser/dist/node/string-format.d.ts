@@ -1,4 +1,9 @@
 /**
+ * Format functions to manipulate strings.
+ *
+ * @module @bldr/core-browser/object-manipulation
+ */
+/**
  * Escape some characters with HTML entities.
  *
  * @see {@link https://coderwall.com/p/ostduq/escape-html-with-javascript}

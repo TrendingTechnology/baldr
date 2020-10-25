@@ -34,7 +34,7 @@ const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
 const url_1 = require("url");
 const node_fetch_1 = __importDefault(require("node-fetch"));
-const core_browser_ts_1 = require("@bldr/core-browser-ts");
+const core_browser_1 = require("@bldr/core-browser");
 const titles_1 = require("./titles");
 const yaml_1 = require("./yaml");
 const file_1 = require("./file");
@@ -78,7 +78,7 @@ function moveAsset(oldPath, newPath, opts = {}) {
     if (newPath && oldPath !== newPath) {
         if (!opts.dryRun)
             fs_1.default.mkdirSync(path_1.default.dirname(newPath), { recursive: true });
-        const extension = core_browser_ts_1.getExtension(oldPath);
+        const extension = core_browser_1.getExtension(oldPath);
         if (extension === 'eps') {
             // Dippermouth-Blues.eps
             // Dippermouth-Blues.mscx
@@ -119,7 +119,7 @@ exports.fetchFile = fetchFile;
  *   extension `.yml`).
  */
 function readAssetYaml(filePath) {
-    const extension = core_browser_ts_1.getExtension(filePath);
+    const extension = core_browser_1.getExtension(filePath);
     if (extension !== 'yml')
         filePath = `${filePath}.yml`;
     if (fs_1.default.existsSync(filePath)) {

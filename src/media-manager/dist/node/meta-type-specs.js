@@ -25,7 +25,7 @@ const uuid_1 = require("uuid");
 // Project packages.
 const helper_1 = require("./helper");
 const core_node_1 = require("@bldr/core-node");
-const core_browser_ts_1 = require("@bldr/core-browser-ts");
+const core_browser_1 = require("@bldr/core-browser");
 /**
  * The configuration object from `/etc/baldr.json`
  */
@@ -40,7 +40,7 @@ function validateDate(value) {
  * Validate a ID string of the Baldr media server.
  */
 function validateMediaId(value) {
-    return value.match(core_browser_ts_1.mediaUriRegExp) ? true : false;
+    return value.match(core_browser_1.mediaUriRegExp) ? true : false;
 }
 /**
  * Validate UUID string (for the Musicbrainz references).

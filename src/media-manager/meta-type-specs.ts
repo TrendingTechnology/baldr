@@ -23,7 +23,7 @@ import { v4 as uuidv4 } from 'uuid'
 // Project packages.
 import { deasciify, idify } from './helper'
 import { getPdfPageCount } from '@bldr/core-node'
-import { mediaUriRegExp } from '@bldr/core-browser-ts'
+import { mediaUriRegExp } from '@bldr/core-browser'
 import { MetaSpec } from '@bldr/type-definitions'
 
 /**

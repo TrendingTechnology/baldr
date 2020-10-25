@@ -18,7 +18,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // Node packages.
 const path_1 = __importDefault(require("path"));
 // Project packages.
-const core_browser_ts_1 = require("@bldr/core-browser-ts");
+const core_browser_1 = require("@bldr/core-browser");
 const config_1 = __importDefault(require("@bldr/config"));
 const titles_1 = require("./titles");
 const meta_type_specs_1 = __importDefault(require("./meta-type-specs"));
@@ -76,7 +76,7 @@ function formatFilePath(data, oldPath) {
     if (!data.extension) {
         if (!data.mainImage)
             throw new Error(`Your data needs a property named “mainImage”.`);
-        data.extension = core_browser_ts_1.getExtension(data.mainImage);
+        data.extension = core_browser_1.getExtension(data.mainImage);
         // b/Bush_George-Walker/main.jpeg
     }
     if (data.extension === 'jpeg')
@@ -147,7 +147,7 @@ function isPropertyDerived(propSpec) {
  * @param typeSpec - The specification of one meta type.
  */
 function sortAndDeriveProps(data, typeSpec) {
-    const origData = core_browser_ts_1.deepCopy(data);
+    const origData = core_browser_1.deepCopy(data);
     const result = {};
     let folderTitles;
     let filePath;
@@ -280,7 +280,7 @@ function processByType(data, typeName) {
 function process(data) {
     // The meta type specification is in camel case. The meta data is
     // stored in the YAML format in snake case
-    data = core_browser_ts_1.convertPropertiesSnakeToCamel(data);
+    data = core_browser_1.convertPropertiesSnakeToCamel(data);
     if (!data.metaTypes) {
         data.metaTypes = 'general';
     }

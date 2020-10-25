@@ -1,16 +1,17 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.RawDataObject = exports.convertPropertiesCamelToSnake = exports.convertPropertiesSnakeToCamel = exports.convertProperties = exports.snakeToCamel = exports.camelToSnake = exports.deepCopy = void 0;
+/**
+ * Manipulate javascript objects.
+ *
+ * @module @bldr/core-browser/object-manipulation
+ */
 /**
  * Create a deep copy of an object. This functions uses the two methods
  * `JSON.parse()` and `JSON.stringify()` to accomplish its task.
  *
  * @param data
  */
-function deepCopy(data) {
+export function deepCopy(data) {
     return JSON.parse(JSON.stringify(data));
 }
-exports.deepCopy = deepCopy;
 /**
  * Convert `camelCase` into `snake_case` strings.
  *
@@ -21,12 +22,11 @@ exports.deepCopy = deepCopy;
  * @see {@link module:@bldr/core-browser.convertPropertiesCase}
  * @see {@link https://vladimir-ivanov.net/camelcase-to-snake_case-and-vice-versa-with-javascript/}
  */
-function camelToSnake(text) {
+export function camelToSnake(text) {
     return text.replace(/[\w]([A-Z])/g, function (m) {
         return m[0] + '_' + m[1];
     }).toLowerCase();
 }
-exports.camelToSnake = camelToSnake;
 /**
  * Convert `snake_case` or `kebab-case` strings into `camelCase` strings.
  *
@@ -37,12 +37,11 @@ exports.camelToSnake = camelToSnake;
  * @see {@link module:@bldr/core-browser.convertPropertiesCase}
  * @see {@link https://catalin.me/javascript-snake-to-camel/}
  */
-function snakeToCamel(text) {
+export function snakeToCamel(text) {
     return text.replace(/([-_][a-z])/g, (group) => group.toUpperCase()
         .replace('-', '')
         .replace('_', ''));
 }
-exports.snakeToCamel = snakeToCamel;
 var PropertyConvertDirection;
 (function (PropertyConvertDirection) {
     PropertyConvertDirection[PropertyConvertDirection["SNAKE_TO_CAMEL"] = 0] = "SNAKE_TO_CAMEL";
@@ -58,7 +57,7 @@ var PropertyConvertDirection;
  * @returns Possibly an new object is returned. One should always
  *   use this returned object.
  */
-function convertProperties(data, direction = PropertyConvertDirection.SNAKE_TO_CAMEL) {
+export function convertProperties(data, direction = PropertyConvertDirection.SNAKE_TO_CAMEL) {
     // To perserve the order of the props.
     let newObject = null;
     // Array
@@ -92,7 +91,6 @@ function convertProperties(data, direction = PropertyConvertDirection.SNAKE_TO_C
         return newObject;
     return data;
 }
-exports.convertProperties = convertProperties;
 /**
  * Convert all properties in an object from `snake_case` to `camelCase`.
  *
@@ -102,10 +100,9 @@ exports.convertProperties = convertProperties;
  *   this returned object. Do not rely on the by reference passed in
  *   object `data`.
  */
-function convertPropertiesSnakeToCamel(data) {
+export function convertPropertiesSnakeToCamel(data) {
     return convertProperties(data, PropertyConvertDirection.SNAKE_TO_CAMEL);
 }
-exports.convertPropertiesSnakeToCamel = convertPropertiesSnakeToCamel;
 /**
  * Convert all properties in an object from `camelCase` to `snake_case`.
  *
@@ -115,14 +112,13 @@ exports.convertPropertiesSnakeToCamel = convertPropertiesSnakeToCamel;
  *   this returned object. Do not rely on the by reference passed in
  *   object `data`.
  */
-function convertPropertiesCamelToSnake(data) {
+export function convertPropertiesCamelToSnake(data) {
     return convertProperties(data, PropertyConvertDirection.CAMEL_TO_SNAKE);
 }
-exports.convertPropertiesCamelToSnake = convertPropertiesCamelToSnake;
 /**
  * Create a deep copy of and object.
  */
-class RawDataObject {
+export class RawDataObject {
     constructor(rawData) {
         this.raw = deepCopy(rawData);
     }
@@ -150,4 +146,3 @@ class RawDataObject {
         return false;
     }
 }
-exports.RawDataObject = RawDataObject;
