@@ -63,7 +63,7 @@ export function makeAsset (filePath: string): Asset {
   return new Asset(filePath)
 }
 
-export const assetTypes = new MediaCategoriesManager(config)
+export const mediaCategoriesManager = new MediaCategoriesManager(config)
 
 /**
  * @param filePath - The file path of the media asset.
@@ -71,5 +71,5 @@ export const assetTypes = new MediaCategoriesManager(config)
 export function filePathToAssetType (filePath: string): string | undefined {
   const asset = makeAsset(filePath)
   if (asset.extension)
-  return assetTypes.extensionToType(asset.extension)
+  return mediaCategoriesManager.extensionToType(asset.extension)
 }

@@ -127,12 +127,12 @@ async function convert (inputFile, cmdObj = {}) {
   const inputExtension = asset.extension.toLowerCase()
   let assetType
   try {
-    assetType = mediaServer.assetTypes.extensionToType(inputExtension)
+    assetType = mediaServer.mediaCategoriesManager.extensionToType(inputExtension)
   } catch (error) {
     console.log(`Unsupported extension ${inputExtension}`)
     return
   }
-  const outputExtension = mediaServer.assetTypes.typeToTargetExtension(assetType)
+  const outputExtension = mediaServer.mediaCategoriesManager.typeToTargetExtension(assetType)
   const outputFileName = `${mediaServer.helper.idify(asset.basename_)}.${outputExtension}`
   let outputFile = path.join(path.dirname(inputFile), outputFileName)
   if (converted.has(outputFile)) return

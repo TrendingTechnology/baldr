@@ -5,7 +5,7 @@
  */
 import { Configuration } from '@bldr/type-definitions';
 /**
- * Categories some media asset file formats in asset types: For example:
+ * Classifies some media asset file formats in this categories:
  * `audio`, `image`, `video`, `document`.
  */
 export declare class MediaCategoriesManager {

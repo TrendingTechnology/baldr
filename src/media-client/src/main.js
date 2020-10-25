@@ -72,7 +72,7 @@ export let shortcuts
 /**
  *
  */
-export const assetTypes = new MediaCategoriesManager(config)
+export const mediaCategoriesManager = new MediaCategoriesManager(config)
 
 /**
  * Extract media URIs from an object to allow linked media assets inside
@@ -1321,7 +1321,7 @@ export class ClientMediaAsset {
        * The media type, for example `image`, `audio` or `video`.
        * @type {string}
        */
-      this.type = assetTypes.extensionToType(this.extension)
+      this.type = mediaCategoriesManager.extensionToType(this.extension)
     }
 
     /**
@@ -1849,7 +1849,7 @@ class Resolver {
    * @returns {module:@bldr/media-client.ClientMediaAsset}
    */
   createAssetFromFileObject_ (file) {
-    if (assetTypes.isAsset(file.name)) {
+    if (mediaCategoriesManager.isAsset(file.name)) {
       // blob:http:/localhost:8080/8c00d9e3-6ff1-4982-a624-55f125b5c0c0
       const httpUrl = URL.createObjectURL(file)
       // 8c00d9e3-6ff1-4982-a624-55f125b5c0c0
@@ -1869,7 +1869,7 @@ class Resolver {
    * @param {module:@bldr/media-client.ClientMediaAsset} asset
    */
   addMediaElementToAsset (asset) {
-    asset.type = assetTypes.extensionToType(asset.extension)
+    asset.type = mediaCategoriesManager.extensionToType(asset.extension)
     // After type
     if (asset.type !== 'document') {
       asset.mediaElement = createMediaElement(asset)

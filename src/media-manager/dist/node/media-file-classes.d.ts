@@ -36,7 +36,7 @@ export declare class Asset extends MediaFile {
  * @param filePath - The file path of the media asset.
  */
 export declare function makeAsset(filePath: string): Asset;
-export declare const assetTypes: MediaCategoriesManager;
+export declare const mediaCategoriesManager: MediaCategoriesManager;
 /**
  * @param filePath - The file path of the media asset.
  */

@@ -131,7 +131,7 @@ function stripTags (text) {
 
 const folderTitleTree = new FolderTitleTree()
 
-const assetTypes = new MediaCategoriesManager(config)
+const mediaCategoriesManager = new MediaCategoriesManager(config)
 
 /**
  * Base class to be extended.
@@ -300,7 +300,7 @@ class Asset extends MediaFile {
   addFileInfos () {
     this.addFileInfos_()
     const previewImage = `${this.absPath_}_preview.jpg`
-    this.assetType = assetTypes.extensionToType(this.extension)
+    this.assetType = mediaCategoriesManager.extensionToType(this.extension)
     if (fs.existsSync(previewImage)) {
       this.previewImage = true
     }
@@ -471,7 +471,7 @@ function isAsset (filePath) {
     return false
   }
   if (filePath.match(new RegExp('^.*/TX/.*.pdf$'))) return true
-  return assetTypes.isAsset(filePath)
+  return mediaCategoriesManager.isAsset(filePath)
 }
 
 /**
@@ -1462,7 +1462,7 @@ if (require.main === module) {
 module.exports = {
   asciify,
   Asset,
-  assetTypes,
+  mediaCategoriesManager,
   deasciify,
   FolderTitleTree,
   getExtension,

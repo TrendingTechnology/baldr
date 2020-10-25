@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.filePathToAssetType = exports.assetTypes = exports.makeAsset = exports.Asset = void 0;
+exports.filePathToAssetType = exports.mediaCategoriesManager = exports.makeAsset = exports.Asset = void 0;
 // Node packages.
 const path_1 = __importDefault(require("path"));
 const core_browser_1 = require("@bldr/core-browser");
@@ -57,13 +57,13 @@ function makeAsset(filePath) {
     return new Asset(filePath);
 }
 exports.makeAsset = makeAsset;
-exports.assetTypes = new core_browser_1.MediaCategoriesManager(config_1.default);
+exports.mediaCategoriesManager = new core_browser_1.MediaCategoriesManager(config_1.default);
 /**
  * @param filePath - The file path of the media asset.
  */
 function filePathToAssetType(filePath) {
     const asset = makeAsset(filePath);
     if (asset.extension)
-        return exports.assetTypes.extensionToType(asset.extension);
+        return exports.mediaCategoriesManager.extensionToType(asset.extension);
 }
 exports.filePathToAssetType = filePathToAssetType;
