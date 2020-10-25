@@ -2,7 +2,7 @@
  * @module @bldr/lamp/masters/generic
  */
 
-import { plainText } from '@bldr/core-browser'
+import { convertHtmlToPlainText } from '@bldr/core-browser'
 import { markupToHtml } from '@/lib.js'
 import steps from '@/steps.js'
 
@@ -179,7 +179,7 @@ export default {
     plainTextFromProps (props) {
       const output = []
       for (const markup of props.markup) {
-        output.push(plainText(markup))
+        output.push(convertHtmlToPlainText(markup))
       }
       return output.join(' | ')
     },

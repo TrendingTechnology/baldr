@@ -5,7 +5,39 @@
  * @module @bldr/core-browser/object-manipulation
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.toTitleCase = exports.convertDurationToSeconds = exports.formatToLocalDateTime = exports.formatToYear = exports.formatToLocalDate = exports.shortenText = exports.plainText = exports.formatWikicommonsUrl = exports.formatImslpUrl = exports.formatYoutubeUrl = exports.formatMusicbrainzWorkUrl = exports.formatMusicbrainzRecordingUrl = exports.formatWikipediaUrl = exports.formatWikidataUrl = exports.formatMultiPartAssetFileName = exports.escapeHtml = void 0;
+exports.toTitleCase = exports.convertDurationToSeconds = exports.formatToLocalDateTime = exports.formatToYear = exports.formatToLocalDate = exports.shortenText = exports.convertHtmlToPlainText = exports.formatWikicommonsUrl = exports.formatImslpUrl = exports.formatYoutubeUrl = exports.formatMusicbrainzWorkUrl = exports.formatMusicbrainzRecordingUrl = exports.formatWikipediaUrl = exports.formatWikidataUrl = exports.formatMultiPartAssetFileName = exports.escapeHtml = exports.convertSnakeToCamel = exports.convertCamelToSnake = void 0;
+/**
+ * Convert `camelCase` into `snake_case` strings.
+ *
+ * @param text - A camel cased string.
+ *
+ * @returns A string formatted in `snake_case`.
+ *
+ * @see {@link module:@bldr/core-browser.convertPropertiesCase}
+ * @see {@link https://vladimir-ivanov.net/camelcase-to-snake_case-and-vice-versa-with-javascript/}
+ */
+function convertCamelToSnake(text) {
+    return text.replace(/[\w]([A-Z])/g, function (m) {
+        return m[0] + '_' + m[1];
+    }).toLowerCase();
+}
+exports.convertCamelToSnake = convertCamelToSnake;
+/**
+ * Convert `snake_case` or `kebab-case` strings into `camelCase` strings.
+ *
+ * @param text - A snake or kebab cased string
+ *
+ * @returns A string formatted in `camelCase`.
+ *
+ * @see {@link module:@bldr/core-browser.convertPropertiesCase}
+ * @see {@link https://catalin.me/javascript-snake-to-camel/}
+ */
+function convertSnakeToCamel(text) {
+    return text.replace(/([-_][a-z])/g, (group) => group.toUpperCase()
+        .replace('-', '')
+        .replace('_', ''));
+}
+exports.convertSnakeToCamel = convertSnakeToCamel;
 /**
  * Escape some characters with HTML entities.
  *
@@ -157,7 +189,7 @@ exports.formatWikicommonsUrl = formatWikicommonsUrl;
  *
  * @returns The plain text version.
  */
-function plainText(html) {
+function convertHtmlToPlainText(html) {
     if (!html)
         return '';
     // To get spaces between heading and paragraphs
@@ -165,7 +197,7 @@ function plainText(html) {
     const markup = new DOMParser().parseFromString(html, 'text/html');
     return markup.body.textContent || '';
 }
-exports.plainText = plainText;
+exports.convertHtmlToPlainText = convertHtmlToPlainText;
 /**
  * Shorten a text string. By default the string is shortend to the maximal
  * length 80.
@@ -179,7 +211,7 @@ function shortenText(text, { maxLength, stripTags }) {
     if (!maxLength)
         maxLength = 80;
     if (stripTags)
-        text = plainText(text);
+        text = convertHtmlToPlainText(text);
     if (text.length < maxLength)
         return text;
     // https://stackoverflow.com/a/5454303

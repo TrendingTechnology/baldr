@@ -3,7 +3,7 @@
  */
 
 import { markupToHtml } from '@/lib.js'
-import { plainText } from '@bldr/core-browser'
+import { convertHtmlToPlainText } from '@bldr/core-browser'
 import steps from '@/steps.js'
 
 /**
@@ -285,7 +285,7 @@ export default {
       setQuestionsByStepNo.call(this, newStepNo)
     },
     plainTextFromProps (props) {
-      return plainText(collectText('', props.questions))
+      return convertHtmlToPlainText(collectText('', props.questions))
     }
   }
 }

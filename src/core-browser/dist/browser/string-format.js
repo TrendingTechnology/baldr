@@ -4,6 +4,36 @@
  * @module @bldr/core-browser/object-manipulation
  */
 /**
+ * Convert `camelCase` into `snake_case` strings.
+ *
+ * @param text - A camel cased string.
+ *
+ * @returns A string formatted in `snake_case`.
+ *
+ * @see {@link module:@bldr/core-browser.convertPropertiesCase}
+ * @see {@link https://vladimir-ivanov.net/camelcase-to-snake_case-and-vice-versa-with-javascript/}
+ */
+export function convertCamelToSnake(text) {
+    return text.replace(/[\w]([A-Z])/g, function (m) {
+        return m[0] + '_' + m[1];
+    }).toLowerCase();
+}
+/**
+ * Convert `snake_case` or `kebab-case` strings into `camelCase` strings.
+ *
+ * @param text - A snake or kebab cased string
+ *
+ * @returns A string formatted in `camelCase`.
+ *
+ * @see {@link module:@bldr/core-browser.convertPropertiesCase}
+ * @see {@link https://catalin.me/javascript-snake-to-camel/}
+ */
+export function convertSnakeToCamel(text) {
+    return text.replace(/([-_][a-z])/g, (group) => group.toUpperCase()
+        .replace('-', '')
+        .replace('_', ''));
+}
+/**
  * Escape some characters with HTML entities.
  *
  * @see {@link https://coderwall.com/p/ostduq/escape-html-with-javascript}
@@ -145,7 +175,7 @@ export function formatWikicommonsUrl(fileName) {
  *
  * @returns The plain text version.
  */
-export function plainText(html) {
+export function convertHtmlToPlainText(html) {
     if (!html)
         return '';
     // To get spaces between heading and paragraphs
@@ -166,7 +196,7 @@ export function shortenText(text, { maxLength, stripTags }) {
     if (!maxLength)
         maxLength = 80;
     if (stripTags)
-        text = plainText(text);
+        text = convertHtmlToPlainText(text);
     if (text.length < maxLength)
         return text;
     // https://stackoverflow.com/a/5454303

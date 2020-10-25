@@ -1451,7 +1451,7 @@ export class ClientMediaAsset {
         output.push(this[property])
       }
     }
-    return plainText(output.join(' | '))
+    return convertHtmlToPlainText(output.join(' | '))
   }
 
   /**

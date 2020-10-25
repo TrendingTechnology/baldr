@@ -2,7 +2,7 @@
  * @module @bldr/lamp/masters/editor
  */
 
-import { plainText } from '@bldr/core-browser'
+import { convertHtmlToPlainText } from '@bldr/core-browser'
 import { markupToHtml } from '@/lib.js'
 import steps from '@/steps.js'
 
@@ -62,7 +62,7 @@ export default {
       return steps.calculateStepCountText(props.markup, props, -1)
     },
     plainTextFromProps (props) {
-      return plainText(props.markup)
+      return convertHtmlToPlainText(props.markup)
     },
     leaveSlide ({ oldProps }) {
       const element = document.querySelector('.vc_editor_master')

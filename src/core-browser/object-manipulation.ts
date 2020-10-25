@@ -4,6 +4,8 @@
  * @module @bldr/core-browser/object-manipulation
  */
 
+import { convertSnakeToCamel, convertCamelToSnake } from './string-format'
+
 /**
  * Create a deep copy of an object. This functions uses the two methods
  * `JSON.parse()` and `JSON.stringify()` to accomplish its task.
@@ -12,41 +14,6 @@
  */
 export function deepCopy (data: object): object {
   return JSON.parse(JSON.stringify(data))
-}
-
-/**
- * Convert `camelCase` into `snake_case` strings.
- *
- * @param text - A camel cased string.
- *
- * @returns A string formatted in `snake_case`.
- *
- * @see {@link module:@bldr/core-browser.convertPropertiesCase}
- * @see {@link https://vladimir-ivanov.net/camelcase-to-snake_case-and-vice-versa-with-javascript/}
- */
-export function camelToSnake (text: string): string {
-  return text.replace(/[\w]([A-Z])/g, function (m) {
-    return m[0] + '_' + m[1]
-  }).toLowerCase()
-}
-
-/**
- * Convert `snake_case` or `kebab-case` strings into `camelCase` strings.
- *
- * @param text - A snake or kebab cased string
- *
- * @returns A string formatted in `camelCase`.
- *
- * @see {@link module:@bldr/core-browser.convertPropertiesCase}
- * @see {@link https://catalin.me/javascript-snake-to-camel/}
- */
-export function snakeToCamel (text: string): string {
-  return text.replace(
-    /([-_][a-z])/g,
-    (group) => group.toUpperCase()
-      .replace('-', '')
-      .replace('_', '')
-  )
 }
 
 interface StringObject {
@@ -86,9 +53,9 @@ export function convertProperties (data: any, direction: PropertyConvertDirectio
     for (const oldProp in data) {
       let newProp: string
       if (direction === PropertyConvertDirection.CAMEL_TO_SNAKE) {
-        newProp = camelToSnake(oldProp)
+        newProp = convertCamelToSnake(oldProp)
       } else {
-        newProp = snakeToCamel(oldProp)
+        newProp = convertSnakeToCamel(oldProp)
       }
       newObject[newProp] = data[oldProp]
       // Object or array

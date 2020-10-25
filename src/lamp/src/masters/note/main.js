@@ -2,7 +2,7 @@
  * @module @bldr/lamp/masters/note
  */
 
-import { plainText } from '@bldr/core-browser'
+import { convertHtmlToPlainText } from '@bldr/core-browser'
 import { markupToHtml } from '@/lib.js'
 import steps from '@/steps.js'
 
@@ -98,7 +98,7 @@ export default {
       return steps.generateSlideStepsFromText(props.markup, { stepMode: 'words' })
     },
     plainTextFromProps (props) {
-      return plainText(props.markup)
+      return convertHtmlToPlainText(props.markup)
     },
     afterSlideNoChangeOnComponent () {
       this.domSteps = new steps.DomSteps({

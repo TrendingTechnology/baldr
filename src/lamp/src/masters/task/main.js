@@ -2,7 +2,7 @@
  * @module @bldr/lamp/masters/task
  */
 
-import { plainText } from '@bldr/core-browser'
+import { convertHtmlToPlainText } from '@bldr/core-browser'
 
 export default {
   title: 'Arbeitsauftrag',
@@ -33,7 +33,7 @@ export default {
       return props
     },
     plainTextFromProps (props) {
-      return plainText(props.markup)
+      return convertHtmlToPlainText(props.markup)
     }
   }
 }

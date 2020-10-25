@@ -5,7 +5,8 @@
  * @module @bldr/core-browser/object-manipulation
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.RawDataObject = exports.convertPropertiesCamelToSnake = exports.convertPropertiesSnakeToCamel = exports.convertProperties = exports.snakeToCamel = exports.camelToSnake = exports.deepCopy = void 0;
+exports.RawDataObject = exports.convertPropertiesCamelToSnake = exports.convertPropertiesSnakeToCamel = exports.convertProperties = exports.deepCopy = void 0;
+const string_format_1 = require("./string-format");
 /**
  * Create a deep copy of an object. This functions uses the two methods
  * `JSON.parse()` and `JSON.stringify()` to accomplish its task.
@@ -16,38 +17,6 @@ function deepCopy(data) {
     return JSON.parse(JSON.stringify(data));
 }
 exports.deepCopy = deepCopy;
-/**
- * Convert `camelCase` into `snake_case` strings.
- *
- * @param text - A camel cased string.
- *
- * @returns A string formatted in `snake_case`.
- *
- * @see {@link module:@bldr/core-browser.convertPropertiesCase}
- * @see {@link https://vladimir-ivanov.net/camelcase-to-snake_case-and-vice-versa-with-javascript/}
- */
-function camelToSnake(text) {
-    return text.replace(/[\w]([A-Z])/g, function (m) {
-        return m[0] + '_' + m[1];
-    }).toLowerCase();
-}
-exports.camelToSnake = camelToSnake;
-/**
- * Convert `snake_case` or `kebab-case` strings into `camelCase` strings.
- *
- * @param text - A snake or kebab cased string
- *
- * @returns A string formatted in `camelCase`.
- *
- * @see {@link module:@bldr/core-browser.convertPropertiesCase}
- * @see {@link https://catalin.me/javascript-snake-to-camel/}
- */
-function snakeToCamel(text) {
-    return text.replace(/([-_][a-z])/g, (group) => group.toUpperCase()
-        .replace('-', '')
-        .replace('_', ''));
-}
-exports.snakeToCamel = snakeToCamel;
 var PropertyConvertDirection;
 (function (PropertyConvertDirection) {
     PropertyConvertDirection[PropertyConvertDirection["SNAKE_TO_CAMEL"] = 0] = "SNAKE_TO_CAMEL";
@@ -81,10 +50,10 @@ function convertProperties(data, direction = PropertyConvertDirection.SNAKE_TO_C
         for (const oldProp in data) {
             let newProp;
             if (direction === PropertyConvertDirection.CAMEL_TO_SNAKE) {
-                newProp = camelToSnake(oldProp);
+                newProp = string_format_1.convertCamelToSnake(oldProp);
             }
             else {
-                newProp = snakeToCamel(oldProp);
+                newProp = string_format_1.convertSnakeToCamel(oldProp);
             }
             newObject[newProp] = data[oldProp];
             // Object or array

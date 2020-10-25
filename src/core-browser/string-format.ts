@@ -5,6 +5,41 @@
  */
 
 /**
+ * Convert `camelCase` into `snake_case` strings.
+ *
+ * @param text - A camel cased string.
+ *
+ * @returns A string formatted in `snake_case`.
+ *
+ * @see {@link module:@bldr/core-browser.convertPropertiesCase}
+ * @see {@link https://vladimir-ivanov.net/camelcase-to-snake_case-and-vice-versa-with-javascript/}
+ */
+export function convertCamelToSnake (text: string): string {
+  return text.replace(/[\w]([A-Z])/g, function (m) {
+    return m[0] + '_' + m[1]
+  }).toLowerCase()
+}
+
+/**
+ * Convert `snake_case` or `kebab-case` strings into `camelCase` strings.
+ *
+ * @param text - A snake or kebab cased string
+ *
+ * @returns A string formatted in `camelCase`.
+ *
+ * @see {@link module:@bldr/core-browser.convertPropertiesCase}
+ * @see {@link https://catalin.me/javascript-snake-to-camel/}
+ */
+export function convertSnakeToCamel (text: string): string {
+  return text.replace(
+    /([-_][a-z])/g,
+    (group) => group.toUpperCase()
+      .replace('-', '')
+      .replace('_', '')
+  )
+}
+
+/**
  * Escape some characters with HTML entities.
  *
  * @see {@link https://coderwall.com/p/ostduq/escape-html-with-javascript}
@@ -27,6 +62,21 @@ export function escapeHtml (htmlString: string): string {
   return ('' + htmlString).replace(htmlEscaper, function (match) {
     return htmlEscapes[match]
   })
+}
+
+/**
+ * Get the plain text version of a HTML string.
+ *
+ * @param html - A HTML formated string.
+ *
+ * @returns The plain text version.
+ */
+export function convertHtmlToPlainText (html: string): string {
+  if (!html) return ''
+  // To get spaces between heading and paragraphs
+  html = html.replace(/></g, '> <')
+  const markup = new DOMParser().parseFromString(html, 'text/html')
+  return markup.body.textContent || ''
 }
 
 /**
@@ -146,21 +196,6 @@ export function formatWikicommonsUrl (fileName: string): string {
   return `https://commons.wikimedia.org/wiki/File:${fileName}`
 }
 
-/**
- * Get the plain text version of a HTML string.
- *
- * @param html - A HTML formated string.
- *
- * @returns The plain text version.
- */
-export function plainText (html: string): string {
-  if (!html) return ''
-  // To get spaces between heading and paragraphs
-  html = html.replace(/></g, '> <')
-  const markup = new DOMParser().parseFromString(html, 'text/html')
-  return markup.body.textContent || ''
-}
-
 interface ShortenTextOptions {
   stripTags: boolean
   maxLength: number
@@ -176,7 +211,7 @@ interface ShortenTextOptions {
 export function shortenText (text: string, { maxLength, stripTags }: ShortenTextOptions) {
   if (!text) return ''
   if (!maxLength) maxLength = 80
-  if (stripTags) text = plainText(text)
+  if (stripTags) text = convertHtmlToPlainText(text)
   if (text.length < maxLength) return text
   // https://stackoverflow.com/a/5454303
   // trim the string to the maximum length

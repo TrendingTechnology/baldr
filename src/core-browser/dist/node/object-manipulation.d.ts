@@ -10,28 +10,6 @@
  * @param data
  */
 export declare function deepCopy(data: object): object;
-/**
- * Convert `camelCase` into `snake_case` strings.
- *
- * @param text - A camel cased string.
- *
- * @returns A string formatted in `snake_case`.
- *
- * @see {@link module:@bldr/core-browser.convertPropertiesCase}
- * @see {@link https://vladimir-ivanov.net/camelcase-to-snake_case-and-vice-versa-with-javascript/}
- */
-export declare function camelToSnake(text: string): string;
-/**
- * Convert `snake_case` or `kebab-case` strings into `camelCase` strings.
- *
- * @param text - A snake or kebab cased string
- *
- * @returns A string formatted in `camelCase`.
- *
- * @see {@link module:@bldr/core-browser.convertPropertiesCase}
- * @see {@link https://catalin.me/javascript-snake-to-camel/}
- */
-export declare function snakeToCamel(text: string): string;
 declare enum PropertyConvertDirection {
     SNAKE_TO_CAMEL = 0,
     CAMEL_TO_SNAKE = 1

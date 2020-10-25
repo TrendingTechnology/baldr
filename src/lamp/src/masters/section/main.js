@@ -2,7 +2,7 @@
  * @module @bldr/lamp/masters/section
  */
 
-import { plainText } from '@bldr/core-browser'
+import { convertHtmlToPlainText } from '@bldr/core-browser'
 
 export default {
   title: 'Abschnitt',
@@ -30,7 +30,7 @@ export default {
       return props
     },
     plainTextFromProps (props) {
-      return plainText(props.heading)
+      return convertHtmlToPlainText(props.heading)
     }
   }
 }

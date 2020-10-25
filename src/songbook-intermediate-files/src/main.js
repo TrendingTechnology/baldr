@@ -1713,7 +1713,7 @@ function exportToMediaServer (library) {
 
     for (const property of song.metaDataCombined.allProperties) {
       if (song.metaDataCombined[property]) {
-        rawYaml[`${camelToSnake(property)}_combined`] = song.metaDataCombined[property]
+        rawYaml[`${convertCamelToSnake(property)}_combined`] = song.metaDataCombined[property]
       }
     }
 
