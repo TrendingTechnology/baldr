@@ -4,7 +4,7 @@ const path = require('path')
 
 // Third party packages.
 const chalk = require('chalk')
-const wikidata = require('@bldr/wikidata')
+const wikidata = require('@bldr/wikidata').default
 
 // Project packages.
 const metaTypes = require('@bldr/media-server').metaTypes
