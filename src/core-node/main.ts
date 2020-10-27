@@ -12,7 +12,7 @@ import util from 'util'
 import path from 'path'
 import { URL } from 'url'
 
-// Third party packages
+// Third party packages.
 import git from 'git-rev-sync'
 import fetch from 'node-fetch'
 

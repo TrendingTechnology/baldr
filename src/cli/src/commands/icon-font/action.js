@@ -33,7 +33,7 @@ async function downloadIcon (url, name, newName) {
     destName = name
   }
   const destination = path.join(tmpDir, `${destName}.svg`)
-  await cmd.exec('wget', '-O', destination, url)
+  await cmd.exec(['wget', '-O', destination, url])
   // console.log(`Download destination: ${chalk.green(destination)}`)
 }
 

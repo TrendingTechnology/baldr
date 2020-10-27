@@ -45,15 +45,17 @@ async function action (youtubeId) {
   const cmd = new CommandRunner({})
   cmd.startSpin()
   cmd.log('Updating youtube-dl using pip3.')
-  await cmd.exec('pip3', 'install', '--upgrade', 'youtube-dl')
+  await cmd.exec(['pip3', 'install', '--upgrade', 'youtube-dl'])
 
   cmd.log('Downloading the YouTube video.')
   await cmd.exec(
-    'youtube-dl',
-    '--format', 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/mp4',
-    '--output', youtubeId,
-    '--write-thumbnail',
-    youtubeId,
+    [
+      'youtube-dl',
+      '--format', 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/mp4',
+      '--output', youtubeId,
+      '--write-thumbnail',
+      youtubeId
+    ],
     { cwd: ytDir }
   )
 
@@ -72,8 +74,8 @@ async function action (youtubeId) {
     fs.renameSync(srcPreviewJpg, destPreview)
   } else if (fs.existsSync(srcPreviewWebp)) {
     await cmd.exec(
-      'magick',
-      'convert', srcPreviewWebp, destPreview,
+      ['magick',
+      'convert', srcPreviewWebp, destPreview],
       { cwd: ytDir }
     )
     fs.unlinkSync(srcPreviewWebp)

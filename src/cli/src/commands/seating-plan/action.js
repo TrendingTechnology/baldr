@@ -39,7 +39,7 @@ const documentTemplate = {
  */
 async function action (mdbFile) {
   const cmd = new CommandRunner()
-  const result = await cmd.exec('mdb-export', mdbFile, 'Schüler')
+  const result = await cmd.exec(['mdb-export', mdbFile, 'Schüler'])
   writeFile('tmp.csv', result.stdout)
 
   const grades = {}

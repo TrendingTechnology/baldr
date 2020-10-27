@@ -25,7 +25,7 @@ async function buildApp (cmd, appName) {
     throw new Error(`App path doesn’t exist for app “${appName}”.`)
   }
   cmd.log(`${appName}: build the Vue app.`)
-  await cmd.exec('npm', 'run', 'build:webapp', { cwd: appPath })
+  await cmd.exec(['npm', 'run', 'build:webapp'], { cwd: appPath })
 
   let destinationDir
   if (appName === 'lamp') {
@@ -36,13 +36,15 @@ async function buildApp (cmd, appName) {
 
   cmd.log(`${appName}: push the build to the remote HTTP server.`)
   await cmd.exec(
-    'rsync',
-    '-av',
-    '--delete',
-    '--usermap', `jf:${config.http.webServerUser}`,
-    '--groupmap', `jf:${config.http.webServerGroup}`,
-    `${appPath}/dist/`,
-    `${config.mediaServer.sshAliasRemote}:${config.http.webRoot}/${destinationDir}/`
+    [
+      'rsync',
+      '-av',
+      '--delete',
+      '--usermap', `jf:${config.http.webServerUser}`,
+      '--groupmap', `jf:${config.http.webServerGroup}`,
+      `${appPath}/dist/`,
+      `${config.mediaServer.sshAliasRemote}:${config.http.webRoot}/${destinationDir}/`
+    ]
   )
   cmd.stopSpin()
 }

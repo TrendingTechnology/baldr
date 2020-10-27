@@ -17,20 +17,24 @@ async function action () {
 
   cmd.log('Pull the Vue builds from the remote web server.')
   await cmd.exec(
-    'rsync',
-    '-av',
-    '--delete',
-    '--exclude', 'logs',
-    `${config.mediaServer.sshAliasRemote}:${config.http.webRoot}/`,
-    `${config.http.webRoot}/`
+    [
+      'rsync',
+      '-av',
+      '--delete',
+      '--exclude', 'logs',
+      `${config.mediaServer.sshAliasRemote}:${config.http.webRoot}/`,
+      `${config.http.webRoot}/`
+    ]
   )
 
   cmd.log('Fixing the ownership of the Vue builds.')
   await cmd.exec(
-    'chown',
-    '-R',
-    `${config.http.webServerUser}:${config.http.webServerUser}`,
-    config.http.webRoot
+    [
+      'chown',
+      '-R',
+      `${config.http.webServerUser}:${config.http.webServerUser}`,
+      config.http.webRoot
+    ]
   )
   cmd.stopSpin()
 }

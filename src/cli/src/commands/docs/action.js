@@ -23,7 +23,7 @@ async function generateDocs () {
   cmd.startSpin()
 
   cmd.log(`Update source: ${chalk.yellow(config.doc.src)}`)
-  await cmd.exec('git', 'pull', { cwd: config.doc.src })
+  await cmd.exec(['git', 'pull'], { cwd: config.doc.src })
 
   cmd.log(`Clean destination: ${chalk.green(config.doc.dest)}`)
   await fs.remove(config.doc.dest)

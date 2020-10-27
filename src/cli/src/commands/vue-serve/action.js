@@ -13,7 +13,7 @@ const { config } = require('../../main.js')
 async function action (appName = 'lamp') {
   const appPath = path.join(config.localRepo, 'src', appName)
   const cmd = new CommandRunner({ verbose: true })
-  await cmd.exec('npm', 'run', 'serve:webapp', { cwd: appPath })
+  await cmd.exec(['npm', 'run', 'serve:webapp'], { cwd: appPath })
 }
 
 module.exports = action

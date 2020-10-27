@@ -10,13 +10,17 @@
     "type": "git",
     "url": "git+https://github.com/Josef-Friedrich/baldr.git"
   },
+  "scripts": {
+    "build": "npm run build:node",
+    "build:node": "tsc --module commonjs --outDir dist/node"
+  },
   "license": "MIT",
   "author": {
     "name": "Josef Friedrich",
     "email": "josef@friedrich.rocks",
     "url": "https://josef.friedrich.rocks"
   },
-  "main": "main.js",
+  "main": "dist/node/main.js",
   "publishConfig": {
     "access": "public"
   },
@@ -24,5 +28,8 @@
     "gauge": "3.0.0",
     "object-assign": "^4.1.1",
     "ora": "5.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "12.12.2"
   }
 }

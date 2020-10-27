@@ -5,55 +5,60 @@
  */
 
 // Node packages.
-const childProcess = require('child_process')
-const os = require('os')
+import * as childProcess from 'child_process'
+import os from 'os'
 
-const ora = require('ora')
+import type { SpawnOptionsWithStdioTuple, StdioNull, ExecOptionsWithStringEncoding } from 'child_process'
+
+// Third party packages.
+import ora from 'ora'
 // TODO remove dependency object-assign
 // Error: Cannot find module 'object-assign'
-const Gauge = require('gauge')
+import Gauge from 'gauge'
+import chalk from 'chalk'
 
-const chalk = require('chalk')
+interface CommandRunnerOption {
+  verbose: boolean
+}
 
 /**
  * Run commands on the command line in a nice and secure fashion.
  */
-class CommandRunner {
+export class CommandRunner {
+  /**
+   * Print out captured stdout and stderr of the method exec form
+   * childProcess.
+   */
+  private verbose: boolean
+
+  /**
+   * An instance of the Ora package terminal spinner.
+   *
+   * @see {@link https://www.npmjs.com/package/ora}
+   */
+  private spinner: ora.Ora
+
+  /**
+   * An instance of the Gauge progress bar.
+   */
+  private gauge: any
+
+  /**
+   * The current log message. If you use `this.log(message)`, message is
+   * stored in this attribute. `this.exec(args[])` appends in the verbose mode
+   * stdout and stderr to this message.
+   */
+  private message: string
   /**
    * @param {Object} options
    * @property {Boolean} verbose
    */
-  constructor (options) {
-    /**
-     * Print out captured stdout and stderr of the method exec form
-     * childProcess.
-     *
-     * @type {Boolean}
-     */
-    this.verbose = (options && options.verbose)
-
-    /**
-     * A instance of the Ora package terminal spinner.
-     *
-     * @see {@link https://www.npmjs.com/package/ora}
-     *
-     * @type {Object}
-     */
+  constructor (options?: CommandRunnerOption) {
+    this.verbose = (options && options.verbose) ? true : false
     this.spinner = ora({ spinner: 'line' })
-
-    /**
-     *
-     */
     this.gauge = new Gauge()
     this.gauge.setTheme('ASCII')
 
-    /**
-     * The current log message. If you use `this.log(message)`, message is
-     * stored in this attribute. `this.exec(args[])` appends in the verbose mode
-     * stdout and stderr to this message.
-     *
-     * @type {String}
-     */
     this.message = ''
   }
 
@@ -85,7 +90,7 @@ class CommandRunner {
   /**
    * Update the Gauge progress bar.
    */
-  updateProgress (completed, text) {
+  updateProgress (completed: number, text: string) {
     this.gauge.pulse()
     this.gauge.show(text, completed)
   }
@@ -97,24 +102,21 @@ class CommandRunner {
    * For example `cmd.exec('youtube-dl', youtubeId, { cwd: ytDir })`.
    * We have to run the commands asynchronous because of the spinner.
    *
-   * @param {String} args - One or more arguments.
-   * @param {Object} options - See `childProcess.spawnSync()`
+   * @param args - One or more arguments.
+   * @param options - See `childProcess.spawnSync()`
    *   [options](https://nodejs.org/api/child_process.html#child_process_child_process_spawnsync_command_args_options).
    *
    * @returns {Object}
    *   [see on nodejs.org](https://nodejs.org/api/child_process.html#child_process_child_process_spawnsync_command_args_options).
    */
-  exec () {
+  exec (args: string[], options?: SpawnOptionsWithStdioTuple<StdioNull, StdioNull, StdioNull>): Promise<undefined> {
     if (this.verbose) this.startSpin()
 
-    const args = Array.from(arguments)
-    let options = {}
-    if (args.length > 1 && typeof args[args.length - 1] === 'object') {
-      options = args.pop()
-    }
     // To get error messages on unkown commands
+    if (!options) options = <SpawnOptionsWithStdioTuple<StdioNull, StdioNull, StdioNull>> {}
+
     options.shell = true
-    options.encoding = 'utf-8'
+    // options.encoding = 'utf-8'
     return new Promise((resolve, reject) => {
       let command
       let commandString
@@ -138,13 +140,13 @@ class CommandRunner {
       let stdout = ''
       let stderr = ''
 
-      command.stdout.on('data', (data) => {
+      command.stdout.on('data', (data: Buffer) => {
         this.logStdOutErr(data)
         stdout = stdout + data
       })
 
       // somehow songbook build stays open without this event.
-      command.stderr.on('data', (data) => {
+      command.stderr.on('data', (data: Buffer) => {
         this.logStdOutErr(data)
         stderr = stderr + data
       })
@@ -155,7 +157,7 @@ class CommandRunner {
 
       command.on('exit', (code) => {
         if (code === 0) {
-          resolve({ stdout, stderr })
+          resolve(<any>{ stdout, stderr })
         } else {
           reject(new Error(stderr))
         }
@@ -166,61 +168,55 @@ class CommandRunner {
   /**
    * Append the buffed data stream from the child process to the spinner text.
    *
-   * @param {Buffer} data - The binary output from childProcess.
+   * @param data - The binary output from childProcess.
    */
-  logStdOutErr (data) {
+  logStdOutErr (data: Buffer) {
     if (this.verbose) {
       let cleanedText = data.toString().trim()
       cleanedText = cleanedText.replace(/<s> \[webpack\.Progress\]/, '')
       cleanedText = cleanedText.replace(/\s{2,}/, ' ')
-      this.setSpinnerText_(this.message + ' ' + cleanedText)
+      this.setSpinnerText(this.message + ' ' + cleanedText)
     }
   }
 
   /**
-   * Set the spinner text and cut the lenght of the text to fit in a terminal
-   * window.
+   * Set the spinner text and cut the lenght of the text to fit in a
+   * terminal window.
    *
-   * @param {String} text - The text to set on the spinner.
-   *
-   * @private
+   * @param text - The text to set on the spinner.
    */
-  setSpinnerText_ (text) {
+  private setSpinnerText (text: string) {
     this.spinner.text = text.substring(0, process.stdout.columns - 3)
   }
 
   /**
-   * @param {String} message - A message to show after the spinner.
+   * @param message - A message to show after the spinner.
    */
-  log (message) {
+  log (message: string) {
     this.message = message
-    this.setSpinnerText_(message)
+    this.setSpinnerText(message)
   }
 
   /**
-   *
+   * Catch an error and exit the progress.
    */
-  catch (error) {
+  catch (error: Error) {
     this.stopSpin()
     console.log(error)
     process.exit()
   }
 
   /**
-   *
+   * Stop the gauge progress bar.
    */
   stopProgress () {
     this.gauge.hide()
   }
 
   /**
-   *
+   * Stop the command line spinner.
    */
   stopSpin () {
     this.spinner.stop()
   }
-}
-
-module.exports = {
-  CommandRunner
 }
