@@ -155,7 +155,7 @@ const cloze = <MetaSpec.Type> {
  */
 const composition = <MetaSpec.Type> {
   title: 'Komposition',
-  detectTypeByPath: new RegExp('^.*/HB/.*m4a$'),
+  detectTypeByPath: new RegExp('^.*/HB/.*(m4a|mp3)$'),
   props: {
     title: {
       title: 'Titel der Komponist',
@@ -600,7 +600,7 @@ const radio = <MetaSpec.Type> {
  */
 const recording = <MetaSpec.Type> {
   title: 'Aufnahme',
-  detectTypeByPath: new RegExp('^.*/HB/.*m4a$'),
+  detectTypeByPath: new RegExp('^.*/HB/.*(m4a|mp3)$'),
   props: {
     artist: {
       title: 'Interpret',

@@ -46,11 +46,17 @@ class Asset extends MediaFile {
             this.metaData = data;
         }
     }
+    /**
+     * The id of the media asset. Read from the metadata file.
+     */
     get id() {
         if (this.metaData && this.metaData.id) {
             return this.metaData.id;
         }
     }
+    /**
+     * The media category (`image`, `audio`, `video`, `document`)
+     */
     get mediaCategory() {
         if (this.extension) {
             return exports.mediaCategoriesManager.extensionToType(this.extension);

@@ -29,7 +29,13 @@ export declare class Asset extends MediaFile {
      * @param filePath - The file path of the media asset.
      */
     constructor(filePath: string);
+    /**
+     * The id of the media asset. Read from the metadata file.
+     */
     get id(): string | undefined;
+    /**
+     * The media category (`image`, `audio`, `video`, `document`)
+     */
     get mediaCategory(): string | undefined;
 }
 /**

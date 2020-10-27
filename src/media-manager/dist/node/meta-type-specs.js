@@ -151,7 +151,7 @@ const cloze = {
  */
 const composition = {
     title: 'Komposition',
-    detectTypeByPath: new RegExp('^.*/HB/.*m4a$'),
+    detectTypeByPath: new RegExp('^.*/HB/.*(m4a|mp3)$'),
     props: {
         title: {
             title: 'Titel der Komponist',
@@ -587,7 +587,7 @@ const radio = {
  */
 const recording = {
     title: 'Aufnahme',
-    detectTypeByPath: new RegExp('^.*/HB/.*m4a$'),
+    detectTypeByPath: new RegExp('^.*/HB/.*(m4a|mp3)$'),
     props: {
         artist: {
             title: 'Interpret',
