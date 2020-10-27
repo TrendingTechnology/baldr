@@ -35,7 +35,7 @@ async function buildElectronApp (cmd, appName) {
   await cmd.exec(['apt', '-y', 'remove', `baldr-${appName}`])
 
   cmd.log(`${appName}: install the .deb package.`)
-  await cmd.exec(['dpkg', '-i', path.join(appPath, 'dist_electron', `baldr-${appName}_${packageJson.version}_amd64.deb`]))
+  await cmd.exec(['dpkg', '-i', path.join(appPath, 'dist_electron', `baldr-${appName}_${packageJson.version}_amd64.deb`)])
 
   cmd.stopSpin()
 }

@@ -21,6 +21,7 @@ core-browser
 core-node
 tex-markdown-converter
 wikidata
+cli-utils
 media-manager"
 
 for DIR in $DIRS; do
