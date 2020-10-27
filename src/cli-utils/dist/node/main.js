@@ -46,7 +46,7 @@ class CommandRunner {
      * @property {Boolean} verbose
      */
     constructor(options) {
-        this.verbose = (options && options.verbose);
+        this.verbose = (options && options.verbose) ? true : false;
         this.spinner = ora_1.default({ spinner: 'line' });
         this.gauge = new gauge_1.default();
         this.gauge.setTheme('ASCII');
@@ -89,7 +89,7 @@ class CommandRunner {
      * We have to run the commands asynchronous because of the spinner.
      *
      * @param args - One or more arguments.
-     * @param options - See `childProcess.spawnSync()`
+     * @param options - See `childProcess.spawn()`
      *   [options](https://nodejs.org/api/child_process.html#child_process_child_process_spawnsync_command_args_options).
      *
      * @returns {Object}
@@ -102,7 +102,7 @@ class CommandRunner {
         if (!options)
             options = {};
         options.shell = true;
-        // options.encoding = 'utf-8'
+        options.encoding = 'utf-8';
         return new Promise((resolve, reject) => {
             let command;
             let commandString;
@@ -117,7 +117,7 @@ class CommandRunner {
             if (this.verbose) {
                 this.message = `Exec: ${chalk_1.default.yellow(commandString)}`;
             }
-            if (options.detached) {
+            if (options && options.detached) {
                 command.unref();
                 resolve();
             }

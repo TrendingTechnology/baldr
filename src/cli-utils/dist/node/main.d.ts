@@ -4,9 +4,14 @@
  * @module @bldr/cli-utils
  */
 /// <reference types="node" />
-import type { SpawnOptionsWithStdioTuple, StdioNull } from 'child_process';
 interface CommandRunnerOption {
     verbose: boolean;
+}
+interface CommandRunnerExecOption {
+    cwd: string;
+    detached: boolean;
+    shell: true;
+    encoding: string;
 }
 /**
  * Run commands on the command line in a nice and secure fashion.
@@ -37,7 +42,7 @@ export declare class CommandRunner {
      * @param {Object} options
      * @property {Boolean} verbose
      */
-    constructor(options: CommandRunnerOption);
+    constructor(options?: CommandRunnerOption);
     /**
      *
      */
@@ -62,13 +67,13 @@ export declare class CommandRunner {
      * We have to run the commands asynchronous because of the spinner.
      *
      * @param args - One or more arguments.
-     * @param options - See `childProcess.spawnSync()`
+     * @param options - See `childProcess.spawn()`
      *   [options](https://nodejs.org/api/child_process.html#child_process_child_process_spawnsync_command_args_options).
      *
      * @returns {Object}
      *   [see on nodejs.org](https://nodejs.org/api/child_process.html#child_process_child_process_spawnsync_command_args_options).
      */
-    exec(args: string[], options?: SpawnOptionsWithStdioTuple<StdioNull, StdioNull, StdioNull>): Promise<undefined>;
+    exec(args: string[], options?: CommandRunnerExecOption): Promise<undefined>;
     /**
      * Append the buffed data stream from the child process to the spinner text.
      *

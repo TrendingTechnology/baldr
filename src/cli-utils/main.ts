@@ -8,8 +8,6 @@
 import * as childProcess from 'child_process'
 import os from 'os'
 
-import type { SpawnOptionsWithStdioTuple, StdioNull, ExecOptionsWithStringEncoding } from 'child_process'
-
 // Third party packages.
 import ora from 'ora'
 // TODO remove dependency object-assign
@@ -19,6 +17,13 @@ import chalk from 'chalk'
 
 interface CommandRunnerOption {
   verbose: boolean
+}
+
+interface CommandRunnerExecOption {
+  cwd: string
+  detached: boolean
+  shell: true
+  encoding: string
 }
 
 /**
@@ -103,20 +108,20 @@ export class CommandRunner {
    * We have to run the commands asynchronous because of the spinner.
    *
    * @param args - One or more arguments.
-   * @param options - See `childProcess.spawnSync()`
+   * @param options - See `childProcess.spawn()`
    *   [options](https://nodejs.org/api/child_process.html#child_process_child_process_spawnsync_command_args_options).
    *
    * @returns {Object}
    *   [see on nodejs.org](https://nodejs.org/api/child_process.html#child_process_child_process_spawnsync_command_args_options).
    */
-  exec (args: string[], options?: SpawnOptionsWithStdioTuple<StdioNull, StdioNull, StdioNull>): Promise<undefined> {
+  exec (args: string[], options?: CommandRunnerExecOption): Promise<undefined> {
     if (this.verbose) this.startSpin()
 
     // To get error messages on unkown commands
-    if (!options) options = <SpawnOptionsWithStdioTuple<StdioNull, StdioNull, StdioNull>> {}
+    if (!options) options = {} as CommandRunnerExecOption
 
     options.shell = true
-    // options.encoding = 'utf-8'
+    options.encoding = 'utf-8'
     return new Promise((resolve, reject) => {
       let command
       let commandString
@@ -132,7 +137,7 @@ export class CommandRunner {
         this.message = `Exec: ${chalk.yellow(commandString)}`
       }
 
-      if (options.detached) {
+      if (options && options.detached) {
         command.unref()
         resolve()
       }
