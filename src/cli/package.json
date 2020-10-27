@@ -16,9 +16,13 @@
     "email": "josef@friedrich.rocks",
     "url": "https://josef.friedrich.rocks"
   },
-  "main": "src/main.js",
+  "main": "dist/node/main.js",
   "publishConfig": {
     "access": "public"
+  },
+  "scripts": {
+    "build": "npm run build:node",
+    "build:node": "tsc --module commonjs --outDir dist/node"
   },
   "dependencies": {
     "@bldr/cli-utils": "^0.1.0",
@@ -45,6 +49,6 @@
     "webfont": "^9.0.0"
   },
   "bin": {
-    "baldr_cli.js": "./src/main.js"
+    "baldr_cli.js": "./dist/node/main.js"
   }
 }

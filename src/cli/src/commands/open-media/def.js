@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   command: 'open-media',
   alias: 'o',
   checkExecutable: 'xdg-open',

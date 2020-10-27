@@ -25,7 +25,7 @@ const fs_1 = __importDefault(require("fs"));
 const util_1 = __importDefault(require("util"));
 const path_1 = __importDefault(require("path"));
 const url_1 = require("url");
-// Third party packages
+// Third party packages.
 const git_rev_sync_1 = __importDefault(require("git-rev-sync"));
 const node_fetch_1 = __importDefault(require("node-fetch"));
 /**
