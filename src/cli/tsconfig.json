@@ -3,7 +3,8 @@
     "outDir": "./dist",
     "module": "CommonJS",
     "allowJs": true,
-    "target": "ES6"
+    "target": "ES6",
+    "esModuleInterop": true
   },
   "include": ["./src/**/*"]
 }

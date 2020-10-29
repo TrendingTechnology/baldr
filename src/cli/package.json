@@ -35,6 +35,7 @@
     "@bldr/songbook-intermediate-files": "^0.2.3",
     "@bldr/tex-markdown-converter": "^0.1.0",
     "@bldr/wikidata": "^0.1.0",
+    "@bldr/type-definitions": "^0.1.0",
     "axios": "^0.20.0",
     "chalk": "^4.1.0",
     "color": "^3.1.2",

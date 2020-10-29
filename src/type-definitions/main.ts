@@ -5,6 +5,7 @@
  */
 
 export * from './asset'
+export * from './cli'
 export * from './config'
 export * from './meta-spec'
 export * from './presentation'

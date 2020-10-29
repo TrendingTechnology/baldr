@@ -1,8 +1,8 @@
 // Node packages.
-const childProcess = require('child_process')
+import * as childProcess from 'child_process'
 
-// Globals.
-const { config } = require('../../main.js')
+// Project packages.
+import config from '@bldr/config'
 
 /**
  * Open base path.
@@ -12,4 +12,4 @@ function action () {
   process.unref()
 }
 
-module.exports = action
+export = action
