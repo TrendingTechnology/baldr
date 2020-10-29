@@ -90,7 +90,6 @@ function actionHelp () {
 }
 
 async function main () {
-  program.version(require('../package.json').version)
   loadCommands(program)
 
   try {

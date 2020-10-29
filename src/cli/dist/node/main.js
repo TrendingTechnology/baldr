@@ -91,7 +91,7 @@ function actionHelp() {
 }
 function main() {
     return __awaiter(this, void 0, void 0, function* () {
-        program.version(require('../package.json').version);
+        //program.version(require('../package.json').version)
         loadCommands(program);
         try {
             yield program.parseAsync(process.argv);
