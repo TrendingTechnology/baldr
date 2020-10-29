@@ -1,3 +1,4 @@
+"use strict";
 module.exports = {
     command: 'build-electron [app-name]',
     alias: 'be',

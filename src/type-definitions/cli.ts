@@ -18,6 +18,11 @@ type Option = [string, string]
  */
 export interface CliCommandSpec {
   /**
+   * The method
+   * [command](https://www.npmjs.com/package/commander#commands) of the
+   * commander object is used to generate a new command
+   * (`program.command(def.command)`).
+   *
    * For example: `normalize [files...]`
    */
   command: string
@@ -39,6 +44,11 @@ export interface CliCommandSpec {
   options?: Option[]
 
   /**
+   * The method
+   * [description](https://www.npmjs.com/package/commander#commands) of the
+   * commander object is used to generate a new command
+   * (`subProgramm.description(def.description)`).
+   *
    * For example: `Normalize the meta data files in the YAML format
    * (sort, clean up).`
    */

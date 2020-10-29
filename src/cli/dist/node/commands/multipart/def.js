@@ -1,3 +1,4 @@
+"use strict";
 module.exports = {
     command: 'multipart <glob> <prefix>',
     alias: 'mp',

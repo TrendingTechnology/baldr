@@ -1,3 +1,4 @@
+"use strict";
 module.exports = {
     command: 'convert [files...]',
     alias: 'c',

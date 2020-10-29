@@ -1,3 +1,4 @@
+"use strict";
 module.exports = {
     command: 'seating-plan <notenmanager-mdb>',
     alias: 'sp',

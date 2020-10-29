@@ -1,3 +1,4 @@
+"use strict";
 module.exports = {
     command: 'mirror-folder-structure',
     alias: 'mfs',

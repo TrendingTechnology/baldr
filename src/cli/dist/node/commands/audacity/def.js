@@ -1,3 +1,4 @@
+"use strict";
 module.exports = {
     command: 'audacity <text-mark-file>',
     alias: 'au',

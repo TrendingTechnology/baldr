@@ -1,3 +1,4 @@
+"use strict";
 module.exports = {
     command: 'video-preview [files...]',
     alias: 'v',

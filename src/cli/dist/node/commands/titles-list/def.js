@@ -1,3 +1,4 @@
+"use strict";
 module.exports = {
     command: 'titles-list [files...]',
     alias: 'tl',

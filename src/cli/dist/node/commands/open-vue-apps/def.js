@@ -1,3 +1,4 @@
+"use strict";
 module.exports = {
     command: 'open-vue-app [name]',
     alias: 'ova',

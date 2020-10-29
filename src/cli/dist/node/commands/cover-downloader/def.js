@@ -1,3 +1,4 @@
+"use strict";
 module.exports = {
     command: 'cover-downloader [files...]',
     alias: 'cd',

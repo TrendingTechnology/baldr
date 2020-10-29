@@ -1,3 +1,4 @@
+"use strict";
 module.exports = {
     command: 'build [app-name]',
     alias: 'b',

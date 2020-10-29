@@ -1,3 +1,4 @@
+"use strict";
 module.exports = {
     command: 'titles-to-tex [files...]',
     alias: 't',

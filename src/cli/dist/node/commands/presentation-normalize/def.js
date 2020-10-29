@@ -1,3 +1,4 @@
+"use strict";
 module.exports = {
     command: 'presentation-normalize <path>',
     alias: 'pn',

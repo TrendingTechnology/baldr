@@ -1,3 +1,4 @@
+"use strict";
 module.exports = {
     command: 'wikidata <metadata-type> <item-id> [arg1] [arg2]',
     alias: 'w',
