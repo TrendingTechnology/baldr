@@ -3,9 +3,7 @@ const os = require('os')
 
 // Project packages.
 const { CommandRunner } = require('@bldr/cli-utils')
-
-// Globals.
-const { config } = require('../../main.js')
+const config = require('@bldr/config')
 
 /**
  *

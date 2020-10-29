@@ -6,9 +6,7 @@ const chalk = require('chalk')
 
 // Project packages.
 const mediaServer = require('@bldr/media-server')
-
-// Globals.
-const { cwd, config } = require('../../main.js')
+const config = require('@bldr/config')
 
 function action () {
   // In the archive folder are no two letter folders like 'YT'.

@@ -1,7 +1,8 @@
 // Project packages.
 const { CommandRunner } = require('@bldr/cli-utils')
 
-const { config } = require('../../main.js')
+const config = require('@bldr/config')
+
 const syncBuilds = require('../build-sync/action.js')
 const buildVueApp = require('../build/action.js')
 

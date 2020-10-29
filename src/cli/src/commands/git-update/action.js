@@ -1,7 +1,6 @@
 // Project packages.
 const { CommandRunner } = require('@bldr/cli-utils')
-
-const { config } = require('../../main.js')
+const config = require('@bldr/config')
 
 async function action () {
   const cmd = new CommandRunner({ verbose: true })

@@ -6,9 +6,7 @@ const chalk = require('chalk')
 
 // Project packages:
 const { openFolderWithArchives, locationIndicator } = require('@bldr/media-server')
-
-// Globals.
-const { cwd } = require('../../main.js')
+const config = require('@bldr/config')
 
 function action (filePath, cmdObj) {
   if (!filePath) {

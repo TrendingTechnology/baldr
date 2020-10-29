@@ -1,8 +1,6 @@
 // Project packages:
 const { mirrorFolderStructure } = require('@bldr/media-server')
-
-// Globals.
-const { cwd } = require('../../main.js')
+const config = require('@bldr/config')
 
 function action () {
   console.log(mirrorFolderStructure(cwd))

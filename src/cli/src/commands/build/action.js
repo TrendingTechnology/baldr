@@ -4,9 +4,7 @@ const path = require('path')
 
 // Project packages:
 const { CommandRunner } = require('@bldr/cli-utils')
-
-// Globals.
-const { config } = require('../../main.js')
+const config = require('@bldr/config')
 
 const appNames = [
   'lamp',

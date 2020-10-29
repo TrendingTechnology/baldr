@@ -10,9 +10,7 @@ const jsdoc = require('jsdoc-api')
 // Project packages.
 const { openWith } = require('@bldr/media-server')
 const { CommandRunner } = require('@bldr/cli-utils')
-
-// Globals.
-const { config } = require('../../main.js')
+const config = require('@bldr/config')
 
 function open () {
   openWith('xdg-open', path.join(config.doc.dest, 'index.html'))

@@ -13,11 +13,9 @@ const webfont = require('webfont').default
 
 // Project packages.
 const { CommandRunner } = require('@bldr/cli-utils')
+const config = require('@bldr/config')
 
 const cmd = new CommandRunner()
-
-// Globals
-const { config } = require('../../main.js')
 
 let tmpDir
 
