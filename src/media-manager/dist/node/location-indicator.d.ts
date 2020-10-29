@@ -78,5 +78,5 @@ declare class LocationIndicator {
      */
     getMirroredPath(currentPath: string): string;
 }
-declare const _default: LocationIndicator;
-export default _default;
+export declare const locationIndicator: LocationIndicator;
+export default locationIndicator;

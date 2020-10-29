@@ -1,18 +1,16 @@
 // Node packages.
-const fs = require('fs')
-const path = require('path')
+import fs from 'fs'
+import path from 'path'
 
-const axios = require('axios').default
+// Third party packages.
+import  axios from 'axios'
 
 // Project packages.
-const { CommandRunner } = require('@bldr/cli-utils')
-const { LocationIndicator } = require('@bldr/media-server')
-const { operations } = require('@bldr/media-manager')
-const config = require('@bldr/config')
+import { CommandRunner } from '@bldr/cli-utils'
+import { operations, locationIndicator } from '@bldr/media-manager'
+import config from '@bldr/config'
 
-const { cwd } = require('../../main.js')
-
-async function requestYoutubeApi(youtubeId) {
+async function requestYoutubeApi(youtubeId: string): Promise<object> {
   const result = await axios.get('https://www.googleapis.com/youtube/v3/videos', {
     params: {
       part: 'snippet',
@@ -32,17 +30,16 @@ async function requestYoutubeApi(youtubeId) {
 /**
  *
  */
-async function action (youtubeId) {
+async function action (youtubeId: string): Promise<void> {
   const metaData = await requestYoutubeApi(youtubeId)
   console.log(metaData)
 
-  const location = new LocationIndicator()
-  const parentDir = location.getPresParentDir(cwd)
+  const parentDir = locationIndicator.getPresParentDir(process.cwd())
   const ytDir = path.join(parentDir, 'YT')
   if (!fs.existsSync(ytDir)) {
     fs.mkdirSync(ytDir)
   }
-  const cmd = new CommandRunner({})
+  const cmd = new CommandRunner()
   cmd.startSpin()
   cmd.log('Updating youtube-dl using pip3.')
   await cmd.exec(['pip3', 'install', '--upgrade', 'youtube-dl'])
@@ -83,4 +80,4 @@ async function action (youtubeId) {
   cmd.stopSpin()
 }
 
-module.exports = action
+export = action

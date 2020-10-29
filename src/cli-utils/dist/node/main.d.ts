@@ -8,10 +8,10 @@ interface CommandRunnerOption {
     verbose: boolean;
 }
 interface CommandRunnerExecOption {
-    cwd: string;
-    detached: boolean;
-    shell: true;
-    encoding: string;
+    cwd?: string;
+    detached?: boolean;
+    shell?: true;
+    encoding?: string;
 }
 /**
  * Run commands on the command line in a nice and secure fashion.

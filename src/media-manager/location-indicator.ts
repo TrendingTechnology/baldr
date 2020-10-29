@@ -194,4 +194,6 @@ class LocationIndicator {
   }
 }
 
-export default new LocationIndicator()
+export const locationIndicator = new LocationIndicator()
+
+export default locationIndicator

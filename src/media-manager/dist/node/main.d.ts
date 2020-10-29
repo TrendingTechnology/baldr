@@ -25,6 +25,7 @@ export declare const operations: {
 export * from './yaml';
 export * from './file';
 export * from './media-file-classes';
+export * from './location-indicator';
 interface MoveAssetConfiguration {
     copy?: boolean;
     dryRun?: boolean;

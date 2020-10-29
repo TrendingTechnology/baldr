@@ -101,8 +101,10 @@ class CommandRunner {
         // To get error messages on unkown commands
         if (!options)
             options = {};
-        options.shell = true;
-        options.encoding = 'utf-8';
+        if (options.shell === undefined)
+            options.shell = true;
+        if (options.encoding === undefined)
+            options.encoding = 'utf-8';
         return new Promise((resolve, reject) => {
             let command;
             let commandString;
