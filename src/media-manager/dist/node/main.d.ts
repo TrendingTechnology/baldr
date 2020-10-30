@@ -24,6 +24,7 @@ export declare const operations: {
 };
 export * from './directory-tree-walk';
 export * from './file';
+export * from './helper';
 export * from './location-indicator';
 export * from './media-file-classes';
 export * from './yaml';

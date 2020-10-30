@@ -1,0 +1,34 @@
+{
+  "name": "@bldr/audio-metadata",
+  "version": "0.1.0",
+  "description": "A small wrapper module around the music-metadata.",
+  "homepage": "https://github.com/Josef-Friedrich/baldr#readme",
+  "bugs": {
+    "url": "https://github.com/Josef-Friedrich/baldr/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Josef-Friedrich/baldr.git"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Josef Friedrich",
+    "email": "josef@friedrich.rocks",
+    "url": "https://josef.friedrich.rocks"
+  },
+  "main": "dist/node/main.js",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "npm run build:node",
+    "build:node": "tsc --module commonjs --outDir dist/node"
+  },
+  "dependencies": {
+    "music-metadata": "7.4.0"
+  },
+  "devDependencies": {
+    "@types/js-yaml": "3.11.1",
+    "@types/node": "12.12.2"
+  }
+}

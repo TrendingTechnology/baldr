@@ -1,8 +1,11 @@
-// Project packages.
-const mediaServer = require('@bldr/media-server');
-const { readFile, writeYamlFile } = require('@bldr/media-manager');
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 // Third party packages.
-const chalk = require('chalk');
+const chalk_1 = __importDefault(require("chalk"));
+// Project packages.
+const media_manager_1 = require("@bldr/media-manager");
 /**
  * Convert a Audacity text mark file into a YAML file.
  *
@@ -31,8 +34,8 @@ const chalk = require('chalk');
  *   file.
  */
 function action(filePath) {
-    const text = readFile(filePath);
-    console.log(`The content of the source file “${chalk.yellow(filePath)}”:\n`);
+    const text = media_manager_1.readFile(filePath);
+    console.log(`The content of the source file “${chalk_1.default.yellow(filePath)}”:\n`);
     console.log(text);
     const lines = text.split('\n');
     const samples = [];
@@ -54,7 +57,7 @@ function action(filePath) {
                 title = match[3];
             }
             title = title.trim();
-            const id = mediaServer.asciify(title.toLowerCase());
+            const id = media_manager_1.asciify(title.toLowerCase());
             if (startTime === endTime) {
                 endTime = null;
             }
@@ -71,12 +74,12 @@ function action(filePath) {
     }
     for (const index in samples) {
         const sample = samples[index];
-        if (!sample.end_time && index < samples.length - 1) {
+        if (!sample.end_time && parseInt(index) < samples.length - 1) {
             sample['end_time'] = samples[parseInt(index) + 1]['start_time'];
         }
     }
     const dest = `${filePath}.yml`;
-    console.log(`The content of the destination file “${chalk.green(dest)}”:\n`);
-    writeYamlFile(dest, samples);
+    console.log(`The content of the destination file “${chalk_1.default.green(dest)}”:\n`);
+    media_manager_1.writeYamlFile(dest, samples);
 }
 module.exports = action;

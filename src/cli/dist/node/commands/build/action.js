@@ -1,3 +1,4 @@
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -7,12 +8,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 // Node packages.
-const fs = require('fs');
-const path = require('path');
-// Project packages:
-const { CommandRunner } = require('@bldr/cli-utils');
-const config = require('@bldr/config');
+const fs_1 = __importDefault(require("fs"));
+const path_1 = __importDefault(require("path"));
+// Project packages.
+const cli_utils_1 = require("@bldr/cli-utils");
+const config_1 = __importDefault(require("@bldr/config"));
 const appNames = [
     'lamp',
     'seating-plan',
@@ -25,8 +29,8 @@ const appNames = [
  */
 function buildApp(cmd, appName) {
     return __awaiter(this, void 0, void 0, function* () {
-        const appPath = path.join(config.localRepo, 'src', appName);
-        if (!fs.existsSync(appPath)) {
+        const appPath = path_1.default.join(config_1.default.localRepo, 'src', appName);
+        if (!fs_1.default.existsSync(appPath)) {
             throw new Error(`App path doesn’t exist for app “${appName}”.`);
         }
         cmd.log(`${appName}: build the Vue app.`);
@@ -43,10 +47,10 @@ function buildApp(cmd, appName) {
             'rsync',
             '-av',
             '--delete',
-            '--usermap', `jf:${config.http.webServerUser}`,
-            '--groupmap', `jf:${config.http.webServerGroup}`,
+            '--usermap', `jf:${config_1.default.http.webServerUser}`,
+            '--groupmap', `jf:${config_1.default.http.webServerGroup}`,
             `${appPath}/dist/`,
-            `${config.mediaServer.sshAliasRemote}:${config.http.webRoot}/${destinationDir}/`
+            `${config_1.default.mediaServer.sshAliasRemote}:${config_1.default.http.webRoot}/${destinationDir}/`
         ]);
         cmd.stopSpin();
     });
@@ -57,7 +61,7 @@ function buildApp(cmd, appName) {
  */
 function action(appName) {
     return __awaiter(this, void 0, void 0, function* () {
-        const cmd = new CommandRunner();
+        const cmd = new cli_utils_1.CommandRunner();
         cmd.startSpin();
         try {
             if (!appName) {

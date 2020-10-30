@@ -36,6 +36,7 @@
     "@bldr/tex-markdown-converter": "^0.1.0",
     "@bldr/wikidata": "^0.1.0",
     "@bldr/type-definitions": "^0.1.0",
+    "@bldr/audio-metadata": "^0.1.0",
     "axios": "^0.20.0",
     "chalk": "^4.1.0",
     "color": "^3.1.2",
@@ -44,7 +45,6 @@
     "fs-extra": "^9.0.1",
     "js-yaml": "^3.14.0",
     "jsdoc-api": "^6.0.0",
-    "music-metadata": "7.4.0",
     "node-fetch": "^2.6.1",
     "ora": "5.1.0",
     "webfont": "^9.0.0"

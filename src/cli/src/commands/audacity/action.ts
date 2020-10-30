@@ -1,10 +1,8 @@
-// Project packages.
-const mediaServer = require('@bldr/media-server')
-
-const { readFile, writeYamlFile } = require('@bldr/media-manager')
-
 // Third party packages.
-const chalk = require('chalk')
+import chalk from 'chalk'
+
+// Project packages.
+import { readFile, writeYamlFile, asciify } from '@bldr/media-manager'
 
 /**
  * Convert a Audacity text mark file into a YAML file.
@@ -33,7 +31,7 @@ const chalk = require('chalk')
  * @param {String} filePath - The file path of the Audacity’s text mark
  *   file.
  */
-function action (filePath) {
+function action (filePath: string) {
   const text = readFile(filePath)
   console.log(`The content of the source file “${chalk.yellow(filePath)}”:\n`)
   console.log(text)
@@ -57,7 +55,7 @@ function action (filePath) {
         title = match[3]
       }
       title = title.trim()
-      const id = mediaServer.asciify(title.toLowerCase())
+      const id = asciify(title.toLowerCase())
 
       if (startTime === endTime) {
         endTime = null
@@ -74,7 +72,7 @@ function action (filePath) {
   }
   for (const index in samples) {
     const sample = samples[index]
-    if (!sample.end_time && index < samples.length - 1) {
+    if (!sample.end_time && parseInt(index) < samples.length - 1) {
       sample['end_time'] = samples[parseInt(index) + 1]['start_time']
     }
   }
@@ -83,4 +81,4 @@ function action (filePath) {
   writeYamlFile(dest, samples)
 }
 
-module.exports = action
+export = action

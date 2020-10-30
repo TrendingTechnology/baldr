@@ -1,10 +1,10 @@
 // Node packages.
-const fs = require('fs')
-const path = require('path')
+import fs from 'fs'
+import path from 'path'
 
-// Project packages:
-const { CommandRunner } = require('@bldr/cli-utils')
-const config = require('@bldr/config')
+// Project packages.
+import { CommandRunner } from '@bldr/cli-utils'
+import config from '@bldr/config'
 
 const appNames = [
   'lamp',
@@ -17,7 +17,7 @@ const appNames = [
  * @param {String} appName - The name of the name. The must be the same
  *   as the parent directory.
  */
-async function buildApp (cmd, appName) {
+async function buildApp (cmd: CommandRunner, appName: string): Promise<void> {
   const appPath = path.join(config.localRepo, 'src', appName)
   if (!fs.existsSync(appPath)) {
     throw new Error(`App path doesn’t exist for app “${appName}”.`)
@@ -25,7 +25,7 @@ async function buildApp (cmd, appName) {
   cmd.log(`${appName}: build the Vue app.`)
   await cmd.exec(['npm', 'run', 'build:webapp'], { cwd: appPath })
 
-  let destinationDir
+  let destinationDir: string
   if (appName === 'lamp') {
     destinationDir = 'presentation'
   } else {
@@ -51,7 +51,7 @@ async function buildApp (cmd, appName) {
  * @param {String} appName - The name of the name. The must be the same
  *   as the parent directory.
  */
-async function action (appName) {
+async function action (appName: string): Promise<void> {
   const cmd = new CommandRunner()
   cmd.startSpin()
   try {
@@ -68,4 +68,4 @@ async function action (appName) {
   }
 }
 
-module.exports = action
+export = action
