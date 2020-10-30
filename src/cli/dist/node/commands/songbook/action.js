@@ -6,8 +6,7 @@ const chalk = require('chalk');
 // Project packages.
 const core = require('@bldr/core-node');
 const songbook = require('@bldr/songbook-intermediate-files');
-// Globals.
-const { config } = require('../../main.js');
+const config = require('@bldr/config');
 function action(cmdObj) {
     if (cmdObj.folder) {
         cmdObj.force = true;

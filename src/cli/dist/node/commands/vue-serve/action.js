@@ -11,8 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 const path = require('path');
 // Project packages.
 const { CommandRunner } = require('@bldr/cli-utils');
-// Globals.
-const { config } = require('../../main.js');
+const config = require('@bldr/config');
 /**
  * @param {String} appName The name of the Vue app = parent folder of the app.
  */

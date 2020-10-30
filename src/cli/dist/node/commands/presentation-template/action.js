@@ -16,8 +16,6 @@ const chalk = require('chalk');
 const mediaServer = require('@bldr/media-server');
 const { convertTexToMd, removeTexComments, regBuilder, extractMatchAll } = require('@bldr/tex-markdown-converter');
 const { readFile, yamlToTxt, makeAsset } = require('@bldr/media-manager');
-// Globals.
-const { cwd } = require('../../main.js');
 function convertToOneLineMd(content) {
     content = removeTexComments(content);
     content = content.replace(/\n/g, ' ');
@@ -166,7 +164,7 @@ function presentationFromAssets(filePath) {
 function action(filePath, cmdObj) {
     return __awaiter(this, void 0, void 0, function* () {
         if (!filePath) {
-            filePath = cwd;
+            filePath = process.cwd();
         }
         else {
             const stat = fs.statSync(filePath);

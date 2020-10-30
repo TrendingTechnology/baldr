@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 // Project packages.
 const { CommandRunner } = require('@bldr/cli-utils');
-const { config } = require('../../main.js');
+const config = require('@bldr/config');
 function action() {
     return __awaiter(this, void 0, void 0, function* () {
         const cmd = new CommandRunner({ verbose: true });

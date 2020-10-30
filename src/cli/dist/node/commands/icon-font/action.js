@@ -18,9 +18,8 @@ const chalk = require('chalk');
 const webfont = require('webfont').default;
 // Project packages.
 const { CommandRunner } = require('@bldr/cli-utils');
+const config = require('@bldr/config');
 const cmd = new CommandRunner();
-// Globals
-const { config } = require('../../main.js');
 let tmpDir;
 function basePath() {
     return path.join(config.localRepo, 'src', 'icons', 'src', ...arguments);

@@ -1,4 +1,5 @@
 #! /usr/bin/env node
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -8,24 +9,25 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
 // Node packages.
-const fs = require('fs');
-const path = require('path');
+const fs_1 = __importDefault(require("fs"));
+const path_1 = __importDefault(require("path"));
 // Third party packages.
-const commander = require('commander');
+const commander_1 = require("commander");
 // Project packages.
-const { checkExecutables } = require('@bldr/core-node');
+const core_node_1 = require("@bldr/core-node");
 // Globals.
-const commandsPath = path.join(__dirname, 'commands');
-const config = require('@bldr/config');
-const cwd = process.cwd();
+const commandsPath = path_1.default.join(__dirname, 'commands');
 /**
- * To avoid duplicate aliases. The `commander` doesn’t complain about duplicates.
- *
- * @param {Array} aliases
+ * To avoid duplicate aliases. The `commander` doesn’t complain about
+ * duplicates.
  */
 const aliases = [];
-const program = new commander.Command();
+const program = new commander_1.Command();
 program.option('-v, --verbose', 'Be more verbose');
 program.on('command:*', function () {
     console.error('Invalid command: %s\nSee --help for a list of available commands.', program.args.join(' '));
@@ -35,16 +37,16 @@ program.on('command:*', function () {
  * We use a closure to be able te require the subcommands ad hoc on invocation.
  * To avoid long loading times by many subcommands.
  *
- * @param {String} commandName - The name of the command.
- * @param {Object} def
+ * @param commandName - The name of the command.
+ * @param def
  */
 function actionHandler(commandName, def) {
-    return function () {
+    return function (...args) {
         if (def.checkExecutable) {
-            checkExecutables(def.checkExecutable);
+            core_node_1.checkExecutables(def.checkExecutable);
         }
-        const action = require(path.join(commandsPath, commandName, 'action.js'));
-        const args = [
+        const action = require(path_1.default.join(commandsPath, commandName, 'action.js'));
+        args = [
             ...arguments,
             // To get the global --verbose options
             program.opts()
@@ -62,9 +64,9 @@ function actionHandler(commandName, def) {
  * @param {Object} program - An instance of the package “commander”.
  */
 function loadCommands(program) {
-    const subcommandDirs = fs.readdirSync(commandsPath);
+    const subcommandDirs = fs_1.default.readdirSync(commandsPath);
     for (const commandName of subcommandDirs) {
-        const def = require(path.join(commandsPath, commandName, 'def.js'));
+        const def = require(path_1.default.join(commandsPath, commandName, 'def.js'));
         const subProgramm = program.command(def.command);
         if (def.alias) {
             if (!aliases.includes(def.alias)) {
@@ -107,9 +109,6 @@ function main() {
         }
     });
 }
-module.exports = {
-    cwd, config
-};
 if (require.main === module) {
     main();
 }

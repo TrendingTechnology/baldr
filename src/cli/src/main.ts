@@ -1,28 +1,26 @@
 #! /usr/bin/env node
 
 // Node packages.
-const fs = require('fs')
-const path = require('path')
+import fs from 'fs'
+import path from 'path'
 
 // Third party packages.
-const commander = require('commander')
+import { Command } from 'commander'
 
 // Project packages.
-const { checkExecutables } = require('@bldr/core-node')
+import { checkExecutables } from '@bldr/core-node'
+import { CliCommandSpec } from '@bldr/type-definitions'
 
 // Globals.
 const commandsPath = path.join(__dirname, 'commands')
-const config = require('@bldr/config')
-const cwd = process.cwd()
 
 /**
- * To avoid duplicate aliases. The `commander` doesn’t complain about duplicates.
- *
- * @param {Array} aliases
+ * To avoid duplicate aliases. The `commander` doesn’t complain about
+ * duplicates.
  */
-const aliases = []
+const aliases: string[] = []
 
-const program = new commander.Command()
+const program = new Command()
 program.option('-v, --verbose', 'Be more verbose')
 program.on('command:*', function () {
   console.error('Invalid command: %s\nSee --help for a list of available commands.', program.args.join(' '))
@@ -33,17 +31,17 @@ program.on('command:*', function () {
  * We use a closure to be able te require the subcommands ad hoc on invocation.
  * To avoid long loading times by many subcommands.
  *
- * @param {String} commandName - The name of the command.
- * @param {Object} def
+ * @param commandName - The name of the command.
+ * @param def
  */
-function actionHandler (commandName, def) {
-  return function () {
+function actionHandler (commandName: string, def: CliCommandSpec) {
+  return function (...args: any[]): void | Promise<void> {
     if (def.checkExecutable) {
       checkExecutables(def.checkExecutable)
     }
     const action = require(path.join(commandsPath, commandName, 'action.js'))
 
-    const args = [
+    args = [
       ...arguments,
       // To get the global --verbose options
       program.opts()
@@ -55,12 +53,14 @@ function actionHandler (commandName, def) {
   }
 }
 
+type Program = typeof program
+
 /**
  * Load all (sub)commands.
  *
  * @param {Object} program - An instance of the package “commander”.
  */
-function loadCommands (program) {
+function loadCommands (program: Program) {
   const subcommandDirs = fs.readdirSync(commandsPath)
   for (const commandName of subcommandDirs) {
     const def = require(path.join(commandsPath, commandName, 'def.js'))
@@ -105,10 +105,6 @@ async function main () {
   if (process.argv.length <= 2) {
     actionHelp()
   }
-}
-
-module.exports = {
-  cwd, config
 }
 
 if (require.main === module) {
