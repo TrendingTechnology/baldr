@@ -1,9 +1,6 @@
-// Node packages.
-const os = require('os')
-
 // Project packages.
-const { CommandRunner } = require('@bldr/cli-utils')
-const config = require('@bldr/config')
+import { CommandRunner } from '@bldr/cli-utils'
+import config from '@bldr/config'
 
 /**
  *
@@ -37,4 +34,4 @@ async function action () {
   cmd.stopSpin()
 }
 
-module.exports = action
+export = action

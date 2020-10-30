@@ -27,6 +27,7 @@ export * from './file';
 export * from './helper';
 export * from './location-indicator';
 export * from './media-file-classes';
+export * from './titles';
 export * from './yaml';
 interface MoveAssetConfiguration {
     copy?: boolean;

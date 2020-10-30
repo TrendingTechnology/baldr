@@ -1,20 +1,20 @@
 // Node packages.
-const fs = require('fs')
-const path = require('path')
+import fs from 'fs'
+import path from 'path'
 
-// Project packages:
-const { CommandRunner } = require('@bldr/cli-utils')
-const config = require('@bldr/config')
+// Project packages.
+import { CommandRunner } from '@bldr/cli-utils'
+import config from '@bldr/config'
 
 const appNames = [
   'lamp'
 ]
 
 /**
- * @param {String} appName - The name of the name. The must be the same
+ * @param appName - The name of the name. The must be the same
  *   as the parent directory.
  */
-async function buildElectronApp (cmd, appName) {
+async function buildElectronApp (cmd: CommandRunner, appName: string): Promise<void> {
   const appPath = path.join(config.localRepo, 'src', appName)
   if (!fs.existsSync(appPath)) {
     throw new Error(`App path doesn’t exist for app “${appName}”.`)
@@ -39,12 +39,10 @@ async function buildElectronApp (cmd, appName) {
 }
 
 /**
- * @param {String} appName - The name of the app. The app name must be the same
+ * @param appName - The name of the app. The app name must be the same
  *   as the parent directory.
- * @param {Object} cmdObj
- * @param {Object} globalOpts
  */
-async function action (appName, cmdObj, globalOpts) {
+async function action (appName: string): Promise<void> {
   const cmd = new CommandRunner({
     verbose: true
   })
@@ -64,4 +62,4 @@ async function action (appName, cmdObj, globalOpts) {
   }
 }
 
-module.exports = action
+export = action

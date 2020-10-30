@@ -1,23 +1,16 @@
 // Node packages.
-const childProcess = require('child_process')
-const fs = require('fs')
-const path = require('path')
+import childProcess from 'child_process'
+import fs from 'fs'
+import path from 'path'
 
 // Third party packages.
-const chalk = require('chalk')
+import chalk from 'chalk'
 
 // Project packages.
-const mediaServer = require('@bldr/media-server')
-const { moveAsset, readFile, writeFile, yamlToTxt, operations } = require('@bldr/media-manager')
+import { moveAsset, readFile, writeFile, yamlToTxt, operations, locationIndicator, DeepTitle, walk } from '@bldr/media-manager'
+import { getPdfPageCount } from '@bldr/core-node'
 
-const { getPdfPageCount } = require('@bldr/core-node')
-
-/**
- * @param {String} tmpPdfFile
- * @param {Number} pageCount
- * @param {Number} pageNo
- */
-function generateOneClozeSvg (tmpPdfFile, pageCount, pageNo) {
+function generateOneClozeSvg (tmpPdfFile: string, pageCount: number, pageNo: number) {
   const cwd = path.dirname(tmpPdfFile)
   let counterSuffix = ''
   if (pageCount > 1) {
@@ -30,7 +23,7 @@ function generateOneClozeSvg (tmpPdfFile, pageCount, pageNo) {
   // Convert into SVG
   childProcess.spawnSync(
     'pdf2svg',
-    [tmpPdfFile, svgFileName, pageNo],
+    [tmpPdfFile, svgFileName, pageNo.toString()],
     { cwd }
   )
 
@@ -40,7 +33,7 @@ function generateOneClozeSvg (tmpPdfFile, pageCount, pageNo) {
   writeFile(svgFilePath, svgContent)
 
   // Write info yaml
-  const titles = new mediaServer.HierarchicalFolderTitles(tmpPdfFile)
+  const titles = new DeepTitle(tmpPdfFile)
   const infoYaml = {
     id: `${titles.id}_LT${counterSuffix}`,
     title: `Lückentext zum Thema „${titles.title}“ (Seite ${pageNo} von ${pageCount})`,
@@ -51,7 +44,7 @@ function generateOneClozeSvg (tmpPdfFile, pageCount, pageNo) {
   writeFile(path.join(cwd, `${svgFileName}.yml`), yamlToTxt(infoYaml))
 
   // Move to LT (Lückentext) subdir.
-  const newPath = mediaServer.locationIndicator.moveIntoSubdir(path.resolve(svgFileName), 'LT')
+  const newPath = locationIndicator.moveIntoSubdir(path.resolve(svgFileName), 'LT')
   moveAsset(svgFilePath, newPath)
   operations.normalizeMediaAsset(newPath, { wikidata: false })
 }
@@ -59,7 +52,7 @@ function generateOneClozeSvg (tmpPdfFile, pageCount, pageNo) {
 /**
  * @param {String} filePath
  */
-function generateClozeSvg (filePath) {
+function generateClozeSvg (filePath: string) {
   filePath = path.resolve(filePath)
   console.log(filePath)
   const cwd = path.dirname(filePath)
@@ -126,8 +119,8 @@ function generateClozeSvg (filePath) {
 /**
  * Generate from TeX files with cloze texts SVGs for baldr.
  */
-function action (filePath) {
-  mediaServer.walk(
+function action (filePath: string) {
+  walk(
     generateClozeSvg,
     { regex: new RegExp('.*\.tex$'), path: filePath }
   ) // eslint-disable-line

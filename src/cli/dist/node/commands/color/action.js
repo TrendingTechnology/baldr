@@ -1,5 +1,10 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
 // Third party packages.
-var Color = require('color');
+const color_1 = __importDefault(require("color"));
 // See @bldr/themes/default-vars.scss
 const colors = {
     'white-light': '#fcfcfb',
@@ -33,17 +38,9 @@ const colors = {
     'purple-dark': '#9e5f8c',
     'black-dark': '#110f0e'
 };
-/**
- * @param {object} color
- *
- * ```js
- * { model: 'rgb', color: [ 252, 252, 251 ], valpha: 1 }
- * ```
- */
 function createGimpPaletteLine(color, name) {
     const segments = [];
-    const c = color.color;
-    for (const rgb of c) {
+    for (const rgb of color.color) {
         if (rgb > 99) {
             segments.push(`${rgb} `);
         }
@@ -73,7 +70,7 @@ function createGimpPalette() {
     lines.push('GIMP Palette');
     lines.push('Name: baldr');
     for (const colorName in colors) {
-        const color = new Color(colors[colorName]);
+        const color = new color_1.default(colors[colorName]);
         lines.push(createGimpPaletteLine(color.rgb(), colorName));
     }
     console.log(lines.join('\n'));

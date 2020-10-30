@@ -51,7 +51,8 @@
   },
   "devDependencies": {
     "@types/js-yaml": "3.11.1",
-    "@types/node": "12.12.2"
+    "@types/node": "12.12.2",
+    "@types/color": "^3.0.1"
   },
   "bin": {
     "baldr_cli.js": "./dist/node/main.js"

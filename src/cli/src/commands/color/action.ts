@@ -1,5 +1,5 @@
 // Third party packages.
-var Color = require('color')
+import Color from 'color'
 
 // See @bldr/themes/default-vars.scss
 const colors = {
@@ -35,17 +35,22 @@ const colors = {
   'black-dark': '#110f0e'
 }
 
+type rgb = [ number, number, number ]
+
 /**
- * @param {object} color
- *
  * ```js
  * { model: 'rgb', color: [ 252, 252, 251 ], valpha: 1 }
  * ```
  */
-function createGimpPaletteLine (color, name) {
+interface ColorSpec {
+  model: string
+  color: rgb
+  valpha: number
+}
+
+function createGimpPaletteLine (color: ColorSpec, name: string) {
   const segments = []
-  const c = color.color
-  for (const rgb of c) {
+  for (const rgb of color.color) {
     if (rgb > 99) {
       segments.push(`${rgb} `)
     } else if (rgb > 9) {
@@ -75,7 +80,7 @@ function createGimpPalette () {
   lines.push('Name: baldr')
   for (const colorName in colors) {
     const color = new Color(colors[colorName])
-    lines.push(createGimpPaletteLine(color.rgb(), colorName))
+    lines.push(createGimpPaletteLine(<any> color.rgb(), colorName))
   }
   console.log(lines.join('\n'))
 }

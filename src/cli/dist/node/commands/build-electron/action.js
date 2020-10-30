@@ -1,3 +1,4 @@
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -7,47 +8,48 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 // Node packages.
-const fs = require('fs');
-const path = require('path');
-// Project packages:
-const { CommandRunner } = require('@bldr/cli-utils');
-const config = require('@bldr/config');
+const fs_1 = __importDefault(require("fs"));
+const path_1 = __importDefault(require("path"));
+// Project packages.
+const cli_utils_1 = require("@bldr/cli-utils");
+const config_1 = __importDefault(require("@bldr/config"));
 const appNames = [
     'lamp'
 ];
 /**
- * @param {String} appName - The name of the name. The must be the same
+ * @param appName - The name of the name. The must be the same
  *   as the parent directory.
  */
 function buildElectronApp(cmd, appName) {
     return __awaiter(this, void 0, void 0, function* () {
-        const appPath = path.join(config.localRepo, 'src', appName);
-        if (!fs.existsSync(appPath)) {
+        const appPath = path_1.default.join(config_1.default.localRepo, 'src', appName);
+        if (!fs_1.default.existsSync(appPath)) {
             throw new Error(`App path doesn’t exist for app “${appName}”.`);
         }
-        const packageJson = require(path.join(appPath, 'package.json'));
+        const packageJson = require(path_1.default.join(appPath, 'package.json'));
         cmd.log(`${appName}: Install npm dependencies.`);
-        yield cmd.exec(['npx', 'lerna', 'bootstrap'], { cwd: config.localRepo });
+        yield cmd.exec(['npx', 'lerna', 'bootstrap'], { cwd: config_1.default.localRepo });
         cmd.log(`${appName}: build the Electron app.`);
         yield cmd.exec(['npm', 'run', 'build:electron'], { cwd: appPath });
         // await cmd.exec(['npm', 'run', 'install:deb'], { cwd: appPath })
         cmd.log(`${appName}: remove old .deb package.`);
         yield cmd.exec(['apt', '-y', 'remove', `baldr-${appName}`]);
         cmd.log(`${appName}: install the .deb package.`);
-        yield cmd.exec(['dpkg', '-i', path.join(appPath, 'dist_electron', `baldr-${appName}_${packageJson.version}_amd64.deb`)]);
+        yield cmd.exec(['dpkg', '-i', path_1.default.join(appPath, 'dist_electron', `baldr-${appName}_${packageJson.version}_amd64.deb`)]);
         cmd.stopSpin();
     });
 }
 /**
- * @param {String} appName - The name of the app. The app name must be the same
+ * @param appName - The name of the app. The app name must be the same
  *   as the parent directory.
- * @param {Object} cmdObj
- * @param {Object} globalOpts
  */
-function action(appName, cmdObj, globalOpts) {
+function action(appName) {
     return __awaiter(this, void 0, void 0, function* () {
-        const cmd = new CommandRunner({
+        const cmd = new cli_utils_1.CommandRunner({
             verbose: true
         });
         cmd.checkRoot();

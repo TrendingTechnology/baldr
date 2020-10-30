@@ -1,35 +1,34 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
 // Node packages.
-const childProcess = require('child_process');
-const fs = require('fs');
-const path = require('path');
+const child_process_1 = __importDefault(require("child_process"));
+const fs_1 = __importDefault(require("fs"));
+const path_1 = __importDefault(require("path"));
 // Third party packages.
-const chalk = require('chalk');
+const chalk_1 = __importDefault(require("chalk"));
 // Project packages.
-const mediaServer = require('@bldr/media-server');
-const { moveAsset, readFile, writeFile, yamlToTxt, operations } = require('@bldr/media-manager');
-const { getPdfPageCount } = require('@bldr/core-node');
-/**
- * @param {String} tmpPdfFile
- * @param {Number} pageCount
- * @param {Number} pageNo
- */
+const media_manager_1 = require("@bldr/media-manager");
+const core_node_1 = require("@bldr/core-node");
 function generateOneClozeSvg(tmpPdfFile, pageCount, pageNo) {
-    const cwd = path.dirname(tmpPdfFile);
+    const cwd = path_1.default.dirname(tmpPdfFile);
     let counterSuffix = '';
     if (pageCount > 1) {
         counterSuffix = `_${pageNo}`;
     }
-    console.log(`Convert page ${chalk.green(pageNo)}`);
+    console.log(`Convert page ${chalk_1.default.green(pageNo)}`);
     const svgFileName = `Lueckentext${counterSuffix}.svg`;
-    const svgFilePath = path.join(cwd, svgFileName);
+    const svgFilePath = path_1.default.join(cwd, svgFileName);
     // Convert into SVG
-    childProcess.spawnSync('pdf2svg', [tmpPdfFile, svgFileName, pageNo], { cwd });
+    child_process_1.default.spawnSync('pdf2svg', [tmpPdfFile, svgFileName, pageNo.toString()], { cwd });
     // Remove width="" and height="" attributes
-    let svgContent = readFile(svgFilePath);
+    let svgContent = media_manager_1.readFile(svgFilePath);
     svgContent = svgContent.replace(/(width|height)=".+?" /g, '');
-    writeFile(svgFilePath, svgContent);
+    media_manager_1.writeFile(svgFilePath, svgContent);
     // Write info yaml
-    const titles = new mediaServer.HierarchicalFolderTitles(tmpPdfFile);
+    const titles = new media_manager_1.DeepTitle(tmpPdfFile);
     const infoYaml = {
         id: `${titles.id}_LT${counterSuffix}`,
         title: `Lückentext zum Thema „${titles.title}“ (Seite ${pageNo} von ${pageCount})`,
@@ -37,27 +36,27 @@ function generateOneClozeSvg(tmpPdfFile, pageCount, pageNo) {
         cloze_page_no: pageNo,
         cloze_page_count: pageCount
     };
-    writeFile(path.join(cwd, `${svgFileName}.yml`), yamlToTxt(infoYaml));
+    media_manager_1.writeFile(path_1.default.join(cwd, `${svgFileName}.yml`), media_manager_1.yamlToTxt(infoYaml));
     // Move to LT (Lückentext) subdir.
-    const newPath = mediaServer.locationIndicator.moveIntoSubdir(path.resolve(svgFileName), 'LT');
-    moveAsset(svgFilePath, newPath);
-    operations.normalizeMediaAsset(newPath, { wikidata: false });
+    const newPath = media_manager_1.locationIndicator.moveIntoSubdir(path_1.default.resolve(svgFileName), 'LT');
+    media_manager_1.moveAsset(svgFilePath, newPath);
+    media_manager_1.operations.normalizeMediaAsset(newPath, { wikidata: false });
 }
 /**
  * @param {String} filePath
  */
 function generateClozeSvg(filePath) {
-    filePath = path.resolve(filePath);
+    filePath = path_1.default.resolve(filePath);
     console.log(filePath);
-    const cwd = path.dirname(filePath);
-    let texFileContent = readFile(filePath);
+    const cwd = path_1.default.dirname(filePath);
+    let texFileContent = media_manager_1.readFile(filePath);
     if (texFileContent.indexOf('cloze') === -1) {
-        console.log(`${chalk.red(filePath)} has no cloze texts.`);
+        console.log(`${chalk_1.default.red(filePath)} has no cloze texts.`);
         return;
     }
     const tmpTexFile = filePath.replace('.tex', '_Loesung.tex');
-    console.log(`Generate SVGs from the file ${chalk.yellow(filePath)}.`);
-    const jobName = path.basename(tmpTexFile).replace('.tex', '');
+    console.log(`Generate SVGs from the file ${chalk_1.default.yellow(filePath)}.`);
+    const jobName = path_1.default.basename(tmpTexFile).replace('.tex', '');
     // Show cloze texts by patching the TeX file and generate a PDF file.
     // \documentclass[angabe,querformat]{schule-arbeitsblatt}
     texFileContent = texFileContent.replace(/\\documentclass(\[(.*)\])?\{schule-arbeitsblatt\}/, function (match, p1, p2) {
@@ -83,25 +82,25 @@ function generateClozeSvg(filePath) {
         }
         return `\\documentclass[${args.join(',')}]{schule-arbeitsblatt}`;
     });
-    writeFile(tmpTexFile, texFileContent);
-    const result = childProcess.spawnSync('lualatex', ['--shell-escape', tmpTexFile], { cwd, encoding: 'utf-8' });
+    media_manager_1.writeFile(tmpTexFile, texFileContent);
+    const result = child_process_1.default.spawnSync('lualatex', ['--shell-escape', tmpTexFile], { cwd, encoding: 'utf-8' });
     if (result.status !== 0) {
         console.log(result.stdout);
         console.log(result.stderr);
         throw new Error('lualatex compilation failed.');
     }
-    const tmpPdfFile = path.join(cwd, `${jobName}.pdf`);
-    const pageCount = getPdfPageCount(tmpPdfFile);
+    const tmpPdfFile = path_1.default.join(cwd, `${jobName}.pdf`);
+    const pageCount = core_node_1.getPdfPageCount(tmpPdfFile);
     for (let index = 1; index <= pageCount; index++) {
         generateOneClozeSvg(tmpPdfFile, pageCount, index);
     }
-    fs.unlinkSync(tmpTexFile);
-    fs.unlinkSync(tmpPdfFile);
+    fs_1.default.unlinkSync(tmpTexFile);
+    fs_1.default.unlinkSync(tmpPdfFile);
 }
 /**
  * Generate from TeX files with cloze texts SVGs for baldr.
  */
 function action(filePath) {
-    mediaServer.walk(generateClozeSvg, { regex: new RegExp('.*\.tex$'), path: filePath }); // eslint-disable-line
+    media_manager_1.walk(generateClozeSvg, { regex: new RegExp('.*\.tex$'), path: filePath }); // eslint-disable-line
 }
 module.exports = action;

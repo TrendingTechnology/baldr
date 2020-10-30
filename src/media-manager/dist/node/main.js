@@ -47,6 +47,7 @@ __exportStar(require("./file"), exports);
 __exportStar(require("./helper"), exports);
 __exportStar(require("./location-indicator"), exports);
 __exportStar(require("./media-file-classes"), exports);
+__exportStar(require("./titles"), exports);
 __exportStar(require("./yaml"), exports);
 /**
  * Move (rename) or copy a media asset and it’s corresponding meta data file
