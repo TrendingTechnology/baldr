@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.filePathToAssetType = exports.mediaCategoriesManager = exports.makeAsset = exports.Asset = void 0;
+exports.isPresentation = exports.isAsset = exports.filePathToAssetType = exports.mediaCategoriesManager = exports.makeAsset = exports.Asset = void 0;
 // Node packages.
 const path_1 = __importDefault(require("path"));
 const core_browser_1 = require("@bldr/core-browser");
@@ -83,3 +83,32 @@ function filePathToAssetType(filePath) {
         return exports.mediaCategoriesManager.extensionToType(asset.extension);
 }
 exports.filePathToAssetType = filePathToAssetType;
+/**
+ * Check if the given file is a media asset.
+ *
+ * @param filePath - The path of the file to check.
+ */
+function isAsset(filePath) {
+    if (filePath.indexOf('eps-converted-to.pdf') > -1 || // eps converted into pdf by TeX
+        filePath.indexOf('_preview.jpg') > -1 || // Preview image
+        filePath.match(/_no\d+\./) // Multipart asset
+    ) {
+        return false;
+    }
+    if (filePath.match(new RegExp('^.*/TX/.*.pdf$')))
+        return true;
+    return exports.mediaCategoriesManager.isAsset(filePath);
+}
+exports.isAsset = isAsset;
+/**
+ * Check if the given file is a presentation.
+ *
+ * @param filePath - The path of the file to check.
+ */
+function isPresentation(filePath) {
+    if (filePath.indexOf('Praesentation.baldr.yml') > -1) {
+        return true;
+    }
+    return false;
+}
+exports.isPresentation = isPresentation;

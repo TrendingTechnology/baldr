@@ -22,10 +22,11 @@ export declare const operations: {
     normalizePresentationFile: typeof normalizePresentationFile;
     renameMediaAsset: typeof renameMediaAsset;
 };
-export * from './yaml';
+export * from './directory-tree-walk';
 export * from './file';
-export * from './media-file-classes';
 export * from './location-indicator';
+export * from './media-file-classes';
+export * from './yaml';
 interface MoveAssetConfiguration {
     copy?: boolean;
     dryRun?: boolean;

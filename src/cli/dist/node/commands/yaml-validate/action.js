@@ -1,20 +1,25 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
 // Node packages.
-const fs = require('fs');
+const fs_1 = __importDefault(require("fs"));
 // Third party packages.
-const chalk = require('chalk');
-const yaml = require('js-yaml');
+const chalk_1 = __importDefault(require("chalk"));
+const js_yaml_1 = __importDefault(require("js-yaml"));
 // Project packages.
-const mediaServer = require('@bldr/media-server');
+const media_manager_1 = require("@bldr/media-manager");
 /**
- * @param {String} filePath - The media file path.
+ * @param filePath - The media file path.
  */
 function validateYamlOneFile(filePath) {
     try {
-        yaml.safeLoad(fs.readFileSync(filePath, 'utf8'));
-        console.log(`${chalk.green('ok')}: ${chalk.yellow(filePath)}`);
+        js_yaml_1.default.safeLoad(fs_1.default.readFileSync(filePath, 'utf8'));
+        console.log(`${chalk_1.default.green('ok')}: ${chalk_1.default.yellow(filePath)}`);
     }
     catch (error) {
-        console.log(`${chalk.red('error')}: ${chalk.red(error.name)}: ${error.message}`);
+        console.log(`${chalk_1.default.red('error')}: ${chalk_1.default.red(error.name)}: ${error.message}`);
         throw new Error(error.name);
     }
 }
@@ -24,7 +29,7 @@ function validateYamlOneFile(filePath) {
  * @param {String} files - The media file path.
  */
 function action(files) {
-    mediaServer.walk(validateYamlOneFile, {
+    media_manager_1.walk(validateYamlOneFile, {
         path: files,
         regex: 'yml'
     });

@@ -9,9 +9,7 @@
 import fs from 'fs'
 import path from 'path'
 
-import {
-  getExtension
-} from '@bldr/core-browser'
+import { getExtension } from '@bldr/core-browser'
 import { AssetType } from '@bldr/type-definitions'
 
 import { DeepTitle, TitleTree } from './titles'
@@ -35,10 +33,11 @@ export const operations = {
   renameMediaAsset
 }
 
-export * from './yaml'
+export * from './directory-tree-walk'
 export * from './file'
-export * from './media-file-classes'
 export * from './location-indicator'
+export * from './media-file-classes'
+export * from './yaml'
 
 interface MoveAssetConfiguration {
   copy?: boolean

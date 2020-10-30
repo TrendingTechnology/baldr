@@ -42,10 +42,11 @@ exports.operations = {
     normalizePresentationFile: normalize_presentation_1.normalizePresentationFile,
     renameMediaAsset: rename_asset_1.renameMediaAsset
 };
-__exportStar(require("./yaml"), exports);
+__exportStar(require("./directory-tree-walk"), exports);
 __exportStar(require("./file"), exports);
-__exportStar(require("./media-file-classes"), exports);
 __exportStar(require("./location-indicator"), exports);
+__exportStar(require("./media-file-classes"), exports);
+__exportStar(require("./yaml"), exports);
 /**
  * Move (rename) or copy a media asset and it’s corresponding meta data file
  * (`*.yml`) and preview file (`_preview.jpg`).

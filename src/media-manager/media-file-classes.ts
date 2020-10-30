@@ -90,3 +90,32 @@ export function filePathToAssetType (filePath: string): string | undefined {
   if (asset.extension)
   return mediaCategoriesManager.extensionToType(asset.extension)
 }
+
+/**
+ * Check if the given file is a media asset.
+ *
+ * @param filePath - The path of the file to check.
+ */
+export function isAsset (filePath: string): boolean {
+  if (
+    filePath.indexOf('eps-converted-to.pdf') > -1 || // eps converted into pdf by TeX
+    filePath.indexOf('_preview.jpg') > -1 || // Preview image
+    filePath.match(/_no\d+\./) // Multipart asset
+  ) {
+    return false
+  }
+  if (filePath.match(new RegExp('^.*/TX/.*.pdf$'))) return true
+  return mediaCategoriesManager.isAsset(filePath)
+}
+
+/**
+ * Check if the given file is a presentation.
+ *
+ * @param filePath - The path of the file to check.
+ */
+export function isPresentation (filePath: string): boolean {
+  if (filePath.indexOf('Praesentation.baldr.yml') > -1) {
+    return true
+  }
+  return false
+}

@@ -1,17 +1,17 @@
 // Node packages.
-const fs = require('fs')
+import fs from 'fs'
 
 // Third party packages.
-const chalk = require('chalk')
-const yaml = require('js-yaml')
+import chalk from 'chalk'
+import yaml from 'js-yaml'
 
 // Project packages.
-const mediaServer = require('@bldr/media-server')
+import { walk } from '@bldr/media-manager'
 
 /**
- * @param {String} filePath - The media file path.
+ * @param filePath - The media file path.
  */
-function validateYamlOneFile (filePath) {
+function validateYamlOneFile (filePath: string) {
   try {
     yaml.safeLoad(fs.readFileSync(filePath, 'utf8'))
     console.log(`${chalk.green('ok')}: ${chalk.yellow(filePath)}`)
@@ -27,7 +27,7 @@ function validateYamlOneFile (filePath) {
  * @param {String} files - The media file path.
  */
 function action (files) {
-  mediaServer.walk(validateYamlOneFile, {
+  walk(validateYamlOneFile, {
     path: files,
     regex: 'yml'
   })

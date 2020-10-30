@@ -49,6 +49,10 @@
     "ora": "5.1.0",
     "webfont": "^9.0.0"
   },
+  "devDependencies": {
+    "@types/js-yaml": "3.11.1",
+    "@types/node": "12.12.2"
+  },
   "bin": {
     "baldr_cli.js": "./dist/node/main.js"
   }
