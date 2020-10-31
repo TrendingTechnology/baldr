@@ -1,21 +1,18 @@
 // Node packages.
-const fs = require('fs')
+import fs from 'fs'
 
 // Third party packages.
-const chalk = require('chalk')
+import chalk from 'chalk'
 
 // Project packages.
-const mediaServer = require('@bldr/media-server')
-const { convertTexToMd } = require('@bldr/tex-markdown-converter')
-const { readFile } = require('@bldr/media-manager')
-
-const locationIndicator = new mediaServer.LocationIndicator()
+import { convertTexToMd } from '@bldr/tex-markdown-converter'
+import { readFile, locationIndicator, walk } from '@bldr/media-manager'
 
 /**
- * @param {String} input - A file path or a text string to convert.
+ * @param input - A file path or a text string to convert.
  */
-function convertTexToMarkdown (input) {
-  let content
+function convertTexToMarkdown (input: string): string {
+  let content: string
   if (!fs.existsSync(input)) {
     content = input
   } else {
@@ -31,15 +28,17 @@ function convertTexToMarkdown (input) {
 }
 
 /**
+ * Convert TeX to markdown.
+ *
  * @param {Array} filesOrText - An array of input files, comes from the commanders’
  *   variadic parameter `[files...]` or a text block in the first element
  *   of the array.
  */
-function action (filesOrText) {
+function action (filesOrText: string | string[]) {
   if (Array.isArray(filesOrText) && filesOrText.length > 0 && !fs.existsSync(filesOrText[0])) {
     convertTexToMarkdown(filesOrText[0])
   } else {
-    mediaServer.walk(convertTexToMarkdown, {
+    walk(convertTexToMarkdown, {
       path: filesOrText,
       regex: 'tex'
     })

@@ -6,5 +6,5 @@ export = <CliCommandSpec> {
   options: [
     ['-f, --force', 'Overwrite existing `title.txt` files.']
   ],
-  description: 'TeX files to folder titles title.txt'
+  description: 'Create from the TeX files the folder titles text file `title.txt`.'
 }

@@ -1,9 +1,12 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 // Third party packages.
-const chalk = require('chalk');
+const chalk_1 = __importDefault(require("chalk"));
 // Project packages.
-const mediaServer = require('@bldr/media-server');
-const { convertMdToTex } = require('@bldr/tex-markdown-converter');
-const { readFile, writeFile } = require('@bldr/media-manager');
+const tex_markdown_converter_1 = require("@bldr/tex-markdown-converter");
+const media_manager_1 = require("@bldr/media-manager");
 /**
  * ```tex
  * \setzetitel{
@@ -19,10 +22,10 @@ const { readFile, writeFile } = require('@bldr/media-manager');
  * @param {String} filePath - The path of a TeX file.
  */
 function patchTexFileWithTitles(filePath) {
-    console.log(`\nReplace titles in TeX file “${chalk.yellow(filePath)}”\n`);
-    const titles = new mediaServer.HierarchicalFolderTitles(filePath);
+    console.log(`\nReplace titles in TeX file “${chalk_1.default.yellow(filePath)}”\n`);
+    const titles = new media_manager_1.DeepTitle(filePath);
     const setzeTitle = {
-        jahrgangsstufe: titles.grade
+        jahrgangsstufe: titles.grade.toString()
     };
     const ebenen = ['ebenei', 'ebeneii', 'ebeneiii', 'ebeneiv', 'ebenev'];
     for (let index = 0; index < titles.curriculumTitlesArray.length; index++) {
@@ -34,7 +37,7 @@ function patchTexFileWithTitles(filePath) {
     }
     // Replace semantic markup
     for (const key in setzeTitle) {
-        setzeTitle[key] = convertMdToTex(setzeTitle[key]);
+        setzeTitle[key] = tex_markdown_converter_1.convertMdToTex(setzeTitle[key]);
     }
     const lines = ['\\setzetitel{'];
     for (const key in setzeTitle) {
@@ -43,30 +46,33 @@ function patchTexFileWithTitles(filePath) {
     lines.push('}');
     lines.push(''); // to get an empty line
     const patchedTitles = lines.join('\n');
-    let texFileString = readFile(filePath);
+    let texFileString = media_manager_1.readFile(filePath);
     // /s s (dotall) modifier, +? one or more (non-greedy)
     const regexp = new RegExp(/\\setzetitel\{.+?,?\n\}\n/, 's');
     const match = texFileString.match(regexp);
     if (match) {
         const unpatchedTitles = match[0];
         if (unpatchedTitles !== patchedTitles) {
-            console.log(chalk.yellow(unpatchedTitles));
+            console.log(chalk_1.default.yellow(unpatchedTitles));
             texFileString = texFileString.replace(regexp, patchedTitles);
-            writeFile(filePath, texFileString);
+            media_manager_1.writeFile(filePath, texFileString);
         }
-        console.log(chalk.green(patchedTitles));
+        console.log(chalk_1.default.green(patchedTitles));
         if (unpatchedTitles === patchedTitles) {
             console.log('No changes!');
         }
     }
 }
 /**
- * @param {Array} files - An array of input files, comes from the commanders’
- *   variadic parameter `[files...]`.
+ * Replace the title section of the TeX files with metadata retrieved
+ * from the title.txt files.
+ *
+ * @param filePaths - An array of input files. This parameter comes from
+ *   the commanders’ variadic parameter `[files...]`.
  */
-function action(files) {
-    mediaServer.walk(patchTexFileWithTitles, {
-        path: files,
+function action(filePaths) {
+    media_manager_1.walk(patchTexFileWithTitles, {
+        path: filePaths,
         regex: 'tex'
     });
 }

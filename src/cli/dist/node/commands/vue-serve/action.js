@@ -1,3 +1,4 @@
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -7,18 +8,23 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 // Node packages.
-const path = require('path');
+const path_1 = __importDefault(require("path"));
 // Project packages.
-const { CommandRunner } = require('@bldr/cli-utils');
-const config = require('@bldr/config');
+const cli_utils_1 = require("@bldr/cli-utils");
+const config_1 = __importDefault(require("@bldr/config"));
 /**
- * @param {String} appName The name of the Vue app = parent folder of the app.
+ * Serve a Vue web app.
+ *
+ * @param appName - The name of the Vue app = parent folder of the app.
  */
 function action(appName = 'lamp') {
     return __awaiter(this, void 0, void 0, function* () {
-        const appPath = path.join(config.localRepo, 'src', appName);
-        const cmd = new CommandRunner({ verbose: true });
+        const appPath = path_1.default.join(config_1.default.localRepo, 'src', appName);
+        const cmd = new cli_utils_1.CommandRunner({ verbose: true });
         yield cmd.exec(['npm', 'run', 'serve:webapp'], { cwd: appPath });
     });
 }

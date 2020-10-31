@@ -1,10 +1,9 @@
 // Third party packages.
-const chalk = require('chalk')
+import chalk from 'chalk'
 
 // Project packages.
-const mediaServer = require('@bldr/media-server')
-const { convertMdToTex } = require('@bldr/tex-markdown-converter')
-const { readFile, writeFile } = require('@bldr/media-manager')
+import { convertMdToTex } from '@bldr/tex-markdown-converter'
+import { readFile, writeFile, DeepTitle, walk } from '@bldr/media-manager'
 
 /**
  * ```tex
@@ -20,12 +19,12 @@ const { readFile, writeFile } = require('@bldr/media-manager')
  *
  * @param {String} filePath - The path of a TeX file.
  */
-function patchTexFileWithTitles (filePath) {
+function patchTexFileWithTitles (filePath: string): void {
   console.log(`\nReplace titles in TeX file “${chalk.yellow(filePath)}”\n`)
-  const titles = new mediaServer.HierarchicalFolderTitles(filePath)
+  const titles = new DeepTitle(filePath)
 
-  const setzeTitle = {
-    jahrgangsstufe: titles.grade
+  const setzeTitle: { [key: string]: string } = {
+    jahrgangsstufe: titles.grade.toString()
   }
 
   const ebenen = ['ebenei', 'ebeneii', 'ebeneiii', 'ebeneiv', 'ebenev']
@@ -72,14 +71,17 @@ function patchTexFileWithTitles (filePath) {
 }
 
 /**
- * @param {Array} files - An array of input files, comes from the commanders’
- *   variadic parameter `[files...]`.
+ * Replace the title section of the TeX files with metadata retrieved
+ * from the title.txt files.
+ *
+ * @param filePaths - An array of input files. This parameter comes from
+ *   the commanders’ variadic parameter `[files...]`.
  */
-function action (files) {
-  mediaServer.walk(patchTexFileWithTitles, {
-    path: files,
+function action (filePaths: string[]): void {
+  walk(patchTexFileWithTitles, {
+    path: filePaths,
     regex: 'tex'
   })
 }
 
-module.exports = action
+export = action
