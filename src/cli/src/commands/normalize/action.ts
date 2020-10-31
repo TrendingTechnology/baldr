@@ -7,10 +7,10 @@ import { operations, walk } from '@bldr/media-manager'
 /**
  * Normalize the metadata files in the YAML format (sort, clean up).
  *
- * @param filePaths - An array of input files. Comes from the
- *   commanders’ variadic parameter `[files...]`.
- * @param cmdObj - An object containing options as key-value pairs. Comes from
- *  `commander.Command.opts()`
+ * @param filePaths - An array of input files. This parameter comes from
+ *   the commanders’ variadic parameter `[files...]`.
+ * @param cmdObj - An object containing options as key-value pairs.
+ *  This parameter comes from `commander.Command.opts()`
  */
 function action (filePaths: string[], cmdObj: { [key: string]: any, wikidata: any }) {
   walk({

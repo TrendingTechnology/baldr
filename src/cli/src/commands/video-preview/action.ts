@@ -1,22 +1,29 @@
 // Node packages.
-const childProcess = require('child_process')
-const path = require('path')
+import childProcess from 'child_process'
+import path from 'path'
 
 // Third party packages.
-const chalk = require('chalk')
+import chalk from 'chalk'
 
 // Project packages.
-const mediaServer = require('@bldr/media-server')
+import { filePathToAssetType, walk } from '@bldr/media-manager'
 
-const { filePathToAssetType } = require('@bldr/media-manager')
-
-function createVideoPreviewImageOneFile (filePath, second) {
-  if (!second) second = 10
+/**
+ * Create a video preview image.
+ *
+ * @param filePath
+ * @param second
+ */
+function createVideoPreviewImageOneFile (filePath: string, second: number | string) {
+  if (!second)
+    second = 10
   const assetType = filePathToAssetType(filePath)
   if (assetType === 'video') {
     const output = `${filePath}_preview.jpg`
     const outputFileName = path.basename(output)
     console.log(`Preview image: ${chalk.green(outputFileName)} at second ${chalk.green(second)})`)
+    if (typeof second === 'number')
+      second = second.toString()
     const process = childProcess.spawnSync('ffmpeg', [
       '-i', filePath,
       '-ss', second, // Position in seconds
@@ -31,14 +38,22 @@ function createVideoPreviewImageOneFile (filePath, second) {
   }
 }
 
-function action (files, cmdObj) {
-  mediaServer.walk({
+/**
+ * Create video preview images.
+ *
+ * @param filePaths - An array of input files. This parameter comes from
+ *   the commanders’ variadic parameter `[files...]`.
+ * @param cmdObj - An object containing options as key-value pairs.
+ *  This parameter comes from `commander.Command.opts()`
+ */
+function action (filePaths: string[], cmdObj: { [key: string]: any }) {
+  walk({
     asset (relPath) {
       createVideoPreviewImageOneFile(relPath, cmdObj.seconds)
     }
   }, {
-    path: files
+    path: filePaths
   })
 }
 
-module.exports = action
+export = action
