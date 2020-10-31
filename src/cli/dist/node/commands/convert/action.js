@@ -4,14 +4,14 @@ const media_manager_1 = require("@bldr/media-manager");
 /**
  * Convert multiple files.
  *
- * @param files - An array of input files to convert.
+ * @param filePaths - An array of input files to convert.
  * @param cmdObj - The command object from the commander.
  */
-function action(files, cmdObj) {
+function action(filePaths, cmdObj) {
     media_manager_1.walk({
         all: media_manager_1.operations.convertAsset
     }, {
-        path: files,
+        path: filePaths,
         payload: cmdObj
     });
 }

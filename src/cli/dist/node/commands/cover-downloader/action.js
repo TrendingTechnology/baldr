@@ -1,3 +1,4 @@
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -7,39 +8,42 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 // Node packages.
-const fs = require('fs');
+const fs_1 = __importDefault(require("fs"));
 // Third party packages.
-const chalk = require('chalk');
+const chalk_1 = __importDefault(require("chalk"));
 // Project packages.
-const mediaServer = require('@bldr/media-server');
-const { loadYaml, fetchFile } = require('@bldr/media-manager');
+const media_manager_1 = require("@bldr/media-manager");
+const core_node_1 = require("@bldr/core-node");
 /**
  * @param {String} filePath - The media asset file path.
  */
 function downloadCover(filePath, cmdObj) {
     return __awaiter(this, void 0, void 0, function* () {
         const yamlFile = `${filePath}.yml`;
-        const metaData = loadYaml(yamlFile);
+        const metaData = media_manager_1.loadYaml(yamlFile);
         console.log(metaData);
-        if (metaData.cover_source) {
+        if (metaData.coverSource) {
             const previewFile = `${filePath}_preview.jpg`;
-            fetchFile(metaData.cover_source, previewFile);
+            core_node_1.fetchFile(metaData.coverSource, previewFile);
         }
         else {
-            console.log(chalk.red('No property “cover_source” found.'));
+            console.log(chalk_1.default.red('No property “cover_source” found.'));
         }
     });
 }
 /**
- * @param {Array} files - An array of input files, comes from the commanders’
+ * @param files - An array of input files, comes from the commanders’
  *   variadic parameter `[files...]`.
  */
 function action(files, cmdObj) {
-    mediaServer.walk({
+    media_manager_1.walk({
         asset(relPath) {
             return __awaiter(this, void 0, void 0, function* () {
-                if (fs.existsSync(`${relPath}.yml`)) {
+                if (fs_1.default.existsSync(`${relPath}.yml`)) {
                     yield downloadCover(relPath, cmdObj);
                 }
             });

@@ -1,14 +1,14 @@
-const { operations } = require('@bldr/media-manager')
-const { fetchFile } = require('@bldr/core-node')
+import { operations } from '@bldr/media-manager'
+import { fetchFile } from '@bldr/core-node'
 
 /**
  * Download a media asset.
  *
- * @param {String} url The source URL.
- * @param {String} id The ID of the destination file.
- * @param {String} extension The extension of the destination file.
+ * @param url - The source URL.
+ * @param id - The ID of the destination file.
+ * @param extension - The extension of the destination file.
  */
-async function action (url, id = null, extension = null) {
+async function action (url: string, id: string = null, extension: string = null) {
   if (!extension) {
     extension = url.substring(url.lastIndexOf('.') + 1)
   }
@@ -26,4 +26,4 @@ async function action (url, id = null, extension = null) {
   await operations.initializeMetaYaml(destFile, { source: url })
 }
 
-module.exports = action
+export = action

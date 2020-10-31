@@ -1,12 +1,12 @@
 // Node packages.
-const fs = require('fs')
+import fs from 'fs'
 
 // Third party packages.
-const chalk = require('chalk')
+import chalk from 'chalk'
 
 // Project packages.
-const mediaServer = require('@bldr/media-server')
-const { loadYaml, fetchFile } = require('@bldr/media-manager')
+import { loadYaml, walk } from '@bldr/media-manager'
+import { fetchFile } from '@bldr/core-node'
 
 /**
  * @param {String} filePath - The media asset file path.
@@ -16,20 +16,20 @@ async function downloadCover (filePath, cmdObj) {
   const metaData = loadYaml(yamlFile)
   console.log(metaData)
 
-  if (metaData.cover_source) {
+  if (metaData.coverSource) {
     const previewFile = `${filePath}_preview.jpg`
-    fetchFile(metaData.cover_source, previewFile)
+    fetchFile(metaData.coverSource, previewFile)
   } else {
     console.log(chalk.red('No property “cover_source” found.'))
   }
 }
 
 /**
- * @param {Array} files - An array of input files, comes from the commanders’
+ * @param files - An array of input files, comes from the commanders’
  *   variadic parameter `[files...]`.
  */
-function action (files, cmdObj) {
-  mediaServer.walk({
+function action (files: string | string[], cmdObj: { [key: string]: any }) {
+  walk({
     async asset (relPath) {
       if (fs.existsSync(`${relPath}.yml`)) {
         await downloadCover(relPath, cmdObj)
@@ -40,4 +40,4 @@ function action (files, cmdObj) {
   })
 }
 
-module.exports = action
+export = action

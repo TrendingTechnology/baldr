@@ -30,12 +30,15 @@ function yamlToTxt(data) {
 }
 exports.yamlToTxt = yamlToTxt;
 /**
- * Load a YAML file. Return only objects to save vscode type checks.
+ * Load a YAML file and convert into a Javascript object. The string
+ * properties are converted in the `camleCase` format. The function
+ * returns a object to save Visual Studio Code type checks (Not
+ * AssetType, PresentationType etc).
  *
  * @param filePath - The path of a YAML file.
  *
- * @returns The parsed YAML file as a object. The string properties are
- * in the camleCase format.
+ * @returns The parsed YAML file as an object. The string properties are
+ * converted in the `camleCase` format.
  */
 function loadYaml(filePath) {
     const result = js_yaml_1.default.safeLoad(file_1.readFile(filePath));

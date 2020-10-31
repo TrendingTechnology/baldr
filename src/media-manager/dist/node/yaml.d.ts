@@ -10,14 +10,19 @@ import { AssetType } from '@bldr/type-definitions';
  */
 export declare function yamlToTxt(data: any): string;
 /**
- * Load a YAML file. Return only objects to save vscode type checks.
+ * Load a YAML file and convert into a Javascript object. The string
+ * properties are converted in the `camleCase` format. The function
+ * returns a object to save Visual Studio Code type checks (Not
+ * AssetType, PresentationType etc).
  *
  * @param filePath - The path of a YAML file.
  *
- * @returns The parsed YAML file as a object. The string properties are
- * in the camleCase format.
+ * @returns The parsed YAML file as an object. The string properties are
+ * converted in the `camleCase` format.
  */
-export declare function loadYaml(filePath: string): object;
+export declare function loadYaml(filePath: string): {
+    [key: string]: any;
+};
 /**
  * Convert some data (usually Javascript objets) into the YAML format
  * and write the string into a text file.
