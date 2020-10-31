@@ -14,7 +14,7 @@ const appNames = [
 ]
 
 /**
- * @param {String} appName - The name of the name. The must be the same
+ * @param appName - The name of the name. The must be the same
  *   as the parent directory.
  */
 async function buildApp (cmd: CommandRunner, appName: string): Promise<void> {

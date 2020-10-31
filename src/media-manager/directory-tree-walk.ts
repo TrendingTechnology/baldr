@@ -12,7 +12,7 @@ import { isPresentation, isAsset } from './media-file-classes'
 /**
  * A function which is called during the directory structure walk.
  */
-type WalkFunc = (path: string, payload?: object) => Promise<void> | void
+type WalkFunc = (path: string, payload?: object) => any
 
 /**
  * A collection of walk functions.
@@ -21,28 +21,28 @@ interface WalkFuncBundle {
   /**
    * This function is called on each presentation.
    */
-  presentation: WalkFunc
+  presentation?: WalkFunc
 
   /**
    * This function is called on each asset.
    */
-  asset: WalkFunc
+  asset?: WalkFunc
 
   /**
    * This function is called on all media
    * types, at the moment on presentations and assets.
    */
-  all: WalkFunc
+  all?: WalkFunc
 
   /**
    * This function is called on every file.
    */
-  everyFile: WalkFunc
+  everyFile?: WalkFunc
 
   /**
    * This function is called on directories.
    */
-  directory: WalkFunc
+  directory?: WalkFunc
 }
 
 /**

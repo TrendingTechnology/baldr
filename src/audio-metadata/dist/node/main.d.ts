@@ -60,5 +60,5 @@ interface AudioMetadataContainer {
  * }
  * ```
  */
-export declare function collectAudioMetaData(inputFile: string): Promise<AudioMetadataContainer>;
-export {};
+declare function collectAudioMetaData(inputFile: string): Promise<AudioMetadataContainer>;
+export = collectAudioMetaData;

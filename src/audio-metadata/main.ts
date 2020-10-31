@@ -63,7 +63,7 @@ interface AudioMetadataContainer {
  * }
  * ```
  */
-export async function collectAudioMetaData (inputFile: string): Promise<AudioMetadataContainer> {
+async function collectAudioMetaData (inputFile: string): Promise<AudioMetadataContainer> {
   const metaData = await musicMetadata.parseFile(inputFile)
 
   if ('common' in metaData) {
@@ -87,3 +87,5 @@ export async function collectAudioMetaData (inputFile: string): Promise<AudioMet
     return output
   }
 }
+
+export = collectAudioMetaData

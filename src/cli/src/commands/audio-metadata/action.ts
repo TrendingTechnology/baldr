@@ -1,5 +1,5 @@
 // Project packages.
-import { collectAudioMetaData } from '@bldr/audio-metadata'
+import collectAudioMetaData from '@bldr/audio-metadata'
 
 /**
  * @param {String} audioFile

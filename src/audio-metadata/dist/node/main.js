@@ -11,8 +11,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.collectAudioMetaData = void 0;
 const music_metadata_1 = __importDefault(require("music-metadata"));
 /**
  * Output from `music-metadata`:
@@ -94,4 +92,4 @@ function collectAudioMetaData(inputFile) {
         }
     });
 }
-exports.collectAudioMetaData = collectAudioMetaData;
+module.exports = collectAudioMetaData;

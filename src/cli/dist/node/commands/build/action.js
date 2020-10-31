@@ -24,7 +24,7 @@ const appNames = [
     'songbook'
 ];
 /**
- * @param {String} appName - The name of the name. The must be the same
+ * @param appName - The name of the name. The must be the same
  *   as the parent directory.
  */
 function buildApp(cmd, appName) {
