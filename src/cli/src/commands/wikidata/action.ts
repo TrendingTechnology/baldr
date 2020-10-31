@@ -1,14 +1,14 @@
 // Node packages.
-const fs = require('fs')
-const path = require('path')
+import fs from 'fs'
+import path from 'path'
 
 // Third party packages.
-const chalk = require('chalk')
-const wikidata = require('@bldr/wikidata').default
+import chalk from 'chalk'
+import wikidata from '@bldr/wikidata'
 
 // Project packages.
-const metaTypes = require('@bldr/media-server').metaTypes
-const { writeYamlFile } = require('@bldr/media-manager')
+import { writeYamlFile, metaTypes } from '@bldr/media-manager'
+import type { AssetType } from '@bldr/type-definitions'
 
 /**
  * @param {String} metaType - For example `group`, `instrument`, `person`,
@@ -17,20 +17,20 @@ const { writeYamlFile } = require('@bldr/media-manager')
  * @param {String} arg1
  * @param {String} arg2
  */
-async function action (metaType, itemId, arg1, arg2, cmdObj) {
-  let data = await wikidata.query(itemId, metaType, metaTypes.typeSpecs)
+async function action (metaType: string, itemId: string, arg1: string, arg2: string, cmdObj: { [key: string]: any }): Promise<void> {
+  let rawData = await wikidata.query(itemId, metaType, metaTypes.typeSpecs)
   if (arg1) {
     if (metaType === 'person') {
-      data.firstname = arg1
-      data.lastname = arg2
+      rawData.firstname = arg1
+      rawData.lastname = arg2
     }
   }
-  data.metaTypes = metaType
-  data = metaTypes.process(data)
+  rawData.metaTypes = metaType
+  const data = <AssetType.FileFormat> metaTypes.process(rawData)
   console.log(data)
 
   let downloadWikicommons = true
-  if (!data.mainImage) {
+  if (!rawData.mainImage) {
     data.mainImage = 'blank.jpg'
     downloadWikicommons = false
   }
@@ -63,4 +63,4 @@ async function action (metaType, itemId, arg1, arg2, cmdObj) {
   }
 }
 
-module.exports = action
+export = action

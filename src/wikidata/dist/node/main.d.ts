@@ -26,7 +26,9 @@ declare function mergeData(data: MetaSpec.Data, dataWiki: MetaSpec.Data, typeSpe
  * @param typeNames
  * @param typeSpecs
  */
-declare function query(itemId: string, typeNames: MetaSpec.TypeNames, typeSpecs: MetaSpec.TypeCollection): Promise<object>;
+declare function query(itemId: string, typeNames: MetaSpec.TypeNames, typeSpecs: MetaSpec.TypeCollection): Promise<{
+    [key: string]: any;
+}>;
 declare const _default: {
     fetchCommonsFile: typeof fetchCommonsFile;
     mergeData: typeof mergeData;

@@ -127,3 +127,10 @@ Description in 3 places:
 Description
 
 ```
+
+Convert imports
+
+```
+const (.*) = require\((.*)\)
+import $1 from $2
+```

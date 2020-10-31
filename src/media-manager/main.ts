@@ -22,6 +22,8 @@ import { normalizeMediaAsset } from './operations/normalize-asset'
 import { normalizePresentationFile } from './operations/normalize-presentation'
 import { renameMediaAsset } from './operations/rename-asset'
 
+import metaTypesImp from './meta-types'
+export const metaTypes = metaTypesImp
 /**
  * A collection of function to manipulate the media assets and presentation files.
  */

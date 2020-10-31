@@ -420,7 +420,7 @@ function mergeData (data: MetaSpec.Data, dataWiki: MetaSpec.Data, typeSpecs: Met
  * @param typeNames
  * @param typeSpecs
  */
-async function query (itemId: string, typeNames: MetaSpec.TypeNames, typeSpecs: MetaSpec.TypeCollection): Promise<object> {
+async function query (itemId: string, typeNames: MetaSpec.TypeNames, typeSpecs: MetaSpec.TypeCollection): Promise<{ [key: string]: any }> {
   if (!wikibase.isItemId(itemId)) {
     throw new Error(`No item id: ${itemId}`)
   }

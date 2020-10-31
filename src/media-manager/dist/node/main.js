@@ -20,7 +20,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.readAssetYaml = exports.moveAsset = exports.operations = void 0;
+exports.readAssetYaml = exports.moveAsset = exports.operations = exports.metaTypes = void 0;
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
 const core_browser_1 = require("@bldr/core-browser");
@@ -32,6 +32,8 @@ const initialize_meta_yaml_1 = require("./operations/initialize-meta-yaml");
 const normalize_asset_1 = require("./operations/normalize-asset");
 const normalize_presentation_1 = require("./operations/normalize-presentation");
 const rename_asset_1 = require("./operations/rename-asset");
+const meta_types_1 = __importDefault(require("./meta-types"));
+exports.metaTypes = meta_types_1.default;
 /**
  * A collection of function to manipulate the media assets and presentation files.
  */

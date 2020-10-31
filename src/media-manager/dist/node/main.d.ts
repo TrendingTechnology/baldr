@@ -12,6 +12,29 @@ import { initializeMetaYaml } from './operations/initialize-meta-yaml';
 import { normalizeMediaAsset } from './operations/normalize-asset';
 import { normalizePresentationFile } from './operations/normalize-presentation';
 import { renameMediaAsset } from './operations/rename-asset';
+export declare const metaTypes: {
+    detectTypeByPath: (filePath: string) => string | undefined;
+    formatFilePath: (data: AssetType.FileFormat, oldPath?: string | undefined) => string;
+    process: (data: AssetType.Generic) => AssetType.Generic;
+    typeSpecs: {
+        cloze: import("@bldr/type-definitions").MetaSpec.Type;
+        composition: import("@bldr/type-definitions").MetaSpec.Type;
+        cover: import("@bldr/type-definitions").MetaSpec.Type;
+        group: import("@bldr/type-definitions").MetaSpec.Type;
+        instrument: import("@bldr/type-definitions").MetaSpec.Type;
+        person: import("@bldr/type-definitions").MetaSpec.Type;
+        photo: import("@bldr/type-definitions").MetaSpec.Type;
+        radio: import("@bldr/type-definitions").MetaSpec.Type;
+        recording: import("@bldr/type-definitions").MetaSpec.Type;
+        reference: import("@bldr/type-definitions").MetaSpec.Type;
+        score: import("@bldr/type-definitions").MetaSpec.Type;
+        song: import("@bldr/type-definitions").MetaSpec.Type;
+        worksheet: import("@bldr/type-definitions").MetaSpec.Type;
+        youtube: import("@bldr/type-definitions").MetaSpec.Type;
+        general: import("@bldr/type-definitions").MetaSpec.Type;
+    };
+    mergeTypeNames: (...typeName: string[]) => string;
+};
 /**
  * A collection of function to manipulate the media assets and presentation files.
  */

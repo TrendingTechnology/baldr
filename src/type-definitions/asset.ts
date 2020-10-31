@@ -15,6 +15,7 @@ export namespace AssetType {
     extension?: string
     mainImage?: string
     filePath?: string
+    [key: string]: any
   }
 
   /**

@@ -58,7 +58,7 @@ function detectTypeByPath (filePath: string): MetaSpec.TypeNames | undefined {
  *
  * @returns A absolute path
  */
-function formatFilePath (data: AssetType.FileFormat, oldPath: string): string {
+function formatFilePath (data: AssetType.FileFormat, oldPath?: string): string {
   if (!data.metaTypes) throw new Error(`Your data needs a property named “metaTypes”.`)
   // TODO: support multiple types
   // person,general -> person

@@ -14,6 +14,7 @@ export declare namespace AssetType {
         extension?: string;
         mainImage?: string;
         filePath?: string;
+        [key: string]: any;
     }
     /**
      * A type for the possible property names.
