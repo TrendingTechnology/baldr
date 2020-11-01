@@ -1,3 +1,4 @@
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -7,13 +8,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 // Node packages.
-const fs = require('fs');
+const fs_1 = __importDefault(require("fs"));
 // Third party packages.
-const csv = require('csv-parser');
+const csv_parser_1 = __importDefault(require("csv-parser"));
 // Project packages.
-const { CommandRunner } = require('@bldr/cli-utils');
-const { writeFile } = require('@bldr/media-manager');
+const cli_utils_1 = require("@bldr/cli-utils");
+const media_manager_1 = require("@bldr/media-manager");
 const documentTemplate = {
     grades: {},
     jobs: {
@@ -33,6 +37,7 @@ const documentTemplate = {
             icon: 'window-open'
         }
     },
+    timeStampMsec: 0,
     meta: {
         location: 'Pirckheimer-Gymnasium, Nürnberg',
         teacher: 'OStR Josef Friedrich',
@@ -40,16 +45,18 @@ const documentTemplate = {
     }
 };
 /**
- * @param {String} mdbFile
+ * @param  mdbFile
  */
 function action(mdbFile) {
     return __awaiter(this, void 0, void 0, function* () {
-        const cmd = new CommandRunner();
+        const cmd = new cli_utils_1.CommandRunner();
         const result = yield cmd.exec(['mdb-export', mdbFile, 'Schüler']);
-        writeFile('tmp.csv', result.stdout);
+        if (result && result.stdout) {
+            media_manager_1.writeFile('tmp.csv', result.stdout);
+        }
         const grades = {};
-        fs.createReadStream('tmp.csv')
-            .pipe(csv())
+        fs_1.default.createReadStream('tmp.csv')
+            .pipe(csv_parser_1.default())
             .on('data', (data) => {
             if (grades[data.klasse]) {
                 grades[data.klasse][`${data.name}, ${data.vorname}`] = {};
@@ -61,7 +68,7 @@ function action(mdbFile) {
             .on('end', () => {
             documentTemplate.grades = grades;
             documentTemplate.timeStampMsec = new Date().getTime();
-            writeFile('seating-plan.json', JSON.stringify(documentTemplate, null, '  '));
+            media_manager_1.writeFile('seating-plan.json', JSON.stringify(documentTemplate, null, '  '));
         });
     });
 }

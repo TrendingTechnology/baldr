@@ -26,6 +26,11 @@ interface CommandRunnerExecOption {
   encoding?: string
 }
 
+interface CommandRunnerResult {
+  stdout: string
+  stderr: string
+}
+
 /**
  * Run commands on the command line in a nice and secure fashion.
  */
@@ -114,7 +119,7 @@ export class CommandRunner {
    * @returns {Object}
    *   [see on nodejs.org](https://nodejs.org/api/child_process.html#child_process_child_process_spawnsync_command_args_options).
    */
-  exec (args: string[], options?: CommandRunnerExecOption): Promise<undefined> {
+  exec (args: string[], options?: CommandRunnerExecOption): Promise<CommandRunnerResult> {
     if (this.verbose) this.startSpin()
 
     // To get error messages on unkown commands
@@ -142,8 +147,8 @@ export class CommandRunner {
         resolve()
       }
 
-      let stdout = ''
-      let stderr = ''
+      let stdout: string = ''
+      let stderr: string = ''
 
       command.stdout.on('data', (data: Buffer) => {
         this.logStdOutErr(data)
@@ -162,7 +167,7 @@ export class CommandRunner {
 
       command.on('exit', (code) => {
         if (code === 0) {
-          resolve(<any>{ stdout, stderr })
+          resolve(<CommandRunnerResult> { stdout, stderr })
         } else {
           reject(new Error(stderr))
         }

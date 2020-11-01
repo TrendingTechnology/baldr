@@ -1,12 +1,12 @@
 // Node packages.
-const fs = require('fs')
+import fs from 'fs'
 
 // Third party packages.
-const csv = require('csv-parser')
+import csv from 'csv-parser'
 
 // Project packages.
-const { CommandRunner } = require('@bldr/cli-utils')
-const { writeFile } = require('@bldr/media-manager')
+import { CommandRunner } from '@bldr/cli-utils'
+import { writeFile } from '@bldr/media-manager'
 
 const documentTemplate = {
   grades: {},
@@ -27,6 +27,7 @@ const documentTemplate = {
       icon: 'window-open'
     }
   },
+  timeStampMsec: 0,
   meta: {
     location: 'Pirckheimer-Gymnasium, Nürnberg',
     teacher: 'OStR Josef Friedrich',
@@ -35,12 +36,14 @@ const documentTemplate = {
 }
 
 /**
- * @param {String} mdbFile
+ * @param  mdbFile
  */
-async function action (mdbFile) {
+async function action (mdbFile: string): Promise<void> {
   const cmd = new CommandRunner()
   const result = await cmd.exec(['mdb-export', mdbFile, 'Schüler'])
-  writeFile('tmp.csv', result.stdout)
+  if (result && result.stdout) {
+    writeFile('tmp.csv', result.stdout)
+  }
 
   const grades = {}
 
@@ -60,4 +63,4 @@ async function action (mdbFile) {
     })
 }
 
-module.exports = action
+export = action

@@ -1,8 +1,8 @@
 // Project packages.
-const { CommandRunner } = require('@bldr/cli-utils')
-const config = require('@bldr/config')
+import { CommandRunner } from '@bldr/cli-utils'
+import config from '@bldr/config'
 
-async function action () {
+async function action (): Promise<void> {
   const cmd = new CommandRunner({ verbose: true })
   cmd.startSpin()
 
@@ -24,4 +24,4 @@ async function action () {
   cmd.stopSpin()
 }
 
-module.exports = action
+export = action

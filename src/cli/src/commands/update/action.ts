@@ -1,15 +1,21 @@
 // Project packages.
-const { CommandRunner } = require('@bldr/cli-utils')
+import { CommandRunner } from '@bldr/cli-utils'
 
-const config = require('@bldr/config')
+import config from '@bldr/config'
 
-const syncBuilds = require('../build-sync/action.js')
-const buildVueApp = require('../build/action.js')
+import syncBuilds from '../build-sync/action.js'
+import buildVueApp from '../build/action.js'
+
+type whatType = 'api' | 'config' | 'media' | 'vue'
 
 /**
+ * Normalize the metadata files in the YAML format (sort, clean up).
  *
+ * @param what - What is to update. `api`,
+ * @param cmdObj - An object containing options as key-value pairs.
+ *  This parameter comes from `commander.Command.opts()`
  */
-async function action (what, cmdObj) {
+async function action (what: whatType, cmdObj: { [key: string]: any }): Promise<void> {
   const cmd = new CommandRunner()
   cmd.checkRoot()
 
@@ -135,4 +141,4 @@ async function action (what, cmdObj) {
   cmd.stopSpin()
 }
 
-module.exports = action
+export = action

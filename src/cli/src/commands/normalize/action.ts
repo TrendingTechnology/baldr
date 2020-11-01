@@ -24,4 +24,4 @@ function action (filePaths: string[], cmdObj: { [key: string]: any, wikidata: an
   })
 }
 
-module.exports = action
+export = action

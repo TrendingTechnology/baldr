@@ -1,3 +1,4 @@
+"use strict";
 module.exports = {
     command: 'download <url> [id] [extension]',
     alias: 'dl',
