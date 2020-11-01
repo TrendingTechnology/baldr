@@ -1,21 +1,19 @@
-// Node packages.
-const path = require('path');
+"use strict";
 // Project packages.
-const mediaServer = require('@bldr/media-server');
-const { operations } = require('@bldr/media-manager');
+const media_manager_1 = require("@bldr/media-manager");
 /**
  * Rename files.
  *
- * @param {Array} files - An array of input files, comes from the commanders’
- *   variadic parameter `[files...]`.
+ * @param {Array} filePaths - An array of input files, comes from the
+ *   commanders’ variadic parameter `[files...]`.
  */
-function action(files) {
-    mediaServer.walk({
+function action(filePaths) {
+    media_manager_1.walk({
         all(oldPath) {
-            operations.renameMediaAsset(oldPath);
+            media_manager_1.operations.renameMediaAsset(oldPath);
         }
     }, {
-        path: files
+        path: filePaths
     });
 }
 module.exports = action;

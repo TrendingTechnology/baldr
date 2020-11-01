@@ -1,13 +1,12 @@
 // Third party packages.
-const chalk = require('chalk')
+import chalk from 'chalk'
 
 // Project packages.
-const mediaManager = require('@bldr/media-manager')
-const mediaServer = require('@bldr/media-server')
+import { DeepTitle, walk } from '@bldr/media-manager'
 
-function read (filePath) {
+function read (filePath: string): void {
   console.log(filePath)
-  const titles = new mediaManager.default.DeepTitle(filePath)
+  const titles = new DeepTitle(filePath)
   console.log(`  id: ${chalk.cyan(titles.id)}`)
   console.log(`  title: ${chalk.yellow(titles.title)}`)
   if (titles.subtitle) console.log(`  subtitle: ${chalk.green(titles.subtitle)}`)
@@ -16,17 +15,18 @@ function read (filePath) {
 }
 
 /**
+ * List all hierarchical (deep) folder titles.
  *
- * @param {Array} files - An array of input files, comes from the commanders’
+ * @param {Array} filePaths - An array of input files, comes from the commanders’
  *   variadic parameter `[files...]`.
  */
-async function action (files) {
-  await mediaServer.walk({
+async function action (filePaths: string[]) {
+  await walk({
     presentation (relPath) {
       read(relPath)
     }
   }, {
-    path: files
+    path: filePaths
   })
 }
 

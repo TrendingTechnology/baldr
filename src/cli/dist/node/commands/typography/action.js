@@ -1,17 +1,22 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 // Third party packages.
-const chalk = require('chalk');
+const chalk_1 = __importDefault(require("chalk"));
 // Project packages.
-const mediaServer = require('@bldr/media-server');
-const { readFile, writeFile } = require('@bldr/media-manager');
+const media_manager_1 = require("@bldr/media-manager");
 /**
- * @param {Array} files - An array of input files, comes from the commanders’
+ * Fix some typographic issues, for example quotes “…” -> „…“.
+ *
+ * @param filePaths - An array of input files, comes from the commanders’
  *   variadic parameter `[files...]`.
  */
-function action(files) {
-    mediaServer.walk({
+function action(filePaths) {
+    media_manager_1.walk({
         everyFile(filePath) {
-            console.log(chalk.green(filePath));
-            let content = readFile(filePath);
+            console.log(chalk_1.default.green(filePath));
+            let content = media_manager_1.readFile(filePath);
             const before = content;
             content = content.replace(/“([^“”]*)”/g, '„$1“');
             content = content.replace(/"([^"]*)"/g, '„$1“');
@@ -23,19 +28,19 @@ function action(files) {
             content = content.replace(/(.)\n*$/g, '$1\n');
             const after = content;
             if (before !== after) {
-                console.log(chalk.red('before:'));
-                console.log('„' + chalk.yellow(before) + '“');
-                console.log(chalk.red('after:'));
-                console.log('„' + chalk.green(after) + '“');
-                writeFile(filePath, content);
+                console.log(chalk_1.default.red('before:'));
+                console.log('„' + chalk_1.default.yellow(before) + '“');
+                console.log(chalk_1.default.red('after:'));
+                console.log('„' + chalk_1.default.green(after) + '“');
+                media_manager_1.writeFile(filePath, content);
             }
             else {
                 console.log('No change');
-                console.log('„' + chalk.blue(after) + '“');
+                console.log('„' + chalk_1.default.blue(after) + '“');
             }
         }
     }, {
-        path: files
+        path: filePaths
     });
 }
 module.exports = action;

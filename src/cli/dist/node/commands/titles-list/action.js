@@ -1,3 +1,4 @@
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -7,34 +8,38 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
 // Third party packages.
-const chalk = require('chalk');
+const chalk_1 = __importDefault(require("chalk"));
 // Project packages.
-const mediaManager = require('@bldr/media-manager');
-const mediaServer = require('@bldr/media-server');
+const media_manager_1 = require("@bldr/media-manager");
 function read(filePath) {
     console.log(filePath);
-    const titles = new mediaManager.default.DeepTitle(filePath);
-    console.log(`  id: ${chalk.cyan(titles.id)}`);
-    console.log(`  title: ${chalk.yellow(titles.title)}`);
+    const titles = new media_manager_1.DeepTitle(filePath);
+    console.log(`  id: ${chalk_1.default.cyan(titles.id)}`);
+    console.log(`  title: ${chalk_1.default.yellow(titles.title)}`);
     if (titles.subtitle)
-        console.log(`  subtitle: ${chalk.green(titles.subtitle)}`);
-    console.log(`  grade: ${chalk.blue(titles.grade)}`);
-    console.log(`  curriculum: ${chalk.red(titles.curriculum)}\n`);
+        console.log(`  subtitle: ${chalk_1.default.green(titles.subtitle)}`);
+    console.log(`  grade: ${chalk_1.default.blue(titles.grade)}`);
+    console.log(`  curriculum: ${chalk_1.default.red(titles.curriculum)}\n`);
 }
 /**
+ * List all hierarchical (deep) folder titles.
  *
- * @param {Array} files - An array of input files, comes from the commanders’
+ * @param {Array} filePaths - An array of input files, comes from the commanders’
  *   variadic parameter `[files...]`.
  */
-function action(files) {
+function action(filePaths) {
     return __awaiter(this, void 0, void 0, function* () {
-        yield mediaServer.walk({
+        yield media_manager_1.walk({
             presentation(relPath) {
                 read(relPath);
             }
         }, {
-            path: files
+            path: filePaths
         });
     });
 }

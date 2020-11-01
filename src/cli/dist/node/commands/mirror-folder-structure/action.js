@@ -1,7 +1,7 @@
-// Project packages:
-const { mirrorFolderStructure } = require('@bldr/media-server');
-const config = require('@bldr/config');
+"use strict";
+// Project packages.
+const media_server_1 = require("@bldr/media-server");
 function action() {
-    console.log(mirrorFolderStructure(cwd));
+    console.log(media_server_1.mirrorFolderStructure(process.cwd()));
 }
 module.exports = action;

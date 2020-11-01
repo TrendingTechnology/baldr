@@ -1,12 +1,12 @@
 // Node packages.
-const path = require('path')
-const childProcess = require('child_process')
+import path from 'path'
+import childProcess from 'child_process'
 
 // Third party packages.
-const chalk = require('chalk')
+import chalk from 'chalk'
 
 // Project packages.
-const mediaServer = require('@bldr/media-server')
+import { walk } from '@bldr/media-manager'
 
 function buildOneFile (filePath) {
   const process = childProcess.spawnSync(
@@ -21,14 +21,16 @@ function buildOneFile (filePath) {
 }
 
 /**
- * @param {Array} filesOrText - An array of input files, comes from the
- *   commanders’ variadic parameter `[files...]`
+ * Build TeX files.
+ *
+ * @param filePaths - An array of input files, comes from the commanders’
+ *   variadic parameter `[files...]`
  */
-function action (files) {
-  mediaServer.walk(buildOneFile, {
-    path: files,
+function action (filePaths: string[]): void {
+  walk(buildOneFile, {
+    path: filePaths,
     regex: 'tex'
   })
 }
 
-module.exports = action
+export = action

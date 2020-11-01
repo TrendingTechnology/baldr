@@ -1,18 +1,18 @@
 // Node packages.
-const fs = require('fs')
+import fs from 'fs'
 
 // Third party packages.
-const chalk = require('chalk')
+import chalk from 'chalk'
 
 // Project packages.
-const mediaServer = require('@bldr/media-server')
+import { walk } from '@bldr/media-manager'
 
 /**
  * @param {String} filePath - The media file path.
  *
  * @returns {String}
  */
-function renameByRegex (filePath, { pattern, replacement }) {
+function renameByRegex (filePath: string, { pattern, replacement }): void {
   const newFilePath = filePath.replace(pattern, replacement)
   if (filePath !== newFilePath) {
     console.log(`\nRename:\n  old: ${chalk.yellow(filePath)} \n  new: ${chalk.green(newFilePath)}`)
@@ -20,12 +20,12 @@ function renameByRegex (filePath, { pattern, replacement }) {
   }
 }
 
-function action (pattern, replacement, filePath) {
-  mediaServer.walk(renameByRegex, {
+function action (pattern: string, replacement: string, filePath: string): void {
+  walk(renameByRegex, {
     regex: new RegExp('.*'),
     path: filePath,
     payload: { pattern, replacement }
   })
 }
 
-module.exports = action
+export = action

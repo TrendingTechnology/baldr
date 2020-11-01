@@ -1,16 +1,24 @@
 // Node packages.
-const path = require('path')
+import path from 'path'
 
 // Third party packages.
-const chalk = require('chalk')
+import chalk from 'chalk'
 
 // Project packages:
-const { openFolderWithArchives, locationIndicator } = require('@bldr/media-server')
-const config = require('@bldr/config')
+import { locationIndicator } from '@bldr/media-manager'
+import { openFolderWithArchives } from '@bldr/media-server'
 
-function action (filePath, cmdObj) {
+/**
+ * Normalize the metadata files in the YAML format (sort, clean up).
+ *
+ * @param filePaths - An array of input files. This parameter comes from
+ *   the commanders’ variadic parameter `[files...]`.
+ * @param cmdObj - An object containing options as key-value pairs.
+ *  This parameter comes from `commander.Command.opts()`
+ */
+function action (filePath: string, cmdObj: { [key: string]: any }): void {
   if (!filePath) {
-    filePath = cwd
+    filePath = process.cwd()
   }
   const regex = /^[a-zA-Z0-9-_/]+$/g
   if (!regex.test(filePath)) {

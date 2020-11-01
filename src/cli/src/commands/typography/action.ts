@@ -1,16 +1,17 @@
 // Third party packages.
-const chalk = require('chalk')
+import chalk from 'chalk'
 
 // Project packages.
-const mediaServer = require('@bldr/media-server')
-const { readFile, writeFile } = require('@bldr/media-manager')
+import { readFile, writeFile, walk } from '@bldr/media-manager'
 
 /**
- * @param {Array} files - An array of input files, comes from the commanders’
+ * Fix some typographic issues, for example quotes “…” -> „…“.
+ *
+ * @param filePaths - An array of input files, comes from the commanders’
  *   variadic parameter `[files...]`.
  */
-function action (files) {
-  mediaServer.walk({
+function action (filePaths: string[]): void {
+  walk({
     everyFile (filePath) {
       console.log(chalk.green(filePath))
       let content = readFile(filePath)
@@ -38,8 +39,8 @@ function action (files) {
       }
     }
   }, {
-    path: files
+    path: filePaths
   })
 }
 
-module.exports = action
+export = action

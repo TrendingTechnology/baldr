@@ -1,30 +1,26 @@
 // Node packages.
-const fs = require('fs')
-const path = require('path')
-
-// Third party packages.
-const yaml = require('js-yaml')
+import fs from 'fs'
+import path from 'path'
 
 // Project packages.
-const mediaServer = require('@bldr/media-server')
-const { moveAsset } = require('@bldr/media-manager')
+import { moveAsset, walk, loadMetaDataYaml } from '@bldr/media-manager'
 
 /**
  * Rename a media asset after the `id` in the meta data file.
  *
- * @param {String} filePath - The media asset file path.
+ * @param filePath - The media asset file path.
  */
-function renameFromIdOneFile (filePath) {
-  let result
+function renameFromIdOneFile (filePath: string): void {
+  let result: { [key: string]: any }
   try {
-    result = yaml.safeLoad(fs.readFileSync(`${filePath}.yml`, 'utf8'))
+    result = loadMetaDataYaml(filePath)
   } catch (error) {
     console.log(filePath)
     console.log(error)
     return
   }
 
-  if ('id' in result && result.id) {
+  if (result.id) {
     let id = result.id
     const oldPath = filePath
 
@@ -48,11 +44,11 @@ function renameFromIdOneFile (filePath) {
  * Rename a media asset or all child asset of the parent working directory
  * after the `id` in the meta data file.
  *
- * @param {Array} files - An array of input files, comes from the commanders’
+ * @param files - An array of input files, comes from the commanders’
  *   variadic parameter `[files...]`.
  */
-function action (files) {
-  mediaServer.walk({
+function action (files: string[]): void {
+  walk({
     asset (relPath) {
       if (fs.existsSync(`${relPath}.yml`)) {
         renameFromIdOneFile(relPath)
