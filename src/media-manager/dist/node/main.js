@@ -28,6 +28,7 @@ const titles_1 = require("./titles");
 const yaml_1 = require("./yaml");
 // Operations
 const convert_asset_1 = require("./operations/convert-asset");
+const generate_presentation_1 = require("./operations/generate-presentation");
 const initialize_meta_yaml_1 = require("./operations/initialize-meta-yaml");
 const normalize_asset_1 = require("./operations/normalize-asset");
 const normalize_presentation_1 = require("./operations/normalize-presentation");
@@ -39,6 +40,7 @@ exports.metaTypes = meta_types_1.default;
  */
 exports.operations = {
     convertAsset: convert_asset_1.convertAsset,
+    generatePresentation: generate_presentation_1.generatePresentation,
     initializeMetaYaml: initialize_meta_yaml_1.initializeMetaYaml,
     normalizeMediaAsset: normalize_asset_1.normalizeMediaAsset,
     normalizePresentationFile: normalize_presentation_1.normalizePresentationFile,

@@ -8,6 +8,7 @@
 import { AssetType } from '@bldr/type-definitions';
 import { DeepTitle, TitleTree } from './titles';
 import { convertAsset } from './operations/convert-asset';
+import { generatePresentation } from './operations/generate-presentation';
 import { initializeMetaYaml } from './operations/initialize-meta-yaml';
 import { normalizeMediaAsset } from './operations/normalize-asset';
 import { normalizePresentationFile } from './operations/normalize-presentation';
@@ -40,6 +41,7 @@ export declare const metaTypes: {
  */
 export declare const operations: {
     convertAsset: typeof convertAsset;
+    generatePresentation: typeof generatePresentation;
     initializeMetaYaml: typeof initializeMetaYaml;
     normalizeMediaAsset: typeof normalizeMediaAsset;
     normalizePresentationFile: typeof normalizePresentationFile;

@@ -108,6 +108,12 @@ export declare function convertTexToMd(text: string): string;
  * @returns A string in the TeX format.
  */
 export declare function convertMdToTex(text: string): string;
+declare type TexObject = {
+    [key: string]: string | string[];
+};
+declare type TexObjectArray = TexObject[];
+export declare function objectifyTexZitat(content: string): TexObjectArray;
+export declare function objectifyTexItemize(content: string): TexObjectArray;
 declare const _default: {
     regBuilder: RegExpBuilder;
     cleanMatch: typeof cleanMatch;

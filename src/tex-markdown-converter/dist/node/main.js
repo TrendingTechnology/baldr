@@ -5,7 +5,7 @@
  * @module @bldr/tex-markdown-converter
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.convertMdToTex = exports.convertTexToMd = exports.removeTexComments = exports.extractMatchAll = exports.regBuilder = void 0;
+exports.objectifyTexItemize = exports.objectifyTexZitat = exports.convertMdToTex = exports.convertTexToMd = exports.removeTexComments = exports.extractMatchAll = exports.regBuilder = void 0;
 /**
  * Build and assemble strings to generate regular expressions from.
  */
@@ -326,6 +326,83 @@ function convertMdToTex(text) {
     return convert(text, true);
 }
 exports.convertMdToTex = convertMdToTex;
+function convertToOneLineMd(content) {
+    content = removeTexComments(content);
+    content = content.replace(/\n/g, ' ');
+    content = content.replace(/\s\s+/g, ' ');
+    content = content.trim();
+    // [\\person{Erasmus von Rotterdam}
+    content = content.replace(/^\[/, '');
+    content = content.replace(/\]$/, '');
+    return convertTexToMd(content);
+}
+function objectifyTexZitat(content) {
+    const regexp = new RegExp(exports.regBuilder.env('zitat', '\\*?' + exports.regBuilder.captDotAll), 'g');
+    const matches = content.matchAll(regexp);
+    const data = [];
+    for (const match of matches) {
+        let text = match[1];
+        const regOpt = /^[^]+\]/;
+        let optional = text.match(regOpt);
+        let optionalString = '';
+        if (optional) {
+            optionalString = optional[0];
+            text = text.replace(regOpt, '');
+        }
+        text = convertToOneLineMd(text);
+        const item = {
+            text
+        };
+        if (optionalString) {
+            // [\person{Bischof Bernardino Cirillo}][1549]
+            // [\person{Martin Luther}]
+            const segments = optionalString.split('][');
+            if (segments.length > 1) {
+                item.author = convertToOneLineMd(segments[0]);
+                item.date = convertToOneLineMd(segments[1]);
+            }
+            else {
+                item.author = convertToOneLineMd(segments[0]);
+            }
+        }
+        data.push(item);
+    }
+    return data;
+}
+exports.objectifyTexZitat = objectifyTexZitat;
+function objectifyTexItemize(content) {
+    const regSection = exports.regBuilder.cmd('(sub)?(sub)?section', '([^\\}]*?)');
+    const regItemize = exports.regBuilder.env('(compactitem|itemize)');
+    const matches = [];
+    const exclude = ['itemize', 'compactitem', 'sub'];
+    for (const regex of [
+        regSection + exports.regBuilder.whiteNewline + regSection + exports.regBuilder.whiteNewline + regItemize,
+        regSection + exports.regBuilder.whiteNewline + regItemize,
+        regItemize
+    ]) {
+        content = extractMatchAll(content, regex, matches, exclude);
+    }
+    const data = [];
+    for (const match of matches) {
+        const itemsText = match.pop();
+        if (itemsText) {
+            const sections = match;
+            const item = {};
+            const items = [];
+            for (const itemText of itemsText.split('\\item')) {
+                const oneLine = convertToOneLineMd(itemText);
+                if (oneLine)
+                    items.push(oneLine);
+            }
+            if (sections.length)
+                item.sections = sections;
+            item.items = items;
+            data.push(item);
+        }
+    }
+    return data;
+}
+exports.objectifyTexItemize = objectifyTexItemize;
 exports.default = {
     regBuilder: exports.regBuilder,
     cleanMatch,

@@ -373,6 +373,89 @@ export function convertMdToTex(text: string): string {
   return convert(text, true)
 }
 
+type TexObject = { [key: string]: string | string[] }
+type TexObjectArray = TexObject[]
+
+function convertToOneLineMd (content: string): string {
+  content = removeTexComments(content)
+  content = content.replace(/\n/g, ' ')
+  content = content.replace(/\s\s+/g, ' ')
+  content = content.trim()
+  // [\\person{Erasmus von Rotterdam}
+  content = content.replace(/^\[/, '')
+  content = content.replace(/\]$/, '')
+  return convertTexToMd(content)
+}
+
+export function objectifyTexZitat (content: string): TexObjectArray {
+  const regexp = new RegExp(regBuilder.env('zitat', '\\*?' + regBuilder.captDotAll), 'g')
+  const matches = content.matchAll(regexp)
+  const data: TexObjectArray = []
+  for (const match of matches) {
+    let text = match[1]
+    const regOpt = /^[^]+\]/
+    let optional = text.match(regOpt)
+    let optionalString: string = ''
+    if (optional) {
+      optionalString = optional[0]
+      text = text.replace(regOpt, '')
+    }
+    text = convertToOneLineMd(text)
+    const item: TexObject = {
+      text
+    }
+    if (optionalString) {
+      // [\person{Bischof Bernardino Cirillo}][1549]
+      // [\person{Martin Luther}]
+      const segments = optionalString.split('][')
+      if (segments.length > 1) {
+        item.author = convertToOneLineMd(segments[0])
+        item.date = convertToOneLineMd(segments[1])
+      } else {
+        item.author = convertToOneLineMd(segments[0])
+      }
+    }
+    data.push(item)
+  }
+  return data
+}
+
+export function objectifyTexItemize (content: string): TexObjectArray {
+  const regSection = regBuilder.cmd('(sub)?(sub)?section', '([^\\}]*?)')
+  const regItemize = regBuilder.env('(compactitem|itemize)')
+
+  const matches: string[][] = []
+  const exclude = ['itemize', 'compactitem', 'sub']
+  for (const regex of [
+    regSection + regBuilder.whiteNewline + regSection + regBuilder.whiteNewline + regItemize,
+    regSection + regBuilder.whiteNewline + regItemize,
+    regItemize
+  ]) {
+    content = extractMatchAll(content, regex, matches, exclude)
+  }
+
+  const data: TexObjectArray = []
+  for (const match of matches) {
+    const itemsText = match.pop()
+
+    if (itemsText) {
+      const sections = match
+      const item: TexObject = {}
+      const items: string[] = []
+      for (const itemText of itemsText.split('\\item')) {
+        const oneLine = convertToOneLineMd(itemText)
+        if (oneLine) items.push(oneLine)
+      }
+
+      if (sections.length) item.sections = sections
+      item.items = items
+      data.push(item)
+    }
+
+  }
+  return data
+}
+
 export default {
   regBuilder,
   cleanMatch,

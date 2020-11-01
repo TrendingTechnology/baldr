@@ -17,6 +17,7 @@ import { loadYaml } from './yaml'
 
 // Operations
 import { convertAsset } from './operations/convert-asset'
+import { generatePresentation } from './operations/generate-presentation'
 import { initializeMetaYaml } from './operations/initialize-meta-yaml'
 import { normalizeMediaAsset } from './operations/normalize-asset'
 import { normalizePresentationFile } from './operations/normalize-presentation'
@@ -29,6 +30,7 @@ export const metaTypes = metaTypesImp
  */
 export const operations = {
   convertAsset,
+  generatePresentation,
   initializeMetaYaml,
   normalizeMediaAsset,
   normalizePresentationFile,
