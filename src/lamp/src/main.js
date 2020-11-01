@@ -86,55 +86,6 @@
  *
  * ## Called during the parsing the YAML file (`Praesentation.baldr.yml`):
  *
- * ### 1. `normalizeProps(props)`
- *
- * - `return`: an object.
- *
- * ```js
- * export const default = {
- *   hooks: {
- *     // result must fit to props
- *     normalizeProps (props) {
- *       if (typeof props === 'string') {
- *         return {
- *           markup: props
- *         }
- *       }
- *     }
- *   }
- * }
- * ```
- *
- * ### 2. `resolveMediaUris(props)`
- *
- * - `return`: an array or a string.
- *
- * ```js
- * export const default = {
- *   hooks: {
- *     // An array of media URIs to resolve (like [id:beethoven, id:mozart.mp3])
- *     resolveMediaUris (props) {
- *       return props.src
- *     }
- *   }
- * }
- * ```
- *
- * ### 3. `resolveOptionalMediaUris(props)`
- *
- * - `return`: an array or a string.
- *
- * ```js
- * export const default = {
-  *   hooks: {
-  *     // An array of media URIs to resolve (like [id:beethoven, id:mozart.mp3])
-  *     resolveOptionalMediaUris (props) {
-  *       return props.src
-  *     }
-  *   }
-  * }
-  * ```
- *
  * ### 4. `afterLoading({ props, master })`
  *
  * Goes into the background.

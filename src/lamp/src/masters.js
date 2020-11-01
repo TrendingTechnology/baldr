@@ -421,10 +421,10 @@ class Master {
   }
 
   /**
-   * Check if the handed over media URIs can be resolved. Throw no errors if the
-   * media assets are not present. This is used in the YouTube master slide.
-   * This master slide uses the online version if no offline video could be
-   * resolve.
+   * Check if the handed over media URIs can be resolved. Throw no errors, if
+   * the media assets are not present. This hook is used in the YouTube master
+   * slide. This master slide uses the online version, if no offline video could
+   * be resolved.
    *
    * @param {module:@bldr/lamp~props} props
    *
