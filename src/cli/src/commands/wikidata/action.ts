@@ -37,7 +37,7 @@ async function action (metaType: string, itemId: string, arg1: string, arg2: str
 
   const dest = metaTypes.formatFilePath(data)
   if (downloadWikicommons) {
-    if (!cmdObj.dryRun) {
+    if (!cmdObj.dryRun && data.mainImage) {
       await wikidata.fetchCommonsFile(data.mainImage, dest)
     } else {
       console.log(`Dry run! Destination: ${chalk.green(dest)}`)

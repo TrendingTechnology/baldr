@@ -39,16 +39,17 @@ async function downloadIcon (url: string, name: string, newName: string): Promis
 
 async function downloadIcons (iconMapping: IconMapping, urlTemplate: string): Promise<void> {
   cmd.startProgress()
-  //console.log(`New download task using this template: ${chalk.red(urlTemplate)}`)
+  // console.log(`New download task using this template: ${chalk.red(urlTemplate)}`)
   const iconsCount = Object.keys(iconMapping).length
   let count = 0
   for (const icon in iconMapping) {
     const url = urlTemplate.replace('{icon}', icon)
-    //console.log(`Download icon “${chalk.blue(icon)}” from “${chalk.yellow(url)}”`)
-    let newName
+    // console.log(`Download icon “${chalk.blue(icon)}” from “${chalk.yellow(url)}”`)
+    let newName: string = ''
     if (iconMapping[icon]) {
       newName = iconMapping[icon]
     }
+    if (!newName) throw new Error('Unkown icon name.')
     await downloadIcon(url, icon, newName)
     count++
     cmd.updateProgress(count / iconsCount, `download icon “${chalk.blue(icon)}”`)
@@ -86,7 +87,7 @@ interface WebFontConfig {
 function convertIntoFontFiles (config: WebFontConfig): void {
   console.log(config)
   webfont(config)
-    .then(result => {
+    .then((result: { [key: string]: any }) => {
       console.log(result)
       const css = []
       const names = []
@@ -112,7 +113,7 @@ function convertIntoFontFiles (config: WebFontConfig): void {
       writeFileToDest('icons.json', JSON.stringify(names, null, '  '))
       return result
     })
-    .catch(error => {
+    .catch((error: Error) => {
       console.log(error)
       throw error
     })
@@ -126,9 +127,9 @@ interface FontBuildOption {
 
 async function buildFont (options: FontBuildOption[]): Promise<void> {
   for (const task of options) {
-    if ('urlTemplate' in task) {
+    if (task.urlTemplate) {
       await downloadIcons(task.iconMapping, task.urlTemplate)
-    } else if ('folder' in task) {
+    } else if (task.folder) {
       copyIcons(task.folder, tmpDir)
     }
   }

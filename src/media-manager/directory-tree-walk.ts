@@ -50,10 +50,10 @@ interface WalkFuncBundle {
  */
 interface WalkOption {
   /**
-   * The function/s is/are called with with this object. Multiple
+   * The function/s is/are called with with this payload. Multiple
    * arguments have to be bundled as a single object.
    */
-  payload?: object
+  payload?: any
 
   /**
    * An array of directory or file paths or a single path. If this

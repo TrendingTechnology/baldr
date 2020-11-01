@@ -38,7 +38,7 @@ function action(filePath, cmdObj) {
         filePath = media_manager_1.locationIndicator.getPresParentDir(filePath);
         filePath = path_1.default.resolve(path_1.default.join(filePath, 'Praesentation.baldr.yml'));
         console.log(filePath);
-        if (!fs_1.default.existsSync(filePath) || cmdObj.force) {
+        if (!fs_1.default.existsSync(filePath) || (cmdObj && cmdObj.force)) {
             console.log(`Presentation template created at: ${chalk_1.default.green(filePath)}`);
         }
         else {

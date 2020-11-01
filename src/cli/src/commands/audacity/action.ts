@@ -46,7 +46,7 @@ function action (filePath: string) {
       //  for example: 1.488171
       const startTime = Number(match[1])
       //  for example: 1.488171
-      let endTime = Number(match[2])
+      let endTime: number | undefined = Number(match[2])
       let title
       if (!match[3]) {
         title = String(counter)
@@ -58,22 +58,22 @@ function action (filePath: string) {
       const id = asciify(title.toLowerCase())
 
       if (startTime === endTime) {
-        endTime = null
+        endTime = undefined
       }
-      const sample = {
+      const sample: { [key: string]: any } = {
         id,
         title,
-        start_time: startTime
+        startTime: startTime
       }
-      if (endTime) sample['end_time'] = endTime
+      if (endTime) sample.endTime = endTime
       samples.push(sample)
     }
     counter += 1
   }
   for (const index in samples) {
     const sample = samples[index]
-    if (!sample.end_time && parseInt(index) < samples.length - 1) {
-      sample['end_time'] = samples[parseInt(index) + 1]['start_time']
+    if (!sample.endTime && parseInt(index) < samples.length - 1) {
+      sample.endTime = samples[parseInt(index) + 1].startTime
     }
   }
   const dest = `${filePath}.yml`

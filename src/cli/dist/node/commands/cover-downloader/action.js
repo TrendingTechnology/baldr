@@ -21,7 +21,7 @@ const core_node_1 = require("@bldr/core-node");
 /**
  * @param {String} filePath - The media asset file path.
  */
-function downloadCover(filePath, cmdObj) {
+function downloadCover(filePath) {
     return __awaiter(this, void 0, void 0, function* () {
         const yamlFile = `${filePath}.yml`;
         const metaData = media_manager_1.loadYaml(yamlFile);
@@ -39,12 +39,12 @@ function downloadCover(filePath, cmdObj) {
  * @param files - An array of input files, comes from the commanders’
  *   variadic parameter `[files...]`.
  */
-function action(files, cmdObj) {
+function action(files) {
     media_manager_1.walk({
         asset(relPath) {
             return __awaiter(this, void 0, void 0, function* () {
                 if (fs_1.default.existsSync(`${relPath}.yml`)) {
-                    yield downloadCover(relPath, cmdObj);
+                    yield downloadCover(relPath);
                 }
             });
         }

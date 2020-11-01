@@ -2,7 +2,7 @@
 import Color from 'color'
 
 // See @bldr/themes/default-vars.scss
-const colors = {
+const colors: { [key: string]: string } = {
   'white-light': '#fcfcfb',
   'yellow-light': '#f0d171',
   'orange-light': '#f3a058',

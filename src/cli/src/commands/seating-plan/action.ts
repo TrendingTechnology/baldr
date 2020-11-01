@@ -45,7 +45,7 @@ async function action (mdbFile: string): Promise<void> {
     writeFile('tmp.csv', result.stdout)
   }
 
-  const grades = {}
+  const grades: { [key: string]: any } = {}
 
   fs.createReadStream('tmp.csv')
     .pipe(csv())

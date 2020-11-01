@@ -5,7 +5,8 @@
     "allowJs": true,
     "target": "ES6",
     "esModuleInterop": true,
-    "lib": ["ES2020.String"]
+    "lib": ["ES2020.String"],
+    "strict": true
   },
   "include": ["./src/**/*"]
 }

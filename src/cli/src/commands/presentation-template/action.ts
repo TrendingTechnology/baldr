@@ -26,7 +26,7 @@ async function action (filePath?: string, cmdObj?: { [key: string]: any }) {
 
   filePath = path.resolve(path.join(filePath, 'Praesentation.baldr.yml'))
   console.log(filePath)
-  if (!fs.existsSync(filePath) || cmdObj.force) {
+  if (!fs.existsSync(filePath) || (cmdObj && cmdObj.force)) {
     console.log(`Presentation template created at: ${chalk.green(filePath)}`)
   } else {
     filePath = filePath.replace('.baldr.yml', '_tmp.baldr.yml')

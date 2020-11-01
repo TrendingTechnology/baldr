@@ -12,7 +12,7 @@ import { walk } from '@bldr/media-manager'
  *
  * @returns {String}
  */
-function renameByRegex (filePath: string, { pattern, replacement }): void {
+function renameByRegex (filePath: string, { pattern, replacement }: any): void {
   const newFilePath = filePath.replace(pattern, replacement)
   if (filePath !== newFilePath) {
     console.log(`\nRename:\n  old: ${chalk.yellow(filePath)} \n  new: ${chalk.green(newFilePath)}`)

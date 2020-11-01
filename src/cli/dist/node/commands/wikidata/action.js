@@ -45,7 +45,7 @@ function action(metaType, itemId, arg1, arg2, cmdObj) {
         }
         const dest = media_manager_1.metaTypes.formatFilePath(data);
         if (downloadWikicommons) {
-            if (!cmdObj.dryRun) {
+            if (!cmdObj.dryRun && data.mainImage) {
                 yield wikidata_1.default.fetchCommonsFile(data.mainImage, dest);
             }
             else {

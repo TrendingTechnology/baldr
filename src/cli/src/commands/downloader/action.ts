@@ -8,7 +8,7 @@ import { fetchFile } from '@bldr/core-node'
  * @param id - The ID of the destination file.
  * @param extension - The extension of the destination file.
  */
-async function action (url: string, id: string = null, extension: string = null) {
+async function action (url: string, id?: string, extension?: string) {
   if (!extension) {
     extension = url.substring(url.lastIndexOf('.') + 1)
   }
@@ -18,12 +18,13 @@ async function action (url: string, id: string = null, extension: string = null)
     id = id.replace(/\.\w+$/, '')
   }
 
-  let destFile = `${id}.${extension}`
+  const destFile = `${id}.${extension}`
 
   await fetchFile(url, destFile)
   // Make images smaller.
-  destFile = await operations.convertAsset(destFile)
-  await operations.initializeMetaYaml(destFile, { source: url })
+  const convertedDestFile = await operations.convertAsset(destFile)
+  if (convertedDestFile)
+    await operations.initializeMetaYaml(destFile, { source: url })
 }
 
 export = action

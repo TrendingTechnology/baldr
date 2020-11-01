@@ -11,7 +11,7 @@ import { walk } from '@bldr/media-manager'
 /**
  * @param filePath - The media file path.
  */
-function validateYamlOneFile (filePath: string) {
+function validateYamlOneFile (filePath: string): void {
   try {
     yaml.safeLoad(fs.readFileSync(filePath, 'utf8'))
     console.log(`${chalk.green('ok')}: ${chalk.yellow(filePath)}`)
@@ -24,13 +24,13 @@ function validateYamlOneFile (filePath: string) {
 /**
  * Validate YAML files.
  *
- * @param {String} files - The media file path.
+ * @param filePaths - The media file path.
  */
-function action (files) {
+function action (filePaths: string[]): void {
   walk(validateYamlOneFile, {
-    path: files,
+    path: filePaths,
     regex: 'yml'
   })
 }
 
-module.exports = action
+export = action

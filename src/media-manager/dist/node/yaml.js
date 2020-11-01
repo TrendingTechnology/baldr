@@ -65,7 +65,8 @@ function loadMetaDataYaml(filePath) {
 exports.loadMetaDataYaml = loadMetaDataYaml;
 /**
  * Convert some data (usually Javascript objets) into the YAML format
- * and write the string into a text file.
+ * and write the string into a text file. The property names are
+ * converted to `snake_case`.
  *
  * @param filePath - The file path of the destination yaml file. The yml
  *   extension has to be included.
@@ -81,12 +82,12 @@ function writeYamlFile(filePath, data) {
 }
 exports.writeYamlFile = writeYamlFile;
 /**
- * Write the metadata YAML file for a corresponding media file specified by
- * `filePath`.
+ * Write the metadata YAML file for a corresponding media file specified
+ * by `filePath`. The property names are converted to `snake_case`.
  *
- * @param filePath - The filePath gets asciified and a yml extension
- *   is appended.
- * @param metaData
+ * @param filePath - The filePath gets asciified and a yml extension is
+ *   appended.
+ * @param metaData - The metadata to store in the YAML file.
  * @param force - Always create the yaml file. Overwrite the old one.
  */
 function writeMetaDataYaml(filePath, metaData, force) {

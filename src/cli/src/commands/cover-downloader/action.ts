@@ -11,7 +11,7 @@ import { fetchFile } from '@bldr/core-node'
 /**
  * @param {String} filePath - The media asset file path.
  */
-async function downloadCover (filePath, cmdObj) {
+async function downloadCover (filePath: string): Promise<void> {
   const yamlFile = `${filePath}.yml`
   const metaData = loadYaml(yamlFile)
   console.log(metaData)
@@ -28,11 +28,11 @@ async function downloadCover (filePath, cmdObj) {
  * @param files - An array of input files, comes from the commanders’
  *   variadic parameter `[files...]`.
  */
-function action (files: string | string[], cmdObj: { [key: string]: any }) {
+function action (files: string | string[]): void {
   walk({
     async asset (relPath) {
       if (fs.existsSync(`${relPath}.yml`)) {
-        await downloadCover(relPath, cmdObj)
+        await downloadCover(relPath)
       }
     }
   }, {

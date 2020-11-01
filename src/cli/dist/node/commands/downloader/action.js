@@ -17,7 +17,7 @@ const core_node_1 = require("@bldr/core-node");
  * @param id - The ID of the destination file.
  * @param extension - The extension of the destination file.
  */
-function action(url, id = null, extension = null) {
+function action(url, id, extension) {
     return __awaiter(this, void 0, void 0, function* () {
         if (!extension) {
             extension = url.substring(url.lastIndexOf('.') + 1);
@@ -26,11 +26,12 @@ function action(url, id = null, extension = null) {
             id = url.substring(url.lastIndexOf('/') + 1);
             id = id.replace(/\.\w+$/, '');
         }
-        let destFile = `${id}.${extension}`;
+        const destFile = `${id}.${extension}`;
         yield core_node_1.fetchFile(url, destFile);
         // Make images smaller.
-        destFile = yield media_manager_1.operations.convertAsset(destFile);
-        yield media_manager_1.operations.initializeMetaYaml(destFile, { source: url });
+        const convertedDestFile = yield media_manager_1.operations.convertAsset(destFile);
+        if (convertedDestFile)
+            yield media_manager_1.operations.initializeMetaYaml(destFile, { source: url });
     });
 }
 module.exports = action;

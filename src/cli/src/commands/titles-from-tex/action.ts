@@ -16,7 +16,7 @@ function clean (text: string): string {
   return text
 }
 
-function convertTexToFolderTitles (filePath: string, cmdObj: { [key: string]: any }): void {
+function convertTexToFolderTitles (filePath: string, cmdObj: any): void {
   const content = readFile(filePath)
   const matchTitle = content.match(/ {2}titel = \{(.+?)\}[,\n]/s)
   const output = []

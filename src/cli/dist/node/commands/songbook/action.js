@@ -1,3 +1,4 @@
+"use strict";
 // Node packages.
 const fs = require('fs');
 const path = require('path');

@@ -192,8 +192,12 @@ function moveMp3(oldPath, newPath, cmdObj) {
         // Move mp3 into media.
         media_manager_1.moveAsset(oldPath, tmpMp3Path, { copy: true });
         // Convert into m4a.
-        newPath = yield media_manager_1.operations.convertAsset(tmpMp3Path);
-        let metaData = media_manager_1.readAssetYaml(newPath);
+        const convertedPath = yield media_manager_1.operations.convertAsset(tmpMp3Path);
+        if (!convertedPath)
+            throw new Error('Error converting asset.');
+        let metaData = media_manager_1.readAssetYaml(convertedPath);
+        if (!metaData)
+            throw new Error('Error reading asset yaml');
         metaData.metaType = 'composition';
         // Try to get the MusicBrainz recording ID.
         const musicbrainzRecordingId = getMbrainzRecordingId(tmpMp3Path);
@@ -222,6 +226,8 @@ function moveReference(oldPath, cmdObj) {
             return;
         yield media_manager_1.operations.initializeMetaYaml(newPath);
         const metaData = media_manager_1.readAssetYaml(newPath);
+        if (!metaData)
+            return;
         metaData.reference_title = 'Tonart: Musik erleben - reflektieren - interpretieren; Lehrwerk für die Oberstufe.';
         metaData.author = 'Wieland Schmid';
         metaData.publisher = 'Helbling';
@@ -268,6 +274,8 @@ function move(oldPath, cmdObj) {
         // Had to be an absolute path (to check if its an inactive/archived folder)
         oldPath = path_1.default.resolve(oldPath);
         const extension = core_browser_1.getExtension(oldPath);
+        if (!extension)
+            return;
         if (!media_manager_1.locationIndicator.isInArchive(oldPath)) {
             relocate(oldPath, extension, cmdObj);
         }

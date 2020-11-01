@@ -65,7 +65,7 @@ function relocate (oldPath: string, extension: string, cmdObj: { [key: string]: 
 /**
  * For images in the TeX file which appear multiple times in one file.
  */
-const resolvedTexImages = {}
+const resolvedTexImages: { [key: string]: string } = {}
 
 /**
  * Move images which are linked in a Tex file.
@@ -77,7 +77,7 @@ const resolvedTexImages = {}
  *
  * @returns for example: BD/John-Coltrane.jpg
  */
-function moveTexImage (oldPathTex: string, baseName: string, cmdObj: { [key: string]: any }): string {
+function moveTexImage (oldPathTex: string, baseName: string, cmdObj: { [key: string]: any }): string | undefined {
   if (resolvedTexImages[baseName]) return resolvedTexImages[baseName]
   // /archive/10/10_Jazz/30_Stile/50_Modern-Jazz/Material
   const imageFolder = path.join(path.dirname(oldPathTex), 'Material')
@@ -120,7 +120,7 @@ function moveTexImage (oldPathTex: string, baseName: string, cmdObj: { [key: str
  *   `/archive/10/10_Jazz/30_Stile/50_Modern-Jazz/Arbeitsblatt.tex`
  * @param {Object} cmdObj - See commander docs.
  */
-function moveTex (oldPath: string, newPath: string, cmdObj) {
+function moveTex (oldPath: string, newPath: string, cmdObj: any) {
   // /archive/10/10_Jazz/30_Stile/10_New-Orleans-Dixieland/Material/Texte.tex
   // /archive/10/10_Jazz/History-of-Jazz/Inhalt.tex
   if (locationIndicator.isInDeactivatedDir(oldPath)) return
@@ -164,7 +164,7 @@ function moveTex (oldPath: string, newPath: string, cmdObj) {
   }
 }
 
-function getMbrainzRecordingId (filePath: string): string {
+function getMbrainzRecordingId (filePath: string): string | undefined {
   const process = childProcess.spawnSync(
     '/usr/local/bin/musicbrainz-acoustid.py', [filePath], { encoding: 'utf-8' }
   )
@@ -196,9 +196,11 @@ async function moveMp3 (oldPath: string, newPath: string, cmdObj: { [key: string
   moveAsset(oldPath, tmpMp3Path, { copy: true })
 
   // Convert into m4a.
-  newPath = await operations.convertAsset(tmpMp3Path)
+  const convertedPath = await operations.convertAsset(tmpMp3Path)
+  if (!convertedPath) throw new Error('Error converting asset.')
 
-  let metaData = readAssetYaml(newPath)
+  let metaData = readAssetYaml(convertedPath)
+  if (!metaData) throw new Error('Error reading asset yaml')
   metaData.metaType = 'composition'
 
   // Try to get the MusicBrainz recording ID.
@@ -227,6 +229,7 @@ async function moveReference (oldPath: string, cmdObj: { [key: string]: any }) {
   if (cmdObj.dryRun) return
   await operations.initializeMetaYaml(newPath)
   const metaData = readAssetYaml(newPath)
+  if (!metaData) return
   metaData.reference_title = 'Tonart: Musik erleben - reflektieren - interpretieren; Lehrwerk für die Oberstufe.'
   metaData.author = 'Wieland Schmid'
   metaData.publisher = 'Helbling'
@@ -264,10 +267,11 @@ async function moveFromArchive (oldPath: string, extension: string, cmdObj: { [k
  *   `/archive/10/10_Jazz/30_Stile/50_Modern-Jazz/Arbeitsblatt.tex`
  * @param cmdObj - See commander docs.
  */
-async function move (oldPath: string, cmdObj: { [key: string]: any }): Promise<void> {
+async function move (oldPath: string, cmdObj: any): Promise<void> {
   // Had to be an absolute path (to check if its an inactive/archived folder)
   oldPath = path.resolve(oldPath)
   const extension = getExtension(oldPath)
+  if (!extension) return
   if (!locationIndicator.isInArchive(oldPath)) {
     relocate(oldPath, extension, cmdObj)
   } else {

@@ -45,16 +45,18 @@ function downloadIcon(url, name, newName) {
 function downloadIcons(iconMapping, urlTemplate) {
     return __awaiter(this, void 0, void 0, function* () {
         cmd.startProgress();
-        //console.log(`New download task using this template: ${chalk.red(urlTemplate)}`)
+        // console.log(`New download task using this template: ${chalk.red(urlTemplate)}`)
         const iconsCount = Object.keys(iconMapping).length;
         let count = 0;
         for (const icon in iconMapping) {
             const url = urlTemplate.replace('{icon}', icon);
-            //console.log(`Download icon “${chalk.blue(icon)}” from “${chalk.yellow(url)}”`)
-            let newName;
+            // console.log(`Download icon “${chalk.blue(icon)}” from “${chalk.yellow(url)}”`)
+            let newName = '';
             if (iconMapping[icon]) {
                 newName = iconMapping[icon];
             }
+            if (!newName)
+                throw new Error('Unkown icon name.');
             yield downloadIcon(url, icon, newName);
             count++;
             cmd.updateProgress(count / iconsCount, `download icon “${chalk_1.default.blue(icon)}”`);
@@ -79,7 +81,7 @@ function writeFileToDest(destFileName, content) {
 function convertIntoFontFiles(config) {
     console.log(config);
     webfont_1.default(config)
-        .then(result => {
+        .then((result) => {
         console.log(result);
         const css = [];
         const names = [];
@@ -103,7 +105,7 @@ function convertIntoFontFiles(config) {
         writeFileToDest('icons.json', JSON.stringify(names, null, '  '));
         return result;
     })
-        .catch(error => {
+        .catch((error) => {
         console.log(error);
         throw error;
     });
@@ -111,10 +113,10 @@ function convertIntoFontFiles(config) {
 function buildFont(options) {
     return __awaiter(this, void 0, void 0, function* () {
         for (const task of options) {
-            if ('urlTemplate' in task) {
+            if (task.urlTemplate) {
                 yield downloadIcons(task.iconMapping, task.urlTemplate);
             }
-            else if ('folder' in task) {
+            else if (task.folder) {
                 copyIcons(task.folder, tmpDir);
             }
         }

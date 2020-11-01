@@ -8,7 +8,7 @@ import chalk from 'chalk'
 // Project packages.
 import { walk } from '@bldr/media-manager'
 
-function buildOneFile (filePath) {
+function buildOneFile (filePath: string) {
   const process = childProcess.spawnSync(
     'lualatex', ['--halt-on-error', '--shell-escape', filePath],
     { cwd: path.dirname(filePath) }

@@ -2,7 +2,6 @@
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-Object.defineProperty(exports, "__esModule", { value: true });
 // Node packages.
 const fs_1 = __importDefault(require("fs"));
 // Third party packages.
@@ -26,11 +25,11 @@ function validateYamlOneFile(filePath) {
 /**
  * Validate YAML files.
  *
- * @param {String} files - The media file path.
+ * @param filePaths - The media file path.
  */
-function action(files) {
+function action(filePaths) {
     media_manager_1.walk(validateYamlOneFile, {
-        path: files,
+        path: filePaths,
         regex: 'yml'
     });
 }
