@@ -1,24 +1,26 @@
 // Third party packages.
-const fs = require('fs')
-const path = require('path')
-const childProcess = require('child_process')
+import fs from 'fs'
+import path from 'path'
+import childProcess from 'child_process'
 
 // Third party packages.
-const chalk = require('chalk')
+import chalk from 'chalk'
 
 // Project packages.
-const mediaServer = require('@bldr/media-server')
-const coreBrowser = require('@bldr/core-browser')
-const {
+import { getExtension } from '@bldr/core-browser'
+import {
   moveAsset,
   readFile,
   writeFile,
   writeYamlFile,
+  walk,
   readAssetYaml,
-  operations
-} = require('@bldr/media-manager')
-
-const locationIndicator = mediaServer.locationIndicator
+  operations,
+  idify,
+  metaTypes,
+  asciify,
+  locationIndicator
+} from '@bldr/media-manager'
 
 /**
  * Relocate a media asset inside the main media folder. Move some
@@ -27,7 +29,7 @@ const locationIndicator = mediaServer.locationIndicator
  * @param {String} oldPath
  * @param {String} extension
  */
-function relocate (oldPath, extension, cmdObj) {
+function relocate (oldPath: string, extension: string, cmdObj: { [key: string]: any }) {
   if (oldPath.match(new RegExp('^.*/[A-Z]{2,}/[^/]*$'))) {
     return
   }
@@ -68,14 +70,14 @@ const resolvedTexImages = {}
 /**
  * Move images which are linked in a Tex file.
  *
- * @param {String} oldPathTex - for example:
+ * @param oldPathTex - for example:
  *   `/media/10/10_Jazz/30_Stile/50_Modern-Jazz/Arbeitsblatt.tex`
- * @param {String} baseName - for example: `My-little-Annie-so-sweet`
- * @param {Object} cmdObj - See commander docs.
+ * @param baseName - for example: `My-little-Annie-so-sweet`
+ * @param cmdObj - See commander docs.
  *
- * @returns {String} - for example: BD/John-Coltrane.jpg
+ * @returns for example: BD/John-Coltrane.jpg
  */
-function moveTexImage (oldPathTex, baseName, cmdObj) {
+function moveTexImage (oldPathTex: string, baseName: string, cmdObj: { [key: string]: any }): string {
   if (resolvedTexImages[baseName]) return resolvedTexImages[baseName]
   // /archive/10/10_Jazz/30_Stile/50_Modern-Jazz/Material
   const imageFolder = path.join(path.dirname(oldPathTex), 'Material')
@@ -118,7 +120,7 @@ function moveTexImage (oldPathTex, baseName, cmdObj) {
  *   `/archive/10/10_Jazz/30_Stile/50_Modern-Jazz/Arbeitsblatt.tex`
  * @param {Object} cmdObj - See commander docs.
  */
-function moveTex (oldPath, newPath, cmdObj) {
+function moveTex (oldPath: string, newPath: string, cmdObj) {
   // /archive/10/10_Jazz/30_Stile/10_New-Orleans-Dixieland/Material/Texte.tex
   // /archive/10/10_Jazz/History-of-Jazz/Inhalt.tex
   if (locationIndicator.isInDeactivatedDir(oldPath)) return
@@ -162,7 +164,7 @@ function moveTex (oldPath, newPath, cmdObj) {
   }
 }
 
-function getMbrainzRecordingId (filePath) {
+function getMbrainzRecordingId (filePath: string): string {
   const process = childProcess.spawnSync(
     '/usr/local/bin/musicbrainz-acoustid.py', [filePath], { encoding: 'utf-8' }
   )
@@ -177,14 +179,14 @@ function getMbrainzRecordingId (filePath) {
   }
 }
 
-async function moveMp3 (oldPath, newPath, cmdObj) {
+async function moveMp3 (oldPath: string, newPath: string, cmdObj: { [key: string]: any }) {
   // Format dest file path.
   newPath = locationIndicator.moveIntoSubdir(newPath, 'HB')
-  newPath = mediaServer.asciify(newPath)
+  newPath = asciify(newPath)
   // a Earth, Wind & Fire - Shining Star.mp3
   let fileName = path.basename(newPath)
   fileName = fileName.replace(/\.mp3$/i, '')
-  fileName = mediaServer.helper.idify(fileName)
+  fileName = idify(fileName)
   fileName = `${fileName}.mp3`
   // a-Fletcher-Henderson_Aint-she-sweet.mp3
   fileName = fileName.replace(/^a-/, '')
@@ -206,14 +208,19 @@ async function moveMp3 (oldPath, newPath, cmdObj) {
   metaData.source = oldPath
   // To get ID prefix
   metaData.filePath = newPath
-  metaData = mediaServer.metaTypes.process(metaData)
+  metaData = metaTypes.process(metaData)
   writeYamlFile(`${newPath}.yml`, metaData)
 
   // Delete MP3.
   fs.unlinkSync(tmpMp3Path)
 }
 
-async function moveReference (oldPath, cmdObj) {
+/**
+ * @param oldPath - for example:
+ *   `/archive/10/10_Jazz/30_Stile/50_Modern-Jazz/Arbeitsblatt.tex`
+ * @param cmdObj - See commander docs.
+ */
+async function moveReference (oldPath: string, cmdObj: { [key: string]: any }) {
   let newPath = locationIndicator.getMirroredPath(oldPath)
   newPath = locationIndicator.moveIntoSubdir(newPath, 'QL')
   moveAsset(oldPath, newPath, cmdObj)
@@ -229,7 +236,13 @@ async function moveReference (oldPath, cmdObj) {
   writeYamlFile(`${newPath}.yml`, metaData)
 }
 
-async function moveFromArchive (oldPath, extension, cmdObj) {
+/**
+ * @param oldPath - for example:
+ *   `/archive/10/10_Jazz/30_Stile/50_Modern-Jazz/Arbeitsblatt.tex`
+ * @param extension - The extension of the file.
+ * @param cmdObj - See commander docs.
+ */
+async function moveFromArchive (oldPath: string, extension: string, cmdObj: { [key: string]: any }) {
   if (oldPath.indexOf('Tonart.pdf') > -1) {
     await moveReference(oldPath, cmdObj)
     return
@@ -247,14 +260,14 @@ async function moveFromArchive (oldPath, extension, cmdObj) {
 }
 
 /**
- * @param {String} oldPath - for example:
+ * @param oldPath - for example:
  *   `/archive/10/10_Jazz/30_Stile/50_Modern-Jazz/Arbeitsblatt.tex`
- * @param {Object} cmdObj - See commander docs.
+ * @param cmdObj - See commander docs.
  */
-async function move (oldPath, cmdObj) {
+async function move (oldPath: string, cmdObj: { [key: string]: any }): Promise<void> {
   // Had to be an absolute path (to check if its an inactive/archived folder)
   oldPath = path.resolve(oldPath)
-  const extension = coreBrowser.getExtension(oldPath)
+  const extension = getExtension(oldPath)
   if (!locationIndicator.isInArchive(oldPath)) {
     relocate(oldPath, extension, cmdObj)
   } else {
@@ -262,19 +275,27 @@ async function move (oldPath, cmdObj) {
   }
 }
 
-function action (files, cmdObj) {
-  const opts = {
-    path: files,
+/**
+ * Normalize the metadata files in the YAML format (sort, clean up).
+ *
+ * @param filePaths - An array of input files. This parameter comes from
+ *   the commanders’ variadic parameter `[files...]`.
+ * @param cmdObj - An object containing options as key-value pairs.
+ *  This parameter comes from `commander.Command.opts()`
+ */
+function action (filePaths: string[], cmdObj: { [key: string]: any }) {
+  const opts: { [key: string]: any } = {
+    path: filePaths,
     payload: cmdObj
   }
   if (cmdObj.extension) {
     opts.regex = cmdObj.extension
-    mediaServer.walk(move, opts)
+    walk(move, opts)
   } else if (cmdObj.regexp) {
     opts.regex = new RegExp(cmdObj.regexp)
-    mediaServer.walk(move, opts)
+    walk(move, opts)
   } else {
-    mediaServer.walk({
+    walk({
       everyFile (relPath) {
         move(relPath, {})
       }

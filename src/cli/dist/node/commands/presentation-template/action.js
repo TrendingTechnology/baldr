@@ -1,3 +1,4 @@
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -7,182 +8,44 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
 // Node packages.
-const fs = require('fs');
-const path = require('path');
+const fs_1 = __importDefault(require("fs"));
+const path_1 = __importDefault(require("path"));
 // Third party packages.
-const chalk = require('chalk');
+const chalk_1 = __importDefault(require("chalk"));
 // Project packages.
-const mediaServer = require('@bldr/media-server');
-const { convertTexToMd, removeTexComments, regBuilder, extractMatchAll } = require('@bldr/tex-markdown-converter');
-const { readFile, yamlToTxt, makeAsset } = require('@bldr/media-manager');
-function convertToOneLineMd(content) {
-    content = removeTexComments(content);
-    content = content.replace(/\n/g, ' ');
-    content = content.replace(/\s\s+/g, ' ');
-    content = content.trim();
-    // [\\person{Erasmus von Rotterdam}
-    content = content.replace(/^\[/, '');
-    content = content.replace(/\]$/, '');
-    return convertTexToMd(content);
-}
+const media_manager_1 = require("@bldr/media-manager");
 /**
- * @param {String} masterName
- * @param {Array|Object} data
- */
-function slidify(masterName, data, topLevelData) {
-    function slidifySingle(masterName, data) {
-        const slide = {};
-        slide[masterName] = data;
-        if (topLevelData)
-            Object.assign(slide, topLevelData);
-        return slide;
-    }
-    if (Array.isArray(data)) {
-        const result = [];
-        for (const item of data) {
-            result.push(slidifySingle(masterName, item));
-        }
-        return result;
-    }
-    else if (typeof data === 'object') {
-        return [slidifySingle(masterName, data)];
-    }
-}
-function objectifyTexZitat(content) {
-    const regexp = new RegExp(regBuilder.env('zitat', '\\*?' + regBuilder.captDotAll), 'g');
-    const matches = content.matchAll(regexp);
-    const data = [];
-    for (const match of matches) {
-        let text = match[1];
-        const regOpt = /^[^]+\]/;
-        let optional = text.match(regOpt);
-        if (optional) {
-            optional = optional[0];
-            text = text.replace(regOpt, '');
-        }
-        text = convertToOneLineMd(text);
-        const item = {
-            text
-        };
-        if (optional) {
-            // [\person{Bischof Bernardino Cirillo}][1549]
-            // [\person{Martin Luther}]
-            const segments = optional.split('][');
-            if (segments.length > 1) {
-                item.author = convertToOneLineMd(segments[0]);
-                item.date = convertToOneLineMd(segments[1]);
-            }
-            else {
-                item.author = convertToOneLineMd(segments[0]);
-            }
-        }
-        data.push(item);
-    }
-    return data;
-}
-function objectifyTexItemize(content) {
-    const regSection = regBuilder.cmd('(sub)?(sub)?section', '([^\\}]*?)');
-    const regItemize = regBuilder.env('(compactitem|itemize)');
-    const matches = [];
-    const exclude = ['itemize', 'compactitem', 'sub'];
-    for (const regex of [
-        regSection + regBuilder.whiteNewline + regSection + regBuilder.whiteNewline + regItemize,
-        regSection + regBuilder.whiteNewline + regItemize,
-        regItemize
-    ]) {
-        content = extractMatchAll(content, regex, matches, exclude);
-    }
-    const data = [];
-    for (const match of matches) {
-        const itemsText = match.pop();
-        const sections = match;
-        const item = {};
-        const items = [];
-        for (const itemText of itemsText.split('\\item')) {
-            const oneLine = convertToOneLineMd(itemText);
-            if (oneLine)
-                items.push(oneLine);
-        }
-        if (sections.length)
-            item.sections = sections;
-        item.items = items;
-        data.push(item);
-    }
-    return data;
-}
-/**
- * Create a Praesentation.baldr.yml file and insert all media assets in the
- * presentation.
- *
- * @param {String} filePath - The file path of the new created presentation
- *   template.
- */
-function presentationFromAssets(filePath) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const basePath = path.dirname(filePath);
-        let slides = [];
-        yield mediaServer.walk({
-            asset(relPath) {
-                const asset = makeAsset(relPath);
-                if (!asset.id) {
-                    console.log(`Asset has no ID: ${chalk.red(relPath)}`);
-                    return;
-                }
-                let masterName;
-                if (asset.id.indexOf('_LT') > -1) {
-                    masterName = 'cloze';
-                }
-                else if (asset.id.indexOf('NB') > -1) {
-                    masterName = 'score_sample';
-                }
-                else {
-                    masterName = asset.mediaCategory;
-                }
-                slides.push({
-                    [masterName]: `id:${asset.id}`
-                });
-            }
-        }, { path: basePath });
-        const notePath = path.join(basePath, 'Hefteintrag.tex');
-        if (fs.existsSync(notePath)) {
-            const noteContent = readFile(notePath);
-            slides = slides.concat(slidify('note', objectifyTexItemize(noteContent), { source: 'Hefteintrag.tex' }));
-        }
-        const worksheetPath = path.join(basePath, 'Arbeitsblatt.tex');
-        if (fs.existsSync(worksheetPath)) {
-            const worksheetContent = readFile(worksheetPath);
-            slides = slides.concat(slidify('quote', objectifyTexZitat(worksheetContent), { source: 'Arbeitsblatt.tex' }));
-        }
-        const result = yamlToTxt({
-            slides
-        });
-        console.log(result);
-        fs.writeFileSync(filePath, result);
-    });
-}
+ * @param filePath - A file path.
+ * @param cmdObj - An object containing options as key-value pairs.
+ *  This parameter comes from `commander.Command.opts()`
+*/
 function action(filePath, cmdObj) {
     return __awaiter(this, void 0, void 0, function* () {
         if (!filePath) {
             filePath = process.cwd();
         }
         else {
-            const stat = fs.statSync(filePath);
+            const stat = fs_1.default.statSync(filePath);
             if (!stat.isDirectory()) {
-                filePath = path.dirname(filePath);
+                filePath = path_1.default.dirname(filePath);
             }
         }
-        filePath = mediaServer.locationIndicator.getPresParentDir(filePath);
-        filePath = path.resolve(path.join(filePath, 'Praesentation.baldr.yml'));
+        filePath = media_manager_1.locationIndicator.getPresParentDir(filePath);
+        filePath = path_1.default.resolve(path_1.default.join(filePath, 'Praesentation.baldr.yml'));
         console.log(filePath);
-        if (!fs.existsSync(filePath) || cmdObj.force) {
-            console.log(`Presentation template created at: ${chalk.green(filePath)}`);
+        if (!fs_1.default.existsSync(filePath) || cmdObj.force) {
+            console.log(`Presentation template created at: ${chalk_1.default.green(filePath)}`);
         }
         else {
             filePath = filePath.replace('.baldr.yml', '_tmp.baldr.yml');
-            console.log(`Presentation already exists, create tmp file: ${chalk.red(filePath)}`);
+            console.log(`Presentation already exists, create tmp file: ${chalk_1.default.red(filePath)}`);
         }
-        yield presentationFromAssets(filePath);
+        yield media_manager_1.operations.generatePresentation(filePath);
     });
 }
 module.exports = action;

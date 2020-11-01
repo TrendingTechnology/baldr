@@ -3,28 +3,30 @@
 // https://github.com/Templarian/MaterialDesign-Font-Build/blob/master/bin/index.js
 
 // Node packages.
-const fs = require('fs')
-const path = require('path')
-const os = require('os')
+import fs from 'fs'
+import path from 'path'
+import os from 'os'
 
 // Third party packages.
-const chalk = require('chalk')
-const webfont = require('webfont').default
+import chalk from 'chalk'
+import webfont from 'webfont'
 
 // Project packages.
-const { CommandRunner } = require('@bldr/cli-utils')
-const config = require('@bldr/config')
+import { CommandRunner } from '@bldr/cli-utils'
+import config from '@bldr/config'
 
 const cmd = new CommandRunner()
 
-let tmpDir
+let tmpDir: string
 
-function basePath () {
+type IconMapping = { [key: string]: string }
+
+function basePath (...args: string[]): string {
   return path.join(config.localRepo, 'src', 'icons', 'src', ...arguments)
 }
 
-async function downloadIcon (url, name, newName) {
-  let destName
+async function downloadIcon (url: string, name: string, newName: string): Promise<void> {
+  let destName: string
   if (newName) {
     destName = newName
   } else {
@@ -35,7 +37,7 @@ async function downloadIcon (url, name, newName) {
   // console.log(`Download destination: ${chalk.green(destination)}`)
 }
 
-async function downloadIcons (iconMapping, urlTemplate) {
+async function downloadIcons (iconMapping: IconMapping, urlTemplate: string): Promise<void> {
   cmd.startProgress()
   //console.log(`New download task using this template: ${chalk.red(urlTemplate)}`)
   const iconsCount = Object.keys(iconMapping).length
@@ -54,10 +56,10 @@ async function downloadIcons (iconMapping, urlTemplate) {
   cmd.stopProgress()
 }
 
-function copyIcons (srcFolder, destFolder) {
+function copyIcons (srcFolder: string, destFolder: string): void {
   const icons = fs.readdirSync(srcFolder)
   for (const icon of icons) {
-    if (icons.includes('.svg') > -1) {
+    if (icons.includes('.svg')) {
       fs.copyFileSync(
         path.join(srcFolder, icon),
         path.join(destFolder, icon)
@@ -67,13 +69,21 @@ function copyIcons (srcFolder, destFolder) {
   }
 }
 
-function writeFileToDest (destFileName, content) {
+function writeFileToDest (destFileName: string, content: string): void {
   const destPath = basePath(destFileName)
   fs.writeFileSync(destPath, content)
   console.log(`Create file: ${chalk.cyan(destPath)}`)
 }
 
-function convertIntoFontFiles (config) {
+interface WebFontConfig {
+  files: string,
+  fontName: string,
+  formats: string[],
+  fontHeight: number,
+  descent: number
+}
+
+function convertIntoFontFiles (config: WebFontConfig): void {
   console.log(config)
   webfont(config)
     .then(result => {
@@ -108,7 +118,13 @@ function convertIntoFontFiles (config) {
     })
 }
 
-async function buildFont (options) {
+interface FontBuildOption {
+  iconMapping: IconMapping
+  folder?: string
+  urlTemplate?: string
+}
+
+async function buildFont (options: FontBuildOption[]): Promise<void> {
   for (const task of options) {
     if ('urlTemplate' in task) {
       await downloadIcons(task.iconMapping, task.urlTemplate)
@@ -125,7 +141,7 @@ async function buildFont (options) {
   })
 }
 
-function action () {
+function action (): void {
   tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), path.sep))
 
   console.log(`The SVG files of the icons are download to: ${chalk.yellow(tmpDir)}`)
@@ -207,4 +223,4 @@ function action () {
   ])
 }
 
-module.exports = action
+export = action

@@ -4,7 +4,8 @@
     "module": "CommonJS",
     "allowJs": true,
     "target": "ES6",
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "lib": ["ES2020.String"]
   },
   "include": ["./src/**/*"]
 }
