@@ -52,13 +52,6 @@
  * - `master`
  *
  *
- * ## Additional `props` keys:
- *
- * - `description`: String to describe the property
- * - `markup` (boolean): The specified value can contain markup. The value can
- *    be written in Markdown and or in HTML. is converted into HTML. The key
- *    `type` has to be `String`.
- *
  * ```js
  * export const default = {
  *   title: 'Bild',
@@ -83,78 +76,6 @@
  * # Hooks (exported master methods)
  *
  * The hooks are listed in call order:
- *
- * ## Called during the parsing the YAML file (`Praesentation.baldr.yml`):
- *
- * ### 4. `afterLoading({ props, master })`
- *
- * Goes into the background.
- *
- * - `this`: is the main Vue instance.
- * - `return`: void.
- *
- * ```js
- * export const default = {
- *   hooks {
- *     async afterLoading ({ props, master }) {
- *       const body = await getHtmlBody(props.title, props.language)
- *       master.$commit('addBody', { id: formatId(props.language, props.title), body: body })
- *     }
- *   }
- * }
- * ```
- *
- * ### 5. `afterMediaResolution({ props, master })`
- *
- * Blocks.
- *
- * - `this`: is the main Vue instance.
- * - `return`: void.
- *
- * ```js
- * export const default = {
- *   hooks {
- *     async afterMediaResolution ({ props, master }) {
- *     }
- *   }
- * }
- * ```
- *
- * ### 6. `collectPropsMain(props)`
- *
- * - `this`: is the main Vue instance.
- * - `return`: an object.
- *
- * ```js
- * export const default = {
- * }
- * ```
- *
- * ### 7. `collectPropsPreview({ props, propsMain, slide })`
- *
- * - `this`: is the main Vue instance.
- * - `return`: an object.
- *
- * ```js
- * export const default = {
- * }
- * ```
- *
- * ### 8. `calculateStepCount({ props, propsMain, propsPreview, slide, master })`
- *
- * - `this`: is the main Vue instance.
- * - `return`: a number or an array of slide steps.
- *
- * ```js
- * export const default = {
- *   hooks: {
- *     calculateStepCount ({ props, propsMain, propsPreview, slide }) {
- *       return props.src.length
- *     }
- *   }
- * }
- * ```
- *
  * ## Getter on the slide object:
  *
  * ### `titleFromProps({ props, propsMain, propsPreview })`

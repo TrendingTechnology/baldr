@@ -65,6 +65,95 @@ interface MasterHooks {
    */
   resolveOptionalMediaUris?: (props: StringObject) => string | string[]
 
+  /**
+   * Goes in the background.
+   *
+   * Called during the parsing the YAML file (`Praesentation.baldr.yml`)
+   *
+   * - `this`: is the main Vue instance.
+   * - `return`: void.
+   *
+   * ```js
+   * export const default = {
+   *   hooks {
+   *     async afterLoading ({ props, master }) {
+   *       const body = await getHtmlBody(props.title, props.language)
+   *       master.$commit('addBody', { id: formatId(props.language, props.title), body: body })
+   *     }
+   *   }
+   * }
+   * ```
+   */
+  afterLoading?: () => Promise<void>
+
+  /**
+   * Called during the parsing the YAML file (`Praesentation.baldr.yml`).
+   *
+   * Blocks
+   *
+   * - `this`: is the main Vue instance.
+   * - `return`: void.
+   *
+   * ```js
+   * export const default = {
+   *   hooks {
+   *     async afterMediaResolution ({ props, master }) {
+   *     }
+   *   }
+   * }
+   * ```
+   */
+  afterMediaResolution?: () => Promise<void>
+
+  /**
+   *
+   * ### 6. `collectPropsMain(props)`
+   *
+   * - `this`: is the main Vue instance.
+   * - `return`: an object.
+   *
+   * ```js
+   * export const default = {
+   * }
+   * ```
+   */
+  collectPropsMain?: ({ props, propsMain, slide }: StringObject) => StringObject
+
+  /**
+   * Called during the parsing the YAML file (`Praesentation.baldr.yml`).
+   *
+   * - `this`: is the main Vue instance.
+   * - `return`: an object.
+   *
+   * ```js
+   * export const default = {
+   *   hooks: {
+   *     collectPropsPreview({ props, propsMain, slide }) {
+   *       return props.src.length
+   *     }
+   *   }
+   * }
+   * ```
+   */
+  collectPropsPreview?: ({ props, propsMain, slide }: StringObject) => StringObject
+
+  /**
+   * Called during the parsing the YAML file (`Praesentation.baldr.yml`).
+   *
+   * - `this`: is the main Vue instance.
+   * - `return`: a number or an array of slide steps.
+   *
+   * ```js
+   * export const default = {
+   *   hooks: {
+   *     calculateStepCount ({ props, propsMain, propsPreview, slide }) {
+   *       return props.src.length
+   *     }
+   *   }
+   * }
+   * ```
+   */
+  calculateStepCount?: ({ props, propsMain, propsPreview, slide, master }: StringObject) => number
 }
 
 /**
