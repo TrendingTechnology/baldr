@@ -23,8 +23,8 @@ const yaml = require('js-yaml')
 
 // Project packages.
 const { AlphabeticalSongsTree, SongMetaDataCombined, CoreLibrary } = require('@bldr/songbook-core')
-const core = require('@bldr/core-node')
-const { formatMultiPartAssetFileName, camelToSnake, jsYamlConfig } = require('@bldr/core-browser')
+const { log } = require('@bldr/core-node')
+const { formatMultiPartAssetFileName, convertCamelToSnake, jsYamlConfig,  } = require('@bldr/core-browser')
 
 /**
  * See `/etc/baldr.json`.
@@ -1150,7 +1150,7 @@ class PianoScore {
     texMarkup = texMarkup.replace('//basepath//', basePath)
 
     // Write contents to the text file.
-    core.log(
+    log(
       'The TeX markup was written to: %s', // Do not change text: This will break tests.
       this.texFile.path // No color: This will break tests.
     )
@@ -1164,7 +1164,7 @@ class PianoScore {
     // Compile twice for the table of contents
     // The page numbers in the toc only matches after three runs.
     for (let index = 0; index < 3; index++) {
-      core.log(
+      log(
         'Compile the TeX file “%s” the %d time.',
         chalk.yellow(this.texFile.path),
         index + 1

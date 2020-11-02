@@ -1,6 +1,6 @@
 "use strict";
 /**
- * Low level classes and functions used by the node packages. Some helper
+ * Low level functions used by the node packages. Some helper
  * functions etc.
  *
  * @module @bldr/core-node
@@ -18,7 +18,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.fetchFile = exports.getPdfPageCount = exports.checkExecutables = exports.gitHead = exports.log = void 0;
+exports.writeFile = exports.readFile = exports.fetchFile = exports.getPdfPageCount = exports.checkExecutables = exports.gitHead = exports.log = void 0;
 // Node packages.
 const child_process_1 = __importDefault(require("child_process"));
 const fs_1 = __importDefault(require("fs"));
@@ -99,9 +99,26 @@ function fetchFile(url, dest) {
     });
 }
 exports.fetchFile = fetchFile;
-exports.default = {
-    checkExecutables,
-    getPdfPageCount,
-    gitHead,
-    log
-};
+/**
+ * Read the content of a text file in the `utf-8` format.
+ *
+ * A wrapper around `fs.readFileSync()`
+ *
+ * @param filePath - A path of a text file.
+ *
+ * @returns The content of the file in the `utf-8` format.
+ */
+function readFile(filePath) {
+    return fs_1.default.readFileSync(filePath, { encoding: 'utf-8' });
+}
+exports.readFile = readFile;
+/**
+ * Write some text content into a file.
+ *
+ * @param filePath - A path of a text file.
+ * @param content - Some text to write to a file.
+ */
+function writeFile(filePath, content) {
+    fs_1.default.writeFileSync(filePath, content);
+}
+exports.writeFile = writeFile;

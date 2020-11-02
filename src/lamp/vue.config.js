@@ -6,7 +6,7 @@ const path = require('path')
 const { DefinePlugin } = require('webpack')
 
 // Project packages
-const core = require('@bldr/core-node')
+const { gitHead } = require('@bldr/core-node')
 const { exportSassAsJson } = require('@bldr/themes')
 const packageJson = require('./package.json')
 const config = require('@bldr/config')
@@ -50,7 +50,7 @@ module.exports = {
         compilationTime: new Date().getTime(),
         config: JSON.stringify(config),
         defaultThemeSassVars: JSON.stringify(exportSassAsJson()),
-        gitHead: JSON.stringify(core.gitHead()),
+        gitHead: JSON.stringify(gitHead()),
         lampVersion: JSON.stringify(packageJson.version),
         rawYamlExamples: JSON.stringify(readExamples())
       })

@@ -1,5 +1,5 @@
 /**
- * Low level classes and functions used by the node packages. Some helper
+ * Low level functions used by the node packages. Some helper
  * functions etc.
  *
  * @module @bldr/core-node
@@ -19,15 +19,21 @@ import fetch from 'node-fetch'
 /**
  * Wrapper around `util.format()` and `console.log()`
  */
-export function log (format: string) {
+export function log (format: string): void {
   const args = Array.from(arguments).slice(1)
   console.log(util.format(format, ...args))
+}
+
+interface GitHead {
+  short: string
+  long: string
+  isDirty: boolean
 }
 
 /**
  * Generate a revision string in the form version-gitshort(-dirty)
  */
-export function gitHead (): object {
+export function gitHead (): GitHead {
   return {
     short: git.short(),
     long: git.long(),
@@ -41,7 +47,7 @@ export function gitHead (): object {
  * @param executables - An array of executables names or a
  *   a single executable as a string.
  */
-export function checkExecutables (executables: string | string[]) {
+export function checkExecutables (executables: string | string[]): void {
   if (!Array.isArray(executables)) executables = [executables]
   for (const executable of executables) {
     const process = childProcess.spawnSync('which', [executable], { shell: true })
@@ -86,9 +92,25 @@ export async function fetchFile (url: string, dest: string) {
   fs.writeFileSync(dest, Buffer.from(await response.arrayBuffer()))
 }
 
-export default {
-  checkExecutables,
-  getPdfPageCount,
-  gitHead,
-  log
+/**
+ * Read the content of a text file in the `utf-8` format.
+ *
+ * A wrapper around `fs.readFileSync()`
+ *
+ * @param filePath - A path of a text file.
+ *
+ * @returns The content of the file in the `utf-8` format.
+ */
+export function readFile(filePath: string): string {
+  return fs.readFileSync(filePath, { encoding: 'utf-8' })
+}
+
+/**
+ * Write some text content into a file.
+ *
+ * @param filePath - A path of a text file.
+ * @param content - Some text to write to a file.
+ */
+export function writeFile(filePath: string, content: string): void {
+  fs.writeFileSync(filePath, content)
 }

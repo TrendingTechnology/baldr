@@ -8,8 +8,8 @@ import {
   jsYamlConfig
 } from '@bldr/core-browser'
 import { AssetType } from '@bldr/type-definitions'
+import { readFile, writeFile } from '@bldr/core-node'
 
-import { readFile, writeFile } from './file'
 import { asciify, deasciify } from './helper'
 import { Asset } from './media-file-classes'
 import metaTypes from './meta-types'

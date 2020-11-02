@@ -6,7 +6,7 @@ const path = require('path')
 const chalk = require('chalk')
 
 // Project packages.
-const core = require('@bldr/core-node')
+const { log } = require('@bldr/core-node')
 const songbook = require('@bldr/songbook-intermediate-files')
 const config = require('@bldr/config')
 
@@ -36,7 +36,7 @@ function action (cmdObj) {
     cmdObj.pageTurnOptimized = false
   }
 
-  core.log(
+  log(
     'The base path of the song collection is located at:\n    %s\n',
     chalk.cyan(config.songbook.path)
   )
@@ -44,7 +44,7 @@ function action (cmdObj) {
   if (cmdObj.projectorPath) config.songbook.projectorPath = cmdObj.projectorPath
   if (config.songbook.projectorPath === 'none') config.songbook.projectorPath = null
   if (config.songbook.projectorPath) {
-    core.log(
+    log(
       'The folder where all projector related files are stored is:\n    %s\n',
       chalk.green(config.songbook.projectorPath)
     )
@@ -55,7 +55,7 @@ function action (cmdObj) {
   if (cmdObj.pianoPath) config.songbook.pianoPath = cmdObj.pianoPath
   if (config.songbook.pianoPath === 'none') config.songbook.pianoPath = null
   if (config.songbook.pianoPath) {
-    core.log(
+    log(
       'The folder where all piano related files are stored is:\n    %s\n',
       chalk.green(config.songbook.pianoPath)
     )
@@ -66,7 +66,7 @@ function action (cmdObj) {
     config.songbook.projectorPath,
     config.songbook.pianoPath
   )
-  core.log('Found %s songs.', library.countSongs())
+  log('Found %s songs.', library.countSongs())
   if (cmdObj.list) library.loadSongList(cmdObj.list)
 
   if (cmdObj.clean) {
@@ -93,7 +93,7 @@ function action (cmdObj) {
         projectorPath,
         JSON.stringify(library, null, '  ')
       )
-      core.log('Create JSON file: %s', chalk.yellow(projectorPath))
+      log('Create JSON file: %s', chalk.yellow(projectorPath))
     }
     songbook.buildVueApp()
   }

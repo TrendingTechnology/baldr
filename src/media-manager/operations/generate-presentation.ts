@@ -7,9 +7,10 @@ import chalk from 'chalk'
 
 // Project packages.
 import { objectifyTexItemize, objectifyTexZitat } from '@bldr/tex-markdown-converter'
+import { readFile, writeFile } from '@bldr/core-node'
+
 import { makeAsset } from '../media-file-classes'
 import { yamlToTxt } from '../yaml'
-import { readFile } from '../file'
 import { walk } from '../directory-tree-walk'
 
 type SlideData = { [key: string]: any }
@@ -86,5 +87,5 @@ export async function generatePresentation (filePath: string): Promise<void> {
     slides
   })
   console.log(result)
-  fs.writeFileSync(filePath, result)
+  writeFile(filePath, result)
 }

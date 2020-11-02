@@ -1,5 +1,5 @@
 /**
- * Low level classes and functions used by the node packages. Some helper
+ * Low level functions used by the node packages. Some helper
  * functions etc.
  *
  * @module @bldr/core-node
@@ -8,10 +8,15 @@
  * Wrapper around `util.format()` and `console.log()`
  */
 export declare function log(format: string): void;
+interface GitHead {
+    short: string;
+    long: string;
+    isDirty: boolean;
+}
 /**
  * Generate a revision string in the form version-gitshort(-dirty)
  */
-export declare function gitHead(): object;
+export declare function gitHead(): GitHead;
 /**
  * Check if some executables are installed. Throws an error if not.
  *
@@ -36,10 +41,21 @@ export declare function getPdfPageCount(filePath: string): number;
  *   automatically created.
  */
 export declare function fetchFile(url: string, dest: string): Promise<void>;
-declare const _default: {
-    checkExecutables: typeof checkExecutables;
-    getPdfPageCount: typeof getPdfPageCount;
-    gitHead: typeof gitHead;
-    log: typeof log;
-};
-export default _default;
+/**
+ * Read the content of a text file in the `utf-8` format.
+ *
+ * A wrapper around `fs.readFileSync()`
+ *
+ * @param filePath - A path of a text file.
+ *
+ * @returns The content of the file in the `utf-8` format.
+ */
+export declare function readFile(filePath: string): string;
+/**
+ * Write some text content into a file.
+ *
+ * @param filePath - A path of a text file.
+ * @param content - Some text to write to a file.
+ */
+export declare function writeFile(filePath: string, content: string): void;
+export {};

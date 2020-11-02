@@ -7,7 +7,7 @@ const CopyPlugin = require('copy-webpack-plugin')
 const { DefinePlugin } = require('webpack')
 
 // Project packages.
-const core = require('@bldr/core-node')
+const { gitHead } = require('@bldr/core-node')
 
 const config = require('@bldr/config')
 
@@ -42,7 +42,7 @@ module.exports = {
         // If the value is a string it will be used as a code fragment.
         compilationTime: new Date().getTime(),
         config: JSON.stringify(config),
-        gitHead: JSON.stringify(core.gitHead()),
+        gitHead: JSON.stringify(gitHead()),
         songsJson: JSON.stringify(require(path.join(config.songbook.projectorPath, 'songs.json')))
       })
     ]

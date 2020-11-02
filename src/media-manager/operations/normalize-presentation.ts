@@ -2,7 +2,7 @@ import { PresentationType } from '@bldr/type-definitions'
 
 import { DeepTitle } from '../titles'
 import { loadYaml, yamlToTxt } from '../yaml'
-import { readFile, writeFile } from '../file'
+import { readFile, writeFile } from '@bldr/core-node'
 
 /**
  * Remove unnecessary single quotes.
