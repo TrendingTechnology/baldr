@@ -47,7 +47,6 @@ exports.operations = {
     renameMediaAsset: rename_asset_1.renameMediaAsset
 };
 __exportStar(require("./directory-tree-walk"), exports);
-__exportStar(require("./file"), exports);
 __exportStar(require("./helper"), exports);
 __exportStar(require("./location-indicator"), exports);
 __exportStar(require("./media-file-classes"), exports);

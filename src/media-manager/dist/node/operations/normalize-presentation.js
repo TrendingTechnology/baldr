@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.normalizePresentationFile = void 0;
 const titles_1 = require("../titles");
 const yaml_1 = require("../yaml");
-const file_1 = require("../file");
+const core_node_1 = require("@bldr/core-node");
 /**
  * Remove unnecessary single quotes.
  *
@@ -43,7 +43,7 @@ function shortedMediaUris(rawYamlString, presentationId) {
  * @param filePath - A path of a text file.
  */
 function normalizePresentationFile(filePath) {
-    let textContent = file_1.readFile(filePath);
+    let textContent = core_node_1.readFile(filePath);
     const presentation = yaml_1.loadYaml(filePath);
     // Generate meta.
     const title = new titles_1.DeepTitle(filePath);
@@ -62,7 +62,7 @@ function normalizePresentationFile(filePath) {
     }
     // Remove single quotes.
     textContent = removeSingleQuotes(textContent);
-    file_1.writeFile(filePath, textContent);
+    core_node_1.writeFile(filePath, textContent);
     console.log(textContent);
 }
 exports.normalizePresentationFile = normalizePresentationFile;

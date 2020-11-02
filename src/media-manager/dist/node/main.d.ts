@@ -48,7 +48,6 @@ export declare const operations: {
     renameMediaAsset: typeof renameMediaAsset;
 };
 export * from './directory-tree-walk';
-export * from './file';
 export * from './helper';
 export * from './location-indicator';
 export * from './media-file-classes';
