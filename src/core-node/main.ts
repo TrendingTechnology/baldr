@@ -19,8 +19,7 @@ import fetch from 'node-fetch'
 /**
  * Wrapper around `util.format()` and `console.log()`
  */
-export function log (format: string): void {
-  const args = Array.from(arguments).slice(1)
+export function log (format: string, ...args: any): void {
   console.log(util.format(format, ...args))
 }
 

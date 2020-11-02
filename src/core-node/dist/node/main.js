@@ -31,8 +31,7 @@ const node_fetch_1 = __importDefault(require("node-fetch"));
 /**
  * Wrapper around `util.format()` and `console.log()`
  */
-function log(format) {
-    const args = Array.from(arguments).slice(1);
+function log(format, ...args) {
     console.log(util_1.default.format(format, ...args));
 }
 exports.log = log;

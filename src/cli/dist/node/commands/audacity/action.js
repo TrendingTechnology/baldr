@@ -59,23 +59,23 @@ function action(filePath) {
             title = title.trim();
             const id = media_manager_1.asciify(title.toLowerCase());
             if (startTime === endTime) {
-                endTime = null;
+                endTime = undefined;
             }
             const sample = {
                 id,
                 title,
-                start_time: startTime
+                startTime: startTime
             };
             if (endTime)
-                sample['end_time'] = endTime;
+                sample.endTime = endTime;
             samples.push(sample);
         }
         counter += 1;
     }
     for (const index in samples) {
         const sample = samples[index];
-        if (!sample.end_time && parseInt(index) < samples.length - 1) {
-            sample['end_time'] = samples[parseInt(index) + 1]['start_time'];
+        if (!sample.endTime && parseInt(index) < samples.length - 1) {
+            sample.endTime = samples[parseInt(index) + 1].startTime;
         }
     }
     const dest = `${filePath}.yml`;

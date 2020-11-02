@@ -1,16 +1,20 @@
 // Node packages.
-const fs = require('fs')
-const path = require('path')
+import fs from 'fs'
+import path from 'path'
 
 // Third party packages.
-const chalk = require('chalk')
+import chalk from 'chalk'
 
 // Project packages.
-const { log } = require('@bldr/core-node')
-const songbook = require('@bldr/songbook-intermediate-files')
-const config = require('@bldr/config')
+import { log } from '@bldr/core-node'
+import songbook from '@bldr/songbook-intermediate-files'
+import config from '@bldr/config'
 
-function action (cmdObj) {
+/**
+ * @param cmdObj - An object containing options as key-value pairs.
+ *  This parameter comes from `commander.Command.opts()`
+ */
+function action (cmdObj: { [key: string]: any }): void {
   if (cmdObj.folder) {
     cmdObj.force = true
   }
@@ -42,7 +46,7 @@ function action (cmdObj) {
   )
 
   if (cmdObj.projectorPath) config.songbook.projectorPath = cmdObj.projectorPath
-  if (config.songbook.projectorPath === 'none') config.songbook.projectorPath = null
+  if (config.songbook.projectorPath === 'none') config.songbook.projectorPath = ''
   if (config.songbook.projectorPath) {
     log(
       'The folder where all projector related files are stored is:\n    %s\n',
@@ -53,7 +57,7 @@ function action (cmdObj) {
   // Maybe bug in commander ?
   if (cmdObj.piapath) cmdObj.pianoPath = cmdObj.piapath
   if (cmdObj.pianoPath) config.songbook.pianoPath = cmdObj.pianoPath
-  if (config.songbook.pianoPath === 'none') config.songbook.pianoPath = null
+  if (config.songbook.pianoPath === 'none') config.songbook.pianoPath = ''
   if (config.songbook.pianoPath) {
     log(
       'The folder where all piano related files are stored is:\n    %s\n',
@@ -99,4 +103,4 @@ function action (cmdObj) {
   }
 }
 
-module.exports = action
+export = action

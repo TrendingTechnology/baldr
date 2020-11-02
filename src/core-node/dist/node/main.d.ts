@@ -7,7 +7,7 @@
 /**
  * Wrapper around `util.format()` and `console.log()`
  */
-export declare function log(format: string): void;
+export declare function log(format: string, ...args: any): void;
 interface GitHead {
     short: string;
     long: string;
