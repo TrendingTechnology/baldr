@@ -154,23 +154,222 @@ interface MasterHooks {
    * ```
    */
   calculateStepCount?: ({ props, propsMain, propsPreview, slide, master }: StringObject) => number
+
+  /**
+   * Getter on the slide object.
+   *
+   * ```js
+   * export const default = {
+   *   hooks: {
+   *     titleFromProps ({ props, propsMain }) {
+   *       if (props.title) return props.title
+   *       const asset = propsMain.mediaAsset
+   *       if (asset.title) return asset.title
+   *     }
+   *   }
+   * }
+   *  ```
+   */
+  titleFromProps?: ({ props, propsMain, propsPreview }: any) => string
+
+  /**
+   * Getter on the slide object.
+   *
+   * - `return`: a string
+   *
+   * ```js
+   * export const default = {
+   *   hooks: {
+   *     plainTextFromProps (props) {
+   *       const output = []
+   *       for (const markup of props.markup) {
+   *         output.push(convertHtmlToPlainText(markup))
+   *       }
+   *       return output.join(' | ')
+   *     }
+   *   }
+   * }
+   * ```
+   */
+  plainTextFromProps?: (props: StringObject) => string
+
+  /**
+   * Slide change.
+   *
+   * This hook is only called on the public master component (the one that is
+   * visible for the audience), not on further secondary master components (for
+   * example the ad hoc slides or the future slide view in the speakers view.)
+   *
+   * - `this`: is the Vue instance of the current main master component.
+   * - called from within the Vuex store in the file  `store.js`.
+   *
+   * ```js
+   * export const default = {
+   *   hooks: {
+   *     // Called when leaving a slide.
+   *     leaveSlide ({ oldSlide, oldProps, newSlide, newProps }) {
+   *     }
+   *   }
+   * }
+   *
+   * ```
+   */
+  leaveSlide?: ({ oldSlide, oldProps, newSlide, newProps }: any) => void
+
+  /**
+   * Slide change
+   *
+   * This hook is only called on the public master component (the one that is
+   * visible for the audience), not on further secondary master components (for
+   * example the ad hoc slides or the future slide view in the speakers view.)
+   *
+   * - `this`: is the Vue instance of the current main master component.
+   * - called from within the Vuex store in the file  `store.js`.
+   *
+   * ```js
+   * export const default = {
+   *   hooks: {
+   *     // Called when entering a slide.
+   *     enterSlide ({ oldSlide, oldProps, newSlide, newProps }) {
+   *     }
+   *   }
+   * }
+   * ```
+   */
+  enterSlide?: ({ oldSlide, oldProps, newSlide, newProps }: any) => void
+
+  /**
+   * Slide change
+   *
+   * - `this`: is the Vue instance of the current main master component.
+   * - called from the master component mixin in the file `masters.js`.
+   */
+  afterSlideNoChangeOnComponent?: ({ oldSlideNo, newSlideNo }: any) => void
+
+  /**
+   * Step change
+   *
+   * This hook is only called on the public master component (the one that is
+   * visible for the audience), not on further secondary master components (for
+   * example the ad hoc slides or the future slide view in the speakers view.)
+   *
+   * - `this`: is the Vue instance of the current main master component.
+   * - called from the Vuex action `setStepNoCurrent` in the file `store.js`.
+   *
+   * ```js
+   * export const default = {
+   *   hooks: {
+   *     // Called when leaving a step.
+   *     leaveStep ({ oldStepNo, newStepNo }) {
+   *     }
+   *   }
+   * }
+   * ```
+   */
+  leaveStep?: ({ oldStepNo, newStepNo }: any) => void
+
+  /**
+   * Step change
+   * ### 2. ``
+   *
+   * This hook is only called on the public master component (the one that is
+   * visible for the audience), not on further secondary master components (for
+   * example the ad hoc slides or the future slide view in the speakers view.)
+   *
+   * - `this`: is the Vue instance of the current main master component.
+   * - called from the Vuex action `setStepNoCurrent` in the file `store.js`.
+   *
+   * ```js
+   * export const default = {
+   *   hooks: {
+   *     // Called when entering a step.
+   *     enterStep ({ oldStepNo, newStepNo }) {
+   *       if (this.stepMode) {
+   *         this.domSteps.displayByNo({
+   *           oldStepNo,
+   *           stepNo: this.stepNo
+   *         })
+   *       }
+   *     }
+   *   }
+   * }
+   * ```
+   */
+  enterStep?: ({ oldStepNo, newStepNo }: any) => void
+
+  /**
+   * Step change
+   *
+   * - `this`: is the Vue instance of the current main master component.
+   * - called from the master component mixin in the file `masters.js`.
+   * - `return`: void
+   */
+  afterStepNoChangeOnComponent?: ({ oldStepNo, newStepNo, slideNoChange }: any) => void
+
 }
 
 /**
+ * An extended version of the Vue `props` defintion.
  * Additional `props` keys (in comparison to the Vue props)
+ *
+ * ```js
+ *  const props = {
+ *    src: {
+ *      default: 'id:Fuer-Elise'
+ *      description: 'Den URI zu einer Video-Datei.',
+ *      inlineMarkup: false
+ *      markup: false
+ *      assetUri: true,
+ *      required: true,
+ *      type: String,
+ *    }
+ *  }
+ * ```
  */
 interface MasterProp {
   /**
-   * Text to describe the property.
+   * A default value.
+   */
+  default?: 'id:Fuer-Elise'
+
+  /**
+   * Text to describe the property. A descriptive text shown in the
+   * documentation.
    */
   description?: string
 
   /**
+   * Indicates that this `prop` is text for extracting inline media URIs
+   * like `[id:Beethoven_Ludwig-van]`.
+   */
+  inlineMarkup?: boolean
+
+  /**
    * The specified value can contain markup. The value can be written in
-   * Markdown and or in HTML. is converted into HTML. The key `type` has
-   * to be `String`.
+   * Markdown and or in HTML. Markdown is converted into HTML. The key
+   * `type` has to be `String`.
    */
   markup?: boolean
+
+  /**
+   * Indicates that this `prop` contains a media file URI.
+   */
+  assetUri?: boolean
+
+  /**
+   * Must be specifed.
+   */
+  required?: boolean
+
+  /**
+   * The same as Vue `type`.
+   */
+  type?: object
+}
+
+interface MasterIconSpec {
+  name: string
+  color: string
 }
 
 interface MasterSpec {
@@ -178,6 +377,8 @@ interface MasterSpec {
    * The human readable title of the master slide.
    */
   title: string
+
+  icon: MasterIconSpec
 
   /**
    * The properties of the master slide.
