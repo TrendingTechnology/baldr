@@ -1,5 +1,4 @@
-
-module.exports = {
+export = {
   AB: 'Arbeitsblatt',
   BD: 'Bild',
   EP: 'Example',

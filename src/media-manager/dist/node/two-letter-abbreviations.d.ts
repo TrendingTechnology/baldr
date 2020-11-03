@@ -1,0 +1,21 @@
+declare const _default: {
+    AB: string;
+    BD: string;
+    EP: string;
+    FT: string;
+    GN: string;
+    GR: string;
+    HB: string;
+    IN: string;
+    LD: string;
+    LT: string;
+    NB: string;
+    PT: string;
+    PR: string;
+    QL: string;
+    SF: string;
+    TX: string;
+    VD: string;
+    YT: string;
+};
+export = _default;

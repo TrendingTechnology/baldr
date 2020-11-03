@@ -79,12 +79,8 @@ const { MediaCategoriesManager, convertPropertiesSnakeToCamel } = require('@bldr
 const registerSeatingPlan = require('./seating-plan.js').registerRestApi
 
 // Submodules.
-const metaTypes = require('./meta-types.js')
-const helper = require('./helper.js')
-const { HierarchicalFolderTitles, FolderTitleTree } = require('./titles.js')
 const { Database } = require('./database.js')
-
-const { asciify, deasciify } = helper
+const { walk, asciify, deasciify, metaTypes, TitleTree, DeepTitle, locationIndicator } = require('@bldr/media-manager')
 
 const packageJson = require('../package.json')
 
@@ -129,7 +125,7 @@ function stripTags (text) {
 
 /* Media objects **************************************************************/
 
-const folderTitleTree = new FolderTitleTree()
+const folderTitleTree = new TitleTree()
 
 const mediaCategoriesManager = new MediaCategoriesManager(config)
 
@@ -372,7 +368,7 @@ class Presentation extends MediaFile {
     const data = this.readYaml_(filePath)
     if (data) this.importProperties(data)
 
-    const folderTitles = new HierarchicalFolderTitles(filePath)
+    const folderTitles = new DeepTitle(filePath)
     folderTitleTree.add(folderTitles)
 
     if (typeof this.meta === 'undefined') this.meta = {}
@@ -453,41 +449,6 @@ class Presentation extends MediaFile {
   }
 }
 
-/* Checks *********************************************************************/
-
-/**
- * Check if the given file is a media asset.
- *
- * @param {String} filePath - The path of the file to check.
- *
- * @returns {Boolean}
- */
-function isAsset (filePath) {
-  if (
-    filePath.indexOf('eps-converted-to.pdf') > -1 || // eps converted into pdf by TeX
-    filePath.indexOf('_preview.jpg') > -1 || // Preview image
-    filePath.match(/_no\d+\./) // Multipart asset
-  ) {
-    return false
-  }
-  if (filePath.match(new RegExp('^.*/TX/.*.pdf$'))) return true
-  return mediaCategoriesManager.isAsset(filePath)
-}
-
-/**
- * Check if the given file is a presentation.
- *
- * @param {String} filePath - The path of the file to check.
- *
- * @returns {Boolean}
- */
-function isPresentation (filePath) {
-  if (filePath.indexOf('Praesentation.baldr.yml') > -1) {
-    return true
-  }
-  return false
-}
-
 /* Insert *********************************************************************/
 
 /**
@@ -513,105 +474,6 @@ async function insertObjectIntoDb (filePath, mediaType) {
     const msg = `${relPath}: [${error.name}] ${error.message}`
     console.log(msg)
     errors.push(msg)
-  }
-}
-
-/**
- * Execute a function on one file or walk trough all files matching a regex in
- * the current working directory or in the given directory path.
- *
- * @param {Function|Object} func - A single function or an object containing
- *   functions. Properties:
- *   - `presentation`: This function is called on each presentation.
- *   - `asset`: This function is called on each asset.
- *   - `all` (`presentation`, `asset`):  This function is called on all media
- *      types, at the moment on presentations and assets.
- *   - `everyFile`This function is called on every file.
- * @param {Object} opt
- * @property {Object} opt.payload - The function/s is/are called with with this
- *   object. Multiple arguments have to be bundled as a single object.
- * @property {(Array|String)} opt.path - An array of directory or file paths or
- *   a single path. If this property is not set, the current working directory
- *   is used.
- * @property {(String|Regex)} opt.regex - If this property is set, `func` have
- *   to be a single function. Each resolved file path must match this regular
- *   expression to execute the function. If you have specified a string, this
- *   string is converted into the regular expression `*.ext`.
- */
-async function walk (func, opt) {
-  // Some checks to exit early.
-  if (!func) {
-    throw new Error('Missing property: `func`.')
-  }
-  if (typeof opt !== 'object') opt = {}
-  if (typeof func === 'object' && opt.regex) {
-    throw new Error('Use a single function and a regex or an object containing functions without a regex.')
-  }
-
-  // commander [filepath...] -> without arguments is an empty array.
-  if (!opt.path || (Array.isArray(opt.path) && opt.path.length === 0)) {
-    opt.path = process.cwd()
-  }
-
-  // A list of file paths.
-  if (Array.isArray(opt.path)) {
-    for (const relPath of opt.path) {
-      await walk(func, { path: relPath, payload: opt.payload, regex: opt.regex })
-    }
-    return
-  }
-
-  // Rename action: Rename during walk, opt.path can change
-  if (!fs.existsSync(opt.path)) {
-    return
-  }
-
-  // A directory.
-  if (fs.statSync(opt.path).isDirectory()) {
-    if (func.directory) await func.directory(opt.path, opt.payload)
-    if (fs.existsSync(opt.path)) {
-      const files = fs.readdirSync(opt.path)
-      for (const fileName of files) {
-        // Exclude hidden files and directories like '.git'
-        if (fileName.charAt(0) !== '.') {
-          const relPath = path.join(opt.path, fileName)
-          await walk(func, { path: relPath, payload: opt.payload, regex: opt.regex })
-        }
-      }
-    }
-
-  // A single file.
-  } else {
-    // Exclude hidden files and directories like '.git'
-    if (path.basename(opt.path).charAt(0) === '.') return
-    if (!fs.existsSync(opt.path)) return
-    if (opt.regex) {
-      // If regex is a string it is treated as an extension.
-      if (typeof opt.regex === 'string') {
-        opt.regex = new RegExp('.*\.' + opt.regex + '$', 'i') // eslint-disable-line
-      }
-      if (!opt.path.match(opt.regex)) {
-        return
-      }
-    }
-
-    if (typeof func === 'function') {
-      await func(opt.path, opt.payload)
-      return
-    }
-    if (func.everyFile) {
-      await func.everyFile(opt.path, opt.payload)
-    }
-    const isPres = isPresentation(opt.path)
-    const isAss = isAsset(opt.path)
-    if ((isPres || isAss) && func.all) {
-      await func.all(opt.path, opt.payload)
-    }
-    if (isPres && func.presentation) {
-      await func.presentation(opt.path, opt.payload)
-    } else if (isAss && func.asset) {
-      await func.asset(opt.path, opt.payload)
-    }
   }
 }
 
@@ -812,208 +674,6 @@ function untildify (filePath) {
 }
 
 /**
- * Indicate where a file is located in the media folder structure.
- *
- * Merge the configurations entries of `config.mediaServer.basePath` and
- * `config.mediaServer.archivePaths`. Store only the accessible ones.
- */
-class LocationIndicator {
-  constructor () {
-    /**
-     *
-     */
-    this.main = config.mediaServer.basePath
-    const basePaths = [
-      config.mediaServer.basePath,
-      ...config.mediaServer.archivePaths
-    ]
-    /**
-     * @private
-     */
-    this.paths_ = []
-    for (let i = 0; i < basePaths.length; i++) {
-      basePaths[i] = path.resolve(untildify(basePaths[i]))
-      if (fs.existsSync(basePaths[i])) {
-        this.paths_.push(basePaths[i])
-      }
-    }
-  }
-
-  /**
-   * Check if the `currentPath` is inside a archive folder structure and
-   * not in den main media folder.
-   *
-   * @param {String} currentPath
-   *
-   * @returns {Boolean}
-   */
-  isInArchive (currentPath) {
-    if (path.resolve(currentPath).indexOf(this.main) > -1) {
-      return false
-    }
-    return true
-  }
-
-  /**
-   * Get the directory where a presentation file (Praesentation.baldr.yml) is
-   * located in (The first folder with a prefix like `10_`)
-   *
-   * `/baldr/media/10/10_Jazz/30_Stile/20_Swing/Material/Duke-Ellington.jpg` ->
-   * `/baldr/media/10/10_Jazz/30_Stile/20_Swing`
-   *
-   * @param {String} currentPath
-   *
-   * @returns {String}
-   */
-  getPresParentDir (currentPath) {
-    // /Duke-Ellington.jpg
-    // /Material
-    const regexp = new RegExp(path.sep + '([^' + path.sep + ']+)$')
-    let match
-    do {
-      let isPrefixed
-      match = currentPath.match(regexp)
-      if (match && match.length > 1) {
-        // Return only directories not files like
-        // ...HB/Orchester/05_Promenade.mp3
-        if (
-          // 20_Swing -> true
-          // Material -> false
-          match[1].match(/\d\d_.*/g) &&
-          fs.statSync(currentPath).isDirectory()
-        ) {
-          isPrefixed = true
-        }
-        if (!isPrefixed) {
-          currentPath = currentPath.replace(regexp, '')
-        }
-      }
-      if (isPrefixed) {
-        match = false
-      }
-    } while (match)
-
-    return currentPath
-  }
-
-  /**
-   * Move a file path into a directory relative to the current
-   * presentation directory.
-   *
-   * `/baldr/media/10/10_Jazz/30_Stile/20_Swing/NB/Duke-Ellington.jpg` `BD` ->
-   * `/baldr/media/10/10_Jazz/30_Stile/20_Swing/BD/Duke-Ellington.jpg`
-   *
-   * @param {String} currentPath - The current path.
-   * @param {String} subDir - A relative path.
-   *
-   * @returns {String}
-   */
-  moveIntoSubdir (currentPath, subDir) {
-    const fileName = path.basename(currentPath)
-    const presPath = this.getPresParentDir(currentPath)
-    return path.join(presPath, subDir, fileName)
-  }
-
-  /**
-   * A deactivaed directory is a directory which has no direct counter part in
-   * the main media folder, which is not mirrored. It is a real archived folder
-   * in the archive folder. Activated folders have a prefix like `10_`
-   *
-   * true:
-   *
-   * - `/archive/10/10_Jazz/30_Stile/10_New-Orleans-Dixieland/Material/Texte.tex`
-   * - `/archive/10/10_Jazz/History-of-Jazz/Inhalt.tex`
-   * - `/archive/12/20_Tradition/30_Volksmusik/Bartok/10_Tanzsuite/Gliederung.tex`
-   *
-   * false:
-   *
-   * `/archive/10/10_Jazz/20_Vorformen/10_Worksongs-Spirtuals/Arbeitsblatt.tex`
-   */
-  isInDeactivatedDir (currentPath) {
-    currentPath = path.dirname(currentPath)
-    const relPath = this.getRelPath(currentPath)
-    const segments = relPath.split(path.sep)
-    for (const segment of segments) {
-      if (!segment.match(/^\d\d/)) {
-        return true
-      }
-    }
-    return false
-  }
-
-  /**
-   * @returns {Array} - An array of directory paths in this order: First the
-   *   main base path of the media server, then one ore more archive directory
-   *   paths. The paths are checked for existence and resolved (untildified).
-   */
-  get () {
-    return this.paths_
-  }
-
-  /**
-   * Get the path relative to one of the base paths and `currentPath`.
-   *
-   * @param {String} currentPath - The path of a file or a directory inside
-   *   a media server folder structure or inside its archive folders.
-   *
-   * @returns {String}
-   */
-  getRelPath (currentPath) {
-    currentPath = path.resolve(currentPath)
-    let relPath
-    for (const basePath of this.paths_) {
-      if (currentPath.indexOf(basePath) === 0) {
-        relPath = currentPath.replace(basePath, '')
-        break
-      }
-    }
-    if (relPath) return relPath.replace(new RegExp(`^${path.sep}`), '')
-  }
-
-  /**
-   * Get the path relative to one of the base paths and `currentPath`.
-   *
-   * @param {String} currentPath - The path of a file or a directory inside
-   *   a media server folder structure or inside its archive folders.
-   *
-   * @returns {String}
-   */
-  getBasePath (currentPath) {
-    currentPath = path.resolve(currentPath)
-    let basePath
-    for (const bPath of this.paths_) {
-      if (currentPath.indexOf(bPath) === 0) {
-        basePath = bPath
-        break
-      }
-    }
-    if (basePath) return basePath.replace(new RegExp(`${path.sep}$`), '')
-  }
-
-  /**
-   *
-   * @param {String} currentPath - The path of a file or a directory inside
-   *   a media server folder structure or inside its archive folders.
-   *
-   * @returns {String}
-   */
-  getMirroredPath (currentPath) {
-    const basePath = this.getBasePath(currentPath)
-    const relPath = this.getRelPath(currentPath)
-    let mirroredBasePath
-    for (const bPath of this.paths_) {
-      if (basePath !== bPath) {
-        mirroredBasePath = bPath
-        break
-      }
-    }
-    if (mirroredBasePath && relPath) return path.join(mirroredBasePath, relPath)
-  }
-}
-
-const locationIndicator = new LocationIndicator()
-
-/**
  * Open a file path using the linux command `xdg-open`.
  *
  * @param {String} currentPath
@@ -1047,7 +707,6 @@ function openFolder (currentPath, create) {
  */
 function openFolderWithArchives (currentPath, create) {
   const result = {}
-  const locationIndicator = new LocationIndicator()
   const relPath = locationIndicator.getRelPath(currentPath)
   for (const basePath of locationIndicator.get()) {
     if (relPath) {
@@ -1083,8 +742,6 @@ function mirrorFolderStructure (currentPath) {
     })
     return filelist
   }
-
-  const locationIndicator = new LocationIndicator()
 
   const currentBasePath = locationIndicator.getBasePath(currentPath)
 
@@ -1464,18 +1121,14 @@ module.exports = {
   Asset,
   mediaCategoriesManager,
   deasciify,
-  FolderTitleTree,
+  TitleTree,
   getExtension,
-  helper,
   helpMessages,
-  HierarchicalFolderTitles,
-  locationIndicator,
-  LocationIndicator,
+  DeepTitle,
   metaTypes,
   mirrorFolderStructure,
   openFolderWithArchives,
   openWith,
   registerMediaRestApi,
-  walk,
   runRestApi
 }

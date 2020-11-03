@@ -22,7 +22,8 @@ core-node
 tex-markdown-converter
 wikidata
 cli-utils
-media-manager"
+media-manager
+media-server"
 
 for DIR in $DIRS; do
   DIR="$HOME/git-repositories/github/Josef-Friedrich/baldr/src/$DIR"

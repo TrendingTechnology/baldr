@@ -12,11 +12,12 @@
     "type": "git",
     "url": "git+https://github.com/Josef-Friedrich/baldr.git"
   },
-  "main": "src/main.js",
+  "main": "dist/node/main.js",
   "dependencies": {
     "@bldr/core-browser": "^0.11.3",
     "@bldr/core-node": "^0.2.2",
     "@bldr/config": "^0.1.0",
+    "@bldr/media-manager": "^0.1.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "js-yaml": "^3.14.0",
@@ -24,6 +25,13 @@
     "saslprep": "^1.0.3",
     "transliteration": "^2.1.11",
     "uuid": "^8.3.0"
+  },
+  "devDependencies": {
+    "@types/node": "^12.12.2"
+  },
+  "scripts": {
+    "build": "npm run build:node",
+    "build:node": "tsc --module commonjs --outDir dist/node"
   },
   "publishConfig": {
     "access": "public"

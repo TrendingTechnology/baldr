@@ -2,17 +2,20 @@
  * @module @bldr/media-server/database
  */
 
-const mongodb = require('mongodb')
+import mongodb from 'mongodb'
 
-/**
- * The configuration object from `/etc/baldr.json`
- */
-const config = require('@bldr/config')
+import config from '@bldr/config'
 
 /**
  * A wrapper around MongoDB.
  */
 class Database {
+  schema: object
+
+  private mongoClient: mongodb.MongoClient
+
+  db: mongodb.Db
+
   constructor () {
     const conf = config.databases.mongodb
     const user = encodeURIComponent(conf.user)
@@ -56,37 +59,27 @@ class Database {
       }
     }
 
-    /**
-     * @type {mongodb.MongoClient}
-     * @private
-     */
-    this.mongoClient_ = new mongodb.MongoClient(
+    this.mongoClient = new mongodb.MongoClient(
       url,
       { useNewUrlParser: true, useUnifiedTopology: true }
     )
 
-    /**
-     * @type {mongodb.Db}
-     */
     this.db = null
   }
 
-  /**
-   * @return {Promise}
-   */
-  async connect () {
+  async connect (): Promise<void> {
     if (!this.db) {
-      await this.mongoClient_.connect()
-      this.db = this.mongoClient_.db(config.databases.mongodb.dbName)
+      await this.mongoClient.connect()
+      this.db = this.mongoClient.db(config.databases.mongodb.dbName)
     }
   }
 
   /**
    * List all collection names in an array.
    *
-   * @returns {Promise.<Array>} An array of collection names.
+   * @returns An array of collection names.
    */
-  async listCollectionNames () {
+  async listCollectionNames (): Promise<string[]> {
     const collections = await this.db.listCollections().toArray()
     const names = []
     for (const collection of collections) {
@@ -97,10 +90,8 @@ class Database {
 
   /**
    * Create the collections with indexes.
-   *
-   * @returns {Promise.<Object>}
    */
-  async initialize () {
+  async initialize (): Promise<{ [key: string]: any }> {
     const collectionNames = await this.listCollectionNames()
 
     // https://stackoverflow.com/a/35868933
@@ -131,10 +122,8 @@ class Database {
   /**
    * Drop all collections except collection which defined drop: false in
    * this.schema
-   *
-   * @returns {Promise.<Object>}
    */
-  async drop () {
+  async drop (): Promise<{ [key: string]: any }> {
     const droppedCollections = []
     for (const collectionName in this.schema) {
       if (this.schema[collectionName].drop === true) {
@@ -149,10 +138,8 @@ class Database {
 
   /**
    * Reinitialize the MongoDB database (Drop all collections and initialize).
-   *
-   * @returns {Promise.<Object>}
    */
-  async reInitialize () {
+  async reInitialize (): Promise<{ [key: string]: any }>  {
     const resultdropDb = await this.drop()
     const resultInitializeDb = await this.initialize()
     return {
@@ -163,10 +150,8 @@ class Database {
 
   /**
    * Delete all media files (assets, presentations) from the database.
-   *
-   * @returns {Promise.<Object>}
    */
-  async flushMediaFiles () {
+  async flushMediaFiles (): Promise<{ [key: string]: any }>  {
     const countDroppedAssets = await this.assets.countDocuments()
     const countDroppedPresentations = await this.presentations.countDocuments()
     await this.assets.deleteMany({})
