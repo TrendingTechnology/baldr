@@ -1,22 +1,17 @@
+"use strict";
 /**
  * A REST API to save states of the seating plan app.
  * @module @bldr/api-seating-plan
  */
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.registerRestApi = void 0;
 // Third party packages.
-var express = require('express');
-// Project packages.
-var packageJson = require('../package.json');
-/**
- * @param {module:@bldr/media-server/database.Database} database
- */
+var express_1 = __importDefault(require("express"));
 function registerRestApi(database) {
-    var app = express();
-    app.get('/version', function (req, res) {
-        res.status(200).send({
-            name: packageJson.name,
-            version: packageJson.version
-        });
-    });
+    var app = express_1.default();
     app.post('/save-state', function (req, res) {
         var body = req.body;
         if (!{}.hasOwnProperty.call(body, 'timeStampMsec')) {
@@ -83,6 +78,4 @@ function registerRestApi(database) {
     });
     return app;
 }
-module.exports = {
-    registerRestApi: registerRestApi
-};
+exports.registerRestApi = registerRestApi;

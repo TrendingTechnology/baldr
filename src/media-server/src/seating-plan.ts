@@ -5,23 +5,12 @@
  */
 
 // Third party packages.
-const express = require('express')
+import express, { Express } from 'express'
 
-// Project packages.
-const packageJson = require('../package.json')
+import { Database } from './database'
 
-/**
- * @param {module:@bldr/media-server/database.Database} database
- */
-function registerRestApi (database) {
+export function registerRestApi (database: Database): Express {
   const app = express()
-
-  app.get('/version', (req, res) => {
-    res.status(200).send({
-      name: packageJson.name,
-      version: packageJson.version
-    })
-  })
 
   app.post('/save-state', (req, res) => {
     const body = req.body
@@ -93,8 +82,4 @@ function registerRestApi (database) {
   })
 
   return app
-}
-
-module.exports = {
-  registerRestApi
 }

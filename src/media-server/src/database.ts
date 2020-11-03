@@ -9,7 +9,7 @@ import config from '@bldr/config'
 /**
  * A wrapper around MongoDB.
  */
-class Database {
+export class Database {
   schema: object
 
   private mongoClient: mongodb.MongoClient
@@ -180,8 +180,4 @@ class Database {
   get seatingPlan () {
     return this.db.collection('seatingPlan')
   }
-}
-
-module.exports = {
-  Database
 }

@@ -27,7 +27,9 @@
     "uuid": "^8.3.0"
   },
   "devDependencies": {
-    "@types/node": "^12.12.2"
+    "@types/node": "^12.12.2",
+    "@types/express": "^4.17.8",
+    "@types/mongodb": "^3.1.31"
   },
   "scripts": {
     "build": "npm run build:node",

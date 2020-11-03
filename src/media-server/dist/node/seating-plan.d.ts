@@ -1,4 +1,7 @@
 /**
- * @param {module:@bldr/media-server/database.Database} database
+ * A REST API to save states of the seating plan app.
+ * @module @bldr/api-seating-plan
  */
-export function registerRestApi(database: any): any;
+import { Express } from 'express';
+import { Database } from './database';
+export declare function registerRestApi(database: Database): Express;

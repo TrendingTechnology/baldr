@@ -122,9 +122,8 @@ var config = require('@bldr/config');
 var _a = require('@bldr/core-browser'), MediaCategoriesManager = _a.MediaCategoriesManager, convertPropertiesSnakeToCamel = _a.convertPropertiesSnakeToCamel;
 var registerSeatingPlan = require('./seating-plan.js').registerRestApi;
 // Submodules.
-var helper = require('./helper.js');
 var Database = require('./database.js').Database;
-var _b = require('@bldr/media-manager'), walk = _b.walk, asciify = _b.asciify, deasciify = _b.deasciify, metaTypes = _b.metaTypes, TitleTree = _b.TitleTree, DeepTitle = _b.DeepTitle;
+var _b = require('@bldr/media-manager'), walk = _b.walk, asciify = _b.asciify, deasciify = _b.deasciify, metaTypes = _b.metaTypes, TitleTree = _b.TitleTree, DeepTitle = _b.DeepTitle, locationIndicator = _b.locationIndicator;
 var packageJson = require('../package.json');
 /**
  * Base path of the media server file store.
@@ -472,38 +471,6 @@ var Presentation = /** @class */ (function (_super) {
     };
     return Presentation;
 }(MediaFile));
-/* Checks *********************************************************************/
-/**
- * Check if the given file is a media asset.
- *
- * @param {String} filePath - The path of the file to check.
- *
- * @returns {Boolean}
- */
-function isAsset(filePath) {
-    if (filePath.indexOf('eps-converted-to.pdf') > -1 || // eps converted into pdf by TeX
-        filePath.indexOf('_preview.jpg') > -1 || // Preview image
-        filePath.match(/_no\d+\./) // Multipart asset
-    ) {
-        return false;
-    }
-    if (filePath.match(new RegExp('^.*/TX/.*.pdf$')))
-        return true;
-    return mediaCategoriesManager.isAsset(filePath);
-}
-/**
- * Check if the given file is a presentation.
- *
- * @param {String} filePath - The path of the file to check.
- *
- * @returns {Boolean}
- */
-function isPresentation(filePath) {
-    if (filePath.indexOf('Praesentation.baldr.yml') > -1) {
-        return true;
-    }
-    return false;
-}
 /* Insert *********************************************************************/
 /**
  * @param {String} filePath
@@ -816,7 +783,6 @@ function openFolder(currentPath, create) {
  */
 function openFolderWithArchives(currentPath, create) {
     var result = {};
-    var locationIndicator = new LocationIndicator();
     var relPath = locationIndicator.getRelPath(currentPath);
     for (var _i = 0, _a = locationIndicator.get(); _i < _a.length; _i++) {
         var basePath_1 = _a[_i];
@@ -853,7 +819,6 @@ function mirrorFolderStructure(currentPath) {
         });
         return filelist;
     }
-    var locationIndicator = new LocationIndicator();
     var currentBasePath = locationIndicator.getBasePath(currentPath);
     var mirrorBasePath;
     for (var _i = 0, _a = locationIndicator.get(); _i < _a.length; _i++) {
@@ -1353,7 +1318,6 @@ module.exports = {
     deasciify: deasciify,
     TitleTree: TitleTree,
     getExtension: getExtension,
-    helper: helper,
     helpMessages: helpMessages,
     DeepTitle: DeepTitle,
     metaTypes: metaTypes,

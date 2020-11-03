@@ -1,5 +1,5 @@
 #! /usr/bin/env node
-export const asciify: any;
+export const asciify: typeof import("@bldr/media-manager").asciify;
 /**
  * This class is used both for the entries in the MongoDB database as well for
  * the queries.
@@ -34,8 +34,8 @@ export class Asset extends MediaFile {
     multiPartCount: number;
 }
 export const mediaCategoriesManager: import("@bldr/core-browser").MediaCategoriesManager;
-export const deasciify: any;
-export const TitleTree: any;
+export const deasciify: typeof import("@bldr/media-manager").deasciify;
+export const TitleTree: typeof import("@bldr/media-manager").TitleTree;
 /**
  * Get the extension from a file path.
  *
@@ -44,11 +44,6 @@ export const TitleTree: any;
  * @returns {String}
  */
 export function getExtension(filePath: string): string;
-export const helper: {
-    asciify: (input: string) => string;
-    idify: (input: string) => string;
-    deasciify: (input: string) => string;
-};
 /**
  * This object hold jsons for displaying help messages in the browser on
  * some entry point urls.
@@ -58,8 +53,30 @@ export const helper: {
  * @type {Object}
  */
 export const helpMessages: any;
-export const DeepTitle: any;
-export const metaTypes: any;
+export const DeepTitle: typeof import("@bldr/media-manager").DeepTitle;
+export const metaTypes: {
+    detectTypeByPath: (filePath: string) => string;
+    formatFilePath: (data: import("../../config/node_modules/@bldr/type-definitions/dist/node/asset.js").AssetType.FileFormat, oldPath?: string) => string;
+    process: (data: import("../../config/node_modules/@bldr/type-definitions/dist/node/asset.js").AssetType.Generic) => import("../../config/node_modules/@bldr/type-definitions/dist/node/asset.js").AssetType.Generic;
+    typeSpecs: {
+        cloze: import("../../config/node_modules/@bldr/type-definitions/dist/node/meta-spec.js").MetaSpec.Type;
+        composition: import("../../config/node_modules/@bldr/type-definitions/dist/node/meta-spec.js").MetaSpec.Type;
+        cover: import("../../config/node_modules/@bldr/type-definitions/dist/node/meta-spec.js").MetaSpec.Type;
+        group: import("../../config/node_modules/@bldr/type-definitions/dist/node/meta-spec.js").MetaSpec.Type;
+        instrument: import("../../config/node_modules/@bldr/type-definitions/dist/node/meta-spec.js").MetaSpec.Type;
+        person: import("../../config/node_modules/@bldr/type-definitions/dist/node/meta-spec.js").MetaSpec.Type;
+        photo: import("../../config/node_modules/@bldr/type-definitions/dist/node/meta-spec.js").MetaSpec.Type;
+        radio: import("../../config/node_modules/@bldr/type-definitions/dist/node/meta-spec.js").MetaSpec.Type;
+        recording: import("../../config/node_modules/@bldr/type-definitions/dist/node/meta-spec.js").MetaSpec.Type;
+        reference: import("../../config/node_modules/@bldr/type-definitions/dist/node/meta-spec.js").MetaSpec.Type;
+        score: import("../../config/node_modules/@bldr/type-definitions/dist/node/meta-spec.js").MetaSpec.Type;
+        song: import("../../config/node_modules/@bldr/type-definitions/dist/node/meta-spec.js").MetaSpec.Type;
+        worksheet: import("../../config/node_modules/@bldr/type-definitions/dist/node/meta-spec.js").MetaSpec.Type;
+        youtube: import("../../config/node_modules/@bldr/type-definitions/dist/node/meta-spec.js").MetaSpec.Type;
+        general: import("../../config/node_modules/@bldr/type-definitions/dist/node/meta-spec.js").MetaSpec.Type;
+    };
+    mergeTypeNames: (...typeName: string[]) => string;
+};
 /**
  * Mirror the folder structure of the media folder into the archive folder or
  * vice versa. Only folders with two prefixed numbers followed by an
@@ -108,13 +125,13 @@ export function openWith(executable: string, filePath: string): void;
 /**
  * Register the express js rest api in a giant function.
  */
-export function registerMediaRestApi(): any;
+export function registerMediaRestApi(): import("express-serve-static-core").Express;
 /**
  * Run the REST API. Listen to a TCP port.
  *
  * @param {Number} port - A TCP port.
  */
-export function runRestApi(port: number): Promise<any>;
+export function runRestApi(port: number): Promise<import("express-serve-static-core").Express>;
 /**
  * Base class to be extended.
  */
@@ -203,7 +220,7 @@ declare class MediaFile {
      * Generate `id` and `title` if this properties are not present.
      */
     prepareForInsert(): MediaFile;
-    id: any;
-    title: any;
+    id: string;
+    title: string;
 }
 export {};
