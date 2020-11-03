@@ -399,9 +399,9 @@ interface SubTree {
 export class TitleTree {
   private subTree: SubTree
   deepTitle: DeepTitle
-  constructor (folderTitle: DeepTitle) {
+  constructor (deepTitle: DeepTitle) {
     this.subTree = {}
-    this.deepTitle = folderTitle
+    this.deepTitle = deepTitle
   }
 
   /**

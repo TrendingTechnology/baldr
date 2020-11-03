@@ -6,17 +6,16 @@ import path from 'path'
 // Project packages.
 import config from '@bldr/config'
 import { locationIndicator } from '@bldr/media-manager'
+import type { StringIndexedObject } from '@bldr/type-definitions'
 
 import { database } from './main'
 
 /**
  * Throw an error if the media type is unkown. Provide a default value.
  *
- * @param {String} mediaType - At the moment `assets` and `presentation`
- *
- * @return {String}
+ * @param mediaType - At the moment `assets` and `presentation`
  */
-function validateMediaType (mediaType) {
+export function validateMediaType (mediaType: string): string {
   const mediaTypes = ['assets', 'presentations']
   if (!mediaType) return 'assets'
   if (!mediaTypes.includes(mediaType)) {
@@ -30,12 +29,10 @@ function validateMediaType (mediaType) {
  * Resolve a ID from a given media type (`assets`, `presentations`) to a
  * absolute path.
  *
- * @param {String} id - The id of the media type.
- * @param {String} mediaType - At the moment `assets` and `presentation`
- *
- * @return {Promise.<String>}
+ * @param id - The id of the media type.
+ * @param mediaType - At the moment `assets` and `presentation`
  */
-async function getAbsPathFromId (id, mediaType = 'presentations') {
+async function getAbsPathFromId (id: string, mediaType: string = 'presentations'): Promise<string> {
   mediaType = validateMediaType(mediaType)
   const result = await database.db.collection(mediaType).find({ id: id }).next()
   if (!result) throw new Error(`Can not find media file with the type “${mediaType}” and the id “${id}”.`)
@@ -51,12 +48,12 @@ async function getAbsPathFromId (id, mediaType = 'presentations') {
 /**
  * Open a file path using the linux command `xdg-open`.
  *
- * @param {String} currentPath
- * @param {Boolean} create - Create the directory structure of
+ * @param currentPath
+ * @param create - Create the directory structure of
  *   the given `currentPath` in a recursive manner.
  */
-function openFolder (currentPath, create) {
-  const result = {}
+function openFolder (currentPath: string, create: boolean): StringIndexedObject {
+  const result: StringIndexedObject = {}
   if (create && !fs.existsSync(currentPath)) {
     fs.mkdirSync(currentPath, { recursive: true })
     result.create = true
@@ -80,7 +77,7 @@ function openFolder (currentPath, create) {
  * @param {Boolean} create - Create the directory structure of
  *   the given `currentPath` in a recursive manner.
  */
-function openFolderWithArchives (currentPath, create) {
+function openFolderWithArchives (currentPath: string, create: boolean): StringIndexedObject {
   const result = {}
   const relPath = locationIndicator.getRelPath(currentPath)
   for (const basePath of locationIndicator.get()) {
@@ -104,7 +101,7 @@ function openFolderWithArchives (currentPath, create) {
  *
  * @returns {Object} - Status informations of the action.
  */
-function mirrorFolderStructure (currentPath: string) {
+function mirrorFolderStructure (currentPath: string): StringIndexedObject {
   function walkSync (dir: string, filelist?: string[]): string[] {
     const files = fs.readdirSync(dir)
     filelist = filelist || []
@@ -181,7 +178,7 @@ function mirrorFolderStructure (currentPath: string) {
  * @see node module on npmjs.org “open”
  * @see {@link https://unix.stackexchange.com/a/537848}
  */
-function openWith (executable: string, filePath: string) {
+function openWith (executable: string, filePath: string): void {
   // See node module on npmjs.org “open”
   const subprocess = childProcess.spawn(executable, [filePath], {
     stdio: 'ignore',
@@ -197,7 +194,7 @@ function openWith (executable: string, filePath: string) {
  * @param id - The id of the media type.
  * @param mediaType - At the moment `assets` and `presentation`
  */
-async function openEditor (id: string, mediaType: string) {
+export async function openEditor (id: string, mediaType: string): Promise<StringIndexedObject> {
   const absPath = await getAbsPathFromId(id, mediaType)
   const parentFolder = path.dirname(absPath)
   const editor = config.mediaServer.editor
@@ -227,11 +224,11 @@ async function openEditor (id: string, mediaType: string) {
  * @param create - Create the directory structure of
  *   the relative path in the archive in a recursive manner.
  */
-async function openParentFolder (id: string, mediaType: string, archive: boolean, create: boolean) {
+export async function openParentFolder (id: string, mediaType: string, archive: boolean, create: boolean): Promise<StringIndexedObject> {
   const absPath = await getAbsPathFromId(id, mediaType)
   const parentFolder = path.dirname(absPath)
 
-  let result
+  let result: StringIndexedObject
   if (archive) {
     result = openFolderWithArchives(parentFolder, create)
   } else {

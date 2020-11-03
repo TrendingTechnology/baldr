@@ -75,11 +75,13 @@ import yaml from 'js-yaml'
 // Project packages.
 import config from '@bldr/config'
 import { MediaCategoriesManager, convertPropertiesSnakeToCamel } from '@bldr/core-browser'
-import { walk, asciify, deasciify, metaTypes, TitleTree, DeepTitle, locationIndicator } from '@bldr/media-manager'
+import { walk, asciify, deasciify, TitleTree, DeepTitle } from '@bldr/media-manager'
+import type { StringIndexedObject } from '@bldr/type-definitions'
 
 // Submodules.
 import { Database } from './database.js'
 import { registerSeatingPlan } from './seating-plan'
+import { openParentFolder, openEditor, validateMediaType } from './operations'
 
 import packageJson from '../package.json'
 
@@ -124,7 +126,7 @@ function stripTags (text) {
 
 /* Media objects **************************************************************/
 
-const folderTitleTree = new TitleTree()
+const folderTitleTree = new TitleTree(new DeepTitle(config.mediaServer.basePath))
 
 const mediaCategoriesManager = new MediaCategoriesManager(config)
 
@@ -132,6 +134,15 @@ const mediaCategoriesManager = new MediaCategoriesManager(config)
  * Base class to be extended.
  */
 class MediaFile {
+  absPath_: string
+  path: string
+  filename: string
+  size?: number
+  timeModified?: number
+  extension?: string
+  basename_?: string
+  id: string
+  title: string
   constructor (filePath) {
     /**
      * Absolute path ot the file.
@@ -267,6 +278,10 @@ class MediaFile {
  * the queries.
  */
 class Asset extends MediaFile {
+  infoFile_: string
+  previewImage: boolean
+  assetType: string
+  multiPartCount: number
   /**
    * @param {string} filePath - The file path of the media file.
    */
@@ -362,6 +377,11 @@ class Asset extends MediaFile {
  * properties are in `camelCase`.
  */
 class Presentation extends MediaFile {
+  meta: StringIndexedObject
+  title: string
+  titleSubtitle: string
+  allTitlesSubtitle: string
+  id: string
   constructor (filePath) {
     super(filePath)
     const data = this.readYaml_(filePath)
@@ -566,7 +586,7 @@ async function update (full = false) {
  *
  * @type {Object}
  */
-const helpMessages = {
+const helpMessages: StringIndexedObject = {
   navigation: {
     get: {
       'folder-title-tree': 'Get the folder title tree as a hierarchical json object.'
@@ -681,7 +701,7 @@ function registerMediaRestApi () {
       }
 
       // field
-      if (!('field' in query)) query.field = 'id'
+      let field: string = !query.field ? 'id' : <string> query.field
 
       // result
       if (!('result' in query)) query.result = 'fullObjects'
@@ -694,8 +714,8 @@ function registerMediaRestApi () {
       let find
       // exactMatch
       if (query.method === 'exactMatch') {
-        const findObject = {}
-        findObject[query.field] = query.search
+        const findObject: StringIndexedObject = {}
+        findObject[field] = query.search
         find = collection.find(findObject, { projection: { _id: 0 } })
         result = await find.next()
       // substringSearch
@@ -703,7 +723,7 @@ function registerMediaRestApi () {
         // https://stackoverflow.com/a/38427476/10193818
         const regex = new RegExp(escapeRegex(query.search), 'gi')
         const $match = {}
-        $match[query.field] = regex
+        $match[field] = regex
         let $project
         if (query.result === 'fullObjects') {
           $project = {
@@ -837,7 +857,7 @@ async function runRestApi (port) {
   app.use('/seating-plan', registerSeatingPlan(database))
   app.use('/media', registerMediaRestApi())
 
-  const helpMessages = {
+  const helpMessages: StringIndexedObject = {
     version: {
       name: packageJson.name,
       version: packageJson.version

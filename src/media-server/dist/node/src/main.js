@@ -162,7 +162,7 @@ function stripTags(text) {
     return text.replace(/<[^>]+>/g, '');
 }
 /* Media objects **************************************************************/
-var folderTitleTree = new media_manager_1.TitleTree();
+var folderTitleTree = new media_manager_1.TitleTree(new media_manager_1.DeepTitle(config_1.default.mediaServer.basePath));
 var mediaCategoriesManager = new core_browser_1.MediaCategoriesManager(config_1.default);
 /**
  * Base class to be extended.

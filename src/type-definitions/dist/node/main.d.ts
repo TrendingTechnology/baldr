@@ -9,3 +9,9 @@ export * from './config';
 export * from './meta-spec';
 export * from './presentation';
 export * from './titles';
+export declare type StringIndexedObject = {
+    [key: string]: any;
+};
+export declare type StringIndexedStringObject = {
+    [key: string]: string;
+};

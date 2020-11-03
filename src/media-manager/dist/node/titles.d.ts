@@ -265,7 +265,7 @@ interface SubTree {
 export declare class TitleTree {
     private subTree;
     deepTitle: DeepTitle;
-    constructor(folderTitle: DeepTitle);
+    constructor(deepTitle: DeepTitle);
     /**
      * Add one folder title to the tree.
      *

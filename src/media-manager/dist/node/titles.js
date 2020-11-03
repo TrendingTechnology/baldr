@@ -306,9 +306,9 @@ exports.DeepTitle = DeepTitle;
  * ```
  */
 class TitleTree {
-    constructor(folderTitle) {
+    constructor(deepTitle) {
         this.subTree = {};
-        this.deepTitle = folderTitle;
+        this.deepTitle = deepTitle;
     }
     /**
      * Add one folder title to the tree.
