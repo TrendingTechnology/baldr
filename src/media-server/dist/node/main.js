@@ -1,4 +1,5 @@
 #! /usr/bin/env node
+"use strict";
 /**
  * The REST API and command line interface of the BALDR media server.
  *
@@ -108,35 +109,36 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.database = void 0;
 // Node packages.
-var childProcess = require('child_process');
-var fs = require('fs');
-var path = require('path');
-var os = require('os');
+var child_process_1 = __importDefault(require("child_process"));
+var fs_1 = __importDefault(require("fs"));
+var path_1 = __importDefault(require("path"));
+var os_1 = __importDefault(require("os"));
 // Third party packages.
-var cors = require('cors');
-var express = require('express');
-var yaml = require('js-yaml');
+var cors_1 = __importDefault(require("cors"));
+var express_1 = __importDefault(require("express"));
+var js_yaml_1 = __importDefault(require("js-yaml"));
 // Project packages.
-var config = require('@bldr/config');
-var _a = require('@bldr/core-browser'), MediaCategoriesManager = _a.MediaCategoriesManager, convertPropertiesSnakeToCamel = _a.convertPropertiesSnakeToCamel;
-var registerSeatingPlan = require('./seating-plan.js').registerRestApi;
+var config_1 = __importDefault(require("@bldr/config"));
+var core_browser_1 = require("@bldr/core-browser");
+var media_manager_1 = require("@bldr/media-manager");
 // Submodules.
-var Database = require('./database.js').Database;
-var _b = require('@bldr/media-manager'), walk = _b.walk, asciify = _b.asciify, deasciify = _b.deasciify, metaTypes = _b.metaTypes, TitleTree = _b.TitleTree, DeepTitle = _b.DeepTitle, locationIndicator = _b.locationIndicator;
-var packageJson = require('../package.json');
+var database_js_1 = require("./database.js");
+var seating_plan_1 = require("./seating-plan");
+var package_json_1 = __importDefault(require("../package.json"));
 /**
  * Base path of the media server file store.
  */
-var basePath = config.mediaServer.basePath;
+var basePath = config_1.default.mediaServer.basePath;
 /**
  * A container array for all error messages send out via the REST API.
  */
 var errors = [];
-/**
- * @type {module:@bldr/media-server/database.Database}
- */
-var database;
 /* Helper functions ***********************************************************/
 /**
  * Get the extension from a file path.
@@ -146,7 +148,7 @@ var database;
  * @returns {String}
  */
 function getExtension(filePath) {
-    return path.extname(filePath).replace('.', '');
+    return path_1.default.extname(filePath).replace('.', '');
 }
 /**
  * Strip HTML tags from a string.
@@ -159,8 +161,8 @@ function stripTags(text) {
     return text.replace(/<[^>]+>/g, '');
 }
 /* Media objects **************************************************************/
-var folderTitleTree = new TitleTree();
-var mediaCategoriesManager = new MediaCategoriesManager(config);
+var folderTitleTree = new media_manager_1.TitleTree();
+var mediaCategoriesManager = new core_browser_1.MediaCategoriesManager(config_1.default);
 /**
  * Base class to be extended.
  */
@@ -171,7 +173,7 @@ var MediaFile = /** @class */ (function () {
          * @type {string}
          * @access protected
          */
-        this.absPath_ = path.resolve(filePath);
+        this.absPath_ = path_1.default.resolve(filePath);
         /**
          * Relative path ot the file.
          * @type {string}
@@ -181,13 +183,13 @@ var MediaFile = /** @class */ (function () {
          * The basename (filename) of the file.
          * @type {string}
          */
-        this.filename = path.basename(filePath);
+        this.filename = path_1.default.basename(filePath);
     }
     /**
      * @access protected
      */
     MediaFile.prototype.addFileInfos_ = function () {
-        var stats = fs.statSync(this.absPath_);
+        var stats = fs_1.default.statSync(this.absPath_);
         /**
          * The file size in bytes.
          * @type {number}
@@ -209,7 +211,7 @@ var MediaFile = /** @class */ (function () {
          * @type {string}
          * @private
          */
-        this.basename_ = path.basename(this.absPath_, "." + this.extension);
+        this.basename_ = path_1.default.basename(this.absPath_, "." + this.extension);
         return this;
     };
     /**
@@ -231,8 +233,8 @@ var MediaFile = /** @class */ (function () {
      * @access protected
      */
     MediaFile.prototype.readYaml_ = function (filePath) {
-        if (fs.existsSync(filePath)) {
-            return yaml.safeLoad(fs.readFileSync(filePath, 'utf8'));
+        if (fs_1.default.existsSync(filePath)) {
+            return js_yaml_1.default.safeLoad(fs_1.default.readFileSync(filePath, 'utf8'));
         }
         return {};
     };
@@ -263,7 +265,7 @@ var MediaFile = /** @class */ (function () {
      */
     MediaFile.prototype.importProperties = function (properties) {
         if (typeof properties === 'object') {
-            properties = convertPropertiesSnakeToCamel(properties);
+            properties = core_browser_1.convertPropertiesSnakeToCamel(properties);
             for (var property in properties) {
                 this[property] = properties[property];
             }
@@ -276,9 +278,9 @@ var MediaFile = /** @class */ (function () {
     MediaFile.prototype.prepareForInsert = function () {
         this.addFileInfos();
         if (!this.id)
-            this.id = asciify(this.basename_);
+            this.id = media_manager_1.asciify(this.basename_);
         if (!this.title)
-            this.title = deasciify(this.id);
+            this.title = media_manager_1.deasciify(this.id);
         this.cleanTmpProperties();
         return this;
     };
@@ -317,7 +319,7 @@ var Asset = /** @class */ (function (_super) {
         this.addFileInfos_();
         var previewImage = this.absPath_ + "_preview.jpg";
         this.assetType = mediaCategoriesManager.extensionToType(this.extension);
-        if (fs.existsSync(previewImage)) {
+        if (fs_1.default.existsSync(previewImage)) {
             this.previewImage = true;
         }
         this.detectMultiparts_();
@@ -366,7 +368,7 @@ var Asset = /** @class */ (function (_super) {
             return fileName;
         };
         var count = 2;
-        while (fs.existsSync(nextAssetFileName(count)) || fs.existsSync(nextAssetFileNameOld(count))) {
+        while (fs_1.default.existsSync(nextAssetFileName(count)) || fs_1.default.existsSync(nextAssetFileNameOld(count))) {
             count += 1;
         }
         count -= 1; // The counter is increased before the file system check.
@@ -392,7 +394,7 @@ var Presentation = /** @class */ (function (_super) {
         var data = _this.readYaml_(filePath);
         if (data)
             _this.importProperties(data);
-        var folderTitles = new DeepTitle(filePath);
+        var folderTitles = new media_manager_1.DeepTitle(filePath);
         folderTitleTree.add(folderTitles);
         if (typeof _this.meta === 'undefined')
             _this.meta = {};
@@ -488,19 +490,19 @@ function insertObjectIntoDb(filePath, mediaType) {
                     }
                     else if (mediaType === 'assets') {
                         // Now only with meta data yml. Fix problems with PDF lying around.
-                        if (!fs.existsSync(filePath + ".yml"))
+                        if (!fs_1.default.existsSync(filePath + ".yml"))
                             return [2 /*return*/];
                         object = new Asset(filePath);
                     }
                     object = object.prepareForInsert();
-                    return [4 /*yield*/, database.db.collection(mediaType).insertOne(object)];
+                    return [4 /*yield*/, exports.database.db.collection(mediaType).insertOne(object)];
                 case 1:
                     _a.sent();
                     return [3 /*break*/, 3];
                 case 2:
                     error_1 = _a.sent();
                     console.log(error_1);
-                    relPath = filePath.replace(config.mediaServer.basePath, '');
+                    relPath = filePath.replace(config_1.default.mediaServer.basePath, '');
                     relPath = relPath.replace(new RegExp('^/'), '');
                     msg = relPath + ": [" + error_1.name + "] " + error_1.message;
                     console.log(msg);
@@ -515,7 +517,7 @@ function insertObjectIntoDb(filePath, mediaType) {
  * Run git pull on the `basePath`
  */
 function gitPull() {
-    var gitPull = childProcess.spawnSync('git', ['pull'], {
+    var gitPull = child_process_1.default.spawnSync('git', ['pull'], {
         cwd: basePath,
         encoding: 'utf-8'
     });
@@ -539,39 +541,39 @@ function update(full) {
                 case 0:
                     if (full)
                         gitPull();
-                    gitRevParse = childProcess.spawnSync('git', ['rev-parse', 'HEAD'], {
+                    gitRevParse = child_process_1.default.spawnSync('git', ['rev-parse', 'HEAD'], {
                         cwd: basePath,
                         encoding: 'utf-8'
                     });
                     lastCommitId = gitRevParse.stdout.replace(/\n$/, '');
-                    return [4 /*yield*/, database.connect()];
+                    return [4 /*yield*/, exports.database.connect()];
                 case 1:
                     _a.sent();
-                    return [4 /*yield*/, database.initialize()];
+                    return [4 /*yield*/, exports.database.initialize()];
                 case 2:
                     _a.sent();
-                    return [4 /*yield*/, database.flushMediaFiles()];
+                    return [4 /*yield*/, exports.database.flushMediaFiles()];
                 case 3:
                     _a.sent();
                     begin = new Date().getTime();
-                    return [4 /*yield*/, database.db.collection('updates').insertOne({ begin: begin, end: 0 })];
+                    return [4 /*yield*/, exports.database.db.collection('updates').insertOne({ begin: begin, end: 0 })];
                 case 4:
                     _a.sent();
-                    return [4 /*yield*/, walk({
+                    return [4 /*yield*/, media_manager_1.walk({
                             everyFile: function (filePath) {
                                 // Delete temporary files.
                                 if (filePath.match(/\.(aux|out|log|synctex\.gz|mscx,)$/) ||
                                     filePath.indexOf('Praesentation_tmp.baldr.yml') > -1 ||
                                     filePath.indexOf('title_tmp.txt') > -1) {
-                                    fs.unlinkSync(filePath);
+                                    fs_1.default.unlinkSync(filePath);
                                 }
                             },
                             directory: function (filePath) {
                                 // Delete empty directories.
-                                if (fs.existsSync(filePath) && fs.statSync(filePath).isDirectory()) {
-                                    var files = fs.readdirSync(filePath);
+                                if (fs_1.default.existsSync(filePath) && fs_1.default.statSync(filePath).isDirectory()) {
+                                    var files = fs_1.default.readdirSync(filePath);
                                     if (files.length === 0) {
-                                        fs.rmdirSync(filePath);
+                                        fs_1.default.rmdirSync(filePath);
                                     }
                                 }
                             },
@@ -599,18 +601,18 @@ function update(full) {
                 case 5:
                     _a.sent();
                     // .replaceOne and upsert: Problems with merge objects?
-                    return [4 /*yield*/, database.db.collection('folderTitleTree').deleteOne({ id: 'root' })];
+                    return [4 /*yield*/, exports.database.db.collection('folderTitleTree').deleteOne({ id: 'root' })];
                 case 6:
                     // .replaceOne and upsert: Problems with merge objects?
                     _a.sent();
-                    return [4 /*yield*/, database.db.collection('folderTitleTree').insertOne({
+                    return [4 /*yield*/, exports.database.db.collection('folderTitleTree').insertOne({
                             id: 'root',
                             tree: folderTitleTree.get()
                         })];
                 case 7:
                     _a.sent();
                     end = new Date().getTime();
-                    return [4 /*yield*/, database.db.collection('updates').updateOne({ begin: begin }, { $set: { end: end, lastCommitId: lastCommitId } })];
+                    return [4 /*yield*/, exports.database.db.collection('updates').updateOne({ begin: begin }, { $set: { end: end, lastCommitId: lastCommitId } })];
                 case 8:
                     _a.sent();
                     return [2 /*return*/, {
@@ -688,57 +690,6 @@ var helpMessages = {
     }
 };
 /**
- * Throw an error if the media type is unkown. Provide a default value.
- *
- * @param {String} mediaType - At the moment `assets` and `presentation`
- *
- * @return {String}
- */
-function validateMediaType(mediaType) {
-    var mediaTypes = ['assets', 'presentations'];
-    if (!mediaType)
-        return 'assets';
-    if (!mediaTypes.includes(mediaType)) {
-        throw new Error("Unkown media type \u201C" + mediaType + "\u201D! Allowed media types are: " + mediaTypes);
-    }
-    else {
-        return mediaType;
-    }
-}
-/**
- * Resolve a ID from a given media type (`assets`, `presentations`) to a
- * absolute path.
- *
- * @param {String} id - The id of the media type.
- * @param {String} mediaType - At the moment `assets` and `presentation`
- *
- * @return {Promise.<String>}
- */
-function getAbsPathFromId(id, mediaType) {
-    if (mediaType === void 0) { mediaType = 'presentations'; }
-    return __awaiter(this, void 0, void 0, function () {
-        var result, relPath;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    mediaType = validateMediaType(mediaType);
-                    return [4 /*yield*/, database.db.collection(mediaType).find({ id: id }).next()];
-                case 1:
-                    result = _a.sent();
-                    if (!result)
-                        throw new Error("Can not find media file with the type \u201C" + mediaType + "\u201D and the id \u201C" + id + "\u201D.");
-                    if (mediaType === 'assets') {
-                        relPath = result.path + ".yml";
-                    }
-                    else {
-                        relPath = result.path;
-                    }
-                    return [2 /*return*/, path.join(config.mediaServer.basePath, relPath)];
-            }
-        });
-    });
-}
-/**
  *
  * @param {String} filePath
  *
@@ -746,240 +697,28 @@ function getAbsPathFromId(id, mediaType) {
  */
 function untildify(filePath) {
     if (filePath[0] === '~') {
-        return path.join(os.homedir(), filePath.slice(1));
+        return path_1.default.join(os_1.default.homedir(), filePath.slice(1));
     }
     return filePath;
-}
-/**
- * Open a file path using the linux command `xdg-open`.
- *
- * @param {String} currentPath
- * @param {Boolean} create - Create the directory structure of
- *   the given `currentPath` in a recursive manner.
- */
-function openFolder(currentPath, create) {
-    var result = {};
-    if (create && !fs.existsSync(currentPath)) {
-        fs.mkdirSync(currentPath, { recursive: true });
-        result.create = true;
-    }
-    if (fs.existsSync(currentPath)) {
-        // xdg-open opens a mounted root folder in vs code.
-        openWith(config.mediaServer.fileManager, currentPath);
-        result.open = true;
-    }
-    return result;
-}
-/**
- * Open the current path multiple times.
- *
- * 1. In the main media server directory
- * 2. In a archive directory structure.
- * 3. In a second archive directory structure ... and so on.
- *
- * @param {String} currentPath
- * @param {Boolean} create - Create the directory structure of
- *   the given `currentPath` in a recursive manner.
- */
-function openFolderWithArchives(currentPath, create) {
-    var result = {};
-    var relPath = locationIndicator.getRelPath(currentPath);
-    for (var _i = 0, _a = locationIndicator.get(); _i < _a.length; _i++) {
-        var basePath_1 = _a[_i];
-        if (relPath) {
-            var currentPath_1 = path.join(basePath_1, relPath);
-            result[currentPath_1] = openFolder(currentPath_1, create);
-        }
-        else {
-            result[basePath_1] = openFolder(basePath_1, create);
-        }
-    }
-    return result;
-}
-/**
- * Mirror the folder structure of the media folder into the archive folder or
- * vice versa. Only folders with two prefixed numbers followed by an
- * underscore (for example “10_”) are mirrored.
- *
- * @param {String} currentPath - Must be a relative path within one of the
- *   folder structures.
- *
- * @returns {Object} - Status informations of the action.
- */
-function mirrorFolderStructure(currentPath) {
-    function walkSync(dir, filelist) {
-        var files = fs.readdirSync(dir);
-        filelist = filelist || [];
-        files.forEach(function (file) {
-            var filePath = path.join(dir, file);
-            if (fs.statSync(filePath).isDirectory() && file.match(/^\d\d_/)) {
-                filelist.push(filePath);
-                walkSync(filePath, filelist);
-            }
-        });
-        return filelist;
-    }
-    var currentBasePath = locationIndicator.getBasePath(currentPath);
-    var mirrorBasePath;
-    for (var _i = 0, _a = locationIndicator.get(); _i < _a.length; _i++) {
-        var basePath_2 = _a[_i];
-        if (basePath_2 !== currentBasePath) {
-            mirrorBasePath = basePath_2;
-            break;
-        }
-    }
-    var relPaths = walkSync(currentPath);
-    for (var index = 0; index < relPaths.length; index++) {
-        relPaths[index] = locationIndicator.getRelPath(relPaths[index]);
-    }
-    var created = [];
-    var existing = [];
-    for (var _b = 0, relPaths_1 = relPaths; _b < relPaths_1.length; _b++) {
-        var relPath = relPaths_1[_b];
-        var newPath = path.join(mirrorBasePath, relPath);
-        if (!fs.existsSync(newPath)) {
-            try {
-                fs.mkdirSync(newPath, { recursive: true });
-            }
-            catch (error) {
-                return {
-                    error: error
-                };
-            }
-            created.push(relPath);
-        }
-        else {
-            existing.push(relPath);
-        }
-    }
-    return {
-        ok: {
-            currentBasePath: currentBasePath,
-            mirrorBasePath: mirrorBasePath,
-            created: created,
-            existing: existing
-        }
-    };
-}
-/**
- * Open a file path with an executable.
- *
- * To launch apps via the REST API the systemd unit file must run as
- * the user you login in in your desktop environment. You also have to set
- * to environment variables: `DISPLAY=:0` and
- * `DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$UID/bus`
- *
- * ```
- * Environment=DISPLAY=:0
- * Environment=DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus
- * User=1000
- * Group=1000
- * ```
- *
- * @param {String} executable - Name or path of an executable.
- * @param {String} filePath - The path of a file or a folder.
- *
- * @see node module on npmjs.org “open”
- * @see {@link https://unix.stackexchange.com/a/537848}
- */
-function openWith(executable, filePath) {
-    // See node module on npmjs.org “open”
-    var subprocess = childProcess.spawn(executable, [filePath], {
-        stdio: 'ignore',
-        detached: true
-    });
-    subprocess.unref();
-}
-/**
- * Open a media file specified by an ID with an editor specified in
- *   `config.mediaServer.editor` (`/etc/baldr.json`).
- *
- * @param {String} id - The id of the media type.
- * @param {String} mediaType - At the moment `assets` and `presentation`
- */
-function openEditor(id, mediaType) {
-    return __awaiter(this, void 0, void 0, function () {
-        var absPath, parentFolder, editor;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, getAbsPathFromId(id, mediaType)];
-                case 1:
-                    absPath = _a.sent();
-                    parentFolder = path.dirname(absPath);
-                    editor = config.mediaServer.editor;
-                    if (!fs.existsSync(editor)) {
-                        return [2 /*return*/, {
-                                error: "Editor \u201C" + editor + "\u201D can\u2019t be found."
-                            }];
-                    }
-                    openWith(config.mediaServer.editor, parentFolder);
-                    return [2 /*return*/, {
-                            id: id,
-                            mediaType: mediaType,
-                            absPath: absPath,
-                            parentFolder: parentFolder,
-                            editor: editor
-                        }];
-            }
-        });
-    });
-}
-/**
- * Open the parent folder of a presentation, a media asset in a file explorer
- * GUI application.
- *
- * @param {String} id - The id of the media type.
- * @param {String} mediaType - At the moment `assets` and `presentation`
- * @param {Boolean} archive - Addtionaly open the corresponding archive
- *   folder.
- * @param {Boolean} create - Create the directory structure of
- *   the relative path in the archive in a recursive manner.
- */
-function openParentFolder(id, mediaType, archive, create) {
-    return __awaiter(this, void 0, void 0, function () {
-        var absPath, parentFolder, result;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, getAbsPathFromId(id, mediaType)];
-                case 1:
-                    absPath = _a.sent();
-                    parentFolder = path.dirname(absPath);
-                    if (archive) {
-                        result = openFolderWithArchives(parentFolder, create);
-                    }
-                    else {
-                        result = openFolder(parentFolder, create);
-                    }
-                    return [2 /*return*/, {
-                            id: id,
-                            parentFolder: parentFolder,
-                            mediaType: mediaType,
-                            archive: archive,
-                            create: create,
-                            result: result
-                        }];
-            }
-        });
-    });
 }
 /**
  * Register the express js rest api in a giant function.
  */
 function registerMediaRestApi() {
     var _this = this;
-    var db = database.db;
+    var db = exports.database.db;
     // https://stackoverflow.com/a/38427476/10193818
     function escapeRegex(text) {
         return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
     }
-    var app = express();
+    var app = express_1.default();
     app.get('/', function (req, res) {
         res.json(helpMessages.navigation);
     });
     app.get('/version', function (req, res) {
         res.json({
-            name: packageJson.name,
-            version: packageJson.version
+            name: package_json_1.default.name,
+            version: package_json_1.default.version
         });
     });
     /* query */
@@ -1013,7 +752,7 @@ function registerMediaRestApi() {
                     // result
                     if (!('result' in query))
                         query.result = 'fullObjects';
-                    return [4 /*yield*/, database.connect()];
+                    return [4 /*yield*/, exports.database.connect()];
                 case 1:
                     _a.sent();
                     collection = db.collection(query.type);
@@ -1091,7 +830,7 @@ function registerMediaRestApi() {
                 case 0:
                     _c.trys.push([0, 2, , 3]);
                     _b = (_a = res).json;
-                    return [4 /*yield*/, database.flushMediaFiles()];
+                    return [4 /*yield*/, exports.database.flushMediaFiles()];
                 case 1:
                     _b.apply(_a, [_c.sent()]);
                     return [3 /*break*/, 3];
@@ -1110,7 +849,7 @@ function registerMediaRestApi() {
                 case 0:
                     _c.trys.push([0, 2, , 3]);
                     _b = (_a = res).json;
-                    return [4 /*yield*/, database.initialize()];
+                    return [4 /*yield*/, exports.database.initialize()];
                 case 1:
                     _b.apply(_a, [_c.sent()]);
                     return [3 /*break*/, 3];
@@ -1166,7 +905,7 @@ function registerMediaRestApi() {
                 case 0:
                     _c.trys.push([0, 2, , 3]);
                     _b = (_a = res).json;
-                    return [4 /*yield*/, database.reInitialize()];
+                    return [4 /*yield*/, exports.database.reInitialize()];
                 case 1:
                     _b.apply(_a, [_c.sent()]);
                     return [3 /*break*/, 3];
@@ -1261,27 +1000,27 @@ function runRestApi(port) {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    app = express();
-                    database = new Database();
-                    return [4 /*yield*/, database.connect()];
+                    app = express_1.default();
+                    exports.database = new database_js_1.Database();
+                    return [4 /*yield*/, exports.database.connect()];
                 case 1:
                     _a.sent();
-                    return [4 /*yield*/, database.initialize()];
+                    return [4 /*yield*/, exports.database.initialize()];
                 case 2:
                     _a.sent();
-                    app.use(cors());
-                    app.use(express.json());
-                    app.use('/seating-plan', registerSeatingPlan(database));
+                    app.use(cors_1.default());
+                    app.use(express_1.default.json());
+                    app.use('/seating-plan', seating_plan_1.registerSeatingPlan(exports.database));
                     app.use('/media', registerMediaRestApi());
                     helpMessages = {
                         version: {
-                            name: packageJson.name,
-                            version: packageJson.version
+                            name: package_json_1.default.name,
+                            version: package_json_1.default.version
                         }
                     };
                     app.get('/', function (req, res) {
                         res.json({
-                            version: packageJson.version,
+                            version: package_json_1.default.version,
                             navigation: {
                                 media: helpMessages.navigation
                             }
@@ -1291,7 +1030,7 @@ function runRestApi(port) {
                         res.json(helpMessages.version);
                     });
                     if (!port) {
-                        port = config.api.port;
+                        port = config_1.default.api.port;
                     }
                     app.listen(port, function () {
                         console.log("The BALDR REST API is running on port " + port + ".");
@@ -1311,19 +1050,3 @@ var main = function () {
 if (require.main === module) {
     main();
 }
-module.exports = {
-    asciify: asciify,
-    Asset: Asset,
-    mediaCategoriesManager: mediaCategoriesManager,
-    deasciify: deasciify,
-    TitleTree: TitleTree,
-    getExtension: getExtension,
-    helpMessages: helpMessages,
-    DeepTitle: DeepTitle,
-    metaTypes: metaTypes,
-    mirrorFolderStructure: mirrorFolderStructure,
-    openFolderWithArchives: openFolderWithArchives,
-    openWith: openWith,
-    registerMediaRestApi: registerMediaRestApi,
-    runRestApi: runRestApi
-};

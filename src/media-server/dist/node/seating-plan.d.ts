@@ -4,4 +4,4 @@
  */
 import { Express } from 'express';
 import { Database } from './database';
-export declare function registerRestApi(database: Database): Express;
+export declare function registerSeatingPlan(database: Database): Express;

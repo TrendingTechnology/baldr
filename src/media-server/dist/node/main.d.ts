@@ -1,226 +1,65 @@
 #! /usr/bin/env node
-export const asciify: typeof import("@bldr/media-manager").asciify;
 /**
- * This class is used both for the entries in the MongoDB database as well for
- * the queries.
+ * The REST API and command line interface of the BALDR media server.
+ *
+ * # Media types:
+ *
+ * - presentation (`Presentation()`)
+ * - asset (`Asset()`)
+ *   - multipart asset (`filename.jpg`, `filename_no002.jpg`, `filename_no003.jpg`)
+ *
+ * # Definition of the objects:
+ *
+ * A _presentation_ is a YAML file for the BALDR presentation app. It must have
+ * the file name scheme `*.baldr.yml`. The media server stores the whole YAML
+ * file in the MongoDB database.
+ *
+ * A _asset_ is a media file which has a meta data file in the YAML format.
+ * The file name scheme for this meta data file is `media-file.jpg.yml`. The
+ * suffix `.yml` has to be appended. Only the content of the meta data file
+ * is stored into the database.
+ *
+ * # REST API
+ * - `get`
+ *   - `folder-title-tree`: Get the folder title tree as a hierarchical json
+ *     object.
+ * - `mgmt`
+ *   - `flush`: Delete all media files (assets, presentations) from the database.
+ *   - `init`: Initialize the MongoDB database
+ *   - `open`: Open a media file specified by an ID. This query parameters are
+ *     available:
+ *       - `id`: The ID of the media file (required).
+ *       - `type`: `presentations`, `assets`. The default value is
+ *         `presentations.`
+ *       - `with`: `editor` specified in `config.mediaServer.editor`
+ *         (`/etc/baldr.json`) or `folder` to open the parent folder of the
+ *         given media file. The default value is `editor`
+ *       - `archive`: True if present, false by default. Open the file or the
+           folder in the corresponding archive folder structure.
+ *       - `create`: True if present, false by default. Create the possibly none
+            existing directory structure in a recursive manner.
+ *   - `re-init`: Re-Initialize the MongoDB database (Drop all collections and
+ *     initialize)
+ *   - `update`: Update the media server database (Flush and insert).
+ *   - `query`: Getting results by using query parameters. This query parameters
+ *     are available:
+ *      - `type`: `assets` (default), `presentations` (what)
+ *      - `method`: `exactMatch`, `substringSearch` (default) (how).
+ *          - `exactMatch`: The query parameter `search` must be a perfect match
+ *            to a top level database field to get a result.
+ *          - `substringSearch`: The query parameter `search` is only a
+ *            substring of the string to search in.
+ *      - `field`: `id` (default), `title`, etc ... (where).
+ *      - `search`: Some text to search for (search for).
+ *      - `result`: `fullObjects` (default), `dynamicSelect`
+ * - `stats`:
+ *   - `count`: Count / sum of the media files (assets, presentations) in the
+ *     database.
+ *   - `updates`: Journal of the update processes with timestamps.
+ *
+ * @module @bldr/media-server
  */
-export class Asset extends MediaFile {
-    /**
-     * @param {string} filePath - The file path of the media file.
-     */
-    constructor(filePath: string);
-    /**
-     * The absolute path of the info file in the YAML format. On the absolute
-     * media file path `.yml` is appended.
-     * @type {string}
-     */
-    infoFile_: string;
-    /**
-     * Indicates if the asset has a preview image.
-     * @type {Boolean}
-     */
-    previewImage: boolean;
-    assetType: string;
-    /**
-     * Search for mutlipart assets. The naming scheme of multipart assets is:
-     * `filename.jpg`, `filename_no002.jpg`, `filename_no003.jpg`
-     */
-    detectMultiparts_(): void;
-    /**
-     * The count of parts of a multipart asset.
-     *
-     * @type {Number}
-     */
-    multiPartCount: number;
-}
-export const mediaCategoriesManager: import("@bldr/core-browser").MediaCategoriesManager;
-export const deasciify: typeof import("@bldr/media-manager").deasciify;
-export const TitleTree: typeof import("@bldr/media-manager").TitleTree;
 /**
- * Get the extension from a file path.
- *
- * @param {String} filePath
- *
- * @returns {String}
+ * @type {module:@bldr/media-server/database.Database}
  */
-export function getExtension(filePath: string): string;
-/**
- * This object hold jsons for displaying help messages in the browser on
- * some entry point urls.
- *
- * Update docs on the top of this file in the JSDoc block.
- *
- * @type {Object}
- */
-export const helpMessages: any;
-export const DeepTitle: typeof import("@bldr/media-manager").DeepTitle;
-export const metaTypes: {
-    detectTypeByPath: (filePath: string) => string;
-    formatFilePath: (data: import("../../config/node_modules/@bldr/type-definitions/dist/node/asset.js").AssetType.FileFormat, oldPath?: string) => string;
-    process: (data: import("../../config/node_modules/@bldr/type-definitions/dist/node/asset.js").AssetType.Generic) => import("../../config/node_modules/@bldr/type-definitions/dist/node/asset.js").AssetType.Generic;
-    typeSpecs: {
-        cloze: import("../../config/node_modules/@bldr/type-definitions/dist/node/meta-spec.js").MetaSpec.Type;
-        composition: import("../../config/node_modules/@bldr/type-definitions/dist/node/meta-spec.js").MetaSpec.Type;
-        cover: import("../../config/node_modules/@bldr/type-definitions/dist/node/meta-spec.js").MetaSpec.Type;
-        group: import("../../config/node_modules/@bldr/type-definitions/dist/node/meta-spec.js").MetaSpec.Type;
-        instrument: import("../../config/node_modules/@bldr/type-definitions/dist/node/meta-spec.js").MetaSpec.Type;
-        person: import("../../config/node_modules/@bldr/type-definitions/dist/node/meta-spec.js").MetaSpec.Type;
-        photo: import("../../config/node_modules/@bldr/type-definitions/dist/node/meta-spec.js").MetaSpec.Type;
-        radio: import("../../config/node_modules/@bldr/type-definitions/dist/node/meta-spec.js").MetaSpec.Type;
-        recording: import("../../config/node_modules/@bldr/type-definitions/dist/node/meta-spec.js").MetaSpec.Type;
-        reference: import("../../config/node_modules/@bldr/type-definitions/dist/node/meta-spec.js").MetaSpec.Type;
-        score: import("../../config/node_modules/@bldr/type-definitions/dist/node/meta-spec.js").MetaSpec.Type;
-        song: import("../../config/node_modules/@bldr/type-definitions/dist/node/meta-spec.js").MetaSpec.Type;
-        worksheet: import("../../config/node_modules/@bldr/type-definitions/dist/node/meta-spec.js").MetaSpec.Type;
-        youtube: import("../../config/node_modules/@bldr/type-definitions/dist/node/meta-spec.js").MetaSpec.Type;
-        general: import("../../config/node_modules/@bldr/type-definitions/dist/node/meta-spec.js").MetaSpec.Type;
-    };
-    mergeTypeNames: (...typeName: string[]) => string;
-};
-/**
- * Mirror the folder structure of the media folder into the archive folder or
- * vice versa. Only folders with two prefixed numbers followed by an
- * underscore (for example “10_”) are mirrored.
- *
- * @param {String} currentPath - Must be a relative path within one of the
- *   folder structures.
- *
- * @returns {Object} - Status informations of the action.
- */
-export function mirrorFolderStructure(currentPath: string): any;
-/**
- * Open the current path multiple times.
- *
- * 1. In the main media server directory
- * 2. In a archive directory structure.
- * 3. In a second archive directory structure ... and so on.
- *
- * @param {String} currentPath
- * @param {Boolean} create - Create the directory structure of
- *   the given `currentPath` in a recursive manner.
- */
-export function openFolderWithArchives(currentPath: string, create: boolean): {};
-/**
- * Open a file path with an executable.
- *
- * To launch apps via the REST API the systemd unit file must run as
- * the user you login in in your desktop environment. You also have to set
- * to environment variables: `DISPLAY=:0` and
- * `DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$UID/bus`
- *
- * ```
- * Environment=DISPLAY=:0
- * Environment=DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus
- * User=1000
- * Group=1000
- * ```
- *
- * @param {String} executable - Name or path of an executable.
- * @param {String} filePath - The path of a file or a folder.
- *
- * @see node module on npmjs.org “open”
- * @see {@link https://unix.stackexchange.com/a/537848}
- */
-export function openWith(executable: string, filePath: string): void;
-/**
- * Register the express js rest api in a giant function.
- */
-export function registerMediaRestApi(): import("express-serve-static-core").Express;
-/**
- * Run the REST API. Listen to a TCP port.
- *
- * @param {Number} port - A TCP port.
- */
-export function runRestApi(port: number): Promise<import("express-serve-static-core").Express>;
-/**
- * Base class to be extended.
- */
-declare class MediaFile {
-    constructor(filePath: any);
-    /**
-     * Absolute path ot the file.
-     * @type {string}
-     * @access protected
-     */
-    absPath_: string;
-    /**
-     * Relative path ot the file.
-     * @type {string}
-     */
-    path: string;
-    /**
-     * The basename (filename) of the file.
-     * @type {string}
-     */
-    filename: string;
-    /**
-     * @access protected
-     */
-    addFileInfos_(): MediaFile;
-    /**
-     * The file size in bytes.
-     * @type {number}
-     */
-    size: number;
-    /**
-     * The timestamp indicating the last time this file was modified
-     * expressed in milliseconds since the POSIX Epoch.
-     * @type {Number}
-     */
-    timeModified: number;
-    /**
-     * The extension of the file.
-     * @type {string}
-     */
-    extension: string;
-    /**
-     * The basename (filename without extension) of the file.
-     * @type {string}
-     * @private
-     */
-    private basename_;
-    /**
-     * Parse the info file of a media asset or the presenation file itself.
-     *
-     * Each media file can have a info file that stores additional
-     * metadata informations.
-     *
-     * File path:
-     * `/home/baldr/beethoven.jpg`
-     *
-     * Info file in the YAML file format:
-     * `/home/baldr/beethoven.jpg.yml`
-     *
-     * @param {string} filePath - The path of the YAML file.
-     *
-     * @returns {object}
-     *
-     * @access protected
-     */
-    readYaml_(filePath: string): object;
-    /**
-     * Add metadata from the file system, like file size or timeModifed.
-     */
-    addFileInfos(): MediaFile;
-    /**
-     * Delete the temporary properties of the object. Temporary properties end
-     * with `_`.
-     */
-    cleanTmpProperties(): MediaFile;
-    /**
-     * Merge an object into the class object. Properties can be in the
-     * `snake_case` or `kebab-case` form. They are converted into `camelCase` in a
-     * recursive fashion.
-     *
-     * @param {object} properties - Add an object to the class properties.
-     */
-    importProperties(properties: object): void;
-    /**
-     * Prepare the object for the insert into the MongoDB database
-     * Generate `id` and `title` if this properties are not present.
-     */
-    prepareForInsert(): MediaFile;
-    id: string;
-    title: string;
-}
-export {};
+export declare let database: any;

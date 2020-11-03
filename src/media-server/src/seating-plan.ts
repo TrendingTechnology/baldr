@@ -9,7 +9,7 @@ import express, { Express } from 'express'
 
 import { Database } from './database'
 
-export function registerRestApi (database: Database): Express {
+export function registerSeatingPlan (database: Database): Express {
   const app = express()
 
   app.post('/save-state', (req, res) => {

@@ -7,10 +7,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.registerRestApi = void 0;
+exports.registerSeatingPlan = void 0;
 // Third party packages.
 var express_1 = __importDefault(require("express"));
-function registerRestApi(database) {
+function registerSeatingPlan(database) {
     var app = express_1.default();
     app.post('/save-state', function (req, res) {
         var body = req.body;
@@ -78,4 +78,4 @@ function registerRestApi(database) {
     });
     return app;
 }
-exports.registerRestApi = registerRestApi;
+exports.registerSeatingPlan = registerSeatingPlan;
