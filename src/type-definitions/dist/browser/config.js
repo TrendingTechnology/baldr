@@ -1,5 +1,5 @@
 /**
- * Some basic Typescript interfaces and type defintions.
+ * The type of the JSON object of the file `/etc/baldr.json`
  *
  * @module @bldr/type-definitions/config
  */
