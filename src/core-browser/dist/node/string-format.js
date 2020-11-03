@@ -5,7 +5,7 @@
  * @module @bldr/core-browser/object-manipulation
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.toTitleCase = exports.convertDurationToSeconds = exports.formatToLocalDateTime = exports.formatToYear = exports.formatToLocalDate = exports.shortenText = exports.formatWikicommonsUrl = exports.formatImslpUrl = exports.formatYoutubeUrl = exports.formatMusicbrainzWorkUrl = exports.formatMusicbrainzRecordingUrl = exports.formatWikipediaUrl = exports.formatWikidataUrl = exports.formatMultiPartAssetFileName = exports.convertHtmlToPlainText = exports.escapeHtml = exports.convertSnakeToCamel = exports.convertCamelToSnake = void 0;
+exports.stripTags = exports.toTitleCase = exports.convertDurationToSeconds = exports.formatToLocalDateTime = exports.formatToYear = exports.formatToLocalDate = exports.shortenText = exports.formatWikicommonsUrl = exports.formatImslpUrl = exports.formatYoutubeUrl = exports.formatMusicbrainzWorkUrl = exports.formatMusicbrainzRecordingUrl = exports.formatWikipediaUrl = exports.formatWikidataUrl = exports.formatMultiPartAssetFileName = exports.convertHtmlToPlainText = exports.escapeHtml = exports.convertSnakeToCamel = exports.convertCamelToSnake = void 0;
 /**
  * Convert `camelCase` into `snake_case` strings.
  *
@@ -324,3 +324,12 @@ function toTitleCase(text) {
     return text.charAt(0).toUpperCase() + text.slice(1);
 }
 exports.toTitleCase = toTitleCase;
+/**
+ * Strip HTML tags from a string.
+ *
+ * @param text - A text containing HTML tags.
+ */
+function stripTags(text) {
+    return text.replace(/<[^>]+>/g, '');
+}
+exports.stripTags = stripTags;

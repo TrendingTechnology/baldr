@@ -74,7 +74,7 @@ import yaml from 'js-yaml'
 
 // Project packages.
 import config from '@bldr/config'
-import { MediaCategoriesManager, convertPropertiesSnakeToCamel } from '@bldr/core-browser'
+import { MediaCategoriesManager, convertPropertiesSnakeToCamel, getExtension, stripTags } from '@bldr/core-browser'
 import { walk, asciify, deasciify, TitleTree, DeepTitle } from '@bldr/media-manager'
 import type { StringIndexedObject } from '@bldr/type-definitions'
 
@@ -97,30 +97,6 @@ let errors = []
  * @type {module:@bldr/media-server/database.Database}
  */
 export let database
-
-/* Helper functions ***********************************************************/
-
-/**
- * Get the extension from a file path.
- *
- * @param {String} filePath
- *
- * @returns {String}
- */
-function getExtension (filePath) {
-  return path.extname(filePath).replace('.', '')
-}
-
-/**
- * Strip HTML tags from a string.
- *
- * @param {String} text - A text containing HTML tags.
- *
- * @returns {String}
- */
-function stripTags (text) {
-  return text.replace(/<[^>]+>/g, '')
-}
 
 /* Media objects **************************************************************/
 
@@ -639,19 +615,6 @@ const helpMessages: StringIndexedObject = {
 }
 
 /**
- *
- * @param {String} filePath
- *
- * @see {@link https://stackoverflow.com/a/36221905/10193818}
- */
-function untildify (filePath) {
-  if (filePath[0] === '~') {
-    return path.join(os.homedir(), filePath.slice(1))
-  }
-  return filePath
-}
-
-/**
  * Register the express js rest api in a giant function.
  */
 function registerMediaRestApi () {
@@ -856,10 +819,6 @@ async function runRestApi (port) {
         media: helpMessages.navigation
       }
     })
-  })
-
-  app.get('/version', (req, res) => {
-    res.json(helpMessages.version)
   })
 
   if (!port) {

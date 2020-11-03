@@ -118,7 +118,6 @@ exports.database = void 0;
 var child_process_1 = __importDefault(require("child_process"));
 var fs_1 = __importDefault(require("fs"));
 var path_1 = __importDefault(require("path"));
-var os_1 = __importDefault(require("os"));
 // Third party packages.
 var cors_1 = __importDefault(require("cors"));
 var express_1 = __importDefault(require("express"));
@@ -139,27 +138,6 @@ var basePath = config_1.default.mediaServer.basePath;
  * A container array for all error messages send out via the REST API.
  */
 var errors = [];
-/* Helper functions ***********************************************************/
-/**
- * Get the extension from a file path.
- *
- * @param {String} filePath
- *
- * @returns {String}
- */
-function getExtension(filePath) {
-    return path_1.default.extname(filePath).replace('.', '');
-}
-/**
- * Strip HTML tags from a string.
- *
- * @param {String} text - A text containing HTML tags.
- *
- * @returns {String}
- */
-function stripTags(text) {
-    return text.replace(/<[^>]+>/g, '');
-}
 /* Media objects **************************************************************/
 var folderTitleTree = new media_manager_1.TitleTree(new media_manager_1.DeepTitle(config_1.default.mediaServer.basePath));
 var mediaCategoriesManager = new core_browser_1.MediaCategoriesManager(config_1.default);
@@ -205,7 +183,7 @@ var MediaFile = /** @class */ (function () {
          * The extension of the file.
          * @type {string}
          */
-        this.extension = getExtension(this.absPath_);
+        this.extension = core_browser_1.getExtension(this.absPath_);
         /**
          * The basename (filename without extension) of the file.
          * @type {string}
@@ -408,7 +386,7 @@ var Presentation = /** @class */ (function (_super) {
          *
          * @type {String}
          */
-        _this.title = stripTags(_this.meta.title);
+        _this.title = core_browser_1.stripTags(_this.meta.title);
         /**
          * The plain text version of `this.meta.title (this.meta.subtitle)`
          *
@@ -445,7 +423,7 @@ var Presentation = /** @class */ (function (_super) {
      */
     Presentation.prototype.titleSubtitle_ = function () {
         if (this.meta.subtitle) {
-            return this.title + " (" + stripTags(this.meta.subtitle) + ")";
+            return this.title + " (" + core_browser_1.stripTags(this.meta.subtitle) + ")";
         }
         else {
             return this.title;
@@ -469,7 +447,7 @@ var Presentation = /** @class */ (function (_super) {
         if (this.meta.subtitle) {
             all = all + " (" + this.meta.subtitle + ")";
         }
-        return stripTags(all);
+        return core_browser_1.stripTags(all);
     };
     return Presentation;
 }(MediaFile));
@@ -689,18 +667,6 @@ var helpMessages = {
         }
     }
 };
-/**
- *
- * @param {String} filePath
- *
- * @see {@link https://stackoverflow.com/a/36221905/10193818}
- */
-function untildify(filePath) {
-    if (filePath[0] === '~') {
-        return path_1.default.join(os_1.default.homedir(), filePath.slice(1));
-    }
-    return filePath;
-}
 /**
  * Register the express js rest api in a giant function.
  */

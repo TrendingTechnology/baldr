@@ -303,3 +303,11 @@ export function convertDurationToSeconds(duration) {
 export function toTitleCase(text) {
     return text.charAt(0).toUpperCase() + text.slice(1);
 }
+/**
+ * Strip HTML tags from a string.
+ *
+ * @param text - A text containing HTML tags.
+ */
+export function stripTags(text) {
+    return text.replace(/<[^>]+>/g, '');
+}

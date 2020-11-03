@@ -155,4 +155,10 @@ export declare function convertDurationToSeconds(duration: string): number;
  * @param text
  */
 export declare function toTitleCase(text: string): string;
+/**
+ * Strip HTML tags from a string.
+ *
+ * @param text - A text containing HTML tags.
+ */
+export declare function stripTags(text: string): string;
 export {};
