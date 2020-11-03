@@ -91,7 +91,7 @@ var Database = /** @class */ (function () {
             }
         };
         this.mongoClient = new mongodb_1.default.MongoClient(url, { useNewUrlParser: true, useUnifiedTopology: true });
-        this.db = null;
+        //this.db = undefined
     }
     Database.prototype.connect = function () {
         return __awaiter(this, void 0, void 0, function () {

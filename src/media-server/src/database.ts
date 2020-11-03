@@ -5,12 +5,13 @@
 import mongodb from 'mongodb'
 
 import config from '@bldr/config'
+import type { StringIndexedObject } from '@bldr/type-definitions'
 
 /**
  * A wrapper around MongoDB.
  */
 export class Database {
-  schema: object
+  schema: StringIndexedObject
 
   private mongoClient: mongodb.MongoClient
 
@@ -64,7 +65,7 @@ export class Database {
       { useNewUrlParser: true, useUnifiedTopology: true }
     )
 
-    this.db = null
+    //this.db = undefined
   }
 
   async connect (): Promise<void> {
@@ -104,7 +105,7 @@ export class Database {
       }
     }
 
-    const result = {}
+    const result: StringIndexedObject = {}
     for (const collectionName in this.schema) {
       const indexes = await this.db.collection(collectionName).listIndexes().toArray()
       result[collectionName] = {

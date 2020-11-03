@@ -683,7 +683,7 @@ function registerMediaRestApi() {
     });
     /* query */
     app.get('/query', function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
-        var query, methods, field, collection, result, find, findObject, regex, $match, $project, error_2;
+        var query, type, methods, method, field, collection, result, find, findObject, search, regex, $match, $project, error_2;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -698,13 +698,11 @@ function registerMediaRestApi() {
                         });
                         return [2 /*return*/];
                     }
-                    // type
-                    query.type = operations_1.validateMediaType(query.type.toString());
+                    type = operations_1.validateMediaType(query.type ? query.type.toString() : '');
                     methods = ['exactMatch', 'substringSearch'];
-                    if (!('method' in query))
-                        query.method = 'substringSearch';
-                    if (!methods.includes(query.method.toString())) {
-                        throw new Error("Unkown method \u201C" + query.method + "\u201D! Allowed methods: " + methods);
+                    method = query.method ? query.method.toString() : 'substringSearch';
+                    if (!methods.includes(method)) {
+                        throw new Error("Unkown method \u201C" + method + "\u201D! Allowed methods: " + methods);
                     }
                     field = !query.field ? 'id' : query.field;
                     // result
@@ -713,7 +711,7 @@ function registerMediaRestApi() {
                     return [4 /*yield*/, exports.database.connect()];
                 case 1:
                     _a.sent();
-                    collection = db.collection(query.type);
+                    collection = db.collection(type);
                     result = void 0;
                     find = void 0;
                     if (!(query.method === 'exactMatch')) return [3 /*break*/, 3];
@@ -728,7 +726,8 @@ function registerMediaRestApi() {
                     return [3 /*break*/, 5];
                 case 3:
                     if (!(query.method === 'substringSearch')) return [3 /*break*/, 5];
-                    regex = new RegExp(escapeRegex(query.search), 'gi');
+                    search = query.search ? query.search.toString() : '';
+                    regex = new RegExp(escapeRegex(search), 'gi');
                     $match = {};
                     $match[field] = regex;
                     $project = void 0;
@@ -950,7 +949,7 @@ function registerMediaRestApi() {
 /**
  * Run the REST API. Listen to a TCP port.
  *
- * @param {Number} port - A TCP port.
+ * @param port - A TCP port.
  */
 function runRestApi(port) {
     return __awaiter(this, void 0, void 0, function () {

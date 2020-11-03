@@ -2,11 +2,12 @@
  * @module @bldr/media-server/database
  */
 import mongodb from 'mongodb';
+import type { StringIndexedObject } from '@bldr/type-definitions';
 /**
  * A wrapper around MongoDB.
  */
 export declare class Database {
-    schema: object;
+    schema: StringIndexedObject;
     private mongoClient;
     db: mongodb.Db;
     constructor();

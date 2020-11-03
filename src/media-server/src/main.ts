@@ -65,7 +65,6 @@
 import childProcess from 'child_process'
 import fs from 'fs'
 import path from 'path'
-import os from 'os'
 
 // Third party packages.
 import cors from 'cors'
@@ -91,12 +90,12 @@ const basePath = config.mediaServer.basePath
 /**
  * A container array for all error messages send out via the REST API.
  */
-let errors = []
+let errors: string[] = []
 
 /**
  * @type {module:@bldr/media-server/database.Database}
  */
-export let database
+export let database: Database
 
 /* Media objects **************************************************************/
 
@@ -115,9 +114,9 @@ class MediaFile {
   timeModified?: number
   extension?: string
   basename_?: string
-  id: string
-  title: string
-  constructor (filePath) {
+  id?: string
+  title?: string
+  constructor (filePath: string) {
     /**
      * Absolute path ot the file.
      * @type {string}
@@ -191,9 +190,9 @@ class MediaFile {
    *
    * @access protected
    */
-  readYaml_ (filePath) {
+  readYaml_ (filePath: string): StringIndexedObject {
     if (fs.existsSync(filePath)) {
-      return yaml.safeLoad(fs.readFileSync(filePath, 'utf8'))
+      return <StringIndexedObject> yaml.safeLoad(fs.readFileSync(filePath, 'utf8'))
     }
     return {}
   }
@@ -225,7 +224,7 @@ class MediaFile {
    *
    * @param {object} properties - Add an object to the class properties.
    */
-  importProperties (properties) {
+  importProperties (properties: StringIndexedObject) {
     if (typeof properties === 'object') {
       properties = convertPropertiesSnakeToCamel(properties)
       for (const property in properties) {
@@ -254,12 +253,12 @@ class MediaFile {
 class Asset extends MediaFile {
   infoFile_: string
   previewImage: boolean
-  assetType: string
-  multiPartCount: number
+  assetType?: string
+  multiPartCount?: number
   /**
    * @param {string} filePath - The file path of the media file.
    */
-  constructor (filePath) {
+  constructor (filePath: string) {
     super(filePath)
 
     /**
@@ -356,7 +355,7 @@ class Presentation extends MediaFile {
   titleSubtitle: string
   allTitlesSubtitle: string
   id: string
-  constructor (filePath) {
+  constructor (filePath: string) {
     super(filePath)
     const data = this.readYaml_(filePath)
     if (data) this.importProperties(data)
@@ -620,7 +619,7 @@ const helpMessages: StringIndexedObject = {
 function registerMediaRestApi () {
   const db = database.db
   // https://stackoverflow.com/a/38427476/10193818
-  function escapeRegex (text) {
+  function escapeRegex (text: string): string {
     return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&')
   }
 
@@ -645,23 +644,23 @@ function registerMediaRestApi () {
         return
       }
       // type
-      query.type = validateMediaType(query.type.toString())
+      const type: string  = validateMediaType(query.type ? query.type.toString() : '')
 
       // method
       const methods = ['exactMatch', 'substringSearch']
-      if (!('method' in query)) query.method = 'substringSearch'
-      if (!methods.includes(query.method.toString())) {
-        throw new Error(`Unkown method “${query.method}”! Allowed methods: ${methods}`)
+      const method: string = query.method ? query.method.toString() : 'substringSearch'
+      if (!methods.includes(method)) {
+        throw new Error(`Unkown method “${method}”! Allowed methods: ${methods}`)
       }
 
       // field
-      let field: string = !query.field ? 'id' : <string> query.field
+      const field: string = !query.field ? 'id' : <string> query.field
 
       // result
       if (!('result' in query)) query.result = 'fullObjects'
 
       await database.connect()
-      const collection = db.collection(query.type)
+      const collection = db.collection(type)
 
       // find
       let result
@@ -675,8 +674,9 @@ function registerMediaRestApi () {
       // substringSearch
       } else if (query.method === 'substringSearch') {
         // https://stackoverflow.com/a/38427476/10193818
-        const regex = new RegExp(escapeRegex(query.search), 'gi')
-        const $match = {}
+        const search = query.search ? query.search.toString() : ''
+        const regex = new RegExp(escapeRegex(search), 'gi')
+        const $match: StringIndexedObject = {}
         $match[field] = regex
         let $project
         if (query.result === 'fullObjects') {
@@ -796,9 +796,9 @@ function registerMediaRestApi () {
 /**
  * Run the REST API. Listen to a TCP port.
  *
- * @param {Number} port - A TCP port.
+ * @param port - A TCP port.
  */
-async function runRestApi (port) {
+async function runRestApi (port?: number) {
   const app = express()
 
   database = new Database()

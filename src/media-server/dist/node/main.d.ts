@@ -59,7 +59,8 @@
  *
  * @module @bldr/media-server
  */
+import { Database } from './database.js';
 /**
  * @type {module:@bldr/media-server/database.Database}
  */
-export declare let database: any;
+export declare let database: Database;
