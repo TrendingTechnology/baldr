@@ -153,20 +153,22 @@ function openFolderWithArchives(currentPath, create) {
  * @returns {Object} - Status informations of the action.
  */
 function mirrorFolderStructure(currentPath) {
-    function walkSync(dir, filelist) {
+    function walkSync(dir, fileList) {
         var files = fs_1.default.readdirSync(dir);
-        filelist = filelist || [];
+        if (!fileList)
+            fileList = [];
         files.forEach(function (file) {
             var filePath = path_1.default.join(dir, file);
             if (fs_1.default.statSync(filePath).isDirectory() && file.match(/^\d\d_/)) {
-                filelist.push(filePath);
-                walkSync(filePath, filelist);
+                if (fileList)
+                    fileList.push(filePath);
+                walkSync(filePath, fileList);
             }
         });
-        return filelist;
+        return fileList;
     }
     var currentBasePath = media_manager_1.locationIndicator.getBasePath(currentPath);
-    var mirrorBasePath;
+    var mirrorBasePath = '';
     for (var _i = 0, _a = media_manager_1.locationIndicator.get(); _i < _a.length; _i++) {
         var basePath = _a[_i];
         if (basePath !== currentBasePath) {

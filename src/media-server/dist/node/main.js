@@ -978,9 +978,6 @@ function runRestApi(port) {
                             }
                         });
                     });
-                    app.get('/version', function (req, res) {
-                        res.json(helpMessages.version);
-                    });
                     if (!port) {
                         port = config_1.default.api.port;
                     }

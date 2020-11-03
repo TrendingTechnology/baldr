@@ -78,7 +78,7 @@ function openFolder (currentPath: string, create: boolean): StringIndexedObject 
  *   the given `currentPath` in a recursive manner.
  */
 function openFolderWithArchives (currentPath: string, create: boolean): StringIndexedObject {
-  const result = {}
+  const result: StringIndexedObject = {}
   const relPath = locationIndicator.getRelPath(currentPath)
   for (const basePath of locationIndicator.get()) {
     if (relPath) {
@@ -102,22 +102,22 @@ function openFolderWithArchives (currentPath: string, create: boolean): StringIn
  * @returns {Object} - Status informations of the action.
  */
 function mirrorFolderStructure (currentPath: string): StringIndexedObject {
-  function walkSync (dir: string, filelist?: string[]): string[] {
+  function walkSync (dir: string, fileList?: string[]): string[] {
     const files = fs.readdirSync(dir)
-    filelist = filelist || []
+    if (!fileList) fileList = []
     files.forEach(function (file) {
       const filePath = path.join(dir, file)
       if (fs.statSync(filePath).isDirectory() && file.match(/^\d\d_/)) {
-        filelist.push(filePath)
-        walkSync(filePath, filelist)
+        if (fileList) fileList.push(filePath)
+        walkSync(filePath, fileList)
       }
     })
-    return filelist
+    return fileList
   }
 
   const currentBasePath = locationIndicator.getBasePath(currentPath)
 
-  let mirrorBasePath: string
+  let mirrorBasePath: string = ''
   for (const basePath of locationIndicator.get()) {
     if (basePath !== currentBasePath) {
       mirrorBasePath = basePath
