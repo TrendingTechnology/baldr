@@ -131,7 +131,6 @@ var media_manager_1 = require("@bldr/media-manager");
 var database_js_1 = require("./database.js");
 var seating_plan_1 = require("./seating-plan");
 var operations_1 = require("./operations");
-var package_json_1 = __importDefault(require("../package.json"));
 /**
  * Base path of the media server file store.
  */
@@ -162,7 +161,7 @@ function stripTags(text) {
     return text.replace(/<[^>]+>/g, '');
 }
 /* Media objects **************************************************************/
-var folderTitleTree = new media_manager_1.TitleTree();
+var folderTitleTree = new media_manager_1.TitleTree(new media_manager_1.DeepTitle(config_1.default.mediaServer.basePath));
 var mediaCategoriesManager = new core_browser_1.MediaCategoriesManager(config_1.default);
 /**
  * Base class to be extended.
@@ -716,12 +715,6 @@ function registerMediaRestApi() {
     app.get('/', function (req, res) {
         res.json(helpMessages.navigation);
     });
-    app.get('/version', function (req, res) {
-        res.json({
-            name: package_json_1.default.name,
-            version: package_json_1.default.version
-        });
-    });
     /* query */
     app.get('/query', function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
         var query, methods, field, collection, result, find, findObject, regex, $match, $project, error_2;
@@ -1011,15 +1004,9 @@ function runRestApi(port) {
                     app.use(express_1.default.json());
                     app.use('/seating-plan', seating_plan_1.registerSeatingPlan(exports.database));
                     app.use('/media', registerMediaRestApi());
-                    helpMessages = {
-                        version: {
-                            name: package_json_1.default.name,
-                            version: package_json_1.default.version
-                        }
-                    };
+                    helpMessages = {};
                     app.get('/', function (req, res) {
                         res.json({
-                            version: package_json_1.default.version,
                             navigation: {
                                 media: helpMessages.navigation
                             }

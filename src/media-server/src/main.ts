@@ -83,8 +83,6 @@ import { Database } from './database.js'
 import { registerSeatingPlan } from './seating-plan'
 import { openParentFolder, openEditor, validateMediaType } from './operations'
 
-import packageJson from '../package.json'
-
 /**
  * Base path of the media server file store.
  */
@@ -669,13 +667,6 @@ function registerMediaRestApi () {
     res.json(helpMessages.navigation)
   })
 
-  app.get('/version', (req, res) => {
-    res.json({
-      name: packageJson.name,
-      version: packageJson.version
-    })
-  })
-
   /* query */
 
   app.get('/query', async (req, res, next) => {
@@ -857,16 +848,10 @@ async function runRestApi (port) {
   app.use('/seating-plan', registerSeatingPlan(database))
   app.use('/media', registerMediaRestApi())
 
-  const helpMessages: StringIndexedObject = {
-    version: {
-      name: packageJson.name,
-      version: packageJson.version
-    }
-  }
+  const helpMessages: StringIndexedObject = {}
 
   app.get('/', (req, res) => {
     res.json({
-      version: packageJson.version,
       navigation: {
         media: helpMessages.navigation
       }
