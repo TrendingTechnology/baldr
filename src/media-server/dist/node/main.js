@@ -514,7 +514,7 @@ function gitPull() {
 function update(full) {
     if (full === void 0) { full = false; }
     return __awaiter(this, void 0, void 0, function () {
-        var gitRevParse, lastCommitId, begin, tree, end;
+        var gitRevParse, lastCommitId, begin, end;
         var _this = this;
         return __generator(this, function (_a) {
             switch (_a.label) {
@@ -581,13 +581,10 @@ function update(full) {
                 case 5:
                     _a.sent();
                     // .replaceOne and upsert: Problems with merged objects?
-                    return [4 /*yield*/, exports.database.db.collection('folderTitleTree').deleteOne({ id: 'root' })
-                        // We use toJSON to get value from the getter functions.
-                    ];
+                    return [4 /*yield*/, exports.database.db.collection('folderTitleTree').deleteOne({ id: 'root' })];
                 case 6:
                     // .replaceOne and upsert: Problems with merged objects?
                     _a.sent();
-                    tree = core_browser_1.deepCopy(titleTree.get());
                     return [4 /*yield*/, exports.database.db.collection('folderTitleTree').insertOne({
                             id: 'root',
                             tree: titleTree.get()

@@ -530,8 +530,6 @@ async function update (full: boolean = false): Promise<StringIndexedObject> {
 
   // .replaceOne and upsert: Problems with merged objects?
   await database.db.collection('folderTitleTree').deleteOne({ id: 'root' })
-  // We use toJSON to get value from the getter functions.
-  const tree = deepCopy(titleTree.get())
   await database.db.collection('folderTitleTree').insertOne({
     id: 'root', // To avoid duplicate trees.
     tree: titleTree.get()

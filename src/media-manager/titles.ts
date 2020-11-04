@@ -13,40 +13,6 @@ import { PresentationType, StringIndexedObject } from '@bldr/type-definitions'
  */
 import config from '@bldr/config'
 
-interface FolderTitleSpec {
-  /**
-   * The title. It is the first line in the file `titles.txt`.
-   */
-  title: string
-
-  /**
-   * The subtitle. It is the second line in the file `titles.txt`.
-   */
-  subtitle?: string
-
-  /**
-   * The name of the parent folder, for example `10_Konzertierende-Musiker`
-   */
-  folderName: string
-
-  /**
-   * The relative path of the folder inside the base path, for example
-   * `12/10_Interpreten/10_Konzertierende-Musiker`.
-   */
-  path: string
-
-  /**
-   * True if the folder contains a file with the file name
-   * `Praesentation.baldr.yml`
-   */
-  hasPraesentation: boolean
-
-  /**
-   * The level in a folder title tree, starting with 1. 1 ist the top level.
-   */
-  level: number
-}
-
 /**
  * Hold some meta data about a folder and its title.
  */
@@ -86,7 +52,7 @@ class FolderTitle {
   /**
    * @param {Object} data - Some meta data about the folder.
    */
-  constructor ({ title, subtitle, folderName, path, hasPraesentation, level }: FolderTitleSpec) {
+  constructor ({ title, subtitle, folderName, path, hasPraesentation, level }: StringIndexedObject) {
     this.title = title
     if (subtitle) this.subtitle = subtitle
     this.folderName = folderName
@@ -99,33 +65,6 @@ class FolderTitle {
 /**
  * Hold metadata about a folder and its titles in a hierarchical folder
  * structure.
- *
- * ```js
- * HierarchicalFolderTitle {
- *   titles_: [
- *     FolderTitle {
- *       path: '06',
- *       title: '6. Jahrgangsstufe',
- *       folderName: '06'
- *     },
- *     FolderTitle {
- *       path: '06/20_Mensch-Zeit',
- *       title: 'Lernbereich 2: Musik - Mensch - Zeit',
- *       folderName: '20_Mensch-Zeit'
- *     },
- *     FolderTitle {
- *       path: '06/20_Mensch-Zeit/10_Bach',
- *       title: 'Johann Sebastian Bach: Musik als Bekenntnis',
- *       folderName: '10_Bach'
- *     },
- *     FolderTitle {
- *       path: '06/20_Mensch-Zeit/10_Bach/40_Bachs-vergebliche-Reise',
- *       title: 'Johann Sebastian Bachs Reise nach Berlin 1747',
- *       folderName: '40_Bachs-vergebliche-Reise'
- *     }
- *   ]
- * }
- * ```
  */
 export class DeepTitle {
 
@@ -162,7 +101,7 @@ export class DeepTitle {
   private readTitleTxt (filePath: string): FolderTitle {
     const titleRaw = fs.readFileSync(filePath, { encoding: 'utf-8' })
     const titles = titleRaw.split('\n')
-    const folderTitle = new FolderTitle(<FolderTitleSpec> {})
+    const folderTitle = new FolderTitle({})
     if (titles.length > 0) {
       folderTitle.title = titles[0]
     }
@@ -251,25 +190,6 @@ export class DeepTitle {
   /**
    * Not the title of the first and the last folder.
    *
-   * ```js
-   * HierarchicalFolderTitles {
-   *   titles_: [
-   *     FolderTitle {
-   *       title: '6. Jahrgangsstufe'
-   *     },
-   *     FolderTitle {
-   *       title: 'Lernbereich 2: Musik - Mensch - Zeit'
-   *     },
-   *     FolderTitle {
-   *       title: 'Johann Sebastian Bach: Musik als Bekenntnis'
-   *     },
-   *     FolderTitle {
-   *       title: 'Johann Sebastian Bachs Reise nach Berlin 1747'
-   *     }
-   *   ]
-   * }
-   * ```
-   *
    * -> Lernbereich 2: Musik - Mensch - Zeit / Johann Sebastian Bach: Musik als Bekenntnis
    */
   get curriculum (): string {
@@ -354,9 +274,6 @@ export class DeepTitle {
     return result
   }
 
-  toJSON(): FolderTitleSpec {
-    return this.lastFolderTitleObject
-  }
 }
 
 interface SubTree {
@@ -367,45 +284,25 @@ interface SubTree {
  * A tree of folder titles.
  *
  * ```json
- *
  * {
  *   "10": {
- *     "_title": {
- *       "title": "10. Jahrgangsstufe",
- *       "path": "10",
- *       "folderName": "10",
- *       "level": 1
- *     },
- *     "10_Kontext": {
- *       "_title": {
- *         "title": "Musik im Kontext",
- *         "path": "10/10_Kontext",
- *         "folderName": "10_Kontext",
- *         "level": 2
- *       },
- *       "10_Musiktheater-Ueberblick": {
- *         "_title": {
- *           "title": "Musiktheater: Überblick",
- *           "hasPraesentation": true,
- *           "path": "10/10_Kontext/20_Musiktheater/10_Musiktheater-Ueberblick",
- *           "folderName": "10_Musiktheater-Ueberblick",
- *           "level": 3
- *         }
- *       },
- *       "20_Oper-Carmen": {
- *         "_title": {
- *           "title": "<em class=\"person\">Georges Bizet</em>: Oper <em class=\"piece\">„Carmen“</em> (1875)",
- *           "path": "10/10_Kontext/20_Musiktheater/20_Oper-Carmen",
- *           "folderName": "20_Oper-Carmen",
- *           "level": 3
- *         },
- *         "10_Hauptpersonen": {
- *           "_title": {
- *             "title": "Personencharakteristik der vier Hauptpersonen",
- *             "hasPraesentation": true,
- *             "path": "10/10_Kontext/20_Musiktheater/20_Oper-Carmen/10_Hauptpersonen",
- *             "folderName": "10_Hauptpersonen",
- *             "level": 4
+ *     "subTree": {
+ *       "10_Kontext": {
+ *         "subTree": {
+ *           "20_Oper-Carmen": {
+ *             "subTree": {
+ *               "30_Habanera": {
+ *                 "subTree": {},
+ *                 "title": {
+ *                   "title": "Personencharakterisierung in der Oper",
+ *                   "folderName": "30_Habanera",
+ *                   "path": "10/10_Kontext/20_Musiktheater/20_Oper-Carmen/30_Habanera",
+ *                   "hasPraesentation": true,
+ *                   "level": 4,
+ *                   "subtitle": "<em class=\"person\">Georges Bizet</em>:..."
+ *                 }
+ *               }
+ *             }
  *           }
  *         }
  *       }
@@ -425,11 +322,11 @@ export class TitleTree {
   }
 
   /**
-   * Add one folder title to the tree.
+   * Add one deep folder title to the tree.
    *
-   * @param deepTitle
+   * @param deepTitle The deep folder title to add.
    */
-  add (deepTitle: DeepTitle) {
+  add (deepTitle: DeepTitle): void {
     const folderName = deepTitle.shiftFolderName()
     if (!folderName) return
     if (!this.subTree[folderName]) {
