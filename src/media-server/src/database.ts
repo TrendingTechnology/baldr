@@ -7,22 +7,32 @@ import mongodb from 'mongodb'
 import config from '@bldr/config'
 import type { StringIndexedObject } from '@bldr/type-definitions'
 
+export async function connectDb (): Promise<mongodb.Db> {
+  const conf = config.databases.mongodb
+  const user = encodeURIComponent(conf.user)
+  const password = encodeURIComponent(conf.password)
+  const authMechanism = 'DEFAULT'
+  const url = `mongodb://${user}:${password}@${conf.url}/${conf.dbName}?authMechanism=${authMechanism}`
+
+  const mongoClient = new mongodb.MongoClient(
+    url,
+    { useNewUrlParser: true, useUnifiedTopology: true }
+  )
+
+  await mongoClient.connect()
+  return mongoClient.db(config.databases.mongodb.dbName)
+}
+
 /**
  * A wrapper around MongoDB.
  */
 export class Database {
   schema: StringIndexedObject
 
-  private mongoClient: mongodb.MongoClient
-
   db: mongodb.Db
 
-  constructor () {
-    const conf = config.databases.mongodb
-    const user = encodeURIComponent(conf.user)
-    const password = encodeURIComponent(conf.password)
-    const authMechanism = 'DEFAULT'
-    const url = `mongodb://${user}:${password}@${conf.url}/${conf.dbName}?authMechanism=${authMechanism}`
+  constructor (db: mongodb.Db) {
+    this.db = db
 
     /**
      * @type {Object}
@@ -59,20 +69,10 @@ export class Database {
         drop: false
       }
     }
-
-    this.mongoClient = new mongodb.MongoClient(
-      url,
-      { useNewUrlParser: true, useUnifiedTopology: true }
-    )
-
-    //this.db = undefined
   }
 
-  async connect (): Promise<void> {
-    if (!this.db) {
-      await this.mongoClient.connect()
-      this.db = this.mongoClient.db(config.databases.mongodb.dbName)
-    }
+  async connect(): Promise<void> {
+    this.db = await connectDb()
   }
 
   /**

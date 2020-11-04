@@ -42,19 +42,36 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Database = void 0;
+exports.Database = exports.connectDb = void 0;
 var mongodb_1 = __importDefault(require("mongodb"));
 var config_1 = __importDefault(require("@bldr/config"));
+function connectDb() {
+    return __awaiter(this, void 0, void 0, function () {
+        var conf, user, password, authMechanism, url, mongoClient;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    conf = config_1.default.databases.mongodb;
+                    user = encodeURIComponent(conf.user);
+                    password = encodeURIComponent(conf.password);
+                    authMechanism = 'DEFAULT';
+                    url = "mongodb://" + user + ":" + password + "@" + conf.url + "/" + conf.dbName + "?authMechanism=" + authMechanism;
+                    mongoClient = new mongodb_1.default.MongoClient(url, { useNewUrlParser: true, useUnifiedTopology: true });
+                    return [4 /*yield*/, mongoClient.connect()];
+                case 1:
+                    _a.sent();
+                    return [2 /*return*/, mongoClient.db(config_1.default.databases.mongodb.dbName)];
+            }
+        });
+    });
+}
+exports.connectDb = connectDb;
 /**
  * A wrapper around MongoDB.
  */
 var Database = /** @class */ (function () {
-    function Database() {
-        var conf = config_1.default.databases.mongodb;
-        var user = encodeURIComponent(conf.user);
-        var password = encodeURIComponent(conf.password);
-        var authMechanism = 'DEFAULT';
-        var url = "mongodb://" + user + ":" + password + "@" + conf.url + "/" + conf.dbName + "?authMechanism=" + authMechanism;
+    function Database(db) {
+        this.db = db;
         /**
          * @type {Object}
          */
@@ -90,21 +107,18 @@ var Database = /** @class */ (function () {
                 drop: false
             }
         };
-        this.mongoClient = new mongodb_1.default.MongoClient(url, { useNewUrlParser: true, useUnifiedTopology: true });
-        //this.db = undefined
     }
     Database.prototype.connect = function () {
         return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
+            var _a;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
                     case 0:
-                        if (!!this.db) return [3 /*break*/, 2];
-                        return [4 /*yield*/, this.mongoClient.connect()];
+                        _a = this;
+                        return [4 /*yield*/, connectDb()];
                     case 1:
-                        _a.sent();
-                        this.db = this.mongoClient.db(config_1.default.databases.mongodb.dbName);
-                        _a.label = 2;
-                    case 2: return [2 /*return*/];
+                        _a.db = _b.sent();
+                        return [2 /*return*/];
                 }
             });
         });

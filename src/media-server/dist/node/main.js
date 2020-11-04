@@ -255,9 +255,9 @@ var MediaFile = /** @class */ (function () {
      */
     MediaFile.prototype.prepareForInsert = function () {
         this.addFileInfos();
-        if (!this.id)
+        if (!this.id && this.basename_)
             this.id = media_manager_1.asciify(this.basename_);
-        if (!this.title)
+        if (!this.title && this.id)
             this.title = media_manager_1.deasciify(this.id);
         this.cleanTmpProperties();
         return this;
@@ -296,7 +296,9 @@ var Asset = /** @class */ (function (_super) {
     Asset.prototype.addFileInfos = function () {
         this.addFileInfos_();
         var previewImage = this.absPath_ + "_preview.jpg";
-        this.assetType = mediaCategoriesManager.extensionToType(this.extension);
+        if (this.extension) {
+            this.assetType = mediaCategoriesManager.extensionToType(this.extension);
+        }
         if (fs_1.default.existsSync(previewImage)) {
             this.previewImage = true;
         }
@@ -372,14 +374,15 @@ var Presentation = /** @class */ (function (_super) {
         var data = _this.readYaml_(filePath);
         if (data)
             _this.importProperties(data);
-        var folderTitles = new media_manager_1.DeepTitle(filePath);
-        folderTitleTree.add(folderTitles);
-        if (typeof _this.meta === 'undefined')
+        var deepTitle = new media_manager_1.DeepTitle(filePath);
+        folderTitleTree.add(deepTitle);
+        var deepTitleTmp = deepTitle;
+        if (!_this.meta)
             _this.meta = {};
         for (var _i = 0, _a = ['id', 'title', 'subtitle', 'curriculum', 'grade']; _i < _a.length; _i++) {
             var property = _a[_i];
             if (typeof _this.meta[property] === 'undefined')
-                _this.meta[property] = folderTitles[property];
+                _this.meta[property] = deepTitleTmp[property];
         }
         /**
          * The plain text version of `this.meta.title`.
@@ -406,7 +409,7 @@ var Presentation = /** @class */ (function (_super) {
        * @returns {String}
        * @private
        */
-        _this.allTitlesSubtitle = _this.allTitlesSubtitle_(folderTitles);
+        _this.allTitlesSubtitle = _this.allTitlesSubtitle_(deepTitle);
         /**
          * Value is the same as `meta.id`
          *
@@ -417,12 +420,9 @@ var Presentation = /** @class */ (function (_super) {
     }
     /**
      * Generate the plain text version of `this.meta.title (this.meta.subtitle)`
-     *
-     * @returns {String}
-     * @private
      */
     Presentation.prototype.titleSubtitle_ = function () {
-        if (this.meta.subtitle) {
+        if (this.meta && this.meta.subtitle) {
             return this.title + " (" + core_browser_1.stripTags(this.meta.subtitle) + ")";
         }
         else {
@@ -438,13 +438,10 @@ var Presentation = /** @class */ (function (_super) {
      * 6. Jahrgangsstufe / Lernbereich 2: Musik - Mensch - Zeit /
      * Johann Sebastian Bach: Musik als Bekenntnis /
      * Johann Sebastian Bachs Reise nach Berlin 1747 (Ricercar a 3)
-     *
-     * @returns {String}
-     * @private
      */
     Presentation.prototype.allTitlesSubtitle_ = function (folderTitles) {
         var all = folderTitles.allTitles;
-        if (this.meta.subtitle) {
+        if (this.meta && this.meta.subtitle) {
             all = all + " (" + this.meta.subtitle + ")";
         }
         return core_browser_1.stripTags(all);
@@ -462,7 +459,10 @@ function insertObjectIntoDb(filePath, mediaType) {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    _a.trys.push([0, 2, , 3]);
+                    object = undefined;
+                    _a.label = 1;
+                case 1:
+                    _a.trys.push([1, 3, , 4]);
                     if (mediaType === 'presentations') {
                         object = new Presentation(filePath);
                     }
@@ -472,12 +472,14 @@ function insertObjectIntoDb(filePath, mediaType) {
                             return [2 /*return*/];
                         object = new Asset(filePath);
                     }
+                    if (!object)
+                        return [2 /*return*/];
                     object = object.prepareForInsert();
                     return [4 /*yield*/, exports.database.db.collection(mediaType).insertOne(object)];
-                case 1:
-                    _a.sent();
-                    return [3 /*break*/, 3];
                 case 2:
+                    _a.sent();
+                    return [3 /*break*/, 4];
+                case 3:
                     error_1 = _a.sent();
                     console.log(error_1);
                     relPath = filePath.replace(config_1.default.mediaServer.basePath, '');
@@ -485,8 +487,8 @@ function insertObjectIntoDb(filePath, mediaType) {
                     msg = relPath + ": [" + error_1.name + "] " + error_1.message;
                     console.log(msg);
                     errors.push(msg);
-                    return [3 /*break*/, 3];
-                case 3: return [2 /*return*/];
+                    return [3 /*break*/, 4];
+                case 4: return [2 /*return*/];
             }
         });
     });
@@ -953,15 +955,15 @@ function registerMediaRestApi() {
  */
 function runRestApi(port) {
     return __awaiter(this, void 0, void 0, function () {
-        var app, helpMessages;
+        var app, db, helpMessages;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     app = express_1.default();
-                    exports.database = new database_js_1.Database();
-                    return [4 /*yield*/, exports.database.connect()];
+                    return [4 /*yield*/, database_js_1.connectDb()];
                 case 1:
-                    _a.sent();
+                    db = _a.sent();
+                    exports.database = new database_js_1.Database(db);
                     return [4 /*yield*/, exports.database.initialize()];
                 case 2:
                     _a.sent();

@@ -3,14 +3,14 @@
  */
 import mongodb from 'mongodb';
 import type { StringIndexedObject } from '@bldr/type-definitions';
+export declare function connectDb(): Promise<mongodb.Db>;
 /**
  * A wrapper around MongoDB.
  */
 export declare class Database {
     schema: StringIndexedObject;
-    private mongoClient;
     db: mongodb.Db;
-    constructor();
+    constructor(db: mongodb.Db);
     connect(): Promise<void>;
     /**
      * List all collection names in an array.

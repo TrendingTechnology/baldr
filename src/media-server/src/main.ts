@@ -78,7 +78,7 @@ import { walk, asciify, deasciify, TitleTree, DeepTitle } from '@bldr/media-mana
 import type { StringIndexedObject } from '@bldr/type-definitions'
 
 // Submodules.
-import { Database } from './database.js'
+import { connectDb, Database } from './database.js'
 import { registerSeatingPlan } from './seating-plan'
 import { openParentFolder, openEditor, validateMediaType } from './operations'
 
@@ -116,6 +116,7 @@ class MediaFile {
   basename_?: string
   id?: string
   title?: string
+  [key: string]: any
   constructor (filePath: string) {
     /**
      * Absolute path ot the file.
@@ -239,8 +240,8 @@ class MediaFile {
    */
   prepareForInsert () {
     this.addFileInfos()
-    if (!this.id) this.id = asciify(this.basename_)
-    if (!this.title) this.title = deasciify(this.id)
+    if (!this.id && this.basename_) this.id = asciify(this.basename_)
+    if (!this.title && this.id) this.title = deasciify(this.id)
     this.cleanTmpProperties()
     return this
   }
@@ -283,7 +284,9 @@ class Asset extends MediaFile {
   addFileInfos () {
     this.addFileInfos_()
     const previewImage = `${this.absPath_}_preview.jpg`
-    this.assetType = mediaCategoriesManager.extensionToType(this.extension)
+    if (this.extension) {
+      this.assetType = mediaCategoriesManager.extensionToType(this.extension)
+    }
     if (fs.existsSync(previewImage)) {
       this.previewImage = true
     }
@@ -296,7 +299,7 @@ class Asset extends MediaFile {
    * `filename.jpg`, `filename_no002.jpg`, `filename_no003.jpg`
    */
   detectMultiparts_ () {
-    const nextAssetFileName = (count) => {
+    const nextAssetFileName = (count: number) => {
       let suffix
       if (count < 10) {
         suffix = `_no00${count}`
@@ -318,7 +321,7 @@ class Asset extends MediaFile {
      * @todo remove
      * @param {Number} count
      */
-    const nextAssetFileNameOld = (count) => {
+    const nextAssetFileNameOld = (count: number) => {
       let suffix
       if (count < 10) {
         suffix = `_no0${count}`
@@ -350,7 +353,7 @@ class Asset extends MediaFile {
  * properties are in `camelCase`.
  */
 class Presentation extends MediaFile {
-  meta: StringIndexedObject
+  meta?: StringIndexedObject
   title: string
   titleSubtitle: string
   allTitlesSubtitle: string
@@ -360,12 +363,13 @@ class Presentation extends MediaFile {
     const data = this.readYaml_(filePath)
     if (data) this.importProperties(data)
 
-    const folderTitles = new DeepTitle(filePath)
-    folderTitleTree.add(folderTitles)
+    const deepTitle = new DeepTitle(filePath)
+    folderTitleTree.add(deepTitle)
+    const deepTitleTmp: StringIndexedObject = deepTitle
 
-    if (typeof this.meta === 'undefined') this.meta = {}
+    if (!this.meta) this.meta = {}
     for (const property of ['id', 'title', 'subtitle', 'curriculum', 'grade']) {
-      if (typeof this.meta[property] === 'undefined') this.meta[property] = folderTitles[property]
+      if (typeof this.meta[property] === 'undefined') this.meta[property] = deepTitleTmp[property]
     }
 
     /**
@@ -395,7 +399,7 @@ class Presentation extends MediaFile {
    * @returns {String}
    * @private
    */
-    this.allTitlesSubtitle = this.allTitlesSubtitle_(folderTitles)
+    this.allTitlesSubtitle = this.allTitlesSubtitle_(deepTitle)
 
     /**
      * Value is the same as `meta.id`
@@ -407,12 +411,9 @@ class Presentation extends MediaFile {
 
   /**
    * Generate the plain text version of `this.meta.title (this.meta.subtitle)`
-   *
-   * @returns {String}
-   * @private
    */
-  titleSubtitle_ () {
-    if (this.meta.subtitle) {
+  private titleSubtitle_ (): string {
+    if (this.meta && this.meta.subtitle) {
       return `${this.title} (${stripTags(this.meta.subtitle)})`
     } else {
       return this.title
@@ -428,13 +429,10 @@ class Presentation extends MediaFile {
    * 6. Jahrgangsstufe / Lernbereich 2: Musik - Mensch - Zeit /
    * Johann Sebastian Bach: Musik als Bekenntnis /
    * Johann Sebastian Bachs Reise nach Berlin 1747 (Ricercar a 3)
-   *
-   * @returns {String}
-   * @private
    */
-  allTitlesSubtitle_ (folderTitles) {
+  private allTitlesSubtitle_ (folderTitles: DeepTitle): string {
     let all = folderTitles.allTitles
-    if (this.meta.subtitle) {
+    if (this.meta && this.meta.subtitle) {
       all = `${all} (${this.meta.subtitle})`
     }
     return stripTags(all)
@@ -447,8 +445,8 @@ class Presentation extends MediaFile {
  * @param {String} filePath
  * @param {String} mediaType
  */
-async function insertObjectIntoDb (filePath, mediaType) {
-  let object
+async function insertObjectIntoDb (filePath: string, mediaType: string): Promise<void> {
+  let object: Presentation | Asset | undefined = undefined
   try {
     if (mediaType === 'presentations') {
       object = new Presentation(filePath)
@@ -457,6 +455,7 @@ async function insertObjectIntoDb (filePath, mediaType) {
       if (!fs.existsSync(`${filePath}.yml`)) return
       object = new Asset(filePath)
     }
+    if (!object) return
     object = object.prepareForInsert()
     await database.db.collection(mediaType).insertOne(object)
   } catch (error) {
@@ -801,8 +800,8 @@ function registerMediaRestApi () {
 async function runRestApi (port?: number) {
   const app = express()
 
-  database = new Database()
-  await database.connect()
+  const db = await connectDb()
+  database = new Database(db)
   await database.initialize()
 
   app.use(cors())
