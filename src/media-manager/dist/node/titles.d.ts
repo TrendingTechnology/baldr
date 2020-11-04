@@ -137,7 +137,6 @@ export declare class DeepTitle {
      * All titles concatenated with ` / ` (Include the first and the last title)
      * without the subtitles.
      *
-     *
      * for example:
      *
      * 6. Jahrgangsstufe / Lernbereich 2: Musik - Mensch - Zeit /
@@ -200,10 +199,15 @@ export declare class DeepTitle {
     get grade(): number;
     /**
      * List all `FolderTitle()` objects.
-     *
-     * @returns {Array}
      */
     list(): FolderTitle[];
+    /**
+     * Get the folder title object by the name of the current folder.
+     *
+     * @param folderName - A folder name. The name must in the titles
+     *   array to get an result.
+     */
+    getFolderTitleByFolderName(folderName: string): FolderTitle | undefined;
     /**
      * Generate a object containing the meta informations of a presentation.
      */
@@ -266,8 +270,8 @@ interface SubTree {
  */
 export declare class TitleTree {
     private subTree;
-    deepTitle: DeepTitle;
-    constructor(deepTitle: DeepTitle);
+    title?: FolderTitle;
+    constructor(deepTitle: DeepTitle, folderName?: string);
     /**
      * Add one folder title to the tree.
      *

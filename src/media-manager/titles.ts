@@ -91,7 +91,7 @@ class FolderTitle {
     if (subtitle) this.subtitle = subtitle
     this.folderName = folderName
     this.path = path
-    this.hasPraesentation = hasPraesentation
+    this.hasPraesentation = hasPraesentation ? true : false
     this.level = level
   }
 }
@@ -181,7 +181,7 @@ export class DeepTitle {
    *
    * @param filePath - The path of the presentation file.
    */
-  private read (filePath: string) {
+  private read (filePath: string): void {
     // We need absolute paths. The cli gives us relative paths.
     filePath = path.resolve(filePath)
     // ['', 'var', 'data', 'baldr', 'media', '12', ..., 'Praesentation.baldr.yml']
@@ -192,7 +192,7 @@ export class DeepTitle {
     const minDepth = config.mediaServer.basePath.split(path.sep).length
     // To build the path property of the FolderTitle class.
     const folderNames = []
-    let level: number = 0
+    let level: number = 1
     for (let index = minDepth + 1; index < depth; index++) {
       const folderName = segments[index - 1]
       folderNames.push(folderName)
@@ -230,7 +230,6 @@ export class DeepTitle {
   /**
    * All titles concatenated with ` / ` (Include the first and the last title)
    * without the subtitles.
-   *
    *
    * for example:
    *
@@ -321,11 +320,23 @@ export class DeepTitle {
 
   /**
    * List all `FolderTitle()` objects.
-   *
-   * @returns {Array}
    */
   list (): FolderTitle[] {
     return this.titles
+  }
+
+  /**
+   * Get the folder title object by the name of the current folder.
+   *
+   * @param folderName - A folder name. The name must in the titles
+   *   array to get an result.
+   */
+  getFolderTitleByFolderName (folderName: string): FolderTitle | undefined {
+    for (const folderTitle of this.titles) {
+      if (folderTitle.folderName === folderName) {
+        return folderTitle
+      }
+    }
   }
 
   /**
@@ -405,10 +416,12 @@ interface SubTree {
  */
 export class TitleTree {
   private subTree: SubTree
-  deepTitle: DeepTitle
-  constructor (deepTitle: DeepTitle) {
+  title?: FolderTitle
+  constructor (deepTitle: DeepTitle, folderName?: string) {
     this.subTree = {}
-    this.deepTitle = deepTitle
+    if (folderName) {
+      this.title = deepTitle.getFolderTitleByFolderName(folderName)
+    }
   }
 
   /**
@@ -420,7 +433,7 @@ export class TitleTree {
     const folderName = deepTitle.shiftFolderName()
     if (!folderName) return
     if (!this.subTree[folderName]) {
-      this.subTree[folderName] = new TitleTree(deepTitle)
+      this.subTree[folderName] = new TitleTree(deepTitle, folderName)
     } else {
       this.subTree[folderName].add(deepTitle)
     }

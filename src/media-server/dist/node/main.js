@@ -60,6 +60,19 @@
  *
  * @module @bldr/media-server
  */
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -69,43 +82,70 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.database = void 0;
 // Node packages.
-const child_process_1 = __importDefault(require("child_process"));
-const fs_1 = __importDefault(require("fs"));
-const path_1 = __importDefault(require("path"));
+var child_process_1 = __importDefault(require("child_process"));
+var fs_1 = __importDefault(require("fs"));
+var path_1 = __importDefault(require("path"));
 // Third party packages.
-const cors_1 = __importDefault(require("cors"));
-const express_1 = __importDefault(require("express"));
-const js_yaml_1 = __importDefault(require("js-yaml"));
+var cors_1 = __importDefault(require("cors"));
+var express_1 = __importDefault(require("express"));
+var js_yaml_1 = __importDefault(require("js-yaml"));
 // Project packages.
-const config_1 = __importDefault(require("@bldr/config"));
-const core_browser_1 = require("@bldr/core-browser");
-const media_manager_1 = require("@bldr/media-manager");
+var config_1 = __importDefault(require("@bldr/config"));
+var core_browser_1 = require("@bldr/core-browser");
+var media_manager_1 = require("@bldr/media-manager");
 // Submodules.
-const database_js_1 = require("./database.js");
-const seating_plan_1 = require("./seating-plan");
-const operations_1 = require("./operations");
+var database_js_1 = require("./database.js");
+var seating_plan_1 = require("./seating-plan");
+var operations_1 = require("./operations");
 /**
  * Base path of the media server file store.
  */
-const basePath = config_1.default.mediaServer.basePath;
+var basePath = config_1.default.mediaServer.basePath;
 /**
  * A container array for all error messages send out via the REST API.
  */
-let errors = [];
+var errors = [];
 /* Media objects **************************************************************/
-const titleTree = new media_manager_1.TitleTree(new media_manager_1.DeepTitle(config_1.default.mediaServer.basePath));
-const mediaCategoriesManager = new core_browser_1.MediaCategoriesManager(config_1.default);
+var titleTree = new media_manager_1.TitleTree(new media_manager_1.DeepTitle(config_1.default.mediaServer.basePath));
+var mediaCategoriesManager = new core_browser_1.MediaCategoriesManager(config_1.default);
 /**
  * Base class to be extended.
  */
-class MediaFile {
-    constructor(filePath) {
+var MediaFile = /** @class */ (function () {
+    function MediaFile(filePath) {
         /**
          * Absolute path ot the file.
          * @type {string}
@@ -126,8 +166,8 @@ class MediaFile {
     /**
      * @access protected
      */
-    addFileInfos_() {
-        const stats = fs_1.default.statSync(this.absPath_);
+    MediaFile.prototype.addFileInfos_ = function () {
+        var stats = fs_1.default.statSync(this.absPath_);
         /**
          * The file size in bytes.
          * @type {number}
@@ -149,9 +189,9 @@ class MediaFile {
          * @type {string}
          * @private
          */
-        this.basename_ = path_1.default.basename(this.absPath_, `.${this.extension}`);
+        this.basename_ = path_1.default.basename(this.absPath_, "." + this.extension);
         return this;
-    }
+    };
     /**
      * Parse the info file of a media asset or the presenation file itself.
      *
@@ -170,30 +210,30 @@ class MediaFile {
      *
      * @access protected
      */
-    readYaml_(filePath) {
+    MediaFile.prototype.readYaml_ = function (filePath) {
         if (fs_1.default.existsSync(filePath)) {
             return js_yaml_1.default.safeLoad(fs_1.default.readFileSync(filePath, 'utf8'));
         }
         return {};
-    }
+    };
     /**
      * Add metadata from the file system, like file size or timeModifed.
      */
-    addFileInfos() {
+    MediaFile.prototype.addFileInfos = function () {
         return this.addFileInfos_();
-    }
+    };
     /**
      * Delete the temporary properties of the object. Temporary properties end
      * with `_`.
      */
-    cleanTmpProperties() {
-        for (const property in this) {
+    MediaFile.prototype.cleanTmpProperties = function () {
+        for (var property in this) {
             if (property.match(/_$/)) {
                 delete this[property];
             }
         }
         return this;
-    }
+    };
     /**
      * Merge an object into the class object. Properties can be in the
      * `snake_case` or `kebab-case` form. They are converted into `camelCase` in a
@@ -201,19 +241,19 @@ class MediaFile {
      *
      * @param {object} properties - Add an object to the class properties.
      */
-    importProperties(properties) {
+    MediaFile.prototype.importProperties = function (properties) {
         if (typeof properties === 'object') {
             properties = core_browser_1.convertPropertiesSnakeToCamel(properties);
-            for (const property in properties) {
+            for (var property in properties) {
                 this[property] = properties[property];
             }
         }
-    }
+    };
     /**
      * Prepare the object for the insert into the MongoDB database
      * Generate `id` and `title` if this properties are not present.
      */
-    prepareForInsert() {
+    MediaFile.prototype.prepareForInsert = function () {
         this.addFileInfos();
         if (!this.id && this.basename_)
             this.id = media_manager_1.asciify(this.basename_);
@@ -221,38 +261,41 @@ class MediaFile {
             this.title = media_manager_1.deasciify(this.id);
         this.cleanTmpProperties();
         return this;
-    }
-}
+    };
+    return MediaFile;
+}());
 /**
  * This class is used both for the entries in the MongoDB database as well for
  * the queries.
  */
-class Asset extends MediaFile {
+var Asset = /** @class */ (function (_super) {
+    __extends(Asset, _super);
     /**
      * @param {string} filePath - The file path of the media file.
      */
-    constructor(filePath) {
-        super(filePath);
+    function Asset(filePath) {
+        var _this = _super.call(this, filePath) || this;
         /**
          * The absolute path of the info file in the YAML format. On the absolute
          * media file path `.yml` is appended.
          * @type {string}
          */
-        this.infoFile_ = `${this.absPath_}.yml`;
-        const data = this.readYaml_(this.infoFile_);
-        this.importProperties(data);
+        _this.infoFile_ = _this.absPath_ + ".yml";
+        var data = _this.readYaml_(_this.infoFile_);
+        _this.importProperties(data);
         /**
          * Indicates if the asset has a preview image.
          * @type {Boolean}
          */
-        this.previewImage = false;
+        _this.previewImage = false;
+        return _this;
     }
     /**
      *
      */
-    addFileInfos() {
+    Asset.prototype.addFileInfos = function () {
         this.addFileInfos_();
-        const previewImage = `${this.absPath_}_preview.jpg`;
+        var previewImage = this.absPath_ + "_preview.jpg";
         if (this.extension) {
             this.assetType = mediaCategoriesManager.extensionToType(this.extension);
         }
@@ -261,28 +304,29 @@ class Asset extends MediaFile {
         }
         this.detectMultiparts_();
         return this;
-    }
+    };
     /**
      * Search for mutlipart assets. The naming scheme of multipart assets is:
      * `filename.jpg`, `filename_no002.jpg`, `filename_no003.jpg`
      */
-    detectMultiparts_() {
-        const nextAssetFileName = (count) => {
-            let suffix;
+    Asset.prototype.detectMultiparts_ = function () {
+        var _this = this;
+        var nextAssetFileName = function (count) {
+            var suffix;
             if (count < 10) {
-                suffix = `_no00${count}`;
+                suffix = "_no00" + count;
             }
             else if (count < 100) {
-                suffix = `_no0${count}`;
+                suffix = "_no0" + count;
             }
             else if (count < 1000) {
-                suffix = `_no${count}`;
+                suffix = "_no" + count;
             }
             else {
-                throw new Error(`${this.absPath_} multipart asset counts greater than 100 are not supported.`);
+                throw new Error(_this.absPath_ + " multipart asset counts greater than 100 are not supported.");
             }
-            const basePath = this.absPath_.replace(`.${this.extension}`, '');
-            const fileName = `${basePath}${suffix}.${this.extension}`;
+            var basePath = _this.absPath_.replace("." + _this.extension, '');
+            var fileName = "" + basePath + suffix + "." + _this.extension;
             return fileName;
         };
         /**
@@ -291,19 +335,19 @@ class Asset extends MediaFile {
          * @todo remove
          * @param {Number} count
          */
-        const nextAssetFileNameOld = (count) => {
-            let suffix;
+        var nextAssetFileNameOld = function (count) {
+            var suffix;
             if (count < 10) {
-                suffix = `_no0${count}`;
+                suffix = "_no0" + count;
             }
             else if (count < 100) {
-                suffix = `_no${count}`;
+                suffix = "_no" + count;
             }
-            const basePath = this.absPath_.replace(`.${this.extension}`, '');
-            const fileName = `${basePath}${suffix}.${this.extension}`;
+            var basePath = _this.absPath_.replace("." + _this.extension, '');
+            var fileName = "" + basePath + suffix + "." + _this.extension;
             return fileName;
         };
-        let count = 2;
+        var count = 2;
         while (fs_1.default.existsSync(nextAssetFileName(count)) || fs_1.default.existsSync(nextAssetFileNameOld(count))) {
             count += 1;
         }
@@ -316,39 +360,42 @@ class Asset extends MediaFile {
              */
             this.multiPartCount = count;
         }
-    }
-}
+    };
+    return Asset;
+}(MediaFile));
 /**
  * The whole presentation YAML file converted to an Javascript object. All
  * properties are in `camelCase`.
  */
-class Presentation extends MediaFile {
-    constructor(filePath) {
-        super(filePath);
-        const data = this.readYaml_(filePath);
+var Presentation = /** @class */ (function (_super) {
+    __extends(Presentation, _super);
+    function Presentation(filePath) {
+        var _this = _super.call(this, filePath) || this;
+        var data = _this.readYaml_(filePath);
         if (data)
-            this.importProperties(data);
-        const deepTitle = new media_manager_1.DeepTitle(filePath);
+            _this.importProperties(data);
+        var deepTitle = new media_manager_1.DeepTitle(filePath);
         titleTree.add(deepTitle);
-        const deepTitleTmp = deepTitle;
-        if (!this.meta)
-            this.meta = {};
-        for (const property of ['id', 'title', 'subtitle', 'curriculum', 'grade']) {
-            if (typeof this.meta[property] === 'undefined')
-                this.meta[property] = deepTitleTmp[property];
+        var deepTitleTmp = deepTitle;
+        if (!_this.meta)
+            _this.meta = {};
+        for (var _i = 0, _a = ['id', 'title', 'subtitle', 'curriculum', 'grade']; _i < _a.length; _i++) {
+            var property = _a[_i];
+            if (typeof _this.meta[property] === 'undefined')
+                _this.meta[property] = deepTitleTmp[property];
         }
         /**
          * The plain text version of `this.meta.title`.
          *
          * @type {String}
          */
-        this.title = core_browser_1.stripTags(this.meta.title);
+        _this.title = core_browser_1.stripTags(_this.meta.title);
         /**
          * The plain text version of `this.meta.title (this.meta.subtitle)`
          *
          * @type {String}
          */
-        this.titleSubtitle = this.titleSubtitle_();
+        _this.titleSubtitle = _this.titleSubtitle_();
         /**
        * The plain text version of `folderTitles.allTitles
        * (this.meta.subtitle)`
@@ -362,25 +409,26 @@ class Presentation extends MediaFile {
        * @returns {String}
        * @private
        */
-        this.allTitlesSubtitle = this.allTitlesSubtitle_(deepTitle);
+        _this.allTitlesSubtitle = _this.allTitlesSubtitle_(deepTitle);
         /**
          * Value is the same as `meta.id`
          *
          * @type {String}
          */
-        this.id = this.meta.id;
+        _this.id = _this.meta.id;
+        return _this;
     }
     /**
      * Generate the plain text version of `this.meta.title (this.meta.subtitle)`
      */
-    titleSubtitle_() {
+    Presentation.prototype.titleSubtitle_ = function () {
         if (this.meta && this.meta.subtitle) {
-            return `${this.title} (${core_browser_1.stripTags(this.meta.subtitle)})`;
+            return this.title + " (" + core_browser_1.stripTags(this.meta.subtitle) + ")";
         }
         else {
             return this.title;
         }
-    }
+    };
     /**
      * Generate the plain text version of `folderTitles.allTitles
      * (this.meta.subtitle)`
@@ -391,57 +439,70 @@ class Presentation extends MediaFile {
      * Johann Sebastian Bach: Musik als Bekenntnis /
      * Johann Sebastian Bachs Reise nach Berlin 1747 (Ricercar a 3)
      */
-    allTitlesSubtitle_(folderTitles) {
-        let all = folderTitles.allTitles;
+    Presentation.prototype.allTitlesSubtitle_ = function (folderTitles) {
+        var all = folderTitles.allTitles;
         if (this.meta && this.meta.subtitle) {
-            all = `${all} (${this.meta.subtitle})`;
+            all = all + " (" + this.meta.subtitle + ")";
         }
         return core_browser_1.stripTags(all);
-    }
-}
+    };
+    return Presentation;
+}(MediaFile));
 /* Insert *********************************************************************/
 /**
  * @param {String} filePath
  * @param {String} mediaType
  */
 function insertObjectIntoDb(filePath, mediaType) {
-    return __awaiter(this, void 0, void 0, function* () {
-        let object = undefined;
-        try {
-            if (mediaType === 'presentations') {
-                object = new Presentation(filePath);
+    return __awaiter(this, void 0, void 0, function () {
+        var object, error_1, relPath, msg;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    object = undefined;
+                    _a.label = 1;
+                case 1:
+                    _a.trys.push([1, 3, , 4]);
+                    if (mediaType === 'presentations') {
+                        object = new Presentation(filePath);
+                    }
+                    else if (mediaType === 'assets') {
+                        // Now only with meta data yml. Fix problems with PDF lying around.
+                        if (!fs_1.default.existsSync(filePath + ".yml"))
+                            return [2 /*return*/];
+                        object = new Asset(filePath);
+                    }
+                    if (!object)
+                        return [2 /*return*/];
+                    object = object.prepareForInsert();
+                    return [4 /*yield*/, exports.database.db.collection(mediaType).insertOne(object)];
+                case 2:
+                    _a.sent();
+                    return [3 /*break*/, 4];
+                case 3:
+                    error_1 = _a.sent();
+                    console.log(error_1);
+                    relPath = filePath.replace(config_1.default.mediaServer.basePath, '');
+                    relPath = relPath.replace(new RegExp('^/'), '');
+                    msg = relPath + ": [" + error_1.name + "] " + error_1.message;
+                    console.log(msg);
+                    errors.push(msg);
+                    return [3 /*break*/, 4];
+                case 4: return [2 /*return*/];
             }
-            else if (mediaType === 'assets') {
-                // Now only with meta data yml. Fix problems with PDF lying around.
-                if (!fs_1.default.existsSync(`${filePath}.yml`))
-                    return;
-                object = new Asset(filePath);
-            }
-            if (!object)
-                return;
-            object = object.prepareForInsert();
-            yield exports.database.db.collection(mediaType).insertOne(object);
-        }
-        catch (error) {
-            console.log(error);
-            let relPath = filePath.replace(config_1.default.mediaServer.basePath, '');
-            relPath = relPath.replace(new RegExp('^/'), '');
-            const msg = `${relPath}: [${error.name}] ${error.message}`;
-            console.log(msg);
-            errors.push(msg);
-        }
+        });
     });
 }
 /**
  * Run git pull on the `basePath`
  */
 function gitPull() {
-    const gitPull = child_process_1.default.spawnSync('git', ['pull'], {
+    var gitPull = child_process_1.default.spawnSync('git', ['pull'], {
         cwd: basePath,
         encoding: 'utf-8'
     });
     if (gitPull.status !== 0)
-        throw new Error(`git pull exits with an non-zero status code.`);
+        throw new Error("git pull exits with an non-zero status code.");
 }
 /**
  * Update the media server.
@@ -450,61 +511,103 @@ function gitPull() {
  *
  * @returns {Promise.<Object>}
  */
-function update(full = false) {
-    return __awaiter(this, void 0, void 0, function* () {
-        if (full)
-            gitPull();
-        const gitRevParse = child_process_1.default.spawnSync('git', ['rev-parse', 'HEAD'], {
-            cwd: basePath,
-            encoding: 'utf-8'
+function update(full) {
+    if (full === void 0) { full = false; }
+    return __awaiter(this, void 0, void 0, function () {
+        var gitRevParse, lastCommitId, begin, tree, end;
+        var _this = this;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    if (full)
+                        gitPull();
+                    gitRevParse = child_process_1.default.spawnSync('git', ['rev-parse', 'HEAD'], {
+                        cwd: basePath,
+                        encoding: 'utf-8'
+                    });
+                    lastCommitId = gitRevParse.stdout.replace(/\n$/, '');
+                    return [4 /*yield*/, exports.database.connect()];
+                case 1:
+                    _a.sent();
+                    return [4 /*yield*/, exports.database.initialize()];
+                case 2:
+                    _a.sent();
+                    return [4 /*yield*/, exports.database.flushMediaFiles()];
+                case 3:
+                    _a.sent();
+                    begin = new Date().getTime();
+                    return [4 /*yield*/, exports.database.db.collection('updates').insertOne({ begin: begin, end: 0 })];
+                case 4:
+                    _a.sent();
+                    return [4 /*yield*/, media_manager_1.walk({
+                            everyFile: function (filePath) {
+                                // Delete temporary files.
+                                if (filePath.match(/\.(aux|out|log|synctex\.gz|mscx,)$/) ||
+                                    filePath.indexOf('Praesentation_tmp.baldr.yml') > -1 ||
+                                    filePath.indexOf('title_tmp.txt') > -1) {
+                                    fs_1.default.unlinkSync(filePath);
+                                }
+                            },
+                            directory: function (filePath) {
+                                // Delete empty directories.
+                                if (fs_1.default.existsSync(filePath) && fs_1.default.statSync(filePath).isDirectory()) {
+                                    var files = fs_1.default.readdirSync(filePath);
+                                    if (files.length === 0) {
+                                        fs_1.default.rmdirSync(filePath);
+                                    }
+                                }
+                            },
+                            presentation: function (filePath) { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+                                switch (_a.label) {
+                                    case 0: return [4 /*yield*/, insertObjectIntoDb(filePath, 'presentations')];
+                                    case 1:
+                                        _a.sent();
+                                        return [2 /*return*/];
+                                }
+                            }); }); },
+                            asset: function (filePath) { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+                                switch (_a.label) {
+                                    case 0: return [4 /*yield*/, insertObjectIntoDb(filePath, 'assets')];
+                                    case 1:
+                                        _a.sent();
+                                        return [2 /*return*/];
+                                }
+                            }); }); }
+                        }, {
+                            path: basePath
+                        })
+                        // .replaceOne and upsert: Problems with merged objects?
+                    ];
+                case 5:
+                    _a.sent();
+                    // .replaceOne and upsert: Problems with merged objects?
+                    return [4 /*yield*/, exports.database.db.collection('folderTitleTree').deleteOne({ id: 'root' })
+                        // We use toJSON to get value from the getter functions.
+                    ];
+                case 6:
+                    // .replaceOne and upsert: Problems with merged objects?
+                    _a.sent();
+                    tree = core_browser_1.deepCopy(titleTree.get());
+                    return [4 /*yield*/, exports.database.db.collection('folderTitleTree').insertOne({
+                            id: 'root',
+                            tree: titleTree.get()
+                        })];
+                case 7:
+                    _a.sent();
+                    end = new Date().getTime();
+                    return [4 /*yield*/, exports.database.db.collection('updates').updateOne({ begin: begin }, { $set: { end: end, lastCommitId: lastCommitId } })];
+                case 8:
+                    _a.sent();
+                    return [2 /*return*/, {
+                            finished: true,
+                            begin: begin,
+                            end: end,
+                            duration: end - begin,
+                            lastCommitId: lastCommitId,
+                            errors: errors
+                        }];
+            }
         });
-        const lastCommitId = gitRevParse.stdout.replace(/\n$/, '');
-        yield exports.database.connect();
-        yield exports.database.initialize();
-        yield exports.database.flushMediaFiles();
-        const begin = new Date().getTime();
-        yield exports.database.db.collection('updates').insertOne({ begin: begin, end: 0 });
-        yield media_manager_1.walk({
-            everyFile: (filePath) => {
-                // Delete temporary files.
-                if (filePath.match(/\.(aux|out|log|synctex\.gz|mscx,)$/) ||
-                    filePath.indexOf('Praesentation_tmp.baldr.yml') > -1 ||
-                    filePath.indexOf('title_tmp.txt') > -1) {
-                    fs_1.default.unlinkSync(filePath);
-                }
-            },
-            directory: (filePath) => {
-                // Delete empty directories.
-                if (fs_1.default.existsSync(filePath) && fs_1.default.statSync(filePath).isDirectory()) {
-                    const files = fs_1.default.readdirSync(filePath);
-                    if (files.length === 0) {
-                        fs_1.default.rmdirSync(filePath);
-                    }
-                }
-            },
-            presentation: (filePath) => __awaiter(this, void 0, void 0, function* () { yield insertObjectIntoDb(filePath, 'presentations'); }),
-            asset: (filePath) => __awaiter(this, void 0, void 0, function* () { yield insertObjectIntoDb(filePath, 'assets'); })
-        }, {
-            path: basePath
-        });
-        // .replaceOne and upsert: Problems with merged objects?
-        yield exports.database.db.collection('folderTitleTree').deleteOne({ id: 'root' });
-        // We use toJSON to get value from the getter functions.
-        const tree = core_browser_1.deepCopy(titleTree.get());
-        yield exports.database.db.collection('folderTitleTree').insertOne({
-            id: 'root',
-            tree: titleTree.get()
-        });
-        const end = new Date().getTime();
-        yield exports.database.db.collection('updates').updateOne({ begin: begin }, { $set: { end: end, lastCommitId } });
-        return {
-            finished: true,
-            begin,
-            end,
-            duration: end - begin,
-            lastCommitId,
-            errors
-        };
     });
 }
 /* Express Rest API ***********************************************************/
@@ -516,7 +619,7 @@ function update(full = false) {
  *
  * @type {Object}
  */
-const helpMessages = {
+var helpMessages = {
     navigation: {
         get: {
             'folder-title-tree': 'Get the folder title tree as a hierarchical json object.'
@@ -573,173 +676,279 @@ const helpMessages = {
  * Register the express js rest api in a giant function.
  */
 function registerMediaRestApi() {
-    const db = exports.database.db;
+    var _this = this;
+    var db = exports.database.db;
     // https://stackoverflow.com/a/38427476/10193818
     function escapeRegex(text) {
         return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
     }
-    const app = express_1.default();
-    app.get('/', (req, res) => {
+    var app = express_1.default();
+    app.get('/', function (req, res) {
         res.json(helpMessages.navigation);
     });
     /* query */
-    app.get('/query', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
-        try {
-            const query = req.query;
-            if (Object.keys(query).length === 0) {
-                res.status(500).send({
-                    error: {
-                        msg: 'Missing query parameters!',
-                        navigationGuide: helpMessages.navigation.query
+    app.get('/query', function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+        var query, type, methods, method, field, collection, result, find, findObject, search, regex, $match, $project, error_2;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    _a.trys.push([0, 6, , 7]);
+                    query = req.query;
+                    if (Object.keys(query).length === 0) {
+                        res.status(500).send({
+                            error: {
+                                msg: 'Missing query parameters!',
+                                navigationGuide: helpMessages.navigation.query
+                            }
+                        });
+                        return [2 /*return*/];
                     }
-                });
-                return;
+                    type = operations_1.validateMediaType(query.type ? query.type.toString() : '');
+                    methods = ['exactMatch', 'substringSearch'];
+                    method = query.method ? query.method.toString() : 'substringSearch';
+                    if (!methods.includes(method)) {
+                        throw new Error("Unkown method \u201C" + method + "\u201D! Allowed methods: " + methods);
+                    }
+                    field = !query.field ? 'id' : query.field;
+                    // result
+                    if (!('result' in query))
+                        query.result = 'fullObjects';
+                    return [4 /*yield*/, exports.database.connect()];
+                case 1:
+                    _a.sent();
+                    collection = db.collection(type);
+                    result = void 0;
+                    find = void 0;
+                    if (!(query.method === 'exactMatch')) return [3 /*break*/, 3];
+                    findObject = {};
+                    findObject[field] = query.search;
+                    find = collection.find(findObject, { projection: { _id: 0 } });
+                    return [4 /*yield*/, find.next()
+                        // substringSearch
+                    ];
+                case 2:
+                    result = _a.sent();
+                    return [3 /*break*/, 5];
+                case 3:
+                    if (!(query.method === 'substringSearch')) return [3 /*break*/, 5];
+                    search = query.search ? query.search.toString() : '';
+                    regex = new RegExp(escapeRegex(search), 'gi');
+                    $match = {};
+                    $match[field] = regex;
+                    $project = void 0;
+                    if (query.result === 'fullObjects') {
+                        $project = {
+                            _id: false
+                        };
+                    }
+                    else if (query.result === 'dynamicSelect') {
+                        $project = {
+                            _id: false,
+                            id: true,
+                            name: "$" + query.field
+                        };
+                    }
+                    find = collection.aggregate([{ $match: $match }, { $project: $project }]);
+                    return [4 /*yield*/, find.toArray()];
+                case 4:
+                    result = _a.sent();
+                    _a.label = 5;
+                case 5:
+                    res.json(result);
+                    return [3 /*break*/, 7];
+                case 6:
+                    error_2 = _a.sent();
+                    next(error_2);
+                    return [3 /*break*/, 7];
+                case 7: return [2 /*return*/];
             }
-            // type
-            const type = operations_1.validateMediaType(query.type ? query.type.toString() : '');
-            // method
-            const methods = ['exactMatch', 'substringSearch'];
-            const method = query.method ? query.method.toString() : 'substringSearch';
-            if (!methods.includes(method)) {
-                throw new Error(`Unkown method “${method}”! Allowed methods: ${methods}`);
-            }
-            // field
-            const field = !query.field ? 'id' : query.field;
-            // result
-            if (!('result' in query))
-                query.result = 'fullObjects';
-            yield exports.database.connect();
-            const collection = db.collection(type);
-            // find
-            let result;
-            let find;
-            // exactMatch
-            if (query.method === 'exactMatch') {
-                const findObject = {};
-                findObject[field] = query.search;
-                find = collection.find(findObject, { projection: { _id: 0 } });
-                result = yield find.next();
-                // substringSearch
-            }
-            else if (query.method === 'substringSearch') {
-                // https://stackoverflow.com/a/38427476/10193818
-                const search = query.search ? query.search.toString() : '';
-                const regex = new RegExp(escapeRegex(search), 'gi');
-                const $match = {};
-                $match[field] = regex;
-                let $project;
-                if (query.result === 'fullObjects') {
-                    $project = {
-                        _id: false
-                    };
-                }
-                else if (query.result === 'dynamicSelect') {
-                    $project = {
-                        _id: false,
-                        id: true,
-                        name: `$${query.field}`
-                    };
-                }
-                find = collection.aggregate([{ $match }, { $project }]);
-                result = yield find.toArray();
-            }
-            res.json(result);
-        }
-        catch (error) {
-            next(error);
-        }
-    }));
+        });
+    }); });
     /* get */
-    app.get('/get/folder-title-tree', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
-        try {
-            const result = yield db.collection('folderTitleTree').find({ id: 'root' }, { projection: { _id: 0 } }).next();
-            res.json(result.tree);
-        }
-        catch (error) {
-            next(error);
-        }
-    }));
+    app.get('/get/folder-title-tree', function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+        var result, error_3;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    _a.trys.push([0, 2, , 3]);
+                    return [4 /*yield*/, db.collection('folderTitleTree').find({ id: 'root' }, { projection: { _id: 0 } }).next()];
+                case 1:
+                    result = _a.sent();
+                    res.json(result.tree);
+                    return [3 /*break*/, 3];
+                case 2:
+                    error_3 = _a.sent();
+                    next(error_3);
+                    return [3 /*break*/, 3];
+                case 3: return [2 /*return*/];
+            }
+        });
+    }); });
     /* mgmt = management */
-    app.get('/mgmt/flush', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
-        try {
-            res.json(yield exports.database.flushMediaFiles());
-        }
-        catch (error) {
-            next(error);
-        }
-    }));
-    app.get('/mgmt/init', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
-        try {
-            res.json(yield exports.database.initialize());
-        }
-        catch (error) {
-            next(error);
-        }
-    }));
-    app.get('/mgmt/open', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
-        try {
-            const query = req.query;
-            if (!query.id)
-                throw new Error('You have to specify an ID (?id=myfile).');
-            if (!query.with)
-                query.with = 'editor';
-            if (!query.type)
-                query.type = 'presentations';
-            const archive = ('archive' in query);
-            const create = ('create' in query);
-            if (query.with === 'editor') {
-                res.json(yield operations_1.openEditor(query.id.toString(), query.type.toString()));
+    app.get('/mgmt/flush', function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+        var _a, _b, error_4;
+        return __generator(this, function (_c) {
+            switch (_c.label) {
+                case 0:
+                    _c.trys.push([0, 2, , 3]);
+                    _b = (_a = res).json;
+                    return [4 /*yield*/, exports.database.flushMediaFiles()];
+                case 1:
+                    _b.apply(_a, [_c.sent()]);
+                    return [3 /*break*/, 3];
+                case 2:
+                    error_4 = _c.sent();
+                    next(error_4);
+                    return [3 /*break*/, 3];
+                case 3: return [2 /*return*/];
             }
-            else if (query.with === 'folder') {
-                res.json(yield operations_1.openParentFolder(query.id.toString(), query.type.toString(), archive, create));
+        });
+    }); });
+    app.get('/mgmt/init', function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+        var _a, _b, error_5;
+        return __generator(this, function (_c) {
+            switch (_c.label) {
+                case 0:
+                    _c.trys.push([0, 2, , 3]);
+                    _b = (_a = res).json;
+                    return [4 /*yield*/, exports.database.initialize()];
+                case 1:
+                    _b.apply(_a, [_c.sent()]);
+                    return [3 /*break*/, 3];
+                case 2:
+                    error_5 = _c.sent();
+                    next(error_5);
+                    return [3 /*break*/, 3];
+                case 3: return [2 /*return*/];
             }
-        }
-        catch (error) {
-            next(error);
-        }
-    }));
-    app.get('/mgmt/re-init', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
-        try {
-            res.json(yield exports.database.reInitialize());
-        }
-        catch (error) {
-            next(error);
-        }
-    }));
-    app.get('/mgmt/update', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
-        try {
-            res.json(yield update(false));
-            // Clear error message store.
-            errors = [];
-        }
-        catch (error) {
-            next(error);
-        }
-    }));
+        });
+    }); });
+    app.get('/mgmt/open', function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+        var query, archive, create, _a, _b, _c, _d, error_6;
+        return __generator(this, function (_e) {
+            switch (_e.label) {
+                case 0:
+                    _e.trys.push([0, 5, , 6]);
+                    query = req.query;
+                    if (!query.id)
+                        throw new Error('You have to specify an ID (?id=myfile).');
+                    if (!query.with)
+                        query.with = 'editor';
+                    if (!query.type)
+                        query.type = 'presentations';
+                    archive = ('archive' in query);
+                    create = ('create' in query);
+                    if (!(query.with === 'editor')) return [3 /*break*/, 2];
+                    _b = (_a = res).json;
+                    return [4 /*yield*/, operations_1.openEditor(query.id.toString(), query.type.toString())];
+                case 1:
+                    _b.apply(_a, [_e.sent()]);
+                    return [3 /*break*/, 4];
+                case 2:
+                    if (!(query.with === 'folder')) return [3 /*break*/, 4];
+                    _d = (_c = res).json;
+                    return [4 /*yield*/, operations_1.openParentFolder(query.id.toString(), query.type.toString(), archive, create)];
+                case 3:
+                    _d.apply(_c, [_e.sent()]);
+                    _e.label = 4;
+                case 4: return [3 /*break*/, 6];
+                case 5:
+                    error_6 = _e.sent();
+                    next(error_6);
+                    return [3 /*break*/, 6];
+                case 6: return [2 /*return*/];
+            }
+        });
+    }); });
+    app.get('/mgmt/re-init', function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+        var _a, _b, error_7;
+        return __generator(this, function (_c) {
+            switch (_c.label) {
+                case 0:
+                    _c.trys.push([0, 2, , 3]);
+                    _b = (_a = res).json;
+                    return [4 /*yield*/, exports.database.reInitialize()];
+                case 1:
+                    _b.apply(_a, [_c.sent()]);
+                    return [3 /*break*/, 3];
+                case 2:
+                    error_7 = _c.sent();
+                    next(error_7);
+                    return [3 /*break*/, 3];
+                case 3: return [2 /*return*/];
+            }
+        });
+    }); });
+    app.get('/mgmt/update', function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+        var _a, _b, error_8;
+        return __generator(this, function (_c) {
+            switch (_c.label) {
+                case 0:
+                    _c.trys.push([0, 2, , 3]);
+                    _b = (_a = res).json;
+                    return [4 /*yield*/, update(false)];
+                case 1:
+                    _b.apply(_a, [_c.sent()]);
+                    // Clear error message store.
+                    errors = [];
+                    return [3 /*break*/, 3];
+                case 2:
+                    error_8 = _c.sent();
+                    next(error_8);
+                    return [3 /*break*/, 3];
+                case 3: return [2 /*return*/];
+            }
+        });
+    }); });
     /* stats = statistics */
-    app.get('/stats/count', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
-        try {
-            res.json({
-                assets: yield db.collection('assets').countDocuments(),
-                presentations: yield db.collection('presentations').countDocuments()
-            });
-        }
-        catch (error) {
-            next(error);
-        }
-    }));
-    app.get('/stats/updates', (req, res, next) => __awaiter(this, void 0, void 0, function* () {
-        try {
-            res.json(yield db.collection('updates')
-                .find({}, { projection: { _id: 0 } })
-                .sort({ begin: -1 })
-                .limit(20)
-                .toArray());
-        }
-        catch (error) {
-            next(error);
-        }
-    }));
+    app.get('/stats/count', function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+        var _a, _b, error_9;
+        var _c;
+        return __generator(this, function (_d) {
+            switch (_d.label) {
+                case 0:
+                    _d.trys.push([0, 3, , 4]);
+                    _b = (_a = res).json;
+                    _c = {};
+                    return [4 /*yield*/, db.collection('assets').countDocuments()];
+                case 1:
+                    _c.assets = _d.sent();
+                    return [4 /*yield*/, db.collection('presentations').countDocuments()];
+                case 2:
+                    _b.apply(_a, [(_c.presentations = _d.sent(),
+                            _c)]);
+                    return [3 /*break*/, 4];
+                case 3:
+                    error_9 = _d.sent();
+                    next(error_9);
+                    return [3 /*break*/, 4];
+                case 4: return [2 /*return*/];
+            }
+        });
+    }); });
+    app.get('/stats/updates', function (req, res, next) { return __awaiter(_this, void 0, void 0, function () {
+        var _a, _b, error_10;
+        return __generator(this, function (_c) {
+            switch (_c.label) {
+                case 0:
+                    _c.trys.push([0, 2, , 3]);
+                    _b = (_a = res).json;
+                    return [4 /*yield*/, db.collection('updates')
+                            .find({}, { projection: { _id: 0 } })
+                            .sort({ begin: -1 })
+                            .limit(20)
+                            .toArray()];
+                case 1:
+                    _b.apply(_a, [_c.sent()]);
+                    return [3 /*break*/, 3];
+                case 2:
+                    error_10 = _c.sent();
+                    next(error_10);
+                    return [3 /*break*/, 3];
+                case 3: return [2 /*return*/];
+            }
+        });
+    }); });
     return app;
 }
 /**
@@ -748,34 +957,44 @@ function registerMediaRestApi() {
  * @param port - A TCP port.
  */
 function runRestApi(port) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const app = express_1.default();
-        const db = yield database_js_1.connectDb();
-        exports.database = new database_js_1.Database(db);
-        yield exports.database.initialize();
-        app.use(cors_1.default());
-        app.use(express_1.default.json());
-        app.use('/seating-plan', seating_plan_1.registerSeatingPlan(exports.database));
-        app.use('/media', registerMediaRestApi());
-        const helpMessages = {};
-        app.get('/', (req, res) => {
-            res.json({
-                navigation: {
-                    media: helpMessages.navigation
-                }
-            });
+    return __awaiter(this, void 0, void 0, function () {
+        var app, db, helpMessages;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    app = express_1.default();
+                    return [4 /*yield*/, database_js_1.connectDb()];
+                case 1:
+                    db = _a.sent();
+                    exports.database = new database_js_1.Database(db);
+                    return [4 /*yield*/, exports.database.initialize()];
+                case 2:
+                    _a.sent();
+                    app.use(cors_1.default());
+                    app.use(express_1.default.json());
+                    app.use('/seating-plan', seating_plan_1.registerSeatingPlan(exports.database));
+                    app.use('/media', registerMediaRestApi());
+                    helpMessages = {};
+                    app.get('/', function (req, res) {
+                        res.json({
+                            navigation: {
+                                media: helpMessages.navigation
+                            }
+                        });
+                    });
+                    if (!port) {
+                        port = config_1.default.api.port;
+                    }
+                    app.listen(port, function () {
+                        console.log("The BALDR REST API is running on port " + port + ".");
+                    });
+                    return [2 /*return*/, app];
+            }
         });
-        if (!port) {
-            port = config_1.default.api.port;
-        }
-        app.listen(port, () => {
-            console.log(`The BALDR REST API is running on port ${port}.`);
-        });
-        return app;
     });
 }
-const main = function () {
-    let port;
+var main = function () {
+    var port;
     if (process.argv.length === 3)
         port = parseInt(process.argv[2]);
     return runRestApi(port);

@@ -27,7 +27,7 @@ class FolderTitle {
             this.subtitle = subtitle;
         this.folderName = folderName;
         this.path = path;
-        this.hasPraesentation = hasPraesentation;
+        this.hasPraesentation = hasPraesentation ? true : false;
         this.level = level;
     }
 }
@@ -116,7 +116,7 @@ class DeepTitle {
         const minDepth = config_1.default.mediaServer.basePath.split(path_1.default.sep).length;
         // To build the path property of the FolderTitle class.
         const folderNames = [];
-        let level = 0;
+        let level = 1;
         for (let index = minDepth + 1; index < depth; index++) {
             const folderName = segments[index - 1];
             folderNames.push(folderName);
@@ -151,7 +151,6 @@ class DeepTitle {
     /**
      * All titles concatenated with ` / ` (Include the first and the last title)
      * without the subtitles.
-     *
      *
      * for example:
      *
@@ -235,11 +234,22 @@ class DeepTitle {
     }
     /**
      * List all `FolderTitle()` objects.
-     *
-     * @returns {Array}
      */
     list() {
         return this.titles;
+    }
+    /**
+     * Get the folder title object by the name of the current folder.
+     *
+     * @param folderName - A folder name. The name must in the titles
+     *   array to get an result.
+     */
+    getFolderTitleByFolderName(folderName) {
+        for (const folderTitle of this.titles) {
+            if (folderTitle.folderName === folderName) {
+                return folderTitle;
+            }
+        }
     }
     /**
      * Generate a object containing the meta informations of a presentation.
@@ -313,9 +323,11 @@ exports.DeepTitle = DeepTitle;
  * ```
  */
 class TitleTree {
-    constructor(deepTitle) {
+    constructor(deepTitle, folderName) {
         this.subTree = {};
-        this.deepTitle = deepTitle;
+        if (folderName) {
+            this.title = deepTitle.getFolderTitleByFolderName(folderName);
+        }
     }
     /**
      * Add one folder title to the tree.
@@ -327,7 +339,7 @@ class TitleTree {
         if (!folderName)
             return;
         if (!this.subTree[folderName]) {
-            this.subTree[folderName] = new TitleTree(deepTitle);
+            this.subTree[folderName] = new TitleTree(deepTitle, folderName);
         }
         else {
             this.subTree[folderName].add(deepTitle);
