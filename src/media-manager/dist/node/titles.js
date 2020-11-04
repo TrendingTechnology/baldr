@@ -23,7 +23,8 @@ class FolderTitle {
      */
     constructor({ title, subtitle, folderName, path, hasPraesentation, level }) {
         this.title = title;
-        this.subtitle = subtitle;
+        if (subtitle)
+            this.subtitle = subtitle;
         this.folderName = folderName;
         this.path = path;
         this.hasPraesentation = hasPraesentation;
@@ -115,6 +116,7 @@ class DeepTitle {
         const minDepth = config_1.default.mediaServer.basePath.split(path_1.default.sep).length;
         // To build the path property of the FolderTitle class.
         const folderNames = [];
+        let level = 0;
         for (let index = minDepth + 1; index < depth; index++) {
             const folderName = segments[index - 1];
             folderNames.push(folderName);
@@ -129,6 +131,7 @@ class DeepTitle {
                 const folderTitle = this.readTitleTxt(titleTxt);
                 folderTitle.path = folderNames.join(path_1.default.sep);
                 folderTitle.folderName = folderName;
+                folderTitle.level = level++;
                 this.titles.push(folderTitle);
             }
         }
@@ -253,12 +256,16 @@ class DeepTitle {
             delete result.subtitle;
         return result;
     }
+    toJSON() {
+        return this.lastFolderTitleObject;
+    }
 }
 exports.DeepTitle = DeepTitle;
 /**
  * A tree of folder titles.
  *
  * ```json
+ *
  * {
  *   "10": {
  *     "_title": {

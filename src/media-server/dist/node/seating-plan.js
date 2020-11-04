@@ -9,37 +9,36 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.registerSeatingPlan = void 0;
 // Third party packages.
-var express_1 = __importDefault(require("express"));
+const express_1 = __importDefault(require("express"));
 function registerSeatingPlan(database) {
-    var app = express_1.default();
-    app.post('/save-state', function (req, res) {
-        var body = req.body;
+    const app = express_1.default();
+    app.post('/save-state', (req, res) => {
+        const body = req.body;
         if (!{}.hasOwnProperty.call(body, 'timeStampMsec')) {
             res.sendStatus(404);
         }
         database.seatingPlan.insertOne(body);
-        var responseMessage = {
+        const responseMessage = {
             success: body.timeStampMsec,
             storedObject: body
         };
         res.json(responseMessage);
         console.log(responseMessage);
     });
-    app.get('/get-states', function (req, res) {
-        database.seatingPlan.aggregate([{ $match: {} }, { $project: { timeStampMsec: 1, _id: 0 } }]).toArray(function (error, result) {
+    app.get('/get-states', (req, res) => {
+        database.seatingPlan.aggregate([{ $match: {} }, { $project: { timeStampMsec: 1, _id: 0 } }]).toArray((error, result) => {
             if (error) {
                 return res.status(500).send(error);
             }
-            var states = [];
-            for (var _i = 0, result_1 = result; _i < result_1.length; _i++) {
-                var state = result_1[_i];
+            const states = [];
+            for (const state of result) {
                 states.push(state.timeStampMsec);
             }
             res.status(200).send(states);
         });
     });
-    app.get('/latest', function (req, res) {
-        database.seatingPlan.find().sort({ timeStampMsec: -1 }).limit(1).toArray(function (error, result) {
+    app.get('/latest', (req, res) => {
+        database.seatingPlan.find().sort({ timeStampMsec: -1 }).limit(1).toArray((error, result) => {
             if (error) {
                 return res.status(500).send(error);
             }
@@ -51,20 +50,20 @@ function registerSeatingPlan(database) {
             }
         });
     });
-    app.get('/get-state-by-time/:timeStampMsec', function (req, res) {
-        database.seatingPlan.find({ timeStampMsec: parseInt(req.params.timeStampMsec) }).toArray(function (error, result) {
+    app.get('/get-state-by-time/:timeStampMsec', (req, res) => {
+        database.seatingPlan.find({ timeStampMsec: parseInt(req.params.timeStampMsec) }).toArray((error, result) => {
             if (error) {
                 return res.status(500).send(error);
             }
             res.status(200).send(result);
         });
     });
-    app.delete('/delete-state-by-time/:timeStampMsec', function (req, res) {
-        database.seatingPlan.deleteOne({ timeStampMsec: parseInt(req.params.timeStampMsec) }, {}, function (error, result) {
+    app.delete('/delete-state-by-time/:timeStampMsec', (req, res) => {
+        database.seatingPlan.deleteOne({ timeStampMsec: parseInt(req.params.timeStampMsec) }, {}, (error, result) => {
             if (error) {
                 return res.status(500).send(error);
             }
-            var message = {
+            const message = {
                 deletedCount: result.deletedCount,
                 timeStampMsec: parseInt(req.params.timeStampMsec)
             };

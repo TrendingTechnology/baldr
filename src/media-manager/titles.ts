@@ -6,7 +6,7 @@
 import fs from 'fs'
 import path from 'path'
 
-import { PresentationType } from '@bldr/type-definitions'
+import { PresentationType, StringIndexedObject } from '@bldr/type-definitions'
 
 /**
  * The configuration object from `/etc/baldr.json`
@@ -22,7 +22,7 @@ interface FolderTitleSpec {
   /**
    * The subtitle. It is the second line in the file `titles.txt`.
    */
-  subtitle: string
+  subtitle?: string
 
   /**
    * The name of the parent folder, for example `10_Konzertierende-Musiker`
@@ -59,7 +59,7 @@ class FolderTitle {
   /**
    * The subtitle. It is the second line in the file `titles.txt`.
    */
-  subtitle: string
+  subtitle?: string
 
   /**
    * The name of the parent folder, for example `10_Konzertierende-Musiker`
@@ -88,7 +88,7 @@ class FolderTitle {
    */
   constructor ({ title, subtitle, folderName, path, hasPraesentation, level }: FolderTitleSpec) {
     this.title = title
-    this.subtitle = subtitle
+    if (subtitle) this.subtitle = subtitle
     this.folderName = folderName
     this.path = path
     this.hasPraesentation = hasPraesentation
@@ -192,6 +192,7 @@ export class DeepTitle {
     const minDepth = config.mediaServer.basePath.split(path.sep).length
     // To build the path property of the FolderTitle class.
     const folderNames = []
+    let level: number = 0
     for (let index = minDepth + 1; index < depth; index++) {
       const folderName = segments[index - 1]
       folderNames.push(folderName)
@@ -206,6 +207,7 @@ export class DeepTitle {
         const folderTitle = this.readTitleTxt(titleTxt)
         folderTitle.path = folderNames.join(path.sep)
         folderTitle.folderName = folderName
+        folderTitle.level = level++
         this.titles.push(folderTitle)
       }
     }
@@ -340,6 +342,10 @@ export class DeepTitle {
     if (!result.subtitle) delete result.subtitle
     return result
   }
+
+  toJSON(): FolderTitleSpec {
+    return this.lastFolderTitleObject
+  }
 }
 
 interface SubTree {
@@ -350,6 +356,7 @@ interface SubTree {
  * A tree of folder titles.
  *
  * ```json
+ *
  * {
  *   "10": {
  *     "_title": {

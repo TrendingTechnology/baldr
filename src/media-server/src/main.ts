@@ -68,12 +68,12 @@ import path from 'path'
 
 // Third party packages.
 import cors from 'cors'
-import express from 'express'
+import express, { json } from 'express'
 import yaml from 'js-yaml'
 
 // Project packages.
 import config from '@bldr/config'
-import { MediaCategoriesManager, convertPropertiesSnakeToCamel, getExtension, stripTags } from '@bldr/core-browser'
+import { MediaCategoriesManager, convertPropertiesSnakeToCamel, getExtension, stripTags, deepCopy } from '@bldr/core-browser'
 import { walk, asciify, deasciify, TitleTree, DeepTitle } from '@bldr/media-manager'
 import type { StringIndexedObject } from '@bldr/type-definitions'
 
@@ -99,7 +99,7 @@ export let database: Database
 
 /* Media objects **************************************************************/
 
-const folderTitleTree = new TitleTree(new DeepTitle(config.mediaServer.basePath))
+const titleTree = new TitleTree(new DeepTitle(config.mediaServer.basePath))
 
 const mediaCategoriesManager = new MediaCategoriesManager(config)
 
@@ -364,7 +364,7 @@ class Presentation extends MediaFile {
     if (data) this.importProperties(data)
 
     const deepTitle = new DeepTitle(filePath)
-    folderTitleTree.add(deepTitle)
+    titleTree.add(deepTitle)
     const deepTitleTmp: StringIndexedObject = deepTitle
 
     if (!this.meta) this.meta = {}
@@ -489,7 +489,7 @@ function gitPull () {
  *
  * @returns {Promise.<Object>}
  */
-async function update (full = false) {
+async function update (full: boolean = false): Promise<StringIndexedObject> {
   if (full) gitPull()
   const gitRevParse = childProcess.spawnSync('git', ['rev-parse', 'HEAD'], {
     cwd: basePath,
@@ -528,14 +528,14 @@ async function update (full = false) {
     path: basePath
   })
 
-  // .replaceOne and upsert: Problems with merge objects?
+  // .replaceOne and upsert: Problems with merged objects?
   await database.db.collection('folderTitleTree').deleteOne({ id: 'root' })
-  await database.db.collection('folderTitleTree').insertOne(
-    {
-      id: 'root',
-      tree: folderTitleTree.get()
-    }
-  )
+  // We use toJSON to get value from the getter functions.
+  const tree = deepCopy(titleTree.get())
+  await database.db.collection('folderTitleTree').insertOne({
+    id: 'root', // To avoid duplicate trees.
+    tree: titleTree.get()
+  })
   const end = new Date().getTime()
   await database.db.collection('updates').updateOne({ begin: begin }, { $set: { end: end, lastCommitId } })
   return {

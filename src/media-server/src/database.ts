@@ -59,7 +59,9 @@ export class Database {
         drop: true
       },
       folderTitleTree: {
-        indexes: [],
+        indexes: [
+          { field: 'id', unique: true },
+        ],
         drop: true
       },
       seatingPlan: {
@@ -157,6 +159,7 @@ export class Database {
     const countDroppedPresentations = await this.presentations.countDocuments()
     await this.assets.deleteMany({})
     await this.presentations.deleteMany({})
+    await this.folderTitleTree.deleteMany({})
     return {
       countDroppedAssets, countDroppedPresentations
     }

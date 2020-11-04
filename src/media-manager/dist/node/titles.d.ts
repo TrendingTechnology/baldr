@@ -10,7 +10,7 @@ interface FolderTitleSpec {
     /**
      * The subtitle. It is the second line in the file `titles.txt`.
      */
-    subtitle: string;
+    subtitle?: string;
     /**
      * The name of the parent folder, for example `10_Konzertierende-Musiker`
      */
@@ -41,7 +41,7 @@ declare class FolderTitle {
     /**
      * The subtitle. It is the second line in the file `titles.txt`.
      */
-    subtitle: string;
+    subtitle?: string;
     /**
      * The name of the parent folder, for example `10_Konzertierende-Musiker`
      */
@@ -208,6 +208,7 @@ export declare class DeepTitle {
      * Generate a object containing the meta informations of a presentation.
      */
     generatePresetationMeta(): PresentationType.Meta;
+    toJSON(): FolderTitleSpec;
 }
 interface SubTree {
     [key: string]: TitleTree;
@@ -216,6 +217,7 @@ interface SubTree {
  * A tree of folder titles.
  *
  * ```json
+ *
  * {
  *   "10": {
  *     "_title": {
