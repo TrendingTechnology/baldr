@@ -48,18 +48,20 @@ function downloadIcons(iconMapping, urlTemplate) {
         // console.log(`New download task using this template: ${chalk.red(urlTemplate)}`)
         const iconsCount = Object.keys(iconMapping).length;
         let count = 0;
-        for (const icon in iconMapping) {
-            const url = urlTemplate.replace('{icon}', icon);
+        for (const oldName in iconMapping) {
+            const url = urlTemplate.replace('{icon}', oldName);
             // console.log(`Download icon “${chalk.blue(icon)}” from “${chalk.yellow(url)}”`)
-            let newName = '';
-            if (iconMapping[icon]) {
-                newName = iconMapping[icon];
+            let newName = oldName;
+            const iconDef = iconMapping[oldName];
+            if (typeof iconDef === 'string' && iconDef) {
+                newName = iconDef;
             }
-            if (!newName)
-                throw new Error('Unkown icon name.');
-            yield downloadIcon(url, icon, newName);
+            else if (typeof iconDef === 'object' && iconDef.newName) {
+                newName = iconDef.newName;
+            }
+            yield downloadIcon(url, oldName, newName);
             count++;
-            cmd.updateProgress(count / iconsCount, `download icon “${chalk_1.default.blue(icon)}”`);
+            cmd.updateProgress(count / iconsCount, `download icon “${chalk_1.default.blue(oldName)}”`);
         }
         cmd.stopProgress();
     });
@@ -133,67 +135,7 @@ function action() {
     tmpDir = fs_1.default.mkdtempSync(path_1.default.join(os_1.default.tmpdir(), path_1.default.sep));
     console.log(`The SVG files of the icons are download to: ${chalk_1.default.yellow(tmpDir)}`);
     buildFont([
-        {
-            urlTemplate: 'https://raw.githubusercontent.com/Templarian/MaterialDesign/master/svg/{icon}.svg',
-            iconMapping: {
-                'account-group': '',
-                'account-plus': '',
-                'account-star-outline': 'account-star',
-                'air-filter': '',
-                'arrow-left': '',
-                'chevron-down': '',
-                'chevron-left': '',
-                'chevron-right': '',
-                'chevron-up': '',
-                'content-save': 'save',
-                'dice-multiple': '',
-                'file-image': '',
-                'file-music': 'file-audio',
-                'file-outline': '',
-                'file-video': '',
-                'google-spreadsheet': '',
-                'open-in-new': '',
-                'presentation-play': 'presentation',
-                'seat-outline': '',
-                'table-of-contents': '',
-                'test-tube': '',
-                'timeline-text': '',
-                'unfold-more-horizontal': 'steps',
-                'unfold-more-vertical': 'slides',
-                'video-switch': '',
-                'window-open': '',
-                close: '',
-                cloud: '',
-                delete: '',
-                export: '',
-                import: '',
-                'magnify': '',
-                notebook: '',
-                wikipedia: '',
-                'account-hard-hat': 'worker',
-                youtube: '',
-                play: '',
-                pause: '',
-                'skip-next': '',
-                'skip-previous': '',
-                pencil: '',
-                'video-vintage': '',
-                'comment-quote': '',
-                'clipboard-account': '',
-                'file-presentation-box': '',
-                'image': '',
-                music: '',
-                'folder-open': '',
-                'comment-alert': '',
-                'comment-question': '',
-                update: '',
-                'play-speed': '',
-                'file-tree': '',
-                trumpet: '',
-                'text-box-multiple-outline': 'multi-part',
-                'cloud-download': '' // Master slide youtube for download (cached) video file with an asset.
-            }
-        },
+        config_1.default.iconFont,
         {
             folder: basePath('icons'),
             // iconMapping not used

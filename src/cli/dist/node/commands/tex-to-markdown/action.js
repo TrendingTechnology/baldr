@@ -10,6 +10,7 @@ const chalk_1 = __importDefault(require("chalk"));
 // Project packages.
 const tex_markdown_converter_1 = require("@bldr/tex-markdown-converter");
 const media_manager_1 = require("@bldr/media-manager");
+const core_node_1 = require("@bldr/core-node");
 /**
  * @param input - A file path or a text string to convert.
  */
@@ -20,7 +21,7 @@ function convertTexToMarkdown(input) {
     }
     else {
         console.log(chalk_1.default.green(media_manager_1.locationIndicator.getRelPath(input)));
-        content = media_manager_1.readFile(input);
+        content = core_node_1.readFile(input);
     }
     console.log('\n' + chalk_1.default.yellow('Original:') + '\n');
     console.log(content);

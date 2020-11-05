@@ -6,7 +6,8 @@ import chalk from 'chalk'
 
 // Project packages.
 import { convertTexToMd } from '@bldr/tex-markdown-converter'
-import { readFile, locationIndicator, walk } from '@bldr/media-manager'
+import { locationIndicator, walk } from '@bldr/media-manager'
+import { readFile } from '@bldr/core-node'
 
 /**
  * @param input - A file path or a text string to convert.

@@ -14,12 +14,11 @@ import webfont from 'webfont'
 // Project packages.
 import { CommandRunner } from '@bldr/cli-utils'
 import config from '@bldr/config'
+import { IconFontMapping, IconFontConfiguration, IconDefintion } from '@bldr/type-definitions'
 
 const cmd = new CommandRunner()
 
 let tmpDir: string
-
-type IconMapping = { [key: string]: string }
 
 function basePath (...args: string[]): string {
   return path.join(config.localRepo, 'src', 'icons', 'src', ...arguments)
@@ -37,22 +36,25 @@ async function downloadIcon (url: string, name: string, newName: string): Promis
   // console.log(`Download destination: ${chalk.green(destination)}`)
 }
 
-async function downloadIcons (iconMapping: IconMapping, urlTemplate: string): Promise<void> {
+async function downloadIcons (iconMapping: IconFontMapping, urlTemplate: string): Promise<void> {
   cmd.startProgress()
   // console.log(`New download task using this template: ${chalk.red(urlTemplate)}`)
   const iconsCount = Object.keys(iconMapping).length
   let count = 0
-  for (const icon in iconMapping) {
-    const url = urlTemplate.replace('{icon}', icon)
+  for (const oldName in iconMapping) {
+    const url = urlTemplate.replace('{icon}', oldName)
     // console.log(`Download icon “${chalk.blue(icon)}” from “${chalk.yellow(url)}”`)
-    let newName: string = ''
-    if (iconMapping[icon]) {
-      newName = iconMapping[icon]
+    let newName: string = oldName
+    const iconDef: string | IconDefintion = iconMapping[oldName]
+    if (typeof iconDef === 'string' && iconDef) {
+      newName = iconDef
+    } else if (typeof iconDef === 'object' && iconDef.newName) {
+      newName = iconDef.newName
     }
-    if (!newName) throw new Error('Unkown icon name.')
-    await downloadIcon(url, icon, newName)
+
+    await downloadIcon(url, oldName, newName)
     count++
-    cmd.updateProgress(count / iconsCount, `download icon “${chalk.blue(icon)}”`)
+    cmd.updateProgress(count / iconsCount, `download icon “${chalk.blue(oldName)}”`)
   }
   cmd.stopProgress()
 }
@@ -119,13 +121,7 @@ function convertIntoFontFiles (config: WebFontConfig): void {
     })
 }
 
-interface FontBuildOption {
-  iconMapping: IconMapping
-  folder?: string
-  urlTemplate?: string
-}
-
-async function buildFont (options: FontBuildOption[]): Promise<void> {
+async function buildFont (options: IconFontConfiguration[]): Promise<void> {
   for (const task of options) {
     if (task.urlTemplate) {
       await downloadIcons(task.iconMapping, task.urlTemplate)
@@ -148,67 +144,7 @@ function action (): void {
   console.log(`The SVG files of the icons are download to: ${chalk.yellow(tmpDir)}`)
 
   buildFont([
-    {
-      urlTemplate: 'https://raw.githubusercontent.com/Templarian/MaterialDesign/master/svg/{icon}.svg',
-      iconMapping: {
-        'account-group': '',
-        'account-plus': '',
-        'account-star-outline': 'account-star',
-        'air-filter': '',
-        'arrow-left': '',
-        'chevron-down': '',
-        'chevron-left': '',
-        'chevron-right': '',
-        'chevron-up': '',
-        'content-save': 'save',
-        'dice-multiple': '',
-        'file-image': '',
-        'file-music': 'file-audio',
-        'file-outline': '',
-        'file-video': '',
-        'google-spreadsheet': '',
-        'open-in-new': '',
-        'presentation-play': 'presentation',
-        'seat-outline': '',
-        'table-of-contents': '',
-        'test-tube': '',
-        'timeline-text': '',
-        'unfold-more-horizontal': 'steps',
-        'unfold-more-vertical': 'slides',
-        'video-switch': '',
-        'window-open': '',
-        close: '',
-        cloud: '',
-        delete: '',
-        export: '',
-        import: '',
-        'magnify': '', // Search icon
-        notebook: '',
-        wikipedia: '',
-        'account-hard-hat': 'worker',
-        youtube: '',
-        play: '',
-        pause: '',
-        'skip-next': '',
-        'skip-previous': '',
-        pencil: '', // master-icon: editor
-        'video-vintage': '', // master-icon: video
-        'comment-quote': '', // master-icon: quote
-        'clipboard-account': '',
-        'file-presentation-box': '',
-        'image': '', // imaster-icon: image
-        music: '', // imaster-icon: audio
-        'folder-open': '',
-        'comment-alert': '', // imaster-icon: task
-        'comment-question': '', // imaster-icon: question
-        update: '', // Update icon for the REST API overview.
-        'play-speed': '', // Start play
-        'file-tree': '', // Master slide section
-        trumpet: '', // Master slide “instrument”
-        'text-box-multiple-outline': 'multi-part', // multipart assets
-        'cloud-download': '' // Master slide youtube for download (cached) video file with an asset.
-      }
-    },
+    config.iconFont,
     {
       folder: basePath('icons'),
       // iconMapping not used

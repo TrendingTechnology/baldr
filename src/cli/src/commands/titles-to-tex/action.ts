@@ -3,7 +3,8 @@ import chalk from 'chalk'
 
 // Project packages.
 import { convertMdToTex } from '@bldr/tex-markdown-converter'
-import { readFile, writeFile, DeepTitle, walk } from '@bldr/media-manager'
+import { DeepTitle, walk } from '@bldr/media-manager'
+import { readFile, writeFile } from '@bldr/core-node'
 
 /**
  * ```tex

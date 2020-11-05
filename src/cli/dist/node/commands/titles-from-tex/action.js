@@ -11,6 +11,7 @@ const chalk_1 = __importDefault(require("chalk"));
 // Project packages.
 const tex_markdown_converter_1 = require("@bldr/tex-markdown-converter");
 const media_manager_1 = require("@bldr/media-manager");
+const core_node_1 = require("@bldr/core-node");
 function clean(text) {
     text = text.replace(/\n/g, ' ');
     text = text.replace(/\s+/g, ' ');
@@ -18,7 +19,7 @@ function clean(text) {
     return text;
 }
 function convertTexToFolderTitles(filePath, cmdObj) {
-    const content = media_manager_1.readFile(filePath);
+    const content = core_node_1.readFile(filePath);
     const matchTitle = content.match(/ {2}titel = \{(.+?)\}[,\n]/s);
     const output = [];
     let title = '';
@@ -44,12 +45,12 @@ function convertTexToFolderTitles(filePath, cmdObj) {
         }
         const presFile = path_1.default.join(destBasePath, 'Praesentation.baldr.yml');
         if (!fs_1.default.existsSync(presFile) || cmdObj.force) {
-            media_manager_1.writeFile(presFile, '---\n');
+            core_node_1.writeFile(presFile, '---\n');
         }
         console.log(chalk_1.default.green(dest));
         console.log(`  title: ${chalk_1.default.blue(title)}`);
         console.log(`  subtitle: ${chalk_1.default.cyan(subtitle)}\n`);
-        media_manager_1.writeFile(dest, output.join('\n') + '\n');
+        core_node_1.writeFile(dest, output.join('\n') + '\n');
     }
 }
 /**

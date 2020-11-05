@@ -24,9 +24,9 @@ function generateOneClozeSvg(tmpPdfFile, pageCount, pageNo) {
     // Convert into SVG
     child_process_1.default.spawnSync('pdf2svg', [tmpPdfFile, svgFileName, pageNo.toString()], { cwd });
     // Remove width="" and height="" attributes
-    let svgContent = media_manager_1.readFile(svgFilePath);
+    let svgContent = core_node_1.readFile(svgFilePath);
     svgContent = svgContent.replace(/(width|height)=".+?" /g, '');
-    media_manager_1.writeFile(svgFilePath, svgContent);
+    core_node_1.writeFile(svgFilePath, svgContent);
     // Write info yaml
     const titles = new media_manager_1.DeepTitle(tmpPdfFile);
     const infoYaml = {
@@ -36,7 +36,7 @@ function generateOneClozeSvg(tmpPdfFile, pageCount, pageNo) {
         cloze_page_no: pageNo,
         cloze_page_count: pageCount
     };
-    media_manager_1.writeFile(path_1.default.join(cwd, `${svgFileName}.yml`), media_manager_1.yamlToTxt(infoYaml));
+    core_node_1.writeFile(path_1.default.join(cwd, `${svgFileName}.yml`), media_manager_1.yamlToTxt(infoYaml));
     // Move to LT (Lückentext) subdir.
     const newPath = media_manager_1.locationIndicator.moveIntoSubdir(path_1.default.resolve(svgFileName), 'LT');
     media_manager_1.moveAsset(svgFilePath, newPath);
@@ -49,7 +49,7 @@ function generateClozeSvg(filePath) {
     filePath = path_1.default.resolve(filePath);
     console.log(filePath);
     const cwd = path_1.default.dirname(filePath);
-    let texFileContent = media_manager_1.readFile(filePath);
+    let texFileContent = core_node_1.readFile(filePath);
     if (texFileContent.indexOf('cloze') === -1) {
         console.log(`${chalk_1.default.red(filePath)} has no cloze texts.`);
         return;
@@ -82,7 +82,7 @@ function generateClozeSvg(filePath) {
         }
         return `\\documentclass[${args.join(',')}]{schule-arbeitsblatt}`;
     });
-    media_manager_1.writeFile(tmpTexFile, texFileContent);
+    core_node_1.writeFile(tmpTexFile, texFileContent);
     const result = child_process_1.default.spawnSync('lualatex', ['--shell-escape', tmpTexFile], { cwd, encoding: 'utf-8' });
     if (result.status !== 0) {
         console.log(result.stdout);

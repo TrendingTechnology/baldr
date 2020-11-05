@@ -10,8 +10,6 @@ import chalk from 'chalk'
 import { getExtension } from '@bldr/core-browser'
 import {
   moveAsset,
-  readFile,
-  writeFile,
   writeYamlFile,
   walk,
   readAssetYaml,
@@ -21,6 +19,7 @@ import {
   asciify,
   locationIndicator
 } from '@bldr/media-manager'
+import { readFile, writeFile } from '@bldr/core-node'
 
 /**
  * Relocate a media asset inside the main media folder. Move some

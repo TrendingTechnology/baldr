@@ -7,8 +7,8 @@ import path from 'path'
 import chalk from 'chalk'
 
 // Project packages.
-import { moveAsset, readFile, writeFile, yamlToTxt, operations, locationIndicator, DeepTitle, walk } from '@bldr/media-manager'
-import { getPdfPageCount } from '@bldr/core-node'
+import { moveAsset, yamlToTxt, operations, locationIndicator, DeepTitle, walk } from '@bldr/media-manager'
+import { getPdfPageCount, readFile, writeFile } from '@bldr/core-node'
 
 function generateOneClozeSvg (tmpPdfFile: string, pageCount: number, pageNo: number) {
   const cwd = path.dirname(tmpPdfFile)
@@ -70,11 +70,11 @@ function generateClozeSvg (filePath: string) {
   // \documentclass[angabe,querformat]{schule-arbeitsblatt}
   texFileContent = texFileContent.replace(
     /\\documentclass(\[(.*)\])?\{schule-arbeitsblatt\}/,
-    function (match, p1, p2) {
+    function (match: string, p1: string, p2: string) {
       // match \documentclass[angabe,querformat]{schule-arbeitsblatt}
       // p1: [angabe,querformat]
       // p2: angabe,querformat
-      let args = []
+      let args: string[] = []
       let isSolutionSet = false
       if (p2) {
         args = p2.split(',')

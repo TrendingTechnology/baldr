@@ -17,7 +17,7 @@ const fs_1 = __importDefault(require("fs"));
 const csv_parser_1 = __importDefault(require("csv-parser"));
 // Project packages.
 const cli_utils_1 = require("@bldr/cli-utils");
-const media_manager_1 = require("@bldr/media-manager");
+const core_node_1 = require("@bldr/core-node");
 const documentTemplate = {
     grades: {},
     jobs: {
@@ -52,7 +52,7 @@ function action(mdbFile) {
         const cmd = new cli_utils_1.CommandRunner();
         const result = yield cmd.exec(['mdb-export', mdbFile, 'Schüler']);
         if (result && result.stdout) {
-            media_manager_1.writeFile('tmp.csv', result.stdout);
+            core_node_1.writeFile('tmp.csv', result.stdout);
         }
         const grades = {};
         fs_1.default.createReadStream('tmp.csv')
@@ -68,7 +68,7 @@ function action(mdbFile) {
             .on('end', () => {
             documentTemplate.grades = grades;
             documentTemplate.timeStampMsec = new Date().getTime();
-            media_manager_1.writeFile('seating-plan.json', JSON.stringify(documentTemplate, null, '  '));
+            core_node_1.writeFile('seating-plan.json', JSON.stringify(documentTemplate, null, '  '));
         });
     });
 }

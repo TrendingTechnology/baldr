@@ -6,6 +6,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 const chalk_1 = __importDefault(require("chalk"));
 // Project packages.
 const media_manager_1 = require("@bldr/media-manager");
+const core_node_1 = require("@bldr/core-node");
 /**
  * Fix some typographic issues, for example quotes “…” -> „…“.
  *
@@ -16,7 +17,7 @@ function action(filePaths) {
     media_manager_1.walk({
         everyFile(filePath) {
             console.log(chalk_1.default.green(filePath));
-            let content = media_manager_1.readFile(filePath);
+            let content = core_node_1.readFile(filePath);
             const before = content;
             content = content.replace(/“([^“”]*)”/g, '„$1“');
             content = content.replace(/"([^"]*)"/g, '„$1“');
@@ -32,7 +33,7 @@ function action(filePaths) {
                 console.log('„' + chalk_1.default.yellow(before) + '“');
                 console.log(chalk_1.default.red('after:'));
                 console.log('„' + chalk_1.default.green(after) + '“');
-                media_manager_1.writeFile(filePath, content);
+                core_node_1.writeFile(filePath, content);
             }
             else {
                 console.log('No change');

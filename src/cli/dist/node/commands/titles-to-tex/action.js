@@ -7,6 +7,7 @@ const chalk_1 = __importDefault(require("chalk"));
 // Project packages.
 const tex_markdown_converter_1 = require("@bldr/tex-markdown-converter");
 const media_manager_1 = require("@bldr/media-manager");
+const core_node_1 = require("@bldr/core-node");
 /**
  * ```tex
  * \setzetitel{
@@ -46,7 +47,7 @@ function patchTexFileWithTitles(filePath) {
     lines.push('}');
     lines.push(''); // to get an empty line
     const patchedTitles = lines.join('\n');
-    let texFileString = media_manager_1.readFile(filePath);
+    let texFileString = core_node_1.readFile(filePath);
     // /s s (dotall) modifier, +? one or more (non-greedy)
     const regexp = new RegExp(/\\setzetitel\{.+?,?\n\}\n/, 's');
     const match = texFileString.match(regexp);
@@ -55,7 +56,7 @@ function patchTexFileWithTitles(filePath) {
         if (unpatchedTitles !== patchedTitles) {
             console.log(chalk_1.default.yellow(unpatchedTitles));
             texFileString = texFileString.replace(regexp, patchedTitles);
-            media_manager_1.writeFile(filePath, texFileString);
+            core_node_1.writeFile(filePath, texFileString);
         }
         console.log(chalk_1.default.green(patchedTitles));
         if (unpatchedTitles === patchedTitles) {

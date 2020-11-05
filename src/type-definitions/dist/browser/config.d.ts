@@ -42,15 +42,33 @@ interface HttpConfiguration {
  * }
  * ```
  */
-interface IconFontMapping {
+export interface IconDefintion {
     newName?: string;
     description?: string;
 }
-interface IconFontConfiguration {
+/**
+ * ```json
+ * {
+ *   "file-tree": "tree",
+ *   "trumpet": "",
+ *   "text-box-multiple-outline": {
+ *     "newName": "multi-part",
+ *     "description": "multipart assets"
+ *   },
+ *   "cloud-download": {
+ *      "description": "Master slide youtube for download (cached) video file with an asset."
+ *   }
+ * }
+ * ```
+ */
+export interface IconFontMapping {
+    [key: string]: string | IconDefintion;
+}
+export interface IconFontConfiguration {
     /**
      * `"https://raw.github...svg/{icon}.svg"`
      */
-    urlTemplate: string;
+    urlTemplate?: string;
     /**
      * ```json
      * {
@@ -66,9 +84,11 @@ interface IconFontConfiguration {
      * }
      * ```
      */
-    iconMapping: {
-        [key: string]: string | IconFontMapping;
-    };
+    iconMapping: IconFontMapping;
+    /**
+     * A path of a local folder containing SVGs to build an icon font from.
+     */
+    folder?: string;
 }
 interface AssetType {
     allowedExtensions: string[];

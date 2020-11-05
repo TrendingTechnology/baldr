@@ -6,6 +6,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 const chalk_1 = __importDefault(require("chalk"));
 // Project packages.
 const media_manager_1 = require("@bldr/media-manager");
+const core_node_1 = require("@bldr/core-node");
 /**
  * Convert a Audacity text mark file into a YAML file.
  *
@@ -34,7 +35,7 @@ const media_manager_1 = require("@bldr/media-manager");
  *   file.
  */
 function action(filePath) {
-    const text = media_manager_1.readFile(filePath);
+    const text = core_node_1.readFile(filePath);
     console.log(`The content of the source file “${chalk_1.default.yellow(filePath)}”:\n`);
     console.log(text);
     const lines = text.split('\n');
