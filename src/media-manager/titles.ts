@@ -68,6 +68,10 @@ class FolderTitle {
  */
 export class DeepTitle {
 
+  /**
+   * An array of folder titles. The last element is the folder title of
+   * the `filePath`.
+   */
   private titles: FolderTitle[]
 
   /**

@@ -45,9 +45,9 @@ export default {
         if (titles[segment]) {
           links.push({
             path: ['topics', ...segments.slice(0, index + 1)].join('/'),
-            text: titles[segment]._title.title
+            text: titles[segment].title.title
           })
-          titles = titles[segment]
+          titles = titles[segment].subTree
         }
       }
       return links
