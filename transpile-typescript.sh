@@ -16,6 +16,8 @@ _transpile() {
 
 # First low level modules
 DIRS="type-definitions
+presentation-masters
+presentation-parser
 config
 core-browser
 core-node

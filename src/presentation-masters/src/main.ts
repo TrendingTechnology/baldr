@@ -1,6 +1,39 @@
 
 type StringObject = { [key: string]: any }
 
+interface PropsAndSlide {
+  props: StringObject
+  propsMain: StringObject
+  slide: object
+}
+
+interface PropsSlideAndMaster extends PropsAndSlide {
+  propsPreview: StringObject
+  master: object
+}
+
+interface PropsBundle {
+  props: StringObject
+  propsMain: StringObject
+  propsPreview: StringObject
+}
+
+interface OldAndNewPropsAndSlide {
+  oldSlide: object
+  oldProps: StringObject
+  newSlide: object
+  newProps: StringObject
+}
+
+interface OldAndNewStepNo {
+  oldStepNo: number
+  newStepNo: number
+}
+
+interface OldAndNewStepNoAndSlideNoChange extends OldAndNewStepNo {
+  slideNoChange: boolean
+}
+
 /**
  * Hooks (exported master methods)
  *
@@ -117,7 +150,7 @@ interface MasterHooks {
    * }
    * ```
    */
-  collectPropsMain?: ({ props, propsMain, slide }: StringObject) => StringObject
+  collectPropsMain?: (payload: PropsAndSlide) => StringObject
 
   /**
    * Called during the parsing the YAML file (`Praesentation.baldr.yml`).
@@ -135,7 +168,7 @@ interface MasterHooks {
    * }
    * ```
    */
-  collectPropsPreview?: ({ props, propsMain, slide }: StringObject) => StringObject
+  collectPropsPreview?: (payload: PropsAndSlide) => StringObject
 
   /**
    * Called during the parsing the YAML file (`Praesentation.baldr.yml`).
@@ -153,7 +186,7 @@ interface MasterHooks {
    * }
    * ```
    */
-  calculateStepCount?: ({ props, propsMain, propsPreview, slide, master }: StringObject) => number
+  calculateStepCount?: (payload: PropsSlideAndMaster) => number
 
   /**
    * Getter on the slide object.
@@ -170,7 +203,7 @@ interface MasterHooks {
    * }
    *  ```
    */
-  titleFromProps?: ({ props, propsMain, propsPreview }: any) => string
+  titleFromProps?: (payload: PropsBundle) => string
 
   /**
    * Getter on the slide object.
@@ -214,7 +247,7 @@ interface MasterHooks {
    *
    * ```
    */
-  leaveSlide?: ({ oldSlide, oldProps, newSlide, newProps }: any) => void
+  leaveSlide?: (payload: OldAndNewPropsAndSlide) => void
 
   /**
    * Slide change
@@ -236,7 +269,7 @@ interface MasterHooks {
    * }
    * ```
    */
-  enterSlide?: ({ oldSlide, oldProps, newSlide, newProps }: any) => void
+  enterSlide?: (payload: OldAndNewPropsAndSlide) => void
 
   /**
    * Slide change
@@ -244,7 +277,7 @@ interface MasterHooks {
    * - `this`: is the Vue instance of the current main master component.
    * - called from the master component mixin in the file `masters.js`.
    */
-  afterSlideNoChangeOnComponent?: ({ oldSlideNo, newSlideNo }: any) => void
+  afterSlideNoChangeOnComponent?: (payload: OldAndNewPropsAndSlide) => void
 
   /**
    * Step change
@@ -266,7 +299,7 @@ interface MasterHooks {
    * }
    * ```
    */
-  leaveStep?: ({ oldStepNo, newStepNo }: any) => void
+  leaveStep?: (payload: OldAndNewPropsAndSlide) => void
 
   /**
    * Step change
@@ -295,7 +328,7 @@ interface MasterHooks {
    * }
    * ```
    */
-  enterStep?: ({ oldStepNo, newStepNo }: any) => void
+  enterStep?: (payload: OldAndNewPropsAndSlide) => void
 
   /**
    * Step change
@@ -304,7 +337,7 @@ interface MasterHooks {
    * - called from the master component mixin in the file `masters.js`.
    * - `return`: void
    */
-  afterStepNoChangeOnComponent?: ({ oldStepNo, newStepNo, slideNoChange }: any) => void
+  afterStepNoChangeOnComponent?: (payload: OldAndNewStepNoAndSlideNoChange) => void
 
 }
 

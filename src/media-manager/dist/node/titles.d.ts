@@ -42,6 +42,10 @@ declare class FolderTitle {
  * structure.
  */
 export declare class DeepTitle {
+    /**
+     * An array of folder titles. The last element is the folder title of
+     * the `filePath`.
+     */
     private titles;
     /**
      * An array of folder names. This array is used to descent the folder tree.
