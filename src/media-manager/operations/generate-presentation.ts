@@ -2,9 +2,6 @@
 import fs from 'fs'
 import path from 'path'
 
-// Third party packages.
-import chalk from 'chalk'
-
 // Project packages.
 import { objectifyTexItemize, objectifyTexZitat } from '@bldr/tex-markdown-converter'
 import { readFile, writeFile } from '@bldr/core-node'
@@ -52,7 +49,6 @@ export async function generatePresentation (filePath: string): Promise<void> {
     asset (relPath) {
       const asset = makeAsset(relPath)
       if (!asset.id) {
-        console.log(`Asset has no ID: ${chalk.red(relPath)}`)
         return
       }
       let masterName: string = 'generic'
