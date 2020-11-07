@@ -20,7 +20,14 @@ const cmd = new CommandRunner()
 
 let tmpDir: string
 
-function basePath (...args: string[]): string {
+/**
+ * Get the absolute path inside the `src/icons/src/` folder
+ *
+ * @param args Multiple path segents.
+ *
+ * @returns An absolute path.
+ */
+function getIconPath (...args: string[]): string {
   return path.join(config.localRepo, 'src', 'icons', 'src', ...arguments)
 }
 
@@ -59,10 +66,16 @@ async function downloadIcons (iconMapping: IconFontMapping, urlTemplate: string)
   cmd.stopProgress()
 }
 
+/**
+ * Copy svg icons for a source folder to a destination folder.
+ *
+ * @param srcFolder The source folder.
+ * @param destFolder The destination folder.
+ */
 function copyIcons (srcFolder: string, destFolder: string): void {
   const icons = fs.readdirSync(srcFolder)
   for (const icon of icons) {
-    if (icons.includes('.svg')) {
+    if (icon.includes('.svg')) {
       fs.copyFileSync(
         path.join(srcFolder, icon),
         path.join(destFolder, icon)
@@ -73,7 +86,7 @@ function copyIcons (srcFolder: string, destFolder: string): void {
 }
 
 function writeFileToDest (destFileName: string, content: string): void {
-  const destPath = basePath(destFileName)
+  const destPath = getIconPath(destFileName)
   fs.writeFileSync(destPath, content)
   console.log(`Create file: ${chalk.cyan(destPath)}`)
 }
@@ -94,7 +107,7 @@ function convertIntoFontFiles (config: WebFontConfig): void {
       const css = []
       const names = []
 
-      const header = fs.readFileSync(basePath('style_header.css'), { encoding: 'utf-8' })
+      const header = fs.readFileSync(getIconPath('style_header.css'), { encoding: 'utf-8' })
       css.push(header)
 
       for (const glyphData of result.glyphsData) {
@@ -146,7 +159,7 @@ function action (): void {
   buildFont([
     config.iconFont,
     {
-      folder: basePath('icons'),
+      folder: getIconPath('icons'),
       // iconMapping not used
       iconMapping: {
         baldr: '',

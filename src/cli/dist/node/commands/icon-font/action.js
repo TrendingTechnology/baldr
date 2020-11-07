@@ -25,7 +25,14 @@ const cli_utils_1 = require("@bldr/cli-utils");
 const config_1 = __importDefault(require("@bldr/config"));
 const cmd = new cli_utils_1.CommandRunner();
 let tmpDir;
-function basePath(...args) {
+/**
+ * Get the absolute path inside the `src/icons/src/` folder
+ *
+ * @param args Multiple path segents.
+ *
+ * @returns An absolute path.
+ */
+function getIconPath(...args) {
     return path_1.default.join(config_1.default.localRepo, 'src', 'icons', 'src', ...arguments);
 }
 function downloadIcon(url, name, newName) {
@@ -66,17 +73,23 @@ function downloadIcons(iconMapping, urlTemplate) {
         cmd.stopProgress();
     });
 }
+/**
+ * Copy svg icons for a source folder to a destination folder.
+ *
+ * @param srcFolder The source folder.
+ * @param destFolder The destination folder.
+ */
 function copyIcons(srcFolder, destFolder) {
     const icons = fs_1.default.readdirSync(srcFolder);
     for (const icon of icons) {
-        if (icons.includes('.svg')) {
+        if (icon.includes('.svg')) {
             fs_1.default.copyFileSync(path_1.default.join(srcFolder, icon), path_1.default.join(destFolder, icon));
             console.log(`Copy the file “${chalk_1.default.magenta(icon)}” from the destination folder “${chalk_1.default.green(icon)}” to the destination folder “${chalk_1.default.yellow(icon)}”.`);
         }
     }
 }
 function writeFileToDest(destFileName, content) {
-    const destPath = basePath(destFileName);
+    const destPath = getIconPath(destFileName);
     fs_1.default.writeFileSync(destPath, content);
     console.log(`Create file: ${chalk_1.default.cyan(destPath)}`);
 }
@@ -87,7 +100,7 @@ function convertIntoFontFiles(config) {
         console.log(result);
         const css = [];
         const names = [];
-        const header = fs_1.default.readFileSync(basePath('style_header.css'), { encoding: 'utf-8' });
+        const header = fs_1.default.readFileSync(getIconPath('style_header.css'), { encoding: 'utf-8' });
         css.push(header);
         for (const glyphData of result.glyphsData) {
             const name = glyphData.metadata.name;
@@ -137,7 +150,7 @@ function action() {
     buildFont([
         config_1.default.iconFont,
         {
-            folder: basePath('icons'),
+            folder: getIconPath('icons'),
             // iconMapping not used
             iconMapping: {
                 baldr: '',
