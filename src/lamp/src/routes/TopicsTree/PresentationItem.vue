@@ -10,7 +10,7 @@
     <ul :class="`ul-level-${level}`" v-if="hasChilds">
       <li
         v-for="item in childs"
-        :key="item._title.path"
+        :key="item.title.path"
       >
         <presentation-item :item="item"/>
       </li>
@@ -33,8 +33,8 @@ export default {
   },
   computed: {
     folderTitle () {
-      if (this.item && '_title' in this.item) {
-        return this.item._title
+      if (this.item && this.item.title) {
+        return this.item.title
       }
       return ''
     },
@@ -70,14 +70,14 @@ export default {
       return ''
     },
     hasChilds () {
-      return this.item && Object.keys(this.item).length > 1
+      return this.item && this.item.subTree && Object.keys(this.item.subTree).length > 1
     },
     childs () {
-      if (!this.item) return []
-      const keys = Object.keys(this.item).filter(key => key !== '_title').sort()
+      if (!this.item || !this.item.subTree) return []
       const item = []
+      const keys = Object.keys(this.item.subTree).sort()
       for (const key of keys) {
-        item.push(this.item[key])
+        item.push(this.item.subTree[key])
       }
       return item
     }

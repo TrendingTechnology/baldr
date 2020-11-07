@@ -25,10 +25,6 @@ import PresentationItem from './PresentationItem.vue'
 import TopicBreadCrumbs from '@/components/TopicBreadCrumbs.vue'
 import TopLevelJumpers from './TopLevelJumpers.vue'
 
-import { createNamespacedHelpers } from 'vuex'
-
-const { mapGetters } = createNamespacedHelpers('lamp')
-
 async function enterRoute (vm, to) {
   await vm.$store.dispatch('lamp/loadFolderTitleTree')
   vm.setSubFolderTitleTreeByIds(to.params.ids)
@@ -63,7 +59,7 @@ export default {
       ids = ids.split('/')
       let tree = this.folderTitleTree
       for (const id of ids) {
-        tree = tree[id]
+        if (tree && tree.subTree) tree = tree.subTree[id]
       }
       this.subFolderTitleTree = tree
     }
@@ -71,7 +67,21 @@ export default {
   mounted () {
     this.path = this.$route.params.ids
   },
-  computed: mapGetters(['folderTitleTree']),
+  computed: {
+    folderTitleTree () {
+      const subTree = this.$store.getters['lamp/folderTitleTree']
+      return {
+        subTree,
+        title: {
+          title: 'Fach Musik',
+          level: 0,
+          hasPresentation: false,
+          path: '/',
+          folderName: 'musik'
+        }
+      }
+    }
+  },
   beforeRouteEnter (to, from, next) {
     next(vm => {
       enterRoute(vm, to)

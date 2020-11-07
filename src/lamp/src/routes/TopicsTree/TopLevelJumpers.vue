@@ -27,13 +27,13 @@ export default {
       if (this.path && this.path !== 'Musik') {
         const segments = this.path.split('/')
         for (const folderName of segments) {
-          if (tree) tree = tree[folderName]
+          if (tree && tree.subTree) tree = tree.subTree[folderName]
         }
       }
       const topics = []
       if (!tree) return
       for (const folderName of Object.keys(tree).sort()) {
-        const topic = tree[folderName]._title
+        const topic = tree[folderName].title
         if (topic) {
           topics.push({
             title: topic.title,
