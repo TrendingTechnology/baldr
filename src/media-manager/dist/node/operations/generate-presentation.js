@@ -16,8 +16,6 @@ exports.generatePresentation = void 0;
 // Node packages.
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
-// Third party packages.
-const chalk_1 = __importDefault(require("chalk"));
 // Project packages.
 const tex_markdown_converter_1 = require("@bldr/tex-markdown-converter");
 const core_node_1 = require("@bldr/core-node");
@@ -62,7 +60,6 @@ function generatePresentation(filePath) {
             asset(relPath) {
                 const asset = media_file_classes_1.makeAsset(relPath);
                 if (!asset.id) {
-                    console.log(`Asset has no ID: ${chalk_1.default.red(relPath)}`);
                     return;
                 }
                 let masterName = 'generic';
