@@ -9,6 +9,7 @@
 export * from './media-categories';
 export * from './object-manipulation';
 export * from './string-format';
+export * from './yaml';
 /**
  * Get the extension from a file path.
  *
@@ -24,14 +25,6 @@ export function getExtension(filePath) {
         }
     }
 }
-/**
- * @link {@see https://www.npmjs.com/package/js-yaml}
- */
-export const jsYamlConfig = {
-    noArrayIndent: true,
-    lineWidth: 72,
-    noCompatMode: true
-};
 /**
  * Regular expression to detect media URIs.
  *

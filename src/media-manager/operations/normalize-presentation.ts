@@ -1,8 +1,9 @@
 import { PresentationType } from '@bldr/type-definitions'
+import { readFile, writeFile } from '@bldr/core-node'
+import { convertObjectToYamlString } from '@bldr/core-browser'
 
 import { DeepTitle } from '../titles'
-import { loadYaml, yamlToTxt } from '../yaml'
-import { readFile, writeFile } from '@bldr/core-node'
+import { loadYaml } from '../yaml'
 
 /**
  * Remove unnecessary single quotes.
@@ -55,7 +56,7 @@ export function normalizePresentationFile(filePath: string) {
     if (presentation.meta.id) meta.id = presentation.meta.id
     if (presentation.meta.curriculumUrl) meta.curriculumUrl = presentation.meta.curriculumUrl
   }
-  const metaString = yamlToTxt({ meta })
+  const metaString = convertObjectToYamlString({ meta })
   textContent = textContent.replace(/.*\nslides:/s, metaString + '\nslides:')
 
   // Shorten media URIs with `./`

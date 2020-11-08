@@ -109,9 +109,13 @@ export declare function convertTexToMd(text: string): string;
  */
 export declare function convertMdToTex(text: string): string;
 declare type TexObject = {
-    [key: string]: string | string[];
+    [key: string]: any;
 };
 declare type TexObjectArray = TexObject[];
+/**
+ *
+ * @param content A TeX string.
+ */
 export declare function objectifyTexZitat(content: string): TexObjectArray;
 export declare function objectifyTexItemize(content: string): TexObjectArray;
 declare const _default: {

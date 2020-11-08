@@ -4,6 +4,8 @@
  * @module @bldr/tex-markdown-converter
  */
 
+import { convertObjectToYamlString } from '@bldr/core-browser'
+
  /**
   * A replacement using a regular expression.
   */
@@ -12,6 +14,7 @@ export interface RegExpReplacement {
    * A regular expression.
    */
   reg: RegExp
+
   /**
    * A replacement string.
    */
@@ -166,8 +169,6 @@ function mdReg(tagName: string, className: string = ''): RegExp {
 /**
  * @param tagName - The name of the HTML tag (for example “em”).
  * @param className - The name of the CSS class (for example “person”).
- *
- * @returns
  */
 function mdRep(tagName: string, className: string = ''): string {
   let classMarkup = ''
@@ -181,8 +182,6 @@ function mdRep(tagName: string, className: string = ''): string {
  * @param texCommandName
  * @param htmlTagName
  * @param htmlClassName
- *
- * @returns
  */
 function semanticSpec(texCommandName: string, htmlTagName: string, htmlClassName: string): ReplacementPair[] {
   return [{
@@ -212,6 +211,14 @@ const specification: ReplacementPair[] = [
   {
     tex: { reg: texReg('section'), rep: texRep('section') },
     md: { reg: /# (.*)\n/g, rep: '# $1' }
+  },
+  {
+    tex: { reg: texReg('subsection'), rep: texRep('subsection') },
+    md: { reg: /## (.*)\n/g, rep: '## $1' }
+  },
+  {
+    tex: { reg: texReg('subsubsection'), rep: texRep('subsubsection') },
+    md: { reg: /### (.*)\n/g, rep: '### $1' }
   }
 ]
 
@@ -233,7 +240,6 @@ export function removeTexComments(text: string): string {
 }
 
 /**
- *
  * @param {string} text - A input string to convert.
  */
 function removeTexHeaderFooter(text: string): string {
@@ -244,7 +250,6 @@ function removeTexHeaderFooter(text: string): string {
 }
 
 /**
- *
  * @param text - A input string to convert.
  */
 function convertTexItemize(text: string): string {
@@ -355,6 +360,7 @@ function convert(text: string, toTex: boolean): string {
  */
 export function convertTexToMd(text: string): string {
   text = removeTexHeaderFooter(text)
+  text = convertTexZitat(text)
   text = convertTexItemize(text)
   text = convert(text, false)
   text = cleanUpTex(text)
@@ -373,7 +379,7 @@ export function convertMdToTex(text: string): string {
   return convert(text, true)
 }
 
-type TexObject = { [key: string]: string | string[] }
+type TexObject = { [key: string]: any }
 type TexObjectArray = TexObject[]
 
 function convertToOneLineMd (content: string): string {
@@ -387,6 +393,10 @@ function convertToOneLineMd (content: string): string {
   return convertTexToMd(content)
 }
 
+/**
+ *
+ * @param content A TeX string.
+ */
 export function objectifyTexZitat (content: string): TexObjectArray {
   const regexp = new RegExp(regBuilder.env('zitat', '\\*?' + regBuilder.captDotAll), 'g')
   const matches = content.matchAll(regexp)
@@ -402,22 +412,32 @@ export function objectifyTexZitat (content: string): TexObjectArray {
     }
     text = convertToOneLineMd(text)
     const item: TexObject = {
-      text
+      quote: {
+        text
+      }
     }
     if (optionalString) {
       // [\person{Bischof Bernardino Cirillo}][1549]
       // [\person{Martin Luther}]
       const segments = optionalString.split('][')
       if (segments.length > 1) {
-        item.author = convertToOneLineMd(segments[0])
-        item.date = convertToOneLineMd(segments[1])
+        item.quote.author = convertToOneLineMd(segments[0])
+        item.quote.date = convertToOneLineMd(segments[1])
       } else {
-        item.author = convertToOneLineMd(segments[0])
+        item.quote.author = convertToOneLineMd(segments[0])
       }
     }
     data.push(item)
   }
   return data
+}
+
+function convertTexZitat(content: string): string {
+  const zitate = objectifyTexZitat(content)
+  if (zitate.length > 0) {
+    return convertObjectToYamlString(zitate)
+  }
+  return content
 }
 
 export function objectifyTexItemize (content: string): TexObjectArray {

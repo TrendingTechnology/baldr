@@ -3,32 +3,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.writeMetaDataYaml = exports.writeYamlFile = exports.loadMetaDataYaml = exports.loadYaml = exports.yamlToTxt = void 0;
+exports.writeMetaDataYaml = exports.writeYamlFile = exports.loadMetaDataYaml = exports.loadYaml = void 0;
 const fs_1 = __importDefault(require("fs"));
-const js_yaml_1 = __importDefault(require("js-yaml"));
 const core_browser_1 = require("@bldr/core-browser");
 const core_node_1 = require("@bldr/core-node");
 const helper_1 = require("./helper");
 const media_file_classes_1 = require("./media-file-classes");
 const meta_types_1 = __importDefault(require("./meta-types"));
-/**
- * Convert a Javascript object into a text string, ready to be written
- * into a text file. The property names are converted to `snake_case`.
- *
- * @param data - Some data to convert to YAML.
- *
- * @returns A string in the YAML format ready to be written into a text
- *   file. The result string begins with `---`.
- */
-function yamlToTxt(data) {
-    data = core_browser_1.convertPropertiesCamelToSnake(data);
-    const yamlMarkup = [
-        '---',
-        js_yaml_1.default.safeDump(data, core_browser_1.jsYamlConfig)
-    ];
-    return yamlMarkup.join('\n');
-}
-exports.yamlToTxt = yamlToTxt;
 /**
  * Load a YAML file and convert into a Javascript object. The string
  * properties are converted in the `camleCase` format. The function
@@ -41,11 +22,7 @@ exports.yamlToTxt = yamlToTxt;
  * converted in the `camleCase` format.
  */
 function loadYaml(filePath) {
-    const result = js_yaml_1.default.safeLoad(core_node_1.readFile(filePath));
-    if (typeof result !== 'object') {
-        return { result };
-    }
-    return core_browser_1.convertPropertiesSnakeToCamel(result);
+    return core_browser_1.convertYamlStringToObject(core_node_1.readFile(filePath));
 }
 exports.loadYaml = loadYaml;
 /**
@@ -76,7 +53,7 @@ exports.loadMetaDataYaml = loadMetaDataYaml;
  * @returns The data converted to YAML as a string.
  */
 function writeYamlFile(filePath, data) {
-    const yaml = yamlToTxt(data);
+    const yaml = core_browser_1.convertObjectToYamlString(data);
     core_node_1.writeFile(filePath, yaml);
     return yaml;
 }

@@ -27,7 +27,11 @@
     "access": "public"
   },
   "dependencies": {
-    "@bldr/type-definitions": "^0.1.0"
+    "@bldr/type-definitions": "^0.1.0",
+    "js-yaml": "^3.14.0"
+  },
+  "devDependencies": {
+    "@types/js-yaml": "^3.12.5"
   },
   "gitHead": "ed4f60e66c8f420711d3eb15185620f7688e6fc9"
 }

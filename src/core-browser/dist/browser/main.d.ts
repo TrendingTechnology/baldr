@@ -9,6 +9,7 @@
 export * from './media-categories';
 export * from './object-manipulation';
 export * from './string-format';
+export * from './yaml';
 /**
  * Get the extension from a file path.
  *
@@ -17,14 +18,6 @@ export * from './string-format';
  * @returns The extension in lower case characters.
  */
 export declare function getExtension(filePath: string): string | undefined;
-/**
- * @link {@see https://www.npmjs.com/package/js-yaml}
- */
-export declare const jsYamlConfig: {
-    noArrayIndent: boolean;
-    lineWidth: number;
-    noCompatMode: boolean;
-};
 /**
  * Regular expression to detect media URIs.
  *

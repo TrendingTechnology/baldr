@@ -1,9 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.normalizePresentationFile = void 0;
+const core_node_1 = require("@bldr/core-node");
+const core_browser_1 = require("@bldr/core-browser");
 const titles_1 = require("../titles");
 const yaml_1 = require("../yaml");
-const core_node_1 = require("@bldr/core-node");
 /**
  * Remove unnecessary single quotes.
  *
@@ -54,7 +55,7 @@ function normalizePresentationFile(filePath) {
         if (presentation.meta.curriculumUrl)
             meta.curriculumUrl = presentation.meta.curriculumUrl;
     }
-    const metaString = yaml_1.yamlToTxt({ meta });
+    const metaString = core_browser_1.convertObjectToYamlString({ meta });
     textContent = textContent.replace(/.*\nslides:/s, metaString + '\nslides:');
     // Shorten media URIs with `./`
     if (meta.id) {
