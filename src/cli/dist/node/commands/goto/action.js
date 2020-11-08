@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 // Node packages.
 const child_process_1 = __importDefault(require("child_process"));
+const fs_1 = __importDefault(require("fs"));
 // Third party packages.
 const chalk_1 = __importDefault(require("chalk"));
 // Project packages.
@@ -18,6 +19,10 @@ function action() {
     // media server.
     if (!mirroredPath)
         mirroredPath = config_1.default.mediaServer.basePath;
+    if (!fs_1.default.existsSync(mirroredPath)) {
+        console.log(`The path “${chalk_1.default.red(mirroredPath)}” doesn’t exist.`);
+        process.exit(1);
+    }
     console.log(`Go to: ${chalk_1.default.green(mirroredPath)}`);
     child_process_1.default.spawn('zsh', ['-i'], {
         cwd: mirroredPath,

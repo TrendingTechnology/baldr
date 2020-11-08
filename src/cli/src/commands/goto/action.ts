@@ -1,5 +1,6 @@
 // Node packages.
 import childProcess from 'child_process'
+import fs from 'fs'
 
 // Third party packages.
 import chalk from 'chalk'
@@ -16,6 +17,11 @@ function action () {
   // If no mirrored path could be detected we show the base path of the
   // media server.
   if (!mirroredPath) mirroredPath = config.mediaServer.basePath
+
+  if (!fs.existsSync(mirroredPath)) {
+    console.log(`The path “${chalk.red(mirroredPath)}” doesn’t exist.`)
+    process.exit(1)
+  }
   console.log(`Go to: ${chalk.green(mirroredPath)}`)
   childProcess.spawn('zsh', ['-i'], {
     cwd: mirroredPath,
