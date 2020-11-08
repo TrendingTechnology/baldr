@@ -12,6 +12,7 @@ export interface RegExpReplacement {
    * A regular expression.
    */
   reg: RegExp
+
   /**
    * A replacement string.
    */
@@ -166,8 +167,6 @@ function mdReg(tagName: string, className: string = ''): RegExp {
 /**
  * @param tagName - The name of the HTML tag (for example “em”).
  * @param className - The name of the CSS class (for example “person”).
- *
- * @returns
  */
 function mdRep(tagName: string, className: string = ''): string {
   let classMarkup = ''
@@ -181,8 +180,6 @@ function mdRep(tagName: string, className: string = ''): string {
  * @param texCommandName
  * @param htmlTagName
  * @param htmlClassName
- *
- * @returns
  */
 function semanticSpec(texCommandName: string, htmlTagName: string, htmlClassName: string): ReplacementPair[] {
   return [{
@@ -212,6 +209,14 @@ const specification: ReplacementPair[] = [
   {
     tex: { reg: texReg('section'), rep: texRep('section') },
     md: { reg: /# (.*)\n/g, rep: '# $1' }
+  },
+  {
+    tex: { reg: texReg('subsection'), rep: texRep('subsection') },
+    md: { reg: /## (.*)\n/g, rep: '## $1' }
+  },
+  {
+    tex: { reg: texReg('subsubsection'), rep: texRep('subsubsection') },
+    md: { reg: /### (.*)\n/g, rep: '### $1' }
   }
 ]
 
@@ -233,7 +238,6 @@ export function removeTexComments(text: string): string {
 }
 
 /**
- *
  * @param {string} text - A input string to convert.
  */
 function removeTexHeaderFooter(text: string): string {
@@ -244,7 +248,6 @@ function removeTexHeaderFooter(text: string): string {
 }
 
 /**
- *
  * @param text - A input string to convert.
  */
 function convertTexItemize(text: string): string {

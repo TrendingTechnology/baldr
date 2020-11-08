@@ -171,6 +171,14 @@ const specification = [
     {
         tex: { reg: texReg('section'), rep: texRep('section') },
         md: { reg: /# (.*)\n/g, rep: '# $1' }
+    },
+    {
+        tex: { reg: texReg('subsection'), rep: texRep('subsection') },
+        md: { reg: /## (.*)\n/g, rep: '## $1' }
+    },
+    {
+        tex: { reg: texReg('subsubsection'), rep: texRep('subsubsection') },
+        md: { reg: /### (.*)\n/g, rep: '### $1' }
     }
 ];
 /**
