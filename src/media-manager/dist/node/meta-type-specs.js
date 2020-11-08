@@ -23,13 +23,11 @@ const path_1 = __importDefault(require("path"));
 // Third party packages.
 const uuid_1 = require("uuid");
 // Project packages.
-const helper_1 = require("./helper");
 const core_node_1 = require("@bldr/core-node");
 const core_browser_1 = require("@bldr/core-browser");
-/**
- * The configuration object from `/etc/baldr.json`
- */
 const config_1 = __importDefault(require("@bldr/config"));
+const helper_1 = require("./helper");
+const two_letter_abbreviations_1 = require("./two-letter-abbreviations");
 /**
  * Validate a date string in the format `yyyy-mm-dd`.
  */
@@ -61,7 +59,7 @@ function validateYoutubeId(value) {
  *
  * @param filePath - The media asset file path.
  *
- * @returns the ID prefix.
+ * @returns The ID prefix.
  */
 function generateIdPrefix(filePath) {
     // We need the absolute path
@@ -877,9 +875,10 @@ const general = {
                         // old prefix: Piazzolla-Adios-Nonino_NB
                         // updated prefix: Piazzolla-Nonino_NB
                         // Preferred result: Piazzolla-Nonino_NB_Adios-Nonino_melancolico
-                        // if (value.match(/.*_[A-Z]{2,}_.*/)) {
-                        //   value = value.replace(/^.*_[A-Z]{2,}/, idPrefix)
-                        // }
+                        const twoLetterRegExp = '(' + two_letter_abbreviations_1.getTwoLetterAbbreviations().join('|') + ')';
+                        if (value.match(new RegExp(`.*_${twoLetterRegExp}_.*`))) {
+                            value = value.replace(new RegExp(`^.*_${twoLetterRegExp}`), idPrefix);
+                        }
                     }
                 }
                 // Disabled for example GR_Beatles_The != Beatles_GR_The
@@ -965,6 +964,13 @@ const general = {
             title: 'Dateiendung',
             state: 'absent'
         }
+    },
+    initialize: function ({ typeData, typeSpec }) {
+        if (!two_letter_abbreviations_1.checkForTwoLetterDir(typeData.filePath)) {
+            console.log(`File path ${typeData.filePath} is not in a valid two letter directory.`);
+            process.exit();
+        }
+        return typeData;
     },
     finalize: function ({ typeData, typeSpec }) {
         for (const propName in typeData) {

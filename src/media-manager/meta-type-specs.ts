@@ -21,15 +21,13 @@ import path from 'path'
 import { v4 as uuidv4 } from 'uuid'
 
 // Project packages.
-import { deasciify, idify } from './helper'
 import { getPdfPageCount } from '@bldr/core-node'
 import { mediaUriRegExp } from '@bldr/core-browser'
 import { MetaSpec } from '@bldr/type-definitions'
-
-/**
- * The configuration object from `/etc/baldr.json`
- */
 import config from '@bldr/config'
+
+import { deasciify, idify } from './helper'
+import { getTwoLetterAbbreviations, checkForTwoLetterDir }  from './two-letter-abbreviations'
 
 /**
  * Validate a date string in the format `yyyy-mm-dd`.
@@ -66,7 +64,7 @@ function validateYoutubeId (value: string): boolean {
  *
  * @param filePath - The media asset file path.
  *
- * @returns the ID prefix.
+ * @returns The ID prefix.
  */
 function generateIdPrefix (filePath: string): string {
   // We need the absolute path
@@ -897,9 +895,10 @@ const general = <MetaSpec.Type> {
             // old prefix: Piazzolla-Adios-Nonino_NB
             // updated prefix: Piazzolla-Nonino_NB
             // Preferred result: Piazzolla-Nonino_NB_Adios-Nonino_melancolico
-            // if (value.match(/.*_[A-Z]{2,}_.*/)) {
-            //   value = value.replace(/^.*_[A-Z]{2,}/, idPrefix)
-            // }
+            const twoLetterRegExp = '(' + getTwoLetterAbbreviations().join('|') + ')'
+            if (value.match(new RegExp(`.*_${twoLetterRegExp}_.*`))) {
+              value = value.replace(new RegExp(`^.*_${twoLetterRegExp}`), idPrefix)
+            }
           }
         }
 
@@ -986,6 +985,13 @@ const general = <MetaSpec.Type> {
       title: 'Dateiendung',
       state: 'absent'
     }
+  },
+  initialize: function({ typeData, typeSpec }) {
+    if (!checkForTwoLetterDir(typeData.filePath)) {
+      console.log(`File path ${typeData.filePath} is not in a valid two letter directory.`)
+      process.exit()
+    }
+    return typeData
   },
   finalize: function ({ typeData, typeSpec }) {
     for (const propName in typeData) {

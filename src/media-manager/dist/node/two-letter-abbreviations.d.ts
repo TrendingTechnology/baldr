@@ -1,21 +1,11 @@
-declare const _default: {
-    AB: string;
-    BD: string;
-    EP: string;
-    FT: string;
-    GN: string;
-    GR: string;
-    HB: string;
-    IN: string;
-    LD: string;
-    LT: string;
-    NB: string;
-    PT: string;
-    PR: string;
-    QL: string;
-    SF: string;
-    TX: string;
-    VD: string;
-    YT: string;
-};
-export = _default;
+export declare function isValidTwoLetterAbbreviation(abbreviation: string): boolean;
+export declare function getTwoLetterAbbreviations(): string[];
+/**
+ * Check if the given file path is in a valid two letter directory.
+ *
+ * @param filePath A file path, for example
+ * `../30_Funktionen-Filmmusik/HB/Bach_Aria-Orchestersuite.m4a.yml`
+ *
+ * @return True if the file path is in a valid two letter directory, else false.
+ */
+export declare function checkForTwoLetterDir(filePath: string): boolean;
