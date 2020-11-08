@@ -390,6 +390,10 @@ function convertToOneLineMd (content: string): string {
   return convertTexToMd(content)
 }
 
+/**
+ *
+ * @param content A TeX string.
+ */
 export function objectifyTexZitat (content: string): TexObjectArray {
   const regexp = new RegExp(regBuilder.env('zitat', '\\*?' + regBuilder.captDotAll), 'g')
   const matches = content.matchAll(regexp)
