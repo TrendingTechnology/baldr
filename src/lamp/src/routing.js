@@ -58,7 +58,7 @@ function setDocumentTitleByRoute (route) {
   const getBuildTimeTitle = function () {
     const buildTime = new Date(compilationTime).toLocaleString()
     let lastCommit = gitHead.short
-    if (gitHead.short) {
+    if (gitHead.dirty) {
       lastCommit = `${lastCommit}-dirty`
     }
     return `Baldr Lamp (${buildTime} ${lastCommit})`
