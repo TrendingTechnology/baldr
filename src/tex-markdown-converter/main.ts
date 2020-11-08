@@ -4,6 +4,8 @@
  * @module @bldr/tex-markdown-converter
  */
 
+import { convertObjectToYamlString } from '@bldr/core-browser'
+
  /**
   * A replacement using a regular expression.
   */
@@ -358,6 +360,7 @@ function convert(text: string, toTex: boolean): string {
  */
 export function convertTexToMd(text: string): string {
   text = removeTexHeaderFooter(text)
+  text = convertTexZitat(text)
   text = convertTexItemize(text)
   text = convert(text, false)
   text = cleanUpTex(text)
@@ -376,7 +379,7 @@ export function convertMdToTex(text: string): string {
   return convert(text, true)
 }
 
-type TexObject = { [key: string]: string | string[] }
+type TexObject = { [key: string]: any }
 type TexObjectArray = TexObject[]
 
 function convertToOneLineMd (content: string): string {
@@ -409,22 +412,32 @@ export function objectifyTexZitat (content: string): TexObjectArray {
     }
     text = convertToOneLineMd(text)
     const item: TexObject = {
-      text
+      quote: {
+        text
+      }
     }
     if (optionalString) {
       // [\person{Bischof Bernardino Cirillo}][1549]
       // [\person{Martin Luther}]
       const segments = optionalString.split('][')
       if (segments.length > 1) {
-        item.author = convertToOneLineMd(segments[0])
-        item.date = convertToOneLineMd(segments[1])
+        item.quote.author = convertToOneLineMd(segments[0])
+        item.quote.date = convertToOneLineMd(segments[1])
       } else {
-        item.author = convertToOneLineMd(segments[0])
+        item.quote.author = convertToOneLineMd(segments[0])
       }
     }
     data.push(item)
   }
   return data
+}
+
+function convertTexZitat(content: string): string {
+  const zitate = objectifyTexZitat(content)
+  if (zitate.length > 0) {
+    return convertObjectToYamlString(zitate)
+  }
+  return content
 }
 
 export function objectifyTexItemize (content: string): TexObjectArray {

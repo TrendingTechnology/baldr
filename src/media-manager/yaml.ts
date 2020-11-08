@@ -3,9 +3,8 @@ import fs from 'fs'
 import yaml from 'js-yaml'
 
 import {
-  convertPropertiesCamelToSnake,
-  convertPropertiesSnakeToCamel,
-  jsYamlConfig
+  convertYamlStringToObject,
+  convertObjectToYamlString
 } from '@bldr/core-browser'
 import { AssetType } from '@bldr/type-definitions'
 import { readFile, writeFile } from '@bldr/core-node'
@@ -13,24 +12,6 @@ import { readFile, writeFile } from '@bldr/core-node'
 import { asciify, deasciify } from './helper'
 import { Asset } from './media-file-classes'
 import metaTypes from './meta-types'
-
-/**
- * Convert a Javascript object into a text string, ready to be written
- * into a text file. The property names are converted to `snake_case`.
- *
- * @param data - Some data to convert to YAML.
- *
- * @returns A string in the YAML format ready to be written into a text
- *   file. The result string begins with `---`.
- */
-export function yamlToTxt (data: any): string {
-  data = convertPropertiesCamelToSnake(data)
-  const yamlMarkup = [
-    '---',
-    yaml.safeDump(data, jsYamlConfig)
-  ]
-  return yamlMarkup.join('\n')
-}
 
 /**
  * Load a YAML file and convert into a Javascript object. The string
@@ -44,11 +25,7 @@ export function yamlToTxt (data: any): string {
  * converted in the `camleCase` format.
  */
 export function loadYaml (filePath: string): { [key: string]: any } {
-  const result = yaml.safeLoad(readFile(filePath))
-  if (typeof result !== 'object') {
-    return { result }
-  }
-  return convertPropertiesSnakeToCamel(result)
+  return convertYamlStringToObject(readFile(filePath))
 }
 
 /**
@@ -79,7 +56,7 @@ export function loadMetaDataYaml (filePath: string): { [key: string]: any } {
  * @returns The data converted to YAML as a string.
  */
 export function writeYamlFile (filePath: string, data: object): string {
-  const yaml = yamlToTxt(data)
+  const yaml = convertObjectToYamlString(data)
   writeFile(filePath, yaml)
   return yaml
 }

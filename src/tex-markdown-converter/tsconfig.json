@@ -5,7 +5,8 @@
     "declaration": true,
     "outDir": "./dist",
     "strict": true,
-    "lib": ["es2020"]
+    "lib": ["es2020"],
+    "moduleResolution": "node"
   },
   "include": ["main.ts"],
   "exclude": ["node_modules", "**/__tests__/*"]

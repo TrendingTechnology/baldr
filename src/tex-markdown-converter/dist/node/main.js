@@ -6,6 +6,7 @@
  */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.objectifyTexItemize = exports.objectifyTexZitat = exports.convertMdToTex = exports.convertTexToMd = exports.removeTexComments = exports.extractMatchAll = exports.regBuilder = void 0;
+const core_browser_1 = require("@bldr/core-browser");
 /**
  * Build and assemble strings to generate regular expressions from.
  */
@@ -127,8 +128,6 @@ function mdReg(tagName, className = '') {
 /**
  * @param tagName - The name of the HTML tag (for example “em”).
  * @param className - The name of the CSS class (for example “person”).
- *
- * @returns
  */
 function mdRep(tagName, className = '') {
     let classMarkup = '';
@@ -141,8 +140,6 @@ function mdRep(tagName, className = '') {
  * @param texCommandName
  * @param htmlTagName
  * @param htmlClassName
- *
- * @returns
  */
 function semanticSpec(texCommandName, htmlTagName, htmlClassName) {
     return [{
@@ -199,7 +196,6 @@ function removeTexComments(text) {
 }
 exports.removeTexComments = removeTexComments;
 /**
- *
  * @param {string} text - A input string to convert.
  */
 function removeTexHeaderFooter(text) {
@@ -209,7 +205,6 @@ function removeTexHeaderFooter(text) {
     return text;
 }
 /**
- *
  * @param text - A input string to convert.
  */
 function convertTexItemize(text) {
@@ -316,6 +311,7 @@ function convert(text, toTex) {
  */
 function convertTexToMd(text) {
     text = removeTexHeaderFooter(text);
+    text = convertTexZitat(text);
     text = convertTexItemize(text);
     text = convert(text, false);
     text = cleanUpTex(text);
@@ -344,6 +340,10 @@ function convertToOneLineMd(content) {
     content = content.replace(/\]$/, '');
     return convertTexToMd(content);
 }
+/**
+ *
+ * @param content A TeX string.
+ */
 function objectifyTexZitat(content) {
     const regexp = new RegExp(exports.regBuilder.env('zitat', '\\*?' + exports.regBuilder.captDotAll), 'g');
     const matches = content.matchAll(regexp);
@@ -359,18 +359,20 @@ function objectifyTexZitat(content) {
         }
         text = convertToOneLineMd(text);
         const item = {
-            text
+            quote: {
+                text
+            }
         };
         if (optionalString) {
             // [\person{Bischof Bernardino Cirillo}][1549]
             // [\person{Martin Luther}]
             const segments = optionalString.split('][');
             if (segments.length > 1) {
-                item.author = convertToOneLineMd(segments[0]);
-                item.date = convertToOneLineMd(segments[1]);
+                item.quote.author = convertToOneLineMd(segments[0]);
+                item.quote.date = convertToOneLineMd(segments[1]);
             }
             else {
-                item.author = convertToOneLineMd(segments[0]);
+                item.quote.author = convertToOneLineMd(segments[0]);
             }
         }
         data.push(item);
@@ -378,6 +380,13 @@ function objectifyTexZitat(content) {
     return data;
 }
 exports.objectifyTexZitat = objectifyTexZitat;
+function convertTexZitat(content) {
+    const zitate = objectifyTexZitat(content);
+    if (zitate.length > 0) {
+        return core_browser_1.convertObjectToYamlString(zitate);
+    }
+    return content;
+}
 function objectifyTexItemize(content) {
     const regSection = exports.regBuilder.cmd('(sub)?(sub)?section', '([^\\}]*?)');
     const regItemize = exports.regBuilder.env('(compactitem|itemize)');

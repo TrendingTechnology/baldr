@@ -1,6 +1,9 @@
 import { safeDump, safeLoad } from 'js-yaml'
 
-import { convertPropertiesCamelToSnake, convertPropertiesSnakeToCamel } from './object-manipulation'
+import {
+  convertPropertiesCamelToSnake,
+  convertPropertiesSnakeToCamel
+} from './object-manipulation'
 
 /**
  * @link {@see https://www.npmjs.com/package/js-yaml}

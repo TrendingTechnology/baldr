@@ -1,15 +1,5 @@
 import { AssetType } from '@bldr/type-definitions';
 /**
- * Convert a Javascript object into a text string, ready to be written
- * into a text file. The property names are converted to `snake_case`.
- *
- * @param data - Some data to convert to YAML.
- *
- * @returns A string in the YAML format ready to be written into a text
- *   file. The result string begins with `---`.
- */
-export declare function yamlToTxt(data: any): string;
-/**
  * Load a YAML file and convert into a Javascript object. The string
  * properties are converted in the `camleCase` format. The function
  * returns a object with string properties to save Visual Studio Code
